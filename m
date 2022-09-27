@@ -2,177 +2,152 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20DD75EC62C
-	for <lists+linux-next@lfdr.de>; Tue, 27 Sep 2022 16:33:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 024155ECC01
+	for <lists+linux-next@lfdr.de>; Tue, 27 Sep 2022 20:17:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232387AbiI0OdA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 27 Sep 2022 10:33:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51494 "EHLO
+        id S231640AbiI0SQ6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 27 Sep 2022 14:16:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232106AbiI0Ock (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 27 Sep 2022 10:32:40 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48C3D54CBF
-        for <linux-next@vger.kernel.org>; Tue, 27 Sep 2022 07:32:39 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1odBdT-0005tX-4C; Tue, 27 Sep 2022 16:32:35 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1odBdS-003F7h-A5; Tue, 27 Sep 2022 16:32:32 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1odBdP-003uny-P8; Tue, 27 Sep 2022 16:32:31 +0200
-Date:   Tue, 27 Sep 2022 16:32:25 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     David Miller <davem@davemloft.net>
-Cc:     broonie@kernel.org, Networking <netdev@vger.kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
+        with ESMTP id S232349AbiI0SQ4 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 27 Sep 2022 14:16:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EBCA7DF73;
+        Tue, 27 Sep 2022 11:16:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F0B5061ADE;
+        Tue, 27 Sep 2022 18:16:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71636C433C1;
+        Tue, 27 Sep 2022 18:16:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664302614;
+        bh=yBmLVeYuwO9SPGn3sVc/WFiOlCFKTla9PdQObzOz11Y=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Yqoyza1RJIbYJKx0MOumj/Yr/WHVG1sepV9t85gBanYExG3tsXR49qmhUAI/d5OLs
+         ApHLJA2f37Gq8GBnEnoqpwbZX9waP4D4Zy96LhTGZafucT3jTynUov4DflKYt+LzQo
+         wTpo5DDjrW/UcY8xcWb9Ki8CZfAtIOxxq+p44dZc4lhqRirdj2scaTZ3ATyLlBjV5w
+         tj6Vp7+VhjeGGN8oLrWVJqp0bshi8o9naoSUvDzv6j/azES50Avj3NRIwrsmPX8qBT
+         kml4z8++hEzqKMNrS/tTZ1nLReIYJlOOY6cu1HwE/2uYFU2m542sfm57pKCQSQwxI4
+         6KBuFgnE2xRCQ==
+From:   broonie@kernel.org
+To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc:     Adam Bratschi-Kaye <ark.email@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Antonio Terceiro <antonio.terceiro@linaro.org>,
+        =?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Boris-Chengbiao Zhou <bobo1239@web.de>,
+        Daniel Xu <dxu@dxuuu.xyz>,
+        Dariusz Sosnowski <dsosnowski@dsosnowski.pl>,
+        Douglas Su <d0u9.su@outlook.com>, Finn Behrens <me@kloenk.de>,
+        Gary Guo <gary@garyguo.net>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Yang Yingliang <yangyingliang@huawei.com>
-Subject: Re: linux-next: manual merge of the net-next tree with the i2c tree
-Message-ID: <20220927143225.j4yztggdqqozdiwa@pengutronix.de>
-References: <20220927130206.368099-1-broonie@kernel.org>
+        Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Sven Van Asbroeck <thesven73@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>
+Subject: linux-next: manual merge of the rust tree with the kbuild tree
+Date:   Tue, 27 Sep 2022 19:16:47 +0100
+Message-Id: <20220927181647.487727-1-broonie@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="7mgoxxaeekmkd6jf"
-Content-Disposition: inline
-In-Reply-To: <20220927130206.368099-1-broonie@kernel.org>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-next@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+Hi all,
 
---7mgoxxaeekmkd6jf
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+FIXME: Add owner of second tree to To:
+       Add author(s)/SOB of conflicting commits.
 
-Hello,
+Today's linux-next merge of the rust tree got a conflict in:
 
-On Tue, Sep 27, 2022 at 02:02:06PM +0100, broonie@kernel.org wrote:
-> Hi all,
->=20
-> Today's linux-next merge of the net-next tree got conflicts in:
->=20
->   drivers/net/dsa/lan9303_i2c.c
->   drivers/net/dsa/microchip/ksz9477_i2c.c
->   drivers/net/dsa/xrs700x/xrs700x_i2c.c
->=20
-> between commit:
->=20
->   ed5c2f5fd10dd ("i2c: Make remove callback return void")
->=20
-> from the i2c tree and commits:
->=20
->   db5d451c4640a ("net: dsa: lan9303: remove unnecessary i2c_set_clientdat=
-a()")
->   008971adb95d3 ("net: dsa: microchip: ksz9477: remove unnecessary i2c_se=
-t_clientdata()")
->   6387bf7c390a1 ("net: dsa: xrs700x: remove unnecessary i2c_set_clientdat=
-a()")
->=20
-> from the net-next tree.
->=20
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
->=20
-> diff --cc drivers/net/dsa/lan9303_i2c.c
-> index b25e91b26d991,79be5fc044bd4..0000000000000
-> --- a/drivers/net/dsa/lan9303_i2c.c
-> +++ b/drivers/net/dsa/lan9303_i2c.c
-> @@@ -70,11 -70,11 +70,9 @@@ static void lan9303_i2c_remove(struct i
->   	struct lan9303_i2c *sw_dev =3D i2c_get_clientdata(client);
->  =20
->   	if (!sw_dev)
->  -		return 0;
->  +		return;
->  =20
->   	lan9303_remove(&sw_dev->chip);
-> --
-> - 	i2c_set_clientdata(client, NULL);
->  -	return 0;
->   }
->  =20
->   static void lan9303_i2c_shutdown(struct i2c_client *client)
-> diff --cc drivers/net/dsa/microchip/ksz9477_i2c.c
-> index 4a719ab8aa89c,e111756f64735..0000000000000
-> --- a/drivers/net/dsa/microchip/ksz9477_i2c.c
-> +++ b/drivers/net/dsa/microchip/ksz9477_i2c.c
-> @@@ -58,8 -58,8 +58,6 @@@ static void ksz9477_i2c_remove(struct i
->  =20
->   	if (dev)
->   		ksz_switch_remove(dev);
-> --
-> - 	i2c_set_clientdata(i2c, NULL);
->  -	return 0;
->   }
->  =20
->   static void ksz9477_i2c_shutdown(struct i2c_client *i2c)
-> diff --cc drivers/net/dsa/xrs700x/xrs700x_i2c.c
-> index bbaf5a3fbf000,cd533b9e17eca..0000000000000
-> --- a/drivers/net/dsa/xrs700x/xrs700x_i2c.c
-> +++ b/drivers/net/dsa/xrs700x/xrs700x_i2c.c
-> @@@ -110,11 -110,11 +110,9 @@@ static void xrs700x_i2c_remove(struct i
->   	struct xrs700x *priv =3D i2c_get_clientdata(i2c);
->  =20
->   	if (!priv)
->  -		return 0;
->  +		return;
->  =20
->   	xrs700x_switch_remove(priv);
-> --
-> - 	i2c_set_clientdata(i2c, NULL);
->  -	return 0;
->   }
->  =20
->   static void xrs700x_i2c_shutdown(struct i2c_client *i2c)
+  Makefile
 
-To fix that issue before sending a PR to Linus you might want to pull
+between commit:
 
-	https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux i2c/make_remove_=
-callback_void-immutable
+  0cc1b22fa606e ("kbuild: list sub-directories in ./Kbuild")
+  ca5f20da2ffcb ("kbuild: move .vmlinux.objs rule to Makefile.modpost")
 
-into your tree.
+from the kbuild tree and commit:
 
-Best regards
-Uwe
+  d64ddbd68af8f ("Kbuild: add Rust support")
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+from the rust tree.
 
---7mgoxxaeekmkd6jf
-Content-Type: application/pgp-signature; name="signature.asc"
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmMzCXYACgkQwfwUeK3K
-7AmW1Qf/bgiNo2Mo68dWX3kd8AOMpEiW4YG/Hy6lGGWSOzLC473XhiRnN2nzM/cJ
-TnIf5vRyVks8DYhy31HY5nnnJRYFiJMqHm1J9XzsYO3f6mY7P1BhmW1toagFKRdg
-nxOCZTDh+Aos2m4FSXm91HUExFJ1hMaH4CH7nPjr+584+ZN+0ILVovTTchHuEzjl
-Cy3+UN+d83DmLUoEjAVFKdURWggKpO5TYAbPluB5jZ1PsR4xeRMe72EU9FcWS0X8
-+Pp+gUduEnEYgsWrJNBXmpSz2yWAiYEGYrsVNdfMt3PuuWAjWxW/3lYAX6YNXmJd
-miAKxj5Akk0JK22aBXVj51nkKXblVQ==
-=ONMS
------END PGP SIGNATURE-----
-
---7mgoxxaeekmkd6jf--
+diff --cc Makefile
+index 2b4980490ecb2,c759ee3152544..0000000000000
+--- a/Makefile
++++ b/Makefile
+@@@ -789,7 -862,11 +861,10 @@@ KBUILD_CFLAGS += $(stackp-flags-y
+  
+  KBUILD_CFLAGS-$(CONFIG_WERROR) += -Werror
+  KBUILD_CFLAGS-$(CONFIG_CC_NO_ARRAY_BOUNDS) += -Wno-array-bounds
+ -KBUILD_CFLAGS += $(KBUILD_CFLAGS-y) $(CONFIG_CC_IMPLICIT_FALLTHROUGH)
+  
++ KBUILD_RUSTFLAGS-$(CONFIG_WERROR) += -Dwarnings
++ KBUILD_RUSTFLAGS += $(KBUILD_RUSTFLAGS-y)
++ 
+  ifdef CONFIG_CC_IS_CLANG
+  KBUILD_CPPFLAGS += -Qunused-arguments
+  # The kernel builds with '-std=gnu11' so use of GNU extensions is acceptable.
+@@@ -1098,9 -1182,16 +1179,8 @@@ export MODORDER := $(extmod_prefix)modu
+  export MODULES_NSDEPS := $(extmod_prefix)modules.nsdeps
+  
+  ifeq ($(KBUILD_EXTMOD),)
+ -core-y			+= kernel/ certs/ mm/ fs/ ipc/ security/ crypto/
+ -core-$(CONFIG_BLOCK)	+= block/
+ -core-$(CONFIG_IO_URING)	+= io_uring/
+ -core-$(CONFIG_RUST)	+= rust/
+ -
+ -vmlinux-dirs	:= $(patsubst %/,%,$(filter %/, \
+ -		     $(core-y) $(core-m) $(drivers-y) $(drivers-m) \
+ -		     $(libs-y) $(libs-m)))
+--
+ -vmlinux-alldirs	:= $(sort $(vmlinux-dirs) Documentation \
+ +build-dir	:= .
+ +clean-dirs	:= $(sort . Documentation \
+  		     $(patsubst %/,%,$(filter %/, $(core-) \
+  			$(drivers-) $(libs-))))
+  
+@@@ -1497,7 -1585,7 +1581,8 @@@ endif # CONFIG_MODULE
+  # Directories & files removed with 'make clean'
+  CLEAN_FILES += include/ksym vmlinux.symvers modules-only.symvers \
+  	       modules.builtin modules.builtin.modinfo modules.nsdeps \
+- 	       compile_commands.json .thinlto-cache .vmlinux.objs
+ -	       compile_commands.json .thinlto-cache rust/test rust/doc
+++	       compile_commands.json .thinlto-cache .vmlinux.objs \
+++	       rust/test rust/doc
+  
+  # Directories & files removed with 'make mrproper'
+  MRPROPER_FILES += include/config include/generated          \
+diff --git a/Kbuild b/Kbuild
+index 8a37584d1fd6b..5f4a23fc87b63 100644
+--- a/Kbuild
++++ b/Kbuild
+@@ -91,6 +91,7 @@ obj-$(CONFIG_BLOCK)	+= block/
+ obj-$(CONFIG_IO_URING)	+= io_uring/
+ obj-y			+= $(ARCH_LIB)
+ obj-y			+= drivers/
++obj-$(CONFIG_RUST)	+= rust/
+ obj-y			+= sound/
+ obj-$(CONFIG_SAMPLES)	+= samples/
+ obj-$(CONFIG_NET)	+= net/

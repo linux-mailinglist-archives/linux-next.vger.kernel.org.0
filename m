@@ -2,90 +2,82 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B05315EE2E4
-	for <lists+linux-next@lfdr.de>; Wed, 28 Sep 2022 19:17:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85D9A5EE333
+	for <lists+linux-next@lfdr.de>; Wed, 28 Sep 2022 19:33:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230431AbiI1RRW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 28 Sep 2022 13:17:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34672 "EHLO
+        id S233782AbiI1RdA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 28 Sep 2022 13:33:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234559AbiI1RRC (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 28 Sep 2022 13:17:02 -0400
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4582718E22;
-        Wed, 28 Sep 2022 10:16:46 -0700 (PDT)
-Received: by mail-io1-xd2a.google.com with SMTP id n192so9500953iod.3;
-        Wed, 28 Sep 2022 10:16:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=nWT0dY8CH6ZDhZEwG3/zxXxVza72yOSFN78+9HivIx8=;
-        b=o5lP24+OoGt0u1JvVmbs6pVe+VTt3V3io+TCieNxR4yRFDHB+h3mp762sRAFzfm8P2
-         Zdi4+vfp0a4BKzFsNjQ9wy1FGmveqFoq4pRuSX/65InDVeGf8HNznCJ2eG7dGmT3uGKB
-         Oc4UpQxSjJpNiFvsoYbbX2odnW9ctbHt0bZLFzgritGRvDaPF2kC76VJNVnj/y8s+m2/
-         JurPbn1fL84T7lk+31WK1HGYzXg2vM0dhfJV2aTOy0wj/0zhtiptP/rfFYcZKuUIrXO6
-         DvW4Z9I24dKz3DrOyy1tgNl1C3RS5dAIL3T+iFOuoEOt3M4sLzs/nZA/VWpSjJmFpLlU
-         mTcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=nWT0dY8CH6ZDhZEwG3/zxXxVza72yOSFN78+9HivIx8=;
-        b=POHFQW5Y9B7zarEvDPx2KNtJldA+mH5yj7pWNlTXBYI8/20Kj0RfMgg/ar9OffXs+O
-         PvPg9qtMGPFu8LndyC3SJeXjeagDmBzDVcfWWKvhUaFPLsDN8LQnHkw5vo1MrM/yIdCq
-         lv0z2zSth6fUfxor6BjoYr8NFbSOwuHHmc/2kCl++Lw2y8KiFGXsds2hOrnZiiihLcXM
-         azn9L4h9lvcU/l9Yr6TwJtlOeuR8YS4hvo4t3wnHSTn7Y/f8G1h8s3OyHbdTud6lWZB6
-         FbwfEoBPS12x8HqAN9lcW7jRp4NGMkhNP9wJuQzW5KzYbS0Ji4VXnFLm0APOJsKXXgLB
-         XHIg==
-X-Gm-Message-State: ACrzQf1SFZwpTooEIvMCooAC6niRbmEQ/xzfVNdi1hHnIi1P4pYGzlTm
-        bhb/u8jKk+6gCAC4hQ8GVSTIp3tGMVonBweag7o=
-X-Google-Smtp-Source: AMsMyM6a0LBYPMwSJMlznDm4+VAzXSEs+W4lpjj2ThGM0Q7tUeTU2/4r7NH0n+RWsv6q2iWYuipZAV7l8w4/Dd+64fk=
-X-Received: by 2002:a05:6638:218f:b0:35a:7f20:6a57 with SMTP id
- s15-20020a056638218f00b0035a7f206a57mr17584932jaj.186.1664385405399; Wed, 28
- Sep 2022 10:16:45 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220927181647.487727-1-broonie@kernel.org>
-In-Reply-To: <20220927181647.487727-1-broonie@kernel.org>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Wed, 28 Sep 2022 19:16:34 +0200
-Message-ID: <CANiq72=9ns5DU0C6eacxLnMkNUqZXa_gP_x3KLBKof8dR3HNYw@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the rust tree with the kbuild tree
-To:     broonie@kernel.org
-Cc:     Adam Bratschi-Kaye <ark.email@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Antonio Terceiro <antonio.terceiro@linaro.org>,
-        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Boris-Chengbiao Zhou <bobo1239@web.de>,
-        Daniel Xu <dxu@dxuuu.xyz>,
-        Dariusz Sosnowski <dsosnowski@dsosnowski.pl>,
-        Douglas Su <d0u9.su@outlook.com>, Finn Behrens <me@kloenk.de>,
-        Gary Guo <gary@garyguo.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        with ESMTP id S233252AbiI1Rc6 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 28 Sep 2022 13:32:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17F4EF3725;
+        Wed, 28 Sep 2022 10:32:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 79E6561F5D;
+        Wed, 28 Sep 2022 17:32:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9958C433C1;
+        Wed, 28 Sep 2022 17:32:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664386372;
+        bh=MESF/SAXKnOYRRXeWy0BA+NQHtLoq1hqzis71tdV/bg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=NQ8lHRM4EI7m6vcK4N+wXV44/T7gKFQe9h85VmI0RpYs18IIEBnSQVfGnTNmoF35+
+         2nt0smmScKpVmRbpzXi/w3NcwZgfs9rdrKQlq5wRGzXg12Xh7Bu0e8ellH6wY5xzRu
+         nrA6RLIYupyfewoxt+5FFLnadBZGdjM9lro7UfJ5Mwqnn35ftBN+ZZM1bfpBRbeyw+
+         p7H/IfanWQXJdR6tXrDf7DMvXBbwEGdAG6h+BO011s4jJEfhJnaoL+PWydbnr8ylFS
+         eJCUGVp/cT/I0TVHgJAOzGshBNo4+3YePtylyu8uxPtWQ4npzlGvcBrzqmbXEe2vRD
+         lWYG+G64lgOrA==
+From:   broonie@kernel.org
+To:     William Breathitt Gray <wbg@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Sven Van Asbroeck <thesven73@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        William Breathitt Gray <william.gray@linaro.org>
+Subject: linux-next: manual merge of the counter-next tree with the counter-current tree
+Date:   Wed, 28 Sep 2022 18:32:48 +0100
+Message-Id: <20220928173248.236720-1-broonie@kernel.org>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Sep 27, 2022 at 8:16 PM <broonie@kernel.org> wrote:
->
-> I fixed it up (see below) and can carry the fix as necessary. This
+Hi all,
 
-Build-tested it -- works, thanks!
+Today's linux-next merge of the counter-next tree got a conflict in:
 
-Cheers,
-Miguel
+  include/linux/counter.h
+
+between commit:
+
+  8294b04153c33 ("counter: Realign counter_comp comment block to 80 characters")
+
+from the counter-current tree and commits:
+
+  88f48f81d496f ("counter: Realign counter_comp comment block to 80 characters")
+  b6e53438badcb ("counter: Introduce the Signal polarity component")
+  3cebaa0b807a2 ("counter: Introduce the Count capture component")
+  a51fd608704bd ("counter: Introduce the COUNTER_COMP_ARRAY component type")
+
+from the counter-next tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+diff --cc include/linux/counter.h
+index a81234bc8ea8e,c41fa602ed283..0000000000000
+--- a/include/linux/counter.h
++++ b/include/linux/counter.h

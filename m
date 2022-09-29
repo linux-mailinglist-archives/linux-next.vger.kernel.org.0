@@ -2,48 +2,50 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1140F5EED72
-	for <lists+linux-next@lfdr.de>; Thu, 29 Sep 2022 07:59:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2DA75EED96
+	for <lists+linux-next@lfdr.de>; Thu, 29 Sep 2022 08:09:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234878AbiI2F7h (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 29 Sep 2022 01:59:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34108 "EHLO
+        id S233332AbiI2GJa (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 29 Sep 2022 02:09:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234585AbiI2F7g (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 29 Sep 2022 01:59:36 -0400
+        with ESMTP id S230015AbiI2GJ3 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 29 Sep 2022 02:09:29 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62BB721B9;
-        Wed, 28 Sep 2022 22:59:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 129E911C144;
+        Wed, 28 Sep 2022 23:09:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
         Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
         Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=NXUihHm0xOJUlsVS7RXSAPp6feiEX61IX5jpUCvHJSU=; b=OcpQjrOLrFI18JmVeNjMrL9A1R
-        7tJ1vb91/D4zIehcuQeDcXBgWEWc9Xl+xmL5BKXwJO/AqA/okBi8EZrRVVvUxb/1Zr5iyXjBml9tc
-        YbeJ8XmbynCK9wb8v/5M63FoBnnjKW4XC9q5a2OBI5uWqeJ/fUx+0oN2qsJpTN7EhxMVSsGrC6xMC
-        3X6pSYDb7hAkiTSJSu8KW30+9B0q31u03Mhj8cdkCTX649Naya6CuUGoYpjQxOhm3is6F2spQh+GQ
-        445tRdvylO9aKMliyOLsUycg1wqMdsxlOo4IrzkvrL56/Dk500SXnQRNW3xk4vcSTbo320eV3zJvB
-        k3QT6HxA==;
+        bh=8glxvAsCfjK/Oq/Yba1pToU5yEMO+RQjzWfqMG6Hn3g=; b=RId2ByHt48Mp7EmYN+XtwX62Ad
+        cpwaMQc6GjQrCk4SyBrhlafzpe4LFf1/OPvZduDJmUi7wPgjMSaffoP4CQsm5MDBg0KsXs6Vjll70
+        AGc0kfUxszlG+X9hu8kRpByPd7mv9JQdIwl3QlAjfWuzwizfgjNP3E7kQRdfbKGxgV035eCAbcxU4
+        Q6SozNVM4fseDu78STIIeqabKDkAjbKcyIIqOw2Bj4020Gk3sDqqM4IX8wJcxoljD1jytRhTAQWhI
+        /cDPDLSMmgf3JADJW1+S6RVmJJ8GPtp+1r2Wd2PsyXddVWfEsGfRpPFly1cgkWVDfTl6eP7YxoHvT
+        4VzhDBXg==;
 Received: from [2601:1c2:d80:3110::a2e7]
         by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1odma5-001K2m-0M; Thu, 29 Sep 2022 05:59:33 +0000
-Message-ID: <d0c824e3-11fb-6002-982d-c15916f060d8@infradead.org>
-Date:   Wed, 28 Sep 2022 22:59:32 -0700
+        id 1odmjf-001Ks1-G4; Thu, 29 Sep 2022 06:09:27 +0000
+Message-ID: <68689c5b-327f-65df-0d34-a7e1a851f568@infradead.org>
+Date:   Wed, 28 Sep 2022 23:09:26 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.2.2
-Subject: Re: linux-next: Tree for Sep 28 (Kconfig: SND_SOC_QDSP6)
+Subject: Re: linux-next: Tree for Sep 28
+ (drivers/gpu/drm/msm/msm_gem_shrinker.c)
 Content-Language: en-US
 To:     broonie@kernel.org,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        Rob Clark <robdclark@chromium.org>
 References: <20220928192605.247546-1-broonie@kernel.org>
 From:   Randy Dunlap <rdunlap@infradead.org>
 In-Reply-To: <20220928192605.247546-1-broonie@kernel.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -61,12 +63,13 @@ On 9/28/22 12:26, broonie@kernel.org wrote:
 > Changes since 20220927:
 > 
 
-on x86_64, when QCOM_APR is not set and COMPILE_TEST=y:
+on x86_64:
 
-WARNING: unmet direct dependencies detected for SND_SOC_QDSP6
-  Depends on [n]: SOUND [=y] && !UML && SND [=y] && SND_SOC [=y] && SND_SOC_QCOM [=y] && QCOM_APR [=n] && COMMON_CLK [=y]
-  Selected by [y]:
-  - SND_SOC_SC8280XP [=y] && SOUND [=y] && !UML && SND [=y] && SND_SOC [=y] && SND_SOC_QCOM [=y] && (QCOM_APR [=n] || COMPILE_TEST [=y]) && SOUNDWIRE [=y] && COMMON_CLK [=y]
+../drivers/gpu/drm/msm/msm_gem_shrinker.c: In function ‘can_block’:
+../drivers/gpu/drm/msm/msm_gem_shrinker.c:29:28: error: ‘__GFP_ATOMIC’ undeclared (first use in this function); did you mean ‘GFP_ATOMIC’?
+   29 |         if (sc->gfp_mask & __GFP_ATOMIC)
+      |                            ^~~~~~~~~~~~
+      |                            GFP_ATOMIC
 
 
 

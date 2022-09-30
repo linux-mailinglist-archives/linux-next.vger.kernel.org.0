@@ -2,134 +2,167 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07AE75F0B2E
-	for <lists+linux-next@lfdr.de>; Fri, 30 Sep 2022 13:58:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D54785F0B47
+	for <lists+linux-next@lfdr.de>; Fri, 30 Sep 2022 14:06:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229870AbiI3L6X (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 30 Sep 2022 07:58:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47820 "EHLO
+        id S230420AbiI3MGd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 30 Sep 2022 08:06:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231320AbiI3L6W (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 30 Sep 2022 07:58:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D01A15FC7C;
-        Fri, 30 Sep 2022 04:58:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 08A106230C;
-        Fri, 30 Sep 2022 11:58:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3017FC433D6;
-        Fri, 30 Sep 2022 11:58:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664539100;
-        bh=wsb962dMKRh67QppXhCfHwWVKv37pVodkZIc29Rre7o=;
-        h=From:To:Cc:Subject:Date:From;
-        b=L1XsEQr+hrLzLPqpP4SmZPwTNkks4X6J6VEd9w9hLVMqwk+PRgAcj271QdyUJZEkL
-         9tzhPSSccqDyafu7s9Gfypcs3+MA8WD72kKKoQTGBmCqXV5V1xIpGJOS6T5SVhZL1A
-         4CiJDWRt4C0MsxfA3Yox/uCNhDorpdV4S6dC8lmUhsb/6TqqCDr9pkzHt1ug1A+muu
-         nrD7bZmnRl7KlCks8SIMsXR3qcaBkg/GVQIKdI4AS/EPBorq6ZwignaOaGGTdddSmJ
-         snxOhQTGqxFj1+9QTUiq7dT67LmPg74gR3gHCxJRMOaBtELPISYSx5jylWdFNI8Yhj
-         /t7c5D1wjbQhQ==
-From:   broonie@kernel.org
-To:     Lee Jones <lee@kernel.org>
+        with ESMTP id S230358AbiI3MGc (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 30 Sep 2022 08:06:32 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C144D15AB73
+        for <linux-next@vger.kernel.org>; Fri, 30 Sep 2022 05:06:30 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id k10so6556644lfm.4
+        for <linux-next@vger.kernel.org>; Fri, 30 Sep 2022 05:06:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=/Hh3w8b6d9P9uyOgmgV/Rx9H7p7C6KLrvLHtxihZXHE=;
+        b=zCEnWtF9CeAcAmKrS2oKa7epm8QDPNoPOYsJNhgn3hN5GysNTeZDZRwEjruIRtF4GZ
+         0Nx7t+u4hn48rjUlb8StcZJ4h0E5mPV5j0u7iSNHDcCvWZcIgFuAC17RBwb/z5U+5FWJ
+         WBh2pfouO9hYd1uNeitXMlwfU37hS6Jqa+QVjMWGmxrZrWCPDntNmDJt5mLob4clk/oM
+         8mjfh3cG25cUX3m8AWp8d+AYTwqZL8/u7LsTQ1rtrGaLL0swc0beVvrLjHeBL5frTFqf
+         egEXv5yBbCDNxOexCEiVmGLANncgTmER8zKprVApZKT9wGr5DLG8ExHx00xndcHZhN2g
+         xQ0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=/Hh3w8b6d9P9uyOgmgV/Rx9H7p7C6KLrvLHtxihZXHE=;
+        b=ewec4cExOpI6gBU7RpDLK9mMHQySAYaqGkWc5wD1k2xxnFsBMonxKHj/S0WemrUQir
+         UDQ8edES+9SSJr/lcEehawR6d95cuso5KRWN2EOIZMbHPz5QoQaDRE0VjMZcEkEJzXXo
+         uINcgtcJ9MrOS8kdwCgu4HDV/XkMLX/VnfDcURfF4IIE8l+5lCJUBoKlarC/jPR6+jsT
+         RLabZtfqXL93DTkVPldPGJQc7zdruxs39UjZAzPo71MryAgugu9+B11yZuMosPX4HpvF
+         BFGGmlsgQnf/elhYANkjEokYjdXrUxA5l87f2UZbI+8X9jhSCQYk76bNZ6zlfYlrOBgM
+         lXvw==
+X-Gm-Message-State: ACrzQf1+9gLa+ZlziBk+v8mW1dPedS5yd3T6E4f/yHId4OaVUixddyD0
+        MhoATzIF2dg7e3I+GhwPtlMkFqJ9+wKHYQ==
+X-Google-Smtp-Source: AMsMyM5Au9/HOnkusXJEyg25z9G0ILNwGEWN2ewb7840+VsT7ezLolNuYLdeVYIW8M8jmfWpp1v/TA==
+X-Received: by 2002:a05:6512:1152:b0:4a0:5555:15ee with SMTP id m18-20020a056512115200b004a0555515eemr3553626lfg.38.1664539589099;
+        Fri, 30 Sep 2022 05:06:29 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id g22-20020a05651222d600b00485caa0f5dfsm278908lfu.44.2022.09.30.05.06.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 30 Sep 2022 05:06:28 -0700 (PDT)
+Message-ID: <1e9a21a3-d6c3-3f76-18dc-ff14e8609846@linaro.org>
+Date:   Fri, 30 Sep 2022 14:06:28 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: linux-next: manual merge of the mfd tree with the qcom tree
+To:     broonie@kernel.org, Lee Jones <lee@kernel.org>
 Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the mfd tree with the qcom tree
-Date:   Fri, 30 Sep 2022 12:58:16 +0100
-Message-Id: <20220930115816.128513-1-broonie@kernel.org>
-X-Mailer: git-send-email 2.30.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220930115816.128513-1-broonie@kernel.org>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220930115816.128513-1-broonie@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi all,
+On 30/09/2022 13:58, broonie@kernel.org wrote:
+> Hi all,
+> 
+> Today's linux-next merge of the mfd tree got a conflict in:
+> 
+>   Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml
+> 
 
-Today's linux-next merge of the mfd tree got a conflict in:
+Thanks Mark.
 
-  Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml
+> between commit:
+> 
+>   4f2e28b2cc2e0 ("dt-bindings: mfd: qcom,tcsr: add several devices")
 
-between commit:
+It seems this commit was picked by both Bjorn/qcom and Lee/MFD.
 
-  4f2e28b2cc2e0 ("dt-bindings: mfd: qcom,tcsr: add several devices")
+> 
+> from the qcom tree and commits:
+> 
+>   f8c1940165bea ("dt-bindings: mfd: qcom,tcsr: Add several devices")
+>   a328ae8504dbc ("dt-bindings: mfd: qcom,tcsr: Drop simple-mfd from IPQ6018")
 
-from the qcom tree and commits:
+This commit depends on the duplicated one (on "Add several devices"), so
+I think all set can stay in MFD and instead Bjorn could drop his copy of
+the commit.
 
-  f8c1940165bea ("dt-bindings: mfd: qcom,tcsr: Add several devices")
-  a328ae8504dbc ("dt-bindings: mfd: qcom,tcsr: Drop simple-mfd from IPQ6018")
+If not, please propagate the merge conflict resolution, but not the one
+from Mark.
 
-from the mfd tree.
+Instead result should look like a328ae8504dbc (from MFD tree).
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
 
-diff --cc Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml
-index d3c25daa995e4,b12809b5cc22e..0000000000000
---- a/Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml
-+++ b/Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml
-@@@ -15,31 -15,27 +15,27 @@@ description
-  
-  properties:
-    compatible:
- -    items:
- -      - enum:
- -          - qcom,msm8998-tcsr
- -          - qcom,qcs404-tcsr
- -          - qcom,sc7180-tcsr
- -          - qcom,sc7280-tcsr
- -          - qcom,sdm630-tcsr
- -          - qcom,sdm845-tcsr
- -          - qcom,sm8150-tcsr
- -          - qcom,tcsr-apq8064
- -          - qcom,tcsr-apq8084
- -          - qcom,tcsr-ipq6018
- -          - qcom,tcsr-ipq8064
- -          - qcom,tcsr-mdm9615
- -          - qcom,tcsr-msm8660
- -          - qcom,tcsr-msm8916
- -          - qcom,tcsr-msm8953
- -          - qcom,tcsr-msm8960
- -          - qcom,tcsr-msm8974
- -          - qcom,tcsr-msm8996
- -      - const: syscon
- +    oneOf:
- +      - items:
- +          - enum:
- +              - qcom,msm8998-tcsr
- +              - qcom,qcs404-tcsr
- +              - qcom,sc7180-tcsr
- +              - qcom,sc7280-tcsr
- +              - qcom,sdm630-tcsr
- +              - qcom,sdm845-tcsr
- +              - qcom,sm8150-tcsr
- +              - qcom,tcsr-apq8064
- +              - qcom,tcsr-apq8084
- +              - qcom,tcsr-ipq8064
- +              - qcom,tcsr-mdm9615
- +              - qcom,tcsr-msm8660
- +              - qcom,tcsr-msm8916
- +              - qcom,tcsr-msm8953
- +              - qcom,tcsr-msm8960
- +              - qcom,tcsr-msm8974
- +              - qcom,tcsr-msm8996
- +          - const: syscon
--       - items:
--           - const: qcom,tcsr-ipq6018
--           - const: syscon
--           - const: simple-mfd
-  
-    reg:
-      maxItems: 1
+> 
+> from the mfd tree.
+> 
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+> 
+> diff --cc Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml
+> index d3c25daa995e4,b12809b5cc22e..0000000000000
+> --- a/Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml
+> +++ b/Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml
+> @@@ -15,31 -15,27 +15,27 @@@ description
+>   
+>   properties:
+>     compatible:
+>  -    items:
+>  -      - enum:
+>  -          - qcom,msm8998-tcsr
+>  -          - qcom,qcs404-tcsr
+>  -          - qcom,sc7180-tcsr
+>  -          - qcom,sc7280-tcsr
+>  -          - qcom,sdm630-tcsr
+>  -          - qcom,sdm845-tcsr
+>  -          - qcom,sm8150-tcsr
+>  -          - qcom,tcsr-apq8064
+>  -          - qcom,tcsr-apq8084
+>  -          - qcom,tcsr-ipq6018
+>  -          - qcom,tcsr-ipq8064
+>  -          - qcom,tcsr-mdm9615
+>  -          - qcom,tcsr-msm8660
+>  -          - qcom,tcsr-msm8916
+>  -          - qcom,tcsr-msm8953
+>  -          - qcom,tcsr-msm8960
+>  -          - qcom,tcsr-msm8974
+>  -          - qcom,tcsr-msm8996
+>  -      - const: syscon
+>  +    oneOf:
+>  +      - items:
+>  +          - enum:
+>  +              - qcom,msm8998-tcsr
+>  +              - qcom,qcs404-tcsr
+>  +              - qcom,sc7180-tcsr
+>  +              - qcom,sc7280-tcsr
+>  +              - qcom,sdm630-tcsr
+>  +              - qcom,sdm845-tcsr
+>  +              - qcom,sm8150-tcsr
+>  +              - qcom,tcsr-apq8064
+>  +              - qcom,tcsr-apq8084
+
+This misses ipq6018. Please chose solely the MFD branch/side.
+
+>  +              - qcom,tcsr-ipq8064
+
+Best regards,
+Krzysztof
+

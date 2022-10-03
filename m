@@ -2,96 +2,241 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B14E55F2EEE
-	for <lists+linux-next@lfdr.de>; Mon,  3 Oct 2022 12:40:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C910F5F3599
+	for <lists+linux-next@lfdr.de>; Mon,  3 Oct 2022 20:26:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229846AbiJCKkY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 3 Oct 2022 06:40:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60334 "EHLO
+        id S229461AbiJCS0i (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 3 Oct 2022 14:26:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229814AbiJCKkB (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 3 Oct 2022 06:40:01 -0400
-Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C21521B9C2
-        for <linux-next@vger.kernel.org>; Mon,  3 Oct 2022 03:39:45 -0700 (PDT)
-Received: by mail-ed1-x542.google.com with SMTP id u21so9755909edi.9
-        for <linux-next@vger.kernel.org>; Mon, 03 Oct 2022 03:39:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date;
-        bh=pSKuz9BJS/Qwel4yBJUKsJP++c1z8gtIosTtEbMtN5I=;
-        b=RHHmAOienDzk5McXyVq7AyXFgmsKNvHjoqFyqlyCgjT1QBoFpxKv9Uv17ulESMjY4i
-         nOZSC1HdGsv82NGwdY1N4uleC4VH/rT2CUE7ux5jgQjcRMjfiuZs4EPrzjomPBCIRjjF
-         tcoLTkOXwtM4EfN8reFn67RiN1lX4dtfnlOupwHmLEWTZjN6dT+pKoA782cD5YxzZonI
-         EHgKfhYIjFU7+1GSbWZtRpIDGKy1kYbo1J7MxwcI5zGc+ehlTgHDgqqEZaMskur1NiX6
-         V1ZwZ4lKy0DxcpkHO+bG7O3aRzTZP3JxmNikA7jZ/3N42E5h+cAgymt5j4NSAcUO5qXY
-         W8OQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=pSKuz9BJS/Qwel4yBJUKsJP++c1z8gtIosTtEbMtN5I=;
-        b=nz4JFpNWnWAbK6l7GnonEtyRRMy5lRpMYRw8f8jyjE6Z4XiN15S/8RKK/OyKuFY2Ck
-         WWkz/vRsgV/ymWBYHBc+sg/L8xeUC+3jgd/Q9H0iI2Tfh8Xb5njXRZfaBw3qjlUaStl5
-         +S0yX+uL/3Pt54Nw6b2DSfmhioHTMZTuZwU5mmG/5gxD3r1BCSTktrMR57xHgGPIM+S6
-         TiNZHHdD9NJkDQhxIMoDdY1rM7IEF0diQXRQ6+ZqmV1InDYBybL7RNUPBKYJloyBgehK
-         JnCurMtnct4Ig8wyzTedPdK+HXV9OjmnvxwUguP0kaKo2swHqZdjB/9KfkoR46yejzc7
-         BLXw==
-X-Gm-Message-State: ACrzQf0cuEWWeZ5wPYVrlltmZxvUoHqy+uYA5IIXpxZZDbEHUz8Tereg
-        irlLJAWv865yTJ66ZYRvPIRDkqiNmeDITP64gSI=
-X-Google-Smtp-Source: AMsMyM55rxqZxZJwCvYpZJQU+G5rYXAdOj3bJi8qPp2s4BD9Klxipg+IvcoIxwcXKEUVoEBkeX9RJH+n+jvrprCsnBw=
-X-Received: by 2002:a05:6402:1856:b0:458:db1e:20ec with SMTP id
- v22-20020a056402185600b00458db1e20ecmr6260068edy.14.1664793584281; Mon, 03
- Oct 2022 03:39:44 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:a05:6f02:614c:b0:25:2f9b:6a8e with HTTP; Mon, 3 Oct 2022
- 03:39:43 -0700 (PDT)
-Reply-To: davidnelson7702626@gmail.com
-From:   david <nenkan1975@gmail.com>
-Date:   Mon, 3 Oct 2022 11:39:43 +0100
-Message-ID: <CAFO9AXjZUvFb_nNhB4gNdKk=jV50DXJo6uThtUvw0WbsFvrP2Q@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:542 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5055]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [nenkan1975[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [nenkan1975[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [davidnelson7702626[at]gmail.com]
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+        with ESMTP id S229819AbiJCS0g (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 3 Oct 2022 14:26:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C0A522295;
+        Mon,  3 Oct 2022 11:26:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3415FB81203;
+        Mon,  3 Oct 2022 18:26:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAE27C433D6;
+        Mon,  3 Oct 2022 18:26:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664821592;
+        bh=qQ+lKO5aMUr9c/skIopg9XS88/sx1Dq4BqDdMW7rr3w=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ANzKjsMOOhVTwP0q6+11SyNVWD2Yo2r8Euj8BFoJdPN3sP5TGBpjV8anlYBf1y6zy
+         Vv0AjC95AVOzt/LbJL/rKuF4Zf8KquORziUnBHtYFw9/UrtxXIpdeRgCBmn87Ry1OH
+         kjp2W33T0PHaZTNRBawx22svahDm/Wtlh19U8iFbc+V9mUaBHzwM0g35vYWp5nlR1j
+         MbdBB1lHxIoeDBd0paGBIloaKKGzDUyXSuX+0HlnkQzZLPLYxDGxJzqajP7pTW/2uO
+         4nCKkZNBqjO+Q6iS3wC5PAoC4Fi2eizg47D7nojMdvsqA7Pmv9viGIeIO5/xqe0/Rf
+         UlgtJ0QoOg4og==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1ofQ98-00EMd8-Be;
+        Mon, 03 Oct 2022 19:26:30 +0100
+Date:   Mon, 03 Oct 2022 19:26:29 +0100
+Message-ID: <8635c4bw6i.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Randy Dunlap <rdunlap@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>
+Cc:     broonie@kernel.org,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        x86@kernel.org
+Subject: Re: linux-next: Tree for Sep 30 (i386 non-SMP non-APIC w/ IRQ_DOMAIN: build errors)
+In-Reply-To: <bb1a7d75-521e-b578-f47f-e5bab652c2c7@infradead.org>
+References: <20220930154710.548289-1-broonie@kernel.org>
+        <bb1a7d75-521e-b578-f47f-e5bab652c2c7@infradead.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: rdunlap@infradead.org, tglx@linutronix.de, bp@alien8.de, broonie@kernel.org, linux-next@vger.kernel.org, linux-kernel@vger.kernel.org, x86@kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hello friend, I want to send money to you to enable me invest in your
-country get back to me if you are interested.
++ Borislav and the x86 mailing list
+
+On Sat, 01 Oct 2022 22:25:37 +0100,
+Randy Dunlap <rdunlap@infradead.org> wrote:
+>=20
+> Hi--
+>=20
+> On 9/30/22 08:47, broonie@kernel.org wrote:
+> > Hi all,
+> >=20
+> > Stephen should be back on Monday and normal service resumed.
+> >=20
+> > Changes since 20220929:
+> >=20
+>=20
+> i386 randconfig:
+>=20
+> # CONFIG_SMP is not set
+> # CONFIG_X86_UP_APIC is not set
+> CONFIG_IRQ_DOMAIN=3Dy
+> CONFIG_IRQ_SIM=3Dy
+> CONFIG_IRQ_DOMAIN_HIERARCHY=3Dy
+> CONFIG_GENERIC_MSI_IRQ=3Dy
+> CONFIG_GENERIC_MSI_IRQ_DOMAIN=3Dy
+>=20
+>=20
+> (a)
+>   CC      drivers/phy/phy-can-transceiver.o
+> In file included from ../include/asm-generic/gpio.h:11,
+>                  from ../include/linux/gpio.h:62,
+>                  from ../drivers/phy/phy-can-transceiver.c:11:
+> ../include/linux/gpio/driver.h:31:33: error: field =E2=80=98msiinfo=E2=80=
+=99 has incomplete type
+>    31 |         msi_alloc_info_t        msiinfo;
+>       |
+
+There is plenty of similar issues with drivers/gpio.
+
+This looks like x86 without APIC support lacks a proper definition of
+'struct irq_alloc_info'. I can make one up to get things to compile,
+but I wonder if that makes any sense the first place.
+
+[warning: anything below only shows that I know nothing about x86]
+
+Can x86 practically deal with MSIs without the APIC? If not, we should
+instead find a way to forbid MSIs when APIC isn't selected. Or make
+APIC support mandatory.
+
+>=20
+> (b)
+>   CC      arch/x86/kernel/hpet.o
+> ../arch/x86/kernel/hpet.c: In function =E2=80=98hpet_msi_init=E2=80=99:
+> ../arch/x86/kernel/hpet.c:520:46: error: invalid use of incomplete typede=
+f =E2=80=98msi_alloc_info_t=E2=80=99 {aka =E2=80=98struct irq_alloc_info=E2=
+=80=99}
+>   520 |         irq_domain_set_info(domain, virq, arg->hwirq, info->chip,=
+ NULL,
+>       |                                              ^~
+> ../arch/x86/kernel/hpet.c:521:49: error: invalid use of incomplete typede=
+f =E2=80=98msi_alloc_info_t=E2=80=99 {aka =E2=80=98struct irq_alloc_info=E2=
+=80=99}
+>   521 |                             handle_edge_irq, arg->data, "edge");
+>       |                                                 ^~
+>   CC      fs/jfs/jfs_xtree.o
+> ../arch/x86/kernel/hpet.c: In function =E2=80=98hpet_create_irq_domain=E2=
+=80=99:
+> ../arch/x86/kernel/hpet.c:550:13: error: =E2=80=98x86_vector_domain=E2=80=
+=99 undeclared (first use in this function)
+>   550 |         if (x86_vector_domain =3D=3D NULL)
+>       |             ^~~~~~~~~~~~~~~~~
+> ../arch/x86/kernel/hpet.c:550:13: note: each undeclared identifier is rep=
+orted only once for each function it appears in
+> ../arch/x86/kernel/hpet.c: In function =E2=80=98hpet_assign_irq=E2=80=99:
+> ../arch/x86/kernel/hpet.c:598:31: error: storage size of =E2=80=98info=E2=
+=80=99 isn=E2=80=99t known
+>   598 |         struct irq_alloc_info info;
+>       |                               ^~~~
+> ../arch/x86/kernel/hpet.c:600:9: error: implicit declaration of function =
+=E2=80=98init_irq_alloc_info=E2=80=99 [-Werror=3Dimplicit-function-declarat=
+ion]
+>   600 |         init_irq_alloc_info(&info, NULL);
+>       |         ^~~~~~~~~~~~~~~~~~~
+> ../arch/x86/kernel/hpet.c:601:21: error: =E2=80=98X86_IRQ_ALLOC_TYPE_HPET=
+=E2=80=99 undeclared (first use in this function)
+>   601 |         info.type =3D X86_IRQ_ALLOC_TYPE_HPET;
+>       |                     ^~~~~~~~~~~~~~~~~~~~~~~
+> ../arch/x86/kernel/hpet.c:598:31: warning: unused variable =E2=80=98info=
+=E2=80=99 [-Wunused-variable]
+>   598 |         struct irq_alloc_info info;
+>       |                               ^~~~
+> ../arch/x86/kernel/hpet.c:607:1: error: control reaches end of non-void f=
+unction [-Werror=3Dreturn-type]
+>   607 | }
+>       | ^
+
+Same question: is HPET usable without the APIC? If so, the MSI part
+should probably be guarded by something else.
+
+>=20
+>=20
+> (c)
+>   CC      kernel/irq/msi.o
+> ../kernel/irq/msi.c: In function =E2=80=98msi_domain_ops_get_hwirq=E2=80=
+=99:
+> ../kernel/irq/msi.c:585:19: error: invalid use of incomplete typedef =E2=
+=80=98msi_alloc_info_t=E2=80=99 {aka =E2=80=98struct irq_alloc_info=E2=80=
+=99}
+>   585 |         return arg->hwirq;
+>       |                   ^~
+> In file included from ../arch/x86/include/asm/string.h:3,
+>                  from ../include/linux/string.h:20,
+>                  from ../arch/x86/include/asm/page_32.h:22,
+>                  from ../arch/x86/include/asm/page.h:14,
+>                  from ../arch/x86/include/asm/thread_info.h:12,
+>                  from ../include/linux/thread_info.h:60,
+>                  from ../arch/x86/include/asm/preempt.h:7,
+>                  from ../include/linux/preempt.h:78,
+>                  from ../include/linux/rcupdate.h:27,
+>                  from ../include/linux/rculist.h:11,
+>                  from ../include/linux/pid.h:5,
+>                  from ../include/linux/sched.h:14,
+>                  from ../include/linux/ratelimit.h:6,
+>                  from ../include/linux/dev_printk.h:16,
+>                  from ../include/linux/device.h:15,
+>                  from ../kernel/irq/msi.c:12:
+> ../kernel/irq/msi.c: In function =E2=80=98msi_domain_ops_prepare=E2=80=99:
+> ../kernel/irq/msi.c:591:30: error: invalid application of =E2=80=98sizeof=
+=E2=80=99 to incomplete type =E2=80=98msi_alloc_info_t=E2=80=99 {aka =E2=80=
+=98struct irq_alloc_info=E2=80=99}
+>   591 |         memset(arg, 0, sizeof(*arg));
+>       |                              ^
+> ../arch/x86/include/asm/string_32.h:195:52: note: in definition of macro =
+=E2=80=98memset=E2=80=99
+>   195 | #define memset(s, c, count) __builtin_memset(s, c, count)
+>       |                                                    ^~~~~
+> ../kernel/irq/msi.c: In function =E2=80=98msi_domain_ops_set_desc=E2=80=
+=99:
+> ../kernel/irq/msi.c:598:12: error: invalid use of incomplete typedef =E2=
+=80=98msi_alloc_info_t=E2=80=99 {aka =E2=80=98struct irq_alloc_info=E2=80=
+=99}
+>   598 |         arg->desc =3D desc;
+>       |            ^~
+> ../kernel/irq/msi.c: In function =E2=80=98__msi_domain_alloc_irqs=E2=80=
+=99:
+> ../kernel/irq/msi.c:858:9: error: variable =E2=80=98arg=E2=80=99 has init=
+ializer but incomplete type
+>   858 |         msi_alloc_info_t arg =3D { };
+>       |         ^~~~~~~~~~~~~~~~
+> ../kernel/irq/msi.c:858:26: error: storage size of =E2=80=98arg=E2=80=99 =
+isn=E2=80=99t known
+>   858 |         msi_alloc_info_t arg =3D { };
+>       |                          ^~~
+> ../kernel/irq/msi.c:858:26: warning: unused variable =E2=80=98arg=E2=80=
+=99 [-Wunused-variable]
+>   CC      lib/clz_tab.o
+> ../kernel/irq/msi.c: In function =E2=80=98msi_domain_ops_get_hwirq=E2=80=
+=99:
+> ../kernel/irq/msi.c:586:1: error: control reaches end of non-void functio=
+n [-Werror=3Dreturn-type]
+>   586 | }
+>       | ^
+
+This is related to (a).
+
+Thanks,
+
+	M.
+
+--=20
+Without deviation from the norm, progress is not possible.

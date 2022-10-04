@@ -2,111 +2,124 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31D655F3E48
-	for <lists+linux-next@lfdr.de>; Tue,  4 Oct 2022 10:26:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB4195F4017
+	for <lists+linux-next@lfdr.de>; Tue,  4 Oct 2022 11:44:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230228AbiJDI03 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 4 Oct 2022 04:26:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33746 "EHLO
+        id S229619AbiJDJnl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 4 Oct 2022 05:43:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230183AbiJDI0W (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 4 Oct 2022 04:26:22 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52D342B625;
-        Tue,  4 Oct 2022 01:26:09 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 4126C5C01C0;
-        Tue,  4 Oct 2022 04:26:08 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Tue, 04 Oct 2022 04:26:08 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1664871968; x=1664958368; bh=nYJIR2k0EF
-        yCjWdCxWOh2cI2l/iR85+dfplMtNc6+SU=; b=uSm3C3f0heRtAXDyKjQYiSKp0T
-        VynUoKmiBSUCWDvYyddtmZZ5m+r3TQKtmCNkjwwYVbhnv3RhO0qD/utBqOuexcQr
-        ozJwpqJnsLak1jxfNt7TbICWCp78vngNQxh+dMm9PsJFRvQqG6ZtC8MkM5ej+BxB
-        Rm74lJk/LyQcjM1UvwnqpnCUMNhefOmzPsmxYQ+uqXmspU7R5Mq4Cd/oWxWvdxem
-        h++8kVQDAfpj52IGglpUKxB+kzHY78weJfnS3ekc0J3JpbPyYVBRVrXUi19mzetD
-        w9z0keMzziGKaEWW07EA657iQ1+aq1Yxgu/9NKd/0KxVjSDZrKliLm+nsOrw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1664871968; x=1664958368; bh=nYJIR2k0EFyCjWdCxWOh2cI2l/iR
-        85+dfplMtNc6+SU=; b=1WzagopDo48qNZsHDL/fknPJp2BbLpu6hkVLr64sacEU
-        WdLcqKSq8mgpKfxKOm3BDTfUrcOW7j/5duyltqpWwZxRx57SsotmERU11EfJ2Biq
-        AKY7QNNpV8gzNO3y1vazotUugGtO6nablPYGfdAQ1h4GQASEIdmpRuU8x1vOXzAR
-        zOCMYtCpPrYDWM1RoF4I5V2r0DNfSHzJaUzZYD93XMWlqzCZDu5slKZjLjAMzDTM
-        XmT/6RMjB7q8hWvz7cKfs4xLy1QAUt3cIt0U/WXZF9j36O72VsyOHoEaNawiStKO
-        zJ6sR+LjZNaE3HUflCbNQIS37wfItfO8qIFHb98kVw==
-X-ME-Sender: <xms:H-47YzLDOa3QLFf1UUDSQh6XDfToXTfl-8IIXfdsXyJb-wSml8uF3A>
-    <xme:H-47Y3IkBT3Pl1CcRn9Cm5PJsl6APRH35fbtvi5brqM6PO8hUTynhJmayRUeDYyyR
-    3-V-2fmTQLOYg>
-X-ME-Received: <xmr:H-47Y7tIZwZoTi1OqtOCPGjvvo1z6bO2mH8iG5abBoUJC__iWgVcwBWBc9RWOexlgWl0APHwO68Uh3BursBas5nZrI7MiEk4>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeeiuddgtdehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
-    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepheegvd
-    evvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefhgfehkeetnecuvehluhhs
-    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
-    hhrdgtohhm
-X-ME-Proxy: <xmx:H-47Y8ZlmQBhlWKRf0f8UKOUHa1EixGKgKJPjGIA1g9SdOEswzVYPw>
-    <xmx:H-47Y6b9i9XHwS893jh5Tdvg9LTgEuh699vueDN6SR3pRbjgTIemtQ>
-    <xmx:H-47YwDAbPwrTrN5-MQ6kYoBdoIZEdHAI-ZTv5Tk56-xGyb3tagJvw>
-    <xmx:IO47Y_NYRk3YP4CvwTp_KaixbjPnIkITvLw9sqWQQP8qYcAZx3QSAQ>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 4 Oct 2022 04:26:07 -0400 (EDT)
-Date:   Tue, 4 Oct 2022 10:26:05 +0200
-From:   Greg KH <greg@kroah.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        with ESMTP id S231163AbiJDJnD (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 4 Oct 2022 05:43:03 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFA8D2B1B8;
+        Tue,  4 Oct 2022 02:40:28 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MhXkL3GnHz4xGc;
+        Tue,  4 Oct 2022 20:40:26 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1664876426;
+        bh=w2kuGEV/YvrEJc0RZCY9v7PrU9QfbsLR7Qi5e2WiR/Q=;
+        h=Date:From:To:Cc:Subject:From;
+        b=A6jM/eD8feZxmz8dTja1IAnS8+YeXxOYbDxY4GqVmUmKd5K/IMf2qh9rTcg5SgdC3
+         wMJaWGd88n+BCibECrr0Eb8hnpa7lHshEKvX13iZ16sYtYUIT/QA3WloO3U/DcFJ4/
+         ifRCdudR1Oe+xNKpsyrLqjo4ab7QqlHecsRYM/HTP/JLN7ZX5KPWVzZDnEuIaIYrLy
+         jBM5i6v9Ck2YWQO8DY8N45fM1VeOxyOcwCCkz6Ax2V6bgf4kB2pyP+iSteoVeCtte2
+         aRNvtTZoFEv1XkhoECcDHbV3t02OJDN6q/nOVSntOBtKRWdkQNZABZCGSw1a6V7WZf
+         tH9TVk1QTExcQ==
+Date:   Tue, 4 Oct 2022 20:40:25 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>
+Cc:     Alexander Potapenko <glider@google.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the staging tree with the tty tree
-Message-ID: <YzvuHflMJm6BMHxE@kroah.com>
-References: <20221004173354.141e1a5b@canb.auug.org.au>
+Subject: linux-next: manual merge of the mm-stable tree with the kspp tree
+Message-ID: <20221004204025.7be8a3be@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221004173354.141e1a5b@canb.auug.org.au>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/6KqjqoIEX21PNN6ZDGZOfuo";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Oct 04, 2022 at 05:33:54PM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Today's linux-next merge of the staging tree got a conflict in:
-> 
->   drivers/staging/fwserial/fwserial.c
-> 
-> between commit:
-> 
->   a8c11c152034 ("tty: Make ->set_termios() old ktermios const")
-> 
-> from the tty tree and commit:
-> 
->   db65becab2a3 ("staging: fwserial: delete the driver.")
-> 
-> from the staging tree.
-> 
-> I fixed it up (I deleted the file) and can carry the fix as
-> necessary. This is now fixed as far as linux-next is concerned, but any
-> non trivial conflicts should be mentioned to your upstream maintainer
-> when your tree is submitted for merging.  You may also want to consider
-> cooperating with the maintainer of the conflicting tree to minimise any
-> particularly complex conflicts.
+--Sig_/6KqjqoIEX21PNN6ZDGZOfuo
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Fix is correct, thanks.
+Hi all,
 
-greg k-h
+Today's linux-next merge of the mm-stable tree got a conflict in:
+
+  include/linux/fortify-string.h
+
+between commit:
+
+  9f7d69c5cd23 ("fortify: Convert to struct vs member helpers")
+
+from the kspp tree and commit:
+
+  ff901d80fff6 ("x86: kmsan: use __msan_ string functions where possible.")
+
+from the mm-stable tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc include/linux/fortify-string.h
+index b62c90cfafaf,6c8a1a29d0b6..000000000000
+--- a/include/linux/fortify-string.h
++++ b/include/linux/fortify-string.h
+@@@ -325,11 -282,13 +325,13 @@@ __FORTIFY_INLINE void fortify_memset_ch
+  })
+ =20
+  /*
+ - * __builtin_object_size() must be captured here to avoid evaluating argu=
+ment
+ - * side-effects further into the macro layers.
+ + * __struct_size() vs __member_size() must be captured here to avoid
+ + * evaluating argument side-effects further into the macro layers.
+   */
++ #ifndef CONFIG_KMSAN
+  #define memset(p, c, s) __fortify_memset_chk(p, c, s,			\
+ -		__builtin_object_size(p, 0), __builtin_object_size(p, 1))
+ +		__struct_size(p), __member_size(p))
++ #endif
+ =20
+  /*
+   * To make sure the compiler can enforce protection against buffer overfl=
+ows,
+
+--Sig_/6KqjqoIEX21PNN6ZDGZOfuo
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmM7/4kACgkQAVBC80lX
+0Gx2xwf+O+5/lPFttzn6ykSEIZ33GeDcFcXJlOxXEHqrdmAiMLoR7JTG7zdoHMRK
+FWR6Pogs5X5ZvP+BrPzcI9hOqQGPg1vOZRoKWPEzNDDLtoHzNGPNJAXP6+hQv+vd
++GCscgesVaYPRyEWIsDx/+Waloxpem+4FDkk6/DO2Oi6y+Tx0exkgD8IoFweutxJ
+Gc6BkWxNcZkHIlxAfoGCDQKhtNi8nul3mCWvcSihpRCEURED2FIWM8N2sglIBN2m
+mZhI785BoJliFpSMwKOgEvxkw6VFj/jDgEvVNlGGB8AUSKnUSghSVbNfYiTyFynC
+dk1tesum4NHV+WPvaGLYVhfFFSqYBw==
+=0ELm
+-----END PGP SIGNATURE-----
+
+--Sig_/6KqjqoIEX21PNN6ZDGZOfuo--

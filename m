@@ -2,72 +2,64 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF34B5F4BB9
-	for <lists+linux-next@lfdr.de>; Wed,  5 Oct 2022 00:15:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E44C5F4BCA
+	for <lists+linux-next@lfdr.de>; Wed,  5 Oct 2022 00:24:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230094AbiJDWPC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 4 Oct 2022 18:15:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45998 "EHLO
+        id S229888AbiJDWYM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 4 Oct 2022 18:24:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230160AbiJDWPA (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 4 Oct 2022 18:15:00 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42A0120184
-        for <linux-next@vger.kernel.org>; Tue,  4 Oct 2022 15:14:57 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id w2so14321481pfb.0
-        for <linux-next@vger.kernel.org>; Tue, 04 Oct 2022 15:14:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=5L01wecfli+mbpc2reA9sYX86GK31JmxkVaD77jT208=;
-        b=tx0mpRPVbWB2tbZ5dEJJrMPJ2+Nc4lEHC0shmxNtCSS6FagmNv2w3S0bWvTi/aZgxy
-         vG5cZsCR70+8nyrcLUZf+8lB/+7DOJk1lP4skbXJ+FcqZwxIwAZSOvxJkZOVn/+WhTUJ
-         3oUNkCeAwXzlz7WjqFmyPZiX1poLE326R3XpuMbSAvxswchVfLhpkWWHGQCYPp1Pf/pf
-         WbUrJiVTi8CbUW3QUsnvVa4JLx6lcZgDYLaPwSAuEVUdg+ZzHKEUGe7HCzOpyV7v0Su8
-         VmIkAgfSIIfADOi5DPqvfNm/jJqWVTWqjqkN+QSv71HAO66tFmCzVj5zjfHo9Wmm3jb9
-         1QAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=5L01wecfli+mbpc2reA9sYX86GK31JmxkVaD77jT208=;
-        b=OK2ihyI38gXq5MF8pi9XMTOgxv35GUYpgK61YCOaLq47xXoh4ldtghpRfcRTtuF7dM
-         S7sQI++vE0XaYwCEttjFEdrWTNZZF84mh5HV8G8VjHEUfI9vTUrOfAGMKvLoti/+QBJg
-         481zV05DowqvgkLF97PLCnCRac5h1c/PJPpYyrNwZTJ/dlFLXVJo0yroMEQpaR2bKGFs
-         P6TDh6pWgA6uAJKFSGs87hSdiYVHrhH5HbUS9Puru7Hm+FXUuAEttJf1zUjPqTc+Zhwd
-         861syShJ/3M7URdNvJVWuXy7L56TxCI9dvwTvzGtSIA3ueBMwGiL8gkeXXt0GCLMggUD
-         kUhA==
-X-Gm-Message-State: ACrzQf3CsUad3rTmzKxKCVoD9YudlUfLNjkPtW2iCf5ekTBCaCudXsZ6
-        3C0W8iKSZ3w94V7WQwvyx2tyfg==
-X-Google-Smtp-Source: AMsMyM557Y3Ml2t31BNEn1s1Jmf8Up6yq+hdDSraVclt2hzN9xsg77NdjSwXVnWg7KdtzJaEn4lhTA==
-X-Received: by 2002:a63:8543:0:b0:44c:be7c:78a9 with SMTP id u64-20020a638543000000b0044cbe7c78a9mr12289218pgd.221.1664921696449;
-        Tue, 04 Oct 2022 15:14:56 -0700 (PDT)
-Received: from ?IPV6:2600:380:4b7a:dece:391e:b400:2f06:c12f? ([2600:380:4b7a:dece:391e:b400:2f06:c12f])
-        by smtp.gmail.com with ESMTPSA id p2-20020a17090a930200b0020669c8bd87sm30720pjo.36.2022.10.04.15.14.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Oct 2022 15:14:56 -0700 (PDT)
-Message-ID: <080c1152-1965-48cb-5834-d521bbf316e2@kernel.dk>
-Date:   Tue, 4 Oct 2022 16:14:54 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: linux-next: build failure after merge of the block tree
-Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Anuj Gupta <anuj20.g@samsung.com>,
-        Kanchan Joshi <joshi.k@samsung.com>,
+        with ESMTP id S231509AbiJDWYE (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 4 Oct 2022 18:24:04 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68D486CD2C;
+        Tue,  4 Oct 2022 15:24:00 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MhsgG5hXSz4wgv;
+        Wed,  5 Oct 2022 09:23:54 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1664922238;
+        bh=PJvV9GSwTzxUzZ3q+upLLSeckY4hE3k1CD2xrv4ZpQA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=TD8Xgt/gOUT22IwM+gaJEZ1xc7TioQmCi6m5aYHunoTzLhsNagggDAf4U60QyKFoz
+         CUTGxK9T46RF233NpzR6UnxxPNhe2DyLu3ZZv1EvPQM6KURU/Rv9veIY/67dlWZmiJ
+         uWOXT4TtcD+wvT0tEnxhT+xWXx/wcnQ+pchTodOPbG77d9JKGfjy/2loxUswIx8O2W
+         NkZWvskeN+M/aM6VnWOj4npStm5V90spFxttPQpUw+z503lztT4WfqX2Zr7tjLwhq1
+         05m21awBdM135AKax+SoDL9QwYd9PQ7LJeIKGIHeAvaLSaqpiaK+rCZGdlRCCALS4k
+         E/CVCxyLaUQuA==
+Date:   Wed, 5 Oct 2022 09:23:53 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     broonie@kernel.org, Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+        Adam Bratschi-Kaye <ark.email@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Antonio Terceiro <antonio.terceiro@linaro.org>,
+        =?UTF-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Boris-Chengbiao Zhou <bobo1239@web.de>,
+        Daniel Xu <dxu@dxuuu.xyz>,
+        Dariusz Sosnowski <dsosnowski@dsosnowski.pl>,
+        Douglas Su <d0u9.su@outlook.com>, Finn Behrens <me@kloenk.de>,
+        Gary Guo <gary@garyguo.net>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20221005085046.1adefcfc@canb.auug.org.au>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20221005085046.1adefcfc@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Sven Van Asbroeck <thesven73@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>
+Subject: Re: linux-next: manual merge of the rust tree with the kbuild tree
+Message-ID: <20221005092353.78eb0160@canb.auug.org.au>
+In-Reply-To: <20220927181647.487727-1-broonie@kernel.org>
+References: <20220927181647.487727-1-broonie@kernel.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/=dwaqcMymkfiiQn=D7GB4.v";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,24 +67,116 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 10/4/22 3:50 PM, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the block tree, today's linux-next build (when
-> CONFIG_IO_URING is not set) failed like this:
-> 
-> include/linux/io_uring.h:65:12: error: unused function 'io_uring_cmd_import_fixed' [-Werror,-Wunused-function]
-> 
-> Caused by commit
-> 
->   a9216fac3ed8 ("io_uring: add io_uring_cmd_import_fixed")
-> 
-> "inline" is missing.
+--Sig_/=dwaqcMymkfiiQn=D7GB4.v
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I forgot to pull in the branch post adding that patch... Pulled in
-now.
+Hi all,
 
--- 
-Jens Axboe
+On Tue, 27 Sep 2022 19:16:47 +0100 broonie@kernel.org wrote:
+>
+> Today's linux-next merge of the rust tree got a conflict in:
+>=20
+>   Makefile
+>=20
+> between commit:
+>=20
+>   0cc1b22fa606e ("kbuild: list sub-directories in ./Kbuild")
+>   ca5f20da2ffcb ("kbuild: move .vmlinux.objs rule to Makefile.modpost")
+>=20
+> from the kbuild tree and commit:
+>=20
+>   d64ddbd68af8f ("Kbuild: add Rust support")
+>=20
+> from the rust tree.
+>=20
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+>=20
+> diff --cc Makefile
+> index 2b4980490ecb2,c759ee3152544..0000000000000
+> --- a/Makefile
+> +++ b/Makefile
+> @@@ -789,7 -862,11 +861,10 @@@ KBUILD_CFLAGS +=3D $(stackp-flags-y
+>  =20
+>   KBUILD_CFLAGS-$(CONFIG_WERROR) +=3D -Werror
+>   KBUILD_CFLAGS-$(CONFIG_CC_NO_ARRAY_BOUNDS) +=3D -Wno-array-bounds
+>  -KBUILD_CFLAGS +=3D $(KBUILD_CFLAGS-y) $(CONFIG_CC_IMPLICIT_FALLTHROUGH)
+>  =20
+> + KBUILD_RUSTFLAGS-$(CONFIG_WERROR) +=3D -Dwarnings
+> + KBUILD_RUSTFLAGS +=3D $(KBUILD_RUSTFLAGS-y)
+> +=20
+>   ifdef CONFIG_CC_IS_CLANG
+>   KBUILD_CPPFLAGS +=3D -Qunused-arguments
+>   # The kernel builds with '-std=3Dgnu11' so use of GNU extensions is acc=
+eptable.
+> @@@ -1098,9 -1182,16 +1179,8 @@@ export MODORDER :=3D $(extmod_prefix)modu
+>   export MODULES_NSDEPS :=3D $(extmod_prefix)modules.nsdeps
+>  =20
+>   ifeq ($(KBUILD_EXTMOD),)
+>  -core-y			+=3D kernel/ certs/ mm/ fs/ ipc/ security/ crypto/
+>  -core-$(CONFIG_BLOCK)	+=3D block/
+>  -core-$(CONFIG_IO_URING)	+=3D io_uring/
+>  -core-$(CONFIG_RUST)	+=3D rust/
+>  -
+>  -vmlinux-dirs	:=3D $(patsubst %/,%,$(filter %/, \
+>  -		     $(core-y) $(core-m) $(drivers-y) $(drivers-m) \
+>  -		     $(libs-y) $(libs-m)))
+> --
+>  -vmlinux-alldirs	:=3D $(sort $(vmlinux-dirs) Documentation \
+>  +build-dir	:=3D .
+>  +clean-dirs	:=3D $(sort . Documentation \
+>   		     $(patsubst %/,%,$(filter %/, $(core-) \
+>   			$(drivers-) $(libs-))))
+>  =20
+> @@@ -1497,7 -1585,7 +1581,8 @@@ endif # CONFIG_MODULE
+>   # Directories & files removed with 'make clean'
+>   CLEAN_FILES +=3D include/ksym vmlinux.symvers modules-only.symvers \
+>   	       modules.builtin modules.builtin.modinfo modules.nsdeps \
+> - 	       compile_commands.json .thinlto-cache .vmlinux.objs
+>  -	       compile_commands.json .thinlto-cache rust/test rust/doc
+> ++	       compile_commands.json .thinlto-cache .vmlinux.objs \
+> ++	       rust/test rust/doc
+>  =20
+>   # Directories & files removed with 'make mrproper'
+>   MRPROPER_FILES +=3D include/config include/generated          \
+> diff --git a/Kbuild b/Kbuild
+> index 8a37584d1fd6b..5f4a23fc87b63 100644
+> --- a/Kbuild
+> +++ b/Kbuild
+> @@ -91,6 +91,7 @@ obj-$(CONFIG_BLOCK)	+=3D block/
+>  obj-$(CONFIG_IO_URING)	+=3D io_uring/
+>  obj-y			+=3D $(ARCH_LIB)
+>  obj-y			+=3D drivers/
+> +obj-$(CONFIG_RUST)	+=3D rust/
+>  obj-y			+=3D sound/
+>  obj-$(CONFIG_SAMPLES)	+=3D samples/
+>  obj-$(CONFIG_NET)	+=3D net/
 
+This is now a conflict between the kbuild tree and Linus' tree.
 
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/=dwaqcMymkfiiQn=D7GB4.v
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmM8snkACgkQAVBC80lX
+0Gx3Wgf/c5htheFHnK3X9gd9vcZjBc4a/Kr8CTtDQqm+fPy68fzjG+HjzNhFB6uB
+ZOye8h8HRMkEUDtY2PmP3iY8z64FWQaxNLgbVu3/PkR/MuBHj7ZpfLQD1fogAlZw
+YuT1PB2nQajIuAIkdxPEVg5l+unqT5wEMbdu+NVw4s3qsZ88MP6wo2Nxb4L4suHU
+zG9IROopaanPl+fOjQkPNh8MMBwfxkUDF+rS208nw9M/DYu+5UIG8Tav+Sjd75Jz
+6qedEX2L9Pr30JOUt0Sbra24/+Fd0rJQaEwAMBmXJbcDq/DugTztfcEi0ZdpRY8D
+AEivesbql6lf8pEwmae6jT62MvDVIg==
+=wuWl
+-----END PGP SIGNATURE-----
+
+--Sig_/=dwaqcMymkfiiQn=D7GB4.v--

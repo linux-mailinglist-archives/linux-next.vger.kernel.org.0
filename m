@@ -2,119 +2,91 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 845AE5F4AA3
-	for <lists+linux-next@lfdr.de>; Tue,  4 Oct 2022 23:04:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B3525F4B2A
+	for <lists+linux-next@lfdr.de>; Tue,  4 Oct 2022 23:50:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229578AbiJDVEF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 4 Oct 2022 17:04:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54398 "EHLO
+        id S230091AbiJDVuz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 4 Oct 2022 17:50:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229569AbiJDVEE (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 4 Oct 2022 17:04:04 -0400
-Received: from mail104.syd.optusnet.com.au (mail104.syd.optusnet.com.au [211.29.132.246])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B6F2965270;
-        Tue,  4 Oct 2022 14:04:03 -0700 (PDT)
-Received: from dread.disaster.area (pa49-181-106-210.pa.nsw.optusnet.com.au [49.181.106.210])
-        by mail104.syd.optusnet.com.au (Postfix) with ESMTPS id 6EB2C8AC3BA;
-        Wed,  5 Oct 2022 08:04:01 +1100 (AEDT)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-        (envelope-from <david@fromorbit.com>)
-        id 1ofp56-00FfvW-2h; Wed, 05 Oct 2022 08:04:00 +1100
-Date:   Wed, 5 Oct 2022 08:04:00 +1100
-From:   Dave Chinner <david@fromorbit.com>
-To:     "Darrick J. Wong" <djwong@kernel.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>, linux-xfs@vger.kernel.org,
-        Stephen Zhang <starzhangzsd@gmail.com>,
-        Shida Zhang <zhangshida@kylinos.cn>,
+        with ESMTP id S230088AbiJDVuy (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 4 Oct 2022 17:50:54 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A50B24BF3;
+        Tue,  4 Oct 2022 14:50:52 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Mhrx33dWtz4x1D;
+        Wed,  5 Oct 2022 08:50:47 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1664920248;
+        bh=HN953pU94xEC8/scIinqRGHHD4tIEtXg2hyrS0Rhh6I=;
+        h=Date:From:To:Cc:Subject:From;
+        b=sP0hne8BlkgvGc4ZWxP8Pgjxf0jPgKd/LTMyiQU/OqZL/e72l8G874U5iYTOtVwsH
+         eNEztP2xkNtk0dJ8wMI+eaBJgqapWHiCgcL1nD3oSYLdYO7Y/e3ojyg2gu6wWyVEp8
+         svrdVHOd+/ozz/Izi5fNTicQQXRH+xI1+IfVLNlBchqfFS8YZN1CsYRl6b5r7BygCi
+         tyCDTvaRlgCYs68PunGrNXXHGqJGJb2SD7xfHSpR3zDXpwm1Ss+CMLqowe3EwVd3JU
+         /56WWhMJ07c21SaJ+73Vo5sTVafv2mOrFMxJ8pcpf+8yC/8C2sDyNwukeo7PYtyWKz
+         fdtF/7lf4A/NQ==
+Date:   Wed, 5 Oct 2022 08:50:46 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Anuj Gupta <anuj20.g@samsung.com>,
+        Kanchan Joshi <joshi.k@samsung.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Signed-off-by missing for commit in the xfs tree
-Message-ID: <20221004210400.GO3600936@dread.disaster.area>
-References: <20221004072302.345bfd4a@canb.auug.org.au>
- <20221003222103.GM3600936@dread.disaster.area>
- <20221004225012.501e11ed@canb.auug.org.au>
- <YzxX7ks+YD7U1dcl@magnolia>
+Subject: linux-next: build failure after merge of the block tree
+Message-ID: <20221005085046.1adefcfc@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YzxX7ks+YD7U1dcl@magnolia>
-X-Optus-CM-Score: 0
-X-Optus-CM-Analysis: v=2.4 cv=OJNEYQWB c=1 sm=1 tr=0 ts=633c9fc2
-        a=j6JUzzrSC7wlfFge/rmVbg==:117 a=j6JUzzrSC7wlfFge/rmVbg==:17
-        a=kj9zAlcOel0A:10 a=Qawa6l4ZSaYA:10 a=7-415B0cAAAA:8
-        a=dO8VshlyLlrOEYzubo8A:9 a=CjuIK1q_8ugA:10 a=biEYGPWJfzWAr4FL6Ov7:22
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/4SvURcv27ADnxUpzgNmKe=o";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Oct 04, 2022 at 08:57:34AM -0700, Darrick J. Wong wrote:
-> On Tue, Oct 04, 2022 at 10:50:12PM +1100, Stephen Rothwell wrote:
-> > Hi Dave,
-> > 
-> > On Tue, 4 Oct 2022 09:21:03 +1100 Dave Chinner <david@fromorbit.com> wrote:
-> > >
-> > > The commit matches exactly what was sent to the list. It's just
-> > > that the patch was sent from a personal email address with a
-> > > corporate signoff.
-> > > 
-> > > Since when has that been an issue?  I -personally- have been doing
-> > > this for well over a decade and I'm pretty sure there are lots of
-> > > other people who also do this.
-> > 
-> > If you are happy (as the maintainer), then fine.
+--Sig_/4SvURcv27ADnxUpzgNmKe=o
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Not really, I don't like it when our tools don't do the right thing,
-are entirely silent about it and then I get surprised by custom
-checks other people run.
+Hi all,
 
-> > My script just could
-> > not connect those 2 email addresses.  I check for matches between the
-> > address itself (the part between the <>) or a match between the "name"
-> > part (before the <>).  If either matches (or it is obvious) then I
-> > don't report it.
+After merging the block tree, today's linux-next build (when
+CONFIG_IO_URING is not set) failed like this:
 
-Yup, during development of the patches the names started out
-matching. The SOB stayed the same but the name on the personal email
-address got anglicised, hence nothing matched by the time I pulled
-it with b4.
+include/linux/io_uring.h:65:12: error: unused function 'io_uring_cmd_import=
+_fixed' [-Werror,-Wunused-function]
 
-> > I have reported very few of these.
-> 
-> My checkpatch is happier if the whole "name <email>" string matches, but
-> it'll accept name matches.  This ofc rests upon the assumption that
-> I can spot the deepcake'd Dave Chinners hawking phones in Russia or
-> whatever. ;)
+Caused by commit
 
-If someone wants to fake me and do my work for me so I don't have to
-do anything, I'm all for it. :)
+  a9216fac3ed8 ("io_uring: add io_uring_cmd_import_fixed")
 
-As it is, I use the convention of putting an explicit From: tag in
-the commit message that matches the SOB so tools pulling stuff from
-mailing lists do the right thing with them (same as any third-party
-provided patch in a series). 
+"inline" is missing.
 
-> That said... I think we should get in the habit of asking patch authors
-> to make sure that at least one of the email or name strings match
-> between the From and SOB tags.  I can see how people who grok even less
-> about how Chinese names work than I do (read: lawyers) might get fussy
-> about this kind of thing.
+--=20
+Cheers,
+Stephen Rothwell
 
-As per above, the normal solution is an explicit "From: <foo>" line
-that matches the SOB.  It's just annoying that our new-fangled tools
-haven't encoded this long-standing convention to warn us when we
-pull a patch with a from-tag that doesn't match a sob-tag.
+--Sig_/4SvURcv27ADnxUpzgNmKe=o
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-And, yes, I know about git hooks - forcing every maintainer to
-implement their own custom git hooks to catch errors the tool they
-are all using can easily catch is not a reliable or scalable
-solution. We use common tools for a reason.
+-----BEGIN PGP SIGNATURE-----
 
--Dave.
--- 
-Dave Chinner
-david@fromorbit.com
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmM8qrYACgkQAVBC80lX
+0GxZhQf+PybKqigT6rwDjdh5P2jT2209luw5NxmpjWZuJLwvcPbBZ+3pVFF02EDT
+RBgen8Pv/bH6dS/I1UkgZCfQgqsT5EFWbA6enQq3HOYLG9gzrSZokMKF0lfuCffs
+yml7H6WgofhvHRgj3IoDKCV9HveiEqUs8l4VyrYrWh1T33UanaWMUl+WQU1+h1DQ
+tzUj84fCjIgPgoqOPxjvQPoraAE3Bd9FRy7FPi1i0MmX+VW24BvG+Uj7wAXgwJky
+JmSRKwPdHP5SyiN0PETRF7MQzuLvjW06K1RMCAdcwkvC9eWV4/xBJgVUOB30cqWZ
+5JUZMETsTInCtywotOCUaVTFIHa0Wg==
+=L8/f
+-----END PGP SIGNATURE-----
+
+--Sig_/4SvURcv27ADnxUpzgNmKe=o--

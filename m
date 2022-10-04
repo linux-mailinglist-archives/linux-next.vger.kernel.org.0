@@ -1,101 +1,305 @@
 Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 459495F3D3F
-	for <lists+linux-next@lfdr.de>; Tue,  4 Oct 2022 09:29:41 +0200 (CEST)
+Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
+	by mail.lfdr.de (Postfix) with ESMTP id 813765F3DA1
+	for <lists+linux-next@lfdr.de>; Tue,  4 Oct 2022 10:05:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229798AbiJDH3j (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 4 Oct 2022 03:29:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50108 "EHLO
+        id S229531AbiJDIFR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 4 Oct 2022 04:05:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229710AbiJDH3i (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 4 Oct 2022 03:29:38 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F929EA1;
-        Tue,  4 Oct 2022 00:29:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1664868556;
-        bh=PjLfiWf3KgvvxLs7ixsr6WIV11sUjNekWvCmpbR/84s=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=fb48HmkZm5vTXDmpGRqodbdTJwXh/UE+KDb2e5QoB0UrLuwKTaExfV8RG/+v30+Ss
-         kaEYFAYw0qTyWcGSxwYVXYWHFx4KTJY5ljNy4JQqd222qZc5JhjyGS0pqoJJam7gPA
-         I7urxg0X3yq0u9mtLlNqnKZIFmv9Rp4L1emUlW54=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.20.60] ([92.116.170.54]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MSKu0-1om7fP3EPw-00Sgwp; Tue, 04
- Oct 2022 09:29:15 +0200
-Message-ID: <9e45b60b-4af5-4fed-7b7d-3a5c4dcd6321@gmx.de>
-Date:   Tue, 4 Oct 2022 09:29:12 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: linux-next: manual merge of the fbdev tree with the drm tree
-Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Dave Airlie <airlied@redhat.com>
-Cc:     DRI <dri-devel@lists.freedesktop.org>,
+        with ESMTP id S229630AbiJDIFQ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 4 Oct 2022 04:05:16 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70DD41A20B;
+        Tue,  4 Oct 2022 01:05:14 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MhVcK5ql2z4x1D;
+        Tue,  4 Oct 2022 19:05:05 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1664870710;
+        bh=g/MNZsp39+pLKhhen476XgHXqxPTlWguDNLHOKnvddc=;
+        h=Date:From:To:Cc:Subject:From;
+        b=MmoW6d37BiXX7wLKSp5xsiRjMciBjHCOumahhDsCK0v1gb6M0938v8l5vGbT3aZf8
+         Ev7pKf8YUpqMqJHo2qjvw17YciRcjZbNWRKBK5HqjqVb4mnaYlrrsz6Hmi3CZubFuf
+         prEQqDFg7+vPe7HxVxB3NyVj7HjhzC8Ul0mVaTLV/c8ifaMbdtQCC3jBjIddgxnGsm
+         42dvIFrq3x3w5p0wbwEqSv1Pp9TAoFpKGsl7qyXrcOsj6A/haY06W5R76Y/iKkRKjc
+         hxt3SNomlXploVoqQBHleWIlITz+mmNZSchoBucoMNRMwa8ZJ66YR7a5I278SfrQkb
+         XmjgM9c30jLwQ==
+Date:   Tue, 4 Oct 2022 19:05:02 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc:     Adam Bratschi-Kaye <ark.email@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boris-Chengbiao Zhou <bobo1239@web.de>,
+        Daniel Xu <dxu@dxuuu.xyz>, Finn Behrens <me@kloenk.de>,
+        Gary Guo <gary@garyguo.net>, Jonathan Corbet <corbet@lwn.net>,
+        Julian Merkle <me@jvmerkle.de>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        ruanjinjie <ruanjinjie@huawei.com>
-References: <20221004132723.7b4b03ab@canb.auug.org.au>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <20221004132723.7b4b03ab@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:RhRjjdSTMXclbO2Pq+jAsOtH6f8ahvH3qxxv5b3ySNGrbPxD1PA
- cbANWDIDwujW/Okg1nuRjcdfvBOp/C4DxaoZoBX8x7aPOzcRvWAHvsn1o1jt2GXrc2Xz+Ae
- FMWzqgpffhhp90IJY0aePAzVt6AxafuMS0J0o9ZZcH5npnqZ4nbQvwizezgrbiyDW3lMlCc
- xdZSemk8WrJE3S5Yax0xA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:kPdXvwEittw=:MHpYa29j3z0JvMBwkVigz5
- fYR3szZUEaW9U+lLDO3ycDKvyF5LfE+b45CQCBRhz0gQJXfIYeKHRM1/LKRhBsw+kOt74Eqio
- J41IWSL1nY3oVmYBCLK9C3s+eQO3MU0PrhTI09owiJTAPuM4fGPTgp1MqTaLFKPULQOcAkPIA
- aySe80F/R+gwqD/ZZms2K3lbHPUv4OoRfehdppGFLxIxyPgMI/JPJVWPLoPVWtNUW/IZe2dMr
- DVZQEPTkTW5hVaP0No5en96GC2I4tRRLgIrZ7VojgBH0rZqJ7l7gCmAn/JxEkV1elGx3Ud/UT
- KOHCkws1Bc2jR4QYhSZLbUDzlpN+qs+gD2dQTBgTL1BDSgii+E6Jp4WQcP5dmU5/AulLQjoHt
- /6JR8NgkAXk5AsWORnU+37c6ulYnrunZ579TdAvW5PHaN7TOKAsQJ6MxO7MlP0oFo+JJOQ1/G
- LmuJWflYn3ioIUnuEGctkkyn0r778U8Q9KHEKr4zgK/GW2qjW3F5UprJobSlZUYXa7IWgAZ0D
- sDK7jgaSRyyN3b7dIO3bsofHf7+P1DVIM5qI2tOBtrcgxX3IuTpUB1CfBkrqxgZ4ktX/mBWjN
- dezuK0eJ7QpA/enn16k5bdFPOmLerVEHodbhr6CWGKdapP0h5j4FstA4lwUkK2lYRD7vRbylr
- J1axNKo+57YkYcbY3pfj7SGttvw5t+/Mqp/rcXxUBZZO0u1hobQOMX83vKCbKkhTJ9W2+Sl5v
- boeLh3usjOek0Pm7ToEI9l7BYCE5dcSMIY3BY4l5HvhRuSWdTx3X89dphMlrp7ZQ97VIyBuJ0
- GbP3Jd+U17UsBlrcnRm0tQwUzLXpVmG976s633D6AnTDXouOuXcNA2dG6Ql08MHuHhgNqvmnk
- 6PkKioDBAUrOtbI5r2fiHcop/k9WRBkY9Tz4/MRQstfS8YrrBPYESSjx0OLKYJAIGl6B2sMh5
- Y8vriAAt9icI/gcbMWWqD44AH+/5G2b9XXfeoBmpEdGxu/B+Ad2t/T826b90rc1yK8EtsDZTx
- ZA/3JeyrGxx/dQa3xEYo+v4Ntgy4OGyEisbcqB6KmxdFb3sqps5CZ3FZCLjvqN1jJuodQtKAu
- iTQKJguSi6aULE+hYZuUGGt4MGmU2mO7fsH35MmRCXa9lEEn9UpWcNr434jrkWxPUVH7LLVhW
- HCXOHL4mK+lXaQV96hu1Un16pt
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Sven Van Asbroeck <thesven73@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        Wei Liu <wei.liu@kernel.org>, Wu XiangCheng <bobwxc@email.cn>,
+        Yuki Okushi <jtitor@2k36.org>
+Subject: linux-next: manual merge of the rust tree with Linus' tree
+Message-ID: <20221004190502.4e7d3348@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/1NmPO7j4ZNUD+Yp7Ii8vpju";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 10/4/22 04:27, Stephen Rothwell wrote:
-> Hi all,
->
-> Today's linux-next merge of the fbdev tree got a conflict in:
->
->    drivers/video/fbdev/tridentfb.c
->
-> between commit:
->
->    145eed48de27 ("fbdev: Remove conflicting devices on PCI bus")
->
-> from the drm tree and commit:
->
->    d738bf0123d6 ("fbdev: tridentfb: Fix missing pci_disable_device() in =
-probe and remove")
->
-> from the fbdev tree.
+--Sig_/1NmPO7j4ZNUD+Yp7Ii8vpju
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-Thanks for the notice!
-I'll fix it up in the fbdev tree, either by dropping that offending patch =
-or fix the conflict.
+Hi all,
 
-Helge
+Today's linux-next merge of the rust tree got a conflict in:
 
+  Documentation/index.rst
+
+between commit:
+
+  0c7b4366f1ab ("docs: Rewrite the front page")
+
+from the origin tree and commit:
+
+  d07479b211b7 ("docs: add Rust documentation")
+
+from the rust tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc Documentation/index.rst
+index 85eab6e990ab,00722aa20cd7..000000000000
+--- a/Documentation/index.rst
++++ b/Documentation/index.rst
+@@@ -12,84 -18,134 +12,85 @@@ documents into a coherent whole.  Pleas
+  documentation are welcome; join the linux-doc list at vger.kernel.org if
+  you want to help out.
+ =20
+ -Licensing documentation
+ ------------------------
+ +Working with the development community
+ +--------------------------------------
+ =20
+ -The following describes the license of the Linux kernel source code
+ -(GPLv2), how to properly mark the license of individual files in the sour=
+ce
+ -tree, as well as links to the full license text.
+ -
+ -* :ref:`kernel_licensing`
+ -
+ -User-oriented documentation
+ ----------------------------
+ -
+ -The following manuals are written for *users* of the kernel =E2=80=94 tho=
+se who are
+ -trying to get it to work optimally on a given system.
+ +The essential guides for interacting with the kernel's development
+ +community and getting your work upstream.
+ =20
+  .. toctree::
+ -   :maxdepth: 2
+ -
+ -   admin-guide/index
+ -   kbuild/index
+ -
+ -Firmware-related documentation
+ -------------------------------
+ -The following holds information on the kernel's expectations regarding the
+ -platform firmwares.
+ +   :maxdepth: 1
+ =20
+ -.. toctree::
+ -   :maxdepth: 2
+ +   process/development-process
+ +   process/submitting-patches
+ +   Code of conduct <process/code-of-conduct>
+ +   maintainer/index
+ +   All development-process docs <process/index>
+ =20
+ -   firmware-guide/index
+ -   devicetree/index
+ =20
+ -Application-developer documentation
+ ------------------------------------
+ +Internal API manuals
+ +--------------------
+ =20
+ -The user-space API manual gathers together documents describing aspects of
+ -the kernel interface as seen by application developers.
+ +Manuals for use by developers working to interface with the rest of the
+ +kernel.
+ =20
+  .. toctree::
+ -   :maxdepth: 2
+ -
+ -   userspace-api/index
+ +   :maxdepth: 1
+ =20
+ +   core-api/index
+ +   driver-api/index
+ +   subsystem-apis
+ +   Locking in the kernel <locking/index>
+ =20
+ -Introduction to kernel development
+ -----------------------------------
+ +Development tools and processes
+ +-------------------------------
+ =20
+ -These manuals contain overall information about how to develop the kernel.
+ -The kernel community is quite large, with thousands of developers
+ -contributing over the course of a year.  As with any large community,
+ -knowing how things are done will make the process of getting your changes
+ -merged much easier.
+ +Various other manuals with useful information for all kernel developers.
+ =20
+  .. toctree::
+ -   :maxdepth: 2
+ +   :maxdepth: 1
+ =20
+ -   process/index
+ -   dev-tools/index
+ +   process/license-rules
+     doc-guide/index
+ +   dev-tools/index
+ +   dev-tools/testing-overview
+     kernel-hacking/index
+     trace/index
+ -   maintainer/index
+     fault-injection/index
+     livepatch/index
++    rust/index
+ =20
+ =20
+ -Kernel API documentation
+ -------------------------
+ +User-oriented documentation
+ +---------------------------
+ =20
+ -These books get into the details of how specific kernel subsystems work
+ -from the point of view of a kernel developer.  Much of the information he=
+re
+ -is taken directly from the kernel source, with supplemental material added
+ -as needed (or at least as we managed to add it =E2=80=94 probably *not* a=
+ll that is
+ -needed).
+ +The following manuals are written for *users* of the kernel =E2=80=94 tho=
+se who are
+ +trying to get it to work optimally on a given system and application
+ +developers seeking information on the kernel's user-space APIs.
+ =20
+  .. toctree::
+ -   :maxdepth: 2
+ +   :maxdepth: 1
+ =20
+ -   driver-api/index
+ -   core-api/index
+ -   locking/index
+ -   accounting/index
+ -   block/index
+ -   cdrom/index
+ -   cpu-freq/index
+ -   fb/index
+ -   fpga/index
+ -   hid/index
+ -   i2c/index
+ -   iio/index
+ -   isdn/index
+ -   infiniband/index
+ -   leds/index
+ -   netlabel/index
+ -   networking/index
+ -   pcmcia/index
+ -   power/index
+ -   target/index
+ -   timers/index
+ -   spi/index
+ -   w1/index
+ -   watchdog/index
+ -   virt/index
+ -   input/index
+ -   hwmon/index
+ -   gpu/index
+ -   security/index
+ -   sound/index
+ -   crypto/index
+ -   filesystems/index
+ -   mm/index
+ -   bpf/index
+ -   usb/index
+ -   PCI/index
+ -   scsi/index
+ -   misc-devices/index
+ -   scheduler/index
+ -   mhi/index
+ -   peci/index
+ -
+ -Architecture-agnostic documentation
+ ------------------------------------
+ +   admin-guide/index
+ +   The kernel build system <kbuild/index>
+ +   admin-guide/reporting-issues.rst
+ +   User-space tools <tools/index>
+ +   userspace-api/index
+ +
+ +See also: the `Linux man pages <https://www.kernel.org/doc/man-pages/>`_,
+ +which are kept separately from the kernel's own documentation.
+ +
+ +Firmware-related documentation
+ +------------------------------
+ +The following holds information on the kernel's expectations regarding the
+ +platform firmwares.
+ =20
+  .. toctree::
+ -   :maxdepth: 2
+ +   :maxdepth: 1
+ +
+ +   firmware-guide/index
+ +   devicetree/index
+ =20
+ -   asm-annotations
+ =20
+  Architecture-specific documentation
+  -----------------------------------
+
+--Sig_/1NmPO7j4ZNUD+Yp7Ii8vpju
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmM76S4ACgkQAVBC80lX
+0Gxf3Qf+Pf1PnHvYy3iP1OlaInlUU2D0kZfFlruv0SZWGTaLJUMQe/NPVQdekTD3
+tI+S/gwd9yp4Skii+EwZiPb7woDPdHDkc5hY1JA1PIb8EHqAPvvSM/J00J6xNhka
+JKO4IA+32YQeF7Stc3XEwkfXLA8LDpi3w4+Un6Cuq0eNiKeGyxulAHjygMdFyBDO
+zpGYwfzRq+nj9q/UtGCYQy12nVja9vDO4LZFIcvgHbCrz61oawXP5p7N/oq6E1tq
+Aw3VOcAy1bZXROElg8p0/PTu92oEvZ5xbGjkMdqWVL4qNz0HBtYm8Omh2hPAWtEJ
+9vg2YKsfLW8SwL8JW9vmDGtuHkgVzg==
+=burp
+-----END PGP SIGNATURE-----
+
+--Sig_/1NmPO7j4ZNUD+Yp7Ii8vpju--

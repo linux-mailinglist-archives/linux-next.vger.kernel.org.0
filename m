@@ -2,54 +2,49 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97FF15F4C1C
-	for <lists+linux-next@lfdr.de>; Wed,  5 Oct 2022 00:45:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA3515F4C58
+	for <lists+linux-next@lfdr.de>; Wed,  5 Oct 2022 01:04:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230235AbiJDWpo (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 4 Oct 2022 18:45:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33246 "EHLO
+        id S229825AbiJDXEP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 4 Oct 2022 19:04:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230058AbiJDWpn (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 4 Oct 2022 18:45:43 -0400
+        with ESMTP id S229678AbiJDXEO (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 4 Oct 2022 19:04:14 -0400
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E68864F192;
-        Tue,  4 Oct 2022 15:45:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D90844B0CF;
+        Tue,  4 Oct 2022 16:04:11 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Mht8L0QSjz4xDn;
-        Wed,  5 Oct 2022 09:45:38 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MhtYf3PPWz4x1D;
+        Wed,  5 Oct 2022 10:04:06 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1664923539;
-        bh=VLbDgrb7jeNhNRMHmVfeAUsikRAntGBmoxvtb8owLaM=;
+        s=201702; t=1664924646;
+        bh=vkw1pfzTvTHY7nMrUZhZNC6y25oDkSCN2BnPtzDF9Ck=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=K/1fMqEbLkZW5q380KFNwEknWdDMRWLySfEakFNwRjDbCcypGYRI3jMNmBJDeSx1d
-         HcxdVAsI0F7a/7EeqI/v0jGU+nDA8Rob2EBbkOqk+84Q6VfdyCTBdG4OQvla38N1Yt
-         cXS/2X2THhglbFhyc77hBFF3ipNa8rFA96TO1+aaPSJf1sFcNYfjvB6KjvJ55OG2zW
-         qQjVTfC0vh+b8ocs2QS4RYgvi0eZnlSs1qo0w0aZefbBbvOglkFN/bV3mKmnuHIzhu
-         BTq/Akl5HSv/E5Bwr/P+rV4qglKrpPSpXuqImg6w6W+LAg9eDBErE+CDsmrkx5jlqW
-         w3x/DcoDBHBrA==
-Date:   Wed, 5 Oct 2022 09:45:36 +1100
+        b=MdYt3Unh13reAB+SYjdnjFmhq/0qYb/lyU0qWzzzpeomZjyZJhx3INnVuFEfwHJDy
+         YYQMWlRmCaClGJ6avQdTBTnCAA1fsT3yqSqapMCbh3i3AgfPmB87vUYtX4GxScQY/D
+         RS4BkNimwzrLm+NMYa/eWvSjSyWCviWWgGuQnYp3FJ4bi2/s67Z4hDlM1734y+Raaf
+         CuLpmKKy4i+PFg/Pnx/ftdYdo2wkUOk3J8FFWTR+iCMuGixglStBDjtGvFm6tYYca3
+         NzdlGk0j6mQex+HiVWRzh1U7EC9hEB45lo8oU8neIoBuUivwxATUt0iHqqmMZXw/9L
+         3B6WvClJ9oqkw==
+Date:   Wed, 5 Oct 2022 10:04:04 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     David Miller <davem@davemloft.net>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        David Vernet <void@manifault.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+To:     Jaegeuk Kim <jaegeuk@kernel.org>
+Cc:     Eric Biggers <ebiggers@kernel.org>,
+        Eric Biggers <ebiggers@google.com>,
+        Eunhee Rho <eunhee83.rho@samsung.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Stanislav Fomichev <sdf@google.com>
-Subject: Re: linux-next: manual merge of the net-next tree with the bpf tree
-Message-ID: <20221005094536.679c55e1@canb.auug.org.au>
-In-Reply-To: <20221003190727.0921e479@kernel.org>
-References: <20221004122428.653bd5cd@canb.auug.org.au>
-        <20221003190727.0921e479@kernel.org>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the statx-dioalign tree with the
+ f2fs tree
+Message-ID: <20221005100404.3e3b1597@canb.auug.org.au>
+In-Reply-To: <20221004095158.46d920d0@canb.auug.org.au>
+References: <20221004095158.46d920d0@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/.YE0yhnbwf.UMCRzoDHIheM";
+Content-Type: multipart/signed; boundary="Sig_/r6zUz+FFUdL1vPFxp9p8Sb3";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
@@ -60,42 +55,89 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/.YE0yhnbwf.UMCRzoDHIheM
+--Sig_/r6zUz+FFUdL1vPFxp9p8Sb3
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Jakub,
+Hi all,
 
-On Mon, 3 Oct 2022 19:07:27 -0700 Jakub Kicinski <kuba@kernel.org> wrote:
+On Tue, 4 Oct 2022 09:51:58 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
 >
-> Unrelated to the conflict but do you see this when building the latest
-> by any chance? Is it just me and my poor old gcc 8.5?
+> Today's linux-next merge of the statx-dioalign tree got a conflict in:
 >=20
-> vmlinux.o: warning: objtool: ___ksymtab+bpf_dispatcher_xdp_func+0x0: data=
- relocation to !ENDBR: bpf_dispatcher_xdp_func+0x0
-> vmlinux.o: warning: objtool: bpf_dispatcher_xdp+0xa0: data relocation to =
-!ENDBR: bpf_dispatcher_xdp_func+0x0
+>   fs/f2fs/f2fs.h
+>=20
+> between commit:
+>=20
+>   2958e881d590 ("f2fs: allow direct read for zoned device")
+>=20
+> from the f2fs tree and commit:
+>=20
+>   2db0487faa21 ("f2fs: move f2fs_force_buffered_io() into file.c")
+>=20
+> from the statx-dioalign tree.
+>=20
+> I fixed it up (I used the latter version of this file and applied the
+> following merge fix patch) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+>=20
+> From c5beb9e5e8c4a68c68dfbca7ddd21afa4ba3fa57 Mon Sep 17 00:00:00 2001
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Tue, 4 Oct 2022 09:48:22 +1100
+> Subject: [PATCH] f2fs: fix up for "f2fs: allow direct read for zoned devi=
+ce"
+>=20
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> ---
+>  fs/f2fs/file.c | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+> index b1135f584677..996aad7c1e34 100644
+> --- a/fs/f2fs/file.c
+> +++ b/fs/f2fs/file.c
+> @@ -822,7 +822,12 @@ static bool f2fs_force_buffered_io(struct inode *ino=
+de, int rw)
+>  	/* disallow direct IO if any of devices has unaligned blksize */
+>  	if (f2fs_is_multi_device(sbi) && !sbi->aligned_blksize)
+>  		return true;
+> -
+> +	/*
+> +	 * for blkzoned device, fallback direct IO to buffered IO, so
+> +	 * all IOs can be serialized by log-structured write.
+> +	 */
+> +	if (f2fs_sb_has_blkzoned(sbi) && (rw =3D=3D WRITE))
+> +		return true;
+>  	if (f2fs_lfs_mode(sbi) && rw =3D=3D WRITE && F2FS_IO_ALIGNED(sbi))
+>  		return true;
+>  	if (is_sbi_flag_set(sbi, SBI_CP_DISABLED))
+> --=20
+> 2.35.1
 
-I don't get those messages.
-
+This is now a conflict between the f2fs tree and Linus' tree.
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/.YE0yhnbwf.UMCRzoDHIheM
+--Sig_/r6zUz+FFUdL1vPFxp9p8Sb3
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmM8t5AACgkQAVBC80lX
-0Gz91Qf9E1ojiA6qxk7bNCljWKPy/DaHWjiZGTBqtH5+miY6l+/dqwGKX5VmiEYo
-ZcZIqJjyAfmnVwA2rKkfJx0JnWbKn5NV7C0p0F5viRNkRS+C566pxJkiAorWZSvE
-ocyDhu0xjW0b9K24j/hcudXm4yC2zgcFIaMWVFeOA/m2XpGGIiEAIkUEhQwafk5R
-LiPA6sKcd88yo2AppmSlZAi0A1C6WGstJ3EyaPNEqGtEFOD9ITgIJtRw2AHyFMeO
-IyKMx2gHvIxcvspx2EEes/YK9CEhX6gbGi/mGe6aa3vQB5DjUKp4R3llE7Rxb05l
-X0PsZrycf4t3e34V2bTCDz4WH3JM6A==
-=djYm
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmM8u+QACgkQAVBC80lX
+0GxH4Af+N1PMJDBvbSOW6xd9PN44VZskAbYPiflj/fsYiGNcvHg2BmtcYew5LVLQ
+mnX5hE3mfwA6aY9Bror1yYXKizhgfGczFZOTi8dIHj0BpyEFfLHrBtYN/1D+WC4R
+FT6rBHLstLnHuq30ayqTLVR9ryn/KQ5oBiiAClgYBCdqHGJYiGZrtPes+xKjGlmj
+eFV2P/kemCpQzPOTK5TATQg/4201zM3JhU9siZOnNIvoWWXxU8jHI3YGhcr5rvJi
+FKc2ujbewJY98CRDvN0rPIHdF+hW8AnKtK5Jnt5KsQ5bYvKIDLginBmwEQMqFxkH
+R3U2QEvFJ8t3SbGfPcUqXGqWRy2DgQ==
+=4Fr4
 -----END PGP SIGNATURE-----
 
---Sig_/.YE0yhnbwf.UMCRzoDHIheM--
+--Sig_/r6zUz+FFUdL1vPFxp9p8Sb3--

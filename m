@@ -2,62 +2,59 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 762745F5341
-	for <lists+linux-next@lfdr.de>; Wed,  5 Oct 2022 13:19:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A50115F53E5
+	for <lists+linux-next@lfdr.de>; Wed,  5 Oct 2022 13:46:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229615AbiJELTu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 5 Oct 2022 07:19:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46116 "EHLO
+        id S230152AbiJELqa (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 5 Oct 2022 07:46:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229830AbiJELTr (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 5 Oct 2022 07:19:47 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CDC1764D;
-        Wed,  5 Oct 2022 04:19:45 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id f11so22820383wrm.6;
-        Wed, 05 Oct 2022 04:19:45 -0700 (PDT)
+        with ESMTP id S230244AbiJELp6 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 5 Oct 2022 07:45:58 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C3EE7A52F;
+        Wed,  5 Oct 2022 04:44:03 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id ay7-20020a05600c1e0700b003b49861bf48so1906618wmb.0;
+        Wed, 05 Oct 2022 04:44:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZOH0N862OH/9tiivSt3Zwjt1qR1oUocM3XEbjZOA5Xs=;
-        b=p7hISEZxTLVrPFiIi0B0dRX9xAJv7UNvnE9chppraPoeFcDGnYgmBx7MsPASMikx7G
-         wbA5/N24Zr1SDnUFS219VtWjVVzWI8ci9lLmJCa1uE+xWm7Ij8o23Uk+sVKMH0HOwhyq
-         46wws/br7R6VdhUZST8gkDX94W8FD8Qaa0rk6paqpjPxiZB07oLDxHSMPMLAbs2cSUFX
-         xnwBOniashRY//mCbHOF1K4jdWMy5nBtpIP34SevKDdZs6cw9HgxroWtTSZh7SIDZt3M
-         GPgGr/fzo/bAdEeaVUXgAiCHCF7D2+4EP5K63Y/RDoC8YBfh3b5XZ5Nu2iDNFgICw3sr
-         ny2A==
+        bh=I6JO1askOXv3fIRom3nLLKljILvMiIWCZXOL0gCR+zI=;
+        b=Wc8WRlG+WpW8mbJvGsJThiHj1HY0CcYuGKBnatg6+VXXQi3avdhmYgTfOe3XPQAcY7
+         I/JLrMiFquIOHeVyojQCB7iwK71vi1HkS7r2JM46K/HiaK0rYukCIhxzlO4R5sb0j/NB
+         cAQ1owdKdxK3SaU4jfpOkhuphZUT1GwKDK+j7jou0ujCPuSoxkr6wKBAak22bMFVHydB
+         asvpTNDz5gNPWcXeELDQV2bhdW3+FfJzQqOS+lLyu5Tp6+w0ne0v5XK0iipYT9cLSutr
+         xtAN7myNx3rNfc3gEK9iOWxyQjAoT2zw2XL661qkxCw8sFgab0k0FrBsgtbBQOTi4oh9
+         iC/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZOH0N862OH/9tiivSt3Zwjt1qR1oUocM3XEbjZOA5Xs=;
-        b=LzFiEr383GVzZpk25tYAQNEA3L3KPAM/dMJxHOByD9MDzNgC3ElG4D+agp7knKVYwT
-         GcEkv9E20BUcZz0rqWBHK6jGd5z5dEfjcuGcIKR4Rk4ZtTC8NmVER9pz4rM5xKCKB6Qn
-         zsvqFUjkqtTcs5z40I+dShjWWLJdD7/cVBqR2iRXnEADxVbNvguiQ6LqNWNv6FIVFnfu
-         V37lKGkH6QKGFOkuRn8/+LDjMEn0+d8Miwkfpx9eVWkAYpVJ+Wc62gt8U3A/ADnqRcx2
-         LjqXCdHM3JDn4oTcv77wJyswkmgE33LW77kbNQ6fuQnbV4uNnT+ubXUpHE6Uhkf3AsM3
-         nGLw==
-X-Gm-Message-State: ACrzQf3bukAgLOXWi1j8pwkrzaCUUXwgL0kJB0MGMCUZg7ih9+zG5Zyz
-        46guc9mAGrBgxGaLKvMAeOSX6rYcw60=
-X-Google-Smtp-Source: AMsMyM7MATMXyZeCGO0qZBzgn4wRxM30AAQNmiEGIHECsD8SmyDHKW1kRFhFnMcsDjUGC6TUcmdX6w==
-X-Received: by 2002:adf:fdcf:0:b0:22e:3ef3:1d28 with SMTP id i15-20020adffdcf000000b0022e3ef31d28mr8765657wrs.331.1664968784078;
-        Wed, 05 Oct 2022 04:19:44 -0700 (PDT)
+        bh=I6JO1askOXv3fIRom3nLLKljILvMiIWCZXOL0gCR+zI=;
+        b=D5pTYbgsqx+wwJJXuVwGBA70Jj7ubuLlEckqxuhMPHZVCvmHusPhzyl/Nn0AzqBfKZ
+         sxDsVFHcEkJvi4nio5MMDNQod+8bOVT2XFX58aM9ElycP/FLT/qWQEWkIUnA7YwSI8pH
+         UQhtGJI/LrJ4HEtNJ8CqWZv8uTqmB5BVp4/PCKmdXL7WNoJEOGSGK7l6Zo2pcCoL8m72
+         7JweTQ0+LjWqe2U2JsWpmPZNwte3s8oxJC+oFyEDB9ASYGq2lohj6vCGtsWVr6SWfTga
+         3UAW0wPHIBMrNxTNeKHgkWEIkJRUZssOpLAhJFCqBOQb7aefKv8yFXV51XgDOu/z4uzT
+         D/MA==
+X-Gm-Message-State: ACrzQf0GGT6HuYJNORWw8Ig/9qijVEtXGNbiog3g9yuXy0wwqNVcYkaP
+        rVCerVR05vX/BjtbR0y4+p+iaRu/fys=
+X-Google-Smtp-Source: AMsMyM6kySg7JhOnbqTNzF3k0OyNUxybSz4HxCID9n6Z9GWv0v0/EuIV6zyBPaOH+zhl/XtyQ8wAPQ==
+X-Received: by 2002:a05:600c:1c84:b0:3b3:ef37:afd3 with SMTP id k4-20020a05600c1c8400b003b3ef37afd3mr2874007wms.155.1664970220260;
+        Wed, 05 Oct 2022 04:43:40 -0700 (PDT)
 Received: from debian (host-78-150-37-98.as13285.net. [78.150.37.98])
-        by smtp.gmail.com with ESMTPSA id u19-20020a05600c19d300b003bf6da9d2cesm1138180wmq.28.2022.10.05.04.19.43
+        by smtp.gmail.com with ESMTPSA id z12-20020a05600c220c00b003a63a3b55c3sm1631689wml.14.2022.10.05.04.43.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Oct 2022 04:19:43 -0700 (PDT)
-Date:   Wed, 5 Oct 2022 12:19:42 +0100
+        Wed, 05 Oct 2022 04:43:39 -0700 (PDT)
+Date:   Wed, 5 Oct 2022 12:43:38 +0100
 From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-To:     Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, ntfs3@lists.linux.dev,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        linux-next@vger.kernel.org
-Subject: build failure of next-20221005 due to a3a956c78efa ("fs/ntfs3: Add
- option "nocase"")
-Message-ID: <Yz1oTvzDpCkOE+fr@debian>
+To:     Huacai Chen <chenhuacai@loongson.cn>
+Cc:     WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
+Subject: build failure of next-20221005 due to 4078ec1ef5ed ("LoongArch: Use
+ TLB for ioremap()")
+Message-ID: <Yz1t6rPLOzKT8Id+@debian>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -73,43 +70,34 @@ X-Mailing-List: linux-next@vger.kernel.org
 
 Hi All,
 
-The builds of x86_84 allmodconfig with clang have failed to build
-next-20221005 with the error:
+The builds of loongarch allmodconfig have failed to build next-20221005
+with errors
 
-fs/ntfs3/namei.c:445:7: error: variable 'uni1' is used uninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
-                if (toupper(c1) != toupper(c2)) {
-                    ^~~~~~~~~~~~~~~~~~~~~~~~~~
-./include/linux/ctype.h:64:20: note: expanded from macro 'toupper'
-#define toupper(c) __toupper(c)
-                   ^
-fs/ntfs3/namei.c:487:12: note: uninitialized use occurs here
-        __putname(uni1);
-                  ^~~~
-./include/linux/fs.h:2803:65: note: expanded from macro '__putname'
-#define __putname(name)         kmem_cache_free(names_cachep, (void *)(name))
-                                                                       ^~~~
-fs/ntfs3/namei.c:445:3: note: remove the 'if' if its condition is always false
-                if (toupper(c1) != toupper(c2)) {
-                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-fs/ntfs3/namei.c:434:7: error: variable 'uni1' is used uninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
-                if (!lm--) {
-                    ^~~~~
-fs/ntfs3/namei.c:487:12: note: uninitialized use occurs here
-        __putname(uni1);
-                  ^~~~
-./include/linux/fs.h:2803:65: note: expanded from macro '__putname'
-#define __putname(name)         kmem_cache_free(names_cachep, (void *)(name))
-                                                                       ^~~~
-fs/ntfs3/namei.c:434:3: note: remove the 'if' if its condition is always false
-                if (!lm--) {
-                ^~~~~~~~~~~~
-fs/ntfs3/namei.c:430:22: note: initialize the variable 'uni1' to silence this warning
-        struct cpu_str *uni1, *uni2;
-                            ^
-                             = NULL
-2 errors generated.
+sound/soc/mediatek/common/mtk-btcvsd.c: In function 'mtk_btcvsd_snd_remove':
+sound/soc/mediatek/common/mtk-btcvsd.c:1394:32: error: unused variable 'btcvsd' [-Werror=unused-variable]
+ 1394 |         struct mtk_btcvsd_snd *btcvsd = dev_get_drvdata(&pdev->dev);
+      |                                ^~~~~~
 
-git bisect pointed to a3a956c78efa ("fs/ntfs3: Add option "nocase"").
+
+sound/soc/sof/intel/hda.c: In function 'hda_dsp_remove':
+sound/soc/sof/intel/hda.c:1185:26: error: unused variable 'bus' [-Werror=unused-variable]
+ 1185 |         struct hdac_bus *bus = sof_to_bus(sdev);
+      |                          ^~~
+
+
+drivers/mfd/asic3.c: In function 'asic3_mfd_remove':
+drivers/mfd/asic3.c:940:23: error: unused variable 'asic' [-Werror=unused-variable]
+  940 |         struct asic3 *asic = platform_get_drvdata(pdev);
+      |                       ^~~~
+
+
+drivers/gpu/drm/exynos/exynos7_drm_decon.c: In function 'decon_remove':
+drivers/gpu/drm/exynos/exynos7_drm_decon.c:771:31: error: unused variable 'ctx' [-Werror=unused-variable]
+  771 |         struct decon_context *ctx = dev_get_drvdata(&pdev->dev);
+      |               
+
+
+git bisect pointed to 4078ec1ef5ed ("LoongArch: Use TLB for ioremap()")
 
 I will be happy to test any patch or provide any extra log if needed.
 

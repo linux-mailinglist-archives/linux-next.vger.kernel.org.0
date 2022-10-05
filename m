@@ -2,95 +2,134 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76CD05F4FA4
-	for <lists+linux-next@lfdr.de>; Wed,  5 Oct 2022 08:03:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1B125F4FD6
+	for <lists+linux-next@lfdr.de>; Wed,  5 Oct 2022 08:39:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229716AbiJEGDG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 5 Oct 2022 02:03:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54482 "EHLO
+        id S229517AbiJEGjS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 5 Oct 2022 02:39:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbiJEGDF (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 5 Oct 2022 02:03:05 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88B3325EB3;
-        Tue,  4 Oct 2022 23:03:04 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id l8so10126734wmi.2;
-        Tue, 04 Oct 2022 23:03:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=XfuxcPrid/1Sd5yZYeCEG8zmqxixUVmuQ/H/2tn2BcI=;
-        b=k/klt2/b89hFNe78TQbXNeja/IdMpcZiYrjnKfvP2z+814E+oizkM/8ElFrkUb/05R
-         YidX2Si8BVq0VWVPoWBvWve7ZSUQANllVUqjY5eLPbGIQBzi4mw88JovZ1v3WP94q6w7
-         Zpw1iNmnnU24C23jT0+++yDCG6xP33OHLtCXg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=XfuxcPrid/1Sd5yZYeCEG8zmqxixUVmuQ/H/2tn2BcI=;
-        b=SGKLu0KfCIxp242tn8VAK6FstKZGgi0Wfv5alwlnjHYzF1aHWXR+0MYQCFpMmwNhmP
-         gAh640dr0IuaJTIHA0V5cP9heDACaiuFKOKGR/Cz0S97v5G/OkmY1zSOjDHdX+ukjwt/
-         gnRLhML7LY/NFtx8t+OWsYO3m15PaoFEULZhOpnKQKD+DMsBUxVdTVnH4Qb5ZYRagE65
-         fkZjxUPfgQxNzMP/6Xc8eCodXnrNS6gI7ktVAcY530HiGQBY3WW6UgsVVUQmkmsyq9dS
-         dmlrVts3xNeGgeDwkBUNHvfflPULgDDAR599ejcpfvgGpL9Xr7USvKGQhQItQuXjxaoW
-         DQxQ==
-X-Gm-Message-State: ACrzQf1N9S6UxBi2wuSRGZ1NvHYqfacWeCKUgoSeaj0JursKCOkr7N6d
-        dJyRqtAUE8m1WSIHi6czhz0G1C0x4Iqvt0sRi7M=
-X-Google-Smtp-Source: AMsMyM4NbL/FH0L/HZzNVSH872uO46cq4sujSzw/KArLDXyK3aSWFIteAMEN5sWrZHSYS5Cm7JOPuWE+QMKgjyP0yhg=
-X-Received: by 2002:a05:600c:1906:b0:3b4:c979:e639 with SMTP id
- j6-20020a05600c190600b003b4c979e639mr2079663wmq.10.1664949782844; Tue, 04 Oct
- 2022 23:03:02 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220725095913.31e859ec@canb.auug.org.au> <df8f4765-a804-cb50-bbb5-475925ba2036@milecki.pl>
- <20220815105419.4df1005b@canb.auug.org.au> <20220831091654.45d5ed41@canb.auug.org.au>
- <20221005114841.4540d325@canb.auug.org.au> <abbe10d1-4c2a-5fad-3f92-e55c514d3ce2@gmail.com>
-In-Reply-To: <abbe10d1-4c2a-5fad-3f92-e55c514d3ce2@gmail.com>
-From:   Joel Stanley <joel@jms.id.au>
-Date:   Wed, 5 Oct 2022 06:02:50 +0000
-Message-ID: <CACPK8Xecn8ZREAqcLcuZHjA=NhaanRMKu4W39okAkBFX4aaOnw@mail.gmail.com>
-Subject: Re: linux-next: build warnings after merge of the broadcom tree
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        with ESMTP id S229453AbiJEGjR (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 5 Oct 2022 02:39:17 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8AF2606AD;
+        Tue,  4 Oct 2022 23:39:14 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Mj4fj32tCz4x1R;
+        Wed,  5 Oct 2022 17:39:09 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1664951950;
+        bh=UrEsygdFipco2BHqGzf2XhG4aPMLc7N3pT9vVU3rPes=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=GVyLF01LsA+9BoT/62ukIKyCbFN3keDIDiTUWQvMKQ61Y0ZgzhzCUzggm1hvWDUFd
+         2hx3exu180aTKU3H3BSiIr2K8oSiqwj25b55gsAFFxZb3V8+nP4e7wkXQguQVJVyjO
+         m6CSIPP3SOBwyfX+TDVHDAn5a75xzmZ2PZytjuWLOk8Qf1R/kMJG1KOlX7t8PZKib5
+         qlqUzhvwKoMfT322YAchmpSVQqUaPWu+iNtR5MeX3YSIUxMocab94jh+8vlOaKZbZX
+         78dAb+Ay+obLKyMWmH/0iVF9cH5S67lly2I6uU/AEDM98Y5s4B5D/ZI6S96LYpj8Dn
+         coq+T4dD4VpIg==
+Date:   Wed, 5 Oct 2022 17:39:04 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Alexander Potapenko <glider@google.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the mm-stable tree with the kspp
+ tree
+Message-ID: <20221005173904.12540ffe@canb.auug.org.au>
+In-Reply-To: <20221004204025.7be8a3be@canb.auug.org.au>
+References: <20221004204025.7be8a3be@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/4y4jTsp8=i3rlvQ4LDEz0E5";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, 5 Oct 2022 at 03:01, Florian Fainelli <f.fainelli@gmail.com> wrote:
-> >> I am still seeing these warnings.
-> >>
-> >> The above commit is now
-> >>
-> >>    61dc1e3850a6 ("ARM: dts: BCM5301X: Add basic PCI controller properties")
-> >
-> > Has any progress been made with this?  This commit is now in the
-> > arm-soc tree.
->
-> Yes, I was hoping to get some feedback on this patch:
->
-> https://lore.kernel.org/all/20220920210213.3268525-1-f.fainelli@gmail.com/
->
-> but I suppose being the ARM SoC maintainer I can just go ahead and push it.
+--Sig_/4y4jTsp8=i3rlvQ4LDEz0E5
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I'd send a revert of the change. Rafal can then re-submit a series
-that fixes the dtc warnings as well as the yaml warning once they have
-been tested and reviewed.
+Hi all,
 
-The yaml warnings aren't seen by other developers, as they require the
-tools to be installed, but those from dtc are.
+On Tue, 4 Oct 2022 20:40:25 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
+>=20
+> Today's linux-next merge of the mm-stable tree got a conflict in:
+>=20
+>   include/linux/fortify-string.h
+>=20
+> between commit:
+>=20
+>   9f7d69c5cd23 ("fortify: Convert to struct vs member helpers")
+>=20
+> from the kspp tree and commit:
+>=20
+>   ff901d80fff6 ("x86: kmsan: use __msan_ string functions where possible.=
+")
+>=20
+> from the mm-stable tree.
+>=20
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+>=20
+>=20
+> diff --cc include/linux/fortify-string.h
+> index b62c90cfafaf,6c8a1a29d0b6..000000000000
+> --- a/include/linux/fortify-string.h
+> +++ b/include/linux/fortify-string.h
+> @@@ -325,11 -282,13 +325,13 @@@ __FORTIFY_INLINE void fortify_memset_ch
+>   })
+>  =20
+>   /*
+>  - * __builtin_object_size() must be captured here to avoid evaluating ar=
+gument
+>  - * side-effects further into the macro layers.
+>  + * __struct_size() vs __member_size() must be captured here to avoid
+>  + * evaluating argument side-effects further into the macro layers.
+>    */
+> + #ifndef CONFIG_KMSAN
+>   #define memset(p, c, s) __fortify_memset_chk(p, c, s,			\
+>  -		__builtin_object_size(p, 0), __builtin_object_size(p, 1))
+>  +		__struct_size(p), __member_size(p))
+> + #endif
+>  =20
+>   /*
+>    * To make sure the compiler can enforce protection against buffer over=
+flows,
 
+This is now a conflict between the mm-stable tree and Linus' tree.
+
+--=20
 Cheers,
+Stephen Rothwell
 
-Joel
+--Sig_/4y4jTsp8=i3rlvQ4LDEz0E5
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmM9JogACgkQAVBC80lX
+0GwIZggApjYw82dVFfmTq72uxz8Uh2M/14G4pOF3PhfTWl1KdABDnsEY5sQVI9Y2
+6Qw2VS6DvCOtKw7s2N2NKsDhcI1EjoujdpYvBv9mLljOi0JZbckepvSfi0AsjV5H
+XTPXbAFm/Q1A1If9+H/Uk68r4XIusJDSzPkuvOoBXig21Hw/Wf9aqAO8/IkYIFda
+y/sC4h+XT6yUSCKKqunL3X9xNepzg8lDJx8MCNwZ4Lftf7KAHZ1g4Pjn5ih+cmdS
+QfLnt2lLGvP4KyKzdsDbyDnO1HVuB2IxyBJCw7K7zJoppj5KIdNcCOeShaJ7AZDC
+292SrElD/rcpgDlRL9tJNU0QV+h5QA==
+=JZVb
+-----END PGP SIGNATURE-----
+
+--Sig_/4y4jTsp8=i3rlvQ4LDEz0E5--

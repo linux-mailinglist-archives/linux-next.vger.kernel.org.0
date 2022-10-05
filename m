@@ -2,147 +2,132 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DC195F4DEE
-	for <lists+linux-next@lfdr.de>; Wed,  5 Oct 2022 04:55:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB5075F4DFD
+	for <lists+linux-next@lfdr.de>; Wed,  5 Oct 2022 05:01:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229530AbiJECzI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 4 Oct 2022 22:55:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49410 "EHLO
+        id S229445AbiJEDBc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 4 Oct 2022 23:01:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229719AbiJECzH (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 4 Oct 2022 22:55:07 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1459B4B0F2;
-        Tue,  4 Oct 2022 19:55:00 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        with ESMTP id S229494AbiJEDBb (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 4 Oct 2022 23:01:31 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1A295D10B;
+        Tue,  4 Oct 2022 20:01:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Mhzgy3d89z4wgv;
-        Wed,  5 Oct 2022 13:54:54 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1664938495;
-        bh=/dftQjub+WnhGxhKZTf/hwc0P/TVISd3s3y0LT/2H6I=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=aFfZRc+7svIDlKlZmfurJyZNvKIDqQTintw7NAT7hUft7diCESQDcawUbsHILLMn1
-         jJeEaHO0FZ+IfW3X6hes0U8+B3PMnzVP03DRfbXsVBvv/3/bCffuKYc2BM3LKjknIj
-         H6rv+zYusLFsVvTgqC8QcvSSgC6awrhYhYnvMOVWgbngHY2Iivqv1ugKG5ArMgEV6h
-         d3SDjodLIeO9SSbE0hhnXAeFY00G+XVtjB5MhzwMdiKeaDs8+R+W79n/p7Dq24mQ8z
-         me/UEyp5Hq1KSMyU45CVTo32dRjpV0k6esA/rnQ+W+mXYXyuQmXSUjocqV+wyqADXy
-         aXEbCFeP7OHmw==
-Date:   Wed, 5 Oct 2022 13:54:52 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Kees Cook <keescook@chromium.org>,
+        by ams.source.kernel.org (Postfix) with ESMTPS id A9496B81C76;
+        Wed,  5 Oct 2022 03:01:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DD2AC433C1;
+        Wed,  5 Oct 2022 03:01:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664938887;
+        bh=2K4KiV7cPFLSD3RGGa7NSZcyE05Kqz67W50GPiHXla8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FcChFZKOLy8PrM/3mS4FU94zl7cO7jcTJijAbPcaDeobVoGq4jgy9eN3FyoWQv06F
+         xePczqWR+x6ZRMNwSItfmx2PUjFbdfKvMTHzI0y1/iqcNSwrKJ9RMatq+hvFwMZEbu
+         GtzKO6mxx4N0EdH2anf7olBtuq5PStHtEenWCPNfmOwkuoObQMd2w2DfUoqBekEwbu
+         OrzKStlqEVhUYHIRAErUwkMGbEJRj+iCphgIbz3kNJOx1iOJ4c7A8aHqO9CXDlVBXW
+         ZakIdt3/9n0Ai9F4TZ49dpMytq0yLMG6PB/RnU9x/Pgaygg+0mMty/DvVbIUcv5kj8
+         PIQSjRCFA5jSA==
+Date:   Tue, 4 Oct 2022 20:01:26 -0700
+From:   "Darrick J. Wong" <djwong@kernel.org>
+To:     Stephen Zhang <starzhangzsd@gmail.com>
+Cc:     Dave Chinner <david@fromorbit.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        linux-xfs@vger.kernel.org, Shida Zhang <zhangshida@kylinos.cn>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Marco Elver <elver@google.com>
-Subject: Re: linux-next: manual merge of the kspp tree with the tip tree
-Message-ID: <20221005135452.2ebb563d@canb.auug.org.au>
-In-Reply-To: <20220906174946.61819060@canb.auug.org.au>
-References: <20220906174946.61819060@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: Signed-off-by missing for commit in the xfs tree
+Message-ID: <YzzzhsZQ4qlDrcFW@magnolia>
+References: <20221004072302.345bfd4a@canb.auug.org.au>
+ <20221003222103.GM3600936@dread.disaster.area>
+ <20221004225012.501e11ed@canb.auug.org.au>
+ <YzxX7ks+YD7U1dcl@magnolia>
+ <20221004210400.GO3600936@dread.disaster.area>
+ <CANubcdV462CTQQsmkaPG-dP1Cgy6BqHKj-gXZzh=U=pH+i7dfg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/frrJnoO7JsebmBB+ihL3H+2";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CANubcdV462CTQQsmkaPG-dP1Cgy6BqHKj-gXZzh=U=pH+i7dfg@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/frrJnoO7JsebmBB+ihL3H+2
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Wed, Oct 05, 2022 at 10:52:05AM +0800, Stephen Zhang wrote:
+> Dave Chinner <david@fromorbit.com> 于2022年10月5日周三 05:06写道：
+> > As it is, I use the convention of putting an explicit From: tag in
+> > the commit message that matches the SOB so tools pulling stuff from
+> > mailing lists do the right thing with them (same as any third-party
+> > provided patch in a series).
+> >
+> > > That said... I think we should get in the habit of asking patch authors
+> > > to make sure that at least one of the email or name strings match
+> > > between the From and SOB tags.  I can see how people who grok even less
+> > > about how Chinese names work than I do (read: lawyers) might get fussy
+> > > about this kind of thing.
+> >
+> > As per above, the normal solution is an explicit "From: <foo>" line
+> > that matches the SOB.  It's just annoying that our new-fangled tools
+> > haven't encoded this long-standing convention to warn us when we
+> > pull a patch with a from-tag that doesn't match a sob-tag.
+> >
+> 
+> Sorry, but I'm not sure whether what you mean is adding another "From: " line
+> right above the SOB tag like:
+> ====
+> From: name2 <email address2>
+> Date: Mon, 12 Sep 2022 xx:xx:xx +0800
+> Subject: [PATCH ] xfs: fix xxx and xxx
+> 
+> ...
+> the commit  message
+> ...
+> 
+> From: name <email address>             //added line
+> signed-off-by:  name <email address>
+> ...
+> ====
 
-Hi all,
+I think Dave means something like this patch of mine:
+https://lore.kernel.org/linux-xfs/166473478893.1083155.2555785331844801316.stgit@magnolia/T/#u
 
-On Tue, 6 Sep 2022 17:49:46 +1000 Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
->
-> Today's linux-next merge of the kspp tree got a conflict in:
->=20
->   lib/Kconfig.debug
->=20
-> between commit:
->=20
->   724c299c6a0e ("perf/hw_breakpoint: Add KUnit test for constraints accou=
-nting")
->=20
-> from the tip tree and commit:
->=20
->   bb26bbd0a067 ("fortify: Add KUnit test for FORTIFY_SOURCE internals")
->=20
-> from the kspp tree.
->=20
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
->=20
-> --=20
-> Cheers,
-> Stephen Rothwell
->=20
-> diff --cc lib/Kconfig.debug
-> index e40550a5bdd3,1f267c0ddffd..000000000000
-> --- a/lib/Kconfig.debug
-> +++ b/lib/Kconfig.debug
-> @@@ -2533,16 -2542,15 +2545,25 @@@ config STACKINIT_KUNIT_TES
->   	  CONFIG_GCC_PLUGIN_STRUCTLEAK, CONFIG_GCC_PLUGIN_STRUCTLEAK_BYREF,
->   	  or CONFIG_GCC_PLUGIN_STRUCTLEAK_BYREF_ALL.
->  =20
->  +config HW_BREAKPOINT_KUNIT_TEST
->  +	bool "Test hw_breakpoint constraints accounting" if !KUNIT_ALL_TESTS
->  +	depends on HAVE_HW_BREAKPOINT
->  +	depends on KUNIT=3Dy
->  +	default KUNIT_ALL_TESTS
->  +	help
->  +	  Tests for hw_breakpoint constraints accounting.
->  +
->  +	  If unsure, say N.
->  +
-> + config FORTIFY_KUNIT_TEST
-> + 	tristate "Test fortified str*() and mem*() function internals at runti=
-me" if !KUNIT_ALL_TESTS
-> + 	depends on KUNIT && FORTIFY_SOURCE
-> + 	default KUNIT_ALL_TESTS
-> + 	help
-> + 	  Builds unit tests for checking internals of FORTIFY_SOURCE as used
-> + 	  by the str*() and mem*() family of functions. For testing runtime
-> + 	  traps of FORTIFY_SOURCE, see LKDTM's "FORTIFY_*" tests.
-> +=20
->   config TEST_UDELAY
->   	tristate "udelay test driver"
->   	help
+From:   "Darrick J. Wong" <djwong@kernel.org>
+To:     djwong@kernel.org
+Cc:     linux-xfs@vger.kernel.org
+Date:   Sun, 02 Oct 2022 11:19:48 -0700
+Subject: [PATCH 3/4] xfs: set the buffer type after holding the AG[IF] across trans_roll
 
-This is now a conflict between the tip tree and Linus' tree.
+From: Darrick J. Wong <djwong@kernel.org>
 
---=20
-Cheers,
-Stephen Rothwell
+Currently, the only way to lock an allocation group is to hold the AGI
+and AGF buffers.  If repair needs to roll the transaction while
+repairing some AG metadata, it maintains that lock by holding the two
+buffers across the transaction roll and joins them afterwards.
 
---Sig_/frrJnoO7JsebmBB+ihL3H+2
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+However, repair is not the same as the other parts of XFS that employ
+this bhold/bjoin sequence, because it's possible that the AGI or AGF
+buffers are not actually dirty before the roll.  In this case, the
+buffer log item can detach from the buffer, which means that we have to
+re-set the buffer type in the bli after joining the buffer to the new
+transaction so that log recovery will know what to do if the fs fails.
 
------BEGIN PGP SIGNATURE-----
+Signed-off-by: Darrick J. Wong <djwong@kernel.org>
+---
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmM88fwACgkQAVBC80lX
-0GzAeAf/caICAy0O0D3CylqZf1VpG0M2SOZ8RbbIWdn8ym8nFKRdvgsDnw5UWMQk
-Kcop8C/Xv6cTVEVGlOEtG7HO5L1//s2YNkioxtRQY+cIKFUShC5uakkDijVgqSHU
-Yvdnwqs17KBmPTzogyvyv64WtnA46bS0I1vzdFWsR8QJSJf25SU42Z8lLeuF/BDu
-2koh/bXc+mdOTqMtQ9hiQ6qyGCEBnHBc1Wstu6nY89blKbgiZ57pZLYfpdUggDDQ
-J7SFxUUU+ioCjLTuAdDnshMS5OO0qz6XmnFRAAVGo4Vyx5tMzaZqn5vtVZ8iT5yg
-e0GFXHSEyHht3jfRz2a5etT/LOu12Q==
-=DCPr
------END PGP SIGNATURE-----
+Notice how after the Subject: there is a blank line (which terminates
+the headers) followed by a new From: line in the body?  And the
+name/email in that second From: line matches the SOB later on?
 
---Sig_/frrJnoO7JsebmBB+ihL3H+2--
+--D
+
+> 
+> Thanks,
+> Stephen.

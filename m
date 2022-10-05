@@ -2,93 +2,112 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D61B5F544A
-	for <lists+linux-next@lfdr.de>; Wed,  5 Oct 2022 14:19:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C22F25F5476
+	for <lists+linux-next@lfdr.de>; Wed,  5 Oct 2022 14:30:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229737AbiJEMTL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 5 Oct 2022 08:19:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39424 "EHLO
+        id S229610AbiJEMay (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 5 Oct 2022 08:30:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229837AbiJEMTK (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 5 Oct 2022 08:19:10 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 211804DF25
-        for <linux-next@vger.kernel.org>; Wed,  5 Oct 2022 05:19:09 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id y136so15668252pfb.3
-        for <linux-next@vger.kernel.org>; Wed, 05 Oct 2022 05:19:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=Kch95tHHe8y0dIqkTVplEFHJb/ntNCXtwkxDszyYdcA=;
-        b=qa9Xxrj8Khk7MeFieImHaceH75MPZZe87Zof7eaXtUpnMY/1CSnGMku/XOPUyReJZH
-         acmkdT9DjZp3f47I5AAtO+N6JghZLByO4VOBpZZWjBdAHWX2teizcZKnOQCVhczUldqY
-         vxA4dNJEkE0rFePanxfk7bBEjVoG3jB1/lLISsgamfpLBAvLNHOm5FrHGtP4Vx8v7D9k
-         5aGLpTrWnpN5JfhITIsYHKHUjnDqDEsKZr2mp/mzZ+zxgd2T0wjUC/rMuGi7VWC7zbTU
-         McLADrx0jdxLo6Q30lSGObCzYW5afDMoYvovGwQs5SaK8GHOBEzVBDCoW7PgPJ8r8ayr
-         IS5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=Kch95tHHe8y0dIqkTVplEFHJb/ntNCXtwkxDszyYdcA=;
-        b=mVfTaWcy4he3iQbRJgGGfJTd1n/ejkcF85dLTkFuH5zsZW5H5hQJLsLquOlQ3RHtgg
-         9lUSt7LN/g8aoZtVehHjYQGOwS0gdM27b/m5CGFxlT8/s8loV4beeqGCDXOhzWbinzmu
-         lRCIs6Vdn23XQUC4tRWhfP/wWk2jHhRCeNLyTAfrIxFbB6pG6ldY3GI4KFKVlmhtt9bV
-         RQpXxXCfjZ6s25Znkq/Duv9m/jrTaSrRrZfwhm9GBC/XPJz7J6XU4mBuWjGsZXC/PYeD
-         QTvBkm6RkffF7nXa6uSMVK3ux7SlvrhhP1twKEbPEGlyZjJL9OsZep+y7XpsdkNufXpK
-         tMHQ==
-X-Gm-Message-State: ACrzQf1gE/9tHD2ya5BbMYgiAZ5iMwU5faSAO7WYyFsek6WNjdUG+Jsg
-        OCMTP5mvUM9ANAPcgP0g1HNObg==
-X-Google-Smtp-Source: AMsMyM4MRlFjL3Z/LGK71aFd/IwfHhTGKouTQN3w7MTh+a/6Qf4G1a386Nl5Kzzozog4KF/dCBZ60g==
-X-Received: by 2002:a05:6a00:c82:b0:561:ad4a:ca0d with SMTP id a2-20020a056a000c8200b00561ad4aca0dmr10889958pfv.50.1664972348547;
-        Wed, 05 Oct 2022 05:19:08 -0700 (PDT)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id y23-20020a17090264d700b00176e2fa216csm10523961pli.52.2022.10.05.05.19.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Oct 2022 05:19:07 -0700 (PDT)
-Message-ID: <3dcff83c-3ddf-b068-270b-f886de8eba7f@kernel.dk>
-Date:   Wed, 5 Oct 2022 06:19:06 -0600
+        with ESMTP id S229509AbiJEMaw (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 5 Oct 2022 08:30:52 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2209A25E8C;
+        Wed,  5 Oct 2022 05:30:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 9BDD5CE12FA;
+        Wed,  5 Oct 2022 12:30:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E00E2C433D7;
+        Wed,  5 Oct 2022 12:30:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664973048;
+        bh=MUH/5Nr9NH5nKvpp0g6W1q0YMvqiwhZO2hEEaGu7mjg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=uNkQZys6eTVye1mUdQlmmPlOzfcPR4HVn4+cBENggnv0hjY/R7ncfpjGyssN4t7u8
+         WyaJfbsbSONZ2w6dut04UzBU0rH7Gn2fAz1bkhWqMEg46XGLTruf4qerOC7A3wL30x
+         khjyz5RvzQv/QfzwqN5AY3MOZOsEMICr0XTM7isnK2VSaZQ4nvG7x8uZOn8o5AoUL0
+         pse87rtFEj08C3l2ZgjOtQlXsF7uKe4/vPMMupSJO4Ee4ZfHEaDM2CHGr2LeTdHSqO
+         CsjHkDbQ0la+igFccgmQTJ4hVhhh0wIo5URoSih3Mt8J1L0qzpxPIiD6c9WHWLnHno
+         Lw4pIiRn2pptw==
+Received: by mail-ej1-f49.google.com with SMTP id kg6so19777019ejc.9;
+        Wed, 05 Oct 2022 05:30:48 -0700 (PDT)
+X-Gm-Message-State: ACrzQf1OyarxO8lzeZ4ZwAIwxKx1UgUIc40qYEmdQXWsfdkgsYK/Na5G
+        sD9xrgiNQbZTrvDabwIfa50GCEdsaUtse853C+M=
+X-Google-Smtp-Source: AMsMyM5L8hCj4bFlWh0VlM5kabk6auuvY8ux7t4b2Vc2ydVwZHKt3XLpUTraCw25wFlUiOkTFbotGZGrl8iYa+Ajy/Y=
+X-Received: by 2002:a17:907:a05a:b0:78d:225c:bbc3 with SMTP id
+ gz26-20020a170907a05a00b0078d225cbbc3mr4319639ejc.224.1664973047171; Wed, 05
+ Oct 2022 05:30:47 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: linux-next: build warning after merge of the block tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Pavel Begunkov <asml.silence@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20221005181734.08b2f1d9@canb.auug.org.au>
-Content-Language: en-US
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20221005181734.08b2f1d9@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <Yz1t6rPLOzKT8Id+@debian>
+In-Reply-To: <Yz1t6rPLOzKT8Id+@debian>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Wed, 5 Oct 2022 20:30:34 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H7FoDEEtqF_ZOwTGPeGK-4wpzsxEqvO+iuq=KpEuDUofQ@mail.gmail.com>
+Message-ID: <CAAhV-H7FoDEEtqF_ZOwTGPeGK-4wpzsxEqvO+iuq=KpEuDUofQ@mail.gmail.com>
+Subject: Re: build failure of next-20221005 due to 4078ec1ef5ed ("LoongArch:
+ Use TLB for ioremap()")
+To:     "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 10/5/22 1:17 AM, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the block tree, today's linux-next build (htmldocs)
-> produced this warning:
-> 
-> include/linux/skbuff.h:1051: warning: Function parameter or member 'scm_io_uring' not described in 'sk_buff'
-> 
-> Introduced by commit
-> 
->   0dd99edbfae7 ("io_uring/af_unix: defer registered files gc to io_uring release")
+Hi, Sudip,
 
-Thanks, fixed.
+This seems a false positive. When the implementation of iounmap() is
+empty (but this is completely legal I think), these drivers will cause
+"unused variable error".
 
--- 
-Jens Axboe
+Huacai
 
-
+On Wed, Oct 5, 2022 at 7:43 PM Sudip Mukherjee (Codethink)
+<sudipm.mukherjee@gmail.com> wrote:
+>
+> Hi All,
+>
+> The builds of loongarch allmodconfig have failed to build next-20221005
+> with errors
+>
+> sound/soc/mediatek/common/mtk-btcvsd.c: In function 'mtk_btcvsd_snd_remove':
+> sound/soc/mediatek/common/mtk-btcvsd.c:1394:32: error: unused variable 'btcvsd' [-Werror=unused-variable]
+>  1394 |         struct mtk_btcvsd_snd *btcvsd = dev_get_drvdata(&pdev->dev);
+>       |                                ^~~~~~
+>
+>
+> sound/soc/sof/intel/hda.c: In function 'hda_dsp_remove':
+> sound/soc/sof/intel/hda.c:1185:26: error: unused variable 'bus' [-Werror=unused-variable]
+>  1185 |         struct hdac_bus *bus = sof_to_bus(sdev);
+>       |                          ^~~
+>
+>
+> drivers/mfd/asic3.c: In function 'asic3_mfd_remove':
+> drivers/mfd/asic3.c:940:23: error: unused variable 'asic' [-Werror=unused-variable]
+>   940 |         struct asic3 *asic = platform_get_drvdata(pdev);
+>       |                       ^~~~
+>
+>
+> drivers/gpu/drm/exynos/exynos7_drm_decon.c: In function 'decon_remove':
+> drivers/gpu/drm/exynos/exynos7_drm_decon.c:771:31: error: unused variable 'ctx' [-Werror=unused-variable]
+>   771 |         struct decon_context *ctx = dev_get_drvdata(&pdev->dev);
+>       |
+>
+>
+> git bisect pointed to 4078ec1ef5ed ("LoongArch: Use TLB for ioremap()")
+>
+> I will be happy to test any patch or provide any extra log if needed.
+>
+>
+> --
+> Regards
+> Sudip
+>

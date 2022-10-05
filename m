@@ -2,148 +2,89 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 846A15F5034
-	for <lists+linux-next@lfdr.de>; Wed,  5 Oct 2022 09:12:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBCC55F503D
+	for <lists+linux-next@lfdr.de>; Wed,  5 Oct 2022 09:17:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229507AbiJEHMt (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 5 Oct 2022 03:12:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49274 "EHLO
+        id S229573AbiJEHRm (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 5 Oct 2022 03:17:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229737AbiJEHMs (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 5 Oct 2022 03:12:48 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 448A81DA62
-        for <linux-next@vger.kernel.org>; Wed,  5 Oct 2022 00:12:47 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ofyZx-0000sn-8Q; Wed, 05 Oct 2022 09:12:29 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ofyZw-004iI1-Ny; Wed, 05 Oct 2022 09:12:27 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ofyZu-005hvF-AQ; Wed, 05 Oct 2022 09:12:26 +0200
-Date:   Wed, 5 Oct 2022 09:12:26 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Wolfram Sang <wsa@kernel.org>, broonie@kernel.org,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Daniel Scally <djrscally@gmail.com>,
+        with ESMTP id S229484AbiJEHRm (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 5 Oct 2022 03:17:42 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C146161714;
+        Wed,  5 Oct 2022 00:17:39 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Mj5W56QXRz4x1D;
+        Wed,  5 Oct 2022 18:17:36 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1664954258;
+        bh=0ja0Pdb7di8zesD+XsNPwAag4Edj4/WtYKkmBFlNNtc=;
+        h=Date:From:To:Cc:Subject:From;
+        b=jrNyyldbI9us85oXNwaMkiZIn02EpZfmvhU6y2WTRq7iMyUj+xzUpdGW3OQTscQRb
+         eVQUGjzoHYx4wUliT3xg8Fz+btCf6RUyC9FliUfGS4vIxDQRHkeV2Xay2nz8tLlbac
+         /0Pta5UYuY8EeTBBxq1Ox/LM954xm8mW/9qC7CD7jjfOi+qPvGRBatybjieow7w6t8
+         +FUF2CAwRe/Uu73zZ/8xnnItW22y47ftFdnt40p8DlCUSSsz3d7zjur2S+jvZJvVXM
+         DtZ4LIvpP1b6ym/4RcZtLO2QaVECww8fBpVYhPwsQ/Bdjp1y8DiK0boseducxN+QZa
+         bOnfCVgqMPdSA==
+Date:   Wed, 5 Oct 2022 18:17:34 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Pavel Begunkov <asml.silence@gmail.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
-Subject: Re: linux-next: manual merge of the pm tree with the i2c tree
-Message-ID: <20221005071226.4ounaaq42frkdpa3@pengutronix.de>
-References: <20220929121853.100271-1-broonie@kernel.org>
- <20221005111836.1d43b228@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build warning after merge of the block tree
+Message-ID: <20221005181734.08b2f1d9@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="d7wx7pxlkn2m3xij"
-Content-Disposition: inline
-In-Reply-To: <20221005111836.1d43b228@canb.auug.org.au>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-next@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/Hw.QCxmD1CBS43ov6D9jU3r";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-
---d7wx7pxlkn2m3xij
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+--Sig_/Hw.QCxmD1CBS43ov6D9jU3r
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Oct 05, 2022 at 11:18:36AM +1100, Stephen Rothwell wrote:
-> Hi all,
->=20
-> On Thu, 29 Sep 2022 13:18:53 +0100 broonie@kernel.org wrote:
-> >
-> > Today's linux-next merge of the pm tree got a conflict in:
-> >=20
-> >   drivers/platform/x86/intel/int3472/tps68470.c
-> >=20
-> > between commit:
-> >=20
-> >   ed5c2f5fd10dd ("i2c: Make remove callback return void")
-> >=20
-> > from the i2c tree and commit:
-> >=20
-> >   06a659d1f0a0a ("platform/x86: int3472: Support multiple gpio lookups =
-in board data")
-> >=20
-> > from the pm tree.
-> >=20
-> > I fixed it up (see below) and can carry the fix as necessary. This
-> > is now fixed as far as linux-next is concerned, but any non trivial
-> > conflicts should be mentioned to your upstream maintainer when your tree
-> > is submitted for merging.  You may also want to consider cooperating
-> > with the maintainer of the conflicting tree to minimise any particularly
-> > complex conflicts.
-> >=20
-> > diff --cc drivers/platform/x86/intel/int3472/tps68470.c
-> > index 5dd81bb05255b,49fc379fe680a..0000000000000
-> > --- a/drivers/platform/x86/intel/int3472/tps68470.c
-> > +++ b/drivers/platform/x86/intel/int3472/tps68470.c
-> > @@@ -178,13 -227,18 +227,16 @@@ static int skl_int3472_tps68470_probe(s
-> >   	return ret;
-> >   }
-> >  =20
-> >  -static int skl_int3472_tps68470_remove(struct i2c_client *client)
-> >  +static void skl_int3472_tps68470_remove(struct i2c_client *client)
-> >   {
-> >   	const struct int3472_tps68470_board_data *board_data;
-> > + 	int i;
-> >  =20
-> >   	board_data =3D int3472_tps68470_get_board_data(dev_name(&client->dev=
-));
-> > - 	if (board_data)
-> > - 		gpiod_remove_lookup_table(board_data->tps68470_gpio_lookup_table);
-> > + 	if (board_data) {
-> > + 		for (i =3D 0; i < board_data->n_gpiod_lookups; i++)
-> > + 			gpiod_remove_lookup_table(board_data->tps68470_gpio_lookup_tables[=
-i]);
-> > + 	}
-> >  -
-> >  -	return 0;
-> >   }
-> >  =20
-> >   static const struct acpi_device_id int3472_device_id[] =3D {
->=20
-> This is now a conflict between the i2c tree and Linus' tree.
+Hi all,
 
-In the meantime the i2c tree is pulled, too and Linus solved the
-conflict in the same way in b86406d42ae3c41ae0ce332ea24350829b88af51.
+After merging the block tree, today's linux-next build (htmldocs)
+produced this warning:
 
-Best regards
-Uwe
+include/linux/skbuff.h:1051: warning: Function parameter or member 'scm_io_=
+uring' not described in 'sk_buff'
+
+Introduced by commit
+
+  0dd99edbfae7 ("io_uring/af_unix: defer registered files gc to io_uring re=
+lease")
 
 --=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+Cheers,
+Stephen Rothwell
 
---d7wx7pxlkn2m3xij
-Content-Type: application/pgp-signature; name="signature.asc"
+--Sig_/Hw.QCxmD1CBS43ov6D9jU3r
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmM9LlcACgkQwfwUeK3K
-7Ak8Jwf+N6Hjj989m4OAPECZi9fVsUL6Wrs+3sKLCMCOfMZ7iWwhrd959ho5Hi/g
-p9VdOoYhtdE6FYiXo1XktMWUoCP063Mc6tyCQFH5F6nPNt6OXeehDhlUaqitEbwK
-IvVaLYcm6Tuv6UuGZcNBYMGeECwbWVdGyfNWg1X8BWbYzlSdvatY8TC4EP+aOkDQ
-Xx/CiyWr3UCfdL57zMgA0qmzwR5Aoq/mV+Nf1V/499QErVYn+WTmfyvHGtCkEYZO
-muO2gsDyFm679HGwyha0Q4oQUS3rSmYoPmP20X0ftvXynoeIn4Ebi8yMrGE4gCK+
-yuurpS9Tk9X2TIUh+gKbkXXKXI5A2A==
-=izQm
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmM9L44ACgkQAVBC80lX
+0GypuQf/cSR3beUofv5pHVw8oXavjrdNuOR7Cw/+Tqh16jFNs2iWFIxGj/aZOZC7
+gmZfnAGVh2sCIPuDLf9/vuPFhFYmEeBFdKvk8RH48TbZkYxiDyqzVXQ6uHNj1Pxe
+rafhmrBOP766NlXemvimAEzE9f3WkrAEc432ETmDYA/DWktB/vqkwKbbvtJg3n2o
+DaRukyHdHmWuEOur/15C6eMkilAz/kwmTJlGUVmcaMTm6KgATFME0BBGohYi51d8
+zXvb/HgYNy4Jqat2T1/VYW4l6L87WmTMXfoYnQ/t6FEiogYzr01cwxn4UBiPl4QW
+Wwa2oW8pBqn2AG3L6m/gNlYVE96WFg==
+=MTvk
 -----END PGP SIGNATURE-----
 
---d7wx7pxlkn2m3xij--
+--Sig_/Hw.QCxmD1CBS43ov6D9jU3r--

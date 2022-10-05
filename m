@@ -2,77 +2,68 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2557A5F4DB4
-	for <lists+linux-next@lfdr.de>; Wed,  5 Oct 2022 04:30:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 374405F4DEB
+	for <lists+linux-next@lfdr.de>; Wed,  5 Oct 2022 04:52:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229830AbiJECaC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 4 Oct 2022 22:30:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43770 "EHLO
+        id S229621AbiJECwo (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 4 Oct 2022 22:52:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiJECaA (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 4 Oct 2022 22:30:00 -0400
-Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 875FCE0C7;
-        Tue,  4 Oct 2022 19:29:54 -0700 (PDT)
-Received: by mail-qk1-x72b.google.com with SMTP id x18so9507665qkn.6;
-        Tue, 04 Oct 2022 19:29:54 -0700 (PDT)
+        with ESMTP id S229446AbiJECwo (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 4 Oct 2022 22:52:44 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB9BC399D4;
+        Tue,  4 Oct 2022 19:52:42 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id lt21so7413078ejb.0;
+        Tue, 04 Oct 2022 19:52:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=DH5rQi2gKCWVxF/UdTT3Pt9lu19qfj4nBn9r1FjX+YI=;
-        b=paaudFZ6Vr3L4pp17zGBi4V8FzeImBFik2rhM1956UBDSklriKzHZ0gmdxtqulR5nG
-         xNXXJ+jpi0wzO5IJ9aWAbXc5Km0R+n2fFFoOWKm/8fOK1+ETyBXZmHFqv2g/qUSZidPW
-         Wr5LPAEH58Rqxt3Fa7zk8qCw13/O+TNlsVo4R9bM6tFjwLRBIpYqQm90La3pqY1BIZMm
-         vCXWj3+8WX+udIXDEvtQ+GdDViCtJ6VEhaKiCsXhsX0SZAewovhm4lytoFgG8W3325GP
-         0dIZI2Z6MjMRshJghjnfobYaLtfk7WlevoWIy8Bbyd9iCvhQX6e1FgNI8q7D6q7eGGLh
-         aUIw==
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JJwG3frOWn9EMl53OrFRq9F3gFMhYSxA/Qh0S8QYeGk=;
+        b=R1Jv5DleiacEd81pWFLhrNGh6FeGASjMYG4OMAPZ+NMJMqyZr0Th9+B+ILT7IJ/REK
+         xUiE1eqRHThBIKTvmfPIgDQIQSeLxdOJW5gvtGWmYt+E18UdfH/kjEQMFIMFefMRkKtv
+         Tb560rYyRSu9lUT85LbJm8nSNWBIPm2JB8MUTf8KQSQb3jvihkLLBwCciONH5wz5knKr
+         rvsXp1NEbObl3IzjJT1Vujya8b4ep5UZfL+IVRp2ffg4WzGl6UZpHWkj4OX9tOpJuGUj
+         mmjAz7rihELLx8FvCvr8Z4Jya6MTLTAQT26F8UwK27TChA1fx6nHmvpJxZgkADITl/3o
+         OEhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=DH5rQi2gKCWVxF/UdTT3Pt9lu19qfj4nBn9r1FjX+YI=;
-        b=KPjhJ5xkjASAGrxhEDSuBvTDOycLyv4vYDVkBNj5urEbMbBl3KQAe0WXOE9RBVWUCm
-         5E6gT+YPIleu8zwzyP2JgQx3LJueQbZcvQqS7D+IOA84bFkIqSbI3VX3gtqe3lne2Oq9
-         IHgEyoxICCpgKB3be9ArmMzl8NheNPyURoZdQJkoJ3f3yV0bhv3wyovM735S0j0KfreY
-         jVa77JQP3zb3B8M9qS9NK8u6wBPw6LxXL3KwRPgSFAorhwWZicN9oLeKua/nQ4gVqS2O
-         1BOh3b7nPN/dtW4sWG+arzT+oZKTLXxPxZA6LD0foUETe2bNG8AGY8+uCi+tXVjaWO5t
-         FDhQ==
-X-Gm-Message-State: ACrzQf1ozGKpQTPrYnIyh3VLWGfrK04u55oEgbtj7uuiAhNOP3H+VCxT
-        VoGO52rWr4AgsWZ3Im9PxM0=
-X-Google-Smtp-Source: AMsMyM6BtQhI0S8XoTCsOZmWORrstDxHcn+485rJZr9ccLPLH07taTl4gXKVzn0D+ehEn0xhQ+t2GQ==
-X-Received: by 2002:a05:620a:318d:b0:6ce:d8de:bab2 with SMTP id bi13-20020a05620a318d00b006ced8debab2mr18923141qkb.456.1664936993131;
-        Tue, 04 Oct 2022 19:29:53 -0700 (PDT)
-Received: from [192.168.1.102] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id w2-20020a05620a444200b006dfa0891397sm3524746qkp.32.2022.10.04.19.29.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Oct 2022 19:29:52 -0700 (PDT)
-Message-ID: <abbe10d1-4c2a-5fad-3f92-e55c514d3ce2@gmail.com>
-Date:   Tue, 4 Oct 2022 19:29:50 -0700
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JJwG3frOWn9EMl53OrFRq9F3gFMhYSxA/Qh0S8QYeGk=;
+        b=3f0tdjGY8pwq4bVukYTfcBktUzhHY7m/ftRvdV6Sm+fEvptycE1JIKmMq2kPZDy8D+
+         H+2nGNayos3LgbUlfcyCpwJd7sBEcEXCiKA+doQtDPUSiJbtROd4mol33dXHji/3avzr
+         0W870jrmfx2zHSblU8CiM8w7tII1yzNJ77a5WVUgBoa/Yx2yL02icnf2jKY1lnIONIEc
+         1M+63WwSty13HNI142CYukSYbzRA/HE2RcNn5w4W0Bc2Qk4IoJSiQPCajaWOYIntMZ95
+         nMoU6eekfaOUYVTRifEjLYpQB0Hii9z8gqQAvRxGUWVRtg2MLxbDZsvgGn0PMoOUKFXH
+         lNlQ==
+X-Gm-Message-State: ACrzQf27VRoz0cFXdQcqEez7xROZ4sCxLgcYYAc9UDeQyu70ceW/A6dR
+        6aKt6/mvumUl34uTuwqPNrreNE0tP8YUzhVgqrA=
+X-Google-Smtp-Source: AMsMyM6ofTEPyaplhV3tgR63D05cCHG4Sto86JoJxRELTJI7Hpqan/bej3wemN8eW4Y3hSOqKdrr/ApkAo81Hz3CMwA=
+X-Received: by 2002:a17:907:97d2:b0:787:a9ee:8ced with SMTP id
+ js18-20020a17090797d200b00787a9ee8cedmr22006722ejc.335.1664938361318; Tue, 04
+ Oct 2022 19:52:41 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: linux-next: build warnings after merge of the broadcom tree
-Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>
-Cc:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+References: <20221004072302.345bfd4a@canb.auug.org.au> <20221003222103.GM3600936@dread.disaster.area>
+ <20221004225012.501e11ed@canb.auug.org.au> <YzxX7ks+YD7U1dcl@magnolia> <20221004210400.GO3600936@dread.disaster.area>
+In-Reply-To: <20221004210400.GO3600936@dread.disaster.area>
+From:   Stephen Zhang <starzhangzsd@gmail.com>
+Date:   Wed, 5 Oct 2022 10:52:05 +0800
+Message-ID: <CANubcdV462CTQQsmkaPG-dP1Cgy6BqHKj-gXZzh=U=pH+i7dfg@mail.gmail.com>
+Subject: Re: linux-next: Signed-off-by missing for commit in the xfs tree
+To:     Dave Chinner <david@fromorbit.com>
+Cc:     "Darrick J. Wong" <djwong@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        linux-xfs@vger.kernel.org, Shida Zhang <zhangshida@kylinos.cn>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        ARM <linux-arm-kernel@lists.infradead.org>
-References: <20220725095913.31e859ec@canb.auug.org.au>
- <df8f4765-a804-cb50-bbb5-475925ba2036@milecki.pl>
- <20220815105419.4df1005b@canb.auug.org.au>
- <20220831091654.45d5ed41@canb.auug.org.au>
- <20221005114841.4540d325@canb.auug.org.au>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20221005114841.4540d325@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -81,71 +72,41 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+Dave Chinner <david@fromorbit.com> =E4=BA=8E2022=E5=B9=B410=E6=9C=885=E6=97=
+=A5=E5=91=A8=E4=B8=89 05:06=E5=86=99=E9=81=93=EF=BC=9A
+> As it is, I use the convention of putting an explicit From: tag in
+> the commit message that matches the SOB so tools pulling stuff from
+> mailing lists do the right thing with them (same as any third-party
+> provided patch in a series).
+>
+> > That said... I think we should get in the habit of asking patch authors
+> > to make sure that at least one of the email or name strings match
+> > between the From and SOB tags.  I can see how people who grok even less
+> > about how Chinese names work than I do (read: lawyers) might get fussy
+> > about this kind of thing.
+>
+> As per above, the normal solution is an explicit "From: <foo>" line
+> that matches the SOB.  It's just annoying that our new-fangled tools
+> haven't encoded this long-standing convention to warn us when we
+> pull a patch with a from-tag that doesn't match a sob-tag.
+>
 
+Sorry, but I'm not sure whether what you mean is adding another "From: " li=
+ne
+right above the SOB tag like:
+=3D=3D=3D=3D
+From: name2 <email address2>
+Date: Mon, 12 Sep 2022 xx:xx:xx +0800
+Subject: [PATCH ] xfs: fix xxx and xxx
 
-On 10/4/2022 5:48 PM, Stephen Rothwell wrote:
-> Hi all,
-> 
-> On Wed, 31 Aug 2022 09:16:54 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->>
->> On Mon, 15 Aug 2022 10:54:19 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->>>
->>> On Mon, 25 Jul 2022 12:33:48 +0200 Rafał Miłecki <rafal@milecki.pl> wrote:
->>>>
->>>> On 25.07.2022 01:59, Stephen Rothwell wrote:
->>>>> After merging the broadcom tree, today's linux-next build (arm
->>>>> multi_v7_defconfig) produced these warnings:
->>>>>
->>>>> arch/arm/boot/dts/bcm5301x.dtsi:240.21-246.5: Warning (pci_bridge): /axi@18000000/pcie@12000: missing ranges for PCI bridge (or not a bridge)
->>>>> arch/arm/boot/dts/bcm5301x.dtsi:248.21-254.5: Warning (pci_bridge): /axi@18000000/pcie@13000: missing ranges for PCI bridge (or not a bridge)
->>>>> arch/arm/boot/dts/bcm5301x.dtsi:256.21-262.5: Warning (pci_bridge): /axi@18000000/pcie@14000: missing ranges for PCI bridge (or not a bridge)
->>>>
->>>> This is expected. My commit ef126d3f58d25 ("ARM: dts: BCM5301X: Add
->>>> basic PCI controller properties") reduced following warnings:
->>>>
->>>> arch/arm/boot/dts/bcm47081-buffalo-wzr-600dhp2.dtb: pcie@12000: 'device_type' is a required property
->>>>           From schema: /lib/python3.9/site-packages/dtschema/schemas/pci/pci-bus.yaml
->>>> arch/arm/boot/dts/bcm47081-buffalo-wzr-600dhp2.dtb: pcie@12000: 'ranges' is a required property
->>>>           From schema: /lib/python3.9/site-packages/dtschema/schemas/pci/pci-bus.yaml
->>>> arch/arm/boot/dts/bcm47081-buffalo-wzr-600dhp2.dtb: pcie@12000: '#address-cells' is a required property
->>>>           From schema: /lib/python3.9/site-packages/dtschema/schemas/pci/pci-bus.yaml
->>>> arch/arm/boot/dts/bcm47081-buffalo-wzr-600dhp2.dtb: pcie@12000: '#size-cells' is a required property
->>>>           From schema: /lib/python3.9/site-packages/dtschema/schemas/pci/pci-bus.yaml
->>>>
->>>>
->>>> down to this one:
->>>>
->>>> arch/arm/boot/dts/bcm47081-buffalo-wzr-600dhp2.dtb: pcie@12000: 'ranges' is a required property
->>>>           From schema: /lib/python3.9/site-packages/dtschema/schemas/pci/pci-bus.yaml
->>>>
->>>>
->>>> and basically does the right thing (adds required properties).
->>>>
->>>>
->>>> I'm fully aware "ranges" need to be added (it's mentioned in the commit)
->>>> and it's one of next things on my BCM5301X list.
->>>>
->>>> So while my commits triggers that problem it also reduces warnings so
->>>> I'd say it's acceptable.
->>
->> Not from my point of view:  I was not getting any warnings and now I am
->> getting 254 lines of warnings :-(
->>    
->>> So, is something being done about these introduced warnings?
->>
->> I am still seeing these warnings.
->>
->> The above commit is now
->>
->>    61dc1e3850a6 ("ARM: dts: BCM5301X: Add basic PCI controller properties")
-> 
-> Has any progress been made with this?  This commit is now in the
-> arm-soc tree.
+...
+the commit  message
+...
 
-Yes, I was hoping to get some feedback on this patch:
+From: name <email address>             //added line
+signed-off-by:  name <email address>
+...
+=3D=3D=3D=3D
 
-https://lore.kernel.org/all/20220920210213.3268525-1-f.fainelli@gmail.com/
-
-but I suppose being the ARM SoC maintainer I can just go ahead and push it.
--- 
-Florian
+Thanks,
+Stephen.

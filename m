@@ -2,151 +2,107 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97BEB5F58A6
-	for <lists+linux-next@lfdr.de>; Wed,  5 Oct 2022 18:55:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64E0B5F5AF1
+	for <lists+linux-next@lfdr.de>; Wed,  5 Oct 2022 22:25:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230286AbiJEQzW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 5 Oct 2022 12:55:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56662 "EHLO
+        id S230415AbiJEUZn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 5 Oct 2022 16:25:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230011AbiJEQzV (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 5 Oct 2022 12:55:21 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3911B2CDDF
-        for <linux-next@vger.kernel.org>; Wed,  5 Oct 2022 09:55:16 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id n74so6908350yba.11
-        for <linux-next@vger.kernel.org>; Wed, 05 Oct 2022 09:55:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=rsZ76Ip2EvmQeYsUzg+ffG1r7wWmuHmhZ9WxYfrqRII=;
-        b=ivkwIvYrCqQ6IpY0CnK+yUCDC/soMVnN3kz81qoGxIR67aP3W1K9R4LO56cmZWfM5X
-         nm+yNBv2HCngwSDnlrrugt9tvA3k5rfL8gDDGe0w89NiJVDwIlALnZs914MiCosanslK
-         VsERA6wG+lGhxfUoJ8gWuKZ/hZ4SzTA9wGNlbbctZht02b2gAKvF8mTa6qNFBXRVcLO3
-         xNKlWXR02h5IB78APzkYIOhEoy8oxI9+Hm9gJ/mSMzna0Cewu69YgjxMg9h01/RffvC9
-         /gOMJ2PsNnxUC9tuC+Uqf6wlwd6eedpMwE4inFUV+m4/DXkCidTrqJyidc7zdsQXeJcH
-         TP4g==
+        with ESMTP id S231150AbiJEUZX (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 5 Oct 2022 16:25:23 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB3E77F27B
+        for <linux-next@vger.kernel.org>; Wed,  5 Oct 2022 13:25:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1665001515;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=86WWmb1vJeLs9Ctv4ANh4WOz2rPIK6lvoWUYd8tv0OA=;
+        b=AQrlhsW9bRNbW29xs8kFC/csk5e76rz1iftghepgoGvy/jbwZbWbzM6EWHXnmZ15Ue6Fva
+        +QwMbIZkkTF0Aw8wMar1xhq9tPQbgw15/kXiGp4s/XhWcfUqiPZbsHGi4KTTWPBu67lU9S
+        KS0Ia/0UJx7oelc0FHzSTWwkqG7q/qQ=
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com
+ [209.85.166.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-300-xYWBLNWIPhipc_gwdT8yHw-1; Wed, 05 Oct 2022 16:25:14 -0400
+X-MC-Unique: xYWBLNWIPhipc_gwdT8yHw-1
+Received: by mail-io1-f72.google.com with SMTP id o2-20020a6b5a02000000b006ad1ff1dbd6so6429616iob.13
+        for <linux-next@vger.kernel.org>; Wed, 05 Oct 2022 13:25:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=rsZ76Ip2EvmQeYsUzg+ffG1r7wWmuHmhZ9WxYfrqRII=;
-        b=HhJZG5W5iG00E9S6LKDE2kyWZjGB1cXAsLq6D7RlfAQ3jvS1VveJ0qiFBLoULrleK8
-         +GOz5y+wv6E+n5Kv3PKsYhFx12xBTZb2eNYHMqeffXZBYQq4kjHWKmws05TLGo3J9p20
-         wCKp2W6jXCPlssp5YNGlFgFWc3UyyghNBETx8KQYd+bvG8FDQjQWLfMmt+tAGfI6aKL8
-         xyUs7mM6bTdbFftdCYZ3lq0vbHesHZ9yq6Ma4h7bU+awCKPKx/NrxgOGBJN+McJ94vcM
-         8t8Kc6/MIpnMex6huMetBCmZnm96+rT86cidE6c7TNPPnqokQ8IOSf8C4UVc9RSigoTQ
-         O5yw==
-X-Gm-Message-State: ACrzQf3CF0yx43MHT3JgpmMlBIok9Vt4PR/sbRnASccjHI+3ghUlWsZ8
-        6lCNZY3Ev+sZigPS1j1g2j9QLrqJJ0bbOu6fFLHsMQ==
-X-Google-Smtp-Source: AMsMyM75HtQVeRjDaKSiYMMGpBjbmPAuX7oFi4ZgfMA8jt6iEVe0L/SjLn9c4aMcLA7OFxmXeyYplZXvKfxYTHqgTY4=
-X-Received: by 2002:a5b:a44:0:b0:6b0:13b:c93b with SMTP id z4-20020a5b0a44000000b006b0013bc93bmr822944ybq.398.1664988915253;
- Wed, 05 Oct 2022 09:55:15 -0700 (PDT)
-MIME-Version: 1.0
-References: <20221004204025.7be8a3be@canb.auug.org.au> <20221005173904.12540ffe@canb.auug.org.au>
-In-Reply-To: <20221005173904.12540ffe@canb.auug.org.au>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Wed, 5 Oct 2022 18:54:38 +0200
-Message-ID: <CAG_fn=VLGmRn85V-yG-6Dtq71_f-7wpYiG2RyjBDgKj0NAe7-Q@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the mm-stable tree with the kspp tree
+        bh=86WWmb1vJeLs9Ctv4ANh4WOz2rPIK6lvoWUYd8tv0OA=;
+        b=4br3NGf/yR1zvNCHwbFaI3CbSfWf6s2ljGY2peavgJkxM36bx6eWi52x5Z6r++8JVz
+         yQ+Mo22LbzqjRwIcR2EKGcMMhpzxn91d8zUh3/HTDLkw3gx1ZiE8dVWj+sYY8IDhxAet
+         H3K98Ue3YM3TqqIp1UAOCv+r2Vm0jHcYat1SQ50PBZYG2qWntaz9Y84EhtmvigywQw/Z
+         nBc2GGRxXTbNpgx7jiZ7FJ9vE+hrKyoAmEEFLMmqgwjPsEeB8MRMmhx2vwJTPEM47Ajl
+         A28dygqWapwsuUOH7s03rit4fpxE3sBqrUaMF7VDhSEzSXC3bqT/RbPP84JkcLlK78jt
+         D/pw==
+X-Gm-Message-State: ACrzQf3LcRw998qEItBsPUvIW5NrghBjVijO1UEzy6raDITgPaoO6K7i
+        gqsqEh+djjCBx597rsBc2J0vdjyDYyO5330uPTtlDvZzQ1xr9nsNVN/gD/bLLX4Lm3DVXvfcFnd
+        MTyFFzexYBP/+lJQxIMOziA==
+X-Received: by 2002:a05:6638:1135:b0:362:bcba:6fff with SMTP id f21-20020a056638113500b00362bcba6fffmr707436jar.129.1665001513208;
+        Wed, 05 Oct 2022 13:25:13 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM5zMQ8nZBstQ8/VZUmu7G1LF5iy09Gr1MWJLuQFjO/chMV4an7kCrwy4dVvl9VBSVUH7mrGwg==
+X-Received: by 2002:a05:6638:1135:b0:362:bcba:6fff with SMTP id f21-20020a056638113500b00362bcba6fffmr707427jar.129.1665001513003;
+        Wed, 05 Oct 2022 13:25:13 -0700 (PDT)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id h14-20020a056602154e00b006a175fe334dsm7161320iow.1.2022.10.05.13.25.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Oct 2022 13:25:11 -0700 (PDT)
+Date:   Wed, 5 Oct 2022 14:25:10 -0600
+From:   Alex Williamson <alex.williamson@redhat.com>
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
+Cc:     Christoph Hellwig <hch@lst.de>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>
+Subject: Re: linux-next: Fixes tag needs some work in the vfio tree
+Message-ID: <20221005142510.199debc2.alex.williamson@redhat.com>
+In-Reply-To: <20221004073151.2d4f778d@canb.auug.org.au>
+References: <20221004073151.2d4f778d@canb.auug.org.au>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Oct 5, 2022 at 8:39 AM Stephen Rothwell <sfr@canb.auug.org.au> wrot=
-e:
->
+On Tue, 4 Oct 2022 07:31:51 +1100
+Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+
 > Hi all,
->
-> On Tue, 4 Oct 2022 20:40:25 +1100 Stephen Rothwell <sfr@canb.auug.org.au>=
- wrote:
-> >
-> > Today's linux-next merge of the mm-stable tree got a conflict in:
-> >
-> >   include/linux/fortify-string.h
-> >
-> > between commit:
-> >
-> >   9f7d69c5cd23 ("fortify: Convert to struct vs member helpers")
-> >
-> > from the kspp tree and commit:
-> >
-> >   ff901d80fff6 ("x86: kmsan: use __msan_ string functions where possibl=
-e.")
-> >
-> > from the mm-stable tree.
-> >
-> > I fixed it up (see below) and can carry the fix as necessary. This
-> > is now fixed as far as linux-next is concerned, but any non trivial
-> > conflicts should be mentioned to your upstream maintainer when your tre=
-e
-> > is submitted for merging.  You may also want to consider cooperating
-> > with the maintainer of the conflicting tree to minimise any particularl=
-y
-> > complex conflicts.
+> 
+> In commit
+> 
+>   66c6b7dbbda3 ("drm/i915/gvt: fix a memory leak in intel_gvt_init_vgpu_types")
+> 
+> Fixes tag
+> 
+>   Fixes: c90d097ae144 ("drm/i915/gvt: define weight according to vGPU type")
+> 
+> has these problem(s):
+> 
+>   - Target SHA1 does not exist
+> 
+> Maybe you meant
+> 
+> Fixes: bc90d097ae14 ("drm/i915/gvt: define weight according to vGPU type")
 
-Looks good, thanks for handling this!
+Yes, I agree.  I've fixed this in my tree and forced the update to my
+next branch.  Thanks!
 
-> >
-> > diff --cc include/linux/fortify-string.h
-> > index b62c90cfafaf,6c8a1a29d0b6..000000000000
-> > --- a/include/linux/fortify-string.h
-> > +++ b/include/linux/fortify-string.h
-> > @@@ -325,11 -282,13 +325,13 @@@ __FORTIFY_INLINE void fortify_memset_ch
-> >   })
-> >
-> >   /*
-> >  - * __builtin_object_size() must be captured here to avoid evaluating =
-argument
-> >  - * side-effects further into the macro layers.
-> >  + * __struct_size() vs __member_size() must be captured here to avoid
-> >  + * evaluating argument side-effects further into the macro layers.
-> >    */
-> > + #ifndef CONFIG_KMSAN
-> >   #define memset(p, c, s) __fortify_memset_chk(p, c, s,                =
-       \
-> >  -            __builtin_object_size(p, 0), __builtin_object_size(p, 1))
-> >  +            __struct_size(p), __member_size(p))
-> > + #endif
-> >
-> >   /*
-> >    * To make sure the compiler can enforce protection against buffer ov=
-erflows,
->
-> This is now a conflict between the mm-stable tree and Linus' tree.
+Alex
 
-Anything else we need to do specifically for Linus' tree?
-
-> --
-> Cheers,
-> Stephen Rothwell
-
-
-
---=20
-Alexander Potapenko
-Software Engineer
-
-Google Germany GmbH
-Erika-Mann-Stra=C3=9Fe, 33
-80636 M=C3=BCnchen
-
-Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
-Registergericht und -nummer: Hamburg, HRB 86891
-Sitz der Gesellschaft: Hamburg

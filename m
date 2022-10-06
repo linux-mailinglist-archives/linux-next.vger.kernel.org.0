@@ -2,61 +2,54 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3EDE5F6FF1
-	for <lists+linux-next@lfdr.de>; Thu,  6 Oct 2022 23:08:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 671075F711C
+	for <lists+linux-next@lfdr.de>; Fri,  7 Oct 2022 00:25:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232103AbiJFVIn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 6 Oct 2022 17:08:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58176 "EHLO
+        id S231206AbiJFWZq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 6 Oct 2022 18:25:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232023AbiJFVIl (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 6 Oct 2022 17:08:41 -0400
+        with ESMTP id S229683AbiJFWZo (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 6 Oct 2022 18:25:44 -0400
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ADB5C14A3;
-        Thu,  6 Oct 2022 14:08:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4622EC5109;
+        Thu,  6 Oct 2022 15:25:39 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Mk3vM33ZQz4xFv;
-        Fri,  7 Oct 2022 08:08:31 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Mk5c96hP2z4x1V;
+        Fri,  7 Oct 2022 09:25:29 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1665090513;
-        bh=tBh7R6EFNvNHC472p+hpxdozssjAKs0uoyZ2/Iz5m7c=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=lEZ1s/HQiOR9m8FWwvlBEaEksytuS4VvE0NaNWxJyYQUqlyvAgZV9TvsHaf8jc+0F
-         TMbVyFcXYBIBH1GRM2dfDclqp0olE3JhdqgiOlM02TBf3ifpLxwe0y7qgBco6xYr//
-         TrnyLkwtS7pFp5fKipMYaYCoYsWSo+suiCDC9y9tvJ370eCjGwKA2+BxDQBi92NFoP
-         xx9AyE7ttg86rcV5lvlsAyfUHOcWzEE8lyMK4ghfM5X0MtyVxfVn4yYOn/wFCH+qR0
-         BSBfEKgW9sOOF+2Z7+us9y+wJu/NzsOI7BQe581i8o1E1N38oqDfsKdSW8ypePg/ce
-         2LEnAms0O1R8w==
-Date:   Fri, 7 Oct 2022 03:52:44 +1100
+        s=201702; t=1665095134;
+        bh=WItBWR5VdZOwUNQvtjVFvL3cxTiPIDKBURswLB2Y0Yc=;
+        h=Date:From:To:Cc:Subject:From;
+        b=MHj76dkuR8itYSRyl2q8zESg6uAGL3+fih0lSoCdsjHaRnmdGt8Yn4p1hv2P+GD8S
+         wph0uWdc05eiXAQzA7SLp6OWOs5ENANejC7KxC08IQYwvKeUsyDC8n4KopwV9WBh8b
+         w92esPNUsUimS/ySiBRFSsWnWbNHYKj5Pmy2uxu9OStEPFV93OM/wU+wArqFNd/Qog
+         TOoQmIZuuT8SqjbwW2ktEbFgjFpDUfgs8ZPsteK3nBINMYCAwGI3gTffm5Mr5k2llv
+         uXUhebNBPHYcMiCcf/nFirJpKuQD8ovF8YPlc9+1nN6AWB0nb/DThuqp7Gn8jict/R
+         4oZeLTZqXzouA==
+Date:   Fri, 7 Oct 2022 05:16:28 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        David Airlie <airlied@redhat.com>,
-        Hamza Mahfooz <hamza.mahfooz@amd.com>,
-        Mark Brown <broonie@kernel.org>,
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Adam Bratschi-Kaye <ark.email@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boris-Chengbiao Zhou <bobo1239@web.de>,
+        Daniel Xu <dxu@dxuuu.xyz>, Finn Behrens <me@kloenk.de>,
+        Gary Guo <gary@garyguo.net>, Julian Merkle <me@jvmerkle.de>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Aurabindo Pillai <aurabindo.pillai@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>
-Subject: Re: linux-next: build failure after merge of the drm tree
-Message-ID: <20221007035244.46e258a3@canb.auug.org.au>
-In-Reply-To: <CADnq5_N1cZiG39KzUzdHCtLRRCipMMNXjaNuAvoQs8=VTjtGCA@mail.gmail.com>
-References: <20220930105434.111407-1-broonie@kernel.org>
-        <20221004132047.435d42db@canb.auug.org.au>
-        <CAMwc25oshRcJBoCT70B+b42bh5sPqgyoHuBx6K6ZLrwBMHnJzw@mail.gmail.com>
-        <20221004140558.64f59f2c@canb.auug.org.au>
-        <YzwbW4YQwQPsRPYw@sirena.org.uk>
-        <CADnq5_PbPQPui1tOdUMB+OYbz6UBMKCgtwvE95oA+SfcN0RzNg@mail.gmail.com>
-        <09cd11c5-2a15-3653-957c-88c751fa9029@amd.com>
-        <20221006092810.0c3a2238@canb.auug.org.au>
-        <20221006191245.11bb0e2c@canb.auug.org.au>
-        <CADnq5_N1cZiG39KzUzdHCtLRRCipMMNXjaNuAvoQs8=VTjtGCA@mail.gmail.com>
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Sven Van Asbroeck <thesven73@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        Wei Liu <wei.liu@kernel.org>, Wu XiangCheng <bobwxc@email.cn>,
+        Yuki Okushi <jtitor@2k36.org>
+Subject: linux-next: manual merge of the kbuild tree with Linus' tree
+Message-ID: <20221007051628.004a89d4@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/yq=CMsPbtfbw3ZbIbj0A.8v";
+Content-Type: multipart/signed; boundary="Sig_/EGF=xV7cIqEmPDoPFq3HMOM";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
@@ -67,72 +60,70 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/yq=CMsPbtfbw3ZbIbj0A.8v
+--Sig_/EGF=xV7cIqEmPDoPFq3HMOM
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Alex,
+Hi all,
 
-On Thu, 6 Oct 2022 09:56:32 -0400 Alex Deucher <alexdeucher@gmail.com> wrot=
-e:
->
-> This looks good to me.  Care to add you s-o-b?
->=20
-> On Thu, Oct 6, 2022 at 4:12 AM Stephen Rothwell <sfr@canb.auug.org.au> wr=
-ote:
-> >
-> > This works as well, and (in my opinion) is better:
-> >
-> > diff --git a/drivers/gpu/drm/amd/display/dc/core/dc_stream.c b/drivers/=
-gpu/drm/amd/display/dc/core/dc_stream.c
-> > index ae13887756bf..fb6222d4c430 100644
-> > --- a/drivers/gpu/drm/amd/display/dc/core/dc_stream.c
-> > +++ b/drivers/gpu/drm/amd/display/dc/core/dc_stream.c
-> > @@ -499,7 +499,7 @@ bool dc_stream_remove_writeback(struct dc *dc,
-> >                 struct dc_stream_state *stream,
-> >                 uint32_t dwb_pipe_inst)
-> >  {
-> > -       int i =3D 0, j =3D 0;
-> > +       unsigned int i, j;
-> >         if (stream =3D=3D NULL) {
-> >                 dm_error("DC: dc_stream is NULL!\n");
-> >                 return false;
-> > @@ -520,9 +520,9 @@ bool dc_stream_remove_writeback(struct dc *dc,
-> >         }
-> >
-> >         /* remove writeback info for disabled writeback pipes from stre=
-am */
-> > -       for (i =3D 0, j =3D 0; i < stream->num_wb_info && j < MAX_DWB_P=
-IPES; i++) {
-> > +       for (i =3D 0, j =3D 0; i < stream->num_wb_info; i++) {
-> >                 if (stream->writeback_info[i].wb_enabled) {
-> > -                       if (i !=3D j)
-> > +                       if (j < i)
-> >                                 /* trim the array */
-> >                                 stream->writeback_info[j] =3D stream->w=
-riteback_info[i];
-> >                         j++;
+Today's linux-next merge of the kbuild tree got a conflict in:
 
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+  Documentation/process/changes.rst
+
+between commit:
+
+  d07479b211b7 ("docs: add Rust documentation")
+
+from Linus' tree and commit:
+
+  0715fdb03e2c ("docs: bump minimal GNU Make version to 3.82")
+
+from the kbuild tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/yq=CMsPbtfbw3ZbIbj0A.8v
+diff --cc Documentation/process/changes.rst
+index 9a90197989dd,26a7fd875cfa..000000000000
+--- a/Documentation/process/changes.rst
++++ b/Documentation/process/changes.rst
+@@@ -31,9 -31,7 +31,9 @@@ you probably needn't concern yourself w
+  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D
+  GNU C                  5.1              gcc --version
+  Clang/LLVM (optional)  11.0.0           clang --version
+ +Rust (optional)        1.62.0           rustc --version
+ +bindgen (optional)     0.56.0           bindgen --version
+- GNU make               3.81             make --version
++ GNU make               3.82             make --version
+  bash                   4.2              bash --version
+  binutils               2.23             ld -v
+  flex                   2.5.35           flex --version
+
+--Sig_/EGF=xV7cIqEmPDoPFq3HMOM
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmM/B9wACgkQAVBC80lX
-0GxPBwf/X9e+0uhZmXWuqnUtNXKQwd59fHfR7z+ygsIZb+QvXVfou3rxBBG01k9L
-ynx2bUMXHzZclPr4YRBTujJg+WUrGRaSSwQLYMnaMldJPLIw1DVOzQPJc55MzkTx
-Ot1EwdItYS0CohnccfrUZwWTs7j8j5rkn9tQNDRmkPAS5HQ+SzIir2oA0axR78yT
-tL9uxN762UYNBTPGH07aZ2Z/tMMTglop9JtzsAhtJJzUMK9G4VMMP1UDld8PfYwf
-1yz85G9JBKhEjk+NItYGvKLK3XzxERwusBaUUGgb77dsZ2A/njBwZkkHjPeP7Djr
-gvipz9skgMi5RjNrKa3caq0X0EYP6g==
-=mEP6
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmM/G3wACgkQAVBC80lX
+0Gx0xQf/fMHBQuecGKnRAlr8EmovP9qaY90Fr+Wqckj+dEsK7nIabIG2aNENFgvT
+gkBu3VgYHLDT383a3pnf8hJARzsezAGPLvy3mzuAuXgTb7Ob1gC98p8XCtZNOYk2
+C1BjXURtUSux5D2I03zzoDgwtErrM6ffmLsaNDThr+3QnuRtf1tqtcznMGBtipti
+4FU+Oa/r0xbLsakoZOuJs/m0YmiLXVLcn8M2YJYTaHBK3Gf2kkFMj1KU3B7ik7NB
+eCnV8OR7Qc4lxcsxq/90y9SaRoAYjTWRm/1qFk9XzwTsWPOIPTFTc4bveULpRrXz
+6lQhV+TK/18DTeDb1wfGxgUyXI2tiQ==
+=GSlG
 -----END PGP SIGNATURE-----
 
---Sig_/yq=CMsPbtfbw3ZbIbj0A.8v--
+--Sig_/EGF=xV7cIqEmPDoPFq3HMOM--

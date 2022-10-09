@@ -2,136 +2,95 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D9B35F84FF
-	for <lists+linux-next@lfdr.de>; Sat,  8 Oct 2022 13:33:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDC1E5F8A21
+	for <lists+linux-next@lfdr.de>; Sun,  9 Oct 2022 10:32:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229539AbiJHLdd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 8 Oct 2022 07:33:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50234 "EHLO
+        id S229824AbiJIIcc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 9 Oct 2022 04:32:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbiJHLdc (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sat, 8 Oct 2022 07:33:32 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5604476C5
-        for <linux-next@vger.kernel.org>; Sat,  8 Oct 2022 04:33:30 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id q9so11642004ejd.0
-        for <linux-next@vger.kernel.org>; Sat, 08 Oct 2022 04:33:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=colorfullife-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:cc:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=oQx/0eIrDYpOi0EDDbnHHydn8n1/MpC3+4uz+2W5yo0=;
-        b=BAa3LCiZgsXUNGlAE7tOH+EmIFdeTQKpTTJ5xJ7KshfcobjgqN7o5FPC1JoucysIUC
-         jvsr4zO580LVBubMwiYGKjGPc/A2zHo+6ISwTm7ywUrIPeSUKS8qRspmLAvqZEyv5Z1c
-         GzVQ+d7igRfZh3XodXvHZsUlaf6Zuiabo+QY4GGlrdnKPz/y5DfWFaJy9JqbiuDuph1I
-         ofr1r1IW3ZA6xQcNGI5chVvjFZ8/6ohc43bKpanCHXIj6o6E2uyuTw5GwwZ3g6IGvZuB
-         6p8xV3KYsM1qJjmHUN+eygHTfH3yWNfRwSO3SXfLOvyYGGd14NdGUg2JWzNjHhY41KRg
-         9dqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:cc:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oQx/0eIrDYpOi0EDDbnHHydn8n1/MpC3+4uz+2W5yo0=;
-        b=dj15FBm9ASTU6Rmukdrrl8Af2Yse++Sh9A3IVZLLcEU4EDbw0sTkmOQ6GL1vyWzkK8
-         V8AAP3dBCGyFc/0fefifs2YUcClqHI+Uq6pj1V8BNS/9+HG83xjv5zXDd43d9onnh4tD
-         RcXvH+hix2/dhUZAgFsBmHGEUmLHeVwplUCWhUlrfjKztKDI/jNw9+ltToQ+UAe5HfU3
-         ytfmTa87fHkqIVIpfwbUD6UL8lSopXbz2LxRSn8jhlzQ3Dv7sVwu3B5R/hE+o2fgga3A
-         CYvuae51AsPKwG6Bf7/yJdSVFqCxoqe7DyKQzcbZhjLv70HXU3cegJlbFNdi6CVAqqUP
-         8ltQ==
-X-Gm-Message-State: ACrzQf3s3UX1k41rLjxT2qTy73iAogaXFggUF9LaDhCfWjpAiAK2r7p4
-        zL9GA6PghNRYMXW1nsIRFf+NR3b+iB8mUg==
-X-Google-Smtp-Source: AMsMyM6rhWNb3A6dRryVy3rJGu5yzQTAs3357YPdwpUmZyCr4n59z190inREtA5Y3d6gVqLg3r0TMg==
-X-Received: by 2002:a17:906:8a50:b0:78c:9179:9116 with SMTP id gx16-20020a1709068a5000b0078c91799116mr7478169ejc.625.1665228809300;
-        Sat, 08 Oct 2022 04:33:29 -0700 (PDT)
-Received: from ?IPV6:2003:d9:973f:8800:35d7:7623:f33e:520e? (p200300d9973f880035d77623f33e520e.dip0.t-ipconnect.de. [2003:d9:973f:8800:35d7:7623:f33e:520e])
-        by smtp.googlemail.com with ESMTPSA id z8-20020a1709063ac800b007824c5fe95esm2653513ejd.50.2022.10.08.04.33.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 08 Oct 2022 04:33:28 -0700 (PDT)
-Message-ID: <77aefd92-86a1-b1d6-fe84-01f25de0dac3@colorfullife.com>
-Date:   Sat, 8 Oct 2022 13:33:26 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: linux-next: manual merge of the driver-core tree with the jc_docs
- tree
-To:     Mark Brown <broonie@kernel.org>, Jonathan Corbet <corbet@lwn.net>
-References: <20220926210631.657728-1-broonie@kernel.org>
- <20220926224621.47llaskp6mihi4dd@tarta.nabijaczleweli.xyz>
- <878rm5rbka.fsf@meer.lwn.net> <YzI/3MjHgbXFHoHG@sirena.org.uk>
- <87czbgoc0s.fsf@meer.lwn.net>
- <AS8PR10MB483537EF2530D92C3D5BFF9ABF5B9@AS8PR10MB4835.EURPRD10.PROD.OUTLOOK.COM>
-Content-Language: en-US
-Cc:     =?UTF-8?B?0L3QsNCx?= <nabijaczleweli@nabijaczleweli.xyz>,
-        Greg KH <greg@kroah.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        with ESMTP id S229811AbiJIIcb (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 9 Oct 2022 04:32:31 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE58321249;
+        Sun,  9 Oct 2022 01:32:28 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MlZzV6bkBz4x1F;
+        Sun,  9 Oct 2022 19:32:22 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1665304343;
+        bh=+nhQ0dj8aFjYXJqSybc6sKvdvigo4xUve8yqIzxVm+0=;
+        h=Date:From:To:Cc:Subject:From;
+        b=UKrnmY6JNdNEsdIIE1TYWGE/IozVNcjiCBfpzX0CIUtjQiDkvhx7nHk2Q1ajR/k0+
+         2Ic7Rm7yAHzM8u9ilN9NyZrfdN4cWwYfRktA9h+170U2mnL/wsk7kTBrvanXOsm7FO
+         4MJhccojOqSxzsl/yY5G76g8qBTQ4TC6KuW+tv57gJxj8PcRtPWAMQR8pwKpnsemd0
+         NTma8aPSFVlfvuBGtIoMdCkzjukOVjorlHCR7150f6C7KxANpFkitZj9QuTbOVSUCd
+         xav3A9wZT8omfzjiQgHtQE2ikK24LeGR+wniZw0O9UF+7CoRgvF2boWbVBKrkGpAGS
+         PKtZHBORqCUgQ==
+Date:   Sun, 9 Oct 2022 19:32:17 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        "Spraul Manfred (XC-CT/PAC1)" <manfred.spraul@de.bosch.com>
-From:   Manfred Spraul <manfred@colorfullife.com>
-In-Reply-To: <AS8PR10MB483537EF2530D92C3D5BFF9ABF5B9@AS8PR10MB4835.EURPRD10.PROD.OUTLOOK.COM>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the mm-stable tree
+Message-ID: <20221009193217.6cca2f8a@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/tFhaPhz9E4.ucv1FkUhgMuD";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi,
+--Sig_/tFhaPhz9E4.ucv1FkUhgMuD
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On Dienstag, 27. September 2022 21:25 , Jonathan Corbet <corbet@lwn.net> 
-wrote:
-> Mark Brown <broonie@kernel.org> writes:
->
->> On Mon, Sep 26, 2022 at 04:54:45PM -0600, Jonathan Corbet wrote:
->>> наб <nabijaczleweli@nabijaczleweli.xyz> writes:
->>>> This also reveals that I missed NBD_REQUEST_MAGIC (needs to go,
->>>> same reason as NBD_REPLY_MAGIC) in the first pass, but that's
->>>> unrelated here.
->>> I've been trying to make sense of that merge myself.  Is the right
->>> solution that I should just drop 32ba63d4b2e1a ?  Manfred, thoughts
->>> on that?
->> That'd certainly be a viable option too.
-> OK, I have dropped the conflicting patch.  Manfred, if there are changes there that still need to get in, please resubmit that part and we'll get it done.
+Hi all,
 
-Dropping is the correct approach:
-The values are part of the line protocol, and thus according to the 
-current definition not in scope.
+In commit
 
-In theory, the change in include/uapi/linux/nbd.h is still useful, but I 
-do not think that this is worth the effort.
->
->
-> diff --git a/include/uapi/linux/nbd.h b/include/uapi/linux/nbd.h
-> index 20d6cc91435d..88752b20e6c8 100644
-> --- a/include/uapi/linux/nbd.h
-> +++ b/include/uapi/linux/nbd.h
-> @@ -11,6 +11,8 @@
->  *            Cleanup PARANOIA usage & code.
->  * 2004/02/19 Paul Clements
->  *            Removed PARANOIA, plus various cleanup and comments
-> + *
-> + * See doc/proto.md of the nbd package for more details on the protocol.
->  */
->
-> #ifndef _UAPILINUX_NBD_H
-> @@ -63,7 +65,6 @@ enum {
->
-> #define NBD_REQUEST_MAGIC 0x25609513
-> #define NBD_REPLY_MAGIC 0x67446698
-> -/* Do *not* use magics: 0x12560953 0x96744668. */
->
-> /*
->  * This is the packet used for communication between client and
-> --
->
+  bbff39cc6cbc ("hugetlb: allocate vma lock for all sharable vmas")
 
---
+Fixes tag
 
-     Manfred
+  Fixes: "hugetlb: clean up code checking for fault/truncation races"
 
+has these problem(s):
+
+  - No SHA1 recognised
+
+Maybe you meant
+
+Fixes: fa27759af4a6 ("hugetlb: clean up code checking for fault/truncation =
+races")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/tFhaPhz9E4.ucv1FkUhgMuD
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNChxEACgkQAVBC80lX
+0GxENAf9G8ppEkb5JJ58KxAxY9zrmvFrD934hIkQag/K/lubzfMHtjlUT5Bbt2lD
+v2PkF0L2V/WnOe16qco06pIxcAH630AzS5KqOGEIS2nL8Fua8iU5VE/YcURHNVyT
+EOT0W8GbfKxWmst9bDSwCl/7gHDDT/SK6XKYVL0BSLaXW3Vlj0lUPchJSMPknZhD
+c65lEUWahLFEN9+0IfFXhFv+sxYzp/4J6NVPrraRhw6AUg40jZwS+T3eUob07Bfb
+w5ZzZ71ROQNtewCcS1gVxjBwy8GsfwIy7WQDJEs8RGfWVWigVU1w6WJucjMiHzbL
+lXw5CdskiAF8yOO0K3sN2Cn95CZS3g==
+=a5V+
+-----END PGP SIGNATURE-----
+
+--Sig_/tFhaPhz9E4.ucv1FkUhgMuD--

@@ -2,102 +2,139 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62FB35F8A4F
-	for <lists+linux-next@lfdr.de>; Sun,  9 Oct 2022 11:15:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72B0E5F9039
+	for <lists+linux-next@lfdr.de>; Mon, 10 Oct 2022 00:22:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229587AbiJIJPP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 9 Oct 2022 05:15:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47846 "EHLO
+        id S230514AbiJIWWg (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 9 Oct 2022 18:22:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229699AbiJIJPN (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 9 Oct 2022 05:15:13 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C577222B2;
-        Sun,  9 Oct 2022 02:15:11 -0700 (PDT)
+        with ESMTP id S231701AbiJIWVU (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 9 Oct 2022 18:21:20 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 775221CB1B;
+        Sun,  9 Oct 2022 15:17:13 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Mlbws4G2Tz4x1F;
-        Sun,  9 Oct 2022 20:15:09 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MlxGS5W22z4wgv;
+        Mon, 10 Oct 2022 09:16:32 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1665306910;
-        bh=PhMDw4subVzNzu3fEQcQZAcv/PUsdzeKoLJP70WWR6k=;
+        s=201702; t=1665353793;
+        bh=5JXiyZ2rBUBWg3NdZnRUOBYGxdaJVI3zNREgAnnnSGE=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ICMLpKEJZRlk2cDptvTL8On4FAk7NmEkjHyGAJJgnO65rtfsiLwgrsSroD6llR7vu
-         Jca1zhGwp+2d9D1Fa0BNMdJ9I7dkwyNzYcQXZyjb4wnoJ1mZAtjke3BHvx2CWPoNEl
-         ZP+WYwflRqS0oggqKEmUR2neFQENaJmTVxit27GHjNFv9oKxqQ4mPf8+K7RC8qXB5c
-         EJ57sTNe/LlLeoLwtr/hkNuT2+DNVFao/dxc2arzM+jLeIMs/OoY0qJQ+3D3dkr4PB
-         tEPR5F5e+QVY0Ga56Cx2ZTdUjcX20EkgNzeiLz02Od4HWp3j5Wjtmj+g2FlVCfAP90
-         /qBO4MadOKFfg==
-Date:   Sun, 9 Oct 2022 20:15:04 +1100
+        b=RVxnEoNnLYmLN/XeKRBBN0MbOXQ7XdNGTwIFR7MAqcDRQC+OXtn6AWacO5gOP8gJP
+         pairn8Mfsct4dLSrLqwliTM9oUgUXDPB2m04UNsCzJncJ9IUO6xkSqOLJj2qfCIFnj
+         5w2iCiFpfYsFHYY4KCHtxRQ//JycHRaIsKMKx+PAPPBdMsWizVTQu9cfsAO8reCMp6
+         SJMo7QCx3AKrCy+OT91tXDROL4CJMvHvAZZ5KfPsVTGb5LRepEisAPHmuQVDfLo1hI
+         8RvipvyxQorPHaOXKeGeqvacFqTPPAlzRZ9nLR7VGKgepxnV7rN0SvmxCUnDJ0xmJF
+         0gXpZ1KGBKcbA==
+Date:   Mon, 10 Oct 2022 09:16:14 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        PowerPC <linuxppc-dev@lists.ozlabs.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Fixes tag needs some work in the mm-stable tree
-Message-ID: <20221009201504.43d8c325@canb.auug.org.au>
-In-Reply-To: <20221009193544.27055db5@canb.auug.org.au>
-References: <20221009193544.27055db5@canb.auug.org.au>
+Subject: Re: linux-next: manual merge of the powerpc tree with the kbuild
+ tree
+Message-ID: <20221010091614.20a89f56@canb.auug.org.au>
+In-Reply-To: <20221004091205.2677b823@canb.auug.org.au>
+References: <20221004091205.2677b823@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/LF9QSBH317wmy6MSF2itQE_";
+Content-Type: multipart/signed; boundary="Sig_/.km7qOSO.2uHzBoxFdOk.nC";
  protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/LF9QSBH317wmy6MSF2itQE_
+--Sig_/.km7qOSO.2uHzBoxFdOk.nC
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Sun, 9 Oct 2022 19:35:44 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
+On Tue, 4 Oct 2022 09:12:05 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
 rote:
 >=20
-> In commit
+> Today's linux-next merge of the powerpc tree got a conflict in:
 >=20
->   bbff39cc6cbc ("hugetlb: allocate vma lock for all sharable vmas")
+>   arch/powerpc/kernel/Makefile
 >=20
-> Fixes tag
+> between commit:
 >=20
->   Fixes: "hugetlb: clean up code checking for fault/truncation races"
+>   321648455061 ("kbuild: use obj-y instead extra-y for objects placed at =
+the head")
 >=20
-> has these problem(s):
+> from the kbuild tree and commit:
 >=20
->   - No SHA1 recognised
+>   dfc3095cec27 ("powerpc: Remove CONFIG_FSL_BOOKE")
 >=20
-> Maybe you meant
+> from the powerpc tree.
 >=20
-> Fixes: fa27759af4a6 ("hugetlb: clean up code checking for fault/truncatio=
-n races")
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+>=20
+> --=20
+> Cheers,
+> Stephen Rothwell
+>=20
+> diff --cc arch/powerpc/kernel/Makefile
+> index ad3decb9f20b,1f121c188805..000000000000
+> --- a/arch/powerpc/kernel/Makefile
+> +++ b/arch/powerpc/kernel/Makefile
+> @@@ -118,12 -116,12 +116,12 @@@ obj-$(CONFIG_PPC_E500)		+=3D cpu_setup_e5
+>   obj-$(CONFIG_PPC_DOORBELL)	+=3D dbell.o
+>   obj-$(CONFIG_JUMP_LABEL)	+=3D jump_label.o
+>  =20
+>  -extra-$(CONFIG_PPC64)		:=3D head_64.o
+>  -extra-$(CONFIG_PPC_BOOK3S_32)	:=3D head_book3s_32.o
+>  -extra-$(CONFIG_40x)		:=3D head_40x.o
+>  -extra-$(CONFIG_44x)		:=3D head_44x.o
+>  -extra-$(CONFIG_PPC_85xx)	:=3D head_85xx.o
+>  -extra-$(CONFIG_PPC_8xx)		:=3D head_8xx.o
+>  +obj-$(CONFIG_PPC64)		+=3D head_64.o
+>  +obj-$(CONFIG_PPC_BOOK3S_32)	+=3D head_book3s_32.o
+>  +obj-$(CONFIG_40x)		+=3D head_40x.o
+>  +obj-$(CONFIG_44x)		+=3D head_44x.o
+> - obj-$(CONFIG_FSL_BOOKE)		+=3D head_fsl_booke.o
+> ++obj-$(CONFIG_PPC_85xx)		:=3D head_85xx.o
+>  +obj-$(CONFIG_PPC_8xx)		+=3D head_8xx.o
+>   extra-y				+=3D vmlinux.lds
+>  =20
+>   obj-$(CONFIG_RELOCATABLE)	+=3D reloc_$(BITS).o
 
-Sorry, I accidentally sent this twice.
+This is now a conflict between the kbuild tree and Linus' tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/LF9QSBH317wmy6MSF2itQE_
+--Sig_/.km7qOSO.2uHzBoxFdOk.nC
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNCkRgACgkQAVBC80lX
-0Gy8Ewf+NX7Zfhmisuw4HtOWV4PT+52I+JWxspX3+iR+KdW/bq5DTWHzibqZ5TOx
-kHevCShbfWkddTewo7mJs18DCaMnvY9He0Ng88cU7nlV1T7K0RuCukxrSl/KDWjC
-doSz0oKxlL6a7MpPo6ZHupheySqflxY/Rb8LO3IAiAv1Eqja3IReX3+gBv17aA1e
-GqMCtSqxaTNO3fc7OnT+G5tts/s7YfQ7k7EoNcANunsmT2SekaFuBuZ/raO0hK1j
-M0ON+2eofAeTDjxbBmwVDZW5YOxcwSXdfY0NaGEW2VNIaolkjdQJjrZBvVEOJVOU
-QA/LF7ZV1SapFmEex01Vkx5bas2CWA==
-=oOaq
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNDSC8ACgkQAVBC80lX
+0Gy6egf8CKc2goJR5uR31lWy7MtzaXaEXtSJhagzpfue8Ykt1sikkbMLJt+i2WVt
+zK2/ehfB9wV6o37xfSdeL3slBnX7bkhqEI6oolypnozHXRArTYbtCO1uVs0cO2kR
++vR1h/TzNcApDlPnZ6DKEjpVDAv3uQyFFuMy9CrTR8lq4ZR7xL/5l9ksfcd02vOO
++aSrN0UDZ05BeFF5AzQs7wBl4iBrDqr+1atpqtxxSmyAJqs+yT2w8mjov8+u2x2p
+HUL/F+PepQhGYLFY+M1x56VYH8BLx2SPBc1wM+LZtfGPIYCV/Aw8Ma8i6VKhV2a1
+hnOJqR8ie93KM+zhra1hgZrxlurK+g==
+=ID1k
 -----END PGP SIGNATURE-----
 
---Sig_/LF9QSBH317wmy6MSF2itQE_--
+--Sig_/.km7qOSO.2uHzBoxFdOk.nC--

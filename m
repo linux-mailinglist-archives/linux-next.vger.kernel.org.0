@@ -2,143 +2,89 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5934C5FA6B8
-	for <lists+linux-next@lfdr.de>; Mon, 10 Oct 2022 22:59:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76CA15FA6C3
+	for <lists+linux-next@lfdr.de>; Mon, 10 Oct 2022 23:00:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230243AbiJJU7R (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 10 Oct 2022 16:59:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44562 "EHLO
+        id S229662AbiJJVAs (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 10 Oct 2022 17:00:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231364AbiJJU6i (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 10 Oct 2022 16:58:38 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C2837EFC5;
-        Mon, 10 Oct 2022 13:58:22 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MmWTh0PNnz4x1D;
-        Tue, 11 Oct 2022 07:58:16 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1665435497;
-        bh=d+P08bQm7lw1yI2lY2EcaHxG6OhotVqkVTSQ762CItU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=J8OpcPdhboJJZyqYQSCK4f0knAqWpdbmUU6uOD0D14d2Cs4m5iPkyH6Zc3Zdz9Hep
-         GDign9icoD8yaVwHl55sWeAx9bnvb0rAbSrmZQgYzstenfhCTdgNduP5qWIzOKped4
-         fjgaVYCe54fGrRCi0r8P3knXo+eIQBHO+A6+9GA1CFMhdUdqcT9cBe5lIlspGwulT5
-         3lsF1AI9j/0BKo67I5Iw7bE724pWJD9nOOYudD6NoA0ethoHBLZxVrs2Og84Rov0xN
-         ub5t2oQoBJK6wj5Wixw6VJMh1+sxFC92Rl//WkjzAyeEive4XN+0QHtnWl44ztSgt4
-         Uo5Po5BTf8/0A==
-Date:   Tue, 11 Oct 2022 07:57:48 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Thomas Gleixner <tglx@linutronix.de>,
+        with ESMTP id S230346AbiJJVAj (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 10 Oct 2022 17:00:39 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F53A310;
+        Mon, 10 Oct 2022 13:59:53 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id b15so10793475pje.1;
+        Mon, 10 Oct 2022 13:59:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=69QNkeF1VMU19p8EHpHj3PcPL5WDz7Vr/ECBHT1RXr0=;
+        b=gGs410RbjPWYOOhiCE4Y86Xaq5V6Q8wkMGtxMfuk29VmbBh6MIRcfXhlnGvM7EvLno
+         D5d5Y93CgM7I8biJKs93RORzV6o0YmqXhYP7k/REr8KV3Q6oP2XptNtqOOQcx1b81JSj
+         PKqa8/7hCQlLgkewOpu0KlKlJwhA6oYzT0nMC+I7FbeHlC5pzqFIGQjrs0bboivbqRjF
+         VALlvYMB1CwfVN8+d4Mry/aUfuudwejdqdehpQ6stvVywWfacRffYUH9Aay4H6qWRICC
+         5LMReGBidZXUshUYPCRQAEHlXi6+ARDikGz0JEaBNZ8k5cuHkBP1s0wKptiqTMiu5sKA
+         ie7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=69QNkeF1VMU19p8EHpHj3PcPL5WDz7Vr/ECBHT1RXr0=;
+        b=EiiiFrwYmxqXkJatnab5fih3qxl00cgrp7AONKcGGbcgwfzHZm/o2SXYiF+tG0qvQP
+         CtN2qAmoJeYXto0GZtLlqP5xmGRlokCd6b109SF5QSB772DkusJNaPaprMNKPigWUJ7J
+         B6JFfaev/o/xcz9VqRSQMulq58+ienhfr/Mr47AAz5WE+KkGuOWduhyU1/j79/Lf8SSw
+         /S+XPdxnZWVpCWTR7XOXEKjw7l788flQbI4wa/4kPSwsocrf2JLS+HWCBtVQpEN+F3H3
+         ubZT57ejPxoe39BpkFpfown+4S90mjefhf05091KwP2cQJ5fWv7ufwyUOR7fgNJbfocl
+         7ARA==
+X-Gm-Message-State: ACrzQf0AU6QNMwPDvI70WjbElXYhlDcBiYpG1JupStv6itINN0eNI+iq
+        Wroj0WD4MlRTj66+sYM4mCU=
+X-Google-Smtp-Source: AMsMyM7ypkryDKcLvgzs+zm8KfLFAztr+G5QMu4sZ94VxKYaNKfodmgD4wVDtv+dsdAokH7yhq0A5g==
+X-Received: by 2002:a17:90b:78e:b0:205:c9ae:21f9 with SMTP id l14-20020a17090b078e00b00205c9ae21f9mr23066714pjz.112.1665435589523;
+        Mon, 10 Oct 2022 13:59:49 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id y10-20020a17090a154a00b0020d48bc6661sm1884835pja.31.2022.10.10.13.59.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Oct 2022 13:59:49 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 10 Oct 2022 10:59:47 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>,
         "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Tejun Heo <tj@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
         Chengming Zhou <zhouchengming@bytedance.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
 Subject: Re: linux-next: build failure after merge of the cgroup tree
-Message-ID: <20221011075748.3db42926@canb.auug.org.au>
-In-Reply-To: <20220912161812.072aaa3b@canb.auug.org.au>
+Message-ID: <Y0SHw8VaKkcEKaT7@slm.duckdns.org>
 References: <20220912161812.072aaa3b@canb.auug.org.au>
+ <20221011075748.3db42926@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/6kl/oNG8V108UU=TVCV/Gag";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221011075748.3db42926@canb.auug.org.au>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/6kl/oNG8V108UU=TVCV/Gag
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, Oct 11, 2022 at 07:57:48AM +1100, Stephen Rothwell wrote:
+> This is now a conflict between the tip tree and Linus' tree.
 
-Hi all,
+The conflict and resolution were noted in the pull request. This should be
+fine.
 
-On Mon, 12 Sep 2022 16:18:12 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->=20
-> After merging the cgroup tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
->=20
-> kernel/cgroup/cgroup.c:5275:26: error: 'CFTYPE_PRESSURE' undeclared here =
-(not in a function)
->  5275 |                 .flags =3D CFTYPE_PRESSURE,
->       |                          ^~~~~~~~~~~~~~~
->=20
-> Caused by commit
->=20
->   8a693f7766f9 ("cgroup: Remove CFTYPE_PRESSURE")
->=20
-> inteacting with commits
->=20
->   52b1364ba0b1 ("sched/psi: Add PSI_IRQ to track IRQ/SOFTIRQ pressure")
->   34f26a15611a ("sched/psi: Per-cgroup PSI accounting disable/re-enable i=
-nterface")
->=20
-> from the tip tree.
->=20
-> I have applied the following merge fix patch.
->=20
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Mon, 12 Sep 2022 16:15:33 +1000
-> Subject: [PATCH] sched/psi: fix up for "cgroup: Remove CFTYPE_PRESSURE"
->=20
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> ---
->  kernel/cgroup/cgroup.c | 2 --
->  1 file changed, 2 deletions(-)
->=20
-> diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
-> index 974ca46c6d7b..829aa42e773e 100644
-> --- a/kernel/cgroup/cgroup.c
-> +++ b/kernel/cgroup/cgroup.c
-> @@ -5272,7 +5272,6 @@ static struct cftype cgroup_psi_files[] =3D {
->  #ifdef CONFIG_IRQ_TIME_ACCOUNTING
->  	{
->  		.name =3D "irq.pressure",
-> -		.flags =3D CFTYPE_PRESSURE,
->  		.file_offset =3D offsetof(struct cgroup, psi_files[PSI_IRQ]),
->  		.seq_show =3D cgroup_irq_pressure_show,
->  		.write =3D cgroup_irq_pressure_write,
-> @@ -5282,7 +5281,6 @@ static struct cftype cgroup_psi_files[] =3D {
->  #endif
->  	{
->  		.name =3D "cgroup.pressure",
-> -		.flags =3D CFTYPE_PRESSURE,
->  		.seq_show =3D cgroup_pressure_show,
->  		.write =3D cgroup_pressure_write,
->  	},
-> --=20
-> 2.35.1
+Thanks.
 
-This is now a conflict between the tip tree and Linus' tree.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/6kl/oNG8V108UU=TVCV/Gag
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNEh0wACgkQAVBC80lX
-0GzVfgf/T4fr7DVteETpQN9rKT8kRx8msuYeKOuo797mybS1bV/vkU6eow0Z3nt9
-B20Sq0ZT4qaLQJ6gx+xehEFHR3mZi5RK+jtakzh4tk8L8RJLM/SuVZ7DkYqRcnCz
-YQ7uGUwoL9XkAXn19AM4+GgAfTcyx5gArX3nIwiF/iYed8igNavDrIjlIzS5Ve4m
-2otSwIWjswZMvc1b5zG3ZFMtz2N+Qf+vUP+Q7X2hCTsLMj4UqQNtu+eLAt6Lxm6m
-usOueRVumo8H6onChRlsjL3uZ+B2iL41+FbK+m5E1Iv5OQ52R/TLZr/jhD1xvwLT
-BjYP/3Bm1kbhUNJ9upRFVov74NXnLw==
-=gAW3
------END PGP SIGNATURE-----
-
---Sig_/6kl/oNG8V108UU=TVCV/Gag--
+-- 
+tejun

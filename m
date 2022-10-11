@@ -2,51 +2,62 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C8035FBE6E
-	for <lists+linux-next@lfdr.de>; Wed, 12 Oct 2022 01:32:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 684465FBE71
+	for <lists+linux-next@lfdr.de>; Wed, 12 Oct 2022 01:33:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229459AbiJKXcf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 11 Oct 2022 19:32:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38392 "EHLO
+        id S229618AbiJKXdV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 11 Oct 2022 19:33:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229527AbiJKXce (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 11 Oct 2022 19:32:34 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AF67A344F;
-        Tue, 11 Oct 2022 16:32:31 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        with ESMTP id S229678AbiJKXdV (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 11 Oct 2022 19:33:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13D1CA3455;
+        Tue, 11 Oct 2022 16:33:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MnBs64hymz4xGj;
-        Wed, 12 Oct 2022 10:32:26 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1665531147;
-        bh=x+Eov3eRwg7TSgwoiQwZSVfI7w+4NiORozuvJ9NhAlI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=uHZtas+aMxhpn+qMhzdq2xmL2ejCX5Ke882xadn9fZILU6Sv58f7GLevm5Gq7PEFO
-         1qd1sUQjKvK1wGYD+YjAeD9/ktYfTCeFGcz3K2VTzREmuQiyEUtfXo/e3BomqQcJa/
-         Vfy4VAafZfaheyBYvEmzwE3VtvdW6Onfhr1v9G4vUsT+Zi522mQwl1FpzfHC8rQWDQ
-         MtJZ05E75UOUvd5tuAR9oe5wyqvBMpxW7XEbcj0SfYvmNbYNuMQW3Rc82a29/UUoLN
-         RWdUnKfXw13WcZvrylWmX1WEr2cEuwDOTQ61kRhjpZG9oEuF5lQm2u/tgsgV5GRltS
-         508KWJwCy8phw==
-Date:   Wed, 12 Oct 2022 08:46:11 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Theodore Ts'o <tytso@mit.edu>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Yury Norov <yury.norov@gmail.com>,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B0AB6132C;
+        Tue, 11 Oct 2022 23:33:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13626C433C1;
+        Tue, 11 Oct 2022 23:33:18 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="TPHgnLGD"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1665531196;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=J72S7lKbBoFi2f3wnJgojyAB1r4vtVtzcuZbXeqIDP8=;
+        b=TPHgnLGDTERFqN5Ro8AW4hhfq70IyfNVQ/2XoloVHNUrqMukWIsr+lZwOs+zEc9Ys657sh
+        bQlbUdGwDxCYXZG0saATwHtUsamPzCOMPHt+RVTfjcMI/9//amUSUA6ujwqGYPRaTEL7/A
+        CSRS/1anxewUvoEIZB0MAFlDMpKv5/g=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 7bd43544 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Tue, 11 Oct 2022 23:33:15 +0000 (UTC)
+Received: by mail-vs1-f48.google.com with SMTP id 126so15876777vsi.10;
+        Tue, 11 Oct 2022 16:33:15 -0700 (PDT)
+X-Gm-Message-State: ACrzQf3QsRTuXE2jq3yJlM6rUKqlf13CvI9c7x/TDmSdvWS5rKbs3k3R
+        xD1AGcWUqimFQl+dEU+TM+8a94kLpU2J+4n61j8=
+X-Google-Smtp-Source: AMsMyM5JUgwRX+Bm3y9oUVFh1rcsjYinFY8TY3YCHljWiWeTWMUoErS7G+cD75hF4ZdPei4mmItDVE3dcZw+cn0iN7c=
+X-Received: by 2002:a05:6102:1481:b0:39a:67f5:3096 with SMTP id
+ d1-20020a056102148100b0039a67f53096mr12251101vsv.70.1665531194490; Tue, 11
+ Oct 2022 16:33:14 -0700 (PDT)
+MIME-Version: 1.0
+References: <20221007161411.731900ea@canb.auug.org.au> <20221012084611.53852c92@canb.auug.org.au>
+In-Reply-To: <20221012084611.53852c92@canb.auug.org.au>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Tue, 11 Oct 2022 17:33:03 -0600
+X-Gmail-Original-Message-ID: <CAHmME9rxkqSSi4xdy62do4i7Wx75fDFAPzRTCf8PLL_AGbs8MQ@mail.gmail.com>
+Message-ID: <CAHmME9rxkqSSi4xdy62do4i7Wx75fDFAPzRTCf8PLL_AGbs8MQ@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the bitmap tree with the random tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     "Theodore Ts'o" <tytso@mit.edu>, Yury Norov <yury.norov@gmail.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the bitmap tree with the random
- tree
-Message-ID: <20221012084611.53852c92@canb.auug.org.au>
-In-Reply-To: <20221007161411.731900ea@canb.auug.org.au>
-References: <20221007161411.731900ea@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/5syZWPfTHPSEH.=wYfNFEbl";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,73 +65,52 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/5syZWPfTHPSEH.=wYfNFEbl
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-
-Hi all,
-
-On Fri, 7 Oct 2022 16:14:11 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
+On Tue, Oct 11, 2022 at 5:32 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 >
-> Today's linux-next merge of the bitmap tree got a conflict in:
->=20
->   include/linux/nodemask.h
->=20
-> between commit:
->=20
->   82f33a32b4d2 ("treewide: use prandom_u32_max() when possible")
->=20
-> from the random tree and commit:
->=20
->   97848c10f9f8 ("lib/bitmap: remove bitmap_ord_to_pos")
->=20
-> from the bitmap tree.
->=20
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
->=20
->=20
-> diff --cc include/linux/nodemask.h
-> index 66ee9b4b7925,0c45fb066caa..000000000000
-> --- a/include/linux/nodemask.h
-> +++ b/include/linux/nodemask.h
-> @@@ -508,8 -508,7 +508,7 @@@ static inline int node_random(const nod
->  =20
->   	w =3D nodes_weight(*maskp);
->   	if (w)
-> - 		bit =3D bitmap_ord_to_pos(maskp->bits,
-> - 			prandom_u32_max(w), MAX_NUMNODES);
->  -		bit =3D find_nth_bit(maskp->bits, MAX_NUMNODES, get_random_int() % w);
-> ++		bit =3D find_nth_bit(maskp->bits, MAX_NUMNODES, prandom_u32_max(w));
->   	return bit;
->   #else
->   	return 0;
+> Hi all,
+>
+> On Fri, 7 Oct 2022 16:14:11 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> >
+> > Today's linux-next merge of the bitmap tree got a conflict in:
+> >
+> >   include/linux/nodemask.h
+> >
+> > between commit:
+> >
+> >   82f33a32b4d2 ("treewide: use prandom_u32_max() when possible")
+> >
+> > from the random tree and commit:
+> >
+> >   97848c10f9f8 ("lib/bitmap: remove bitmap_ord_to_pos")
+> >
+> > from the bitmap tree.
+> >
+> > I fixed it up (see below) and can carry the fix as necessary. This
+> > is now fixed as far as linux-next is concerned, but any non trivial
+> > conflicts should be mentioned to your upstream maintainer when your tree
+> > is submitted for merging.  You may also want to consider cooperating
+> > with the maintainer of the conflicting tree to minimise any particularly
+> > complex conflicts.
+> >
+> >
+> > diff --cc include/linux/nodemask.h
+> > index 66ee9b4b7925,0c45fb066caa..000000000000
+> > --- a/include/linux/nodemask.h
+> > +++ b/include/linux/nodemask.h
+> > @@@ -508,8 -508,7 +508,7 @@@ static inline int node_random(const nod
+> >
+> >       w = nodes_weight(*maskp);
+> >       if (w)
+> > -             bit = bitmap_ord_to_pos(maskp->bits,
+> > -                     prandom_u32_max(w), MAX_NUMNODES);
+> >  -            bit = find_nth_bit(maskp->bits, MAX_NUMNODES, get_random_int() % w);
+> > ++            bit = find_nth_bit(maskp->bits, MAX_NUMNODES, prandom_u32_max(w));
+> >       return bit;
+> >   #else
+> >       return 0;
+>
+> This is now a conflict between the random tree and Linus' tree.
 
-This is now a conflict between the random tree and Linus' tree.
+Thanks. I'll sort it out.
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/5syZWPfTHPSEH.=wYfNFEbl
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNF5CMACgkQAVBC80lX
-0GwEbAf+LQapnjSWPK1HNUTZuyc4u80gSj/Riyi7ppuxfeauIrQ9V3cHywMbVxxK
-Tni2exuyTr1LDEHVQmD3+BmbdDIEWS3tNzvABYTb2Mgc/BShY36HmhGmuBbJME3y
-gxNPpo1lmwXo2FEEQAzcTlR623B8TwUhvXYsMeGcnoyN1TfNXzSSgjs4RIrKRoYk
-8R1Fh8sljfy1mIamPk6IgtYn+rStWzqbxHPYOjSgnyW/xcaxDtP5hBEKGy58Ob0h
-vatR2vVssNjUBIivgHWvWfiZ6AEVfZQU5kczpk4ItGd6zOn2V0zDNlJ9hxbHVr02
-C2d+b2vF2bHmBQk2fEQB8S+mN82IdA==
-=1McD
------END PGP SIGNATURE-----
-
---Sig_/5syZWPfTHPSEH.=wYfNFEbl--
+Jason

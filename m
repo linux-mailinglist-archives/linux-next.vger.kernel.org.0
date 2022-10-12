@@ -2,113 +2,97 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 912E25FCEAE
-	for <lists+linux-next@lfdr.de>; Thu, 13 Oct 2022 01:00:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 771FF5FCEC8
+	for <lists+linux-next@lfdr.de>; Thu, 13 Oct 2022 01:15:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229792AbiJLXAS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 12 Oct 2022 19:00:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43166 "EHLO
+        id S229475AbiJLXPh (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 12 Oct 2022 19:15:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229648AbiJLW7s (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 12 Oct 2022 18:59:48 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E454A265B;
-        Wed, 12 Oct 2022 15:59:38 -0700 (PDT)
+        with ESMTP id S229459AbiJLXPg (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 12 Oct 2022 19:15:36 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3091B1106;
+        Wed, 12 Oct 2022 16:15:34 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Mnp4n3VNtz4xFy;
-        Thu, 13 Oct 2022 09:59:37 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MnpR62js3z4x1G;
+        Thu, 13 Oct 2022 10:15:30 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1665615577;
-        bh=dlSeURIZbGv4D6or2NL+ft3mN0Zln/f62r9aYjEnMow=;
+        s=201702; t=1665616530;
+        bh=uulpi7hsvZgyVCmbVTbY0Yr4fvpQwR6qN8jW4s61zWc=;
         h=Date:From:To:Cc:Subject:From;
-        b=U+7uKzeYv21M1JzyLUkb/tiTrIuiz4TQhKYCO4hOGSfGn9eGvWY6hb+GWn0549712
-         b1Kotg7Sosfk6elk25ayJ+3blvtN5T/+hHWyUX3IIezk7nW1WaSLlk1mF8BTu26Ofv
-         LVc96KF6XED5IlVkqnRLxkOejoZN+A8/oycq4zZ5O/wPDQifAHNmXSN4EjACjJTIFH
-         idkoeMfFII75MCIZ/b9XkbzScgxFCZbKKn77mTSRP5tpMPsXcvIqZ8dx0Ix8aLTNoB
-         6UvM3YalN+h7/FPblRW9Liz+72LWbvkudiQ1HQ7el1y/ZW0ilae3fVSjKiVneWjjVD
-         gMuNbrR82IT7w==
-Date:   Thu, 13 Oct 2022 09:59:36 +1100
+        b=G1nle5bbqG7QfR7VoDJq3dBaBjXCUoMw2ijw3MxjGS/eU+Pd/Y0Xt0CLVL0x6necd
+         k7qvWkOV5iNFUFREIRk0wWqLgLKkgxZLEroX5+c7BMGXtXcnrJtsoMDa4Q41fUBFJk
+         1oPw7//JGFVDOZ3XfMGSSI7WoB/g1es7C5xBqLIpiIWtC0B2M0cPVwYlArkXVVWoGK
+         tJPx2LZTJuc+z1Xmn+VU7iDZVepgkFkHNXtIg5lNiFfL+L3JpAwfnxCR/Oemz4/hiB
+         TYjzCQ7d86ZMIk6yxsfocRFbsiIwLvQIvwAOtxblKLndEzibTMcXGcrD/vErpTamNj
+         sBsVAdwwl7r2w==
+Date:   Thu, 13 Oct 2022 10:15:28 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
 To:     Miklos Szeredi <miklos@szeredi.hu>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Miklos Szeredi <mszeredi@redhat.com>
-Subject: linux-next: manual merge of the fuse tree with Linus' tree
-Message-ID: <20221013095936.2dedd370@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the fuse tree
+Message-ID: <20221013101528.4afacfe3@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Llt5gQlEHDQTa.K.F1cSsqF";
+Content-Type: multipart/signed; boundary="Sig_/VjOEsYHV=Gm/kFZji/nAt6u";
  protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/Llt5gQlEHDQTa.K.F1cSsqF
+--Sig_/VjOEsYHV=Gm/kFZji/nAt6u
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the fuse tree got a conflict in:
+After merging the fuse tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-  include/uapi/linux/fuse.h
+ERROR: modpost: ".delete_from_page_cache" [fs/fuse/fuse.ko] undefined!
 
-between commit:
+Caused by commit
 
-  7d37539037c2 ("fuse: implement ->tmpfile()")
+  0d659ac83481 ("fuse: fix readdir cache race")
 
-from Linus' tree and commit:
+delete_from_page_cache has not been exported to modules since commit
 
-  22fb2e02a194 ("fuse: add "expire only" mode to FUSE_NOTIFY_INVAL_ENTRY")
+  452e9e6992fe ("filemap: Add filemap_remove_folio and __filemap_remove_fol=
+io")
 
-from the fuse tree.
+Which was merged into Linus tree in v5.17-rc1.
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+I have used the fuse tree from next-20221012 for today.
+
+Is this really destined for v6.1?
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc include/uapi/linux/fuse.h
-index 76ee8f9e024a,1688fdea550f..000000000000
---- a/include/uapi/linux/fuse.h
-+++ b/include/uapi/linux/fuse.h
-@@@ -196,7 -196,7 +196,8 @@@
-   *  - add FUSE_HAS_INODE_DAX, FUSE_ATTR_DAX
-   *
-   *  7.37
- + *  - add FUSE_TMPFILE
-+  *  - add FUSE_EXPIRE_ONLY flag to fuse_notify_inval_entry
-   */
- =20
-  #ifndef _LINUX_FUSE_H
-
---Sig_/Llt5gQlEHDQTa.K.F1cSsqF
+--Sig_/VjOEsYHV=Gm/kFZji/nAt6u
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNHRtgACgkQAVBC80lX
-0Gx+bggAhdojgh8S2JpfopzVI4uM7Bqdt4DvXgs2tMlcREdHwyU0hQpZBfui7qYq
-Sud1Rc2zB9sGxkK9uA3MyJkxbafV0X8twpXFJ/5qfP5ZAkiJ5yY7xIUa/L8jh+IT
-koL+kFgyIzNc+WHPDLshWwlCJRALblW5N9CYdGcaGUVg4MKPPlsal2y7NFj28TPV
-GowunLMSl0YZRxJiOGc5e8YIA6ayM3D/fFyULQmFJp+jLfczi7eTRHVU3TqQe8zG
-acLMlKlnxgXR68NghBepNt7JZ2m41fDuWAoStgbUtae2LBtwjLCsHVLsGwHOASU7
-Zy5j8GGix+xZ//LUbjBd5mr706NHmw==
-=icT7
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNHSpAACgkQAVBC80lX
+0GyY5Qf/SKD9GE3uqhIO1+JICt7AfvtNs3vN+WfLuMnoZi+AMkHAaxkvnNWjeK37
+JW+e/58qPUOvKj4ha394pIx42ZIIPKsZil6+W6mLulWsRwG9hELzDI/SMbOLH22C
+G4LjyMypCQlHHf+Z/ZC+DHbejP2CIDi4zimz0tjm+S/NsecP4SLlICqo7H/IRV5v
+rfJ1buxvKTGqSeJBzS+ORveAj0yzkh9mveHcApNjrWOjirMJTy6KSqUg4pEBpdZU
+tabBhYJA+41hwMSVFYjbqgPza7kwZvE+WZjeKYPv1zPrGiPbU9vbY+rvUOamn6Bf
+Ar1ifxkd+AnO4DyN7b9NjNS6ai3opQ==
+=qQp4
 -----END PGP SIGNATURE-----
 
---Sig_/Llt5gQlEHDQTa.K.F1cSsqF--
+--Sig_/VjOEsYHV=Gm/kFZji/nAt6u--

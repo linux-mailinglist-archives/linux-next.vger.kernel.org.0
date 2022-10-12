@@ -2,43 +2,44 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 771FF5FCEC8
-	for <lists+linux-next@lfdr.de>; Thu, 13 Oct 2022 01:15:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 128035FCF03
+	for <lists+linux-next@lfdr.de>; Thu, 13 Oct 2022 01:42:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229475AbiJLXPh (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 12 Oct 2022 19:15:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48772 "EHLO
+        id S229543AbiJLXmn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 12 Oct 2022 19:42:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiJLXPg (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 12 Oct 2022 19:15:36 -0400
+        with ESMTP id S229614AbiJLXmm (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 12 Oct 2022 19:42:42 -0400
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3091B1106;
-        Wed, 12 Oct 2022 16:15:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6617D6889D;
+        Wed, 12 Oct 2022 16:42:40 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MnpR62js3z4x1G;
-        Thu, 13 Oct 2022 10:15:30 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Mnq2Q3Pzsz4xGG;
+        Thu, 13 Oct 2022 10:42:38 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1665616530;
-        bh=uulpi7hsvZgyVCmbVTbY0Yr4fvpQwR6qN8jW4s61zWc=;
+        s=201702; t=1665618158;
+        bh=MSgqIlLNuoLVp0EJwgBfD8Q46u9XEpVHooayGrvn7Jw=;
         h=Date:From:To:Cc:Subject:From;
-        b=G1nle5bbqG7QfR7VoDJq3dBaBjXCUoMw2ijw3MxjGS/eU+Pd/Y0Xt0CLVL0x6necd
-         k7qvWkOV5iNFUFREIRk0wWqLgLKkgxZLEroX5+c7BMGXtXcnrJtsoMDa4Q41fUBFJk
-         1oPw7//JGFVDOZ3XfMGSSI7WoB/g1es7C5xBqLIpiIWtC0B2M0cPVwYlArkXVVWoGK
-         tJPx2LZTJuc+z1Xmn+VU7iDZVepgkFkHNXtIg5lNiFfL+L3JpAwfnxCR/Oemz4/hiB
-         TYjzCQ7d86ZMIk6yxsfocRFbsiIwLvQIvwAOtxblKLndEzibTMcXGcrD/vErpTamNj
-         sBsVAdwwl7r2w==
-Date:   Thu, 13 Oct 2022 10:15:28 +1100
+        b=KmuDHxg7WQCeaIYJs0urcN696PI1aLGg+fPSj0KsQzNE+IFaJHCVaXdqtXJ2vpNDt
+         VgpcKLFMT/eYAioaSNKmBOgpd85ytenFgSaaITv1Gc1p7TRM1qmc56IdBX0L0TxUwl
+         4xQGPzl3VhJC3EfgP0XyTJWC/uPuiJYJUF1YH14aCg9c224c2nBxeCluh1OAHOeJR/
+         QdtBV7HhYdVhKI1WwGxIxznEFsSTGTujpYMnhWYHjmZdv9Q2JPbkeHr8eOfODMcfNu
+         j6zUf8jmQZLzhYh2b0YiIeWCT5SvzfC8xS+jDyuQwSSbAAVeJ++X0Wbja8rIEkkMB1
+         JL/57dG7peq4A==
+Date:   Thu, 13 Oct 2022 10:42:34 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Miklos Szeredi <miklos@szeredi.hu>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Carlos Llamas <cmllamas@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the fuse tree
-Message-ID: <20221013101528.4afacfe3@canb.auug.org.au>
+Subject: linux-next: Signed-off-by missing for commit in the mm-stable tree
+Message-ID: <20221013104234.11e88852@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/VjOEsYHV=Gm/kFZji/nAt6u";
+Content-Type: multipart/signed; boundary="Sig_/9wo_KwYw/tNprJT532caCWR";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
@@ -49,50 +50,36 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/VjOEsYHV=Gm/kFZji/nAt6u
+--Sig_/9wo_KwYw/tNprJT532caCWR
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the fuse tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+Commit
 
-ERROR: modpost: ".delete_from_page_cache" [fs/fuse/fuse.ko] undefined!
+  db24ef4e6b0a ("mm/mmap: undo ->mmap() when arch_validate_flags() fails")
 
-Caused by commit
-
-  0d659ac83481 ("fuse: fix readdir cache race")
-
-delete_from_page_cache has not been exported to modules since commit
-
-  452e9e6992fe ("filemap: Add filemap_remove_folio and __filemap_remove_fol=
-io")
-
-Which was merged into Linus tree in v5.17-rc1.
-
-I have used the fuse tree from next-20221012 for today.
-
-Is this really destined for v6.1?
+is missing a Signed-off-by from its author.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/VjOEsYHV=Gm/kFZji/nAt6u
+--Sig_/9wo_KwYw/tNprJT532caCWR
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNHSpAACgkQAVBC80lX
-0GyY5Qf/SKD9GE3uqhIO1+JICt7AfvtNs3vN+WfLuMnoZi+AMkHAaxkvnNWjeK37
-JW+e/58qPUOvKj4ha394pIx42ZIIPKsZil6+W6mLulWsRwG9hELzDI/SMbOLH22C
-G4LjyMypCQlHHf+Z/ZC+DHbejP2CIDi4zimz0tjm+S/NsecP4SLlICqo7H/IRV5v
-rfJ1buxvKTGqSeJBzS+ORveAj0yzkh9mveHcApNjrWOjirMJTy6KSqUg4pEBpdZU
-tabBhYJA+41hwMSVFYjbqgPza7kwZvE+WZjeKYPv1zPrGiPbU9vbY+rvUOamn6Bf
-Ar1ifxkd+AnO4DyN7b9NjNS6ai3opQ==
-=qQp4
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNHUOsACgkQAVBC80lX
+0GxDzgf+L8iPHqShlZ4+VjcZv3/fg0A1uRA0jlY3H1sZJUMXJsF5mXjP4sVcVDqw
+Y75yBhMfyi2euEXOCXCPogzYMXK+Ar4Eh1SPsbnn0/kVC/ev2vCjYT81x2qXsS5W
+ZRg7tYCmf+QietKubJFwEDfeFSM0kYrRV98d/BagCJbNVFFEd/auHrvSpknGtvbQ
+dOxk/05W1y8u7HGn6Loy21dH9vVwTiZlEVkZI8PYQj4DTQEJVUMMGzoxGpLNUvE7
+dZbpfmcnkj2/MI6gnlTWucZd4033hLlZoN0kuX2waoYCem5IY+L/6mWpP9f45RQZ
+wNCtOAq89iVRamJK5jQNd1UxqwBt5A==
+=dwFC
 -----END PGP SIGNATURE-----
 
---Sig_/VjOEsYHV=Gm/kFZji/nAt6u--
+--Sig_/9wo_KwYw/tNprJT532caCWR--

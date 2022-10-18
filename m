@@ -2,107 +2,104 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D54BA6032A3
-	for <lists+linux-next@lfdr.de>; Tue, 18 Oct 2022 20:38:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DDF66033C8
+	for <lists+linux-next@lfdr.de>; Tue, 18 Oct 2022 22:08:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229843AbiJRSiR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 18 Oct 2022 14:38:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49760 "EHLO
+        id S230136AbiJRUIl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 18 Oct 2022 16:08:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229651AbiJRSiP (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 18 Oct 2022 14:38:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 306489D535;
-        Tue, 18 Oct 2022 11:38:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S230058AbiJRUIZ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 18 Oct 2022 16:08:25 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10987AC49E;
+        Tue, 18 Oct 2022 13:08:21 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CCBE5616B3;
-        Tue, 18 Oct 2022 18:38:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E577C43470;
-        Tue, 18 Oct 2022 18:38:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666118294;
-        bh=gvTaZypEgGGido85MgcyNS4DS7bHb03iQAm+R660AJM=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=h4X44UYm3ssdYIwEMDeIKB+A8Wu3y81H9L1q7UHCTRiH81BO6Fwyh+r3HRDXObFgM
-         YSGuG344wbamHqscdLZNrOsnxltHOjZQ7S6KQ7aGvr+77Sk1f6DTK/KJuDVhiXWDva
-         7e0PdZ+3qytT7OlWGb2x98uIkofmpQv/nuG9Uj7oTl1ND8JE2dgbTp2SQWMQ34J6Ix
-         WGb34uKpa/YphSZF1jeeAt95+5oIxfZhgcXWOP9R2WYiK0FnK7F6TFyJHJedOBSsB/
-         Ez3XK2Zt0lNEkhwjy3fU7pDNiypgxbckClGsac0TX9JtIf/7Sgw7deTkf4y671tGmt
-         laVGf1xJGyiBw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id D16295C0990; Tue, 18 Oct 2022 11:38:13 -0700 (PDT)
-Date:   Tue, 18 Oct 2022 11:38:13 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Jianmin Lv <lvjianmin@loongson.cn>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Subject: Re: linux-next: manual merge of the rcu tree with Linus' tree
-Message-ID: <20221018183813.GW5600@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20221018094152.39787a20@canb.auug.org.au>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MsQ0K2psPz4xG9;
+        Wed, 19 Oct 2022 07:08:17 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1666123698;
+        bh=+D0gWHeMBzegukkXy1SdA4pRcO2k+qIUSncTGFsmUrQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=IM3Ksofa7q0N07sdw4Y0BnnxOq+Wk9WHXYdxl+5xWiZfF0v0jENYfC4JiVjkSoplT
+         hca7aER9mrQTT0ti1vO8s0szXz2OlHuYJnfmA3HWbGY3e3YEylxmKFLSEZ8aALQrN/
+         1JbAb30DkDpMsQhLiQiFL1aHNGVdANiBMMxg2/qxN2NeV/CtZpp3SAXeM3YF61nO8+
+         HFoEn9iCVLpuc5Wt2k4sv/tOQtQlB41/5FvNEDZ817atqJzaPiqWLp5gp2C4Dbb5DA
+         Ylx2d7TfjyK/b6PYHqZ4XuB7fA8hDmFMOaMHpvPZZbLKjP16iiDfQ/NE0H13s5ecg5
+         v1qvR5ALbD7Dg==
+Date:   Wed, 19 Oct 2022 07:08:04 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     linux-next@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, linux-xfs@vger.kernel.org,
+        Keith Busch <kbusch@kernel.org>, linux-fscrypt@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-ext4@vger.kernel.org,
+        Alexander Viro <viro@zeniv.linux.org.uk>
+Subject: Re: [PATCH v5 0/8] make statx() return DIO alignment information
+Message-ID: <20221019070804.53eac15d@canb.auug.org.au>
+In-Reply-To: <Y05QzQM2ed8sOJxC@sol.localdomain>
+References: <20220827065851.135710-1-ebiggers@kernel.org>
+        <YxfE8zjqkT6Zn+Vn@quark>
+        <Yx6DNIorJ86IWk5q@quark>
+        <20220913063025.4815466c@canb.auug.org.au>
+        <20221018155524.5fc4e421@canb.auug.org.au>
+        <Y05QzQM2ed8sOJxC@sol.localdomain>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221018094152.39787a20@canb.auug.org.au>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/kxgvt//y.g1b5pnGQvTpgqK";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Oct 18, 2022 at 09:41:52AM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Today's linux-next merge of the rcu tree got a conflict in:
-> 
->   arch/loongarch/Kconfig
-> 
-> between commit:
-> 
->   c78c43fe7d42 ("LoongArch: Use acpi_arch_dma_setup() and remove ARCH_HAS_PHYS_TO_DMA")
-> 
-> from Linus' tree and commit:
-> 
->   839fc1e464eb ("arch/loongarch: Add ARCH_HAS_NMI_SAFE_THIS_CPU_OPS Kconfig option")
-> 
-> from the rcu tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
+--Sig_/kxgvt//y.g1b5pnGQvTpgqK
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thank you, Stephen!
+Hi Eric,
 
-For whatever it is worth, this will go away once I test my rebase to v6.1.
+On Tue, 18 Oct 2022 00:07:57 -0700 Eric Biggers <ebiggers@kernel.org> wrote:
+>
+> On Tue, Oct 18, 2022 at 03:55:24PM +1100, Stephen Rothwell wrote:
+> >=20
+> > I notice that this branch has been removed.  Are you finished with it
+> > (i.e. should I remove it from linux-next)?
+> >  =20
+>=20
+> Yes, I think so.  This patchset has been merged upstream.  Any more patch=
+es
+> related to STATX_DIOALIGN should go in through the VFS or filesystem-spec=
+ific
+> trees.
 
-							Thanx, Paul
+OK, I have removed it.
 
-> -- 
-> Cheers,
-> Stephen Rothwell
-> 
-> diff --cc arch/loongarch/Kconfig
-> index 903096bd87f8,c8864768dc4d..000000000000
-> --- a/arch/loongarch/Kconfig
-> +++ b/arch/loongarch/Kconfig
-> @@@ -10,6 -10,8 +10,7 @@@ config LOONGARC
->   	select ARCH_ENABLE_MEMORY_HOTPLUG
->   	select ARCH_ENABLE_MEMORY_HOTREMOVE
->   	select ARCH_HAS_ACPI_TABLE_UPGRADE	if ACPI
-> + 	select ARCH_HAS_NMI_SAFE_THIS_CPU_OPS
->  -	select ARCH_HAS_PHYS_TO_DMA
->   	select ARCH_HAS_PTE_SPECIAL
->   	select ARCH_HAS_TICK_BROADCAST if GENERIC_CLOCKEVENTS_BROADCAST
->   	select ARCH_INLINE_READ_LOCK if !PREEMPTION
+--=20
+Cheers,
+Stephen Rothwell
 
+--Sig_/kxgvt//y.g1b5pnGQvTpgqK
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNPB6QACgkQAVBC80lX
+0Gw+mAf/bGHv0gVJlUAUtMlO+X/kuJ8K1xyeTNlPrY/3kIPVHvURN4N84Z456Pqj
+T0tguhmoNIHnsiHD/ho7QW/9KfYkkvi0RT5M3eWWZIEky6wIUIQVmcteXUGc/ml5
+QveAoeyW+UizAfGCDpSYtIh/iTiNtzRtOFcwseOWwBnT07GLgqWH848IHFM5hPt8
+FAqlSCuWunHR7xkkfWX9XXJkDla5e/5z9C1DLrKWqNtgk7haUOrtZh3h90nVfJpo
+9mKAil+9j1DCFRmaJfWggK6qvwNYy0/erG23c8pXs94BPk6eN0WZ/2wmLfoAFES3
+M8E+Ra5EMWsQNIdiwy64N23mBSJv0A==
+=/mrd
+-----END PGP SIGNATURE-----
+
+--Sig_/kxgvt//y.g1b5pnGQvTpgqK--

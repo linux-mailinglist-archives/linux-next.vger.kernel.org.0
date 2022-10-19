@@ -2,64 +2,107 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DAE6605235
-	for <lists+linux-next@lfdr.de>; Wed, 19 Oct 2022 23:47:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0C4A605383
+	for <lists+linux-next@lfdr.de>; Thu, 20 Oct 2022 00:57:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230341AbiJSVrT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 19 Oct 2022 17:47:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59796 "EHLO
+        id S230323AbiJSW5e (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 19 Oct 2022 18:57:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230319AbiJSVrQ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 19 Oct 2022 17:47:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2D79190461;
-        Wed, 19 Oct 2022 14:47:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S230120AbiJSW5d (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 19 Oct 2022 18:57:33 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A0FE1C39C4;
+        Wed, 19 Oct 2022 15:57:30 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 96E72B825F6;
-        Wed, 19 Oct 2022 21:47:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 360ADC433D6;
-        Wed, 19 Oct 2022 21:47:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666216033;
-        bh=2aXD5vrDRaBVh3BhQ2ePbMswz4yUwVdOZh4IViQZ+34=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=J/M69iWZC5lMDu/V51xBtX5mmmQdB3O8QpKcmA0O05y942ygU3VwNIQRmnhr5loHv
-         Beu93CRJqEQYuhb9lNtZIuvI56TJiSR7kYNBddnceg8iHr/ecprSrl9yJplihw2tM3
-         SzCYNk96GtarBQPNdKKHEkLUJ1CtRkqR8J7do4/lVv9D6cWaW5kX6pagADAt3Oxo7k
-         gf5qdzlIKFarZuoP1JSljljPk0iO5Df8bB8rTC9R1xCK9wT1ML3Z+kQHx8HcYdiR9o
-         oovZx/1L/RmbkcFhxWkPgmHnYQTAmLO4TTB8LJAgUDQVUJXX86JSqnbMp+usqHOjsF
-         Ne569u/0FFQhw==
-Date:   Wed, 19 Oct 2022 16:47:11 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Mt5j146jXz4xGQ;
+        Thu, 20 Oct 2022 09:57:25 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1666220248;
+        bh=bE8FsV7P/1dHPlwdOCqJYtJ+w6dJbFF/0a+T7QYskUo=;
+        h=Date:From:To:Cc:Subject:From;
+        b=sa4bbByjkwl667rQ6I35JPts4O6Lff8gBAbOY0fOLMSM9AH736fVbXcXj3Pjow6Qh
+         pyX7RsBIhNPTzCTojuNyzi8wX/lOJkLCp/22L+KnfB2Qeg4lJS1FgVfaIiJII+CFUZ
+         x4R5f8OZ5AcpeGPa0YsWPhYuNkTFzyVCEHRxqw/JcNkI1FUn4rahYi3FNwYwym/fpV
+         Iz4x09Hd0K1wu3QkRB0JX0gkq3BX0CHmKRhJ5ZeaycTjdZYHmbJv0gePNo9ncukF3E
+         7oT/y8Od7KEJjQLp0B2Izbx3L7IcDg9GITsHpstJnDjN6sXhnYpo02aswX9M0preUN
+         ImJi8nMSkqzKg==
+Date:   Thu, 20 Oct 2022 03:23:40 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Kalle Valo <kvalo@kernel.org>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Wireless <linux-wireless@vger.kernel.org>
+Cc:     David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Ilan Peer <ilan.peer@intel.com>,
+        Johannes Berg <johannes.berg@intel.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Signed-off-by missing for commit in the pci-current
- tree
-Message-ID: <20221019214711.GA48619@bhelgaas>
+Subject: linux-next: manual merge of the wireless-next tree with Linus' tree
+Message-ID: <20221020032340.5cf101c0@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221020012608.20a5f3dc@canb.auug.org.au>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/QPch7.CbFCOkhnPOVW._2io";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Oct 20, 2022 at 01:26:08AM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Commit
-> 
->   22286757d2f5 ("MAINTAINERS: Update Kishon's email address in PCI endpoint subsystem")
-> 
-> is missing a Signed-off-by from its committer.
+--Sig_/QPch7.CbFCOkhnPOVW._2io
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Sorry, fixed.
+Hi all,
+
+FIXME: Add owner of second tree to To:
+       Add author(s)/SOB of conflicting commits.
+
+Today's linux-next merge of the wireless-next tree got a conflict in:
+
+  net/mac80211/util.c
+
+between commit:
+
+  ff05d4b45dd8 ("wifi: mac80211: fix MBSSID parsing use-after-free")
+
+from the origin tree and commit:
+
+  ff05d4b45dd8 ("wifi: mac80211: fix MBSSID parsing use-after-free")
+
+from the wireless-next tree.
+
+I fixed it up (I just used the latter version) and can carry the fix as
+necessary. This is now fixed as far as linux-next is concerned, but any
+non trivial conflicts should be mentioned to your upstream maintainer
+when your tree is submitted for merging.  You may also want to consider
+cooperating with the maintainer of the conflicting tree to minimise any
+particularly complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/QPch7.CbFCOkhnPOVW._2io
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNQJIwACgkQAVBC80lX
+0GxAlAf/aHM3on2G4e5RKXL4lH05joPGVAbUVxATSIVImtY4deYQEQng/x32Z/bC
+avmlu2lCwUTtLaCp94cPwmHu6cjmCCFythOz3w053z16/CO7Uy/Kdjpwdug+J1z5
+V9MLMXlFFisDx4aYaJiq0daYJW1yggdqkZpdn34N1c7cw8kvLTeMDmOGEjlERe4Z
+Uu5M0EskEgncOljFcwjBmoTe6dNfF3wyXUuj9urIV64MHF68gCsjE6r946trlynH
+FkFDqFBgO8B1YsXLWam5snGldbrjGfApd9ky5fhpoi+PejQ+F3+4hz2+XuqZ616Z
+6FztdQoZDMH10HHJphQFh9L+s6mtGA==
+=fsIU
+-----END PGP SIGNATURE-----
+
+--Sig_/QPch7.CbFCOkhnPOVW._2io--

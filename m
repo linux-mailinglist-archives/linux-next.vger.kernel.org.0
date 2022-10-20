@@ -2,64 +2,64 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E2D4605643
-	for <lists+linux-next@lfdr.de>; Thu, 20 Oct 2022 06:20:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE15E60569A
+	for <lists+linux-next@lfdr.de>; Thu, 20 Oct 2022 07:02:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229497AbiJTEUw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 20 Oct 2022 00:20:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47792 "EHLO
+        id S229587AbiJTFCz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 20 Oct 2022 01:02:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiJTEUu (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 20 Oct 2022 00:20:50 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8178610D69B
-        for <linux-next@vger.kernel.org>; Wed, 19 Oct 2022 21:20:47 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id y191so19195072pfb.2
-        for <linux-next@vger.kernel.org>; Wed, 19 Oct 2022 21:20:47 -0700 (PDT)
+        with ESMTP id S229484AbiJTFCy (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 20 Oct 2022 01:02:54 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF47318F904
+        for <linux-next@vger.kernel.org>; Wed, 19 Oct 2022 22:02:51 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id g8-20020a17090a128800b0020c79f987ceso2256785pja.5
+        for <linux-next@vger.kernel.org>; Wed, 19 Oct 2022 22:02:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kernelci-org.20210112.gappssmtp.com; s=20210112;
         h=from:to:subject:content-transfer-encoding:mime-version:date
          :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=7qpTX5PXEfbzbIC2TLWL519H/cpctyZMl6YfThS6EiM=;
-        b=HbZOagRGqGiN3Up9NOPrZx12gow0PD+zsdv3SgL143EcgZCXTHxueadvL9ILweLQ9+
-         YK3DUVyMIawIk5Zc/NMY+zIUzMZvpO2qHEH+Kb3NHtDaOaqRHnP087mduKgsInTEM6So
-         RB2rXr8zyhfQ3oq6MPfJ9b58Nx6H8G/UW25a5BWj0uhnOY9jFW+PxGJU8cR7qBq3ig0W
-         EPOqA6WIvuIpRjH5JAc4NI6lD47n6p3UIHoeDpU2q8bBEP7+SkWbnYq0yRY75rlJIzYP
-         WiRzMYI1jvMUd5BFWfn7rF/NGyGyiXxWVTXNgJnPbpQrGetXp33gcUv1YWj5rs+ewZ9o
-         b/wA==
+        bh=coR0wQiu4BzyHPUcM5wCsJKWYHpE5nQ/KysACoYENKo=;
+        b=YornIqfV1Tt6r7gTtRB6gsKiiBwuPZV3jHuYIkxXcn0W8Nxo7x7SJFoJVLrZIYAr7f
+         J0gWLdGu9IIKM5n5GqTxW5xau9A5CUmbgL+o0Uu4h3ObTnK41nDGicXSVOQtCnGurwue
+         pqa0X5C0wqgfuIBW1oK7WyaZsP989Wo4jtFEJBekCoHjVS4HASYGR4Sib92L1KBOvArd
+         w3hlSGxWNGvHBjgkH2Uf7CJqayBAudW1GlNOdA4B1o5rk310QFBORJsvI1npIRijHgp7
+         Am5VfDNR0Aeu5b3BuQKrHgQhzYrioBTguKL3XViPrnjQLsHPvE8EPNht6hhEJQ1eRAmk
+         Ehuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=from:to:subject:content-transfer-encoding:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=7qpTX5PXEfbzbIC2TLWL519H/cpctyZMl6YfThS6EiM=;
-        b=Sqp8zAjZph/VASXBz4MmHdRX2Y+ogD98AgzG7uECzocqnqtyOybX9c6j/lBhtVZCce
-         oPxv60ACW+l8xTrEh/tAtNsp7P9lV/CvaJLUazeGvWjEJxA8vqidhZ5M3uAsjNtRsm4Y
-         kcXlkqjM13430D88u0Y2nHT9ns02Z6J4wE5qvpNY2iEFNGlo0mEuVo6vfXnZQ0Ga6Axt
-         eBu3GyIIn2PksN9XMUUHB3XUQWkziLSbTgYtHUguYBuOq11Yhz0PS9Ah7wdaZezXh170
-         u04AP+CzO8iyIQxGHnrD+hZhrJWhXyJ8LUdb2VICdTW33LEzUpghyZFe4bAkyYvlkH9n
-         7Rqw==
-X-Gm-Message-State: ACrzQf0ibifzHrSFdmL9Mnf3sq/wwLg1xCZUTQ+jrULpxgN1l4DjE2aE
-        agBPOQT2EhhnOUSZentpHrs2CVGo2Fqcmj0d
-X-Google-Smtp-Source: AMsMyM7N62gb/j7qzEWSQZIyc2rCvTQUdxoKKcURiAzaBooWngEVxDPt0aiWf8Tbj9ysXh1u1mwFUA==
-X-Received: by 2002:a17:903:40d1:b0:17f:4e94:b747 with SMTP id t17-20020a17090340d100b0017f4e94b747mr11602304pld.44.1666239634784;
-        Wed, 19 Oct 2022 21:20:34 -0700 (PDT)
+        bh=coR0wQiu4BzyHPUcM5wCsJKWYHpE5nQ/KysACoYENKo=;
+        b=uH/sWnHlzK5UfgaOMP3SDcFXkP2ST6BlAzoCP0CJXHmtpI1Wb2jaXR1DcUcWAKe5t9
+         BmK23v8/5OX42KA/lmoqsM4la1apTGG5S7sUTsoOxr6ESQSy2h/BlJqozLG5/7QZ/Ezn
+         Ko6Df5jcoLwIwh3KeBOXSgrlzJZAKRnzK/9tCSiJI9EeoM7HMM2hBwvtkWG6NvGmXd2P
+         RRaSNk/BCME7+OgaT5Dnm+j11vcFTgKeaxdgIyWkCbrD9yUg75y7i06GIC/vBz52bRsq
+         T9KUjhj/pKHyVkA8DnJrBTE7+4MNEaX4d+F6qLYOPF457K4yO6v6/N7SqJclH4wea1dc
+         AuJw==
+X-Gm-Message-State: ACrzQf2UEnU7yyF0u/ZVTadwSE1msoaZCfuC/TgTd9OwV1RJfiFnGLwJ
+        Ni8hSsl2B9o7iFLsDV0WMjmwb2wcTq1Kg4lm
+X-Google-Smtp-Source: AMsMyM5YTvCnAJIelelm6H3oZNZD8zz5CNIPsDoSQExB539q9ZSU/2akGZp56NApQJQx6eInKE8Kow==
+X-Received: by 2002:a17:903:94:b0:186:61a4:3bb5 with SMTP id o20-20020a170903009400b0018661a43bb5mr1908774pld.159.1666242170343;
+        Wed, 19 Oct 2022 22:02:50 -0700 (PDT)
 Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id e15-20020a170902784f00b00178b9c997e5sm11615316pln.138.2022.10.19.21.19.34
+        by smtp.gmail.com with ESMTPSA id cf6-20020a17090aebc600b0020a8ed65df3sm782007pjb.45.2022.10.19.22.02.49
         for <linux-next@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Oct 2022 21:19:56 -0700 (PDT)
-Message-ID: <6350cc6c.170a0220.85942.60d4@mx.google.com>
-Date:   Wed, 19 Oct 2022 21:19:56 -0700 (PDT)
+        Wed, 19 Oct 2022 22:02:50 -0700 (PDT)
+Message-ID: <6350d67a.170a0220.c28f3.2190@mx.google.com>
+Date:   Wed, 19 Oct 2022 22:02:50 -0700 (PDT)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-Kernelci-Report-Type: build
-X-Kernelci-Kernel: next-20221020
-X-Kernelci-Branch: master
+X-Kernelci-Kernel: v6.1-rc1-242-g2cf0df170b5f
+X-Kernelci-Branch: pending-fixes
 X-Kernelci-Tree: next
-Subject: next/master build: 220 builds: 12 failed, 208 passed, 31 errors,
- 90 warnings (next-20221020)
+Subject: next/pending-fixes build: 207 builds: 6 failed, 201 passed, 10 errors,
+ 40 warnings (v6.1-rc1-242-g2cf0df170b5f)
 To:     linux-next@vger.kernel.org
 From:   "kernelci.org bot" <bot@kernelci.org>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -71,70 +71,48 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master build: 220 builds: 12 failed, 208 passed, 31 errors, 90 warning=
-s (next-20221020)
+next/pending-fixes build: 207 builds: 6 failed, 201 passed, 10 errors, 40 w=
+arnings (v6.1-rc1-242-g2cf0df170b5f)
 
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20221020/
+Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
+rnel/v6.1-rc1-242-g2cf0df170b5f/
 
 Tree: next
-Branch: master
-Git Describe: next-20221020
-Git Commit: acee3e83b493505058d1e48fce167f623dac1a05
+Branch: pending-fixes
+Git Describe: v6.1-rc1-242-g2cf0df170b5f
+Git Commit: 2cf0df170b5f1231e49c5124d173c69ced59acbf
 Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
 Built: 8 unique architectures
 
 Build Failures Detected:
 
 arm:
-    allmodconfig: (clang-16) FAIL
-    mxs_defconfig: (gcc-10) FAIL
     rpc_defconfig: (gcc-10) FAIL
-
-i386:
-    allmodconfig: (clang-16) FAIL
 
 mips:
     decstation_64_defconfig: (gcc-10) FAIL
-    xway_defconfig: (gcc-10) FAIL
 
 riscv:
-    allnoconfig: (clang-16) FAIL
-    defconfig+CONFIG_EFI=3Dn: (clang-16) FAIL
     defconfig: (gcc-10) FAIL
     defconfig+debug: (gcc-10) FAIL
+    defconfig+kselftest: (gcc-10) FAIL
     rv32_defconfig: (gcc-10) FAIL
-
-x86_64:
-    allmodconfig: (clang-16) FAIL
 
 Errors and Warnings Detected:
 
 arc:
 
 arm64:
-    defconfig+CONFIG_ARM64_64K_PAGES=3Dy (clang-16): 1 error
 
 arm:
-    allmodconfig (clang-16): 2 errors, 13 warnings
-    aspeed_g5_defconfig (clang-16): 1 error, 10 warnings
-    cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (clang-13): 6 =
-warnings
-    cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (clang-13=
-): 6 warnings
     keystone_defconfig (gcc-10): 1 warning
     moxart_defconfig (gcc-10): 1 warning
-    multi_v5_defconfig (clang-16): 1 error
-    mxs_defconfig (gcc-10): 1 error, 1 warning
     rpc_defconfig (gcc-10): 2 errors
     tct_hammer_defconfig (gcc-10): 1 warning
     tegra_defconfig (gcc-10): 1 warning
     viper_defconfig (gcc-10): 1 warning
 
 i386:
-    allmodconfig (clang-16): 6 errors, 2 warnings
-    allnoconfig (clang-16): 1 error
-    i386_defconfig (clang-16): 1 error
 
 mips:
     32r2el_defconfig (gcc-10): 1 warning
@@ -149,12 +127,11 @@ mips:
     loongson3_defconfig (gcc-10): 1 error
     rb532_defconfig (gcc-10): 2 warnings
     rs90_defconfig (gcc-10): 1 warning
-    xway_defconfig (gcc-10): 1 error, 1 warning
 
 riscv:
-    allnoconfig (clang-16): 1 error
     defconfig (gcc-10): 1 error
     defconfig+debug (gcc-10): 1 error
+    defconfig+kselftest (gcc-10): 1 error
     rv32_defconfig (gcc-10): 1 error
 
 sparc:
@@ -166,37 +143,15 @@ sparc:
     tinyconfig (gcc-10): 1 warning
 
 x86_64:
-    allmodconfig (clang-16): 4 errors, 11 warnings
-    allnoconfig (clang-16): 1 error
-    x86_64_defconfig (clang-16): 1 error
 
 Errors summary:
 
-    11   error: write on a pipe with no reader
     4    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=
 =80=98-mhard-float=E2=80=99
     3    ERROR: modpost: "riscv_cbom_block_size" [arch/riscv/kvm/kvm.ko] un=
 defined!
-    2    fs/ntfs3/namei.c:445:7: error: variable 'uni1' is used uninitializ=
-ed whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
-    2    fs/ntfs3/namei.c:434:7: error: variable 'uni1' is used uninitializ=
-ed whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
-    2    drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8188f.c:432:7: erro=
-r: variable 'hw_ctrl_s1' is used uninitialized whenever 'if' condition is f=
-alse [-Werror,-Wsometimes-uninitialized]
-    1    ld.lld: error: undefined symbol: __aeabi_uldivmod
-    1    drivers/pinctrl/pinctrl-lantiq.c:62:2: error: implicit declaration=
- of function =E2=80=98seq_printf=E2=80=99; did you mean =E2=80=98scnprintf=
-=E2=80=99? [-Werror=3Dimplicit-function-declaration]
-    1    drivers/pinctrl/freescale/pinctrl-mxs.c:57:2: error: implicit decl=
-aration of function =E2=80=98seq_printf=E2=80=99; did you mean =E2=80=98scn=
-printf=E2=80=99? [-Werror=3Dimplicit-function-declaration]
-    1    drivers/net/ethernet/mellanox/mlx5/core/en_main.c:3583:12: error: =
-stack frame size (1072) exceeds limit (1024) in 'mlx5e_setup_tc' [-Werror,-=
-Wframe-larger-than]
-    1    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_7_ppt.c:143=
-6:12: error: stack frame size (1028) exceeds limit (1024) in 'smu_v13_0_7_g=
-et_power_profile_mode' [-Werror,-Wframe-larger-than]
+    1    vcpu.c:(.text+0x608): undefined reference to `riscv_cbom_block_siz=
+e'
     1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=
 =3D0x'
     1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=
@@ -204,22 +159,13 @@ et_power_profile_mode' [-Werror,-Wframe-larger-than]
 
 Warnings summary:
 
-    22   clang: warning: argument unused during compilation: '-march=3Darmv=
-6k' [-Wunused-command-line-argument]
-    12   clang: warning: argument unused during compilation: '-march=3Darmv=
-7-a' [-Wunused-command-line-argument]
     10   <stdin>:1517:2: warning: #warning syscall clone3 not implemented [=
 -Wcpp]
-    8    fs/coredump.c:839:12: warning: =E2=80=98dump_emit_page=E2=80=99 de=
+    8    fs/coredump.c:834:12: warning: =E2=80=98dump_emit_page=E2=80=99 de=
 fined but not used [-Wunused-function]
     3    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
 e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
 ted "0,0"
-    2    fs/ntfs3/namei.c:430:22: note: initialize the variable 'uni1' to s=
-ilence this warning
-    2    drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8188f.c:415:45: not=
-e: initialize the variable 'hw_ctrl_s1' to silence this warning
-    2    cc1: some warnings being treated as errors
     2    arch/mips/boot/dts/brcm/bcm63268.dtsi:115.5-22: Warning (reg_forma=
 t): /ubus/timer-mfd@10000080/watchdog@1c:reg: property has invalid length (=
 8 bytes) (#address-cells =3D=3D 2, #size-cells =3D=3D 1)
@@ -243,30 +189,9 @@ ci_device_bus_num): Failed prerequisite 'reg_format'
 2c_bus_reg): Failed prerequisite 'reg_format'
     2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
 tion failed, symbol will not be versioned.
-    1    vmlinux.o: warning: objtool: vc_switch_off_ist+0xbe: call to memcp=
-y() leaves .noinstr.text section
-    1    vmlinux.o: warning: objtool: sync_regs+0x24: call to memcpy() leav=
-es .noinstr.text section
-    1    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x47: relocation to=
- !ENDBR: .text+0x1110f8
-    1    vmlinux.o: warning: objtool: fixup_bad_iret+0x36: call to memset()=
- leaves .noinstr.text section
-    1    vmlinux.o: warning: objtool: __sev_put_ghcb+0x35: call to memcpy()=
- leaves .noinstr.text section
-    1    vmlinux.o: warning: objtool: __sev_get_ghcb+0xad: call to memcpy()=
- leaves .noinstr.text section
-    1    fs/reiserfs/reiserfs.o: warning: objtool: replace_key+0x226: stack=
- state mismatch: cfa1=3D4+80 cfa2=3D4+96
-    1    drivers/media/platform/qcom/camss/qcom-camss.o: warning: objtool: =
-csiphy_lanes_enable+0x494: sibling call from callable instruction with modi=
-fied stack frame
-    1    drivers/media/i2c/m5mols/m5mols.o: warning: objtool: m5mols_set_fm=
-t() falls through to next function __cfi_m5mols_get_fmt()
     1    cc1: warning: result of =E2=80=98-117440512 << 16=E2=80=99 require=
 s 44 bits to represent, but =E2=80=98int=E2=80=99 only has 32 bits [-Wshift=
 -overflow=3D]
-    1    ......clang: warning: argument unused during compilation: '-march=
-=3Darmv6k' [-Wunused-command-line-argument]
 
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
@@ -307,115 +232,8 @@ Warnings:
 
 ---------------------------------------------------------------------------=
 -----
-allmodconfig (i386, clang-16) =E2=80=94 FAIL, 6 errors, 2 warnings, 0 secti=
-on mismatches
-
-Errors:
-    error: write on a pipe with no reader
-    fs/ntfs3/namei.c:445:7: error: variable 'uni1' is used uninitialized wh=
-enever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
-    fs/ntfs3/namei.c:434:7: error: variable 'uni1' is used uninitialized wh=
-enever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
-    drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8188f.c:432:7: error: va=
-riable 'hw_ctrl_s1' is used uninitialized whenever 'if' condition is false =
-[-Werror,-Wsometimes-uninitialized]
-    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_7_ppt.c:1436:12:=
- error: stack frame size (1028) exceeds limit (1024) in 'smu_v13_0_7_get_po=
-wer_profile_mode' [-Werror,-Wframe-larger-than]
-    drivers/net/ethernet/mellanox/mlx5/core/en_main.c:3583:12: error: stack=
- frame size (1072) exceeds limit (1024) in 'mlx5e_setup_tc' [-Werror,-Wfram=
-e-larger-than]
-
-Warnings:
-    fs/ntfs3/namei.c:430:22: note: initialize the variable 'uni1' to silenc=
-e this warning
-    drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8188f.c:415:45: note: in=
-itialize the variable 'hw_ctrl_s1' to silence this warning
-
----------------------------------------------------------------------------=
------
-allmodconfig (arm, clang-16) =E2=80=94 FAIL, 2 errors, 13 warnings, 0 secti=
-on mismatches
-
-Errors:
-    error: write on a pipe with no reader
-    ld.lld: error: undefined symbol: __aeabi_uldivmod
-
-Warnings:
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    ......clang: warning: argument unused during compilation: '-march=3Darm=
-v6k' [-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-
----------------------------------------------------------------------------=
------
-allmodconfig (x86_64, clang-16) =E2=80=94 FAIL, 4 errors, 11 warnings, 0 se=
-ction mismatches
-
-Errors:
-    error: write on a pipe with no reader
-    fs/ntfs3/namei.c:445:7: error: variable 'uni1' is used uninitialized wh=
-enever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
-    fs/ntfs3/namei.c:434:7: error: variable 'uni1' is used uninitialized wh=
-enever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
-    drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8188f.c:432:7: error: va=
-riable 'hw_ctrl_s1' is used uninitialized whenever 'if' condition is false =
-[-Werror,-Wsometimes-uninitialized]
-
-Warnings:
-    vmlinux.o: warning: objtool: sync_regs+0x24: call to memcpy() leaves .n=
-oinstr.text section
-    vmlinux.o: warning: objtool: vc_switch_off_ist+0xbe: call to memcpy() l=
-eaves .noinstr.text section
-    vmlinux.o: warning: objtool: fixup_bad_iret+0x36: call to memset() leav=
-es .noinstr.text section
-    vmlinux.o: warning: objtool: __sev_get_ghcb+0xad: call to memcpy() leav=
-es .noinstr.text section
-    vmlinux.o: warning: objtool: __sev_put_ghcb+0x35: call to memcpy() leav=
-es .noinstr.text section
-    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x47: relocation to !END=
-BR: .text+0x1110f8
-    fs/reiserfs/reiserfs.o: warning: objtool: replace_key+0x226: stack stat=
-e mismatch: cfa1=3D4+80 cfa2=3D4+96
-    fs/ntfs3/namei.c:430:22: note: initialize the variable 'uni1' to silenc=
-e this warning
-    drivers/media/i2c/m5mols/m5mols.o: warning: objtool: m5mols_set_fmt() f=
-alls through to next function __cfi_m5mols_get_fmt()
-    drivers/media/platform/qcom/camss/qcom-camss.o: warning: objtool: csiph=
-y_lanes_enable+0x494: sibling call from callable instruction with modified =
-stack frame
-    drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8188f.c:415:45: note: in=
-itialize the variable 'hw_ctrl_s1' to silence this warning
-
----------------------------------------------------------------------------=
------
-allnoconfig (riscv, clang-16) =E2=80=94 FAIL, 1 error, 0 warnings, 0 sectio=
+allmodconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
 n mismatches
-
-Errors:
-    error: write on a pipe with no reader
 
 ---------------------------------------------------------------------------=
 -----
@@ -426,14 +244,6 @@ n mismatches
 -----
 allnoconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
 ismatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (x86_64, clang-16) =E2=80=94 PASS, 1 error, 0 warnings, 0 secti=
-on mismatches
-
-Errors:
-    error: write on a pipe with no reader
 
 ---------------------------------------------------------------------------=
 -----
@@ -450,14 +260,6 @@ Warnings:
 
 ---------------------------------------------------------------------------=
 -----
-allnoconfig (i386, clang-16) =E2=80=94 PASS, 1 error, 0 warnings, 0 section=
- mismatches
-
-Errors:
-    error: write on a pipe with no reader
-
----------------------------------------------------------------------------=
------
 am200epdkit_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
  section mismatches
 
@@ -467,43 +269,13 @@ ar7_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
  mismatches
 
 Warnings:
-    fs/coredump.c:839:12: warning: =E2=80=98dump_emit_page=E2=80=99 defined=
+    fs/coredump.c:834:12: warning: =E2=80=98dump_emit_page=E2=80=99 defined=
  but not used [-Wunused-function]
 
 ---------------------------------------------------------------------------=
 -----
 aspeed_g4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
 ection mismatches
-
----------------------------------------------------------------------------=
------
-aspeed_g5_defconfig (arm, clang-16) =E2=80=94 PASS, 1 error, 10 warnings, 0=
- section mismatches
-
-Errors:
-    error: write on a pipe with no reader
-
-Warnings:
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
 
 ---------------------------------------------------------------------------=
 -----
@@ -673,102 +445,6 @@ on mismatches
 
 ---------------------------------------------------------------------------=
 -----
-cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config (arm64, clang-13=
-) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+arm64-chromebook=
- (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatch=
-es
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-mediatek.flavour.config+arm64-chromeb=
-ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
-tches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-qualcomm.flavour.config+arm64-chromeb=
-ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
-tches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-rockchip64.flavour.config+arm64-chrom=
-ebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mis=
-matches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (arm, clang-13) =
-=E2=80=94 PASS, 0 errors, 6 warnings, 0 section mismatches
-
-Warnings:
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (arm, clang-1=
-3) =E2=80=94 PASS, 0 errors, 6 warnings, 0 section mismatches
-
-Warnings:
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromeos-amd-stoneyridge.flavour.config+x86-chr=
-omebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
-mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromeos-intel-denverton.flavour.config+x86-chr=
-omebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
-mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromeos-intel-pineview.flavour.config+x86-chro=
-mebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config (x86_64, clang=
--13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config+x86-chromebook=
- (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatc=
-hes
-
----------------------------------------------------------------------------=
------
 cu1000-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
  section mismatches
 
@@ -804,11 +480,6 @@ s, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
 defconfig (riscv, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 section mi=
 smatches
 
@@ -818,21 +489,13 @@ ed!
 
 ---------------------------------------------------------------------------=
 -----
-defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, clang-16) =E2=80=94 PASS, 1 er=
-ror, 0 warnings, 0 section mismatches
-
-Errors:
-    error: write on a pipe with no reader
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
 
 ---------------------------------------------------------------------------=
 -----
-defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
-rs, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_EFI=3Dn (riscv, clang-16) =E2=80=94 FAIL, 0 errors, 0 warn=
-ings, 0 section mismatches
+defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
+s, 0 warnings, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -841,13 +504,18 @@ s, 0 warnings, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
-defconfig+arm64-chromebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 wa=
-rnings, 0 section mismatches
+defconfig+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
-defconfig+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
-ings, 0 section mismatches
+defconfig+arm64-chromebook+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+arm64-chromebook+videodec (arm64, gcc-10) =E2=80=94 PASS, 0 error=
+s, 0 warnings, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -862,6 +530,24 @@ ion mismatches
 Errors:
     ERROR: modpost: "riscv_cbom_block_size" [arch/riscv/kvm/kvm.ko] undefin=
 ed!
+
+---------------------------------------------------------------------------=
+-----
+defconfig+debug (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+ima (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (riscv, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 =
+section mismatches
+
+Errors:
+    vcpu.c:(.text+0x608): undefined reference to `riscv_cbom_block_size'
 
 ---------------------------------------------------------------------------=
 -----
@@ -969,14 +655,6 @@ on mismatches
 
 ---------------------------------------------------------------------------=
 -----
-i386_defconfig (i386, clang-16) =E2=80=94 PASS, 1 error, 0 warnings, 0 sect=
-ion mismatches
-
-Errors:
-    error: write on a pipe with no reader
-
----------------------------------------------------------------------------=
------
 i386_defconfig+debug (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
  section mismatches
 
@@ -988,6 +666,11 @@ s, 0 section mismatches
 ---------------------------------------------------------------------------=
 -----
 imx_v4_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+imx_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
 ection mismatches
 
 ---------------------------------------------------------------------------=
@@ -1041,7 +724,7 @@ keystone_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
 tion mismatches
 
 Warnings:
-    fs/coredump.c:839:12: warning: =E2=80=98dump_emit_page=E2=80=99 defined=
+    fs/coredump.c:834:12: warning: =E2=80=98dump_emit_page=E2=80=99 defined=
  but not used [-Wunused-function]
 
 ---------------------------------------------------------------------------=
@@ -1177,7 +860,7 @@ moxart_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
 on mismatches
 
 Warnings:
-    fs/coredump.c:839:12: warning: =E2=80=98dump_emit_page=E2=80=99 defined=
+    fs/coredump.c:834:12: warning: =E2=80=98dump_emit_page=E2=80=99 defined=
  but not used [-Wunused-function]
 
 ---------------------------------------------------------------------------=
@@ -1194,14 +877,6 @@ on mismatches
 -----
 multi_v4t_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
 ection mismatches
-
----------------------------------------------------------------------------=
------
-multi_v5_defconfig (arm, clang-16) =E2=80=94 PASS, 1 error, 0 warnings, 0 s=
-ection mismatches
-
-Errors:
-    error: write on a pipe with no reader
 
 ---------------------------------------------------------------------------=
 -----
@@ -1235,6 +910,26 @@ multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy (arm, gcc-10) =E2=80=94 PASS, 0=
 
 ---------------------------------------------------------------------------=
 -----
+multi_v7_defconfig+crypto (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+debug (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+ima (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
 mvebu_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
 ction mismatches
 
@@ -1245,16 +940,8 @@ ction mismatches
 
 ---------------------------------------------------------------------------=
 -----
-mxs_defconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 section m=
-ismatches
-
-Errors:
-    drivers/pinctrl/freescale/pinctrl-mxs.c:57:2: error: implicit declarati=
-on of function =E2=80=98seq_printf=E2=80=99; did you mean =E2=80=98scnprint=
-f=E2=80=99? [-Werror=3Dimplicit-function-declaration]
-
-Warnings:
-    cc1: some warnings being treated as errors
+mxs_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -1372,7 +1059,7 @@ rb532_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sect=
 ion mismatches
 
 Warnings:
-    fs/coredump.c:839:12: warning: =E2=80=98dump_emit_page=E2=80=99 defined=
+    fs/coredump.c:834:12: warning: =E2=80=98dump_emit_page=E2=80=99 defined=
  but not used [-Wunused-function]
     cc1: warning: result of =E2=80=98-117440512 << 16=E2=80=99 requires 44 =
 bits to represent, but =E2=80=98int=E2=80=99 only has 32 bits [-Wshift-over=
@@ -1408,7 +1095,7 @@ rs90_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
 n mismatches
 
 Warnings:
-    fs/coredump.c:839:12: warning: =E2=80=98dump_emit_page=E2=80=99 defined=
+    fs/coredump.c:834:12: warning: =E2=80=98dump_emit_page=E2=80=99 defined=
  but not used [-Wunused-function]
 
 ---------------------------------------------------------------------------=
@@ -1556,7 +1243,7 @@ tct_hammer_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 s=
 ection mismatches
 
 Warnings:
-    fs/coredump.c:839:12: warning: =E2=80=98dump_emit_page=E2=80=99 defined=
+    fs/coredump.c:834:12: warning: =E2=80=98dump_emit_page=E2=80=99 defined=
  but not used [-Wunused-function]
 
 ---------------------------------------------------------------------------=
@@ -1565,18 +1252,18 @@ tegra_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
 n mismatches
 
 Warnings:
-    fs/coredump.c:839:12: warning: =E2=80=98dump_emit_page=E2=80=99 defined=
+    fs/coredump.c:834:12: warning: =E2=80=98dump_emit_page=E2=80=99 defined=
  but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
 
 ---------------------------------------------------------------------------=
 -----
 tinyconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
 smatches
-
----------------------------------------------------------------------------=
------
-tinyconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -1588,8 +1275,8 @@ Warnings:
 
 ---------------------------------------------------------------------------=
 -----
-tinyconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
+tinyconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -1632,7 +1319,7 @@ viper_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
 n mismatches
 
 Warnings:
-    fs/coredump.c:839:12: warning: =E2=80=98dump_emit_page=E2=80=99 defined=
+    fs/coredump.c:834:12: warning: =E2=80=98dump_emit_page=E2=80=99 defined=
  but not used [-Wunused-function]
 
 ---------------------------------------------------------------------------=
@@ -1649,14 +1336,6 @@ vt8500_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
 -----
 x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
 ection mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, clang-16) =E2=80=94 PASS, 1 error, 0 warnings, 0 =
-section mismatches
-
-Errors:
-    error: write on a pipe with no reader
 
 ---------------------------------------------------------------------------=
 -----
@@ -1680,8 +1359,8 @@ x86_64_defconfig+ima (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
 
 ---------------------------------------------------------------------------=
 -----
-x86_64_defconfig+x86-chromebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors=
-, 0 warnings, 0 section mismatches
+x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -1695,6 +1374,11 @@ rrors, 0 warnings, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
+x86_64_defconfig+x86-chromebook+kselftest (x86_64, gcc-10) =E2=80=94 PASS, =
+0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
 x86_64_defconfig+x86_kvm_guest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0=
  warnings, 0 section mismatches
 
@@ -1702,19 +1386,6 @@ x86_64_defconfig+x86_kvm_guest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0=
 -----
 xcep_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
 n mismatches
-
----------------------------------------------------------------------------=
------
-xway_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 section=
- mismatches
-
-Errors:
-    drivers/pinctrl/pinctrl-lantiq.c:62:2: error: implicit declaration of f=
-unction =E2=80=98seq_printf=E2=80=99; did you mean =E2=80=98scnprintf=E2=80=
-=99? [-Werror=3Dimplicit-function-declaration]
-
-Warnings:
-    cc1: some warnings being treated as errors
 
 ---------------------------------------------------------------------------=
 -----

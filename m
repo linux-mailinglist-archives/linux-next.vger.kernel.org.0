@@ -2,76 +2,115 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ADC76069F4
-	for <lists+linux-next@lfdr.de>; Thu, 20 Oct 2022 23:01:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB379606A7C
+	for <lists+linux-next@lfdr.de>; Thu, 20 Oct 2022 23:51:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229682AbiJTVBh (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 20 Oct 2022 17:01:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46694 "EHLO
+        id S229815AbiJTVvc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 20 Oct 2022 17:51:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229585AbiJTVBg (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 20 Oct 2022 17:01:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23436220F9A
-        for <linux-next@vger.kernel.org>; Thu, 20 Oct 2022 14:01:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S229994AbiJTVvc (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 20 Oct 2022 17:51:32 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4132A1A6528
+        for <linux-next@vger.kernel.org>; Thu, 20 Oct 2022 14:51:30 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 99016B8291E
-        for <linux-next@vger.kernel.org>; Thu, 20 Oct 2022 21:01:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFF8AC433D6
-        for <linux-next@vger.kernel.org>; Thu, 20 Oct 2022 21:01:28 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="XhSoLhCZ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1666299687;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type;
-        bh=yECODzUyGjhkbwRaudAZlZ8YrWe/uEoEu0OMeAjrYsQ=;
-        b=XhSoLhCZYHesOP6zNo2G7oyHaLECya7ZRUha5lygVKm/5rowzoNR43px0Fi+nDb0rajf7q
-        8etMpve8hKNbnrpD0t0hbf6548H+ipanGizCCjJfsXRQgV7Xp3KLqh1q1tloxTvI0JwcCc
-        r5pdceSax8jZwb1h+4xuIMFnSTgxpuU=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id d5a62aca (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO)
-        for <linux-next@vger.kernel.org>;
-        Thu, 20 Oct 2022 21:01:27 +0000 (UTC)
-Received: by mail-ua1-f44.google.com with SMTP id p4so896297uao.0
-        for <linux-next@vger.kernel.org>; Thu, 20 Oct 2022 14:01:27 -0700 (PDT)
-X-Gm-Message-State: ACrzQf3X3oriQ9lX75wxbcOrnCJo3ERhs9lCGxT9SgmeRqSz7tzr6aHq
-        DzKPWqRrI0NzBuZYfGIhoWQeWGLsjlLB0JiPI+E=
-X-Google-Smtp-Source: AMsMyM7z1uKt6+xpDq34CUjylz9+siEEcNubj/lBSvzNqfGhpW4dTAQdi6cBrcsXIARweeQr4mWxBKNYwQU0/mPVRmc=
-X-Received: by 2002:a05:6102:7c9:b0:3a7:6261:935 with SMTP id
- y9-20020a05610207c900b003a762610935mr8895919vsg.73.1666299686398; Thu, 20 Oct
- 2022 14:01:26 -0700 (PDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MthBP1VMCz4x1V;
+        Fri, 21 Oct 2022 08:51:24 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1666302685;
+        bh=YkPxM52sbJ2VSVHqJuxM7yYx6+8gl3nBrw7tBms1AcI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=mEduMK1UVNbEHCOwNV4r+y5RnVHooMuibCGselcirNycc+f0CGCKAflriLMVZxiy5
+         7lmjC3zPYRX0h35DXYRbx54nYNvDbuenoHrlmUgtB0ip0zCogOBCOxo+bHE5kG/2i+
+         Qk7aq+6zbZ+7ZJFOgZ/lept8el+951KSiJhn4u/bE6QI0mVtbAHeqB0vOhYbX6/p1a
+         4l08hJp5yWmr1nk0RwFcvITY2nPtV5v2gRbb3pcMfJCCePSKZDWUbUSbVCMxRDfo5U
+         gwQYKs3FLzjvwIYNSY3wneszHC7qXJhWE3GMNgtzChorMz6XDZXOnSgdShQ3AD26N+
+         Df8+WS5x0wbKg==
+Date:   Fri, 21 Oct 2022 08:51:05 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: request to add branch/tag to linux-next
+Message-ID: <20221021085105.0e3cfa74@canb.auug.org.au>
+In-Reply-To: <CAHmME9r4PTAOKJDHbVTDnrTA5vNy9Y-9pLCAxSUZJVpkihbXWA@mail.gmail.com>
+References: <CAHmME9r4PTAOKJDHbVTDnrTA5vNy9Y-9pLCAxSUZJVpkihbXWA@mail.gmail.com>
 MIME-Version: 1.0
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Thu, 20 Oct 2022 15:01:14 -0600
-X-Gmail-Original-Message-ID: <CAHmME9r4PTAOKJDHbVTDnrTA5vNy9Y-9pLCAxSUZJVpkihbXWA@mail.gmail.com>
-Message-ID: <CAHmME9r4PTAOKJDHbVTDnrTA5vNy9Y-9pLCAxSUZJVpkihbXWA@mail.gmail.com>
-Subject: request to add branch/tag to linux-next
-To:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/T55dLhFlZSK3VV2Tg7DjsMQ";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Stephen,
+--Sig_/T55dLhFlZSK3VV2Tg7DjsMQ
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I'm working on some potentially disruptive changes that could really
-benefit from being in -next. Linus suggested I accumulate these
-changes in a separate branch for that. Currently that's here:
+Hi Jason,
 
-https://git.kernel.org/pub/scm/linux/kernel/git/zx2c4/linux.git branch
-unsigned-char
+On Thu, 20 Oct 2022 15:01:14 -0600 "Jason A. Donenfeld" <Jason@zx2c4.com> w=
+rote:
+>
+> I'm working on some potentially disruptive changes that could really
+> benefit from being in -next. Linus suggested I accumulate these
+> changes in a separate branch for that. Currently that's here:
+>=20
+> https://git.kernel.org/pub/scm/linux/kernel/git/zx2c4/linux.git branch
+> unsigned-char
+>=20
+> I'm not sure how automated your setup is. Would it make sense to add
+> that branch explicitly, or to add a "for-next" branch/tag, which you
+> can grab if it exists and skip if it's gone?
 
-I'm not sure how automated your setup is. Would it make sense to add
-that branch explicitly, or to add a "for-next" branch/tag, which you
-can grab if it exists and skip if it's gone?
+Added form today.  Just keep that branch updated and I will refetch it
+periodically (at least daily during the week).  If it is not there I
+will keep using whatever was there last time I fetched until you tell
+me to remove it from -next.
 
-Jason
+Thanks for adding your subsystem tree as a participant of linux-next.  As
+you may know, this is not a judgement of your code.  The purpose of
+linux-next is for integration testing and to lower the impact of
+conflicts between subsystems in the next merge window.=20
+
+You will need to ensure that the patches/commits in your tree/series have
+been:
+     * submitted under GPL v2 (or later) and include the Contributor's
+        Signed-off-by,
+     * posted to the relevant mailing list,
+     * reviewed by you (or another maintainer of your subsystem tree),
+     * successfully unit tested, and=20
+     * destined for the current or next Linux merge window.
+
+Basically, this should be just what you would send to Linus (or ask him
+to fetch).  It is allowed to be rebased if you deem it necessary.
+
+--=20
+Cheers,
+Stephen Rothwell=20
+sfr@canb.auug.org.au
+
+--Sig_/T55dLhFlZSK3VV2Tg7DjsMQ
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNRwskACgkQAVBC80lX
+0Gy2+ggAllnqOKvc6Z77gshbEqHvzspliDhtk8TVea0g1MK4ERy1aM7iYEO8aiet
+CleYuZVqSTei83rlXJfNmhJK81ERY8kQR7OCw8xwe+vM7JTJMUARJiFEHAAAW7bF
+qwJc1gURPsH3TWeXiAaLsjAfGOGv2EAbKN7hLK93mG2bxwsQiPv5NB2OLySgZfIj
+m351SnLCtR2hb+kiuh6b23MyN7GxdqLcWD90BX7/xtiYAbz57HyxegC30ItcH1b9
+MGmKzYDtUsVOWlvBKVkz65VnG3A6A/5CmwgVsy53uD7Mxo+V2FXmfX/tsiIxD6GD
+iA4nVjIiMB9gwA/7+WomDnpseR0iLQ==
+=guHH
+-----END PGP SIGNATURE-----
+
+--Sig_/T55dLhFlZSK3VV2Tg7DjsMQ--

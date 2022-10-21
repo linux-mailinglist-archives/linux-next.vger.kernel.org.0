@@ -2,115 +2,98 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB379606A7C
-	for <lists+linux-next@lfdr.de>; Thu, 20 Oct 2022 23:51:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87C47606C54
+	for <lists+linux-next@lfdr.de>; Fri, 21 Oct 2022 02:02:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229815AbiJTVvc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 20 Oct 2022 17:51:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50692 "EHLO
+        id S229501AbiJUACp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 20 Oct 2022 20:02:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229994AbiJTVvc (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 20 Oct 2022 17:51:32 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4132A1A6528
-        for <linux-next@vger.kernel.org>; Thu, 20 Oct 2022 14:51:30 -0700 (PDT)
+        with ESMTP id S229657AbiJUACp (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 20 Oct 2022 20:02:45 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFA331F040A;
+        Thu, 20 Oct 2022 17:02:42 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MthBP1VMCz4x1V;
-        Fri, 21 Oct 2022 08:51:24 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Mtl5m5Rfdz4xGT;
+        Fri, 21 Oct 2022 11:02:36 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1666302685;
-        bh=YkPxM52sbJ2VSVHqJuxM7yYx6+8gl3nBrw7tBms1AcI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=mEduMK1UVNbEHCOwNV4r+y5RnVHooMuibCGselcirNycc+f0CGCKAflriLMVZxiy5
-         7lmjC3zPYRX0h35DXYRbx54nYNvDbuenoHrlmUgtB0ip0zCogOBCOxo+bHE5kG/2i+
-         Qk7aq+6zbZ+7ZJFOgZ/lept8el+951KSiJhn4u/bE6QI0mVtbAHeqB0vOhYbX6/p1a
-         4l08hJp5yWmr1nk0RwFcvITY2nPtV5v2gRbb3pcMfJCCePSKZDWUbUSbVCMxRDfo5U
-         gwQYKs3FLzjvwIYNSY3wneszHC7qXJhWE3GMNgtzChorMz6XDZXOnSgdShQ3AD26N+
-         Df8+WS5x0wbKg==
-Date:   Fri, 21 Oct 2022 08:51:05 +1100
+        s=201702; t=1666310557;
+        bh=MjsN/eyeofQCiAF8hY6LImhgi5IuAOlTJYnxg+e5XII=;
+        h=Date:From:To:Cc:Subject:From;
+        b=htqxJ/s81/O5Nb0nGxtRIU1sQ+cNz9SmYkXxC6mGGVLs/zMniojTSUPPNkNxMB4lO
+         1EjXixQE29xk2I/sNeJwy2fKYHsUwhaAdlLllUna8QVwPWLrPNyUxLN5tej2SEGxIa
+         hD4crHPw0JStuFIf99kN/97nz1jYnJy89FBmrKa8xpognqql1tlZZPzRe7YVGAF9V9
+         6Gbsu3TsBWYT0X2NatHPpusBEATu0IZ2BCrLjUGg/SRm0xa9y9LwDlAKcAUrZ1ubnt
+         XgqwVdS4IZeihPIqLwQCYPDeZADGsPx38V8oF0eehUTo7qvlVt4ci5BghWnF/bxLCc
+         j7yT5ceHOipUQ==
+Date:   Fri, 21 Oct 2022 11:02:34 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: request to add branch/tag to linux-next
-Message-ID: <20221021085105.0e3cfa74@canb.auug.org.au>
-In-Reply-To: <CAHmME9r4PTAOKJDHbVTDnrTA5vNy9Y-9pLCAxSUZJVpkihbXWA@mail.gmail.com>
-References: <CAHmME9r4PTAOKJDHbVTDnrTA5vNy9Y-9pLCAxSUZJVpkihbXWA@mail.gmail.com>
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>
+Cc:     Zack Rusin <zackr@vmware.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the drm-misc tree
+Message-ID: <20221021110234.51f9ab66@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/T55dLhFlZSK3VV2Tg7DjsMQ";
+Content-Type: multipart/signed; boundary="Sig_/lwpP884_0BVkJrtlgfprAkY";
  protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/T55dLhFlZSK3VV2Tg7DjsMQ
+--Sig_/lwpP884_0BVkJrtlgfprAkY
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Jason,
+Hi all,
 
-On Thu, 20 Oct 2022 15:01:14 -0600 "Jason A. Donenfeld" <Jason@zx2c4.com> w=
-rote:
->
-> I'm working on some potentially disruptive changes that could really
-> benefit from being in -next. Linus suggested I accumulate these
-> changes in a separate branch for that. Currently that's here:
->=20
-> https://git.kernel.org/pub/scm/linux/kernel/git/zx2c4/linux.git branch
-> unsigned-char
->=20
-> I'm not sure how automated your setup is. Would it make sense to add
-> that branch explicitly, or to add a "for-next" branch/tag, which you
-> can grab if it exists and skip if it's gone?
+After merging the drm-misc tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-Added form today.  Just keep that branch updated and I will refetch it
-periodically (at least daily during the week).  If it is not there I
-will keep using whatever was there last time I fetched until you tell
-me to remove it from -next.
+drivers/gpu/drm/nouveau/nouveau_display.c: In function 'nouveau_display_cre=
+ate':
+drivers/gpu/drm/nouveau/nouveau_display.c:662:29: error: unused variable 'd=
+evice' [-Werror=3Dunused-variable]
+  662 |         struct nvkm_device *device =3D nvxx_device(&drm->client.dev=
+ice);
+      |                             ^~~~~~
+cc1: all warnings being treated as errors
 
-Thanks for adding your subsystem tree as a participant of linux-next.  As
-you may know, this is not a judgement of your code.  The purpose of
-linux-next is for integration testing and to lower the impact of
-conflicts between subsystems in the next merge window.=20
+Introduced by commit
 
-You will need to ensure that the patches/commits in your tree/series have
-been:
-     * submitted under GPL v2 (or later) and include the Contributor's
-        Signed-off-by,
-     * posted to the relevant mailing list,
-     * reviewed by you (or another maintainer of your subsystem tree),
-     * successfully unit tested, and=20
-     * destined for the current or next Linux merge window.
+  7c99616e3fe7 ("drm: Remove drm_mode_config::fb_base")
 
-Basically, this should be just what you would send to Linus (or ask him
-to fetch).  It is allowed to be rebased if you deem it necessary.
+I have used the drm-misc tree from next-20221020 for today.
 
 --=20
 Cheers,
-Stephen Rothwell=20
-sfr@canb.auug.org.au
+Stephen Rothwell
 
---Sig_/T55dLhFlZSK3VV2Tg7DjsMQ
+--Sig_/lwpP884_0BVkJrtlgfprAkY
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNRwskACgkQAVBC80lX
-0Gy2+ggAllnqOKvc6Z77gshbEqHvzspliDhtk8TVea0g1MK4ERy1aM7iYEO8aiet
-CleYuZVqSTei83rlXJfNmhJK81ERY8kQR7OCw8xwe+vM7JTJMUARJiFEHAAAW7bF
-qwJc1gURPsH3TWeXiAaLsjAfGOGv2EAbKN7hLK93mG2bxwsQiPv5NB2OLySgZfIj
-m351SnLCtR2hb+kiuh6b23MyN7GxdqLcWD90BX7/xtiYAbz57HyxegC30ItcH1b9
-MGmKzYDtUsVOWlvBKVkz65VnG3A6A/5CmwgVsy53uD7Mxo+V2FXmfX/tsiIxD6GD
-iA4nVjIiMB9gwA/7+WomDnpseR0iLQ==
-=guHH
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNR4ZsACgkQAVBC80lX
+0GxliAf9HxvpCb9hc+2CQgGCkBWspRTmqUs/DDH0l3jQSuG0lNIsBi2n4Do/iU46
+3zkQa/4ujPahMMbxZI1SxYtv/DV7zhduW5vSSBgC3jSe/9+78fpJpQg9Uhqv/0G1
+H58j9c+DbFNv4oReEAKlsBoMpE8VpafFUDqN62UBwAyV5h1Cp6gWl+FM0Nygu0fP
+JgGAdvt8RYfYG6Y2KI+nF976WnxIDF7WinEui91ZJinjsnsSy+ftwF1IA34Q8kXk
+3M3vTFkGRszQh8hDD5rjAcc/7xBjM3XlbDb82Fp1y85hvPMjalggMcS2+7B+NcYe
+GlwRzVWfOlmGUNd1wIyqGGAj3BLPnQ==
+=7Au/
 -----END PGP SIGNATURE-----
 
---Sig_/T55dLhFlZSK3VV2Tg7DjsMQ--
+--Sig_/lwpP884_0BVkJrtlgfprAkY--

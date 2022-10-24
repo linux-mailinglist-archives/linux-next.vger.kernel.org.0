@@ -2,84 +2,101 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 912DF60BDB2
-	for <lists+linux-next@lfdr.de>; Tue, 25 Oct 2022 00:45:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5CCE60BFAC
+	for <lists+linux-next@lfdr.de>; Tue, 25 Oct 2022 02:35:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230204AbiJXWpE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 24 Oct 2022 18:45:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42768 "EHLO
+        id S230108AbiJYAfG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 24 Oct 2022 20:35:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230144AbiJXWof (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 24 Oct 2022 18:44:35 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95F311CE3ED;
-        Mon, 24 Oct 2022 14:07:00 -0700 (PDT)
+        with ESMTP id S230175AbiJYAex (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 24 Oct 2022 20:34:53 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E8082D8736;
+        Mon, 24 Oct 2022 16:00:55 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Mx6Sx3mMCz4xG6;
-        Tue, 25 Oct 2022 07:42:25 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Mx9Xf3qLKz4x1V;
+        Tue, 25 Oct 2022 10:00:50 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1666644145;
-        bh=JvArXTXLlCWwbB/iVkguOuQ/s+HWcZybwT36DiuPR7c=;
+        s=201702; t=1666652451;
+        bh=eotwvGasqAc4vnaOIwXKE/43nzNnMiRZsXgTE3pyD1k=;
         h=Date:From:To:Cc:Subject:From;
-        b=mfDdVtvBVJ1emMYpavetQLplSCt+qsQaERLVxkotN0Vzz9MDK52hhwbDm1rYfIMbL
-         1cfdYdC52doIPj+4GuiwevYvCQi2IIx8HybXk78RbdvlogG1O0Z0N1ja5Fe3wgudRB
-         hmt4CQhlUpZukXq9V/B5fB1JTbxeyif2qslihe+Q/uN+RzF9wgjAGKtaGY3WYApwvA
-         Vlsv5RCMm9eHRWOqQ7KdVvFyynhX4tZiyP9bi07+lnZOrKgy3YTAr8CRWaDEJKGfPQ
-         cBTB8poiW12YuAeddFPQnCiJRn9Xk8MkpuaV3+IYU3mGfY2T4bDzRDAdeC+uzSFgK+
-         RrljcPQm53UcA==
-Date:   Tue, 25 Oct 2022 07:41:56 +1100
+        b=VcS/ETfzGrzXYQEwO8swqZ0EakpKIb0yKyGtXJzUMSeYFUvv2foRfXl81HxhqP9Bo
+         J43k3qY0moQ0pRem55wC8Q4C/aB2QlvRlw5LJo9j6ZvPkT9AeVKH+yg+6UV4w3k0Qz
+         fxsjrlNQgT2ajxVYJyUyIc7bMIDrPoOzTB1pof2cXFjnW01ItjSFJqrbtFwRNMlLl0
+         3QWvaTghiO1ckzYPjoy8ByR+gFovnZLCyGxasSVs5lEZDnMiSOmZkEVZczrl8xY5tW
+         bRh11zbH3O0ofvaaWLlPmcqEyuS1wlAtFLIxm0WN0Mjvcmxt14hqh7iTBWv2udo7Ym
+         29x0vYYV8RcqA==
+Date:   Tue, 25 Oct 2022 10:00:48 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     Matthew Wilcox <willy@infradead.org>,
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the slab tree
-Message-ID: <20221025074156.19fdd67e@canb.auug.org.au>
+Subject: linux-next: build failure after merge of the input tree
+Message-ID: <20221025100048.49384530@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/JWSTRo5q6GA5eEN8b2voHVu";
+Content-Type: multipart/signed; boundary="Sig_/J7Z6Km5Qa2LFiaGFGDNFuRp";
  protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/JWSTRo5q6GA5eEN8b2voHVu
+--Sig_/J7Z6Km5Qa2LFiaGFGDNFuRp
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Commit
+After merging the input tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-  5a01d8f8b6a0 ("mm/migrate: make isolate_movable_page() skip slab pages")
+drivers/input/keyboard/stmpe-keypad.c: In function 'stmpe_keypad_probe':
+drivers/input/keyboard/stmpe-keypad.c:353:9: error: implicit declaration of=
+ function 'of_property_read_u32' [-Werror=3Dimplicit-function-declaration]
+  353 |         of_property_read_u32(np, "debounce-interval", &keypad->debo=
+unce_ms);
+      |         ^~~~~~~~~~~~~~~~~~~~
+drivers/input/keyboard/stmpe-keypad.c:355:33: error: implicit declaration o=
+f function 'of_property_read_bool' [-Werror=3Dimplicit-function-declaration]
+  355 |         keypad->no_autorepeat =3D of_property_read_bool(np, "st,no-=
+autorepeat");
+      |                                 ^~~~~~~~~~~~~~~~~~~~~
+cc1: all warnings being treated as errors
 
-is missing a Signed-off-by from its author.
+Caused by commit
+
+  8b96465c93a8 ("Input: matrix_keypad - replace header inclusions by forwar=
+d declarations")
+
+I have used the input tree from next-20221024 for today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/JWSTRo5q6GA5eEN8b2voHVu
+--Sig_/J7Z6Km5Qa2LFiaGFGDNFuRp
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNW+JQACgkQAVBC80lX
-0GyAuwf+OEOHz/NeDXQZeCeqVpdac78EwE972g5pxslLnLJqmuPBOpjBR308HN+J
-5gJFnwz33cN5tfrJcu5eNm3AFagAniJmnRl+26nydelEVPhCik1/FPRS2iCAFArU
-SCaHJZB4M31v68qs5OBU/wBVVrhIyLqAcKeTzjr5u61FoPWLwPgPugi/JL2NhI/w
-4GEyTGHsxTxYu03IKsuSRLFE9nemLn9kGPQbbb5lnUpomhLkDNngz/mV91kGyo6I
-6aXS/qfuIWM6xGjDfG9gLbKWvlfVQlYl41AyxmYKvjywxC+pquVX6vz7XaxbliHv
-c2isPDot+rcV8CW37Y+ckkM5aY8pLg==
-=OhQo
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNXGSAACgkQAVBC80lX
+0GwSawf/c802VDOd96XgmbLkMH1QBVAKFfQdYBzdIZUAMDHcpAzn7InFvIotmYPf
+uo7mGcEor0woempAZv8iLrdpJYA6JvoGko8J0cyEzaHtRRBOmqDITa3KbbBwr28V
+lzI39ItsRAV3sMnWX1l2n2exmQ63MqXx04+C3/vkciq+Xj5wgEfYgOJ9Qle/4s4p
+a7fO4oCDI0vZ25GZHOgDkXhaVON+tZPZTzCop/1FKTNTwnQvRFcjIM4URX+JHnqn
+UziJAxCKvSalmB/b7WGwdFV/HWQE4O/ynZ4Do8mVoe435F+bJSWEEtl0l6Lz4/H+
+38ftIex7fdrS81Nzre7XBiafqJqkqg==
+=b6b1
 -----END PGP SIGNATURE-----
 
---Sig_/JWSTRo5q6GA5eEN8b2voHVu--
+--Sig_/J7Z6Km5Qa2LFiaGFGDNFuRp--

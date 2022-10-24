@@ -2,97 +2,93 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F9BA609932
-	for <lists+linux-next@lfdr.de>; Mon, 24 Oct 2022 06:37:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B3A5609A91
+	for <lists+linux-next@lfdr.de>; Mon, 24 Oct 2022 08:34:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229556AbiJXEh1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 24 Oct 2022 00:37:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49296 "EHLO
+        id S229667AbiJXGeG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 24 Oct 2022 02:34:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbiJXEh0 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 24 Oct 2022 00:37:26 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDE9F7961A;
-        Sun, 23 Oct 2022 21:37:24 -0700 (PDT)
+        with ESMTP id S229556AbiJXGeF (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 24 Oct 2022 02:34:05 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6E325C378;
+        Sun, 23 Oct 2022 23:34:03 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Mwj3Q3sBWz4x1H;
-        Mon, 24 Oct 2022 15:37:22 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Mwlf11YZBz4x1V;
+        Mon, 24 Oct 2022 17:34:00 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1666586242;
-        bh=XeBbu51ONb9JAfg1h17zoPOKHfDkBz9Y1B+LeOgUEVI=;
-        h=Date:From:To:Cc:Subject:From;
-        b=uqM2YAUvqYVzNJ6rKOACoVlCWVDezvOeE8RwcEnUpqVbC3MGg5Kmi2eW18LuFd6MB
-         nNIxWysxliyDB/Tde9z57LPmIGsb6YQkFzxh2etfDZQib9pFULaSXMKf9UXj35u1Pc
-         bZNHrrbuiat9uYkyGvdkKsUqIy0BLYZ+eCskf+tH2ZtJY90nbCjLKOJs0XDL6fGMYe
-         YV4HgtzOMuXY2VnYxuMCTUy2KUDsj3NUVMn0YVyGtkOB38+Hqx0wwUrwojEFQ83d8v
-         vWX48s1Ojig0iUbY/0ZWmYGq1L15R81inxSes0slEQz3CSQK02/Vn3/N9DPS3vXn3V
-         xuZpqiUH/yBIQ==
-Date:   Mon, 24 Oct 2022 15:37:20 +1100
+        s=201702; t=1666593242;
+        bh=3eIP8TJRgX3pfB62JavefRCci5PsgV1Uc3dFFxPAOPU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=nm2X4A/tccyE/53hOASvlOPGa4dVwgMemuut/bMuFtLozRGdhLMG6cgzmxEwdob7T
+         Lf96GZ+YRJ9MbdzlKK9RZI+0riQJUbqSuVK3W7HkbpPnJ16Bvloy1AjGaQBuhb1s71
+         S1Nllt5zKnFAhs9p8qXhoktZ61KenrzN9nZdQd7CtTa36xCH/VE7p1F7W2a/gmLBJ+
+         516srarOsHOmy3HmW72Imy0nf5KE6iYQh6GHKsuxMWlBfEoD67rZRRupQUscaHM3AQ
+         MRE6aTDv9p+8XHOOn+bgpqNayHibOS4DyaQpENSgx/QK+CJlEWpXjmJHBi8NLgobRf
+         pew0AaWqApgPw==
+Date:   Mon, 24 Oct 2022 17:33:58 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Shawn Guo <shawnguo@kernel.org>
-Cc:     Max Krummenacher <max.krummenacher@toradex.com>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Theodore Ts'o <tytso@mit.edu>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the imx-mxs tree
-Message-ID: <20221024153720.5e387e34@canb.auug.org.au>
+Subject: Re: linux-next: build failure after merge of the random tree
+Message-ID: <20221024173358.43de55f6@canb.auug.org.au>
+In-Reply-To: <Y1YUhaHXpMV80gQO@zx2c4.com>
+References: <20221024132319.4b3910ad@canb.auug.org.au>
+        <Y1YUhaHXpMV80gQO@zx2c4.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/1unH=l9f0fRgJjnPU44mXN/";
+Content-Type: multipart/signed; boundary="Sig_/83c648kI+Dlm_h3XYGb8NOb";
  protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/1unH=l9f0fRgJjnPU44mXN/
+--Sig_/83c648kI+Dlm_h3XYGb8NOb
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Hi Jason,
 
-In commit
+On Mon, 24 Oct 2022 06:28:53 +0200 "Jason A. Donenfeld" <Jason@zx2c4.com> w=
+rote:
+>
+> I'll remove the removal commit for now and will plan on handling that
+> separately at the end of the 6.2 merge window.
 
-  c9545754e9a7 ("arm64: dts: verdin-imx8mp: fix ctrl_sleep_moci")
-
-Fixes tag
-
-  Fixes: 1d8df9c74bff ("arm64: dts: freescale: add initial support for verd=
-in imx8m plus")
-
-has these problem(s):
-
-  - Target SHA1 does not exist
-
-Maybe you meant
-
-Fixes: a39ed23bdf6e ("arm64: dts: freescale: add initial support for verdin=
- imx8m plus")
+OK, thanks.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/1unH=l9f0fRgJjnPU44mXN/
+--Sig_/83c648kI+Dlm_h3XYGb8NOb
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNWFoAACgkQAVBC80lX
-0GzwnQgAovb301iZeT5H+2g5ApfWYVrWTsIfpMME2Xawfj4a7DfPJoYzRp6P65cL
-7QkzxWGk14ttHKjWDPWJ7X26/NuFc4MAo59lxHm3PxLnoqAschDDXxgwWteffLKY
-bFKQrIBVWVxseMt7BWRxfUKKv1+p465qDvex8ZxwHT9QBpxDqJnv54m/kaZhqFhS
-89J2Cz9mCxAgMlJ3jp3J2IQmilliH+eAcoxlQj/o9AESgdLiy0LiED629v4cbFub
-KSFFrfrBi6MGiUpPBQwoacUsyNdXCtyYEhLU0z7TnqUHXf127BfJh4jkfsP/rQXN
-CjTttpR4fD6sfpEGziYYyxmnYK3h1A==
-=17CZ
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNWMdcACgkQAVBC80lX
+0GxImgf7BB6rs/X6unMpvO0EcNeGWymZSA9Z2/UgCw1Bdej+iGrj2yHTMvTfR/PE
++LAbBhvgNhijQYBYbZkyWssootUS7j72bPHqdW5wKThtlU7lJbHK6qsrug6xGClL
+lBpPRUIk/ZnnwyxPcnej57rfTU2jxZLOoIFf3+E9JwT4KPaCneAINFzZSt2rNOBk
+K594M6ewWMxaj/i2MapMK6B2nBWu0mMPn5evYw9klilfUGgDTIQYS3iUl9uptnZS
+6zZVJNt+Bzb1pIaggyrVsHrdzb7ZL57jN4v4wqT5uRabiNcbgm+YMG+Dgv6/Qdgm
+zzHNxW4geD4H8MCBp7igchGD/CsXIg==
+=OCAP
 -----END PGP SIGNATURE-----
 
---Sig_/1unH=l9f0fRgJjnPU44mXN/--
+--Sig_/83c648kI+Dlm_h3XYGb8NOb--

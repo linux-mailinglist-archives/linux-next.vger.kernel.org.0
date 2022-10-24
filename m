@@ -2,80 +2,142 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36D44609AD2
-	for <lists+linux-next@lfdr.de>; Mon, 24 Oct 2022 08:58:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1AAE609AEE
+	for <lists+linux-next@lfdr.de>; Mon, 24 Oct 2022 09:04:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229910AbiJXG6M (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 24 Oct 2022 02:58:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33630 "EHLO
+        id S229752AbiJXHEp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 24 Oct 2022 03:04:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbiJXG6K (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 24 Oct 2022 02:58:10 -0400
-X-Greylist: delayed 429 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 23 Oct 2022 23:58:06 PDT
-Received: from smtp-out-03.comm2000.it (smtp-out-03.comm2000.it [212.97.32.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A1395EDE7;
-        Sun, 23 Oct 2022 23:58:02 -0700 (PDT)
-Received: from francesco-nb.int.toradex.com (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: francesco@dolcini.it)
-        by smtp-out-03.comm2000.it (Postfix) with ESMTPSA id 74882B4357B;
-        Mon, 24 Oct 2022 08:50:51 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailserver.it;
-        s=mailsrv; t=1666594252;
-        bh=3DmqS6uviGKDrbnLwBKbh5oj+ySmwKcSbnQtg2IBmBg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=OjYEM7mqjlZ7R3UD6qIqDUZ7wFi/IjeWGsso4J6ivIr/FHP65U1yfilwdGB1Vi2gL
-         jcxbrYWnn6yKJlwXK5M1BtYToTgl1tM0nL2zc6Rbjro0rGxTKlqHdt0sghmiR4/Edp
-         ZLzQ6mG2qAROWja3/SCtR9PiaaAwcnMapnlOfA456eufVxWV/2hrso0QaAZv2Q2kcm
-         aBXOnBpf2muuOunNGkmD6neKVNM0en/QB7FBhJuJDMz4br4dIRFnQUp/tPcfDlW8PM
-         bkiWFqGcAQE1Lanm4gol9Cy1u5OIn7XywTakSmxb2l7l9+cbohmJTdKu1pj6yMWh+o
-         P6UaJrDrp4y3A==
-Date:   Mon, 24 Oct 2022 08:50:47 +0200
-From:   Francesco Dolcini <francesco@dolcini.it>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Shawn Guo <shawnguo@kernel.org>
-Cc:     Max Krummenacher <max.krummenacher@toradex.com>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Fixes tag needs some work in the imx-mxs tree
-Message-ID: <Y1Y1x0heHVqIXjJ4@francesco-nb.int.toradex.com>
-References: <20221024153720.5e387e34@canb.auug.org.au>
+        with ESMTP id S229544AbiJXHEn (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 24 Oct 2022 03:04:43 -0400
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E81E11151
+        for <linux-next@vger.kernel.org>; Mon, 24 Oct 2022 00:04:38 -0700 (PDT)
+Received: by mail-il1-f197.google.com with SMTP id f15-20020a056e020b4f00b002fa34db70f0so8127941ilu.2
+        for <linux-next@vger.kernel.org>; Mon, 24 Oct 2022 00:04:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=j2qMk01p1y2UcDubJpHKziTQteyQaf5CHj4pTV0csVY=;
+        b=JVJyFLDhxK6XLxlb6DCm/k6qFF2z+eqF88Tpo8JIREiUVNT7H3Vq313ToU5NgaB9p9
+         f4/2C7H/VDY+5/wXumUBOdqaPEb10TeBVjXSPoA9wLCsEsJjNYc40q/LXnlsehnYYAdq
+         Rhi95QQXdyM9aUFwxJ1gMjPvptT1Me6UaNVGuSW2frItafnTJI6vNYtUGBIS//7n+Jmu
+         i4V4z1G2sBlcIu4WSCB8Ga7+EybHRLcFkWYmCKPWMtN1Eal6ehKymVo7ei1wPEOfKYNF
+         TCkxvHxk+w9O0gbfD9AV35Vaf4U94yy7fd7G5GmDRxOQb/Zzba2ECzyV/UyxIlcNhfCR
+         S7Gw==
+X-Gm-Message-State: ACrzQf26MZr8WZWUFtFHaJttyUZMN95hjJlXib3m1qiQJFh2ya9GDSIU
+        j7DQPKxgttmibiVVdQiX8XCF3NpzzUrMO0o2gxPvjDBGc55q
+X-Google-Smtp-Source: AMsMyM41NRDqCjS47+i/He0adKT75JTvu8kTDBwm59xQZ0LbZ1XVMHN346ISStj5rhlj37V26YhsM/271J3LXV7aEN97h323ZOWr
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221024153720.5e387e34@canb.auug.org.au>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:d03:b0:363:efb2:41de with SMTP id
+ q3-20020a0566380d0300b00363efb241demr22604423jaj.36.1666595076343; Mon, 24
+ Oct 2022 00:04:36 -0700 (PDT)
+Date:   Mon, 24 Oct 2022 00:04:36 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000008291c505ebc267d1@google.com>
+Subject: [syzbot] linux-next boot error: kernel panic: kasan_populate_shadow:
+ Failed to allocate page, nid=NUM from=ADDR
+From:   syzbot <syzbot+31ac477942b208466c5f@syzkaller.appspotmail.com>
+To:     linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        sfr@canb.auug.org.au, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Oct 24, 2022 at 03:37:20PM +1100, Stephen Rothwell wrote:
-> In commit
-> 
->   c9545754e9a7 ("arm64: dts: verdin-imx8mp: fix ctrl_sleep_moci")
-> 
-> Fixes tag
-> 
->   Fixes: 1d8df9c74bff ("arm64: dts: freescale: add initial support for verdin imx8m plus")
-> 
-> has these problem(s):
-> 
->   - Target SHA1 does not exist
-> 
-> Maybe you meant
-> 
-> Fixes: a39ed23bdf6e ("arm64: dts: freescale: add initial support for verdin imx8m plus")
-correct, sorry for the mistake :/
+Hello,
 
-Shawn: I assume you can fix it, let me know otherwise.
+syzbot found the following issue on:
 
-Hopefully since commit  bd17e036b495 ("checkpatch: warn for non-standard fixes tag style")
-was merged these kind of mistakes should be less and less frequent.
+HEAD commit:    76cf65d1377f Add linux-next specific files for 20221024
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=1238856a880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=2c4b7d600a5739a6
+dashboard link: https://syzkaller.appspot.com/bug?extid=31ac477942b208466c5f
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-Francesco
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/f02c41d197ff/disk-76cf65d1.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/9e829e2883ef/vmlinux-76cf65d1.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+31ac477942b208466c5f@syzkaller.appspotmail.com
+
+x86/PAT: Configuration [0-7]: WB  WC  UC- UC  WB  WP  UC- WT  
+last_pfn = 0xbfffd max_arch_pfn = 0x400000000
+found SMP MP-table at [mem 0x000f2750-0x000f275f]
+Using GB pages for direct mapping
+ACPI: Early table checksum verification disabled
+ACPI: RSDP 0x00000000000F24D0 000014 (v00 Google)
+ACPI: RSDT 0x00000000BFFFFFA0 000038 (v01 Google GOOGRSDT 00000001 GOOG 00000001)
+ACPI: FACP 0x00000000BFFFF330 0000F4 (v02 Google GOOGFACP 00000001 GOOG 00000001)
+ACPI: DSDT 0x00000000BFFFD8C0 001A64 (v01 Google GOOGDSDT 00000001 GOOG 00000001)
+ACPI: FACS 0x00000000BFFFD880 000040
+ACPI: FACS 0x00000000BFFFD880 000040
+ACPI: SRAT 0x00000000BFFFFE60 0000C8 (v03 Google GOOGSRAT 00000001 GOOG 00000001)
+ACPI: APIC 0x00000000BFFFFDB0 000076 (v05 Google GOOGAPIC 00000001 GOOG 00000001)
+ACPI: SSDT 0x00000000BFFFF430 000980 (v01 Google GOOGSSDT 00000001 GOOG 00000001)
+ACPI: WAET 0x00000000BFFFFE30 000028 (v01 Google GOOGWAET 00000001 GOOG 00000001)
+ACPI: Reserving FACP table memory at [mem 0xbffff330-0xbffff423]
+ACPI: Reserving DSDT table memory at [mem 0xbfffd8c0-0xbffff323]
+ACPI: Reserving FACS table memory at [mem 0xbfffd880-0xbfffd8bf]
+ACPI: Reserving FACS table memory at [mem 0xbfffd880-0xbfffd8bf]
+ACPI: Reserving SRAT table memory at [mem 0xbffffe60-0xbfffff27]
+ACPI: Reserving APIC table memory at [mem 0xbffffdb0-0xbffffe25]
+ACPI: Reserving SSDT table memory at [mem 0xbffff430-0xbffffdaf]
+ACPI: Reserving WAET table memory at [mem 0xbffffe30-0xbffffe57]
+SRAT: PXM 0 -> APIC 0x00 -> Node 0
+SRAT: PXM 0 -> APIC 0x01 -> Node 0
+ACPI: SRAT: Node 0 PXM 0 [mem 0x00000000-0x0009ffff]
+ACPI: SRAT: Node 0 PXM 0 [mem 0x00100000-0xbfffffff]
+ACPI: SRAT: Node 0 PXM 0 [mem 0x100000000-0x23fffffff]
+NUMA: Node 0 [mem 0x00000000-0x0009ffff] + [mem 0x00100000-0xbfffffff] -> [mem 0x00000000-0xbfffffff]
+NUMA: Node 0 [mem 0x00000000-0xbfffffff] + [mem 0x100000000-0x23fffffff] -> [mem 0x00000000-0x23fffffff]
+Faking node 0 at [mem 0x0000000000000000-0x000000013fffffff] (5120MB)
+Faking node 1 at [mem 0x0000000140000000-0x000000023fffffff] (4096MB)
+NODE_DATA(0) allocated [mem 0x13fffa000-0x13fffffff]
+NODE_DATA(1) allocated [mem 0x23fff7000-0x23fffcfff]
+Zone ranges:
+  DMA      [mem 0x0000000000001000-0x0000000000ffffff]
+  DMA32    [mem 0x0000000001000000-0x00000000ffffffff]
+  Normal   [mem 0x0000000100000000-0x000000023fffffff]
+  Device   empty
+Movable zone start for each node
+Early memory node ranges
+  node   0: [mem 0x0000000000001000-0x000000000009efff]
+  node   0: [mem 0x0000000000100000-0x00000000bfffcfff]
+  node   0: [mem 0x0000000100000000-0x000000013fffffff]
+  node   1: [mem 0x0000000140000000-0x000000023fffffff]
+Initmem setup node 0 [mem 0x0000000000001000-0x000000013fffffff]
+Initmem setup node 1 [mem 0x0000000140000000-0x000000023fffffff]
+On node 0, zone DMA: 1 pages in unavailable ranges
+On node 0, zone DMA: 97 pages in unavailable ranges
+On node 0, zone Normal: 3 pages in unavailable ranges
+Kernel panic - not syncing: kasan_populate_pmd arch/x86/mm/kasan_init_64.c:67 [inline]: Failed to allocate page, nid=0 from=1000000
+Kernel panic - not syncing: kasan_populate_pud arch/x86/mm/kasan_init_64.c:99 [inline]: Failed to allocate page, nid=0 from=1000000
+Kernel panic - not syncing: kasan_populate_p4d arch/x86/mm/kasan_init_64.c:119 [inline]: Failed to allocate page, nid=0 from=1000000
+Kernel panic - not syncing: kasan_populate_pgd arch/x86/mm/kasan_init_64.c:138 [inline]: Failed to allocate page, nid=0 from=1000000
+Kernel panic - not syncing: kasan_populate_shadow+0x57f/0x71f arch/x86/mm/kasan_init_64.c:153: Failed to allocate page, nid=0 from=1000000
+CPU: 0 PID: 0 Comm: swapper Not tainted 6.1.0-rc1-next-20221024-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/11/2022
+Call Trace:
+ <TASK>
+ </TASK>
+Rebooting in 86400 seconds..
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

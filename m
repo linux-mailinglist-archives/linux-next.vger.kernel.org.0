@@ -2,110 +2,80 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17E64609A95
-	for <lists+linux-next@lfdr.de>; Mon, 24 Oct 2022 08:34:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36D44609AD2
+	for <lists+linux-next@lfdr.de>; Mon, 24 Oct 2022 08:58:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229631AbiJXGey (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 24 Oct 2022 02:34:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33286 "EHLO
+        id S229910AbiJXG6M (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 24 Oct 2022 02:58:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230349AbiJXGeq (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 24 Oct 2022 02:34:46 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2030015A09;
-        Sun, 23 Oct 2022 23:34:44 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id 98D2B5C0074;
-        Mon, 24 Oct 2022 02:34:40 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Mon, 24 Oct 2022 02:34:40 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1666593280; x=1666679680; bh=Xwh4kNbLJ+
-        gA+QPsTv2FFt38/vG6iHGKt/O7ACFaLXM=; b=mJWxbDjBEdl1s4qlB2bAwt0uVD
-        YHioV04aaWGWWNHxkJ8MJ7x2LGt0t3vzFSSiiSJO8aQbmmJdm8XxTuglo+S1/uuq
-        n5h0hzsWevkxFrbwIcpcNt2yr02epGLr1DjeWJ/i3VoebEuRusQqYaChlIKCSkRy
-        VZhsrg3Dqp4mlIHRTskvWFvD6VCh8gE+S0Xw3uE6AwP4ws3YbZYnm0f5pV72fxxN
-        7s2zwW8V7AvYgrjn4jNWAtKORArmlLQyc/rzy9mth+Lo9PJNPz725NzBBqeVpquY
-        SaJ60QNHbnNgdkci+BwhuPvZNqfRQvfQpv3pFTyaFioNUIx3E8hqnlJapQng==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1666593280; x=1666679680; bh=Xwh4kNbLJ+gA+QPsTv2FFt38/vG6
-        iHGKt/O7ACFaLXM=; b=fsY09+t9P4Xr4ihTo8rtbNjjkAwKuBbNtR6yK03KJ/z5
-        VMDeft5/NgjiHqQPHeqzQj5oSiJB0OjAhYs4La1M9lFRh6N6UU4h3NtVTtdNWWoS
-        bxwUQqMwMWvBEFqqvA1lJHzQvOqiYPSOz0Yh7gl9bbNDxeroM4pxlrKA5wf5FqIi
-        8OVnThfE81JdbP0SC1xLrFJxTS0HBKO/HHyTDpQPiI2tsCNK0LjKayI0RpvcuBCT
-        yCuzVb9Mcps3HPugouB4wUvyZmZ+qyqzxJR/yfb1g6oozF6Y9IFXBTruFxgM4nk1
-        6p4KSxokKLPfQm/VZa9IluzFA2FPNB6J4nNEITbZrQ==
-X-ME-Sender: <xms:ADJWYxg3SSstexo5LDZ0FQyw-yq8P9oabAwniKHjXqdJh6qoSMERmA>
-    <xme:ADJWY2AhwhfYKPk6q1c32HnguPirUljQI_gVZmKM-GTI6tBicaAewfMIpbji7WogS
-    QnlcPUMvSDauw>
-X-ME-Received: <xmr:ADJWYxHOhINomZgpCT4BKPFz2dLN8SN-4FSB9D_PNigbPvo5akoUDakIruqiImedWAkpGbXM7Egv0OO6HDPrW07cWfFkI3OP>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrgedtfedgudduudcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgv
-    ghcumffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeehge
-    dvvedvleejuefgtdduudfhkeeltdeihfevjeekjeeuhfdtueefhffgheekteenucevlhhu
-    shhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhroh
-    grhhdrtghomh
-X-ME-Proxy: <xmx:ADJWY2RvPku-y2WX2oUfJGj3kzAZoL7GxtnbRylDbs9pjnDKZIP4nw>
-    <xmx:ADJWY-wJHcZ4DtJueJg4nxcm57WT5zJbZHaJlf9NQBaCmguEzi2l4A>
-    <xmx:ADJWY87dvb-Nc9r6pSeX1IFLEBRGZ8iMkJwcI2CACzYk6IbzaPpZKQ>
-    <xmx:ADJWYzrvyRZbntiVPtGEvYKJHk9CTWFnXJo-AkkEZlGWjJanJfFtOw>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 24 Oct 2022 02:34:39 -0400 (EDT)
-Date:   Mon, 24 Oct 2022 08:34:38 +0200
-From:   Greg KH <greg@kroah.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        James Clark <james.clark@arm.com>,
+        with ESMTP id S229455AbiJXG6K (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 24 Oct 2022 02:58:10 -0400
+X-Greylist: delayed 429 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 23 Oct 2022 23:58:06 PDT
+Received: from smtp-out-03.comm2000.it (smtp-out-03.comm2000.it [212.97.32.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A1395EDE7;
+        Sun, 23 Oct 2022 23:58:02 -0700 (PDT)
+Received: from francesco-nb.int.toradex.com (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: francesco@dolcini.it)
+        by smtp-out-03.comm2000.it (Postfix) with ESMTPSA id 74882B4357B;
+        Mon, 24 Oct 2022 08:50:51 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailserver.it;
+        s=mailsrv; t=1666594252;
+        bh=3DmqS6uviGKDrbnLwBKbh5oj+ySmwKcSbnQtg2IBmBg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=OjYEM7mqjlZ7R3UD6qIqDUZ7wFi/IjeWGsso4J6ivIr/FHP65U1yfilwdGB1Vi2gL
+         jcxbrYWnn6yKJlwXK5M1BtYToTgl1tM0nL2zc6Rbjro0rGxTKlqHdt0sghmiR4/Edp
+         ZLzQ6mG2qAROWja3/SCtR9PiaaAwcnMapnlOfA456eufVxWV/2hrso0QaAZv2Q2kcm
+         aBXOnBpf2muuOunNGkmD6neKVNM0en/QB7FBhJuJDMz4br4dIRFnQUp/tPcfDlW8PM
+         bkiWFqGcAQE1Lanm4gol9Cy1u5OIn7XywTakSmxb2l7l9+cbohmJTdKu1pj6yMWh+o
+         P6UaJrDrp4y3A==
+Date:   Mon, 24 Oct 2022 08:50:47 +0200
+From:   Francesco Dolcini <francesco@dolcini.it>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Shawn Guo <shawnguo@kernel.org>
+Cc:     Max Krummenacher <max.krummenacher@toradex.com>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warnings after merge of the char-misc.current
- tree
-Message-ID: <Y1Yx/ioaPRA9YIzM@kroah.com>
-References: <20221024135752.2b83af97@canb.auug.org.au>
+Subject: Re: linux-next: Fixes tag needs some work in the imx-mxs tree
+Message-ID: <Y1Y1x0heHVqIXjJ4@francesco-nb.int.toradex.com>
+References: <20221024153720.5e387e34@canb.auug.org.au>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221024135752.2b83af97@canb.auug.org.au>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221024153720.5e387e34@canb.auug.org.au>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Oct 24, 2022 at 01:57:52PM +1100, Stephen Rothwell wrote:
-> Hi all,
+On Mon, Oct 24, 2022 at 03:37:20PM +1100, Stephen Rothwell wrote:
+> In commit
 > 
-> After merging the char-misc.current tree, today's linux-next build
-> (arm64 defconfig) produced these warnings:
+>   c9545754e9a7 ("arm64: dts: verdin-imx8mp: fix ctrl_sleep_moci")
 > 
-> drivers/hwtracing/coresight/coresight-cti-core.c: In functio
-> n 'cti_enable_hw':
-> drivers/hwtracing/coresight/coresight-cti-core.c:93:24: warning: unused variable 'dev' [-Wunused-variable]
->    93 |         struct device *dev = &drvdata->csdev->dev;
->       |                        ^~~
-> drivers/hwtracing/coresight/coresight-cti-core.c: In function 'cti_disable_hw':
-> drivers/hwtracing/coresight/coresight-cti-core.c:154:24: warning: unused variable 'dev' [-Wunused-variable]
->   154 |         struct device *dev = &drvdata->csdev->dev;
->       |                        ^~~
+> Fixes tag
 > 
-> Introduced by commit
+>   Fixes: 1d8df9c74bff ("arm64: dts: freescale: add initial support for verdin imx8m plus")
 > 
->   665c157e0204 ("coresight: cti: Fix hang in cti_disable_hw()")
+> has these problem(s):
+> 
+>   - Target SHA1 does not exist
+> 
+> Maybe you meant
+> 
+> Fixes: a39ed23bdf6e ("arm64: dts: freescale: add initial support for verdin imx8m plus")
+correct, sorry for the mistake :/
 
-Thanks for the report, I have now reverted this in my tree.
+Shawn: I assume you can fix it, let me know otherwise.
 
-greg k-h
+Hopefully since commit  bd17e036b495 ("checkpatch: warn for non-standard fixes tag style")
+was merged these kind of mistakes should be less and less frequent.
+
+Francesco

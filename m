@@ -2,91 +2,86 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BB8A60D8A3
-	for <lists+linux-next@lfdr.de>; Wed, 26 Oct 2022 02:58:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C945E60D8C1
+	for <lists+linux-next@lfdr.de>; Wed, 26 Oct 2022 03:13:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230307AbiJZA6G (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 25 Oct 2022 20:58:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44624 "EHLO
+        id S231544AbiJZBNs (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 25 Oct 2022 21:13:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231790AbiJZA6B (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 25 Oct 2022 20:58:01 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F1DEB97B3;
-        Tue, 25 Oct 2022 17:57:57 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Mxr5C2tjZz4x1G;
-        Wed, 26 Oct 2022 11:57:51 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1666745871;
-        bh=5IlccjlQdb3J4JC2XtAZbByG+Gm56eELSBVozfhpvB4=;
-        h=Date:From:To:Cc:Subject:From;
-        b=BZ3VGS9Mt2UBt9Lv6VhbTJGIieHpmfXIrrNp+8xQjNDWUkmaZCXQ4LklCExy1LBFK
-         qm0uZssJR2AanqroEXe7yPElHrHEnC9apB5vHA39vy5P329fOlHbf90l8GkYwIlpfH
-         7eKOR//dQT36Uvw2/5y0glHEcrfssR03Q3Dwph/p2qXIon0m1IHNxmwdiIzhiT8BW9
-         mBNEQD1iHCl2pdEsrMch/5snYuHu2R4mC/0bkOV+lQI+vkJnyz8H28q90al72TeZ5s
-         Y7OBsXbdncmFMHDnVqEqHTKkF9SpSc1Vt5a8K1vjBdWhSWPNmfek74gvCKsc43KB7U
-         kKQwTkKmNQ/Gg==
-Date:   Wed, 26 Oct 2022 11:57:48 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        with ESMTP id S230012AbiJZBNs (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 25 Oct 2022 21:13:48 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EAF0E7791
+        for <linux-next@vger.kernel.org>; Tue, 25 Oct 2022 18:13:47 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id f23so12582550plr.6
+        for <linux-next@vger.kernel.org>; Tue, 25 Oct 2022 18:13:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=gggPBAdhwzHx2K1mydrKo8NbjmVha3/Mzmm/f3GMSRU=;
+        b=TrJkrw/wSHS5X3vvLUaKxFJtrzPtH5iTzVd7Vcjqm9q+T40od8a4eYZJ/tdXYPXti3
+         X2CD6GMeTxCHU9skHFuPbjb0De5yMEaMtfbMzKuQ4oAG7grxMIsgF+oWxoHhQFu3e5it
+         +/haYeMQxrDLQmdWmELgZoaKC5+zqg3EzlDNg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gggPBAdhwzHx2K1mydrKo8NbjmVha3/Mzmm/f3GMSRU=;
+        b=L9+VIDLv7LhxnRZXpZo+c1SnSqDaFvFdL+E3HVIkyfkuYplgnJtqF8utwNKwKMAhCl
+         E0mfIWfKQPkEKOM3XMSx/XDLWj/fIFzmuDs0GL/BEYi3EomL4crWGMqy9Q6n1XUqxc6J
+         3mL4VwN1c1pUYAyTMInN6RlU1KmSI9bVaIGXuVJ4wdISP69bcdv4CclczIMKSmYeVkfi
+         +uNC7hsd9F2OyjyetB256aoos6lv3WsmBc52r1WaYXy9SqUD9dwfJsa11jHfQnjYefRB
+         VL3gCZZAhjlw4RD9eSxS9O2MrrnFD0wWlVJdjnhZ4DgdXItUnpvw4u47I93GuYQJ7RFb
+         7vaA==
+X-Gm-Message-State: ACrzQf3wqQ30+DdZYANHx+L7hcuICuIzc6zH/FoJpYrqpy/olW4kGmPs
+        pbQAqpO8USs1KMSY0m35TPRnNA==
+X-Google-Smtp-Source: AMsMyM5JEmI8MymPbUu6llAYi+U3etJHqlQZAkTVnxE/sJy0QUl7WqIthyrxmdjrIhdstLQHrYVdMQ==
+X-Received: by 2002:a17:902:6bc8:b0:178:81db:c6d9 with SMTP id m8-20020a1709026bc800b0017881dbc6d9mr41814359plt.56.1666746826901;
+        Tue, 25 Oct 2022 18:13:46 -0700 (PDT)
+Received: from google.com ([240f:75:7537:3187:faf6:e503:6cac:3b53])
+        by smtp.gmail.com with ESMTPSA id m15-20020a17090a158f00b00212d4c50647sm189268pja.36.2022.10.25.18.13.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Oct 2022 18:13:46 -0700 (PDT)
+Date:   Wed, 26 Oct 2022 10:13:42 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the mm tree
-Message-ID: <20221026115748.24b57082@canb.auug.org.au>
+Subject: Re: linux-next: build warning after merge of the mm tree
+Message-ID: <Y1iJxiAky+k7Tgaf@google.com>
+References: <20221026115748.24b57082@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/XmmDxMS4vjpgoI4_/V_70=M";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221026115748.24b57082@canb.auug.org.au>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/XmmDxMS4vjpgoI4_/V_70=M
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On (22/10/26 11:57), Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the mm tree, today's linux-next build (htmldocs) produced
+> this warning:
+> 
+> Documentation/admin-guide/blockdev/zram.rst:304: WARNING: Title underline too short.
+> 
+> 10) Deactivate
+> =============
+> 
+> Introduced by commit
+> 
+>   410119cc7a63 ("Documentation: document zram pool_page_order attribute")
 
-Hi all,
-
-After merging the mm tree, today's linux-next build (htmldocs) produced
-this warning:
-
-Documentation/admin-guide/blockdev/zram.rst:304: WARNING: Title underline t=
-oo short.
-
-10) Deactivate
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-
-Introduced by commit
-
-  410119cc7a63 ("Documentation: document zram pool_page_order attribute")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/XmmDxMS4vjpgoI4_/V_70=M
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNYhgwACgkQAVBC80lX
-0GzLIgf/YX++N8gscjbi+yMofgjtxEYQuctN6lxHEf2qOe5gVpiBaWzZ+B/R2el4
-WXvIIinUCwJT+7WqeJoZ0zSjfnnmW5ptTWLt4Awyn/Ez4pMTKvyPx5GkRMQPMph2
-8jZPf5USRegYHnwemN3HuudjUz4jNWOxicsy2JZedLfJcw5teyFTDrFO5adhDILx
-zBsOIcAP/9/y1th1nQJWXZZc5J6cwgQ37UkQuWENq+iwlqGzMTphGEJ7fy3ehrn9
-UFZrKdSAKKVIyPryBCpZPL6FLUegKZz0Dl8kMvK/oztEQA+1o3jGT3enMKBRrO2m
-geRE/7/cXe5MVYa0kEnGD4/MlRWAoQ==
-=olgM
------END PGP SIGNATURE-----
-
---Sig_/XmmDxMS4vjpgoI4_/V_70=M--
+Will fix. Thanks!

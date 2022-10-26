@@ -2,38 +2,38 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89BAD60E10C
-	for <lists+linux-next@lfdr.de>; Wed, 26 Oct 2022 14:41:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E263260E370
+	for <lists+linux-next@lfdr.de>; Wed, 26 Oct 2022 16:35:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233937AbiJZMlQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 26 Oct 2022 08:41:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54608 "EHLO
+        id S233914AbiJZOfp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 26 Oct 2022 10:35:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233958AbiJZMkw (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 26 Oct 2022 08:40:52 -0400
+        with ESMTP id S234078AbiJZOfo (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 26 Oct 2022 10:35:44 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BCD777E9E;
-        Wed, 26 Oct 2022 05:40:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F17E3491C4;
+        Wed, 26 Oct 2022 07:35:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AB505B82246;
-        Wed, 26 Oct 2022 12:40:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C8B7C433C1;
-        Wed, 26 Oct 2022 12:40:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AC792B822B5;
+        Wed, 26 Oct 2022 14:35:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 971E6C433D6;
+        Wed, 26 Oct 2022 14:35:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666788012;
-        bh=FJ31cqAnQKzd03R5Ig4+m6Igv2FCyJA6gs796fBnpJw=;
+        s=k20201202; t=1666794940;
+        bh=x+48O7cslOovb4alCfajPAHTVBLIpgxGIG/BjNakEuU=;
         h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=AdcL4NB52XVTG7zzBcAt94N/c5iYpT3VAq0rLiUPRW8tfIlS2DQyf6RTNcHKboz/G
-         rWWDtZaAiADHOPCEJGjdQZt7bapnt5f4Z4H68Fcs9Z2u0taHoUSYKU1cmll+H/ejLA
-         p+LPiBlCReuCVo9Zk9des+ij8jmCKAx6jBzaz8npFntyOt5dYAau9qzeAU97k8oLZj
-         0mcPMTIqBs5QwvOD3oscCxoF0UIL6Bqc/vpHqUvL0ov5Beh3YPW1Ra82phOUqsdk0U
-         j9U0BJiBGdV88iKQoKhl65zHJDxUoBhIWH//IWx5MKxAcCNAP1UbDmnZv38V/flD+2
-         VZK1jp1l60n2g==
+        b=BIE8ohkyArcywM2fFtNX6bxnFoOap0OB1HrpR+gZ8DrvimZfqgQdzCvciO0oY9vVB
+         Nx9RhsEGgzooFcKyAqSrmpVq/RFpY1nR+hFxWOO7N7RTCi2cN18yCJ1v2o51uBVlo9
+         CV5AixzaizXMQeMKmuXBm7MBlzalmajrliWCYk9zVZK8MzjAS4T6ctxbnFmUIWDAWF
+         9GOrYE8+6EX7GpBpldkBFhQIbZwARlNZrCc1OdbtGtHzP93463DLg6eS3U1wLy51nt
+         HHBw/CeuXgkzrRj99RuGIWpsRCfKxUUa9Mi6Eo2L8NimV9oKr17Jn04NifBSwrE17c
+         BuV+GXrKDVYyw==
 From:   Kalle Valo <kvalo@kernel.org>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
         Johannes Berg <johannes.berg@intel.com>,
         Johannes Berg <johannes@sipsolutions.net>,
         Wireless <linux-wireless@vger.kernel.org>,
@@ -45,11 +45,10 @@ Subject: Re: linux-next: manual merge of the wireless-next tree with Linus' tree
 References: <20221020032340.5cf101c0@canb.auug.org.au>
         <20221019162324.2baaa7e8@kernel.org>
         <20221020041440.3f6c1e46@canb.auug.org.au>
-        <20221019165258.1ea6daa6@kernel.org>
-Date:   Wed, 26 Oct 2022 15:40:03 +0300
-In-Reply-To: <20221019165258.1ea6daa6@kernel.org> (Jakub Kicinski's message of
-        "Wed, 19 Oct 2022 16:52:58 -0700")
-Message-ID: <87pmeeyd0c.fsf@kernel.org>
+Date:   Wed, 26 Oct 2022 17:35:32 +0300
+In-Reply-To: <20221020041440.3f6c1e46@canb.auug.org.au> (Stephen Rothwell's
+        message of "Thu, 20 Oct 2022 04:14:40 +1100")
+Message-ID: <87ilk6y7nv.fsf@kernel.org>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
 Content-Type: text/plain
@@ -62,40 +61,31 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Jakub Kicinski <kuba@kernel.org> writes:
+Hi Stephen,
 
-> On Thu, 20 Oct 2022 04:14:40 +1100 Stephen Rothwell wrote:
->> > Dunno if this is a glitch or real problem. But it reminds me - I see
->> > there is direct wireless -> wireless-next merge without going via
->> > Linus's tree. I think you may have mentioned it to us, but not sure
->> > if I said this clearly - let's try to avoid such merges. Linus certainly
->> > doesn't like when we do net -> net-next merges without sending net to
->> > him first and forwarding. I'm not 100% sure why (maybe Steven knows)
->> > - whether it's an aesthetic thing or avoiding real issues thing, but
->> > either way it's _a_ thing :S  
->> 
->> Has Linus really complained about you merging the net tree into the
->> net-next tree?
+Stephen Rothwell <sfr@canb.auug.org.au> writes:
+
+> On Wed, 19 Oct 2022 16:23:24 -0700 Jakub Kicinski <kuba@kernel.org> wrote:
+>>
+>> On Thu, 20 Oct 2022 03:23:40 +1100 Stephen Rothwell wrote:
+>> > Today's linux-next merge of the wireless-next tree got a conflict in:
+>> > 
+>> >   net/mac80211/util.c
+>> > 
+>> > between commit:
+>> > 
+>> >   ff05d4b45dd8 ("wifi: mac80211: fix MBSSID parsing use-after-free")
+>> > 
+>> > from the origin tree and commit:
+>> > 
+>> >   ff05d4b45dd8 ("wifi: mac80211: fix MBSSID parsing use-after-free")  
 >
-> I can't find that exchange right now. Maybe it was about merging
-> back his tree into ours without submitting a PR. Hm.
+> This should have been commit
+>
+>   45ebac4f059b ("wifi: mac80211: Parse station profile from association response")
 
-So yes, we merged wireless into wireless-next in commit dfd2d876b3fd
-("Merge remote-tracking branch 'wireless/main' into wireless-next"). But
-that's only in wireless-next right now, we will send a pull request to
-net-next soon.
-
-My understanding is that Linus does not like excessive or pointless
-merge requests, and his recent email[1] says similar. But in our case I
-think the merge is justified, otherwise we would have conflicts between
-trees, which means more work for everyone involved with tree merges and
-most likely even bugs if the merge resolutions are difficult.
-
-And we were not planning to do this often, maybe something like once per
-cycle and only then there's a strong reason for the merge. Naturally we
-would document that in the merge, just like Linus prefers. Thoughts?
-
-[1] https://lore.kernel.org/all/CAHk-=wgb42XG1c_rtwupJMD9QXbJsE6k_TBKYC4YvZ8bkATcVg@mail.gmail.com/
+BTW I have been trying to reproduce this conflict to no avail, do you
+still see it?
 
 -- 
 https://patchwork.kernel.org/project/linux-wireless/list/

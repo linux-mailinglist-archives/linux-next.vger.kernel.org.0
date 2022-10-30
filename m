@@ -2,45 +2,44 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA524612D11
-	for <lists+linux-next@lfdr.de>; Sun, 30 Oct 2022 22:39:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ECA3612D3F
+	for <lists+linux-next@lfdr.de>; Sun, 30 Oct 2022 23:09:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229642AbiJ3Vj1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 30 Oct 2022 17:39:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47182 "EHLO
+        id S229494AbiJ3WJZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 30 Oct 2022 18:09:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbiJ3Vj1 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 30 Oct 2022 17:39:27 -0400
+        with ESMTP id S229500AbiJ3WJJ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 30 Oct 2022 18:09:09 -0400
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CAEEA18A;
-        Sun, 30 Oct 2022 14:39:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 712213A9;
+        Sun, 30 Oct 2022 15:09:07 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4N0qRq2m29z4xDn;
-        Mon, 31 Oct 2022 08:39:19 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4N0r693zn4z4xDn;
+        Mon, 31 Oct 2022 09:09:05 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1667165960;
-        bh=+aBU7ZA5geVQM/30TggdquQpOF2bN+5m18KZO57UuKo=;
+        s=201702; t=1667167745;
+        bh=NTQffs0vahflHbYvWvIj/tRjdu5q4+DRytE06b12Z90=;
         h=Date:From:To:Cc:Subject:From;
-        b=L+TJzMPrpiVDV2nkvFfHBCg8PmTVA2TguQdGsoIsypn1X+8kKd8ZTwRDX1hp6ul4D
-         d7p9wLDuzqA2noup/WxybFOpwfnx8B4LopsopWVycxgqJAXGaEVrhoO/Xj8whC8ojP
-         uUOe+I2152Qry+OPS1ydl6dAq5j0yD8O/bmFFKkL3+/7/XgVbU3E9o6Abg91jB0/e/
-         FP9WNL6/y1UtcAf82/utHa2LJo/gt5DNbgUi3DrJN42gRp70FjSCJQlktX0l3dXulX
-         9xIh1xK/ZTIWuyu+ks2P/cnMb6BBgRRJewGj7VSQ0B7qmD1SnTx0WLqx4xQAs8SlYo
-         ZZsAQiBKiOoEg==
-Date:   Mon, 31 Oct 2022 08:39:17 +1100
+        b=iBP+S3cl0NvSajg0qd6B7PGVmsVBNAVxhtsRm+jae/RMNmp0ld4b3r0j4L01WBNYp
+         VVtoykXpl6bP5sh4mVvMJ+9C5PnBqGoo5AVSrdSxibiJWdDD9MLnW+dmb95nJbqcfz
+         FO3Bh/WBxU8mV5o1Ddjfna7Wgq6Az7kvS1WTbIzMr7wdb8/H3KPiQpXBp+qpD8+P7h
+         R6LrPPRG8utW6tZ7e4faCylOzZWZy+rDnSdrD4mQjUH2M+RE82DY9JfhF0uGNwnrEu
+         ft5u9/uBac92GiA6ktAMuWMIc93H517UC7evhMtZqcL4RDu0qIT6m1RY8/I5uOQaZi
+         QEp9ZT9YxSwlg==
+Date:   Mon, 31 Oct 2022 09:09:04 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>
-Cc:     Chen Zhongjin <chenzhongjin@huawei.com>,
+To:     Shawn Guo <shawnguo@kernel.org>
+Cc:     Alistair Francis <alistair@alistair23.me>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the sound-asoc-fixes tree
-Message-ID: <20221031083917.6944b95b@canb.auug.org.au>
+Subject: linux-next: build failure after merge of the imx-mxs tree
+Message-ID: <20221031090904.7ce6ca3c@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ZvSHMJYsqsrF96+CJ4WMsg.";
+Content-Type: multipart/signed; boundary="Sig_/G+CLzd00wNTG3_o=uI.aitp";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
@@ -51,40 +50,45 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/ZvSHMJYsqsrF96+CJ4WMsg.
+--Sig_/G+CLzd00wNTG3_o=uI.aitp
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the sound-asoc-fixes tree, today's linux-next build (arm
-multi_v7_defconfig) produced this warning:
+After merging the imx-mxs tree, today's linux-next build (arm
+multi_v7_defconfig) failed like this:
 
-WARNING: modpost: sound/soc/snd-soc-core.o: section mismatch in reference: =
-init_module (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
+arch/arm/boot/dts/imx7d-remarkable2.dts:26.15-44.5: ERROR (phandle_referenc=
+es): /thermal-zones/epd-thermal: Reference to non-existent node or label "e=
+pd_pmic"
 
-Introduced by commit
+ERROR: Input tree has errors, aborting (use -f to force output)
 
-  6ec27c53886c ("ASoC: core: Fix use-after-free in snd_soc_exit()")
+Caused by commit
+
+  b725fda78895 ("ARM: dts: imx7d-remarkable2: Enable silergy,sy7636a")
+
+I have used the imx-mxs tree from next-20221028 for today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/ZvSHMJYsqsrF96+CJ4WMsg.
+--Sig_/G+CLzd00wNTG3_o=uI.aitp
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNe7wUACgkQAVBC80lX
-0GxkAgf+Nz6VdbssPm24S37sI2Y1OREiPehGhjgLLlX/iModbHz9oUVRJ/beUQdU
-yoQRJZe4wra5CNrN4yppAv3Tloeanm4Hr+KG0PMMxTMB4a4X70l7qWJtoaR6q9+X
-O/yNoo1JcUaKwJg0R70sc0ANRM53ZvEOv4y43ShTtj+f5NcR5kamQFNgWS3RCTqP
-WTSiklFRDbAibJM8/2kkmjDy+9vKQORjCA+TAj+T/eoaUGb0JqjENB1KTXreTsLP
-a0aL2JsNTdmMfRG0/8Agtwd37gK3fmL9BfDjpdz5549h94WAqIR6wzPs1X4hBYv2
-+Skkt2QJBAmA6RFJDEvLrAO4/duFtw==
-=TEMv
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNe9gAACgkQAVBC80lX
+0GzYowgAkgreZgexi6/EQQ3oKw7I/oBrroNu4vo9srKEDt1UB5lJ2rkc2JEsF0ce
+HmO43gFeQDjV6ysk9AJLx0umnFeyrc3IhugFHYfIgomBY9gg02f2dLHCF+4zTzbN
+0wlZo5stYpK9LxujIKHeo9ZxSBeTiIQfz7iOG2btR+qwzwxO272uGIsZJUtN4V3o
+l9KR8rx6uSLxq+dCQGml3sjbiqDdvyu/aNJI8WLmYxB00KCi5U2n1AKDhzCFoStv
+CEZSz19h2g9DrTEIGxIxpbfLfxKtjkmuGxf3M+wjFfaSuXw+IwChmBoBGsvfds46
++XUeapz6wTW9BjBxTDu5xpbyNeWqvQ==
+=RSos
 -----END PGP SIGNATURE-----
 
---Sig_/ZvSHMJYsqsrF96+CJ4WMsg.--
+--Sig_/G+CLzd00wNTG3_o=uI.aitp--

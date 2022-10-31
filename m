@@ -2,137 +2,89 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 297EC612E30
-	for <lists+linux-next@lfdr.de>; Mon, 31 Oct 2022 01:13:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DB3F612E6F
+	for <lists+linux-next@lfdr.de>; Mon, 31 Oct 2022 01:52:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229457AbiJaAN0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 30 Oct 2022 20:13:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42524 "EHLO
+        id S229562AbiJaAw2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 30 Oct 2022 20:52:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiJaANZ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 30 Oct 2022 20:13:25 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89891C1;
-        Sun, 30 Oct 2022 17:13:23 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        with ESMTP id S229515AbiJaAw2 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 30 Oct 2022 20:52:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1215120;
+        Sun, 30 Oct 2022 17:52:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4N0tsT4gYSz4x1H;
-        Mon, 31 Oct 2022 11:13:17 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1667175198;
-        bh=xegPlFecIBiquH+rR1wquFUQHWsEBb6GVrP8Aob7dS4=;
-        h=Date:From:To:Cc:Subject:From;
-        b=DfpKFFfYKIPitKTTI+yIeNwQiKkOKXKhdQJiaWiGEGfAuCC0uzv6QIMtXAJS7GFEz
-         y3f4uiGIovcTPtDk7sm7c+wh+Zh+z6ydgyP/ypYLW6hMEsQswj6DtlS6mbh9tjU4hf
-         GX/sZyM3QPHSAWnFVlhA9zkHvypwbCOCuLQ4BZL1+IL5aLfOpv0jRmExQwMtiND76p
-         JxtUsfxr0qFjIzLOXN4GM7Z9NlRGR1ASfjEzlvcdFnfpURmgA+PdqJaAy851iL6dMk
-         wMMGD2g3WCAFYp0qPQXWZNnQTyIby3105AvRf0AvgXjjvZHPImFwDX6ngzDvxVNcK7
-         k7KQlcTfj03vA==
-Date:   Mon, 31 Oct 2022 11:13:15 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Dave Airlie <airlied@redhat.com>
-Subject: linux-next: build failure after merge of the amdgpu tree
-Message-ID: <20221031111315.04b0f8fa@canb.auug.org.au>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3E94760F8C;
+        Mon, 31 Oct 2022 00:52:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB31DC433C1;
+        Mon, 31 Oct 2022 00:52:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667177546;
+        bh=aAKSoQnRirrEhzznep5heaZ2XHhpE7FBrQKBRdvFiXI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CDh4H/sP5FvkJiSy4245sfEHKCggo2e4/08dG0uRMB25oTJPxGr+TpCSx0v5cHSBW
+         9Hi+6/0c14zYNVuH/uj39XIi/6l2jMkfXVvD44hFR2+OnYgUpC149V6aDqyuhx2HA/
+         h5Ia352Syh+PfyNiCbztfyJqytms7vbZorY0lrdJK5qqQA/UkgFRGMRRdtzPinEHG3
+         x1wkdT28FTl/G5odqlyS47FM20LyKXn/b6wCOxCtPTMRwomQ/T2urSasXdtCGWGWLG
+         ExZ3N8856j/+h4/OWILedgb5bCrDnTuEfinpX+i/gRc8wb/01JXdSiR5+YR/KtdoIO
+         Yba9vOzcZA4DA==
+Date:   Mon, 31 Oct 2022 08:52:19 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Alistair <alistair@alistair23.me>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the imx-mxs tree
+Message-ID: <20221031005219.GA125525@dragon>
+References: <20221031090904.7ce6ca3c@canb.auug.org.au>
+ <87cab9ba-883b-4275-8170-12b525399751@app.fastmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/+00LH7RwlwPcEvf_+_U2QpE";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87cab9ba-883b-4275-8170-12b525399751@app.fastmail.com>
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/+00LH7RwlwPcEvf_+_U2QpE
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Mon, Oct 31, 2022 at 08:11:57AM +1000, Alistair wrote:
+> On Mon, 31 Oct 2022, at 8:09 AM, Stephen Rothwell wrote:
+> > Hi all,
+> > 
+> > After merging the imx-mxs tree, today's linux-next build (arm
+> > multi_v7_defconfig) failed like this:
+> > 
+> > arch/arm/boot/dts/imx7d-remarkable2.dts:26.15-44.5: ERROR (phandle_references): /thermal-zones/epd-thermal: Reference to non-existent node or label "epd_pmic"
+> > 
+> > ERROR: Input tree has errors, aborting (use -f to force output)
+> 
+> Sorry, that's completely my fault. Apparently I had a local change
+> that didn't get committed. I'll send a new version of this patch.
 
-Hi all,
+Alistair,
 
-After merging the amdgpu tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+I have fixed it up with the change below.
 
-drivers/gpu/drm/amd/amdgpu/amdgpu_kms.c: In function 'amdgpu_firmware_info':
-drivers/gpu/drm/amd/amdgpu/amdgpu_kms.c:353:9: error: duplicate case value
-  353 |         case AMDGPU_INFO_FW_IMU:
-      |         ^~~~
-drivers/gpu/drm/amd/amdgpu/amdgpu_kms.c:349:9: note: previously used here
-  349 |         case AMDGPU_INFO_FW_IMU:
-      |         ^~~~
+Shawn
 
-Caused by commit
+diff --git a/arch/arm/boot/dts/imx7d-remarkable2.dts b/arch/arm/boot/dts/imx7d-remarkable2.dts
+index 2314f68f3c86..8b2f11e85e05 100644
+--- a/arch/arm/boot/dts/imx7d-remarkable2.dts
++++ b/arch/arm/boot/dts/imx7d-remarkable2.dts
+@@ -24,7 +24,7 @@ memory@80000000 {
+ 
+        thermal-zones {
+                epd-thermal {
+-                       thermal-sensors = <&epd_pmic>;
++                       thermal-sensors = <&sy7636a>;
+                        polling-delay-passive = <30000>;
+                        polling-delay = <30000>;
+ 
 
-  22834837f8dd ("Merge branch 'drm-next' of https://gitlab.freedesktop.org/=
-agd5f/linux")
-
-because commits
-
-  b72362962a66 ("drm/amd: Add IMU fw version to fw version queries")
-
-from the amdgpu tree and
-
-  68bc147363bd ("drm/amd: Add IMU fw version to fw version queries")
-
-from Linus' tree are the same patch and git merged this hunk from
-both :-(
-
-I have applied the following merge fixup patch.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Mon, 31 Oct 2022 11:05:29 +1100
-Subject: [PATCH] fixup for bad merge of "drm/amd: Add IMU fw version to fw =
-version queries"
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- drivers/gpu/drm/amd/amdgpu/amdgpu_kms.c | 4 ----
- 1 file changed, 4 deletions(-)
-
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_kms.c b/drivers/gpu/drm/amd/=
-amdgpu/amdgpu_kms.c
-index 662704371756..4e42dcb1950f 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_kms.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_kms.c
-@@ -350,10 +350,6 @@ static int amdgpu_firmware_info(struct drm_amdgpu_info=
-_firmware *fw_info,
- 		fw_info->ver =3D adev->gfx.imu_fw_version;
- 		fw_info->feature =3D 0;
- 		break;
--	case AMDGPU_INFO_FW_IMU:
--		fw_info->ver =3D adev->gfx.imu_fw_version;
--		fw_info->feature =3D 0;
--		break;
- 	default:
- 		return -EINVAL;
- 	}
---=20
-2.35.1
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/+00LH7RwlwPcEvf_+_U2QpE
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNfExsACgkQAVBC80lX
-0GySfgf/W01DZW6kyviTgOb9Wgvdk54hG4Q/r+yYsXpLGl6WCcFL8Kb6lyH7SnoR
-tWsOG0xET7V4S6/c5ge0zPK1ktp/rg1qk55IxO0sq8uMcXk8cfP++lQ4fEdVHcJ8
-ocH3Una4FR1ShNRZFPYf7XeOSxGWBcKqZZid0Gk/QCck376UJRoL85lTvTt6YZmv
-BzDdjGzJIIdop/VG8YubaLNyGbK6By5a/qu/GqxzXXleBgsD5A/K7XK0Fk6Vsknz
-rZrKXXOc2qZxTJhStW7fU1fbs450zkZ+nUoL0DPJ/cJY9xuuF9GeP3prFJHlIAxA
-VgFLpau1Y7nuvCbxZmH/naKJcv7uCg==
-=NgjN
------END PGP SIGNATURE-----
-
---Sig_/+00LH7RwlwPcEvf_+_U2QpE--

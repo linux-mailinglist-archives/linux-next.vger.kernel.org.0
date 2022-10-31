@@ -2,53 +2,46 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82DA8612E95
-	for <lists+linux-next@lfdr.de>; Mon, 31 Oct 2022 02:18:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27DBB612EEC
+	for <lists+linux-next@lfdr.de>; Mon, 31 Oct 2022 03:23:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229636AbiJaBSQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 30 Oct 2022 21:18:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42010 "EHLO
+        id S229574AbiJaCXl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 30 Oct 2022 22:23:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbiJaBSP (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 30 Oct 2022 21:18:15 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5348E9FDA;
-        Sun, 30 Oct 2022 18:18:14 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N0wBd1smlzmVbK;
-        Mon, 31 Oct 2022 09:13:13 +0800 (CST)
-Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 31 Oct 2022 09:17:57 +0800
-Received: from [10.67.108.67] (10.67.108.67) by dggpemm500013.china.huawei.com
- (7.185.36.172) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 31 Oct
- 2022 09:17:57 +0800
-Message-ID: <09aa678e-b072-d567-5e8a-fdd58d761871@huawei.com>
-Date:   Mon, 31 Oct 2022 09:17:53 +0800
+        with ESMTP id S229494AbiJaCXk (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 30 Oct 2022 22:23:40 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 228772678;
+        Sun, 30 Oct 2022 19:23:38 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4N0xln29whz4xFy;
+        Mon, 31 Oct 2022 13:23:33 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1667183013;
+        bh=07tdsqNe++J8/yzBiFrLHlBuVLMuqBEfXZItok9j7iI=;
+        h=Date:From:To:Cc:Subject:From;
+        b=D/P7CIX6+ZBmqnDmPh9rleF5+z0Qxx5HN4btcPPyBMloNYCRygrU3awRF8L2poUtc
+         L/z+Db6jcN5WviRGnhFjSbslzF0DqQafd2K4bRx0XdiZikLPAwLQLaz2WU4gTLvs/i
+         PTMclogQXLKfmUKU0rVuCxZoHUvnQIfnePUGzOG5ursupqRbButH7/i8VjIBVxZIl7
+         cwTLYo8JRJnbtd5LDqKA/Ci6BtzSIPwsEgR8JbyTyX6EQW2FnamrbWhr8EQyqOo5SE
+         igG4xYZfU70WsZqQzLwJ4cB/r/s0v4rW50RXSHyQNvDsWSlpM8Jht+McFxGvnYmNnS
+         dXwBdghT0u8bA==
+Date:   Mon, 31 Oct 2022 13:23:31 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the cgroup tree
+Message-ID: <20221031132331.76193df5@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.0
-Subject: Re: linux-next: build warning after merge of the sound-asoc-fixes
- tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>
-CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Linux Next Mailing List" <linux-next@vger.kernel.org>
-References: <20221031083917.6944b95b@canb.auug.org.au>
-Content-Language: en-US
-From:   Chen Zhongjin <chenzhongjin@huawei.com>
-In-Reply-To: <20221031083917.6944b95b@canb.auug.org.au>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.108.67]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500013.china.huawei.com (7.185.36.172)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: multipart/signed; boundary="Sig_/CeH/UmCLq/GeI9VzD=+erx/";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,45 +49,47 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi,
+--Sig_/CeH/UmCLq/GeI9VzD=+erx/
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On 2022/10/31 5:39, Stephen Rothwell wrote:
-> Hi all,
->
-> After merging the sound-asoc-fixes tree, today's linux-next build (arm
-> multi_v7_defconfig) produced this warning:
->
-> WARNING: modpost: sound/soc/snd-soc-core.o: section mismatch in reference: init_module (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
->
-> Introduced by commit
->
->    6ec27c53886c ("ASoC: core: Fix use-after-free in snd_soc_exit()")
-It's because I called "_exit snd_soc_util_exit()" inside "_init 
-snd_soc_init()".
+Hi all,
 
-Since snd_soc_util_exit is only used in snd_soc_init() and 
-snd_soc_exit(), I think it's fine to remove _exit for snd_soc_util_exit().
+After merging the cgroup tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-Could you please add this change for the patch?
+ERROR: modpost: "css_tryget" [arch/x86/kvm/kvm-amd.ko] undefined!
+ERROR: modpost: "css_put" [arch/x86/kvm/kvm-amd.ko] undefined!
+ERROR: modpost: "css_put" [fs/btrfs/btrfs.ko] undefined!
+ERROR: modpost: "css_get" [fs/btrfs/btrfs.ko] undefined!
+ERROR: modpost: "css_put" [drivers/block/loop.ko] undefined!
+ERROR: modpost: "css_get" [drivers/block/loop.ko] undefined!
+ERROR: modpost: "css_put" [net/netfilter/xt_cgroup.ko] undefined!
 
+Caused by commit
 
-diff --git a/sound/soc/soc-utils.c b/sound/soc/soc-utils.c
-index a3b6df2378b4..a4dba0b751e7 100644
---- a/sound/soc/soc-utils.c
-+++ b/sound/soc/soc-utils.c
-@@ -264,7 +264,7 @@ int __init snd_soc_util_init(void)
-         return ret;
-  }
+  6ab428604f72 ("cgroup: Implement DEBUG_CGROUP_REF")
 
--void __exit snd_soc_util_exit(void)
-+void snd_soc_util_exit(void)
-  {
-         platform_driver_unregister(&soc_dummy_driver);
-         platform_device_unregister(soc_dummy_dev);
+I have used the cgroup tree from next-20221028 for today.
 
+--=20
+Cheers,
+Stephen Rothwell
 
-Thanks!
+--Sig_/CeH/UmCLq/GeI9VzD=+erx/
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-Best,
+-----BEGIN PGP SIGNATURE-----
 
-Chen
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNfMaMACgkQAVBC80lX
+0GzSpQf/U0vlRo5t291zlYzb7OVa70jYeHV5ea992lQv6HRckE8+RxF7/43SA0Ja
+82i6KXYcNfWmTwkNi+vHccD1muPUVaIYHMr80VKxyhru6DVLPAe87n19Dvj/y1fd
+SpFdBwkzAn/oyiQJCzBzYWFXJHvsU3XV7T1uQ/QKau2PT4p6jCz5IkyDHwf+5bWt
+RSOtRGlnYuqbaCkGJzv56OtfZ0k+6cSugSnn1G5JXHDOZ2Grzlwi5JaYQ+eN8L50
+LVdjnrr+llij9EgLA8NnVcJorEwE3KWTj3MenViCh2w3jDyus41SOBb54jQyHwb7
+jRDJtVyBud33rxoSKy4j9xKPMAVSeQ==
+=LFI0
+-----END PGP SIGNATURE-----
+
+--Sig_/CeH/UmCLq/GeI9VzD=+erx/--

@@ -2,50 +2,54 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F093A61331A
-	for <lists+linux-next@lfdr.de>; Mon, 31 Oct 2022 10:55:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D59F46133AA
+	for <lists+linux-next@lfdr.de>; Mon, 31 Oct 2022 11:31:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229549AbiJaJzV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 31 Oct 2022 05:55:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56654 "EHLO
+        id S230450AbiJaKb3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 31 Oct 2022 06:31:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229782AbiJaJzU (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 31 Oct 2022 05:55:20 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 573B3CE12;
-        Mon, 31 Oct 2022 02:55:19 -0700 (PDT)
-Received: from fraeml705-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4N17l60kzRz6HJCs;
-        Mon, 31 Oct 2022 17:53:38 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
- fraeml705-chm.china.huawei.com (10.206.15.54) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2375.31; Mon, 31 Oct 2022 10:55:16 +0100
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 31 Oct
- 2022 09:55:15 +0000
-Date:   Mon, 31 Oct 2022 09:55:14 +0000
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+        with ESMTP id S230498AbiJaKbQ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 31 Oct 2022 06:31:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3FA1DFCE;
+        Mon, 31 Oct 2022 03:31:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5F8B56112F;
+        Mon, 31 Oct 2022 10:31:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C8A4C433D7;
+        Mon, 31 Oct 2022 10:31:14 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="X8gaf4A4"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1667212272;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=IlOd7xgy7E5r6ifMOYBNBCNYfKpunC4K0/VttogcNR0=;
+        b=X8gaf4A49LJ7uYJwtTL/3k0qmty03o3y7J63k0GLszf2rPwaukBbtsKvsyz8bKBHyiOrSU
+        DDzkNR6YOvXyaietyHVUo4fgJkMkaX3A0uIuujcq/jN+1Pvom87AeSrnAurBglzAb93hIo
+        /1E+GwsTJIV+whD6aGzubaVwzmOh/nU=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 4c52aed8 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Mon, 31 Oct 2022 10:31:12 +0000 (UTC)
+Date:   Mon, 31 Oct 2022 11:31:10 +0100
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
-CC:     Saravanan Sekar <sravanhome@gmail.com>,
+Cc:     Theodore Ts'o <tytso@mit.edu>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Fixes tag needs some work in the iio-fixes tree
-Message-ID: <20221031095514.00003174@Huawei.com>
-In-Reply-To: <20221031074006.1ca60136@canb.auug.org.au>
-References: <20221031074006.1ca60136@canb.auug.org.au>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+Subject: Re: linux-next: build failure after merge of the random tree
+Message-ID: <Y1+j7jOV8fYMGXiD@zx2c4.com>
+References: <20221031170956.2cdf101a@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.227.76]
-X-ClientProxiedBy: lhrpeml500003.china.huawei.com (7.191.162.67) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221031170956.2cdf101a@canb.auug.org.au>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,32 +57,24 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, 31 Oct 2022 07:40:06 +1100
-Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-
+On Mon, Oct 31, 2022 at 05:09:56PM +1100, Stephen Rothwell wrote:
 > Hi all,
 > 
-> In commit
+> After merging the random tree, today's linux-next build (arm64 defconfig)
+> failed like this:
 > 
->   a589ef35fc62 ("iio: adc: mp2629: fix potential array out of bound
-> access")
+> arch/arm64/kernel/pi/kaslr_early.c: In function 'kaslr_early_init':
+> arch/arm64/kernel/pi/kaslr_early.c:97:22: error: implicit declaration of function '__early_cpu_has_rndr' [-Werror=implicit-function-declaration]
+>    97 |                 if (!__early_cpu_has_rndr() ||
+>       |                      ^~~~~~~~~~~~~~~~~~~~
+> cc1: some warnings being treated as errors
 > 
-> Fixes tag
+> Caused by commit
 > 
->   Fixes: 7abd9fb6468 ("iio: adc: mp2629: Add support for mp2629 ADC
-> driver")
+>   70ae866ab6b3 ("random: remove early archrandom abstraction")
 > 
-> has these problem(s):
-> 
->   - SHA1 should be at least 12 digits long
->     This can be fixed for the future by setting core.abbrev to 12 (or
->     more) or (for git v2.11 or later) just making sure it is not set
->     (or set to "auto").
-> 
+> I have used the ramdom tree from next-20221028 for today.
 
-Doh, I clearly failed to run my local checks.  Will fix within next day
-or so.
+Thanks, sorted.
 
-Thanks,
-
-Jonathan
+Jason

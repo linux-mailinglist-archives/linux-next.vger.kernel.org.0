@@ -2,54 +2,67 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D59F46133AA
-	for <lists+linux-next@lfdr.de>; Mon, 31 Oct 2022 11:31:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98D9F61363C
+	for <lists+linux-next@lfdr.de>; Mon, 31 Oct 2022 13:26:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230450AbiJaKb3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 31 Oct 2022 06:31:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47624 "EHLO
+        id S231128AbiJaM0Y (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 31 Oct 2022 08:26:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230498AbiJaKbQ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 31 Oct 2022 06:31:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3FA1DFCE;
-        Mon, 31 Oct 2022 03:31:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5F8B56112F;
-        Mon, 31 Oct 2022 10:31:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C8A4C433D7;
-        Mon, 31 Oct 2022 10:31:14 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="X8gaf4A4"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1667212272;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=IlOd7xgy7E5r6ifMOYBNBCNYfKpunC4K0/VttogcNR0=;
-        b=X8gaf4A49LJ7uYJwtTL/3k0qmty03o3y7J63k0GLszf2rPwaukBbtsKvsyz8bKBHyiOrSU
-        DDzkNR6YOvXyaietyHVUo4fgJkMkaX3A0uIuujcq/jN+1Pvom87AeSrnAurBglzAb93hIo
-        /1E+GwsTJIV+whD6aGzubaVwzmOh/nU=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 4c52aed8 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Mon, 31 Oct 2022 10:31:12 +0000 (UTC)
-Date:   Mon, 31 Oct 2022 11:31:10 +0100
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Theodore Ts'o <tytso@mit.edu>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the random tree
-Message-ID: <Y1+j7jOV8fYMGXiD@zx2c4.com>
-References: <20221031170956.2cdf101a@canb.auug.org.au>
+        with ESMTP id S229930AbiJaM0X (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 31 Oct 2022 08:26:23 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01795EF
+        for <linux-next@vger.kernel.org>; Mon, 31 Oct 2022 05:26:22 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id q1-20020a17090a750100b002139ec1e999so5769017pjk.1
+        for <linux-next@vger.kernel.org>; Mon, 31 Oct 2022 05:26:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=DBziwjD6VOr3EGXyX1bjYrdrCAM6584SHszB4FeJSak=;
+        b=JwiQNgWD58FPmPWU4+SL+0NyLcb1gDWnV2eblVZe38dV1733rXhDBHTltzbzbNi+cX
+         SgBMNeH3y8n9bu6opBQskB4KS1LQB7tejodO2f2DI5IuPUGCht4TRHjWgSu4TqJi1BNW
+         WvumMA7XFTrTL3ikcQstPw1enAJYwv9Xv1BXy0gFFQQkHPzuE3hWG/HB7RavUg0tqfHg
+         gnQLp9igR/iqCMTQUHqo/WkwQ2VF5n3HFABBiY/sFoQtkWrZWOqqXXy8FINmi3eb9scZ
+         OI01jhD2f4LTq8XgAWgTQgoD/R2A8VBmIQ61Fm8Dmy4nzGzecK12q66xFyAtIuN2yQBn
+         RPbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DBziwjD6VOr3EGXyX1bjYrdrCAM6584SHszB4FeJSak=;
+        b=E4Ku3pcqFEiuKb8cog20UqzU4Y10Cb+eu6z0UzF+dJxdvG8wI081mglYc9fa55oea7
+         u4utRkUgpb55KGt+B57l3HjizTzuPy98PMGZETO5BsSKaTqshmJ1g/M5PPssObQK9Uz+
+         1FJRHml5AnXak8mqVYCtoyN+hleqT9TbjAa+PXx7XDK2mefdjYhNvnFqynbLObUf7mYj
+         6Ms+VX8bPG4iuVD2cZhv77/RTB0aICfJMkXSaG/HUWpL4UJ+7WP3RxofUM7/e68PaVhx
+         SdkZr7mYz4VJ239dLw4oAAQiU8/qn3eGi2azU/d40nI0kZd1yDu+DmMaY15R/kf9iiOl
+         A6tA==
+X-Gm-Message-State: ACrzQf1jDVzOjU0kuT3KwpIsd9PZXhCTT5uE4hdSX3NPUFlOMvfqVGwE
+        ZXd+/K0Lux7CYp/QDuYKxlCkPy3Vae7ysyHP
+X-Google-Smtp-Source: AMsMyM7UuF1/dv+ncYb7TByxOo8XVM+PmSEqM671gggTfo/1i79V/G2uN7WR824A7KOyB16xkmZgGA==
+X-Received: by 2002:a17:902:cec3:b0:187:12cc:d699 with SMTP id d3-20020a170902cec300b0018712ccd699mr9125829plg.83.1667219178881;
+        Mon, 31 Oct 2022 05:26:18 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id l16-20020a17090a071000b00213d08fa459sm2673276pjl.17.2022.10.31.05.26.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Oct 2022 05:26:18 -0700 (PDT)
+Message-ID: <635fbeea.170a0220.9bf15.44fb@mx.google.com>
+Date:   Mon, 31 Oct 2022 05:26:18 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221031170956.2cdf101a@canb.auug.org.au>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: test
+X-Kernelci-Kernel: next-20221031
+X-Kernelci-Branch: master
+X-Kernelci-Tree: next
+Subject: next/master baseline: 40 runs, 2 regressions (next-20221031)
+To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+        kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,24 +70,99 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Oct 31, 2022 at 05:09:56PM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the random tree, today's linux-next build (arm64 defconfig)
-> failed like this:
-> 
-> arch/arm64/kernel/pi/kaslr_early.c: In function 'kaslr_early_init':
-> arch/arm64/kernel/pi/kaslr_early.c:97:22: error: implicit declaration of function '__early_cpu_has_rndr' [-Werror=implicit-function-declaration]
->    97 |                 if (!__early_cpu_has_rndr() ||
->       |                      ^~~~~~~~~~~~~~~~~~~~
-> cc1: some warnings being treated as errors
-> 
-> Caused by commit
-> 
->   70ae866ab6b3 ("random: remove early archrandom abstraction")
-> 
-> I have used the ramdom tree from next-20221028 for today.
+next/master baseline: 40 runs, 2 regressions (next-20221031)
 
-Thanks, sorted.
+Regressions Summary
+-------------------
 
-Jason
+platform                     | arch  | lab           | compiler | defconfig=
+                  | regressions
+-----------------------------+-------+---------------+----------+----------=
+------------------+------------
+mt8183-kukui-...uniper-sku16 | arm64 | lab-collabora | clang-13 | defconfig=
++arm64-chromebook | 1          =
+
+sc7180-trogdo...zor-limozeen | arm64 | lab-collabora | clang-13 | defconfig=
++arm64-chromebook | 1          =
+
+
+  Details:  https://kernelci.org/test/job/next/branch/master/kernel/next-20=
+221031/plan/baseline/
+
+  Test:     baseline
+  Tree:     next
+  Branch:   master
+  Describe: next-20221031
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+  SHA:      6fbda10ec6f8d70d0f4446f861f7db726c2f2e7c =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform                     | arch  | lab           | compiler | defconfig=
+                  | regressions
+-----------------------------+-------+---------------+----------+----------=
+------------------+------------
+mt8183-kukui-...uniper-sku16 | arm64 | lab-collabora | clang-13 | defconfig=
++arm64-chromebook | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/635f8dd54bee418642e7db74
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+arm64-chromebook
+  Compiler:    clang-13 (Debian clang version 13.0.1-6~deb11u1)
+  Plain log:   https://storage.kernelci.org//next/master/next-20221031/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-collabora/baseline-mt8183-kukui-j=
+acuzzi-juniper-sku16.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20221031/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-collabora/baseline-mt8183-kukui-j=
+acuzzi-juniper-sku16.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20221024.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/635f8dd54bee418642e7d=
+b75
+        failing since 171 days (last pass: next-20220506, first fail: next-=
+20220512) =
+
+ =
+
+
+
+platform                     | arch  | lab           | compiler | defconfig=
+                  | regressions
+-----------------------------+-------+---------------+----------+----------=
+------------------+------------
+sc7180-trogdo...zor-limozeen | arm64 | lab-collabora | clang-13 | defconfig=
++arm64-chromebook | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/635f8cda737f2368bbe7db66
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+arm64-chromebook
+  Compiler:    clang-13 (Debian clang version 13.0.1-6~deb11u1)
+  Plain log:   https://storage.kernelci.org//next/master/next-20221031/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-collabora/baseline-sc7180-trogdor=
+-lazor-limozeen.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20221031/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-collabora/baseline-sc7180-trogdor=
+-lazor-limozeen.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20221024.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/635f8cda737f2368bbe7d=
+b67
+        new failure (last pass: next-20221028) =
+
+ =20

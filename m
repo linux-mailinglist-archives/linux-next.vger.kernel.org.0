@@ -2,257 +2,94 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E393B613021
-	for <lists+linux-next@lfdr.de>; Mon, 31 Oct 2022 07:05:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43DCD61302C
+	for <lists+linux-next@lfdr.de>; Mon, 31 Oct 2022 07:10:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229549AbiJaGFw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 31 Oct 2022 02:05:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39180 "EHLO
+        id S229637AbiJaGKC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 31 Oct 2022 02:10:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbiJaGFv (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 31 Oct 2022 02:05:51 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F9E664D3;
-        Sun, 30 Oct 2022 23:05:49 -0700 (PDT)
+        with ESMTP id S229479AbiJaGKC (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 31 Oct 2022 02:10:02 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6568F2DD2;
+        Sun, 30 Oct 2022 23:10:00 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4N12h53G7yz4xG6;
-        Mon, 31 Oct 2022 17:05:41 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4N12n226cFz4xFy;
+        Mon, 31 Oct 2022 17:09:58 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1667196343;
-        bh=p1+nRZdedWh35LkHyLGXYFreKSjb+HyEYst51m0wVHg=;
+        s=201702; t=1667196598;
+        bh=Iy+NcbbtfKfcj1OaC8AZXGNI5Dy79wNJ35iaLbsKO/U=;
         h=Date:From:To:Cc:Subject:From;
-        b=Bb2rwsowE4iOTJhBOXji+Sa+AtYugGdH88L2vH1yYUoMCoR0EyYKZOlUXMAfzCx8d
-         23wAKoGnQTzTEWUH3fU+PdG9boGXyTENdI3i5CD5Um7GayKlxP0tF8ybeU+aF3aGjQ
-         e+QosTlI0cQe0Rbc+/HmiiB0EB16Kl8LY6AZR/LqH6Myi1X7aYt1yoNiuu01Z1qTMo
-         uv9d6+O3LjERH6k/D208xwRMxp2sxli1a2QE7AxQyz5fhcMZVoZBBtfoAQlmYOyWhc
-         Uv3tgMmL2/5om7p4PTrqGh1+XRbJenXBYyMgZoFvvPdImFj8SsoVLXIR4TjHfwQQC/
-         RaFFnRWbufHiQ==
-Date:   Mon, 31 Oct 2022 17:05:37 +1100
+        b=d8++4rApKs+Wb4AFKLVynWb8XMVr0RRfV7W9C+aiUgMblQXzlEpEc/puYL5+1It+a
+         GZbd9MuKOdd8bVBr7n9IadD+fc+QeOnEHDrIKC01GkWTp+Jloo4vSLkzVRYtEUZAk5
+         GEAGyLTPVBlfCNM7i4rZZEhiJoKDJ9nd+5Iy0EFifDTJwjPMUxlTLO1rUDABM6icka
+         nVCtN+FFd2+xvoQc9i34TG62T8BvgJtrpGwtC6un7+UHIumLtMsrsO5+haj2215cM8
+         f/M5uwsIYCQa6C6Ng7uyPP5XTV2eFi83rXKdnsNvo8GFCHNMY9l9hgfk/IV9j+7d9I
+         201IcWK1+wvTA==
+Date:   Mon, 31 Oct 2022 17:09:56 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     Binbin Zhou <zhoubinbin@loongson.cn>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     Theodore Ts'o <tytso@mit.edu>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warnings after merge of the jc_docs tree
-Message-ID: <20221031170537.722220c4@canb.auug.org.au>
+Subject: linux-next: build failure after merge of the random tree
+Message-ID: <20221031170956.2cdf101a@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/XKJrvR+xL.ngtgezdvsGigi";
+Content-Type: multipart/signed; boundary="Sig_/NcMbPBvSTx/AAHr4G9._57S";
  protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/XKJrvR+xL.ngtgezdvsGigi
+--Sig_/NcMbPBvSTx/AAHr4G9._57S
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the jc_docs tree, today's linux-next build (htmldocs)
-produced these warnings:
+After merging the random tree, today's linux-next build (arm64 defconfig)
+failed like this:
 
-Documentation/core-api/timekeeping.rst:16: WARNING: Duplicate C declaration=
-, also defined at translations/zh_CN/core-api/timekeeping:26.
-Declaration is '.. c:function:: ktime_t ktime_get(void)'.
-Documentation/core-api/timekeeping.rst:23: WARNING: Duplicate C declaration=
-, also defined at translations/zh_CN/core-api/timekeeping:33.
-Declaration is '.. c:function:: ktime_t ktime_get_boottime(void)'.
-Documentation/core-api/timekeeping.rst:31: WARNING: Duplicate C declaration=
-, also defined at translations/zh_CN/core-api/timekeeping:40.
-Declaration is '.. c:function:: ktime_t ktime_get_real(void)'.
-Documentation/core-api/timekeeping.rst:43: WARNING: Duplicate C declaration=
-, also defined at translations/zh_CN/core-api/timekeeping:49.
-Declaration is '.. c:function:: ktime_t ktime_get_clocktai(void)'.
-Documentation/core-api/timekeeping.rst:51: WARNING: Duplicate C declaration=
-, also defined at translations/zh_CN/core-api/timekeeping:56.
-Declaration is '.. c:function:: ktime_t ktime_get_raw(void)'.
-Documentation/core-api/timekeeping.rst:65: WARNING: Duplicate C declaration=
-, also defined at translations/zh_CN/core-api/timekeeping:68.
-Declaration is '.. c:function:: u64 ktime_get_ns(void)'.
-Documentation/core-api/timekeeping.rst:65: WARNING: Duplicate C declaration=
-, also defined at translations/zh_CN/core-api/timekeeping:68.
-Declaration is '.. c:function:: u64 ktime_get_boottime_ns(void)'.
-Documentation/core-api/timekeeping.rst:65: WARNING: Duplicate C declaration=
-, also defined at translations/zh_CN/core-api/timekeeping:68.
-Declaration is '.. c:function:: u64 ktime_get_real_ns(void)'.
-Documentation/core-api/timekeeping.rst:65: WARNING: Duplicate C declaration=
-, also defined at translations/zh_CN/core-api/timekeeping:68.
-Declaration is '.. c:function:: u64 ktime_get_clocktai_ns(void)'.
-Documentation/core-api/timekeeping.rst:65: WARNING: Duplicate C declaration=
-, also defined at translations/zh_CN/core-api/timekeeping:68.
-Declaration is '.. c:function:: u64 ktime_get_raw_ns(void)'.
-Documentation/core-api/timekeeping.rst:75: WARNING: Duplicate C declaration=
-, also defined at translations/zh_CN/core-api/timekeeping:77.
-Declaration is '.. c:function:: void ktime_get_ts64(struct timespec64*)'.
-Documentation/core-api/timekeeping.rst:75: WARNING: Duplicate C declaration=
-, also defined at translations/zh_CN/core-api/timekeeping:77.
-Declaration is '.. c:function:: void ktime_get_boottime_ts64(struct timespe=
-c64*)'.
-Documentation/core-api/timekeeping.rst:75: WARNING: Duplicate C declaration=
-, also defined at translations/zh_CN/core-api/timekeeping:77.
-Declaration is '.. c:function:: void ktime_get_real_ts64(struct timespec64*=
-)'.
-Documentation/core-api/timekeeping.rst:75: WARNING: Duplicate C declaration=
-, also defined at translations/zh_CN/core-api/timekeeping:77.
-Declaration is '.. c:function:: void ktime_get_clocktai_ts64(struct timespe=
-c64*)'.
-Documentation/core-api/timekeeping.rst:75: WARNING: Duplicate C declaration=
-, also defined at translations/zh_CN/core-api/timekeeping:77.
-Declaration is '.. c:function:: void ktime_get_raw_ts64(struct timespec64*)=
-'.
-Documentation/core-api/timekeeping.rst:86: WARNING: Duplicate C declaration=
-, also defined at translations/zh_CN/core-api/timekeeping:87.
-Declaration is '.. c:function:: time64_t ktime_get_seconds(void)'.
-Documentation/core-api/timekeeping.rst:86: WARNING: Duplicate C declaration=
-, also defined at translations/zh_CN/core-api/timekeeping:87.
-Declaration is '.. c:function:: time64_t ktime_get_boottime_seconds(void)'.
-Documentation/core-api/timekeeping.rst:86: WARNING: Duplicate C declaration=
-, also defined at translations/zh_CN/core-api/timekeeping:87.
-Declaration is '.. c:function:: time64_t ktime_get_real_seconds(void)'.
-Documentation/core-api/timekeeping.rst:86: WARNING: Duplicate C declaration=
-, also defined at translations/zh_CN/core-api/timekeeping:87.
-Declaration is '.. c:function:: time64_t ktime_get_clocktai_seconds(void)'.
-Documentation/core-api/timekeeping.rst:86: WARNING: Duplicate C declaration=
-, also defined at translations/zh_CN/core-api/timekeeping:87.
-Declaration is '.. c:function:: time64_t ktime_get_raw_seconds(void)'.
-Documentation/core-api/timekeeping.rst:102: WARNING: Duplicate C declaratio=
-n, also defined at translations/zh_CN/core-api/timekeeping:101.
-Declaration is '.. c:function:: ktime_t ktime_get_coarse(void)'.
-Documentation/core-api/timekeeping.rst:102: WARNING: Duplicate C declaratio=
-n, also defined at translations/zh_CN/core-api/timekeeping:101.
-Declaration is '.. c:function:: ktime_t ktime_get_coarse_boottime(void)'.
-Documentation/core-api/timekeeping.rst:102: WARNING: Duplicate C declaratio=
-n, also defined at translations/zh_CN/core-api/timekeeping:101.
-Declaration is '.. c:function:: ktime_t ktime_get_coarse_real(void)'.
-Documentation/core-api/timekeeping.rst:102: WARNING: Duplicate C declaratio=
-n, also defined at translations/zh_CN/core-api/timekeeping:101.
-Declaration is '.. c:function:: ktime_t ktime_get_coarse_clocktai(void)'.
-Documentation/core-api/timekeeping.rst:107: WARNING: Duplicate C declaratio=
-n, also defined at translations/zh_CN/core-api/timekeeping:106.
-Declaration is '.. c:function:: u64 ktime_get_coarse_ns(void)'.
-Documentation/core-api/timekeeping.rst:107: WARNING: Duplicate C declaratio=
-n, also defined at translations/zh_CN/core-api/timekeeping:106.
-Declaration is '.. c:function:: u64 ktime_get_coarse_boottime_ns(void)'.
-Documentation/core-api/timekeeping.rst:107: WARNING: Duplicate C declaratio=
-n, also defined at translations/zh_CN/core-api/timekeeping:106.
-Declaration is '.. c:function:: u64 ktime_get_coarse_real_ns(void)'.
-Documentation/core-api/timekeeping.rst:107: WARNING: Duplicate C declaratio=
-n, also defined at translations/zh_CN/core-api/timekeeping:106.
-Declaration is '.. c:function:: u64 ktime_get_coarse_clocktai_ns(void)'.
-Documentation/core-api/timekeeping.rst:112: WARNING: Duplicate C declaratio=
-n, also defined at translations/zh_CN/core-api/timekeeping:111.
-Declaration is '.. c:function:: void ktime_get_coarse_ts64(struct timespec6=
-4*)'.
-Documentation/core-api/timekeeping.rst:112: WARNING: Duplicate C declaratio=
-n, also defined at translations/zh_CN/core-api/timekeeping:111.
-Declaration is '.. c:function:: void ktime_get_coarse_boottime_ts64(struct =
-timespec64*)'.
-Documentation/core-api/timekeeping.rst:112: WARNING: Duplicate C declaratio=
-n, also defined at translations/zh_CN/core-api/timekeeping:111.
-Declaration is '.. c:function:: void ktime_get_coarse_real_ts64(struct time=
-spec64*)'.
-Documentation/core-api/timekeeping.rst:112: WARNING: Duplicate C declaratio=
-n, also defined at translations/zh_CN/core-api/timekeeping:111.
-Declaration is '.. c:function:: void ktime_get_coarse_clocktai_ts64(struct =
-timespec64*)'.
-Documentation/core-api/timekeeping.rst:132: WARNING: Duplicate C declaratio=
-n, also defined at translations/zh_CN/core-api/timekeeping:126.
-Declaration is '.. c:function:: u64 ktime_get_mono_fast_ns(void)'.
-Documentation/core-api/timekeeping.rst:132: WARNING: Duplicate C declaratio=
-n, also defined at translations/zh_CN/core-api/timekeeping:126.
-Declaration is '.. c:function:: u64 ktime_get_raw_fast_ns(void)'.
-Documentation/core-api/timekeeping.rst:132: WARNING: Duplicate C declaratio=
-n, also defined at translations/zh_CN/core-api/timekeeping:126.
-Declaration is '.. c:function:: u64 ktime_get_boot_fast_ns(void)'.
-Documentation/core-api/timekeeping.rst:132: WARNING: Duplicate C declaratio=
-n, also defined at translations/zh_CN/core-api/timekeeping:126.
-Declaration is '.. c:function:: u64 ktime_get_tai_fast_ns(void)'.
-Documentation/core-api/timekeeping.rst:132: WARNING: Duplicate C declaratio=
-n, also defined at translations/zh_CN/core-api/timekeeping:126.
-Declaration is '.. c:function:: u64 ktime_get_real_fast_ns(void)'.
-Documentation/core-api/timekeeping.rst:154: WARNING: Duplicate C declaratio=
-n, also defined at translations/zh_CN/core-api/timekeeping:144.
-Declaration is '.. c:function:: void ktime_get_ts(struct timespec*)'.
-Documentation/core-api/timekeeping.rst:158: WARNING: Duplicate C declaratio=
-n, also defined at translations/zh_CN/core-api/timekeeping:148.
-Declaration is '.. c:function:: void do_gettimeofday(struct timeval*)'.
-Documentation/core-api/timekeeping.rst:158: WARNING: Duplicate C declaratio=
-n, also defined at translations/zh_CN/core-api/timekeeping:148.
-Declaration is '.. c:function:: void getnstimeofday(struct timespec*)'.
-Documentation/core-api/timekeeping.rst:158: WARNING: Duplicate C declaratio=
-n, also defined at translations/zh_CN/core-api/timekeeping:148.
-Declaration is '.. c:function:: void getnstimeofday64(struct timespec64*)'.
-Documentation/core-api/timekeeping.rst:158: WARNING: Duplicate C declaratio=
-n, also defined at translations/zh_CN/core-api/timekeeping:148.
-Declaration is '.. c:function:: void ktime_get_real_ts(struct timespec*)'.
-Documentation/core-api/timekeeping.rst:167: WARNING: Duplicate C declaratio=
-n, also defined at translations/zh_CN/core-api/timekeeping:157.
-Declaration is '.. c:function:: struct timespec current_kernel_time(void)'.
-Documentation/core-api/timekeeping.rst:167: WARNING: Duplicate C declaratio=
-n, also defined at translations/zh_CN/core-api/timekeeping:157.
-Declaration is '.. c:function:: struct timespec64 current_kernel_time64(voi=
-d)'.
-Documentation/core-api/timekeeping.rst:167: WARNING: Duplicate C declaratio=
-n, also defined at translations/zh_CN/core-api/timekeeping:157.
-Declaration is '.. c:function:: struct timespec get_monotonic_coarse(void)'.
-Documentation/core-api/timekeeping.rst:167: WARNING: Duplicate C declaratio=
-n, also defined at translations/zh_CN/core-api/timekeeping:157.
-Declaration is '.. c:function:: struct timespec64 get_monotonic_coarse64(vo=
-id)'.
-Documentation/core-api/timekeeping.rst:178: WARNING: Duplicate C declaratio=
-n, also defined at translations/zh_CN/core-api/timekeeping:166.
-Declaration is '.. c:function:: struct timespec getrawmonotonic(void)'.
-Documentation/core-api/timekeeping.rst:178: WARNING: Duplicate C declaratio=
-n, also defined at translations/zh_CN/core-api/timekeeping:166.
-Declaration is '.. c:function:: struct timespec64 getrawmonotonic64(void)'.
-Documentation/core-api/timekeeping.rst:178: WARNING: Duplicate C declaratio=
-n, also defined at translations/zh_CN/core-api/timekeeping:166.
-Declaration is '.. c:function:: struct timespec timekeeping_clocktai(void)'.
-Documentation/core-api/timekeeping.rst:178: WARNING: Duplicate C declaratio=
-n, also defined at translations/zh_CN/core-api/timekeeping:166.
-Declaration is '.. c:function:: struct timespec64 timekeeping_clocktai64(vo=
-id)'.
-Documentation/core-api/timekeeping.rst:178: WARNING: Duplicate C declaratio=
-n, also defined at translations/zh_CN/core-api/timekeeping:166.
-Declaration is '.. c:function:: struct timespec get_monotonic_boottime(void=
-)'.
-Documentation/core-api/timekeeping.rst:178: WARNING: Duplicate C declaratio=
-n, also defined at translations/zh_CN/core-api/timekeeping:166.
-Declaration is '.. c:function:: struct timespec64 get_monotonic_boottime64(=
-void)'.
+arch/arm64/kernel/pi/kaslr_early.c: In function 'kaslr_early_init':
+arch/arm64/kernel/pi/kaslr_early.c:97:22: error: implicit declaration of fu=
+nction '__early_cpu_has_rndr' [-Werror=3Dimplicit-function-declaration]
+   97 |                 if (!__early_cpu_has_rndr() ||
+      |                      ^~~~~~~~~~~~~~~~~~~~
+cc1: some warnings being treated as errors
 
-Presumably introduced by commit
+Caused by commit
 
-  d24c911bd031 ("docs/zh_CN: core-api: Add timekeeping Chinese translation")
+  70ae866ab6b3 ("random: remove early archrandom abstraction")
 
-but I have no idea why :-(
+I have used the ramdom tree from next-20221028 for today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/XKJrvR+xL.ngtgezdvsGigi
+--Sig_/NcMbPBvSTx/AAHr4G9._57S
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNfZbEACgkQAVBC80lX
-0GyQiwf/YnhAQUEerDenxDeHF0y/Al8f3SR+Vb9sTmkkGVghjFVDbwHoAW6jGnth
-Ktx+qGs9W4PgpQpRLsA4cFoIq0nUrGHbvAvKTAYu32NW50c3l43PhI30P51bdfr/
-2H8BNVGWG+tbnvz39oOySFNfVNQY4pZhLqPu6eQKtfhDi8x2lAIpt+QbSjcLB6Os
-jRbWSIaCgIOoAcEev6YcbkOGdmxnIkQ2TnQ/XlGxLVGQyUw6PM6OVcWiYjLPuHHr
-KWDMGf650wb24kz77D0VXEtw+fXVhOke2KXfCDl+XE18SflXhWnDBgBpzvJNewwq
-TuxgrTQ64giPu5ZmiJq/YiZZYaIOwg==
-=M+0y
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNfZrQACgkQAVBC80lX
+0GwzMgf+K63b3yP6dlffkiZ7whDFrbiD18CQ0xsXAk2SmmlujYoUgLV8Ca9XZ91Z
+31f9qhPx8KInfNP9LbWvqjQZ0FRnHEdxW5Mov6oooa7z0sSQJw/kGWBLO6Iou4do
+YiImRXOy+DWGePjU2+PQDLxrPxjU2nrb8lPe2f8rDTUs/Nv4YuQDBtmmAAOvvmv0
+X5lcC0MZEcHAvBV5WM51Tk8TBdp/rtStK5MibpQcVYXjuzxH3XVenwD0tUBiHB0f
+CxYc55rfSxqAgWsb3rU+zqe2b6s91ra1ZxOWleKKHFw6PGdYGeE67hN9+1eeTlXa
+4ZotHs8moQBxy+DEi1Hw7b5uCdnfog==
+=HuP6
 -----END PGP SIGNATURE-----
 
---Sig_/XKJrvR+xL.ngtgezdvsGigi--
+--Sig_/NcMbPBvSTx/AAHr4G9._57S--

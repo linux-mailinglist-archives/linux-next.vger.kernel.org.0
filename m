@@ -2,110 +2,202 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC7D761768B
-	for <lists+linux-next@lfdr.de>; Thu,  3 Nov 2022 07:04:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C6CB6176A7
+	for <lists+linux-next@lfdr.de>; Thu,  3 Nov 2022 07:17:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230511AbiKCGEK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 3 Nov 2022 02:04:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43220 "EHLO
+        id S229791AbiKCGRc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 3 Nov 2022 02:17:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231124AbiKCGEI (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 3 Nov 2022 02:04:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F3CA193D8;
-        Wed,  2 Nov 2022 23:04:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BDDB3B82623;
-        Thu,  3 Nov 2022 06:04:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA7E1C433D6;
-        Thu,  3 Nov 2022 06:04:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667455445;
-        bh=rFhLifYy+8HsdQTm8osPCDSqqdwFjwybPV/8Y+l48FQ=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=GL8HssBJpWpsGzTIJopmmhZ4bsHyh8YS9odof1AgbpYE56g2V9Rm+HE2tj8PcwftU
-         L/rf6ly9l7WOWecQZkRMv5z+WuABFVSLRYc9neJ5MxTOGIVTrhbMMefZKL0ZsHC5FD
-         EnNqZGoV0yQ1O84UH6lzycrdyB+P6TcJp2GnuFluCrUaEJnPqzW+mjuTn/vpSsB0qy
-         +xmeP6UgvggxBwFaWEIGi+O6iu6pgS4uDOmXcZfSqEt/lezCC8Uq7p/v/rMTYxQlkc
-         uyu44w6Be0sExGRgDaD/eQnzKY9dtjudICfqclrla1pxQ2xzgacf1JOjiXvH71QKo+
-         EQwztzVwxkvNA==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     Ping-Ke Shih <pkshih@realtek.com>
-Cc:     coverity-bot <keescook@chromium.org>,
-        Gary Chang <gary.chang@realtek.com>,
-        Timlee <timlee@realtek.com>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        "linux-next\@vger.kernel.org" <linux-next@vger.kernel.org>,
-        "linux-hardening\@vger.kernel.org" <linux-hardening@vger.kernel.org>,
-        linux-wireless@vger.kernel.org
-Subject: Re: Coverity: rtw89_mac_resize_ple_rx_quota(): Integer handling issues
-References: <202211021253.44E254479@keescook>
-        <884ff1b628e44d32960f438f75a6524c@realtek.com>
-Date:   Thu, 03 Nov 2022 08:03:59 +0200
-In-Reply-To: <884ff1b628e44d32960f438f75a6524c@realtek.com> (Ping-Ke Shih's
-        message of "Thu, 3 Nov 2022 01:26:45 +0000")
-Message-ID: <87h6zgfub4.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        with ESMTP id S229745AbiKCGRb (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 3 Nov 2022 02:17:31 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68EA618E02
+        for <linux-next@vger.kernel.org>; Wed,  2 Nov 2022 23:17:30 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id v28so737108pfi.12
+        for <linux-next@vger.kernel.org>; Wed, 02 Nov 2022 23:17:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=2SzhgN8GaqT8zn/DoN1Xiz3L9dooAHfhRVKtCoMKf/Y=;
+        b=Wt0VIKofnCvUA3Skcrwnc4w3gtC3+IqWvJ65PqVHNfI5brf91ymqHdHT3DdrA4SFtb
+         Pd/Y/65xGCJvRr8p7grCXiI9aVrCp/SwfNETJ3/0tXy+n+lY+EM5XCXFq5BzgLoCNdcF
+         ogcJAMMlgn9WSLOnEQ444G8zDbIAleMQYN542QZ8MDc9GgpzHrwzdv/WzVaKel/D4o0R
+         w9qZToEt0KUVnvG9AjfgwSgKlQ9vg174aRo7+aHePqcDA0rMQA9v3Gd1CmWaT2LWZNoQ
+         /F+raupCXGAUDc1MyJIVrCI8F+Bu3Kl+UFstEf325SOOdP6ncjrZEjQOKKCGNbe/7NF0
+         /qeA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2SzhgN8GaqT8zn/DoN1Xiz3L9dooAHfhRVKtCoMKf/Y=;
+        b=JIQ4m7y2YMApL/KK8KvCButeMaqqhg6EnVN0HJ1MNh4rH5irJuFGZLGPJaxaULModW
+         OMIzB0gKvTUBuKRmamNfesJcnIjzoWcO1uEj2gaGpU+ypDprnYe7BxRe+Yep/Xm/4hla
+         Ef3k3rwLjgYV/6y3GRoJz3rJNZwub4da/HB654D7epI1CZL1LY+jEmEzz7ZSzVRvCcK6
+         IBLTBsT9H0C+zWBHDL/0s7v9V7pXNfW+Xu5GY3HQliAQOBnJiVFx6ACIc2MfJHBHJhWc
+         i2TwZH5pB1KO3RzTFyk2D38e8Csewb47MeSVPkABdQlWkv9+GAL2VhvAHpM+CnqBm2cK
+         t+tg==
+X-Gm-Message-State: ACrzQf3NX3gDhiOnUeUDVCSObGZvZKX4Kitzy44/mJMAvRrgxEGpws0J
+        7if5qHLkjwe2pA5LTipps+Qdloa70+iTYsty
+X-Google-Smtp-Source: AMsMyM7AR/mH4XEYEQ2ApuvBUpwbMp0nrY4Pb+AWaOvgLsaC9ET1vdWJMb5bo3iyAfSEYYhV2W9FWA==
+X-Received: by 2002:a63:e511:0:b0:46f:98cf:13d3 with SMTP id r17-20020a63e511000000b0046f98cf13d3mr21010192pgh.363.1667456249643;
+        Wed, 02 Nov 2022 23:17:29 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id u15-20020a170903124f00b00186c5e8a8d7sm9433693plh.171.2022.11.02.23.17.28
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Nov 2022 23:17:29 -0700 (PDT)
+Message-ID: <63635cf9.170a0220.36947.1e8c@mx.google.com>
+Date:   Wed, 02 Nov 2022 23:17:29 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: next-20221103
+X-Kernelci-Branch: master
+X-Kernelci-Tree: next
+Subject: next/master build: 11 builds: 0 failed, 11 passed,
+ 12 warnings (next-20221103)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Ping-Ke Shih <pkshih@realtek.com> writes:
+next/master build: 11 builds: 0 failed, 11 passed, 12 warnings (next-202211=
+03)
 
->> -----Original Message-----
->> From: coverity-bot <keescook@chromium.org>
->> Sent: Thursday, November 3, 2022 3:53 AM
->> To: Gary Chang <gary.chang@realtek.com>
->> Cc: Timlee <timlee@realtek.com>; Kalle Valo <kvalo@kernel.org>; Ping-Ke Shih <pkshih@realtek.com>; Gustavo
->> A. R. Silva <gustavo@embeddedor.com>; linux-next@vger.kernel.org; linux-hardening@vger.kernel.org
->> Subject: Coverity: rtw89_mac_resize_ple_rx_quota(): Integer handling issues
->> 
->> Hello!
->> 
->> This is an experimental semi-automated report about issues detected by
->> Coverity from a scan of next-20221102 as part of the linux-next scan project:
->> https://scan.coverity.com/projects/linux-next-weekly-scan
->> 
->> You're getting this email because you were associated with the identified
->> lines of code (noted below) that were touched by commits:
->> 
->>   Tue Nov 1 11:26:13 2022 +0200
->>     7a68ec3da79e ("wifi: rtw89: add function to adjust and restore PLE quota")
->> 
->> Coverity reported the following:
->> 
->> *** CID 1527095:  Integer handling issues  (SIGN_EXTENSION)
->> /drivers/net/wireless/realtek/rtw89/mac.c: 1562 in rtw89_mac_resize_ple_rx_quota()
->> 1556     		rtw89_err(rtwdev, "[ERR]get_dle_mem_cfg\n");
->> 1557     		return -EINVAL;
->> 1558     	}
->> 1559
->> 1560     	min_cfg = cfg->ple_min_qt;
->> 1561     	max_cfg = cfg->ple_max_qt;
->> vvv     CID 1527095:  Integer handling issues  (SIGN_EXTENSION)
->> vvv     Suspicious implicit sign extension: "max_cfg->cma0_dma" with type "u16" (16 bits, unsigned) is
->> promoted in "max_cfg->cma0_dma << 16" to type "int" (32 bits, signed), then sign-extended to type "unsigned
->> long" (64 bits, unsigned).  If "max_cfg->cma0_dma << 16" is greater than 0x7FFFFFFF, the upper bits of the
->> result will all be 1.
->
-> Thanks for pointing this. I'll fix it.
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20221103/
 
-Thanks Ping.
+Tree: next
+Branch: master
+Git Describe: next-20221103
+Git Commit: 81214a573d19ae2fa5b528286ba23cd1cb17feec
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Built: 3 unique architectures
 
-I noticed that linux-wireless list was missing in CC, would it possible
-for the bot to automatically add that to all wireless related reports?
-Adding it manually now.
+Warnings Detected:
 
--- 
-https://patchwork.kernel.org/project/linux-wireless/list/
+arm64:
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+arm:
+    cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (clang-13): 6 =
+warnings
+    cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (clang-13=
+): 6 warnings
+
+x86_64:
+
+
+Warnings summary:
+
+    12   clang: warning: argument unused during compilation: '-march=3Darmv=
+7-a' [-Wunused-command-line-argument]
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+arm64-chromebook=
+ (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatch=
+es
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-mediatek.flavour.config+arm64-chromeb=
+ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
+tches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-qualcomm.flavour.config+arm64-chromeb=
+ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
+tches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-rockchip64.flavour.config+arm64-chrom=
+ebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mis=
+matches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (arm, clang-13) =
+=E2=80=94 PASS, 0 errors, 6 warnings, 0 section mismatches
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (arm, clang-1=
+3) =E2=80=94 PASS, 0 errors, 6 warnings, 0 section mismatches
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromeos-intel-denverton.flavour.config+x86-chr=
+omebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromeos-intel-pineview.flavour.config+x86-chro=
+mebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config (x86_64, clang=
+-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config+x86-chromebook=
+ (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatc=
+hes
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors=
+, 0 warnings, 0 section mismatches
+
+---
+For more info write to <info@kernelci.org>

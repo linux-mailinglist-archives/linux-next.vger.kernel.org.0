@@ -2,75 +2,93 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A719617647
-	for <lists+linux-next@lfdr.de>; Thu,  3 Nov 2022 06:43:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 150A261764E
+	for <lists+linux-next@lfdr.de>; Thu,  3 Nov 2022 06:45:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229790AbiKCFny (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 3 Nov 2022 01:43:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33464 "EHLO
+        id S229733AbiKCFpS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 3 Nov 2022 01:45:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229598AbiKCFnx (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 3 Nov 2022 01:43:53 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEC4112D3E;
-        Wed,  2 Nov 2022 22:43:51 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id v7so436673wmn.0;
-        Wed, 02 Nov 2022 22:43:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=bRjybSvIy7GPC+qmcyN3TQaFUKfG9bdmHWkue9u5H1g=;
-        b=Xr/GoIvALAbW+JDjQAKNYFJbtU6j028csgoe6KTKp90HVOqEPPMF2FFvsLY47xKrRz
-         CfXam1/gzf3V83o5yiR07/4kTjWKPXGqvU68Q6od8ze3zQmrpvd5axQb9rlm3avaHk+s
-         IBy7yUqIA5HQn0LGdkHJRikkj57WYHlBydJSM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bRjybSvIy7GPC+qmcyN3TQaFUKfG9bdmHWkue9u5H1g=;
-        b=NMj93Fy0p6kij0yoWraHl5ZMxEkT4tnr1FxbDOwSSVbcO3VbUKb2BUgnsBF8BJibES
-         uw9bF0tckZJ2B+503jS3p9hyO7izEKzR8Qbn1feQSYuGeo0zbK4an2UHLc7jRH3zbR7w
-         Cx1pZf1PrOBNZGHnyJK1/T1JklKj1aq/tXVRjRDyHxal36rW3zkDsxGusv5KMWNno9Ub
-         3xpVsi2jtjSVxzBwfi6hXIKQThCh7s38OEzELtzGGTi+CpjCK1K3N5VYeL1Q+wU5Ine0
-         vNFC3FpqX3P8PpS7kXSv6ixyS538qwkmeRwlqwD4V0U2sOahqONoTRyTtIxXIzPS+WpX
-         l86Q==
-X-Gm-Message-State: ACrzQf0CvHQKOesOdD/UgPGJhzDjdK+85e/2Dm6M8ZHFMAWll6k5C4QO
-        nGfQpZdWKZs85U8vYhUzV5bhAsaqwHZbCHcNI+Xsnc9C
-X-Google-Smtp-Source: AMsMyM68EPBtgvWAMcecAd62+fd5k/kYRpgUwfM3Om5gX0Vc0GE3x7xq4qQ6agBbbWT9EG27dikSueujw1asiaO473c=
-X-Received: by 2002:a1c:25c1:0:b0:3cf:4dc4:5a97 with SMTP id
- l184-20020a1c25c1000000b003cf4dc45a97mr25885424wml.147.1667454230246; Wed, 02
- Nov 2022 22:43:50 -0700 (PDT)
-MIME-Version: 1.0
-References: <20221103163757.1b6219a9@canb.auug.org.au>
-In-Reply-To: <20221103163757.1b6219a9@canb.auug.org.au>
-From:   Joel Stanley <joel@jms.id.au>
-Date:   Thu, 3 Nov 2022 05:43:38 +0000
-Message-ID: <CACPK8XeEfuPzGY5sORrWwS_sECH395B3cW4x5YMNDw0-205V+A@mail.gmail.com>
-Subject: Re: linux-next: Signed-off-by missing for commit in the aspeed tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        with ESMTP id S229457AbiKCFpR (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 3 Nov 2022 01:45:17 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A67B13F54;
+        Wed,  2 Nov 2022 22:45:16 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4N2t563hyvz4xG6;
+        Thu,  3 Nov 2022 16:45:14 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1667454314;
+        bh=odUBhmY5EdWW5u5PgK2wpAh5CNrc3eSrrWaOMinBiek=;
+        h=Date:From:To:Cc:Subject:From;
+        b=e5UmbPjoFUTfQEnNnNjz+Z6LIpG6SSEBNdgsthFr9UbSNmrM+IHQ21m7vFRzzBkJn
+         B1gXwMmoHh4j2Gh1vabRzOaRiqpPTF7plP44hphE3kU9i4IgkMT/LEstV4IQctvoOS
+         kcMEVgtsRIhxf1WjHLQ6Y1bcPEmaOAjtEUgot/fQ/lOSlEcGkD/o68r1pDjaIu0/VX
+         SkntbsfQACGkpnctdGdDJWFB7MoyPkmm6zuq+aNAeEfV7nb8FW7Z20nTNcNPpEEQRD
+         CBt16lUtf76BJkE7WN9uyP91Lx8lqhLWjYn5MOf0G6tdwNqq6Y+MrgQ+8ts3cxKhRY
+         dKhSlE8kIjPlQ==
+Date:   Thu, 3 Nov 2022 16:45:13 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Subject: linux-next: Fixes tag needs some work in the drm-msm-lumag tree
+Message-ID: <20221103164513.1042ac8d@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/TV9+jsoUrH4AYLMNqfE.9dd";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, 3 Nov 2022 at 05:38, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> Commit
->
->   e5bf0d36698a ("soc: nuvoton: Add SoC info driver for WPCM450")
->
-> is missing a Signed-off-by from its committer.
+--Sig_/TV9+jsoUrH4AYLMNqfE.9dd
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks, fixed now.
+Hi all,
+
+In commit
+
+  28cdee47f519 ("drm/msm/dsi: drop modeset sanity checks")
+
+Fixes tag
+
+  Fixes: 3f0689e66352 ("drm/msm/dsi: check msm_dsi and dsi pointers before
+
+has these problem(s):
+
+  - Subject has leading but no trailing parentheses
+  - Subject has leading but no trailing quoteso
+
+Please do not truncate or fold Fixes: tag lines.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/TV9+jsoUrH4AYLMNqfE.9dd
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNjVWkACgkQAVBC80lX
+0GwGJAf/bk/6bA69je74QGLz20G7LeYw7n+5JC5N2kv6tcxdwmJ86GILE9YDo6b3
+5XITzeRcEQbj6NJwO8YonQTW/MYONEEeNQgzqYr2AZqYD+0GrMM3vmCmYuBjD+VL
+fSKdE19wOg9HUA7DJPeGumLDwTHOUqs3REN2sZYeh+x/HE1rzuoJiWAZi+OIovXI
+ImzdCxNH0uweKU+UMzFexthq6uGoL0i0VMDkkkAOYvxcgmFt7moVQhWCYLLIIE5e
+leC0j6AMomOSgzMtQZQH0XZP4MpVZrqZj0HVlU1/hZelvUBV35SQeKlJ6DFoPeCG
+GnYgEMSPWZcC7eF8RMnBH/YeDM2Y/w==
+=8Wrh
+-----END PGP SIGNATURE-----
+
+--Sig_/TV9+jsoUrH4AYLMNqfE.9dd--

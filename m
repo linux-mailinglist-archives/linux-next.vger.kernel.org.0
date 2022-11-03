@@ -2,83 +2,75 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0335561763A
-	for <lists+linux-next@lfdr.de>; Thu,  3 Nov 2022 06:38:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A719617647
+	for <lists+linux-next@lfdr.de>; Thu,  3 Nov 2022 06:43:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230373AbiKCFiC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 3 Nov 2022 01:38:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59702 "EHLO
+        id S229790AbiKCFny (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 3 Nov 2022 01:43:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229733AbiKCFiB (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 3 Nov 2022 01:38:01 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDA562DE4;
-        Wed,  2 Nov 2022 22:37:59 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4N2swk2fs3z4xP9;
-        Thu,  3 Nov 2022 16:37:58 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1667453878;
-        bh=FNYmxgIkNSWN5NQQMV3yQPmQJmWGtWG9QK3nm8/y/RU=;
-        h=Date:From:To:Cc:Subject:From;
-        b=TfPjM+0RlKXndU8ODniDEBb+6WJ4DQvhW1vQVAh0NsKUzS6UvgbN2cYonP7Ys9YDd
-         2X3URh1kroXHKnXlk9PKn3uhHmo7O8QWQUFlHJDw7w6O81KGhjnSHCNThiX2/mSAFy
-         j3T6JfuPAppuuWaHRUMBhBWqwwsPeRoNK3exHTo/zmrVUK+gQN8hjsNHhxJLvO/Nyf
-         RHpolSdVTRyxCP2ctLuvyeSWUgod2LxdIQrrnBYUC5/y8G6h7gZPx7x8mGKikDLlOc
-         tB1DfKhPtnGyZbzlgOGAM19MvCBmhTWGQy//Lcc7IOS9tb3SQgqPvzFMKdL8sxZ/oJ
-         6XIC6AxcQw01w==
-Date:   Thu, 3 Nov 2022 16:37:57 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Joel Stanley <joel@jms.id.au>
+        with ESMTP id S229598AbiKCFnx (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 3 Nov 2022 01:43:53 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEC4112D3E;
+        Wed,  2 Nov 2022 22:43:51 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id v7so436673wmn.0;
+        Wed, 02 Nov 2022 22:43:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=jms.id.au; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=bRjybSvIy7GPC+qmcyN3TQaFUKfG9bdmHWkue9u5H1g=;
+        b=Xr/GoIvALAbW+JDjQAKNYFJbtU6j028csgoe6KTKp90HVOqEPPMF2FFvsLY47xKrRz
+         CfXam1/gzf3V83o5yiR07/4kTjWKPXGqvU68Q6od8ze3zQmrpvd5axQb9rlm3avaHk+s
+         IBy7yUqIA5HQn0LGdkHJRikkj57WYHlBydJSM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bRjybSvIy7GPC+qmcyN3TQaFUKfG9bdmHWkue9u5H1g=;
+        b=NMj93Fy0p6kij0yoWraHl5ZMxEkT4tnr1FxbDOwSSVbcO3VbUKb2BUgnsBF8BJibES
+         uw9bF0tckZJ2B+503jS3p9hyO7izEKzR8Qbn1feQSYuGeo0zbK4an2UHLc7jRH3zbR7w
+         Cx1pZf1PrOBNZGHnyJK1/T1JklKj1aq/tXVRjRDyHxal36rW3zkDsxGusv5KMWNno9Ub
+         3xpVsi2jtjSVxzBwfi6hXIKQThCh7s38OEzELtzGGTi+CpjCK1K3N5VYeL1Q+wU5Ine0
+         vNFC3FpqX3P8PpS7kXSv6ixyS538qwkmeRwlqwD4V0U2sOahqONoTRyTtIxXIzPS+WpX
+         l86Q==
+X-Gm-Message-State: ACrzQf0CvHQKOesOdD/UgPGJhzDjdK+85e/2Dm6M8ZHFMAWll6k5C4QO
+        nGfQpZdWKZs85U8vYhUzV5bhAsaqwHZbCHcNI+Xsnc9C
+X-Google-Smtp-Source: AMsMyM68EPBtgvWAMcecAd62+fd5k/kYRpgUwfM3Om5gX0Vc0GE3x7xq4qQ6agBbbWT9EG27dikSueujw1asiaO473c=
+X-Received: by 2002:a1c:25c1:0:b0:3cf:4dc4:5a97 with SMTP id
+ l184-20020a1c25c1000000b003cf4dc45a97mr25885424wml.147.1667454230246; Wed, 02
+ Nov 2022 22:43:50 -0700 (PDT)
+MIME-Version: 1.0
+References: <20221103163757.1b6219a9@canb.auug.org.au>
+In-Reply-To: <20221103163757.1b6219a9@canb.auug.org.au>
+From:   Joel Stanley <joel@jms.id.au>
+Date:   Thu, 3 Nov 2022 05:43:38 +0000
+Message-ID: <CACPK8XeEfuPzGY5sORrWwS_sECH395B3cW4x5YMNDw0-205V+A@mail.gmail.com>
+Subject: Re: linux-next: Signed-off-by missing for commit in the aspeed tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the aspeed tree
-Message-ID: <20221103163757.1b6219a9@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/e7IVy5M_L9LZoUIrD0mX70n";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/e7IVy5M_L9LZoUIrD0mX70n
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Thu, 3 Nov 2022 at 05:38, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> Commit
+>
+>   e5bf0d36698a ("soc: nuvoton: Add SoC info driver for WPCM450")
+>
+> is missing a Signed-off-by from its committer.
 
-Hi all,
-
-Commit
-
-  e5bf0d36698a ("soc: nuvoton: Add SoC info driver for WPCM450")
-
-is missing a Signed-off-by from its committer.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/e7IVy5M_L9LZoUIrD0mX70n
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNjU7UACgkQAVBC80lX
-0GwBeggAjzH6RQZT3k0nBNHCU70T3BU/lN4mvt6cRIt/FHGUHARTeSbGfu5MiyJj
-qDjI9SAGbJAIQoPpIkq4HrAUlNgYX3fFhmDWzQvRNNOXKupYVcBXBe0IAJ8zTVnh
-DPHU69lXf1bgAih2qo5hXa2PtwyRvqVL6i1xoPNA+7uZNTuW2FHRyRCYpc9n/9s9
-muxlVFRFSYZ2B2fJVxXEsyZNK7S9ENUzDXMIsxcxSVms/qUpGny1oZ8eR5PeCb3h
-3fYpxeSklHUsSh3eF9jxDhnK0j+zOHWudnVTwkFFbSRa4aNNPYX2s1iHbN4letYw
-tcCA1JShoE4hHyL+F+OVH7iaaBSNpw==
-=7e63
------END PGP SIGNATURE-----
-
---Sig_/e7IVy5M_L9LZoUIrD0mX70n--
+Thanks, fixed now.

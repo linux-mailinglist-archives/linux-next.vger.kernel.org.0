@@ -2,59 +2,59 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54E5661A111
-	for <lists+linux-next@lfdr.de>; Fri,  4 Nov 2022 20:33:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80A3661A118
+	for <lists+linux-next@lfdr.de>; Fri,  4 Nov 2022 20:35:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229588AbiKDTdH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 4 Nov 2022 15:33:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59860 "EHLO
+        id S229615AbiKDTf0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 4 Nov 2022 15:35:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229615AbiKDTdE (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 4 Nov 2022 15:33:04 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62A3043AE8
-        for <linux-next@vger.kernel.org>; Fri,  4 Nov 2022 12:33:01 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id f63so5215535pgc.2
-        for <linux-next@vger.kernel.org>; Fri, 04 Nov 2022 12:33:01 -0700 (PDT)
+        with ESMTP id S229492AbiKDTfZ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 4 Nov 2022 15:35:25 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3088645090
+        for <linux-next@vger.kernel.org>; Fri,  4 Nov 2022 12:35:24 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id b29so5328338pfp.13
+        for <linux-next@vger.kernel.org>; Fri, 04 Nov 2022 12:35:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=content-disposition:mime-version:message-id:subject:cc:to:date:from
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=qGzpjn13dVlcuHa3QfKLMJS0aiybXjJ4fJgb8JKEdS0=;
-        b=iEpoNfjUSPmVInj+LqC03wXnbIzcRmhgeZwez+hMwOhChOZJiBRq1S5KF7dMUzdhRs
-         TyZtq+Iautgmig3VjOBjK5N+qtPcRucs5Pnz6722c6ahsdN0q3KtKaVo4h/ffyDrOnmQ
-         1+NqMwX5+Gai6f6NTzw8VnZqzwpHHkzEdI//U=
+        bh=Fi3uLXH+szzqTxRSWVS63wUkqoaeAU4TkZNAaOvVK+s=;
+        b=aWx+oPO+Srbo1w+pEL6tCCG2kMxu7Owtr3UvsxPEkOsAPbsNEoWsMP/nloh4Xfxmjt
+         yAPc0edxVQcVDqNuzsSO7GcAU0weBGcazqHv85VCQxprA0/+UVoKiaaE+p7ftEd7g2sC
+         TGxq/1cx5xFlVcjBZr75s1UfKRd0G0E9umQIQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-disposition:mime-version:message-id:subject:cc:to:date:from
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qGzpjn13dVlcuHa3QfKLMJS0aiybXjJ4fJgb8JKEdS0=;
-        b=ny8TLahEAxf/AI0egnvxEV63g46OGwq9wHFGYnzKx2qnFVQkleI+1GWSRa9G07LPGP
-         2w0s8forCRRk6bzzrofIYzAVlD2M5IiK3f1hvC5QFqDzoKo83vx7k2vAWFBQWcYntEhu
-         33OMCvAbB6OUjE+RO7cHUf1aT4QVnck7jwsXpxxWr0XGhoICvu9ZSzF2ACw0RovrFQwS
-         ZCrqkLI0iLCsDyg7JFvl9PoPI5tz+OPrcllVcqHWF8D3oVKAa+9Urja0yXefhIFHzwtO
-         fmP0u+zzAUhxkVtd5sDMVybo0M2mA5cHyqn0UJltQbV6bQiIbY9y4fUBP7MrwvTwvDQ9
-         DgYw==
-X-Gm-Message-State: ACrzQf3BeDjBbX+x5QYVked9TV3lRiDIi1696qT/pfINSHktOIujOBdT
-        OzkTJd8QU/suFbuTcD8bD+1Zeg==
-X-Google-Smtp-Source: AMsMyM5FVrooXJN4dw9eC1GsB+jA3C1bDK2l4NoOTcLVgrzfxIY3HF8QnF9dZnGI1NjpBiY+EHAnTQ==
-X-Received: by 2002:a05:6a00:1309:b0:535:d421:1347 with SMTP id j9-20020a056a00130900b00535d4211347mr37370950pfu.5.1667590381090;
-        Fri, 04 Nov 2022 12:33:01 -0700 (PDT)
+        bh=Fi3uLXH+szzqTxRSWVS63wUkqoaeAU4TkZNAaOvVK+s=;
+        b=QRQZV2RRMV3nej6DP1FZkYxYMMz5IB0BFdU5cc1YZi8eYUhVdJ+dagnkjEjXfgOyfS
+         vyO40cCCdHk2XryoGtaYQYkz6Kcb+A7ye0ICuPxcsjn89DkTDDNmnciSsgsGLO5Hhjc/
+         9eepS5daNKD89nM44ONlZb1FbYnZcogDj/5+gZaTl+ZKnNrYq+fa7b2Xk8i8PIXElAnf
+         5kBJTMxLTFrU6wywvGhtKBhuLVubT+D1L/wHQy5FFFR19LYm98TVeiUcGov3Maou3ZNx
+         3V1AjCP/JUBNQIzuH7mnxRznLwDUVDvmgOjfOxygF3cFGzo5g60kbAMqczQgwjFzJ248
+         3arA==
+X-Gm-Message-State: ACrzQf3JMwVsHzveZqcPxk9O+mgIacEdreuTyfdcizHnnxLKKZ0+rk4h
+        uxHhY8pBDVkoELTppWYx9IIV8A==
+X-Google-Smtp-Source: AMsMyM7t+PovjIzz0bK0Dmex/GB5uaGqzigeaTOQYl4Zm0s+THtQgtXB0FMtorvOI4GBtIiH/aigqg==
+X-Received: by 2002:a05:6a00:4508:b0:56d:8afe:b7c1 with SMTP id cw8-20020a056a00450800b0056d8afeb7c1mr25958465pfb.29.1667590523697;
+        Fri, 04 Nov 2022 12:35:23 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id n4-20020a63e044000000b0044e8d66ae05sm105054pgj.22.2022.11.04.12.33.00
+        by smtp.gmail.com with ESMTPSA id i16-20020a632210000000b0043a18cef977sm109241pgi.13.2022.11.04.12.35.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Nov 2022 12:33:00 -0700 (PDT)
+        Fri, 04 Nov 2022 12:35:23 -0700 (PDT)
 From:   coverity-bot <keescook@chromium.org>
 X-Google-Original-From: coverity-bot <keescook+coverity-bot@chromium.org>
-Date:   Fri, 4 Nov 2022 12:33:00 -0700
-To:     Benedikt Niedermayr <benedikt.niedermayr@siemens.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-kernel@vger.kernel.org, Tony Lindgren <tony@atomide.com>,
-        Roger Quadros <rogerq@kernel.org>, linux-omap@vger.kernel.org,
+Date:   Fri, 4 Nov 2022 12:35:22 -0700
+To:     Crt Mori <cmo@melexis.com>
+Cc:     linux-iio@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
+        linux-kernel@vger.kernel.org, Jonathan Cameron <jic23@kernel.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
         "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
         linux-next@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Coverity: gpmc_is_valid_waitpin(): Control flow issues
-Message-ID: <202211041233.4D45359E7@keescook>
+Subject: Coverity: mlx90632_probe(): Error handling issues
+Message-ID: <202211041235.FB1AF7F6F@keescook>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -77,27 +77,27 @@ https://scan.coverity.com/projects/linux-next-weekly-scan
 You're getting this email because you were associated with the identified
 lines of code (noted below) that were touched by commits:
 
-  Wed Nov 2 10:02:39 2022 -0400
-    89aed3cd5cb9 ("memory: omap-gpmc: wait pin additions")
+  Thu Nov 3 21:42:26 2022 +0000
+    c83d3e5ca97f ("iio: temperature: mlx90632 Add runtime powermanagement modes")
 
 Coverity reported the following:
 
-*** CID 1527139:  Control flow issues  (NO_EFFECT)
-drivers/memory/omap-gpmc.c:1048 in gpmc_is_valid_waitpin()
-1042     	spin_unlock(&gpmc_mem_lock);
-1043     }
-1044     EXPORT_SYMBOL(gpmc_cs_free);
-1045
-1046     static bool gpmc_is_valid_waitpin(u32 waitpin)
-1047     {
-vvv     CID 1527139:  Control flow issues  (NO_EFFECT)
-vvv     This greater-than-or-equal-to-zero comparison of an unsigned value is always true. "waitpin >= 0U".
-1048     	return waitpin >= 0 && waitpin < gpmc_nr_waitpins;
-1049     }
-1050
-1051     static int gpmc_alloc_waitpin(struct gpmc_device *gpmc,
-1052     			      struct gpmc_settings *p)
-1053     {
+*** CID 1527134:  Error handling issues  (CHECKED_RETURN)
+drivers/iio/temperature/mlx90632.c:1270 in mlx90632_probe()
+1264     	mlx90632->object_ambient_temperature = 25000; /* 25 degrees milliCelsius */
+1265     	mlx90632->interaction_ts = jiffies; /* Set initial value */
+1266
+1267     	pm_runtime_get_noresume(&client->dev);
+1268     	pm_runtime_set_active(&client->dev);
+1269
+vvv     CID 1527134:  Error handling issues  (CHECKED_RETURN)
+vvv     Calling "devm_pm_runtime_enable" without checking return value (as is done elsewhere 21 out of 24 times).
+1270     	devm_pm_runtime_enable(&client->dev);
+1271     	pm_runtime_set_autosuspend_delay(&client->dev, MLX90632_SLEEP_DELAY_MS);
+1272     	pm_runtime_use_autosuspend(&client->dev);
+1273     	pm_runtime_put_autosuspend(&client->dev);
+1274
+1275     	return devm_iio_device_register(&client->dev, indio_dev);
 
 If this is a false positive, please let us know so we can mark it as
 such, or teach the Coverity rules to be smarter. If not, please make
@@ -105,8 +105,8 @@ sure fixes get into linux-next. :) For patches fixing this, please
 include these lines (but double-check the "Fixes" first):
 
 Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
-Addresses-Coverity-ID: 1527139 ("Control flow issues")
-Fixes: 89aed3cd5cb9 ("memory: omap-gpmc: wait pin additions")
+Addresses-Coverity-ID: 1527134 ("Error handling issues")
+Fixes: c83d3e5ca97f ("iio: temperature: mlx90632 Add runtime powermanagement modes")
 
 Thanks for your attention!
 

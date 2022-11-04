@@ -2,64 +2,64 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D686661912C
-	for <lists+linux-next@lfdr.de>; Fri,  4 Nov 2022 07:39:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBA35619195
+	for <lists+linux-next@lfdr.de>; Fri,  4 Nov 2022 08:08:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229567AbiKDGju (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 4 Nov 2022 02:39:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33212 "EHLO
+        id S229532AbiKDHIu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 4 Nov 2022 03:08:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbiKDGjt (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 4 Nov 2022 02:39:49 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CDFCD2FD
-        for <linux-next@vger.kernel.org>; Thu,  3 Nov 2022 23:39:46 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id v3so3621336pgh.4
-        for <linux-next@vger.kernel.org>; Thu, 03 Nov 2022 23:39:46 -0700 (PDT)
+        with ESMTP id S230172AbiKDHIr (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 4 Nov 2022 03:08:47 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14596275FE
+        for <linux-next@vger.kernel.org>; Fri,  4 Nov 2022 00:08:44 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id 128so3681132pga.1
+        for <linux-next@vger.kernel.org>; Fri, 04 Nov 2022 00:08:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kernelci-org.20210112.gappssmtp.com; s=20210112;
         h=from:to:subject:content-transfer-encoding:mime-version:date
          :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=5oYc0FEfq6MDYyW4WidCSIA9RpF3BZw+1otCNUhcBLs=;
-        b=5AINGaquTeEmwJ28wIB5n8SycWSnNOp/8ya0sCa5/CH2i2pE9jefqdM5r2j/7A1yPc
-         sVAGafN968t7YimB6tptyW3MO91+CD2C/ILqfpdITzKD82zBvTaAlz+uUJdjkghlFZxO
-         a2fUfj9M41DiXhBoIVB5NSi9Nuk7rWwQ0/O6jbkJzuPbaOU+bKdIJ5m72lY8I3+h/BTS
-         nweIbdaR6+NhxsnWRwwo7khKfByuyzcy+PpDL/DwtbibslQpk1XPA0Vbv3CLpTI2oAde
-         hymvDgw/CSX/R/+TZE6EsmpsVj56HNdHQdq9pQCXuvwx+kNbfNwSvxIT9R+/mLY1UWmd
-         MTJA==
+        bh=V8229q9WuPw4pFeqwn2KqSKv0V9NF82LIaGGuHW19Wo=;
+        b=cD6MXydHlFxpel+pzHHB74LdEsvgLj9c4+yyOuxYdovQRyLsD4Ggs52m+SEVNNAUhq
+         BuqvnrxMbZS0dk20PGy90G8D0Z5HxOD1pmyi2Ikyi3pG2ZKDqUk6g7Bvw/PUmJwec1IK
+         G897ayiSwxorIfGQkmNj6HJjg/yGKVrQcXmVYyGJVfh1SCoAy4FqfvU1iA88oZUwQnHA
+         wU2o/t4ACKlCvIsnEy7uA44vcg04g5I2w66i9bwF43ku/bKc9FdZo7KXbcg87XrmzCLP
+         pF9ZlamIaTy28JyZFuOFzAVxLSMS8jqzR1WDSHEyEwLtM+DN4qswqFN4a5JaUmShMcya
+         RRgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=from:to:subject:content-transfer-encoding:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=5oYc0FEfq6MDYyW4WidCSIA9RpF3BZw+1otCNUhcBLs=;
-        b=q8/1r35nEbv2G7A2/JANap0M051hwvzPq/kkm/oCLoU4cMyJaXsHnKhj5lZWUuISiv
-         yVkLCH9LqEJA0sl8LdWwFdoocLytlQfoOCFAZuMB+NHvsT4wfq3cbU5PqmrUEQYPUY7Q
-         YxAnWzTk45LiEg/6uHuZqhxLAVYwpMPaiAoa+cXjyfyoifVb79eTJ8hpS1PRDUePKg16
-         dWPYTSgoiBfL6Lj1DB3S9v+fxsPdykRE4CHBXMgi7/oqFgUUruZtFZYF8Tm1wFlJ1zsk
-         0pPdfzQIHNyKYaGEconzv5RTbRz+hpIhNL/aTNYdkN3eG+ZXO8htjvgwl69Gid5DuWfW
-         V+Pg==
-X-Gm-Message-State: ACrzQf0XZUn8UZjzqBO5/wBnY5zyXerh8uEZN6yixhHueCrrJ2jbOgTP
-        VDIAjTlJv67CVhKyFoykJhKkERYEHpAzzw==
-X-Google-Smtp-Source: AMsMyM5RAUUtbPiEwSUCLdIOA4YE/TzQKFRVDpf83d8mr7rhPCShPr3ugn/sqx1ZioVdDzzjlb5cEQ==
-X-Received: by 2002:a63:ce54:0:b0:46a:e2a9:c7f6 with SMTP id r20-20020a63ce54000000b0046ae2a9c7f6mr28966886pgi.264.1667543984318;
-        Thu, 03 Nov 2022 23:39:44 -0700 (PDT)
+        bh=V8229q9WuPw4pFeqwn2KqSKv0V9NF82LIaGGuHW19Wo=;
+        b=MECksk9uey6cNxm6n28r69N8P5k8xMd+jqE5if5I4AqBCYrMyyFieZVjGPOC0OMxlL
+         kql0qdMhsyMwkjyGPMtDuufVhH3gPOZG58eku9MvgOFn/8pPV87qBUgg3TNJ36r29McJ
+         +b3FWD3MkKFFMRE4ZPiWT6SvAcMFQ36YNmKJ1BLCkYfBx0EYTVUkIdy0WAW0VjnNFqi6
+         aIAOq09YqDp5C/rCGNAatRmVZwy4b5BxamjPI2wzsDKb50l+3Ot+N5t1n4UbpZPQTFKc
+         DD1f00PkQFY2Koul9OpSmm7+Q9OasPe10vFW3BZGmF8xVnTBSCOnHOij4l2H5x1M4HjS
+         9UZQ==
+X-Gm-Message-State: ACrzQf38kpAaKT/VrdqPorXhD5q91lDL/ty1/zOJe61g52wQaqYEFXI2
+        B0/9MTT0UdI80ODy5vIPdyMBwUKsg/sVXgvA
+X-Google-Smtp-Source: AMsMyM4ppCp2yThDBV15+mfQfANUwiaLz2s3bAIAqWzkJtSPmad1LbtfaVRWSDBhI+08ZJMI8jPpdw==
+X-Received: by 2002:a63:4955:0:b0:44e:d36e:4c2e with SMTP id y21-20020a634955000000b0044ed36e4c2emr29376150pgk.326.1667545722320;
+        Fri, 04 Nov 2022 00:08:42 -0700 (PDT)
 Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id q95-20020a17090a17e800b001fe39bda429sm982646pja.38.2022.11.03.23.39.43
+        by smtp.gmail.com with ESMTPSA id 64-20020a621543000000b00560cdb3784bsm1930493pfv.60.2022.11.04.00.08.41
         for <linux-next@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 23:39:43 -0700 (PDT)
-Message-ID: <6364b3af.170a0220.343e4.2336@mx.google.com>
-Date:   Thu, 03 Nov 2022 23:39:43 -0700 (PDT)
+        Fri, 04 Nov 2022 00:08:41 -0700 (PDT)
+Message-ID: <6364ba79.620a0220.c90a6.4375@mx.google.com>
+Date:   Fri, 04 Nov 2022 00:08:41 -0700 (PDT)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-Kernelci-Report-Type: build
-X-Kernelci-Kernel: next-20221104
-X-Kernelci-Branch: master
+X-Kernelci-Kernel: v6.1-rc3-392-g53fcf96923f7
+X-Kernelci-Branch: pending-fixes
 X-Kernelci-Tree: next
-Subject: next/master build: 219 builds: 4 failed, 215 passed, 7 errors,
- 77 warnings (next-20221104)
+Subject: next/pending-fixes build: 199 builds: 4 failed, 195 passed, 8 errors,
+ 38 warnings (v6.1-rc3-392-g53fcf96923f7)
 To:     linux-next@vger.kernel.org
 From:   "kernelci.org bot" <bot@kernelci.org>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -71,31 +71,28 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master build: 219 builds: 4 failed, 215 passed, 7 errors, 77 warnings =
-(next-20221104)
+next/pending-fixes build: 199 builds: 4 failed, 195 passed, 8 errors, 38 wa=
+rnings (v6.1-rc3-392-g53fcf96923f7)
 
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20221104/
+Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
+rnel/v6.1-rc3-392-g53fcf96923f7/
 
 Tree: next
-Branch: master
-Git Describe: next-20221104
-Git Commit: 0cdb3579f1ee4c1e55acf8dfb0697b660067b1f8
+Branch: pending-fixes
+Git Describe: v6.1-rc3-392-g53fcf96923f7
+Git Commit: 53fcf96923f7823196751aa781db39ac83093348
 Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
 Built: 8 unique architectures
 
 Build Failures Detected:
 
 arm:
-    cros://chromeos-5.10/armel/chromiumos-arm.flavour.config: (clang-13) FA=
-IL
     rpc_defconfig: (gcc-10) FAIL
-
-i386:
-    allmodconfig: (clang-16) FAIL
+    sama7_defconfig: (gcc-10) FAIL
 
 mips:
     decstation_64_defconfig: (gcc-10) FAIL
+    rs90_defconfig: (gcc-10) FAIL
 
 Errors and Warnings Detected:
 
@@ -104,25 +101,12 @@ arc:
 arm64:
 
 arm:
-    aspeed_g5_defconfig (clang-16): 10 warnings
-    cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (clang-13): 1 =
-error, 5 warnings
-    cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (clang-13=
-): 6 warnings
     keystone_defconfig (gcc-10): 1 warning
     moxart_defconfig (gcc-10): 1 warning
-    multi_v7_defconfig (gcc-10): 1 warning
-    multi_v7_defconfig (clang-16): 10 warnings
-    multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (gcc-10): 1 warning
-    multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (gcc-10): 1 warni=
-ng
-    multi_v7_defconfig+CONFIG_SMP=3Dn (gcc-10): 1 warning
-    multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy (gcc-10): 1 warning
-    multi_v7_defconfig+debug (gcc-10): 1 warning
-    multi_v7_defconfig+kselftest (gcc-10): 1 warning
     rpc_defconfig (gcc-10): 2 errors
+    sama7_defconfig (gcc-10): 1 error
     tct_hammer_defconfig (gcc-10): 1 warning
-    tegra_defconfig (gcc-10): 2 warnings
+    tegra_defconfig (gcc-10): 1 warning
     viper_defconfig (gcc-10): 1 warning
 
 i386:
@@ -139,7 +123,7 @@ mips:
     loongson2k_defconfig (gcc-10): 1 error
     loongson3_defconfig (gcc-10): 1 error
     rb532_defconfig (gcc-10): 2 warnings
-    rs90_defconfig (gcc-10): 1 warning
+    rs90_defconfig (gcc-10): 1 error, 1 warning
 
 riscv:
 
@@ -156,9 +140,7 @@ Errors summary:
 
     4    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=
 =80=98-mhard-float=E2=80=99
-    1    drivers/pwm/pwm-tegra.c:148:53: error: signed shift result (0x3B9A=
-CA0000) requires 39 bits to represent, but 'long' only has 32 bits [-Werror=
-,-Wshift-overflow]
+    2    ERROR: modpost: Section mismatches detected.
     1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=
 =3D0x'
     1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=
@@ -166,15 +148,8 @@ CA0000) requires 39 bits to represent, but 'long' only has 32 bits [-Werror=
 
 Warnings summary:
 
-    21   clang: warning: argument unused during compilation: '-march=3Darmv=
-7-a' [-Wunused-command-line-argument]
-    10   clang: warning: argument unused during compilation: '-march=3Darmv=
-6k' [-Wunused-command-line-argument]
-    8    fs/coredump.c:842:12: warning: =E2=80=98dump_emit_page=E2=80=99 de=
+    8    fs/coredump.c:834:12: warning: =E2=80=98dump_emit_page=E2=80=99 de=
 fined but not used [-Wunused-function]
-    8    drivers/pwm/pwm-tegra.c:148:53: warning: result of =E2=80=98100000=
-0000 << 8=E2=80=99 requires 39 bits to represent, but =E2=80=98long int=E2=
-=80=99 only has 32 bits [-Wshift-overflow=3D]
     8    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [=
 -Wcpp]
     3    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
@@ -206,6 +181,14 @@ tion failed, symbol will not be versioned.
     1    cc1: warning: result of =E2=80=98-117440512 << 16=E2=80=99 require=
 s 44 bits to represent, but =E2=80=98int=E2=80=99 only has 32 bits [-Wshift=
 -overflow=3D]
+
+Section mismatches summary:
+
+    60   WARNING: modpost: vmlinux.o: section mismatch in reference: snd_so=
+c_init (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
+    19   WARNING: modpost: sound/soc/snd-soc-core.o: section mismatch in re=
+ference: init_module (section: .init.text) -> snd_soc_util_exit (section: .=
+exit.text)
 
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
@@ -246,13 +229,13 @@ Warnings:
 
 ---------------------------------------------------------------------------=
 -----
-allmodconfig (i386, clang-16) =E2=80=94 FAIL, 0 errors, 0 warnings, 0 secti=
-on mismatches
+allmodconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
 
----------------------------------------------------------------------------=
------
-allmodconfig (arm64, clang-16) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
+Section mismatches:
+    WARNING: modpost: sound/soc/snd-soc-core.o: section mismatch in referen=
+ce: init_module (section: .init.text) -> snd_soc_util_exit (section: .exit.=
+text)
 
 ---------------------------------------------------------------------------=
 -----
@@ -264,23 +247,13 @@ Warnings:
 
 ---------------------------------------------------------------------------=
 -----
-allnoconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
 allnoconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
 n mismatches
 
 ---------------------------------------------------------------------------=
 -----
-allnoconfig (x86_64, clang-16) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (i386, clang-16) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
+allnoconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -298,40 +271,13 @@ ar7_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
  mismatches
 
 Warnings:
-    fs/coredump.c:842:12: warning: =E2=80=98dump_emit_page=E2=80=99 defined=
+    fs/coredump.c:834:12: warning: =E2=80=98dump_emit_page=E2=80=99 defined=
  but not used [-Wunused-function]
 
 ---------------------------------------------------------------------------=
 -----
 aspeed_g4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
 ection mismatches
-
----------------------------------------------------------------------------=
------
-aspeed_g5_defconfig (arm, clang-16) =E2=80=94 PASS, 0 errors, 10 warnings, =
-0 section mismatches
-
-Warnings:
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
 
 ---------------------------------------------------------------------------=
 -----
@@ -347,6 +293,17 @@ tion mismatches
 -----
 at91_dt_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
 tion mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
+
+---------------------------------------------------------------------------=
+-----
+ath25_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -377,6 +334,12 @@ ion mismatches
 -----
 bcm2835_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
 tion mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
 
 ---------------------------------------------------------------------------=
 -----
@@ -469,6 +432,11 @@ on mismatches
 cm_x300_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
 tion mismatches
 
+Section mismatches:
+    WARNING: modpost: sound/soc/snd-soc-core.o: section mismatch in referen=
+ce: init_module (section: .init.text) -> snd_soc_util_exit (section: .exit.=
+text)
+
 ---------------------------------------------------------------------------=
 -----
 cobalt_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
@@ -496,105 +464,6 @@ on mismatches
 
 ---------------------------------------------------------------------------=
 -----
-cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config (arm64, clang-13=
-) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+arm64-chromebook=
- (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatch=
-es
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-mediatek.flavour.config+arm64-chromeb=
-ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
-tches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-qualcomm.flavour.config+arm64-chromeb=
-ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
-tches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-rockchip64.flavour.config+arm64-chrom=
-ebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mis=
-matches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (arm, clang-13) =
-=E2=80=94 FAIL, 1 error, 5 warnings, 0 section mismatches
-
-Errors:
-    drivers/pwm/pwm-tegra.c:148:53: error: signed shift result (0x3B9ACA000=
-0) requires 39 bits to represent, but 'long' only has 32 bits [-Werror,-Wsh=
-ift-overflow]
-
-Warnings:
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (arm, clang-1=
-3) =E2=80=94 PASS, 0 errors, 6 warnings, 0 section mismatches
-
-Warnings:
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromeos-amd-stoneyridge.flavour.config+x86-chr=
-omebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
-mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromeos-intel-denverton.flavour.config+x86-chr=
-omebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
-mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromeos-intel-pineview.flavour.config+x86-chro=
-mebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config (x86_64, clang=
--13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config+x86-chromebook=
- (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatc=
-hes
-
----------------------------------------------------------------------------=
------
 cu1000-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
  section mismatches
 
@@ -608,10 +477,19 @@ cu1830-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
 davinci_all_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
  section mismatches
 
+Section mismatches:
+    WARNING: modpost: sound/soc/snd-soc-core.o: section mismatch in referen=
+ce: init_module (section: .init.text) -> snd_soc_util_exit (section: .exit.=
+text)
+
 ---------------------------------------------------------------------------=
 -----
 db1xxx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
 tion mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
 
 ---------------------------------------------------------------------------=
 -----
@@ -635,28 +513,69 @@ ismatches
 
 ---------------------------------------------------------------------------=
 -----
-defconfig+CONFIG_ARM64_16K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
-rs, 0 warnings, 0 section mismatches
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
 
 ---------------------------------------------------------------------------=
 -----
-defconfig+CONFIG_EFI=3Dn (riscv, clang-16) =E2=80=94 PASS, 0 errors, 0 warn=
-ings, 0 section mismatches
+defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
+s, 0 warnings, 0 section mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
 
 ---------------------------------------------------------------------------=
 -----
 defconfig+CONFIG_RANDOMIZE_BASE=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
 s, 0 warnings, 0 section mismatches
 
+Section mismatches:
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
+
 ---------------------------------------------------------------------------=
 -----
 defconfig+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
 ings, 0 section mismatches
 
+Section mismatches:
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
+
 ---------------------------------------------------------------------------=
 -----
-defconfig+arm64-chromebook+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
-rs, 0 warnings, 0 section mismatches
+defconfig+arm64-chromebook+videodec (arm64, gcc-10) =E2=80=94 PASS, 0 error=
+s, 0 warnings, 0 section mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
+
+---------------------------------------------------------------------------=
+-----
+defconfig+debug (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
 
 ---------------------------------------------------------------------------=
 -----
@@ -665,33 +584,57 @@ tion mismatches
 
 ---------------------------------------------------------------------------=
 -----
-defconfig+ima (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
 defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
  section mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
+
+---------------------------------------------------------------------------=
+-----
+defconfig+videodec (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
 
 ---------------------------------------------------------------------------=
 -----
 eseries_pxa_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
  section mismatches
 
+Section mismatches:
+    WARNING: modpost: sound/soc/snd-soc-core.o: section mismatch in referen=
+ce: init_module (section: .init.text) -> snd_soc_util_exit (section: .exit.=
+text)
+
 ---------------------------------------------------------------------------=
 -----
 exynos_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
 ion mismatches
 
+Section mismatches:
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
+
 ---------------------------------------------------------------------------=
 -----
 ezx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
  mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
 
 ---------------------------------------------------------------------------=
 -----
@@ -711,6 +654,12 @@ Errors:
 -----
 gcw0_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
 on mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
 
 ---------------------------------------------------------------------------=
 -----
@@ -754,11 +703,6 @@ ngs, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
-haps_hs_smp_defconfig+kselftest (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 w=
-arnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
 hisi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
 n mismatches
 
@@ -771,11 +715,6 @@ n mismatches
 -----
 i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
 on mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, clang-16) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -792,10 +731,22 @@ s, 0 section mismatches
 imx_v4_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
 ection mismatches
 
+Section mismatches:
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
+
 ---------------------------------------------------------------------------=
 -----
 imx_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
 ection mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
 
 ---------------------------------------------------------------------------=
 -----
@@ -848,7 +799,7 @@ keystone_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
 tion mismatches
 
 Warnings:
-    fs/coredump.c:842:12: warning: =E2=80=98dump_emit_page=E2=80=99 defined=
+    fs/coredump.c:834:12: warning: =E2=80=98dump_emit_page=E2=80=99 defined=
  but not used [-Wunused-function]
 
 ---------------------------------------------------------------------------=
@@ -884,6 +835,12 @@ Errors:
     cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
 =98-mhard-float=E2=80=99
 
+Section mismatches:
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
+
 ---------------------------------------------------------------------------=
 -----
 loongson3_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 s=
@@ -903,6 +860,12 @@ tion mismatches
 lpc32xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
 tion mismatches
 
+Section mismatches:
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
+
 ---------------------------------------------------------------------------=
 -----
 lpd270_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
@@ -917,6 +880,11 @@ tion mismatches
 -----
 magician_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
 ction mismatches
+
+Section mismatches:
+    WARNING: modpost: sound/soc/snd-soc-core.o: section mismatch in referen=
+ce: init_module (section: .init.text) -> snd_soc_util_exit (section: .exit.=
+text)
 
 ---------------------------------------------------------------------------=
 -----
@@ -973,6 +941,12 @@ milbeaut_m10v_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
 mini2440_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
 ction mismatches
 
+Section mismatches:
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
+
 ---------------------------------------------------------------------------=
 -----
 mmp2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
@@ -984,7 +958,7 @@ moxart_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
 on mismatches
 
 Warnings:
-    fs/coredump.c:842:12: warning: =E2=80=98dump_emit_page=E2=80=99 defined=
+    fs/coredump.c:834:12: warning: =E2=80=98dump_emit_page=E2=80=99 defined=
  but not used [-Wunused-function]
 
 ---------------------------------------------------------------------------=
@@ -1004,125 +978,137 @@ ection mismatches
 
 ---------------------------------------------------------------------------=
 -----
-multi_v5_defconfig (arm, clang-16) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
 multi_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
 ction mismatches
 
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
-tion mismatches
-
-Warnings:
-    drivers/pwm/pwm-tegra.c:148:53: warning: result of =E2=80=981000000000 =
-<< 8=E2=80=99 requires 39 bits to represent, but =E2=80=98long int=E2=80=99=
- only has 32 bits [-Wshift-overflow=3D]
+Section mismatches:
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
 
 ---------------------------------------------------------------------------=
 -----
-multi_v7_defconfig (arm, clang-16) =E2=80=94 PASS, 0 errors, 10 warnings, 0=
- section mismatches
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
 
-Warnings:
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
+Section mismatches:
+    WARNING: modpost: sound/soc/snd-soc-core.o: section mismatch in referen=
+ce: init_module (section: .init.text) -> snd_soc_util_exit (section: .exit.=
+text)
 
 ---------------------------------------------------------------------------=
 -----
 multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm, gcc-10) =E2=80=94 PASS, =
-0 errors, 1 warning, 0 section mismatches
+0 errors, 0 warnings, 0 section mismatches
 
-Warnings:
-    drivers/pwm/pwm-tegra.c:148:53: warning: result of =E2=80=981000000000 =
-<< 8=E2=80=99 requires 39 bits to represent, but =E2=80=98long int=E2=80=99=
- only has 32 bits [-Wshift-overflow=3D]
+Section mismatches:
+    WARNING: modpost: sound/soc/snd-soc-core.o: section mismatch in referen=
+ce: init_module (section: .init.text) -> snd_soc_util_exit (section: .exit.=
+text)
 
 ---------------------------------------------------------------------------=
 -----
 multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (arm, gcc-10) =E2=80=
-=94 PASS, 0 errors, 1 warning, 0 section mismatches
+=94 PASS, 0 errors, 0 warnings, 0 section mismatches
 
-Warnings:
-    drivers/pwm/pwm-tegra.c:148:53: warning: result of =E2=80=981000000000 =
-<< 8=E2=80=99 requires 39 bits to represent, but =E2=80=98long int=E2=80=99=
- only has 32 bits [-Wshift-overflow=3D]
+Section mismatches:
+    WARNING: modpost: sound/soc/snd-soc-core.o: section mismatch in referen=
+ce: init_module (section: .init.text) -> snd_soc_util_exit (section: .exit.=
+text)
 
 ---------------------------------------------------------------------------=
 -----
-multi_v7_defconfig+CONFIG_SMP=3Dn (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1=
- warning, 0 section mismatches
+multi_v7_defconfig+CONFIG_SMP=3Dn (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0=
+ warnings, 0 section mismatches
 
-Warnings:
-    drivers/pwm/pwm-tegra.c:148:53: warning: result of =E2=80=981000000000 =
-<< 8=E2=80=99 requires 39 bits to represent, but =E2=80=98long int=E2=80=99=
- only has 32 bits [-Wshift-overflow=3D]
+Section mismatches:
+    WARNING: modpost: sound/soc/snd-soc-core.o: section mismatch in referen=
+ce: init_module (section: .init.text) -> snd_soc_util_exit (section: .exit.=
+text)
 
 ---------------------------------------------------------------------------=
 -----
 multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy (arm, gcc-10) =E2=80=94 PASS, 0=
- errors, 1 warning, 0 section mismatches
+ errors, 0 warnings, 0 section mismatches
 
-Warnings:
-    drivers/pwm/pwm-tegra.c:148:53: warning: result of =E2=80=981000000000 =
-<< 8=E2=80=99 requires 39 bits to represent, but =E2=80=98long int=E2=80=99=
- only has 32 bits [-Wshift-overflow=3D]
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+debug (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning,=
- 0 section mismatches
-
-Warnings:
-    drivers/pwm/pwm-tegra.c:148:53: warning: result of =E2=80=981000000000 =
-<< 8=E2=80=99 requires 39 bits to represent, but =E2=80=98long int=E2=80=99=
- only has 32 bits [-Wshift-overflow=3D]
+Section mismatches:
+    WARNING: modpost: sound/soc/snd-soc-core.o: section mismatch in referen=
+ce: init_module (section: .init.text) -> snd_soc_util_exit (section: .exit.=
+text)
 
 ---------------------------------------------------------------------------=
 -----
-multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warn=
-ing, 0 section mismatches
+multi_v7_defconfig+crypto (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
 
-Warnings:
-    drivers/pwm/pwm-tegra.c:148:53: warning: result of =E2=80=981000000000 =
-<< 8=E2=80=99 requires 39 bits to represent, but =E2=80=98long int=E2=80=99=
- only has 32 bits [-Wshift-overflow=3D]
+Section mismatches:
+    WARNING: modpost: sound/soc/snd-soc-core.o: section mismatch in referen=
+ce: init_module (section: .init.text) -> snd_soc_util_exit (section: .exit.=
+text)
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+debug (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+Section mismatches:
+    WARNING: modpost: sound/soc/snd-soc-core.o: section mismatch in referen=
+ce: init_module (section: .init.text) -> snd_soc_util_exit (section: .exit.=
+text)
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+ima (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+Section mismatches:
+    WARNING: modpost: sound/soc/snd-soc-core.o: section mismatch in referen=
+ce: init_module (section: .init.text) -> snd_soc_util_exit (section: .exit.=
+text)
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+Section mismatches:
+    WARNING: modpost: sound/soc/snd-soc-core.o: section mismatch in referen=
+ce: init_module (section: .init.text) -> snd_soc_util_exit (section: .exit.=
+text)
 
 ---------------------------------------------------------------------------=
 -----
 mvebu_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
 ction mismatches
 
+Section mismatches:
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
+
 ---------------------------------------------------------------------------=
 -----
 mvebu_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
 ction mismatches
 
+Section mismatches:
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
+
 ---------------------------------------------------------------------------=
 -----
 mxs_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
  mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
 
 ---------------------------------------------------------------------------=
 -----
@@ -1163,6 +1149,11 @@ s, 0 section mismatches
 -----
 omap2plus_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
 ection mismatches
+
+Section mismatches:
+    WARNING: modpost: sound/soc/snd-soc-core.o: section mismatch in referen=
+ce: init_module (section: .init.text) -> snd_soc_util_exit (section: .exit.=
+text)
 
 ---------------------------------------------------------------------------=
 -----
@@ -1224,15 +1215,32 @@ ion mismatches
 pxa_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
  mismatches
 
+Section mismatches:
+    WARNING: modpost: sound/soc/snd-soc-core.o: section mismatch in referen=
+ce: init_module (section: .init.text) -> snd_soc_util_exit (section: .exit.=
+text)
+
 ---------------------------------------------------------------------------=
 -----
 qcom_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
 n mismatches
 
+Section mismatches:
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
+
 ---------------------------------------------------------------------------=
 -----
 qi_lb60_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
 ction mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
 
 ---------------------------------------------------------------------------=
 -----
@@ -1240,7 +1248,7 @@ rb532_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sect=
 ion mismatches
 
 Warnings:
-    fs/coredump.c:842:12: warning: =E2=80=98dump_emit_page=E2=80=99 defined=
+    fs/coredump.c:834:12: warning: =E2=80=98dump_emit_page=E2=80=99 defined=
  but not used [-Wunused-function]
     cc1: warning: result of =E2=80=98-117440512 << 16=E2=80=99 requires 44 =
 bits to represent, but =E2=80=98int=E2=80=99 only has 32 bits [-Wshift-over=
@@ -1250,6 +1258,11 @@ flow=3D]
 -----
 rbtx49xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
 ection mismatches
+
+Section mismatches:
+    WARNING: modpost: sound/soc/snd-soc-core.o: section mismatch in referen=
+ce: init_module (section: .init.text) -> snd_soc_util_exit (section: .exit.=
+text)
 
 ---------------------------------------------------------------------------=
 -----
@@ -1272,12 +1285,19 @@ Errors:
 
 ---------------------------------------------------------------------------=
 -----
-rs90_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
-n mismatches
+rs90_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 section=
+ mismatches
+
+Errors:
+    ERROR: modpost: Section mismatches detected.
 
 Warnings:
-    fs/coredump.c:842:12: warning: =E2=80=98dump_emit_page=E2=80=99 defined=
+    fs/coredump.c:834:12: warning: =E2=80=98dump_emit_page=E2=80=99 defined=
  but not used [-Wunused-function]
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
 
 ---------------------------------------------------------------------------=
 -----
@@ -1294,10 +1314,21 @@ ion mismatches
 s3c2410_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
 tion mismatches
 
+Section mismatches:
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
+
 ---------------------------------------------------------------------------=
 -----
 s3c6400_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
 tion mismatches
+
+Section mismatches:
+    WARNING: modpost: sound/soc/snd-soc-core.o: section mismatch in referen=
+ce: init_module (section: .init.text) -> snd_soc_util_exit (section: .exit.=
+text)
 
 ---------------------------------------------------------------------------=
 -----
@@ -1309,10 +1340,23 @@ tion mismatches
 sama5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
 on mismatches
 
+Section mismatches:
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
+
 ---------------------------------------------------------------------------=
 -----
-sama7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
+sama7_defconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 sectio=
+n mismatches
+
+Errors:
+    ERROR: modpost: Section mismatches detected.
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
 
 ---------------------------------------------------------------------------=
 -----
@@ -1328,6 +1372,10 @@ tion mismatches
 -----
 shmobile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
 ction mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
 
 ---------------------------------------------------------------------------=
 -----
@@ -1402,32 +1450,38 @@ on mismatches
 
 ---------------------------------------------------------------------------=
 -----
+sunxi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
+
+---------------------------------------------------------------------------=
+-----
 tct_hammer_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 s=
 ection mismatches
 
 Warnings:
-    fs/coredump.c:842:12: warning: =E2=80=98dump_emit_page=E2=80=99 defined=
+    fs/coredump.c:834:12: warning: =E2=80=98dump_emit_page=E2=80=99 defined=
  but not used [-Wunused-function]
 
 ---------------------------------------------------------------------------=
 -----
-tegra_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 secti=
-on mismatches
+tegra_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
 
 Warnings:
-    drivers/pwm/pwm-tegra.c:148:53: warning: result of =E2=80=981000000000 =
-<< 8=E2=80=99 requires 39 bits to represent, but =E2=80=98long int=E2=80=99=
- only has 32 bits [-Wshift-overflow=3D]
-    fs/coredump.c:842:12: warning: =E2=80=98dump_emit_page=E2=80=99 defined=
+    fs/coredump.c:834:12: warning: =E2=80=98dump_emit_page=E2=80=99 defined=
  but not used [-Wunused-function]
 
----------------------------------------------------------------------------=
------
-tinyconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section m=
-ismatches
-
-Warnings:
-    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+Section mismatches:
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
 
 ---------------------------------------------------------------------------=
 -----
@@ -1446,6 +1500,14 @@ smatches
 
 ---------------------------------------------------------------------------=
 -----
+tinyconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section m=
+ismatches
+
+Warnings:
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
 trizeps4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
 ction mismatches
 
@@ -1453,6 +1515,12 @@ ction mismatches
 -----
 u8500_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
 on mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
 
 ---------------------------------------------------------------------------=
 -----
@@ -1485,7 +1553,7 @@ viper_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
 n mismatches
 
 Warnings:
-    fs/coredump.c:842:12: warning: =E2=80=98dump_emit_page=E2=80=99 defined=
+    fs/coredump.c:834:12: warning: =E2=80=98dump_emit_page=E2=80=99 defined=
  but not used [-Wunused-function]
 
 ---------------------------------------------------------------------------=
@@ -1497,16 +1565,6 @@ ction mismatches
 -----
 vt8500_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
 0 section mismatches
-
----------------------------------------------------------------------------=
------
-wpcm450_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, clang-16) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -1535,23 +1593,18 @@ x86_64_defconfig+ima (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
 
 ---------------------------------------------------------------------------=
 -----
-x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
-nings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
 x86_64_defconfig+x86-chromebook (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, =
 0 warnings, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
-x86_64_defconfig+x86-chromebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors=
-, 0 warnings, 0 section mismatches
+x86_64_defconfig+x86-chromebook+amdgpu (x86_64, gcc-10) =E2=80=94 PASS, 0 e=
+rrors, 0 warnings, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
-x86_64_defconfig+x86-chromebook+amdgpu (x86_64, gcc-10) =E2=80=94 PASS, 0 e=
-rrors, 0 warnings, 0 section mismatches
+x86_64_defconfig+x86-chromebook+kselftest (x86_64, gcc-10) =E2=80=94 PASS, =
+0 errors, 0 warnings, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -1567,6 +1620,11 @@ n mismatches
 -----
 zeus_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
 n mismatches
+
+Section mismatches:
+    WARNING: modpost: sound/soc/snd-soc-core.o: section mismatch in referen=
+ce: init_module (section: .init.text) -> snd_soc_util_exit (section: .exit.=
+text)
 
 ---
 For more info write to <info@kernelci.org>

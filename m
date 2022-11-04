@@ -2,46 +2,44 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2769618CA5
-	for <lists+linux-next@lfdr.de>; Fri,  4 Nov 2022 00:15:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D23A1618DC9
+	for <lists+linux-next@lfdr.de>; Fri,  4 Nov 2022 02:48:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230340AbiKCXP1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 3 Nov 2022 19:15:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48348 "EHLO
+        id S230233AbiKDBsv (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 3 Nov 2022 21:48:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230402AbiKCXP0 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 3 Nov 2022 19:15:26 -0400
+        with ESMTP id S230185AbiKDBsu (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 3 Nov 2022 21:48:50 -0400
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2824B1CFCA;
-        Thu,  3 Nov 2022 16:15:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F66324083;
+        Thu,  3 Nov 2022 18:48:47 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4N3KNm1zvPz4xGQ;
-        Fri,  4 Nov 2022 10:15:20 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4N3Nnn6lwFz4xGQ;
+        Fri,  4 Nov 2022 12:48:44 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1667517320;
-        bh=tM1MvXcfRBx2uPm9hhpVrMwKQf2k9tr/drdD63iQNfU=;
+        s=201702; t=1667526526;
+        bh=Sw8ahRMEJhKbsmXfbRquLX9VUEUzLmgtYJuC3Xv2+IE=;
         h=Date:From:To:Cc:Subject:From;
-        b=K4uh6ywNakRILCxgMKWHWpuhkXJELXpJf8gQCbflffySvh5IRmhSkBryXHRfp4TyI
-         tyU97ExysDFENluBp5qiSSpVDotqtmr8Kq3ohSkKJskxSbmkTll/dOPIf01R8p9og2
-         LMXNUPSPCn/UJfyk69AVvofEzJWoW3Ha5rWI7uG8XBIElCq8upUjetEbCMTVjCOkvD
-         6grOmFvDO9LmLzKFLypA3K3cF87oa1Nylw61ujG5cfvoZQPxAyQjFoVJlbPv8djpPy
-         /q0r58w7G9tnCFXHQtb3ymFSINiEwihGsw6BVQEMoTLZ2qN2Sb8x0Phseh1bM6OMSR
-         W4LyR9Y/ycH2A==
-Date:   Fri, 4 Nov 2022 10:15:03 +1100
+        b=dsYfepOk79XuQf+UoGXkBoA87aUNf1Keu0OKqyDdNwEfuSo5aa2kgSxHtFubtQwgM
+         goqImN/x+icdDCHc06GkOXiIt0xiCOJiBA5FPRsZVAVZpxzjCgo0CihJFz3nmjhVve
+         6kRz9it/t1mKAYS5JuTZ7YE2PSjeeXgKAssZe8zD4rBOaLZy4VnvR53UqLSOS1eZwv
+         G9O71r9pNUOET3mki9LzGbLxIJ9lzdecAsAhRqPOJY7211vXo3mYZJ4THnhMnw/BFZ
+         8R9tSW0ruCO2I758d2h8j2aAYNf5ZGFMkN7d17oDfKBTYUTHJrorgMqtU3kKvWkg04
+         FI6ox3dWUypvg==
+Date:   Fri, 4 Nov 2022 12:48:40 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>
-Cc:     Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+To:     Corey Minyard <cminyard@mvista.com>
+Cc:     "Steven Rostedt (Google)" <rostedt@goodmis.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the drm-misc tree with Linus' tree
-Message-ID: <20221104101503.777fa92f@canb.auug.org.au>
+Subject: linux-next: build failure after merge of the ipmi tree
+Message-ID: <20221104124840.51ab5b5c@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/mDKJXgG2m49_Fc0CtbeXI4i";
+Content-Type: multipart/signed; boundary="Sig_/ca7G/cqBi.HxMd8M3bO8V7c";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
@@ -52,76 +50,57 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/mDKJXgG2m49_Fc0CtbeXI4i
+--Sig_/ca7G/cqBi.HxMd8M3bO8V7c
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the drm-misc tree got a conflict in:
+After merging the ipmi tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-  include/drm/gpu_scheduler.h
+drivers/char/ipmi/ipmi_ssif.c: In function 'shutdown_ssif':
+drivers/char/ipmi/ipmi_ssif.c:1276:9: error: implicit declaration of functi=
+on 'del_timer_shutdown'; did you mean 'device_shutdown'? [-Werror=3Dimplici=
+t-function-declaration]
+ 1276 |         del_timer_shutdown(&ssif_info->watch_timer);
+      |         ^~~~~~~~~~~~~~~~~~
+      |         device_shutdown
+cc1: all warnings being treated as errors
+drivers/char/ipmi/ipmi_msghandler.c: In function 'cleanup_ipmi':
+drivers/char/ipmi/ipmi_msghandler.c:5547:17: error: implicit declaration of=
+ function 'del_timer_shutdown'; did you mean 'device_shutdown'? [-Werror=3D=
+implicit-function-declaration]
+ 5547 |                 del_timer_shutdown(&ipmi_timer);
+      |                 ^~~~~~~~~~~~~~~~~~
+      |                 device_shutdown
+cc1: all warnings being treated as errors
 
-between commit:
+Caused by commit
 
-  7b476affcccf ("drm/sched: add DRM_SCHED_FENCE_DONT_PIPELINE flag")
+  306ab2918b4c ("timers: ipmi: Use del_timer_shutdown() before freeing time=
+r")
 
-from Linus' tree and commit:
-
-  4d5230b50dd4 ("drm/scheduler: add drm_sched_job_add_resv_dependencies")
-
-from the drm-misc tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+I have used the ipmi tree from next-20221103 for today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc include/drm/gpu_scheduler.h
-index ca11716d084a,e40baefadc3a..000000000000
---- a/include/drm/gpu_scheduler.h
-+++ b/include/drm/gpu_scheduler.h
-@@@ -32,15 -32,8 +32,17 @@@
- =20
-  #define MAX_WAIT_SCHED_ENTITY_Q_EMPTY msecs_to_jiffies(1000)
- =20
- +/**
- + * DRM_SCHED_FENCE_DONT_PIPELINE - Prefent dependency pipelining
- + *
- + * Setting this flag on a scheduler fence prevents pipelining of jobs dep=
-ending
- + * on this fence. In other words we always insert a full CPU round trip b=
-efore
- + * dependen jobs are pushed to the hw queue.
- + */
- +#define DRM_SCHED_FENCE_DONT_PIPELINE	DMA_FENCE_FLAG_USER_BITS
- +
-+ enum dma_resv_usage;
-+ struct dma_resv;
-  struct drm_gem_object;
- =20
-  struct drm_gpu_scheduler;
-
---Sig_/mDKJXgG2m49_Fc0CtbeXI4i
+--Sig_/ca7G/cqBi.HxMd8M3bO8V7c
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNkS3cACgkQAVBC80lX
-0Gzoogf+PjKbLtC+rWkutwb/8LqNSr7RAmnRG4hhHsoDFLBPL+Rg49YffUffl1Ry
-pnWa6Hyrn096EHmEhxQbY+BaLua+QMYK7Xpnuj1EFozTR3pmCUbaoAg46DkurLZi
-Cx6Qg6Uyz8EGc0zGdk6SaJ1vBL5VLgtApSPlQGV34YQ6+KuaOjwOmn40JCX82Jt/
-HlpG25xghWi3mGW5fcVVQmDANCErKkYJFRYuuEdJI6lcK3mv4gvBaEp4+83kcoDz
-lQ5DDV+KJ1qMkzKiROe3dBaT+Xesj9idVFXnCI6sc0txOEmsDuDCxYEvf0MICxaR
-t0/alE3ohS5HE0G3IRevwKWxRTschA==
-=F7+Q
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNkb3gACgkQAVBC80lX
+0Gz69gf9FtzKZYfPo3f059cujYxPvcVZNh4xMK00Q8BeHMa/H89WaUBAwFJpqx/h
+rI6v59BT2nr6ofMbq3x8qNn587/1a/qBnY7zxy+/stiQU89fiwC0PsYwamgBXCGe
+rtgulLUVEOm+n3fIxDv/Y3+KGYJZ7PIZW7ZIXYieqtV9wlnMX0cly8QPGFcmgTn6
+1V0EMJnnzVJT8ZWTedOri6y4qtx8vFu9ReoWHtPqFCKUnWwvHoF7vdBzNQwtayM7
+KZd+lfiFAvToJaR92LWuWqQk41BApMzjg+YXL16RR8WyHjD7QSDISkf37hzvd8lv
+fz0b1ZB52qMIJvqD15mQA4E6NUmeTQ==
+=ujV8
 -----END PGP SIGNATURE-----
 
---Sig_/mDKJXgG2m49_Fc0CtbeXI4i--
+--Sig_/ca7G/cqBi.HxMd8M3bO8V7c--

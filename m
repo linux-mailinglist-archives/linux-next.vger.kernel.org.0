@@ -2,101 +2,109 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C61DD618DCB
-	for <lists+linux-next@lfdr.de>; Fri,  4 Nov 2022 02:49:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2F9D618E0C
+	for <lists+linux-next@lfdr.de>; Fri,  4 Nov 2022 03:14:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230153AbiKDBt2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 3 Nov 2022 21:49:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44012 "EHLO
+        id S230187AbiKDCOu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 3 Nov 2022 22:14:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230131AbiKDBt2 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 3 Nov 2022 21:49:28 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AD1023BEA;
-        Thu,  3 Nov 2022 18:49:27 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4N3NpZ04wbz4xGQ;
-        Fri,  4 Nov 2022 12:49:24 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1667526566;
-        bh=YF6g3NMiz2XuJjBE/5QtHdP17D6vrSLTuUEPImyPtZM=;
-        h=Date:From:To:Cc:Subject:From;
-        b=lkp/KSZL2U0RWbNVod6XsD2QPNiCO0H7HmeKlNXDQGuEWlEx42DKCdvKSf1Og4pMw
-         8rnIqkWtYjE2MYspsfBDPk4bMlP1Sd9RSwZMhsiMusKnMl6zbZ2U3EwJCA1natkV+H
-         iBBDXextDZbOuRnagtNuAlGKoaDaTzraLCZ0IkgFxoj8QrSfzLHm0mbbO8Yw9q4h1u
-         wgY9vnBiDg2JrZfdMhLH9b/lRCWfrkhXbsMrarWoeKdoxo9J8KDcU0Ciyt2DAO32uA
-         TPoGOrLxIUzHJG8S62IY8zAlXUQHcdvbh/9QuwSfDTDuzTZAr4mUfGscoJjqNdRx8u
-         1ifmxC0MFQR2w==
-Date:   Fri, 4 Nov 2022 12:49:22 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
-        Rob Herring <robherring2@gmail.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        with ESMTP id S229978AbiKDCOt (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 3 Nov 2022 22:14:49 -0400
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DA98DF;
+        Thu,  3 Nov 2022 19:14:45 -0700 (PDT)
+Received: by mail-qt1-x830.google.com with SMTP id a27so2359740qtw.10;
+        Thu, 03 Nov 2022 19:14:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:reply-to
+         :message-id:subject:cc:to:from:date:sender:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oiXbD2YNom6J2OrmtFTyJbyPTSCOMGbOUhnw6jGU9lU=;
+        b=ETf7kDJ50UOqPVrffNb+QK4IELw0nXYZL4kOtjiTeV0IRPvUCEtJX3Z5PZqXeagYwl
+         4j8UNqpXQ8JSvIHGzXvZ4XBsdgv4EZGMtmgwh1BkAgPD7rY6AnEDumIyaPp3GqEkNuZM
+         3YLi3jTHxfCEnWeCTQ8rnXx+WieHJETRYB0XXQty2gU3cNJHeTOOdMgD+72gaWXo6Lj0
+         Yw88ts44TbOT4VtuZzYcQOmlV3p661dfJoEfcIuoq1Lu3o8DsSzJv7MXxKtkBcG3wz85
+         fhYAj7aBjk24p43zhSXWzh6wMrFHRXTcReHe5GlJtHfK0Tg0a/IBr600V+XvIF6SBUDr
+         O+Fw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:reply-to
+         :message-id:subject:cc:to:from:date:sender:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=oiXbD2YNom6J2OrmtFTyJbyPTSCOMGbOUhnw6jGU9lU=;
+        b=x1A1oeFcRi/s/MMtG71hVReAPwE7lmjuyvNXzluPIxQXMgFI3XJUJXHc4h7w6SbL3h
+         lRIWEBjrH1BICbcBvWnfOyE/E0mdLYU7jHRzlUxZHBWKdsDpBQiCJ82V2tk1BEIS3etK
+         +yxfZw++nIX4oEjnnMAH/JAzVQjXRbD6Sc2DNAKU7M9x7vT/Ozt11EtaSf7n+A76BdY/
+         Qe5IDExsaJyjcu4VtVDT+cwm+zyiBvZdrxYpNmhKqvzWWK/ZnJKO+q1hxzBCTYCCVUh8
+         sHyPs39JdFfd7MXlwW7wp9zu4/v5JCepr9wDvYuGKruKdMekdkfLX4wlYypE2N85NHU3
+         Y6ig==
+X-Gm-Message-State: ACrzQf1SI4u26Zk60o2oEsFnu5hDI8zLRu+zp0p2uOfV/SCbHXOOGNYg
+        37jiPGXiqP7vXjpFHpg7E0ruQLM4XtSy
+X-Google-Smtp-Source: AMsMyM5caQt1ApaRDPX3jHlmgcvcoWlZC8MGZdIr1E4SRBxvfyBUwVA3DgO73fDJtjnwPUW0ugfvUg==
+X-Received: by 2002:ac8:541:0:b0:3a5:2710:4a5c with SMTP id c1-20020ac80541000000b003a527104a5cmr20222499qth.101.1667528084663;
+        Thu, 03 Nov 2022 19:14:44 -0700 (PDT)
+Received: from serve.minyard.net (serve.minyard.net. [2001:470:b8f6:1b::1])
+        by smtp.gmail.com with ESMTPSA id u16-20020a05620a455000b006fa313bf185sm2000859qkp.8.2022.11.03.19.14.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Nov 2022 19:14:43 -0700 (PDT)
+Sender: Corey Minyard <tcminyard@gmail.com>
+Received: from minyard.net (unknown [IPv6:2001:470:b8f6:1b:d43d:2899:6e28:9931])
+        by serve.minyard.net (Postfix) with ESMTPSA id 5EF28180044;
+        Fri,  4 Nov 2022 02:14:42 +0000 (UTC)
+Date:   Thu, 3 Nov 2022 21:14:41 -0500
+From:   Corey Minyard <minyard@acm.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Corey Minyard <cminyard@mvista.com>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Rob Herring <robh@kernel.org>
-Subject: linux-next: manual merge of the iio tree with the devicetree tree
-Message-ID: <20221104124922.499bdece@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the ipmi tree
+Message-ID: <Y2R1kdOS7pHaEtBV@minyard.net>
+Reply-To: minyard@acm.org
+References: <20221104124840.51ab5b5c@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/l1gY7jIs4abwCp_cP=YN8Pq";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221104124840.51ab5b5c@canb.auug.org.au>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/l1gY7jIs4abwCp_cP=YN8Pq
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Fri, Nov 04, 2022 at 12:48:40PM +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the ipmi tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+> 
+> drivers/char/ipmi/ipmi_ssif.c: In function 'shutdown_ssif':
+> drivers/char/ipmi/ipmi_ssif.c:1276:9: error: implicit declaration of function 'del_timer_shutdown'; did you mean 'device_shutdown'? [-Werror=implicit-function-declaration]
+>  1276 |         del_timer_shutdown(&ssif_info->watch_timer);
+>       |         ^~~~~~~~~~~~~~~~~~
+>       |         device_shutdown
+> cc1: all warnings being treated as errors
+> drivers/char/ipmi/ipmi_msghandler.c: In function 'cleanup_ipmi':
+> drivers/char/ipmi/ipmi_msghandler.c:5547:17: error: implicit declaration of function 'del_timer_shutdown'; did you mean 'device_shutdown'? [-Werror=implicit-function-declaration]
+>  5547 |                 del_timer_shutdown(&ipmi_timer);
+>       |                 ^~~~~~~~~~~~~~~~~~
+>       |                 device_shutdown
+> cc1: all warnings being treated as errors
+> 
+> Caused by commit
+> 
+>   306ab2918b4c ("timers: ipmi: Use del_timer_shutdown() before freeing timer")
+> 
+> I have used the ipmi tree from next-20221103 for today.
 
-Hi all,
+That patch shouldn't have gone it, it's fixed now.
 
-Today's linux-next merge of the iio tree got a conflict in:
+Thanks,
 
-  Documentation/devicetree/bindings/iio/addac/adi,ad74413r.yaml
-
-between commit:
-
-  c9adc3bd1180 ("dt-bindings: Remove "status" from schema examples, again")
-
-from the devicetree tree and commit:
-
-  a4728fe6b58b ("dt-bindings: iio: addac: adi,ad74413r: improve example")
-
-from the iio tree.
-
-I fixed it up (I just used the latter whic included the former change
-to this file) and can carry the fix as necessary. This is now fixed as
-far as linux-next is concerned, but any non trivial conflicts should be
-mentioned to your upstream maintainer when your tree is submitted for
-merging.  You may also want to consider cooperating with the maintainer
-of the conflicting tree to minimise any particularly complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/l1gY7jIs4abwCp_cP=YN8Pq
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNkb6IACgkQAVBC80lX
-0Gyy8Qf/UyUG5s/rsgbzd+HpXFiuMDPgWihb6VuipQ7F3NbAy95UMqZaVsFiqDUD
-/+TZmGNZQTUdf9u18gN9EiWV6f1AL+vnTKGChBYedeia4aDlejDfG/QEbYldJC52
-BI1ISJfLv2dZmlhRtLIQoe8tUjBx6sWbhCCWo0/+oPYksvQSB3/3k19Cz2H7gapF
-zDZ3VqzQO/r+m9oxqATwRXES7r/dtSX9H+NS1J5wp83JdyeECE3N/Og8d1qolzDP
-hdOcZtV7UMnxfQyclH2WuFM/SSIhJU4ZU//BYCK1Hr50G9D3lm5VCttU1yFa2NDK
-uviXWsYxlKrVvoHAlAUI7uFVPb6LIw==
-=ZOMy
------END PGP SIGNATURE-----
-
---Sig_/l1gY7jIs4abwCp_cP=YN8Pq--
+-corey

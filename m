@@ -2,94 +2,100 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 098BA61E65A
-	for <lists+linux-next@lfdr.de>; Sun,  6 Nov 2022 22:13:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E37C61E6A3
+	for <lists+linux-next@lfdr.de>; Sun,  6 Nov 2022 22:43:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230171AbiKFVNi (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 6 Nov 2022 16:13:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39178 "EHLO
+        id S230190AbiKFVn2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 6 Nov 2022 16:43:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229919AbiKFVNh (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 6 Nov 2022 16:13:37 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7CF4635F;
-        Sun,  6 Nov 2022 13:13:35 -0800 (PST)
+        with ESMTP id S230003AbiKFVn1 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 6 Nov 2022 16:43:27 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 908A560D1;
+        Sun,  6 Nov 2022 13:43:24 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4N56Xt01j5z4x2c;
-        Mon,  7 Nov 2022 08:13:33 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4N57CD19Pbz4x2c;
+        Mon,  7 Nov 2022 08:43:20 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1667769214;
-        bh=RvpuggfHK11s5Kb0GsbI0h7Jz/8HynA35oj3XZxU5dQ=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Zoy0DkG36gZzjpGd1SeiYhQAbVfgqaNzHCo9Ri9GHNcaEx58E4/dMDPwpMc+x70ZO
-         Gpz56wz+6+rlQ2M6j0xCG5KcUqIxAqgGjHj+IADpmWRwZ25nnf4bdQ9FXf6rpbD2O6
-         zPiL+cSIpKHM011PI6JDW0blDThmwEZ1S8U0x/7yqeGNwNJMQguv8T5GCTLqW8velb
-         HEu0ItFX780G8KXlJRb+obiO+hBSZfhiXslnmqtJuU/di5twTOFcRqj71ysQaF2obi
-         /0QLFoCBrrplkqAr8m6BLQK5GgvsJZMfzOHQxIeEXvXE5tr/oWvp7/kRzt9IUI4wke
-         73Mdk9s2vcRhA==
-Date:   Mon, 7 Nov 2022 08:13:32 +1100
+        s=201702; t=1667771003;
+        bh=NPLJIrYYOdhGjx9YSa7IN6VqLPLfnT7SouJu1IBs4+c=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=YQpXDsUI1YvVo6K8bToXfxeV6JC15eE5KpAFuEdSrclVChuWe7uzzmU3RKveilrC1
+         rg0Tnxg+TKjE5bhTSfYICZlVcWhB4NBjNzhSRJHu1nWyHgdxXsgpViKjWYQd/KkJh3
+         V/I/rKDZ+KLB9xe4Wt9U18rcXOVFW3IO9wxDY6A3n5yN2+DUFlA9qcfVXzeK6ry9b1
+         Zb6sc5yHm/FOq2WGQDdIbw8R6RU7mFPcoNB2ek67k2q+OepFQ7bZ6f/0/u13ccGj6n
+         /BbklQh++UpbmojomWmpRxExjnD9ZnxLcNuvMGedlMUPPuDXTsA/P03KpxOA1wrkXc
+         aw0JG0m18q/tQ==
+Date:   Mon, 7 Nov 2022 08:43:18 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     Al Cooper <alcooperx@gmail.com>,
+To:     Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>
+Cc:     Chen Zhongjin <chenzhongjin@huawei.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the phy-next tree
-Message-ID: <20221107081332.391638fc@canb.auug.org.au>
+Subject: Re: linux-next: build warning after merge of the sound-asoc-fixes
+ tree
+Message-ID: <20221107084318.5a83394a@canb.auug.org.au>
+In-Reply-To: <20221031083917.6944b95b@canb.auug.org.au>
+References: <20221031083917.6944b95b@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/kmDcqy11Arj+gYGt.v/vb_C";
+Content-Type: multipart/signed; boundary="Sig_/MVjBo1Gv8enA0IwBrMpf=TE";
  protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/kmDcqy11Arj+gYGt.v/vb_C
+--Sig_/MVjBo1Gv8enA0IwBrMpf=TE
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Hi Stephen,
 
-In commit
+On Mon, 31 Oct 2022 08:39:17 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> Hi all,
+>=20
+> After merging the sound-asoc-fixes tree, today's linux-next build (arm
+> multi_v7_defconfig) produced this warning:
+>=20
+> WARNING: modpost: sound/soc/snd-soc-core.o: section mismatch in reference=
+: init_module (section: .init.text) -> snd_soc_util_exit (section: .exit.te=
+xt)
+>=20
+> Introduced by commit
+>=20
+>   6ec27c53886c ("ASoC: core: Fix use-after-free in snd_soc_exit()")
 
-  3ef54ad3004a ("phy: usb: s2 WoL wakeup_count not incremented for USB->Eth=
- devices")
-
-Fixes tag
-
-  Fixes: f1c0db40a3ad ("usb: Add "wake on" functionality")
-
-has these problem(s):
-
-  - Subject does not match target commit subject
-    Just use
-	git log -1 --format=3D'Fixes: %h ("%s")'
+I am still getting this warning.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/kmDcqy11Arj+gYGt.v/vb_C
+--Sig_/MVjBo1Gv8enA0IwBrMpf=TE
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNoI3wACgkQAVBC80lX
-0GwzKgf+N62tNYZi2NbCgXDKRMazsbD+cLAYI8/QI8cLtlPjvW2mStIL2Wj/HcCr
-1ieu4gF2U0t6W8+M29E67Y9VTZ9sJ/cX34uUh/EmW4UJs9SISKgQ+5b4H9xhQ5rB
-jTDhPBseijsFe2hwoQG9p3nQwk7YplJ2uhLqwDx6CJK0gDGSp7RdQzVJs4IMLNwp
-yoWx8HIU4oL89eKhPZYQlMyVayz71OCgG5ZSuprygjzjp6hkCjbaUhs5AoxJRWS7
-fqZ3DMCFs0lhTOaAaqCfcecqg/uVxRRcYcHQ6fzxDPu42U954zOfZQuzWhrisFuP
-e6PJi0vLEGTbUvmoHDQXYCvNFOZCWQ==
-=LClN
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNoKnYACgkQAVBC80lX
+0Gw4agf/QK7wosY8qsJs6laM66PRSYssbYZFlEtR1MLLYCKEYmGh0cZpGKQYt7k3
+WNt1ysuVyglsvPUaRfA1GJm0SNhHf9uyE0RK1NrCfcDNTgiW3LApjY8ZWs+ERZCn
+elPnwykukF5nd5bZf7XJE9f+6ICA9mN/5FsC7tCzS6zx1lRVFdfnL4e6sZ7hJgAy
+VtCPpy7rzv6gHwzG3X+Hea7f2xowQkgw8TG3gKvD+8FyYR4fkXN6TrzD6OfX83P5
+heKy+0Sf/u0rT8awiqPb4TqltmhnJH1Mpwivfkzi7FhBNE7lll92u4mtygNjVtKf
+0mTCRPFjs2ggdCmKNNLUw5BCYGbg2w==
+=iY7s
 -----END PGP SIGNATURE-----
 
---Sig_/kmDcqy11Arj+gYGt.v/vb_C--
+--Sig_/MVjBo1Gv8enA0IwBrMpf=TE--

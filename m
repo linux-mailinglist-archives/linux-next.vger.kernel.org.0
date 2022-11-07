@@ -2,847 +2,415 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBA6261EF22
-	for <lists+linux-next@lfdr.de>; Mon,  7 Nov 2022 10:34:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 853BC61EFB4
+	for <lists+linux-next@lfdr.de>; Mon,  7 Nov 2022 10:55:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231681AbiKGJes (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 7 Nov 2022 04:34:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59536 "EHLO
+        id S230471AbiKGJzY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 7 Nov 2022 04:55:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231672AbiKGJer (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 7 Nov 2022 04:34:47 -0500
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48C61C10
-        for <linux-next@vger.kernel.org>; Mon,  7 Nov 2022 01:34:45 -0800 (PST)
-Received: by mail-pl1-x633.google.com with SMTP id k7so10543179pll.6
-        for <linux-next@vger.kernel.org>; Mon, 07 Nov 2022 01:34:45 -0800 (PST)
+        with ESMTP id S231673AbiKGJzW (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 7 Nov 2022 04:55:22 -0500
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35BA91581E;
+        Mon,  7 Nov 2022 01:55:18 -0800 (PST)
+Received: by mail-pg1-x534.google.com with SMTP id q71so9983723pgq.8;
+        Mon, 07 Nov 2022 01:55:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=48oqlDNuWQO0f5IqFgAaSQRPCXaLHxIaaVFd67ySnEM=;
-        b=qCSc7P2aWVGSVrOK0Jlre+YktN9h6za1+NH0ltCvMmDNDk3VMmIL1JUPQCf+FDl18y
-         hJzQ2IjB+b89W3RMCrfJkpTs5km7F/RUrgYWMf8HYZ/mGOUGF9HjBvVQuASAiWt/S5pn
-         7u2jYUdgqIEpUXOw/lqPjcUqpiOIf5oB02TbqYOvWBTBtyxw/lIyhFziHtZuOoD1+t8f
-         j/kF7LWZWlMYBkBo7iL/LKZItls/3RG4crpUl1qqon13WfzEtgZTOV4Fqo2/H+VJlE52
-         TYAZA3Tv4RFFN53X3X4YuojmXMPEvPt3YmWF0Bs5vyMH3n5Ob6PU3AC/oNn+S0dA9co0
-         Y8sQ==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Hr8slVM8vWWCownhtCp/SyZlW1/FtPW5skKNhYxHrZI=;
+        b=SviQdqK8TII1if2wp7MGb3OwR8gIonBvw2nuaftxN5e+GOP+qu1Kd+dvxighLGz6eZ
+         msVcF35UvjffoUlhvc2BRsbpKjnnL2GcItKWpVWW8z803IDj/6KhUUZw4XTitgHID+9l
+         5s0in3FFSWJvAl1GOI1vPulKVnKqnQSISjlSWCX2KatYOZ79eD/GB6Bn4wZhkzj2C6zT
+         OUAMAuoYHBae7IFxyxJJj1w6a+fC5C6CZC5c78aHZ0w7r0DyAwal6G4o55Qq3q0T/lAn
+         3PhKIRkqZ2FGZzLY0wWQJb6j8izHICcQpIa/wTkXSkUYdswGiK4xxdnwvsF84pDR5JGY
+         K7Uw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=48oqlDNuWQO0f5IqFgAaSQRPCXaLHxIaaVFd67ySnEM=;
-        b=VbIgdSCNMs5nmZBSxdvVV8KrbIgZQTgEk15LwL9EJ+0fqLTTvsk5hX0zEvfg5ElH/i
-         tantFH9eqoOmA4JKEAGJ0LjerINAPqpfQgCJLeg8jr8JVsDDd0/N7YIdip6knql8wROf
-         RDjp13Za16Z8IAVtgEVCPZsFsEJmUgqDQbEvor7RRguJQWlOSMs/K+CHkJDQ4XUTWdD8
-         tZwDv0iBImwXv2sWWe7sxsOah1OtaA5ELyB5Xau+z5e1DTsn5TSpu5sKy9qZ00r+JMj6
-         g28BdQL9b05cLcj8pO1L76d16lyhQcaNSlHPo6iK/dDt091o62gjDVnbSAvJ3OBiPmCa
-         kIrQ==
-X-Gm-Message-State: ACrzQf2oPzRWz+Teo8k/t9yE0zmVLSPfnV118x2lbt2fQ37jsh6W4vx3
-        4aK5XJdEAWtXLqPSAKGeoeQS7ORKQkb/3Mpe
-X-Google-Smtp-Source: AMsMyM4um/ZDhWA1xMtioRb0spdgFY0Hg2RMrlb4kK25rZOI+k0LjLyIr5op7QTz0f9fDEgoThDaaA==
-X-Received: by 2002:a17:902:f605:b0:186:6feb:7eb4 with SMTP id n5-20020a170902f60500b001866feb7eb4mr49430979plg.134.1667813684394;
-        Mon, 07 Nov 2022 01:34:44 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id f14-20020a170902ce8e00b00180033438a0sm4540868plg.106.2022.11.07.01.34.43
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Hr8slVM8vWWCownhtCp/SyZlW1/FtPW5skKNhYxHrZI=;
+        b=OzntdKrplKOk90T6GCrFVF62QZoPUXZ3oswdBOD9bWlg3Xdz6KJ+yeM+p/Z08EyJEx
+         nvzCIWTLypflDh3cu1+sRz/GpbvTNTFlLGwN/w0vTQDDVUFGi8Bc8yeQW9htNFBxxVGQ
+         q/AO73WWh+pgMWnHnSFBXbssorr3JTuQgg0aGn3H5n9cliP1eHTr7bNswH4zRJ//Vd/6
+         268nzsNitXtj3LRygnDpT5gjNemc4qp6wwKEVLaC/CQPOq1BC7z+cPhLYSS4Mp6ajXGb
+         1CD0UemgfWnHPiBALUSLQeDNVr9ctgUOqinViFLfE3UejZosAOB83KoTmlGTwWl5e/M+
+         EXbQ==
+X-Gm-Message-State: ACrzQf3WNc5TWWH6QuiMo2NgJnXaZtNf1fum/K6EdPMEu5vI98PTms14
+        7F2PgVqZ5RMPKAPlb3l0DGcP4xCTRx0=
+X-Google-Smtp-Source: AMsMyM6yO7OPDg8pIduklP+4s8ymkJ6srmETGY8d02lp7ifyDeaJQWWaurQJOt73HPWB6G0bA8RT2w==
+X-Received: by 2002:a05:6a00:1ad0:b0:56d:5fdb:a29b with SMTP id f16-20020a056a001ad000b0056d5fdba29bmr41532842pfv.76.1667814917649;
+        Mon, 07 Nov 2022 01:55:17 -0800 (PST)
+Received: from debian.me (subs09a-223-255-225-70.three.co.id. [223.255.225.70])
+        by smtp.gmail.com with ESMTPSA id bx6-20020a17090af48600b0020ad26fa65dsm3880914pjb.56.2022.11.07.01.55.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Nov 2022 01:34:44 -0800 (PST)
-Message-ID: <6368d134.170a0220.4675f.6a2f@mx.google.com>
-Date:   Mon, 07 Nov 2022 01:34:44 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        Mon, 07 Nov 2022 01:55:17 -0800 (PST)
+Received: by debian.me (Postfix, from userid 1000)
+        id C4A5C103EC6; Mon,  7 Nov 2022 16:55:13 +0700 (WIB)
+Date:   Mon, 7 Nov 2022 16:55:13 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Jonathan Corbet <corbet@lwn.net>, rcu@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Subject: [PATCH] Documentation: RCU: use code blocks with autogenerated line
+ (was: Re: linux-next: build warning after merge of the rcu tree)
+Message-ID: <Y2jWAR1QESe3OrhH@debian.me>
+References: <20221107142641.527396ea@canb.auug.org.au>
+ <20221107050212.GG28461@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: test
-X-Kernelci-Kernel: next-20221107
-X-Kernelci-Branch: master
-X-Kernelci-Tree: next
-Subject: next/master baseline: 521 runs, 22 regressions (next-20221107)
-To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
-        kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="BOHAifbXzPBJBb7F"
+Content-Disposition: inline
+In-Reply-To: <20221107050212.GG28461@paulmck-ThinkPad-P17-Gen-1>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master baseline: 521 runs, 22 regressions (next-20221107)
 
-Regressions Summary
--------------------
-
-platform                     | arch  | lab             | compiler | defconf=
-ig                    | regressions
------------------------------+-------+-----------------+----------+--------=
-----------------------+------------
-am57xx-beagle-x15            | arm   | lab-linaro-lkft | gcc-10   | multi_v=
-7_defconfig+debug     | 1          =
-
-imx6dl-riotboard             | arm   | lab-pengutronix | gcc-10   | multi_v=
-7_defconfig+debug     | 1          =
-
-imx6qp-wandboard-revd1       | arm   | lab-pengutronix | gcc-10   | multi_v=
-7_defconfig+debug     | 1          =
-
-imx6sx-sdb                   | arm   | lab-nxp         | gcc-10   | imx_v6_=
-v7_defconfig          | 1          =
-
-imx6ul-pico-hobbit           | arm   | lab-pengutronix | gcc-10   | imx_v6_=
-v7_defconfig          | 1          =
-
-imx6ul-pico-hobbit           | arm   | lab-pengutronix | gcc-10   | multi_v=
-7_defconfig           | 1          =
-
-imx6ul-pico-hobbit           | arm   | lab-pengutronix | gcc-10   | multi_v=
-7_defc...CONFIG_SMP=3Dn | 1          =
-
-imx6ul-pico-hobbit           | arm   | lab-pengutronix | gcc-10   | multi_v=
-7_defc...MB2_KERNEL=3Dy | 1          =
-
-kontron-kswit...0-mmt-6g-2gs | arm   | lab-kontron     | clang-16 | multi_v=
-7_defconfig           | 1          =
-
-kontron-kswit...0-mmt-6g-2gs | arm   | lab-kontron     | gcc-10   | multi_v=
-7_defconfig           | 1          =
-
-kontron-kswit...0-mmt-6g-2gs | arm   | lab-kontron     | gcc-10   | multi_v=
-7_defc...CONFIG_SMP=3Dn | 1          =
-
-kontron-kswit...0-mmt-6g-2gs | arm   | lab-kontron     | gcc-10   | multi_v=
-7_defc...MB2_KERNEL=3Dy | 1          =
-
-mt8183-kukui-...uniper-sku16 | arm64 | lab-collabora   | clang-13 | cros://=
-chrome...4-chromebook | 1          =
-
-mt8183-kukui-...uniper-sku16 | arm64 | lab-collabora   | clang-13 | defconf=
-ig+arm64-chromebook   | 1          =
-
-mt8183-kukui-...uniper-sku16 | arm64 | lab-collabora   | gcc-10   | defconf=
-ig+arm64-chromebook   | 1          =
-
-ox820-clouden...lug-series-3 | arm   | lab-baylibre    | gcc-10   | oxnas_v=
-6_defconfig           | 1          =
-
-qcom-qdf2400                 | arm64 | lab-linaro-lkft | gcc-10   | defconf=
-ig                    | 1          =
-
-rk3399-gru-kevin             | arm64 | lab-collabora   | clang-13 | cros://=
-chrome...4-chromebook | 3          =
-
-sc7180-trogdo...zor-limozeen | arm64 | lab-collabora   | clang-13 | defconf=
-ig+arm64-chromebook   | 1          =
-
-sc7180-trogdo...zor-limozeen | arm64 | lab-collabora   | gcc-10   | defconf=
-ig+arm64-chromebook   | 1          =
-
-
-  Details:  https://kernelci.org/test/job/next/branch/master/kernel/next-20=
-221107/plan/baseline/
-
-  Test:     baseline
-  Tree:     next
-  Branch:   master
-  Describe: next-20221107
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      d8e87774068af213ab5b058b1b114dc397b577aa =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform                     | arch  | lab             | compiler | defconf=
-ig                    | regressions
------------------------------+-------+-----------------+----------+--------=
-----------------------+------------
-am57xx-beagle-x15            | arm   | lab-linaro-lkft | gcc-10   | multi_v=
-7_defconfig+debug     | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/63689f3aa8eddddf67e7db57
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+debug
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20221107/arm/=
-multi_v7_defconfig+debug/gcc-10/lab-linaro-lkft/baseline-am57xx-beagle-x15.=
-txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20221107/arm/=
-multi_v7_defconfig+debug/gcc-10/lab-linaro-lkft/baseline-am57xx-beagle-x15.=
-html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20221024.1/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/63689f3aa8eddddf67e7d=
-b58
-        failing since 53 days (last pass: next-20220907, first fail: next-2=
-0220913) =
-
- =
-
-
-
-platform                     | arch  | lab             | compiler | defconf=
-ig                    | regressions
------------------------------+-------+-----------------+----------+--------=
-----------------------+------------
-imx6dl-riotboard             | arm   | lab-pengutronix | gcc-10   | multi_v=
-7_defconfig+debug     | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6368a0f692362d2dfde7db74
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+debug
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20221107/arm/=
-multi_v7_defconfig+debug/gcc-10/lab-pengutronix/baseline-imx6dl-riotboard.t=
-xt
-  HTML log:    https://storage.kernelci.org//next/master/next-20221107/arm/=
-multi_v7_defconfig+debug/gcc-10/lab-pengutronix/baseline-imx6dl-riotboard.h=
-tml
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20221024.1/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6368a0f692362d2dfde7d=
-b75
-        failing since 89 days (last pass: next-20220808, first fail: next-2=
-0220810) =
-
- =
-
-
-
-platform                     | arch  | lab             | compiler | defconf=
-ig                    | regressions
------------------------------+-------+-----------------+----------+--------=
-----------------------+------------
-imx6qp-wandboard-revd1       | arm   | lab-pengutronix | gcc-10   | multi_v=
-7_defconfig+debug     | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/63689daeb08e034de8e7db77
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+debug
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20221107/arm/=
-multi_v7_defconfig+debug/gcc-10/lab-pengutronix/baseline-imx6qp-wandboard-r=
-evd1.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20221107/arm/=
-multi_v7_defconfig+debug/gcc-10/lab-pengutronix/baseline-imx6qp-wandboard-r=
-evd1.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20221024.1/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/63689daeb08e034de8e7d=
-b78
-        failing since 76 days (last pass: next-20220810, first fail: next-2=
-0220822) =
-
- =
-
-
-
-platform                     | arch  | lab             | compiler | defconf=
-ig                    | regressions
------------------------------+-------+-----------------+----------+--------=
-----------------------+------------
-imx6sx-sdb                   | arm   | lab-nxp         | gcc-10   | imx_v6_=
-v7_defconfig          | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/63689ad589cfc2290ce7dba0
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: imx_v6_v7_defconfig
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20221107/arm/=
-imx_v6_v7_defconfig/gcc-10/lab-nxp/baseline-imx6sx-sdb.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20221107/arm/=
-imx_v6_v7_defconfig/gcc-10/lab-nxp/baseline-imx6sx-sdb.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20221024.1/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/63689ad589cfc2290ce7d=
-ba1
-        failing since 60 days (last pass: next-20220831, first fail: next-2=
-0220907) =
-
- =
-
-
-
-platform                     | arch  | lab             | compiler | defconf=
-ig                    | regressions
------------------------------+-------+-----------------+----------+--------=
-----------------------+------------
-imx6ul-pico-hobbit           | arm   | lab-pengutronix | gcc-10   | imx_v6_=
-v7_defconfig          | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/63689b56c77cf4ea04e7db78
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: imx_v6_v7_defconfig
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20221107/arm/=
-imx_v6_v7_defconfig/gcc-10/lab-pengutronix/baseline-imx6ul-pico-hobbit.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20221107/arm/=
-imx_v6_v7_defconfig/gcc-10/lab-pengutronix/baseline-imx6ul-pico-hobbit.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20221024.1/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/63689b56c77cf4ea04e7d=
-b79
-        failing since 181 days (last pass: v5.16-rc4-6579-gea922272cbe5, fi=
-rst fail: next-20220509) =
-
- =
-
-
-
-platform                     | arch  | lab             | compiler | defconf=
-ig                    | regressions
------------------------------+-------+-----------------+----------+--------=
-----------------------+------------
-imx6ul-pico-hobbit           | arm   | lab-pengutronix | gcc-10   | multi_v=
-7_defconfig           | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/63689cfa56b92d1676e7db51
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20221107/arm/=
-multi_v7_defconfig/gcc-10/lab-pengutronix/baseline-imx6ul-pico-hobbit.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20221107/arm/=
-multi_v7_defconfig/gcc-10/lab-pengutronix/baseline-imx6ul-pico-hobbit.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20221024.1/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/63689cfa56b92d1676e7d=
-b52
-        failing since 181 days (last pass: v5.16-rc4-6579-gea922272cbe5, fi=
-rst fail: next-20220509) =
-
- =
-
-
-
-platform                     | arch  | lab             | compiler | defconf=
-ig                    | regressions
------------------------------+-------+-----------------+----------+--------=
-----------------------+------------
-imx6ul-pico-hobbit           | arm   | lab-pengutronix | gcc-10   | multi_v=
-7_defc...CONFIG_SMP=3Dn | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6368a05687b3a8e427e7dbc3
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+CONFIG_SMP=3Dn
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20221107/arm/=
-multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-10/lab-pengutronix/baseline-imx6ul-pi=
-co-hobbit.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20221107/arm/=
-multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-10/lab-pengutronix/baseline-imx6ul-pi=
-co-hobbit.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20221024.1/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6368a05687b3a8e427e7d=
-bc4
-        failing since 181 days (last pass: v5.16-rc4-6579-gea922272cbe5, fi=
-rst fail: next-20220509) =
-
- =
-
-
-
-platform                     | arch  | lab             | compiler | defconf=
-ig                    | regressions
------------------------------+-------+-----------------+----------+--------=
-----------------------+------------
-imx6ul-pico-hobbit           | arm   | lab-pengutronix | gcc-10   | multi_v=
-7_defc...MB2_KERNEL=3Dy | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6368a1be1666be688ae7db8f
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20221107/arm/=
-multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/lab-pengutronix/baseline=
--imx6ul-pico-hobbit.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20221107/arm/=
-multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/lab-pengutronix/baseline=
--imx6ul-pico-hobbit.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20221024.1/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6368a1be1666be688ae7d=
-b90
-        failing since 181 days (last pass: next-20211207, first fail: next-=
-20220509) =
-
- =
-
-
-
-platform                     | arch  | lab             | compiler | defconf=
-ig                    | regressions
------------------------------+-------+-----------------+----------+--------=
-----------------------+------------
-kontron-kswit...0-mmt-6g-2gs | arm   | lab-kontron     | clang-16 | multi_v=
-7_defconfig           | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6368a8cac9b5cec739e7db74
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    clang-16 (Debian clang version 16.0.0-++20221025071726+e6c84=
-18aab0b-1~exp1~20221025071826.433)
-  Plain log:   https://storage.kernelci.org//next/master/next-20221107/arm/=
-multi_v7_defconfig/clang-16/lab-kontron/baseline-kontron-kswitch-d10-mmt-6g=
--2gs.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20221107/arm/=
-multi_v7_defconfig/clang-16/lab-kontron/baseline-kontron-kswitch-d10-mmt-6g=
--2gs.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20221024.1/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6368a8cac9b5cec739e7d=
-b75
-        new failure (last pass: next-20221104) =
-
- =
-
-
-
-platform                     | arch  | lab             | compiler | defconf=
-ig                    | regressions
------------------------------+-------+-----------------+----------+--------=
-----------------------+------------
-kontron-kswit...0-mmt-6g-2gs | arm   | lab-kontron     | gcc-10   | multi_v=
-7_defconfig           | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/63689b08c1d5beb28ce7db8f
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20221107/arm/=
-multi_v7_defconfig/gcc-10/lab-kontron/baseline-kontron-kswitch-d10-mmt-6g-2=
-gs.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20221107/arm/=
-multi_v7_defconfig/gcc-10/lab-kontron/baseline-kontron-kswitch-d10-mmt-6g-2=
-gs.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20221024.1/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/63689b08c1d5beb28ce7d=
-b90
-        new failure (last pass: next-20221104) =
-
- =
-
-
-
-platform                     | arch  | lab             | compiler | defconf=
-ig                    | regressions
------------------------------+-------+-----------------+----------+--------=
-----------------------+------------
-kontron-kswit...0-mmt-6g-2gs | arm   | lab-kontron     | gcc-10   | multi_v=
-7_defc...CONFIG_SMP=3Dn | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/63689e00372f6ffab4e7db64
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+CONFIG_SMP=3Dn
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20221107/arm/=
-multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-10/lab-kontron/baseline-kontron-kswit=
-ch-d10-mmt-6g-2gs.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20221107/arm/=
-multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-10/lab-kontron/baseline-kontron-kswit=
-ch-d10-mmt-6g-2gs.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20221024.1/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/63689e00372f6ffab4e7d=
-b65
-        new failure (last pass: next-20221104) =
-
- =
-
-
-
-platform                     | arch  | lab             | compiler | defconf=
-ig                    | regressions
------------------------------+-------+-----------------+----------+--------=
-----------------------+------------
-kontron-kswit...0-mmt-6g-2gs | arm   | lab-kontron     | gcc-10   | multi_v=
-7_defc...MB2_KERNEL=3Dy | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6368a1214dcb9066f1e7db76
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20221107/arm/=
-multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/lab-kontron/baseline-kon=
-tron-kswitch-d10-mmt-6g-2gs.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20221107/arm/=
-multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/lab-kontron/baseline-kon=
-tron-kswitch-d10-mmt-6g-2gs.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20221024.1/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6368a1214dcb9066f1e7d=
-b77
-        new failure (last pass: next-20221104) =
-
- =
-
-
-
-platform                     | arch  | lab             | compiler | defconf=
-ig                    | regressions
------------------------------+-------+-----------------+----------+--------=
-----------------------+------------
-mt8183-kukui-...uniper-sku16 | arm64 | lab-collabora   | clang-13 | cros://=
-chrome...4-chromebook | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6368a25dce154f0ecbe7db4f
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+a=
-rm64-chromebook
-  Compiler:    clang-13 (Debian clang version 13.0.1-6~deb11u1)
-  Plain log:   https://storage.kernelci.org//next/master/next-20221107/arm6=
-4/cros---chromeos-5.10-arm64-chromiumos-arm64.flavour.config+arm64-chromebo=
-ok/clang-13/lab-collabora/baseline-mt8183-kukui-jacuzzi-juniper-sku16.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20221107/arm6=
-4/cros---chromeos-5.10-arm64-chromiumos-arm64.flavour.config+arm64-chromebo=
-ok/clang-13/lab-collabora/baseline-mt8183-kukui-jacuzzi-juniper-sku16.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20221024.1/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6368a25dce154f0ecbe7d=
-b50
-        failing since 115 days (last pass: next-20220705, first fail: next-=
-20220714) =
-
- =
-
-
-
-platform                     | arch  | lab             | compiler | defconf=
-ig                    | regressions
------------------------------+-------+-----------------+----------+--------=
-----------------------+------------
-mt8183-kukui-...uniper-sku16 | arm64 | lab-collabora   | clang-13 | defconf=
-ig+arm64-chromebook   | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6368a5bad16cc02fc4e7db75
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+arm64-chromebook
-  Compiler:    clang-13 (Debian clang version 13.0.1-6~deb11u1)
-  Plain log:   https://storage.kernelci.org//next/master/next-20221107/arm6=
-4/defconfig+arm64-chromebook/clang-13/lab-collabora/baseline-mt8183-kukui-j=
-acuzzi-juniper-sku16.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20221107/arm6=
-4/defconfig+arm64-chromebook/clang-13/lab-collabora/baseline-mt8183-kukui-j=
-acuzzi-juniper-sku16.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20221024.1/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6368a5bad16cc02fc4e7d=
-b76
-        failing since 178 days (last pass: next-20220506, first fail: next-=
-20220512) =
-
- =
-
-
-
-platform                     | arch  | lab             | compiler | defconf=
-ig                    | regressions
------------------------------+-------+-----------------+----------+--------=
-----------------------+------------
-mt8183-kukui-...uniper-sku16 | arm64 | lab-collabora   | gcc-10   | defconf=
-ig+arm64-chromebook   | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/63689ca7426467f6aae7db6f
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+arm64-chromebook
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20221107/arm6=
-4/defconfig+arm64-chromebook/gcc-10/lab-collabora/baseline-mt8183-kukui-jac=
-uzzi-juniper-sku16.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20221107/arm6=
-4/defconfig+arm64-chromebook/gcc-10/lab-collabora/baseline-mt8183-kukui-jac=
-uzzi-juniper-sku16.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20221024.1/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/63689ca7426467f6aae7d=
-b70
-        failing since 143 days (last pass: next-20220610, first fail: next-=
-20220616) =
-
- =
-
-
-
-platform                     | arch  | lab             | compiler | defconf=
-ig                    | regressions
------------------------------+-------+-----------------+----------+--------=
-----------------------+------------
-ox820-clouden...lug-series-3 | arm   | lab-baylibre    | gcc-10   | oxnas_v=
-6_defconfig           | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/636895769a5224b5aee7db4f
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: oxnas_v6_defconfig
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20221107/arm/=
-oxnas_v6_defconfig/gcc-10/lab-baylibre/baseline-ox820-cloudengines-pogoplug=
--series-3.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20221107/arm/=
-oxnas_v6_defconfig/gcc-10/lab-baylibre/baseline-ox820-cloudengines-pogoplug=
--series-3.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20221024.1/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/636895769a5224b5aee7d=
-b50
-        failing since 75 days (last pass: next-20220822, first fail: next-2=
-0220823) =
-
- =
-
-
-
-platform                     | arch  | lab             | compiler | defconf=
-ig                    | regressions
------------------------------+-------+-----------------+----------+--------=
-----------------------+------------
-qcom-qdf2400                 | arm64 | lab-linaro-lkft | gcc-10   | defconf=
-ig                    | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6368a8a39397895766e7db76
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20221107/arm6=
-4/defconfig/gcc-10/lab-linaro-lkft/baseline-qcom-qdf2400.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20221107/arm6=
-4/defconfig/gcc-10/lab-linaro-lkft/baseline-qcom-qdf2400.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20221024.1/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6368a8a39397895766e7d=
-b77
-        new failure (last pass: next-20221102) =
-
- =
-
-
-
-platform                     | arch  | lab             | compiler | defconf=
-ig                    | regressions
------------------------------+-------+-----------------+----------+--------=
-----------------------+------------
-rk3399-gru-kevin             | arm64 | lab-collabora   | clang-13 | cros://=
-chrome...4-chromebook | 3          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6368a16b69497bac00e7db71
-
-  Results:     71 PASS, 21 FAIL, 0 SKIP
-  Full config: cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+a=
-rm64-chromebook
-  Compiler:    clang-13 (Debian clang version 13.0.1-6~deb11u1)
-  Plain log:   https://storage.kernelci.org//next/master/next-20221107/arm6=
-4/cros---chromeos-5.10-arm64-chromiumos-arm64.flavour.config+arm64-chromebo=
-ok/clang-13/lab-collabora/baseline-rk3399-gru-kevin.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20221107/arm6=
-4/cros---chromeos-5.10-arm64-chromiumos-arm64.flavour.config+arm64-chromebo=
-ok/clang-13/lab-collabora/baseline-rk3399-gru-kevin.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20221024.1/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.cros-ec-sensors-gyro0-probed: https://kernelci.org/test=
-/case/id/6368a16b69497bac00e7dbb6
-        failing since 2 days (last pass: next-20221103, first fail: next-20=
-221104)
-
-    2022-11-07T06:10:24.646835  /lava-7880467/1/../bin/lava-test-case
-    2022-11-07T06:10:24.661187  <8>[   24.842247] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Dcros-ec-sensors-gyro0-probed RESULT=3Dfail>   =
-
-
-  * baseline.bootrr.cros-ec-sensors-accel1-probed: https://kernelci.org/tes=
-t/case/id/6368a16b69497bac00e7dbb7
-        failing since 2 days (last pass: next-20221103, first fail: next-20=
-221104)
-
-    2022-11-07T06:10:22.603193  <8>[   22.784497] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Dcros-ec-sensors-accel0-probed RESULT=3Dfail>
-    2022-11-07T06:10:23.617704  /lava-7880467/1/../bin/lava-test-case
-    2022-11-07T06:10:23.629228  <8>[   23.810659] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Dcros-ec-sensors-accel1-probed RESULT=3Dfail>   =
-
-
-  * baseline.bootrr.cros-ec-sensors-accel0-probed: https://kernelci.org/tes=
-t/case/id/6368a16b69497bac00e7dbb8
-        failing since 2 days (last pass: next-20221103, first fail: next-20=
-221104)
-
-    2022-11-07T06:10:21.555884  =
-
-    2022-11-07T06:10:22.592086  /lava-7880467/1/../bin/lava-test-case   =
-
- =
-
-
-
-platform                     | arch  | lab             | compiler | defconf=
-ig                    | regressions
------------------------------+-------+-----------------+----------+--------=
-----------------------+------------
-sc7180-trogdo...zor-limozeen | arm64 | lab-collabora   | clang-13 | defconf=
-ig+arm64-chromebook   | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6368a7489d3415af0ae7db5f
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+arm64-chromebook
-  Compiler:    clang-13 (Debian clang version 13.0.1-6~deb11u1)
-  Plain log:   https://storage.kernelci.org//next/master/next-20221107/arm6=
-4/defconfig+arm64-chromebook/clang-13/lab-collabora/baseline-sc7180-trogdor=
--lazor-limozeen.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20221107/arm6=
-4/defconfig+arm64-chromebook/clang-13/lab-collabora/baseline-sc7180-trogdor=
--lazor-limozeen.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20221024.1/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6368a7489d3415af0ae7d=
-b60
-        failing since 6 days (last pass: next-20221028, first fail: next-20=
-221031) =
-
- =
-
-
-
-platform                     | arch  | lab             | compiler | defconf=
-ig                    | regressions
------------------------------+-------+-----------------+----------+--------=
-----------------------+------------
-sc7180-trogdo...zor-limozeen | arm64 | lab-collabora   | gcc-10   | defconf=
-ig+arm64-chromebook   | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/63689bb8f9ad20b192e7db99
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+arm64-chromebook
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20221107/arm6=
-4/defconfig+arm64-chromebook/gcc-10/lab-collabora/baseline-sc7180-trogdor-l=
-azor-limozeen.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20221107/arm6=
-4/defconfig+arm64-chromebook/gcc-10/lab-collabora/baseline-sc7180-trogdor-l=
-azor-limozeen.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20221024.1/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/63689bb8f9ad20b192e7d=
-b9a
-        failing since 12 days (last pass: next-20221025, first fail: next-2=
-0221026) =
-
- =20
+--BOHAifbXzPBJBb7F
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Sun, Nov 06, 2022 at 09:02:12PM -0800, Paul E. McKenney wrote:
+> On Mon, Nov 07, 2022 at 02:26:41PM +1100, Stephen Rothwell wrote:
+> > Hi all,
+> >=20
+> > After merging the rcu tree, today's linux-next build (htmldocs)
+> > produced this warning:
+> >=20
+> > Documentation/RCU/rcubarrier.rst:205: WARNING: Literal block ends witho=
+ut a blank line; unexpected unindent.
+> >=20
+> > Introduced by commit
+> >=20
+> >   21c2e3909721 ("doc: Update rcubarrier.rst")
+>=20
+> Huh.  I guess that numbered code samples are not supposed to have more
+> than nine lines?  Ah well, easy to fix by going back to left-justified
+> numbers.  I was wondering about that!
+>=20
+
+I think the proper fix is just let Sphinx generates line number:
+
+---- >8 ----
+
+=46rom 5cea54b61b2dbf2ec5e00479c6c8f9e190b49091 Mon Sep 17 00:00:00 2001
+=46rom: Bagas Sanjaya <bagasdotme@gmail.com>
+Date: Mon, 7 Nov 2022 15:41:31 +0700
+Subject: [PATCH] Documentation: RCU: use code blocks with autogenerated line
+ numbers in RCU barrier doc
+
+Recently Stephen Rothwell reported htmldocs warning in
+Documentation/RCU/rcubarrier.rst when merging rcu tree [1], which has been
+fixed by left-justifying the culprit line numbers. However, similar
+issues can occur when line numbers are manually added without caution.
+
+Instead, use code-block syntax with :linenos: option, which automatically
+generates line numbers in code snippets.
+
+Link: https://lore.kernel.org/linux-next/20221107142641.527396ea@canb.auug.=
+org.au/ [1]
+Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+---
+ Documentation/RCU/rcubarrier.rst | 213 +++++++++++++++++--------------
+ 1 file changed, 114 insertions(+), 99 deletions(-)
+
+diff --git a/Documentation/RCU/rcubarrier.rst b/Documentation/RCU/rcubarrie=
+r.rst
+index 5a643e5233d5f6..79adf39838653e 100644
+--- a/Documentation/RCU/rcubarrier.rst
++++ b/Documentation/RCU/rcubarrier.rst
+@@ -70,81 +70,87 @@ If your module uses multiple srcu_struct structures, th=
+en it must also
+ use multiple invocations of srcu_barrier() when unloading that module.
+ For example, if it uses call_rcu(), call_srcu() on srcu_struct_1, and
+ call_srcu() on srcu_struct_2, then the following three lines of code
+-will be required when unloading::
++will be required when unloading:
+=20
+- 1 rcu_barrier();
+- 2 srcu_barrier(&srcu_struct_1);
+- 3 srcu_barrier(&srcu_struct_2);
++.. code-block:: c
++   :linenos:
++
++   rcu_barrier();
++   srcu_barrier(&srcu_struct_1);
++   srcu_barrier(&srcu_struct_2);
+=20
+ If latency is of the essence, workqueues could be used to run these
+ three functions concurrently.
+=20
+ An ancient version of the rcutorture module makes use of rcu_barrier()
+-in its exit function as follows::
++in its exit function as follows:
+=20
+- 1  static void
+- 2  rcu_torture_cleanup(void)
+- 3  {
+- 4    int i;
+- 5
+- 6    fullstop =3D 1;
+- 7    if (shuffler_task !=3D NULL) {
+- 8     VERBOSE_PRINTK_STRING("Stopping rcu_torture_shuffle task");
+- 9     kthread_stop(shuffler_task);
+- 10   }
+- 11   shuffler_task =3D NULL;
+- 12
+- 13   if (writer_task !=3D NULL) {
+- 14     VERBOSE_PRINTK_STRING("Stopping rcu_torture_writer task");
+- 15     kthread_stop(writer_task);
+- 16   }
+- 17   writer_task =3D NULL;
+- 18
+- 19   if (reader_tasks !=3D NULL) {
+- 20     for (i =3D 0; i < nrealreaders; i++) {
+- 21       if (reader_tasks[i] !=3D NULL) {
+- 22         VERBOSE_PRINTK_STRING(
+- 23           "Stopping rcu_torture_reader task");
+- 24         kthread_stop(reader_tasks[i]);
+- 25       }
+- 26       reader_tasks[i] =3D NULL;
+- 27     }
+- 28     kfree(reader_tasks);
+- 29     reader_tasks =3D NULL;
+- 30   }
+- 31   rcu_torture_current =3D NULL;
+- 32
+- 33   if (fakewriter_tasks !=3D NULL) {
+- 34     for (i =3D 0; i < nfakewriters; i++) {
+- 35       if (fakewriter_tasks[i] !=3D NULL) {
+- 36         VERBOSE_PRINTK_STRING(
+- 37           "Stopping rcu_torture_fakewriter task");
+- 38         kthread_stop(fakewriter_tasks[i]);
+- 39       }
+- 40       fakewriter_tasks[i] =3D NULL;
+- 41     }
+- 42     kfree(fakewriter_tasks);
+- 43     fakewriter_tasks =3D NULL;
+- 44   }
+- 45
+- 46   if (stats_task !=3D NULL) {
+- 47     VERBOSE_PRINTK_STRING("Stopping rcu_torture_stats task");
+- 48     kthread_stop(stats_task);
+- 49   }
+- 50   stats_task =3D NULL;
+- 51
+- 52   /* Wait for all RCU callbacks to fire. */
+- 53   rcu_barrier();
+- 54
+- 55   rcu_torture_stats_print(); /* -After- the stats thread is stopped! */
+- 56
+- 57   if (cur_ops->cleanup !=3D NULL)
+- 58     cur_ops->cleanup();
+- 59   if (atomic_read(&n_rcu_torture_error))
+- 60     rcu_torture_print_module_parms("End of test: FAILURE");
+- 61   else
+- 62     rcu_torture_print_module_parms("End of test: SUCCESS");
+- 63 }
++.. code-block:: c
++   :linenos:
++
++   static void
++   rcu_torture_cleanup(void)
++   {
++     int i;
++  =20
++     fullstop =3D 1;
++     if (shuffler_task !=3D NULL) {
++      VERBOSE_PRINTK_STRING("Stopping rcu_torture_shuffle task");
++      kthread_stop(shuffler_task);
++     }
++     shuffler_task =3D NULL;
++  =20
++     if (writer_task !=3D NULL) {
++       VERBOSE_PRINTK_STRING("Stopping rcu_torture_writer task");
++       kthread_stop(writer_task);
++     }
++     writer_task =3D NULL;
++  =20
++     if (reader_tasks !=3D NULL) {
++       for (i =3D 0; i < nrealreaders; i++) {
++         if (reader_tasks[i] !=3D NULL) {
++           VERBOSE_PRINTK_STRING(
++             "Stopping rcu_torture_reader task");
++           kthread_stop(reader_tasks[i]);
++         }
++         reader_tasks[i] =3D NULL;
++       }
++       kfree(reader_tasks);
++       reader_tasks =3D NULL;
++     }
++     rcu_torture_current =3D NULL;
++  =20
++     if (fakewriter_tasks !=3D NULL) {
++       for (i =3D 0; i < nfakewriters; i++) {
++         if (fakewriter_tasks[i] !=3D NULL) {
++           VERBOSE_PRINTK_STRING(
++             "Stopping rcu_torture_fakewriter task");
++           kthread_stop(fakewriter_tasks[i]);
++         }
++         fakewriter_tasks[i] =3D NULL;
++       }
++       kfree(fakewriter_tasks);
++       fakewriter_tasks =3D NULL;
++     }
++  =20
++     if (stats_task !=3D NULL) {
++       VERBOSE_PRINTK_STRING("Stopping rcu_torture_stats task");
++       kthread_stop(stats_task);
++     }
++     stats_task =3D NULL;
++  =20
++     /* Wait for all RCU callbacks to fire. */
++     rcu_barrier();
++  =20
++     rcu_torture_stats_print(); /* -After- the stats thread is stopped! */
++  =20
++     if (cur_ops->cleanup !=3D NULL)
++       cur_ops->cleanup();
++     if (atomic_read(&n_rcu_torture_error))
++       rcu_torture_print_module_parms("End of test: FAILURE");
++     else
++       rcu_torture_print_module_parms("End of test: SUCCESS");
++   }
+=20
+ Line 6 sets a global variable that prevents any RCU callbacks from
+ re-posting themselves. This will not be necessary in most cases, since
+@@ -191,21 +197,24 @@ queues. His implementation queues an RCU callback on =
+each of the per-CPU
+ callback queues, and then waits until they have all started executing, at
+ which point, all earlier RCU callbacks are guaranteed to have completed.
+=20
+-The original code for rcu_barrier() was roughly as follows::
++The original code for rcu_barrier() was roughly as follows:
+=20
+- 1   void rcu_barrier(void)
+- 2   {
+- 3     BUG_ON(in_interrupt());
+- 4     /* Take cpucontrol mutex to protect against CPU hotplug */
+- 5     mutex_lock(&rcu_barrier_mutex);
+- 6     init_completion(&rcu_barrier_completion);
+- 7     atomic_set(&rcu_barrier_cpu_count, 1);
+- 8     on_each_cpu(rcu_barrier_func, NULL, 0, 1);
+- 9     if (atomic_dec_and_test(&rcu_barrier_cpu_count))
+- 10       complete(&rcu_barrier_completion);
+- 11    wait_for_completion(&rcu_barrier_completion);
+- 12    mutex_unlock(&rcu_barrier_mutex);
+- 13  }
++.. code-block:: c
++   :linenos:
++
++   void rcu_barrier(void)
++   {
++     BUG_ON(in_interrupt());
++     /* Take cpucontrol mutex to protect against CPU hotplug */
++     mutex_lock(&rcu_barrier_mutex);
++     init_completion(&rcu_barrier_completion);
++     atomic_set(&rcu_barrier_cpu_count, 1);
++     on_each_cpu(rcu_barrier_func, NULL, 0, 1);
++     if (atomic_dec_and_test(&rcu_barrier_cpu_count))
++        complete(&rcu_barrier_completion);
++     wait_for_completion(&rcu_barrier_completion);
++     mutex_unlock(&rcu_barrier_mutex);
++   }
+=20
+ Line 3 verifies that the caller is in process context, and lines 5 and 12
+ use rcu_barrier_mutex to ensure that only one rcu_barrier() is using the
+@@ -230,18 +239,21 @@ This code was rewritten in 2008 and several times the=
+reafter, but this
+ still gives the general idea.
+=20
+ The rcu_barrier_func() runs on each CPU, where it invokes call_rcu()
+-to post an RCU callback, as follows::
++to post an RCU callback, as follows:
+=20
+- 1  static void rcu_barrier_func(void *notused)
+- 2  {
+- 3    int cpu =3D smp_processor_id();
+- 4    struct rcu_data *rdp =3D &per_cpu(rcu_data, cpu);
+- 5    struct rcu_head *head;
+- 6
+- 7    head =3D &rdp->barrier;
+- 8    atomic_inc(&rcu_barrier_cpu_count);
+- 9    call_rcu(head, rcu_barrier_callback);
+- 10 }
++.. code-block:: c
++   :linenos:
++
++   static void rcu_barrier_func(void *notused)
++   {
++     int cpu =3D smp_processor_id();
++     struct rcu_data *rdp =3D &per_cpu(rcu_data, cpu);
++     struct rcu_head *head;
++  =20
++     head =3D &rdp->barrier;
++     atomic_inc(&rcu_barrier_cpu_count);
++     call_rcu(head, rcu_barrier_callback);
++   }
+=20
+ Lines 3 and 4 locate RCU's internal per-CPU rcu_data structure,
+ which contains the struct rcu_head that needed for the later call to
+@@ -252,13 +264,16 @@ the current CPU's queue.
+=20
+ The rcu_barrier_callback() function simply atomically decrements the
+ rcu_barrier_cpu_count variable and finalizes the completion when it
+-reaches zero, as follows::
++reaches zero, as follows:
+=20
+- 1 static void rcu_barrier_callback(struct rcu_head *notused)
+- 2 {
+- 3   if (atomic_dec_and_test(&rcu_barrier_cpu_count))
+- 4     complete(&rcu_barrier_completion);
+- 5 }
++.. code-block:: c
++   :linenos:
++
++   static void rcu_barrier_callback(struct rcu_head *notused)
++   {
++     if (atomic_dec_and_test(&rcu_barrier_cpu_count))
++       complete(&rcu_barrier_completion);
++   }
+=20
+ .. _rcubarrier_quiz_3:
+=20
+
+base-commit: 2c9ea2f2e0a56cbf6931992812bffe47506f23d0
+
+Thanks.
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--BOHAifbXzPBJBb7F
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY2jV+QAKCRD2uYlJVVFO
+o5A7AP9iAn+6E7tVSXBerXQ40pTMUCc2+RUW8u1xgjV29B6PbQD/QVCJ67K/jTuw
+Y+Nm2TLobUyphGJ6YesUTknojFN+6QA=
+=Xniw
+-----END PGP SIGNATURE-----
+
+--BOHAifbXzPBJBb7F--

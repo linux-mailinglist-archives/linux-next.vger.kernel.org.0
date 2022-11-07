@@ -2,118 +2,83 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 867FE61E9DF
-	for <lists+linux-next@lfdr.de>; Mon,  7 Nov 2022 04:52:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DF2A61EA3F
+	for <lists+linux-next@lfdr.de>; Mon,  7 Nov 2022 05:50:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230390AbiKGDwn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 6 Nov 2022 22:52:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59324 "EHLO
+        id S230326AbiKGEur (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 6 Nov 2022 23:50:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230332AbiKGDwm (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 6 Nov 2022 22:52:42 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F6FEE86;
-        Sun,  6 Nov 2022 19:52:42 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        with ESMTP id S230160AbiKGEuq (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 6 Nov 2022 23:50:46 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F14295F7B;
+        Sun,  6 Nov 2022 20:50:45 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4N5HPN4G3Hz4xG8;
-        Mon,  7 Nov 2022 14:52:39 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1667793160;
-        bh=/W09fEjEk6dmxq8VJiAMaKMbqp+5ilZYFXnZP85X8KY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=kevqY741sjDbqsZAZFYAGctC09Qb6ODcncol6a0TSNrS8l8cYqZNRCek+tMn40uS4
-         uXCk6J+z3Gu6lEmARbRvXSKTjjddMDLx22mvtytF/0ZohJ80sxtCO1Xa4gEPLiwOkl
-         mrIqiGVlxrrD8Sf1AeivVaiEBjwMj6bdE9yfVXWpzZjflkM11zOUXBYyHu2Btr+t3R
-         S9AgzcjRLZiDfLm8KqlVtvTMZ8VjBgY0Z3ocrWEnLiXselvCG9uctTPc1GubwbxR+M
-         DXKKiAzyXfmAADYsBAXC09kkia0WARrW8ii8WPdBF/IQLVTfcTa/cthphfnrAdZRg/
-         Wy9dYvBLaxTYw==
-Date:   Mon, 7 Nov 2022 14:52:38 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Chen Zhongjin <chenzhongjin@huawei.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
+        by ams.source.kernel.org (Postfix) with ESMTPS id A9AAAB80DB7;
+        Mon,  7 Nov 2022 04:50:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96E4EC433C1;
+        Mon,  7 Nov 2022 04:50:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667796643;
+        bh=TZ9bEh8ECp5206JWTREk+68oOp2OK/IFrlmPHp3w1LM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=u3QBv8YadaiiEfl+5oeFspF1n1sEW98bFix0NkenXN09e1FEUMFRxfSc9Q42yeyP7
+         +EDSoYNC8Vz874SqwMuCDab4fQ3ioQnwh4ignFXH6U2mZ+f9Yse26uQHT7sQusnyMD
+         PODXq2nMXH+ZuS153SOnlpYyEZgQeAvz5dAEnGNaryGLaNCaNNgkoJ71d8YNseEdXi
+         dNOvnhXiDSRM/Lg6peo5lSUKZbVv6lZSU5cOMfNZzTJ+GLaVIn9F7NqQgWKOlfeZD3
+         VPkEbk7ay7GV/NLNpyozb3mAY73Szfl5j7VgXnvydW0C3nxbQoo7HGirJOPAHrPwPv
+         iGjjssKbsZMzg==
+Date:   Mon, 7 Nov 2022 10:20:38 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
+        Al Cooper <alcooperx@gmail.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Linux Next Mailing List" <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the sound-asoc-fixes
- tree
-Message-ID: <20221107145238.208d517a@canb.auug.org.au>
-In-Reply-To: <94003e66-399f-2c13-0ad5-72d5c6e87da3@huawei.com>
-References: <20221031083917.6944b95b@canb.auug.org.au>
-        <20221107084318.5a83394a@canb.auug.org.au>
-        <94003e66-399f-2c13-0ad5-72d5c6e87da3@huawei.com>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: Fixes tag needs some work in the phy-next tree
+Message-ID: <Y2iOng7bwrWFboIV@matsya>
+References: <20221107081332.391638fc@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/b/n=SAtgraly9H1nM6C=w4D";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221107081332.391638fc@canb.auug.org.au>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/b/n=SAtgraly9H1nM6C=w4D
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 07-11-22, 08:13, Stephen Rothwell wrote:
+> Hi all,
+> 
+> In commit
+> 
+>   3ef54ad3004a ("phy: usb: s2 WoL wakeup_count not incremented for USB->Eth devices")
 
-Hi Chen,
+Thanks for reporting, fixed now
 
-On Mon, 7 Nov 2022 11:03:39 +0800 Chen Zhongjin <chenzhongjin@huawei.com> w=
-rote:
->
-> On 2022/11/7 5:43, Stephen Rothwell wrote:
-> >
-> > On Mon, 31 Oct 2022 08:39:17 +1100 Stephen Rothwell <sfr@canb.auug.org.=
-au> wrote: =20
-> >>
-> >> After merging the sound-asoc-fixes tree, today's linux-next build (arm
-> >> multi_v7_defconfig) produced this warning:
-> >>
-> >> WARNING: modpost: sound/soc/snd-soc-core.o: section mismatch in refere=
-nce: init_module (section: .init.text) -> snd_soc_util_exit (section: .exit=
-.text)
-> >>
-> >> Introduced by commit
-> >>
-> >>    6ec27c53886c ("ASoC: core: Fix use-after-free in snd_soc_exit()") =
-=20
-> > I am still getting this warning. =20
->=20
-> I compiled linux-next/master and didn't find the warning.
->=20
-> Also I noticed that the fix patch 06ba770a799f ("ASoC: soc-utils: Remove =
-__exit for snd_soc_util_exit()") is on the tree.
->=20
-> Have no idea what's going wrong. Could you please check whether this fixu=
-p takes effect?
+> 
+> Fixes tag
+> 
+>   Fixes: f1c0db40a3ad ("usb: Add "wake on" functionality")
+> 
+> has these problem(s):
+> 
+>   - Subject does not match target commit subject
+>     Just use
+> 	git log -1 --format='Fixes: %h ("%s")'
+> 
+> -- 
+> Cheers,
+> Stephen Rothwell
 
-That fix patch is in the sound-asoc tree (and makes the warning go
-away), but the patch causing the warning is in the sound-asoc-fixes
-tree ... so the latter patch needs to be moved into the
-sound-asoc-fixes tree.
 
---=20
-Cheers,
-Stephen Rothwell
 
---Sig_/b/n=SAtgraly9H1nM6C=w4D
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNogQYACgkQAVBC80lX
-0GxOFAf7Bpbk9iVoIMCWv8sbCN1zDbKi/2Wa26rDJkU1UTEq7CGI0ojKwSVYmz2H
-Ll1ZjYCrG4pukrCaokS5riPXF4Q4cN1SLf6ogZ01QbOG0D3iqa5Rs5SdDysEYIPx
-s33AdikvYE13phqmjjAeg+u7n0HA0XVi/NiN+jKkSCbqMnfUDbzbNQdIElfDdJLa
-C4+fSb84uNINV/exx82m+pVN0yEcf9seFHovouVEchSVFGGmzMQruEE8ja4j+35L
-B7+lWwRNrBP6lJl/zyUy6mtBKZvIde+lAtH6uhCObD4T34C/AS2tpxU3xwEoPTpF
-Nmo36NMY3/hzFXM6yXY3rj1XxzFp2A==
-=9/Rn
------END PGP SIGNATURE-----
-
---Sig_/b/n=SAtgraly9H1nM6C=w4D--
+-- 
+~Vinod

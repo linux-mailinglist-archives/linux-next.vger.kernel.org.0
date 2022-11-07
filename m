@@ -2,50 +2,50 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1B0361EA41
-	for <lists+linux-next@lfdr.de>; Mon,  7 Nov 2022 05:51:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CDE861EA50
+	for <lists+linux-next@lfdr.de>; Mon,  7 Nov 2022 06:02:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230420AbiKGEvo (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 6 Nov 2022 23:51:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45324 "EHLO
+        id S229454AbiKGFCT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 7 Nov 2022 00:02:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230160AbiKGEvn (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 6 Nov 2022 23:51:43 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A75E5F7B;
-        Sun,  6 Nov 2022 20:51:42 -0800 (PST)
+        with ESMTP id S229447AbiKGFCS (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 7 Nov 2022 00:02:18 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 716EC26D2;
+        Sun,  6 Nov 2022 21:02:17 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EC33960EC4;
-        Mon,  7 Nov 2022 04:51:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3D9DC433D6;
-        Mon,  7 Nov 2022 04:51:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2C6F3B80DBB;
+        Mon,  7 Nov 2022 05:02:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBE5CC433D6;
+        Mon,  7 Nov 2022 05:02:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667796701;
-        bh=x1ar0oW6kUam3xH8IpOfjT09cYROhu1iQnuFPwJp7Aw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Wi3gfsP2fC9+SZ/CWsQZFsygVKMwPGydRaELXh5RxFbMniJ9d1LGtmjd6eOHOMHRw
-         /Z15UudO3Dy0gA/bQmjHu+VBX/Jvm/9ovICYB707OXl+Ij2n0rh3A3yY2qXPfOAF/q
-         0ovnGJZQ7+AT5oKSwwUUKWbBJP/halmYoKUDOKaUKRplhnTRZ3p9ABLq0GuvJ9gox/
-         Xt6o6lri1H3NdWHTF4jt4gUauTvUzaGRSOFYCMft2ZodtyzhfIf5iR8BMTr2CU7ikb
-         rUj4wPVLRs96fz43OlgIY3r+h5E6tJA0Kg9QbdIQ5lCVyHc3ZRvMG8ebRUR0TwpjqR
-         W7Itns6ObcCLA==
-Date:   Mon, 7 Nov 2022 10:21:37 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Justin Chen <justinpopo6@gmail.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        s=k20201202; t=1667797334;
+        bh=2aiJHArwsupxkp1IsuKbI6DmVORpLnjh1xSSGylUQ4U=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=idPmHuoZsj0NP1+z0T7FuC1wOLNYOgVR1P/Ngxv/XmTFNAsgEsq67hHpH6ftDpi7c
+         wwxTszTcA6XcTd0mp5BRpotqbXvwKU2jFm2hL9+AvlZvFap5zkoP6pw2DkkAoRysK+
+         r7ArF8dzFk0PoBxW2nWyTwD3WkRtXR/mjPlzIda4uugRqqaLntaeEcmpjvWIXsJphA
+         Hh5MtzZ4jvrUGHUdvFZLAPOd7PN2P2TD/TCdvB/+G9J/hr9FQdX1p6rNWiV892+Y9B
+         jwcHjLggT4M2s6HHNzCsYhWcpKtZE1fKTsCmgAS+xtB7ixw/CIyZyePcujB7OFbulr
+         RDZ0fbegNUvsA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id F174C5C196D; Sun,  6 Nov 2022 21:02:12 -0800 (PST)
+Date:   Sun, 6 Nov 2022 21:02:12 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Fixes tag needs some work in the phy-next tree
-Message-ID: <Y2iO2XbUPmewsrfH@matsya>
-References: <20221107081159.7ba208fd@canb.auug.org.au>
- <CAJx26kX_fb6RMyVWQO7TntVTn9i3z2SzR0uXjUf4_zQczsmEeQ@mail.gmail.com>
+Subject: Re: linux-next: build warning after merge of the rcu tree
+Message-ID: <20221107050212.GG28461@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20221107142641.527396ea@canb.auug.org.au>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAJx26kX_fb6RMyVWQO7TntVTn9i3z2SzR0uXjUf4_zQczsmEeQ@mail.gmail.com>
+In-Reply-To: <20221107142641.527396ea@canb.auug.org.au>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -55,38 +55,22 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 06-11-22, 17:10, Justin Chen wrote:
-> On Sun, Nov 6, 2022 at 1:12 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> >
-> > Hi all,
-> >
-> > In commits
-> >
-> >   5b679072af07 ("phy: usb: Fix clock imbalance for suspend/resume")
-> >   219ec4e8f7b2 ("phy: usb: Use slow clock for wake enabled suspend")
-> >
-> > Fixes tag
-> >
-> >   Fixes: ae532b2b7aa5 ("usb: Add "wake on" functionality for newer Synopsis XHCI controllers")
-> >
-> > has these problem(s):
-> >
-> >   - Subject does not match target commit subject
-
-Fixed now
-
-> >     Just use
-> >         git log -1 --format='Fixes: %h ("%s")'
-> >
-> Apologies, I missed the "phy:" in the beginning. Should be this.
-> Fixes: ae532b2b7aa5 ("phy: usb: Add "wake on" functionality for newer
-> Synopsis XHCI controllers")
-
-Use the script above to generate this and not manually
+On Mon, Nov 07, 2022 at 02:26:41PM +1100, Stephen Rothwell wrote:
+> Hi all,
 > 
-> How should I fix this? Can this be fixed in place?
+> After merging the rcu tree, today's linux-next build (htmldocs)
+> produced this warning:
+> 
+> Documentation/RCU/rcubarrier.rst:205: WARNING: Literal block ends without a blank line; unexpected unindent.
+> 
+> Introduced by commit
+> 
+>   21c2e3909721 ("doc: Update rcubarrier.rst")
 
-I have fixed it up
+Huh.  I guess that numbered code samples are not supposed to have more
+than nine lines?  Ah well, easy to fix by going back to left-justified
+numbers.  I was wondering about that!
 
--- 
-~Vinod
+Apologies for the hassle!
+
+							Thanx, Paul

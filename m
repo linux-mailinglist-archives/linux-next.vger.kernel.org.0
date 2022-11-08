@@ -2,90 +2,85 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D4D8621F43
-	for <lists+linux-next@lfdr.de>; Tue,  8 Nov 2022 23:30:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A7BF621F64
+	for <lists+linux-next@lfdr.de>; Tue,  8 Nov 2022 23:39:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229798AbiKHWaP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 8 Nov 2022 17:30:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59360 "EHLO
+        id S229488AbiKHWjg (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 8 Nov 2022 17:39:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230186AbiKHW3y (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 8 Nov 2022 17:29:54 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E9371DA67;
-        Tue,  8 Nov 2022 14:29:13 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4N6N765YW9z4xTt;
-        Wed,  9 Nov 2022 09:29:06 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1667946546;
-        bh=R0Nrt+aLwmFltyK+1DTSPxxtz3w2ijtHQ8/Gvop5afg=;
-        h=Date:From:To:Cc:Subject:From;
-        b=q6HpBRw40X/4sQVBMna8Rp+vEjVev2pdlpAY64yIvPOidLkl6iQFqopL21WWdKpQd
-         vQJXhERZmIWBiAzuZC7qB/4MCtOpiwogwaFe4gxAD3yGCu2as05GNbwd0J6wol5TfS
-         iIbPFR9iwEJaLVlB+ckYmBRlr2U507mxA2Qj6Pt6llOpmSNSfH5NeZdXxcSe2jVhYE
-         j76JmOAE8UAZXZU2Ey2XphMWpW9dOb0qlKgNKAeMNWnSqmAljrCwNucRxYduCzAc5i
-         kqSwaUXC3z3zos8OPP9z19Yiaj/u3M3QVZTm+xxPmAEZ9uQgw8/lBe3ZxO0R2QdSRF
-         k/wxzoF3ufgKg==
-Date:   Wed, 9 Nov 2022 09:29:01 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     Cristian Marussi <cristian.marussi@arm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the scmi tree
-Message-ID: <20221109092901.0c748a3e@canb.auug.org.au>
+        with ESMTP id S229530AbiKHWje (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 8 Nov 2022 17:39:34 -0500
+Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AF8360355
+        for <linux-next@vger.kernel.org>; Tue,  8 Nov 2022 14:39:34 -0800 (PST)
+Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-13b23e29e36so17848483fac.8
+        for <linux-next@vger.kernel.org>; Tue, 08 Nov 2022 14:39:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=/iT2V0+tQxLZsJICdQg59XlFu2/MLGUwh4giryzJ2M0=;
+        b=ICm23jsQ4wdOkSkDuvly1QVqoPytp9haz2v1LjvoeGLVJH9FIR4AyyOH/NFjOrtxi1
+         B/H6EBQqzG7LanFT66euegYuzZFZZiTmk/DcaMWZtl1n4lK6Az2iCmQ3HxD++xJOx8Qd
+         HkOMIF1ZZ2Ohq0FCllMqc2J4z135+5BpkMihQLi5XuVlfDhicgi3lxbE3h/5TDttK7Mf
+         pOfN3kaFDtIlLyD4sozk8RI1jslvNTObnkLpfycgwiQEQPAL6l/HZpE1jjEHhgip8JzZ
+         3gs8i7tZ2V56xO1OCuHRfEKQ/oxejvmnKNz9oY57bkozIMB8nOzi/d5oLykBS2UpRcNp
+         pq/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/iT2V0+tQxLZsJICdQg59XlFu2/MLGUwh4giryzJ2M0=;
+        b=of689iD/ML8o+BJlW7IqDdOftrawDIvlC6lOwfLuQqbMHT2RE64WLRGqq3lHDNYxUm
+         xUMGnFk6uPoMD+usKtQWRZCoIBQ8boElrdtLN9iOSvgkKa4kGpu9tWs+BG0fd5kq7RTS
+         U9DC4l67yv0Pt40WvE7Cn/yXqcF7qUKEPMW74ituIm1wEj6darsfr0nTDXmaGyAcbcK5
+         tY3bGHywU5588MJX8v1tXP7oS5CkuDilKHhYawlrYPKzpkPviivrYDxp3yfxWjgraaNw
+         nnWHRueLlxYC/1Tkt6qvC+BTc8zEKN/XJWLgD4H9uFDzmOFuZpQ+GWfN/VQKLbtJt3uK
+         mr3Q==
+X-Gm-Message-State: ACrzQf3LNK2tN9+fZT7pCcS61RFy8W2pbKhT6heJToj6ALsxNEMMUzip
+        WQSGTNrvgnrm65E52uxuW08lajW2xVzzu00bq+5CwA==
+X-Google-Smtp-Source: AMsMyM4IufYTlvc6thSOGbvJFOSUOuyMiyKKIhnuNmYNTwpkUcVkstkGJdDySVWlN34cPCqWVOREmvOavwxL3Nc1Ajs=
+X-Received: by 2002:a05:6870:b6a3:b0:13b:f4f1:7dec with SMTP id
+ cy35-20020a056870b6a300b0013bf4f17decmr34481709oab.282.1667947173215; Tue, 08
+ Nov 2022 14:39:33 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Ub9jelDoD3yMmBeJ8gs4rpW";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <000000000000e915eb05ecf9dc4d@google.com> <Y2qjerZigLiO8YVw@zx2c4.com>
+In-Reply-To: <Y2qjerZigLiO8YVw@zx2c4.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Tue, 8 Nov 2022 14:39:22 -0800
+Message-ID: <CACT4Y+a3bJmMf8JNm=SZYOKtgSVnOpY4+bgdT4ugLLhVV-NCEA@mail.gmail.com>
+Subject: Re: [syzbot] linux-next boot error: WARNING in kthread_should_stop
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     syzbot <syzbot+25aae26fb74bd5909706@syzkaller.appspotmail.com>,
+        herbert@gondor.apana.org.au, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        linux@dominikbrodowski.net, olivia@selenic.com,
+        sfr@canb.auug.org.au, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/Ub9jelDoD3yMmBeJ8gs4rpW
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, 8 Nov 2022 at 10:44, 'Jason A. Donenfeld' via syzkaller-bugs
+<syzkaller-bugs@googlegroups.com> wrote:
+>
+> Already fixed in the tree.
 
-Hi all,
+Hi Jason,
 
-After merging the scmi tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+The latest commit touching this code in linux-next is this one. Is it
+the fixing commit?
 
-ERROR: modpost: "debugfs_create_str" [drivers/firmware/arm_scmi/scmi-module=
-.ko] undefined!
-
-Caused by commit
-
-  4ccdc880f1bb ("firmware: arm_scmi: Add core Raw transmission support")
-
-I have used the scmi tree from next-20221108 for today.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/Ub9jelDoD3yMmBeJ8gs4rpW
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNq2C0ACgkQAVBC80lX
-0Gz3mwgAhc5hfzMLp3v2E+QVeqT2l+8qUYP1ojBUhHPP693x3bZtG4xVWAbwCeeI
-lDHosRPPn/47sB/pJpa7bT8V98+yS7GZgSQsWXh3j2lYC0F11lupsNedL8sZL/iL
-sLNaHI4XRt7/U8/uy3tCCejTY1T94yojdNtuVjj54B72trB8UluUPJk2jSE0zyEd
-+2NfQpk2PF6sv/FqAT060vU8np6Sx7tLCICRiVK/Uo1Xf5K900qQLi4rYS4G29V+
-Ugn/1efBFddtv51g4mafNDnabtAjaGXurJ8Gj7S5Rp8fDfrqlTZt6YDzgxQZ0ekM
-rrkIYk6onRioG0jamfZlVPMWEOqlWA==
-=KXfI
------END PGP SIGNATURE-----
-
---Sig_/Ub9jelDoD3yMmBeJ8gs4rpW--
+commit e0a37003ff0beed62e85a00e313b21764c5f1d4f
+Author:     Jason A. Donenfeld <Jason@zx2c4.com>
+CommitDate: Mon Nov 7 12:47:57 2022 +0100
+    hw_random: use add_hwgenerator_randomness() for early entropy

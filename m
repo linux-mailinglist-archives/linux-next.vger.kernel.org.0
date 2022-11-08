@@ -2,82 +2,109 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F27C162061B
-	for <lists+linux-next@lfdr.de>; Tue,  8 Nov 2022 02:33:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A88336206BF
+	for <lists+linux-next@lfdr.de>; Tue,  8 Nov 2022 03:29:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233282AbiKHBdB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 7 Nov 2022 20:33:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52146 "EHLO
+        id S233294AbiKHC3S (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 7 Nov 2022 21:29:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233165AbiKHBcr (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 7 Nov 2022 20:32:47 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17D972B250;
-        Mon,  7 Nov 2022 17:30:54 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C1589B81714;
-        Tue,  8 Nov 2022 01:30:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D58C1C433C1;
-        Tue,  8 Nov 2022 01:30:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667871051;
-        bh=0yBZHoDeAsx88XhELODMBIElqdEk3adTf9nXLZge1ak=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=d0B2Iu5Ms8CoTSUOD8gb4w79uATuWiyzX1YnEckxthgG+aPpcnkynxjHluphhgyPH
-         2n3N8q4g8FDNTPG38kq0Il/EKoT+ibgPfjcKsk9w4dU3jqSXDIECsSBB7KA91/q/aN
-         57keLiFlkjEl3xxhX2cfZG6WhC/LEg+arKMHYfac4mLojETvXDHvdfaiO0CBB1T5Ve
-         Pbzzahaqt367SPfupSM16BF+7UvY4G1HWogU9JRcbSQWWbnr7YEzNGaSHdJu4/D+85
-         Bd4F8YJRjDLoNqOL/SS/+H6QmdusCnj0S3Rz5ft8lAC7I/IlN38eRVj3fMr2UH/XKs
-         EY35Bm/08Gtuw==
-Date:   Mon, 7 Nov 2022 19:30:48 -0600
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Andy Gross <agross@kernel.org>,
-        Matti =?utf-8?Q?Lehtim=C3=A4ki?= <matti.lehtimaki@gmail.com>,
-        Rayyan Ansari <rayyan@ansari.sh>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the qcom tree
-Message-ID: <20221108013048.7uu4gseeysbzpoqt@builder.lan>
-References: <20221108090018.44624610@canb.auug.org.au>
+        with ESMTP id S233371AbiKHC3O (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 7 Nov 2022 21:29:14 -0500
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A4B812D09;
+        Mon,  7 Nov 2022 18:29:10 -0800 (PST)
+Received: by mail-pg1-x533.google.com with SMTP id r18so12174581pgr.12;
+        Mon, 07 Nov 2022 18:29:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=h8+iDxfk1Lu5FMUmp5MLJsvPgLkzuNlpDVt+Jem4i3Q=;
+        b=Jp6Olhjx38ZCDIpDvJa1kIKktRPm6c5xnQbrcwbxWay6fgRWNK0dTBXcUESv2Ou9wj
+         mlhrbfIlEkDgdrQnx6HVbM9ZBII5gln6KLJd6+6tVcKZVN4z54kuoPubmB6j8IidDZTI
+         W9weypMD0ZPjGj5KN6/B7vCwTppH7/3YkT+f9Cs3J1ls3GeBLeQIgD0x+VYsina/5Oee
+         4izY6OU4D1ZVoDRiUCmNpjftQ/mVr81qX/Rd0N6uHQrAprw8F1K0QqVV4yNycxrn/49E
+         UVzyiHlNcQIlokU0fkuQWaCpkWMkaD3VMznkY0jZ8QtZUvfzgUQHR8UMGQYdehANEXm6
+         oOag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=h8+iDxfk1Lu5FMUmp5MLJsvPgLkzuNlpDVt+Jem4i3Q=;
+        b=td2ujajh3hsZlV5QLdCDZrXfOGB24YUH+8hJoAQPfjKul7REklEzmeYxO7eRa2Sgnm
+         n9OqTTIzl1L8JzM8aIK/wl30BI3yOa8W0bLoQ51QKJpTAqqIhS3qw7bp9hhvIYywXSzf
+         /AKKuIPdaHl5g0yYT3o/gRxUSF0Z4aYvDMqAkNUY1WnD4NJxr232k2JgMOfrx1l/f1mQ
+         VmmEd+h6hXLfeunJ+Q9KSjRE4/mmKqDVBB62oUx0ROJibZZSb23J73HX4EdhgjZGMaUE
+         Zbn24HTK+0fcwvdZfS0IatTFTqTtcWBOEQAj8zZq3f6DNZKm/4dl60OOUueep+BKQEbw
+         JguQ==
+X-Gm-Message-State: ACrzQf3uJAvnmj2C7DJYzdf8olZTuHjEiZyVclyUr/TZ4ywMo953p9C9
+        r6JoXR4MsOngxhriEdZ1oRY=
+X-Google-Smtp-Source: AMsMyM4PHS1dbFAuhR5oCM2R3s+kkIX9oz32AKULQ5Nbtx0LyF1xDDPqA9EGoLuJeO4fX+1jOUKMfg==
+X-Received: by 2002:a05:6a00:1823:b0:56b:f348:998f with SMTP id y35-20020a056a00182300b0056bf348998fmr53571623pfa.28.1667874550131;
+        Mon, 07 Nov 2022 18:29:10 -0800 (PST)
+Received: from [192.168.43.80] (subs02-180-214-232-93.three.co.id. [180.214.232.93])
+        by smtp.gmail.com with ESMTPSA id k27-20020aa7999b000000b0056b8af5d46esm5144170pfh.168.2022.11.07.18.29.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Nov 2022 18:29:09 -0800 (PST)
+Message-ID: <206a95eb-5430-f9bf-15ad-4e644393255e@gmail.com>
+Date:   Tue, 8 Nov 2022 09:29:01 +0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221108090018.44624610@canb.auug.org.au>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH] Documentation: RCU: use code blocks with autogenerated
+ line (was: Re: linux-next: build warning after merge of the rcu tree)
+Content-Language: en-US
+To:     Akira Yokosawa <akiyks@gmail.com>
+Cc:     corbet@lwn.net, frederic@kernel.org, jiangshanlai@gmail.com,
+        joel@joelfernandes.org, josh@joshtriplett.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-next@vger.kernel.org, mathieu.desnoyers@efficios.com,
+        paulmck@kernel.org, quic_neeraju@quicinc.com, rcu@vger.kernel.org,
+        rostedt@goodmis.org, sfr@canb.auug.org.au
+References: <Y2jWAR1QESe3OrhH@debian.me>
+ <af3ec8bf-310e-69ea-9d32-f7aec740b306@gmail.com>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <af3ec8bf-310e-69ea-9d32-f7aec740b306@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SORTED_RECIPS,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Nov 08, 2022 at 09:00:18AM +1100, Stephen Rothwell wrote:
-> Hi all,
+On 11/7/22 18:48, Akira Yokosawa wrote:
+> That might be true if all you care about were the generated documents,
+> but we need to pay attention to readers of .rst files as plain-text.
 > 
-> After merging the qcom tree, today's linux-next build (arm
-> multi_v7_defconfig) failed like this:
-> 
-> arch/arm/boot/dts/qcom-msm8226.dtsi:302.21-327.5: ERROR (phandle_references): /soc/cci@fda0c000: Reference to non-existent node or label "mmcc"
+> There are a bunch of references to line numbers in RCU documents.
+> If explicit line numbers are removed from snippets, such readers need
+> to count the lines by themselves, which doesn't sound reasonable to me.
 > 
 
-Sorry about that, not sure why I didn't catch that before pushing my
-branch. I've pulled in the missing patch today.
+I think only rcubarrier.rst have explicit references to line numbers.
 
-Thanks,
-Bjorn
+Also, besides manual line counting, readers seeing rst sources can deduce
+where actually the lines are from explanation of the snippet. Of course
+they can make htmldocs and seeing the output if they want.
 
-> Caused by commit
+> If you can put labels to referenced lines within code snippets, auto
+> generation of line numbers might work, but as far as I know, Sphinx
+> doesn't provide such a nice feature.
 > 
->   4ab2f41b0850 ("ARM: dts: qcom: msm8226: Add CCI bus")
-> 
-> I have used the qcom tree from next-20221107 for today.
-> 
-> -- 
-> Cheers,
-> Stephen Rothwell
 
+There's also :emphasize-lines: option to highlight selected line numbers.
+
+Thanks.
+
+-- 
+An old man doll... just what I always wanted! - Clara
 

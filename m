@@ -2,142 +2,129 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B41AC620B18
-	for <lists+linux-next@lfdr.de>; Tue,  8 Nov 2022 09:26:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6466F620C6D
+	for <lists+linux-next@lfdr.de>; Tue,  8 Nov 2022 10:39:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232955AbiKHI0f (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 8 Nov 2022 03:26:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40598 "EHLO
+        id S233259AbiKHJjz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 8 Nov 2022 04:39:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233663AbiKHI0Y (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 8 Nov 2022 03:26:24 -0500
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2075.outbound.protection.outlook.com [40.107.100.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 912EE27DC1;
-        Tue,  8 Nov 2022 00:26:23 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=H0YpOLN8WY7gGJKrraiBu1VnzgYTLsfgGo/zLv7SPvPqWXDuCnAdeCGM3IxciPsfsdU2b7AZMrX723qQPbrey91T6OGniEaOamUnk1IeDKy5ba6L8g9XX4OV0VOg68DYYWYEMsQYB1WYVix/6unbzMBr3FPLfOwtLOnWlYaOBq9Pa65VCz/s8n1MX4UhWxVqDIG+4AOzadKnMCEqN0GhOc4mrA4t0Qi8IfoNjxlYaZtjOaGGmmxx8p6TjAqMo2d5bIHwCv7VYuJ2A2CrkAe5kxyH5Qc5qz64J4V0iofe42wMA8lPVey9hK5R5Gy1+6Z6DshmJ3Q6B/wgdjSgRzacEQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=70N2KF9WgIdQvgZYuR75kAYp8Ht+z6WNNx3vjjiHEfg=;
- b=WANyi80ZuCqtNN3KjlpD3gALWqExy2DOkQ9hLXCsew3uAWcGAh+bsCa6FZRmoOOq0moNqfHeIg0nUk9lbGHU0xnxFxG6vZW/zhevq5RBFiKvzOLE4hcXksc01EbrRdc70XwQUaII0ORlmDkYcp4yt4FsVhNH8tFAUJcSU4eSQcn9SYZX8Pv8xTSCqvcUtKtXkW4EDgYMhlehHo/aTfnr0i8Ib3J8ejd7miCmtAyCnAfhXNfnZKKF4ScP3SstAuWAHO6ZLBa17oRLvhMa2FKb4z7CmOrXUUEtE0Em/PnbR/DUikdzx7uSGYvIBDCLj9KPKkLJDuvB46ZBQUSyBWeZsw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=70N2KF9WgIdQvgZYuR75kAYp8Ht+z6WNNx3vjjiHEfg=;
- b=X0JAF7UyRPHGmTUsJYRJOrZz2FADDUi69dUsf+dAS5HdGySE68pSzZdWguQXZprpc+32BEu1QowazT0RXgwe+ht0NLk7FT1CsaElC3/IaeNVJCfBObLEaXqWJH662hZfesp9IVlUliqNIls/mJWWbxhT3UpMdr9w4U1jlP1owlEy2IhEWJRL9MowFW6QYOj9IiPVv9keFQD67kwQZKB2ChMMmf579mP6cgiGooxCXPnmh2Pqo5dTHbl8iHYsBSwakOblXZ/qYueDZTsSyx1OandLTnXOphI8XzjIirYNzke9rW+EwKq/0xVgnM9BHa91u9te+RigShhyu587OmEfBg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN0PR12MB5979.namprd12.prod.outlook.com (2603:10b6:208:37e::15)
- by DM4PR12MB5152.namprd12.prod.outlook.com (2603:10b6:5:393::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.27; Tue, 8 Nov
- 2022 08:26:21 +0000
-Received: from MN0PR12MB5979.namprd12.prod.outlook.com
- ([fe80::4ca5:7eff:cf08:6a4]) by MN0PR12MB5979.namprd12.prod.outlook.com
- ([fe80::4ca5:7eff:cf08:6a4%9]) with mapi id 15.20.5769.015; Tue, 8 Nov 2022
- 08:26:21 +0000
-Date:   Tue, 8 Nov 2022 09:26:17 +0100
-From:   Jiri Pirko <jiri@nvidia.com>
-To:     syzbot <syzbot+c2ca18f0fccdd1f09c66@syzkaller.appspotmail.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com, sfr@canb.auug.org.au,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] linux-next test error: WARNING in devl_port_unregister
-Message-ID: <Y2oSqdrob7bI6Xvr@nanopsycho>
-References: <0000000000000c56d205ece61277@google.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0000000000000c56d205ece61277@google.com>
-X-ClientProxiedBy: FR0P281CA0090.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:1e::15) To MN0PR12MB5979.namprd12.prod.outlook.com
- (2603:10b6:208:37e::15)
+        with ESMTP id S233803AbiKHJjx (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 8 Nov 2022 04:39:53 -0500
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CB9A26AE5
+        for <linux-next@vger.kernel.org>; Tue,  8 Nov 2022 01:39:51 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id b3so20444147lfv.2
+        for <linux-next@vger.kernel.org>; Tue, 08 Nov 2022 01:39:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=kSwog5ERxG3EokF124vpEbubj3vdn0vtr+WUZpZ5SIc=;
+        b=gdeDy+kVAls2tF3+8sTJ9fVAWpvclXEl/RcjTan6GjLB1bEPXlpzRWWD0uXdzu1vWt
+         A9zjjA8AiNshAQJha7dQq6pslJ8AKFoE61X7ry6GdgkBi2l4ef4jJJzdChn12qckcqBV
+         S4w7wKz4e0ZYehkm8WUcCsJW+M94nMoOJ17Ae872c1lt7U9O+H1W25wcR6hYUffJYNVg
+         YSnT8wyAo6SF7rmfLLi/6kMhx6zIBVZW7Wo1At5CiBc/vF+C1ceE0ejDpJo1rhNoNMGO
+         n/nQCb8A1WmlLy8/+dN7yL8k85KRYFzmKVWRtZbfj3/PLlqvIGQ9NAgMMEh4oxjBa0qs
+         31Rg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=kSwog5ERxG3EokF124vpEbubj3vdn0vtr+WUZpZ5SIc=;
+        b=Zae4s/a92Ri/93fFuTKFOJuhuETQ6IFc0mShm3Y6oeETzk4z5TemPOEW/tyHFm6hVI
+         7b6kvRZn8+FdeHQVf6b9YrnGw5xGGutSRsj97Q1Jfpfs2AwZh7YyzQTizPNJFujJMMQO
+         SWe+QX5//BjTc+z6YCMBWrjzE6VWCaIratdRnrKvraThI4RXtCQM9TcsJZmhvbpOPIRz
+         9+BTJ2eSPuIvtAy9DWoTwUYbetzXLh2/750bLQL1RZaCL0j1qvfgFgK5pplnqDoy7bLV
+         3zUeozWLoosX1fr3xNOVp4UxhiCRWa2L8HujMnWaBzfrb2ifbF2REgEJn6rcEwVPIVX3
+         zGXw==
+X-Gm-Message-State: ACrzQf2V71uZvsxOkpzyb+ZPwDHkVbZgsR+MbPolKHwWTzugf5DpUtfT
+        IbbU1/Qsvxj0oD389SwFdXXxVA==
+X-Google-Smtp-Source: AMsMyM6aCyd7GLTchlaoL+Cpdzc6zcZSwGdB4+XrqFm7lPITXo+4Eqv8OHH2Ff2W8eeXs7CVhE7+RA==
+X-Received: by 2002:a19:dc48:0:b0:4a8:d24b:d78 with SMTP id f8-20020a19dc48000000b004a8d24b0d78mr20399524lfj.351.1667900389861;
+        Tue, 08 Nov 2022 01:39:49 -0800 (PST)
+Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
+        by smtp.gmail.com with ESMTPSA id t3-20020a19ad03000000b004a459799bc3sm1700025lfc.283.2022.11.08.01.39.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Nov 2022 01:39:49 -0800 (PST)
+Message-ID: <32f42513-0c55-042e-2530-c58d980a9ce0@linaro.org>
+Date:   Tue, 8 Nov 2022 10:39:48 +0100
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR12MB5979:EE_|DM4PR12MB5152:EE_
-X-MS-Office365-Filtering-Correlation-Id: 99a65ceb-3b83-4d3a-8169-08dac162ea74
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: M3CgXItdBJdQ/dM7xtV7BdtwB9eyKIvcz93bt15OcAG+a+TC425cCltoHYEQpFI+8lfsdJ0IPOWF9mXSr1UO354DfPamdczw/DnSU8m5lfnuzLU05qkDjwBrmJ7dgxZyslwuBM5cmFx7XUYOaRHh/jyJZvTfvfPHZk4pCMXIFPJXp9dVIH91qrY36/cuw62SixUwsCJdXG87l7xLD5n6cspk803o3/EaUF7h3EUeNDba2hisNFF3/zxCnHTuqkKYk45v1E/C+GBOvqYunQR2jCif2T+DaZiiOSMrEZZjnTslRFIhwqCeVV5lwXvCKgXsixb2W3Hzp0AoN2TU7QcJor/TflgGBRK6nkctNKg4CllpNT/295/2MS5Z1Wrky6Apc/r+3JeLnBw+9fbfTg9T/IsWFuzWqkohKRiF7Poe5aJH9DNQY7BBOzELtyoiSGOVMphWUOpAnFxApwN7fJEuxGzi9jnd0Pz/Q1p9eUpYz++wx1oKsPKVDpHv870iO8vnB7A3NrxSyIe6VQsY5bN59uUcJmKmA9mNDIe68X6wk37Y9ZzAWNlZSYU5ZzIrrNj/74ijvwha/RjC5AMz0q3FkV5r1WzxBvtPiqw/ooU81mmhTMmMZPXbOJXE9ch8Q+h+rmBUGzFb8+RsxWGk4BJWSp0vOhJIinsASOT2UfMk40qy2rK1jQSLkhRql127l3pMRgDWoI2HgRMzHx+vUYnQ+n30/6PVvT7hreobY2mwbO+H+ZATYvv90hh3zXFXSRyK2vCYXzY1Ma7X+81bOceNTLL4rqxo507UIBbtX6NJBIqZVGPra0CE+8Dx0lALAL93lrPSTCmRi6l4kDU4jSn1zSAlnXrnHDdEi2j9+UmUokFS1fCgoGgG6OlWcBgWCDvP
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB5979.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(7916004)(39860400002)(396003)(136003)(376002)(366004)(346002)(451199015)(38100700002)(478600001)(966005)(6486002)(33716001)(83380400001)(86362001)(6666004)(186003)(2906002)(6512007)(9686003)(6506007)(8936002)(5660300002)(7416002)(41300700001)(26005)(66946007)(66556008)(66476007)(316002)(4326008)(8676002)(99710200001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?uuI6ICNE3UiJCMZZpKcO5IANSXy4MvvtH6UvLtTGcZaug7SqimWZkhjpQ5kP?=
- =?us-ascii?Q?YLlqIk4nxQ49kIlymZZsiFBc0RTc0tEGLgiG2I2gF7w9Swvj+YDmc2Uu5Mvm?=
- =?us-ascii?Q?tC8DowxpV0jtQq/c/VwrxwmhXtCayqvAqMTGvHeU/43GNH3PnakrMkruheaH?=
- =?us-ascii?Q?rqRhtaG3E9v8W5rWEL4GDHFoP/CkT3aT+u3YxydO1/QxHUwVP8YCKKJJy5y+?=
- =?us-ascii?Q?KbaL7IGVVhW1UrU6z+DEEL74F4BuEdGJm04f4XN51yKCkK5KBbratXsDBZ7e?=
- =?us-ascii?Q?skciJXIIC6XiZ58JNUeHSMVg9FgQDo+vdhVbqVuqU8DB5v4706fMK7vEU1BN?=
- =?us-ascii?Q?un1tZfU4JLWR7D5RyEFS1wDadhNEHOTOpV4rVCv6g06+LCyvi5zghsmLziHr?=
- =?us-ascii?Q?L/mgrp4kesLn4ErhAuSPB2L55fCdru6RFkZoOSsNpNxOi1Z8Uq21o9Pk+dQB?=
- =?us-ascii?Q?9P5liKujo24mc0Fs2drORTCjS2btSAFjohtpeVS+l13NRFVtpmqSfFjvX160?=
- =?us-ascii?Q?jbkYtPYfYVPN9BWTPzyFWZIYiFAPgCpt9/10FCg34qX+mNIvbMIIja1QAUoJ?=
- =?us-ascii?Q?uE3SUn2i7ZplFamY0qv2TpZGLbmt63yXgx/gxR+vGbITpzTENg7cYqcmT6dA?=
- =?us-ascii?Q?qqsgvk/7LqDBtt2cGofweD9j9rEFlGCNLdX0IpwAPtqHp95qlENJC8p71BJW?=
- =?us-ascii?Q?zf8kSBRIJDriKzVbIaDy6eI4MlLe+rImnez4fjLSWYSJk+MIy8FcBTBklDit?=
- =?us-ascii?Q?4QTkFtoBv8fIlBlLKk6v07vxNkTCxSLSuUolmTyCWStGiToTHl9gwm0PvVIj?=
- =?us-ascii?Q?HKFNcfKr8ufhI9hCOEvjItb7G/58i/Qo2aHeVQ/8VkzhHXpQUCndAiBJbAlA?=
- =?us-ascii?Q?9/HatV8jcpILdiosjmf9csJRFoNTEgp/GTLZXuIudjl/+mYn7HmzSgoX/wdU?=
- =?us-ascii?Q?aNucN7Dd94F6URi1ELGmAwVzhkJ/EJorhUbiZNvKZbDSZPk8D9jkGGjl3r8/?=
- =?us-ascii?Q?+Ssl/9Wz8ey9GqAIzWKCnrEE/jINrIz6FlU0LmS6KvhYgU0DzfocUupNwvJV?=
- =?us-ascii?Q?qQT8blh7uSr2JmyUC04wfQ9n6kV3R+K6NCU9udWAXB61hTL/5HIZqHgMLo+W?=
- =?us-ascii?Q?NX59caGUyv4ct3hfStkjQYeivwyjW8HILIwSTTx+bf575V/aJDZ3Oj1cLAIl?=
- =?us-ascii?Q?N53lqZU/VDehWni5hUIWaFVOK47V49dNN6BJiyGVh5sxrh4PfmyaNEafFO2g?=
- =?us-ascii?Q?BGTyMvfvupmSkwaNAq0tM/hKiVguaTxNHlcNU7v7fd3AaA85DhjQWlgz1DEB?=
- =?us-ascii?Q?0vLuKaBeyjoUwNXXWUbCP5o/cbhc6PScrHD7stQUA1o1QB5UXnGn0f2BZQP+?=
- =?us-ascii?Q?0hOftuR9Rb3AqQPDsmfHAcK+ibBOBPT4wfbK/Sy9OukRLBonOf9OEUPX7zQi?=
- =?us-ascii?Q?pPpyo0EyIunCwng8ltqExJr+nvR4nDLyNj/PSQfb7C0/ukR4WsfM3XCpCy8Y?=
- =?us-ascii?Q?RKU32NbCTU5Ha8+Z8DYoyM4q4fb4s+ymARQjSVJIOltkXUb5U8X6XlJmp85z?=
- =?us-ascii?Q?nSnvQkQk/ZVEcZfjpKG51KOpNhwyq4jgDNx/Uuoe?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 99a65ceb-3b83-4d3a-8169-08dac162ea74
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB5979.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Nov 2022 08:26:21.3149
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: P1ozcE37zeqOoCSICEAnFfY9f/3dOdDofimZz9s0ALnz1aWtdDGxDGH0S20tRQni
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5152
-X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SORTED_RECIPS,SPF_HELO_PASS,
-        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: Coverity: gpmc_is_valid_waitpin(): Control flow issues
+Content-Language: en-US
+To:     "Niedermayr, BENEDIKT" <benedikt.niedermayr@siemens.com>,
+        "rogerq@kernel.org" <rogerq@kernel.org>,
+        "keescook@chromium.org" <keescook@chromium.org>
+Cc:     "gustavo@embeddedor.com" <gustavo@embeddedor.com>,
+        "tony@atomide.com" <tony@atomide.com>,
+        "linux-next@vger.kernel.org" <linux-next@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-omap@vger.kernel.org" <linux-omap@vger.kernel.org>,
+        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>
+References: <202211041233.4D45359E7@keescook>
+ <7cdf3d14-3f1b-7cd4-e8b9-e94b5359bf82@kernel.org>
+ <e4e4c4f0-782b-9f89-d7a2-859c7759ca66@kernel.org>
+ <b18cddde778ada5030f6a80308854cf9c0dc4d23.camel@siemens.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <b18cddde778ada5030f6a80308854cf9c0dc4d23.camel@siemens.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Mon, Nov 07, 2022 at 08:02:52PM CET, syzbot+c2ca18f0fccdd1f09c66@syzkaller.appspotmail.com wrote:
->Hello,
+On 08/11/2022 09:02, Niedermayr, BENEDIKT wrote:
+> On Mon, 2022-11-07 at 10:56 +0200, Roger Quadros wrote:
+>>
+>> On 07/11/2022 10:53, Roger Quadros wrote:
+>>> Hi Benedikt,
+>>>
+>>> On 04/11/2022 21:33, coverity-bot wrote:
+>>>> Hello!
+>>>>
+>>>> This is an experimental semi-automated report about issues detected by
+>>>> Coverity from a scan of next-20221104 as part of the linux-next scan project:
+>>>> https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fscan.coverity.com%2Fprojects%2Flinux-next-weekly-scan&amp;data=05%7C01%7Cbenedikt.niedermayr%40siemens.com%7C1a25cc8704524f24224108dac09dfab7%7C38ae3bcd95794fd4addab42e1495d55a%7C1%7C0%7C638034081994087461%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=W1KlBKg9nwEDfFAbqW6Jw7v1d46HQLj8RX8wlZ9RHyc%3D&amp;reserved=0
+>>>>
+>>>> You're getting this email because you were associated with the identified
+>>>> lines of code (noted below) that were touched by commits:
+>>>>
+>>>>   Wed Nov 2 10:02:39 2022 -0400
+>>>>     89aed3cd5cb9 ("memory: omap-gpmc: wait pin additions")
+>>>>
+>>>> Coverity reported the following:
+>>>>
+>>>> *** CID 1527139:  Control flow issues  (NO_EFFECT)
+>>>> drivers/memory/omap-gpmc.c:1048 in gpmc_is_valid_waitpin()
+>>>> 1042     	spin_unlock(&gpmc_mem_lock);
+>>>> 1043     }
+>>>> 1044     EXPORT_SYMBOL(gpmc_cs_free);
+>>>> 1045
+>>>> 1046     static bool gpmc_is_valid_waitpin(u32 waitpin)
+>>>
+>>> We will need to change this waitpin argument to int.
+>>> In addition we will also need to change
+>>> struct gpmc_waitpin->pin and struct gpmc_setting->wait_pin
+>>> to int as in the code we are relying on GPMC_WAITPIN_INVALID logic which is -1.
+>>
+>> Another alternative with less churn is to leave them as u32
+>> but make GPMC_WAITPIN_INVALID set to a large positive number.
+> Ok, I will fix that. 
+> Do I need to send a new fix-patch on top the current patch series? 
+> Or should I just send only the bugfix-patch for the coverity-bot? 
 >
->syzbot found the following issue on:
->
->HEAD commit:    d8e87774068a Add linux-next specific files for 20221107
->git tree:       linux-next
->console output: https://syzkaller.appspot.com/x/log.txt?x=17b99fde880000
->kernel config:  https://syzkaller.appspot.com/x/.config?x=97401fe9f72601bf
->dashboard link: https://syzkaller.appspot.com/bug?extid=c2ca18f0fccdd1f09c66
->compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
->
->Downloadable assets:
->disk image: https://storage.googleapis.com/syzbot-assets/671a9d3d5dc6/disk-d8e87774.raw.xz
->vmlinux: https://storage.googleapis.com/syzbot-assets/ef1309efbb19/vmlinux-d8e87774.xz
->kernel image: https://storage.googleapis.com/syzbot-assets/7592dabd2a3a/bzImage-d8e87774.xz
->
->IMPORTANT: if you fix the issue, please add the following tag to the commit:
->Reported-by: syzbot+c2ca18f0fccdd1f09c66@syzkaller.appspotmail.com
->
->wlan1: Creating new IBSS network, BSSID 50:50:50:50:50:50
->netdevsim netdevsim0 netdevsim3 (unregistering): unset [1, 0] type 2 family 0 port 6081 - 0
->------------[ cut here ]------------
->WARNING: CPU: 0 PID: 11 at net/core/devlink.c:9998 devl_port_unregister+0x2f6/0x390 net/core/devlink.c:9998
 
-Taking care of this. Will send fix today.
+A bugfix patch on current next is ok.
+
+Best regards,
+Krzysztof
+

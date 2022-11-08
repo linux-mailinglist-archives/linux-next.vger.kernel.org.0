@@ -2,98 +2,136 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1968E620EAA
-	for <lists+linux-next@lfdr.de>; Tue,  8 Nov 2022 12:21:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65C96621771
+	for <lists+linux-next@lfdr.de>; Tue,  8 Nov 2022 15:54:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233216AbiKHLVc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 8 Nov 2022 06:21:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60688 "EHLO
+        id S234344AbiKHOyA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 8 Nov 2022 09:54:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233782AbiKHLV0 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 8 Nov 2022 06:21:26 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F155DF588;
-        Tue,  8 Nov 2022 03:21:25 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id AF7B31F88B;
-        Tue,  8 Nov 2022 11:21:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1667906484;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Xbmkf20b3GGM4eZ0HtjGYF5NWspQjalhLC9Jm7fCMLE=;
-        b=ozJeG2GsmeG+ccya43ePXnCpQNI9eUSKS+zwcf3kmw0gbiou08Ttk4NUYP0Cr+ZK1Tvkey
-        y9/dqlPHaSN4EjVFfZthECFTeiKHRXa/P09gwqdt4n70JMuJa5+RQXXHy0XoW65SajdfFX
-        C0XtcGQVBVvqhBhgz1C60rWH0nMD/vE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1667906484;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Xbmkf20b3GGM4eZ0HtjGYF5NWspQjalhLC9Jm7fCMLE=;
-        b=jbHPkmkZ5J/MQ4g0AHvcgpzjHlv2izR25fX6Ksj+7aGZEGZlBfjOJfpyeIT4iyrmHxJ3AZ
-        Ls3bEBVD3LTTXCAw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7DDAD139F1;
-        Tue,  8 Nov 2022 11:21:24 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id x0/EHbQ7amOhNgAAMHmgww
-        (envelope-from <dsterba@suse.cz>); Tue, 08 Nov 2022 11:21:24 +0000
-Date:   Tue, 8 Nov 2022 12:21:02 +0100
-From:   David Sterba <dsterba@suse.cz>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     David Sterba <dsterba@suse.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the btrfs tree
-Message-ID: <20221108112102.GX5824@suse.cz>
-Reply-To: dsterba@suse.cz
-References: <20221108094229.1b530fec@canb.auug.org.au>
+        with ESMTP id S234285AbiKHOxw (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 8 Nov 2022 09:53:52 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F72018E0C;
+        Tue,  8 Nov 2022 06:53:51 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id j12so14390293plj.5;
+        Tue, 08 Nov 2022 06:53:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=iPWTM5bctppQrEhT8PhLH/n0wnwXqhBeZrZRWfQFk6Y=;
+        b=IFSc9rcTe5NRbcWLMfSJ4CqwAQk9sDNFD/xyAot5VYfdbTZ2hxB6yakJcevKzWEHu0
+         xRno1uKyAhpxqkPvfsBXilff1tCNQ+QmyDif5bt01gE1aiT8fZfADLRWzZdcL4pAjFfB
+         Irj29iU6KywmdtoUDu3iJxR4oZNscSeCyi4Biaq2yKFJJcsG2mgCdJvHDiGfldp3/O1l
+         lWhzqP3x2mWhl/zTzedyULoseUB/vAgw8Jl2tFWiESsYZ70CljZwdet9gcNuJXulG9h6
+         c3OEal4GGhdvE24tP913AWfuznGbLEO/hluY1PvetFaUN9icFyV58RC+rmjkG18CcZws
+         Uvrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=iPWTM5bctppQrEhT8PhLH/n0wnwXqhBeZrZRWfQFk6Y=;
+        b=HSmbTTd35gWv+oaLPzWTmpRDnCn/8hdPE4fUXcC6MJUEPJOcLnWRwq7S8gKrVyc4gL
+         3MBm8jGygAmXnGyD4lD5ZSHvsm0C7PDiNeaQwq2/JeQ73uCF1q3KqdqBirUymYxXGtC1
+         Zn7axkgu90eBkI+v0EcMtqtRe+LEzVmmFrMa1NIBjswGPcW0p17YdSW9jKTi4Zkesef9
+         f+7xhebQtd3QXHdRRTciwO+hekOWh3HYmMnH0iI4Ce5BhiwU4Ze4tqTpArFGe8a1HP8i
+         RZIkqCWrcuG4PzL6vi6O1mAEaneReDbwh4MTbSU/WFCml1ESH6RrEj0PDsBb1R+VEAlP
+         OwiQ==
+X-Gm-Message-State: ANoB5pk8hbd18x9zUKtG5ZjNSYRVoh7d4mIlN+gkx/loW0usWpMfORVD
+        vm2TNgxWhiwU0pT2g195JxKbU2sIh04=
+X-Google-Smtp-Source: AA0mqf5rkTlutTfPxsW2hru2NT6RkXbIajNdPSnXJv2RClDTXMhDdnd9C9N5Rnimq+6rkNpPFQlUgA==
+X-Received: by 2002:a17:902:6b4a:b0:188:867a:e079 with SMTP id g10-20020a1709026b4a00b00188867ae079mr7466801plt.158.1667919230982;
+        Tue, 08 Nov 2022 06:53:50 -0800 (PST)
+Received: from [192.168.11.9] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
+        by smtp.gmail.com with ESMTPSA id x190-20020a6231c7000000b0056abfa74eddsm6701169pfx.147.2022.11.08.06.53.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Nov 2022 06:53:50 -0800 (PST)
+Message-ID: <fd1903d4-a721-931e-c928-1818cd650490@gmail.com>
+Date:   Tue, 8 Nov 2022 23:53:46 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221108094229.1b530fec@canb.auug.org.au>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+From:   Akira Yokosawa <akiyks@gmail.com>
+Subject: Re: [PATCH] Documentation: RCU: use code blocks with autogenerated
+ line (was: Re: linux-next: build warning after merge of the rcu tree)
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     corbet@lwn.net, linux-kernel@vger.kernel.org,
+        linux-next@vger.kernel.org, paulmck@kernel.org, rcu@vger.kernel.org
+References: <Y2jWAR1QESe3OrhH@debian.me>
+ <af3ec8bf-310e-69ea-9d32-f7aec740b306@gmail.com>
+ <206a95eb-5430-f9bf-15ad-4e644393255e@gmail.com>
+Content-Language: en-US
+In-Reply-To: <206a95eb-5430-f9bf-15ad-4e644393255e@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Nov 08, 2022 at 09:42:29AM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the btrfs tree, today's linux-next build (powerpc
-> ppc64_defconfig) failed like this:
-> 
-> ld: fs/btrfs/messages.o:(.opd+0x90): multiple definition of `abort_should_print_stack'; fs/btrfs/ctree.o:(.opd+0x270): first defined here
-> ld: fs/btrfs/messages.o: in function `.abort_should_print_stack':
-> messages.c:(.text.unlikely+0x55c): multiple definition of `.abort_should_print_stack'; fs/btrfs/ctree.o:ctree.c:(.text.unlikely+0x0): first defined here
-> 
-> Caused by commit
-> 
->   8bb808c6ad91 ("btrfs: don't print stack trace when transaction is aborted due to ENOMEM")
-> 
-> from the btrfs-fixes tree interacting with commit
-> 
->   c6f1e8101ccc ("btrfs: don't print stack trace when transaction is aborted due to ENOMEM")
-> 
-> from the btrfs tree.
-> 
-> I applied the following merge fix for today.
+[Dropping most CCs]
 
-Thanks. We have development branch that moved a lot of code and fixes to
-mainline are in different files. Locally I see that for-next builds fine
-because the next-fixes is not merged to it but the linux-next tree
-merges both. I'll do more build checks, sorry for inconvenience.
+On Tue, 8 Nov 2022 09:29:01 +0700, Bagas Sanjaya wrote:
+> On 11/7/22 18:48, Akira Yokosawa wrote:
+>> That might be true if all you care about were the generated documents,
+>> but we need to pay attention to readers of .rst files as plain-text.
+>>
+>> There are a bunch of references to line numbers in RCU documents.
+>> If explicit line numbers are removed from snippets, such readers need
+>> to count the lines by themselves, which doesn't sound reasonable to me.
+>>
+> 
+> I think only rcubarrier.rst have explicit references to line numbers.
+
+Oh, I find such references in (not limited to):
+
+  - Documentation/RCU/Design/Requirements/Requirements.rst
+  - Documentation/RCU/Design/Data-Structures/Data-Structures.rst
+
+> 
+> Also, besides manual line counting, readers seeing rst sources can deduce
+> where actually the lines are from explanation of the snippet.
+
+Maybe, maybe not... Deducing may take time.
+
+>                                                               Of course
+> they can make htmldocs and seeing the output if they want.
+
+There can be situations where you can't afford such luxuries.
+
+Remember there is a note in Documentation/doc-guide/sphinx.rst
+which reads:
+
+  Please don't go overboard with reStructuredText markup. Keep it simple.
+  For the most part the documentation should be plain text with just enough
+  consistency in formatting that it can be converted to other formats.
+
+My interpretation of above:
+
+  .rst sources should be kept as close to plain-text which can be
+  easily understood in dumb terminals, as far as possible.
+
+> 
+>> If you can put labels to referenced lines within code snippets, auto
+>> generation of line numbers might work, but as far as I know, Sphinx
+>> doesn't provide such a nice feature.
+>>
+> 
+> There's also :emphasize-lines: option to highlight selected line numbers.
+
+But that option doesn't do any highlighting while viewing .rst files
+as plain-text. What am I missing?
+
+        Thanks, Akira
+
+> 
+> Thanks.
+> 

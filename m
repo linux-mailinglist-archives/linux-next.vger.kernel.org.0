@@ -2,104 +2,97 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39CEC621E3F
-	for <lists+linux-next@lfdr.de>; Tue,  8 Nov 2022 22:11:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C455D621E62
+	for <lists+linux-next@lfdr.de>; Tue,  8 Nov 2022 22:15:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229842AbiKHVK4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 8 Nov 2022 16:10:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39574 "EHLO
+        id S229499AbiKHVPb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 8 Nov 2022 16:15:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229574AbiKHVKv (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 8 Nov 2022 16:10:51 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75B2F3C6EE;
-        Tue,  8 Nov 2022 13:10:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S229587AbiKHVPa (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 8 Nov 2022 16:15:30 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 073B45B866;
+        Tue,  8 Nov 2022 13:15:27 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DB951B81B14;
-        Tue,  8 Nov 2022 21:10:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28FBDC433D6;
-        Tue,  8 Nov 2022 21:10:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667941847;
-        bh=C103BVnc6HogXMutfEawBf8A4V2X3b7IA40Tl/iPp00=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZkIPU/nBWYyqNGgAURRo8hoMmV4wzZbLYm/euRetn6cgns6Cjmp0axVhHKzO7ES6N
-         dXisV31jP1B76yaIbdu4fydhlJc2dl1oZpssr0sMSMH+pClpdJTds9YJY1LDByaf5K
-         b+pnTDlWan6FAEI9jd6n1+M6tiBmk8XgXoJQEvDinGsxUClsRSobelj/l1/rA8Wp+H
-         /JsYBFtNC9tXrzKJiTWXDjQpweyRYRGHfiDTWzsGmCtFIbgbsfMoXrsYjo54jrLhtA
-         fbLMLy+3JmXha1tvH0465xOHBkz+qEu9Yaq2HEjWBDYYNcs2aZx/vYihckVTJL4GRy
-         /ky+m8bz2Nwew==
-Date:   Tue, 8 Nov 2022 13:10:45 -0800
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     coverity-bot <keescook@chromium.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Miroslav Benes <mbenes@suse.cz>, linux-kernel@vger.kernel.org,
-        Mikulas Patocka <mpatocka@redhat.com>,
-        Borislav Petkov <bp@suse.de>, Yujie Liu <yujie.liu@intel.com>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        linux-next@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: Coverity: elf_create_prefix_symbol(): Resource leaks
-Message-ID: <20221108211045.hba5t63xmo3wuej7@treble>
-References: <202211041232.6071ACE@keescook>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4N6LV23pCRz4xZ0;
+        Wed,  9 Nov 2022 08:15:22 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1667942123;
+        bh=awZUebozG6l0VSgtn/Y968RpJ+MjxLNoG9Mj415Fp6k=;
+        h=Date:From:To:Cc:Subject:From;
+        b=CR+KEmTA7O6FJEho9SCB5p5/iZxi6KLg0M4Eqgu4xJ4cYN5pO6QaLWskDANe3+mBw
+         6b1FWWfIhOOgmfij8kltOwDpf5axFoY2+OiEu5coy6IQTz7uxhtC7voZDjlvwRdq8Q
+         H7AqT1O3zgLoxN8QWUXCyZSf1F5xYMgvQrMgtOoodG4DsfZLfx6vBLoCXvq0pLz7OY
+         N/aiROIu5AsAa1G89+6AuKCUteHeSeddWyG/dIiEGnFgqbYZ+itvGi+T2ZinQQFtTW
+         yhDzVrtmHGdruZUQWv3bif0MnIrnxbuMKjn7TrYveN2BuRtXO9I501/Iu02KdCNguX
+         gIQAuPzpYKzmg==
+Date:   Wed, 9 Nov 2022 08:15:04 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Xinlei Lee <xinlei.lee@mediatek.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the mediatek tree
+Message-ID: <20221109081504.23e0fe6c@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <202211041232.6071ACE@keescook>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/SChaYkhd.6HxKPvxV3mOa4k";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Nov 04, 2022 at 12:32:38PM -0700, coverity-bot wrote:
-> Hello!
-> 
-> This is an experimental semi-automated report about issues detected by
-> Coverity from a scan of next-20221104 as part of the linux-next scan project:
-> https://scan.coverity.com/projects/linux-next-weekly-scan
-> 
-> You're getting this email because you were associated with the identified
-> lines of code (noted below) that were touched by commits:
-> 
->   Tue Nov 1 13:44:09 2022 +0100
->     9f2899fe36a6 ("objtool: Add option to generate prefix symbols")
-> 
-> Coverity reported the following:
-> 
-> *** CID 1527141:  Resource leaks  (RESOURCE_LEAK)
-> tools/objtool/elf.c:833 in elf_create_prefix_symbol()
-> 827     	struct symbol *sym = calloc(1, sizeof(*sym));
-> 828     	size_t namelen = strlen(orig->name) + sizeof("__pfx_");
-> 829     	char *name = malloc(namelen);
-> 830
-> 831     	if (!sym || !name) {
-> 832     		perror("malloc");
-> vvv     CID 1527141:  Resource leaks  (RESOURCE_LEAK)
-> vvv     Variable "sym" going out of scope leaks the storage it points to.
-> 833     		return NULL;
-> 834     	}
-> 835
-> 836     	snprintf(name, namelen, "__pfx_%s", orig->name);
-> 837
-> 838     	sym->name = name;
-> 
-> If this is a false positive, please let us know so we can mark it as
-> such, or teach the Coverity rules to be smarter. If not, please make
-> sure fixes get into linux-next. :) For patches fixing this, please
-> include these lines (but double-check the "Fixes" first):
-> 
-> Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
-> Addresses-Coverity-ID: 1527141 ("Resource leaks")
-> Fixes: 9f2899fe36a6 ("objtool: Add option to generate prefix symbols")
+--Sig_/SChaYkhd.6HxKPvxV3mOa4k
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Please disable resource leak checking in objtool.  It's a short-lived
-userspace tool for which we generally don't care about memory leaks.
+Hi all,
 
--- 
-Josh
+In commit
+
+  e6c7e6216dc6 ("soc: mediatek: Add all settings to mtk_mmsys_ddp_dpi_fmt_c=
+onfig func")
+
+Fixes tag
+
+  Fixes: a071e52f75d1 ("soc: mediatek: Add mmsys func to adapt to dpi outpu=
+t for MT8186")
+
+has these problem(s):
+
+  - Target SHA1 does not exist
+
+Maybe you meant
+
+Fixes: b404cb45990b ("soc: mediatek: Add mmsys func to adapt to dpi output =
+for MT8186")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/SChaYkhd.6HxKPvxV3mOa4k
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNqxtgACgkQAVBC80lX
+0GzBEAf/YooGjLa5FsEQc/stc2iqyMKBjn8T8bQ72z+snx5w47sqcvYhbyLwcsQa
+4qigaKSg3hHUABi2Qau/+4mk3gRVPM3J3gMapFlZagnd7l1gHoNbIFm2+PD1jgcS
+jq/ToaJveWIGIF/1JCqHZBa9Gdig2uLKkKvMdxAHYRsoQVx4DQDV3o5DF2f3jgf4
+lIjgm3LiVSb/n2ij76ALM1GosFTUWnYhGxKphBv+RlJsejCjewGwyz8B+pnOCLvn
+hcF8driomw8dnsbVy/Ogiq11flTLho8ft+qAmHAgioI7Us8lWRWDn6WtRHwJHxg4
+p7fNIkRwLY9t45YVU24z4+x9YMoWXw==
+=iZ2s
+-----END PGP SIGNATURE-----
+
+--Sig_/SChaYkhd.6HxKPvxV3mOa4k--

@@ -2,54 +2,67 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7C43621A5E
-	for <lists+linux-next@lfdr.de>; Tue,  8 Nov 2022 18:23:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B96D621A9A
+	for <lists+linux-next@lfdr.de>; Tue,  8 Nov 2022 18:29:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234006AbiKHRXs (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 8 Nov 2022 12:23:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56530 "EHLO
+        id S233736AbiKHR3a (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 8 Nov 2022 12:29:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234413AbiKHRXm (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 8 Nov 2022 12:23:42 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13E15EA6;
-        Tue,  8 Nov 2022 09:23:36 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AD3DC614FA;
-        Tue,  8 Nov 2022 17:23:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B956C433D6;
-        Tue,  8 Nov 2022 17:23:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667928215;
-        bh=hQg7NoKja9TGe1uumJQDYjviyfCTnfLxmswlsfS/doA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sSd+n7EE0MNX8tHp3LUL4qUnk/MPwMLUQgiWCVIl7kax2vTSV/3xCxAlRW5WHEC0x
-         drPFNSZrYwOh7acWU1RUVu/qXRWXj4K9KBW5Gpl2ZOfmuZd4YCl9In1ysJNm99LCkc
-         oeacoG/asj5IgNc8yKo5f5Bsa6JQ1oXUzq/3qyXApUv26+lD0D3qDGKgFaJA52Ub/J
-         mHYT1nLia7/P3lq7RXvHJJVbPA66HFsULrud/EBTMd1GYrJhcfbLwHNfqCxnQOm5oO
-         th7Hrptz99tmaYorsTtnWTlKcZq2xgZ0b8XhP46c+WMveHDJirW5AqfDfkqDMcl4/J
-         kKcPWw5HxOhNA==
-Date:   Tue, 8 Nov 2022 10:23:31 -0700
-From:   Keith Busch <kbusch@kernel.org>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Gerd Bayer <gbayer@linux.ibm.com>, Jens Axboe <axboe@fb.com>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Niklas Schnelle <schnelle@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
-        linux-nvme@lists.infradead.org
-Subject: Re: nvme-pci: NULL pointer dereference in nvme_dev_disable() on
- linux-next
-Message-ID: <Y2qQk/LuiNNdmdRD@kbusch-mbp>
-References: <fad4d2d5e24eabe1a4fcab75c5d080a6229dc88b.camel@linux.ibm.com>
- <20221108074846.GA22674@lst.de>
+        with ESMTP id S234077AbiKHR33 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 8 Nov 2022 12:29:29 -0500
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1360D1DDDD
+        for <linux-next@vger.kernel.org>; Tue,  8 Nov 2022 09:29:29 -0800 (PST)
+Received: by mail-pg1-x532.google.com with SMTP id o13so4669308pgu.7
+        for <linux-next@vger.kernel.org>; Tue, 08 Nov 2022 09:29:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5FVCMfeiZLHWKmFh+FqLYpaeqKRAlifxYJVyfWqZqZk=;
+        b=TcXV7SAA0xvPOfmvHzBUPQnugs/YasXJ6whZHnJ7gjDDFxRs64xayMIqnUph3gVGuM
+         Vk7oED5XLpqF8JjKACQYtGGBJcsD1icZ4+7PfBZj5p814CvweAwkXr8kDdYGLXWjSTH8
+         mSeioFi2Rcl6sCMT060qYV7CiWku9QUPYtbzw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5FVCMfeiZLHWKmFh+FqLYpaeqKRAlifxYJVyfWqZqZk=;
+        b=VOBnt65jvNSCBdZJs76fAvLflYaE434EVapHEvcV00rY1+C8fYsu1NiRIeMm7kW/Eh
+         QwquSJBjNh2BlXUDrWolCi6NPuBy2viYnAnxFTAckanEs5eUbvHgmECaOd1G3Ndzktum
+         cjWvjj019lrSXVRxOe2hewqFCBfDheuUbe+U1rHGr/9uz58CjMEUq68yYinE6kmVNTy/
+         9UreJMeMhpU3+2tnPwTOX4nRTsj2DrBjSyAnTRUMtV0JBwPdOMubNkMlWA+kRgMu2kax
+         faT+MR5sk17yLf0bwpMsYTQ12F15exC3pCxeQx9QPGKg6YN/oDqV8UxUkq0PNO8lV9P1
+         kwlA==
+X-Gm-Message-State: ACrzQf30655uaDB2c3+eusKyFZbUK40EBv4NL0dRXw6o5H2g6nPZXFo2
+        MMOqMnH/4yjJMOvUpNpIAAmsmQ==
+X-Google-Smtp-Source: AMsMyM5aFIIqDhZfHqMUWHiT3mSwKknCdK4qJXdm+uZ0LnKIMqvrnR1fIs6JDxdhfeftiDlv8cN4qA==
+X-Received: by 2002:a63:6909:0:b0:41c:9f4f:a63c with SMTP id e9-20020a636909000000b0041c9f4fa63cmr50519040pgc.76.1667928568583;
+        Tue, 08 Nov 2022 09:29:28 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id b191-20020a621bc8000000b0056bb0357f5bsm6631443pfb.192.2022.11.08.09.29.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Nov 2022 09:29:28 -0800 (PST)
+From:   coverity-bot <keescook@chromium.org>
+X-Google-Original-From: coverity-bot <keescook+coverity-bot@chromium.org>
+Date:   Tue, 8 Nov 2022 09:29:27 -0800
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org, Theodore Ts'o <tytso@mit.edu>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Olivia Mackall <olivia@selenic.com>,
+        linux-crypto@vger.kernel.org,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        linux-next@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Coverity: add_early_randomness(): Integer handling issues
+Message-ID: <202211080929.F5B344C9F@keescook>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221108074846.GA22674@lst.de>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,35 +70,47 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Nov 08, 2022 at 08:48:47AM +0100, Christoph Hellwig wrote:
-> Below is the minimal fix.  I'll see if I sort out the mess that is
-> probe/reset failure vs ->remove a bit better, though.
+Hello!
 
-This looks good to go. I vote apply for 6.1, and we should consider
-merging your larger refactor for 6.2 after more test/review.
+This is an experimental semi-automated report about issues detected by
+Coverity from a scan of next-20221108 as part of the linux-next scan project:
+https://scan.coverity.com/projects/linux-next-weekly-scan
 
-Reviewed-by: Keith Busch <kbusch@kernel.org>
- 
-> diff --git a/drivers/nvme/host/core.c b/drivers/nvme/host/core.c
-> index f94b05c585cbc..577bacdcfee08 100644
-> --- a/drivers/nvme/host/core.c
-> +++ b/drivers/nvme/host/core.c
-> @@ -5160,6 +5160,8 @@ EXPORT_SYMBOL_GPL(nvme_start_freeze);
->  
->  void nvme_stop_queues(struct nvme_ctrl *ctrl)
->  {
-> +	if (!ctrl->tagset)
-> +		return;
->  	if (!test_and_set_bit(NVME_CTRL_STOPPED, &ctrl->flags))
->  		blk_mq_quiesce_tagset(ctrl->tagset);
->  	else
-> @@ -5169,6 +5171,8 @@ EXPORT_SYMBOL_GPL(nvme_stop_queues);
->  
->  void nvme_start_queues(struct nvme_ctrl *ctrl)
->  {
-> +	if (!ctrl->tagset)
-> +		return;
->  	if (test_and_clear_bit(NVME_CTRL_STOPPED, &ctrl->flags))
->  		blk_mq_unquiesce_tagset(ctrl->tagset);
->  }
-> 
+You're getting this email because you were associated with the identified
+lines of code (noted below) that were touched by commits:
+
+  Mon Nov 7 12:47:57 2022 +0100
+    e0a37003ff0b ("hw_random: use add_hwgenerator_randomness() for early entropy")
+
+Coverity reported the following:
+
+*** CID 1527234:  Integer handling issues  (SIGN_EXTENSION)
+drivers/char/hw_random/core.c:73 in add_early_randomness()
+67     	int bytes_read;
+68
+69     	mutex_lock(&reading_mutex);
+70     	bytes_read = rng_get_data(rng, rng_fillbuf, 32, 0);
+71     	mutex_unlock(&reading_mutex);
+72     	if (bytes_read > 0) {
+vvv     CID 1527234:  Integer handling issues  (SIGN_EXTENSION)
+vvv     Suspicious implicit sign extension: "rng->quality" with type "unsigned short" (16 bits, unsigned) is promoted in "bytes_read * 8 * rng->quality / 1024" to type "int" (32 bits, signed), then sign-extended to type "unsigned long" (64 bits, unsigned).  If "bytes_read * 8 * rng->quality / 1024" is greater than 0x7FFFFFFF, the upper bits of the result will all be 1.
+73     		size_t entropy = bytes_read * 8 * rng->quality / 1024;
+74     		add_hwgenerator_randomness(rng_fillbuf, bytes_read, entropy, false);
+75     	}
+76     }
+77
+78     static inline void cleanup_rng(struct kref *kref)
+
+If this is a false positive, please let us know so we can mark it as
+such, or teach the Coverity rules to be smarter. If not, please make
+sure fixes get into linux-next. :) For patches fixing this, please
+include these lines (but double-check the "Fixes" first):
+
+Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
+Addresses-Coverity-ID: 1527234 ("Integer handling issues")
+Fixes: e0a37003ff0b ("hw_random: use add_hwgenerator_randomness() for early entropy")
+
+Thanks for your attention!
+
+-- 
+Coverity-bot

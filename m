@@ -2,115 +2,76 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B96D621A9A
-	for <lists+linux-next@lfdr.de>; Tue,  8 Nov 2022 18:29:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CACF0621AA6
+	for <lists+linux-next@lfdr.de>; Tue,  8 Nov 2022 18:31:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233736AbiKHR3a (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 8 Nov 2022 12:29:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33672 "EHLO
+        id S234241AbiKHRbZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 8 Nov 2022 12:31:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234077AbiKHR33 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 8 Nov 2022 12:29:29 -0500
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1360D1DDDD
-        for <linux-next@vger.kernel.org>; Tue,  8 Nov 2022 09:29:29 -0800 (PST)
-Received: by mail-pg1-x532.google.com with SMTP id o13so4669308pgu.7
-        for <linux-next@vger.kernel.org>; Tue, 08 Nov 2022 09:29:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5FVCMfeiZLHWKmFh+FqLYpaeqKRAlifxYJVyfWqZqZk=;
-        b=TcXV7SAA0xvPOfmvHzBUPQnugs/YasXJ6whZHnJ7gjDDFxRs64xayMIqnUph3gVGuM
-         Vk7oED5XLpqF8JjKACQYtGGBJcsD1icZ4+7PfBZj5p814CvweAwkXr8kDdYGLXWjSTH8
-         mSeioFi2Rcl6sCMT060qYV7CiWku9QUPYtbzw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5FVCMfeiZLHWKmFh+FqLYpaeqKRAlifxYJVyfWqZqZk=;
-        b=VOBnt65jvNSCBdZJs76fAvLflYaE434EVapHEvcV00rY1+C8fYsu1NiRIeMm7kW/Eh
-         QwquSJBjNh2BlXUDrWolCi6NPuBy2viYnAnxFTAckanEs5eUbvHgmECaOd1G3Ndzktum
-         cjWvjj019lrSXVRxOe2hewqFCBfDheuUbe+U1rHGr/9uz58CjMEUq68yYinE6kmVNTy/
-         9UreJMeMhpU3+2tnPwTOX4nRTsj2DrBjSyAnTRUMtV0JBwPdOMubNkMlWA+kRgMu2kax
-         faT+MR5sk17yLf0bwpMsYTQ12F15exC3pCxeQx9QPGKg6YN/oDqV8UxUkq0PNO8lV9P1
-         kwlA==
-X-Gm-Message-State: ACrzQf30655uaDB2c3+eusKyFZbUK40EBv4NL0dRXw6o5H2g6nPZXFo2
-        MMOqMnH/4yjJMOvUpNpIAAmsmQ==
-X-Google-Smtp-Source: AMsMyM5aFIIqDhZfHqMUWHiT3mSwKknCdK4qJXdm+uZ0LnKIMqvrnR1fIs6JDxdhfeftiDlv8cN4qA==
-X-Received: by 2002:a63:6909:0:b0:41c:9f4f:a63c with SMTP id e9-20020a636909000000b0041c9f4fa63cmr50519040pgc.76.1667928568583;
-        Tue, 08 Nov 2022 09:29:28 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id b191-20020a621bc8000000b0056bb0357f5bsm6631443pfb.192.2022.11.08.09.29.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Nov 2022 09:29:28 -0800 (PST)
-From:   coverity-bot <keescook@chromium.org>
-X-Google-Original-From: coverity-bot <keescook+coverity-bot@chromium.org>
-Date:   Tue, 8 Nov 2022 09:29:27 -0800
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-kernel@vger.kernel.org, Theodore Ts'o <tytso@mit.edu>,
+        with ESMTP id S234125AbiKHRbX (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 8 Nov 2022 12:31:23 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20D031DDDD;
+        Tue,  8 Nov 2022 09:31:23 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ACB8C616EF;
+        Tue,  8 Nov 2022 17:31:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 795BBC433B5;
+        Tue,  8 Nov 2022 17:31:21 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="X8TWEhxg"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1667928678;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=WFchwpYWTZe1uP8NzfYiIHuE3VUM7GlNjwOOVlNkivY=;
+        b=X8TWEhxgMqUY3ABKegdYHjdTULR1ZAEQzm/G3BRcJHsT3IMdcLhB/GXyxlyHExuWSMEb+L
+        wzLJtg1bPIWtG9zqERGIRh7/8hr1aN3VjKE+y0AE/zjRg+gcSNy5I6AONviXfni+IH363+
+        QQRKnVbPdHfwtKnwknSH1V9RCICTNsc=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 277c757f (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Tue, 8 Nov 2022 17:31:18 +0000 (UTC)
+Received: by mail-vs1-f52.google.com with SMTP id z189so14321125vsb.4;
+        Tue, 08 Nov 2022 09:31:17 -0800 (PST)
+X-Gm-Message-State: ACrzQf2VaSLNfefNdPDdBntwxPARsvsGkRJWzXtWUlLW/G/v5hbaLTHP
+        VaATmjWqePZdD60rE+yzJhNkGm8RDIsYciiqwwo=
+X-Google-Smtp-Source: AMsMyM6OVmzlIf5XCDhf4Ss4zAoklzwJ63nR7aCZ5EFvtrKLrKq8Vw6R5xzFM1Hpl8GzbqEh3JVzJKqkRY2Xv5kJjVI=
+X-Received: by 2002:a05:6102:f9a:b0:3aa:1a11:2702 with SMTP id
+ e26-20020a0561020f9a00b003aa1a112702mr29981791vsv.73.1667928676884; Tue, 08
+ Nov 2022 09:31:16 -0800 (PST)
+MIME-Version: 1.0
+References: <202211080929.F5B344C9F@keescook>
+In-Reply-To: <202211080929.F5B344C9F@keescook>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Tue, 8 Nov 2022 18:31:05 +0100
+X-Gmail-Original-Message-ID: <CAHmME9o_vJL6YstAGutZNzQ30EmWQ5vcYqbeFYoSvPm3CYeXzg@mail.gmail.com>
+Message-ID: <CAHmME9o_vJL6YstAGutZNzQ30EmWQ5vcYqbeFYoSvPm3CYeXzg@mail.gmail.com>
+Subject: Re: Coverity: add_early_randomness(): Integer handling issues
+To:     coverity-bot <keescook@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, "Theodore Ts'o" <tytso@mit.edu>,
         Dominik Brodowski <linux@dominikbrodowski.net>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
         Olivia Mackall <olivia@selenic.com>,
         linux-crypto@vger.kernel.org,
         Herbert Xu <herbert@gondor.apana.org.au>,
         "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
         linux-next@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Coverity: add_early_randomness(): Integer handling issues
-Message-ID: <202211080929.F5B344C9F@keescook>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hello!
+"If "bytes_read * 8 * rng->quality / 1024" is greater than 0x7FFFFFFF,
+the upper bits of the result will all be 1."
 
-This is an experimental semi-automated report about issues detected by
-Coverity from a scan of next-20221108 as part of the linux-next scan project:
-https://scan.coverity.com/projects/linux-next-weekly-scan
+Except "bytes_read" is an int. So false positive.
 
-You're getting this email because you were associated with the identified
-lines of code (noted below) that were touched by commits:
-
-  Mon Nov 7 12:47:57 2022 +0100
-    e0a37003ff0b ("hw_random: use add_hwgenerator_randomness() for early entropy")
-
-Coverity reported the following:
-
-*** CID 1527234:  Integer handling issues  (SIGN_EXTENSION)
-drivers/char/hw_random/core.c:73 in add_early_randomness()
-67     	int bytes_read;
-68
-69     	mutex_lock(&reading_mutex);
-70     	bytes_read = rng_get_data(rng, rng_fillbuf, 32, 0);
-71     	mutex_unlock(&reading_mutex);
-72     	if (bytes_read > 0) {
-vvv     CID 1527234:  Integer handling issues  (SIGN_EXTENSION)
-vvv     Suspicious implicit sign extension: "rng->quality" with type "unsigned short" (16 bits, unsigned) is promoted in "bytes_read * 8 * rng->quality / 1024" to type "int" (32 bits, signed), then sign-extended to type "unsigned long" (64 bits, unsigned).  If "bytes_read * 8 * rng->quality / 1024" is greater than 0x7FFFFFFF, the upper bits of the result will all be 1.
-73     		size_t entropy = bytes_read * 8 * rng->quality / 1024;
-74     		add_hwgenerator_randomness(rng_fillbuf, bytes_read, entropy, false);
-75     	}
-76     }
-77
-78     static inline void cleanup_rng(struct kref *kref)
-
-If this is a false positive, please let us know so we can mark it as
-such, or teach the Coverity rules to be smarter. If not, please make
-sure fixes get into linux-next. :) For patches fixing this, please
-include these lines (but double-check the "Fixes" first):
-
-Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
-Addresses-Coverity-ID: 1527234 ("Integer handling issues")
-Fixes: e0a37003ff0b ("hw_random: use add_hwgenerator_randomness() for early entropy")
-
-Thanks for your attention!
-
--- 
-Coverity-bot
+Jason

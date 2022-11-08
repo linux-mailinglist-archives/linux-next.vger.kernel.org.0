@@ -2,101 +2,98 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAFD6620C7B
-	for <lists+linux-next@lfdr.de>; Tue,  8 Nov 2022 10:40:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1968E620EAA
+	for <lists+linux-next@lfdr.de>; Tue,  8 Nov 2022 12:21:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233425AbiKHJku (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 8 Nov 2022 04:40:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54180 "EHLO
+        id S233216AbiKHLVc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 8 Nov 2022 06:21:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233809AbiKHJkh (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 8 Nov 2022 04:40:37 -0500
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D9543134B
-        for <linux-next@vger.kernel.org>; Tue,  8 Nov 2022 01:40:36 -0800 (PST)
-Received: by mail-lj1-x236.google.com with SMTP id c25so20214185ljr.8
-        for <linux-next@vger.kernel.org>; Tue, 08 Nov 2022 01:40:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nwGH3xncezy8aE+xydBamp1X2UzAG0+D2pQxSdjT3Go=;
-        b=PguF6LnLRQ/cpoVLZlxFFNefduNiIZHPgBoSTGmze3dAN+AliIFf9pQcwZzBAdrJs+
-         bT4oyiQjoIIApKKZOQWKdEqeMyMEW3JoLlrVuHXITZgB0NkyBzyEGfyBz/CPJBBSqZXi
-         KNj22sWWhCl2xPc0pPLBw0D/wR1jp2xksw1JazMlcvaHQTS0eAbELD3pwm/Ob7EcxfNS
-         O0k8jjEUg2eOCJvJgyGpDm7NVALcKS/4qOhxrLMlosDiZrSmoEtx0eIeVRXcSB7jtY8r
-         uOCvGB64HPdapt+WCwWGecQctc1t0p+Wt8JHyRfbRFa//ys8PO6jHc5Ocsq1hrynOebU
-         7VQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nwGH3xncezy8aE+xydBamp1X2UzAG0+D2pQxSdjT3Go=;
-        b=FpNVD89Adffk/FSGE+ySMjqvtapNUOgpFbwYcG7fnDyU+M/kM6rMRJTbOmP3tQtxG/
-         2Du+X1o/smJyN9FX+O9vgzCqLbVi4riJyD44WlYjJev87oxwYrNGDhNwTz/cDiDtFJ8q
-         +Nn/7w4X5yT3T2BTz54GgZwiW/MaWJP+HLUtTM3iqJJwamqq/7Ep1b+JXFehmeALScla
-         GERQ3bjQ/FlcjGSPQZwZvVEs7HNDMiPdUyEnSV1/sqQQrQUr1vFvQr/mvJP1R8P1PLiu
-         gqDqjYXREMAn8NoJcv7gU0GcGj4Vtvg7fhLYpH6hupllXJ72Ud26qU9ZV44GcaC2b9el
-         HbJw==
-X-Gm-Message-State: ACrzQf1ItsIdqO9D4xLBmjGKgCcQ2DyIbd5om8RtS3MelpglvaOKWz1p
-        pcEKAN06ZehyEa2sadPDkQoCNQ==
-X-Google-Smtp-Source: AMsMyM6g0IjhpvwW0iRhgu1Nh1ZcIdl7Lok+Zjry8sEZS7v3Grs0teipqFv3tlbCkRt6UTvGImC4Vg==
-X-Received: by 2002:a2e:978a:0:b0:277:107:725f with SMTP id y10-20020a2e978a000000b002770107725fmr17989655lji.417.1667900434663;
-        Tue, 08 Nov 2022 01:40:34 -0800 (PST)
-Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
-        by smtp.gmail.com with ESMTPSA id u28-20020a2eb81c000000b0026dc7b59d8esm1658719ljo.22.2022.11.08.01.40.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Nov 2022 01:40:34 -0800 (PST)
-Message-ID: <5791ab49-debf-53d6-f076-0e46c4f392ea@linaro.org>
-Date:   Tue, 8 Nov 2022 10:40:33 +0100
+        with ESMTP id S233782AbiKHLV0 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 8 Nov 2022 06:21:26 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F155DF588;
+        Tue,  8 Nov 2022 03:21:25 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id AF7B31F88B;
+        Tue,  8 Nov 2022 11:21:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1667906484;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Xbmkf20b3GGM4eZ0HtjGYF5NWspQjalhLC9Jm7fCMLE=;
+        b=ozJeG2GsmeG+ccya43ePXnCpQNI9eUSKS+zwcf3kmw0gbiou08Ttk4NUYP0Cr+ZK1Tvkey
+        y9/dqlPHaSN4EjVFfZthECFTeiKHRXa/P09gwqdt4n70JMuJa5+RQXXHy0XoW65SajdfFX
+        C0XtcGQVBVvqhBhgz1C60rWH0nMD/vE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1667906484;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Xbmkf20b3GGM4eZ0HtjGYF5NWspQjalhLC9Jm7fCMLE=;
+        b=jbHPkmkZ5J/MQ4g0AHvcgpzjHlv2izR25fX6Ksj+7aGZEGZlBfjOJfpyeIT4iyrmHxJ3AZ
+        Ls3bEBVD3LTTXCAw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7DDAD139F1;
+        Tue,  8 Nov 2022 11:21:24 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id x0/EHbQ7amOhNgAAMHmgww
+        (envelope-from <dsterba@suse.cz>); Tue, 08 Nov 2022 11:21:24 +0000
+Date:   Tue, 8 Nov 2022 12:21:02 +0100
+From:   David Sterba <dsterba@suse.cz>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     David Sterba <dsterba@suse.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the btrfs tree
+Message-ID: <20221108112102.GX5824@suse.cz>
+Reply-To: dsterba@suse.cz
+References: <20221108094229.1b530fec@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: Coverity: gpmc_is_valid_waitpin(): Control flow issues
-Content-Language: en-US
-To:     "Niedermayr, BENEDIKT" <benedikt.niedermayr@siemens.com>,
-        "rogerq@kernel.org" <rogerq@kernel.org>,
-        "keescook@chromium.org" <keescook@chromium.org>
-Cc:     "gustavo@embeddedor.com" <gustavo@embeddedor.com>,
-        "tony@atomide.com" <tony@atomide.com>,
-        "linux-next@vger.kernel.org" <linux-next@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-omap@vger.kernel.org" <linux-omap@vger.kernel.org>,
-        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>
-References: <202211041233.4D45359E7@keescook>
- <7cdf3d14-3f1b-7cd4-e8b9-e94b5359bf82@kernel.org>
- <e4e4c4f0-782b-9f89-d7a2-859c7759ca66@kernel.org>
- <b18cddde778ada5030f6a80308854cf9c0dc4d23.camel@siemens.com>
- <57664014384bae015d593a7c6c6b7715fda3e89d.camel@siemens.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <57664014384bae015d593a7c6c6b7715fda3e89d.camel@siemens.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221108094229.1b530fec@canb.auug.org.au>
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 08/11/2022 09:15, Niedermayr, BENEDIKT wrote:
+On Tue, Nov 08, 2022 at 09:42:29AM +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the btrfs tree, today's linux-next build (powerpc
+> ppc64_defconfig) failed like this:
+> 
+> ld: fs/btrfs/messages.o:(.opd+0x90): multiple definition of `abort_should_print_stack'; fs/btrfs/ctree.o:(.opd+0x270): first defined here
+> ld: fs/btrfs/messages.o: in function `.abort_should_print_stack':
+> messages.c:(.text.unlikely+0x55c): multiple definition of `.abort_should_print_stack'; fs/btrfs/ctree.o:ctree.c:(.text.unlikely+0x0): first defined here
+> 
+> Caused by commit
+> 
+>   8bb808c6ad91 ("btrfs: don't print stack trace when transaction is aborted due to ENOMEM")
+> 
+> from the btrfs-fixes tree interacting with commit
+> 
+>   c6f1e8101ccc ("btrfs: don't print stack trace when transaction is aborted due to ENOMEM")
+> 
+> from the btrfs tree.
+> 
+> I applied the following merge fix for today.
 
->>> Another alternative with less churn is to leave them as u32
->>> but make GPMC_WAITPIN_INVALID set to a large positive number.
->> Ok, I will fix that. 
->> Do I need to send a new fix-patch on top the current patch series? 
->> Or should I just send only the bugfix-patch for the coverity-bot? 
->>
-> Sorry, another Question: 
-> Is it somehow possible to check locally if the bugfix actually fixed the bug, before I submit the patch?
-
-I think only if you have Coverity somewhere in your company set for
-testing kernel...
-
-Best regards,
-Krzysztof
-
+Thanks. We have development branch that moved a lot of code and fixes to
+mainline are in different files. Locally I see that for-next builds fine
+because the next-fixes is not merged to it but the linux-next tree
+merges both. I'll do more build checks, sorry for inconvenience.

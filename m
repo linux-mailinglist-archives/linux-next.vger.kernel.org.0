@@ -2,111 +2,77 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3116622577
-	for <lists+linux-next@lfdr.de>; Wed,  9 Nov 2022 09:30:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96F18622583
+	for <lists+linux-next@lfdr.de>; Wed,  9 Nov 2022 09:33:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230143AbiKIIaX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 9 Nov 2022 03:30:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40340 "EHLO
+        id S230152AbiKIIdB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 9 Nov 2022 03:33:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230051AbiKIIaH (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 9 Nov 2022 03:30:07 -0500
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1BB02229C;
-        Wed,  9 Nov 2022 00:29:12 -0800 (PST)
-Received: by mail-pf1-x42e.google.com with SMTP id i3so16032266pfc.11;
-        Wed, 09 Nov 2022 00:29:12 -0800 (PST)
+        with ESMTP id S229645AbiKIIco (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 9 Nov 2022 03:32:44 -0500
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92D5E22BDB
+        for <linux-next@vger.kernel.org>; Wed,  9 Nov 2022 00:31:19 -0800 (PST)
+Received: by mail-ej1-x634.google.com with SMTP id m22so7513962eji.10
+        for <linux-next@vger.kernel.org>; Wed, 09 Nov 2022 00:31:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=dHqVmoBRLCXyP1j0l5deF9pd4e0PRBaQAjJLi6rMh3Y=;
-        b=bNYpd6fOAEPkFBgdNJfAnjfYOFgRecFDIVcFdbCB3kotZsewF4/r2mF3qVJN0EooBR
-         2g6EQbZnxLleP8zZ2wMl+8oZqcKRVzPhYMT0rAO5X+BXnh8GGgQD1PcZjYTmouSRWV+/
-         COYD+nyVEbl/88JLOpf5jkSagfnAnjIM9sN+/rlwobP0A7849CHePTt4Xd4qAWCp6NIT
-         fRVP1knBiVFtDOWWKukUMdilAkeFlCShOlMClrPE8t8QgrqsCKURB2goXZQDSk8RCO9m
-         MBsGxZ1Kzsou4CETTxjExpySKmu9ptlHul+y8MTWD19wNTu4GKeB1NzRDzF7Opb/3z1d
-         Q+tw==
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=R1xHWWbiiK/Pvy+0DuJmabIzb5bjUgxiCFd5RDREmog=;
+        b=kVSIeK3HgspV1mdpXhzA1BrripthgSeMREB+K9ArgoFecjHGj8PCLukPUsZLqyt8aS
+         lVG0afrwNVsjCMdJ7jtR6RA742ZxBt8k5K6HiIHuwcjN3eVjFj5+OcSoKKhj2BDOgv6i
+         zhy8fsP7Q8SiYdAlMtwMmZP69Rnv4sCKZ+b4ggvXwkniVDz/cJFIcHnqeMTuKi0ABPi9
+         svvQ5YjSoWqgKFIGSLqbSJdSOzfK2HViq3kFay/KCA8GP2yhWxVv9SF3yflVeHvAMBMk
+         0wa0Rs1xUm4qsbAKSK48onvXkkxV1VqUSAPz3LQHDsBIUgko7D602br7yBDXTKc8rlXY
+         9N7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dHqVmoBRLCXyP1j0l5deF9pd4e0PRBaQAjJLi6rMh3Y=;
-        b=IyACUCvTvWK0CXxaCTnnynDV1tmoonTHtX2/cyrPjWJPYx7g2aTSycMF3TR5DonBSu
-         BmenqPCTH5QTKJYTQsHhqEHwytLsH511o8AWyIBDEH+3EbhRvGvA48MuvlReR/VqAXEJ
-         WQyA4H6kZ5yn3yboRW07hVFxQny4rrgEBGrkw3qy1wrIoX5xPXLP8Cu3s1Z3zcaXrq3V
-         nABUi4e24MulQzMRDEJSHXpOPcMTaREpuWAsnGFTFCbi3ZFuxpAH8hgAg/QsYgkrgiUd
-         10qzvlO7kYaR3s30ToDPav/yJMxwSPdtj8aqrAvh6xeqGG8nw6hqEfseIiMgUMmGnjyv
-         vGoA==
-X-Gm-Message-State: ACrzQf2pDJh+xzNsrmJDvSVntnYRAVqFULfcIM8/u/k+7VTRHK4+TqqJ
-        vM3q8bfQhxUhIBfZ28cX1rbgg9lwFjX4xA==
-X-Google-Smtp-Source: AMsMyM4MyGSXc8iDU8z4fBb//Iy/GbYqIP0Xou51QXtMwzfDgIECKrQbjuGpptL8qpOK6Fh7cXGImA==
-X-Received: by 2002:a63:8449:0:b0:46e:ecba:c46d with SMTP id k70-20020a638449000000b0046eecbac46dmr52659709pgd.310.1667982549534;
-        Wed, 09 Nov 2022 00:29:09 -0800 (PST)
-Received: from [192.168.43.80] (subs02-180-214-232-21.three.co.id. [180.214.232.21])
-        by smtp.gmail.com with ESMTPSA id b6-20020a170903228600b00186b0ac12c5sm8418374plh.172.2022.11.09.00.28.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Nov 2022 00:29:09 -0800 (PST)
-Message-ID: <26188ff7-9a0c-d72c-b956-63d8f1c500ba@gmail.com>
-Date:   Wed, 9 Nov 2022 15:28:54 +0700
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=R1xHWWbiiK/Pvy+0DuJmabIzb5bjUgxiCFd5RDREmog=;
+        b=G+0XsP+TpMxsKkn3HZNyAzQNfDY3TPqgrYgySAI18BGSoVMH8PL9jl2wEUMhbK3tfb
+         gZJx07bIhEzvRSdPzzjuS7vsGOX9Gh+SyQH4AOA1ub6C5CwvlPEzXqXJXBAmvVE6eKt1
+         EEyJoOtt0mBndFDPmCJceGBt6J5SK4fdcY2y865SCK74PCeGeCxw06Nh2itMnZWpQeGn
+         MB47jqRLlbb5/fCu05znN3kn5DKl6SFhAZfKM0HzC8XcB6+07LjpQpB3nninKfZ0b0P2
+         MELY7Ym1GCfKSqTsuyTJp9rt8vYfSDWcvYlsMIqkOAHGts+h1VWCfxw8hLo97nJW0TEM
+         3BkA==
+X-Gm-Message-State: ACrzQf0dMdPc0yYZgeAz9aN33f0n9irB/9wBICXIIV0kOc4gwZ3ra4Jf
+        iIOXojb1f+lFIMFg5QgyBNBKDwYU9v1hDxpqOFn0VA==
+X-Google-Smtp-Source: AMsMyM5S0pI0Lhb6kU0CQL8E4Q/D4EQYDzZ/ipfZXcrNUfrxHjRIrwrMChdvspsKC740TxNqAu1IhpqHaetzNUcqj0s=
+X-Received: by 2002:a17:906:4c4b:b0:7ad:a197:b58e with SMTP id
+ d11-20020a1709064c4b00b007ada197b58emr57279558ejw.203.1667982677745; Wed, 09
+ Nov 2022 00:31:17 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH] Documentation: RCU: use code blocks with autogenerated
- line (was: Re: linux-next: build warning after merge of the rcu tree)
-Content-Language: en-US
-To:     Akira Yokosawa <akiyks@gmail.com>
-Cc:     corbet@lwn.net, linux-kernel@vger.kernel.org,
-        linux-next@vger.kernel.org, paulmck@kernel.org, rcu@vger.kernel.org
-References: <Y2jWAR1QESe3OrhH@debian.me>
- <af3ec8bf-310e-69ea-9d32-f7aec740b306@gmail.com>
- <206a95eb-5430-f9bf-15ad-4e644393255e@gmail.com>
- <fd1903d4-a721-931e-c928-1818cd650490@gmail.com>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <fd1903d4-a721-931e-c928-1818cd650490@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20221109134644.1621f1e5@canb.auug.org.au>
+In-Reply-To: <20221109134644.1621f1e5@canb.auug.org.au>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Wed, 9 Nov 2022 09:31:06 +0100
+Message-ID: <CACRpkdZOU4afUiTNZV7_dKdMWkVztXKa13EN-qtmWAjY0Ai8OA@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the pinctrl tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Yinbo Zhu <zhuyinbo@loongson.cn>,
+        zhanghongchen <zhanghongchen@loongson.cn>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 11/8/22 21:53, Akira Yokosawa wrote:
->> I think only rcubarrier.rst have explicit references to line numbers.
-> 
-> Oh, I find such references in (not limited to):
-> 
->   - Documentation/RCU/Design/Requirements/Requirements.rst
->   - Documentation/RCU/Design/Data-Structures/Data-Structures.rst
-> 
+On Wed, Nov 9, 2022 at 3:46 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 
-Ah, I don't see these above!
+> After merging the pinctrl tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
 
-> Remember there is a note in Documentation/doc-guide/sphinx.rst
-> which reads:
-> 
->   Please don't go overboard with reStructuredText markup. Keep it simple.
->   For the most part the documentation should be plain text with just enough
->   consistency in formatting that it can be converted to other formats.
-> 
-> My interpretation of above:
-> 
->   .rst sources should be kept as close to plain-text which can be
->   easily understood in dumb terminals, as far as possible.
-> 
+Fixed by putting in a new v8 version from Yinbo.
 
-Ah! I always forget that. I'm leaning towards *abusing* the markup,
-though.
-
-Thanks for the reminder.
-
--- 
-An old man doll... just what I always wanted! - Clara
-
+Yours,
+Linus Walleij

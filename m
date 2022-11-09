@@ -2,77 +2,111 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25EEE6224CA
-	for <lists+linux-next@lfdr.de>; Wed,  9 Nov 2022 08:42:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3116622577
+	for <lists+linux-next@lfdr.de>; Wed,  9 Nov 2022 09:30:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229448AbiKIHmP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 9 Nov 2022 02:42:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45938 "EHLO
+        id S230143AbiKIIaX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 9 Nov 2022 03:30:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229734AbiKIHmO (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 9 Nov 2022 02:42:14 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAD871B784;
-        Tue,  8 Nov 2022 23:42:13 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 60173B81D1C;
-        Wed,  9 Nov 2022 07:42:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25E99C433C1;
-        Wed,  9 Nov 2022 07:42:08 +0000 (UTC)
-Date:   Wed, 9 Nov 2022 13:12:05 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Jeff Johnson <quic_jjohnson@quicinc.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the mhi tree
-Message-ID: <20221109074205.GA4651@thinkpad>
-References: <20221109151637.67be60f8@canb.auug.org.au>
+        with ESMTP id S230051AbiKIIaH (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 9 Nov 2022 03:30:07 -0500
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1BB02229C;
+        Wed,  9 Nov 2022 00:29:12 -0800 (PST)
+Received: by mail-pf1-x42e.google.com with SMTP id i3so16032266pfc.11;
+        Wed, 09 Nov 2022 00:29:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=dHqVmoBRLCXyP1j0l5deF9pd4e0PRBaQAjJLi6rMh3Y=;
+        b=bNYpd6fOAEPkFBgdNJfAnjfYOFgRecFDIVcFdbCB3kotZsewF4/r2mF3qVJN0EooBR
+         2g6EQbZnxLleP8zZ2wMl+8oZqcKRVzPhYMT0rAO5X+BXnh8GGgQD1PcZjYTmouSRWV+/
+         COYD+nyVEbl/88JLOpf5jkSagfnAnjIM9sN+/rlwobP0A7849CHePTt4Xd4qAWCp6NIT
+         fRVP1knBiVFtDOWWKukUMdilAkeFlCShOlMClrPE8t8QgrqsCKURB2goXZQDSk8RCO9m
+         MBsGxZ1Kzsou4CETTxjExpySKmu9ptlHul+y8MTWD19wNTu4GKeB1NzRDzF7Opb/3z1d
+         Q+tw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dHqVmoBRLCXyP1j0l5deF9pd4e0PRBaQAjJLi6rMh3Y=;
+        b=IyACUCvTvWK0CXxaCTnnynDV1tmoonTHtX2/cyrPjWJPYx7g2aTSycMF3TR5DonBSu
+         BmenqPCTH5QTKJYTQsHhqEHwytLsH511o8AWyIBDEH+3EbhRvGvA48MuvlReR/VqAXEJ
+         WQyA4H6kZ5yn3yboRW07hVFxQny4rrgEBGrkw3qy1wrIoX5xPXLP8Cu3s1Z3zcaXrq3V
+         nABUi4e24MulQzMRDEJSHXpOPcMTaREpuWAsnGFTFCbi3ZFuxpAH8hgAg/QsYgkrgiUd
+         10qzvlO7kYaR3s30ToDPav/yJMxwSPdtj8aqrAvh6xeqGG8nw6hqEfseIiMgUMmGnjyv
+         vGoA==
+X-Gm-Message-State: ACrzQf2pDJh+xzNsrmJDvSVntnYRAVqFULfcIM8/u/k+7VTRHK4+TqqJ
+        vM3q8bfQhxUhIBfZ28cX1rbgg9lwFjX4xA==
+X-Google-Smtp-Source: AMsMyM4MyGSXc8iDU8z4fBb//Iy/GbYqIP0Xou51QXtMwzfDgIECKrQbjuGpptL8qpOK6Fh7cXGImA==
+X-Received: by 2002:a63:8449:0:b0:46e:ecba:c46d with SMTP id k70-20020a638449000000b0046eecbac46dmr52659709pgd.310.1667982549534;
+        Wed, 09 Nov 2022 00:29:09 -0800 (PST)
+Received: from [192.168.43.80] (subs02-180-214-232-21.three.co.id. [180.214.232.21])
+        by smtp.gmail.com with ESMTPSA id b6-20020a170903228600b00186b0ac12c5sm8418374plh.172.2022.11.09.00.28.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Nov 2022 00:29:09 -0800 (PST)
+Message-ID: <26188ff7-9a0c-d72c-b956-63d8f1c500ba@gmail.com>
+Date:   Wed, 9 Nov 2022 15:28:54 +0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221109151637.67be60f8@canb.auug.org.au>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH] Documentation: RCU: use code blocks with autogenerated
+ line (was: Re: linux-next: build warning after merge of the rcu tree)
+Content-Language: en-US
+To:     Akira Yokosawa <akiyks@gmail.com>
+Cc:     corbet@lwn.net, linux-kernel@vger.kernel.org,
+        linux-next@vger.kernel.org, paulmck@kernel.org, rcu@vger.kernel.org
+References: <Y2jWAR1QESe3OrhH@debian.me>
+ <af3ec8bf-310e-69ea-9d32-f7aec740b306@gmail.com>
+ <206a95eb-5430-f9bf-15ad-4e644393255e@gmail.com>
+ <fd1903d4-a721-931e-c928-1818cd650490@gmail.com>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <fd1903d4-a721-931e-c928-1818cd650490@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Nov 09, 2022 at 03:16:37PM +1100, Stephen Rothwell wrote:
-> Hi all,
+On 11/8/22 21:53, Akira Yokosawa wrote:
+>> I think only rcubarrier.rst have explicit references to line numbers.
 > 
-> After merging the mhi tree, today's linux-next build (x86_64 allmodconfig)
-> failed like this:
+> Oh, I find such references in (not limited to):
 > 
-> drivers/bus/mhi/host/pci_generic.c: In function 'mhi_pci_get_irqs':
-> drivers/bus/mhi/host/pci_generic.c:743:60: error: assignment of member 'irq' in read-only object
->   743 |                         mhi_cntrl_config->event_cfg[i].irq = 0;
->       |                                                            ^
-> 
-> Caused by commit
-> 
->   c970e67d64a5 ("bus: mhi: host: make mhi_controller_config::event_cfg const")
+>   - Documentation/RCU/Design/Requirements/Requirements.rst
+>   - Documentation/RCU/Design/Data-Structures/Data-Structures.rst
 > 
 
-Dropped it now.
+Ah, I don't see these above!
 
-Thanks,
-Mani
-
-> I have used the mhi tree from next-20221108 for today.
+> Remember there is a note in Documentation/doc-guide/sphinx.rst
+> which reads:
 > 
-> -- 
-> Cheers,
-> Stephen Rothwell
+>   Please don't go overboard with reStructuredText markup. Keep it simple.
+>   For the most part the documentation should be plain text with just enough
+>   consistency in formatting that it can be converted to other formats.
+> 
+> My interpretation of above:
+> 
+>   .rst sources should be kept as close to plain-text which can be
+>   easily understood in dumb terminals, as far as possible.
+> 
 
+Ah! I always forget that. I'm leaning towards *abusing* the markup,
+though.
 
+Thanks for the reminder.
 
 -- 
-மணிவண்ணன் சதாசிவம்
+An old man doll... just what I always wanted! - Clara
+

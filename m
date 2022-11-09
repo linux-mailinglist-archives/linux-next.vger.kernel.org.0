@@ -2,46 +2,48 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F18E6623767
-	for <lists+linux-next@lfdr.de>; Thu, 10 Nov 2022 00:25:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44C5F6237C2
+	for <lists+linux-next@lfdr.de>; Thu, 10 Nov 2022 00:54:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231567AbiKIXZY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 9 Nov 2022 18:25:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37354 "EHLO
+        id S232085AbiKIXyq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 9 Nov 2022 18:54:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229835AbiKIXZY (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 9 Nov 2022 18:25:24 -0500
+        with ESMTP id S231891AbiKIXyh (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 9 Nov 2022 18:54:37 -0500
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ADA32D1C8;
-        Wed,  9 Nov 2022 15:25:22 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B859248DD;
+        Wed,  9 Nov 2022 15:54:35 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4N71KR4F7Rz4xYD;
-        Thu, 10 Nov 2022 10:25:14 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4N71zD5mQRz4xYD;
+        Thu, 10 Nov 2022 10:54:32 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1668036317;
-        bh=ERJC9eRMspSvsDqwdNvHOLiIP1XOJz4EMAXQzGjCFDQ=;
+        s=201702; t=1668038073;
+        bh=8scDc1dWo/N/sQIgyaUpJyTxwAXLYx2ZCqELj/8aWy0=;
         h=Date:From:To:Cc:Subject:From;
-        b=Dq29p6qEMuw95b6qrvea0y0KOVhyJaTY6uvGt8aRxNfEDnl+1bRW/0IjXW/J3JVbV
-         cLKuwXkBvVxEMspmiVOZpw1A/VfsAslL3lPG6Fsu/PH1x+ZF0ISaTwVJFasbkwzy4i
-         GiZLcnGSORWqMznK+cPy002+sOnFmGtHDBz7Sce4S1pCsDtBMUIyRYdDCGF17qlmjo
-         FEvl0CntzCd8biNgfELg3nHHZB8ab19LqIBxthdnIaERN0Ekqz71l4g6MIK7CiT9mM
-         ZZ9JQMrJ5T1tjaj4IHO1xKzq9JY7oFmVWmmZxN/9mnCkG2G1p5dTNoce5a94psJAIx
-         EpTwjRYGbm9LQ==
-Date:   Thu, 10 Nov 2022 10:25:09 +1100
+        b=itKSEJgFosLrgotVH5ZbbbzfuywvaMuGuVYM4l3gcmsjIAi/s7Mea/sNT5/HUV9c7
+         IkTdSDD3c7nD8XTWCBeijUL2Y4T9BwjlarNnDAF/DcmyVfN3I8GQOTjyUQa5nDEMqZ
+         ARB0OJRI20o1nXiP5s3OGoenfT87/fmlqejB0a9fzdhVQ6OaYvdSUBMddv1LbMJniI
+         ZL+UotntrOu2+1DXT9Mk9GuFobWwtE3wixWIriCbQuVIEt/eHzcqlANt3QJmgAc28n
+         rwKFHZMNNy5AbaTzQuYwdkmH4oPo6LmkGtZTV8lxK8xfREr1wQgyZWEvrFyvcf1ckW
+         PDIUQ13GjcjHw==
+Date:   Thu, 10 Nov 2022 10:54:31 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Dave Airlie <airlied@redhat.com>
+Cc:     Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Oliver Hartkopp <socketcan@hartkopp.net>
-Subject: linux-next: manual merge of the net-next tree with the net tree
-Message-ID: <20221110102509.1f7d63cc@canb.auug.org.au>
+        Thomas Zimmermann <tzimmermann@suse.de>
+Subject: linux-next: manual merge of the drm-misc tree with the drm tree
+Message-ID: <20221110105431.164e411d@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/URFtFf22l.+X3Y1NFfBS6RV";
+Content-Type: multipart/signed; boundary="Sig_/Llf+jcIAGjBrZ9CjHZDQWCJ";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
@@ -52,25 +54,30 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/URFtFf22l.+X3Y1NFfBS6RV
+--Sig_/Llf+jcIAGjBrZ9CjHZDQWCJ
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the net-next tree got a conflict in:
+Today's linux-next merge of the drm-misc tree got a conflict in:
 
-  drivers/net/can/pch_can.c
+  drivers/gpu/drm/nouveau/nouveau_fbcon.c
 
 between commit:
 
-  ae64438be192 ("can: dev: fix skb drop check")
+  4a16dd9d18a0 ("drm/nouveau/kms: switch to drm fbdev helpers")
 
-from the net tree and commit:
+from the drm tree and commits:
 
-  1dd1b521be85 ("can: remove obsolete PCH CAN driver")
+  9877d8f6bc37 ("drm/fb_helper: Rename field fbdev to info in struct drm_fb=
+_helper")
+  7fd50bc39d12 ("drm/fb-helper: Rename drm_fb_helper_alloc_fbi() to use _in=
+fo postfix")
+  afb0ff78c13c ("drm/fb-helper: Rename drm_fb_helper_unregister_fbi() to us=
+e _info postfix")
 
-from the net-next tree.
+from the drm-misc tree.
 
 I fixed it up (I just removed the file) and can carry the fix as
 necessary. This is now fixed as far as linux-next is concerned, but any
@@ -83,20 +90,20 @@ particularly complex conflicts.
 Cheers,
 Stephen Rothwell
 
---Sig_/URFtFf22l.+X3Y1NFfBS6RV
+--Sig_/Llf+jcIAGjBrZ9CjHZDQWCJ
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNsNtUACgkQAVBC80lX
-0GxFswf/djufZrRbLl+gPNoti1zVqCMOm95cWuWOTr6tAnsoYYCAdEKRdc9EK8hn
-DvKNQghwe4DhpoRc3UvloA+ad0Iw5UATxMghWgXzVpJKD6KID+XDZwzy32ZqrCRk
-xf/JCQgHEwVKuihfW1ryM6hpcMSz8s1OgBBxJyEzsiiJI33CJC0ylKi1177ws47o
-2ErVgqkWS0zukPReWCUQbGv+ke0LafnR2uyPp+blqATaaqeSo/BlrvrFqvxKSHiG
-nbIdZWmUjsnAmzwmM5+k/uJDHb4lVpuYO4sQWKS+k6Bsm80MPl07XdpJK4VS4ANI
-qe6khrMbsB3aZACwMi9t0r51cdS4qA==
-=rE2s
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNsPbcACgkQAVBC80lX
+0GwsKQgAhuT7YAcwMGTbZUiPbPr6ICtpwuQN7+2oe+0jemxqiaODBxvD1PvDi7cL
+bj4u3zVATZxmhMEFYaZn4TzY2WsuYnzVwtmineEzP/NzML0f4ZSP/nvlBFgCyYuJ
++00oFge7ki+VWcy+6ZwlW/7ClNSyu+sADC+5N3/a9DXyKXhV0Q2jQy8e+U3Bw8Ki
+CrBdy4uENOH1dcd84MtqgCOlI8KmJHwaTwJkkw9LZnM52/1gCPZhkJVN6+fnT340
+l/orIVn2txdUJXVwa2Xj9b/gbt8fgutNLWY69nqm5p94OmxO/OPyr3sOB4OLzQ4r
+1D05WAMAlJKPMHSBHRtUg/HyE3fQ/g==
+=I2QK
 -----END PGP SIGNATURE-----
 
---Sig_/URFtFf22l.+X3Y1NFfBS6RV--
+--Sig_/Llf+jcIAGjBrZ9CjHZDQWCJ--

@@ -2,46 +2,43 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6F6E624CF3
-	for <lists+linux-next@lfdr.de>; Thu, 10 Nov 2022 22:25:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 608A0624CF8
+	for <lists+linux-next@lfdr.de>; Thu, 10 Nov 2022 22:28:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231147AbiKJVZb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 10 Nov 2022 16:25:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42320 "EHLO
+        id S229724AbiKJV2R (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 10 Nov 2022 16:28:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbiKJVZ1 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 10 Nov 2022 16:25:27 -0500
+        with ESMTP id S229463AbiKJV2Q (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 10 Nov 2022 16:28:16 -0500
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FD34314;
-        Thu, 10 Nov 2022 13:25:24 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 249FF1D6;
+        Thu, 10 Nov 2022 13:28:15 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4N7Zcb30ggz4xTg;
-        Fri, 11 Nov 2022 08:25:19 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4N7Zgx2gp6z4xTg;
+        Fri, 11 Nov 2022 08:28:13 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1668115519;
-        bh=1lrZIjDS0eQbvvLZjDGoZN8tvyhs4pnf2ZvQt0EF2y0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=QRRhKg0jsJxdpOMeQjzCgockGM13Qjw/FKkEqAicYqS8cWgjIJyFzQ2v0L60Bbz7+
-         BBO4eomFVqsr2pbazfpmMStDpKj0J22jeYFpBi55VAOI9BfH40So5YrXqqNCveVjLh
-         gmraS0FJcI+0IuJsasxJiBYsTGd4feeDyPuU6JJegoYMznRzcdf9P+cr84pZ7vH5Yx
-         3ZxjtT9hUr+aiC/4O5z1I3ReC1DmMVXAjyV3dBO5h4qlzDE8ezveeYgeXTXsCEDkzS
-         hC2Q7jQk5A3OXypsGmJQ05lC9BAipS0pkHtRSHYOBxJFPBWpHyUlTE3tYlIrZJtVou
-         /+9qcuUiLn4Gg==
-Date:   Fri, 11 Nov 2022 08:24:55 +1100
+        s=201702; t=1668115693;
+        bh=ibUdi+QMYyfARWbAqqypO7qXyl6bTh0LELYGokheEJg=;
+        h=Date:From:To:Cc:Subject:From;
+        b=pamcZ3GyntHnF1u7g2l6+pmkLSNH7YGUl1Ubizaap6/dhjWNxXwH3nJ0c2sPwzpGQ
+         Ko5JdEFwtlyVsW2/zMA2Q2i2O6NO6wodDlF6V8sM2qDqpfyvZnF1kMmBDkKrHfYByI
+         QCWu120J8QStbicGiZis35nzcRg6RYbMmN8o6NULuPC53fQ8yzoHrjGZ0a0vvEwSsE
+         /qMDi8nnTN5dNHZmR9eXByVfbuBcxQPbpadXops71t5TCwt0/8SOJGYktQcqkx27AP
+         u7wgxNKFe4ZLmfVOrS0EzQ5e+ad3Ia4lFx/N4NatQxBN4+WXFon+amSSo8cL8+qfAu
+         KEmdmtFSrtkNw==
+Date:   Fri, 11 Nov 2022 08:28:11 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Sterba <dsterba@suse.cz>
-Cc:     Boris Burkov <boris@bur.io>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     Jaegeuk Kim <jaegeuk@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Fixes tag needs some work in the btrfs tree
-Message-ID: <20221111082455.6319fa88@canb.auug.org.au>
-In-Reply-To: <20221107080225.358cc0ee@canb.auug.org.au>
-References: <20221107080225.358cc0ee@canb.auug.org.au>
+Subject: linux-next: Fixes tag needs some work in the f2fs tree
+Message-ID: <20221111082811.3c0fe637@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/dBqVbvZHIcqe0/lB4yFaMqY";
+Content-Type: multipart/signed; boundary="Sig_/W_8leBqFKyp1PGe/.wusItW";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
@@ -52,53 +49,46 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/dBqVbvZHIcqe0/lB4yFaMqY
+--Sig_/W_8leBqFKyp1PGe/.wusItW
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Mon, 7 Nov 2022 08:02:25 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
->
-> In commit
->=20
->   5a2644cf1841 ("btrfs: fix improper error handling in btrfs_unlink")
+In commit
 
-This is now commit c330cff765cc.
+  6953bf65286d ("f2fs: allow to read node block after shutdown")
 
-> Fixes tag
->=20
->   Fixes: 6a1d44efb9d0 ("btrfs: setup qstr from dentrys using fscrypt help=
-er")
->=20
-> has these problem(s):
->=20
->   - Target SHA1 does not exist
->=20
-> Maybe you meant
->=20
-> Fixes: c0916fbc08be ("btrfs: setup qstr from dentrys using fscrypt helper=
-")
+Fixes tag
+
+  Fixes: 83a3bfdb5a8 ("f2fs: indicate shutdown f2fs to allow unmount succes=
+sfully")
+
+has these problem(s):
+
+  - SHA1 should be at least 12 digits long
+    This can be fixed for the future by setting core.abbrev to 12 (or
+    more) or (for git v2.11 or later) just making sure it is not set
+    (or set to "auto").
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/dBqVbvZHIcqe0/lB4yFaMqY
+--Sig_/W_8leBqFKyp1PGe/.wusItW
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNtbCcACgkQAVBC80lX
-0Gyt6Qf/RDLy2KctETSt5T/zRz0Wlqacq1ie3FD+g1l7Z9nOnkfBDfP3oqlbIlAC
-LoLzjo6B5sKQeK/SfwB15s4nFpdSZ23qokBs4OZ45O0O/J6lLv1zjIu1MnxaG+7+
-RjsxeCkn4UaG/u5HvJ0Yiq/uz31iF7AAdEEP/V9JvSa8py4QoKOQ5J7QyZlAogGo
-HvbwyQEzJF/w0aoUIwWEg7f/uyv8+4oSKGBqiHUSw54LQgkD7Fmsol5pyKgSs4gL
-Y6qe56/RoJXKuta6PKzuexvb88HqOYwPhQMIgK6YRKe04PoqlCBJ+gOpyN8Mst5J
-rQ+ehkrQZQhpTuvSj1XL0ahCYOFNSw==
-=VplA
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNtbOsACgkQAVBC80lX
+0GxkkAf+O5ljI1lRsPBS0yOh6FHmJ446V7/0vPzwvQ+YNNli8/+kP7l5wtT8NOeP
+twbfepNZT0qTteNlOJW5g2Lkm2Sv170vu1hl7vo8J/r/zQhdmIYyWa9ZknDUEuK0
+Hc+59i0LoHDW9m0F9onn9CJs0i7USfjswv73VPgh+p5/GXxF8+1sVRWH2F7lx7I2
+uCnlZSADpbROqE0FHSmcvKIRxRUSt60bB5g7BnMJxDEGoR77Mlp7JLG3oBg4uDCY
+0sP/qJJcG38IvUk5cR82DWbea3h0KMAenYcLLUgE5oIdcD013JfXaz1qcMU+z6jv
+RyvpNKklkhtxjDbrYD8mh80js1zSYQ==
+=HIhv
 -----END PGP SIGNATURE-----
 
---Sig_/dBqVbvZHIcqe0/lB4yFaMqY--
+--Sig_/W_8leBqFKyp1PGe/.wusItW--

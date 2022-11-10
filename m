@@ -2,137 +2,136 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3E0D624739
-	for <lists+linux-next@lfdr.de>; Thu, 10 Nov 2022 17:41:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 849C462474E
+	for <lists+linux-next@lfdr.de>; Thu, 10 Nov 2022 17:43:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231905AbiKJQl4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 10 Nov 2022 11:41:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39218 "EHLO
+        id S232426AbiKJQn5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 10 Nov 2022 11:43:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232032AbiKJQls (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 10 Nov 2022 11:41:48 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9509443863
-        for <linux-next@vger.kernel.org>; Thu, 10 Nov 2022 08:41:46 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id s12so3942024edd.5
-        for <linux-next@vger.kernel.org>; Thu, 10 Nov 2022 08:41:46 -0800 (PST)
+        with ESMTP id S232341AbiKJQnR (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 10 Nov 2022 11:43:17 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2C2D45EF0
+        for <linux-next@vger.kernel.org>; Thu, 10 Nov 2022 08:42:58 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id z5-20020a17090a8b8500b00210a3a2364fso6070786pjn.0
+        for <linux-next@vger.kernel.org>; Thu, 10 Nov 2022 08:42:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=raspberrypi.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=PXjmgmTZbivYNCVWB/JUFc7h/+Q7RCIq92KdMMjOLfI=;
-        b=tadhODvAQBstTXxKr5UPmLw+VB7fNxM2svKr46LIB2KDzmBT5FyakWQoUP4PpuJ0HG
-         WnUU8TuxJnzHwD2FEUyixga1iE47JHIwFlLMic3SOl1rqHyxt9xhhS7IKfBDaoNxoHY/
-         Guo3wEjVfuhpr+bNUS9wwCkoQsGoI6w0vAO82n1E/VEgZqjRBxOZ8Jf0QWOhg44gyt4r
-         aG4H/8Be20qkWgEJ3q1IyuP1neyhXBnDpu+wIRpPwP5xaWzmaFz8/D0o54DGA/ML3fj2
-         BFSTiBstcr1FdQoI17Aj/Vps/AyBqS9+Wcp8nST4woTodIesMS0P1ECvmiEBbxM9Gd/y
-         vIAg==
+        d=chromium.org; s=google;
+        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=EfgsLc2+G9HPdaL8aH3Xzd8lv8JeS+eH5Ba4xV4l/yA=;
+        b=IruV/cOGCppTZMecE2WVY8zukl+kcYVeoo7vFWW6yGTBj+JNzqw7SwdygU11Ap5tXp
+         +IWICnrL7OpPlowtcizxkZ8u7fNIf7VOdlhb+UCVVdiNOgc1eLngTeYpENadc4W7k2ql
+         lwVFIi2Zm+49ixbK5qXD6pVFvTfaAaG7iPD9c=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PXjmgmTZbivYNCVWB/JUFc7h/+Q7RCIq92KdMMjOLfI=;
-        b=P1y6vaXOnks9NdxjzWitc02Fk4tOQXLdJZiJaM0FiwW/rTYjWIKWsFP94l0Pd8n/za
-         xj3YvqjDWLHx4ctYJyNIUMfsj7oCVZqw6vZC7kYaLUWQGdEmkXmlNbeQwJRbNg+jR3B1
-         B+18rzr2Q8Fr1ioa9aCzVUV7nb8VLl+gVrBkQ6XBZkZIIs2XlRwyivAFkchunusOgdVn
-         5HIby0DdL0o4qMMkV94MSITz/RSHu3h9aEFZonWsxMSxx2m8wVQnmONhJ+v6WMRUCR3U
-         dNxngBOFM8wJuANkxuPkU10Bois6VIOgnf4yvnQDuhbm0lY3E6vql/AEKlgBuw007eoO
-         1JTQ==
-X-Gm-Message-State: ACrzQf3RDfs9o2tP+fTf4R8wClMR9/3bItac2HHE2p6/pI1ddUJDLvPu
-        NtquRMJ70fVC+N/OPxIQ7KXV71VJJsjSDnclRqFUgQ==
-X-Google-Smtp-Source: AMsMyM5xmiXxEeOzmNuy/Kq98htw3UnaNPQB44q/IPt7Hgv62yRSWf//kYvb/fxfl2oNtNsLD6xYTxGlImkj0jpfphQ=
-X-Received: by 2002:a05:6402:c07:b0:461:87ab:78aa with SMTP id
- co7-20020a0564020c0700b0046187ab78aamr64197695edb.258.1668098505181; Thu, 10
- Nov 2022 08:41:45 -0800 (PST)
-MIME-Version: 1.0
-References: <202211100830.1F097DC@keescook>
-In-Reply-To: <202211100830.1F097DC@keescook>
-From:   Dave Stevenson <dave.stevenson@raspberrypi.com>
-Date:   Thu, 10 Nov 2022 16:41:28 +0000
-Message-ID: <CAPY8ntCkjG0BafMy+iLna2BDvr0n10E8hzUqL01WpUgFCjwV4g@mail.gmail.com>
-Subject: Re: Coverity: imx290_ctrl_init(): Error handling issues
-To:     coverity-bot <keescook@chromium.org>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-kernel@vger.kernel.org,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        linux-media@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=EfgsLc2+G9HPdaL8aH3Xzd8lv8JeS+eH5Ba4xV4l/yA=;
+        b=oMSdvzKw5w63p1wt6lHdsB6V1Tcmwd17mRausfvqwP3c3/M4rTG+zrezGbDBLpWGNd
+         SIbIBbTGOCCeFXodWvG0SMPJLVf95a9E5FB+4d3Rlq34ZPu/dweTd7Nj9Px1c0vMboPf
+         /25Syl7ouOsPikApbjNPOfwbe8h/uj/zeXXb6WfxmSWElb4YKf0TRPh5Qgt+szIXwtbc
+         /g4voPp1tbiUJeWOciAqm4iRmLYunxhyQ3MiOWy3We9c3sRxOpzHc5U3oiL5k6zMGwns
+         MLMLoJfdbhF/ZGkSdW3MJYAV4Mt6CITmfxs2SEZVloJunlrM6KTCI3OdJmYrPNGTFbiZ
+         rvJw==
+X-Gm-Message-State: ACrzQf3IzWECvI9u27QsXYeHEY1e5IHGNktIBxIz2a7XgB0FSwPuLNXD
+        dtdM3Yu9t6uc8vzMkO+a4FWCTQ==
+X-Google-Smtp-Source: AMsMyM4zFp+Wrf9N4R4CuG0pbWGCwDSSClCq2oRdgHwJJKI1w+NXOW7FDTxl0KXE16WpLHC9sb8z8g==
+X-Received: by 2002:a17:902:82c2:b0:188:5581:c8de with SMTP id u2-20020a17090282c200b001885581c8demr1293917plz.140.1668098578376;
+        Thu, 10 Nov 2022 08:42:58 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id t4-20020a1709027fc400b00186f0f59d1esm11373906plb.192.2022.11.10.08.42.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Nov 2022 08:42:58 -0800 (PST)
+From:   coverity-bot <keescook@chromium.org>
+X-Google-Original-From: coverity-bot <keescook+coverity-bot@chromium.org>
+Date:   Thu, 10 Nov 2022 08:42:57 -0800
+To:     Ben Skeggs <bskeggs@redhat.com>
+Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
+        linux-kernel@vger.kernel.org, Daniel Vetter <daniel@ffwll.ch>,
+        Lyude Paul <lyude@redhat.com>,
+        Karol Herbst <kherbst@redhat.com>,
+        David Airlie <airlied@gmail.com>,
+        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
+        Jani Nikula <jani.nikula@intel.com>,
+        Dave Airlie <airlied@redhat.com>,
         "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
         linux-next@vger.kernel.org, linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Subject: Coverity: nv50_hdmi_enable(): OVERRUN
+Message-ID: <202211100842.076585A@keescook>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, 10 Nov 2022 at 16:31, coverity-bot <keescook@chromium.org> wrote:
->
-> Hello!
->
-> This is an experimental semi-automated report about issues detected by
-> Coverity from a scan of next-20221110 as part of the linux-next scan project:
-> https://scan.coverity.com/projects/linux-next-weekly-scan
->
-> You're getting this email because you were associated with the identified
-> lines of code (noted below) that were touched by commits:
->
->   Thu Oct 27 14:38:02 2022 +0300
->     4c9c93cf8657 ("media: i2c: imx290: Create controls for fwnode properties")
->
-> Coverity reported the following:
->
-> *** CID 1527251:  Error handling issues  (CHECKED_RETURN)
-> drivers/media/i2c/imx290.c:1056 in imx290_ctrl_init()
-> 1050            imx290->vblank = v4l2_ctrl_new_std(&imx290->ctrls, &imx290_ctrl_ops,
-> 1051                                               V4L2_CID_VBLANK, blank, blank, 1,
-> 1052                                               blank);
-> 1053            if (imx290->vblank)
-> 1054                    imx290->vblank->flags |= V4L2_CTRL_FLAG_READ_ONLY;
-> 1055
-> vvv     CID 1527251:  Error handling issues  (CHECKED_RETURN)
-> vvv     Calling "v4l2_ctrl_new_fwnode_properties" without checking return value (as is done elsewhere 9 out of 10 times).
-> 1056            v4l2_ctrl_new_fwnode_properties(&imx290->ctrls, &imx290_ctrl_ops,
-> 1057                                            &props);
-> 1058
-> 1059            imx290->sd.ctrl_handler = &imx290->ctrls;
-> 1060
-> 1061            if (imx290->ctrls.error) {
->
-> If this is a false positive, please let us know so we can mark it as
-> such, or teach the Coverity rules to be smarter. If not, please make
-> sure fixes get into linux-next. :) For patches fixing this, please
-> include these lines (but double-check the "Fixes" first):
+Hello!
 
-I looked at this one when the patches were sent to the list.
+This is an experimental semi-automated report about issues detected by
+Coverity from a scan of next-20221110 as part of the linux-next scan project:
+https://scan.coverity.com/projects/linux-next-weekly-scan
 
-On failure, v4l2_ctrl_new_fwnode_properties will have set the error
-flag in struct v4l2_ctrl_handler. This is also what it returns.
+You're getting this email because you were associated with the identified
+lines of code (noted below) that were touched by commits:
 
-In most of the existing drivers the error flag has already been
-checked before calling v4l2_ctrl_new_fwnode_properties, therefore the
-return value has to be checked explicitly. In this case it is checked
-at line 1061 which is after v4l2_ctrl_new_fwnode_properties has been
-called, and therefore there is no need to check the return value of
-the call.
+  Wed Nov 9 08:22:02 2022 +1000
+    f530bc60a30b ("drm/nouveau/disp: move HDMI config into acquire + infoframe methods")
 
-IMHO Neither is particularly right or wrong, just slightly different
-approaches. In some regards this new code pattern is nicer as it
-removes a number of error handling paths.
+Coverity reported the following:
 
-  Dave
+*** CID 1527272:    (OVERRUN)
+drivers/gpu/drm/nouveau/dispnv50/disp.c:801 in nv50_hdmi_enable()
+795
+796     		size = hdmi_infoframe_pack(&infoframe, args.data, 17);
+797     	} else {
+798     		size = 0;
+799     	}
+800
+vvv     CID 1527272:    (OVERRUN)
+vvv     Overrunning struct type nvif_outp_infoframe_v0 of 8 bytes by passing it to a function which accesses it at byte offset 21 using argument "size" (which evaluates to 14).
+801     	nvif_outp_infoframe(&nv_encoder->outp, NVIF_OUTP_INFOFRAME_V0_AVI, &args.infoframe, size);
+802
+803     	/* Vendor InfoFrame. */
+804     	if (!drm_hdmi_vendor_infoframe_from_display_mode(&infoframe.vendor.hdmi,
+805     							 &nv_connector->base, mode))
+806     		size = hdmi_infoframe_pack(&infoframe, args.data, 17);
+drivers/gpu/drm/nouveau/dispnv50/disp.c:810 in nv50_hdmi_enable()
+804     	if (!drm_hdmi_vendor_infoframe_from_display_mode(&infoframe.vendor.hdmi,
+805     							 &nv_connector->base, mode))
+806     		size = hdmi_infoframe_pack(&infoframe, args.data, 17);
+807     	else
+808     		size = 0;
+809
+vvv     CID 1527272:    (OVERRUN)
+vvv     Overrunning struct type nvif_outp_infoframe_v0 of 8 bytes by passing it to a function which accesses it at byte offset 21 using argument "size" (which evaluates to 14).
+810     	nvif_outp_infoframe(&nv_encoder->outp, NVIF_OUTP_INFOFRAME_V0_VSI, &args.infoframe, size);
+811
+812     	nv50_audio_enable(encoder, nv_crtc, nv_connector, state, mode);
+813     }
+814
+815     /******************************************************************************
 
-> Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
-> Addresses-Coverity-ID: 1527251 ("Error handling issues")
-> Fixes: 4c9c93cf8657 ("media: i2c: imx290: Create controls for fwnode properties")
->
-> Thanks for your attention!
->
-> --
-> Coverity-bot
+If this is a false positive, please let us know so we can mark it as
+such, or teach the Coverity rules to be smarter. If not, please make
+sure fixes get into linux-next. :) For patches fixing this, please
+include these lines (but double-check the "Fixes" first):
+
+Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
+Addresses-Coverity-ID: 1527272 ("OVERRUN")
+Fixes: f530bc60a30b ("drm/nouveau/disp: move HDMI config into acquire + infoframe methods")
+
+It looks like this should address &args not &args.infoframe, if the
+intention is to include the "data" member.
+
+Thanks for your attention!
+
+-- 
+Coverity-bot

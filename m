@@ -2,101 +2,215 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1015D6238EC
-	for <lists+linux-next@lfdr.de>; Thu, 10 Nov 2022 02:37:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 672DC623918
+	for <lists+linux-next@lfdr.de>; Thu, 10 Nov 2022 02:44:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232348AbiKJBg6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 9 Nov 2022 20:36:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37020 "EHLO
+        id S229980AbiKJBon (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 9 Nov 2022 20:44:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232330AbiKJBgy (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 9 Nov 2022 20:36:54 -0500
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8C4B23BD8;
-        Wed,  9 Nov 2022 17:36:53 -0800 (PST)
-Received: by mail-pf1-x42c.google.com with SMTP id y203so454320pfb.4;
-        Wed, 09 Nov 2022 17:36:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7oEB0lmZcsgH+1cJj1K5vcGagIGFkzSpM0f9u/agpKk=;
-        b=j5vAZZswxbBkHZzlL1ibLXLQbQGvK/q/voHBPTA1Ws2DdyIcIxirEPVoIIwi4/sXEE
-         6pddZ/yGus6geTiEG+0QBsLNJaFZiuRoroNmFDwac3SFK5jSBJJ1XsU1BVsBg4HcSgK8
-         r/SwCyk8LffYTykINyVSGMn4tWufX2ZbWeq4TX2XF2kw1yeCFOeyJy+0dE0tvsY29awC
-         O/Ok6itCX7IiW9utGLN1ra+3onkKIV9LsL7CAy28lBgBe5WcSqNh3SrrnzoYzi2rSaev
-         v9Rg7JfLrNfbxgEtzAIb122i3+gGXWIxqnswqCjYjom6IY3HrAqMEXWzMGDD0yfoDfap
-         dQ+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7oEB0lmZcsgH+1cJj1K5vcGagIGFkzSpM0f9u/agpKk=;
-        b=0ra0n48820Js5P7QwTUcCKkavO/QhdA8MBC9bNaDdhpO9TdHloI8+9TIM6tQKpLcqs
-         FZH+hQB9vWj4eDqv8uHKasD1npVOE5KRwg/T/7mro79gWv5KZkBnrXb6thXBDVr+TzUu
-         ccvywpYG4sjZ/xjuhN6K2NQbeUDL0tPuYxgP09M5IiVtKXGhUgZU8LHDgE4QRCvulPc+
-         1zdKgqaXmmFU6cx6IfPjPR8zYMu2M2xBhipp8JWrZx7+rfyLnb78Cf5ubLZzaayLPxAj
-         VPq2xYdtEZr0QaF18SlfXnqDf0Ml4SWrXnImC6jNXqrjFy0gA1iaMbiJ715VU9y32qkF
-         OD1w==
-X-Gm-Message-State: ACrzQf2s5VOV8lM47ts3HqJsMmRaf2mEkWq171eL0KyWP+Mwca9fjWn8
-        mxj+Ujruq2FkUcp/00wD8EE=
-X-Google-Smtp-Source: AMsMyM5pxt6O5G2t44hmX7bNcOIwJjfDwhc/Z1C5/sklTlOtzuBZmTn3pd4yijWcrTIVK+UNfOb4xA==
-X-Received: by 2002:aa7:83c8:0:b0:56d:8e07:4618 with SMTP id j8-20020aa783c8000000b0056d8e074618mr51245416pfn.33.1668044213225;
-        Wed, 09 Nov 2022 17:36:53 -0800 (PST)
-Received: from [192.168.43.80] (subs02-180-214-232-25.three.co.id. [180.214.232.25])
-        by smtp.gmail.com with ESMTPSA id p12-20020a170902bd0c00b001754fa42065sm9755598pls.143.2022.11.09.17.36.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Nov 2022 17:36:52 -0800 (PST)
-Message-ID: <0323ce55-bb9b-dd85-93e8-22ad3591b7f3@gmail.com>
-Date:   Thu, 10 Nov 2022 08:36:46 +0700
+        with ESMTP id S232114AbiKJBok (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 9 Nov 2022 20:44:40 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41C0629812;
+        Wed,  9 Nov 2022 17:44:38 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4N74Q93CvXz4xZ0;
+        Thu, 10 Nov 2022 12:44:33 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1668044673;
+        bh=ZeWw/pBrhB5XCaM3DHaahIUrvIcAQKT78oFK3ZsAtwE=;
+        h=Date:From:To:Cc:Subject:From;
+        b=IH2hg/DjzipNOIhtHxwpaI18PCjBsH543SYeuD0BfL8wmI7OrFy2APF5aD/g0LGbn
+         jP239+BKg3h4niw3US8IDBG2+7szpiOWMqrk76rJcXpJNn+Fwcyafo6BeFq9CTe5Ik
+         ayycTGkynBBPX4RdHIay8W9jnDCdHP6WDcXG9LtNzhGMDO4jNcSBcsJgxcvRd1bR3V
+         5WNz9dXelReRq007SIMMUBuoGTg3cY3mbEjazjqIkz/3RSjaKlZWHRZdvjWqx3BNKt
+         tpmO+a5I+SFGSqYo4aLlUxiowvOHSYXWuH+ER3neJU5mD3eNtsRviSPr8ghyQMDgVS
+         hlvKEBu0PL/kQ==
+Date:   Thu, 10 Nov 2022 12:44:32 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     "GONG, Ruiqi" <gongruiqi1@huawei.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the selinux tree with Linus' tree
+Message-ID: <20221110124118.37e626fb@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH] Documentation: media: Add ST VGXY61 driver documentation
- to userspace API table of contents
-To:     Benjamin MUGNIER <benjamin.mugnier@foss.st.com>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-next@vger.kernel.org
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Xavier Roumegue <xavier.roumegue@oss.nxp.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-References: <20221109100147.218947-1-bagasdotme@gmail.com>
- <f0aee291-ce44-400b-be3a-dfe38c62e450@foss.st.com>
-Content-Language: en-US
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <f0aee291-ce44-400b-be3a-dfe38c62e450@foss.st.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/whRV2wne/_eDbaPE.FvD4Ej";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 11/9/22 21:50, Benjamin MUGNIER wrote:
-> Hi Bagas,
-> 
-> I already submitted this here:
-> https://www.spinics.net/lists/linux-media/msg221143.html
-> 
-> Thanks.
-> 
+--Sig_/whRV2wne/_eDbaPE.FvD4Ej
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Oh, I don't see above! Thanks anyway.
+Hi all,
 
-PS: Please don't top post your reply; reply inline with appropriate
-context. I had to cut the whole context below your reply.
+Today's linux-next merge of the selinux tree got conflicts in:
 
--- 
-An old man doll... just what I always wanted! - Clara
+  security/selinux/ss/services.c
+  security/selinux/ss/sidtab.c
+  security/selinux/ss/sidtab.h
 
+between commit:
+
+  abe3c631447d ("selinux: enable use of both GFP_KERNEL and GFP_ATOMIC in c=
+onvert_context()")
+
+from Linus' tree and commit:
+
+  048be156491f ("selinux: remove the sidtab context conversion indirect cal=
+ls")
+
+from the selinux tree.
+
+I fixed it up (see below) and applied the following merge fix patch
+as well and can carry the fix as necessary. This is now fixed as far as
+linux-next is concerned, but any non trivial conflicts should be mentioned
+to your upstream maintainer when your tree is submitted for merging.
+You may also want to consider cooperating with the maintainer of the
+conflicting tree to minimise any particularly complex conflicts.
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Thu, 10 Nov 2022 12:38:01 +1100
+Subject: [PATCH] selinux: fix up for "selinux: enable use of both GFP_KERNEL
+ and GFP_ATOMIC in convert_context()"
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ security/selinux/ss/services.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/security/selinux/ss/services.h b/security/selinux/ss/services.h
+index 6348c95ff0e5..c4301626487f 100644
+--- a/security/selinux/ss/services.h
++++ b/security/selinux/ss/services.h
+@@ -41,6 +41,7 @@ void services_compute_xperms_decision(struct extended_per=
+ms_decision *xpermd,
+ 				      struct avtab_node *node);
+=20
+ int services_convert_context(struct convert_context_args *args,
+-			     struct context *oldc, struct context *newc);
++			     struct context *oldc, struct context *newc,
++			     gfp_t gfp_flags);
+=20
+ #endif	/* _SS_SERVICES_H_ */
+--=20
+2.35.1
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc security/selinux/ss/services.c
+index 64a6a37dc36d,e63c4f942fd6..9086c4ea0255
+--- a/security/selinux/ss/services.c
++++ b/security/selinux/ss/services.c
+@@@ -2014,18 -2008,20 +2008,21 @@@ static inline int convert_context_handl
+  	return 0;
+  }
+ =20
+- /*
+-  * Convert the values in the security context
+-  * structure `oldc' from the values specified
+-  * in the policy `p->oldp' to the values specified
+-  * in the policy `p->newp', storing the new context
+-  * in `newc'.  Verify that the context is valid
+-  * under the new policy.
++ /**
++  * services_convert_context - Convert a security context across policies.
++  * @args: populated convert_context_args struct
++  * @oldc: original context
++  * @newc: converted context
++  *
++  * Convert the values in the security context structure @oldc from the va=
+lues
++  * specified in the policy @args->oldp to the values specified in the pol=
+icy
++  * @args->newp, storing the new context in @newc, and verifying that the
++  * context is valid under the new policy.
+   */
+- static int convert_context(struct context *oldc, struct context *newc, vo=
+id *p,
+- 			   gfp_t gfp_flags)
++ int services_convert_context(struct convert_context_args *args,
+ -			     struct context *oldc, struct context *newc)
+++			     struct context *oldc, struct context *newc,
+++			     gfp_t gfp_flags)
+  {
+- 	struct convert_context_args *args;
+  	struct ocontext *oc;
+  	struct role_datum *role;
+  	struct type_datum *typdatum;
+@@@ -2034,10 -2030,8 +2031,8 @@@
+  	u32 len;
+  	int rc;
+ =20
+- 	args =3D p;
+-=20
+  	if (oldc->str) {
+ -		s =3D kstrdup(oldc->str, GFP_KERNEL);
+ +		s =3D kstrdup(oldc->str, gfp_flags);
+  		if (!s)
+  			return -ENOMEM;
+ =20
+diff --cc security/selinux/ss/sidtab.c
+index db5cce385bf8,1c3d2cda6b92..38d25173aebd
+--- a/security/selinux/ss/sidtab.c
++++ b/security/selinux/ss/sidtab.c
+@@@ -324,8 -327,8 +327,9 @@@ int sidtab_context_to_sid(struct sidta
+  			goto out_unlock;
+  		}
+ =20
+- 		rc =3D convert->func(context, &dst_convert->context,
+- 				   convert->args, GFP_ATOMIC);
++ 		rc =3D services_convert_context(convert->args,
+ -					      context, &dst_convert->context);
+++					      context, &dst_convert->context,
+++					      GFP_ATOMIC);
+  		if (rc) {
+  			context_destroy(&dst->context);
+  			goto out_unlock;
+@@@ -402,9 -405,9 +406,10 @@@ static int sidtab_convert_tree(union si
+  		}
+  		i =3D 0;
+  		while (i < SIDTAB_LEAF_ENTRIES && *pos < count) {
+- 			rc =3D convert->func(&esrc->ptr_leaf->entries[i].context,
+- 					   &edst->ptr_leaf->entries[i].context,
+- 					   convert->args, GFP_KERNEL);
++ 			rc =3D services_convert_context(convert->args,
++ 					&esrc->ptr_leaf->entries[i].context,
+ -					&edst->ptr_leaf->entries[i].context);
+++					&edst->ptr_leaf->entries[i].context,
+++					GFP_KERNEL);
+  			if (rc)
+  				return rc;
+  			(*pos)++;
+
+--Sig_/whRV2wne/_eDbaPE.FvD4Ej
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNsV4AACgkQAVBC80lX
+0GxG8wgAjpoVgExpS7o4Qa1EtzUZR6HJL3a9ObVLvrknTaFsMOlv2EDDOyFlwVkk
+QWGYDuWQZhoRJSVgp9p0MtoeIA3peejO5gNw/89+rrvvu9c8rtxDhNFDEbzXBnjg
+7wDrjCe1nAqjiK35Lwxla6C5VJI7jsHGhUQxY/wroUz2PzXabb6vPREmN32L9a4l
+2dWNh2kierB58H/1Jm5SflnKNAPrGWIiVJVXl5h8bYMTcpdVO4wxsomy4KBxHL8E
+QIoZageiWr9xcr9d5r2gSjh5CBha+o9jmagL94uhuHCV8E7mkwU5Y+Pd5xTCHNek
+o398kb1nR1nZJDIRsrzIqHV4eOKcDw==
+=ffWS
+-----END PGP SIGNATURE-----
+
+--Sig_/whRV2wne/_eDbaPE.FvD4Ej--

@@ -2,76 +2,96 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CABE0624C19
-	for <lists+linux-next@lfdr.de>; Thu, 10 Nov 2022 21:43:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E21EB624C61
+	for <lists+linux-next@lfdr.de>; Thu, 10 Nov 2022 22:04:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231985AbiKJUnt (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 10 Nov 2022 15:43:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48504 "EHLO
+        id S231639AbiKJVEK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 10 Nov 2022 16:04:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231967AbiKJUns (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 10 Nov 2022 15:43:48 -0500
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 190224D5DD
-        for <linux-next@vger.kernel.org>; Thu, 10 Nov 2022 12:43:47 -0800 (PST)
-Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 867912CB;
-        Thu, 10 Nov 2022 20:43:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 867912CB
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1668113024; bh=4LcTONyiLyLVkTe5BAYLb5ptVLcYspwd8D5C7sLwB8M=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=h7BymJ1j/R3RBMfanqMCdTq2mqwWNrmTz9Palwj0nxQv5pU5aJAqWtSeWjRh1gqpU
-         7BwwpJsqIL0SBZh+pPr5L3+2ZHTwZH5Y289j8n636i3q1k4FPYsJhHf+OVa+Ia4gZr
-         SmEjXO5y+m9lbnV7Uptk9d2C0T1aa/mXiRztzbcKaiRGehan9QvOSklRxAx0/I3VSi
-         x8kUM0ACr9dvN7oZa/SUn3+an9bD7/M5QKCfSz/btcZznV1JxMXvLadWxzbQKJ0/uU
-         SCaRVxi6BTXgBfME+psovLlFuQ2dcgLSvPnlmaHwM4yDLwMViPOvKWcETTkps2nVOG
-         8DlrEwm4ZbV7A==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Randy Dunlap <rdunlap@infradead.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the mm tree
-In-Reply-To: <e523ce8c-9c60-13de-7e91-a553de985838@infradead.org>
-References: <20221110183352.08cc2303@canb.auug.org.au>
- <CAHk-=wiyYSrBiOKJEV3phOBDT7EMgdXCnDUrp57E8HGNT4SFdA@mail.gmail.com>
- <e523ce8c-9c60-13de-7e91-a553de985838@infradead.org>
-Date:   Thu, 10 Nov 2022 13:43:43 -0700
-Message-ID: <87a64yh75s.fsf@meer.lwn.net>
+        with ESMTP id S231342AbiKJVEI (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 10 Nov 2022 16:04:08 -0500
+Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE8DC4AF22
+        for <linux-next@vger.kernel.org>; Thu, 10 Nov 2022 13:04:07 -0800 (PST)
+Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-13b23e29e36so3501917fac.8
+        for <linux-next@vger.kernel.org>; Thu, 10 Nov 2022 13:04:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=K2FSyx/7hf/Wl53aKBYclj6BZx3v4YrSE/GL1nVyZ+M=;
+        b=me6Oqd3J14Kjh53kFqMRs4MQFuNZ/MTfo+A2c7eVS1UU6VtwxGhDUHJLpLHnr3+UlL
+         XKuHrixc6HYsZJJIz0WZP5r7KiSP9DXC9AdZ3ndEgfy4VJSCpPbKgSPFgc5AKGO0X42d
+         TLCwHz0tbczFYtTaUJugKc97aNjhxhSZo7qvK3ZLwoofQ1bu7kQzUxAwG+TtEBha1r9v
+         MTrx8sgYeoMTyk2uZdT70RpHOO5Xu1Eu3zZNFAKJXR72dUI5VIyI1pvFtyD0rsLiJYS8
+         h6qMf2YMv5yaecUzm9M8N7GheOQ0og4L3M8pro70otwIwVnAEkhx+9YxVEpoQ56tKHmn
+         qL4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=K2FSyx/7hf/Wl53aKBYclj6BZx3v4YrSE/GL1nVyZ+M=;
+        b=IPPivF4YShOpjpRDLf/TLcMlIl1TKnxyYJy4L4hodCRUY3x8jYpnInfs+YBNt3Womi
+         jGsWllPJ6hJCyTTAVKjssOXm0jGZV8AQn3Zbs0FZD19EUdKNDV0eOjNC+m3NXQLvPicB
+         uRArmVOljNBXsGqufMwlESNOKZXqK1dY+yKs05xUQehEv1hHo1+aG7d5tMTil6YpfjMA
+         udRImGXuALyE961lMu8wO534kzVdm34/oqzn+TALc368wlAPlkTHcih9DX28Elz6N2j0
+         /ilqsMcQTxh/PnnzQZt/pB1cYGilPZ7usGpIXCCD5iL47PTO0up9iOPCy7rZtI8pvnTD
+         OMig==
+X-Gm-Message-State: ACrzQf0wvc/SXep7gl3jg9NZwXrq++ypAV07eDIWoZOmAPxTTZTJ8yaz
+        AHl/fPxJdLELZjvEtUQk97VsqpFkXKDiLZo+hWTJBw==
+X-Google-Smtp-Source: AMsMyM5FqivOusKyXCfu9CKG+fGkgjpfhMbFK+Zp84zmhABRLSR9WPRL3GWdUBKamriIvuAmpzwCer5gRb40d8y8Ilo=
+X-Received: by 2002:a05:6870:9727:b0:13d:a22b:3503 with SMTP id
+ n39-20020a056870972700b0013da22b3503mr2092455oaq.233.1668114246723; Thu, 10
+ Nov 2022 13:04:06 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <000000000000e915eb05ecf9dc4d@google.com> <Y2qjerZigLiO8YVw@zx2c4.com>
+ <CACT4Y+a3bJmMf8JNm=SZYOKtgSVnOpY4+bgdT4ugLLhVV-NCEA@mail.gmail.com> <Y2rrZ8lIIMrKkb2Z@zx2c4.com>
+In-Reply-To: <Y2rrZ8lIIMrKkb2Z@zx2c4.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Thu, 10 Nov 2022 13:03:55 -0800
+Message-ID: <CACT4Y+Y+h_tNN0XT9fb0jYH7V4HvWR=D1R8qsduor9jDSSi80g@mail.gmail.com>
+Subject: Re: [syzbot] linux-next boot error: WARNING in kthread_should_stop
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     syzbot <syzbot+25aae26fb74bd5909706@syzkaller.appspotmail.com>,
+        herbert@gondor.apana.org.au, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        linux@dominikbrodowski.net, olivia@selenic.com,
+        sfr@canb.auug.org.au, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Randy Dunlap <rdunlap@infradead.org> writes:
-
-> Looks like scripts/kernel-doc is deficient in parsing
+On Tue, 8 Nov 2022 at 15:51, Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+> > <syzkaller-bugs@googlegroups.com> wrote:
+> > >
+> > > Already fixed in the tree.
+> >
+> > Hi Jason,
+> >
+> > The latest commit touching this code in linux-next is this one. Is it
+> > the fixing commit?
+> >
+> > commit e0a37003ff0beed62e85a00e313b21764c5f1d4f
+> > Author:     Jason A. Donenfeld <Jason@zx2c4.com>
+> > CommitDate: Mon Nov 7 12:47:57 2022 +0100
+> >     hw_random: use add_hwgenerator_randomness() for early entropy
 >
-> struct encoded_page;
+> It's this one: https://git.kernel.org/pub/scm/linux/kernel/git/crng/random.git/commit/?id=9807175c5515cea94f8ac6c157f20cc48c40465b
 >
-> without having any { ... }
+> Couple hours more and there'll be a new linux-next with the fix.
 >
-> and it doesn't handle "typedef union" or "typedef struct". :(
+> Jason
 
-It's never needed to do that before...it's not often we document
-structure types that don't actually exist :)  kernel-doc wants to be
-able to check that all of the fields and such are documented, so it
-tries to parse the whole thing.
+Let's tell syzbot about the fix so that it reports similar bugs in future:
 
-In this case, the right solution might be to just write kerneldoc
-comments for the accessor functions instead, since that's what will
-actually be used.
-
-jon
+#syz fix: hw_random: use add_hwgenerator_randomness() for early entropy

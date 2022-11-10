@@ -2,45 +2,45 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99EFF623AE7
-	for <lists+linux-next@lfdr.de>; Thu, 10 Nov 2022 05:12:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C70F7623B21
+	for <lists+linux-next@lfdr.de>; Thu, 10 Nov 2022 06:09:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232167AbiKJEME (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 9 Nov 2022 23:12:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32814 "EHLO
+        id S229596AbiKJFJK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 10 Nov 2022 00:09:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231501AbiKJELS (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 9 Nov 2022 23:11:18 -0500
+        with ESMTP id S229516AbiKJFJJ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 10 Nov 2022 00:09:09 -0500
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 774BD32BB9;
-        Wed,  9 Nov 2022 20:09:58 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A132C2B1B8;
+        Wed,  9 Nov 2022 21:09:07 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4N77ds1D1Bz4xYV;
-        Thu, 10 Nov 2022 15:09:53 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4N78y91rybz4xGT;
+        Thu, 10 Nov 2022 16:09:05 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1668053393;
-        bh=efdeU73S6fdDllLQr16Y33lKGpbCYm21shAP5HlKYos=;
+        s=201702; t=1668056945;
+        bh=t1Zs9kyiW0gGCqlM+108NhrzNMiXqtOdDkhiwRDuybI=;
         h=Date:From:To:Cc:Subject:From;
-        b=Kh9OqRM5ibVrR/ubeIYF2IoqwvbbRALc1+qLGadDqu5tvT5wufkTsDx0MLieI37QQ
-         VGrSTEoAS7hgcl64d0LiHkFpaEu3rPRTqY1WQQvLcgpKcfdLNnPrAmdkt94wqgEBC7
-         UCjuD3bT3eGppqvPWR//YTdFMntgsFRiAEkP9VgcH30FKv4cwy4lJXBjKuRbN2mVrB
-         ggrB2wlmEtiSIHMVytQbKXY7g2DP4Tg4YxXjcU56viIAmaT2fY0uM6IyfNsC0L341o
-         IiYqAU7F/sdyoKdQuf/qN28sYjEvkSkA88JfA/flKD5ZGil1YC5RKL/pshBASVEw9S
-         c5WmK/Ef6UKOg==
-Date:   Thu, 10 Nov 2022 15:09:51 +1100
+        b=KaFSnpyYTblTDwELjpAvfWZqcnSPqeVZass62HvV24hdbfkEDilIf95Uz2qec3iDo
+         fJ9I/W7gQrctebulesjhNppoDh2dZoS+oozowgu2hNHwnlvRZCtpqwxMh/59RtkMU3
+         /k5t9Ek/mavhLFVmC9Bu5TBzQyNCdCALkV+Z4YXXFZ9auoi1ZnQFP+1VmVS9edF/CE
+         Gz9RmBxInXorCs7XceQSwd3bIDAaqADp9b5KirXEvpdaP2EzmEfKCuTEe1CSmv2YVb
+         zsqePCq/Kmj2hsKKifGn9b5l2FovaODp3ObkutgLUc17jFm5ZHGKpgXq3whdYhV0Ng
+         oBMGyi9ax+0Jg==
+Date:   Thu, 10 Nov 2022 16:09:03 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Yinbo Zhu <zhuyinbo@loongson.cn>,
-        zhanghongchen <zhanghongchen@loongson.cn>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     Ard Biesheuvel <ardb@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the pinctrl tree
-Message-ID: <20221110150951.1d9f0079@canb.auug.org.au>
+Subject: linux-next: manual merge of the efi tree with the arm64 tree
+Message-ID: <20221110160903.062515c8@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/AYGngnTW2Nrhv7DdtJhBukX";
+Content-Type: multipart/signed; boundary="Sig_/dIVKFk9o3ktPdWvxMAXl9y1";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
@@ -51,42 +51,85 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/AYGngnTW2Nrhv7DdtJhBukX
+--Sig_/dIVKFk9o3ktPdWvxMAXl9y1
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the pinctrl tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+Today's linux-next merge of the efi tree got a conflict in:
 
-ERROR: modpost: missing MODULE_LICENSE() in drivers/pinctrl/pinctrl-loongso=
-n2.o
+  drivers/firmware/efi/libstub/Makefile
 
-Caused by commit
+between commit:
 
-  6b88d921f848 ("pinctrl: pinctrl-loongson2: add pinctrl driver support")
+  68c76ad4a957 ("arm64: unwind: add asynchronous unwind tables to kernel an=
+d modules")
 
-I have used the pinctrl tree from next-20221108 again for today.
+from the arm64 tree and commit:
+
+  0d60ffeec53c ("efi: libstub: Deduplicate ftrace command line argument fil=
+tering")
+
+from the efi tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/AYGngnTW2Nrhv7DdtJhBukX
+diff --cc drivers/firmware/efi/libstub/Makefile
+index 1016f0b5311d,402dfb30ddc7..000000000000
+--- a/drivers/firmware/efi/libstub/Makefile
++++ b/drivers/firmware/efi/libstub/Makefile
+@@@ -18,17 -22,14 +22,15 @@@ cflags-$(CONFIG_X86)		+=3D -m$(BITS) -D__
+ =20
+  # arm64 uses the full KBUILD_CFLAGS so it's necessary to explicitly
+  # disable the stackleak plugin
+- cflags-$(CONFIG_ARM64)		:=3D $(subst $(CC_FLAGS_FTRACE),,$(KBUILD_CFLAGS)=
+) \
+- 				   -fpie $(DISABLE_STACKLEAK_PLUGIN) \
++ cflags-$(CONFIG_ARM64)		+=3D -fpie $(DISABLE_STACKLEAK_PLUGIN) \
+ +				   -fno-unwind-tables -fno-asynchronous-unwind-tables \
+  				   $(call cc-option,-mbranch-protection=3Dnone)
+- cflags-$(CONFIG_ARM)		:=3D $(subst $(CC_FLAGS_FTRACE),,$(KBUILD_CFLAGS)) \
+- 				   -fno-builtin -fpic \
++ cflags-$(CONFIG_ARM)		+=3D -DEFI_HAVE_STRLEN -DEFI_HAVE_STRNLEN \
++ 				   -DEFI_HAVE_MEMCHR -DEFI_HAVE_STRRCHR \
++ 				   -DEFI_HAVE_STRCMP -fno-builtin -fpic \
+  				   $(call cc-option,-mno-single-pic-base)
+- cflags-$(CONFIG_RISCV)		:=3D $(subst $(CC_FLAGS_FTRACE),,$(KBUILD_CFLAGS)=
+) \
+- 				   -fpic
+- cflags-$(CONFIG_LOONGARCH)	:=3D $(subst $(CC_FLAGS_FTRACE),,$(KBUILD_CFLA=
+GS)) \
+- 				   -fpie
++ cflags-$(CONFIG_RISCV)		+=3D -fpic
++ cflags-$(CONFIG_LOONGARCH)	+=3D -fpie
+ =20
+  cflags-$(CONFIG_EFI_PARAMS_FROM_FDT)	+=3D -I$(srctree)/scripts/dtc/libfdt
+ =20
+
+--Sig_/dIVKFk9o3ktPdWvxMAXl9y1
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNseY8ACgkQAVBC80lX
-0GwS1wf/SCiXDfZiZaT/0Zz09FtUfFrrTofLeCGTD9wn/yh09r1jCGx15PBi71F1
-GtApqpYziLbkTNdTgg5Peu4pSf/n+nvcHxwkvMop7aXEDpWJw+4td0xSNIa30mZ5
-TR/VH5/RrPWD/Jshdi+C3x0c0UmwJ3vHlcSKRu621kPmKujVF754KxzEjbEGm/Sq
-HTFhnDLiR2kfs0f1znXn4TZ4hkngGXMLfh5kEpwed0p2ucxyBnS95It2gmGKg5kU
-59N5yajqGYzG40LUjwi5s3AsBnB/Lkddzx6Xh9HMWAOxpyUP7+/m+z8IlgKTfaax
-XlVfNYHFlXsyyatIUoJlpDAUbBKiDQ==
-=HGfV
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNsh28ACgkQAVBC80lX
+0GzcMwf+PfmrUtugjgfcTYuNzGiu/KrseZCgDJWS4FGFZad16xb83A2y2sLrgH6o
+3pezuaR5+h29eTtqwtblV2Z3tLqN/HxLRm74JWUNvq/sz9YPa2WcFbzva6Yq2TIN
+4Hh9AerOcXBIDLgJiVSG1YTtLyJgaSjzoJB3N3o5Kx+2xf/TbV6sj9JxqBS+4hdL
+DulEV1IiOWzp8AmCqq4PClJWMrsWhY0GttsdahlO5JIjB5/ruVodFaJ1FmMxqUFi
+IZsOrgCx3tA2rQseOOfeTRx/2KWxCpAZDOHcN7Am7njKUhBpp6SNWrrm9yKaih97
+je3kOMYlFw8dSXsN0sxEYlC1cZXVyQ==
+=i0yt
 -----END PGP SIGNATURE-----
 
---Sig_/AYGngnTW2Nrhv7DdtJhBukX--
+--Sig_/dIVKFk9o3ktPdWvxMAXl9y1--

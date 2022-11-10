@@ -2,71 +2,70 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DAA662476F
-	for <lists+linux-next@lfdr.de>; Thu, 10 Nov 2022 17:49:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92D81624773
+	for <lists+linux-next@lfdr.de>; Thu, 10 Nov 2022 17:49:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232473AbiKJQtE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 10 Nov 2022 11:49:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49340 "EHLO
+        id S232103AbiKJQtV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 10 Nov 2022 11:49:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232548AbiKJQs3 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 10 Nov 2022 11:48:29 -0500
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22F1F47315
-        for <linux-next@vger.kernel.org>; Thu, 10 Nov 2022 08:47:14 -0800 (PST)
-Received: by mail-pf1-x433.google.com with SMTP id y203so2709206pfb.4
-        for <linux-next@vger.kernel.org>; Thu, 10 Nov 2022 08:47:14 -0800 (PST)
+        with ESMTP id S232126AbiKJQtB (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 10 Nov 2022 11:49:01 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DEC165D7
+        for <linux-next@vger.kernel.org>; Thu, 10 Nov 2022 08:48:19 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id d59-20020a17090a6f4100b00213202d77e1so5190534pjk.2
+        for <linux-next@vger.kernel.org>; Thu, 10 Nov 2022 08:48:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=content-disposition:mime-version:message-id:subject:cc:to:date:from
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=GceMGOT23bDdO1sSROQwcwP69H1ZqtgPMLAw5MYkScc=;
-        b=APGWSySH0nQ+8O7iWRU1RBBRPkDJD4BGBlNNvOVv2ZH8wyvRuICxAHt2mCA78hzuWr
-         a5V6f0KCzdxdcNRV+nHFWc2/hzROgVtbZ4repKZJTuhbyTJ1NoKMR/gHKFSE3NRcShEP
-         5NO7lcrAB4okpWmVROknBLQM60yTAB9q7TBwM=
+        bh=LDJ5GbeH4x/1yjxtjF2BP9FcVDh9qhDYbgp39xw30DM=;
+        b=Fe2LrkP4LSaAmzpNbzUlL4Sz8W/ckj87PLB0s4ExV2y1hr/SBDx2aHXMGIHH4Q1HZp
+         SlVXRYyU/kLp+VT2nJhpvSEpLp5Gw306usHXiFoSvkdLXpFh1XiL/tfTwivIahCI7ZWT
+         lxhf3NYj8/XNq2LoDLiXIqTqCb4OIr0rR5gOM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-disposition:mime-version:message-id:subject:cc:to:date:from
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GceMGOT23bDdO1sSROQwcwP69H1ZqtgPMLAw5MYkScc=;
-        b=L8hKyj/lj4DnH00+skeYnPOEtIXP+BTjrK1KpzKSicXX6lr4H8tQoX04qapKmrcBi/
-         igeQShCxk7mhZT7gdpm2PvL07vuAgImoDIJiwS00lBfK2NyWQfgLboxFQ9iOvCFVj1WN
-         TJrd1KV5WgNPl41w0k2eITd9tdZtenmdSXelcX4FriSAekam25pxNIEQOcn3RLH/J34h
-         TsPnHmJ7fwR1cvlIorSZ/Qb4qWIOIs3ohAJFmctYyGBiLe6tqTEyFnidm6/gEMwUkchC
-         1pX9IbH6WKljagqXhPHqsUNMQu/pLktm9KyRtjZQyRmzM8V6Um1sOvVLaVAkf3zGDWyJ
-         nLDw==
-X-Gm-Message-State: ACrzQf2fzOGZUs08HvGkW+ndBqImgm7djBQWwffUPIFOC0bLhdLFvDry
-        5s9+8HlzQLT0ScEbB/2qJ5SMBw==
-X-Google-Smtp-Source: AMsMyM7q8wtqwy/hkh/glFOXuhiV3wodhFZXacYSxWn6EtsbfrHYW6QjhuJ8/1DJMeN7KpH68ghfPw==
-X-Received: by 2002:aa7:93ae:0:b0:56b:ac5c:f3dc with SMTP id x14-20020aa793ae000000b0056bac5cf3dcmr2934151pff.77.1668098833554;
-        Thu, 10 Nov 2022 08:47:13 -0800 (PST)
+        bh=LDJ5GbeH4x/1yjxtjF2BP9FcVDh9qhDYbgp39xw30DM=;
+        b=1O/6gT6zwWVQuu3qU7We3N/N3iOk2fdhd1f4UV3AGCUHswzXMTO7+4XyEJP2s+Ugem
+         Xaw741eZxH0eRQU1s0Z4lnoQAuTJSrCWOA5rGD8zQW9kqJfGay9Nfx99FcrfsUkGINuo
+         oPA5g4n8wDZXFskTtyQ8pJ2EGXa908r309F93f1KgkRyaWMhkTXBqt/LAFS0hLXgZivI
+         n4+hiBhSkmRCkL+Q9J4FBR+176/1al2k5Kdn9NhEYMLJYTW1LtEA7q0uzD2kZgwhpBOy
+         modJYSIvSsS6OyHcffLlmSuPRj78t4LQ3c09KG9uYJomcP16uEyZ2UkKbRgfVJ9eeTXA
+         k9ZA==
+X-Gm-Message-State: ACrzQf0B7Vw1QgQQFSD9IKBJ+DXYH4+8OWWU2iGbfa28FAIqY4GyLY8l
+        dH0PECww7lN0tQBCzQHypqHn/g==
+X-Google-Smtp-Source: AMsMyM5L7JASpAto4IfQ834QGHOPC/E4fFSGlP1B6IiNOx5M0h4LxXrBlQ6jL1GcB0G62qrRYLVm/w==
+X-Received: by 2002:a17:902:d503:b0:187:19c4:f9db with SMTP id b3-20020a170902d50300b0018719c4f9dbmr58312424plg.82.1668098898782;
+        Thu, 10 Nov 2022 08:48:18 -0800 (PST)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id r23-20020a17090b051700b001ef8ab65052sm45974pjz.11.2022.11.10.08.47.13
+        by smtp.gmail.com with ESMTPSA id om15-20020a17090b3a8f00b00213c7cf21c0sm50871pjb.5.2022.11.10.08.48.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Nov 2022 08:47:13 -0800 (PST)
+        Thu, 10 Nov 2022 08:48:18 -0800 (PST)
 From:   coverity-bot <keescook@chromium.org>
 X-Google-Original-From: coverity-bot <keescook+coverity-bot@chromium.org>
-Date:   Thu, 10 Nov 2022 08:47:12 -0800
-To:     Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc:     Alexey Romanov <avromanov@sberdevices.ru>,
-        linux-kernel@vger.kernel.org, Nick Terrell <terrelln@fb.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Suleiman Souhlal <suleiman@google.com>,
-        Nitin Gupta <ngupta@vflare.org>, Jens Axboe <axboe@kernel.dk>,
-        Nhat Pham <nphamcs@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-block@vger.kernel.org,
+Date:   Thu, 10 Nov 2022 08:48:17 -0800
+To:     Ben Skeggs <bskeggs@redhat.com>
+Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
+        linux-kernel@vger.kernel.org, Daniel Vetter <daniel@ffwll.ch>,
+        Lyude Paul <lyude@redhat.com>,
+        Karol Herbst <kherbst@redhat.com>,
+        David Airlie <airlied@gmail.com>,
+        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
+        Jani Nikula <jani.nikula@intel.com>,
+        Dave Airlie <airlied@redhat.com>,
         "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
         linux-next@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Coverity: zram_recompress(): OVERRUN
-Message-ID: <202211100847.388C61B3@keescook>
+Subject: Coverity: nv50_sor_atomic_enable(): Memory - corruptions
+Message-ID: <202211100848.FFBA2432@keescook>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -82,87 +81,27 @@ https://scan.coverity.com/projects/linux-next-weekly-scan
 You're getting this email because you were associated with the identified
 lines of code (noted below) that were touched by commits:
 
-  Wed Nov 9 20:33:48 2022 -0800
-    03e6c729aa64 ("zram: introduce recompress sysfs knob")
+  Wed Nov 9 08:22:02 2022 +1000
+    813443721331 ("drm/nouveau/disp: move DP link config into acquire")
 
 Coverity reported the following:
 
-*** CID 1527270:    (OVERRUN)
-drivers/block/zram/zram_drv.c:1727 in zram_recompress()
-1721     		zstrm = zcomp_stream_get(zram->comps[prio]);
-1722     		src = kmap_atomic(page);
-1723     		ret = zcomp_compress(zstrm, src, &comp_len_new);
-1724     		kunmap_atomic(src);
-1725
-1726     		if (ret) {
-vvv     CID 1527270:    (OVERRUN)
-vvv     Overrunning array "zram->comps" of 4 8-byte elements at element index 4 (byte offset 39) using index "prio" (which evaluates to 4).
-1727     			zcomp_stream_put(zram->comps[prio]);
-1728     			return ret;
-1729     		}
-1730
-1731     		class_index_new = zs_lookup_class_index(zram->mem_pool,
-1732     							comp_len_new);
-drivers/block/zram/zram_drv.c:1786 in zram_recompress()
-1780     	handle_new = zs_malloc(zram->mem_pool, comp_len_new,
-1781     			       __GFP_KSWAPD_RECLAIM |
-1782     			       __GFP_NOWARN |
-1783     			       __GFP_HIGHMEM |
-1784     			       __GFP_MOVABLE);
-1785     	if (IS_ERR_VALUE(handle_new)) {
-vvv     CID 1527270:    (OVERRUN)
-vvv     Overrunning array "zram->comps" of 4 8-byte elements at element index 4 (byte offset 39) using index "prio" (which evaluates to 4).
-1786     		zcomp_stream_put(zram->comps[prio]);
-1787     		return PTR_ERR((void *)handle_new);
-1788     	}
-1789
-1790     	dst = zs_map_object(zram->mem_pool, handle_new, ZS_MM_WO);
-1791     	memcpy(dst, zstrm->buffer, comp_len_new);
-drivers/block/zram/zram_drv.c:1737 in zram_recompress()
-1731     		class_index_new = zs_lookup_class_index(zram->mem_pool,
-1732     							comp_len_new);
-1733
-1734     		/* Continue until we make progress */
-1735     		if (class_index_new >= class_index_old ||
-1736     		    (threshold && comp_len_new >= threshold)) {
-vvv     CID 1527270:    (OVERRUN)
-vvv     Overrunning array "zram->comps" of 4 8-byte elements at element index 4 (byte offset 39) using index "prio" (which evaluates to 4).
-1737     			zcomp_stream_put(zram->comps[prio]);
-1738     			continue;
-1739     		}
-1740
-1741     		/* Recompression was successful so break out */
-1742     		break;
-drivers/block/zram/zram_drv.c:1721 in zram_recompress()
-1715     		 * priority algorithm (or same algorithm).
-1716     		 */
-1717     		if (prio <= zram_get_priority(zram, index))
-1718     			continue;
-1719
-1720     		num_recomps++;
-vvv     CID 1527270:    (OVERRUN)
-vvv     Overrunning array "zram->comps" of 4 8-byte elements at element index 4 (byte offset 39) using index "prio" (which evaluates to 4).
-1721     		zstrm = zcomp_stream_get(zram->comps[prio]);
-1722     		src = kmap_atomic(page);
-1723     		ret = zcomp_compress(zstrm, src, &comp_len_new);
-1724     		kunmap_atomic(src);
-1725
-1726     		if (ret) {
-drivers/block/zram/zram_drv.c:1710 in zram_recompress()
-1704     	class_index_old = zs_lookup_class_index(zram->mem_pool, comp_len_old);
-1705     	/*
-1706     	 * Iterate the secondary comp algorithms list (in order of priority)
-1707     	 * and try to recompress the page.
-1708     	 */
-1709     	for (; prio < prio_max; prio++) {
-vvv     CID 1527270:    (OVERRUN)
-vvv     Overrunning array "zram->comps" of 4 8-byte elements at element index 4 (byte offset 39) using index "prio" (which evaluates to 4).
-1710     		if (!zram->comps[prio])
-1711     			continue;
-1712
-1713     		/*
-1714     		 * Skip if the object is already re-compressed with a higher
-1715     		 * priority algorithm (or same algorithm).
+*** CID 1527269:  Memory - corruptions  (OVERRUN)
+drivers/gpu/drm/nouveau/dispnv50/disp.c:1619 in nv50_sor_atomic_enable()
+1613     				lvds_8bpc = true;
+1614     		}
+1615
+1616     		nvif_outp_acquire_lvds(&nv_encoder->outp, lvds_dual, lvds_8bpc);
+1617     		break;
+1618     	case DCB_OUTPUT_DP:
+vvv     CID 1527269:  Memory - corruptions  (OVERRUN)
+vvv     Overrunning array "(*nv_encoder).dp.dpcd" of 15 bytes by passing it to a function which accesses it at byte offset 15.
+1619     		nvif_outp_acquire_dp(&nv_encoder->outp, nv_encoder->dp.dpcd, 0, 0, hda, false);
+1620     		depth = nv50_dp_bpc_to_depth(asyh->or.bpc);
+1621
+1622     		if (nv_encoder->outp.or.link & 1)
+1623     			proto = NV887D_SOR_SET_CONTROL_PROTOCOL_DP_A;
+1624     		else
 
 If this is a false positive, please let us know so we can mark it as
 such, or teach the Coverity rules to be smarter. If not, please make
@@ -170,8 +109,8 @@ sure fixes get into linux-next. :) For patches fixing this, please
 include these lines (but double-check the "Fixes" first):
 
 Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
-Addresses-Coverity-ID: 1527270 ("OVERRUN")
-Fixes: 03e6c729aa64 ("zram: introduce recompress sysfs knob")
+Addresses-Coverity-ID: 1527269 ("Memory - corruptions")
+Fixes: 813443721331 ("drm/nouveau/disp: move DP link config into acquire")
 
 Thanks for your attention!
 

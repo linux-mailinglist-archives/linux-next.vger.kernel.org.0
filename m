@@ -2,69 +2,69 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4131F624791
-	for <lists+linux-next@lfdr.de>; Thu, 10 Nov 2022 17:50:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E31866247B1
+	for <lists+linux-next@lfdr.de>; Thu, 10 Nov 2022 17:57:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232635AbiKJQum (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 10 Nov 2022 11:50:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49224 "EHLO
+        id S231277AbiKJQ5Q (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 10 Nov 2022 11:57:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232738AbiKJQuN (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 10 Nov 2022 11:50:13 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 579E013E82
-        for <linux-next@vger.kernel.org>; Thu, 10 Nov 2022 08:50:06 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id c15-20020a17090a1d0f00b0021365864446so2027595pjd.4
-        for <linux-next@vger.kernel.org>; Thu, 10 Nov 2022 08:50:06 -0800 (PST)
+        with ESMTP id S232798AbiKJQ4z (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 10 Nov 2022 11:56:55 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6359E4199B
+        for <linux-next@vger.kernel.org>; Thu, 10 Nov 2022 08:56:52 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id l2so1847229pld.13
+        for <linux-next@vger.kernel.org>; Thu, 10 Nov 2022 08:56:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZVqd+PvgZXEgpR5oiDP8I3WYALDkF1kwCNnCVwq1mpo=;
-        b=KOrM7nTAXpp3ofHwJJRvDPycbrxwy/BUtfmO83XndSZ41PtDxOacBE0DrQFpxytI1Q
-         JJCh2k1V7GgfY+6JXBzLBO19fnq0I4c2Jxvx68eO/LtakOsggQNrDZKf2M8qFcI91F9P
-         1JIEUsrASBrRow9EergEBIaIRb3VyJeJht5a0=
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=MObtVKIB7l4b8WfJfpmkCk3gsljGAahPc93DAQJ6frg=;
+        b=W/0Fkr/byKXpfxP6+/jTpnDsIjqIxtuvfL0qjcv4YJK39Z2TVqxxhwqsaNDUOUbx1c
+         2KijmlCyXt1eIEfCI7vM+r4LVEDXUIbT3iGDtqC5dVjQgqWg2Z2TPnd2gakmNTZPCd+5
+         Ggcho7pqKNfRLqnV0GXCOcZHHVyeg+PPxDxWs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZVqd+PvgZXEgpR5oiDP8I3WYALDkF1kwCNnCVwq1mpo=;
-        b=j3bXJMMMtK2CWUXJcenSFXIz4pHLtqQa+IPMaLGOaLH9vML1106N6bBMj9cJltAMnc
-         77+VBbHEizDHWvEgGSL1qWTNRuxa16y0bzVOc0738DXEvEhlisbwmiyMnQkXlcPtpzZo
-         NC4wkEU/jwdWaz3xfqFFBd3yitksUHvEFWiW3NheIQFzYA3qQ4tT45DHp9cNst/wHhwX
-         iZ8vbRKfxrdQ257QL2mb/3apAUuYNvFV+JA8NE6KwWIEFjM7qbXUrW87Hpc8l/JvN3WV
-         QPOqUjfNuy0qshve/MaYKFLfNGFUq77J9PpgnxykyEJaJ7/XuqR7eMT/J5b3Sqov1XKd
-         wdqw==
-X-Gm-Message-State: ACrzQf2xRMgjHEr2726lCkApL51W3PwV5IS+slgwQOmw5Mkl2VuInHLJ
-        l8lg3nEkO1jwY/cFzpwjkhx79g==
-X-Google-Smtp-Source: AMsMyM68qD69p1bOkhPUXlhFPk3ZndMHRyb1mJfNywAclXB2dk8dtu5d1uueCVKTxNOxV0ehqJ3EmA==
-X-Received: by 2002:a17:90b:4d91:b0:213:f1b:dab5 with SMTP id oj17-20020a17090b4d9100b002130f1bdab5mr65253209pjb.95.1668099005884;
-        Thu, 10 Nov 2022 08:50:05 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MObtVKIB7l4b8WfJfpmkCk3gsljGAahPc93DAQJ6frg=;
+        b=yAky/V6yY31GIAAuzgVLXTubF7iEr472PCxbdWLmDrgrcMoKVt7w6Yg7xQdo5ohSuK
+         +T4Y8RjCZjLDzOu+g+3BEgJOOZOviSwuVQC+fWpPAntHy9V5K0UddxeEwmZfynUZaFXY
+         G45soMhgYQeH8soTgVzyLqNLwPwWs1P9DIOuqQ1ZEgSV0WrSvKy+C9kqs8kFfria/lfx
+         VIHjf9tJIsxg6V4UE1XYl+SAl2Ip+IUoxfrv9VEQqFf24ccHcBsu2CwMjcOI8o32oeCG
+         M/otdOcbbyfSnBpdBjlygYWE6W2HX7o9M+JuQoQAhkhuq04RtsI/vpUgmV1TUfmrbO9c
+         Q91Q==
+X-Gm-Message-State: ACrzQf0N4bjQdBmXFcqrGbQTAF4m1pHqrMse6A4Vg7lYo4YF2feNH9hl
+        7PdLMMya3xDx+y2HadNR6DECHQ==
+X-Google-Smtp-Source: AMsMyM6aYNGQRU9jd0TsshThz+/JIVzG11NvElrb65k/L5ym/ko6eFmmta8lbovKLs0qzsYhiQnHTA==
+X-Received: by 2002:a17:90a:8503:b0:212:9b3f:dee5 with SMTP id l3-20020a17090a850300b002129b3fdee5mr1464006pjn.62.1668099411538;
+        Thu, 10 Nov 2022 08:56:51 -0800 (PST)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id y23-20020a17090264d700b0017f92246e4dsm11375728pli.181.2022.11.10.08.50.05
+        by smtp.gmail.com with ESMTPSA id z10-20020aa79f8a000000b00560bb4a57f7sm10748151pfr.179.2022.11.10.08.56.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Nov 2022 08:50:05 -0800 (PST)
-From:   coverity-bot <keescook@chromium.org>
-X-Google-Original-From: coverity-bot <keescook+coverity-bot@chromium.org>
-Date:   Thu, 10 Nov 2022 08:50:04 -0800
-To:     Lyude Paul <lyude@redhat.com>
-Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
-        linux-kernel@vger.kernel.org, Ilia Mirkin <imirkin@alum.mit.edu>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Karol Herbst <kherbst@redhat.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        David Airlie <airlied@gmail.com>,
-        "Nathan E. Egge" <unlord@xiph.org>,
-        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        Jani Nikula <jani.nikula@intel.com>,
-        Dave Airlie <airlied@redhat.com>,
+        Thu, 10 Nov 2022 08:56:51 -0800 (PST)
+Date:   Thu, 10 Nov 2022 08:56:50 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Dave Stevenson <dave.stevenson@raspberrypi.com>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-kernel@vger.kernel.org,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        linux-media@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
         linux-next@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Coverity: nouveau_dp_irq(): Null pointer dereferences
-Message-ID: <202211100850.7A8DD75@keescook>
+Subject: Re: Coverity: imx290_ctrl_init(): Error handling issues
+Message-ID: <202211100856.9CE03EC@keescook>
+References: <202211100830.1F097DC@keescook>
+ <CAPY8ntCkjG0BafMy+iLna2BDvr0n10E8hzUqL01WpUgFCjwV4g@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <CAPY8ntCkjG0BafMy+iLna2BDvr0n10E8hzUqL01WpUgFCjwV4g@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -75,47 +75,62 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hello!
+On Thu, Nov 10, 2022 at 04:41:28PM +0000, Dave Stevenson wrote:
+> On Thu, 10 Nov 2022 at 16:31, coverity-bot <keescook@chromium.org> wrote:
+> >
+> > Hello!
+> >
+> > This is an experimental semi-automated report about issues detected by
+> > Coverity from a scan of next-20221110 as part of the linux-next scan project:
+> > https://scan.coverity.com/projects/linux-next-weekly-scan
+> >
+> > You're getting this email because you were associated with the identified
+> > lines of code (noted below) that were touched by commits:
+> >
+> >   Thu Oct 27 14:38:02 2022 +0300
+> >     4c9c93cf8657 ("media: i2c: imx290: Create controls for fwnode properties")
+> >
+> > Coverity reported the following:
+> >
+> > *** CID 1527251:  Error handling issues  (CHECKED_RETURN)
+> > drivers/media/i2c/imx290.c:1056 in imx290_ctrl_init()
+> > 1050            imx290->vblank = v4l2_ctrl_new_std(&imx290->ctrls, &imx290_ctrl_ops,
+> > 1051                                               V4L2_CID_VBLANK, blank, blank, 1,
+> > 1052                                               blank);
+> > 1053            if (imx290->vblank)
+> > 1054                    imx290->vblank->flags |= V4L2_CTRL_FLAG_READ_ONLY;
+> > 1055
+> > vvv     CID 1527251:  Error handling issues  (CHECKED_RETURN)
+> > vvv     Calling "v4l2_ctrl_new_fwnode_properties" without checking return value (as is done elsewhere 9 out of 10 times).
+> > 1056            v4l2_ctrl_new_fwnode_properties(&imx290->ctrls, &imx290_ctrl_ops,
+> > 1057                                            &props);
+> > 1058
+> > 1059            imx290->sd.ctrl_handler = &imx290->ctrls;
+> > 1060
+> > 1061            if (imx290->ctrls.error) {
+> >
+> > If this is a false positive, please let us know so we can mark it as
+> > such, or teach the Coverity rules to be smarter. If not, please make
+> > sure fixes get into linux-next. :) For patches fixing this, please
+> > include these lines (but double-check the "Fixes" first):
+> 
+> I looked at this one when the patches were sent to the list.
+> 
+> On failure, v4l2_ctrl_new_fwnode_properties will have set the error
+> flag in struct v4l2_ctrl_handler. This is also what it returns.
+> 
+> In most of the existing drivers the error flag has already been
+> checked before calling v4l2_ctrl_new_fwnode_properties, therefore the
+> return value has to be checked explicitly. In this case it is checked
+> at line 1061 which is after v4l2_ctrl_new_fwnode_properties has been
+> called, and therefore there is no need to check the return value of
+> the call.
+> 
+> IMHO Neither is particularly right or wrong, just slightly different
+> approaches. In some regards this new code pattern is nicer as it
+> removes a number of error handling paths.
 
-This is an experimental semi-automated report about issues detected by
-Coverity from a scan of next-20221110 as part of the linux-next scan project:
-https://scan.coverity.com/projects/linux-next-weekly-scan
-
-You're getting this email because you were associated with the identified
-lines of code (noted below) that were touched by commits:
-
-  Mon Aug 31 19:10:08 2020 -0400
-    a0922278f83e ("drm/nouveau/kms/nv50-: Refactor and cleanup DP HPD handling")
-
-Coverity reported the following:
-
-*** CID 1527266:  Null pointer dereferences  (REVERSE_INULL)
-drivers/gpu/drm/nouveau/nouveau_dp.c:237 in nouveau_dp_irq()
-231     	struct nouveau_encoder *outp = find_encoder(connector, DCB_OUTPUT_DP);
-232     	struct nouveau_drm *drm = nouveau_drm(outp->base.base.dev);
-233     	struct nv50_mstm *mstm;
-234     	u64 hpd = 0;
-235     	int ret;
-236
-vvv     CID 1527266:  Null pointer dereferences  (REVERSE_INULL)
-vvv     Null-checking "outp" suggests that it may be null, but it has already been dereferenced on all paths leading to the check.
-237     	if (!outp)
-238     		return;
-239
-240     	mstm = outp->dp.mstm;
-241     	NV_DEBUG(drm, "service %s\n", connector->name);
-242
-
-If this is a false positive, please let us know so we can mark it as
-such, or teach the Coverity rules to be smarter. If not, please make
-sure fixes get into linux-next. :) For patches fixing this, please
-include these lines (but double-check the "Fixes" first):
-
-Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
-Addresses-Coverity-ID: 1527266 ("Null pointer dereferences")
-Fixes: a0922278f83e ("drm/nouveau/kms/nv50-: Refactor and cleanup DP HPD handling")
-
-Thanks for your attention!
+Great! Thanks for double-checking it. :)
 
 -- 
-Coverity-bot
+Kees Cook

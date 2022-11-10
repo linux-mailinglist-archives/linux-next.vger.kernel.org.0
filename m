@@ -2,89 +2,106 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86166623C8D
-	for <lists+linux-next@lfdr.de>; Thu, 10 Nov 2022 08:23:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87CA6623CA9
+	for <lists+linux-next@lfdr.de>; Thu, 10 Nov 2022 08:31:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232426AbiKJHXn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 10 Nov 2022 02:23:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42756 "EHLO
+        id S232767AbiKJHbl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 10 Nov 2022 02:31:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231975AbiKJHXl (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 10 Nov 2022 02:23:41 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C32345F92;
-        Wed,  9 Nov 2022 23:23:40 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4N7CxM4X8Pz4xGR;
-        Thu, 10 Nov 2022 18:23:35 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1668065015;
-        bh=eCgZuOrZeK3uav+U6LxiRcLS2WwQlJr1zG7pU+NFb8s=;
-        h=Date:From:To:Cc:Subject:From;
-        b=ocnQ4Z9/9AqI+YFp2ZH/ojygbUHgVs4UMtctC40pD+gwCIRpYfxw0LMgx+F3X9QW4
-         gcaueR7pakFoLv5y1R5IkgPagDTJAbevNdU7djJlbv8f2o2O0IaEN4mgQbmQMD4jKb
-         HcVURZFehtGVfUGCkqinMEQRwxNpkFh4gjztMowHg63s3/zu0s8+P7GkoB2jIKI8HS
-         z8BpgtPBiDJrimwG/mMyR5WdsT0jYjOFxRXmHFDz3/DCyVL/OpAcw9WYCz+JLDX1kL
-         7IXD1nsBY3w0/5FVBfg5Tdc+8T01sjaB40NkMmzdI9qPo+66Jou/6wY4uKFzE3MBFZ
-         7hs0Q5Ypt9a3w==
-Date:   Thu, 10 Nov 2022 18:23:33 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     Dillon Varone <Dillon.Varone@amd.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the amdgpu tree
-Message-ID: <20221110182333.5b590d8d@canb.auug.org.au>
+        with ESMTP id S232837AbiKJHbf (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 10 Nov 2022 02:31:35 -0500
+X-Greylist: delayed 180 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 09 Nov 2022 23:31:34 PST
+Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [81.169.146.220])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B019932061
+        for <linux-next@vger.kernel.org>; Wed,  9 Nov 2022 23:31:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1668065306;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=53kn45NV5vY6ZWYmWvYdin3V1VeMulhMote1E7SCfzQ=;
+    b=iYJBnHw3MqkXuXr9h0MSplYpRIgCGr4n5rWv9Ch51ZyomIlsjdOyYH2yh8T/wnkeYO
+    MGCqD9U4OzkPzLCLq93N1JpqBT45IaIlbupHok7jQgEF6mpoyPNE6eP7d5dsLcBa2QCj
+    ls/kl0xpn2gdyjx/EDULD/fV26G8+LI/vTXpEqoxLYrHveTfWlB33XAiuGgttAdKm7ps
+    6Vmak3WE+1jD7cuc6kJQcfGz+NI+XZbdnmnkU65+kwaxqqBpCtPA+gp9vOML01lL10Nl
+    YkT/r2x6hReudom+NvJP25lwbRgmxDsT5IlGqXosoJAUGxOwXjbbz6vRv5gytdc2ey/2
+    MvFg==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusx3hdIrpKytJSr6hfz3Vg=="
+X-RZG-CLASS-ID: mo00
+Received: from [IPV6:2a00:6020:1cfd:d100::923]
+    by smtp.strato.de (RZmta 48.2.1 AUTH)
+    with ESMTPSA id Dde783yAA7SQeDY
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Thu, 10 Nov 2022 08:28:26 +0100 (CET)
+Message-ID: <54c92bbe-33fa-35ba-dd7f-14a28dcf758a@hartkopp.net>
+Date:   Thu, 10 Nov 2022 08:28:21 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Ms1LLnaW_=qH1evLk_pii9L";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: linux-next: manual merge of the net-next tree with the net tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+References: <20221110102509.1f7d63cc@canb.auug.org.au>
+Content-Language: en-US
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+In-Reply-To: <20221110102509.1f7d63cc@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/Ms1LLnaW_=qH1evLk_pii9L
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hello Stephen,
 
-Hi all,
+On 10.11.22 00:25, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Today's linux-next merge of the net-next tree got a conflict in:
+> 
+>    drivers/net/can/pch_can.c
+> 
+> between commit:
+> 
+>    ae64438be192 ("can: dev: fix skb drop check")
+> 
+> from the net tree and commit:
+> 
+>    1dd1b521be85 ("can: remove obsolete PCH CAN driver")
+> 
+> from the net-next tree.
+> 
+> I fixed it up (I just removed the file) and can carry the fix as
+> necessary. This is now fixed as far as linux-next is concerned, but any
+> non trivial conflicts should be mentioned to your upstream maintainer
+> when your tree is submitted for merging.  You may also want to consider
+> cooperating with the maintainer of the conflicting tree to minimise any
+> particularly complex conflicts.
+> 
 
-After merging the amdgpu tree, today's linux-next build (htmldocs)
-produced this warning:
+Yes, this is known.
 
-drivers/gpu/drm/amd/display/dc/dc.h:869: warning: Function parameter or mem=
-ber 'min_prefetch_in_strobe_ns' not described in 'dc_debug_options'
+The removal of the PCH CAN driver missed the last net-next phase for 
+Linux 6.1 by some hours and therefore showed up relatively early in the 
+net-next for 6.2.
 
-Introduced by commit
+Maybe we should generally try to commit "complete removals" of drivers 
+preferably at the end of a -next phase which would have omitted this 
+conflict.
 
-  01c0c124b9ec ("drm/amd/display: Enforce minimum prefetch time for low mem=
-clk on DCN32")
+Thanks for your work!
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/Ms1LLnaW_=qH1evLk_pii9L
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNspvUACgkQAVBC80lX
-0GwlbAf8CrFOIfG3AJVql+81Oa2N5iYuzR+fvUi5DqATWI9OBThAP0/aWpXLdnQp
-LY9uHE34PIlq9To6ruMCGyW6wWZmF2RkTWHvcMLU6ZVUZdXDvEsHoTTDMDfcbH+U
-CRrQD7Aqibp+euy/Dn/1yVPHisbJdxGtV3mARgUCPETr/+CnYMFBqFzUz9k9eVEa
-ce73i4JuzjjUucgkTozg7ZXqOFs3UejAgHD+8RoVVY/kSv0bJo4HLJSQ7SI5Y2bD
-rFnKAxcedfjd5XfpjpzVrjhG73EAZDV2oYMTc0FbIIobg5++hlkRdaWF65L7PadJ
-3Ui5FshtUJmuXwjX/Cv9uEU87z1WQQ==
-=nJjf
------END PGP SIGNATURE-----
-
---Sig_/Ms1LLnaW_=qH1evLk_pii9L--
+Best regards,
+Oliver

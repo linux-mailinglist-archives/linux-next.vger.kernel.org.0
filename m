@@ -2,140 +2,90 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD4B9624E89
-	for <lists+linux-next@lfdr.de>; Fri, 11 Nov 2022 00:40:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 007FB624EEA
+	for <lists+linux-next@lfdr.de>; Fri, 11 Nov 2022 01:26:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230342AbiKJXkS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 10 Nov 2022 18:40:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38534 "EHLO
+        id S231320AbiKKA0s (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 10 Nov 2022 19:26:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229675AbiKJXkR (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 10 Nov 2022 18:40:17 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A97244E425;
-        Thu, 10 Nov 2022 15:40:15 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4N7dcD5q8Wz4xZb;
-        Fri, 11 Nov 2022 10:40:12 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1668123613;
-        bh=v7WFZwCJE44bk4UDPUyj4rHwotdx4Bm2Nb3T9fecMuw=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Y4r9ZkDpf995uXVoICLmPHujhVCw3qMtTeqwS6JHzBBAJ0h0eNoFqpk5jOO1g3/S8
-         +fMFzL5SfzVRLJbCv2UdZdGokgYBK+DpTV9fJBGMPNWR7WhCxlbMkMb+UUrGVWzvwK
-         u1fE9bG5m47OZSHZcQ1SWEY6gRk7OF/wK7cZau8wQrB8WRd9GXumsGKJ3OhoEzbjjy
-         15In/dkOlwsbEWXcl3YAlWLTAPJ2SrrR9KA3M0hOxsNkYW+27XfOXnIwNVSg/7rAhF
-         AIMVzlz4XSl1LyAstg7TRP4oOR4bX7Z+hud+E7G9rqJS+CazrBbeuvpFh2KHE1Mg0S
-         HB9UQ6O+eCbQQ==
-Date:   Fri, 11 Nov 2022 10:40:09 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-Cc:     bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Eduard Zingerman <eddyz87@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>
-Subject: linux-next: manual merge of the bpf-next tree with the perf tree
-Message-ID: <20221111104009.0edfa8a6@canb.auug.org.au>
+        with ESMTP id S231564AbiKKA0r (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 10 Nov 2022 19:26:47 -0500
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C029261BA2
+        for <linux-next@vger.kernel.org>; Thu, 10 Nov 2022 16:26:42 -0800 (PST)
+Received: by mail-pg1-x534.google.com with SMTP id 130so3111499pgc.5
+        for <linux-next@vger.kernel.org>; Thu, 10 Nov 2022 16:26:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=z5NGc0Wtc/LAmeM4ZbbbL8b0+UEPmBPAYTp12Vkl1o0=;
+        b=OYVMNqSYsFjm1l8Gb77rL89LoGY1zcp9Xm6VxVICPuHEclqOVJvgjkuoDATdF3jc9z
+         WQ362RA9vIleTOkpT9IQ12tgbW8mtK8oT7L3E9avA34iV1hjk3pk/jNAVGr2HGyTnBTF
+         IFnm+HQJ7g8P5sFjNIAVrYXFIK5sf1GV4jQYo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=z5NGc0Wtc/LAmeM4ZbbbL8b0+UEPmBPAYTp12Vkl1o0=;
+        b=LYyLqOuAHI0jblN+2BvaCX/tkwjFUlAZbyH3+ZwRlM7lCCs+ZkyuzgS2E22zRwCnK7
+         W2SXMApa40xrYdZmUCWU9snySySeEaCNmYIImWs2gZ1+4sTYlQS6tLiqnnaGYajy+FwL
+         5vTApx6cz0X1aPkApUdoni+aoTUBt3D8ob6lQw0W5/DAh97TZa33XbbRgTD1Dzfwexh8
+         NEMs8BGcmQO3u6/r+XvnfG8Kcb/7Koe8vWQ/UGqtl2qKXBtI1dA3JbgMoOBRUwAb89pm
+         XMckKWeHm3AytQ9mryx93nA1Jky+ne/z4XWXgxr8PXMHCrkMbYsD1gyRIzVE66iF+LVD
+         su3w==
+X-Gm-Message-State: ACrzQf0Y5kScN37P4gt8ZSVWfRBrW5uEZ3Sfttjuy+3iDeseHRtQTTpf
+        bL3r5QmBLtYO/rmLUcvH/2VcqQ==
+X-Google-Smtp-Source: AMsMyM7Kh7CVcxqJugz4JnRLlCyj+VNc2Jl1ZCgSFYUBWm/peCV0U9rmVHoHIjznkrpRLbvkAA1Bdw==
+X-Received: by 2002:a63:5543:0:b0:46f:ed3a:f38b with SMTP id f3-20020a635543000000b0046fed3af38bmr3803064pgm.387.1668126397981;
+        Thu, 10 Nov 2022 16:26:37 -0800 (PST)
+Received: from google.com ([240f:75:7537:3187:8d55:c60d:579d:741c])
+        by smtp.gmail.com with ESMTPSA id t6-20020a1709027fc600b0018703bf3ec9sm288513plb.61.2022.11.10.16.26.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Nov 2022 16:26:37 -0800 (PST)
+Date:   Fri, 11 Nov 2022 09:26:31 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     coverity-bot <keescook@chromium.org>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Alexey Romanov <avromanov@sberdevices.ru>,
+        linux-kernel@vger.kernel.org, Nick Terrell <terrelln@fb.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Suleiman Souhlal <suleiman@google.com>,
+        Nitin Gupta <ngupta@vflare.org>, Jens Axboe <axboe@kernel.dk>,
+        Nhat Pham <nphamcs@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-block@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        linux-next@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: Coverity: zram_recompress(): OVERRUN
+Message-ID: <Y22WtxzDXM5PfFnb@google.com>
+References: <202211100847.388C61B3@keescook>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Mf=VGpDvB3Is_MT5DV3pyQm";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202211100847.388C61B3@keescook>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/Mf=VGpDvB3Is_MT5DV3pyQm
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On (22/11/10 08:47), coverity-bot wrote:
+> *** CID 1527270:    (OVERRUN)
+> drivers/block/zram/zram_drv.c:1727 in zram_recompress()
+> 1721     		zstrm = zcomp_stream_get(zram->comps[prio]);
+> 1722     		src = kmap_atomic(page);
+> 1723     		ret = zcomp_compress(zstrm, src, &comp_len_new);
+> 1724     		kunmap_atomic(src);
+> 1725
+> 1726     		if (ret) {
+> vvv     CID 1527270:    (OVERRUN)
+> vvv     Overrunning array "zram->comps" of 4 8-byte elements at element index 4 (byte offset 39) using index "prio" (which evaluates to 4).
 
-Hi all,
-
-Today's linux-next merge of the bpf-next tree got a conflict in:
-
-  tools/perf/util/stat.c
-
-between commit:
-
-  8b76a3188b85 ("perf stat: Remove unused perf_counts.aggr field")
-
-from the perf tree and commit:
-
-  c302378bc157 ("libbpf: Hashmap interface update to allow both long and vo=
-id* keys/values")
-
-from the bpf-next tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc tools/perf/util/stat.c
-index 3a432a949d46,c0656f85bfa5..000000000000
---- a/tools/perf/util/stat.c
-+++ b/tools/perf/util/stat.c
-@@@ -318,7 -258,27 +318,7 @@@ void evlist__copy_prev_raw_counts(struc
-  		evsel__copy_prev_raw_counts(evsel);
-  }
- =20
-- static size_t pkg_id_hash(const void *__key, void *ctx __maybe_unused)
- -void evlist__save_aggr_prev_raw_counts(struct evlist *evlist)
- -{
- -	struct evsel *evsel;
- -
- -	/*
- -	 * To collect the overall statistics for interval mode,
- -	 * we copy the counts from evsel->prev_raw_counts to
- -	 * evsel->counts. The perf_stat_process_counter creates
- -	 * aggr values from per cpu values, but the per cpu values
- -	 * are 0 for AGGR_GLOBAL. So we use a trick that saves the
- -	 * previous aggr value to the first member of perf_counts,
- -	 * then aggr calculation in process_counter_values can work
- -	 * correctly.
- -	 */
- -	evlist__for_each_entry(evlist, evsel) {
- -		*perf_counts(evsel->prev_raw_counts, 0, 0) =3D
- -			evsel->prev_raw_counts->aggr;
- -	}
- -}
- -
-+ static size_t pkg_id_hash(long __key, void *ctx __maybe_unused)
-  {
-  	uint64_t *key =3D (uint64_t *) __key;
- =20
-
---Sig_/Mf=VGpDvB3Is_MT5DV3pyQm
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNti9kACgkQAVBC80lX
-0GwgvQf/ZUMJAeCiTypChJ8m4r0T4j7X7SfL7YtAh1iIJA87lNmaQBQs6KcwmfE0
-/XRouDfgqloRk0EdSSx9M/bJ7j4pmbHS/n/CfHBEuktttkPxf+V4gd5c5lPNajjq
-z1yYKiSo9mMbv4gNrHYhY/r7iv/lTH3hQw8IXUTeX6ShaTrdm53xkNuWg+Np6SEh
-wZX1cUXBo3QQXCZHYXiVmrzeGffGznMxy9Zlmfx6CG2KqiEy7EqOXstGDltfAD1l
-1zQlrEAVcEXsA7Bcm1lorwWsloRYLQYDne3IaukqqHwJoXNbgLm/fNl3aQd4Jdy2
-6Ubwqh7symR9bLFe6oBW5ohU2mzeFg==
-=8UFj
------END PGP SIGNATURE-----
-
---Sig_/Mf=VGpDvB3Is_MT5DV3pyQm--
+Hmm... I don't really see how prio can evaluate to 4.

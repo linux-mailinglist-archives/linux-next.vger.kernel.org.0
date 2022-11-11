@@ -2,50 +2,50 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 007FB624EEA
-	for <lists+linux-next@lfdr.de>; Fri, 11 Nov 2022 01:26:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38884624EFE
+	for <lists+linux-next@lfdr.de>; Fri, 11 Nov 2022 01:37:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231320AbiKKA0s (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 10 Nov 2022 19:26:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53138 "EHLO
+        id S231818AbiKKAhT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 10 Nov 2022 19:37:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231564AbiKKA0r (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 10 Nov 2022 19:26:47 -0500
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C029261BA2
-        for <linux-next@vger.kernel.org>; Thu, 10 Nov 2022 16:26:42 -0800 (PST)
-Received: by mail-pg1-x534.google.com with SMTP id 130so3111499pgc.5
-        for <linux-next@vger.kernel.org>; Thu, 10 Nov 2022 16:26:42 -0800 (PST)
+        with ESMTP id S231820AbiKKAhR (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 10 Nov 2022 19:37:17 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C555261765
+        for <linux-next@vger.kernel.org>; Thu, 10 Nov 2022 16:37:16 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id m6-20020a17090a5a4600b00212f8dffec9so3393757pji.0
+        for <linux-next@vger.kernel.org>; Thu, 10 Nov 2022 16:37:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=z5NGc0Wtc/LAmeM4ZbbbL8b0+UEPmBPAYTp12Vkl1o0=;
-        b=OYVMNqSYsFjm1l8Gb77rL89LoGY1zcp9Xm6VxVICPuHEclqOVJvgjkuoDATdF3jc9z
-         WQ362RA9vIleTOkpT9IQ12tgbW8mtK8oT7L3E9avA34iV1hjk3pk/jNAVGr2HGyTnBTF
-         IFnm+HQJ7g8P5sFjNIAVrYXFIK5sf1GV4jQYo=
+        bh=joENuXZdCD3xg2y3vBRwMSO4BUP9wXySx77lEgOxTdU=;
+        b=Qkd/eDkw5bDGoNk59bjQkjFqB17uANwrULMAAfIyNup6NMRtIdipemKzmdRwlKvc0Y
+         m3gbegXJ41j+KOdrnFkD+PTdQd5lBs9ojFZ8toDmT0YZosaGq+j7kyrCx+8/w/qt7OMq
+         6pXoyzpiq4fgN8uf0/qpL5mYBi/vgzt6i3+1w=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=z5NGc0Wtc/LAmeM4ZbbbL8b0+UEPmBPAYTp12Vkl1o0=;
-        b=LYyLqOuAHI0jblN+2BvaCX/tkwjFUlAZbyH3+ZwRlM7lCCs+ZkyuzgS2E22zRwCnK7
-         W2SXMApa40xrYdZmUCWU9snySySeEaCNmYIImWs2gZ1+4sTYlQS6tLiqnnaGYajy+FwL
-         5vTApx6cz0X1aPkApUdoni+aoTUBt3D8ob6lQw0W5/DAh97TZa33XbbRgTD1Dzfwexh8
-         NEMs8BGcmQO3u6/r+XvnfG8Kcb/7Koe8vWQ/UGqtl2qKXBtI1dA3JbgMoOBRUwAb89pm
-         XMckKWeHm3AytQ9mryx93nA1Jky+ne/z4XWXgxr8PXMHCrkMbYsD1gyRIzVE66iF+LVD
-         su3w==
-X-Gm-Message-State: ACrzQf0Y5kScN37P4gt8ZSVWfRBrW5uEZ3Sfttjuy+3iDeseHRtQTTpf
-        bL3r5QmBLtYO/rmLUcvH/2VcqQ==
-X-Google-Smtp-Source: AMsMyM7Kh7CVcxqJugz4JnRLlCyj+VNc2Jl1ZCgSFYUBWm/peCV0U9rmVHoHIjznkrpRLbvkAA1Bdw==
-X-Received: by 2002:a63:5543:0:b0:46f:ed3a:f38b with SMTP id f3-20020a635543000000b0046fed3af38bmr3803064pgm.387.1668126397981;
-        Thu, 10 Nov 2022 16:26:37 -0800 (PST)
+        bh=joENuXZdCD3xg2y3vBRwMSO4BUP9wXySx77lEgOxTdU=;
+        b=w1CO0MLJCvnJmxJJOaNmEm5/nxgoZXois81u35eB3reCthwiLDAmIep+Mv9a9+2D5U
+         yxGrmx4YpUpvdyH/iVmihrmcAT+62LvXV/8b81m/+VzIagWG7ytcKdz4Fsn0XNhmukGo
+         nZwIYEh2p0MTaFSpg/NYvomAFrsKJGCKJAWhCBDMXLWVhvusLv8FMmijCatyVN+KSmK5
+         uvgLgyB6DmfiUSJ4B+ZNZ0R28ilIckq8FrIcR9IlAuZe+Odh5pGS4YcV5sFrhNhyb08h
+         vQbRFgWZ1ZrS4Bkh2TaLcXBvQqIv0MmTnUGy+ETsSAoLnc3JFNuZvRwosmhLtUruWW3f
+         GY3Q==
+X-Gm-Message-State: ANoB5plkbnSo6s1mfysOpdUD1mfEklVyx5v2Gi3FzBVg2lqzgviIQ0mp
+        cBEm6JkWhFQTqyAkgLXikyP2Ww==
+X-Google-Smtp-Source: AA0mqf67I+mNMSyBu5fw9kL7x/lMPOnne39/x2DjuxhKeAAUDDUXN/85avp90U0klAYNieKBXS/LjA==
+X-Received: by 2002:a17:903:324d:b0:180:4030:1c7d with SMTP id ji13-20020a170903324d00b0018040301c7dmr97707plb.99.1668127036277;
+        Thu, 10 Nov 2022 16:37:16 -0800 (PST)
 Received: from google.com ([240f:75:7537:3187:8d55:c60d:579d:741c])
-        by smtp.gmail.com with ESMTPSA id t6-20020a1709027fc600b0018703bf3ec9sm288513plb.61.2022.11.10.16.26.33
+        by smtp.gmail.com with ESMTPSA id j5-20020a170902c3c500b00186b138706fsm306805plj.13.2022.11.10.16.37.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Nov 2022 16:26:37 -0800 (PST)
-Date:   Fri, 11 Nov 2022 09:26:31 +0900
+        Thu, 10 Nov 2022 16:37:15 -0800 (PST)
+Date:   Fri, 11 Nov 2022 09:37:10 +0900
 From:   Sergey Senozhatsky <senozhatsky@chromium.org>
 To:     coverity-bot <keescook@chromium.org>
 Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
@@ -60,7 +60,7 @@ Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
         "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
         linux-next@vger.kernel.org, linux-hardening@vger.kernel.org
 Subject: Re: Coverity: zram_recompress(): OVERRUN
-Message-ID: <Y22WtxzDXM5PfFnb@google.com>
+Message-ID: <Y22ZNtdH9s+cuL9l@google.com>
 References: <202211100847.388C61B3@keescook>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -77,15 +77,29 @@ List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
 On (22/11/10 08:47), coverity-bot wrote:
-> *** CID 1527270:    (OVERRUN)
-> drivers/block/zram/zram_drv.c:1727 in zram_recompress()
-> 1721     		zstrm = zcomp_stream_get(zram->comps[prio]);
-> 1722     		src = kmap_atomic(page);
-> 1723     		ret = zcomp_compress(zstrm, src, &comp_len_new);
-> 1724     		kunmap_atomic(src);
-> 1725
-> 1726     		if (ret) {
+[..]
+> 1704     	class_index_old = zs_lookup_class_index(zram->mem_pool, comp_len_old);
+> 1705     	/*
+> 1706     	 * Iterate the secondary comp algorithms list (in order of priority)
+> 1707     	 * and try to recompress the page.
+> 1708     	 */
+> 1709     	for (; prio < prio_max; prio++) {
 > vvv     CID 1527270:    (OVERRUN)
 > vvv     Overrunning array "zram->comps" of 4 8-byte elements at element index 4 (byte offset 39) using index "prio" (which evaluates to 4).
+> 1710     		if (!zram->comps[prio])
+> 1711     			continue;
+> 1712
+> 1713     		/*
+> 1714     		 * Skip if the object is already re-compressed with a higher
+> 1715     		 * priority algorithm (or same algorithm).
 
-Hmm... I don't really see how prio can evaluate to 4.
+prio_max is always limited and max value it can have is 4 (ZRAM_MAX_COMPS).
+Depending on use case we can limit prio_max even to lower values.
+
+So we have
+
+	for (; prio < 4; prio++) {
+		foo = comps[prio];
+	}
+
+I don't see how prio can be 4 inside of this loop.

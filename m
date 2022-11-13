@@ -2,50 +2,48 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BABA627371
-	for <lists+linux-next@lfdr.de>; Mon, 14 Nov 2022 00:23:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C32E627392
+	for <lists+linux-next@lfdr.de>; Mon, 14 Nov 2022 00:46:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230525AbiKMXXf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 13 Nov 2022 18:23:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44480 "EHLO
+        id S234152AbiKMXqk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 13 Nov 2022 18:46:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229692AbiKMXXd (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 13 Nov 2022 18:23:33 -0500
+        with ESMTP id S230525AbiKMXqj (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 13 Nov 2022 18:46:39 -0500
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8D40324;
-        Sun, 13 Nov 2022 15:23:31 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 282CBEAF;
+        Sun, 13 Nov 2022 15:46:38 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4N9T5X6QJRz4x1D;
-        Mon, 14 Nov 2022 10:23:28 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4N9TcC1KJNz4x1V;
+        Mon, 14 Nov 2022 10:46:35 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1668381810;
-        bh=65AmNELdQUu+5ZUFxLeHt1YFNVUSiBa9NN7XJDkLfcI=;
+        s=201702; t=1668383196;
+        bh=p9cwpJgX7TeFvxg8QIGt1dTdDdRe10v7vFZ2y90vuDE=;
         h=Date:From:To:Cc:Subject:From;
-        b=bCJ6EFhmvwL+L4257L0lSgATVHywjhbm2XWZI0I8HRFQ7QlkQLi+i6xY1iTWgsKsR
-         XcM00TeNiMuhPVqo3db8u8Bgdf9OSMQJ7yICBe+R07reaz67quvS0rKNcFtE1fXny1
-         VE1JVBNp/r5Kc2qvZtenrVBbltEiWlPgwImXR/+pObGp/zBkYkvs1RcVsguk42IM+o
-         jDDZSYkHID1jV0ng02johKCkXsDKXrCHP0zjXBv3EuFRxyluqIjOdkxXyCLPRgv33k
-         Z8tSI3/IRZVWCLO7ncZuT6jktCAIyPXuadwQ4uuatBs0goApetSkzBtiVNTu6LpDMz
-         fUiLIdy9EI5wQ==
-Date:   Mon, 14 Nov 2022 10:23:27 +1100
+        b=I0xFcgKAjNfAM+idvtTyKbowjW1pDEnKaBOn3YeTpO/Czwe11EbNmuDkF8N1xiAvl
+         ltWsIevL+XtgjziYN2+c00WSmu7xruBxmKy2B6kQ14+XGpi3BkLl++1UhWZqCtjgeJ
+         HCZ9eVe1YlSARgqV922MOtgJwE3KPuvWvlkZWyt1OiCsetrc3go3wY/ZCNc2BDpob/
+         hXFWTtmT1pe1VQcoEr+Fn7D3007OZY6gWkHbT8/1JZxcoDsLoyssAYQlS89a4a44HT
+         hbxfzZNWbsiVrUzXXejs3p8bXEFMXRk1UammIvTAWKC1vsNAF5VymRmbUwZYdqMIfg
+         pmBOMPBh05Wgw==
+Date:   Mon, 14 Nov 2022 10:46:33 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>
-Cc:     Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jani Nikula <jani.nikula@intel.com>,
+To:     Luis Chamberlain <mcgrof@kernel.org>,
+        David Miller <davem@davemloft.net>
+Cc:     Networking <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the drm-intel tree with Linus' tree
-Message-ID: <20221114102327.6d53341e@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Zhen Lei <thunder.leizhen@huawei.com>
+Subject: linux-next: manual merge of the modules tree with the net-next tree
+Message-ID: <20221114104633.4961d175@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ZnAXSQtQ1fl=ax+EWztprCE";
+Content-Type: multipart/signed; boundary="Sig_/bq2TEQpZj0Py2YhvVmkgUAU";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
@@ -56,26 +54,28 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/ZnAXSQtQ1fl=ax+EWztprCE
+--Sig_/bq2TEQpZj0Py2YhvVmkgUAU
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the drm-intel tree got a conflict in:
+Today's linux-next merge of the modules tree got conflicts in:
 
-  drivers/gpu/drm/i915/display/intel_backlight.c
+  include/linux/module.h
+  kernel/module/kallsyms.c
 
 between commit:
 
-  b1d36e73cc1c ("drm/i915: Don't register backlight when another backlight =
-should be used (v2)")
+  73feb8d5fa3b ("kallsyms: Make module_kallsyms_on_each_symbol generally av=
+ailable")
 
-from Linus' tree and commit:
+from the net-next tree and commit:
 
-  801543b2593b ("drm/i915: stop including i915_irq.h from i915_trace.h")
+  90de88426f3c ("livepatch: Improve the search performance of module_kallsy=
+ms_on_each_symbol()")
 
-from the drm-intel tree.
+from the modules tree.
 
 I fixed it up (see below) and can carry the fix as necessary. This
 is now fixed as far as linux-next is concerned, but any non trivial
@@ -88,35 +88,65 @@ complex conflicts.
 Cheers,
 Stephen Rothwell
 
-diff --cc drivers/gpu/drm/i915/display/intel_backlight.c
-index beba39a38c87,0438071f58cf..000000000000
---- a/drivers/gpu/drm/i915/display/intel_backlight.c
-+++ b/drivers/gpu/drm/i915/display/intel_backlight.c
-@@@ -8,8 -8,7 +8,9 @@@
-  #include <linux/pwm.h>
-  #include <linux/string_helpers.h>
+diff --cc include/linux/module.h
+index 35876e89eb93,3b312a1fcf59..000000000000
+--- a/include/linux/module.h
++++ b/include/linux/module.h
+@@@ -879,17 -878,8 +878,17 @@@ static inline bool module_sig_ok(struc
+  }
+  #endif	/* CONFIG_MODULE_SIG */
  =20
- +#include <acpi/video.h>
- +
-+ #include "i915_reg.h"
-  #include "intel_backlight.h"
-  #include "intel_backlight_regs.h"
-  #include "intel_connector.h"
+ +#if defined(CONFIG_MODULES) && defined(CONFIG_KALLSYMS)
+- int module_kallsyms_on_each_symbol(int (*fn)(void *, const char *,
+- 					     struct module *, unsigned long),
++ int module_kallsyms_on_each_symbol(const char *modname,
++ 				   int (*fn)(void *, const char *, unsigned long),
+  				   void *data);
+ +#else
+- static inline int module_kallsyms_on_each_symbol(int (*fn)(void *, const =
+char *,
+- 						 struct module *, unsigned long),
+- 						 void *data)
+++static inline int module_kallsyms_on_each_symbol(const char *modname,
+++						 int (*fn)(void *, const char *, unsigned long),
+++						 void *data);
+ +{
+ +	return -EOPNOTSUPP;
+ +}
+ +#endif  /* CONFIG_MODULES && CONFIG_KALLSYMS */
+ =20
+  #endif /* _LINUX_MODULE_H */
+diff --cc kernel/module/kallsyms.c
+index 4523f99b0358,329cef573675..000000000000
+--- a/kernel/module/kallsyms.c
++++ b/kernel/module/kallsyms.c
+@@@ -494,8 -494,9 +494,8 @@@ unsigned long module_kallsyms_lookup_na
+  	return ret;
+  }
+ =20
+- int module_kallsyms_on_each_symbol(int (*fn)(void *, const char *,
+- 					     struct module *, unsigned long),
+ -#ifdef CONFIG_LIVEPATCH
++ int module_kallsyms_on_each_symbol(const char *modname,
++ 				   int (*fn)(void *, const char *, unsigned long),
+  				   void *data)
+  {
+  	struct module *mod;
 
---Sig_/ZnAXSQtQ1fl=ax+EWztprCE
+--Sig_/bq2TEQpZj0Py2YhvVmkgUAU
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNxfG8ACgkQAVBC80lX
-0GxEfwf/ZY8+RcMKTXCLuurxKxq3aiF7cZqDEBXsSX75DF1hJbR4HJgviZevd33o
-Xby2YRrl5W5+lGzBS7B3gbiE7fhvzHONuDFhTYBWEUZ3SozZaruwGjg/C9bzX8B6
-Ch0G1haLNoP/+VfSPh8Efn3eLgnxKv4xWcz2NRXHPzWPOLg9xa9DdDu50X0OJyn3
-vlYIaqC3doE1UyWv9alq0MBTjMu1tbxgAMy4ch47B5jA0zSrKmwQDVsvC1GOvbOJ
-S09Fzemym++0a0NBl/9/VIXpGbtNFyGDgA7a2dQA4T/q7skXJIAwjeLO2YXHiVwT
-SlKy0f/AaXHYTinLpBhpxMMyGURIag==
-=6WTA
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNxgdkACgkQAVBC80lX
+0GzG4wf/TSAkdLTYlfJm3PL0crKjP0MFUpbC7F0GvWio0p52eC6XDkKub2dGpUIQ
+ua54ZzLlXu5emhODl1doR9flyYe2Gj/nBa6KUTsZ4XTj9L2UFlxLZKw/Cbhudjxk
+6Qpr6i8Ho7ob1aaGqBvZnf4wS3CNJ9xMA7PLZWThIOdt36H3Ynl2oTBnFDRBt3TZ
+zz9819TTJJEfJTodkFDKAf05sF7DiOL7lWlaRaIVuQDzt1RvsGixgQgmw+pmeOAV
+j4UF91nEzK21WyKatEcVNhq3aR+O/u7LIrliUAQJs1tPOuLXkFUpGoxgOW8McGNz
+O1k1kLVI3mmQC7PwCRQehV15AykTQQ==
+=mYNi
 -----END PGP SIGNATURE-----
 
---Sig_/ZnAXSQtQ1fl=ax+EWztprCE--
+--Sig_/bq2TEQpZj0Py2YhvVmkgUAU--

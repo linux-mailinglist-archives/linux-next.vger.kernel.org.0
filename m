@@ -2,45 +2,47 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E86B262764C
-	for <lists+linux-next@lfdr.de>; Mon, 14 Nov 2022 08:18:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34FEF627664
+	for <lists+linux-next@lfdr.de>; Mon, 14 Nov 2022 08:31:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235617AbiKNHSD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 14 Nov 2022 02:18:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55682 "EHLO
+        id S235646AbiKNHbh (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 14 Nov 2022 02:31:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235493AbiKNHSC (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 14 Nov 2022 02:18:02 -0500
+        with ESMTP id S235115AbiKNHbg (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 14 Nov 2022 02:31:36 -0500
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32C2FDE9E;
-        Sun, 13 Nov 2022 23:18:00 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F3AC616D;
+        Sun, 13 Nov 2022 23:31:35 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4N9gd16Ff6z4x1D;
-        Mon, 14 Nov 2022 18:17:57 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4N9gwj5Ny2z4x1D;
+        Mon, 14 Nov 2022 18:31:32 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1668410278;
-        bh=qZpRMBfulR0hk3+nMHk6MPbGdFAiexHBzM8ZJegSEbc=;
+        s=201702; t=1668411094;
+        bh=GT24nafW+y7Nl0IxPljg2aoHx7gagEziTSV1tH+M9KE=;
         h=Date:From:To:Cc:Subject:From;
-        b=Sr79NbvOA7ED/G0Su7rh6bM5EX0B3FB5ub313wiJXFvGu08G3tTBeGc8rHEJ3V+UR
-         8VYiILJZ3gFidx/czLR1PIQrOO3w+uBC8Pa0s7Qa1ICFOmu4RY0u/kqSKPixWKRqyL
-         8hazMf/GX+yIluWbyoKWhskUXqyciKNvnH8SY8Y6cecaeG+Zs9GCy3F0lCjqB3yibw
-         FNzB4OT44eya2OebpAP90LjPSepJLkWvk6ykhsAoCat+c4f9UCMQG4y91sjZjUv0k9
-         st2kDUd150pVWD1dQcIWPgrz74X57qgKKBr07cHnqlY00wqBCRUbflOwu7ynyzAJmg
-         wQLDo4CqsfrIg==
-Date:   Mon, 14 Nov 2022 18:17:52 +1100
+        b=LFmTwLd/xttcVBFFu0PU3fruoN7/JmXfg0ToxTQlIl+aIzsO/1luy145UC7bM3sZU
+         CndvRDq4rslaY3/M64xDpFPx0+rDwj7HNumAtw0Bo6mH4JdOaaZv7CvZlhYjqroLQF
+         aeiXj8aaTrQYESEKJIn24yrguPNtdiCC5B2YPDDpn0DXKoKUmp3EtLHnc7osZ7KfP+
+         Mio7Ph0TMLrTHEOjG7fPvUTyyzFZ0WDmYqKs4LgAjkkh+hJyJaB4fjzf76CdqbfipM
+         ikPEF9tYlLUZsXSz1Ah3HiziXU8p+UoL7pUzEQVQioaVyGB8/0lZSfxwOrFSdDrjwk
+         qO44bhkCZTrCA==
+Date:   Mon, 14 Nov 2022 18:31:31 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Greg KH <greg@kroah.com>, Arnd Bergmann <arnd@arndb.de>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Liu Ying <victor.liu@nxp.com>,
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Andrii Nakryiko <andrii@kernel.org>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Maryam Tahhan <mtahhan@redhat.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warnings after merge of the char-misc tree
-Message-ID: <20221114181752.08a850f0@canb.auug.org.au>
+Subject: linux-next: build warnings after merge of the net-next tree
+Message-ID: <20221114183131.3c68e1b5@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_//PUj8r=6+n+YxL7hcZB0qik";
+Content-Type: multipart/signed; boundary="Sig_/oCAY=xF0oojv8uwpX=vk3N_";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
@@ -51,46 +53,52 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_//PUj8r=6+n+YxL7hcZB0qik
+--Sig_/oCAY=xF0oojv8uwpX=vk3N_
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the char-misc tree, today's linux-next build (powerpc
-allnoconfig) produced these warnings:
+After merging the net-next tree, today's linux-next build (htmldocs)
+produced these warnings:
 
-drivers/bus/simple-pm-bus.c:96:12: warning: 'simple_pm_bus_runtime_resume' =
-defined but not used [-Wunused-function]
-   96 | static int simple_pm_bus_runtime_resume(struct device *dev)
-      |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/bus/simple-pm-bus.c:87:12: warning: 'simple_pm_bus_runtime_suspend'=
- defined but not used [-Wunused-function]
-   87 | static int simple_pm_bus_runtime_suspend(struct device *dev)
-      |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Documentation/bpf/map_cpumap.rst:50: WARNING: Error in declarator or parame=
+ters
+Invalid C declaration: Expected identifier in nested name. [error at 67]
+  int bpf_map_update_elem(int fd, const void *key, const void *value,
+  -------------------------------------------------------------------^
+Documentation/bpf/map_cpumap.rst:50: WARNING: Error in declarator or parame=
+ters
+Invalid C declaration: Expecting "(" in parameters. [error at 11]
+  __u64 flags);
+  -----------^
+Documentation/bpf/map_cpumap.rst:73: WARNING: Duplicate C declaration, also=
+ defined at bpf/map_array:35.
+Declaration is '.. c:function:: int bpf_map_lookup_elem(int fd, const void =
+*key, void *value);'.
 
 Introduced by commit
 
-  882cf4c913d7 ("drivers: bus: simple-pm-bus: Use clocks")
+  161939abc80b ("docs/bpf: Document BPF_MAP_TYPE_CPUMAP map")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_//PUj8r=6+n+YxL7hcZB0qik
+--Sig_/oCAY=xF0oojv8uwpX=vk3N_
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNx66AACgkQAVBC80lX
-0GxrPQf/cYjGwXQIJMzHXo7fdAsJq2HGRt9lkyxppFUVTqKEBfeIl2nGGV+SN1Fk
-FQiOyOu9EydGgESHWyXfNZAgTXVSx9tmbvsLEBWF5mrTsx73aHb5ePEfBMIO2bXQ
-OrhUZv1csZ5BAqFQ+1YEG7XpIZ1Lmyf4u2L4Ut61ri+boG5/mkbS71boho6eyowG
-UATEzuGaF6v2+99ov48QfMcJj8kQrkAVUb+EKfqGP8H8M1ccOa2yvtH4kUnDN/AT
-Zi+4rhgoVdSnROA8oWgHIbbkMBTyhApz6owgRDbEYSKDS5z3XT/goFo5/j/qwJwU
-vPgYsRlCAZw2IE2r6FE14fnTR03o4g==
-=AKaA
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNx7tMACgkQAVBC80lX
+0Gyg0gf+OZd9mC0HhnWLGH4hA2xRMO/0Dc13LjqhLZo/ec6HIX/SYeQo3MHSVrGk
+m66zNVShDxaoWP3wWZZaMN/xeLnGuYFBGodfBEA7X9qmRoH18Frl53vjPwv+J5zW
+u8MouplpESNVeDJTm8Uj8rtBtIfTI0MLKiTEhxTAF5VCcR0CZrruSjitQ4uV+yOX
+YG9WKZvtyigpTexoXjzoYDP0ti9PeC91kbRCdOLlAqMRRcvrYo0p0OTLz9N4wRps
+wifu9ELK1t3TZ4E8JxE1cb3exH3htNVORGxgHX7vjg1IloYFgaMHDTbrT3dJXlov
+MTNhtgUTYFoTz99vKTfNmMkcxhzU9A==
+=u+3A
 -----END PGP SIGNATURE-----
 
---Sig_//PUj8r=6+n+YxL7hcZB0qik--
+--Sig_/oCAY=xF0oojv8uwpX=vk3N_--

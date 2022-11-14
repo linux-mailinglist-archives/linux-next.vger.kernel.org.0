@@ -2,103 +2,110 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34FEF627664
-	for <lists+linux-next@lfdr.de>; Mon, 14 Nov 2022 08:31:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC78262766F
+	for <lists+linux-next@lfdr.de>; Mon, 14 Nov 2022 08:34:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235646AbiKNHbh (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 14 Nov 2022 02:31:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59708 "EHLO
+        id S235746AbiKNHeF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 14 Nov 2022 02:34:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235115AbiKNHbg (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 14 Nov 2022 02:31:36 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F3AC616D;
-        Sun, 13 Nov 2022 23:31:35 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4N9gwj5Ny2z4x1D;
-        Mon, 14 Nov 2022 18:31:32 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1668411094;
-        bh=GT24nafW+y7Nl0IxPljg2aoHx7gagEziTSV1tH+M9KE=;
-        h=Date:From:To:Cc:Subject:From;
-        b=LFmTwLd/xttcVBFFu0PU3fruoN7/JmXfg0ToxTQlIl+aIzsO/1luy145UC7bM3sZU
-         CndvRDq4rslaY3/M64xDpFPx0+rDwj7HNumAtw0Bo6mH4JdOaaZv7CvZlhYjqroLQF
-         aeiXj8aaTrQYESEKJIn24yrguPNtdiCC5B2YPDDpn0DXKoKUmp3EtLHnc7osZ7KfP+
-         Mio7Ph0TMLrTHEOjG7fPvUTyyzFZ0WDmYqKs4LgAjkkh+hJyJaB4fjzf76CdqbfipM
-         ikPEF9tYlLUZsXSz1Ah3HiziXU8p+UoL7pUzEQVQioaVyGB8/0lZSfxwOrFSdDrjwk
-         qO44bhkCZTrCA==
-Date:   Mon, 14 Nov 2022 18:31:31 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Andrii Nakryiko <andrii@kernel.org>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Maryam Tahhan <mtahhan@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warnings after merge of the net-next tree
-Message-ID: <20221114183131.3c68e1b5@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/oCAY=xF0oojv8uwpX=vk3N_";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S235115AbiKNHeE (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 14 Nov 2022 02:34:04 -0500
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE12C2ACF;
+        Sun, 13 Nov 2022 23:34:03 -0800 (PST)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id 996C8320090C;
+        Mon, 14 Nov 2022 02:34:02 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Mon, 14 Nov 2022 02:34:03 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1668411242; x=1668497642; bh=tg5u0gr/GF
+        HeI84as/hj5YvgUNQOQ5UK5W+kE67Zre4=; b=YP8E2ZwJSSGN0rUdiTQ+Kdr4lZ
+        NQygbLTRMlYT+QohBzqNeDfU53BoaWEO9x45BicXoU8kl4Q6/26Wa4T26/dQgjvb
+        vG78n820nnyje7eNM1Xv76OzB3O4MF6YkB7FtPlISDubhMLiXfL6p050QWohjIiE
+        FiwPPkv18h6w1rRTcg9awUZHt9t70xNZ9P1omA3Qpxm0ReRsDG5fEeCmLBgkTYHe
+        p8sO4gD095+nMEmVJS+IjvaS+5rMyi+ZBizOA0fQrXRWLyLFSaOaS1+h2m9NAR4+
+        0FjaFtxA0ZEkf3h4+JKJlf80LRzK+G6miISPQhxKe7OmjWbHh5e7q/d0fK7g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1668411242; x=1668497642; bh=tg5u0gr/GFHeI84as/hj5YvgUNQO
+        Q5UK5W+kE67Zre4=; b=C1yMFrux8xuyGuUlY/gjSlHDztT4/Vdccn0ZLI2v3TJq
+        z4pDe68yfFfl7t0WLWTyceNy28VPbAe13Mv3iAFkxcTXv9xCCfiSaZOtqieEGxGl
+        dRrg5kiyF2ZxjQAZLH1g5Jjpw+V3AT1oJie72zk0sCZXqVUekc0notrOI9x5UsO5
+        00QXMx2kS0gskD4N8QAtK69wpnMiS8gMTCsXIuCnrD9nqJyMz9b+TD07nnKEI4na
+        sqSVyqAZRYUBkWNQBiH1B+dTqNVlRp3hYEIIBjFLlKEDEPfsjmDWD1TFZ2jk5/hZ
+        dh2D90kMz0wq6b8KWpz1G6KJlS0zUzloD1rONc9a/w==
+X-ME-Sender: <xms:ae9xY-lzcX8B1p-DuG0avR6MGl2-tLaad-QOBLBIFXdwAe3d74ryCw>
+    <xme:ae9xY13MM2LizqU5iFZNiciEcSGFp2-px8PYxsazXZPtULx_Us3baT1laWj8IaH2c
+    WfF4VjCCeaQXiS4umg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrgedugddutdelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:ae9xY8rpxVwLm422m8eBnyqQqJiAvYHBknGngwh9Ne8fbly0Nerf1A>
+    <xmx:ae9xYylza0dDketpbSNvhSqAPIofsraBxfHJ17zYrz-48zMpBD1RnQ>
+    <xmx:ae9xY82iRubFENNzfSKg78qmKvELr8M8mMohFj-edc39y6XJNBupzg>
+    <xmx:au9xY5w5suR1IEIUyCclwSFp3l2bD4y3b44zi5JYLMsHpzR5abq_dw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id B0299B60086; Mon, 14 Nov 2022 02:34:01 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1115-g8b801eadce-fm-20221102.001-g8b801ead
+Mime-Version: 1.0
+Message-Id: <02828ff7-c734-4b55-b86e-5cc777e1a35b@app.fastmail.com>
+In-Reply-To: <20221114181752.08a850f0@canb.auug.org.au>
+References: <20221114181752.08a850f0@canb.auug.org.au>
+Date:   Mon, 14 Nov 2022 08:33:41 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Stephen Rothwell" <sfr@canb.auug.org.au>,
+        "Greg KH" <greg@kroah.com>
+Cc:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        "Liu Ying" <victor.liu@nxp.com>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        linux-next <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warnings after merge of the char-misc tree
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/oCAY=xF0oojv8uwpX=vk3N_
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Mon, Nov 14, 2022, at 08:17, Stephen Rothwell wrote:
+> Hi all,
+>
+> After merging the char-misc tree, today's linux-next build (powerpc
+> allnoconfig) produced these warnings:
+>
+> drivers/bus/simple-pm-bus.c:96:12: warning: 
+> 'simple_pm_bus_runtime_resume' defined but not used [-Wunused-function]
+>    96 | static int simple_pm_bus_runtime_resume(struct device *dev)
+>       |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> drivers/bus/simple-pm-bus.c:87:12: warning: 
+> 'simple_pm_bus_runtime_suspend' defined but not used [-Wunused-function]
+>    87 | static int simple_pm_bus_runtime_suspend(struct device *dev)
+>       |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>
+> Introduced by commit
+>
+>   882cf4c913d7 ("drivers: bus: simple-pm-bus: Use clocks")
 
-Hi all,
+I see that this is caused by the patch using the old-style
+SET_RUNTIME_PM_OPS/SET_NOIRQ_SYSTEM_SLEEP_PM_OPS macros
+instead of the correct SYSTEM_SLEEP_PM_OPS/NOIRQ_SYSTEM_SLEEP_PM_OPS
+versions.
 
-After merging the net-next tree, today's linux-next build (htmldocs)
-produced these warnings:
-
-Documentation/bpf/map_cpumap.rst:50: WARNING: Error in declarator or parame=
-ters
-Invalid C declaration: Expected identifier in nested name. [error at 67]
-  int bpf_map_update_elem(int fd, const void *key, const void *value,
-  -------------------------------------------------------------------^
-Documentation/bpf/map_cpumap.rst:50: WARNING: Error in declarator or parame=
-ters
-Invalid C declaration: Expecting "(" in parameters. [error at 11]
-  __u64 flags);
-  -----------^
-Documentation/bpf/map_cpumap.rst:73: WARNING: Duplicate C declaration, also=
- defined at bpf/map_array:35.
-Declaration is '.. c:function:: int bpf_map_lookup_elem(int fd, const void =
-*key, void *value);'.
-
-Introduced by commit
-
-  161939abc80b ("docs/bpf: Document BPF_MAP_TYPE_CPUMAP map")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/oCAY=xF0oojv8uwpX=vk3N_
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNx7tMACgkQAVBC80lX
-0Gyg0gf+OZd9mC0HhnWLGH4hA2xRMO/0Dc13LjqhLZo/ec6HIX/SYeQo3MHSVrGk
-m66zNVShDxaoWP3wWZZaMN/xeLnGuYFBGodfBEA7X9qmRoH18Frl53vjPwv+J5zW
-u8MouplpESNVeDJTm8Uj8rtBtIfTI0MLKiTEhxTAF5VCcR0CZrruSjitQ4uV+yOX
-YG9WKZvtyigpTexoXjzoYDP0ti9PeC91kbRCdOLlAqMRRcvrYo0p0OTLz9N4wRps
-wifu9ELK1t3TZ4E8JxE1cb3exH3htNVORGxgHX7vjg1IloYFgaMHDTbrT3dJXlov
-MTNhtgUTYFoTz99vKTfNmMkcxhzU9A==
-=u+3A
------END PGP SIGNATURE-----
-
---Sig_/oCAY=xF0oojv8uwpX=vk3N_--
+     Arnd

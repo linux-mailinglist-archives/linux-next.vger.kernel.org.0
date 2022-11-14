@@ -2,133 +2,167 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D52E6278D6
-	for <lists+linux-next@lfdr.de>; Mon, 14 Nov 2022 10:17:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29EAD627A11
+	for <lists+linux-next@lfdr.de>; Mon, 14 Nov 2022 11:09:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236217AbiKNJRR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 14 Nov 2022 04:17:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60722 "EHLO
+        id S236411AbiKNKI7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 14 Nov 2022 05:08:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235832AbiKNJRQ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 14 Nov 2022 04:17:16 -0500
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C15DA64EB;
-        Mon, 14 Nov 2022 01:17:15 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id E4007320029B;
-        Mon, 14 Nov 2022 04:17:14 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Mon, 14 Nov 2022 04:17:15 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1668417434; x=1668503834; bh=Nbszh6yKWt
-        PS+eiCWoyZeWj6ob3Ps/hY4GNNusxcFgI=; b=OWN2i4uWyQhbTciMs9PbzmT/0L
-        0LM5iETi8C2bWOYXtBYs1VScxZyhYFqiL/sXqLkeAVtTqnAtLZlLLv2nnT8Ldq0f
-        TqxuHAIjjVdVRZ5zXEuI2RPJ5flVFhhVj0bc8R9qlsl93L1Yaq+/Nnj2fUTKXroB
-        Q+tJbJXtuY4G2d2jXuAyHMoryNAXvbFsJHOG2+48hjYVvOAMQvFrZYIfxTUKN4XX
-        iOyABUuvbW7IrvN9k9axNqvwKv6NKCMCB+ll1Lbn0IF1/SSY7kebUqBikUKmDt6m
-        TW7AOyXGPJc5ZVbcjz/Q4ZxGTVKlx2H/kcU9wlih+OjyY7ZfZgaiz6T7R62w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1668417434; x=1668503834; bh=Nbszh6yKWtPS+eiCWoyZeWj6ob3P
-        s/hY4GNNusxcFgI=; b=nmufghBSWlgMbkFlPpJtmPplJcRoFHdTCD/kip6GyH0H
-        yRV4Na5TOE79NAX3QKyWa14zgK6XLc/EXn7H4J9xN7ooDrmdo6Aa24Ho7geUSOEj
-        NGT1INXcdDWX7/Gz1uwH7lbI90GFwoUJvWVX0aGoUf8AuarMXbqAL1GYbZyGijg7
-        nZGUhycZHP05gNhvvM3r7dCtP2XDKTgPRTAk6vf3gc0utQSZP8ZJNm1vXs/g7Ln/
-        9MiNVy8ZMGPdYmFMlZlpFc5AbOLM4Jfu4fG/EXHeABcKiStmM9k44t+1SL8aVHCW
-        fYFNS4cm8YwrD4lkb+NNtD0QKUlez/nsG1KXqLmE3w==
-X-ME-Sender: <xms:mQdyY8oZ9A7GuGZza6fNY-cUfJNN7GDXccqDpNGpL8rlIkCeW6bCwA>
-    <xme:mQdyYyqTSOc4HKTS40L2zw01bf-EKCHj7vkUMzhYjxQJN8JOFrpb9tfF1RWXsyXeZ
-    2fSQa6EKIsM3kydsWA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrgedugddufeduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:mQdyYxO9NryolxJAg04Qm2kFejU4gE2Nkb9vBGOhqGYZyUyzM8DGDg>
-    <xmx:mQdyYz7_lF1fCRiNdRS0x_qV_ghL5ImEoMEus8WjHePvku3jvhr0ew>
-    <xmx:mQdyY74lLgP1NyH_dfogpslGaKnDqUqlEqapGNtwcE4EjLBYKjLxYw>
-    <xmx:mgdyY9nWCpQfp9z6v6SeNWzCqenlc3GgEGkA4tyY0wTvai1hgNpzHg>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id CEB17B60086; Mon, 14 Nov 2022 04:17:13 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1115-g8b801eadce-fm-20221102.001-g8b801ead
-Mime-Version: 1.0
-Message-Id: <1481d53e-9fe3-4605-8776-587a44fdc0ce@app.fastmail.com>
-In-Reply-To: <23be5d9c69ae758602b9de97d47f787fa104961d.camel@nxp.com>
-References: <20221114181752.08a850f0@canb.auug.org.au>
- <02828ff7-c734-4b55-b86e-5cc777e1a35b@app.fastmail.com>
- <23be5d9c69ae758602b9de97d47f787fa104961d.camel@nxp.com>
-Date:   Mon, 14 Nov 2022 10:16:53 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Liu Ying" <victor.liu@nxp.com>,
-        "Stephen Rothwell" <sfr@canb.auug.org.au>,
-        "Greg KH" <greg@kroah.com>
-Cc:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        linux-next <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warnings after merge of the char-misc tree
+        with ESMTP id S236448AbiKNKIV (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 14 Nov 2022 05:08:21 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 973B31F616;
+        Mon, 14 Nov 2022 02:08:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668420482; x=1699956482;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=yOVQIHkuUCyb9yuVJwgc7s85bbeRz6iUd3ajHxZ7HeA=;
+  b=hvYCy6RUS2mAVENf+xJqPHk9zxmTRdJdCGWfeZT4p/b8Fzu02n4hdHW2
+   L7AnOh/0uLlf/YDA7xvBa1+VNljIb1EMKFCSkFoTQPOeXLAEtkMepqwPM
+   fAaZS/4DxD8PIgk8quiRIhsmtNLEqMranvgYJsZkF70cr+0N9VrYesQfa
+   BQGAG223wTeE+1XVSvDmahwcSudTum/wXF4wnFbHBhifjllY/KOhuhHk2
+   YrRqD5IEnioZWV6seBmtohkAHx8s5h1zIGUGdengiiechqgbGCGwKI5t9
+   mS9RWxfj+E3gHwYPlg73Miui2+jZkXWux/QNAPEIPwgJdcudugSNMfanm
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10530"; a="376198076"
+X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
+   d="scan'208";a="376198076"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2022 02:08:02 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10530"; a="727466802"
+X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
+   d="scan'208";a="727466802"
+Received: from dsmahang-mobl.ger.corp.intel.com (HELO localhost) ([10.252.59.240])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2022 02:07:57 -0800
+From:   Jani Nikula <jani.nikula@intel.com>
+To:     Karol Herbst <kherbst@redhat.com>,
+        Kees Cook <keescook@chromium.org>
+Cc:     Lyude Paul <lyude@redhat.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        linux-kernel@vger.kernel.org, Ilia Mirkin <imirkin@alum.mit.edu>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        David Airlie <airlied@gmail.com>,
+        "Nathan E. Egge" <unlord@xiph.org>,
+        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
+        Dave Airlie <airlied@redhat.com>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        linux-next@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: Coverity: nouveau_dp_irq(): Null pointer dereferences
+In-Reply-To: <CACO55tvaXFyAMiAYmx2DKNj9fNtapThejHkRsvZd_5StYXTy+w@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <202211100850.7A8DD75@keescook> <87iljl6ehe.fsf@intel.com>
+ <202211111110.11B554B@keescook>
+ <CACO55tt5KOgDYMEw=spDeoMaYuj2GQOuHU+BEgadr1nQiFOGhw@mail.gmail.com>
+ <202211111215.1F421B7E@keescook>
+ <CACO55tvaXFyAMiAYmx2DKNj9fNtapThejHkRsvZd_5StYXTy+w@mail.gmail.com>
+Date:   Mon, 14 Nov 2022 12:07:55 +0200
+Message-ID: <87fsel4zno.fsf@intel.com>
+MIME-Version: 1.0
 Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Nov 14, 2022, at 10:03, Liu Ying wrote:
-> On Mon, 2022-11-14 at 08:33 +0100, Arnd Bergmann wrote:
->> On Mon, Nov 14, 2022, at 08:17, Stephen Rothwell wrote:
->> > Hi all,
->> > 
->> > After merging the char-misc tree, today's linux-next build (powerpc
->> > allnoconfig) produced these warnings:
->> > 
->> > drivers/bus/simple-pm-bus.c:96:12: warning: 
->> > 'simple_pm_bus_runtime_resume' defined but not used [-Wunused-function]
->> >    96 | static int simple_pm_bus_runtime_resume(struct device *dev)
->> >       |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> > drivers/bus/simple-pm-bus.c:87:12: warning: 
->> > 'simple_pm_bus_runtime_suspend' defined but not used [-Wunused-function]
->> >    87 | static int simple_pm_bus_runtime_suspend(struct device *dev)
->> >       |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> > 
->> > Introduced by commit
->> > 
->> >   882cf4c913d7 ("drivers: bus: simple-pm-bus: Use clocks")
->> 
->> I see that this is caused by the patch using the old-style
->> SET_RUNTIME_PM_OPS/SET_NOIRQ_SYSTEM_SLEEP_PM_OPS macros
->> instead of the correct SYSTEM_SLEEP_PM_OPS/NOIRQ_SYSTEM_SLEEP_PM_OPS
->> versions.
->> 
+On Fri, 11 Nov 2022, Karol Herbst <kherbst@redhat.com> wrote:
+> On Fri, Nov 11, 2022 at 9:16 PM Kees Cook <keescook@chromium.org> wrote:
+>>
+>> On Fri, Nov 11, 2022 at 09:06:54PM +0100, Karol Herbst wrote:
+>> > On Fri, Nov 11, 2022 at 8:21 PM Kees Cook <keescook@chromium.org> wrote:
+>> > >
+>> > > On Fri, Nov 11, 2022 at 11:13:17AM +0200, Jani Nikula wrote:
+>> > > > On Thu, 10 Nov 2022, coverity-bot <keescook@chromium.org> wrote:
+>> > > > > Hello!
+>> > > > >
+>> > > > > This is an experimental semi-automated report about issues detected by
+>> > > > > Coverity from a scan of next-20221110 as part of the linux-next scan project:
+>> > > > > https://scan.coverity.com/projects/linux-next-weekly-scan
+>> > > > >
+>> > > > > You're getting this email because you were associated with the identified
+>> > > > > lines of code (noted below) that were touched by commits:
+>> > > > >
+>> > > > >   Mon Aug 31 19:10:08 2020 -0400
+>> > > > >     a0922278f83e ("drm/nouveau/kms/nv50-: Refactor and cleanup DP HPD handling")
+>> > > >
+>> > > > Hi Kees, this looks like a good idea, but maybe double check the Cc list
+>> > > > generation? I was Cc'd on four mails today that I thought were
+>> > > > irrelevant to me.
+>> > >
+>> > > Hi!
+>> > >
+>> > > Heh, I was recently asked to _expand_ the CC list. :)
+>> > >
+>> > > For these last pass of reports, I added a get_maintainers.pl run to the
+>> > > identified commit. In this instance, the commit touched:
+>> > >
+>> > >  drivers/gpu/drm/nouveau/dispnv04/disp.c     |    6 +
+>> > >  drivers/gpu/drm/nouveau/dispnv50/disp.c     |  192 ++++++++++++++++++++++--------------------------
+>> > >  drivers/gpu/drm/nouveau/nouveau_connector.c |   14 ---
+>> > >  drivers/gpu/drm/nouveau/nouveau_display.c   |    2
+>> > >  drivers/gpu/drm/nouveau/nouveau_display.h   |    2
+>> > >  drivers/gpu/drm/nouveau/nouveau_dp.c        |  132 ++++++++++++++++++++++++++++-----
+>> > >  drivers/gpu/drm/nouveau/nouveau_encoder.h   |   33 +++++++-
+>> > >  7 files changed, 244 insertions(+), 137 deletions(-)
+>> > >
+>> > > And the get_maintainers.pl rationale was:
+>> > >
+>> > > Ben Skeggs <bskeggs@redhat.com> (supporter:DRM DRIVER FOR NVIDIA GEFORCE/QUADRO GPUS,commit_signer:1/1=100%,commit_signer:6/16=38%,authored:4/16=25%,added_lines:23/124=19%,removed_lines:36/152=24%)
+>> > > Karol Herbst <kherbst@redhat.com> (supporter:DRM DRIVER FOR NVIDIA GEFORCE/QUADRO GPUS,commit_signer:2/1=100%)
+>> > > Lyude Paul <lyude@redhat.com> (supporter:DRM DRIVER FOR NVIDIA GEFORCE/QUADRO GPUS,commit_signer:9/16=56%,authored:6/16=38%,added_lines:92/124=74%,removed_lines:107/152=70%)
+>> > > David Airlie <airlied@gmail.com> (maintainer:DRM DRIVERS)
+>> > > Daniel Vetter <daniel@ffwll.ch> (maintainer:DRM DRIVERS)
+>> > > Ilia Mirkin <imirkin@alum.mit.edu> (commit_signer:1/1=100%,authored:1/1=100%,added_lines:2/2=100%,removed_lines:2/2=100%)
+>> > > "Nathan E. Egge" <unlord@xiph.org> (commit_signer:1/1=100%)
+>> > > Jani Nikula <jani.nikula@intel.com> (commit_signer:6/16=38%)
+>> > > Dave Airlie <airlied@redhat.com> (commit_signer:5/16=31%)
+>> > > Thomas Zimmermann <tzimmermann@suse.de> (commit_signer:4/16=25%,authored:4/16=25%)
+>> > > dri-devel@lists.freedesktop.org (open list:DRM DRIVER FOR NVIDIA GEFORCE/QUADRO GPUS)
+>> > > nouveau@lists.freedesktop.org (open list:DRM DRIVER FOR NVIDIA GEFORCE/QUADRO GPUS)
+>> > >
+>> >
+>> > I'd say it's good enough to message supporters and the mailing lists
+>> > for at least Nouveau code, maybe even all drm drivers.
+>>
+>> i.e. leave out the commit_signer hits?
+>>
 >
-> You meant RUNTIME_PM_OPS/NOIRQ_SYSTEM_SLEEP_PM_OPS macros should be
-> used, right?
+> yes.
 
-Right, sorry for mixing up the runtime ones.
+Agreed.
 
-> Why not add __maybe_unused to the callbacks like below snippet instead?
-> This way, the old-style macros may determine those callbacks are NULL
-> or non-NULL according to CONFIG_PM_SLEEP and CONFIG_PM.
+I understand the point of commit_signer, but I don't think
+get_maintainers.pl does a very good job with the heuristics, or
+filtering out "insignificant" contributions to the files being changed.
 
-That was the old way of doing it before 1a3c7bb08826 ("PM: core: Add
-new *_PM_OPS macros, deprecate old ones"), we are slowly moving to
-the new ones instead to avoid having to add __maybe_unused annotations.
+BR,
+Jani.
 
-You may however want to use ".pm = pm_ptr(&simple_pm_bus_pm_ops)" if
-you care about the space savings for configurations with CONFIG_PM
-disabled.
+>
+>> > Not sure what to do about actual maintainers, but I doubt Dave and
+>> > Daniel want to be CCed on every Coverity report here either.
+>>
+>> I updated the CC logic based on this feedback:
+>> https://lore.kernel.org/linux-hardening/87h6zgfub4.fsf@kernel.org/
+>>
+>> So maybe just mailing lists?
+>>
+>
+> That should be good enough, but maybe the DRM subsystem is big enough
+> so it's reasonable to add special rules. For Nouveau either way is
+> fine.
+>
+>> --
+>> Kees Cook
+>>
+>
 
-      Arnd
+-- 
+Jani Nikula, Intel Open Source Graphics Center

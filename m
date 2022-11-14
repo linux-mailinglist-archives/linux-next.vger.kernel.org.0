@@ -2,167 +2,102 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29EAD627A11
-	for <lists+linux-next@lfdr.de>; Mon, 14 Nov 2022 11:09:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BFE8627A23
+	for <lists+linux-next@lfdr.de>; Mon, 14 Nov 2022 11:12:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236411AbiKNKI7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 14 Nov 2022 05:08:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42446 "EHLO
+        id S236128AbiKNKMq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 14 Nov 2022 05:12:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236448AbiKNKIV (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 14 Nov 2022 05:08:21 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 973B31F616;
-        Mon, 14 Nov 2022 02:08:02 -0800 (PST)
+        with ESMTP id S236567AbiKNKMB (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 14 Nov 2022 05:12:01 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E0BD2037F;
+        Mon, 14 Nov 2022 02:10:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668420482; x=1699956482;
+  t=1668420643; x=1699956643;
   h=from:to:cc:subject:in-reply-to:references:date:
    message-id:mime-version;
-  bh=yOVQIHkuUCyb9yuVJwgc7s85bbeRz6iUd3ajHxZ7HeA=;
-  b=hvYCy6RUS2mAVENf+xJqPHk9zxmTRdJdCGWfeZT4p/b8Fzu02n4hdHW2
-   L7AnOh/0uLlf/YDA7xvBa1+VNljIb1EMKFCSkFoTQPOeXLAEtkMepqwPM
-   fAaZS/4DxD8PIgk8quiRIhsmtNLEqMranvgYJsZkF70cr+0N9VrYesQfa
-   BQGAG223wTeE+1XVSvDmahwcSudTum/wXF4wnFbHBhifjllY/KOhuhHk2
-   YrRqD5IEnioZWV6seBmtohkAHx8s5h1zIGUGdengiiechqgbGCGwKI5t9
-   mS9RWxfj+E3gHwYPlg73Miui2+jZkXWux/QNAPEIPwgJdcudugSNMfanm
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10530"; a="376198076"
+  bh=Zc1y8BWK7mjmeSrhkG74pWOJjIpoWMU+QYmFu9YybfI=;
+  b=LOlu3FglsgA6OizjvqDy2TC1E2My0RUfvkLc3UmgUU8kuPSmulMHTetd
+   t+/VqQbkcYQKYhMySqrUrpr2VTErTEtTlMyPE756QVM9RYvGc1WK7bycz
+   FpowoQ/XQTrnDQP7bby5FZNCPT9E4vUqrjfY808zm8n4p/qD8zaepnIeU
+   ozWhOb652J4mWESn7PR2DkO2tA0cWqwn4RT1suaetBgWiGo95OzqqYEHe
+   kWuB5iVLxAsGVhOgTZK7ayUxWP1ZQuZzQnpx8GY9CUtkJeCABB4ExUdtj
+   0TPQrRfijJ8RlwkoN/ZsmXK5cT9gxKKgx75Uw8+k/gniTyUoIpvD6GOJK
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10530"; a="313078939"
 X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
-   d="scan'208";a="376198076"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2022 02:08:02 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10530"; a="727466802"
+   d="scan'208";a="313078939"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2022 02:10:42 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10530"; a="589312433"
 X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
-   d="scan'208";a="727466802"
+   d="scan'208";a="589312433"
 Received: from dsmahang-mobl.ger.corp.intel.com (HELO localhost) ([10.252.59.240])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2022 02:07:57 -0800
-From:   Jani Nikula <jani.nikula@intel.com>
-To:     Karol Herbst <kherbst@redhat.com>,
-        Kees Cook <keescook@chromium.org>
-Cc:     Lyude Paul <lyude@redhat.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        linux-kernel@vger.kernel.org, Ilia Mirkin <imirkin@alum.mit.edu>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        David Airlie <airlied@gmail.com>,
-        "Nathan E. Egge" <unlord@xiph.org>,
-        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        Dave Airlie <airlied@redhat.com>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        linux-next@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: Coverity: nouveau_dp_irq(): Null pointer dereferences
-In-Reply-To: <CACO55tvaXFyAMiAYmx2DKNj9fNtapThejHkRsvZd_5StYXTy+w@mail.gmail.com>
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2022 02:10:39 -0800
+From:   Jani Nikula <jani.nikula@linux.intel.com>
+To:     Hans de Goede <hdegoede@redhat.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>
+Cc:     Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the drm-intel tree with Linus' tree
+In-Reply-To: <33ef1207-aad7-b7cd-61ac-327e9afb0699@redhat.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <202211100850.7A8DD75@keescook> <87iljl6ehe.fsf@intel.com>
- <202211111110.11B554B@keescook>
- <CACO55tt5KOgDYMEw=spDeoMaYuj2GQOuHU+BEgadr1nQiFOGhw@mail.gmail.com>
- <202211111215.1F421B7E@keescook>
- <CACO55tvaXFyAMiAYmx2DKNj9fNtapThejHkRsvZd_5StYXTy+w@mail.gmail.com>
-Date:   Mon, 14 Nov 2022 12:07:55 +0200
-Message-ID: <87fsel4zno.fsf@intel.com>
+References: <20221114102327.6d53341e@canb.auug.org.au>
+ <33ef1207-aad7-b7cd-61ac-327e9afb0699@redhat.com>
+Date:   Mon, 14 Nov 2022 12:10:37 +0200
+Message-ID: <87cz9p4zj6.fsf@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, 11 Nov 2022, Karol Herbst <kherbst@redhat.com> wrote:
-> On Fri, Nov 11, 2022 at 9:16 PM Kees Cook <keescook@chromium.org> wrote:
->>
->> On Fri, Nov 11, 2022 at 09:06:54PM +0100, Karol Herbst wrote:
->> > On Fri, Nov 11, 2022 at 8:21 PM Kees Cook <keescook@chromium.org> wrote:
->> > >
->> > > On Fri, Nov 11, 2022 at 11:13:17AM +0200, Jani Nikula wrote:
->> > > > On Thu, 10 Nov 2022, coverity-bot <keescook@chromium.org> wrote:
->> > > > > Hello!
->> > > > >
->> > > > > This is an experimental semi-automated report about issues detected by
->> > > > > Coverity from a scan of next-20221110 as part of the linux-next scan project:
->> > > > > https://scan.coverity.com/projects/linux-next-weekly-scan
->> > > > >
->> > > > > You're getting this email because you were associated with the identified
->> > > > > lines of code (noted below) that were touched by commits:
->> > > > >
->> > > > >   Mon Aug 31 19:10:08 2020 -0400
->> > > > >     a0922278f83e ("drm/nouveau/kms/nv50-: Refactor and cleanup DP HPD handling")
->> > > >
->> > > > Hi Kees, this looks like a good idea, but maybe double check the Cc list
->> > > > generation? I was Cc'd on four mails today that I thought were
->> > > > irrelevant to me.
->> > >
->> > > Hi!
->> > >
->> > > Heh, I was recently asked to _expand_ the CC list. :)
->> > >
->> > > For these last pass of reports, I added a get_maintainers.pl run to the
->> > > identified commit. In this instance, the commit touched:
->> > >
->> > >  drivers/gpu/drm/nouveau/dispnv04/disp.c     |    6 +
->> > >  drivers/gpu/drm/nouveau/dispnv50/disp.c     |  192 ++++++++++++++++++++++--------------------------
->> > >  drivers/gpu/drm/nouveau/nouveau_connector.c |   14 ---
->> > >  drivers/gpu/drm/nouveau/nouveau_display.c   |    2
->> > >  drivers/gpu/drm/nouveau/nouveau_display.h   |    2
->> > >  drivers/gpu/drm/nouveau/nouveau_dp.c        |  132 ++++++++++++++++++++++++++++-----
->> > >  drivers/gpu/drm/nouveau/nouveau_encoder.h   |   33 +++++++-
->> > >  7 files changed, 244 insertions(+), 137 deletions(-)
->> > >
->> > > And the get_maintainers.pl rationale was:
->> > >
->> > > Ben Skeggs <bskeggs@redhat.com> (supporter:DRM DRIVER FOR NVIDIA GEFORCE/QUADRO GPUS,commit_signer:1/1=100%,commit_signer:6/16=38%,authored:4/16=25%,added_lines:23/124=19%,removed_lines:36/152=24%)
->> > > Karol Herbst <kherbst@redhat.com> (supporter:DRM DRIVER FOR NVIDIA GEFORCE/QUADRO GPUS,commit_signer:2/1=100%)
->> > > Lyude Paul <lyude@redhat.com> (supporter:DRM DRIVER FOR NVIDIA GEFORCE/QUADRO GPUS,commit_signer:9/16=56%,authored:6/16=38%,added_lines:92/124=74%,removed_lines:107/152=70%)
->> > > David Airlie <airlied@gmail.com> (maintainer:DRM DRIVERS)
->> > > Daniel Vetter <daniel@ffwll.ch> (maintainer:DRM DRIVERS)
->> > > Ilia Mirkin <imirkin@alum.mit.edu> (commit_signer:1/1=100%,authored:1/1=100%,added_lines:2/2=100%,removed_lines:2/2=100%)
->> > > "Nathan E. Egge" <unlord@xiph.org> (commit_signer:1/1=100%)
->> > > Jani Nikula <jani.nikula@intel.com> (commit_signer:6/16=38%)
->> > > Dave Airlie <airlied@redhat.com> (commit_signer:5/16=31%)
->> > > Thomas Zimmermann <tzimmermann@suse.de> (commit_signer:4/16=25%,authored:4/16=25%)
->> > > dri-devel@lists.freedesktop.org (open list:DRM DRIVER FOR NVIDIA GEFORCE/QUADRO GPUS)
->> > > nouveau@lists.freedesktop.org (open list:DRM DRIVER FOR NVIDIA GEFORCE/QUADRO GPUS)
->> > >
->> >
->> > I'd say it's good enough to message supporters and the mailing lists
->> > for at least Nouveau code, maybe even all drm drivers.
->>
->> i.e. leave out the commit_signer hits?
->>
+On Mon, 14 Nov 2022, Hans de Goede <hdegoede@redhat.com> wrote:
+> Hi,
 >
-> yes.
+> On 11/14/22 00:23, Stephen Rothwell wrote:
+>> Hi all,
+>> 
+>> Today's linux-next merge of the drm-intel tree got a conflict in:
+>> 
+>>   drivers/gpu/drm/i915/display/intel_backlight.c
+>> 
+>> between commit:
+>> 
+>>   b1d36e73cc1c ("drm/i915: Don't register backlight when another backlight should be used (v2)")
+>> 
+>> from Linus' tree and commit:
+>> 
+>>   801543b2593b ("drm/i915: stop including i915_irq.h from i915_trace.h")
+>> 
+>> from the drm-intel tree.
+>
+> This is weird, because the:
+>
+>    b1d36e73cc1c ("drm/i915: Don't register backlight when another backlight should be used (v2)")
+>
+> commit is in 6.1-rc1, so there can only be a conflict it 6.1-rc1 has not
+> been back-merged into drm-intel yet ?
 
-Agreed.
-
-I understand the point of commit_signer, but I don't think
-get_maintainers.pl does a very good job with the heuristics, or
-filtering out "insignificant" contributions to the files being changed.
+That's the reason it *is* a conflict, right?
 
 BR,
 Jani.
 
->
->> > Not sure what to do about actual maintainers, but I doubt Dave and
->> > Daniel want to be CCed on every Coverity report here either.
->>
->> I updated the CC logic based on this feedback:
->> https://lore.kernel.org/linux-hardening/87h6zgfub4.fsf@kernel.org/
->>
->> So maybe just mailing lists?
->>
->
-> That should be good enough, but maybe the DRM subsystem is big enough
-> so it's reasonable to add special rules. For Nouveau either way is
-> fine.
->
->> --
->> Kees Cook
->>
->
 
 -- 
 Jani Nikula, Intel Open Source Graphics Center

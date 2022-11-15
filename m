@@ -2,136 +2,164 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E09262AFA1
-	for <lists+linux-next@lfdr.de>; Wed, 16 Nov 2022 00:48:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B708D62AFB1
+	for <lists+linux-next@lfdr.de>; Wed, 16 Nov 2022 00:52:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229509AbiKOXr7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 15 Nov 2022 18:47:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44874 "EHLO
+        id S229656AbiKOXw4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 15 Nov 2022 18:52:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229575AbiKOXr6 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 15 Nov 2022 18:47:58 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F807317F7;
-        Tue, 15 Nov 2022 15:47:56 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NBjXn6LxNz4xTg;
-        Wed, 16 Nov 2022 10:47:53 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1668556074;
-        bh=mNBclmwaAQTxYMzZYFdEyX+gKdInfl7kuoGFMn09KBE=;
-        h=Date:From:To:Cc:Subject:From;
-        b=VSBRMDX7d+o9U9vMdOkJFHDqhGZZpXmU1SF9zkKv+LvurcZNq+W66tBxTt9ArbT0p
-         Puva/8Di6LF2Z1Q/TQb5Vzf90i1/4hFWHUotU+H8u5iyk/DbzxogZvIbzjcrCOqNZV
-         fZdaZuguvV6MVMuqJG/CqR6dR+UyGPNxKJD8Il1th71kdbqwzf2F0NfvLwGtyTEz7z
-         nGKpPzpV4A3GWAX5c/PTIrCISK4ki7IHi+AfYi4JxcoNxdDfzTZsSxd7DWiO7jaLTw
-         JptBX61a7jj9+u4GEbZ+N+PK4xmNmhdv1R9LrYQe02zszVqfeS0q9kwScGoo5CiF+I
-         QLGKVNzyAeFuQ==
-Date:   Wed, 16 Nov 2022 10:47:52 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>
-Cc:     Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the drm-misc tree with the
- drm-misc-fixes tree
-Message-ID: <20221116104752.4c64495a@canb.auug.org.au>
+        with ESMTP id S229637AbiKOXwy (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 15 Nov 2022 18:52:54 -0500
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2042.outbound.protection.outlook.com [40.107.243.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0197DD2FF;
+        Tue, 15 Nov 2022 15:52:54 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gI48pwUweW5LT/WKj0KXszXHYMAyCwfbjHREASitY9rlPIuJD1vvf46QPQ8fvrcppUITrZDtYnzSs/saUu4ovvS81JRZau1bZbL5jsGs/3tXVS0P9h9/yRtftdjapvwSKSrBO/M3OBAhOajw/QJGumbH+MeFzhsb/W8nKrhMWIUIRiL2fCoxHTqawwAbkONS8HZ9QoDYvtvp9cN1vNzQzJTz45X/XPV5kzQlLJ9BmMk+MzpNb5WIkYX6gWzsxZSzMXGI2AKGuZFdoOxvFXCArHarDmCKI4d5RTo1bOjKGf9XEDmmisQAdpZ2cGmy57ewuEib1eAYVxSTblXzoinsGg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=22NO8ngiErE4YOH73QhHucI/dwYmIALIZHIjUPzDMeY=;
+ b=Bn07Or9eiqY2TG3QRGIwy94ZSGbCB0XcTbli6wsDMgMuhTdTgdRXL4di3g9DBe/Z+Kx7vxF0K3oTfOJY2u32lKigWjpHb8Xy7OlA7Yvb1tLWZ3XeljaYMFalkuQ2SCv+NaUjqvOxPD3cyENsG83+K4gJVuLilgQOMWKGyytowTm7kljK2AMstuTRFvd71ASV8DpHIvZ/zvla6GCxhApQmLYHr5bRCVmdD4fhkH5Ys6oW71MDTu6bXK2I0CzFDZpTL4nVpFaFVyEXN9R3m2y2VwtS6gY47bS95ful/uZnXknXpX74HHQKgj/zf80/3eu57XGpUipZdttOEl1e1rjY1w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=22NO8ngiErE4YOH73QhHucI/dwYmIALIZHIjUPzDMeY=;
+ b=kFxulxxoONhuCmKCeahvFOhsyLQ4oeaAsADJd7NCUEQxNSVpV7plBCEjoeYHhqlEuV0KlkGpPigUruoo3g7W7Wq3zE710FZS0H67+nks2XBi2yGrnafIq7dJcoMLU7C0SOZlUi3J40rWsZkm7Gd2cQ4MKQ4DcnjDbZjU8rSyybWuTLelcYnqdLAn6wj2SeD9a3wP6KFsNKlM3yplY7BcxHYw7zsBnOXOC6ORVhYHZRrPdufgfo/JkojEnp+PL7F+nSwOQJFD1uLeKDkw2RGw7QifQCqtOEiovIRlYJGhQtcKxFLshfGsyyn8VoxULnIQm0Iu8mjd9YKD9X41txoSRQ==
+Received: from SJ0PR12MB5676.namprd12.prod.outlook.com (2603:10b6:a03:42e::8)
+ by CH2PR12MB4246.namprd12.prod.outlook.com (2603:10b6:610:a9::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.18; Tue, 15 Nov
+ 2022 23:52:52 +0000
+Received: from SJ0PR12MB5676.namprd12.prod.outlook.com
+ ([fe80::46c4:5346:c449:9bd4]) by SJ0PR12MB5676.namprd12.prod.outlook.com
+ ([fe80::46c4:5346:c449:9bd4%3]) with mapi id 15.20.5813.017; Tue, 15 Nov 2022
+ 23:52:52 +0000
+From:   Besar Wicaksono <bwicaksono@nvidia.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Suzuki Poulose <suzuki.poulose@arm.com>
+Subject: RE: linux-next: build failure after merge of the arm64 tree
+Thread-Topic: linux-next: build failure after merge of the arm64 tree
+Thread-Index: AQHY+T4w2yZkiIZ58Ua1lVlSj6Es9K5AqEEw
+Date:   Tue, 15 Nov 2022 23:52:51 +0000
+Message-ID: <SJ0PR12MB56762CFC0B8D680B05828EF8A0049@SJ0PR12MB5676.namprd12.prod.outlook.com>
+References: <20221116090401.0cd5ccc7@canb.auug.org.au>
+In-Reply-To: <20221116090401.0cd5ccc7@canb.auug.org.au>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SJ0PR12MB5676:EE_|CH2PR12MB4246:EE_
+x-ms-office365-filtering-correlation-id: a6efa887-6d98-47bd-9a06-08dac7648220
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: kKh2PL2266GGxbZdoSQVmt5yBtzJptkG5KYH/4VcDOrF3mXtQhuoht0mmHvnZfp5UHZcTSQV7fc9KJsdoETsVZxWtpnmMvjlMYcsE7/pZEuDIY2MD/tiie4keN3eFv30bEDRPFEIQVF80lRqAP14wN4HOCmUjBIma90M2BVL9TN5lu7buUY0f543Mm3eabltRhFHBAikVcwnX8vacmFr04A2PwoQ3hRoIfljfOBczJZolISGvO7dEP7rDKh4eT2Su5+EaDLuytW1FFp6kmhLhxHb56CUJ7qQLq5TaD3IJOok549uF57gLutSnUtJTHWI35/Xcr0Om2EfdUudw1aI/fOSYzkXe2BTiH5VxTqS5eilNTUUAY2zuzKPFihMDGLi8z6Xazuf26357emvOhMhaK4rYUDpeQUYopWlwYCoKczjTq/QZFjIYdaiFJqan23dScEDc25LZ11HLXyqyXL4Wq3tHCKHV8UEVGJIQr6PRktWpFISKUPme8fjCLLLTRJkGCZgsSaJbvOG2X3I6H5ZhSW1T5/omB+SF0Kl982ZrqK21Wux+wLjwSMZ+dbCJwmAIgUIlnT30obeQ8LGCh2b42iF9q0lTQH0Mw3Khs2KSU3Jmsh6v/Ahl+OlmI4aD19KcR8873Tp99bmy8BBL2H+y/3oGWmHZcSM/3hMz4Gn9Q/2/R7ETN+xBlEeYA3jbCJVR0itjuPLMzh6lFnzS2o3aq4Umd2Ja2neHGFGww9eWvHfvShqJiHvFqHlBrUCQK4HtZA3aGjs8SZe4QkEw2v27Q==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR12MB5676.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(376002)(396003)(136003)(39860400002)(346002)(451199015)(478600001)(71200400001)(55016003)(110136005)(86362001)(316002)(53546011)(2906002)(52536014)(41300700001)(33656002)(38100700002)(122000001)(54906003)(7696005)(6506007)(64756008)(76116006)(66946007)(4326008)(8676002)(66556008)(66476007)(83380400001)(66446008)(5660300002)(186003)(8936002)(9686003)(38070700005)(26005);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?HOSs8/LMmXMaYRMYm+eqz7pwO/Y9OV5YdS3/r3bf4M52ryibxrTJ3cQ4W6iS?=
+ =?us-ascii?Q?MXKowZi+16t5FDfXsxYKu/4kCeH+m/eB8Z3z7RRG5BApQEbAJSCSJDhsr4Z0?=
+ =?us-ascii?Q?ZK/XlZLyiL9FyhK9rBUTxSSUb6vhUNwvRV2TpLkpnynB1PqcZin1kodZuhDR?=
+ =?us-ascii?Q?NSQoqDhGruRN2VS1l9AvMd0s5enjE1LB9onfYXS1N4UCALfyUlOdk6qbDXaM?=
+ =?us-ascii?Q?dEddPHJHYYccOpQkKsx5C+hxCg5VXy1Sgd0ac6wTivz0dvUNH/xMeQeD7JCg?=
+ =?us-ascii?Q?qK1iD8Bn7K3jF1C1qN97cOvVpId/rhBNsnmArFLlC4EG6UlgkfF+dtr4XQBV?=
+ =?us-ascii?Q?76b4sehOjDjxWFhZA7C28xBHo2RQpGLttrHdElwCl6HbXV9+Y4Ytnqzxubkh?=
+ =?us-ascii?Q?UTw8VqvFxr07lglCFOkkOTEL8dUuUBelK1DRkmiH5GiTHVoMs0uX43SxX5Hs?=
+ =?us-ascii?Q?qf08nJHq9sxR28ULCIYrqYKCzvJlzW1Fdo5zts3s1BGQPJ7HySK0RoxJ7+kM?=
+ =?us-ascii?Q?kAhUhWbnZ8SawqXXlylFqVn6C6VahZd8yUUxqCbaTVr/6IQLYdP9X1wEL7U5?=
+ =?us-ascii?Q?qPHbMXNmcGAtDGCEX/lvkq5Af/umL84GRI7ntvW0fAmRnQJSjYuVtXyIaDfM?=
+ =?us-ascii?Q?geceEOSFgGoAC7fWL7Y3Ra6suLVL79MjoaLNZQt7Exd9aKWjkb7SzbTpm7iA?=
+ =?us-ascii?Q?pjaHHL/KrpdBzqCAGB0Uxa90Cn5fljJ7Ky+vXB66aihh0UDzqAyU+9uEbSvA?=
+ =?us-ascii?Q?e6Zxr/FxDL7IrbmVGqOlc5EpUElWJNRQyjMZNoTarcca2RyqGXHcffxCfFe1?=
+ =?us-ascii?Q?XE4S/CjAj1nRnKM44U4bODRteNWL/Ncvat32tMHlhWZ1sTgnzLP4Le0dsGmW?=
+ =?us-ascii?Q?2c1dbtwOT0wrndoMvCeC9O64vmHHbpycsA9gUiOF3F61Tk2UiITz4tsdK1Xi?=
+ =?us-ascii?Q?AbLa2g3ZcXif7M3kwqMrjcLcWXdn1JpqVVbl1wIjAicwSOQByxfPZLUOIKfi?=
+ =?us-ascii?Q?qR26/3/ExxnwA1+b0JJtbB3pIpYpeq6YHckJx8vbYrp3FTA242ao2L10PdYF?=
+ =?us-ascii?Q?tB6lYh0G1Hw8MVSK/092RBV0jw174F7stgIK/+FX9GaiPOxTXR0k5RfA8skW?=
+ =?us-ascii?Q?pCxsghToPWLct6iC7B2bwezZeKeJF+q80nsxxQNxuVj6OwCFjfBvKS7ZoBUd?=
+ =?us-ascii?Q?tvx3Bta78HRF78kEOIKnK0vEuGJfuwQXdU5uL8d0hXQyOGfgsR7Cb/poE2gf?=
+ =?us-ascii?Q?FZbIVv+rGeMI/capFElC/AfDHsJQG8JboPFG9gjKbMkGLgSbOz2cf+RMuBrW?=
+ =?us-ascii?Q?BzrSj0Yu4PFUa0ztClqQA+6sct1DCZzXnghghV+iAzSQrubNhDvIK8JyWqoZ?=
+ =?us-ascii?Q?EnJZZGFui/ldEtmGWD3XMKx55LFkX43zpGSW7AYJcjY8ywH0LHuEoSmU0DdB?=
+ =?us-ascii?Q?67I48JVaWysxqPqSL5v8fV8oKfFyyAwIWJdeyXPDI22Bx21ejj6uSNUwaX9+?=
+ =?us-ascii?Q?9Myqqr/GI2IIjPeJDLvoUXTYAbSMGF0lyeMY/Vpk/3KFZTprvSZfS0+j8fLG?=
+ =?us-ascii?Q?Ml1hLlUGTmh7THlbMLqRyaAT0xLy0MNs1DS0TSQV?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/wjgPxu/WZguAY0NUMy/Wf_I";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR12MB5676.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a6efa887-6d98-47bd-9a06-08dac7648220
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Nov 2022 23:52:51.9553
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: +YChEL2uHyP6wQNaRJv0h68WgP9k6Tr2lAY156PYiPSUurGiALo/ZTlsjE3OjSxu7s9Ko3QqifPwtcYLCdsheA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4246
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/wjgPxu/WZguAY0NUMy/Wf_I
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
 
-Today's linux-next merge of the drm-misc tree got a conflict in:
+> -----Original Message-----
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Sent: Tuesday, November 15, 2022 4:04 PM
+> To: Catalin Marinas <catalin.marinas@arm.com>; Will Deacon
+> <will@kernel.org>
+> Cc: Besar Wicaksono <bwicaksono@nvidia.com>; Linux Kernel Mailing List
+> <linux-kernel@vger.kernel.org>; Linux Next Mailing List <linux-
+> next@vger.kernel.org>
+> Subject: linux-next: build failure after merge of the arm64 tree
+>=20
+> Hi all,
+>=20
+> After merging the arm64 tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+>=20
+> drivers/perf/arm_cspmu/arm_cspmu.c: In function 'arm_cspmu_get_cpus':
+> drivers/perf/arm_cspmu/arm_cspmu.c:1114:29: error: implicit declaration o=
+f
+> function 'get_acpi_id_for_cpu' [-Werror=3Dimplicit-function-declaration]
+>  1114 |                             get_acpi_id_for_cpu(cpu)) {
+>       |                             ^~~~~~~~~~~~~~~~~~~
+>=20
 
-  drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
++CC Suzuki for awareness.
 
-between commit:
+This function is used for searching CPU with matching ACPI Processor ID in =
+PPTT.
+I will check if adding PPTT dependency to arm_cspmu would resolve this issu=
+e.
 
-  eca13f3c67b6 ("drm/amdgpu: use the last IB as gang leader v2")
+Regards,
+Besar
 
-from the drm-misc-fixes tree and commit:
-
-  1728baa7e4e6 ("drm/amdgpu: use scheduler dependencies for CS")
-
-from the drm-misc tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
-index de5cb056c9ad,0528c2b1db6e..000000000000
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
-@@@ -1197,10 -1201,7 +1203,10 @@@ static int amdgpu_cs_sync_rings(struct=20
-  	}
- =20
-  	for (i =3D 0; i < p->gang_size; ++i) {
- +		if (p->jobs[i] =3D=3D leader)
- +			continue;
- +
-- 		r =3D amdgpu_sync_clone(&leader->sync, &p->jobs[i]->sync);
-+ 		r =3D amdgpu_sync_push_to_job(&p->sync, p->jobs[i]);
-  		if (r)
-  			return r;
-  	}
-@@@ -1241,14 -1243,11 +1247,14 @@@ static int amdgpu_cs_submit(struct amdg
-  	for (i =3D 0; i < p->gang_size; ++i)
-  		drm_sched_job_arm(&p->jobs[i]->base);
- =20
- -	for (i =3D 0; i < (p->gang_size - 1); ++i) {
- +	for (i =3D 0; i < p->gang_size; ++i) {
-  		struct dma_fence *fence;
- =20
- +		if (p->jobs[i] =3D=3D leader)
- +			continue;
- +
-  		fence =3D &p->jobs[i]->base.s_fence->scheduled;
-- 		r =3D amdgpu_sync_fence(&leader->sync, fence);
-+ 		r =3D drm_sched_job_add_dependency(&leader->base, fence);
-  		if (r)
-  			goto error_cleanup;
-  	}
-
---Sig_/wjgPxu/WZguAY0NUMy/Wf_I
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmN0JSgACgkQAVBC80lX
-0GxUwAgAoWI36aevpcyI9lzL7qDXiwqHVX3Vr5ed8U4YFtRFEOCr8jK+zBq4DnQK
-RTORhliDSaGNM4mZAbYeUcqPcIGEWBqcIYKmpwNPihBWP85dcO1LXN8r1Zxb33/y
-tuniOCKdJtCExKjq7b5I1FPkFxKMFND/MCkcWzMur4b/F8KedMYfczRqD1N1uU2C
-Nrrq88G/KeTj/3nqeH0+ErAdl++9zlLmWOHpzGUXJmjGmcVb7gHhZapFpNYbIhEB
-8OqKTU38GWuz+okJdR4wx4WIbcAQYbr+yO7nPKOgrwnjRlYEpJcdhCFh0jN/RwrG
-Etxmk8SdRn4TLVl1kX/HxmWAGDEs8A==
-=2ttS
------END PGP SIGNATURE-----
-
---Sig_/wjgPxu/WZguAY0NUMy/Wf_I--
+> Caused by commit
+>=20
+>   e37dfd65731d ("perf: arm_cspmu: Add support for ARM CoreSight PMU
+> driver")
+>=20
+> I have used the arm64 tree from next-20221115 for today.
+>=20
+> --
+> Cheers,
+> Stephen Rothwell

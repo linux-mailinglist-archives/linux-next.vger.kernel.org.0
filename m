@@ -2,94 +2,89 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24C1F629110
-	for <lists+linux-next@lfdr.de>; Tue, 15 Nov 2022 05:03:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0090C629170
+	for <lists+linux-next@lfdr.de>; Tue, 15 Nov 2022 06:21:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232163AbiKOEDe (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 14 Nov 2022 23:03:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44802 "EHLO
+        id S230230AbiKOFVB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 15 Nov 2022 00:21:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231851AbiKOEDb (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 14 Nov 2022 23:03:31 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B562B114C;
-        Mon, 14 Nov 2022 20:03:29 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NBCG26b0kz4x1D;
-        Tue, 15 Nov 2022 15:03:22 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1668485003;
-        bh=3FVi7YR5ydMbW8FZhQb19D7y209wMWIMPKpHppb9+S8=;
-        h=Date:From:To:Cc:Subject:From;
-        b=OvLNzHhtXSr21lJ5jGo5CuLgN4rofim9Bk5e7qKQZ6pIlyTK9kRpJ7idSRcytODH7
-         Q8IGmkR24dIIIxr5vpaSdiaLnPXVugvAsrBr7fiHxHWHRY/BOb9LEbkQH4wG7lD+Ui
-         Om547fI1jh2o47r/UkrGWEN0C9KdI1kVxU0waL+XUIN5Fa1OxzSrFGVxIH0+hEEgpu
-         qUC7JAWQA2xdd16F0Luzp8+/bpQxxBVAJ3qY32M7n7+uW5t3yxpWZ1z7nupwdfbJwz
-         jFOmuFtRc04RLruwigXrjYmC0sjgcpLpR2a5WXkGkjdQWO9DT3zeRzGcaSMa6PBsu2
-         EuGCMki0i/oiw==
-Date:   Tue, 15 Nov 2022 15:03:18 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
+        with ESMTP id S230031AbiKOFU7 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 15 Nov 2022 00:20:59 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F235167DF;
+        Mon, 14 Nov 2022 21:20:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1668489641; bh=7a1CDBFiXBSPRVqpkBP3B5ID6/eFzYXsb4HHp3hy4ZI=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=g0LO7Z1VURvA1WeG5jNOwHCP+j2llwjGhcV37ASuv9hbDxY8YfnftJ/A7J8pVmOJ+
+         Q2/qfBKUrqDbthJ/XOP3lKT6Ig00Vmsc2G/zJozNOKo0iWLslgNOWspAO8K2CzOLcQ
+         hcABdSoWHPvhr3m9YF5eSWrDJCwZX7MakRJbgRQuRLt3rkHkp0T00vpdPmCmRZeJwH
+         e6eBcZDWyYNburnF2AnNyJaPOfL1ulvmY9HifuxTCQbwyizH6o8inoiZSVkAjTo3Di
+         s5YBdCeo6UOOY66bbUbuFsOjIRCJPm5qXmv9kasXtC/S3i/n1li5SoyeTZi2Heq6GZ
+         EafXh4r5nzPxg==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.20.60] ([92.116.131.87]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MVNAr-1oUjCY06UB-00SKp6; Tue, 15
+ Nov 2022 06:20:41 +0100
+Message-ID: <17d44085-ae13-44ad-f9ac-031931ba26df@gmx.de>
+Date:   Tue, 15 Nov 2022 06:20:40 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: linux-next: build warning after merge of the fbdev tree
+Content-Language: en-US
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Shang XiaoJing <shangxiaojing@huawei.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the pinctrl tree
-Message-ID: <20221115150318.7547f53f@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/on_I8nhaqq9UomVqUhgO+xg";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221115112021.1c8aa004@canb.auug.org.au>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <20221115112021.1c8aa004@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:Hke/3atF54baUqnxwwJbD2mthx5HOzSEbbYRDm8Ed2sJmGBQ68z
+ zI8Lo2wng3uFZ3BvwLSOmMrb6pXVXVjGPmx9vDSSZt+LZekfOe8POjEIJ9iX8BXWvExAtUN
+ 1fZCBFBq2ro7uCcwNznEJSuIcHwcySGvi3wgxN7xpKtFv79zNxjVAS7MVLkevPyTT+TCNGT
+ WGfWgZtyuMEmOZHRGr80A==
+UI-OutboundReport: notjunk:1;M01:P0:8Li9gYSNWb4=;AzoWVn+jUfqgCUAIhkLssVxKdKW
+ 885tT90t09WuOvDHe2wmzmPiqrwPp0Y6xQiIEK6EMz4VKykHCnMQJ6A+j4JcxovQo83MS8kRh
+ bsM0yiFJYt9zoMLwBjV1JulyoPIw8RLw/hwZPw7JATQySccXC80hfTdTCs9KhorIzT4Lf/rUE
+ DH4YTueGEG1dtDFKeKUsBu9N81u/Wm6JcgNMWXcx/DPxGRv16tBqWXDGU4iIdZzIjDpTuD6nA
+ VzdUGryStAHumPD1Ym5yA0ueO/A94n33ZA6FadmTy5LHeHMSs1gT2NmhwGdHl2OEsH1PAc2cX
+ 44AeLy/7ft0g9VHDkm/4WspmIqyflshmgtZRCZnSqDjt7D468ZSdc73MSl1ZhYE6P3Y3+lOYu
+ X9cMpG38EGXX/EDbRUqi8IAA2BAbtMMHJacQsaDksAdmmsx60PD2GVW46hEHtgAzJk8FY5bHn
+ umC4wNkFOWCRq+vZzFH+XtLfCE3l7hqDkZpY7hmUWrSYVcG/mgbgMQNkqK/o5pYCIvUds4xxY
+ 1m28pp71pp/3y5TAuW7r1E2B0EkLbDwwvTv6J+kBtUxgp9a2RUVkdJGoUQKuwRHlJgrXaIpsq
+ MAAmfSZMR9GCaXk3mIu3YAhZoGtqBTcubwlIaooKhh10C9xpVKtvdzrtReW6z42+3m5AqkIqb
+ oAIPSORdvLKvFFlgFYfi7ZLsX8g4l7gn+4/PckxpxRKBfCmPqAvOixCcNZwbK3Al7r6VYzZC8
+ Mr/Vk/7xafrrzCZbfwp1QV8PdYx/MglMDGlBfUYxmwnCYNS3uTD6v74poMa6zIKfRBU4Be4FC
+ 6tUf+VxyHKnC0WRwUYWTFCf3yaHsh+SvZpL/3VT7yCLvBxcKhtAvwdoyVbnh4jz2ffPtcowtI
+ yzWDE1vrm81JQluEFlwuduvlTgOu8f51C4Giy772ag6cliN/DnDFsE3cpglRJVBEQM2YcKg0v
+ QY1gSoZulkKEY1XDQ3sw+v/6sJo=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/on_I8nhaqq9UomVqUhgO+xg
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 11/15/22 01:20, Stephen Rothwell wrote:
+> After merging the fbdev tree, today's linux-next build (x86_64
+> allmodconfig) produced this warning:
+>
+> WARNING: modpost: drivers/video/fbdev/via/viafb.o: section mismatch in r=
+eference: init_module (section: .init.text) -> viafb_exit (section: .exit.=
+text)
+>
+> Introduced by commit
+>
+>    ab885d8c7e15 ("fbdev: via: Fix error in via_core_init()")
 
-Hi all,
+build is fixed for now... but still looking for a better solution.
 
-After merging the pinctrl tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+Helge
 
-ERROR: modpost: "debounce_time_mt6765" [drivers/pinctrl/mediatek/pinctrl-mt=
-6765.ko] undefined!
-ERROR: modpost: "debounce_time_mt2701" [drivers/pinctrl/mediatek/pinctrl-mt=
-6779.ko] undefined!
-
-Caused by commit
-
-  e1ff91f9d230 ("pinctrl: mediatek: Fix EINT pins input debounce time confi=
-guration")
-
-I have used the pinctrl tree from next-20221114 for today.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/on_I8nhaqq9UomVqUhgO+xg
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNzD4YACgkQAVBC80lX
-0GwjWwf9HmLJ75oSOaYLiTODmBAUVim29fpTK7jJmN8M0XSt8mt6UJs3iopXB54L
-K4hrehztykHtwJ2jhdO2fCja0jjxi1RlVE9uhwsEw7eKbdZemVLzK1ItNVcgnmqg
-FcFSD2J9XgiIYjmolTz/3R9/lgO4/jrWO1Pei1NGlKD9e75if7zqOrnOJlgtkP75
-KGCuHr7P+PKa1VcuU/B0hAlGwWSlkU9Pm96A4WVfG5myx9DADtdzidmO9h5cvBVL
-5PMCp++b7Ylba/rlK6YYn8zWCDGpB+nrfSiGg6N4kh9dJLN04RAs5mX4LYziYuV1
-XtiWG8x7zYjWxMuLzj+nSCc1IWvLLA==
-=sdD5
------END PGP SIGNATURE-----
-
---Sig_/on_I8nhaqq9UomVqUhgO+xg--

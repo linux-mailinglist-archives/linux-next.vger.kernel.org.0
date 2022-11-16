@@ -2,53 +2,65 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 897D762B1A3
-	for <lists+linux-next@lfdr.de>; Wed, 16 Nov 2022 04:03:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADA4B62B337
+	for <lists+linux-next@lfdr.de>; Wed, 16 Nov 2022 07:24:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231633AbiKPDDP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 15 Nov 2022 22:03:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34904 "EHLO
+        id S230238AbiKPGYt (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 16 Nov 2022 01:24:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230424AbiKPDDO (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 15 Nov 2022 22:03:14 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9815713E23;
-        Tue, 15 Nov 2022 19:03:12 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NBnt237r2z4x1T;
-        Wed, 16 Nov 2022 14:03:06 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1668567788;
-        bh=UY0ccI3aO6v1TmsIAsEjO7GSYU2Ug6bsvaaUvJWXiMQ=;
-        h=Date:From:To:Cc:Subject:From;
-        b=LTKdcjZwHb/zHQzEtIEVprOBzl+Y3uuuOJpyhuB4GUTkdC+0+++faKzOv8NcEKzId
-         TzL5XOQFwGmx83aRyA4Wx6+lJJMqC9mp4pATzcqvbuC3oUgFxjSCySRSifbsTt13ye
-         VpZSDKh5q2ISpJFGbPfQ5eCxF0G529cmBTqJf1Rb76W6NRFREPNOJKXczdgsKJehlj
-         bQ4SumTu2uyyRxpzyqNJGPERLCe2PX6VRlfv7yvloDsOiBoGXnFsyhnalWIcJd8YGs
-         ZV3GZpixibbbNr/kqz0+fr2F/gJTq3CYnnwdJbLfxlU9aE6GaBiSqMnkFyw4lkhvcv
-         Zf8sauDVR7QNg==
-Date:   Wed, 16 Nov 2022 14:03:04 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Christoffer Dall <cdall@cs.columbia.edu>,
-        Marc Zyngier <maz@kernel.org>
-Cc:     Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Gavin Shan <gshan@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: linux-next: manual merge of the kvms390 tree with the kvm-arm tree
-Message-ID: <20221116140304.48333261@canb.auug.org.au>
+        with ESMTP id S232802AbiKPGXH (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 16 Nov 2022 01:23:07 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70B921582D;
+        Tue, 15 Nov 2022 22:23:06 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id b3so27980027lfv.2;
+        Tue, 15 Nov 2022 22:23:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Dsr7OsB8wB98rNVEI9QRhf9lR0zwcVT6qNdfdodmdlw=;
+        b=mfFlllbzPTyEVyif9qC2QIPaMpl/raWnKGEqr6DAtzKsGd1nv8m9sjTqdFOG40jo0K
+         dgwz3yBugrdHu1TDYzpVyGtURkhUSdhi14BRZj6HLjhoUzi+PO+FuAFrr2qDZ7M/9hrf
+         Ue7U+4591f3hhlewOHxulJsPuoF+PDz/W9opqmaH52zhZln1l9s5jlta+SrjzQO/lm9N
+         8820F719epsY1B3vX+cfYiucNQOhTIYlTovlgRGGnAX5Ba3uwjKcQguq47Sso+2lMeOj
+         fOJFUMG/lTzg/Owh/oMf24+0/HcuVjFoHYCE0HyAlX+m/M/n0BLmV0r//IeV57KgVyd3
+         DnBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Dsr7OsB8wB98rNVEI9QRhf9lR0zwcVT6qNdfdodmdlw=;
+        b=LyXUSBmtMGXtuJPHRCECQJ2tCXyF49JwdYkpkhtCvUiD/SZycApIz7MK1F73qHDJaR
+         bTlKdyGppeJ5YfWEqLfmn0V3EnVGs41c7m+Z5ThoQeMk6RD9doH4NVJRJ/ABMTPWz3Uw
+         MAqthXSIs84lqgfETduiqZsfbS1zsLnqAlG1kc8ybD6ovh9wfiT6fipGRUSVE9YJCr1L
+         389a8DedF0rHbE/9Y4Vhi28LQPYSUeLBXs+3+ztPM6G+14P7tvVaq5Zm+Fwy0AT9MD4w
+         3yulsS5b5NUfUXSMMEeTWyxu33Vk2U3DVIF84WqKK85yXAdNmP9iW5ukjacmdSZqKVl5
+         st0A==
+X-Gm-Message-State: ANoB5pnkfD7gkd3TGUyk9WWq2P3D8wnAmkqYG+Gf5IEhA3fkgYGus5zB
+        qn3xSS7RZyp3yc87ve6T44qHleuBDcTMTDL0oE0=
+X-Google-Smtp-Source: AA0mqf5hlPGejSK5eNDPIzypAZth5+Edami5qB75CSiwQJvI62yZWoxUrqui61+XJGYexg2ogWzR3m8Bno+az1U18a0=
+X-Received: by 2002:a05:6512:1115:b0:4a2:3924:de36 with SMTP id
+ l21-20020a056512111500b004a23924de36mr6620878lfg.663.1668579784635; Tue, 15
+ Nov 2022 22:23:04 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/mzxMh2a2MppNBDeVeNrwBI9";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+References: <20221116074146.6e7cbce9@canb.auug.org.au>
+In-Reply-To: <20221116074146.6e7cbce9@canb.auug.org.au>
+From:   Steve French <smfrench@gmail.com>
+Date:   Wed, 16 Nov 2022 00:22:52 -0600
+Message-ID: <CAH2r5muADC_ow81cGPppTQ2zuMHvB_7aadb2WAbyZFFD7ELi0g@mail.gmail.com>
+Subject: Re: linux-next: Fixes tag needs some work in the cifs tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     CIFS <linux-cifs@vger.kernel.org>,
+        Zhang Xiaoxu <zhangxiaoxu5@huawei.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,66 +68,34 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/mzxMh2a2MppNBDeVeNrwBI9
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+updated Fixes tag for that commit in cifs-2.6.git for-next
 
-Hi all,
+On Tue, Nov 15, 2022 at 2:41 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> In commit
+>
+>   9898f0456aa3 ("cifs: Fix wrong return value checking when GETFLAGS")
+>
+> Fixes tag
+>
+>   Fixes: 64a5cfa6db9 ("Allow setting per-file compression via SMB2/3")
+>
+> has these problem(s):
+>
+>   - SHA1 should be at least 12 digits long
+>     This can be fixed for the future by setting core.abbrev to 12 (or
+>     more) or (for git v2.11 or later) just making sure it is not set
+>     (or set to "auto").
+>
+> --
+> Cheers,
+> Stephen Rothwell
 
-Today's linux-next merge of the kvms390 tree got a conflict in:
 
-  include/uapi/linux/kvm.h
 
-between commit:
+-- 
+Thanks,
 
-  86bdf3ebcfe1 ("KVM: Support dirty ring in conjunction with bitmap")
-
-from the kvm-arm tree and commit:
-
-  57ecc06995f9 ("KVM: s390: pv: add KVM_CAP_S390_PROTECTED_ASYNC_DISABLE")
-
-from the kvms390 tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc include/uapi/linux/kvm.h
-index c87b5882d7ae,d3f86a280858..000000000000
---- a/include/uapi/linux/kvm.h
-+++ b/include/uapi/linux/kvm.h
-@@@ -1178,7 -1178,7 +1178,8 @@@ struct kvm_ppc_resize_hpt=20
-  #define KVM_CAP_S390_ZPCI_OP 221
-  #define KVM_CAP_S390_CPU_TOPOLOGY 222
-  #define KVM_CAP_DIRTY_LOG_RING_ACQ_REL 223
- -#define KVM_CAP_S390_PROTECTED_ASYNC_DISABLE 224
- +#define KVM_CAP_DIRTY_LOG_RING_WITH_BITMAP 224
-++#define KVM_CAP_S390_PROTECTED_ASYNC_DISABLE 225
- =20
-  #ifdef KVM_CAP_IRQ_ROUTING
- =20
-
---Sig_/mzxMh2a2MppNBDeVeNrwBI9
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmN0UugACgkQAVBC80lX
-0GxI5QgAnyuHlbIYa4BK79/8oGra7RkwRp0ZwR9XEMQa6eP0RzWfwSyLxDJd120O
-6NiOy2ZotxsbUKLdMOwRfJoiee6arwccqt13CfgbbhwcHdZCJIKgSR4AteY7m2hJ
-fjf6toEXqjT1f1WRL+lTlyG+ryllzWv4GtUnwHuuSziqrCgUygy5EduLvIDOlITU
-lIRWU7R/MrPThcE0RG7O/pXMq5vZbr7VmFC+6XuOe33TtriBnm4LVZmhBJto3f9d
-9H0sGBZ6IhBxPQK/fGYz7c7d0jhX7thSYtxnOXdy75/nxQMiUUW35bQoPSYXWVzQ
-3XdXWlyJ5iErjNXtzBitpJsKkF+76Q==
-=PVhU
------END PGP SIGNATURE-----
-
---Sig_/mzxMh2a2MppNBDeVeNrwBI9--
+Steve

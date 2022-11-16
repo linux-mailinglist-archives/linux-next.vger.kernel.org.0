@@ -2,68 +2,44 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C650762B57B
-	for <lists+linux-next@lfdr.de>; Wed, 16 Nov 2022 09:47:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A55A262BAAD
+	for <lists+linux-next@lfdr.de>; Wed, 16 Nov 2022 12:02:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233059AbiKPIrS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 16 Nov 2022 03:47:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46370 "EHLO
+        id S230314AbiKPLCf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 16 Nov 2022 06:02:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232883AbiKPIrR (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 16 Nov 2022 03:47:17 -0500
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7114F19009;
-        Wed, 16 Nov 2022 00:47:16 -0800 (PST)
-Received: by mail-oi1-x230.google.com with SMTP id v81so17747763oie.5;
-        Wed, 16 Nov 2022 00:47:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=EFx3ADTqPQnIUoerCbcND56+lAT60nhJaC7HSWp/txE=;
-        b=RIGCpjYQFDBQjvYxCTHdkSWgTFx4vhsfeZYj86W1gUcNtLxbbOfB+qDH9MB4fb8RJf
-         MARkgbwU/sYvEV1k86jwlYsHiiqPiFmeKPRsmRmX5QI7EndW1zUDZC0zmllO6lKQxGDm
-         jmllwCwvQc49N62wCkABlEumaIy7OuYsG4NR3O+cds4pmgv8YgxTn4LPgeUU3EW6g9vE
-         fgmdVysxGSgR9a2N8430h636GB2iGUZlm1NV8WpT+i7DnFQwwemqBiwF2PRGzfBuB0zS
-         rIxfTJvoxY5EY4FeJwxclF85nG/kdCLqJVM9h1sZ7H9bCtmpNQ6ffAX8qgU2i/FAkzNI
-         Q4Ig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=EFx3ADTqPQnIUoerCbcND56+lAT60nhJaC7HSWp/txE=;
-        b=2bmogAyqCm3QENX9Tvu96DJ9AiAjg62y3E++MsHOjDEE3E7lu0pm8M4Y+r5BxMcQco
-         o5wihZ6eeT2+RE93038zOyL6hg5D+gYgHRC3TsbHGzvMR7WoyfKfo5iPX496ro+Qojtb
-         qkEoFe48VJEsS2n++dBPMix+9I0h3fwfeuSxGvLUJ7B4BL8IkDWYv74sTXJuAxKzp7hE
-         YGi9ZMvxJ7wgWtBVJNITWd7dA2o7ELrMipwSph62GL6ddcqnnNqVrEFB2MO6zsFwmQI2
-         ZRlSSBgBquhAU3udhu+zoJdSdK22/hMD9qj6lf35fIdM+uR7bx2Qn5kfBGmz98Ht3+g5
-         SZaw==
-X-Gm-Message-State: ANoB5pkRSSM3pIgzWakgOP/TDkbxa/U54saHO8mWTE0W5U3zS1HDI9vg
-        Ufwb8y7MVHNJ0gbwL9BKmJnH4MeHdQnfduBoYMcdSrkOwAa1CKHRTT0=
-X-Google-Smtp-Source: AA0mqf7qE3nYJW8kHOhm1O2gl+T62j32ZFd5tMwnG6tPZCbzUm4wcO50MIa/a4qTgqv3yxc8wBEulTeJIzHf3IYqzL4=
-X-Received: by 2002:a54:468f:0:b0:35a:3c4d:9c9e with SMTP id
- k15-20020a54468f000000b0035a3c4d9c9emr1053445oic.97.1668588435747; Wed, 16
- Nov 2022 00:47:15 -0800 (PST)
+        with ESMTP id S238967AbiKPLBm (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 16 Nov 2022 06:01:42 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 41F871FFA0;
+        Wed, 16 Nov 2022 02:49:38 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3A20C150C;
+        Wed, 16 Nov 2022 02:49:44 -0800 (PST)
+Received: from [10.57.40.76] (unknown [10.57.40.76])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E18253F663;
+        Wed, 16 Nov 2022 02:49:36 -0800 (PST)
+Message-ID: <774c9e6b-a8f4-66fe-aae0-d1cefedf7df3@arm.com>
+Date:   Wed, 16 Nov 2022 10:49:35 +0000
 MIME-Version: 1.0
-References: <20221116173353.19c17173@canb.auug.org.au>
-In-Reply-To: <20221116173353.19c17173@canb.auug.org.au>
-From:   Jamie Bainbridge <jamie.bainbridge@gmail.com>
-Date:   Wed, 16 Nov 2022 19:47:04 +1100
-Message-ID: <CAAvyFNgZjPQger6E7cVHkRLcic85RwKz7opd2Tmf2MdyWt8QmQ@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the net-next tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Stephen Hemminger <stephen@networkplumber.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.4.2
+Subject: Re: linux-next: build failure after merge of the arm64 tree
+To:     Besar Wicaksono <bwicaksono@nvidia.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20221116090401.0cd5ccc7@canb.auug.org.au>
+ <SJ0PR12MB56762CFC0B8D680B05828EF8A0049@SJ0PR12MB5676.namprd12.prod.outlook.com>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <SJ0PR12MB56762CFC0B8D680B05828EF8A0049@SJ0PR12MB5676.namprd12.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,27 +47,53 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, 16 Nov 2022 at 17:34, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> After merging the net-next tree, today's linux-next build (powerpc
-> pseries_le_defconfig) failed like this:
->
->
-> Caused by commit
->
->   d9282e48c608 ("tcp: Add listening address to SYN flood message")
->
-> CONFIG_IPV6 is not set for this build.
->
-> --
-> Cheers,
-> Stephen Rothwell
+On 15/11/2022 23:52, Besar Wicaksono wrote:
+> 
+> 
+>> -----Original Message-----
+>> From: Stephen Rothwell <sfr@canb.auug.org.au>
+>> Sent: Tuesday, November 15, 2022 4:04 PM
+>> To: Catalin Marinas <catalin.marinas@arm.com>; Will Deacon
+>> <will@kernel.org>
+>> Cc: Besar Wicaksono <bwicaksono@nvidia.com>; Linux Kernel Mailing List
+>> <linux-kernel@vger.kernel.org>; Linux Next Mailing List <linux-
+>> next@vger.kernel.org>
+>> Subject: linux-next: build failure after merge of the arm64 tree
+>>
+>> Hi all,
+>>
+>> After merging the arm64 tree, today's linux-next build (x86_64
+>> allmodconfig) failed like this:
+>>
+>> drivers/perf/arm_cspmu/arm_cspmu.c: In function 'arm_cspmu_get_cpus':
+>> drivers/perf/arm_cspmu/arm_cspmu.c:1114:29: error: implicit declaration of
+>> function 'get_acpi_id_for_cpu' [-Werror=implicit-function-declaration]
+>>   1114 |                             get_acpi_id_for_cpu(cpu)) {
+>>        |                             ^~~~~~~~~~~~~~~~~~~
+>>
+> 
+> +CC Suzuki for awareness.
+> 
+> This function is used for searching CPU with matching ACPI Processor ID in PPTT.
+> I will check if adding PPTT dependency to arm_cspmu would resolve this issue.
 
-Yes, Geert already sent a patch:
+Please make this dependent on ARM64. That should resolve the failure.
+As such the helper is available with ARM64 && ACPI.
 
- tcp: Fix tcp_syn_flood_action() if CONFIG_IPV6=n
- https://lore.kernel.org/netdev/d1ecf500f07e063d4e8e34f4045ddca55416c686.1668507036.git.geert+renesas@glider.be/
+Suzuki
 
-Jamie
+> 
+> Regards,
+> Besar
+> 
+>> Caused by commit
+>>
+>>    e37dfd65731d ("perf: arm_cspmu: Add support for ARM CoreSight PMU
+>> driver")
+>>
+>> I have used the arm64 tree from next-20221115 for today.
+>>
+>> --
+>> Cheers,
+>> Stephen Rothwell
+

@@ -2,153 +2,148 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0A6762F00A
-	for <lists+linux-next@lfdr.de>; Fri, 18 Nov 2022 09:49:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A376662F0F2
+	for <lists+linux-next@lfdr.de>; Fri, 18 Nov 2022 10:20:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241471AbiKRItu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 18 Nov 2022 03:49:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41358 "EHLO
+        id S241849AbiKRJUd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 18 Nov 2022 04:20:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241608AbiKRItb (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 18 Nov 2022 03:49:31 -0500
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2097.outbound.protection.outlook.com [40.107.21.97])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47CC71DC;
-        Fri, 18 Nov 2022 00:49:23 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CkUxFzUMSd1nicjJOS31DqacU/f4V9N2YpBqdZa8332RW6Y25ywJstTAMBggFWaHFwt0EBNlNlu4AIZs1j5deL4kUHSK83T52A1siDwUXE/MY8C+l7j6fo0DIDsIM/Eh3K6PqtlT4jCe6N7TdAkB3PRBNYjHIi56Bbz7oQMOp1vY5r7eZY0Cs72Ptz64NPekMk9Jt3xDqVp3P7LvmfpXx498Z6BhLo+SzUnKz+aKv8VbAQX4mL4F340Z8nvWuglhX7icadMI/r/D4WQmP+4ugc/nVvSCcM3P3RhvwnxfYHZgxo7Hlw+5dHz8DC/H03jPDLMvsqxjQoURZYDk7ia9gQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xC057QHQhoclD6CDqLIe4DqQ8iBr9Ld7Ibzdj4b2SwA=;
- b=La5vqZ0nVsmYqNKoiznqO7S6hs6Qls2kvnKHrmcpsmJyKBSKSMzYGO63FT3YmkYJS3JzqjjCwfyNKT59OjcboinHwbV0ISA4ywZKrB4BtTXYLb/8aXmCHEH23q9A1TTp2Z2J3UVjfxakcQcFwYv1iaaV2KAKNMf9ODnLq1HTLNnef1oJDZLkGPH7GpKWaQULfwC/Mu0lcREMzM69uXhEfsEfdnkYXljdnVj86DVxG1rKjUFoaBREQfgn3xk46VHamPyze9A9TATXizM8kv53iEDRSoyqIg30uyTDssWADP/BPkVcYl8DlW4HQEmNhg5Lxz8ZWHYq2JHojFMdH9BWOA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=prevas.dk; dmarc=pass action=none header.from=prevas.dk;
- dkim=pass header.d=prevas.dk; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=prevas.dk;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xC057QHQhoclD6CDqLIe4DqQ8iBr9Ld7Ibzdj4b2SwA=;
- b=adB1PlIjcBYpMXKixDNL2zhQpGkcHsmF1jyETW7raTC4xp3fcgBUyMNBN8H5Xo+rKaEiEwY8gdthXl0esrJAcmVHA4forvnEG6D+bGZE+WvoElKz5OpyWVv/zwT1g/3tpkWwQ1NArx6o+6e56l6hdf9nWij7SJnJoKuSG4at3wg=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=prevas.dk;
-Received: from DU0PR10MB5266.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:34a::22)
- by PAWPR10MB7747.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:366::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.18; Fri, 18 Nov
- 2022 08:49:21 +0000
-Received: from DU0PR10MB5266.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::732f:4316:a0be:bdbc]) by DU0PR10MB5266.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::732f:4316:a0be:bdbc%4]) with mapi id 15.20.5834.009; Fri, 18 Nov 2022
- 08:49:20 +0000
-Message-ID: <90e0cc7f-1cad-bb1f-448f-673dcf25cb15@prevas.dk>
-Date:   Fri, 18 Nov 2022 09:49:15 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: Coverity: add_early_randomness(): Integer handling issues
-Content-Language: en-US, da
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        coverity-bot <keescook@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, Theodore Ts'o <tytso@mit.edu>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Olivia Mackall <olivia@selenic.com>,
-        linux-crypto@vger.kernel.org,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        linux-next@vger.kernel.org, linux-hardening@vger.kernel.org
-References: <202211080929.F5B344C9F@keescook>
- <CAHmME9o_vJL6YstAGutZNzQ30EmWQ5vcYqbeFYoSvPm3CYeXzg@mail.gmail.com>
-From:   Rasmus Villemoes <rasmus.villemoes@prevas.dk>
-In-Reply-To: <CAHmME9o_vJL6YstAGutZNzQ30EmWQ5vcYqbeFYoSvPm3CYeXzg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MM0P280CA0070.SWEP280.PROD.OUTLOOK.COM
- (2603:10a6:190:8::29) To DU0PR10MB5266.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:10:34a::22)
+        with ESMTP id S241857AbiKRJU1 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 18 Nov 2022 04:20:27 -0500
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEB08AE58;
+        Fri, 18 Nov 2022 01:20:25 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 523F45C0513;
+        Fri, 18 Nov 2022 04:20:23 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Fri, 18 Nov 2022 04:20:23 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1668763223; x=1668849623; bh=4n4DR4UwM1
+        0Hw+UX/vwcqMHSZCvbtAN5htQFeot9k0s=; b=LYNeULVFAebnqpXOJpHXpNjDeY
+        XS0flPyOKrAZxKsh4iQc0ZI5EJvqg/vL6nqEYs2k4HELn5ioOaZASWxsOBDZz8Nk
+        U05AvRz/anebMho0GIoFAUzeWR1Q6yHnU5KvMD1nZOe9dV2tCagLqZhi0JH3vmc1
+        LtG7PYqX4CR6zcupd+XfXf2RZZ7wky/8sxvaKpgnawNa9PBoZU0XWNLEBuTHrV+i
+        Dt9H/w54YuWeBAsGdv+QQNxbSMV265i4e6LiwviudQHCQc9zv90hT1Vw/cIQoosB
+        PtT0UHFH6679yAOFMWv+pSsE8UAUuA6b3otS69gmmKEp0Hw2aMEydArXGhHA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1668763223; x=1668849623; bh=4n4DR4UwM10Hw+UX/vwcqMHSZCvb
+        tAN5htQFeot9k0s=; b=dYtPEl3UgKwY4kyD4AclEMrQ2EtGmLPlA68TpselZHFF
+        9u8LIdlGK0KAGUzTewj5FC9HO3MG39VuhRI9zm+ur9hWzfEkDlRNbeU9sL2qLVmh
+        l6v/t6vop4T3uI8/LivxEaQyaJWmgtH9aYewlRAVb8j7ag0mz4E2v7cI7LOh6voh
+        /brht4rf2zmC395EH+IGCIHNyyZpNURecjznZ6jIAtZY+V15ds2359kF8IrdJwYr
+        zHvtZDwHd6wq7ElS1IfwH7Sjao5l6JXsJ8P2Sy4Soqpn0N1m+w5WBYvMwhs8l3kn
+        cOdGElnKuyTbwsdFDvebzfpfudJciGUooy4nSwbV2w==
+X-ME-Sender: <xms:Vk53Y-mYyWluu8ptma9_HbxzN6V0WEpT_zpG02A8sZ0p4Td9uapCrw>
+    <xme:Vk53Y12N-XZjh3vrK1cA6dPEI_PelFPLODYnhhJEBfbWIzdJieuCywjCJIfyyG9mX
+    2VuecYVem3sERPMWKc>
+X-ME-Received: <xmr:Vk53Y8oWX8yXhLN6ibFL6-YdpceVsXUpxT1bIWXFHrJ2u2si28bNZ-uOdYrR9x4V3rXXjRoq3c5mHX3uzb1vPUDmQtq3o5DOQaedOjnVGNt49w>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrhedtgddtvdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
+    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
+    htvghrnhepteefffefgfektdefgfeludfgtdejfeejvddttdekteeiffejvdfgheehfffh
+    vedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
+    grgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:Vk53YymcEeZCWCnz6mZOA7HIRDHqvrJ3RJhYNSBbdApXSrbN5jJdLQ>
+    <xmx:Vk53Y80X3IftNfwIwF5-yOrZ4Hj2t-qhk6Nplx_5Me_yOEJ2DXcITw>
+    <xmx:Vk53Y5vs-s38Diftjkj7piocKdDWJO3Q2-Af4vCMmlWqcY_7cI1Emw>
+    <xmx:V053Y1HYD8gWp49Ur4aXLMO6qjTii50h3ivR-O1mqw55YOZ9nRnksQ>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 18 Nov 2022 04:20:22 -0500 (EST)
+Date:   Fri, 18 Nov 2022 10:20:20 +0100
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        =?utf-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        llvm@lists.linux.dev
+Subject: Re: linux-next: manual merge of the drm-misc tree with the origin
+ tree
+Message-ID: <20221118092020.nhvjomvwwryb7j3n@houat>
+References: <20221116105702.746ce3cf@canb.auug.org.au>
+ <Y3ZvffZiR+SgtY6h@dev-arch.thelio-3990X>
+ <20221118090636.00bfc293@canb.auug.org.au>
+ <Y3bLRLDCrd7KYqom@dev-arch.thelio-3990X>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU0PR10MB5266:EE_|PAWPR10MB7747:EE_
-X-MS-Office365-Filtering-Correlation-Id: 10a23e64-5c81-4aa8-429f-08dac941c8d4
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: HrIvP/gg19ssBJ1Mg95A2po6kIRjUgfBNI3+us9ZEhoROL2t4Dng8MFMQ90YwFQB5IVT2ktTvj8xy252orcKkfHAlXUyaFM6JVh+EEMKV/pwjNPypia/zrKQWiTwCTPHUgUQXNPUm9DA0sqits7SLyG0qc6Dzefv38323KZ9jIJEPPyIeQJ6AyzxqcS2YrS80VUJ52np6oj8Ix4XOtdkfOJrJKnGmuULEH/1aetY8wIS9vx0TjBtyMC1kCpS7lbNS9j3j2r/TEZiJtlcu38NH90uLHshhccYTc7YJ9cRCRU9GZUL15lhqibemM++26PaJKONSAWFV/TzAmX2Epvuqev4V/y/wXm2pLaoF7aluh2HhB/46sxeAnc6ZHESJKwuP2X0vkzJZMPZeVhadrsBFjOFq470dPxcc8CUX5JB/Tmuu8FXCe43CyRhbyoQOP9wd5rmFr4mAyvnUR85Tu6JebWGC61zKwR8S/c+DGYc+R5nfCJtWoISYmLWDzZQKmlMQQWyENGLbCxRx8WPBVNUGbUYizkCElMTTE5xgMpLjMzHiqzZg2T1/zYgry/prGRQ5Biwsom08ttIxVuQTugom8sScIPFmao+ygJ5FP3HRVdjc++QpKE855lh7TwY36YeW5WfMQp8Cc2Z7hbBPBeUaeXNt3rKcx+TKqQvUsBJmBNGWGZLQW0MRZW7nrspUldYMUzkl//wwycNOWxGZMki6Y1G2g047gJtGStKnaVXz08+lnUiqF5OqIMOADBvb36x
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR10MB5266.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(346002)(39850400004)(376002)(136003)(396003)(366004)(451199015)(86362001)(66476007)(31696002)(6506007)(36756003)(2616005)(8976002)(66556008)(66946007)(44832011)(4326008)(4744005)(38350700002)(5660300002)(8676002)(6486002)(6666004)(478600001)(316002)(41300700001)(52116002)(7416002)(110136005)(54906003)(186003)(38100700002)(6512007)(8936002)(26005)(2906002)(31686004)(83380400001)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NDlNdXVPQWErMXptU2xDN3htTVJRYUp4Q0toWUExUFhpc3NSbWNTYVl0ckdH?=
- =?utf-8?B?RWpaZG5WaDMwaU1NaG8yTWZ6anBpSXdOYnN0YTVQQ1VrV21XSDNqMEpvRzZw?=
- =?utf-8?B?dWxISHM2cTZIUlZqQ2pUU1p5cXBwUnhja3pCWW9ZU0gvRnZWa1FaejhKR3JO?=
- =?utf-8?B?TzhlejZuTXZJY3hVbDlGOXVPM293RzAraHdGSTFMSHZMMXVvejJhZlZHUlkx?=
- =?utf-8?B?UVQrZ1dnazRXb25EME1tMnIvaGJPelhnR01EYVphbmV2T0VMakZlNmp6VWk4?=
- =?utf-8?B?cVRScE9rSVErVmppVHd1ZWoxRXFJZUdHNE5uM2t3cHN1M0YzQm91enpCNWpY?=
- =?utf-8?B?M3M4Mm1qL1cxbFB2ZHdHbnRyVHBTdWtXQmhoSDZhVGx3MjJpU0JwOGNUWm5r?=
- =?utf-8?B?NytPR29SQU1KYVUwcXV1TklIeitQOEpXRks4ZHVSL3lZcmdRMHFjUDF6akRh?=
- =?utf-8?B?TG5GNEFKQTRITFBDY1J6eUlYdVpmb0Z4REtOR2IzTGJ5N05TVkxWUzZmdEFa?=
- =?utf-8?B?Q2F4NDhaNW14YmE1M09lUW9XQ1pjRUVHakJGWVBWTm5jcm04UTdJNXJ3aEdq?=
- =?utf-8?B?SFV0dUZLenRLU3hkUWMyL1FGRGVWOUxCcWxuV2grVTIxNjlrNVdzYnQwRFJ4?=
- =?utf-8?B?dTZReWtPTzZOQllNejB3T1ExZjYwSS9TNU5KY1IzRnJqV2dCSS9oZFhISHlE?=
- =?utf-8?B?VFNCUDQ4V2crbUcvWjFYYzVwSk0rUXFmSVlKbFNBZncwQ2hiSUg1d1VubGdw?=
- =?utf-8?B?RDdnSTNic1VnUmdYb2xieUZhdjlWS3pQZnRNYitSUmlFamhiS0FyY2QzK3o1?=
- =?utf-8?B?dEU4NzVjZFZQOU5PZUtJcWU0U3lFU09obmZsN2hwc25nSjV2dkZ4b24zcXRz?=
- =?utf-8?B?SHhVY2tBOGpDVTY1Z08wR0lPR01oVlVndXBCT3pZWlBtZ2ppbE55Yjh1OGJu?=
- =?utf-8?B?ZzN5RW9oOE5zTzM4S005ZitnR2FwelVYOXhjMjliZlVNZGV0TWM5aEtzQjBr?=
- =?utf-8?B?UWIvb2xMMUtmdTFrU3IwbWl4UkxIemU0ZE9HNERzRllnbld3UUVEdkpQREh5?=
- =?utf-8?B?MzFrTDEwLzBhYkovTEh0QWZvRDU4WUQycWxSc3BrdUEvcTdRQlBVTHBUTUFk?=
- =?utf-8?B?dG1WWmh2THg0VG9laFZqaFVVZlFBNGdWaDNPOEhwRWErQ1ZuMytNQXVjbi83?=
- =?utf-8?B?Nk5ZNkJ3SDZVTFRkdFVoY01wVWhqVDRBcG9jKzkvd0I0aWRZdUxyVStJWkNN?=
- =?utf-8?B?NFFuMVBJTlhWWXdtRWUvbGsxZWlYNndpVTJaMHBQeW45NzhwVDNBaHhaS0NY?=
- =?utf-8?B?R1cyQkt6MDc1S3BSK0hTdTBDdTdzUWYxV081dCtvUXZqL2M2R0hwODJBQyt1?=
- =?utf-8?B?ZDR4aXdSNk9SNkxhcVFWTUYrUDRHWEpEdHViV25xNWRVRS9BaEhuSWhYbU1P?=
- =?utf-8?B?VzEwUWZDUzhneDJLc0t5SkVFUkx3eUpmMEp5L1ovUkI0cDJVR05lTlM3Q0ll?=
- =?utf-8?B?bklWOVVtYXBlZ2tFZm9OQStqcE1jRlVzeWZaY1NZTkhDdGVlZFZUT00zTHVK?=
- =?utf-8?B?Q0FRWE9MY3ZBRDVuc2VxTVp2OGdUbmcrMHlEWmJLZ0dZK0pqNms2WlhTcVJU?=
- =?utf-8?B?a3o4dWtScWp5VHlkTkNKY2wrbjVYWVhuMjRYK0h3WnR6SGY2akQyV0RLZHBn?=
- =?utf-8?B?QnZoUGZSWE5iUEtvd21vUEpaRzNvSEh1OVhBUzRGYWRMbmo0OVUrK0NXakd1?=
- =?utf-8?B?S0ZSUzdlVGR2RXBIbzJDbm5obENpcFVtdmYxSk9oK3d6aHFlMVdFLzZDU1dx?=
- =?utf-8?B?QWRPQWYrVklNTHN0YTRJakVpcTlJK2VjSnQ4d3ZJUElyci82RVZMaGJIMGVL?=
- =?utf-8?B?UHF5eXdPMWorVTVOaFlCdW1CQXBzeS9HaU5UK2xwR0RyVnp0ZWtMQkJRVG5R?=
- =?utf-8?B?YllsMGQ5NmZuYU1QaFVjbUluV05EQWZDbFFtVU03OGtBYnY2UlhYckZsZXlm?=
- =?utf-8?B?eEh0U1VBTGR3aDNSdjU3c1F4NDZtcG9Ma0dnRWVkZndTbkdjcVQ2VSt4ZHFo?=
- =?utf-8?B?VGtqSzlzY01FZjlWb0tucGtST1BhdXhXQ2FwalloSFpNYkU3b3hHb1QzSTVT?=
- =?utf-8?B?c29td1Z0SkltWUlzY1pBWU5xeVJDaTVuR1BoVkY3RERwaFhTZXBTN1dobGxP?=
- =?utf-8?B?aXc9PQ==?=
-X-OriginatorOrg: prevas.dk
-X-MS-Exchange-CrossTenant-Network-Message-Id: 10a23e64-5c81-4aa8-429f-08dac941c8d4
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR10MB5266.EURPRD10.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Nov 2022 08:49:20.7788
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: d350cf71-778d-4780-88f5-071a4cb1ed61
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: pb2tiEttHhydlX20tT33L9NtJlHZhjug2DeqsQyDy/XdFRbVYbC0AU7HLvJFSr/YAY8KYP1IzgT7XGx6h7jWk9apusrKl275+u9LbiKIKFI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAWPR10MB7747
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="utkgyjtezkaepsh6"
+Content-Disposition: inline
+In-Reply-To: <Y3bLRLDCrd7KYqom@dev-arch.thelio-3990X>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 08/11/2022 18.31, Jason A. Donenfeld wrote:
-> "If "bytes_read * 8 * rng->quality / 1024" is greater than 0x7FFFFFFF,
-> the upper bits of the result will all be 1."
-> 
-> Except "bytes_read" is an int. So false positive.
 
-Well, the automated report could use a better wording, but just from the
-types alone there's nothing preventing the "bytes_read * 8 *
-rng->quality" expression from mathematically exceeding INT_MAX and thus
-potentially becoming a negative value (so technically of course not
-greater than 0x7FFFFFFF, but the point being that the sign bit is set),
-and then the result of the division will most likely also be negative.
+--utkgyjtezkaepsh6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-But what actually saves the day is that I suppose bytes_read cannot be
-more than 32, so the multiplication is indeed at most 256*U16_MAX. Too
-bad we don't have a __postcond(@ret < (int)size) attribute we could put
-on functions like rng_get_data() to help static analysis.
+On Thu, Nov 17, 2022 at 05:01:08PM -0700, Nathan Chancellor wrote:
+> On Fri, Nov 18, 2022 at 09:06:36AM +1100, Stephen Rothwell wrote:
+> > Hi Nathan,
+> >=20
+> > On Thu, 17 Nov 2022 10:29:33 -0700 Nathan Chancellor <nathan@kernel.org=
+> wrote:
+> > >
+> > > This resolution is not quite right, as pointed out by clang:
+> > >=20
+> > >     drivers/gpu/drm/vc4/vc4_hdmi.c:351:14: error: variable 'vc4_hdmi'=
+ is uninitialized when used here [-Werror,-Wuninitialized]
+> > >             mutex_lock(&vc4_hdmi->mutex);
+> > >                         ^~~~~~~~
+> > >     ./include/linux/mutex.h:187:44: note: expanded from macro 'mutex_=
+lock'
+> > >     #define mutex_lock(lock) mutex_lock_nested(lock, 0)
+> > >                                                ^~~~
+> > >     drivers/gpu/drm/vc4/vc4_hdmi.c:322:27: note: initialize the varia=
+ble 'vc4_hdmi' to silence this warning
+> > >             struct vc4_hdmi *vc4_hdmi;
+> > >                                      ^
+> > >                                       =3D NULL
+> > >     1 error generated.
+> > >=20
+> > > Obviously, the assignment of vc4_hdmi should be before mutex_lock().
+> >=20
+> > Thanks for pointing that out (silly me :-) ).  I have fixed up the
+> > resolution for today.
+>=20
+> Great, thank you so much! One less warning to worry about :)
 
-Rasmus
+I actually did the same conflict resolution in drm-tip. I've fixed it up
+too, thanks for your report :)
 
+Maxime
+
+--utkgyjtezkaepsh6
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCY3dOVAAKCRDj7w1vZxhR
+xa2fAQD933QJY5E3XRwJGvMvYIALowd4qIYtQyxBCrk/Zo2bTQEAiLYk8Ij68h6E
+CzpNCMHNSYp+43IPN7VzU0UqzQpvawk=
+=GyeM
+-----END PGP SIGNATURE-----
+
+--utkgyjtezkaepsh6--

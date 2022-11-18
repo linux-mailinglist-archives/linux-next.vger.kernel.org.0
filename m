@@ -2,46 +2,44 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E51862ED08
-	for <lists+linux-next@lfdr.de>; Fri, 18 Nov 2022 06:06:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE70D62EDE1
+	for <lists+linux-next@lfdr.de>; Fri, 18 Nov 2022 07:47:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231768AbiKRFGZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 18 Nov 2022 00:06:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44564 "EHLO
+        id S230004AbiKRGrk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 18 Nov 2022 01:47:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiKRFGY (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 18 Nov 2022 00:06:24 -0500
+        with ESMTP id S229620AbiKRGrj (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 18 Nov 2022 01:47:39 -0500
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF52C769C4;
-        Thu, 17 Nov 2022 21:06:22 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69EBD3896;
+        Thu, 17 Nov 2022 22:47:37 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4ND4WH5HKwz4xTg;
-        Fri, 18 Nov 2022 16:06:19 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4ND6m70pHQz4x1V;
+        Fri, 18 Nov 2022 17:47:35 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1668747981;
-        bh=T1MFAIfpM2C/YonaaB7UpbcsoXJOdQH4wk0zCh0yK3s=;
+        s=201702; t=1668754055;
+        bh=A6cu1z9mBy/jPVa56NxpA6ipqfhlgU6vQZycRkyQ2ew=;
         h=Date:From:To:Cc:Subject:From;
-        b=ESBCarbnttmvS1fXfLvUzOUB/XoNkZ1IYEt6eGYSu4A/rxvge2jLs/sE/1MIjX2zc
-         OAHaHsD04OVtRVSaWT6pZQ9Ja4xsJli3lW4CgwsYfJx351+EvwTquRGhI+mo7Z0RMN
-         NzSE1RLSbYr/SQVyGM7xB/uPIXImE+gFAxY581k6ff5c77K79lo5vG7KLYkrL+rdFW
-         mAdUDrJUUysNpRAzvR8fEyhSV361Y1e5CmYEFrT2dg3havo4ma9XiFF7RhWveE5axo
-         nRB1u1u7VTOlFKVxpDHNYCSMsuADzgJKWTYa1vJSpd5BwzgwbflEB2nuqHbM1SiVlG
-         gkPhTtGD3sDNw==
-Date:   Fri, 18 Nov 2022 16:06:17 +1100
+        b=kkDsji85mKhagS4mFtQf8OwXZggwz29bJE7E/IuQjX+sKLvPV+OMe7+WzgzLMFJV2
+         bHDBtYMiR2ADK3kh9I4wko3x+76ezm9hn1UBl4Q00gGyrFJnZc7duxwyY3V0o7onHA
+         PB+gKWwRtePfExOjnhg3Ohb9xKCiFe9L9jWDu+DYrMh9L5xBXRpvHwFKUkiWR/Wdb9
+         ImSeZ5726n7mb6T2grAV59tGXJFCKfouu/xAYkyDf3N7UyS+AkkVFEayHp5jcEXrz2
+         F4AX34y5meXeJH7NE71awyRJi/ENXBxAxcSbDlkbgKSB7eub9OB8uuF2BY3+MjT50F
+         ZREYK4eXsr0zg==
+Date:   Fri, 18 Nov 2022 17:47:33 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>
-Cc:     ARM <linux-arm-kernel@lists.infradead.org>,
+To:     Alex Deucher <alexdeucher@gmail.com>
+Cc:     Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Yinbo Zhu <zhuyinbo@loongson.cn>
-Subject: linux-next: manual merge of the pinctrl tree with the arm-soc tree
-Message-ID: <20221118160617.5955f2ff@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build warning after merge of the amdgpu tree
+Message-ID: <20221118174733.78a98e1a@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/WnBzte5U0Pttpkpi1ZqQup9";
+Content-Type: multipart/signed; boundary="Sig_/_yBrTmq3XiEIq+LHX2Pymte";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
@@ -52,78 +50,43 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/WnBzte5U0Pttpkpi1ZqQup9
+--Sig_/_yBrTmq3XiEIq+LHX2Pymte
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the pinctrl tree got a conflict in:
+After merging the amdgpu tree, today's linux-next build (htmldocs)
+produced this warning:
 
-  MAINTAINERS
+Error: Cannot open file /home/sfr/next/next/drivers/gpu/drm/amd/amdgpu/amdg=
+pu_mn
+.c
 
-between commit:
+Introduced by commit
 
-  b82621ac8450 ("soc: loongson: add GUTS driver for loongson-2 platforms")
+  d9483ecd327b ("drm/amdgpu: rename the files for HMM handling")
 
-from the arm-soc tree and commit:
-
-  457ff9fb29d7 ("dt-bindings: pinctrl: add loongson-2 pinctrl")
-
-from the pinctrl tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+This file is mentioned in Documentation/gpu/amdgpu/driver-core.rst
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc MAINTAINERS
-index ec383d27e762,f76107c24949..000000000000
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@@ -12097,13 -12013,14 +12097,21 @@@ F:	drivers/*/*loongarch
-  F:	Documentation/loongarch/
-  F:	Documentation/translations/zh_CN/loongarch/
- =20
- +LOONGSON-2 SOC SERIES GUTS DRIVER
- +M:	Yinbo Zhu <zhuyinbo@loongson.cn>
- +L:	loongarch@lists.linux.dev
- +S:	Maintained
- +F:	Documentation/devicetree/bindings/hwinfo/loongson,ls2k-chipid.yaml
- +F:	drivers/soc/loongson/loongson2_guts.c
- +
-+ LOONGSON-2 SOC SERIES PINCTRL DRIVER
-+ M:	zhanghongchen <zhanghongchen@loongson.cn>
-+ M:	Yinbo Zhu <zhuyinbo@loongson.cn>
-+ L:	linux-gpio@vger.kernel.org
-+ S:	Maintained
-+ F:	Documentation/devicetree/bindings/pinctrl/loongson,ls2k-pinctrl.yaml
-+ F:	drivers/pinctrl/pinctrl-loongson2.c
-+=20
-  LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
-  M:	Sathya Prakash <sathya.prakash@broadcom.com>
-  M:	Sreekanth Reddy <sreekanth.reddy@broadcom.com>
-
---Sig_/WnBzte5U0Pttpkpi1ZqQup9
+--Sig_/_yBrTmq3XiEIq+LHX2Pymte
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmN3EskACgkQAVBC80lX
-0GzgsQf/fyX0j3aKutQZ3zmI1rgCZEDaFraRXxpU0DudJLSoNsDJi0Wxx5vByfed
-tnWRPUO6n2uSuB7ACcCe0fUVHFIKSjJXTRnUg4dVc/AP/txlCU6GCBjo8ehfYhdB
-fsUKbl17JoVF1jGXpgC0bw6EtcKDeGeJx8+O2F3NPYvRwYZGqPKO5Q/m1+fZgJKK
-ytyoJuqa7P2zInDVCQuYunfoXAysl7erdHKGcKDVmT3i8M7hymroh31ZDehUJNTW
-STlmq/oD4UYhMUOYLW743EkCB+YQhuFNR86M6e7A/yapakXHTZT46Z0zGnsD0/IO
-dqfk503Awy91r/weSqJv7TLWC7OEOQ==
-=pUsu
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmN3KoUACgkQAVBC80lX
+0GwVSQgAnsumUz9J9v9vYfBW/hlw+RHnzKO7UZhJQJzVBxywrf2ZGYe0ki3Niubt
+MqfJONjvMPw68M1zB9PW4wYNXMC276yVpR8NKYPFcEwDh+R0MJ33gAAlpEe6XcMY
+bhhJ8voZrstsmCAniQNXPkQVhx+2fdk00JgovEri4wjZAC1HP6nnZf/+2+V/Ud/a
+8y1spKZsYmE1Ofi8Xz+6sn4jh63XZWXlWNxb3PoOMFSizzuPmborFyN0ah/yB1QO
+ISe6AqO4Uuc+M43oM3oDnbWuVPhpih1FA0us13BzJPygZvxXjIgd9oVgwPIZkzzA
+yKJnLFXhY6vELDNQbHNax+Lpg/8aig==
+=4Tfc
 -----END PGP SIGNATURE-----
 
---Sig_/WnBzte5U0Pttpkpi1ZqQup9--
+--Sig_/_yBrTmq3XiEIq+LHX2Pymte--

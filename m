@@ -2,55 +2,53 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8C5362E9F1
-	for <lists+linux-next@lfdr.de>; Fri, 18 Nov 2022 01:01:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A899062EA09
+	for <lists+linux-next@lfdr.de>; Fri, 18 Nov 2022 01:05:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233865AbiKRABO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 17 Nov 2022 19:01:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54504 "EHLO
+        id S239454AbiKRAFu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 17 Nov 2022 19:05:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230447AbiKRABN (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 17 Nov 2022 19:01:13 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EFCC70A3D;
-        Thu, 17 Nov 2022 16:01:13 -0800 (PST)
+        with ESMTP id S233270AbiKRAFt (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 17 Nov 2022 19:05:49 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 974D0BC0;
+        Thu, 17 Nov 2022 16:05:48 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D3131B8221D;
-        Fri, 18 Nov 2022 00:01:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12EE3C433D6;
-        Fri, 18 Nov 2022 00:01:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 32F0C6204B;
+        Fri, 18 Nov 2022 00:05:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 286C3C433D6;
+        Fri, 18 Nov 2022 00:05:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668729670;
-        bh=ov1dwfKlY10jlyvvrILEMTGZym5hMBZuKYP5HTVbbNw=;
+        s=k20201202; t=1668729947;
+        bh=H8A+VfcBwEu+5oVlM/ylb1vTzqKOVIIzcbV2vdm5TRw=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jUV6xj2ZuGt6gS++XzvZWg0g4N5kX3l4CCDn+/3k2C9z8oqImtI0RiS453F7mzV7s
-         /i8YeU0Zk/s8iJXQZvkZ6VIwOVUccL/fB18s6uWeB5TNua5NHVLUQcG5c7g3lwD14I
-         8Jqpt6YpzqDz7axweXGMZ0ccO8JOc2xAcPv93xP/E/hb/dTFiKsoQ4w++pKZjAtYEK
-         elqG3Gz2r/BxmLl/PYwBnq6HveJstEV2yXkKHe9rQMIiGcSH/mM6UsBKQvXKyw0b+4
-         lUDo3Np0l8usOfpNZ6bY7az78OiFW1/7dNoUFwg0kK1zJKH9f5UD7Xjq08EDHn3Vgp
-         D4no7ZB6I5rHQ==
-Date:   Thu, 17 Nov 2022 17:01:08 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Maxime Ripard <maxime@cerno.tech>, llvm@lists.linux.dev
-Subject: Re: linux-next: manual merge of the drm-misc tree with the origin
- tree
-Message-ID: <Y3bLRLDCrd7KYqom@dev-arch.thelio-3990X>
-References: <20221116105702.746ce3cf@canb.auug.org.au>
- <Y3ZvffZiR+SgtY6h@dev-arch.thelio-3990X>
- <20221118090636.00bfc293@canb.auug.org.au>
+        b=BNCkZVXFUcZFrQOGW2YcialIeFX2flA6n9/RBkJDbCfCY9LmBmCE3MgkOEZQfWc8B
+         r1C0j6NWb7hABNH5zw6S8MnxBvSeFMlZzxMDwOFGI82U9okzQT0I/MYOTHkzR/VBlG
+         ENEIaDjfLvFb3KLLNDmEjQYT7teUAImhdOIlX1ze7TlNZKGj0h/ahNC0kVQnrjTBXD
+         t8C4O6KpOdHy4mcjNkwV1cgZDf0Y5SoGkSAgEpls7z9/IEA5mk9R0x2kJMw7BIi9Pz
+         bvU5pLfmS/8q4QtuzGSU7s3OJNr7sCAjrhGiKIa9pNnqARqduJu4+EYFkIguGMlyx9
+         xr1LcP95PEu+g==
+Date:   Thu, 17 Nov 2022 18:05:32 -0600
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     coverity-bot <keescook@chromium.org>
+Cc:     Ananda <a.badmaev@clicknet.pro>, Jonathan Corbet <corbet@lwn.net>,
+        linux-kernel@vger.kernel.org, Minchan Kim <minchan@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        linux-mm@kvack.org, linux-doc@vger.kernel.org,
+        Vitaly Wool <vitaly.wool@konsulko.com>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        linux-next@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: Coverity: zblock_reclaim_block(): Control flow issues
+Message-ID: <Y3bMTK+558whA1VX@work>
+References: <202211171421.914F0F3719@keescook>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221118090636.00bfc293@canb.auug.org.au>
+In-Reply-To: <202211171421.914F0F3719@keescook>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -60,31 +58,54 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Nov 18, 2022 at 09:06:36AM +1100, Stephen Rothwell wrote:
-> Hi Nathan,
+On Thu, Nov 17, 2022 at 02:21:46PM -0800, coverity-bot wrote:
+> Hello!
 > 
-> On Thu, 17 Nov 2022 10:29:33 -0700 Nathan Chancellor <nathan@kernel.org> wrote:
-> >
-> > This resolution is not quite right, as pointed out by clang:
-> > 
-> >     drivers/gpu/drm/vc4/vc4_hdmi.c:351:14: error: variable 'vc4_hdmi' is uninitialized when used here [-Werror,-Wuninitialized]
-> >             mutex_lock(&vc4_hdmi->mutex);
-> >                         ^~~~~~~~
-> >     ./include/linux/mutex.h:187:44: note: expanded from macro 'mutex_lock'
-> >     #define mutex_lock(lock) mutex_lock_nested(lock, 0)
-> >                                                ^~~~
-> >     drivers/gpu/drm/vc4/vc4_hdmi.c:322:27: note: initialize the variable 'vc4_hdmi' to silence this warning
-> >             struct vc4_hdmi *vc4_hdmi;
-> >                                      ^
-> >                                       = NULL
-> >     1 error generated.
-> > 
-> > Obviously, the assignment of vc4_hdmi should be before mutex_lock().
+> This is an experimental semi-automated report about issues detected by
+> Coverity from a scan of next-20221117 as part of the linux-next scan project:
+> https://scan.coverity.com/projects/linux-next-weekly-scan
 > 
-> Thanks for pointing that out (silly me :-) ).  I have fixed up the
-> resolution for today.
+> You're getting this email because you were associated with the identified
+> lines of code (noted below) that were touched by commits:
+> 
+>   Wed Nov 16 16:19:12 2022 -0800
+>     9097e28c25c8 ("mm: add zblock - new allocator for use via zpool API")
+> 
+> Coverity reported the following:
+> 
+> *** CID 1527349:  Control flow issues  (NO_EFFECT)
+> mm/zblock.c:412 in zblock_reclaim_block()
+> 406     	unsigned long handle, block_type, slot;
+> 407     	int ret, i, reclaimed;
+> 408
+> 409     	/* start with list storing blocks with the worst compression and try
+> 410     	 * to evict the first added (oldest) block in this list
+> 411     	 */
+> vvv     CID 1527349:  Control flow issues  (NO_EFFECT)
+> vvv     This greater-than-or-equal-to-zero comparison of an unsigned value is always true. "block_type >= 0UL".
+> 412     	for (block_type = ARRAY_SIZE(block_desc) - 1; block_type >= 0; --block_type) {
 
-Great, thank you so much! One less warning to worry about :)
+This seems like a legit issue.
 
-Cheers,
-Nathan
+--
+Gustavo
+
+> 413     		list = &(pool->block_lists[block_type]);
+> 414     		spin_lock(&list->lock);
+> 415
+> 416     		/* find the oldest block in list */
+> 417     		block = list_last_entry(&list->head, struct zblock_block, block_node);
+> 
+> If this is a false positive, please let us know so we can mark it as
+> such, or teach the Coverity rules to be smarter. If not, please make
+> sure fixes get into linux-next. :) For patches fixing this, please
+> include these lines (but double-check the "Fixes" first):
+> 
+> Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
+> Addresses-Coverity-ID: 1527349 ("Control flow issues")
+> Fixes: 9097e28c25c8 ("mm: add zblock - new allocator for use via zpool API")
+> 
+> Thanks for your attention!
+> 
+> -- 
+> Coverity-bot

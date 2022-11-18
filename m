@@ -2,73 +2,112 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 626A462FE28
-	for <lists+linux-next@lfdr.de>; Fri, 18 Nov 2022 20:44:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F3E462FF1D
+	for <lists+linux-next@lfdr.de>; Fri, 18 Nov 2022 22:05:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235056AbiKRToo (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 18 Nov 2022 14:44:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57642 "EHLO
+        id S230129AbiKRVFW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 18 Nov 2022 16:05:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233401AbiKRTom (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 18 Nov 2022 14:44:42 -0500
-Received: from forward502o.mail.yandex.net (forward502o.mail.yandex.net [37.140.190.204])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32BEF7818F;
-        Fri, 18 Nov 2022 11:44:37 -0800 (PST)
-Received: from myt6-9bdf92ffd111.qloud-c.yandex.net (myt6-9bdf92ffd111.qloud-c.yandex.net [IPv6:2a02:6b8:c12:468a:0:640:9bdf:92ff])
-        by forward502o.mail.yandex.net (Yandex) with ESMTP id 824F825D4753;
-        Fri, 18 Nov 2022 22:44:34 +0300 (MSK)
-Received: by myt6-9bdf92ffd111.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id cb4WW6nS5o-iWV82vUV;
-        Fri, 18 Nov 2022 22:44:33 +0300
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=clicknet.pro; s=mail; t=1668800673;
-        bh=X2hlUUTmy+wdL5CZtSmKqk3Z0B9hgsCkGcalUOd2Vbw=;
-        h=From:In-Reply-To:Cc:Date:References:To:Subject:Message-ID;
-        b=BVh1Ji6Vp0PNRo/uwwJw2SrG5NAjQe+7Kwdcbtz/Pfp+xFvl+Vjb+ApeZ6gqfFtpV
-         +MoHAd1E+mVaInB0lnj1Jdz7h1UVJ34Qy0g9Bh86PMrhZC8zpjJcmwaonX64Wl1L1+
-         pWwTuxnvfVI98u9rbQIwZitCeRwR71lE33+ixxhE=
-Authentication-Results: myt6-9bdf92ffd111.qloud-c.yandex.net; dkim=pass header.i=@clicknet.pro
-Message-ID: <536ede34-e360-78a5-ef6f-df032fa30154@clicknet.pro>
-Date:   Fri, 18 Nov 2022 22:44:17 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: Coverity: zblock_alloc(): Memory - illegal accesses
-Content-Language: en-US
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
-        Minchan Kim <minchan@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        linux-mm@kvack.org, linux-doc@vger.kernel.org,
-        Vitaly Wool <vitaly.wool@konsulko.com>,
+        with ESMTP id S229552AbiKRVFV (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 18 Nov 2022 16:05:21 -0500
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A713976DA;
+        Fri, 18 Nov 2022 13:05:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
+        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+        Resent-Cc:Resent-Message-ID; bh=P6rXaBfeIINbzRWSy2AGyxu2PyTieOunm5ts0qSAvmk=;
+        t=1668805520; x=1670015120; b=Rwcu1xEWim0khPiqff3ufgdDSs2XzssqGHz27HbBwqHSLMU
+        T3KXiXKHJlqSDkKEgy2vUilE76Bd7EUsKBv4uuLTGsgYyGKBxlSetbMKLKHxPeUoARwgnA5DI2d7H
+        AIb+ZQMnlr5N7JXQyYwLyoxDENkUxH4r9gTiQtmZdCt/HfoogHbktZW8tDe+BwOLWd2s7pDBh8ZhV
+        MC6/NQ53iEU4plgmzDgT+piLGOYl/F5ZS+cb9fWCZqh+7Ecxup1ZgaAAqOw0XHC2qlE8szvS31hZ6
+        wmN6TzrQbxq0OUtJev05udKet0wc/lIy6kWbL9WBVRoHUPZcy8qJExkTfX53V9Jg==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.96)
+        (envelope-from <johannes@sipsolutions.net>)
+        id 1ow8XQ-003CYt-07;
+        Fri, 18 Nov 2022 22:04:40 +0100
+Message-ID: <d4c07fa45de290f32611420e2f116d8a6e32d22a.camel@sipsolutions.net>
+Subject: Re: Coverity: iwl_mvm_sec_key_add(): Memory - corruptions
+From:   Johannes Berg <johannes@sipsolutions.net>
+To:     coverity-bot <keescook@chromium.org>
+Cc:     Luca Coelho <luciano.coelho@intel.com>,
+        Haim Dreyfuss <haim.dreyfuss@intel.com>,
+        Miri Korenblit <miriam.rachel.korenblit@intel.com>,
+        Petr Stourac <pstourac@redhat.com>,
+        linux-kernel@vger.kernel.org,
+        Mordechay Goodstein <mordechay.goodstein@intel.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Nathan Errera <nathan.errera@intel.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Shaul Triebitz <shaul.triebitz@intel.com>,
+        netdev@vger.kernel.org,
+        Gregory Greenman <gregory.greenman@intel.com>,
+        Abhishek Naik <abhishek.naik@intel.com>,
+        Jose Ignacio Tornos Martinez <jtornosm@redhat.com>,
+        Ayala Beker <ayala.beker@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-wireless@vger.kernel.org,
+        Sriram R <quic_srirrama@quicinc.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        Mike Golant <michael.golant@intel.com>,
+        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
         "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
         linux-next@vger.kernel.org, linux-hardening@vger.kernel.org
-References: <202211171419.FCDC8EE@keescook>
- <74337ebd-0222-2e78-9149-8fa40b0c815e@clicknet.pro>
- <202211180841.39558B5E5@keescook>
-From:   Ananda Badmaev <a.badmaev@clicknet.pro>
-In-Reply-To: <202211180841.39558B5E5@keescook>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Date:   Fri, 18 Nov 2022 22:04:38 +0100
+In-Reply-To: <202211180854.CD96D54D36@keescook>
+References: <202211180854.CD96D54D36@keescook>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+MIME-Version: 1.0
+X-malware-bazaar: not-scanned
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_PDS_PRO_TLD autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-18.11.2022 19:43, Kees Cook пишет:
-> Ah-ha, understood. Well, if you do want to catch it if there is ever a
-> typo in the block_desc values (which are not obviously >4096 without
-> sitting down and calculating them), perhaps add:
-> 
->          if (WARN_ON(block_type >= ARRAY_SIZE(block_desc))
->                  return -ENOSPC;
-> 
-> 
+On Fri, 2022-11-18 at 08:54 -0800, coverity-bot wrote:
+>=20
+> *** CID 1527370:  Memory - corruptions  (OVERRUN)
+> drivers/net/wireless/intel/iwlwifi/mvm/mld-key.c:123 in iwl_mvm_sec_key_a=
+dd()
+> 117
+> 118     	if (WARN_ON(keyconf->keylen > sizeof(cmd.u.add.key)))
+> 119     		return -EINVAL;
+> 120
+> 121     	if (keyconf->cipher =3D=3D WLAN_CIPHER_SUITE_WEP40 ||
+> 122     	    keyconf->cipher =3D=3D WLAN_CIPHER_SUITE_WEP104)
+> vvv     CID 1527370:  Memory - corruptions  (OVERRUN)
+> vvv     Overrunning buffer pointed to by "cmd.u.add.key + 3" of 32 bytes =
+by passing it to a function which accesses it at byte offset 34 using argum=
+ent "keyconf->keylen" (which evaluates to 32). [Note: The source code imple=
+mentation of the function has been overridden by a builtin model.]
+> 123     		memcpy(cmd.u.add.key + IWL_SEC_WEP_KEY_OFFSET, keyconf->key,
+> 124     		       keyconf->keylen);
+> 125     	else
+> 126     		memcpy(cmd.u.add.key, keyconf->key, keyconf->keylen);
+> 127
+> 128     	if (keyconf->cipher =3D=3D WLAN_CIPHER_SUITE_TKIP) {
+>=20
+> If this is a false positive, please let us know so we can mark it as
+> such, or teach the Coverity rules to be smarter. If not, please make
+> sure fixes get into linux-next. :) For patches fixing this, please
+> include these lines (but double-check the "Fixes" first):
+>=20
 
-Probably it would be better to add a single check on the largest 
-slot_size >= PAGE_SIZE at pool creation time.
+Well, I don't think you can teach coverity this easily, but the
+WARN_ON() check there is not really meant to protect this - WEP keys
+must have a length of either 5 or 13 bytes (40 or 104 bits!).
 
+So there's no issue here, but I'm not surprised that coverity wouldn't
+be able to figure that out through the stack.
+
+johannes

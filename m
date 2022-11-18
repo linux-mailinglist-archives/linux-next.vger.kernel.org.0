@@ -2,50 +2,75 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B3D362EAB6
-	for <lists+linux-next@lfdr.de>; Fri, 18 Nov 2022 02:07:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EAC662EAD7
+	for <lists+linux-next@lfdr.de>; Fri, 18 Nov 2022 02:24:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234961AbiKRBHc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 17 Nov 2022 20:07:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59828 "EHLO
+        id S239229AbiKRBYv (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 17 Nov 2022 20:24:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234850AbiKRBHb (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 17 Nov 2022 20:07:31 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ED1124BFE;
-        Thu, 17 Nov 2022 17:07:30 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NCzCh1Yq9z4xDK;
-        Fri, 18 Nov 2022 12:07:27 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1668733648;
-        bh=F+iqyvnB5hnWasFe3ejyqxa7HEUiyJEk0LNreLORbGU=;
-        h=Date:From:To:Cc:Subject:From;
-        b=pAOEd6fRkcwGiT+ijmZSrc7yjezz/uTLN5gbpksIJ+4HMC7vASzNzNrUrUI/dKPMq
-         uAHdQ1Jni+yLRVHPiOkeDewpHH+GGrpnxxzaeGORN1NbrvmeeCAWDj07e+4TLy8QeV
-         yJTUfO3v+YRI+DPeS+6XT1FCfQM0Km5X/67Ij0SffSUupPZbrkhp5xit080BKMiQKC
-         VmjBGs/n6Br2e4XNwyIFaf7KwMQ9JCMgi8dkl8A7hzvHIS1444Q6gzpY23LO2GZ2Q7
-         i8kzQOJ8tWPyZy6P2Ho7ZA+UiJaKpUw1VQGKkCM7lZZsqgi4VSf+vi++YS7igSQ3xK
-         S3YbeMU5fOp0Q==
-Date:   Fri, 18 Nov 2022 12:07:26 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Tudor Ambarus <Tudor.Ambarus@microchip.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard.weinberger@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>
-Subject: linux-next: manual merge of the spi-nor tree with the mtd tree
-Message-ID: <20221118120726.6c410939@canb.auug.org.au>
+        with ESMTP id S234814AbiKRBYu (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 17 Nov 2022 20:24:50 -0500
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C49CF6CA0D
+        for <linux-next@vger.kernel.org>; Thu, 17 Nov 2022 17:24:48 -0800 (PST)
+Received: by mail-io1-xd2b.google.com with SMTP id p141so2815185iod.6
+        for <linux-next@vger.kernel.org>; Thu, 17 Nov 2022 17:24:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=R4T4enbQOsqO6XmAV2f5zgRx0vHX3wK4skHjCmqpICo=;
+        b=tRE8MM8ca79bEn0b3rkDQO5fw0/vkOWKZR1tr+6audLccXPFKXC4mMpzZrEnQ9Rstr
+         I4lbu9pQcWPcS5m05iK8xB2g6dLdJikgg+I7JKxU3RSpVo7rYenwhKYV+maXu5Gnb8sa
+         da9yZCzhVhRxfwlmoD01NV8jLinl+wLctMmxx2+PLcrUNdxNQUJolSTlrIXOg62ccbhf
+         Pt+GqFxBC4fZ4c2/o5Z94wZuBvxnvPMnVz6W13PArWGHzVfScmN/bqWlDq8KiDpmkyNS
+         gU6G67Z5VCRqDUGFk9bhZz3789ejikfK7LH83pOfy0jt0E/NQgtBT4+wDBKuO6302iyQ
+         kP+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=R4T4enbQOsqO6XmAV2f5zgRx0vHX3wK4skHjCmqpICo=;
+        b=jz1LKVVVI+YlAb7aq88MIcE9n+ZVAHG8Q8VS99qJFAqbNlPlw12K1Vt+CfQo5LAB87
+         q0O95iCQpELdkdf1D0o7pfCeUuPRrsoSJh3uY6X2WdeRFHLpRoOmOGx6K162yhJDpFyc
+         20FUQukeDICIJoV63hMlezmcen24lNB11QmGZiCFayGn6+Uvw0aSROn3Qjm+NoYISogT
+         7dI1VNqVnQR9KocqJhdX5AHU/8H5Qt+wDtx2bZzB+JTRx7vgafCMyQrdtTyEuvlL/R0E
+         JAgB0MGlrkuPQwiYA87LsxAbxGiInwlOsjHV38euQ9P+WEQ75LWuxjPuvqnZM9JOgsAi
+         faOg==
+X-Gm-Message-State: ANoB5pl8WpClccztiaKm8mcNyqRhxuaX5R132un/UlFf++uJzv6hZsLz
+        yZp5VMwAtPwZ+PqsnhRMBqPT0qtH3J1KTj2HXChTsg==
+X-Google-Smtp-Source: AA0mqf6NkBSAY4uvxVSPwmaPsyhvjtFX0CdumrT/0Ae0/Afz6RGYfmyK7Nfejp1L55e1tCG1ilHwXKgSN00I+OwRtQE=
+X-Received: by 2002:a6b:6d0d:0:b0:6c4:ad4d:b23a with SMTP id
+ a13-20020a6b6d0d000000b006c4ad4db23amr2378611iod.2.1668734687862; Thu, 17 Nov
+ 2022 17:24:47 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/zcYv2rxHj9_yyRaU7+.hfcu";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+References: <202211171422.7A7A7A9@keescook> <CANn89iLQcLNX+x_gJCMy5kD5GW3Xg8U4s0VGHtSuN8iegmhjxQ@mail.gmail.com>
+ <202211171513.28D070E@keescook> <CANn89iKgMvhLbTi=SHn41R--rBQ8As=E52Hnecch6nOhXVYGrg@mail.gmail.com>
+ <202211171624.963F44FCE@keescook>
+In-Reply-To: <202211171624.963F44FCE@keescook>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Thu, 17 Nov 2022 17:24:36 -0800
+Message-ID: <CANn89iJ1ciQkv5nt5XgRXAXPVzEW6J=GdiUYvqrYgjUU440OtQ@mail.gmail.com>
+Subject: Re: Coverity: __sock_gen_cookie(): Error handling issues
+To:     Kees Cook <keescook@chromium.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Nikolay Aleksandrov <nikolay@nvidia.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        netdev@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        linux-next@vger.kernel.org, linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,85 +78,93 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/zcYv2rxHj9_yyRaU7+.hfcu
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Thu, Nov 17, 2022 at 4:25 PM Kees Cook <keescook@chromium.org> wrote:
+>
+> On Thu, Nov 17, 2022 at 03:22:22PM -0800, Eric Dumazet wrote:
+> > On Thu, Nov 17, 2022 at 3:14 PM Kees Cook <keescook@chromium.org> wrote:
+> > >
+> > > On Thu, Nov 17, 2022 at 02:49:55PM -0800, Eric Dumazet wrote:
+> > > > On Thu, Nov 17, 2022 at 2:22 PM coverity-bot <keescook@chromium.org> wrote:
+> > > > >
+> > > > > Hello!
+> > > > >
+> > > > > This is an experimental semi-automated report about issues detected by
+> > > > > Coverity from a scan of next-20221117 as part of the linux-next scan project:
+> > > > > https://scan.coverity.com/projects/linux-next-weekly-scan
+> > > > >
+> > > > > You're getting this email because you were associated with the identified
+> > > > > lines of code (noted below) that were touched by commits:
+> > > > >
+> > > > >   Wed Nov 16 12:42:01 2022 +0000
+> > > > >     4ebf802cf1c6 ("net: __sock_gen_cookie() cleanup")
+> > > > >
+> > > > > Coverity reported the following:
+> > > > >
+> > > > > *** CID 1527347:  Error handling issues  (CHECKED_RETURN)
+> > > > > net/core/sock_diag.c:33 in __sock_gen_cookie()
+> > > > > 27     {
+> > > > > 28      u64 res = atomic64_read(&sk->sk_cookie);
+> > > > > 29
+> > > > > 30      if (!res) {
+> > > > > 31              u64 new = gen_cookie_next(&sock_cookie);
+> > > > > 32
+> > > > > vvv     CID 1527347:  Error handling issues  (CHECKED_RETURN)
+> > > > > vvv     Calling "atomic64_try_cmpxchg" without checking return value (as is done elsewhere 8 out of 9 times).
+> > > > > 33              atomic64_try_cmpxchg(&sk->sk_cookie, &res, new);
+> > > >
+> > > >
+> > > > Hmmm. for some reason I thought @res was always updated...
+> > > >
+> > > > A fix would be to read sk->sk_cookie, but I guess your tool will still
+> > > > complain we do not care
+> > > > of  atomic64_try_cmpxchg() return value ?
+> > > >
+> > > > diff --git a/net/core/sock_diag.c b/net/core/sock_diag.c
+> > > > index b11593cae5a09b15a10d6ba35bccc22263cb8fc8..58efb9c1c8dd4f8e5a3009a0176e1b96487daaff
+> > > > 100644
+> > > > --- a/net/core/sock_diag.c
+> > > > +++ b/net/core/sock_diag.c
+> > > > @@ -31,6 +31,10 @@ u64 __sock_gen_cookie(struct sock *sk)
+> > > >                 u64 new = gen_cookie_next(&sock_cookie);
+> > > >
+> > > >                 atomic64_try_cmpxchg(&sk->sk_cookie, &res, new);
+> > > > +               /* Another cpu/thread might have won the race,
+> > > > +                * reload the final value.
+> > > > +                */
+> > > > +               res = atomic64_read(&sk->sk_cookie);
+> > > >         }
+> > > >         return res;
+> > > >  }
+> > >
+> > > I think it's saying it was expecting an update loop -- i.e. to make sure
+> > > the value actually got swapped (the "try" part...)?
+> >
+> > The value has been updated, either by us or someone else.
+> >
+> > We do not particularly care who won the race, since the value is
+> > updated once only.
+>
+> Ah! Okay, now I understand the added comment. Thanks :)
 
-Hi all,
+I guess we could simply go back to atomic64_cmpxchg() to avoid a false positive.
 
-Today's linux-next merge of the spi-nor tree got a conflict in:
+This boils to avoid the loop we had prior to 4ebf802cf1c6
 
-  Documentation/devicetree/bindings/mtd/jedec,spi-nor.yaml
+diff --git a/net/core/sock_diag.c b/net/core/sock_diag.c
+index b11593cae5a09b15a10d6ba35bccc22263cb8fc8..7b9e321e0f6b15f2fb7af9f53fceb874439cbd02
+100644
+--- a/net/core/sock_diag.c
++++ b/net/core/sock_diag.c
+@@ -30,7 +30,11 @@ u64 __sock_gen_cookie(struct sock *sk)
+        if (!res) {
+                u64 new = gen_cookie_next(&sock_cookie);
 
-between commit:
-
-  e9a399caf031 ("dt-bindings: mtd: spi-nor: Drop common properties")
-
-from the mtd tree and commit:
-
-  7f2937efe186 ("dt-bindings: mtd: spi-nor: Add reset-gpios property")
-
-from the spi-nor tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc Documentation/devicetree/bindings/mtd/jedec,spi-nor.yaml
-index 6cc491083650,8a843b9b8673..000000000000
---- a/Documentation/devicetree/bindings/mtd/jedec,spi-nor.yaml
-+++ b/Documentation/devicetree/bindings/mtd/jedec,spi-nor.yaml
-@@@ -70,6 -70,26 +70,12 @@@ properties
-        be used on such systems, to denote the absence of a reliable reset
-        mechanism.
- =20
-+   reset-gpios:
-+     description:
-+       A GPIO line connected to the RESET (active low) signal of the devic=
-e.
-+       If "broken-flash-reset" is present then having this property does n=
-ot
-+       make any difference.
-+=20
- -  partitions:
- -    type: object
- -
- -  '#address-cells': true
- -  '#size-cells': true
- -
- -patternProperties:
- -  # Note: use 'partitions' node for new users
- -  '^partition@':
- -    type: object
- -
- -  "^otp(-[0-9]+)?$":
- -    type: object
- -
-  unevaluatedProperties: false
- =20
-  examples:
-
---Sig_/zcYv2rxHj9_yyRaU7+.hfcu
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmN22s4ACgkQAVBC80lX
-0GwVJgf9E4AEVdBQ9hqjd+u9n8GcwtyCvjgtcHKFaJXZVd7TwPjsHU6qGqPDnSK/
-ZCwMe33DY0Xwt4XAah6+H4YauuxLzMz5PrRDcravKyog6bE279dkaM8WDDZLmBzV
-HtoyJzkUPn4IhXGgQd+EQWYH4zaaCvc29KQ/aQBya3Ua2B6aO2N3VBqTe6ZiRX2+
-yVr+Kk1FwzQ/ekjADfZaBm5oHsDgctfBbG9d2+ohsVkf4nEy+u0ioYsxRP2Ldjoi
-TSFxo6uyuRA1j/mDWFJTTi+2oF9dMBGhsWCPqmJYL73CtT98EuAbU4yu+XABmKQr
-Ftj2m6P2RN6MwI/GkFA6BM4LOmpSYw==
-=xQYI
------END PGP SIGNATURE-----
-
---Sig_/zcYv2rxHj9_yyRaU7+.hfcu--
+-               atomic64_try_cmpxchg(&sk->sk_cookie, &res, new);
++               atomic64_cmpxchg(&sk->sk_cookie, res, new);
++               /* Another cpu/thread might have won the race,
++                * load the final value.
++                */
++               res = atomic64_read(&sk->sk_cookie);
+        }
+        return res;
+ }

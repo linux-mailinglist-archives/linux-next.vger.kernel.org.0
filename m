@@ -2,126 +2,128 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C577062FA89
-	for <lists+linux-next@lfdr.de>; Fri, 18 Nov 2022 17:43:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C9A762FAC0
+	for <lists+linux-next@lfdr.de>; Fri, 18 Nov 2022 17:49:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240700AbiKRQnc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 18 Nov 2022 11:43:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58786 "EHLO
+        id S235489AbiKRQta (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 18 Nov 2022 11:49:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242176AbiKRQn3 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 18 Nov 2022 11:43:29 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEFAEC47
-        for <linux-next@vger.kernel.org>; Fri, 18 Nov 2022 08:43:24 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id w4-20020a17090ac98400b002186f5d7a4cso5251288pjt.0
-        for <linux-next@vger.kernel.org>; Fri, 18 Nov 2022 08:43:24 -0800 (PST)
+        with ESMTP id S235350AbiKRQt0 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 18 Nov 2022 11:49:26 -0500
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D554E10B52
+        for <linux-next@vger.kernel.org>; Fri, 18 Nov 2022 08:49:25 -0800 (PST)
+Received: by mail-pg1-x531.google.com with SMTP id b62so5525719pgc.0
+        for <linux-next@vger.kernel.org>; Fri, 18 Nov 2022 08:49:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=bFpydVEsN0sToFVtM7jELuhoofQy9t2jPUFLTcIXRx8=;
-        b=PHxZLY8Iha2TaDny05JWQTVe0OvBw0y5kIlu1jrIxQ+y043xEur9SKJwSXJGZdYF/C
-         zq1dqTPaNBWrbbSY2FkMBWe5upYYu4TBKzmWhWP/uY+H7Mu+CtEdN3peJYoo9fHOgNqT
-         R5v38A+RV3qaU4RRHUv5Htt/vmgr5kCH78AXk=
+        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ehUyg9og+6g03rh9x9ts9jERlST9RZLtaqEmFDxKGMc=;
+        b=L35mCNVIZNLiioNel/sW2fV4ieca4G2sXtR9lRBysm0PPqP3SFS0FLNmN8Pea7Zmbv
+         tDwxDHIiDpeQ6gWL1H+yPvNjqinYeC71M4fdxdlOjiXQcofY6SpelDE6VqUFkvmHdGu9
+         WXTxrvdq6Su4POXtCphZuJDBBBKqzcEdSnJDI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
+        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bFpydVEsN0sToFVtM7jELuhoofQy9t2jPUFLTcIXRx8=;
-        b=wdrKlx68lGMAyD3vXmjKzdcXDos6euMesHEW1pq2Nz6s9dHYARNRszQeG8qh8qNj83
-         o4vGnQxx/plUqeoS+6ZrZvWouDGBSqqKOvc08ahEWvS7ZeRsbOaGJOwrKtn88xGo+Deq
-         mCPw009WrstSZfpQLJKywVjR1QR4m8s/dKE+MEzWFjSd1FfeQUB21rv/T2tV1ZpnaRbk
-         p6m5ha9Mgeo/qomT8WophjDFrhGOBVdDzQtQMCydWJIuKvmvutxf3RGxo7r8tcn1nbrC
-         rF4fUYx4lde3lreqeBFuw8Oj2jrCQ65OFqLOuAOvIMgGXFFI1UD8skmhb7mk3vvyoYTU
-         eW+Q==
-X-Gm-Message-State: ANoB5pkQF0N95I9iM9XTGebJ7N7kuVrFIBnvQJOokIPDywuH8r47mxO6
-        jd6wltWAHFTRP/6gcD1LY0PU6Q==
-X-Google-Smtp-Source: AA0mqf40QW2uM/mdUZtAUwUfmrT0ybXaxtav/kplbk3xWLYOjhj55pBX/fcy0ASDVHC8fxxYw0QVxA==
-X-Received: by 2002:a17:902:7242:b0:17c:4ae7:cf23 with SMTP id c2-20020a170902724200b0017c4ae7cf23mr448359pll.2.1668789804136;
-        Fri, 18 Nov 2022 08:43:24 -0800 (PST)
+        bh=ehUyg9og+6g03rh9x9ts9jERlST9RZLtaqEmFDxKGMc=;
+        b=pOP/owAWG6QAGaXIKI+0yx8L4vWWpqKzwqJFTnni/bYORxVD7yq1FC6BLUukzMBYiZ
+         qKTvGEKzuBMJ9lsjs4rDy3iRY3IreUyDb8chbx5OcVQ/zNG8ULGMssK79t3d+TNO37SE
+         sWIOn5EfD8kwt8+TyNu7jjFOPsGu/RATez1CXakjXvrXSjODDg/NjfHJauflXOV8VZe0
+         jrJc95G7w+kCp5b9xPvR7vEJysdx/QN4VvHzMHnDvZhoGNqygRfemW1JMKhPfzqpng/Y
+         g9VOqo1TdkB1C+UNA3goKBo35jEPTZhJk6L1PvtycracNvkDCPc8nSdNShKChDY3rbXH
+         3tmA==
+X-Gm-Message-State: ANoB5pmOFLla5eoe1/UiYHMO//V6CaFqMOVyvac9CkQUWwq291g9tyPn
+        EylNRHhBI08oB3iwoftMtk7H5Q==
+X-Google-Smtp-Source: AA0mqf60R75nwNvLu1XMvAA/HsqOTSPrQI5sXAOc+NHgyvwwAhweU9UnGjVFQ7VloaXUCUCft31vGQ==
+X-Received: by 2002:a63:f354:0:b0:476:db6f:e79d with SMTP id t20-20020a63f354000000b00476db6fe79dmr7426913pgj.399.1668790165373;
+        Fri, 18 Nov 2022 08:49:25 -0800 (PST)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id c3-20020a170903234300b0017f59ebafe7sm3928259plh.212.2022.11.18.08.43.20
+        by smtp.gmail.com with ESMTPSA id q4-20020a17090311c400b001865c298588sm3878961plh.258.2022.11.18.08.49.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Nov 2022 08:43:20 -0800 (PST)
-Date:   Fri, 18 Nov 2022 08:43:19 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Ananda Badmaev <a.badmaev@clicknet.pro>
-Cc:     Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
-        Minchan Kim <minchan@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        linux-mm@kvack.org, linux-doc@vger.kernel.org,
-        Vitaly Wool <vitaly.wool@konsulko.com>,
+        Fri, 18 Nov 2022 08:49:25 -0800 (PST)
+From:   coverity-bot <keescook@chromium.org>
+X-Google-Original-From: coverity-bot <keescook+coverity-bot@chromium.org>
+Date:   Fri, 18 Nov 2022 08:49:24 -0800
+To:     Jani Nikula <jani.nikula@intel.com>
+Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Ville =?iso-8859-1?Q?Syrj=E4l=E4?= 
+        <ville.syrjala@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        intel-gfx@lists.freedesktop.org,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Arun R Murthy <arun.r.murthy@intel.com>,
+        Imre Deak <imre.deak@intel.com>,
         "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
         linux-next@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: Coverity: zblock_alloc(): Memory - illegal accesses
-Message-ID: <202211180841.39558B5E5@keescook>
-References: <202211171419.FCDC8EE@keescook>
- <74337ebd-0222-2e78-9149-8fa40b0c815e@clicknet.pro>
+Subject: Coverity: intel_hti_uses_phy(): Integer handling issues
+Message-ID: <202211180848.D39006C@keescook>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <74337ebd-0222-2e78-9149-8fa40b0c815e@clicknet.pro>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Nov 18, 2022 at 04:05:36PM +0300, Ananda Badmaev wrote:
-> 18.11.2022 01:20, coverity-bot пишет:
-> > Coverity reported the following:
-> > 
-> > *** CID 1527352:  Memory - illegal accesses  (OVERRUN)
-> > mm/zblock.c:320 in zblock_alloc()
-> > 314     	}
-> > 315     	list = &(pool->block_lists[block_type]);
-> > 316
-> > 317     check:
-> > 318     	spin_lock(&list->lock);
-> > 319     	/* check if there are free slots in cache */
-> > vvv     CID 1527352:  Memory - illegal accesses  (OVERRUN)
-> > vvv     Overrunning array of 10208 bytes at byte offset 10208 by dereferencing pointer "list".
-> > 320     	block = cache_find_block(list);
-> > 321     	if (block)
-> > 322     		goto found;
-> > 323     	spin_unlock(&list->lock);
-> > 324
-> > 325     	/* not found block with free slots try to allocate new empty block */
-> > 
-> > If this is a false positive, please let us know so we can mark it as
-> > such, or teach the Coverity rules to be smarter. If not, please make
-> > sure fixes get into linux-next. :) For patches fixing this, please
-> > include these lines (but double-check the "Fixes" first):
-> > 
-> > Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
-> > Addresses-Coverity-ID: 1527352 ("Memory - illegal accesses")
-> > Fixes: 9097e28c25c8 ("mm: add zblock - new allocator for use via zpool API")
-> > 
-> > It looks like block_type is not checked to be < ARRAY_SIZE(block_desc)
-> > after exiting the earlier loop, so the access through "list" may be past
-> > the end of pool->block_lists.
-> > 
-> 
-> There is no need for this check because it is guaranteed that this code will
-> be executed only if size <= PAGE_SIZE. Since slot_size for the last list
-> even exceeds PAGE_SIZE, block_type will be always valid.
+Hello!
 
-Ah-ha, understood. Well, if you do want to catch it if there is ever a
-typo in the block_desc values (which are not obviously >4096 without
-sitting down and calculating them), perhaps add:
+This is an experimental semi-automated report about issues detected by
+Coverity from a scan of next-20221118 as part of the linux-next scan project:
+https://scan.coverity.com/projects/linux-next-weekly-scan
 
-        if (WARN_ON(block_type >= ARRAY_SIZE(block_desc))
-                return -ENOSPC;
+You're getting this email because you were associated with the identified
+lines of code (noted below) that were touched by commits:
 
+  Thu Nov 17 16:12:56 2022 +0200
+    62749912540b ("drm/i915/display: move hti under display sub-struct")
+
+Coverity reported the following:
+
+*** CID 1527374:  Integer handling issues  (BAD_SHIFT)
+drivers/gpu/drm/i915/display/intel_hti.c:24 in intel_hti_uses_phy()
+18     	if (INTEL_INFO(i915)->display.has_hti)
+19     		i915->display.hti.state = intel_de_read(i915, HDPORT_STATE);
+20     }
+21
+22     bool intel_hti_uses_phy(struct drm_i915_private *i915, enum phy phy)
+23     {
+vvv     CID 1527374:  Integer handling issues  (BAD_SHIFT)
+vvv     In expression "1UL << 2 * phy + 1", shifting by a negative amount has undefined behavior.  The shift amount, "2 * phy + 1", is as little as -1.
+24     	return i915->display.hti.state & HDPORT_ENABLED &&
+25     		i915->display.hti.state & HDPORT_DDI_USED(phy);
+26     }
+27
+28     u32 intel_hti_dpll_mask(struct drm_i915_private *i915)
+29     {
+
+If this is a false positive, please let us know so we can mark it as
+such, or teach the Coverity rules to be smarter. If not, please make
+sure fixes get into linux-next. :) For patches fixing this, please
+include these lines (but double-check the "Fixes" first):
+
+Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
+Addresses-Coverity-ID: 1527374 ("Integer handling issues")
+Fixes: 62749912540b ("drm/i915/display: move hti under display sub-struct")
+
+This code appears to be safe currently (intel_hti_uses_phy() is never
+called with PHY_NONE), but perhaps add an explicit check?
+
+	if (WARN_ON(phy == PHY_NONE))
+		return false;
+
+Thanks for your attention!
 
 -- 
-Kees Cook
+Coverity-bot

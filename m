@@ -2,127 +2,113 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C492632C59
-	for <lists+linux-next@lfdr.de>; Mon, 21 Nov 2022 19:52:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D222C632F2F
+	for <lists+linux-next@lfdr.de>; Mon, 21 Nov 2022 22:44:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230207AbiKUSv5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 21 Nov 2022 13:51:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55342 "EHLO
+        id S231490AbiKUVog (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 21 Nov 2022 16:44:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230179AbiKUSv4 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 21 Nov 2022 13:51:56 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5667BD06ED
-        for <linux-next@vger.kernel.org>; Mon, 21 Nov 2022 10:51:55 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id q96-20020a17090a1b6900b00218b8f9035cso2950839pjq.5
-        for <linux-next@vger.kernel.org>; Mon, 21 Nov 2022 10:51:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=zm84tpupvmaITkohpBn02m0iZCyzot9WfjUTwDdO95Q=;
-        b=TZHHW5kNwjAzkad1Zh5h9lS46JKIGDzI0CDjZhUR4ipjaOHvuj/kxUflclqyIIty9J
-         ISzkI2wwBxbUewoU2rAUzbPYHweiawqutaVuI89coe9QRvGziEcY9yAz0uyDJS6tu4hN
-         b4hGWZNap3cziCocVkF/WGi3J8dIgnGZLVBiWuCO8BBOznpJwuwC5q6PHGLEFy8AcYdA
-         GAFbPatrorCAiEHJtag0mktSYQ873Uelh1yES5QgjKxwpaWh9jByWPpDcy5FtyClXw8v
-         Gp3s1oLamUmLbyinhmRdL8vYHC8FSoUXQ2i5jf1Cx9QKoWOmCog2eHLbqtdQF3H5eYYg
-         f6FQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zm84tpupvmaITkohpBn02m0iZCyzot9WfjUTwDdO95Q=;
-        b=Mxcc9lB7r6GtPY1kqjEFaL7lqCYTChjsh6Vkipv3MGhukd41dTx6MFOFXjwsgyC9Pa
-         i8xh6MopacuhNhJsBhyR1+tan/G/FUWQWvlfvicpcGO796R6fdyf8zeObSluiAefLvNx
-         wsh2qhuWmphPiyvAjVylLnY4v0iwsobUi4tuPr4cPI2GU26M20ISSkgv+U9Kq4WOmFla
-         SJGj1drpRDapIThh3+ZTuruuAoZp2RrzO9sk4dWhzeZqhjd4qg2+wvvxSchGh996A0Z1
-         VRBQ2itCV5c56lHobRlS1lFAsAT3Y1PHDtt5piiLtMDIB+vnVC69kv4eqd4W3UqsW85Q
-         qIoA==
-X-Gm-Message-State: ANoB5plKlsKevMepKHbJb35odB+Ajk18zCiUv6fBEz0JCE7NQjtcWjGv
-        4t5Qgl6O9ae2UucED7ynq/5IpLVhKjtcT5cuKlRv
-X-Google-Smtp-Source: AA0mqf4rpW3YO/j4tiyJM0wxI7W4oxRgQk46kvGUSnjsiDptiajWC26FP9j9VcWhsE0W9OXx4MOSRPXOCHhgb8w1HUU=
-X-Received: by 2002:a17:90b:2743:b0:20d:4173:faf9 with SMTP id
- qi3-20020a17090b274300b0020d4173faf9mr27566513pjb.147.1669056714787; Mon, 21
- Nov 2022 10:51:54 -0800 (PST)
+        with ESMTP id S231441AbiKUVoO (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 21 Nov 2022 16:44:14 -0500
+Received: from us-smtp-delivery-44.mimecast.com (us-smtp-delivery-44.mimecast.com [205.139.111.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 923C2DE5
+        for <linux-next@vger.kernel.org>; Mon, 21 Nov 2022 13:44:13 -0800 (PST)
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-183-7uzm-LpVPkW4jNd1cgtn2g-1; Mon, 21 Nov 2022 16:42:50 -0500
+X-MC-Unique: 7uzm-LpVPkW4jNd1cgtn2g-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 445C3811E84;
+        Mon, 21 Nov 2022 21:42:49 +0000 (UTC)
+Received: from hog (unknown [10.39.192.162])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 8047E492B16;
+        Mon, 21 Nov 2022 21:42:47 +0000 (UTC)
+Date:   Mon, 21 Nov 2022 22:41:57 +0100
+From:   Sabrina Dubroca <sd@queasysnail.net>
+To:     Steffen Klassert <steffen.klassert@secunet.com>
+Cc:     syzbot <syzbot+bfb2bee01b9c01fff864@syzkaller.appspotmail.com>,
+        davem@davemloft.net, edumazet@google.com,
+        herbert@gondor.apana.org.au, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com, sfr@canb.auug.org.au,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] linux-next test error: general protection fault in
+ xfrm_policy_lookup_bytype
+Message-ID: <Y3vwpcJcUgqn22Fw@hog>
+References: <000000000000706e6f05edfb4ce0@google.com>
+ <Y3uULqIZ31at0aIX@hog>
+ <20221121171513.GB704954@gauss3.secunet.de>
 MIME-Version: 1.0
-References: <20221121142658.2e3f4108@canb.auug.org.au>
-In-Reply-To: <20221121142658.2e3f4108@canb.auug.org.au>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Mon, 21 Nov 2022 13:51:43 -0500
-Message-ID: <CAHC9VhR0csviPvHfh5CYm76PVz8LaAaAt38oRv+3gbFHEJP0yw@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the apparmor tree with the security tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     John Johansen <john.johansen@canonical.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221121171513.GB704954@gauss3.secunet.de>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Sun, Nov 20, 2022 at 10:27 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> Today's linux-next merge of the apparmor tree got a conflict in:
->
->   security/apparmor/domain.c
->
-> between commit:
->
->   f6fbd8cbf3ed ("lsm,fs: fix vfs_getxattr_alloc() return type and caller error paths")
->
-> from the security tree and commit:
->
->   217af7e2f4de ("apparmor: refactor profile rules and attachments")
->
-> from the apparmor tree.
->
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
->
-> --
-> Cheers,
-> Stephen Rothwell
->
-> diff --cc security/apparmor/domain.c
-> index 00dc0ec066de,b447bc13ea8e..000000000000
-> --- a/security/apparmor/domain.c
-> +++ b/security/apparmor/domain.c
-> @@@ -308,14 -296,16 +296,15 @@@ static int change_profile_perms(struct
->    * Returns: number of extended attributes that matched, or < 0 on error
->    */
->   static int aa_xattrs_match(const struct linux_binprm *bprm,
-> -                          struct aa_profile *profile, unsigned int state)
-> +                          struct aa_profile *profile, aa_state_t state)
->   {
->         int i;
->  -      ssize_t size;
->         struct dentry *d;
->         char *value = NULL;
-> -       int size, value_size = 0, ret = profile->xattr_count;
-> +       struct aa_attachment *attach = &profile->attach;
->  -      int value_size = 0, ret = attach->xattr_count;
-> ++      int size, value_size = 0, ret = attach->xattr_count;
->
-> -       if (!bprm || !profile->xattr_count)
-> +       if (!bprm || !attach->xattr_count)
->                 return 0;
->         might_sleep();
+2022-11-21, 18:15:13 +0100, Steffen Klassert wrote:
+> On Mon, Nov 21, 2022 at 04:07:26PM +0100, Sabrina Dubroca wrote:
+> > 2022-11-21, 05:47:38 -0800, syzbot wrote:
+> > > Hello,
+> > > 
+> > > syzbot found the following issue on:
+> > > 
+> > > HEAD commit:    e4cd8d3ff7f9 Add linux-next specific files for 20221121
+> > > git tree:       linux-next
+> > > console output: https://syzkaller.appspot.com/x/log.txt?x=1472370d880000
+> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=a0ebedc6917bacc1
+> > > dashboard link: https://syzkaller.appspot.com/bug?extid=bfb2bee01b9c01fff864
+> > > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> > > 
+> > > Downloadable assets:
+> > > disk image: https://storage.googleapis.com/syzbot-assets/b59eb967701d/disk-e4cd8d3f.raw.xz
+> > > vmlinux: https://storage.googleapis.com/syzbot-assets/37a7b43e6e84/vmlinux-e4cd8d3f.xz
+> > > kernel image: https://storage.googleapis.com/syzbot-assets/ebfb0438e6a2/bzImage-e4cd8d3f.xz
+> > > 
+> > > IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> > > Reported-by: syzbot+bfb2bee01b9c01fff864@syzkaller.appspotmail.com
+> > > 
+> > > general protection fault, probably for non-canonical address 0xdffffc0000000019: 0000 [#1] PREEMPT SMP KASAN
+> > > KASAN: null-ptr-deref in range [0x00000000000000c8-0x00000000000000cf]
+> > > CPU: 0 PID: 5295 Comm: kworker/0:3 Not tainted 6.1.0-rc5-next-20221121-syzkaller #0
+> > > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+> > > Workqueue: ipv6_addrconf addrconf_dad_work
+> > > RIP: 0010:xfrm_policy_lookup_bytype.cold+0x1c/0x54 net/xfrm/xfrm_policy.c:2139
+> > 
+> > That's the printk at the end of the function, when
+> > xfrm_policy_lookup_bytype returns NULL. It seems to have snuck into
+> > commit c39f95aaf6d1 ("xfrm: Fix oops in __xfrm_state_delete()"), we
+> > can just remove it:
+> > 
+> > diff --git a/net/xfrm/xfrm_policy.c b/net/xfrm/xfrm_policy.c
+> > index 3a203c59a11b..e392d8d05e0c 100644
+> > --- a/net/xfrm/xfrm_policy.c
+> > +++ b/net/xfrm/xfrm_policy.c
+> > @@ -2135,9 +2135,6 @@ static struct xfrm_policy *xfrm_policy_lookup_bytype(struct net *net, u8 type,
+> >  fail:
+> >  	rcu_read_unlock();
+> >  
+> > -	if (!IS_ERR(ret))
+> > -		printk("xfrm_policy_lookup_bytype: policy if_id %d, wanted if_id  %d\n", ret->if_id, if_id);
+> > -
+> >  	return ret;
+> 
+> Hm, this was not in the original patch. Maybe my tree was not
+> clean when I applied it. Do you want to send a patch, or should
+> I just remove it?
 
-John's the AppArmor expert, but this looks okay to me.  As a reminder,
-the lsm/next commit only changes the type of @size from a ssize_t to
-an int type.
+Go ahead, I guess it's more convenient for you.
 
 -- 
-paul-moore.com
+Sabrina
+

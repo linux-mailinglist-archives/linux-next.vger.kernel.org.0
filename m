@@ -2,113 +2,102 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D222C632F2F
-	for <lists+linux-next@lfdr.de>; Mon, 21 Nov 2022 22:44:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34133632FA1
+	for <lists+linux-next@lfdr.de>; Mon, 21 Nov 2022 23:16:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231490AbiKUVog (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 21 Nov 2022 16:44:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58976 "EHLO
+        id S231593AbiKUWQX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 21 Nov 2022 17:16:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231441AbiKUVoO (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 21 Nov 2022 16:44:14 -0500
-Received: from us-smtp-delivery-44.mimecast.com (us-smtp-delivery-44.mimecast.com [205.139.111.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 923C2DE5
-        for <linux-next@vger.kernel.org>; Mon, 21 Nov 2022 13:44:13 -0800 (PST)
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-183-7uzm-LpVPkW4jNd1cgtn2g-1; Mon, 21 Nov 2022 16:42:50 -0500
-X-MC-Unique: 7uzm-LpVPkW4jNd1cgtn2g-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        with ESMTP id S231589AbiKUWQU (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 21 Nov 2022 17:16:20 -0500
+X-Greylist: delayed 600 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 21 Nov 2022 14:16:18 PST
+Received: from gimli.rothwell.id.au (unknown [IPv6:2404:9400:2:0:216:3eff:fee1:997a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88BECD9BB2;
+        Mon, 21 Nov 2022 14:16:18 -0800 (PST)
+Received: from authenticated.rothwell.id.au (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 445C3811E84;
-        Mon, 21 Nov 2022 21:42:49 +0000 (UTC)
-Received: from hog (unknown [10.39.192.162])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 8047E492B16;
-        Mon, 21 Nov 2022 21:42:47 +0000 (UTC)
-Date:   Mon, 21 Nov 2022 22:41:57 +0100
-From:   Sabrina Dubroca <sd@queasysnail.net>
-To:     Steffen Klassert <steffen.klassert@secunet.com>
-Cc:     syzbot <syzbot+bfb2bee01b9c01fff864@syzkaller.appspotmail.com>,
-        davem@davemloft.net, edumazet@google.com,
-        herbert@gondor.apana.org.au, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com, sfr@canb.auug.org.au,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] linux-next test error: general protection fault in
- xfrm_policy_lookup_bytype
-Message-ID: <Y3vwpcJcUgqn22Fw@hog>
-References: <000000000000706e6f05edfb4ce0@google.com>
- <Y3uULqIZ31at0aIX@hog>
- <20221121171513.GB704954@gauss3.secunet.de>
+        by mail.rothwell.id.au (Postfix) with ESMTPSA id 4NGLnP0rwYzyd4;
+        Tue, 22 Nov 2022 08:56:25 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rothwell.id.au;
+        s=201702; t=1669067786;
+        bh=QV0Z2bSBUE5r7R2wuaEHFcwtsjNuL4Kx/JBOa/aaxlo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=VB3StVzNvce3mm1S80Yz/kGHX2DptGgulr7wXwOYjN5T1YOJbRUC8cORLxgRPoHhx
+         P3fVXMrAXDkbBWC6kU3efCqzdAP0mr6qVPhO4jOY/eYRc03xOpMKhcg6wzBPrwVBZz
+         l2uMiq6Ha4Ih9R+RsbA044FRihD+nBbydEoQIl97rW44MeEk5g99KQM8lSbRCP/3SF
+         TjbG4v4dKpoX4XTxmn7VhudPoNqu8GpONoAJ930f51e38ilO5qrM5qTvqd7gRwv/aO
+         XfiB/DOUMQJWo+erW+Z/4gBlqWPhjjHRxBdqRJY43Yk9FiPu1DG80UwYFdBhqtm4uh
+         nqHwu3XE6tPGQ==
+Date:   Tue, 22 Nov 2022 08:55:50 +1100
+From:   Stephen Rothwell <sfr@rothwell.id.au>
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Gaosheng Cui <cuigaosheng1@huawei.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the security tree with Linus' tree
+Message-ID: <20221122085550.3b8bdef9@oak.ozlabs.ibm.com>
+In-Reply-To: <CAHC9VhSTLnEX58gGFCEDHo8K3CBkU33b2oqVKUvDhRyz33ibmw@mail.gmail.com>
+References: <20221121142014.0ae7c8ff@canb.auug.org.au>
+        <CAHC9VhSTLnEX58gGFCEDHo8K3CBkU33b2oqVKUvDhRyz33ibmw@mail.gmail.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; aarch64-unknown-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221121171513.GB704954@gauss3.secunet.de>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/tkHXnsw91Tz5On1k5VMKro5";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-2022-11-21, 18:15:13 +0100, Steffen Klassert wrote:
-> On Mon, Nov 21, 2022 at 04:07:26PM +0100, Sabrina Dubroca wrote:
-> > 2022-11-21, 05:47:38 -0800, syzbot wrote:
-> > > Hello,
-> > > 
-> > > syzbot found the following issue on:
-> > > 
-> > > HEAD commit:    e4cd8d3ff7f9 Add linux-next specific files for 20221121
-> > > git tree:       linux-next
-> > > console output: https://syzkaller.appspot.com/x/log.txt?x=1472370d880000
-> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=a0ebedc6917bacc1
-> > > dashboard link: https://syzkaller.appspot.com/bug?extid=bfb2bee01b9c01fff864
-> > > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> > > 
-> > > Downloadable assets:
-> > > disk image: https://storage.googleapis.com/syzbot-assets/b59eb967701d/disk-e4cd8d3f.raw.xz
-> > > vmlinux: https://storage.googleapis.com/syzbot-assets/37a7b43e6e84/vmlinux-e4cd8d3f.xz
-> > > kernel image: https://storage.googleapis.com/syzbot-assets/ebfb0438e6a2/bzImage-e4cd8d3f.xz
-> > > 
-> > > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > > Reported-by: syzbot+bfb2bee01b9c01fff864@syzkaller.appspotmail.com
-> > > 
-> > > general protection fault, probably for non-canonical address 0xdffffc0000000019: 0000 [#1] PREEMPT SMP KASAN
-> > > KASAN: null-ptr-deref in range [0x00000000000000c8-0x00000000000000cf]
-> > > CPU: 0 PID: 5295 Comm: kworker/0:3 Not tainted 6.1.0-rc5-next-20221121-syzkaller #0
-> > > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-> > > Workqueue: ipv6_addrconf addrconf_dad_work
-> > > RIP: 0010:xfrm_policy_lookup_bytype.cold+0x1c/0x54 net/xfrm/xfrm_policy.c:2139
-> > 
-> > That's the printk at the end of the function, when
-> > xfrm_policy_lookup_bytype returns NULL. It seems to have snuck into
-> > commit c39f95aaf6d1 ("xfrm: Fix oops in __xfrm_state_delete()"), we
-> > can just remove it:
-> > 
-> > diff --git a/net/xfrm/xfrm_policy.c b/net/xfrm/xfrm_policy.c
-> > index 3a203c59a11b..e392d8d05e0c 100644
-> > --- a/net/xfrm/xfrm_policy.c
-> > +++ b/net/xfrm/xfrm_policy.c
-> > @@ -2135,9 +2135,6 @@ static struct xfrm_policy *xfrm_policy_lookup_bytype(struct net *net, u8 type,
-> >  fail:
-> >  	rcu_read_unlock();
-> >  
-> > -	if (!IS_ERR(ret))
-> > -		printk("xfrm_policy_lookup_bytype: policy if_id %d, wanted if_id  %d\n", ret->if_id, if_id);
-> > -
-> >  	return ret;
-> 
-> Hm, this was not in the original patch. Maybe my tree was not
-> clean when I applied it. Do you want to send a patch, or should
-> I just remove it?
+--Sig_/tkHXnsw91Tz5On1k5VMKro5
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Go ahead, I guess it's more convenient for you.
+Hi Paul,
 
--- 
-Sabrina
+On Mon, 21 Nov 2022 13:47:18 -0500 Paul Moore <paul@paul-moore.com> wrote:
+>
+> I asked this on a previous conflict but never received an answer so
+> I'll ask it one more time: is there a recommended way to notify
+> linux-next of an upcoming conflict?  I generally notice the merge
+> conflict within a few minutes of merging the patches into a -next
+> branch, and fix it shortly afterwards.  I'm happy to provide a
+> heads-up, and a merge example, but I'm not sure what the process is
+> for that, if any.  Or, would you simply prefer to notice it yourself?
+> I'm not bothered either way, I just thought you might appreciate the
+> heads-up.
 
+Sorry about that.  Some maintainers will just send a "heads up" email
+with a suggested resolution patch (but I don't get very many).  That
+can be very helpful for complicated (or non obvious) conflicts.  I
+still generally look at how to fix them myself (and report them), but
+it can save me considerable time in particularly obscure cases.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/tkHXnsw91Tz5On1k5VMKro5
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmN78+YACgkQAVBC80lX
+0Gyg8AgAgBfDD9n/2AsJl9dO9Fpk7NYl7kVJWmUI3+JQTMSrYL46wrhb8OKCRo37
+/DCG1SDU22L1BnN2oO4FST7NsVpYjL7XQKjTsUqHVhZEelwJuIRGR0wDbhsv2xVB
+kFWQ/gSS9Rvc94VJzcr8J66CNAGDfzFfEfo1GuyIUfGQQj+aFtxPDiXEnYW/Rg3H
+lXZNTftzWiY+SFBBqM/miVL/PEZL2LJuYUFOiCQBbTBJCBSb03y4kxkXezFUX8NV
+h6YARMR5boRbU2OsVHu4G0MJwoguL+nVL+CGyqfjzO++BwsRGM7Qh/w4SwR0ZZWY
+XxQ5urxjAe/nxTsgqUvsuowOPC/gnQ==
+=f3rv
+-----END PGP SIGNATURE-----
+
+--Sig_/tkHXnsw91Tz5On1k5VMKro5--

@@ -2,115 +2,100 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0630663174F
-	for <lists+linux-next@lfdr.de>; Mon, 21 Nov 2022 00:28:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 372B1631773
+	for <lists+linux-next@lfdr.de>; Mon, 21 Nov 2022 01:00:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229498AbiKTX1y (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 20 Nov 2022 18:27:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43392 "EHLO
+        id S229655AbiKUAAw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 20 Nov 2022 19:00:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiKTX1x (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 20 Nov 2022 18:27:53 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8719417A92;
-        Sun, 20 Nov 2022 15:27:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S229518AbiKUAAv (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 20 Nov 2022 19:00:51 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B90525298;
+        Sun, 20 Nov 2022 16:00:49 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id DB0CACE0CE4;
-        Sun, 20 Nov 2022 23:27:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36C15C433C1;
-        Sun, 20 Nov 2022 23:27:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668986866;
-        bh=Tx2o5MRqUNtnBVS6RiWQrUpDRS8DDJptpeqkVFtVZs0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JSCAd1e5FUaX1dHMO4y/QlWqswsoYkS0YQBgWsZaDFmG/ac/I3eFNPweZ5y0PDY+L
-         Kvupz26elOUQKjIQjPjsZZFLB6Vt0ItQgJXGkmCMjDPcxHsjlKmyOxapyI4NbxFC3F
-         i92x549nfRwy3GQ69bV8FrUOrGnWDASjy9ON6hCg6FgpS8M+QtdoFknSx+MAXKRQYE
-         tnDqT5dDmIY1eawQdflEc0J5UpTSbL4y0/Dyu8cfzmgAHg7Ny7O3SJHlbv5FTxjB3U
-         LbyskcaAYdYQJhVtpRJkVJaKNa/49i/epE0RQkpAGTDgnMwOCU6SuZiix4uCHe55N4
-         +0gE0RgwrzLdA==
-Date:   Sun, 20 Nov 2022 23:27:42 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Conor Dooley <Conor.Dooley@microchip.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NFnbH0RvXz4x1D;
+        Mon, 21 Nov 2022 11:00:42 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1668988843;
+        bh=PQ/mZoZy1OtDgUCx+23gEqJrYuLlwBeJIlyTABANKZQ=;
+        h=Date:From:To:Cc:Subject:From;
+        b=XsZDt2AwZFtzEeALOulNeE7FT+EnsebC5lpY3R8kLnPecJ9qR1pQYg1C7qxnmKTA3
+         2TFYJMjBADBeJVgjQc9cKwpCcGfNwfJiAprkVTWPeBQkgx4SAELZJ+YBrOpoImJZa8
+         6/KxH+LH2vjEePTfpRNIDsTWgbRWxizTOs1i+mk28NbXSFmQ/SW17LwxAziHFcQxl+
+         C1RtcbYy9UVWpqEgbaxz4vc/N3BE5B2wrWqzdIH2rcUd/L8MGVqYQSpYBM383e7dyy
+         +UsZX74wUcddyDnitt2ojHsrDKKLxlWjV8S19FjDHkauAxA1SCgnxeinEGvX8/yrJo
+         60z0GADH6gTuQ==
+Date:   Mon, 21 Nov 2022 11:00:41 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     John Ogness <john.ogness@linutronix.de>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Samuel Holland <samuel@sholland.org>
-Subject: Re: linux-next: manual merge of the riscv-dt tree with the renesas
- tree
-Message-ID: <Y3q37h2NkupDFL+E@spud>
-References: <20221121102318.40c58114@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the printk tree
+Message-ID: <20221121110041.1d2c635b@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221121102318.40c58114@canb.auug.org.au>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/B3yQZdqv6nwEEef/MGmVwSi";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 10:23:18AM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Today's linux-next merge of the riscv-dt tree got a conflict in:
-> 
->   Documentation/devicetree/bindings/riscv/cpus.yaml
-> 
-> between commit:
-> 
->   57e1b873c2f5 ("dt-bindings: riscv: Sort the CPU core list alphabetically")
-> 
-> from the renesas tree and commit:
-> 
->   41adc2fbad8b ("dt-bindings: riscv: Add T-HEAD C906 and C910 compatibles")
-> 
-> from the riscv-dt tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
+--Sig_/B3yQZdqv6nwEEef/MGmVwSi
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Fixup looks good to me Stephen, thanks!
+Hi all,
 
-> 
-> -- 
-> Cheers,
-> Stephen Rothwell
-> 
-> diff --cc Documentation/devicetree/bindings/riscv/cpus.yaml
-> index 2bf91829c8de,e98a716c6f18..000000000000
-> --- a/Documentation/devicetree/bindings/riscv/cpus.yaml
-> +++ b/Documentation/devicetree/bindings/riscv/cpus.yaml
-> @@@ -34,12 -33,14 +34,14 @@@ properties
->                 - sifive,e5
->                 - sifive,e7
->                 - sifive,e71
->  -              - sifive,u74-mc
->  -              - sifive,u54
->  -              - sifive,u74
->  +              - sifive,rocket0
->                 - sifive,u5
->  +              - sifive,u54
->                 - sifive,u7
->  -              - canaan,k210
->  +              - sifive,u74
->  +              - sifive,u74-mc
-> +               - thead,c906
-> +               - thead,c910
->             - const: riscv
->         - items:
->             - enum:
+After merging the printk tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
+ERROR: modpost: "lockdep_assert_console_list_lock_held" [drivers/video/fbde=
+v/xen-fbfront.ko] undefined!
+ERROR: modpost: "lockdep_assert_console_list_lock_held" [drivers/tty/serial=
+/8250/8250.ko] undefined!
+ERROR: modpost: "lockdep_assert_console_list_lock_held" [drivers/tty/serial=
+/samsung_tty.ko] undefined!
+ERROR: modpost: "lockdep_assert_console_list_lock_held" [drivers/tty/serial=
+/kgdboc.ko] undefined!
+ERROR: modpost: "lockdep_assert_console_list_lock_held" [drivers/net/netcon=
+sole.ko] undefined!
 
+Presumably caused by commits
+
+  c26c1533e3bd ("printk: introduce console_list_lock")
+  a71ba89dc3ed ("console: introduce wrappers to read/write console flags")
+  d3ca62bf29bb ("console: introduce console_is_registered()")
+
+I have used the printk tree from next-20221118 for today.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/B3yQZdqv6nwEEef/MGmVwSi
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmN6v6kACgkQAVBC80lX
+0GyDgwf9HAyNLl37VMCGeardwi3g7gbCoJaM5RQdYCjUAHY8gIL6pMlDmE9qXEh9
+R9KzWya0HPsRjmZDNSMpLlKX4tJ40XUVWhGGzr6CSM11CUnRAgPHl1HZC6P7T5V6
+Tx+nSW9AQnmU8LYeEtltP4ZKuLZgFey2lHUPpILPRwmXTD2gDi4Z2GtRan6PwP/8
+9u7WdjDGZx6bW/oV9pixf19prBzHNzNn+mJCjbIQbt+Y4FFLAEoaAxuqSjRQwwbo
+W21GZ0VFjqbHoHvTGtsnZdAyZpnaSpuI8S7McrKCNSOTuOXDDxaUBE2CFxcZIwps
+ycJFhw4ZSkwntLQlPm01Ad3tIspBlA==
+=1RME
+-----END PGP SIGNATURE-----
+
+--Sig_/B3yQZdqv6nwEEef/MGmVwSi--

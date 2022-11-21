@@ -2,118 +2,102 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AB73632AA7
-	for <lists+linux-next@lfdr.de>; Mon, 21 Nov 2022 18:17:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF4D2632C43
+	for <lists+linux-next@lfdr.de>; Mon, 21 Nov 2022 19:47:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230517AbiKURR2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 21 Nov 2022 12:17:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33730 "EHLO
+        id S229870AbiKUSrg (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 21 Nov 2022 13:47:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231162AbiKURRM (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 21 Nov 2022 12:17:12 -0500
-Received: from a.mx.secunet.com (a.mx.secunet.com [62.96.220.36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C7EFD5399;
-        Mon, 21 Nov 2022 09:15:17 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by a.mx.secunet.com (Postfix) with ESMTP id 6552420199;
-        Mon, 21 Nov 2022 18:15:15 +0100 (CET)
-X-Virus-Scanned: by secunet
-Received: from a.mx.secunet.com ([127.0.0.1])
-        by localhost (a.mx.secunet.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id b8o36EmnEO1I; Mon, 21 Nov 2022 18:15:14 +0100 (CET)
-Received: from mailout2.secunet.com (mailout2.secunet.com [62.96.220.49])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by a.mx.secunet.com (Postfix) with ESMTPS id 73080200BB;
-        Mon, 21 Nov 2022 18:15:14 +0100 (CET)
-Received: from cas-essen-01.secunet.de (unknown [10.53.40.201])
-        by mailout2.secunet.com (Postfix) with ESMTP id 641EB80004A;
-        Mon, 21 Nov 2022 18:15:14 +0100 (CET)
-Received: from mbx-essen-01.secunet.de (10.53.40.197) by
- cas-essen-01.secunet.de (10.53.40.201) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 21 Nov 2022 18:15:14 +0100
-Received: from gauss2.secunet.de (10.182.7.193) by mbx-essen-01.secunet.de
- (10.53.40.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 21 Nov
- 2022 18:15:13 +0100
-Received: by gauss2.secunet.de (Postfix, from userid 1000)
-        id 71E4531829DB; Mon, 21 Nov 2022 18:15:13 +0100 (CET)
-Date:   Mon, 21 Nov 2022 18:15:13 +0100
-From:   Steffen Klassert <steffen.klassert@secunet.com>
-To:     Sabrina Dubroca <sd@queasysnail.net>
-CC:     syzbot <syzbot+bfb2bee01b9c01fff864@syzkaller.appspotmail.com>,
-        <davem@davemloft.net>, <edumazet@google.com>,
-        <herbert@gondor.apana.org.au>, <kuba@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-next@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <pabeni@redhat.com>,
-        <sfr@canb.auug.org.au>, <syzkaller-bugs@googlegroups.com>
-Subject: Re: [syzbot] linux-next test error: general protection fault in
- xfrm_policy_lookup_bytype
-Message-ID: <20221121171513.GB704954@gauss3.secunet.de>
-References: <000000000000706e6f05edfb4ce0@google.com>
- <Y3uULqIZ31at0aIX@hog>
+        with ESMTP id S229460AbiKUSrd (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 21 Nov 2022 13:47:33 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51E9D5FCD
+        for <linux-next@vger.kernel.org>; Mon, 21 Nov 2022 10:47:29 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id a22-20020a17090a6d9600b0021896eb5554so6110487pjk.1
+        for <linux-next@vger.kernel.org>; Mon, 21 Nov 2022 10:47:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=slc6To47rlHTqeVdISg2/ZKmr0STUWIrt9f/pkC/6u4=;
+        b=wz4QmcHWoYLuLZDiQdvOhF1LlhHkdjopyRkZVTXjug7tnMGqZ+1Slh2px9OUBglyWe
+         MDazcQS6wXqYke2XdS+sSl7WUDIE6HytecaxaSeSqjWCrMuS1oM4EzcxI9lrpJPCheZD
+         sEfa3CSSbVp20pegnD1AGZjRYvCj0u16ZzERAHGxbgfWoAaSeFLBZB/BEr2bxZWF9xBp
+         WPGUJzxl9mV8OlPsXC2+eHXJz2yvidRapHWaGdXWDU11yIgOxP2z2/dxNzpTKm7LRbW9
+         vno/N5V8OHQlhK7Np/GiLNxph+Usd/t6LxIuNswRVLz90u3JPhEwvFdLXaG2FLKAqs4W
+         c+xw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=slc6To47rlHTqeVdISg2/ZKmr0STUWIrt9f/pkC/6u4=;
+        b=vmgmrdn4RjcDJaRRGigfAyqV+yYUILxxQoYTurxBmFPBggqSvYUbTO2nNsdLCWBTJw
+         3DI5VYPjEc7XqOS3lWjOYic3wdRNNcgbzUzMaUfztLPpMTqAJGnS94u71eBt8azcSZ5f
+         J7UxmeW/y7+glcs9SzkKD4zS8GhfWLjy3dZv0ejVRbfXF2xkTRzuRsbMSMIrcZf3Gnmg
+         nqzcQ1JJTUND3lvJ+3rFc/Djou/H2+20AB9LgCCNzMOnGuszuWb3zD4QcmHeild14fJU
+         IXv93HF1qf1wCoYZcr+X5vJM4VCvR/mJfVisMfic1m5e+DXrCtV6uhqE72QFxjeNCU2D
+         FNrA==
+X-Gm-Message-State: ANoB5pkzouONNMzehPXlmz1syahGTdDEPGVlsYaUmUE4B5pC5WgHrAO/
+        pZqt3PzKNhm2nUnbB4vzy86woCdXuvk2r6qvQoqt
+X-Google-Smtp-Source: AA0mqf4Y35tBtTO5GhLJwsHdoVbWb3knJmpPRFMhjBKTnUFCBRf82bGhlt5Uldqb41tru1IhkPSVsQD7DKCXl2FpqHo=
+X-Received: by 2002:a17:90b:2743:b0:20d:4173:faf9 with SMTP id
+ qi3-20020a17090b274300b0020d4173faf9mr27550835pjb.147.1669056449326; Mon, 21
+ Nov 2022 10:47:29 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <Y3uULqIZ31at0aIX@hog>
-X-ClientProxiedBy: cas-essen-01.secunet.de (10.53.40.201) To
- mbx-essen-01.secunet.de (10.53.40.197)
-X-EXCLAIMER-MD-CONFIG: 2c86f778-e09b-4440-8b15-867914633a10
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221121142014.0ae7c8ff@canb.auug.org.au>
+In-Reply-To: <20221121142014.0ae7c8ff@canb.auug.org.au>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Mon, 21 Nov 2022 13:47:18 -0500
+Message-ID: <CAHC9VhSTLnEX58gGFCEDHo8K3CBkU33b2oqVKUvDhRyz33ibmw@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the security tree with Linus' tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Gaosheng Cui <cuigaosheng1@huawei.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 04:07:26PM +0100, Sabrina Dubroca wrote:
-> 2022-11-21, 05:47:38 -0800, syzbot wrote:
-> > Hello,
-> > 
-> > syzbot found the following issue on:
-> > 
-> > HEAD commit:    e4cd8d3ff7f9 Add linux-next specific files for 20221121
-> > git tree:       linux-next
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=1472370d880000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=a0ebedc6917bacc1
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=bfb2bee01b9c01fff864
-> > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> > 
-> > Downloadable assets:
-> > disk image: https://storage.googleapis.com/syzbot-assets/b59eb967701d/disk-e4cd8d3f.raw.xz
-> > vmlinux: https://storage.googleapis.com/syzbot-assets/37a7b43e6e84/vmlinux-e4cd8d3f.xz
-> > kernel image: https://storage.googleapis.com/syzbot-assets/ebfb0438e6a2/bzImage-e4cd8d3f.xz
-> > 
-> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > Reported-by: syzbot+bfb2bee01b9c01fff864@syzkaller.appspotmail.com
-> > 
-> > general protection fault, probably for non-canonical address 0xdffffc0000000019: 0000 [#1] PREEMPT SMP KASAN
-> > KASAN: null-ptr-deref in range [0x00000000000000c8-0x00000000000000cf]
-> > CPU: 0 PID: 5295 Comm: kworker/0:3 Not tainted 6.1.0-rc5-next-20221121-syzkaller #0
-> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-> > Workqueue: ipv6_addrconf addrconf_dad_work
-> > RIP: 0010:xfrm_policy_lookup_bytype.cold+0x1c/0x54 net/xfrm/xfrm_policy.c:2139
-> 
-> That's the printk at the end of the function, when
-> xfrm_policy_lookup_bytype returns NULL. It seems to have snuck into
-> commit c39f95aaf6d1 ("xfrm: Fix oops in __xfrm_state_delete()"), we
-> can just remove it:
-> 
-> diff --git a/net/xfrm/xfrm_policy.c b/net/xfrm/xfrm_policy.c
-> index 3a203c59a11b..e392d8d05e0c 100644
-> --- a/net/xfrm/xfrm_policy.c
-> +++ b/net/xfrm/xfrm_policy.c
-> @@ -2135,9 +2135,6 @@ static struct xfrm_policy *xfrm_policy_lookup_bytype(struct net *net, u8 type,
->  fail:
->  	rcu_read_unlock();
->  
-> -	if (!IS_ERR(ret))
-> -		printk("xfrm_policy_lookup_bytype: policy if_id %d, wanted if_id  %d\n", ret->if_id, if_id);
-> -
->  	return ret;
+On Sun, Nov 20, 2022 at 10:20 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> Today's linux-next merge of the security tree got a conflict in:
+>
+>   security/commoncap.c
+>
+> between commit:
+>
+>   8cf0a1bc1287 ("capabilities: fix potential memleak on error path from vfs_getxattr_alloc()")
+>
+> from Linus' tree and commit:
+>
+>   f6fbd8cbf3ed ("lsm,fs: fix vfs_getxattr_alloc() return type and caller error paths")
+>
+> from the security tree.
+>
+> I fixed it up (I just used the latter) and can carry the fix as
+> necessary.
 
-Hm, this was not in the original patch. Maybe my tree was not
-clean when I applied it. Do you want to send a patch, or should
-I just remove it?
+That's more or less what I've done with my builds, thanks Stephen.
+
+I asked this on a previous conflict but never received an answer so
+I'll ask it one more time: is there a recommended way to notify
+linux-next of an upcoming conflict?  I generally notice the merge
+conflict within a few minutes of merging the patches into a -next
+branch, and fix it shortly afterwards.  I'm happy to provide a
+heads-up, and a merge example, but I'm not sure what the process is
+for that, if any.  Or, would you simply prefer to notice it yourself?
+I'm not bothered either way, I just thought you might appreciate the
+heads-up.
+
+-- 
+paul-moore.com

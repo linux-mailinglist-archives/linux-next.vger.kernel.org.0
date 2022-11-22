@@ -2,128 +2,94 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C67C633541
-	for <lists+linux-next@lfdr.de>; Tue, 22 Nov 2022 07:27:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EBDC63357E
+	for <lists+linux-next@lfdr.de>; Tue, 22 Nov 2022 07:51:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231771AbiKVG1D (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 22 Nov 2022 01:27:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41300 "EHLO
+        id S232034AbiKVGvJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 22 Nov 2022 01:51:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231934AbiKVG1B (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 22 Nov 2022 01:27:01 -0500
-Received: from a.mx.secunet.com (a.mx.secunet.com [62.96.220.36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D25682E685;
-        Mon, 21 Nov 2022 22:27:00 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by a.mx.secunet.com (Postfix) with ESMTP id 84F4F20270;
-        Tue, 22 Nov 2022 07:26:59 +0100 (CET)
-X-Virus-Scanned: by secunet
-Received: from a.mx.secunet.com ([127.0.0.1])
-        by localhost (a.mx.secunet.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id FN8Hhv3eqx_w; Tue, 22 Nov 2022 07:26:58 +0100 (CET)
-Received: from mailout2.secunet.com (mailout2.secunet.com [62.96.220.49])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S230152AbiKVGvI (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 22 Nov 2022 01:51:08 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 684AF21261;
+        Mon, 21 Nov 2022 22:51:05 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by a.mx.secunet.com (Postfix) with ESMTPS id 9352B20184;
-        Tue, 22 Nov 2022 07:26:58 +0100 (CET)
-Received: from cas-essen-01.secunet.de (unknown [10.53.40.201])
-        by mailout2.secunet.com (Postfix) with ESMTP id 8CE8780004A;
-        Tue, 22 Nov 2022 07:26:58 +0100 (CET)
-Received: from mbx-essen-01.secunet.de (10.53.40.197) by
- cas-essen-01.secunet.de (10.53.40.201) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 22 Nov 2022 07:26:58 +0100
-Received: from gauss2.secunet.de (10.182.7.193) by mbx-essen-01.secunet.de
- (10.53.40.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 22 Nov
- 2022 07:26:58 +0100
-Received: by gauss2.secunet.de (Postfix, from userid 1000)
-        id EB57631829DB; Tue, 22 Nov 2022 07:26:57 +0100 (CET)
-Date:   Tue, 22 Nov 2022 07:26:57 +0100
-From:   Steffen Klassert <steffen.klassert@secunet.com>
-To:     Sabrina Dubroca <sd@queasysnail.net>
-CC:     syzbot <syzbot+bfb2bee01b9c01fff864@syzkaller.appspotmail.com>,
-        <davem@davemloft.net>, <edumazet@google.com>,
-        <herbert@gondor.apana.org.au>, <kuba@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-next@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <pabeni@redhat.com>,
-        <sfr@canb.auug.org.au>, <syzkaller-bugs@googlegroups.com>
-Subject: Re: [syzbot] linux-next test error: general protection fault in
- xfrm_policy_lookup_bytype
-Message-ID: <20221122062657.GE704954@gauss3.secunet.de>
-References: <000000000000706e6f05edfb4ce0@google.com>
- <Y3uULqIZ31at0aIX@hog>
- <20221121171513.GB704954@gauss3.secunet.de>
- <Y3vwpcJcUgqn22Fw@hog>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NGZfH2ZYGz4xDK;
+        Tue, 22 Nov 2022 17:51:03 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1669099863;
+        bh=FrlHFNe9zvh5AopDqCcGYXZ+bqcNy/5GofTYQkA2+eA=;
+        h=Date:From:To:Cc:Subject:From;
+        b=qGGV7QUAzCfeZ1z05hKCZnE8Cje16DDnyW6Du9TnTF8gAgIpsIoNcbwYZs+n2NNCC
+         /BAOa82/o5QUNqm+DAT7f1JUzrB/7Soo8UhkSwEi/4pAFxt2BkBWswFbvquWegqpBQ
+         ZDlcK0jzIyjxrYSsGDNMHOlI5cIl9HAYqB2iDU6U/rx0xKnLxxds2pZptMi6ZNL2yP
+         fkWlicGaVl1MOGF0lUxQRQI9ORBirIqUL5UJidByv0bLEIRMHRB2p7qOWf6DH4Gdql
+         P1V7oXnGO7bbW4p1si+5yFcVYFWlfFvhjrhTr7F16rojmosx4RLQpMpX+hOcJJE8KK
+         C7p6BjI80vPDw==
+Date:   Tue, 22 Nov 2022 17:50:57 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Stefan Roesch <shr@devkernel.io>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build warnings after merge of the mm tree
+Message-ID: <20221122175057.52f0cd9f@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <Y3vwpcJcUgqn22Fw@hog>
-X-ClientProxiedBy: cas-essen-02.secunet.de (10.53.40.202) To
- mbx-essen-01.secunet.de (10.53.40.197)
-X-EXCLAIMER-MD-CONFIG: 2c86f778-e09b-4440-8b15-867914633a10
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/zj=SY+aGCuy6SA3HUuIg/0X";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 10:41:57PM +0100, Sabrina Dubroca wrote:
-> 2022-11-21, 18:15:13 +0100, Steffen Klassert wrote:
-> > On Mon, Nov 21, 2022 at 04:07:26PM +0100, Sabrina Dubroca wrote:
-> > > 2022-11-21, 05:47:38 -0800, syzbot wrote:
-> > > > Hello,
-> > > > 
-> > > > syzbot found the following issue on:
-> > > > 
-> > > > HEAD commit:    e4cd8d3ff7f9 Add linux-next specific files for 20221121
-> > > > git tree:       linux-next
-> > > > console output: https://syzkaller.appspot.com/x/log.txt?x=1472370d880000
-> > > > kernel config:  https://syzkaller.appspot.com/x/.config?x=a0ebedc6917bacc1
-> > > > dashboard link: https://syzkaller.appspot.com/bug?extid=bfb2bee01b9c01fff864
-> > > > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> > > > 
-> > > > Downloadable assets:
-> > > > disk image: https://storage.googleapis.com/syzbot-assets/b59eb967701d/disk-e4cd8d3f.raw.xz
-> > > > vmlinux: https://storage.googleapis.com/syzbot-assets/37a7b43e6e84/vmlinux-e4cd8d3f.xz
-> > > > kernel image: https://storage.googleapis.com/syzbot-assets/ebfb0438e6a2/bzImage-e4cd8d3f.xz
-> > > > 
-> > > > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > > > Reported-by: syzbot+bfb2bee01b9c01fff864@syzkaller.appspotmail.com
-> > > > 
-> > > > general protection fault, probably for non-canonical address 0xdffffc0000000019: 0000 [#1] PREEMPT SMP KASAN
-> > > > KASAN: null-ptr-deref in range [0x00000000000000c8-0x00000000000000cf]
-> > > > CPU: 0 PID: 5295 Comm: kworker/0:3 Not tainted 6.1.0-rc5-next-20221121-syzkaller #0
-> > > > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-> > > > Workqueue: ipv6_addrconf addrconf_dad_work
-> > > > RIP: 0010:xfrm_policy_lookup_bytype.cold+0x1c/0x54 net/xfrm/xfrm_policy.c:2139
-> > > 
-> > > That's the printk at the end of the function, when
-> > > xfrm_policy_lookup_bytype returns NULL. It seems to have snuck into
-> > > commit c39f95aaf6d1 ("xfrm: Fix oops in __xfrm_state_delete()"), we
-> > > can just remove it:
-> > > 
-> > > diff --git a/net/xfrm/xfrm_policy.c b/net/xfrm/xfrm_policy.c
-> > > index 3a203c59a11b..e392d8d05e0c 100644
-> > > --- a/net/xfrm/xfrm_policy.c
-> > > +++ b/net/xfrm/xfrm_policy.c
-> > > @@ -2135,9 +2135,6 @@ static struct xfrm_policy *xfrm_policy_lookup_bytype(struct net *net, u8 type,
-> > >  fail:
-> > >  	rcu_read_unlock();
-> > >  
-> > > -	if (!IS_ERR(ret))
-> > > -		printk("xfrm_policy_lookup_bytype: policy if_id %d, wanted if_id  %d\n", ret->if_id, if_id);
-> > > -
-> > >  	return ret;
-> > 
-> > Hm, this was not in the original patch. Maybe my tree was not
-> > clean when I applied it. Do you want to send a patch, or should
-> > I just remove it?
-> 
-> Go ahead, I guess it's more convenient for you.
+--Sig_/zj=SY+aGCuy6SA3HUuIg/0X
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I just did a forced push to remove that hunk.
+Hi all,
 
-Thanks!
+After merging the mm tree, today's linux-next build (htmldocs) produced
+thess warnings:
+
+/home/sfr/next/next/Documentation/ABI/testing/sysfs-class-bdi:76: ERROR: Un=
+expected indentation.
+/home/sfr/next/next/Documentation/ABI/testing/sysfs-class-bdi:89: ERROR: Un=
+expected indentation.
+/home/sfr/next/next/Documentation/ABI/testing/sysfs-class-bdi:48: ERROR: Un=
+expected indentation.
+
+Introduced by commit
+
+  93e6d447506d ("mm: document /sys/class/bdi/<bdi>/min_bytes knob")
+  a0eef74439b2 ("mm: document /sys/class/bdi/<bdi>/max_ratio_fine knob")
+  3aafa9ff1d4f ("mm: document /sys/class/bdi/<bdi>/min_ratio_fine knob")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/zj=SY+aGCuy6SA3HUuIg/0X
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmN8cVEACgkQAVBC80lX
+0GwG6Qf/cWsoDJGRe4tWZSCNwD67oxgXrJZOL490+y+KNNh+Lcy8slvmRRQNxnb2
+NXuFCulmd29cNMToU3gaSA9ISX+ahYFPk774zm/5ljIzKUXa9qyirSQgjr9s9Kpi
+RFpV8FcEXUbOoBr4BXm81HwLy5GNJh64JvKI0Gcn9ap8QizhjHWfmuzxJa2FNNV4
+H5CErvRZ+Xbz5JBUGVDChryqyUuxmIGW/rL553edy02+s6o2iSVB8LaKempdVd6Q
+h7lzTMVn9voed39r94+xl/qXy5I+dRH8h4/P0ks0xg5vXzHmrHB/59GUaLADK7Gt
+2E719sUyMd1xk2vzIGunlpdEmbCRXw==
+=1oC9
+-----END PGP SIGNATURE-----
+
+--Sig_/zj=SY+aGCuy6SA3HUuIg/0X--

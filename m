@@ -2,133 +2,88 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FF8F633581
-	for <lists+linux-next@lfdr.de>; Tue, 22 Nov 2022 07:53:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 620DB6335B2
+	for <lists+linux-next@lfdr.de>; Tue, 22 Nov 2022 08:11:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229750AbiKVGx3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 22 Nov 2022 01:53:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54066 "EHLO
+        id S230284AbiKVHLB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 22 Nov 2022 02:11:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbiKVGx2 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 22 Nov 2022 01:53:28 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B7AC13FB2;
-        Mon, 21 Nov 2022 22:53:26 -0800 (PST)
+        with ESMTP id S229459AbiKVHLA (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 22 Nov 2022 02:11:00 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAEC5303E8;
+        Mon, 21 Nov 2022 23:10:58 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NGZj02NXCz4xN4;
-        Tue, 22 Nov 2022 17:53:24 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NGb596zD1z4wgv;
+        Tue, 22 Nov 2022 18:10:53 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1669100005;
-        bh=1D8sZG9GF18vPYMLaUq7bP+I0cCCLAR16At2pGyWKkE=;
+        s=201702; t=1669101054;
+        bh=nyeF04Knp8y7cOZd9oxlnJ2ullys+K3OaYBYCSqHX+o=;
         h=Date:From:To:Cc:Subject:From;
-        b=YkNp3b76Llz3jxrmvY9dUUZ7psft9nmkRc65hcpcL66wIw0xTnXict2zDUVkBsTw3
-         4HIt7SNVK2hDAc9PbpytnjDDAnhe3wbY46INMQjQwJuOxF48M8N6BMS6KRLrrZBZf2
-         odq05gxw42p8UdVXduuAUAo7By2nLw38iqdhEX/yCZurE+1oZrHdJ7D9E6dUuOWkeL
-         t5CUCfbaWU1UjHYYm36qDFcONuIKobZ5DVHxb/wGzpMPqD811j70bIeT8pQDJElZSQ
-         /Fa4itJOE8Iul+7OkxN5Qhm/6Uzje1jCuo8XAXu3zWw/Cz015GzN52jAIVRYVG25I7
-         974fUQiUk96eQ==
-Date:   Tue, 22 Nov 2022 17:53:23 +1100
+        b=RYWpskUnIL7J7if9i42J+FfdHBJZrjlmeKG1sF/fMIACNMl2Oqj0TYlwr/avFAba/
+         9Sz1S54RcIFyFIDhZUWmiMdwCBJICMkp11Z95KqxvyNi4eA1xRhQrpOjoTwg4l533f
+         QWzzFf7GqZ/ORjtWrGLdP6eH4sx422cXkJXg9ImpOhJdrVI3Wj+bGITyXaXYPQZA9p
+         QasWCxrXAVjYox+UORF3k9dU7u18X8ReHjzR08rGs3DY37XQDWdrMdhiEgB3zd5c2e
+         CsolibZWEd6x8LtcXH55AJilqmNAZTwjJChsAKllYmU/nA8ZbKCaybPjjO29kp5obM
+         pgJ6QqLUY7n6A==
+Date:   Tue, 22 Nov 2022 18:10:52 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Yang Li <yang.lee@linux.alibaba.com>,
-        David Hildenbrand <david@redhat.com>,
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     John Ogness <john.ogness@linutronix.de>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the mm tree
-Message-ID: <20221122175323.09ad723e@canb.auug.org.au>
+Subject: linux-next: build warning after merge of the printk tree
+Message-ID: <20221122181052.75618842@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/v5=e6Az0B98G4P9nzdeLmAk";
+Content-Type: multipart/signed; boundary="Sig_/1yT9IZ6fS6S_2bv8RJgdbds";
  protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/v5=e6Az0B98G4P9nzdeLmAk
+--Sig_/1yT9IZ6fS6S_2bv8RJgdbds
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the mm tree, today's linux-next build (x86_64 allmodconfig)
-failed like this:
+After merging the printk tree, today's linux-next build (htmldocs)
+produced this warning:
 
-In file included from include/uapi/linux/posix_types.h:5,
-                 from include/uapi/linux/types.h:14,
-                 from include/linux/types.h:6,
-                 from include/linux/kasan-checks.h:5,
-                 from include/asm-generic/rwonce.h:26,
-                 from ./arch/powerpc/include/generated/asm/rwonce.h:1,
-                 from include/linux/compiler.h:247,
-                 from include/linux/build_bug.h:5,
-                 from include/linux/container_of.h:5,
-                 from include/linux/list.h:5,
-                 from mm/hugetlb.c:6:
-mm/hugetlb.c: In function 'add_hugetlb_page':
-include/linux/stddef.h:8:14: warning: passing argument 2 of 'set_page_priva=
-te' makes integer from pointer without a cast [-Wint-conversion]
-    8 | #define NULL ((void *)0)
-      |              ^~~~~~~~~~~
-      |              |
-      |              void *
-mm/hugetlb.c:1533:32: note: in expansion of macro 'NULL'
- 1533 |         set_page_private(page, NULL);
-      |                                ^~~~
-In file included from include/linux/mmzone.h:21,
-                 from include/linux/gfp.h:7,
-                 from include/linux/mm.h:7,
-                 from mm/hugetlb.c:8:
-include/linux/mm_types.h:464:70: note: expected 'long unsigned int' but arg=
-ument is of type 'void *'
-  464 | static inline void set_page_private(struct page *page, unsigned lon=
-g private)
-      |                                                        ~~~~~~~~~~~~=
-~~^~~~~~~
+kernel/printk/printk.c:298: warning: Function parameter or member 'cookie' =
+not described in 'console_srcu_read_unlock'
 
-Caused by commit
+Introduced by commit
 
-  1f0d844bcc5b ("mm/hugetlb: stop using 0 as NULL pointer")
-
-set_page_private() have taken an unsigned long as its second argument
-since (at least) v5.8-rc1.  The cited bugzilla refers to next-20221121,
-but even there:
-
-$ git grep set_page_private next-20221121:include/linux/mm_types.h
-next-20221121:include/linux/mm_types.h:static inline void set_page_private(=
-struct page *page, unsigned long private)
-
-In fact the bugzilla refers to mm/hugetlb.c line 1531.  In next-20221121
-that is:
-
-        folio_change_private(folio, 0);
-
-I have reverted that commit for today.  Please take more care :-(
+  8bdbdd7f43cd ("printk: Prepare for SRCU console list protection")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/v5=e6Az0B98G4P9nzdeLmAk
+--Sig_/1yT9IZ6fS6S_2bv8RJgdbds
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmN8ceMACgkQAVBC80lX
-0GyFLggAnxyolZS2cOboEfqh4VR8GOlSBGCA7PhqCweD866lLwrZBRdlGx66V9Fj
-ZYGlCTC/DncGHHTmDp485N1J6PQxUuuY+OyrJUGqcbRi1+PEHRTHplgzkCDziY0+
-/mmY731b2mPfl5hBF9VN9eZ51MiGRbbqIofXAn4x6dUw/KFTy3WtR2IHxqu9E/gK
-yThD4OPiORy4FZPI/TiBtgG8Vne/AmE+26NmsFZUXfEu7KvWVNl8gP5kWBTHeuue
-FbJqQzbrNkaI/nEZ3ItfmNmsHpL5T0ZM1aFKcPhjLga7w+cvuGxJjEKe+cHiqcHp
-ORQnGfiIrDtv1Ffaixed35WJ9XGT4g==
-=nEJr
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmN8dfwACgkQAVBC80lX
+0GyqCwgAjyCqG7Kt0qYOCxCg6lPugOzRJjt2otAfGCW7GVuyO8UHCzPARhK1/RwJ
+ICvPTvtQejVw6e5wUA3UzqGhwTAourUMQsYFhPb7s82ePx4fwHOVsIRwFf7G3TmT
+qjlK270oCnngcX/Cp0/Lgs+OiujipFbAx6ktUywFdRKWUInMlmrFvEy4mLf4hEOo
+r+RNMaKG+R4HKTdKJ2lKMcNtqF0FwrG4xtjRZfJBtKvm/oxE1JNResI1JaQVjvzR
+uZTax1psJ3lgRm1yEcpuM6jFzWJLrYOeIG+YX+GCltAWCT2k/pX/375QaDemxJLn
+BFRRZUEkXPVnJbnfSosjj4S+yNTPHw==
+=qS8K
 -----END PGP SIGNATURE-----
 
---Sig_/v5=e6Az0B98G4P9nzdeLmAk--
+--Sig_/1yT9IZ6fS6S_2bv8RJgdbds--

@@ -2,73 +2,47 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC84E6341CE
-	for <lists+linux-next@lfdr.de>; Tue, 22 Nov 2022 17:46:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08123634908
+	for <lists+linux-next@lfdr.de>; Tue, 22 Nov 2022 22:18:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233000AbiKVQqt (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 22 Nov 2022 11:46:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46692 "EHLO
+        id S234844AbiKVVSG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 22 Nov 2022 16:18:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234113AbiKVQqr (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 22 Nov 2022 11:46:47 -0500
-Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8233C697CA;
-        Tue, 22 Nov 2022 08:46:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
-        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-        Resent-Cc:Resent-Message-ID; bh=cfCEpsHVZR+VbInAoPMp32ekOw5sXB2mwaZRbX/GjM0=;
-        t=1669135605; x=1670345205; b=wBpYOUVpun4OcoDQh56MgJLB6Vonb0MoWY0iAxmiJ3s35eh
-        OtZ7qG4WKZC3Vz5KzAA5uyLFpEAgcHDjKZeaSfY0LrcG+t+RQoaQLHvxmdxbMPQFd43k63t81XJjp
-        kiDB9XlCfdXh5UUUiLpgv4lGc5J79x5L90v80KWf2RWryYpKO1Nv3z01HtQYf1MYI2pJDADZeKaTM
-        bWSZ7WZHJsy5eXgR5rrMSz3nnJSXG0CWt546zo/zpJb+hk1sc6syBMvoIjkjRVQSr9v5VYz/BtI+r
-        i5bMStm7akVf1xDQRHPxw04uPEVJlYdEeVwj0qCBsscf0nBsu0Q0ijIQoNS4b5WQ==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-        (Exim 4.96)
-        (envelope-from <johannes@sipsolutions.net>)
-        id 1oxWPS-006PQd-38;
-        Tue, 22 Nov 2022 17:46:11 +0100
-Message-ID: <1d3a2fafcc14de7406fd689029277fd74ed3ce87.camel@sipsolutions.net>
-Subject: Re: Coverity: iwl_mvm_sec_key_add(): Memory - corruptions
-From:   Johannes Berg <johannes@sipsolutions.net>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Luca Coelho <luciano.coelho@intel.com>,
-        Haim Dreyfuss <haim.dreyfuss@intel.com>,
-        Miri Korenblit <miriam.rachel.korenblit@intel.com>,
-        Petr Stourac <pstourac@redhat.com>,
-        linux-kernel@vger.kernel.org,
-        Mordechay Goodstein <mordechay.goodstein@intel.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Nathan Errera <nathan.errera@intel.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Shaul Triebitz <shaul.triebitz@intel.com>,
-        netdev@vger.kernel.org,
-        Gregory Greenman <gregory.greenman@intel.com>,
-        Abhishek Naik <abhishek.naik@intel.com>,
-        Jose Ignacio Tornos Martinez <jtornosm@redhat.com>,
-        Ayala Beker <ayala.beker@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-wireless@vger.kernel.org,
-        Sriram R <quic_srirrama@quicinc.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        Mike Golant <michael.golant@intel.com>,
-        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        linux-next@vger.kernel.org, linux-hardening@vger.kernel.org
-Date:   Tue, 22 Nov 2022 17:46:09 +0100
-In-Reply-To: <202211181424.794FCAD@keescook>
-References: <202211180854.CD96D54D36@keescook>
-         <d4c07fa45de290f32611420e2f116d8a6e32d22a.camel@sipsolutions.net>
-         <202211181424.794FCAD@keescook>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+        with ESMTP id S234134AbiKVVSD (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 22 Nov 2022 16:18:03 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E9E88B849;
+        Tue, 22 Nov 2022 13:18:00 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NGxtX35Qsz4wgv;
+        Wed, 23 Nov 2022 08:17:56 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1669151876;
+        bh=DJmz63qNR630cYU/2IgMgViIxyDoLfgrkG0RXDOwOk0=;
+        h=Date:From:To:Cc:Subject:From;
+        b=MXBu0UOhfmiJovFe5R3yZ7qeDDXVm7EtYseKDPnyt3eX6EPiytnTHiE4PlXeokcKe
+         sXttrjE9PrVXbUCsj4XPg4q+Yv3knS911ikfbviBu5MSZN5BKB7SF1I/ASAr315gM/
+         9SWCSkZI6W1XUXu04umwNoIlG+irKZ/eV6+6+mVF19ixZ3TFRCPc3EdbC8JQt78DiJ
+         Xr37SKeQ18u8oeJSrpzh8SmEsEbJiKIcuHh8aPLrIQFnD41ZU1V57NT5QugGvQRJ1h
+         BA5oRWbze41gdPKJTftSpstfOtUOShY6RmQ+Os9OSt47z7t9RqMPr4GEP1Ziza4j5m
+         9o092AZhwc2bA==
+Date:   Wed, 23 Nov 2022 08:17:26 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Sterba <dsterba@suse.cz>
+Cc:     Boris Burkov <boris@bur.io>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the btrfs tree
+Message-ID: <20221123081726.140b18d1@canb.auug.org.au>
 MIME-Version: 1.0
-X-malware-bazaar: not-scanned
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+Content-Type: multipart/signed; boundary="Sig_/vA8zu+Z/rKVRpXW4_6DoXzh";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,50 +50,47 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, 2022-11-18 at 14:25 -0800, Kees Cook wrote:
-> On Fri, Nov 18, 2022 at 10:04:38PM +0100, Johannes Berg wrote:
-> > On Fri, 2022-11-18 at 08:54 -0800, coverity-bot wrote:
-> > >=20
-> > > *** CID 1527370:  Memory - corruptions  (OVERRUN)
-> > > drivers/net/wireless/intel/iwlwifi/mvm/mld-key.c:123 in iwl_mvm_sec_k=
-ey_add()
-> > > 117
-> > > 118     	if (WARN_ON(keyconf->keylen > sizeof(cmd.u.add.key)))
-> > > 119     		return -EINVAL;
-> > > 120
-> > > 121     	if (keyconf->cipher =3D=3D WLAN_CIPHER_SUITE_WEP40 ||
-> > > 122     	    keyconf->cipher =3D=3D WLAN_CIPHER_SUITE_WEP104)
-> > > vvv     CID 1527370:  Memory - corruptions  (OVERRUN)
-> > > vvv     Overrunning buffer pointed to by "cmd.u.add.key + 3" of 32 by=
-tes by passing it to a function which accesses it at byte offset 34 using a=
-rgument "keyconf->keylen" (which evaluates to 32). [Note: The source code i=
-mplementation of the function has been overridden by a builtin model.]
-> > > 123     		memcpy(cmd.u.add.key + IWL_SEC_WEP_KEY_OFFSET, keyconf->key=
-,
-> > > 124     		       keyconf->keylen);
-> > > 125     	else
-> > > 126     		memcpy(cmd.u.add.key, keyconf->key, keyconf->keylen);
-> > > 127
-> > > 128     	if (keyconf->cipher =3D=3D WLAN_CIPHER_SUITE_TKIP) {
-> > >=20
-> > > If this is a false positive, please let us know so we can mark it as
-> > > such, or teach the Coverity rules to be smarter. If not, please make
-> > > sure fixes get into linux-next. :) For patches fixing this, please
-> > > include these lines (but double-check the "Fixes" first):
-> > >=20
-> >=20
-> > Well, I don't think you can teach coverity this easily, but the
-> > WARN_ON() check there is not really meant to protect this - WEP keys
-> > must have a length of either 5 or 13 bytes (40 or 104 bits!).
-> >=20
-> > So there's no issue here, but I'm not surprised that coverity wouldn't
-> > be able to figure that out through the stack.
->=20
-> Gotcha. And some other layer is doing the verification that cipher and
-> keylen are correctly matched?
+--Sig_/vA8zu+Z/rKVRpXW4_6DoXzh
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
 
-Yes, the key must come through cfg80211_validate_key_settings() at some
-point.
+In commit
 
-johannes
+  e60fd7bf12f2 ("btrfs: fix improper error handling in btrfs_unlink")
+
+Fixes tag
+
+  Fixes: 6a1d44efb9d0 ("btrfs: setup qstr from dentrys using fscrypt helper=
+")
+
+has these problem(s):
+
+  - Target SHA1 does not exist
+
+Maybe you meant
+
+Fixes: aa8270bea38f ("btrfs: setup qstr from dentrys using fscrypt helper")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/vA8zu+Z/rKVRpXW4_6DoXzh
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmN9PGcACgkQAVBC80lX
+0GwAtAf+JMJA+gUijkDC0D/aSTr2HLbpIY0HL+V0JtT9n0+gQzaluXTg4d22B8eh
+oguFB/YvUypc9Se8UUUBbBCef1lk4xPxWsEyelzXCDIwiVri5PC8QafY1keqpyGq
+Q6gQNpkaC5fJ3C8Y4sc5hji6sjiW6IvCxQndWdjMm2mkVe3bi6nweuLGe0Vy5F42
+x/XVckjuUjiuBKL1IADiT3c4uR5juFoI5yuF6mHWH4XOKtSOc8FO0dZLHE5o9PsN
+En15QyIdtBJEKOfEn0v7TAJcCHermqZhCnLUsiqRZcv55HTEXMcLhr+ExoXyaWr9
+DT3+6SfXMuC9MVZJ8r2L97EOvDexlw==
+=++x2
+-----END PGP SIGNATURE-----
+
+--Sig_/vA8zu+Z/rKVRpXW4_6DoXzh--

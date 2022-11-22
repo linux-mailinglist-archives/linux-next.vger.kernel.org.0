@@ -2,91 +2,138 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12A7B633A68
-	for <lists+linux-next@lfdr.de>; Tue, 22 Nov 2022 11:46:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D205633CD3
+	for <lists+linux-next@lfdr.de>; Tue, 22 Nov 2022 13:49:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232659AbiKVKp7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 22 Nov 2022 05:45:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41024 "EHLO
+        id S231773AbiKVMtI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 22 Nov 2022 07:49:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232430AbiKVKpV (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 22 Nov 2022 05:45:21 -0500
-Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8583710B6F;
-        Tue, 22 Nov 2022 02:41:51 -0800 (PST)
-Received: by mail-qk1-f182.google.com with SMTP id g10so9905164qkl.6;
-        Tue, 22 Nov 2022 02:41:51 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=d4bBwFpw/JtzmjBWlLagA7Fmkmm3Jz+aY8iRdpUiYzs=;
-        b=X6PMK4u4eXCjU/YfQVm9pP91PijwZoJ4zDv8Wv1uU9DoId+yqGVSRgE18+O9V65ze+
-         HYXB9zP46uN/VZqXCie+bz2vlB4P2W2jNNG4kJgdmGMR3RP1IumA+F4Qp9zctLu5CSIB
-         tDHBVucXfoFhrzBm8vAYRJ+dBe9EZVlHJDGHKs+/Ear54z1NuIzOeW8DFwL4mXuobQ50
-         K9a1EQl8Y2pzk63YS8Js68WBQWxkRiXPdRvTlf38LwAvTEXy/rXtpN/hvnxX9OfRTIhR
-         4ifJ69tENom0B+439LHZnZtg4eZbBDESZexnexEE3ODiIP47SLEGy3/GRUV+wSz6oY0I
-         H6/A==
-X-Gm-Message-State: ANoB5pkRBk8Kt16ZkPza+Y+mewubIBhww83dgw8n85aBuNhWHWocphUj
-        PKK0ZH2WORbB6xM+6QX0SUZcq9iapAJ7Jg==
-X-Google-Smtp-Source: AA0mqf5JowMB+iZdEP388QDHqPxgMJIBgafjFTYD3xOomsm0bwOhnTkeX60yzimKPLbYh02F+COb1A==
-X-Received: by 2002:a05:620a:22ab:b0:6fa:9fb8:c50b with SMTP id p11-20020a05620a22ab00b006fa9fb8c50bmr20048859qkh.48.1669113710144;
-        Tue, 22 Nov 2022 02:41:50 -0800 (PST)
-Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com. [209.85.219.174])
-        by smtp.gmail.com with ESMTPSA id x13-20020a05620a448d00b006fa4ac86bfbsm9848357qkp.55.2022.11.22.02.41.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Nov 2022 02:41:49 -0800 (PST)
-Received: by mail-yb1-f174.google.com with SMTP id j196so865619ybj.2;
-        Tue, 22 Nov 2022 02:41:49 -0800 (PST)
-X-Received: by 2002:a25:8249:0:b0:6dd:b521:a8f2 with SMTP id
- d9-20020a258249000000b006ddb521a8f2mr2650165ybn.380.1669113709053; Tue, 22
- Nov 2022 02:41:49 -0800 (PST)
+        with ESMTP id S233072AbiKVMtH (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 22 Nov 2022 07:49:07 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00EDC606A5;
+        Tue, 22 Nov 2022 04:49:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669121347; x=1700657347;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=wIJg1xGX4Yte1WCZtUnuC+TmFlgnxwSAMKL4iqSLhss=;
+  b=Wc0hsLn9T4hVB6m6uSdBaGIwN2Q7//vpCWX9/KOQFG0KAOnsRHnMQMEE
+   X2gyIbJ84k1lEzWnQocPOFI6FSAHOgeZjadVDrX4X+vw5Cslyrmb2FfvW
+   WJuCB+dLjx8ifbwVZ1n1HVNZ+Iazk3dJnmhcpJnsm3yUkrkIS43q/YSg1
+   ggw308G9/Q25IgNuuBFSOIxwSOKt2xO9Tcx2mKi3CCODKJc1DBZM0SVcp
+   6a6aHNY52dY0gmHiKuGIMLQg5K+wGGijAmbQFQXEVgSwyw2QeGA6hlvnF
+   D/8SZgYcNszR92D2sYekHgoj2JgU7U4x4f8pHqr5QBEwVXzJkrUXuLVw/
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="375948696"
+X-IronPort-AV: E=Sophos;i="5.96,184,1665471600"; 
+   d="scan'208";a="375948696"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2022 04:49:06 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="766327818"
+X-IronPort-AV: E=Sophos;i="5.96,184,1665471600"; 
+   d="scan'208";a="766327818"
+Received: from sfflynn-mobl.ger.corp.intel.com (HELO localhost) ([10.252.18.151])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2022 04:49:01 -0800
+From:   Jani Nikula <jani.nikula@intel.com>
+To:     coverity-bot <keescook@chromium.org>
+Cc:     David Airlie <airlied@gmail.com>,
+        Ville =?utf-8?B?U3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        intel-gfx@lists.freedesktop.org,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Arun R Murthy <arun.r.murthy@intel.com>,
+        Imre Deak <imre.deak@intel.com>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        linux-next@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: Coverity: intel_hti_uses_phy(): Integer handling issues
+In-Reply-To: <202211180848.D39006C@keescook>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <202211180848.D39006C@keescook>
+Date:   Tue, 22 Nov 2022 14:48:58 +0200
+Message-ID: <875yf7xih1.fsf@intel.com>
 MIME-Version: 1.0
-References: <20221122183833.6509537e@canb.auug.org.au>
-In-Reply-To: <20221122183833.6509537e@canb.auug.org.au>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 22 Nov 2022 11:41:38 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdX-vHH5b_Qg6-CyB4kRhHaHN=HW=FeRkJ85EM7jL41Egw@mail.gmail.com>
-Message-ID: <CAMuHMdX-vHH5b_Qg6-CyB4kRhHaHN=HW=FeRkJ85EM7jL41Egw@mail.gmail.com>
-Subject: dlm build failure (was: Re: linux-next: Tree for Nov 22)
-To:     Alexander Aring <aahringo@redhat.com>,
-        David Teigland <teigland@redhat.com>,
-        Christine Caulfield <ccaulfie@redhat.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        cluster-devel@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Nov 22, 2022 at 8:40 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> Merging dlm/next (dbb751ffab0b fs: dlm: parallelize lowcomms socket handling)
+On Fri, 18 Nov 2022, coverity-bot <keescook@chromium.org> wrote:
+> Hello!
+>
+> This is an experimental semi-automated report about issues detected by
+> Coverity from a scan of next-20221118 as part of the linux-next scan project:
+> https://scan.coverity.com/projects/linux-next-weekly-scan
+>
+> You're getting this email because you were associated with the identified
+> lines of code (noted below) that were touched by commits:
+>
+>   Thu Nov 17 16:12:56 2022 +0200
+>     62749912540b ("drm/i915/display: move hti under display sub-struct")
+>
+> Coverity reported the following:
+>
+> *** CID 1527374:  Integer handling issues  (BAD_SHIFT)
+> drivers/gpu/drm/i915/display/intel_hti.c:24 in intel_hti_uses_phy()
+> 18     	if (INTEL_INFO(i915)->display.has_hti)
+> 19     		i915->display.hti.state = intel_de_read(i915, HDPORT_STATE);
+> 20     }
+> 21
+> 22     bool intel_hti_uses_phy(struct drm_i915_private *i915, enum phy phy)
+> 23     {
+> vvv     CID 1527374:  Integer handling issues  (BAD_SHIFT)
+> vvv     In expression "1UL << 2 * phy + 1", shifting by a negative amount has undefined behavior.  The shift amount, "2 * phy + 1", is as little as -1.
+> 24     	return i915->display.hti.state & HDPORT_ENABLED &&
+> 25     		i915->display.hti.state & HDPORT_DDI_USED(phy);
+> 26     }
+> 27
+> 28     u32 intel_hti_dpll_mask(struct drm_i915_private *i915)
+> 29     {
+>
+> If this is a false positive, please let us know so we can mark it as
+> such, or teach the Coverity rules to be smarter. If not, please make
+> sure fixes get into linux-next. :) For patches fixing this, please
+> include these lines (but double-check the "Fixes" first):
+>
+> Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
+> Addresses-Coverity-ID: 1527374 ("Integer handling issues")
+> Fixes: 62749912540b ("drm/i915/display: move hti under display sub-struct")
 
-noreply@ellerman.id.au reported a build failure for e.g. m68k/defconfig[1]:
+Thanks for the report, fix at [1].
 
-    ERROR: modpost: "lockdep_is_held" [fs/dlm/dlm.ko] undefined!
+I realize I didn't use the suggested tags above. For one thing, we've
+never really logged any proprietary tools used. Looks like
+"Addresses-Coverity-ID:" is growing in popularity though.
 
-which I have bisected to this commit.  The corresponding patch does not seem
-to have been posted for public review to any mailing list archived by lore.
+The Fixes: tag points at code refactoring, it was a pre-existing
+condition.
 
-[1] http://kisskb.ellerman.id.au/kisskb/buildresult/14835766/
+BR,
+Jani.
 
-Gr{oetje,eeting}s,
 
-                        Geert
+[1] https://patchwork.freedesktop.org/patch/msgid/20221122120948.3436180-1-jani.nikula@intel.com
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+>
+> This code appears to be safe currently (intel_hti_uses_phy() is never
+> called with PHY_NONE), but perhaps add an explicit check?
+>
+> 	if (WARN_ON(phy == PHY_NONE))
+> 		return false;
+>
+> Thanks for your attention!
+
+-- 
+Jani Nikula, Intel Open Source Graphics Center

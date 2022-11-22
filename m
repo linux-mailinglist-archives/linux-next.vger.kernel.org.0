@@ -2,75 +2,73 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 933BF6336BC
-	for <lists+linux-next@lfdr.de>; Tue, 22 Nov 2022 09:12:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC0F863384A
+	for <lists+linux-next@lfdr.de>; Tue, 22 Nov 2022 10:24:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230123AbiKVIMK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 22 Nov 2022 03:12:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47582 "EHLO
+        id S232288AbiKVJYi (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 22 Nov 2022 04:24:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232697AbiKVIL7 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 22 Nov 2022 03:11:59 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A9F83F07D;
-        Tue, 22 Nov 2022 00:11:57 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id w4-20020a17090ac98400b002186f5d7a4cso13039651pjt.0;
-        Tue, 22 Nov 2022 00:11:57 -0800 (PST)
+        with ESMTP id S232500AbiKVJYh (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 22 Nov 2022 04:24:37 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E9243FB9A;
+        Tue, 22 Nov 2022 01:24:36 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id k2-20020a17090a4c8200b002187cce2f92so11535105pjh.2;
+        Tue, 22 Nov 2022 01:24:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=btLM7ioiVORnm3lEYHf5T5x/aS6QHwdNoAQEJBXdHAc=;
-        b=M1jLnNubYt0SrwfSW9i33n6YX1ESpn28PZnSjooKh5wdJp0U3GRDiUEoEkEBFtfJDP
-         4dkjfxA1VTmYtoudabd51wBXPWcEaawZxcMTcUZJwZ46wusGDqOZcK3qn4UjMWbLxRui
-         n4byirPUyNnplpDep6IBcqP49UpD/GA09QeuUn6PeUF/6yiNOzcyo83YUX6QuvdrFEbH
-         HxDGK+TPhvn4EniN8wO+Zg3s4Jc0cO82Ha/s8kAorlDgzCKxWkhUQHq8j2FB5Y9GU9mV
-         Cwgjbffjc4fUeAwn6XVyKeJnwcmIO3SUzpKl4jq8MT0Fd5lWQHDSDe6nyjFt8fFXbneW
-         7O+w==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=s8JJhKrnJnq6IJLlykHCdHSIPjJqB9EfI3hBa0xq0Z4=;
+        b=ApwQoSk3UzPJuhdouqlGiHxWAKrD6pOmDT4dwFzyGbs3A7/SR2g5gF622jQdsP3JLY
+         cPc2/2OrLw1jaQR3jaB1Oxzmq/zbtwR5yOvfGKpbMnn6KlDFwHW57OYd/sMzdoEycH1e
+         uYiW5dm/S1PGbjgakOk7FgI3wzyrjky5pKOuvlkg6rRGSO71ehsIkpKxoa4eegi7Y/ip
+         YSFsLDoYHB6KnX/FFadOGTFshDS57b9CwqKljn8eIyktEp9Q9bYDKgb1jzMmkmcubz65
+         FKuc03AEl8Zn0G79sAhV9hCqrEVMnn4R3ZicatsjvmfXiFf0Rg7jREbfSdjLNaoVx6h8
+         HgOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=btLM7ioiVORnm3lEYHf5T5x/aS6QHwdNoAQEJBXdHAc=;
-        b=P0Br42GokGvwuo4qbpP0wlQJUzQlGxkqEcr5Df0qx87cq7mYw70ts+m5zemQ4zowSs
-         QfEtpwW4TqxkY4AO9wiN/MCtNIjL5rE2YWcsalvyYEf88ZuZVGZxuWwLJiN1+SeuqJsJ
-         QtXu4cF3m+/+Z6AveS5X+CmHK8Ny+ckvtTso2/cmu57EYQ7/PMO/WJf8Pq86N2CMnkzW
-         +5woP0e77OQCidM4NmJc2fQKtJLaxc1hqQMkEgD9bYxdhLnkAbBL3LwvGF/RzotS61Ek
-         SPU1Ltk1zrD76zVdC7DD01XAvjzzhZHutytim8QnrhtKu810xTPAYZrOuKuAmY2WWCPO
-         Q1BA==
-X-Gm-Message-State: ANoB5pnHMv6qhex1ozm9BB0QQMuNkYqpQk9zLXmQsictp04d9XGrvZn5
-        ZaR0dg/qOjPgFsFREzTBzHE=
-X-Google-Smtp-Source: AA0mqf4rUn0XDlqrmJJBd6NyKaOBpE5iWvUY5T498CL9cJwO2dSokFPls/EDnGAcTn7P77yiHWPvfg==
-X-Received: by 2002:a17:902:ef44:b0:185:40ca:68b8 with SMTP id e4-20020a170902ef4400b0018540ca68b8mr4368853plx.16.1669104717383;
-        Tue, 22 Nov 2022 00:11:57 -0800 (PST)
-Received: from [192.168.43.80] (subs03-180-214-233-4.three.co.id. [180.214.233.4])
-        by smtp.gmail.com with ESMTPSA id e7-20020aa798c7000000b0056bee23a80bsm9994602pfm.137.2022.11.22.00.11.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Nov 2022 00:11:57 -0800 (PST)
-Message-ID: <492af720-43ad-15d6-f21c-b94eea5442b5@gmail.com>
-Date:   Tue, 22 Nov 2022 15:11:53 +0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH] PCI/MSI: api: Use bullet lists in kernel-doc comments
-Content-Language: en-US
-To:     "Ahmed S. Darwish" <darwi@linutronix.de>
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-next@vger.kernel.org, linux-doc@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-References: <20221121184100.0974cc35@canb.auug.org.au>
- <20221121101245.23544-1-bagasdotme@gmail.com> <Y3t83uo/TZzxc1nL@lx-t490>
- <Y3xFV2IkUlRWPdCd@debian.me> <Y3xkj/3G4JxgXlal@lx-t490>
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=s8JJhKrnJnq6IJLlykHCdHSIPjJqB9EfI3hBa0xq0Z4=;
+        b=p3XAviXVIUA++0MtR5zZm9Pn1m88h7x18RySSqpJhQziQVsQkjyChIvtZRfowhbWyC
+         1CwxZcwV6Ojn1Ls7jaLwxtk8mX7Kj0c9jcPnVTnz3GXfWrKDD/I7eyjmxF6NafpgrSsK
+         CLr472SGRRwV+I8QDfnsViBwcQ4Ny/2tXAsgAd/JwEr7Ksy64bBZn2OYbJrBnLwW0XWY
+         puVb2GhTjvgsDFrOlvxKWjyVl+GQ/rGA1GE2o5zdpwAhCvSwZhmXCMTRI8Qwx6c1xAVw
+         XzumedKz+iT1D2smE0dD1xANnnvCpv7BcjMqKxsLVbfZKM2EVdulQCMqYm++NC8I/+It
+         mKPQ==
+X-Gm-Message-State: ANoB5pknnIyifsAL+ZwR74JVdI8aITrfJ4cPV3gnVcuq/6XOv3ojUnC0
+        WUb20BgwMYzr24UJTQ4Jn2gS19tUxaA=
+X-Google-Smtp-Source: AA0mqf7/zp4lIFi/fI8JMT9QscNTXT6F9SMwB9Q3FaO9A34ebbKbaO/+/n3Hr1gKQpX3YP7vsip75w==
+X-Received: by 2002:a17:902:d091:b0:187:337a:b692 with SMTP id v17-20020a170902d09100b00187337ab692mr2899058plv.166.1669109075733;
+        Tue, 22 Nov 2022 01:24:35 -0800 (PST)
+Received: from debian.. (subs03-180-214-233-4.three.co.id. [180.214.233.4])
+        by smtp.gmail.com with ESMTPSA id y13-20020a17090abd0d00b00213ee5a12c9sm9126826pjr.55.2022.11.22.01.24.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Nov 2022 01:24:35 -0800 (PST)
 From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <Y3xkj/3G4JxgXlal@lx-t490>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+To:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Documentation <linux-doc@vger.kernel.org>
+Cc:     Stefan Roesch <shr@devkernel.io>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: [PATCH] mm: fix indentation of bdi sysfs description
+Date:   Tue, 22 Nov 2022 16:24:20 +0700
+Message-Id: <20221122092420.19363-1-bagasdotme@gmail.com>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20221122175057.52f0cd9f@canb.auug.org.au>
+References: <20221122175057.52f0cd9f@canb.auug.org.au>
+MIME-Version: 1.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2786; i=bagasdotme@gmail.com; h=from:subject; bh=2zvRF+e1ifZB6Yjvr2jerEU0wt9FSzO7N8oT7Xykiqs=; b=owGbwMvMwCH2bWenZ2ig32LG02pJDMk1U118/zVJuKZFp93M+flin/wNtnn3bqX+i8+dXJhkNokx Mi26o5SFQYyDQVZMkWVSIl/T6V1GIhfa1zrCzGFlAhnCwMUpABMR/MvwV16wa8mn3f0GqrlHjyoU9S xSZktKNKrcPG8XU7eloHDgMkaGh48em88L3yx4VvUu9/8pAmffTWc/MfPo/rxvRpvyTjzPZwIA
+X-Developer-Key: i=bagasdotme@gmail.com; a=openpgp; fpr=701B806FDCA5D3A58FFB8F7D7C276C64A5E44A1D
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
         autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -79,113 +77,68 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 11/22/22 12:56, Ahmed S. Darwish wrote:
-> On Tue, Nov 22, 2022 at 10:43:19AM +0700, Bagas Sanjaya wrote:
->>
->> For the list above, no, since if the alignment is kept, like:
->>
-> 
-> NAK.
-> 
-> Below patch works properly on my side, no Sphinx errors and proper HTML
-> view, while still keeping proper-alignment in the C code.
-> 
-> Sorry, you're too focusing on the HTML side.
-> 
-> Making the C code readable, not just the HTML output, is quite
-> important.
-> 
-> =>
-> 
-> From: Bagas Sanjaya <bagasdotme@gmail.com>
-> 
-> Use bullet-list RST syntax for kernel-doc parameters' flags and
-> interrupt mode descriptions. Otherwise Sphinx produces "Unexpected
-> identation" errors and warnings.
-> 
-> Link: https://lore.kernel.org/r/20221121101245.23544-1-bagasdotme@gmail.com
-> Fixes: 5c0997dc33ac24 ("PCI/MSI: Move pci_alloc_irq_vectors() to api.c")
-> Fixes: 017239c8db2093 ("PCI/MSI: Move pci_irq_vector() to api.c")
-> Fixes: be37b8428b7b77 ("PCI/MSI: Move pci_irq_get_affinity() to api.c")
-> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
-> [darwi@linutronix.de: Match subject-line with other subystem commits]
-> [darwi@linutronix.de: Remove verbose Sphinx log from commit log]
-> [darwi@linutronix.de: For C kernel-doc comments legibility, keep
->  the flags and interrupt mode descriptions aligned.]
-> Acked-by: Ahmed S. Darwish <darwi@linutronix.de>
-> ---
-> 
->  drivers/pci/msi/api.c | 33 +++++++++++++++++++--------------
->  1 file changed, 19 insertions(+), 14 deletions(-)
-> 
-> diff --git a/drivers/pci/msi/api.c b/drivers/pci/msi/api.c
-> index dfcaa77108de..6c0c0f3ad3b8 100644
-> --- a/drivers/pci/msi/api.c
-> +++ b/drivers/pci/msi/api.c
-> @@ -209,12 +209,15 @@ EXPORT_SYMBOL(pci_disable_msix);
->   * @min_vecs: minimum required number of vectors (must be >= 1)
->   * @max_vecs: maximum desired number of vectors
->   * @flags:    One or more of:
-> - *            %PCI_IRQ_MSIX      Allow trying MSI-X vector allocations
-> - *            %PCI_IRQ_MSI       Allow trying MSI vector allocations
-> - *            %PCI_IRQ_LEGACY    Allow trying legacy INTx interrupts, if
-> - *                               and only if @min_vecs == 1
-> - *            %PCI_IRQ_AFFINITY  Auto-manage IRQs affinity by spreading
-> - *                               the vectors around available CPUs
-> + *
-> + *            * %PCI_IRQ_MSIX      Allow trying MSI-X vector allocations
-> + *            * %PCI_IRQ_MSI       Allow trying MSI vector allocations
-> + *
-> + *            * %PCI_IRQ_LEGACY    Allow trying legacy INTx interrupts, if
-> + *              and only if @min_vecs == 1
-> + *
-> + *            * %PCI_IRQ_AFFINITY  Auto-manage IRQs affinity by spreading
-> + *              the vectors around available CPUs
->   *
->   * Allocate up to @max_vecs interrupt vectors on device. MSI-X irq
->   * vector allocation has a higher precedence over plain MSI, which has a
-> @@ -299,10 +302,11 @@ EXPORT_SYMBOL(pci_alloc_irq_vectors_affinity);
->   * pci_irq_vector() - Get Linux IRQ number of a device interrupt vector
->   * @dev: the PCI device to operate on
->   * @nr:  device-relative interrupt vector index (0-based); has different
-> - *       meanings, depending on interrupt mode
-> - *         MSI-X        the index in the MSI-X vector table
-> - *         MSI          the index of the enabled MSI vectors
-> - *         INTx         must be 0
-> + *       meanings, depending on interrupt mode:
-> + *
-> + *         * MSI-X     the index in the MSI-X vector table
-> + *         * MSI       the index of the enabled MSI vectors
-> + *         * INTx      must be 0
->   *
->   * Return: the Linux IRQ number, or -EINVAL if @nr is out of range
->   */
-> @@ -322,10 +326,11 @@ EXPORT_SYMBOL(pci_irq_vector);
->   * pci_irq_get_affinity() - Get a device interrupt vector affinity
->   * @dev: the PCI device to operate on
->   * @nr:  device-relative interrupt vector index (0-based); has different
-> - *       meanings, depending on interrupt mode
-> - *         MSI-X        the index in the MSI-X vector table
-> - *         MSI          the index of the enabled MSI vectors
-> - *         INTx         must be 0
-> + *       meanings, depending on interrupt mode:
-> + *
-> + *         * MSI-X     the index in the MSI-X vector table
-> + *         * MSI       the index of the enabled MSI vectors
-> + *         * INTx      must be 0
->   *
->   * Return: MSI/MSI-X vector affinity, NULL if @nr is out of range or if
->   * the MSI(-X) vector was allocated without explicit affinity
+Stephen Rothwell reported htmldocs warnings when merging mm tree:
 
-Personally I'd like to write the entries as:
+Documentation/ABI/testing/sysfs-class-bdi:76: WARNING: Unexpected indentation.
+Documentation/ABI/testing/sysfs-class-bdi:89: WARNING: Unexpected indentation.
+Documentation/ABI/testing/sysfs-class-bdi:48: WARNING: Unexpected indentation.
 
-  * term - definition
+These warnings are due to inconsistent indentation in description of bdi
+sysfs symbols.
 
-But anyway, your suggestion patch LGTM. Thanks!
+Fix these by following indentation of surrounding text.
 
-Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
+Link: https://lore.kernel.org/linux-next/20221122175057.52f0cd9f@canb.auug.org.au/
+Fixes: 93e6d447506d8a ("mm: document /sys/class/bdi/<bdi>/min_bytes knob")
+Fixes: a0eef74439b213 ("mm: document /sys/class/bdi/<bdi>/max_ratio_fine knob")
+Fixes: 3aafa9ff1d4f67 ("mm: document /sys/class/bdi/<bdi>/min_ratio_fine knob")
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+---
+ Documentation/ABI/testing/sysfs-class-bdi | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
+diff --git a/Documentation/ABI/testing/sysfs-class-bdi b/Documentation/ABI/testing/sysfs-class-bdi
+index b4ed0db680cf69..0d2abd88a18cbd 100644
+--- a/Documentation/ABI/testing/sysfs-class-bdi
++++ b/Documentation/ABI/testing/sysfs-class-bdi
+@@ -54,8 +54,8 @@ Description:
+ 
+ 	The 'min_ratio_fine' parameter allows assigning a minimum reserve
+ 	of the write-back cache to a particular device. The value is
+-    expressed as part of 1 million. For example, this is useful for
+-    providing a minimum QoS.
++	expressed as part of 1 million. For example, this is useful for
++	providing a minimum QoS.
+ 
+ 	(read-write)
+ 
+@@ -78,10 +78,10 @@ Contact:	Stefan Roesch <shr@devkernel.io>
+ Description:
+ 	Allows limiting a particular device to use not more than the
+ 	given value of the write-back cache.  The value is given as part
+-    of 1 million. This is useful in situations where we want to avoid
+-    one device taking all or most of the write-back cache.  For example
+-    in case of an NFS mount that is prone to get stuck, or a FUSE mount
+-    which cannot be trusted to play fair.
++	of 1 million. This is useful in situations where we want to avoid
++	one device taking all or most of the write-back cache.  For example
++	in case of an NFS mount that is prone to get stuck, or a FUSE mount
++	which cannot be trusted to play fair.
+ 
+ 	(read-write)
+ 
+@@ -95,7 +95,7 @@ Description:
+ 
+ 	The 'min_bytes' parameter allows assigning a minimum
+ 	percentage of the write-back cache to a particular device
+-    expressed in bytes.
++	expressed in bytes.
+ 	For example, this is useful for providing a minimum QoS.
+ 
+ 	(read-write)
+
+base-commit: d45f43b2c12b5ec8492c48574cb015c63304161b
 -- 
 An old man doll... just what I always wanted! - Clara
 

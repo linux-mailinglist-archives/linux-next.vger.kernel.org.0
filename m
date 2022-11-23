@@ -2,186 +2,493 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AD4F63550C
-	for <lists+linux-next@lfdr.de>; Wed, 23 Nov 2022 10:14:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77ECD635A63
+	for <lists+linux-next@lfdr.de>; Wed, 23 Nov 2022 11:43:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237233AbiKWJN0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 23 Nov 2022 04:13:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54684 "EHLO
+        id S236348AbiKWKnO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 23 Nov 2022 05:43:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237225AbiKWJNY (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 23 Nov 2022 04:13:24 -0500
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 199F772119
-        for <linux-next@vger.kernel.org>; Wed, 23 Nov 2022 01:13:22 -0800 (PST)
-Received: by mail-il1-f200.google.com with SMTP id c4-20020a056e020bc400b0030098df879dso12417941ilu.6
-        for <linux-next@vger.kernel.org>; Wed, 23 Nov 2022 01:13:22 -0800 (PST)
+        with ESMTP id S238114AbiKWKma (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 23 Nov 2022 05:42:30 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F41C91D314
+        for <linux-next@vger.kernel.org>; Wed, 23 Nov 2022 02:27:45 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id l22-20020a17090a3f1600b00212fbbcfb78so1563087pjc.3
+        for <linux-next@vger.kernel.org>; Wed, 23 Nov 2022 02:27:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=r/GlN6sy2+Bf4mHekTYx3vn94XLUBDJyCZJ8lrdWGHg=;
+        b=I+GKlY8mGoPokqjFvYKIACCm2JnO8z1koaeXoVpAHL7sJdCA8qN0eafoK1iQYMl4KO
+         PwwpsneLtnbVfaqq3n23XH/b75ALjV9JDGteQ/vf78Uu92iZHrnjPAKeQeYr9FpRntf2
+         nLLRkyA/FcWqZjc0Yr04yqd9USNA4xo0RRrDmXd6gbb+ArOppZjr62D13d3PTXgVCmKo
+         WT2nLeBh/LPxu79+DxC+5KyKal7zYV6P/GX+U9lodEy3hoaJABG1SQIev9LoieTqOa3F
+         j0wa3gBglQzNWTCjklDyKR16JjLAOCw0AHq39Vema9eIUr6lktYfEwVaebjVXQpsMKOc
+         KjLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=e5fAgmlcda0f4xm5PCv89wQFpDv+wwAWL/2hkwjR7XQ=;
-        b=TABqyPgHO1Nz8Mz+py4xq51IDUH1t82JjoZuxfJJ+IaK0kao4L1Z3VnwtZNvs5/CQ6
-         aA+e2jptEf2kUvb0xEdY/KKwnvsBLA+ieTYWYmVlbYAtVdXI36cmR8M01o1c2hD6ayvB
-         y5HSuc4puPRO8XvHKR2gVsYWCUSkIcqvDUAixXYiFaP/YobEPHcA0oC119Nn5kwbNuYI
-         CljONSJpVfkl0PVvKQVhkra/h1YlKUf/zqW+KLfYtsDypjQ6MUF+rRH/6bRmImJERiM1
-         CcVx/at1BG+QO1HnUvYF7vla7PeAlulbww4bA6w23q3+N85WFCtZDiefwwacrhOXnF4J
-         i7xA==
-X-Gm-Message-State: ANoB5pmmVICOEwkdgULYyP9egB9EgBAOI7KLki5FteZVoCvSriE3bGTX
-        KEtDR8dRhufrTqFPjRy1Xr0PYfgOGQix/yvFK4YNDBXpNGjK
-X-Google-Smtp-Source: AA0mqf5WwU0U7OH1gTLg9Hapy1BfHoOHdZ/OJHD4W3sOBBiJxe0sESoHamXGD2VVwcZY6N6mb600A1risKLoxwRZFt6DWy2euvcD
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=r/GlN6sy2+Bf4mHekTYx3vn94XLUBDJyCZJ8lrdWGHg=;
+        b=8N/TtNvZ0Yy11wF+Y+Z00FTRypaqo38PoRsV9xMMd7/914G6ZWcXgEzh9t6VMBVRVu
+         atUKx22n7SO5zIGwTNtAhmewOIjeDTxS+Fh3jqyyoU/e6B+xDoLeLl3l26kszNz/hrHj
+         iCD7DD/rbUmbGHU5XIBR4n5GccxgqskJfe/h5gGSqwHcxAMXIPpgxw1aoXvB63TB18QS
+         Am64er7AOXtm0khHBLKyLF9/Oq4jPnmqag7nCWQzY0QOHGmKM8JN000FuD4gG58avz4S
+         eehjPJW0xEjDEAypt6eI7dRQ9+P0DWT4NmeQPgWuuPo1SYbOE4BMD4p9VREnSvvFQj9l
+         hAkg==
+X-Gm-Message-State: ANoB5pmwugGpKNuxJ5O1j0rOkcLJT7HuinM73YOh+/wLqFEZFDiZwnSj
+        3Ovnj9PnKX53FG+W8wnTk3Shgmnq6evJBUI4s54=
+X-Google-Smtp-Source: AA0mqf4h+kyRhMob8WfHJm+dwDNpFfu1qYLzwUPQjO+cifgUbFtm3RvX2Hz6N/iOSMBj5CHElqHLZw==
+X-Received: by 2002:a17:902:cf08:b0:188:e49e:2657 with SMTP id i8-20020a170902cf0800b00188e49e2657mr12539575plg.151.1669199265132;
+        Wed, 23 Nov 2022 02:27:45 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id ik5-20020a170902ab0500b001891b01addfsm7501561plb.274.2022.11.23.02.27.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Nov 2022 02:27:44 -0800 (PST)
+Message-ID: <637df5a0.170a0220.86b40.b878@mx.google.com>
+Date:   Wed, 23 Nov 2022 02:27:44 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-X-Received: by 2002:a92:1941:0:b0:302:4cd9:c850 with SMTP id
- e1-20020a921941000000b003024cd9c850mr4585370ilm.69.1669194801456; Wed, 23 Nov
- 2022 01:13:21 -0800 (PST)
-Date:   Wed, 23 Nov 2022 01:13:21 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000033ad1105ee1fb33d@google.com>
-Subject: [syzbot] linux-next boot error: WARNING in fb_deferred_io_schedule_flush
-From:   syzbot <syzbot+62debf5fcd57b5a592e1@syzkaller.appspotmail.com>
-To:     daniel@ffwll.ch, deller@gmx.de, dri-devel@lists.freedesktop.org,
-        jayalk@intworks.biz, linux-fbdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
-        sfr@canb.auug.org.au, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: master
+X-Kernelci-Kernel: next-20221123
+X-Kernelci-Report-Type: test
+X-Kernelci-Tree: next
+Subject: next/master baseline: 597 runs, 11 regressions (next-20221123)
+To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+        kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hello,
+next/master baseline: 597 runs, 11 regressions (next-20221123)
 
-syzbot found the following issue on:
+Regressions Summary
+-------------------
 
-HEAD commit:    736b6d81d93c Add linux-next specific files for 20221123
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=13780ab1880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=84cf3b793149c9bf
-dashboard link: https://syzkaller.appspot.com/bug?extid=62debf5fcd57b5a592e1
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+platform                     | arch   | lab           | compiler | defconfi=
+g                    | regressions
+-----------------------------+--------+---------------+----------+---------=
+---------------------+------------
+imx7ulp-evk                  | arm    | lab-nxp       | gcc-10   | imx_v6_v=
+7_defconfig          | 1          =
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/b1f9b28c7e06/disk-736b6d81.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/139697685008/vmlinux-736b6d81.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/6ff62230b292/bzImage-736b6d81.xz
+kontron-kswit...0-mmt-6g-2gs | arm    | lab-kontron   | clang-16 | multi_v7=
+_defconfig           | 1          =
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+62debf5fcd57b5a592e1@syzkaller.appspotmail.com
+kontron-kswit...0-mmt-6g-2gs | arm    | lab-kontron   | gcc-10   | multi_v7=
+_defconfig           | 1          =
 
-QNX4 filesystem 0.2.3 registered.
-qnx6: QNX6 filesystem 1.0.0 registered.
-fuse: init (API version 7.38)
-orangefs_debugfs_init: called with debug mask: :none: :0:
-orangefs_init: module version upstream loaded
-JFS: nTxBlock = 8192, nTxLock = 65536
-SGI XFS with ACLs, security attributes, realtime, quota, no debug enabled
-9p: Installing v9fs 9p2000 file system support
-NILFS version 2 loaded
-befs: version: 0.9.3
-ocfs2: Registered cluster interface o2cb
-ocfs2: Registered cluster interface user
-OCFS2 User DLM kernel interface loaded
-gfs2: GFS2 installed
-ceph: loaded (mds proto 32)
-NET: Registered PF_ALG protocol family
-xor: automatically using best checksumming function   avx       
-async_tx: api initialized (async)
-Key type asymmetric registered
-Asymmetric key parser 'x509' registered
-Asymmetric key parser 'pkcs8' registered
-Key type pkcs7_test registered
-alg: self-tests for CTR-KDF (hmac(sha256)) passed
-Block layer SCSI generic (bsg) driver version 0.4 loaded (major 240)
-io scheduler mq-deadline registered
-io scheduler kyber registered
-io scheduler bfq registered
-input: Power Button as /devices/LNXSYSTM:00/LNXPWRBN:00/input/input0
-ACPI: button: Power Button [PWRF]
-input: Sleep Button as /devices/LNXSYSTM:00/LNXSLPBN:00/input/input1
-ACPI: button: Sleep Button [SLPF]
-ACPI: \_SB_.LNKC: Enabled at IRQ 11
-virtio-pci 0000:00:03.0: virtio_pci: leaving for legacy driver
-ACPI: \_SB_.LNKD: Enabled at IRQ 10
-virtio-pci 0000:00:04.0: virtio_pci: leaving for legacy driver
-ACPI: \_SB_.LNKB: Enabled at IRQ 10
-virtio-pci 0000:00:06.0: virtio_pci: leaving for legacy driver
-virtio-pci 0000:00:07.0: virtio_pci: leaving for legacy driver
-N_HDLC line discipline registered with maxframe=4096
-Serial: 8250/16550 driver, 4 ports, IRQ sharing enabled
-00:03: ttyS0 at I/O 0x3f8 (irq = 4, base_baud = 115200) is a 16550A
-00:04: ttyS1 at I/O 0x2f8 (irq = 3, base_baud = 115200) is a 16550A
-00:05: ttyS2 at I/O 0x3e8 (irq = 6, base_baud = 115200) is a 16550A
-00:06: ttyS3 at I/O 0x2e8 (irq = 7, base_baud = 115200) is a 16550A
-Non-volatile memory driver v1.3
-Linux agpgart interface v0.103
-ACPI: bus type drm_connector registered
-[drm] Initialized vgem 1.0.0 20120112 for vgem on minor 0
-[drm] Initialized vkms 1.0.0 20180514 for vkms on minor 1
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 1 at drivers/video/fbdev/core/fb_defio.c:340 fb_deferred_io_schedule_flush+0x9f/0xf0 drivers/video/fbdev/core/fb_defio.c:340
-Modules linked in:
-CPU: 0 PID: 1 Comm: swapper/0 Not tainted 6.1.0-rc6-next-20221123-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-RIP: 0010:fb_deferred_io_schedule_flush+0x9f/0xf0 drivers/video/fbdev/core/fb_defio.c:340
-Code: c1 e8 03 80 3c 30 00 75 38 48 8b 35 43 81 27 0a bf 08 00 00 00 e8 c1 05 06 fd 48 83 c4 10 5b 5d e9 66 76 34 fd e8 61 76 34 fd <0f> 0b 48 83 c4 10 5b 5d e9 54 76 34 fd e8 6f 97 82 fd e9 7a ff ff
-RSP: 0000:ffffc900000672d8 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: ffff88801e2d0000 RCX: 0000000000000000
-RDX: ffff888140150000 RSI: ffffffff844c552f RDI: ffff88801e2d0418
-RBP: 0000000000000000 R08: 0000000000000001 R09: ffffffff9133aa47
-R10: 0000000000000001 R11: 0000000000000001 R12: 0000000000000000
-R13: 0000000000000008 R14: ffff88801e281940 R15: 00000000000000d0
-FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffff88823ffff000 CR3: 000000000c48e000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- drm_fb_helper_damage drivers/gpu/drm/drm_fb_helper.c:602 [inline]
- drm_fb_helper_sys_imageblit+0x2c9/0x380 drivers/gpu/drm/drm_fb_helper.c:883
- drm_fbdev_fb_imageblit+0x17d/0x260 drivers/gpu/drm/drm_fbdev_generic.c:157
- soft_cursor+0x514/0xa30 drivers/video/fbdev/core/softcursor.c:74
- bit_cursor+0xf13/0x17a0 drivers/video/fbdev/core/bitblit.c:377
- fbcon_cursor+0x3e0/0x550 drivers/video/fbdev/core/fbcon.c:1330
- hide_cursor+0x85/0x280 drivers/tty/vt/vt.c:907
- redraw_screen+0x5b8/0x740 drivers/tty/vt/vt.c:1012
- vc_do_resize+0xed6/0x1170 drivers/tty/vt/vt.c:1342
- fbcon_init+0x1061/0x1920 drivers/video/fbdev/core/fbcon.c:1125
- visual_init+0x326/0x620 drivers/tty/vt/vt.c:1074
- do_bind_con_driver.isra.0+0x52f/0x910 drivers/tty/vt/vt.c:3694
- do_take_over_console+0x450/0x5c0 drivers/tty/vt/vt.c:4273
- do_fbcon_takeover+0xe8/0x210 drivers/video/fbdev/core/fbcon.c:530
- do_fb_registered drivers/video/fbdev/core/fbcon.c:3008 [inline]
- fbcon_fb_registered+0x34a/0x460 drivers/video/fbdev/core/fbcon.c:3028
- do_register_framebuffer drivers/video/fbdev/core/fbmem.c:1597 [inline]
- register_framebuffer+0x6b7/0xb60 drivers/video/fbdev/core/fbmem.c:1703
- __drm_fb_helper_initial_config_and_unlock+0xe30/0x13e0 drivers/gpu/drm/drm_fb_helper.c:2117
- drm_fb_helper_initial_config drivers/gpu/drm/drm_fb_helper.c:2183 [inline]
- drm_fb_helper_initial_config+0x4a/0x60 drivers/gpu/drm/drm_fb_helper.c:2175
- drm_fbdev_client_hotplug+0x2b4/0x3d0 drivers/gpu/drm/drm_fbdev_generic.c:406
- drm_fbdev_generic_setup+0x165/0x440 drivers/gpu/drm/drm_fbdev_generic.c:488
- vkms_create drivers/gpu/drm/vkms/vkms_drv.c:208 [inline]
- vkms_init+0x569/0x5ed drivers/gpu/drm/vkms/vkms_drv.c:233
- do_one_initcall+0x141/0x790 init/main.c:1306
- do_initcall_level init/main.c:1379 [inline]
- do_initcalls init/main.c:1395 [inline]
- do_basic_setup init/main.c:1414 [inline]
- kernel_init_freeable+0x6f9/0x782 init/main.c:1634
- kernel_init+0x1e/0x1d0 init/main.c:1522
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
- </TASK>
+kontron-kswit...0-mmt-6g-2gs | arm    | lab-kontron   | gcc-10   | multi_v7=
+_defc...MB2_KERNEL=3Dy | 1          =
+
+kontron-kswit...0-mmt-6g-2gs | arm    | lab-kontron   | gcc-10   | multi_v7=
+_defc...CONFIG_SMP=3Dn | 1          =
+
+mt8183-kukui-...uniper-sku16 | arm64  | lab-collabora | clang-13 | defconfi=
+g+arm64-chromebook   | 1          =
+
+mt8183-kukui-...uniper-sku16 | arm64  | lab-collabora | gcc-10   | defconfi=
+g+arm64-chromebook   | 1          =
+
+ox820-clouden...lug-series-3 | arm    | lab-baylibre  | gcc-10   | oxnas_v6=
+_defconfig           | 1          =
+
+qemu_x86_64                  | x86_64 | lab-broonie   | gcc-10   | x86_64_d=
+efconfig+debug       | 1          =
+
+r8a7743-iwg20d-q7            | arm    | lab-cip       | gcc-10   | shmobile=
+_defconfig           | 1          =
+
+rk3288-rock2-square          | arm    | lab-collabora | gcc-10   | multi_v7=
+_defc...G_ARM_LPAE=3Dy | 1          =
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+  Details:  https://kernelci.org/test/job/next/branch/master/kernel/next-20=
+221123/plan/baseline/
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+  Test:     baseline
+  Tree:     next
+  Branch:   master
+  Describe: next-20221123
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+  SHA:      736b6d81d93cf61a0601af90bd552103ef997b3f =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform                     | arch   | lab           | compiler | defconfi=
+g                    | regressions
+-----------------------------+--------+---------------+----------+---------=
+---------------------+------------
+imx7ulp-evk                  | arm    | lab-nxp       | gcc-10   | imx_v6_v=
+7_defconfig          | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/637dc6f07dc54d1a8f2abd0e
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: imx_v6_v7_defconfig
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20221123/arm/=
+imx_v6_v7_defconfig/gcc-10/lab-nxp/baseline-imx7ulp-evk.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20221123/arm/=
+imx_v6_v7_defconfig/gcc-10/lab-nxp/baseline-imx7ulp-evk.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20221107.1/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/637dc6f07dc54d1a8f2ab=
+d0f
+        failing since 165 days (last pass: next-20220601, first fail: next-=
+20220610) =
+
+ =
+
+
+
+platform                     | arch   | lab           | compiler | defconfi=
+g                    | regressions
+-----------------------------+--------+---------------+----------+---------=
+---------------------+------------
+kontron-kswit...0-mmt-6g-2gs | arm    | lab-kontron   | clang-16 | multi_v7=
+_defconfig           | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/637dd2f2cc48f1214f2abd0e
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig
+  Compiler:    clang-16 (Debian clang version 16.0.0-++20221110071954+dd9f7=
+963e434-1~exp1~20221110072047.450)
+  Plain log:   https://storage.kernelci.org//next/master/next-20221123/arm/=
+multi_v7_defconfig/clang-16/lab-kontron/baseline-kontron-kswitch-d10-mmt-6g=
+-2gs.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20221123/arm/=
+multi_v7_defconfig/clang-16/lab-kontron/baseline-kontron-kswitch-d10-mmt-6g=
+-2gs.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20221107.1/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/637dd2f2cc48f1214f2ab=
+d0f
+        failing since 16 days (last pass: next-20221104, first fail: next-2=
+0221107) =
+
+ =
+
+
+
+platform                     | arch   | lab           | compiler | defconfi=
+g                    | regressions
+-----------------------------+--------+---------------+----------+---------=
+---------------------+------------
+kontron-kswit...0-mmt-6g-2gs | arm    | lab-kontron   | gcc-10   | multi_v7=
+_defconfig           | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/637dc92c52ed1408572abd6c
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20221123/arm/=
+multi_v7_defconfig/gcc-10/lab-kontron/baseline-kontron-kswitch-d10-mmt-6g-2=
+gs.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20221123/arm/=
+multi_v7_defconfig/gcc-10/lab-kontron/baseline-kontron-kswitch-d10-mmt-6g-2=
+gs.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20221107.1/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/637dc92c52ed1408572ab=
+d6d
+        failing since 16 days (last pass: next-20221104, first fail: next-2=
+0221107) =
+
+ =
+
+
+
+platform                     | arch   | lab           | compiler | defconfi=
+g                    | regressions
+-----------------------------+--------+---------------+----------+---------=
+---------------------+------------
+kontron-kswit...0-mmt-6g-2gs | arm    | lab-kontron   | gcc-10   | multi_v7=
+_defc...MB2_KERNEL=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/637dcabc4dc663362e2abd09
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20221123/arm/=
+multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/lab-kontron/baseline-kon=
+tron-kswitch-d10-mmt-6g-2gs.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20221123/arm/=
+multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/lab-kontron/baseline-kon=
+tron-kswitch-d10-mmt-6g-2gs.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20221107.1/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/637dcabc4dc663362e2ab=
+d0a
+        failing since 16 days (last pass: next-20221104, first fail: next-2=
+0221107) =
+
+ =
+
+
+
+platform                     | arch   | lab           | compiler | defconfi=
+g                    | regressions
+-----------------------------+--------+---------------+----------+---------=
+---------------------+------------
+kontron-kswit...0-mmt-6g-2gs | arm    | lab-kontron   | gcc-10   | multi_v7=
+_defc...CONFIG_SMP=3Dn | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/637dce05b238281fb12abd19
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+CONFIG_SMP=3Dn
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20221123/arm/=
+multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-10/lab-kontron/baseline-kontron-kswit=
+ch-d10-mmt-6g-2gs.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20221123/arm/=
+multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-10/lab-kontron/baseline-kontron-kswit=
+ch-d10-mmt-6g-2gs.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20221107.1/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/637dce05b238281fb12ab=
+d1a
+        failing since 16 days (last pass: next-20221104, first fail: next-2=
+0221107) =
+
+ =
+
+
+
+platform                     | arch   | lab           | compiler | defconfi=
+g                    | regressions
+-----------------------------+--------+---------------+----------+---------=
+---------------------+------------
+mt8183-kukui-...uniper-sku16 | arm64  | lab-collabora | clang-13 | defconfi=
+g+arm64-chromebook   | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/637dc5c44c180dc1872abd84
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+arm64-chromebook
+  Compiler:    clang-13 (Debian clang version 13.0.1-6~deb11u1)
+  Plain log:   https://storage.kernelci.org//next/master/next-20221123/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-collabora/baseline-mt8183-kukui-j=
+acuzzi-juniper-sku16.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20221123/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-collabora/baseline-mt8183-kukui-j=
+acuzzi-juniper-sku16.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20221107.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/637dc5c44c180dc1872ab=
+d85
+        failing since 194 days (last pass: next-20220506, first fail: next-=
+20220512) =
+
+ =
+
+
+
+platform                     | arch   | lab           | compiler | defconfi=
+g                    | regressions
+-----------------------------+--------+---------------+----------+---------=
+---------------------+------------
+mt8183-kukui-...uniper-sku16 | arm64  | lab-collabora | gcc-10   | defconfi=
+g+arm64-chromebook   | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/637dc76fe28052695e2abd25
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+arm64-chromebook
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20221123/arm6=
+4/defconfig+arm64-chromebook/gcc-10/lab-collabora/baseline-mt8183-kukui-jac=
+uzzi-juniper-sku16.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20221123/arm6=
+4/defconfig+arm64-chromebook/gcc-10/lab-collabora/baseline-mt8183-kukui-jac=
+uzzi-juniper-sku16.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20221107.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/637dc76fe28052695e2ab=
+d26
+        failing since 159 days (last pass: next-20220610, first fail: next-=
+20220616) =
+
+ =
+
+
+
+platform                     | arch   | lab           | compiler | defconfi=
+g                    | regressions
+-----------------------------+--------+---------------+----------+---------=
+---------------------+------------
+ox820-clouden...lug-series-3 | arm    | lab-baylibre  | gcc-10   | oxnas_v6=
+_defconfig           | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/637dc5b718f089473d2abcfb
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: oxnas_v6_defconfig
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20221123/arm/=
+oxnas_v6_defconfig/gcc-10/lab-baylibre/baseline-ox820-cloudengines-pogoplug=
+-series-3.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20221123/arm/=
+oxnas_v6_defconfig/gcc-10/lab-baylibre/baseline-ox820-cloudengines-pogoplug=
+-series-3.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20221107.1/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/637dc5b718f089473d2ab=
+cfc
+        failing since 91 days (last pass: next-20220822, first fail: next-2=
+0220823) =
+
+ =
+
+
+
+platform                     | arch   | lab           | compiler | defconfi=
+g                    | regressions
+-----------------------------+--------+---------------+----------+---------=
+---------------------+------------
+qemu_x86_64                  | x86_64 | lab-broonie   | gcc-10   | x86_64_d=
+efconfig+debug       | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/637dc7b9861768a80f2abd1f
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: x86_64_defconfig+debug
+  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20221123/x86_=
+64/x86_64_defconfig+debug/gcc-10/lab-broonie/baseline-qemu_x86_64.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20221123/x86_=
+64/x86_64_defconfig+debug/gcc-10/lab-broonie/baseline-qemu_x86_64.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20221107.1/x86/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/637dc7b9861768a80f2ab=
+d20
+        new failure (last pass: next-20221122) =
+
+ =
+
+
+
+platform                     | arch   | lab           | compiler | defconfi=
+g                    | regressions
+-----------------------------+--------+---------------+----------+---------=
+---------------------+------------
+r8a7743-iwg20d-q7            | arm    | lab-cip       | gcc-10   | shmobile=
+_defconfig           | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/637dc335dc1655e4642abd0f
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: shmobile_defconfig
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20221123/arm/=
+shmobile_defconfig/gcc-10/lab-cip/baseline-r8a7743-iwg20d-q7.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20221123/arm/=
+shmobile_defconfig/gcc-10/lab-cip/baseline-r8a7743-iwg20d-q7.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20221107.1/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/637dc335dc1655e4642ab=
+d10
+        new failure (last pass: next-20221122) =
+
+ =
+
+
+
+platform                     | arch   | lab           | compiler | defconfi=
+g                    | regressions
+-----------------------------+--------+---------------+----------+---------=
+---------------------+------------
+rk3288-rock2-square          | arm    | lab-collabora | gcc-10   | multi_v7=
+_defc...G_ARM_LPAE=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/637dcd7837ad2d94802abd19
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20221123/arm/=
+multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy/gcc-10/lab-collabora/=
+baseline-rk3288-rock2-square.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20221123/arm/=
+multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy/gcc-10/lab-collabora/=
+baseline-rk3288-rock2-square.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20221107.1/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/637dcd7837ad2d94802ab=
+d1a
+        failing since 0 day (last pass: next-20221121, first fail: next-202=
+21122) =
+
+ =20

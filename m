@@ -2,97 +2,141 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3852F634F98
-	for <lists+linux-next@lfdr.de>; Wed, 23 Nov 2022 06:33:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C032B634FAF
+	for <lists+linux-next@lfdr.de>; Wed, 23 Nov 2022 06:37:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234981AbiKWFdB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 23 Nov 2022 00:33:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55134 "EHLO
+        id S235785AbiKWFhB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 23 Nov 2022 00:37:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234911AbiKWFdA (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 23 Nov 2022 00:33:00 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDF1C26AC4;
-        Tue, 22 Nov 2022 21:32:59 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NH8sh3GXdz4xGW;
-        Wed, 23 Nov 2022 16:32:56 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1669181577;
-        bh=+jCZiVAOePrhE8wSGyAYoXMn/pbPMzBGm+ZypBiLzQw=;
-        h=Date:From:To:Cc:Subject:From;
-        b=dZNqW6d53Yg4r154+mz2v86Od6HvBzGH2wgkMwN3tXRJ1MsbefFS1Y2mEfUXurqft
-         wVh5daptXdLun/5U4TCyRORgEEIQ9+tx/SmBywclyu9lE+hmaiyy+Z/uZmF1uIOfNj
-         KZk6AsYsUMcmqf2IRwAlUv380+Cqt2evzNdMd3CfLiNdSA8WtmjIIrXyOLq5QjPN7i
-         2jLG9SAyT7Yp07LBHqT/7SlNdcUZvU3A30edvFDfOzU7lK2L8urU66WxwSQalZOF5G
-         +F1WexhmwTJPBmXXT4gfBmNHJQjiwPVO9mpg02njUFTb8wyCEEfGt3gJbTaRpOri23
-         z1zYXWxHq9Xfw==
-Date:   Wed, 23 Nov 2022 16:32:55 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Zhen Lei <thunder.leizhen@huawei.com>,
+        with ESMTP id S229717AbiKWFhB (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 23 Nov 2022 00:37:01 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37B2A82233
+        for <linux-next@vger.kernel.org>; Tue, 22 Nov 2022 21:36:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669181765;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Fm2z95zFBkrJo+OG+cEbfJqfzc4sPwppotEwP4eeDhQ=;
+        b=N7kLE4VeS8QFm7mjblaBNzsXSLk1iVJZDGGN8cJC9GArIkWEmUpSJYGrvUhru3qAPPwynI
+        Bb/R1S5m4rXoKeoJ+aLt7R5u8qNYFzV2k1JeFXoSqZ7bZGyfnr+Z+dx/qC3s7O2RPKzyq9
+        j/QegTqWk1F/qw0PMFxRdv/TK4/hpCU=
+Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com
+ [209.85.208.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-130-2w3uVp7oOmmJJjNOEJ5CMw-1; Wed, 23 Nov 2022 00:36:03 -0500
+X-MC-Unique: 2w3uVp7oOmmJJjNOEJ5CMw-1
+Received: by mail-lj1-f199.google.com with SMTP id bn17-20020a05651c179100b0027905fa8e48so5041593ljb.15
+        for <linux-next@vger.kernel.org>; Tue, 22 Nov 2022 21:36:03 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Fm2z95zFBkrJo+OG+cEbfJqfzc4sPwppotEwP4eeDhQ=;
+        b=jSxEzTLmuXka1O70hJeV7EDnyUexn2Zm87lfByRO8I7bAsSrZtLmKChkfW8CdlfqyE
+         X533trffU8wKKaWm5fZE70dykE2i0dRVsAQuDMVDkuJtUrlKsdYOXVuAkOzUKkJ185VU
+         37vlOaPy3B2sZ6FJjVMq7ko187mAeWC9nFa/rDtCYwWm5J9FAZgCdvWZ1v8ezC9W7boj
+         v5mwuEprmZNhmzOo+zm9l8NUMc9N25yZmKfteboHUbWHUgQY6+4AYH6fckbRbvhsp4To
+         ddgUTggR/ydecOiEZwNI03sN7Lv6tk/Kr8KexjO46RMZZMMfKAN+SBVJrFwrjzZZ8WRq
+         gsFg==
+X-Gm-Message-State: ANoB5plujyJPZe6qbPRsXRjWEKheyiUp1kO7xCDSnCcqUCEXQDCci7xI
+        GnfC8BUyIajR5PYjfXKNTkRG5v1q1diiHDe1gxD58kgHwHqQJZWXE8frrFHRrJDyhZ9T2fBvKvP
+        Mio1do4w2hCeVvljz9FI6zmXQHzr6IrG+xAq6HA==
+X-Received: by 2002:ac2:5921:0:b0:4b3:cdf5:93f3 with SMTP id v1-20020ac25921000000b004b3cdf593f3mr8507175lfi.99.1669181762528;
+        Tue, 22 Nov 2022 21:36:02 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf7EmAdgaB8z6/XlFfL3GYcrmaPlXFkV2QFwJYrqaxkfAnHDIeaFh8pRTCR3xvg4c2PyDsw5HZNh73j3bDrQq70=
+X-Received: by 2002:ac2:5921:0:b0:4b3:cdf5:93f3 with SMTP id
+ v1-20020ac25921000000b004b3cdf593f3mr8507165lfi.99.1669181762300; Tue, 22 Nov
+ 2022 21:36:02 -0800 (PST)
+MIME-Version: 1.0
+References: <20221117183214.2473e745@canb.auug.org.au> <20221123162033.02910a5a@canb.auug.org.au>
+In-Reply-To: <20221123162033.02910a5a@canb.auug.org.au>
+From:   David Airlie <airlied@redhat.com>
+Date:   Wed, 23 Nov 2022 15:35:50 +1000
+Message-ID: <CAMwc25pz4mBYJUK5_GX01X0_5CCCrzfrGS=HoFTtrVRrqF13kA@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the drm-misc tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warnings after merge of the rcu tree
-Message-ID: <20221123163255.48653674@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/EFUHsV+UjFtxK1tYhTiW1.6";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/EFUHsV+UjFtxK1tYhTiW1.6
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Wed, Nov 23, 2022 at 3:21 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> On Thu, 17 Nov 2022 18:32:14 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> >
+> > After merging the drm-misc tree, today's linux-next build (powerpc
+> > ppc44x_defconfig) failed like this:
+> >
+> > ld: drivers/video/fbdev/core/fbmon.o: in function `fb_modesetting_disabled':
+> > fbmon.c:(.text+0x1e4): multiple definition of `fb_modesetting_disabled'; drivers/video/fbdev/core/fbmem.o:fbmem.c:(.text+0x1bac): first defined here
+> > ld: drivers/video/fbdev/core/fbcmap.o: in function `fb_modesetting_disabled':
+> > fbcmap.c:(.text+0x478): multiple definition of `fb_modesetting_disabled'; drivers/video/fbdev/core/fbmem.o:fbmem.c:(.text+0x1bac): first defined here
+> > ld: drivers/video/fbdev/core/fbsysfs.o: in function `fb_modesetting_disabled':
+> > fbsysfs.c:(.text+0xb64): multiple definition of `fb_modesetting_disabled'; drivers/video/fbdev/core/fbmem.o:fbmem.c:(.text+0x1bac): first defined here
+> > ld: drivers/video/fbdev/core/modedb.o: in function `fb_modesetting_disabled':
+> > modedb.c:(.text+0x129c): multiple definition of `fb_modesetting_disabled'; drivers/video/fbdev/core/fbmem.o:fbmem.c:(.text+0x1bac): first defined here
+> > ld: drivers/video/fbdev/core/fbcvt.o: in function `fb_modesetting_disabled':
+> > fbcvt.c:(.text+0x0): multiple definition of `fb_modesetting_disabled'; drivers/video/fbdev/core/fbmem.o:fbmem.c:(.text+0x1bac): first defined here
+> >
+> > Caused by commit
+> >
+> >   0ba2fa8cbd29 ("fbdev: Add support for the nomodeset kernel parameter")
+> >
+> > This build does not have CONFIG_VIDEO_NOMODESET set.
+> >
+> > I applied the following patch for today.
+> >
+> > From 63f957a050c62478ed1348c5b204bc65c68df4d7 Mon Sep 17 00:00:00 2001
+> > From: Stephen Rothwell <sfr@canb.auug.org.au>
+> > Date: Thu, 17 Nov 2022 18:19:22 +1100
+> > Subject: [PATCH] fix up for "fbdev: Add support for the nomodeset kernel parameter"
+> >
+> > Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> > ---
+> >  include/linux/fb.h | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/include/linux/fb.h b/include/linux/fb.h
+> > index 3a822e4357b1..ea421724f733 100644
+> > --- a/include/linux/fb.h
+> > +++ b/include/linux/fb.h
+> > @@ -807,7 +807,7 @@ extern int fb_find_mode(struct fb_var_screeninfo *var,
+> >  #if defined(CONFIG_VIDEO_NOMODESET)
+> >  bool fb_modesetting_disabled(const char *drvname);
+> >  #else
+> > -bool fb_modesetting_disabled(const char *drvname)
+> > +static inline bool fb_modesetting_disabled(const char *drvname)
+> >  {
+> >       return false;
+> >  }
+> > --
+> > 2.35.1
+>
+> This commit went away for a couple of linux-next releases, but now has
+> reappeared in the drm tree :-(  What went wrong?
 
-Hi all,
+Nothing gone wrong as such, just the drm-misc-next pull request was
+sent on a regular weekly cadence, then I merged it a few days later.
+The fix for this is still in the drm-misc-next queue for the next PR
+which I will get this week.
 
-After merging the rcu tree, today's linux-next build (htmldocs) produced
-these warnings:
+Dave.
 
-Documentation/RCU/stallwarn.rst:401: WARNING: Literal block expected; none =
-found.
-Documentation/RCU/stallwarn.rst:428: WARNING: Literal block expected; none =
-found.
-Documentation/RCU/stallwarn.rst:445: WARNING: Literal block expected; none =
-found.
-Documentation/RCU/stallwarn.rst:459: WARNING: Literal block expected; none =
-found.
-Documentation/RCU/stallwarn.rst:468: WARNING: Literal block expected; none =
-found.
-
-Introduced by commit
-
-  3d2788ba4573 ("doc: Document CONFIG_RCU_CPU_STALL_CPUTIME=3Dy stall infor=
-mation")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/EFUHsV+UjFtxK1tYhTiW1.6
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmN9sIcACgkQAVBC80lX
-0GyDZwgAoqTZAoiy1Lmb7EBIul2zcS0zE90jbJLYGRQvd7zg3rMuew1RsYEvjdpA
-n8amuH+o09MuacoY3xjV45YT+O8w7F3j5aMBL1wJy63Wsv2Rdlfipanx+HfXWOwF
-HQemhgx91HGt+58nkLiCSdv2z0mCvtd2KhpdD6qFU/jxC2YLYiDqWLjZ61qLGfCP
-TUB3XaK39N6k75QMpNLOj7ny4LwEMtJsROl8qsKcthwkvvyGg6qRHEhHYMw913TO
-AcVch1sG+dnTRf+eAfkSvmNP4crHqzZU2Gb4WgrunYBV2Pr5ZhFtf2fWpAQtIug1
-WdT1RfusM4y36X2I9URPDKAbN0QPBw==
-=A5Gb
------END PGP SIGNATURE-----
-
---Sig_/EFUHsV+UjFtxK1tYhTiW1.6--

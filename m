@@ -2,47 +2,65 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B218A636CEC
-	for <lists+linux-next@lfdr.de>; Wed, 23 Nov 2022 23:13:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2FA9636E1B
+	for <lists+linux-next@lfdr.de>; Thu, 24 Nov 2022 00:08:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229448AbiKWWNy (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 23 Nov 2022 17:13:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57086 "EHLO
+        id S229542AbiKWXH1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 23 Nov 2022 18:07:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229714AbiKWWNg (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 23 Nov 2022 17:13:36 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1011922DF;
-        Wed, 23 Nov 2022 14:13:18 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NHb3w548xz4x1T;
-        Thu, 24 Nov 2022 09:13:16 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1669241597;
-        bh=xwBv0lx8WWUPKMv48p6jAU8TvfVAnOqvxHo64k/jwqo=;
-        h=Date:From:To:Cc:Subject:From;
-        b=FMHamTAf5snffKzYAEkTMIM0N1YgU3z+yqvCy+vfGYCx3eIjX0Q3EAw1MjR8TKXp+
-         E8Qk2zBBRCPmOUuTAIioi02w931r84OtWB9J/+zVX7GmLbPfmHsM1x6KggqZxFrwzY
-         n/F4MhwkVekLa9MZaDv5n5SmfzTjUaVNBxpqLOSgEeWGoiYdXibmN/5hMDJDoP8iac
-         kBTFtx2IkzCh5rGeSWKcgG4FJOhj/MjcmAnzhVxVnBo3wm2tc5i8KnqmYKpDmDpQQN
-         JcktbX7m2TkgF/cblNYjkLq5V+ZDD8BXBFOoJJ4OD2V3KNJsA+QoE5wJQl721I22pj
-         qBc5UhN6o5BPQ==
-Date:   Thu, 24 Nov 2022 09:13:15 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Li Zetao <lizetao1@huawei.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the mm tree
-Message-ID: <20221124091315.56ca5235@canb.auug.org.au>
+        with ESMTP id S229932AbiKWXHM (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 23 Nov 2022 18:07:12 -0500
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C55EC171CBD
+        for <linux-next@vger.kernel.org>; Wed, 23 Nov 2022 15:07:06 -0800 (PST)
+Received: by mail-io1-xd2f.google.com with SMTP id e189so198299iof.1
+        for <linux-next@vger.kernel.org>; Wed, 23 Nov 2022 15:07:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=BU3XkYqFmHA9BvuBs9S7U9WfiZ7L9XnnHyZ9Ng5b+xM=;
+        b=cfqaciRfou0A4j9IsMdzIUDusTNTfWzXUzILo3ggSb6LiFlrdqZdY2vVKQIkMM5N54
+         uUQr9QcHish/MLN7QRizZZj7WD3SSjX8029tQnAN/k0GG8bdaakWH+RjV8jSIU5n3Bgn
+         Gc7ZRo7aYDUAo9H3lcwJlCvtp4ZQN5dpf+9yrnu7wLeOR0atO4YpDPg9sh+mgTjPR2S8
+         nCDh/EFvXVmQEBHAM2Lve9Xyy4Ei7RACZD0Ho+8Vch+0eBcON11WD/JQ9JvhsEh8YCdW
+         oEYBY2eQc4rp6o6EqmaUTclfSl9FNVkEAl7NKVX+j855ZMjZZNk4qz38Xjgqy7+1S44J
+         OqJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BU3XkYqFmHA9BvuBs9S7U9WfiZ7L9XnnHyZ9Ng5b+xM=;
+        b=v6hIYrKNGKOUQAiHjZWb5iNpjd9SFV6w2i5JV2QtksguLJ4QDlS2sUwDDDJ/bCR3Kv
+         ipjxhtVUGbYIW9QZ2bcYC2UMYiBIKW34uOaqRErT/LCjLywP21STQeARp/AD3/tt8Dcb
+         xXWUiAGJ6RA0Eau5ev47vVK66RbvuBceAz73jYVz1nPatoP+8dXIH8dTPniAqkknnqjI
+         BlbgYE9JR19rYpzjBPEx91EcNx4b35wl5ctUOWnbYT75DQu7IfyqL5xFJM0lHBKpuhF+
+         jyXXcAP1Yh5hpSVvwQ9621GNOkQqAvDvd7ye/ZiDAeQiFtebN/J+aMMqYt8k98Cq+7dJ
+         kTBA==
+X-Gm-Message-State: ANoB5pl2UKe0iSp7r6sP1gmIiDpQMDI5FSvcXfHci5Ko3rgBEp01igTl
+        BYvFDROaib1PUlBFBLCbvzotSm8vrE0lq0Zq0r6gvQ==
+X-Google-Smtp-Source: AA0mqf6i34UC7vmeMazgT7hRQb0NnKcz+pPUFK96DKKYWr4Apdsnv4TGw8y2UlI9oCYhUy8lKn6rrlBYDxha8rDtRaY=
+X-Received: by 2002:a05:6638:89:b0:363:9e67:d9d9 with SMTP id
+ v9-20020a056638008900b003639e67d9d9mr6182091jao.133.1669244825874; Wed, 23
+ Nov 2022 15:07:05 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/gdpTz79gJllcd0XzzTL/h7/";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+References: <20221124090815.7e550d88@canb.auug.org.au>
+In-Reply-To: <20221124090815.7e550d88@canb.auug.org.au>
+From:   Jann Horn <jannh@google.com>
+Date:   Thu, 24 Nov 2022 00:06:28 +0100
+Message-ID: <CAG48ez31N1S6g1h8HT8Wxvt8a5m7Y1gJ6JKkVTB2z9G8AGbONA@mail.gmail.com>
+Subject: Re: linux-next: Fixes tag needs some work in the mm tree
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,41 +68,21 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/gdpTz79gJllcd0XzzTL/h7/
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Wed, Nov 23, 2022 at 11:08 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> In commit
+>
+>   d5d60d30f574 ("mmu_gather: Use macro arguments more carefully")
+>
+> Fixes tag
+>
+>   Fixes: a6d60245d6d9 ("asm-generic/tlb: Track which levels of the page table=
+>
+> has these problem(s):
 
-Hi all,
-
-Commit
-
-  55847dd3e622 ("ocfs2: fix memory leak in ocfs2_mount_volume()")
-
-is missing a Signed-off-by from its author.
-
-Another one routed via a mailing list :-(
-
-Maybe we need something like "if the From: address includes ' via '
-and there is a Reply-To: header, then use that address as the author"?
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/gdpTz79gJllcd0XzzTL/h7/
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmN+mvsACgkQAVBC80lX
-0GyB7Qf+M3S87FpYYFUkQkeZiwfIu29PpnSr/CP0W+E9TwSSCtxA3mZRzKCIiVsQ
-CXEsMO/OPq6XBYNONVBXPB4EzqEY18/AEtQGBBWNBCugvcgb78j31swceL1ceZYV
-8IhEXuoskt7PFkAJ9WuMVQdPlrqYGakX2QhBoauo34echfyrbaP319PnYdVdHWPS
-RT+j8nACGJpeeRiYfG9Tgb6DF8gDDYe8lzPAfJv4Jq7MP8xJHrrBUuYAHuz0FgMK
-qK9dpPhX+GMHknCWZHkwPXl5oc9/vxazlP3ohgEDbBHmdnoFHXc3vLrqMSOStXfs
-CNuiliAnSLWsL4NquFU+I+oxM9SJdg==
-=IsBm
------END PGP SIGNATURE-----
-
---Sig_/gdpTz79gJllcd0XzzTL/h7/--
+I'm not sure what happened here - when I apply the mail that I sent
+with "git am", the "Fixes" line is properly one line. But in the
+version that landed in the tree, it looks as if the quoted-printable
+encoding was not decoded for that one line?

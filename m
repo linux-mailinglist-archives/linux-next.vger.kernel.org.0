@@ -2,91 +2,94 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6F05637FAD
-	for <lists+linux-next@lfdr.de>; Thu, 24 Nov 2022 20:33:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9647638060
+	for <lists+linux-next@lfdr.de>; Thu, 24 Nov 2022 21:57:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229481AbiKXTdX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 24 Nov 2022 14:33:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43066 "EHLO
+        id S229471AbiKXU5v (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 24 Nov 2022 15:57:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiKXTdW (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 24 Nov 2022 14:33:22 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C5C282212;
-        Thu, 24 Nov 2022 11:33:21 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S229452AbiKXU5v (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 24 Nov 2022 15:57:51 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B775712D14;
+        Thu, 24 Nov 2022 12:57:49 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B397DB821DD;
-        Thu, 24 Nov 2022 19:33:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D94DC433D7;
-        Thu, 24 Nov 2022 19:33:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1669318398;
-        bh=G56naonxExe7awqWZ+LhcMgkDZMstSLkFYMHI57lu1g=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=SU39a5DBzMXR3TEnheVgcYN0443XrbpK2XZtZmfh8dhOCXZv7H18uGN8Gw1E5LbGG
-         epCdVT9C/k2lKHeqsrKeuGUbhFegzpALqmpA+JpAdW/HI4aPlKaxNYcR6JnYI59I36
-         WqHDawhZv9UwCUt5ZAR4nrlJPcW4T6jstzu+ane0=
-Date:   Thu, 24 Nov 2022 11:33:17 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev,
-        regressions@lists.linux.dev, lkft-triage@lists.linaro.org,
-        vishal.moola@gmail.com, Matthew Wilcox <willy@infradead.org>,
-        Jann Horn <jannh@google.com>
-Subject: Re: next: x86: clang: mm/khugepaged.c:1428:45: error: variable
- 'pmd' is uninitialized when used here
-Message-Id: <20221124113317.37ca142d58b5e7efecd1facf@linux-foundation.org>
-In-Reply-To: <CA+G9fYtMoRLC0-9hnpw6+fb_i-6jqLNQH83Q90JqyXO7aCJwNw@mail.gmail.com>
-References: <CA+G9fYtMoRLC0-9hnpw6+fb_i-6jqLNQH83Q90JqyXO7aCJwNw@mail.gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NJ9LM3JBxz4x1T;
+        Fri, 25 Nov 2022 07:57:47 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1669323467;
+        bh=T+Ekp7moZrH2H5ic7xKHfW9FmjhdZ8QvwOokl5/e4Yg=;
+        h=Date:From:To:Cc:Subject:From;
+        b=VDrzHWTkr1Zb9PJ6gxGKWhXzS2FLRkwdo0ynzn1li8ZPJNNuSjUrU8OZA5zKFOuFx
+         +6O9os0QCyEC6IXNLt3AZINrfPFv/smsvqNuDAVMMtap3yixe0Osk27YXzcOQKKFCC
+         Ybq+g1wxLTdb83RMEeKS0YoLZz/sVlvMuM/jCSN3jC/n1Dnv6P5kK2amnNP1cvS34q
+         uyQ/7xfRCYDBmDAeF/ilPHTBMqIeKDPC0ojssb3tTsk5QpdRjO3brAe3k+1zbnupLr
+         +k3BicjyIGVvI3pVIiqH9h6RaARwgDRh97UC8gS4o3qjctHRV775thxfSSgbSRmnFP
+         rbfUTUEYSUPvw==
+Date:   Fri, 25 Nov 2022 07:57:29 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+Cc:     Ian Rogers <irogers@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the perf tree
+Message-ID: <20221125075729.24214bd3@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/fl+DvJXPTaJ6XT=bsfPQCzN";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, 24 Nov 2022 21:07:48 +0530 Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
+--Sig_/fl+DvJXPTaJ6XT=bsfPQCzN
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> LKFT CI system noticed clang-15 build failures on x86_64 and i386.
-> 
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> 
-> make --silent --keep-going --jobs=8
-> O=/home/tuxbuild/.cache/tuxmake/builds/1/build LLVM=1 LLVM_IAS=1
-> ARCH=x86_64 SRCARCH=x86 CROSS_COMPILE=x86_64-linux-gnu-
-> 'HOSTCC=sccache clang' 'CC=sccache clang'
-> mm/khugepaged.c:1428:45: error: variable 'pmd' is uninitialized when
-> used here [-Werror,-Wuninitialized]
->         page_table_check_pte_clear_range(mm, addr, pmd);
->                                                    ^~~
-> mm/khugepaged.c:1415:2: note: variable 'pmd' is declared here
->         pmd_t pmd;
->         ^
+Hi all,
 
-Thanks.  Due to "mm/khugepaged: fix GUP-fast interaction by freeing
-ptes via mmu_gather".
+In commit
 
-Jann, I'll just do this for now:
+  be3392b65f2b ("perf list: List callback support for libpfm")
 
---- a/mm/khugepaged.c~mm-khugepaged-fix-gup-fast-interaction-by-freeing-ptes-via-mmu_gather-fix
-+++ a/mm/khugepaged.c
-@@ -1431,7 +1431,6 @@ static void collapse_and_free_pmd(struct
- 	 */
- 	if (vma->anon_vma)
- 		lockdep_assert_held_write(&vma->anon_vma->root->rwsem);
--	page_table_check_pte_clear_range(mm, addr, pmd);
- 
- 	tlb_gather_mmu(&tlb, mm);
- 	pmd = READ_ONCE(*pmdp);
-_
+Fixes tag
 
-please check.
+  Fixes: e42b0ee61282a2f9 ("perf list: Add JSON output option")
+
+has these problem(s):
+
+  - Target SHA1 does not exist
+
+Maybe you meant
+
+Fixes: 6ed249441a7d ("perf list: Add JSON output option")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/fl+DvJXPTaJ6XT=bsfPQCzN
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmN/2rkACgkQAVBC80lX
+0GwiQQgAkCoWR9TR85BrhzxFCguBAUdjJlvwzJlsTBk6slK40pkSvkjvqKG5n5gB
+VRmTsAKo1TVmJs39d5QDVdLd11rFt49j+qyms1sJCcsYluwY3fR+gpRc+fMpHGCH
+swqHyDh44QBnxll1ZOBxazLe6IrBZbq2KNvMMgfdIhUvbRW/S3NUPU2W0LnQcLBn
+El245LVRfu68a10rr6/XAY3cEbc6NKy+w+gXdhNOVC+eojiqEd5tM8TbdQSChOpP
+I6C6cQc1SVkO4TYgAFQA+uqlsYr/cdsF5LhkhEvLIsMESCcURhcS0dQs6wTJ9GxT
+R6oBBXvL8Rb1uSaa9Py9+R7FhGtYjA==
+=kreZ
+-----END PGP SIGNATURE-----
+
+--Sig_/fl+DvJXPTaJ6XT=bsfPQCzN--

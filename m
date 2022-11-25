@@ -2,137 +2,116 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6220963875E
-	for <lists+linux-next@lfdr.de>; Fri, 25 Nov 2022 11:22:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA659638788
+	for <lists+linux-next@lfdr.de>; Fri, 25 Nov 2022 11:29:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230145AbiKYKWp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 25 Nov 2022 05:22:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48526 "EHLO
+        id S230178AbiKYK3m (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 25 Nov 2022 05:29:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230194AbiKYKWg (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 25 Nov 2022 05:22:36 -0500
-Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FD9DBCA9
-        for <linux-next@vger.kernel.org>; Fri, 25 Nov 2022 02:22:32 -0800 (PST)
-Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-14279410bf4so4649464fac.8
-        for <linux-next@vger.kernel.org>; Fri, 25 Nov 2022 02:22:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=dFk4/TyXFVH4omq0MKPCZJW7VRN5MWFd1VLeZHQ4myQ=;
-        b=O13X7eQnbmmZ5OZqc1v+Nq5wiHmRFlOakztg4v4kVKzbkp9A2YhxSxn700wHfwQgHj
-         jtL4ZvMsa4P4eCx3kHERQVZdyN5zMzG56fIXBLxVYZQ4xAUnftJ8E2hMwey7QHEHYTBy
-         wp9WzqOq0Gq/2vaXu/AjhjkkuOFzNZ1N/QzaxJ4OEbwT0srBV76yrEy8VyGdoNUgoBlZ
-         UAj99FE9mas+xMxsdohu26gc/ZjZ2KrH/RfUmuZznSQM71QlIJCwRGw9Cc54yyF3L140
-         9OyC6ojt8/4ZJ28HRhAXVPwy3kxFwYw3Sp6rS36NcIB8kLmQbASBByv40OmbsOI0KC6F
-         AfVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dFk4/TyXFVH4omq0MKPCZJW7VRN5MWFd1VLeZHQ4myQ=;
-        b=BDeZDi+9o9+J2KUU+SQuma1O/iejDEHomS8IGMqZfw+JLUextPm7uPBgmcyB9I0xcy
-         GkjtGVfwjSSuUUvYPD34/jqqyKyhdpu4sV3Vi95+cOybtLJcy3suezW1rjJD36Jlol4r
-         KqNzlH9g69stPcs3iTTchQJVHSYhRDn89gNHptabQy26TeZJzwAHBnw1YtWciwkV84aC
-         QAd67czI4mAlnOzpIBrL+juHCHsZ3RVfLVnWW+VVGjePRxfwGu6vjceMNlPdfnwCXboH
-         AW0FM99OBwC97rOdzgUPSplSqwukj4o3IB2+YVCvG5+zO+uCk45SvaZIKlki8acpNi55
-         TjTA==
-X-Gm-Message-State: ANoB5pkAikZpHiQd2lBg4NN+Kzb6dJh/QY1kU1w9jdYzA+JaVKcro6kh
-        GkutJsvmkbFfuwM9bCs4jlVm2DJpYA6YoT/jQManiQ==
-X-Google-Smtp-Source: AA0mqf4iZUnbBKSrM1flPegAiAXqzZPEmIYY3e6KEyG/6IvzCjm2R7eG2INLEOUcWbubEOlM2BPZ3p+zihoAbed/kJI=
-X-Received: by 2002:a05:6870:b689:b0:13c:7d1c:5108 with SMTP id
- cy9-20020a056870b68900b0013c7d1c5108mr11030408oab.282.1669371751235; Fri, 25
- Nov 2022 02:22:31 -0800 (PST)
+        with ESMTP id S229934AbiKYK3l (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 25 Nov 2022 05:29:41 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 704F81FCDF;
+        Fri, 25 Nov 2022 02:29:40 -0800 (PST)
+Received: from zn.tnic (p200300ea9733e784329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e784:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id CEEB71EC06C1;
+        Fri, 25 Nov 2022 11:29:38 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1669372178;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=wLUMoW1MAGvGSE9qqBYQ6DlGH4B8mL8lIeXoP8DoMU8=;
+        b=T9RewFHIjvKGLcpIg70j98aXoYa9XoaOdr655IlxTzon8L6Oz/qaN1j3g3KJVOBofW6aRp
+        TnwdAwrN6q/gA9eGBbOi0VEl6TB+SletOmaJJ0+wSApLJnM/Z9BCN+/ngInUezzfa1jhEm
+        yl4SJ4xy59NrltoSLAj55qx3ZdMKxQU=
+Date:   Fri, 25 Nov 2022 11:29:39 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Ard Biesheuvel <ardb@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the efi tree with the tip tree
+Message-ID: <Y4CZEysC8Ls9qt7R@zn.tnic>
+References: <20221125122216.07eae5c6@canb.auug.org.au>
 MIME-Version: 1.0
-References: <000000000000706e6f05edfb4ce0@google.com> <Y3uULqIZ31at0aIX@hog>
- <20221121171513.GB704954@gauss3.secunet.de> <Y3vwpcJcUgqn22Fw@hog> <20221122062657.GE704954@gauss3.secunet.de>
-In-Reply-To: <20221122062657.GE704954@gauss3.secunet.de>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Fri, 25 Nov 2022 11:22:20 +0100
-Message-ID: <CACT4Y+b4xCFFjNKQ51q_JsvbkVNFpG3YBnK4iarcD+u0-Nsobg@mail.gmail.com>
-Subject: Re: [syzbot] linux-next test error: general protection fault in xfrm_policy_lookup_bytype
-To:     Steffen Klassert <steffen.klassert@secunet.com>
-Cc:     Sabrina Dubroca <sd@queasysnail.net>,
-        syzbot <syzbot+bfb2bee01b9c01fff864@syzkaller.appspotmail.com>,
-        davem@davemloft.net, edumazet@google.com,
-        herbert@gondor.apana.org.au, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com, sfr@canb.auug.org.au,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221125122216.07eae5c6@canb.auug.org.au>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, 22 Nov 2022 at 07:27, Steffen Klassert
-<steffen.klassert@secunet.com> wrote:
->
-> On Mon, Nov 21, 2022 at 10:41:57PM +0100, Sabrina Dubroca wrote:
-> > 2022-11-21, 18:15:13 +0100, Steffen Klassert wrote:
-> > > On Mon, Nov 21, 2022 at 04:07:26PM +0100, Sabrina Dubroca wrote:
-> > > > 2022-11-21, 05:47:38 -0800, syzbot wrote:
-> > > > > Hello,
-> > > > >
-> > > > > syzbot found the following issue on:
-> > > > >
-> > > > > HEAD commit:    e4cd8d3ff7f9 Add linux-next specific files for 20221121
-> > > > > git tree:       linux-next
-> > > > > console output: https://syzkaller.appspot.com/x/log.txt?x=1472370d880000
-> > > > > kernel config:  https://syzkaller.appspot.com/x/.config?x=a0ebedc6917bacc1
-> > > > > dashboard link: https://syzkaller.appspot.com/bug?extid=bfb2bee01b9c01fff864
-> > > > > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> > > > >
-> > > > > Downloadable assets:
-> > > > > disk image: https://storage.googleapis.com/syzbot-assets/b59eb967701d/disk-e4cd8d3f.raw.xz
-> > > > > vmlinux: https://storage.googleapis.com/syzbot-assets/37a7b43e6e84/vmlinux-e4cd8d3f.xz
-> > > > > kernel image: https://storage.googleapis.com/syzbot-assets/ebfb0438e6a2/bzImage-e4cd8d3f.xz
-> > > > >
-> > > > > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > > > > Reported-by: syzbot+bfb2bee01b9c01fff864@syzkaller.appspotmail.com
-> > > > >
-> > > > > general protection fault, probably for non-canonical address 0xdffffc0000000019: 0000 [#1] PREEMPT SMP KASAN
-> > > > > KASAN: null-ptr-deref in range [0x00000000000000c8-0x00000000000000cf]
-> > > > > CPU: 0 PID: 5295 Comm: kworker/0:3 Not tainted 6.1.0-rc5-next-20221121-syzkaller #0
-> > > > > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-> > > > > Workqueue: ipv6_addrconf addrconf_dad_work
-> > > > > RIP: 0010:xfrm_policy_lookup_bytype.cold+0x1c/0x54 net/xfrm/xfrm_policy.c:2139
-> > > >
-> > > > That's the printk at the end of the function, when
-> > > > xfrm_policy_lookup_bytype returns NULL. It seems to have snuck into
-> > > > commit c39f95aaf6d1 ("xfrm: Fix oops in __xfrm_state_delete()"), we
-> > > > can just remove it:
-> > > >
-> > > > diff --git a/net/xfrm/xfrm_policy.c b/net/xfrm/xfrm_policy.c
-> > > > index 3a203c59a11b..e392d8d05e0c 100644
-> > > > --- a/net/xfrm/xfrm_policy.c
-> > > > +++ b/net/xfrm/xfrm_policy.c
-> > > > @@ -2135,9 +2135,6 @@ static struct xfrm_policy *xfrm_policy_lookup_bytype(struct net *net, u8 type,
-> > > >  fail:
-> > > >   rcu_read_unlock();
-> > > >
-> > > > - if (!IS_ERR(ret))
-> > > > -         printk("xfrm_policy_lookup_bytype: policy if_id %d, wanted if_id  %d\n", ret->if_id, if_id);
-> > > > -
-> > > >   return ret;
-> > >
-> > > Hm, this was not in the original patch. Maybe my tree was not
-> > > clean when I applied it. Do you want to send a patch, or should
-> > > I just remove it?
-> >
-> > Go ahead, I guess it's more convenient for you.
->
-> I just did a forced push to remove that hunk.
+On Fri, Nov 25, 2022 at 12:22:16PM +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Today's linux-next merge of the efi tree got a conflict in:
+> 
+>   arch/x86/boot/compressed/efi_thunk_64.S
+> 
+> between commit:
+> 
+>   cb8bda8ad443 ("x86/boot/compressed: Rename efi_thunk_64.S to efi-mixed.S")
+> 
+> from the tip tree and commit:
+> 
+>   a61962d8e7d3 ("efi: libstub: Permit mixed mode return types other than efi_status_t")
+> 
+> from the efi tree.
+> 
+> I fixed it up (I remofved the file and applied the following patch) and
+> can carry the fix as necessary. This is now fixed as far as linux-next
+> is concerned, but any non trivial conflicts should be mentioned to your
+> upstream maintainer when your tree is submitted for merging.  You may
+> also want to consider cooperating with the maintainer of the conflicting
+> tree to minimise any particularly complex conflicts.
+> 
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Fri, 25 Nov 2022 12:15:58 +1100
+> Subject: [PATCH] fix up for "efi: libstub: Permit mixed mode return types other than efi_status_t"
+> 
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> ---
+>  arch/x86/boot/compressed/efi_mixed.S | 6 ------
+>  1 file changed, 6 deletions(-)
+> 
+> diff --git a/arch/x86/boot/compressed/efi_mixed.S b/arch/x86/boot/compressed/efi_mixed.S
+> index 8b02e507d3bb..4ca70bf93dc0 100644
+> --- a/arch/x86/boot/compressed/efi_mixed.S
+> +++ b/arch/x86/boot/compressed/efi_mixed.S
+> @@ -132,12 +132,6 @@ SYM_FUNC_START(__efi64_thunk)
+>  	movl	%ebx, %fs
+>  	movl	%ebx, %gs
+>  
+> -	/*
+> -	 * Convert 32-bit status code into 64-bit.
+> -	 */
+> -	roll	$1, %eax
+> -	rorq	$1, %rax
+> -
+>  	pop	%rbx
+>  	pop	%rbp
+>  	RET
+> -- 
 
-Let's tell syzbot about the fix, so that it reports similarly looking
-crashes in future:
+LGTM, thanks Stephen.
 
-#syz fix: xfrm: Fix oops in __xfrm_state_delete()
+We'll keep that in mind when sending the pull requests later.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

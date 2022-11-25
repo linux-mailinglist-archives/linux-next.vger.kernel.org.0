@@ -2,72 +2,58 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 225B16384C2
-	for <lists+linux-next@lfdr.de>; Fri, 25 Nov 2022 08:50:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F9B263858D
+	for <lists+linux-next@lfdr.de>; Fri, 25 Nov 2022 09:52:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229568AbiKYHum (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 25 Nov 2022 02:50:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40982 "EHLO
+        id S229463AbiKYIwE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 25 Nov 2022 03:52:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiKYHul (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 25 Nov 2022 02:50:41 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F2B01BEBB;
-        Thu, 24 Nov 2022 23:50:37 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 0D86E21AE4;
-        Fri, 25 Nov 2022 07:50:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1669362636; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=nvdAlIgOG5yqCLw/uf3CjVt0knMtHQ2HViq7mDKGha0=;
-        b=UfA+KLDHvqCfxZkPL8VzkpPT/Fhn6znGTJkr9TAm8Df/6osHNjpPZL3bpjXCNW9Y6CO+bV
-        55yDsVYkDD1XCL4UB9UYWsXIiUbxJpK1nR1ijkPRl3MAS0DNrX3yo0Osn0cL7Uhod8zhw2
-        6Jmj/Fl9CPemw02qixisQW8yEpz74O8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1669362636;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=nvdAlIgOG5yqCLw/uf3CjVt0knMtHQ2HViq7mDKGha0=;
-        b=hFbVrf2fTew+nsw0hgcUxNXADJWFG/z1U07cXA+HsRBXofEjbI5gIqoncmK8d81yaEwaT8
-        DibuSqZrI/DVt/AA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E840413A08;
-        Fri, 25 Nov 2022 07:50:35 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id kKr+N8tzgGMTFgAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Fri, 25 Nov 2022 07:50:35 +0000
-Message-ID: <14bd73b0-5480-2b35-7b89-161075d9f444@suse.cz>
-Date:   Fri, 25 Nov 2022 08:50:35 +0100
+        with ESMTP id S229724AbiKYIvs (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 25 Nov 2022 03:51:48 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 560402790D
+        for <linux-next@vger.kernel.org>; Fri, 25 Nov 2022 00:51:47 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oyUQe-0008Qt-8q; Fri, 25 Nov 2022 09:51:24 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oyUQX-000Bz1-Gz; Fri, 25 Nov 2022 09:51:18 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oyUQX-000FZX-M5; Fri, 25 Nov 2022 09:51:17 +0100
+Date:   Fri, 25 Nov 2022 09:51:17 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>
+Cc:     Arnd Bergmann <arnd@kernel.org>, kernel@pengutronix.de,
+        linux-samsung-soc@vger.kernel.org, Ben Dooks <ben-linux@fluff.org>,
+        linux-kernel@vger.kernel.org,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        dmaengine@vger.kernel.org, Simtec Linux Team <linux@simtec.co.uk>,
+        linux-next@vger.kernel.org
+Subject: Re: [PATCH] ARM: s3c: Fix a build error after the s3c24xx dma driver
+ was removed
+Message-ID: <20221125085117.23p7yv6wgo6b5l3v@pengutronix.de>
+References: <20221021203329.4143397-14-arnd@kernel.org>
+ <20221118215401.505480-1-u.kleine-koenig@pengutronix.de>
+ <f0425349-d965-0a40-0672-27dfbe45eb44@linaro.org>
+ <b759a3e7-7a45-3dc9-14ba-8b01da798f10@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: linux-next: build failure after merge of the slab tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Marco Elver <elver@google.com>,
-        kasan-dev <kasan-dev@googlegroups.com>
-References: <20221125124934.462dc661@canb.auug.org.au>
-Content-Language: en-US
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20221125124934.462dc661@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham autolearn_force=no
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="esiizevgytu3ebii"
+Content-Disposition: inline
+In-Reply-To: <b759a3e7-7a45-3dc9-14ba-8b01da798f10@linaro.org>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-next@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,42 +61,66 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 11/25/22 02:49, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the slab tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
-> 
-> mm/slub.c:965:13: error: 'freelist_corrupted' defined but not used [-Werror=unused-function]
->   965 | static bool freelist_corrupted(struct kmem_cache *s, struct slab *slab,
->       |             ^~~~~~~~~~~~~~~~~~
-> 
-> Caused by commit
-> 
->   f6e94ad44e77 ("mm, slub: remove percpu slabs with CONFIG_SLUB_TINY")
-> 
-> I have used the slab tree from next-20221123 again.
 
-I tried the allmodconfig and:
+--esiizevgytu3ebii
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-WARNING: unmet direct dependencies detected for SLUB_DEBUG
-  Depends on [n]: SLUB [=y] && SYSFS [=y] && !SLUB_TINY [=y]
-  Selected by [y]:
-  - KASAN_GENERIC [=y] && <choice> && HAVE_ARCH_KASAN [=y] && CC_HAS_KASAN_GENERIC [=y] && CC_HAS_WORKING_NOSANITIZE_ADDRESS [=y] && SLUB [=y]
+Hello,
 
-Wasn't aware it's possible that it will leave a combination of configs
-that's not allowed and just warn about it. Oh well.
+On Sun, Nov 20, 2022 at 12:22:31PM +0100, Krzysztof Kozlowski wrote:
+> On 20/11/2022 11:31, Krzysztof Kozlowski wrote:
+> > On 18/11/2022 22:54, Uwe Kleine-K=F6nig wrote:
+> >> The linux/platform_data/dma-s3c24xx.h header file was removed. It didn=
+'t
+> >> declare or define any symbol needed in devs.c though, so the #include
+> >> can just be dropped.
+> >>
+> >> Fixes: cccc46ae3623 ("dmaengine: remove s3c24xx driver")
+> >> Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+> >> ---
+> >=20
+> > The file was not removed... or it should not have been yet. The s3c24xx
+> > dma driver removal should be part of Arnd series taken via SoC ARM.
 
-I'll solve it by:
---- a/lib/Kconfig.kasan
-+++ b/lib/Kconfig.kasan
-@@ -37,7 +37,7 @@ menuconfig KASAN
-                     (HAVE_ARCH_KASAN_SW_TAGS && CC_HAS_KASAN_SW_TAGS)) && \
-                    CC_HAS_WORKING_NOSANITIZE_ADDRESS) || \
-                   HAVE_ARCH_KASAN_HW_TAGS
--       depends on (SLUB && SYSFS) || (SLAB && !DEBUG_SLAB)
-+       depends on (SLUB && SYSFS && !SLUB_TINY) || (SLAB && !DEBUG_SLAB)
-        select STACKDEPOT_ALWAYS_INIT
-        help
-          Enables KASAN (Kernel Address Sanitizer) - a dynamic memory safety
+The patch enters next with the merge of
 
+	git://git.kernel.org/pub/scm/linux/kernel/git/vkoul/dmaengine.git next
+
+Ah, the patch that became cccc46ae3623 (i.e. patch #14) is part of a
+bigger series. Its patch #1 removes s3c24xx.c (which you pointed out to be =
+still
+broken) and patch #2 includes the change I suggested here.
+
+> I think that commit should be just dropped instead.
+
++1
+
+BTW, cccc46ae3623 is included in next since next-20221107 and breaks
+(at least) arm/s3c2410_defconfig. So I would consider reverting
+cccc46ae3623 a fix. (Added linux-next to Cc:)
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--esiizevgytu3ebii
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmOAggIACgkQwfwUeK3K
+7AlqoQf+KRbGDmlQGJTMMKxkt2L3KLegKVD+jLC7UDsLNb0hvIZfNNT+rHssdKoT
+ECq3d0DiK74j5sRtBthgpx3HXMMv5Pu8KgdCNFctiqrfKHugthsaVUNCoEx3Y6cN
+JUfGERyytyAduNPLUzUNS79ANWeVpZ2z9lIYwbDZpdcwLp8JY2RFSfvIqU25l8ug
+3S+e+/NXj37PgCkgvyp8DWbcEoRpNrHLmpaXivhayf3D//0MYa6kdGM0Xejdtw0T
+an5yLUFEdndcRBpp0t9yWh/M83/xTJZ9ndcp8RZMjEVdcBedKpPo/UyO4K+sWQFp
+hfWyBh44QeIwv64XfzGst+xJRoGOuw==
+=WdqC
+-----END PGP SIGNATURE-----
+
+--esiizevgytu3ebii--

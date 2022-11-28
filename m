@@ -2,55 +2,55 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E09EA63A080
-	for <lists+linux-next@lfdr.de>; Mon, 28 Nov 2022 05:21:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E89C063A090
+	for <lists+linux-next@lfdr.de>; Mon, 28 Nov 2022 05:26:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229538AbiK1EVQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 27 Nov 2022 23:21:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56436 "EHLO
+        id S229533AbiK1E0u (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 27 Nov 2022 23:26:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229607AbiK1EUe (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 27 Nov 2022 23:20:34 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9729D9FDE;
-        Sun, 27 Nov 2022 20:19:07 -0800 (PST)
+        with ESMTP id S229475AbiK1E0t (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 27 Nov 2022 23:26:49 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87B4BF7F;
+        Sun, 27 Nov 2022 20:26:48 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NLC056gkfz4xG9;
-        Mon, 28 Nov 2022 15:19:01 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NLC923Jv8z4x7X;
+        Mon, 28 Nov 2022 15:26:46 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1669609142;
-        bh=H0oBK7FCisXB7btwPM/HOT6CxyeXJHanPbSbd1866cs=;
+        s=201702; t=1669609607;
+        bh=s0ckmJzFb9AoM9lnKvO8dA2qYD/wcA2VBYQQJyZJD28=;
         h=Date:From:To:Cc:Subject:From;
-        b=qRLdWAhqOLx5JOKB7U0JC7CtoCpRYyZjJWRCAhFMGN8dWUipRwaA0IYfJU8ChPh48
-         EdUvfGauB175Ir1MjeM98KJefXC3NaQIFrDfdSi/sU+4krIvSECDfUFEybwhXzNu3e
-         8UeprO98/zm9CL4Nh/N4EsPWAyjOw5CEY6BsOy7ZzQUda4PGjQbL5uF5qTWhvncDNE
-         kdUuDunfJd9kI7AWwRuio+fIhcyDlbnMjAKbn2PVK4pDj2wCU8g16h8uxXme2Ev09w
-         g1QzA09SnECkCC7kkwhshkKP3jwlSS6G6k6x40lHWiNRFqYXcNgj/igJiP+UM5IiFf
-         GjRIVAdzWgqHQ==
-Date:   Mon, 28 Nov 2022 15:19:00 +1100
+        b=EAun0cKn0ho8UF3CX3MAF0Sc6oWBy9p0MUTr6fqUxL+wSirDADt8nhAhrBmXQr438
+         0BlB0DF6Au4f3sAFo0dltkaEktKzdCj/4U63ajY0+3+ZK5JZJfwNtdROcjcwygMxp9
+         XR/adSzO4WExThPCkZPIGDHyhPHVHj+DDk+6f+SQGuSEGznmiGrYJB41/oh4FbqwyT
+         ldkwgSFcJKxuG7VrZNXWhSbLGHMQ++CgMZwKIaEnMANvnMZij1FE3/3zgBqjzXbJYF
+         jdG6CgyPmpuHPQANuuAyff7aFutcdioF57WwUUG69SAwUa6tU3ARr23qEKPZIgnK78
+         8TXBfNXIcq8bQ==
+Date:   Mon, 28 Nov 2022 15:26:45 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Robert Schlabbach <robert_s@gmx.net>,
+Cc:     Lin Ma <linma@zju.edu.cn>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
 Subject: linux-next: build warnings after merge of the v4l-dvb-next tree
-Message-ID: <20221128151900.5eb94a01@canb.auug.org.au>
+Message-ID: <20221128152645.245141b6@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/bch6x3wADM9GUP3yHwWko7j";
+Content-Type: multipart/signed; boundary="Sig_/.5K7g0MVBZKVS=XkzPf5DS/";
  protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/bch6x3wADM9GUP3yHwWko7j
+--Sig_/.5K7g0MVBZKVS=XkzPf5DS/
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
@@ -59,89 +59,33 @@ Hi all,
 After merging the v4l-dvb-next tree, today's linux-next build (htmldocs)
 produced these warnings:
 
-include/uapi/linux/dvb/frontend.h:399: warning: Enum value 'QAM_1024' not d=
-escribed in enum 'fe_modulation'
-include/uapi/linux/dvb/frontend.h:399: warning: Enum value 'QAM_4096' not d=
-escribed in enum 'fe_modulation'
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: fec-1-3
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: fec-1-4
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: fec-5-9
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: fec-7-9
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: fec-8-15
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: fec-11-15
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: fec-13-18
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: fec-9-20
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: fec-11-20
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: fec-23-36
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: fec-25-36
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: fec-13-45
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: fec-26-45
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: fec-28-45
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: fec-32-45
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: fec-77-90
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: fec-1-3
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: fec-1-4
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: fec-5-9
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: fec-7-9
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: fec-8-15
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: fec-11-15
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: fec-13-18
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: fec-9-20
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: fec-11-20
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: fec-23-36
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: fec-25-36
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: fec-13-45
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: fec-26-45
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: fec-28-45
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: fec-32-45
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: fec-77-90
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: apsk-8-l
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: apsk-16-l
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: apsk-32-l
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: apsk-64
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: apsk-64-l
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: qam-1024
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: qam-4096
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: apsk-8-l
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: apsk-16-l
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: apsk-32-l
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: apsk-64
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: apsk-64-l
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: guard-inte=
-rval-1-64
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: guard-inte=
-rval-1-64
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: rolloff-15
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: rolloff-10
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: rolloff-5
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: rolloff-15
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: rolloff-10
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: rolloff-5
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: sys-dvbc2
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: sys-dvbc2
+include/media/dvbdev.h:193: warning: Function parameter or member 'ref' not=
+ described in 'dvb_device'
+include/media/dvbdev.h:207: warning: expecting prototype for dvb_device_get=
+(). Prototype was for dvb_device_put() instead
 
 Introduced by commit
 
-  6508a50fe84f ("media: dvb: add DVB-C2 and DVB-S2X parameter values")
+  0fc044b2b5e2 ("media: dvbdev: adopts refcnt to avoid UAF")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/bch6x3wADM9GUP3yHwWko7j
+--Sig_/.5K7g0MVBZKVS=XkzPf5DS/
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOENrQACgkQAVBC80lX
-0GzRWAf/QKKv5C3S0BMm4aDqEDk0QjO64jFFETkbLJJTYDHw4Re+WsNGvYYy9fNJ
-3LFt+/deehrmphDkO/oJhM8Ba9WrDTny4ooQrEg2pF2jBgh2xdKdgSaAJhLSiSIK
-6l3YUBy2MnNIHaoCVidYBWRqdVyZw5FjsudFk/8bT6Z3myBSgNXtjRlA2NbGOtSV
-gGFimN5kFwxeXMYoSPJK9Z9fa1rh7vEv2ah05YbeOrTuqmarC3hJBzdeRl+TpPNR
-PHx0ObjdjX/GX9CuJ9dFoqE78Un+CNGx3k9+kIQSti4rZ2jUAMe04dWfemkVsD5o
-/F/fq2X57yE5G6W5PndYaV6UOO/ROg==
-=hP+H
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOEOIUACgkQAVBC80lX
+0Gz95Af9EMxuJb9Gq/JjwoOVkJc3E2Cj8XtVLxJx7gV+6/r+Kfv80mgF519V4DpU
+gNrqZuvo9SzrEdcQs7pq1aRLJ+/zPe8mUklFeLq4dIpGTdMJ7RikLtrIRg1h5RNI
+bCguO4bcs02cPukU6/spAk51JS7+t9/WyFZb7vZZhuFvDGWqfU9gipcAD9GsBGoT
+TFx8xPISu0MWmx9H4FyUyIZh7R1TiYmnCFkZ5gjsBwqvBVgM0HoItp91Hg6nYGvu
+L4NqgrrzIgiSWxmxiWALrPfWCipVgGshqKw80QPXw3zW1kdrWjAMC9CDwQYM6ZgL
+Ou5ezc8SuuG1dE/0ZvizsjfOD+SWPQ==
+=FSHE
 -----END PGP SIGNATURE-----
 
---Sig_/bch6x3wADM9GUP3yHwWko7j--
+--Sig_/.5K7g0MVBZKVS=XkzPf5DS/--

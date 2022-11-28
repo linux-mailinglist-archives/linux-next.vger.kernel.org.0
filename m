@@ -2,113 +2,127 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A287563A75F
-	for <lists+linux-next@lfdr.de>; Mon, 28 Nov 2022 12:50:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76CAA63A8A7
+	for <lists+linux-next@lfdr.de>; Mon, 28 Nov 2022 13:45:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230164AbiK1LuS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 28 Nov 2022 06:50:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56292 "EHLO
+        id S229827AbiK1MpB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 28 Nov 2022 07:45:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231263AbiK1LuM (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 28 Nov 2022 06:50:12 -0500
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E03AB13E8A;
-        Mon, 28 Nov 2022 03:50:11 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id 037093200908;
-        Mon, 28 Nov 2022 06:50:08 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Mon, 28 Nov 2022 06:50:09 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1669636208; x=1669722608; bh=wtIBsaHA3J
-        ecaBQ+MxbdbPF8tvV/uo7IabJxbgjL8HE=; b=GD1zytP23/kdQ3fmF383F9qTNz
-        /MFsiT9Ul8jn681zGlzd4rrp565x3cilHuV3Za1aN0Qi9tlOvLd91+zS74YA95PG
-        8+GMIm0lIenjsvQsgwLiRsMkb3IkIv91xjOGMkmSHZFpJTg5f3d3KAa1c5dP0UU1
-        V29/8RyzGfOgH32ywxne/RBKg5Cm+BUXD+8YDCzTlENFi7ZgYvNlS3HVbjBd0f2s
-        cmln8T9bhW2tII0f7ncd0tiwMl7VQzUIVYejCquTNCrVMsuRYdGc09M98G8jiiKs
-        lrpOCmujOJPHC/yKnM3eaiYA+w0wqC+8Ze8pZ826j3WKQlFuvv7SzzyAmOeA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1669636208; x=1669722608; bh=wtIBsaHA3JecaBQ+MxbdbPF8tvV/
-        uo7IabJxbgjL8HE=; b=R5iD66YkdV72T3S5qp28jgaE1fXvL+aklXoU8PXsa9Tq
-        5SaLwhdkyniwKJqE80DbLg4xfm3aKc5o/DjD7gL4UcB0znog2Ugh1uKLCGvVXYDR
-        B/5o6PsI/0AWsP1oFZzsRVFBKyyHRiJvLKmHvE7qR9Z76PRgioORGh/Mw7R9iF83
-        V/8acV8CXCXg/KkL6nndcWtSjTlqiMbI6jPjZNQHAHGnultYYYUUYwWZ6JwRGCdz
-        w0U81snpTTfAEv6Dgm5YrNhid3P5bbmMlbMVhQPsP21YZARGnnT0y19H3OpuKQ/t
-        sZr46GE35dLRserEPiDxz0zGPuHqwUkJXoj6cIXDTg==
-X-ME-Sender: <xms:cKCEY5od_1Pgllv3hSPxO33j1K-T3LdFdfbwKN22bt1TF228EUhBQQ>
-    <xme:cKCEY7oSJhat0c02h3ewiL6KN0DVHLjtV9zP6jVHVUaN_gAlB8A9m6SBTdK7su230
-    SiGN98rOtTmEA>
-X-ME-Received: <xmr:cKCEY2Nt4SnoL_skIjCJfr-neIOA45VYFUclCb9TWrBlgQgpRvgUEAnXbnW_fZne_5HKV3SxpAbUkBtybXscvQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrjedvgdeffecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcu
-    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeehgedvve
-    dvleejuefgtdduudfhkeeltdeihfevjeekjeeuhfdtueefhffgheekteenucevlhhushht
-    vghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhh
-    drtghomh
-X-ME-Proxy: <xmx:cKCEY07xaVNekpRWerJk72qWO0f1BN483i7H9wl_c2MpgTWp6HddGw>
-    <xmx:cKCEY46WEweKBiYDCLApcekYkm95uH5UzR30zIQPcnXyLNysl6iHPQ>
-    <xmx:cKCEY8hKaQz174EPb863U7FCIMG-W1KRYOgA1xK31cZqfBq5Xlf7gw>
-    <xmx:cKCEYz3PsJor8-hvCypkWG7MolTpKmV8Gl3MbBukhg_QPEtgFIH_cQ>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 28 Nov 2022 06:50:07 -0500 (EST)
-Date:   Mon, 28 Nov 2022 12:50:03 +0100
-From:   Greg KH <greg@kroah.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
+        with ESMTP id S230094AbiK1Moh (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 28 Nov 2022 07:44:37 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED22B65A1;
+        Mon, 28 Nov 2022 04:44:33 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NLQCJ6VLxz4x1H;
+        Mon, 28 Nov 2022 23:44:28 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1669639469;
+        bh=k0uUVCZ1nUoWE2jqd424nzIZGKnRyZrs5TKCPdfAisI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=tSry0xu8csQVM+mDrj9FSRleAE7NgTGgf6tWxCMSF8wXP7+yNOJ3ccUNcXDGgZlGl
+         OGgpmsNupnYBDsHa4sz8cuQFzDifnEikzLQZB7CrgbqXY+whDHXW6bl0GCvtGTgnIj
+         PMEH+vUcNRMhRbsi7/KvOHuLzXEUqUvjq5uRDtvPY/TkSucIzn+f3uqgbNOtf57o7e
+         egUW3I0IALJibEja+Wj/h3YmD/dKfxFUl+yhmyC2sRHMDa8/UQm+TMlop6oWlNQErf
+         LmKMiOOywe8+2M67FTgBM1BqAlyV1g94+vBbQbghNoOrLTk1veFjqW2PXuiEsoDjkx
+         X0T8qN4Ki6o0w==
+Date:   Mon, 28 Nov 2022 23:44:08 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Greg KH <greg@kroah.com>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
 Subject: Re: linux-next: build failure after merge of the driver-core tree
-Message-ID: <Y4Sga+ONeDe9Q7yz@kroah.com>
+Message-ID: <20221128234408.7a4dec34@canb.auug.org.au>
+In-Reply-To: <Y4Sga+ONeDe9Q7yz@kroah.com>
 References: <20221128133600.14ce44bf@canb.auug.org.au>
+        <Y4Sga+ONeDe9Q7yz@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221128133600.14ce44bf@canb.auug.org.au>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/iDLLG2gcqxANPr9VJLmkav/";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Nov 28, 2022 at 01:36:00PM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the driver-core tree, today's linux-next build (powerpc
-> ppc64_defconfig) failed like this:
-> 
-> arch/powerpc/platforms/book3s/vas-api.c: In function 'vas_register_coproc_api':
-> arch/powerpc/platforms/book3s/vas-api.c:590:38: error: assignment to 'char * (*)(const struct device *, umode_t *)' {aka 'char * (*)(const struct device *, short unsigned int *)'} from incompatible pointer type 'char * (*)(struct device *, umode_t *)' {aka 'char * (*)(struct device *, short unsigned int *)'} [-Werror=incompatible-pointer-types]
->   590 |         coproc_device.class->devnode = coproc_devnode;
->       |                                      ^
-> drivers/misc/cxl/file.c: In function 'cxl_file_init':
-> drivers/misc/cxl/file.c:687:28: error: assignment to 'char * (*)(const struct device *, umode_t *)' {aka 'char * (*)(const struct device *, short unsigned int *)'} from incompatible pointer type 'char * (*)(struct device *, umode_t *)' {aka 'char * (*)(struct device *, short unsigned int *)'} [-Werror=incompatible-pointer-types]
->   687 |         cxl_class->devnode = cxl_devnode;
->       |                            ^
-> 
-> Caused by commit
-> 
->   ff62b8e6588f ("driver core: make struct class.devnode() take a const *")
-> 
-> I have used the driver-core tree from next-20221125 for today.
+--Sig_/iDLLG2gcqxANPr9VJLmkav/
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Hm, how do we resolve problems like this where an api changes in my
-branch but needs to be updated in another branch that is not in Linus's
-tree yet?
+Hi Greg,
 
-Want me to make a patch for this for you to apply after the driver-core
-merge?
+On Mon, 28 Nov 2022 12:50:03 +0100 Greg KH <greg@kroah.com> wrote:
+>
+> On Mon, Nov 28, 2022 at 01:36:00PM +1100, Stephen Rothwell wrote:
+> >=20
+> > After merging the driver-core tree, today's linux-next build (powerpc
+> > ppc64_defconfig) failed like this:
+> >=20
+> > arch/powerpc/platforms/book3s/vas-api.c: In function 'vas_register_copr=
+oc_api':
+> > arch/powerpc/platforms/book3s/vas-api.c:590:38: error: assignment to 'c=
+har * (*)(const struct device *, umode_t *)' {aka 'char * (*)(const struct =
+device *, short unsigned int *)'} from incompatible pointer type 'char * (*=
+)(struct device *, umode_t *)' {aka 'char * (*)(struct device *, short unsi=
+gned int *)'} [-Werror=3Dincompatible-pointer-types]
+> >   590 |         coproc_device.class->devnode =3D coproc_devnode;
+> >       |                                      ^
+> > drivers/misc/cxl/file.c: In function 'cxl_file_init':
+> > drivers/misc/cxl/file.c:687:28: error: assignment to 'char * (*)(const =
+struct device *, umode_t *)' {aka 'char * (*)(const struct device *, short =
+unsigned int *)'} from incompatible pointer type 'char * (*)(struct device =
+*, umode_t *)' {aka 'char * (*)(struct device *, short unsigned int *)'} [-=
+Werror=3Dincompatible-pointer-types]
+> >   687 |         cxl_class->devnode =3D cxl_devnode;
+> >       |                            ^
+> >=20
+> > Caused by commit
+> >=20
+> >   ff62b8e6588f ("driver core: make struct class.devnode() take a const =
+*")
+> >=20
+> > I have used the driver-core tree from next-20221125 for today. =20
+>=20
+> Hm, how do we resolve problems like this where an api changes in my
+> branch but needs to be updated in another branch that is not in Linus's
+> tree yet?
 
-thanks,
+That is not the case here:
 
-greg k-h
+$ git show ff62b8e6588f:arch/powerpc/platforms/book3s/vas-api.c | grep copr=
+oc_devnode
+static char *coproc_devnode(struct device *dev, umode_t *mode)
+	coproc_device.class->devnode =3D coproc_devnode;
+$ git show ff62b8e6588f:drivers/misc/cxl/file.c | grep cxl_devnode
+static char *cxl_devnode(struct device *dev, umode_t *mode)
+	cxl_class->devnode =3D cxl_devnode;
+
+You just need to add a commit to your tree that updates the missed cases.
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/iDLLG2gcqxANPr9VJLmkav/
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOErRgACgkQAVBC80lX
+0GyQqQf/UVldQV9PIdQWiqi842assrp39aI1qOW0OwrZuA1lYtaoFD3Deku1+eUJ
+h+hFaK3NRuHYN8G+eDAXvfB1qbM/h1oiMNYsJtxGdSrdPurWFyHuFu/TLRUVUzu1
+7FeBIwJMAlbb68P0lH5g0OWnjtS+fNEhz0uEsdhDUASrCtp6qiNw5Nar77skrrOb
+XsFSOPeAxO/wuFu+wyA3csezISoQ/F8XCBiehumJq1Myb0JyZX720f0vHXiNOucR
+/DyPrfjL44BClIz63kH0y/2s2wSqhVjSg/+psndp80ILjWxZB5R8Uc+1O+v95DOH
+Qlnhd8oY7D0yUtGiXuXwnS4g0BJbtQ==
+=Iwte
+-----END PGP SIGNATURE-----
+
+--Sig_/iDLLG2gcqxANPr9VJLmkav/--

@@ -2,181 +2,113 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 584FE63A609
-	for <lists+linux-next@lfdr.de>; Mon, 28 Nov 2022 11:23:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A287563A75F
+	for <lists+linux-next@lfdr.de>; Mon, 28 Nov 2022 12:50:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230177AbiK1KXw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 28 Nov 2022 05:23:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58368 "EHLO
+        id S230164AbiK1LuS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 28 Nov 2022 06:50:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230250AbiK1KXu (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 28 Nov 2022 05:23:50 -0500
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6EC21A81C
-        for <linux-next@vger.kernel.org>; Mon, 28 Nov 2022 02:23:47 -0800 (PST)
-Received: by mail-io1-f70.google.com with SMTP id y5-20020a056602120500b006cf628c14ddso5559845iot.15
-        for <linux-next@vger.kernel.org>; Mon, 28 Nov 2022 02:23:47 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=NobAw+FI5C8ULf/Y4Ui7fBPT64uhSipLoJa02tBgo6w=;
-        b=2VIaq5EE8L7i70m2TEddS4o/hV4I8Wk0cxMMfmGO2/k1yywKNnoXcwv73Wsr0pOn7f
-         2KqC8lZebS7qpP7h9EceQP/eDPV2Lx6fRIikb0HJV95OXMO6/pqsQJ4A9OXbxvj97Ys8
-         MJ/fCtV/UWFAeM8LPrFgdsjgsZ2I4bY2e3Z6oFhYoHunPXBq2LmdzwrSzpYvYbG06QR8
-         4Gs7puX1o/Y6K/UMGPhlVYsxMNgG4Z+xFQYITgfT0hfV4pMCi/UhTzpJ7vigzR1Ipc5X
-         sfuIQqG7DRCLOB/8uuDUvLFy4vRjwuFZOo3GXlgqTfZiOUbLh8OlP7LTybTtGoz1cfqe
-         lUPQ==
-X-Gm-Message-State: ANoB5plwyQnr2sW+Qgo23fAC0yMH3Ghxyezby6YSYSAJDI4C1jlOYqra
-        l6+zrMSH+qjs0YJRwpxO0CfpNyBpLZo0M5HUCqEZR2eAsiBN
-X-Google-Smtp-Source: AA0mqf4q82h5u4p7M9JpZmf8yostPPR0v00Z1sWBDTOj2UMlZRBmJ58XVJx36gq0C2LTe7Y34B4QfwYkzwhvSooCAYj0epoKt1QT
+        with ESMTP id S231263AbiK1LuM (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 28 Nov 2022 06:50:12 -0500
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E03AB13E8A;
+        Mon, 28 Nov 2022 03:50:11 -0800 (PST)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id 037093200908;
+        Mon, 28 Nov 2022 06:50:08 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Mon, 28 Nov 2022 06:50:09 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1669636208; x=1669722608; bh=wtIBsaHA3J
+        ecaBQ+MxbdbPF8tvV/uo7IabJxbgjL8HE=; b=GD1zytP23/kdQ3fmF383F9qTNz
+        /MFsiT9Ul8jn681zGlzd4rrp565x3cilHuV3Za1aN0Qi9tlOvLd91+zS74YA95PG
+        8+GMIm0lIenjsvQsgwLiRsMkb3IkIv91xjOGMkmSHZFpJTg5f3d3KAa1c5dP0UU1
+        V29/8RyzGfOgH32ywxne/RBKg5Cm+BUXD+8YDCzTlENFi7ZgYvNlS3HVbjBd0f2s
+        cmln8T9bhW2tII0f7ncd0tiwMl7VQzUIVYejCquTNCrVMsuRYdGc09M98G8jiiKs
+        lrpOCmujOJPHC/yKnM3eaiYA+w0wqC+8Ze8pZ826j3WKQlFuvv7SzzyAmOeA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1669636208; x=1669722608; bh=wtIBsaHA3JecaBQ+MxbdbPF8tvV/
+        uo7IabJxbgjL8HE=; b=R5iD66YkdV72T3S5qp28jgaE1fXvL+aklXoU8PXsa9Tq
+        5SaLwhdkyniwKJqE80DbLg4xfm3aKc5o/DjD7gL4UcB0znog2Ugh1uKLCGvVXYDR
+        B/5o6PsI/0AWsP1oFZzsRVFBKyyHRiJvLKmHvE7qR9Z76PRgioORGh/Mw7R9iF83
+        V/8acV8CXCXg/KkL6nndcWtSjTlqiMbI6jPjZNQHAHGnultYYYUUYwWZ6JwRGCdz
+        w0U81snpTTfAEv6Dgm5YrNhid3P5bbmMlbMVhQPsP21YZARGnnT0y19H3OpuKQ/t
+        sZr46GE35dLRserEPiDxz0zGPuHqwUkJXoj6cIXDTg==
+X-ME-Sender: <xms:cKCEY5od_1Pgllv3hSPxO33j1K-T3LdFdfbwKN22bt1TF228EUhBQQ>
+    <xme:cKCEY7oSJhat0c02h3ewiL6KN0DVHLjtV9zP6jVHVUaN_gAlB8A9m6SBTdK7su230
+    SiGN98rOtTmEA>
+X-ME-Received: <xmr:cKCEY2Nt4SnoL_skIjCJfr-neIOA45VYFUclCb9TWrBlgQgpRvgUEAnXbnW_fZne_5HKV3SxpAbUkBtybXscvQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrjedvgdeffecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcu
+    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeehgedvve
+    dvleejuefgtdduudfhkeeltdeihfevjeekjeeuhfdtueefhffgheekteenucevlhhushht
+    vghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhh
+    drtghomh
+X-ME-Proxy: <xmx:cKCEY07xaVNekpRWerJk72qWO0f1BN483i7H9wl_c2MpgTWp6HddGw>
+    <xmx:cKCEY46WEweKBiYDCLApcekYkm95uH5UzR30zIQPcnXyLNysl6iHPQ>
+    <xmx:cKCEY8hKaQz174EPb863U7FCIMG-W1KRYOgA1xK31cZqfBq5Xlf7gw>
+    <xmx:cKCEYz3PsJor8-hvCypkWG7MolTpKmV8Gl3MbBukhg_QPEtgFIH_cQ>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 28 Nov 2022 06:50:07 -0500 (EST)
+Date:   Mon, 28 Nov 2022 12:50:03 +0100
+From:   Greg KH <greg@kroah.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the driver-core tree
+Message-ID: <Y4Sga+ONeDe9Q7yz@kroah.com>
+References: <20221128133600.14ce44bf@canb.auug.org.au>
 MIME-Version: 1.0
-X-Received: by 2002:a02:7409:0:b0:375:4727:8625 with SMTP id
- o9-20020a027409000000b0037547278625mr14738013jac.300.1669631027186; Mon, 28
- Nov 2022 02:23:47 -0800 (PST)
-Date:   Mon, 28 Nov 2022 02:23:47 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000048102d05ee8544e5@google.com>
-Subject: [syzbot] linux-next boot error: WARNING: refcount bug in dvb_register_device
-From:   syzbot <syzbot+fce48a3dd3368645bd6c@syzkaller.appspotmail.com>
-To:     colin.i.king@gmail.com, keitasuzuki.park@sslab.ics.keio.ac.jp,
-        linma@zju.edu.cn, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-next@vger.kernel.org,
-        mchehab@kernel.org, sfr@canb.auug.org.au,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221128133600.14ce44bf@canb.auug.org.au>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hello,
+On Mon, Nov 28, 2022 at 01:36:00PM +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the driver-core tree, today's linux-next build (powerpc
+> ppc64_defconfig) failed like this:
+> 
+> arch/powerpc/platforms/book3s/vas-api.c: In function 'vas_register_coproc_api':
+> arch/powerpc/platforms/book3s/vas-api.c:590:38: error: assignment to 'char * (*)(const struct device *, umode_t *)' {aka 'char * (*)(const struct device *, short unsigned int *)'} from incompatible pointer type 'char * (*)(struct device *, umode_t *)' {aka 'char * (*)(struct device *, short unsigned int *)'} [-Werror=incompatible-pointer-types]
+>   590 |         coproc_device.class->devnode = coproc_devnode;
+>       |                                      ^
+> drivers/misc/cxl/file.c: In function 'cxl_file_init':
+> drivers/misc/cxl/file.c:687:28: error: assignment to 'char * (*)(const struct device *, umode_t *)' {aka 'char * (*)(const struct device *, short unsigned int *)'} from incompatible pointer type 'char * (*)(struct device *, umode_t *)' {aka 'char * (*)(struct device *, short unsigned int *)'} [-Werror=incompatible-pointer-types]
+>   687 |         cxl_class->devnode = cxl_devnode;
+>       |                            ^
+> 
+> Caused by commit
+> 
+>   ff62b8e6588f ("driver core: make struct class.devnode() take a const *")
+> 
+> I have used the driver-core tree from next-20221125 for today.
 
-syzbot found the following issue on:
+Hm, how do we resolve problems like this where an api changes in my
+branch but needs to be updated in another branch that is not in Linus's
+tree yet?
 
-HEAD commit:    15f2f20ccbf2 Add linux-next specific files for 20221128
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=114a14ad880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=50be0d6c9da3be9d
-dashboard link: https://syzkaller.appspot.com/bug?extid=fce48a3dd3368645bd6c
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+Want me to make a patch for this for you to apply after the driver-core
+merge?
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/0bcd04c8e812/disk-15f2f20c.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/23f3cf3f818e/vmlinux-15f2f20c.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/9111cdf112e7/bzImage-15f2f20c.xz
+thanks,
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+fce48a3dd3368645bd6c@syzkaller.appspotmail.com
-
-usbcore: registered new interface driver sonixj
-usbcore: registered new interface driver spca500
-usbcore: registered new interface driver spca501
-usbcore: registered new interface driver spca505
-usbcore: registered new interface driver spca506
-usbcore: registered new interface driver spca508
-usbcore: registered new interface driver spca561
-usbcore: registered new interface driver spca1528
-usbcore: registered new interface driver sq905
-usbcore: registered new interface driver sq905c
-usbcore: registered new interface driver sq930x
-usbcore: registered new interface driver sunplus
-usbcore: registered new interface driver stk014
-usbcore: registered new interface driver stk1135
-usbcore: registered new interface driver stv0680
-usbcore: registered new interface driver t613
-usbcore: registered new interface driver gspca_topro
-usbcore: registered new interface driver touptek
-usbcore: registered new interface driver tv8532
-usbcore: registered new interface driver vc032x
-usbcore: registered new interface driver vicam
-usbcore: registered new interface driver xirlink-cit
-usbcore: registered new interface driver gspca_zc3xx
-usbcore: registered new interface driver ALi m5602
-usbcore: registered new interface driver STV06xx
-usbcore: registered new interface driver gspca_gl860
-usbcore: registered new interface driver hackrf
-usbcore: registered new interface driver msi2500
-usbcore: registered new interface driver Philips webcam
-usbcore: registered new interface driver uvcvideo
-au0828: au0828 driver loaded
-usbcore: registered new interface driver au0828
-usbcore: registered new interface driver cx231xx
-usbcore: registered new interface driver em28xx
-em28xx: Registered (Em28xx v4l2 Extension) extension
-em28xx: Registered (Em28xx Audio Extension) extension
-em28xx: Registered (Em28xx dvb Extension) extension
-em28xx: Registered (Em28xx Input Extension) extension
-usbcore: registered new interface driver go7007
-usbcore: registered new interface driver go7007-loader
-usbcore: registered new interface driver hdpvr
-usbcore: registered new interface driver pvrusb2
-pvrusb2: V4L in-tree version:Hauppauge WinTV-PVR-USB2 MPEG2 Encoder/Tuner
-pvrusb2: Debug mask is 31 (0x1f)
-usbcore: registered new interface driver stk1160
-usbcore: registered new interface driver usbtv
-dvbdev: DVB: registering new adapter (dvb_vidtv_bridge)
-i2c i2c-0: DVB: registering adapter 0 frontend 0 (Dummy demod for DVB-T/T2/C/S/S2)...
-------------[ cut here ]------------
-refcount_t: addition on 0; use-after-free.
-WARNING: CPU: 0 PID: 1 at lib/refcount.c:25 refcount_warn_saturate+0x17c/0x1f0 lib/refcount.c:25
-Modules linked in:
-CPU: 0 PID: 1 Comm: swapper/0 Not tainted 6.1.0-rc6-next-20221128-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-RIP: 0010:refcount_warn_saturate+0x17c/0x1f0 lib/refcount.c:25
-Code: 0a 31 ff 89 de e8 64 54 75 fd 84 db 0f 85 2e ff ff ff e8 e7 57 75 fd 48 c7 c7 60 4c a6 8a c6 05 bf 49 51 0a 01 e8 5c 83 b4 05 <0f> 0b e9 0f ff ff ff e8 c8 57 75 fd 0f b6 1d a9 49 51 0a 31 ff 89
-RSP: 0000:ffffc900000678d0 EFLAGS: 00010282
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: ffff88813ff58000 RSI: ffffffff81660e7c RDI: fffff5200000cf0c
-RBP: ffff888022a45010 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000080000000 R11: 0000000000000000 R12: 0000000000000001
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000001
-FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffff88823ffff000 CR3: 000000000c48e000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- __refcount_add include/linux/refcount.h:199 [inline]
- __refcount_inc include/linux/refcount.h:250 [inline]
- refcount_inc include/linux/refcount.h:267 [inline]
- kref_get include/linux/kref.h:45 [inline]
- dvb_device_get drivers/media/dvb-core/dvbdev.c:585 [inline]
- dvb_register_device+0xe83/0x16e0 drivers/media/dvb-core/dvbdev.c:517
- dvb_register_frontend+0x58f/0x8c0 drivers/media/dvb-core/dvb_frontend.c:3044
- vidtv_bridge_dvb_init drivers/media/test-drivers/vidtv/vidtv_bridge.c:430 [inline]
- vidtv_bridge_probe+0x450/0x9f0 drivers/media/test-drivers/vidtv/vidtv_bridge.c:502
- platform_probe+0x100/0x1f0 drivers/base/platform.c:1400
- call_driver_probe drivers/base/dd.c:560 [inline]
- really_probe+0x249/0xb90 drivers/base/dd.c:639
- __driver_probe_device+0x1df/0x4d0 drivers/base/dd.c:778
- driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:808
- __driver_attach+0x271/0x570 drivers/base/dd.c:1194
- bus_for_each_dev+0x14b/0x1d0 drivers/base/bus.c:301
- bus_add_driver+0x4cd/0x640 drivers/base/bus.c:618
- driver_register+0x224/0x3a0 drivers/base/driver.c:246
- vidtv_bridge_init+0x3b/0x68 drivers/media/test-drivers/vidtv/vidtv_bridge.c:594
- do_one_initcall+0x141/0x790 init/main.c:1306
- do_initcall_level init/main.c:1379 [inline]
- do_initcalls init/main.c:1395 [inline]
- do_basic_setup init/main.c:1414 [inline]
- kernel_init_freeable+0x6f9/0x782 init/main.c:1634
- kernel_init+0x1e/0x1d0 init/main.c:1522
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+greg k-h

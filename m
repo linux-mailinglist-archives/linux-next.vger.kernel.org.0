@@ -2,48 +2,44 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1CBF63B3B0
-	for <lists+linux-next@lfdr.de>; Mon, 28 Nov 2022 21:49:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCB8363B432
+	for <lists+linux-next@lfdr.de>; Mon, 28 Nov 2022 22:27:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234305AbiK1Ut2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 28 Nov 2022 15:49:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58978 "EHLO
+        id S233481AbiK1V1W (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 28 Nov 2022 16:27:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234328AbiK1Ut1 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 28 Nov 2022 15:49:27 -0500
+        with ESMTP id S233072AbiK1V1V (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 28 Nov 2022 16:27:21 -0500
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46BA06576;
-        Mon, 28 Nov 2022 12:49:25 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 939822611C;
+        Mon, 28 Nov 2022 13:27:19 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NLcyn2bWMz4xG6;
-        Tue, 29 Nov 2022 07:49:20 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NLdpY0wQxz4x2c;
+        Tue, 29 Nov 2022 08:27:16 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1669668561;
-        bh=GBGb2lW9eB+I55glXRDf2ymZdeShrAjBsL4tVrQH6Ug=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=T7KlvLdCVazciUGwoba2cbbhFNzyuB55dIv1KnSGqy0/3rizrRZaM9z/r27+nleQT
-         7kTe9Dap0AgViYfdPiBT40eCTovcfN3zMgyyn+6sBSUBARGobNMfUIonQhsZsvb5ty
-         6EBu2n/PHrckvGr8u43VCQ0ba7t0HH5wX8jnq33O/lFsRyELLgobruRNi+K7Bz8TxE
-         xUmpXryLH1/OTi7DDe5E1Z36KISB3oJweBf6U/4TdPTxIvuWffEMQggR1pHY+meYFg
-         n02LHIFNtdU+Akvs3BvbieETTioBXO1pzurQ0a7Rj7awGzIfTFfsht2Bo33KU5YXf+
-         e1qe5s1eH0TYA==
-Date:   Tue, 29 Nov 2022 06:46:05 +1100
+        s=201702; t=1669670837;
+        bh=MWziLs6nPPhw3ZyePQKffCNuS8no1eTujDFnHVUc6lU=;
+        h=Date:From:To:Cc:Subject:From;
+        b=a3agnTwLzFi0fhwgMzr+GkY/E/L87TSRP5R3hzN399YVO4dBqTgHZHTUYtGC410yH
+         ykMkHmOoeVZI29LnyGYLKfL0U9+eZWo/muwLXu9kFVnQC45aqqQQ12l3PES0SWhvFW
+         Mcb+RcN1LSKj/zFDfe4Dox8g7vD3G+nycIfVO3lKjSis1fFH7bBBMJu0zKd37F4Wzu
+         D1UvZFncgLC5DEVF3agiOpRV+0+M9QLZUUHbiIew8xfRDrOlD1HZT8563y258Jicwt
+         CajNVdgxZxZX/s2VP1wY34kNxw3qh65eXewy4FyiUiQ98yuITmE5cIq7ozpjXwr1Ju
+         +JgSdXxFN3fLg==
+Date:   Tue, 29 Nov 2022 08:27:15 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Greg KH <greg@kroah.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the driver-core tree
-Message-ID: <20221129064605.1aadc0e6@canb.auug.org.au>
-In-Reply-To: <Y4TgXLb4EweoJb0k@kroah.com>
-References: <20221128133600.14ce44bf@canb.auug.org.au>
-        <Y4Sga+ONeDe9Q7yz@kroah.com>
-        <20221128234408.7a4dec34@canb.auug.org.au>
-        <Y4TgXLb4EweoJb0k@kroah.com>
+Subject: linux-next: Fixes tag needs some work in the block tree
+Message-ID: <20221129082715.78e44566@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Ep8D1ynbQWl8cHK4CpfZ/AS";
+Content-Type: multipart/signed; boundary="Sig_/uIVkaxbK_TscEmA+D6_pZmV";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
@@ -54,37 +50,46 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/Ep8D1ynbQWl8cHK4CpfZ/AS
+--Sig_/uIVkaxbK_TscEmA+D6_pZmV
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Greg,
+Hi all,
 
-On Mon, 28 Nov 2022 17:22:52 +0100 Greg KH <greg@kroah.com> wrote:
->
-> Odd, why is 0-day not triggering on any of these in my tree?   Anyway,
-> I'll go fix it up, thanks...
+In commit
 
-Does 0-day do powerpc builds?
+  4b49197f9fbd ("block: mq-deadline: Rename deadline_is_seq_writes()")
+
+Fixes tag
+
+  Fixes: 015d02f4853 ("block: mq-deadline: Do not break sequential write st=
+reams to zoned HDDs")
+
+has these problem(s):
+
+  - SHA1 should be at least 12 digits long
+    This can be fixed for the future by setting core.abbrev to 12 (or
+    more) or (for git v2.11 or later) just making sure it is not set
+    (or set to "auto").
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/Ep8D1ynbQWl8cHK4CpfZ/AS
+--Sig_/uIVkaxbK_TscEmA+D6_pZmV
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOFD/4ACgkQAVBC80lX
-0Gw8JAf9H9IrakSYC470oeWM2soPNUmgGe+CtWgBF4v7X+i3INHayjRnTB14R2fQ
-9D9t8tAEezXzPiii2utux0EMeHwC0mTn4zR2MfZb728HTnOSZgxv4n39y0gKXgnH
-MjR3tknUynHPStEmAujt+V4w1POvhYCZR8nIOHf7YGtTut2IqO9t5htLzpOgOcP4
-qMeXieg+i3/Wa5X/LntkEMorraMLsIjyNr8aczpDjIC6cihIzR52ldnfGkgA8KTN
-f+b1IBRWog6eq63p9FViW/ED4Mq1KYbPXDyVZ1s0w5mfaLlkYyBwzhOY28Po/6w5
-MRPMxTEoWJiaiCqgngu6knyuCwuNag==
-=0T5K
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOFJ7QACgkQAVBC80lX
+0GzwAQf/Wn36GO3PV5QoKzZXeqQlv5lx2Tyk7AcrU3JeUddUDY7UK+9OKPPYTf3q
+89XNlGwZXMVhpwM2EOrBrZnM1SIyBdaTF/yQzTXLNAwBNVu3+4kpUBing1qSM9Jc
+ZRQIbloJTLA33GQMPv6E+uKX5PhS8nYcp/4zlg6XX4/gcg1CYYdqKsC0a7du8dRe
+rrUn4LOexpcQymj88PdPeA+gQ9CWtPqTJXachmpYXuJqTTJaZl8QQrc8+8hNBK3J
+XX4PHu5G02rloYSMOKrAyZyM8bqPeaD50oAgUFowANsHW3eP/e8pXbuAaGcsXSPJ
+mX4HDMbSb/AzKjPUMsrYNWDoL473mw==
+=ljWT
 -----END PGP SIGNATURE-----
 
---Sig_/Ep8D1ynbQWl8cHK4CpfZ/AS--
+--Sig_/uIVkaxbK_TscEmA+D6_pZmV--

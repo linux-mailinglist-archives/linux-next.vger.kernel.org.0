@@ -2,71 +2,71 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD32C63AD98
-	for <lists+linux-next@lfdr.de>; Mon, 28 Nov 2022 17:23:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4837763AEFA
+	for <lists+linux-next@lfdr.de>; Mon, 28 Nov 2022 18:36:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232715AbiK1QXV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 28 Nov 2022 11:23:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53200 "EHLO
+        id S231675AbiK1RgG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 28 Nov 2022 12:36:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232719AbiK1QW7 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 28 Nov 2022 11:22:59 -0500
+        with ESMTP id S232390AbiK1RgF (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 28 Nov 2022 12:36:05 -0500
 Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B97EC778;
-        Mon, 28 Nov 2022 08:22:57 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 371325C013B;
-        Mon, 28 Nov 2022 11:22:57 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Mon, 28 Nov 2022 11:22:57 -0500
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C47EA24962;
+        Mon, 28 Nov 2022 09:36:01 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id E006A5C00DB;
+        Mon, 28 Nov 2022 12:35:58 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Mon, 28 Nov 2022 12:35:58 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
         :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1669652577; x=1669738977; bh=gOI9d57EdP
-        pv6R/HBMFQvc3Ijzcm6PPOdLdQVSYXR7Q=; b=U62U+7g9MfACOzEN/A7jq/hEYG
-        KnmW/AitoSBncHwujWeHpbxXNqAZCCgDu/L9zib5XS0a3O5lWZq5XhJl1P0O5Pld
-        9O4WPaeoh0TyI2tWEmr4m2l6u+ZbCE0PQw0gkaRIEIkwemm8rKVgByGsI8gnpeC7
-        Y3qKO3t+zFDhbLCD1nOmHybY3Bn8Pa9fuqSMgJL0sB8VMr6XewFbLiIBj2z30rXx
-        50tSsyVw1HTtQ0ZbVDtxmHuzA2XT+ryT5EtGjBsfW7hRJfAjlBN2I4I+u29LmAuN
-        qfDsw+bxmcYJIvEhDl1OksrN/bAciGTzSD0aEOc5RKUOsWB3GtQyQC/eyRpQ==
+        :subject:to:to; s=fm1; t=1669656958; x=1669743358; bh=aKzeEdpO8C
+        H2HdtCvIgLs+oL7GmiAQ4112GY4wqfTWI=; b=VaJI7QNb/7jTI79BIHjdowt7vX
+        RdUnTi2zZ3sdgDH5DXzo+Zo54MSE533K4dP6tgNAunpVKTLjRKP9Ev2UJb8ksMsf
+        V2b8fHdsNQWL00cv0oTNUVLCQ47jcZZ7rdyAPhS6dlJngXvdp0LxfNcjLKEJb/lZ
+        8my5ZIlYhe7rsFPDahpKqQYXFMHbSjDK8XJP9vsHeXIsrL8EVoXfHKqXr4zzJBju
+        iG6ibrFspKUoVxYHYchnPHoM4CJo5aNyV1whZQBUTw9meTW/VFXrZA6aFwX6+vPb
+        /cVyLhP9S+FN+Z6AoPJ8p7JOIuhL6QsCfTR8FmXfSgpCPEf7IelssomyoaNg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
         :feedback-id:from:from:in-reply-to:in-reply-to:message-id
         :mime-version:references:reply-to:sender:subject:subject:to:to
         :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1669652577; x=1669738977; bh=gOI9d57EdPpv6R/HBMFQvc3Ijzcm
-        6PPOdLdQVSYXR7Q=; b=rRCFsx4FtY3+6IVFqDDWWFn4Sr1e3OdB1LXIk+TOnAvx
-        0XY2dY/xdA1I9+qpRKjnCkLJw40OrCDsLOOFpPTG1qbRZ0ZII92LO75nc52tHsKv
-        aKvbVlNSJ409eyYPoMeTzctWkF7vhcju4Z1+nJnNZd9t7jVVvnpbWES6fJzefAUp
-        XCRLyRXyRgggsY9KQM+6SqTrr9eCe0IM8KEGnWbGuIF/cfVM3CdybYAyygDWPVdr
-        NcJPsOIcM8uIt4cg+u/pPpo1Q4ZAgTFy5yh1oytMAZQZ8sZBC+dybZEHAt+jUonu
-        nS+5v+xlM8FY0eiE6TJmpSiuPaC/sID2UN9v6klgbA==
-X-ME-Sender: <xms:YOCEYzltBQJyPJHHMOOt-k-ZyoQwhI3ZOvEdhO7vTQKXcnSJL9JAPg>
-    <xme:YOCEY23T8iJzub16qx3DPejQiHgIwNk41nFkulkYrOdGElKcCq70jJJfgBqRPIm3F
-    _qs68-T4TyG3g>
-X-ME-Received: <xmr:YOCEY5pLNHFf0T0imMs_TOqKpYAcVmh6Dcyc4Vyh4kIyspyHvHDpzo7ng6GKn2oFMw5i9TQEkKHfHojp1LkuSQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrjedvgdeklecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcu
-    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeehgedvve
-    dvleejuefgtdduudfhkeeltdeihfevjeekjeeuhfdtueefhffgheekteenucevlhhushht
-    vghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhh
-    drtghomh
-X-ME-Proxy: <xmx:YOCEY7n4C7JsOQVS82ceo0nQINa-Gy39fvPEkB7SPdl0ILt_9LFLDQ>
-    <xmx:YOCEYx3hXoXoHBTpwKJYp3PLCNL1IRROE4McUmHrfg3xedgptTK-wg>
-    <xmx:YOCEY6uDSDVbMhOTeMnyfbmZYv0ZBj01A85XkoGAw74aT1uP6-9WIA>
-    <xmx:YeCEY8QHIjo_-KtV4A50XwOqeWouIHbqCheKfbNQkBgjVfCaB1TuAA>
+        fm1; t=1669656958; x=1669743358; bh=aKzeEdpO8CH2HdtCvIgLs+oL7Gmi
+        AQ4112GY4wqfTWI=; b=f1yRnY6YIPO+eGpZwJ2dDhzN5NsfAWDVCFLu7llhxFQK
+        pxF7WqSzQmop2S4fQpGbCeWTgejZaDxvhh4f4JDkTmnPyxOEzNKgDEI1zT+6lWFr
+        UXfF8Gc5ZoWFUsNyqQpjOBw4D/Svz0eudlN/gffMUu/0VVKmoxIWHyrFbe2n6P+O
+        NZN2A50J3qibGqAcBONiEmzjdbyod04FJtT32NLqzGrfGBgErcwUP7x0mya6mt74
+        O/okDfGw0cwpM24Vbu3+AoOAFM5FvcDd+hFx8FV+64d/SPqfe9jbnuAg65r9uIMy
+        bSZAB2r/V1vlVGGAQN5GJYDN+0YsPSwEG2TEIov8xQ==
+X-ME-Sender: <xms:fvGEY4gWfV0CvjuvAIoQwPPzCqMepYewStgsvKQ_Tp-fGzb6P1rasg>
+    <xme:fvGEYxDk1i032FP_264JlWdq7NqIXkdnOWvQuppPIs8NUd-chqzMTRykcsLIdEwBx
+    ZIRZrRpuEWm3w>
+X-ME-Received: <xmr:fvGEYwHThauLr3zT9qfwb8PWXM5hHhLQ96l9DV_jzxsY7gSOL5WKqhJohp8GDStzmfqRUnDMjnRjNSlQH--tOw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrjedvgddutdehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
+    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepheegvd
+    evvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefhgfehkeetnecuvehluhhs
+    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
+    hhrdgtohhm
+X-ME-Proxy: <xmx:fvGEY5QpXevNtDvl2KVGxQgUf-1POuYwHKRTsXoeangq-QQ5A9yVVQ>
+    <xmx:fvGEY1xwudIgkaCCbdbCyLly6Ljn5EJ2ceBORjWImF_s7y_ZoJVgCQ>
+    <xmx:fvGEY34bnjFq4HNWf8EEoYptaMcTXk91X-7qz76Ei2pRWDXNmM1_oA>
+    <xmx:fvGEY3uiSMgp5Af3I3ZZiSjA4nNlfFyblURULTCgPodorhv9avtc5w>
 Feedback-ID: i787e41f1:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 28 Nov 2022 11:22:55 -0500 (EST)
-Date:   Mon, 28 Nov 2022 17:22:52 +0100
+ 28 Nov 2022 12:35:57 -0500 (EST)
+Date:   Mon, 28 Nov 2022 18:35:56 +0100
 From:   Greg KH <greg@kroah.com>
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
 Subject: Re: linux-next: build failure after merge of the driver-core tree
-Message-ID: <Y4TgXLb4EweoJb0k@kroah.com>
+Message-ID: <Y4TxfIFxbhciz9TJ@kroah.com>
 References: <20221128133600.14ce44bf@canb.auug.org.au>
  <Y4Sga+ONeDe9Q7yz@kroah.com>
  <20221128234408.7a4dec34@canb.auug.org.au>
@@ -124,7 +124,8 @@ On Mon, Nov 28, 2022 at 11:44:08PM +1100, Stephen Rothwell wrote:
 > 
 > You just need to add a commit to your tree that updates the missed cases.
 
-Odd, why is 0-day not triggering on any of these in my tree?   Anyway,
-I'll go fix it up, thanks...
+Ok, patch sent out, let's see if 0-day objects...
+
+thanks,
 
 greg k-h

@@ -2,120 +2,200 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF4DC63C29A
-	for <lists+linux-next@lfdr.de>; Tue, 29 Nov 2022 15:33:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBD0163C357
+	for <lists+linux-next@lfdr.de>; Tue, 29 Nov 2022 16:13:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235713AbiK2OdH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 29 Nov 2022 09:33:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41218 "EHLO
+        id S232360AbiK2PNx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 29 Nov 2022 10:13:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235700AbiK2Oc7 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 29 Nov 2022 09:32:59 -0500
-Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4052419C3B;
-        Tue, 29 Nov 2022 06:32:58 -0800 (PST)
-Received: by mail-qt1-f176.google.com with SMTP id w4so9012257qts.0;
-        Tue, 29 Nov 2022 06:32:58 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cUpgiPOMkAgUjLgo0dg2Z726lxhPTeHnNlTeQA4SUTQ=;
-        b=GeteOidpvqYjKCz/jyhd2M7AQAehzFktxBnw/6hlPGyth7PykRE01/YENAJ+S6d9TY
-         rbEcC3ZG9q1ymcLQ01HVmGAY6hwND+CytEDII1nIo4ZXNm+VFySX71gv37iXjWSJ8PEn
-         pxrOG7fHJtqPSTLgSu14EmM2K5OKVxK33EKRk6Z73cpQlk4mV5qVY+mvjhbyVlHmQ10r
-         cugBDmKqZrdzZ50f+na6Yo2RloG9vM3pOnJWso83eW+kKr28fSDmESpLGMlYe4ng0b64
-         HI9RuenmvkVJKQHOK/hY9P2gTbDCVMXDenssT6E22PBVP5KM5g8t0CLRspsMGZRwR7Zx
-         ZvYA==
-X-Gm-Message-State: ANoB5pkUGd/yfaaOQ10nTgvVs0MVJG6HUFwufGvbjhFCYLPxFQO1JHB8
-        RxDmK+JG9fCv6XW+2h4L2LH10xFsdePs4Q==
-X-Google-Smtp-Source: AA0mqf4D5XmrS2oPQ6h8AtbAoUUS0mgrIReyRagSbdTx0cKABISHDY0FjSwJl4ySFv64sNYam8MqNQ==
-X-Received: by 2002:a05:622a:4017:b0:3a5:4f7e:bab2 with SMTP id cf23-20020a05622a401700b003a54f7ebab2mr37871622qtb.527.1669732377131;
-        Tue, 29 Nov 2022 06:32:57 -0800 (PST)
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com. [209.85.128.174])
-        by smtp.gmail.com with ESMTPSA id bl38-20020a05620a1aa600b006fbb4b98a25sm10545595qkb.109.2022.11.29.06.32.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Nov 2022 06:32:56 -0800 (PST)
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-3bfd998fa53so87507957b3.5;
-        Tue, 29 Nov 2022 06:32:55 -0800 (PST)
-X-Received: by 2002:a0d:dc87:0:b0:370:61f5:b19e with SMTP id
- f129-20020a0ddc87000000b0037061f5b19emr51696728ywe.316.1669732374847; Tue, 29
- Nov 2022 06:32:54 -0800 (PST)
-MIME-Version: 1.0
-References: <20221117122904.6759427e@canb.auug.org.au> <20221128102212.39f90b0c@canb.auug.org.au>
- <1a60d0b2-c020-4fce-d7f2-3534c9e14c84@intel.com> <9ac3a182-fc30-0834-8555-a4ec334531ae@linaro.org>
- <Y4S8H/hn1EJzw8fL@debian.me> <70ee6a63-de17-100f-d4fd-8b23ab92bfee@linaro.org>
-In-Reply-To: <70ee6a63-de17-100f-d4fd-8b23ab92bfee@linaro.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 29 Nov 2022 15:32:43 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUc1xt+J6a-vfQ3uJiRYiU4Sda3XRjy89RqKSAv_zQBKQ@mail.gmail.com>
-Message-ID: <CAMuHMdUc1xt+J6a-vfQ3uJiRYiU4Sda3XRjy89RqKSAv_zQBKQ@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the thermal tree with the pm tree
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Zhang Rui <rui.zhang@intel.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Guenter Roeck <linux@roeck-us.net>,
+        with ESMTP id S229693AbiK2PNw (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 29 Nov 2022 10:13:52 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 709F9DFFB;
+        Tue, 29 Nov 2022 07:13:51 -0800 (PST)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ATF5BLa007838;
+        Tue, 29 Nov 2022 15:13:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=6DM+s6wNaCi7olYeyp2LZ8PKgJ1P1Ksw181EifA6oxE=;
+ b=mc1mq92bTJoaeKiyFeaY3lLG6+NUU4aeg6hAze4ZHzuwHVk7cuLtaUi1GMwTOLeYjrdi
+ VvSiEYHPEEzGeo1glTlZ3dntAgk2WNLwMzLGXqpXDV/z4G25VO/hEFo3P1MmvvJGw0pK
+ 0KhNiIqRcPpr0cS+8am/i3h33mo0BBslda1bJB1Hyrmp/TTc2GNrmcAj3Of4lhRVIb2u
+ VEB39LlSGytmtVk0Zse97DrZm1x+HGricSFM5tMVy1XdkwGzF5t+OBYlCJsR5DIpCJ3/
+ CNiEbd6tc4Y1uEA0wsPiq3APO+Q32/2Y3/c7rbj9OC3iXbS9Rb4wgiuLoL8Z7ejAxEZl oA== 
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m5mdhg6p9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 29 Nov 2022 15:13:33 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2ATF5aCK005278;
+        Tue, 29 Nov 2022 15:13:31 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma04ams.nl.ibm.com with ESMTP id 3m3ae9c8gb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 29 Nov 2022 15:13:31 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2ATFDTtn1180394
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 29 Nov 2022 15:13:29 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EAA2D11C04A;
+        Tue, 29 Nov 2022 15:13:28 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 01D8B11C04C;
+        Tue, 29 Nov 2022 15:13:27 +0000 (GMT)
+Received: from [9.109.198.140] (unknown [9.109.198.140])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 29 Nov 2022 15:13:26 +0000 (GMT)
+Message-ID: <6cdad32e-782d-5bb5-f7e9-a44fb0b6444d@linux.ibm.com>
+Date:   Tue, 29 Nov 2022 20:43:25 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: linux-next: build warnings after merge of the powerpc-objtool
+ tree
+Content-Language: en-US
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        PowerPC <linuxppc-dev@lists.ozlabs.org>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        rafael@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
+        Sathvika Vasireddy <sv@linux.ibm.com>
+References: <20221125143012.6426c2b9@canb.auug.org.au>
+From:   Sathvika Vasireddy <sv@linux.ibm.com>
+In-Reply-To: <20221125143012.6426c2b9@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: F2lH_XEpazIbiNeK9BvuK-gXke5aRu4x
+X-Proofpoint-GUID: F2lH_XEpazIbiNeK9BvuK-gXke5aRu4x
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-29_09,2022-11-29_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 priorityscore=1501
+ mlxlogscore=999 malwarescore=0 phishscore=0 impostorscore=0
+ lowpriorityscore=0 spamscore=0 suspectscore=0 clxscore=1011 adultscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211290083
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Daniel,
+Hi all,
 
-On Mon, Nov 28, 2022 at 3:08 PM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
-> On 28/11/2022 14:48, Bagas Sanjaya wrote:
-> > On Mon, Nov 28, 2022 at 02:22:27PM +0100, Daniel Lezcano wrote:
-> >> On 28/11/2022 13:51, Rafael J. Wysocki wrote:
-> >>> Sorry about this, but I cannot fix it myself and Daniel is on an
-> >>> extended leave.
-> >>>
-> >>> Can you just drop it permanently from linux-next and we'll sort this out
-> >>> when Daniel is back?
-> >>
-> >> Yes sorry for that, I'll go back in a couple of days and sort this out
-> >
-> > What about the upcoming merge window? At worst Linus has to figure
-> > out how to solve this complex conflict when pulling either tree...
-> >
-> > Linus has already said that there's likely -rc8 of current cycle [1],
-> > so we have about two weeks to try sorting out the conflict and be ready
-> > for PR to him.
+On 25/11/22 09:00, Stephen Rothwell wrote:
+> Hi all,
 >
-> Thanks for the pointer.
+> After merging the powerpc-objtool tree, today's linux-next build (powerpc
+> pseries_le_defconfig) produced these warnings:
 >
-> I've been quickly through the changes for the thermal tree and I think I
-> should be able to sort out most of the patches before the end of this
-> week, hopefully. If there are any changes which sound too complex, I'll
-> post pone them to the next release
+> arch/powerpc/kernel/head_64.o: warning: objtool: end_first_256B(): can't find starting instruction
+> arch/powerpc/kernel/optprobes_head.o: warning: objtool: optprobe_template_end(): can't find starting instruction
+>
+> I have no idea what started this (they may have been there yesterday).
+I was able to recreate the above mentioned warnings with 
+pseries_le_defconfig and powernv_defconfig. The regression report also 
+mentions a warning 
+(https://lore.kernel.org/oe-kbuild-all/202211282102.QUr7HHrW-lkp@intel.com/) 
+seen with arch/powerpc/kernel/kvm_emul.S assembly file.
 
-I gave it a try for today's renesas-drivers release.
-Does the conflict] resolution in [1] look good to you?
+  [1] arch/powerpc/kernel/optprobes_head.o: warning: objtool: 
+optprobe_template_end(): can't find starting instruction
+  [2] arch/powerpc/kernel/kvm_emul.o: warning: objtool: 
+kvm_template_end(): can't find starting instruction
+  [3] arch/powerpc/kernel/head_64.o: warning: objtool: end_first_256B(): 
+can't find starting instruction
 
-Thanks!
+The warnings [1] and [2] go away after adding 'nop' instruction. Below 
+diff fixes it for me:
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drivers.git/commit/?h=renesas-drivers-2022-11-29-v6.1-rc7&id=9b249c2e655ef25473afbcdae85453c66eb288be
+diff --git a/arch/powerpc/kernel/optprobes_head.S 
+b/arch/powerpc/kernel/optprobes_head.S
+index cd4e7bc32609..ea4e3bd82f4f 100644
+--- a/arch/powerpc/kernel/optprobes_head.S
++++ b/arch/powerpc/kernel/optprobes_head.S
+@@ -134,3 +134,4 @@ optprobe_template_ret:
 
-Gr{oetje,eeting}s,
+         .global optprobe_template_end
+  optprobe_template_end:
++       nop
 
-                        Geert
+diff --git a/arch/powerpc/kernel/kvm_emul.S b/arch/powerpc/kernel/kvm_emul.S
+index 7af6f8b50c5d..41fd664e3ba0 100644
+--- a/arch/powerpc/kernel/kvm_emul.S
++++ b/arch/powerpc/kernel/kvm_emul.S
+@@ -352,3 +352,4 @@ kvm_tmp_end:
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+  .global kvm_template_end
+  kvm_template_end:
++       nop
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+For warning [3], objtool is throwing can't find starting instruction 
+warning because it finds that the symbol (end_first_256B) is zero sized, 
+and such symbols are not added to the rbtree. I tried to fix it by 
+adding a 'nop' instruction (pasted diff below), but that resulted in a 
+kernel build failure.
+
+diff --git a/arch/powerpc/kernel/head_64.S b/arch/powerpc/kernel/head_64.S
+index 874efd25cc45..d48850fe159f 100644
+--- a/arch/powerpc/kernel/head_64.S
++++ b/arch/powerpc/kernel/head_64.S
+@@ -192,6 +192,7 @@ __secondary_hold:
+         EMIT_BUG_ENTRY 0b, __FILE__, __LINE__, 0
+  #endif
+  CLOSE_FIXED_SECTION(first_256B)
++nop
+
+  /*
+   * On server, we include the exception vectors code here as it
+
+diff --git a/arch/powerpc/kernel/exceptions-64s.S 
+b/arch/powerpc/kernel/exceptions-64s.S
+index 26f8fef53c72..f7517d443e9b 100644
+--- a/arch/powerpc/kernel/exceptions-64s.S
++++ b/arch/powerpc/kernel/exceptions-64s.S
+@@ -3104,9 +3104,13 @@ __end_interrupts:
+  DEFINE_FIXED_SYMBOL(__end_interrupts, virt_trampolines)
+
+  CLOSE_FIXED_SECTION(real_vectors);
++nop
+  CLOSE_FIXED_SECTION(real_trampolines);
++nop
+  CLOSE_FIXED_SECTION(virt_vectors);
++nop
+  CLOSE_FIXED_SECTION(virt_trampolines);
++nop
+
+  USE_TEXT_SECTION()
+
+I'm not very sure on how to address this particular warning 
+(arch/powerpc/kernel/head_64.o: warning: objtool: end_first_256B(): 
+can't find starting instruction). Given that there are no calls to 
+_mcount, one workaround is to skip objtool from running on 
+arch/powerpc/kernel/head_64.o file. The below diff works for me:
+
+diff --git a/arch/powerpc/kernel/Makefile b/arch/powerpc/kernel/Makefile
+index 9b6146056e48..9ef6a040d875 100644
+--- a/arch/powerpc/kernel/Makefile
++++ b/arch/powerpc/kernel/Makefile
+@@ -219,3 +219,5 @@ $(obj)/vdso64_wrapper.o : $(obj)/vdso/vdso64.so.dbg
+
+  # for cleaning
+  subdir- += vdso
++
++OBJECT_FILES_NON_STANDARD_head_64.o := y
+
+
+Thanks,
+Sathvika

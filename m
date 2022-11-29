@@ -2,103 +2,115 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C24E563BB8C
-	for <lists+linux-next@lfdr.de>; Tue, 29 Nov 2022 09:29:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 071BE63BC87
+	for <lists+linux-next@lfdr.de>; Tue, 29 Nov 2022 10:07:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230425AbiK2I31 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 29 Nov 2022 03:29:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40850 "EHLO
+        id S229915AbiK2JHr (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 29 Nov 2022 04:07:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230433AbiK2I2z (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 29 Nov 2022 03:28:55 -0500
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 592F22D4;
-        Tue, 29 Nov 2022 00:28:12 -0800 (PST)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id C1A7F5C013F;
-        Tue, 29 Nov 2022 03:28:09 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Tue, 29 Nov 2022 03:28:09 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1669710489; x=1669796889; bh=oJL+vWNc8V
-        oEVmSHLNBSd0VMgyTgBe9/oE+igmrFcKM=; b=UciQKjoac7RQ7y0jT76YjelVZd
-        Wg7lOP1uLFHu8vWGye1FPnYNX3eklj0g0viHLo3DzBha3C0WZ5zUo1PbAQoIt+dR
-        ndzMfCZY0Ci4cyzFh/YJlolkQKws4HOBwQKE9Fuuao5oDhE2OWSV9Zjhc03ezcPT
-        rbKrg31+X2AaIfDRekVczGLbRhqnmzQlpav9cIo8qQq46VP/+E9dqZwxcFgEqaVI
-        OFY0qVVqJC9EvaPwKe8l4IWV137Bj69jj/kiY7x5LorAKF2kLS2tKQty80YX0ohp
-        AuVsnROFm/fPYQ+EHtAQwgqD/FbdmgieJxhR3Ln2J3yri6AorxG/+wgVQv/A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1669710489; x=1669796889; bh=oJL+vWNc8VoEVmSHLNBSd0VMgyTg
-        Be9/oE+igmrFcKM=; b=TkUUIZh9MTpyv4uVgmRcXSDUJrJGwAEU6xN8Wd0vaVVP
-        TKFYc2NMjsNpVpl2DNFzuA9rHjkG1ThhS5bYzmJsQ0RMC88+yHUfkmDDiE/hLAqW
-        fzbru+D+saF+bo6zzA3Gl0wx9UWTNdnGbLuQX7TVmVKyJefZVJDNCt1GuT557vnQ
-        zoXdKQ1Pi9vF+33C+07be2t+C8dFCGGtfaczknF12hG6F/EJ5Dd0g6EBXjOMRdgw
-        ZYUSWnVBi3MpzjBGFSXGGF+/TO7sX3k8qW5DVGA60NebQf5+2FaEheRbde52g8y/
-        Tkr8xOhSQMJxUDHB5DDRQpz2xwy08yKikqCopvDgbQ==
-X-ME-Sender: <xms:mcKFY8hUTxOqcRe0oMDhjKi-k-4jYcYf-ssywbD05JoKUEe6wL3NQA>
-    <xme:mcKFY1DlSF9XcTr8cijlT0JH6FZXnpV2u-J2Usu1ycRC_S3KYXo2-6eXriIT43dN_
-    9oy6545PEas7w>
-X-ME-Received: <xmr:mcKFY0HbL83eouHfJO2XS9sY10jZfZkrGppdRsJ0nY4TBdyUbxDm0aNB3yZ2Bms5-c9ogq0sBhpRkZxcnqowgg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrjeefgdduvdduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
-    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepheegvd
-    evvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefhgfehkeetnecuvehluhhs
-    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
-    hhrdgtohhm
-X-ME-Proxy: <xmx:mcKFY9QsLB-yqoycY16ripkRIeVdk_8-f3WxVdby0JIZr27FxtdqGA>
-    <xmx:mcKFY5xSyV2MDFYYBAxL4Cmeq1eDObbvYmHf9t-XPZvzEEfz2CE52Q>
-    <xmx:mcKFY77wpr-4dz8QbV1ZGTY-OFde7KDIQLz5qhkq9eKpOZgOH0LNFg>
-    <xmx:mcKFY7s2iC50O1RV_URyLB_h5K81MxzWf761qqCEN9WkBaZ5BzxA5g>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 29 Nov 2022 03:28:08 -0500 (EST)
-Date:   Tue, 29 Nov 2022 09:28:05 +0100
-From:   Greg KH <greg@kroah.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the driver-core tree
-Message-ID: <Y4XClZLzBoRZm/7Y@kroah.com>
-References: <20221128133600.14ce44bf@canb.auug.org.au>
- <Y4Sga+ONeDe9Q7yz@kroah.com>
- <20221128234408.7a4dec34@canb.auug.org.au>
- <Y4TgXLb4EweoJb0k@kroah.com>
- <20221129064605.1aadc0e6@canb.auug.org.au>
+        with ESMTP id S231733AbiK2JHp (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 29 Nov 2022 04:07:45 -0500
+Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECF92E15;
+        Tue, 29 Nov 2022 01:07:39 -0800 (PST)
+Received: by mail-qv1-f54.google.com with SMTP id a17so7515649qvt.9;
+        Tue, 29 Nov 2022 01:07:39 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pRTrs4STHN19HAaWZ6G6ImvhRFTGcXTwtf66lKxgXXI=;
+        b=GtOdZts36iebJA8PYmMx1GVhOxv4n7P6T8nROrX/B40iTpR69UEK/HUFZ+Js54/Sdv
+         xfbTPUhhJHOob6GO8Jzyiq7tOV8T7hb44Fqev2ty7kK0ojuU14DMLwWysL4kkQOyQ7Ib
+         Uk6gYukybiMBgQjOfGRogV1Q6C+6hXPH67bYUdNO8z4xw+o7rmaabqhQLRkG/1RADSmZ
+         KLghesI/s7ueArFzP321xzGje8GaBoHT2ndCURsuLm2oIRPtLY2rvbaqNjtIArbgLseQ
+         2E0Q7s2SOCVep5gAZnTxHcd08Oh0e+lQG2BxvPUC2ZaEOYAyWzxPWnAOXmw//UeQ1FRu
+         rEyg==
+X-Gm-Message-State: ANoB5pk16bF13h3EktD0HrIZYs/qZCmbBBG/jYTsPhnPG64Dz+/DcECR
+        neg3AyLBA5DBwvWRpPSIhGmOAQ8qIb+u8A==
+X-Google-Smtp-Source: AA0mqf5rh86N1EzKg1VnvN+gI0tAXW+F7Y2j/jVCR/5AeIvTWfQ+JUph+GUug7M2jEud3VzF9pAGEw==
+X-Received: by 2002:a0c:9067:0:b0:4bb:a664:4165 with SMTP id o94-20020a0c9067000000b004bba6644165mr32920099qvo.84.1669712858661;
+        Tue, 29 Nov 2022 01:07:38 -0800 (PST)
+Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com. [209.85.219.175])
+        by smtp.gmail.com with ESMTPSA id f20-20020a05620a409400b006e16dcf99c8sm10189399qko.71.2022.11.29.01.07.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 29 Nov 2022 01:07:37 -0800 (PST)
+Received: by mail-yb1-f175.google.com with SMTP id d128so16602508ybf.10;
+        Tue, 29 Nov 2022 01:07:37 -0800 (PST)
+X-Received: by 2002:a25:7408:0:b0:6f2:49a7:38ef with SMTP id
+ p8-20020a257408000000b006f249a738efmr20678381ybc.365.1669712857595; Tue, 29
+ Nov 2022 01:07:37 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221129064605.1aadc0e6@canb.auug.org.au>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221128105844.315bb58a@canb.auug.org.au>
+In-Reply-To: <20221128105844.315bb58a@canb.auug.org.au>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 29 Nov 2022 10:07:26 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXkDOn+J-Tjd_nDpkAKYXBhHVtNWSrLrkiGjpvYYXJkEg@mail.gmail.com>
+Message-ID: <CAMuHMdXkDOn+J-Tjd_nDpkAKYXBhHVtNWSrLrkiGjpvYYXJkEg@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the drm tree with Linus' tree
+To:     Dave Airlie <airlied@redhat.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        "Stanley.Yang" <Stanley.Yang@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Nov 29, 2022 at 06:46:05AM +1100, Stephen Rothwell wrote:
-> Hi Greg,
-> 
-> On Mon, 28 Nov 2022 17:22:52 +0100 Greg KH <greg@kroah.com> wrote:
-> >
-> > Odd, why is 0-day not triggering on any of these in my tree?   Anyway,
-> > I'll go fix it up, thanks...
-> 
-> Does 0-day do powerpc builds?
+Hi DRm people,
 
-I thought it did, based on other problems I have had reported.  I'll go
-queue this fix up now.
+On Mon, Nov 28, 2022 at 1:02 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> Today's linux-next merge of the drm tree got a conflict in:
+>
+>   drivers/gpu/drm/amd/amdgpu/amdgpu_job.c
+>
+> between commits:
+>
+>   3cb93f390453 ("drm/amdgpu: fix use-after-free during gpu recovery")
+>   b09d6acba1d9 ("drm/amdgpu: handle gang submit before VMID")
+>
+> from Linus' tree and commits:
+>
+>   1b2d5eda5ad7 ("drm/amdgpu: move explicit sync check into the CS")
+>   1728baa7e4e6 ("drm/amdgpu: use scheduler dependencies for CS")
+>   c5093cddf56b ("drm/amdgpu: drop the fence argument from amdgpu_vmid_grab")
+>   940ca22b7ea9 ("drm/amdgpu: drop amdgpu_sync from amdgpu_vmid_grab v2")
+>   1b2d5eda5ad7 ("drm/amdgpu: move explicit sync check into the CS")
+>   1728baa7e4e6 ("drm/amdgpu: use scheduler dependencies for CS")
+>
+> from the drm tree.
+>
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
 
-thanks,
+Have you considered merging drm-fixes into drm-next, so not everyone
+who consumes your trees needs to resolve the same merge conflicts?
 
-greg k-h
+Thanks!
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

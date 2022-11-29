@@ -2,170 +2,103 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFE9B63B9B2
-	for <lists+linux-next@lfdr.de>; Tue, 29 Nov 2022 07:12:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C24E563BB8C
+	for <lists+linux-next@lfdr.de>; Tue, 29 Nov 2022 09:29:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235287AbiK2GMu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 29 Nov 2022 01:12:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44902 "EHLO
+        id S230425AbiK2I31 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 29 Nov 2022 03:29:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235392AbiK2GMs (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 29 Nov 2022 01:12:48 -0500
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C2B663C6
-        for <linux-next@vger.kernel.org>; Mon, 28 Nov 2022 22:12:42 -0800 (PST)
-Received: by mail-pf1-x430.google.com with SMTP id a16so12306322pfg.4
-        for <linux-next@vger.kernel.org>; Mon, 28 Nov 2022 22:12:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=ylL3m3WkiaiBb1U9qwe4tuLSx4Mx2eaOKu2W3qoSE8Y=;
-        b=lv55r+mlSlbVQnCi52eOzK4BpcrWtRoTtCFUHu+eQgVGDe8Yo0XMMursc6ylZ5q5BH
-         AKUAk0CV37EkOMi5XsmFLI4SUuYoUW9eYZ0+lthNSRtkoADSvlNjV7/Jag7upNK6LTnA
-         ZURRXp/LdOJboaICjTjMa50YFEOiD3ivV5B3o0scKcLixPjrlW91UP8km5Yx09zXxHoy
-         DdzxjK5oiXnHEB7mXR5AAsftYLMvkHXZzd4s3CE7xhhQI/14F1VFwZDHZiA7I+fk22Bq
-         UwZ5Qy3aK1wdf9GY1diBsgxh7w95LlZMJPnOGRi0ho+NiPtThFS+t+fCY3Lh4B8YGV7i
-         rIjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ylL3m3WkiaiBb1U9qwe4tuLSx4Mx2eaOKu2W3qoSE8Y=;
-        b=W+AKivRJEy8Nm+GGtiOWRuajxAo7ro/8UqQ96bVmQCQsYfIJ11H3Pc438LlvOjiByP
-         CTypdiNIZKIohSr7Mx2CnRJh9nF+MFSZw0PoFoCVdA45w11kHKUgsv6+r1qB2hD5I0++
-         cdyWJ/RQLi1DnJ3kcB1xjJi3mnbkcYc5n6GZUNmF+FQUEyYOU+hWliQLlbqXHKwvfES+
-         wlAUCbG//3Z8XboSFJgWru9BYXht3vW41R41xArWZ1JQtA9pqLz/q2XWxA5jpWFU6KaX
-         dD5AYagbEbbcI0NeTKHdB67SnN3iRhBb3HqVT87H1O0mtzWPvl+2YTLhgLRKKBWRuQEa
-         lz0Q==
-X-Gm-Message-State: ANoB5pmcri4lUxwvRv9ojg7TdTzyAAYvHQ9hBW59BT4rjU5R9sV4uRsP
-        co/AEyLwVzDFNZqKhAa8Ao+tXAcCPRUojVe200o=
-X-Google-Smtp-Source: AA0mqf6xdEI2VBVXXEpnJuGcVhK1qDFB7paclxlmv0xCQ0v41Vq+u/lRTBfEOQNbIZv8E/7Yc2Wkgg==
-X-Received: by 2002:a63:ef07:0:b0:476:aad3:9121 with SMTP id u7-20020a63ef07000000b00476aad39121mr32271832pgh.385.1669702361134;
-        Mon, 28 Nov 2022 22:12:41 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id q15-20020a17090a178f00b002132f3e71c6sm489023pja.52.2022.11.28.22.12.40
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Nov 2022 22:12:40 -0800 (PST)
-Message-ID: <6385a2d8.170a0220.fe651.0e82@mx.google.com>
-Date:   Mon, 28 Nov 2022 22:12:40 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S230433AbiK2I2z (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 29 Nov 2022 03:28:55 -0500
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 592F22D4;
+        Tue, 29 Nov 2022 00:28:12 -0800 (PST)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id C1A7F5C013F;
+        Tue, 29 Nov 2022 03:28:09 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Tue, 29 Nov 2022 03:28:09 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1669710489; x=1669796889; bh=oJL+vWNc8V
+        oEVmSHLNBSd0VMgyTgBe9/oE+igmrFcKM=; b=UciQKjoac7RQ7y0jT76YjelVZd
+        Wg7lOP1uLFHu8vWGye1FPnYNX3eklj0g0viHLo3DzBha3C0WZ5zUo1PbAQoIt+dR
+        ndzMfCZY0Ci4cyzFh/YJlolkQKws4HOBwQKE9Fuuao5oDhE2OWSV9Zjhc03ezcPT
+        rbKrg31+X2AaIfDRekVczGLbRhqnmzQlpav9cIo8qQq46VP/+E9dqZwxcFgEqaVI
+        OFY0qVVqJC9EvaPwKe8l4IWV137Bj69jj/kiY7x5LorAKF2kLS2tKQty80YX0ohp
+        AuVsnROFm/fPYQ+EHtAQwgqD/FbdmgieJxhR3Ln2J3yri6AorxG/+wgVQv/A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1669710489; x=1669796889; bh=oJL+vWNc8VoEVmSHLNBSd0VMgyTg
+        Be9/oE+igmrFcKM=; b=TkUUIZh9MTpyv4uVgmRcXSDUJrJGwAEU6xN8Wd0vaVVP
+        TKFYc2NMjsNpVpl2DNFzuA9rHjkG1ThhS5bYzmJsQ0RMC88+yHUfkmDDiE/hLAqW
+        fzbru+D+saF+bo6zzA3Gl0wx9UWTNdnGbLuQX7TVmVKyJefZVJDNCt1GuT557vnQ
+        zoXdKQ1Pi9vF+33C+07be2t+C8dFCGGtfaczknF12hG6F/EJ5Dd0g6EBXjOMRdgw
+        ZYUSWnVBi3MpzjBGFSXGGF+/TO7sX3k8qW5DVGA60NebQf5+2FaEheRbde52g8y/
+        Tkr8xOhSQMJxUDHB5DDRQpz2xwy08yKikqCopvDgbQ==
+X-ME-Sender: <xms:mcKFY8hUTxOqcRe0oMDhjKi-k-4jYcYf-ssywbD05JoKUEe6wL3NQA>
+    <xme:mcKFY1DlSF9XcTr8cijlT0JH6FZXnpV2u-J2Usu1ycRC_S3KYXo2-6eXriIT43dN_
+    9oy6545PEas7w>
+X-ME-Received: <xmr:mcKFY0HbL83eouHfJO2XS9sY10jZfZkrGppdRsJ0nY4TBdyUbxDm0aNB3yZ2Bms5-c9ogq0sBhpRkZxcnqowgg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrjeefgdduvdduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
+    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepheegvd
+    evvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefhgfehkeetnecuvehluhhs
+    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
+    hhrdgtohhm
+X-ME-Proxy: <xmx:mcKFY9QsLB-yqoycY16ripkRIeVdk_8-f3WxVdby0JIZr27FxtdqGA>
+    <xmx:mcKFY5xSyV2MDFYYBAxL4Cmeq1eDObbvYmHf9t-XPZvzEEfz2CE52Q>
+    <xmx:mcKFY77wpr-4dz8QbV1ZGTY-OFde7KDIQLz5qhkq9eKpOZgOH0LNFg>
+    <xmx:mcKFY7s2iC50O1RV_URyLB_h5K81MxzWf761qqCEN9WkBaZ5BzxA5g>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 29 Nov 2022 03:28:08 -0500 (EST)
+Date:   Tue, 29 Nov 2022 09:28:05 +0100
+From:   Greg KH <greg@kroah.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the driver-core tree
+Message-ID: <Y4XClZLzBoRZm/7Y@kroah.com>
+References: <20221128133600.14ce44bf@canb.auug.org.au>
+ <Y4Sga+ONeDe9Q7yz@kroah.com>
+ <20221128234408.7a4dec34@canb.auug.org.au>
+ <Y4TgXLb4EweoJb0k@kroah.com>
+ <20221129064605.1aadc0e6@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: master
-X-Kernelci-Kernel: next-20221129
-X-Kernelci-Report-Type: build
-X-Kernelci-Tree: next
-Subject: next/master build: 14 builds: 0 failed, 14 passed (next-20221129)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221129064605.1aadc0e6@canb.auug.org.au>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master build: 14 builds: 0 failed, 14 passed (next-20221129)
+On Tue, Nov 29, 2022 at 06:46:05AM +1100, Stephen Rothwell wrote:
+> Hi Greg,
+> 
+> On Mon, 28 Nov 2022 17:22:52 +0100 Greg KH <greg@kroah.com> wrote:
+> >
+> > Odd, why is 0-day not triggering on any of these in my tree?   Anyway,
+> > I'll go fix it up, thanks...
+> 
+> Does 0-day do powerpc builds?
 
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20221129/
+I thought it did, based on other problems I have had reported.  I'll go
+queue this fix up now.
 
-Tree: next
-Branch: master
-Git Describe: next-20221129
-Git Commit: 13ee7ef407cfcf63f4f047460ac5bb6ba5a3447d
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Built: 3 unique architectures
+thanks,
 
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config (arm64, clang-13=
-) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+arm64-chromebook=
- (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatch=
-es
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-mediatek.flavour.config+arm64-chromeb=
-ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
-tches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-qualcomm.flavour.config+arm64-chromeb=
-ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
-tches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-rockchip64.flavour.config+arm64-chrom=
-ebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mis=
-matches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (arm, clang-13) =
-=E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (arm, clang-1=
-3) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromeos-amd-stoneyridge.flavour.config+x86-chr=
-omebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
-mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromeos-intel-denverton.flavour.config+x86-chr=
-omebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
-mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromeos-intel-pineview.flavour.config+x86-chro=
-mebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config (x86_64, clang=
--13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config+x86-chromebook=
- (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatc=
-hes
-
----------------------------------------------------------------------------=
------
-defconfig+arm64-chromebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 wa=
-rnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86-chromebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors=
-, 0 warnings, 0 section mismatches
-
----
-For more info write to <info@kernelci.org>
+greg k-h

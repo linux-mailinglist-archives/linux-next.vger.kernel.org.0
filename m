@@ -2,83 +2,50 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D40C63DC4A
-	for <lists+linux-next@lfdr.de>; Wed, 30 Nov 2022 18:46:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 136B163E3CA
+	for <lists+linux-next@lfdr.de>; Wed, 30 Nov 2022 23:57:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229457AbiK3Rqc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 30 Nov 2022 12:46:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42278 "EHLO
+        id S229563AbiK3W5M (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 30 Nov 2022 17:57:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229728AbiK3Rqb (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 30 Nov 2022 12:46:31 -0500
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D22D0578CB;
-        Wed, 30 Nov 2022 09:46:30 -0800 (PST)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id 3C39D5C0062;
-        Wed, 30 Nov 2022 12:46:30 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Wed, 30 Nov 2022 12:46:30 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1669830390; x=1669916790; bh=AX14omH+eL
-        twVKen9On23t4YSDHGeBv/Kh1/CUrTnIE=; b=O/Ta0QsZss2vz+iVG6ZFk4XXs1
-        3KefWo7WgGzXkwfy2IGOUZ9HJdDpF3HIzYmomQsfzLRMQm+S3+yJ4GFM5FjZLl1E
-        qb6ryyTEqiYcTauXClTMld7WpmB78Frfgr32WjGSZoz6EYWO/MjalWJiLE15F1zY
-        XF22uosHneUcpsa2UeifUTh4j7GvRpnbGOqL2yJSn+KoCkrDMnMvxH/zMM76SH3X
-        aCN2ap8jJW5LGodllfPUH24wsgN48gr0N5D+pRNsItcIt6NzHjg5iLC/ITiwDb5m
-        0DVj8MiBFnqtaKltVqRkDZ9Dli9g9/wIrOCmBcPL7Y29x/s6+Bhn9WqT90Ew==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1669830390; x=1669916790; bh=AX14omH+eLtwVKen9On23t4YSDHG
-        eBv/Kh1/CUrTnIE=; b=d0VMU6HOV6XtYFycWXYUSdlOw+P3pqKVfd4cmBXRXDhk
-        +SrfJgJh3Sj/cz2dGBs7hW2xnLbZZ7Lmi/MnEIElyA5mWNMdDOXsDGblp1/d0e09
-        /472B6YkP+0qvDh+zDgOVoC9wbchl+J2Rhtt66By3og3T2voZI0+nbgA09dV/GUB
-        KMAqCI4xFPcj5ouKxrpStGgOTn5DLnuQElKuow6q504aCa7La2pBxj08vVffYOke
-        DTlFGiYv4GSijFLTSmMyNBw1IiOqHmxWa1Fd+m1kTEtQYvY5jnzwPyS4F+5CwtbC
-        hNhYrQDnbxgJEhvlnemC06coByK8SqDNzrVnuAIMig==
-X-ME-Sender: <xms:9ZaHY7wzDMdfFiffrdhhQJ5fs6PND2OJrkgwrmjgE7gre4Ddd5NRrg>
-    <xme:9ZaHYzQL87dx5rPEzGL-KLjTKYTZPcOejfUcOPF2DNhCupzskEQYCbmiyENJfwbj2
-    S4XntlmWaDHxQ>
-X-ME-Received: <xmr:9ZaHY1XV3BH3mOk4_n7N1doloqaw2_RRtpDn2dVRZWdJEAjTVccFFPlFKmaL2sWkqJHFtFVX3ugP6Q2lC9eszQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrtdefgddutdefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
-    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepheegvd
-    evvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefhgfehkeetnecuvehluhhs
-    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
-    hhrdgtohhm
-X-ME-Proxy: <xmx:9ZaHY1if8KdKzbqyXIJXseNVsoW2TKua_qa_yEwFQpdM9zWW_mLm8A>
-    <xmx:9ZaHY9CsACLOS9Vlrtc1UvP-JEioZdjX1N8SeVTb9eZjovxkjnniRw>
-    <xmx:9ZaHY-IQM0bYxibdlP0sMKFjkN0kV6h5p0qhd-tdL6-umctimXPiig>
-    <xmx:9paHY_3_HT9TFk0e134-fO1FPgC2xu4KdPf8CWb-sDZ20nFF3UugHg>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 30 Nov 2022 12:46:29 -0500 (EST)
-Date:   Wed, 30 Nov 2022 18:46:26 +0100
-From:   Greg KH <greg@kroah.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        with ESMTP id S229514AbiK3W5M (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 30 Nov 2022 17:57:12 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B97192A0A;
+        Wed, 30 Nov 2022 14:57:09 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NMvjD3ktTz4xGM;
+        Thu,  1 Dec 2022 09:57:04 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1669849025;
+        bh=lH3ZdNsbzBDqZQvPGPjYU5CgMs8PuJgaZZ7rFv3jwkY=;
+        h=Date:From:To:Cc:Subject:From;
+        b=dPhWv0FYg+1/xZLFLgSXaQDwgo7cEg9x/dRCSwEVx7gVbMk2Cpwx36VExiqtLvz+N
+         l6Ncul0o4h0Ekk9S0/Qnne+YlEy4b+sG+chOKvsJ8y95cRg6RFfBLhnD2u7cE00vFC
+         KChZxC+sbFwRBwAsm9bYhUBxRBwI7W58jkthMUz7tTwkGGrByD1VCOlrxKztTxsD6G
+         QvcNU+qKTizVa8Xbk5h8RWRaUbdiCX7SI1WbW0QYCry00F2CrMXfU5h9KNJxVOF0Pb
+         WfFfdf+i7i26kw+67Ru2ZjPeny7h43IVV0czp82qnDqnO8Vp/JPyaoJ+kHdVGCogX7
+         HWAIwX2rsrfjg==
+Date:   Thu, 1 Dec 2022 09:57:00 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Dave Airlie <airlied@redhat.com>,
+        DRI <dri-devel@lists.freedesktop.org>
+Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the usb tree
-Message-ID: <Y4eW8vv2yeyDkAiF@kroah.com>
-References: <20221130131854.35b58b16@canb.auug.org.au>
- <Y4c11VtMQ64W1U+i@kroah.com>
- <Y4c3YwZqFGhJZN1L@smile.fi.intel.com>
- <Y4eWVSmMjmntrq3U@smile.fi.intel.com>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Matt Roper <matthew.d.roper@intel.com>
+Subject: linux-next: manual merge of the drm tree with Linus' tree
+Message-ID: <20221201095700.7325e73a@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y4eWVSmMjmntrq3U@smile.fi.intel.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+Content-Type: multipart/signed; boundary="Sig_/oxECwUXRyVqokrbyUg1Ffx.";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,30 +53,93 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Nov 30, 2022 at 07:43:49PM +0200, Andy Shevchenko wrote:
-> On Wed, Nov 30, 2022 at 12:58:43PM +0200, Andy Shevchenko wrote:
-> > On Wed, Nov 30, 2022 at 11:52:05AM +0100, Greg KH wrote:
-> > > On Wed, Nov 30, 2022 at 01:18:54PM +1100, Stephen Rothwell wrote:
-> 
-> ...
-> 
-> > > Andy, I'm going to revert this series from the USB tree now, please fix
-> > > it up and resend.
-> > 
-> > Sure. I think I will rename in my series list_count() to list_count_nodes().
-> > This will be less invasive and should solve the issue(s).
-> > 
-> > $ git grep -n -lw list_count
-> > drivers/block/z2ram.c
-> > drivers/gpu/drm/i915/gt/intel_engine_cs.c
-> > drivers/scsi/hptiop.c
-> > drivers/scsi/hptiop.h
-> > drivers/xen/unpopulated-alloc.c
-> > 
-> > $ git grep -n -lw list_count_nodes
-> 
-> v5 had been sent.
+--Sig_/oxECwUXRyVqokrbyUg1Ffx.
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks, I'll get to it in a few days when I catch up on USB changes.
+Hi all,
 
-greg k-h
+Today's linux-next merge of the drm tree got a conflict in:
+
+  drivers/gpu/drm/i915/gt/intel_gt.c
+
+between commit:
+
+  04aa64375f48 ("drm/i915: fix TLB invalidation for Gen12 video and compute=
+ engines")
+
+from Linus' tree and commit:
+
+  46c507f03a46 ("drm/i915/gt: Always use MCR functions on multicast registe=
+rs")
+
+from the drm tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/gpu/drm/i915/gt/intel_gt.c
+index 7caa3412a244,0325f071046c..000000000000
+--- a/drivers/gpu/drm/i915/gt/intel_gt.c
++++ b/drivers/gpu/drm/i915/gt/intel_gt.c
+@@@ -1018,16 -1103,17 +1108,22 @@@ static void mmio_invalidate_full(struc
+  		if (!intel_engine_pm_is_awake(engine))
+  			continue;
+ =20
+- 		rb =3D get_reg_and_bit(engine, regs =3D=3D gen8_regs, regs, num);
+- 		if (!i915_mmio_reg_offset(rb.reg))
+- 			continue;
+-=20
+- 		if (GRAPHICS_VER(i915) =3D=3D 12 && (engine->class =3D=3D VIDEO_DECODE_=
+CLASS ||
+- 		    engine->class =3D=3D VIDEO_ENHANCEMENT_CLASS ||
+- 		    engine->class =3D=3D COMPUTE_CLASS))
+- 			rb.bit =3D _MASKED_BIT_ENABLE(rb.bit);
+-=20
+- 		intel_uncore_write_fw(uncore, rb.reg, rb.bit);
++ 		if (GRAPHICS_VER_FULL(i915) >=3D IP_VER(12, 50)) {
++ 			intel_gt_mcr_multicast_write_fw(gt,
++ 							xehp_regs[engine->class],
++ 							BIT(engine->instance));
++ 		} else {
++ 			rb =3D get_reg_and_bit(engine, regs =3D=3D gen8_regs, regs, num);
++ 			if (!i915_mmio_reg_offset(rb.reg))
++ 				continue;
++=20
+++			if (GRAPHICS_VER(i915) =3D=3D 12 && (engine->class =3D=3D VIDEO_DECODE=
+_CLASS ||
+++			    engine->class =3D=3D VIDEO_ENHANCEMENT_CLASS ||
+++			    engine->class =3D=3D COMPUTE_CLASS))
+++				rb.bit =3D _MASKED_BIT_ENABLE(rb.bit);
+++
++ 			intel_uncore_write_fw(uncore, rb.reg, rb.bit);
++ 		}
+  		awake |=3D engine->mask;
+  	}
+ =20
+
+--Sig_/oxECwUXRyVqokrbyUg1Ffx.
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOH37wACgkQAVBC80lX
+0GzfMwf/Qepx3h9aOZxYgOEt7rWD7j5qK0RXF6BWoM3cH7eFzzP5/+fFuLrXB2ma
+ZVZVrSZYw3hUps2CuxGuPGGvlfl+p+PWT3r8RQYOeYeh1a9r2eFPIghL8k9PALz8
+Qw0StT3jlOwiq4YiUNgKQL54SCG2AxLKZTRuzZ7rig1RWFASuOk6gCdMJZlcygjf
+pA7WdCwXtJl+7dw9Qx5rJtdYXktuEiFeFz7Ne+Jw1bFjocKFOirlUsBuDfmOOcfn
+bK2L1o8zU7WfJAKUXyfkVvgJniEkb1E0cV7O5ZmMdowXPV1b2AnD7mRZZVoDgqHO
+L8tmtAccPuBye0y+9nrd8WUdcJG/ww==
+=+Eex
+-----END PGP SIGNATURE-----
+
+--Sig_/oxECwUXRyVqokrbyUg1Ffx.--

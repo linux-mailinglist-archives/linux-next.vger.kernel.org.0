@@ -2,44 +2,46 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02BDE63CD3D
-	for <lists+linux-next@lfdr.de>; Wed, 30 Nov 2022 03:19:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B3AE63CD8A
+	for <lists+linux-next@lfdr.de>; Wed, 30 Nov 2022 03:54:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230293AbiK3CTE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 29 Nov 2022 21:19:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42024 "EHLO
+        id S232445AbiK3CyU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 29 Nov 2022 21:54:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbiK3CTD (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 29 Nov 2022 21:19:03 -0500
+        with ESMTP id S229610AbiK3CyT (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 29 Nov 2022 21:54:19 -0500
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CB355E3FB;
-        Tue, 29 Nov 2022 18:19:02 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC8A549B56;
+        Tue, 29 Nov 2022 18:54:17 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NMNDb6pkpz4x1R;
-        Wed, 30 Nov 2022 13:18:55 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NMP1L45g5z4x2c;
+        Wed, 30 Nov 2022 13:54:14 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1669774736;
-        bh=kD4blEFge91GWwdYs77NTKaflNYGmYoRLiHgReBp9Sk=;
+        s=201702; t=1669776856;
+        bh=rmbLL7A/OECr8Pm7FvnSrW7zvHrKAED2jbkgPYet9Ho=;
         h=Date:From:To:Cc:Subject:From;
-        b=QkP+v0bqsRghlRA0gw4sY4DrVsYQkZwjoWmqj5l2Ge6yvY+fVISK5CRSn4mM77XCZ
-         +Ywguu/h9Js5vNPGwIPlnmmpF1pyOV4TNRxS3YG0Aa4OsvVfXwKAlDsWArZC2v5KOV
-         OMX4XustRiIzWQF8M8nKqkuS/+l7kQXhuNTJcpC2brfen24yd29hUiL+SKHe3ZAhQG
-         8aH0KVbP14KEVEgPuZNbFkvdqM/PeVAdAP7mOGF2O86TmAFC6pY0CIucX+lOQ+SE2g
-         bVXiW/jVrNIvR59+9Mjyj01T9kFC8xk5lh/MqRyf2xImFP2ewIg5EvM258FGdAynzD
-         l9GtiJW4aPY3w==
-Date:   Wed, 30 Nov 2022 13:18:54 +1100
+        b=jRPZgKvUFFdPP2V9StpxYv1pIomCDRzyiTKUqZ+f1tqvXVmVQ9D5Rx0LiiarZ0HHN
+         eX9dBAbMXFovt71W8l9wFBLRoBQiDKsi0ZJSFkHGDZcAzfD1jgjCsngvm/IpVuq0po
+         9fPLGuliRegoiTxHwo7HLhK2YIcRw5gtfdu+zRBjZSigvzdpgHJZThHzidOsISsa+r
+         uTQqdT+qgcAHxZw1jqBN+HU7/sFRzHj04xi8HI/pGwUjvmP71jNQ2HUDjmBx2y91Sr
+         zLm8OmFaRwuoUHlJ47FGTlBwyHK7hEJabnhvJsbM910CiCPU5Mnq+pKHN4Ids6xSFn
+         KlXvohHcOLkoQ==
+Date:   Wed, 30 Nov 2022 13:54:13 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Greg KH <greg@kroah.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+To:     Ard Biesheuvel <ardb@kernel.org>,
+        Huacai Chen <chenhuacai@loongson.cn>
+Cc:     Binbin Zhou <zhoubinbin@loongson.cn>,
+        Huacai Chen <chenhuacai@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the usb tree
-Message-ID: <20221130131854.35b58b16@canb.auug.org.au>
+Subject: linux-next: manual merge of the efi tree with the loongarch tree
+Message-ID: <20221130135413.140c850b@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/9Y/Rr6rWsLMj+Xb=jl/s9KQ";
+Content-Type: multipart/signed; boundary="Sig_/YF9Fup445u6o3wbBHC8Wket";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
@@ -50,54 +52,95 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/9Y/Rr6rWsLMj+Xb=jl/s9KQ
+--Sig_/YF9Fup445u6o3wbBHC8Wket
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the usb tree, today's linux-next build (x86_64 allmodconfig)
-failed like this:
+Today's linux-next merge of the efi tree got a conflict in:
 
-drivers/xen/unpopulated-alloc.c:17:21: error: 'list_count' redeclared as di=
-fferent kind of symbol
-   17 | static unsigned int list_count;
-      |                     ^~~~~~~~~~
-In file included from include/linux/preempt.h:11,
-                 from include/linux/spinlock.h:56,
-                 from include/linux/mmzone.h:8,
-                 from include/linux/gfp.h:7,
-                 from drivers/xen/unpopulated-alloc.c:3:
-include/linux/list.h:662:22: note: previous definition of 'list_count' with=
- type 'size_t(struct list_head *)' {aka 'long unsigned int(struct list_head=
- *)'}
-  662 | static inline size_t list_count(struct list_head *head)
-      |                      ^~~~~~~~~~
+  arch/loongarch/kernel/efi.c
 
-Caused by commit
+between commit:
 
-  a9efc04cfd05 ("i915: Move list_count() to list.h for broader use")
+  113b340ca07a ("LoongArch: Add FDT booting support from efi system table")
 
-I have used the usb tree from next-20221129 for today.
+from the loongarch tree and commit:
+
+  732ea9db9d8a ("efi: libstub: Move screen_info handling to common code")
+
+from the efi tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/9Y/Rr6rWsLMj+Xb=jl/s9KQ
+diff --cc arch/loongarch/kernel/efi.c
+index 47d03b133053,d75ce73e8ff8..000000000000
+--- a/arch/loongarch/kernel/efi.c
++++ b/arch/loongarch/kernel/efi.c
+@@@ -54,17 -52,27 +54,38 @@@ void __init efi_runtime_init(void
+  	set_bit(EFI_RUNTIME_SERVICES, &efi.flags);
+  }
+ =20
+ +void __init *efi_fdt_pointer(void)
+ +{
+ +	if (!efi_systab)
+ +		return NULL;
+ +
+ +	if (fdt_pointer =3D=3D EFI_INVALID_TABLE_ADDR)
+ +		return NULL;
+ +
+ +	return early_memremap_ro(fdt_pointer, SZ_64K);
+ +}
+ +
++ unsigned long __initdata screen_info_table =3D EFI_INVALID_TABLE_ADDR;
++=20
++ static void __init init_screen_info(void)
++ {
++ 	struct screen_info *si;
++=20
++ 	if (screen_info_table =3D=3D EFI_INVALID_TABLE_ADDR)
++ 		return;
++=20
++ 	si =3D early_memremap(screen_info_table, sizeof(*si));
++ 	if (!si) {
++ 		pr_err("Could not map screen_info config table\n");
++ 		return;
++ 	}
++ 	screen_info =3D *si;
++ 	memset(si, 0, sizeof(*si));
++ 	early_memunmap(si, sizeof(*si));
++=20
++ 	memblock_reserve(screen_info.lfb_base, screen_info.lfb_size);
++ }
++=20
+  void __init efi_init(void)
+  {
+  	int size;
+
+--Sig_/YF9Fup445u6o3wbBHC8Wket
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOGvY4ACgkQAVBC80lX
-0Gwiygf8CIyjvTa+bNq+X1+BjSH/3SujZe8la/FQwXred850016fx/WCYpiAu5wn
-o7sV7TCPsV/4pvE/90vs9TAc9/eXFXXhrdmxC1aXAeMVWC9lTzquaxKlOWaTMEcj
-zJTWW1s5J/AADYpZ6vQnX93uNWZTyiLO6wFbml4t6Hl+g7+lVEQOFchTn3RkG6DN
-h6yomEUnkfV4tbzJsXAHugX5746ckvZKHQoEBdWQk0Uv+QHnW4rQkzSIkJUBrv1F
-OqNPG1uit5syR5TbBM4U1rx/aJqOozXcLro9rmj74Dl7/GNNIYoHIm6F5ZBzrrk3
-AHtJb/+q2qetzAXJJJ4enPlbKMBF/A==
-=KG50
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOGxdUACgkQAVBC80lX
+0GyEwwf+LWn8tz4gdtKdeXpX4hsfDJAaHHC5oDdvrCfiEyNnu3wTkjjHGdpml5T9
+UvXJTQlCWvs9HbNACny6NNwyvq8vsGc4YKobhlUVr77Vf/iU1jt/5auiE1QcDK6I
+rPA0eudq3n31GJZwMsnN42q/xLHxZEdWRd14QMk2Xl0PFR0/rdJgWSE9iCjVEC0K
+16lJN4eDNx9MacrLWvigp0LdPoONOzFuhktQrNRSof3BXUh1aVvb//Cv4+E+yMMw
+0fYqSPQmZiljX5d54kLB/AtSlYsAvN90CKsdZaWpz10rTScbZXbYUXfBV1CX4E7O
+DxjEFdQJ44fo72Hyw6T0b/l4s10a8g==
+=lKcd
 -----END PGP SIGNATURE-----
 
---Sig_/9Y/Rr6rWsLMj+Xb=jl/s9KQ--
+--Sig_/YF9Fup445u6o3wbBHC8Wket--

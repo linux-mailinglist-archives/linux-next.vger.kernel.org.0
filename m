@@ -2,48 +2,45 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3176C63E797
-	for <lists+linux-next@lfdr.de>; Thu,  1 Dec 2022 03:16:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7866463E79F
+	for <lists+linux-next@lfdr.de>; Thu,  1 Dec 2022 03:18:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229776AbiLACQe (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 30 Nov 2022 21:16:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49772 "EHLO
+        id S229576AbiLACSa (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 30 Nov 2022 21:18:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiLACQd (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 30 Nov 2022 21:16:33 -0500
+        with ESMTP id S229551AbiLACSa (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 30 Nov 2022 21:18:30 -0500
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9E0D8932A;
-        Wed, 30 Nov 2022 18:16:31 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A56D02872A;
+        Wed, 30 Nov 2022 18:18:28 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NN07F4bmdz4xG6;
-        Thu,  1 Dec 2022 13:16:25 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NN09Z4my0z4xG6;
+        Thu,  1 Dec 2022 13:18:26 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1669860986;
-        bh=S5ONOgZTz0o2WtCmNBz+lPKRdK6AlxXo3Pg1r0rdX+Y=;
+        s=201702; t=1669861107;
+        bh=kEd/xZARf6Mr8dAYiKlsLt6883mfgikoGzqEeJFFmT8=;
         h=Date:From:To:Cc:Subject:From;
-        b=qgDcVfK5GnoATJ2aezvzB2v9wS6E7f6tkrn+ne0/J5FHBMnvUzwTbtzFMB9M0aVVZ
-         ixD9IR3Pqo6Cy8Sy0CPBpS0R1AVDGQufX3/9/ixNeUU5ieYaPj4VwncAqauK+5teqh
-         cKm+SRrp3soXJJgqOGBH8nsJRVyrAuUSsoyRDm+PTTOuPeZMa/5hYfBq8t6qzgJ6o9
-         lgk+Ouu/DHvNj2mh7Zk4rLhaoR3Sx/leBS3T9nl05kGWB1A0JEWuMdpNLXg0DHwIue
-         xvfz23RD25gBCwMsw0KPeAZ4UNQZtUfBIFQ3iXbn70ZakmQYTszrSef5JDNrsNxDjU
-         lW02TseOnZOAw==
-Date:   Thu, 1 Dec 2022 13:16:23 +1100
+        b=uWy8prUs1+224MpFaqu8Ev2Y62sxe1Ol0PjThnSnEVy2yB6Z6z6acA3/BOFWQfZmp
+         FmcUspNlV3uER/N7VAKYdq3qCmYfFSKrl4V1JukwBn2CxTWH8DpuwwHrssqXKknX8w
+         kpMesnuPI60FizQ9oe+HtcO/gD3LBxbD07mx/KQJY1kK5deSuwVHl2U68CRqBEWP4j
+         6J6dgxyqGdBaDd9+NWBhhXrYjYWL8GOfjAjQmQfJNTQyZOfXiTNb7JOJhTPArGPW0n
+         MIBAAkkIAE6mE1du0vPjSrt57qr8+/n8Wu28FTwnIdGjmn/tW0+H3QKIIEt/sQBzo/
+         6GJPIIvB3pfxA==
+Date:   Thu, 1 Dec 2022 13:18:25 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Christoffer Dall <cdall@cs.columbia.edu>,
-        Marc Zyngier <maz@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     KVM <kvm@vger.kernel.org>, David Matlack <dmatlack@google.com>,
+To:     Greg KH <greg@kroah.com>, Dave Airlie <airlied@redhat.com>
+Cc:     DRI <dri-devel@lists.freedesktop.org>,
+        Oded Gabbay <ogabbay@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Sean Christopherson <seanjc@google.com>
-Subject: linux-next: manual merge of the kvm-arm tree with the kvm tree
-Message-ID: <20221201131623.18ebc8d8@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the driver-core tree
+Message-ID: <20221201131825.701fb3f5@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/7OYHAZ/oIIkHuO+IrwWjSQq";
+Content-Type: multipart/signed; boundary="Sig_/.8EklvJ2jx7ZkOzHVWLYcUu";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
@@ -54,131 +51,59 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/7OYHAZ/oIIkHuO+IrwWjSQq
+--Sig_/.8EklvJ2jx7ZkOzHVWLYcUu
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the kvm-arm tree got a conflict in:
+After merging the driver-core tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-  tools/testing/selftests/kvm/include/perf_test_util.h
+drivers/gpu/drm/../../accel/drm_accel.c: In function 'accel_sysfs_init':
+drivers/gpu/drm/../../accel/drm_accel.c:41:30: error: assignment to 'char *=
+ (*)(const struct device *, umode_t *)' {aka 'char * (*)(const struct devic=
+e *, short unsigned int *)'} from incompatible pointer type 'char * (*)(str=
+uct device *, umode_t *)' {aka 'char * (*)(struct device *, short unsigned =
+int *)'} [-Werror=3Dincompatible-pointer-types]
+   41 |         accel_class->devnode =3D accel_devnode;
+      |                              ^
 
-between commit:
+Caused by commit
 
-  9fda6753c9dd ("KVM: selftests: Rename perf_test_util.[ch] to memstress.[c=
-h]")
+  ff62b8e6588f ("driver core: make struct class.devnode() take a const *")
 
-from the kvm tree and commit:
+interacting with commit
 
-  9ec1eb1bccee ("KVM: selftests: Have perf_test_util signal when to stop vC=
-PUs")
+  8bf4889762a8 ("drivers/accel: define kconfig and register a new major")
 
-from the kvm-arm tree.
+from the drm tree.
 
-I fixed it up (I removed the file and applied the following patch) and
-can carry the fix as necessary. This is now fixed as far as linux-next
-is concerned, but any non trivial conflicts should be mentioned to your
-upstream maintainer when your tree is submitted for merging.  You may
-also want to consider cooperating with the maintainer of the conflicting
-tree to minimise any particularly complex conflicts.
-
-(this patch covered another occurrence fo the needed rename)
+I have applied the following merge resolution patch.
 
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Thu, 1 Dec 2022 12:19:45 +1100
-Subject: [PATCH] fix up for rename of perf_test_args to memstress_args
+Date: Thu, 1 Dec 2022 13:08:06 +1100
+Subject: [PATCH] fix up for "drivers/accel: define kconfig and register a n=
+ew major"
 
 Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
 ---
- tools/testing/selftests/kvm/access_tracking_perf_test.c       | 2 +-
- tools/testing/selftests/kvm/demand_paging_test.c              | 2 +-
- tools/testing/selftests/kvm/include/memstress.h               | 2 ++
- tools/testing/selftests/kvm/lib/memstress.c                   | 4 ++--
- .../testing/selftests/kvm/memslot_modification_stress_test.c  | 2 +-
- 5 files changed, 7 insertions(+), 5 deletions(-)
+ drivers/accel/drm_accel.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/kvm/access_tracking_perf_test.c b/tool=
-s/testing/selftests/kvm/access_tracking_perf_test.c
-index 2c9e0abcac94..57a16371e9c2 100644
---- a/tools/testing/selftests/kvm/access_tracking_perf_test.c
-+++ b/tools/testing/selftests/kvm/access_tracking_perf_test.c
-@@ -208,7 +208,7 @@ static bool spin_wait_for_next_iteration(int *current_i=
-teration)
- 	int last_iteration =3D *current_iteration;
+diff --git a/drivers/accel/drm_accel.c b/drivers/accel/drm_accel.c
+index a5ee84a4017a..1b69824286fd 100644
+--- a/drivers/accel/drm_accel.c
++++ b/drivers/accel/drm_accel.c
+@@ -27,7 +27,7 @@ static struct device_type accel_sysfs_device_minor =3D {
+ 	.name =3D "accel_minor"
+ };
 =20
- 	do {
--		if (READ_ONCE(perf_test_args.stop_vcpus))
-+		if (READ_ONCE(memstress_args.stop_vcpus))
- 			return false;
-=20
- 		*current_iteration =3D READ_ONCE(iteration);
-diff --git a/tools/testing/selftests/kvm/demand_paging_test.c b/tools/testi=
-ng/selftests/kvm/demand_paging_test.c
-index f980ed8aeead..b0e1fc4de9e2 100644
---- a/tools/testing/selftests/kvm/demand_paging_test.c
-+++ b/tools/testing/selftests/kvm/demand_paging_test.c
-@@ -161,7 +161,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
- 			vcpu_alias =3D addr_gpa2alias(vm, vcpu_args->gpa);
-=20
- 			prefault_mem(vcpu_alias,
--				vcpu_args->pages * perf_test_args.guest_page_size);
-+				vcpu_args->pages * memstress_args.guest_page_size);
-=20
- 			/*
- 			 * Set up user fault fd to handle demand paging
-diff --git a/tools/testing/selftests/kvm/include/memstress.h b/tools/testin=
-g/selftests/kvm/include/memstress.h
-index bbd2a302df10..4ae63963c14f 100644
---- a/tools/testing/selftests/kvm/include/memstress.h
-+++ b/tools/testing/selftests/kvm/include/memstress.h
-@@ -40,6 +40,8 @@ struct memstress_args {
-=20
- 	/* Run vCPUs in L2 instead of L1, if the architecture supports it. */
- 	bool nested;
-+	/* Test is done, stop running vCPUs. */
-+	bool stop_vcpus;
- 	/* Randomize which pages are accessed by the guest. */
- 	bool random_access;
- 	/* True if all vCPUs are pinned to pCPUs */
-diff --git a/tools/testing/selftests/kvm/lib/memstress.c b/tools/testing/se=
-lftests/kvm/lib/memstress.c
-index 3742ce238129..5f1d3173c238 100644
---- a/tools/testing/selftests/kvm/lib/memstress.c
-+++ b/tools/testing/selftests/kvm/lib/memstress.c
-@@ -292,7 +292,7 @@ void memstress_start_vcpu_threads(int nr_vcpus,
-=20
- 	vcpu_thread_fn =3D vcpu_fn;
- 	WRITE_ONCE(all_vcpu_threads_running, false);
--	WRITE_ONCE(perf_test_args.stop_vcpus, false);
-+	WRITE_ONCE(memstress_args.stop_vcpus, false);
-=20
- 	for (i =3D 0; i < nr_vcpus; i++) {
- 		struct vcpu_thread *vcpu =3D &vcpu_threads[i];
-@@ -315,7 +315,7 @@ void memstress_join_vcpu_threads(int nr_vcpus)
+-static char *accel_devnode(struct device *dev, umode_t *mode)
++static char *accel_devnode(const struct device *dev, umode_t *mode)
  {
- 	int i;
-=20
--	WRITE_ONCE(perf_test_args.stop_vcpus, true);
-+	WRITE_ONCE(memstress_args.stop_vcpus, true);
-=20
- 	for (i =3D 0; i < nr_vcpus; i++)
- 		pthread_join(vcpu_threads[i].thread, NULL);
-diff --git a/tools/testing/selftests/kvm/memslot_modification_stress_test.c=
- b/tools/testing/selftests/kvm/memslot_modification_stress_test.c
-index 431dbc47d345..9855c41ca811 100644
---- a/tools/testing/selftests/kvm/memslot_modification_stress_test.c
-+++ b/tools/testing/selftests/kvm/memslot_modification_stress_test.c
-@@ -43,7 +43,7 @@ static void vcpu_worker(struct memstress_vcpu_args *vcpu_=
-args)
- 	run =3D vcpu->run;
-=20
- 	/* Let the guest access its memory until a stop signal is received */
--	while (!READ_ONCE(perf_test_args.stop_vcpus)) {
-+	while (!READ_ONCE(memstress_args.stop_vcpus)) {
- 		ret =3D _vcpu_run(vcpu);
- 		TEST_ASSERT(ret =3D=3D 0, "vcpu_run failed: %d\n", ret);
-=20
+ 	return kasprintf(GFP_KERNEL, "accel/%s", dev_name(dev));
+ }
 --=20
 2.35.1
 
@@ -186,20 +111,20 @@ args)
 Cheers,
 Stephen Rothwell
 
---Sig_/7OYHAZ/oIIkHuO+IrwWjSQq
+--Sig_/.8EklvJ2jx7ZkOzHVWLYcUu
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOIDncACgkQAVBC80lX
-0GyVCwf/edGjXd7ZvZT0fmFfLkguTmC35h3y2vHQKmhdYRrIlg6lM/C8idsqOdbL
-BecCFGcT3gTE3wMYk6fjoOKsEE6dH61vhsviMH0IyUpaK/vnwxEBWsMfX06osVUh
-jjTBw9dY9MAn8xxAx/j0vCn6VVkKWutFDqLKAiv8+IMj1/qbmbli9038+kKFpJmC
-aFeJme5UhVA9dJxRVNffnEgXau0em2QkrsjFHi8qgXurL1YbSAtpccW55dpvLEmJ
-z2NT7gLcSWfPvQ2TUer8/eoYdzhxBC53/f1MM80LMgjX424QUWG7sQBdqEEIHubO
-TIEZWZIESmXxurCN5G2F1eCzwMgn5A==
-=JMf6
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOIDvEACgkQAVBC80lX
+0Gxx2gf/XA+fAqxqjyAf1I4t3IUjS0OgCPGJGGg21g4mKcEtRS63zQAr/TM8z5Af
+kR+vX9j3b+B/iUNy8WnlvEx/utkenW+qKZGckyBL7ryuihpjLoJkKztFcwz/tRe+
+U5nfjM9sXlvX5WTQVPnZQrVryadA22SaU+PJvReqRJi0cqHkpoV82LAUSTuevr0C
+jTYI2i0y5yIV/XJRj+dxoYTQYdgJTUjVGq1cTQJmnXq35tZcvCjxFRZKArE4jqMz
+2qfXQKHLjQj8eAYdoT1zsMVawfHvLfgcJo0YlvZ2hT7DfeOdPRqoVrt0dAMlnTxD
+bhTZfXnAXoi1wpF1oPb74Ow4ZCWyLA==
+=ddvj
 -----END PGP SIGNATURE-----
 
---Sig_/7OYHAZ/oIIkHuO+IrwWjSQq--
+--Sig_/.8EklvJ2jx7ZkOzHVWLYcUu--

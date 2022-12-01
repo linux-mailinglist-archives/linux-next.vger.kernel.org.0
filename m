@@ -2,48 +2,49 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 252E663E6C6
-	for <lists+linux-next@lfdr.de>; Thu,  1 Dec 2022 01:57:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 178E663E6EC
+	for <lists+linux-next@lfdr.de>; Thu,  1 Dec 2022 02:09:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229635AbiLAA5t (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 30 Nov 2022 19:57:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43838 "EHLO
+        id S229613AbiLABJo (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 30 Nov 2022 20:09:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiLAA5s (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 30 Nov 2022 19:57:48 -0500
+        with ESMTP id S229566AbiLABJo (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 30 Nov 2022 20:09:44 -0500
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47BB81FF92;
-        Wed, 30 Nov 2022 16:57:45 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 905D942F7B;
+        Wed, 30 Nov 2022 17:09:42 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NMyNR1pd4z4xFv;
-        Thu,  1 Dec 2022 11:57:42 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NMyfD5F24z4xFv;
+        Thu,  1 Dec 2022 12:09:40 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1669856263;
-        bh=KXADFIMMmWG2dsbS7Re7sU/J+anY0jo/1Wlp2ldlTZc=;
+        s=201702; t=1669856981;
+        bh=brvavOSOc62js08CKp3eQxixTiCVzmBixPUmp8sxcW8=;
         h=Date:From:To:Cc:Subject:From;
-        b=KVJvCMdGO5y7GtEiY1nOHvbSM+gWYnpNyZ7RxSbYb1dv8F17zI4VYD7/PL+rsqCUt
-         eL3iloa6dUkGSJA1lTxG2h6sNU2qIDHMDBqMRpICCSgETZ2e3yZOUnsNiuI4CSDMqU
-         230fEzKC1FUYfEVi5tm7UIMhMHqCVCAJsNaz+GC/ZtJlpjm4pY2KMMSQ5qz1lLr2qB
-         zTt1PQzhZr15ryCTjHIy/r3IsY/AvQ53B9KH4PyVobjRiPIkklS0TGXuTOFuPSn0Gu
-         5pT8JjbzdjYgSA6SYsHfDuMPPzquJtbjjfkawrx2iykVH8Z/RY0BfHTfYihAMLdq9v
-         qBtpHP4P+uMaw==
-Date:   Thu, 1 Dec 2022 11:57:41 +1100
+        b=AAjY4PhM/3tjlWzLFpEF1CVHxtrnPlvH4pXdCV5tiOKOblqlcs+XvkDhJk3DI85qp
+         yjZDxpLjtKHfqgcUOvsJhnZCuRKbV76/2Q6skzSTlb9Tp0np3jO95gHcjrJCeHyXja
+         voC+0YjKnVMAwVhAOHPfgdY+knE6+1+wT5+JnTL7HkGDKu5WF0Yp4pxxPVEM+vkXfw
+         p1zwvMBmWT+BTv+kCr5hDUICis7a96E8Prba5lbhmU/PvBgZWYtcP3HlG6iIgu8CeQ
+         FC/kaU+6u2nzZpNhuOol+VOkUU/uph1dQz1DzZgkxvqEcNqOxC8N68NnhmeSbf1i/e
+         ZatCSvrstGlrQ==
+Date:   Thu, 1 Dec 2022 12:09:39 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
 To:     Christoffer Dall <cdall@cs.columbia.edu>,
-        Marc Zyngier <maz@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     KVM <kvm@vger.kernel.org>, David Matlack <dmatlack@google.com>,
+        Marc Zyngier <maz@kernel.org>
+Cc:     Gavin Shan <gshan@redhat.com>, Paolo Bonzini <pbonzini@redhat.com>,
+        KVM <kvm@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Sean Christopherson <seanjc@google.com>
+        Sean Christopherson <seanjc@google.com>,
+        Vipin Sharma <vipinsh@google.com>,
+        Vishal Annapurve <vannapurve@google.com>
 Subject: linux-next: manual merge of the kvm-arm tree with the kvm tree
-Message-ID: <20221201115741.7de32422@canb.auug.org.au>
+Message-ID: <20221201120939.3c19f004@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/.Ikwq/Ds1OUTjRj1j+hZle3";
+Content-Type: multipart/signed; boundary="Sig_/StyU/QJYB47_8rLAkHl4wg4";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
@@ -54,26 +55,32 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/.Ikwq/Ds1OUTjRj1j+hZle3
+--Sig_/StyU/QJYB47_8rLAkHl4wg4
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the kvm-arm tree got conflicts in:
+Today's linux-next merge of the kvm-arm tree got a conflict in:
 
-  tools/testing/selftests/kvm/access_tracking_perf_test.c
-  tools/testing/selftests/kvm/memslot_modification_stress_test.c
+  tools/testing/selftests/kvm/memslot_perf_test.c
 
-between commit:
+between commits:
 
-  7812d80c0f89 ("KVM: selftests: Rename perf_test_util symbols to memstress=
-")
+  018ea2d71a43 ("KVM: selftests: Add atoi_paranoid() to catch errors missed=
+ by atoi()")
+  dc88244bf548 ("KVM: selftests: Automatically do init_ucall() for non-bare=
+bones VMs")
+  197ebb713ad0 ("KVM: selftests: move common startup logic to kvm_util.c")
 
-from the kvm tree and commit:
+from the kvm tree and commits:
 
-  9ec1eb1bccee ("KVM: selftests: Have perf_test_util signal when to stop vC=
-PUs")
+  34396437b11f ("KVM: selftests: memslot_perf_test: Probe memory slots for =
+once")
+  8675c6f22698 ("KVM: selftests: memslot_perf_test: Support variable guest =
+page size")
+  a69170c65acd ("KVM: selftests: memslot_perf_test: Report optimal memory s=
+lots")
 
 from the kvm-arm tree.
 
@@ -88,73 +95,90 @@ complex conflicts.
 Cheers,
 Stephen Rothwell
 
-diff --cc tools/testing/selftests/kvm/access_tracking_perf_test.c
-index 02d3587cab0a,942370d57392..000000000000
---- a/tools/testing/selftests/kvm/access_tracking_perf_test.c
-+++ b/tools/testing/selftests/kvm/access_tracking_perf_test.c
-@@@ -321,11 -318,8 +318,8 @@@ static void run_test(enum vm_guest_mod
-  	mark_memory_idle(vm, nr_vcpus);
-  	access_memory(vm, nr_vcpus, ACCESS_READ, "Reading from idle memory");
+diff --cc tools/testing/selftests/kvm/memslot_perf_test.c
+index 36b20abfb948,2ad40f7c9c08..000000000000
+--- a/tools/testing/selftests/kvm/memslot_perf_test.c
++++ b/tools/testing/selftests/kvm/memslot_perf_test.c
+@@@ -252,23 -284,22 +284,21 @@@ static bool prepare_vm(struct vm_data *
+  	struct timespec tstart;
+  	struct sync_area *sync;
  =20
-- 	/* Set done to signal the vCPU threads to exit */
-- 	done =3D true;
--=20
- -	perf_test_join_vcpu_threads(nr_vcpus);
- -	perf_test_destroy_vm(vm);
- +	memstress_join_vcpu_threads(nr_vcpus);
- +	memstress_destroy_vm(vm);
-  }
+- 	max_mem_slots =3D kvm_check_cap(KVM_CAP_NR_MEMSLOTS);
+- 	TEST_ASSERT(max_mem_slots > 1,
+- 		    "KVM_CAP_NR_MEMSLOTS should be greater than 1");
+- 	TEST_ASSERT(nslots > 1 || nslots =3D=3D -1,
+- 		    "Slot count cap should be greater than 1");
+- 	if (nslots !=3D -1)
+- 		max_mem_slots =3D min(max_mem_slots, (uint32_t)nslots);
+- 	pr_info_v("Allowed number of memory slots: %"PRIu32"\n", max_mem_slots);
++ 	host_page_size =3D getpagesize();
++ 	guest_page_size =3D vm_guest_mode_params[VM_MODE_DEFAULT].page_size;
++ 	mempages =3D mem_size / guest_page_size;
  =20
-  static void help(char *name)
-diff --cc tools/testing/selftests/kvm/memslot_modification_stress_test.c
-index d07e921bfcc5,3a5e4518307c..000000000000
---- a/tools/testing/selftests/kvm/memslot_modification_stress_test.c
-+++ b/tools/testing/selftests/kvm/memslot_modification_stress_test.c
-@@@ -34,9 -34,7 +34,7 @@@
-  static int nr_vcpus =3D 1;
-  static uint64_t guest_percpu_mem_size =3D DEFAULT_PER_VCPU_MEM_SIZE;
+- 	TEST_ASSERT(mempages > 1,
+- 		    "Can't test without any memory");
++ 	data->vm =3D __vm_create_with_one_vcpu(&data->vcpu, mempages, guest_code=
+);
+ -	ucall_init(data->vm, NULL);
++ 	TEST_ASSERT(data->vm->page_size =3D=3D guest_page_size, "Invalid VM page=
+ size");
  =20
-- static bool run_vcpus =3D true;
--=20
- -static void vcpu_worker(struct perf_test_vcpu_args *vcpu_args)
- +static void vcpu_worker(struct memstress_vcpu_args *vcpu_args)
-  {
-  	struct kvm_vcpu *vcpu =3D vcpu_args->vcpu;
-  	struct kvm_run *run;
-@@@ -107,14 -105,13 +105,12 @@@ static void run_test(enum vm_guest_mod
+  	data->npages =3D mempages;
+- 	data->nslots =3D max_mem_slots - 1;
+- 	data->pages_per_slot =3D mempages / data->nslots;
+- 	if (!data->pages_per_slot) {
+- 		*maxslots =3D mempages + 1;
++ 	TEST_ASSERT(data->npages > 1, "Can't test without any memory");
++ 	data->nslots =3D nslots;
++ 	data->pages_per_slot =3D data->npages / data->nslots;
++ 	rempages =3D data->npages % data->nslots;
++ 	if (!check_slot_pages(host_page_size, guest_page_size,
++ 			      data->pages_per_slot, rempages)) {
++ 		*maxslots =3D get_max_slots(data, host_page_size);
+  		return false;
+  	}
  =20
-  	pr_info("Started all vCPUs\n");
+@@@ -884,9 -966,9 +965,9 @@@ static bool parse_args(int argc, char *
+  			map_unmap_verify =3D true;
+  			break;
+  		case 's':
+ -			targs->nslots =3D atoi(optarg);
+ +			targs->nslots =3D atoi_paranoid(optarg);
+- 			if (targs->nslots <=3D 0 && targs->nslots !=3D -1) {
+- 				pr_info("Slot count cap has to be positive or -1 for no cap\n");
++ 			if (targs->nslots <=3D 1 && targs->nslots !=3D -1) {
++ 				pr_info("Slot count cap must be larger than 1 or -1 for no cap\n");
+  				return false;
+  			}
+  			break;
+@@@ -994,6 -1103,12 +1090,9 @@@ int main(int argc, char *argv[]
+  	struct test_result rbestslottime;
+  	int tctr;
  =20
- -	add_remove_memslot(vm, p->memslot_modification_delay,
- -			   p->nr_memslot_modifications);
- +	add_remove_memslot(vm, p->delay, p->nr_iterations);
+ -	/* Tell stdout not to buffer its content */
+ -	setbuf(stdout, NULL);
+ -
++ 	if (!check_memory_sizes())
++ 		return -1;
++=20
+  	if (!parse_args(argc, argv, &targs))
+  		return -1;
  =20
-- 	run_vcpus =3D false;
--=20
- -	perf_test_join_vcpu_threads(nr_vcpus);
- +	memstress_join_vcpu_threads(nr_vcpus);
-  	pr_info("All vCPU threads joined\n");
- =20
- -	perf_test_destroy_vm(vm);
- +	memstress_destroy_vm(vm);
-  }
- =20
-  static void help(char *name)
 
---Sig_/.Ikwq/Ds1OUTjRj1j+hZle3
+--Sig_/StyU/QJYB47_8rLAkHl4wg4
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOH/AUACgkQAVBC80lX
-0GzhMgf/ThhiYtkIM/b6+mxQoe8ngRiH+8ZilGBTBSk3dnQUAlpNSx/1tkFF6uFm
-meXTDwigtT1R2iVyDmFYSXz6QFEskH7vtIAF4eqnfpjnZXq7FT+GdP1AAxl40X47
-Qv2YgVh6GOp/dpHjyefy+LwLiSgxMINnxqbkxETOBnR24qQZESN6eJD0w3N4+obj
-QugQKd5nJ1JvDbVwn2NkUkDHmqbPNrj60PSQJwrkEP3zRWg+fuWgfLzLMOIUhBzn
-/WW2bUpRposuEWuqBosy+x4lmM+iepH4Ljb/3e00GkHgml8HfgN9pdNqY73UfPvU
-gww/P8E/VyLm+1EjUszs/vzSGiq5Yg==
-=jCWp
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOH/tMACgkQAVBC80lX
+0GzDdAf9EwHzX9q8/A8wU1nDscw28nlh5ATvstpiKd1W6+q0xPn+uQiRgac7J/CP
+K7Eys7ifm6JiwLU+CkP+wRBgIizITNtmcAXyGcMzf4DT5Byop/e9PpBW+CUwE72e
+gzzALRhmYYNdqjuHk73ULD61KcfiF+jb9egmgRHESR1GIZYGNtPHxTUscbb7UQLn
+Vc983LX+Zc9O2t6ApRNpEfhj10C/7RZRg1GmoJMwpHTKXtrGNe1KKLC7PGW/xS40
+aIYoqKiw9xaqGi8i09RX9xvV2ifiC57Gb7m1KlhGrht5oqDdOIQ4yPqnHustp74E
+GX8jhnrzAmecJz5Bo8OrZswf5tfL8w==
+=gwKS
 -----END PGP SIGNATURE-----
 
---Sig_/.Ikwq/Ds1OUTjRj1j+hZle3--
+--Sig_/StyU/QJYB47_8rLAkHl4wg4--

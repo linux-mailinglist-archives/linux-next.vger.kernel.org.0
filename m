@@ -2,45 +2,44 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7866463E79F
-	for <lists+linux-next@lfdr.de>; Thu,  1 Dec 2022 03:18:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74D6663E82B
+	for <lists+linux-next@lfdr.de>; Thu,  1 Dec 2022 04:08:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229576AbiLACSa (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 30 Nov 2022 21:18:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53020 "EHLO
+        id S229539AbiLADID (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 30 Nov 2022 22:08:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbiLACSa (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 30 Nov 2022 21:18:30 -0500
+        with ESMTP id S229513AbiLADIC (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 30 Nov 2022 22:08:02 -0500
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A56D02872A;
-        Wed, 30 Nov 2022 18:18:28 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D39822EF4F;
+        Wed, 30 Nov 2022 19:08:00 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NN09Z4my0z4xG6;
-        Thu,  1 Dec 2022 13:18:26 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NN1Gl2M3yz4x1V;
+        Thu,  1 Dec 2022 14:07:59 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1669861107;
-        bh=kEd/xZARf6Mr8dAYiKlsLt6883mfgikoGzqEeJFFmT8=;
+        s=201702; t=1669864079;
+        bh=TfGmS1zCmudsr4uYautLm5Znw0ne7ebMP1HiuHsM1sI=;
         h=Date:From:To:Cc:Subject:From;
-        b=uWy8prUs1+224MpFaqu8Ev2Y62sxe1Ol0PjThnSnEVy2yB6Z6z6acA3/BOFWQfZmp
-         FmcUspNlV3uER/N7VAKYdq3qCmYfFSKrl4V1JukwBn2CxTWH8DpuwwHrssqXKknX8w
-         kpMesnuPI60FizQ9oe+HtcO/gD3LBxbD07mx/KQJY1kK5deSuwVHl2U68CRqBEWP4j
-         6J6dgxyqGdBaDd9+NWBhhXrYjYWL8GOfjAjQmQfJNTQyZOfXiTNb7JOJhTPArGPW0n
-         MIBAAkkIAE6mE1du0vPjSrt57qr8+/n8Wu28FTwnIdGjmn/tW0+H3QKIIEt/sQBzo/
-         6GJPIIvB3pfxA==
-Date:   Thu, 1 Dec 2022 13:18:25 +1100
+        b=oJVfaAprK6gXnjydn6DsCFq1BnWQaL5OLLKgDK+aI0x8vAI6vgXetXnwyhhWNdmq+
+         7fCOB6F5e+WK9kpSjjZneajXSTqlBrwVRUnjgp9+EZccWujUoSrGCBRjHMfr9qIMSs
+         gS4jBBD1Udqv6DFWVLAL03pQ6so/L8Tdze23kt2qebadfA+pofSpCDMtCHNvQCBkSP
+         8lcFpEI7asvnZzjpKKu+Bqcq2Ik9apaJ0vL5jbPHxSWOE10x7s+IFCAQEvvi4+ZdRV
+         80Rm78pBAWYd2Ym8JOl6eHOMluATttHtii3UoJSwpxD0FEYsb0YR6ALqQi+v1hqHrZ
+         aHt7wr84iC7rQ==
+Date:   Thu, 1 Dec 2022 14:07:58 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Greg KH <greg@kroah.com>, Dave Airlie <airlied@redhat.com>
-Cc:     DRI <dri-devel@lists.freedesktop.org>,
-        Oded Gabbay <ogabbay@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the driver-core tree
-Message-ID: <20221201131825.701fb3f5@canb.auug.org.au>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Luis Chamberlain <mcgrof@kernel.org>
+Subject: linux-next: build failure after merge of the kspp tree
+Message-ID: <20221201140758.1d3e9aec@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/.8EklvJ2jx7ZkOzHVWLYcUu";
+Content-Type: multipart/signed; boundary="Sig_/HlZ8cRjPobylttKtqm9R9rM";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
@@ -51,80 +50,63 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/.8EklvJ2jx7ZkOzHVWLYcUu
+--Sig_/HlZ8cRjPobylttKtqm9R9rM
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the driver-core tree, today's linux-next build (x86_64
+After merging the kspp tree, today's linux-next build (x86_64
 allmodconfig) failed like this:
 
-drivers/gpu/drm/../../accel/drm_accel.c: In function 'accel_sysfs_init':
-drivers/gpu/drm/../../accel/drm_accel.c:41:30: error: assignment to 'char *=
- (*)(const struct device *, umode_t *)' {aka 'char * (*)(const struct devic=
-e *, short unsigned int *)'} from incompatible pointer type 'char * (*)(str=
-uct device *, umode_t *)' {aka 'char * (*)(struct device *, short unsigned =
-int *)'} [-Werror=3Dincompatible-pointer-types]
-   41 |         accel_class->devnode =3D accel_devnode;
-      |                              ^
+kernel/panic.c: In function 'check_panic_on_warn':
+kernel/panic.c:238:25: error: format '%s' expects argument of type 'char *'=
+, but argument 2 has type 'unsigned int' [-Werror=3Dformat=3D]
+  238 |                 panic("%s: system warned too often (kernel.warn_lim=
+it is %d)",
+      |                        ~^
+      |                         |
+      |                         char *
+      |                        %d
+  239 |                       warn_limit);
+      |                       ~~~~~~~~~~
+      |                       |
+      |                       unsigned int
+kernel/panic.c:238:75: error: format '%d' expects a matching 'int' argument=
+ [-Werror=3Dformat=3D]
+  238 |                 panic("%s: system warned too often (kernel.warn_lim=
+it is %d)",
+      |                                                                    =
+      ~^
+      |                                                                    =
+       |
+      |                                                                    =
+       int
 
 Caused by commit
 
-  ff62b8e6588f ("driver core: make struct class.devnode() take a const *")
+  480e0e1d4817 ("panic: Introduce warn_limit")
 
-interacting with commit
-
-  8bf4889762a8 ("drivers/accel: define kconfig and register a new major")
-
-from the drm tree.
-
-I have applied the following merge resolution patch.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Thu, 1 Dec 2022 13:08:06 +1100
-Subject: [PATCH] fix up for "drivers/accel: define kconfig and register a n=
-ew major"
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- drivers/accel/drm_accel.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/accel/drm_accel.c b/drivers/accel/drm_accel.c
-index a5ee84a4017a..1b69824286fd 100644
---- a/drivers/accel/drm_accel.c
-+++ b/drivers/accel/drm_accel.c
-@@ -27,7 +27,7 @@ static struct device_type accel_sysfs_device_minor =3D {
- 	.name =3D "accel_minor"
- };
-=20
--static char *accel_devnode(struct device *dev, umode_t *mode)
-+static char *accel_devnode(const struct device *dev, umode_t *mode)
- {
- 	return kasprintf(GFP_KERNEL, "accel/%s", dev_name(dev));
- }
---=20
-2.35.1
+I have used the kspp tree from next-20221130 for today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/.8EklvJ2jx7ZkOzHVWLYcUu
+--Sig_/HlZ8cRjPobylttKtqm9R9rM
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOIDvEACgkQAVBC80lX
-0Gxx2gf/XA+fAqxqjyAf1I4t3IUjS0OgCPGJGGg21g4mKcEtRS63zQAr/TM8z5Af
-kR+vX9j3b+B/iUNy8WnlvEx/utkenW+qKZGckyBL7ryuihpjLoJkKztFcwz/tRe+
-U5nfjM9sXlvX5WTQVPnZQrVryadA22SaU+PJvReqRJi0cqHkpoV82LAUSTuevr0C
-jTYI2i0y5yIV/XJRj+dxoYTQYdgJTUjVGq1cTQJmnXq35tZcvCjxFRZKArE4jqMz
-2qfXQKHLjQj8eAYdoT1zsMVawfHvLfgcJo0YlvZ2hT7DfeOdPRqoVrt0dAMlnTxD
-bhTZfXnAXoi1wpF1oPb74Ow4ZCWyLA==
-=ddvj
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOIGo4ACgkQAVBC80lX
+0GxflAf9E7Q1cEGIFiJwsrqgE3+0ppAkiVA5xXcTYwcz4t0tB5ZGpFhpXm/CJssl
+Kc/V2Wa3+cFd3FmICAnYg94LQrKb6ciMKzXbXvnp4viEeD+v15jC4xcRAq3Iob3a
+K1G/njB+II9CMhv4nxnfjLMH/yVTAvWykprcjmkLYSPn/IcnIrnxPGoeSuYdFa8t
+u7T7r9NIuQptQ8tgzg9Exfs7Qvg6KISr4I9QyO3we0uQ9UEEDZaCLyS377BeC6tS
+hJnyPj7BCLZXDoHbCv54eX6At3QiGGM7OKl+TMVRAJxPs/uvTFYzsndmkMscWe8Y
+HhOyx3Ym/P8p6crt9jQQ34I9jvcXRg==
+=B3L/
 -----END PGP SIGNATURE-----
 
---Sig_/.8EklvJ2jx7ZkOzHVWLYcUu--
+--Sig_/HlZ8cRjPobylttKtqm9R9rM--

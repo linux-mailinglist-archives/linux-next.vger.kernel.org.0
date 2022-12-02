@@ -2,51 +2,51 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39676641061
-	for <lists+linux-next@lfdr.de>; Fri,  2 Dec 2022 23:11:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C8AD64106D
+	for <lists+linux-next@lfdr.de>; Fri,  2 Dec 2022 23:13:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229491AbiLBWLi (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 2 Dec 2022 17:11:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58822 "EHLO
+        id S234874AbiLBWNM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 2 Dec 2022 17:13:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229657AbiLBWLg (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 2 Dec 2022 17:11:36 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A18CF89A5
-        for <linux-next@vger.kernel.org>; Fri,  2 Dec 2022 14:11:35 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id cm20so6172834pjb.1
-        for <linux-next@vger.kernel.org>; Fri, 02 Dec 2022 14:11:35 -0800 (PST)
+        with ESMTP id S234863AbiLBWNG (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 2 Dec 2022 17:13:06 -0500
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57C42BC5B4
+        for <linux-next@vger.kernel.org>; Fri,  2 Dec 2022 14:13:04 -0800 (PST)
+Received: by mail-pg1-x52e.google.com with SMTP id 82so5514910pgc.0
+        for <linux-next@vger.kernel.org>; Fri, 02 Dec 2022 14:13:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=content-disposition:mime-version:message-id:subject:cc:to:date:from
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=w0dcCRAw7breQBxRgO7vXMzRE1EKaCH1sm8fAccBDKk=;
-        b=OwVi+W7xvxR/nGjj39pmX3oRQiji/LPiwOpKAVbcIfM5DiCUEx2CVjjGCPgXGrAYj2
-         5UoXRgnzXLZKAL8W05vLqFxBXlQ6XcoYM3KtBnvhqQMVng3lNY2A1Ac0VfEk1e+mkKH0
-         2KCcNECGN1AEN2hcX554Bmw8qWfXqc5l8cIxA=
+        bh=/kWu3ykUp6jy2oE1ZRRlRshB8WYV422H/n94yGeyIhw=;
+        b=GAXzEoo+S14lTK4cD0oXTEUsG2k/16arWIJHGYDGGoAITzPptHOYra+4PIZqAMKrAp
+         0tB61+aGUNfbM+CwM2yGVn+YfT1RARaHjexCaAWA6Kq22roouKhqhimPBUwevE+wG2Sg
+         ZdiVdxiW6gDD6Q9OAe7rXSCASwOhwS+nWPyfQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-disposition:mime-version:message-id:subject:cc:to:date:from
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=w0dcCRAw7breQBxRgO7vXMzRE1EKaCH1sm8fAccBDKk=;
-        b=0PTbxUwiidvNg7EXn1oOwI0LJa8J14jYJsaTU5vw2Aeb9FOOPvrhjgPsU3H5ShmALt
-         +VHZsgvjOdfdHG5e79nDx4Rr+Ck0+L4UXVk4SEsw3O2bc3YWzPFkmKl9YC5Lxz8o0lGu
-         iYRFSE6qXIU1tpUMADTT5FJ0LyfPyHrSSXn58PP2Upwbsk8KNijm2znFtHRFZQeKM9TC
-         LMyum1jbPLFgoUT49oGfF0KFy4kd9kmU0OEm0A6QYG0WDwZ6GACz5O0N9VCFhh2fgrvp
-         1K9gY+Ug47kjKDRo86kUUSMNfuMeKk0FH7akfoGh7tbQZX4OrvAQC3hsOcAlPuFTnAk8
-         Uc0A==
-X-Gm-Message-State: ANoB5pn9/tkK/rchPWGMbNpUiFmCdL4l1DbadpAUCw7z3/AHaC+GI86t
-        GQ/nV8Ps7yVWAq130PBQ8Czriw==
-X-Google-Smtp-Source: AA0mqf6QTLbmI+X8jti2r+C7tdO68/bOJUECQQLNnuZG8zdOtdYlL2NT2bZgqzSjU6DeRIsbPY36zw==
-X-Received: by 2002:a17:90a:9e5:b0:219:5139:7fa8 with SMTP id 92-20020a17090a09e500b0021951397fa8mr20815064pjo.15.1670019094904;
-        Fri, 02 Dec 2022 14:11:34 -0800 (PST)
+        bh=/kWu3ykUp6jy2oE1ZRRlRshB8WYV422H/n94yGeyIhw=;
+        b=At8sI+Lyhnpb/ViVLPLtGKngw6mSx7okQL/QC+IdQ3fhk3UTB3UhIKYEVsV0IYDLU7
+         mR0gptn2HjDTrjIFOAeeqDjFYqGFc0gx0Ioxf8RBPPkB1plBj4qu6WQTHymrqyMjXVxZ
+         ArwfZrfmwiVPUtakPMde96ltjv3S21xvLK+iFFaFaJCIDAmc47a0mNrWmJp76LAINeNw
+         45PnYazJzPS1/wguaYNb/+Ag0Mx+QTJg+dMpImIskh5K+3R/uySWxN4Gsj05XXfzPxWO
+         OGVj8h4kVtNgiJJEcnUcFgxJpFG6Lp9oDLm8VdCT5AdpKBAJToA1PWycVJ/DgVEcr+Pu
+         hCTw==
+X-Gm-Message-State: ANoB5pms1nEx5JrY5dfeCO3OjlT+5i45FvQTHKiX/wEGRgDZo4i1D0+E
+        3NNtxdCt95Y2ood4Nr4uNatoOQ==
+X-Google-Smtp-Source: AA0mqf4yMGLxJ4yzBzgABiEyiOC9Cw7v89H4Mg51yU3dIagFC0iIYu5hjOGUJWotx3YNlubWgYaiJQ==
+X-Received: by 2002:a63:dd16:0:b0:476:d2d9:5151 with SMTP id t22-20020a63dd16000000b00476d2d95151mr45023874pgg.487.1670019184321;
+        Fri, 02 Dec 2022 14:13:04 -0800 (PST)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id h131-20020a628389000000b0056bb36c047asm5510216pfe.105.2022.12.02.14.11.34
+        by smtp.gmail.com with ESMTPSA id f205-20020a6238d6000000b00574679561b4sm5563234pfa.134.2022.12.02.14.13.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Dec 2022 14:11:34 -0800 (PST)
+        Fri, 02 Dec 2022 14:13:03 -0800 (PST)
 From:   coverity-bot <keescook@chromium.org>
 X-Google-Original-From: coverity-bot <keescook+coverity-bot@chromium.org>
-Date:   Fri, 2 Dec 2022 14:11:33 -0800
+Date:   Fri, 2 Dec 2022 14:13:02 -0800
 To:     Shayne Chen <shayne.chen@mediatek.com>
 Cc:     Lorenzo Bianconi <lorenzo@kernel.org>,
         linux-wireless@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
@@ -70,15 +70,14 @@ Cc:     Lorenzo Bianconi <lorenzo@kernel.org>,
         Sujuan Chen <sujuan.chen@mediatek.com>,
         "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
         linux-next@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Coverity: mt7996_hw_queue_read(): Integer handling issues
-Message-ID: <202212021411.A5E618D3@keescook>
+Subject: Coverity: mt7996_mcu_rx_radar_detected(): Insecure data handling
+Message-ID: <202212021413.392BADAF@keescook>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -99,22 +98,22 @@ lines of code (noted below) that were touched by commits:
 
 Coverity reported the following:
 
-*** CID 1527813:  Integer handling issues  (SIGN_EXTENSION)
-drivers/net/wireless/mediatek/mt76/mt7996/debugfs.c:460 in mt7996_hw_queue_read()
-454     	for (i = 0; i < size; i++) {
-455     		u32 ctrl, head, tail, queued;
-456
-457     		if (val & BIT(map[i].index))
-458     			continue;
-459
-vvv     CID 1527813:  Integer handling issues  (SIGN_EXTENSION)
-vvv     Suspicious implicit sign extension: "map[i].qid" with type "u8" (8 bits, unsigned) is promoted in "map[i].qid << 24" to type "int" (32 bits, signed), then sign-extended to type "unsigned long" (64 bits, unsigned).  If "map[i].qid << 24" is greater than 0x7FFFFFFF, the upper bits of the result will all be 1.
-460     		ctrl = BIT(31) | (map[i].pid << 10) | (map[i].qid << 24);
-461     		mt76_wr(dev, MT_FL_Q0_CTRL, ctrl);
-462
-463     		head = mt76_get_field(dev, MT_FL_Q2_CTRL,
-464     				      GENMASK(11, 0));
-465     		tail = mt76_get_field(dev, MT_FL_Q2_CTRL,
+*** CID 1527812:  Insecure data handling  (TAINTED_SCALAR)
+drivers/net/wireless/mediatek/mt76/mt7996/mcu.c:338 in mt7996_mcu_rx_radar_detected()
+332     {
+333     	struct mt76_phy *mphy = &dev->mt76.phy;
+334     	struct mt7996_mcu_rdd_report *r;
+335
+336     	r = (struct mt7996_mcu_rdd_report *)skb->data;
+337
+vvv     CID 1527812:  Insecure data handling  (TAINTED_SCALAR)
+vvv     Using tainted variable "r->band_idx" as an index into an array "(*dev).mt76.phys".
+338     	mphy = dev->mt76.phys[r->band_idx];
+339     	if (!mphy)
+340     		return;
+341
+342     	if (r->band_idx == MT_RX_SEL2)
+343     		cfg80211_background_radar_event(mphy->hw->wiphy,
 
 If this is a false positive, please let us know so we can mark it as
 such, or teach the Coverity rules to be smarter. If not, please make
@@ -122,7 +121,7 @@ sure fixes get into linux-next. :) For patches fixing this, please
 include these lines (but double-check the "Fixes" first):
 
 Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
-Addresses-Coverity-ID: 1527813 ("Integer handling issues")
+Addresses-Coverity-ID: 1527812 ("Insecure data handling")
 Fixes: 98686cd21624 ("wifi: mt76: mt7996: add driver for MediaTek Wi-Fi 7 (802.11be) devices")
 
 Thanks for your attention!

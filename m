@@ -2,99 +2,49 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDF2863FDA6
-	for <lists+linux-next@lfdr.de>; Fri,  2 Dec 2022 02:34:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA0AC63FECD
+	for <lists+linux-next@lfdr.de>; Fri,  2 Dec 2022 04:31:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231171AbiLBBel (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 1 Dec 2022 20:34:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51514 "EHLO
+        id S231533AbiLBDbY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 1 Dec 2022 22:31:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229893AbiLBBek (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 1 Dec 2022 20:34:40 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63B73D11CD;
-        Thu,  1 Dec 2022 17:34:39 -0800 (PST)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B21DiEJ009769;
-        Fri, 2 Dec 2022 01:33:55 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=nNFlj7IlbzH8Y0VxNQIQygN9uEj4JjNSylmNATnWK/c=;
- b=tofiYkTGLKHPkE2z+tV2skbXmR6fnfc5Aqj3noU6twa3Lv7UHecn2NbIe3iju0ltPWa6
- ngYJpNi0MwJf/xBCfg+k/0IvbAMLVzsgEl4FzVLiA1q5m24avThDg8uTIMuszHC7cT0N
- IoeIRcOCeVxszQKvIIP+Ko3okMiYTWTAdinpWC6KCOB2ztDO6eB2aExYVk8h3VKkTmCZ
- KMjargKqc+A9SeIZjlOk2h/N2OIZODuGItJT3EVZAiYPRg3idYLVtfB+OZ3HeSKjeZzJ
- vFh6YBsruIzI6IlpGFhV1fsHD4vgMxrv/UqpCmTbU0sy9UgwLTDqqmJdBfSmdUKZFWyk yg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m77gw8cn7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 02 Dec 2022 01:33:54 +0000
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2B21Urt6005339;
-        Fri, 2 Dec 2022 01:33:54 GMT
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m77gw8cmr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 02 Dec 2022 01:33:54 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2B21M2x0026576;
-        Fri, 2 Dec 2022 01:33:52 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma05fra.de.ibm.com with ESMTP id 3m3ae9dyve-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 02 Dec 2022 01:33:52 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2B21Xn0s49742160
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 2 Dec 2022 01:33:49 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9EB10AE04D;
-        Fri,  2 Dec 2022 01:33:49 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4752DAE045;
-        Fri,  2 Dec 2022 01:33:49 +0000 (GMT)
-Received: from ozlabs.au.ibm.com (unknown [9.192.253.14])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri,  2 Dec 2022 01:33:49 +0000 (GMT)
-Received: from li-0d7fa1cc-2c9d-11b2-a85c-aed20764436d.ibm.com (unknown [9.177.77.84])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S231181AbiLBDbX (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 1 Dec 2022 22:31:23 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A723BD9B13;
+        Thu,  1 Dec 2022 19:31:20 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ozlabs.au.ibm.com (Postfix) with ESMTPSA id 55CE66015C;
-        Fri,  2 Dec 2022 12:33:38 +1100 (AEDT)
-Message-ID: <3b13190d1f0bebd31c2e44a6a936e6d8f8e77892.camel@linux.ibm.com>
-Subject: Re: linux-next: build failure after merge of the tip tree
-From:   Benjamin Gray <bgray@linux.ibm.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Cc:     "Christopher M. Riedl" <cmr@bluescreens.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NNdl54qh8z4x1V;
+        Fri,  2 Dec 2022 14:31:13 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1669951875;
+        bh=dGmf72ncD/4NdOoAGiGfp2ldEHsmrOX7GeYxxIlw1iI=;
+        h=Date:From:To:Cc:Subject:From;
+        b=IqwSsQevBvTlcZghD8RrbvK/OS1wagK/DoQO2amlxJp9gve2/yirsqhJvflP01OMy
+         O+JRzcYLYc63mCysVf2ase6i7kAOk15Nn73eaedITQEohbVom+5XlHXx+fcPgMIq/w
+         jemmvGcw3801mcrgqjyv6aU27PvYQSWDEU28hZGWvbn0mB1pQJymPLXYNEx3STmHJC
+         pyYWKTW01v0zFiG6b94/nl0l61JYWlDcCMzHke7kcCQKN33YMs6dtTytyVKWNGBn41
+         tp9v7a1eO7g0AcRjqXF1OubW1kiqhMX/bNi8/cB9jc+PTfuQz6sMl5x1lbYxGFGky2
+         9AWg/asmYeY/Q==
+Date:   Fri, 2 Dec 2022 14:31:10 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Michael Ellerman <mpe@ellerman.id.au>,
         PowerPC <linuxppc-dev@lists.ozlabs.org>
-Date:   Fri, 02 Dec 2022 12:33:34 +1100
-In-Reply-To: <20221202112646.5813c34b@canb.auug.org.au>
-References: <20221202112646.5813c34b@canb.auug.org.au>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.1 (3.46.1-1.fc37) 
+Cc:     "Christopher M. Riedl" <cmr@bluescreens.de>,
+        Benjamin Gray <bgray@linux.ibm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: boot failure after merge of the powerpc tree
+Message-ID: <20221202143110.0f00c3e5@canb.auug.org.au>
 MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: TGrNh6eul9A1mGnnAwFQ7tfR8i18utK0
-X-Proofpoint-GUID: KF9HGiCVS8ewIwADp7ufNt1ae7uQNiTo
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-01_14,2022-12-01_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 malwarescore=0
- bulkscore=0 clxscore=1011 adultscore=0 suspectscore=0 spamscore=0
- mlxscore=0 lowpriorityscore=0 impostorscore=0 priorityscore=1501
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2212020010
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+Content-Type: multipart/signed; boundary="Sig_/BjbHU/pbGfn0Mh7nb5lWnVd";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -102,24 +52,97 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, 2022-12-02 at 11:26 +1100, Stephen Rothwell wrote:
-> Though, I wonder if the powerpc tree should
-> use mm_alloc() instead of copy_init_mm() as well?=C2=A0 The tip tree
-> commit
-> says:
->=20
-> =C2=A0=C2=A0=C2=A0 Instead of duplicating init_mm, allocate a fresh mm. T=
-he
-> advantage is
-> =C2=A0=C2=A0=C2=A0 that mm_alloc() has much simpler dependencies. Additio=
-nally it
-> makes
-> =C2=A0=C2=A0=C2=A0 more conceptual sense, init_mm has no (and must not ha=
-ve) user
-> state
-> =C2=A0=C2=A0=C2=A0 to duplicate.
->=20
+--Sig_/BjbHU/pbGfn0Mh7nb5lWnVd
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Yes, that seems fine. All we need is that the page table isn't shared
-and the kernel mappings are the same as in init_mm. It seems mm_alloc()
-does this at some point.
+Hi all,
+
+After merging all the trees, today's linux-next qemu run (powerpc
+pseries_le_defconfig with kvm) crashed like this:
+
+Memory: 2029504K/2097152K available (14592K kernel code, 2944K rwdata, 1817=
+6K rodata, 5120K init, 1468K bss, 67648K reserved, 0K cma-reserved)
+SLUB: HWalign=3D128, Order=3D0-3, MinObjects=3D0, CPUs=3D1, Nodes=3D1
+BUG: Kernel NULL pointer dereference on read at 0x0000001c
+Faulting instruction address: 0xc00000000047e9bc
+Oops: Kernel access of bad area, sig: 7 [#1]
+LE PAGE_SIZE=3D64K MMU=3DRadix SMP NR_CPUS=3D2048 NUMA pSeries
+Modules linked in:
+CPU: 0 PID: 0 Comm: swapper Not tainted 6.1.0-rc7 #1
+Hardware name: IBM pSeries (emulated by qemu) POWER9 (raw) 0x4e1202 0xf0000=
+05 of:SLOF,HEAD hv:linux,kvm pSeries
+NIP:  c00000000047e9bc LR: c000000000e06718 CTR: c00000000047e970
+REGS: c000000002773770 TRAP: 0300   Not tainted  (6.1.0-rc7)
+MSR:  8000000002001033 <SF,VEC,ME,IR,DR,RI,LE>  CR: 22004220  XER: 00000000
+CFAR: c000000000070508 DAR: 000000000000001c DSISR: 00080000 IRQMASK: 3=20
+GPR00: c000000000e06718 c000000002773a10 c00000000116fc00 0000000000000000=
+=20
+GPR04: 0000000000002900 0000000000002800 0000000000000000 0000000000000000=
+=20
+GPR08: 000000000000000e c0000000027afc00 0000000000000000 0000000000004000=
+=20
+GPR12: c00000000047e970 c000000002950000 0000000000000000 00000000013c8ff0=
+=20
+GPR16: 000000000000000d 0000000002be00d0 0000000000000001 00000000013c8e60=
+=20
+GPR20: 00000000013c8fa8 00000000013c8d90 c0000000027b2160 0000000000000000=
+=20
+GPR24: 0000000000000005 c0000000027b3568 c000000000e06718 0000000000002900=
+=20
+GPR28: 0000000000002900 0000000007fff33f 0000000000000000 c000000002773bc8=
+=20
+NIP [c00000000047e9bc] kmem_cache_alloc+0x5c/0x610
+LR [c000000000e06718] mas_alloc_nodes+0xe8/0x350
+Call Trace:
+[c000000002773a10] [0040000000000000] 0x40000000000000 (unreliable)
+[c000000002773a70] [c000000000e06718] mas_alloc_nodes+0xe8/0x350
+[c000000002773ad0] [c000000000e0f7f4] mas_expected_entries+0x94/0x110
+[c000000002773b10] [c00000000012cc44] dup_mmap+0x194/0x730
+[c000000002773c80] [c00000000012d260] dup_mm+0x80/0x180
+[c000000002773cc0] [c00000000008e7c0] text_area_cpu_up_mm+0x20/0x1a0
+[c000000002773d20] [c00000000013367c] cpuhp_invoke_callback+0x15c/0x810
+[c000000002773db0] [c0000000001348dc] cpuhp_issue_call+0x28c/0x2a0
+[c000000002773e00] [c000000000134e44] __cpuhp_setup_state_cpuslocked+0x154/=
+0x3e0
+[c000000002773eb0] [c000000000135180] __cpuhp_setup_state+0xb0/0x1d0
+[c000000002773f10] [c000000002016f9c] poking_init+0x40/0x9c
+[c000000002773f30] [c00000000200434c] start_kernel+0x598/0x914
+[c000000002773fe0] [c00000000000d990] start_here_common+0x1c/0x20
+Code: fb81ffe0 7c9b2378 3b293968 fbc1fff0 f8010010 7c7e1b78 fba1ffe8 fbe1ff=
+f8 91610008 f821ffa1 f8410018 83b90000 <83e3001c> 7fbd2038 7bbc0020 7f84e37=
+8=20
+---[ end trace 0000000000000000 ]---
+
+Kernel panic - not syncing: Attempted to kill the idle task!
+
+Reverting commits
+
+  55a02e6ea958 ("powerpc/code-patching: Use temporary mm for Radix MMU")
+  d0462ee02fdd ("powerpc/code-patching: Consolidate and cache per-cpu patch=
+ing context")
+(this second just because it follows the other and modifies the same file)
+
+fixes the panic.  I have done that in linux-next today.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/BjbHU/pbGfn0Mh7nb5lWnVd
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOJcX4ACgkQAVBC80lX
+0GwWOwgAjqKajQf1EBA6Y9xvIrOMk/sU97LDyRymafQAqS80fWM650XoDOfaJR4v
+PwvLMBEXnXJKqf3Flhr2GxDC0o6SuSRm2oK7/DnPovpyZgnxatLq4wfpGF3YWIlj
+D9EfIgNXzt78xTMrDu2O9oFnso1m4WSzQa+FqMm0DFZNRCIkqLMOv3BPqn48ofD3
+3rtrk5xuShrqxnHtdyUXBO/C9IB9dSHW6OLCECBipVUATQEjcDkavogDkNpIMeWk
+bXO/CiZDphejKIP8W003wuVbHXwy5SkvxrLv86/xjQpTwKM81vuIfZPNJ+XjagJ0
++SA9Dd10CDQLrPgsNnA4RO9XLE6eyQ==
+=NakJ
+-----END PGP SIGNATURE-----
+
+--Sig_/BjbHU/pbGfn0Mh7nb5lWnVd--

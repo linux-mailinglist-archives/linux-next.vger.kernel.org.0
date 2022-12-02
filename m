@@ -2,82 +2,82 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C8AD64106D
-	for <lists+linux-next@lfdr.de>; Fri,  2 Dec 2022 23:13:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D30FF641083
+	for <lists+linux-next@lfdr.de>; Fri,  2 Dec 2022 23:21:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234874AbiLBWNM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 2 Dec 2022 17:13:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33672 "EHLO
+        id S234876AbiLBWVu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 2 Dec 2022 17:21:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234863AbiLBWNG (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 2 Dec 2022 17:13:06 -0500
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57C42BC5B4
-        for <linux-next@vger.kernel.org>; Fri,  2 Dec 2022 14:13:04 -0800 (PST)
-Received: by mail-pg1-x52e.google.com with SMTP id 82so5514910pgc.0
-        for <linux-next@vger.kernel.org>; Fri, 02 Dec 2022 14:13:04 -0800 (PST)
+        with ESMTP id S234858AbiLBWVu (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 2 Dec 2022 17:21:50 -0500
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5B76F8189
+        for <linux-next@vger.kernel.org>; Fri,  2 Dec 2022 14:21:48 -0800 (PST)
+Received: by mail-pg1-x531.google.com with SMTP id h193so5463272pgc.10
+        for <linux-next@vger.kernel.org>; Fri, 02 Dec 2022 14:21:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=content-disposition:mime-version:message-id:subject:cc:to:date:from
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=/kWu3ykUp6jy2oE1ZRRlRshB8WYV422H/n94yGeyIhw=;
-        b=GAXzEoo+S14lTK4cD0oXTEUsG2k/16arWIJHGYDGGoAITzPptHOYra+4PIZqAMKrAp
-         0tB61+aGUNfbM+CwM2yGVn+YfT1RARaHjexCaAWA6Kq22roouKhqhimPBUwevE+wG2Sg
-         ZdiVdxiW6gDD6Q9OAe7rXSCASwOhwS+nWPyfQ=
+        bh=aMS0b2RE+vIHMOYP2E8EZZmUlghR9trNposIEeXjKJI=;
+        b=GNTcUDsFn03JscGIy0a+vYklYFfFxJZZqGpErbZZkJXfUy51L4mNHn15JV39Wn01z3
+         vb4zrIv5tFVn1hMThrwS+Z1/O+pe9nX5VyfbHAqFsufDYe/6mHsHteF9gFgr7BbTHhZt
+         kdAMU2oSGR44L1sJjQuBc7Zg+9UiSLhcbzifE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-disposition:mime-version:message-id:subject:cc:to:date:from
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/kWu3ykUp6jy2oE1ZRRlRshB8WYV422H/n94yGeyIhw=;
-        b=At8sI+Lyhnpb/ViVLPLtGKngw6mSx7okQL/QC+IdQ3fhk3UTB3UhIKYEVsV0IYDLU7
-         mR0gptn2HjDTrjIFOAeeqDjFYqGFc0gx0Ioxf8RBPPkB1plBj4qu6WQTHymrqyMjXVxZ
-         ArwfZrfmwiVPUtakPMde96ltjv3S21xvLK+iFFaFaJCIDAmc47a0mNrWmJp76LAINeNw
-         45PnYazJzPS1/wguaYNb/+Ag0Mx+QTJg+dMpImIskh5K+3R/uySWxN4Gsj05XXfzPxWO
-         OGVj8h4kVtNgiJJEcnUcFgxJpFG6Lp9oDLm8VdCT5AdpKBAJToA1PWycVJ/DgVEcr+Pu
-         hCTw==
-X-Gm-Message-State: ANoB5pms1nEx5JrY5dfeCO3OjlT+5i45FvQTHKiX/wEGRgDZo4i1D0+E
-        3NNtxdCt95Y2ood4Nr4uNatoOQ==
-X-Google-Smtp-Source: AA0mqf4yMGLxJ4yzBzgABiEyiOC9Cw7v89H4Mg51yU3dIagFC0iIYu5hjOGUJWotx3YNlubWgYaiJQ==
-X-Received: by 2002:a63:dd16:0:b0:476:d2d9:5151 with SMTP id t22-20020a63dd16000000b00476d2d95151mr45023874pgg.487.1670019184321;
-        Fri, 02 Dec 2022 14:13:04 -0800 (PST)
+        bh=aMS0b2RE+vIHMOYP2E8EZZmUlghR9trNposIEeXjKJI=;
+        b=ulVVYquXAXwYOjAPNlj19yjqmGgVSPy964TrS24ndbUJYCi4RuQfggBr+hdhacjnM0
+         OOoQsIZ9vCNdPWQ/9o4HvGDLOglvNcwBlR1PE/nFV4sZIjPHYpJf8MkzBvOEjtuWGw1G
+         EewkH7Xznrcf6HiuagGJkT4v7GmBN/lFdV2BfGi+QWakCVELoUskA9tOStOxCLkdaM/W
+         WBOzdhSeQ4Ebu8Xj1S8iipP678aE3IkbHCN0Sjc8iTV1sTVKQa5x/X37kJRp0pHfUeCB
+         /+O7LU9qquiUN5gxDPEqIpivOLDUKzAGvPlO7MxBMyTfC+jKvwyywzkN7eQ3EOETFIJy
+         QaoA==
+X-Gm-Message-State: ANoB5pntokkE1FozMUJd9o55FKNF7OGlHw81Mv/Ia+fq1BTqHx9S7coz
+        VBXfUegGl3Njt2eweLOoSrmkZA==
+X-Google-Smtp-Source: AA0mqf793ESx/sscIPyNmg7Zc2YStJKUoN2l9l7kbnO18Sros+YI1MVyANNMCuAajv/r7OdyYX7R0A==
+X-Received: by 2002:a05:6a00:3029:b0:576:6bff:1c61 with SMTP id ay41-20020a056a00302900b005766bff1c61mr3817196pfb.15.1670019708300;
+        Fri, 02 Dec 2022 14:21:48 -0800 (PST)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id f205-20020a6238d6000000b00574679561b4sm5563234pfa.134.2022.12.02.14.13.03
+        by smtp.gmail.com with ESMTPSA id t15-20020a170902e84f00b00188c9c11559sm6123882plg.1.2022.12.02.14.21.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Dec 2022 14:13:03 -0800 (PST)
+        Fri, 02 Dec 2022 14:21:47 -0800 (PST)
 From:   coverity-bot <keescook@chromium.org>
 X-Google-Original-From: coverity-bot <keescook+coverity-bot@chromium.org>
-Date:   Fri, 2 Dec 2022 14:13:02 -0800
-To:     Shayne Chen <shayne.chen@mediatek.com>
-Cc:     Lorenzo Bianconi <lorenzo@kernel.org>,
+Date:   Fri, 2 Dec 2022 14:21:46 -0800
+To:     Sean Wang <sean.wang@mediatek.com>
+Cc:     YN Chen <YN.Chen@mediatek.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
         linux-wireless@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
         Kalle Valo <kvalo@kernel.org>,
-        StanleyYP Wang <StanleyYP.Wang@mediatek.com>,
         Matthias Brugger <matthias.bgg@gmail.com>,
-        Peter Chiu <chui-hao.chiu@mediatek.com>,
+        Shayne Chen <shayne.chen@mediatek.com>,
         Eric Dumazet <edumazet@google.com>,
-        Money Wang <Money.Wang@mediatek.com>,
+        Leon Yen <leon.yen@mediatek.com>,
         linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
-        Howard Hsu <howard-yh.hsu@mediatek.com>,
+        Deren Wu <deren.wu@mediatek.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Quan Zhou <quan.zhou@mediatek.com>,
         linux-mediatek@lists.infradead.org, Felix Fietkau <nbd@nbd.name>,
         "David S. Miller" <davem@davemloft.net>,
-        Evelyn Tsai <evelyn.tsai@mediatek.com>,
-        linux-kernel@vger.kernel.org,
-        MeiChia Chiu <meichia.chiu@mediatek.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Bo Jiao <Bo.Jiao@mediatek.com>,
+        linux-kernel@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
+        Ben Greear <greearb@candelatech.com>,
+        Ming Yen Hsieh <mingyen.hsieh@mediatek.com>,
         Ryder Lee <ryder.lee@mediatek.com>,
-        Sujuan Chen <sujuan.chen@mediatek.com>,
         "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
         linux-next@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Coverity: mt7996_mcu_rx_radar_detected(): Insecure data handling
-Message-ID: <202212021413.392BADAF@keescook>
+Subject: Coverity: mt7921_check_offload_capability(): Resource leaks
+Message-ID: <202212021421.6B6D4F45@keescook>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -93,27 +93,27 @@ https://scan.coverity.com/projects/linux-next-weekly-scan
 You're getting this email because you were associated with the identified
 lines of code (noted below) that were touched by commits:
 
-  Thu Dec 1 17:29:14 2022 +0100
-    98686cd21624 ("wifi: mt76: mt7996: add driver for MediaTek Wi-Fi 7 (802.11be) devices")
+  Thu Dec 1 17:29:13 2022 +0100
+    034ae28b56f1 ("wifi: mt76: mt7921: introduce remain_on_channel support")
 
 Coverity reported the following:
 
-*** CID 1527812:  Insecure data handling  (TAINTED_SCALAR)
-drivers/net/wireless/mediatek/mt76/mt7996/mcu.c:338 in mt7996_mcu_rx_radar_detected()
-332     {
-333     	struct mt76_phy *mphy = &dev->mt76.phy;
-334     	struct mt7996_mcu_rdd_report *r;
-335
-336     	r = (struct mt7996_mcu_rdd_report *)skb->data;
-337
-vvv     CID 1527812:  Insecure data handling  (TAINTED_SCALAR)
-vvv     Using tainted variable "r->band_idx" as an index into an array "(*dev).mt76.phys".
-338     	mphy = dev->mt76.phys[r->band_idx];
-339     	if (!mphy)
-340     		return;
-341
-342     	if (r->band_idx == MT_RX_SEL2)
-343     		cfg80211_background_radar_event(mphy->hw->wiphy,
+*** CID 1527806:  Resource leaks  (RESOURCE_LEAK)
+drivers/net/wireless/mediatek/mt76/mt7921/init.c:178 in mt7921_check_offload_capability()
+172     	ret = request_firmware(&fw, fw_wm, dev);
+173     	if (ret)
+174     		return ret;
+175
+176     	if (!fw || !fw->data || fw->size < sizeof(*hdr)) {
+177     		dev_err(dev, "Invalid firmware\n");
+vvv     CID 1527806:  Resource leaks  (RESOURCE_LEAK)
+vvv     Variable "fw" going out of scope leaks the storage it points to.
+178     		return -EINVAL;
+179     	}
+180
+181     	data = fw->data;
+182     	hdr = (const void *)(fw->data + fw->size - sizeof(*hdr));
+183
 
 If this is a false positive, please let us know so we can mark it as
 such, or teach the Coverity rules to be smarter. If not, please make
@@ -121,8 +121,8 @@ sure fixes get into linux-next. :) For patches fixing this, please
 include these lines (but double-check the "Fixes" first):
 
 Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
-Addresses-Coverity-ID: 1527812 ("Insecure data handling")
-Fixes: 98686cd21624 ("wifi: mt76: mt7996: add driver for MediaTek Wi-Fi 7 (802.11be) devices")
+Addresses-Coverity-ID: 1527806 ("Resource leaks")
+Fixes: 034ae28b56f1 ("wifi: mt76: mt7921: introduce remain_on_channel support")
 
 Thanks for your attention!
 

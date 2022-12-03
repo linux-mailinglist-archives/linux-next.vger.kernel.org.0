@@ -2,49 +2,49 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 363EA641434
-	for <lists+linux-next@lfdr.de>; Sat,  3 Dec 2022 06:06:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72CF0641442
+	for <lists+linux-next@lfdr.de>; Sat,  3 Dec 2022 06:26:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229537AbiLCFF7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 3 Dec 2022 00:05:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38422 "EHLO
+        id S229710AbiLCF0P (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sat, 3 Dec 2022 00:26:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbiLCFF5 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sat, 3 Dec 2022 00:05:57 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65A13BBBF8;
-        Fri,  2 Dec 2022 21:05:56 -0800 (PST)
+        with ESMTP id S229809AbiLCF0O (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sat, 3 Dec 2022 00:26:14 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C65EAE2ABB;
+        Fri,  2 Dec 2022 21:26:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670043956; x=1701579956;
+  t=1670045173; x=1701581173;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=MUai+TNjC0Cx5KqQvcNQnHWoy9M6SukRcdTK0bFEnI0=;
-  b=XFSkGINMSBldSTaD6zHQtF8DlMktC9Hu/6hI/Jl/z/wN9X97h3To+KY6
-   bcyMiu034d2ZWOfR8jkxq6aq8rb1O/9gsj03xHj2GQl+eVwIHnrbb38sh
-   Mg0q8z8k+7FabV1Vajv8eMaDxuGsDAvO4wXmejaGqYqSK3cCM0XWt2VAd
-   RUb+PuDY5jAYV6euOsdH55kOi/7KfTAr5GvIh55AMP6pq6Kv2rhHHzQX7
-   /NbxqZa60QkB/DNnFZaT5EAN7WzmhJF+EV4ekf9w6R6RRz301baAEq7Ic
-   j25gXFHGKqTRBmHJM5+mf+xH8k5eYBeucS5r8FI0vbPyWT5M4MMb+RFmD
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="295789950"
+  bh=WJ/EtdAAq3iZV8At5WAIDvB61b6DbKEUdBQU4p3hB0U=;
+  b=J7XrBdG64lzSVzCbQ7wJs9+R4O237m0UO6nGJWwE3PRu7oxIo9wVrRot
+   hfGEJtj1tQZgRwjyicOlmIOY+IZxbFpF1t0iy1NUZOf35/7a6zu7RoeqS
+   NSgN8LWY78sp5eBWue97sYLCdlqHZOYpr7shjH8Nm8DcmyyB41KKOrg6f
+   6fM2GlKzxalt+VfFDKZPAHu1I5GOisSUD7COLLbpfuMij+nQxhJREumqu
+   wNxqD3OWsUkwm+3Ha7XOrMHn1vct6ufhmf1sxK1hz3eC4fl7XFSHBeLBX
+   uthpyq8TdQzof10bMq2wIpbDU+KiPQbo+Yz3QVrLEG0zuUuFDgS+Za5bX
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="296451987"
 X-IronPort-AV: E=Sophos;i="5.96,214,1665471600"; 
-   d="scan'208";a="295789950"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 21:05:56 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="751524149"
+   d="scan'208";a="296451987"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 21:26:13 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="708713321"
 X-IronPort-AV: E=Sophos;i="5.96,214,1665471600"; 
-   d="scan'208";a="751524149"
+   d="scan'208";a="708713321"
 Received: from jithujos.sc.intel.com ([172.25.103.66])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 21:05:55 -0800
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 21:26:13 -0800
 From:   Jithu Joseph <jithu.joseph@intel.com>
-To:     bp@suse.de
+To:     bp@alien8.de
 Cc:     rdunlap@infradead.org, jithu.joseph@intel.com,
         linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
         sfr@canb.auug.org.au, ashok.raj@intel.com, tony.luck@intel.com
-Subject: [PATCH] platform/x86/intel/ifs: Add missing documentation entry
-Date:   Fri,  2 Dec 2022 21:04:28 -0800
-Message-Id: <20221203050428.502264-1-jithu.joseph@intel.com>
+Subject: [RESEND PATCH] platform/x86/intel/ifs: Add missing documentation entry
+Date:   Fri,  2 Dec 2022 21:24:45 -0800
+Message-Id: <20221203052445.502450-1-jithu.joseph@intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <774fd22a-aaee-758d-8195-77bac783ecbc@infradead.org>
 References: <774fd22a-aaee-758d-8195-77bac783ecbc@infradead.org>
@@ -52,7 +52,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -66,6 +66,8 @@ Link: https://lore.kernel.org/lkml/774fd22a-aaee-758d-8195-77bac783ecbc@infradea
 Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
 Signed-off-by: Jithu Joseph <jithu.joseph@intel.com>
 ---
+ -Resending to "bp@alien8.de" as "bp@suse.de" reported undeliverable
+
  drivers/platform/x86/intel/ifs/ifs.h | 1 +
  1 file changed, 1 insertion(+)
 

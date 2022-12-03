@@ -2,56 +2,50 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72CF0641442
-	for <lists+linux-next@lfdr.de>; Sat,  3 Dec 2022 06:26:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66F6A641464
+	for <lists+linux-next@lfdr.de>; Sat,  3 Dec 2022 06:58:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229710AbiLCF0P (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 3 Dec 2022 00:26:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54558 "EHLO
+        id S229872AbiLCF6A (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sat, 3 Dec 2022 00:58:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229809AbiLCF0O (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sat, 3 Dec 2022 00:26:14 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C65EAE2ABB;
-        Fri,  2 Dec 2022 21:26:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670045173; x=1701581173;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=WJ/EtdAAq3iZV8At5WAIDvB61b6DbKEUdBQU4p3hB0U=;
-  b=J7XrBdG64lzSVzCbQ7wJs9+R4O237m0UO6nGJWwE3PRu7oxIo9wVrRot
-   hfGEJtj1tQZgRwjyicOlmIOY+IZxbFpF1t0iy1NUZOf35/7a6zu7RoeqS
-   NSgN8LWY78sp5eBWue97sYLCdlqHZOYpr7shjH8Nm8DcmyyB41KKOrg6f
-   6fM2GlKzxalt+VfFDKZPAHu1I5GOisSUD7COLLbpfuMij+nQxhJREumqu
-   wNxqD3OWsUkwm+3Ha7XOrMHn1vct6ufhmf1sxK1hz3eC4fl7XFSHBeLBX
-   uthpyq8TdQzof10bMq2wIpbDU+KiPQbo+Yz3QVrLEG0zuUuFDgS+Za5bX
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="296451987"
-X-IronPort-AV: E=Sophos;i="5.96,214,1665471600"; 
-   d="scan'208";a="296451987"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 21:26:13 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="708713321"
-X-IronPort-AV: E=Sophos;i="5.96,214,1665471600"; 
-   d="scan'208";a="708713321"
-Received: from jithujos.sc.intel.com ([172.25.103.66])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 21:26:13 -0800
-From:   Jithu Joseph <jithu.joseph@intel.com>
-To:     bp@alien8.de
-Cc:     rdunlap@infradead.org, jithu.joseph@intel.com,
-        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
-        sfr@canb.auug.org.au, ashok.raj@intel.com, tony.luck@intel.com
-Subject: [RESEND PATCH] platform/x86/intel/ifs: Add missing documentation entry
-Date:   Fri,  2 Dec 2022 21:24:45 -0800
-Message-Id: <20221203052445.502450-1-jithu.joseph@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <774fd22a-aaee-758d-8195-77bac783ecbc@infradead.org>
-References: <774fd22a-aaee-758d-8195-77bac783ecbc@infradead.org>
+        with ESMTP id S229522AbiLCF57 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sat, 3 Dec 2022 00:57:59 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09D932612A;
+        Fri,  2 Dec 2022 21:57:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=y+Q6icb5gf7L8lM2da2GQW7PPHjMW0v2gUtTHLGjGV4=; b=n2VHN6fNRoYypi9fxPFQXBYHcf
+        j5Oj+VHCG708oKFxEC7I6aYb2fkUpKWfxxUkS2NCOxLch74gou+AV/v3yFTQiOCY2yVv0oV6JpEyN
+        bPjwvOgy0ztr52Fbxz/PUSZ3IsMzc6cdF/oLj0qJjXjpbNB+gRaFdZhhfcWaovk74cc0wWwEPpwYI
+        2AupBdAKQ6savLEZkJj73YcukdhubR30JXjIk9SVDbYI0mJa/XprSSOyxrSDGGpH2gJ5IrYy76N01
+        SYg0EIYTy7KHed8dWufSEd3ZhKOb8DED1qxAj3afo8+y2T7A15bGBILgtXjq1ps+ofes9mSXY/Fu3
+        tR0bzQbw==;
+Received: from [2601:1c2:d80:3110::a2e7]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1p1LX3-002YO1-ML; Sat, 03 Dec 2022 05:57:50 +0000
+Message-ID: <49eefb22-28c9-c383-7d8b-5e90bb4cdda5@infradead.org>
+Date:   Fri, 2 Dec 2022 21:57:48 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [RESEND PATCH] platform/x86/intel/ifs: Add missing documentation
+ entry
+Content-Language: en-US
+To:     Jithu Joseph <jithu.joseph@intel.com>, bp@alien8.de
+Cc:     linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        sfr@canb.auug.org.au, ashok.raj@intel.com, tony.luck@intel.com
+References: <774fd22a-aaee-758d-8195-77bac783ecbc@infradead.org>
+ <20221203052445.502450-1-jithu.joseph@intel.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20221203052445.502450-1-jithu.joseph@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,32 +53,40 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Documentation for test_num member of struct ifs_data is missing [1].
 
-Link: https://lore.kernel.org/lkml/774fd22a-aaee-758d-8195-77bac783ecbc@infradead.org/ [1]
 
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Signed-off-by: Jithu Joseph <jithu.joseph@intel.com>
----
- -Resending to "bp@alien8.de" as "bp@suse.de" reported undeliverable
+On 12/2/22 21:24, Jithu Joseph wrote:
+> Documentation for test_num member of struct ifs_data is missing [1].
+> 
+> Link: https://lore.kernel.org/lkml/774fd22a-aaee-758d-8195-77bac783ecbc@infradead.org/ [1]
+> 
+> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> Signed-off-by: Jithu Joseph <jithu.joseph@intel.com>
 
- drivers/platform/x86/intel/ifs/ifs.h | 1 +
- 1 file changed, 1 insertion(+)
+Acked-by: Randy Dunlap <rdunlap@infradead.org>
 
-diff --git a/drivers/platform/x86/intel/ifs/ifs.h b/drivers/platform/x86/intel/ifs/ifs.h
-index da1474e1d8eb..046e39304fd5 100644
---- a/drivers/platform/x86/intel/ifs/ifs.h
-+++ b/drivers/platform/x86/intel/ifs/ifs.h
-@@ -208,6 +208,7 @@ union ifs_status {
-  * @status: it holds simple status pass/fail/untested
-  * @scan_details: opaque scan status code from h/w
-  * @cur_batch: number indicating the currently loaded test file
-+ * @test_num: number indicating the test type
-  */
- struct ifs_data {
- 	int	integrity_cap_bit;
+Thanks.
 
-base-commit: 1a63b58082869273bfbab1b945007193f7bd3a78
+> ---
+>  -Resending to "bp@alien8.de" as "bp@suse.de" reported undeliverable
+> 
+>  drivers/platform/x86/intel/ifs/ifs.h | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/platform/x86/intel/ifs/ifs.h b/drivers/platform/x86/intel/ifs/ifs.h
+> index da1474e1d8eb..046e39304fd5 100644
+> --- a/drivers/platform/x86/intel/ifs/ifs.h
+> +++ b/drivers/platform/x86/intel/ifs/ifs.h
+> @@ -208,6 +208,7 @@ union ifs_status {
+>   * @status: it holds simple status pass/fail/untested
+>   * @scan_details: opaque scan status code from h/w
+>   * @cur_batch: number indicating the currently loaded test file
+> + * @test_num: number indicating the test type
+>   */
+>  struct ifs_data {
+>  	int	integrity_cap_bit;
+> 
+> base-commit: 1a63b58082869273bfbab1b945007193f7bd3a78
+
 -- 
-2.25.1
-
+~Randy

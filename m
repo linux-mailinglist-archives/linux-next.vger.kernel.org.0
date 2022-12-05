@@ -2,104 +2,77 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E346364282F
-	for <lists+linux-next@lfdr.de>; Mon,  5 Dec 2022 13:14:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DB8F642B12
+	for <lists+linux-next@lfdr.de>; Mon,  5 Dec 2022 16:10:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231708AbiLEMOK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 5 Dec 2022 07:14:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50368 "EHLO
+        id S229982AbiLEPKV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 5 Dec 2022 10:10:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231327AbiLEMOJ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 5 Dec 2022 07:14:09 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40582AA;
-        Mon,  5 Dec 2022 04:14:09 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D26BB61032;
-        Mon,  5 Dec 2022 12:14:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D70EC433D7;
-        Mon,  5 Dec 2022 12:14:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670242448;
-        bh=aU0EeKX8NEFmCRSppqGIfcV+YjV+Rndty44Slx3vuG4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ow+BKXiEznsV2GNM7RNddJDg1iYqbvFIysjh1RjLt5Y7o/4papI+mp9pY87zIp2zD
-         EHTAFUr1NRlcSjDwetW0xHhvM+XigQvVqyid2Q2iqHpOiC316bSUvqF28ovhHjM1PA
-         ml32vQOJ1PGVzXOcfaSOKVts5vzArUCWdQtOwC7vlaswtZ/F+NwnWKWpBRjHJXJn0g
-         W7BLqW0iF3JBThtHy7BV40OuKE6dNoxPf1Nx8nyAMsdu6EtveOJsKfOByepu6e/YIf
-         sykM9QOGErQyAUCoezpBd7TXBibgoklVvKIEFWTB/GfiLpkPH/e7IznYwMurt0J/Xb
-         jnLt307EXsOUQ==
-Date:   Mon, 5 Dec 2022 12:14:02 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     kernelci@groups.io, sfr@canb.auug.org.au,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     info@kernelci.org, linux-next@vger.kernel.org,
-        linux-mips@vger.kernel.org
-Subject: Re: next/pending-fixes build: 205 builds: 2 failed, 203 passed, 6
- errors, 40 warnings (v6.1-rc7-310-gb04468dba0c6)
-Message-ID: <Y43gij0rJWFWFeSz@sirena.org.uk>
-References: <638d2def.170a0220.a77ce.05fa@mx.google.com>
- <20221205105718.38e244a0@canb.auug.org.au>
+        with ESMTP id S230437AbiLEPKU (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 5 Dec 2022 10:10:20 -0500
+X-Greylist: delayed 2295 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 05 Dec 2022 07:10:18 PST
+Received: from kylie.crudebyte.com (kylie.crudebyte.com [5.189.157.229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 337D61B8
+        for <linux-next@vger.kernel.org>; Mon,  5 Dec 2022 07:10:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=crudebyte.com; s=kylie; h=Content-Type:Content-Transfer-Encoding:
+        MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
+        Content-ID:Content-Description;
+        bh=gMUhJn01PNmaB5ePS6jMbGvmKgU5N/9Ep6unef2i9Is=; b=f+TphnqNcFdvRRdMgiiUrr7l/r
+        uONhi6A7KYq76Srqyf6u657aFHq2p/elaPmGD9nRvshwAXwH5DI1x5Lqgfm8fPD03e21edMo/5nVg
+        FLb2LzPNZhDqstq4Eg1Xe74m3MtIyTyjN2FDAo95ZOBOgivIJi1Q+26JYKLL7IAhyzq3jh7b6nhek
+        I36w8dcRNKvEsJ1JcvKGCefbRCzstkTfal9KGmhOwNIVpCiqKqU/SptDvILkkRjS2JwqYwNuAuVL/
+        6IOqmuh8Ne0V8r9ezaT9F4yneSKSbZCA6d/L/zq/BowhMvCT4HgGIlO70IZqVf4q5F1NE4+T6NGgY
+        aggUypx7R4bWUTYRbdv/cmLFIjlWxoIoV/QyBsrTq89GmvM4HUgixJ9cFxKIosPdBFV1LvZ+UxPi4
+        TduQMtFVCO6EwpWMpZQR/ThIHoKT0t5lTEPbhB4bJnxGeWPf5sOvCgyt6Bvp9dcCKRe55+eeMnz4V
+        4DqBESusRDAyNKWVoAiecoftMiQsLid8B3Pi9tc4O31u2Vf9ue91ERcTJdYK+vltZjE7RaZTH/jCo
+        9vk0QoFQQhK2qH8pErg7mX59ihvL0m5mKNt7DFVY+wiY2yPe3JFinXlDJupw0wGvNJz16/i90bMB7
+        Duj23PzUNn8Q2r7jbrZynldCJ/O2txSaSgCzp2ZLY=;
+From:   Christian Schoenebeck <linux_oss@crudebyte.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Dominique Martinet <asmadeus@codewreck.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the v9fs tree
+Date:   Mon, 05 Dec 2022 15:31:57 +0100
+Message-ID: <46397336.ChKRcxMYMu@silver>
+In-Reply-To: <Y41vKkaH9tvRXCfv@codewreck.org>
+References: <20221205150316.6fac25f2@canb.auug.org.au> <Y41vKkaH9tvRXCfv@codewreck.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="icqlFEUnd7CJ/mq/"
-Content-Disposition: inline
-In-Reply-To: <20221205105718.38e244a0@canb.auug.org.au>
-X-Cookie: If it ain't broke, don't fix it.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+On Monday, December 5, 2022 5:10:18 AM CET Dominique Martinet wrote:
+> Stephen Rothwell wrote on Mon, Dec 05, 2022 at 03:03:16PM +1100:
+> > After merging the v9fs tree, today's linux-next build (i386 defconfig)
+> > failed like this:
+[...]
+> > net/9p/client.c:523:17: note: in expansion of macro 'pr_err'
+> >   523 |                 pr_err(
+> >       |                 ^~~~~~
+> > cc1: all warnings being treated as errors
+> > 
+> > Caused by commit
+> > 
+> >   36cd2f80abf8 ("net/9p: fix response size check in p9_check_errors()")
+> > 
+> > I have applied the following patch for today:
+> 
+> Thank you!
+> I guess I should start building one 32bit kernel somewhere...
 
---icqlFEUnd7CJ/mq/
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+:/ I'll setup a 32-bit build system as well, sorry!
 
-On Mon, Dec 05, 2022 at 10:57:18AM +1100, Stephen Rothwell wrote:
-> On Sun, 04 Dec 2022 15:31:59 -0800 (PST) "kernelci.org bot" <bot@kernelci=
-=2Eorg> wrote:
+Best regards,
+Christian Schoenebeck
 
-> > mips:
-> >     fuloong2e_defconfig (gcc-10): 1 error
-> >     lemote2f_defconfig (gcc-10): 1 error
-> >     loongson2k_defconfig (gcc-10): 1 error
-> >     loongson3_defconfig (gcc-10): 1 error
 
-> > Errors summary:
-> >=20
-> >     4    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with=
- =E2=80=98-mhard-float=E2=80=99
-> >     1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr =
-r7,=3D0x'
-> >     1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr =
-r3,=3D0x'
-
-> These have been around for a very long time, now.  Is there some way we
-> can get them fixed?
-
-Presumably, I've added Thomas as he's the MIPS maintainer.
-
---icqlFEUnd7CJ/mq/
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmON4IoACgkQJNaLcl1U
-h9ArZQf/cOw6/R+ibZ4f2pZ8XY6whmqqxL0ui+/zK59xlDz97QR5hIQAkFwyUIX0
-E2TCfj8cpfo3E1JrbGAMnV3mJhcNdUv8njL4HzoegSOL1oeGOWxLSCudtt+Dtbp9
-NZ7gtaynOUG3gcqthLfi7FGhUZ3Rna3s8NlD7Cy2uMspzh/waHAyH7/cOBEDruoa
-V1OFkQCe/AOzscHO1XpVWJYtBXiOdekl7V6LPcKL5cMhrQg0wpeCl8SR1HVKvXSu
-SuwU3nYLrfG376x8JaKZZmxejt28+8NA5B5u/pZeB5aGQifXKffwknF6IAHEfesk
-UpAgRP0hehqs0mNMSH8lBJJBFq0CEg==
-=RTck
------END PGP SIGNATURE-----
-
---icqlFEUnd7CJ/mq/--

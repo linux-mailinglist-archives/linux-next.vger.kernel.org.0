@@ -2,97 +2,90 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4933642256
-	for <lists+linux-next@lfdr.de>; Mon,  5 Dec 2022 05:43:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E40BE642266
+	for <lists+linux-next@lfdr.de>; Mon,  5 Dec 2022 05:55:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231260AbiLEEnT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 4 Dec 2022 23:43:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52076 "EHLO
+        id S231260AbiLEEzM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 4 Dec 2022 23:55:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230501AbiLEEnS (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 4 Dec 2022 23:43:18 -0500
-Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EA6BDEC2;
-        Sun,  4 Dec 2022 20:43:16 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VWMo53a_1670215392;
-Received: from B-P7TQMD6M-0146.local(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VWMo53a_1670215392)
-          by smtp.aliyun-inc.com;
-          Mon, 05 Dec 2022 12:43:14 +0800
-Date:   Mon, 5 Dec 2022 12:43:12 +0800
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Al Viro <viro@ZenIV.linux.org.uk>, Gao Xiang <xiang@kernel.org>,
-        Jingbo Xu <jefflexu@linux.alibaba.com>,
+        with ESMTP id S231371AbiLEEzL (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 4 Dec 2022 23:55:11 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22306E0BF;
+        Sun,  4 Dec 2022 20:55:09 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NQWSW4THHz4x1V;
+        Mon,  5 Dec 2022 15:55:07 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1670216107;
+        bh=zQ8TiCwyeqRDC/ypKGA5ig/pOYTkDt+KNcA+WTAkaF0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=erlp6bxteAHyuXsd3fTeQe4fx3LEkd9QerqnAzLO6ShP+6RIMXMp7Yzxx+jz7Fqoc
+         M9hvQ0bdhsF980CuOxzRGryrvJBBViYLva8KcNR2gMGkaE4WEE22gyc7y3qsee5aT3
+         g2kJKBlweBzo708eYbXgCHryEnJeBtGJ50uWkgas6hm1M6koohybVerj4J8Nb22L9a
+         SPbeCGK4BcFuJI/ktSBAcrqFPSiecUfe28awmkdBHult62RZYvAlrlv1/wZcYYqA2Y
+         zVfnbRJMC98pVRifiFUI7CYwKmW2BiwaRS5JpnzVKJVqv/K7P8D60wu9vDD3folC0S
+         uRTOX/Z+6xQ4g==
+Date:   Mon, 5 Dec 2022 15:55:06 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Dominique Martinet <asmadeus@codewreck.org>
+Cc:     Christian Schoenebeck <linux_oss@crudebyte.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the vfs tree with the erofs tree
-Message-ID: <Y4124Jod9kS+sHGY@B-P7TQMD6M-0146.local>
-References: <20221205092415.56cc6e19@canb.auug.org.au>
- <Y41h7hz12QXQaSYS@B-P7TQMD6M-0146.local>
- <20221205151107.05579d52@canb.auug.org.au>
+Subject: Re: linux-next: build failure after merge of the v9fs tree
+Message-ID: <20221205155506.47ba27fc@canb.auug.org.au>
+In-Reply-To: <Y41vKkaH9tvRXCfv@codewreck.org>
+References: <20221205150316.6fac25f2@canb.auug.org.au>
+        <Y41vKkaH9tvRXCfv@codewreck.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221205151107.05579d52@canb.auug.org.au>
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/eiP2cSB.ubD.Cwp6uIjxVIO";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Dec 05, 2022 at 03:11:07PM +1100, Stephen Rothwell wrote:
-> Hi Gao,
-> 
-> On Mon, 5 Dec 2022 11:13:50 +0800 Gao Xiang <hsiangkao@linux.alibaba.com> wrote:
-> >
-> > On Mon, Dec 05, 2022 at 09:24:15AM +1100, Stephen Rothwell wrote:
-> > > Hi all,
-> > > 
-> > > Today's linux-next merge of the vfs tree got a conflict in:
-> > > 
-> > >   fs/erofs/fscache.c
-> > > 
-> > > between commits:
-> > > 
-> > >   89175ef1262d ("erofs: switch to prepare_ondemand_read() in fscache mode")
-> > >   89175ef1262d ("erofs: switch to prepare_ondemand_read() in fscache mode")
-> > > 
-> > > from the erofs tree and commit:
-> > > 
-> > >   89175ef1262d ("erofs: switch to prepare_ondemand_read() in fscache mode")
-> > > 
-> > > from the vfs tree.  
-> > 
-> > Is the commit from the vfs tree correct?
-> > 
-> > The conflict fix looks good to me (we tend to enable large folios in the
-> > next cycle.)
-> 
-> The commits should be
-> 
->   89175ef1262d ("erofs: switch to prepare_ondemand_read() in fscache mode")
->   a21274e993a6 ("erofs: support large folios for fscache mode")
-> 
-> from the erofs tree and
-> 
->   de4eda9de2d9 ("use less confusing names for iov_iter direction initializers")
-> 
-> from the vfs tree.
-> 
-> Cut and paste weirdness caught me again :-(
+--Sig_/eiP2cSB.ubD.Cwp6uIjxVIO
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks for the confirmation!
+Hi Dominique,
 
-Thanks,
-Gao Xiang
+On Mon, 5 Dec 2022 13:10:18 +0900 Dominique Martinet <asmadeus@codewreck.or=
+g> wrote:
+>
+> I've amended the bad commit with this and added a note to the patch
+> thanking you (not quite sure how to express that with xx-by: like tags,
+> it's just words -- if you care and have a suggestion feel free)
 
-> 
-> -- 
-> Cheers,
-> Stephen Rothwell
+Looks good to me.
 
+--=20
+Cheers,
+Stephen Rothwell
 
+--Sig_/eiP2cSB.ubD.Cwp6uIjxVIO
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmONeaoACgkQAVBC80lX
+0Gzscwf/WRSzofM+94QqtMzU7LZjLnquZAXjWJl6NuSOetHeVYWMtj1mAI0C6df7
+qg6pOo2S/erAwgfFbUeBhZNiyPMf8clAs3xRNiIC+eTlW6i4tzilz0puJAlCjbco
+vnGhnPty8UqecCMV6u6R+StbSac2H+h0OB4VgFtIotz0rV7ww1DdbyjXxKBUUh/3
+Irs0r2dqTa1+cmkIYyn/U/NK4QfTAzTI7wpGmZ6II4nSDSRymZzWNv+YW3bfoGeS
+g/aR0c+cjpLk3/SoQzqMo033iQGhJwc4L48J3bAIisL7JCJiDCp12Wk2k1IP0Hwc
+1+QailTMl9UKNZKbCSK76EhkfkXj7g==
+=Fpw/
+-----END PGP SIGNATURE-----
+
+--Sig_/eiP2cSB.ubD.Cwp6uIjxVIO--

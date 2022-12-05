@@ -2,177 +2,153 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 579436421D5
-	for <lists+linux-next@lfdr.de>; Mon,  5 Dec 2022 04:13:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C48264222A
+	for <lists+linux-next@lfdr.de>; Mon,  5 Dec 2022 05:03:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230446AbiLEDN5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 4 Dec 2022 22:13:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59646 "EHLO
+        id S231320AbiLEEDZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 4 Dec 2022 23:03:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230439AbiLEDN4 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 4 Dec 2022 22:13:56 -0500
-Received: from out30-54.freemail.mail.aliyun.com (out30-54.freemail.mail.aliyun.com [115.124.30.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A97A713CD8;
-        Sun,  4 Dec 2022 19:13:54 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R641e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VWMLxrT_1670210030;
-Received: from B-P7TQMD6M-0146.local(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VWMLxrT_1670210030)
-          by smtp.aliyun-inc.com;
-          Mon, 05 Dec 2022 11:13:52 +0800
-Date:   Mon, 5 Dec 2022 11:13:50 +0800
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Al Viro <viro@ZenIV.linux.org.uk>, Gao Xiang <xiang@kernel.org>,
-        Jingbo Xu <jefflexu@linux.alibaba.com>,
+        with ESMTP id S231354AbiLEEDY (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 4 Dec 2022 23:03:24 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 158A4E0BE;
+        Sun,  4 Dec 2022 20:03:21 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NQVJk2lxBz4x1V;
+        Mon,  5 Dec 2022 15:03:17 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1670212999;
+        bh=bn+Ynyqonbkxhlxq9RLq/EqIlQxsr9VMxyD6RntrAqU=;
+        h=Date:From:To:Cc:Subject:From;
+        b=moV6G4PPYlMrXZikQmQXGbAMs2IaAVZgfXBoQz12bjMla6cRPQHGQ9ZJ/1F+nQetC
+         fcRpTUb/oMtctGpKVlEC9zliH+a0NTRagwugKpd4SjdT8wHNGaO+g0FOf3j3wcs/yU
+         W0bcq66kcT5mVLcWch2KeGeaTluvT1FpRKLKOwoWZu4UPLaRwk4g3ov43Y9ph5jmkD
+         2XjrRv6o3UkZavJkUO3j7P8A2v7zq9ux4fhsaaveFjJyWt4pb9pOD7BcLaVKEms5FX
+         HKiA0FgZ9g9X+D1z4aPeqX5zk/r+zxGNX3fFJM7cVL47tHQjaJuqDeg+WhsMci9arL
+         5ddiAUBJSMJQw==
+Date:   Mon, 5 Dec 2022 15:03:16 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Dominique Martinet <asmadeus@codewreck.org>
+Cc:     Christian Schoenebeck <linux_oss@crudebyte.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the vfs tree with the erofs tree
-Message-ID: <Y41h7hz12QXQaSYS@B-P7TQMD6M-0146.local>
-References: <20221205092415.56cc6e19@canb.auug.org.au>
+Subject: linux-next: build failure after merge of the v9fs tree
+Message-ID: <20221205150316.6fac25f2@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221205092415.56cc6e19@canb.auug.org.au>
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/K/gVDou+ok0MxDNaJnE=fl8";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Stephen,
+--Sig_/K/gVDou+ok0MxDNaJnE=fl8
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Dec 05, 2022 at 09:24:15AM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Today's linux-next merge of the vfs tree got a conflict in:
-> 
->   fs/erofs/fscache.c
-> 
-> between commits:
-> 
->   89175ef1262d ("erofs: switch to prepare_ondemand_read() in fscache mode")
->   89175ef1262d ("erofs: switch to prepare_ondemand_read() in fscache mode")
-> 
-> from the erofs tree and commit:
-> 
->   89175ef1262d ("erofs: switch to prepare_ondemand_read() in fscache mode")
-> 
-> from the vfs tree.
+Hi all,
 
-Is the commit from the vfs tree correct?
+After merging the v9fs tree, today's linux-next build (i386 defconfig)
+failed like this:
 
-The conflict fix looks good to me (we tend to enable large folios in the
-next cycle.)
+In file included from include/linux/kernel.h:29,
+                 from arch/x86/include/asm/percpu.h:27,
+                 from arch/x86/include/asm/nospec-branch.h:14,
+                 from arch/x86/include/asm/paravirt_types.h:27,
+                 from arch/x86/include/asm/ptrace.h:97,
+                 from arch/x86/include/asm/math_emu.h:5,
+                 from arch/x86/include/asm/processor.h:13,
+                 from arch/x86/include/asm/timex.h:5,
+                 from include/linux/timex.h:67,
+                 from include/linux/time32.h:13,
+                 from include/linux/time.h:60,
+                 from include/linux/stat.h:19,
+                 from include/linux/module.h:13,
+                 from net/9p/client.c:11:
+net/9p/client.c: In function 'p9_check_errors':
+include/linux/kern_levels.h:5:25: error: format '%ld' expects argument of t=
+ype 'long int', but argument 3 has type 'size_t' {aka 'unsigned int'} [-Wer=
+ror=3Dformat=3D]
+    5 | #define KERN_SOH        "\001"          /* ASCII Start Of Header */
+      |                         ^~~~~~
+include/linux/printk.h:429:25: note: in definition of macro 'printk_index_w=
+rap'
+  429 |                 _p_func(_fmt, ##__VA_ARGS__);                      =
+     \
+      |                         ^~~~
+include/linux/printk.h:500:9: note: in expansion of macro 'printk'
+  500 |         printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
+      |         ^~~~~~
+include/linux/kern_levels.h:11:25: note: in expansion of macro 'KERN_SOH'
+   11 | #define KERN_ERR        KERN_SOH "3"    /* error conditions */
+      |                         ^~~~~~~~
+include/linux/printk.h:500:16: note: in expansion of macro 'KERN_ERR'
+  500 |         printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
+      |                ^~~~~~~~
+net/9p/client.c:523:17: note: in expansion of macro 'pr_err'
+  523 |                 pr_err(
+      |                 ^~~~~~
+cc1: all warnings being treated as errors
 
-Thanks,
-Gao Xiang
+Caused by commit
 
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
-> 
-> -- 
-> Cheers,
-> Stephen Rothwell
-> 
-> diff --cc fs/erofs/fscache.c
-> index f14886c479bd,4c837be3b6e3..000000000000
-> --- a/fs/erofs/fscache.c
-> +++ b/fs/erofs/fscache.c
-> @@@ -126,28 -159,47 +126,28 @@@ static int erofs_fscache_read_folios_as
->   
->   	ret = fscache_begin_read_operation(cres, cookie);
->   	if (ret)
->  -		goto out;
->  +		return ret;
->   
->   	while (done < len) {
->  -		subreq = kzalloc(sizeof(struct netfs_io_subrequest),
->  -				 GFP_KERNEL);
->  -		if (subreq) {
->  -			INIT_LIST_HEAD(&subreq->rreq_link);
->  -			refcount_set(&subreq->ref, 2);
->  -			subreq->rreq = rreq;
->  -			refcount_inc(&rreq->ref);
->  -		} else {
->  -			ret = -ENOMEM;
->  -			goto out;
->  -		}
->  -
->  -		subreq->start = pstart + done;
->  -		subreq->len	=  len - done;
->  -		subreq->flags = 1 << NETFS_SREQ_ONDEMAND;
->  +		loff_t sstart = pstart + done;
->  +		size_t slen = len - done;
->  +		unsigned long flags = 1 << NETFS_SREQ_ONDEMAND;
->   
->  -		list_add_tail(&subreq->rreq_link, &rreq->subrequests);
->  -
->  -		source = cres->ops->prepare_read(subreq, LLONG_MAX);
->  -		if (WARN_ON(subreq->len == 0))
->  +		source = cres->ops->prepare_ondemand_read(cres,
->  +				sstart, &slen, LLONG_MAX, &flags, 0);
->  +		if (WARN_ON(slen == 0))
->   			source = NETFS_INVALID_READ;
->   		if (source != NETFS_READ_FROM_CACHE) {
->  -			erofs_err(sb, "failed to fscache prepare_read (source %d)",
->  -				  source);
->  -			ret = -EIO;
->  -			subreq->error = ret;
->  -			erofs_fscache_put_subrequest(subreq);
->  -			goto out;
->  +			erofs_err(sb, "failed to fscache prepare_read (source %d)", source);
->  +			return -EIO;
->   		}
->   
->  -		atomic_inc(&rreq->nr_outstanding);
->  +		refcount_inc(&req->ref);
-> - 		iov_iter_xarray(&iter, READ, &req->mapping->i_pages,
-> ++		iov_iter_xarray(&iter, ITER_DEST, &req->mapping->i_pages,
->  +				lstart + done, slen);
->   
->  -		iov_iter_xarray(&iter, ITER_DEST, &rreq->mapping->i_pages,
->  -				start + done, subreq->len);
->  -
->  -		ret = fscache_read(cres, subreq->start, &iter,
->  -				   NETFS_READ_HOLE_FAIL,
->  -				   erofc_fscache_subreq_complete, subreq);
->  +		ret = fscache_read(cres, sstart, &iter, NETFS_READ_HOLE_FAIL,
->  +				   erofs_fscache_subreq_complete, req);
->   		if (ret == -EIOCBQUEUED)
->   			ret = 0;
->   		if (ret) {
-> @@@ -233,19 -297,17 +233,19 @@@ static int erofs_fscache_data_read_slic
->   		}
->   		iov_iter_zero(PAGE_SIZE - size, &iter);
->   		erofs_put_metabuf(&buf);
->  -		return PAGE_SIZE;
->  +		primary->submitted += PAGE_SIZE;
->  +		return 0;
->   	}
->   
->  +	count = primary->len - primary->submitted;
->   	if (!(map.m_flags & EROFS_MAP_MAPPED)) {
-> - 		iov_iter_xarray(&iter, READ, &mapping->i_pages, pos, count);
->  -		count = len;
-> + 		iov_iter_xarray(&iter, ITER_DEST, &mapping->i_pages, pos, count);
->   		iov_iter_zero(count, &iter);
->  -		return count;
->  +		primary->submitted += count;
->  +		return 0;
->   	}
->   
->  -	count = min_t(size_t, map.m_llen - (pos - map.m_la), len);
->  +	count = min_t(size_t, map.m_llen - (pos - map.m_la), count);
->   	DBG_BUGON(!count || count % PAGE_SIZE);
->   
->   	mdev = (struct erofs_map_dev) {
+  36cd2f80abf8 ("net/9p: fix response size check in p9_check_errors()")
 
+I have applied the following patch for today:
 
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Mon, 5 Dec 2022 14:55:10 +1100
+Subject: [PATCH] net/9p: use %zu to print size_t
+
+Fixes: 36cd2f80abf8 ("net/9p: fix response size check in p9_check_errors()")
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ net/9p/client.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/net/9p/client.c b/net/9p/client.c
+index deb7baa178f3..6db5e0c55f9c 100644
+--- a/net/9p/client.c
++++ b/net/9p/client.c
+@@ -521,7 +521,7 @@ static int p9_check_errors(struct p9_client *c, struct =
+p9_req_t *req)
+ 	err =3D p9_parse_header(&req->rc, NULL, &type, NULL, 0);
+ 	if (req->rc.size > req->rc.capacity && !req->rc.zc) {
+ 		pr_err(
+-			 "requested packet size too big: %d does not fit %ld (type=3D%d)\n",
++			 "requested packet size too big: %d does not fit %zu (type=3D%d)\n",
+ 			 req->rc.size, req->rc.capacity, req->rc.id);
+ 		return -EIO;
+ 	}
+--=20
+2.35.1
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/K/gVDou+ok0MxDNaJnE=fl8
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmONbYQACgkQAVBC80lX
+0Gy/rwf/XJjnu0djTWhMmOlluPZjx+Ppnqm917cJ4FiUaquVBOE7xPaklkIpWUZV
+eFAeeJuHzwHy8RESk7+Xmc9tJ5ZIfH7nGhiyQSsfNZq76pHZDrzX0u5yaoOknWjl
+cvwlAHuWJ6Gt3LJRd8zHXahjkHc5588oiUDkuLB0triWSBGWjQC1XOgZbsfWlGxZ
+8BHfkQgaKQDpHCu75gqG5+deuVAkClBBRrq7EhzKy+cTKOUaBvLYSuAcvbUDsjIn
+FCa9fXxYy+RUMl/xwl6WzvHpJ7eLivNvdHnRKBmxz81qlkXU7qjm8qwJWTpv/XH9
+vdQ7c1KXxp9Jrj1vhOmpRjs0MywF3g==
+=OnM1
+-----END PGP SIGNATURE-----
+
+--Sig_/K/gVDou+ok0MxDNaJnE=fl8--

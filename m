@@ -2,105 +2,81 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6AD96436FA
-	for <lists+linux-next@lfdr.de>; Mon,  5 Dec 2022 22:40:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56329643840
+	for <lists+linux-next@lfdr.de>; Mon,  5 Dec 2022 23:42:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231599AbiLEVk5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 5 Dec 2022 16:40:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40286 "EHLO
+        id S230437AbiLEWmR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 5 Dec 2022 17:42:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231160AbiLEVk4 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 5 Dec 2022 16:40:56 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4511425EBC;
-        Mon,  5 Dec 2022 13:40:54 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NQxmw4Xb3z4wgv;
-        Tue,  6 Dec 2022 08:40:48 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1670276449;
-        bh=bj/9YMHqJCCVv195EGHZoWZDT+Qa0ZVxlDMji/X3sUI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=n9qgymWgpbPoiDk3AJrp3fBYqJASOzUV54DpZcSbc51MZfRHAvb05OQ2bSj+NrTHV
-         sLfIk041B+EWGFvWTV/5yA81M3zDX6u4icfcHdScJfJRwFQSF0RQb2M2TgSDTAj7xT
-         xNcq+Cna49QdpRPDv+23782/EVjTuBUIqwL5xeds2Pm2GbbxJGDTjBAItx6J1fp9FP
-         /bCczgAgpM926fVXj0b+1RMUfDseMYIHPsX+clldRVF484XSzEITbUTVMHCtLK0EdG
-         L5fuNUgZPKou1x3wt+w+8kiuw32aFpA+5XiG3DqoU/GlA+hrLPyH52R1oSfCpDL6QK
-         osDrXaUQehf3Q==
-Date:   Tue, 6 Dec 2022 08:40:46 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>,
-        Ben Levinsky <ben.levinsky@amd.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Michal Simek <michal.simek@amd.com>,
-        Rajan Vaja <rajan.vaja@xilinx.com>,
-        Tanmay Shah <tanmay.shah@amd.com>,
-        Bjorn Andersson <andersson@kernel.org>
-Subject: Re: linux-next: manual merge of the rpmsg tree with the spi tree
-Message-ID: <20221206084046.020e03ea@canb.auug.org.au>
-In-Reply-To: <Y45MpxPpWBSkBsyp@sirena.org.uk>
-References: <20221128134120.0afdceb3@canb.auug.org.au>
-        <CANLsYkw0Nq38rZzGTTpCL4J3aWJQpX32iOe4zdTT0+CcfhcOmg@mail.gmail.com>
-        <Y45MpxPpWBSkBsyp@sirena.org.uk>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/S2lGb1uH3ibi7K8ZXJB/PPE";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S230235AbiLEWmQ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 5 Dec 2022 17:42:16 -0500
+Received: from nautica.notk.org (nautica.notk.org [91.121.71.147])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2865FDEE;
+        Mon,  5 Dec 2022 14:42:16 -0800 (PST)
+Received: by nautica.notk.org (Postfix, from userid 108)
+        id 77EB0C01B; Mon,  5 Dec 2022 23:42:24 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1670280144; bh=R/AMBoyyHa2hQLy+oRLOqypPkWT7gf7zzItJ5Gnn7rY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kzcP1SFaQ1LbJMT2De9D8nQsQthP1PSxDKCfbDuHe+ZBTeL5NT8TM2OqOeOl3I6mf
+         jDuQLB3mhmcN2A5AnfySJk/qe9uodKQe+65DsEIRauq7t5qiwpfJE+dakdI7tscZMP
+         6UqB04Mln3xO5LqptemZAlI2IkGQQcxZs57+Fk9KM6pOKX/uZ1l+yzVutGLUm31md6
+         MJfWAc0Sxcy0W4YORDAlFUbACGUGrVNVDpiMJgdpNcVbtYnUzq2c2uZAuWCOsakdPr
+         AJps69lPGsVTRNW4pI/nsmxZ+Xc89h+ll/nVMsjFu7eKgRFn/c4GbHDiPmPLFNDmw8
+         e0YYx3o5Smr6w==
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
+Received: from odin.codewreck.org (localhost [127.0.0.1])
+        by nautica.notk.org (Postfix) with ESMTPS id C56E9C009;
+        Mon,  5 Dec 2022 23:42:22 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1670280144; bh=R/AMBoyyHa2hQLy+oRLOqypPkWT7gf7zzItJ5Gnn7rY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kzcP1SFaQ1LbJMT2De9D8nQsQthP1PSxDKCfbDuHe+ZBTeL5NT8TM2OqOeOl3I6mf
+         jDuQLB3mhmcN2A5AnfySJk/qe9uodKQe+65DsEIRauq7t5qiwpfJE+dakdI7tscZMP
+         6UqB04Mln3xO5LqptemZAlI2IkGQQcxZs57+Fk9KM6pOKX/uZ1l+yzVutGLUm31md6
+         MJfWAc0Sxcy0W4YORDAlFUbACGUGrVNVDpiMJgdpNcVbtYnUzq2c2uZAuWCOsakdPr
+         AJps69lPGsVTRNW4pI/nsmxZ+Xc89h+ll/nVMsjFu7eKgRFn/c4GbHDiPmPLFNDmw8
+         e0YYx3o5Smr6w==
+Received: from localhost (odin.codewreck.org [local])
+        by odin.codewreck.org (OpenSMTPD) with ESMTPA id 3795af09;
+        Mon, 5 Dec 2022 22:42:10 +0000 (UTC)
+Date:   Tue, 6 Dec 2022 07:41:55 +0900
+From:   Dominique Martinet <asmadeus@codewreck.org>
+To:     Christian Schoenebeck <linux_oss@crudebyte.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the v9fs tree
+Message-ID: <Y45zsz71RfXbySDq@codewreck.org>
+References: <20221205150316.6fac25f2@canb.auug.org.au>
+ <Y41vKkaH9tvRXCfv@codewreck.org>
+ <46397336.ChKRcxMYMu@silver>
+ <3823616.UlgstfPZBx@silver>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <3823616.UlgstfPZBx@silver>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/S2lGb1uH3ibi7K8ZXJB/PPE
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Christian Schoenebeck wrote on Mon, Dec 05, 2022 at 09:40:06PM +0100:
+> Dominique, looking at your 9p queue, I just realized what happened here: I 
+> posted a v2 of these two patches, which got lost for some reason:
+> 
+> https://lore.kernel.org/all/cover.1669144861.git.linux_oss@crudebyte.com/
+> 
+> The currently queued 1st patch is still v1 as well.
 
-Hi Mark,
+Oh. Now how did I manage that one..
+Thanks for the catch, and v2 had the valid printf modifier...
 
-On Mon, 5 Dec 2022 19:55:19 +0000 Mark Brown <broonie@kernel.org> wrote:
->
-> On Mon, Dec 05, 2022 at 10:24:48AM -0700, Mathieu Poirier wrote:
-> > On Sun, 27 Nov 2022 at 19:41, Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote: =20
->=20
-> > >   1e400cb9cff2 ("firmware: xilinx: Add qspi firmware interface") =20
->=20
-> > Mark - since this is in the SPI tree, can you send me a pull request
-> > for this commit?  I will do the refactoring on my side. =20
->=20
-> That would basically be the entire SPI tree up to that point since it's
-> all mostly on one branch...
-
-Both sides just need to mention it to Linus when you send your pull
-requests - it is not a problematic conflict.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/S2lGb1uH3ibi7K8ZXJB/PPE
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOOZV4ACgkQAVBC80lX
-0GzIYQf/SYMRngv9pUYycVE9ytTC7tm0BORJ14YbhSXypSrQsczbkWKYjW61ga3m
-685lyMDsH18g+SV/zsTpcbe7F9GdHO0mWBo9eoNHJepmCGDRzz/tnOlZc1W7jJLT
-frXyxRQ4nHEvOLykMTAsI0d7LJvByn6AT/4ESVK09hqY5MZQVOoTxUY6tcSzrK53
-0rVFjqliVzNwHTSpOPRRutP4y1xVbTvJYBUXEMQ90hYNu/livDG5YkGkq1A4dRWY
-b3PTjJ9cgHE6zBCEMQpgWOZEnAVCrmaoCr9jvLp7XHRnOmznV727bOMDWEuS/FN8
-EJg8WB4C4wvZAxgKn2MbZivWoaCLyA==
-=cRXS
------END PGP SIGNATURE-----
-
---Sig_/S2lGb1uH3ibi7K8ZXJB/PPE--
+Sorry for all the trouble :(
+-- 
+Dominique

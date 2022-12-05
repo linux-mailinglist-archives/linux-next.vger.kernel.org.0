@@ -2,159 +2,106 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5547D6420FF
-	for <lists+linux-next@lfdr.de>; Mon,  5 Dec 2022 02:15:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AD7F642165
+	for <lists+linux-next@lfdr.de>; Mon,  5 Dec 2022 03:12:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231213AbiLEBPt (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 4 Dec 2022 20:15:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51342 "EHLO
+        id S231140AbiLECMD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 4 Dec 2022 21:12:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230448AbiLEBPs (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 4 Dec 2022 20:15:48 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 363E99FDE;
-        Sun,  4 Dec 2022 17:15:46 -0800 (PST)
+        with ESMTP id S230307AbiLECMC (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 4 Dec 2022 21:12:02 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECF2112A8C;
+        Sun,  4 Dec 2022 18:12:00 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NQQbL1dL5z4xN8;
-        Mon,  5 Dec 2022 12:15:41 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NQRr94Cr0z4x1H;
+        Mon,  5 Dec 2022 13:11:53 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1670202944;
-        bh=va+ER1GinBW/ZbxfHD/We3OdldRGmNelHCbNhtA+I08=;
+        s=201702; t=1670206314;
+        bh=47fI970nCbAtDsVXIob2q/VXxrdUuAylhwDVGCzCJM8=;
         h=Date:From:To:Cc:Subject:From;
-        b=LUiOAsmxErriObZ4GNeT4CErqp+Xlt6RFwjfddFzTwvL3jPnkDLHQJ6Fdd7wUXto3
-         iOPIhzSXzyQko5Ec6CH9xdq6WGmTOQTZlZn/RDWUqo7d1pqvFJGme1OBjNLT1innkY
-         8Th63qUjUT12CVTvt3nX0qD6RmLDceM69/0eb4YnXVBZ56lv02Max6IjQxuRf2x0uX
-         bFSsmsunqM5NhrzY8x6WIK1UyBNXlfvVDZeRW3un4JzJPrfLUmnGkJuBQ9NmBNEzxy
-         TJ/fUip4tC0hRFiLkzXEF/wWHoM2s3EhT5XFy+daZjqByZgxsaSnqmj9Y8g8lTZhXZ
-         b9r76AcovcZWA==
-Date:   Mon, 5 Dec 2022 12:15:40 +1100
+        b=vK8QkZxlv+4bm4vDWZZFdAP5IXIzW9KBbaLAJLNapw45QMex3o516+LiJALTCJp28
+         /5ohp4QqDFLYAQNqQck4FnyBLyW5SuMvdISpJ60FrFWJyRH5ivHF3FSHlTX+JVYiEh
+         wz4nqedfacufm1LQugzExST4Ey4oq8ZBpVB42Y398hnfNzdKKbEz/urcwVjQTrNDW7
+         kQqBQ6dSYRdfR2gL9+JPDf2rno1gyX7G/RH9Nr/NRJr0eOFHZWH2xTCIsre8s3dC2T
+         9KrvTjx4vnNzabFFvZtPjScZTNUKFe3V5U+8+JSM0IaDyicuKj6JMplbibe0P9Wtz8
+         EQY/1cRTIOMWQ==
+Date:   Mon, 5 Dec 2022 13:11:52 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+To:     Greg KH <greg@kroah.com>, Jens Axboe <axboe@kernel.dk>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the tip tree
-Message-ID: <20221205121540.25a993c2@canb.auug.org.au>
+Subject: linux-next: manual merge of the driver-core tree with the block
+ tree
+Message-ID: <20221205131152.26c49399@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ta_TCegbeHFhMSoB1X7m4ax";
+Content-Type: multipart/signed; boundary="Sig_/dkNr_BLgZrxgb1OvV7weeVh";
  protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/ta_TCegbeHFhMSoB1X7m4ax
+--Sig_/dkNr_BLgZrxgb1OvV7weeVh
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the tip tree, today's linux-next build (x86_64 allmodconfig)
-failed like this:
+Today's linux-next merge of the driver-core tree got a conflict in:
 
-In file included from include/linux/uaccess.h:11,
-                 from include/linux/sched/task.h:11,
-                 from include/linux/sched/signal.h:9,
-                 from include/linux/rcuwait.h:6,
-                 from include/linux/percpu-rwsem.h:7,
-                 from include/linux/fs.h:33,
-                 from include/linux/huge_mm.h:8,
-                 from include/linux/mm.h:726,
-                 from drivers/media/common/videobuf2/frame_vector.c:5:
-drivers/media/common/videobuf2/frame_vector.c: In function 'get_vaddr_frame=
-s':
-drivers/media/common/videobuf2/frame_vector.c:46:31: error: 'mm' undeclared=
- (first use in this function); did you mean 'tm'?
-   46 |         start =3D untagged_addr(mm, start);
-      |                               ^~
-arch/x86/include/asm/uaccess.h:38:28: note: in definition of macro 'untagge=
-d_addr'
-   38 |                 __addr &=3D (mm)->context.untag_mask | sign;       =
-       \
-      |                            ^~
-drivers/media/common/videobuf2/frame_vector.c:46:31: note: each undeclared =
-identifier is reported only once for each function it appears in
-   46 |         start =3D untagged_addr(mm, start);
-      |                               ^~
-arch/x86/include/asm/uaccess.h:38:28: note: in definition of macro 'untagge=
-d_addr'
-   38 |                 __addr &=3D (mm)->context.untag_mask | sign;       =
-       \
-      |                            ^~
+  include/linux/blkdev.h
+  drivers/block/pktcdvd.c
 
-Caused by commit
+between commits:
 
-  062c9b2996e9 ("mm: Pass down mm_struct to untagged_addr()")
+  f40eb99897af ("pktcdvd: remove driver.")
+  85d6ce58e493 ("block: remove devnode callback from struct block_device_op=
+erations")
 
-interacting with commit
+from the block tree and commit:
 
-  6647e76ab623 ("v4l2: don't fall back to follow_pfn() if pin_user_pages_fa=
-st() fails")
+  be7e8b917ead ("blkdev: make struct block_device_operations.devnode() take=
+ a const *")
 
-from Linus' tree.
+from the driver-core tree.
 
-I have applied the following merge fix patch for today.
+I fixed it up (I removed pktcdvd.c and used blkdev.h from the former tree)
+and can carry the fix as necessary. This is now fixed as far as linux-next
+is concerned, but any non trivial conflicts should be mentioned to your
+upstream maintainer when your tree is submitted for merging.  You may
+also want to consider cooperating with the maintainer of the conflicting
+tree to minimise any particularly complex conflicts.
 
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Mon, 5 Dec 2022 11:55:52 +1100
-Subject: [PATCH] fix up for "mm: Pass down mm_struct to untagged_addr()"
 
-interacting with "v4l2: don't fall back to follow_pfn() if pin_user_pages_f=
-ast() fails"
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- drivers/media/common/videobuf2/frame_vector.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/media/common/videobuf2/frame_vector.c b/drivers/media/=
-common/videobuf2/frame_vector.c
-index 18124929b18d..13455a76a37e 100644
---- a/drivers/media/common/videobuf2/frame_vector.c
-+++ b/drivers/media/common/videobuf2/frame_vector.c
-@@ -43,7 +43,7 @@ int get_vaddr_frames(unsigned long start, unsigned int nr=
-_frames,
- 	if (WARN_ON_ONCE(nr_frames > vec->nr_allocated))
- 		nr_frames =3D vec->nr_allocated;
-=20
--	start =3D untagged_addr(mm, start);
-+	start =3D untagged_addr(current->mm, start);
-=20
- 	ret =3D pin_user_pages_fast(start, nr_frames,
- 				  FOLL_FORCE | FOLL_WRITE | FOLL_LONGTERM,
---=20
-2.35.1
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/ta_TCegbeHFhMSoB1X7m4ax
+--Sig_/dkNr_BLgZrxgb1OvV7weeVh
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmONRjwACgkQAVBC80lX
-0GyglQf/XuQWW31A/19o3r+K3CnPRal4dtU0hcX4mqfxfQUdwUFZtUOqhkAXUK5C
-ElbQ2RReZCtTZbYVK/Q4TMSN1IfPYQZ1S01qG8mbr5SwtMsRGst5jyIL5+DxIb4C
-K9MOqXug2hz10VyYCkLRWj9GBBGqGyyK4sweo42i8Cfuv1YfJ8OcyqdRhDnwVyK0
-lYfGHtmLMYP9xWbMwkDLBqwp99P/vtaGTF4Jvx+ilPkLtOiDVhCMA6F9nAH+7HS0
-13oWdWzdjRj6q/o0zxGlwzVEuZzwtFnaMd/9ZOJh+30WnZ/2rIIrpc8mz1x7jshR
-kHB0MwWajKVrZLvqMod33Z6oWygEiw==
-=7UPh
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmONU2gACgkQAVBC80lX
+0GxwmggAmtiB+NOQ5K+ORB2SsdyoSDOqqb4saMnpJIb0KnmLbGUcQJMWfnNRKrlq
+l0gLZdZ/98Tvr1rudnOozLNOtbgznp40rvXMoyAT1lhhwB29MnEAjjxgoGJePDfG
+iA/OsHRDOx4LkFDpe2+SlmrZjzeQYBNb1YXzy1K0bZGmv5h8SP6R3BlbV8aMMLmp
+pScAUPqflcGprqYUjXuHwn4nxNr0E0mRNFSLZSN8OXn+asA+NnDFm4IBHBVkPS1b
+jqGG9IOc4/rfm6LfeFzgYmWbaw4/ZPx67uID4yd6UfVkudraQs2V/vQSzJGLnaHc
+yvihy+mIwB/fmF4dq1UdvROOH02q/g==
+=+DPK
 -----END PGP SIGNATURE-----
 
---Sig_/ta_TCegbeHFhMSoB1X7m4ax--
+--Sig_/dkNr_BLgZrxgb1OvV7weeVh--

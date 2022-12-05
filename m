@@ -2,118 +2,156 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E39616423FF
-	for <lists+linux-next@lfdr.de>; Mon,  5 Dec 2022 09:03:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 275EF642538
+	for <lists+linux-next@lfdr.de>; Mon,  5 Dec 2022 09:58:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231406AbiLEIDi (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 5 Dec 2022 03:03:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54748 "EHLO
+        id S232313AbiLEI6r (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 5 Dec 2022 03:58:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231842AbiLEID3 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 5 Dec 2022 03:03:29 -0500
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ED8E28C;
-        Mon,  5 Dec 2022 00:03:26 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id 1B57B3200918;
-        Mon,  5 Dec 2022 03:03:23 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Mon, 05 Dec 2022 03:03:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1670227402; x=1670313802; bh=2PeOQw77mZ
-        Is4RmHtQcQO9RXZKB7n7lnwirONUp4eN4=; b=FGSiTdgTga/y5yzAwvfi6jpH6z
-        AvxNlBFv2FbdCNOpUX198CwWkXG2zzEO5w+JS0Yq1008RTjNStzLh5ONIASvXC9+
-        sW5wGlxkmot/uU1cZx4fskNCXaDSDhI6SGs1W5U3HRj7pzGp1IAA5TLw8sjwlTsq
-        0H0cKY/7BuTnvE171Xv4dkjTScgNj2c/1H6Ff54av0ycxoemKUqyulZi/ark9COh
-        hz9p9OUfU5i5JUPMtiCSX+690Y2gVOsIZtAvjUsHoIY67evUpL45BPgY9LAWWD+K
-        dynjM3QwcJhXARtcUA8fm8QaknPJFPouifKMr8/IUdNKTyN/B+RnhqItySHA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1670227402; x=1670313802; bh=2PeOQw77mZIs4RmHtQcQO9RXZKB7
-        n7lnwirONUp4eN4=; b=Q3/lQ5uvVUTK8HDPOhkfRo7XS2VQK/jdYOuMzokpYROV
-        prGjlhSz5U3iLmHPTwLER9aCqYZU4HqW2v4k6LRU3wnrRwIHsuQ7lrxXjjVPpQc7
-        nnYxCAfkp31tInDpFXwqeSoCUnIhFTl2gXwe23EV6/JOkWuXqF+Fv0Ek4AmImJu0
-        XtEK26aHf3rO1GxkiGtFSesMS6S+EaSjdIy1CJS3NyXPAV52uchFflfBz2nVimSZ
-        veeKuR4q5Z0bI+pIdW8797st38KGTsazgm7EKkw2gefnhZ/0ieLPvvsIwHZC5e88
-        Xaq27l3EwplXpQn8PppYajspEjcgBzySgHYM8gMGsg==
-X-ME-Sender: <xms:yaWNY3JLkBK_3AJwpNC7-pl6Gu5Ad1OmLRokp6BEBCYVpFWs_hacBg>
-    <xme:yaWNY7KnRjz_mgDJ8x0e1npc908Qy0GCchvRcN9-42vYQGtGCBtLHvk-9PN9XsXKx
-    Ya0Y14Wj6CvQQ>
-X-ME-Received: <xmr:yaWNY_uqNxBsLDxYXma6wBbycs-_bEXanX3dGiM70gteLxVjGlB0BB8K4xMog4dVvFu_4pSx6WW-bCP22a4G8g>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudefgdduudejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
-    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepheegvd
-    evvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefhgfehkeetnecuvehluhhs
-    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
-    hhrdgtohhm
-X-ME-Proxy: <xmx:yaWNYwa7mHm321x4KGk7JGRoexQ_cYEWOqBre6laNfAkPRH5SvNRYw>
-    <xmx:yaWNY-bJ2tduEeH6IDbsqIsimtc4p4fJIDdvAd9sGrq8-CvO2OOmow>
-    <xmx:yaWNY0A3e45uiE5VNBK7wVtaurC9bQoJ2vFvRfTKkhhJnqXMEG-9KA>
-    <xmx:yqWNYzNxT3I7paFVxIzF50fbiXkeCCaYU1q0S5lEgOGGkiWi1A46IA>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 5 Dec 2022 03:03:21 -0500 (EST)
-Date:   Mon, 5 Dec 2022 09:03:18 +0100
-From:   Greg KH <greg@kroah.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Jens Axboe <axboe@kernel.dk>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the driver-core tree with the block
- tree
-Message-ID: <Y42lxp8WyoVAL2QX@kroah.com>
-References: <20221205131152.26c49399@canb.auug.org.au>
+        with ESMTP id S232307AbiLEI5v (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 5 Dec 2022 03:57:51 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7293B1658C
+        for <linux-next@vger.kernel.org>; Mon,  5 Dec 2022 00:56:36 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1p27Gz-00065M-Gc; Mon, 05 Dec 2022 09:56:25 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1p27Gw-002QBr-3u; Mon, 05 Dec 2022 09:56:22 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1p27Gw-002hzv-68; Mon, 05 Dec 2022 09:56:22 +0100
+Date:   Mon, 5 Dec 2022 09:56:22 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     kernel@pengutronix.de, Arnd Bergmann <arnd@kernel.org>,
+        linux-samsung-soc@vger.kernel.org,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-next@vger.kernel.org, Ben Dooks <ben-linux@fluff.org>,
+        dmaengine@vger.kernel.org, Simtec Linux Team <linux@simtec.co.uk>
+Subject: Re: Regression in dmaengine/next was removed
+Message-ID: <20221205085622.75yyfztkahmrlrz4@pengutronix.de>
+References: <20221021203329.4143397-14-arnd@kernel.org>
+ <20221118215401.505480-1-u.kleine-koenig@pengutronix.de>
+ <f0425349-d965-0a40-0672-27dfbe45eb44@linaro.org>
+ <b759a3e7-7a45-3dc9-14ba-8b01da798f10@linaro.org>
+ <20221125085117.23p7yv6wgo6b5l3v@pengutronix.de>
+ <7f5cf3d8-4a3b-41eb-fed9-1ade4ba1e4e2@linaro.org>
+ <20221202112003.kanwr7bixbaiqdgz@pengutronix.de>
+ <Y4nkvT+R8t6eGrWj@matsya>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="7eoiblj4p2fvpvxp"
 Content-Disposition: inline
-In-Reply-To: <20221205131152.26c49399@canb.auug.org.au>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y4nkvT+R8t6eGrWj@matsya>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-next@vger.kernel.org
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Dec 05, 2022 at 01:11:52PM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Today's linux-next merge of the driver-core tree got a conflict in:
-> 
->   include/linux/blkdev.h
->   drivers/block/pktcdvd.c
-> 
-> between commits:
-> 
->   f40eb99897af ("pktcdvd: remove driver.")
->   85d6ce58e493 ("block: remove devnode callback from struct block_device_operations")
-> 
-> from the block tree and commit:
-> 
->   be7e8b917ead ("blkdev: make struct block_device_operations.devnode() take a const *")
-> 
-> from the driver-core tree.
-> 
-> I fixed it up (I removed pktcdvd.c and used blkdev.h from the former tree)
-> and can carry the fix as necessary. This is now fixed as far as linux-next
-> is concerned, but any non trivial conflicts should be mentioned to your
-> upstream maintainer when your tree is submitted for merging.  You may
-> also want to consider cooperating with the maintainer of the conflicting
-> tree to minimise any particularly complex conflicts.
 
-As it was me who wrote all of the above patches, I knew this would
-conflict, sorry about that :)
+--7eoiblj4p2fvpvxp
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-And thanks for the resolution, using the block tree's versions is
-correct.
+Hello Vinod,
 
-greg k-h
+On Fri, Dec 02, 2022 at 05:12:53PM +0530, Vinod Koul wrote:
+> On 02-12-22, 12:20, Uwe Kleine-K=F6nig wrote:
+> > I made the subject a bit more expressive.
+
+I wonder what I intended to write there, something like "Regression in
+dmaengine/next in arm/s3c2410_defconfig", sorry to make it look as if
+you already fixed the regression :-)
+
+> > On Fri, Nov 25, 2022 at 09:52:51AM +0100, Krzysztof Kozlowski wrote:
+> > > On 25/11/2022 09:51, Uwe Kleine-K=F6nig wrote:
+> > > > On Sun, Nov 20, 2022 at 12:22:31PM +0100, Krzysztof Kozlowski wrote:
+> > > >> On 20/11/2022 11:31, Krzysztof Kozlowski wrote:
+> > > >>> On 18/11/2022 22:54, Uwe Kleine-K=F6nig wrote:
+> > > >>>> The linux/platform_data/dma-s3c24xx.h header file was removed. I=
+t didn't
+> > > >>>> declare or define any symbol needed in devs.c though, so the #in=
+clude
+> > > >>>> can just be dropped.
+> > > >>>>
+> > > >>>> Fixes: cccc46ae3623 ("dmaengine: remove s3c24xx driver")
+> > > >>>> Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.d=
+e>
+> > > >>>> ---
+> > > >>>
+> > > >>> The file was not removed... or it should not have been yet. The s=
+3c24xx
+> > > >>> dma driver removal should be part of Arnd series taken via SoC AR=
+M.
+> > > >=20
+> > > > The patch enters next with the merge of
+> > > >=20
+> > > > 	git://git.kernel.org/pub/scm/linux/kernel/git/vkoul/dmaengine.git =
+next
+> > > >=20
+> > > > Ah, the patch that became cccc46ae3623 (i.e. patch #14) is part of a
+> > > > bigger series. Its patch #1 removes s3c24xx.c (which you pointed ou=
+t to be still
+> > > > broken) and patch #2 includes the change I suggested here.
+> > > >=20
+> > > >> I think that commit should be just dropped instead.
+> > > >=20
+> > > > +1
+> > > >=20
+> > > > BTW, cccc46ae3623 is included in next since next-20221107 and breaks
+> > > > (at least) arm/s3c2410_defconfig. So I would consider reverting
+> > > > cccc46ae3623 a fix. (Added linux-next to Cc:)
+> > >=20
+> > > Yes. The build failure of next was reported already by kernel test ro=
+bot.
+> > >=20
+> > > Vinod, can we drop this patch?
+> >=20
+> > That patch is still contained in the next tags of this week. :-(
+>=20
+> Apologies for delay, I was moving...
+>=20
+> I have reverted and pushed now
+
+Thanks!
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--7eoiblj4p2fvpvxp
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmONsjMACgkQwfwUeK3K
+7AmXSwf/VZuQ2FjkiIN+56r+5b4pEZ6q5pmktLnS0zhETdeXoiKfbQl2nRhk8YOk
+DKhMlUpD5jGS4r5PXYhct9n10dSquwOQDSrDRtf3HO2VTroTREEJ48vEjOkpu7TY
+th0TIWt/ZoXjfASyFi8Vpx7Y26Mi6rye9pLZk96FLiYGCfTX5G0ygi1/Fh4uMUeY
+teQIqSUg7C1hN56rYP37btxYBehUlhWmxW3P+rLGUYT+ZPGvsEXWv0K2XIajrPTd
+pKr+xmec6C2GuHsc3EN0YtPITdrHGBC9RTrMaC8XDXKaGYVAEEYzueSCTCTvcRQ5
+sDUzioR2cnq37vyUneeVlX043ZBszA==
+=9QGH
+-----END PGP SIGNATURE-----
+
+--7eoiblj4p2fvpvxp--

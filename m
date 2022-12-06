@@ -2,49 +2,80 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98EB0644E82
-	for <lists+linux-next@lfdr.de>; Tue,  6 Dec 2022 23:24:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84262644F8B
+	for <lists+linux-next@lfdr.de>; Wed,  7 Dec 2022 00:24:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229813AbiLFWYC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 6 Dec 2022 17:24:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59862 "EHLO
+        id S229746AbiLFXYX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 6 Dec 2022 18:24:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229731AbiLFWYB (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 6 Dec 2022 17:24:01 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CAC531F94;
-        Tue,  6 Dec 2022 14:23:59 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NRZhB3cb7z4xN4;
-        Wed,  7 Dec 2022 09:23:54 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1670365436;
-        bh=lqNRfzgYaa3SPZu2eVsFmxAbCnMUF7h6TuLq00GT2eI=;
-        h=Date:From:To:Cc:Subject:From;
-        b=A95lawMY9K4F8GNxvpovLh5r8yoqV9ki4zrLso/+SnDupp2ABlakDJqjJLOJW2RVp
-         GOIoiQ0prAUtJJZeoy/W0jglEmIMfv/ePjPjGx0TFbj0aPeXHA308Xb/nrbqAwY5+j
-         EL0EgrrAFPSza/eduwgXnV6x9vdW1PnvvjhtD+5xCyyV0AxfeWUlWSA6k7ZRFtDLbs
-         73KdWbU7lilFUStTA7SjXgzhMcH2NTLI1AHEMTVMVlk8G7gDvWdpsSprHX7Ynps26d
-         dOzpLQlvkOqBCrhONWAK+eaExnomn6ERyiFdEiybOtob0xQf+KD9LKvrWBY9181MKi
-         nQoOf+azYxOfg==
-Date:   Wed, 7 Dec 2022 09:23:53 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Hirokazu Honda <hiroh@chromium.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
+        with ESMTP id S229726AbiLFXYV (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 6 Dec 2022 18:24:21 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F5BA30570
+        for <linux-next@vger.kernel.org>; Tue,  6 Dec 2022 15:23:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670369004;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=qHVwCR9dXgT4rn48btgKYly0tc+kiTHkQV2npU7J1+I=;
+        b=AmyybaiMXnDhM2daNTu7CX8eGokhGLVfEBBvCJ/eaWSnfs082dnplepvyBfACkIfsEj+TY
+        zgtR8jW83Y/r1C1FP0YmDTClLXyhuKjJEZMRuB7ybdoEXBdCohO+x5b4feE5hbj+OFdtP1
+        G+b3zMD5BBzvXMSc7NRgJUgq5MsYeD4=
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com
+ [209.85.166.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-532-e-PFiqW2MDSeUvx1eFKoGw-1; Tue, 06 Dec 2022 18:23:23 -0500
+X-MC-Unique: e-PFiqW2MDSeUvx1eFKoGw-1
+Received: by mail-il1-f199.google.com with SMTP id j20-20020a056e02219400b00300a22a7fe0so15529249ila.3
+        for <linux-next@vger.kernel.org>; Tue, 06 Dec 2022 15:23:23 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qHVwCR9dXgT4rn48btgKYly0tc+kiTHkQV2npU7J1+I=;
+        b=2q/3mr/lGXm/eJ0GGD4VKopnA91gYOv9YIv7bE/Hagqaq4ryp8BqN+EuyCj73DYO97
+         WjPRRRnv+wVq++e/EVaJgiR2nPFuIkz9e5V/c9LBCE34sNc9lY7mDYvi+SqDCz/cyT2M
+         p2QtwP0IxtzMz1Sm7QWchajLfbKtAiUkNVTZMQu7lZQb+meuq6o4uv0yUEVYPyZ9xTmU
+         fDoseBAT5n+QkKosBV8uL732ClZA2QXzNLNb+RJA3S7FhJyXH8lSMysWh5B9ibLf3g2D
+         CtetT9LaC/guXrC6aTrvfS9V2QC/oUWCiTfX98PdN4u3mID1U1Tk3rLSL71yuW9xlE62
+         YIKA==
+X-Gm-Message-State: ANoB5plM74SmjILJ4cbbTrTGjBLUFPrRkoDJBnh2Es9gL89C90G2cXzj
+        g6IKMppc37htYunVHNspDYP2qqAZ6S4URIr0bjJ+qv0Wl/4MpUdjSWj6AGQxoWJ29NXv5zklym/
+        Em1p2TFh+hSBuJFZfLGW9sQ==
+X-Received: by 2002:a05:6638:3387:b0:375:3be7:2908 with SMTP id h7-20020a056638338700b003753be72908mr42850171jav.275.1670369002852;
+        Tue, 06 Dec 2022 15:23:22 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf6SbUj9DQD4p2LUzlEY1+B7GH3nRiQqYzu6t19cZlVFdTZhm14tUnflnfLbyYzPyPHCEnCABA==
+X-Received: by 2002:a05:6638:3387:b0:375:3be7:2908 with SMTP id h7-20020a056638338700b003753be72908mr42850163jav.275.1670369002588;
+        Tue, 06 Dec 2022 15:23:22 -0800 (PST)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id b41-20020a0295ac000000b00363f8e0ab41sm7144239jai.152.2022.12.06.15.23.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Dec 2022 15:23:21 -0800 (PST)
+Date:   Tue, 6 Dec 2022 16:23:19 -0700
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Jason Gunthorpe <jgg@nvidia.com>, Greg KH <greg@kroah.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the v4l-dvb-next tree with Linus' tree
-Message-ID: <20221207092353.0d1df5f8@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Yi Liu <yi.l.liu@intel.com>
+Subject: Re: linux-next: manual merge of the iommufd tree with the
+ driver-core, vfio trees
+Message-ID: <20221206162319.7902bbf8.alex.williamson@redhat.com>
+In-Reply-To: <20221206132153.074fff0c@canb.auug.org.au>
+References: <20221206132153.074fff0c@canb.auug.org.au>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ahfs.6cyzuPFBklWtgXRyxz";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,151 +83,59 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/ahfs.6cyzuPFBklWtgXRyxz
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, 6 Dec 2022 13:21:53 +1100
+Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 
-Hi all,
+> Hi all,
+> 
+> Today's linux-next merge of the iommufd tree got a conflict in:
+> 
+>   drivers/vfio/vfio_main.c
+> 
+> between commits:
+> 
+>   ff62b8e6588f ("driver core: make struct class.devnode() take a const *")
+>   e2d55709398e ("vfio: Fold vfio_virqfd.ko into vfio.ko")
+> 
+> from the driver-core, vfio trees and commits:
+> 
+>   c2849d718d26 ("vfio: Move vfio group specific code into group.c")
+>   f96dc03a8368 ("vfio: Wrap vfio group module init/clean code into helpers")
+> 
+> from the iommufd tree.
+> 
+> I fixed it up (I think - see below and I had to add the fix up patch as
+> well) and can carry the fix as necessary. This is now fixed as far as
+> linux-next is concerned, but any non trivial conflicts should be mentioned
+> to your upstream maintainer when your tree is submitted for merging.
+> You may also want to consider cooperating with the maintainer of the
+> conflicting tree to minimise any particularly complex conflicts.
+> 
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Tue, 6 Dec 2022 13:17:41 +1100
+> Subject: [PATCH] vfio: fix up for "driver core: make struct class.devnode() take a const *"
+> 
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> ---
+>  drivers/vfio/group.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/vfio/group.c b/drivers/vfio/group.c
+> index c5d8bf10495e..bb24b2f0271e 100644
+> --- a/drivers/vfio/group.c
+> +++ b/drivers/vfio/group.c
+> @@ -827,7 +827,7 @@ bool vfio_file_has_dev(struct file *file, struct vfio_device *device)
+>  }
+>  EXPORT_SYMBOL_GPL(vfio_file_has_dev);
+>  
+> -static char *vfio_devnode(struct device *dev, umode_t *mode)
+> +static char *vfio_devnode(const struct device *dev, umode_t *mode)
+>  {
+>  	return kasprintf(GFP_KERNEL, "vfio/%s", dev_name(dev));
+>  }
+> 
 
-Today's linux-next merge of the v4l-dvb-next tree got a conflict in:
+Looks good, thank you,
 
-  drivers/media/common/videobuf2/frame_vector.c
+Alex
 
-between commit:
-
-  6647e76ab623 ("v4l2: don't fall back to follow_pfn() if pin_user_pages_fa=
-st() fails")
-
-from Linus' tree and commit:
-
-  e2fc6edd37ba ("media: videobuf2: revert "get_userptr: buffers are always =
-writable"")
-
-from the v4l-dvb-next tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc drivers/media/common/videobuf2/frame_vector.c
-index 144027035892,aad72640f055..000000000000
---- a/drivers/media/common/videobuf2/frame_vector.c
-+++ b/drivers/media/common/videobuf2/frame_vector.c
-@@@ -32,10 -33,15 +33,11 @@@
-   *
-   * This function takes care of grabbing mmap_lock as necessary.
-   */
-- int get_vaddr_frames(unsigned long start, unsigned int nr_frames,
-+ int get_vaddr_frames(unsigned long start, unsigned int nr_frames, bool wr=
-ite,
-  		     struct frame_vector *vec)
-  {
- -	struct mm_struct *mm =3D current->mm;
- -	struct vm_area_struct *vma;
- -	int ret_pin_user_pages_fast =3D 0;
- -	int ret =3D 0;
- -	int err;
- +	int ret;
-+ 	unsigned int gup_flags =3D FOLL_FORCE | FOLL_LONGTERM;
- =20
-  	if (nr_frames =3D=3D 0)
-  		return 0;
-@@@ -45,20 -51,62 +47,22 @@@
- =20
-  	start =3D untagged_addr(start);
- =20
-- 	ret =3D pin_user_pages_fast(start, nr_frames,
-- 				  FOLL_FORCE | FOLL_WRITE | FOLL_LONGTERM,
-+ 	if (write)
-+ 		gup_flags |=3D FOLL_WRITE;
-+=20
-+ 	ret =3D pin_user_pages_fast(start, nr_frames, gup_flags,
-  				  (struct page **)(vec->ptrs));
- -	if (ret > 0) {
- -		vec->got_ref =3D true;
- -		vec->is_pfns =3D false;
- -		goto out_unlocked;
- -	}
- -	ret_pin_user_pages_fast =3D ret;
- +	vec->got_ref =3D true;
- +	vec->is_pfns =3D false;
- +	vec->nr_frames =3D ret;
- =20
- -	mmap_read_lock(mm);
- -	vec->got_ref =3D false;
- -	vec->is_pfns =3D true;
- -	ret =3D 0;
- -	do {
- -		unsigned long *nums =3D frame_vector_pfns(vec);
- +	if (likely(ret > 0))
- +		return ret;
- =20
- -		vma =3D vma_lookup(mm, start);
- -		if (!vma)
- -			break;
- -
- -		while (ret < nr_frames && start + PAGE_SIZE <=3D vma->vm_end) {
- -			err =3D follow_pfn(vma, start, &nums[ret]);
- -			if (err) {
- -				if (ret)
- -					goto out;
- -				// If follow_pfn() returns -EINVAL, then this
- -				// is not an IO mapping or a raw PFN mapping.
- -				// In that case, return the original error from
- -				// pin_user_pages_fast(). Otherwise this
- -				// function would return -EINVAL when
- -				// pin_user_pages_fast() returned -ENOMEM,
- -				// which makes debugging hard.
- -				if (err =3D=3D -EINVAL && ret_pin_user_pages_fast)
- -					ret =3D ret_pin_user_pages_fast;
- -				else
- -					ret =3D err;
- -				goto out;
- -			}
- -			start +=3D PAGE_SIZE;
- -			ret++;
- -		}
- -		/* Bail out if VMA doesn't completely cover the tail page. */
- -		if (start < vma->vm_end)
- -			break;
- -	} while (ret < nr_frames);
- -out:
- -	mmap_read_unlock(mm);
- -out_unlocked:
- -	if (!ret)
- -		ret =3D -EFAULT;
- -	if (ret > 0)
- -		vec->nr_frames =3D ret;
- -	return ret;
- +	/* This used to (racily) return non-refcounted pfns. Let people know */
- +	WARN_ONCE(1, "get_vaddr_frames() cannot follow VM_IO mapping");
- +	vec->nr_frames =3D 0;
- +	return ret ? ret : -EFAULT;
-  }
-  EXPORT_SYMBOL(get_vaddr_frames);
- =20
-
---Sig_/ahfs.6cyzuPFBklWtgXRyxz
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOPwPkACgkQAVBC80lX
-0GyXAwf8CrMVCEnXkKiFJxJyNfXDW6Jy8m+lmcc3fQMuZZbw+ME3PWN3ZPGLH6dA
-FAVdYq+Bhb9NSHoURHRizjCvTI/IMoZfsfVwziDWUuroAjvyUqdIAW8G1osnr/l/
-AY9Nj5T9eWvQDoXGn6c1/t9hQA4oNriEXQ+kTIorl20eoGZmhI9x0HadbTLBwVnY
-8iIXZ6zMbReP33MtVumyE/KxVZuYtWRaYBrNPXRGfCWtfsRp/ASblKGV2Z9sG49w
-cRh2SDXkGnKR7GC4/Fkh0/H3wBFsSv4LbX033CydEtCprurBw8y9nVlQP/MdQ04K
-GkWm0vUBQSpMtvvOvkk5ZOpizznaeg==
-=myTt
------END PGP SIGNATURE-----
-
---Sig_/ahfs.6cyzuPFBklWtgXRyxz--

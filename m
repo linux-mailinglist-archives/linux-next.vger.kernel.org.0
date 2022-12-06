@@ -2,77 +2,79 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 471CA643A8D
-	for <lists+linux-next@lfdr.de>; Tue,  6 Dec 2022 02:13:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25AB4643B02
+	for <lists+linux-next@lfdr.de>; Tue,  6 Dec 2022 02:55:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230459AbiLFBNp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 5 Dec 2022 20:13:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39906 "EHLO
+        id S231274AbiLFBzv (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 5 Dec 2022 20:55:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230154AbiLFBNo (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 5 Dec 2022 20:13:44 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 839C31C43A;
-        Mon,  5 Dec 2022 17:13:41 -0800 (PST)
+        with ESMTP id S230381AbiLFBzu (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 5 Dec 2022 20:55:50 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1317817E03;
+        Mon,  5 Dec 2022 17:55:49 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NR2VV0gmnz4xG6;
-        Tue,  6 Dec 2022 12:13:37 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NR3R40ht2z4xFy;
+        Tue,  6 Dec 2022 12:55:43 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1670289219;
-        bh=XZaVH3uav8QW5c1zAbnSpShdGDyJPaS5c3+u/jlf+zw=;
+        s=201702; t=1670291744;
+        bh=+kr9K190luLCIYTf2mrVyAk+cbBziqrcU7K/IB9jiJ0=;
         h=Date:From:To:Cc:Subject:From;
-        b=CWcGf68Om5ueioQ7Ijp1+P0OaWg+hDkusBofES08YSKgwjpHcXoCRYozNfeXNAOtk
-         inGI+SaV9xch2gm909qWGfhQQHUu+lhrrJw1tPGQJ4+54XT59HJgBv0znbSoX5XXtV
-         U2SldrGIgeidAtG/K2q3G+wAW/uPTWIKpS1qfRNDbAwqq4a4aY3xGR65JoCdfVsqIR
-         VNT5lDWDakaXs5LzGmItR8+iwPyLnHyohTPnc0csRaBti+75Km3Dz2vJ4Sd/KgZYfA
-         l0LBZuj9oapQcLJX1KjhwhH3lxlx8Mjt+5nTbylIa4U3tRZlCKLPzS5G9RKVAU0KfI
-         kcl1cxD1cfeVw==
-Date:   Tue, 6 Dec 2022 12:13:36 +1100
+        b=tvBWk/RbPq0J71HfYnOxJFYkEZg/+Parb2REp42CCG5B3fIuXpgMNoAPVG+abHR1R
+         ONViFihFW27uZtBciSJ7PpeGdyQajMa4AQetD1/A0QBqKj+KQRPf49pJFmg20ycDb3
+         PgeX28ISKEnyAUsxSxmvbCF5KUJRg2ahjjwwI497jdRV3SD09xNX2miRD84PMSUocg
+         hIHdxX9/7yt/MQ/a2ofpPiV+EIljE2LjfbsRdHhJ7kymFfPYD+jp3BVxzjHmEWT95B
+         fXG1vD/ylfWoWiAbRY+2uzqtNOxBTJOQxeMOkeKcDl8f+Zwy+TKPhPLxtPnsBpnmYa
+         9WDnKPuXNo2Cg==
+Date:   Tue, 6 Dec 2022 12:55:42 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>
-Cc:     ARM <linux-arm-kernel@lists.infradead.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+To:     Jason Gunthorpe <jgg@nvidia.com>,
+        Alex Williamson <alex.williamson@redhat.com>
+Cc:     Jason Gunthorpe <jgg@ziepe.ca>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the pinctrl tree with the arm-soc tree
-Message-ID: <20221206121336.474457bb@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Yi Liu <yi.l.liu@intel.com>
+Subject: linux-next: manual merge of the iommufd tree with the vfio tree
+Message-ID: <20221206125542.52ea97a7@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/KOqh2lCuC6HEK63tLTN+oxC";
+Content-Type: multipart/signed; boundary="Sig_/aMEmD7DKl0UtDMn_/lkvPb.";
  protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/KOqh2lCuC6HEK63tLTN+oxC
+--Sig_/aMEmD7DKl0UtDMn_/lkvPb.
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the pinctrl tree got a conflict in:
+Today's linux-next merge of the iommufd tree got conflicts in:
 
-  drivers/soc/fsl/qe/gpio.c
+  drivers/vfio/Kconfig
+  drivers/vfio/Makefile
 
 between commits:
 
-  84582f9ed090 ("soc: fsl: qe: Avoid using gpio_to_desc()")
-  66310b5a0fc1 ("soc: fsl: qe: request pins non-exclusively")
+  20601c45a0fa ("vfio: Remove CONFIG_VFIO_SPAPR_EEH")
+  e2d55709398e ("vfio: Fold vfio_virqfd.ko into vfio.ko")
 
-from the arm-soc tree and commit:
+from the vfio tree and commits:
 
-  c9eb6e546a23 ("soc: fsl: qe: Switch to use fwnode instead of of_node")
+  a4d1f91db502 ("vfio-iommufd: Support iommufd for physical VFIO devices")
+  e5a9ec7e096a ("vfio: Make vfio_container optionally compiled")
+  c2849d718d26 ("vfio: Move vfio group specific code into group.c")
 
-from the pinctrl tree.
+from the iommufd tree.
 
 I fixed it up (see below) and can carry the fix as necessary. This
 is now fixed as far as linux-next is concerned, but any non trivial
@@ -85,62 +87,67 @@ complex conflicts.
 Cheers,
 Stephen Rothwell
 
-diff --cc drivers/soc/fsl/qe/gpio.c
-index 1440922341d8,9abb45ab138b..000000000000
---- a/drivers/soc/fsl/qe/gpio.c
-+++ b/drivers/soc/fsl/qe/gpio.c
-@@@ -13,11 -13,14 +13,13 @@@
-  #include <linux/err.h>
-  #include <linux/io.h>
-  #include <linux/of.h>
- -#include <linux/of_gpio.h>
- +#include <linux/of_gpio.h>	/* for of_mm_gpio_chip */
- +#include <linux/gpio/consumer.h>
-  #include <linux/gpio/driver.h>
- -/* FIXME: needed for gpio_to_chip() get rid of this */
- -#include <linux/gpio.h>
-  #include <linux/slab.h>
-  #include <linux/export.h>
-+ #include <linux/property.h>
+diff --cc drivers/vfio/Kconfig
+index 0b8d53f63c7e,286c1663bd75..000000000000
+--- a/drivers/vfio/Kconfig
++++ b/drivers/vfio/Kconfig
+@@@ -38,6 -46,17 +46,12 @@@ config VFIO_NOIOMM
+  	  this mode since there is no IOMMU to provide DMA translation.
+ =20
+  	  If you don't know what to do here, say N.
++ endif
 +=20
-  #include <soc/fsl/qe/qe.h>
+ -config VFIO_SPAPR_EEH
+ -	tristate
+ -	depends on EEH && VFIO_IOMMU_SPAPR_TCE
+ -	default VFIO
+ -
++ config VFIO_VIRQFD
+ -	tristate
+++	bool
++ 	select EVENTFD
++ 	default n
  =20
-  struct qe_gpio_chip {
-@@@ -187,16 -181,8 +189,16 @@@ struct qe_pin *qe_pin_request(struct de
-  		goto err0;
-  	}
+  source "drivers/vfio/pci/Kconfig"
+  source "drivers/vfio/platform/Kconfig"
+diff --cc drivers/vfio/Makefile
+index 0721ed4831c9,3783db7e8082..000000000000
+--- a/drivers/vfio/Makefile
++++ b/drivers/vfio/Makefile
+@@@ -2,12 -2,17 +2,14 @@@
+  obj-$(CONFIG_VFIO) +=3D vfio.o
  =20
- +	qe_pin->controller =3D gpiochip_get_data(gc);
- +	/*
- +	 * FIXME: this gets the local offset on the gpio_chip so that the driver
- +	 * can manipulate pin control settings through its custom API. The real
- +	 * solution is to create a real pin control driver for this.
- +	 */
- +	qe_pin->num =3D gpio_num - gc->base;
- +
-- 	if (!of_device_is_compatible(gc->of_node, "fsl,mpc8323-qe-pario-bank")) {
-+ 	if (!fwnode_device_is_compatible(gc->fwnode, "fsl,mpc8323-qe-pario-bank"=
-)) {
- -		pr_debug("%s: tried to get a non-qe pin\n", __func__);
- +		dev_dbg(dev, "%s: tried to get a non-qe pin\n", __func__);
-  		err =3D -EINVAL;
-  		goto err0;
-  	}
+  vfio-y +=3D vfio_main.o \
+- 	  iova_bitmap.o \
+- 	  container.o
++ 	  group.o \
++ 	  iova_bitmap.o
+ +vfio-$(CONFIG_VFIO_VIRQFD) +=3D virqfd.o
++ vfio-$(CONFIG_IOMMUFD) +=3D iommufd.o
++ vfio-$(CONFIG_VFIO_CONTAINER) +=3D container.o
+ =20
+ -obj-$(CONFIG_VFIO_VIRQFD) +=3D vfio_virqfd.o
+  obj-$(CONFIG_VFIO_IOMMU_TYPE1) +=3D vfio_iommu_type1.o
+  obj-$(CONFIG_VFIO_IOMMU_SPAPR_TCE) +=3D vfio_iommu_spapr_tce.o
+ -obj-$(CONFIG_VFIO_SPAPR_EEH) +=3D vfio_spapr_eeh.o
+  obj-$(CONFIG_VFIO_PCI) +=3D pci/
+  obj-$(CONFIG_VFIO_PLATFORM) +=3D platform/
+  obj-$(CONFIG_VFIO_MDEV) +=3D mdev/
 
---Sig_/KOqh2lCuC6HEK63tLTN+oxC
+--Sig_/aMEmD7DKl0UtDMn_/lkvPb.
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOOl0EACgkQAVBC80lX
-0GwtkQf+Ji/VPu3RB70iKdaEN1TUyi8Xpd9nQtFKNNvGVVASlamI/IRH2MgBwCRz
-OOxgB88Rul1PjAHme5ar8Mil6tsSwCSH9/f8Q7fOjfZjv6Gbt3MqAIjN+D/WvGCQ
-Zwqql07hjnUEdf5yRuOllLX6zwwf3jH1z7QRz7+LIgypiG/GrAdRtfRyovQW8QTe
-k4xCpLuwRAhE7PGiEqB1V0zELfTvhjwbEWbURPT89NBGkECXdiCooO8uNkKt+eTt
-GYzLZmg87cpo2pbtIt/s3Vy8bvwqG5Ct/HVfBDbxMYtllKlchVR/FD7LmWuVnnp6
-P8wWhK52Oii83+e1OokEk4x8pFWRaQ==
-=IzJa
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOOoR4ACgkQAVBC80lX
+0GyYAAf/QT53K511Q/L6sbHaIicPx8fBLCfqGweMP+WBoNWSeODAzjTeFcOC0Aau
+EdXR1f7twP2qG0O8xSGiKcL78fyg/RiXBQtYaaZAuE043XeTB7ClosXvBxz1ZTij
+/tQ5XZ1GwCjMKAI2F4nVBM2yilO0+HJBTwxVPePpc5gFdD+OlMYNPbesMZ5YM1eQ
+5BXBM+YlhjQYGJNJI5TFaO/Xe0OtSlL/YKS+3JRkxieHhF/VRtZLCc0L0IceF4lM
+Q+FveptrUvpJNI0aSumf9tscr+L7Fgk/YqqgGxmDHFP16SMyiKEEiPMXCaMm5V6x
+U5HpmzXfj1tSrB36MvvIX7qWGjV3qQ==
+=mJ1+
 -----END PGP SIGNATURE-----
 
---Sig_/KOqh2lCuC6HEK63tLTN+oxC--
+--Sig_/aMEmD7DKl0UtDMn_/lkvPb.--

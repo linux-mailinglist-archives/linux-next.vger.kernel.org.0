@@ -2,219 +2,152 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CEE4644FAD
-	for <lists+linux-next@lfdr.de>; Wed,  7 Dec 2022 00:35:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FC1A644FB0
+	for <lists+linux-next@lfdr.de>; Wed,  7 Dec 2022 00:37:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229629AbiLFXfL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 6 Dec 2022 18:35:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40568 "EHLO
+        id S229711AbiLFXhJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 6 Dec 2022 18:37:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbiLFXfK (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 6 Dec 2022 18:35:10 -0500
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2055.outbound.protection.outlook.com [40.107.94.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A76DC303E9;
-        Tue,  6 Dec 2022 15:35:09 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SADianSLhIIKGQgAq8tsxg4ejnag5gzUqC258vZu1PL0TLtAK0u64BFY+lgWQfc0DJ2kAVaCVtdmSS+zsZn48SBYGNwduiFIurW1TTO1bogbA+NnHfdzFIp4MSGuvzEZ7cv1ggAr7Tgj0WAlgYYrfeeMuSm0MWIrAuInkHB4V3j/umeLdGhpKeHeZVTSIduU5JJW+V+ikdLSswsieil70Jdqe2K4ZTQjhYWSyw5tlAI11geFEJy2D/sQ5hzc7tXEpTNmhD/SK6bVFEy+iVAbEMs/8l98kqxcrcOzQgMduky8rRqsGbTSCWmdY9XOZcG4SV6ME7ViBuJCUWpynptsfQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=H8sF4vNR1/8jXwLgiiTkk4f9I67zBDx/m9hvLVTW3wQ=;
- b=UN027uPVRhc1uiKLcAX8Utl6bJybuaLKk1kEvQUd/9GqWcLFS9eoSSWaH/PYvXPbSFLcxyfQyGUNf3ifUfHxxBMdE2bUQtEztW11aiGwDmSVLWprvlNddmXpMDcT92TznQAZF4h2QWruXpnzGIvlKie3zzzjw9JAes0F2Btavk+zMmirPu0f5B6zVQIyzHPWb8qU+7sVhUxuoUchpRekAYRK+LphdVtkCAgaBqLKpO67lqAeDkuVn1AVs1j5yzkEuiajP64OwCORr1xBO7DfqeZ4+LRYKJxbFUiafh+f24Hprky/PA8YMHEIypANf44dIgH4TPfWo3nk9ntstkxWng==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=H8sF4vNR1/8jXwLgiiTkk4f9I67zBDx/m9hvLVTW3wQ=;
- b=JPhC7rDewWo4jRoiaEdmQM++ey1g9yOcXMFLNzXWEcnSuRx72Bz1lJb3oD/SKn+lKbv4egXn5xAeDwFET+sNDHkdJIx2BHGfXgPt47Extfdlw9vR1r8jpvt7mmzWzjbtNEGTfYMxbeEFwn8NUJ4d2aY63mifH4o0EeWvUtHuF9PFd62bUFJAj9G6U7b5Qx6vF0jORfeRehaUQGrbNtfm3ubeo27OUzc+4ncvZ6fZXX29QBDI0u6k+0ny+xfU/UyI7KC7ezQ4TsUgHFYEb9h+PkOcslYPR2GInaWwQriIM5FVVNh6tQ0VjZuU0ROSw7S+akiEQ02nihSjEWND4zMIxw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by DS0PR12MB6390.namprd12.prod.outlook.com (2603:10b6:8:ce::7) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5880.14; Tue, 6 Dec 2022 23:35:08 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f8b0:df13:5f8d:12a]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f8b0:df13:5f8d:12a%7]) with mapi id 15.20.5880.014; Tue, 6 Dec 2022
- 23:35:08 +0000
-Date:   Tue, 6 Dec 2022 19:35:06 -0400
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Alex Williamson <alex.williamson@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Yi Liu <yi.l.liu@intel.com>
-Subject: Re: linux-next: manual merge of the iommufd tree with the vfio tree
-Message-ID: <Y4/RqtFMCobuOL8J@nvidia.com>
-References: <20221206125542.52ea97a7@canb.auug.org.au>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221206125542.52ea97a7@canb.auug.org.au>
-X-ClientProxiedBy: BL0PR02CA0117.namprd02.prod.outlook.com
- (2603:10b6:208:35::22) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+        with ESMTP id S229448AbiLFXhI (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 6 Dec 2022 18:37:08 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E61E3E099
+        for <linux-next@vger.kernel.org>; Tue,  6 Dec 2022 15:37:07 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id w4-20020a17090ac98400b002186f5d7a4cso19552611pjt.0
+        for <linux-next@vger.kernel.org>; Tue, 06 Dec 2022 15:37:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=otCW253l7ot84a9vVRmiVoG+lIxgrQNkYbdDhCOtC9c=;
+        b=haGQ+FidVA17wTfx2NQ/Pqq/OpXe0/1Dzr59IUgqxAZNDk/WVBWDpcWJ3Z0fulUStb
+         c9584Lh0t96uOzS0fNsUaG3BeUFW/tFfU14Y5naNZYWEGRdecx0Ipv+sGXFNxH6hWuys
+         qqWvECLFxx4lkR87n0Itr+zaBfL1HXV8FGs7A=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=otCW253l7ot84a9vVRmiVoG+lIxgrQNkYbdDhCOtC9c=;
+        b=T1fGC4+eBrOzl4UMs5YR4fAWpeihZ22DY3EvPxXFRv2pZwvUjgg/h/E40YVt+XU7el
+         7kMUV6OVyauRWISnKE5LZBQTIgPi+cjNJTVpnN/ZO8Hyw2PBcB3bgrhA/stxr8eQWKCg
+         c2yT+koC23fHiLuf1eSqHOnzCaspFR8IE6AEN6rkO6i6sgjzjs2VXnrmvpuQa/yP7cwM
+         /TKi2jO1ekQHPVp3z9IQvXLCPrwXfY5WZE//2ANFc19MXqnzo2BPaJ+DV18kxN2bxFvP
+         OdT87B6BJ6y5ZRPFKWNa5bnGx7qS0iJkq1eeUkz6d02JZmchbM2bg5k7GZSgvZc4XujM
+         mONg==
+X-Gm-Message-State: ANoB5pmx/jHx1QYPBwr6j68p6+vpMFAyyKRoa3Hs1H/yEIL5nWUaibWF
+        5XqbviBG03UM5wDgRdNYw0K5nQ==
+X-Google-Smtp-Source: AA0mqf4q1OYKyKIO9N36w2rvWCO+pr3fDJLBXlCWFivm02RH39BnlErnrXEIOx2DhnvBhvDcTwOt7w==
+X-Received: by 2002:a17:90a:d383:b0:219:c8d3:c503 with SMTP id q3-20020a17090ad38300b00219c8d3c503mr14436340pju.65.1670369827082;
+        Tue, 06 Dec 2022 15:37:07 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id w10-20020a62820a000000b00574cf11aaf3sm12178022pfd.208.2022.12.06.15.37.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Dec 2022 15:37:06 -0800 (PST)
+Date:   Tue, 6 Dec 2022 15:37:05 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Ryder Lee <Ryder.Lee@mediatek.com>
+Cc:     Shayne Chen =?utf-8?B?KOmZs+i7kuS4nik=?= 
+        <Shayne.Chen@mediatek.com>,
+        StanleyYP Wang =?utf-8?B?KOeOi+S+kemCpik=?= 
+        <StanleyYP.Wang@mediatek.com>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Howard-YH Hsu =?utf-8?B?KOioseiCsuixqik=?= 
+        <Howard-YH.Hsu@mediatek.com>,
+        "gustavo@embeddedor.com" <gustavo@embeddedor.com>,
+        Evelyn Tsai =?utf-8?B?KOiUoeePiumIuik=?= 
+        <Evelyn.Tsai@mediatek.com>,
+        Money Wang =?utf-8?B?KOeOi+S/oeWuiSk=?= 
+        <Money.Wang@mediatek.com>,
+        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
+        "nbd@nbd.name" <nbd@nbd.name>,
+        MeiChia Chiu =?utf-8?B?KOmCsee+juWYiSk=?= 
+        <MeiChia.Chiu@mediatek.com>,
+        "lorenzo@kernel.org" <lorenzo@kernel.org>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        Sean Wang <Sean.Wang@mediatek.com>,
+        "kvalo@kernel.org" <kvalo@kernel.org>,
+        "edumazet@google.com" <edumazet@google.com>,
+        Sujuan Chen =?utf-8?B?KOmZiOe0oOWonyk=?= 
+        <Sujuan.Chen@mediatek.com>,
+        Chui-hao Chiu =?utf-8?B?KOmCseWegua1qSk=?= 
+        <Chui-hao.Chiu@mediatek.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "linux-next@vger.kernel.org" <linux-next@vger.kernel.org>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        Bo Jiao =?utf-8?B?KOeEpuazoik=?= <Bo.Jiao@mediatek.com>
+Subject: Re: Coverity: mt7996_hw_queue_read(): Integer handling issues
+Message-ID: <202212061535.5D3DA489FB@keescook>
+References: <202212021411.A5E618D3@keescook>
+ <786eff1a1751a5bc0dc68d6567be585b635bddb1.camel@mediatek.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|DS0PR12MB6390:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2417816a-1dba-453f-f0fa-08dad7e28282
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Sh5wKCaMH1rta8vpT5z/uKOw0KJbfPFjsef5bJY7yAlvoSbOMksAv5EARAbcUAksl+l9uWkQq7m1yZFJrOUyQiG0yjRNr9KFr+FQdAfkev5GDBwPLRoFyNDM1cnacZCBHpMDp+EpEr7q7R7+Bx4kRSPiuJiz7ifuVusVxpomxBFuawhRgxzYzVyqHw49pH5ID60cfbFqIxXzJa8EmUCpkEo6v49wKtB7pvjWCRmIxMrMIXB/YupDZjC/jsqbbn39iUIXWz4Dr/AKIBvPVNR1jOdCAFGA9mbTwWOO2tJkcAgD/oK/Gl/erKo/clpzVzuY8zt/nR5HzgAIfwxvASHKiQkQcactZ9Lkixpf2IwzV+hiInnYwuFGovgsSEo4lW0f9nPg6kHhERCAaITqSno86zqnaVT4YPtmVfZ3cForXueafjquj3x3DCb1wHf76RmaunWxXZCGYRS6nK1c8vdCJEuAT5zZTATXy2ovBfxb7wW0WOLIWuDR5mIJh0p6V8XFgcqV71eUbfw7Hd69jHGhBXpAD/gwWnEZgAgdAyXdh28ilA00qBpB1kAngmc0loEs57PInR8XV95Ylp/HVFWqQQynVokqJfZeqG8oqD3rWexRlmau4tocYWZ9HDQVWi8kv+/JLvtLCtCUCm3N44ZFXQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(396003)(39860400002)(346002)(136003)(376002)(451199015)(2906002)(66946007)(83380400001)(8936002)(8676002)(4326008)(36756003)(66556008)(5660300002)(66476007)(316002)(54906003)(41300700001)(86362001)(6916009)(6486002)(478600001)(6506007)(26005)(6512007)(186003)(2616005)(38100700002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?UL/uuArNvccwZUpe2/ZLkyz36Z+gvB9hPfp9Zh9mvspUZDvmwsrcNithq8Pr?=
- =?us-ascii?Q?P3JiiglA4cEIuD1xxqc3+2sZSgjiIQ2CrkMaH2vq+3PinNzbKRpys93JTLi5?=
- =?us-ascii?Q?POSKgWD/hGlbjdDgW+auRX6QOIAhDbrsI9BIVctqW7kI5dbFeVpa4aP0dXYz?=
- =?us-ascii?Q?GE5uljjUbcz7NA8fozqKsvCEwLNSGtN4i0tm7b23sssCOxlvuVG3ZjnxeFs5?=
- =?us-ascii?Q?wmpodipIePEM6Dhu8XPQlEWXMwbnDYteTCeowzt1uXXB7q1HQpZhVn0OCHUQ?=
- =?us-ascii?Q?J3AX/ne4eYBMxHZwFqrAQUfZsD9+qvtQNY2ywTI3wb9hLlgbuUJOxDDXyPmV?=
- =?us-ascii?Q?0h5vIxFVX9VhJLXQlT4JtLPVhgWzX5xPzMAHzJu5YHX2wM9eLS7a2Wz2eGvP?=
- =?us-ascii?Q?WvdQEIyeoYTb7XIsiC22naXjJrUUS626FvVystKVji7/U+UVDjRB8B3H6qIi?=
- =?us-ascii?Q?z0YTplh/mvrPME3GfV7zC0zQG2y8pJX70nESTbr96WEmV1uA5E0LRe3vmD1S?=
- =?us-ascii?Q?xNn8hKCe9n+HFITMr8kHH7eQXt9F5zrKrSG0Z3kcoRZOZ9Avn10nbMnCeRGE?=
- =?us-ascii?Q?ebPn3y6mLaieZM30yKLIRVDfk8hZ6AKeDjSwSXor+abpionJ8arWJBKiqs5W?=
- =?us-ascii?Q?s7zp4b+WlE1XNOHUw9boVVjuF00d/Sz6hhpp+Y7kWCJO6avUMqKei0LtgIN8?=
- =?us-ascii?Q?+4HeBR6IDNaENtiMpqeWoOZhflldkieQWEOBIaQYyrGvnbdetZznAYRapdsW?=
- =?us-ascii?Q?7qLT+zmgj4OefL3J4DAkYhKz46lXdwStvk/jx5luaZj5j5dOzjDNu7SI2Kcy?=
- =?us-ascii?Q?Ts4K6Pg9Ojb+k0ueLtC+o7Ka16keWcR4v0eInzR9K2APaw8q0uXlmIXujLpG?=
- =?us-ascii?Q?c674Yn9SE1uh8qnMS2rWS76krVJORpTvo/EePMtAvRuqxhzziqNxUKxEvRzQ?=
- =?us-ascii?Q?wFFEU/ZJm8nnGP9SjhuPDjAt1/HA0Z3EVK5E9w2YEzQVDtkn2zqkR1R9l+JN?=
- =?us-ascii?Q?4Opxo3hD5sHyl2YymnXTDFpVxD/sY70lExC8IwN7WP8YrVI7z6p8GSi497Jl?=
- =?us-ascii?Q?m2c1y32Bg7AOW5VaoIuBLgSffZWSh8CN4qm0NE2Zp60yp7dlxw/OJ2iYZZjk?=
- =?us-ascii?Q?Lp4JPW7g38mibX3zHUFco6+PaPvCi0HKSNgj6PCXCV1FPH9pJlccvirv28bs?=
- =?us-ascii?Q?cxE7p3DhBszwSXo0HSe1mFeYucIQJ6mdNIGIrCB5p+pRLrugqNaP52cyvOIk?=
- =?us-ascii?Q?nLp9CezJyV1T9UX8Kd3QBaM/PdwcOfFQECRJva4tpnvJgc5WuXuW+536iCoO?=
- =?us-ascii?Q?hLApaM4GywHXYZtRAx9xcMhpIvDxf6NStUB8JikrfIAard/BZU3xKvaZKgMr?=
- =?us-ascii?Q?8ub4rQjt6F53XyInNZiPoxeLkoFVyjBaMe0cOLSN+f1WQ7rRa96+mZHDTKN1?=
- =?us-ascii?Q?u7FYdsh70VKgj7v6AYt8LIgksdjJf2gzw60B6mdylxpSQobwOpI3l7PObBRK?=
- =?us-ascii?Q?eeOD9O3DcPys50klG8hp6kX3CGKmHuzn/iJXJdHxdTbxuKtgQUAOCODn2eP6?=
- =?us-ascii?Q?/ASlxUwSu8RntUzkopk=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2417816a-1dba-453f-f0fa-08dad7e28282
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Dec 2022 23:35:07.9952
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 5eSDicNTD1zfhdlfp//4h22E+RjX7OeiJ2dlS24ZJH8A3ZdCVbtvVbr0vjjl6KSx
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB6390
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <786eff1a1751a5bc0dc68d6567be585b635bddb1.camel@mediatek.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Dec 06, 2022 at 12:55:42PM +1100, Stephen Rothwell wrote:
-> Hi all,
+On Sat, Dec 03, 2022 at 04:40:09AM +0000, Ryder Lee wrote:
+> On Fri, 2022-12-02 at 14:11 -0800, coverity-bot wrote:
+> > Hello!
+> > 
+> > This is an experimental semi-automated report about issues detected
+> > by
+> > Coverity from a scan of next-20221202 as part of the linux-next scan
+> > project:
+> > 
+> https://urldefense.com/v3/__https://scan.coverity.com/projects/linux-next-weekly-scan__;!!CTRNKA9wMg0ARbw!jBOoj6LMqqA8E0AyjKQTa-0rVzcFiZ3BbpciEIn7so974kcMBeG4zZm-QU4AudLXY7-jNUSt0unzAt2zirSF$ 
+> >  
+> > 
+> > You're getting this email because you were associated with the
+> > identified
+> > lines of code (noted below) that were touched by commits:
+> > 
+> >   Thu Dec 1 17:29:14 2022 +0100
+> >     98686cd21624 ("wifi: mt76: mt7996: add driver for MediaTek Wi-Fi
+> > 7 (802.11be) devices")
+> > 
+> > Coverity reported the following:
+> > 
+> > *** CID 1527813:  Integer handling issues  (SIGN_EXTENSION)
+> > drivers/net/wireless/mediatek/mt76/mt7996/debugfs.c:460 in
+> > mt7996_hw_queue_read()
+> > 454     	for (i = 0; i < size; i++) {
+> > 455     		u32 ctrl, head, tail, queued;
+> > 456
+> > 457     		if (val & BIT(map[i].index))
+> > 458     			continue;
+> > 459
+> > vvv     CID 1527813:  Integer handling issues  (SIGN_EXTENSION)
+> > vvv     Suspicious implicit sign extension: "map[i].qid" with type
+> > "u8" (8 bits, unsigned) is promoted in "map[i].qid << 24" to type
+> > "int" (32 bits, signed), then sign-extended to type "unsigned long"
+> > (64 bits, unsigned).  If "map[i].qid << 24" is greater than
+> > 0x7FFFFFFF, the upper bits of the result will all be 1.
+> > 460     		ctrl = BIT(31) | (map[i].pid << 10) |
+> > (map[i].qid << 24);
 > 
-> Today's linux-next merge of the iommufd tree got conflicts in:
+> u32 ctrl = BIT(31) | (map[i].pid << 10) | (map[i].qid << 24);
 > 
->   drivers/vfio/Kconfig
->   drivers/vfio/Makefile
-> 
-> between commits:
-> 
->   20601c45a0fa ("vfio: Remove CONFIG_VFIO_SPAPR_EEH")
->   e2d55709398e ("vfio: Fold vfio_virqfd.ko into vfio.ko")
-> 
-> from the vfio tree and commits:
-> 
->   a4d1f91db502 ("vfio-iommufd: Support iommufd for physical VFIO devices")
->   e5a9ec7e096a ("vfio: Make vfio_container optionally compiled")
->   c2849d718d26 ("vfio: Move vfio group specific code into group.c")
-> 
-> from the iommufd tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
+> Hmm ...where's type "int" (32 bits, signed) from?
 
-I got the same as you for what you showed, but I also got a hunk in
-vfio_main.c as well? It looks close to your next-20221206 tag, but I
-renamed 'err_virqfd' to 'err_group' and 'err_dev_class' to
-'err_virqfd' for consistency with the rest of the file.
+	map[i].qid is promoted to int before the "<< 24".
 
-Thanks,
-Jason
-
-@@@ -1260,27 -1902,59 +1348,34 @@@ static int __init vfio_init(void
-        if (ret)
-                return ret;
-  
-+       ret = vfio_virqfd_init();
-+       if (ret)
- -              goto err_virqfd;
- -
- -      /* /dev/vfio/$GROUP */
- -      vfio.class = class_create(THIS_MODULE, "vfio");
- -      if (IS_ERR(vfio.class)) {
- -              ret = PTR_ERR(vfio.class);
- -              goto err_group_class;
- -      }
- -
- -      vfio.class->devnode = vfio_devnode;
-++              goto err_group;
-+ 
-        /* /sys/class/vfio-dev/vfioX */
-        vfio.device_class = class_create(THIS_MODULE, "vfio-dev");
-        if (IS_ERR(vfio.device_class)) {
-                ret = PTR_ERR(vfio.device_class);
---              goto err_dev_class;
-++              goto err_virqfd;
-        }
-  
- -      ret = alloc_chrdev_region(&vfio.group_devt, 0, MINORMASK + 1, "vfio");
- -      if (ret)
- -              goto err_alloc_chrdev;
- -
-        pr_info(DRIVER_DESC " version: " DRIVER_VERSION "\n");
-        return 0;
-  
- -err_alloc_chrdev:
- -      class_destroy(vfio.device_class);
- -      vfio.device_class = NULL;
---err_dev_class:
- -      class_destroy(vfio.class);
- -      vfio.class = NULL;
- -err_group_class:
- -      vfio_virqfd_exit();
-+ err_virqfd:
- -      vfio_container_cleanup();
-++      vfio_virqfd_exit();
-++err_group:
- +      vfio_group_cleanup();
-        return ret;
-  }
-  
-  static void __exit vfio_cleanup(void)
-  {
- -      WARN_ON(!list_empty(&vfio.group_list));
- -
-        ida_destroy(&vfio.device_ida);
- -      ida_destroy(&vfio.group_ida);
- -      unregister_chrdev_region(vfio.group_devt, MINORMASK + 1);
-        class_destroy(vfio.device_class);
-        vfio.device_class = NULL;
- -      class_destroy(vfio.class);
-+       vfio_virqfd_exit();
- -      vfio_container_cleanup();
- -      vfio.class = NULL;
- +      vfio_group_cleanup();
-        xa_destroy(&vfio_device_set_xa);
-  }
-  
- 
-
-
+-- 
+Kees Cook

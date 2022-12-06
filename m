@@ -2,47 +2,47 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA71B6439E8
-	for <lists+linux-next@lfdr.de>; Tue,  6 Dec 2022 01:25:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 471CA643A8D
+	for <lists+linux-next@lfdr.de>; Tue,  6 Dec 2022 02:13:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231630AbiLFAZC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 5 Dec 2022 19:25:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44982 "EHLO
+        id S230459AbiLFBNp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 5 Dec 2022 20:13:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiLFAY7 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 5 Dec 2022 19:24:59 -0500
+        with ESMTP id S230154AbiLFBNo (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 5 Dec 2022 20:13:44 -0500
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2A841F2FC;
-        Mon,  5 Dec 2022 16:24:57 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 839C31C43A;
+        Mon,  5 Dec 2022 17:13:41 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NR1QC49S2z4x1T;
-        Tue,  6 Dec 2022 11:24:51 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NR2VV0gmnz4xG6;
+        Tue,  6 Dec 2022 12:13:37 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1670286292;
-        bh=4bttU9xuSbnp1T/tbvdcKwjQVJPJdcK+Mjvu8iHG65o=;
+        s=201702; t=1670289219;
+        bh=XZaVH3uav8QW5c1zAbnSpShdGDyJPaS5c3+u/jlf+zw=;
         h=Date:From:To:Cc:Subject:From;
-        b=rNKRPhcOthMt4WBi5977e+QUpARdC45GYHHoAbw5XAbvWnMgyh0+4y7BXnxfkyc8t
-         ZTlJbeq/RP4jghqnJ/lskvfTcUE6+I6rmzvVZcJ45wQ5b7BV1zTF13XFmoF1OTvLF0
-         Jlwlfef1wpWMdI7Hdi66Y/ZsXhKp0ZHlulBn7NElToFHKx5XVDlm4c44VZG/SEllb0
-         PcSc6dnirNh/4hSCPNAjfxhX6IZ7l1hcE+CPD+bltsy8/uUvcXtTLmT656lVIwcCH3
-         9g0T7XUfYwSmQ5Meb2bGDto8IB7wVjBnJE7ajFvWSVAvfGcshsuOVoSHq6DkSkDhIQ
-         AxgpjFsmSNI1Q==
-Date:   Tue, 6 Dec 2022 11:24:47 +1100
+        b=CWcGf68Om5ueioQ7Ijp1+P0OaWg+hDkusBofES08YSKgwjpHcXoCRYozNfeXNAOtk
+         inGI+SaV9xch2gm909qWGfhQQHUu+lhrrJw1tPGQJ4+54XT59HJgBv0znbSoX5XXtV
+         U2SldrGIgeidAtG/K2q3G+wAW/uPTWIKpS1qfRNDbAwqq4a4aY3xGR65JoCdfVsqIR
+         VNT5lDWDakaXs5LzGmItR8+iwPyLnHyohTPnc0csRaBti+75Km3Dz2vJ4Sd/KgZYfA
+         l0LBZuj9oapQcLJX1KjhwhH3lxlx8Mjt+5nTbylIa4U3tRZlCKLPzS5G9RKVAU0KfI
+         kcl1cxD1cfeVw==
+Date:   Tue, 6 Dec 2022 12:13:36 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Armin Wolf <W_Armin@gmx.de>,
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>
+Cc:     ARM <linux-arm-kernel@lists.infradead.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Subject: linux-next: manual merge of the drivers-x86 tree with the pm tree
-Message-ID: <20221206112447.429f7ab7@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the pinctrl tree with the arm-soc tree
+Message-ID: <20221206121336.474457bb@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/jlzzsRQhMGIBha=E=89gQu0";
+Content-Type: multipart/signed; boundary="Sig_/KOqh2lCuC6HEK63tLTN+oxC";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
@@ -53,27 +53,26 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/jlzzsRQhMGIBha=E=89gQu0
+--Sig_/KOqh2lCuC6HEK63tLTN+oxC
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the drivers-x86 tree got a conflict in:
+Today's linux-next merge of the pinctrl tree got a conflict in:
 
-  drivers/acpi/battery.c
+  drivers/soc/fsl/qe/gpio.c
 
-between commit:
+between commits:
 
-  98b0cf207b61 ("ACPI: battery: Call power_supply_changed() when adding hoo=
-ks")
+  84582f9ed090 ("soc: fsl: qe: Avoid using gpio_to_desc()")
+  66310b5a0fc1 ("soc: fsl: qe: request pins non-exclusively")
 
-from the pm tree and commit:
+from the arm-soc tree and commit:
 
-  878a82c23469 ("ACPI: battery: Pass battery hook pointer to hook callbacks=
-")
+  c9eb6e546a23 ("soc: fsl: qe: Switch to use fwnode instead of of_node")
 
-from the drivers-x86 tree.
+from the pinctrl tree.
 
 I fixed it up (see below) and can carry the fix as necessary. This
 is now fixed as far as linux-next is concerned, but any non trivial
@@ -86,36 +85,62 @@ complex conflicts.
 Cheers,
 Stephen Rothwell
 
-diff --cc drivers/acpi/battery.c
-index 883c75757400,9482b0b6eadc..000000000000
---- a/drivers/acpi/battery.c
-+++ b/drivers/acpi/battery.c
-@@@ -696,8 -696,7 +696,8 @@@ static void __battery_hook_unregister(s
-  	if (lock)
-  		mutex_lock(&hook_mutex);
-  	list_for_each_entry(battery, &acpi_battery_list, list) {
-- 		if (!hook->remove_battery(battery->bat))
- -		hook->remove_battery(battery->bat, hook);
-++		if (!hook->remove_battery(battery->bat, hook))
- +			power_supply_changed(battery->bat);
+diff --cc drivers/soc/fsl/qe/gpio.c
+index 1440922341d8,9abb45ab138b..000000000000
+--- a/drivers/soc/fsl/qe/gpio.c
++++ b/drivers/soc/fsl/qe/gpio.c
+@@@ -13,11 -13,14 +13,13 @@@
+  #include <linux/err.h>
+  #include <linux/io.h>
+  #include <linux/of.h>
+ -#include <linux/of_gpio.h>
+ +#include <linux/of_gpio.h>	/* for of_mm_gpio_chip */
+ +#include <linux/gpio/consumer.h>
+  #include <linux/gpio/driver.h>
+ -/* FIXME: needed for gpio_to_chip() get rid of this */
+ -#include <linux/gpio.h>
+  #include <linux/slab.h>
+  #include <linux/export.h>
++ #include <linux/property.h>
++=20
+  #include <soc/fsl/qe/qe.h>
+ =20
+  struct qe_gpio_chip {
+@@@ -187,16 -181,8 +189,16 @@@ struct qe_pin *qe_pin_request(struct de
+  		goto err0;
   	}
-  	list_del(&hook->list);
-  	if (lock)
+ =20
+ +	qe_pin->controller =3D gpiochip_get_data(gc);
+ +	/*
+ +	 * FIXME: this gets the local offset on the gpio_chip so that the driver
+ +	 * can manipulate pin control settings through its custom API. The real
+ +	 * solution is to create a real pin control driver for this.
+ +	 */
+ +	qe_pin->num =3D gpio_num - gc->base;
+ +
+- 	if (!of_device_is_compatible(gc->of_node, "fsl,mpc8323-qe-pario-bank")) {
++ 	if (!fwnode_device_is_compatible(gc->fwnode, "fsl,mpc8323-qe-pario-bank"=
+)) {
+ -		pr_debug("%s: tried to get a non-qe pin\n", __func__);
+ +		dev_dbg(dev, "%s: tried to get a non-qe pin\n", __func__);
+  		err =3D -EINVAL;
+  		goto err0;
+  	}
 
---Sig_/jlzzsRQhMGIBha=E=89gQu0
+--Sig_/KOqh2lCuC6HEK63tLTN+oxC
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOOi88ACgkQAVBC80lX
-0GwoCgf9FpJ2FlQZ1thukSsoGfixDIwCo5jlkrLNZ9PpGS/90WkafVyBzQ7jebJu
-fT8OOrY6cP7LB2RbXVnUoWeuOB1084UsGdR68mr0FHAsa/cEqJfSEhilwQ0Pq6li
-2znB6llfqUpgHLL1QdWvJ6X5S8wzJEVE4z14JEw1FDcYd6hYE+bnQwnivfjVHnmP
-ME9MgLuWXe1UgG7KuvGUlb1slMBQWLXHj17+s8sikEAMyCO90L8+cTRkfidnb+qw
-6ZC5s7w/Hs7wNBj6CZQ/vhDnsTUqR7GAMlGgQNFaOIf/gYDhKtYYXQHO4OdBICcC
-r5Fg2sqEZ0SyCGBE3XXUJSILeZhhOA==
-=XMJ7
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOOl0EACgkQAVBC80lX
+0GwtkQf+Ji/VPu3RB70iKdaEN1TUyi8Xpd9nQtFKNNvGVVASlamI/IRH2MgBwCRz
+OOxgB88Rul1PjAHme5ar8Mil6tsSwCSH9/f8Q7fOjfZjv6Gbt3MqAIjN+D/WvGCQ
+Zwqql07hjnUEdf5yRuOllLX6zwwf3jH1z7QRz7+LIgypiG/GrAdRtfRyovQW8QTe
+k4xCpLuwRAhE7PGiEqB1V0zELfTvhjwbEWbURPT89NBGkECXdiCooO8uNkKt+eTt
+GYzLZmg87cpo2pbtIt/s3Vy8bvwqG5Ct/HVfBDbxMYtllKlchVR/FD7LmWuVnnp6
+P8wWhK52Oii83+e1OokEk4x8pFWRaQ==
+=IzJa
 -----END PGP SIGNATURE-----
 
---Sig_/jlzzsRQhMGIBha=E=89gQu0--
+--Sig_/KOqh2lCuC6HEK63tLTN+oxC--

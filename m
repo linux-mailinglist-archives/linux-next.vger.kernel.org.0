@@ -2,47 +2,53 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A1FE644AE9
-	for <lists+linux-next@lfdr.de>; Tue,  6 Dec 2022 19:12:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76EBB644AF9
+	for <lists+linux-next@lfdr.de>; Tue,  6 Dec 2022 19:17:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229537AbiLFSMO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 6 Dec 2022 13:12:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57572 "EHLO
+        id S229477AbiLFSQx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 6 Dec 2022 13:16:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbiLFSMN (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 6 Dec 2022 13:12:13 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B45A3B9F6
-        for <linux-next@vger.kernel.org>; Tue,  6 Dec 2022 10:12:12 -0800 (PST)
+        with ESMTP id S229731AbiLFSQw (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 6 Dec 2022 13:16:52 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0BBE2D74B;
+        Tue,  6 Dec 2022 10:16:51 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 262A461602
-        for <linux-next@vger.kernel.org>; Tue,  6 Dec 2022 18:12:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F922C433C1;
-        Tue,  6 Dec 2022 18:12:11 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5953DB81B1F;
+        Tue,  6 Dec 2022 18:16:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA2EAC433D6;
+        Tue,  6 Dec 2022 18:16:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670350331;
-        bh=XZVaq9xQ4Osoi5iqrW6KNweGzDb6TxsGKCiIaIuU7V8=;
-        h=Date:From:To:Cc:Subject:From;
-        b=pvdwjCXGcjvfehVXEo9E2vY26XdC6rrpIMYHzucE18MC3EV8f8S2A6pjRTE+E0bYh
-         nq3Tk1wooUlo7S+yxoJZzbavTNmUoIhRWxjebuCAR95sezs2m+POOjgtnMmt1VfvNb
-         JjohzP2KLtritCd0XUM85XpUCcqbIRNK8r8bMMIkQwTufidZTJaeJyrTHJNTaUIVog
-         SVD46r6Fdv3V6XMJU7zZaRYbvuoXmeyhIIRINkj9o6gwMk4z5JcIGq4pfsGS+6Y/8q
-         1kf8S/8RLjXshF8vBGG3aO+pXGxVDvDDIEyLfPLKr/tyaFOh88OX4y/OlHAgryEDRE
-         rDoF091MS0CAA==
-Date:   Tue, 6 Dec 2022 12:12:09 -0600
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     linux-next@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: linux-next: Expected merge conflict in iio qcom,spmi-vadc.yaml
-Message-ID: <20221206181209.zj36eezbj2irktmo@builder.lan>
+        s=k20201202; t=1670350609;
+        bh=macQQ74pjNjmKFm8T+wbES3REUCkFjh+lVvmQilsrUY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=dYrsTt3f5z+/AXYuybQ15f05xy/VElaugfomTFjhbLP/qg9Uti9Fls6H6JUwHL/fA
+         fl8rendKXr2VbIz1PsCMsrkrsE1BSDM8//kKjrHtNvYkEYwriI4ufmzMvbB9IpIr5D
+         sEYocOUvA0Ze2//cjrMT3dOv5Wjd7xRskTGS+MdNNqB/Iin2zLKyz7QV3Jtghk+9Vu
+         mpOalcc5E1PjHjgLx9byYfihjjbSvO+kAuuvKWNFvM86dNLZBpj7kAeUiYsAmlz0Ne
+         yDDaR8kGnUMY0Z8mSZbYxqbqwhWpX9G3gj5RfEQr2QSIPXrTxfcRH8b7hpKMiWRnYd
+         86Z6QA5zLWnCg==
+From:   Mark Brown <broonie@kernel.org>
+To:     Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Marc Zyngier <maz@kernel.org>
+Cc:     kvmarm@lists.linux.dev, kvm@vger.kernel.org,
+        linux-next@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Mark Brown <broonie@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Ricardo Koller <ricarkol@google.com>
+Subject: [PATCH] KVM: selftests: Fix build due to ucall_uninit() removal
+Date:   Tue,  6 Dec 2022 18:15:06 +0000
+Message-Id: <20221206181506.252537-1-broonie@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1809; i=broonie@kernel.org; h=from:subject; bh=macQQ74pjNjmKFm8T+wbES3REUCkFjh+lVvmQilsrUY=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjj4apcRMzRY/3tffeY2BaujjTzJ6CZMq8Xxzk9Awb SDUV+3GJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY4+GqQAKCRAk1otyXVSH0NlRB/ 9LWXJwFvylGOiRN1bWQfLyw9jaJOwv5Pf4HkB9GFM3Tip2CqJRRkV3sF4BQDX1PCMU7epSd0usq1T/ evWNcCpQZSFQ0bXovG4j4+cmHVim5y4EKIGWBqlR+dZ5nZsjTEf/nogWA0JoCmnG/rah6oh+SNNwsb /3NKaaDA3If0eGTSXcPe38ZWpPEd3DnNaqZYnnkyK84jVR2LE2jGep11ygv2Buq6ccxj5GAMLUa7JG 8N0gSW7ni2iwN7+IeUVEh5+X1kYgBJpufhUskYmz73ModYIPVKElZBPUxNosmzRtXGZCeXbwE18Qwf 05ADCKlxRAF18A3etfhA0+9mCFFcwR
+X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -52,20 +58,49 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Stephen,
+Today's -next fails to build on arm64 due to:
 
-I messed up and picked an IIO DT binding change a while ago without
-synchronizing with Jonathan and we've now ended up with a failing
-dt_binding_check because of this.
+In file included from include/kvm_util.h:11,
+                 from aarch64/page_fault_test.c:15:
+include/ucall_common.h:36:47: note: expected ‘vm_paddr_t’ {aka ‘long unsigned int’} but argument is of type ‘void *’
+   36 | void ucall_init(struct kvm_vm *vm, vm_paddr_t mmio_gpa);
+      |                                    ~~~~~~~~~~~^~~~~~~~
+aarch64/page_fault_test.c:725:2: warning: implicit declaration of function ‘ucall_uninit’; did you mean ‘ucall_init’? [-Wimplicit-function-declaration]
+  725 |  ucall_uninit(vm);
+      |  ^~~~~~~~~~~~
+      |  ucall_init
 
-The solution for this is:
-https://lore.kernel.org/lkml/20221117121307.264550-1-krzysztof.kozlowski@linaro.org/
+which is caused by commit
 
-After considering the various solutions I've picked this up as:
-51f7be212ae6 ("dt-bindings: iio: adc: qcom,spmi-vadc: fix PM8350 define")
+interacting poorly with commit
 
-This does however cause a merge conflict between the qcom- and
-iio-trees. Could you please solve this in line with Krzysztof's patch?
+   28a65567acb5 ("KVM: selftests: Drop now-unnecessary ucall_uninit()")
 
-Thanks,
-Bjorn
+As is done for other ucall_uninit() users remove the call in the newly added
+page_fault_test.c.
+
+Fixes: 28a65567acb5 ("KVM: selftests: Drop now-unnecessary ucall_uninit()")
+Fixes: 35c581015712 ("KVM: selftests: aarch64: Add aarch64/page_fault_test")
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Cc: Sean Christopherson <seanjc@google.com>
+Cc: Ricardo Koller <ricarkol@google.com>
+Cc: Marc Zyngier <maz@kernel.org>
+---
+ tools/testing/selftests/kvm/aarch64/page_fault_test.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/tools/testing/selftests/kvm/aarch64/page_fault_test.c b/tools/testing/selftests/kvm/aarch64/page_fault_test.c
+index 05bb6a6369c2..4ef89c57a937 100644
+--- a/tools/testing/selftests/kvm/aarch64/page_fault_test.c
++++ b/tools/testing/selftests/kvm/aarch64/page_fault_test.c
+@@ -722,7 +722,6 @@ static void run_test(enum vm_guest_mode mode, void *arg)
+ 
+ 	vcpu_run_loop(vm, vcpu, test);
+ 
+-	ucall_uninit(vm);
+ 	kvm_vm_free(vm);
+ 	free_uffd(test, pt_uffd, data_uffd);
+ 
+-- 
+2.30.2
+

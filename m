@@ -2,81 +2,120 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56329643840
-	for <lists+linux-next@lfdr.de>; Mon,  5 Dec 2022 23:42:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA71B6439E8
+	for <lists+linux-next@lfdr.de>; Tue,  6 Dec 2022 01:25:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230437AbiLEWmR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 5 Dec 2022 17:42:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38470 "EHLO
+        id S231630AbiLFAZC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 5 Dec 2022 19:25:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230235AbiLEWmQ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 5 Dec 2022 17:42:16 -0500
-Received: from nautica.notk.org (nautica.notk.org [91.121.71.147])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2865FDEE;
-        Mon,  5 Dec 2022 14:42:16 -0800 (PST)
-Received: by nautica.notk.org (Postfix, from userid 108)
-        id 77EB0C01B; Mon,  5 Dec 2022 23:42:24 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1670280144; bh=R/AMBoyyHa2hQLy+oRLOqypPkWT7gf7zzItJ5Gnn7rY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kzcP1SFaQ1LbJMT2De9D8nQsQthP1PSxDKCfbDuHe+ZBTeL5NT8TM2OqOeOl3I6mf
-         jDuQLB3mhmcN2A5AnfySJk/qe9uodKQe+65DsEIRauq7t5qiwpfJE+dakdI7tscZMP
-         6UqB04Mln3xO5LqptemZAlI2IkGQQcxZs57+Fk9KM6pOKX/uZ1l+yzVutGLUm31md6
-         MJfWAc0Sxcy0W4YORDAlFUbACGUGrVNVDpiMJgdpNcVbtYnUzq2c2uZAuWCOsakdPr
-         AJps69lPGsVTRNW4pI/nsmxZ+Xc89h+ll/nVMsjFu7eKgRFn/c4GbHDiPmPLFNDmw8
-         e0YYx3o5Smr6w==
+        with ESMTP id S229456AbiLFAY7 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 5 Dec 2022 19:24:59 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2A841F2FC;
+        Mon,  5 Dec 2022 16:24:57 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NR1QC49S2z4x1T;
+        Tue,  6 Dec 2022 11:24:51 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1670286292;
+        bh=4bttU9xuSbnp1T/tbvdcKwjQVJPJdcK+Mjvu8iHG65o=;
+        h=Date:From:To:Cc:Subject:From;
+        b=rNKRPhcOthMt4WBi5977e+QUpARdC45GYHHoAbw5XAbvWnMgyh0+4y7BXnxfkyc8t
+         ZTlJbeq/RP4jghqnJ/lskvfTcUE6+I6rmzvVZcJ45wQ5b7BV1zTF13XFmoF1OTvLF0
+         Jlwlfef1wpWMdI7Hdi66Y/ZsXhKp0ZHlulBn7NElToFHKx5XVDlm4c44VZG/SEllb0
+         PcSc6dnirNh/4hSCPNAjfxhX6IZ7l1hcE+CPD+bltsy8/uUvcXtTLmT656lVIwcCH3
+         9g0T7XUfYwSmQ5Meb2bGDto8IB7wVjBnJE7ajFvWSVAvfGcshsuOVoSHq6DkSkDhIQ
+         AxgpjFsmSNI1Q==
+Date:   Tue, 6 Dec 2022 11:24:47 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Armin Wolf <W_Armin@gmx.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Subject: linux-next: manual merge of the drivers-x86 tree with the pm tree
+Message-ID: <20221206112447.429f7ab7@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/jlzzsRQhMGIBha=E=89gQu0";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
-Received: from odin.codewreck.org (localhost [127.0.0.1])
-        by nautica.notk.org (Postfix) with ESMTPS id C56E9C009;
-        Mon,  5 Dec 2022 23:42:22 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1670280144; bh=R/AMBoyyHa2hQLy+oRLOqypPkWT7gf7zzItJ5Gnn7rY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kzcP1SFaQ1LbJMT2De9D8nQsQthP1PSxDKCfbDuHe+ZBTeL5NT8TM2OqOeOl3I6mf
-         jDuQLB3mhmcN2A5AnfySJk/qe9uodKQe+65DsEIRauq7t5qiwpfJE+dakdI7tscZMP
-         6UqB04Mln3xO5LqptemZAlI2IkGQQcxZs57+Fk9KM6pOKX/uZ1l+yzVutGLUm31md6
-         MJfWAc0Sxcy0W4YORDAlFUbACGUGrVNVDpiMJgdpNcVbtYnUzq2c2uZAuWCOsakdPr
-         AJps69lPGsVTRNW4pI/nsmxZ+Xc89h+ll/nVMsjFu7eKgRFn/c4GbHDiPmPLFNDmw8
-         e0YYx3o5Smr6w==
-Received: from localhost (odin.codewreck.org [local])
-        by odin.codewreck.org (OpenSMTPD) with ESMTPA id 3795af09;
-        Mon, 5 Dec 2022 22:42:10 +0000 (UTC)
-Date:   Tue, 6 Dec 2022 07:41:55 +0900
-From:   Dominique Martinet <asmadeus@codewreck.org>
-To:     Christian Schoenebeck <linux_oss@crudebyte.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the v9fs tree
-Message-ID: <Y45zsz71RfXbySDq@codewreck.org>
-References: <20221205150316.6fac25f2@canb.auug.org.au>
- <Y41vKkaH9tvRXCfv@codewreck.org>
- <46397336.ChKRcxMYMu@silver>
- <3823616.UlgstfPZBx@silver>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <3823616.UlgstfPZBx@silver>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Christian Schoenebeck wrote on Mon, Dec 05, 2022 at 09:40:06PM +0100:
-> Dominique, looking at your 9p queue, I just realized what happened here: I 
-> posted a v2 of these two patches, which got lost for some reason:
-> 
-> https://lore.kernel.org/all/cover.1669144861.git.linux_oss@crudebyte.com/
-> 
-> The currently queued 1st patch is still v1 as well.
+--Sig_/jlzzsRQhMGIBha=E=89gQu0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Oh. Now how did I manage that one..
-Thanks for the catch, and v2 had the valid printf modifier...
+Hi all,
 
-Sorry for all the trouble :(
--- 
-Dominique
+Today's linux-next merge of the drivers-x86 tree got a conflict in:
+
+  drivers/acpi/battery.c
+
+between commit:
+
+  98b0cf207b61 ("ACPI: battery: Call power_supply_changed() when adding hoo=
+ks")
+
+from the pm tree and commit:
+
+  878a82c23469 ("ACPI: battery: Pass battery hook pointer to hook callbacks=
+")
+
+from the drivers-x86 tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/acpi/battery.c
+index 883c75757400,9482b0b6eadc..000000000000
+--- a/drivers/acpi/battery.c
++++ b/drivers/acpi/battery.c
+@@@ -696,8 -696,7 +696,8 @@@ static void __battery_hook_unregister(s
+  	if (lock)
+  		mutex_lock(&hook_mutex);
+  	list_for_each_entry(battery, &acpi_battery_list, list) {
+- 		if (!hook->remove_battery(battery->bat))
+ -		hook->remove_battery(battery->bat, hook);
+++		if (!hook->remove_battery(battery->bat, hook))
+ +			power_supply_changed(battery->bat);
+  	}
+  	list_del(&hook->list);
+  	if (lock)
+
+--Sig_/jlzzsRQhMGIBha=E=89gQu0
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOOi88ACgkQAVBC80lX
+0GwoCgf9FpJ2FlQZ1thukSsoGfixDIwCo5jlkrLNZ9PpGS/90WkafVyBzQ7jebJu
+fT8OOrY6cP7LB2RbXVnUoWeuOB1084UsGdR68mr0FHAsa/cEqJfSEhilwQ0Pq6li
+2znB6llfqUpgHLL1QdWvJ6X5S8wzJEVE4z14JEw1FDcYd6hYE+bnQwnivfjVHnmP
+ME9MgLuWXe1UgG7KuvGUlb1slMBQWLXHj17+s8sikEAMyCO90L8+cTRkfidnb+qw
+6ZC5s7w/Hs7wNBj6CZQ/vhDnsTUqR7GAMlGgQNFaOIf/gYDhKtYYXQHO4OdBICcC
+r5Fg2sqEZ0SyCGBE3XXUJSILeZhhOA==
+=XMJ7
+-----END PGP SIGNATURE-----
+
+--Sig_/jlzzsRQhMGIBha=E=89gQu0--

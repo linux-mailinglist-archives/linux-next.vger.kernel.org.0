@@ -2,121 +2,104 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7B8C645EA6
-	for <lists+linux-next@lfdr.de>; Wed,  7 Dec 2022 17:22:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE013646332
+	for <lists+linux-next@lfdr.de>; Wed,  7 Dec 2022 22:23:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229866AbiLGQWy (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 7 Dec 2022 11:22:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47176 "EHLO
+        id S229571AbiLGVXd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 7 Dec 2022 16:23:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229820AbiLGQWv (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 7 Dec 2022 11:22:51 -0500
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEFCA25C5C
-        for <linux-next@vger.kernel.org>; Wed,  7 Dec 2022 08:22:47 -0800 (PST)
-Received: by mail-io1-xd32.google.com with SMTP id 3so5812271iou.12
-        for <linux-next@vger.kernel.org>; Wed, 07 Dec 2022 08:22:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Bn9I9xV79fJUCgoxsa3ub+uGmmlj3Tv0J26ZcN9So2c=;
-        b=oktSzxAShr3BHoD72bP4RFPVPK2PQ9754FcMwUZLSN4JtDJnGYSSmZWOGHv94kk8p2
-         hRwss1tlAVG7p8Av2GnMo81SayC6jYcGxuvgfQjOmrGY3anuIuUmHTnrOwK4bjFlrHLH
-         8X2zXyi3q6BymHi1hN9CxD5+hoxVUb4cv+kVB+LerzeBetWY4WfSZ5+f327qAreMbIrn
-         68t4pMOeqqBpF9HLmnL9+4GnvtxCjB6tGckAQYSJQEdBSt77fS7PfaRqOq6S74eXp1OI
-         HyGz4pZzTJh8yNYLubKPUaRkK+fiekioy/q9ElL9E6hHGOMvjaC1n0ZrZ+A9RVFAaNNK
-         rmtA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Bn9I9xV79fJUCgoxsa3ub+uGmmlj3Tv0J26ZcN9So2c=;
-        b=63njmYUV7CFXfYebo4sLvfhTrzgXYmo5aGZ9jb2e0F1YDsDbG2KrDrrNFy+rSha7m+
-         +HImij0RDVL8YmO+w6rk0P9HU8oM7XTnDr70p54E64WUn86CSXKGfvdcSxsvdsqA02nm
-         +bBL3JtR4ximFrM/KohM5vvNfTTAcAPNQx10s3gxACYsb6SgS1Dve2DGn+24YgqjAlnu
-         aEJOfd7SjGNMQAgpZh9mkCEVGQ9MdgkbYhyB/BLk7L24Ccx0kH2sm0JpM0pVZNWsn8gg
-         Sh9NtZlKy4t0mLvMxW4BlrsLMJreNcW6eTYzmp3IyN49v4hD35yUxd55DLZPFrgOcKbi
-         kRkA==
-X-Gm-Message-State: ANoB5pkZNoUS6TjoXpNa9ZP6Knyhf5trb83AOO4IOApuUfv0P2jcpd7A
-        jn1JC4WpZ3SHR/fsFM4jnmksI4RW7YbRI8BcWsM=
-X-Google-Smtp-Source: AA0mqf4ybGl8vC1UVIEO3y/JfQbgJP/6fnnH7vd2PgBXxTLGzha4ra0sC3Q2OFIDuj9XNhFK1cMt4Q==
-X-Received: by 2002:a02:334d:0:b0:376:22fe:5e7c with SMTP id k13-20020a02334d000000b0037622fe5e7cmr43131407jak.126.1670430167275;
-        Wed, 07 Dec 2022 08:22:47 -0800 (PST)
-Received: from [192.168.1.94] ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id p12-20020a056e0206cc00b00302f958e71dsm7202366ils.49.2022.12.07.08.22.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Dec 2022 08:22:46 -0800 (PST)
-Message-ID: <b7d8193c-7e15-f5cd-08d4-8ef788d9bb36@kernel.dk>
-Date:   Wed, 7 Dec 2022 09:22:45 -0700
+        with ESMTP id S229557AbiLGVXc (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 7 Dec 2022 16:23:32 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 213D67B554;
+        Wed,  7 Dec 2022 13:23:30 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NS9Hz6xThz4xFy;
+        Thu,  8 Dec 2022 08:23:27 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1670448208;
+        bh=skFp02LLaaYnCICffHDRFegmfkjpdWAOsEShVo3tYzY=;
+        h=Date:From:To:Cc:Subject:From;
+        b=YZcTp0J4SPYZBkF8cGUuFlS9GtVMT/FvaOyPjKwhaCPeCU9jh8aOjZNSk2F/cjBzX
+         fQ4D/9iA8qrpZKxC9Z9vmJaVU0aJkRfpu7roNI29Tyw2uQ4PHJxEfpLHxPQWdDl22A
+         rLIjfKKpL079SNBV86ptjj7jQq7JFyCuBTev7JSH/81cXZWPcy0tRQ20ikm9RETACN
+         e/gbU9RDv5k1p4Ogf01PWjdImqJP3mzaBoD7o1GesuVrppXB12KUPHWd3a3Dnu/YI8
+         c3WRwLssh2hWkpzb/8Gio/EfUJ8PVLpC6Q5VnPIW9DHGbo6LXmhgh/tZfbrV+osEPO
+         w4iyncEfOkIDw==
+Date:   Thu, 8 Dec 2022 08:23:01 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Juergen Gross <jgross@suse.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Yang Yingliang <yangyingliang@huawei.com>
+Subject: linux-next: manual merge of the net tree with Linus' tree
+Message-ID: <20221208082301.5f7483e8@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: next: LTP: syscalls: epoll_clt() if fd is an invalid fd expected
- EBADF: EINVAL (22)
-Content-Language: en-US
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, regressions@lists.linux.dev,
-        lkft-triage@lists.linaro.org,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        LTP List <ltp@lists.linux.it>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, chrubis <chrubis@suse.cz>
-References: <CA+G9fYv_UU+oVUbd8Mzt8FkXscenX2kikRSCZ7DPXif9i5erNg@mail.gmail.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <CA+G9fYv_UU+oVUbd8Mzt8FkXscenX2kikRSCZ7DPXif9i5erNg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/BBoFWBm3G8D.uuP4C6PiDj_";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 12/7/22 8:58?AM, Naresh Kamboju wrote:
-> LTP syscalls epoll_ctl02 is failing on Linux next master.
-> The reported problem is always reproducible and starts from next-20221205.
-> 
-> GOOD tag: next-20221202
-> BAD tag: next-20221205
-> 
-> tst_test.c:1524: TINFO: Timeout per run is 0h 05m 00s
-> epoll_ctl02.c:87: TPASS: epoll_clt(...) if epfd is an invalid fd : EBADF (9)
-> epoll_ctl02.c:87: TPASS: epoll_clt(...) if fd does not support epoll : EPERM (1)
-> epoll_ctl02.c:87: TFAIL: epoll_clt(...) if fd is an invalid fd
-> expected EBADF: EINVAL (22)
-> epoll_ctl02.c:87: TPASS: epoll_clt(...) if op is not supported : EINVAL (22)
-> epoll_ctl02.c:87: TPASS: epoll_clt(...) if fd is the same as epfd : EINVAL (22)
-> epoll_ctl02.c:87: TPASS: epoll_clt(...) if events is NULL : EFAULT (14)
-> epoll_ctl02.c:87: TPASS: epoll_clt(...) if fd is not registered with
-> EPOLL_CTL_DEL : ENOENT (2)
-> epoll_ctl02.c:87: TPASS: epoll_clt(...) if fd is not registered with
-> EPOLL_CTL_MOD : ENOENT (2)
-> epoll_ctl02.c:87: TPASS: epoll_clt(...) if fd is already registered
-> with EPOLL_CTL_ADD : EEXIST (17)
+--Sig_/BBoFWBm3G8D.uuP4C6PiDj_
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-This should fix it:
+Hi all,
 
+Today's linux-next merge of the net tree got a conflict in:
 
-diff --git a/fs/eventpoll.c b/fs/eventpoll.c
-index ec7ffce8265a..de9c551e1993 100644
---- a/fs/eventpoll.c
-+++ b/fs/eventpoll.c
-@@ -2195,6 +2195,7 @@ int do_epoll_ctl(int epfd, int op, int fd, struct epoll_event *epds,
- 	}
- 
- 	/* Get the "struct file *" for the target file */
-+	error = -EBADF;
- 	tf = fdget(fd);
- 	if (!tf.file)
- 		goto error_fput;
+  drivers/net/xen-netback/rx.c
 
--- 
-Jens Axboe
+between commit:
+
+  74e7e1efdad4 ("xen/netback: don't call kfree_skb() with interrupts disabl=
+ed")
+
+from Linus' tree and commit:
+
+  9e6246518592 ("xen/netback: don't call kfree_skb() under spin_lock_irqsav=
+e()")
+
+from the net tree.
+
+I fixed it up (I just used the version from Linus' tree) and can carry the
+fix as necessary. This is now fixed as far as linux-next is concerned,
+but any non trivial conflicts should be mentioned to your upstream
+maintainer when your tree is submitted for merging.  You may also want
+to consider cooperating with the maintainer of the conflicting tree to
+minimise any particularly complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/BBoFWBm3G8D.uuP4C6PiDj_
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmORBDUACgkQAVBC80lX
+0Gw0awf+Ljq8FCkkBHKNr/Ow1PMqCcSfW6hDzj1DTusJr8dJ/bfwl+465fFNK47G
+XETYph0oA/coKmc3gpfQ3uU+HclRU3qDZklLLZwcw/MrBQ86m9z8VxwrcDhhZ/+O
+0Ckr6D3AinEbqRCd0gJ05Q/jWkdRjNORGrPrwo6uvDPi8JfbPANAQBHWpLO0hLyI
+a6lVtl7Y/7NeLeBgLLPz6j42Z7+9L0sh5ccagPmPLtrc+UIHSwYHu5CN5H656DFP
+JcEVovbfr8KsSAYit3npE2KD1BgmxuMoW3fCWGtfEJwWErWCNRZnJFWMp1ryHV/B
+du+cSCTFqqmCNIfLI1QiKfopjh+onQ==
+=uxy7
+-----END PGP SIGNATURE-----
+
+--Sig_/BBoFWBm3G8D.uuP4C6PiDj_--

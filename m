@@ -2,114 +2,138 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0438864572C
-	for <lists+linux-next@lfdr.de>; Wed,  7 Dec 2022 11:09:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC249645994
+	for <lists+linux-next@lfdr.de>; Wed,  7 Dec 2022 13:03:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229650AbiLGKJp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 7 Dec 2022 05:09:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39634 "EHLO
+        id S230243AbiLGMDm (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 7 Dec 2022 07:03:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229674AbiLGKJn (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 7 Dec 2022 05:09:43 -0500
-X-Greylist: delayed 62 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 07 Dec 2022 02:09:42 PST
-Received: from ewsoutbound.kpnmail.nl (ewsoutbound.kpnmail.nl [195.121.94.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 617144090B
-        for <linux-next@vger.kernel.org>; Wed,  7 Dec 2022 02:09:42 -0800 (PST)
-X-KPN-MessageId: 1c8b243d-7617-11ed-97dd-005056abad63
-Received: from smtp.kpnmail.nl (unknown [10.31.155.40])
-        by ewsoutbound.so.kpn.org (Halon) with ESMTPS
-        id 1c8b243d-7617-11ed-97dd-005056abad63;
-        Wed, 07 Dec 2022 11:08:35 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=xs4all.nl; s=xs4all01;
-        h=content-type:from:to:subject:mime-version:date:message-id;
-        bh=dcZxkIgsXiP5No5awWGbrW9LWMFxyRSZX9pAr84k0FE=;
-        b=t5Qp8bjpGxZJ53ZfMt92QufNUYG4xEimUjFuo9EGRplD32Pre2FnLnS7G0ADg5EqgGqSVdr1FMb97
-         bv0Gb/ZD/hFjcfQFShY/RMeGd+Mj1bMnlI2fA6zVVKhmoBjl2zGw3jnWzX6Xrmi0tNYqEKsz1IO2hd
-         09v7sbG1fDlWz8M2rBPoBQD+v4b0BuPMXpuE1fCm2TA/ziZUmJxjp+R6Wj+1snKZ5Hqk77L5wiqG1P
-         SuMxrGteyUQEg+h+E9JhFTXJlPP3HvM8ArcbOb9UWOD/HyxMARAkZB2Q3jd5AMCPHjXPMfRzbYumFj
-         2xYvEvxs6GOokuMPt5JcbPhvQCZWk9w==
-X-KPN-MID: 33|llIboo3TtsDibD9OxK1HzEi9yIkyLaEr7GrgY/49E3cXBxO7c7YxhbEDQgKCtda
- quGRuSD35Axk/MVYC7USB3cTnJ0jy2Obzff0tqYF5qnI=
-X-KPN-VerifiedSender: Yes
-X-CMASSUN: 33|+Pwbvb1VhlDEvO4WDfeBZAayJMnYDnnD8FzZXJgK8a8nuvs2vuGLVoGqn8Bqlhf
- 8I9GkWNkbtdIKSOON4x9rhA==
-X-Originating-IP: 173.38.220.42
-Received: from [10.47.77.219] (unknown [173.38.220.42])
-        by smtp.xs4all.nl (Halon) with ESMTPSA
-        id 1da16f9e-7617-11ed-927c-005056ab7584;
-        Wed, 07 Dec 2022 11:08:38 +0100 (CET)
-Message-ID: <e250c025-65c4-1760-bcfe-7efb116b5c9d@xs4all.nl>
-Date:   Wed, 7 Dec 2022 11:08:37 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: linux-next: Signed-off-by missing for commit in the v4l-dvb-next
- tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        with ESMTP id S230245AbiLGMDj (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 7 Dec 2022 07:03:39 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72E6425E9F;
+        Wed,  7 Dec 2022 04:03:36 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NRwsw2Rjvz4xVH;
+        Wed,  7 Dec 2022 23:03:31 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1670414612;
+        bh=SUeN5NLWNEE9mx0glx2Prtl5W/yRPcJJJmfxMVdj4jU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=jYhRAGxbLi8Bn0UGkotCn0sXxP2lE9iowK5Em2q425yqQ6LW59TdgMieaWEIEZGDS
+         4JkVAUGevu7Jf1l8zZbqtmcv+UZPwN4cjH/pyuQEKu/dCfysAejHYNUBXYMlniIApV
+         qwBIUzHhcR3LdADMjgiws/FKV7zMdLyVYMCF7HnZQuqIWCh9vMUKDR4P/XvIEbZSd8
+         tmziJJnlUHk1PHHnO1SJtXsmfBNl39ewJsAf4VKinCyUfPAE8ctCljGHWFLtHcSagW
+         WkbZEhmClLvLPc8gJhrDNXGgYDTCdGafQsjZnABB+aa9YbmnPMgyQ+FAJQu8QlhU2n
+         vxH5ZdS1v+qcw==
+Date:   Wed, 7 Dec 2022 23:03:15 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: Signed-off-by missing for commit in the
+ v4l-dvb-next tree
+Message-ID: <20221207212220.66670e30@canb.auug.org.au>
+In-Reply-To: <e250c025-65c4-1760-bcfe-7efb116b5c9d@xs4all.nl>
 References: <20221207075657.39b5552c@canb.auug.org.au>
-Content-Language: en-US
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-In-Reply-To: <20221207075657.39b5552c@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+ <e250c025-65c4-1760-bcfe-7efb116b5c9d@xs4all.nl>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/xo+/OdhNU7blp0uI5XJQ6y=";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 12/6/22 21:56, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Commits
-> 
->   85abf40b56af ("media: ipu3-cio2: make the bridge depend on i2c")
->   ca61babacbe8 ("media: MAINTAINERS: Add Hans de Goede as staging/atomisp maintainer")
-> 
-> are missing a Signed-off-by from their committer.
-> 
+--Sig_/xo+/OdhNU7blp0uI5XJQ6y=
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-They have a SoB, but there is a 'Link:' tag right before that:
+Hi Hans,
 
-commit 85abf40b56af5f3130a4f9dcdb808c7feb64e083
-Author: Adam Borowski <kilobyte@angband.pl>
-Date:   Fri Sep 16 00:33:18 2022 +0100
+On Wed, 7 Dec 2022 11:08:37 +0100 Hans Verkuil <hverkuil-cisco@xs4all.nl> w=
+rote:
+>
+> On 12/6/22 21:56, Stephen Rothwell wrote:
+> > Hi all,
+> >=20
+> > Commits
+> >=20
+> >   85abf40b56af ("media: ipu3-cio2: make the bridge depend on i2c")
+> >   ca61babacbe8 ("media: MAINTAINERS: Add Hans de Goede as staging/atomi=
+sp maintainer")
+> >=20
+> > are missing a Signed-off-by from their committer.
+> >  =20
+>=20
+> They have a SoB, but there is a 'Link:' tag right before that:
+>=20
+> commit 85abf40b56af5f3130a4f9dcdb808c7feb64e083
+> Author: Adam Borowski <kilobyte@angband.pl>
+> Date:   Fri Sep 16 00:33:18 2022 +0100
+>=20
+>     media: ipu3-cio2: make the bridge depend on i2c
+>=20
+>     drivers/media/pci/intel/ipu3/cio2-bridge.c: In function =E2=80=98cio2=
+_bridge_unregister_sensors=E2=80=99:
+>     drivers/media/pci/intel/ipu3/cio2-bridge.c:258:17: error: implicit de=
+claration of function =E2=80=98i2c_unregister_device=E2=80=99; did you mean=
+ =E2=80=98spi_unregister_device=E2=80=99? [-Werror=3Dimplicit-function-decl=
+aration]
+>       258 |                 i2c_unregister_device(sensor->vcm_i2c_client);
+>           |                 ^~~~~~~~~~~~~~~~~~~~~
+>           |                 spi_unregister_device
+>=20
+>     Link: https://lore.kernel.org/linux-media/S230142AbiJTWql/20221020224=
+641Z+958@vger.kernel.org
+>     Signed-off-by: Adam Borowski <kilobyte@angband.pl>
+>     Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+>=20
+> commit ca61babacbe8ada7a0671f910c22b8758f481c0c
+> Author: Hans de Goede <hdegoede@redhat.com>
+> Date:   Wed Nov 23 16:14:47 2022 +0000
+>=20
+>     media: MAINTAINERS: Add Hans de Goede as staging/atomisp maintainer
+>=20
+>     Add myself as maintainer for the drivers/staging/media/atomisp code.
+>=20
+>     Link: https://lore.kernel.org/linux-media/20221123161447.15834-1-hdeg=
+oede@redhat.com
+>     Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+>     Acked-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+>     Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+>=20
+> Could that be the cause? checkpatch doesn't complain about this.
 
-    media: ipu3-cio2: make the bridge depend on i2c
+They have no SOB line from you and you are the one who committed them.
 
-    drivers/media/pci/intel/ipu3/cio2-bridge.c: In function ‘cio2_bridge_unregister_sensors’:
-    drivers/media/pci/intel/ipu3/cio2-bridge.c:258:17: error: implicit declaration of function ‘i2c_unregister_device’; did you mean ‘spi_unregister_device’? [-Werror=implicit-function-declaration]
-      258 |                 i2c_unregister_device(sensor->vcm_i2c_client);
-          |                 ^~~~~~~~~~~~~~~~~~~~~
-          |                 spi_unregister_device
+--=20
+Cheers,
+Stephen Rothwell
 
-    Link: https://lore.kernel.org/linux-media/S230142AbiJTWql/20221020224641Z+958@vger.kernel.org
-    Signed-off-by: Adam Borowski <kilobyte@angband.pl>
-    Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+--Sig_/xo+/OdhNU7blp0uI5XJQ6y=
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-commit ca61babacbe8ada7a0671f910c22b8758f481c0c
-Author: Hans de Goede <hdegoede@redhat.com>
-Date:   Wed Nov 23 16:14:47 2022 +0000
+-----BEGIN PGP SIGNATURE-----
 
-    media: MAINTAINERS: Add Hans de Goede as staging/atomisp maintainer
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOQgQMACgkQAVBC80lX
+0Gxu4wf9HbHT2hMXbDlhb6FwDFzpdWQ/LMA5HSpW5dILV9U1zO7faQsn7Blf4lUC
+ZGROQAYefTQ9w8Rk968prJYkEhQgnzF+jx4O8Fuxsci6cf/TI764dDt4pS27qb/U
+X5qfSCALyp+WkhvRtYjf5zAYxS1y/RYLhNAFpUfZos00iXdVvQZqa+UGhTyBfQwn
+L+L4zmAs09kBCJ5RyQra1cXP/gpZ0vvarq73K6Dn/GLVrbgFhdNrBIeLx2G+z8Jr
+0a06Ujl4Fy6ufgg/WhsyCxMcJFQ78dif5vV/6bZmXimdSxjcjQg+eFbkZW0yEOGo
+hwZpL0BUqvpusqqojDv4iXic6ibWuQ==
+=q5Ke
+-----END PGP SIGNATURE-----
 
-    Add myself as maintainer for the drivers/staging/media/atomisp code.
-
-    Link: https://lore.kernel.org/linux-media/20221123161447.15834-1-hdegoede@redhat.com
-    Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-    Acked-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-    Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-
-Could that be the cause? checkpatch doesn't complain about this.
-
-Regards,
-
-	Hans
+--Sig_/xo+/OdhNU7blp0uI5XJQ6y=--

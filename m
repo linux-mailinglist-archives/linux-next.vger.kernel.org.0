@@ -2,181 +2,106 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1D916476FF
-	for <lists+linux-next@lfdr.de>; Thu,  8 Dec 2022 21:10:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E3C4647A5D
+	for <lists+linux-next@lfdr.de>; Fri,  9 Dec 2022 00:54:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229606AbiLHUKo (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 8 Dec 2022 15:10:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49336 "EHLO
+        id S230053AbiLHXx7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 8 Dec 2022 18:53:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbiLHUKn (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 8 Dec 2022 15:10:43 -0500
-Received: from smtp-relay-canonical-1.canonical.com (smtp-relay-canonical-1.canonical.com [185.125.188.121])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7EC971266;
-        Thu,  8 Dec 2022 12:10:38 -0800 (PST)
-Received: from [192.168.192.83] (unknown [50.47.134.245])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id 0F15D420B2;
-        Thu,  8 Dec 2022 20:10:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1670530237;
-        bh=bHLpKlVywAIn9Mz9IlXBf3CKnLTyGWwhq0WGPu4dJxE=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=FPYdiJn0Wv2IeXB64dV5hw9eDeK1e9mj5wKCVrFEZCzENSE3h7+xN8bo/rhftcL/M
-         zE/BmMQuHVFw6UVsxw7QO6HyjUbwj1oUJnuyqfGyb6VJoHLoXAHZxC8SD3z2Eb9NwL
-         VvTq+FgCdtJFBGs623+U+Mu5iLMDyQE5BzBI9lisgFHvzL6frtH1Fuf9+PRiUIc2Vc
-         fMcj0upMdeIlroCOol+VqAoEbkSA1xOP4HLfeFU18SEjssBQv9zVZXKq05EJEBxpxe
-         k8FOMfyNvYEEwQBHubTtGrEodn48SPWVuD9vIzX92aOjSWS1L53ZeMmgcSqv7thGJS
-         vg82L9TbdrUjw==
-Message-ID: <bff89220-df3a-a148-2ba4-6aad3874f322@canonical.com>
-Date:   Thu, 8 Dec 2022 12:10:34 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: linux-next: manual merge of the kunit-next tree with the apparmor
- tree
-Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Brendan Higgins <brendanhiggins@google.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Rae Moar <rmoar@google.com>
-References: <20221208135327.01364529@canb.auug.org.au>
-From:   John Johansen <john.johansen@canonical.com>
-Organization: Canonical
-In-Reply-To: <20221208135327.01364529@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S229538AbiLHXx6 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 8 Dec 2022 18:53:58 -0500
+Received: from nautica.notk.org (nautica.notk.org [91.121.71.147])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 502C126ACE;
+        Thu,  8 Dec 2022 15:53:57 -0800 (PST)
+Received: by nautica.notk.org (Postfix, from userid 108)
+        id 34CC2C01E; Fri,  9 Dec 2022 00:54:06 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1670543646; bh=fVFAqawFttj8I80f5N81FfPuX+mDk6lIwOx2zqsllNA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qjE801cYXAhzQivJ/K9KGtOzD2Aj7tLnm1ZAGT1Ontk1wiZm/uuNvP8epI8FuQdgT
+         8/G9xQwKV3LmxwES0P2I5UsN619RVq3KxjABaRAJiTqgvs0cgPU47lo1tN9EUqSXdJ
+         Muyjt3WujLLwVdeTVvLXAmaLnrLlw3Khzq/B9o5E2/BpDhzeUvTWPgh+6U8uO5Ysl7
+         l0flRI44+xckc9t1hrrX7IeEMbOeRZpHcT/vL4IAWlLseHD4buS/5s5fwDoB2kDWzx
+         1sI7OZ1TtuV9qjSCzenLhJXtEONBG4n3krCwyzFMmk8yfC4DKlu1Q30mKamGBs6ZUo
+         dtw0pGG8HHxTg==
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
+Received: from odin.codewreck.org (localhost [127.0.0.1])
+        by nautica.notk.org (Postfix) with ESMTPS id 7C4D6C01B;
+        Fri,  9 Dec 2022 00:54:03 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1670543644; bh=fVFAqawFttj8I80f5N81FfPuX+mDk6lIwOx2zqsllNA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=zlGIkKZJPL156WFoM5KfGnYy13Mu3ruM7Z/GtbUlz4hM9WIszmrz5gywlw2MN2Cl0
+         y7yNyNiLpRepSmTWn382TQL+tY/01dv9fX/XptJHwxaVWIfezqHRiU7FL1D8yj8TvI
+         qXthArLiWtHdy13bsekNrEBNHa9NHEE3ERztaxr08rK6nIplQ28TgbJANBENywvRIl
+         tfj3U/WJfMhWWqYAxWaoZ9ESbatithwpN4h1GPKN4aG4s0VgBpCti7XE1P9ZHsk8gw
+         7ufi7/uFu7lyX7tQJtZMwDqxPh+z+U6MknWqltyOFAOreVaabsvbLvu4N7dj/IJ8ig
+         Fj2tK0nXI1dAA==
+Received: from localhost (odin.codewreck.org [local])
+        by odin.codewreck.org (OpenSMTPD) with ESMTPA id 7b43bc40;
+        Thu, 8 Dec 2022 23:53:50 +0000 (UTC)
+Date:   Fri, 9 Dec 2022 08:53:35 +0900
+From:   Dominique Martinet <asmadeus@codewreck.org>
+To:     Christian Schoenebeck <linux_oss@crudebyte.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the v9fs tree
+Message-ID: <Y5J4/5WGnG5Uxadg@codewreck.org>
+References: <20221205150316.6fac25f2@canb.auug.org.au>
+ <3823616.UlgstfPZBx@silver>
+ <Y45zsz71RfXbySDq@codewreck.org>
+ <6054083.7yRespAWZ4@silver>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <6054083.7yRespAWZ4@silver>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 12/7/22 18:53, Stephen Rothwell wrote:
-> Hi all,
+Christian Schoenebeck wrote on Thu, Dec 08, 2022 at 04:55:17PM +0100:
+> On Monday, December 5, 2022 11:41:55 PM CET Dominique Martinet wrote:
+> > Christian Schoenebeck wrote on Mon, Dec 05, 2022 at 09:40:06PM +0100:
+> > > Dominique, looking at your 9p queue, I just realized what happened here: I 
+> > > posted a v2 of these two patches, which got lost for some reason:
+> > > 
+> > > https://lore.kernel.org/all/cover.1669144861.git.linux_oss@crudebyte.com/
+> > > 
+> > > The currently queued 1st patch is still v1 as well.
+> > 
+> > Oh. Now how did I manage that one..
+> > Thanks for the catch, and v2 had the valid printf modifier...
 > 
-> Today's linux-next merge of the kunit-next tree got a conflict in:
-> 
->    security/apparmor/policy_unpack.c
-> 
-> between commits:
-> 
->    371e50a0b19f ("apparmor: make unpack_array return a trianary value")
->    73c7e91c8bc9 ("apparmor: Remove unnecessary size check when unpacking trans_table")
->    217af7e2f4de ("apparmor: refactor profile rules and attachments")
-> (and probably others)
-> 
-> from the apparmor tree and commit:
-> 
->    2c92044683f5 ("apparmor: test: make static symbols visible during kunit testing")
-> 
-> from the kunit-next tree.
-> 
-> This is somewhat of a mess ... pity there is not a shared branch (or
-> better routing if the patches).
-> 
-sorry, there was a miscommunication/misunderstanding, probably all on me, I
-thought the kunit stuff that is conflicting here was going to merge next
-cycle.
+> You remember updating the 1st patch as well, right? :)
 
-> I fixed it up (hopefully - see below) and can carry the fix as
-> necessary. This is now fixed as far as linux-next is concerned, but any
-> non trivial conflicts should be mentioned to your upstream maintainer
-> when your tree is submitted for merging.  You may also want to consider
-> cooperating with the maintainer of the conflicting tree to minimise any
-> particularly complex conflicts.
-> 
-> I also had to add this patch:
-> 
-this needs to be modified to build if kunit is not enabled, basically
-the defines need to move up outside the #if IS_ENABLED(CONFIG_KUNIT)
+It looks up to date to me, e.g. zc is added at the end of the p9_fcall
+structure.
+(and these are the only two patches you sent, right? :D)
 
-ie.
-diff --git a/security/apparmor/include/policy_unpack.h b/security/apparmor/include/policy_unpack.h
-index 8fdf8f703bd0..dcf7d1bbf96b 100644
---- a/security/apparmor/include/policy_unpack.h
-+++ b/security/apparmor/include/policy_unpack.h
-@@ -165,6 +165,11 @@ static inline void aa_put_loaddata(struct aa_loaddata *data)
-  		kref_put(&data->count, aa_loaddata_kref);
-  }
-  
-+#define tri int
-+#define TRI_TRUE 1
-+#define TRI_NONE 0
-+#define TRI_FALSE -1
-+
-  #if IS_ENABLED(CONFIG_KUNIT)
-  bool aa_inbounds(struct aa_ext *e, size_t size);
-  size_t aa_unpack_u16_chunk(struct aa_ext *e, char **chunk);
-@@ -173,11 +178,6 @@ bool aa_unpack_nameX(struct aa_ext *e, enum aa_code code, const char *name);
-  bool aa_unpack_u32(struct aa_ext *e, u32 *data, const char *name);
-  bool aa_unpack_u64(struct aa_ext *e, u64 *data, const char *name);
-  
--#define tri int
--#define TRI_TRUE 1
--#define TRI_NONE 0
--#define TRI_FALSE -1
--
-  tri aa_unpack_array(struct aa_ext *e, const char *name, u16 *size);
-  size_t aa_unpack_blob(struct aa_ext *e, char **blob, const char *name);
-  int aa_unpack_str(struct aa_ext *e, const char **string, const char *name);
+> In general, I'm sure nobody complains about extra noise like "queued on...".
+> Then it's also more likely for other people to get which patches are still
+> pending or unseen.
 
+I usually apply the patch locally when writing a note about 'taking the
+patch for x' -- but the problem is my workflow is pretty manual to say
+the least (piping mail to base64, base64 to git am on another
+machine...); and I'm not always taking the time to run tests immediately
+so not pushing right away to -next, so I assume I took your patches
+early and looked back when testing after you sent v2 and they were there
+so did't notice :/
 
-feel free to apply that to your patch and then add my
-Acked-by: John Johansen <john.johansen@canonical.com>
+I guess I need to pull the tree back and script a reply from the last
+link or something; so you'll notice the reply is on v1 in this case?
+but it'll be a pain to get the subject back like e.g. pwbot does for
+netdev... hmm..
+I'll think about what I can do.
 
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Thu, 8 Dec 2022 13:47:43 +1100
-> Subject: [PATCH] fixup for "apparmor: make unpack_array return a trianary value"
-> 
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> ---
->   security/apparmor/include/policy_unpack.h | 8 +++++++-
->   security/apparmor/policy_unpack.c         | 5 -----
->   2 files changed, 7 insertions(+), 6 deletions(-)
-> 
-> diff --git a/security/apparmor/include/policy_unpack.h b/security/apparmor/include/policy_unpack.h
-> index 940da8a33e0c..8fdf8f703bd0 100644
-> --- a/security/apparmor/include/policy_unpack.h
-> +++ b/security/apparmor/include/policy_unpack.h
-> @@ -172,7 +172,13 @@ bool aa_unpack_X(struct aa_ext *e, enum aa_code code);
->   bool aa_unpack_nameX(struct aa_ext *e, enum aa_code code, const char *name);
->   bool aa_unpack_u32(struct aa_ext *e, u32 *data, const char *name);
->   bool aa_unpack_u64(struct aa_ext *e, u64 *data, const char *name);
-> -size_t aa_unpack_array(struct aa_ext *e, const char *name);
-> +
-> +#define tri int
-> +#define TRI_TRUE 1
-> +#define TRI_NONE 0
-> +#define TRI_FALSE -1
-> +
-> +tri aa_unpack_array(struct aa_ext *e, const char *name, u16 *size);
->   size_t aa_unpack_blob(struct aa_ext *e, char **blob, const char *name);
->   int aa_unpack_str(struct aa_ext *e, const char **string, const char *name);
->   int aa_unpack_strdup(struct aa_ext *e, char **string, const char *name);
-> diff --git a/security/apparmor/policy_unpack.c b/security/apparmor/policy_unpack.c
-> index 6513545dad5e..173d832fc4ee 100644
-> --- a/security/apparmor/policy_unpack.c
-> +++ b/security/apparmor/policy_unpack.c
-> @@ -30,11 +30,6 @@
->   #include "include/policy_unpack.h"
->   #include "include/policy_compat.h"
->   
-> -#define tri int
-> -#define TRI_TRUE 1
-> -#define TRI_NONE 0
-> -#define TRI_FALSE -1
-> -
->   /* audit callback for unpack fields */
->   static void audit_cb(struct audit_buffer *ab, void *va)
->   {
-
+-- 
+Dominique

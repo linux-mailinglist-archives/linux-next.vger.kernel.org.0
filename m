@@ -2,148 +2,88 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C8016469C4
-	for <lists+linux-next@lfdr.de>; Thu,  8 Dec 2022 08:36:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 582AC646AF9
+	for <lists+linux-next@lfdr.de>; Thu,  8 Dec 2022 09:49:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229591AbiLHHgk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 8 Dec 2022 02:36:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37012 "EHLO
+        id S229637AbiLHItS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 8 Dec 2022 03:49:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbiLHHgj (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 8 Dec 2022 02:36:39 -0500
-Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA48F2A711
-        for <linux-next@vger.kernel.org>; Wed,  7 Dec 2022 23:36:38 -0800 (PST)
-Received: by mail-qk1-x72f.google.com with SMTP id p18so313546qkg.2
-        for <linux-next@vger.kernel.org>; Wed, 07 Dec 2022 23:36:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=97CF61NxNfINvAmFCHySr8pBYXl0fpYSbMxv8vXatSE=;
-        b=QlyXdnWfeAGEZrdOzy9s6Z4X237j8Pipot9BBuCfCRDqWCQpOi464m8FComOVhAP8a
-         3UewOiGSWl2flvhaBM//5YFvyOVH0AafmRZokxXAXiH2pMK3/MDpcBsMF6IdvRVyrJ//
-         sUJFaGIBWiR4PuKQVzsIl6PPuhbj0gJBlF/OeXi1KmkFnYfG9FSXo9QZ1N4jxVmwB6MD
-         c+A8DPLIq1Wa59nidmiqsn3XihHjDvYBo2YeNIum0v9E7Yf1YwAq3GruNpD1e9hZTkum
-         JJCsENXYTiW/+pnS0uT6UEGIEZ8YO6JogP/pe+MLwxHIBWWjYkaIOhw73prhhgFsJWtg
-         GOVQ==
+        with ESMTP id S230022AbiLHItC (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 8 Dec 2022 03:49:02 -0500
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8177E686A0
+        for <linux-next@vger.kernel.org>; Thu,  8 Dec 2022 00:48:34 -0800 (PST)
+Received: by mail-il1-f200.google.com with SMTP id o10-20020a056e02102a00b003006328df7bso661468ilj.17
+        for <linux-next@vger.kernel.org>; Thu, 08 Dec 2022 00:48:34 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=97CF61NxNfINvAmFCHySr8pBYXl0fpYSbMxv8vXatSE=;
-        b=ta0qq8J1VGvJHtDiV6YdXXAYqj590uMv3V98hA8xoMcUPqkwGv9pQiu/ndWfH/IVwY
-         ZeNbZlv6aiKJ3W0kJDfHgN5TxxTWuj/7HionuMMM2GJjEjKLsfGqw+ACl1+4dMy/gb6t
-         jeLidLD0ySlzYpdWOkivbUeDMpf71bQOoMeDW/d95CRc5oT2cZK7lAIFOFxoTrZgliRg
-         f5dEjwi2Bv/JA14ZJr9HR1+KXCccjFOLeuQkfweX98B3Zpz8p+09OpI6CpvUAwoDsDGo
-         5OI6XCUqVnYt9pgQJ2PcwGtWEtQDHmrNG8VWcqzX8v/qEb2mOBcmiui12AcOo0/5kR2+
-         /zNg==
-X-Gm-Message-State: ANoB5pnOSrrVuZjEte/rHHxp2iQWaJEKum/ziINKq2lwVjC7qAXEktl8
-        KIeMjTJ1RBXFnCH4vI4YPsk6vDwM2/SsUd1uI02iVA==
-X-Google-Smtp-Source: AA0mqf5OdwKrHO32/1x7P/rNBKW+fZ551hgS5X0cGSFAUGwcbf2vK6lAreSWv++D00yRLWC6YrOQ28myI+AyLgolrfQ=
-X-Received: by 2002:a05:620a:13aa:b0:6fc:99c2:2567 with SMTP id
- m10-20020a05620a13aa00b006fc99c22567mr30870312qki.784.1670484997799; Wed, 07
- Dec 2022 23:36:37 -0800 (PST)
+        bh=/VqWjUYvuQWzVVThhoLexOpyvD8JYD0kumxHxmjGt2g=;
+        b=pYzyswwb9Gp1khMtTGZnEPQLAOsFMgueNLQAET7mgljjmhl/5KKghfUExSXVh3Cqjc
+         1OmvEj+euwR/QOZ3bpH2KKv3tUu+lFZw+mf8QgsrZK8aGEUmRLKb9EOPH3Ewhv5hUuxE
+         nBwjo/fBxfDXLk4EciwZ6VI2d5mfWybCIdLWATt+YrBfaUbHr9HR/FVvhV9AHVW/S4gq
+         +M2QzaZK0ZTy/A7HFOE01p2Pmmj5HHAU5sJjRPN79SI+O/8ASaq4g3NkfF6KtTEOS1Ji
+         fTx7Uc/pkkeuqN1UTQgvP7JEw8Vr54XsG7q1Mt+er9Yznj4o0xxNEo7V335aSXvOkNco
+         bEDQ==
+X-Gm-Message-State: ANoB5plrXRKTv9ewAkSAHFf7JyRfi922dclb7ipqNorPaskNLLvVTaYi
+        kaS9G+o4v595KVhXSADQJg9cCP1bRVLSfnJhdxNYQQmEfU7L
+X-Google-Smtp-Source: AA0mqf7J8Po0jhjVcm8aCQTLmycs2e4R5vkgSAXCxFOqvvhtjFItvSs7WEGS0OdjpuIhvRw2gEFOIhjlmh/2oOAzyftS2OKgKISi
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 8 Dec 2022 13:06:26 +0530
-Message-ID: <CA+G9fYu5JjZzpFfNOqzLV+KQnSL1VU7n8Yv-FrZYvuvwo1Ayug@mail.gmail.com>
-Subject: security: policy_unpack.c:325:10: error: use of undeclared identifier 'TRI_TRUE'
-To:     open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        lkft-triage@lists.linaro.org, apparmor@lists.ubuntu.com
-Cc:     Nick Terrell <terrelln@fb.com>,
-        John Johansen <john.johansen@canonical.com>,
-        David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>
+X-Received: by 2002:a92:c887:0:b0:302:fd5c:e0a3 with SMTP id
+ w7-20020a92c887000000b00302fd5ce0a3mr28917754ilo.116.1670489313757; Thu, 08
+ Dec 2022 00:48:33 -0800 (PST)
+Date:   Thu, 08 Dec 2022 00:48:33 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000025d41005ef4d1a72@google.com>
+Subject: [syzbot] linux-next build error (14)
+From:   syzbot <syzbot+5301015e05ed3b325b0d@syzkaller.appspotmail.com>
+To:     apparmor@lists.ubuntu.com, jmorris@namei.org,
+        john.johansen@canonical.com, linux-kernel@vger.kernel.org,
+        linux-next@vger.kernel.org, linux-security-module@vger.kernel.org,
+        paul@paul-moore.com, serge@hallyn.com, sfr@canb.auug.org.au,
+        syzkaller-bugs@googlegroups.com, terrelln@fb.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Following build regresion found on Linux next-20221208 tag.
+Hello,
 
-Regressions found on riscv:
-  - build/clang-nightly-defconfig
-  - build/gcc-8-defconfig
-  - build/gcc-11-defconfig
-  - build/clang-15-defconfig
+syzbot found the following issue on:
 
-make --silent --keep-going --jobs=8
-O=/home/tuxbuild/.cache/tuxmake/builds/1/build LLVM=1 LLVM_IAS=1
-ARCH=riscv CROSS_COMPILE=riscv64-linux-gnu- 'HOSTCC=sccache clang'
-'CC=sccache clang' defconfig
-make --silent --keep-going --jobs=8
-O=/home/tuxbuild/.cache/tuxmake/builds/1/build LLVM=1 LLVM_IAS=1
-ARCH=riscv CROSS_COMPILE=riscv64-linux-gnu- 'HOSTCC=sccache clang'
-'CC=sccache clang'
+HEAD commit:    f925116b24c0 Add linux-next specific files for 20221208
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=15dfabd3880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=8b2d3e63e054c24f
+dashboard link: https://syzkaller.appspot.com/bug?extid=5301015e05ed3b325b0d
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+5301015e05ed3b325b0d@syzkaller.appspotmail.com
+
 security/apparmor/policy_unpack.c:316:18: error: unknown type name 'tri'
-VISIBLE_IF_KUNIT tri aa_unpack_array(struct aa_ext *e, const char
-*name, u16 *size)
-                 ^
-security/apparmor/policy_unpack.c:325:10: error: use of undeclared
-identifier 'TRI_TRUE'
-                return TRI_TRUE;
-                       ^
-security/apparmor/policy_unpack.c:328:9: error: use of undeclared
-identifier 'TRI_NONE'
-        return TRI_NONE;
-               ^
-security/apparmor/policy_unpack.c:331:9: error: use of undeclared
-identifier 'TRI_FALSE'
-        return TRI_FALSE;
-               ^
-security/apparmor/policy_unpack.c:455:42: error: use of undeclared
-identifier 'TRI_TRUE'
-                if (aa_unpack_array(e, NULL, &size) != TRI_TRUE)
-                                                       ^
-security/apparmor/policy_unpack.c:529:42: error: use of undeclared
-identifier 'TRI_TRUE'
-                if (aa_unpack_array(e, NULL, &size) != TRI_TRUE)
-                                                       ^
-security/apparmor/policy_unpack.c:559:42: error: use of undeclared
-identifier 'TRI_TRUE'
-                if (aa_unpack_array(e, NULL, &size) != TRI_TRUE)
-                                                       ^
-security/apparmor/policy_unpack.c:611:42: error: use of undeclared
-identifier 'TRI_TRUE'
-                if (aa_unpack_array(e, NULL, &size) != TRI_TRUE ||
-                                                       ^
-security/apparmor/policy_unpack.c:674:42: error: use of undeclared
-identifier 'TRI_TRUE'
-                if (aa_unpack_array(e, NULL, &size) != TRI_TRUE)
-                                                       ^
-9 errors generated.
-make[4]: *** [scripts/Makefile.build:252:
-security/apparmor/policy_unpack.o] Error 1
-make[4]: Target 'security/apparmor/' not remade because of errors.
-make[3]: *** [scripts/Makefile.build:504: security/apparmor] Error 2
+security/apparmor/policy_unpack.c:325:10: error: 'TRI_TRUE' undeclared (first use in this function)
+security/apparmor/policy_unpack.c:328:9: error: 'TRI_NONE' undeclared (first use in this function); did you mean 'IRQ_NONE'?
+security/apparmor/policy_unpack.c:331:9: error: 'TRI_FALSE' undeclared (first use in this function)
+security/apparmor/policy_unpack.c:455:42: error: 'TRI_TRUE' undeclared (first use in this function)
+security/apparmor/policy_unpack.c:529:42: error: 'TRI_TRUE' undeclared (first use in this function)
+security/apparmor/policy_unpack.c:559:42: error: 'TRI_TRUE' undeclared (first use in this function)
+security/apparmor/policy_unpack.c:611:42: error: 'TRI_TRUE' undeclared (first use in this function)
+security/apparmor/policy_unpack.c:674:42: error: 'TRI_TRUE' undeclared (first use in this function)
 
-Build link,
-  - https://builds.tuxbuild.com/2IcJeyR3s4kGd2Nca8vVq7Sleao/
-  - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20221208/testrun/13508560/suite/build/test/gcc-11-defconfig/details/
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Build results comparison:
-  - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20221208/testrun/13508560/suite/build/test/gcc-11-defconfig/history/
-
-
-steps to reproduce:
-# To install tuxmake on your system globally:
-# sudo pip3 install -U tuxmake
-#
-# See https://docs.tuxmake.org/ for complete documentation.
-# Original tuxmake command with fragments listed below.
-# tuxmake --runtime podman --target-arch riscv --toolchain gcc-11
---kconfig defconfig
-
-
-tuxmake --runtime podman --target-arch riscv --toolchain gcc-11
---kconfig https://builds.tuxbuild.com/2IcJeyR3s4kGd2Nca8vVq7Sleao/config
-
---
-Linaro LKFT
-https://lkft.linaro.org
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

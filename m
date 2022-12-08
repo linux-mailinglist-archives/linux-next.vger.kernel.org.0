@@ -2,159 +2,137 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 928CE646553
-	for <lists+linux-next@lfdr.de>; Thu,  8 Dec 2022 00:45:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C2F1646688
+	for <lists+linux-next@lfdr.de>; Thu,  8 Dec 2022 02:36:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229685AbiLGXpN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 7 Dec 2022 18:45:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52632 "EHLO
+        id S229562AbiLHBgL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 7 Dec 2022 20:36:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230017AbiLGXpK (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 7 Dec 2022 18:45:10 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94A0888B64;
-        Wed,  7 Dec 2022 15:45:08 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NSDRP6Gwgz4wgr;
-        Thu,  8 Dec 2022 10:45:05 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1670456707;
-        bh=MTqwpivDHUloOt+tie8jqGHyS0Vza8jO6VUXaymsmqM=;
-        h=Date:From:To:Cc:Subject:From;
-        b=kMLgvTdkUWAQjlQckGSiyRW61UXC2UT5RxaHcOfpLUZMiBaLgotaiPszH/4t1hXDF
-         4UnwSkdpbQ+oMSJtpBYlo/96nJk90oFPdJ6YUIcC0au87vnl4k1x4pEsOiq0JnV08N
-         YArkOzXoO6lGjxYb9NTzdKEQOgq3Ci9Um5SSNg7BpmzIOjr8b0eCfYiBrHXjNVtozi
-         8Udkx0Atg2xNzAreTYra2ebnEWS8Dm8o4wXdZI9isUUdibCzevuBupc2ZP5vFvrB0U
-         zjn53GhRiPxbjDlJlhajxW0j9RnqD7EleH9Hc0gynUV2zts4EYHeqA6YpDBBjTGNC/
-         NADg7PIr2Rs3g==
-Date:   Thu, 8 Dec 2022 10:45:03 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Joerg Roedel <joro@8bytes.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Joerg Roedel <jroedel@suse.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Thierry Reding <treding@nvidia.com>
-Subject: linux-next: manual merge of the iommu tree with the mmc tree
-Message-ID: <20221208104503.0ee41406@canb.auug.org.au>
+        with ESMTP id S229501AbiLHBgK (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 7 Dec 2022 20:36:10 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04C61900DA
+        for <linux-next@vger.kernel.org>; Wed,  7 Dec 2022 17:36:10 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id n65-20020a17090a2cc700b0021bc5ef7a14so76273pjd.0
+        for <linux-next@vger.kernel.org>; Wed, 07 Dec 2022 17:36:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=z7fsxClu+Jd0NjsKaMgykMd0B6rUNb/ikhiPp8Ecv50=;
+        b=jSOCGFfQXTv7C6fiSj3keLmm2Sq4F2mY9D9nO4IYVKX1hPEC61qXF+irZ0+ybvsab5
+         ek9riN+E1ArwCXK9mkJ/u/01U8/LVzcpI9XLH6lQrfE1hurbZsz9u1XOGHytDPmYVFtn
+         U+0okgzsa5kX6h846rbZAlzgLKkDoih61YnNOxdzvKiYjjg4kOxZNskp+OBHpmYbo7TN
+         JeXcNfP9k34kF4B7S3eMfEJ9U4FJNYW6qjEGmIglAmpoEHci+8wxtqmcVF5C+en5q4YJ
+         HBh2DBmLyg6kXgDZ9nb0iu9WiGqW8sQNlnBSm5ZLrnFk9Pj0VOHd6tPnxqbV2rYR0zLC
+         k/KQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=z7fsxClu+Jd0NjsKaMgykMd0B6rUNb/ikhiPp8Ecv50=;
+        b=EAHH0yDi/G+yxT7Cq7E5zqt13qJHZnsgPf4NO1wVcq6gC2MSTyE85sRwJXglCKVjnt
+         r/4ccgF84oldbaI6EYXFKAugjmghH5hErf88H4HMhS+OiMKysLxt5R4pfXjBQWs5fWrD
+         IfMxgsFifSt01Ty5nMeeD+L5OZ/RdD+6uHwL5GAIG0vbfzeSPkTBU7hWGnWCRyCHkDXk
+         PvZ2JGDTzXIlczPE6JMsz7nOo4VHdNZM/ecVeHSNrwCgmZNA3SJ7qZKaZX6jMn+uAFIi
+         Kau927Tc/NdlU/lXKHtlGg3ZWJD82gaJxF1VdHyNrAUu5Kt7tXemEFbsmkklKW3Bh3x2
+         vF8w==
+X-Gm-Message-State: ANoB5pm9DTzJMJ6sG0LKcpr/h3OAkMFI0pUIJLVq5ExSWHZDUIzl8CWf
+        AL0BBb5oELTfZwsnpzfhDAgTng==
+X-Google-Smtp-Source: AA0mqf5lVcwscHjcTHlexgdjucEx1RkH82KSuPvdJV0UjV2u7ZYNBp0UlKILRUfrDVy0Stgnws+aig==
+X-Received: by 2002:a17:902:b416:b0:186:a22a:177e with SMTP id x22-20020a170902b41600b00186a22a177emr76022166plr.163.1670463369398;
+        Wed, 07 Dec 2022 17:36:09 -0800 (PST)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id f29-20020aa79d9d000000b00576ee69c130sm6464039pfq.4.2022.12.07.17.36.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Dec 2022 17:36:08 -0800 (PST)
+Message-ID: <e05d3b3d-223f-ecf9-0e41-25bbae33eb54@kernel.dk>
+Date:   Wed, 7 Dec 2022 18:36:07 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/0sb8vr5wSOSGjEYBuP4dL6j";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: next: LTP: syscalls: epoll_clt() if fd is an invalid fd expected
+ EBADF: EINVAL (22)
+Content-Language: en-US
+To:     Anders Roxell <anders.roxell@linaro.org>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org, regressions@lists.linux.dev,
+        lkft-triage@lists.linaro.org,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        LTP List <ltp@lists.linux.it>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>, chrubis <chrubis@suse.cz>
+References: <CA+G9fYv_UU+oVUbd8Mzt8FkXscenX2kikRSCZ7DPXif9i5erNg@mail.gmail.com>
+ <b7d8193c-7e15-f5cd-08d4-8ef788d9bb36@kernel.dk>
+ <CADYN=9LaiBU-Q5=FSvFKTi_qzE1C45DkdUAfbaZH7FZhn2tbYw@mail.gmail.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <CADYN=9LaiBU-Q5=FSvFKTi_qzE1C45DkdUAfbaZH7FZhn2tbYw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/0sb8vr5wSOSGjEYBuP4dL6j
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 12/7/22 3:27 PM, Anders Roxell wrote:
+> On Wed, 7 Dec 2022 at 17:22, Jens Axboe <axboe@kernel.dk> wrote:
+>>
+>> On 12/7/22 8:58?AM, Naresh Kamboju wrote:
+>>> LTP syscalls epoll_ctl02 is failing on Linux next master.
+>>> The reported problem is always reproducible and starts from next-20221205.
+>>>
+>>> GOOD tag: next-20221202
+>>> BAD tag: next-20221205
+>>>
+>>> tst_test.c:1524: TINFO: Timeout per run is 0h 05m 00s
+>>> epoll_ctl02.c:87: TPASS: epoll_clt(...) if epfd is an invalid fd : EBADF (9)
+>>> epoll_ctl02.c:87: TPASS: epoll_clt(...) if fd does not support epoll : EPERM (1)
+>>> epoll_ctl02.c:87: TFAIL: epoll_clt(...) if fd is an invalid fd
+>>> expected EBADF: EINVAL (22)
+>>> epoll_ctl02.c:87: TPASS: epoll_clt(...) if op is not supported : EINVAL (22)
+>>> epoll_ctl02.c:87: TPASS: epoll_clt(...) if fd is the same as epfd : EINVAL (22)
+>>> epoll_ctl02.c:87: TPASS: epoll_clt(...) if events is NULL : EFAULT (14)
+>>> epoll_ctl02.c:87: TPASS: epoll_clt(...) if fd is not registered with
+>>> EPOLL_CTL_DEL : ENOENT (2)
+>>> epoll_ctl02.c:87: TPASS: epoll_clt(...) if fd is not registered with
+>>> EPOLL_CTL_MOD : ENOENT (2)
+>>> epoll_ctl02.c:87: TPASS: epoll_clt(...) if fd is already registered
+>>> with EPOLL_CTL_ADD : EEXIST (17)
+>>
+>> This should fix it:
+>>
+>>
+>> diff --git a/fs/eventpoll.c b/fs/eventpoll.c
+>> index ec7ffce8265a..de9c551e1993 100644
+>> --- a/fs/eventpoll.c
+>> +++ b/fs/eventpoll.c
+>> @@ -2195,6 +2195,7 @@ int do_epoll_ctl(int epfd, int op, int fd, struct epoll_event *epds,
+>>         }
+>>
+>>         /* Get the "struct file *" for the target file */
+>> +       error = -EBADF;
+>>         tf = fdget(fd);
+>>         if (!tf.file)
+>>                 goto error_fput;
+> 
+> Yes this patch fixed the issue [1].
+> 
+> Cheers,
+> Anders
+> [1] https://lkft.validation.linaro.org/scheduler/job/5931365#L1371
 
-Hi all,
+Great, thanks for confirming. I did queue up the fix.
 
-Today's linux-next merge of the iommu tree got a conflict in:
+-- 
+Jens Axboe
 
-  include/linux/iommu.h
 
-between commit:
-
-  493c9b68d1d8 ("iommu/tegra: Add tegra_dev_iommu_get_stream_id() helper")
-
-from the mmc tree and commit:
-
-  be51b1d6bbff ("iommu/sva: Refactoring iommu_sva_bind/unbind_device()")
-
-from the iommu tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc include/linux/iommu.h
-index 6f53ad74fa0d,68d7d304cdb7..000000000000
---- a/include/linux/iommu.h
-+++ b/include/linux/iommu.h
-@@@ -1103,25 -1143,26 +1147,47 @@@ static inline void iommu_dma_compose_ms
- =20
-  #endif	/* CONFIG_IOMMU_DMA */
- =20
- +/*
- + * Newer generations of Tegra SoCs require devices' stream IDs to be dire=
-ctly programmed into
- + * some registers. These are always paired with a Tegra SMMU or ARM SMMU,=
- for which the contents
- + * of the struct iommu_fwspec are known. Use this helper to formalize acc=
-ess to these internals.
- + */
- +#define TEGRA_STREAM_ID_BYPASS 0x7f
- +
- +static inline bool tegra_dev_iommu_get_stream_id(struct device *dev, u32 =
-*stream_id)
- +{
- +#ifdef CONFIG_IOMMU_API
- +	struct iommu_fwspec *fwspec =3D dev_iommu_fwspec_get(dev);
- +
- +	if (fwspec && fwspec->num_ids =3D=3D 1) {
- +		*stream_id =3D fwspec->ids[0] & 0xffff;
- +		return true;
- +	}
- +#endif
- +
- +	return false;
- +}
- +
-+ #ifdef CONFIG_IOMMU_SVA
-+ struct iommu_sva *iommu_sva_bind_device(struct device *dev,
-+ 					struct mm_struct *mm);
-+ void iommu_sva_unbind_device(struct iommu_sva *handle);
-+ u32 iommu_sva_get_pasid(struct iommu_sva *handle);
-+ #else
-+ static inline struct iommu_sva *
-+ iommu_sva_bind_device(struct device *dev, struct mm_struct *mm)
-+ {
-+ 	return NULL;
-+ }
-+=20
-+ static inline void iommu_sva_unbind_device(struct iommu_sva *handle)
-+ {
-+ }
-+=20
-+ static inline u32 iommu_sva_get_pasid(struct iommu_sva *handle)
-+ {
-+ 	return IOMMU_PASID_INVALID;
-+ }
-+ #endif /* CONFIG_IOMMU_SVA */
-+=20
-  #endif /* __LINUX_IOMMU_H */
-
---Sig_/0sb8vr5wSOSGjEYBuP4dL6j
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmORJX8ACgkQAVBC80lX
-0GwhyAf/a/4RjAEYhZFjVYmqi5aN2GbYGUaEDt+uPdx2Q88oudryeyqWRvTVHv6I
-YpEdukXTAKMLNNXm/yse01nYQ2hWdzZRzu4LUxttKxyIJX7ua7aWQss25/OvpYLa
-XDPgu8lc4EJ+HLvqQ6Gxi7bz9kkegoZM3rPpBLSfh+gm9q2ls4jMEkojV+m8CAEo
-cWmZrFKL8Xr+qvNOh4zHmnP/Of0nUxfDj4wJ6/uRHj3JT75CWzvvRH0Z6B3qtkXy
-Br5B6GmE/DXwrSz6PQ06/8/rlsM+hi+pRHYJDOq2V1ShzQV/TFS6WG0h9JnQF6Gt
-lbkUwvDGON11JRNRbPUePc85kftvDA==
-=BgRg
------END PGP SIGNATURE-----
-
---Sig_/0sb8vr5wSOSGjEYBuP4dL6j--

@@ -2,143 +2,127 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FC9264825F
-	for <lists+linux-next@lfdr.de>; Fri,  9 Dec 2022 13:32:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EF156483F2
+	for <lists+linux-next@lfdr.de>; Fri,  9 Dec 2022 15:40:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229822AbiLIMcH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 9 Dec 2022 07:32:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50266 "EHLO
+        id S229571AbiLIOkO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 9 Dec 2022 09:40:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229712AbiLIMcG (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 9 Dec 2022 07:32:06 -0500
-Received: from EUR03-VI1-obe.outbound.protection.outlook.com (mail-vi1eur03on2072.outbound.protection.outlook.com [40.107.103.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2E3862EBF;
-        Fri,  9 Dec 2022 04:32:05 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZUEJAQZRult6eslWWuoZk6NwLoL1yE/CCkq8s2OfIPO8I8Dd+Tkg2wpiemPysEHZDR7dzgaFpnhgvz2hyUpPIBYwQ0T+aLAYmHiRINzNuWJ9ODn8wli6luG70Z1XF43GA+/jX+ri9AVZ9FEiEkzU5t2gLhA1JOljg5mNMlYrAkeJ0RbADOkXZ0VUC4w5uN1XTSh0XS9t1aqdpOrZ5CRZEIxqTmA4wKQtnP/W/1i2uG2dYh6NZdbpp3XCToaq/f1ZlMEEFK57OTR/HaMR40VKnJpqwXfxbtAKnyJVDtw9LNAJvfZq6ODnJSRC7VP91bagSqimv/LBRr3qBV60yDwy7w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=g7jaFHi0m/L+U7D7vTpKFCe0BHGggnUYstSiKm6UX8E=;
- b=NWoVnVSsJQeW73vXMZu9vuAKZCL/0jr1QJs2QtHt7JpFQqRxo6lcD9jqKpb58+r+D3d0KbyY6E8T7Lvqq9NqrkTIOp/zCO17DQ/fHj/ha6HJWWBwbflMCT9w3IKOxCJGlNvZxSMLgF4nhHl7nszO4mO5tH8wK4ACD1L4guVCaEctoRIr+eLLjg/Mf2UUCKEtGsPPusUN5FvS0dMhT6DQLH2jBMwOMv8lO5sGwiEWcs/t8vy8l0vLvT6cQW7QEgvxBmQs7Yfn4T3FcEAl/TjNVHG5xkNckCKgHUWMRJRh/Q1mMiMWj7V6eCX0UqXEQ48I+O5TbGnV79v0rWSAqEwsWg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 194.138.21.75) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=siemens.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=siemens.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=g7jaFHi0m/L+U7D7vTpKFCe0BHGggnUYstSiKm6UX8E=;
- b=l2ymjfCfSOpkJF/88S6JqAzHfmzS+bECM28bYd/XSnp+k9xx6OFZRC6Tt0YAifAgCzl044Rxf2sYLrIwC6YoY2yAKOCDk7+p8sbN8+3iFAAVV8cJo4b1wx08IsxUoBz4I219D47eQlKG0IeSgxSmo/OLzM4Ib2eUo4uEb6/sUy+yGT7ZxU1CjPxklH4+vbvc6QxbZXnKLHNV3sES62BTS72tRV4B1JZJMFsNiauOvWhSTBL+kTCR7tpjhd6FOIf7eLCWaxlJldwQ81qvXS3qORtya4E++5KMfbieb3Ie01JZSLiF8N6WFJxbnhom3mdnESD+jcx5BDYhnDoynWiZ3Q==
-Received: from AM8P189CA0030.EURP189.PROD.OUTLOOK.COM (2603:10a6:20b:218::35)
- by PAVPR10MB7402.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:31e::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.16; Fri, 9 Dec
- 2022 12:32:03 +0000
-Received: from VE1EUR01FT101.eop-EUR01.prod.protection.outlook.com
- (2603:10a6:20b:218:cafe::e6) by AM8P189CA0030.outlook.office365.com
- (2603:10a6:20b:218::35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.18 via Frontend
- Transport; Fri, 9 Dec 2022 12:32:03 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 194.138.21.75)
- smtp.mailfrom=siemens.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=siemens.com;
-Received-SPF: Pass (protection.outlook.com: domain of siemens.com designates
- 194.138.21.75 as permitted sender) receiver=protection.outlook.com;
- client-ip=194.138.21.75; helo=hybrid.siemens.com; pr=C
-Received: from hybrid.siemens.com (194.138.21.75) by
- VE1EUR01FT101.mail.protection.outlook.com (10.152.3.40) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5901.14 via Frontend Transport; Fri, 9 Dec 2022 12:32:02 +0000
-Received: from DEMCHDC8WAA.ad011.siemens.net (139.25.226.104) by
- DEMCHDC8VRA.ad011.siemens.net (194.138.21.75) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.20; Fri, 9 Dec 2022 13:32:02 +0100
-Received: from bennie-lenovo.fritz.box (144.145.220.67) by
- DEMCHDC8WAA.ad011.siemens.net (139.25.226.104) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.20; Fri, 9 Dec 2022 13:32:01 +0100
-From:   "B. Niedermayr" <benedikt.niedermayr@siemens.com>
-To:     <linux-next@vger.kernel.org>, Roger Quadros <rogerq@kernel.org>,
-        "Tony Lindgren" <tony@atomide.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Benedikt Niedermayr <benedikt.niedermayr@siemens.com>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        "open list:OMAP GENERAL PURPOSE MEMORY CONTROLLER SUPPORT" 
-        <linux-omap@vger.kernel.org>,
-        "open list:MEMORY CONTROLLER DRIVERS" <linux-kernel@vger.kernel.org>
-Subject: [PATCH] memory: omap-gpmc: fix wait pin validation
-Date:   Fri, 9 Dec 2022 13:31:47 +0100
-Message-ID: <20221209123147.591982-1-benedikt.niedermayr@siemens.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S229538AbiLIOkN (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 9 Dec 2022 09:40:13 -0500
+Received: from kylie.crudebyte.com (kylie.crudebyte.com [5.189.157.229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBC311B1F4;
+        Fri,  9 Dec 2022 06:40:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=crudebyte.com; s=kylie; h=Content-Type:Content-Transfer-Encoding:
+        MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
+        Content-ID:Content-Description;
+        bh=WxizpsozvUJDZRYXo5+Z68KQzX6Sn8wpZZpndtWMJGU=; b=saHF1yhhZ857poyGEPIsKZBbK2
+        /dhnY3YJWdsX/CYQY17Yw1dRAIdby5fJiQQsesEWUDN5AIrmvN8diO8LdhvJROJ5Q8kaRNXkFkCiH
+        fpZkSzdWY9QGjgM+wBGvyZx+15qS9Fp/ooPdUJ4e8im8RGS2znD3Ayili1bm+RxFDDi5QR2ajjlOZ
+        afhUhBfSaSqHW1tM91Y/x1xRkygoiMlOePhIxnyT8IaCoEUw3u7xCoDDTjadsuqQI0pbFzhuY6iHA
+        sbP8JgU/UREj0JDBed5nKpzNrWbCNl++b7prSh78w65Xvx1v4oqxj+TJhA1fmAg3PdzsQPM0r2H6l
+        lcecWT8grPrB85kcgAXtCeS6ClrOuQpQq4zuuhZImM1P86sCV8tzFbeW7qbur0D8DhjPy/bSkxKh2
+        5ri0Iuq3PTE36hjY6m/wKY/3OqcSAUrMXcA9D+lexsdzZckurSjzUefC1TxrQlRK4NR7EwGuBfeGA
+        gT7IpeOwEh4dgb4C8n+GV0mjcwmmdHBCsiNZCcK07MV0uV3FIGOEiUo0dI/vfKVLto+IHz3S5WJ9V
+        8Lof1LGPcT6lxafJr3oxDyUKQ/nn0UbFzABDBBZpQ+JSBS9hD/9eFw9g86Ey2/CGfDDhHCDJFJJM7
+        enz27cMIm0BcsD8ixUljoFpDhWm+FQ/QzCEIwtliU=;
+From:   Christian Schoenebeck <linux_oss@crudebyte.com>
+To:     Dominique Martinet <asmadeus@codewreck.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the v9fs tree
+Date:   Fri, 09 Dec 2022 15:40:06 +0100
+Message-ID: <3078112.XLg7Fjt2ba@silver>
+In-Reply-To: <Y5J4/5WGnG5Uxadg@codewreck.org>
+References: <20221205150316.6fac25f2@canb.auug.org.au> <6054083.7yRespAWZ4@silver>
+ <Y5J4/5WGnG5Uxadg@codewreck.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [144.145.220.67]
-X-ClientProxiedBy: DEMCHDC8WAA.ad011.siemens.net (139.25.226.104) To
- DEMCHDC8WAA.ad011.siemens.net (139.25.226.104)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VE1EUR01FT101:EE_|PAVPR10MB7402:EE_
-X-MS-Office365-Filtering-Correlation-Id: fc180bc7-9037-4280-4bab-08dad9e16011
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 5dcvK6uV7ZFnPcKuHfEiZPS+LUi1NPTqV1+sp2sLcLj+DxD/6Iehws5+2T7oD2NpEhtIpBXpEgo+LSiM7AAMbGoQrRs/MpBdNiFQW0aVB6eBDPlWUzOV0nFfoK0zpKV8lMW1lVKgb7x6AmSEymM/ZHL7XoK2LNVk6sUtWUBBz1wH6OVwcRCaPGz1GESWdSj/OajeGkSUSEPDj2bdPutc1uzZH3e0R9lrYhHwLU1lnIYdQoT8XaS0XZGwOIHwKEp0AaGcDCSSn7biQZRpBzmaRr/u7zzU+Gfd+f9lB1R+8G6ae/zjgA/qNxMEJyqNt9bum7PjXvvlYrFCNK+CbEq0dAAmfPNoQPtK+pxp5IjTSJ1RCI8A7ODVmkPRy1LS4MoJHU8RiZPyW0FBpKtVi7qstlwLB+KBEMEXaVV+xjDb9gqEmhB7yULzbx/sJuUBcX921XzuMF/jzBLwXqr0d52QfcQdFYUJQVBG3BrFEA/TVKrg8o66C8eWgE2hqrmbr4V3XYMXMARdLq7nzxZOcNMG7RTJyep0aKi6tU9G1KjTaaP69svycAYWlC41c0T+YH1D9tNYBWE53KpRQMDzRBNSvOHn92kYVD04hF3d6lpSW7mvooe6QGRR8cAtF+NE/4h2v/zk8z50hx6IvmGXe3OIxQAThjdTYEmwmeUezZltfmbkrDhSUiFRenh6jGKDjwjh2V+SkHltqkV6mFQN70EQbBYPLmXU1oKXZeQxOUFAPNM=
-X-Forefront-Antispam-Report: CIP:194.138.21.75;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:hybrid.siemens.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(136003)(396003)(376002)(39860400002)(346002)(451199015)(46966006)(40470700004)(36840700001)(2616005)(186003)(86362001)(16526019)(956004)(1076003)(336012)(83380400001)(356005)(81166007)(47076005)(82740400003)(82960400001)(36860700001)(2906002)(5660300002)(40480700001)(82310400005)(8936002)(40460700003)(478600001)(70586007)(4326008)(26005)(70206006)(6666004)(8676002)(41300700001)(110136005)(54906003)(316002)(36756003)(7049001)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: siemens.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Dec 2022 12:32:02.8492
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: fc180bc7-9037-4280-4bab-08dad9e16011
-X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=38ae3bcd-9579-4fd4-adda-b42e1495d55a;Ip=[194.138.21.75];Helo=[hybrid.siemens.com]
-X-MS-Exchange-CrossTenant-AuthSource: VE1EUR01FT101.eop-EUR01.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAVPR10MB7402
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-From: Benedikt Niedermayr <benedikt.niedermayr@siemens.com>
+On Friday, December 9, 2022 12:53:35 AM CET Dominique Martinet wrote:
+> Christian Schoenebeck wrote on Thu, Dec 08, 2022 at 04:55:17PM +0100:
+> > On Monday, December 5, 2022 11:41:55 PM CET Dominique Martinet wrote:
+> > > Christian Schoenebeck wrote on Mon, Dec 05, 2022 at 09:40:06PM +0100:
+> > > > Dominique, looking at your 9p queue, I just realized what happened here: I 
+> > > > posted a v2 of these two patches, which got lost for some reason:
+> > > > 
+> > > > https://lore.kernel.org/all/cover.1669144861.git.linux_oss@crudebyte.com/
+> > > > 
+> > > > The currently queued 1st patch is still v1 as well.
+> > > 
+> > > Oh. Now how did I manage that one..
+> > > Thanks for the catch, and v2 had the valid printf modifier...
+> > 
+> > You remember updating the 1st patch as well, right? :)
+> 
+> It looks up to date to me, e.g. zc is added at the end of the p9_fcall
+> structure.
+> (and these are the only two patches you sent, right? :D)
 
-This bug has been introduced after switching from -1 to UINT_MAX
-for GPMC_WAITPIN_INVALID.
+Mmm, that's the queued patch I see:
+https://github.com/martinetd/linux/commit/298468c26c14682a5be80a6ec1b4880c8eb3b261
 
-The bug leads to an error when the optional gpmc,wait-pin
-dt-property is not used:
+Which is v1 ('zc' is not at the end of the structure, and in v1 there were
+multiple assignment in the same line like:
 
-...
-gpmc_cs_program_settings: invalid wait-pin (-1)
-...
+  req->tc.zc = req->rc.zc = false;
 
-Signed-off-by: Benedikt Niedermayr <benedikt.niedermayr@siemens.com>
-Fixes: 8dd7e4af5853 ("memory: omap-gpmc: fix coverity issue "Control flow issues"")
-Cc: Rob Herring <robh+dt@kernel.org>
----
- drivers/memory/omap-gpmc.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+which caused code style checker to bark (as well as on the commit log which it
+found too short). So in v2 it is:
 
-diff --git a/drivers/memory/omap-gpmc.c b/drivers/memory/omap-gpmc.c
-index 57d9f91fe89b..d78f73db37c8 100644
---- a/drivers/memory/omap-gpmc.c
-+++ b/drivers/memory/omap-gpmc.c
-@@ -1918,7 +1918,8 @@ int gpmc_cs_program_settings(int cs, struct gpmc_settings *p)
- 		}
- 	}
- 
--	if (p->wait_pin > gpmc_nr_waitpins) {
-+	if (p->wait_pin != GPMC_WAITPIN_INVALID &&
-+	    p->wait_pin > gpmc_nr_waitpins) {
- 		pr_err("%s: invalid wait-pin (%d)\n", __func__, p->wait_pin);
- 		return -EINVAL;
- 	}
--- 
-2.25.1
+  req->tc.zc = false;
+  req->rc.zc = false;
+
+And yes, only two patches. :)
+
+> > In general, I'm sure nobody complains about extra noise like "queued on...".
+> > Then it's also more likely for other people to get which patches are still
+> > pending or unseen.
+> 
+> I usually apply the patch locally when writing a note about 'taking the
+> patch for x' -- but the problem is my workflow is pretty manual to say
+> the least (piping mail to base64, base64 to git am on another
+> machine...); and I'm not always taking the time to run tests immediately
+> so not pushing right away to -next, so I assume I took your patches
+> early and looked back when testing after you sent v2 and they were there
+> so did't notice :/
+> 
+> I guess I need to pull the tree back and script a reply from the last
+> link or something; so you'll notice the reply is on v1 in this case?
+> but it'll be a pain to get the subject back like e.g. pwbot does for
+> netdev... hmm..
+> I'll think about what I can do.
+
+Well, workflows are quite different. Personally I always manually reply to
+mailed patches once I queued them, so that people can verify and correct me in
+case I queued the wrong ones. I never had the feeling to script that part.
+
+There are also people that use tools to keep track of all incoming patches,
+e.g. patchwork client (either the CLI tool, or the web interface):
+https://patchwork.readthedocs.io/en/latest/usage/clients/
+
+The advantage is that it can take care about submitted versions and you just
+mark queued series as done. If you don't have an account it is read-only, so
+you can view pending patches, their status, automatically apply them, but for
+changing their official status somebody has to create an account for you:
+https://lore.kernel.org/all/2915273.dLz0rCdnKo@silver/
+
+There are various patchwork hosts. Not sure who is responsible for creating
+patchwork accounts on lore.kernel.org.
+
+The Redhat guys are using Patchew, e.g.:
+https://patchew.org/QEMU/
+
 

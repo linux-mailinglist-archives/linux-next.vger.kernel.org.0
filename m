@@ -2,106 +2,246 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E3C4647A5D
-	for <lists+linux-next@lfdr.de>; Fri,  9 Dec 2022 00:54:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BBD2647E31
+	for <lists+linux-next@lfdr.de>; Fri,  9 Dec 2022 08:03:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230053AbiLHXx7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 8 Dec 2022 18:53:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35998 "EHLO
+        id S230100AbiLIHDK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 9 Dec 2022 02:03:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbiLHXx6 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 8 Dec 2022 18:53:58 -0500
-Received: from nautica.notk.org (nautica.notk.org [91.121.71.147])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 502C126ACE;
-        Thu,  8 Dec 2022 15:53:57 -0800 (PST)
-Received: by nautica.notk.org (Postfix, from userid 108)
-        id 34CC2C01E; Fri,  9 Dec 2022 00:54:06 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1670543646; bh=fVFAqawFttj8I80f5N81FfPuX+mDk6lIwOx2zqsllNA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qjE801cYXAhzQivJ/K9KGtOzD2Aj7tLnm1ZAGT1Ontk1wiZm/uuNvP8epI8FuQdgT
-         8/G9xQwKV3LmxwES0P2I5UsN619RVq3KxjABaRAJiTqgvs0cgPU47lo1tN9EUqSXdJ
-         Muyjt3WujLLwVdeTVvLXAmaLnrLlw3Khzq/B9o5E2/BpDhzeUvTWPgh+6U8uO5Ysl7
-         l0flRI44+xckc9t1hrrX7IeEMbOeRZpHcT/vL4IAWlLseHD4buS/5s5fwDoB2kDWzx
-         1sI7OZ1TtuV9qjSCzenLhJXtEONBG4n3krCwyzFMmk8yfC4DKlu1Q30mKamGBs6ZUo
-         dtw0pGG8HHxTg==
+        with ESMTP id S230106AbiLIHCm (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 9 Dec 2022 02:02:42 -0500
+Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 243B88F70A
+        for <linux-next@vger.kernel.org>; Thu,  8 Dec 2022 22:58:09 -0800 (PST)
+Received: by mail-vs1-xe30.google.com with SMTP id 3so3610978vsq.7
+        for <linux-next@vger.kernel.org>; Thu, 08 Dec 2022 22:58:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=kpqDWDW86Qv1CiWdKgNq/E5dNAURCkpBqQL/nd5uQ2w=;
+        b=NHMeY8DazfHUdfTIKKzcvt/OCKuKNVpjjZM6hMNdMqdMYxXh1O1phVu7q+HTVl6qUl
+         1ujt/rfZ0YcBXXe1/FL6MwBo/aZ9JskfxzH8o2JZVAU4mE4l+uAX+3hA7fMBGyltb8CL
+         d9BxUPAf03RWaalfJDjV/XbjlmD2+y3Z7czC/AO27iN52fnukliVJQ4YrAJXzHpQG3O/
+         hHszyg5rgFlKK//ECm4nKH+CxQu1JA9wFhJnvdZS2+bQMoWCJt7nuj4IrEPedAthgrli
+         T58Zu2FUr2iLRdkpg+vlV2nlMrBHH4CT7IDNUK4+9ZPDoTQiDZ7Gg/J9C2SKZi5wxgTl
+         0k3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kpqDWDW86Qv1CiWdKgNq/E5dNAURCkpBqQL/nd5uQ2w=;
+        b=t4K44VCLEklaga7iblG7Q1/rPPaxidxkaZ/TLvBFcrt/9tT3Jg8g3yt7MfZnqj76Ya
+         V+LVolj21BlNVF2Cov+otDncjKtz9hcMVdKYEQiWLNq8InHWc1eU0erUKWn6KCrssvee
+         ul0sASbKDNZe2IBHa7BM0TcOd/A7nNzXl9MClNqqwKuJDTCfc8c1oSyCEzCqjslZCJxN
+         w7+RW9dWmQzPWf03K8W415aMHVfLJt2Q7jzcMsLVgLwRV2mBOjjctbYKybCjSzMihZZW
+         5MDELuJXROZscc8FsXSXeHBH5/2ahEo5n8OElnPwyCZIzMwUM1he4fWcguk3G0gOmdjh
+         LM3Q==
+X-Gm-Message-State: ANoB5pmaYBwsyN4QftOOBParBsphtGPeudyD3CkKwGMzorwr++8KWiYk
+        OS+3BQoVb7feP+I2QcBCkxNAnri+pp14aKv+HnDB/Q==
+X-Google-Smtp-Source: AA0mqf78vvTGszPzbnlActIOpUOTI2XgBESLT+QC8csdeW7JDj98XaQLNB8h719MY58WpeT8qrXTavyVf9DIgNjkedU=
+X-Received: by 2002:a05:6102:5785:b0:3b0:7178:7fe8 with SMTP id
+ dh5-20020a056102578500b003b071787fe8mr38242211vsb.38.1670569088056; Thu, 08
+ Dec 2022 22:58:08 -0800 (PST)
+MIME-Version: 1.0
+References: <CA+G9fYu5JjZzpFfNOqzLV+KQnSL1VU7n8Yv-FrZYvuvwo1Ayug@mail.gmail.com>
+In-Reply-To: <CA+G9fYu5JjZzpFfNOqzLV+KQnSL1VU7n8Yv-FrZYvuvwo1Ayug@mail.gmail.com>
+From:   David Gow <davidgow@google.com>
+Date:   Fri, 9 Dec 2022 14:57:55 +0800
+Message-ID: <CABVgOSms-8vXDVX68JX-4UEnaGyCgVyNWH37W8qGz7eVtFcWag@mail.gmail.com>
+Subject: Re: security: policy_unpack.c:325:10: error: use of undeclared
+ identifier 'TRI_TRUE'
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        lkft-triage@lists.linaro.org, apparmor@lists.ubuntu.com,
+        Nick Terrell <terrelln@fb.com>,
+        John Johansen <john.johansen@canonical.com>,
+        Rae Moar <rmoar@google.com>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="00000000000016455b05ef5fad6a"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
-Received: from odin.codewreck.org (localhost [127.0.0.1])
-        by nautica.notk.org (Postfix) with ESMTPS id 7C4D6C01B;
-        Fri,  9 Dec 2022 00:54:03 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1670543644; bh=fVFAqawFttj8I80f5N81FfPuX+mDk6lIwOx2zqsllNA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=zlGIkKZJPL156WFoM5KfGnYy13Mu3ruM7Z/GtbUlz4hM9WIszmrz5gywlw2MN2Cl0
-         y7yNyNiLpRepSmTWn382TQL+tY/01dv9fX/XptJHwxaVWIfezqHRiU7FL1D8yj8TvI
-         qXthArLiWtHdy13bsekNrEBNHa9NHEE3ERztaxr08rK6nIplQ28TgbJANBENywvRIl
-         tfj3U/WJfMhWWqYAxWaoZ9ESbatithwpN4h1GPKN4aG4s0VgBpCti7XE1P9ZHsk8gw
-         7ufi7/uFu7lyX7tQJtZMwDqxPh+z+U6MknWqltyOFAOreVaabsvbLvu4N7dj/IJ8ig
-         Fj2tK0nXI1dAA==
-Received: from localhost (odin.codewreck.org [local])
-        by odin.codewreck.org (OpenSMTPD) with ESMTPA id 7b43bc40;
-        Thu, 8 Dec 2022 23:53:50 +0000 (UTC)
-Date:   Fri, 9 Dec 2022 08:53:35 +0900
-From:   Dominique Martinet <asmadeus@codewreck.org>
-To:     Christian Schoenebeck <linux_oss@crudebyte.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the v9fs tree
-Message-ID: <Y5J4/5WGnG5Uxadg@codewreck.org>
-References: <20221205150316.6fac25f2@canb.auug.org.au>
- <3823616.UlgstfPZBx@silver>
- <Y45zsz71RfXbySDq@codewreck.org>
- <6054083.7yRespAWZ4@silver>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <6054083.7yRespAWZ4@silver>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Christian Schoenebeck wrote on Thu, Dec 08, 2022 at 04:55:17PM +0100:
-> On Monday, December 5, 2022 11:41:55 PM CET Dominique Martinet wrote:
-> > Christian Schoenebeck wrote on Mon, Dec 05, 2022 at 09:40:06PM +0100:
-> > > Dominique, looking at your 9p queue, I just realized what happened here: I 
-> > > posted a v2 of these two patches, which got lost for some reason:
-> > > 
-> > > https://lore.kernel.org/all/cover.1669144861.git.linux_oss@crudebyte.com/
-> > > 
-> > > The currently queued 1st patch is still v1 as well.
-> > 
-> > Oh. Now how did I manage that one..
-> > Thanks for the catch, and v2 had the valid printf modifier...
-> 
-> You remember updating the 1st patch as well, right? :)
+--00000000000016455b05ef5fad6a
+Content-Type: text/plain; charset="UTF-8"
 
-It looks up to date to me, e.g. zc is added at the end of the p9_fcall
-structure.
-(and these are the only two patches you sent, right? :D)
+On Thu, 8 Dec 2022 at 15:36, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
+>
+> Following build regresion found on Linux next-20221208 tag.
+>
+> Regressions found on riscv:
+>   - build/clang-nightly-defconfig
+>   - build/gcc-8-defconfig
+>   - build/gcc-11-defconfig
+>   - build/clang-15-defconfig
+>
+> make --silent --keep-going --jobs=8
+> O=/home/tuxbuild/.cache/tuxmake/builds/1/build LLVM=1 LLVM_IAS=1
+> ARCH=riscv CROSS_COMPILE=riscv64-linux-gnu- 'HOSTCC=sccache clang'
+> 'CC=sccache clang' defconfig
+> make --silent --keep-going --jobs=8
+> O=/home/tuxbuild/.cache/tuxmake/builds/1/build LLVM=1 LLVM_IAS=1
+> ARCH=riscv CROSS_COMPILE=riscv64-linux-gnu- 'HOSTCC=sccache clang'
+> 'CC=sccache clang'
+> security/apparmor/policy_unpack.c:316:18: error: unknown type name 'tri'
+> VISIBLE_IF_KUNIT tri aa_unpack_array(struct aa_ext *e, const char
+> *name, u16 *size)
+>                  ^
+> security/apparmor/policy_unpack.c:325:10: error: use of undeclared
+> identifier 'TRI_TRUE'
+>                 return TRI_TRUE;
+>                        ^
+> security/apparmor/policy_unpack.c:328:9: error: use of undeclared
+> identifier 'TRI_NONE'
+>         return TRI_NONE;
+>                ^
+> security/apparmor/policy_unpack.c:331:9: error: use of undeclared
+> identifier 'TRI_FALSE'
+>         return TRI_FALSE;
+>                ^
+> security/apparmor/policy_unpack.c:455:42: error: use of undeclared
+> identifier 'TRI_TRUE'
+>                 if (aa_unpack_array(e, NULL, &size) != TRI_TRUE)
+>                                                        ^
+> security/apparmor/policy_unpack.c:529:42: error: use of undeclared
+> identifier 'TRI_TRUE'
+>                 if (aa_unpack_array(e, NULL, &size) != TRI_TRUE)
+>                                                        ^
+> security/apparmor/policy_unpack.c:559:42: error: use of undeclared
+> identifier 'TRI_TRUE'
+>                 if (aa_unpack_array(e, NULL, &size) != TRI_TRUE)
+>                                                        ^
+> security/apparmor/policy_unpack.c:611:42: error: use of undeclared
+> identifier 'TRI_TRUE'
+>                 if (aa_unpack_array(e, NULL, &size) != TRI_TRUE ||
+>                                                        ^
+> security/apparmor/policy_unpack.c:674:42: error: use of undeclared
+> identifier 'TRI_TRUE'
+>                 if (aa_unpack_array(e, NULL, &size) != TRI_TRUE)
+>                                                        ^
+> 9 errors generated.
+> make[4]: *** [scripts/Makefile.build:252:
+> security/apparmor/policy_unpack.o] Error 1
+> make[4]: Target 'security/apparmor/' not remade because of errors.
+> make[3]: *** [scripts/Makefile.build:504: security/apparmor] Error 2
+>
+> Build link,
+>   - https://builds.tuxbuild.com/2IcJeyR3s4kGd2Nca8vVq7Sleao/
+>   - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20221208/testrun/13508560/suite/build/test/gcc-11-defconfig/details/
+>
+> Build results comparison:
+>   - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20221208/testrun/13508560/suite/build/test/gcc-11-defconfig/history/
+>
+>
+> steps to reproduce:
+> # To install tuxmake on your system globally:
+> # sudo pip3 install -U tuxmake
+> #
+> # See https://docs.tuxmake.org/ for complete documentation.
+> # Original tuxmake command with fragments listed below.
+> # tuxmake --runtime podman --target-arch riscv --toolchain gcc-11
+> --kconfig defconfig
+>
+>
+> tuxmake --runtime podman --target-arch riscv --toolchain gcc-11
+> --kconfig https://builds.tuxbuild.com/2IcJeyR3s4kGd2Nca8vVq7Sleao/config
+>
+> --
+> Linaro LKFT
+> https://lkft.linaro.org
 
-> In general, I'm sure nobody complains about extra noise like "queued on...".
-> Then it's also more likely for other people to get which patches are still
-> pending or unseen.
+I suspect this is in need of the fix here:
+https://lore.kernel.org/all/bff89220-df3a-a148-2ba4-6aad3874f322@canonical.com/
 
-I usually apply the patch locally when writing a note about 'taking the
-patch for x' -- but the problem is my workflow is pretty manual to say
-the least (piping mail to base64, base64 to git am on another
-machine...); and I'm not always taking the time to run tests immediately
-so not pushing right away to -next, so I assume I took your patches
-early and looked back when testing after you sent v2 and they were there
-so did't notice :/
+Cheers,
+-- David
 
-I guess I need to pull the tree back and script a reply from the last
-link or something; so you'll notice the reply is on v1 in this case?
-but it'll be a pain to get the subject back like e.g. pwbot does for
-netdev... hmm..
-I'll think about what I can do.
+--00000000000016455b05ef5fad6a
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
--- 
-Dominique
+MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
+dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
+6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
+c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
+I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
+AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
+BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
+CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
+AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
+MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
+My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
+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
+N0A3bgltvER3q1cGraQJMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
+dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
+AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
+c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
+LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
+LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
+Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQAxS21FdvRtCQVc
+jgEj+xxSnUr0N9reJlI5J9zRiBCWGxm5yhz965IDka3XVFEbj+beJj/gyHoxbaTGf2AjOufpcMqy
+p4mtqc2l4Csudl8QeiBaOUDx4VKADbgxqpjvwD5zRpSKVj4S9y3BJi9xrRdPOm1Z2ZZYxRUxUz7d
+2MXoxQsFucGJO5a4CwDBaGgJAqvwCXU5Q64rKVIUBk6mtcd3cDwX+PXqx4QrhHFGq6b6oi37YQ8B
++bhlXqlkLrbPlPFk+4Rh4EaW92iD5g8kvtXCOwvIIvs+15Io0dbpIe2W5UKo2OcyDDFvrOACmUOE
+/GuEkhENcyDVyEs/4/N2u9WYMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
+R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
+MDIwAhABj4peqtakTCOMXLZ2mEqRMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCC0
+pHc88TDcIHKN1zFq4z5vAnqHEhCLRh61epNjoFoY/jAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMjEyMDkwNjU4MDhaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAR8EhmjJo+IF4YNXEp4co
+iSSb636ziNwYr6nOuP+I8b17oqSwceTwk26otCFe8tfklzr43oRwahPUmPROZcrKte6y732xS8x+
+uvjHT510VZhPOtpJY3xGoS52poxYbBi+XBfcpDDpSm5sa6AHMM6gVEIUS9SfqjlfD/prqXEL+aEr
+6hKQG8SFg+rThQX1sBs/4x0MyDyDebi3BtEwpHEtnqmZD0RAEydY+dockRlk4a9c2G+69CSbYw5G
+mNyI8WaV1sRBwDugl7VlA+LPqsLU/ZWNCadeW41gzQAOoXkEUy5jcKWbSIqEpBRo0EYkz18cI8LM
+rKpx73Bzxt/X+29dXg==
+--00000000000016455b05ef5fad6a--

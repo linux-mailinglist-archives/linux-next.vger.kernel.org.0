@@ -2,47 +2,46 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7939E64AB0F
-	for <lists+linux-next@lfdr.de>; Tue, 13 Dec 2022 00:03:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65F3C64AB3D
+	for <lists+linux-next@lfdr.de>; Tue, 13 Dec 2022 00:12:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233288AbiLLXDh (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 12 Dec 2022 18:03:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59614 "EHLO
+        id S233694AbiLLXM5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 12 Dec 2022 18:12:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232984AbiLLXDg (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 12 Dec 2022 18:03:36 -0500
+        with ESMTP id S233498AbiLLXMw (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 12 Dec 2022 18:12:52 -0500
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3C321789C;
-        Mon, 12 Dec 2022 15:03:34 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 144816406;
+        Mon, 12 Dec 2022 15:12:50 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NWHH13hnMz4xP9;
-        Tue, 13 Dec 2022 10:03:25 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NWHTr60XTz4xN4;
+        Tue, 13 Dec 2022 10:12:48 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1670886209;
-        bh=NCgE8+5Ez0w6THg439ugWeJQOoe4/Mn6dIFRYwNl0WE=;
-        h=Date:From:To:Cc:Subject:From;
-        b=gXCer509fBGzsF+tdyPj3AMSXcl1razUftnx7drHGmHiM46zpq7poMp4hiKl5vRC2
-         uHayIEuOrTbI7d0d+EtJHPim5gJwM9xeTZkj6p8q3B7Uc8rbp67YYzmFJL9Qxui6AD
-         FtmdPxjBktCKabD5Kvk2D30Ra5XJhurinW9Fa7jF3jWl/A9ETwmlOoioe0loSxgWFN
-         h2Ue407D1HlToUUF94Io2RqnJJO0zQKMmH6kyIv46IMjapLl3MV5IRnjUXFCVTDnBz
-         sniHIEZBnG4nEKMFvsj/daiU90CwRThBmtIYY2hQxi7CbXjauXlskMv+0BPxeVPH0s
-         kzFUp3nLk/ZBA==
-Date:   Tue, 13 Dec 2022 10:03:24 +1100
+        s=201702; t=1670886769;
+        bh=ZmQuWEiTl4pJ0qMkgHfKvSKtoabOfj1EshSB7dzTg6w=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=VtdQ/4eQkUGOy61/icVh2YaWUQVSgGlyy3OuIuvL0hIEHHFFSlykKpfcj8C47HjnG
+         DLiAhYgPxEpeWTs0ZtnCKQV8mGwo75gN11mPioMjCZFu27sX0AEl7vFWgKsuCscOxE
+         ReCF24oL0K7hCvCzn7blqkuinWQhXdLUCZahWR7wHgoPhKQQd110CJ4uiKKVa2XtEw
+         nQ7cyMsZez19Ni8u9hu8G/kGIeDz0ECUkNwEYPIYUMhOU80GddU0Qu0tGiXjOH8pOq
+         eDJrvks9UsrcwD5a0mRS7G8zHBqiLUj+y4It4aUzN27dpfBwHLdOi15AzwNa98+Y/P
+         ODRQZZQJrng4A==
+Date:   Tue, 13 Dec 2022 10:12:47 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <paul@pwsan.com>
-Cc:     Anup Patel <apatel@ventanamicro.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Kees Cook <keescook@chromium.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Subject: linux-next: manual merge of the risc-v tree with Linus' tree
-Message-ID: <20221213100324.67fa5152@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the execve tree with the vfs tree
+Message-ID: <20221213101247.1d252d9d@canb.auug.org.au>
+In-Reply-To: <20221128143704.3fe8f7b1@canb.auug.org.au>
+References: <20221128143704.3fe8f7b1@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/GYnfjOrI7MBXYQWYKt2YHw7";
+Content-Type: multipart/signed; boundary="Sig_/LrhL4FzPAU2BHsHU1D80OAu";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
@@ -53,75 +52,57 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/GYnfjOrI7MBXYQWYKt2YHw7
+--Sig_/LrhL4FzPAU2BHsHU1D80OAu
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the risc-v tree got a conflict in:
+On Mon, 28 Nov 2022 14:37:04 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> Today's linux-next merge of the execve tree got a conflict in:
+>=20
+>   fs/binfmt_elf.c
+>=20
+> between commit:
+>=20
+>   9a938eba8d28 ("kill coredump_params->regs")
+>=20
+> from the vfs tree and commit:
+>=20
+>   8f6e3f9e5a0f ("binfmt: Fix whitespace issues")
+>=20
+> from the execve tree.
+>=20
+> I fixed it up (I just use the former where they conflicted, so may have
+> lost some white space fixups) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
 
-  arch/riscv/configs/defconfig
-
-between commit:
-
-  1776fca7fadb ("riscv: configs: defconfig: Enable Renesas RZ/Five SoC")
-
-from Linus' tree and commit:
-
-  497bcbe3ce04 ("RISC-V: Enable PMEM drivers")
-
-from the risc-v tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+This is now a conflict between the vfs tree and Linus' tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc arch/riscv/configs/defconfig
-index f7f32448f160,fea1b17dbbd3..000000000000
---- a/arch/riscv/configs/defconfig
-+++ b/arch/riscv/configs/defconfig
-@@@ -123,8 -123,8 +124,9 @@@ CONFIG_MICROSEMI_PHY=3D
-  CONFIG_INPUT_MOUSEDEV=3Dy
-  CONFIG_SERIAL_8250=3Dy
-  CONFIG_SERIAL_8250_CONSOLE=3Dy
-+ CONFIG_SERIAL_8250_DW=3Dy
-  CONFIG_SERIAL_OF_PLATFORM=3Dy
- +CONFIG_SERIAL_SH_SCI=3Dy
-  CONFIG_VIRTIO_CONSOLE=3Dy
-  CONFIG_HW_RANDOM=3Dy
-  CONFIG_HW_RANDOM_VIRTIO=3Dy
-@@@ -161,7 -161,7 +163,8 @@@ CONFIG_VIRTIO_MMIO=3D
-  CONFIG_RPMSG_CHAR=3Dy
-  CONFIG_RPMSG_CTRL=3Dy
-  CONFIG_RPMSG_VIRTIO=3Dy
- +CONFIG_ARCH_R9A07G043=3Dy
-+ CONFIG_LIBNVDIMM=3Dy
-  CONFIG_EXT4_FS=3Dy
-  CONFIG_EXT4_FS_POSIX_ACL=3Dy
-  CONFIG_EXT4_FS_SECURITY=3Dy
-
---Sig_/GYnfjOrI7MBXYQWYKt2YHw7
+--Sig_/LrhL4FzPAU2BHsHU1D80OAu
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOXszwACgkQAVBC80lX
-0GwsnQf/ZO+io1MfQupCRf7aCUX90q2iBngkUsdQQRPM25uWh/j9HzaErUoy4vv0
-QHPcXNnAWYf1u3KKP7BHYzZgV+DoPfDzG7dv1dvlFuyCrmWPJdSOydJuj/m3e2ga
-t+akhPEBP0aeLfvurnF82+koVwQGihcpSDJnwuqYdT46CFeBSK5ZF1EyNmMEw2Hp
-lh6ciU1vf06oPU+sMie65t9qAzxS1r03KGuJAMCUkvP+hge7Aq8R7eDqx8CiDWYe
-8wRnrr5VCoA8SPB0YWPRcbCoh9BpAHlIAhZGXWddmUCyoaG9TxgV7cFBoFaoh0fP
-2SpoC95ql6MJocyZRT//Bki4CSmcuw==
-=XNyP
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOXtW8ACgkQAVBC80lX
+0Gw/dAf/dmzLHBULiNcamwSftEMhh66FN40pjtm/AIWJx5xCT2klbW6XziMNVSE/
+e3tLg0Vm2TYhrqJZrMhVBpo+HwkRTqFZTC06G5JJOxR66FrQKOmdqwuxRcqz4d0o
+QJO7WW2VLI/TUQCLp4dApHDn/qTsJ0b3ujCyOjQ8zTNXKNiU+F8/PjsgjeCA7J2C
+nIR0IKxyRNPEAjVw2MzPL7hXwpdZbe1M1Lf+iDUgbGQUGnImzmNwLzWQ2TyL8PV8
+3wFBf0wRVhu9EaB80bSVcP6ec6Qoh11mYcttBEZwjR2jZCixmkSg/vXF75lQa8BK
+FEWzIRcQHCfZkoygVrLnKrtMmCRKwA==
+=9Yx0
 -----END PGP SIGNATURE-----
 
---Sig_/GYnfjOrI7MBXYQWYKt2YHw7--
+--Sig_/LrhL4FzPAU2BHsHU1D80OAu--

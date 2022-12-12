@@ -2,156 +2,87 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B11A564A84D
-	for <lists+linux-next@lfdr.de>; Mon, 12 Dec 2022 20:53:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28D2B64A9B7
+	for <lists+linux-next@lfdr.de>; Mon, 12 Dec 2022 22:49:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232955AbiLLTxZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 12 Dec 2022 14:53:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42030 "EHLO
+        id S233577AbiLLVtV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 12 Dec 2022 16:49:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232930AbiLLTxK (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 12 Dec 2022 14:53:10 -0500
-Received: from smtp-relay-canonical-1.canonical.com (smtp-relay-canonical-1.canonical.com [185.125.188.121])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE0F8D11B;
-        Mon, 12 Dec 2022 11:53:08 -0800 (PST)
-Received: from [192.168.192.83] (unknown [50.47.134.245])
+        with ESMTP id S233641AbiLLVtI (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 12 Dec 2022 16:49:08 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B14F419C16;
+        Mon, 12 Dec 2022 13:48:58 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id 26C27435C6;
-        Mon, 12 Dec 2022 19:53:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1670874787;
-        bh=VAbuQcMBJSaPAYyt7Kw8rKx/OVonYwUI4lQ3FIukyl8=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=jnIUsDVwhUCzT6FOj6jzLNF49yq/WShvpRWAVRBfsTDG4FTrsJVlzwx2G19t3481v
-         BzO0vy0G0bFzm1+yPyJs881WGbQtEvFFyhKxEsS8OwQgov0e8S0vLZ5gt954KXl1qQ
-         ukMqyAWCzy1g3P8XAtoaxXZopPZCe2Vo1IWZjhEGnbcDsSgp0n1bwI1lvfxgQKWBAp
-         rNmPZL52E31+xMia00VdwiUuaQQhc34fFGg+zPvaoA5B4fMCnCVAm2eIWiVEf5r+yV
-         W+BBH2BayI86Ez3kMYUFzsnhb/aN4ia1Jl+/rpNhe4GP0LUtmgafEw+W30ry813Vc8
-         y9UNn5rItmLxA==
-Message-ID: <c4560ccd-fad4-ecb9-4d57-64d94b5ebf30@canonical.com>
-Date:   Mon, 12 Dec 2022 11:53:04 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: linux-next: manual merge of the kunit-next tree with the apparmor
- tree
-Content-Language: en-US
-To:     Shuah Khan <skhan@linuxfoundation.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        David Gow <davidgow@google.com>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NWFd104sXz4xGH;
+        Tue, 13 Dec 2022 08:48:52 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1670881733;
+        bh=N21RLy9QQq1yj++ku2PB1VcKF4Qd6PIqKZAaLSeuXhY=;
+        h=Date:From:To:Cc:Subject:From;
+        b=fFxW63bUuh7fKI4+GRbbNxaxKhE/WXigxahyIrKwXupgMvJbxjxgSQH4ivHCWyrUx
+         u5lyawbL/PdihjVh7tFFus9yc23wECOgrN2oO3C3tNi9WRi8mzuic4qnL8vayOt7hQ
+         eXBiDceodpQwlUl/lLgyxjg2fpwnnjTY8rPKrMfywYaPG+wR+ljicah9G/V44jVnqN
+         wf4E2YHedmqCrXrwXpX3rw/3zYi+56iE6obIevIz8vtGIB/OFvQS4batK6QbHhYXf1
+         ZiTWDYOwqxVMDZdYGE73z/jCey0dH8E2vyLvdncy4/PzSiIeP/i05kiGaIRBj0Rqc7
+         jNolnpavf0/hw==
+Date:   Tue, 13 Dec 2022 08:48:38 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Rae Moar <rmoar@google.com>
-References: <20221208135327.01364529@canb.auug.org.au>
- <bff89220-df3a-a148-2ba4-6aad3874f322@canonical.com>
- <8e82905f-8bdf-05de-2e6a-d8b896d75910@linuxfoundation.org>
- <0e678eb2-455c-88f5-6732-2e8701ebb6e6@linuxfoundation.org>
- <9b21c055-4e1a-2c34-281c-39af7d73fe80@canonical.com>
- <fa9145fe-9815-900f-6dd0-bf80019a319e@linuxfoundation.org>
-From:   John Johansen <john.johansen@canonical.com>
-Organization: Canonical
-In-Reply-To: <fa9145fe-9815-900f-6dd0-bf80019a319e@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the thermal tree
+Message-ID: <20221213084838.33d6678c@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/W9MaaymC+0LDeNpSFJBs1xh";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 12/12/22 11:48, Shuah Khan wrote:
-> On 12/12/22 12:20, John Johansen wrote:
->> On 12/12/22 10:03, Shuah Khan wrote:
->>> On 12/12/22 10:52, Shuah Khan wrote:
->>>> Hi David,
->>>>
->>>> On 12/8/22 13:10, John Johansen wrote:
->>>>> On 12/7/22 18:53, Stephen Rothwell wrote:
->>>>>> Hi all,
->>>>>>
->>>>>> Today's linux-next merge of the kunit-next tree got a conflict in:
->>>>>>
->>>>>>    security/apparmor/policy_unpack.c
->>>>>>
->>>>>> between commits:
->>>>>>
->>>>>>    371e50a0b19f ("apparmor: make unpack_array return a trianary value")
->>>>>>    73c7e91c8bc9 ("apparmor: Remove unnecessary size check when unpacking trans_table")
->>>>>>    217af7e2f4de ("apparmor: refactor profile rules and attachments")
->>>>>> (and probably others)
->>>>>>
->>>>>> from the apparmor tree and commit:
->>>>>>
->>>>>>    2c92044683f5 ("apparmor: test: make static symbols visible during kunit testing")
->>>>>>
->>>>>> from the kunit-next tree.
->>>>>>
->>>>>> This is somewhat of a mess ... pity there is not a shared branch (or
->>>>>> better routing if the patches).
->>>>>>
->>>>> sorry, there was a miscommunication/misunderstanding, probably all on me, I
->>>>> thought the kunit stuff that is conflicting here was going to merge next
->>>>> cycle.
->>>>>
->>>>
->>>
->>> How about I just drop the following for now and handle this in the next cycle?
->>
->> if you want, the other way to handle it is we coordinate our pull requests.
->> You go first. And then I will submit a little later in the week, with the
->> references to the merge conflict and a pointer to a branch with it resolved.
->> This isn't even a particularly tricky merge conflict, it just has the little
->> subtly around making sure the include symbols are conditional.
->>
-> 
-> I assume Linus will not see any problems without your pull requests. In which
-> case we can do this:
-> 
-> - I send my pull request today
-> - You can follow with yours with the fixes later on this week
-> 
+--Sig_/W9MaaymC+0LDeNpSFJBs1xh
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-okay
+Hi all,
 
->> This doesn't affect me much as there is already another merge conflict with
->> the security tree that I need to deal with.
->>
-> 
-> 
->>> I think it might be least confusing option. Let me know. I can just do that
->>> and then send pull request in a day or tow once things settle down in next.
->>>
->>> 2c92044683f5 ("apparmor: test: make static symbols visible during kunit testing")
->>>
->>
->> that is the other option. If you go that route I can help you do the rebase/merge
->> fix.
->>
-> 
-> Let's go with your earlier suggestion.
-> 
+Commit
 
-ack
+  c64c9a768c09 ("Revert "thermal/sysfs: Remove unnecessary check in trip_po=
+int_hyst_show()"")
 
->> looking back at this, there wasn't anything explicit about this not going upstream
->> this cycle, I must have just assumed as the final version came about after rc7. So
->> my bad.
->>
-> 
-> Right - I ended up taking this as it looked like a patch if included could
-> enable other changes to follow without being blocked. Also rc8 was in plan.
-> 
+is missing a Signed-off-by from its author and committer.
 
-yeah, my bad
+Reverts are commits (and change the code) and so need Signed-off-by tags.
 
-> thanks,
-> -- Shuah
+--=20
+Cheers,
+Stephen Rothwell
 
+--Sig_/W9MaaymC+0LDeNpSFJBs1xh
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOXobYACgkQAVBC80lX
+0Gy4UAf/RpgnEUE8aYYqO0yRww+pA0qq8Obg78c7qaAmpTGRF+YWWw4ISD9NyNZk
+b0eC6CmWenZPBQW3zHUhuSYmdsPrxwbP+duHILeQ0t1MTLu8fjkqzio2/biU3m6v
+W/IEB34dD8PS8PU6Phdo0+9w6uHhJ92SjLwTgxzTzy3P/787pAZ8SzVzT0jktskY
+za/ei1Gin7o0nFN/mq0WAHtnfNOKqsD2dtaS1r8ciMOfefcBdAIwvWu+mbxWomMF
+iSRBPpbnzayWrMJRdh0WdAAozPX0ApgpPOM78j7v6P3+oBGB/GrmTqqI6GrkB74c
+Rn3TpSutCMi5VWDNpVAULDEd444a4A==
+=cYh5
+-----END PGP SIGNATURE-----
+
+--Sig_/W9MaaymC+0LDeNpSFJBs1xh--

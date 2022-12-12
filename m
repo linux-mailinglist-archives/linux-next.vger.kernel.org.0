@@ -2,47 +2,41 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBA9564AA46
-	for <lists+linux-next@lfdr.de>; Mon, 12 Dec 2022 23:31:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFC1064AAB0
+	for <lists+linux-next@lfdr.de>; Mon, 12 Dec 2022 23:57:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233549AbiLLWbF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 12 Dec 2022 17:31:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37326 "EHLO
+        id S233737AbiLLW5H (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 12 Dec 2022 17:57:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233786AbiLLWbA (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 12 Dec 2022 17:31:00 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 139A61AF24;
-        Mon, 12 Dec 2022 14:30:58 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        with ESMTP id S233899AbiLLW4r (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 12 Dec 2022 17:56:47 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCB77616F;
+        Mon, 12 Dec 2022 14:56:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NWGYW4rFNz4xN1;
-        Tue, 13 Dec 2022 09:30:55 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1670884256;
-        bh=wol/ZquUNqtT5PILJNikpvyQiO2elLsIVTw0EVhiXFU=;
-        h=Date:From:To:Cc:Subject:From;
-        b=NJbZrKXH7Ug6Si6TrZWG9GZUB9Dn0bFOR9CpfMlD2KVR51974BbpfmiMYkz/oWxgD
-         NKLc0ztwU8+WyxVWVMwTYCWHNJ4w8WJzlHCgaA+ujieQ2+/tzLACw0qBgeLH95qdpH
-         +NcPizDbuUYnV57O6Lf610kFDP9HxBCAace5xZtPW2ofBNfzBCUg9afuEucnjgB1GB
-         j4qFqQgOrjyaexC9YPSCuRFb0u7ClfnIIpiva87MCbLCPV2GI7FSR4eH2Hp9bPqY2U
-         qzL3KNGu7NSf5LUXkgKi0UN17BrGpF70v1maU23wjxTZVMqH/AGQYXNfg1w3hHXlBW
-         lwMNyhQWrMHwA==
-Date:   Tue, 13 Dec 2022 09:30:54 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Kefeng Wang <wangkefeng.wang@huawei.com>,
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7BFA5B80E9E;
+        Mon, 12 Dec 2022 22:56:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E324C433F0;
+        Mon, 12 Dec 2022 22:56:43 +0000 (UTC)
+Date:   Mon, 12 Dec 2022 17:56:42 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the mm-hotfixes tree
-Message-ID: <20221213093054.5211da74@canb.auug.org.au>
+Subject: Re: linux-next: Signed-off-by missing for commit in the ftrace tree
+Message-ID: <20221212175642.77cba577@gandalf.local.home>
+In-Reply-To: <20221213085200.772ddd94@canb.auug.org.au>
+References: <20221213085200.772ddd94@canb.auug.org.au>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/hTrzt8noqpeQkk73HvdJVDq";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,49 +44,25 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/hTrzt8noqpeQkk73HvdJVDq
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, 13 Dec 2022 08:52:00 +1100
+Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 
-Hi all,
+> Hi all,
+> 
+> Commits
+> 
+>   fff1787adaee ("trace/kprobe: remove duplicated calls of ring_buffer_event_data")
+>   8c2b99790196 ("tracing: docs: Update histogram doc for .percent/.graph and 'nohitcount'")
+>   ccf47f5cc4ce ("tracing: Add nohitcount option for suppressing display of raw hitcount")
+>   a2c54256dec7 ("tracing: Add .graph suffix option to histogram value")
+>   abaa5258ce5e ("tracing: Add .percent suffix option to histogram values")
+>   5f2e094ed259 ("tracing: Allow multiple hitcount values in histograms")
+> 
+> are missing a Signed-off-by from their committers.
+> 
 
-After merging the mm-hotfixes tree, today's linux-next build (powerpc
-ppc64_defconfig) failed like this:
+Bah, not sure how this happened. I thought I pulled these patches directly
+from Masami. Does a rebase change the committer tags? As I probably rebased
+them on top of my branch.
 
-mm/ksm.c: In function 'ksm_might_need_to_copy':
-mm/ksm.c:2605:21: error: implicit declaration of function 'copy_mc_user_hig=
-hpage'; did you mean 'copy_user_highpage'? [-Werror=3Dimplicit-function-dec=
-laration]
- 2605 |                 if (copy_mc_user_highpage(new_page, page, address, =
-vma)) {
-      |                     ^~~~~~~~~~~~~~~~~~~~~
-      |                     copy_user_highpage
-
-Caused by commit
-
-  b7edf4b1cdb1 ("mm: hwpoison: support recovery from ksm_might_need_to_copy=
-()")
-
-I have reverted that commit for today.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/hTrzt8noqpeQkk73HvdJVDq
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOXq54ACgkQAVBC80lX
-0GwTRgf+NcfRNGZ/W9oWEtHBVM9dsvDd8ecNLaMVgoxMGLqRyIl+oq3fRCUNkhTh
-40oeVj3N76sOGzvytqPN01vVcJxrWzRkFfpBc5m/yC73YITp+hxmZ/mdPj/nGkvF
-1dRD3/erJZMYOSJ7WhNDATZ/jNSIsYhjxxIT7gvvz2D50XtpH1I6GbqCV7rHHPdJ
-9jqS/UU7Dd4ily77uG/uRgcKphh1CBeSlzfvojpDWL62piTDzWYr8qfehGvRU5yg
-gBG11dcqaO8UwXmEDxiwi8eqsZK12rQjO9LMczEU9/pQJdQzrWaDoBYP49geH1So
-pEziYEHRflWDdNBevmZ/ABuGfhH5yA==
-=Wcyq
------END PGP SIGNATURE-----
-
---Sig_/hTrzt8noqpeQkk73HvdJVDq--
+-- Steve

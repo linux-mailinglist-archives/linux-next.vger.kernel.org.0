@@ -2,118 +2,83 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40EFA64AC09
-	for <lists+linux-next@lfdr.de>; Tue, 13 Dec 2022 01:16:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8E3664AC8E
+	for <lists+linux-next@lfdr.de>; Tue, 13 Dec 2022 01:42:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229700AbiLMAQ3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 12 Dec 2022 19:16:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38372 "EHLO
+        id S230052AbiLMAmY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 12 Dec 2022 19:42:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229975AbiLMAQ2 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 12 Dec 2022 19:16:28 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6383F1B1D4;
-        Mon, 12 Dec 2022 16:16:27 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NWJv71JFhz4xN4;
-        Tue, 13 Dec 2022 11:16:18 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1670890580;
-        bh=xAYs4RzRwjOFkzI7D5yEGU/NLolgCnhRJ8STI3pof/c=;
-        h=Date:From:To:Cc:Subject:From;
-        b=FRl2JzYYRhjzIuuD2avNqoAGw6msBylr58Ef/s6hj0wNErThnhG22FX+pqniXOlDO
-         arAZDTk0jD/KxH3j2fIt4U4E04ajGp4kLz/45Vttt0UZ5HwElRtEaZBBobRny8WOHi
-         bom5kh4satYvqCBVxsClI31jqNCr2FFjvbgx5fU0A4Szn4mVBHOSTH2ytAD18sZJwT
-         E67LM1CpuBlTMTUp8JfxmOWoYP8GcwmQpKCKmiNAyBv6YqbRVGiRT/8m6Od3ZsSwc8
-         L7F7b+c5OSDjZmF6q5S16u2yHAJuLCgLHNbNC9Uoceg6Bdf3g5JNDoXx12xGPDSy6O
-         kLCA6ueziI0aQ==
-Date:   Tue, 13 Dec 2022 11:16:12 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Helge Deller <deller@gmx.de>, Dave Airlie <airlied@redhat.com>
-Cc:     DRI <dri-devel@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Subject: linux-next: manual merge of the fbdev tree with the drm tree
-Message-ID: <20221213111612.7bc1f917@canb.auug.org.au>
+        with ESMTP id S233513AbiLMAmK (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 12 Dec 2022 19:42:10 -0500
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABE5112757;
+        Mon, 12 Dec 2022 16:42:08 -0800 (PST)
+Received: by mail-ot1-x335.google.com with SMTP id x44-20020a05683040ac00b006707c74330eso6248402ott.10;
+        Mon, 12 Dec 2022 16:42:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=WbqL3VgUGL1FVhGoBoEKpskmhDGn/c46rzKHLqxTXoI=;
+        b=gqPx3aylY0jjbVSnMe1Z38P/Xkih0MuThhG+bzCdkZoG2WcK5nJn+8rtseLobNUAe4
+         qPFEbezy8KC24+PV8QPSIPs+1AzRWLYKlZz2QYmAvBpPOJhgtkBxzJNllpeI/6I1bIC4
+         YLsuWnpVrEp2Enjn4swCE3gy1PoeOQ0euIL0QGwiBgmuhHgo4OA8rm8BlgSp4GkUBMQn
+         s11QBbr4nJ5sL1k9+zZUHqDWdwpUMWmkJGjH2aOYPCsaIZGMJfhJMwyv11THdv7iY8eD
+         OaQCF4KuPMZp4iKY0/icQce1SNbIYg8AcLNmkzqsUwA7E5LpqU+eccvX3PR9FrWV6dg2
+         uxxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WbqL3VgUGL1FVhGoBoEKpskmhDGn/c46rzKHLqxTXoI=;
+        b=15dZnRMypkEZ6eLPkKUS9hyCyX5QLJD87OwG+N5lCXEGyQV3va75ko3yuwhwxFG3jf
+         9B+DTTrit0A1J0Qtz+UaoFy1xiqn6UslypPCqXsNLGNeVRkxF8iFFT1NHS1wMAEvRzBA
+         tEOcmXTELF7E3DF6rNgXFMn0mFvNw048vVMoESyauFcTtvq4cfsQrcIGBc40l52aWPFd
+         qIutF+jtoERBY756uEnJRFwXSp1JY6WqRbyknYBYAswQX7YVikxnbLTgpYhe0WF6Dhko
+         g04jsrAxgzw8/q8lteCAUZDkrqHiLZVff/cVK3Smboximx2mpD0tUzmM69aQZAPmjrls
+         btgg==
+X-Gm-Message-State: ANoB5pmXQeU6+qIlvMA7OUIbizfhhruGgpqcTqrWs4acwvhtLKqnVr7j
+        8DbRUG6a8GS5/smiwq+XoeJaxFWAJiY=
+X-Google-Smtp-Source: AA0mqf7K4+nEABpYZCDpkhVNruN0HBpNDYblRQQfqEUxb16zfEieOGn7hF5Lm1kPOntnVJj+n8sNqg==
+X-Received: by 2002:a9d:1cf:0:b0:66e:c503:97a8 with SMTP id e73-20020a9d01cf000000b0066ec50397a8mr8777210ote.3.1670892127849;
+        Mon, 12 Dec 2022 16:42:07 -0800 (PST)
+Received: from localhost ([12.97.180.36])
+        by smtp.gmail.com with ESMTPSA id m4-20020a9d7e84000000b0066eab2ec808sm585564otp.1.2022.12.12.16.42.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Dec 2022 16:42:07 -0800 (PST)
+Date:   Mon, 12 Dec 2022 16:42:06 -0800
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: Signed-off-by missing for commit in the bitmap tree
+Message-ID: <Y5fKXpj54XPyJnrW@yury-laptop>
+References: <20221213085419.3f983d80@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/sp97=XczOeN82EqDD6bT2oD";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221213085419.3f983d80@canb.auug.org.au>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/sp97=XczOeN82EqDD6bT2oD
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, Dec 13, 2022 at 08:54:19AM +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Commits
+> 
+>   e58d68e2633f ("net/mlx5e: Improve remote NUMA preferences used for the IRQ affinity hints")
+>   06a99cbab38e ("sched/topology: Introduce for_each_numa_hop_mask()")
+>   5c0da4f67fe1 ("sched/topology: Introduce sched_numa_hop_mask()")
+> 
+> are missing a Signed-off-by from their committers.
 
-Hi all,
-
-Today's linux-next merge of the fbdev tree got a conflict in:
-
-  drivers/video/fbdev/Kconfig
-
-between commit:
-
-  c8a17756c425 ("drm/ofdrm: Add ofdrm for Open Firmware framebuffers")
-
-from the drm tree and commit:
-
-  225e095bbd3a ("fbdev: offb: make offb driver tristate")
-
-from the fbdev tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc drivers/video/fbdev/Kconfig
-index 71019b167f8b,a529511f7f53..000000000000
---- a/drivers/video/fbdev/Kconfig
-+++ b/drivers/video/fbdev/Kconfig
-@@@ -456,9 -453,8 +456,9 @@@ config FB_ATAR
-  	  chipset found in Ataris.
- =20
-  config FB_OF
-- 	bool "Open Firmware frame buffer device support"
-- 	depends on (FB =3D y) && PPC && (!PPC_PSERIES || PCI)
-+ 	tristate "Open Firmware frame buffer device support"
-+ 	depends on FB && PPC && (!PPC_PSERIES || PCI)
- +	depends on !DRM_OFDRM
-  	select APERTURE_HELPERS
-  	select FB_CFB_FILLRECT
-  	select FB_CFB_COPYAREA
-
---Sig_/sp97=XczOeN82EqDD6bT2oD
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOXxEwACgkQAVBC80lX
-0Gxh8wf/e0gBQKPOoEg6O0eamyAvA1MrPv45E3hqftz0Qf8sg0+b1LLlBMPONe7F
-v1CD8ileZtYa9c/CpH6UNhRSbVsmE8OOJ6H+PgcKTri1FIuD5l6Us9Br8g8x61WP
-mjKuY3H5XjcYhGvnzjC/NpPbwyGQqHkqHSdOF0mMa+smkNjuTkYrQ5uG0GdyLBF0
-U7MLL3AMUmAJOMsBYy914Og4/8M+yhy8u9qNtSC5MIFI1hzxZrzuPuHXpKpypUJ5
-aCnKzXj68sU/v3gkiRQ5ZeWcQ5UHjmJoM09wDjvYTEzumymCHEdoPGQoRM/j0id1
-5x0oQ5+LdMIvLtIuUIogReMCT9nBXw==
-=xRxj
------END PGP SIGNATURE-----
-
---Sig_/sp97=XczOeN82EqDD6bT2oD--
+Fixed, thanks.

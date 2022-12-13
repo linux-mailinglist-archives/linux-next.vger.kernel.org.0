@@ -2,184 +2,118 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28E4E64ABDA
-	for <lists+linux-next@lfdr.de>; Tue, 13 Dec 2022 00:57:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40EFA64AC09
+	for <lists+linux-next@lfdr.de>; Tue, 13 Dec 2022 01:16:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233853AbiLLX46 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 12 Dec 2022 18:56:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57422 "EHLO
+        id S229700AbiLMAQ3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 12 Dec 2022 19:16:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233694AbiLLX4v (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 12 Dec 2022 18:56:51 -0500
-Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9680D17A94
-        for <linux-next@vger.kernel.org>; Mon, 12 Dec 2022 15:56:49 -0800 (PST)
-Received: by mail-vs1-xe36.google.com with SMTP id k185so13032604vsc.2
-        for <linux-next@vger.kernel.org>; Mon, 12 Dec 2022 15:56:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=eHq3rzfk2qISOWZcDMGW7xUibVQqdvKPqxr9reQmboQ=;
-        b=pDKP2uUmsBqeWXTxerK+YOE9qjhW+1jz+PE4oNk3YdSQ+UtNBA2IuzM5G9Vlki6fzU
-         1it/Nswtychto2+R0hS+9taSaHS4g1fj8EPHGF+AZ81jPkiPWvYZXiQabN5FbbbUuiHP
-         b6PYAEWitKQ9D1/HWqvAir3kfpfpmydaEI8HQSEBkv3rOY6lBXZ+aaIJkRtG3mDcOJaj
-         7YzBHipfGnRzi+6dcCENw1mU0wF0uVgMYJyejq479Ol43iesXNF9uIhX3Wkf/DrTLJyn
-         weH0yNkLEI4HOnSjqLAE6sT/FoIuZckGvDZMwyQcsl42tdg2nOTO4AUEefEAn9ttrVz5
-         YHOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=eHq3rzfk2qISOWZcDMGW7xUibVQqdvKPqxr9reQmboQ=;
-        b=jXcZkC09Js+/x5DD972W4OCc8QotPGV3fNt9BniE8wSvw5YtnEcg4CX4+lZabjlcnp
-         hE93nJW9kCoiejH7uUrEOFDSV4SfvK+rnTm8joj5lSBZS1RpVC0PBAbHFIVjdohtetvx
-         ZpCWoQinssVkfBYLXRzAv5yBxzYR4/IMTlF0NcaiPrFTXcANf2wQn5o7UnNafoRz53gE
-         Wzqys2svF5vP7df0e090aYWe2CegSpXW/N0yorkk0tMtHbMk5oaWk0hVgSm2GEbji4HQ
-         q2K6utyTinwgBO9NsOqqKjAGwGsSGimGSCSay4FGfJQCZYkWX2J50ltd5JKUk4K/fIc5
-         8Yqg==
-X-Gm-Message-State: ANoB5pl1F6F15Y3lvQHqcmzA/mgmnNa/t3bisXN52gQ/m6ilo6zBY8+6
-        Ss1wlcw2pFyKvmbxYBhXEkr+fKd8xS2cxNW3vSEbTQ==
-X-Google-Smtp-Source: AA0mqf4dBZXyoX6j/ZmTnXjFrY5NGk2XmW6TLGmDbTcIIGQE0W7Uk8mwXGjeIhvFxbPHecUXCVk6sha/2aVg5prqYUY=
-X-Received: by 2002:a05:6102:308b:b0:3b2:f4e4:a865 with SMTP id
- l11-20020a056102308b00b003b2f4e4a865mr6174402vsb.71.1670889408635; Mon, 12
- Dec 2022 15:56:48 -0800 (PST)
-MIME-Version: 1.0
-References: <20221208135327.01364529@canb.auug.org.au> <bff89220-df3a-a148-2ba4-6aad3874f322@canonical.com>
- <8e82905f-8bdf-05de-2e6a-d8b896d75910@linuxfoundation.org>
- <0e678eb2-455c-88f5-6732-2e8701ebb6e6@linuxfoundation.org>
- <9b21c055-4e1a-2c34-281c-39af7d73fe80@canonical.com> <fa9145fe-9815-900f-6dd0-bf80019a319e@linuxfoundation.org>
- <c4560ccd-fad4-ecb9-4d57-64d94b5ebf30@canonical.com> <a116990c-f544-9dce-0ee5-ab7fbe2601ca@linuxfoundation.org>
-In-Reply-To: <a116990c-f544-9dce-0ee5-ab7fbe2601ca@linuxfoundation.org>
-From:   David Gow <davidgow@google.com>
-Date:   Tue, 13 Dec 2022 07:56:37 +0800
-Message-ID: <CABVgOSk_ud=+3f0-T_Qx6vw34mUvba48=VbwkvN5dtX0z=DBsA@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the kunit-next tree with the apparmor tree
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     John Johansen <john.johansen@canonical.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Brendan Higgins <brendanhiggins@google.com>,
+        with ESMTP id S229975AbiLMAQ2 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 12 Dec 2022 19:16:28 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6383F1B1D4;
+        Mon, 12 Dec 2022 16:16:27 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NWJv71JFhz4xN4;
+        Tue, 13 Dec 2022 11:16:18 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1670890580;
+        bh=xAYs4RzRwjOFkzI7D5yEGU/NLolgCnhRJ8STI3pof/c=;
+        h=Date:From:To:Cc:Subject:From;
+        b=FRl2JzYYRhjzIuuD2avNqoAGw6msBylr58Ef/s6hj0wNErThnhG22FX+pqniXOlDO
+         arAZDTk0jD/KxH3j2fIt4U4E04ajGp4kLz/45Vttt0UZ5HwElRtEaZBBobRny8WOHi
+         bom5kh4satYvqCBVxsClI31jqNCr2FFjvbgx5fU0A4Szn4mVBHOSTH2ytAD18sZJwT
+         E67LM1CpuBlTMTUp8JfxmOWoYP8GcwmQpKCKmiNAyBv6YqbRVGiRT/8m6Od3ZsSwc8
+         L7F7b+c5OSDjZmF6q5S16u2yHAJuLCgLHNbNC9Uoceg6Bdf3g5JNDoXx12xGPDSy6O
+         kLCA6ueziI0aQ==
+Date:   Tue, 13 Dec 2022 11:16:12 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Helge Deller <deller@gmx.de>, Dave Airlie <airlied@redhat.com>
+Cc:     DRI <dri-devel@lists.freedesktop.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Rae Moar <rmoar@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Randy Dunlap <rdunlap@infradead.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Subject: linux-next: manual merge of the fbdev tree with the drm tree
+Message-ID: <20221213111612.7bc1f917@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/sp97=XczOeN82EqDD6bT2oD";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, 13 Dec 2022 at 07:19, Shuah Khan <skhan@linuxfoundation.org> wrote:
->
-> On 12/12/22 12:53, John Johansen wrote:
-> > On 12/12/22 11:48, Shuah Khan wrote:
-> >> On 12/12/22 12:20, John Johansen wrote:
-> >>> On 12/12/22 10:03, Shuah Khan wrote:
-> >>>> On 12/12/22 10:52, Shuah Khan wrote:
-> >>>>> Hi David,
-> >>>>>
-> >>>>> On 12/8/22 13:10, John Johansen wrote:
-> >>>>>> On 12/7/22 18:53, Stephen Rothwell wrote:
-> >>>>>>> Hi all,
-> >>>>>>>
-> >>>>>>> Today's linux-next merge of the kunit-next tree got a conflict in:
-> >>>>>>>
-> >>>>>>>    security/apparmor/policy_unpack.c
-> >>>>>>>
-> >>>>>>> between commits:
-> >>>>>>>
-> >>>>>>>    371e50a0b19f ("apparmor: make unpack_array return a trianary value")
-> >>>>>>>    73c7e91c8bc9 ("apparmor: Remove unnecessary size check when unpacking trans_table")
-> >>>>>>>    217af7e2f4de ("apparmor: refactor profile rules and attachments")
-> >>>>>>> (and probably others)
-> >>>>>>>
-> >>>>>>> from the apparmor tree and commit:
-> >>>>>>>
-> >>>>>>>    2c92044683f5 ("apparmor: test: make static symbols visible during kunit testing")
-> >>>>>>>
-> >>>>>>> from the kunit-next tree.
-> >>>>>>>
-> >>>>>>> This is somewhat of a mess ... pity there is not a shared branch (or
-> >>>>>>> better routing if the patches).
-> >>>>>>>
-> >>>>>> sorry, there was a miscommunication/misunderstanding, probably all on me, I
-> >>>>>> thought the kunit stuff that is conflicting here was going to merge next
-> >>>>>> cycle.
-> >>>>>>
-> >>>>>
-> >>>>
-> >>>> How about I just drop the following for now and handle this in the next cycle?
-> >>>
-> >>> if you want, the other way to handle it is we coordinate our pull requests.
-> >>> You go first. And then I will submit a little later in the week, with the
-> >>> references to the merge conflict and a pointer to a branch with it resolved.
-> >>> This isn't even a particularly tricky merge conflict, it just has the little
-> >>> subtly around making sure the include symbols are conditional.
-> >>>
-> >>
-> >> I assume Linus will not see any problems without your pull requests. In which
-> >> case we can do this:
-> >>
-> >> - I send my pull request today
-> >> - You can follow with yours with the fixes later on this week
-> >>
-> >
-> > okay
-> >
-> >>> This doesn't affect me much as there is already another merge conflict with
-> >>> the security tree that I need to deal with.
-> >>>
-> >>
-> >>
-> >>>> I think it might be least confusing option. Let me know. I can just do that
-> >>>> and then send pull request in a day or tow once things settle down in next.
-> >>>>
-> >>>> 2c92044683f5 ("apparmor: test: make static symbols visible during kunit testing")
-> >>>>
-> >>>
-> >>> that is the other option. If you go that route I can help you do the rebase/merge
-> >>> fix.
-> >>>
-> >>
-> >> Let's go with your earlier suggestion.
-> >>
-> >
-> > ack
-> >
-> >>> looking back at this, there wasn't anything explicit about this not going upstream
-> >>> this cycle, I must have just assumed as the final version came about after rc7. So
-> >>> my bad.
-> >>>
-> >>
-> >> Right - I ended up taking this as it looked like a patch if included could
-> >> enable other changes to follow without being blocked. Also rc8 was in plan.
-> >>
-> >
-> > yeah, my bad
-> >
->
-> No worries. Sent pull request with a note about apparmor and our
-> coordinated pull requests with you on the cc.
->
-> thanks,
-> -- Shuah
->
+--Sig_/sp97=XczOeN82EqDD6bT2oD
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks John, Shuah for sorting this out. I confess that I hadn't
-noticed the conflict before proposing this for 6.2: in retrospect I
-should've checked more carefully given the amount of churn in the
-patch.
+Hi all,
 
-If we have to drop this patch and split the series, that's not a
-problem: it's really just an example. But if the conflict's resolved,
-that's even better.
+Today's linux-next merge of the fbdev tree got a conflict in:
 
-Thanks again!
+  drivers/video/fbdev/Kconfig
 
--- David
+between commit:
+
+  c8a17756c425 ("drm/ofdrm: Add ofdrm for Open Firmware framebuffers")
+
+from the drm tree and commit:
+
+  225e095bbd3a ("fbdev: offb: make offb driver tristate")
+
+from the fbdev tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/video/fbdev/Kconfig
+index 71019b167f8b,a529511f7f53..000000000000
+--- a/drivers/video/fbdev/Kconfig
++++ b/drivers/video/fbdev/Kconfig
+@@@ -456,9 -453,8 +456,9 @@@ config FB_ATAR
+  	  chipset found in Ataris.
+ =20
+  config FB_OF
+- 	bool "Open Firmware frame buffer device support"
+- 	depends on (FB =3D y) && PPC && (!PPC_PSERIES || PCI)
++ 	tristate "Open Firmware frame buffer device support"
++ 	depends on FB && PPC && (!PPC_PSERIES || PCI)
+ +	depends on !DRM_OFDRM
+  	select APERTURE_HELPERS
+  	select FB_CFB_FILLRECT
+  	select FB_CFB_COPYAREA
+
+--Sig_/sp97=XczOeN82EqDD6bT2oD
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOXxEwACgkQAVBC80lX
+0Gxh8wf/e0gBQKPOoEg6O0eamyAvA1MrPv45E3hqftz0Qf8sg0+b1LLlBMPONe7F
+v1CD8ileZtYa9c/CpH6UNhRSbVsmE8OOJ6H+PgcKTri1FIuD5l6Us9Br8g8x61WP
+mjKuY3H5XjcYhGvnzjC/NpPbwyGQqHkqHSdOF0mMa+smkNjuTkYrQ5uG0GdyLBF0
+U7MLL3AMUmAJOMsBYy914Og4/8M+yhy8u9qNtSC5MIFI1hzxZrzuPuHXpKpypUJ5
+aCnKzXj68sU/v3gkiRQ5ZeWcQ5UHjmJoM09wDjvYTEzumymCHEdoPGQoRM/j0id1
+5x0oQ5+LdMIvLtIuUIogReMCT9nBXw==
+=xRxj
+-----END PGP SIGNATURE-----
+
+--Sig_/sp97=XczOeN82EqDD6bT2oD--

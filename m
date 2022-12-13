@@ -2,102 +2,81 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F019564B675
-	for <lists+linux-next@lfdr.de>; Tue, 13 Dec 2022 14:40:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B80C164B719
+	for <lists+linux-next@lfdr.de>; Tue, 13 Dec 2022 15:16:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235396AbiLMNkU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 13 Dec 2022 08:40:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51976 "EHLO
+        id S235808AbiLMOQo (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 13 Dec 2022 09:16:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235689AbiLMNkP (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 13 Dec 2022 08:40:15 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19C322035F
-        for <linux-next@vger.kernel.org>; Tue, 13 Dec 2022 05:40:12 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1p55Vu-0005RL-99; Tue, 13 Dec 2022 14:40:06 +0100
-Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:7718:f6d6:39bc:6089])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 75E3013DE99;
-        Tue, 13 Dec 2022 13:40:02 +0000 (UTC)
-Date:   Tue, 13 Dec 2022 14:39:54 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+        with ESMTP id S235832AbiLMOQS (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 13 Dec 2022 09:16:18 -0500
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A008A20BCF;
+        Tue, 13 Dec 2022 06:15:00 -0800 (PST)
+Received: by mail-pj1-f46.google.com with SMTP id js9so3542079pjb.2;
+        Tue, 13 Dec 2022 06:15:00 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ps5uZAUuWjeHp0nRpK9UhOLpr3IlPI5fPiCauyAdajE=;
+        b=J9r22i03DCWBFUPeNuUTf0oF1VmFeU+rIvoEcxvDUc3NUNSolNN/S+wlqVVG7WqtL0
+         4ADpa7xH3Nxkinu/JuccBjDMQLa5hUwgvmlepUu3PBQTRvayfbT0MTflL5Z+k2bgXVg1
+         z8O8Wqj6qKqtu8/Sk3rFPlJrKBV9phq1D4FlIdBLqOn+M6i+Wd1N22yvRl9vyjftaO51
+         ie1+Ob2c5ecd6bRwLHkXTMvLYZYYZlN6I0/HUQG/zwqTCifzJLYH8OiaS984qh+C8YBr
+         5HdapWl2ph4YAuTzoiMKLjs5C3k/tso8gXKEJQuS7UP0vmCctjlHeVSLvy5/FiRCMT22
+         OHgA==
+X-Gm-Message-State: ANoB5pmTBRMXxKikAW85sTZ3+8cztVhADNUrS2HFKfymP5WbWpaPPZIU
+        BtWSqG3JiL6hHhmJphtD1wGvc6BQTkuDioA/LC8=
+X-Google-Smtp-Source: AA0mqf7xG0f7BfAcXiF0riEYipevRTIgj/IwtJB8yZ8YXCAU7NAOUWaPcsnNL7BIuFc/u/r4MthsjDh1YUCyqPRhyFQ=
+X-Received: by 2002:a17:903:452:b0:189:6574:7ac2 with SMTP id
+ iw18-20020a170903045200b0018965747ac2mr66376173plb.65.1670940900044; Tue, 13
+ Dec 2022 06:15:00 -0800 (PST)
+MIME-Version: 1.0
+References: <20221213153708.4f38a7cf@canb.auug.org.au> <20221213051136.721887-1-mailhol.vincent@wanadoo.fr>
+ <20221213133954.f2msxale6a37bvvo@pengutronix.de>
+In-Reply-To: <20221213133954.f2msxale6a37bvvo@pengutronix.de>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Tue, 13 Dec 2022 23:14:48 +0900
+Message-ID: <CAMZ6Rq+w3ZG5Y=6m+dFL_p3WLUFUkLKarj253nWu9q3+-GOH6Q@mail.gmail.com>
+Subject: Re: [PATCH] Documentation: devlink: add missing toc entry for
+ etas_es58x devlink doc
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
 Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
         David Miller <davem@davemloft.net>,
         Networking <netdev@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: [PATCH] Documentation: devlink: add missing toc entry for
- etas_es58x devlink doc
-Message-ID: <20221213133954.f2msxale6a37bvvo@pengutronix.de>
-References: <20221213153708.4f38a7cf@canb.auug.org.au>
- <20221213051136.721887-1-mailhol.vincent@wanadoo.fr>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="w6xxpeurpmpzifqw"
-Content-Disposition: inline
-In-Reply-To: <20221213051136.721887-1-mailhol.vincent@wanadoo.fr>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-next@vger.kernel.org
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+On Tue. 13 Dec. 2022 at 22:39, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+> On 13.12.2022 14:11:36, Vincent Mailhol wrote:
+> > toc entry is missing for etas_es58x devlink doc and triggers this warning:
+> >
+> >   Documentation/networking/devlink/etas_es58x.rst: WARNING: document isn't included in any toctree
+> >
+> > Add the missing toc entry.
+> >
+> > Fixes: 9f63f96aac92 ("Documentation: devlink: add devlink documentation for the etas_es58x driver")
+> > Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+>
+> Added to linux-can-next + added Reported-bys.
 
---w6xxpeurpmpzifqw
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thanks :)
 
-On 13.12.2022 14:11:36, Vincent Mailhol wrote:
-> toc entry is missing for etas_es58x devlink doc and triggers this warning:
->=20
->   Documentation/networking/devlink/etas_es58x.rst: WARNING: document isn'=
-t included in any toctree
->=20
-> Add the missing toc entry.
->=20
-> Fixes: 9f63f96aac92 ("Documentation: devlink: add devlink documentation f=
-or the etas_es58x driver")
-> Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+FYI, I now have access to a build environment. I confirmed that this
+patch fixes the warning.
 
-Added to linux-can-next + added Reported-bys.
-
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---w6xxpeurpmpzifqw
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmOYgKcACgkQrX5LkNig
-012cpAf5AWekrtzeWWKnbboxA4/JV7pG8JDakQ/HiPdwx/xc+BPMgLxiLNzI07hv
-GP4plhwz5D6ADoRXVwJukGoKoqFqjHifSV8OZHSzu9+nVHHh3dh+NX95RsGqFpq/
-Jd/ehYHOAR1XNtgmENtd/GnF8XQLa9ofmi73K+tRgDVitJWRHF9oJx8M0Ao98hAs
-vM5HIbbR9mriV0aaN7e/8fjkEq3w6QPZPvk2AQBzr4YlkakWW5EnhT9jtnWcUf+b
-vGhg9bUNRSbkA8DCCuMvtNP3CiYeK6UkduPFW5IZY8lBAcXVSq5wbnerPl1yMzYp
-eEEb+8yGadFrB/oL+6ONfKxWsqHUfA==
-=0c5t
------END PGP SIGNATURE-----
-
---w6xxpeurpmpzifqw--
+Yours sincerely,
+Vincent Mailhol

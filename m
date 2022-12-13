@@ -2,88 +2,71 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 447CA64AD70
-	for <lists+linux-next@lfdr.de>; Tue, 13 Dec 2022 03:05:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25AF464AD93
+	for <lists+linux-next@lfdr.de>; Tue, 13 Dec 2022 03:23:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233875AbiLMCF1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 12 Dec 2022 21:05:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37940 "EHLO
+        id S234127AbiLMCXK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 12 Dec 2022 21:23:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230052AbiLMCF0 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 12 Dec 2022 21:05:26 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 523D217881;
-        Mon, 12 Dec 2022 18:05:24 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        with ESMTP id S231964AbiLMCXJ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 12 Dec 2022 21:23:09 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A52D5FE2;
+        Mon, 12 Dec 2022 18:23:08 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NWMJy5g0yz4xP9;
-        Tue, 13 Dec 2022 13:05:22 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1670897122;
-        bh=8gpohpkKaPEZLK0i7Vn/D1MJecGEbxxND6wGrwvVEIs=;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 261DAB80E06;
+        Tue, 13 Dec 2022 02:23:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9A6BC433D2;
+        Tue, 13 Dec 2022 02:23:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1670898185;
+        bh=4dd0Jbjx0gjIAljkmA0ZgSH+i9WhUDx2iCgULP7i/E0=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=EcpGbiIboZ/k1QOIyMCk6GecOqmLCs0iD2mPe4H9FA227wnDgs34C5AMQJHX57j9v
-         nD4RfM8L3LCrWWEewNyFcLF7X/SEYCiPyLDVn2BqsnHcZJ+ezIn1Hx6dr/ymX8R2Ek
-         rHWmjMH2AtxS/PLZIpBdDkHkEeAsiccGDgOADM3bdhILfs0pfFgVHn4Z0pC+/ZBTTI
-         E0BO15tB8/Rh36MUaOuG0nyI/37j6Lb4OEK4OeFtvmkYOL+vcW3/PCS5Iveq9VQJQm
-         /eD9+W/C34CEvWFWWqtO8WCLH70Zqf/W+tl5+dclOcL5lX/XqUAyjfHqOIE0LI/CiH
-         1ONgBAoqPqldw==
-Date:   Tue, 13 Dec 2022 13:05:21 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        b=X0HDRs3avxe+K/MYbWB6BMM0/LmaRrkAg7glg+raHBuLqz/wqrjVxgQF9Ag0CyoFt
+         7Ce2timhwby7O+C9TqZi/wWJ/PwJDm4m5Gox/fUB5AcILVJ/8zYBNQz/nrCzN0FH7g
+         LAx2ahqr3StMu4/N8zAvp6um4SHt+i+EF1yBel+c=
+Date:   Mon, 12 Dec 2022 18:23:04 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Kefeng Wang <wangkefeng.wang@huawei.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: failed to fetch the unsigned-char tree
-Message-ID: <20221213130521.5a7af75b@canb.auug.org.au>
-In-Reply-To: <CAHmME9oT+g2oSRK_1s4+dUmBOW9LTVGuT8pYByp=k2YzAc9cpQ@mail.gmail.com>
-References: <20221213115125.51bb83ae@canb.auug.org.au>
-        <CAHmME9oT+g2oSRK_1s4+dUmBOW9LTVGuT8pYByp=k2YzAc9cpQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/dem81hDXNVmd6TEATi4UHyp";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: linux-next: build failure after merge of the mm-hotfixes tree
+Message-Id: <20221212182304.fc148bf08bc17e58ec4b6674@linux-foundation.org>
+In-Reply-To: <e8dfaf60-ff35-66d3-7bc1-f11eaaef642a@huawei.com>
+References: <20221213093054.5211da74@canb.auug.org.au>
+        <e8dfaf60-ff35-66d3-7bc1-f11eaaef642a@huawei.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/dem81hDXNVmd6TEATi4UHyp
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, 13 Dec 2022 09:34:24 +0800 Kefeng Wang <wangkefeng.wang@huawei.com> wrote:
 
-Hi Jason,
+> Hi, this patch relays on Tony Luck's Patch series "Copy-on-write poison 
+> recovery".[1]
+> and tested ppc64_defconfig based on next-20221208, it's no build failure
 
-On Mon, 12 Dec 2022 18:43:20 -0700 "Jason A. Donenfeld" <Jason@zx2c4.com> w=
-rote:
->
-> Was going to write you this evening. Yes, the tree is done (merged to
-> Linus'), and so you can remove it.
+I reordered these a couple of days ago, not sure how Stephen got a hold
+of this tree - perhaps I wasn't pushy enough.
 
-No worries, I will remove it.
+Stephen, quoting the mm-everything tag would be helpful, but rarely
+useful so only if you're feeling bored ;)
 
---=20
-Cheers,
-Stephen Rothwell
+> I think it is not very hotfix, also will send v3 to address some comments
+> we could adjust the patch order in mm tree, thanks.
 
---Sig_/dem81hDXNVmd6TEATi4UHyp
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+This patch is still in mm-unstable so updates won't be a problem. 
+Soon, please.
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOX3eEACgkQAVBC80lX
-0GyNSwf/f2Dr8gDqd1uVYM4a2VZq7XzD2zd3u5I4M6ehTd24Oy/xqAQDE68OIu5X
-0sDQ2Qy1x79pf8UzkUnn7LsCrzkifhxYXReddYHOs/KmyrZLyTicChGZ95d8BNjx
-1lC4lpMkrif2dDr+lXK1Nnz9zkQIjcJJNHh8teaBLFqMFzJO+id267PZlkUqH19U
-4CUhdzSz/6cLzM4JS7dQuJ2KDNkDgKKu4Q1hPpxQ+cIDwblW5jiF/g0+zZ6HSUq9
-Yby/OXIkUPwC/R/KPN1ew7Lj9SnnaRqoF6iCcAeSYp4ZJ2U3wM274wEa8fFOBE/M
-itBVv/xsPDhku5ruSF7vzC/iJXE0LQ==
-=XW7N
------END PGP SIGNATURE-----
-
---Sig_/dem81hDXNVmd6TEATi4UHyp--

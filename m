@@ -2,47 +2,43 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E6EC64AC91
-	for <lists+linux-next@lfdr.de>; Tue, 13 Dec 2022 01:43:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB06D64AC9B
+	for <lists+linux-next@lfdr.de>; Tue, 13 Dec 2022 01:51:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229842AbiLMAm5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 12 Dec 2022 19:42:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59316 "EHLO
+        id S233250AbiLMAva (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 12 Dec 2022 19:51:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233681AbiLMAmy (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 12 Dec 2022 19:42:54 -0500
+        with ESMTP id S229679AbiLMAv3 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 12 Dec 2022 19:51:29 -0500
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9210A175B9;
-        Mon, 12 Dec 2022 16:42:51 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCD0012D1E;
+        Mon, 12 Dec 2022 16:51:28 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NWKTk1PBFz4xP9;
-        Tue, 13 Dec 2022 11:42:50 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NWKgg2lrhz4xN1;
+        Tue, 13 Dec 2022 11:51:26 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1670892170;
-        bh=SBEnFVbGyIZf4zr83m5p1pj4zUPpzH4Y4I/0VbEKNPk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=SfcMh/EXaG6qDGycSNFE3L9XYrqoBGk/mtWOkchXDzlQbCyJY4vIBsx7IVtdGEqJZ
-         xlcMfznvYRl7cZs+Uv1DvrrLhpxqov+F0vEMpem4hpKNBWJpy7zKTVLHsePZC+32vx
-         tXHMWSDxCrG7iCDoClBbrEFdc08y6vObw+fn6UICTGRiOxfWErLLbDWTz5aZtMEt8p
-         36kRLp4I5jiGklc2TX7C3OC9AO72o74qP+b362ohN3fYHHF8H+jL83xo/zYQcH/8ke
-         FmyfskMEFt3ldWAgXyqApgWYvjsvKVx+8moRnCoERzKeH/pXdjfR5iNWgU10smyR5m
-         lIF3Nv75Q9zDw==
-Date:   Tue, 13 Dec 2022 11:42:49 +1100
+        s=201702; t=1670892687;
+        bh=7b0blUPH4VN7Y+xGDYcerOCLn7BZu9/iBPHp4jawqMg=;
+        h=Date:From:To:Cc:Subject:From;
+        b=os0G+Bi3BCTVeCM+rg6JYRKpEz2flTJicINUe/wzySfxS5VRwlC2jGuKzolqSmoug
+         2JfD05IrHN93VJjJO6+MbjSs3EB4lBtsnoJMaTVxE4f/Kg24KCbk2g3PjTekZOu5Eq
+         Caun41b1/NRIX+vr7bCpMIYsNfGcFiJXL2PEJqUNRt78uY2GFTG70lS3rPbqFxD8Gb
+         EiED5/BsLzbuSADnHDp6pH+lA40HNXMNOs2Um+w3JKLe4YDseSg6oPSvf9HZ5UE0lZ
+         Cg2XCJg54lC10G79Tfg3yjqa+Tc2ZSOnprLZkHRXXI/nENjQbhNx5mml8g1JO/V+Sy
+         YoquTF6QirQXw==
+Date:   Tue, 13 Dec 2022 11:51:25 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Signed-off-by missing for commit in the ftrace tree
-Message-ID: <20221213114249.1bac79ce@canb.auug.org.au>
-In-Reply-To: <20221212175642.77cba577@gandalf.local.home>
-References: <20221213085200.772ddd94@canb.auug.org.au>
-        <20221212175642.77cba577@gandalf.local.home>
+Subject: linux-next: failed to fetch the unsigned-char tree
+Message-ID: <20221213115125.51bb83ae@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/mf7S=zQ7Bi5fs1VypkRn_u6";
+Content-Type: multipart/signed; boundary="Sig_/FJQBCLWtZ_VcHXWtwEsT6mJ";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
@@ -53,48 +49,37 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/mf7S=zQ7Bi5fs1VypkRn_u6
+--Sig_/FJQBCLWtZ_VcHXWtwEsT6mJ
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Steven,
+Hi Jason,
 
-On Mon, 12 Dec 2022 17:56:42 -0500 Steven Rostedt <rostedt@goodmis.org> wro=
-te:
->
-> Bah, not sure how this happened. I thought I pulled these patches directly
-> from Masami. Does a rebase change the committer tags? As I probably rebas=
-ed
-> them on top of my branch.
+Trying to fetch the unsigned-char tree produces this error:
 
-=46rom "git help rebase"
+fatal: couldn't find remote ref refs/heads/unsigned-char
 
-       --signoff
-           Add a Signed-off-by trailer to all the rebased commits. Note that
-           if --interactive is given then only commits marked to be picked,
-           edited or reworded will have the trailer added.
-
-So this is not done by default.  Yet another reason to avoid rebasing
-others work unless absolutely necessary.
+Are you finished withe this branch now (so I should remove it from
+linux-next)?
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/mf7S=zQ7Bi5fs1VypkRn_u6
+--Sig_/FJQBCLWtZ_VcHXWtwEsT6mJ
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOXyokACgkQAVBC80lX
-0Gya2wgAizpr7vYZH8O/GtSKri+e2SFsCi/yFO4PvZcDLvE1pGI9YFDHn975z7mT
-4XMR+SeK1sVgUOBVvHVXvqVF8Xt/iMJWvRfyYPBdAKcKVt1AbBHlkzey0M8RNUqo
-AU5OHQ1irunF1+FTNS9VgmeFVY/IYYZucVCC6QOL7qRLCGFi9QbB7Vdg56qbe8Sk
-qxKrNMmbZa/maahWB9m/GHIU2D6MnrehEn9Ag0/z5yX0XhGnOW8pDioT6SzB8tlI
-hZFgUacVc/PIhjeOhJ1HbZyuc/aQk8QrWZCzkNeLb4ulBn5mhj6arJN0r1AE/QGX
-u4WPCM7PqRcsJ0MFNkgFWBT2LQKK+Q==
-=s2Vn
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOXzI4ACgkQAVBC80lX
+0GwDaggAifJVqEGh0gY7EklW+xQrwtr3JaOeMaoKsVOgIwAqQmhsN5PcR4a+zoIe
+Tpz0x8qa6fX4LbbfZ9wvz5qNTVso7H2PfOeXGJDvdnbh3tvTz0GAB0mg9qs08Uvz
+E7up5QbEhnxr5VWTXsxqDxP5LCQduy3g4YTILcAAIuzkwl+41ahIUwHLSes4K948
+MGNUcTZOEheKqM2b0nR4E0r6CYjG9vRtl05IZM0jyQ69XU/+uaDuQrT5MylGcXpW
+rV+pLG89Kh5c3X0GTkxoAtyGWMlTlFiC3tyOyFFUToFNtiBCNJTdyfdpqjo/RYFn
+Bbc2+jJWHbFTyYXaqLI6EU1HgcuDGw==
+=IMD/
 -----END PGP SIGNATURE-----
 
---Sig_/mf7S=zQ7Bi5fs1VypkRn_u6--
+--Sig_/FJQBCLWtZ_VcHXWtwEsT6mJ--

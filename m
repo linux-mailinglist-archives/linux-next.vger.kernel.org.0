@@ -2,47 +2,62 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AF4564AE48
-	for <lists+linux-next@lfdr.de>; Tue, 13 Dec 2022 04:36:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E5EE64AE84
+	for <lists+linux-next@lfdr.de>; Tue, 13 Dec 2022 05:03:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233635AbiLMDg0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 12 Dec 2022 22:36:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44088 "EHLO
+        id S229611AbiLMEDN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 12 Dec 2022 23:03:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229742AbiLMDg0 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 12 Dec 2022 22:36:26 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 496AB30A;
-        Mon, 12 Dec 2022 19:36:25 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        with ESMTP id S233810AbiLMEDL (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 12 Dec 2022 23:03:11 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A6A1BF72;
+        Mon, 12 Dec 2022 20:02:57 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NWPKz5KBTz4xGH;
-        Tue, 13 Dec 2022 14:36:23 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1670902584;
-        bh=0dpZOkMGtFQ5ouhxPQNugoBxiyajUF0B9/0jmQS7pD8=;
-        h=Date:From:To:Cc:Subject:From;
-        b=rWXzh+dzgZ7J/syomEKTY4Fc91svUswM2wBh/0awkjtbT4tM+HoIclPuXAYzAlHgS
-         /JHid2mZf6dIqJzU7wT3Q+YbieBiAWS67WxKKcvLAuYaQfsb5bwnbqxoLHhx4tKqDv
-         j0zLfUwa2hqKKDBXeWS+ylii/ZNXU++PyozagdYag5gkpasm0DhRnv4M7pTPU5Jrlq
-         cj70TOJJBKY7ASDln2im6MI9zN35vic8D7JIPMxNVfpS8jxWEL36QBJvVg+zhJWdkw
-         LCuO77ru+OZslarRk1jHgWXYpIJOdQla+ouw9x18MwYs/uMFrt+R0l42htQ1pOFw4d
-         iEcEa5m2i0t+Q==
-Date:   Tue, 13 Dec 2022 14:36:22 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Theodore Ts'o <tytso@mit.edu>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the random tree
-Message-ID: <20221213143622.5b2cde33@canb.auug.org.au>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AA2966130D;
+        Tue, 13 Dec 2022 04:02:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB1B3C433F0;
+        Tue, 13 Dec 2022 04:02:55 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="p1ZsKnET"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1670904173;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=7XSkE9XEDwIeL1wCcRgHqeRshArevzsrmXKCW6tdvJw=;
+        b=p1ZsKnETLbhinTN7l6f5RMsTOv0iS4qexHhb54loDYQDF9y2vnFGvjjWbO5kmb5gYXcUgY
+        ZlS4PxgDpcqqIqIoe/i/OJEohqDtOulB/QDRAl8e6++2+xz48/h8sS8XGMmlv/vUokRmOM
+        zPuxsa93DPyQF8zVEGNB/Wiw7GufaXw=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 84d75ca8 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Tue, 13 Dec 2022 04:02:52 +0000 (UTC)
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-3f15a6f72d0so176110647b3.1;
+        Mon, 12 Dec 2022 20:02:52 -0800 (PST)
+X-Gm-Message-State: ANoB5pl3n5DVWjf3AFNVY1sLx3zqKZb+uPpPWGIKc+wFrRgunhNFV1NZ
+        WVHdy1o0RbxkggSP0S34+wLHPz0Deo1leqAH88k=
+X-Google-Smtp-Source: AA0mqf7fcAs/ILLlOSGzhQE2i1v4eh2YESooRlTxcjlcKUC9CnxP2wYjTidXDupX4lU2Vx5AZunnVpZPAQKpKA2jeLg=
+X-Received: by 2002:a81:6d86:0:b0:368:e6b8:77f1 with SMTP id
+ i128-20020a816d86000000b00368e6b877f1mr27276845ywc.414.1670904172008; Mon, 12
+ Dec 2022 20:02:52 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/74ThfVkdR13hdIlLRWBFr+h";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+References: <20221213143622.5b2cde33@canb.auug.org.au>
+In-Reply-To: <20221213143622.5b2cde33@canb.auug.org.au>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Mon, 12 Dec 2022 21:02:41 -0700
+X-Gmail-Original-Message-ID: <CAHmME9q91kY=_pGCbwP2RxYpMFqJK_1vyc0=q7nVQ-bi+2HY2Q@mail.gmail.com>
+Message-ID: <CAHmME9q91kY=_pGCbwP2RxYpMFqJK_1vyc0=q7nVQ-bi+2HY2Q@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the random tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     "Theodore Ts'o" <tytso@mit.edu>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,55 +65,4 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/74ThfVkdR13hdIlLRWBFr+h
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-
-Hi all,
-
-After merging the random tree, today's linux-next build (powerpc
-ppc64_defconfig) failed like this:
-
-drivers/char/hw_random/powernv-rng.c: In function 'powernv_rng_read':
-drivers/char/hw_random/powernv-rng.c:26:17: error: implicit declaration of =
-function 'pnv_get_random_long'; did you mean 'get_random_long'? [-Werror=3D=
-implicit-function-declaration]
-   26 |                 pnv_get_random_long(buf++);
-      |                 ^~~~~~~~~~~~~~~~~~~
-      |                 get_random_long
-net/ipv4/tcp_plb.c: In function 'tcp_plb_update_state_upon_rto':
-net/ipv4/tcp_plb.c:100:18: error: implicit declaration of function 'prandom=
-_u32_max'; did you mean 'prandom_u32_state'? [-Werror=3Dimplicit-function-d=
-eclaration]
-  100 |         pause +=3D prandom_u32_max(pause);
-      |                  ^~~~~~~~~~~~~~~
-      |                  prandom_u32_state
-
-The latter call has been added recently, but the former is presumably
-caused by commit
-
-  5d1056fb3dd8 ("random: do not include <asm/archrandom.h> from random.h")
-
-I have used the random tree from next-20221208 for today.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/74ThfVkdR13hdIlLRWBFr+h
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOX8zYACgkQAVBC80lX
-0GyA5gf/aGycVd8m8YJfK1julNDugbWyseoBYyHwjd4elFKDCt0BvBxa4B2gTTUp
-FZGGMmPEBVj3Rw2gfimp+F620aI42K0V8zDk6gtawVRJILVMBYrYUDjFOarZOD5Q
-nOaCpbnjwG/VOdCKOc5TrBu3jgrwmqtujZCLJ0x/Awu0snLB60YiybWNUfkEkXyb
-yuvvVmZ8fpMmG6EuWjerypSwAibKDlarlQ169ppLquJCeHwQ/yCv+5MZJuAgnX2H
-+yXcTSg6Bbz9gxsQcPyZQqumS00B+zESL6UxClE8XpKwTQeV06PaHG6/t7Q/3CAM
-H/QuNim3mySW/ThCykhVmM9M2ZeiCA==
-=YT6h
------END PGP SIGNATURE-----
-
---Sig_/74ThfVkdR13hdIlLRWBFr+h--
+Thanks, addressed.

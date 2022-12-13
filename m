@@ -2,67 +2,91 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E5EE64AE84
-	for <lists+linux-next@lfdr.de>; Tue, 13 Dec 2022 05:03:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06F8564AEA8
+	for <lists+linux-next@lfdr.de>; Tue, 13 Dec 2022 05:37:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229611AbiLMEDN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 12 Dec 2022 23:03:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56406 "EHLO
+        id S234243AbiLMEhT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 12 Dec 2022 23:37:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233810AbiLMEDL (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 12 Dec 2022 23:03:11 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A6A1BF72;
-        Mon, 12 Dec 2022 20:02:57 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S234134AbiLMEhS (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 12 Dec 2022 23:37:18 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28DB31AF25;
+        Mon, 12 Dec 2022 20:37:16 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AA2966130D;
-        Tue, 13 Dec 2022 04:02:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB1B3C433F0;
-        Tue, 13 Dec 2022 04:02:55 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="p1ZsKnET"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1670904173;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=7XSkE9XEDwIeL1wCcRgHqeRshArevzsrmXKCW6tdvJw=;
-        b=p1ZsKnETLbhinTN7l6f5RMsTOv0iS4qexHhb54loDYQDF9y2vnFGvjjWbO5kmb5gYXcUgY
-        ZlS4PxgDpcqqIqIoe/i/OJEohqDtOulB/QDRAl8e6++2+xz48/h8sS8XGMmlv/vUokRmOM
-        zPuxsa93DPyQF8zVEGNB/Wiw7GufaXw=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 84d75ca8 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Tue, 13 Dec 2022 04:02:52 +0000 (UTC)
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-3f15a6f72d0so176110647b3.1;
-        Mon, 12 Dec 2022 20:02:52 -0800 (PST)
-X-Gm-Message-State: ANoB5pl3n5DVWjf3AFNVY1sLx3zqKZb+uPpPWGIKc+wFrRgunhNFV1NZ
-        WVHdy1o0RbxkggSP0S34+wLHPz0Deo1leqAH88k=
-X-Google-Smtp-Source: AA0mqf7fcAs/ILLlOSGzhQE2i1v4eh2YESooRlTxcjlcKUC9CnxP2wYjTidXDupX4lU2Vx5AZunnVpZPAQKpKA2jeLg=
-X-Received: by 2002:a81:6d86:0:b0:368:e6b8:77f1 with SMTP id
- i128-20020a816d86000000b00368e6b877f1mr27276845ywc.414.1670904172008; Mon, 12
- Dec 2022 20:02:52 -0800 (PST)
-MIME-Version: 1.0
-References: <20221213143622.5b2cde33@canb.auug.org.au>
-In-Reply-To: <20221213143622.5b2cde33@canb.auug.org.au>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Mon, 12 Dec 2022 21:02:41 -0700
-X-Gmail-Original-Message-ID: <CAHmME9q91kY=_pGCbwP2RxYpMFqJK_1vyc0=q7nVQ-bi+2HY2Q@mail.gmail.com>
-Message-ID: <CAHmME9q91kY=_pGCbwP2RxYpMFqJK_1vyc0=q7nVQ-bi+2HY2Q@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the random tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     "Theodore Ts'o" <tytso@mit.edu>,
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NWQh64RxMz4xGH;
+        Tue, 13 Dec 2022 15:37:09 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1670906231;
+        bh=6PEiYlZXv+uu49FitHkjRRS1UJTXbjXhNAPpNWM8y28=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Duu0J29EFawFZ+MtrTrwMXPnnpW1LgI9c8xcKDKabqckz2rn0KpTxbJYu4tLF8Zds
+         daTDPneMa3IotmwcyXUCHJuUp8IoOY5ya624BfejrOoNyEB4/6JYmwUo9PstvdO+hV
+         Wiuub0eh9xZlfXaOGlMospmqMtJpkZosuyYPrdQGGPrtSDmtLjBOxF5/9enRKziBZi
+         aoN/0QNKVUm5tzoZFeN3gpus2IHXnYZxXBSiIyctjPMnNIFD++H6Rgo9nxXH2MCxSK
+         fugqyMG5QNvF8fCNDnIVimTBYXcVId23lw/l2fGNklFgAUHRoRPPGQeynYaeAJfkvt
+         IF6lkYWZisO7Q==
+Date:   Tue, 13 Dec 2022 15:37:08 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: linux-next: build warning after merge of the net-next tree
+Message-ID: <20221213153708.4f38a7cf@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/4vSdMI=5FFYser9j2tRif3V";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Thanks, addressed.
+--Sig_/4vSdMI=5FFYser9j2tRif3V
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+
+Hi all,
+
+After merging the net-next tree, today's linux-next build (htmldocs)
+produced this warning:
+
+Documentation/networking/devlink/etas_es58x.rst: WARNING: document isn't in=
+cluded in any toctree
+
+Introduced by commit
+
+  9f63f96aac92 ("Documentation: devlink: add devlink documentation for the =
+etas_es58x driver")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/4vSdMI=5FFYser9j2tRif3V
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOYAXQACgkQAVBC80lX
+0GwzNwf+Ktbnt8UPhIhnot8TWTtyP7Pky0i1OlkD8xz8FXK6CO3blbtg7G/wBnjC
+O8FZNWpjGmFUqmF7e77x9KlcLUdQbkzPitDDm/jax2dRis5gcIthJlLKoYaZlBTA
+xhui+qV/WqmBo5/C2P224IkMHtQcoHMG1/93LGPMBgnm1aCuXnT5dONrmk0S3/0p
+dHuZ4WXIGYHCjMKQ0kuLbMKDs+3mLIUvyb+yqbKW+YXze/VDjpa8v6baLeZ/6v5W
+tpdYwwZCReYvXHrdkyhFHbcF17GPfj8IjsNk82ZBds4+BBew/GdQezSm2xEY2ZgR
+4V1Yi63HiyCxcZhloutLdZGaKl4xUA==
+=PTqh
+-----END PGP SIGNATURE-----
+
+--Sig_/4vSdMI=5FFYser9j2tRif3V--

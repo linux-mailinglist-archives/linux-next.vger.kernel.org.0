@@ -2,142 +2,131 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 192F464BF00
-	for <lists+linux-next@lfdr.de>; Tue, 13 Dec 2022 23:02:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72D2564C0BB
+	for <lists+linux-next@lfdr.de>; Wed, 14 Dec 2022 00:37:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236199AbiLMWCT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 13 Dec 2022 17:02:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54432 "EHLO
+        id S234027AbiLMXhO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 13 Dec 2022 18:37:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237164AbiLMWBq (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 13 Dec 2022 17:01:46 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4F13EB;
-        Tue, 13 Dec 2022 14:00:45 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NWsrC2Dlkz4xYQ;
-        Wed, 14 Dec 2022 09:00:43 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1670968844;
-        bh=dnKDY1oXjcC0Tv/ElhCbaTcvHEJsm3IIOdeK96sWOaY=;
-        h=Date:From:To:Cc:Subject:From;
-        b=KOjC+qxk0SniGC3699LJGn3Mg13cGc6AbZqjHItVe0afRcsZhGlepkXm823jdSow3
-         fxDbJxNyhhACD9dP+5wteSajpQeL4k2s1CPW2IPz8c3ss2A1VrA+67Lt9qpIoyDqal
-         HmD7qTWzBAQXGL7kMDaaLDMuSSBcT8erlr39fryDQcqWma+kPbPqoj0m9uiSWWeSPK
-         gZtzXJwFRZUpKeLryTkoQ3DKE4IsWd2iwiJ4wdo5Yo+Mj0f2csW+0lmYao+19FAhME
-         7s8OUbl+9wwmHuxBc/gm/KmpMek204qf5H4Id/wkIdjU1eZFc2k+XqoWuhPx7TdC4L
-         C078cxdVu37Dw==
-Date:   Wed, 14 Dec 2022 09:00:42 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc:     Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        with ESMTP id S236514AbiLMXhD (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 13 Dec 2022 18:37:03 -0500
+Received: from post.baikalelectronics.com (post.baikalelectronics.com [213.79.110.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 40A292ED;
+        Tue, 13 Dec 2022 15:36:59 -0800 (PST)
+Received: from post.baikalelectronics.com (localhost.localdomain [127.0.0.1])
+        by post.baikalelectronics.com (Proxmox) with ESMTP id EA808E0EF3;
+        Wed, 14 Dec 2022 02:36:57 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        baikalelectronics.ru; h=cc:cc:content-type:content-type:date
+        :from:from:in-reply-to:message-id:mime-version:references
+        :reply-to:subject:subject:to:to; s=post; bh=eBpFStnJo5vywfTywan9
+        sXxiTpddI4vii6gPlA8SHjo=; b=rR7tGQiadPIkYXV+K1vHPD+7LxZeRDf3zsJy
+        Gy7anDLi8y1+Z0vepqspygcZjYDy4OrcuShgQCjUVv6LQrJKBjhN6+amEQkhXP1I
+        hDpYsxMYnWAhHTVViLg4+Cwp7+ZQK++PIyR613zelL8F0tZjNOMWm5tWkUhykVh2
+        Xa+KR/Q=
+Received: from mail.baikal.int (mail.baikal.int [192.168.51.25])
+        by post.baikalelectronics.com (Proxmox) with ESMTP id D0B9CE0EBF;
+        Wed, 14 Dec 2022 02:36:57 +0300 (MSK)
+Received: from mobilestation (10.8.30.6) by mail (192.168.51.25) with
+ Microsoft SMTP Server (TLS) id 15.0.1395.4; Wed, 14 Dec 2022 02:36:57 +0300
+Date:   Wed, 14 Dec 2022 02:36:49 +0300
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+CC:     Thierry Reding <treding@nvidia.com>,
+        Vidya Sagar <vidyas@nvidia.com>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        ARM <linux-arm-kernel@lists.infradead.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the drm-misc-fixes tree with Linus'
- tree
-Message-ID: <20221214090042.1da0da04@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Rob Herring <robh@kernel.org>
+Subject: Re: linux-next: manual merge of the pci tree with the arm-soc tree
+Message-ID: <20221213233649.zmmiskezdponleuc@mobilestation>
+References: <20221213195313.GA200257@bhelgaas>
+ <20221213200733.GA201693@bhelgaas>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Yyb61wh00qLWsTl=2x39==M";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20221213200733.GA201693@bhelgaas>
+X-Originating-IP: [10.8.30.6]
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/Yyb61wh00qLWsTl=2x39==M
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, Dec 13, 2022 at 02:07:33PM -0600, Bjorn Helgaas wrote:
+> On Tue, Dec 13, 2022 at 01:53:13PM -0600, Bjorn Helgaas wrote:
+> > On Tue, Dec 13, 2022 at 10:03:10PM +0300, Serge Semin wrote:
+> > > On Tue, Dec 13, 2022 at 05:48:53PM +0100, Thierry Reding wrote:
+> > > > On Tue, Dec 13, 2022 at 10:21:03AM -0600, Bjorn Helgaas wrote:
+> > > > > On Mon, Dec 05, 2022 at 09:57:38AM +1100, Stephen Rothwell wrote:
+> > > > > > Hi all,
+> > > > > > 
+> > > > > > Today's linux-next merge of the pci tree got a conflict in:
+> > > > > > 
+> > > > > >   Documentation/devicetree/bindings/pci/snps,dw-pcie.yaml
+> > > > > > 
+> > > > > > between commit:
+> > > > > > 
+> > > > > >   5c3741492d2e ("dt-bindings: PCI: tegra234: Add ECAM support")
+> > > > > > 
+> > > > > > from the arm-soc tree and commit:
+> > > > > > 
+> > > > > >   4cc13eedb892 ("dt-bindings: PCI: dwc: Add reg/reg-names common properties")
+> > > > > > 
+> > > > > > from the pci tree.
+> > > > > > 
+> > > > > > I didn't know how to fix this up, so I just used the latter (and so lost
+> > > > > > the addition of "ecam").
+> > > > > 
+> > > > > Did I miss a suggested resolution for this?
+> > > 
+> > > > We had a brief discussion about this in another thread. So basically
+> > > > Stephen's resolution is fine here and the plan is to instead add the
+> > > > ECAM bits that the Tegra patch does in a separate patch on top of
+> > > > Serge's patch. I should get around to sending that patch tomorrow.
+> > > 
+> > > Actually the discussion still goes. I haven't got a respond to my
+> > > last suggestion which seems to me more reasonable than extending the
+> > > DT-bindings with another vendor-specific reg-name. @Bjorn, please join
+> > > the discussion here:
+> > > https://lore.kernel.org/linux-pci/20221114155333.234496-2-jonathanh@nvidia.com/
+> > 
 
-Hi all,
+> > Sorry, it's really too late for discussion.  I need to send the v6.2
+> > pull request today or at the very latest, tomorrow, so the only thing
+> > to decide is how to resolve the merge conflict in the simplest
+> > possible way.  Unless there's a very compelling reason to resolve it
+> > differently than Stephen did, that's going to be the answer.
 
-Today's linux-next merge of the drm-misc-fixes tree got a conflict in:
+Sigh... One more redundant vendor-specific name. I wish I was in the
+Cc-list of the original series.
 
-  drivers/dma-buf/dma-buf.c
+> 
+> To be more specific, the current answer is this (which is the same as
+> what's in next-20221213):
+> 
+>   https://git.kernel.org/cgit/linux/kernel/git/helgaas/pci.git/tree/Documentation/devicetree/bindings/pci/snps,dw-pcie.yaml?id=f64171fdd171
 
-between commit:
+Thanks. I've got it from the @Stephen message. @Thierry will submit a
+new patch with the same 'ecam'-names change rebased on top of the
+updated DT-schema.
 
-  28743e25fa1c ("dma-buf: Remove obsoleted internal lock")
+-Serge(y)
 
-from Linus' tree and commit:
+> 
+> If you think it needs to be different, please respond with a patch and
+> explanation.
+> 
+> Bjorn
+> 
 
-  f728a5ea27c9 ("dma-buf: fix dma_buf_export init order v2")
-
-from the drm-misc-fixes tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc drivers/dma-buf/dma-buf.c
-index b6c36914e7c6,eb6b59363c4f..000000000000
---- a/drivers/dma-buf/dma-buf.c
-+++ b/drivers/dma-buf/dma-buf.c
-@@@ -658,23 -655,24 +660,23 @@@ struct dma_buf *dma_buf_export(const st
-  	init_waitqueue_head(&dmabuf->poll);
-  	dmabuf->cb_in.poll =3D dmabuf->cb_out.poll =3D &dmabuf->poll;
-  	dmabuf->cb_in.active =3D dmabuf->cb_out.active =3D 0;
- -	mutex_init(&dmabuf->lock);
-+ 	INIT_LIST_HEAD(&dmabuf->attachments);
- =20
-  	if (!resv) {
-- 		resv =3D (struct dma_resv *)&dmabuf[1];
-- 		dma_resv_init(resv);
-+ 		dmabuf->resv =3D (struct dma_resv *)&dmabuf[1];
-+ 		dma_resv_init(dmabuf->resv);
-+ 	} else {
-+ 		dmabuf->resv =3D resv;
-  	}
-- 	dmabuf->resv =3D resv;
- =20
-- 	file =3D dma_buf_getfile(dmabuf, exp_info->flags);
-- 	if (IS_ERR(file)) {
-- 		ret =3D PTR_ERR(file);
-+ 	ret =3D dma_buf_stats_setup(dmabuf, file);
-+ 	if (ret)
-  		goto err_dmabuf;
-- 	}
- =20
-+ 	file->private_data =3D dmabuf;
-+ 	file->f_path.dentry->d_fsdata =3D dmabuf;
-  	dmabuf->file =3D file;
- =20
-- 	INIT_LIST_HEAD(&dmabuf->attachments);
--=20
-  	mutex_lock(&db_list.lock);
-  	list_add(&dmabuf->list_node, &db_list.head);
-  	mutex_unlock(&db_list.lock);
-
---Sig_/Yyb61wh00qLWsTl=2x39==M
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOY9goACgkQAVBC80lX
-0GxE4wf/YfEkxbiaehvNd37ZMtx4/2ICMz4VIuMhpjRmPrbP99hv6PHome3nja0A
-4ZVm0zvHSQmrDzNEMQnONhqqZ1kxc9WW5/6Nz0yos/mUUCnAxv6TiadvmxSpOivL
-uV2KW/dorfwLYkmjkycrCq/YYBN9boB3eTShqyBAY/cx4XWc7+klNd0uv+IuNgxN
-/HMZAv2m6C8Lb5W4HbUhUKp99xKRh4Wf08tZu8Gxe8MDwMA4xP/gW3ZBj6EflRT0
-MFm+yvyf3Fmpb8zFAAY+b4tnUyGakJDiX8OX+o4Djtu4jIf40IFE/8ZmcmCQ+B2V
-XWVlge0T8cQ+WrnZ3cXQE+sMhqTacQ==
-=fKvB
------END PGP SIGNATURE-----
-
---Sig_/Yyb61wh00qLWsTl=2x39==M--

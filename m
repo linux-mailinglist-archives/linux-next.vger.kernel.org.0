@@ -2,58 +2,61 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0526D64D1EF
-	for <lists+linux-next@lfdr.de>; Wed, 14 Dec 2022 22:44:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC60F64D229
+	for <lists+linux-next@lfdr.de>; Wed, 14 Dec 2022 23:08:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229774AbiLNVoK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 14 Dec 2022 16:44:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38922 "EHLO
+        id S229882AbiLNWIM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 14 Dec 2022 17:08:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229863AbiLNVnv (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 14 Dec 2022 16:43:51 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05877442F4;
-        Wed, 14 Dec 2022 13:43:48 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NXTQ51VMVz4xFy;
-        Thu, 15 Dec 2022 08:43:41 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1671054222;
-        bh=NlqnpfOSV2+NmSulfrNqSFmeU6Gp9w9H4diODez4Q1w=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=rYUCNxSbbUFL8Bdsz/qcwQ8Gz8/ALmmMSOfGpOvQynvojsC07BONkJQUCY6FRdSEg
-         YgW2Bz48pNPMzzs27xt6c5c3ub08KGERYe62kmiTWdqR+b+Cgxolulk5rfbY/M8BYq
-         sPV+t2XINciwenZI41V4NjdubdyyhRLyGpvfB5e8egB+4/zqvpbNMDFUuFnqK5TeSR
-         DTGE8jzNvtz6TuOR5m1NgvRmNyaDQc3Yt/Bp5mQZbXOgaSqnePZtYDZlo1KA7si3Lj
-         pdibMnrAzN1SKE1fN8lpC5i1Run6Qq9fNsWihiLOUlnElIeq02FW8iUdbvIk5SxElR
-         kpWrfwzLxKl2A==
-Date:   Thu, 15 Dec 2022 08:43:40 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrii Nakryiko <andrii@kernel.org>,
-        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-Cc:     David Miller <davem@davemloft.net>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Eduard Zingerman <eddyz87@gmail.com>,
+        with ESMTP id S229816AbiLNWH4 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 14 Dec 2022 17:07:56 -0500
+Received: from post.baikalelectronics.com (post.baikalelectronics.com [213.79.110.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 50F7945EC1;
+        Wed, 14 Dec 2022 14:07:45 -0800 (PST)
+Received: from post.baikalelectronics.com (localhost.localdomain [127.0.0.1])
+        by post.baikalelectronics.com (Proxmox) with ESMTP id 70CE2E0ECE;
+        Thu, 15 Dec 2022 01:07:43 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        baikalelectronics.ru; h=cc:cc:content-type:content-type:date
+        :from:from:in-reply-to:message-id:mime-version:references
+        :reply-to:subject:subject:to:to; s=post; bh=/pCoygs5Nbt8sxuIV43i
+        ggr91RZ3NVAA60Esp/Lu/S8=; b=exy0dl6DLMlA944DjHI0U7kivAb1sLYnIfro
+        aUY1r9ZJ0Z8MeN+tGgzfYFNd5NzBhK3c+ky307y/HuH6iM5UUhIiu3HyoJbQf7N4
+        4Bh36nBKSCpG086NC+6Y2c/y66Ts48u81C7snPwbc0KS2O+KeG+wLqRTzgK7T38A
+        Pyv2Cf4=
+Received: from mail.baikal.int (mail.baikal.int [192.168.51.25])
+        by post.baikalelectronics.com (Proxmox) with ESMTP id 5BC48E0E70;
+        Thu, 15 Dec 2022 01:07:43 +0300 (MSK)
+Received: from mobilestation (10.8.30.6) by mail (192.168.51.25) with
+ Microsoft SMTP Server (TLS) id 15.0.1395.4; Thu, 15 Dec 2022 01:07:42 +0300
+Date:   Thu, 15 Dec 2022 01:07:35 +0300
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Thierry Reding <treding@nvidia.com>
+CC:     Rob Herring <robh@kernel.org>, Bjorn Helgaas <helgaas@kernel.org>,
+        Vidya Sagar <vidyas@nvidia.com>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        ARM <linux-arm-kernel@lists.infradead.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>
-Subject: Re: linux-next: manual merge of the bpf-next tree with the perf
- tree
-Message-ID: <20221215084340.01522de0@canb.auug.org.au>
-In-Reply-To: <20221114121606.14436235@canb.auug.org.au>
-References: <20221111104009.0edfa8a6@canb.auug.org.au>
-        <20221114121606.14436235@canb.auug.org.au>
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: Re: linux-next: manual merge of the pci tree with the arm-soc tree
+Message-ID: <20221214220735.5fv6agbkwamvfmbv@mobilestation>
+References: <20221213195313.GA200257@bhelgaas>
+ <20221213200733.GA201693@bhelgaas>
+ <20221213233649.zmmiskezdponleuc@mobilestation>
+ <Y5nfr+AXofk9Ch2m@orome>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/jRdeCr5DUIEbCVNZafec/RM";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <Y5nfr+AXofk9Ch2m@orome>
+X-Originating-IP: [10.8.30.6]
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,100 +64,79 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/jRdeCr5DUIEbCVNZafec/RM
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Wed, Dec 14, 2022 at 03:37:35PM +0100, Thierry Reding wrote:
+> On Wed, Dec 14, 2022 at 02:36:49AM +0300, Serge Semin wrote:
+> > On Tue, Dec 13, 2022 at 02:07:33PM -0600, Bjorn Helgaas wrote:
+> > > On Tue, Dec 13, 2022 at 01:53:13PM -0600, Bjorn Helgaas wrote:
+> > > > On Tue, Dec 13, 2022 at 10:03:10PM +0300, Serge Semin wrote:
+> > > > > On Tue, Dec 13, 2022 at 05:48:53PM +0100, Thierry Reding wrote:
+> > > > > > On Tue, Dec 13, 2022 at 10:21:03AM -0600, Bjorn Helgaas wrote:
+> > > > > > > On Mon, Dec 05, 2022 at 09:57:38AM +1100, Stephen Rothwell wrote:
+> > > > > > > > Hi all,
+> > > > > > > > 
+> > > > > > > > Today's linux-next merge of the pci tree got a conflict in:
+> > > > > > > > 
+> > > > > > > >   Documentation/devicetree/bindings/pci/snps,dw-pcie.yaml
+> > > > > > > > 
+> > > > > > > > between commit:
+> > > > > > > > 
+> > > > > > > >   5c3741492d2e ("dt-bindings: PCI: tegra234: Add ECAM support")
+> > > > > > > > 
+> > > > > > > > from the arm-soc tree and commit:
+> > > > > > > > 
+> > > > > > > >   4cc13eedb892 ("dt-bindings: PCI: dwc: Add reg/reg-names common properties")
+> > > > > > > > 
+> > > > > > > > from the pci tree.
+> > > > > > > > 
+> > > > > > > > I didn't know how to fix this up, so I just used the latter (and so lost
+> > > > > > > > the addition of "ecam").
+> > > > > > > 
+> > > > > > > Did I miss a suggested resolution for this?
+> > > > > 
+> > > > > > We had a brief discussion about this in another thread. So basically
+> > > > > > Stephen's resolution is fine here and the plan is to instead add the
+> > > > > > ECAM bits that the Tegra patch does in a separate patch on top of
+> > > > > > Serge's patch. I should get around to sending that patch tomorrow.
+> > > > > 
+> > > > > Actually the discussion still goes. I haven't got a respond to my
+> > > > > last suggestion which seems to me more reasonable than extending the
+> > > > > DT-bindings with another vendor-specific reg-name. @Bjorn, please join
+> > > > > the discussion here:
+> > > > > https://lore.kernel.org/linux-pci/20221114155333.234496-2-jonathanh@nvidia.com/
+> > > > 
+> > 
+> > > > Sorry, it's really too late for discussion.  I need to send the v6.2
+> > > > pull request today or at the very latest, tomorrow, so the only thing
+> > > > to decide is how to resolve the merge conflict in the simplest
+> > > > possible way.  Unless there's a very compelling reason to resolve it
+> > > > differently than Stephen did, that's going to be the answer.
+> > 
+> > Sigh... One more redundant vendor-specific name. I wish I was in the
+> > Cc-list of the original series.
+> > 
+> > > 
+> > > To be more specific, the current answer is this (which is the same as
+> > > what's in next-20221213):
+> > > 
+> > >   https://git.kernel.org/cgit/linux/kernel/git/helgaas/pci.git/tree/Documentation/devicetree/bindings/pci/snps,dw-pcie.yaml?id=f64171fdd171
+> > 
+> > Thanks. I've got it from the @Stephen message. @Thierry will submit a
+> > new patch with the same 'ecam'-names change rebased on top of the
+> > updated DT-schema.
+> 
 
-Hi all,
+> If Rob doesn't mind this being broken in linux-next for a few more days,
+> I can discuss this internally with our PCI and UEFI teams and find out
+> if your proposal could be made to work.
 
-On Mon, 14 Nov 2022 12:16:06 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> On Fri, 11 Nov 2022 10:40:09 +1100 Stephen Rothwell <sfr@canb.auug.org.au=
-> wrote:
-> >=20
-> > Today's linux-next merge of the bpf-next tree got a conflict in:
-> >=20
-> >   tools/perf/util/stat.c
-> >=20
-> > between commit:
-> >=20
-> >   8b76a3188b85 ("perf stat: Remove unused perf_counts.aggr field")
-> >=20
-> > from the perf tree and commit:
-> >=20
-> >   c302378bc157 ("libbpf: Hashmap interface update to allow both long an=
-d void* keys/values")
-> >=20
-> > from the bpf-next tree.
-> >=20
-> > I fixed it up (see below) and can carry the fix as necessary. This
-> > is now fixed as far as linux-next is concerned, but any non trivial
-> > conflicts should be mentioned to your upstream maintainer when your tree
-> > is submitted for merging.  You may also want to consider cooperating
-> > with the maintainer of the conflicting tree to minimise any particularly
-> > complex conflicts.
-> >=20
-> > --=20
-> > Cheers,
-> > Stephen Rothwell
-> >=20
-> > diff --cc tools/perf/util/stat.c
-> > index 3a432a949d46,c0656f85bfa5..000000000000
-> > --- a/tools/perf/util/stat.c
-> > +++ b/tools/perf/util/stat.c
-> > @@@ -318,7 -258,27 +318,7 @@@ void evlist__copy_prev_raw_counts(struc
-> >   		evsel__copy_prev_raw_counts(evsel);
-> >   }
-> >  =20
-> > - static size_t pkg_id_hash(const void *__key, void *ctx __maybe_unused)
-> >  -void evlist__save_aggr_prev_raw_counts(struct evlist *evlist)
-> >  -{
-> >  -	struct evsel *evsel;
-> >  -
-> >  -	/*
-> >  -	 * To collect the overall statistics for interval mode,
-> >  -	 * we copy the counts from evsel->prev_raw_counts to
-> >  -	 * evsel->counts. The perf_stat_process_counter creates
-> >  -	 * aggr values from per cpu values, but the per cpu values
-> >  -	 * are 0 for AGGR_GLOBAL. So we use a trick that saves the
-> >  -	 * previous aggr value to the first member of perf_counts,
-> >  -	 * then aggr calculation in process_counter_values can work
-> >  -	 * correctly.
-> >  -	 */
-> >  -	evlist__for_each_entry(evlist, evsel) {
-> >  -		*perf_counts(evsel->prev_raw_counts, 0, 0) =3D
-> >  -			evsel->prev_raw_counts->aggr;
-> >  -	}
-> >  -}
-> >  -
-> > + static size_t pkg_id_hash(long __key, void *ctx __maybe_unused)
-> >   {
-> >   	uint64_t *key =3D (uint64_t *) __key;
-> >    =20
->=20
-> This is now a conflict between perf tree and the net-next tree.
+That would be awesome if you managed to work with the already defined
+'config' reg-name so the DT-schema would look a bit cleaner. Thanks
+in advance.
 
-This is now a conflict between the perf tree and Linus' tree.
+-Serge(y)
 
---=20
-Cheers,
-Stephen Rothwell
+> 
+> Thierry
 
---Sig_/jRdeCr5DUIEbCVNZafec/RM
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
 
------BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOaQ4wACgkQAVBC80lX
-0GyGGwgAnlmxEGYWYYPiAc3YCvFti4PWjBtd5sr1POcvdb/nlvtZFjZ2wv4MJxK7
-SFnrK26w61Vtd8uuvwATz+0iUlYQ/kk3LSKy+RRQRVdZ+crkuTeKIyrYtjczFocF
-5JvPqIQXCJXN7DfUPFqBCV3tB4IaV2Xe/vC39UOU9ajhzarc0dlnTDpQMDynf/dK
-S4yF9eQCA9A/9dgbRALYTEGfhJXhWeTjzgLf5BEQQPr4zRd1JBaUKg/a4S+PZL4t
-+VAJaNwhiyKgsEmjFEu/EQHYNVT7JiMB69NN6u8x3BY3vZWW8pFISqi2pdedpeMa
-x2kuX9Bai/QIj+r0NRWR8KJKF7aTvQ==
-=WNQ7
------END PGP SIGNATURE-----
-
---Sig_/jRdeCr5DUIEbCVNZafec/RM--

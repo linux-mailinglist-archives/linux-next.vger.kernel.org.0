@@ -2,52 +2,68 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 068B064C0FA
-	for <lists+linux-next@lfdr.de>; Wed, 14 Dec 2022 01:00:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0E4D64C116
+	for <lists+linux-next@lfdr.de>; Wed, 14 Dec 2022 01:17:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235762AbiLNAAN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 13 Dec 2022 19:00:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32962 "EHLO
+        id S237568AbiLNARp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 13 Dec 2022 19:17:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236598AbiLNAAL (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 13 Dec 2022 19:00:11 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0DED22B09;
-        Tue, 13 Dec 2022 16:00:07 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NWwTy39y9z4xTy;
-        Wed, 14 Dec 2022 11:00:06 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1670976006;
-        bh=6IxHzOntWyfTMx/B6f6SmAj78Lr5q2MkC9fRVpcEsSQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=iHQB4xAfbERLWix8QgnuI9IzrmvpdHCPnM9T1MtWZowNe25zc9PKHsL+v+WDVodb4
-         vF5IVWUnEFXh+P4r644B9e0Hstq0GF065/kBr6jh98cwijxVK9b2O4QkOXhciGXddN
-         vuWfjaX/2X32kDtVuc9zUGxDtVQdMCXGPCJ4vmSJuXpnTLs1gCMZVE7onqHaPx1VVW
-         qL+Rsr5rKrOPmX0sxlWPoqkKv21QeoIndQYB27Kwt8fW4p7PR2sdhqd7J5CslxH0Et
-         1Al/uXDfscmKpgDhZwjk/+qspXP60sCixhTuOI4XePWrsraia5pXsgzOaNPxuq2Yrh
-         HSS6vSwm2Mu/w==
-Date:   Wed, 14 Dec 2022 11:00:05 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     John Johansen <john.johansen@canonical.com>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Rae Moar <rmoar@google.com>
-Subject: Re: linux-next: manual merge of the kunit-next tree with the
- apparmor tree
-Message-ID: <20221214110005.35944aa3@canb.auug.org.au>
-In-Reply-To: <20221208135327.01364529@canb.auug.org.au>
-References: <20221208135327.01364529@canb.auug.org.au>
+        with ESMTP id S238637AbiLNART (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 13 Dec 2022 19:17:19 -0500
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72921233BA
+        for <linux-next@vger.kernel.org>; Tue, 13 Dec 2022 16:13:59 -0800 (PST)
+Received: by mail-pl1-x630.google.com with SMTP id x2so321162plb.13
+        for <linux-next@vger.kernel.org>; Tue, 13 Dec 2022 16:13:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=/9lE8d8Bst9JNkCChsFMldqnRq/Kuf1G48jRNvtC8gk=;
+        b=L5MMb/55ovhsN1CRUuiPiAZ9Kq8oHoav9OybloF5LHTb5Jq1Q3gzLefRB8yNdPZFfr
+         N2ctTo2c4HPUPMKDlMRGcA0LcJGxmCMQMjWe0bg7iT5M8AFPZPtDfPRc2BReDSfra+Bu
+         lFGq0IAY70sw5eFNrQN4nj9dT6MVHMXh82bsfB8ToieTBhlImWaf01GYuXmcUeNr1u7u
+         azrSemTdXw09xtEfN0x5eViEo8yC43a92O9RE5IlrvmEvOtdzuXpquMvdzJEHFIolXH3
+         2yWoEs+4h3iMkytmHgbF7R3acreFfu+gWu4jvwCrvu/wzGtqFtGuXPSgOz304CcTPnGT
+         qZKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/9lE8d8Bst9JNkCChsFMldqnRq/Kuf1G48jRNvtC8gk=;
+        b=dVVwGIKcl3qU1PoPa5pOAZKCEvVjVEBcAUUgzaszAAdfph0/Rp1FwWCgh7KQnrKTuP
+         t9eRFp0Whg8YZ25y0tt8ixcVU8Tr2FN2EUf4l2Ch2jIyLA3bHYdb7MfGp/LdvaaaCLNT
+         XBlwclbBKHKbqERQpGI+1M5ZQ72Kig8R2RsDnNd+e2FPBfUOpM4E3N476mYc/LBcwFCW
+         TulPXbcnomaTUWkC/nUduVUjAPGATeB97KXbxBA66V1Q4ha05/DUTlJ0Rt8aDZT54Uv/
+         ippVnEOGTaAE2lTr4PKa4s34cKhQ2VLGP9oOB/jCQfTcxihBv8XoauIzwlNvFIynNtuh
+         wYwg==
+X-Gm-Message-State: ANoB5pkIMXn537ScYK9bw4/NJ/qdyqgZKE4+Y0wNrZZKbjKrIUCR36+6
+        BEOjBLnjob2XWi21ZZzji9/3AhPBobvq8qV3yo+8jw==
+X-Google-Smtp-Source: AA0mqf79LSrOJBf70A6x8QDqO/zjleBlhjoUvn3/nTYuDp1leuFSN3cp3Cag5qzqurEWLRNqdqe19g==
+X-Received: by 2002:a17:902:7043:b0:189:d560:8b70 with SMTP id h3-20020a170902704300b00189d5608b70mr21586218plt.3.1670976837562;
+        Tue, 13 Dec 2022 16:13:57 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id e8-20020a170902784800b00186c3afb49esm440314pln.209.2022.12.13.16.13.56
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Dec 2022 16:13:56 -0800 (PST)
+Message-ID: <63991544.170a0220.7ff07.1931@mx.google.com>
+Date:   Tue, 13 Dec 2022 16:13:56 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/QOo_PT64wEGpxQRGwuf3wfJ";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: pending-fixes
+X-Kernelci-Kernel: v6.1-6378-g44d433ee7540
+X-Kernelci-Report-Type: build
+X-Kernelci-Tree: next
+Subject: next/pending-fixes build: 185 builds: 4 failed, 181 passed, 7 errors,
+ 46 warnings (v6.1-6378-g44d433ee7540)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,811 +71,1221 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/QOo_PT64wEGpxQRGwuf3wfJ
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+next/pending-fixes build: 185 builds: 4 failed, 181 passed, 7 errors, 46 wa=
+rnings (v6.1-6378-g44d433ee7540)
 
-Hi all,
+Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
+rnel/v6.1-6378-g44d433ee7540/
 
-On Thu, 8 Dec 2022 13:53:27 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
->
-> Today's linux-next merge of the kunit-next tree got a conflict in:
->=20
->   security/apparmor/policy_unpack.c
->=20
-> between commits:
->=20
->   371e50a0b19f ("apparmor: make unpack_array return a trianary value")
->   73c7e91c8bc9 ("apparmor: Remove unnecessary size check when unpacking t=
-rans_table")
->   217af7e2f4de ("apparmor: refactor profile rules and attachments")
-> (and probably others)
->=20
-> from the apparmor tree and commit:
->=20
->   2c92044683f5 ("apparmor: test: make static symbols visible during kunit=
- testing")
->=20
-> from the kunit-next tree.
->=20
-> This is somewhat of a mess ... pity there is not a shared branch (or
-> better routing if the patches).
->=20
-> I fixed it up (hopefully - see below) and can carry the fix as
-> necessary. This is now fixed as far as linux-next is concerned, but any
-> non trivial conflicts should be mentioned to your upstream maintainer
-> when your tree is submitted for merging.  You may also want to consider
-> cooperating with the maintainer of the conflicting tree to minimise any
-> particularly complex conflicts.
->=20
-> I also had to add this patch:
->=20
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Thu, 8 Dec 2022 13:47:43 +1100
-> Subject: [PATCH] fixup for "apparmor: make unpack_array return a trianary=
- value"
->=20
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> ---
->  security/apparmor/include/policy_unpack.h | 8 +++++++-
->  security/apparmor/policy_unpack.c         | 5 -----
->  2 files changed, 7 insertions(+), 6 deletions(-)
->=20
-> diff --git a/security/apparmor/include/policy_unpack.h b/security/apparmo=
-r/include/policy_unpack.h
-> index 940da8a33e0c..8fdf8f703bd0 100644
-> --- a/security/apparmor/include/policy_unpack.h
-> +++ b/security/apparmor/include/policy_unpack.h
-> @@ -172,7 +172,13 @@ bool aa_unpack_X(struct aa_ext *e, enum aa_code code=
-);
->  bool aa_unpack_nameX(struct aa_ext *e, enum aa_code code, const char *na=
-me);
->  bool aa_unpack_u32(struct aa_ext *e, u32 *data, const char *name);
->  bool aa_unpack_u64(struct aa_ext *e, u64 *data, const char *name);
-> -size_t aa_unpack_array(struct aa_ext *e, const char *name);
-> +
-> +#define tri int
-> +#define TRI_TRUE 1
-> +#define TRI_NONE 0
-> +#define TRI_FALSE -1
-> +
-> +tri aa_unpack_array(struct aa_ext *e, const char *name, u16 *size);
->  size_t aa_unpack_blob(struct aa_ext *e, char **blob, const char *name);
->  int aa_unpack_str(struct aa_ext *e, const char **string, const char *nam=
-e);
->  int aa_unpack_strdup(struct aa_ext *e, char **string, const char *name);
-> diff --git a/security/apparmor/policy_unpack.c b/security/apparmor/policy=
-_unpack.c
-> index 6513545dad5e..173d832fc4ee 100644
-> --- a/security/apparmor/policy_unpack.c
-> +++ b/security/apparmor/policy_unpack.c
-> @@ -30,11 +30,6 @@
->  #include "include/policy_unpack.h"
->  #include "include/policy_compat.h"
-> =20
-> -#define tri int
-> -#define TRI_TRUE 1
-> -#define TRI_NONE 0
-> -#define TRI_FALSE -1
-> -
->  /* audit callback for unpack fields */
->  static void audit_cb(struct audit_buffer *ab, void *va)
->  {
-> --=20
-> 2.35.1
->=20
-> --=20
-> Cheers,
-> Stephen Rothwell
->=20
-> diff --cc security/apparmor/policy_unpack.c
-> index 1bf8cfb8700a,12e535fdfa8b..000000000000
-> --- a/security/apparmor/policy_unpack.c
-> +++ b/security/apparmor/policy_unpack.c
-> @@@ -14,9 -14,10 +14,10 @@@
->    */
->  =20
->   #include <asm/unaligned.h>
-> + #include <kunit/visibility.h>
->   #include <linux/ctype.h>
->   #include <linux/errno.h>
->  -#include <linux/zlib.h>
->  +#include <linux/zstd.h>
->  =20
->   #include "include/apparmor.h"
->   #include "include/audit.h"
-> @@@ -27,50 -27,16 +28,12 @@@
->   #include "include/path.h"
->   #include "include/policy.h"
->   #include "include/policy_unpack.h"
->  +#include "include/policy_compat.h"
->  =20
-> -=20
-> - /*
-> -  * The AppArmor interface treats data as a type byte followed by the
-> -  * actual data.  The interface has the notion of a named entry
-> -  * which has a name (AA_NAME typecode followed by name string) followed=
- by
-> -  * the entries typecode and data.  Named types allow for optional
-> -  * elements and extensions to be added and tested for without breaking
-> -  * backwards compatibility.
-> -  */
-> -=20
-> - enum aa_code {
-> - 	AA_U8,
-> - 	AA_U16,
-> - 	AA_U32,
-> - 	AA_U64,
-> - 	AA_NAME,		/* same as string except it is items name */
-> - 	AA_STRING,
-> - 	AA_BLOB,
-> - 	AA_STRUCT,
-> - 	AA_STRUCTEND,
-> - 	AA_LIST,
-> - 	AA_LISTEND,
-> - 	AA_ARRAY,
-> - 	AA_ARRAYEND,
-> - };
-> -=20
-> - /*
-> -  * aa_ext is the read of the buffer containing the serialized profile. =
- The
-> -  * data is copied into a kernel buffer in apparmorfs and then handed of=
-f to
-> -  * the unpack routines.
-> -  */
-> - struct aa_ext {
-> - 	void *start;
-> - 	void *end;
-> - 	void *pos;		/* pointer to current position in the buffer */
-> - 	u32 version;
-> - };
->  -#define K_ABI_MASK 0x3ff
->  -#define FORCE_COMPLAIN_FLAG 0x800
->  -#define VERSION_LT(X, Y) (((X) & K_ABI_MASK) < ((Y) & K_ABI_MASK))
->  -#define VERSION_GT(X, Y) (((X) & K_ABI_MASK) > ((Y) & K_ABI_MASK))
-> --
->  -#define v5	5	/* base version */
->  -#define v6	6	/* per entry policydb mediation check */
->  -#define v7	7
->  -#define v8	8	/* full network masking */
->  +#define tri int
->  +#define TRI_TRUE 1
->  +#define TRI_NONE 0
->  +#define TRI_FALSE -1
->  =20
->   /* audit callback for unpack fields */
->   static void audit_cb(struct audit_buffer *ab, void *va)
-> @@@ -348,26 -319,28 +316,28 @@@ fail
->   	e->pos =3D pos;
->   	return false;
->   }
-> + EXPORT_SYMBOL_IF_KUNIT(aa_unpack_u64);
->  =20
-> - static tri unpack_array(struct aa_ext *e, const char *name, u16 *size)
->  -VISIBLE_IF_KUNIT size_t aa_unpack_array(struct aa_ext *e, const char *n=
-ame)
-> ++VISIBLE_IF_KUNIT tri aa_unpack_array(struct aa_ext *e, const char *name=
-, u16 *size)
->   {
->   	void *pos =3D e->pos;
->  =20
-> - 	if (unpack_nameX(e, AA_ARRAY, name)) {
-> - 		if (!inbounds(e, sizeof(u16)))
-> + 	if (aa_unpack_nameX(e, AA_ARRAY, name)) {
->  -		int size;
-> + 		if (!aa_inbounds(e, sizeof(u16)))
->   			goto fail;
->  -		size =3D (int)le16_to_cpu(get_unaligned((__le16 *) e->pos));
->  +		*size =3D le16_to_cpu(get_unaligned((__le16 *) e->pos));
->   		e->pos +=3D sizeof(u16);
->  -		return size;
->  +		return TRI_TRUE;
->   	}
->  =20
->  +	return TRI_NONE;
->   fail:
->   	e->pos =3D pos;
->  -	return 0;
->  +	return TRI_FALSE;
->   }
-> + EXPORT_SYMBOL_IF_KUNIT(aa_unpack_array);
->  =20
-> - static size_t unpack_blob(struct aa_ext *e, char **blob, const char *na=
-me)
-> + VISIBLE_IF_KUNIT size_t aa_unpack_blob(struct aa_ext *e, char **blob, c=
-onst char *name)
->   {
->   	void *pos =3D e->pos;
->  =20
-> @@@ -470,36 -447,32 +443,36 @@@ static struct aa_dfa *unpack_dfa(struc
->   /**
->    * unpack_trans_table - unpack a profile transition table
->    * @e: serialized data extent information  (NOT NULL)
->  - * @profile: profile to add the accept table to (NOT NULL)
->  + * @table: str table to unpack to (NOT NULL)
->    *
->  - * Returns: true if table successfully unpacked
->  + * Returns: true if table successfully unpacked or not present
->    */
->  -static bool unpack_trans_table(struct aa_ext *e, struct aa_profile *pro=
-file)
->  +static bool unpack_trans_table(struct aa_ext *e, struct aa_str_table *s=
-trs)
->   {
->   	void *saved_pos =3D e->pos;
->  +	char **table =3D NULL;
->  =20
->   	/* exec table is optional */
-> - 	if (unpack_nameX(e, AA_STRUCT, "xtable")) {
-> + 	if (aa_unpack_nameX(e, AA_STRUCT, "xtable")) {
->  -		int i, size;
->  -
->  -		size =3D aa_unpack_array(e, NULL);
->  -		/* currently 4 exec bits and entries 0-3 are reserved iupcx */
->  -		if (size > 16 - 4)
->  +		u16 size;
->  +		int i;
->  +
-> - 		if (unpack_array(e, NULL, &size) !=3D TRI_TRUE)
-> ++		if (aa_unpack_array(e, NULL, &size) !=3D TRI_TRUE)
->  +			/*
->  +			 * Note: index into trans table array is a max
->  +			 * of 2^24, but unpack array can only unpack
->  +			 * an array of 2^16 in size atm so no need
->  +			 * for size check here
->  +			 */
->   			goto fail;
->  -		profile->file.trans.table =3D kcalloc(size, sizeof(char *),
->  -						    GFP_KERNEL);
->  -		if (!profile->file.trans.table)
->  +		table =3D kcalloc(size, sizeof(char *), GFP_KERNEL);
->  +		if (!table)
->   			goto fail;
->  =20
->  -		profile->file.trans.size =3D size;
->   		for (i =3D 0; i < size; i++) {
->   			char *str;
-> - 			int c, j, pos, size2 =3D unpack_strdup(e, &str, NULL);
-> - 			/* unpack_strdup verifies that the last character is
-> + 			int c, j, pos, size2 =3D aa_unpack_strdup(e, &str, NULL);
-> + 			/* aa_unpack_strdup verifies that the last character is
->   			 * null termination byte.
->   			 */
->   			if (!size2)
-> @@@ -534,13 -507,10 +507,13 @@@
->   				/* fail - all other cases with embedded \0 */
->   				goto fail;
->   		}
-> - 		if (!unpack_nameX(e, AA_ARRAYEND, NULL))
-> + 		if (!aa_unpack_nameX(e, AA_ARRAYEND, NULL))
->   			goto fail;
-> - 		if (!unpack_nameX(e, AA_STRUCTEND, NULL))
-> + 		if (!aa_unpack_nameX(e, AA_STRUCTEND, NULL))
->   			goto fail;
->  +
->  +		strs->table =3D table;
->  +		strs->size =3D size;
->   	}
->   	return true;
->  =20
-> @@@ -554,23 -524,21 +527,23 @@@ static bool unpack_xattrs(struct aa_ex
->   {
->   	void *pos =3D e->pos;
->  =20
-> - 	if (unpack_nameX(e, AA_STRUCT, "xattrs")) {
-> + 	if (aa_unpack_nameX(e, AA_STRUCT, "xattrs")) {
->  -		int i, size;
->  +		u16 size;
->  +		int i;
->  =20
-> - 		if (unpack_array(e, NULL, &size) !=3D TRI_TRUE)
->  -		size =3D aa_unpack_array(e, NULL);
->  -		profile->xattr_count =3D size;
->  -		profile->xattrs =3D kcalloc(size, sizeof(char *), GFP_KERNEL);
->  -		if (!profile->xattrs)
-> ++		if (aa_unpack_array(e, NULL, &size) !=3D TRI_TRUE)
->  +			goto fail;
->  +		profile->attach.xattr_count =3D size;
->  +		profile->attach.xattrs =3D kcalloc(size, sizeof(char *), GFP_KERNEL);
->  +		if (!profile->attach.xattrs)
->   			goto fail;
->   		for (i =3D 0; i < size; i++) {
-> - 			if (!unpack_strdup(e, &profile->attach.xattrs[i], NULL))
->  -			if (!aa_unpack_strdup(e, &profile->xattrs[i], NULL))
-> ++			if (!aa_unpack_strdup(e, &profile->attach.xattrs[i], NULL))
->   				goto fail;
->   		}
-> - 		if (!unpack_nameX(e, AA_ARRAYEND, NULL))
-> + 		if (!aa_unpack_nameX(e, AA_ARRAYEND, NULL))
->   			goto fail;
-> - 		if (!unpack_nameX(e, AA_STRUCTEND, NULL))
-> + 		if (!aa_unpack_nameX(e, AA_STRUCTEND, NULL))
->   			goto fail;
->   	}
->  =20
-> @@@ -581,34 -549,32 +554,34 @@@ fail
->   	return false;
->   }
->  =20
->  -static bool unpack_secmark(struct aa_ext *e, struct aa_profile *profile)
->  +static bool unpack_secmark(struct aa_ext *e, struct aa_ruleset *rules)
->   {
->   	void *pos =3D e->pos;
->  -	int i, size;
->  +	u16 size;
->  +	int i;
->  =20
-> - 	if (unpack_nameX(e, AA_STRUCT, "secmark")) {
-> - 		if (unpack_array(e, NULL, &size) !=3D TRI_TRUE)
-> + 	if (aa_unpack_nameX(e, AA_STRUCT, "secmark")) {
->  -		size =3D aa_unpack_array(e, NULL);
-> ++		if (aa_unpack_array(e, NULL, &size) !=3D TRI_TRUE)
->  +			goto fail;
->  =20
->  -		profile->secmark =3D kcalloc(size, sizeof(struct aa_secmark),
->  +		rules->secmark =3D kcalloc(size, sizeof(struct aa_secmark),
->   					   GFP_KERNEL);
->  -		if (!profile->secmark)
->  +		if (!rules->secmark)
->   			goto fail;
->  =20
->  -		profile->secmark_count =3D size;
->  +		rules->secmark_count =3D size;
->  =20
->   		for (i =3D 0; i < size; i++) {
->  -			if (!unpack_u8(e, &profile->secmark[i].audit, NULL))
->  +			if (!unpack_u8(e, &rules->secmark[i].audit, NULL))
->   				goto fail;
->  -			if (!unpack_u8(e, &profile->secmark[i].deny, NULL))
->  +			if (!unpack_u8(e, &rules->secmark[i].deny, NULL))
->   				goto fail;
-> - 			if (!unpack_strdup(e, &rules->secmark[i].label, NULL))
->  -			if (!aa_unpack_strdup(e, &profile->secmark[i].label, NULL))
-> ++			if (!aa_unpack_strdup(e, &rules->secmark[i].label, NULL))
->   				goto fail;
->   		}
-> - 		if (!unpack_nameX(e, AA_ARRAYEND, NULL))
-> + 		if (!aa_unpack_nameX(e, AA_ARRAYEND, NULL))
->   			goto fail;
-> - 		if (!unpack_nameX(e, AA_STRUCTEND, NULL))
-> + 		if (!aa_unpack_nameX(e, AA_STRUCTEND, NULL))
->   			goto fail;
->   	}
->  =20
-> @@@ -632,27 -598,26 +605,27 @@@ static bool unpack_rlimits(struct aa_ex
->   	void *pos =3D e->pos;
->  =20
->   	/* rlimits are optional */
-> - 	if (unpack_nameX(e, AA_STRUCT, "rlimits")) {
-> + 	if (aa_unpack_nameX(e, AA_STRUCT, "rlimits")) {
->  -		int i, size;
->  +		u16 size;
->  +		int i;
->   		u32 tmp =3D 0;
-> - 		if (!unpack_u32(e, &tmp, NULL))
-> + 		if (!aa_unpack_u32(e, &tmp, NULL))
->   			goto fail;
->  -		profile->rlimits.mask =3D tmp;
->  +		rules->rlimits.mask =3D tmp;
->  =20
-> - 		if (unpack_array(e, NULL, &size) !=3D TRI_TRUE ||
->  -		size =3D aa_unpack_array(e, NULL);
->  -		if (size > RLIM_NLIMITS)
-> ++		if (aa_unpack_array(e, NULL, &size) !=3D TRI_TRUE ||
->  +		    size > RLIM_NLIMITS)
->   			goto fail;
->   		for (i =3D 0; i < size; i++) {
->   			u64 tmp2 =3D 0;
->   			int a =3D aa_map_resource(i);
-> - 			if (!unpack_u64(e, &tmp2, NULL))
-> + 			if (!aa_unpack_u64(e, &tmp2, NULL))
->   				goto fail;
->  -			profile->rlimits.limits[a].rlim_max =3D tmp2;
->  +			rules->rlimits.limits[a].rlim_max =3D tmp2;
->   		}
-> - 		if (!unpack_nameX(e, AA_ARRAYEND, NULL))
-> + 		if (!aa_unpack_nameX(e, AA_ARRAYEND, NULL))
->   			goto fail;
-> - 		if (!unpack_nameX(e, AA_STRUCTEND, NULL))
-> + 		if (!aa_unpack_nameX(e, AA_STRUCTEND, NULL))
->   			goto fail;
->   	}
->   	return true;
-> @@@ -662,144 -627,6 +635,144 @@@ fail
->   	return false;
->   }
->  =20
->  +static bool unpack_perm(struct aa_ext *e, u32 version, struct aa_perms =
-*perm)
->  +{
->  +	bool res;
->  +
->  +	if (version !=3D 1)
->  +		return false;
->  +
-> - 	res =3D unpack_u32(e, &perm->allow, NULL);
-> - 	res =3D res && unpack_u32(e, &perm->allow, NULL);
-> - 	res =3D res && unpack_u32(e, &perm->deny, NULL);
-> - 	res =3D res && unpack_u32(e, &perm->subtree, NULL);
-> - 	res =3D res && unpack_u32(e, &perm->cond, NULL);
-> - 	res =3D res && unpack_u32(e, &perm->kill, NULL);
-> - 	res =3D res && unpack_u32(e, &perm->complain, NULL);
-> - 	res =3D res && unpack_u32(e, &perm->prompt, NULL);
-> - 	res =3D res && unpack_u32(e, &perm->audit, NULL);
-> - 	res =3D res && unpack_u32(e, &perm->quiet, NULL);
-> - 	res =3D res && unpack_u32(e, &perm->hide, NULL);
-> - 	res =3D res && unpack_u32(e, &perm->xindex, NULL);
-> - 	res =3D res && unpack_u32(e, &perm->tag, NULL);
-> - 	res =3D res && unpack_u32(e, &perm->label, NULL);
-> ++	res =3D aa_unpack_u32(e, &perm->allow, NULL);
-> ++	res =3D res && aa_unpack_u32(e, &perm->allow, NULL);
-> ++	res =3D res && aa_unpack_u32(e, &perm->deny, NULL);
-> ++	res =3D res && aa_unpack_u32(e, &perm->subtree, NULL);
-> ++	res =3D res && aa_unpack_u32(e, &perm->cond, NULL);
-> ++	res =3D res && aa_unpack_u32(e, &perm->kill, NULL);
-> ++	res =3D res && aa_unpack_u32(e, &perm->complain, NULL);
-> ++	res =3D res && aa_unpack_u32(e, &perm->prompt, NULL);
-> ++	res =3D res && aa_unpack_u32(e, &perm->audit, NULL);
-> ++	res =3D res && aa_unpack_u32(e, &perm->quiet, NULL);
-> ++	res =3D res && aa_unpack_u32(e, &perm->hide, NULL);
-> ++	res =3D res && aa_unpack_u32(e, &perm->xindex, NULL);
-> ++	res =3D res && aa_unpack_u32(e, &perm->tag, NULL);
-> ++	res =3D res && aa_unpack_u32(e, &perm->label, NULL);
->  +
->  +	return res;
->  +}
->  +
->  +static ssize_t unpack_perms_table(struct aa_ext *e, struct aa_perms **p=
-erms)
->  +{
->  +	void *pos =3D e->pos;
->  +	u16 size =3D 0;
->  +
->  +	AA_BUG(!perms);
->  +	/*
->  +	 * policy perms are optional, in which case perms are embedded
->  +	 * in the dfa accept table
->  +	 */
-> - 	if (unpack_nameX(e, AA_STRUCT, "perms")) {
-> ++	if (aa_unpack_nameX(e, AA_STRUCT, "perms")) {
->  +		int i;
->  +		u32 version;
->  +
-> - 		if (!unpack_u32(e, &version, "version"))
-> ++		if (!aa_unpack_u32(e, &version, "version"))
->  +			goto fail_reset;
-> - 		if (unpack_array(e, NULL, &size) !=3D TRI_TRUE)
-> ++		if (aa_unpack_array(e, NULL, &size) !=3D TRI_TRUE)
->  +			goto fail_reset;
->  +		*perms =3D kcalloc(size, sizeof(struct aa_perms), GFP_KERNEL);
->  +		if (!*perms)
->  +			goto fail_reset;
->  +		for (i =3D 0; i < size; i++) {
->  +			if (!unpack_perm(e, version, &(*perms)[i]))
->  +				goto fail;
->  +		}
-> - 		if (!unpack_nameX(e, AA_ARRAYEND, NULL))
-> ++		if (!aa_unpack_nameX(e, AA_ARRAYEND, NULL))
->  +			goto fail;
-> - 		if (!unpack_nameX(e, AA_STRUCTEND, NULL))
-> ++		if (!aa_unpack_nameX(e, AA_STRUCTEND, NULL))
->  +			goto fail;
->  +	} else
->  +		*perms =3D NULL;
->  +
->  +	return size;
->  +
->  +fail:
->  +	kfree(*perms);
->  +fail_reset:
->  +	e->pos =3D pos;
->  +	return -EPROTO;
->  +}
->  +
->  +static int unpack_pdb(struct aa_ext *e, struct aa_policydb *policy,
->  +		      bool required_dfa, bool required_trans,
->  +		      const char **info)
->  +{
->  +	void *pos =3D e->pos;
->  +	int i, flags, error =3D -EPROTO;
->  +	ssize_t size;
->  +
->  +	size =3D unpack_perms_table(e, &policy->perms);
->  +	if (size < 0) {
->  +		error =3D size;
->  +		policy->perms =3D NULL;
->  +		*info =3D "failed to unpack - perms";
->  +		goto fail;
->  +	}
->  +	policy->size =3D size;
->  +
->  +	if (policy->perms) {
->  +		/* perms table present accept is index */
->  +		flags =3D TO_ACCEPT1_FLAG(YYTD_DATA32);
->  +	} else {
->  +		/* packed perms in accept1 and accept2 */
->  +		flags =3D TO_ACCEPT1_FLAG(YYTD_DATA32) |
->  +			TO_ACCEPT2_FLAG(YYTD_DATA32);
->  +	}
->  +
->  +	policy->dfa =3D unpack_dfa(e, flags);
->  +	if (IS_ERR(policy->dfa)) {
->  +		error =3D PTR_ERR(policy->dfa);
->  +		policy->dfa =3D NULL;
->  +		*info =3D "failed to unpack - dfa";
->  +		goto fail;
->  +	} else if (!policy->dfa) {
->  +		if (required_dfa) {
->  +			*info =3D "missing required dfa";
->  +			goto fail;
->  +		}
->  +		goto out;
->  +	}
->  +
->  +	/*
->  +	 * only unpack the following if a dfa is present
->  +	 *
->  +	 * sadly start was given different names for file and policydb
->  +	 * but since it is optional we can try both
->  +	 */
-> - 	if (!unpack_u32(e, &policy->start[0], "start"))
-> ++	if (!aa_unpack_u32(e, &policy->start[0], "start"))
->  +		/* default start state */
->  +		policy->start[0] =3D DFA_START;
-> - 	if (!unpack_u32(e, &policy->start[AA_CLASS_FILE], "dfa_start")) {
-> ++	if (!aa_unpack_u32(e, &policy->start[AA_CLASS_FILE], "dfa_start")) {
->  +		/* default start state for xmatch and file dfa */
->  +		policy->start[AA_CLASS_FILE] =3D DFA_START;
->  +	}	/* setup class index */
->  +	for (i =3D AA_CLASS_FILE + 1; i <=3D AA_CLASS_LAST; i++) {
->  +		policy->start[i] =3D aa_dfa_next(policy->dfa, policy->start[0],
->  +					       i);
->  +	}
->  +	if (!unpack_trans_table(e, &policy->trans) && required_trans) {
->  +		*info =3D "failed to unpack profile transition table";
->  +		goto fail;
->  +	}
->  +
->  +	/* TODO: move compat mapping here, requires dfa merging first */
->  +	/* TODO: move verify here, it has to be done after compat mappings */
->  +out:
->  +	return 0;
->  +
->  +fail:
->  +	e->pos =3D pos;
->  +	return error;
->  +}
->  +
->   static u32 strhash(const void *data, u32 len, u32 seed)
->   {
->   	const char * const *key =3D data;
-> @@@ -858,29 -683,26 +831,29 @@@ static struct aa_profile *unpack_profil
->   	}
->  =20
->   	profile =3D aa_alloc_profile(name, NULL, GFP_KERNEL);
->  -	if (!profile)
->  -		return ERR_PTR(-ENOMEM);
->  +	if (!profile) {
->  +		info =3D "out of memory";
->  +		error =3D -ENOMEM;
->  +		goto fail;
->  +	}
->  +	rules =3D list_first_entry(&profile->rules, typeof(*rules), list);
->  =20
->   	/* profile renaming is optional */
-> - 	(void) unpack_str(e, &profile->rename, "rename");
-> + 	(void) aa_unpack_str(e, &profile->rename, "rename");
->  =20
->   	/* attachment string is optional */
-> - 	(void) unpack_str(e, &profile->attach.xmatch_str, "attach");
->  -	(void) aa_unpack_str(e, &profile->attach, "attach");
-> ++	(void) aa_unpack_str(e, &profile->attach.xmatch_str, "attach");
->  =20
->   	/* xmatch is optional and may be NULL */
->  -	profile->xmatch =3D unpack_dfa(e);
->  -	if (IS_ERR(profile->xmatch)) {
->  -		error =3D PTR_ERR(profile->xmatch);
->  -		profile->xmatch =3D NULL;
->  +	error =3D unpack_pdb(e, &profile->attach.xmatch, false, false, &info);
->  +	if (error) {
->   		info =3D "bad xmatch";
->   		goto fail;
->   	}
->  -	/* xmatch_len is not optional if xmatch is set */
->  -	if (profile->xmatch) {
->  +
->  +	/* neither xmatch_len not xmatch_perms are optional if xmatch is set */
->  +	if (profile->attach.xmatch.dfa) {
-> - 		if (!unpack_u32(e, &tmp, NULL)) {
-> + 		if (!aa_unpack_u32(e, &tmp, NULL)) {
->   			info =3D "missing xmatch len";
->   			goto fail;
->   		}
-> @@@ -943,38 -757,38 +916,38 @@@
->   		profile->path_flags =3D PATH_MEDIATE_DELETED;
->  =20
->   	info =3D "failed to unpack profile capabilities";
-> - 	if (!unpack_u32(e, &(rules->caps.allow.cap[0]), NULL))
->  -	if (!aa_unpack_u32(e, &(profile->caps.allow.cap[0]), NULL))
-> ++	if (!aa_unpack_u32(e, &(rules->caps.allow.cap[0]), NULL))
->   		goto fail;
-> - 	if (!unpack_u32(e, &(rules->caps.audit.cap[0]), NULL))
->  -	if (!aa_unpack_u32(e, &(profile->caps.audit.cap[0]), NULL))
-> ++	if (!aa_unpack_u32(e, &(rules->caps.audit.cap[0]), NULL))
->   		goto fail;
-> - 	if (!unpack_u32(e, &(rules->caps.quiet.cap[0]), NULL))
->  -	if (!aa_unpack_u32(e, &(profile->caps.quiet.cap[0]), NULL))
-> ++	if (!aa_unpack_u32(e, &(rules->caps.quiet.cap[0]), NULL))
->   		goto fail;
-> - 	if (!unpack_u32(e, &tmpcap.cap[0], NULL))
-> + 	if (!aa_unpack_u32(e, &tmpcap.cap[0], NULL))
->   		goto fail;
->  =20
->   	info =3D "failed to unpack upper profile capabilities";
-> - 	if (unpack_nameX(e, AA_STRUCT, "caps64")) {
-> + 	if (aa_unpack_nameX(e, AA_STRUCT, "caps64")) {
->   		/* optional upper half of 64 bit caps */
-> - 		if (!unpack_u32(e, &(rules->caps.allow.cap[1]), NULL))
->  -		if (!aa_unpack_u32(e, &(profile->caps.allow.cap[1]), NULL))
-> ++		if (!aa_unpack_u32(e, &(rules->caps.allow.cap[1]), NULL))
->   			goto fail;
-> - 		if (!unpack_u32(e, &(rules->caps.audit.cap[1]), NULL))
->  -		if (!aa_unpack_u32(e, &(profile->caps.audit.cap[1]), NULL))
-> ++		if (!aa_unpack_u32(e, &(rules->caps.audit.cap[1]), NULL))
->   			goto fail;
-> - 		if (!unpack_u32(e, &(rules->caps.quiet.cap[1]), NULL))
->  -		if (!aa_unpack_u32(e, &(profile->caps.quiet.cap[1]), NULL))
-> ++		if (!aa_unpack_u32(e, &(rules->caps.quiet.cap[1]), NULL))
->   			goto fail;
-> - 		if (!unpack_u32(e, &(tmpcap.cap[1]), NULL))
-> + 		if (!aa_unpack_u32(e, &(tmpcap.cap[1]), NULL))
->   			goto fail;
-> - 		if (!unpack_nameX(e, AA_STRUCTEND, NULL))
-> + 		if (!aa_unpack_nameX(e, AA_STRUCTEND, NULL))
->   			goto fail;
->   	}
->  =20
->   	info =3D "failed to unpack extended profile capabilities";
-> - 	if (unpack_nameX(e, AA_STRUCT, "capsx")) {
-> + 	if (aa_unpack_nameX(e, AA_STRUCT, "capsx")) {
->   		/* optional extended caps mediation mask */
-> - 		if (!unpack_u32(e, &(rules->caps.extended.cap[0]), NULL))
->  -		if (!aa_unpack_u32(e, &(profile->caps.extended.cap[0]), NULL))
-> ++		if (!aa_unpack_u32(e, &(rules->caps.extended.cap[0]), NULL))
->   			goto fail;
-> - 		if (!unpack_u32(e, &(rules->caps.extended.cap[1]), NULL))
->  -		if (!aa_unpack_u32(e, &(profile->caps.extended.cap[1]), NULL))
-> ++		if (!aa_unpack_u32(e, &(rules->caps.extended.cap[1]), NULL))
->   			goto fail;
-> - 		if (!unpack_nameX(e, AA_STRUCTEND, NULL))
-> + 		if (!aa_unpack_nameX(e, AA_STRUCTEND, NULL))
->   			goto fail;
->   	}
->  =20
-> @@@ -993,55 -807,62 +966,55 @@@
->   		goto fail;
->   	}
->  =20
-> - 	if (unpack_nameX(e, AA_STRUCT, "policydb")) {
-> + 	if (aa_unpack_nameX(e, AA_STRUCT, "policydb")) {
->   		/* generic policy dfa - optional and may be NULL */
->   		info =3D "failed to unpack policydb";
->  -		profile->policy.dfa =3D unpack_dfa(e);
->  -		if (IS_ERR(profile->policy.dfa)) {
->  -			error =3D PTR_ERR(profile->policy.dfa);
->  -			profile->policy.dfa =3D NULL;
->  -			goto fail;
->  -		} else if (!profile->policy.dfa) {
->  -			error =3D -EPROTO;
->  +		error =3D unpack_pdb(e, &rules->policy, true, false,
->  +				   &info);
->  +		if (error)
->   			goto fail;
->  -		}
->  -		if (!aa_unpack_u32(e, &profile->policy.start[0], "start"))
->  -			/* default start state */
->  -			profile->policy.start[0] =3D DFA_START;
->  -		/* setup class index */
->  -		for (i =3D AA_CLASS_FILE; i <=3D AA_CLASS_LAST; i++) {
->  -			profile->policy.start[i] =3D
->  -				aa_dfa_next(profile->policy.dfa,
->  -					    profile->policy.start[0],
->  -					    i);
->  -		}
->  +		/* Fixup: drop when we get rid of start array */
->  +		if (aa_dfa_next(rules->policy.dfa, rules->policy.start[0],
->  +				AA_CLASS_FILE))
->  +			rules->policy.start[AA_CLASS_FILE] =3D
->  +			  aa_dfa_next(rules->policy.dfa,
->  +				      rules->policy.start[0],
->  +				      AA_CLASS_FILE);
-> - 		if (!unpack_nameX(e, AA_STRUCTEND, NULL))
-> + 		if (!aa_unpack_nameX(e, AA_STRUCTEND, NULL))
->   			goto fail;
->  +		error =3D aa_compat_map_policy(&rules->policy, e->version);
->  +		if (error) {
->  +			info =3D "failed to remap policydb permission table";
->  +			goto fail;
->  +		}
->   	} else
->  -		profile->policy.dfa =3D aa_get_dfa(nulldfa);
->  +		rules->policy.dfa =3D aa_get_dfa(nulldfa);
->  =20
->   	/* get file rules */
->  -	profile->file.dfa =3D unpack_dfa(e);
->  -	if (IS_ERR(profile->file.dfa)) {
->  -		error =3D PTR_ERR(profile->file.dfa);
->  -		profile->file.dfa =3D NULL;
->  -		info =3D "failed to unpack profile file rules";
->  +	error =3D unpack_pdb(e, &rules->file, false, true, &info);
->  +	if (error) {
->   		goto fail;
->  -	} else if (profile->file.dfa) {
->  -		if (!aa_unpack_u32(e, &profile->file.start, "dfa_start"))
->  -			/* default start state */
->  -			profile->file.start =3D DFA_START;
->  -	} else if (profile->policy.dfa &&
->  -		   profile->policy.start[AA_CLASS_FILE]) {
->  -		profile->file.dfa =3D aa_get_dfa(profile->policy.dfa);
->  -		profile->file.start =3D profile->policy.start[AA_CLASS_FILE];
->  +	} else if (rules->file.dfa) {
->  +		error =3D aa_compat_map_file(&rules->file);
->  +		if (error) {
->  +			info =3D "failed to remap file permission table";
->  +			goto fail;
->  +		}
->  +	} else if (rules->policy.dfa &&
->  +		   rules->policy.start[AA_CLASS_FILE]) {
->  +		rules->file.dfa =3D aa_get_dfa(rules->policy.dfa);
->  +		rules->file.start[AA_CLASS_FILE] =3D rules->policy.start[AA_CLASS_FIL=
-E];
->   	} else
->  -		profile->file.dfa =3D aa_get_dfa(nulldfa);
->  -
->  -	if (!unpack_trans_table(e, profile)) {
->  -		info =3D "failed to unpack profile transition table";
->  -		goto fail;
->  -	}
->  +		rules->file.dfa =3D aa_get_dfa(nulldfa);
->  =20
->  +	error =3D -EPROTO;
-> - 	if (unpack_nameX(e, AA_STRUCT, "data")) {
-> + 	if (aa_unpack_nameX(e, AA_STRUCT, "data")) {
->   		info =3D "out of memory";
->   		profile->data =3D kzalloc(sizeof(*profile->data), GFP_KERNEL);
->  -		if (!profile->data)
->  +		if (!profile->data) {
->  +			error =3D -ENOMEM;
->   			goto fail;
->  -
->  +		}
->   		params.nelem_hint =3D 3;
->   		params.key_len =3D sizeof(void *);
->   		params.key_offset =3D offsetof(struct aa_data, key);
+Tree: next
+Branch: pending-fixes
+Git Describe: v6.1-6378-g44d433ee7540
+Git Commit: 44d433ee7540ae754756ea95f9cd7f51e285fb5f
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Built: 8 unique architectures
 
-This is now a conflict between the apparmor tree and Linus' tree
-(including the updated fix patch).
+Build Failures Detected:
 
---=20
-Cheers,
-Stephen Rothwell
+arm:
+    allmodconfig: (gcc-10) FAIL
+    multi_v5_defconfig: (gcc-10) FAIL
+    rpc_defconfig: (gcc-10) FAIL
 
---Sig_/QOo_PT64wEGpxQRGwuf3wfJ
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+mips:
+    decstation_64_defconfig: (gcc-10) FAIL
 
------BEGIN PGP SIGNATURE-----
+Errors and Warnings Detected:
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOZEgUACgkQAVBC80lX
-0Gzjigf/UUF5WOcHWBESHx1O1jLBaxcRYy6uZcQd41IVSPsa+/Ih3hWSpNJSUdD7
-hrRK7XixwWW7tic8XwAaucDA3UaX6MSSfOQnASB+fOS8D/OS3mfX5oIqcjEGEpjT
-en3XLlaCExJ+KdCnZ3JzeLpCb76V/j5yQqzhpG+QMHLoCYwVq/CeXoBVxwUa9hiy
-l/yCfEJZcX/oIcYfwBYrl0/uFuiWCg6K9dRddbrFKxg/k25sHGKouWz2SIEB7rJb
-LsX0WyYQcl5lo1z09C6ZpCPpfD6PqotJgURlLSbFFgtPVUETXe7pepYxr0f8MBsR
-9o9JBvShXf9EGCLhwzHAtzZrwQeQnA==
-=Zafh
------END PGP SIGNATURE-----
+arc:
 
---Sig_/QOo_PT64wEGpxQRGwuf3wfJ--
+arm64:
+
+arm:
+    allmodconfig (gcc-10): 1 error, 1 warning
+    keystone_defconfig (gcc-10): 1 warning
+    moxart_defconfig (gcc-10): 1 warning
+    rpc_defconfig (gcc-10): 2 errors
+    tct_hammer_defconfig (gcc-10): 1 warning
+    tegra_defconfig (gcc-10): 1 warning
+    viper_defconfig (gcc-10): 1 warning
+
+i386:
+
+mips:
+    32r2el_defconfig (gcc-10): 1 warning
+    32r2el_defconfig+debug (gcc-10): 1 warning
+    ar7_defconfig (gcc-10): 1 warning
+    bmips_be_defconfig (gcc-10): 11 warnings
+    bmips_stb_defconfig (gcc-10): 11 warnings
+    fuloong2e_defconfig (gcc-10): 1 error
+    lemote2f_defconfig (gcc-10): 1 error
+    loongson2k_defconfig (gcc-10): 1 error
+    loongson3_defconfig (gcc-10): 1 error
+    rb532_defconfig (gcc-10): 2 warnings
+    rs90_defconfig (gcc-10): 1 warning
+
+riscv:
+
+sparc:
+    allnoconfig (gcc-10): 1 warning
+    sparc32_defconfig (gcc-10): 2 warnings
+    sparc64_defconfig (gcc-10): 4 warnings
+    sparc64_defconfig+debug (gcc-10): 2 warnings
+    sparc64_defconfig+kselftest (gcc-10): 2 warnings
+    tinyconfig (gcc-10): 1 warning
+
+x86_64:
+
+Errors summary:
+
+    4    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=
+=80=98-mhard-float=E2=80=99
+    1    include/linux/fortify-string.h:57:29: error: argument 2 null where=
+ non-null expected [-Werror=3Dnonnull]
+    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=
+=3D0x'
+    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=
+=3D0x'
+
+Warnings summary:
+
+    10   <stdin>:1517:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+    8    fs/coredump.c:838:12: warning: =E2=80=98dump_emit_page=E2=80=99 de=
+fined but not used [-Wunused-function]
+    2    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
+e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
+ted "0,0"
+    2    arch/mips/boot/dts/brcm/bcm63268.dtsi:120.5-22: Warning (reg_forma=
+t): /ubus/timer-mfd@10000080/watchdog@1c:reg: property has invalid length (=
+8 bytes) (#address-cells =3D=3D 2, #size-cells =3D=3D 1)
+    2    arch/mips/boot/dts/brcm/bcm63268.dtsi:118.21-126.6: Warning (avoid=
+_default_addr_size): /ubus/timer-mfd@10000080/watchdog@1c: Relying on defau=
+lt #size-cells value
+    2    arch/mips/boot/dts/brcm/bcm63268.dtsi:118.21-126.6: Warning (avoid=
+_default_addr_size): /ubus/timer-mfd@10000080/watchdog@1c: Relying on defau=
+lt #address-cells value
+    2    arch/mips/boot/dts/brcm/bcm63268.dtsi:115.5-22: Warning (reg_forma=
+t): /ubus/timer-mfd@10000080/timer@0:reg: property has invalid length (8 by=
+tes) (#address-cells =3D=3D 2, #size-cells =3D=3D 1)
+    2    arch/mips/boot/dts/brcm/bcm63268.dtsi:113.12-116.6: Warning (avoid=
+_default_addr_size): /ubus/timer-mfd@10000080/timer@0: Relying on default #=
+size-cells value
+    2    arch/mips/boot/dts/brcm/bcm63268.dtsi:113.12-116.6: Warning (avoid=
+_default_addr_size): /ubus/timer-mfd@10000080/timer@0: Relying on default #=
+address-cells value
+    2    arch/mips/boot/dts/brcm/bcm63268.dtsi:111.4-35: Warning (ranges_fo=
+rmat): /ubus/timer-mfd@10000080:ranges: "ranges" property has invalid lengt=
+h (12 bytes) (parent #address-cells =3D=3D 1, child #address-cells =3D=3D 2=
+, #size-cells =3D=3D 1)
+    2    arch/mips/boot/dts/brcm/bcm63268-comtrend-vr-3032u.dtb: Warning (s=
+pi_bus_reg): Failed prerequisite 'reg_format'
+    2    arch/mips/boot/dts/brcm/bcm63268-comtrend-vr-3032u.dtb: Warning (p=
+ci_device_reg): Failed prerequisite 'reg_format'
+    2    arch/mips/boot/dts/brcm/bcm63268-comtrend-vr-3032u.dtb: Warning (p=
+ci_device_bus_num): Failed prerequisite 'reg_format'
+    2    arch/mips/boot/dts/brcm/bcm63268-comtrend-vr-3032u.dtb: Warning (i=
+2c_bus_reg): Failed prerequisite 'reg_format'
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    1    cc1: warning: result of =E2=80=98-117440512 << 16=E2=80=99 require=
+s 44 bits to represent, but =E2=80=98int=E2=80=99 only has 32 bits [-Wshift=
+-overflow=3D]
+    1    cc1: all warnings being treated as errors
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig+debug (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, =
+0 section mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 section mi=
+smatches
+
+Errors:
+    include/linux/fortify-string.h:57:29: error: argument 2 null where non-=
+null expected [-Werror=3Dnonnull]
+
+Warnings:
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
+mismatches
+
+Warnings:
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+am200epdkit_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+ar7_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
+ mismatches
+
+Warnings:
+    fs/coredump.c:838:12: warning: =E2=80=98dump_emit_page=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+assabet_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+at91_dt_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ath25_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ath79_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+axm55xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+axs103_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+axs103_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+badge4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm2835_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm47xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+bigsur_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bmips_be_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 11 warnings, 0 =
+section mismatches
+
+Warnings:
+    arch/mips/boot/dts/brcm/bcm63268.dtsi:115.5-22: Warning (reg_format): /=
+ubus/timer-mfd@10000080/timer@0:reg: property has invalid length (8 bytes) =
+(#address-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/mips/boot/dts/brcm/bcm63268.dtsi:120.5-22: Warning (reg_format): /=
+ubus/timer-mfd@10000080/watchdog@1c:reg: property has invalid length (8 byt=
+es) (#address-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/mips/boot/dts/brcm/bcm63268.dtsi:111.4-35: Warning (ranges_format)=
+: /ubus/timer-mfd@10000080:ranges: "ranges" property has invalid length (12=
+ bytes) (parent #address-cells =3D=3D 1, child #address-cells =3D=3D 2, #si=
+ze-cells =3D=3D 1)
+    arch/mips/boot/dts/brcm/bcm63268-comtrend-vr-3032u.dtb: Warning (pci_de=
+vice_reg): Failed prerequisite 'reg_format'
+    arch/mips/boot/dts/brcm/bcm63268-comtrend-vr-3032u.dtb: Warning (pci_de=
+vice_bus_num): Failed prerequisite 'reg_format'
+    arch/mips/boot/dts/brcm/bcm63268-comtrend-vr-3032u.dtb: Warning (i2c_bu=
+s_reg): Failed prerequisite 'reg_format'
+    arch/mips/boot/dts/brcm/bcm63268-comtrend-vr-3032u.dtb: Warning (spi_bu=
+s_reg): Failed prerequisite 'reg_format'
+    arch/mips/boot/dts/brcm/bcm63268.dtsi:113.12-116.6: Warning (avoid_defa=
+ult_addr_size): /ubus/timer-mfd@10000080/timer@0: Relying on default #addre=
+ss-cells value
+    arch/mips/boot/dts/brcm/bcm63268.dtsi:113.12-116.6: Warning (avoid_defa=
+ult_addr_size): /ubus/timer-mfd@10000080/timer@0: Relying on default #size-=
+cells value
+    arch/mips/boot/dts/brcm/bcm63268.dtsi:118.21-126.6: Warning (avoid_defa=
+ult_addr_size): /ubus/timer-mfd@10000080/watchdog@1c: Relying on default #a=
+ddress-cells value
+    arch/mips/boot/dts/brcm/bcm63268.dtsi:118.21-126.6: Warning (avoid_defa=
+ult_addr_size): /ubus/timer-mfd@10000080/watchdog@1c: Relying on default #s=
+ize-cells value
+
+---------------------------------------------------------------------------=
+-----
+bmips_stb_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 11 warnings, 0=
+ section mismatches
+
+Warnings:
+    arch/mips/boot/dts/brcm/bcm63268.dtsi:115.5-22: Warning (reg_format): /=
+ubus/timer-mfd@10000080/timer@0:reg: property has invalid length (8 bytes) =
+(#address-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/mips/boot/dts/brcm/bcm63268.dtsi:120.5-22: Warning (reg_format): /=
+ubus/timer-mfd@10000080/watchdog@1c:reg: property has invalid length (8 byt=
+es) (#address-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/mips/boot/dts/brcm/bcm63268.dtsi:111.4-35: Warning (ranges_format)=
+: /ubus/timer-mfd@10000080:ranges: "ranges" property has invalid length (12=
+ bytes) (parent #address-cells =3D=3D 1, child #address-cells =3D=3D 2, #si=
+ze-cells =3D=3D 1)
+    arch/mips/boot/dts/brcm/bcm63268-comtrend-vr-3032u.dtb: Warning (pci_de=
+vice_reg): Failed prerequisite 'reg_format'
+    arch/mips/boot/dts/brcm/bcm63268-comtrend-vr-3032u.dtb: Warning (pci_de=
+vice_bus_num): Failed prerequisite 'reg_format'
+    arch/mips/boot/dts/brcm/bcm63268-comtrend-vr-3032u.dtb: Warning (i2c_bu=
+s_reg): Failed prerequisite 'reg_format'
+    arch/mips/boot/dts/brcm/bcm63268-comtrend-vr-3032u.dtb: Warning (spi_bu=
+s_reg): Failed prerequisite 'reg_format'
+    arch/mips/boot/dts/brcm/bcm63268.dtsi:113.12-116.6: Warning (avoid_defa=
+ult_addr_size): /ubus/timer-mfd@10000080/timer@0: Relying on default #addre=
+ss-cells value
+    arch/mips/boot/dts/brcm/bcm63268.dtsi:113.12-116.6: Warning (avoid_defa=
+ult_addr_size): /ubus/timer-mfd@10000080/timer@0: Relying on default #size-=
+cells value
+    arch/mips/boot/dts/brcm/bcm63268.dtsi:118.21-126.6: Warning (avoid_defa=
+ult_addr_size): /ubus/timer-mfd@10000080/watchdog@1c: Relying on default #a=
+ddress-cells value
+    arch/mips/boot/dts/brcm/bcm63268.dtsi:118.21-126.6: Warning (avoid_defa=
+ult_addr_size): /ubus/timer-mfd@10000080/watchdog@1c: Relying on default #s=
+ize-cells value
+
+---------------------------------------------------------------------------=
+-----
+cavium_octeon_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cerfcube_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+ci20_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+cm_x300_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+cobalt_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+colibri_pxa270_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+colibri_pxa300_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+collie_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+corgi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+cu1000-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cu1830-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+davinci_all_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+db1xxx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+decstation_64_defconfig (mips, gcc-10) =E2=80=94 FAIL, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+decstation_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+decstation_r4k_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_RANDOMIZE_BASE=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
+s, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+arm64-chromebook+videodec (arm64, gcc-10) =E2=80=94 PASS, 0 error=
+s, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+debug (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+eseries_pxa_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+exynos_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ezx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+footbridge_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+fuloong2e_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 s=
+ection mismatches
+
+Errors:
+    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
+=98-mhard-float=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+gcw0_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+gpr_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+h3600_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+h5000_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+hackkit_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig+debug (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warni=
+ngs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+hisi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+hsdk_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+debug (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+imx_v4_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+imx_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+imxrt_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+integrator_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip22_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip27_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip28_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip32_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ixp4xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+jazz_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+jornada720_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+keystone_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    fs/coredump.c:838:12: warning: =E2=80=98dump_emit_page=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+lart_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+lemote2f_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 se=
+ction mismatches
+
+Errors:
+    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
+=98-mhard-float=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+loongson1b_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson1c_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson2k_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 =
+section mismatches
+
+Errors:
+    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
+=98-mhard-float=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+loongson3_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 s=
+ection mismatches
+
+Errors:
+    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
+=98-mhard-float=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+lpc18xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+lpc32xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+lpd270_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+lubbock_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+magician_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_kvm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_qemu_32r6_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
+gs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaaprp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltasmvp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltasmvp_eva_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaup_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaup_xpa_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+milbeaut_m10v_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+mini2440_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+mmp2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+moxart_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    fs/coredump.c:838:12: warning: =E2=80=98dump_emit_page=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+mps2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+mtx1_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v4t_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, gcc-10) =E2=80=94 FAIL, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm, gcc-10) =E2=80=94 PASS, =
+0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (arm, gcc-10) =E2=80=
+=94 PASS, 0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_SMP=3Dn (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0=
+ warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy (arm, gcc-10) =E2=80=94 PASS, 0=
+ errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+crypto (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+ima (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+mvebu_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+mvebu_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+mxs_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+neponset_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+netwinder_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+nhk8815_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_sdcard_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+omap2plus_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+omega2p_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+orion5x_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+oxnas_v6_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+palmz72_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pcm027_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pic32mzda_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+pleb_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa168_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa255-idp_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa910_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+qcom_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+qi_lb60_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+rb532_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    fs/coredump.c:838:12: warning: =E2=80=98dump_emit_page=E2=80=99 defined=
+ but not used [-Wunused-function]
+    cc1: warning: result of =E2=80=98-117440512 << 16=E2=80=99 requires 44 =
+bits to represent, but =E2=80=98int=E2=80=99 only has 32 bits [-Wshift-over=
+flow=3D]
+
+---------------------------------------------------------------------------=
+-----
+rbtx49xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+realview_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+rm200_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rpc_defconfig (arm, gcc-10) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 section=
+ mismatches
+
+Errors:
+    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=3D0x'
+    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=3D0x'
+
+---------------------------------------------------------------------------=
+-----
+rs90_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    fs/coredump.c:838:12: warning: =E2=80=98dump_emit_page=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+rt305x_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rv32_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+s3c2410_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+s3c6400_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+s5pv210_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+sama5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+sama7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+sb1250_swarm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+shannon_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+shmobile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+simpad_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+socfpga_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+sp7021_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc32_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig+debug (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 2 warning=
+s, 0 section mismatches
+
+Warnings:
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig+kselftest (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 2 war=
+nings, 0 section mismatches
+
+Warnings:
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+spear13xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+spear6xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+spitz_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+stm32_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+sunxi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+tct_hammer_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 s=
+ection mismatches
+
+Warnings:
+    fs/coredump.c:838:12: warning: =E2=80=98dump_emit_page=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+tegra_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    fs/coredump.c:838:12: warning: =E2=80=98dump_emit_page=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section m=
+ismatches
+
+Warnings:
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+trizeps4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+u8500_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+versatile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+vexpress_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+vf610m4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+viper_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    fs/coredump.c:838:12: warning: =E2=80=98dump_emit_page=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+vocore2_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+vt8500_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+amdgpu (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
+gs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+crypto (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
+gs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+debug (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, =
+0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook+amdgpu (x86_64, gcc-10) =E2=80=94 PASS, 0 e=
+rrors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86_kvm_guest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0=
+ warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+xcep_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+zeus_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---
+For more info write to <info@kernelci.org>

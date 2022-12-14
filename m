@@ -2,61 +2,50 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC60F64D229
-	for <lists+linux-next@lfdr.de>; Wed, 14 Dec 2022 23:08:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BAF264D3B3
+	for <lists+linux-next@lfdr.de>; Thu, 15 Dec 2022 00:51:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229882AbiLNWIM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 14 Dec 2022 17:08:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47142 "EHLO
+        id S229530AbiLNXvq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 14 Dec 2022 18:51:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229816AbiLNWH4 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 14 Dec 2022 17:07:56 -0500
-Received: from post.baikalelectronics.com (post.baikalelectronics.com [213.79.110.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 50F7945EC1;
-        Wed, 14 Dec 2022 14:07:45 -0800 (PST)
-Received: from post.baikalelectronics.com (localhost.localdomain [127.0.0.1])
-        by post.baikalelectronics.com (Proxmox) with ESMTP id 70CE2E0ECE;
-        Thu, 15 Dec 2022 01:07:43 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        baikalelectronics.ru; h=cc:cc:content-type:content-type:date
-        :from:from:in-reply-to:message-id:mime-version:references
-        :reply-to:subject:subject:to:to; s=post; bh=/pCoygs5Nbt8sxuIV43i
-        ggr91RZ3NVAA60Esp/Lu/S8=; b=exy0dl6DLMlA944DjHI0U7kivAb1sLYnIfro
-        aUY1r9ZJ0Z8MeN+tGgzfYFNd5NzBhK3c+ky307y/HuH6iM5UUhIiu3HyoJbQf7N4
-        4Bh36nBKSCpG086NC+6Y2c/y66Ts48u81C7snPwbc0KS2O+KeG+wLqRTzgK7T38A
-        Pyv2Cf4=
-Received: from mail.baikal.int (mail.baikal.int [192.168.51.25])
-        by post.baikalelectronics.com (Proxmox) with ESMTP id 5BC48E0E70;
-        Thu, 15 Dec 2022 01:07:43 +0300 (MSK)
-Received: from mobilestation (10.8.30.6) by mail (192.168.51.25) with
- Microsoft SMTP Server (TLS) id 15.0.1395.4; Thu, 15 Dec 2022 01:07:42 +0300
-Date:   Thu, 15 Dec 2022 01:07:35 +0300
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Thierry Reding <treding@nvidia.com>
-CC:     Rob Herring <robh@kernel.org>, Bjorn Helgaas <helgaas@kernel.org>,
-        Vidya Sagar <vidyas@nvidia.com>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        ARM <linux-arm-kernel@lists.infradead.org>,
+        with ESMTP id S229488AbiLNXvp (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 14 Dec 2022 18:51:45 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6CD0187;
+        Wed, 14 Dec 2022 15:51:43 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NXXFk22wjz4xGR;
+        Thu, 15 Dec 2022 10:51:38 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1671061898;
+        bh=Jhs0FxkxL1WiMawudA52+qgnbA54iThVsDF4Fvd4VNY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=of1YjaryGKwX2d8tL/g1zkJbffaW989hdvkp2Sm+6HC/unPtFjwVQflvG8OZNeHsV
+         KzLrV2Cao8qqcvRJqQrsa+A7ahPu/WArqUm7OpDCNXgHIdMZ4onM6GKQhTNxNH8fbe
+         gRjW/nOleuKM1tSP3uV6+n612HQrg/CFRaJ+3axrNlS4z+z1FEFe2ec/eeiZgRt+MT
+         CQ/hMr1M19OExj1bt+ocPksUBN5ibML3Aj1TO3Vk63HHS+fOpykg2IzE8/jsWhVve3
+         quFzK4hmbHnG9LatsFryY/oTkQlmRn/iC1bR0ifJ5ym1FKp+8bfrpDdR1qiyPwz+kn
+         Go/i4VYSrnPNg==
+Date:   Thu, 15 Dec 2022 10:51:33 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Alex Williamson <alex.williamson@redhat.com>
+Cc:     Jason Gunthorpe <jgg@nvidia.com>, Jason Gunthorpe <jgg@ziepe.ca>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: Re: linux-next: manual merge of the pci tree with the arm-soc tree
-Message-ID: <20221214220735.5fv6agbkwamvfmbv@mobilestation>
-References: <20221213195313.GA200257@bhelgaas>
- <20221213200733.GA201693@bhelgaas>
- <20221213233649.zmmiskezdponleuc@mobilestation>
- <Y5nfr+AXofk9Ch2m@orome>
+        Yi Liu <yi.l.liu@intel.com>
+Subject: Re: linux-next: manual merge of the iommufd tree with the vfio tree
+Message-ID: <20221215105133.71fc6601@canb.auug.org.au>
+In-Reply-To: <20221206125542.52ea97a7@canb.auug.org.au>
+References: <20221206125542.52ea97a7@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <Y5nfr+AXofk9Ch2m@orome>
-X-Originating-IP: [10.8.30.6]
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+Content-Type: multipart/signed; boundary="Sig_/m4IRHkZ+Nq07H3x/2dNL9DD";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,79 +53,111 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Dec 14, 2022 at 03:37:35PM +0100, Thierry Reding wrote:
-> On Wed, Dec 14, 2022 at 02:36:49AM +0300, Serge Semin wrote:
-> > On Tue, Dec 13, 2022 at 02:07:33PM -0600, Bjorn Helgaas wrote:
-> > > On Tue, Dec 13, 2022 at 01:53:13PM -0600, Bjorn Helgaas wrote:
-> > > > On Tue, Dec 13, 2022 at 10:03:10PM +0300, Serge Semin wrote:
-> > > > > On Tue, Dec 13, 2022 at 05:48:53PM +0100, Thierry Reding wrote:
-> > > > > > On Tue, Dec 13, 2022 at 10:21:03AM -0600, Bjorn Helgaas wrote:
-> > > > > > > On Mon, Dec 05, 2022 at 09:57:38AM +1100, Stephen Rothwell wrote:
-> > > > > > > > Hi all,
-> > > > > > > > 
-> > > > > > > > Today's linux-next merge of the pci tree got a conflict in:
-> > > > > > > > 
-> > > > > > > >   Documentation/devicetree/bindings/pci/snps,dw-pcie.yaml
-> > > > > > > > 
-> > > > > > > > between commit:
-> > > > > > > > 
-> > > > > > > >   5c3741492d2e ("dt-bindings: PCI: tegra234: Add ECAM support")
-> > > > > > > > 
-> > > > > > > > from the arm-soc tree and commit:
-> > > > > > > > 
-> > > > > > > >   4cc13eedb892 ("dt-bindings: PCI: dwc: Add reg/reg-names common properties")
-> > > > > > > > 
-> > > > > > > > from the pci tree.
-> > > > > > > > 
-> > > > > > > > I didn't know how to fix this up, so I just used the latter (and so lost
-> > > > > > > > the addition of "ecam").
-> > > > > > > 
-> > > > > > > Did I miss a suggested resolution for this?
-> > > > > 
-> > > > > > We had a brief discussion about this in another thread. So basically
-> > > > > > Stephen's resolution is fine here and the plan is to instead add the
-> > > > > > ECAM bits that the Tegra patch does in a separate patch on top of
-> > > > > > Serge's patch. I should get around to sending that patch tomorrow.
-> > > > > 
-> > > > > Actually the discussion still goes. I haven't got a respond to my
-> > > > > last suggestion which seems to me more reasonable than extending the
-> > > > > DT-bindings with another vendor-specific reg-name. @Bjorn, please join
-> > > > > the discussion here:
-> > > > > https://lore.kernel.org/linux-pci/20221114155333.234496-2-jonathanh@nvidia.com/
-> > > > 
-> > 
-> > > > Sorry, it's really too late for discussion.  I need to send the v6.2
-> > > > pull request today or at the very latest, tomorrow, so the only thing
-> > > > to decide is how to resolve the merge conflict in the simplest
-> > > > possible way.  Unless there's a very compelling reason to resolve it
-> > > > differently than Stephen did, that's going to be the answer.
-> > 
-> > Sigh... One more redundant vendor-specific name. I wish I was in the
-> > Cc-list of the original series.
-> > 
-> > > 
-> > > To be more specific, the current answer is this (which is the same as
-> > > what's in next-20221213):
-> > > 
-> > >   https://git.kernel.org/cgit/linux/kernel/git/helgaas/pci.git/tree/Documentation/devicetree/bindings/pci/snps,dw-pcie.yaml?id=f64171fdd171
-> > 
-> > Thanks. I've got it from the @Stephen message. @Thierry will submit a
-> > new patch with the same 'ecam'-names change rebased on top of the
-> > updated DT-schema.
-> 
+--Sig_/m4IRHkZ+Nq07H3x/2dNL9DD
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> If Rob doesn't mind this being broken in linux-next for a few more days,
-> I can discuss this internally with our PCI and UEFI teams and find out
-> if your proposal could be made to work.
+Hi all,
 
-That would be awesome if you managed to work with the already defined
-'config' reg-name so the DT-schema would look a bit cleaner. Thanks
-in advance.
+On Tue, 6 Dec 2022 12:55:42 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
+>=20
+> Today's linux-next merge of the iommufd tree got conflicts in:
+>=20
+>   drivers/vfio/Kconfig
+>   drivers/vfio/Makefile
+>=20
+> between commits:
+>=20
+>   20601c45a0fa ("vfio: Remove CONFIG_VFIO_SPAPR_EEH")
+>   e2d55709398e ("vfio: Fold vfio_virqfd.ko into vfio.ko")
+>=20
+> from the vfio tree and commits:
+>=20
+>   a4d1f91db502 ("vfio-iommufd: Support iommufd for physical VFIO devices")
+>   e5a9ec7e096a ("vfio: Make vfio_container optionally compiled")
+>   c2849d718d26 ("vfio: Move vfio group specific code into group.c")
+>=20
+> from the iommufd tree.
+>=20
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+>=20
+> --=20
+> Cheers,
+> Stephen Rothwell
+>=20
+> diff --cc drivers/vfio/Kconfig
+> index 0b8d53f63c7e,286c1663bd75..000000000000
+> --- a/drivers/vfio/Kconfig
+> +++ b/drivers/vfio/Kconfig
+> @@@ -38,6 -46,17 +46,12 @@@ config VFIO_NOIOMM
+>   	  this mode since there is no IOMMU to provide DMA translation.
+>  =20
+>   	  If you don't know what to do here, say N.
+> + endif
+> +=20
+>  -config VFIO_SPAPR_EEH
+>  -	tristate
+>  -	depends on EEH && VFIO_IOMMU_SPAPR_TCE
+>  -	default VFIO
+>  -
+> + config VFIO_VIRQFD
+>  -	tristate
+> ++	bool
+> + 	select EVENTFD
+> + 	default n
+>  =20
+>   source "drivers/vfio/pci/Kconfig"
+>   source "drivers/vfio/platform/Kconfig"
+> diff --cc drivers/vfio/Makefile
+> index 0721ed4831c9,3783db7e8082..000000000000
+> --- a/drivers/vfio/Makefile
+> +++ b/drivers/vfio/Makefile
+> @@@ -2,12 -2,17 +2,14 @@@
+>   obj-$(CONFIG_VFIO) +=3D vfio.o
+>  =20
+>   vfio-y +=3D vfio_main.o \
+> - 	  iova_bitmap.o \
+> - 	  container.o
+> + 	  group.o \
+> + 	  iova_bitmap.o
+>  +vfio-$(CONFIG_VFIO_VIRQFD) +=3D virqfd.o
+> + vfio-$(CONFIG_IOMMUFD) +=3D iommufd.o
+> + vfio-$(CONFIG_VFIO_CONTAINER) +=3D container.o
+>  =20
+>  -obj-$(CONFIG_VFIO_VIRQFD) +=3D vfio_virqfd.o
+>   obj-$(CONFIG_VFIO_IOMMU_TYPE1) +=3D vfio_iommu_type1.o
+>   obj-$(CONFIG_VFIO_IOMMU_SPAPR_TCE) +=3D vfio_iommu_spapr_tce.o
+>  -obj-$(CONFIG_VFIO_SPAPR_EEH) +=3D vfio_spapr_eeh.o
+>   obj-$(CONFIG_VFIO_PCI) +=3D pci/
+>   obj-$(CONFIG_VFIO_PLATFORM) +=3D platform/
+>   obj-$(CONFIG_VFIO_MDEV) +=3D mdev/
 
--Serge(y)
+This is now a conflict between the vfio tree and Linus' tree.
 
-> 
-> Thierry
+--=20
+Cheers,
+Stephen Rothwell
 
+--Sig_/m4IRHkZ+Nq07H3x/2dNL9DD
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOaYYUACgkQAVBC80lX
+0GxoKAf/fYsSNrPra53oL9grnGpMq5ligH47Xo0xm5EHuEWZjUxToFuzSoMfcryi
+5XXAzbrUIjhrHUXexePK889bQtyof6VzIDr/TQbazWxeWZFWnuOuHDWvoGhxnW54
+/npqmoRNeRa71xYcn7wPubbadZef4OjNq/vKV9doQc2OznMQKxPwwxhA48Ie+SpJ
+sZ1gCZxEcOwvscSP4fRk3GjL8Phu75xkM0pZwLlYNSun6+dCj0Lhn4IGzOVvXSQ8
+jFL68jBEuMoP9vwhVgHa1xlyKuE0cW/d9utVZmW2p2FCuGgq4CN5zmTLLULjk+Uk
+IAIpMazUsh1oknoavN9I2DM0LJaegg==
+=v77K
+-----END PGP SIGNATURE-----
+
+--Sig_/m4IRHkZ+Nq07H3x/2dNL9DD--

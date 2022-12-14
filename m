@@ -2,227 +2,832 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6430864CC6C
-	for <lists+linux-next@lfdr.de>; Wed, 14 Dec 2022 15:37:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AA7964CF83
+	for <lists+linux-next@lfdr.de>; Wed, 14 Dec 2022 19:38:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238500AbiLNOhs (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 14 Dec 2022 09:37:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51342 "EHLO
+        id S238046AbiLNSip (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 14 Dec 2022 13:38:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238208AbiLNOhq (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 14 Dec 2022 09:37:46 -0500
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2054.outbound.protection.outlook.com [40.107.93.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85FCE201BF;
-        Wed, 14 Dec 2022 06:37:45 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=I/xh9MvPbh4yInbwRdp4ibw6eGvBtGMl8TGjPshVMhi/dCHqO1g1Vo8XNjg8waBrYN0osPUIZXibHxQidgzhe6dy93dQBKV9LrJoa2NgYURbGTgam/U6ojsxxrNp1/5FbDPZFlfFcbGtYdxha6J9hKRZtS+PV9Yq/Lh20SYExOqpcFrYSmK7iJ7Dj2cAJC1TUzBUnCv6GaUY+d26oLNK4fsaBsQY0wV5rc2qhPD54s1XTP0cwrvzvIAO4j8FYnThSMKAX15VNbR6vIqejAazO3OJfYsP3fB0+z4LM/JSnWwsfzyW2Oc/ETuzWPM/Y7lIieGxzxdmczsPrEXwIF+spg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=05u9NVsG4R1JTADSobHjo6YhA+jbwmpBf7LpCZtJ0Sg=;
- b=EK2MRTpW4jAR1LlrK+uD3nlbfR1VUxw920lijOZ2Rwi9pSudXdu2NXpG7mftulb/yH5Q9dQ/N2MqgsQTFioOhzBLW5sFJNjpdyu1tYz+AJINsql3awE8UYjmjahmYwo0SRhcPo/IkcEt4sIqkGE4oUpIldP6Y8uiEbcPS1pAI+fQowcU11jB6VKOGMgkAd8DMDRWzYceD9bgE0Rq7mTsQ6xAgLh7qCwT32qC2Cj0o4CTNLMq43MWZ5USGHEMYa5iF49M+1O4DmHsRQUwRHsLSkQzcghzZrKc+S0wzYcd/Aiaxpz/XfLllHQvY86SNFcObkaIeK7QpfxW1YWAayKfvQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=05u9NVsG4R1JTADSobHjo6YhA+jbwmpBf7LpCZtJ0Sg=;
- b=smkXypbOyqpj16PJtqeNvUO4Gb116PIo/9EM5JAFSdZPArLOeFgg8Ghi+7BT9txB4NUfwL7lRNNTY/PQQoGNRRrkDnPswM4VWgou5OLbWyw/nmf+75M33mSpzorBtzsiDcuo81y/muVodyo3xAwjITH6JB5gblI+0o11Uy0kZMoXdA5CjxP51JIUceAU+kNDtQjWfxwGZjVY70fFFGxbdVRSjS11TsgvNvLPGB/CAjLqzQD4hWbsfmlU3ZOW/sJjgPq0A9ansigYvPRP+fV4rlDJ3wRBK9nj3vJlqEsAJ3+uMIE84YSUUCIEL8AForf8BlLvlZS/hVz2/sK+Zvt0tw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from DM8PR12MB5413.namprd12.prod.outlook.com (2603:10b6:8:3b::8) by
- DS7PR12MB5862.namprd12.prod.outlook.com (2603:10b6:8:79::7) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5924.11; Wed, 14 Dec 2022 14:37:43 +0000
-Received: from DM8PR12MB5413.namprd12.prod.outlook.com
- ([fe80::f76a:b86b:c6a:b4c0]) by DM8PR12MB5413.namprd12.prod.outlook.com
- ([fe80::f76a:b86b:c6a:b4c0%9]) with mapi id 15.20.5880.019; Wed, 14 Dec 2022
- 14:37:43 +0000
-Date:   Wed, 14 Dec 2022 15:37:35 +0100
-From:   Thierry Reding <treding@nvidia.com>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Rob Herring <robh@kernel.org>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>,
-        Vidya Sagar <vidyas@nvidia.com>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        ARM <linux-arm-kernel@lists.infradead.org>,
+        with ESMTP id S229795AbiLNSio (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 14 Dec 2022 13:38:44 -0500
+Received: from smtp-relay-canonical-1.canonical.com (smtp-relay-canonical-1.canonical.com [185.125.188.121])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 559061B1C0;
+        Wed, 14 Dec 2022 10:38:41 -0800 (PST)
+Received: from [192.168.192.83] (unknown [50.47.134.245])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id 13FC0435AA;
+        Wed, 14 Dec 2022 18:38:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1671043119;
+        bh=KqviFYKmamhqxOv8optyMqk2lHa0ZsLswjR0hshla7A=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=mGPorri6tyFHYDo27IEuvLhJ8B70GEuCiYXL1YLPJpTPgu1g70NMU77rVUDb+8euI
+         /l0o8AHYnnlmZqbatUPEwHeCApqqny0jZIsWnvoDVWbrIlAEVbT3pz7QpG+9zRuOZp
+         3bTf7kUVL/JkXNPFd25MJsF6IWKwES/Z3/7ULk4GNURv6vJOF7ou6w5WTGdSBkmVz8
+         cmM80JMqrFp9HiQ2Ol8qfVQ2IivY2HxbKjP2OJ38/taUEuUp2zHQa6eFabOtB8Iuwi
+         tHA0Q/v8XhNdrIF5TKqNA5i2zJ18UbmwbWr3x7ay1k3oOHvVDVSi91fpSOr8V9QwE5
+         p+Xkxa8yzXAPQ==
+Message-ID: <a52d335d-111f-e516-0cf3-0a74f340d201@canonical.com>
+Date:   Wed, 14 Dec 2022 10:38:35 -0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: linux-next: manual merge of the kunit-next tree with the apparmor
+ tree
+Content-Language: en-US
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: Re: linux-next: manual merge of the pci tree with the arm-soc tree
-Message-ID: <Y5nfr+AXofk9Ch2m@orome>
-References: <20221213195313.GA200257@bhelgaas>
- <20221213200733.GA201693@bhelgaas>
- <20221213233649.zmmiskezdponleuc@mobilestation>
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="FhN8+P4MJWtqepBQ"
-Content-Disposition: inline
-In-Reply-To: <20221213233649.zmmiskezdponleuc@mobilestation>
-X-NVConfidentiality: public
-User-Agent: Mutt/2.2.9 (2022-11-12)
-X-ClientProxiedBy: BE0P281CA0027.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:b10:14::14) To DM8PR12MB5413.namprd12.prod.outlook.com
- (2603:10b6:8:3b::8)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM8PR12MB5413:EE_|DS7PR12MB5862:EE_
-X-MS-Office365-Filtering-Correlation-Id: 503e84de-20f5-4021-b4e8-08dadde0c2c5
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: V1NyOPlOZ9LPoSVRvmg9r5zaG2eA+S4d5L5kUGUO7pGfpb9HP4gSrLOfAAIFlibwezZC03oiu2cMFz/jU8s3AunX3QKgG9bNerkafKniOO3jxUk894N7EffDEyBQumUX+eLEo+QW1jHL6CJ+pIahdst6SzNg8B4Cxtb/0ipi2hBGWHifKUsnuB4wpd3WrD1P4ZUNjhE7qhUjO0d+46gqB9NRyWk1bGZJGR6dXYN9cj2KVbQh/Lio74POHiiGfdoPNJCYHiZfI6oo6Xy24x+zC/Qt8nLs1OH0SKvFAhhpdoYUf9QSn4XnYYPBvstycMz+j2yHj/xP6Odk4TYgjC2R72R4C+g96a46O3fX7NB8cIKksZkIZj059zEtRHXTUvfG6ZSt7V2jHRjAW1Lb4G9jjVXatNDHOrk0FGIdO7iY5OXK8T6q7G+izQqia1Q0B6tWNhY2Xw9iJYBriu7txroB36zyziIin32kAaaYGGzO7qCBFP6yTGDKnaAHYK22y19D4KD0vPdoOiF6KKjhkj+MgEi1M21xcT58bE9pJ5AXCEWZ6GuiRsJbibWr81YTBx7VjOoTKY9sna9M8SWS/5FaGSN2FQ5D9BUKvBxN7l/5xOgmUPOxCqEGhGAj+beGiLm+DoQ56/y7THyjJ3fTfUB31J/AKoKAOrBIMKFzQIUU2C3ZF42LZaEsW16r3N61pXyDxllMXaN53VbbKE3FY3UEKmOwcPOU92YR2fogmHSECe7ShxyT3N0kSjCXSDboPmxoVbdhq5g8bfD4tUA8Xyi1Q2MixswiVTVdrH5Okzfgws2SM2dpARJC7xwdmJUZDxLjtiwoo6RCNoaTF+eWdHDvcw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR12MB5413.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(7916004)(396003)(366004)(346002)(376002)(136003)(39860400002)(451199015)(38100700002)(33716001)(316002)(6666004)(86362001)(6486002)(966005)(66899015)(6506007)(478600001)(66556008)(66946007)(186003)(6512007)(9686003)(110136005)(54906003)(44144004)(66476007)(2906002)(41300700001)(4326008)(8676002)(7416002)(83380400001)(21480400003)(8936002)(5660300002)(67856001)(2700100001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?vlSqr6qLBBTLaXG81M/aey21GY7weeb0VDobJTe2PDtKHbRnLMnG+OOIXa7q?=
- =?us-ascii?Q?B2SGpnNWMvaJwpR7B2KiJbQFxan0OrgL7dIGS0+6v7rYuGcLzSVDG36qcNZ6?=
- =?us-ascii?Q?7pK3w9kbypoY03MJ7J5OvSjAt8E53a7/U8SW1kyORWY2EtDZe/Kk/weNDD9k?=
- =?us-ascii?Q?EOl2GBXjqwqaIFjQRnZLFnBXk/InPLZZs3KgNnFVXSGa1hKWDR91jQl5glXI?=
- =?us-ascii?Q?iYGHy6XplRrExuJSnYOtR+mR3ZnlqoOSe/yAE/12BMrq+OFvxxPH3twF6Jey?=
- =?us-ascii?Q?sFy0eZcYlG1QID5BZJGqb0E3WIT38n0Ea4qXF8ZINtivvwFP10c0+GMymYAS?=
- =?us-ascii?Q?dxj9iNrNbb/+wuYervkQxWXXpIvLqJ4zenwp2lZdXgD8GRR5cjXb81zEsM+S?=
- =?us-ascii?Q?7IJEZLYMSR2Gznj8fEuvstoEiCe9AUUdQxoRvjWkqJRwlrBn/gQAToTI1870?=
- =?us-ascii?Q?h6KqVPku3LKTO8a8JpR40QmIaeUIBKHKykE9VW3bje3vpL/V6vQy5VltyLfl?=
- =?us-ascii?Q?PGkmu/Q+bJLexx1Z6VlUMCf1SsX7G7X8Mh1hUFBsk0Znhph4XX7nRty3aM7v?=
- =?us-ascii?Q?UvQHhU60Xrv0K/pE9WmHqpVzN2qLpWJBjjGrIokmAksuoRpUJldHOR+geWK6?=
- =?us-ascii?Q?ajomvY0tWZACyd1iiEtkTh1qfREKBMgu5z71AIszbPZT7lZZOmMvDeGhBONr?=
- =?us-ascii?Q?XcIJ9ntkOo4iJGa0jDpvalpOb9E6wvwYxjW+RnAM1nKe3hN9Fwlj65DSPUl6?=
- =?us-ascii?Q?8qSWHb/XTIxpHfrLVdBK7Z/fSBgYVipTmkshUOe3meYw4qEG9OMFtLEHoyKD?=
- =?us-ascii?Q?X3R5uCGYNyden7uK/Wprrgh6fAO929DTML43s+2JBThBfyVBQ4+4XDRQJhvp?=
- =?us-ascii?Q?tDZMaZEySj7YQ9gIeXXtgwWYg7sMowi86pcI/8CEurdvGfZloEAnNDdP28Cu?=
- =?us-ascii?Q?nrKyxam1czqPn9/WjCxtY6NXjl738XFZJswUmsBoEeF9RFTUi3+fiNpsSYRK?=
- =?us-ascii?Q?6dvUvD/TZyrKVhMKk2RoyjrpQauNiFlGDWgqQscMz6j+2aNqWi7/V89PdILb?=
- =?us-ascii?Q?gd+pgwaQAfTt2ybm5ulluBOD2Xd8PNs+eUmchESEE8jg8nqWvYFXGl55+QcA?=
- =?us-ascii?Q?uu/dXprlIhFXyEodALIrjamIRR1+PgL4df9sW2kMFCkcyrwO2lpg4tgG2Cqh?=
- =?us-ascii?Q?/q3nMTnLMfkImMSAI/O4MoHW7ZHSZ5oS17gybgioqkihc5AzO0+K1yk7KhlJ?=
- =?us-ascii?Q?Gjd1Ir96YrpnxXMkMszQRCdk8e3TPs5mU8EqAK3HB2Yh9bBT+iWjMdzMRmfl?=
- =?us-ascii?Q?eCdHZjFGNSq+96BqflWfwA/E57Bkkw2uob7G3Ysf4z5ZI3FdyAPjA6vA2FaT?=
- =?us-ascii?Q?zRYZrmHOmtvkqYIXYlhw2Qy4gGU8PJLbsYPsm1tU/HSyk2fxj3Nk5A60IjsQ?=
- =?us-ascii?Q?GJE+tm9DSC/oGTcB8b5iTPRwXPKbeyfULD9v4me/TZdzTag3j++R1qpEXcjw?=
- =?us-ascii?Q?snDjwxx3juzA3W4+j2S7yfG6Ln1snd6kZymgWkJwSzFA3DhIPlHvldDmlUiV?=
- =?us-ascii?Q?rCswAbOT2hnRg9YnOBDSAT5ZwLBJyPA+7J0/jHQ7lrqOU5cajHtXyRkZX2qi?=
- =?us-ascii?Q?yMeMvmrak6rs4ib4IcEjkZh1RxSx47xih3UYQj+w0R5j?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 503e84de-20f5-4021-b4e8-08dadde0c2c5
-X-MS-Exchange-CrossTenant-AuthSource: DM8PR12MB5413.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Dec 2022 14:37:43.8058
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: XwY0FVEbwXY8m5dvNIwFqzrjXGSgNTo6K0wijU1Gz+DEjLEJ2LDind3qhyTWXrCS6LgeDAlDRSjfiiqF8gg/og==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB5862
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+        Rae Moar <rmoar@google.com>
+References: <20221208135327.01364529@canb.auug.org.au>
+ <20221214110005.35944aa3@canb.auug.org.au>
+From:   John Johansen <john.johansen@canonical.com>
+Organization: Canonical
+In-Reply-To: <20221214110005.35944aa3@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---FhN8+P4MJWtqepBQ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 12/13/22 16:00, Stephen Rothwell wrote:
+> Hi all,
+> 
+> On Thu, 8 Dec 2022 13:53:27 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>>
+>> Today's linux-next merge of the kunit-next tree got a conflict in:
+>>
+>>    security/apparmor/policy_unpack.c
+>>
+>> between commits:
+>>
+>>    371e50a0b19f ("apparmor: make unpack_array return a trianary value")
+>>    73c7e91c8bc9 ("apparmor: Remove unnecessary size check when unpacking trans_table")
+>>    217af7e2f4de ("apparmor: refactor profile rules and attachments")
+>> (and probably others)
+>>
+>> from the apparmor tree and commit:
+>>
+>>    2c92044683f5 ("apparmor: test: make static symbols visible during kunit testing")
+>>
+>> from the kunit-next tree.
+>>
+>> This is somewhat of a mess ... pity there is not a shared branch (or
+>> better routing if the patches).
+>>
+>> I fixed it up (hopefully - see below) and can carry the fix as
+>> necessary. This is now fixed as far as linux-next is concerned, but any
+>> non trivial conflicts should be mentioned to your upstream maintainer
+>> when your tree is submitted for merging.  You may also want to consider
+>> cooperating with the maintainer of the conflicting tree to minimise any
+>> particularly complex conflicts.
+>>
+>> I also had to add this patch:
+>>
+>> From: Stephen Rothwell <sfr@canb.auug.org.au>
+>> Date: Thu, 8 Dec 2022 13:47:43 +1100
+>> Subject: [PATCH] fixup for "apparmor: make unpack_array return a trianary value"
+>>
+>> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+>> ---
+>>   security/apparmor/include/policy_unpack.h | 8 +++++++-
+>>   security/apparmor/policy_unpack.c         | 5 -----
+>>   2 files changed, 7 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/security/apparmor/include/policy_unpack.h b/security/apparmor/include/policy_unpack.h
+>> index 940da8a33e0c..8fdf8f703bd0 100644
+>> --- a/security/apparmor/include/policy_unpack.h
+>> +++ b/security/apparmor/include/policy_unpack.h
+>> @@ -172,7 +172,13 @@ bool aa_unpack_X(struct aa_ext *e, enum aa_code code);
+>>   bool aa_unpack_nameX(struct aa_ext *e, enum aa_code code, const char *name);
+>>   bool aa_unpack_u32(struct aa_ext *e, u32 *data, const char *name);
+>>   bool aa_unpack_u64(struct aa_ext *e, u64 *data, const char *name);
+>> -size_t aa_unpack_array(struct aa_ext *e, const char *name);
+>> +
+>> +#define tri int
+>> +#define TRI_TRUE 1
+>> +#define TRI_NONE 0
+>> +#define TRI_FALSE -1
+>> +
+>> +tri aa_unpack_array(struct aa_ext *e, const char *name, u16 *size);
+>>   size_t aa_unpack_blob(struct aa_ext *e, char **blob, const char *name);
+>>   int aa_unpack_str(struct aa_ext *e, const char **string, const char *name);
+>>   int aa_unpack_strdup(struct aa_ext *e, char **string, const char *name);
+>> diff --git a/security/apparmor/policy_unpack.c b/security/apparmor/policy_unpack.c
+>> index 6513545dad5e..173d832fc4ee 100644
+>> --- a/security/apparmor/policy_unpack.c
+>> +++ b/security/apparmor/policy_unpack.c
+>> @@ -30,11 +30,6 @@
+>>   #include "include/policy_unpack.h"
+>>   #include "include/policy_compat.h"
+>>   
+>> -#define tri int
+>> -#define TRI_TRUE 1
+>> -#define TRI_NONE 0
+>> -#define TRI_FALSE -1
+>> -
+>>   /* audit callback for unpack fields */
+>>   static void audit_cb(struct audit_buffer *ab, void *va)
+>>   {
+>> -- 
+>> 2.35.1
+>>
+>> -- 
+>> Cheers,
+>> Stephen Rothwell
+>>
+>> diff --cc security/apparmor/policy_unpack.c
+>> index 1bf8cfb8700a,12e535fdfa8b..000000000000
+>> --- a/security/apparmor/policy_unpack.c
+>> +++ b/security/apparmor/policy_unpack.c
+>> @@@ -14,9 -14,10 +14,10 @@@
+>>     */
+>>    
+>>    #include <asm/unaligned.h>
+>> + #include <kunit/visibility.h>
+>>    #include <linux/ctype.h>
+>>    #include <linux/errno.h>
+>>   -#include <linux/zlib.h>
+>>   +#include <linux/zstd.h>
+>>    
+>>    #include "include/apparmor.h"
+>>    #include "include/audit.h"
+>> @@@ -27,50 -27,16 +28,12 @@@
+>>    #include "include/path.h"
+>>    #include "include/policy.h"
+>>    #include "include/policy_unpack.h"
+>>   +#include "include/policy_compat.h"
+>>    
+>> -
+>> - /*
+>> -  * The AppArmor interface treats data as a type byte followed by the
+>> -  * actual data.  The interface has the notion of a named entry
+>> -  * which has a name (AA_NAME typecode followed by name string) followed by
+>> -  * the entries typecode and data.  Named types allow for optional
+>> -  * elements and extensions to be added and tested for without breaking
+>> -  * backwards compatibility.
+>> -  */
+>> -
+>> - enum aa_code {
+>> - 	AA_U8,
+>> - 	AA_U16,
+>> - 	AA_U32,
+>> - 	AA_U64,
+>> - 	AA_NAME,		/* same as string except it is items name */
+>> - 	AA_STRING,
+>> - 	AA_BLOB,
+>> - 	AA_STRUCT,
+>> - 	AA_STRUCTEND,
+>> - 	AA_LIST,
+>> - 	AA_LISTEND,
+>> - 	AA_ARRAY,
+>> - 	AA_ARRAYEND,
+>> - };
+>> -
+>> - /*
+>> -  * aa_ext is the read of the buffer containing the serialized profile.  The
+>> -  * data is copied into a kernel buffer in apparmorfs and then handed off to
+>> -  * the unpack routines.
+>> -  */
+>> - struct aa_ext {
+>> - 	void *start;
+>> - 	void *end;
+>> - 	void *pos;		/* pointer to current position in the buffer */
+>> - 	u32 version;
+>> - };
+>>   -#define K_ABI_MASK 0x3ff
+>>   -#define FORCE_COMPLAIN_FLAG 0x800
+>>   -#define VERSION_LT(X, Y) (((X) & K_ABI_MASK) < ((Y) & K_ABI_MASK))
+>>   -#define VERSION_GT(X, Y) (((X) & K_ABI_MASK) > ((Y) & K_ABI_MASK))
+>> --
+>>   -#define v5	5	/* base version */
+>>   -#define v6	6	/* per entry policydb mediation check */
+>>   -#define v7	7
+>>   -#define v8	8	/* full network masking */
+>>   +#define tri int
+>>   +#define TRI_TRUE 1
+>>   +#define TRI_NONE 0
+>>   +#define TRI_FALSE -1
+>>    
+>>    /* audit callback for unpack fields */
+>>    static void audit_cb(struct audit_buffer *ab, void *va)
+>> @@@ -348,26 -319,28 +316,28 @@@ fail
+>>    	e->pos = pos;
+>>    	return false;
+>>    }
+>> + EXPORT_SYMBOL_IF_KUNIT(aa_unpack_u64);
+>>    
+>> - static tri unpack_array(struct aa_ext *e, const char *name, u16 *size)
+>>   -VISIBLE_IF_KUNIT size_t aa_unpack_array(struct aa_ext *e, const char *name)
+>> ++VISIBLE_IF_KUNIT tri aa_unpack_array(struct aa_ext *e, const char *name, u16 *size)
+>>    {
+>>    	void *pos = e->pos;
+>>    
+>> - 	if (unpack_nameX(e, AA_ARRAY, name)) {
+>> - 		if (!inbounds(e, sizeof(u16)))
+>> + 	if (aa_unpack_nameX(e, AA_ARRAY, name)) {
+>>   -		int size;
+>> + 		if (!aa_inbounds(e, sizeof(u16)))
+>>    			goto fail;
+>>   -		size = (int)le16_to_cpu(get_unaligned((__le16 *) e->pos));
+>>   +		*size = le16_to_cpu(get_unaligned((__le16 *) e->pos));
+>>    		e->pos += sizeof(u16);
+>>   -		return size;
+>>   +		return TRI_TRUE;
+>>    	}
+>>    
+>>   +	return TRI_NONE;
+>>    fail:
+>>    	e->pos = pos;
+>>   -	return 0;
+>>   +	return TRI_FALSE;
+>>    }
+>> + EXPORT_SYMBOL_IF_KUNIT(aa_unpack_array);
+>>    
+>> - static size_t unpack_blob(struct aa_ext *e, char **blob, const char *name)
+>> + VISIBLE_IF_KUNIT size_t aa_unpack_blob(struct aa_ext *e, char **blob, const char *name)
+>>    {
+>>    	void *pos = e->pos;
+>>    
+>> @@@ -470,36 -447,32 +443,36 @@@ static struct aa_dfa *unpack_dfa(struc
+>>    /**
+>>     * unpack_trans_table - unpack a profile transition table
+>>     * @e: serialized data extent information  (NOT NULL)
+>>   - * @profile: profile to add the accept table to (NOT NULL)
+>>   + * @table: str table to unpack to (NOT NULL)
+>>     *
+>>   - * Returns: true if table successfully unpacked
+>>   + * Returns: true if table successfully unpacked or not present
+>>     */
+>>   -static bool unpack_trans_table(struct aa_ext *e, struct aa_profile *profile)
+>>   +static bool unpack_trans_table(struct aa_ext *e, struct aa_str_table *strs)
+>>    {
+>>    	void *saved_pos = e->pos;
+>>   +	char **table = NULL;
+>>    
+>>    	/* exec table is optional */
+>> - 	if (unpack_nameX(e, AA_STRUCT, "xtable")) {
+>> + 	if (aa_unpack_nameX(e, AA_STRUCT, "xtable")) {
+>>   -		int i, size;
+>>   -
+>>   -		size = aa_unpack_array(e, NULL);
+>>   -		/* currently 4 exec bits and entries 0-3 are reserved iupcx */
+>>   -		if (size > 16 - 4)
+>>   +		u16 size;
+>>   +		int i;
+>>   +
+>> - 		if (unpack_array(e, NULL, &size) != TRI_TRUE)
+>> ++		if (aa_unpack_array(e, NULL, &size) != TRI_TRUE)
+>>   +			/*
+>>   +			 * Note: index into trans table array is a max
+>>   +			 * of 2^24, but unpack array can only unpack
+>>   +			 * an array of 2^16 in size atm so no need
+>>   +			 * for size check here
+>>   +			 */
+>>    			goto fail;
+>>   -		profile->file.trans.table = kcalloc(size, sizeof(char *),
+>>   -						    GFP_KERNEL);
+>>   -		if (!profile->file.trans.table)
+>>   +		table = kcalloc(size, sizeof(char *), GFP_KERNEL);
+>>   +		if (!table)
+>>    			goto fail;
+>>    
+>>   -		profile->file.trans.size = size;
+>>    		for (i = 0; i < size; i++) {
+>>    			char *str;
+>> - 			int c, j, pos, size2 = unpack_strdup(e, &str, NULL);
+>> - 			/* unpack_strdup verifies that the last character is
+>> + 			int c, j, pos, size2 = aa_unpack_strdup(e, &str, NULL);
+>> + 			/* aa_unpack_strdup verifies that the last character is
+>>    			 * null termination byte.
+>>    			 */
+>>    			if (!size2)
+>> @@@ -534,13 -507,10 +507,13 @@@
+>>    				/* fail - all other cases with embedded \0 */
+>>    				goto fail;
+>>    		}
+>> - 		if (!unpack_nameX(e, AA_ARRAYEND, NULL))
+>> + 		if (!aa_unpack_nameX(e, AA_ARRAYEND, NULL))
+>>    			goto fail;
+>> - 		if (!unpack_nameX(e, AA_STRUCTEND, NULL))
+>> + 		if (!aa_unpack_nameX(e, AA_STRUCTEND, NULL))
+>>    			goto fail;
+>>   +
+>>   +		strs->table = table;
+>>   +		strs->size = size;
+>>    	}
+>>    	return true;
+>>    
+>> @@@ -554,23 -524,21 +527,23 @@@ static bool unpack_xattrs(struct aa_ex
+>>    {
+>>    	void *pos = e->pos;
+>>    
+>> - 	if (unpack_nameX(e, AA_STRUCT, "xattrs")) {
+>> + 	if (aa_unpack_nameX(e, AA_STRUCT, "xattrs")) {
+>>   -		int i, size;
+>>   +		u16 size;
+>>   +		int i;
+>>    
+>> - 		if (unpack_array(e, NULL, &size) != TRI_TRUE)
+>>   -		size = aa_unpack_array(e, NULL);
+>>   -		profile->xattr_count = size;
+>>   -		profile->xattrs = kcalloc(size, sizeof(char *), GFP_KERNEL);
+>>   -		if (!profile->xattrs)
+>> ++		if (aa_unpack_array(e, NULL, &size) != TRI_TRUE)
+>>   +			goto fail;
+>>   +		profile->attach.xattr_count = size;
+>>   +		profile->attach.xattrs = kcalloc(size, sizeof(char *), GFP_KERNEL);
+>>   +		if (!profile->attach.xattrs)
+>>    			goto fail;
+>>    		for (i = 0; i < size; i++) {
+>> - 			if (!unpack_strdup(e, &profile->attach.xattrs[i], NULL))
+>>   -			if (!aa_unpack_strdup(e, &profile->xattrs[i], NULL))
+>> ++			if (!aa_unpack_strdup(e, &profile->attach.xattrs[i], NULL))
+>>    				goto fail;
+>>    		}
+>> - 		if (!unpack_nameX(e, AA_ARRAYEND, NULL))
+>> + 		if (!aa_unpack_nameX(e, AA_ARRAYEND, NULL))
+>>    			goto fail;
+>> - 		if (!unpack_nameX(e, AA_STRUCTEND, NULL))
+>> + 		if (!aa_unpack_nameX(e, AA_STRUCTEND, NULL))
+>>    			goto fail;
+>>    	}
+>>    
+>> @@@ -581,34 -549,32 +554,34 @@@ fail
+>>    	return false;
+>>    }
+>>    
+>>   -static bool unpack_secmark(struct aa_ext *e, struct aa_profile *profile)
+>>   +static bool unpack_secmark(struct aa_ext *e, struct aa_ruleset *rules)
+>>    {
+>>    	void *pos = e->pos;
+>>   -	int i, size;
+>>   +	u16 size;
+>>   +	int i;
+>>    
+>> - 	if (unpack_nameX(e, AA_STRUCT, "secmark")) {
+>> - 		if (unpack_array(e, NULL, &size) != TRI_TRUE)
+>> + 	if (aa_unpack_nameX(e, AA_STRUCT, "secmark")) {
+>>   -		size = aa_unpack_array(e, NULL);
+>> ++		if (aa_unpack_array(e, NULL, &size) != TRI_TRUE)
+>>   +			goto fail;
+>>    
+>>   -		profile->secmark = kcalloc(size, sizeof(struct aa_secmark),
+>>   +		rules->secmark = kcalloc(size, sizeof(struct aa_secmark),
+>>    					   GFP_KERNEL);
+>>   -		if (!profile->secmark)
+>>   +		if (!rules->secmark)
+>>    			goto fail;
+>>    
+>>   -		profile->secmark_count = size;
+>>   +		rules->secmark_count = size;
+>>    
+>>    		for (i = 0; i < size; i++) {
+>>   -			if (!unpack_u8(e, &profile->secmark[i].audit, NULL))
+>>   +			if (!unpack_u8(e, &rules->secmark[i].audit, NULL))
+>>    				goto fail;
+>>   -			if (!unpack_u8(e, &profile->secmark[i].deny, NULL))
+>>   +			if (!unpack_u8(e, &rules->secmark[i].deny, NULL))
+>>    				goto fail;
+>> - 			if (!unpack_strdup(e, &rules->secmark[i].label, NULL))
+>>   -			if (!aa_unpack_strdup(e, &profile->secmark[i].label, NULL))
+>> ++			if (!aa_unpack_strdup(e, &rules->secmark[i].label, NULL))
+>>    				goto fail;
+>>    		}
+>> - 		if (!unpack_nameX(e, AA_ARRAYEND, NULL))
+>> + 		if (!aa_unpack_nameX(e, AA_ARRAYEND, NULL))
+>>    			goto fail;
+>> - 		if (!unpack_nameX(e, AA_STRUCTEND, NULL))
+>> + 		if (!aa_unpack_nameX(e, AA_STRUCTEND, NULL))
+>>    			goto fail;
+>>    	}
+>>    
+>> @@@ -632,27 -598,26 +605,27 @@@ static bool unpack_rlimits(struct aa_ex
+>>    	void *pos = e->pos;
+>>    
+>>    	/* rlimits are optional */
+>> - 	if (unpack_nameX(e, AA_STRUCT, "rlimits")) {
+>> + 	if (aa_unpack_nameX(e, AA_STRUCT, "rlimits")) {
+>>   -		int i, size;
+>>   +		u16 size;
+>>   +		int i;
+>>    		u32 tmp = 0;
+>> - 		if (!unpack_u32(e, &tmp, NULL))
+>> + 		if (!aa_unpack_u32(e, &tmp, NULL))
+>>    			goto fail;
+>>   -		profile->rlimits.mask = tmp;
+>>   +		rules->rlimits.mask = tmp;
+>>    
+>> - 		if (unpack_array(e, NULL, &size) != TRI_TRUE ||
+>>   -		size = aa_unpack_array(e, NULL);
+>>   -		if (size > RLIM_NLIMITS)
+>> ++		if (aa_unpack_array(e, NULL, &size) != TRI_TRUE ||
+>>   +		    size > RLIM_NLIMITS)
+>>    			goto fail;
+>>    		for (i = 0; i < size; i++) {
+>>    			u64 tmp2 = 0;
+>>    			int a = aa_map_resource(i);
+>> - 			if (!unpack_u64(e, &tmp2, NULL))
+>> + 			if (!aa_unpack_u64(e, &tmp2, NULL))
+>>    				goto fail;
+>>   -			profile->rlimits.limits[a].rlim_max = tmp2;
+>>   +			rules->rlimits.limits[a].rlim_max = tmp2;
+>>    		}
+>> - 		if (!unpack_nameX(e, AA_ARRAYEND, NULL))
+>> + 		if (!aa_unpack_nameX(e, AA_ARRAYEND, NULL))
+>>    			goto fail;
+>> - 		if (!unpack_nameX(e, AA_STRUCTEND, NULL))
+>> + 		if (!aa_unpack_nameX(e, AA_STRUCTEND, NULL))
+>>    			goto fail;
+>>    	}
+>>    	return true;
+>> @@@ -662,144 -627,6 +635,144 @@@ fail
+>>    	return false;
+>>    }
+>>    
+>>   +static bool unpack_perm(struct aa_ext *e, u32 version, struct aa_perms *perm)
+>>   +{
+>>   +	bool res;
+>>   +
+>>   +	if (version != 1)
+>>   +		return false;
+>>   +
+>> - 	res = unpack_u32(e, &perm->allow, NULL);
+>> - 	res = res && unpack_u32(e, &perm->allow, NULL);
+>> - 	res = res && unpack_u32(e, &perm->deny, NULL);
+>> - 	res = res && unpack_u32(e, &perm->subtree, NULL);
+>> - 	res = res && unpack_u32(e, &perm->cond, NULL);
+>> - 	res = res && unpack_u32(e, &perm->kill, NULL);
+>> - 	res = res && unpack_u32(e, &perm->complain, NULL);
+>> - 	res = res && unpack_u32(e, &perm->prompt, NULL);
+>> - 	res = res && unpack_u32(e, &perm->audit, NULL);
+>> - 	res = res && unpack_u32(e, &perm->quiet, NULL);
+>> - 	res = res && unpack_u32(e, &perm->hide, NULL);
+>> - 	res = res && unpack_u32(e, &perm->xindex, NULL);
+>> - 	res = res && unpack_u32(e, &perm->tag, NULL);
+>> - 	res = res && unpack_u32(e, &perm->label, NULL);
+>> ++	res = aa_unpack_u32(e, &perm->allow, NULL);
+>> ++	res = res && aa_unpack_u32(e, &perm->allow, NULL);
+>> ++	res = res && aa_unpack_u32(e, &perm->deny, NULL);
+>> ++	res = res && aa_unpack_u32(e, &perm->subtree, NULL);
+>> ++	res = res && aa_unpack_u32(e, &perm->cond, NULL);
+>> ++	res = res && aa_unpack_u32(e, &perm->kill, NULL);
+>> ++	res = res && aa_unpack_u32(e, &perm->complain, NULL);
+>> ++	res = res && aa_unpack_u32(e, &perm->prompt, NULL);
+>> ++	res = res && aa_unpack_u32(e, &perm->audit, NULL);
+>> ++	res = res && aa_unpack_u32(e, &perm->quiet, NULL);
+>> ++	res = res && aa_unpack_u32(e, &perm->hide, NULL);
+>> ++	res = res && aa_unpack_u32(e, &perm->xindex, NULL);
+>> ++	res = res && aa_unpack_u32(e, &perm->tag, NULL);
+>> ++	res = res && aa_unpack_u32(e, &perm->label, NULL);
+>>   +
+>>   +	return res;
+>>   +}
+>>   +
+>>   +static ssize_t unpack_perms_table(struct aa_ext *e, struct aa_perms **perms)
+>>   +{
+>>   +	void *pos = e->pos;
+>>   +	u16 size = 0;
+>>   +
+>>   +	AA_BUG(!perms);
+>>   +	/*
+>>   +	 * policy perms are optional, in which case perms are embedded
+>>   +	 * in the dfa accept table
+>>   +	 */
+>> - 	if (unpack_nameX(e, AA_STRUCT, "perms")) {
+>> ++	if (aa_unpack_nameX(e, AA_STRUCT, "perms")) {
+>>   +		int i;
+>>   +		u32 version;
+>>   +
+>> - 		if (!unpack_u32(e, &version, "version"))
+>> ++		if (!aa_unpack_u32(e, &version, "version"))
+>>   +			goto fail_reset;
+>> - 		if (unpack_array(e, NULL, &size) != TRI_TRUE)
+>> ++		if (aa_unpack_array(e, NULL, &size) != TRI_TRUE)
+>>   +			goto fail_reset;
+>>   +		*perms = kcalloc(size, sizeof(struct aa_perms), GFP_KERNEL);
+>>   +		if (!*perms)
+>>   +			goto fail_reset;
+>>   +		for (i = 0; i < size; i++) {
+>>   +			if (!unpack_perm(e, version, &(*perms)[i]))
+>>   +				goto fail;
+>>   +		}
+>> - 		if (!unpack_nameX(e, AA_ARRAYEND, NULL))
+>> ++		if (!aa_unpack_nameX(e, AA_ARRAYEND, NULL))
+>>   +			goto fail;
+>> - 		if (!unpack_nameX(e, AA_STRUCTEND, NULL))
+>> ++		if (!aa_unpack_nameX(e, AA_STRUCTEND, NULL))
+>>   +			goto fail;
+>>   +	} else
+>>   +		*perms = NULL;
+>>   +
+>>   +	return size;
+>>   +
+>>   +fail:
+>>   +	kfree(*perms);
+>>   +fail_reset:
+>>   +	e->pos = pos;
+>>   +	return -EPROTO;
+>>   +}
+>>   +
+>>   +static int unpack_pdb(struct aa_ext *e, struct aa_policydb *policy,
+>>   +		      bool required_dfa, bool required_trans,
+>>   +		      const char **info)
+>>   +{
+>>   +	void *pos = e->pos;
+>>   +	int i, flags, error = -EPROTO;
+>>   +	ssize_t size;
+>>   +
+>>   +	size = unpack_perms_table(e, &policy->perms);
+>>   +	if (size < 0) {
+>>   +		error = size;
+>>   +		policy->perms = NULL;
+>>   +		*info = "failed to unpack - perms";
+>>   +		goto fail;
+>>   +	}
+>>   +	policy->size = size;
+>>   +
+>>   +	if (policy->perms) {
+>>   +		/* perms table present accept is index */
+>>   +		flags = TO_ACCEPT1_FLAG(YYTD_DATA32);
+>>   +	} else {
+>>   +		/* packed perms in accept1 and accept2 */
+>>   +		flags = TO_ACCEPT1_FLAG(YYTD_DATA32) |
+>>   +			TO_ACCEPT2_FLAG(YYTD_DATA32);
+>>   +	}
+>>   +
+>>   +	policy->dfa = unpack_dfa(e, flags);
+>>   +	if (IS_ERR(policy->dfa)) {
+>>   +		error = PTR_ERR(policy->dfa);
+>>   +		policy->dfa = NULL;
+>>   +		*info = "failed to unpack - dfa";
+>>   +		goto fail;
+>>   +	} else if (!policy->dfa) {
+>>   +		if (required_dfa) {
+>>   +			*info = "missing required dfa";
+>>   +			goto fail;
+>>   +		}
+>>   +		goto out;
+>>   +	}
+>>   +
+>>   +	/*
+>>   +	 * only unpack the following if a dfa is present
+>>   +	 *
+>>   +	 * sadly start was given different names for file and policydb
+>>   +	 * but since it is optional we can try both
+>>   +	 */
+>> - 	if (!unpack_u32(e, &policy->start[0], "start"))
+>> ++	if (!aa_unpack_u32(e, &policy->start[0], "start"))
+>>   +		/* default start state */
+>>   +		policy->start[0] = DFA_START;
+>> - 	if (!unpack_u32(e, &policy->start[AA_CLASS_FILE], "dfa_start")) {
+>> ++	if (!aa_unpack_u32(e, &policy->start[AA_CLASS_FILE], "dfa_start")) {
+>>   +		/* default start state for xmatch and file dfa */
+>>   +		policy->start[AA_CLASS_FILE] = DFA_START;
+>>   +	}	/* setup class index */
+>>   +	for (i = AA_CLASS_FILE + 1; i <= AA_CLASS_LAST; i++) {
+>>   +		policy->start[i] = aa_dfa_next(policy->dfa, policy->start[0],
+>>   +					       i);
+>>   +	}
+>>   +	if (!unpack_trans_table(e, &policy->trans) && required_trans) {
+>>   +		*info = "failed to unpack profile transition table";
+>>   +		goto fail;
+>>   +	}
+>>   +
+>>   +	/* TODO: move compat mapping here, requires dfa merging first */
+>>   +	/* TODO: move verify here, it has to be done after compat mappings */
+>>   +out:
+>>   +	return 0;
+>>   +
+>>   +fail:
+>>   +	e->pos = pos;
+>>   +	return error;
+>>   +}
+>>   +
+>>    static u32 strhash(const void *data, u32 len, u32 seed)
+>>    {
+>>    	const char * const *key = data;
+>> @@@ -858,29 -683,26 +831,29 @@@ static struct aa_profile *unpack_profil
+>>    	}
+>>    
+>>    	profile = aa_alloc_profile(name, NULL, GFP_KERNEL);
+>>   -	if (!profile)
+>>   -		return ERR_PTR(-ENOMEM);
+>>   +	if (!profile) {
+>>   +		info = "out of memory";
+>>   +		error = -ENOMEM;
+>>   +		goto fail;
+>>   +	}
+>>   +	rules = list_first_entry(&profile->rules, typeof(*rules), list);
+>>    
+>>    	/* profile renaming is optional */
+>> - 	(void) unpack_str(e, &profile->rename, "rename");
+>> + 	(void) aa_unpack_str(e, &profile->rename, "rename");
+>>    
+>>    	/* attachment string is optional */
+>> - 	(void) unpack_str(e, &profile->attach.xmatch_str, "attach");
+>>   -	(void) aa_unpack_str(e, &profile->attach, "attach");
+>> ++	(void) aa_unpack_str(e, &profile->attach.xmatch_str, "attach");
+>>    
+>>    	/* xmatch is optional and may be NULL */
+>>   -	profile->xmatch = unpack_dfa(e);
+>>   -	if (IS_ERR(profile->xmatch)) {
+>>   -		error = PTR_ERR(profile->xmatch);
+>>   -		profile->xmatch = NULL;
+>>   +	error = unpack_pdb(e, &profile->attach.xmatch, false, false, &info);
+>>   +	if (error) {
+>>    		info = "bad xmatch";
+>>    		goto fail;
+>>    	}
+>>   -	/* xmatch_len is not optional if xmatch is set */
+>>   -	if (profile->xmatch) {
+>>   +
+>>   +	/* neither xmatch_len not xmatch_perms are optional if xmatch is set */
+>>   +	if (profile->attach.xmatch.dfa) {
+>> - 		if (!unpack_u32(e, &tmp, NULL)) {
+>> + 		if (!aa_unpack_u32(e, &tmp, NULL)) {
+>>    			info = "missing xmatch len";
+>>    			goto fail;
+>>    		}
+>> @@@ -943,38 -757,38 +916,38 @@@
+>>    		profile->path_flags = PATH_MEDIATE_DELETED;
+>>    
+>>    	info = "failed to unpack profile capabilities";
+>> - 	if (!unpack_u32(e, &(rules->caps.allow.cap[0]), NULL))
+>>   -	if (!aa_unpack_u32(e, &(profile->caps.allow.cap[0]), NULL))
+>> ++	if (!aa_unpack_u32(e, &(rules->caps.allow.cap[0]), NULL))
+>>    		goto fail;
+>> - 	if (!unpack_u32(e, &(rules->caps.audit.cap[0]), NULL))
+>>   -	if (!aa_unpack_u32(e, &(profile->caps.audit.cap[0]), NULL))
+>> ++	if (!aa_unpack_u32(e, &(rules->caps.audit.cap[0]), NULL))
+>>    		goto fail;
+>> - 	if (!unpack_u32(e, &(rules->caps.quiet.cap[0]), NULL))
+>>   -	if (!aa_unpack_u32(e, &(profile->caps.quiet.cap[0]), NULL))
+>> ++	if (!aa_unpack_u32(e, &(rules->caps.quiet.cap[0]), NULL))
+>>    		goto fail;
+>> - 	if (!unpack_u32(e, &tmpcap.cap[0], NULL))
+>> + 	if (!aa_unpack_u32(e, &tmpcap.cap[0], NULL))
+>>    		goto fail;
+>>    
+>>    	info = "failed to unpack upper profile capabilities";
+>> - 	if (unpack_nameX(e, AA_STRUCT, "caps64")) {
+>> + 	if (aa_unpack_nameX(e, AA_STRUCT, "caps64")) {
+>>    		/* optional upper half of 64 bit caps */
+>> - 		if (!unpack_u32(e, &(rules->caps.allow.cap[1]), NULL))
+>>   -		if (!aa_unpack_u32(e, &(profile->caps.allow.cap[1]), NULL))
+>> ++		if (!aa_unpack_u32(e, &(rules->caps.allow.cap[1]), NULL))
+>>    			goto fail;
+>> - 		if (!unpack_u32(e, &(rules->caps.audit.cap[1]), NULL))
+>>   -		if (!aa_unpack_u32(e, &(profile->caps.audit.cap[1]), NULL))
+>> ++		if (!aa_unpack_u32(e, &(rules->caps.audit.cap[1]), NULL))
+>>    			goto fail;
+>> - 		if (!unpack_u32(e, &(rules->caps.quiet.cap[1]), NULL))
+>>   -		if (!aa_unpack_u32(e, &(profile->caps.quiet.cap[1]), NULL))
+>> ++		if (!aa_unpack_u32(e, &(rules->caps.quiet.cap[1]), NULL))
+>>    			goto fail;
+>> - 		if (!unpack_u32(e, &(tmpcap.cap[1]), NULL))
+>> + 		if (!aa_unpack_u32(e, &(tmpcap.cap[1]), NULL))
+>>    			goto fail;
+>> - 		if (!unpack_nameX(e, AA_STRUCTEND, NULL))
+>> + 		if (!aa_unpack_nameX(e, AA_STRUCTEND, NULL))
+>>    			goto fail;
+>>    	}
+>>    
+>>    	info = "failed to unpack extended profile capabilities";
+>> - 	if (unpack_nameX(e, AA_STRUCT, "capsx")) {
+>> + 	if (aa_unpack_nameX(e, AA_STRUCT, "capsx")) {
+>>    		/* optional extended caps mediation mask */
+>> - 		if (!unpack_u32(e, &(rules->caps.extended.cap[0]), NULL))
+>>   -		if (!aa_unpack_u32(e, &(profile->caps.extended.cap[0]), NULL))
+>> ++		if (!aa_unpack_u32(e, &(rules->caps.extended.cap[0]), NULL))
+>>    			goto fail;
+>> - 		if (!unpack_u32(e, &(rules->caps.extended.cap[1]), NULL))
+>>   -		if (!aa_unpack_u32(e, &(profile->caps.extended.cap[1]), NULL))
+>> ++		if (!aa_unpack_u32(e, &(rules->caps.extended.cap[1]), NULL))
+>>    			goto fail;
+>> - 		if (!unpack_nameX(e, AA_STRUCTEND, NULL))
+>> + 		if (!aa_unpack_nameX(e, AA_STRUCTEND, NULL))
+>>    			goto fail;
+>>    	}
+>>    
+>> @@@ -993,55 -807,62 +966,55 @@@
+>>    		goto fail;
+>>    	}
+>>    
+>> - 	if (unpack_nameX(e, AA_STRUCT, "policydb")) {
+>> + 	if (aa_unpack_nameX(e, AA_STRUCT, "policydb")) {
+>>    		/* generic policy dfa - optional and may be NULL */
+>>    		info = "failed to unpack policydb";
+>>   -		profile->policy.dfa = unpack_dfa(e);
+>>   -		if (IS_ERR(profile->policy.dfa)) {
+>>   -			error = PTR_ERR(profile->policy.dfa);
+>>   -			profile->policy.dfa = NULL;
+>>   -			goto fail;
+>>   -		} else if (!profile->policy.dfa) {
+>>   -			error = -EPROTO;
+>>   +		error = unpack_pdb(e, &rules->policy, true, false,
+>>   +				   &info);
+>>   +		if (error)
+>>    			goto fail;
+>>   -		}
+>>   -		if (!aa_unpack_u32(e, &profile->policy.start[0], "start"))
+>>   -			/* default start state */
+>>   -			profile->policy.start[0] = DFA_START;
+>>   -		/* setup class index */
+>>   -		for (i = AA_CLASS_FILE; i <= AA_CLASS_LAST; i++) {
+>>   -			profile->policy.start[i] =
+>>   -				aa_dfa_next(profile->policy.dfa,
+>>   -					    profile->policy.start[0],
+>>   -					    i);
+>>   -		}
+>>   +		/* Fixup: drop when we get rid of start array */
+>>   +		if (aa_dfa_next(rules->policy.dfa, rules->policy.start[0],
+>>   +				AA_CLASS_FILE))
+>>   +			rules->policy.start[AA_CLASS_FILE] =
+>>   +			  aa_dfa_next(rules->policy.dfa,
+>>   +				      rules->policy.start[0],
+>>   +				      AA_CLASS_FILE);
+>> - 		if (!unpack_nameX(e, AA_STRUCTEND, NULL))
+>> + 		if (!aa_unpack_nameX(e, AA_STRUCTEND, NULL))
+>>    			goto fail;
+>>   +		error = aa_compat_map_policy(&rules->policy, e->version);
+>>   +		if (error) {
+>>   +			info = "failed to remap policydb permission table";
+>>   +			goto fail;
+>>   +		}
+>>    	} else
+>>   -		profile->policy.dfa = aa_get_dfa(nulldfa);
+>>   +		rules->policy.dfa = aa_get_dfa(nulldfa);
+>>    
+>>    	/* get file rules */
+>>   -	profile->file.dfa = unpack_dfa(e);
+>>   -	if (IS_ERR(profile->file.dfa)) {
+>>   -		error = PTR_ERR(profile->file.dfa);
+>>   -		profile->file.dfa = NULL;
+>>   -		info = "failed to unpack profile file rules";
+>>   +	error = unpack_pdb(e, &rules->file, false, true, &info);
+>>   +	if (error) {
+>>    		goto fail;
+>>   -	} else if (profile->file.dfa) {
+>>   -		if (!aa_unpack_u32(e, &profile->file.start, "dfa_start"))
+>>   -			/* default start state */
+>>   -			profile->file.start = DFA_START;
+>>   -	} else if (profile->policy.dfa &&
+>>   -		   profile->policy.start[AA_CLASS_FILE]) {
+>>   -		profile->file.dfa = aa_get_dfa(profile->policy.dfa);
+>>   -		profile->file.start = profile->policy.start[AA_CLASS_FILE];
+>>   +	} else if (rules->file.dfa) {
+>>   +		error = aa_compat_map_file(&rules->file);
+>>   +		if (error) {
+>>   +			info = "failed to remap file permission table";
+>>   +			goto fail;
+>>   +		}
+>>   +	} else if (rules->policy.dfa &&
+>>   +		   rules->policy.start[AA_CLASS_FILE]) {
+>>   +		rules->file.dfa = aa_get_dfa(rules->policy.dfa);
+>>   +		rules->file.start[AA_CLASS_FILE] = rules->policy.start[AA_CLASS_FILE];
+>>    	} else
+>>   -		profile->file.dfa = aa_get_dfa(nulldfa);
+>>   -
+>>   -	if (!unpack_trans_table(e, profile)) {
+>>   -		info = "failed to unpack profile transition table";
+>>   -		goto fail;
+>>   -	}
+>>   +		rules->file.dfa = aa_get_dfa(nulldfa);
+>>    
+>>   +	error = -EPROTO;
+>> - 	if (unpack_nameX(e, AA_STRUCT, "data")) {
+>> + 	if (aa_unpack_nameX(e, AA_STRUCT, "data")) {
+>>    		info = "out of memory";
+>>    		profile->data = kzalloc(sizeof(*profile->data), GFP_KERNEL);
+>>   -		if (!profile->data)
+>>   +		if (!profile->data) {
+>>   +			error = -ENOMEM;
+>>    			goto fail;
+>>   -
+>>   +		}
+>>    		params.nelem_hint = 3;
+>>    		params.key_len = sizeof(void *);
+>>    		params.key_offset = offsetof(struct aa_data, key);
+> 
+> This is now a conflict between the apparmor tree and Linus' tree
+> (including the updated fix patch).
+> 
 
-On Wed, Dec 14, 2022 at 02:36:49AM +0300, Serge Semin wrote:
-> On Tue, Dec 13, 2022 at 02:07:33PM -0600, Bjorn Helgaas wrote:
-> > On Tue, Dec 13, 2022 at 01:53:13PM -0600, Bjorn Helgaas wrote:
-> > > On Tue, Dec 13, 2022 at 10:03:10PM +0300, Serge Semin wrote:
-> > > > On Tue, Dec 13, 2022 at 05:48:53PM +0100, Thierry Reding wrote:
-> > > > > On Tue, Dec 13, 2022 at 10:21:03AM -0600, Bjorn Helgaas wrote:
-> > > > > > On Mon, Dec 05, 2022 at 09:57:38AM +1100, Stephen Rothwell wrot=
-e:
-> > > > > > > Hi all,
-> > > > > > >=20
-> > > > > > > Today's linux-next merge of the pci tree got a conflict in:
-> > > > > > >=20
-> > > > > > >   Documentation/devicetree/bindings/pci/snps,dw-pcie.yaml
-> > > > > > >=20
-> > > > > > > between commit:
-> > > > > > >=20
-> > > > > > >   5c3741492d2e ("dt-bindings: PCI: tegra234: Add ECAM support=
-")
-> > > > > > >=20
-> > > > > > > from the arm-soc tree and commit:
-> > > > > > >=20
-> > > > > > >   4cc13eedb892 ("dt-bindings: PCI: dwc: Add reg/reg-names com=
-mon properties")
-> > > > > > >=20
-> > > > > > > from the pci tree.
-> > > > > > >=20
-> > > > > > > I didn't know how to fix this up, so I just used the latter (=
-and so lost
-> > > > > > > the addition of "ecam").
-> > > > > >=20
-> > > > > > Did I miss a suggested resolution for this?
-> > > >=20
-> > > > > We had a brief discussion about this in another thread. So basica=
-lly
-> > > > > Stephen's resolution is fine here and the plan is to instead add =
-the
-> > > > > ECAM bits that the Tegra patch does in a separate patch on top of
-> > > > > Serge's patch. I should get around to sending that patch tomorrow.
-> > > >=20
-> > > > Actually the discussion still goes. I haven't got a respond to my
-> > > > last suggestion which seems to me more reasonable than extending the
-> > > > DT-bindings with another vendor-specific reg-name. @Bjorn, please j=
-oin
-> > > > the discussion here:
-> > > > https://lore.kernel.org/linux-pci/20221114155333.234496-2-jonathanh=
-@nvidia.com/
-> > >=20
->=20
-> > > Sorry, it's really too late for discussion.  I need to send the v6.2
-> > > pull request today or at the very latest, tomorrow, so the only thing
-> > > to decide is how to resolve the merge conflict in the simplest
-> > > possible way.  Unless there's a very compelling reason to resolve it
-> > > differently than Stephen did, that's going to be the answer.
->=20
-> Sigh... One more redundant vendor-specific name. I wish I was in the
-> Cc-list of the original series.
->=20
-> >=20
-> > To be more specific, the current answer is this (which is the same as
-> > what's in next-20221213):
-> >=20
-> >   https://git.kernel.org/cgit/linux/kernel/git/helgaas/pci.git/tree/Doc=
-umentation/devicetree/bindings/pci/snps,dw-pcie.yaml?id=3Df64171fdd171
->=20
-> Thanks. I've got it from the @Stephen message. @Thierry will submit a
-> new patch with the same 'ecam'-names change rebased on top of the
-> updated DT-schema.
+sorry for the delay on this, build and regression testing took way
+longer than they should have.
 
-If Rob doesn't mind this being broken in linux-next for a few more days,
-I can discuss this internally with our PCI and UEFI teams and find out
-if your proposal could be made to work.
+apparmor merge request is now sent
 
-Thierry
-
---FhN8+P4MJWtqepBQ
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmOZ36wACgkQ3SOs138+
-s6FIDxAAoKzl8R+PRvw3YzWOKT9eIHm82b26yxc2wx0vtHeESoMr90FQHHQKQqlo
-JcbYMAh61La9xGLSitvgg8JwHYfiu9+rkn8B92Jxi+ltltVTY/VhigVa2X+XmpqF
-lFBxBgq7uJkIBAcM80m5zSyDy94NOEjOfk/1xgdLmgHZOwsHB9W9UdAp9spGtrWT
-SEJnHhXk4LDVf6nnl6B2lmjys26QTySdvsHy0LLPUNjS4DWrOqDxOJq0sYYNaSMh
-WzBGtbPB123tzK9kCOzYvcKq+E5FpPqFqW0ldpVEwK/Yat7tnWel2FICuOxWjQig
-s1SN1IUQs138wQItOoYvlGJ1Oy/YUUHOuPiuC5EBy+SOopOt3NrEBztnua7jaElD
-uvVWBrfEtjUddkKbufdb4bEclcBaNpzY3+skwhsWLub+Pcqbfx6n7d0mqN9FO/s9
-pxAUAvBjv3QyzFEbcUTExVvnZ+PQSDjgvPKIa5CcYdPXCsJTvaaZ236NTs3i3Fs2
-IJAyZ4D6vxcZrve7vwF0J6450nSggajg967ytlVsgMNZX/Gvi/uJQ4/1Okec91zx
-aEuX6kcKN6AP7Ua+2fh7Lwut1XGqd9jPiye0CqDF5dk2kzi+vkEt8vU3tzlRDVR2
-tzR9SKr+3d8rqCAM0YEWiYLU7Q9F86nUIOdVr59bfCEwP2cZwwo=
-=xl2q
------END PGP SIGNATURE-----
-
---FhN8+P4MJWtqepBQ--

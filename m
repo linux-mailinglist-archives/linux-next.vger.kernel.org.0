@@ -2,56 +2,63 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A71B64E4A7
-	for <lists+linux-next@lfdr.de>; Fri, 16 Dec 2022 00:27:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B141164E4D6
+	for <lists+linux-next@lfdr.de>; Fri, 16 Dec 2022 00:56:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229471AbiLOX1O (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 15 Dec 2022 18:27:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58278 "EHLO
+        id S229854AbiLOX4O (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 15 Dec 2022 18:56:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229614AbiLOX1L (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 15 Dec 2022 18:27:11 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B86850D45;
-        Thu, 15 Dec 2022 15:26:58 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NY7fl2S2zz4xFy;
-        Fri, 16 Dec 2022 10:26:55 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1671146816;
-        bh=v2AHfR+82RtV0sKpDBXTbf/zmcDHdVuGQk+jo2tHN8I=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ONMnnApuYu8CbdvBvMu0beq5Av1emjFc7jB/GWxCG4WCDduseKB1LppRmZOf2VpbM
-         5QAGufkPCXOcSchFhOaloO1zSvZ6ZIsWyo/ffVjHSjr5mvgkFAjEckVk00vKtEDOF4
-         rk0vroRkYLXcoz8TEQ+utiw87QWOOYcb4bt7QFyR/FkD2yxFI2XHvdFF8KsRhn164Y
-         RUbj8N/CaOuruEpDDSn7gFHucJjMfyRL+deI3keujVVDRJ7ax/oWJy1wdgZtpB/Naw
-         7gStjYsYNd32KSK+hqOUMG3k0XTcpyzeBFKGwFDg6na9iQSvqXlYx0w77ScX6f/sIO
-         1a2UR9DG3Kizg==
-Date:   Fri, 16 Dec 2022 10:26:54 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, KVM <kvm@vger.kernel.org>,
-        "Chang S. Bae" <chang.seok.bae@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Jiaxi Chen <jiaxi.chen@linux.intel.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        with ESMTP id S229843AbiLOX4M (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 15 Dec 2022 18:56:12 -0500
+Received: from post.baikalelectronics.com (post.baikalelectronics.com [213.79.110.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C636D5E0BD;
+        Thu, 15 Dec 2022 15:56:06 -0800 (PST)
+Received: from post.baikalelectronics.com (localhost.localdomain [127.0.0.1])
+        by post.baikalelectronics.com (Proxmox) with ESMTP id 0AA65E0EDD;
+        Fri, 16 Dec 2022 02:56:05 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        baikalelectronics.ru; h=cc:cc:content-type:content-type:date
+        :from:from:in-reply-to:message-id:mime-version:references
+        :reply-to:subject:subject:to:to; s=post; bh=DdS1VBmXCCXBX8TinHnW
+        D3eIoJeeunNj3INyqaAgzmM=; b=pqk36VHArTcUIKGkiilo7EAfp5TR3QEqbh81
+        IWTLBkhqDfBbbixagCo2eH4XKaDtlTH9euHoaBcaj8zN6rmT5Eu40KOS6etsULx1
+        JWm06gxzjlekdk1gSVSz/QI1Na92LLhPKqSB1mOix0CzAWP8OXj92dMpE5zcniHS
+        jGW1XPA=
+Received: from mail.baikal.int (mail.baikal.int [192.168.51.25])
+        by post.baikalelectronics.com (Proxmox) with ESMTP id B14B2E0E6B;
+        Fri, 16 Dec 2022 02:56:04 +0300 (MSK)
+Received: from mobilestation (10.8.30.10) by mail (192.168.51.25) with
+ Microsoft SMTP Server (TLS) id 15.0.1395.4; Fri, 16 Dec 2022 02:56:04 +0300
+Date:   Fri, 16 Dec 2022 02:56:03 +0300
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Thierry Reding <treding@nvidia.com>
+CC:     Bjorn Helgaas <helgaas@kernel.org>, Rob Herring <robh@kernel.org>,
+        Vidya Sagar <vidyas@nvidia.com>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        ARM <linux-arm-kernel@lists.infradead.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the kvm tree with the tip tree
-Message-ID: <20221216102654.084efc38@canb.auug.org.au>
-In-Reply-To: <20221201111408.05e4edaa@canb.auug.org.au>
-References: <20221201111408.05e4edaa@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: Re: linux-next: manual merge of the pci tree with the arm-soc tree
+Message-ID: <20221215235603.pwbgwarxutjq2cq7@mobilestation>
+References: <20221213195313.GA200257@bhelgaas>
+ <20221213200733.GA201693@bhelgaas>
+ <20221213233649.zmmiskezdponleuc@mobilestation>
+ <Y5nfr+AXofk9Ch2m@orome>
+ <20221214220735.5fv6agbkwamvfmbv@mobilestation>
+ <Y5sNxY1ibaSK5lND@orome>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/+bYwiv08zE/aI24lqa8b.W8";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <Y5sNxY1ibaSK5lND@orome>
+X-Originating-IP: [10.8.30.10]
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,82 +66,92 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/+bYwiv08zE/aI24lqa8b.W8
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Thu, Dec 15, 2022 at 01:06:29PM +0100, Thierry Reding wrote:
+> On Thu, Dec 15, 2022 at 01:07:35AM +0300, Serge Semin wrote:
+> > On Wed, Dec 14, 2022 at 03:37:35PM +0100, Thierry Reding wrote:
+> > > On Wed, Dec 14, 2022 at 02:36:49AM +0300, Serge Semin wrote:
+> > > > On Tue, Dec 13, 2022 at 02:07:33PM -0600, Bjorn Helgaas wrote:
+> > > > > On Tue, Dec 13, 2022 at 01:53:13PM -0600, Bjorn Helgaas wrote:
+> > > > > > On Tue, Dec 13, 2022 at 10:03:10PM +0300, Serge Semin wrote:
+> > > > > > > On Tue, Dec 13, 2022 at 05:48:53PM +0100, Thierry Reding wrote:
+> > > > > > > > On Tue, Dec 13, 2022 at 10:21:03AM -0600, Bjorn Helgaas wrote:
+> > > > > > > > > On Mon, Dec 05, 2022 at 09:57:38AM +1100, Stephen Rothwell wrote:
+> > > > > > > > > > Hi all,
+> > > > > > > > > > 
+> > > > > > > > > > Today's linux-next merge of the pci tree got a conflict in:
+> > > > > > > > > > 
+> > > > > > > > > >   Documentation/devicetree/bindings/pci/snps,dw-pcie.yaml
+> > > > > > > > > > 
+> > > > > > > > > > between commit:
+> > > > > > > > > > 
+> > > > > > > > > >   5c3741492d2e ("dt-bindings: PCI: tegra234: Add ECAM support")
+> > > > > > > > > > 
+> > > > > > > > > > from the arm-soc tree and commit:
+> > > > > > > > > > 
+> > > > > > > > > >   4cc13eedb892 ("dt-bindings: PCI: dwc: Add reg/reg-names common properties")
+> > > > > > > > > > 
+> > > > > > > > > > from the pci tree.
+> > > > > > > > > > 
+> > > > > > > > > > I didn't know how to fix this up, so I just used the latter (and so lost
+> > > > > > > > > > the addition of "ecam").
+> > > > > > > > > 
+> > > > > > > > > Did I miss a suggested resolution for this?
+> > > > > > > 
+> > > > > > > > We had a brief discussion about this in another thread. So basically
+> > > > > > > > Stephen's resolution is fine here and the plan is to instead add the
+> > > > > > > > ECAM bits that the Tegra patch does in a separate patch on top of
+> > > > > > > > Serge's patch. I should get around to sending that patch tomorrow.
+> > > > > > > 
+> > > > > > > Actually the discussion still goes. I haven't got a respond to my
+> > > > > > > last suggestion which seems to me more reasonable than extending the
+> > > > > > > DT-bindings with another vendor-specific reg-name. @Bjorn, please join
+> > > > > > > the discussion here:
+> > > > > > > https://lore.kernel.org/linux-pci/20221114155333.234496-2-jonathanh@nvidia.com/
+> > > > > > 
+> > > > 
+> > > > > > Sorry, it's really too late for discussion.  I need to send the v6.2
+> > > > > > pull request today or at the very latest, tomorrow, so the only thing
+> > > > > > to decide is how to resolve the merge conflict in the simplest
+> > > > > > possible way.  Unless there's a very compelling reason to resolve it
+> > > > > > differently than Stephen did, that's going to be the answer.
+> > > > 
+> > > > Sigh... One more redundant vendor-specific name. I wish I was in the
+> > > > Cc-list of the original series.
+> > > > 
+> > > > > 
+> > > > > To be more specific, the current answer is this (which is the same as
+> > > > > what's in next-20221213):
+> > > > > 
+> > > > >   https://git.kernel.org/cgit/linux/kernel/git/helgaas/pci.git/tree/Documentation/devicetree/bindings/pci/snps,dw-pcie.yaml?id=f64171fdd171
+> > > > 
+> > > > Thanks. I've got it from the @Stephen message. @Thierry will submit a
+> > > > new patch with the same 'ecam'-names change rebased on top of the
+> > > > updated DT-schema.
+> > > 
+> > 
+> > > If Rob doesn't mind this being broken in linux-next for a few more days,
+> > > I can discuss this internally with our PCI and UEFI teams and find out
+> > > if your proposal could be made to work.
+> > 
+> > That would be awesome if you managed to work with the already defined
+> > 'config' reg-name so the DT-schema would look a bit cleaner. Thanks
+> > in advance.
+> 
 
-Hi all,
+> Looks like Linus has now pulled this in and resolved the conflict
+> himself. I think there is some benefit in "ecam" being more specific
+> than "config" and with ECAM being a PCIe standard mapping, it doesn't
+> seem like it's worth overcomplicating things by overloading the meaning
+> of "config".
 
-On Thu, 1 Dec 2022 11:14:08 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
->=20
-> Today's linux-next merge of the kvm tree got a conflict in:
->=20
->   arch/x86/include/asm/cpufeatures.h
->=20
-> between commit:
->=20
->   aa387b1b1e66 ("x86: CPUID and CR3/CR4 flags for Linear Address Masking")
->=20
-> from the tip tree and commits:
->=20
->   6a19d7aa5821 ("x86: KVM: Advertise CMPccXADD CPUID to user space")
->   af2872f62254 ("x86: KVM: Advertise AMX-FP16 CPUID to user space")
->   5e85c4ebf206 ("x86: KVM: Advertise AVX-IFMA CPUID to user space")
->=20
-> from the kvm tree.
->=20
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
->=20
-> --=20
-> Cheers,
-> Stephen Rothwell
->=20
-> diff --cc arch/x86/include/asm/cpufeatures.h
-> index 11a0e06362e4,1419c4e04d45..000000000000
-> --- a/arch/x86/include/asm/cpufeatures.h
-> +++ b/arch/x86/include/asm/cpufeatures.h
-> @@@ -311,7 -308,9 +311,10 @@@
->   /* Intel-defined CPU features, CPUID level 0x00000007:1 (EAX), word 12 =
-*/
->   #define X86_FEATURE_AVX_VNNI		(12*32+ 4) /* AVX VNNI instructions */
->   #define X86_FEATURE_AVX512_BF16		(12*32+ 5) /* AVX512 BFLOAT16 instruct=
-ions */
-> + #define X86_FEATURE_CMPCCXADD           (12*32+ 7) /* "" CMPccXADD inst=
-ructions */
-> + #define X86_FEATURE_AMX_FP16		(12*32+21) /* "" AMX fp16 Support */
-> + #define X86_FEATURE_AVX_IFMA            (12*32+23) /* "" Support for VP=
-MADD52[H,L]UQ */
->  +#define X86_FEATURE_LAM			(12*32+26) /* Linear Address Masking */
->  =20
->   /* AMD-defined CPU features, CPUID level 0x80000008 (EBX), word 13 */
->   #define X86_FEATURE_CLZERO		(13*32+ 0) /* CLZERO instruction */
+It's vise versa actually. Adding the new name overcomplicates the
+DT-interface for no reason. Using the 'config' name for mapping both
+the unrolled and single-sided cfg-spaces would look much cleaner.
 
-This is now a conflict between the tip tree and Libnus' tree.
+-Serge(y)
 
---=20
-Cheers,
-Stephen Rothwell
+> 
+> Thierry
 
---Sig_/+bYwiv08zE/aI24lqa8b.W8
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
 
------BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmObrT4ACgkQAVBC80lX
-0GwbWQf/ZKziOdNiiQTU68Kwfh0tsDqsXzeBvEJpfN+1xGK8zpbuVIRFbdOsY4xf
-ApcKNhAaqU4Z9c/RhE/7jn1Sio5uJQZc+rqR5ax2XTYR1CvrxxHoawsnxALf/rS5
-usxjgJ4NP8hey0orrz8aygEgfUV8Ee8DUdBTX8oaxx9m/2wOLU9r1vblUEFjzhHD
-WadHl6GWDfVC557genMZ8ez0dMAGBZiIlO7RA5Qw1eBWElqmUFzIc3EuOtDb3dmL
-H7cR6IwZvoBE/W7iB6iJxA1rKNCsElR3MbcsrXX9b5fPBdutsE4sDHuq5AJ3aZlr
-a0shzXbzNm+QHCieEwETuUUa0hfGcQ==
-=gK+q
------END PGP SIGNATURE-----
-
---Sig_/+bYwiv08zE/aI24lqa8b.W8--

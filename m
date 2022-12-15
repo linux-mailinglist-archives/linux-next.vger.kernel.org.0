@@ -2,120 +2,208 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ACFD64DE96
-	for <lists+linux-next@lfdr.de>; Thu, 15 Dec 2022 17:27:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C08264E482
+	for <lists+linux-next@lfdr.de>; Fri, 16 Dec 2022 00:09:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230024AbiLOQ1i (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 15 Dec 2022 11:27:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54942 "EHLO
+        id S229545AbiLOXJw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 15 Dec 2022 18:09:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230239AbiLOQ06 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 15 Dec 2022 11:26:58 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 051D32F029;
-        Thu, 15 Dec 2022 08:26:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671121585; x=1702657585;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=WdPUTgd9zWkCfq183zLUbTzeE291Z9BB8LrxG86yBVg=;
-  b=MpyOElCfD1J+vgY6IS3nNruNDgrwBQ9E3dKqfYcnqinl3Mr37TjzSHWv
-   PqcPbd5VpZPgxGJyU14HsKlAcTNd7UL+CaCT81/GrBUbqGrr80Kql5jDW
-   SiEBmQkNmwlgQceazubFqJcwfinToxmcgNh/l4iKvSGRBjCOcv1dBNljf
-   /8DDzBzPJwgFKuaLEMpMMbTvI9kDfwc6ZQOlEhsLXfTNeL8cFckkqFiFL
-   fEdCZPuBWxrsq9H8oR2PVZx0NZTEM4WYyOIpSbd3uAJ7Y80/VwHk7YpWK
-   IAOw32uJN6VQXNm3kYWkwKOwVOzvO7+SoGWKtDuHSmw7zHo8yBZ6ltDYe
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10562"; a="320603924"
-X-IronPort-AV: E=Sophos;i="5.96,248,1665471600"; 
-   d="scan'208";a="320603924"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2022 08:26:06 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10562"; a="773780459"
-X-IronPort-AV: E=Sophos;i="5.96,248,1665471600"; 
-   d="scan'208";a="773780459"
-Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by orsmga004.jf.intel.com with ESMTP; 15 Dec 2022 08:26:05 -0800
-Date:   Thu, 15 Dec 2022 08:34:20 -0800
-From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
+        with ESMTP id S229914AbiLOXJh (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 15 Dec 2022 18:09:37 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EE1C62E9C;
+        Thu, 15 Dec 2022 15:09:15 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NY7GC4hZgz4xG6;
+        Fri, 16 Dec 2022 10:09:07 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1671145750;
+        bh=Llmkiue3cLjus3rNqXb++NFu9PSb6Z8V18DU2c6iraA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=bAQtHBYQ66yQl0Scoi6ywb3ugDIPkBZQXZFiZJ9g+7aYoVlohlrV/76+dQQ1l+/hD
+         EuMVTVrukfOtfVi/k/VHhf0i7AKxMVbgCSmVqvZyOJgax+IxTRum/4+mQQoDXx1GLc
+         zKblPNT3ASivVIiwV/hMzlLO47rleofMs3f2vvhxwj61M4Z3r3sSVVnJmkNjvVC9zs
+         7IL/2qX1T5+dVff+aH86CpoBNynYIkOVw+WsaQDsY6tmJKhvjz1qzJmWMksuu74j8l
+         NW3jpM4YtIsmviM5VLpDrmLjLV74ceF0mZl8LWOSU3aCD8tQPSe+QcOdZyJQ9c2eWV
+         bdUbmwFyR36ew==
+Date:   Fri, 16 Dec 2022 10:09:05 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Michael Ellerman <mpe@ellerman.id.au>
 Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>,
         "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zilstra <peterz@infradead.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        PowerPC <linuxppc-dev@lists.ozlabs.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: Re: linux-next: build failure after merge of the tip tree
-Message-ID: <20221215163420.GA19321@ranerica-svr.sc.intel.com>
-References: <20221213124023.40476af0@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the tip tree with the
+ powerpc-objtool tree
+Message-ID: <20221216100905.78f9ecd9@canb.auug.org.au>
+In-Reply-To: <20221124122931.266df8c7@canb.auug.org.au>
+References: <20221124122931.266df8c7@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221213124023.40476af0@canb.auug.org.au>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/YZiFqCTqNMQ9KhLJxGw8IT2";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Dec 13, 2022 at 12:40:23PM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the tip tree, today's linux-next build (x86_64 allmodconfig)
-> failed like this:
-> 
-> In file included from include/linux/uaccess.h:11,
->                  from include/linux/sched/task.h:11,
->                  from include/linux/sched/signal.h:9,
->                  from include/linux/rcuwait.h:6,
->                  from include/linux/percpu-rwsem.h:7,
->                  from include/linux/fs.h:33,
->                  from include/linux/highmem.h:5,
->                  from include/linux/bvec.h:10,
->                  from include/linux/blk_types.h:10,
->                  from include/linux/blkdev.h:9,
->                  from drivers/scsi/scsi_ioctl.c:9:
-> drivers/scsi/scsi_ioctl.c: In function 'sg_scsi_ioctl':
-> arch/x86/include/asm/uaccess.h:46:9: error: cast specifies array type
->    46 |         (__force __typeof__(ptr))__ptrval;                              \
->       |         ^
-> arch/x86/include/asm/uaccess.h:107:38: note: in definition of macro '__typefits'
->   107 |         __builtin_choose_expr(sizeof(x)<=sizeof(type),(unsigned type)0,not)
->       |                                      ^
-> arch/x86/include/asm/uaccess.h:130:18: note: in expansion of macro '__inttype'
->   130 |         register __inttype(*(ptr)) __val_gu asm("%"_ASM_DX);            \
->       |                  ^~~~~~~~~
-> arch/x86/include/asm/uaccess.h:162:9: note: in expansion of macro 'do_get_user_call'
->   162 |         do_get_user_call(get_user,x,untagged_ptr(current->mm, ptr));    \
->       |         ^~~~~~~~~~~~~~~~
-> arch/x86/include/asm/uaccess.h:162:37: note: in expansion of macro 'untagged_ptr'
->   162 |         do_get_user_call(get_user,x,untagged_ptr(current->mm, ptr));    \
->       |                                     ^~~~~~~~~~~~
-> drivers/scsi/scsi_ioctl.c:522:13: note: in expansion of macro 'get_user'
->   522 |         if (get_user(opcode, sic->data))
->       |             ^~~~~~~~
-> 
-> Caused by commit
-> 
->   ce66a02538f3 ("x86/mm: Fix sparse warnings in untagged_ptr()")
-> 
-> (the scsi code above has not changed since at least February ...)
-> 
-> I have reverted that commit for today.
+--Sig_/YZiFqCTqNMQ9KhLJxGw8IT2
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-There is a patch from Kirill that fixes this issue. It seems that its on
-it's way to be merged [1].
+Hi all,
 
-Thanks and BR,
-Ricardo
+On Thu, 24 Nov 2022 12:29:31 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>=20
+> Today's linux-next merge of the tip tree got a conflict in:
+>=20
+>   tools/objtool/check.c
+>=20
+> between commit:
+>=20
+>   efb11fdb3e1a ("objtool: Fix SEGFAULT")
+>=20
+> from the powerpc-objtool tree and commit:
+>=20
+>   dbcdbdfdf137 ("objtool: Rework instruction -> symbol mapping")
+>=20
+> from the tip tree.
+>=20
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+>=20
+> --=20
+> Cheers,
+> Stephen Rothwell
+>=20
+> diff --cc tools/objtool/check.c
+> index 7580c66ca5c8,4f1a7384426b..000000000000
+> --- a/tools/objtool/check.c
+> +++ b/tools/objtool/check.c
+> @@@ -207,7 -204,7 +204,7 @@@ static bool __dead_end_function(struct=20
+>   		return false;
+>  =20
+>   	insn =3D find_insn(file, func->sec, func->offset);
+> - 	if (!insn || !insn->func)
+>  -	if (!insn_func(insn))
+> ++	if (!insn || !insn_func(insn))
+>   		return false;
+>  =20
+>   	func_for_each_insn(file, func, insn) {
+> @@@ -850,11 -861,73 +861,73 @@@ static int create_ibt_endbr_seal_sectio
+>   	return 0;
+>   }
+>  =20
+> + static int create_cfi_sections(struct objtool_file *file)
+> + {
+> + 	struct section *sec, *s;
+> + 	struct symbol *sym;
+> + 	unsigned int *loc;
+> + 	int idx;
+> +=20
+> + 	sec =3D find_section_by_name(file->elf, ".cfi_sites");
+> + 	if (sec) {
+> + 		INIT_LIST_HEAD(&file->call_list);
+> + 		WARN("file already has .cfi_sites section, skipping");
+> + 		return 0;
+> + 	}
+> +=20
+> + 	idx =3D 0;
+> + 	for_each_sec(file, s) {
+> + 		if (!s->text)
+> + 			continue;
+> +=20
+> + 		list_for_each_entry(sym, &s->symbol_list, list) {
+> + 			if (sym->type !=3D STT_FUNC)
+> + 				continue;
+> +=20
+> + 			if (strncmp(sym->name, "__cfi_", 6))
+> + 				continue;
+> +=20
+> + 			idx++;
+> + 		}
+> + 	}
+> +=20
+> + 	sec =3D elf_create_section(file->elf, ".cfi_sites", 0, sizeof(unsigned=
+ int), idx);
+> + 	if (!sec)
+> + 		return -1;
+> +=20
+> + 	idx =3D 0;
+> + 	for_each_sec(file, s) {
+> + 		if (!s->text)
+> + 			continue;
+> +=20
+> + 		list_for_each_entry(sym, &s->symbol_list, list) {
+> + 			if (sym->type !=3D STT_FUNC)
+> + 				continue;
+> +=20
+> + 			if (strncmp(sym->name, "__cfi_", 6))
+> + 				continue;
+> +=20
+> + 			loc =3D (unsigned int *)sec->data->d_buf + idx;
+> + 			memset(loc, 0, sizeof(unsigned int));
+> +=20
+> + 			if (elf_add_reloc_to_insn(file->elf, sec,
+> + 						  idx * sizeof(unsigned int),
+> + 						  R_X86_64_PC32,
+> + 						  s, sym->offset))
+> + 				return -1;
+> +=20
+> + 			idx++;
+> + 		}
+> + 	}
+> +=20
+> + 	return 0;
+> + }
+> +=20
+>   static int create_mcount_loc_sections(struct objtool_file *file)
+>   {
+>  -	struct section *sec;
+>  -	unsigned long *loc;
+>  +	int addrsize =3D elf_class_addrsize(file->elf);
+>   	struct instruction *insn;
+>  +	struct section *sec;
+>   	int idx;
+>  =20
+>   	sec =3D find_section_by_name(file->elf, "__mcount_loc");
 
-[1]. https://lore.kernel.org/lkml/166986602299.2101055.4152803267481265665.b4-ty@oracle.com/
+This is now a conflict between the powerpc tree and Linus' tree.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/YZiFqCTqNMQ9KhLJxGw8IT2
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmObqREACgkQAVBC80lX
+0Gyevgf+Jaog/4cPR9caBIeop8dVQj+x41sLPTWbYZJwMAdXlf2dRUrTwVuiMMYo
+IRT9KNco030SzNgwEUnSZRRiew0HjWXsqgJYJUcY029C0/6YKDTScWioUZgsSnhA
+LGLOAS5g+tOQTfdiubsfy2P5qnbOXSEerv+KZUnR0AQIpYgAKkBSZJUrCdZs9MeL
+2nAe3PUiKe52zgzAGYd6nmOmh2uI98/0i2+sa3MSDUt3OHnp4q6i3GK0cKZEfSBn
+PLxQQAUdZaR6Y8hMP56vbwD2oRmrjfQi2D9YyzVX/QO8dYzpegMnxhDPI0Lfd+nO
+UwnyRlhbdVDkxsuGNrDEwElx+21paw==
+=q+A3
+-----END PGP SIGNATURE-----
+
+--Sig_/YZiFqCTqNMQ9KhLJxGw8IT2--

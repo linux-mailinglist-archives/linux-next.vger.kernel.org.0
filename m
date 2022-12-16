@@ -2,54 +2,48 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E66F64E582
-	for <lists+linux-next@lfdr.de>; Fri, 16 Dec 2022 02:03:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8C2D64E59C
+	for <lists+linux-next@lfdr.de>; Fri, 16 Dec 2022 02:26:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229596AbiLPBDb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 15 Dec 2022 20:03:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60828 "EHLO
+        id S229743AbiLPB0g (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 15 Dec 2022 20:26:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbiLPBDa (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 15 Dec 2022 20:03:30 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34FEE18B2C;
-        Thu, 15 Dec 2022 17:03:29 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S229480AbiLPB0c (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 15 Dec 2022 20:26:32 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2355B5D6A6;
+        Thu, 15 Dec 2022 17:26:31 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B632661FD0;
-        Fri, 16 Dec 2022 01:03:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F43FC433EF;
-        Fri, 16 Dec 2022 01:03:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671152608;
-        bh=TG9mwD1bCYgozmgjbn31WXW3pQLmSYbDf0pX94TUrus=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=grLATeZAdiYRz94xFfJHWjEfxaPBp8WvZfBHUJJs17I2+fKLgKInGnp9r6e0tnJqJ
-         kMr2+Pvs8u96X6Xzr7gDUtCw0zFu2cIbc+cLjZmAvoO1cqCJSvM7SiDCoFFmBWNu1V
-         wk10SR7so/73VnWZFhcBmr/KtKo9Z2npxZFGfi3tu59N2+Zwqavc6ij28sdWg43MXI
-         aWUcJQI5415K4vFzYJerfNWMhBTmTgolEqaDStXTl5+/bQ75jdMbE3azog1hSeHQQ7
-         YdESHnVAxH8sNG/qGz3NcFpy35CPWfLEOlc9k5pmx0cZUeh/+4V2VzXy2cXr42jzAe
-         Lp8b2qBn/VfKg==
-Date:   Fri, 16 Dec 2022 10:03:25 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NYBJj1ssHz4xGR;
+        Fri, 16 Dec 2022 12:26:29 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1671153989;
+        bh=aVx99TG7U4oYgNg9cvJlV5weqq71jApbrlwQiqe2VRg=;
+        h=Date:From:To:Cc:Subject:From;
+        b=L+mfCjADmYtHhHZ5GtCN25H9l/fxntPmx2TiJYI0kyN8puGp1aAan5491dZyzOWBg
+         jVt5HPN3hrZUnlZ6Tv6sH3Xpzz2f0X0jHLmCm81bGV/l4coQzM1TMzUwUWbMWEbnw6
+         mJbNBrc2jHabh6VNYQD6O5Di3A5uWby5W5sFiyLLlSNnHQ++YHKaTksuW9m7zNuzHG
+         9tC3K4aHdswFQhC36uKDH/4rOsmp2TVcnfNOUrW7HlL+qTc6V8HjdKPvLXuPJpO0fT
+         SERU1YGhqOSwrAZteCIG0a8V3uYJCuXay5YaJYDoKN+bRF2z4n9zgLwtywhpBCiwt0
+         LBGaB3IPpSKUw==
+Date:   Fri, 16 Dec 2022 12:26:27 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
 To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+Cc:     Daniel Verkamp <dverkamp@chromium.org>,
+        Jeff Xu <jeffxu@google.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the mm tree
-Message-Id: <20221216100325.038848b5b427684cd439dcee@kernel.org>
-In-Reply-To: <20221215163548.7c321bb0fac2343a8ef7d202@linux-foundation.org>
-References: <20221216112121.4bcb5c43@canb.auug.org.au>
-        <20221215163548.7c321bb0fac2343a8ef7d202@linux-foundation.org>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Subject: linux-next: build failure after merge of the mm tree
+Message-ID: <20221216122627.6a3ded39@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/oV5U1ZkIftJdRxiOF=tWbm=";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,53 +51,54 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, 15 Dec 2022 16:35:48 -0800
-Andrew Morton <akpm@linux-foundation.org> wrote:
+--Sig_/oV5U1ZkIftJdRxiOF=tWbm=
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> On Fri, 16 Dec 2022 11:21:21 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> 
-> > Hi all,
-> > 
-> > After merging the mm tree, today's linux-next build (powerpc
-> > ppc64_defconfig) failed like this:
-> > 
-> > In file included from fs/btrfs/tree-checker.c:20:
-> > include/linux/error-injection.h: In function 'get_injectable_error_type':
-> > include/linux/error-injection.h:22:17: error: 'EOPNOTSUPP' undeclared (first use in this function)
-> >    22 |         return -EOPNOTSUPP;
-> >       |                 ^~~~~~~~~~
-> > include/linux/error-injection.h:22:17: note: each undeclared identifier is reported only once for each function it appears in
-> > 
-> > Caused by commit
-> > 
-> >   fcb9954aa1dc ("error-injection: remove EI_ETYPE_NONE")
-> > 
-> > I have reverted that commit for today (and the following one).
-> 
-> Thanks.  I'll try the obvious:
+Hi all,
 
-I sent v2 but it seems to be missed.
+After merging the mm tree, today's linux-next build (sparc defconfig)
+failed like this:
 
-https://lore.kernel.org/all/167094068123.608798.9238149148720683524.stgit@devnote3/T/#u
+kernel/pid_namespace.c: In function 'create_pid_namespace':
+kernel/pid_namespace.c:114:9: error: implicit declaration of function 'init=
+ialize_memfd_noexec_scope'; did you mean 'set_memfd_noexec_scope'? [-Werror=
+=3Dimplicit-function-declaration]
+  114 |         initialize_memfd_noexec_scope(ns);
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |         set_memfd_noexec_scope
+kernel/pid_namespace.c: In function 'pid_namespaces_init':
+kernel/pid_namespace.c:462:9: error: implicit declaration of function 'regi=
+ster_pid_ns_sysctl_table_vm'; did you mean 'register_pid_ns_ctl_table_vm'? =
+[-Werror=3Dimplicit-function-declaration]
+  462 |         register_pid_ns_sysctl_table_vm();
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |         register_pid_ns_ctl_table_vm
 
-Either your patch or v2 are OK for me. (doing the same thing)
+Caused by commit
 
-Thank you,
+  70ebb551866e ("mm/memfd: add MFD_NOEXEC_SEAL and MFD_EXEC")
 
-> 
-> --- a/include/linux/error-injection.h~error-injection-remove-ei_etype_none-fix
-> +++ a/include/linux/error-injection.h
-> @@ -4,6 +4,7 @@
->  
->  #include <linux/compiler.h>
->  #include <asm-generic/error-injection.h>
-> +#include <linux/errno.h>
->  
->  #ifdef CONFIG_FUNCTION_ERROR_INJECTION
->  
-> _
-> 
+I have reverted that commit (and the following 2) for today.
 
+--=20
+Cheers,
+Stephen Rothwell
 
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+--Sig_/oV5U1ZkIftJdRxiOF=tWbm=
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmObyUMACgkQAVBC80lX
+0GzPjgf/R7PJ8TLM1xHHJYCAbThuIafQH0e5Cn4fCpny7NPoLKq7vsNjafg57D9O
+cl83f9u4MkvVHK00egRd0ClXa04JgWD+WBv2VrY/xGS4g7eaIBWEv+60hqQQxqlY
+x4XWLuDzO88k7gt5/iNYDNZM/GgPDnWquvk60IG6DKwb0NAytgs/J2MLdvSEQeK/
+d3zMWud94kWu5T9UXnk3ktftoHbkZuj2bnQWPeASsFn3pVy6NrRR3nFz2ZXmUcJg
+/UjPSoWrlIIPbBnQ4MNkvdQf5Jg+0hWyapDoqQmQ4+tZ7kYrQ+aM/Zwfm045pZ3m
+iKB8qRorzfUtkTvHhB3OjslSzAh/DA==
+=C1fl
+-----END PGP SIGNATURE-----
+
+--Sig_/oV5U1ZkIftJdRxiOF=tWbm=--

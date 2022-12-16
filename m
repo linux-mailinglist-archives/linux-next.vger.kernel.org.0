@@ -2,295 +2,86 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3452064E64D
-	for <lists+linux-next@lfdr.de>; Fri, 16 Dec 2022 04:18:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4970164EC13
+	for <lists+linux-next@lfdr.de>; Fri, 16 Dec 2022 14:27:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229547AbiLPDS3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 15 Dec 2022 22:18:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47534 "EHLO
+        id S230042AbiLPN1v (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 16 Dec 2022 08:27:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbiLPDST (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 15 Dec 2022 22:18:19 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E978A2187
-        for <linux-next@vger.kernel.org>; Thu, 15 Dec 2022 19:18:18 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id t11-20020a17090a024b00b0021932afece4so4698342pje.5
-        for <linux-next@vger.kernel.org>; Thu, 15 Dec 2022 19:18:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=4WJdMXvZ7kUAv4szoXLebQMQHWI3Ns6DNh26EWF8SFI=;
-        b=UoLrIh+6czXNF/DuMQhDn4JYKP7jGgaQr1X/zlKZuRBNS6GJsoQA2TILEtuycs2nMv
-         3zsMtBdIwo3/nugr8+UF9NwuPTTXtJk/g4oZcCdx7u0XQYqGiKQHKrhUgr6gmH1gZG8z
-         /lDObJjce7UmkOyFNe1yeOhN0ELSuA5O57kNhRmFvm0qzOCCtI3vPYC951SCA7bm8Pgp
-         d3BErhtuB/EzF70/EbmRc9p9CFLIPiTcisdXk4SlbanhqM5gQIkDTKpe92U1rLkRG9nj
-         r+2SAfB01V5PoqPmTgFJiYSjP7mMuOMrNlcGSnQHGNc/ExsSz6T/cehTzfiuLaRMRaF8
-         nCDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4WJdMXvZ7kUAv4szoXLebQMQHWI3Ns6DNh26EWF8SFI=;
-        b=Sc7h2bBKc10RRW3+fbvwFN7Xi2QNYx9irtqujAFouv1eIyLnx8K3q2TJUuHK9BF0pU
-         ArAI/2A289Owx3sYd3w9bQqeDtwwGERTSbEeZqJWxYufAx0Vy4tajnsqddXfjwBxT8mS
-         BelCZofA1lYCVVdFYbAxO1QYEkb4FNaRFliT/l235t+Q1rtPTIVf+no0Jvosp8kKs4vY
-         qUks1fF2aRS23b1UC3lwYazR30wSzuJLJ5ZA4yGUEQHcGRGr3K2mBGAEEOvSoCOiGrXU
-         U8586aWo2H0+2rrdKaFqdv+QskKAzLIhWKnorx4g45eMuPRGWclQdl3A2hLXYOko4Kpu
-         4T8A==
-X-Gm-Message-State: ANoB5pkxy3KzmLm8PDsHtTDxF8wYpGrlDM922E5Doep+l9cU96CCNvvk
-        hyW6+OV6J6x+gK+UUu2IiZF1RYAnVp+j8u57XeAbiw==
-X-Google-Smtp-Source: AA0mqf7scVeV+vP5bbnz1KKRzffUQUrzffNum7vi2gQpo8ubhirGlBqWAmp8Qwa7DXqHweoVvQFnaw==
-X-Received: by 2002:a17:902:cf4c:b0:189:d696:63e2 with SMTP id e12-20020a170902cf4c00b00189d69663e2mr35797502plg.39.1671160697998;
-        Thu, 15 Dec 2022 19:18:17 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id e7-20020a17090301c700b0019101e8e006sm276686plh.56.2022.12.15.19.18.17
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Dec 2022 19:18:17 -0800 (PST)
-Message-ID: <639be379.170a0220.89985.0b83@mx.google.com>
-Date:   Thu, 15 Dec 2022 19:18:17 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S229789AbiLPN1u (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 16 Dec 2022 08:27:50 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB92233C15;
+        Fri, 16 Dec 2022 05:27:49 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 42E18620FA;
+        Fri, 16 Dec 2022 13:27:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1DC3C433D2;
+        Fri, 16 Dec 2022 13:27:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671197268;
+        bh=CI5psMfl9OJ/zNyCUIvQEPoWmsXwNysWNI8BVnhMZns=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JbgmR4T9fVG5mdnayztMxfoqIu+4XygSd7Af1PdO2TInpHlDRePoVWrFEcmuJ5NRv
+         hOKIW3bQhMnyDYswCYLCBWk3eFYILkjU3B6gLYB6uAdCe4U+ZivIpNMKoo1oR3Pl8v
+         Xl73Jf2QrAVblv7Z9iR52Hk0aNfeCcOeiGFGO95d1227ONVPZ+uaRcY5/grLiSphti
+         XQLwj1XA4m708GdSfbuEVcMquF/dudIjZK30rPjCujowQauSE2A1VqRK/DWUqbxYEE
+         T42VPpixPS2I/av9+H0upj/8uBQjKNVFbjiGRN8wesshhSclDHTLwpJR6XI8KflJGz
+         A/piN5z4Boi6w==
+Date:   Fri, 16 Dec 2022 13:27:44 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Stephen Rothwell <sfr@rothwell.id.au>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: linux-next: taking a break
+Message-ID: <Y5xyULcw4rlr3kpa@sirena.org.uk>
+References: <20221216124626.0dd8cb83@oak.ozlabs.ibm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: master
-X-Kernelci-Kernel: next-20221216
-X-Kernelci-Report-Type: build
-X-Kernelci-Tree: next
-Subject: next/master build: 29 builds: 1 failed, 28 passed, 1 error,
- 4 warnings (next-20221216)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="EPaXEuohUYqzpXK9"
+Content-Disposition: inline
+In-Reply-To: <20221216124626.0dd8cb83@oak.ozlabs.ibm.com>
+X-Cookie: No passing.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master build: 29 builds: 1 failed, 28 passed, 1 error, 4 warnings (nex=
-t-20221216)
 
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20221216/
+--EPaXEuohUYqzpXK9
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Tree: next
-Branch: master
-Git Describe: next-20221216
-Git Commit: ca39c4daa6f7f770b1329ffb46f1e4a6bcc3f291
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Built: 7 unique architectures
+On Fri, Dec 16, 2022 at 12:46:26PM +1100, Stephen Rothwell wrote:
 
-Build Failure Detected:
+> Mark: Thanks you for your help during the year, but I don't think you
+> need to bother this time - I assume you would like a break as well :-)
 
-arm64:
-    allmodconfig: (gcc-10) FAIL
+Yeah, I might actualy still be working a bit later than you so I *might*
+do some runs but definitely only a few days in there if I do anything at
+all so nobody should hold their breath.  OTOH having my build machine
+running full pelt sure does help keep the place warm!
 
-Errors and Warnings Detected:
+--EPaXEuohUYqzpXK9
+Content-Type: application/pgp-signature; name="signature.asc"
 
-arc:
+-----BEGIN PGP SIGNATURE-----
 
-arm64:
-    allmodconfig (gcc-10): 1 error, 1 warning
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmOcck8ACgkQJNaLcl1U
+h9Bqvgf/UB6PW8R4ZauWFywrlEIZEzyQXMgJxni4ergVRu8K3GNaeo7/XLYdaO0f
+17EE6PtoLF46U8A9ZXRThcbSEjvKILKf1XVgoGIUu6zTfvZkcO1/meo/apJFf2TL
+NpMekYItuvkpr2OXs3Z0vWyJm+mss2zhGTjEaWmyes+nZXKtwZyOikMG4OFwBfnv
+Gc6Pgg3m0ib3VCZnm5Ug7G6e0klivUaT2fWaL7NhiUNRfP2dy9aaDLu+EKvdl2Hr
+C7NODHPfA/SOyZ6bdAfmqwdKCZsCveJVUzkvK22t08QS1bMUqNghjB+7CFoOx6L2
+V0HX7IuN/235uZAU+roCXqo9z6vgsw==
+=hzCE
+-----END PGP SIGNATURE-----
 
-arm:
-    tegra_defconfig (gcc-10): 1 warning
-
-mips:
-    rs90_defconfig (gcc-10): 1 warning
-
-riscv:
-
-sparc:
-    allnoconfig (gcc-10): 1 warning
-
-x86_64:
-
-Errors summary:
-
-    1    include/linux/fortify-string.h:57:29: error: argument 2 null where=
- non-null expected [-Werror=3Dnonnull]
-
-Warnings summary:
-
-    2    fs/coredump.c:841:12: warning: =E2=80=98dump_emit_page=E2=80=99 de=
-fined but not used [-Wunused-function]
-    1    cc1: all warnings being treated as errors
-    1    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [=
--Wcpp]
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-allmodconfig (arm64, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 section =
-mismatches
-
-Errors:
-    include/linux/fortify-string.h:57:29: error: argument 2 null where non-=
-null expected [-Werror=3Dnonnull]
-
-Warnings:
-    cc1: all warnings being treated as errors
-
----------------------------------------------------------------------------=
------
-allnoconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
-mismatches
-
-Warnings:
-    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-aspeed_g4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-collie_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config (x86_64, clang=
--13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-cu1000-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_ARM64_16K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
-rs, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-ezx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
----------------------------------------------------------------------------=
------
-h5000_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-integrator_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-malta_kvm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-maltasmvp_eva_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-maltaup_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-mmp2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-multi_v5_defconfig (arm, clang-16) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-netwinder_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-nhk8815_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-nommu_k210_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
-0 section mismatches
-
----------------------------------------------------------------------------=
------
-qcom_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-qi_lb60_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-rbtx49xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-rs90_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
-n mismatches
-
-Warnings:
-    fs/coredump.c:841:12: warning: =E2=80=98dump_emit_page=E2=80=99 defined=
- but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-s5pv210_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-tegra_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
-n mismatches
-
-Warnings:
-    fs/coredump.c:841:12: warning: =E2=80=98dump_emit_page=E2=80=99 defined=
- but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, clang-16) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+amdgpu (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
-gs, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86-chromebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors=
-, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86-chromebook+amdgpu (x86_64, gcc-10) =E2=80=94 PASS, 0 e=
-rrors, 0 warnings, 0 section mismatches
-
----
-For more info write to <info@kernelci.org>
+--EPaXEuohUYqzpXK9--

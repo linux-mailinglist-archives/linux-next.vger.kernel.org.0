@@ -2,75 +2,48 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5D93651480
-	for <lists+linux-next@lfdr.de>; Mon, 19 Dec 2022 21:57:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19CF26516A9
+	for <lists+linux-next@lfdr.de>; Tue, 20 Dec 2022 00:14:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232381AbiLSU5D (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 19 Dec 2022 15:57:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37510 "EHLO
+        id S232981AbiLSXN7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 19 Dec 2022 18:13:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232361AbiLSU4x (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 19 Dec 2022 15:56:53 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 009FC6150
-        for <linux-next@vger.kernel.org>; Mon, 19 Dec 2022 12:56:52 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id w4-20020a17090ac98400b002186f5d7a4cso14442916pjt.0
-        for <linux-next@vger.kernel.org>; Mon, 19 Dec 2022 12:56:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=AP0DPgy6juzYjbnmoSK4DSIse02YvBVHuic1zb1crI0=;
-        b=n2Cb9GinsIjyEaT+YGxcLDI2zefP9STnyh6mk+easKE+YmRAE9neZPO5KKQ0un7hzA
-         1WfQoF2Qy0Oo6ffwsDhxOVc59fCZU/OEXw2pDj+gQV0719Bol/qBcaBjr/N/1fCixHbV
-         ii3Mixw1qykkBdRq56vPuUoU5eSuiWj0Y/li7hPZ1nkZn0PUrxr1Ssco3G6XWTYk0jUX
-         q4f7k/NwuXW5lT7SorZpgTcJN3pVISAhO39PNgwLfXd7DlNY8/GHIY8XYdFgsXUjmFu0
-         W9mV9ZnGjHaq6eAnzo7i3kzYthj9wRa40zLu/snuft72nTrG+Y3Azx55N1JgbakviMQY
-         s+6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AP0DPgy6juzYjbnmoSK4DSIse02YvBVHuic1zb1crI0=;
-        b=6ggLXCwhVUikwkZT8fjlP64Xo2xMUfQCOLWhyCDeVz4Omec3ZeWRA/Fjx0LtzHAZdC
-         B8B/xH93M6ss+iwhQztceru23ABrezVVUgF+nIwtI7P/IrBYqHaQPdfW2iwWdNOtpN+k
-         xyFqZ/rpmCZgsqbb+t+Oex802+4t4gim6NArKZ74HEzW1oeK7WoKoJRXyOzkI5kmW21p
-         dZcmK+Uve/3x4/rlYGsqyUI/yC0tpYdPCmgOL1b2YJntJQs9ls4rSUlgyGu4d7o+wU+j
-         HT1aTWkS7+6zt/uOauUOR+PVZIkCTfy5ApK5QXuJrLLkv5r5vWMA6ZDGFOatBfvfLR8R
-         Nnqw==
-X-Gm-Message-State: AFqh2kqluquMEhIfja5wrIwSkToCVOiw+ezlUejxQdJ6q9klrFJljzFR
-        4HJrk/wAnDmRqdV7bntA1ABFr1+Az9NbWK8G
-X-Google-Smtp-Source: AMrXdXuYwK2oZVtQXVR6Uo4lZSOvVHJU5q2NtoAiJA4PqmRch5RIgzCrcaxiZPZosP5g1PcjUUJE1g==
-X-Received: by 2002:a17:902:e5cd:b0:189:b910:c6d2 with SMTP id u13-20020a170902e5cd00b00189b910c6d2mr1353085plf.1.1671483412369;
-        Mon, 19 Dec 2022 12:56:52 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id q18-20020a17090311d200b00188f07c9eedsm7601657plh.176.2022.12.19.12.56.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Dec 2022 12:56:51 -0800 (PST)
-Date:   Mon, 19 Dec 2022 20:56:48 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     coverity-bot <keescook@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        kvm@vger.kernel.org, Dave Hansen <dave.hansen@linux.intel.com>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        linux-next@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: Coverity: handle_vmclear(): Error handling issues
-Message-ID: <Y6DQEFYmjLTXvw/g@google.com>
-References: <202212010825.C23022D@keescook>
+        with ESMTP id S232989AbiLSXNZ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 19 Dec 2022 18:13:25 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BEC81A384;
+        Mon, 19 Dec 2022 15:06:06 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Nbb0g517Qz4x1G;
+        Tue, 20 Dec 2022 10:05:55 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1671491156;
+        bh=m1FNy0ef8Z6Ok4WPRB4WI1oYFT0cUkkBILg1vbkFQVI=;
+        h=Date:From:To:Cc:Subject:From;
+        b=ujpeG2YHKZSUg2BJbnkrT65xtAJeFw7EZtr6KMggdmbQSwcOCnHM/0K8nHh6BuO7f
+         4xDG54toGM/eHVwRcUnppfJKoLj+eKU2S5DWSovG+QhQgoe+YPp0qUY6wjweB4BvcC
+         RCxwDiT/4rJ7PhX+4Fa3Lw/epOSGA7mzjgpxDEjTsoJHdAb9vE70c3yErGQki4S0YU
+         ihvkrgLxEz+QP939bgXlX9Fty0E0JlGNWCuVhHk2/6gC15n8gAdO+M2Vcz+KXfwLPC
+         Gau7AEw2zMGzj+cU+8PvWRAU0Z8dYASc9Co6WhkIxWwMJ1xwFjoYwcXB1N/YMxR329
+         MFt5ScxByQF4g==
+Date:   Tue, 20 Dec 2022 10:05:53 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Bobby Eshleman <bobby.eshleman@bytedance.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the vhost tree with Linus' tree
+Message-ID: <20221220100553.56279b42@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202212010825.C23022D@keescook>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+Content-Type: multipart/signed; boundary="Sig_/vNGSavCtqEiQo9JsuTjYFFf";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,52 +51,99 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Dec 01, 2022, coverity-bot wrote:
-> Hello!
-> 
-> This is an experimental semi-automated report about issues detected by
-> Coverity from a scan of next-20221201 as part of the linux-next scan project:
-> https://scan.coverity.com/projects/linux-next-weekly-scan
-> 
-> You're getting this email because you were associated with the identified
-> lines of code (noted below) that were touched by commits:
-> 
->   Fri Dec 14 17:59:46 2018 +0100
->     55d2375e58a6 ("KVM: nVMX: Move nested code to dedicated files")
-> 
-> Coverity reported the following:
-> 
-> *** CID 1527765:  Error handling issues  (CHECKED_RETURN)
-> arch/x86/kvm/vmx/nested.c:5269 in handle_vmclear()
-> 5263     	 */
-> 5264     	if (likely(!guest_cpuid_has_evmcs(vcpu) ||
-> 5265     		   !evmptr_is_valid(nested_get_evmptr(vcpu)))) {
-> 5266     		if (vmptr == vmx->nested.current_vmptr)
-> 5267     			nested_release_vmcs12(vcpu);
-> 5268
-> vvv     CID 1527765:  Error handling issues  (CHECKED_RETURN)
-> vvv     Calling "kvm_vcpu_write_guest" without checking return value (as is done elsewhere 7 out of 8 times).
-> 5269     		kvm_vcpu_write_guest(vcpu,
-> 5270     				     vmptr + offsetof(struct vmcs12,
-> 5271     						      launch_state),
-> 5272     				     &zero, sizeof(zero));
-> 5273     	} else if (vmx->nested.hv_evmcs && vmptr == vmx->nested.hv_evmcs_vmptr) {
-> 5274     		nested_release_evmcs(vcpu);
-> 
-> If this is a false positive, please let us know so we can mark it as
-> such, or teach the Coverity rules to be smarter. If not, please make
-> sure fixes get into linux-next. :) For patches fixing this, please
-> include these lines (but double-check the "Fixes" first):
-> 
-> Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
-> Addresses-Coverity-ID: 1527765 ("Error handling issues")
-> Fixes: 55d2375e58a6 ("KVM: nVMX: Move nested code to dedicated files")
+--Sig_/vNGSavCtqEiQo9JsuTjYFFf
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Nit on the bot, if it's going to provide a Fixes without human verification, then
-it should probably try to bisect (which I realize could get quite nasty).  Both
-this VMCLEAR issue and the SMM issue report bogus Fixes due to code movement.  If
-the blamed commit on this won't hadn't been so obviously wrong I likely would have
-copy+pasted without ever verifying.
+Hi all,
 
-Maybe just omit the Fixes entirely and rely on the above "touched by commits" to
-provide the developer with the hint?
+Today's linux-next merge of the vhost tree got a conflict in:
+
+  drivers/vhost/vsock.c
+
+between commit:
+
+  de4eda9de2d9 ("use less confusing names for iov_iter direction initialize=
+rs")
+
+from Linus' tree and commit:
+
+  101cf89e8d08 ("virtio/vsock: replace virtio_vsock_pkt with sk_buff")
+
+from the vhost tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/vhost/vsock.c
+index cd6f7776013a,830bc823addc..000000000000
+--- a/drivers/vhost/vsock.c
++++ b/drivers/vhost/vsock.c
+@@@ -165,8 -157,9 +157,9 @@@ vhost_transport_do_send_pkt(struct vhos
+  			break;
+  		}
+ =20
+ -		iov_iter_init(&iov_iter, READ, &vq->iov[out], in, iov_len);
+ +		iov_iter_init(&iov_iter, ITER_DEST, &vq->iov[out], in, iov_len);
+- 		payload_len =3D pkt->len - pkt->off;
++ 		payload_len =3D skb->len;
++ 		hdr =3D virtio_vsock_hdr(skb);
+ =20
+  		/* If the packet is greater than the space available in the
+  		 * buffer, we split it using multiple buffers.
+@@@ -366,18 -340,21 +340,22 @@@ vhost_vsock_alloc_skb(struct vhost_virt
+  		return NULL;
+  	}
+ =20
+- 	pkt =3D kzalloc(sizeof(*pkt), GFP_KERNEL);
+- 	if (!pkt)
++ 	len =3D iov_length(vq->iov, out);
++=20
++ 	/* len contains both payload and hdr */
++ 	skb =3D virtio_vsock_alloc_skb(len, GFP_KERNEL);
++ 	if (!skb)
+  		return NULL;
+ =20
+ -	iov_iter_init(&iov_iter, WRITE, vq->iov, out, len);
+ +	len =3D iov_length(vq->iov, out);
+ +	iov_iter_init(&iov_iter, ITER_SOURCE, vq->iov, out, len);
+ =20
+- 	nbytes =3D copy_from_iter(&pkt->hdr, sizeof(pkt->hdr), &iov_iter);
+- 	if (nbytes !=3D sizeof(pkt->hdr)) {
++ 	hdr =3D virtio_vsock_hdr(skb);
++ 	nbytes =3D copy_from_iter(hdr, sizeof(*hdr), &iov_iter);
++ 	if (nbytes !=3D sizeof(*hdr)) {
+  		vq_err(vq, "Expected %zu bytes for pkt->hdr, got %zu bytes\n",
+- 		       sizeof(pkt->hdr), nbytes);
+- 		kfree(pkt);
++ 		       sizeof(*hdr), nbytes);
++ 		kfree_skb(skb);
+  		return NULL;
+  	}
+ =20
+
+--Sig_/vNGSavCtqEiQo9JsuTjYFFf
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOg7lEACgkQAVBC80lX
+0GyLZgf+Pc9cXS0OA5KNne6FUmec+Ev6RsGmENoKwykf7ayCw0iesuBgm3J26yI9
+LtxrH+tSiFt/e0lspsUyE6Q3y9kFSXj/A0BmwNqH9YlzxOkEhgWgFeCYjfbAuAg9
+NZsRrStznM3YBwiPvn9zCxQfzrWl7ul1ymlnT1ohpvHLD0wDJHlmYZwi8u5lKOL9
+qlyoMBkjgz9VslSiIQHyeujV5djFgJlOQo1u83w8Pbo+/XswsNtJ6YnB/2kwym37
+EfcLNTfXG66l5jmyCS/VQbmXYZ7peL+/WZXJsTxf1+3KRpqs2OvXLniNEOCoImdv
+ngc6mt2M2KCAcA6OqBc795MVQNWlgg==
+=BPiX
+-----END PGP SIGNATURE-----
+
+--Sig_/vNGSavCtqEiQo9JsuTjYFFf--

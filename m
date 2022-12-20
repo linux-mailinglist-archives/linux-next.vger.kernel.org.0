@@ -2,163 +2,106 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31650651D2D
-	for <lists+linux-next@lfdr.de>; Tue, 20 Dec 2022 10:22:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C20D651DF1
+	for <lists+linux-next@lfdr.de>; Tue, 20 Dec 2022 10:48:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233065AbiLTJWN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 20 Dec 2022 04:22:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35636 "EHLO
+        id S229657AbiLTJse (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 20 Dec 2022 04:48:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233389AbiLTJWI (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 20 Dec 2022 04:22:08 -0500
-Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DD532717
-        for <linux-next@vger.kernel.org>; Tue, 20 Dec 2022 01:22:07 -0800 (PST)
-Received: by mail-vs1-xe31.google.com with SMTP id d185so11277967vsd.0
-        for <linux-next@vger.kernel.org>; Tue, 20 Dec 2022 01:22:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=KFQTAT/Y/60qxMnDWgQSQgFguHHrFxnQFd4R9n+cgwQ=;
-        b=fDruKdJjIappxyO0bzmBnEqjUIfEAjnfPQA73B0kiOjE/GOX+KPSdwbaVtmxKXyXr7
-         0AJcnipRsjURUEqzwnYP1oyPbb6Pzt89SJfiC3av0YAXniickpVH5etVv5hMMMD9NuPN
-         mdEfNhoOnsbPOWUQREXFuEBV/70xHNLoqvJURnsC505NJPeVmeQnH3J//M8q/k7oKfC7
-         CqXf/2BZF9e+Ew7qbhlLUM8r32xRzFM/fFwg6S2eNGaBBns+ODeBMkN2CMoj+kCnU/xJ
-         03aMXsMOgyYGhJDSUNBMlphEYCSQbF1mIET+CFSaDHf5WojOF436J9kim6om2Oi3PaL/
-         yUhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KFQTAT/Y/60qxMnDWgQSQgFguHHrFxnQFd4R9n+cgwQ=;
-        b=C6VZuXv1PSL0DG3mFCjKBu9rj7S7GZK56TaH/lgVwDTBE3ibtTREABIrEjOo4W0fp8
-         HqXk4WEBsckHEY0KTRKE0vZKBG/tm8THxcUWcBtnLqtny2YkN5rz2ALPG2YbK9havm3w
-         +2/0Vvby6rIvUyh8vCvgIgMq/sP/gWcRJ9fXVTeysIO55zbGKc2f68hbYHLfcriW3uHg
-         xsBmN5KCuRG4dhYW3s5DpbLCnOBNa94QyZ+IaJzOJyE7gbMlz7x82H3QqVy4+3lNQ2Lw
-         Y5Xy6bng8CcnsraGKdnAn1xArV35NFurCFIOwil+JROgxM5CxHZ9dP/jVQAbt5hAnfUp
-         X2rQ==
-X-Gm-Message-State: AFqh2kqSOoyjVIi3NgNpka7gQG69iVTn60fQXbPyMP4tpb045NPd3IwI
-        f1XVl4PvDpmVc7UCte9oS/n2pZKpCkQs7Ovp1fUy1A==
-X-Google-Smtp-Source: AMrXdXsbkpwFnYm6AgtUU1IDrJMmQSRHrWbZB/qPQ3q2OYwrwaY15vqHADvqo0o+q6XruFRguq8F2Kfv9cPOdtS/hzk=
-X-Received: by 2002:a67:fa4b:0:b0:3b9:8fcd:5258 with SMTP id
- j11-20020a67fa4b000000b003b98fcd5258mr1764059vsq.3.1671528126055; Tue, 20 Dec
- 2022 01:22:06 -0800 (PST)
+        with ESMTP id S229623AbiLTJsd (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 20 Dec 2022 04:48:33 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3182B46;
+        Tue, 20 Dec 2022 01:48:31 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 682A66602CA4;
+        Tue, 20 Dec 2022 09:48:30 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1671529710;
+        bh=+UeG/t8P+OtU1McVRjaNAutZvdie8zzl6FllAp34G0I=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=mSzvmpUKp6IPOVDQbTVALqil8LoCSJeOkeNxrlV1o46X3tXNtbUgafurypeqRxgCU
+         LrVWIKiMjNs2N5pZ1RRM2YGRhSQf+FvhRmxACS42HRhlSpYfOP/YdItGC35zi2/x4w
+         qB3DuMABQ9triLkO7jYbgO2Qi6Ot7L2clBaxiQLP/IayiGwQ+mGaB4EDs0xM0zFURT
+         wGfilln7bSuXVQ+Z2La+YPr+xAZ1ObOjJYmzwHZp2sBOqny6mYD19QQ4muAGDpaWcP
+         mA4h+qogAW72SJzP5GBQnoTIM55x2f7RBK6pFOISo2pz45fvN2fE9qLghCrEKLnhaS
+         F5zaT7iYS/4nA==
+Message-ID: <c0540d38-090a-abb8-654d-db61ce356349@collabora.com>
+Date:   Tue, 20 Dec 2022 10:48:27 +0100
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 20 Dec 2022 14:51:54 +0530
-Message-ID: <CA+G9fYvz1eNS5fw1Wg5f4HqwdWPNg3EQyrGZVEOJ=OQzYzZ_YQ@mail.gmail.com>
-Subject: next: kernel BUG at drivers/virtio/virtio.c:122!
-To:     open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        lkft-triage@lists.linaro.org, regressions@lists.linux.dev,
-        virtualization@lists.linux-foundation.org
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Shaoqin Huang <shaoqin.huang@intel.com>,
-        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-        Angus Chen <angus.chen@jaguarmicro.com>,
-        =?UTF-8?B?QWxleCBCZW5uw6ll?= <alex.bennee@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Anders Roxell <anders.roxell@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH] virtio: fix virtio_config_ops kerneldocs
+Content-Language: en-US
+To:     =?UTF-8?Q?Ricardo_Ca=c3=b1uelo?= <ricardo.canuelo@collabora.com>,
+        mst@redhat.com
+Cc:     sfr@canb.auug.org.au, linux-kernel@vger.kernel.org,
+        linux-next@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, kernel@collabora.com
+References: <20221220073709.2687151-1-ricardo.canuelo@collabora.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20221220073709.2687151-1-ricardo.canuelo@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-The qemu-x86_64 and qemu-arm64 boot failed with Linux next-20221220 tag.
-It is always reproducible with gcc-11/ gcc-12 and clang tool chains.
+Il 20/12/22 08:37, Ricardo Cañuelo ha scritto:
+> Fixes two warning messages when building htmldocs:
+> 
+>      warning: duplicate section name 'Note'
+>      warning: expecting prototype for virtio_config_ops().
+>               Prototype was for vq_callback_t() instead
+> 
+> Signed-off-by: Ricardo Cañuelo <ricardo.canuelo@collabora.com>
+> ---
+>   include/linux/virtio_config.h | 9 +++++----
+>   1 file changed, 5 insertions(+), 4 deletions(-)
+> 
+> diff --git a/include/linux/virtio_config.h b/include/linux/virtio_config.h
+> index 4b517649cfe8..f9a33062c089 100644
+> --- a/include/linux/virtio_config.h
+> +++ b/include/linux/virtio_config.h
+> @@ -16,8 +16,10 @@ struct virtio_shm_region {
+>   	u64 len;
+>   };
+>   
+> +typedef void vq_callback_t(struct virtqueue *);
+> +
+>   /**
+> - * virtio_config_ops - operations for configuring a virtio device
+> + * struct virtio_config_ops - operations for configuring a virtio device
+>    * Note: Do not assume that a transport implements all of the operations
+>    *       getting/setting a value as a simple read/write! Generally speaking,
+>    *       any of @get/@set, @get_status/@set_status, or @get_features/
+> @@ -68,8 +70,8 @@ struct virtio_shm_region {
+>    * @finalize_features: confirm what device features we'll be using.
+>    *	vdev: the virtio_device
+>    *	This sends the driver feature bits to the device: it can change
+> - *	the dev->feature bits if it wants.
+> - * Note: despite the name this can be called any number of times.
+> + *	the dev->feature bits if it wants. Note: despite the name this
+> + *	can be called any number of times.
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+To avoid getting the same warning in the future (developer mistake and/or other
+reasons), what about dropping this instance of "Note:" entirely?
 
-<6>[    0.000000] Booting Linux on physical CPU 0x0000000000 [0x000f0510]
-<5>[    0.000000] Linux version 6.1.0-next-20221220 (tuxmake@tuxmake)
-(Debian clang version 16.0.0
-(++20221218072110+9c1b82599dac-1~exp1~20221218072217.501), Debian LLD
-16.0.0) #1 SMP PREEMPT @1671498176
-<5>[    0.000000] random: crng init done
-<6>[    0.000000] Machine model: linux,dummy-virt
-....
-<6>[    3.571098] loop: module loaded
-<6>[    3.573410] virtio_blk virtio0: 1/0/0 default/read/poll queues
-<5>[    3.578816] virtio_blk virtio0: [vda] 2816420 512-byte logical
-blocks (1.44 GB/1.34 GiB)
-<4>[    3.581234] ------------[ cut here ]------------
-<2>[    3.581595] kernel BUG at drivers/virtio/virtio.c:122!
-<0>[    3.582906] Internal error: Oops - BUG: 00000000f2000800 [#1] PREEMPT SMP
-<4>[    3.583672] Modules linked in:
-<4>[    3.584905] CPU: 0 PID: 1 Comm: swapper/0 Not tainted
-6.1.0-next-20221220 #1
-<4>[    3.585801] Hardware name: linux,dummy-virt (DT)
-<4>[    3.586591] pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT
--SSBS BTYPE=--)
-<4>[    3.587349] pc : virtio_check_driver_offered_feature+0x60/0x6c
-<4>[    3.588613] lr : virtblk_probe+0x7cc/0x8f0
-<4>[    3.588915] sp : ffff80000802b840
-<4>[    3.589314] x29: ffff80000802b850 x28: 0000000000000000 x27:
-0000000000000001
-<4>[    3.590509] x26: 0000000000000001 x25: 0000000000000200 x24:
-ffff0000c1699b00
-<4>[    3.590832] x23: 00000000000000fe x22: ffff0000c0313c30 x21:
-ffff0000c0313c00
-<4>[    3.591568] x20: ffff0000c02f4080 x19: 0000000000000000 x18:
-ffffffffffffffff
-<4>[    3.592056] x17: 00000000ffffffea x16: 00000000fffffffe x15:
-0000000000000004
-<4>[    3.592632] x14: 0000000000000fff x13: ffff800008028000 x12:
-ffff80000802c000
-<4>[    3.593157] x11: 000000000000000f x10: 000000000000000f x9 :
-ffffae66eee314d8
-<4>[    3.594048] x8 : 0000000000000000 x7 : 3631383837352e33 x6 :
-202020205b3e353c
-<4>[    3.594429] x5 : 0000000000000001 x4 : 0000000000000000 x3 :
-ffff80000802b780
-<4>[    3.594956] x2 : ffff80000802b6f8 x1 : 0000000000000011 x0 :
-ffff0000c02f4080
-<4>[    3.595811] Call trace:
-<4>[    3.596120]  virtio_check_driver_offered_feature+0x60/0x6c
-<4>[    3.596632]  virtio_dev_probe+0x274/0x320
-<4>[    3.597064]  really_probe+0x178/0x418
-<4>[    3.597547]  __driver_probe_device+0x120/0x188
-<4>[    3.597820]  driver_probe_device+0x48/0x22c
-<4>[    3.598189]  __driver_attach+0xf8/0x250
-<4>[    3.598656]  bus_for_each_dev+0x8c/0xd8
-<4>[    3.599151]  driver_attach+0x30/0x3c
-<4>[    3.599321]  bus_add_driver+0x11c/0x22c
-<4>[    3.599684]  driver_register+0x84/0x120
-<4>[    3.600175]  register_virtio_driver+0x38/0x48
-<4>[    3.600575]  virtio_blk_init+0x6c/0xb4
-<4>[    3.600759]  do_one_initcall+0xe0/0x2f8
-<4>[    3.601197]  do_initcall_level+0xa8/0x150
-<4>[    3.601703]  do_initcalls+0x60/0xa0
-<4>[    3.601892]  do_basic_setup+0x28/0x34
-<4>[    3.602229]  kernel_init_freeable+0x100/0x178
-<4>[    3.602706]  kernel_init+0x2c/0x1b4
-<4>[    3.603162]  ret_from_fork+0x10/0x20
-<0>[    3.604398] Code: 540000a0 91001129 f1000508 54ffff61 (d4210000)
-<4>[    3.606108] ---[ end trace 0000000000000000 ]---
-<6>[    3.606714] note: swapper/0[1] exited with preempt_count 1
-<0>[    3.608155] Kernel panic - not syncing: Attempted to kill init!
-exitcode=0x0000000b
-<2>[    3.609173] SMP: stopping secondary CPUs
-<0>[    3.610506] Kernel Offset: 0x2e66e4800000 from 0xffff800008000000
-<0>[    3.610970] PHYS_OFFSET: 0x40000000
-<0>[    3.611428] CPU features: 0x00000,003a612f,cd22773f
-<0>[    3.612277] Memory Limit: none
-<0>[    3.613192] ---[ end Kernel panic - not syncing: Attempted to
-kill init! exitcode=0x0000000b ]---
+I think that something like...
 
-Ref Links,
-https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20221220/testrun/13764099/suite/log-parser-test/test/check-kernel-bug/details/
-https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20221220/testrun/13766814/suite/boot/test/clang-nightly-lkftconfig/details/
-https://storage.tuxsuite.com/public/linaro/lkft/builds/2J9l3qxSBmPWVa1S2uWn0Xuwl1J/config
+the dev->feature bits if it wants. Note that despite the name....
 
+Cheers,
+Angelo
 
---
-Linaro LKFT
-https://lkft.linaro.org

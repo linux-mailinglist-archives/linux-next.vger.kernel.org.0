@@ -2,75 +2,68 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C15FE651A7E
-	for <lists+linux-next@lfdr.de>; Tue, 20 Dec 2022 07:03:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 694B6651ADE
+	for <lists+linux-next@lfdr.de>; Tue, 20 Dec 2022 07:45:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229489AbiLTGCJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 20 Dec 2022 01:02:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58824 "EHLO
+        id S233171AbiLTGpV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 20 Dec 2022 01:45:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232995AbiLTGB7 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 20 Dec 2022 01:01:59 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E4E5BEC
-        for <linux-next@vger.kernel.org>; Mon, 19 Dec 2022 22:01:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671516070;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=CxcvbW4SQ7pucHdedQHJukcG8VAvXPlq9vKxUj0hMx4=;
-        b=MazUFf2d/rncsu6IEwZ53VjG8hOZLcttNOHfH/Kc0Dgv5BMWH4M4UddQe+Hk0dxUMUZtco
-        nQyw/ud1YuaTdO2C//rKITj6pBHh5IgeUv7bT/Z+Q+AejZO0SzcxzzkaUEWT2yTiYiXwAb
-        BqPrp7fijJxcfclFAEAaFPJj3wn8o5w=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-652-OKMsO7ZHNYyWbUa0Vxt6pA-1; Tue, 20 Dec 2022 01:01:09 -0500
-X-MC-Unique: OKMsO7ZHNYyWbUa0Vxt6pA-1
-Received: by mail-qk1-f199.google.com with SMTP id q20-20020a05620a0d9400b006fcaa1eac9bso8761483qkl.23
-        for <linux-next@vger.kernel.org>; Mon, 19 Dec 2022 22:01:09 -0800 (PST)
+        with ESMTP id S233176AbiLTGpU (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 20 Dec 2022 01:45:20 -0500
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CE8B12759
+        for <linux-next@vger.kernel.org>; Mon, 19 Dec 2022 22:45:19 -0800 (PST)
+Received: by mail-pl1-x630.google.com with SMTP id d15so11339971pls.6
+        for <linux-next@vger.kernel.org>; Mon, 19 Dec 2022 22:45:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=hBVifKHY7uRnGLpQU50GeVchpnE2eOEKQKJTw9hl3XA=;
+        b=RH+dv/hvpN6X3UqZgVuMbTqp6EvZ+HVsYI5VLmgN6Niliwip+yWUEctUJpJAkfFKMx
+         OcEijhVaYccA8dTZdD3cnHv/PLoLMVllV6Ssi1l768PzCbv8ehAliX+acgsGRlIrFpEB
+         4BxD0av6nV0p7ErYrUT0K6G28MEW1RHbrwug7tr+Gc74XK5xSo5sXZGai/6RFUaqjrF2
+         3PIJxG6sYz7MOrMtp4RhBH564+ST01X+c20eFBB3k4+jSqwY+kY5tJSDdkcdk8PRY2Wd
+         /jMfh8W6u+qTg2H9h1YKRr835DsrACYhQcVWop3dV6kIpBAXSc+zgawZ4MAVk6qQQkwS
+         DQgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CxcvbW4SQ7pucHdedQHJukcG8VAvXPlq9vKxUj0hMx4=;
-        b=X1ipBTjwlkUO2PeElOhPQymvyyCEDiZ+JWIFAxNSl2mYI2BjuESi43DRkB38EaXcJ1
-         A9y42YdVzQNPWeJ+fFQhnCY9l6bTGl1JHQbUNXvFRUlAyw29r/jDbhGlrutal3eoRq0G
-         g7LkvCzoD9B7de2F7BQgjauPCLZp10iuLb6lM3MbyOa2WuaLjTT91i77f5RhJ8bq6Zqg
-         McEf3SDxze+Y7D+PISq1pVGQ6ksJ2gN6t8/Q8p3BpTSAjjmel6SeFBDVSGlZib3G2wr9
-         TrHzDZzMmJIgt93RjUS+40aFOCHKE1FLQfWGS8mrbv3KMeW4Ehk2pwURTAx5boIQcmz3
-         Xxcg==
-X-Gm-Message-State: AFqh2kp6I5Oa5JMFIk5bEr5EeCB1NR5ntclZRHisqyWweGkTZWt1zMF+
-        aBhKe/tZBHQwfBXlmQ/mirEQH+cvLdYYWe4bHjrKVXWeJ0RYaTk8e+OmfoV5L00rN9ZFiDX3Qr3
-        ozW+3ox2q8lXKIQ3vApmEfA==
-X-Received: by 2002:ac8:6b82:0:b0:39c:efc8:b2a8 with SMTP id z2-20020ac86b82000000b0039cefc8b2a8mr1860742qts.27.1671516068868;
-        Mon, 19 Dec 2022 22:01:08 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXsw52UDtMVMxI8ZArmIc5bnjpD/48/efjCKcb+gL01Wag8osM5NZqk2rULUr1W6iSJyLCyEPg==
-X-Received: by 2002:ac8:6b82:0:b0:39c:efc8:b2a8 with SMTP id z2-20020ac86b82000000b0039cefc8b2a8mr1860722qts.27.1671516068550;
-        Mon, 19 Dec 2022 22:01:08 -0800 (PST)
-Received: from redhat.com ([45.144.113.29])
-        by smtp.gmail.com with ESMTPSA id y23-20020ac87097000000b003a50b9f099esm7063711qto.12.2022.12.19.22.01.05
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hBVifKHY7uRnGLpQU50GeVchpnE2eOEKQKJTw9hl3XA=;
+        b=SMs5IP64nogHVzQ2BrP0C8Q0nOuWMAPCVwvzc5RDPL7/ohrbFlnBrYn5gQLDENxceu
+         4LxxWFKmXv1lR2fzPgvq+v0l/PaSkxygQFHrimrOXWtKN4bEwyj1dLikse6tQ4Hf03ql
+         9yhYC7X8uJaMA7yRhj8JKJYOaodLHhU38sJL09ECgnyqro/xcezz3e2Q23FpsuXUwDK/
+         EPr+c+plcoJlLn4BE5lSVFpy/qVHcl2N+RhepzPqxphJLA5qzHZ12L1NIxS5CoK6UT2v
+         txF3uJ7m5KQMMIjW41cqH9Xld1cYmLQL3kCKsZ2Iq2RP9cNCet/b3wpDSdwPJ8VOIp1C
+         vGEQ==
+X-Gm-Message-State: ANoB5pmgSWfsxPUbskGcr0eja53tF/TS/8NdHBrwpVU2JQmcNe1KNxJF
+        smwqdvvs+061oUOQy64j4K5Oz8td2SgGZ+Fq1jQ=
+X-Google-Smtp-Source: AA0mqf53x9D+/6ZjBtE3sPY+2xJzUJM7l8G+tSp/lb6KkXsod9nAY8ZngorKdV2gA8gx7hn+5lly1A==
+X-Received: by 2002:a17:90a:c7c7:b0:219:89c3:2847 with SMTP id gf7-20020a17090ac7c700b0021989c32847mr46091630pjb.44.1671518718475;
+        Mon, 19 Dec 2022 22:45:18 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id d21-20020a630e15000000b00476b165ff8bsm4633193pgl.57.2022.12.19.22.45.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Dec 2022 22:01:07 -0800 (PST)
-Date:   Tue, 20 Dec 2022 01:01:03 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Ricardo =?iso-8859-1?Q?Ca=F1uelo?= 
-        <ricardo.canuelo@collabora.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the vhost tree
-Message-ID: <20221220010040-mutt-send-email-mst@kernel.org>
-References: <20221220105956.4786852d@canb.auug.org.au>
+        Mon, 19 Dec 2022 22:45:17 -0800 (PST)
+Message-ID: <63a159fd.630a0220.ee7c4.76d3@mx.google.com>
+Date:   Mon, 19 Dec 2022 22:45:17 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221220105956.4786852d@canb.auug.org.au>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: v6.1-14044-gc28c7d2a33a8
+X-Kernelci-Tree: next
+X-Kernelci-Branch: pending-fixes
+X-Kernelci-Report-Type: test
+Subject: next/pending-fixes baseline: 530 runs,
+ 4 regressions (v6.1-14044-gc28c7d2a33a8)
+To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+        kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,24 +71,187 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Dec 20, 2022 at 10:59:56AM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the vhost tree, today's linux-next build (htmldocs)
-> produced this warning:
-> 
-> include/linux/virtio_config.h:74: warning: duplicate section name 'Note'
-> include/linux/virtio_config.h:94: warning: expecting prototype for virtio_config_ops(). Prototype was for vq_callback_t() instead
-> 
-> Revelealed by commit
-> 
->   333723e8bc39 ("docs: driver-api: virtio: virtio on Linux")
+next/pending-fixes baseline: 530 runs, 4 regressions (v6.1-14044-gc28c7d2a3=
+3a8)
+
+Regressions Summary
+-------------------
+
+platform                     | arch | lab          | compiler | defconfig  =
+                  | regressions
+-----------------------------+------+--------------+----------+------------=
+------------------+------------
+da850-lcdk                   | arm  | lab-baylibre | gcc-10   | davinci_all=
+_defconfig        | 1          =
+
+jetson-tk1                   | arm  | lab-baylibre | gcc-10   | multi_v7_de=
+fc...G_ARM_LPAE=3Dy | 1          =
+
+ox820-clouden...lug-series-3 | arm  | lab-baylibre | gcc-10   | oxnas_v6_de=
+fconfig           | 1          =
+
+r8a7743-iwg20d-q7            | arm  | lab-cip      | gcc-10   | shmobile_de=
+fconfig           | 1          =
 
 
-Ricardo I assume you will fix this? Patch on top is ok.
+  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
+v6.1-14044-gc28c7d2a33a8/plan/baseline/
 
-> -- 
-> Cheers,
-> Stephen Rothwell
+  Test:     baseline
+  Tree:     next
+  Branch:   pending-fixes
+  Describe: v6.1-14044-gc28c7d2a33a8
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+  SHA:      c28c7d2a33a85439d90c17712b71ec6907033d5f =
 
 
+
+Test Regressions
+---------------- =
+
+
+
+platform                     | arch | lab          | compiler | defconfig  =
+                  | regressions
+-----------------------------+------+--------------+----------+------------=
+------------------+------------
+da850-lcdk                   | arm  | lab-baylibre | gcc-10   | davinci_all=
+_defconfig        | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63a11fecb179ffbcc54eee45
+
+  Results:     3 PASS, 1 FAIL, 0 SKIP
+  Full config: davinci_all_defconfig
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.1-14044-=
+gc28c7d2a33a8/arm/davinci_all_defconfig/gcc-10/lab-baylibre/baseline-da850-=
+lcdk.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.1-14044-=
+gc28c7d2a33a8/arm/davinci_all_defconfig/gcc-10/lab-baylibre/baseline-da850-=
+lcdk.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20221216.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.dmesg.alert: https://kernelci.org/test/case/id/63a11fecb179ffb=
+cc54eee49
+        failing since 330 days (last pass: v5.16-11577-gffd79fec234d, first=
+ fail: v5.17-rc1-180-g86539e2bdb99)
+        3 lines
+
+    2022-12-20T02:37:14.569416  kern  :alert : BUG: Bad page state in proce=
+ss kworker/u2:0  pfn:c3000
+    2022-12-20T02:37:14.570071  kern  :alert : BUG: Bad page state in proce=
+ss kworker/u2:0  pfn:c3400
+    2022-12-20T02:37:14.572646  kern  :alert : BUG: Bad page state in proce=
+ss kworker/u2:0  pfn:c3800
+    2022-12-20T02:37:14.619408  <8><LAVA_SIGNAL_TESTCASE TEST_CASE_ID=3Dale=
+rt RESULT=3Dfail UNITS=3Dlines MEASUREMENT=3D3>   =
+
+ =
+
+
+
+platform                     | arch | lab          | compiler | defconfig  =
+                  | regressions
+-----------------------------+------+--------------+----------+------------=
+------------------+------------
+jetson-tk1                   | arm  | lab-baylibre | gcc-10   | multi_v7_de=
+fc...G_ARM_LPAE=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63a1441ce463df00ec4eee7b
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.1-14044-=
+gc28c7d2a33a8/arm/multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy/gcc=
+-10/lab-baylibre/baseline-jetson-tk1.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.1-14044-=
+gc28c7d2a33a8/arm/multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy/gcc=
+-10/lab-baylibre/baseline-jetson-tk1.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20221216.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/63a1441ce463df00ec4ee=
+e7c
+        failing since 234 days (last pass: v5.18-rc2-366-ga3e1163f7eb1a, fi=
+rst fail: v5.18-rc4-464-g425675974eb3) =
+
+ =
+
+
+
+platform                     | arch | lab          | compiler | defconfig  =
+                  | regressions
+-----------------------------+------+--------------+----------+------------=
+------------------+------------
+ox820-clouden...lug-series-3 | arm  | lab-baylibre | gcc-10   | oxnas_v6_de=
+fconfig           | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63a11f3c3ea53808494eee3e
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: oxnas_v6_defconfig
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.1-14044-=
+gc28c7d2a33a8/arm/oxnas_v6_defconfig/gcc-10/lab-baylibre/baseline-ox820-clo=
+udengines-pogoplug-series-3.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.1-14044-=
+gc28c7d2a33a8/arm/oxnas_v6_defconfig/gcc-10/lab-baylibre/baseline-ox820-clo=
+udengines-pogoplug-series-3.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20221216.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/63a11f3c3ea53808494ee=
+e3f
+        failing since 69 days (last pass: v6.0-9666-g02c05e0b8d5c, first fa=
+il: v6.0-11312-g1778d6da389c) =
+
+ =
+
+
+
+platform                     | arch | lab          | compiler | defconfig  =
+                  | regressions
+-----------------------------+------+--------------+----------+------------=
+------------------+------------
+r8a7743-iwg20d-q7            | arm  | lab-cip      | gcc-10   | shmobile_de=
+fconfig           | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63a1201af97ee6a7604eee23
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: shmobile_defconfig
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.1-14044-=
+gc28c7d2a33a8/arm/shmobile_defconfig/gcc-10/lab-cip/baseline-r8a7743-iwg20d=
+-q7.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.1-14044-=
+gc28c7d2a33a8/arm/shmobile_defconfig/gcc-10/lab-cip/baseline-r8a7743-iwg20d=
+-q7.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20221216.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/63a1201af97ee6a7604ee=
+e24
+        failing since 6 days (last pass: v6.1-2435-g5c02e5d167d0, first fai=
+l: v6.1-6378-g44d433ee7540) =
+
+ =20

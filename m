@@ -2,60 +2,55 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E0BE65F195
-	for <lists+linux-next@lfdr.de>; Thu,  5 Jan 2023 17:58:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B52B65F36B
+	for <lists+linux-next@lfdr.de>; Thu,  5 Jan 2023 19:06:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234747AbjAEQ6n (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 5 Jan 2023 11:58:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44504 "EHLO
+        id S235547AbjAESGD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 5 Jan 2023 13:06:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232004AbjAEQ6d (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 5 Jan 2023 11:58:33 -0500
-Received: from mail-vk1-xa35.google.com (mail-vk1-xa35.google.com [IPv6:2607:f8b0:4864:20::a35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16E5C392F3
-        for <linux-next@vger.kernel.org>; Thu,  5 Jan 2023 08:58:33 -0800 (PST)
-Received: by mail-vk1-xa35.google.com with SMTP id t2so8572616vkk.9
-        for <linux-next@vger.kernel.org>; Thu, 05 Jan 2023 08:58:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=Ax967uLsBA3GZ5v4kGKlUq/iPf9fnH+4W/AZZQrvrhY=;
-        b=up6JbAUOoVYfp7UKnJzEIyb3T+Dar30KNi/m0G5GObz3TZ/h9VhcRLsGFDexwEFO5X
-         YddZlUcBl1cSpl4JR4LTAvCRDiz3npWpjAKHJyyUvzDzwitwR8GKsMzzPQscZ7CVs3ry
-         wMxgfm4bdEQcOF6eix1YFCyH+ytjDwPX3id6/v/t+KyKdJkuVKaxEoeeTFdnPlkzzx9D
-         YR6cvoq5+AXHG9u5GrocGl5tALbLVZlBnJePE6xaSlSGFs9J/kX6XESpUYs0dlrDCu8+
-         FpJlVTAaJmzlkeM7OV0+LNN+DQqFCtPRm0Q9FLMjfcti6fBGKrper/HA/xhIGLY4jm/f
-         6ZXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Ax967uLsBA3GZ5v4kGKlUq/iPf9fnH+4W/AZZQrvrhY=;
-        b=TaF/+mmyskAxFneCKKlQ5sKcI7I7qrjn7b8VQ4kSl4ORagTsgqspMCmmYwJidR/HNr
-         dT6lKETIr5C/a67Mk1Odk7/4qTXJszA4l4dWkW7i/IZjhfe3M326V1lfdonlIwPahv2C
-         IKJNtkjt2YX21L9CIUMjr/7ZT0Thg7bOdqVJMdBf2DCNUwO3LyJxS40s03QK/RViRwgE
-         JfhQBlvlhHG8aF0c5JK0ipomTN4d/FTSedsDpFv4HdtrAvXOqQtqrVyhlpB49/mWlkhR
-         y7CUvzd5asPfYdDLnJsHpBIwRxE2po+qKE9YVHP0GZ6shyxb8OvgrY5/+wdQ0dfICrSC
-         GBYQ==
-X-Gm-Message-State: AFqh2kpuUJ+UOT3J80AoFMsCyzAdSodY1Rjq9whOK5vqwv0QovWcji6t
-        KPswzEzi17DQFRJ35p5vPJrM0H4NSuYqsT2/siaVOP0NKXYhRuLp
-X-Google-Smtp-Source: AMrXdXuJlnnKSFG7oQLM0fOQ/Xam46a8u/3M3IUgLGmmHu2URT9xp5Jc5tpJCq/Nl063q71lEOjE9jbajufd0iD0OXM=
-X-Received: by 2002:a1f:9e12:0:b0:3d5:de78:715f with SMTP id
- h18-20020a1f9e12000000b003d5de78715fmr1212730vke.7.1672937911996; Thu, 05 Jan
- 2023 08:58:31 -0800 (PST)
-MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 5 Jan 2023 22:28:21 +0530
-Message-ID: <CA+G9fYtrJySuME_dtNZSqPT9Ej7FWwwBGWHamDEEcE06=qruhA@mail.gmail.com>
-Subject: next: powerpc: clang-15: defconfig failed
-To:     llvm@lists.linux.dev,
+        with ESMTP id S235581AbjAESFO (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 5 Jan 2023 13:05:14 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4C765BA37;
+        Thu,  5 Jan 2023 10:04:30 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1D557B81BAE;
+        Thu,  5 Jan 2023 18:04:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56603C433EF;
+        Thu,  5 Jan 2023 18:04:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672941865;
+        bh=qgLRdj60mW8eOCCU8IOIvx4YirE72RALiIrG9dhDlsI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NZeOPl0nlhGR+rHDtz9tedHiTqc/L3K1MVUN1WY6RAiunwqvgZ8Gqb/9S8jsWIUjy
+         Z+/ThuUlri5WUDMU6mmdzZ0lZw4/jhroRoWbuKL62e3LUUnVxQrG+YIHmzorKbeR41
+         eNEqNqUmFZIaYj7/OFsGdZgpH1c5gTEJTQYcrKgZdS8HUQWgIE1AMZqpu7aCBiqh6D
+         K67Hj55YGC+dWIsjh+AK/1oBC4ogj9scScF+yoHd2yWZlNhtLZNBjhfRROoexxMmgB
+         Py0Rvx5mZQykzQG4VeCbQzdVS7Yj64G0jqtemSJsNilk7GiTpdxSsaO0ygPc/HGGK4
+         R3A6LkwaJ5mIw==
+Date:   Thu, 5 Jan 2023 11:04:23 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     linux-s390@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>,
         Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        lkft-triage@lists.linaro.org
-Cc:     Nathan Chancellor <nathan@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        lkft-triage@lists.linaro.org, llvm@lists.linux.dev,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>
+Subject: Re: next: clang-15: s390x-linux-gnu-ld: BFD (GNU Binutils for
+ Debian) 2.35.2 assertion fail ../../bfd/elf64-s390.c:3349
+Message-ID: <Y7cRJ8xh/LLT9kk0@dev-arch.thelio-3990X>
+References: <CA+G9fYu6=N4OU11CcHqh5auVJ4WdrR4QmovHjni-z88N41y8zw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+G9fYu6=N4OU11CcHqh5auVJ4WdrR4QmovHjni-z88N41y8zw@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,60 +58,67 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-The powerpc clang-15 defconfig build failures on Linux next-20230105 due to
-following errors / warnings.
+Hi Naresh,
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+On Thu, Jan 05, 2023 at 10:19:23PM +0530, Naresh Kamboju wrote:
+> The s390 clang-15 build failures on Linux next-20230105 due to following
+> errors / warnings.
+> 
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> 
+> `.exit.text' referenced in section `__jump_table' of fs/fuse/inode.o:
+> defined in discarded section `.exit.text' of fs/fuse/inode.o
+> `.exit.text' referenced in section `__jump_table' of fs/fuse/inode.o:
+> defined in discarded section `.exit.text' of fs/fuse/inode.o
+> `.exit.text' referenced in section `__bug_table' of crypto/algboss.o:
+> defined in discarded section `.exit.text' of crypto/algboss.o
+> `.exit.text' referenced in section `__bug_table' of drivers/scsi/sd.o:
+> defined in discarded section `.exit.text' of drivers/scsi/sd.o
+> `.exit.text' referenced in section `__jump_table' of drivers/md/md.o:
+> defined in discarded section `.exit.text' of drivers/md/md.o
+> `.exit.text' referenced in section `__jump_table' of drivers/md/md.o:
+> defined in discarded section `.exit.text' of drivers/md/md.o
+> `.exit.text' referenced in section `.altinstructions' of
+> drivers/md/md.o: defined in discarded section `.exit.text' of
+> drivers/md/md.o
+> `.exit.text' referenced in section `.altinstructions' of
+> drivers/md/md.o: defined in discarded section `.exit.text' of
+> drivers/md/md.o
+> `.exit.text' referenced in section `.altinstructions' of
+> net/iucv/iucv.o: defined in discarded section `.exit.text' of
+> net/iucv/iucv.o
+> `.exit.text' referenced in section `__bug_table' of
+> drivers/s390/cio/qdio_thinint.o: defined in discarded section
+> `.exit.text' of drivers/s390/cio/qdio_thinint.o
+> `.exit.text' referenced in section `__bug_table' of
+> drivers/s390/net/qeth_l3_main.o: defined in discarded section
+> `.exit.text' of drivers/s390/net/qeth_l3_main.o
+> `.exit.text' referenced in section `__bug_table' of
+> drivers/s390/net/qeth_l3_main.o: defined in discarded section
+> `.exit.text' of drivers/s390/net/qeth_l3_main.o
+> s390x-linux-gnu-ld: BFD (GNU Binutils for Debian) 2.35.2 assertion
+> fail ../../bfd/elf64-s390.c:3349
+> make[2]: *** [scripts/Makefile.vmlinux:34: vmlinux] Error 1
+> make[2]: Target '__default' not remade because of errors.
+> make[1]: *** [Makefile:1252: vmlinux] Error 2
 
-`.exit.text' referenced in section `__bug_table' of crypto/algboss.o:
-defined in discarded section `.exit.text' of crypto/algboss.o
-`.exit.text' referenced in section `__ex_table' of
-drivers/nvdimm/core.o: defined in discarded section `.exit.text' of
-drivers/nvdimm/core.o
-`.exit.text' referenced in section `__ex_table' of
-drivers/nvdimm/core.o: defined in discarded section `.exit.text' of
-drivers/nvdimm/core.o
-`.exit.text' referenced in section `__bug_table' of
-drivers/nvdimm/core.o: defined in discarded section `.exit.text' of
-drivers/nvdimm/core.o
-`.exit.text' referenced in section `__bug_table' of
-drivers/macintosh/windfarm_core.o: defined in discarded section
-`.exit.text' of drivers/macintosh/windfarm_core.o
-`.exit.text' referenced in section `__bug_table' of drivers/scsi/sd.o:
-defined in discarded section `.exit.text' of drivers/scsi/sd.o
-`.exit.text' referenced in section `__ex_table' of
-drivers/i2c/i2c-core-base.o: defined in discarded section `.exit.text'
-of drivers/i2c/i2c-core-base.o
-`.exit.text' referenced in section `__ex_table' of
-drivers/i2c/i2c-core-base.o: defined in discarded section `.exit.text'
-of drivers/i2c/i2c-core-base.o
-`.exit.text' referenced in section `__bug_table' of
-drivers/i2c/i2c-core-base.o: defined in discarded section `.exit.text'
-of drivers/i2c/i2c-core-base.o
-make[2]: *** [/builds/linux/scripts/Makefile.vmlinux:34: vmlinux] Error 1
+Thank you for the report! This has been reported and discussed in a few
+different places on the mailing list with various solutions:
 
-build logs:
-https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230105/testrun/13988496/suite/build/test/clang-15-defconfig/log
-https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230105/testrun/13988496/suite/build/test/clang-15-defconfig/details/
+https://lore.kernel.org/Y7Jal56f6UBh1abE@dev-arch.thelio-3990X/
+https://lore.kernel.org/20230102225656.GA3532398@roeck-us.net/
 
-metadata:
-build_name: clang-15-defconfig
-config: https://storage.tuxsuite.com/public/linaro/lkft/builds/2JtJjO4H316O94lONiPAIir18yV/config
-git_describe: next-20230105
-git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-git_sha: cc3c08b41a9c9402ead726ec6deb1217081d0d8b
+https://lore.kernel.org/20230105031306.1455409-1-masahiroy@kernel.org/
+https://lore.kernel.org/20230105132349.384666-1-mpe@ellerman.id.au/
+https://lore.kernel.org/CAMj1kXHqQoqoys83nEp=Q6oT68+-GpCuMjfnYK9pMy-X_+jjKw@mail.gmail.com/
 
+For the future, if you are able to bisect to the change that caused the
+failure, you can devise a more targeted Cc list and potentially find
+some of this information out beforehand, which would allow more threads
+to stay together.
 
-steps to reproduce with tuxmake:
---------------------------------
-# To install tuxmake on your system globally:
-# sudo pip3 install -U tuxmake
-#
-# See https://docs.tuxmake.org/ for complete documentation.
-# Original tuxmake command with fragments listed below.
-# tuxmake --runtime podman --target-arch powerpc --toolchain clang-15
---kconfig defconfig LLVM=1 LLVM_IAS=0 LD=powerpc64le-linux-gnu-ld
+The PowerPC build failure that you reported around the same time as this
+one has the same root cause.
 
---
-Linaro LKFT
-https://lkft.linaro.org
+Cheers,
+Nathan

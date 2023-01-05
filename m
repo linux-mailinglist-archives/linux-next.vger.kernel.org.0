@@ -2,272 +2,134 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0260F65F01B
-	for <lists+linux-next@lfdr.de>; Thu,  5 Jan 2023 16:31:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CABD65F16C
+	for <lists+linux-next@lfdr.de>; Thu,  5 Jan 2023 17:49:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232584AbjAEPbI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 5 Jan 2023 10:31:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53634 "EHLO
+        id S234455AbjAEQth (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 5 Jan 2023 11:49:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233739AbjAEPbA (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 5 Jan 2023 10:31:00 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF1C54D4A1
-        for <linux-next@vger.kernel.org>; Thu,  5 Jan 2023 07:30:58 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id m8-20020a05600c3b0800b003d96f801c48so1587784wms.0
-        for <linux-next@vger.kernel.org>; Thu, 05 Jan 2023 07:30:58 -0800 (PST)
+        with ESMTP id S229905AbjAEQtg (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 5 Jan 2023 11:49:36 -0500
+Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7542B4C706
+        for <linux-next@vger.kernel.org>; Thu,  5 Jan 2023 08:49:35 -0800 (PST)
+Received: by mail-vs1-xe32.google.com with SMTP id s127so24689505vsb.5
+        for <linux-next@vger.kernel.org>; Thu, 05 Jan 2023 08:49:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=cvvnKOeX+ZlMaRKV3hslb79tQ89vWLcDjGlEy66UrG4=;
-        b=rJUFNlrAUdphD6+xz/QdUo9cCVH2OtCU5DmhSloFQhuXQ4A2q+ANHVaTm6RLC6xGYL
-         YUHiUpLyD0RGadGQjkY6Lnt2ZVngthDvNM7DVo0r1sEuoeBQZ8FdzsXdluy40rN1VGo4
-         CuU5fAucH2oJ+dvIfdC3RtWZfdcOq79U2Om82sKWccMOwDVRGq0tOMDrOlABoGMDlYmp
-         uA6EuC5P8IPQZJPJpYXImKIXI0gnLRX3UzeQt2Iw0g6KQHq1Z8O5LetVwfS1NrNysJfs
-         FCMdygUZPytvsIs+mQWaHvkUdj1BirPasTFlfrKopRKSlSxuFLGQh/cQnjKP66yPcUFO
-         gVMw==
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=NP2Dg9YGoVI0aRQKZRKmk+2NtfJSRs4wKdvzmTJdN30=;
+        b=RJeT9XepF5TTt/k0dUZV/SE5YL3hVU4D6mmbfEyA4pmwBB7u9Hos32VINgv35XTGab
+         e1EXuv+4aVSIQ061+9zrQAbgzlhfggRsZKmpsPRyPT6cQRgiRsSJSnvXBa+4PG40zTNO
+         00JGmopVss5r+0M6adjab+hKHQkwB2SUXfUXg9MzG2Or16N3U/ApampP8ko3k//fpf6s
+         6OcTtIuf+RbrJsoHRYlVSFodrr9JJIv7aAGBgldqjq8vIrh6mD3/nhlVkwMkzMPkD/vb
+         rR8Ff8MUNMLEtlbJhoALbRGIKZD6O0O/ULVVb6Khz/GuqpJZxjILWSz2pgplusYWSOXL
+         GFcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cvvnKOeX+ZlMaRKV3hslb79tQ89vWLcDjGlEy66UrG4=;
-        b=lnFwfoJNyfa6LHadyLgYZQJBBNwWBku2XeHzcGg53/G2FdGNsGTmQCUX2hn6aQ4Uol
-         GjfaTuOZpmJzBzeoOf0u/6MC3A8RvP0uR7bHzvAfrfIRcdk4OVwitaIDczujK38XFqJF
-         gLb0nuCL86o497maJnsTdnEdhc7R8Fzebq2QrcEVQsRynpIFTOgTsxVBId46XMacoawr
-         xAIPQgKnJ+V59hF52oURF9Z9FKsmYHVZIHWvydkvregP1sGtAK5zX/TpVx37KeSsOaLe
-         vYp6243NBlUvjBeJr0HYWsjnbkEpPv895oGVevvVAd2YuY6CfzWzz8prn+KdlSQUVUdj
-         9JRQ==
-X-Gm-Message-State: AFqh2kojsrRpMG7ZMUGEQYgnNe1uP3GbHI1oy3NjzwgwS3HtHlUYmQpf
-        7o0R5Q2ofXhq/vlCYV2cbFUI+Q==
-X-Google-Smtp-Source: AMrXdXtT/Q/phSTIZb/AyjObyLc0LTWLwwdNBsOIpGEgGhuvk/k6VOib0W5GULN5qpm8nZxIwumevA==
-X-Received: by 2002:a05:600c:35ca:b0:3d1:f2de:195a with SMTP id r10-20020a05600c35ca00b003d1f2de195amr39933713wmq.32.1672932657109;
-        Thu, 05 Jan 2023 07:30:57 -0800 (PST)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id r7-20020a05600c458700b003c6b7f5567csm8035801wmo.0.2023.01.05.07.30.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 Jan 2023 07:30:56 -0800 (PST)
-Message-ID: <ea9167d4-0978-fc4b-755f-8df09fc7360e@linaro.org>
-Date:   Thu, 5 Jan 2023 16:30:55 +0100
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=NP2Dg9YGoVI0aRQKZRKmk+2NtfJSRs4wKdvzmTJdN30=;
+        b=4Pm3gURR9n5JiIoSGPoGnhLfPwOnVjlt5SSfPJ1NUSJWxI6dk3Z0I3XVo7DudZqXks
+         QyEV6RZKS6lHohjn941TpjZT3LY76I4AbGqXXk+89LR7K3f44OBvq/ZChN4Ymc0irUXQ
+         qu0EPDxnixBeGgnRSp3eTNjgxRgQxh/xjzGtM9fTQ/1viFf3Mso86fWnWDnODqieZua1
+         DE2IJUhJ0mly14Z7DO4hZMtaYyLoZa2ffu4irZgzkXcrUPL3ZfyChOWpiMjUihYrDGvm
+         3EDFnvkvkHy/wO2lkME+kT0dpizZhvYfuw2QCP8838oEpodnJ02H63HXsxTvsr6PG6qK
+         gtDg==
+X-Gm-Message-State: AFqh2krnuvLdV0oZWYFlLqqyX/G1jzerP/YNYL47KHLCi1aI/6pikZfU
+        sAtqCenHU9yQ+OKS2v0EePVXI+tfxb5qZmSDVLPPMw==
+X-Google-Smtp-Source: AMrXdXt4N8lhwv0Ijg2+gCVWyvzAM1F/iq8VgL5hQCW+zidR9kVMzq0d/GtKCdfAgZeULmnXAfCUBpSPOnUqtk9txS0=
+X-Received: by 2002:a05:6102:3003:b0:3ce:c6d7:a4e3 with SMTP id
+ s3-20020a056102300300b003cec6d7a4e3mr68204vsa.3.1672937374400; Thu, 05 Jan
+ 2023 08:49:34 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: linux-next: manual merge of the thermal tree with the pm tree
-Content-Language: en-US
-To:     "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Daniel Lezcano <daniel.lezcano@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-References: <20230105101054.108ad186@canb.auug.org.au>
- <20230105103519.4e849420@canb.auug.org.au>
- <bb71721b-ba20-90d9-df35-aff3c175194e@intel.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <bb71721b-ba20-90d9-df35-aff3c175194e@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 5 Jan 2023 22:19:23 +0530
+Message-ID: <CA+G9fYu6=N4OU11CcHqh5auVJ4WdrR4QmovHjni-z88N41y8zw@mail.gmail.com>
+Subject: next: clang-15: s390x-linux-gnu-ld: BFD (GNU Binutils for Debian)
+ 2.35.2 assertion fail ../../bfd/elf64-s390.c:3349
+To:     linux-s390@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        lkft-triage@lists.linaro.org, llvm@lists.linux.dev
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 05/01/2023 15:27, Wysocki, Rafael J wrote:
-> 
-> On 1/5/2023 12:35 AM, Stephen Rothwell wrote:
->> Hi all,
->>
->> On Thu, 5 Jan 2023 10:10:54 +1100 Stephen Rothwell 
->> <sfr@canb.auug.org.au> wrote:
->>> Today's linux-next merge of the thermal tree got a conflict in:
->>>
->>>    drivers/thermal/intel/x86_pkg_temp_thermal.c
->>>
->>> between commit:
->>>
->>>    58374a3970a0 ("thermal/x86_pkg_temp_thermal: Add support for 
->>> handling dynamic tjmax")
->>>
->>> from the pm tree and commit:
->>>
->>>    03b2e86a24aa ("thermal/drivers/intel: Use generic 
->>> thermal_zone_get_trip() function")
->>>
->>> from the thermal tree.
-> 
-> I'm wondering why the above commit is in the linux-next branch of the 
-> thermal tree, though.
+The s390 clang-15 build failures on Linux next-20230105 due to following
+errors / warnings.
 
-If you are referring to commit 03b2e86a24aa, it is part of the series 
-which was reviewed but got some locking conflict issues just before the 
-merge window so we dropped it. You asked me to reintroduce it with the 
-fixes after v6.2-rc1 is out [1].
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-The previous conflict and this one is because some changes were picked 
-in the linux-pm branch instead of the thermal/linux-branch.
+`.exit.text' referenced in section `__jump_table' of fs/fuse/inode.o:
+defined in discarded section `.exit.text' of fs/fuse/inode.o
+`.exit.text' referenced in section `__jump_table' of fs/fuse/inode.o:
+defined in discarded section `.exit.text' of fs/fuse/inode.o
+`.exit.text' referenced in section `__bug_table' of crypto/algboss.o:
+defined in discarded section `.exit.text' of crypto/algboss.o
+`.exit.text' referenced in section `__bug_table' of drivers/scsi/sd.o:
+defined in discarded section `.exit.text' of drivers/scsi/sd.o
+`.exit.text' referenced in section `__jump_table' of drivers/md/md.o:
+defined in discarded section `.exit.text' of drivers/md/md.o
+`.exit.text' referenced in section `__jump_table' of drivers/md/md.o:
+defined in discarded section `.exit.text' of drivers/md/md.o
+`.exit.text' referenced in section `.altinstructions' of
+drivers/md/md.o: defined in discarded section `.exit.text' of
+drivers/md/md.o
+`.exit.text' referenced in section `.altinstructions' of
+drivers/md/md.o: defined in discarded section `.exit.text' of
+drivers/md/md.o
+`.exit.text' referenced in section `.altinstructions' of
+net/iucv/iucv.o: defined in discarded section `.exit.text' of
+net/iucv/iucv.o
+`.exit.text' referenced in section `__bug_table' of
+drivers/s390/cio/qdio_thinint.o: defined in discarded section
+`.exit.text' of drivers/s390/cio/qdio_thinint.o
+`.exit.text' referenced in section `__bug_table' of
+drivers/s390/net/qeth_l3_main.o: defined in discarded section
+`.exit.text' of drivers/s390/net/qeth_l3_main.o
+`.exit.text' referenced in section `__bug_table' of
+drivers/s390/net/qeth_l3_main.o: defined in discarded section
+`.exit.text' of drivers/s390/net/qeth_l3_main.o
+s390x-linux-gnu-ld: BFD (GNU Binutils for Debian) 2.35.2 assertion
+fail ../../bfd/elf64-s390.c:3349
+make[2]: *** [scripts/Makefile.vmlinux:34: vmlinux] Error 1
+make[2]: Target '__default' not remade because of errors.
+make[1]: *** [Makefile:1252: vmlinux] Error 2
 
-We find thermal Intel changes going directly in linux-pm and thermal 
-changes going through the thermal tree. And sometime thermal core 
-changes picked through linux-pm and sometime through thermal/linux-next.
+metadata:
+--------
+build_name: clang-15-defconfig
+config: https://storage.tuxsuite.com/public/linaro/lkft/builds/2JtJjVEWoJkAJtKsrWamxsxAQb2/config
+git_describe: next-20230105
+git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+git_sha: cc3c08b41a9c9402ead726ec6deb1217081d0d8b
 
-In order to prevent these conflicts in the future, I suggest to always 
-merge thermal patches through the thermal tree.
+build url: https://storage.tuxsuite.com/public/linaro/lkft/builds/2JtJjVEWoJkAJtKsrWamxsxAQb2/
 
-> It is still under review AFAICS.
+Steps to reproduce with tuxmake:
+--------------------------------
+# To install tuxmake on your system globally:
+# sudo pip3 install -U tuxmake
+#
+# See https://docs.tuxmake.org/ for complete documentation.
+# Original tuxmake command with fragments listed below.
 
-The series including the patch "thermal/drivers/intel: Use generic ..." 
-are reviewed and ready for inclusion AFAICT.
+ tuxmake --runtime podman --target-arch s390 --toolchain clang-15
+--kconfig defconfig LLVM_IAS=0
 
-I'm was waiting for an update of linux-pm/thermal to send a PR against 
-this branch.
-
-> Daniel, can you possibly create a bleeding-edge branch for such things? 
-> I can merge it into my bleeding-edge branch on a daily basis.
-
-Yes, I can create a bleeding-edge branch for other patches. Some 
-questions about it:
-
-  - thermal/linux-next will be based on linux-pm/thermal, and 
-thermal/bleeding-edge will be based on thermal/linux-next, right?
-
-  - When patches can be considered for the bleeding-edge?
-
-  - When patches can be considered moving from bleeding-edge to linux-next?
-
-(the questions above are for the thermal tree).
-
-Thanks
-
-   -- Daniel
-
-[1] 
-https://lore.kernel.org/all/CAJZ5v0gY-Lhgf_1Kfg6P5O8s+YMkP4TxggxyS=LU9jVgJikAkg@mail.gmail.com/
-
-
->>> I fixed it up (see below) and can carry the fix as necessary. This
->>> is now fixed as far as linux-next is concerned, but any non trivial
->>> conflicts should be mentioned to your upstream maintainer when your tree
->>> is submitted for merging.  You may also want to consider cooperating
->>> with the maintainer of the conflicting tree to minimise any particularly
->>> complex conflicts.
->> Actually, the resolution I needed was this:
->>
->> diff --cc drivers/thermal/intel/x86_pkg_temp_thermal.c
->> index 9e08d8c8f5fb,494f25250c2d..24c7774cc4a9
->> --- a/drivers/thermal/intel/x86_pkg_temp_thermal.c
->> +++ b/drivers/thermal/intel/x86_pkg_temp_thermal.c
->> @@@ -107,56 -108,37 +108,17 @@@ static struct zone_device *pkg_temp_the
->>    static int sys_get_curr_temp(struct thermal_zone_device *tzd, int 
->> *temp)
->>    {
->>        struct zone_device *zonedev = tzd->devdata;
->>   -    u32 eax, edx;
->>   +    int val;
->>   -    rdmsr_on_cpu(zonedev->cpu, MSR_IA32_PACKAGE_THERM_STATUS,
->>   -            &eax, &edx);
->>   -    if (eax & 0x80000000) {
->>   -        *temp = zonedev->tj_max - ((eax >> 16) & 0x7f) * 1000;
->>   -        pr_debug("sys_get_curr_temp %d\n", *temp);
->>   -        return 0;
->>   -    }
->>   -    return -EINVAL;
->>   +    val = intel_tcc_get_temp(zonedev->cpu, true);
->>   +    if (val < 0)
->>   +        return val;
->>   +
->>   +    *temp = val * 1000;
->>   +    pr_debug("sys_get_curr_temp %d\n", *temp);
->>   +    return 0;
->>    }
->> - static int sys_get_trip_temp(struct thermal_zone_device *tzd,
->> -                  int trip, int *temp)
->> - {
->> -     struct zone_device *zonedev = tzd->devdata;
->> -     unsigned long thres_reg_value;
->> -     u32 mask, shift, eax, edx;
->> -     int tj_max, ret;
->> -
->> -     if (trip >= MAX_NUMBER_OF_TRIPS)
->> -         return -EINVAL;
->> -
->> -     if (trip) {
->> -         mask = THERM_MASK_THRESHOLD1;
->> -         shift = THERM_SHIFT_THRESHOLD1;
->> -     } else {
->> -         mask = THERM_MASK_THRESHOLD0;
->> -         shift = THERM_SHIFT_THRESHOLD0;
->> -     }
->> -
->> -     tj_max = intel_tcc_get_tjmax(zonedev->cpu);
->> -     if (tj_max < 0)
->> -         return tj_max;
->> -     tj_max *= 1000;
->> -
->> -     ret = rdmsr_on_cpu(zonedev->cpu, MSR_IA32_PACKAGE_THERM_INTERRUPT,
->> -                &eax, &edx);
->> -     if (ret < 0)
->> -         return ret;
->> -
->> -     thres_reg_value = (eax & mask) >> shift;
->> -     if (thres_reg_value)
->> -         *temp = tj_max - thres_reg_value * 1000;
->> -     else
->> -         *temp = THERMAL_TEMP_INVALID;
->> -     pr_debug("sys_get_trip_temp %d\n", *temp);
->> -
->> -     return 0;
->> - }
->> -
->>    static int
->>    sys_set_trip_temp(struct thermal_zone_device *tzd, int trip, int temp)
->>    {
->> @@@ -330,18 -340,25 +325,25 @@@ static int pkg_temp_thermal_device_add(
->>        thres_count = clamp_val(thres_count, 0, MAX_NUMBER_OF_TRIPS);
->> -     err = intel_tcc_get_tjmax(cpu);
->> -     if (err < 0)
->>   -    err = get_tj_max(cpu, &tj_max);
->>   -    if (err)
->> --        return err;
->> ++    tj_max = intel_tcc_get_tjmax(cpu);
->> ++    if (tj_max < 0)
->> ++        return tj_max;
->> ++    tj_max *= 1000;
->>        zonedev = kzalloc(sizeof(*zonedev), GFP_KERNEL);
->>        if (!zonedev)
->>            return -ENOMEM;
->> +     zonedev->trips = pkg_temp_thermal_trips_init(cpu, tj_max, 
->> thres_count);
->> +     if (IS_ERR(zonedev->trips)) {
->> +         err = PTR_ERR(zonedev->trips);
->> +         goto out_kfree_zonedev;
->> +     }
->> +
->>        INIT_DELAYED_WORK(&zonedev->work, 
->> pkg_temp_thermal_threshold_work_fn);
->>        zonedev->cpu = cpu;
->> -     zonedev->tzone = thermal_zone_device_register("x86_pkg_temp",
->> -             thres_count,
->>   -    zonedev->tj_max = tj_max;
->> +     zonedev->tzone = 
->> thermal_zone_device_register_with_trips("x86_pkg_temp",
->> +             zonedev->trips, thres_count,
->>                (thres_count == MAX_NUMBER_OF_TRIPS) ? 0x03 : 0x01,
->>                zonedev, &tzone_ops, &pkg_temp_tz_params, 0, 0);
->>        if (IS_ERR(zonedev->tzone)) {
->>
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+--
+Linaro LKFT
+https://lkft.linaro.org

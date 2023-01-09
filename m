@@ -2,63 +2,50 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64BB46633A9
-	for <lists+linux-next@lfdr.de>; Mon,  9 Jan 2023 23:04:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B92FD66344D
+	for <lists+linux-next@lfdr.de>; Mon,  9 Jan 2023 23:50:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237582AbjAIWEr (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 9 Jan 2023 17:04:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38562 "EHLO
+        id S234870AbjAIWu3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 9 Jan 2023 17:50:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231310AbjAIWEq (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 9 Jan 2023 17:04:46 -0500
-Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA9B813F1E;
-        Mon,  9 Jan 2023 14:04:45 -0800 (PST)
-Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-14ffd3c5b15so10304206fac.3;
-        Mon, 09 Jan 2023 14:04:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ndmvoomVU+29u1ZplaN4voxmDKd24l7mMFDrJXy3RT4=;
-        b=RVxsBWLZxfqWIdO8wi4okCKWVWyIFXm0cs9yDdVBrOFDLdRzZi9FygxHpQ7w8dH1aU
-         EtL6x9/dZoF8TuWpjFwhwDkOX/XPwgRm1dCaIekdMXrCcFrutryrAAgfyTAbILIdg+xK
-         HpZAOe3f4yv9EJwjrhlPTm2AbJYDHNsY90jS3HjiklAyhn4usieuwNQncIaNQRYMYUQw
-         VtfUWw9Q2grWNWJxmaBfbScROuXlt0l0QluL27BjIEM12eMEmK+1O7oNvQWKKnSULOCr
-         36xvAxRQRg8IKZfPKor3p7DWAHowtwM+W0/zG0uN/6v5ZE/kXtsf51LIV/Sup+BR3HZf
-         5BbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ndmvoomVU+29u1ZplaN4voxmDKd24l7mMFDrJXy3RT4=;
-        b=vBZ+ZVXZhNSVnSgYD6Z2mbb2vQLQh7CP9hbLOLsbUBI7FgzqXrDKWXd1I3qrE69tcd
-         RXO/xoAzHm+uj3k4ylBKaqIyFN2opozwrK2OdDP7wsq4LtWzThOA+pi+mNVwJCCULcVQ
-         FkT565zhf9HmoR36wWtEI2OmKmsaRVNMpV0Rq/19uzy5SpVyZoLrflm30WlJrAgzUEWF
-         u0D5c8lcwvJ1UcpefVmUkjyGpGeRaiIfLlNT2ObWld1aD7NXaFNtbZG0GhkCtTGo4j0B
-         WJJIw0ZCJo3KzXcRkltLX8+i+3vvbtwxB/nV//85JegPKjVOHcaDPx7hcgACzmzLjvZs
-         RCNw==
-X-Gm-Message-State: AFqh2kpUuaWU+p3mNHgQLg0kdeCGjJM+h0AmBwNqD2qMFaw/lcxPG3P+
-        1VKjVhCElyeQWX4hzkwAOfsxW2keYwivBIyOXDXTcTVU
-X-Google-Smtp-Source: AMrXdXucrU52D8N4+lb1AlZyET/GL897KgmxPijiJi0bNMVIpWp7KHyICWiPeOTg6BKXmuCxYjxC7bqpSx6DEM2mzzs=
-X-Received: by 2002:a05:6870:970e:b0:148:3c8f:15ab with SMTP id
- n14-20020a056870970e00b001483c8f15abmr5593342oaq.46.1673301884648; Mon, 09
- Jan 2023 14:04:44 -0800 (PST)
-MIME-Version: 1.0
-References: <20230110085858.7667eef9@canb.auug.org.au>
-In-Reply-To: <20230110085858.7667eef9@canb.auug.org.au>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Mon, 9 Jan 2023 17:04:33 -0500
-Message-ID: <CADnq5_NTwqtODh52zzTgGs5HvV+Xw232dwuSVvvehgqzQiyUkg@mail.gmail.com>
-Subject: Re: linux-next: Signed-off-by missing for commit in the amdgpu tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        with ESMTP id S229499AbjAIWnM (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 9 Jan 2023 17:43:12 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0DFB1DDCC;
+        Mon,  9 Jan 2023 14:42:52 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NrTVH4jN9z4xND;
+        Tue, 10 Jan 2023 09:42:47 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1673304171;
+        bh=7DWiRV4Q8QRPF+LkxUekuAC1Y3rOnAapGW2ZUhPDazc=;
+        h=Date:From:To:Cc:Subject:From;
+        b=jPZAuhG6Q8tIhNIKwTjfEZzNYrg62mhClnT5xWVHU4s1dpekt/G49cn9WPuTzUOUg
+         m0mCMScACPVRU49PlzXhRrKKIZgk/akXvI13+HVnnGkhRMXVM94NgNAP+TxTrjM69C
+         VMNwrx5RuneoiGlQ/sKKa7TzbkO1C608GVa1ie3+VKokGi+xeFC44X7PS6Z4NnZcau
+         lLT6L44PLmR385Zt32eI9BiN7FPktG03fTgetyjPs0m+K/1aarFixU1IMnnK8ZfGkq
+         RbHcIthg7lYOjlTPHV0RBChzmIfCFAws9cIR+Cu6GWsMR6LleWknMvGP+8bw/xMgd3
+         y/KbQlT7mcrpw==
+Date:   Tue, 10 Jan 2023 09:42:46 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>
+Cc:     ARM <linux-arm-kernel@lists.infradead.org>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Jilin Yuan <yuanjilin@cdjrlc.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Subject: linux-next: manual merge of the davinci tree with the arm-soc tree
+Message-ID: <20230110094246.1497d12e@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/UX9MyVrSXCmEHSFeNun/8Nf";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,16 +53,51 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Jan 9, 2023 at 4:59 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> Commit
->
->   d6baa536dd7c ("drm/amd: Use `amdgpu_ucode_request` helper for SDMA")
->
-> is missing a Signed-off-by from its committer.
+--Sig_/UX9MyVrSXCmEHSFeNun/8Nf
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Fixed.  Thanks.
+Hi all,
 
-Alex
+Today's linux-next merge of the davinci tree got a conflict in:
+
+  arch/arm/mach-davinci/board-dm365-evm.c
+
+between commit:
+
+  fef6ca600ba7 ("ARM: davinci: remove unused board support")
+
+from the arm-soc tree and commit:
+
+  84bde55c050b ("ARM: davinci: fix repeated words in comments")
+
+from the davinci tree.
+
+I fixed it up (I removed the file) and can carry the fix as
+necessary. This is now fixed as far as linux-next is concerned, but any
+non trivial conflicts should be mentioned to your upstream maintainer
+when your tree is submitted for merging.  You may also want to consider
+cooperating with the maintainer of the conflicting tree to minimise any
+particularly complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/UX9MyVrSXCmEHSFeNun/8Nf
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmO8mGYACgkQAVBC80lX
+0GyBzwf+MrEGJvgsywvPzzoCE37N7+H9UpELbyC59ORp+P+lx+bgM2XX/f8RMlDl
+S12t59Sl2OaA4zpvj7EmiMy/o9M7bcV8DxdgOwWJmqis0nbxNlkqICgs6xays8Go
+/0GZW68ZcG4J7GZo5GSdVdakiF8lTgbzi0va6gVn/dv7cU1TOu+NZO/SS7xJleaG
+IyFxC0h0ubN2xutH0JkOvxiEjUAVMFlBxm3NTEilphlG6MxsuJsIKjNfVEiPusyA
+AlmX48QgOVQq7XyPmN4aUXS0WqV+Or5LLHb90fUJe6NHmrQhqqrxI4MeEKytAmuW
+BuKToJEQHzMwZbmgDI2d81paR4zFZw==
+=sCXs
+-----END PGP SIGNATURE-----
+
+--Sig_/UX9MyVrSXCmEHSFeNun/8Nf--

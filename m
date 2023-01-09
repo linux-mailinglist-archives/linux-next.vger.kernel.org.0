@@ -2,92 +2,101 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7D41662219
-	for <lists+linux-next@lfdr.de>; Mon,  9 Jan 2023 10:52:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EEC2E66335C
+	for <lists+linux-next@lfdr.de>; Mon,  9 Jan 2023 22:43:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236955AbjAIJwZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 9 Jan 2023 04:52:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44274 "EHLO
+        id S229801AbjAIVnO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 9 Jan 2023 16:43:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237018AbjAIJvq (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 9 Jan 2023 04:51:46 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 090FD12D2E;
-        Mon,  9 Jan 2023 01:51:06 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        with ESMTP id S238140AbjAIVmz (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 9 Jan 2023 16:42:55 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13A8A25D4;
+        Mon,  9 Jan 2023 13:42:07 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 9A2C377503;
-        Mon,  9 Jan 2023 09:51:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1673257865; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3dpWY39isfQP0sdAp5OZ+ksSedF6ts93bX5mDxLgRNU=;
-        b=xo2Dc7X0igItsb8uMulagOWyFVE9QbzvnOlAga3jVFhn4gTJRTGkp7RA0LpmV/E4Ej2DhT
-        6Mx9FqrQRJ/05VoavCW6+GY0SKHg2f4Dqt/ZsAwJXOifG39JhQKTZzt8HO+KKVCIYwh1pQ
-        5RuK/ZaInk/jzhEDqmnq5Eij+Zw+yAE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1673257865;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3dpWY39isfQP0sdAp5OZ+ksSedF6ts93bX5mDxLgRNU=;
-        b=hK9+rN5/OIQTVQ+e/nlFnbbfuUpeP7w58Z+jDhh18VIuMj1eNbB0DnL8ec4+VN8KYbxpor
-        0hqKKA/G0WdAauBQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8E1B613583;
-        Mon,  9 Jan 2023 09:51:05 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id XLemIonju2NYBAAAMHmgww
-        (envelope-from <jack@suse.cz>); Mon, 09 Jan 2023 09:51:05 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 19AD3A074D; Mon,  9 Jan 2023 10:51:05 +0100 (CET)
-Date:   Mon, 9 Jan 2023 10:51:05 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Jan Kara <jack@suse.cz>,
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NrS894JNkz4xP3;
+        Tue, 10 Jan 2023 08:42:01 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1673300521;
+        bh=vFuZMimV3+WILQdsvk/fJXxy0oj3sS4gPr6RYHryZp4=;
+        h=Date:From:To:Cc:Subject:From;
+        b=dmdXtKajNo7t2OH0jeqz110qh1r12zwT/gws5uXe7pN4fSrOdOoRMnNP72iyUFOVO
+         vpEVAOT36LKWpPpE5LheSn93CObyp15nOcC+Kicr2/F7iC0f74EQ+558xNbg4m3mJm
+         yS/UE+dAjXrLh9/5+JZtLV+JC0pC7T+CuPV28b6WYz4GduwAkXN+FXw+oekr3a25UM
+         l1pN22mfA6SWPVZqpGEUXIUb6eVCGc7nuoC+Y7s5OoWvtHY2KbvHUfz9B4JK0BwOxT
+         HevzS3/FvgO5s1DxwDlZeaKK2z/0cq1JBpLisqOWaOB29h9BBDRMq+X3gBMTlgVtNI
+         ZvOWYJeCIYUGw==
+Date:   Tue, 10 Jan 2023 08:41:59 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Alexandre Torgue <alexandre.torgue@st.com>
+Cc:     Patrice Chotard <patrice.chotard@foss.st.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patches in the ext3 tree
-Message-ID: <20230109095105.afvw25ntcvopgvub@quack3>
-References: <20230108125156.30578c00@canb.auug.org.au>
+Subject: linux-next: Fixes tags need some work in the stm32 tree
+Message-ID: <20230110084159.7d20dd38@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230108125156.30578c00@canb.auug.org.au>
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/grLQeN+bo9P6DfN18Z=jTv_";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hello!
+--Sig_/grLQeN+bo9P6DfN18Z=jTv_
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On Sun 08-01-23 12:51:56, Stephen Rothwell wrote:
-> The following commits are also in Linus Torvalds' tree as different commits
-> (but the same patches):
-> 
->   ae9e9c7ff062 ("udf: Fix extension of the last extent in the file")
->   6d5ab7c2f7cf ("udf: initialize newblock to 0")
+Hi all,
 
-Yes, I'm sorry for the trouble. Linus considered the whole original pull
-request too intrusive for rc3 so I've just cherrypicked the easy standalone
-fixes and sent a pull request for those. I've now rebased my for_next
-branch on top of Linus' tree to get rid of the duplicates (nobody depends
-on my tree and there's enough time before the merge window opens so it
-should be fine). If there's a better process how to handle such situations,
-please tell me.
+In commits
 
-								Honza
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+  731c05eb8ec3 ("ARM: dts: stm32: Fix qspi pinctrl phandle for stm32mp151a-=
+prtt1l")
+  1bfe5bf6a0ab ("ARM: dts: stm32: Fix qspi pinctrl phandle for stm32mp157c-=
+emstamp-argon")
+  b8deada61dd2 ("ARM: dts: stm32: Fix qspi pinctrl phandle for stm32mp15xx-=
+dhcom-som")
+  4beb2a5e840a ("ARM: dts: stm32: Fix qspi pinctrl phandle for stm32mp15xx-=
+dhcor-som")
+
+Fixes tag
+
+  Fixes: ea99a5a02ebc ("ARM: dts: stm32: Create separate pinmux for qspi cs=
+ pin in stm32mp15-pinctrl.dtsi)
+
+has these problem(s):
+
+  - Subject has leading but no trailing quotes
+
+Also, please keep all the commit message tags together at the end of
+the commit message.  And I don't see any point in the "To:" tag.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/grLQeN+bo9P6DfN18Z=jTv_
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmO8iicACgkQAVBC80lX
+0GxnAwf6AoQanPneVCJaCu8a2ihYF5ZRv1sV4E5mULmJnvJnoe8zDfTiQBGz0c/C
+D1XQbG9LWg6PSpfa8QojmhdL15O7+bKFnQskjDqsIOX3PkVf8arbBHwrR6vqccWi
+zBtl/WNoFf4ty1xdL5KvbtrwwQrs0335EtFNJe/ced6HBQeG5qKFoVSbeX8vgZhU
+hg2etOo44xw/jJrfeTpS5IQdQ6AD6EO+E+l/Y0n2iw3EMfab5Bni3LPGcHTwGKq0
+zFFVK5at+Prz0YBHY5lhFYLmBnpcpKg7dtR7/9oowm5VWhlbnOIB9VrmCzKAU7Gz
+KvXI+QudoVigpSCBKYPi8iTdrIVsqA==
+=VjKP
+-----END PGP SIGNATURE-----
+
+--Sig_/grLQeN+bo9P6DfN18Z=jTv_--

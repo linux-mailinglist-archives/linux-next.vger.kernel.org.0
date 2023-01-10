@@ -2,591 +2,525 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE9176645BF
-	for <lists+linux-next@lfdr.de>; Tue, 10 Jan 2023 17:14:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2686D66462B
+	for <lists+linux-next@lfdr.de>; Tue, 10 Jan 2023 17:34:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230010AbjAJQO5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 10 Jan 2023 11:14:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39210 "EHLO
+        id S239008AbjAJQdv (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 10 Jan 2023 11:33:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233407AbjAJQO4 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 10 Jan 2023 11:14:56 -0500
-Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3822A56889
-        for <linux-next@vger.kernel.org>; Tue, 10 Jan 2023 08:14:53 -0800 (PST)
-Received: by mail-vs1-xe34.google.com with SMTP id 3so12759653vsq.7
-        for <linux-next@vger.kernel.org>; Tue, 10 Jan 2023 08:14:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=v098meve5WrR0PQP9MemXKuTk3wsufJ7up9NIt66/0w=;
-        b=sW/abSDTGm9/VE90QVLpyAkHcaq0cJH7uY+sdRiq8+tDl/9Gu+VG8ncCU2x1tcn3FS
-         pEtNrVsY5U2ECR3YZcAGSkxg6WWaGWMKp2XYjjVj54ANnuiQGaWqglW74mi4mPOljjql
-         4UJOSyQ0x2lsDcUkhQT8fOEQxgoD7+jAUFg12ZX8WI/x65ZV+1JiX9keF+2xFSgzPCp8
-         xDmxKD2pwggFc3Zo3hGSkd3ORLOMXs/spR0y5jrO6Ce1n/KeQPbLvQSI4rtpIrIbcXFr
-         tMb7V4eBmgTY/S0Jj2mj3ddWnracN98YuzlEopUdDJBZ1yMMoWSWFFXkQPJ7xOOPs2Z1
-         uXxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=v098meve5WrR0PQP9MemXKuTk3wsufJ7up9NIt66/0w=;
-        b=phrPCaZ+JWwOOPhO1uIt+RVRdg/OxO+KT5Ydl21wdET4RBmlI7LCagvvLj5gv2mdTD
-         xniFtsM9Ul59bKk7lAFaLjiRZO6y7PNCJOVDvPAJ/pg10HluTPPumT/vGmHXwrZxmSNZ
-         b+0vszcfqnbzbDehCgaU8np3Qb4Fby5BEf9u+XOUVcntI7Tolxrd2TGcl0j6Vq7m+zmA
-         JwkaSntFuH4iMl5ppoIbsMGD5TuhiLfzGerjH/FZ5Q/S7MCV19PdsxXBbocalEMvr8+Q
-         l7JJ2lXXF0NURJhfhZYKLxFSpU9pFTo08Qp3cguJ5rSgjMNv1I9bqMbq7U/sVdMSgoV8
-         STJA==
-X-Gm-Message-State: AFqh2krCIOR76GgRGSUW8WslTWsdy6RxFQKYB8GvXYSIsCsHqoR35xdm
-        4e+XjelZI8r3UzmG6DaSdi7uD7iP9QBYGO4Ishjn8Ixou3bm4e/5
-X-Google-Smtp-Source: AMrXdXulj8njz/cQGrtalCmY2nCvZnyYZlHWCtc5tHgQNbJ5hnKtc6n1DQil6EKWqmh6MTzr21RpB+fBypmeHss/4+g=
-X-Received: by 2002:a05:6102:b0a:b0:3c7:dfdb:a6a2 with SMTP id
- b10-20020a0561020b0a00b003c7dfdba6a2mr6841577vst.34.1673367291907; Tue, 10
- Jan 2023 08:14:51 -0800 (PST)
-MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 10 Jan 2023 21:44:40 +0530
-Message-ID: <CA+G9fYsns3krivbPSjQ1c1EQpVyd-bkW84MaUvqMTQr9c=iEaw@mail.gmail.com>
-Subject: next-20230110: arm64: defconfig+kselftest config boot failed - Unable
- to handle kernel paging request at virtual address fffffffffffffff8
-To:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        with ESMTP id S239134AbjAJQda (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 10 Jan 2023 11:33:30 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C2478E9B4;
+        Tue, 10 Jan 2023 08:33:07 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A809D617DE;
+        Tue, 10 Jan 2023 16:33:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6146BC433EF;
+        Tue, 10 Jan 2023 16:33:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673368386;
+        bh=jr2pZ/UMSVbzFz+1Yzl7inZVl9e465D9yUp1u1Q4HWY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=u7wt/qBGpMLMnFKAje0arJvY70Oha1GtNVBT+xWhFCRXff+9DF1wRT4Qi/08nQVml
+         ihEBcGs8VyZpZ/9JKk9kHo526BcTr8k15x7tpYABUT5CWIYapwnuAKWaCxrcGsGJga
+         rL93WMGmKJSYCtTWaInqH4F34bYdAZaONc9FOo9jHjITGdoCfXPpqrvSdvrLket1Ld
+         r2M+QMwzm/lhOeExENNU/Cx/754P1AEgmEBFzjNeMktDgKEKTkmRifKgsviIBKnwuu
+         TMoftNzLEwl+JLQCgQ89tSznHlsVNM/rQ/w9E83eK6T1zXIZyNMuW6+GdRIZLz6Ame
+         M9M5vnSyBqxPw==
+Date:   Tue, 10 Jan 2023 16:32:59 +0000
+From:   Will Deacon <will@kernel.org>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
         open list <linux-kernel@vger.kernel.org>,
         dri-devel@lists.freedesktop.org,
         Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        lkft-triage@lists.linaro.org, regressions@lists.linux.dev
-Cc:     Arnd Bergmann <arnd@arndb.de>, Mark Brown <broonie@kernel.org>,
-        Will Deacon <will@kernel.org>,
+        lkft-triage@lists.linaro.org, regressions@lists.linux.dev,
+        Arnd Bergmann <arnd@arndb.de>, Mark Brown <broonie@kernel.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
         Mark Rutland <mark.rutland@arm.com>,
         Aishwarya TCV <aishwarya.tcv@arm.com>,
-        Anders Roxell <anders.roxell@linaro.org>
-Content-Type: multipart/mixed; boundary="000000000000038e8205f1eb2fb2"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URI_HEX autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Anders Roxell <anders.roxell@linaro.org>, james.clark@arm.com,
+        nathan@kernel.org
+Subject: Re: next-20230110: arm64: defconfig+kselftest config boot failed -
+ Unable to handle kernel paging request at virtual address fffffffffffffff8
+Message-ID: <20230110163258.GC9436@willie-the-truck>
+References: <CA+G9fYsns3krivbPSjQ1c1EQpVyd-bkW84MaUvqMTQr9c=iEaw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+G9fYsns3krivbPSjQ1c1EQpVyd-bkW84MaUvqMTQr9c=iEaw@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,URI_HEX autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---000000000000038e8205f1eb2fb2
-Content-Type: text/plain; charset="UTF-8"
+[+ James and Nathan]
 
-[ please ignore this email if this regression already reported ]
+On Tue, Jan 10, 2023 at 09:44:40PM +0530, Naresh Kamboju wrote:
+> [ please ignore this email if this regression already reported ]
+> 
+> Today's Linux next tag next-20230110 boot passes with defconfig but
+> boot fails with
+> defconfig + kselftest merge config on arm64 devices and qemu-arm64.
+> 
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> 
+> We are bisecting this problem and get back to you shortly.
+> 
+> GOOD: next-20230109  (defconfig + kselftests configs)
+> BAD: next-20230110 (defconfig + kselftests configs)
 
-Today's Linux next tag next-20230110 boot passes with defconfig but
-boot fails with
-defconfig + kselftest merge config on arm64 devices and qemu-arm64.
+I couldn't find a kselftests .config in the tree (assumedly I'm just ont
+looking hard enough), but does that happen to enable CONFIG_STACK_TRACER=y?
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+If so, since you're using clang, I wonder if this is an issue with
+68a63a412d18 ("arm64: Fix build with CC=clang, CONFIG_FTRACE=y and
+CONFIG_STACK_TRACER=y")?
 
-We are bisecting this problem and get back to you shortly.
+Please let us know how the bisection goes...
 
-GOOD: next-20230109  (defconfig + kselftests configs)
-BAD: next-20230110 (defconfig + kselftests configs)
+Will
 
-kernel crash log [1]:
+> kernel crash log [1]:
+> 
+> [   15.302140] Unable to handle kernel paging request at virtual
+> address fffffffffffffff8
+> [   15.309906] Mem abort info:
+> [   15.312659]   ESR = 0x0000000096000004
+> [   15.316365]   EC = 0x25: DABT (current EL), IL = 32 bits
+> [   15.321626]   SET = 0, FnV = 0
+> [   15.324644]   EA = 0, S1PTW = 0
+> [   15.327744]   FSC = 0x04: level 0 translation fault
+> [   15.332619] Data abort info:
+> [   15.335422]   ISV = 0, ISS = 0x00000004
+> [   15.339226]   CM = 0, WnR = 0
+> [   15.342154] swapper pgtable: 4k pages, 48-bit VAs, pgdp=000000001496c000
+> [   15.348795] [fffffffffffffff8] pgd=0000000000000000, p4d=0000000000000000
+> [   15.355524] Internal error: Oops: 0000000096000004 [#1] PREEMPT SMP
+> [   15.361729] Modules linked in: meson_gxl dwmac_generic
+> snd_soc_meson_gx_sound_card snd_soc_meson_card_utils lima gpu_sched
+> drm_shmem_helper meson_drm drm_dma_helper crct10dif_ce meson_ir
+> rc_core meson_dw_hdmi dw_hdmi meson_canvas dwmac_meson8b
+> stmmac_platform meson_rng stmmac rng_core cec meson_gxbb_wdt
+> drm_display_helper snd_soc_meson_aiu snd_soc_meson_codec_glue pcs_xpcs
+> snd_soc_meson_t9015 amlogic_gxl_crypto crypto_engine display_connector
+> snd_soc_simple_amplifier drm_kms_helper drm nvmem_meson_efuse
+> [   15.405976] CPU: 1 PID: 9 Comm: kworker/u8:0 Not tainted
+> 6.2.0-rc3-next-20230110 #1
+> [   15.413563] Hardware name: Libre Computer AML-S905X-CC (DT)
+> [   15.419086] Workqueue: events_unbound deferred_probe_work_func
+> [   15.424863] pstate: 00000005 (nzcv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> [   15.431762] pc : of_drm_find_bridge+0x38/0x70 [drm]
+> [   15.436594] lr : of_drm_find_bridge+0x20/0x70 [drm]
+> [   15.441423] sp : ffff80000a04b9b0
+> [   15.444700] x29: ffff80000a04b9b0 x28: ffff000008de5810 x27: ffff000008de5808
+> [   15.451772] x26: ffff000008de5800 x25: ffff0000084cb8b0 x24: ffff000001223c00
+> [   15.458844] x23: 0000000000000000 x22: 0000000000000001 x21: ffff00007fa61a28
+> [   15.465917] x20: ffff0000084ca080 x19: ffff00007fa61a28 x18: ffff0000019bd700
+> [   15.472989] x17: 6d64685f77645f6e x16: ffffffffffffffff x15: 0000000000000004
+> [   15.480062] x14: ffff800009bab410 x13: 0000000000000000 x12: 0000000000000003
+> [   15.487135] x11: 0000000000000000 x10: 0000000000000000 x9 : 0000000000000000
+> [   15.494207] x8 : ffff8000010a70a0 x7 : 64410079616b6f01 x6 : 8041640000000003
+> [   15.501279] x5 : 0300000000644100 x4 : 0000000000000080 x3 : 0041640000000000
+> [   15.508352] x2 : ffff000001128000 x1 : 0000000000000000 x0 : 0000000000000000
+> [   15.515426] Call trace:
+> [   15.517863] Insufficient stack space to handle exception!
+> [   15.517867] ESR: 0x0000000096000047 -- DABT (current EL)
+> [   15.517871] FAR: 0xffff80000a047ff0
+> [   15.517873] Task stack:     [0xffff80000a048000..0xffff80000a04c000]
+> [   15.517877] IRQ stack:      [0xffff800008008000..0xffff80000800c000]
+> [   15.517880] Overflow stack: [0xffff00007d9c1320..0xffff00007d9c2320]
+> [   15.517884] CPU: 1 PID: 9 Comm: kworker/u8:0 Not tainted
+> 6.2.0-rc3-next-20230110 #1
+> [   15.517890] Hardware name: Libre Computer AML-S905X-CC (DT)
+> [   15.517895] Workqueue: events_unbound deferred_probe_work_func
+> [   15.517915] pstate: 800003c5 (Nzcv DAIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> [   15.517923] pc : el1_abort+0x4/0x5c
+> [   15.517932] lr : el1h_64_sync_handler+0x60/0xac
+> [   15.517939] sp : ffff80000a048020
+> [   15.517941] x29: ffff80000a048020 x28: ffff000001128000 x27: ffff000008de5808
+> [   15.517950] x26: ffff000008de5800 x25: ffff80000a04b608 x24: ffff000001128000
+> [   15.517957] x23: 00000000a00000c5 x22: ffff8000080321dc x21: ffff80000a048180
+> [   15.517965] x20: ffff8000098e1000 x19: ffff80000a048290 x18: ffff0000019bd700
+> [   15.517972] x17: 0000000000000011 x16: ffffffffffffffff x15: 0000000000000004
+> [   15.517979] x14: ffff800009bab410 x13: 0000000000000000 x12: 0000000000000000
+> [   15.517986] x11: 0000000000000030 x10: ffff800009013a1c x9 : ffff8000090401a0
+> [   15.517994] x8 : 0000000000000025 x7 : 205d363234353135 x6 : 352e35312020205b
+> [   15.518001] x5 : ffff800009f766b7 x4 : ffff800008fe695c x3 : 000000000000000c
+> [   15.518008] x2 : 0000000096000004 x1 : 0000000096000004 x0 : ffff80000a048030
+> [   15.518017] Kernel panic - not syncing: kernel stack overflow
+> [   15.518020] SMP: stopping secondary CPUs
+> [   15.518027] Kernel Offset: disabled
+> [   15.518029] CPU features: 0x00000,01000100,0000421b
+> [   15.518034] Memory Limit: none
+> [   15.679388] ---[ end Kernel panic - not syncing: kernel stack overflow ]---
+> 
+> 
+> [1]
+> https://storage.kernelci.org/next/master/next-20230110/arm64/defconfig/clang-16/lab-broonie/kselftest-arm64-meson-gxl-s905x-libretech-cc.html
+> https://storage.kernelci.org/next/master/next-20230110/arm64/defconfig+arm64-chromebook/gcc-10/lab-collabora/kselftest-arm64-sc7180-trogdor-lazor-limozeen.html
+> https://storage.kernelci.org/next/master/next-20230110/arm64/defconfig+arm64-chromebook/gcc-10/lab-collabora/kselftest-arm64-mt8173-elm-hana.html
+> 
+> Test case details:
+> https://linux.kernelci.org/test/plan/id/63bd1bbadefcf2bc871d3ae5/
+> https://linux.kernelci.org/test/case/id/63bd1bbadefcf2bc871d3ae6/
+> 
+> 
+> --
+> Linaro LKFT
+> https://lkft.linaro.org
 
-[   15.302140] Unable to handle kernel paging request at virtual
-address fffffffffffffff8
-[   15.309906] Mem abort info:
-[   15.312659]   ESR = 0x0000000096000004
-[   15.316365]   EC = 0x25: DABT (current EL), IL = 32 bits
-[   15.321626]   SET = 0, FnV = 0
-[   15.324644]   EA = 0, S1PTW = 0
-[   15.327744]   FSC = 0x04: level 0 translation fault
-[   15.332619] Data abort info:
-[   15.335422]   ISV = 0, ISS = 0x00000004
-[   15.339226]   CM = 0, WnR = 0
-[   15.342154] swapper pgtable: 4k pages, 48-bit VAs, pgdp=000000001496c000
-[   15.348795] [fffffffffffffff8] pgd=0000000000000000, p4d=0000000000000000
-[   15.355524] Internal error: Oops: 0000000096000004 [#1] PREEMPT SMP
-[   15.361729] Modules linked in: meson_gxl dwmac_generic
-snd_soc_meson_gx_sound_card snd_soc_meson_card_utils lima gpu_sched
-drm_shmem_helper meson_drm drm_dma_helper crct10dif_ce meson_ir
-rc_core meson_dw_hdmi dw_hdmi meson_canvas dwmac_meson8b
-stmmac_platform meson_rng stmmac rng_core cec meson_gxbb_wdt
-drm_display_helper snd_soc_meson_aiu snd_soc_meson_codec_glue pcs_xpcs
-snd_soc_meson_t9015 amlogic_gxl_crypto crypto_engine display_connector
-snd_soc_simple_amplifier drm_kms_helper drm nvmem_meson_efuse
-[   15.405976] CPU: 1 PID: 9 Comm: kworker/u8:0 Not tainted
-6.2.0-rc3-next-20230110 #1
-[   15.413563] Hardware name: Libre Computer AML-S905X-CC (DT)
-[   15.419086] Workqueue: events_unbound deferred_probe_work_func
-[   15.424863] pstate: 00000005 (nzcv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-[   15.431762] pc : of_drm_find_bridge+0x38/0x70 [drm]
-[   15.436594] lr : of_drm_find_bridge+0x20/0x70 [drm]
-[   15.441423] sp : ffff80000a04b9b0
-[   15.444700] x29: ffff80000a04b9b0 x28: ffff000008de5810 x27: ffff000008de5808
-[   15.451772] x26: ffff000008de5800 x25: ffff0000084cb8b0 x24: ffff000001223c00
-[   15.458844] x23: 0000000000000000 x22: 0000000000000001 x21: ffff00007fa61a28
-[   15.465917] x20: ffff0000084ca080 x19: ffff00007fa61a28 x18: ffff0000019bd700
-[   15.472989] x17: 6d64685f77645f6e x16: ffffffffffffffff x15: 0000000000000004
-[   15.480062] x14: ffff800009bab410 x13: 0000000000000000 x12: 0000000000000003
-[   15.487135] x11: 0000000000000000 x10: 0000000000000000 x9 : 0000000000000000
-[   15.494207] x8 : ffff8000010a70a0 x7 : 64410079616b6f01 x6 : 8041640000000003
-[   15.501279] x5 : 0300000000644100 x4 : 0000000000000080 x3 : 0041640000000000
-[   15.508352] x2 : ffff000001128000 x1 : 0000000000000000 x0 : 0000000000000000
-[   15.515426] Call trace:
-[   15.517863] Insufficient stack space to handle exception!
-[   15.517867] ESR: 0x0000000096000047 -- DABT (current EL)
-[   15.517871] FAR: 0xffff80000a047ff0
-[   15.517873] Task stack:     [0xffff80000a048000..0xffff80000a04c000]
-[   15.517877] IRQ stack:      [0xffff800008008000..0xffff80000800c000]
-[   15.517880] Overflow stack: [0xffff00007d9c1320..0xffff00007d9c2320]
-[   15.517884] CPU: 1 PID: 9 Comm: kworker/u8:0 Not tainted
-6.2.0-rc3-next-20230110 #1
-[   15.517890] Hardware name: Libre Computer AML-S905X-CC (DT)
-[   15.517895] Workqueue: events_unbound deferred_probe_work_func
-[   15.517915] pstate: 800003c5 (Nzcv DAIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-[   15.517923] pc : el1_abort+0x4/0x5c
-[   15.517932] lr : el1h_64_sync_handler+0x60/0xac
-[   15.517939] sp : ffff80000a048020
-[   15.517941] x29: ffff80000a048020 x28: ffff000001128000 x27: ffff000008de5808
-[   15.517950] x26: ffff000008de5800 x25: ffff80000a04b608 x24: ffff000001128000
-[   15.517957] x23: 00000000a00000c5 x22: ffff8000080321dc x21: ffff80000a048180
-[   15.517965] x20: ffff8000098e1000 x19: ffff80000a048290 x18: ffff0000019bd700
-[   15.517972] x17: 0000000000000011 x16: ffffffffffffffff x15: 0000000000000004
-[   15.517979] x14: ffff800009bab410 x13: 0000000000000000 x12: 0000000000000000
-[   15.517986] x11: 0000000000000030 x10: ffff800009013a1c x9 : ffff8000090401a0
-[   15.517994] x8 : 0000000000000025 x7 : 205d363234353135 x6 : 352e35312020205b
-[   15.518001] x5 : ffff800009f766b7 x4 : ffff800008fe695c x3 : 000000000000000c
-[   15.518008] x2 : 0000000096000004 x1 : 0000000096000004 x0 : ffff80000a048030
-[   15.518017] Kernel panic - not syncing: kernel stack overflow
-[   15.518020] SMP: stopping secondary CPUs
-[   15.518027] Kernel Offset: disabled
-[   15.518029] CPU features: 0x00000,01000100,0000421b
-[   15.518034] Memory Limit: none
-[   15.679388] ---[ end Kernel panic - not syncing: kernel stack overflow ]---
+> [    0.000000] Booting Linux on physical CPU 0x0000000000 [0x410fd034]
+> [    0.000000] Linux version 6.2.0-rc3-next-20230110 (KernelCI@build-j815994-arm64-clang-16-defconfig-2qclb) (Debian clang version 16.0.0 (++20230109071901+ba7af0bf6932-1~exp1~20230109071950.525), Debian LLD 16.0.0) #1 SMP PREEMPT Tue Jan 10 05:18:28 UTC 2023
+> [    0.000000] Machine model: Libre Computer AML-S905X-CC
+> [    0.000000] efi: UEFI not found.
+> [    0.000000] OF: fdt: Reserved memory: failed to reserve memory for node 'hwrom@0': base 0x0000000000000000, size 16 MiB
+> [    0.000000] OF: fdt: Reserved memory: failed to reserve memory for node 'secmon@10000000': base 0x0000000010000000, size 2 MiB
+> [    0.000000] Reserved memory: created CMA memory pool at 0x000000006ac00000, size 256 MiB
+> [    0.000000] OF: reserved mem: initialized node linux,cma, compatible id shared-dma-pool
+> [    0.000000] NUMA: No NUMA configuration found
+> [    0.000000] NUMA: Faking a node at [mem 0x0000000000000000-0x000000007fe5afff]
+> [    0.000000] NUMA: NODE_DATA [mem 0x7fa3ba00-0x7fa3dfff]
+> [    0.000000] Zone ranges:
+> [    0.000000]   DMA      [mem 0x0000000000000000-0x000000007fe5afff]
+> [    0.000000]   DMA32    empty
+> [    0.000000]   Normal   empty
+> [    0.000000] Movable zone start for each node
+> [    0.000000] Early memory node ranges
+> [    0.000000]   node   0: [mem 0x0000000000000000-0x0000000004ffffff]
+> [    0.000000]   node   0: [mem 0x0000000005000000-0x00000000072fffff]
+> [    0.000000]   node   0: [mem 0x0000000007300000-0x000000007fe5afff]
+> [    0.000000] Initmem setup node 0 [mem 0x0000000000000000-0x000000007fe5afff]
+> [    0.000000] On node 0, zone DMA: 421 pages in unavailable ranges
+> [    0.000000] psci: probing for conduit method from DT.
+> [    0.000000] psci: PSCIv1.1 detected in firmware.
+> [    0.000000] psci: Using standard PSCI v0.2 function IDs
+> [    0.000000] psci: MIGRATE_INFO_TYPE not supported.
+> [    0.000000] psci: SMC Calling Convention v1.2
+> [    0.000000] percpu: Embedded 21 pages/cpu s48808 r8192 d29016 u86016
+> [    0.000000] Detected VIPT I-cache on CPU0
+> [    0.000000] CPU features: detected: ARM erratum 845719
+> [    0.000000] alternatives: applying boot alternatives
+> [    0.000000] Fallback order for Node 0: 0 
+> [    0.000000] Built 1 zonelists, mobility grouping on.  Total pages: 515681
+> [    0.000000] Policy zone: DMA
+> [    0.000000] Kernel command line: console=ttyAML0,115200n8 root=/dev/nfs rw nfsroot=192.168.56.75:/var/lib/lava/dispatcher/tmp/81075/extract-nfsrootfs-bawzp4kx,tcp,hard  ip=dhcp
+> [    0.000000] Dentry cache hash table entries: 262144 (order: 9, 2097152 bytes, linear)
+> [    0.000000] Inode-cache hash table entries: 131072 (order: 8, 1048576 bytes, linear)
+> [    0.000000] mem auto-init: stack:all(zero), heap alloc:off, heap free:off
+> [    0.000000] Memory: 1686928K/2095468K available (16576K kernel code, 3912K rwdata, 9348K rodata, 2048K init, 609K bss, 146396K reserved, 262144K cma-reserved)
+> [    0.000000] SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=4, Nodes=1
+> [    0.000000] rcu: Preemptible hierarchical RCU implementation.
+> [    0.000000] rcu: 	RCU event tracing is enabled.
+> [    0.000000] rcu: 	RCU restricting CPUs from NR_CPUS=256 to nr_cpu_ids=4.
+> [    0.000000] 	Trampoline variant of Tasks RCU enabled.
+> [    0.000000] 	Tracing variant of Tasks RCU enabled.
+> [    0.000000] rcu: RCU calculated value of scheduler-enlistment delay is 25 jiffies.
+> [    0.000000] rcu: Adjusting geometry for rcu_fanout_leaf=16, nr_cpu_ids=4
+> [    0.000000] NR_IRQS: 64, nr_irqs: 64, preallocated irqs: 0
+> [    0.000000] Root IRQ handler: gic_handle_irq
+> [    0.000000] GIC: Using split EOI/Deactivate mode
+> [    0.000000] rcu: srcu_init: Setting srcu_struct sizes based on contention.
+> [    0.000000] arch_timer: cp15 timer(s) running at 24.00MHz (phys).
+> [    0.000000] clocksource: arch_sys_counter: mask: 0xffffffffffffff max_cycles: 0x588fe9dc0, max_idle_ns: 440795202592 ns
+> [    0.000000] sched_clock: 56 bits at 24MHz, resolution 41ns, wraps every 4398046511097ns
+> [    0.001262] Console: colour dummy device 80x25
+> [    0.001343] Calibrating delay loop (skipped), value calculated using timer frequency.. 48.00 BogoMIPS (lpj=96000)
+> [    0.001355] pid_max: default: 32768 minimum: 301
+> [    0.001416] LSM: initializing lsm=capability,integrity
+> [    0.001519] Mount-cache hash table entries: 4096 (order: 3, 32768 bytes, linear)
+> [    0.001536] Mountpoint-cache hash table entries: 4096 (order: 3, 32768 bytes, linear)
+> [    0.002983] cblist_init_generic: Setting adjustable number of callback queues.
+> [    0.002999] cblist_init_generic: Setting shift to 2 and lim to 1.
+> [    0.003067] cblist_init_generic: Setting shift to 2 and lim to 1.
+> [    0.003215] rcu: Hierarchical SRCU implementation.
+> [    0.003219] rcu: 	Max phase no-delay instances is 1000.
+> [    0.005690] EFI services will not be available.
+> [    0.006042] smp: Bringing up secondary CPUs ...
+> [    0.006566] Detected VIPT I-cache on CPU1
+> [    0.006686] CPU1: Booted secondary processor 0x0000000001 [0x410fd034]
+> [    0.007302] Detected VIPT I-cache on CPU2
+> [    0.007411] CPU2: Booted secondary processor 0x0000000002 [0x410fd034]
+> [    0.008012] Detected VIPT I-cache on CPU3
+> [    0.008124] CPU3: Booted secondary processor 0x0000000003 [0x410fd034]
+> [    0.008207] smp: Brought up 1 node, 4 CPUs
+> [    0.008214] SMP: Total of 4 processors activated.
+> [    0.008218] CPU features: detected: 32-bit EL0 Support
+> [    0.008221] CPU features: detected: 32-bit EL1 Support
+> [    0.008227] CPU features: detected: CRC32 instructions
+> [    0.008289] CPU: All CPU(s) started at EL2
+> [    0.008369] alternatives: applying system-wide alternatives
+> [    0.010507] devtmpfs: initialized
+> [    0.016604] clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 7645041785100000 ns
+> [    0.016635] futex hash table entries: 1024 (order: 4, 65536 bytes, linear)
+> [    0.022569] pinctrl core: initialized pinctrl subsystem
+> [    0.024617] DMI not present or invalid.
+> [    0.025263] NET: Registered PF_NETLINK/PF_ROUTE protocol family
+> [    0.026298] DMA: preallocated 256 KiB GFP_KERNEL pool for atomic allocations
+> [    0.026578] DMA: preallocated 256 KiB GFP_KERNEL|GFP_DMA pool for atomic allocations
+> [    0.026739] DMA: preallocated 256 KiB GFP_KERNEL|GFP_DMA32 pool for atomic allocations
+> [    0.026812] audit: initializing netlink subsys (disabled)
+> [    0.027009] audit: type=2000 audit(0.024:1): state=initialized audit_enabled=0 res=1
+> [    0.028249] thermal_sys: Registered thermal governor 'step_wise'
+> [    0.028261] thermal_sys: Registered thermal governor 'power_allocator'
+> [    0.028350] cpuidle: using governor menu
+> [    0.028609] hw-breakpoint: found 6 breakpoint and 4 watchpoint registers.
+> [    0.028710] ASID allocator initialised with 65536 entries
+> [    0.030589] Serial: AMBA PL011 UART driver
+> [    0.050210] platform c883a000.hdmi-tx: Fixing up cyclic dependency with d0100000.vpu
+> [    0.052573] platform cvbs-connector: Fixing up cyclic dependency with d0100000.vpu
+> [    0.053502] platform hdmi-connector: Fixing up cyclic dependency with c883a000.hdmi-tx
+> [    0.057055] KASLR disabled due to lack of seed
+> [    0.057777] HugeTLB: registered 1.00 GiB page size, pre-allocated 0 pages
+> [    0.057789] HugeTLB: 16380 KiB vmemmap can be freed for a 1.00 GiB page
+> [    0.057796] HugeTLB: registered 32.0 MiB page size, pre-allocated 0 pages
+> [    0.057799] HugeTLB: 508 KiB vmemmap can be freed for a 32.0 MiB page
+> [    0.057804] HugeTLB: registered 2.00 MiB page size, pre-allocated 0 pages
+> [    0.057807] HugeTLB: 28 KiB vmemmap can be freed for a 2.00 MiB page
+> [    0.057812] HugeTLB: registered 64.0 KiB page size, pre-allocated 0 pages
+> [    0.057816] HugeTLB: 0 KiB vmemmap can be freed for a 64.0 KiB page
+> [    0.059511] ACPI: Interpreter disabled.
+> [    0.062687] iommu: Default domain type: Translated 
+> [    0.062700] iommu: DMA domain TLB invalidation policy: strict mode 
+> [    0.063020] SCSI subsystem initialized
+> [    0.063390] usbcore: registered new interface driver usbfs
+> [    0.063414] usbcore: registered new interface driver hub
+> [    0.063439] usbcore: registered new device driver usb
+> [    0.064563] pps_core: LinuxPPS API ver. 1 registered
+> [    0.064569] pps_core: Software ver. 5.3.6 - Copyright 2005-2007 Rodolfo Giometti <giometti@linux.it>
+> [    0.064583] PTP clock support registered
+> [    0.064756] EDAC MC: Ver: 3.0.0
+> [    0.066616] FPGA manager framework
+> [    0.066716] Advanced Linux Sound Architecture Driver Initialized.
+> [    0.067663] vgaarb: loaded
+> [    0.068065] clocksource: Switched to clocksource arch_sys_counter
+> [    0.068286] VFS: Disk quotas dquot_6.6.0
+> [    0.068322] VFS: Dquot-cache hash table entries: 512 (order 0, 4096 bytes)
+> [    0.068521] pnp: PnP ACPI: disabled
+> [    0.074398] NET: Registered PF_INET protocol family
+> [    0.074701] IP idents hash table entries: 32768 (order: 6, 262144 bytes, linear)
+> [    0.076378] tcp_listen_portaddr_hash hash table entries: 1024 (order: 2, 16384 bytes, linear)
+> [    0.076413] Table-perturb hash table entries: 65536 (order: 6, 262144 bytes, linear)
+> [    0.076426] TCP established hash table entries: 16384 (order: 5, 131072 bytes, linear)
+> [    0.076550] TCP bind hash table entries: 16384 (order: 7, 524288 bytes, linear)
+> [    0.076935] TCP: Hash tables configured (established 16384 bind 16384)
+> [    0.077063] UDP hash table entries: 1024 (order: 3, 32768 bytes, linear)
+> [    0.077117] UDP-Lite hash table entries: 1024 (order: 3, 32768 bytes, linear)
+> [    0.077290] NET: Registered PF_UNIX/PF_LOCAL protocol family
+> [    0.077723] RPC: Registered named UNIX socket transport module.
+> [    0.077733] RPC: Registered udp transport module.
+> [    0.077735] RPC: Registered tcp transport module.
+> [    0.077738] RPC: Registered tcp NFSv4.1 backchannel transport module.
+> [    0.077748] PCI: CLS 0 bytes, default 64
+> [    0.077971] Unpacking initramfs...
+> [    0.078619] hw perfevents: enabled with armv8_cortex_a53 PMU driver, 7 counters available
+> [    0.079173] kvm [1]: IPA Size Limit: 40 bits
+> [    0.081299] kvm [1]: vgic interrupt IRQ9
+> [    0.081396] kvm [1]: Hyp mode initialized successfully
+> [    0.082801] Initialise system trusted keyrings
+> [    0.083076] workingset: timestamp_bits=42 max_order=19 bucket_order=0
+> [    0.083475] squashfs: version 4.0 (2009/01/31) Phillip Lougher
+> [    0.083847] NFS: Registering the id_resolver key type
+> [    0.083886] Key type id_resolver registered
+> [    0.083891] Key type id_legacy registered
+> [    0.083924] nfs4filelayout_init: NFSv4 File Layout Driver Registering...
+> [    0.083929] nfs4flexfilelayout_init: NFSv4 Flexfile Layout Driver Registering...
+> [    0.084203] 9p: Installing v9fs 9p2000 file system support
+> [    0.116765] Key type asymmetric registered
+> [    0.116781] Asymmetric key parser 'x509' registered
+> [    0.116866] Block layer SCSI generic (bsg) driver version 0.4 loaded (major 245)
+> [    0.116873] io scheduler mq-deadline registered
+> [    0.116878] io scheduler kyber registered
+> [    0.118617] irq_meson_gpio: 110 to 8 gpio interrupt mux initialized
+> [    0.135078] EINJ: ACPI disabled.
+> [    0.159731] soc soc0: Amlogic Meson GXL (S905X) Revision 21:d (84:2) Detected
+> [    0.170927] Serial: 8250/16550 driver, 4 ports, IRQ sharing enabled
+> [    0.174933] SuperH (H)SCI(F) driver initialized
+> [    0.175827] c81004c0.serial: ttyAML0 at MMIO 0xc81004c0 (irq = 18, base_baud = 1500000) is a meson_uart
+> [    0.175899] printk: console [ttyAML0] enabled
+> [    1.019195] Freeing initrd memory: 18984K
+> [    1.021972] msm_serial: driver initialized
+> [    1.180405] loop: module loaded
+> [    1.181719] megasas: 07.719.03.00-rc1
+> [    1.190027] tun: Universal TUN/TAP device driver, 1.6
+> [    1.191319] thunder_xcv, ver 1.0
+> [    1.192716] thunder_bgx, ver 1.0
+> [    1.195853] nicpf, ver 1.0
+> [    1.200523] hns3: Hisilicon Ethernet Network Driver for Hip08 Family - version
+> [    1.205678] hns3: Copyright (c) 2017 Huawei Corporation.
+> [    1.210989] hclge is initializing
+> [    1.214237] e1000: Intel(R) PRO/1000 Network Driver
+> [    1.219037] e1000: Copyright (c) 1999-2006 Intel Corporation.
+> [    1.224758] e1000e: Intel(R) PRO/1000 Network Driver
+> [    1.229646] e1000e: Copyright(c) 1999 - 2015 Intel Corporation.
+> [    1.235529] igb: Intel(R) Gigabit Ethernet Network Driver
+> [    1.240858] igb: Copyright (c) 2007-2014 Intel Corporation.
+> [    1.246400] igbvf: Intel(R) Gigabit Virtual Function Network Driver
+> [    1.252588] igbvf: Copyright (c) 2009 - 2012 Intel Corporation.
+> [    1.259016] sky2: driver version 1.30
+> [    1.264029] VFIO - User Level meta-driver version: 0.3
+> [    1.271574] usbcore: registered new interface driver usb-storage
+> [    1.277325] i2c_dev: i2c /dev entries driver
+> [    1.285686] ghes_edac: GHES probing device list is empty
+> [    1.288566] sdhci: Secure Digital Host Controller Interface driver
+> [    1.294400] sdhci: Copyright(c) Pierre Ossman
+> [    1.299968] Synopsys Designware Multimedia Card Interface Driver
+> [    1.306409] sdhci-pltfm: SDHCI platform and OF driver helper
+> [    1.306491] meson-gx-mmc d0074000.mmc: allocated mmc-pwrseq
+> [    1.315815] ledtrig-cpu: registered to indicate activity on CPUs
+> [    1.323914] meson-sm: secure-monitor enabled
+> [    1.326541] SMCCC: SOC_ID: ARCH_SOC_ID not implemented, skipping ....
+> [    1.333638] usbcore: registered new interface driver usbhid
+> [    1.337865] usbhid: USB HID core driver
+> [    1.343235] platform-mhu c883c404.mailbox: Platform MHU Mailbox registered
+> [    1.353900] meson-gx-mmc d0074000.mmc: no support for card's volts
+> [    1.354576] mmc1: error -22 whilst initialising SDIO card
+> [    1.363208] NET: Registered PF_PACKET protocol family
+> [    1.365029] 9pnet: Installing 9P2000 support
+> [    1.369232] Key type dns_resolver registered
+> [    1.381879] registered taskstats version 1
+> [    1.382017] Loading compiled-in X.509 certificates
+> [    1.412271] dwc3-meson-g12a d0078080.usb: USB2 ports: 2
+> [    1.412313] dwc3-meson-g12a d0078080.usb: USB3 ports: 0
+> [    1.954364] dwc2 c9100000.usb: supply vusb_d not found, using dummy regulator
+> [    1.956005] dwc2 c9100000.usb: supply vusb_a not found, using dummy regulator
+> [    1.963329] dwc2 c9100000.usb: EPs: 7, dedicated fifos, 712 entries in SPRAM
+> [    1.973363] xhci-hcd xhci-hcd.0.auto: xHCI Host Controller
+> [    1.975374] xhci-hcd xhci-hcd.0.auto: new USB bus registered, assigned bus number 1
+> [    1.983114] xhci-hcd xhci-hcd.0.auto: USB3 root hub has no ports
+> [    1.988914] xhci-hcd xhci-hcd.0.auto: hcc params 0x0228f664 hci version 0x100 quirks 0x0000000002010010
+> [    1.998271] xhci-hcd xhci-hcd.0.auto: irq 25, io mem 0xc9000000
+> [    2.004858] hub 1-0:1.0: USB hub found
+> [    2.007818] hub 1-0:1.0: 2 ports detected
+> [    2.017395] scpi_protocol scpi: SCP Protocol legacy pre-1.0 firmware
+> [    2.017951] mdson-gx-mmc d0072000.mmc: Got CD GPIO
+> omain-0 init dvfs: 4
+> [    2.052159] Trying to probe devices needed for running init ...
+> [    2.089199] mmc0: new high speed SDXC card at address 59b4
+> [    2.089955] mmcblk0: mmc0:59b4 SD128 119 GiB 
+> [    2.096589]  mmcblk0: p1 p2 p3
+> [    2.096916] mmcblk0: p3 size 1224704 extends beyond EOD, truncated
+> [    2.264087] usb 1-1: new high-speed USB device number 2 using xhci-hcd
+> [    2.453974] hub 1-1:1.0: USB hub found
+> [    2.454695] hub 1-1:1.0: 4 ports detected
+> [    2.466394] mmc1: Card stuck being busy! __mmc_poll_for_busy
+> [   12.266087] platform c883455c.eth-phy-mux: deferred probe pending
+> [   14.337755] ALSA device list:
+> [   14.337936]   No soundcards found.
+> [   14.351381] Freeing unused kernel memory: 2048K
+> [   14.352541] Run /init as init process
+> Loading, please wait...
+> Starting version 247.3-7+deb11u1
+> [   15.002694] gxl-crypto c883e000.crypto: will run requests pump with realtime priority
+> [   15.010106] random: crng init done
+> [   15.016152] gxl-crypto c883e000.crypto: will run requests pump with realtime priority
+> [   15.040684] meson8b-dwmac c9410000.ethernet: IRQ eth_wake_irq not found
+> [   15.041672] meson8b-dwmac c9410000.ethernet: IRQ eth_lpi not found
+> [   15.056432] Registered IR keymap rc-empty
+> [   15.056572] rc rc0: meson-ir as /devices/platform/soc/c8100000.bus/c8100580.ir/rc/rc0
+> [   15.063474] input: meson-ir as /devices/platform/soc/c8100000.bus/c8100580.ir/rc/rc0/input0
+> [   15.071611] meson8b-dwmac c9410000.ethernet: PTP uses main clock
+> [   15.076297] meson-ir c8100580.ir: receiver initialized
+> [   15.085541] meson-drm d0100000.vpu: Queued 2 outputs on vpu
+> [   15.091067] meson8b-dwmac c9410000.ethernet: User ID: 0x11, Synopsys ID: 0x37
+> [   15.093562] meson-drm d0100000.vpu: bound c883a000.hdmi-tx (ops meson_dw_hdmi_ops [meson_dw_hdmi])
+> [   15.094603] meson8b-dwmac c9410000.ethernet: 	DWMAC1000
+> [   15.105478] meson-drm d0100000.vpu: Failed to find HDMI transceiver bridge
+> [   15.108754] meson8b-dwmac c9410000.ethernet: DMA HW capability register supported
+> [   15.119838] lima d00c0000.gpu: gp - mali450 version major 0 minor 0
+> [   15.122817] meson8b-dwmac c9410000.ethernet: RX Checksum Offload Engine supported
+> [   15.122827] meson8b-dwmac c9410000.ethernet: COE Type 2
+> [   15.122833] meson8b-dwmac c9410000.ethernet: TX Checksum insertion supported
+> [   15.122837] meson8b-dwmac c9410000.ethernet: Wake-Up On Lan supported
+> [   15.122986] meson8b-dwmac c9410000.ethernet: Normal descriptors
+> [   15.141218] meson-drm d0100000.vpu: Queued 2 outputs on vpu
+> [   15.141615] meson8b-dwmac c9410000.ethernet: Ring mode enabled
+> [   15.150744] meson-drm d0100000.vpu: bound c883a000.hdmi-tx (ops meson_dw_hdmi_ops [meson_dw_hdmi])
+> [   15.154970] meson8b-dwmac c9410000.ethernet: Enable RX Mitigation via HW Watchdog Timer
+> [   15.159175] lima d00c0000.gpu: pp0 - mali450 version major 0 minor 0
+> [   15.161436] meson-drm d0100000.vpu: Failed to find HDMI transceiver bridge
+> [   15.168933] lima d00c0000.gpu: pp1 - mali450 version major 0 minor 0
+> [   15.206102] meson-drm d0100000.vpu: Queued 2 outputs on vpu
+> [   15.209608] lima d00c0000.gpu: pp2 - mali450 version major 0 minor 0
+> [   15.217027] meson-drm d0100000.vpu: bound c883a000.hdmi-tx (ops meson_dw_hdmi_ops [meson_dw_hdmi])
+> [   15.221169] lima d00c0000.gpu: l2 cache 8K, 4-way, 64byte cache line, 128bit external bus
+> [   15.231561] meson-drm d0100000.vpu: Failed to find HDMI transceiver bridge
+> [   15.238133] lima d00c0000.gpu: l2 cache 64K, 4-way, 64byte cache line, 128bit external bus
+> [   15.253879] lima d00c0000.gpu: bus rate = 166666667
+> [   15.257128] lima d00c0000.gpu: mod rate = 24000000
+> [   15.261862] lima d00c0000.gpu: error -ENODEV: _opp_set_regulators: no regulator (mali) found
+> [   15.286143] [drm] Initialized lima 1.1.0 20191231 for d00c0000.gpu on minor 1
+> [   15.292259] meson-drm d0100000.vpu: Queued 2 outputs on vpu
+> [   15.293715] meson-drm d0100000.vpu: bound c883a000.hdmi-tx (ops meson_dw_hdmi_ops [meson_dw_hdmi])
+> [   15.302140] Unable to handle kernel paging request at virtual address fffffffffffffff8
+> [   15.309906] Mem abort info:
+> [   15.312659]   ESR = 0x0000000096000004
+> [   15.316365]   EC = 0x25: DABT (current EL), IL = 32 bits
+> [   15.321626]   SET = 0, FnV = 0
+> [   15.324644]   EA = 0, S1PTW = 0
+> [   15.327744]   FSC = 0x04: level 0 translation fault
+> [   15.332619] Data abort info:
+> [   15.335422]   ISV = 0, ISS = 0x00000004
+> [   15.339226]   CM = 0, WnR = 0
+> [   15.342154] swapper pgtable: 4k pages, 48-bit VAs, pgdp=000000001496c000
+> [   15.348795] [fffffffffffffff8] pgd=0000000000000000, p4d=0000000000000000
+> [   15.355524] Internal error: Oops: 0000000096000004 [#1] PREEMPT SMP
+> [   15.361729] Modules linked in: meson_gxl dwmac_generic snd_soc_meson_gx_sound_card snd_soc_meson_card_utils lima gpu_sched drm_shmem_helper meson_drm drm_dma_helper crct10dif_ce meson_ir rc_core meson_dw_hdmi dw_hdmi meson_canvas dwmac_meson8b stmmac_platform meson_rng stmmac rng_core cec meson_gxbb_wdt drm_display_helper snd_soc_meson_aiu snd_soc_meson_codec_glue pcs_xpcs snd_soc_meson_t9015 amlogic_gxl_crypto crypto_engine display_connector snd_soc_simple_amplifier drm_kms_helper drm nvmem_meson_efuse
+> [   15.405976] CPU: 1 PID: 9 Comm: kworker/u8:0 Not tainted 6.2.0-rc3-next-20230110 #1
+> [   15.413563] Hardware name: Libre Computer AML-S905X-CC (DT)
+> [   15.419086] Workqueue: events_unbound deferred_probe_work_func
+> [   15.424863] pstate: 00000005 (nzcv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> [   15.431762] pc : of_drm_find_bridge+0x38/0x70 [drm]
+> [   15.436594] lr : of_drm_find_bridge+0x20/0x70 [drm]
+> [   15.441423] sp : ffff80000a04b9b0
+> [   15.444700] x29: ffff80000a04b9b0 x28: ffff000008de5810 x27: ffff000008de5808
+> [   15.451772] x26: ffff000008de5800 x25: ffff0000084cb8b0 x24: ffff000001223c00
+> [   15.458844] x23: 0000000000000000 x22: 0000000000000001 x21: ffff00007fa61a28
+> [   15.465917] x20: ffff0000084ca080 x19: ffff00007fa61a28 x18: ffff0000019bd700
+> [   15.472989] x17: 6d64685f77645f6e x16: ffffffffffffffff x15: 0000000000000004
+> [   15.480062] x14: ffff800009bab410 x13: 0000000000000000 x12: 0000000000000003
+> [   15.487135] x11: 0000000000000000 x10: 0000000000000000 x9 : 0000000000000000
+> [   15.494207] x8 : ffff8000010a70a0 x7 : 64410079616b6f01 x6 : 8041640000000003
+> [   15.501279] x5 : 0300000000644100 x4 : 0000000000000080 x3 : 0041640000000000
+> [   15.508352] x2 : ffff000001128000 x1 : 0000000000000000 x0 : 0000000000000000
+> [   15.515426] Call trace:
+> [   15.517863] Insufficient stack space to handle exception!
+> [   15.517867] ESR: 0x0000000096000047 -- DABT (current EL)
+> [   15.517871] FAR: 0xffff80000a047ff0
+> [   15.517873] Task stack:     [0xffff80000a048000..0xffff80000a04c000]
+> [   15.517877] IRQ stack:      [0xffff800008008000..0xffff80000800c000]
+> [   15.517880] Overflow stack: [0xffff00007d9c1320..0xffff00007d9c2320]
+> [   15.517884] CPU: 1 PID: 9 Comm: kworker/u8:0 Not tainted 6.2.0-rc3-next-20230110 #1
+> [   15.517890] Hardware name: Libre Computer AML-S905X-CC (DT)
+> [   15.517895] Workqueue: events_unbound deferred_probe_work_func
+> [   15.517915] pstate: 800003c5 (Nzcv DAIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> [   15.517923] pc : el1_abort+0x4/0x5c
+> [   15.517932] lr : el1h_64_sync_handler+0x60/0xac
+> [   15.517939] sp : ffff80000a048020
+> [   15.517941] x29: ffff80000a048020 x28: ffff000001128000 x27: ffff000008de5808
+> [   15.517950] x26: ffff000008de5800 x25: ffff80000a04b608 x24: ffff000001128000
+> [   15.517957] x23: 00000000a00000c5 x22: ffff8000080321dc x21: ffff80000a048180
+> [   15.517965] x20: ffff8000098e1000 x19: ffff80000a048290 x18: ffff0000019bd700
+> [   15.517972] x17: 0000000000000011 x16: ffffffffffffffff x15: 0000000000000004
+> [   15.517979] x14: ffff800009bab410 x13: 0000000000000000 x12: 0000000000000000
+> [   15.517986] x11: 0000000000000030 x10: ffff800009013a1c x9 : ffff8000090401a0
+> [   15.517994] x8 : 0000000000000025 x7 : 205d363234353135 x6 : 352e35312020205b
+> [   15.518001] x5 : ffff800009f766b7 x4 : ffff800008fe695c x3 : 000000000000000c
+> [   15.518008] x2 : 0000000096000004 x1 : 0000000096000004 x0 : ffff80000a048030
+> [   15.518017] Kernel panic - not syncing: kernel stack overflow
+> [   15.518020] SMP: stopping secondary CPUs
+> [   15.518027] Kernel Offset: disabled
+> [   15.518029] CPU features: 0x00000,01000100,0000421b
+> [   15.518034] Memory Limit: none
+> [   15.679388] ---[ end Kernel panic - not syncing: kernel stack overflow ]---
 
-
-[1]
-https://storage.kernelci.org/next/master/next-20230110/arm64/defconfig/clang-16/lab-broonie/kselftest-arm64-meson-gxl-s905x-libretech-cc.html
-https://storage.kernelci.org/next/master/next-20230110/arm64/defconfig+arm64-chromebook/gcc-10/lab-collabora/kselftest-arm64-sc7180-trogdor-lazor-limozeen.html
-https://storage.kernelci.org/next/master/next-20230110/arm64/defconfig+arm64-chromebook/gcc-10/lab-collabora/kselftest-arm64-mt8173-elm-hana.html
-
-Test case details:
-https://linux.kernelci.org/test/plan/id/63bd1bbadefcf2bc871d3ae5/
-https://linux.kernelci.org/test/case/id/63bd1bbadefcf2bc871d3ae6/
-
-
---
-Linaro LKFT
-https://lkft.linaro.org
-
---000000000000038e8205f1eb2fb2
-Content-Type: text/x-log; charset="US-ASCII"; name="Linux-next-20230110-kernel-crash.log"
-Content-Disposition: attachment; 
-	filename="Linux-next-20230110-kernel-crash.log"
-Content-Transfer-Encoding: base64
-Content-ID: <f_lcqfbynf0>
-X-Attachment-Id: f_lcqfbynf0
-
-WyAgICAwLjAwMDAwMF0gQm9vdGluZyBMaW51eCBvbiBwaHlzaWNhbCBDUFUgMHgwMDAwMDAwMDAw
-IFsweDQxMGZkMDM0XQpbICAgIDAuMDAwMDAwXSBMaW51eCB2ZXJzaW9uIDYuMi4wLXJjMy1uZXh0
-LTIwMjMwMTEwIChLZXJuZWxDSUBidWlsZC1qODE1OTk0LWFybTY0LWNsYW5nLTE2LWRlZmNvbmZp
-Zy0ycWNsYikgKERlYmlhbiBjbGFuZyB2ZXJzaW9uIDE2LjAuMCAoKysyMDIzMDEwOTA3MTkwMSti
-YTdhZjBiZjY5MzItMX5leHAxfjIwMjMwMTA5MDcxOTUwLjUyNSksIERlYmlhbiBMTEQgMTYuMC4w
-KSAjMSBTTVAgUFJFRU1QVCBUdWUgSmFuIDEwIDA1OjE4OjI4IFVUQyAyMDIzClsgICAgMC4wMDAw
-MDBdIE1hY2hpbmUgbW9kZWw6IExpYnJlIENvbXB1dGVyIEFNTC1TOTA1WC1DQwpbICAgIDAuMDAw
-MDAwXSBlZmk6IFVFRkkgbm90IGZvdW5kLgpbICAgIDAuMDAwMDAwXSBPRjogZmR0OiBSZXNlcnZl
-ZCBtZW1vcnk6IGZhaWxlZCB0byByZXNlcnZlIG1lbW9yeSBmb3Igbm9kZSAnaHdyb21AMCc6IGJh
-c2UgMHgwMDAwMDAwMDAwMDAwMDAwLCBzaXplIDE2IE1pQgpbICAgIDAuMDAwMDAwXSBPRjogZmR0
-OiBSZXNlcnZlZCBtZW1vcnk6IGZhaWxlZCB0byByZXNlcnZlIG1lbW9yeSBmb3Igbm9kZSAnc2Vj
-bW9uQDEwMDAwMDAwJzogYmFzZSAweDAwMDAwMDAwMTAwMDAwMDAsIHNpemUgMiBNaUIKWyAgICAw
-LjAwMDAwMF0gUmVzZXJ2ZWQgbWVtb3J5OiBjcmVhdGVkIENNQSBtZW1vcnkgcG9vbCBhdCAweDAw
-MDAwMDAwNmFjMDAwMDAsIHNpemUgMjU2IE1pQgpbICAgIDAuMDAwMDAwXSBPRjogcmVzZXJ2ZWQg
-bWVtOiBpbml0aWFsaXplZCBub2RlIGxpbnV4LGNtYSwgY29tcGF0aWJsZSBpZCBzaGFyZWQtZG1h
-LXBvb2wKWyAgICAwLjAwMDAwMF0gTlVNQTogTm8gTlVNQSBjb25maWd1cmF0aW9uIGZvdW5kClsg
-ICAgMC4wMDAwMDBdIE5VTUE6IEZha2luZyBhIG5vZGUgYXQgW21lbSAweDAwMDAwMDAwMDAwMDAw
-MDAtMHgwMDAwMDAwMDdmZTVhZmZmXQpbICAgIDAuMDAwMDAwXSBOVU1BOiBOT0RFX0RBVEEgW21l
-bSAweDdmYTNiYTAwLTB4N2ZhM2RmZmZdClsgICAgMC4wMDAwMDBdIFpvbmUgcmFuZ2VzOgpbICAg
-IDAuMDAwMDAwXSAgIERNQSAgICAgIFttZW0gMHgwMDAwMDAwMDAwMDAwMDAwLTB4MDAwMDAwMDA3
-ZmU1YWZmZl0KWyAgICAwLjAwMDAwMF0gICBETUEzMiAgICBlbXB0eQpbICAgIDAuMDAwMDAwXSAg
-IE5vcm1hbCAgIGVtcHR5ClsgICAgMC4wMDAwMDBdIE1vdmFibGUgem9uZSBzdGFydCBmb3IgZWFj
-aCBub2RlClsgICAgMC4wMDAwMDBdIEVhcmx5IG1lbW9yeSBub2RlIHJhbmdlcwpbICAgIDAuMDAw
-MDAwXSAgIG5vZGUgICAwOiBbbWVtIDB4MDAwMDAwMDAwMDAwMDAwMC0weDAwMDAwMDAwMDRmZmZm
-ZmZdClsgICAgMC4wMDAwMDBdICAgbm9kZSAgIDA6IFttZW0gMHgwMDAwMDAwMDA1MDAwMDAwLTB4
-MDAwMDAwMDAwNzJmZmZmZl0KWyAgICAwLjAwMDAwMF0gICBub2RlICAgMDogW21lbSAweDAwMDAw
-MDAwMDczMDAwMDAtMHgwMDAwMDAwMDdmZTVhZmZmXQpbICAgIDAuMDAwMDAwXSBJbml0bWVtIHNl
-dHVwIG5vZGUgMCBbbWVtIDB4MDAwMDAwMDAwMDAwMDAwMC0weDAwMDAwMDAwN2ZlNWFmZmZdClsg
-ICAgMC4wMDAwMDBdIE9uIG5vZGUgMCwgem9uZSBETUE6IDQyMSBwYWdlcyBpbiB1bmF2YWlsYWJs
-ZSByYW5nZXMKWyAgICAwLjAwMDAwMF0gcHNjaTogcHJvYmluZyBmb3IgY29uZHVpdCBtZXRob2Qg
-ZnJvbSBEVC4KWyAgICAwLjAwMDAwMF0gcHNjaTogUFNDSXYxLjEgZGV0ZWN0ZWQgaW4gZmlybXdh
-cmUuClsgICAgMC4wMDAwMDBdIHBzY2k6IFVzaW5nIHN0YW5kYXJkIFBTQ0kgdjAuMiBmdW5jdGlv
-biBJRHMKWyAgICAwLjAwMDAwMF0gcHNjaTogTUlHUkFURV9JTkZPX1RZUEUgbm90IHN1cHBvcnRl
-ZC4KWyAgICAwLjAwMDAwMF0gcHNjaTogU01DIENhbGxpbmcgQ29udmVudGlvbiB2MS4yClsgICAg
-MC4wMDAwMDBdIHBlcmNwdTogRW1iZWRkZWQgMjEgcGFnZXMvY3B1IHM0ODgwOCByODE5MiBkMjkw
-MTYgdTg2MDE2ClsgICAgMC4wMDAwMDBdIERldGVjdGVkIFZJUFQgSS1jYWNoZSBvbiBDUFUwClsg
-ICAgMC4wMDAwMDBdIENQVSBmZWF0dXJlczogZGV0ZWN0ZWQ6IEFSTSBlcnJhdHVtIDg0NTcxOQpb
-ICAgIDAuMDAwMDAwXSBhbHRlcm5hdGl2ZXM6IGFwcGx5aW5nIGJvb3QgYWx0ZXJuYXRpdmVzClsg
-ICAgMC4wMDAwMDBdIEZhbGxiYWNrIG9yZGVyIGZvciBOb2RlIDA6IDAgClsgICAgMC4wMDAwMDBd
-IEJ1aWx0IDEgem9uZWxpc3RzLCBtb2JpbGl0eSBncm91cGluZyBvbi4gIFRvdGFsIHBhZ2VzOiA1
-MTU2ODEKWyAgICAwLjAwMDAwMF0gUG9saWN5IHpvbmU6IERNQQpbICAgIDAuMDAwMDAwXSBLZXJu
-ZWwgY29tbWFuZCBsaW5lOiBjb25zb2xlPXR0eUFNTDAsMTE1MjAwbjggcm9vdD0vZGV2L25mcyBy
-dyBuZnNyb290PTE5Mi4xNjguNTYuNzU6L3Zhci9saWIvbGF2YS9kaXNwYXRjaGVyL3RtcC84MTA3
-NS9leHRyYWN0LW5mc3Jvb3Rmcy1iYXd6cDRreCx0Y3AsaGFyZCAgaXA9ZGhjcApbICAgIDAuMDAw
-MDAwXSBEZW50cnkgY2FjaGUgaGFzaCB0YWJsZSBlbnRyaWVzOiAyNjIxNDQgKG9yZGVyOiA5LCAy
-MDk3MTUyIGJ5dGVzLCBsaW5lYXIpClsgICAgMC4wMDAwMDBdIElub2RlLWNhY2hlIGhhc2ggdGFi
-bGUgZW50cmllczogMTMxMDcyIChvcmRlcjogOCwgMTA0ODU3NiBieXRlcywgbGluZWFyKQpbICAg
-IDAuMDAwMDAwXSBtZW0gYXV0by1pbml0OiBzdGFjazphbGwoemVybyksIGhlYXAgYWxsb2M6b2Zm
-LCBoZWFwIGZyZWU6b2ZmClsgICAgMC4wMDAwMDBdIE1lbW9yeTogMTY4NjkyOEsvMjA5NTQ2OEsg
-YXZhaWxhYmxlICgxNjU3Nksga2VybmVsIGNvZGUsIDM5MTJLIHJ3ZGF0YSwgOTM0OEsgcm9kYXRh
-LCAyMDQ4SyBpbml0LCA2MDlLIGJzcywgMTQ2Mzk2SyByZXNlcnZlZCwgMjYyMTQ0SyBjbWEtcmVz
-ZXJ2ZWQpClsgICAgMC4wMDAwMDBdIFNMVUI6IEhXYWxpZ249NjQsIE9yZGVyPTAtMywgTWluT2Jq
-ZWN0cz0wLCBDUFVzPTQsIE5vZGVzPTEKWyAgICAwLjAwMDAwMF0gcmN1OiBQcmVlbXB0aWJsZSBo
-aWVyYXJjaGljYWwgUkNVIGltcGxlbWVudGF0aW9uLgpbICAgIDAuMDAwMDAwXSByY3U6IAlSQ1Ug
-ZXZlbnQgdHJhY2luZyBpcyBlbmFibGVkLgpbICAgIDAuMDAwMDAwXSByY3U6IAlSQ1UgcmVzdHJp
-Y3RpbmcgQ1BVcyBmcm9tIE5SX0NQVVM9MjU2IHRvIG5yX2NwdV9pZHM9NC4KWyAgICAwLjAwMDAw
-MF0gCVRyYW1wb2xpbmUgdmFyaWFudCBvZiBUYXNrcyBSQ1UgZW5hYmxlZC4KWyAgICAwLjAwMDAw
-MF0gCVRyYWNpbmcgdmFyaWFudCBvZiBUYXNrcyBSQ1UgZW5hYmxlZC4KWyAgICAwLjAwMDAwMF0g
-cmN1OiBSQ1UgY2FsY3VsYXRlZCB2YWx1ZSBvZiBzY2hlZHVsZXItZW5saXN0bWVudCBkZWxheSBp
-cyAyNSBqaWZmaWVzLgpbICAgIDAuMDAwMDAwXSByY3U6IEFkanVzdGluZyBnZW9tZXRyeSBmb3Ig
-cmN1X2Zhbm91dF9sZWFmPTE2LCBucl9jcHVfaWRzPTQKWyAgICAwLjAwMDAwMF0gTlJfSVJRUzog
-NjQsIG5yX2lycXM6IDY0LCBwcmVhbGxvY2F0ZWQgaXJxczogMApbICAgIDAuMDAwMDAwXSBSb290
-IElSUSBoYW5kbGVyOiBnaWNfaGFuZGxlX2lycQpbICAgIDAuMDAwMDAwXSBHSUM6IFVzaW5nIHNw
-bGl0IEVPSS9EZWFjdGl2YXRlIG1vZGUKWyAgICAwLjAwMDAwMF0gcmN1OiBzcmN1X2luaXQ6IFNl
-dHRpbmcgc3JjdV9zdHJ1Y3Qgc2l6ZXMgYmFzZWQgb24gY29udGVudGlvbi4KWyAgICAwLjAwMDAw
-MF0gYXJjaF90aW1lcjogY3AxNSB0aW1lcihzKSBydW5uaW5nIGF0IDI0LjAwTUh6IChwaHlzKS4K
-WyAgICAwLjAwMDAwMF0gY2xvY2tzb3VyY2U6IGFyY2hfc3lzX2NvdW50ZXI6IG1hc2s6IDB4ZmZm
-ZmZmZmZmZmZmZmYgbWF4X2N5Y2xlczogMHg1ODhmZTlkYzAsIG1heF9pZGxlX25zOiA0NDA3OTUy
-MDI1OTIgbnMKWyAgICAwLjAwMDAwMF0gc2NoZWRfY2xvY2s6IDU2IGJpdHMgYXQgMjRNSHosIHJl
-c29sdXRpb24gNDFucywgd3JhcHMgZXZlcnkgNDM5ODA0NjUxMTA5N25zClsgICAgMC4wMDEyNjJd
-IENvbnNvbGU6IGNvbG91ciBkdW1teSBkZXZpY2UgODB4MjUKWyAgICAwLjAwMTM0M10gQ2FsaWJy
-YXRpbmcgZGVsYXkgbG9vcCAoc2tpcHBlZCksIHZhbHVlIGNhbGN1bGF0ZWQgdXNpbmcgdGltZXIg
-ZnJlcXVlbmN5Li4gNDguMDAgQm9nb01JUFMgKGxwaj05NjAwMCkKWyAgICAwLjAwMTM1NV0gcGlk
-X21heDogZGVmYXVsdDogMzI3NjggbWluaW11bTogMzAxClsgICAgMC4wMDE0MTZdIExTTTogaW5p
-dGlhbGl6aW5nIGxzbT1jYXBhYmlsaXR5LGludGVncml0eQpbICAgIDAuMDAxNTE5XSBNb3VudC1j
-YWNoZSBoYXNoIHRhYmxlIGVudHJpZXM6IDQwOTYgKG9yZGVyOiAzLCAzMjc2OCBieXRlcywgbGlu
-ZWFyKQpbICAgIDAuMDAxNTM2XSBNb3VudHBvaW50LWNhY2hlIGhhc2ggdGFibGUgZW50cmllczog
-NDA5NiAob3JkZXI6IDMsIDMyNzY4IGJ5dGVzLCBsaW5lYXIpClsgICAgMC4wMDI5ODNdIGNibGlz
-dF9pbml0X2dlbmVyaWM6IFNldHRpbmcgYWRqdXN0YWJsZSBudW1iZXIgb2YgY2FsbGJhY2sgcXVl
-dWVzLgpbICAgIDAuMDAyOTk5XSBjYmxpc3RfaW5pdF9nZW5lcmljOiBTZXR0aW5nIHNoaWZ0IHRv
-IDIgYW5kIGxpbSB0byAxLgpbICAgIDAuMDAzMDY3XSBjYmxpc3RfaW5pdF9nZW5lcmljOiBTZXR0
-aW5nIHNoaWZ0IHRvIDIgYW5kIGxpbSB0byAxLgpbICAgIDAuMDAzMjE1XSByY3U6IEhpZXJhcmNo
-aWNhbCBTUkNVIGltcGxlbWVudGF0aW9uLgpbICAgIDAuMDAzMjE5XSByY3U6IAlNYXggcGhhc2Ug
-bm8tZGVsYXkgaW5zdGFuY2VzIGlzIDEwMDAuClsgICAgMC4wMDU2OTBdIEVGSSBzZXJ2aWNlcyB3
-aWxsIG5vdCBiZSBhdmFpbGFibGUuClsgICAgMC4wMDYwNDJdIHNtcDogQnJpbmdpbmcgdXAgc2Vj
-b25kYXJ5IENQVXMgLi4uClsgICAgMC4wMDY1NjZdIERldGVjdGVkIFZJUFQgSS1jYWNoZSBvbiBD
-UFUxClsgICAgMC4wMDY2ODZdIENQVTE6IEJvb3RlZCBzZWNvbmRhcnkgcHJvY2Vzc29yIDB4MDAw
-MDAwMDAwMSBbMHg0MTBmZDAzNF0KWyAgICAwLjAwNzMwMl0gRGV0ZWN0ZWQgVklQVCBJLWNhY2hl
-IG9uIENQVTIKWyAgICAwLjAwNzQxMV0gQ1BVMjogQm9vdGVkIHNlY29uZGFyeSBwcm9jZXNzb3Ig
-MHgwMDAwMDAwMDAyIFsweDQxMGZkMDM0XQpbICAgIDAuMDA4MDEyXSBEZXRlY3RlZCBWSVBUIEkt
-Y2FjaGUgb24gQ1BVMwpbICAgIDAuMDA4MTI0XSBDUFUzOiBCb290ZWQgc2Vjb25kYXJ5IHByb2Nl
-c3NvciAweDAwMDAwMDAwMDMgWzB4NDEwZmQwMzRdClsgICAgMC4wMDgyMDddIHNtcDogQnJvdWdo
-dCB1cCAxIG5vZGUsIDQgQ1BVcwpbICAgIDAuMDA4MjE0XSBTTVA6IFRvdGFsIG9mIDQgcHJvY2Vz
-c29ycyBhY3RpdmF0ZWQuClsgICAgMC4wMDgyMThdIENQVSBmZWF0dXJlczogZGV0ZWN0ZWQ6IDMy
-LWJpdCBFTDAgU3VwcG9ydApbICAgIDAuMDA4MjIxXSBDUFUgZmVhdHVyZXM6IGRldGVjdGVkOiAz
-Mi1iaXQgRUwxIFN1cHBvcnQKWyAgICAwLjAwODIyN10gQ1BVIGZlYXR1cmVzOiBkZXRlY3RlZDog
-Q1JDMzIgaW5zdHJ1Y3Rpb25zClsgICAgMC4wMDgyODldIENQVTogQWxsIENQVShzKSBzdGFydGVk
-IGF0IEVMMgpbICAgIDAuMDA4MzY5XSBhbHRlcm5hdGl2ZXM6IGFwcGx5aW5nIHN5c3RlbS13aWRl
-IGFsdGVybmF0aXZlcwpbICAgIDAuMDEwNTA3XSBkZXZ0bXBmczogaW5pdGlhbGl6ZWQKWyAgICAw
-LjAxNjYwNF0gY2xvY2tzb3VyY2U6IGppZmZpZXM6IG1hc2s6IDB4ZmZmZmZmZmYgbWF4X2N5Y2xl
-czogMHhmZmZmZmZmZiwgbWF4X2lkbGVfbnM6IDc2NDUwNDE3ODUxMDAwMDAgbnMKWyAgICAwLjAx
-NjYzNV0gZnV0ZXggaGFzaCB0YWJsZSBlbnRyaWVzOiAxMDI0IChvcmRlcjogNCwgNjU1MzYgYnl0
-ZXMsIGxpbmVhcikKWyAgICAwLjAyMjU2OV0gcGluY3RybCBjb3JlOiBpbml0aWFsaXplZCBwaW5j
-dHJsIHN1YnN5c3RlbQpbICAgIDAuMDI0NjE3XSBETUkgbm90IHByZXNlbnQgb3IgaW52YWxpZC4K
-WyAgICAwLjAyNTI2M10gTkVUOiBSZWdpc3RlcmVkIFBGX05FVExJTksvUEZfUk9VVEUgcHJvdG9j
-b2wgZmFtaWx5ClsgICAgMC4wMjYyOThdIERNQTogcHJlYWxsb2NhdGVkIDI1NiBLaUIgR0ZQX0tF
-Uk5FTCBwb29sIGZvciBhdG9taWMgYWxsb2NhdGlvbnMKWyAgICAwLjAyNjU3OF0gRE1BOiBwcmVh
-bGxvY2F0ZWQgMjU2IEtpQiBHRlBfS0VSTkVMfEdGUF9ETUEgcG9vbCBmb3IgYXRvbWljIGFsbG9j
-YXRpb25zClsgICAgMC4wMjY3MzldIERNQTogcHJlYWxsb2NhdGVkIDI1NiBLaUIgR0ZQX0tFUk5F
-THxHRlBfRE1BMzIgcG9vbCBmb3IgYXRvbWljIGFsbG9jYXRpb25zClsgICAgMC4wMjY4MTJdIGF1
-ZGl0OiBpbml0aWFsaXppbmcgbmV0bGluayBzdWJzeXMgKGRpc2FibGVkKQpbICAgIDAuMDI3MDA5
-XSBhdWRpdDogdHlwZT0yMDAwIGF1ZGl0KDAuMDI0OjEpOiBzdGF0ZT1pbml0aWFsaXplZCBhdWRp
-dF9lbmFibGVkPTAgcmVzPTEKWyAgICAwLjAyODI0OV0gdGhlcm1hbF9zeXM6IFJlZ2lzdGVyZWQg
-dGhlcm1hbCBnb3Zlcm5vciAnc3RlcF93aXNlJwpbICAgIDAuMDI4MjYxXSB0aGVybWFsX3N5czog
-UmVnaXN0ZXJlZCB0aGVybWFsIGdvdmVybm9yICdwb3dlcl9hbGxvY2F0b3InClsgICAgMC4wMjgz
-NTBdIGNwdWlkbGU6IHVzaW5nIGdvdmVybm9yIG1lbnUKWyAgICAwLjAyODYwOV0gaHctYnJlYWtw
-b2ludDogZm91bmQgNiBicmVha3BvaW50IGFuZCA0IHdhdGNocG9pbnQgcmVnaXN0ZXJzLgpbICAg
-IDAuMDI4NzEwXSBBU0lEIGFsbG9jYXRvciBpbml0aWFsaXNlZCB3aXRoIDY1NTM2IGVudHJpZXMK
-WyAgICAwLjAzMDU4OV0gU2VyaWFsOiBBTUJBIFBMMDExIFVBUlQgZHJpdmVyClsgICAgMC4wNTAy
-MTBdIHBsYXRmb3JtIGM4ODNhMDAwLmhkbWktdHg6IEZpeGluZyB1cCBjeWNsaWMgZGVwZW5kZW5j
-eSB3aXRoIGQwMTAwMDAwLnZwdQpbICAgIDAuMDUyNTczXSBwbGF0Zm9ybSBjdmJzLWNvbm5lY3Rv
-cjogRml4aW5nIHVwIGN5Y2xpYyBkZXBlbmRlbmN5IHdpdGggZDAxMDAwMDAudnB1ClsgICAgMC4w
-NTM1MDJdIHBsYXRmb3JtIGhkbWktY29ubmVjdG9yOiBGaXhpbmcgdXAgY3ljbGljIGRlcGVuZGVu
-Y3kgd2l0aCBjODgzYTAwMC5oZG1pLXR4ClsgICAgMC4wNTcwNTVdIEtBU0xSIGRpc2FibGVkIGR1
-ZSB0byBsYWNrIG9mIHNlZWQKWyAgICAwLjA1Nzc3N10gSHVnZVRMQjogcmVnaXN0ZXJlZCAxLjAw
-IEdpQiBwYWdlIHNpemUsIHByZS1hbGxvY2F0ZWQgMCBwYWdlcwpbICAgIDAuMDU3Nzg5XSBIdWdl
-VExCOiAxNjM4MCBLaUIgdm1lbW1hcCBjYW4gYmUgZnJlZWQgZm9yIGEgMS4wMCBHaUIgcGFnZQpb
-ICAgIDAuMDU3Nzk2XSBIdWdlVExCOiByZWdpc3RlcmVkIDMyLjAgTWlCIHBhZ2Ugc2l6ZSwgcHJl
-LWFsbG9jYXRlZCAwIHBhZ2VzClsgICAgMC4wNTc3OTldIEh1Z2VUTEI6IDUwOCBLaUIgdm1lbW1h
-cCBjYW4gYmUgZnJlZWQgZm9yIGEgMzIuMCBNaUIgcGFnZQpbICAgIDAuMDU3ODA0XSBIdWdlVExC
-OiByZWdpc3RlcmVkIDIuMDAgTWlCIHBhZ2Ugc2l6ZSwgcHJlLWFsbG9jYXRlZCAwIHBhZ2VzClsg
-ICAgMC4wNTc4MDddIEh1Z2VUTEI6IDI4IEtpQiB2bWVtbWFwIGNhbiBiZSBmcmVlZCBmb3IgYSAy
-LjAwIE1pQiBwYWdlClsgICAgMC4wNTc4MTJdIEh1Z2VUTEI6IHJlZ2lzdGVyZWQgNjQuMCBLaUIg
-cGFnZSBzaXplLCBwcmUtYWxsb2NhdGVkIDAgcGFnZXMKWyAgICAwLjA1NzgxNl0gSHVnZVRMQjog
-MCBLaUIgdm1lbW1hcCBjYW4gYmUgZnJlZWQgZm9yIGEgNjQuMCBLaUIgcGFnZQpbICAgIDAuMDU5
-NTExXSBBQ1BJOiBJbnRlcnByZXRlciBkaXNhYmxlZC4KWyAgICAwLjA2MjY4N10gaW9tbXU6IERl
-ZmF1bHQgZG9tYWluIHR5cGU6IFRyYW5zbGF0ZWQgClsgICAgMC4wNjI3MDBdIGlvbW11OiBETUEg
-ZG9tYWluIFRMQiBpbnZhbGlkYXRpb24gcG9saWN5OiBzdHJpY3QgbW9kZSAKWyAgICAwLjA2MzAy
-MF0gU0NTSSBzdWJzeXN0ZW0gaW5pdGlhbGl6ZWQKWyAgICAwLjA2MzM5MF0gdXNiY29yZTogcmVn
-aXN0ZXJlZCBuZXcgaW50ZXJmYWNlIGRyaXZlciB1c2JmcwpbICAgIDAuMDYzNDE0XSB1c2Jjb3Jl
-OiByZWdpc3RlcmVkIG5ldyBpbnRlcmZhY2UgZHJpdmVyIGh1YgpbICAgIDAuMDYzNDM5XSB1c2Jj
-b3JlOiByZWdpc3RlcmVkIG5ldyBkZXZpY2UgZHJpdmVyIHVzYgpbICAgIDAuMDY0NTYzXSBwcHNf
-Y29yZTogTGludXhQUFMgQVBJIHZlci4gMSByZWdpc3RlcmVkClsgICAgMC4wNjQ1NjldIHBwc19j
-b3JlOiBTb2Z0d2FyZSB2ZXIuIDUuMy42IC0gQ29weXJpZ2h0IDIwMDUtMjAwNyBSb2RvbGZvIEdp
-b21ldHRpIDxnaW9tZXR0aUBsaW51eC5pdD4KWyAgICAwLjA2NDU4M10gUFRQIGNsb2NrIHN1cHBv
-cnQgcmVnaXN0ZXJlZApbICAgIDAuMDY0NzU2XSBFREFDIE1DOiBWZXI6IDMuMC4wClsgICAgMC4w
-NjY2MTZdIEZQR0EgbWFuYWdlciBmcmFtZXdvcmsKWyAgICAwLjA2NjcxNl0gQWR2YW5jZWQgTGlu
-dXggU291bmQgQXJjaGl0ZWN0dXJlIERyaXZlciBJbml0aWFsaXplZC4KWyAgICAwLjA2NzY2M10g
-dmdhYXJiOiBsb2FkZWQKWyAgICAwLjA2ODA2NV0gY2xvY2tzb3VyY2U6IFN3aXRjaGVkIHRvIGNs
-b2Nrc291cmNlIGFyY2hfc3lzX2NvdW50ZXIKWyAgICAwLjA2ODI4Nl0gVkZTOiBEaXNrIHF1b3Rh
-cyBkcXVvdF82LjYuMApbICAgIDAuMDY4MzIyXSBWRlM6IERxdW90LWNhY2hlIGhhc2ggdGFibGUg
-ZW50cmllczogNTEyIChvcmRlciAwLCA0MDk2IGJ5dGVzKQpbICAgIDAuMDY4NTIxXSBwbnA6IFBu
-UCBBQ1BJOiBkaXNhYmxlZApbICAgIDAuMDc0Mzk4XSBORVQ6IFJlZ2lzdGVyZWQgUEZfSU5FVCBw
-cm90b2NvbCBmYW1pbHkKWyAgICAwLjA3NDcwMV0gSVAgaWRlbnRzIGhhc2ggdGFibGUgZW50cmll
-czogMzI3NjggKG9yZGVyOiA2LCAyNjIxNDQgYnl0ZXMsIGxpbmVhcikKWyAgICAwLjA3NjM3OF0g
-dGNwX2xpc3Rlbl9wb3J0YWRkcl9oYXNoIGhhc2ggdGFibGUgZW50cmllczogMTAyNCAob3JkZXI6
-IDIsIDE2Mzg0IGJ5dGVzLCBsaW5lYXIpClsgICAgMC4wNzY0MTNdIFRhYmxlLXBlcnR1cmIgaGFz
-aCB0YWJsZSBlbnRyaWVzOiA2NTUzNiAob3JkZXI6IDYsIDI2MjE0NCBieXRlcywgbGluZWFyKQpb
-ICAgIDAuMDc2NDI2XSBUQ1AgZXN0YWJsaXNoZWQgaGFzaCB0YWJsZSBlbnRyaWVzOiAxNjM4NCAo
-b3JkZXI6IDUsIDEzMTA3MiBieXRlcywgbGluZWFyKQpbICAgIDAuMDc2NTUwXSBUQ1AgYmluZCBo
-YXNoIHRhYmxlIGVudHJpZXM6IDE2Mzg0IChvcmRlcjogNywgNTI0Mjg4IGJ5dGVzLCBsaW5lYXIp
-ClsgICAgMC4wNzY5MzVdIFRDUDogSGFzaCB0YWJsZXMgY29uZmlndXJlZCAoZXN0YWJsaXNoZWQg
-MTYzODQgYmluZCAxNjM4NCkKWyAgICAwLjA3NzA2M10gVURQIGhhc2ggdGFibGUgZW50cmllczog
-MTAyNCAob3JkZXI6IDMsIDMyNzY4IGJ5dGVzLCBsaW5lYXIpClsgICAgMC4wNzcxMTddIFVEUC1M
-aXRlIGhhc2ggdGFibGUgZW50cmllczogMTAyNCAob3JkZXI6IDMsIDMyNzY4IGJ5dGVzLCBsaW5l
-YXIpClsgICAgMC4wNzcyOTBdIE5FVDogUmVnaXN0ZXJlZCBQRl9VTklYL1BGX0xPQ0FMIHByb3Rv
-Y29sIGZhbWlseQpbICAgIDAuMDc3NzIzXSBSUEM6IFJlZ2lzdGVyZWQgbmFtZWQgVU5JWCBzb2Nr
-ZXQgdHJhbnNwb3J0IG1vZHVsZS4KWyAgICAwLjA3NzczM10gUlBDOiBSZWdpc3RlcmVkIHVkcCB0
-cmFuc3BvcnQgbW9kdWxlLgpbICAgIDAuMDc3NzM1XSBSUEM6IFJlZ2lzdGVyZWQgdGNwIHRyYW5z
-cG9ydCBtb2R1bGUuClsgICAgMC4wNzc3MzhdIFJQQzogUmVnaXN0ZXJlZCB0Y3AgTkZTdjQuMSBi
-YWNrY2hhbm5lbCB0cmFuc3BvcnQgbW9kdWxlLgpbICAgIDAuMDc3NzQ4XSBQQ0k6IENMUyAwIGJ5
-dGVzLCBkZWZhdWx0IDY0ClsgICAgMC4wNzc5NzFdIFVucGFja2luZyBpbml0cmFtZnMuLi4KWyAg
-ICAwLjA3ODYxOV0gaHcgcGVyZmV2ZW50czogZW5hYmxlZCB3aXRoIGFybXY4X2NvcnRleF9hNTMg
-UE1VIGRyaXZlciwgNyBjb3VudGVycyBhdmFpbGFibGUKWyAgICAwLjA3OTE3M10ga3ZtIFsxXTog
-SVBBIFNpemUgTGltaXQ6IDQwIGJpdHMKWyAgICAwLjA4MTI5OV0ga3ZtIFsxXTogdmdpYyBpbnRl
-cnJ1cHQgSVJROQpbICAgIDAuMDgxMzk2XSBrdm0gWzFdOiBIeXAgbW9kZSBpbml0aWFsaXplZCBz
-dWNjZXNzZnVsbHkKWyAgICAwLjA4MjgwMV0gSW5pdGlhbGlzZSBzeXN0ZW0gdHJ1c3RlZCBrZXly
-aW5ncwpbICAgIDAuMDgzMDc2XSB3b3JraW5nc2V0OiB0aW1lc3RhbXBfYml0cz00MiBtYXhfb3Jk
-ZXI9MTkgYnVja2V0X29yZGVyPTAKWyAgICAwLjA4MzQ3NV0gc3F1YXNoZnM6IHZlcnNpb24gNC4w
-ICgyMDA5LzAxLzMxKSBQaGlsbGlwIExvdWdoZXIKWyAgICAwLjA4Mzg0N10gTkZTOiBSZWdpc3Rl
-cmluZyB0aGUgaWRfcmVzb2x2ZXIga2V5IHR5cGUKWyAgICAwLjA4Mzg4Nl0gS2V5IHR5cGUgaWRf
-cmVzb2x2ZXIgcmVnaXN0ZXJlZApbICAgIDAuMDgzODkxXSBLZXkgdHlwZSBpZF9sZWdhY3kgcmVn
-aXN0ZXJlZApbICAgIDAuMDgzOTI0XSBuZnM0ZmlsZWxheW91dF9pbml0OiBORlN2NCBGaWxlIExh
-eW91dCBEcml2ZXIgUmVnaXN0ZXJpbmcuLi4KWyAgICAwLjA4MzkyOV0gbmZzNGZsZXhmaWxlbGF5
-b3V0X2luaXQ6IE5GU3Y0IEZsZXhmaWxlIExheW91dCBEcml2ZXIgUmVnaXN0ZXJpbmcuLi4KWyAg
-ICAwLjA4NDIwM10gOXA6IEluc3RhbGxpbmcgdjlmcyA5cDIwMDAgZmlsZSBzeXN0ZW0gc3VwcG9y
-dApbICAgIDAuMTE2NzY1XSBLZXkgdHlwZSBhc3ltbWV0cmljIHJlZ2lzdGVyZWQKWyAgICAwLjEx
-Njc4MV0gQXN5bW1ldHJpYyBrZXkgcGFyc2VyICd4NTA5JyByZWdpc3RlcmVkClsgICAgMC4xMTY4
-NjZdIEJsb2NrIGxheWVyIFNDU0kgZ2VuZXJpYyAoYnNnKSBkcml2ZXIgdmVyc2lvbiAwLjQgbG9h
-ZGVkIChtYWpvciAyNDUpClsgICAgMC4xMTY4NzNdIGlvIHNjaGVkdWxlciBtcS1kZWFkbGluZSBy
-ZWdpc3RlcmVkClsgICAgMC4xMTY4NzhdIGlvIHNjaGVkdWxlciBreWJlciByZWdpc3RlcmVkClsg
-ICAgMC4xMTg2MTddIGlycV9tZXNvbl9ncGlvOiAxMTAgdG8gOCBncGlvIGludGVycnVwdCBtdXgg
-aW5pdGlhbGl6ZWQKWyAgICAwLjEzNTA3OF0gRUlOSjogQUNQSSBkaXNhYmxlZC4KWyAgICAwLjE1
-OTczMV0gc29jIHNvYzA6IEFtbG9naWMgTWVzb24gR1hMIChTOTA1WCkgUmV2aXNpb24gMjE6ZCAo
-ODQ6MikgRGV0ZWN0ZWQKWyAgICAwLjE3MDkyN10gU2VyaWFsOiA4MjUwLzE2NTUwIGRyaXZlciwg
-NCBwb3J0cywgSVJRIHNoYXJpbmcgZW5hYmxlZApbICAgIDAuMTc0OTMzXSBTdXBlckggKEgpU0NJ
-KEYpIGRyaXZlciBpbml0aWFsaXplZApbICAgIDAuMTc1ODI3XSBjODEwMDRjMC5zZXJpYWw6IHR0
-eUFNTDAgYXQgTU1JTyAweGM4MTAwNGMwIChpcnEgPSAxOCwgYmFzZV9iYXVkID0gMTUwMDAwMCkg
-aXMgYSBtZXNvbl91YXJ0ClsgICAgMC4xNzU4OTldIHByaW50azogY29uc29sZSBbdHR5QU1MMF0g
-ZW5hYmxlZApbICAgIDEuMDE5MTk1XSBGcmVlaW5nIGluaXRyZCBtZW1vcnk6IDE4OTg0SwpbICAg
-IDEuMDIxOTcyXSBtc21fc2VyaWFsOiBkcml2ZXIgaW5pdGlhbGl6ZWQKWyAgICAxLjE4MDQwNV0g
-bG9vcDogbW9kdWxlIGxvYWRlZApbICAgIDEuMTgxNzE5XSBtZWdhc2FzOiAwNy43MTkuMDMuMDAt
-cmMxClsgICAgMS4xOTAwMjddIHR1bjogVW5pdmVyc2FsIFRVTi9UQVAgZGV2aWNlIGRyaXZlciwg
-MS42ClsgICAgMS4xOTEzMTldIHRodW5kZXJfeGN2LCB2ZXIgMS4wClsgICAgMS4xOTI3MTZdIHRo
-dW5kZXJfYmd4LCB2ZXIgMS4wClsgICAgMS4xOTU4NTNdIG5pY3BmLCB2ZXIgMS4wClsgICAgMS4y
-MDA1MjNdIGhuczM6IEhpc2lsaWNvbiBFdGhlcm5ldCBOZXR3b3JrIERyaXZlciBmb3IgSGlwMDgg
-RmFtaWx5IC0gdmVyc2lvbgpbICAgIDEuMjA1Njc4XSBobnMzOiBDb3B5cmlnaHQgKGMpIDIwMTcg
-SHVhd2VpIENvcnBvcmF0aW9uLgpbICAgIDEuMjEwOTg5XSBoY2xnZSBpcyBpbml0aWFsaXppbmcK
-WyAgICAxLjIxNDIzN10gZTEwMDA6IEludGVsKFIpIFBSTy8xMDAwIE5ldHdvcmsgRHJpdmVyClsg
-ICAgMS4yMTkwMzddIGUxMDAwOiBDb3B5cmlnaHQgKGMpIDE5OTktMjAwNiBJbnRlbCBDb3Jwb3Jh
-dGlvbi4KWyAgICAxLjIyNDc1OF0gZTEwMDBlOiBJbnRlbChSKSBQUk8vMTAwMCBOZXR3b3JrIERy
-aXZlcgpbICAgIDEuMjI5NjQ2XSBlMTAwMGU6IENvcHlyaWdodChjKSAxOTk5IC0gMjAxNSBJbnRl
-bCBDb3Jwb3JhdGlvbi4KWyAgICAxLjIzNTUyOV0gaWdiOiBJbnRlbChSKSBHaWdhYml0IEV0aGVy
-bmV0IE5ldHdvcmsgRHJpdmVyClsgICAgMS4yNDA4NThdIGlnYjogQ29weXJpZ2h0IChjKSAyMDA3
-LTIwMTQgSW50ZWwgQ29ycG9yYXRpb24uClsgICAgMS4yNDY0MDBdIGlnYnZmOiBJbnRlbChSKSBH
-aWdhYml0IFZpcnR1YWwgRnVuY3Rpb24gTmV0d29yayBEcml2ZXIKWyAgICAxLjI1MjU4OF0gaWdi
-dmY6IENvcHlyaWdodCAoYykgMjAwOSAtIDIwMTIgSW50ZWwgQ29ycG9yYXRpb24uClsgICAgMS4y
-NTkwMTZdIHNreTI6IGRyaXZlciB2ZXJzaW9uIDEuMzAKWyAgICAxLjI2NDAyOV0gVkZJTyAtIFVz
-ZXIgTGV2ZWwgbWV0YS1kcml2ZXIgdmVyc2lvbjogMC4zClsgICAgMS4yNzE1NzRdIHVzYmNvcmU6
-IHJlZ2lzdGVyZWQgbmV3IGludGVyZmFjZSBkcml2ZXIgdXNiLXN0b3JhZ2UKWyAgICAxLjI3NzMy
-NV0gaTJjX2RldjogaTJjIC9kZXYgZW50cmllcyBkcml2ZXIKWyAgICAxLjI4NTY4Nl0gZ2hlc19l
-ZGFjOiBHSEVTIHByb2JpbmcgZGV2aWNlIGxpc3QgaXMgZW1wdHkKWyAgICAxLjI4ODU2Nl0gc2Ro
-Y2k6IFNlY3VyZSBEaWdpdGFsIEhvc3QgQ29udHJvbGxlciBJbnRlcmZhY2UgZHJpdmVyClsgICAg
-MS4yOTQ0MDBdIHNkaGNpOiBDb3B5cmlnaHQoYykgUGllcnJlIE9zc21hbgpbICAgIDEuMjk5OTY4
-XSBTeW5vcHN5cyBEZXNpZ253YXJlIE11bHRpbWVkaWEgQ2FyZCBJbnRlcmZhY2UgRHJpdmVyClsg
-ICAgMS4zMDY0MDldIHNkaGNpLXBsdGZtOiBTREhDSSBwbGF0Zm9ybSBhbmQgT0YgZHJpdmVyIGhl
-bHBlcgpbICAgIDEuMzA2NDkxXSBtZXNvbi1neC1tbWMgZDAwNzQwMDAubW1jOiBhbGxvY2F0ZWQg
-bW1jLXB3cnNlcQpbICAgIDEuMzE1ODE1XSBsZWR0cmlnLWNwdTogcmVnaXN0ZXJlZCB0byBpbmRp
-Y2F0ZSBhY3Rpdml0eSBvbiBDUFVzClsgICAgMS4zMjM5MTRdIG1lc29uLXNtOiBzZWN1cmUtbW9u
-aXRvciBlbmFibGVkClsgICAgMS4zMjY1NDFdIFNNQ0NDOiBTT0NfSUQ6IEFSQ0hfU09DX0lEIG5v
-dCBpbXBsZW1lbnRlZCwgc2tpcHBpbmcgLi4uLgpbICAgIDEuMzMzNjM4XSB1c2Jjb3JlOiByZWdp
-c3RlcmVkIG5ldyBpbnRlcmZhY2UgZHJpdmVyIHVzYmhpZApbICAgIDEuMzM3ODY1XSB1c2JoaWQ6
-IFVTQiBISUQgY29yZSBkcml2ZXIKWyAgICAxLjM0MzIzNV0gcGxhdGZvcm0tbWh1IGM4ODNjNDA0
-Lm1haWxib3g6IFBsYXRmb3JtIE1IVSBNYWlsYm94IHJlZ2lzdGVyZWQKWyAgICAxLjM1MzkwMF0g
-bWVzb24tZ3gtbW1jIGQwMDc0MDAwLm1tYzogbm8gc3VwcG9ydCBmb3IgY2FyZCdzIHZvbHRzClsg
-ICAgMS4zNTQ1NzZdIG1tYzE6IGVycm9yIC0yMiB3aGlsc3QgaW5pdGlhbGlzaW5nIFNESU8gY2Fy
-ZApbICAgIDEuMzYzMjA4XSBORVQ6IFJlZ2lzdGVyZWQgUEZfUEFDS0VUIHByb3RvY29sIGZhbWls
-eQpbICAgIDEuMzY1MDI5XSA5cG5ldDogSW5zdGFsbGluZyA5UDIwMDAgc3VwcG9ydApbICAgIDEu
-MzY5MjMyXSBLZXkgdHlwZSBkbnNfcmVzb2x2ZXIgcmVnaXN0ZXJlZApbICAgIDEuMzgxODc5XSBy
-ZWdpc3RlcmVkIHRhc2tzdGF0cyB2ZXJzaW9uIDEKWyAgICAxLjM4MjAxN10gTG9hZGluZyBjb21w
-aWxlZC1pbiBYLjUwOSBjZXJ0aWZpY2F0ZXMKWyAgICAxLjQxMjI3MV0gZHdjMy1tZXNvbi1nMTJh
-IGQwMDc4MDgwLnVzYjogVVNCMiBwb3J0czogMgpbICAgIDEuNDEyMzEzXSBkd2MzLW1lc29uLWcx
-MmEgZDAwNzgwODAudXNiOiBVU0IzIHBvcnRzOiAwClsgICAgMS45NTQzNjRdIGR3YzIgYzkxMDAw
-MDAudXNiOiBzdXBwbHkgdnVzYl9kIG5vdCBmb3VuZCwgdXNpbmcgZHVtbXkgcmVndWxhdG9yClsg
-ICAgMS45NTYwMDVdIGR3YzIgYzkxMDAwMDAudXNiOiBzdXBwbHkgdnVzYl9hIG5vdCBmb3VuZCwg
-dXNpbmcgZHVtbXkgcmVndWxhdG9yClsgICAgMS45NjMzMjldIGR3YzIgYzkxMDAwMDAudXNiOiBF
-UHM6IDcsIGRlZGljYXRlZCBmaWZvcywgNzEyIGVudHJpZXMgaW4gU1BSQU0KWyAgICAxLjk3MzM2
-M10geGhjaS1oY2QgeGhjaS1oY2QuMC5hdXRvOiB4SENJIEhvc3QgQ29udHJvbGxlcgpbICAgIDEu
-OTc1Mzc0XSB4aGNpLWhjZCB4aGNpLWhjZC4wLmF1dG86IG5ldyBVU0IgYnVzIHJlZ2lzdGVyZWQs
-IGFzc2lnbmVkIGJ1cyBudW1iZXIgMQpbICAgIDEuOTgzMTE0XSB4aGNpLWhjZCB4aGNpLWhjZC4w
-LmF1dG86IFVTQjMgcm9vdCBodWIgaGFzIG5vIHBvcnRzClsgICAgMS45ODg5MTRdIHhoY2ktaGNk
-IHhoY2ktaGNkLjAuYXV0bzogaGNjIHBhcmFtcyAweDAyMjhmNjY0IGhjaSB2ZXJzaW9uIDB4MTAw
-IHF1aXJrcyAweDAwMDAwMDAwMDIwMTAwMTAKWyAgICAxLjk5ODI3MV0geGhjaS1oY2QgeGhjaS1o
-Y2QuMC5hdXRvOiBpcnEgMjUsIGlvIG1lbSAweGM5MDAwMDAwClsgICAgMi4wMDQ4NThdIGh1YiAx
-LTA6MS4wOiBVU0IgaHViIGZvdW5kClsgICAgMi4wMDc4MThdIGh1YiAxLTA6MS4wOiAyIHBvcnRz
-IGRldGVjdGVkClsgICAgMi4wMTczOTVdIHNjcGlfcHJvdG9jb2wgc2NwaTogU0NQIFByb3RvY29s
-IGxlZ2FjeSBwcmUtMS4wIGZpcm13YXJlClsgICAgMi4wMTc5NTFdIG1kc29uLWd4LW1tYyBkMDA3
-MjAwMC5tbWM6IEdvdCBDRCBHUElPCm9tYWluLTAgaW5pdCBkdmZzOiA0ClsgICAgMi4wNTIxNTld
-IFRyeWluZyB0byBwcm9iZSBkZXZpY2VzIG5lZWRlZCBmb3IgcnVubmluZyBpbml0IC4uLgpbICAg
-IDIuMDg5MTk5XSBtbWMwOiBuZXcgaGlnaCBzcGVlZCBTRFhDIGNhcmQgYXQgYWRkcmVzcyA1OWI0
-ClsgICAgMi4wODk5NTVdIG1tY2JsazA6IG1tYzA6NTliNCBTRDEyOCAxMTkgR2lCIApbICAgIDIu
-MDk2NTg5XSAgbW1jYmxrMDogcDEgcDIgcDMKWyAgICAyLjA5NjkxNl0gbW1jYmxrMDogcDMgc2l6
-ZSAxMjI0NzA0IGV4dGVuZHMgYmV5b25kIEVPRCwgdHJ1bmNhdGVkClsgICAgMi4yNjQwODddIHVz
-YiAxLTE6IG5ldyBoaWdoLXNwZWVkIFVTQiBkZXZpY2UgbnVtYmVyIDIgdXNpbmcgeGhjaS1oY2QK
-WyAgICAyLjQ1Mzk3NF0gaHViIDEtMToxLjA6IFVTQiBodWIgZm91bmQKWyAgICAyLjQ1NDY5NV0g
-aHViIDEtMToxLjA6IDQgcG9ydHMgZGV0ZWN0ZWQKWyAgICAyLjQ2NjM5NF0gbW1jMTogQ2FyZCBz
-dHVjayBiZWluZyBidXN5ISBfX21tY19wb2xsX2Zvcl9idXN5ClsgICAxMi4yNjYwODddIHBsYXRm
-b3JtIGM4ODM0NTVjLmV0aC1waHktbXV4OiBkZWZlcnJlZCBwcm9iZSBwZW5kaW5nClsgICAxNC4z
-Mzc3NTVdIEFMU0EgZGV2aWNlIGxpc3Q6ClsgICAxNC4zMzc5MzZdICAgTm8gc291bmRjYXJkcyBm
-b3VuZC4KWyAgIDE0LjM1MTM4MV0gRnJlZWluZyB1bnVzZWQga2VybmVsIG1lbW9yeTogMjA0OEsK
-WyAgIDE0LjM1MjU0MV0gUnVuIC9pbml0IGFzIGluaXQgcHJvY2VzcwpMb2FkaW5nLCBwbGVhc2Ug
-d2FpdC4uLgpTdGFydGluZyB2ZXJzaW9uIDI0Ny4zLTcrZGViMTF1MQpbICAgMTUuMDAyNjk0XSBn
-eGwtY3J5cHRvIGM4ODNlMDAwLmNyeXB0bzogd2lsbCBydW4gcmVxdWVzdHMgcHVtcCB3aXRoIHJl
-YWx0aW1lIHByaW9yaXR5ClsgICAxNS4wMTAxMDZdIHJhbmRvbTogY3JuZyBpbml0IGRvbmUKWyAg
-IDE1LjAxNjE1Ml0gZ3hsLWNyeXB0byBjODgzZTAwMC5jcnlwdG86IHdpbGwgcnVuIHJlcXVlc3Rz
-IHB1bXAgd2l0aCByZWFsdGltZSBwcmlvcml0eQpbICAgMTUuMDQwNjg0XSBtZXNvbjhiLWR3bWFj
-IGM5NDEwMDAwLmV0aGVybmV0OiBJUlEgZXRoX3dha2VfaXJxIG5vdCBmb3VuZApbICAgMTUuMDQx
-NjcyXSBtZXNvbjhiLWR3bWFjIGM5NDEwMDAwLmV0aGVybmV0OiBJUlEgZXRoX2xwaSBub3QgZm91
-bmQKWyAgIDE1LjA1NjQzMl0gUmVnaXN0ZXJlZCBJUiBrZXltYXAgcmMtZW1wdHkKWyAgIDE1LjA1
-NjU3Ml0gcmMgcmMwOiBtZXNvbi1pciBhcyAvZGV2aWNlcy9wbGF0Zm9ybS9zb2MvYzgxMDAwMDAu
-YnVzL2M4MTAwNTgwLmlyL3JjL3JjMApbICAgMTUuMDYzNDc0XSBpbnB1dDogbWVzb24taXIgYXMg
-L2RldmljZXMvcGxhdGZvcm0vc29jL2M4MTAwMDAwLmJ1cy9jODEwMDU4MC5pci9yYy9yYzAvaW5w
-dXQwClsgICAxNS4wNzE2MTFdIG1lc29uOGItZHdtYWMgYzk0MTAwMDAuZXRoZXJuZXQ6IFBUUCB1
-c2VzIG1haW4gY2xvY2sKWyAgIDE1LjA3NjI5N10gbWVzb24taXIgYzgxMDA1ODAuaXI6IHJlY2Vp
-dmVyIGluaXRpYWxpemVkClsgICAxNS4wODU1NDFdIG1lc29uLWRybSBkMDEwMDAwMC52cHU6IFF1
-ZXVlZCAyIG91dHB1dHMgb24gdnB1ClsgICAxNS4wOTEwNjddIG1lc29uOGItZHdtYWMgYzk0MTAw
-MDAuZXRoZXJuZXQ6IFVzZXIgSUQ6IDB4MTEsIFN5bm9wc3lzIElEOiAweDM3ClsgICAxNS4wOTM1
-NjJdIG1lc29uLWRybSBkMDEwMDAwMC52cHU6IGJvdW5kIGM4ODNhMDAwLmhkbWktdHggKG9wcyBt
-ZXNvbl9kd19oZG1pX29wcyBbbWVzb25fZHdfaGRtaV0pClsgICAxNS4wOTQ2MDNdIG1lc29uOGIt
-ZHdtYWMgYzk0MTAwMDAuZXRoZXJuZXQ6IAlEV01BQzEwMDAKWyAgIDE1LjEwNTQ3OF0gbWVzb24t
-ZHJtIGQwMTAwMDAwLnZwdTogRmFpbGVkIHRvIGZpbmQgSERNSSB0cmFuc2NlaXZlciBicmlkZ2UK
-WyAgIDE1LjEwODc1NF0gbWVzb244Yi1kd21hYyBjOTQxMDAwMC5ldGhlcm5ldDogRE1BIEhXIGNh
-cGFiaWxpdHkgcmVnaXN0ZXIgc3VwcG9ydGVkClsgICAxNS4xMTk4MzhdIGxpbWEgZDAwYzAwMDAu
-Z3B1OiBncCAtIG1hbGk0NTAgdmVyc2lvbiBtYWpvciAwIG1pbm9yIDAKWyAgIDE1LjEyMjgxN10g
-bWVzb244Yi1kd21hYyBjOTQxMDAwMC5ldGhlcm5ldDogUlggQ2hlY2tzdW0gT2ZmbG9hZCBFbmdp
-bmUgc3VwcG9ydGVkClsgICAxNS4xMjI4MjddIG1lc29uOGItZHdtYWMgYzk0MTAwMDAuZXRoZXJu
-ZXQ6IENPRSBUeXBlIDIKWyAgIDE1LjEyMjgzM10gbWVzb244Yi1kd21hYyBjOTQxMDAwMC5ldGhl
-cm5ldDogVFggQ2hlY2tzdW0gaW5zZXJ0aW9uIHN1cHBvcnRlZApbICAgMTUuMTIyODM3XSBtZXNv
-bjhiLWR3bWFjIGM5NDEwMDAwLmV0aGVybmV0OiBXYWtlLVVwIE9uIExhbiBzdXBwb3J0ZWQKWyAg
-IDE1LjEyMjk4Nl0gbWVzb244Yi1kd21hYyBjOTQxMDAwMC5ldGhlcm5ldDogTm9ybWFsIGRlc2Ny
-aXB0b3JzClsgICAxNS4xNDEyMThdIG1lc29uLWRybSBkMDEwMDAwMC52cHU6IFF1ZXVlZCAyIG91
-dHB1dHMgb24gdnB1ClsgICAxNS4xNDE2MTVdIG1lc29uOGItZHdtYWMgYzk0MTAwMDAuZXRoZXJu
-ZXQ6IFJpbmcgbW9kZSBlbmFibGVkClsgICAxNS4xNTA3NDRdIG1lc29uLWRybSBkMDEwMDAwMC52
-cHU6IGJvdW5kIGM4ODNhMDAwLmhkbWktdHggKG9wcyBtZXNvbl9kd19oZG1pX29wcyBbbWVzb25f
-ZHdfaGRtaV0pClsgICAxNS4xNTQ5NzBdIG1lc29uOGItZHdtYWMgYzk0MTAwMDAuZXRoZXJuZXQ6
-IEVuYWJsZSBSWCBNaXRpZ2F0aW9uIHZpYSBIVyBXYXRjaGRvZyBUaW1lcgpbICAgMTUuMTU5MTc1
-XSBsaW1hIGQwMGMwMDAwLmdwdTogcHAwIC0gbWFsaTQ1MCB2ZXJzaW9uIG1ham9yIDAgbWlub3Ig
-MApbICAgMTUuMTYxNDM2XSBtZXNvbi1kcm0gZDAxMDAwMDAudnB1OiBGYWlsZWQgdG8gZmluZCBI
-RE1JIHRyYW5zY2VpdmVyIGJyaWRnZQpbICAgMTUuMTY4OTMzXSBsaW1hIGQwMGMwMDAwLmdwdTog
-cHAxIC0gbWFsaTQ1MCB2ZXJzaW9uIG1ham9yIDAgbWlub3IgMApbICAgMTUuMjA2MTAyXSBtZXNv
-bi1kcm0gZDAxMDAwMDAudnB1OiBRdWV1ZWQgMiBvdXRwdXRzIG9uIHZwdQpbICAgMTUuMjA5NjA4
-XSBsaW1hIGQwMGMwMDAwLmdwdTogcHAyIC0gbWFsaTQ1MCB2ZXJzaW9uIG1ham9yIDAgbWlub3Ig
-MApbICAgMTUuMjE3MDI3XSBtZXNvbi1kcm0gZDAxMDAwMDAudnB1OiBib3VuZCBjODgzYTAwMC5o
-ZG1pLXR4IChvcHMgbWVzb25fZHdfaGRtaV9vcHMgW21lc29uX2R3X2hkbWldKQpbICAgMTUuMjIx
-MTY5XSBsaW1hIGQwMGMwMDAwLmdwdTogbDIgY2FjaGUgOEssIDQtd2F5LCA2NGJ5dGUgY2FjaGUg
-bGluZSwgMTI4Yml0IGV4dGVybmFsIGJ1cwpbICAgMTUuMjMxNTYxXSBtZXNvbi1kcm0gZDAxMDAw
-MDAudnB1OiBGYWlsZWQgdG8gZmluZCBIRE1JIHRyYW5zY2VpdmVyIGJyaWRnZQpbICAgMTUuMjM4
-MTMzXSBsaW1hIGQwMGMwMDAwLmdwdTogbDIgY2FjaGUgNjRLLCA0LXdheSwgNjRieXRlIGNhY2hl
-IGxpbmUsIDEyOGJpdCBleHRlcm5hbCBidXMKWyAgIDE1LjI1Mzg3OV0gbGltYSBkMDBjMDAwMC5n
-cHU6IGJ1cyByYXRlID0gMTY2NjY2NjY3ClsgICAxNS4yNTcxMjhdIGxpbWEgZDAwYzAwMDAuZ3B1
-OiBtb2QgcmF0ZSA9IDI0MDAwMDAwClsgICAxNS4yNjE4NjJdIGxpbWEgZDAwYzAwMDAuZ3B1OiBl
-cnJvciAtRU5PREVWOiBfb3BwX3NldF9yZWd1bGF0b3JzOiBubyByZWd1bGF0b3IgKG1hbGkpIGZv
-dW5kClsgICAxNS4yODYxNDNdIFtkcm1dIEluaXRpYWxpemVkIGxpbWEgMS4xLjAgMjAxOTEyMzEg
-Zm9yIGQwMGMwMDAwLmdwdSBvbiBtaW5vciAxClsgICAxNS4yOTIyNTldIG1lc29uLWRybSBkMDEw
-MDAwMC52cHU6IFF1ZXVlZCAyIG91dHB1dHMgb24gdnB1ClsgICAxNS4yOTM3MTVdIG1lc29uLWRy
-bSBkMDEwMDAwMC52cHU6IGJvdW5kIGM4ODNhMDAwLmhkbWktdHggKG9wcyBtZXNvbl9kd19oZG1p
-X29wcyBbbWVzb25fZHdfaGRtaV0pClsgICAxNS4zMDIxNDBdIFVuYWJsZSB0byBoYW5kbGUga2Vy
-bmVsIHBhZ2luZyByZXF1ZXN0IGF0IHZpcnR1YWwgYWRkcmVzcyBmZmZmZmZmZmZmZmZmZmY4Clsg
-ICAxNS4zMDk5MDZdIE1lbSBhYm9ydCBpbmZvOgpbICAgMTUuMzEyNjU5XSAgIEVTUiA9IDB4MDAw
-MDAwMDA5NjAwMDAwNApbICAgMTUuMzE2MzY1XSAgIEVDID0gMHgyNTogREFCVCAoY3VycmVudCBF
-TCksIElMID0gMzIgYml0cwpbICAgMTUuMzIxNjI2XSAgIFNFVCA9IDAsIEZuViA9IDAKWyAgIDE1
-LjMyNDY0NF0gICBFQSA9IDAsIFMxUFRXID0gMApbICAgMTUuMzI3NzQ0XSAgIEZTQyA9IDB4MDQ6
-IGxldmVsIDAgdHJhbnNsYXRpb24gZmF1bHQKWyAgIDE1LjMzMjYxOV0gRGF0YSBhYm9ydCBpbmZv
-OgpbICAgMTUuMzM1NDIyXSAgIElTViA9IDAsIElTUyA9IDB4MDAwMDAwMDQKWyAgIDE1LjMzOTIy
-Nl0gICBDTSA9IDAsIFduUiA9IDAKWyAgIDE1LjM0MjE1NF0gc3dhcHBlciBwZ3RhYmxlOiA0ayBw
-YWdlcywgNDgtYml0IFZBcywgcGdkcD0wMDAwMDAwMDE0OTZjMDAwClsgICAxNS4zNDg3OTVdIFtm
-ZmZmZmZmZmZmZmZmZmY4XSBwZ2Q9MDAwMDAwMDAwMDAwMDAwMCwgcDRkPTAwMDAwMDAwMDAwMDAw
-MDAKWyAgIDE1LjM1NTUyNF0gSW50ZXJuYWwgZXJyb3I6IE9vcHM6IDAwMDAwMDAwOTYwMDAwMDQg
-WyMxXSBQUkVFTVBUIFNNUApbICAgMTUuMzYxNzI5XSBNb2R1bGVzIGxpbmtlZCBpbjogbWVzb25f
-Z3hsIGR3bWFjX2dlbmVyaWMgc25kX3NvY19tZXNvbl9neF9zb3VuZF9jYXJkIHNuZF9zb2NfbWVz
-b25fY2FyZF91dGlscyBsaW1hIGdwdV9zY2hlZCBkcm1fc2htZW1faGVscGVyIG1lc29uX2RybSBk
-cm1fZG1hX2hlbHBlciBjcmN0MTBkaWZfY2UgbWVzb25faXIgcmNfY29yZSBtZXNvbl9kd19oZG1p
-IGR3X2hkbWkgbWVzb25fY2FudmFzIGR3bWFjX21lc29uOGIgc3RtbWFjX3BsYXRmb3JtIG1lc29u
-X3JuZyBzdG1tYWMgcm5nX2NvcmUgY2VjIG1lc29uX2d4YmJfd2R0IGRybV9kaXNwbGF5X2hlbHBl
-ciBzbmRfc29jX21lc29uX2FpdSBzbmRfc29jX21lc29uX2NvZGVjX2dsdWUgcGNzX3hwY3Mgc25k
-X3NvY19tZXNvbl90OTAxNSBhbWxvZ2ljX2d4bF9jcnlwdG8gY3J5cHRvX2VuZ2luZSBkaXNwbGF5
-X2Nvbm5lY3RvciBzbmRfc29jX3NpbXBsZV9hbXBsaWZpZXIgZHJtX2ttc19oZWxwZXIgZHJtIG52
-bWVtX21lc29uX2VmdXNlClsgICAxNS40MDU5NzZdIENQVTogMSBQSUQ6IDkgQ29tbToga3dvcmtl
-ci91ODowIE5vdCB0YWludGVkIDYuMi4wLXJjMy1uZXh0LTIwMjMwMTEwICMxClsgICAxNS40MTM1
-NjNdIEhhcmR3YXJlIG5hbWU6IExpYnJlIENvbXB1dGVyIEFNTC1TOTA1WC1DQyAoRFQpClsgICAx
-NS40MTkwODZdIFdvcmtxdWV1ZTogZXZlbnRzX3VuYm91bmQgZGVmZXJyZWRfcHJvYmVfd29ya19m
-dW5jClsgICAxNS40MjQ4NjNdIHBzdGF0ZTogMDAwMDAwMDUgKG56Y3YgZGFpZiAtUEFOIC1VQU8g
-LVRDTyAtRElUIC1TU0JTIEJUWVBFPS0tKQpbICAgMTUuNDMxNzYyXSBwYyA6IG9mX2RybV9maW5k
-X2JyaWRnZSsweDM4LzB4NzAgW2RybV0KWyAgIDE1LjQzNjU5NF0gbHIgOiBvZl9kcm1fZmluZF9i
-cmlkZ2UrMHgyMC8weDcwIFtkcm1dClsgICAxNS40NDE0MjNdIHNwIDogZmZmZjgwMDAwYTA0Yjli
-MApbICAgMTUuNDQ0NzAwXSB4Mjk6IGZmZmY4MDAwMGEwNGI5YjAgeDI4OiBmZmZmMDAwMDA4ZGU1
-ODEwIHgyNzogZmZmZjAwMDAwOGRlNTgwOApbICAgMTUuNDUxNzcyXSB4MjY6IGZmZmYwMDAwMDhk
-ZTU4MDAgeDI1OiBmZmZmMDAwMDA4NGNiOGIwIHgyNDogZmZmZjAwMDAwMTIyM2MwMApbICAgMTUu
-NDU4ODQ0XSB4MjM6IDAwMDAwMDAwMDAwMDAwMDAgeDIyOiAwMDAwMDAwMDAwMDAwMDAxIHgyMTog
-ZmZmZjAwMDA3ZmE2MWEyOApbICAgMTUuNDY1OTE3XSB4MjA6IGZmZmYwMDAwMDg0Y2EwODAgeDE5
-OiBmZmZmMDAwMDdmYTYxYTI4IHgxODogZmZmZjAwMDAwMTliZDcwMApbICAgMTUuNDcyOTg5XSB4
-MTc6IDZkNjQ2ODVmNzc2NDVmNmUgeDE2OiBmZmZmZmZmZmZmZmZmZmZmIHgxNTogMDAwMDAwMDAw
-MDAwMDAwNApbICAgMTUuNDgwMDYyXSB4MTQ6IGZmZmY4MDAwMDliYWI0MTAgeDEzOiAwMDAwMDAw
-MDAwMDAwMDAwIHgxMjogMDAwMDAwMDAwMDAwMDAwMwpbICAgMTUuNDg3MTM1XSB4MTE6IDAwMDAw
-MDAwMDAwMDAwMDAgeDEwOiAwMDAwMDAwMDAwMDAwMDAwIHg5IDogMDAwMDAwMDAwMDAwMDAwMApb
-ICAgMTUuNDk0MjA3XSB4OCA6IGZmZmY4MDAwMDEwYTcwYTAgeDcgOiA2NDQxMDA3OTYxNmI2ZjAx
-IHg2IDogODA0MTY0MDAwMDAwMDAwMwpbICAgMTUuNTAxMjc5XSB4NSA6IDAzMDAwMDAwMDA2NDQx
-MDAgeDQgOiAwMDAwMDAwMDAwMDAwMDgwIHgzIDogMDA0MTY0MDAwMDAwMDAwMApbICAgMTUuNTA4
-MzUyXSB4MiA6IGZmZmYwMDAwMDExMjgwMDAgeDEgOiAwMDAwMDAwMDAwMDAwMDAwIHgwIDogMDAw
-MDAwMDAwMDAwMDAwMApbICAgMTUuNTE1NDI2XSBDYWxsIHRyYWNlOgpbICAgMTUuNTE3ODYzXSBJ
-bnN1ZmZpY2llbnQgc3RhY2sgc3BhY2UgdG8gaGFuZGxlIGV4Y2VwdGlvbiEKWyAgIDE1LjUxNzg2
-N10gRVNSOiAweDAwMDAwMDAwOTYwMDAwNDcgLS0gREFCVCAoY3VycmVudCBFTCkKWyAgIDE1LjUx
-Nzg3MV0gRkFSOiAweGZmZmY4MDAwMGEwNDdmZjAKWyAgIDE1LjUxNzg3M10gVGFzayBzdGFjazog
-ICAgIFsweGZmZmY4MDAwMGEwNDgwMDAuLjB4ZmZmZjgwMDAwYTA0YzAwMF0KWyAgIDE1LjUxNzg3
-N10gSVJRIHN0YWNrOiAgICAgIFsweGZmZmY4MDAwMDgwMDgwMDAuLjB4ZmZmZjgwMDAwODAwYzAw
-MF0KWyAgIDE1LjUxNzg4MF0gT3ZlcmZsb3cgc3RhY2s6IFsweGZmZmYwMDAwN2Q5YzEzMjAuLjB4
-ZmZmZjAwMDA3ZDljMjMyMF0KWyAgIDE1LjUxNzg4NF0gQ1BVOiAxIFBJRDogOSBDb21tOiBrd29y
-a2VyL3U4OjAgTm90IHRhaW50ZWQgNi4yLjAtcmMzLW5leHQtMjAyMzAxMTAgIzEKWyAgIDE1LjUx
-Nzg5MF0gSGFyZHdhcmUgbmFtZTogTGlicmUgQ29tcHV0ZXIgQU1MLVM5MDVYLUNDIChEVCkKWyAg
-IDE1LjUxNzg5NV0gV29ya3F1ZXVlOiBldmVudHNfdW5ib3VuZCBkZWZlcnJlZF9wcm9iZV93b3Jr
-X2Z1bmMKWyAgIDE1LjUxNzkxNV0gcHN0YXRlOiA4MDAwMDNjNSAoTnpjdiBEQUlGIC1QQU4gLVVB
-TyAtVENPIC1ESVQgLVNTQlMgQlRZUEU9LS0pClsgICAxNS41MTc5MjNdIHBjIDogZWwxX2Fib3J0
-KzB4NC8weDVjClsgICAxNS41MTc5MzJdIGxyIDogZWwxaF82NF9zeW5jX2hhbmRsZXIrMHg2MC8w
-eGFjClsgICAxNS41MTc5MzldIHNwIDogZmZmZjgwMDAwYTA0ODAyMApbICAgMTUuNTE3OTQxXSB4
-Mjk6IGZmZmY4MDAwMGEwNDgwMjAgeDI4OiBmZmZmMDAwMDAxMTI4MDAwIHgyNzogZmZmZjAwMDAw
-OGRlNTgwOApbICAgMTUuNTE3OTUwXSB4MjY6IGZmZmYwMDAwMDhkZTU4MDAgeDI1OiBmZmZmODAw
-MDBhMDRiNjA4IHgyNDogZmZmZjAwMDAwMTEyODAwMApbICAgMTUuNTE3OTU3XSB4MjM6IDAwMDAw
-MDAwYTAwMDAwYzUgeDIyOiBmZmZmODAwMDA4MDMyMWRjIHgyMTogZmZmZjgwMDAwYTA0ODE4MApb
-ICAgMTUuNTE3OTY1XSB4MjA6IGZmZmY4MDAwMDk4ZTEwMDAgeDE5OiBmZmZmODAwMDBhMDQ4Mjkw
-IHgxODogZmZmZjAwMDAwMTliZDcwMApbICAgMTUuNTE3OTcyXSB4MTc6IDAwMDAwMDAwMDAwMDAw
-MTEgeDE2OiBmZmZmZmZmZmZmZmZmZmZmIHgxNTogMDAwMDAwMDAwMDAwMDAwNApbICAgMTUuNTE3
-OTc5XSB4MTQ6IGZmZmY4MDAwMDliYWI0MTAgeDEzOiAwMDAwMDAwMDAwMDAwMDAwIHgxMjogMDAw
-MDAwMDAwMDAwMDAwMApbICAgMTUuNTE3OTg2XSB4MTE6IDAwMDAwMDAwMDAwMDAwMzAgeDEwOiBm
-ZmZmODAwMDA5MDEzYTFjIHg5IDogZmZmZjgwMDAwOTA0MDFhMApbICAgMTUuNTE3OTk0XSB4OCA6
-IDAwMDAwMDAwMDAwMDAwMjUgeDcgOiAyMDVkMzYzMjM0MzUzMTM1IHg2IDogMzUyZTM1MzEyMDIw
-MjA1YgpbICAgMTUuNTE4MDAxXSB4NSA6IGZmZmY4MDAwMDlmNzY2YjcgeDQgOiBmZmZmODAwMDA4
-ZmU2OTVjIHgzIDogMDAwMDAwMDAwMDAwMDAwYwpbICAgMTUuNTE4MDA4XSB4MiA6IDAwMDAwMDAw
-OTYwMDAwMDQgeDEgOiAwMDAwMDAwMDk2MDAwMDA0IHgwIDogZmZmZjgwMDAwYTA0ODAzMApbICAg
-MTUuNTE4MDE3XSBLZXJuZWwgcGFuaWMgLSBub3Qgc3luY2luZzoga2VybmVsIHN0YWNrIG92ZXJm
-bG93ClsgICAxNS41MTgwMjBdIFNNUDogc3RvcHBpbmcgc2Vjb25kYXJ5IENQVXMKWyAgIDE1LjUx
-ODAyN10gS2VybmVsIE9mZnNldDogZGlzYWJsZWQKWyAgIDE1LjUxODAyOV0gQ1BVIGZlYXR1cmVz
-OiAweDAwMDAwLDAxMDAwMTAwLDAwMDA0MjFiClsgICAxNS41MTgwMzRdIE1lbW9yeSBMaW1pdDog
-bm9uZQpbICAgMTUuNjc5Mzg4XSAtLS1bIGVuZCBLZXJuZWwgcGFuaWMgLSBub3Qgc3luY2luZzog
-a2VybmVsIHN0YWNrIG92ZXJmbG93IF0tLS0K
---000000000000038e8205f1eb2fb2--

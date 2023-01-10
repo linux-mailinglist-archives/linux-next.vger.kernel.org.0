@@ -2,179 +2,102 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6F74663E71
-	for <lists+linux-next@lfdr.de>; Tue, 10 Jan 2023 11:43:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88C7F66432B
+	for <lists+linux-next@lfdr.de>; Tue, 10 Jan 2023 15:23:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232057AbjAJKnI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 10 Jan 2023 05:43:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33828 "EHLO
+        id S231758AbjAJOXJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 10 Jan 2023 09:23:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232258AbjAJKnH (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 10 Jan 2023 05:43:07 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4973DE92;
-        Tue, 10 Jan 2023 02:43:04 -0800 (PST)
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30AAT1WR007264;
-        Tue, 10 Jan 2023 10:42:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : content-type :
- content-transfer-encoding : mime-version : subject : message-id : date :
- cc : to; s=pp1; bh=+ABv3h0j8OIXwtbcwfJ0Ss5bponXeDNhMqOqcDY0Cpc=;
- b=r7CKwSFh9M/4jprYllVuH37em+g2yQWsMozrWnDpqdcXcsK/+ZQnxhRWs45GlsPE6DWf
- KpEyrf+aRtLX9de3j9G9FsSlzAPDT+2UAwcdqUbQ9+2JuW2chr947gNpsSrHDVE/a8YS
- Ms54fLgiK5VSci3T7LvdG94ljZvvWY49ThmhXI7jbwzXkBm7DvwiVF63I9B1vthPp9DU
- vW3/qkNDG0JOyNB0+PZ18rguR3SbLEjtm+Me2pc+LEXSquf6PvPGJ8ggYTWS2LvdlchY
- 2vh/wfjuCBgPMhSjakHS0xJKKbPDc7BGzov8Kbpcq80O+f3u69vOEKqvOyzUpTuFEq/d Og== 
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n14qx2tdr-1
+        with ESMTP id S238474AbjAJOXA (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 10 Jan 2023 09:23:00 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC28F51311;
+        Tue, 10 Jan 2023 06:22:58 -0800 (PST)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30AEH3eB032674;
+        Tue, 10 Jan 2023 14:22:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=pp1; bh=yECEqCQiHABnizLQXXGBiPXiREXHpGO1VURQLRTIjCM=;
+ b=sAGs979adpx6xWvwrs46Uou4RE2Nf9bUoCljf/HFUIKX0IMwM9bHr5cDzKyNROke0pqL
+ qH0s4Unc6UPVxB3mRpv5B+ybQbYcnyJptyigPFyQprwndgs4osXkeVmBSDeHhDyM1GJn
+ 8ABvqfA0NTnNooxQuqfxIq6RXZefpo7RrCy0yNGfcdkf7vVFChIf2f+V5MxyKHFuUsHP
+ BAcsTONo6r5Z8oiTKz6AUvnidvJWBdpgKeDNf0zkGRu+NBYfq6xTXSvW3EdkSW1BV8gJ
+ cVd3nIfIkXrmRfQl7LEEb5vTAKefWbIA32iPTRwq5c0Q5PENep17pQJGDRkP88+aT6e3 rQ== 
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n19n2r68v-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 10 Jan 2023 10:42:59 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30A83dsg000570;
-        Tue, 10 Jan 2023 10:42:57 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3my0c6mp47-1
+        Tue, 10 Jan 2023 14:22:46 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30A89VO0024687;
+        Tue, 10 Jan 2023 14:22:44 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3my0c6myq6-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 10 Jan 2023 10:42:56 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30AAgsRU50200926
+        Tue, 10 Jan 2023 14:22:44 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30AEMe5624052436
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 10 Jan 2023 10:42:54 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8183120043;
-        Tue, 10 Jan 2023 10:42:54 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BF0B920040;
-        Tue, 10 Jan 2023 10:42:53 +0000 (GMT)
-Received: from smtpclient.apple (unknown [9.109.241.16])
-        by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 10 Jan 2023 10:42:53 +0000 (GMT)
-From:   Sachin Sant <sachinp@linux.ibm.com>
-Content-Type: text/plain;
-        charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.300.101.1.3\))
-Subject: [powerpc] Boot failure kernel BUG at mm/usercopy.c:102
-Message-Id: <8C9D7E49-5A75-41BE-ACCB-44FDD8FBE4D0@linux.ibm.com>
-Date:   Tue, 10 Jan 2023 16:12:42 +0530
-Cc:     linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        open list <linux-kernel@vger.kernel.org>
-To:     linux-next@vger.kernel.org, mathieu.desnoyers@efficios.com
-X-Mailer: Apple Mail (2.3731.300.101.1.3)
+        Tue, 10 Jan 2023 14:22:40 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6E8C72004F;
+        Tue, 10 Jan 2023 14:22:40 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3D13020049;
+        Tue, 10 Jan 2023 14:22:40 +0000 (GMT)
+Received: from osiris (unknown [9.152.212.250])
+        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Tue, 10 Jan 2023 14:22:40 +0000 (GMT)
+Date:   Tue, 10 Jan 2023 15:22:38 +0100
+From:   Heiko Carstens <hca@linux.ibm.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the s390 tree
+Message-ID: <Y710ri9sVzmWNpE6@osiris>
+References: <20230110202221.2e284ba0@canb.auug.org.au>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230110202221.2e284ba0@canb.auug.org.au>
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: fxDUG0c3KYwm_R8k8fhqIcyimVGZ7xgr
-X-Proofpoint-GUID: fxDUG0c3KYwm_R8k8fhqIcyimVGZ7xgr
+X-Proofpoint-ORIG-GUID: qsHL9psv4mIuCKshV0XgzyBQ2rPoVSR-
+X-Proofpoint-GUID: qsHL9psv4mIuCKshV0XgzyBQ2rPoVSR-
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-10_03,2023-01-10_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 adultscore=0
- spamscore=0 mlxscore=0 suspectscore=0 malwarescore=0 clxscore=1011
- priorityscore=1501 mlxlogscore=769 impostorscore=0 lowpriorityscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301100063
+ definitions=2023-01-10_04,2023-01-10_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ impostorscore=0 suspectscore=0 bulkscore=0 mlxscore=0 spamscore=0
+ malwarescore=0 adultscore=0 phishscore=0 clxscore=1011 mlxlogscore=957
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301100088
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-6.2.0-rc3-next-20230109 fails to boot on powerpc with following:
+On Tue, Jan 10, 2023 at 08:22:21PM +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the s390 tree, today's linux-next build (s390 allmodconfig)
+> failed like this:
+> 
+> drivers/s390/char/con3270.c:43:24: error: 'condev' defined but not used [-Werror=unused-variable]
+>  static struct tty3270 *condev;
+>                         ^~~~~~
+> 
+> Caused by commit
+> 
+>   c17fe081ac1f ("s390/3270: unify con3270 + tty3270")
 
-[ 0.444834] ------------[ cut here ]------------
-[ 0.444838] kernel BUG at mm/usercopy.c:102!
-[ 0.444842] Oops: Exception in kernel mode, sig: 5 [#1]
-[ 0.444845] LE PAGE_SIZE=3D64K MMU=3DRadix SMP NR_CPUS=3D2048 NUMA =
-pSeries
-[ 0.444849] Modules linked in:
-[ 0.444853] CPU: 23 PID: 201 Comm: modprobe Not tainted =
-6.2.0-rc3-next-20230109 #1
-[ 0.444858] Hardware name: IBM,9080-HEX POWER10 (raw) 0x800200 0xf000006 =
-of:IBM,FW1030.00 (NH1030_026) hv:phyp pSeries
-[ 0.444862] NIP: c00000000055a934 LR: c00000000055a930 CTR: =
-0000000000725d90
-[ 0.444866] REGS: c000000007f937c0 TRAP: 0700 Not tainted =
-(6.2.0-rc3-next-20230109)
-[ 0.444871] MSR: 8000000000029033 <SF,EE,ME,IR,DR,RI,LE> CR: 28088822 =
-XER: 00000007
-[ 0.444879] CFAR: c0000000002012a8 IRQMASK: 0=20
-[ 0.444879] GPR00: c00000000055a930 c000000007f93a60 c0000000013b0800 =
-0000000000000066=20
-[ 0.444879] GPR04: 00000000ffff7fff c000000007f93880 c000000007f93878 =
-0000000000000000=20
-[ 0.444879] GPR08: 00000000ffff7fff 0000000000000000 c0000000025e7150 =
-c0000000029672b8=20
-[ 0.444879] GPR12: 0000000048088824 c000000e87bf6300 c00000000017f458 =
-c0000000034b8100=20
-[ 0.444879] GPR16: 000000012f18eac0 00007fffc5c095d0 00007fffc5c095d8 =
-000000012f140040=20
-[ 0.444879] GPR20: fcffffffffffffff 00000000001fffff 5455555555555555 =
-000ffffffffffff8=20
-[ 0.444879] GPR24: c00000000723a0c0 00007fffc5c09368 0000000000000000 =
-00007fffc5c09370=20
-[ 0.444879] GPR28: 0000000000000250 0000000000000001 c000000003017000 =
-c00000000723a0c0=20
-[ 0.444922] NIP [c00000000055a934] usercopy_abort+0xa4/0xb0
-[ 0.444928] LR [c00000000055a930] usercopy_abort+0xa0/0xb0
-[ 0.444932] Call Trace:
-[ 0.444933] [c000000007f93a60] [c00000000055a930] =
-usercopy_abort+0xa0/0xb0 (unreliable)
-[ 0.444939] [c000000007f93ad0] [c00000000050eeb8] =
-__check_heap_object+0x198/0x1d0
-[ 0.444945] [c000000007f93b10] [c00000000055a7e0] =
-__check_object_size+0x290/0x340
-[ 0.444949] [c000000007f93b50] [c00000000060eba4] =
-create_elf_tables.isra.20+0xc04/0xc90
-[ 0.444956] [c000000007f93c10] [c000000000610b2c] =
-load_elf_binary+0xdac/0x1320
-[ 0.444962] [c000000007f93d00] [c000000000571cf0] =
-bprm_execve+0x3d0/0x7c0
-[ 0.444966] [c000000007f93dc0] [c000000000572b9c] =
-kernel_execve+0x1ac/0x270
-[ 0.444971] [c000000007f93e10] [c00000000017f5cc] =
-call_usermodehelper_exec_async+0x17c/0x250
-[ 0.444978] [c000000007f93e50] [c00000000000e054] =
-ret_from_kernel_thread+0x5c/0x64
-[ 0.444983] --- interrupt: 0 at 0x0
-[ 0.444986] NIP: 0000000000000000 LR: 0000000000000000 CTR: =
-0000000000000000
-[ 0.444990] REGS: c000000007f93e80 TRAP: 0000 Not tainted =
-(6.2.0-rc3-next-20230109)
-[ 0.444994] MSR: 0000000000000000 <> CR: 00000000 XER: 00000000
-[ 0.444998] CFAR: 0000000000000000 IRQMASK: 0=20
-[ 0.444998] GPR00: 0000000000000000 c000000007f94000 0000000000000000 =
-0000000000000000=20
-[ 0.444998] GPR04: 0000000000000000 0000000000000000 0000000000000000 =
-0000000000000000=20
-[ 0.444998] GPR08: 0000000000000000 0000000000000000 0000000000000000 =
-0000000000000000=20
-[ 0.444998] GPR12: 0000000000000000 0000000000000000 c00000000017f458 =
-c0000000034b8100=20
-[ 0.444998] GPR16: 0000000000000000 0000000000000000 0000000000000000 =
-0000000000000000=20
-[ 0.444998] GPR20: 0000000000000000 0000000000000000 0000000000000000 =
-0000000000000000=20
-[ 0.444998] GPR24: 0000000000000000 0000000000000000 0000000000000000 =
-0000000000000000=20
-[ 0.444998] GPR28: 0000000000000000 0000000000000000 0000000000000000 =
-0000000000000000=20
-[ 0.445039] NIP [0000000000000000] 0x0
-[ 0.445042] LR [0000000000000000] 0x0
-[ 0.445044] --- interrupt: 0
-[ 0.445046] Code: 392990f8 48000014 3d02ffe9 390827f0 7d074378 7d094378 =
-7c661b78 3c62ffe7 f9610060 386319f0 4bca6935 60000000 <0fe00000> =
-00000000 00000000 7c0802a6=20
-[ 0.445061] ---[ end trace 0000000000000000 ]=E2=80=94
-
-Git bisect points to following patch:
-
-commit 317c8194e6aeb8b3b573ad139fc2a0635856498e
-     rseq: Introduce feature size and alignment ELF auxiliary vector =
-entries
-
-Reverting the patch helps boot the kernel.
-
-Thanks
--Sachin=
+Thank you for reporting. This should be fixed now:
+https://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git/commit/?h=features&id=9cab4f7d98eee90b762ffbc87055c9499d51a635

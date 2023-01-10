@@ -2,208 +2,114 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0097B66465B
-	for <lists+linux-next@lfdr.de>; Tue, 10 Jan 2023 17:41:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBC4C664673
+	for <lists+linux-next@lfdr.de>; Tue, 10 Jan 2023 17:45:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238385AbjAJQlr (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 10 Jan 2023 11:41:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55636 "EHLO
+        id S234730AbjAJQpc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 10 Jan 2023 11:45:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238871AbjAJQlf (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 10 Jan 2023 11:41:35 -0500
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8789D78E85;
-        Tue, 10 Jan 2023 08:41:32 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 246775C00C6;
-        Tue, 10 Jan 2023 11:41:30 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Tue, 10 Jan 2023 11:41:30 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1673368890; x=1673455290; bh=BQbRuk/s7x
-        iQujbEKJZAedL9CmNeLHCNVqnm1mI9eH8=; b=MG29sti5l3eVz+M3xptJxz0NC1
-        IE/qvGYdM5ehaCmzthzjydWfuT8MzV4zLv1gLa2hfxy1VXTntIRezdknmalF797p
-        0uBvxcXVdpEyv3TroYxwgy1kion+HyYNZHRxyC/f0o1QVYqMg86ueUKXDJQbdysY
-        IalayF8dxEy1AW/PYZUGHOK05+goJmMJJsNFS2MDxrx86Z1y71ZnAP5lMZp89ia9
-        E2wEpFbszvlM/gqJ5L3Av3RvMq4VPHNI0yC/tPokJ7y7/X68B+ffporoGHBHQIej
-        +2N4aI8P+PGfvB90Oc9vhU7uFr7jo+OsiulI03gT4a1S1bwcBIGWMN6CXOkA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1673368890; x=1673455290; bh=BQbRuk/s7xiQujbEKJZAedL9CmNe
-        LHCNVqnm1mI9eH8=; b=M3IrA3iSERaPm0UxD3uqwyQpI/Jph0h9b4Y52R/Ejhft
-        OiO5SfeTJOEe68m4R+PZLzR2MZ5g3xCl8xfuawkMxu2cgOh5t3R3dWV5JE0Z+3mQ
-        SlUzJ1jdTvGTDKOXEKEgjWaeIfFW8gmrrlnYka+O+GSgG7Uw1LP0xcbDJbna6/Rd
-        VwtM9RDQISi1iaFutZvuLLCgdnp5pSxnSAiYxtfxo5fQT6PPHAT/98ogsOZdNhgu
-        tjvEMnTaokq4bIaXxMKbMXqv9dx98Y8Ir2IYKgFl4Hf91GjhrPQfN6RdreZdINeg
-        mUOUWyxpya/lwNU2brNxj8NwlOniMknjrlVQFiaJzQ==
-X-ME-Sender: <xms:OZW9Y4ZZN2uh9HQUdd44CUhwKMHgtT-RIjtqotcq-AB5PdbIkWxvKQ>
-    <xme:OZW9YzaefWRFAEXS9WNxp_oMAnRW140rD8Pbp-M9eQY4ymN7Y2-vpjJ1lOyZgp7L4
-    dH4k7xJtWeSQEPoIXU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrledvgddvjecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
-    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
-    hnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:OZW9Yy85yUoMNx2NdFuuuMqSwTVHjRhfbMow2lo-Jkt1QWlUWqNSRw>
-    <xmx:OZW9Yyr_RF8JWBINxFEen2blPMBazsmTOFkxKBmSKPApPISKVsfsiQ>
-    <xmx:OZW9YzolnHASti5KO9Lre5ghltH13idoIMxaHqT0KxGNpRJNRxO35Q>
-    <xmx:OpW9Y85NYFyJdklUl41h0kWWZ2s66aZSpBKVs0esTYxyehV_M4wpdA>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id CFBF0B60086; Tue, 10 Jan 2023 11:41:29 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1185-g841157300a-fm-20221208.002-g84115730
-Mime-Version: 1.0
-Message-Id: <77342621-d67f-4d47-a33b-6f721576bf9d@app.fastmail.com>
-In-Reply-To: <CA+G9fYsns3krivbPSjQ1c1EQpVyd-bkW84MaUvqMTQr9c=iEaw@mail.gmail.com>
-References: <CA+G9fYsns3krivbPSjQ1c1EQpVyd-bkW84MaUvqMTQr9c=iEaw@mail.gmail.com>
-Date:   Tue, 10 Jan 2023 17:41:08 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Naresh Kamboju" <naresh.kamboju@linaro.org>,
-        linux-next <linux-next@vger.kernel.org>,
-        "open list" <linux-kernel@vger.kernel.org>,
+        with ESMTP id S234848AbjAJQp1 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 10 Jan 2023 11:45:27 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 461646B5EF;
+        Tue, 10 Jan 2023 08:45:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 92645614F3;
+        Tue, 10 Jan 2023 16:45:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C09D5C433EF;
+        Tue, 10 Jan 2023 16:45:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673369113;
+        bh=HE6Q4NXUzpaBllounynVA5H1Vsv5Qxb9vxunO/lCiv0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=D2anPB30X8YmUosIs5zc91RpfpZbQjzT9wKHh2Iv/3pv8juVRXpVU7ejOnqqt7eZG
+         ME95R4y/vZXPU+6P/8ii8GjSJNFXGDLXI9Z/t2kg6WHg1fFqms1rg7Zq1+O21zZuPT
+         cUDlNxU402r7WsCICOOH3bi5d5ymTLy4e6gE3w30dee4GgPffB9lobFFzlUV/KUZRf
+         22S7I4EIfNyU6cN6l3gPd7uOYB6Aq8pgc3eoVA+l3rS8xTuRk+udUrvUqAbV0nWOD4
+         r7XlCOplzuCc190BAE44/uUzwSu+oo3OrvB5qD5iyL9mqTgSrl5n7RXz4RD7ZiA+ft
+         bM+KekEFtKgJg==
+Date:   Tue, 10 Jan 2023 16:45:06 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Will Deacon <will@kernel.org>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
         dri-devel@lists.freedesktop.org,
-        "Linux ARM" <linux-arm-kernel@lists.infradead.org>,
-        lkft-triage@lists.linaro.org, regressions@lists.linux.dev
-Cc:     "Mark Brown" <broonie@kernel.org>, "Will Deacon" <will@kernel.org>,
-        "Catalin Marinas" <catalin.marinas@arm.com>,
-        "Mark Rutland" <mark.rutland@arm.com>,
-        "Aishwarya TCV" <aishwarya.tcv@arm.com>,
-        "Anders Roxell" <anders.roxell@linaro.org>,
-        "Ard Biesheuvel" <ardb@kernel.org>,
-        "Neil Armstrong" <neil.armstrong@linaro.org>,
-        linux-amlogic@lists.infradead.org
-Subject: Re: next-20230110: arm64: defconfig+kselftest config boot failed - Unable to
- handle kernel paging request at virtual address fffffffffffffff8
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        lkft-triage@lists.linaro.org, regressions@lists.linux.dev,
+        Arnd Bergmann <arnd@arndb.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Aishwarya TCV <aishwarya.tcv@arm.com>,
+        Anders Roxell <anders.roxell@linaro.org>, james.clark@arm.com,
+        nathan@kernel.org
+Subject: Re: next-20230110: arm64: defconfig+kselftest config boot failed -
+ Unable to handle kernel paging request at virtual address fffffffffffffff8
+Message-ID: <Y72WEvxzARvnWVST@sirena.org.uk>
+References: <CA+G9fYsns3krivbPSjQ1c1EQpVyd-bkW84MaUvqMTQr9c=iEaw@mail.gmail.com>
+ <20230110163258.GC9436@willie-the-truck>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Xgn8lZtczXaFspXy"
+Content-Disposition: inline
+In-Reply-To: <20230110163258.GC9436@willie-the-truck>
+X-Cookie: Live free or die.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Jan 10, 2023, at 17:14, Naresh Kamboju wrote:
-> [ please ignore this email if this regression already reported ]
->
-> Today's Linux next tag next-20230110 boot passes with defconfig but
-> boot fails with
-> defconfig + kselftest merge config on arm64 devices and qemu-arm64.
->
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
->
-> We are bisecting this problem and get back to you shortly.
->
-> GOOD: next-20230109  (defconfig + kselftests configs)
-> BAD: next-20230110 (defconfig + kselftests configs)
->
-> kernel crash log [1]:
->
-> [   15.302140] Unable to handle kernel paging request at virtual
-> address fffffffffffffff8
-> [   15.309906] Mem abort info:
-> [   15.312659]   ESR = 0x0000000096000004
-> [   15.316365]   EC = 0x25: DABT (current EL), IL = 32 bits
-> [   15.321626]   SET = 0, FnV = 0
-> [   15.324644]   EA = 0, S1PTW = 0
-> [   15.327744]   FSC = 0x04: level 0 translation fault
-> [   15.332619] Data abort info:
-> [   15.335422]   ISV = 0, ISS = 0x00000004
-> [   15.339226]   CM = 0, WnR = 0
-> [   15.342154] swapper pgtable: 4k pages, 48-bit VAs, pgdp=000000001496c000
-> [   15.348795] [fffffffffffffff8] pgd=0000000000000000, p4d=0000000000000000
-> [   15.355524] Internal error: Oops: 0000000096000004 [#1] PREEMPT SMP
-> [   15.361729] Modules linked in: meson_gxl dwmac_generic
-> snd_soc_meson_gx_sound_card snd_soc_meson_card_utils lima gpu_sched
-> drm_shmem_helper meson_drm drm_dma_helper crct10dif_ce meson_ir
-> rc_core meson_dw_hdmi dw_hdmi meson_canvas dwmac_meson8b
-> stmmac_platform meson_rng stmmac rng_core cec meson_gxbb_wdt
-> drm_display_helper snd_soc_meson_aiu snd_soc_meson_codec_glue pcs_xpcs
-> snd_soc_meson_t9015 amlogic_gxl_crypto crypto_engine display_connector
-> snd_soc_simple_amplifier drm_kms_helper drm nvmem_meson_efuse
-> [   15.405976] CPU: 1 PID: 9 Comm: kworker/u8:0 Not tainted
-> 6.2.0-rc3-next-20230110 #1
-> [   15.413563] Hardware name: Libre Computer AML-S905X-CC (DT)
-> [   15.419086] Workqueue: events_unbound deferred_probe_work_func
-> [   15.424863] pstate: 00000005 (nzcv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> [   15.431762] pc : of_drm_find_bridge+0x38/0x70 [drm]
-> [   15.436594] lr : of_drm_find_bridge+0x20/0x70 [drm]
 
-The line is 
+--Xgn8lZtczXaFspXy
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-drivers/gpu/drm/drm_bridge.c:1310:      if (bridge->of_node == np) {
+On Tue, Jan 10, 2023 at 04:32:59PM +0000, Will Deacon wrote:
+> On Tue, Jan 10, 2023 at 09:44:40PM +0530, Naresh Kamboju wrote:
 
-The list_head here is a NULL pointer, so ->of_node points
-to address negative 8, i.e. fffffffffffffff8
+> > GOOD: next-20230109  (defconfig + kselftests configs)
+> > BAD: next-20230110 (defconfig + kselftests configs)
 
-This is linked list corruption, which typically happens as
-part of a use-after-free, and could be the result of a
-failed registration causing an object to be freed after
-it is added to the list.
+> I couldn't find a kselftests .config in the tree (assumedly I'm just ont
+> looking hard enough), but does that happen to enable CONFIG_STACK_TRACER=y?
 
-Unfortunately, there are no patches to this file between
-next-20230109 and next-20230110, so the bug probably is
-not actually in this file.
+It's adding on all the config fragments in
 
-> [   15.515426] Call trace:
-> [   15.517863] Insufficient stack space to handle exception!
-> [   15.517867] ESR: 0x0000000096000047 -- DABT (current EL)
-> [   15.517871] FAR: 0xffff80000a047ff0
-> [   15.517873] Task stack:     [0xffff80000a048000..0xffff80000a04c000]
-> [   15.517877] IRQ stack:      [0xffff800008008000..0xffff80000800c000]
-> [   15.517880] Overflow stack: [0xffff00007d9c1320..0xffff00007d9c2320]
-> [   15.517884] CPU: 1 PID: 9 Comm: kworker/u8:0 Not tainted
-> 6.2.0-rc3-next-20230110 #1
-> [   15.517890] Hardware name: Libre Computer AML-S905X-CC (DT)
-> [   15.517895] Workqueue: events_unbound deferred_probe_work_func
-> [   15.517915] pstate: 800003c5 (Nzcv DAIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> [   15.517923] pc : el1_abort+0x4/0x5c
-> [   15.517932] lr : el1h_64_sync_handler+0x60/0xac
-> [   15.517939] sp : ffff80000a048020
+   tools/testing/selftests/*/config
 
-Not sure about the missing stack trace: I can see that the stack
-pointer is on a task stack, which is reported as having overflown,
-but I don't see why it's unable to print the stack while running
-from the overflow stack.
+which includes ftrace, which does set STACK_TRACER>
 
-A stack overflow is often caused by unbounded recursion, which
-can happen when a device driver binds itself to a device that it
-has just created. The log does look a bit suspicious here,
-with multiple registrations for c883a000.hdmi-tx:
+> If so, since you're using clang, I wonder if this is an issue with
+> 68a63a412d18 ("arm64: Fix build with CC=clang, CONFIG_FTRACE=y and
+> CONFIG_STACK_TRACER=y")?
 
-  986 08:02:56.487871  [   15.141218] meson-drm d0100000.vpu: Queued 2 outputs on vpu
-  987 08:02:56.493572  [   15.141615] meson8b-dwmac c9410000.ethernet: Ring mode enabled
-  988 08:02:56.504769  [   15.150744] meson-drm d0100000.vpu: bound c883a000.hdmi-tx (ops meson_dw_hdmi_ops [meson_dw_hdmi])
-  989 08:02:56.515743  [   15.154970] meson8b-dwmac c9410000.ethernet: Enable RX Mitigation via HW Watchdog Timer
-  990 08:02:56.521531  [   15.159175] lima d00c0000.gpu: pp0 - mali450 version major 0 minor 0
-  991 08:02:56.526718  [   15.161436] meson-drm d0100000.vpu: Failed to find HDMI transceiver bridge
-  992 08:02:56.532417  [   15.168933] lima d00c0000.gpu: pp1 - mali450 version major 0 minor 0
-  993 08:02:56.537747  [   15.206102] meson-drm d0100000.vpu: Queued 2 outputs on vpu
-  994 08:02:56.543435  [   15.209608] lima d00c0000.gpu: pp2 - mali450 version major 0 minor 0
-  995 08:02:56.554307  [   15.217027] meson-drm d0100000.vpu: bound c883a000.hdmi-tx (ops meson_dw_hdmi_ops [meson_dw_hdmi])
-  996 08:02:56.559929  [   15.221169] lima d00c0000.gpu: l2 cache 8K, 4-way, 64byte cache line, 128bit external bus
-  997 08:02:56.565229  [   15.231561] meson-drm d0100000.vpu: Failed to find HDMI transceiver bridge
-  998 08:02:56.576490  [   15.238133] lima d00c0000.gpu: l2 cache 64K, 4-way, 64byte cache line, 128bit external bus
-  999 08:02:56.581759  [   15.253879] lima d00c0000.gpu: bus rate = 166666667
- 1000 08:02:56.587248  [   15.257128] lima d00c0000.gpu: mod rate = 24000000
- 1001 08:02:56.593344  [   15.261862] lima d00c0000.gpu: error -ENODEV: _opp_set_regulators: no regulator (mali) found
- 1002 08:02:56.612809  [   15.286143] [drm] Initialized lima 1.1.0 20191231 for d00c0000.gpu on minor 1
- 1003 08:02:56.618428  [   15.292259] meson-drm d0100000.vpu: Queued 2 outputs on vpu
- 1004 08:02:56.623866  [   15.293715] meson-drm d0100000.vpu: bound c883a000.hdmi-tx (ops meson_dw_hdmi_ops [meson_dw_hdmi])
- 1005 08:02:56.634771  [   15.302140] Unable to handle kernel paging request at virtual address fffffffffffffff8
+ftrace also enables FTRACE.
 
-Again, I don't see any recent changes in that driver or the
-corresponding dts file.
+> Please let us know how the bisection goes...
 
-      Arnd
+Not sure that Naresh has a bisection going, I don't think he's got
+direct access to such a board.
+
+--Xgn8lZtczXaFspXy
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEyBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmO9lhEACgkQJNaLcl1U
+h9DM1wf4sO6Fo8gQppTKumwECBNVeO+TdhIMe9/HbnqGY5crgsaaATNyv8BCnFVM
+nFUDvsSm+/aaFl7JyP9j4G049XhajrXRY2pwDIZhd0AGWX8t4I30VSMwkrs55fS4
+7akRRgvngaxcQtxof99W1r7zXCGIytUdyPbxwfwL7CdKuOGBdKNYMwzxDi3mDezU
+4abIMUxqLdxfQ/NITR7843nADjUNvGSGWIkOxTMN7xt8qzTD+B8rGLRE85D94kr4
+DZYbjqordIxk9uMuJ6rZzUkkHzg1Po7K7pL+O5yAEFIojUbyHVed2wdsw7W3Oxmi
+5WyuaJVJ1ILFmCCqLBlrQdQCRrqm
+=LS4A
+-----END PGP SIGNATURE-----
+
+--Xgn8lZtczXaFspXy--

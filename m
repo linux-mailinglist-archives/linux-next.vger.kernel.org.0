@@ -2,63 +2,66 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBC4C664673
-	for <lists+linux-next@lfdr.de>; Tue, 10 Jan 2023 17:45:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3204166474C
+	for <lists+linux-next@lfdr.de>; Tue, 10 Jan 2023 18:21:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234730AbjAJQpc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 10 Jan 2023 11:45:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57930 "EHLO
+        id S235043AbjAJRU7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 10 Jan 2023 12:20:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234848AbjAJQp1 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 10 Jan 2023 11:45:27 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 461646B5EF;
-        Tue, 10 Jan 2023 08:45:13 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 92645614F3;
-        Tue, 10 Jan 2023 16:45:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C09D5C433EF;
-        Tue, 10 Jan 2023 16:45:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673369113;
-        bh=HE6Q4NXUzpaBllounynVA5H1Vsv5Qxb9vxunO/lCiv0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=D2anPB30X8YmUosIs5zc91RpfpZbQjzT9wKHh2Iv/3pv8juVRXpVU7ejOnqqt7eZG
-         ME95R4y/vZXPU+6P/8ii8GjSJNFXGDLXI9Z/t2kg6WHg1fFqms1rg7Zq1+O21zZuPT
-         cUDlNxU402r7WsCICOOH3bi5d5ymTLy4e6gE3w30dee4GgPffB9lobFFzlUV/KUZRf
-         22S7I4EIfNyU6cN6l3gPd7uOYB6Aq8pgc3eoVA+l3rS8xTuRk+udUrvUqAbV0nWOD4
-         r7XlCOplzuCc190BAE44/uUzwSu+oo3OrvB5qD5iyL9mqTgSrl5n7RXz4RD7ZiA+ft
-         bM+KekEFtKgJg==
-Date:   Tue, 10 Jan 2023 16:45:06 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Will Deacon <will@kernel.org>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        dri-devel@lists.freedesktop.org,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        lkft-triage@lists.linaro.org, regressions@lists.linux.dev,
-        Arnd Bergmann <arnd@arndb.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Aishwarya TCV <aishwarya.tcv@arm.com>,
-        Anders Roxell <anders.roxell@linaro.org>, james.clark@arm.com,
-        nathan@kernel.org
-Subject: Re: next-20230110: arm64: defconfig+kselftest config boot failed -
- Unable to handle kernel paging request at virtual address fffffffffffffff8
-Message-ID: <Y72WEvxzARvnWVST@sirena.org.uk>
-References: <CA+G9fYsns3krivbPSjQ1c1EQpVyd-bkW84MaUvqMTQr9c=iEaw@mail.gmail.com>
- <20230110163258.GC9436@willie-the-truck>
+        with ESMTP id S234859AbjAJRUg (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 10 Jan 2023 12:20:36 -0500
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A5E15F907
+        for <linux-next@vger.kernel.org>; Tue, 10 Jan 2023 09:19:07 -0800 (PST)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-4d19b2686a9so35506377b3.6
+        for <linux-next@vger.kernel.org>; Tue, 10 Jan 2023 09:19:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=+pIR1imfCvqODCp5Ce7sb3iOjvWIQIzon43M7wnw22o=;
+        b=MRbadR54PUQDdCIai9nJWMaeKj5ncad8pWKlcT7e04GbC6M3gwJlojUB0qAc+uLpvO
+         IS08JsnGRYIs97dXEH7k2Q27+tW9YdC8Dh/XNqNj09mf5jo/rR5oxo2scQafRDgKp30/
+         S/siWqkNp+nC6Kxf9I6OGhIOiG5UVIyQmaF/OX/YvyGoPhwGFcFlbUoAI7ZekIEqJmLw
+         SXlKkiXfX83tS/To0WX2f3RELMAm+6+991rB3ALW0DoT5bK+4hVVBVB18B72jKkaudnz
+         pGOSCLklBu09OTvj3xkSFairxub63+6L262bEdHQzwtpsg/U6Kl5eF2kDQi9nQNS1i8f
+         G2Fg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+pIR1imfCvqODCp5Ce7sb3iOjvWIQIzon43M7wnw22o=;
+        b=jMc9i09MBOsmN0QSL/lv+jJYf0JRmlK0ZlS6Yvz06vBLj/gs0lohMPIywksIZyCAmY
+         cxIL9SlgEzEG/BOl2WdDQNKUTq7w6oirPCLuQZA1tP97T6263zs4qR6pusZN7E9MLXEE
+         pTuyX8MEuN1upVCS3/+007yv8U017UFzScNOLSsp9yWTvHXBojIRDajyHQRGkns6hida
+         WXCSIs9s39jPryCfcAOzftxgp4tXp6dygd4udQSXkDh7CA3shLOWVMzB8n9tXw5kWFPZ
+         n/4AlDMnjCWfCsF1DP0J7JP7WQIH0UjAL08finqMRP4APTQMjpzn0sxLy4FmG0ehrdhU
+         Ee+g==
+X-Gm-Message-State: AFqh2kqZ/jj/bTfnCzMfoFsVMZmkRUMFbT08e1jEKQ2fwJNSrFW1NvTp
+        lDPOSj+hcgEvh2oqEUT4yiR3L/49wOUOzN2crUNl1g==
+X-Google-Smtp-Source: AMrXdXsqgQXm7Kgt01NaJGDiQufRhFUocj8hmyB9Qed/vzpPjWBQitOJZD0yCuctSmrr6bZGwmuCrBiI6yHbWm7eyLk=
+X-Received: by 2002:a81:4a56:0:b0:4aa:36f9:a625 with SMTP id
+ x83-20020a814a56000000b004aa36f9a625mr3236828ywa.269.1673371146769; Tue, 10
+ Jan 2023 09:19:06 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Xgn8lZtczXaFspXy"
-Content-Disposition: inline
-In-Reply-To: <20230110163258.GC9436@willie-the-truck>
-X-Cookie: Live free or die.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20230110094246.1497d12e@canb.auug.org.au>
+In-Reply-To: <20230110094246.1497d12e@canb.auug.org.au>
+From:   Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Date:   Tue, 10 Jan 2023 18:18:55 +0100
+Message-ID: <CACMJSescGSdZ4imkNkOEUzfkkwuy=ydHLC3gxwzBywO1bmcZMw@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the davinci tree with the arm-soc tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        ARM <linux-arm-kernel@lists.infradead.org>,
+        Jilin Yuan <yuanjilin@cdjrlc.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,50 +69,35 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+On Mon, 9 Jan 2023 at 23:42, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> Today's linux-next merge of the davinci tree got a conflict in:
+>
+>   arch/arm/mach-davinci/board-dm365-evm.c
+>
+> between commit:
+>
+>   fef6ca600ba7 ("ARM: davinci: remove unused board support")
+>
+> from the arm-soc tree and commit:
+>
+>   84bde55c050b ("ARM: davinci: fix repeated words in comments")
+>
+> from the davinci tree.
+>
+> I fixed it up (I removed the file) and can carry the fix as
+> necessary. This is now fixed as far as linux-next is concerned, but any
+> non trivial conflicts should be mentioned to your upstream maintainer
+> when your tree is submitted for merging.  You may also want to consider
+> cooperating with the maintainer of the conflicting tree to minimise any
+> particularly complex conflicts.
+>
+> --
+> Cheers,
+> Stephen Rothwell
 
---Xgn8lZtczXaFspXy
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+I backed out this patch, thanks!
 
-On Tue, Jan 10, 2023 at 04:32:59PM +0000, Will Deacon wrote:
-> On Tue, Jan 10, 2023 at 09:44:40PM +0530, Naresh Kamboju wrote:
-
-> > GOOD: next-20230109  (defconfig + kselftests configs)
-> > BAD: next-20230110 (defconfig + kselftests configs)
-
-> I couldn't find a kselftests .config in the tree (assumedly I'm just ont
-> looking hard enough), but does that happen to enable CONFIG_STACK_TRACER=y?
-
-It's adding on all the config fragments in
-
-   tools/testing/selftests/*/config
-
-which includes ftrace, which does set STACK_TRACER>
-
-> If so, since you're using clang, I wonder if this is an issue with
-> 68a63a412d18 ("arm64: Fix build with CC=clang, CONFIG_FTRACE=y and
-> CONFIG_STACK_TRACER=y")?
-
-ftrace also enables FTRACE.
-
-> Please let us know how the bisection goes...
-
-Not sure that Naresh has a bisection going, I don't think he's got
-direct access to such a board.
-
---Xgn8lZtczXaFspXy
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEyBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmO9lhEACgkQJNaLcl1U
-h9DM1wf4sO6Fo8gQppTKumwECBNVeO+TdhIMe9/HbnqGY5crgsaaATNyv8BCnFVM
-nFUDvsSm+/aaFl7JyP9j4G049XhajrXRY2pwDIZhd0AGWX8t4I30VSMwkrs55fS4
-7akRRgvngaxcQtxof99W1r7zXCGIytUdyPbxwfwL7CdKuOGBdKNYMwzxDi3mDezU
-4abIMUxqLdxfQ/NITR7843nADjUNvGSGWIkOxTMN7xt8qzTD+B8rGLRE85D94kr4
-DZYbjqordIxk9uMuJ6rZzUkkHzg1Po7K7pL+O5yAEFIojUbyHVed2wdsw7W3Oxmi
-5WyuaJVJ1ILFmCCqLBlrQdQCRrqm
-=LS4A
------END PGP SIGNATURE-----
-
---Xgn8lZtczXaFspXy--
+Bart

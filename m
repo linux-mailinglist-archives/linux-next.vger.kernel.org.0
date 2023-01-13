@@ -2,75 +2,68 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DAF566954C
-	for <lists+linux-next@lfdr.de>; Fri, 13 Jan 2023 12:16:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4AD26695C2
+	for <lists+linux-next@lfdr.de>; Fri, 13 Jan 2023 12:38:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240690AbjAMLP4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 13 Jan 2023 06:15:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37506 "EHLO
+        id S241399AbjAMLh6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 13 Jan 2023 06:37:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240868AbjAMLNz (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 13 Jan 2023 06:13:55 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D0165E0BC;
-        Fri, 13 Jan 2023 03:11:56 -0800 (PST)
+        with ESMTP id S230419AbjAMLhH (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 13 Jan 2023 06:37:07 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 227D414019;
+        Fri, 13 Jan 2023 03:26:31 -0800 (PST)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id B235860401;
-        Fri, 13 Jan 2023 11:11:54 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 7D5ED6ACFE;
+        Fri, 13 Jan 2023 11:26:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1673608314; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        t=1673609189;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=+3J2L5hmxRpKBaSiCc7h8MYxDTVoLFSS4O0+jYcCJsY=;
-        b=uVAx7bB9c34/N3vTgwNEgqbEOcvZaNNDsADFemAbrnEXV8mD704qLYCTwvul4vfBMDhbn2
-        f/GWdbJQW5i0DFFbqSEdaQjpsT3Ao5pYeIDhEo/jUBSL3Wgfnqz5/ofnJiXIjAjzmR9is+
-        zBVRHH6gkSwAYLCmWm2wLpGZ0rOmgjc=
+        bh=xOg9jIs+YlxfzRJ2HLM5rvcF9/BHEDyYH4eLa34v64Y=;
+        b=HodNWU1PyXH8GzPfltlGook/HBsuXMPJTR6KzrbL/EUQmeu1Ywkb2HE7vbK4bfeef94O0z
+        D0Vv2NIGSbXbQKpPQUdKZi7Unc2RgwX4T6bWQqM3bgXXueFPM7bpDlHLAjfPughjnagl36
+        K6pzMWGX2SbZLEvrCeucf0MWJyF9GHE=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1673608314;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        s=susede2_ed25519; t=1673609189;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=+3J2L5hmxRpKBaSiCc7h8MYxDTVoLFSS4O0+jYcCJsY=;
-        b=POoDZ6rDhdVB2MQY3wInGAkmudjrq+wm6WLtcx1XK24khMJD/+MSm2lfNmuNdJuQzhLSiQ
-        yjNWV7lZheYgQiAQ==
+        bh=xOg9jIs+YlxfzRJ2HLM5rvcF9/BHEDyYH4eLa34v64Y=;
+        b=bRbef9FrfsP6d2qJrTA+NHv6ir/2DVzyNgrxTvkESIhcO572zAoulafLjG7CGhAYTC+om7
+        B+GZ9u4eG2mgqVCw==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 97AE21358A;
-        Fri, 13 Jan 2023 11:11:54 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5B3D11358A;
+        Fri, 13 Jan 2023 11:26:29 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id 9Cd1JHo8wWMGLAAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Fri, 13 Jan 2023 11:11:54 +0000
-Message-ID: <eb806f57-15bf-eb7c-97ff-8c4f5dfd2c84@suse.cz>
-Date:   Fri, 13 Jan 2023 12:11:54 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: linux-next: duplicate patches in the mm tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>
+        id +upSFeU/wWNvMwAAMHmgww
+        (envelope-from <dsterba@suse.cz>); Fri, 13 Jan 2023 11:26:29 +0000
+Date:   Fri, 13 Jan 2023 12:20:53 +0100
+From:   David Sterba <dsterba@suse.cz>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20230113142306.27e2ee60@canb.auug.org.au>
-Content-Language: en-US
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20230113142306.27e2ee60@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham autolearn_force=no
+Subject: Re: linux-next: duplicate patches in the btrfs tree
+Message-ID: <20230113112053.GT11562@suse.cz>
+Reply-To: dsterba@suse.cz
+References: <20230113102707.649f0938@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230113102707.649f0938@canb.auug.org.au>
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,21 +71,35 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 1/13/23 04:23, Stephen Rothwell wrote:
+On Fri, Jan 13, 2023 at 10:27:07AM +1100, Stephen Rothwell wrote:
 > Hi all,
 > 
-> The following commits are also in other -next trees tree as different
-> commits (but the same patches):
+> The following commits are duplicated in the btrfs tre and also in the
+> btrfs-fixes tree as different commits (but the same patches):
 > 
->   280691a45437 ("mm/slab: add is_kmalloc_cache() helper function")
-> (commit 61df28eb7788f in the slab tree)
-
-Oops, that was unintentional on the slab tree side. It's part of 2-patch
-series where the second one also depends on other changes in mm tree, so
-both are going through mm. Will drop, thanks.
-
->   a8197833a9d3 ("kernel/irq/manage.c: disable_irq() might sleep.")
-> (commit 17549b0f184d ("genirq: Add might_sleep() to disable_irq()")
-> in the tip tree)
+>   6d3d970b2735 ("btrfs: fix missing error handling when logging directory items")
+>   8bb6898da627 ("btrfs: fix directory logging due to race with concurrent index key deletion")
+>   94cd63ae6799 ("btrfs: add missing setup of log for full commit at add_conflicting_inode()")
+>   16199ad9eb6d ("btrfs: do not abort transaction on failure to write log tree when syncing log")
+>   09e44868f1e0 ("btrfs: do not abort transaction on failure to update log root")
 > 
+> and
+> 
+>   18c166730923 ("btrfs: fix missing error handling when logging directory items")
+>   5c7eafa405c4 ("btrfs: fix directory logging due to race with concurrent index key deletion")
+>   db260d6a0abb ("btrfs: add missing setup of log for full commit at add_conflicting_inode()")
+>   ab6e0ba0377d ("btrfs: do not abort transaction on failure to write log tree when syncing log")
+>   40c7d0525fcd ("btrfs: do not abort transaction on failure to update log root")
+> 
+> in the btrfs tree and
+> 
+>   8ba46a395c7f ("btrfs: fix missing error handling when logging directory items")
+>   46fc636870f4 ("btrfs: fix directory logging due to race with concurrent index key deletion")
+>   52bd17801bcb ("btrfs: add missing setup of log for full commit at add_conflicting_inode()")
+>   3d223cb5a2f7 ("btrfs: do not abort transaction on failure to write log tree when syncing log")
+>   b8a4b882f62c ("btrfs: do not abort transaction on failure to update log root")
+> 
+> in the btrfs-fixes tree.
 
+Will be fixed in next for-next snapshot, some of the merged branches
+weren't properly refreshed.

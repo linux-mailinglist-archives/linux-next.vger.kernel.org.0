@@ -2,109 +2,103 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E905366A0E3
-	for <lists+linux-next@lfdr.de>; Fri, 13 Jan 2023 18:43:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94B7166A124
+	for <lists+linux-next@lfdr.de>; Fri, 13 Jan 2023 18:50:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230081AbjAMRnX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 13 Jan 2023 12:43:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52856 "EHLO
+        id S230197AbjAMRug (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 13 Jan 2023 12:50:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229714AbjAMRnB (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 13 Jan 2023 12:43:01 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DF328B76F;
-        Fri, 13 Jan 2023 09:29:25 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S229497AbjAMRtq (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 13 Jan 2023 12:49:46 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 854E2848C2
+        for <linux-next@vger.kernel.org>; Fri, 13 Jan 2023 09:41:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673631659;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=XeXOBiBQec1eYZ+PYC3J6nXlnuLgGSoZaVRzf4a0Yn8=;
+        b=AVgbcME/4Ri1Eh635IyIg1ORNbTfzm/SNIsFdAi28aZXY1M5iUlMiGYTpyVzbJOQmXWRoI
+        bXZggAtvWv7+vjav5sQOzSKONvXgdOSD/2ptHPztEtlxvQ3Iazqt471sR1XItl8ILOV1sR
+        qIwp2KtRGpXQzUknlVDchinu5pv0yy0=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-611-fa4jNFgDOyyH-awXOH9YEg-1; Fri, 13 Jan 2023 12:40:56 -0500
+X-MC-Unique: fa4jNFgDOyyH-awXOH9YEg-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B2973B8206B;
-        Fri, 13 Jan 2023 17:29:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35C65C433EF;
-        Fri, 13 Jan 2023 17:29:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673630962;
-        bh=wHTzxLTSWIWcmvmjm8HxsOOrxP/zpZaqZsO3pYaP3PQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RfMMpuLL52GwyfuIE4Byu78vWrHe+aDNzSfAQpkJk1YS92uABw45T0K+vhzy7zAoC
-         kVU20RfTNSxjkom8K97OOcrzd6kzJnTZABZn5wpzgcTbt2AItUZDdvfPp5zC68WQSt
-         tX+BHKQsBWwwaWNE3HJxYUo7sEmasjzZpSziEQ7eXBwdQjVILVTbOcQA10DlG75H9Z
-         Sr9wdrAPF/WkxKAsvzNa3T2JXGGhPmSnlaRntkcc3wjAlE0GzyJHdDISaLxjVJf/VH
-         lBzgG3e3BXnwP0mlEXQCIqzhGzpogYDxRvRL1pclxHXz+YBvlRwmI1eDZpoXOoC0iZ
-         MYNthL8mvfjuQ==
-Date:   Fri, 13 Jan 2023 17:29:16 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        lkft-triage@lists.linaro.org, regressions@lists.linux.dev,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Anders Roxell <anders.roxell@linaro.org>
-Subject: Re: next: BUG: kernel NULL pointer dereference, address:
- 0000000000000008 - RIP: 0010:do_wp_page
-Message-ID: <Y8GU7Pqq/z0wxwgs@sirena.org.uk>
-References: <CA+G9fYt_b04YNCCv-iTZTtwb5fmNEQ0abiO46qW_-SrA1GQX8w@mail.gmail.com>
- <Y8Fkjxsq5EOtGiql@casper.infradead.org>
- <CA+G9fYuahjaNs6ia1UOeF98hUhonAt0Z4YOFGcqOKt3J4tRvTw@mail.gmail.com>
- <Y8F+iKuJWAFsUg2m@casper.infradead.org>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8FD2A281723D;
+        Fri, 13 Jan 2023 17:40:55 +0000 (UTC)
+Received: from vschneid.remote.csb (unknown [10.33.36.188])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 71BE64085720;
+        Fri, 13 Jan 2023 17:40:54 +0000 (UTC)
+From:   Valentin Schneider <vschneid@redhat.com>
+To:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>, Tejun Heo <tj@kernel.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>
+Subject: [PATCH] workqueue: Fold rebind_worker() within rebind_workers()
+Date:   Fri, 13 Jan 2023 17:40:40 +0000
+Message-Id: <20230113174040.1344293-1-vschneid@redhat.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="TMhMJ435BNU2n88d"
-Content-Disposition: inline
-In-Reply-To: <Y8F+iKuJWAFsUg2m@casper.infradead.org>
-X-Cookie: I know how to do SPECIAL EFFECTS!!
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+!CONFIG_SMP builds complain about rebind_worker() being unused. Its only
+user, rebind_workers() is indeed only defined for CONFIG_SMP, so just fold
+the two lines back up there.
 
---TMhMJ435BNU2n88d
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Link: http://lore.kernel.org/r/20230113143102.2e94d74f@canb.auug.org.au
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Signed-off-by: Valentin Schneider <vschneid@redhat.com>
+---
+ kernel/workqueue.c | 13 +++++--------
+ 1 file changed, 5 insertions(+), 8 deletions(-)
 
-On Fri, Jan 13, 2023 at 03:53:44PM +0000, Matthew Wilcox wrote:
-> On Fri, Jan 13, 2023 at 09:14:15PM +0530, Naresh Kamboju wrote:
+diff --git a/kernel/workqueue.c b/kernel/workqueue.c
+index 0d44c33b5b24e..dce29154cd07a 100644
+--- a/kernel/workqueue.c
++++ b/kernel/workqueue.c
+@@ -1986,12 +1986,6 @@ static void unbind_worker(struct worker *worker)
+ 		WARN_ON_ONCE(set_cpus_allowed_ptr(worker->task, cpu_possible_mask) < 0);
+ }
+ 
+-static void rebind_worker(struct worker *worker, struct worker_pool *pool)
+-{
+-	kthread_set_per_cpu(worker->task, pool->cpu);
+-	WARN_ON_ONCE(set_cpus_allowed_ptr(worker->task, pool->attrs->cpumask) < 0);
+-}
+-
+ static void wake_dying_workers(struct list_head *cull_list)
+ {
+ 	struct worker *worker, *tmp;
+@@ -5149,8 +5143,11 @@ static void rebind_workers(struct worker_pool *pool)
+ 	 * of all workers first and then clear UNBOUND.  As we're called
+ 	 * from CPU_ONLINE, the following shouldn't fail.
+ 	 */
+-	for_each_pool_worker(worker, pool)
+-		rebind_worker(worker, pool);
++	for_each_pool_worker(worker, pool) {
++		kthread_set_per_cpu(worker->task, pool->cpu);
++		WARN_ON_ONCE(set_cpus_allowed_ptr(worker->task,
++						  pool->attrs->cpumask) < 0);
++	}
+ 
+ 	raw_spin_lock_irq(&pool->lock);
+ 
+-- 
+2.31.1
 
-> > [   15.980869] Hardware name: Supermicro SYS-5019S-ML/X11SSH-F, BIOS
-> > 2.0b 07/27/2017
-> > [   15.988336] RIP: 0010:do_wp_page (memory.c:?)
-
-> Uh, are you compiling your kernels without debuginfo?  The results
-> from syzbot & 0day are much more useful:
-
-> https://lore.kernel.org/linux-mm/Y8FnAwWOxLrfoWTN@casper.infradead.org/T/#u
-
-> for an example.
-
-This will be a consequence of x86 not including DEBUG_INFO in defconfig
-- a lot of the testing systems cover unmodified upstream configs as a
-baseline, it tends to make life easier and be an indication of what
-people want covering.  A quick survey says most architectures are
-setting at least DEBUG_INFO_REDUCED, it'd probably be a good idea for
-x86 to do so as well.  The logs from arm64 and probably also arm
-(depending on exactly which config was being covered)  should be more
-usefully decodable, Naresh you mentioned that those were also failing?
-
---TMhMJ435BNU2n88d
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEyBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmPBlOwACgkQJNaLcl1U
-h9DLYgf3YlPfc1pcH0HO6HljwMCx4N5dyA5iHuN02tOpucDFEofh4Ca72a+QwHbV
-w6c7eGAk+WTO+HaPHSpSRxgvT67Xnk/8s4r5xnTAXvb3CC0cUcPob3zBa8aNH2ms
-ZbQm4dd6fva7sVJFzD1NhlTd/lOeyWIK0bZ+rWtHb2uEmbroBtyyJMYOy9KBCA5i
-0vC3rXkfGeyk2bab8Io9sAx4BJbg4cSdeSX3Fg3xXgspTpuz8xr9/UKKESkZ85yB
-C/Kr98r0EmRg+5BIVdtdesDUE1+5PkpXi5mp6zCOUVe0OhebQ6Wy8rHsVqE+sddM
-zMRKyHRObgl5CJISgH0PDTJUhKtQ
-=9Dfl
------END PGP SIGNATURE-----
-
---TMhMJ435BNU2n88d--

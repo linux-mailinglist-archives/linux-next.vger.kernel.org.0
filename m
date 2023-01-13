@@ -2,77 +2,66 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ED2766A624
-	for <lists+linux-next@lfdr.de>; Fri, 13 Jan 2023 23:44:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ABCB66A72F
+	for <lists+linux-next@lfdr.de>; Sat, 14 Jan 2023 00:41:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231261AbjAMWoi (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 13 Jan 2023 17:44:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42722 "EHLO
+        id S230476AbjAMXlx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 13 Jan 2023 18:41:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231224AbjAMWog (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 13 Jan 2023 17:44:36 -0500
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9B0878267
-        for <linux-next@vger.kernel.org>; Fri, 13 Jan 2023 14:44:34 -0800 (PST)
-Received: by mail-pl1-x631.google.com with SMTP id d3so24837656plr.10
-        for <linux-next@vger.kernel.org>; Fri, 13 Jan 2023 14:44:34 -0800 (PST)
+        with ESMTP id S230363AbjAMXlw (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 13 Jan 2023 18:41:52 -0500
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ADB68CBFB
+        for <linux-next@vger.kernel.org>; Fri, 13 Jan 2023 15:41:51 -0800 (PST)
+Received: by mail-pl1-x632.google.com with SMTP id d15so24961290pls.6
+        for <linux-next@vger.kernel.org>; Fri, 13 Jan 2023 15:41:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=wsXcrt0dsEzR/+pYFsFusq6CHpnVWbUri9q3pTXoUpc=;
-        b=kzBLf0zyrJ0S9DnoDxxCJzIxLFuBn5Nc11m7pIilbQRGBA4EGG4xyxmW903T9u5d4B
-         vieknMz1rKNfYRRjaSi6uO5ew+H7oKkwMMYmjeBJ5DO59KaMe1OUjGDEhQ5XxvjkTTS6
-         8ZpgeR/74LyDm3zUnsdbnAymdoG1pRBviLXDI=
+        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=q6MHYbwLCd4MXDktCkUEHbUjwJCPzByBEFcKICE41Wc=;
+        b=oTZuy2QPWn8Ttcvpqg8Wf+v1IVfqF7e+evU+pjT9cDt2BTwDYJE0G5bkNpMF6ezT3g
+         +SEvjpRmiSNsLRYN9qdquMxFrzldCiMPoVdF6prKORkPqeIap777PZoxpIHMOGBqf/A2
+         umpAryvMGRtP/6LszPqvra+mLhvn9hhxyqa3s=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wsXcrt0dsEzR/+pYFsFusq6CHpnVWbUri9q3pTXoUpc=;
-        b=pv0sqLhLjkEWm9bgi7zvhw5yd/piW+qgOMtIVpza/V8iLs04Pcav7EdqKMWDs8uBiC
-         QSOsfGJUrmbHBcRmlCytqEj4Dl3+oxmgi/5mmyzD8giLyvxHzfOl0/ZNAb31PKNqDlvY
-         aRQfx33CyeLsnfrXOzDQsVKhtkc+ieyCm82653//W4qGbq9w50GnlD4V73PvhJOrO2xX
-         K1vwIx/QS5kJ+8yBHySrgjD9f5AWPvkpP5lMMDUNKbBynaI0XVfRKRwHry7DnbWD5vAO
-         rSlu0nLtMvVF8hTDTpuvw24Ba1a8PuMRStplgfxRRG6IXrcxjhazqO5NpRL5EGrtw2AY
-         /LDg==
-X-Gm-Message-State: AFqh2kox8us8+63if+9lWaNdjTALnGlmLW69rFOey+xoJT3jddlIWPhu
-        9RWnsC9n093imBi+R/cVV/6TOg==
-X-Google-Smtp-Source: AMrXdXv62Ov1kdHtrFHfvRTxiZut/kkJH/iEliksst2Md32FuzN3Om+eA5OI0DoqKT4oF5UulmKYgQ==
-X-Received: by 2002:a05:6a20:8e10:b0:a4:a73e:d1e2 with SMTP id y16-20020a056a208e1000b000a4a73ed1e2mr118115871pzj.57.1673649874224;
-        Fri, 13 Jan 2023 14:44:34 -0800 (PST)
+        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=q6MHYbwLCd4MXDktCkUEHbUjwJCPzByBEFcKICE41Wc=;
+        b=G4wCXNsQ5Ch90gL1ULcTpx7lmUK/C8oPfQyS0KObK+ZqQt/NWSwe3/GpY2pd1IZslA
+         b42dDvv4ySqQlpPETegsBk7qH/o7SWt8qlc2p/vOp02crMEE6tk3nrjjHPt+lO0eVuFd
+         gQYpydgPY4Dnj4CD2y/FrQkztTKl6pzRXKTEDXB7/z3Hy4b7/S8SPiZAQxCsczmeTM8O
+         Qb4f/Vn/ovw59aI5UNJa9dC0/MWdXzIvnMrn5yHS2+Z0R4w5mS8IYlg7tLoKbR5LQnOV
+         UXAhextgNVrkuUhhM1uEnl/J0H9ICfXXtMuC7KecZOjFQbmTnpuzlQGdWWAewZevhe8p
+         WoAA==
+X-Gm-Message-State: AFqh2koFARGlMzk+9tdYm4qkZ7kLvxCNKm0fXPCAOV2y7gGMzL7ueXDL
+        wIMAk6q+pAHFzT/wrs53zAzcbA==
+X-Google-Smtp-Source: AMrXdXuZ+U95h1w+2Ck1r1tekdH9Z21e+CKOPUB5dzyfgK6c9cASSF6xg9nIODJAgNZMvedmhtP+eA==
+X-Received: by 2002:a05:6a20:c906:b0:b4:f66a:99a9 with SMTP id gx6-20020a056a20c90600b000b4f66a99a9mr43708881pzb.60.1673653310583;
+        Fri, 13 Jan 2023 15:41:50 -0800 (PST)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id h4-20020aa79f44000000b0056d7cc80ea4sm303214pfr.110.2023.01.13.14.44.32
+        by smtp.gmail.com with ESMTPSA id v14-20020a17090a4ece00b002194319662asm14592813pjl.42.2023.01.13.15.41.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Jan 2023 14:44:33 -0800 (PST)
-Date:   Fri, 13 Jan 2023 14:44:32 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Niklas Cassel <Niklas.Cassel@wdc.com>
-Cc:     "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Siddhesh Poyarekar <siddhesh@gotplt.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Tom Rix <trix@redhat.com>,
-        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-        Juergen Gross <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        "linux-next@vger.kernel.org" <linux-next@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Michael Chan <michael.chan@broadcom.com>
-Subject: Re: linux-next - bnxt buffer overflow in strnlen
-Message-ID: <202301131415.6E0C3BF328@keescook>
-References: <20220920192202.190793-1-keescook@chromium.org>
- <20220920192202.190793-5-keescook@chromium.org>
- <Y8F/1w1AZTvLglFX@x1-carbon>
- <Y8GB9DMtcSP/8e/i@x1-carbon>
+        Fri, 13 Jan 2023 15:41:50 -0800 (PST)
+From:   coverity-bot <keescook@chromium.org>
+X-Google-Original-From: coverity-bot <keescook+coverity-bot@chromium.org>
+Date:   Fri, 13 Jan 2023 15:41:49 -0800
+To:     Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
+Cc:     Paolo Abeni <pabeni@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-kernel@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        netdev@vger.kernel.org, Heiner Kallweit <hkallweit1@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        linux-next@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Coverity: genphy_c45_plca_set_cfg(): UNINIT
+Message-ID: <202301131541.741EBE0@keescook>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y8GB9DMtcSP/8e/i@x1-carbon>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -83,194 +72,62 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Jan 13, 2023 at 04:08:21PM +0000, Niklas Cassel wrote:
-> On Fri, Jan 13, 2023 at 04:59:19PM +0100, Niklas Cassel wrote:
-> > On Tue, Sep 20, 2022 at 12:22:02PM -0700, Kees Cook wrote:
-> > > Since the commits starting with c37495d6254c ("slab: add __alloc_size
-> > > attributes for better bounds checking"), the compilers have runtime
-> > > allocation size hints available in some places. This was immediately
-> > > available to CONFIG_UBSAN_BOUNDS, but CONFIG_FORTIFY_SOURCE needed
-> > > updating to explicitly make use the hints via the associated
-> > > __builtin_dynamic_object_size() helper. Detect and use the builtin when
-> > > it is available, increasing the accuracy of the mitigation. When runtime
-> > > sizes are not available, __builtin_dynamic_object_size() falls back to
-> > > __builtin_object_size(), leaving the existing bounds checking unchanged.
-> > > [...]
-> > Hello Kees,
-> > 
-> > Unfortunately, this commit introduces a crash in the bnxt
-> > ethernet driver when booting linux-next.
+Hello!
 
-Hi! Thanks for the report. Notes below...
+This is an experimental semi-automated report about issues detected by
+Coverity from a scan of next-20230113 as part of the linux-next scan project:
+https://scan.coverity.com/projects/linux-next-weekly-scan
 
-> > I haven't looked at the code in the bnxt ethernet driver,
-> > I simply know that machine boots fine on v6.2.0-rc3,
-> > but fails to boot with linux-next.
-> > 
-> > So I started an automatic git bisect, which returned:
-> > 439a1bcac648 ("fortify: Use __builtin_dynamic_object_size() when available")
-> > 
-> > $ grep CC_VERSION .config
-> > CONFIG_CC_VERSION_TEXT="gcc (GCC) 12.2.1 20221121 (Red Hat 12.2.1-4)"
-> > CONFIG_GCC_VERSION=120201
-> > 
-> > $ grep FORTIFY .config
-> > CONFIG_ARCH_HAS_FORTIFY_SOURCE=y
-> > CONFIG_FORTIFY_SOURCE=y
-> > 
-> > 
-> > dmesg output:
-> > 
-> > <0>[   10.805253] detected buffer overflow in strnlen
-> [...]
-> > <4>[   10.931470] Call Trace:
-> > <6>[   10.936317] ata9: SATA link down (SStatus 0 SControl 300)
-> > <4>[   10.936745]  <TASK>
-> > <4>[   10.936745]  bnxt_ethtool_init.cold+0x18/0x18
+You're getting this email because you were associated with the identified
+lines of code (noted below) that were touched by commits:
 
-Are you able to run:
+  Wed Jan 11 08:35:02 2023 +0000
+    493323416fed ("drivers/net/phy: add helpers to get/set PLCA configuration")
 
-$ ./scripts/faddr2line vmlinux bnxt_ethtool_init.cold+0x18/0x18
+Coverity reported the following:
 
-to find the exact line it's failing on, just to be sure we're looking in
-the right place?
+*** CID 1530573:    (UNINIT)
+drivers/net/phy/phy-c45.c:1036 in genphy_c45_plca_set_cfg()
+1030     				return ret;
+1031
+1032     			val = ret;
+1033     		}
+1034
+1035     		if (plca_cfg->node_cnt >= 0)
+vvv     CID 1530573:    (UNINIT)
+vvv     Using uninitialized value "val".
+1036     			val = (val & ~MDIO_OATC14_PLCA_NCNT) |
+1037     			      (plca_cfg->node_cnt << 8);
+1038
+1039     		if (plca_cfg->node_id >= 0)
+1040     			val = (val & ~MDIO_OATC14_PLCA_ID) |
+1041     			      (plca_cfg->node_id);
+drivers/net/phy/phy-c45.c:1076 in genphy_c45_plca_set_cfg()
+1070     				return ret;
+1071
+1072     			val = ret;
+1073     		}
+1074
+1075     		if (plca_cfg->burst_cnt >= 0)
+vvv     CID 1530573:    (UNINIT)
+vvv     Using uninitialized value "val".
+1076     			val = (val & ~MDIO_OATC14_PLCA_MAXBC) |
+1077     			      (plca_cfg->burst_cnt << 8);
+1078
+1079     		if (plca_cfg->burst_tmr >= 0)
+1080     			val = (val & ~MDIO_OATC14_PLCA_BTMR) |
+1081     			      (plca_cfg->burst_tmr);
 
-There are a bunch of string functions being used in a loop
-bnxt_ethtool_init(). Here's the code:
+If this is a false positive, please let us know so we can mark it as
+such, or teach the Coverity rules to be smarter. If not, please make
+sure fixes get into linux-next. :) For patches fixing this, please
+include these lines (but double-check the "Fixes" first):
 
-        if (bp->num_tests > BNXT_MAX_TEST)
-                bp->num_tests = BNXT_MAX_TEST;
-	...
-        for (i = 0; i < bp->num_tests; i++) {
-                char *str = test_info->string[i];
-                char *fw_str = resp->test0_name + i * 32;
+Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
+Addresses-Coverity-ID: 1530573 ("UNINIT")
+Fixes: 493323416fed ("drivers/net/phy: add helpers to get/set PLCA configuration")
 
-                if (i == BNXT_MACLPBK_TEST_IDX) {
-                        strcpy(str, "Mac loopback test (offline)");
-                } else if (i == BNXT_PHYLPBK_TEST_IDX) {
-                        strcpy(str, "Phy loopback test (offline)");
-                } else if (i == BNXT_EXTLPBK_TEST_IDX) {
-                        strcpy(str, "Ext loopback test (offline)");
-                } else if (i == BNXT_IRQ_TEST_IDX) {
-                        strcpy(str, "Interrupt_test (offline)");
-                } else {
-                        strscpy(str, fw_str, ETH_GSTRING_LEN);
-                        strncat(str, " test", ETH_GSTRING_LEN - strlen(str));
-                        if (test_info->offline_mask & (1 << i))
-                                strncat(str, " (offline)",
-                                        ETH_GSTRING_LEN - strlen(str));
-                        else
-                                strncat(str, " (online)",
-                                        ETH_GSTRING_LEN - strlen(str));
-                }
-        }
-
-The hardened strnlen() is used internally to the hardened strcpy() and
-strscpy()'s source argument, and strncat()'s dest and source arguments.
-The only non-literal source argument is fw_str.
-
-The destination in this loop is always "str", which is test_info->string[i].
-I'd expect "str" to always be processed as fixed size:
-
-struct bnxt_test_info {
-        u8 offline_mask;
-        u16 timeout;
-        char string[BNXT_MAX_TEST][ETH_GSTRING_LEN];
-};
-
-#define ETH_GSTRING_LEN         32
-#define BNXT_MAX_TEST   8
-
-And the allocation matches that size:
-
-test_info = kzalloc(sizeof(*bp->test_info), GFP_KERNEL);
-
-(bp->test_info is, indeed struct bnxt_test_info too.)
-
-The loop cannot reach BNXT_MAX_TEST. It looks like fw_str's size isn't
-known dynamically, so that shouldn't be a change. (It's assigned from
-a void * return.) So I suspect "str" ran off the end of the allocation,
-which implies that "fw_str" must be >= ETH_GSTRING_LEN. This line looks
-very suspicious:
-
-                char *fw_str = resp->test0_name + i * 32;
-
-I also note that the return value of strscpy() is not checked...
-
-Let's see...
-
-struct hwrm_selftest_qlist_output {
-	...
-        char    test0_name[32];
-        char    test1_name[32];
-        char    test2_name[32];
-        char    test3_name[32];
-        char    test4_name[32];
-        char    test5_name[32];
-        char    test6_name[32];
-        char    test7_name[32];
-	...
-};
-
-Ew. So, yes, it's specifically reach past the end of the test0_name[]
-array, *and* is may overflow the heap. Does this patch solve it for you?
-
-
-diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt_ethtool.c b/drivers/net/ethernet/broadcom/bnxt/bnxt_ethtool.c
-index cbf17fcfb7ab..ec573127b707 100644
---- a/drivers/net/ethernet/broadcom/bnxt/bnxt_ethtool.c
-+++ b/drivers/net/ethernet/broadcom/bnxt/bnxt_ethtool.c
-@@ -3969,7 +3969,7 @@ void bnxt_ethtool_init(struct bnxt *bp)
- 		test_info->timeout = HWRM_CMD_TIMEOUT;
- 	for (i = 0; i < bp->num_tests; i++) {
- 		char *str = test_info->string[i];
--		char *fw_str = resp->test0_name + i * 32;
-+		char *fw_str = resp->test_name[i];
- 
- 		if (i == BNXT_MACLPBK_TEST_IDX) {
- 			strcpy(str, "Mac loopback test (offline)");
-@@ -3980,14 +3980,9 @@ void bnxt_ethtool_init(struct bnxt *bp)
- 		} else if (i == BNXT_IRQ_TEST_IDX) {
- 			strcpy(str, "Interrupt_test (offline)");
- 		} else {
--			strscpy(str, fw_str, ETH_GSTRING_LEN);
--			strncat(str, " test", ETH_GSTRING_LEN - strlen(str));
--			if (test_info->offline_mask & (1 << i))
--				strncat(str, " (offline)",
--					ETH_GSTRING_LEN - strlen(str));
--			else
--				strncat(str, " (online)",
--					ETH_GSTRING_LEN - strlen(str));
-+			snprintf(str, ETH_GSTRING_LEN, "%s test (%s)",
-+				 fw_str, test_info->offline_mask & (1 << i) ?
-+					"offline" : "online");
- 		}
- 	}
- 
-diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt_hsi.h b/drivers/net/ethernet/broadcom/bnxt/bnxt_hsi.h
-index 2686a714a59f..a5408879e077 100644
---- a/drivers/net/ethernet/broadcom/bnxt/bnxt_hsi.h
-+++ b/drivers/net/ethernet/broadcom/bnxt/bnxt_hsi.h
-@@ -10249,14 +10249,7 @@ struct hwrm_selftest_qlist_output {
- 	u8	unused_0;
- 	__le16	test_timeout;
- 	u8	unused_1[2];
--	char	test0_name[32];
--	char	test1_name[32];
--	char	test2_name[32];
--	char	test3_name[32];
--	char	test4_name[32];
--	char	test5_name[32];
--	char	test6_name[32];
--	char	test7_name[32];
-+	char	test_name[8][32];
- 	u8	eyescope_target_BER_support;
- 	#define SELFTEST_QLIST_RESP_EYESCOPE_TARGET_BER_SUPPORT_BER_1E8_SUPPORTED  0x0UL
- 	#define SELFTEST_QLIST_RESP_EYESCOPE_TARGET_BER_SUPPORT_BER_1E9_SUPPORTED  0x1UL
-
-
-
-
+Thanks for your attention!
 
 -- 
-Kees Cook
+Coverity-bot

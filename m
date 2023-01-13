@@ -2,223 +2,105 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4515E669E72
-	for <lists+linux-next@lfdr.de>; Fri, 13 Jan 2023 17:43:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FE9C669EB8
+	for <lists+linux-next@lfdr.de>; Fri, 13 Jan 2023 17:50:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229503AbjAMQnt (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 13 Jan 2023 11:43:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54760 "EHLO
+        id S230479AbjAMQub (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 13 Jan 2023 11:50:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229726AbjAMQnJ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 13 Jan 2023 11:43:09 -0500
-Received: from mail-ua1-x930.google.com (mail-ua1-x930.google.com [IPv6:2607:f8b0:4864:20::930])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A544963F73
-        for <linux-next@vger.kernel.org>; Fri, 13 Jan 2023 08:41:30 -0800 (PST)
-Received: by mail-ua1-x930.google.com with SMTP id i23so1327888ual.13
-        for <linux-next@vger.kernel.org>; Fri, 13 Jan 2023 08:41:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=C6Lr+L/LblDc+yJNt4wnXXxJYLKQypjal3HX7Zk/JBs=;
-        b=IQFN/OGInODCXa4DHXL6w34lhdPc1uMskQ5g7tFJ0oHfQYVPZoDjRMxAFWls6ofeWI
-         Cc192jIOfJM4wAyYcKAzsILPmuH/oreySiel5v2C3xqH4k0ub7n9d9vDVs5g9waeUXgX
-         kxFNOB1d1SEzSPi1CiaUfgjIUzSpfz0061je3FuODY/reLKaXtqBRgCCv2bNKGY0kgDu
-         kg0ue1bkJsKsUnApNAYnZK2GQkeZzEiLoL3zVScbH/htfTDt4RbLoXpGVSjVF0K9pZkk
-         M/oghv0bs48g7pHRF1czjSowPm9mhKnPNjFmkrPVvHGuHD6SMZykgiyvnpewOvDcA/mV
-         eT2Q==
+        with ESMTP id S230305AbjAMQts (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 13 Jan 2023 11:49:48 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 216DA671BE
+        for <linux-next@vger.kernel.org>; Fri, 13 Jan 2023 08:47:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673628456;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=djME/70Dq2hCyOWtbb9rXV1J/myyoY9n25749b7HV2g=;
+        b=FNilpsuJ8Y7ARbvSiNCzGoZ04f2OzGcd1UYTYVdKd1GqkI+6up6IhZfBLUcdtl/xlL5Pn0
+        F7MV0U2JcX7LireZaVBH84rzhm9GOpqUA3EFKcjNCPh8m2UxN1/GBY56PIXsGCAic9W0ia
+        UmSuJmnu1eZ3D+eDBdCH6v2BmFlwfJY=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-37-KQrqjIWJMU-mAALzbs70sg-1; Fri, 13 Jan 2023 11:47:34 -0500
+X-MC-Unique: KQrqjIWJMU-mAALzbs70sg-1
+Received: by mail-wm1-f71.google.com with SMTP id o33-20020a05600c512100b003da1f94e8f7so1562406wms.8
+        for <linux-next@vger.kernel.org>; Fri, 13 Jan 2023 08:47:34 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=C6Lr+L/LblDc+yJNt4wnXXxJYLKQypjal3HX7Zk/JBs=;
-        b=scl94QrQrq9/ImSvCjhEn0b+AYT6gjvXrA91oQPxvJAUnSb5gMkbRXPStIhR4RMUGm
-         O9/sqoFAbeVKNHFuDA5l+hXz6dHqaIiI4GXMuEdv/mIZ+VhjZ4BrKLhEofzAVxOllRLV
-         nP267G+2w60+rL+j+YLYDoJFalSucm0Mt6EtF6C2ALToV/JENnpNBA+2YyHBHDIaTGpr
-         ITvPfmwvm3zJEehosvKtKM548TXs1IonBRirOpRdB4LxZi+8f4Mk+SlsXiEjZN/yb0qk
-         gkmeHdCNdxllhsCMvF+EcGWl371WeCXjRC9Pw5Em6C8T1I6H8O0/LdhjLAc1WDbk5VZj
-         RJ7Q==
-X-Gm-Message-State: AFqh2kothxT5xW5V+O63B+QFsEb9hkFC47nxk4tFprEyxGyu4UGGR9s4
-        7IMowPmnQNA1JGz0S8kOEQHJF4mrNQBptVjo97ab9Q==
-X-Google-Smtp-Source: AMrXdXtVG2JMg8EoGuXDL5LQN7a3JNnSQdhfCX0+6p234rz4v8CaD7VeNzcirdl6I82sSO6ix0hQ+qTpmi9ko3osxlU=
-X-Received: by 2002:ab0:3102:0:b0:5a4:c264:fb05 with SMTP id
- e2-20020ab03102000000b005a4c264fb05mr5531047ual.22.1673628089580; Fri, 13 Jan
- 2023 08:41:29 -0800 (PST)
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=djME/70Dq2hCyOWtbb9rXV1J/myyoY9n25749b7HV2g=;
+        b=Q79k99lEVSP9Uq8To5N91BTI+6ON2VLipXWdGpRawKMTSh8LsBcILFQpYjku47d7J9
+         fKNo9eEIdd11LBJ4Tyr8vcBemSMBcfOeyOSaUEioRpiarxmcHROLmtOjr+jgspANimzD
+         ZhHsUv9ZrTCxpu64JKGzyocRlYEFkv1am8uY24lVz8Vg7VN6ss1nPwESxeB7/kBsC3Vy
+         3AeSOcMeQ+Mp8APn2r4z8E333sm9JHNYE4WwwUtb4rbq8uTE2CuXhTGvVffr0GEXT829
+         OlZuowrq93uvF4VNliUn7sKhvtt75gvHSJP9yA6pRmHPIWWLxKI/UgKEH/VrbFoNNDOz
+         T9+A==
+X-Gm-Message-State: AFqh2konXL/jQ22UIJ995IdJzVs5s3Kne0pTZhBTXU2WBOie5ASoE1HB
+        H/tRaWdME3ZUnul0DlHr8KdB0TjOZUaomiOeYaNoxZFAXkeZIO92rVg0JWy8xet1tDib6GEbjGg
+        9D8AoG3V9pY8k1YJ2AL68At9geoemzrGOF7XwfA/JYZIjPwj2gUNJSkGfwNVVvLqoK25Y8m6VxQ
+        ==
+X-Received: by 2002:a5d:5c12:0:b0:242:800:9a7f with SMTP id cc18-20020a5d5c12000000b0024208009a7fmr55202709wrb.65.1673628452637;
+        Fri, 13 Jan 2023 08:47:32 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXv5j3W2PLZJa6k66qSJK7vxx5Jkcl2ZNrIGiRyqW1y76dg3kAVn3B9j77QV4e5H///posi9iw==
+X-Received: by 2002:a5d:5c12:0:b0:242:800:9a7f with SMTP id cc18-20020a5d5c12000000b0024208009a7fmr55202698wrb.65.1673628452442;
+        Fri, 13 Jan 2023 08:47:32 -0800 (PST)
+Received: from vschneid.remote.csb ([154.57.232.159])
+        by smtp.gmail.com with ESMTPSA id e1-20020adfdbc1000000b002b8fe58d6desm19496504wrj.62.2023.01.13.08.47.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Jan 2023 08:47:31 -0800 (PST)
+From:   Valentin Schneider <vschneid@redhat.com>
+To:     Tejun Heo <tj@kernel.org>, Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the workqueues tree
+In-Reply-To: <Y8GHXUcXYJcHPkOY@slm.duckdns.org>
+References: <20230113143102.2e94d74f@canb.auug.org.au>
+ <Y8GHXUcXYJcHPkOY@slm.duckdns.org>
+Date:   Fri, 13 Jan 2023 16:47:31 +0000
+Message-ID: <xhsmhzgamidp8.mognet@vschneid.remote.csb>
 MIME-Version: 1.0
-References: <CA+G9fYt_b04YNCCv-iTZTtwb5fmNEQ0abiO46qW_-SrA1GQX8w@mail.gmail.com>
- <Y8Fkjxsq5EOtGiql@casper.infradead.org> <CA+G9fYuahjaNs6ia1UOeF98hUhonAt0Z4YOFGcqOKt3J4tRvTw@mail.gmail.com>
- <Y8F+iKuJWAFsUg2m@casper.infradead.org>
-In-Reply-To: <Y8F+iKuJWAFsUg2m@casper.infradead.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Fri, 13 Jan 2023 22:11:18 +0530
-Message-ID: <CA+G9fYsNyEttKsfMu5G+ZWA74HRp77ZOanom35ooFOpvVUgNbg@mail.gmail.com>
-Subject: Re: next: BUG: kernel NULL pointer dereference, address:
- 0000000000000008 - RIP: 0010:do_wp_page
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        lkft-triage@lists.linaro.org, regressions@lists.linux.dev,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Mark Brown <broonie@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Anders Roxell <anders.roxell@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, 13 Jan 2023 at 21:23, Matthew Wilcox <willy@infradead.org> wrote:
+On 13/01/23 06:31, Tejun Heo wrote:
+> On Fri, Jan 13, 2023 at 02:31:02PM +1100, Stephen Rothwell wrote:
+>> Hi all,
+>>
+>> After merging the workqueues tree, today's linux-next build (x86_64
+>> allnoconfig and several others) produced this warning:
+>>
+>> kernel/workqueue.c:1993:13: warning: 'rebind_worker' defined but not used [-Wunused-function]
+>>  1993 | static void rebind_worker(struct worker *worker, struct worker_pool *pool)
+>>       |             ^~~~~~~~~~~~~
+>>
+>> Introduced by commit
+>>
+>>   793777bc193b ("workqueue: Factorize unbind/rebind_workers() logic")
 >
-> On Fri, Jan 13, 2023 at 09:14:15PM +0530, Naresh Kamboju wrote:
-> > Hi Matthew,
-> >
-> > On Fri, 13 Jan 2023 at 19:32, Matthew Wilcox <willy@infradead.org> wrote:
-> > >
-> > > On Fri, Jan 13, 2023 at 06:53:01PM +0530, Naresh Kamboju wrote:
-> > > > Linux next tag 20230113 boot failed on x86_64, arm64, arm and i386.
-> > >
-> > > Why are you still not running these stack dumps through
-> > > scripts/decode_stacktrace.sh ?  That seems like it's much easier for you
-> > > to do than expecting everybody who might be interested in investigating
-> > > your reports to pull down enough of the build artifacts to make it work.
-> >
-> > Hope this will help you.
-> >
-> > # ./scripts/decode_stacktrace.sh vmlinux  < input.txt > output.txt
-> >
-> > stack dumps:
-> > ------------------
-> > [   15.945626] BUG: kernel NULL pointer dereference, address: 0000000000000008
-> > [   15.952588] #PF: supervisor read access in kernel mode
-> > [   15.957720] #PF: error_code(0x0000) - not-present page
-> > [   15.962850] PGD 8000000103213067 P4D 8000000103213067 PUD 103212067 PMD 0
-> > [   15.969724] Oops: 0000 [#1] PREEMPT SMP PTI
-> > [   15.973909] CPU: 3 PID: 1 Comm: init Not tainted 6.2.0-rc3-next-20230113 #1
-> > [   15.980869] Hardware name: Supermicro SYS-5019S-ML/X11SSH-F, BIOS
-> > 2.0b 07/27/2017
-> > [   15.988336] RIP: 0010:do_wp_page (memory.c:?)
+> Valentin, this is caused by rebind_worker() being only used by
+> rebind_workers() which is inside CONFIG_SMP. I don't see any other uses of
+> rebind_worker(). Just fold it back into rebind_workers()?
 >
-> Uh, are you compiling your kernels without debuginfo?
 
-We have a large set of build combinations with and without debug info.
+Woops! Yes I only did it to keep things aligned with unbind_workers(), let
+me resend with that folded back in. Sorry!
 
-> The results
-> from syzbot & 0day are much more useful:
+> Thanks.
 >
-> https://lore.kernel.org/linux-mm/Y8FnAwWOxLrfoWTN@casper.infradead.org/T/#u
->
-> for an example.
->
-> > [   16.087446] Call Trace:
-> > [   16.089893]  <TASK>
-> > [   16.091991] ? trace_preempt_off (??:?)
-> > [   16.096087] ? __handle_mm_fault (memory.c:?)
-> > [   16.100439] __handle_mm_fault (memory.c:?)
-> > [   16.104617] handle_mm_fault (??:?)
-> > [   16.108457] do_user_addr_fault (fault.c:?)
-> > [   16.112642] exc_page_fault (??:?)
-> > [   16.116394] asm_exc_page_fault (??:?)
-> > [   16.120408] RIP: 0033:0x7fe169dbf31e
->
-> > Call Trace:
-> >  <TASK>
-> >  wp_page_copy mm/memory.c:3047 [inline]
-> >  do_wp_page+0x749/0x3880 mm/memory.c:3425
-> >  handle_pte_fault mm/memory.c:4937 [inline]
-> >  __handle_mm_fault+0x2183/0x3eb0 mm/memory.c:5061
-> >  handle_mm_fault+0x1b6/0x850 mm/memory.c:5207
-> >  do_user_addr_fault+0x475/0x1210 arch/x86/mm/fault.c:1407
-> >  handle_page_fault arch/x86/mm/fault.c:1498 [inline]
-> >  exc_page_fault+0x98/0x170 arch/x86/mm/fault.c:1554
-> >  asm_exc_page_fault+0x26/0x30 arch/x86/include/asm/idtentry.h:570
-> > RIP: 0033:0x7f92c0e2df98
->
-> See how much more useful that is?
+> --
+> tejun
 
-From next time I will send regression email reports with decode_stacktrace.sh
-
-For example:
-Here is the decode stack trace from arm64 with filename and line number,
-
-[    0.288009] Unable to handle kernel NULL pointer dereference at
-virtual address 0000000000000008
-[    0.288618] Mem abort info:
-[    0.288812]   ESR = 0x0000000096000006
-[    0.289069]   EC = 0x25: DABT (current EL), IL = 32 bits
-[    0.289427]   SET = 0, FnV = 0
-[    0.289634]   EA = 0, S1PTW = 0
-[    0.289851]   FSC = 0x06: level 2 translation fault
-[    0.290181] Data abort info:
-[    0.290382]   ISV = 0, ISS = 0x00000006
-[    0.290640]   CM = 0, WnR = 0
-[    0.290846] user pgtable: 4k pages, 48-bit VAs, pgdp=0000000100931000
-[    0.291273] [0000000000000008] pgd=0800000101910003,
-p4d=0800000101910003, pud=0800000101911003, pmd=0000000000000000
-[    0.292007] Internal error: Oops: 0000000096000006 [#1] PREEMPT SMP
-[    0.292428] Modules linked in:
-[    0.292639] CPU: 1 PID: 1 Comm: init Not tainted 6.2.0-rc3-next-20230113 #1
-[    0.293100] Hardware name: linux,dummy-virt (DT)
-[    0.293409] pstate: 40400005 (nZcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-[    0.293874] pc : _compound_head (include/linux/page-flags.h:251)
-[    0.294186] lr : do_wp_page (include/linux/rmap.h:156
-mm/memory.c:3057 mm/memory.c:3425)
-[    0.294443] sp : ffff80000803bbf0
-[    0.294669] x29: ffff80000803bbf0 x28: ffff0000c02d0000 x27: 0000000000000a55
-[    0.295140] x26: ffff0000c0980000 x25: ffff0000c0980000 x24: 0000000000000000
-[    0.295621] x23: 0000000000000a55 x22: ffff0000c0932c60 x21: ffff0000c0932c60
-[    0.296122] x20: 0000000000000000 x19: ffff80000803bd18 x18: 0000000000000000
-[    0.296620] x17: 0000000000000000 x16: 0000000000000000 x15: ffff0000c1938400
-[    0.297121] x14: ffff0000c0980000 x13: ffffdec19c918600 x12: 0000ffff86e83fff
-[    0.297621] x11: 0000ffff86c86000 x10: 1fffe00018327081 x9 : ffffdec19c3ec4e8
-[    0.298124] x8 : ffff80000803bb38 x7 : 0000000000000000 x6 : 0000000000000001
-[    0.298624] x5 : ffffdec19dbbf000 x4 : ffffdec19dbbf2e8 x3 : 0000000000000000
-[    0.299125] x2 : ffff0000c02d0000 x1 : ffff0000c02d0000 x0 : 0000000000000000
-[    0.299627] Call trace:
-[    0.299804] _compound_head (include/linux/page-flags.h:251)
-[    0.300059] __handle_mm_fault (mm/memory.c:4937 mm/memory.c:5061)
-[    0.300359] handle_mm_fault (mm/memory.c:5207)
-[    0.300640] do_page_fault (arch/arm64/mm/fault.c:512
-arch/arm64/mm/fault.c:612)
-[    0.300909] do_mem_abort (arch/arm64/mm/fault.c:831)
-[    0.301161] el0_da (arch/arm64/include/asm/daifflags.h:28
-arch/arm64/kernel/entry-common.c:133
-arch/arm64/kernel/entry-common.c:142
-arch/arm64/kernel/entry-common.c:516)
-[    0.301379] el0t_64_sync_handler (arch/arm64/kernel/entry-common.c:659)
-[    0.301684] el0t_64_sync (arch/arm64/kernel/entry.S:584)
-[ 0.301952] Code: d65f03c0 d4210000 d503201f d503201f (f9400401)
-All code
-========
-   0:* c0 03 5f              rolb   $0x5f,(%rbx) <-- trapping instruction
-   3: d6                    (bad)
-   4: 00 00                add    %al,(%rax)
-   6: 21 d4                and    %edx,%esp
-   8: 1f                    (bad)
-   9: 20 03                and    %al,(%rbx)
-   b: d5                    (bad)
-   c: 1f                    (bad)
-   d: 20 03                and    %al,(%rbx)
-   f: d5                    (bad)
-  10: 01 04 40              add    %eax,(%rax,%rax,2)
-  13: f9                    stc
-
-Code starting with the faulting instruction
-===========================================
-   0: 01 04 40              add    %eax,(%rax,%rax,2)
-   3: f9                    stc
-[    0.302379] ---[ end trace 0000000000000000 ]---
-[    0.302718] Kernel panic - not syncing: Attempted to kill init!
-exitcode=0x0000000b
-
-Thank you.
-
-Best regards
-Naresh Kamboju

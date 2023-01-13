@@ -2,86 +2,164 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2433366881F
-	for <lists+linux-next@lfdr.de>; Fri, 13 Jan 2023 01:11:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CA3C668899
+	for <lists+linux-next@lfdr.de>; Fri, 13 Jan 2023 01:36:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239916AbjAMALY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 12 Jan 2023 19:11:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56016 "EHLO
+        id S234765AbjAMAgt (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 12 Jan 2023 19:36:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240221AbjAMALN (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 12 Jan 2023 19:11:13 -0500
+        with ESMTP id S233365AbjAMAgs (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 12 Jan 2023 19:36:48 -0500
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D6BE5DE50;
-        Thu, 12 Jan 2023 16:11:06 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A2EE18B3D;
+        Thu, 12 Jan 2023 16:36:46 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NtMJm1206z4xFv;
-        Fri, 13 Jan 2023 11:11:03 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NtMtN0Yjnz4x1R;
+        Fri, 13 Jan 2023 11:36:43 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1673568664;
-        bh=+2YmlJZdaCngfrReynHEQsvpEbHrVrAfqqyxpJoyi9M=;
+        s=201702; t=1673570204;
+        bh=XUQvRQpyDENYtvUFcxm/gNeE046GNGYCUyfJaUM2ajA=;
         h=Date:From:To:Cc:Subject:From;
-        b=FVwH0lxx8Rpf9rVBVGnilJ3LdbKkQUjtc6JPEO/E4LMpYUYup1W4b2SBDt8w02Osz
-         FEFmfMfkPmrDPr4T3cR/Fec3poJdNfuaGbzJMKRN/gATDgq5CwehoWwip94qqUtyUX
-         Bl9iWizJAv8a4tUqOQDvMjPkuaJT44EgayW5NWby6NwK3hvy8Tigon+nrObGPNLSRu
-         1HTcgwknuJkNRzxyR+5nq1SzNx0CymmEWUid96BMAiiD6GE9GfAhdLLa/mCewxgC+S
-         7RroiegNL72CENDsDAlZcOS4Fn8T3etGzYx7NbrxIDIJy6ySqsGj7eRRGObrSz5Wiy
-         sEtUvKGH+upQg==
-Date:   Fri, 13 Jan 2023 11:11:02 +1100
+        b=X7cB0I/NjuUKqTCUwpyDlh3e0x289Q3FuYK6NgKrclCRcAyvahQKGd4oJI7+Yc5r9
+         38X/AJKVjUnKsT0KGK2+gnx9k3jnmzy78H7tYw/kXF3tE1QScBtHzmkhPAvDOM1msS
+         PASelMadhww48ctLR3cUsAWqC9PHdXW97CfMhCkGAgT/QPA3pz9vXxvOqf1dgmwGDM
+         PDtl+jgXat7Zr6yLMpYPM9yqD7ZsG1w6ZYfYk4OrHuodymBecZatXA+0BpnxHkVK+l
+         2p/odKAUhdboKpuxjaK7u9KgpddkWzxujWwsPYDco5+gN8mcsqrMKY7FW9WyjDz4k+
+         6+OHQCSsKHfWg==
+Date:   Fri, 13 Jan 2023 11:36:42 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patch in the jc_docs tree
-Message-ID: <20230113111102.22a27ae3@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>
+Cc:     Networking <netdev@vger.kernel.org>,
+        Andre Przywara <andre.przywara@arm.com>,
+        =?UTF-8?B?QmrDuHJu?= Mork <bjorn@mork.no>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Subject: linux-next: manual merge of the net-next tree with the net tree
+Message-ID: <20230113113339.658c4723@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/s2t4ltoAs/nNi7wffYyGNHL";
+Content-Type: multipart/signed; boundary="Sig_/9qhutx.lCu63yAJj.ZYuH4u";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
+        UPPERCASE_50_75 autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/s2t4ltoAs/nNi7wffYyGNHL
+--Sig_/9qhutx.lCu63yAJj.ZYuH4u
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-The following commit is also in the mm-hotfixes tree as a different commit
-(but the same patch):
+Today's linux-next merge of the net-next tree got a conflict in:
 
-  ded24dfdddd1 ("Docs/admin-guide/mm/zswap: remove zsmalloc's lack of write=
-back warning")
+  drivers/net/usb/r8152.c
 
-(commit 1beb8ae302a0 in the mm-hotfixes tree).
+between commit:
+
+  be53771c87f4 ("r8152: add vendor/device ID pair for Microsoft Devkit")
+
+from the net tree and commit:
+
+  ec51fbd1b8a2 ("r8152: add USB device driver for config selection")
+
+from the net-next tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/s2t4ltoAs/nNi7wffYyGNHL
+diff --cc drivers/net/usb/r8152.c
+index 23da1d9dafd1,66e70b5f8417..000000000000
+--- a/drivers/net/usb/r8152.c
++++ b/drivers/net/usb/r8152.c
+@@@ -9817,40 -9820,31 +9820,32 @@@ static void rtl8152_disconnect(struct u
+  /* table of devices that work with this driver */
+  static const struct usb_device_id rtl8152_table[] =3D {
+  	/* Realtek */
+- 	REALTEK_USB_DEVICE(VENDOR_ID_REALTEK, 0x8050),
+- 	REALTEK_USB_DEVICE(VENDOR_ID_REALTEK, 0x8053),
+- 	REALTEK_USB_DEVICE(VENDOR_ID_REALTEK, 0x8152),
+- 	REALTEK_USB_DEVICE(VENDOR_ID_REALTEK, 0x8153),
+- 	REALTEK_USB_DEVICE(VENDOR_ID_REALTEK, 0x8155),
+- 	REALTEK_USB_DEVICE(VENDOR_ID_REALTEK, 0x8156),
++ 	{ USB_DEVICE(VENDOR_ID_REALTEK, 0x8050) },
++ 	{ USB_DEVICE(VENDOR_ID_REALTEK, 0x8053) },
++ 	{ USB_DEVICE(VENDOR_ID_REALTEK, 0x8152) },
++ 	{ USB_DEVICE(VENDOR_ID_REALTEK, 0x8153) },
++ 	{ USB_DEVICE(VENDOR_ID_REALTEK, 0x8155) },
++ 	{ USB_DEVICE(VENDOR_ID_REALTEK, 0x8156) },
+ =20
+  	/* Microsoft */
+- 	REALTEK_USB_DEVICE(VENDOR_ID_MICROSOFT, 0x07ab),
+- 	REALTEK_USB_DEVICE(VENDOR_ID_MICROSOFT, 0x07c6),
+- 	REALTEK_USB_DEVICE(VENDOR_ID_MICROSOFT, 0x0927),
+- 	REALTEK_USB_DEVICE(VENDOR_ID_MICROSOFT, 0x0c5e),
+- 	REALTEK_USB_DEVICE(VENDOR_ID_SAMSUNG, 0xa101),
+- 	REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x304f),
+- 	REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x3054),
+- 	REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x3062),
+- 	REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x3069),
+- 	REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x3082),
+- 	REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x7205),
+- 	REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x720c),
+- 	REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x7214),
+- 	REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x721e),
+- 	REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0xa387),
+- 	REALTEK_USB_DEVICE(VENDOR_ID_LINKSYS, 0x0041),
+- 	REALTEK_USB_DEVICE(VENDOR_ID_NVIDIA,  0x09ff),
+- 	REALTEK_USB_DEVICE(VENDOR_ID_TPLINK,  0x0601),
++ 	{ USB_DEVICE(VENDOR_ID_MICROSOFT, 0x07ab) },
++ 	{ USB_DEVICE(VENDOR_ID_MICROSOFT, 0x07c6) },
++ 	{ USB_DEVICE(VENDOR_ID_MICROSOFT, 0x0927) },
+++	{ USB_DEVICE(VENDOR_ID_MICROSOFT, 0x0c5e) },
++ 	{ USB_DEVICE(VENDOR_ID_SAMSUNG, 0xa101) },
++ 	{ USB_DEVICE(VENDOR_ID_LENOVO,  0x304f) },
++ 	{ USB_DEVICE(VENDOR_ID_LENOVO,  0x3054) },
++ 	{ USB_DEVICE(VENDOR_ID_LENOVO,  0x3062) },
++ 	{ USB_DEVICE(VENDOR_ID_LENOVO,  0x3069) },
++ 	{ USB_DEVICE(VENDOR_ID_LENOVO,  0x3082) },
++ 	{ USB_DEVICE(VENDOR_ID_LENOVO,  0x7205) },
++ 	{ USB_DEVICE(VENDOR_ID_LENOVO,  0x720c) },
++ 	{ USB_DEVICE(VENDOR_ID_LENOVO,  0x7214) },
++ 	{ USB_DEVICE(VENDOR_ID_LENOVO,  0x721e) },
++ 	{ USB_DEVICE(VENDOR_ID_LENOVO,  0xa387) },
++ 	{ USB_DEVICE(VENDOR_ID_LINKSYS, 0x0041) },
++ 	{ USB_DEVICE(VENDOR_ID_NVIDIA,  0x09ff) },
++ 	{ USB_DEVICE(VENDOR_ID_TPLINK,  0x0601) },
+  	{}
+  };
+ =20
+
+--Sig_/9qhutx.lCu63yAJj.ZYuH4u
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPAoZcACgkQAVBC80lX
-0GxrWwgAoLbhUI8y3joMj4GtTx/2nTe8qYWzNflob8+1bPg97sMJGFbWcd0ce9ob
-1dQjX8Om88Kif8F14ooNr2cQb5CT+IZyLW5HRcm4WEf8s3j/AArNo6SREs0iYtBz
-menYVWjMTc3Hq2rfbRJB9MF21R3mtZ5FPLYsXa8bNQZufzCVDwK/NAtIvSf6cbzW
-fMqdBxmk3UyT8iHofvvC1sPDSJlUEcoEva4BUaBv8AHcvyDBTFineMUpTUNfcQk1
-3bBRpHPLH1oIcFbN91ikQQPDfqPqL04XvZBe3Fc9OoMo+2VUszlCuXAsSKYAVq3O
-omV4nDFwvCNcS1Uev35oI5Q2FLk0ZQ==
-=roqZ
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPAp5oACgkQAVBC80lX
+0Gwkqwf8CA9D0ibfAJABp7KBzVjqS8Q9fHMcb/29YK3Zdp7eIB26FpeJUcXeCe+y
+j3l/OKExix8JMLjJoL1HADdD5bDwfIh9XkJfP3Nqcieg2d97ydDraG0LJzwmFYlf
+k/sc0S/lfcaKobwojQK0uQB9013PYRlh37+BO8M6GCZWuXuJRL0uEMNTRodpONiP
+zyeDs4BW1WqQKfhrXnDVmuKGkAROu5CJpybIbll1KCG7kMEOgRBbIeERm4vOvGEv
+EJusOu+GGoqtXrUE+X+84ZN5z9S1ZANqop/qulhu+Qa7/7OXEMmLvWwtz02nGEq4
+X2cydp0oA3punJck/UD19WnZXZVxlg==
+=ameD
 -----END PGP SIGNATURE-----
 
---Sig_/s2t4ltoAs/nNi7wffYyGNHL--
+--Sig_/9qhutx.lCu63yAJj.ZYuH4u--

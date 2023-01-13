@@ -2,103 +2,90 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94B7166A124
-	for <lists+linux-next@lfdr.de>; Fri, 13 Jan 2023 18:50:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87EFE66A14E
+	for <lists+linux-next@lfdr.de>; Fri, 13 Jan 2023 18:58:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230197AbjAMRug (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 13 Jan 2023 12:50:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55352 "EHLO
+        id S229484AbjAMR6u (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 13 Jan 2023 12:58:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbjAMRtq (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 13 Jan 2023 12:49:46 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 854E2848C2
-        for <linux-next@vger.kernel.org>; Fri, 13 Jan 2023 09:41:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673631659;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=XeXOBiBQec1eYZ+PYC3J6nXlnuLgGSoZaVRzf4a0Yn8=;
-        b=AVgbcME/4Ri1Eh635IyIg1ORNbTfzm/SNIsFdAi28aZXY1M5iUlMiGYTpyVzbJOQmXWRoI
-        bXZggAtvWv7+vjav5sQOzSKONvXgdOSD/2ptHPztEtlxvQ3Iazqt471sR1XItl8ILOV1sR
-        qIwp2KtRGpXQzUknlVDchinu5pv0yy0=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-611-fa4jNFgDOyyH-awXOH9YEg-1; Fri, 13 Jan 2023 12:40:56 -0500
-X-MC-Unique: fa4jNFgDOyyH-awXOH9YEg-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8FD2A281723D;
-        Fri, 13 Jan 2023 17:40:55 +0000 (UTC)
-Received: from vschneid.remote.csb (unknown [10.33.36.188])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 71BE64085720;
-        Fri, 13 Jan 2023 17:40:54 +0000 (UTC)
-From:   Valentin Schneider <vschneid@redhat.com>
-To:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>, Tejun Heo <tj@kernel.org>,
+        with ESMTP id S230439AbjAMR6E (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 13 Jan 2023 12:58:04 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 449B77A908;
+        Fri, 13 Jan 2023 09:51:25 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id v23so23124629pju.3;
+        Fri, 13 Jan 2023 09:51:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=du5CbuzD5atms0biyIBc9VheGNqSzzV0KdMTQ42JShU=;
+        b=cAcBE7E+Vkqn393UgBfPDsUTqKnVkitg6csPzX3Jal8hLe41CV6LeUEBL8keS27tdJ
+         ycoUvMqbGHSbdzLiRSajaYL2CySlPO8fSpKXcqtSG8iGNyH0j96A2ETKjMuhHs85FHpg
+         8Wyi6b73mJXgiNsdOEbicsITj7KjS++vUvQo2nM9p84r4GW/gpUksl6g0vyyUdmQqWym
+         oM9WzUoLVj/5yaOB3J5q/O1jlrggIx6kNGjojknneX0GUWpP9dQM7wVIQ7FhAeGdJRZM
+         DEGGRq8eCQ1D50/TPjNEtBi8QWNAitdbEoHgdnjSekV1ncKtO7+ouI8jZzWsrGRZnJfQ
+         udpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=du5CbuzD5atms0biyIBc9VheGNqSzzV0KdMTQ42JShU=;
+        b=F/XY3ypQMyAhrqqnfU3oT0b9NUEg1mOpBz9GWOIQ/4Xd+bZS5vNxb2Xm4QgS0IVvKo
+         twCay0VUqtr9B8i2ZbZi4m7D3Rma2QqREmUxkptmdZR160nIGbtmX8b4riz5FHhxPpAA
+         sHaw1lg5DhNbmGoB7OWwaaMibU7ghi1X34G+X79h4geywSn/KV9mHEEATzVYyjKOJo1D
+         qijnxnK4VnqBHFB0AbK0x95niZz27PFiX+0x+AWxSyX1wWXA2O6zOmQZmWGpZoJ2vXS5
+         S4EgAGtU3/TNbnwK5yMwRWOzT/T0yqR3HjJeWtzwRIQrvtYgb+C80Wz1ZaU6jBzWik6t
+         bcAQ==
+X-Gm-Message-State: AFqh2koBIdJ2AUlhmW/KQjKR4+1BakUBOzohO3YvP0u9vQxdySmIikrY
+        Wy6pI0U8jhBeKblYfZv8NOPS54Nhf78=
+X-Google-Smtp-Source: AMrXdXvRZCoIh+K3Cdn5EMXgHn43VDic0a4r16FTk8O2JUbrj2VvDpG7YzPmz0u7JL5/OVJCGapFbg==
+X-Received: by 2002:a17:903:d1:b0:192:7f35:90ed with SMTP id x17-20020a17090300d100b001927f3590edmr10346053plc.11.1673632284578;
+        Fri, 13 Jan 2023 09:51:24 -0800 (PST)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id c1-20020a170902d48100b00189c9f7fac1sm14482455plg.62.2023.01.13.09.51.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Jan 2023 09:51:23 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Fri, 13 Jan 2023 07:51:22 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Valentin Schneider <vschneid@redhat.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
         Lai Jiangshan <jiangshanlai@gmail.com>
-Subject: [PATCH] workqueue: Fold rebind_worker() within rebind_workers()
-Date:   Fri, 13 Jan 2023 17:40:40 +0000
-Message-Id: <20230113174040.1344293-1-vschneid@redhat.com>
+Subject: Re: [PATCH] workqueue: Fold rebind_worker() within rebind_workers()
+Message-ID: <Y8GaGovaq5TkiGSj@slm.duckdns.org>
+References: <20230113174040.1344293-1-vschneid@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230113174040.1344293-1-vschneid@redhat.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-!CONFIG_SMP builds complain about rebind_worker() being unused. Its only
-user, rebind_workers() is indeed only defined for CONFIG_SMP, so just fold
-the two lines back up there.
+On Fri, Jan 13, 2023 at 05:40:40PM +0000, Valentin Schneider wrote:
+> !CONFIG_SMP builds complain about rebind_worker() being unused. Its only
+> user, rebind_workers() is indeed only defined for CONFIG_SMP, so just fold
+> the two lines back up there.
+> 
+> Link: http://lore.kernel.org/r/20230113143102.2e94d74f@canb.auug.org.au
+> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> Signed-off-by: Valentin Schneider <vschneid@redhat.com>
 
-Link: http://lore.kernel.org/r/20230113143102.2e94d74f@canb.auug.org.au
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Signed-off-by: Valentin Schneider <vschneid@redhat.com>
----
- kernel/workqueue.c | 13 +++++--------
- 1 file changed, 5 insertions(+), 8 deletions(-)
+Applied to wq/for-6.3.
 
-diff --git a/kernel/workqueue.c b/kernel/workqueue.c
-index 0d44c33b5b24e..dce29154cd07a 100644
---- a/kernel/workqueue.c
-+++ b/kernel/workqueue.c
-@@ -1986,12 +1986,6 @@ static void unbind_worker(struct worker *worker)
- 		WARN_ON_ONCE(set_cpus_allowed_ptr(worker->task, cpu_possible_mask) < 0);
- }
- 
--static void rebind_worker(struct worker *worker, struct worker_pool *pool)
--{
--	kthread_set_per_cpu(worker->task, pool->cpu);
--	WARN_ON_ONCE(set_cpus_allowed_ptr(worker->task, pool->attrs->cpumask) < 0);
--}
--
- static void wake_dying_workers(struct list_head *cull_list)
- {
- 	struct worker *worker, *tmp;
-@@ -5149,8 +5143,11 @@ static void rebind_workers(struct worker_pool *pool)
- 	 * of all workers first and then clear UNBOUND.  As we're called
- 	 * from CPU_ONLINE, the following shouldn't fail.
- 	 */
--	for_each_pool_worker(worker, pool)
--		rebind_worker(worker, pool);
-+	for_each_pool_worker(worker, pool) {
-+		kthread_set_per_cpu(worker->task, pool->cpu);
-+		WARN_ON_ONCE(set_cpus_allowed_ptr(worker->task,
-+						  pool->attrs->cpumask) < 0);
-+	}
- 
- 	raw_spin_lock_irq(&pool->lock);
- 
+Thanks.
+
 -- 
-2.31.1
-
+tejun

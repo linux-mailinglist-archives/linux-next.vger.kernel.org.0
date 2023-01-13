@@ -2,63 +2,59 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ABCB66A72F
-	for <lists+linux-next@lfdr.de>; Sat, 14 Jan 2023 00:41:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AA4E66A737
+	for <lists+linux-next@lfdr.de>; Sat, 14 Jan 2023 00:47:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230476AbjAMXlx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 13 Jan 2023 18:41:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44356 "EHLO
+        id S229953AbjAMXrd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 13 Jan 2023 18:47:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230363AbjAMXlw (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 13 Jan 2023 18:41:52 -0500
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ADB68CBFB
-        for <linux-next@vger.kernel.org>; Fri, 13 Jan 2023 15:41:51 -0800 (PST)
-Received: by mail-pl1-x632.google.com with SMTP id d15so24961290pls.6
-        for <linux-next@vger.kernel.org>; Fri, 13 Jan 2023 15:41:51 -0800 (PST)
+        with ESMTP id S229894AbjAMXrc (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 13 Jan 2023 18:47:32 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53DC07DE02
+        for <linux-next@vger.kernel.org>; Fri, 13 Jan 2023 15:47:31 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id o18so2745941pji.1
+        for <linux-next@vger.kernel.org>; Fri, 13 Jan 2023 15:47:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=content-disposition:mime-version:message-id:subject:cc:to:date:from
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=q6MHYbwLCd4MXDktCkUEHbUjwJCPzByBEFcKICE41Wc=;
-        b=oTZuy2QPWn8Ttcvpqg8Wf+v1IVfqF7e+evU+pjT9cDt2BTwDYJE0G5bkNpMF6ezT3g
-         +SEvjpRmiSNsLRYN9qdquMxFrzldCiMPoVdF6prKORkPqeIap777PZoxpIHMOGBqf/A2
-         umpAryvMGRtP/6LszPqvra+mLhvn9hhxyqa3s=
+        bh=g2vzzTSH5S57Wrqyr1C9oVjx+on+484XTk68fOM/j/c=;
+        b=giYpFdLflye1WI0EUrCinm2NviDsoDh/JcHzHt45N4mNHndm+d5s7Fu6GlJV9wpOI3
+         vMzmtTx6riqK8nJpLRxKVnndouHKkq2pE4DG8rwVhQ8xTqX8vDMJJqiONeFlarM8FwfR
+         gUUxFdQP9RcTJjLwtIrxhN9jRWOAw6ZjpUEsM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-disposition:mime-version:message-id:subject:cc:to:date:from
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=q6MHYbwLCd4MXDktCkUEHbUjwJCPzByBEFcKICE41Wc=;
-        b=G4wCXNsQ5Ch90gL1ULcTpx7lmUK/C8oPfQyS0KObK+ZqQt/NWSwe3/GpY2pd1IZslA
-         b42dDvv4ySqQlpPETegsBk7qH/o7SWt8qlc2p/vOp02crMEE6tk3nrjjHPt+lO0eVuFd
-         gQYpydgPY4Dnj4CD2y/FrQkztTKl6pzRXKTEDXB7/z3Hy4b7/S8SPiZAQxCsczmeTM8O
-         Qb4f/Vn/ovw59aI5UNJa9dC0/MWdXzIvnMrn5yHS2+Z0R4w5mS8IYlg7tLoKbR5LQnOV
-         UXAhextgNVrkuUhhM1uEnl/J0H9ICfXXtMuC7KecZOjFQbmTnpuzlQGdWWAewZevhe8p
-         WoAA==
-X-Gm-Message-State: AFqh2koFARGlMzk+9tdYm4qkZ7kLvxCNKm0fXPCAOV2y7gGMzL7ueXDL
-        wIMAk6q+pAHFzT/wrs53zAzcbA==
-X-Google-Smtp-Source: AMrXdXuZ+U95h1w+2Ck1r1tekdH9Z21e+CKOPUB5dzyfgK6c9cASSF6xg9nIODJAgNZMvedmhtP+eA==
-X-Received: by 2002:a05:6a20:c906:b0:b4:f66a:99a9 with SMTP id gx6-20020a056a20c90600b000b4f66a99a9mr43708881pzb.60.1673653310583;
-        Fri, 13 Jan 2023 15:41:50 -0800 (PST)
+        bh=g2vzzTSH5S57Wrqyr1C9oVjx+on+484XTk68fOM/j/c=;
+        b=P5DFaVjLHiI2E8mL/fSPKl1ZXSraG7UeGjlkGS1eyzlWUJg0DyX+HuIlOsL9c6GJNC
+         VBQaj1u9j6KDN5t/5jBcI2OLid4Xu3O5AJpTik3dgrHfDm6jMt+vr2qKltmhruMv/RFx
+         v255NchCmSm4ObyKGiHTNvp+IYuYcl6yiji7QYLuzTMPYz5vVMMFUUePPtxYPIyqUi1c
+         EguwdedvYYz+mDvVueGgnO0DxTkwlBJNMvhIUOWCq1gZoIxOF4i/WiMSbTj6351+UpoV
+         qUSuwC5dIoiHFS0/GvJFhvZ+I2nof0SStlkVejIF35blip9GtsL7/c/U4cnJtH6d5TnS
+         ViXA==
+X-Gm-Message-State: AFqh2krGfUF6s5dPPsDpADP7h5m0zRRZrRdRZ/JlLa/GCB/91aomhwTE
+        40Q4JFgv2V/5gU3x//Xpm9Ge9qjHA04U/OMv
+X-Google-Smtp-Source: AMrXdXua3ahnJrXVTD6N185pH/PtMtbliyTXjbCxzwwcMR7xNlL7XXVlPaA6+SCByiegM8HiaDiCug==
+X-Received: by 2002:a17:902:b414:b0:190:fe60:48c4 with SMTP id x20-20020a170902b41400b00190fe6048c4mr11465497plr.21.1673653650812;
+        Fri, 13 Jan 2023 15:47:30 -0800 (PST)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id v14-20020a17090a4ece00b002194319662asm14592813pjl.42.2023.01.13.15.41.49
+        by smtp.gmail.com with ESMTPSA id d12-20020a170902654c00b00189422a6b8bsm14725368pln.91.2023.01.13.15.46.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Jan 2023 15:41:50 -0800 (PST)
+        Fri, 13 Jan 2023 15:46:47 -0800 (PST)
 From:   coverity-bot <keescook@chromium.org>
 X-Google-Original-From: coverity-bot <keescook+coverity-bot@chromium.org>
-Date:   Fri, 13 Jan 2023 15:41:49 -0800
-To:     Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
-Cc:     Paolo Abeni <pabeni@redhat.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-kernel@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        netdev@vger.kernel.org, Heiner Kallweit <hkallweit1@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Andrew Lunn <andrew@lunn.ch>,
+Date:   Fri, 13 Jan 2023 15:46:27 -0800
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Petr Mladek <pmladek@suse.com>, linux-kernel@vger.kernel.org,
         "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
         linux-next@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Coverity: genphy_c45_plca_set_cfg(): UNINIT
-Message-ID: <202301131541.741EBE0@keescook>
+Subject: Coverity: console_prepend_dropped(): Memory - corruptions
+Message-ID: <202301131544.D9E804CCD@keescook>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -81,42 +77,27 @@ https://scan.coverity.com/projects/linux-next-weekly-scan
 You're getting this email because you were associated with the identified
 lines of code (noted below) that were touched by commits:
 
-  Wed Jan 11 08:35:02 2023 +0000
-    493323416fed ("drivers/net/phy: add helpers to get/set PLCA configuration")
+  Wed Jan 11 15:35:11 2023 +0100
+    c4fcc617e148 ("printk: introduce console_prepend_dropped() for dropped messages")
 
 Coverity reported the following:
 
-*** CID 1530573:    (UNINIT)
-drivers/net/phy/phy-c45.c:1036 in genphy_c45_plca_set_cfg()
-1030     				return ret;
-1031
-1032     			val = ret;
-1033     		}
-1034
-1035     		if (plca_cfg->node_cnt >= 0)
-vvv     CID 1530573:    (UNINIT)
-vvv     Using uninitialized value "val".
-1036     			val = (val & ~MDIO_OATC14_PLCA_NCNT) |
-1037     			      (plca_cfg->node_cnt << 8);
-1038
-1039     		if (plca_cfg->node_id >= 0)
-1040     			val = (val & ~MDIO_OATC14_PLCA_ID) |
-1041     			      (plca_cfg->node_id);
-drivers/net/phy/phy-c45.c:1076 in genphy_c45_plca_set_cfg()
-1070     				return ret;
-1071
-1072     			val = ret;
-1073     		}
-1074
-1075     		if (plca_cfg->burst_cnt >= 0)
-vvv     CID 1530573:    (UNINIT)
-vvv     Using uninitialized value "val".
-1076     			val = (val & ~MDIO_OATC14_PLCA_MAXBC) |
-1077     			      (plca_cfg->burst_cnt << 8);
-1078
-1079     		if (plca_cfg->burst_tmr >= 0)
-1080     			val = (val & ~MDIO_OATC14_PLCA_BTMR) |
-1081     			      (plca_cfg->burst_tmr);
+*** CID 1530570:  Memory - corruptions  (OVERRUN)
+kernel/printk/printk.c:2738 in console_prepend_dropped()
+2732     		/* Truncate the message, but keep it terminated. */
+2733     		pmsg->outbuf_len = outbuf_sz - (len + 1);
+2734     		outbuf[pmsg->outbuf_len] = 0;
+2735     	}
+2736
+2737     	memmove(outbuf + len, outbuf, pmsg->outbuf_len + 1);
+vvv     CID 1530570:  Memory - corruptions  (OVERRUN)
+vvv     Overrunning buffer pointed to by "scratchbuf" of 1024 bytes by passing it to a function which accesses it at byte offset 1998 using argument "len" (which evaluates to 1999). [Note: The source code implementation of the function has been overridden by a builtin model.]
+2738     	memcpy(outbuf, scratchbuf, len);
+2739     	pmsg->outbuf_len += len;
+2740     }
+2741     #else
+2742     #define console_prepend_dropped(pmsg, dropped)
+2743     #endif /* CONFIG_PRINTK */
 
 If this is a false positive, please let us know so we can mark it as
 such, or teach the Coverity rules to be smarter. If not, please make
@@ -124,10 +105,16 @@ sure fixes get into linux-next. :) For patches fixing this, please
 include these lines (but double-check the "Fixes" first):
 
 Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
-Addresses-Coverity-ID: 1530573 ("UNINIT")
-Fixes: 493323416fed ("drivers/net/phy: add helpers to get/set PLCA configuration")
+Addresses-Coverity-ID: 1530570 ("Memory - corruptions")
+Fixes: c4fcc617e148 ("printk: introduce console_prepend_dropped() for dropped messages")
 
 Thanks for your attention!
+
+Human notes from Kees:
+
+I'm not sure how it got 1998, but I do see that snprintf() should
+probably be scnprintf(), otherwise "len" might be a lie (i.e. it'll hold
+what it WANTED to write, rather than what it actually wrote).
 
 -- 
 Coverity-bot

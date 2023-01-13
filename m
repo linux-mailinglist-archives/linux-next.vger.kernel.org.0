@@ -2,47 +2,48 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45999668946
-	for <lists+linux-next@lfdr.de>; Fri, 13 Jan 2023 02:53:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7315B668A0A
+	for <lists+linux-next@lfdr.de>; Fri, 13 Jan 2023 04:23:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240472AbjAMBx0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 12 Jan 2023 20:53:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44074 "EHLO
+        id S230170AbjAMDXb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 12 Jan 2023 22:23:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240329AbjAMBxZ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 12 Jan 2023 20:53:25 -0500
+        with ESMTP id S232555AbjAMDXP (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 12 Jan 2023 22:23:15 -0500
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B989C61446;
-        Thu, 12 Jan 2023 17:53:23 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4648A3AB12;
+        Thu, 12 Jan 2023 19:23:11 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NtPZn6tFBz4xFv;
-        Fri, 13 Jan 2023 12:53:21 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NtRZN10wRz4xG6;
+        Fri, 13 Jan 2023 14:23:08 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1673574802;
-        bh=S9U8oytHB3dSaeyje5uwZ/YSmowUo1Oik8gExE+pJVg=;
+        s=201702; t=1673580189;
+        bh=KI4s/ygW2LTMTkbMeEGJEf6R331iJ6vQzU9J+48ujNU=;
         h=Date:From:To:Cc:Subject:From;
-        b=oloNKr4x/+89rlAXowpA8x3aBQDGsP27sTZARZ0CY56OXu9n8JXkCpcnaZD9gMg18
-         xn97MDi6n9k9qAOvHZKFmbswuf1g9/MS4WaGtb0QMnrOH5v+xFEoqoYxRXNd2yoEU9
-         BIFQs26Bwdznr52FGrDeshipzzAvVZYpf2oGLAcICO2piUDHroDf2q+X6PvMmw73bO
-         GrYiXcqr9nkaLmcLANyhHQCdMrjxDW7A49DPs1WnctcpbH1Gq3acsNAZl1qsdNBqhe
-         t68AgCZhfobUBZW1bYdaD2v+fZPEYCUG0a/gErA10hpWJ9LT2K4fId5ugiTwrdDcuW
-         Vl1tOE5jfvntQ==
-Date:   Fri, 13 Jan 2023 12:53:21 +1100
+        b=KOtnrFrcvHk0CVlftw1tjj62SLF8AZvZ2S1cFXXIFsCcVuWiK8l+sgwc+W8bM5NWh
+         cqaXToHwyWb3NOD92OHs6+G1FAHUcVrU+0uov0dEuSeigJpoK/hl5Vft5gcUOBdiBd
+         XkDqlcrkhXE47O2N+GWTry0OJNWEi9EoHyB5tcz0cMV09W4a0kfhQx1WS3eDunllIT
+         DBdcIlzX1E2gBYzTYrtn/jNMA3ZHUPN9U4MVMI6t58gCpap7C+4dF/S6DfThMmO9u+
+         VmWFEmlGU8nJLyyNzI8OmJQkDDgUWutIbZpxa5+O7IQSNNc1CXVv0yIlu7m5nOHqpE
+         TLQxN9HyItMyQ==
+Date:   Fri, 13 Jan 2023 14:23:06 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Thomas Gleixner <tglx@linutronix.de>,
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>,
         "H. Peter Anvin" <hpa@zytor.com>,
         Peter Zijlstra <peterz@infradead.org>
-Cc:     Xin Li <xin3.li@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the tip tree
-Message-ID: <20230113125321.4c60d02f@canb.auug.org.au>
+Subject: linux-next: duplicate patches in the mm tree
+Message-ID: <20230113142306.27e2ee60@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Pfl4L1.H0m+xYyyaz6oVNfM";
+Content-Type: multipart/signed; boundary="Sig_/Wz3phH9AlH+0O_kvTMTlbHu";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
@@ -53,42 +54,40 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/Pfl4L1.H0m+xYyyaz6oVNfM
+--Sig_/Wz3phH9AlH+0O_kvTMTlbHu
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the tip tree, today's linux-next build (x86_64 allmodconfig)
-produced this warning:
+The following commits are also in other -next trees tree as different
+commits (but the same patches):
 
-WARNING: modpost: EXPORT symbol "asm_load_gs_index" [vmlinux] version gener=
-ation failed, symbol will not be versioned.
-Is "asm_load_gs_index" prototyped in <asm/asm-prototypes.h>?
+  280691a45437 ("mm/slab: add is_kmalloc_cache() helper function")
+(commit 61df28eb7788f in the slab tree)
 
-Introduced by commit
-
-  ae53fa187030 ("x86/gsseg: Move load_gs_index() to its own new header file=
-")
+  a8197833a9d3 ("kernel/irq/manage.c: disable_irq() might sleep.")
+(commit 17549b0f184d ("genirq: Add might_sleep() to disable_irq()")
+in the tip tree)
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/Pfl4L1.H0m+xYyyaz6oVNfM
+--Sig_/Wz3phH9AlH+0O_kvTMTlbHu
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPAuZEACgkQAVBC80lX
-0GyrAAf/brIIZNRyAKAierbKmEcI5zwCbtEP8h/+pt1wN4EapxN+fx4NBY508iwp
-so5yy6pOu23LrQNIK8xubI/mMXonXFo2rdByWWzw7it0FRERKx6ofintqu2ef4Bj
-dgjKnfS7pCYcCrQIoAeDm42lD2KfF6WruPa1huJZS3+xl1l18xx0GDl52MocDRME
-gj54yRRIj8ESwd4QODK8lykehmZSeB7++U6nlSNSPRiSJf8+VJHGMy8R0ukMlEed
-v+QvCHD+6DRp5hnGrNOaEITZwaNsTPFFK7/Itd+AQAw46KqANaEqX2GAOxVsjDSM
-x1Eh5HCSqWIXagz75pJhYH83OUaKYQ==
-=tzyc
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPAzpoACgkQAVBC80lX
+0GzdSQf+OoH5gcGscWigXbU9KYKIGro/YcZcogzYvPw2ht7v1zyP2eLN5PAnZ+cR
+5hPEDdktQkaOvxM7f3jEOhd3jo52UU1p/jk6cEDs1HegZYU81aEyTquQgZtxeESx
+enXJ1IPvPWNbfx9JEBufH/BLjTMVzrGL0U8EhTAhUuUAjkbp72/UulgzffTLutGK
+D4SXH/HCpnZcTFaXB3GaHON2PYbXMETpMl4ioucG9N5poCYcMspdvEkVmZ9X52YN
+iKskswn35yYbSX5jqN/XtpbnGjniDoDis1f6rh2yHLGubVdu0aqutyNwKgygk4eK
+3wHFbYsABz2zWPtW1hCd9615LdGqVw==
+=TpRP
 -----END PGP SIGNATURE-----
 
---Sig_/Pfl4L1.H0m+xYyyaz6oVNfM--
+--Sig_/Wz3phH9AlH+0O_kvTMTlbHu--

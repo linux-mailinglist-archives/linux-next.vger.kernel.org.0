@@ -2,67 +2,96 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFAFC669E34
-	for <lists+linux-next@lfdr.de>; Fri, 13 Jan 2023 17:34:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD31D669E3E
+	for <lists+linux-next@lfdr.de>; Fri, 13 Jan 2023 17:37:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230442AbjAMQeq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 13 Jan 2023 11:34:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50604 "EHLO
+        id S229637AbjAMQhB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 13 Jan 2023 11:37:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230471AbjAMQeY (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 13 Jan 2023 11:34:24 -0500
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 420E5820D0;
-        Fri, 13 Jan 2023 08:29:25 -0800 (PST)
-Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 28F6A734;
-        Fri, 13 Jan 2023 16:29:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 28F6A734
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1673627365; bh=ZNRhUjjlgNmkU/RD+ngluE/Vpdur4euGqpGflJgp1LU=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=mkQUmhrG6T86LUvMxIQCzjPPLxPfaj/0uM8JDbDuPyjkedlTJmWUGSnZNGrK1ABCf
-         LcJBp/+55Q73JpypoSQoGY0Dy6yjJDJxdV0ueZHxCvs8g+1RSfK9pqdRmlXPJGAXHO
-         uaaL8622LNRCD0lZuJ+PG4lu569oNqZud95CeN2vv12pZTvUTKj10RAjlr5kboNQh+
-         NMAFHbpky6wMQa31cqAyOYKd0C/yMQPNR0A0QyHEwS6egQCS4lgQigZON10NAWwzuQ
-         RU+kD6UF6QkV9jtwOiIYcNwAeSYSo9vL88tOdn+g7jPqzLhigNaHvkD9nNaC73id6T
-         wQjskfTzyvtUA==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        with ESMTP id S230203AbjAMQgd (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 13 Jan 2023 11:36:33 -0500
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25E4F848F5;
+        Fri, 13 Jan 2023 08:31:30 -0800 (PST)
+Received: by mail-pg1-x52d.google.com with SMTP id 78so15335793pgb.8;
+        Fri, 13 Jan 2023 08:31:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OgCWvW8jX2wErUKxI+z8+BgYAV94/Tfe5mI1Ig8QDC4=;
+        b=qZkE3mLWRTvty5Mxr1y4bHFKSlzRssHJnZyCDg9zv4d61DQ/E99yCB3YTwCXUXo4Iw
+         SDmYOS3sGHBjpsZW7WyXDFPFg9C3blE6Rp0Vnz15GAmY4kjeM/afYaabuKoE5kIYWP7A
+         EC79oB0ZVNqoky4xizSPnYAMWPAZU7N30QDFJI7AYSV302b7rq2whcNlIFZGC4YXXJM2
+         po/SbpKL0d1RyiSKDToGZgSUfacoDyMldFbCtdlA2uOnT/rHSHkbTzg7nrStxvqA3lrb
+         NYGVz0f+AFVEBxfl1higVGDK8XokeRfSvBA6H+vQKPqbMHLebdLPLB+fzmOWJxQQsnqW
+         kplA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OgCWvW8jX2wErUKxI+z8+BgYAV94/Tfe5mI1Ig8QDC4=;
+        b=UwPIhkKsVRYcj4WGDl4oh+MSYzLBugbnyD+jyppaW8Lh/1dueXvuQYtlj6EyxasQxW
+         PIDS5IGo68mvAA4yrH98KWJq42tFPMBI1Ml8di11QdfYogRPNQNHPX6m7AlXtO3BhyZ4
+         mU6DX5eWkQkdpfwSaF/V6YN1MnDromvcWory6oyzZdz9SKe3WM08jY01UAhW3qcdHFdH
+         7cpILbrQY/CsYAaSGVfangkok+qqn13JuV7AAP6M3A/hpid1b6NVq3lcqEKpEhvTE+1n
+         lu8X4bp0RlTTHBfojxHGcdIM9olGrczznKYl1azEsJkMZOhQfV49wFWOcGIUiSclwQO6
+         scjg==
+X-Gm-Message-State: AFqh2ko8zhgcUIhahu6D7xSxh2w//MDhTMMcP0Z/kbqqXYEEOyd3bvVv
+        B7dUyU0ZsAq1khghpVXPeFY=
+X-Google-Smtp-Source: AMrXdXv/TF3ixaHLICwM75AhYPxrA1TJHfw06SvJA5qxr6b/vPoZeiAJ0qe8UV1ZTksYL6UstOEesw==
+X-Received: by 2002:a62:6001:0:b0:582:33b4:4c57 with SMTP id u1-20020a626001000000b0058233b44c57mr10338463pfb.33.1673627489305;
+        Fri, 13 Jan 2023 08:31:29 -0800 (PST)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id p189-20020a625bc6000000b00580cc63dce8sm11780694pfb.77.2023.01.13.08.31.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Jan 2023 08:31:27 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Fri, 13 Jan 2023 06:31:25 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Valentin Schneider <vschneid@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patch in the jc_docs tree
-In-Reply-To: <20230113111102.22a27ae3@canb.auug.org.au>
-References: <20230113111102.22a27ae3@canb.auug.org.au>
-Date:   Fri, 13 Jan 2023 09:29:24 -0700
-Message-ID: <87y1q6qty3.fsf@meer.lwn.net>
+Subject: Re: linux-next: build warning after merge of the workqueues tree
+Message-ID: <Y8GHXUcXYJcHPkOY@slm.duckdns.org>
+References: <20230113143102.2e94d74f@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230113143102.2e94d74f@canb.auug.org.au>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Stephen Rothwell <sfr@canb.auug.org.au> writes:
-
+On Fri, Jan 13, 2023 at 02:31:02PM +1100, Stephen Rothwell wrote:
 > Hi all,
->
-> The following commit is also in the mm-hotfixes tree as a different commit
-> (but the same patch):
->
->   ded24dfdddd1 ("Docs/admin-guide/mm/zswap: remove zsmalloc's lack of writeback warning")
->
-> (commit 1beb8ae302a0 in the mm-hotfixes tree).
+> 
+> After merging the workqueues tree, today's linux-next build (x86_64
+> allnoconfig and several others) produced this warning:
+> 
+> kernel/workqueue.c:1993:13: warning: 'rebind_worker' defined but not used [-Wunused-function]
+>  1993 | static void rebind_worker(struct worker *worker, struct worker_pool *pool)
+>       |             ^~~~~~~~~~~~~
+> 
+> Introduced by commit
+> 
+>   793777bc193b ("workqueue: Factorize unbind/rebind_workers() logic")
 
-Offending patch removed.
+Valentin, this is caused by rebind_worker() being only used by
+rebind_workers() which is inside CONFIG_SMP. I don't see any other uses of
+rebind_worker(). Just fold it back into rebind_workers()?
 
-Thanks,
+Thanks.
 
-jon
+-- 
+tejun

@@ -2,94 +2,93 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45C1266893A
-	for <lists+linux-next@lfdr.de>; Fri, 13 Jan 2023 02:41:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45999668946
+	for <lists+linux-next@lfdr.de>; Fri, 13 Jan 2023 02:53:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232754AbjAMBlX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 12 Jan 2023 20:41:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41216 "EHLO
+        id S240472AbjAMBx0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 12 Jan 2023 20:53:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240396AbjAMBlV (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 12 Jan 2023 20:41:21 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D124140A4;
-        Thu, 12 Jan 2023 17:41:00 -0800 (PST)
+        with ESMTP id S240329AbjAMBxZ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 12 Jan 2023 20:53:25 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B989C61446;
+        Thu, 12 Jan 2023 17:53:23 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NtPJQ6RRdz4xFv;
-        Fri, 13 Jan 2023 12:40:54 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NtPZn6tFBz4xFv;
+        Fri, 13 Jan 2023 12:53:21 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1673574055;
-        bh=lpKOEgV4Mo4ERibfWKSY7/EL4Tqz0Zcmb5+2SJDrVKI=;
+        s=201702; t=1673574802;
+        bh=S9U8oytHB3dSaeyje5uwZ/YSmowUo1Oik8gExE+pJVg=;
         h=Date:From:To:Cc:Subject:From;
-        b=RDABPlVWxenJ0b98yJxov4bP4T3eVTF65YPOL9JHpA1AuuDx/8I5c9d1kKsaBjOsY
-         DXkJFAJwsVQ1+vb/YHaLELM8cZR7+rHswOVlN3J8RZfKs2lkpxptszlc8RzJGx0MOz
-         lZ5+2qxGj88X8O+/0VJy+PRQnfckNIyRsQ1ynFNHYALCyotCN16utytCvWyA7ssMPu
-         26YX8ciDNNspfC2vBS2Uj9MJqm9mHhtgbNapKSavNXA4l7+qHdabC1awafQusJklw6
-         rTtGlq+R4DckjB9eYNiYUg5rqBlVaeeedsAmvb077vMKE0mEfeb3Tb0pNIZV99tV+A
-         vkyTx41Rmut+w==
-Date:   Fri, 13 Jan 2023 12:40:53 +1100
+        b=oloNKr4x/+89rlAXowpA8x3aBQDGsP27sTZARZ0CY56OXu9n8JXkCpcnaZD9gMg18
+         xn97MDi6n9k9qAOvHZKFmbswuf1g9/MS4WaGtb0QMnrOH5v+xFEoqoYxRXNd2yoEU9
+         BIFQs26Bwdznr52FGrDeshipzzAvVZYpf2oGLAcICO2piUDHroDf2q+X6PvMmw73bO
+         GrYiXcqr9nkaLmcLANyhHQCdMrjxDW7A49DPs1WnctcpbH1Gq3acsNAZl1qsdNBqhe
+         t68AgCZhfobUBZW1bYdaD2v+fZPEYCUG0a/gErA10hpWJ9LT2K4fId5ugiTwrdDcuW
+         Vl1tOE5jfvntQ==
+Date:   Fri, 13 Jan 2023 12:53:21 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
 To:     Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>,
         "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Xin Li <xin3.li@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patch in the tip tree
-Message-ID: <20230113124053.5a75633d@canb.auug.org.au>
+Subject: linux-next: build warning after merge of the tip tree
+Message-ID: <20230113125321.4c60d02f@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/MdXEYz7qWe/_HaEBQrBHFji";
+Content-Type: multipart/signed; boundary="Sig_/Pfl4L1.H0m+xYyyaz6oVNfM";
  protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/MdXEYz7qWe/_HaEBQrBHFji
+--Sig_/Pfl4L1.H0m+xYyyaz6oVNfM
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-The following commit is also in the jc_docs tree as a different commit
-(but the same patch):
+After merging the tip tree, today's linux-next build (x86_64 allmodconfig)
+produced this warning:
 
-  379af13b31fa ("docs: locking: Discourage from calling disable_irq() in at=
-omic")
+WARNING: modpost: EXPORT symbol "asm_load_gs_index" [vmlinux] version gener=
+ation failed, symbol will not be versioned.
+Is "asm_load_gs_index" prototyped in <asm/asm-prototypes.h>?
 
-This is commit
+Introduced by commit
 
-  ac6fadf4aa60 ("docs: kernel-hacking: discourage from calling disable_irq(=
-) in atomic")
-
-in the jc_docs tree.
+  ae53fa187030 ("x86/gsseg: Move load_gs_index() to its own new header file=
+")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/MdXEYz7qWe/_HaEBQrBHFji
+--Sig_/Pfl4L1.H0m+xYyyaz6oVNfM
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPAtqUACgkQAVBC80lX
-0GyAGAf8DJmgzgFfl3z3AePPwO9CFj3PLOQpDQFXcY+7zcihe/rhhRgCUX9j6sbz
-YDukR7p78RWOvhTECnJbdlk6vVbE7W9IUt1BIf51PfZvd/PUXXv4eSk2oUb1Sztk
-VKAZZ5TfunmEJphsBaHYmAOhuBX7cALvf8XBb4hLe5MWei0ti4EWmQZm2El801SQ
-JL/ULnB8xn/YHx00MV5ybU7MX8PjIu5ucptaIsyntIOT8KXX+WGpcrUuPB9pac4u
-kUF16DBjgTgIT7sBp9nr2z2LNWdSdrrzGesgUgBCLYXv+3oK70fQ38IbsxhenBF2
-Chezwjn+kN1jUMg+K75Bn+Pq1pKi9g==
-=k7RE
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPAuZEACgkQAVBC80lX
+0GyrAAf/brIIZNRyAKAierbKmEcI5zwCbtEP8h/+pt1wN4EapxN+fx4NBY508iwp
+so5yy6pOu23LrQNIK8xubI/mMXonXFo2rdByWWzw7it0FRERKx6ofintqu2ef4Bj
+dgjKnfS7pCYcCrQIoAeDm42lD2KfF6WruPa1huJZS3+xl1l18xx0GDl52MocDRME
+gj54yRRIj8ESwd4QODK8lykehmZSeB7++U6nlSNSPRiSJf8+VJHGMy8R0ukMlEed
+v+QvCHD+6DRp5hnGrNOaEITZwaNsTPFFK7/Itd+AQAw46KqANaEqX2GAOxVsjDSM
+x1Eh5HCSqWIXagz75pJhYH83OUaKYQ==
+=tzyc
 -----END PGP SIGNATURE-----
 
---Sig_/MdXEYz7qWe/_HaEBQrBHFji--
+--Sig_/Pfl4L1.H0m+xYyyaz6oVNfM--

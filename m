@@ -2,64 +2,65 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 607CF66A73E
-	for <lists+linux-next@lfdr.de>; Sat, 14 Jan 2023 00:55:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73A0E66AAE1
+	for <lists+linux-next@lfdr.de>; Sat, 14 Jan 2023 11:14:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229824AbjAMXzm (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 13 Jan 2023 18:55:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47474 "EHLO
+        id S230021AbjANKOi (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sat, 14 Jan 2023 05:14:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230305AbjAMXzk (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 13 Jan 2023 18:55:40 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BDF47F9C5
-        for <linux-next@vger.kernel.org>; Fri, 13 Jan 2023 15:55:39 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id k12so2896758plk.0
-        for <linux-next@vger.kernel.org>; Fri, 13 Jan 2023 15:55:39 -0800 (PST)
+        with ESMTP id S229992AbjANKOh (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sat, 14 Jan 2023 05:14:37 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36A8676BD
+        for <linux-next@vger.kernel.org>; Sat, 14 Jan 2023 02:14:36 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id k18so1780470pll.5
+        for <linux-next@vger.kernel.org>; Sat, 14 Jan 2023 02:14:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=LF3WsXigIPtoM91xDdGg1MKwYTSeuEO0M3pVuLY/JbQ=;
-        b=UooW/gPdlyiA1OGaapbkni44sryCSNVmMvtT9Ul9RLHWTvKLioT8nJxXKUFZqlBUC2
-         fVRlwYCZe2oHJ/vbuFEOs/HGaZgm2cDjSh/ntaE0nzKPdbPqZTP/JRCDDWEyuLIALOYC
-         KECbXHdpPj+Ai1NKz/0SixoNMulCOF6hUTPX8=
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=z7++H4V6hNi27Aju7rRR2cyddaE4xHSSiZpHf+T0Adk=;
+        b=mV7xtcEZZKXbUW9dgq8/GV7se/rEBkykyqaKRNHFY4Fmq7YnxLKKgkT3XlWlkOkSEi
+         DdPH/RI2Co1aDZiw/v8Q1E7d0wNYORp4D4T3ZgOBbbh6EmIeh2M2H5W3hD0VbFY0KXMj
+         NS+QI/p/J33e46oq+trhdZYGCLOtLmR+elU50=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LF3WsXigIPtoM91xDdGg1MKwYTSeuEO0M3pVuLY/JbQ=;
-        b=S7OIbZYtuWoNZuUlNd/fnO3LCexqdpASb8v0VZJjgM7HOQl9lu7LLlxiDp53aVrjZY
-         trBx0XidepS6zvlVBRwiE7izkmCTZGooMnWW0g+FE+XvWvgItCWnU+PvPifPlCHhsPmj
-         vwMAWg6QoOb8SLhmkijqgsWHTHVMATGVb0HwFamxoXk6EZCFsOMm8q+hXb5XEtEc6By9
-         LIqjc/EVSYSZkgolkyXam394t7fMEjdO0dV4MmSl1SWJPUf5jV4+rqla/cdEqK8h/7l+
-         QSkveGpvfbYk6xp5MxevCIJIqXfT8TeDIbnfqSwpUkUdXIIUpNPtrMRfDS5n/YZrpABr
-         /n5Q==
-X-Gm-Message-State: AFqh2kqFvuNkC0GkxxA+QvhR9ddDTaw1Z7qYxje1A06C7W5o0QiaaZPB
-        y1d0zFnOyqQrWHUCXgtdKnts+A==
-X-Google-Smtp-Source: AMrXdXsOAdCKdSgYkiZ/E0ZO8oA/rxRKPzE25xlurZuhM3GKj0+vty25gaw2s5FBdvVB2khEsKzUew==
-X-Received: by 2002:a17:902:d50e:b0:194:3e44:26a5 with SMTP id b14-20020a170902d50e00b001943e4426a5mr22623176plg.66.1673654138780;
-        Fri, 13 Jan 2023 15:55:38 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id r3-20020a632b03000000b00478e14e6e76sm12379469pgr.32.2023.01.13.15.55.38
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=z7++H4V6hNi27Aju7rRR2cyddaE4xHSSiZpHf+T0Adk=;
+        b=xiQaAUeIv5TYEr2oF2SnXJWwQbjuSNdFjhqXkchDzqIOnqlgKLwV0+tqnDM563A3uT
+         xXlRVOr7+6Oc3144BzsgaOxg67fll7ErZMYpcCmlxu2Fe/kfKU4XASAIy3hQnBpxPn0n
+         9289kBu2tgsByUJ3ObXh7DrYr7bpdoRAhRqXixZaNdRk9tsVH8ScwxCFY9Zqd9InJFhJ
+         N/6Asbb2D78Ni5K9LSEb6AczyW+qeCj0h1Ty0+x45a4AEbpKjNTCUj3bLozlKXcBDnas
+         cNCnCAt15235Ug4nVUgwUSNXykNNm2HeY4fB8rcF9YdBS6sLRAiQ8FtiCg4XGDjhfOnt
+         0WhA==
+X-Gm-Message-State: AFqh2koddeMXzs2E4ZrRZ1sLFyXDV0EBuxrM5R5CPlZgs1i79XecAg9Y
+        xIqogGAvyUvu1wavnGNb+SLd4g==
+X-Google-Smtp-Source: AMrXdXtXwPkUnAblauTv78rZKUdr5wdyNH1Crp8gEXe/df4QYLpoj9xzenEXGfjU4C4oV+m6JdfFnQ==
+X-Received: by 2002:a17:902:a5c1:b0:191:1729:d7e7 with SMTP id t1-20020a170902a5c100b001911729d7e7mr87541846plq.67.1673691275745;
+        Sat, 14 Jan 2023 02:14:35 -0800 (PST)
+Received: from google.com (KD124209188001.ppp-bb.dion.ne.jp. [124.209.188.1])
+        by smtp.gmail.com with ESMTPSA id n13-20020a170903110d00b001925ec4664esm15604019plh.172.2023.01.14.02.14.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Jan 2023 15:55:38 -0800 (PST)
-From:   coverity-bot <keescook@chromium.org>
-X-Google-Original-From: coverity-bot <keescook+coverity-bot@chromium.org>
-Date:   Fri, 13 Jan 2023 15:46:49 -0800
-To:     Liam Howlett <liam.howlett@oracle.com>
-Cc:     "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Holger Hoffsttte <holger@applied-asynchrony.com>,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        stable@vger.kernel.org, linux-mm@kvack.org, amanieu@gmail.com,
+        Sat, 14 Jan 2023 02:14:35 -0800 (PST)
+Date:   Sat, 14 Jan 2023 19:14:29 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     coverity-bot <keescook@chromium.org>
+Cc:     John Ogness <john.ogness@linutronix.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Petr Mladek <pmladek@suse.com>, linux-kernel@vger.kernel.org,
         "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
         linux-next@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Coverity: check_empty_area_window(): Error handling issues
-Message-ID: <202301131546.73FBCC7B6@keescook>
+Subject: Re: Coverity: console_prepend_dropped(): Memory - corruptions
+Message-ID: <Y8KAhaiZQOWTcfyF@google.com>
+References: <202301131544.D9E804CCD@keescook>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <202301131544.D9E804CCD@keescook>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -70,47 +71,29 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hello!
+On (23/01/13 15:46), coverity-bot wrote:
+> *** CID 1530570:  Memory - corruptions  (OVERRUN)
+> kernel/printk/printk.c:2738 in console_prepend_dropped()
+> 2732     		/* Truncate the message, but keep it terminated. */
+> 2733     		pmsg->outbuf_len = outbuf_sz - (len + 1);
+> 2734     		outbuf[pmsg->outbuf_len] = 0;
+> 2735     	}
+> 2736
+> 2737     	memmove(outbuf + len, outbuf, pmsg->outbuf_len + 1);
+> vvv     CID 1530570:  Memory - corruptions  (OVERRUN)
+> vvv     Overrunning buffer pointed to by "scratchbuf" of 1024 bytes by passing it to a function which accesses it at byte offset 1998 using argument "len" (which evaluates to 1999). [Note: The source code implementation of the function has been overridden by a builtin model.]
+> 2738     	memcpy(outbuf, scratchbuf, len);
+> 2739     	pmsg->outbuf_len += len;
+> 2740     }
+> 2741     #else
+> 2742     #define console_prepend_dropped(pmsg, dropped)
+> 2743     #endif /* CONFIG_PRINTK */
+[..]
+> Human notes from Kees:
+> 
+> I'm not sure how it got 1998, but I do see that snprintf() should
+> probably be scnprintf(), otherwise "len" might be a lie (i.e. it'll hold
+> what it WANTED to write, rather than what it actually wrote).
 
-This is an experimental semi-automated report about issues detected by
-Coverity from a scan of next-20230113 as part of the linux-next scan project:
-https://scan.coverity.com/projects/linux-next-weekly-scan
-
-You're getting this email because you were associated with the identified
-lines of code (noted below) that were touched by commits:
-
-  Wed Jan 11 16:15:43 2023 -0800
-    ebc4c1bcc2a5 ("maple_tree: fix mas_empty_area_rev() lower bound validation")
-
-Coverity reported the following:
-
-*** CID 1530569:  Error handling issues  (CHECKED_RETURN)
-lib/test_maple_tree.c:2598 in check_empty_area_window()
-2592     	MT_BUG_ON(mt, mas_empty_area(&mas, 5, 100, 6) != -EBUSY);
-2593
-2594     	mas_reset(&mas);
-2595     	MT_BUG_ON(mt, mas_empty_area(&mas, 0, 8, 10) != -EBUSY);
-2596
-2597     	mas_reset(&mas);
-vvv     CID 1530569:  Error handling issues  (CHECKED_RETURN)
-vvv     Calling "mas_empty_area" without checking return value (as is done elsewhere 8 out of 10 times).
-2598     	mas_empty_area(&mas, 100, 165, 3);
-2599
-2600     	mas_reset(&mas);
-2601     	MT_BUG_ON(mt, mas_empty_area(&mas, 100, 163, 6) != -EBUSY);
-2602     	rcu_read_unlock();
-2603     }
-
-If this is a false positive, please let us know so we can mark it as
-such, or teach the Coverity rules to be smarter. If not, please make
-sure fixes get into linux-next. :) For patches fixing this, please
-include these lines (but double-check the "Fixes" first):
-
-Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
-Addresses-Coverity-ID: 1530569 ("Error handling issues")
-Fixes: ebc4c1bcc2a5 ("maple_tree: fix mas_empty_area_rev() lower bound validation")
-
-Thanks for your attention!
-
--- 
-Coverity-bot
+Cannot imagine how "** %lu printk messages dropped **\n" can expand into
+1998 bytes. Does coverity have a "verbose" mode?

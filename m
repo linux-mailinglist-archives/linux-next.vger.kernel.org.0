@@ -2,111 +2,102 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B7CA66BA1C
-	for <lists+linux-next@lfdr.de>; Mon, 16 Jan 2023 10:19:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ACAD66BA82
+	for <lists+linux-next@lfdr.de>; Mon, 16 Jan 2023 10:36:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232193AbjAPJTC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 16 Jan 2023 04:19:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45622 "EHLO
+        id S232115AbjAPJgR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 16 Jan 2023 04:36:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232156AbjAPJRy (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 16 Jan 2023 04:17:54 -0500
-Received: from formenos.hmeau.com (helcar.hmeau.com [216.24.177.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 136DDF76B;
-        Mon, 16 Jan 2023 01:17:25 -0800 (PST)
-Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
-        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1pHLcF-000RAu-NC; Mon, 16 Jan 2023 17:17:20 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Mon, 16 Jan 2023 17:17:19 +0800
-Date:   Mon, 16 Jan 2023 17:17:19 +0800
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Crypto List <linux-crypto@vger.kernel.org>,
-        Danny Tsen <dtsen@linux.ibm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: [PATCH] crypto: p10-aes-gcm - Use _GLOBAL instead of .global
-Message-ID: <Y8UWHwTkKIkQn1t0@gondor.apana.org.au>
-References: <20230116112939.0820ff24@canb.auug.org.au>
+        with ESMTP id S232268AbjAPJgP (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 16 Jan 2023 04:36:15 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59EF216AF7;
+        Mon, 16 Jan 2023 01:36:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1673861767; bh=wnOHpBayjdNSjw+eUV3MCoIeItj+WtT29KKObbgNH18=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=NSfx8Dl/wEgIyRrR0lcjIoZ2+gQioo4GdYXZkaOt2SZ3INu5zv6Y/9o8PVdWYeZqR
+         QNGn2DEv3OmXbsz/w3tvJWMHONjbZHsP3G8pjogqQPAqlgq+LZCqqIyhJAN9vQxYi/
+         TTf1oXWyOJJg5Jtw4O/rysQc1v+GF13XVONMtp3Nua6R3avP0Qg5toxTZAmfmdXaX3
+         waz1MU7k/3oAEm4Y4i8lS0UfTcafirk3DTeS2iuo2/WnWwb79WkUFzb/ZBwtOosEZj
+         xMtgyLwB0YXxPfnekHlZ3Z9Kf8dhuyG2VjP2OCin+PHLchWkLTvLasF8ABFw4kX0g2
+         QEt3dzz2Bvlbw==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.151.61] ([109.43.179.224]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1N8XPn-1odhjS1vbV-014QUC; Mon, 16
+ Jan 2023 10:36:07 +0100
+Message-ID: <7c2d45e5-8f16-83b2-93ce-87b456c53b52@gmx.de>
+Date:   Mon, 16 Jan 2023 10:36:05 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230116112939.0820ff24@canb.auug.org.au>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: linux-next: manual merge of the fbdev tree with the drm-misc tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc:     Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Kees Cook <keescook@chromium.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+References: <20230116115440.3f1909cd@canb.auug.org.au>
+Content-Language: en-US
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <20230116115440.3f1909cd@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:xA0svzfJeflX86rbfoatcczhHIIJk14fm6BDqRMBweC4tHBj+xI
+ rguCwLMLkg/Dti7PO2lt61M72WAmQkS1veipCs2sT2tXF50/j71RCda0GLxqM4RqNmq4rwt
+ onxH1WflPzvJkQm/GcvynAN21l0DPhdIo3ssqh+IzHHFPXoNyx3w3I2MjIJT/qeguil2NEz
+ hb1ToK3uFt5czFm5P26rw==
+UI-OutboundReport: notjunk:1;M01:P0:k89X/3EyuLs=;g1bkkxWspCpYG57AuM4VeRimN4z
+ ezB7wSI6jDg08BcB6gbCb7IFTL/5VQXLsoEc52FXl1CUtYylgCgQG6h0/fsgDaU+Mk7x6hvAM
+ h+hoKyfY5r9xDqV0vHXyrH5hvZppQ0e1W/1R11DNZivpMIutj+C1SRh/8Ck22cDutidkA4f4v
+ BU4QZIFVtgwBQ6OfEyernNiIJk1DZ3tbRpnHy7b9n9lZXB+L9CICCX9NWCOGraTxe5rl1Mnzu
+ LThv7ToYMMG1Pdft3L1FbsidYy12beDqw6tsZ/OYz1q+IZY2A9rhBIT8EJlCsgno1hKto/ICy
+ 63TAZfGVlcRbQ3dcZfKJfeU0vxY6dMXc5M8tMRGMCjB5sjtz/lkfJUSColVdLB8mG+mTouieH
+ 6NQpK2/OEmPJRYDJHihgtreIs/U6YUyyjyw3PahEJbAFhqAGWl8BZqF5EhqTMUn/7aac/7yMB
+ zgykOQegOPMj8zmB4Bkmz0hqMxjUkRN+IsVIR3Ug4HafcJILz0QAPcd5zJwn7SGAwMYTUgMBz
+ RG2W7pcLSak1Qx0NeoY9n4vmxc304QoQYzfn2PIK4QNRSa98lwzdIpJ3OOt8NUGtSqy5PBMIj
+ +PHeMimDGxhjtTeBkxWOX/9/TXbhuWJmn8SrxOP9IkdMDgTv05Ie02knvAvsCDjedtOwts6/C
+ LToJ99CyQqrBquHVmCrtoARUSopVrvNjgGuTbCzNIuXpLZFLDniRmSOXzaMpmBv0T3A46Ybkm
+ tHJBzjo9kuZW5HvAh88dct0WI22xmvo8yBp2Uf/yWuB9TbJ7Q3/yhwO87Ry3sjc+sNB9IPdcj
+ ICnUeNi9avC718Vb2cFp/1DCSiEn2eYLi/ACaBvJoRZneYM8/zUKKDGzzuTAt2k3wAwifQbtQ
+ WWDCuQ3S7Rnm/4y6lpQzevW1lrjM5O3iHtGstwg6vQwQvW1q9MBMpWSd3r6gbthn0+uQClPaf
+ bZBnczip6/lgZQog2ZUJZdFL7mA=
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Jan 16, 2023 at 11:29:39AM +1100, Stephen Rothwell wrote:
+On 1/16/23 01:54, Stephen Rothwell wrote:
 > Hi all,
-> 
-> After merging the crypto tree, today's linux-next build (powerpc
-> ppc64_defconfig) failed like this:
-> 
-> ERROR: modpost: ".aes_p10_gcm_decrypt" [arch/powerpc/crypto/p10-aes-gcm-crypto.ko] undefined!
-> ERROR: modpost: ".aes_p10_gcm_encrypt" [arch/powerpc/crypto/p10-aes-gcm-crypto.ko] undefined!
-> 
-> Caused by commits
-> 
->   cc40379b6e19 ("crypto: p10-aes-gcm - Glue code for AES/GCM stitched implementation")
->   ca68a96c37eb ("crypto: p10-aes-gcm - An accelerated AES/GCM stitched implementation")
+>
+> Today's linux-next merge of the fbdev tree got a conflict in:
+>
+>    include/linux/fb.h
+>
+> between commit:
+>
+>    5b6373de4351 ("drm/fbdev: Remove aperture handling and FBINFO_MISC_FI=
+RMWARE")
+>
+> from the drm-misc tree and commit:
+>
+>    72ac3535c2c5 ("fbdev: fb.h: Replace 0-length array with flexible arra=
+y")
+>
+> from the fbdev tree.
 
-Does this patch help?
+I've dropped the offending patch from the fbdev git tree, so it should
+be resolved now.
 
-> I have used the crypto tree from next-20230113 for today.
-> 
-> BTW, that series seems to have been committed in the wrong order -
-> there are refrerences to files/functions before they are created.
+Thanks!
+Helge
 
-Sorry, this patch series was submitted in this order and I
-didn't pick it up when applying it.
-
----8<---
-_GLOBAL is needed instead of .global on Linux in assembly code.
-
-Fixes: cc40379b6e19 ("crypto: p10-aes-gcm - Glue code for AES/GCM stitched implementation")
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
-
-diff --git a/arch/powerpc/crypto/p10_aes_gcm.S b/arch/powerpc/crypto/p10_aes_gcm.S
-index 2306ad7c5e36..c25a1837efca 100644
---- a/arch/powerpc/crypto/p10_aes_gcm.S
-+++ b/arch/powerpc/crypto/p10_aes_gcm.S
-@@ -38,6 +38,8 @@
-  # ===================================================================================
-  #
- 
-+#include <asm/ppc_asm.h>
-+
- .machine        "any"
- .abiversion     1
- .text
-@@ -569,9 +571,8 @@ ppc_aes_gcm_ghash:
-  #    rounds is at offset 240 in rk
-  #    Xi is at 0 in gcm_table (Xip).
-  #
--.global aes_p10_gcm_encrypt
- .align 5
--aes_p10_gcm_encrypt:
-+_GLOBAL(aes_p10_gcm_encrypt)
- 
- 	SAVE_REGS
- 
-@@ -1109,9 +1110,8 @@ aes_gcm_out:
-  #
-  # 8x Decrypt
-  #
--.global aes_p10_gcm_decrypt
- .align 5
--aes_p10_gcm_decrypt:
-+_GLOBAL(aes_p10_gcm_decrypt)
- 
- 	SAVE_REGS
- 
-Thanks,
--- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt

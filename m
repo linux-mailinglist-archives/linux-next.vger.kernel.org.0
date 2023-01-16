@@ -2,90 +2,89 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A534C66B660
-	for <lists+linux-next@lfdr.de>; Mon, 16 Jan 2023 04:46:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4552F66B627
+	for <lists+linux-next@lfdr.de>; Mon, 16 Jan 2023 04:32:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231944AbjAPDqB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 15 Jan 2023 22:46:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42846 "EHLO
+        id S231523AbjAPDcJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 15 Jan 2023 22:32:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231685AbjAPDpR (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 15 Jan 2023 22:45:17 -0500
-X-Greylist: delayed 643 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 15 Jan 2023 19:43:53 PST
-Received: from air.basealt.ru (air.basealt.ru [194.107.17.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBA35A257;
-        Sun, 15 Jan 2023 19:43:53 -0800 (PST)
-Received: by air.basealt.ru (Postfix, from userid 490)
-        id 7442A2F20227; Mon, 16 Jan 2023 03:23:56 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
-Received: from localhost (broadband-188-32-10-232.ip.moscow.rt.ru [188.32.10.232])
-        by air.basealt.ru (Postfix) with ESMTPSA id 4228C2F20226;
-        Mon, 16 Jan 2023 03:23:55 +0000 (UTC)
-Date:   Mon, 16 Jan 2023 06:23:55 +0300
-From:   "Alexey V. Vissarionov" <gremlin@altlinux.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        "Alexey V. Vissarionov" <gremlin@altlinux.org>,
+        with ESMTP id S231713AbjAPDcJ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 15 Jan 2023 22:32:09 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85ECF5245;
+        Sun, 15 Jan 2023 19:32:07 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NwHdK2nHgz4wgv;
+        Mon, 16 Jan 2023 14:32:04 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1673839925;
+        bh=MYzrcPtOc5I2lrsnKNs2i9UU6uSObM46NS6qIaN7NpI=;
+        h=Date:From:To:Cc:Subject:From;
+        b=VNU0b+trYcrro8vRg8vZDg/RmFKdBQLNtgpFUt0ZMXoAkHx4ALjJXT/6F1UvLWdXi
+         zsBdrRRd3iUQtJRmwqfBO8IxuyXqwM48tb6/OQX5MhnsmdLFjb6//S/URzUY7OXfh9
+         kQvDDXrcDGQqu4KsaA4clTx/xud0xHGlwLjrL4Mhusco0Ar5RkNqmBV5CLKuUtMRqJ
+         PTjOaqWYaDAgLSMUs9zcUtoqi4JE2kte3XpD4LrnbtkEqQtrw/zv9xjs16s6aMCMSc
+         IsBjHaiuvaAqZSCJeChc8Dbu9kDU+adUROZJ7Xr0OpEvMC3PIvrE5pAdv6hoI0cWWm
+         hyX7yjWGODUNQ==
+Date:   Mon, 16 Jan 2023 14:32:03 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Boris Brezillon <boris.brezillon@collabora.com>
+Cc:     JaimeLiao <jaimeliao.tw@gmail.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Fixes tag needs some work in the pci tree
-Message-ID: <20230116032354.GA8107@altlinux.org>
-References: <20230116081425.43ff9e39@canb.auug.org.au>
+Subject: linux-next: build warning after merge of the nand tree
+Message-ID: <20230116143203.3f91f181@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ZGiS0Q5IWpPtfppv"
-Content-Disposition: inline
-In-Reply-To: <20230116081425.43ff9e39@canb.auug.org.au>
+Content-Type: multipart/signed; boundary="Sig_/xEUa0vyaTTB++MlFIL6fw4Q";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-
---ZGiS0Q5IWpPtfppv
-Content-Type: text/plain; charset=koi8-r
-Content-Disposition: inline
+--Sig_/xEUa0vyaTTB++MlFIL6fw4Q
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-On 2023-01-16 08:14:25 +1100, Stephen Rothwell wrote:
- > In commit
- > 58d4c63d0a27 ("PCI/IOV: Enlarge virtfn sysfs name buffer")
- > Fixes tag
- > Fixes: dd7cc44d0 ("PCI: add SR-IOV API for Physical Function driver")
- > has these problem(s):
- > - SHA1 should be at least 12 digits long
+Hi all,
 
-Full SHA1 is dd7cc44d0bcec5e9c42fe52e88dc254ae62eac8d
-First 12 digits would obviously be dd7cc44d0bce
+After merging the nand tree, today's linux-next build (htmldocs) produced
+this warning:
 
+include/linux/mtd/rawnand.h:1325: warning: Function parameter or member 'co=
+nt_read' not described in 'nand_chip'
+
+Introduced by commit
+
+  003fe4b9545b ("mtd: rawnand: Support for sequential cache reads")
 
 --=20
-Alexey V. Vissarionov
-gremlin =F0=F2=E9 altlinux =F4=FE=EB org; +vii-cmiii-ccxxix-lxxix-xlii
-GPG: 0D92F19E1C0DC36E27F61A29CD17E2B43D879005 @ hkp://keys.gnupg.net
+Cheers,
+Stephen Rothwell
 
---ZGiS0Q5IWpPtfppv
-Content-Type: application/pgp-signature; name="signature.asc"
+--Sig_/xEUa0vyaTTB++MlFIL6fw4Q
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIcBAEBCgAGBQJjxMNKAAoJEFv2F9znRj5Kn88P/jelyECGQOvg8aUTlUA5BOZv
-1FsMQwIETjuSf444zZ5zEv3eX0VozqDFSJIis2+RMcL1Kx6HV6v6gia1+RX5nhzG
-sF9BE2qX0yxuBgpDFZ0h3wzfWDEFZiPvtUWwrwr8C76h8NccC9MY/gkXCN/KrFJ+
-XlQ8FnYxXDLgS8Ii6cPBXxUq3fZteAUxsR8m/sYMm78/NY1O9DBqLJOwRHS2iFIF
-RY2bk3kLKsJpjpNiUmT4OG4n7wLRcHzzGSj2785NtJwTJnzydI8kYVfcMoM9EeJL
-9+TJONb1X7JHu0gctRpYnS4vFUtZGJl8/zv9sWee3WoEiFCiph+wG/J2o4VqGDDX
-dnH9fbb/llSf+sOeCZ2k88bZZUiCvMbzRvJeYkrrAPDtF87BmS4Xo1hQUJSlT0nX
-CRuivqXHTqmWHEpW+2OfvPqjeczHBYNAm+vjP52+/8BEuoqmnDgL3Wd4mn4reKxe
-lhqIxa/NNFqAMIJcBw6DzmBj4zegNBeBVMIF0pxtO4CTYk/afhUbBOH/jxCEuWCy
-XbRwww9JIs8VZOOa0K+nU1Rj8NzE0AKiw0nwecvoeXpAIYwUoP0SA/X64+WhPBXg
-PmB0CMmUGJ7iWOagQrTNBp+iO4x7nO7l8KhfxZ5jMs4MN9K09La20toErc2xHceI
-ZTbWit7ZyUb2h0iAet0G
-=bYks
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPExTMACgkQAVBC80lX
+0GwMewf+LLuOeht3jPg+vLo+lEmCYcGrZZ6bAdDHMiBCFjIuAuWXc/HX18lQLH7o
+L2cQs8zTJzQf3O+WSxgeOr/nj2ESSiNObJswqzpS4XDmHrY6QDi4WUO+fIRTQHE2
+cq2Ebr1MmsnQuGoKTzh4dg5tUYE6zzIeJ5GwcK2ra6KnGD7GO2fdlVUupVLmWkTJ
+pnNx/wPwgqhIYFZ42+K3p+wJPMXK+P16VYtaXKb9/Y27golChnTmejgn0p6cbJLc
+5jyXCtUtg9enuO3MnSlC+rN/rAUa7+9anL9+6neLwzd0+S7oDtTISWvyeY/YAojF
+/3/ZnzJZHuRcHNxSK3yM4gYqJ39j5w==
+=WV5y
 -----END PGP SIGNATURE-----
 
---ZGiS0Q5IWpPtfppv--
+--Sig_/xEUa0vyaTTB++MlFIL6fw4Q--

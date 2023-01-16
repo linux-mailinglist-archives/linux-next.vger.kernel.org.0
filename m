@@ -2,47 +2,44 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66B7166B54A
-	for <lists+linux-next@lfdr.de>; Mon, 16 Jan 2023 02:38:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37D9066B594
+	for <lists+linux-next@lfdr.de>; Mon, 16 Jan 2023 03:24:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231451AbjAPBi0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 15 Jan 2023 20:38:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60120 "EHLO
+        id S231773AbjAPCYW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 15 Jan 2023 21:24:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231607AbjAPBiY (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 15 Jan 2023 20:38:24 -0500
+        with ESMTP id S231788AbjAPCYU (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 15 Jan 2023 21:24:20 -0500
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB9F66EAF;
-        Sun, 15 Jan 2023 17:38:23 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE99F6A74;
+        Sun, 15 Jan 2023 18:24:18 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NwF663Hkfz4wgq;
-        Mon, 16 Jan 2023 12:38:22 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NwG745gyjz4xN6;
+        Mon, 16 Jan 2023 13:24:16 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1673833102;
-        bh=bchoLYLmRdaqaBe/F5Ff2MdvahnWoO14ZXlyvluYbtI=;
+        s=201702; t=1673835856;
+        bh=L6mPNJJiyd9RSshC893NuQ9D87jjJHrPyneYqEQYjLo=;
         h=Date:From:To:Cc:Subject:From;
-        b=unmDEYbkU/Tri2Of14PZdDGql0jPMDGqv6VoQcYTM3Tukt1/QZ3mVnRQa8xicPzcV
-         mbrnm8Wbrvlehzml/XM3QZ8hsaQvCFQOm3zYghcCatILfCglEU8bApRT0n8ThnHEZp
-         aIhk8WmMMj2RkTb8QtBnV194Xefcic+tqiASUyAImOZ+nBvaRZwNuMPW26oJl5YbuG
-         5kfk7MU3lw0vEXjC9BXLqXFw35z6tgP3NIyOoHr1nQppX1haW2QObdDh5TBrt26faD
-         dJcpwdb8La/GIr0MFhm2/ERN4pGhlr6A2qt1MnuH7O6LvrHqHe+sYZWp1uddi4yDWl
-         5rD6JdTQ5mUAg==
-Date:   Mon, 16 Jan 2023 12:38:21 +1100
+        b=Q0ObWaXJISPExYXhTO48bOScDW1iRvBLQ/EHxpkCOI9QIEdXuZbNif+BvTSOqqeZZ
+         rApLDMlVeZEy9V14o0wqZFZh3fz5RP78M6tCNejjaJkZqgnuxRIXM5UxWWdQ6kZZon
+         pCKcqjATJLeMdNvFtk4het/GJ9hrFusOLOUxvwriKT1abeg8gEXvYCYaY0OQEs9IBy
+         PNc8nHWNzfgcu6bfPnWTFNWyTdFio+bUT3eCHirs1Z1hsn3zBlDtfOJIy+HvZ31CpC
+         fFblxIHxKy9EGXZ90Lt2vx6cXGAHnLYBsgDAzwSLy/bxPfPkS5v5AlSgku1jZh1IcV
+         QD5jwxioZZWTw==
+Date:   Mon, 16 Jan 2023 13:24:15 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     Mike Christie <michael.christie@oracle.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patch in the rcu tree
-Message-ID: <20230116123821.41d336ea@canb.auug.org.au>
+Subject: linux-next: build failure after merge of the scsi-mkp tree
+Message-ID: <20230116132415.793bb720@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/+AjM21RVvHKRxUXsHR++tmn";
+Content-Type: multipart/signed; boundary="Sig_/v=Zc0u4igO0yeAmdQEFQe9n";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
@@ -53,42 +50,56 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/+AjM21RVvHKRxUXsHR++tmn
+--Sig_/v=Zc0u4igO0yeAmdQEFQe9n
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-The following commit is also in the tip tree as a different commit
-(but the same patch):
+After merging the scsi-mkp tree, today's linux-next build (powerpc
+ppc64_defconfig) failed like this:
 
-  836dc5db1d87 ("context_tracking: Use arch_atomic_*() in __ct_user_enter a=
-nd __ct_user_exit")
+drivers/scsi/cxlflash/superpipe.c: In function 'read_cap16':
+drivers/scsi/cxlflash/superpipe.c:364:65: error: incompatible type for argu=
+ment 8 of 'scsi_execute_cmd'
+  364 |                                   CMD_BUFSIZE, to, CMD_RETRIES, exe=
+c_args);
+      |                                                                 ^~~=
+~~~~~~
+      |                                                                 |
+      |                                                                 str=
+uct scsi_exec_args
+In file included from include/scsi/scsi_cmnd.h:12,
+                 from drivers/scsi/cxlflash/superpipe.c:20:
+include/scsi/scsi_device.h:471:51: note: expected 'const struct scsi_exec_a=
+rgs *' but argument is of type 'struct scsi_exec_args'
+  471 |                      const struct scsi_exec_args *args);
+      |                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~
 
-It is commit
+Caused by commit
 
-  0e26e1de0032 ("context_tracking: Fix noinstr vs KASAN")
+  606375f1a869 ("scsi: cxlflash: Convert to scsi_execute_cmd()")
 
-in the tip tree.
+I have used the scsi-mkp tree from next-20230113 for today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/+AjM21RVvHKRxUXsHR++tmn
+--Sig_/v=Zc0u4igO0yeAmdQEFQe9n
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPEqo0ACgkQAVBC80lX
-0GySGAgAmFI6TtP8yOENpoCrgDHKPSzH0iIHNG2cRZeYbOlWm8cBH7KrQO2cwNzJ
-61+sB4pWGJrT5tUtP5DTxFJ1PouMrFdvAUuitDpzZCcneDS6/YndvW4lP6YtWeiq
-dYUVanwHok/FLC8Drmhaq6mMg2KQHJSDyFTiNbmKoMRdfEhY3VRXfcam/GUq9z9z
-0s/XU4pPrbpAmdNVAmlpJ3JAsGyhD8Q4WiCPEFMASQmdmCYYy9f8FbWkOWY1Vo+P
-ZeXg2/ahrIPY1qwVEVh9eSM09NNiDinCJe/eCHgnOJMbQhMc263vXP4swhpZwWXT
-0YIKNZGaeV9s4hkFtVOqalT/tOpchA==
-=jdJQ
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPEtU8ACgkQAVBC80lX
+0Gwf+Af9FTWSS2K0pGh9rhL3Hu9vpi7TiHWWEu1m5Ni2+asnbalBGMH6+uk+e3mQ
+Y8iTyWu5PUUovtLBVyfZW9cuCzsCmvfE8Oy7l4QSqizMu61m3JE5BM9CEy89gYor
+WLDlfRbnv4k29i9XsJJCD7AlmoeahaPM7RNCkX7xvAbK2yey9w8QKGaZLe6UCIyU
+UKyclC1bqk88OUvXdZHym6BKBagmcAou/CytWk7uExDWkTjA2QccxluBWnyGbA2Z
+AYJZm2KX+EQsSQtyZjRxDe0XGdRPSb1PaKXZ/AHG4+PwK0mHe+wOBoMmZTefqvAx
+kts4WB5v/a0zr/ojj5gydhsAsqwpkQ==
+=vRck
 -----END PGP SIGNATURE-----
 
---Sig_/+AjM21RVvHKRxUXsHR++tmn--
+--Sig_/v=Zc0u4igO0yeAmdQEFQe9n--

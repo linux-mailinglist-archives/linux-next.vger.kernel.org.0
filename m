@@ -2,47 +2,51 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E6CE66C46B
-	for <lists+linux-next@lfdr.de>; Mon, 16 Jan 2023 16:54:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC8FD66C94B
+	for <lists+linux-next@lfdr.de>; Mon, 16 Jan 2023 17:47:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231361AbjAPPyy (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 16 Jan 2023 10:54:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37070 "EHLO
+        id S233885AbjAPQrw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 16 Jan 2023 11:47:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231480AbjAPPyl (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 16 Jan 2023 10:54:41 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3DEB22A0C;
-        Mon, 16 Jan 2023 07:54:37 -0800 (PST)
+        with ESMTP id S233799AbjAPQrV (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 16 Jan 2023 11:47:21 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ACD940BEF;
+        Mon, 16 Jan 2023 08:35:09 -0800 (PST)
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id D92C433878;
-        Mon, 16 Jan 2023 15:54:35 +0000 (UTC)
+        by smtp-out2.suse.de (Postfix) with ESMTP id CC830671D6;
+        Mon, 16 Jan 2023 16:35:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1673884475; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1673886907; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=+vuORpOHQ+AS7Wy51WLoSsM0R/N2cByB/Ocy0ai6rAo=;
-        b=SiUj34q1jbNV1pskKZDPTBEDEXasyWymprZY8Gy8/EI4uORx0GAZRdz843ns7uHlK07LQx
-        lAiFWYVRoQkbt2va+VX1PEOYN/kTYGdByba+zxf4FXVQakIlkCTUf1aufyvZ56xJAr+sZ2
-        6JOLZ9hblGsM6U7MtgrjWeKTQih/BoQ=
+        bh=x7t0YOJRqJkyR/v4+Wf24lPdcrODSmxqSGim8YzYnhs=;
+        b=Io1NDW4DvizFFd/BfM+ziDxHHjtF5sOBp4nwfT08niOp80XKhwhwF/jZKscKxuc6k06VEx
+        d0hQgX1MwimvRavIgcAbe6zgrgsCOiJ3Gm5gZ1adL09GDww4Pqd2NMkjqHGKUCOnmCt2Tn
+        pMu7OCH1bCzfJx7+hPkUTJ5vVf+sYyk=
 Received: from suse.cz (unknown [10.100.201.202])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id A30592C1A5;
-        Mon, 16 Jan 2023 15:54:35 +0000 (UTC)
-Date:   Mon, 16 Jan 2023 16:54:32 +0100
+        by relay2.suse.de (Postfix) with ESMTPS id 3CF3F2C1AC;
+        Mon, 16 Jan 2023 16:35:05 +0000 (UTC)
+Date:   Mon, 16 Jan 2023 17:35:02 +0100
 From:   Petr Mladek <pmladek@suse.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     John Ogness <john.ogness@linutronix.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the printk tree
-Message-ID: <Y8VzOA9B5kuF3lQH@alley>
-References: <20230116102301.66ccb248@canb.auug.org.au>
+To:     Sergey Senozhatsky <senozhatsky@chromium.org>
+Cc:     coverity-bot <keescook@chromium.org>,
+        John Ogness <john.ogness@linutronix.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        linux-next@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: Coverity: console_prepend_dropped(): Memory - corruptions
+Message-ID: <Y8V8tqMJeB7t+rcJ@alley>
+References: <202301131544.D9E804CCD@keescook>
+ <Y8KAhaiZQOWTcfyF@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230116102301.66ccb248@canb.auug.org.au>
+In-Reply-To: <Y8KAhaiZQOWTcfyF@google.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -52,37 +56,49 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon 2023-01-16 10:23:01, Stephen Rothwell wrote:
-> Hi all,
+On Sat 2023-01-14 19:14:29, Sergey Senozhatsky wrote:
+> On (23/01/13 15:46), coverity-bot wrote:
+> > *** CID 1530570:  Memory - corruptions  (OVERRUN)
+> > kernel/printk/printk.c:2738 in console_prepend_dropped()
+> > 2732     		/* Truncate the message, but keep it terminated. */
+> > 2733     		pmsg->outbuf_len = outbuf_sz - (len + 1);
+> > 2734     		outbuf[pmsg->outbuf_len] = 0;
+> > 2735     	}
+> > 2736
+> > 2737     	memmove(outbuf + len, outbuf, pmsg->outbuf_len + 1);
+> > vvv     CID 1530570:  Memory - corruptions  (OVERRUN)
+> > vvv     Overrunning buffer pointed to by "scratchbuf" of 1024 bytes by passing it to a function which accesses it at byte offset 1998 using argument "len" (which evaluates to 1999). [Note: The source code implementation of the function has been overridden by a builtin model.]
+> > 2738     	memcpy(outbuf, scratchbuf, len);
+> > 2739     	pmsg->outbuf_len += len;
+> > 2740     }
+> > 2741     #else
+> > 2742     #define console_prepend_dropped(pmsg, dropped)
+> > 2743     #endif /* CONFIG_PRINTK */
+> [..]
+> > Human notes from Kees:
+> > 
+> > I'm not sure how it got 1998, but I do see that snprintf() should
+> > probably be scnprintf(), otherwise "len" might be a lie (i.e. it'll hold
+> > what it WANTED to write, rather than what it actually wrote).
 > 
-> After merging the printk tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
-> 
-> ERROR: modpost: "console_srcu_read_lock_is_held" [drivers/tty/serial/kgdboc.ko] undefined!
-> 
-> Caused by commit
-> 
->   75ffddf01347 ("tty: serial: kgdboc: fix mutex locking order for configure_kgdboc()")
+> Cannot imagine how "** %lu printk messages dropped **\n" can expand into
+> 1998 bytes. Does coverity have a "verbose" mode?
 
-Great catch! Thanks a lot for the report.
+I guess that coverity tries to pass some random string that is longer
+than the provided buffer.
 
-It gets fixed by:
+The code might be safe with the current size of the buffer and
+the string. But it is true that the following is wrong:
 
---- a/kernel/printk/printk.c
-+++ b/kernel/printk/printk.c
-@@ -123,6 +123,7 @@ bool console_srcu_read_lock_is_held(void)
- {
- 	return srcu_read_lock_held(&console_srcu);
- }
-+EXPORT_SYMBOL(console_srcu_read_lock_is_held);
- #endif
- 
- enum devkmsg_log_bits {
+	len = snprintf(scratchbuf, scratchbuf_sz,
+		       "** %lu printk messages dropped **\n", dropped);
 
 
-I have added this fix by ammending the problematic commit so that we
-do not break bisection, see
-https://git.kernel.org/pub/scm/linux/kernel/git/printk/linux.git/commit/?h=rework/console-list-lock&id=3ef5abd9b5c738bc6fa9a65e40331ef2cb03ad9c
+As Kees pointed out in the human comment, we should use scnprintf()
+that will return the really written length of the string that fits
+into the buffer.
+
+I am going to send a patch.
 
 Best Regards,
 Petr

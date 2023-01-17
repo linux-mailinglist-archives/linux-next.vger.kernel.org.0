@@ -2,51 +2,50 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1D04670C08
-	for <lists+linux-next@lfdr.de>; Tue, 17 Jan 2023 23:48:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D3CB670CF1
+	for <lists+linux-next@lfdr.de>; Wed, 18 Jan 2023 00:13:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229982AbjAQWsE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 17 Jan 2023 17:48:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41308 "EHLO
+        id S229864AbjAQXNq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 17 Jan 2023 18:13:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229989AbjAQWqy (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 17 Jan 2023 17:46:54 -0500
+        with ESMTP id S229677AbjAQXNB (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 17 Jan 2023 18:13:01 -0500
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75387B2D3F;
-        Tue, 17 Jan 2023 13:48:40 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0E5B8874B;
+        Tue, 17 Jan 2023 12:56:28 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NxMw70dchz4xMx;
-        Wed, 18 Jan 2023 08:48:39 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NxLlp56Rcz4xMx;
+        Wed, 18 Jan 2023 07:56:22 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1673992119;
-        bh=75Yy+WlgV7Ex/vzs3d+z+VuSR6ePdxf+ksxThEs556g=;
+        s=201702; t=1673988983;
+        bh=JURaEdE8CMeLGxxVxQfYP3YHQFwTCFjuZtmFFKcP1SY=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=eUrD1izkefCGdU0GkTwpFXkSea45FsmDooNhuxzEozUS2ERpoXmXVmH+UVGIBxi19
-         nEc40XS9polRJgAe1QsBkuDETFTlOl183ayNhp2g5rHrphEm0N54uqny3Lg9QnJGjT
-         jl+WFvCo/dPFjPbvxP9Ub9b3ChBHIkycXjbB7dmsQ9QCrSRTwelPsH9uHjrHFWb7oI
-         Mc5GsMIkjM31FpQfdGTAnb+udsA8cxO16m3/CUbh7gdBmHHAMxLwWIydCMICdGq1pb
-         ZxHWAAmEnaYtCia4oeAjRyQDAUm3I3A+c1OnvKTX2UOy5/yrH+mEEmmXFZkldU+loi
-         CdJOeF0kWgc/Q==
-Date:   Wed, 18 Jan 2023 08:48:37 +1100
+        b=HFmgvjCT4hnwui+3XW3WWuRB/ZIVIC+IvKxZIORl3JzW7D3Dm+e/f2BbxlzOit7dB
+         aYa2A0tj4hieeB1cVpYvFKoi1ym6wqlZUF2HWC9ki0DiKX+S4jU3zgkfGTrZO/UJQF
+         0p3veyIeqJAofiIQ5NOl+UyqPKCfrNBaB7qMPitdxe6qQjN7XrF1z+B8GXWnHebQ0a
+         WSXmBGIgSkmVJBThKSpi5pK8pMTkNyQM7xF52KYxs5hxI+J3lB1ODjitcrpwpVHEtj
+         mXqJkhe0LPCrOU4kVHGLb6XY3V014E2Mk/8BTy3uY9/98xV3kXR0i3Ui1jyY9xgmxc
+         vF6QTl2YiFpdw==
+Date:   Wed, 18 Jan 2023 07:56:20 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Chuck Lever III <chuck.lever@oracle.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     Karol Herbst <kherbst@redhat.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        DRI <dri-devel@lists.freedesktop.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patch in the nfsd tree
-Message-ID: <20230118084837.492b1611@canb.auug.org.au>
-In-Reply-To: <E6550C77-4A13-4AD6-8991-D1E369F716E2@oracle.com>
-References: <20230113101326.09b1250e@canb.auug.org.au>
-        <53DEC27F-0AAC-4EFA-AB6E-0B5D44AACFB9@oracle.com>
-        <F7CFC18D-6AAC-4DAD-AA43-5C718FC1100E@oracle.com>
-        <20230117115228.13b55d07@canb.auug.org.au>
-        <C72F2CC7-EB89-44D4-AC4A-C33EBED4B120@oracle.com>
-        <20230118080027.300ab7b5@canb.auug.org.au>
-        <E6550C77-4A13-4AD6-8991-D1E369F716E2@oracle.com>
+Subject: Re: linux-next: duplicate patch in the kspp tree
+Message-ID: <20230118075620.60250ca2@canb.auug.org.au>
+In-Reply-To: <CACO55ttvqwnmGS=4gig-AOy+67bDesdj2S9HDJ3hS=uyN0NGOQ@mail.gmail.com>
+References: <20230117150212.3d8ee843@canb.auug.org.au>
+        <CACO55ttvqwnmGS=4gig-AOy+67bDesdj2S9HDJ3hS=uyN0NGOQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/AQ8XAsxpQ=/_f5XNHLj7od.";
+Content-Type: multipart/signed; boundary="Sig_/roh3be+LjwRG1po+YE_hoN2";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
@@ -57,37 +56,62 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/AQ8XAsxpQ=/_f5XNHLj7od.
+--Sig_/roh3be+LjwRG1po+YE_hoN2
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Chuck,
+Hi Karol,
 
-On Tue, 17 Jan 2023 21:23:45 +0000 Chuck Lever III <chuck.lever@oracle.com>=
- wrote:
+On Tue, 17 Jan 2023 14:52:12 +0100 Karol Herbst <kherbst@redhat.com> wrote:
+>
+> On Tue, Jan 17, 2023 at 5:02 AM Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
+> >
+> > The following commit is also in the drm-misc tree as a different commit
+> > (but the same patch):
+> >
+> >   06b19f46455c ("drm/nouveau/fb/ga102: Replace zero-length array of tra=
+iling structs with flex-array")
+> > =20
 >=20
-> That's now been done for-rc -> nfsd-fixes and for-next -> nfsd-next.
+> which branch? Because I just fetched the remote and don't have this
+> commit in my local repo
 
-I have updated here as well, thanks.
+That was from
+git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git (branch
+for-next/kspp) yesterday.  It was the top commit in that branch.  It is
+still there today (I am not saying it should not be).
+
+> > This is commit
+> >
+> >   54d47689c6e3 ("drm/nouveau/fb/ga102: Replace zero-length array of tra=
+iling structs with flex-array")
+> >
+> > in the drm-misc tree.
+
+That was from git://anongit.freedesktop.org/drm/drm-misc (branch
+for-linux-next) yesterday.  It was the top commit in that branch.  It
+is still there today (again, I am not saying it should not be) but the
+branch has moved on.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/AQ8XAsxpQ=/_f5XNHLj7od.
+--Sig_/roh3be+LjwRG1po+YE_hoN2
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPHF7UACgkQAVBC80lX
-0GwBOQf/fF/Y/88sLoaisXK3Tm7cJn4rwR30RQ1ecILgeHy01yChGDAv5CTuJpIm
-Ss6U/LOjSAPQyQX4QxnLvenTDJuWP+/dep5yxkZgmHidFC9xdwp61k3BCg53CXmB
-Hwqxb+uhmQrEw9jRnNqtj+/50/6Vr/0/izHVAKZVuqgTiWcZ63MLaiLU4rx+akay
-xI7QcELOHrgoRC+rFz0trFHhqu0G/M5MMbuvbAtxKxAx8tqt1Md4onMp90NTu5X2
-NCSgZ5bYfxo3laQ6i5tb5AoRCBMzUkxIAOjIoMh14NlEQEsHo6JL1wi1bSp0cJlm
-Df4HCbDcI6//ZnN9t0jbaeLBGC8+VA==
-=BiCg
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPHC3QACgkQAVBC80lX
+0GzxyAf9FiQpvKWIWXkG5ENB8aCFwuWvd/MajLzDeMrtpfRzTMdkzo6kA5CM4Axq
+r1sYV2d/rY305uM6Wt3t32Fo/nzKZubPR1AjaGgXhXXqCgHjDmFDR/h2P1YR9Rxv
+6/kauy8dJ5HacdmR9mFvz9fSjWAzwKITyzCF/njYxnRiUGUGTYt0AQd0g+0Iuv8q
+4AlvdN/bue/gqHbrgLbg+crMxEZ/PVz/fJrL4eLi72Zst1lBomuoaOGzwyzd6sqt
+E63o5dyUu21n2ABGNgHKUi9mcKlI419DYWPxlR55O3dHnLLaISFJj9y1Rti9psT4
+ABukiUOMWYiUbODihnq6hhApP4aopQ==
+=pYPj
 -----END PGP SIGNATURE-----
 
---Sig_/AQ8XAsxpQ=/_f5XNHLj7od.--
+--Sig_/roh3be+LjwRG1po+YE_hoN2--

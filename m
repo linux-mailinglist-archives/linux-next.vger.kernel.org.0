@@ -2,116 +2,100 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22BEC66DC33
-	for <lists+linux-next@lfdr.de>; Tue, 17 Jan 2023 12:21:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C11366DF80
+	for <lists+linux-next@lfdr.de>; Tue, 17 Jan 2023 14:53:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236482AbjAQLUv (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 17 Jan 2023 06:20:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40508 "EHLO
+        id S229965AbjAQNxx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 17 Jan 2023 08:53:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236638AbjAQLU3 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 17 Jan 2023 06:20:29 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF3CE33459;
-        Tue, 17 Jan 2023 03:20:24 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 680FB5CB40;
-        Tue, 17 Jan 2023 11:20:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1673954423; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        with ESMTP id S231454AbjAQNxo (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 17 Jan 2023 08:53:44 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 952BB3C3E
+        for <linux-next@vger.kernel.org>; Tue, 17 Jan 2023 05:52:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673963548;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=XPjwrcXmuFGkQbX3taDI9ie1BtTBZf9HP9xMBmIbYHg=;
-        b=QejvsoIMCwUtGFOfkF1T35ph+Pp2eQzJX1oyMUJutWnO+tPAsvBOMrdBi4xcU66AK82Jpj
-        L2h504x44J6hR1jOtzYRPKj26VV/Z3xpKB/V7Q47FF2SHxkwSJy6QMHUelno/9wipM6ruN
-        1sBKFQPCcoYXQYsvjBy5+L5MRMJOt34=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id D90852C141;
-        Tue, 17 Jan 2023 11:20:22 +0000 (UTC)
-Date:   Tue, 17 Jan 2023 12:20:20 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc:     John Ogness <john.ogness@linutronix.de>,
-        coverity-bot <keescook@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        linux-next@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: Coverity: console_prepend_dropped(): Memory - corruptions
-Message-ID: <Y8aEdDxQrQICQtem@alley>
-References: <202301131544.D9E804CCD@keescook>
- <Y8KAhaiZQOWTcfyF@google.com>
- <Y8V8tqMJeB7t+rcJ@alley>
- <Y8YRBo7ZmtzWT4J1@google.com>
- <877cxl3abr.fsf@jogness.linutronix.de>
- <Y8ZTlVX3HQUVkU13@google.com>
+        bh=zCNIOWyp6BvkZ2wh9MfUHSp5MAA9j0ACgJb6RoOlUO0=;
+        b=KcGMPKmADbLtkrQxiHf00SJE9n9GZK4kIgU6a+BtHOtoPsDQ3GFgl3wSZa/w6s+1ogFKIf
+        yar99T6NX8Emlx3U6qbvpq6mWxmvZVihwHJKBpbKYblE4q52e25SOO65bKQwB+syV8wH5D
+        SFkDrOM52LMHoqmjxZPcp6/UwtIXJUk=
+Received: from mail-lj1-f198.google.com (mail-lj1-f198.google.com
+ [209.85.208.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-592-WSOIl5Z1MFuhd8i6atRSVA-1; Tue, 17 Jan 2023 08:52:25 -0500
+X-MC-Unique: WSOIl5Z1MFuhd8i6atRSVA-1
+Received: by mail-lj1-f198.google.com with SMTP id y8-20020a2e9d48000000b0027f1feabc75so8194810ljj.16
+        for <linux-next@vger.kernel.org>; Tue, 17 Jan 2023 05:52:25 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zCNIOWyp6BvkZ2wh9MfUHSp5MAA9j0ACgJb6RoOlUO0=;
+        b=O0ChVA0+VWuW4PlVW4ZCHR4WX/jvHZ8YWuFF8C0VTP8BifgnswvKbhJZheJLaMUKqq
+         HCTG1ec/AVt1nmyt2c/fuvOMFoDDSWHbfq9bDbfJqufV7t8SrLsYmHI+q4eAeeayX14g
+         wzlLEsJx4B5F4VkaMMwsFKZGy3SsrUL7qQ3gtBhcyGeTJQeBR9QIxoI4gcmsO4PhMJe2
+         TaXiMi43RSej9eEAIorTkX3X3n67ZM9oLnt6A925me97pU2HKUNoTIQnv1lFQaRwtOtL
+         Nx2Yqy62wAjAT0Ismt2egb3/ci4WaLmYD72d06ch/AbjghF37MjfZgfozx9bCg++/6i7
+         uQhg==
+X-Gm-Message-State: AFqh2ko+llySmQKu468pVJfN6IvBafy2NRhkWOiarS4hVd9LoHOfroMA
+        Y+DH4hdIFQYzHGQ56cQQvPjd744w+DA8JJs81dgrxRfuYcYoLhxUSAQTmfhR4KxFgPW4njrpnWn
+        sjgfTOl1Nw0AeGMNupoyt6h0TGBPh9LeWfp5Wng==
+X-Received: by 2002:ac2:4ade:0:b0:4d0:7b7:65dc with SMTP id m30-20020ac24ade000000b004d007b765dcmr133418lfp.122.1673963544334;
+        Tue, 17 Jan 2023 05:52:24 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXs9jCpstio+iSjdAor3NZ75bz+2Dnozw/p6Ykmo64gLJfiYXc3udp+wH4Z3eIPBKX1dEiSO07P7nXfvqprRwdo=
+X-Received: by 2002:ac2:4ade:0:b0:4d0:7b7:65dc with SMTP id
+ m30-20020ac24ade000000b004d007b765dcmr133416lfp.122.1673963544131; Tue, 17
+ Jan 2023 05:52:24 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y8ZTlVX3HQUVkU13@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230117150212.3d8ee843@canb.auug.org.au>
+In-Reply-To: <20230117150212.3d8ee843@canb.auug.org.au>
+From:   Karol Herbst <kherbst@redhat.com>
+Date:   Tue, 17 Jan 2023 14:52:12 +0100
+Message-ID: <CACO55ttvqwnmGS=4gig-AOy+67bDesdj2S9HDJ3hS=uyN0NGOQ@mail.gmail.com>
+Subject: Re: linux-next: duplicate patch in the kspp tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue 2023-01-17 16:51:49, Sergey Senozhatsky wrote:
-> On (23/01/17 08:16), John Ogness wrote:
-> > On 2023-01-17, Sergey Senozhatsky <senozhatsky@chromium.org> wrote:
-> > > On (23/01/16 17:35), Petr Mladek wrote:
-> > >> 	len = snprintf(scratchbuf, scratchbuf_sz,
-> > >> 		       "** %lu printk messages dropped **\n", dropped);
-> > >
-> > > Wouldn't
-> > >
-> > > 	if (WARN_ON_ONCE(len + PRINTK_PREFIX_MAX >= outbuf_sz))
-> > > 		return;
-> > >
-> > > prevent us from doing something harmful?
+On Tue, Jan 17, 2023 at 5:02 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> The following commit is also in the drm-misc tree as a different commit
+> (but the same patch):
+>
+>   06b19f46455c ("drm/nouveau/fb/ga102: Replace zero-length array of trailing structs with flex-array")
+>
 
-The problem is that it compares outbuf_sz that is bigger than
-scratchbuf.
+which branch? Because I just fetched the remote and don't have this
+commit in my local repo
 
-The above check should prevent crash in:
+> This is commit
+>
+>   54d47689c6e3 ("drm/nouveau/fb/ga102: Replace zero-length array of trailing structs with flex-array")
+>
+> in the drm-misc tree.
+>
+> --
+> Cheers,
+> Stephen Rothwell
 
-	memmove(outbuf + len, outbuf, pmsg->outbuf_len + 1);
-
-But it would not prevent out-of-bound access to scratchbuf in:
-
-	memcpy(outbuf, scratchbuf, len);
-
-
-That said, the coverity report is pretty confusing. It is below
-the memmove() so that it looks like the memmove() is dangerous.
-But it talks about "scratchbuf" so that it probably describes
-the real problem in "memcpy()".
-
-
-> > Sure. But @0len is supposed to contain the number of bytes in
-> > @scratchbuf, which theoretically it does not. snprintf() is the wrong
-> > function to use here, even if there is not real danger in this
-> > situation.
-> 
-> Oh, yes, I agree that snprintf() should be replaced. Maybe we can go
-> even a bit furhter and replace all snprintf()-s in kernel/printk/*
-> (well, in a similar fashion, just in case). I'm just trying to understand
-> what type of assumptions does coverity make here and so far everything
-> looks rather peculiar.
-
-Note that we sometimes need snprintf() to compute the needed size
-of the buffer. For example, vsnprintf() in vprintk_store() is
-correct.
-
-It looks to me that snprintf() in console_prepend_dropped() is the
-only real problem.
-
-Well, it would be nice to replace the few sprintf() calls. They look safe
-because the size of the output is limited by the printf format but...
-
-Best Regards,
-Petr

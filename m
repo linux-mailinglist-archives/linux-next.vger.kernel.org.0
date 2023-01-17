@@ -2,93 +2,124 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8D1266D4DC
-	for <lists+linux-next@lfdr.de>; Tue, 17 Jan 2023 04:08:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7692466D521
+	for <lists+linux-next@lfdr.de>; Tue, 17 Jan 2023 04:47:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235690AbjAQDID (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 16 Jan 2023 22:08:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34606 "EHLO
+        id S235198AbjAQDr5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 16 Jan 2023 22:47:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235711AbjAQDH5 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 16 Jan 2023 22:07:57 -0500
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8BA8233DF
-        for <linux-next@vger.kernel.org>; Mon, 16 Jan 2023 19:07:55 -0800 (PST)
-Received: by mail-pl1-x633.google.com with SMTP id z13so4364469plg.6
-        for <linux-next@vger.kernel.org>; Mon, 16 Jan 2023 19:07:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=pnJ9Zmocxu4Xq5ufmgMvMkKxKjqhgHcC/CXVZl3M6Kg=;
-        b=VT/EEiv5boIzMV75DdA9/aJwFxF8Is84Rhw3/LYBmRMMYQpCUAgfOvntIelHvMClTW
-         yMMYT/gArron1p5NI3ZWwNx7VwexbGk5nFEciNhajeDchErJns5L+5ncMt8OcUPsVqtQ
-         jQb27l54t7AeQHJvNQXLmE7rhaplUy52bbmBU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pnJ9Zmocxu4Xq5ufmgMvMkKxKjqhgHcC/CXVZl3M6Kg=;
-        b=p3T1o0DmmiHx254rWGiTo1IGgPnb6ysHElHqsQ740zbYEx8eG4VjbmKwLh6wu/kIOR
-         cBeNYKFTO/ddVLTd1afJc8tPMOJ8oZIA/N02DRsrU+WusVMt7k4JMmeBIhFhVIo0oJOP
-         iS2l68v4PkJHYDMaKX1FxNtOpWB3iWWCofwKgMQ0Xqz+IP6VIcgKZZBqOWzz22D1aCS7
-         5FMxHIbxkpGHRlWib/kza0qiPZyBtMNXtFcjEX/YgqV+lcNeSwbT5if4Gox/F+fR5Z0K
-         QaNvgVVgaEZs3Uk5/lFRPGQLFMVsFg4vZafWsxyUr602gXZ/N2K4XlIc6RMF3WoK3kcH
-         ZeqQ==
-X-Gm-Message-State: AFqh2ko+qP/RqMIJkdz1WZcNZzIBrmKNg71+Yk+1cUVTqZg24SWd705W
-        Zr7iDhEGcJ7cwLAM5XOyfBlUsT9eIiZ7tIa6
-X-Google-Smtp-Source: AMrXdXtQj78NfF9qx+TabtfHmEG+hyBEpYjSaH0gM6kYOQE/gPWnG4sWnLISWWRe0lGgYM28aT9AHQ==
-X-Received: by 2002:a17:903:54d:b0:193:a5b:ccf6 with SMTP id jo13-20020a170903054d00b001930a5bccf6mr808312plb.0.1673924875310;
-        Mon, 16 Jan 2023 19:07:55 -0800 (PST)
-Received: from google.com (KD124209188001.ppp-bb.dion.ne.jp. [124.209.188.1])
-        by smtp.gmail.com with ESMTPSA id s21-20020a170902b19500b00189e1522982sm19987634plr.168.2023.01.16.19.07.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Jan 2023 19:07:54 -0800 (PST)
-Date:   Tue, 17 Jan 2023 12:07:50 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        coverity-bot <keescook@chromium.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        linux-next@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: Coverity: console_prepend_dropped(): Memory - corruptions
-Message-ID: <Y8YRBo7ZmtzWT4J1@google.com>
-References: <202301131544.D9E804CCD@keescook>
- <Y8KAhaiZQOWTcfyF@google.com>
- <Y8V8tqMJeB7t+rcJ@alley>
+        with ESMTP id S235121AbjAQDr4 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 16 Jan 2023 22:47:56 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C701922DC5;
+        Mon, 16 Jan 2023 19:47:54 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Nwvx00xGvz4xG5;
+        Tue, 17 Jan 2023 14:47:48 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1673927268;
+        bh=pdT0tLO8GhTYnyOobd7AHS4rLZhzpys/XxIhDrVwTQE=;
+        h=Date:From:To:Cc:Subject:From;
+        b=cEF0eu2Lw5aegSx7hGanxUhFFwulU0oLGRKzDX7StCDPirx2Abu/ytDSH084deiY7
+         0z/FDrubl8A/sJMWjvQUUlgCAdTrcAzoOKiE8PY3dHCZLToxTdMAOkXNvsVi3kQYa2
+         Z7+lGjW01f/8Kvfy3lOv3AQhHhxO6Qxb4iO8z1JGBtr2g6azOGXgZOqgseK6bzFVqP
+         CV/C27yiGepyyLOvIuMHs/EhD+MgBM/DYHhse/55OFeSJ38FLztC92pSOp6zCGXTFL
+         RF435i6MR6FINTJcMmn8kgsbx8nHJId1zOfw44IdKlanWq8Jd9SDDPrScs/UJrJBLz
+         6WmWN7eIklSfg==
+Date:   Tue, 17 Jan 2023 14:47:47 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Herbert Xu <herbert@gondor.apana.org.au>,
+        Linux Crypto List <linux-crypto@vger.kernel.org>
+Cc:     Danny Tsen <dtsen@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        PowerPC <linuxppc-dev@lists.ozlabs.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the crypto tree
+Message-ID: <20230117144747.37115c52@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y8V8tqMJeB7t+rcJ@alley>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/U3=+W9+taE+jWVag5qZssFt";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On (23/01/16 17:35), Petr Mladek wrote:
-> 
-> I am going to send a patch.
+--Sig_/U3=+W9+taE+jWVag5qZssFt
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Sure, sounds good.
+Hi all,
 
-> The code might be safe with the current size of the buffer and
-> the string. But it is true that the following is wrong:
-> 
-> 	len = snprintf(scratchbuf, scratchbuf_sz,
-> 		       "** %lu printk messages dropped **\n", dropped);
+After merging the crypto tree, today's linux-next build (powerpc
+pseries_le_defconfig) failed like this:
 
-Wouldn't
+arch/powerpc/crypto/p10_aes_gcm.o: warning: objtool: .text+0x884: unannotat=
+ed intra-function call
+arch/powerpc/crypto/aesp8-ppc.o: warning: objtool: aes_p8_set_encrypt_key+0=
+x44: unannotated intra-function call
+ld: arch/powerpc/crypto/p10_aes_gcm.o: ABI version 1 is not compatible with=
+ ABI version 2 output
+ld: failed to merge target specific data of file arch/powerpc/crypto/p10_ae=
+s_gcm.o
 
-	if (WARN_ON_ONCE(len + PRINTK_PREFIX_MAX >= outbuf_sz))
-		return;
+Caused by commit
 
-prevent us from doing something harmful?
+  ca68a96c37eb ("crypto: p10-aes-gcm - An accelerated AES/GCM stitched impl=
+ementation")
+
+I have applied the following hack for today.
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Tue, 17 Jan 2023 14:41:10 +1100
+Subject: [PATCH] crypto: p10-aes-gcm - only ABIv1 code has been implemented
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ arch/powerpc/crypto/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/powerpc/crypto/Kconfig b/arch/powerpc/crypto/Kconfig
+index db7d99383993..36928ad14a6b 100644
+--- a/arch/powerpc/crypto/Kconfig
++++ b/arch/powerpc/crypto/Kconfig
+@@ -97,6 +97,7 @@ config CRYPTO_AES_PPC_SPE
+ config CRYPTO_P10_AES_GCM
+ 	tristate "Stitched AES/GCM acceleration support on P10+ CPU (PPC)"
+ 	depends on PPC64
++	depends on PPC64_ELF_ABI_V1
+ 	select CRYPTO_LIB_AES
+ 	select CRYPTO_ALGAPI
+ 	select CRYPTO_AEAD
+--=20
+2.35.1
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/U3=+W9+taE+jWVag5qZssFt
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPGGmMACgkQAVBC80lX
+0GzXFQf+IuQ0OoBK3RJPXB4MBEqFCXGFIsjgycvkBpeMhsPwrlTGzgd+Gk2oNnjn
+1VSGXyhT+Qy0mk5iSu7ZHteVWK2oM88re9zAzQoo0FkkNhBDi+6PITfoEjeqAifA
+OmVS1AOcz7XOuIVwGs5JosHJ3UGv8kvWiWjJaI6u1WYqpZF2gRfsNu2SnylW4Xs6
+8PMa66m4u9QaV3E8lav7d11I0gA88FIk2EE27vbIBboh0pvYY9j/VsEJ09YjplXX
+m2EjXwo54fIsP8/6Kunp4cOyd8DKJzwP3RundKYzZDPp5P8UBX9ems5nY7TyfstD
+HKhHguDvaYEwFPhNxs1u7LZUIcjpsg==
+=rAi6
+-----END PGP SIGNATURE-----
+
+--Sig_/U3=+W9+taE+jWVag5qZssFt--

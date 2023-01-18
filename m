@@ -2,118 +2,154 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE06467151A
-	for <lists+linux-next@lfdr.de>; Wed, 18 Jan 2023 08:36:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 369A2671621
+	for <lists+linux-next@lfdr.de>; Wed, 18 Jan 2023 09:26:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229526AbjARHgQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 18 Jan 2023 02:36:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37554 "EHLO
+        id S229927AbjARI0M (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 18 Jan 2023 03:26:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229849AbjARHfU (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 18 Jan 2023 02:35:20 -0500
-Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20E5293723
-        for <linux-next@vger.kernel.org>; Tue, 17 Jan 2023 22:51:18 -0800 (PST)
-Received: by mail-vs1-xe36.google.com with SMTP id q125so22996506vsb.0
-        for <linux-next@vger.kernel.org>; Tue, 17 Jan 2023 22:51:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=Kie7n9eyX2y+8J9SsgwusItXi1rTkJJNsJ1PDD++j0E=;
-        b=B3s3j3N0gG+bNvJM1kixcYCNP/GKIWVHPyV4lr3MVXl/p0N7BMpYjYlyLkA+JDNEwK
-         YPBayZkNvzY9TJMNbLdgwh74aQGMywjDnB+HgnS0sAYfB7rOXeKINkcC80Dq9Chxv1DM
-         1Tew2QJlCzFdNmJd4aYvCOrI3jZfPsBDrEg+t6exzkc3wFZhl1TDhr3dj3POyWbweOYR
-         +7Npg6iCsUQcJq8UB4rK0rr2tOPePqrnq2X7W6XikqLyrIoHUkuWy0cFKeDRI/7G0kUt
-         bC9HiI6ACpwicvuUfC9hiCdSxpSHxHZNDelqvQnkWIAm1HWc1SKEmSTBl5163j53Jqb9
-         dDlg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Kie7n9eyX2y+8J9SsgwusItXi1rTkJJNsJ1PDD++j0E=;
-        b=1EjWKjkfvDpMP2zywz4FNqRFaYMvZHOYSXY61t/8YT1jDT7UZGVDSANYUAmBd1kVjx
-         Ku2BmTqfRjvaspwVxZ3epY4dTpmIFJcYRMhh956MC2NibEnmXIzC8Af/N7lZCUhMtrCc
-         vDrkVcqymb5I2vJ5XB4ejpAbLcUB2pESVb/5y2q7OxU8yrdYveGVZc2GPA4VhqIjR+zT
-         Reu4j7CJuqFG8Vt5mBwpDgW9J1JeWSiGBLNxLMbyBO5QsovpsbH1Gnw93uSrQuixdqBr
-         xjPkAm5lbSOEkLehZ4d3gqS3Cp6mYz1NiGicjVx+kisiPS9KmPgQBzzF39BRT2dtTLLz
-         Mpow==
-X-Gm-Message-State: AFqh2kqoJLyDt17TEpFhrDXiPp4ZFfZm2WDVx2knLUzRe5qQibfNuxUb
-        xqWFlVihdvqwx4EmJlp8ZZ/DW6qKnIK8bnubT8Lo9w==
-X-Google-Smtp-Source: AMrXdXsAPqq2grhhH7dWv3ibNzidh83nP0UMQkpPzASvjBVgkLMqi0nHLe5BmrNOLAwh7gP3eyGxpJ7a7jWlLotqW3o=
-X-Received: by 2002:a05:6102:5587:b0:3b5:32d0:edcc with SMTP id
- dc7-20020a056102558700b003b532d0edccmr779063vsb.24.1674024677099; Tue, 17 Jan
- 2023 22:51:17 -0800 (PST)
+        with ESMTP id S229873AbjARIZ7 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 18 Jan 2023 03:25:59 -0500
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8005E47EDC;
+        Tue, 17 Jan 2023 23:51:42 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id CC9433200437;
+        Wed, 18 Jan 2023 02:51:40 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Wed, 18 Jan 2023 02:51:41 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1674028300; x=1674114700; bh=RGuR+VxWYL
+        rsT+sIyy6iY6TbdhUSEvwC7Aaq91qar/0=; b=oHFrnBrGVabUGxohEkxAigY0An
+        P4RkYuB2Mua/5CF4hz3xmvxViEvpps7TCExjZX7FPHLLzt5lLrQ9WVgD1gWFcscn
+        yn/aJ0WIxbpJdSF08hDGPkOIDNTurliPtUt6hJY+cWWSCnfMjX17kD1yrL3/tvNN
+        Yc0ZPFWwzeN0LWwpXXXCzTNnmbsP2hvhGtc1Ogkv4PLlBzfUtopGiYddWGg864IT
+        mezS6WBoijD2Pb7xOK39ITYUlCkbrfyqtKEcCSSvyJsc2TqCk9bBKI9vwpqDlovV
+        IpYjUZV+BODtZyc8QsZVgz6lElUO5F0f7YuAw+QfabJM1JLteCqcoHw0yavQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1674028300; x=1674114700; bh=RGuR+VxWYLrsT+sIyy6iY6TbdhUS
+        EvwC7Aaq91qar/0=; b=fJ+7TcEq890D95kMoIZ9mpbYhkz5muUCOZfK+RSLCK7P
+        R1kr9Sol39GVm+e7Wki6TGlY+TMsGU7odd80F2GknATy7a2lLYfu2f359h6mksou
+        P5HLvdymfyWalIJOsswTWnj8fhL7kTbXSgiy3ytomNw1gqDk0DPDbBk4Ycr9nVQA
+        v7jMuM+tsYcu8lxVXcr7O4qvC/83sSnfkicG+HtC2m/MGKtoEd6n6/uYJEqYKiC5
+        2bfRGkG0oKn/SJ26C2N/muXTs2OMV0IwM6sPiRCqOERvdQGkGJ7YPY5IGESjpNJH
+        ZUVsbU3TBewM0q5kvmsyD7/KKTT1cn6pqFekRS0rqw==
+X-ME-Sender: <xms:C6XHY4OJXrZzkvGrUmMK0daroG-OpcGvQx9Y-tpoPvvAYgefrCr70A>
+    <xme:C6XHY-9ahjx1K_9-aicGromwcXoRp_lx-YdkHgYRClWrAzRwh8k71TQTfBlCs0mUO
+    _uWjzhD-b6RJw>
+X-ME-Received: <xmr:C6XHY_TJm4hbmafQ-BhYJR85Bb9HSwaUzOLPebrDdenMirqo0p0aSZXT7GIm5IeDnAfRt85QwFTGgJXkrRhg28rksP8X-47V5ssQ-Q>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddtjedgudduiecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgv
+    ghcumffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeehge
+    dvvedvleejuefgtdduudfhkeeltdeihfevjeekjeeuhfdtueefhffgheekteenucevlhhu
+    shhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhroh
+    grhhdrtghomh
+X-ME-Proxy: <xmx:C6XHYwuhmSukiA_o6KfdkA3xUHBxdKy-0CJFoAob9LYl0xrlO65v8A>
+    <xmx:C6XHYwc4gdMkHqE7zz2_dL7VYo_qHGIpu8agq_0V6Rcg0d4kQo2pLg>
+    <xmx:C6XHY03BtV-YfnegsZf_cQhujIGascCLHYJSzqWUJBDE9t1PRiVTlg>
+    <xmx:DKXHY23_PQA-7bZ6A6xKx61sPCY9mhjdDULja4r-ncSlaJENZq2vzA>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 18 Jan 2023 02:51:39 -0500 (EST)
+Date:   Wed, 18 Jan 2023 08:48:20 +0100
+From:   Greg KH <greg@kroah.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Jack Pham <quic_jackp@quicinc.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linyu Yuan <quic_linyyuan@quicinc.com>,
+        Rajaram Regupathy <rajaram.regupathy@intel.com>,
+        Saranya Gopal <saranya.gopal@intel.com>
+Subject: Re: linux-next: manual merge of the usb tree with the usb.current
+ tree
+Message-ID: <Y8ekRLJlpyBLEJfN@kroah.com>
+References: <20230118115624.72e7e756@canb.auug.org.au>
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 18 Jan 2023 12:21:06 +0530
-Message-ID: <CA+G9fYs+ZDoW8Xm8M5quk7J3aE942D4c34oDWM2Xjg-DQFm+Bw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] drm/msm/gpu: Add devfreq tuning debugfs
-To:     dri-devel@lists.freedesktop.org,
-        open list <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Cc:     Rob Clark <robdclark@gmail.com>,
-        Rob Clark <robdclark@chromium.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230118115624.72e7e756@canb.auug.org.au>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Following build regression noticed on Linux next-20230118.
+On Wed, Jan 18, 2023 at 11:56:24AM +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Today's linux-next merge of the usb tree got a conflict in:
+> 
+>   drivers/usb/typec/ucsi/ucsi.c
+> 
+> between commit:
+> 
+>   fac4b8633fd6 ("usb: ucsi: Ensure connector delayed work items are flushed")
+> 
+> from the usb.current tree and commit:
+> 
+>   b04e1747fbcc ("usb: typec: ucsi: Register USB Power Delivery Capabilities")
+> 
+> from the usb tree.
+> 
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+> 
+> -- 
+> Cheers,
+> Stephen Rothwell
+> 
+> diff --cc drivers/usb/typec/ucsi/ucsi.c
+> index 1292241d581a,d04809476f71..000000000000
+> --- a/drivers/usb/typec/ucsi/ucsi.c
+> +++ b/drivers/usb/typec/ucsi/ucsi.c
+> @@@ -1426,20 -1551,14 +1557,26 @@@ void ucsi_unregister(struct ucsi *ucsi
+>   		ucsi_unregister_altmodes(&ucsi->connector[i],
+>   					 UCSI_RECIPIENT_CON);
+>   		ucsi_unregister_port_psy(&ucsi->connector[i]);
+>  -		if (ucsi->connector[i].wq)
+>  +
+>  +		if (ucsi->connector[i].wq) {
+>  +			struct ucsi_work *uwork;
+>  +
+>  +			mutex_lock(&ucsi->connector[i].lock);
+>  +			/*
+>  +			 * queue delayed items immediately so they can execute
+>  +			 * and free themselves before the wq is destroyed
+>  +			 */
+>  +			list_for_each_entry(uwork, &ucsi->connector[i].partner_tasks, node)
+>  +				mod_delayed_work(ucsi->connector[i].wq, &uwork->work, 0);
+>  +			mutex_unlock(&ucsi->connector[i].lock);
+>   			destroy_workqueue(ucsi->connector[i].wq);
+>  +		}
+> + 		usb_power_delivery_unregister_capabilities(ucsi->connector[i].port_sink_caps);
+> + 		ucsi->connector[i].port_sink_caps = NULL;
+> + 		usb_power_delivery_unregister_capabilities(ucsi->connector[i].port_source_caps);
+> + 		ucsi->connector[i].port_source_caps = NULL;
+> + 		usb_power_delivery_unregister(ucsi->connector[i].pd);
+> + 		ucsi->connector[i].pd = NULL;
+>   		typec_unregister_port(ucsi->connector[i].port);
+>   	}
+>   
 
-Regressions found on arm:
-    - build/gcc-8-imx_v6_v7_defconfig
-    - build/gcc-12-imx_v6_v7_defconfig
-    - build/clang-15-imx_v6_v7_defconfig
-    - build/clang-nightly-imx_v6_v7_defconfig
-
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-WARNING: unmet direct dependencies detected for DEVFREQ_GOV_SIMPLE_ONDEMAND
-  Depends on [n]: PM_DEVFREQ [=n]
-  Selected by [y]:
-  - DRM_MSM [=y] && HAS_IOMEM [=y] && DRM [=y] && (ARCH_QCOM [=n] ||
-SOC_IMX5 [=y] || COMPILE_TEST [=n]) && COMMON_CLK [=y] &&
-IOMMU_SUPPORT [=y] && (QCOM_OCMEM [=n] || QCOM_OCMEM [=n]=n) &&
-(QCOM_LLCC [=n] || QCOM_LLCC [=n]=n) && (QCOM_COMMAND_DB [=n] ||
-QCOM_COMMAND_DB [=n]=n)
-
-WARNING: unmet direct dependencies detected for DEVFREQ_GOV_SIMPLE_ONDEMAND
-  Depends on [n]: PM_DEVFREQ [=n]
-  Selected by [y]:
-  - DRM_MSM [=y] && HAS_IOMEM [=y] && DRM [=y] && (ARCH_QCOM [=n] ||
-SOC_IMX5 [=y] || COMPILE_TEST [=n]) && COMMON_CLK [=y] &&
-IOMMU_SUPPORT [=y] && (QCOM_OCMEM [=n] || QCOM_OCMEM [=n]=n) &&
-(QCOM_LLCC [=n] || QCOM_LLCC [=n]=n) && (QCOM_COMMAND_DB [=n] ||
-QCOM_COMMAND_DB [=n]=n)
-make --silent --keep-going --jobs=8
-O=/home/tuxbuild/.cache/tuxmake/builds/1/build ARCH=arm
-CROSS_COMPILE=arm-linux-gnueabihf- 'CC=sccache
-arm-linux-gnueabihf-gcc' 'HOSTCC=sccache gcc'
-In file included from drivers/gpu/drm/msm/msm_gpu.h:18,
-                 from drivers/gpu/drm/msm/adreno/adreno_gpu.h:15,
-                 from drivers/gpu/drm/msm/adreno/adreno_device.c:9:
-drivers/gpu/drm/msm/msm_drv.h:237:45: error: field
-'gpu_devfreq_config' has incomplete type
-  237 |         struct devfreq_simple_ondemand_data gpu_devfreq_config;
-      |                                             ^~~~~~~~~~~~~~~~~~
-
-Build log:
-https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230118/testrun/14250189/suite/build/test/gcc-12-imx_v6_v7_defconfig/log
-
-This was already reported a while back on lore,
-https://lore.kernel.org/all/202301130108.fslQjvJ8-lkp@intel.com/
 
 
---
-Linaro LKFT
-https://lkft.linaro.org
+Thanks, this looks correct.  I'll apply it when these get merged locally
+in a week or so.
+
+greg k-h

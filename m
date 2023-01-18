@@ -2,48 +2,45 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF7F9670E87
-	for <lists+linux-next@lfdr.de>; Wed, 18 Jan 2023 01:23:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D8A8670EDE
+	for <lists+linux-next@lfdr.de>; Wed, 18 Jan 2023 01:42:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229478AbjARAXq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 17 Jan 2023 19:23:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59008 "EHLO
+        id S229680AbjARAmC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 17 Jan 2023 19:42:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229698AbjARAXU (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 17 Jan 2023 19:23:20 -0500
+        with ESMTP id S229503AbjARAld (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 17 Jan 2023 19:41:33 -0500
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C085F770;
-        Tue, 17 Jan 2023 15:38:05 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C22E53CE0D;
+        Tue, 17 Jan 2023 16:19:06 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NxQLJ0K5Tz4xG5;
-        Wed, 18 Jan 2023 10:37:59 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NxRFh63nbz4xGq;
+        Wed, 18 Jan 2023 11:19:04 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1673998681;
-        bh=6o8f/hsZEwlY53BGqySN9SPEz6PJroAobIGjrinQTSk=;
+        s=201702; t=1674001145;
+        bh=99wDRjxrQLqpktGcF6RM5026lWVnSpjeJNcQIou38TU=;
         h=Date:From:To:Cc:Subject:From;
-        b=GdV8R3SkGkXScJGg4DCKpHQ7bfsdlEzxKsNHMpdAqjMBgYr0roTo3fojIUxEQdNOE
-         bkWFsMKroeG9QJtw6GiypcKtKam+kmA4iK9rFC5f/MUsnqvN5OdMM8kCFQFPTzDssA
-         Pg6gc7yuUQ2Gdhw/YWHxx27ZQOFC71u+foIkGUARKF4cMcnIGoXFuF+8BhZ9YaFrDl
-         zsdHCMp3s1MS7flLhjElksxJlgUnRti97ixH7K7xMG6Zn6aeR0+oukIVZBT4GJs3mx
-         8kCu3bTyOFRNMOzFJ2nCRwwSvifM0MfpVlezoWRPmwXzCzS681Ot0gJqB8HR2Ectf/
-         54/Nsv1A5fExw==
-Date:   Wed, 18 Jan 2023 10:37:58 +1100
+        b=stHtedjml8gnYb1pr/QZG8j93HsPzToD8QQuGuNb7bREvBkTkdx8B5kcIeNtyAmmF
+         KODc2qNmSsIHgi+HDOsV2HcPSF6Th6lVMsRgMwLHuF0uulTKdd6IKJYj6G7C7cTlzf
+         Ty3d1k8zK19ivxhC4u5zTtNuwstx4LqQK97kcgu3mNkUKYkop6WV/WR6cV/ws4TQSx
+         gzjhM8p3RZ1xux708SQ7/0Om7Dc4RGi9FeU6lF3Rplj93Mv89CPH2NoCFR5y7TOyxk
+         M/puu/AC9l3NPMMIHivFjWKac0/QhJL3FnK86hzXFFsQ+SuviVCOTm0D3j+W8LHMRk
+         OHva4wGpBdquQ==
+Date:   Wed, 18 Jan 2023 11:19:03 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>
-Cc:     Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
+To:     Rob Herring <robherring2@gmail.com>, Andy Gross <agross@kernel.org>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patch in the drm-intel tree
-Message-ID: <20230118103758.135fe5a5@canb.auug.org.au>
+Subject: linux-next: duplicate patch in the devicetree tree
+Message-ID: <20230118111903.69dc4500@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/u7VdDh0MoqRd_0D7xHcYRX3";
+Content-Type: multipart/signed; boundary="Sig_/xlb5usL_M28w1MEYm4I/N0h";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
@@ -54,41 +51,43 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/u7VdDh0MoqRd_0D7xHcYRX3
+--Sig_/xlb5usL_M28w1MEYm4I/N0h
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-The following commit is also in the drm-intel-fixes tree as a different
-commit (but the same patch):
+The following commit is also in the qcom tree as a different commit
+(but the same patch):
 
-  0fe76b198d48 ("drm/i915/display: Check source height is > 0")
+  37483c262365 ("dt-bindings: clock: qcom,videocc: correct clocks per varia=
+nt")
 
 this is commit
 
-  8565c502e7c1 ("drm/i915/display: Check source height is > 0")
+  06839dfc8798 ("dt-bindings: clock: qcom,videocc: correct clocks per varia=
+nt")
 
-in the drm-intel-fixes tree.
+in the qcom tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/u7VdDh0MoqRd_0D7xHcYRX3
+--Sig_/xlb5usL_M28w1MEYm4I/N0h
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPHMVYACgkQAVBC80lX
-0GyaAgf/dTYHcQK7vqkDT+y1zjCMVNrhHHQGIA7yZHREcvu/i1dtVJn6myl2zIwb
-pMumbJmbC4dImXlxx8eVgXHJuEZDDW6wd9itn772o44YAPFmg2H+pGG8Evnvo/d/
-n+1Coj1asHT2nceuTDsEZV/FZfoY0Ghtr0XMpSPZOrprtbc7nCEHvJMULRDn0XvT
-TdfD0GSx/ntPWlAYsPTx4o0igTNRYvMfiJQ8C8i0CryKIqf5V6RuRJRUBDSW6vQf
-jV0VK2Vg1YBb074rIosLRuA5MDvBg6qw3sBcfOChTk3lIlXaFfLjeu9ndAy2ixFy
-kph8iZv0fmq/GBmJ3ZfGpeGv7+AroQ==
-=E1Ip
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPHOvcACgkQAVBC80lX
+0GzALQf8CMFUvhLZ8edgCGYFSxXZeE9hk/2KAa3vf8zaJQmYAQPA0Wab1b/hw4ts
+cHOzq4lwouGZLCGp6/Q+mfcFcgnKw6luUcYFtyGivh8eJagoa+G0PwYBAwbl0Hr/
+3+D9ZTViZPjZvsM8u9vJ7rOEe/EiYgbeT0g3SAuUuUj8fEeIv52IBKAVe+J3gH7o
+Y7EgsIDpGOxl+HUMT4ZmzAfuridkBMWvyPN0gzMIaLddI5/vzPn+WXs/AMkmSy9i
+Zo/atibKRFN96OUx6ZSzsRsSW0FYSgruiIEb79DwyXHzokJBcx2b03y1Y3XsRLHw
+dhnsA3CjJ/URW1YMEh0bpb5jPMQhEw==
+=KQJ1
 -----END PGP SIGNATURE-----
 
---Sig_/u7VdDh0MoqRd_0D7xHcYRX3--
+--Sig_/xlb5usL_M28w1MEYm4I/N0h--

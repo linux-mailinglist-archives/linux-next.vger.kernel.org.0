@@ -2,47 +2,47 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19D0D67453E
-	for <lists+linux-next@lfdr.de>; Thu, 19 Jan 2023 22:53:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4597674598
+	for <lists+linux-next@lfdr.de>; Thu, 19 Jan 2023 23:12:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230155AbjASVxk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 19 Jan 2023 16:53:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37124 "EHLO
+        id S229797AbjASWMq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 19 Jan 2023 17:12:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231232AbjASVxF (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 19 Jan 2023 16:53:05 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ECF2AEDB8;
-        Thu, 19 Jan 2023 13:34:26 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        with ESMTP id S229696AbjASWLV (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 19 Jan 2023 17:11:21 -0500
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58E0DDF969;
+        Thu, 19 Jan 2023 13:48:41 -0800 (PST)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NybVh4Sdzz4xwp;
-        Fri, 20 Jan 2023 08:34:20 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1674164060;
-        bh=04p20k6x+zOHD5csIvRkYgr9m4XP4xceFZWPkOVjwHE=;
-        h=Date:From:To:Cc:Subject:From;
-        b=eltusKszsrKu4Fx2cTzMHVxORZt4RF+4DmlB+b7u/u+LqzBoPjHoJ5yVZv9I2eN4r
-         hxdRmOMxWbn56fhIIg+WSUeA0jMcqbSPapgiFCIneyIH4YWHLI4ks01dU4/1all3YE
-         EVUvuvJ3qJGBsi8LXXk6EMzkWDBOnZ1k8zUrS+zqCB4S74JJep/5gXAFGwKigDktyF
-         j4Ba1zNaf5mkiJmFF5oeJVo2uaWR3LxE1jk37++FPBDPBSPQhdF3nWRl+ZvEquKDUt
-         9xdJqGrte6cKz8iz3Vnv/uQR5svEiUY1h+4ivSIR1xXsrLOu09tdaFLTuv07aX6f5Q
-         V0PvIWR67WgnQ==
-Date:   Fri, 20 Jan 2023 08:34:19 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jonathan Corbet <corbet@lwn.net>
+        by ms.lwn.net (Postfix) with ESMTPSA id 94E04359;
+        Thu, 19 Jan 2023 21:48:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 94E04359
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1674164919; bh=ag6HUaimVZm7NlwVzt7zlfh9xPGOVrD3YGEZy6w1pxY=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=rRCgOdVoOA364MGoPS9OHm0VgZxQKFA28+OfLVSZkhompQtWJW+4KZz4HwkUBpZa0
+         KWvKVy20BJVDy+diY8PcAKuLIDtssj1LRHIfdNq77fE8b6LjJNzclCJWKMq81eUooX
+         3j1iYSd+SwdXTN3aJRNm/MmBBM61clLCuvvpwh2JcwWy59dvltgfftDmNeviUeekG1
+         zcvJvW18J+tABW3AZEaVBkynueSMUd00heepyCjEuuuP/oJT2bnQrg3AzYychozqz8
+         VRd6Hy3elMoNwTWq02MwCNu0O8QlWqRCj75TAXAj1lf6RKyCCKgDNUp7mbzqQsN2ew
+         ZZrGnTo94k76g==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
 Cc:     Jakob Koschel <jkl820.git@gmail.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the jc_docs tree
-Message-ID: <20230120083419.1fff9149@canb.auug.org.au>
+Subject: Re: linux-next: Signed-off-by missing for commit in the jc_docs tree
+In-Reply-To: <20230120083419.1fff9149@canb.auug.org.au>
+References: <20230120083419.1fff9149@canb.auug.org.au>
+Date:   Thu, 19 Jan 2023 14:48:38 -0700
+Message-ID: <87ilh26vrd.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/H9ZMt6mqee.EXXLyOER8Cx2";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,36 +50,19 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/H9ZMt6mqee.EXXLyOER8Cx2
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Stephen Rothwell <sfr@canb.auug.org.au> writes:
 
-Hi all,
+> Hi all,
+>
+> Commit
+>
+>   6b25b190a9a3 ("docs/scripts/gdb: add necessary make scripts_gdb step")
+>
+> is missing a Signed-off-by from its author.
 
-Commit
+Sigh...my tooling is supposed to catch that...  Patch dropped; Jakob,
+would you like to send me a properly signed-off version?
 
-  6b25b190a9a3 ("docs/scripts/gdb: add necessary make scripts_gdb step")
+Thanks,
 
-is missing a Signed-off-by from its author.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/H9ZMt6mqee.EXXLyOER8Cx2
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPJt1sACgkQAVBC80lX
-0Gz2mAf+NRyxKWbCLtl9QxIdlOVPFE1nmPvGAtE0TlV9OWM3zssYoJ3tQglWLZ31
-MS06iBE9y/QP2x13esV2NSyXRhpI6G3BfUbjEVrO8yDdPAa9HJ5QoOov7ZBOHzzP
-ZEgZUYXi7Ctj2dyLKT1sDhmP4mgw4tMlInyfVdUNYwlQrxMzMiJzEl2AQ+ge+BjC
-kTEjjc6lgLh679nasX3bdAueShE7croW7liHfFOsKfY25VkZllWnavQoX4HT8Xey
-VebIJVXUd1Gwqf2LLm0uwwocD3VB9eXODDks9I0gWETadZekkmQLGztidDrF3Vbq
-ex59mmBe5zjZkfVavWa0t4w/2m2JJg==
-=sHlf
------END PGP SIGNATURE-----
-
---Sig_/H9ZMt6mqee.EXXLyOER8Cx2--
+jon

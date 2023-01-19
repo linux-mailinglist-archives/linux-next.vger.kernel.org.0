@@ -2,120 +2,89 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F4FA673C09
-	for <lists+linux-next@lfdr.de>; Thu, 19 Jan 2023 15:32:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72252674005
+	for <lists+linux-next@lfdr.de>; Thu, 19 Jan 2023 18:34:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231366AbjASOcj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 19 Jan 2023 09:32:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50574 "EHLO
+        id S229851AbjASReF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 19 Jan 2023 12:34:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229686AbjASOcS (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 19 Jan 2023 09:32:18 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9D1482D54
-        for <linux-next@vger.kernel.org>; Thu, 19 Jan 2023 06:30:45 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id m5-20020a05600c4f4500b003db03b2559eso1396693wmq.5
-        for <linux-next@vger.kernel.org>; Thu, 19 Jan 2023 06:30:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2Umd92wRNfvAofgDIf+r9yO6iFgRztRZ4IYJ8AlzHdY=;
-        b=vkJOCCzoL8vjtTPGRMsoOw1R7mAXvOAuerYWRxBWXaMunEvMBJjX9QndCAb/cafgXt
-         Wp7AkkYDAcaPRBYQ2VzjOWVN5wMoZwqSQeukFJm2XD2SjfcQjxuESHU2zwmh/1FcbtXJ
-         OR5MMr6FO9bGoSKOuVuORlUSNlWpvJonbFssJ4ND0rStfsU754zN4PuUj9O8ONNIjh4a
-         XtpkqnpVW9+jKKgKSW7R6dKH1iBsVvX0/s9opm2SOcUAbFbwYsgnVMH8XvKRL/D2Bxl+
-         wln/UUynFA/QaLNWDnaf5NjAcf474M7n22HbeVud8gC0gqsEEcvlanaQjOHrda0OhsBF
-         77EA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2Umd92wRNfvAofgDIf+r9yO6iFgRztRZ4IYJ8AlzHdY=;
-        b=S+WuOFFQRZkaEfw7+R9vd5H2X79Gy9xFwIjf2Tmk+/uNpZvdGhU+vU1HyAlAr9joMR
-         FGKqGnj1Ha8DQinH0lY6ZgdLyGf01S4sEzs7cs9NE6KA6l7u+cz4hE5qjfWzuYbgtRqX
-         CHrUHcCDHvYEYWU/7zRpq9C7x02DLUut8hVgy8026WbC/sd2PBe+swX8FtOaQs09Aqmm
-         5MbUbFbV8szA2s9VnU5o9xtHc0WfWuV+x2ToZll8BzbrvB1xjZSD0RFMGsRF4r80vKm3
-         ojxLRy3xdSesgl38SGqe0AwaW4tWfQj2qp+63/+BP3d+9cWDzKY4L16xRXTohAioFsSP
-         5EQw==
-X-Gm-Message-State: AFqh2kqZZUnKlAgSmYFb+CHQpiZzIhKF2Vy/Ra87wxajr9yI1fG0+rtT
-        e5eWNQBK/EAhOwLKiULLlH4Zwg==
-X-Google-Smtp-Source: AMrXdXt/qRZqd3d5H5nKuT29rqnbZSUkbKuOzkuX9Eo+5Br+urhGdBlFyU95SdJu1GACPisSU9MB5A==
-X-Received: by 2002:a05:600c:601c:b0:3d9:ee01:60a4 with SMTP id az28-20020a05600c601c00b003d9ee0160a4mr10567478wmb.1.1674138641269;
-        Thu, 19 Jan 2023 06:30:41 -0800 (PST)
-Received: from [192.168.0.15] (cpc76484-cwma10-2-0-cust274.7-3.cable.virginm.net. [82.31.201.19])
-        by smtp.gmail.com with ESMTPSA id o12-20020a05600c4fcc00b003daff80f16esm6836420wmq.27.2023.01.19.06.30.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 Jan 2023 06:30:40 -0800 (PST)
-Message-ID: <000e333d-f6df-0d08-07a0-2e7056bb6792@linaro.org>
-Date:   Thu, 19 Jan 2023 14:30:39 +0000
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: linux-next: manual merge of the net-next tree with the net tree
-Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>,
-        Matthieu Baerts <matthieu.baerts@tessares.net>
-Cc:     Alex Elder <elder@linaro.org>, Jakub Kicinski <kuba@kernel.org>,
+        with ESMTP id S229626AbjASReE (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 19 Jan 2023 12:34:04 -0500
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9D0829E05
+        for <linux-next@vger.kernel.org>; Thu, 19 Jan 2023 09:34:03 -0800 (PST)
+Received: from cwcc.thunk.org (pool-173-48-120-46.bstnma.fios.verizon.net [173.48.120.46])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 30JHXW4n018458
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 19 Jan 2023 12:33:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1674149616; bh=jX0t83R7p7p0HQWetaSXC63gp0f3+PSHgcNUT/Jsbtw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=DGk5acJ2+G3WnlsmvTXbQlRa0dwU1xHO14zUkCg6Gqlgs8seCPnGw2+oFv/E9fDAb
+         NlvdOaZy6BzERVwnAj1shmNS0ULxmH5OvbX99TsBXmaPY9vfbCu35Osz/pwRZRavFR
+         xnvOTwCMo5JsnKwDfOelz1lCTxR0dvR6SpSTS1qCBLxeHHCId4WuSrf0IzUwdwh/c8
+         J/iKEC526tnr6ArK/RLJwG7cptVHpPXIBPM9fEGhRvjRq5j0+w91x0JDKJzQ18HTt0
+         leZNMbMgVaFOjwXF8mQAbjKC1JW0f/Srdq1QWC239rvCqjLo+i6Q4SydOMUg0la7cD
+         dh6L4gYiQYi5Q==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id 4130215C469B; Thu, 19 Jan 2023 12:33:32 -0500 (EST)
+Date:   Thu, 19 Jan 2023 12:33:32 -0500
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Greg KH <greg@kroah.com>, Vinod Koul <vkoul@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Sing-Han Chen <singhanc@nvidia.com>,
+        Wayne Chang <waynec@nvidia.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20230119114125.5182c7ab@canb.auug.org.au>
-From:   Caleb Connolly <caleb.connolly@linaro.org>
-In-Reply-To: <20230119114125.5182c7ab@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Subject: Re: linux-next: duplicate patches in the phy-next tree
+Message-ID: <Y8l+7KfRdPweMGWd@mit.edu>
+References: <20230119153145.598885cf@canb.auug.org.au>
+ <Y8jfW2TTnHd3J7R1@matsya>
+ <Y8jpFw5mfvyRLX/C@kroah.com>
+ <Y8lJiJHHcUO7MXQY@orome>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y8lJiJHHcUO7MXQY@orome>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+On Thu, Jan 19, 2023 at 02:45:44PM +0100, Thierry Reding wrote:
+> 
+> This has been a recurring theme, so I'm trying to get a better
+> understanding of what people expect here. Some maintainers want to see
+> a whole series for a single feature (in this case it was Tegra234 USB
+> support) even if it crosses multiple subsystems/trees. This has the
+> advantage that patches can be arranged such that all dependencies are
+> resolved. Other maintainers like things to be split up so that patches
+> are easier to pick up.
 
+Yeah, that's a problem I've seen work both ways.  For example, there
+was the "Convert del_timer*() to timer_shutdown*()" series, which was
+sent out both as a treewide patch as well as piecewise for each
+subsystem.  The patches haven't been applied yet, and it's been on my
+todo list to figure out (a) whether I should wait and for it to go in
+via some other tree, and (b) whether it's safe to apply it standalone
+for ext4, and that's what the patch author was intending.
 
-On 19/01/2023 00:41, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Today's linux-next merge of the net-next tree got conflicts in:
-> 
->   drivers/net/ipa/ipa_interrupt.c
->   drivers/net/ipa/ipa_interrupt.h
-> 
-> between commit:
-> 
->   9ec9b2a30853 ("net: ipa: disable ipa interrupt during suspend")
-> 
-> from the net tree and commits:
-> 
->   8e461e1f092b ("net: ipa: introduce ipa_interrupt_enable()")
->   d50ed3558719 ("net: ipa: enable IPA interrupt handlers separate from registration")
-> 
-> from the net-next tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
-> 
+Personally, I'm happy to do it both ways, especially for fairly
+trivial treewide changes.  If it's complex enough that it's going to
+cause merge conflict headaches, that would be different, but very
+often, it's just 1 or 2 line changes in a very large number of
+subsystems.
 
-Hi all, sorry for the delayed response to this.
+Cheers,
 
-If this is the same fixup in Matthieu's email [1] (which it appears to
-be), I can confirm that it's the correct fix here.
-
-I based the patch on master as it is a bug fix which we intend to
-backport, I should have mentioned the conflict with Alex's patch on
--next, apologies for the miscommunication.
-
--- 
-Kind Regards,
-Caleb (they/them)
+						- Ted

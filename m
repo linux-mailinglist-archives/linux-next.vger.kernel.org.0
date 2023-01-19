@@ -2,92 +2,104 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F352C673072
-	for <lists+linux-next@lfdr.de>; Thu, 19 Jan 2023 05:40:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0DF86730EE
+	for <lists+linux-next@lfdr.de>; Thu, 19 Jan 2023 06:05:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229570AbjASEkN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 18 Jan 2023 23:40:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54642 "EHLO
+        id S229616AbjASFFK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 19 Jan 2023 00:05:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229816AbjASEjt (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 18 Jan 2023 23:39:49 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 097F76E823;
-        Wed, 18 Jan 2023 20:37:40 -0800 (PST)
+        with ESMTP id S229618AbjASFED (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 19 Jan 2023 00:04:03 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 481E74DE2D;
+        Wed, 18 Jan 2023 20:58:13 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Ny8w84K42z4xN1;
-        Thu, 19 Jan 2023 15:36:24 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Ny9PH1sMMz4xG5;
+        Thu, 19 Jan 2023 15:58:11 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1674102985;
-        bh=uXiJRrSwOenfyHVojoKNT3dWtAN7By4hWLamYXeB4OU=;
-        h=Date:From:To:Cc:Subject:From;
-        b=cTjDBfuEFiK8a2nTR549PA/KFUjwioeJdgoFAiz+F/2RgRuz118EJUeaRWIvbZimD
-         +PkScaGHoaSBdN0OBCTGZ9bLCWviLih9ArUaqpaR8vbkwfDAKVRzQn1lseknOgTtmq
-         UZ7wxFF4jhDz0vijvJrLrY8Vf8+LVvJgugetjf3ROkOPy560uz6sz8N5JOA2EVa56r
-         X0dtTxzMUZOkJptUt9XvxN3F4Obdab4KGWKoER/5yzkwZiad8qkTa+cA4ehAvFk71v
-         aJTV0/x/2LRiJiDOWWIm5l1DBWAQqUmM1ReohBmXJWpQFtQvEuID93HFaOz7WK8rGT
-         xTutHYoQSOvVA==
-Date:   Thu, 19 Jan 2023 15:36:23 +1100
+        s=201702; t=1674104291;
+        bh=78mZuHN8lfebdX+am20yyCiUWINHe53KM7xnBzY6pfU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Hg2U9BKCj3pAjUTI/24TJqtpMTLJO2xdYI6snTAvOEniK6PqLvi9xLCvTOXAGJO4D
+         btPCKLMG5srU6kVpcl6JLnJXwOSn1Di+DOzUnYQEYLGksFdoACOcQzenctGeIA5QkG
+         NDgjedv9Re/OAn/9lJTIzVMjeMknez6dqEIw9YAfHXvKoR1eVXpUNS47b4+5Id24+j
+         Ea6mg/X1mBBr7Qke7aN5RnTXAjuhXQWvJB2yJkQntYgTOKpTgMrkRJ5uSifj9zAp13
+         CO7A0+iS7LvUZFR8zJdDNcXC24Z86BeEY5uUD55wcqHdvmHKyfXdhXfNqRgHI2iQjX
+         S3sP39JNl6acw==
+Date:   Thu, 19 Jan 2023 15:58:09 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Colin Cross <ccross@android.com>,
-        Olof Johansson <olof@lixom.net>,
-        Thierry Reding <treding@nvidia.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Tejun Heo <tj@kernel.org>
+Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patch in the phy-next tree
-Message-ID: <20230119153623.339d6739@canb.auug.org.au>
+Subject: Re: linux-next: manual merge of the mm tree with the cgroup tree
+Message-ID: <20230119155809.33625b3a@canb.auug.org.au>
+In-Reply-To: <20230106125915.60c8b547@canb.auug.org.au>
+References: <20230106125915.60c8b547@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/q=jRzdn=08Bi_=8oKQBQw4j";
+Content-Type: multipart/signed; boundary="Sig_/YNDi1t5=QTE0J_.xk0Ecumf";
  protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/q=jRzdn=08Bi_=8oKQBQw4j
+--Sig_/YNDi1t5=QTE0J_.xk0Ecumf
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-The following commit is also in the tegra tree as a different commit
-(but the same patch):
+On Fri, 6 Jan 2023 12:59:15 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
+>=20
+> Today's linux-next merge of the mm tree got a conflict in:
+>=20
+>   Documentation/admin-guide/cgroup-v1/memory.rst
+>=20
+> between commit:
+>=20
+>   da3ad2e14f63 ("docs: cgroup-v1: add internal cross-references")
+>=20
+> from the cgroup tree and commits:
+>=20
+>   6cd7ad27c60f ("mm: memcontrol: deprecate charge moving")
+>   9bf9f4ba8bd5 ("mm-memcontrol-deprecate-charge-moving-fix")
 
-  fb1ff01307ee ("dt-bindings: phy: tegra-xusb: Convert to json-schema")
+These have been combined into commit
 
-this is commit
+  da34a8484d16 ("mm: memcontrol: deprecate charge moving")
 
-  56052eee689a ("dt-bindings: phy: tegra-xusb: Convert to json-schema")
-
-in the tegra tree.
+in the mm-stable tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/q=jRzdn=08Bi_=8oKQBQw4j
+--Sig_/YNDi1t5=QTE0J_.xk0Ecumf
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPIyMcACgkQAVBC80lX
-0GybCwf9E7NVsD+a5Axi7bs/Y52qQG3PLkGtFRh1z0QDu89H0D4kUb2I76mtNFLq
-O5Pv99BgHqULUt/Zy6+veq5Opfqz1ktdH5oXUvawiWzvKicCkzRKLT3Rhw0GkU68
-W4Z966Li0NozLGy2wsiYe6bskI2ziv++kD+P3TDhA3wnH+DswzSwfKeL1cY1WCsn
-9IWS20PoJR8VMt4O4gyc7zL7dHis28OLTXJnYt+QLfhxdb8aXjkadWJXj9jsxW4y
-EjSk3sXB4LbMiEaD7Mflms2XjyniPJ8uewixbVC5/x10PwNfPh0D/DgnU4qrPye6
-YpQeVmAI3zdFXElb1cgevZxQA3uDKg==
-=AVRR
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPIzeEACgkQAVBC80lX
+0GxvQwf9EaVuh34vLQHdxOa+RZgMmMex/KAnIt+3tRY5jb9NZyJrohO9mLaNqyYy
+x1brq+CCwQ5a/IHpPr88R469RMuSWKC2v+EqxYayCmylhv7vLf3gffn+rlKTSV3g
+HArGWUYRvziJpDIsxuPmiO5FZ8PL42SUvRbzaHu6c6Z59K7QP0qLtdAPhDtlLIXm
+Ci75FJe1p4bclIqMvCa0tdJamrlLvIg00sO7W5h0bKMWBIeKV8xoLGHh4MRNsXvJ
+/6sXIK3aoR9pNfiBEJOfbxGBpj5QVjxz6EfjwETV1IZ629fx3Gq6cv3HVi6P+Dmd
+ZYiE8QQlaDUnLSBY+WT4bQT9Y82ddA==
+=Dv/6
 -----END PGP SIGNATURE-----
 
---Sig_/q=jRzdn=08Bi_=8oKQBQw4j--
+--Sig_/YNDi1t5=QTE0J_.xk0Ecumf--

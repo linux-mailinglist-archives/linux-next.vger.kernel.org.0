@@ -2,44 +2,44 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E0C067492D
-	for <lists+linux-next@lfdr.de>; Fri, 20 Jan 2023 03:06:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A503674931
+	for <lists+linux-next@lfdr.de>; Fri, 20 Jan 2023 03:09:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229874AbjATCGk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 19 Jan 2023 21:06:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32940 "EHLO
+        id S229484AbjATCJc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 19 Jan 2023 21:09:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229787AbjATCGj (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 19 Jan 2023 21:06:39 -0500
+        with ESMTP id S229473AbjATCJb (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 19 Jan 2023 21:09:31 -0500
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED4EBA8395;
-        Thu, 19 Jan 2023 18:06:36 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 079CA1A0;
+        Thu, 19 Jan 2023 18:09:30 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NyjXq2XDlz4xHV;
-        Fri, 20 Jan 2023 13:06:35 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Nyjc8529xz4xHV;
+        Fri, 20 Jan 2023 13:09:28 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1674180395;
-        bh=UtRB6E0wN2erVA9ouuQuDSVey2aH1kMgxHSkIFViH0A=;
+        s=201702; t=1674180568;
+        bh=5v66ofCrkJZhwu8nWLQSSFBEbMU/Ef/xua4Jd/IYozU=;
         h=Date:From:To:Cc:Subject:From;
-        b=L+meNp7m0hF8Y4dsW9/76cHIk7uKgRk/3AuWiJUGhqsTXpNYphfs75QW4Qgd/ikXm
-         5vbTYDXsbCw7SN6HcyVbt+gJSqkPQQ+bWwItCNer0ODSAoKA6jiZIHQT1pyQtUPR+l
-         271vbDxi+E6FviO6tZhvGLncPjwnQO2C6K1fhKy1Qc0gQEjrTfzpwQeE49EK7WmLzw
-         jyCR+r1Eifc5ZzaYzoH11gi5e7arYErweylA3yayk/NuS0oEQ/kiTkJbBYC9v7aA9Q
-         uZwkTH12EnvqhPQFNOfxuFUXhRPzDmZrY4TnPCcjmMbIIrbuM8EiixNxLkeUyliFW7
-         z82zA2dI94ZFA==
-Date:   Fri, 20 Jan 2023 13:06:34 +1100
+        b=GUlnd2i0/UDXOKkvMic9LJSxurdPNnj6woxMoy1vYh9kTU42wL9zabD14EEiBWsd9
+         6l/mJyui9s+zpLPUGQ7iQgpp4uDx8S0Aywqhqy3y7jJsuFK6i/9CykMpqA2/wLp8Ga
+         A7HAQBpgMd5QoVePUmMckxEULjZhi1pFq6s9G+darZSfITfLe9x7ypUardyOZrRrpT
+         Am0diNuHOI8uCvVg1GQaGik1PYjAZcMfJzaN/ma2DhWg8qfrmdXiU0xgQgkv2xe8G8
+         4Nvh8jY1NK6S9fMdyLel/Tue/xekjFJ3wfvZD/y4L12Rv2DD4uUM2Dc/Vln0tyuKF0
+         3HGVJ8p1/kH/Q==
+Date:   Fri, 20 Jan 2023 13:09:27 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Oded Gabbay <ogabbay@kernel.org>
-Cc:     Ofir Bitton <obitton@habana.ai>,
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Aaron Lewis <aaronlewis@google.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the accel tree
-Message-ID: <20230120130634.61c3e857@canb.auug.org.au>
+Subject: linux-next: build warning after merge of the kvm-x86 tree
+Message-ID: <20230120130927.3100f935@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/A=2_9B9N4uqEOp8GZ4PgI5V";
+Content-Type: multipart/signed; boundary="Sig_/YV=vQxprrYLgPCGt08wsGHK";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
@@ -50,46 +50,40 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/A=2_9B9N4uqEOp8GZ4PgI5V
+--Sig_/YV=vQxprrYLgPCGt08wsGHK
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the accel tree, today's linux-next build (htmldocs)
+After merging the kvm-x86 tree, today's linux-next build (htmldocs)
 produced this warning:
 
-Documentation/ABI/testing/sysfs-driver-habanalabs:201: ERROR: Unexpected in=
-dentation.
-Documentation/ABI/testing/sysfs-driver-habanalabs:201: WARNING: Block quote=
- ends without a blank line; unexpected unindent.
-Documentation/ABI/testing/sysfs-driver-habanalabs:201: ERROR: Unexpected in=
-dentation.
-Documentation/ABI/testing/sysfs-driver-habanalabs:201: WARNING: Block quote=
- ends without a blank line; unexpected unindent.
+Documentation/virt/kvm/api.rst:5070: ERROR: Unexpected indentation.
 
 Introduced by commit
 
-  0a14c331682f ("habanalabs: update device status sysfs documentation")
+  651daa44b11c ("kvm: x86/pmu: Introduce masked events to the pmu event fil=
+ter")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/A=2_9B9N4uqEOp8GZ4PgI5V
+--Sig_/YV=vQxprrYLgPCGt08wsGHK
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPJ9yoACgkQAVBC80lX
-0GymPAf+IOpHfof0/LYaZr6N49uaVkMlA1DewjifwnvQDpErjx9a0kLAd7C4CSu3
-pY57JLjHyCIm2lScdr+Cqx5z6zAj4sPlZMM0v040yCkaloTEIhFFoTW1q37s4im6
-DkrhyFOGX0VHQnkJyygrR0mGVD2F5plzhM2aYV6gMCMGTcycC2Z+uarPiqn2PdDr
-nFSddSoUCRv1BSGMy3J5IhM2OMFfJu0amuCLmA45xza3J+ecYpw+J8jjgDnyT9Fv
-O857stTeu/+GQ3mhaSHHazY6p3yTh1pYvOfHH3QqH3e0DCjI715hdfjAyGMUYa1W
-DA69ZD0keGRO+UF6agLPa8rY/zdDZg==
-=yTyW
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPJ99cACgkQAVBC80lX
+0Gx50wf+LdJPiMjod6rmkLzOIVM4tYSgp13RXJnEs2OT58qEC8IWyekiGk4Udh5c
+XQlXbK0nzeRoQNLzj43ZKENGBUsepwKvSr2M4Q26905nv6GnpkyB+nXI732XCfkH
+GMDHkhJG4G6Awb8bIPsaALAoc3D0C8w//zfmXkEW9kP1UZhb7uo7SCmvdMAaob5m
+GRiS63Q+FsHDgpzBY2D75Bc06lxmcnMIivvv6a97sJAm+0Oqzjmc0P1/lJT1MWdl
+H+//hMKjs9PautjEBtSJl9mKr1miGU/m+mGiKRE1JPJtOTPGLjZSy20RQl3/o1Al
+HIG9uiQBe+WQXL6oBXqA71tccXnrzw==
+=Gkut
 -----END PGP SIGNATURE-----
 
---Sig_/A=2_9B9N4uqEOp8GZ4PgI5V--
+--Sig_/YV=vQxprrYLgPCGt08wsGHK--

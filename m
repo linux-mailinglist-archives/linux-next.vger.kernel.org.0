@@ -2,115 +2,151 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32A9C675C67
-	for <lists+linux-next@lfdr.de>; Fri, 20 Jan 2023 19:05:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46411675DD1
+	for <lists+linux-next@lfdr.de>; Fri, 20 Jan 2023 20:18:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229916AbjATSFB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 20 Jan 2023 13:05:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55774 "EHLO
+        id S229490AbjATTSq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 20 Jan 2023 14:18:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231181AbjATSE6 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 20 Jan 2023 13:04:58 -0500
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC66A65F39
-        for <linux-next@vger.kernel.org>; Fri, 20 Jan 2023 10:04:56 -0800 (PST)
-Received: by mail-pl1-x62e.google.com with SMTP id p24so5986638plw.11
-        for <linux-next@vger.kernel.org>; Fri, 20 Jan 2023 10:04:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=2OuajGsQxBU53T1LkCzzlNc9v38dGdSuaz3Ry16782k=;
-        b=cv4xGHqJsuZvK2ZarceReQkinlRWj2RKHI/IXlEeZ8KhlCt9vSO+50shUgMQe8U7Xo
-         o/N48hI9fEfkAoRXatBZOk/BX0ATkFJL8snFudzFxL3kNQ9mKICA/iOJSXzXo2qLmZNF
-         8twvT7FVamMuP5tkEBBz1tL29FrI4hkbo5KtFr9UgvArdoGmLJNRcJR9SXOwhW03BQNG
-         VvQ5wv+icw52V1um0S2V9vmsnnONdVfyOW6vf7J6e74roX9rmFAD2M2mhIVkp66B3fmX
-         EuRuzMryXhDtQSyIsM/pnUMX+I5wmG9EwAsk0P9XQZKaRKc/AhS07ScnQZ1vfJbrvcvr
-         XJGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2OuajGsQxBU53T1LkCzzlNc9v38dGdSuaz3Ry16782k=;
-        b=4hhGKZ/q+OkD2LvMsS40+cIh7CPyBF+zTfLdG1lvAPL0WHPpuLGKwd+p9ywO6IidZX
-         OVtK1yArNmyVjUBqkVAlOTUTEVBYE7KUkcJufbJAPL+cJK0O4aKH7HSW/UF7ZGyQ1/Oc
-         eZ9+u48Uicj7qSFyA0z0FEYmyMlaYWoyR0AgksrYXNrEkKdopZF2gyFq9cKInZgubudk
-         Ess9qha5o+t7kJVUsNnVx5xv7K3vY5EpiCi+NscI5jbFddxq+WcQvA9LYYp3BYpLBlmp
-         EER1Wv2n9/k9dgRqcQlawF24goIS58dVcuZwKmbYwaKBRH3ydq0JUbpS4Qi2z2r+NsJq
-         63AA==
-X-Gm-Message-State: AFqh2koC+Z2KZk4XRoA2ITdYx/CsrkAlkW88KZu2QgYQtHUH8jG/Kv5H
-        vTdL/7+pgLC/BuEldjIgNkYTNw==
-X-Google-Smtp-Source: AMrXdXuQhxYzud0iE3IRvL3V0n7Ork0xtZ6zEcwNtunFJm0FHpzqoz+cUMFDIt1LhNt+V+5xPvsjoQ==
-X-Received: by 2002:a17:903:404c:b0:191:4367:7fde with SMTP id n12-20020a170903404c00b0019143677fdemr268549pla.0.1674237896052;
-        Fri, 20 Jan 2023 10:04:56 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id f5-20020a170902684500b0019488a36e2asm11100991pln.277.2023.01.20.10.04.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Jan 2023 10:04:55 -0800 (PST)
-Date:   Fri, 20 Jan 2023 18:04:51 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     Freedesktop DRI List <dri-devel@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Documentation <linux-doc@vger.kernel.org>,
-        Linux KVM <kvm@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Oded Gabbay <ogabbay@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jeffrey Hugo <quic_jhugo@quicinc.com>,
-        Ofir Bitton <obitton@habana.ai>,
-        Aaron Lewis <aaronlewis@google.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: Re: [PATCH linux-next 3/3] kvm: x86/pmu: Add blank line separator
- before KVM_CAP_PMU_EVENT_MASKED_EVENTS code path list
-Message-ID: <Y8rXw6g8JZkajrZ5@google.com>
-References: <20230120123534.137413-1-bagasdotme@gmail.com>
- <20230120123534.137413-4-bagasdotme@gmail.com>
+        with ESMTP id S229624AbjATTSp (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 20 Jan 2023 14:18:45 -0500
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 288961167F;
+        Fri, 20 Jan 2023 11:18:40 -0800 (PST)
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30KGD8TA019608;
+        Fri, 20 Jan 2023 11:18:39 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-id : mime-version; s=s2048-2021-q4;
+ bh=jI0rZ4SaZrkohoDBDgp8Qcdn7uEMCGxO33V6e4CawN4=;
+ b=PYbU/iULI/h38bAWhU+8QMklEyQZKJYwnCPl+yT01uEzM17tBlooiwh9k6AvSkGg0M8R
+ quSlnBsp666kqIzsF1qS0OOTVO67lPmcwB3WD6vdIKF9sutyfC2KBT+5HC1/PXY+kXo6
+ rK17AvCa/KUt65/Ln7GScV7c4KLSBiBGsw22pAxJ9rhM40GRj+uQxuWXX6w/uMAfpptX
+ x5SmRU9d/kojuENKdgE9ue4mKS8niMPBldLX+ARVeduyQjPXbmJXtc5m4Nq80JaKB9FZ
+ COXeL1pc0ZBJnSW2FwZ89wefrZKKmV4evRkVAamycTmBIBQsHQeMf3gV8pe9CzfwQT2R vQ== 
+Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2169.outbound.protection.outlook.com [104.47.58.169])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3n702vjra3-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 20 Jan 2023 11:18:39 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Z7kZmDFoXA1GPpbQoDLBSeCgUd4faW/Xy4S1NWKig49LkKss2Usv6hrR3L9CbFPzIWvx38bYOzWAHNS4lRwECj4sg+vpJLPGVNkz9W++5o/QPJGgEwGVtBv1X4mNEOqtVvI6uGA2D8Z1j6AaiMJi/lqNX7mLDYoL/12pEAq1yR/u+hh+d4HNAIbuNw4iKArwNkNr+o0lmo3Udj0Gq89Svm1hDVt+pvrnbZa+8Fwd/i6oZWXMT79qK6/+Z0UiS/hw089k4QmoT+6ecTWVYIxd+fWPxFoQCuCBrmfXiVkUuTrqRp5b3Rabp8ZZ1/AeiFRfuy12rAnRWcXvc3bJhQ0mcw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=jI0rZ4SaZrkohoDBDgp8Qcdn7uEMCGxO33V6e4CawN4=;
+ b=NwLQU1OlASwCGP1bOY0lpiKVqtUclQR7cKcgJ5df+YQM3Ye7FJq+KKtxF9bYRVCPkdAHu/iNAel7pIwAaUsCRVHSHIVP+zJaRIOr8jycyVoR28u+CO7Tdv0dqjcW4IfklSK2rFCscnb/UXklBR35GNP3bcF2echDgrb2uQKQXy4i2ViFW50xd135csbBmm4j0r74pUWs9Y4GZNjak1cwEx0bqQZMK+mndoOhYoZzk+DTH7AOPe8M0z2YroaGnjj5DrGNJ4c28anOhv5a5GKDBsnajUxwEItIL9TQzmVV5ECEhRLt19eY6zB3ob61IVI+xKY6H10C3goA7ZYaSqZN9w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=meta.com; dmarc=pass action=none header.from=meta.com;
+ dkim=pass header.d=meta.com; arc=none
+Received: from BY5PR15MB3667.namprd15.prod.outlook.com (2603:10b6:a03:1f9::18)
+ by BLAPR15MB3969.namprd15.prod.outlook.com (2603:10b6:208:27f::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.27; Fri, 20 Jan
+ 2023 19:18:35 +0000
+Received: from BY5PR15MB3667.namprd15.prod.outlook.com
+ ([fe80::9136:21da:ed88:da96]) by BY5PR15MB3667.namprd15.prod.outlook.com
+ ([fe80::9136:21da:ed88:da96%7]) with mapi id 15.20.6002.013; Fri, 20 Jan 2023
+ 19:18:35 +0000
+From:   Nick Terrell <terrelln@meta.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: Signed-off-by missing for commit in the zstd-fixes
+ tree
+Thread-Topic: linux-next: Signed-off-by missing for commit in the zstd-fixes
+ tree
+Thread-Index: AQHZKSUW+5N1z1l0x0WPVd3IbvGb566ntaQA
+Date:   Fri, 20 Jan 2023 19:18:35 +0000
+Message-ID: <D1A16450-8FEE-4601-AF3F-45066B6B7A92@fb.com>
+References: <20230116080514.34ee3baf@canb.auug.org.au>
+In-Reply-To: <20230116080514.34ee3baf@canb.auug.org.au>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BY5PR15MB3667:EE_|BLAPR15MB3969:EE_
+x-ms-office365-filtering-correlation-id: fe06c3bc-9842-4c0e-598b-08dafb1b2062
+x-fb-source: Internal
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: x5qmYfm92UCWTQxVHUsiLB5dRAeD8jO7RMHAdu9xyFQpWsAMhqPU1JrTQQ43EDzi7lymYO+sM6IqOJ/wTEBpR65Nt9d+66sDnHOkSy0Pfe56R8hB6eqL0G9EwNyNTdKtAZQ9Qtw9eDGdBAfoOtiatCzJM2qOrhhH5ZOvye0vC2tNhW0dthVUdxE5Xo0fmTBHMU9caV3g5meG4dLEGtOb6PT8neVzULoPTgVp5BP5OQAwgwSZ0Uh1G+cd5E3h4Ls3QuDh0ItrxMtOrNGKs1+glEe5AFK55IZFiFZFd8HaE/JyMnHGwWYp0QfbTR4ecGzgn7jNCuY1MPzj0JD6/Xb9rw4UMzEAsksaKRPoi95Vq22Z7DgctsDOSc8vF/2kz1/T0jiZSqSjvRvArV/9NMxaC82HR206aAVm2l1iC1dMg7G2EAXpUZNo+j/KnKVoGLstST4rrWlgtYnvozVQSVug0RCBF0oSJHx7YuZOyJN9Iw8agsF0F8Iww9AAOmJ5hnFTQG0q53r1eLYAPpKu/UVuNz3JDI695hNnKqmzpI5bzblQEG/DPVwHCTHm077TxbVZpTcjP2kkHoCmbFFtuo7HxU7I5w1BxnFj2UQD8Wp3YiAssOWbHo5KgvDsAGkfQw/udkpxoCxvJDivD1N3yZJ8Jm6d7DF9hK7ZWX7mO6mAVR5ytINOtidOfKW1NX8otw51WYBU3V/jNzSeZNfiyf+1mA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR15MB3667.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(39860400002)(136003)(376002)(366004)(346002)(451199015)(186003)(2906002)(6512007)(26005)(54906003)(9686003)(6506007)(53546011)(6486002)(122000001)(36756003)(316002)(478600001)(71200400001)(38100700002)(38070700005)(86362001)(33656002)(558084003)(83380400001)(41300700001)(4326008)(8936002)(5660300002)(91956017)(76116006)(66556008)(66946007)(66476007)(66446008)(6916009)(64756008)(8676002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?JmP8tYs3obkcztElbyU0sCwuuOMrxokvNK1ddJFmJcI1QfNlItCYEky6kJqG?=
+ =?us-ascii?Q?pEJ/GnVoNfSayfdouSPHy/tfv9/iJriJ8IxqAxRKIi0k3xyYjShyQr7GoAbb?=
+ =?us-ascii?Q?gGSnyFwBVvALsWXdRfQHAlvMx22IMXlvuyK66cvDrPiCG9lLIrmqMVztqXdR?=
+ =?us-ascii?Q?FH3pvc+904N4IfyrcwUBBTi+Zsmq+AaTkr/GXkr2xJyAzH7yemogpTe9ZCAK?=
+ =?us-ascii?Q?LMxsdM0ZkdUCL7qEMLZnh151jU5Hpe3tJbAZNZGjvjHy2Xnh1qPjsCnidWeJ?=
+ =?us-ascii?Q?f4S1g23ShezsAUD1XyV2EMh4KrJrBOAAMv6y4rw/D8xRkL0uFo24E9gt77Ab?=
+ =?us-ascii?Q?ZPtSMhdsxE10mKI50TQnUNlZ7sLujvoHD/5e9eDWPWChpnbJ3cCRzWA+YNQz?=
+ =?us-ascii?Q?UPv18j0NO0atZEyIYlp4W6Yw98JMWdadX9JVJPYkqBTIodE6MsIC46H8VqZP?=
+ =?us-ascii?Q?XV2jksEvgOsd1kOc/8pyi7Kc+Wew2zMmAhEp/g7BXomy1y/TNlzo3w3t9KdK?=
+ =?us-ascii?Q?/a+W6rv/z1/pAKMeXcHRSeaO7CLtXpbB0hx/S+MnfXBQue6KxhPRpDElfK/S?=
+ =?us-ascii?Q?XfNtJGMggNCgNVXUPX761DD2M3ubUyf/IyNubCAqIrAjy62097z+mvFJOCn2?=
+ =?us-ascii?Q?JmtOmR6OyyaaaRTgHtfXMmapk1D86zivdbjx3NaxhDIgHq5mBmU/sd+Sem9G?=
+ =?us-ascii?Q?Vk18Z/1Z+ru+c2nDZDypgJt0aCMjn5NdlH5ywUWIzfYLkjJo32PqZesZEkrM?=
+ =?us-ascii?Q?kiGZvE7UyyWzmHgBt4gXwjYEIuryNUcBASoGy987+4U9JE8vDzwDuYkn33u9?=
+ =?us-ascii?Q?hWJn2Zff7feOIqxD2rqd7rydrbYc+wthiBXf6mv3uJqMJ84NIx0SI2QaNGOZ?=
+ =?us-ascii?Q?n1Yycpcl5SZF00bbuLqj49T7wmHsEGWdQgOcp9DPincwp9WU3RBVd9PSwjYe?=
+ =?us-ascii?Q?O7Vj7ByFkaEB3GTrRcCz0TbKNDAI3hgyMnIN8e7ZO9R03j6HYFPjw1F0eodo?=
+ =?us-ascii?Q?LDrplbpUbEjw9irg/pO67jSJL3S1mRPpSdtijmF6fLHEyImOchjVhKXks3D4?=
+ =?us-ascii?Q?yjdE4ysIiVKzf/bDgRXvpqgkK9WQyN79VPCS63L+9WajC0hFML5zpSS9BjLL?=
+ =?us-ascii?Q?4hllyM5A1RgoS+TpwsSTNLrnZDsDmpnzvKJp8ddziuHVbS/HXWcGRXYDLwZC?=
+ =?us-ascii?Q?xVriCKqaVnyMa+BmGg2qzidEhpR5yWIwnWuMcJFvPlWq22rOUo4EAU8Pju0F?=
+ =?us-ascii?Q?tfBCQgH6Qdo/yYGPgqE7YO/Irv1AhPbCTTsiX2dv6fv68I5Lk3QDgRJefUn8?=
+ =?us-ascii?Q?/pjvz6t4NKKTuNmBy9opp8cGXZ6p71xIyu3SmzHiAIkzNl1loWC1gyY10EMt?=
+ =?us-ascii?Q?y4jOB2OVtQjnu1ZvuX0WfYxZRuisROKHlvAaO66ysgOvix982ZDMvhkIh/OX?=
+ =?us-ascii?Q?YvwwhtoxXgvzRzWraFYfiu0b/Mb0VZQpNVQuvnNo44CO+z3i/kDJJoXDAMI6?=
+ =?us-ascii?Q?ZjjHeX0yUjggJJ/aXfBZQCCFHBtqIDiwt8wxGUHzFC5LdVq2eYb27juIX/ex?=
+ =?us-ascii?Q?XURx8wLun0PWkjZZtGh+hB/hcXyO6CBoetPdQ3dR?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <A40666124961FF47AC86EAE57978F926@namprd15.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230120123534.137413-4-bagasdotme@gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: meta.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR15MB3667.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: fe06c3bc-9842-4c0e-598b-08dafb1b2062
+X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Jan 2023 19:18:35.2039
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: v76Btj3dB9JfIX0AlMU4GrO9vfMh1+T1KLLhy3W/4nKQ6etH8Rc5xjYxlNI5Tri+NqUnpK4BY34sYafVdd9q5g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR15MB3969
+X-Proofpoint-GUID: mZO8VraNdQJha3MVyRPrsecFBznbP92P
+X-Proofpoint-ORIG-GUID: mZO8VraNdQJha3MVyRPrsecFBznbP92P
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-20_10,2023-01-20_01,2022-06-22_01
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Jan 20, 2023, Bagas Sanjaya wrote:
-> Stephen Rothwell reported htmldocs warning when merging kvm-x86 tree:
-> 
-> Documentation/virt/kvm/api.rst:5070: ERROR: Unexpected indentation.
-> 
-> Fix the warning by adding a blank line separator before
-> KVM_CAP_PMU_EVENT_MASKED_EVENTS code path list to determine guest access.
-> 
-> Link: https://lore.kernel.org/linux-next/20230120130927.3100f935@canb.auug.org.au/
-> Fixes: 651daa44b11c0e ("kvm: x86/pmu: Introduce masked events to the pmu event filter")
-> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
-> ---
->  Documentation/virt/kvm/api.rst | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-> index a477186c57c193..83e3acc9e3211d 100644
-> --- a/Documentation/virt/kvm/api.rst
-> +++ b/Documentation/virt/kvm/api.rst
-> @@ -5067,6 +5067,7 @@ An encoded event will follow this layout::
->  
->  When the guest attempts to program the PMU, these steps are followed in
->  determining if the guest should have access:
-> +
->   1. Match the event select from the guest against the filter events.
->   2. If a match is found, match the guest's unit mask to the mask and match
->      values of the included filter events.
-> -- 
 
-Squashed this into the offending commit, thanks!
+
+> On Jan 15, 2023, at 1:05 PM, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> 
+> Hi all,
+> 
+> Commit
+> 
+>  8cbf4bb547b7 ("lib: zstd: Fix -Wstringop-overflow warning")
+> 
+> is missing a Signed-off-by from its committer.
+
+Thanks, fixed!
+
+> -- 
+> Cheers,
+> Stephen Rothwell
+

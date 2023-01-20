@@ -2,107 +2,101 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E9926757E9
-	for <lists+linux-next@lfdr.de>; Fri, 20 Jan 2023 16:00:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC24567591C
+	for <lists+linux-next@lfdr.de>; Fri, 20 Jan 2023 16:52:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229724AbjATPAJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 20 Jan 2023 10:00:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36534 "EHLO
+        id S230458AbjATPwj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 20 Jan 2023 10:52:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229590AbjATPAJ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 20 Jan 2023 10:00:09 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DE2641B72;
-        Fri, 20 Jan 2023 07:00:07 -0800 (PST)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30KEx1X8000559;
-        Fri, 20 Jan 2023 14:59:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=3HrTy6KRH0c8nn8RZz4UfVbeho7HoRu2+7rX1+TKX6o=;
- b=NrU0ke3Gq12txpQ4inx0oalb6FODLnpl/63NNfyMI4fRK915a1sfFJm+ZGTnSS6XUrmu
- 6JDQbXXMyz+2t8MbTxD29cp9Xpd5/s2d9L7019nVyU9S0p6FtIO7AXRxqP4O+Em0crSd
- TRf3FojLW1/lbKiJeWDql6YEtTvYMF7NuF1wFVFgVcjgtQdR9uXTE32YwyPGz6DGz0eG
- 2VX9BXcRazJ0GM4DZHR4jJ1+58AiC4pLsm+wo+SNYERuIBSLfmp2ZDR4NQdZENhSDlHA
- 8HgUC93d+ZbYBetZ7ze5TMKhAmDbckmxTTKJqbn6+ZPeA9+uTO0p7cuJZFybsIlviJzj 8w== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n7c28hwv5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 20 Jan 2023 14:59:42 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30KExfev006092
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 20 Jan 2023 14:59:41 GMT
-Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Fri, 20 Jan
- 2023 06:59:40 -0800
-Message-ID: <8a5c3cc6-c1e5-b6c4-e69d-441cf3a1fa7d@quicinc.com>
-Date:   Fri, 20 Jan 2023 07:59:39 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH linux-next 1/3] Documentation: accel: escape wildcard in
- special file path
-Content-Language: en-US
-To:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        Freedesktop DRI List <dri-devel@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Documentation <linux-doc@vger.kernel.org>,
-        Linux KVM <kvm@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-CC:     Oded Gabbay <ogabbay@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ofir Bitton <obitton@habana.ai>,
-        Sean Christopherson <seanjc@google.com>,
-        Aaron Lewis <aaronlewis@google.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-References: <20230120123534.137413-1-bagasdotme@gmail.com>
- <20230120123534.137413-2-bagasdotme@gmail.com>
-From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
-In-Reply-To: <20230120123534.137413-2-bagasdotme@gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: c49osEI-LfEgRsTJD9aA3ZchrnIv8A_-
-X-Proofpoint-ORIG-GUID: c49osEI-LfEgRsTJD9aA3ZchrnIv8A_-
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-20_09,2023-01-20_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 spamscore=0
- priorityscore=1501 adultscore=0 lowpriorityscore=0 mlxlogscore=954
- clxscore=1011 mlxscore=0 suspectscore=0 malwarescore=0 bulkscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301200142
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S230392AbjATPwi (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 20 Jan 2023 10:52:38 -0500
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F355210F;
+        Fri, 20 Jan 2023 07:52:37 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 2260F320046E;
+        Fri, 20 Jan 2023 10:52:36 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Fri, 20 Jan 2023 10:52:36 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1674229955; x=1674316355; bh=DtS8Jq+YGT
+        i7yWho9Vbrof/W6pjerVKNtmOz7aKe06M=; b=f9QLexsh11uF9/M6aGmdhI0kpB
+        nRraiDm12gpr3t6SEDmgzAq6/AF4tVnhkWo0eIvW4nneSVHy6ktQ1qHDQzZ+Mo3Y
+        rbxIkjPwy4jKk3kCAWARnHCKCxCDufVfxSPwkZCjMq0tEkvKmTrYq1LKej+wRYzF
+        ZL35/6wLDAWSHvwPhMHFGr+WxskwTgtuAG6BAcJ+sGjdnLuXxFN81fv84KfcIin+
+        WdTOvxd17WGCPyrnQJJ/mZ2rRtwTFBTNSK2LpTPQDLgDKpOoizR00T42Z9IIkyVC
+        zftTzmLperGx4AaESwK9UhAhHyC4IxTP0gkMMjVfjqcOQnsuu8yg9K4SvYLA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1674229955; x=1674316355; bh=DtS8Jq+YGTi7yWho9Vbrof/W6pje
+        rVKNtmOz7aKe06M=; b=UzU8ZWqTPmgqDpZs1evTS+43RxhGDhYR+SorIEftHO+0
+        MCgXWJsaTaB5QikmF7ShLiJHaBDom66BgZBVLZ6YFl3pUcPBorF8yirKuHVtnpAL
+        hR81fGcelNiOl08voW3pvjFRjQ+XWzIkyzqEZBIOXzpu8srxIKzyXVPxoxvdcwY9
+        YBooj6aXBE+4hs3XSoJZQ2JypeycREXUXzYj00R7BHU4e2J7Y2OOjBk5bWQfDej9
+        9CX+5E8kP2ECE+A5MqRR2v0tX4JOVvaiGtI+4yXyMNrWk/6Zpe+XYHQT9rSmVsvo
+        M3Up3Cj4eJAA6X4zqFF/IF3rAPyaXx6WfK6cH3fLXw==
+X-ME-Sender: <xms:w7jKY3mOZvfvkCkkr6TxND2vTQY_gMwTUI6D8BF0OiVjkufmsTPurA>
+    <xme:w7jKY617LQjosI9Gr26lMzEYyVcaqFQWYr59CDfyLzWAbyCVfyYcqDK_Y9gAPehsD
+    7lqWG3uzQd0fDNdluk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudduvddgkeefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:w7jKY9puV1miYR_CcqRkbhP8MIL6BBpGcjqyST-zdLmphyGx36fyZA>
+    <xmx:w7jKY_l6rRn739AkVf7pxeyU46G9c3kVybqesI6FYDcTYqqFpuxEkw>
+    <xmx:w7jKY13WKFPdWf1iyVN7BLaolZeGVI8jMovIX6pMRmbHNwei5qPWJA>
+    <xmx:w7jKYwTHf-s13xzhMyXHZa5SSfXjTuahwzPPtuSlmWKMAnRQK9njGA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 3553DB60086; Fri, 20 Jan 2023 10:52:35 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-85-gd6d859e0cf-fm-20230116.001-gd6d859e0
+Mime-Version: 1.0
+Message-Id: <91b81295-868f-4272-ba16-25862346ddec@app.fastmail.com>
+In-Reply-To: <20230113121308.5e86479f@canb.auug.org.au>
+References: <20230113121308.5e86479f@canb.auug.org.au>
+Date:   Fri, 20 Jan 2023 16:52:13 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Stephen Rothwell" <sfr@canb.auug.org.au>,
+        "Mark Brown" <broonie@kernel.org>,
+        "Liam Girdwood" <lgirdwood@gmail.com>,
+        "Olof Johansson" <olof@lixom.net>
+Cc:     ARM <linux-arm-kernel@lists.infradead.org>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        linux-next <linux-next@vger.kernel.org>
+Subject: Re: linux-next: duplicate patch in the sound-asoc tree
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 1/20/2023 5:35 AM, Bagas Sanjaya wrote:
-> Stephen Rothwell reported htmldocs warning then merging accel tree:
-> 
-> Documentation/accel/introduction.rst:72: WARNING: Inline emphasis start-string without end-string.
-> 
-> Sphinx confuses the file wildcards with inline emphasis (italics), hence
-> the warning.
-> 
-> Fix the warning by escaping wildcards.
-> 
-> Link: https://lore.kernel.org/linux-next/20230120132116.21de1104@canb.auug.org.au/
-> Fixes: f65c5dac207322 ("docs: accel: Fix debugfs path")
-> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+On Fri, Jan 13, 2023, at 02:13, Stephen Rothwell wrote:
+> Hi all,
+>
+> The following commit is also in the arm-soc tree as a different commit
+> (but the same patch):
+>
+>   5eab9265759e ("ASoC: PXA: make SND_PXA2XX_SOC_AC97 user-selectable")
+>
+> (commit 350a6eb412d3 in the arm-soc tree)
 
-Thanks for addressing this before I even saw the warning report.
+I dropped it from my tree now, as I had to rebase this branch
+for hopefully the last time.
 
-Reviewed-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
+     Arnd

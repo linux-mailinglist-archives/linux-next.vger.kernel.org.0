@@ -2,116 +2,156 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B61C6754B4
-	for <lists+linux-next@lfdr.de>; Fri, 20 Jan 2023 13:36:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D86B8675649
+	for <lists+linux-next@lfdr.de>; Fri, 20 Jan 2023 15:02:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230322AbjATMg3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 20 Jan 2023 07:36:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59446 "EHLO
+        id S229708AbjATOCS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 20 Jan 2023 09:02:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230182AbjATMgQ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 20 Jan 2023 07:36:16 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 701E8BFF42;
-        Fri, 20 Jan 2023 04:35:52 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id s13-20020a17090a6e4d00b0022900843652so8944517pjm.1;
-        Fri, 20 Jan 2023 04:35:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EMRe8eLbb8kiHFG5rJAk+PE3/E/OOzFPOQcaCCbQAoA=;
-        b=h9ZDQEpdJpvry7XWWAXJlAu+RImAffJ6mJRokPSxuAcl2ojeIUAJU0hYBM87Wef3Y8
-         qcYv78OCB4+F0a2EHi0QexCUL6KQ0DtM1FFTJEVsXO11eHp0daCIkA4LMm0Opmi+FPN3
-         jhn32UKAz8788V4RxXr8quDOe1L/wp0akqP6LII6QaCnyU271LrAxphlEh1tXgYq6pYP
-         QuW5RwUWCDp2ACemGyrEa02k6zfNs9MnZC8GkkI6LUp5eX8Ct37FpjcEQEeWK4iX6BHf
-         YoUFBXj0jO4eAJ2UdSeXQVt/b85CUCo/eEy8yh/UYWZvoGkemlhiTVLDWdEd1GEuoE2H
-         6q2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EMRe8eLbb8kiHFG5rJAk+PE3/E/OOzFPOQcaCCbQAoA=;
-        b=Pq5U0ZhHPJgl+aDWO3Ay8yMC9WwUSlhrfi5DV/LdToaPIGutms69RcaUtWdL1cxg9X
-         GEUYI1vgYXGPrMc+C52GO0hxLKLMgk3QvgzZDXrRjKbcl2zkE3KY9YEbfyQN+oll52t4
-         5xjIn9WbnOQcJbAKiHuXEwzsjuuFN7FqoQnG1+YJLyzaDtJRooJGYy1Oq3Jormvbg1WZ
-         jgq742PsAzDNSQ/2tcvYsRy2y1CfOamH3yYM7TqAS+znnE1We/63PFjB40Hu9dteipr0
-         G8aX3mdJ8AzRaeNNKQLUdgGuM4PC+C6wmoqJ8l4DR8SPQukQG6Ez0CMKL1o3cxn8jd/N
-         suJg==
-X-Gm-Message-State: AFqh2kprPkizOjdGknyWdz/hT/Kk41msDk1p8er/M7L06lDryQV603ZR
-        HFaTCHcI6lItOFlbyQXVgFU=
-X-Google-Smtp-Source: AMrXdXvVos2ggTL5T7HwbpOP+GXCUldlSyFLCZin7OjMSnh1W6yxJ50nEOUR/Xc6pUbJWCAKcPjonA==
-X-Received: by 2002:a05:6a21:398b:b0:b6:a58c:d01 with SMTP id ad11-20020a056a21398b00b000b6a58c0d01mr16824076pzc.30.1674218144599;
-        Fri, 20 Jan 2023 04:35:44 -0800 (PST)
-Received: from debian.me (subs02-180-214-232-6.three.co.id. [180.214.232.6])
-        by smtp.gmail.com with ESMTPSA id z189-20020a6233c6000000b0058de3516c3esm5534003pfz.142.2023.01.20.04.35.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Jan 2023 04:35:42 -0800 (PST)
-Received: by debian.me (Postfix, from userid 1000)
-        id 2CA5310189D; Fri, 20 Jan 2023 19:35:37 +0700 (WIB)
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Freedesktop DRI List <dri-devel@lists.freedesktop.org>,
+        with ESMTP id S230061AbjATOCR (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 20 Jan 2023 09:02:17 -0500
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CAE3C459D;
+        Fri, 20 Jan 2023 06:02:16 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id C545332007E8;
+        Fri, 20 Jan 2023 09:02:14 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute6.internal (MEProxy); Fri, 20 Jan 2023 09:02:16 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1674223334; x=1674309734; bh=bQ9pm+mBpB
+        l5Sw4+mLHdw4/LhiTKozGr7tRAm3ulMBw=; b=jfWtK1/DtpEe2YmkTVXbg0xKqw
+        sNivVbVU9DqXhWzBSAPPo3ua6IePXct6Dk+gQRcS2eAkAR/98H7znP72jbrJV8Nm
+        MulQ2pUubrw7RC8zSZqTWEROqYYDlHiPFu9mYi8fzNWRQ6VAyTdlE/pLsojl02b2
+        m60NIcopTzAiKD3McLcUHMZUqgw+nvOZqCBzMc19jWvBkVhBJ7G9BOsxZR+sqXZ6
+        FL6D3JraRhQEi4OK2OCT8+aJMH9lcEjuUysKh1aDIo6c/ahnva/uPaAkGUIGPkD5
+        lRMhsc6UMajgZQXccaUUAynvjGtMrs9S5tiGzACcVDin1+WLxosRwv+/vvUg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1674223334; x=1674309734; bh=bQ9pm+mBpBl5Sw4+mLHdw4/LhiTK
+        ozGr7tRAm3ulMBw=; b=N73LA3YmczIJv1ovZVcLu1E6t1sGMHGK/n3REBrWdz3f
+        Wsztx9uy9KA96L3IOyuE7aFCtgLZpGueKnJX+bx3sTopfhLR6yZihVKhYRahgVK7
+        eJGgDCMKfsj1BcmbGHH8vhdCf8wuSq9bu/DJlxWiQLRPW0l0ZXGZBAYL89Sw3mIR
+        U2Z4lpE20olV8fCTJceymyki9XSaZrXy8tr2eOSg8NAWWtb0m5qj9WMy1eKEoIRm
+        pw16ZkG+ahVfdk4nXjAGpnJH222aL6I+Of2Z1OAEdMJODLltlv/076bul94ZMbob
+        viKHB5C/3fHeiH5l1UlqSZ7ncg/6fAYzb9dIHXsMyQ==
+X-ME-Sender: <xms:5Z7KY1UahBWRTJYL_YLwTo2yVRsbyo-Emm-Y653O8hwK7Todc7GG8A>
+    <xme:5Z7KY1mwOR3uKZygcQHOwc10kb-CpyspZpJpjx3-ypPv0ih9CnErBcOmVeHV_ljPd
+    fqxE9y8jfMlFw>
+X-ME-Received: <xmr:5Z7KYxZkbP109MeMm2jVKD-A-E2SaKFVsKjkvrIa9-opeRUIZOIj3o_uYkN_sht94kHtheWQkiejAywVKm-AS7vjfwQOr00E_QkXJw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudduvddgiedtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
+    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepheegvd
+    evvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefhgfehkeetnecuvehluhhs
+    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
+    hhrdgtohhm
+X-ME-Proxy: <xmx:5Z7KY4XNPeYC83KS9yCA4JPbDOgAryn_r4LQ5oCR2BueGdmvV6hAcg>
+    <xmx:5Z7KY_nD1ZcY5UVb0Udom-nZsb1Fk2C46M-MmxE9owEKVqlZHI_zuQ>
+    <xmx:5Z7KY1fDiMzNG9XPyZhArhUnU0MfQrgtnhAuHXcomW4u9HE-k1f0aA>
+    <xmx:5p7KYx1O1Xm4ZSHQDBbraiPMU9ZJx_-OA1RUdAEZs2MwRnpcajea8Q>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 20 Jan 2023 09:02:12 -0500 (EST)
+Date:   Fri, 20 Jan 2023 15:02:10 +0100
+From:   Greg KH <greg@kroah.com>
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Vinod Koul <vkoul@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Sing-Han Chen <singhanc@nvidia.com>,
+        Wayne Chang <waynec@nvidia.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Documentation <linux-doc@vger.kernel.org>,
-        Linux KVM <kvm@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Oded Gabbay <ogabbay@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jeffrey Hugo <quic_jhugo@quicinc.com>,
-        Ofir Bitton <obitton@habana.ai>,
-        Sean Christopherson <seanjc@google.com>,
-        Aaron Lewis <aaronlewis@google.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: [PATCH linux-next 3/3] kvm: x86/pmu: Add blank line separator before KVM_CAP_PMU_EVENT_MASKED_EVENTS code path list
-Date:   Fri, 20 Jan 2023 19:35:34 +0700
-Message-Id: <20230120123534.137413-4-bagasdotme@gmail.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230120123534.137413-1-bagasdotme@gmail.com>
-References: <20230120123534.137413-1-bagasdotme@gmail.com>
+Subject: Re: linux-next: duplicate patches in the phy-next tree
+Message-ID: <Y8qe4hd52B3ltXH8@kroah.com>
+References: <20230119153145.598885cf@canb.auug.org.au>
+ <Y8jfW2TTnHd3J7R1@matsya>
+ <Y8jpFw5mfvyRLX/C@kroah.com>
+ <Y8lJiJHHcUO7MXQY@orome>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1281; i=bagasdotme@gmail.com; h=from:subject; bh=ztjmBXMVnQA+Q8YPslWD2ffuuyTaZSosFKC4Wud/mqs=; b=owGbwMvMwCX2bWenZ2ig32LG02pJDMmnuqblvYpfyPXs1e8DP07fz4sKKRN5eY/58eVV/IEWT1Vv Kmzf31HKwiDGxSArpsgyKZGv6fQuI5EL7WsdYeawMoEMYeDiFICJnLvGyLBLoHBL85E3pyuuRp/+xf +y3l5IOY01q1D5xHmXgHn8/rcYGf4FlBw+lH5Gneue8eWN89Sf5jfYbNh89/ir5stxBk9Ou7EBAA==
-X-Developer-Key: i=bagasdotme@gmail.com; a=openpgp; fpr=701B806FDCA5D3A58FFB8F7D7C276C64A5E44A1D
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y8lJiJHHcUO7MXQY@orome>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Stephen Rothwell reported htmldocs warning when merging kvm-x86 tree:
+On Thu, Jan 19, 2023 at 02:45:44PM +0100, Thierry Reding wrote:
+> On Thu, Jan 19, 2023 at 07:54:15AM +0100, Greg KH wrote:
+> > On Thu, Jan 19, 2023 at 11:42:43AM +0530, Vinod Koul wrote:
+> > > On 19-01-23, 15:31, Stephen Rothwell wrote:
+> > > > Hi all,
+> > > > 
+> > > > The following commits are also in the usb tree as different commits
+> > > > (but the same patches):
+> > > > 
+> > > >   5c7f94f8bad8 ("phy: tegra: xusb: Add Tegra234 support")
+> > > >   e5f9124404d0 ("phy: tegra: xusb: Disable trk clk when not in use")
+> > > > 
+> > > > they are commits
+> > > > 
+> > > >   d8163a32ca95 ("phy: tegra: xusb: Add Tegra234 support")
+> > > >   71d9e899584e ("phy: tegra: xusb: Disable trk clk when not in use")
+> > > 
+> > > Ah, ideally these should go thru phy tree!
+> > 
+> > Yeah, but they were submitted as a larger set of patches with USB
+> > changes to me, so I took the whole series (it's hard to pick and choose
+> > from a series).
+> 
+> This has been a recurring theme, so I'm trying to get a better
+> understanding of what people expect here. Some maintainers want to see
+> a whole series for a single feature (in this case it was Tegra234 USB
+> support) even if it crosses multiple subsystems/trees. This has the
+> advantage that patches can be arranged such that all dependencies are
+> resolved. Other maintainers like things to be split up so that patches
+> are easier to pick up.
+> 
+> Submitters can spell out in the cover letter how they think things
+> should be picked up, but they're not always aware of what else is going
+> on in the respective trees, so they may get it wrong.
+> 
+> I personally prefer to pick up DT bindings into the platform tree since
+> we're getting into a place where device trees can be properly validated
+> and keeping bindings and DTS files in the same tree helps with that.
+> 
+> But I know that DT maintainers prefer bindings to go through subsystem
+> trees because it can help reduce conflicts and that outweighs the DT
+> validation benefits, which some platforms may still be far away from
+> being able to use.
+> 
+> DTS changes on the other hand are a different thing. In my opinion it is
+> much better for them to be applied through platform trees because of the
+> greater potential for conflicts. In any given cycle there are often
+> multiple patches touching the same DTS files and currently a lot of
+> clean up is going on for validation.
+> 
+> So I wonder if we should just move away from the current process of how
+> we submit series. Maybe a less confusing way would be to strictly
+> separate driver and DTS changes into two series. That way maintainers
+> would better understand what patches to pick. It also has its own set of
+> disadvantages (can't validate DTS changes against DT bindings, and it
+> may not even be clear where certain DTS changes are documented).
 
-Documentation/virt/kvm/api.rst:5070: ERROR: Unexpected indentation.
+I don't like splitting them up, so keeping them all together is good.
+Make it simple for developers to do, and also simple for maintainers.
+If we end up with duplicates at times, what's the harm?
 
-Fix the warning by adding a blank line separator before
-KVM_CAP_PMU_EVENT_MASKED_EVENTS code path list to determine guest access.
+thanks,
 
-Link: https://lore.kernel.org/linux-next/20230120130927.3100f935@canb.auug.org.au/
-Fixes: 651daa44b11c0e ("kvm: x86/pmu: Introduce masked events to the pmu event filter")
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
----
- Documentation/virt/kvm/api.rst | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-index a477186c57c193..83e3acc9e3211d 100644
---- a/Documentation/virt/kvm/api.rst
-+++ b/Documentation/virt/kvm/api.rst
-@@ -5067,6 +5067,7 @@ An encoded event will follow this layout::
- 
- When the guest attempts to program the PMU, these steps are followed in
- determining if the guest should have access:
-+
-  1. Match the event select from the guest against the filter events.
-  2. If a match is found, match the guest's unit mask to the mask and match
-     values of the included filter events.
--- 
-An old man doll... just what I always wanted! - Clara
-
+greg k-h

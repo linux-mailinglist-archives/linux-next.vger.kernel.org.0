@@ -2,102 +2,129 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EDE56772CF
-	for <lists+linux-next@lfdr.de>; Sun, 22 Jan 2023 22:38:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2396B677360
+	for <lists+linux-next@lfdr.de>; Mon, 23 Jan 2023 00:01:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230114AbjAVViD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 22 Jan 2023 16:38:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60274 "EHLO
+        id S229986AbjAVXB4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 22 Jan 2023 18:01:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230018AbjAVViC (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 22 Jan 2023 16:38:02 -0500
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF90F18A81
-        for <linux-next@vger.kernel.org>; Sun, 22 Jan 2023 13:37:47 -0800 (PST)
-Received: by mail-pg1-x52d.google.com with SMTP id 141so7708045pgc.0
-        for <linux-next@vger.kernel.org>; Sun, 22 Jan 2023 13:37:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Oe89yTjGNmmMUneDO1NsmFMgS00g5APq0GaajvfZiZ0=;
-        b=J+daCyhSYvDYWVjODQE6PTdfJoZ/ugHBfEw9RdNa4DoHyo1sz0xA0/EJfAq/MsCiGo
-         0IHi2W3TAjZz+V/tJ8BsQ9GUDI6K0etRzWK0h+Uh67To7mLugsDzjEAMjIbWJVRr4+Pq
-         QoUL0GUqHrLAEP10C+V1o8Hq6aU5MiD0AgcC2gsVsQHEh3CEedzvx0vIprp7buTYJR1l
-         16gNNdO+aIiTjKlDFYHcZaSdzJ7RfjT7Fbokuzg884aZuKjBXyG2bK0PU0lmt+kbzub5
-         dau2YmokqakH0ocDY17ExpfqvM/6rzhhKQlBbFVliIQz73ghY9GuIFYnqedcsZ4eA+x7
-         Xi3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Oe89yTjGNmmMUneDO1NsmFMgS00g5APq0GaajvfZiZ0=;
-        b=qyU/GsLM8m+1FnFATj5w062Jir9Wm95zruxbHw/TuaVAievNJuBubSRLgtGf0/VMZ5
-         FrCzXPr9Q6MyTiGr921V2RlcfA3JWO/E4rMuysp0prKgmqJqoAr2n0Yt+QKmTAxsIS3z
-         pdrP2nF1s3MRmdiZ0o3BDu82Mw9jvvaMAqcpbvqurCzsArhJeYgezqUJKSKGQH9Z+dmw
-         +nTcm4rSiuOT4seC+kmKRnJPU8lEGjkUad4XLlflfRuJX1nhbyrEM/HXA5K6dZK6X3xp
-         pJ22d66edVwpv627oTWunQNBjcHs3KOy64juuYgXM26DjkLi2IV91Ctue9pdVkkBS0LX
-         pL/w==
-X-Gm-Message-State: AFqh2kpbP7jPmmHo5yxPglS1aq4bE1RpFoFLAsZqRebj00gWiyP0U2hs
-        v87FnmVqHfMJ6MKxyO40N/AknQ==
-X-Google-Smtp-Source: AMrXdXszoC3+w1Q2zpPGPMKmhkMrf+BkeuMJJxCc2NsQnWAXRpcEltY7WDe9CHNW06GZjFQWhmcpBw==
-X-Received: by 2002:a62:87c9:0:b0:587:4621:9645 with SMTP id i192-20020a6287c9000000b0058746219645mr5490475pfe.1.1674423459230;
-        Sun, 22 Jan 2023 13:37:39 -0800 (PST)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id y24-20020aa79438000000b00574ebfdc721sm30736947pfo.16.2023.01.22.13.37.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 22 Jan 2023 13:37:38 -0800 (PST)
-Message-ID: <dd18f35d-6b16-9601-90b3-2efc2cbed173@kernel.dk>
-Date:   Sun, 22 Jan 2023 14:37:37 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: linux-next: Signed-off-by missing for commit in the block tree
-Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        with ESMTP id S229811AbjAVXBz (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 22 Jan 2023 18:01:55 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39CC018ABD;
+        Sun, 22 Jan 2023 15:01:53 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P0TJF3FZcz4xZb;
+        Mon, 23 Jan 2023 10:01:49 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1674428511;
+        bh=yQ7hL8V1d6N/GdcSCF+uExTlfY+LEaNIBvxpKLmJHAE=;
+        h=Date:From:To:Cc:Subject:From;
+        b=hWgxGeihYF+gpArJqjOxtHh0MEacjjNziid6zzi2yvfU9LikLYy+843Vi/1UQDgNZ
+         +K68BlszSfwnZjHC6jFSRLbuojqvgaHldvDal2hYLYr9r6bRz8pqYP5lY+/tpUC4BA
+         U8PphJsHdiwucJGwRpCQqjftLhDBa+KSq/GqPenbjPW6l4Vt2ktZtz9hIk34Y24yVb
+         3+3wjDERZz26iicTriZfTzBQeKEoHuzvKIvPwF22PIygPkKdBh1qcMk86kVLGYbAq0
+         1/kTYuXKyine9IJt9C7zVjxdelfNZOC+7tio5cmclM13Kt6Bs7UICMVGRkoktNT+hV
+         q3J6pipj1uvAg==
+Date:   Mon, 23 Jan 2023 10:01:47 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20230123080830.7d50fccd@canb.auug.org.au>
- <61a0120a-4cff-90c0-6f87-4957aaee7a0b@kernel.dk>
- <20230123083458.45f3641c@canb.auug.org.au>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20230123083458.45f3641c@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Subject: linux-next: manual merge of the v4l-dvb-next tree with Linus' tree
+Message-ID: <20230123100147.5d8aff75@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/W78ZZYFNhsOtmz7thiSwUpR";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 1/22/23 2:34 PM, Stephen Rothwell wrote:
-> Hi Jens,
-> 
-> On Sun, 22 Jan 2023 14:30:15 -0700 Jens Axboe <axboe@kernel.dk> wrote:
->>
->> On 1/22/23 2:08 PM, Stephen Rothwell wrote:
->>>
->>> Commit
->>>
->>>   24337ddf1ff4 ("io_uring: Enable KASAN for request cache")
->>>
->>> is missing a Signed-off-by from its committer.  
->>
->> Fixed up, thanks.
-> 
-> Thanks.
-> 
-> Except you misspelled "Signed-off-by" :-)
+--Sig_/W78ZZYFNhsOtmz7thiSwUpR
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Hah, damnit! I never type that by hand, except for here... Anyway,
-fixed THAT one up too.
+Hi all,
 
--- 
-Jens Axboe
+Today's linux-next merge of the v4l-dvb-next tree got conflicts in:
 
+  MAINTAINERS
 
+between commit:
+
+  e0be11a833e8 ("MAINTAINERS: add networking entries for Willem")
+
+from Linus' tree and commit:
+
+  3673237b62a8 ("media: zr364xx: remove deprecated driver")
+
+from the v4l-dvb-next tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc MAINTAINERS
+index 56c7cb44a42a,ba5254cd1002..000000000000
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@@ -21582,23 -21710,6 +21565,13 @@@ S:	Orpha
+  W:	http://linux-lc100020.sourceforge.net
+  F:	drivers/net/wireless/zydas/zd1201.*
+ =20
+- USB ZR364XX DRIVER
+- M:	Antoine Jacquet <royale@zerezo.com>
+- L:	linux-usb@vger.kernel.org
+- L:	linux-media@vger.kernel.org
+- S:	Maintained
+- W:	http://royale.zerezo.com/zr364xx/
+- T:	git git://linuxtv.org/media_tree.git
+- F:	Documentation/admin-guide/media/zr364xx*
+- F:	drivers/staging/media/deprecated/zr364xx/
+-=20
+ +USER DATAGRAM PROTOCOL (UDP)
+ +M:	Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+ +S:	Maintained
+ +F:	include/linux/udp.h
+ +F:	net/ipv4/udp.c
+ +F:	net/ipv6/udp.c
+ +
+  USER-MODE LINUX (UML)
+  M:	Richard Weinberger <richard@nod.at>
+  M:	Anton Ivanov <anton.ivanov@cambridgegreys.com>
+
+--Sig_/W78ZZYFNhsOtmz7thiSwUpR
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPNwFwACgkQAVBC80lX
+0GzemQf/UuDwXGZIjgnMEKAcTIV4cFSlMZIc8BvzfvDID4jO0k3FEpY/yMnY+goQ
+qJIPQI+OsmhcBwRvG3Jv8hQ9t63kq9OeEruPAQH5TNS6f4MyTBckIhq+VUEXDKQ4
+1347cU0bY2cbxFK8YkVW1TvsDPGA79C0cQFkujYyjU2ttHdPqqoQndW9phUHOXI4
+x00uhhQFwK6H0/+d1p5/qCGfnpkHLzc7daUfwqNRXZseUNH06p5Ly2FNdeuRrsCs
+izwylwWPJzOrq6vh/GG2Y///KtopVrsGAyKhaBODL6AiQk6xXrl9+E34oAzLlIp6
+kP4Ox7xqR+tO8lQpmeIbtywW0VU1pw==
+=dDwg
+-----END PGP SIGNATURE-----
+
+--Sig_/W78ZZYFNhsOtmz7thiSwUpR--

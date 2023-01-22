@@ -2,96 +2,102 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E28CB6772B1
-	for <lists+linux-next@lfdr.de>; Sun, 22 Jan 2023 22:35:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EDE56772CF
+	for <lists+linux-next@lfdr.de>; Sun, 22 Jan 2023 22:38:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229980AbjAVVfE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 22 Jan 2023 16:35:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57600 "EHLO
+        id S230114AbjAVViD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 22 Jan 2023 16:38:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229971AbjAVVfD (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 22 Jan 2023 16:35:03 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 544F016AE0;
-        Sun, 22 Jan 2023 13:35:01 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P0RN36mpvz4xyF;
-        Mon, 23 Jan 2023 08:34:59 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1674423300;
-        bh=vgWQMNWMOBeEgmRIMGTyD/Ft1sPNNTzyu9y34fCVk8k=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Kox7UxlzDLpHNXbeT9tmCus0kD7YxekyPbq/0xkU3zjeQKgwglCgnfywhA4u29RlQ
-         MNpCR4bhWm+Y7RtuxBBZw8GJQL4r/6FZJhn4fy8Dgg7njvffGITTVZ7ahn1rmYipNE
-         MBrGSOEYOr9AQB1aC+KehQb/mf3whvGGFxtdVJsLz7gsn/SIzz44ysxZzOGr7Wzb/Y
-         nnazBZ3uCafgeOrOKMRia3YJb8M5tjxXn6KyOws4dIU9qawlVaktVollGHlR9/aP/c
-         PU4ygh6rrTXLN2iMQEyKFn965AjMTS28tmPDDEJzVKXbIMnHiiU6W/gUD1siw9j6/U
-         w0Vx7wzLliNEw==
-Date:   Mon, 23 Jan 2023 08:34:58 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jens Axboe <axboe@kernel.dk>
+        with ESMTP id S230018AbjAVViC (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 22 Jan 2023 16:38:02 -0500
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF90F18A81
+        for <linux-next@vger.kernel.org>; Sun, 22 Jan 2023 13:37:47 -0800 (PST)
+Received: by mail-pg1-x52d.google.com with SMTP id 141so7708045pgc.0
+        for <linux-next@vger.kernel.org>; Sun, 22 Jan 2023 13:37:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Oe89yTjGNmmMUneDO1NsmFMgS00g5APq0GaajvfZiZ0=;
+        b=J+daCyhSYvDYWVjODQE6PTdfJoZ/ugHBfEw9RdNa4DoHyo1sz0xA0/EJfAq/MsCiGo
+         0IHi2W3TAjZz+V/tJ8BsQ9GUDI6K0etRzWK0h+Uh67To7mLugsDzjEAMjIbWJVRr4+Pq
+         QoUL0GUqHrLAEP10C+V1o8Hq6aU5MiD0AgcC2gsVsQHEh3CEedzvx0vIprp7buTYJR1l
+         16gNNdO+aIiTjKlDFYHcZaSdzJ7RfjT7Fbokuzg884aZuKjBXyG2bK0PU0lmt+kbzub5
+         dau2YmokqakH0ocDY17ExpfqvM/6rzhhKQlBbFVliIQz73ghY9GuIFYnqedcsZ4eA+x7
+         Xi3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Oe89yTjGNmmMUneDO1NsmFMgS00g5APq0GaajvfZiZ0=;
+        b=qyU/GsLM8m+1FnFATj5w062Jir9Wm95zruxbHw/TuaVAievNJuBubSRLgtGf0/VMZ5
+         FrCzXPr9Q6MyTiGr921V2RlcfA3JWO/E4rMuysp0prKgmqJqoAr2n0Yt+QKmTAxsIS3z
+         pdrP2nF1s3MRmdiZ0o3BDu82Mw9jvvaMAqcpbvqurCzsArhJeYgezqUJKSKGQH9Z+dmw
+         +nTcm4rSiuOT4seC+kmKRnJPU8lEGjkUad4XLlflfRuJX1nhbyrEM/HXA5K6dZK6X3xp
+         pJ22d66edVwpv627oTWunQNBjcHs3KOy64juuYgXM26DjkLi2IV91Ctue9pdVkkBS0LX
+         pL/w==
+X-Gm-Message-State: AFqh2kpbP7jPmmHo5yxPglS1aq4bE1RpFoFLAsZqRebj00gWiyP0U2hs
+        v87FnmVqHfMJ6MKxyO40N/AknQ==
+X-Google-Smtp-Source: AMrXdXszoC3+w1Q2zpPGPMKmhkMrf+BkeuMJJxCc2NsQnWAXRpcEltY7WDe9CHNW06GZjFQWhmcpBw==
+X-Received: by 2002:a62:87c9:0:b0:587:4621:9645 with SMTP id i192-20020a6287c9000000b0058746219645mr5490475pfe.1.1674423459230;
+        Sun, 22 Jan 2023 13:37:39 -0800 (PST)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id y24-20020aa79438000000b00574ebfdc721sm30736947pfo.16.2023.01.22.13.37.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 22 Jan 2023 13:37:38 -0800 (PST)
+Message-ID: <dd18f35d-6b16-9601-90b3-2efc2cbed173@kernel.dk>
+Date:   Sun, 22 Jan 2023 14:37:37 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: linux-next: Signed-off-by missing for commit in the block tree
+Content-Language: en-US
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Signed-off-by missing for commit in the block tree
-Message-ID: <20230123083458.45f3641c@canb.auug.org.au>
-In-Reply-To: <61a0120a-4cff-90c0-6f87-4957aaee7a0b@kernel.dk>
 References: <20230123080830.7d50fccd@canb.auug.org.au>
-        <61a0120a-4cff-90c0-6f87-4957aaee7a0b@kernel.dk>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/iVJQIDUCZV/cJkn5NgggFCI";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+ <61a0120a-4cff-90c0-6f87-4957aaee7a0b@kernel.dk>
+ <20230123083458.45f3641c@canb.auug.org.au>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20230123083458.45f3641c@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/iVJQIDUCZV/cJkn5NgggFCI
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+On 1/22/23 2:34 PM, Stephen Rothwell wrote:
+> Hi Jens,
+> 
+> On Sun, 22 Jan 2023 14:30:15 -0700 Jens Axboe <axboe@kernel.dk> wrote:
+>>
+>> On 1/22/23 2:08 PM, Stephen Rothwell wrote:
+>>>
+>>> Commit
+>>>
+>>>   24337ddf1ff4 ("io_uring: Enable KASAN for request cache")
+>>>
+>>> is missing a Signed-off-by from its committer.  
+>>
+>> Fixed up, thanks.
+> 
+> Thanks.
+> 
+> Except you misspelled "Signed-off-by" :-)
 
-Hi Jens,
+Hah, damnit! I never type that by hand, except for here... Anyway,
+fixed THAT one up too.
 
-On Sun, 22 Jan 2023 14:30:15 -0700 Jens Axboe <axboe@kernel.dk> wrote:
->
-> On 1/22/23 2:08=E2=80=AFPM, Stephen Rothwell wrote:
-> >=20
-> > Commit
-> >=20
-> >   24337ddf1ff4 ("io_uring: Enable KASAN for request cache")
-> >=20
-> > is missing a Signed-off-by from its committer. =20
->=20
-> Fixed up, thanks.
+-- 
+Jens Axboe
 
-Thanks.
 
-Except you misspelled "Signed-off-by" :-)
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/iVJQIDUCZV/cJkn5NgggFCI
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPNrAIACgkQAVBC80lX
-0Gx37Af+LaA/dwy6gN1s09kONhcXZMMw2nEiV8uihi6czSHCsOZTBGJzoCO7pZ9d
-GODGy+sDN123v4Pnk2gsoRVTHuMW781jVrM/XQof4/YMzNceqHdOFyzIiD97YL3C
-f0CuWaOo1svUzcbpGlgaLHabZb/Xzq/O54myGeFIecNpVcnshci0H6h+jXNIW7F+
-tnci3QdzhXJ0uq4q8KFU58rfnBpmM5uaP8w8YOgqNntXsPVLkqiuCI27NQcAVLMI
-wjDA7XmgCTFqxCR0PQq7mchUDczJ4A6lu+4MJrrUUm2h15HnGB79vKEFCgXLjwh9
-S4lQhX9nQYUCLHd04n5CLbtiY3rUHw==
-=Gkrd
------END PGP SIGNATURE-----
-
---Sig_/iVJQIDUCZV/cJkn5NgggFCI--

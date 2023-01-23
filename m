@@ -2,80 +2,79 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D82F6677E47
-	for <lists+linux-next@lfdr.de>; Mon, 23 Jan 2023 15:42:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D05066783A6
+	for <lists+linux-next@lfdr.de>; Mon, 23 Jan 2023 18:52:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231583AbjAWOmZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 23 Jan 2023 09:42:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49648 "EHLO
+        id S232628AbjAWRwy (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 23 Jan 2023 12:52:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231511AbjAWOmY (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 23 Jan 2023 09:42:24 -0500
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A7002201A;
-        Mon, 23 Jan 2023 06:42:23 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id 7DF85320092E;
-        Mon, 23 Jan 2023 09:42:22 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Mon, 23 Jan 2023 09:42:23 -0500
+        with ESMTP id S230128AbjAWRwx (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 23 Jan 2023 12:52:53 -0500
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E75D1717E;
+        Mon, 23 Jan 2023 09:52:51 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 5D3283200949;
+        Mon, 23 Jan 2023 12:52:48 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute6.internal (MEProxy); Mon, 23 Jan 2023 12:52:49 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1674484942; x=
-        1674571342; bh=KbSF4ldL5+pYxUQfvT9aGEQGL7o7DDUOIC5afK3e+u8=; b=W
-        LWgwah5aSrHOtwas+kvZ93vWTKJ93PBChKSGm6pWvksmKY9E1QcCGzY5pAK4zCQH
-        cSqUhMStqt/PqS+HTvu79aVYapIjeDF8lvnoHOND+aJ7FFNbZ1se3Iv+stJVWjaq
-        +eAR38N9NlMdWGMYbnKWqFoH2Hp3dIzXVk6DZGEa6vqVHz2NPJA1yHt6/zErhLf3
-        BIQMmip8TwMv9iuXDDLd+795b8D88/wrBCrPGnl+PV/Uy5jupoVuRLDTrkPEM/Tr
-        9RpN4aG3WaCgIv5D7tujc3xNoQYuapEXDe4wtFjv36PO39cYfloPEFj8qnRwpOua
-        AjKFXf4h2Qeomf+HYmK7w==
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1674496367; x=1674582767; bh=NJnqRwcpwU
+        T+APDxZemOSPiySbFRy9evWMZn6qHEDEg=; b=Ukl3SAIeA43rY81BsV6teORpvR
+        0WRadyd47/HbMxPQJsiATA1+dhzANRc5n5BFDip6FN2554cxgO41pbcSHl4X4jEM
+        BDiq3pUh42G5/2D+lxusPIorZRSOF5flPoT1nFU+ADlFu+DUC1Mb7EQXPmho0EPZ
+        rkh2gBMdVPyIspJ+KQ69hprZ0OMMsVzRdkDW9MFoVwkl5mdMun6h7Kxqv9lOJSxJ
+        rNeuwTFRx8loBuIuIBp5pUa7sEYjGOMllt5HsCQhvSPc2nxWE6ph7TwXKWQdMy4L
+        MLYV7HwB+JW8FMGk/q5s2sKsD4RT1pQKFbqueNKS4dCOXNpR7dA9OBaBZ6aA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1674484942; x=
-        1674571342; bh=KbSF4ldL5+pYxUQfvT9aGEQGL7o7DDUOIC5afK3e+u8=; b=Q
-        HbXnDSPIExubYFxbO1UeHWr+WZ00v2wIOfqnSMJsfeAuLayvi5FYLNcj4rWGAvod
-        J5jXTj74gbx8HArfnB6fYRlrN60PSQmkZZMUmo0/tQEnHyS9YGykr7RpJj5SXtZh
-        SI2fiJ0QWLsZGrrY7ahQ5vSW1KaYs9uBRmEzVF/c1VfFKysaFRY8rRtrxCYyTGTx
-        TLEZbF5RffYahjcF/NYSgNpei4oSdt/WhMnbczpcuvfsDMbo5mJXRTPpfzhEZ9CF
-        VCfTU4VYWeSHxqbb/Q+/z/HR8w0h6Hqe4hZUFvG41/EJk0Dd42mbNiboOLyCgBhP
-        EEsyQgihTlWBz3dlbiGBA==
-X-ME-Sender: <xms:zpzOYyFGjYXGgW4IbSmW36Cm1HQvzzGftlaJogfxMyolAKenqa33ug>
-    <xme:zpzOYzWeilb8VcQXLlr2lluCOAdNhR6psRVs28eUwfwwPjtXLjcUbVXbTT6hBgML7
-    JxeMpCotgUaKA>
-X-ME-Received: <xmr:zpzOY8JSZSlEpDcxSLorTFconEuAWitN3aLo_3dsSFKfoGdIZIyhuZOIBxK0qmBEpNw4smrUKKyotWBRAozrV0cg5SJ6Jhcdd3O2hg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddukedgheeiucetufdoteggodetrfdotf
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1674496367; x=1674582767; bh=NJnqRwcpwUT+APDxZemOSPiySbFR
+        y9evWMZn6qHEDEg=; b=AXCGKFw5aajuEqAbs0+IhnTR03Ptlfgiz9T1g/4C5TO+
+        uP2yt4+0MJU+b+utUwu5T7KV/E2mZzOq1L6QIZLAvogPNVvj841JCyIFqvfHb2EN
+        6sD3GuPT8fbRizQ3gFqD9HtqoO8VmQv0JY+MgxRj5xYkJH1FB8XlbUzKXko1ePPr
+        n1m9ekdXswHYUORPfXCUYVnRrGUo/9602iI+CqJ0835NDcGFVtJ6Xneqf/9m35ZF
+        CLfdPX+QA8yDiD2LpQke6Xg2I4IX7jKxnAMoGdaQUX9k8EpsDuuQpNoggO4ASyWh
+        2Sgha4/yMAoIqgIgrEaiItIWR0T1Vwnc6UqjsAe9Pw==
+X-ME-Sender: <xms:b8nOY5L2uB3YWlyCP-vM5yX9aWiv2WFgCMKug4E24dKmbdQ-OqCluA>
+    <xme:b8nOY1JE1gdxqgVPifinrq5zlSiCc3JGLQR43_63tuqgQtCGouRgHkyLM51tdOgw7
+    sp6NNgknTY2mQ>
+X-ME-Received: <xmr:b8nOYxsbleaTFxgkleaH8KBzhR-Djvv1-3YRjAIkcvmI1RCT78_BOmLjbfq8LLsDsOzprPhRSJzWH4XtC8LAAQYgkhc0y7dXqqqeYw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddukedgleegucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggugfgjsehtkeertddttddunecuhfhrohhmpefirhgv
-    ghcumffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeelhe
-    ehudduueeggeejgfehueduffehveeukefgkeeufeeltdejteeiuedtkeekleenucevlhhu
-    shhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhroh
-    grhhdrtghomh
-X-ME-Proxy: <xmx:zpzOY8H0OXTLc_AbTdnzombngB2zdrw6bgPiooGkVj9g_PPQ953kOQ>
-    <xmx:zpzOY4VgwspGQKaU8hSDa9TyIUKv3Yy5gP9KAtNgSmCWe-ncsbSkZw>
-    <xmx:zpzOY_My_cjqvjpAYoZHbWbhk-m4E7Zpf49CLAugalx7qjbQvEYlTA>
-    <xmx:zpzOY6J1zNU0VS6vLP_l8C2og1wFqa79yWmQVUq196JiYJIKgufqLQ>
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
+    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepheegvd
+    evvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefhgfehkeetnecuvehluhhs
+    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
+    hhrdgtohhm
+X-ME-Proxy: <xmx:b8nOY6Y4ns8-yrDpWjcQD2eOkvGOwU8Pg1HtpsXwwsHb-cVeATu6sA>
+    <xmx:b8nOYwYHj_by3GBKwWPdHCDVYVKcYWXSzyyPUZq7EskaqE5X1qt8AQ>
+    <xmx:b8nOY-D9o6kTwOUUQ_93W5f2S2bxVjkkY9lYiEzwpPm7idCIU7Dl6A>
+    <xmx:b8nOY2MA_VWxDKwkhJd85csyf2qoacJHwaybJtEHSqrGA4Eg2TdgXQ>
 Feedback-ID: i787e41f1:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 23 Jan 2023 09:42:21 -0500 (EST)
-Date:   Mon, 23 Jan 2023 15:42:19 +0100
+ 23 Jan 2023 12:52:46 -0500 (EST)
+Date:   Mon, 23 Jan 2023 18:52:44 +0100
 From:   Greg KH <greg@kroah.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        =?iso-8859-1?Q?J=F3_=C1gila?= Bitsch <jgilab@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the usb tree
-Message-ID: <Y86cy1AM4w5ju5A4@kroah.com>
-References: <20230123152430.3e51fd25@canb.auug.org.au>
+Subject: Re: linux-next: build failure after merge of the tty tree
+Message-ID: <Y87JbLHfRqAfQpHy@kroah.com>
+References: <20230123131818.2785f4e8@canb.auug.org.au>
+ <CACMJSevdzO7QuYqQ8B1QoAPC5CUW--+AeDm2dHbf1TGGL0=aMA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230123152430.3e51fd25@canb.auug.org.au>
+In-Reply-To: <CACMJSevdzO7QuYqQ8B1QoAPC5CUW--+AeDm2dHbf1TGGL0=aMA@mail.gmail.com>
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -85,23 +84,86 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Jan 23, 2023 at 03:24:30PM +1100, Stephen Rothwell wrote:
-> Hi all,
+On Mon, Jan 23, 2023 at 10:46:28AM +0100, Bartosz Golaszewski wrote:
+> On Mon, 23 Jan 2023 at 03:18, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> >
+> > Hi all,
+> >
+> > After merging the tty tree, today's linux-next build (x86_64 allmodconfig)
+> > failed like this:
+> >
+> > drivers/tty/serial/qcom_geni_serial.c: In function 'setup_fifos':
+> > drivers/tty/serial/qcom_geni_serial.c:1058:17: error: 'struct qcom_geni_serial_port' has no member named 'rx_fifo'
+> >  1058 |         if (port->rx_fifo && (old_rx_fifo_depth != port->rx_fifo_depth) && port->rx_fifo_depth) {
+> >       |                 ^~
+> > drivers/tty/serial/qcom_geni_serial.c:1059:21: error: 'struct qcom_geni_serial_port' has no member named 'rx_fifo'
+> >  1059 |                 port->rx_fifo = devm_krealloc(uport->dev, port->rx_fifo,
+> >       |                     ^~
+> > drivers/tty/serial/qcom_geni_serial.c:1059:63: error: 'struct qcom_geni_serial_port' has no member named 'rx_fifo'
+> >  1059 |                 port->rx_fifo = devm_krealloc(uport->dev, port->rx_fifo,
+> >       |                                                               ^~
+> > drivers/tty/serial/qcom_geni_serial.c:1062:26: error: 'struct qcom_geni_serial_port' has no member named 'rx_fifo'
+> >  1062 |                 if (!port->rx_fifo)
+> >       |                          ^~
+> >
+> > Caused by commit
+> >
+> >   2aaa43c70778 ("tty: serial: qcom-geni-serial: add support for serial engine DMA")
+> >
+> > interacting with commit
+> >
+> >   b8caf69a6946 ("tty: serial: qcom-geni-serial: fix slab-out-of-bounds on RX FIFO buffer")
+> >
+> > from Linus' tree.
+> >
+> > I have applied the following merge fix patch for today (I am not sure
+> > if it is actually correct, but it builds).
+> >
+> > From: Stephen Rothwell <sfr@canb.auug.org.au>
+> > Date: Mon, 23 Jan 2023 13:09:27 +1100
+> > Subject: [PATCH] tty: fix up for "tty: serial: qcom-geni-serial: add support
+> >  for serial engine DMA"
+> >
+> > interacting with "tty: serial: qcom-geni-serial: fix slab-out-of-bounds
+> > on RX FIFO buffer".
+> >
+> > Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> > ---
+> >  drivers/tty/serial/qcom_geni_serial.c | 6 +++---
+> >  1 file changed, 3 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
+> > index d98e0a8aae7c..61350007bf1c 100644
+> > --- a/drivers/tty/serial/qcom_geni_serial.c
+> > +++ b/drivers/tty/serial/qcom_geni_serial.c
+> > @@ -1055,11 +1055,11 @@ static int setup_fifos(struct qcom_geni_serial_port *port)
+> >         uport->fifosize =
+> >                 (port->tx_fifo_depth * port->tx_fifo_width) / BITS_PER_BYTE;
+> >
+> > -       if (port->rx_fifo && (old_rx_fifo_depth != port->rx_fifo_depth) && port->rx_fifo_depth) {
+> > -               port->rx_fifo = devm_krealloc(uport->dev, port->rx_fifo,
+> > +       if (port->rx_buf && (old_rx_fifo_depth != port->rx_fifo_depth) && port->rx_fifo_depth) {
+> > +               port->rx_buf = devm_krealloc(uport->dev, port->rx_buf,
+> >                                               port->rx_fifo_depth * sizeof(u32),
+> >                                               GFP_KERNEL);
+> > -               if (!port->rx_fifo)
+> > +               if (!port->rx_buf)
+> >                         return -ENOMEM;
+> >         }
+> >
+> > --
+> > 2.35.1
+> >
+> > --
+> > Cheers,
+> > Stephen Rothwell
 > 
-> After merging the usb tree, today's linux-next build (htmldocs) produced
-> this warning:
+> This looks fine and works fine:
 > 
-> include/linux/usb/composite.h:510: warning: Function parameter or member 'bcd_webusb_version' not described in 'usb_composite_dev'
-> include/linux/usb/composite.h:510: warning: Function parameter or member 'b_webusb_vendor_code' not described in 'usb_composite_dev'
-> include/linux/usb/composite.h:510: warning: Function parameter or member 'landing_page' not described in 'usb_composite_dev'
-> include/linux/usb/composite.h:510: warning: Function parameter or member 'use_webusb' not described in 'usb_composite_dev'
-> 
-> Introduced by commit
-> 
->   93c473948c58 ("usb: gadget: add WebUSB landing page support")
+> Reviewed-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> Tested-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-Jó, can you send a follow-on patch to fix this issue please?
-
-thanks,
+Thanks for this, someone else just sent the same thing, I've queued it
+up too.
 
 greg k-h

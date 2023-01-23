@@ -2,70 +2,48 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2319D678B3F
-	for <lists+linux-next@lfdr.de>; Mon, 23 Jan 2023 23:59:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C06F678BA5
+	for <lists+linux-next@lfdr.de>; Tue, 24 Jan 2023 00:03:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232403AbjAWW7x (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 23 Jan 2023 17:59:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60272 "EHLO
+        id S232099AbjAWXDj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 23 Jan 2023 18:03:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232758AbjAWW7n (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 23 Jan 2023 17:59:43 -0500
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A58D95FFA
-        for <linux-next@vger.kernel.org>; Mon, 23 Jan 2023 14:59:18 -0800 (PST)
-Received: by mail-pl1-x62e.google.com with SMTP id v23so13010214plo.1
-        for <linux-next@vger.kernel.org>; Mon, 23 Jan 2023 14:59:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=mUw+5qOPqzT0QgGYWK9h2lLMx3Txbd3YBAfPD6m5U1Y=;
-        b=rPsxL2bRQ6/nupQU1Jp9WvRQOljLbKsg4RNOh1teS+06dzRYkoC2I9qcbBtrMoiNCv
-         irjB7YQ6NiQ2DRUF5jTUW7IhuWrrwAIqiD/1CQAVFhMGXXpv5DMhP5lKRoPBIaSX9tDs
-         hbDHplOT2rkDURb9qq/Z/HniFzTY5q9WoJA24r70t2h7rb+yRTLkOSt1FVwas685ICNz
-         s/19wELZGfi6rNoJnBwKw07d5u4mqMyow3eZ9MEjL0G/ZME5ozdpQhtGMO1z5QpvyyFw
-         v7DP6UGQ+kqUVDL/A6n24L/teWx1X6ibfNObO8Mpe3nTcGk8zOladW+y0mt1Ct2Vg/wM
-         6opw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mUw+5qOPqzT0QgGYWK9h2lLMx3Txbd3YBAfPD6m5U1Y=;
-        b=scFiH9eRMw8vvE41s7zgB63D4Md3Q7FTdZO3aD2zU/G6gb4weZcE8jHrj9Qr2nm3tt
-         LGUN7W4Q5vA8E+vBL1juW8h2o5lyet7wUIyLsStYwNz0A1o+7vBgkpx0cRaCMLM6zUTL
-         4WGDO4APyR77nUmvn4QY+f09qosu+8qJ/PceMenZM4TQN5DeowRzPGXWXjTaPmWrLW9R
-         4OntHJo+Kk4syNgdokGEBICee8GRnDeXGaH8EjFOxtLJbWGO8rQ64R789VObbOz2sfXG
-         Fglz5vp99rRv10FDyZgfJAaEQD82FSuOCIzyZKE+kfk2b+mJXKOKk8GilIrlVUs3hB0J
-         0hhw==
-X-Gm-Message-State: AFqh2koc1n5Bd7iEQkLZfAB4ItVU5xaSA2HrpEIkIKnO1usErHvopqwX
-        nxA5j/mpkhjriH4fRoOoKS4fMrzDosPQsGZHYLAJ5g==
-X-Google-Smtp-Source: AMrXdXtO0XFUkvEXzJzoxIe3sgPAsDPvPugKrLNWr7lWrmNPcEzij5QlGnC3yuGEkU8DQU1ly+mfyQyI7Tdphp++Z5E=
-X-Received: by 2002:a17:90a:2c4d:b0:229:2410:ef30 with SMTP id
- p13-20020a17090a2c4d00b002292410ef30mr2830399pjm.66.1674514748780; Mon, 23
- Jan 2023 14:59:08 -0800 (PST)
-MIME-Version: 1.0
-References: <20230124094403.76e0011f@canb.auug.org.au>
-In-Reply-To: <20230124094403.76e0011f@canb.auug.org.au>
-From:   Stanislav Fomichev <sdf@google.com>
-Date:   Mon, 23 Jan 2023 14:58:56 -0800
-Message-ID: <CAKH8qBvO3QiR9tvu6=ic-A79O5qp8=WMSL8VR6sCDvO4cmOKqg@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the bpf-next tree with Linus' tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
+        with ESMTP id S231953AbjAWXDg (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 23 Jan 2023 18:03:36 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 216233A593;
+        Mon, 23 Jan 2023 15:03:06 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P15Gz3bSfz4xyF;
+        Tue, 24 Jan 2023 10:02:51 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1674514972;
+        bh=mSntX7M1BWnx+3X6vSUMHIbBpo2Tej3Z/vVUQjj9+rc=;
+        h=Date:From:To:Cc:Subject:From;
+        b=B+SqX6tvMvGq3WSbJLrGhnYqWq2851XFXiISLtiDYdMUHJKXM4uMrXN17YnHIxU5m
+         QX1Djq6T8C2C7ZlThUBgWPV8KiJWLzDxWaGNK6hos7PlLR/WdBcpnr3/PC6tvj7yOk
+         ovHTz01zcrSKvxWJ+ftRlLGn30WgY86Kcux8mW2GiPAjyChazXFqyeyf4OABVdo7Gl
+         y3K2gGSYWoWWBHVeTN9BXNu3nhFY+9rkImasYTQeSnvZn4FuKDhFb+EJaZYsITMbZ6
+         GJE/VUuS03eE/qikH6HzP3HueJFhwVNkMrxrfNdUQoaWeUeysykr1AeGzgCr01cljW
+         tVbuAfDSgmtMg==
+Date:   Tue, 24 Jan 2023 10:02:49 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Martin KaFai Lau <martin.lau@kernel.org>,
-        Paul Moore <paul@paul-moore.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the net-next tree
+Message-ID: <20230124100249.5ec4512c@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/78vkhwALhY6su2u.n.Z+QAx";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,172 +51,112 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Jan 23, 2023 at 2:44 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> Today's linux-next merge of the bpf-next tree got a conflict in:
->
->   kernel/bpf/offload.c
->
-> between commit:
->
->   ef01f4e25c17 ("bpf: restore the ebpf program ID for BPF_AUDIT_UNLOAD and PERF_BPF_EVENT_PROG_UNLOAD")
->
-> from Linus' tree and commit:
->
->   89bbc53a4dbb ("bpf: Reshuffle some parts of bpf/offload.c")
->
-> from the bpf-next tree.
->
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
+--Sig_/78vkhwALhY6su2u.n.Z+QAx
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Yeah, that looks like a correct resolution, thank you!
-Not sure what would've been the correct way to handle it in bpf-next
-(except waiting for bpf tree to be merged)?
+Hi all,
 
-> --
-> Cheers,
-> Stephen Rothwell
->
-> diff --cc kernel/bpf/offload.c
-> index 190d9f9dc987,e87cab2ed710..000000000000
-> --- a/kernel/bpf/offload.c
-> +++ b/kernel/bpf/offload.c
-> @@@ -75,20 -74,124 +74,121 @@@ bpf_offload_find_netdev(struct net_devi
->         return rhashtable_lookup_fast(&offdevs, &netdev, offdevs_params);
->   }
->
-> - int bpf_prog_offload_init(struct bpf_prog *prog, union bpf_attr *attr)
-> + static int __bpf_offload_dev_netdev_register(struct bpf_offload_dev *offdev,
-> +                                            struct net_device *netdev)
->   {
->         struct bpf_offload_netdev *ondev;
-> -       struct bpf_prog_offload *offload;
->         int err;
->
-> -       if (attr->prog_type != BPF_PROG_TYPE_SCHED_CLS &&
-> -           attr->prog_type != BPF_PROG_TYPE_XDP)
-> -               return -EINVAL;
-> +       ondev = kzalloc(sizeof(*ondev), GFP_KERNEL);
-> +       if (!ondev)
-> +               return -ENOMEM;
->
-> -       if (attr->prog_flags)
-> -               return -EINVAL;
-> +       ondev->netdev = netdev;
-> +       ondev->offdev = offdev;
-> +       INIT_LIST_HEAD(&ondev->progs);
-> +       INIT_LIST_HEAD(&ondev->maps);
-> +
-> +       err = rhashtable_insert_fast(&offdevs, &ondev->l, offdevs_params);
-> +       if (err) {
-> +               netdev_warn(netdev, "failed to register for BPF offload\n");
-> +               goto err_free;
-> +       }
-> +
-> +       if (offdev)
-> +               list_add(&ondev->offdev_netdevs, &offdev->netdevs);
-> +       return 0;
-> +
-> + err_free:
-> +       kfree(ondev);
-> +       return err;
-> + }
-> +
-> + static void __bpf_prog_offload_destroy(struct bpf_prog *prog)
-> + {
-> +       struct bpf_prog_offload *offload = prog->aux->offload;
-> +
-> +       if (offload->dev_state)
-> +               offload->offdev->ops->destroy(prog);
-> +
->  -      /* Make sure BPF_PROG_GET_NEXT_ID can't find this dead program */
->  -      bpf_prog_free_id(prog, true);
->  -
-> +       list_del_init(&offload->offloads);
-> +       kfree(offload);
-> +       prog->aux->offload = NULL;
-> + }
-> +
-> + static int bpf_map_offload_ndo(struct bpf_offloaded_map *offmap,
-> +                              enum bpf_netdev_command cmd)
-> + {
-> +       struct netdev_bpf data = {};
-> +       struct net_device *netdev;
-> +
-> +       ASSERT_RTNL();
-> +
-> +       data.command = cmd;
-> +       data.offmap = offmap;
-> +       /* Caller must make sure netdev is valid */
-> +       netdev = offmap->netdev;
-> +
-> +       return netdev->netdev_ops->ndo_bpf(netdev, &data);
-> + }
-> +
-> + static void __bpf_map_offload_destroy(struct bpf_offloaded_map *offmap)
-> + {
-> +       WARN_ON(bpf_map_offload_ndo(offmap, BPF_OFFLOAD_MAP_FREE));
-> +       /* Make sure BPF_MAP_GET_NEXT_ID can't find this dead map */
-> +       bpf_map_free_id(&offmap->map, true);
-> +       list_del_init(&offmap->offloads);
-> +       offmap->netdev = NULL;
-> + }
-> +
-> + static void __bpf_offload_dev_netdev_unregister(struct bpf_offload_dev *offdev,
-> +                                               struct net_device *netdev)
-> + {
-> +       struct bpf_offload_netdev *ondev, *altdev = NULL;
-> +       struct bpf_offloaded_map *offmap, *mtmp;
-> +       struct bpf_prog_offload *offload, *ptmp;
-> +
-> +       ASSERT_RTNL();
-> +
-> +       ondev = rhashtable_lookup_fast(&offdevs, &netdev, offdevs_params);
-> +       if (WARN_ON(!ondev))
-> +               return;
-> +
-> +       WARN_ON(rhashtable_remove_fast(&offdevs, &ondev->l, offdevs_params));
-> +
-> +       /* Try to move the objects to another netdev of the device */
-> +       if (offdev) {
-> +               list_del(&ondev->offdev_netdevs);
-> +               altdev = list_first_entry_or_null(&offdev->netdevs,
-> +                                                 struct bpf_offload_netdev,
-> +                                                 offdev_netdevs);
-> +       }
-> +
-> +       if (altdev) {
-> +               list_for_each_entry(offload, &ondev->progs, offloads)
-> +                       offload->netdev = altdev->netdev;
-> +               list_splice_init(&ondev->progs, &altdev->progs);
-> +
-> +               list_for_each_entry(offmap, &ondev->maps, offloads)
-> +                       offmap->netdev = altdev->netdev;
-> +               list_splice_init(&ondev->maps, &altdev->maps);
-> +       } else {
-> +               list_for_each_entry_safe(offload, ptmp, &ondev->progs, offloads)
-> +                       __bpf_prog_offload_destroy(offload->prog);
-> +               list_for_each_entry_safe(offmap, mtmp, &ondev->maps, offloads)
-> +                       __bpf_map_offload_destroy(offmap);
-> +       }
-> +
-> +       WARN_ON(!list_empty(&ondev->progs));
-> +       WARN_ON(!list_empty(&ondev->maps));
-> +       kfree(ondev);
-> + }
-> +
-> + static int __bpf_prog_dev_bound_init(struct bpf_prog *prog, struct net_device *netdev)
-> + {
-> +       struct bpf_offload_netdev *ondev;
-> +       struct bpf_prog_offload *offload;
-> +       int err;
->
->         offload = kzalloc(sizeof(*offload), GFP_USER);
->         if (!offload)
+After merging the net-next tree, today's linux-next build (powerpc
+ppc64_defconfig) failed like this:
+
+In file included from net/ethtool/netlink.c:6:
+net/ethtool/netlink.h:177:20: error: redefinition of 'ethnl_update_bool'
+  177 | static inline void ethnl_update_bool(bool *dst, const struct nlattr=
+ *attr,
+      |                    ^~~~~~~~~~~~~~~~~
+net/ethtool/netlink.h:125:20: note: previous definition of 'ethnl_update_bo=
+ol' with type 'void(bool *, const struct nlattr *, bool *)' {aka 'void(_Boo=
+l *, const struct nlattr *, _Bool *)'}
+  125 | static inline void ethnl_update_bool(bool *dst, const struct nlattr=
+ *attr,
+      |                    ^~~~~~~~~~~~~~~~~
+
+Caused by commit
+
+  dc0b98a1758f ("ethtool: Add and use ethnl_update_bool.")
+
+merging badly with commit
+
+  7c494a7749a7 ("net: ethtool: netlink: introduce ethnl_update_bool()")
+
+from the net tree.
+
+I applied the following merge fix up.
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Tue, 24 Jan 2023 09:58:16 +1100
+Subject: [PATCH] fix up for "ethtool: Add and use ethnl_update_bool."
+
+interacting with "net: ethtool: netlink: introduce ethnl_update_bool()"
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ net/ethtool/netlink.h | 26 --------------------------
+ 1 file changed, 26 deletions(-)
+
+diff --git a/net/ethtool/netlink.h b/net/ethtool/netlink.h
+index 4992fab0d06b..b01f7cd542c4 100644
+--- a/net/ethtool/netlink.h
++++ b/net/ethtool/netlink.h
+@@ -111,32 +111,6 @@ static inline void ethnl_update_u8(u8 *dst, const stru=
+ct nlattr *attr,
+ 	*mod =3D true;
+ }
+=20
+-/**
+- * ethnl_update_bool() - update bool from NLA_U8 attribute
+- * @dst:  value to update
+- * @attr: netlink attribute with new value or null
+- * @mod:  pointer to bool for modification tracking
+- *
+- * Use the u8 value from NLA_U8 netlink attribute @attr to set bool variab=
+le
+- * pointed to by @dst to false (if zero) or 1 (if not); do nothing if @att=
+r is
+- * null. Bool pointed to by @mod is set to true if this function changed t=
+he
+- * logical value of *dst, otherwise it is left as is.
+- */
+-static inline void ethnl_update_bool(bool *dst, const struct nlattr *attr,
+-				     bool *mod)
+-{
+-	u8 val;
+-
+-	if (!attr)
+-		return;
+-	val =3D !!nla_get_u8(attr);
+-	if (*dst =3D=3D val)
+-		return;
+-
+-	*dst =3D val;
+-	*mod =3D true;
+-}
+-
+ /**
+  * ethnl_update_bool32() - update u32 used as bool from NLA_U8 attribute
+  * @dst:  value to update
+--=20
+2.35.1
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/78vkhwALhY6su2u.n.Z+QAx
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPPEhoACgkQAVBC80lX
+0Gx82gf+Nz9Fzf9CwhYXSZJ81aYhNp6oFFI/eXBgw+ZIKdL1SEH4ea0xxhwLrlHM
+R2735JENLUxgww0Xp6yjsM468Qs32ggInMbMzr01Ml2HV54fyFmFAp76OI7XpKzQ
+5YWFDalhJ1hofmvF/fKWQDQAzG6xwdcacga2C1w8F176+iKKg8UTBqmcZ3EuDyaI
+0XLbDtov8P9MDcwGS4vCtFNsbCZJHo3hrdxnrUr/ugvjIaWvqyOjS975Q5ngAk9J
+G6FMfL/zb2YvRtUC4fZuoouRw3V0pmuX2Ok4tonclyNbcGcDrsCUIn0jT4hTMvA6
+KsYqtPScT8q3m8w7k5nqWhsMvlJxMg==
+=BHCy
+-----END PGP SIGNATURE-----
+
+--Sig_/78vkhwALhY6su2u.n.Z+QAx--

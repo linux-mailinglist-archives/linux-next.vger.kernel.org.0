@@ -2,145 +2,245 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41559678AC5
-	for <lists+linux-next@lfdr.de>; Mon, 23 Jan 2023 23:31:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5666678AEC
+	for <lists+linux-next@lfdr.de>; Mon, 23 Jan 2023 23:44:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232223AbjAWWbY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 23 Jan 2023 17:31:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42714 "EHLO
+        id S231728AbjAWWoK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 23 Jan 2023 17:44:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232630AbjAWWbY (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 23 Jan 2023 17:31:24 -0500
-Received: from esa3.hgst.iphmx.com (esa3.hgst.iphmx.com [216.71.153.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1744E3756E
-        for <linux-next@vger.kernel.org>; Mon, 23 Jan 2023 14:31:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1674513082; x=1706049082;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=p0UtFABJp0hLOaOIqqM+R1Uo6OBWkEwj2jwqHdizZ1M=;
-  b=Rle4kWh/uhSUp+efshFNysU8I8VKtK/Qpx5c/7rvfTsfh2IoMZw8M1ig
-   YLSzraCzEnE88G1VQ7ZZO3Qf9EMibmo6IPmaSNvgeF4LZ/LYNANLJGwxm
-   Mys8JSB4Ywz2QuZBcJhfHR7fPnbdOeKoYMXT2mq/oCNRaoBj17Icj01Nc
-   metHoGVSDj8/e63puUBICVZpcp/O6oMG2ivD6T3mGu2Dn8e296SHibd8H
-   VZWjKn/BkUFA2aArdRWW1Cn4cAFQckzgUZUsr9YAfQPfNaaDIHLdRJZfq
-   m4uZyximbax0vzXVvtHZquy4S3osxURqY9AIO4H8zJv04BkUtiH8C6RiP
-   w==;
-X-IronPort-AV: E=Sophos;i="5.97,240,1669046400"; 
-   d="scan'208";a="226569209"
-Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 24 Jan 2023 06:31:21 +0800
-IronPort-SDR: Dw5WFOZPZuMd3RpA8kEBnMWoG3a0Bo7vKTDkIXUGKJ86bO59SigKDpeWYw1S+k3oUwkQotgKxf
- SdGammvLuNukoN9RrkPFJZ/U9uTIE8ZqSEnyhQRIekLvk3ago/ptiLrav3mPmJTb3eerhdshxv
- xPAJmpAs8QfpEQd1iDQSp9oymCKHEjzo25VkckkyooYbia64uO3IuN8vUGfu9ChKoimiGrXWVp
- BAXfgjON83hV0WCliwFBFmdmQPBHIuXeha5rJUBwEQ7ftok6UMSOvYTcpEzlX1cYyAjrPab250
- R2E=
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 23 Jan 2023 13:43:10 -0800
-IronPort-SDR: BQqEFNF1T5C+pZW1Mr4V30ImT12O5+cA/iGOWODl5CV2pS0zMegW7vvvbGqRp2mToIdQaC9cvE
- cOoEs4G7OZQmwHYVdB6lbQrf3tikjBehhiwZA62b99Pc3L1q4l0JYaQ48WrWv+ihuQaUGlgKVn
- FC8Hoie8Jzdo+KMuRv+pz/Zb6o4KDRKOrNETF/Ct2U+eluzSRYDiYxFfNF54MHaCdxXyz6+D43
- mKhsT3kJsxpIau9EiT6zonhnjs6pH4Jtdk3TfWEprUjfxd237ASHKQ7Kik4FZwssEiaT2xgmdN
- 6AQ=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 23 Jan 2023 14:31:21 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4P14Zd5qCTz1RvTr
-        for <linux-next@vger.kernel.org>; Mon, 23 Jan 2023 14:31:21 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1674513081; x=1677105082; bh=p0UtFABJp0hLOaOIqqM+R1Uo6OBWkEwj2jw
-        qHdizZ1M=; b=JT83bXodkT6u4orDLmojlpL28+Hq806G4Ev1UlC99YHKhjjDmav
-        WvbmBo2g14NYgwq+xlVZxtBvqyejIYCApLJzyea+vVl2qpb1E2fxbITToa28Xvp9
-        6Sc6Gfn+OHm+BLLFD9GpcLKqiS6uy+aYEps+1mDKPFBfInWBHb8ZYN240mwrsKKx
-        UZXpHZu/djZVTTnqhK5iv9yRO+EQmLQTKUI6lwwBhAj6JTRVvdomIpXbeca0ziAb
-        HgXQqxmedtUB/4ssyEc6cC2mv6p0Q+g7dz1gdT/ZUXCG7J3ykpW44VU0LIrejAlb
-        9Iu8hy/pivW5cDwjfuBmRAAExlo3Boo/76w==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id tCVaiK4VSSRa for <linux-next@vger.kernel.org>;
-        Mon, 23 Jan 2023 14:31:21 -0800 (PST)
-Received: from [10.225.163.51] (unknown [10.225.163.51])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4P14Zc17Tvz1RvLy;
-        Mon, 23 Jan 2023 14:31:19 -0800 (PST)
-Message-ID: <1631b427-9efd-cd26-5dbc-0143097f859b@opensource.wdc.com>
-Date:   Tue, 24 Jan 2023 07:31:18 +0900
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: linux-next: manual merge of the zonefs tree with the
- vfs-idmapping tree
-Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Damien Le Moal <Damien.LeMoal@wdc.com>,
-        Christian Brauner <christian@brauner.io>,
-        Seth Forshee <sforshee@kernel.org>
-Cc:     Christian Brauner <brauner@kernel.org>,
+        with ESMTP id S231493AbjAWWoJ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 23 Jan 2023 17:44:09 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F05571F493;
+        Mon, 23 Jan 2023 14:44:06 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P14sJ5x6qz4xyF;
+        Tue, 24 Jan 2023 09:44:04 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1674513845;
+        bh=QM4QdgfuJW7UXJbWh+zoZm88/mDrwRvfSuQuw+d9jh4=;
+        h=Date:From:To:Cc:Subject:From;
+        b=p/JEuT4kBpBASXaN2kEIdkFXaMHpIs9yH6OYFMszJ3lU3n8WUKyDKSHLm8fN9X/o2
+         1ydsDtbuQbrYUofoCcaGPfkZ0vlutrCOAat8V8XHe9iV9uXdA2lefHhH4F2sJKH5Xa
+         utezgVwreb11HF1LrW2JyvU7x2XKmwlvz5gtZqAlU/OoPsGGM78ovrtQzDc5WUw82c
+         WXpCWd9WSmEHBZWsM51FMinHiYsN/My7yGzmxfJdvAsYlJXcIo6DkWFAkBrHWZv//4
+         iJeTXZMncesn288eyzo1TgMeh4fDvo7fzWJqH9nlpP7b0o1O6e4DTpgPpWNtCgksSK
+         icRboD0szaA3Q==
+Date:   Tue, 24 Jan 2023 09:44:03 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>
+Cc:     bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20230124085951.59eb8da3@canb.auug.org.au>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <20230124085951.59eb8da3@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Martin KaFai Lau <martin.lau@kernel.org>,
+        Paul Moore <paul@paul-moore.com>,
+        Stanislav Fomichev <sdf@google.com>
+Subject: linux-next: manual merge of the bpf-next tree with Linus' tree
+Message-ID: <20230124094403.76e0011f@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/wU/SZ3C0D7Tba.FNsSjjQSl";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 1/24/23 06:59, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Today's linux-next merge of the zonefs tree got a conflict in:
-> 
->   fs/zonefs/super.c
-> 
-> between commits:
-> 
->   c1632a0f1120 ("fs: port ->setattr() to pass mnt_idmap")
->   f2d40141d5d9 ("fs: port inode_init_owner() to mnt_idmap")
->   f861646a6562 ("quota: port to mnt_idmap")
+--Sig_/wU/SZ3C0D7Tba.FNsSjjQSl
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Indeed, these patches touch zonefs. linux-fsdevel is high traffic and I
-missed these patches as I was not on the distribution list. I never acked
-these changes. Not cool, to say the least.
+Hi all,
 
-> from the vfs-idmapping tree and commits:
-> 
->   4008e2a0b01a ("zonefs: Reorganize code")
->   d207794ababe ("zonefs: Dynamically create file inodes when needed")
-> 
-> from the zonefs tree.
-> 
-> This is a bit of a mess :-(
+Today's linux-next merge of the bpf-next tree got a conflict in:
 
-Yes.
+  kernel/bpf/offload.c
 
-> I fixed it up (I think - see below) and can carry the fix as necessary.
-> This is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
+between commit:
 
-Thanks for that. Do you want me to rebase my for-6.3/for-next branch on
-these patches ? I need to retest everything anyway, so I might as well do
-that.
+  ef01f4e25c17 ("bpf: restore the ebpf program ID for BPF_AUDIT_UNLOAD and =
+PERF_BPF_EVENT_PROG_UNLOAD")
 
--- 
-Damien Le Moal
-Western Digital Research
+from Linus' tree and commit:
 
+  89bbc53a4dbb ("bpf: Reshuffle some parts of bpf/offload.c")
+
+from the bpf-next tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc kernel/bpf/offload.c
+index 190d9f9dc987,e87cab2ed710..000000000000
+--- a/kernel/bpf/offload.c
++++ b/kernel/bpf/offload.c
+@@@ -75,20 -74,124 +74,121 @@@ bpf_offload_find_netdev(struct net_devi
+  	return rhashtable_lookup_fast(&offdevs, &netdev, offdevs_params);
+  }
+ =20
+- int bpf_prog_offload_init(struct bpf_prog *prog, union bpf_attr *attr)
++ static int __bpf_offload_dev_netdev_register(struct bpf_offload_dev *offd=
+ev,
++ 					     struct net_device *netdev)
+  {
+  	struct bpf_offload_netdev *ondev;
+- 	struct bpf_prog_offload *offload;
+  	int err;
+ =20
+- 	if (attr->prog_type !=3D BPF_PROG_TYPE_SCHED_CLS &&
+- 	    attr->prog_type !=3D BPF_PROG_TYPE_XDP)
+- 		return -EINVAL;
++ 	ondev =3D kzalloc(sizeof(*ondev), GFP_KERNEL);
++ 	if (!ondev)
++ 		return -ENOMEM;
+ =20
+- 	if (attr->prog_flags)
+- 		return -EINVAL;
++ 	ondev->netdev =3D netdev;
++ 	ondev->offdev =3D offdev;
++ 	INIT_LIST_HEAD(&ondev->progs);
++ 	INIT_LIST_HEAD(&ondev->maps);
++=20
++ 	err =3D rhashtable_insert_fast(&offdevs, &ondev->l, offdevs_params);
++ 	if (err) {
++ 		netdev_warn(netdev, "failed to register for BPF offload\n");
++ 		goto err_free;
++ 	}
++=20
++ 	if (offdev)
++ 		list_add(&ondev->offdev_netdevs, &offdev->netdevs);
++ 	return 0;
++=20
++ err_free:
++ 	kfree(ondev);
++ 	return err;
++ }
++=20
++ static void __bpf_prog_offload_destroy(struct bpf_prog *prog)
++ {
++ 	struct bpf_prog_offload *offload =3D prog->aux->offload;
++=20
++ 	if (offload->dev_state)
++ 		offload->offdev->ops->destroy(prog);
++=20
+ -	/* Make sure BPF_PROG_GET_NEXT_ID can't find this dead program */
+ -	bpf_prog_free_id(prog, true);
+ -
++ 	list_del_init(&offload->offloads);
++ 	kfree(offload);
++ 	prog->aux->offload =3D NULL;
++ }
++=20
++ static int bpf_map_offload_ndo(struct bpf_offloaded_map *offmap,
++ 			       enum bpf_netdev_command cmd)
++ {
++ 	struct netdev_bpf data =3D {};
++ 	struct net_device *netdev;
++=20
++ 	ASSERT_RTNL();
++=20
++ 	data.command =3D cmd;
++ 	data.offmap =3D offmap;
++ 	/* Caller must make sure netdev is valid */
++ 	netdev =3D offmap->netdev;
++=20
++ 	return netdev->netdev_ops->ndo_bpf(netdev, &data);
++ }
++=20
++ static void __bpf_map_offload_destroy(struct bpf_offloaded_map *offmap)
++ {
++ 	WARN_ON(bpf_map_offload_ndo(offmap, BPF_OFFLOAD_MAP_FREE));
++ 	/* Make sure BPF_MAP_GET_NEXT_ID can't find this dead map */
++ 	bpf_map_free_id(&offmap->map, true);
++ 	list_del_init(&offmap->offloads);
++ 	offmap->netdev =3D NULL;
++ }
++=20
++ static void __bpf_offload_dev_netdev_unregister(struct bpf_offload_dev *o=
+ffdev,
++ 						struct net_device *netdev)
++ {
++ 	struct bpf_offload_netdev *ondev, *altdev =3D NULL;
++ 	struct bpf_offloaded_map *offmap, *mtmp;
++ 	struct bpf_prog_offload *offload, *ptmp;
++=20
++ 	ASSERT_RTNL();
++=20
++ 	ondev =3D rhashtable_lookup_fast(&offdevs, &netdev, offdevs_params);
++ 	if (WARN_ON(!ondev))
++ 		return;
++=20
++ 	WARN_ON(rhashtable_remove_fast(&offdevs, &ondev->l, offdevs_params));
++=20
++ 	/* Try to move the objects to another netdev of the device */
++ 	if (offdev) {
++ 		list_del(&ondev->offdev_netdevs);
++ 		altdev =3D list_first_entry_or_null(&offdev->netdevs,
++ 						  struct bpf_offload_netdev,
++ 						  offdev_netdevs);
++ 	}
++=20
++ 	if (altdev) {
++ 		list_for_each_entry(offload, &ondev->progs, offloads)
++ 			offload->netdev =3D altdev->netdev;
++ 		list_splice_init(&ondev->progs, &altdev->progs);
++=20
++ 		list_for_each_entry(offmap, &ondev->maps, offloads)
++ 			offmap->netdev =3D altdev->netdev;
++ 		list_splice_init(&ondev->maps, &altdev->maps);
++ 	} else {
++ 		list_for_each_entry_safe(offload, ptmp, &ondev->progs, offloads)
++ 			__bpf_prog_offload_destroy(offload->prog);
++ 		list_for_each_entry_safe(offmap, mtmp, &ondev->maps, offloads)
++ 			__bpf_map_offload_destroy(offmap);
++ 	}
++=20
++ 	WARN_ON(!list_empty(&ondev->progs));
++ 	WARN_ON(!list_empty(&ondev->maps));
++ 	kfree(ondev);
++ }
++=20
++ static int __bpf_prog_dev_bound_init(struct bpf_prog *prog, struct net_de=
+vice *netdev)
++ {
++ 	struct bpf_offload_netdev *ondev;
++ 	struct bpf_prog_offload *offload;
++ 	int err;
+ =20
+  	offload =3D kzalloc(sizeof(*offload), GFP_USER);
+  	if (!offload)
+
+--Sig_/wU/SZ3C0D7Tba.FNsSjjQSl
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEyBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPPDbMACgkQAVBC80lX
+0GxwqQf4mJ5cPkCVXH7D/OMIcltw4EyHo/bfrz/QfXnpieqRkn3QkH/h9VFe8GXS
+hVvfLP9f9p7sPo1iP1q6OrKWrh/vWy2vL54zffjmnU8KgZAQExYSUp7UBUNDvbUn
+0ZckTv//jsdTjD1ocMKrytCxHHL3gUWHqaQIRD5m1ayu77fCn2aL4L6E4fjG3n73
+kgTuUgTnD15veQ+M0pRFkbMTb/w8D5J+AHSlFRVXa0iLz/rNraU2T8tMup1ANat6
+cVH0GVWccZtUD0MPP57+ycvTHHE5djvtwspJSB6diwsBgRNugSwVjGgqq8QA17x3
+Y3kbszRhFn9/ji/pby11ruPs5w/n
+=W1wp
+-----END PGP SIGNATURE-----
+
+--Sig_/wU/SZ3C0D7Tba.FNsSjjQSl--

@@ -2,81 +2,87 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D05066783A6
-	for <lists+linux-next@lfdr.de>; Mon, 23 Jan 2023 18:52:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 378BD6785B2
+	for <lists+linux-next@lfdr.de>; Mon, 23 Jan 2023 20:02:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232628AbjAWRwy (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 23 Jan 2023 12:52:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60788 "EHLO
+        id S231626AbjAWTCk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 23 Jan 2023 14:02:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230128AbjAWRwx (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 23 Jan 2023 12:52:53 -0500
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E75D1717E;
-        Mon, 23 Jan 2023 09:52:51 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 5D3283200949;
-        Mon, 23 Jan 2023 12:52:48 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Mon, 23 Jan 2023 12:52:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1674496367; x=1674582767; bh=NJnqRwcpwU
-        T+APDxZemOSPiySbFRy9evWMZn6qHEDEg=; b=Ukl3SAIeA43rY81BsV6teORpvR
-        0WRadyd47/HbMxPQJsiATA1+dhzANRc5n5BFDip6FN2554cxgO41pbcSHl4X4jEM
-        BDiq3pUh42G5/2D+lxusPIorZRSOF5flPoT1nFU+ADlFu+DUC1Mb7EQXPmho0EPZ
-        rkh2gBMdVPyIspJ+KQ69hprZ0OMMsVzRdkDW9MFoVwkl5mdMun6h7Kxqv9lOJSxJ
-        rNeuwTFRx8loBuIuIBp5pUa7sEYjGOMllt5HsCQhvSPc2nxWE6ph7TwXKWQdMy4L
-        MLYV7HwB+JW8FMGk/q5s2sKsD4RT1pQKFbqueNKS4dCOXNpR7dA9OBaBZ6aA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1674496367; x=1674582767; bh=NJnqRwcpwUT+APDxZemOSPiySbFR
-        y9evWMZn6qHEDEg=; b=AXCGKFw5aajuEqAbs0+IhnTR03Ptlfgiz9T1g/4C5TO+
-        uP2yt4+0MJU+b+utUwu5T7KV/E2mZzOq1L6QIZLAvogPNVvj841JCyIFqvfHb2EN
-        6sD3GuPT8fbRizQ3gFqD9HtqoO8VmQv0JY+MgxRj5xYkJH1FB8XlbUzKXko1ePPr
-        n1m9ekdXswHYUORPfXCUYVnRrGUo/9602iI+CqJ0835NDcGFVtJ6Xneqf/9m35ZF
-        CLfdPX+QA8yDiD2LpQke6Xg2I4IX7jKxnAMoGdaQUX9k8EpsDuuQpNoggO4ASyWh
-        2Sgha4/yMAoIqgIgrEaiItIWR0T1Vwnc6UqjsAe9Pw==
-X-ME-Sender: <xms:b8nOY5L2uB3YWlyCP-vM5yX9aWiv2WFgCMKug4E24dKmbdQ-OqCluA>
-    <xme:b8nOY1JE1gdxqgVPifinrq5zlSiCc3JGLQR43_63tuqgQtCGouRgHkyLM51tdOgw7
-    sp6NNgknTY2mQ>
-X-ME-Received: <xmr:b8nOYxsbleaTFxgkleaH8KBzhR-Djvv1-3YRjAIkcvmI1RCT78_BOmLjbfq8LLsDsOzprPhRSJzWH4XtC8LAAQYgkhc0y7dXqqqeYw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddukedgleegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
-    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepheegvd
-    evvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefhgfehkeetnecuvehluhhs
-    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
-    hhrdgtohhm
-X-ME-Proxy: <xmx:b8nOY6Y4ns8-yrDpWjcQD2eOkvGOwU8Pg1HtpsXwwsHb-cVeATu6sA>
-    <xmx:b8nOYwYHj_by3GBKwWPdHCDVYVKcYWXSzyyPUZq7EskaqE5X1qt8AQ>
-    <xmx:b8nOY-D9o6kTwOUUQ_93W5f2S2bxVjkkY9lYiEzwpPm7idCIU7Dl6A>
-    <xmx:b8nOY2MA_VWxDKwkhJd85csyf2qoacJHwaybJtEHSqrGA4Eg2TdgXQ>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 23 Jan 2023 12:52:46 -0500 (EST)
-Date:   Mon, 23 Jan 2023 18:52:44 +0100
-From:   Greg KH <greg@kroah.com>
-To:     Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        with ESMTP id S231548AbjAWTCj (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 23 Jan 2023 14:02:39 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3053C166F2;
+        Mon, 23 Jan 2023 11:02:38 -0800 (PST)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30NHSJPL007475;
+        Mon, 23 Jan 2023 19:02:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=ZY0xpRJaWKFLpnnJgp+bGJO/WmfFGXwo7nAzo2SfNzE=;
+ b=FFh5XNk7B8Ilse9g9ouGtdNrubjvCmCMf/XAEgSu+Cu6qwq1o7BVtCaRVwYgZMOGgx1i
+ SNwZUqQq+ICd6TLjwnJ2yw0VBKGjH+sWkKeepla/e/DIEZ/DIk0JGfBUKWvmZGcxatVu
+ Fx/0wY5AuJo0xwcpW2yzEzvrnNd3crGOWi5uKLy0xaFlmAJIZRBs0qbvygNEu3xNuGJB
+ L6aXQPhPKxWSfoVw8o4NNvB8JXqUJNiVT/8sCJplA6KTuHBazlORsej12BwnB1LszIFu
+ VMn/De6nHUT6wjl5XQcsmKClmxW5wkiLBgCFkCv3Zw4HV4d6EIkdIdOV2Zb2FTb+I85A iw== 
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n9t3djs3y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 23 Jan 2023 19:02:31 +0000
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30NHxPYK004808;
+        Mon, 23 Jan 2023 19:02:31 GMT
+Received: from smtprelay03.wdc07v.mail.ibm.com ([9.208.129.113])
+        by ppma01dal.us.ibm.com (PPS) with ESMTPS id 3n87p7sdwe-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 23 Jan 2023 19:02:30 +0000
+Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
+        by smtprelay03.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30NJ2Snv7602826
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 23 Jan 2023 19:02:29 GMT
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CBA735805A;
+        Mon, 23 Jan 2023 19:02:28 +0000 (GMT)
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 29FE958062;
+        Mon, 23 Jan 2023 19:02:28 +0000 (GMT)
+Received: from [9.160.36.55] (unknown [9.160.36.55])
+        by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Mon, 23 Jan 2023 19:02:28 +0000 (GMT)
+Message-ID: <c988b032-d076-bda6-ee38-3c83e9cad711@linux.ibm.com>
+Date:   Mon, 23 Jan 2023 14:02:27 -0500
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: linux-next: manual merge of the kvms390 tree with the s390 tree
+Content-Language: en-US
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>
+Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the tty tree
-Message-ID: <Y87JbLHfRqAfQpHy@kroah.com>
-References: <20230123131818.2785f4e8@canb.auug.org.au>
- <CACMJSevdzO7QuYqQ8B1QoAPC5CUW--+AeDm2dHbf1TGGL0=aMA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACMJSevdzO7QuYqQ8B1QoAPC5CUW--+AeDm2dHbf1TGGL0=aMA@mail.gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+References: <20230123121245.526d262b@canb.auug.org.au>
+From:   Anthony Krowiak <akrowiak@linux.ibm.com>
+In-Reply-To: <20230123121245.526d262b@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 35m911hxxgigjn5pZCaXtfl3BaGm9dox
+X-Proofpoint-ORIG-GUID: 35m911hxxgigjn5pZCaXtfl3BaGm9dox
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-23_12,2023-01-23_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 clxscore=1011
+ impostorscore=0 bulkscore=0 lowpriorityscore=0 suspectscore=0 phishscore=0
+ adultscore=0 mlxscore=0 priorityscore=1501 spamscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2301230178
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,86 +90,41 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Jan 23, 2023 at 10:46:28AM +0100, Bartosz Golaszewski wrote:
-> On Mon, 23 Jan 2023 at 03:18, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> >
-> > Hi all,
-> >
-> > After merging the tty tree, today's linux-next build (x86_64 allmodconfig)
-> > failed like this:
-> >
-> > drivers/tty/serial/qcom_geni_serial.c: In function 'setup_fifos':
-> > drivers/tty/serial/qcom_geni_serial.c:1058:17: error: 'struct qcom_geni_serial_port' has no member named 'rx_fifo'
-> >  1058 |         if (port->rx_fifo && (old_rx_fifo_depth != port->rx_fifo_depth) && port->rx_fifo_depth) {
-> >       |                 ^~
-> > drivers/tty/serial/qcom_geni_serial.c:1059:21: error: 'struct qcom_geni_serial_port' has no member named 'rx_fifo'
-> >  1059 |                 port->rx_fifo = devm_krealloc(uport->dev, port->rx_fifo,
-> >       |                     ^~
-> > drivers/tty/serial/qcom_geni_serial.c:1059:63: error: 'struct qcom_geni_serial_port' has no member named 'rx_fifo'
-> >  1059 |                 port->rx_fifo = devm_krealloc(uport->dev, port->rx_fifo,
-> >       |                                                               ^~
-> > drivers/tty/serial/qcom_geni_serial.c:1062:26: error: 'struct qcom_geni_serial_port' has no member named 'rx_fifo'
-> >  1062 |                 if (!port->rx_fifo)
-> >       |                          ^~
-> >
-> > Caused by commit
-> >
-> >   2aaa43c70778 ("tty: serial: qcom-geni-serial: add support for serial engine DMA")
-> >
-> > interacting with commit
-> >
-> >   b8caf69a6946 ("tty: serial: qcom-geni-serial: fix slab-out-of-bounds on RX FIFO buffer")
-> >
-> > from Linus' tree.
-> >
-> > I have applied the following merge fix patch for today (I am not sure
-> > if it is actually correct, but it builds).
-> >
-> > From: Stephen Rothwell <sfr@canb.auug.org.au>
-> > Date: Mon, 23 Jan 2023 13:09:27 +1100
-> > Subject: [PATCH] tty: fix up for "tty: serial: qcom-geni-serial: add support
-> >  for serial engine DMA"
-> >
-> > interacting with "tty: serial: qcom-geni-serial: fix slab-out-of-bounds
-> > on RX FIFO buffer".
-> >
-> > Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> > ---
-> >  drivers/tty/serial/qcom_geni_serial.c | 6 +++---
-> >  1 file changed, 3 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
-> > index d98e0a8aae7c..61350007bf1c 100644
-> > --- a/drivers/tty/serial/qcom_geni_serial.c
-> > +++ b/drivers/tty/serial/qcom_geni_serial.c
-> > @@ -1055,11 +1055,11 @@ static int setup_fifos(struct qcom_geni_serial_port *port)
-> >         uport->fifosize =
-> >                 (port->tx_fifo_depth * port->tx_fifo_width) / BITS_PER_BYTE;
-> >
-> > -       if (port->rx_fifo && (old_rx_fifo_depth != port->rx_fifo_depth) && port->rx_fifo_depth) {
-> > -               port->rx_fifo = devm_krealloc(uport->dev, port->rx_fifo,
-> > +       if (port->rx_buf && (old_rx_fifo_depth != port->rx_fifo_depth) && port->rx_fifo_depth) {
-> > +               port->rx_buf = devm_krealloc(uport->dev, port->rx_buf,
-> >                                               port->rx_fifo_depth * sizeof(u32),
-> >                                               GFP_KERNEL);
-> > -               if (!port->rx_fifo)
-> > +               if (!port->rx_buf)
-> >                         return -ENOMEM;
-> >         }
-> >
-> > --
-> > 2.35.1
-> >
-> > --
-> > Cheers,
-> > Stephen Rothwell
-> 
-> This looks fine and works fine:
-> 
-> Reviewed-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> Tested-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-Thanks for this, someone else just sent the same thing, I've queued it
-up too.
+On 1/22/23 8:12 PM, Stephen Rothwell wrote:
+> Hi all,
+>
+> Today's linux-next merge of the kvms390 tree got a conflict in:
+>
+>    drivers/s390/crypto/vfio_ap_ops.c
+>
+> between commit:
+>
+>    0daf9878a799 ("s390/vfio_ap: check TAPQ response code when waiting for queue reset")
+>
+> from the s390 tree and commit:
+>
+>    bedac519eefa ("s390/vfio-ap: check TAPQ response code when waiting for queue reset")
+>
+> from the kvms390 tree.
+>
+> They seem to do the same thing, so I used the version of this file from
+> the s390 tree as it's commit is much newer and has other changes to this
+> file i.e. I effectively dropped the kvms390 tree commit.
 
-greg k-h
+
+That's odd, the patch series posted to the kernel mailing lists did not 
+have both of those patches. I think the problem may have occurred 
+because there was an earlier version of the patch in question that was 
+used to debug a problem in our CI. That patch should have been reverted 
+prior to installing the latest version.
+
+
+>
+> I fixed it up (see above) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+>

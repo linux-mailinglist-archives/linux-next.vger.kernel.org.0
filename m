@@ -2,129 +2,103 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 378BD6785B2
-	for <lists+linux-next@lfdr.de>; Mon, 23 Jan 2023 20:02:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A5FC6788CE
+	for <lists+linux-next@lfdr.de>; Mon, 23 Jan 2023 21:56:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231626AbjAWTCk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 23 Jan 2023 14:02:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42538 "EHLO
+        id S231717AbjAWU4v (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 23 Jan 2023 15:56:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231548AbjAWTCj (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 23 Jan 2023 14:02:39 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3053C166F2;
-        Mon, 23 Jan 2023 11:02:38 -0800 (PST)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30NHSJPL007475;
-        Mon, 23 Jan 2023 19:02:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=ZY0xpRJaWKFLpnnJgp+bGJO/WmfFGXwo7nAzo2SfNzE=;
- b=FFh5XNk7B8Ilse9g9ouGtdNrubjvCmCMf/XAEgSu+Cu6qwq1o7BVtCaRVwYgZMOGgx1i
- SNwZUqQq+ICd6TLjwnJ2yw0VBKGjH+sWkKeepla/e/DIEZ/DIk0JGfBUKWvmZGcxatVu
- Fx/0wY5AuJo0xwcpW2yzEzvrnNd3crGOWi5uKLy0xaFlmAJIZRBs0qbvygNEu3xNuGJB
- L6aXQPhPKxWSfoVw8o4NNvB8JXqUJNiVT/8sCJplA6KTuHBazlORsej12BwnB1LszIFu
- VMn/De6nHUT6wjl5XQcsmKClmxW5wkiLBgCFkCv3Zw4HV4d6EIkdIdOV2Zb2FTb+I85A iw== 
-Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n9t3djs3y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 23 Jan 2023 19:02:31 +0000
-Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
-        by ppma01dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30NHxPYK004808;
-        Mon, 23 Jan 2023 19:02:31 GMT
-Received: from smtprelay03.wdc07v.mail.ibm.com ([9.208.129.113])
-        by ppma01dal.us.ibm.com (PPS) with ESMTPS id 3n87p7sdwe-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 23 Jan 2023 19:02:30 +0000
-Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
-        by smtprelay03.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30NJ2Snv7602826
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 23 Jan 2023 19:02:29 GMT
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CBA735805A;
-        Mon, 23 Jan 2023 19:02:28 +0000 (GMT)
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 29FE958062;
-        Mon, 23 Jan 2023 19:02:28 +0000 (GMT)
-Received: from [9.160.36.55] (unknown [9.160.36.55])
-        by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Mon, 23 Jan 2023 19:02:28 +0000 (GMT)
-Message-ID: <c988b032-d076-bda6-ee38-3c83e9cad711@linux.ibm.com>
-Date:   Mon, 23 Jan 2023 14:02:27 -0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: linux-next: manual merge of the kvms390 tree with the s390 tree
-Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>
-Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
+        with ESMTP id S232098AbjAWU4t (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 23 Jan 2023 15:56:49 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 400F2360B0;
+        Mon, 23 Jan 2023 12:56:24 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P12Sd5PqXz4y0l;
+        Tue, 24 Jan 2023 07:56:01 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1674507362;
+        bh=eoK4hX06Tgqi8Ba+YSj4Fdh7a7Ml2qISzbV4BV9AUaI=;
+        h=Date:From:To:Cc:Subject:From;
+        b=nRguNp00MXTVJKU2+FSUEGYnOoyW6gXoDDdv+oya9dW6kQHQIFD+qd2GaDsHoM1+o
+         O35ssULe7r7BJ6vtT6POxsNh4seF9w4jIRTMklc3L+H0fgsEn0i5T9cHxK06uk3U3k
+         9TCNw0Xr7MiGdnihKaznq+3K12B5ba8oRbY3KMZFDDC0RbMo7EHfq+ArMfMPIVRkOR
+         JO7wpzGT73fX6uMXfVkpWCW66svmJjHXNQ7RyGf44chraw4mne3ahfew84Mgj6uqyq
+         dH+n2ttiupWncqfcKjXKPzM5VcZQTNvZvU7mUGtEIQA1J9Dl2ZccMm//vbEiVb0rya
+         IxxQl06lm/E1w==
+Date:   Tue, 24 Jan 2023 07:56:00 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Pierluigi Passaro <pierluigi.p@variscite.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20230123121245.526d262b@canb.auug.org.au>
-From:   Anthony Krowiak <akrowiak@linux.ibm.com>
-In-Reply-To: <20230123121245.526d262b@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 35m911hxxgigjn5pZCaXtfl3BaGm9dox
-X-Proofpoint-ORIG-GUID: 35m911hxxgigjn5pZCaXtfl3BaGm9dox
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-23_12,2023-01-23_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 clxscore=1011
- impostorscore=0 bulkscore=0 lowpriorityscore=0 suspectscore=0 phishscore=0
- adultscore=0 mlxscore=0 priorityscore=1501 spamscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2301230178
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Subject: linux-next: build failure after merge of the gpio-brgl-fixes tree
+Message-ID: <20230124075600.649bd7bb@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/Awt7O9f_eRYXqqNa=3aXwxU";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+--Sig_/Awt7O9f_eRYXqqNa=3aXwxU
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On 1/22/23 8:12 PM, Stephen Rothwell wrote:
-> Hi all,
->
-> Today's linux-next merge of the kvms390 tree got a conflict in:
->
->    drivers/s390/crypto/vfio_ap_ops.c
->
-> between commit:
->
->    0daf9878a799 ("s390/vfio_ap: check TAPQ response code when waiting for queue reset")
->
-> from the s390 tree and commit:
->
->    bedac519eefa ("s390/vfio-ap: check TAPQ response code when waiting for queue reset")
->
-> from the kvms390 tree.
->
-> They seem to do the same thing, so I used the version of this file from
-> the s390 tree as it's commit is much newer and has other changes to this
-> file i.e. I effectively dropped the kvms390 tree commit.
+Hi all,
 
+After merging the gpio-brgl-fixes tree, today's linux-next build (powerpc
+ppc64_defconfig) failed like this:
 
-That's odd, the patch series posted to the kernel mailing lists did not 
-have both of those patches. I think the problem may have occurred 
-because there was an earlier version of the patch in question that was 
-used to debug a problem in our CI. That patch should have been reverted 
-prior to installing the latest version.
+In file included from include/linux/of_gpio.h:14,
+                 from drivers/net/phy/mdio_bus.c:27:
+include/linux/gpio/driver.h:782:68: error: parameter 4 ('lflags') has incom=
+plete type
+  782 |                                             enum gpio_lookup_flags =
+lflags,
+      |                                             ~~~~~~~~~~~~~~~~~~~~~~~=
+^~~~~~
+include/linux/gpio/driver.h:779:33: error: function declaration isn't a pro=
+totype [-Werror=3Dstrict-prototypes]
+  779 | static inline struct gpio_desc *gpiochip_request_own_desc(struct gp=
+io_chip *gc,
+      |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~
+cc1: some warnings being treated as errors
 
+Caused by commit
 
->
-> I fixed it up (see above) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
->
+  de5f701724ac ("gpiolib: fix linker errors when GPIOLIB is disabled")
+
+I have used the gpio-brgl-fixes tree from next-20210123 for today.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/Awt7O9f_eRYXqqNa=3aXwxU
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPO9GAACgkQAVBC80lX
+0GxgTwf/ZuwW2iZVbTgRENWUZeD96uL2xieSUDb8XO8XMCQ7VQtg+u1Hg6O/7SD6
+SOKTFYgo5NdYbLSd91goMU1a810gOHmAte1fI/FheXmuiEnhtiHKgfSJmPcjcDKf
+auPAVYVOeNgieEOvicaztqy431ezATf02Hhje8HsY8IKy01EHL6hzc+sfs7vdFRj
+vrODojFaC4V4GI0sYdyIWNGmd0bHXo+Q+8n67VJFxcNKy74l2dklNhe+WaMXawMs
+SUw8ov9H0ZE3X8raYYM3rywxqSezMLSjGOsIZX9pR9ChwpOlBes5rVVyDQDNg3Vy
+SpSnmOX4HjLQbg2YaXBWLxke4dm42w==
+=KkyY
+-----END PGP SIGNATURE-----
+
+--Sig_/Awt7O9f_eRYXqqNa=3aXwxU--

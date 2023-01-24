@@ -2,109 +2,107 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44D6F67A5A4
-	for <lists+linux-next@lfdr.de>; Tue, 24 Jan 2023 23:27:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87C4367A5FE
+	for <lists+linux-next@lfdr.de>; Tue, 24 Jan 2023 23:39:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229887AbjAXW1f (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 24 Jan 2023 17:27:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55224 "EHLO
+        id S229719AbjAXWjo (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 24 Jan 2023 17:39:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229715AbjAXW1e (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 24 Jan 2023 17:27:34 -0500
-Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53C7F37B48;
-        Tue, 24 Jan 2023 14:27:33 -0800 (PST)
-Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-15ff0a1f735so11146551fac.5;
-        Tue, 24 Jan 2023 14:27:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=QYzhrVnn/TY2Z5kM6uHGUFL5kwZuEGKyu87043mT1ZQ=;
-        b=cIGvlQmaaiEqC5V/4G5Lr1T6F65HXZJPeGHaQHS+dac+N8DztqppB82k7MxXnivBwC
-         FFBHSuZUBwWfLZS26Fku1zffVyQCKsm0nVt8u+QT++d8TzSywJ1Tb6A2WRifnO4HzG3T
-         YdW5tKU4jYcot3mbAV+Jm+4bqNtOZ4YKQzjGzRxCTL+cNsEgKH55XCwOz1D3WA0C9VgS
-         fW+KfBRr0CY5iktem3H0V1aV0zt4WWiPkSg21xfGnNTq88CVlsnLL4VLiMJhmJqBQ7cF
-         +Jjf2FjSKJmc3LAMT/z2WRtON1uOt6BShOK3/F2bzpxwsFqsq9HfUkUEEq1mTevasmJA
-         v7Aw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QYzhrVnn/TY2Z5kM6uHGUFL5kwZuEGKyu87043mT1ZQ=;
-        b=Izkc78Vthpjs3mxqQIZN6/kvCDIo2EHaMzIi7sJ1HU76t2ixfekAaOHVn+mzXapMdl
-         9nf5m1/fBbMF5szb/z+wA75aAk9VzButeLg4XIyKuhF560uSbwVdhqi3b4AW655N4AUX
-         DkqjfeTP99FBl5Ujb3CoB+lKwDUGz/Im2pJb8pPc0+pO7zJPOhcGkNbKxLYD6tE6KDsZ
-         byd23OrqjIFVVBCUQwOssGG0aJDCFkihcK5+5YPdTkMsZ0B/8CBC2BpBjwWIR4bo69P4
-         WIE0Joruz71FGhk7GrNhxudX0OdYZiY3T2nX4FoHFfQQNAVJpN2tMOK99w0MwPUmmCsG
-         rNZQ==
-X-Gm-Message-State: AFqh2kqi+Ab31eHqkYSiYR7/3jami79P8dxcr2xyQtngYUI3IU5Zh8OV
-        LkZLhpi2nxVZcQiJ/+OwCvxIkyq54wo=
-X-Google-Smtp-Source: AMrXdXuqIExoz1KdggK4V62mQTSd9Qhu9wNsHAolO6rFH/iSKHpqVVJol9SdetGRc261eg0JVANNoQ==
-X-Received: by 2002:a05:6870:288a:b0:144:c094:16bb with SMTP id gy10-20020a056870288a00b00144c09416bbmr16293353oab.51.1674599252398;
-        Tue, 24 Jan 2023 14:27:32 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id ov16-20020a056870cb9000b00136f3e4bc29sm1288212oab.9.2023.01.24.14.27.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 Jan 2023 14:27:31 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <f8381a17-f4ca-122f-15fc-b5b88d3d322a@roeck-us.net>
-Date:   Tue, 24 Jan 2023 14:27:29 -0800
+        with ESMTP id S234313AbjAXWjn (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 24 Jan 2023 17:39:43 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F81C4C2C;
+        Tue, 24 Jan 2023 14:39:37 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P1hjg0PH8z4xP9;
+        Wed, 25 Jan 2023 09:39:34 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1674599975;
+        bh=GkFWQBK4jy/04ZTnWGb8zsXMJrL9xseVauK1DbmQ5WU=;
+        h=Date:From:To:Cc:Subject:From;
+        b=STwG5VuAAMBpN9YarD/0N/m4V5iaL7B5PSfDr9+DtXzYWVf330TQJDoF8qMXgiKbd
+         y56jJAA249btk6SexxRaSa7Saux6Sxf2CDgT+4Bfwr6JzRhfXTmRmt/kdv6v8L4d9Y
+         yVpFSUdk8EnkD0T2akqTsKjDnrVpKp1xhijwh/MZCDOZ67gL65+93p40n4fZo2fyAt
+         Y1xW4wBkf1SiQgRIBKY4JwnohCvQ5tXn1VOXoqyABV2xmGGKF9nwzeF+3NgJg3mPPE
+         zYU1y3cSIu0fobQLg+y4xO/WGkFXF/PxLdiDRi2zMwcxDiDugA5WBPGZzAle67xCbP
+         J8PP778mqs8xg==
+Date:   Wed, 25 Jan 2023 09:39:33 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Subject: linux-next: manual merge of the thermal tree with the pm tree
+Message-ID: <20230125093933.518d9010@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: linux-next: build failure after merge of the hwmon-staging tree
-Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Mario Kicherer <dev@kicherer.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20230125092416.44a98d6b@canb.auug.org.au>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20230125092416.44a98d6b@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/8X56z72XDNrLkoib226AOCr";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-T24gMS8yNC8yMyAxNDoyNCwgU3RlcGhlbiBSb3Rod2VsbCB3cm90ZToNCj4gSGkgYWxsLA0K
-PiANCj4gQWZ0ZXIgbWVyZ2luZyB0aGUgaHdtb24tc3RhZ2luZyB0cmVlLCB0b2RheSdzIGxp
-bnV4LW5leHQgYnVpbGQgKHg4Nl82NA0KPiBhbGxtb2Rjb25maWcpIGZhaWxlZCBsaWtlIHRo
-aXM6DQo+IA0KPiBkcml2ZXJzL2h3bW9uL21jMzR2cjUwMDogc3RydWN0IG9mX2RldmljZV9p
-ZCBpcyAyMDAgYnl0ZXMuICBUaGUgbGFzdCBvZiAxIGlzOg0KPiAweDAwIDB4MDAgMHgwMCAw
-eDAwIDB4MDAgMHgwMCAweDAwIDB4MDAgMHgwMCAweDAwIDB4MDAgMHgwMCAweDAwIDB4MDAg
-MHgwMCAweDAwIDB4MDAgMHgwMCAweDAwIDB4MDAgMHgwMCAweDAwIDB4MDAgMHgwMCAweDAw
-IDB4MDAgMHgwMCAweDAwIDB4MDAgMHgwMCAweDAwIDB4MDAgMHgwMCAweDAwIDB4MDAgMHgw
-MCAweDAwIDB4MDAgMHgwMCAweDAwIDB4MDAgMHgwMCAweDAwIDB4MDAgMHgwMCAweDAwIDB4
-MDAgMHgwMCAweDAwIDB4MDAgMHgwMCAweDAwIDB4MDAgMHgwMCAweDAwIDB4MDAgMHgwMCAw
-eDAwIDB4MDAgMHgwMCAweDAwIDB4MDAgMHgwMCAweDAwIDB4NmUgMHg3OCAweDcwIDB4MmMg
-MHg2ZCAweDYzIDB4MzMgMHgzNCAweDc2IDB4NzIgMHgzNSAweDMwIDB4MzAgMHgwMCAweDAw
-IDB4MDAgMHgwMCAweDAwIDB4MDAgMHgwMCAweDAwIDB4MDAgMHgwMCAweDAwIDB4MDAgMHgw
-MCAweDAwIDB4MDAgMHgwMCAweDAwIDB4MDAgMHgwMCAweDAwIDB4MDAgMHgwMCAweDAwIDB4
-MDAgMHgwMCAweDAwIDB4MDAgMHgwMCAweDAwIDB4MDAgMHgwMCAweDAwIDB4MDAgMHgwMCAw
-eDAwIDB4MDAgMHgwMCAweDAwIDB4MDAgMHgwMCAweDAwIDB4MDAgMHgwMCAweDAwIDB4MDAg
-MHgwMCAweDAwIDB4MDAgMHgwMCAweDAwIDB4MDAgMHgwMCAweDAwIDB4MDAgMHgwMCAweDAw
-IDB4MDAgMHgwMCAweDAwIDB4MDAgMHgwMCAweDAwIDB4MDAgMHgwMCAweDAwIDB4MDAgMHgw
-MCAweDAwIDB4MDAgMHgwMCAweDAwIDB4MDAgMHgwMCAweDAwIDB4MDAgMHgwMCAweDAwIDB4
-MDAgMHgwMCAweDAwIDB4MDAgMHgwMCAweDAwIDB4MDAgMHgwMCAweDAwIDB4MDAgMHgwMCAw
-eDAwIDB4MDAgMHgwMCAweDAwIDB4MDAgMHgwMCAweDAwIDB4MDAgMHgwMCAweDAwIDB4MDAg
-MHgwMCAweDAwIDB4MDAgMHgwMCAweDAwIDB4MDAgMHgwMCAweDAwIDB4MDAgMHgwMCAweDAw
-IDB4MDAgMHgwMCAweDAwIDB4MDAgMHgwMCAweDAwIDB4MDAgMHgwMCAweDAwIDB4MDAgMHgw
-MCAweDAwIDB4MDANCj4gRkFUQUw6IG1vZHBvc3Q6IGRyaXZlcnMvaHdtb24vbWMzNHZyNTAw
-OiBzdHJ1Y3Qgb2ZfZGV2aWNlX2lkIGlzIG5vdCB0ZXJtaW5hdGVkIHdpdGggYSBOVUxMIGVu
-dHJ5IQ0KPiANCj4gQ2F1c2VkIGJ5IGNvbW1pdA0KPiANCj4gICAgZDRhNmFlMDQ0MDQ1ICgi
-aHdtb246IGFkZCBpbml0aWFsIE5YUCBNQzM0VlI1MDAgUE1JQyBtb25pdG9yaW5nIHN1cHBv
-cnQiKQ0KPiANCj4gSSBoYXZlIHVzZWQgdGhlIGh3bW9uLXN0YWdpbmcgdHJlZSBmcm9tIG5l
-eHQtMjAyMzAxMjQgZm9yIHRvZGF5Lg0KPiANCg0KQWxyZWFkeSBmaXhlZC4gU29ycnkgZm9y
-IHRoZSB0cm91YmxlLg0KDQpHdWVudGVyDQoNCg==
+--Sig_/8X56z72XDNrLkoib226AOCr
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+
+Hi all,
+
+FIXME: Add owner of second tree to To:
+       Add author(s)/SOB of conflicting commits.
+
+Today's linux-next merge of the thermal tree got a conflict in:
+
+  drivers/thermal/intel/intel_pch_thermal.c
+
+between commit:
+
+  fee19c692160 ("thermal: intel: intel_pch: Use generic trip points")
+
+from the pm tree and commit:
+
+  9e631aa90c97 ("thermal/drivers/intel: Use generic trip points for intel_p=
+ch")
+
+from the thermal tree.
+
+These commits are very similar, so I just used the former version (since
+it was newer).
+
+I fixed it up (see above) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/8X56z72XDNrLkoib226AOCr
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPQXiUACgkQAVBC80lX
+0GwvqAf+O0y6gS41QyoyCFlF4r6xlLQ1YOChRhkMcbCSGIdzvPLTDro0H1SYHxQu
+V8SGj6g0ioA9ZjBAD8H1dQ4pCl5R6fdO5yNhUjLKqPLSfS/NDuLMFvciA5HvojBw
+T7T3bQyw8/bfuNF9ZV0/B/469VTAqrLqR5OohAgqysPr9RJMa1SDKC9GzXykWYYY
+aMo3zEjIalwi3i6zoB1fbfWe2e3MeK2vS+nBtWJwXuHDCC8XxCx71KQ9xigIic/P
+hIizv50yogd75u9H3+eaVVAFMaeGKCPxKRG7cuBXiZIxOqiDpcC6aBfuqwNDCLiP
+kqpm2Abldm/dG6dmzqjWZ+0YehYrbw==
+=mZkh
+-----END PGP SIGNATURE-----
+
+--Sig_/8X56z72XDNrLkoib226AOCr--

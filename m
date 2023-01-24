@@ -2,121 +2,130 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 671BD67963D
-	for <lists+linux-next@lfdr.de>; Tue, 24 Jan 2023 12:10:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27408679675
+	for <lists+linux-next@lfdr.de>; Tue, 24 Jan 2023 12:19:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233875AbjAXLKL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 24 Jan 2023 06:10:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40318 "EHLO
+        id S232459AbjAXLTp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 24 Jan 2023 06:19:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233791AbjAXLKH (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 24 Jan 2023 06:10:07 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBEEE1BDD
-        for <linux-next@vger.kernel.org>; Tue, 24 Jan 2023 03:09:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674558560;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=+DMRJfez60dbarODNUh7sHzp4Lsmr8FQDQTVuXe7R6M=;
-        b=N2J0j5n/mptfwMd/gxlsBwOjpJjmo4Kx9MO+6brRQjXgl0nGggvpCSaR5nfE7yF2oeM5US
-        dhxasxAtPPPiaCsCWx+/+TXilTjAWQHKqw2th4QaiAG+62uZuwYn0J/5s8EZyF33jb6oCI
-        fBsQDZdCuZBmWQdYMrAnhtO1wT6oa7s=
-Received: from mail-vk1-f199.google.com (mail-vk1-f199.google.com
- [209.85.221.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-377-7qEsxThkNT6mrNMEfdYMYA-1; Tue, 24 Jan 2023 06:09:18 -0500
-X-MC-Unique: 7qEsxThkNT6mrNMEfdYMYA-1
-Received: by mail-vk1-f199.google.com with SMTP id bb21-20020a056122221500b003e20d9fec6dso4489348vkb.12
-        for <linux-next@vger.kernel.org>; Tue, 24 Jan 2023 03:09:18 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+DMRJfez60dbarODNUh7sHzp4Lsmr8FQDQTVuXe7R6M=;
-        b=qkK8R5bLzKrV6NAMCkyTEEv2u5HYi75zL5Jd/TQr/3PjzuKR3i8HPyxOVBPWa2a40g
-         Tbq6NypQeS1Um5tYWVtMQ+TB7o4Ql6r60ZM5MDZjKCBsh3hV4+Ln0RcxfgQv0vW7oOQT
-         b7wa2pxBxwJFuVAh6c8YJL0V/lVjZJwV3UrH2S/ZAJgZ5AN29F3pgL8rd1+A1HHUbnSZ
-         iyPEXA3CSjhk0IpajaOpSo1I48X7/N5v3+wU5uRFP8iJrRlbhKMSufzlmrcHyJgSebz+
-         z5w790aZjdKLbgDiunB0NnW6pM5cI6Je5fMLq1roDpatwLzOH9hbsWoqnY16ya3KboIg
-         IQog==
-X-Gm-Message-State: AFqh2kqRiveDlSoPNNo3klzDaoPJ3Q9OzaK4RblIdKwqL6Sh+zyc38hr
-        C21hWg/uT/y3OwZWhTeoB0hcRZsP/QCvVGD3g3yGlcRWdUyysDXw5RcjuclJJseAuZdC4TQ7oY7
-        BvrX5/Idon1JJZnR6WHLOqQShDqsOUyHnoMxEXQ==
-X-Received: by 2002:a1f:e701:0:b0:3dd:f5ea:63a2 with SMTP id e1-20020a1fe701000000b003ddf5ea63a2mr3697201vkh.10.1674558558412;
-        Tue, 24 Jan 2023 03:09:18 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXvB4Kl48vzijkNT1iQDWORsxLD/4IdktHUPkydJbw9Rz+NmsbYKXiKwXzsVm5K8G1Rv8dZasY5bY7KqTqSMx1Q=
-X-Received: by 2002:a1f:e701:0:b0:3dd:f5ea:63a2 with SMTP id
- e1-20020a1fe701000000b003ddf5ea63a2mr3697196vkh.10.1674558558172; Tue, 24 Jan
- 2023 03:09:18 -0800 (PST)
-MIME-Version: 1.0
-References: <20230124125515.7c88c9fb@canb.auug.org.au> <86a628mi9q.wl-maz@kernel.org>
-In-Reply-To: <86a628mi9q.wl-maz@kernel.org>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Date:   Tue, 24 Jan 2023 12:09:07 +0100
-Message-ID: <CABgObfZxjbG+ZofDPfOdiY_QP4j09XtTNwQVmGnbwoc+oaocxA@mail.gmail.com>
-Subject: Re: linux-next: duplicate patches in the kvm-x86 tree
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Sean Christopherson <seanjc@google.com>,
-        KVM <kvm@vger.kernel.org>,
-        Christoffer Dall <cdall@cs.columbia.edu>,
+        with ESMTP id S232166AbjAXLTn (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 24 Jan 2023 06:19:43 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5CC63A94;
+        Tue, 24 Jan 2023 03:19:42 -0800 (PST)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30OA2tQo006352;
+        Tue, 24 Jan 2023 11:19:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=8Ll9shPCzbAV7uqNWiIZwnqBMi5NAj5aLjDWPEt4hRs=;
+ b=jqZm0S5Coj347wHXVzOE5ARgBrvEqgJUravw1/SFq97G83cIyhpb5Fw+hwUViOcfpxOZ
+ QPHp1YuI2kUNGOPWo4gCS9mGRYY+7sIc/iOVJ/uDqF9Htt/RPCdEO8dCS3ui1uKYSpKc
+ nYDIuHCSwqFza1s/GNclBRYF/owhThkLJqCVgGKWYCWVEPd+Dt6YAkxAa1RaCnSxVT8F
+ R+AXDYvRGKxKRLSRw+RJQ0vB52mY5LH2gCSp/BhGF5gxmc1QsIM6FT/Jcg7cCa8DFzwi
+ BJyLXDWizF3U7u2TmiK0CJkSWbXRtHbToS7p0cvbRCo3Rp946P0gTKaUNNlXEWgxBZPK gg== 
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3naaknnev3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 24 Jan 2023 11:19:29 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30NKRjOD031150;
+        Tue, 24 Jan 2023 11:19:28 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+        by ppma03fra.de.ibm.com (PPS) with ESMTPS id 3n87p6anf6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 24 Jan 2023 11:19:27 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30OBJOvG21561980
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 24 Jan 2023 11:19:24 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 59C9A20043;
+        Tue, 24 Jan 2023 11:19:24 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7954220040;
+        Tue, 24 Jan 2023 11:19:23 +0000 (GMT)
+Received: from [9.171.71.154] (unknown [9.171.71.154])
+        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 24 Jan 2023 11:19:23 +0000 (GMT)
+Message-ID: <0fae8ad5-8dcd-3864-a532-4760f3f2a95c@linux.ibm.com>
+Date:   Tue, 24 Jan 2023 12:19:23 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: linux-next: manual merge of the kvms390 tree with the s390 tree
+Content-Language: en-US
+To:     Anthony Krowiak <akrowiak@linux.ibm.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>
+Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        GUARANTEED_100_PERCENT,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+References: <20230123121245.526d262b@canb.auug.org.au>
+ <c988b032-d076-bda6-ee38-3c83e9cad711@linux.ibm.com>
+From:   Christian Borntraeger <borntraeger@linux.ibm.com>
+In-Reply-To: <c988b032-d076-bda6-ee38-3c83e9cad711@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: UKjX9A6s3yqam4giVaJKmsE8VOcNPU_6
+X-Proofpoint-GUID: UKjX9A6s3yqam4giVaJKmsE8VOcNPU_6
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-23_12,2023-01-24_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 clxscore=1011
+ priorityscore=1501 impostorscore=0 mlxlogscore=999 spamscore=0
+ adultscore=0 mlxscore=0 malwarescore=0 bulkscore=0 lowpriorityscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301240101
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Jan 24, 2023 at 9:47 AM Marc Zyngier <maz@kernel.org> wrote:
->
-> Hi Stephen,
->
-> On Tue, 24 Jan 2023 01:55:15 +0000,
-> Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> >
-> > Hi all,
-> >
-> > The following commits are also in other tree(s?) as different
-> > commits (but the same patches):
-> >
-> >   0b6639e8ed87 ("KVM: s390: Move hardware setup/unsetup to init/exit")
-> >   0c2be59e0b53 ("KVM: x86: Use KBUILD_MODNAME to specify vendor module name")
-> >   1334f214d19f ("KVM: s390: Unwind kvm_arch_init() piece-by-piece() if a step fails")
->
-> [...]
->
-> > I guess someone has rebased one of the kvm trees and it had already been
-> > merged into another (like the kvm or kvm-arm trees).
->
-> Huh, that's worrying. I'm carrying the kvm-hw-enable-refactor branch
-> from the KVM tree, which I understood to be a stable branch[1], and
-> which I merged to avoid conflicts to be propagated everywhere.
+hAm 23.01.23 um 20:02 schrieb Anthony Krowiak:
+> 
+> On 1/22/23 8:12 PM, Stephen Rothwell wrote:
+>> Hi all,
+>>
+>> Today's linux-next merge of the kvms390 tree got a conflict in:
+>>
+>>    drivers/s390/crypto/vfio_ap_ops.c
+>>
+>> between commit:
+>>
+>>    0daf9878a799 ("s390/vfio_ap: check TAPQ response code when waiting for queue reset")
+>>
+>> from the s390 tree and commit:
+>>
+>>    bedac519eefa ("s390/vfio-ap: check TAPQ response code when waiting for queue reset")
+>>
+>> from the kvms390 tree.
+>>
+>> They seem to do the same thing, so I used the version of this file from
+>> the s390 tree as it's commit is much newer and has other changes to this
+>> file i.e. I effectively dropped the kvms390 tree commit.
+> 
+> 
+> That's odd, the patch series posted to the kernel mailing lists did not have both of those patches. I think the problem may have occurred because there was an earlier version of the patch in question that was used to debug a problem in our CI. That patch should have been reverted prior to installing the latest version.
 
-It wasn't 100% guaranteed to be stable because it was meant to be
-tested and have fixes squashed in. But since I had no issues reported
-from either maintainers or bots, I will indeed merge commit
-9f1a4c004869 aka kvm/kvm-hw-enable-refactor into kvm/next. Sean,
-please rebase to drop the duplicate commits.
 
-Paolo
+Yes, that patch was part of the kvms390 tree and it was old. I removed it. Sorry for the left-over
+The one in the s390 tree is the correct one:
 
->
-> Paolo, Sean: what is the *real* status of this branch?
->
->         M.
->
-> [1] https://lore.kernel.org/r/4d73d1b9-2c28-ab6a-2963-579bcc7a9e67@redhat.com
->
-> --
-> Without deviation from the norm, progress is not possible.
->
+https://lore.kernel.org/all/20230118203111.529766-3-akrowiak@linux.ibm.com/
+is now
+https://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git/commit/?h=for-next&id=0daf9878a7990058e74025493820bce0f67654c4
 
+this should be ok now?
+
+Christian

@@ -2,44 +2,46 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B959067A427
-	for <lists+linux-next@lfdr.de>; Tue, 24 Jan 2023 21:45:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28E4367A50B
+	for <lists+linux-next@lfdr.de>; Tue, 24 Jan 2023 22:36:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234211AbjAXUpQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 24 Jan 2023 15:45:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54378 "EHLO
+        id S233852AbjAXVgy (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 24 Jan 2023 16:36:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233663AbjAXUpP (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 24 Jan 2023 15:45:15 -0500
+        with ESMTP id S233594AbjAXVgx (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 24 Jan 2023 16:36:53 -0500
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03B5F4FACD;
-        Tue, 24 Jan 2023 12:45:08 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 209C3474E1;
+        Tue, 24 Jan 2023 13:36:52 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P1f9Y53yMz4xN4;
-        Wed, 25 Jan 2023 07:45:05 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P1gKF6vcRz4xGM;
+        Wed, 25 Jan 2023 08:36:49 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1674593106;
-        bh=kQfNoknmbtg5TQDqgUCCia6KVTQBV3rP34byr167yqw=;
+        s=201702; t=1674596210;
+        bh=xnufTPKHa3vmJf7wDtYjWqadIpILZ6VitBo63kitCEM=;
         h=Date:From:To:Cc:Subject:From;
-        b=E498AHzI2LQj88dgUcCnv7ytpyMpZ4WJ5I5GNHhe1b/mdt27tM4RDWCJdNk1DENqx
-         rrl9zI3WdqVFMBlpjeQWC7H6ORNDNwg8AUSVBB5Xe136EsydmmIOEuIV/1Z7dYsvZs
-         Nnfzi6YMJFZxiw6Hb5ISU7Gc4sbke5Oe9EcZqbkZElpUYLxRWvItPjFoUYabudncXZ
-         QFsC/NrDEI/8qHTawI+lEboYaByNDOXYuHfhx0B+OS5A+zcAzuaL130vETYGOuxLEC
-         FCIWSeSj0TdLhueGaliy8exfV877Aqhvo/UY4D5vQpQTZIwBbdGUpRaENkdS75+pzp
-         Vbtf6Sf1YsgyQ==
-Date:   Wed, 25 Jan 2023 07:45:04 +1100
+        b=QTjiyUijMYU+fSNRgOo3KJaGWNVvN5ZwdxRHyeyBKz5FnJb6QPBQGmkbtwVfgvzEy
+         2G153f7OArknJNWgxlOV3zYr4LCU9SKVkBnG3fWKhrUfPeh+6vJvtpc9Bv6a9HVB6j
+         MWyor9XNLWSVLP7xWdSVXglj8sIl/KP9DXZsrILP9s0tMSaezAQ/Nx4MP2xDsh+0Q8
+         /V6zTsvMvGa2PfxZTTazHIH9wXtJ8G4gUsR36INy0boy+zMfjq4Bqcw6Ehit8WSzjq
+         b7PHZWfEdoeGkdtqtgbSdIBszvyJIfB0df0IcQxznfMWTPDHuWphRtC/C+Nb6+jRKl
+         orvwZTqEXWIdA==
+Date:   Wed, 25 Jan 2023 08:36:47 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Dave Airlie <airlied@redhat.com>,
-        DRI <dri-devel@lists.freedesktop.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patches in the drm tree
-Message-ID: <20230125074504.22f45b57@canb.auug.org.au>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     James Clark <james.clark@arm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>
+Subject: linux-next: manual merge of the arm64 tree with Linus' tree
+Message-ID: <20230125083647.34067ee1@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Pq.dz/mAFTzMhZ1nvmsAoeV";
+Content-Type: multipart/signed; boundary="Sig_/7CXzZw5p_+EOu8ulKOWiDp0";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
@@ -50,41 +52,68 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/Pq.dz/mAFTzMhZ1nvmsAoeV
+--Sig_/7CXzZw5p_+EOu8ulKOWiDp0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-The following commits are also in Linus Torvalds' tree as different
-commits (but the same patches):
+Today's linux-next merge of the arm64 tree got a conflict in:
 
-  0c8a6e9ea232 ("drm/i915: re-disable RC6p on Sandy Bridge")
-  14ec40a88210 ("drm/i915/selftests: Unwind hugepages to drop wakeref on er=
-ror")
-  3db9d590557d ("drm/i915/gt: Reset twice")
-  4f0755c2faf7 ("drm/i915: Reserve enough fence slot for i915_vma_unbind_as=
-ync")
-  bed4b455cf53 ("drm/i915: Fix potential context UAFs")
+  arch/arm64/Kconfig
+
+between commit:
+
+  68a63a412d18 ("arm64: Fix build with CC=3Dclang, CONFIG_FTRACE=3Dy and CO=
+NFIG_STACK_TRACER=3Dy")
+
+from Linus' tree and commit:
+
+  baaf553d3bc3 ("arm64: Implement HAVE_DYNAMIC_FTRACE_WITH_CALL_OPS")
+
+from the arm64 tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/Pq.dz/mAFTzMhZ1nvmsAoeV
+diff --cc arch/arm64/Kconfig
+index c5ccca26a408,de052d935832..000000000000
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@@ -184,6 -186,10 +186,8 @@@ config ARM6
+  	select HAVE_DEBUG_KMEMLEAK
+  	select HAVE_DMA_CONTIGUOUS
+  	select HAVE_DYNAMIC_FTRACE
+ -	select HAVE_DYNAMIC_FTRACE_WITH_ARGS \
+ -		if $(cc-option,-fpatchable-function-entry=3D2)
++ 	select HAVE_DYNAMIC_FTRACE_WITH_CALL_OPS \
++ 		if (DYNAMIC_FTRACE_WITH_ARGS && !CFI_CLANG)
+  	select FTRACE_MCOUNT_USE_PATCHABLE_FUNCTION_ENTRY \
+  		if DYNAMIC_FTRACE_WITH_ARGS
+  	select HAVE_EFFICIENT_UNALIGNED_ACCESS
+
+--Sig_/7CXzZw5p_+EOu8ulKOWiDp0
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPQQ1AACgkQAVBC80lX
-0Gy9lgf/XWEZEboTgdxPtWWEBxOLOvFk04gz8xU7M8lACJ0eNAO4MEp2632pPe9/
-Jdyet1G90ajflCVlHPfcqagrCSWjm6xK+UesRp6CIbbOdVpAZ/recP29WL9PIL6A
-YaOR6ckQYnmDtXo7eNMUXUO0MaFcRe8oLBa7fb+rKlLMk4fnBV7c3z1ZwGvJsyBK
-eJBd5nr94HZNQi3CcD1+w2ohy/1V+W6f3IS1uH9MwSnOOPBad00YThNLcxAXqyk4
-dkFvWb/jJpBMCKHhbaHjCMrja5xMw1gkMEtIZiUwKHEkjhTf3VaSI/yii9DxxjdI
-0LrUwqIWLhpjJZ2sJ5YQYmLEPx40iw==
-=tq1E
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPQT28ACgkQAVBC80lX
+0GxUhQgAiktfLFT2LlRTQRNafAY6itxNTpf1wQ9qVMycl7/8QqPjloAQ9axLKjQG
+4kmYxFZox5USJ1ehnPoEEsupuFMIGW2pYu22LEQYTWW3DNr+fvVQVT5lREV0v/ad
+/BazD8o6zJr7wrjACZqq/eR/rO3Wom4IeSzf86EeWuWDEquhZMShvkO+YyMQtLTC
+fefwkOe9z/kFoMaCgS8A3ngcxSsETNCJpG2JtBZdmY4R4v0+LSjSwosVMECkFCcx
+J9unyPCs8ebUAhdwsjM1TthMbIql1283uXs7CibygtFAh8SQbhePhws84nBec7Fo
+9CBM4sSrRhg61gn4rvrPP8087Krdyw==
+=J+L/
 -----END PGP SIGNATURE-----
 
---Sig_/Pq.dz/mAFTzMhZ1nvmsAoeV--
+--Sig_/7CXzZw5p_+EOu8ulKOWiDp0--

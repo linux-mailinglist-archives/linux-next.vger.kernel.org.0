@@ -2,102 +2,105 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA58F67B879
-	for <lists+linux-next@lfdr.de>; Wed, 25 Jan 2023 18:26:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63D1367B8B0
+	for <lists+linux-next@lfdr.de>; Wed, 25 Jan 2023 18:36:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234581AbjAYR0z (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 25 Jan 2023 12:26:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50538 "EHLO
+        id S236064AbjAYRg3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 25 Jan 2023 12:36:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229612AbjAYR0z (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 25 Jan 2023 12:26:55 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8809A9F;
-        Wed, 25 Jan 2023 09:26:53 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id z11so22631000ede.1;
-        Wed, 25 Jan 2023 09:26:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:message-id:subject:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=CYMEij3rxHWyzgLm7dd5XsZ6vBXXY5YhrQ7zALUGLjk=;
-        b=Dv8hdB3DMUVXMukiXrX8R5uayffhTytfjOgnhlH736EMc/WIsAQMKzQ57MnRHeWfFV
-         F5n3xRt1KakybWkK45QuYajlkvzPLPosyqXR5rIt0hlMzci8GZPbFFEF3CHAYx8vP+FI
-         dODp8tKCEe1ugqJMoxMcZ0nPXGlCRpjb0siys1HlQlai19Q0sgK5VCnv39XzIfMpOX36
-         aG0myJGc/o/HGOD2kuxfpc40mLNnhjIFyVhT5+bTcY7BZ32M3VR2MkVBxdkJJ5FSy3GR
-         bqnyabPa0HRsK863qhLq+U5WF328x620ZEXXVWii0q+Spxo+bzpjNxZFYnv/PHETxY1g
-         8pew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:message-id:subject:to:from:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=CYMEij3rxHWyzgLm7dd5XsZ6vBXXY5YhrQ7zALUGLjk=;
-        b=O/I/HOnqVuWBC8RMrYaEc8YiiPzTGEWxPjbwiHwnowiJ6iMI79XGskVEYoA7LuDxyn
-         rSRv6f9uqLOQiyXOd5dAGG22XCfoEpsU/YGAyWEc9OJKutosQIfE31FriniO9lzn+S1K
-         +fwglx/2p7IL/a9yLClcHSrgR98Pqo2P1LgbChk1jwAmrva7uBuMEljLvnVAm32B06Uw
-         QeXXgouj4idQM6YBn86mLHWOpg3ejYgmN8Gyh59hhimCMtdKKTtT/RgBZEU4KemfAoeq
-         4EMHUFYlq41R42OVyjBPasXKs4hpjJyrdqxZZuXKSqF75mKEdRulWSlDKNja/gzV41eF
-         Vn5Q==
-X-Gm-Message-State: AFqh2kr/xjknTdK3IMGS2klFpQ6LAB+HlHeFxZpS5HVPJGshBTm9z5kc
-        RC6W2mp6Wo9Uba2fXDUkmuoI1memruE=
-X-Google-Smtp-Source: AMrXdXsUvLlARBjMXRXjQMdoUzGjSjgvrKOPoFY18DBSj653Pol8v+oWAZdyD2Rlk/XeWRH8j+FQVg==
-X-Received: by 2002:a50:ff08:0:b0:49b:7416:e3ff with SMTP id a8-20020a50ff08000000b0049b7416e3ffmr34024896edu.5.1674667611597;
-        Wed, 25 Jan 2023 09:26:51 -0800 (PST)
-Received: from jo-einhundert ([2a02:908:13d6:2180:36e8:f43a:77c6:b1a2])
-        by smtp.gmail.com with ESMTPSA id lf14-20020a170907174e00b007c1633cea13sm2688052ejc.12.2023.01.25.09.26.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Jan 2023 09:26:51 -0800 (PST)
-Date:   Wed, 25 Jan 2023 18:26:49 +0100
-From:   =?iso-8859-1?Q?J=F3_=C1gila?= Bitsch <jgilab@gmail.com>
-To:     Greg KH <greg@kroah.com>, Stephen Rothwell <sfr@canb.auug.org.au>,
+        with ESMTP id S236098AbjAYRg2 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 25 Jan 2023 12:36:28 -0500
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DD335B597;
+        Wed, 25 Jan 2023 09:36:24 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 874105C00D8;
+        Wed, 25 Jan 2023 12:36:21 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Wed, 25 Jan 2023 12:36:21 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1674668181; x=
+        1674754581; bh=VpaKyOeeNsoB1s68TYe0vuAy9Pw1dIF/erA8n8pEvvE=; b=Y
+        qZcgC2AgtBLb9D1dcphAx3AxU9wKSEkdcFlR/gNp4L1ITi4V8xBdJPPgTxWXZHK7
+        Ops9LuZvrdpueF0NbFtp1B+1PIF0tF6R5FPTsXPwqeSO6g/JqqQo8vNeYlqVLDHV
+        gRBQc96akQ5N+Sa4w9t/EZXcbXwmYOYwdWnqNW0MchhTrhgLL9YB+a/G/TwUOmei
+        Lugq9FI35jkUURre/Qnqv7jAsm64y1uKFkwDU6bOuaGAGlV9A3/ZUQ7wDyP/CAML
+        IgNmVncixYEPJLfatd3xOIFJfRPzxGtLMxcjxlCEhtw3DKlAmxE0VYl0im9Kw2ot
+        KTfTVjlfcfjXTXVYh1s9Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1674668181; x=
+        1674754581; bh=VpaKyOeeNsoB1s68TYe0vuAy9Pw1dIF/erA8n8pEvvE=; b=c
+        2nRGqU1DVQrYh+bkKCPX1uGLrkfqY28YU8CFtkwrq/7iFo6eznR4VRZgrBQJuq47
+        TW4W4L9tLmOniudVYBy81Zmptd0nwRo8Z+NkHWKShWBtYLSAUYGRkFjzZr0FXMd4
+        VN6uyKz0JypxeItYePeN32u/7gmDFm5olAcE3enqlgvujJVwUD9VJbW6huinwfGP
+        /YpUI5IWv82xQILJN3xnoW9L68pfrM1VMDo9aM+gurHVmLm/Bi5ZXwyt88/YVhae
+        KMgTX+Vh6CfCjB9oZt2gV6b0LMlyBFhTszEI+680YO+8Epl2zfNOCu6ioGQA+BCe
+        0c23ygxvWHbJdLcMtbgXA==
+X-ME-Sender: <xms:lWjRY4PU9BNhdnZLVqH22Ckv-yKve6IfxbRmrLPkOYr16Fa4aEb21A>
+    <xme:lWjRY-9J5kBvbPRctsp4en3lpDlNi5i6UgOsugOF636GCW4EWiBQ_CyQnGPA9AEXk
+    6LtNz7S7lrhzA>
+X-ME-Received: <xmr:lWjRY_SMLuo8pFPTRCD7BmswoLQUC-F-62Cqy-mI7lhDB-_vrz6sgdDsWMzjb3TFWKI1hsWaGlgWgHYa0_3fXelwjQIdctmecp0smA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddvvddguddtgecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtugfgjgesthekredttddtudenucfhrhhomhepifhr
+    vghgucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnheple
+    ehheduudeugeegjefgheeuudffheevueekgfekueefledtjeetieeutdekkeelnecuvehl
+    uhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrh
+    horghhrdgtohhm
+X-ME-Proxy: <xmx:lWjRYwuoSFbxuuRkK-b6nA4sV6EaIVGQ_DsoH8DuD2_gsSD6olht3w>
+    <xmx:lWjRYwczUbQxtK94G4zKyJmM66da4QAHhwq9_DB4XxGkVjyyyT49eA>
+    <xmx:lWjRY02gxVddiAPl66716QFvmdEgVipbhNyVtzYnWi6eCCiQ0WlCOw>
+    <xmx:lWjRY4RgnBGRwKwj_QMTbaUt5rUCa7rK1ZwRWPm74zkchuomIA7ilw>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 25 Jan 2023 12:36:20 -0500 (EST)
+Date:   Wed, 25 Jan 2023 18:36:17 +0100
+From:   Greg KH <greg@kroah.com>
+To:     =?iso-8859-1?Q?J=F3_=C1gila?= Bitsch <jgilab@gmail.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: [PATCH] usb: gadget: add doc to struct usb_composite_dev
-Message-ID: <Y9FmWVF+J08V4RbP@jo-einhundert>
+Subject: Re: [PATCH] usb: gadget: add doc to struct usb_composite_dev
+Message-ID: <Y9Fokec99g+c31P2@kroah.com>
+References: <Y86cy1AM4w5ju5A4@kroah.com>
+ <Y9FmWVF+J08V4RbP@jo-einhundert>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y86cy1AM4w5ju5A4@kroah.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y9FmWVF+J08V4RbP@jo-einhundert>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Added documentation to the new struct members:
-* bcd_webusb_version
-* b_webusb_vendor_code
-* landing_page
-* use_webusb
-to avoid warnings in the build of htmldocs
+On Wed, Jan 25, 2023 at 06:26:49PM +0100, Jó Ágila Bitsch wrote:
+> Added documentation to the new struct members:
+> * bcd_webusb_version
+> * b_webusb_vendor_code
+> * landing_page
+> * use_webusb
+> to avoid warnings in the build of htmldocs
+> 
+> Signed-off-by: Jó Ágila Bitsch <jgilab@gmail.com>
 
-Signed-off-by: Jó Ágila Bitsch <jgilab@gmail.com>
----
- include/linux/usb/composite.h | 4 ++++
- 1 file changed, 4 insertions(+)
+What commit id does this fix?
 
-diff --git a/include/linux/usb/composite.h b/include/linux/usb/composite.h
-index 91d22c3ed458..7ef8cea67f50 100644
---- a/include/linux/usb/composite.h
-+++ b/include/linux/usb/composite.h
-@@ -432,6 +432,10 @@ static inline struct usb_composite_driver *to_cdriver(
-  * @qw_sign: qwSignature part of the OS string
-  * @b_vendor_code: bMS_VendorCode part of the OS string
-  * @use_os_string: false by default, interested gadgets set it
-+ * @bcd_webusb_version: 0x0100 by default, WebUSB specification version
-+ * @b_webusb_vendor_code: 0x0 by default, vendor code for WebUSB
-+ * @landing_page: empty by default, landing page to announce in WebUSB
-+ * @use_webusb:: false by default, interested gadgets set it
-  * @os_desc_config: the configuration to be used with OS descriptors
-  * @setup_pending: true when setup request is queued but not completed
-  * @os_desc_pending: true when os_desc request is queued but not completed
--- 
-2.37.2
+And it was reported by Stephen, so can you provide a reported-by tag
+too?
 
+thanks,
+greg k-h

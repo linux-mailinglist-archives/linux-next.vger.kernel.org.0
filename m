@@ -2,57 +2,65 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D30067BC7F
-	for <lists+linux-next@lfdr.de>; Wed, 25 Jan 2023 21:25:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BEC967BE9E
+	for <lists+linux-next@lfdr.de>; Wed, 25 Jan 2023 22:34:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235705AbjAYUZS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 25 Jan 2023 15:25:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57000 "EHLO
+        id S236687AbjAYVeR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 25 Jan 2023 16:34:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234492AbjAYUZR (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 25 Jan 2023 15:25:17 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF45A3028B
-        for <linux-next@vger.kernel.org>; Wed, 25 Jan 2023 12:25:16 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id m15so14641705wms.4
-        for <linux-next@vger.kernel.org>; Wed, 25 Jan 2023 12:25:16 -0800 (PST)
+        with ESMTP id S236735AbjAYVeQ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 25 Jan 2023 16:34:16 -0500
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B872E5BB6;
+        Wed, 25 Jan 2023 13:33:50 -0800 (PST)
+Received: by mail-ej1-x62d.google.com with SMTP id ss4so31137ejb.11;
+        Wed, 25 Jan 2023 13:33:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:message-id:subject:to:from:date:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=wurMI0e/6kU3Ra6nRfONxCRHUpQVKJO2S1y2IziaWoI=;
-        b=MWWRQoUR6m0F3i0d6Pk9q4mh7va7LHQzpvpQUIXc1b26a8DM39QyW1ojKiQ7XXdbtM
-         V5DFSuVMO7Oug4OVh0lfp1s8dpdZoyYBR0KNhjXkFVjCg614pF7bGh2QvngPnTKWpUP6
-         lvLDFimbxNz8/pbgK5Q2X6Fy9qFAqKojzBAmLVyemXU4GrW+6aTN87zZRWeL6m1hf4Vh
-         xLmjSMT8oSdxFWsooZp361gjSN9+q8thJ9RTgzyUOYWlq7q2ZD9588JP3+aifyNQLjKs
-         ydIGAa1szgJn/995ZYvqTiXxdOTBSIJ7lb6IGlBpIhMDG6Y4BtGjYo8tTC5n48kW39C5
-         Z4ww==
+        bh=6n5jLL5ph6VO5rm/KwnIygzlxq5cwf2QkTHEzDecDts=;
+        b=RZj4rDmYVuT9ph4Y5/AOAu1pjAAq4x5heKsFkBfAzWMHPneMLJBqYvOcYKEehbZFdl
+         BL8mM1xxQv8ZVxP5bi8zJxfacnnCEjzK4NGIJ/I8+twgB/su7K3vXBw7+N1Tp2emvPw3
+         neq9ipUVtJKF0/iuXuGu7aTZFe6lTkZ8vvinJz0+mADTjfbCItATuZnQzrutV+OlmtUD
+         w+Z2lCigim9WjrTTkopr7UGRtB/xjipDhk88a5dlww9INArOXj7vd+TssyCLOK+lrbZt
+         kVJDCyTkf8fALXEfPy2dbsfEZ6hNLbYEs32nL6k3IlTe+l2MCZKSo0m3knQBqGoQql89
+         39MQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:message-id:subject:to:from:date:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=wurMI0e/6kU3Ra6nRfONxCRHUpQVKJO2S1y2IziaWoI=;
-        b=ZpETZvQhJrI2Wq9DSj8kF5A2xDBftOIspVat+/2wJ0yL/27wQttxT/jb878SdxHtli
-         xaqLpZaH9Xs9GvoP+wRZNnoJ52N1Wakk3m/GHp3YRqCVAiZO1VmEpP1iyxgcqt1SSmS5
-         I+AddMBLRJvK4QA40DJhJ6mt/vNQqvbh1KTalsjOYYwIlLfHmJ+Z8DjtOJzb+WDKbXGo
-         j/IoLai1/Elyk3xCedWIcrBtE2PtrwVEo+RT6aIUkzT2bhvVSmcyptLjdPgK3SDa5I0R
-         yaR2SETeZv0HFmuuT1XWLCDH8Dj/jxppr7SlP9OlYx0ae9ZI/c88RRw3S3Gs9Q7uKXZB
-         /gXA==
-X-Gm-Message-State: AFqh2kqFbmD8lU54n01UObquf1xdhiki9Jl32ax9GxSSXrG0GBrF9j8Y
-        hSJXfWiJd06K7RJ/aHl24Yc0cTmXL2kzllB9fenbp+lgWVxQOA==
-X-Google-Smtp-Source: AMrXdXsqMfpWKil+Cz2zA5fcj/mKqeUxo3iE+k2prB6okCiosmTcxyurBkam9OzQ7ar9X+09MXSsf0fUJmtF+KPM6jk=
-X-Received: by 2002:a05:600c:1c02:b0:3d7:8c6:a8cb with SMTP id
- j2-20020a05600c1c0200b003d708c6a8cbmr2145646wms.82.1674678314986; Wed, 25 Jan
- 2023 12:25:14 -0800 (PST)
+        bh=6n5jLL5ph6VO5rm/KwnIygzlxq5cwf2QkTHEzDecDts=;
+        b=lMwcHm/+8bCGLulbw3zuS6K3V7ZsBcIfCUv81LwhMRqCW8Rj4LmGn6h55njXwfXBo4
+         B4eVsIH2I0SEjg1+GSyCXoeqmvfYqQ9pOkIVob/f8VAU874nqWqRInNCDvC67MFvjTWZ
+         XNDi0wjYKGlToCLpj53gbgYzY25xQD37FH1BXk9D5aGHH4TN2E/0y3nVPcYNGXtZmBZc
+         g1wl+SIvY46gJe4pc5xhFvBNTs8pwDdHSZy+Bmky3SlF+aeoKsCFOlO8hZ8rI3WUyguh
+         hKSTqvDRjXP73DMMfJ2ql9Flt1ixZrOHRYS+kDwGq/aJwfqjljaj92b4YdFkVA+Wdn8w
+         NN8w==
+X-Gm-Message-State: AFqh2ko83jXb64VvgCGxmaQH6oohuuGIJIXN45MsqKB2zayjphZbDzjb
+        uvgyXFtuk0XFSaXr/ZPWmffAm92gy20=
+X-Google-Smtp-Source: AMrXdXtFJ9dHCoW34mPFTdH5ix7Zv6ywMoyj24QFi8jRZYbPbY8oLn6P/0ku7HN0wP/vimKdzwOzEw==
+X-Received: by 2002:a17:906:f0d1:b0:84d:450b:8767 with SMTP id dk17-20020a170906f0d100b0084d450b8767mr34657883ejb.21.1674682428818;
+        Wed, 25 Jan 2023 13:33:48 -0800 (PST)
+Received: from jo-einhundert ([2a02:908:13d6:2180:956c:5c0b:c22:76b8])
+        by smtp.gmail.com with ESMTPSA id i25-20020a170906265900b007ae10525550sm2885474ejc.47.2023.01.25.13.33.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Jan 2023 13:33:48 -0800 (PST)
+Date:   Wed, 25 Jan 2023 22:33:47 +0100
+From:   =?iso-8859-1?Q?J=F3_=C1gila?= Bitsch <jgilab@gmail.com>
+To:     Greg KH <greg@kroah.com>, Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: [PATCH v1] usb: gadget: add doc to struct usb_composite_dev
+Message-ID: <Y9FmWVF+J08V4RbP@jo-einhundert>
 MIME-Version: 1.0
-From:   Eric Van Hensbergen <ericvh@gmail.com>
-Date:   Wed, 25 Jan 2023 14:25:03 -0600
-Message-ID: <CAFkjPTnULXdFY5tFrBHD6exgJt-3gszkm8UBsu0DeD2Xa_inXw@mail.gmail.com>
-Subject: Re-add v9fs/for-next branch
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        linux-next@vger.kernel.org,
-        Dominique Martinet <asmadeus@codewreck.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y9Fokec99g+c31P2@kroah.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -63,15 +71,38 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-After a decade hiatus, I was wondering if would be possible to add my
-for-next branch
-(https://git.kernel.org/pub/scm/linux/kernel/git/ericvh/v9fs.git/log/?h=ericvh/for-next)
-back into linux-next.  I'm going to be doing quite a bit of work over
-the next few months fixing up performance and have already coordinated
-a bit with Dominique who has been doing much of the heavy lifting of
-v9fs maintainership over the past decade -- but is worried that he
-doesn't have the bandwidth to keep up with a high rate-of-change.
+Added documentation to new struct members for WebUSB:
+* bcd_webusb_version
+* b_webusb_vendor_code
+* landing_page
+* use_webusb
+to avoid warnings in the build of htmldocs
 
-Thanks,
+Fixes: 93c473948c58 ("usb: gadget: add WebUSB landing page support")
+Reported-By: Stephen Rothwell <sfr@canb.auug.org.au>
+Signed-off-by: Jó Ágila Bitsch <jgilab@gmail.com>
+---
+V0 -> V1: added Tested-By and Fixes Tags
 
-          -eric
+
+ include/linux/usb/composite.h | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/include/linux/usb/composite.h b/include/linux/usb/composite.h
+index 91d22c3ed458..7ef8cea67f50 100644
+--- a/include/linux/usb/composite.h
++++ b/include/linux/usb/composite.h
+@@ -432,6 +432,10 @@ static inline struct usb_composite_driver *to_cdriver(
+  * @qw_sign: qwSignature part of the OS string
+  * @b_vendor_code: bMS_VendorCode part of the OS string
+  * @use_os_string: false by default, interested gadgets set it
++ * @bcd_webusb_version: 0x0100 by default, WebUSB specification version
++ * @b_webusb_vendor_code: 0x0 by default, vendor code for WebUSB
++ * @landing_page: empty by default, landing page to announce in WebUSB
++ * @use_webusb:: false by default, interested gadgets set it
+  * @os_desc_config: the configuration to be used with OS descriptors
+  * @setup_pending: true when setup request is queued but not completed
+  * @os_desc_pending: true when os_desc request is queued but not completed
+-- 
+2.37.2
+

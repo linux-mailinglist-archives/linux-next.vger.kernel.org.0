@@ -2,105 +2,76 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63D1367B8B0
-	for <lists+linux-next@lfdr.de>; Wed, 25 Jan 2023 18:36:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D30067BC7F
+	for <lists+linux-next@lfdr.de>; Wed, 25 Jan 2023 21:25:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236064AbjAYRg3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 25 Jan 2023 12:36:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58882 "EHLO
+        id S235705AbjAYUZS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 25 Jan 2023 15:25:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236098AbjAYRg2 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 25 Jan 2023 12:36:28 -0500
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DD335B597;
-        Wed, 25 Jan 2023 09:36:24 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 874105C00D8;
-        Wed, 25 Jan 2023 12:36:21 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Wed, 25 Jan 2023 12:36:21 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1674668181; x=
-        1674754581; bh=VpaKyOeeNsoB1s68TYe0vuAy9Pw1dIF/erA8n8pEvvE=; b=Y
-        qZcgC2AgtBLb9D1dcphAx3AxU9wKSEkdcFlR/gNp4L1ITi4V8xBdJPPgTxWXZHK7
-        Ops9LuZvrdpueF0NbFtp1B+1PIF0tF6R5FPTsXPwqeSO6g/JqqQo8vNeYlqVLDHV
-        gRBQc96akQ5N+Sa4w9t/EZXcbXwmYOYwdWnqNW0MchhTrhgLL9YB+a/G/TwUOmei
-        Lugq9FI35jkUURre/Qnqv7jAsm64y1uKFkwDU6bOuaGAGlV9A3/ZUQ7wDyP/CAML
-        IgNmVncixYEPJLfatd3xOIFJfRPzxGtLMxcjxlCEhtw3DKlAmxE0VYl0im9Kw2ot
-        KTfTVjlfcfjXTXVYh1s9Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1674668181; x=
-        1674754581; bh=VpaKyOeeNsoB1s68TYe0vuAy9Pw1dIF/erA8n8pEvvE=; b=c
-        2nRGqU1DVQrYh+bkKCPX1uGLrkfqY28YU8CFtkwrq/7iFo6eznR4VRZgrBQJuq47
-        TW4W4L9tLmOniudVYBy81Zmptd0nwRo8Z+NkHWKShWBtYLSAUYGRkFjzZr0FXMd4
-        VN6uyKz0JypxeItYePeN32u/7gmDFm5olAcE3enqlgvujJVwUD9VJbW6huinwfGP
-        /YpUI5IWv82xQILJN3xnoW9L68pfrM1VMDo9aM+gurHVmLm/Bi5ZXwyt88/YVhae
-        KMgTX+Vh6CfCjB9oZt2gV6b0LMlyBFhTszEI+680YO+8Epl2zfNOCu6ioGQA+BCe
-        0c23ygxvWHbJdLcMtbgXA==
-X-ME-Sender: <xms:lWjRY4PU9BNhdnZLVqH22Ckv-yKve6IfxbRmrLPkOYr16Fa4aEb21A>
-    <xme:lWjRY-9J5kBvbPRctsp4en3lpDlNi5i6UgOsugOF636GCW4EWiBQ_CyQnGPA9AEXk
-    6LtNz7S7lrhzA>
-X-ME-Received: <xmr:lWjRY_SMLuo8pFPTRCD7BmswoLQUC-F-62Cqy-mI7lhDB-_vrz6sgdDsWMzjb3TFWKI1hsWaGlgWgHYa0_3fXelwjQIdctmecp0smA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddvvddguddtgecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtugfgjgesthekredttddtudenucfhrhhomhepifhr
-    vghgucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnheple
-    ehheduudeugeegjefgheeuudffheevueekgfekueefledtjeetieeutdekkeelnecuvehl
-    uhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrh
-    horghhrdgtohhm
-X-ME-Proxy: <xmx:lWjRYwuoSFbxuuRkK-b6nA4sV6EaIVGQ_DsoH8DuD2_gsSD6olht3w>
-    <xmx:lWjRYwczUbQxtK94G4zKyJmM66da4QAHhwq9_DB4XxGkVjyyyT49eA>
-    <xmx:lWjRY02gxVddiAPl66716QFvmdEgVipbhNyVtzYnWi6eCCiQ0WlCOw>
-    <xmx:lWjRY4RgnBGRwKwj_QMTbaUt5rUCa7rK1ZwRWPm74zkchuomIA7ilw>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 25 Jan 2023 12:36:20 -0500 (EST)
-Date:   Wed, 25 Jan 2023 18:36:17 +0100
-From:   Greg KH <greg@kroah.com>
-To:     =?iso-8859-1?Q?J=F3_=C1gila?= Bitsch <jgilab@gmail.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: [PATCH] usb: gadget: add doc to struct usb_composite_dev
-Message-ID: <Y9Fokec99g+c31P2@kroah.com>
-References: <Y86cy1AM4w5ju5A4@kroah.com>
- <Y9FmWVF+J08V4RbP@jo-einhundert>
+        with ESMTP id S234492AbjAYUZR (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 25 Jan 2023 15:25:17 -0500
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF45A3028B
+        for <linux-next@vger.kernel.org>; Wed, 25 Jan 2023 12:25:16 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id m15so14641705wms.4
+        for <linux-next@vger.kernel.org>; Wed, 25 Jan 2023 12:25:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=wurMI0e/6kU3Ra6nRfONxCRHUpQVKJO2S1y2IziaWoI=;
+        b=MWWRQoUR6m0F3i0d6Pk9q4mh7va7LHQzpvpQUIXc1b26a8DM39QyW1ojKiQ7XXdbtM
+         V5DFSuVMO7Oug4OVh0lfp1s8dpdZoyYBR0KNhjXkFVjCg614pF7bGh2QvngPnTKWpUP6
+         lvLDFimbxNz8/pbgK5Q2X6Fy9qFAqKojzBAmLVyemXU4GrW+6aTN87zZRWeL6m1hf4Vh
+         xLmjSMT8oSdxFWsooZp361gjSN9+q8thJ9RTgzyUOYWlq7q2ZD9588JP3+aifyNQLjKs
+         ydIGAa1szgJn/995ZYvqTiXxdOTBSIJ7lb6IGlBpIhMDG6Y4BtGjYo8tTC5n48kW39C5
+         Z4ww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wurMI0e/6kU3Ra6nRfONxCRHUpQVKJO2S1y2IziaWoI=;
+        b=ZpETZvQhJrI2Wq9DSj8kF5A2xDBftOIspVat+/2wJ0yL/27wQttxT/jb878SdxHtli
+         xaqLpZaH9Xs9GvoP+wRZNnoJ52N1Wakk3m/GHp3YRqCVAiZO1VmEpP1iyxgcqt1SSmS5
+         I+AddMBLRJvK4QA40DJhJ6mt/vNQqvbh1KTalsjOYYwIlLfHmJ+Z8DjtOJzb+WDKbXGo
+         j/IoLai1/Elyk3xCedWIcrBtE2PtrwVEo+RT6aIUkzT2bhvVSmcyptLjdPgK3SDa5I0R
+         yaR2SETeZv0HFmuuT1XWLCDH8Dj/jxppr7SlP9OlYx0ae9ZI/c88RRw3S3Gs9Q7uKXZB
+         /gXA==
+X-Gm-Message-State: AFqh2kqFbmD8lU54n01UObquf1xdhiki9Jl32ax9GxSSXrG0GBrF9j8Y
+        hSJXfWiJd06K7RJ/aHl24Yc0cTmXL2kzllB9fenbp+lgWVxQOA==
+X-Google-Smtp-Source: AMrXdXsqMfpWKil+Cz2zA5fcj/mKqeUxo3iE+k2prB6okCiosmTcxyurBkam9OzQ7ar9X+09MXSsf0fUJmtF+KPM6jk=
+X-Received: by 2002:a05:600c:1c02:b0:3d7:8c6:a8cb with SMTP id
+ j2-20020a05600c1c0200b003d708c6a8cbmr2145646wms.82.1674678314986; Wed, 25 Jan
+ 2023 12:25:14 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y9FmWVF+J08V4RbP@jo-einhundert>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+From:   Eric Van Hensbergen <ericvh@gmail.com>
+Date:   Wed, 25 Jan 2023 14:25:03 -0600
+Message-ID: <CAFkjPTnULXdFY5tFrBHD6exgJt-3gszkm8UBsu0DeD2Xa_inXw@mail.gmail.com>
+Subject: Re-add v9fs/for-next branch
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        linux-next@vger.kernel.org,
+        Dominique Martinet <asmadeus@codewreck.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Jan 25, 2023 at 06:26:49PM +0100, Jó Ágila Bitsch wrote:
-> Added documentation to the new struct members:
-> * bcd_webusb_version
-> * b_webusb_vendor_code
-> * landing_page
-> * use_webusb
-> to avoid warnings in the build of htmldocs
-> 
-> Signed-off-by: Jó Ágila Bitsch <jgilab@gmail.com>
+After a decade hiatus, I was wondering if would be possible to add my
+for-next branch
+(https://git.kernel.org/pub/scm/linux/kernel/git/ericvh/v9fs.git/log/?h=ericvh/for-next)
+back into linux-next.  I'm going to be doing quite a bit of work over
+the next few months fixing up performance and have already coordinated
+a bit with Dominique who has been doing much of the heavy lifting of
+v9fs maintainership over the past decade -- but is worried that he
+doesn't have the bandwidth to keep up with a high rate-of-change.
 
-What commit id does this fix?
+Thanks,
 
-And it was reported by Stephen, so can you provide a reported-by tag
-too?
-
-thanks,
-greg k-h
+          -eric

@@ -2,63 +2,65 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5018267B7C8
-	for <lists+linux-next@lfdr.de>; Wed, 25 Jan 2023 18:02:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA58F67B879
+	for <lists+linux-next@lfdr.de>; Wed, 25 Jan 2023 18:26:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235516AbjAYRCB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 25 Jan 2023 12:02:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54356 "EHLO
+        id S234581AbjAYR0z (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 25 Jan 2023 12:26:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235992AbjAYRBd (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 25 Jan 2023 12:01:33 -0500
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F4F148593;
-        Wed, 25 Jan 2023 09:01:32 -0800 (PST)
-Received: by mail-io1-xd32.google.com with SMTP id 203so8719218iou.13;
-        Wed, 25 Jan 2023 09:01:32 -0800 (PST)
+        with ESMTP id S229612AbjAYR0z (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 25 Jan 2023 12:26:55 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8809A9F;
+        Wed, 25 Jan 2023 09:26:53 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id z11so22631000ede.1;
+        Wed, 25 Jan 2023 09:26:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ec1Ka0db1NrX1Xb7d95sT9qUeiw8lmRBXlQq56Tj8+c=;
-        b=TAHjGISDVcHzQJ7O+EVA+8A0dOl8L6jAXumEOFX13od6F2COjwX5d8GUyYDW4iHg1N
-         BknN44cQLaSCws3uEf5xB1+Tpb4IPERmY4E/tECkGkhj4LdOyojZg8CM1icIdSnYIE8e
-         BIa0fuFf4nJ9BcRlY4zN9Vbvm+G1nmx744EDE1USWyPIrs0Zn9sOabCSQWOLSDOIjtUe
-         1oeacil1nLfduuSOOhnUeUTef6naudguuW5Er9vC3TFSn16ZVoZNndlaHZ+sK/HgG0WS
-         CXl8hOGqg9oELkKNiuF1RdqYqKiXMPyGCuJDdX3f5f46nr30xqWN4esTJzVO6H6GYuwW
-         1lmQ==
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:message-id:subject:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=CYMEij3rxHWyzgLm7dd5XsZ6vBXXY5YhrQ7zALUGLjk=;
+        b=Dv8hdB3DMUVXMukiXrX8R5uayffhTytfjOgnhlH736EMc/WIsAQMKzQ57MnRHeWfFV
+         F5n3xRt1KakybWkK45QuYajlkvzPLPosyqXR5rIt0hlMzci8GZPbFFEF3CHAYx8vP+FI
+         dODp8tKCEe1ugqJMoxMcZ0nPXGlCRpjb0siys1HlQlai19Q0sgK5VCnv39XzIfMpOX36
+         aG0myJGc/o/HGOD2kuxfpc40mLNnhjIFyVhT5+bTcY7BZ32M3VR2MkVBxdkJJ5FSy3GR
+         bqnyabPa0HRsK863qhLq+U5WF328x620ZEXXVWii0q+Spxo+bzpjNxZFYnv/PHETxY1g
+         8pew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ec1Ka0db1NrX1Xb7d95sT9qUeiw8lmRBXlQq56Tj8+c=;
-        b=53KDGWsGlL7QtAUUMcIqYP/Re4YY6PXBkTuIYMYQxhe+0UM3oNvu/F1SrUsAs49Qoj
-         RJI1QRFLfIuddl9I/GVjy4D3dCk6f+7LpxvBNRm4AcIvDThjwByyiEKQVq+eUy5WnvQD
-         IbecJs6BZGxEpMCe5DclV+dLutBy2Uqu7xEMLxWlo0udUirEh6ZWT7YBN5SnHHQ17Oh2
-         3oUUGe0mY4+gs1kKYkjWvsiH3mm91pza5dbAMEeYVUhc9mpgWcb+rBFSVxLE/a2bQ5PA
-         /WLsa+TvGatzvEvuMzLnEjMevZD4fx7XwtL9mB1AMNzJKKC1H2fyJJhfOQYtXHhLCiVI
-         b9Qg==
-X-Gm-Message-State: AFqh2kqUGn5Sf/u+yYTwAXx3uCmqQ6wfUY5jXqwQpdatZuIsYCd40QqP
-        27ON1GOwgEtx+K1eUOT0f+T1LrgBnLsP6JL7q0f43hB5UUk=
-X-Google-Smtp-Source: AMrXdXvgmWJenxWNl6uHkQ679tdqmRtHUOqyTNLrAWKiBQAK+mZ5VsPFIv6EeYW4gCr55iuoyUHqqQC5wCpHKj5GJS4=
-X-Received: by 2002:a5d:8798:0:b0:704:5916:5290 with SMTP id
- f24-20020a5d8798000000b0070459165290mr2644851ion.10.1674666091656; Wed, 25
- Jan 2023 09:01:31 -0800 (PST)
-MIME-Version: 1.0
-References: <20230123152430.3e51fd25@canb.auug.org.au> <Y86cy1AM4w5ju5A4@kroah.com>
-In-Reply-To: <Y86cy1AM4w5ju5A4@kroah.com>
-From:   =?UTF-8?B?SsOzIMOBZ2lsYSBCaXRzY2g=?= <jgilab@gmail.com>
-Date:   Wed, 25 Jan 2023 18:01:20 +0100
-Message-ID: <CAMUOyH3p1ji0AQSKD6b05ozUfQ5_09jzx8VttQSGZampjBZofw@mail.gmail.com>
-Subject: Re: linux-next: build warning after merge of the usb tree
-To:     Greg KH <greg@kroah.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:message-id:subject:to:from:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CYMEij3rxHWyzgLm7dd5XsZ6vBXXY5YhrQ7zALUGLjk=;
+        b=O/I/HOnqVuWBC8RMrYaEc8YiiPzTGEWxPjbwiHwnowiJ6iMI79XGskVEYoA7LuDxyn
+         rSRv6f9uqLOQiyXOd5dAGG22XCfoEpsU/YGAyWEc9OJKutosQIfE31FriniO9lzn+S1K
+         +fwglx/2p7IL/a9yLClcHSrgR98Pqo2P1LgbChk1jwAmrva7uBuMEljLvnVAm32B06Uw
+         QeXXgouj4idQM6YBn86mLHWOpg3ejYgmN8Gyh59hhimCMtdKKTtT/RgBZEU4KemfAoeq
+         4EMHUFYlq41R42OVyjBPasXKs4hpjJyrdqxZZuXKSqF75mKEdRulWSlDKNja/gzV41eF
+         Vn5Q==
+X-Gm-Message-State: AFqh2kr/xjknTdK3IMGS2klFpQ6LAB+HlHeFxZpS5HVPJGshBTm9z5kc
+        RC6W2mp6Wo9Uba2fXDUkmuoI1memruE=
+X-Google-Smtp-Source: AMrXdXsUvLlARBjMXRXjQMdoUzGjSjgvrKOPoFY18DBSj653Pol8v+oWAZdyD2Rlk/XeWRH8j+FQVg==
+X-Received: by 2002:a50:ff08:0:b0:49b:7416:e3ff with SMTP id a8-20020a50ff08000000b0049b7416e3ffmr34024896edu.5.1674667611597;
+        Wed, 25 Jan 2023 09:26:51 -0800 (PST)
+Received: from jo-einhundert ([2a02:908:13d6:2180:36e8:f43a:77c6:b1a2])
+        by smtp.gmail.com with ESMTPSA id lf14-20020a170907174e00b007c1633cea13sm2688052ejc.12.2023.01.25.09.26.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Jan 2023 09:26:51 -0800 (PST)
+Date:   Wed, 25 Jan 2023 18:26:49 +0100
+From:   =?iso-8859-1?Q?J=F3_=C1gila?= Bitsch <jgilab@gmail.com>
+To:     Greg KH <greg@kroah.com>, Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: [PATCH] usb: gadget: add doc to struct usb_composite_dev
+Message-ID: <Y9FmWVF+J08V4RbP@jo-einhundert>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y86cy1AM4w5ju5A4@kroah.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -69,36 +71,33 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Jan 23, 2023 at 3:42 PM Greg KH <greg@kroah.com> wrote:
->
-> On Mon, Jan 23, 2023 at 03:24:30PM +1100, Stephen Rothwell wrote:
-> > Hi all,
-> >
-> > After merging the usb tree, today's linux-next build (htmldocs) produce=
-d
-> > this warning:
-> >
-> > include/linux/usb/composite.h:510: warning: Function parameter or membe=
-r 'bcd_webusb_version' not described in 'usb_composite_dev'
-> > include/linux/usb/composite.h:510: warning: Function parameter or membe=
-r 'b_webusb_vendor_code' not described in 'usb_composite_dev'
-> > include/linux/usb/composite.h:510: warning: Function parameter or membe=
-r 'landing_page' not described in 'usb_composite_dev'
-> > include/linux/usb/composite.h:510: warning: Function parameter or membe=
-r 'use_webusb' not described in 'usb_composite_dev'
-> >
-> > Introduced by commit
-> >
-> >   93c473948c58 ("usb: gadget: add WebUSB landing page support")
->
-> J=C3=B3, can you send a follow-on patch to fix this issue please?
->
-> thanks,
->
-> greg k-h
+Added documentation to the new struct members:
+* bcd_webusb_version
+* b_webusb_vendor_code
+* landing_page
+* use_webusb
+to avoid warnings in the build of htmldocs
 
-I just posted a new version where I also merged in Andy Shevchenko's
-patches against by patch.
+Signed-off-by: Jó Ágila Bitsch <jgilab@gmail.com>
+---
+ include/linux/usb/composite.h | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Best regards,
-J=C3=B3
+diff --git a/include/linux/usb/composite.h b/include/linux/usb/composite.h
+index 91d22c3ed458..7ef8cea67f50 100644
+--- a/include/linux/usb/composite.h
++++ b/include/linux/usb/composite.h
+@@ -432,6 +432,10 @@ static inline struct usb_composite_driver *to_cdriver(
+  * @qw_sign: qwSignature part of the OS string
+  * @b_vendor_code: bMS_VendorCode part of the OS string
+  * @use_os_string: false by default, interested gadgets set it
++ * @bcd_webusb_version: 0x0100 by default, WebUSB specification version
++ * @b_webusb_vendor_code: 0x0 by default, vendor code for WebUSB
++ * @landing_page: empty by default, landing page to announce in WebUSB
++ * @use_webusb:: false by default, interested gadgets set it
+  * @os_desc_config: the configuration to be used with OS descriptors
+  * @setup_pending: true when setup request is queued but not completed
+  * @os_desc_pending: true when os_desc request is queued but not completed
+-- 
+2.37.2
+

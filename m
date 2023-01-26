@@ -2,69 +2,81 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1097467BFA1
-	for <lists+linux-next@lfdr.de>; Wed, 25 Jan 2023 23:10:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6C3B67D08E
+	for <lists+linux-next@lfdr.de>; Thu, 26 Jan 2023 16:45:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229595AbjAYWKg (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 25 Jan 2023 17:10:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58418 "EHLO
+        id S230231AbjAZPp0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 26 Jan 2023 10:45:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231124AbjAYWKf (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 25 Jan 2023 17:10:35 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 472A45649A;
-        Wed, 25 Jan 2023 14:10:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
-        bh=qrA4WDuiycfQq8e9UdqLL+UdvaBCIEeofG2czzLroEo=; b=oHTVbQkdmcbX9vIIVzr9T10S9b
-        oXS2EMq9Tvb75lN+Uzq/qnwEqAuYEoCy3kj/+k3jBAPtWMPnd2C2os5q1TsirQhdTAwwP7siojP8K
-        6R6Yznnm9cj42l6Sntmu43FgvYEEEKUsHAwqt1K2N5kr7ZWrJynkGwWpPHJgZPKnoiPmzRMgifbt7
-        lsKphQs9c7uRIi8jyt/DZXP6hnX2ZPhVS2CiUoAP1hdCNlpnWZdRwPwNkK7JuKwYaxPiCAtMqw94b
-        7vUwUP9JwdVQHiL7GfD/5ndzx9NH2yJ03VW+EuoyhjQFoJ6AWAB5A4csYpWX6taq4YInipYi1VWwD
-        DOcUcGFg==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pKnyI-008x2C-Fn; Wed, 25 Jan 2023 22:10:22 +0000
-Date:   Wed, 25 Jan 2023 14:10:22 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
+        with ESMTP id S231604AbjAZPpY (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 26 Jan 2023 10:45:24 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADB4E2686A;
+        Thu, 26 Jan 2023 07:45:15 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 18DBA61896;
+        Thu, 26 Jan 2023 15:45:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24238C433D2;
+        Thu, 26 Jan 2023 15:45:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674747914;
+        bh=LHRHDzLm9LWFpExQnuxPr8v2tFfVJzIuUrxWWsNuf3Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Eh6ohAlNGPuQh+oWljwE65VWJlgdvpk5EstZJBFPQuiCUv+1zs+o9THi0w7mDp2uV
+         4MjxNp+bweut1H0AZdEVumdEFm3v+P6kFOayCKZR8OYL2EArUJM4Is643I85D0ETHA
+         MepRrMNrDiObKli2DHZqJtUUJHhxbjmvespsHcJ4YjPj70fFzKsbDsnwpoQY5LHmVx
+         igWkaGieidB05INEXk3TWzSCr9TyCl9yId0wIs1OWABwjOt7WKN2tiahR907BinN3V
+         MSgeMSD+D4vdGA7dfy1aduYUW55Luf/2ApvbxAGkDlYgeFhcH2CSh9Rlh4hLvCTxh5
+         1S3WG+rbiFTHg==
+Date:   Thu, 26 Jan 2023 15:45:11 +0000
+From:   Jarkko Sakkinen <jarkko@kernel.org>
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Martin Wilck <mwilck@suse.com>, Petr Pavlu <petr.pavlu@suse.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patch in the modules tree
-Message-ID: <Y9GoziGJmwDN/YZV@bombadil.infradead.org>
-References: <20230125152212.51164f0e@canb.auug.org.au>
+Subject: Re: linux-next: duplicate patches in the tpmdd tree
+Message-ID: <Y9KgBzb7DTsqoRSV@kernel.org>
+References: <20230123081140.4fbc0aaa@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20230125152212.51164f0e@canb.auug.org.au>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230123081140.4fbc0aaa@canb.auug.org.au>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Jan 25, 2023 at 03:22:12PM +1100, Stephen Rothwell wrote:
+On Mon, Jan 23, 2023 at 08:11:40AM +1100, Stephen Rothwell wrote:
 > Hi all,
->=20
-> The following commit is also in Linus Torvalds' tree as a different commit
-> (but the same patch):
->=20
->   7ea5b24deb65 ("module: Don't wait for GOING modules")
->=20
-> This is commit
->=20
->   0254127ab977 ("module: Don't wait for GOING modules")
->=20
-> In Linus' tree.
+> 
+> The following commits are also in Linus Torvalds' tree as different
+> commits (but the same patches):
+> 
+>   07e8ac925f39 ("xfs: fix off-by-one error in xfs_btree_space_to_height")
+>   3f5948c5cbb6 ("xfs: xfs_qm: remove unnecessary ‘0’ values from error")
+>   42131102fd2b ("xfs: make xfs_iomap_page_ops static")
+>   650db86fa92e ("xfs: get root inode correctly at bulkstat")
+>   81e251490768 ("xfs: fix extent busy updating")
+>   8c06bf34e6a4 ("Linux 6.2-rc3")
+>   9b56a9ba5a17 ("xfs: Fix deadlock on xfs_inodegc_worker")
+>   b8314b7eee32 ("xfs: don't assert if cmap covers imap after cycling lock")
+>   cb714cbd5150 ("powerpc/vmlinux.lds: Define RUNTIME_DISCARD_EXIT")
+>   d48aa1d1fa3e ("powerpc/vmlinux.lds: Don't discard .comment")
+>   ed70c7b3cd7e ("powerpc/vmlinux.lds: Don't discard .rela* for relocatable builds")
+> 
+> This is clearly caused by a bad rebase of the tpmdd tree :-(
+> 
+> -- 
+> Cheers,
+> Stephen Rothwell
 
-I've fixed this and dropped the patch merged on Linus' tree, thanks.
+Thanks I'll fix it.
 
-  Luis
+BR, Jarkko

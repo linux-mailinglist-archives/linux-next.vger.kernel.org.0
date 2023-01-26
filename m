@@ -2,90 +2,95 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6EF767D897
-	for <lists+linux-next@lfdr.de>; Thu, 26 Jan 2023 23:37:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7784567D89D
+	for <lists+linux-next@lfdr.de>; Thu, 26 Jan 2023 23:39:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233208AbjAZWhJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 26 Jan 2023 17:37:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38584 "EHLO
+        id S229730AbjAZWjI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 26 Jan 2023 17:39:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233238AbjAZWgy (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 26 Jan 2023 17:36:54 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FC8B3C39;
-        Thu, 26 Jan 2023 14:36:46 -0800 (PST)
+        with ESMTP id S230225AbjAZWjH (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 26 Jan 2023 17:39:07 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A2B84EF7;
+        Thu, 26 Jan 2023 14:39:06 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P2wYP4mB6z4xwq;
-        Fri, 27 Jan 2023 09:36:41 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P2wc82gXMz4xwp;
+        Fri, 27 Jan 2023 09:39:04 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1674772601;
-        bh=w6NFETs287m+waQNjv1iPPSx9DhormQPktztfTYHRjA=;
+        s=201702; t=1674772744;
+        bh=nAcG/YYvgYCoLwfwltWnqDMCWXVKQpjGcIiUMSGG6w0=;
         h=Date:From:To:Cc:Subject:From;
-        b=W5OWfb6btDxkTJCkODuHeJALPzA2YxAJ4/628HTMlrm1LGW7xAoRgCiyAYVy2yb5X
-         j+W+lHA6cDESjx/R0nAeKIg7LT/fu+yVivjRfZBLP2ykyYIEKZEPRhl0JzJv8zv354
-         S9NYYDSZJaIelfe8i02v9T4NgzBvhWhZd/JCvkiY8BmAy1075+NmE8svzRR/5Mhwg8
-         hqUPUEOeCxjKqzJmJd5F3T41qfz7wqg216HMXmrEaUAmiFybvpbtpUADzMVtW5ag1H
-         rmMsmESs0QHqs7SLcrVC+qi+FKYtuVwNgBRuE3C5C0BqHgm9PlE4EE5R11eat2SS1g
-         XMmT3PZKthrmg==
-Date:   Fri, 27 Jan 2023 09:36:39 +1100
+        b=hD5aY3Kzkm9INMo1LXVkl0OcHz4/bBV9GwLnOeouAdgLXLhZGX15Bd2hM5QqgkZN2
+         Iw7cqzc1OMPZNe1oLoWDf9TjdN7CsOaQQGb6LINsLYybf8XGi0N1vyp+6QHl3+Pqup
+         fblaVNTAlFQ/k6kArshO3tdoZScM6un9OSEa/5pwjVLmPOaOFMpRbC/26+2wwNSxrq
+         AYZ7mdrmD7ck2XuG17MT53XdgKQj/JzIs8wy62H7UqnR6euagwGoVogG1+gH2LqyHK
+         qr1exx3IeEsYyUAu+dZM3aklNUBUnUEY89kSM0JsSY+s6WEsf2T6UUIWoYNgRpKjkb
+         wgfQsqXL2DPnw==
+Date:   Fri, 27 Jan 2023 09:39:03 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Bjorn Helgaas <bhelgaas@google.com>
-Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+To:     Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     Bastien Nocera <hadess@hadess.net>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patch in the pci tree
-Message-ID: <20230127093639.27eb526b@canb.auug.org.au>
+Subject: linux-next: Fixes tag needs some work in the hid tree
+Message-ID: <20230127093903.1f60ddb8@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/7h9W=Mqc7OfBfveWzalAujA";
+Content-Type: multipart/signed; boundary="Sig_/eC2Nj93nWtQT_kEE.9u_2PW";
  protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/7h9W=Mqc7OfBfveWzalAujA
+--Sig_/eC2Nj93nWtQT_kEE.9u_2PW
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-The following commit is also in Linus Torvalds' tree as a different
-commit (but the same patch):
+In commit
 
-  b692c96b424f ("PCI: dwc: Adjust to recent removal of PCI_MSI_IRQ_DOMAIN")
+  82a3e2fb3e96 ("HID: logitech-hidpp: Hard-code HID++ 1.0 fast scroll suppo=
+rt")
 
-This is commit
+Fixes tag
 
-  760d560f71c8 ("PCI: dwc: Adjust to recent removal of PCI_MSI_IRQ_DOMAIN")
+  Fixes: 908d325 ("HID: logitech-hidpp: Detect hi-res scrolling support")
 
-in Linus' tree.
+has these problem(s):
+
+  - SHA1 should be at least 12 digits long
+    This can be fixed for the future by setting core.abbrev to 12 (or
+    more) or (for git v2.11 or later) just making sure it is not set
+    (or set to "auto").
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/7h9W=Mqc7OfBfveWzalAujA
+--Sig_/eC2Nj93nWtQT_kEE.9u_2PW
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPTAHgACgkQAVBC80lX
-0Gy1zQf+KM+1qP/1o85sKL+kBNr1JI/KZSr4+V6V3A0D4v6nGQM6ZjdD71ahGw3P
-NHWgzoB605Yk9Ce6mSqaWRi7jKNFN2uIX83tP9Bh9N71/SG95Qc+irsBOnxBZHDP
-qkBlNIJ5l22RMhRM1ctv/3pemlF5cI2rzdq9iHZKRVS2lq0f+RXL4CB6fnsFBvSe
-ZsmuxYDFgpbBIYlc2ulU+tp8vuzQBOrbNHLZLUqKcy9NNVE4jj4o0xhZoWndeJ7f
-7guKHp/rdDGrpVF1DPkC8twgROtU9s8DccpT3JFBJsAsblhdM0dELSq3PdjjP8FV
-KQ2pROVbOSGfyZlh1ViR9iVUGj49Mw==
-=jOFK
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPTAQcACgkQAVBC80lX
+0GywyQf/WaEHTFdEiVv4BNR5RSQhIJBAu8V5rO1MGvtozQ4G5cynqqvJTyzcIUMi
+TTowkDvOM4MkUcrMgiqAAH14oRsL3M+4x6+UqeuR650TCFWo7f3qOdeCV+ue+iN/
+ZKoIX4YjF+GK1hxvJqkJOBkK0KlXfW6f2cR7luWS3njHGxBZYDG1N1E2bjnsL1sP
+dHteAJWmJJEj4J67eRpOZvXH080dmViGH4Gn0b1kfE63wtthmBAtCYpn0u+TrzSb
+19NLwILAVDC6viIycA604zyraHnuBC41YIu4TsrnGCjZrTgttSdzyQ0pBAS15peY
+wMYC6PufFBWuiWjZzthsOs/URgUUXg==
+=ZNKn
 -----END PGP SIGNATURE-----
 
---Sig_/7h9W=Mqc7OfBfveWzalAujA--
+--Sig_/eC2Nj93nWtQT_kEE.9u_2PW--

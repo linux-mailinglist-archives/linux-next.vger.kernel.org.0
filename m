@@ -2,87 +2,164 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5480667DA3B
-	for <lists+linux-next@lfdr.de>; Fri, 27 Jan 2023 01:10:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAE1567DAB5
+	for <lists+linux-next@lfdr.de>; Fri, 27 Jan 2023 01:23:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230046AbjA0AK3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 26 Jan 2023 19:10:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44796 "EHLO
+        id S229654AbjA0AW5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 26 Jan 2023 19:22:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231670AbjA0AK2 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 26 Jan 2023 19:10:28 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70DD860CAD;
-        Thu, 26 Jan 2023 16:10:25 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id z11so3416074ede.1;
-        Thu, 26 Jan 2023 16:10:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=TzvyztqTUqhDZSZhosPdZdeM50hG8/cWxMKn7fUj6B0=;
-        b=RNamU9mUtzrlzn0TAxG1wWURwfki+wfpEmXMkSvbNALsjZyqasLqkhedKzqwa6GLRS
-         Iosrt+QBB5N3h9Uxusd4tLHxvmcyxLMUKWNsqyLGPx6xcdYpRPGid2t9gYl2pA7DSMt4
-         kCr879ArC5xBiopSrp2kZUK2g9VlMv/BIUFhM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TzvyztqTUqhDZSZhosPdZdeM50hG8/cWxMKn7fUj6B0=;
-        b=qSfLaDoLI9djHYn4u/W46N5Fjy9L5oEeqwBAKww7ETMlJdvst5XhJT1K2s75rx2H/Q
-         3XS+PEX3SScZYyjsJpNMIdMtvuNlhY5naclr9NIsPvIj98lhhk7MY98+ZN31dJJEoFep
-         kaZhaGpYxa0dvM638bVGSFt/X75gCWX1D+cCdcPEibwjMzhw6Qm28bmPXpHpPBOgJ84e
-         5KRZV2z9MiBbenm0RID6Qzap4j2ZxA6fBi4P85w7D3So3nHEvYmQ/lUsSBEaAobykgm5
-         CAAhZH/gEMVrcIr0feGBq0OnEx8fVGTXotGJplvur70OHMhNtLeH1oMfbxwO2njKWKQK
-         6OBQ==
-X-Gm-Message-State: AFqh2kq3Vt0jCl9ZehcrHUYI06gtOzzfeyeqbDWlxDZmlf1s5iDTeg8A
-        Kg3kDnq5ARQGoLWh9mns3Ga608CSWCA+J0Rduol2vblg
-X-Google-Smtp-Source: AMrXdXsAGTfzRbtQDCKmtyYLn+0y5JFjnEbtEM300Gv9/UP8Xof/oEFHKVTbcRjK5TJLcCg8I5kKsoDJ7mo4T2bhAz0=
-X-Received: by 2002:a05:6402:5288:b0:49e:66b8:a790 with SMTP id
- en8-20020a056402528800b0049e66b8a790mr5507160edb.47.1674778223761; Thu, 26
- Jan 2023 16:10:23 -0800 (PST)
-MIME-Version: 1.0
-References: <20230127110428.34c159b4@canb.auug.org.au>
-In-Reply-To: <20230127110428.34c159b4@canb.auug.org.au>
-From:   Joel Stanley <joel@jms.id.au>
-Date:   Fri, 27 Jan 2023 00:10:11 +0000
-Message-ID: <CACPK8XeNk7dmWjw4N8KxDt5ObR6b=p5wSDRjcpt4cVvbww2X2g@mail.gmail.com>
-Subject: Re: linux-next: duplicate patch in the aspeed tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        ARM <linux-arm-kernel@lists.infradead.org>,
-        Eddie James <eajames@linux.ibm.com>,
+        with ESMTP id S229498AbjA0AW4 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 26 Jan 2023 19:22:56 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98E327EC9;
+        Thu, 26 Jan 2023 16:22:29 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P2ytk583gz4xN1;
+        Fri, 27 Jan 2023 11:21:50 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1674778911;
+        bh=HViW9Me7YJOaBsw5QSGbFRC0eMlpQKUZBgSymIkZ1cg=;
+        h=Date:From:To:Cc:Subject:From;
+        b=H/CjgGlpY4N61tApkudioZUZG+YqXQ7qNnMOT/EdizdD6qi1DTPs0u4CUPY0+55q3
+         YjI/csYarR1GXxOdaOnqEGzogF4N1jo7T7UF2N9tYWWR4tpuW8GuB78vDQTlLPfFvE
+         Dr4xw04rowWP0LBHN/d5w0eDgPuHFClSoP9CcRX0E7VLCfXA1m1dl3wJqedEWkmSEZ
+         UeCsbNC7i7YanBjiroI94wlmTFBxpT+bkaMyCCZ7nI4KlOUyds5Y297sUB8l7B/FKJ
+         FDu/boJOLsOVl2+GWGl6i9fFD89dPkHaxwsAEMLz+cYks6PhBONO7Cm5cmUPl4bNm6
+         4Lfwe6j53TKpA==
+Date:   Fri, 27 Jan 2023 11:21:49 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Eric Van Hensbergen <ericvh@gmail.com>,
+        Christian Brauner <christian@brauner.io>,
+        Seth Forshee <sforshee@kernel.org>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        Eric Van Hensbergen <ericvh@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Subject: linux-next: manual merge of the v9fs-ericvh tree with the
+ vfs-idmapping tree
+Message-ID: <20230127112149.283a466f@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/g1rpF6bNsxU0/JEjdiDyK0O";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, 27 Jan 2023 at 00:04, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> The following commit is also in the arm-soc-fixes tree as a different
-> commit (but the same patch):
->
->   fc8529f0609d ("ARM: dts: aspeed: Fix pca9849 compatible")
->
-> This is commit
->
->   d9b6c322fd33 ("ARM: dts: aspeed: Fix pca9849 compatible")
->
-> in the arm-soc-fixes tree.
+--Sig_/g1rpF6bNsxU0/JEjdiDyK0O
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks, I'll drop this from the aspeed tree now that it's been merged as a fix.
+Hi all,
 
+Today's linux-next merge of the v9fs-ericvh tree got conflicts in:
+
+  fs/9p/vfs_inode.c
+  fs/9p/vfs_inode_dotl.c
+
+between commit:
+
+  b74d24f7a74f ("fs: port ->getattr() to pass mnt_idmap")
+
+from the vfs-idmapping tree and commit:
+
+  a905b430e998 ("fs/9p: writeback mode fixes")
+
+from the v9fs-ericvh tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
 Cheers,
+Stephen Rothwell
 
-Joel
+diff --cc fs/9p/vfs_inode.c
+index 4344e7a7865f,c61709d98934..000000000000
+--- a/fs/9p/vfs_inode.c
++++ b/fs/9p/vfs_inode.c
+@@@ -1038,8 -1009,11 +1009,11 @@@ v9fs_vfs_getattr(struct mnt_idmap *idma
+  	p9_debug(P9_DEBUG_VFS, "dentry: %p\n", dentry);
+  	v9ses =3D v9fs_dentry2v9ses(dentry);
+  	if (v9ses->cache =3D=3D CACHE_LOOSE || v9ses->cache =3D=3D CACHE_FSCACHE=
+) {
+- 		generic_fillattr(&nop_mnt_idmap, d_inode(dentry), stat);
+ -		generic_fillattr(&init_user_ns, inode, stat);
+++		generic_fillattr(&nop_mnt_idmap, inode, stat);
+  		return 0;
++ 	} else if (v9ses->cache >=3D CACHE_WRITEBACK) {
++ 		if (S_ISREG(inode->i_mode))
++ 			filemap_write_and_wait(inode->i_mapping);
+  	}
+  	fid =3D v9fs_fid_lookup(dentry);
+  	if (IS_ERR(fid))
+diff --cc fs/9p/vfs_inode_dotl.c
+index 3bed3eb3a0e2,3ad48474bf29..000000000000
+--- a/fs/9p/vfs_inode_dotl.c
++++ b/fs/9p/vfs_inode_dotl.c
+@@@ -462,8 -452,11 +452,11 @@@ v9fs_vfs_getattr_dotl(struct mnt_idmap=20
+  	p9_debug(P9_DEBUG_VFS, "dentry: %p\n", dentry);
+  	v9ses =3D v9fs_dentry2v9ses(dentry);
+  	if (v9ses->cache =3D=3D CACHE_LOOSE || v9ses->cache =3D=3D CACHE_FSCACHE=
+) {
+- 		generic_fillattr(&nop_mnt_idmap, d_inode(dentry), stat);
+ -		generic_fillattr(&init_user_ns, inode, stat);
+++		generic_fillattr(&nop_mnt_idmap, inode, stat);
+  		return 0;
++ 	} else if (v9ses->cache) {
++ 		if (S_ISREG(inode->i_mode))
++ 			filemap_write_and_wait(inode->i_mapping);
+  	}
+  	fid =3D v9fs_fid_lookup(dentry);
+  	if (IS_ERR(fid))
+@@@ -592,12 -589,17 +589,17 @@@ int v9fs_vfs_setattr_dotl(struct mnt_id
+  		return retval;
+  	}
+ =20
+- 	if ((iattr->ia_valid & ATTR_SIZE) &&
+- 	    iattr->ia_size !=3D i_size_read(inode))
++ 	if ((iattr->ia_valid & ATTR_SIZE) && iattr->ia_size !=3D
++ 		 i_size_read(inode)) {
+  		truncate_setsize(inode, iattr->ia_size);
++ 		truncate_pagecache(inode, iattr->ia_size);
++=20
++ 		if (v9ses->cache =3D=3D CACHE_FSCACHE)
++ 			fscache_resize_cookie(v9fs_inode_cookie(v9inode), iattr->ia_size);
++ 	}
+ =20
+  	v9fs_invalidate_inode_attr(inode);
+ -	setattr_copy(&init_user_ns, inode, iattr);
+ +	setattr_copy(&nop_mnt_idmap, inode, iattr);
+  	mark_inode_dirty(inode);
+  	if (iattr->ia_valid & ATTR_MODE) {
+  		/* We also want to update ACL when we update mode bits */
+
+--Sig_/g1rpF6bNsxU0/JEjdiDyK0O
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPTGR0ACgkQAVBC80lX
+0GwN3ggAmMgP8dChrtldhgo8l+bZ9skT5YwR9t/T9ilc/gVL2bWsTqOWeGU/EPb0
+P1Az0StnnIx2WvuOoaUETZg3sWNG+Xf15mR3D80pKPC1YoU4Dhrn51Z8PewBVIyi
+A/qk2Aj3/aVm1gAFBZZ5Aq9B3LnRAZr6u5ibmlbe2wXdnpuRW1GmnwCMc+bpsPGK
+/39tBV2KwPIT4l6HjQbdqyfggH9DNFFkaebvd0oJTNQWbsQiui5f7zwEIAayJteI
+324n8SLYGAAqBy0OMy7pl/rLfaETyvwGdSrCw3FhpPtpUst9oEZlsNojz91xkkie
+HGvqGwS5TGkPgIuAUBYWn1mpT8Vamw==
+=f8Z1
+-----END PGP SIGNATURE-----
+
+--Sig_/g1rpF6bNsxU0/JEjdiDyK0O--

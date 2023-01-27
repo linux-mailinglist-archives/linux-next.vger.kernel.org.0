@@ -2,47 +2,46 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA9B867DABA
-	for <lists+linux-next@lfdr.de>; Fri, 27 Jan 2023 01:26:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C3CC67DB4F
+	for <lists+linux-next@lfdr.de>; Fri, 27 Jan 2023 02:36:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229771AbjA0A0p (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 26 Jan 2023 19:26:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34010 "EHLO
+        id S229662AbjA0BgK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 26 Jan 2023 20:36:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbjA0A0o (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 26 Jan 2023 19:26:44 -0500
+        with ESMTP id S229512AbjA0BgJ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 26 Jan 2023 20:36:09 -0500
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71E0346AC;
-        Thu, 26 Jan 2023 16:26:43 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5327E1B3;
+        Thu, 26 Jan 2023 17:36:07 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P2z0K0Xv5z4x1T;
-        Fri, 27 Jan 2023 11:26:41 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P30XP55mhz4xGM;
+        Fri, 27 Jan 2023 12:36:05 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1674779202;
-        bh=7W+o3SEh8LHcXFVjlnNFe6JICjd6gXkmn5eBv3655gM=;
+        s=201702; t=1674783365;
+        bh=QpcQXyZx/EC9cb29y4iHNb99wmw63VWK8dYKcS0KQdE=;
         h=Date:From:To:Cc:Subject:From;
-        b=kVUFknaDpgsjZ0ef2fehvMHHneAyY0P2FGAmR68odPyizhHhahJyXUugiufPxHh8/
-         Rk6KMHgPOXKiDtmCoKuShvyBdivQkjZ4Ed3Qe4YzqU3US9FHvWL/SDfeaUB1qlYmzk
-         ebmMvVJ7P3zQZoEOSv/zhsS6OjqjRF2ToKU7kMf3P1JFT++LFueprEzKjt+ODucnqJ
-         X7m6T0UtSGn6rVgwhbwKmYgZV+HPO4FB3jHHaxn0Kh6pv1Zk9AGej1/jENzmdyKLOm
-         pEBAf7LczL49B8GDLktl2CrP3J4xhiA7zwau8tyokB8N3MI9kccFSDK78CQx7CRyC8
-         kaknKE/IkIfEw==
-Date:   Fri, 27 Jan 2023 11:26:40 +1100
+        b=l6yE4VwRHmKmbOchBtaYU4FHMaqRXE27UQwF3T/LXVKOqPDCoWkqx+fjCdGRKU60R
+         PeHPYS6qbbIapwkUfHgvIuuiIa9VWmLCIrq9U5BSdRiwzJHhsTWH0ZigWUSVcs8SsF
+         6SxmkWpJM0J67/8UGWILBTc+52ntqxViS4JPvtCjlRH1RAsF1/+xWqODrXhDlVt3Gn
+         GmOkaUQvZKi9uKhS08IKJM5mPyydXbDxAEGjFp9VrZ6pIeE76mwipVDbRD2vgooKle
+         6NhFDnXLIT/wF7E1SjgrJ1SgShLW8+VoBKkX/UhIqZXv9g7KVrmJMoT0S2L10hbIWv
+         fQ6qflx0VKCww==
+Date:   Fri, 27 Jan 2023 12:36:04 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jeff Layton <jlayton@kernel.org>,
-        Miklos Szeredi <miklos@szeredi.hu>
-Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Gerhard Engleder <gerhard@engleder-embedded.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Miklos Szeredi <mszeredi@redhat.com>,
-        Tycho Andersen <tycho@tycho.pizza>
-Subject: linux-next: manual merge of the file-locks tree with the fuse tree
-Message-ID: <20230127112640.6f55e705@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the net-next tree with the net tree
+Message-ID: <20230127123604.36bb3e99@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/xrKXj_7XRnL1G3rt_ORqcTo";
+Content-Type: multipart/signed; boundary="Sig_/NZf=sKxk=GAHUS09KqeBWby";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
@@ -53,27 +52,25 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/xrKXj_7XRnL1G3rt_ORqcTo
+--Sig_/NZf=sKxk=GAHUS09KqeBWby
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the file-locks tree got a conflict in:
+Today's linux-next merge of the net-next tree got a conflict in:
 
-  fs/fuse/file.c
+  drivers/net/ethernet/engleder/tsnep_main.c
 
 between commit:
 
-  5a8bee63b10f ("fuse: in fuse_flush only wait if someone wants the return =
-code")
+  3d53aaef4332 ("tsnep: Fix TX queue stop/wake for multiple queues")
 
-from the fuse tree and commit:
+from the net tree and commit:
 
-  5970e15dbcfe ("filelock: move file locking definitions to separate header=
- file")
+  25faa6a4c5ca ("tsnep: Replace TX spin_lock with __netif_tx_lock")
 
-from the file-locks tree.
+from the net-next tree.
 
 I fixed it up (see below) and can carry the fix as necessary. This
 is now fixed as far as linux-next is concerned, but any non trivial
@@ -86,34 +83,68 @@ complex conflicts.
 Cheers,
 Stephen Rothwell
 
-diff --cc fs/fuse/file.c
-index 5a98cf915bd3,1458412f2492..000000000000
---- a/fs/fuse/file.c
-+++ b/fs/fuse/file.c
-@@@ -18,7 -18,7 +18,8 @@@
-  #include <linux/falloc.h>
-  #include <linux/uio.h>
-  #include <linux/fs.h>
- +#include <linux/file.h>
-+ #include <linux/filelock.h>
+diff --cc drivers/net/ethernet/engleder/tsnep_main.c
+index 00e2108f2ca4,e9dfefba5973..000000000000
+--- a/drivers/net/ethernet/engleder/tsnep_main.c
++++ b/drivers/net/ethernet/engleder/tsnep_main.c
+@@@ -450,10 -458,8 +458,8 @@@ static netdev_tx_t tsnep_xmit_frame_rin
+  		/* ring full, shall not happen because queue is stopped if full
+  		 * below
+  		 */
+ -		netif_stop_queue(tx->adapter->netdev);
+ +		netif_stop_subqueue(tx->adapter->netdev, tx->queue_index);
  =20
-  static int fuse_send_open(struct fuse_mount *fm, u64 nodeid,
-  			  unsigned int open_flags, int opcode,
+- 		spin_unlock_irqrestore(&tx->lock, flags);
+-=20
+  		return NETDEV_TX_BUSY;
+  	}
+ =20
+@@@ -493,11 -495,9 +495,9 @@@
+ =20
+  	if (tsnep_tx_desc_available(tx) < (MAX_SKB_FRAGS + 1)) {
+  		/* ring can get full with next frame */
+ -		netif_stop_queue(tx->adapter->netdev);
+ +		netif_stop_subqueue(tx->adapter->netdev, tx->queue_index);
+  	}
+ =20
+- 	spin_unlock_irqrestore(&tx->lock, flags);
+-=20
+  	return NETDEV_TX_OK;
+  }
+ =20
+@@@ -567,13 -701,13 +701,13 @@@ static bool tsnep_tx_poll(struct tsnep_
+  	} while (likely(budget));
+ =20
+  	if ((tsnep_tx_desc_available(tx) >=3D ((MAX_SKB_FRAGS + 1) * 2)) &&
+ -	    netif_queue_stopped(tx->adapter->netdev)) {
+ -		netif_wake_queue(tx->adapter->netdev);
+ +	    netif_tx_queue_stopped(nq)) {
+ +		netif_tx_wake_queue(nq);
+  	}
+ =20
+- 	spin_unlock_irqrestore(&tx->lock, flags);
++ 	__netif_tx_unlock(nq);
+ =20
+- 	return (budget !=3D 0);
++ 	return budget !=3D 0;
+  }
+ =20
+  static bool tsnep_tx_pending(struct tsnep_tx *tx)
 
---Sig_/xrKXj_7XRnL1G3rt_ORqcTo
+--Sig_/NZf=sKxk=GAHUS09KqeBWby
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPTGkAACgkQAVBC80lX
-0GwVvwf/RQTyhZ2zmKUQnyCriqbQ1CReN38H57nh1c9LkjP62NY58J2CjwcdHvpl
-9XItdqim4NfBv4jkfbMAg+LLrOoYDuS8ENrUfkpNtnVYXKchAy68z4pTtmLcS3wW
-97f8QXA4lJrXufn1m1FCB7BVAWkqY2mIotpjK2rKpu5iARNUOewMlUNav81ijmhJ
-s9gCTwFcXOwhBCxItRbiNphZZPCII5J3rt8xLhFb4h39PHsN3iO1cny5BdkqeMNA
-nOcVQ0I7H6FO5dzI8IzJNsGN0nv2eKu7FOyAxJf725IcT1hmZ+0LHAEQURksVNXm
-OKHlvznR6HkVNrZbghJldHPs/nr39w==
-=NQZg
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPTKoQACgkQAVBC80lX
+0GwmIAgAhq33cIDho0VbMWndYimZDUL4jf257qzHZdsWzJnvM0XwOhRThjsLSGEB
+2HDsflQCIdvDlu8T+zXBEraMvoyl57H2p9xIvQ5fBunmvE0Npm4MIHV5cFnCCD/2
+BY5My7WAaSjo0s9rnmlAGQGo5UX+h8w99oCpE1Bq7WlDsfIWsAGDdS/KeiS/lbBe
+6wq0UhXiaJTsewwATJYRa6Jh5wkwz3rqHSOBTZcN9+RqXiRAXcuLEKdOdWSLnKU6
+oA3CYb4BiG9yVkxlK4hTm3QYhvfY1FQJnpxtD7Bg0iOj/tD+PnmFxXNo4Mg9Nhbl
+MuQzPHOjF/fdM+gESkSdSYCs6IPX1g==
+=glic
 -----END PGP SIGNATURE-----
 
---Sig_/xrKXj_7XRnL1G3rt_ORqcTo--
+--Sig_/NZf=sKxk=GAHUS09KqeBWby--

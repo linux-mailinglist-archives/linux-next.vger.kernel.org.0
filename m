@@ -2,110 +2,95 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BEC367DE2B
-	for <lists+linux-next@lfdr.de>; Fri, 27 Jan 2023 08:04:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED15267DE4F
+	for <lists+linux-next@lfdr.de>; Fri, 27 Jan 2023 08:12:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232056AbjA0HDN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 27 Jan 2023 02:03:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60090 "EHLO
+        id S232057AbjA0HMv (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 27 Jan 2023 02:12:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232182AbjA0HDD (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 27 Jan 2023 02:03:03 -0500
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F0C5279AC;
-        Thu, 26 Jan 2023 23:02:57 -0800 (PST)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.west.internal (Postfix) with ESMTP id 9587F3200917;
-        Fri, 27 Jan 2023 02:02:53 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Fri, 27 Jan 2023 02:02:54 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1674802973; x=1674889373; bh=W/jkW9u0WB
-        5SFsXC/R5d1e2tDBzid48tPP/Q1cQjf9k=; b=G152YWx970G3IBAq1Ci1dNb8wI
-        BvnaCy+ZczprTeaX+ojbTBTBrgGejn8v46HorxFilBNQLovCQ4e8srbm2agfvetm
-        g2pwqmG4o6bKSCcs726Vv1BXeBJrP15n5797pYRTQGP6ZgBQ0pxnA/o2fQKs5CtO
-        Nglg5yTuWJ4gQooywVFW8qNCm6TNSc0KK6FNqLleObups3MC6B/YXgXG/uFg01lU
-        17nlGfFHCKJoePVvkmjJmJSpQFE8/sSwreWj85CPdh5Db6BGps7vgRDoQFTk5KH3
-        C65+rBtqyEtmuxgFvXo9gR3WDjC3LP1PB3GgPZXNk7jH6HJMTu6HgLmcrBtA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1674802973; x=1674889373; bh=W/jkW9u0WB5SFsXC/R5d1e2tDBzi
-        d48tPP/Q1cQjf9k=; b=nlEDtlFBOEUWzp+LVIyBqpVHU8mMfBboPgvn0GFRxKao
-        LiBvtyeXGKI0c5IeP8hoqtriY74wrZo/H+m4e+un+0kiRcMwZ3cfVoKeLH3tsck0
-        vbv185cLjpIVrs/E5PMxtwQD+Z02VQsih/cqBI2xEeF/DR4ymGYtxnmkN9feLKYi
-        YdO35j4qNtCC8PPvbhEUJU/OgIzB6PioXdShDYQmFxJn9GAgSzxLKWI+lfHfpiOT
-        LNm4KiBhQbuvHJHqRu7w00wAoM9+d05KgX0QsKcgn3ZRSKCczv0ydCUzIHnnixIC
-        wsHY5zZRieitv3j+umnQAMGpw/a5GhGt9HQefUl4JQ==
-X-ME-Sender: <xms:HHfTY6wpCkYu90hqT4bvKE_BFjGRg1yYWO_Pip9OtU6tsHOs_pOZzg>
-    <xme:HHfTY2RiSs6tFkRb2h-67cyRP1bIec6ekh9nZassjxFbUA2gXQ9Gy8XTOdfPiEbBp
-    6WYcQv0YGekYA>
-X-ME-Received: <xmr:HHfTY8UUog3Cz9KVOSavjcx1tQjHnar0s0jBYYhXBXug5FDtQuYcI9hr5RyLHXCmeSJGPZCpHIszZF3g4RHkj06YtLutZh8LwNms3Q>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddvhedguddthecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgv
-    ghcumffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeehge
-    dvvedvleejuefgtdduudfhkeeltdeihfevjeekjeeuhfdtueefhffgheekteenucevlhhu
-    shhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhroh
-    grhhdrtghomh
-X-ME-Proxy: <xmx:HXfTYwhCK62pSDMxNMvS--W3hgJCNMFVej8J116z_QKLTtLgWHW0uw>
-    <xmx:HXfTY8ARYqRCVr37cTXFf0eCSewaHhPvKX_6los_6n--Pzy38Uvt9g>
-    <xmx:HXfTYxKrmneAYc-LRtOsDs59CY8hOY2o_jMN9QAJWAasulrazpSAxQ>
-    <xmx:HXfTY424QzscFRcMvhucm7KD132-Mvc57_dPTRbGP-ySjtI09KH_JQ>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 27 Jan 2023 02:02:52 -0500 (EST)
-Date:   Fri, 27 Jan 2023 08:02:48 +0100
-From:   Greg KH <greg@kroah.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
+        with ESMTP id S230404AbjA0HMu (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 27 Jan 2023 02:12:50 -0500
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10ED01027B;
+        Thu, 26 Jan 2023 23:12:49 -0800 (PST)
+Received: by mail-ej1-f54.google.com with SMTP id v6so11227267ejg.6;
+        Thu, 26 Jan 2023 23:12:48 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uVj6tESp4nEWyweFFwTiuF+hajljU5N9ZtVJsgI50Ms=;
+        b=spwoF+puhEjVBhNP5gOoMlFKbk/MH1yknmcI4QedkyCZoDTamlQtoVzSTfCRgRPdEy
+         4WBB9GDugTjm7Qd1e5n8kArL6pRXRHhaY3gm/oJVSzK2o4fH32BTjIzhwFtmk90w33Ky
+         5JQ9gpsam3uX7S/366uvjpyGKVWBpaeOo6UfI7hc6LkD4gNrZTNu68OHVENb840ZsBfD
+         TAxL5JbSihHEDRUUUd//UFsz0Vny3lrtgbcnPO/GOt6pPMJ3CQyaTItLEu+IoEDxEwhe
+         laZAbw2fB4udN44l5u7xRHJ/h2osYCQ0vfVlUDvtwmLIrR3QYCn5NtW/+USn+keJQk0H
+         oDCQ==
+X-Gm-Message-State: AFqh2kqfFwFV4KIas871tm1VjsNtLY2A+NMHyf7cthSqsJSfRko8oIZq
+        mHjyIS0SAwgsFpb1ZTZF/oz0sqweh1g=
+X-Google-Smtp-Source: AMrXdXsKlioCnHG+HsP3xNl4il4T9jfpnY+iMovgYnpTy0k+dfBCai7gzJh58/B1/NfR8+zY9FvuHg==
+X-Received: by 2002:a17:906:5786:b0:84d:4e79:e7a with SMTP id k6-20020a170906578600b0084d4e790e7amr41671668ejq.74.1674803567502;
+        Thu, 26 Jan 2023 23:12:47 -0800 (PST)
+Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:49? ([2a0b:e7c0:0:107::aaaa:49])
+        by smtp.gmail.com with ESMTPSA id z16-20020a170906945000b0084d46461852sm1715868ejx.126.2023.01.26.23.12.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 26 Jan 2023 23:12:47 -0800 (PST)
+Message-ID: <82cfbb3e-cb2c-199c-8833-35498ce894e2@kernel.org>
+Date:   Fri, 27 Jan 2023 08:12:46 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: linux-next: manual merge of the kspp tree with the tty tree
+Content-Language: en-US
+To:     Greg KH <greg@kroah.com>, Stephen Rothwell <sfr@canb.auug.org.au>
 Cc:     Kees Cook <keescook@chromium.org>,
-        "Jiri Slaby (SUSE)" <jirislaby@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the kspp tree with the tty tree
-Message-ID: <Y9N3GNBKzOKuSOMJ@kroah.com>
 References: <20230127155753.1f9b9517@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230127155753.1f9b9517@canb.auug.org.au>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+ <Y9N3GNBKzOKuSOMJ@kroah.com>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <Y9N3GNBKzOKuSOMJ@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Jan 27, 2023 at 03:57:53PM +1100, Stephen Rothwell wrote:
-> Hi all,
+On 27. 01. 23, 8:02, Greg KH wrote:
+> On Fri, Jan 27, 2023 at 03:57:53PM +1100, Stephen Rothwell wrote:
+>> Hi all,
+>>
+>> Today's linux-next merge of the kspp tree got a conflict in:
+>>
+>>    drivers/tty/vt/vt.c
+>>
+>> between commit:
+>>
+>>    feb36abbedea ("tty: vt: remove struct uni_screen")
+>>
+>> from the tty tree and commit:
+>>
+>>    19c30ead3938 ("vt: Replace 0-length array with flexible array")
+>>
+>> from the kspp tree.
 > 
-> Today's linux-next merge of the kspp tree got a conflict in:
-> 
->   drivers/tty/vt/vt.c
-> 
-> between commit:
-> 
->   feb36abbedea ("tty: vt: remove struct uni_screen")
-> 
-> from the tty tree and commit:
-> 
->   19c30ead3938 ("vt: Replace 0-length array with flexible array")
-> 
-> from the kspp tree.
+> Kees, I was waiting for a new version of your 0-length patch before
+> applying it as I thought there were review comments on it.  So you
+> should probably drop it from your tree or resend it so I can merge it
+> into the tty tree if it's acceptable.
 
-Kees, I was waiting for a new version of your 0-length patch before
-applying it as I thought there were review comments on it.  So you
-should probably drop it from your tree or resend it so I can merge it
-into the tty tree if it's acceptable.
+feb36abbedea removes the array completely, so obsoletes 19c30ead3938.
 
 thanks,
+-- 
+js
+suse labs
 
-greg k-h

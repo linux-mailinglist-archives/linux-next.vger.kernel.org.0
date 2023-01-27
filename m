@@ -2,136 +2,110 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A32C67DE24
-	for <lists+linux-next@lfdr.de>; Fri, 27 Jan 2023 08:02:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BEC367DE2B
+	for <lists+linux-next@lfdr.de>; Fri, 27 Jan 2023 08:04:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232145AbjA0HCh (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 27 Jan 2023 02:02:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59544 "EHLO
+        id S232056AbjA0HDN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 27 Jan 2023 02:03:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232182AbjA0HCe (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 27 Jan 2023 02:02:34 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 415452C66E;
-        Thu, 26 Jan 2023 23:02:31 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P37n01MyWz4xG5;
-        Fri, 27 Jan 2023 18:02:28 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1674802949;
-        bh=6gH4IKc6HNhdES0qvz8VWm4LlOaKSyUY97nT3yO26mo=;
-        h=Date:From:To:Cc:Subject:From;
-        b=A9EYW7ixH/XzqjKYVL2GgAGLnKLu1i/XMahrLFZG7LsTnr/XpygZJfnoubil4KJ0D
-         bkqhtLSHaRLGM8pW/J7n5w9FgYbv5Io8bqsxB92fYp4FxbOj6qaElDijc6E26oX4cm
-         j9SgPVGViPXcs3gRBMEY++/0Ts64WRKBO1btGashN4aP/e2d+V7IhjGQc7Gu4deytj
-         tIgv7q71UxaDDHM9zhUv2d+qk9Gy5oarvqreJqrWd0uqGjDFC7CXhD2gzZ3cNEOaGM
-         CIcPihISGQw+7ODfSQNZmNpQ/Opsub5iHIoZxcYpZltDu5tJDOoS/q6lnms9dI2B2p
-         L5B0DhVvalS2Q==
-Date:   Fri, 27 Jan 2023 18:02:26 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Joerg Roedel <joro@8bytes.org>
-Cc:     Jason Gunthorpe <jgg@nvidia.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Joerg Roedel <jroedel@suse.de>,
-        Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
+        with ESMTP id S232182AbjA0HDD (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 27 Jan 2023 02:03:03 -0500
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F0C5279AC;
+        Thu, 26 Jan 2023 23:02:57 -0800 (PST)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.west.internal (Postfix) with ESMTP id 9587F3200917;
+        Fri, 27 Jan 2023 02:02:53 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Fri, 27 Jan 2023 02:02:54 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1674802973; x=1674889373; bh=W/jkW9u0WB
+        5SFsXC/R5d1e2tDBzid48tPP/Q1cQjf9k=; b=G152YWx970G3IBAq1Ci1dNb8wI
+        BvnaCy+ZczprTeaX+ojbTBTBrgGejn8v46HorxFilBNQLovCQ4e8srbm2agfvetm
+        g2pwqmG4o6bKSCcs726Vv1BXeBJrP15n5797pYRTQGP6ZgBQ0pxnA/o2fQKs5CtO
+        Nglg5yTuWJ4gQooywVFW8qNCm6TNSc0KK6FNqLleObups3MC6B/YXgXG/uFg01lU
+        17nlGfFHCKJoePVvkmjJmJSpQFE8/sSwreWj85CPdh5Db6BGps7vgRDoQFTk5KH3
+        C65+rBtqyEtmuxgFvXo9gR3WDjC3LP1PB3GgPZXNk7jH6HJMTu6HgLmcrBtA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1674802973; x=1674889373; bh=W/jkW9u0WB5SFsXC/R5d1e2tDBzi
+        d48tPP/Q1cQjf9k=; b=nlEDtlFBOEUWzp+LVIyBqpVHU8mMfBboPgvn0GFRxKao
+        LiBvtyeXGKI0c5IeP8hoqtriY74wrZo/H+m4e+un+0kiRcMwZ3cfVoKeLH3tsck0
+        vbv185cLjpIVrs/E5PMxtwQD+Z02VQsih/cqBI2xEeF/DR4ymGYtxnmkN9feLKYi
+        YdO35j4qNtCC8PPvbhEUJU/OgIzB6PioXdShDYQmFxJn9GAgSzxLKWI+lfHfpiOT
+        LNm4KiBhQbuvHJHqRu7w00wAoM9+d05KgX0QsKcgn3ZRSKCczv0ydCUzIHnnixIC
+        wsHY5zZRieitv3j+umnQAMGpw/a5GhGt9HQefUl4JQ==
+X-ME-Sender: <xms:HHfTY6wpCkYu90hqT4bvKE_BFjGRg1yYWO_Pip9OtU6tsHOs_pOZzg>
+    <xme:HHfTY2RiSs6tFkRb2h-67cyRP1bIec6ekh9nZassjxFbUA2gXQ9Gy8XTOdfPiEbBp
+    6WYcQv0YGekYA>
+X-ME-Received: <xmr:HHfTY8UUog3Cz9KVOSavjcx1tQjHnar0s0jBYYhXBXug5FDtQuYcI9hr5RyLHXCmeSJGPZCpHIszZF3g4RHkj06YtLutZh8LwNms3Q>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddvhedguddthecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgv
+    ghcumffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeehge
+    dvvedvleejuefgtdduudfhkeeltdeihfevjeekjeeuhfdtueefhffgheekteenucevlhhu
+    shhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhroh
+    grhhdrtghomh
+X-ME-Proxy: <xmx:HXfTYwhCK62pSDMxNMvS--W3hgJCNMFVej8J116z_QKLTtLgWHW0uw>
+    <xmx:HXfTY8ARYqRCVr37cTXFf0eCSewaHhPvKX_6los_6n--Pzy38Uvt9g>
+    <xmx:HXfTYxKrmneAYc-LRtOsDs59CY8hOY2o_jMN9QAJWAasulrazpSAxQ>
+    <xmx:HXfTY424QzscFRcMvhucm7KD132-Mvc57_dPTRbGP-ySjtI09KH_JQ>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 27 Jan 2023 02:02:52 -0500 (EST)
+Date:   Fri, 27 Jan 2023 08:02:48 +0100
+From:   Greg KH <greg@kroah.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Kees Cook <keescook@chromium.org>,
+        "Jiri Slaby (SUSE)" <jirislaby@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the rpmsg tree
-Message-ID: <20230127180226.783baf07@canb.auug.org.au>
+Subject: Re: linux-next: manual merge of the kspp tree with the tty tree
+Message-ID: <Y9N3GNBKzOKuSOMJ@kroah.com>
+References: <20230127155753.1f9b9517@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/frRvHQhF_rDoSX2W0qag6Z6";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230127155753.1f9b9517@canb.auug.org.au>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/frRvHQhF_rDoSX2W0qag6Z6
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Fri, Jan 27, 2023 at 03:57:53PM +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Today's linux-next merge of the kspp tree got a conflict in:
+> 
+>   drivers/tty/vt/vt.c
+> 
+> between commit:
+> 
+>   feb36abbedea ("tty: vt: remove struct uni_screen")
+> 
+> from the tty tree and commit:
+> 
+>   19c30ead3938 ("vt: Replace 0-length array with flexible array")
+> 
+> from the kspp tree.
 
-Hi all,
+Kees, I was waiting for a new version of your 0-length patch before
+applying it as I thought there were review comments on it.  So you
+should probably drop it from your tree or resend it so I can merge it
+into the tty tree if it's acceptable.
 
-After merging the rpmsg tree, today's linux-next build (arm64 defconfig)
-failed like this:
+thanks,
 
-drivers/remoteproc/qcom_q6v5_adsp.c: In function 'adsp_map_carveout':
-drivers/remoteproc/qcom_q6v5_adsp.c:369:15: error: too few arguments to fun=
-ction 'iommu_map'
-  369 |         ret =3D iommu_map(rproc->domain, iova, adsp->mem_phys,
-      |               ^~~~~~~~~
-In file included from drivers/remoteproc/qcom_q6v5_adsp.c:12:
-include/linux/iommu.h:473:12: note: declared here
-  473 | extern int iommu_map(struct iommu_domain *domain, unsigned long iov=
-a,
-      |            ^~~~~~~~~
-
-Caused by commit
-
-  f22eedff28af ("remoteproc: qcom: Add support for memory sandbox")
-
-interacting with commit
-
-  1369459b2e21 ("iommu: Add a gfp parameter to iommu_map()")
-
-from the iommu tree.
-
-I have applied the following merge fix patch.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Fri, 27 Jan 2023 17:58:15 +1100
-Subject: [PATCH] remoteproc: fix for "iommu: Add a gfp parameter to iommu_m=
-ap()"
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- drivers/remoteproc/qcom_q6v5_adsp.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/remoteproc/qcom_q6v5_adsp.c b/drivers/remoteproc/qcom_=
-q6v5_adsp.c
-index 2dc850f48f00..08d8dad22ca7 100644
---- a/drivers/remoteproc/qcom_q6v5_adsp.c
-+++ b/drivers/remoteproc/qcom_q6v5_adsp.c
-@@ -367,7 +367,8 @@ static int adsp_map_carveout(struct rproc *rproc)
- 	iova =3D  adsp->mem_phys | (sid << 32);
-=20
- 	ret =3D iommu_map(rproc->domain, iova, adsp->mem_phys,
--			adsp->mem_size,	IOMMU_READ | IOMMU_WRITE);
-+			adsp->mem_size,	IOMMU_READ | IOMMU_WRITE,
-+			GFP_KERNEL);
- 	if (ret) {
- 		dev_err(adsp->dev, "Unable to map ADSP Physical Memory\n");
- 		return ret;
---=20
-2.35.1
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/frRvHQhF_rDoSX2W0qag6Z6
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPTdwIACgkQAVBC80lX
-0GxutQf+NFHMFY+sQAz4PhnGTSJk7raZfueLnfuLMFw2OBJvrm2DUENqPHzjY7gA
-gHJEE2Wv8towOukOlbfaTsl6K4CjCQeOjHDLwzaT/XiXhGCT9kPpB3D1SeK3B9WA
-tJ8J1mPrbpXJX49w1qqSH5eut1N9ofYBM6VkZ6er0ljvxORbX6gNGcfmKFtKgig7
-+gqR2Gx7OUQDhMxuujdlH+DtI6+8EDfORCtEaOHL/FUVzGJyM6BMQKNMybicUw2p
-3kjWAlOkXMWxEP231qNO84NtsTBuTTMRd2JA++bw9caOyZj1Qek+oHZo5pN0E0Vg
-Mfn6Dze6VmphPcLp4zGwJUYBoBnthw==
-=Sy/m
------END PGP SIGNATURE-----
-
---Sig_/frRvHQhF_rDoSX2W0qag6Z6--
+greg k-h

@@ -2,83 +2,62 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 025E1680224
-	for <lists+linux-next@lfdr.de>; Sun, 29 Jan 2023 23:10:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5277E680253
+	for <lists+linux-next@lfdr.de>; Sun, 29 Jan 2023 23:43:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230393AbjA2WKE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 29 Jan 2023 17:10:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38462 "EHLO
+        id S234232AbjA2WnP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 29 Jan 2023 17:43:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230365AbjA2WKE (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 29 Jan 2023 17:10:04 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 735CA18142;
-        Sun, 29 Jan 2023 14:10:03 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P4lqG1J1Rz4x2c;
-        Mon, 30 Jan 2023 09:10:02 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1675030202;
-        bh=IUf2HFa58QRUO1XTT2PABThAsG5WcYMxvHZCJ0WgTyY=;
-        h=Date:From:To:Cc:Subject:From;
-        b=n36lHg2RyHARSSd3O5OQy1AuLX2i+haqXNx3vOeBYqGI8oGp3Ptr/ycoPGncUKaHl
-         xRNXpa/5y3OXZnlb1RrGADgpGrKmIyFdvmXSaJX36qO2htlRVrxRUwVmDMxEjabrxo
-         z7fSZgVRxmF04E0hk4iMSzRd5ovj648LQH5hBcWwJsOmii5fRhe+Ws5xC0rl9ARWfN
-         CNoL4gizmcvfTqduiCttgeyiXD7wAqXmLosJ4ePmUm99aZWIMxwW3tpMKAkpqjR1JB
-         SRcKv7u61YFqtRCJJygkW121XwnIEfQDqmqU8Z54vkoR2VyKSwyCccyw/VMtXSpIsN
-         5eJMVbuowRLhg==
-Date:   Mon, 30 Jan 2023 09:10:01 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        with ESMTP id S230206AbjA2WnO (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 29 Jan 2023 17:43:14 -0500
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DAE2E3AE;
+        Sun, 29 Jan 2023 14:43:12 -0800 (PST)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1pMGOD-0006av-40; Sun, 29 Jan 2023 23:43:09 +0100
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Dan Johansen <strit@manjaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the nvmem tree
-Message-ID: <20230130091001.6f02053b@canb.auug.org.au>
+Subject: Re: linux-next: Fixes tag needs some work in the rockchip tree
+Date:   Sun, 29 Jan 2023 23:43:08 +0100
+Message-ID: <4457262.LvFx2qVVIh@diego>
+In-Reply-To: <20230130090233.67f2c5f1@canb.auug.org.au>
+References: <20230130090233.67f2c5f1@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/B74NUSQeKffmJB7RkPeBJ2T";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/B74NUSQeKffmJB7RkPeBJ2T
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Am Sonntag, 29. Januar 2023, 23:02:33 CET schrieb Stephen Rothwell:
+> Hi all,
+> 
+> In commit
+> 
+>   96e908b46e65 ("arm64: dts: rockchip: set sdmmc0 speed to sd-uhs-sdr50 on rock-3a")
+> 
+> Fixes tag
+> 
+>   Fixes: 22a442e6 ("arm64: dts: rockchip: add basic dts for the radxa rock3 model a")
 
-Hi all,
+[re-sending as I initially answered Dan's reply without realizing that the
+ mailinglists weren't included there]
 
-Commit
+I've amended the commit with the better commit hash and also updated the
+for-next branch.
 
-  ee0a7b467d3a ("nvmem: stm32: fix OPTEE dependency")
+Thanks for catching this
+Heiko
 
-is missing a Signed-off-by from its committer.
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/B74NUSQeKffmJB7RkPeBJ2T
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPW7rkACgkQAVBC80lX
-0GxYHAf/VhyZny3K5Ducnxsf0hz+P5Q8scUT2eIGLx5vW/Jd6tL5pnOFPj6v+Euu
-d1aDiXjXjLaACbdmXj9ynZGSa+y87LlzifVAvolyQRJieRGoXyzlxOyJiRQY+aA1
-b6NtVxgmdx4pE+8YyHBZY7Shx4Q5nz7AD874WjNN99tKf+ncbppbImPOn9r0qjdJ
-J6srGBURVrN8jpGG8BsBy4CBxhq5UH2No+zru5oG+Iwvy5TLjyOB4boteGRhfjQq
-ro73VmQOXycOXu4tx2k4yQ3d2GW3wUB8K4JnZavb4xUqdT6NvUeKVsTdgzjwyo//
-w4q4kIyiO5bN3hv9RUGNdbdCsEICsA==
-=s3DI
------END PGP SIGNATURE-----
-
---Sig_/B74NUSQeKffmJB7RkPeBJ2T--

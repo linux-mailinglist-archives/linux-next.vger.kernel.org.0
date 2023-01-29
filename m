@@ -2,85 +2,96 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 580C067F52E
-	for <lists+linux-next@lfdr.de>; Sat, 28 Jan 2023 07:25:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B08A68020F
+	for <lists+linux-next@lfdr.de>; Sun, 29 Jan 2023 22:57:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229540AbjA1GZL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 28 Jan 2023 01:25:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36850 "EHLO
+        id S235286AbjA2V5s (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 29 Jan 2023 16:57:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbjA1GZK (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sat, 28 Jan 2023 01:25:10 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97D12518DD;
-        Fri, 27 Jan 2023 22:25:09 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S235259AbjA2V5r (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 29 Jan 2023 16:57:47 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D9EB170A;
+        Sun, 29 Jan 2023 13:57:45 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2CBFD60CBA;
-        Sat, 28 Jan 2023 06:25:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1590FC433D2;
-        Sat, 28 Jan 2023 06:25:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674887108;
-        bh=Umq2aUXuK9lTmblhHQPleWfHoZUAvv9+MtmiHIjdEvY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Nj/BiMD0JZkGPM54uzRsSL3dXml8GVuoWpXqrscvjyHvwi7wttjKj53JcENQbZ89m
-         kG7To/Jk8anW6FHlf/A8nAXFJqJdvFo3qsPC/qCX1gKwUEz2g/MQie8q197uAmMQ+O
-         Ffaoeu3QxyxTmcjRj6PiFvRsp7XS1Fbi7B8eBWVCO/ITOjO9c9mm5lgzs2mgZ1ITMl
-         wnixV8jY+OuzZgegfw5QHYWUry5sySlA7r96KA0CtWMJEtfNs+4D4hPgO7Fk2qYWlP
-         KjG877t1n2Iwm27KqpgKHbLS/5A+7TWkI+0VtJ51TheLvw5vqEuD3Z4SlgEVhJlcqa
-         3kPAhmU/UaTKQ==
-Date:   Fri, 27 Jan 2023 22:25:07 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Matthieu Baerts <matthieu.baerts@tessares.net>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>,
-        Gerhard Engleder <gerhard@engleder-embedded.com>,
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P4lXy0hh2z4x1f;
+        Mon, 30 Jan 2023 08:57:38 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1675029459;
+        bh=TprZzZlRmx1MMQcznzzLjoSYmA+RJQsb5MwXXe4BfzA=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Pl95kkMzwA5vZaA91Okv4bb9lxi1lRB73XqhCQSU29FT8zVUyTcKlUsNE0rBtXWHt
+         3pwZnCjOKL9eBFhTorT2Av93NTzSHUNIc+lyvTAbBoRaGW2u2F0wTjubN5ZtqrBUUG
+         Mu/ujt5IJ3gNOJvO2dF0nffGKsr6IL/ov3XJaBueHu4rBMgm1wj0s+ox91Tdsdo6+q
+         d1FSr8l5CzCxLVTpw1ZOPv8v8DSiZWKDPkfAm+19BflWC6wcbseNZCJdOsmlQAUCHy
+         iswwErRjclxP/JprgHQ660tP8q+eJk++897YgrJdj0O58tdaPMKCx1hrwTZ0c0ZwH5
+         LC4IET9DM8p+w==
+Date:   Mon, 30 Jan 2023 08:57:36 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Randy Dunlap <rdunlap@infradead.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the net-next tree with the net tree
-Message-ID: <20230127222507.29c9ffb2@kernel.org>
-In-Reply-To: <1de50d67-1c1d-bf5e-5409-d0cc19aeda73@tessares.net>
-References: <20230127123604.36bb3e99@canb.auug.org.au>
-        <1de50d67-1c1d-bf5e-5409-d0cc19aeda73@tessares.net>
+Subject: linux-next: duplicate patches in the mm-hotfixes tree
+Message-ID: <20230130085736.425c0846@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/.9/X3YAQSoPRTbtKuKUNrUX";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, 27 Jan 2023 11:39:41 +0100 Matthieu Baerts wrote:
-> On 27/01/2023 02:36, Stephen Rothwell wrote:
-> > Hi all,
-> > 
-> > Today's linux-next merge of the net-next tree got a conflict in:
-> > 
-> >   drivers/net/ethernet/engleder/tsnep_main.c
-> > 
-> > between commit:
-> > 
-> >   3d53aaef4332 ("tsnep: Fix TX queue stop/wake for multiple queues")
-> > 
-> > from the net tree and commit:
-> > 
-> >   25faa6a4c5ca ("tsnep: Replace TX spin_lock with __netif_tx_lock")
-> > 
-> > from the net-next tree.  
-> 
-> Thank you for the proposed patch. I had the same conflict on my side
-> with MPTCP when merging net-next with -net and your fix seems to do the
-> job correctly!
-> 
-> Tested-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+--Sig_/.9/X3YAQSoPRTbtKuKUNrUX
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-BTW would it be possible to get these in form of rr-cache?
-Or otherwise to import the resolution without fetching all objects 
-from your trees?
+Hi all,
+
+The following commits are also in Linus Torvalds' tree as different
+commits (but the same patches):
+
+  6db597d57118 ("lib: Kconfig: fix spellos")
+  f21c83eb3617 ("Revert "mm/compaction: fix set skip in fast_find_migratebl=
+ock"")
+
+These are commits
+
+  ca0f2cfc495d ("lib: Kconfig: fix spellos")
+  95e7a450b819 ("Revert "mm/compaction: fix set skip in fast_find_migratebl=
+ock"")
+
+in Linus' tree.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/.9/X3YAQSoPRTbtKuKUNrUX
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPW69AACgkQAVBC80lX
+0GygnAgAgGTNpMjs0Awn3BfFfmKSWvGNwl85AGGvzLe3dVrAJw04g9ozsoAQsnSn
+YbaGCsT7mKQF4FdgtzZxMJU8604jNJmXP4a7Qzpt3ZiqfmocvOexabwss/0N7Nqc
+bgviJH7c7EiDamYzoBeyYXzDOV6CW4eBwFr9lKItxn5X0RUm97mOab7EaQUDOUjC
+MJ0Jw1GqZsP6X+tJOwuC2hCObQPubSZuoQ3d0TIrbZl/T8b1Fhbzqm0JNj8CJplP
+dMN7mf41BoVwPMbdrIMp3IzEpQJId259DW9bEqC7yYNLRH1iavbRwg06861UQvHi
+nxyHXUzAS5ywp79Yj6kdwvSEQu6CHg==
+=wfZl
+-----END PGP SIGNATURE-----
+
+--Sig_/.9/X3YAQSoPRTbtKuKUNrUX--

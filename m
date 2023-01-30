@@ -2,59 +2,58 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01A3F681F64
-	for <lists+linux-next@lfdr.de>; Tue, 31 Jan 2023 00:10:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0052B681F75
+	for <lists+linux-next@lfdr.de>; Tue, 31 Jan 2023 00:14:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229700AbjA3XKK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 30 Jan 2023 18:10:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40834 "EHLO
+        id S229620AbjA3XOj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 30 Jan 2023 18:14:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229573AbjA3XKK (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 30 Jan 2023 18:10:10 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64E587293;
-        Mon, 30 Jan 2023 15:10:03 -0800 (PST)
+        with ESMTP id S230058AbjA3XOi (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 30 Jan 2023 18:14:38 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CDD81CAEF;
+        Mon, 30 Jan 2023 15:14:31 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P5P5y1gbLz4x1d;
-        Tue, 31 Jan 2023 10:09:58 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P5PC95lNtz4x1d;
+        Tue, 31 Jan 2023 10:14:29 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1675120198;
-        bh=xXKRVa/x3vbppHXeb1afCumE2vg369DYRlNy9rhGf+A=;
+        s=201702; t=1675120470;
+        bh=1NPCECl8cFvSKrhix1qJjN0ZBmuleVasqwSfFxjJOQc=;
         h=Date:From:To:Cc:Subject:From;
-        b=AAFxoZTz4mxRTdDn6j1GqmFieD8qI7mh6L0eAWVmuLa8Mixqa7Seu9rcusXSL36UA
-         5hpKpKc1bOa5nGkaNsv4ZTs0tNWDdk3E08QKLDJb8LmQybxMc/CaiDzgYGYAmsfON/
-         GK2J1VkFG0XItnFB/iEFPGe+R+gtjTm1d6hhKtA7+f/nBEE9h5P8ABStwVAO864Sb3
-         YxE3vORv2h34DAIRzUrur1bLfPREyFp6OcAvhIcMtlke3X0vRTDiEgUB3wAO3/GdV8
-         jp5mUJ8L0xCeAnmxlG62AfkWK/JOcr8laIt+2i08DhOBaZgusdDFkc1Vvdmfwfyduu
-         K8NPzelKmHmWA==
-Date:   Tue, 31 Jan 2023 10:07:28 +1100
+        b=IsR3sChAJkHQFoG60SBLza3p6WGbXEESoICU7jTuaRqZ6mN03MACFwGIpki3O/uU0
+         AVEwMpKEgCG/qqoT4dzZXkTKUnLt4ZQiaShzJZZSKZ0TT+XcKVu5Uh7Y8GPvQe/nak
+         Mb67Z6LiYm6FGMjoTdrvOKyDlBrH12nOzk+0JUhals3ESpkkNiBeYsj0No+4qpa0tw
+         Nosh9mfXimwPfbokIRerFiEvanq0IjuT6h58GK0VqFVzZrfxizwZu7KFMyCYjPd1hl
+         j1N1oMjkhywPKIFSkS8Omdp6cOf1puX/FNEh2b0drHmLkU3zKyyr6oVvFDO1rlVybn
+         7gMcHULAa6Jzg==
+Date:   Tue, 31 Jan 2023 10:12:44 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
 To:     Jaegeuk Kim <jaegeuk@kernel.org>,
         Christian Brauner <christian@brauner.io>,
         Seth Forshee <sforshee@kernel.org>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Daeho Jeong <daehojeong@google.com>,
+Cc:     Chao Yu <chao@kernel.org>, Christian Brauner <brauner@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
 Subject: linux-next: manual merge of the f2fs tree with the vfs-idmapping
  tree
-Message-ID: <20230131100728.6efdb3c5@canb.auug.org.au>
+Message-ID: <20230131101244.26f85f35@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/m/=CYt.5H9XPjtvaJipS7Fe";
+Content-Type: multipart/signed; boundary="Sig_/Jy=oOH1dTIlGK12s8WfgmxL";
  protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/m/=CYt.5H9XPjtvaJipS7Fe
+--Sig_/Jy=oOH1dTIlGK12s8WfgmxL
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
@@ -62,7 +61,7 @@ Hi all,
 
 Today's linux-next merge of the f2fs tree got a conflict in:
 
-  fs/f2fs/file.c
+  fs/f2fs/namei.c
 
 between commit:
 
@@ -70,7 +69,8 @@ between commit:
 
 from the vfs-idmapping tree and commit:
 
-  81712a1f56dc ("f2fs: synchronize atomic write aborts")
+  8abe4be45132 ("f2fs: remove unneeded f2fs_cp_error() in f2fs_create_white=
+out()")
 
 from the f2fs tree.
 
@@ -85,67 +85,41 @@ complex conflicts.
 Cheers,
 Stephen Rothwell
 
-diff --cc fs/f2fs/file.c
-index b90617639743,3efb0852fd48..000000000000
---- a/fs/f2fs/file.c
-+++ b/fs/f2fs/file.c
-@@@ -2087,19 -2090,28 +2090,28 @@@ static int f2fs_ioc_start_atomic_write(
-  		goto out;
-  	}
+diff --cc fs/f2fs/namei.c
+index d8e01bbbf27f,82923273f4bb..000000000000
+--- a/fs/f2fs/namei.c
++++ b/fs/f2fs/namei.c
+@@@ -923,13 -923,10 +923,10 @@@ static int f2fs_tmpfile(struct mnt_idma
+  	return finish_open_simple(file, err);
+  }
  =20
-- 	/* Create a COW inode for atomic write */
-- 	pinode =3D f2fs_iget(inode->i_sb, fi->i_pino);
-- 	if (IS_ERR(pinode)) {
-- 		f2fs_up_write(&fi->i_gc_rwsem[WRITE]);
-- 		ret =3D PTR_ERR(pinode);
-- 		goto out;
-- 	}
-+ 	/* Check if the inode already has a COW inode */
-+ 	if (fi->cow_inode =3D=3D NULL) {
-+ 		/* Create a COW inode for atomic write */
-+ 		pinode =3D f2fs_iget(inode->i_sb, fi->i_pino);
-+ 		if (IS_ERR(pinode)) {
-+ 			f2fs_up_write(&fi->i_gc_rwsem[WRITE]);
-+ 			ret =3D PTR_ERR(pinode);
-+ 			goto out;
-+ 		}
+ -static int f2fs_create_whiteout(struct user_namespace *mnt_userns,
+ +static int f2fs_create_whiteout(struct mnt_idmap *idmap,
+  				struct inode *dir, struct inode **whiteout)
+  {
+- 	if (unlikely(f2fs_cp_error(F2FS_I_SB(dir))))
+- 		return -EIO;
+-=20
+ -	return __f2fs_tmpfile(mnt_userns, dir, NULL,
+ +	return __f2fs_tmpfile(idmap, dir, NULL,
+  				S_IFCHR | WHITEOUT_MODE, true, whiteout);
+  }
  =20
-- 	ret =3D f2fs_get_tmpfile(idmap, pinode, &fi->cow_inode);
-- 	iput(pinode);
-- 	if (ret) {
-- 		f2fs_up_write(&fi->i_gc_rwsem[WRITE]);
-- 		goto out;
- -		ret =3D f2fs_get_tmpfile(mnt_userns, pinode, &fi->cow_inode);
-++		ret =3D f2fs_get_tmpfile(idmap, pinode, &fi->cow_inode);
-+ 		iput(pinode);
-+ 		if (ret) {
-+ 			f2fs_up_write(&fi->i_gc_rwsem[WRITE]);
-+ 			goto out;
-+ 		}
-+=20
-+ 		set_inode_flag(fi->cow_inode, FI_COW_FILE);
-+ 		clear_inode_flag(fi->cow_inode, FI_INLINE_DATA);
-+ 	} else {
-+ 		/* Reuse the already created COW inode */
-+ 		f2fs_do_truncate_blocks(fi->cow_inode, 0, true);
-  	}
- =20
-  	f2fs_write_inode(inode, NULL);
 
---Sig_/m/=CYt.5H9XPjtvaJipS7Fe
+--Sig_/Jy=oOH1dTIlGK12s8WfgmxL
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPYTbAACgkQAVBC80lX
-0GzuVQf9FMT4XLNAAARH64bDGUySddufOR0b5g9cO2piyP2+3nO+zG3fp/TAjsaX
-5Pc3fS/+nXtBq0c+J+/Hmuo01oJYe4cXIeqK8g+KGUR73lrIDc9j/dUMt3MrhhjB
-P5cpgSzAUYgZX0zEA0Qmv21OuT/FQYY6RaccRG5f5Fj0GXtiIa109/na8OsBlo2X
-S9MotDAJqrIFXwg1T4KW6BUrJ6vRijnmA6AC462Ks4kzacbpeGMIpuRSt+aoWno8
-Bwd77bR5Xe1iFvKyX52pdYFyoVsLa4pDj6i21SXdJ6uj3bD+0V+rNIjg2rLftNcT
-mYNzD7294yl070T4xqmn5xnf9NT+cA==
-=ORrA
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPYTuwACgkQAVBC80lX
+0GwBagf/TGt9UbacvbykFcjl7F9l9hxIQmz028e7wYvp1YX5thIU8sK4rI/VZcCA
+7GfzNxj5xzBW7GkMJN1Lnb62VW9N39Y1891h/1b2neQQb8MG6COK1tEvCVYFmUoQ
+DN42Ili9ryjpwNkXl3VwTljuDw4eXRjS0oeKftYIAP6NBRrkWSY6jz6VCMbuvc8j
+x8q/tVve8ooNztrxHPTnHNQGl1Dba+dO9xg07o/kj7QmX+gLBhRFIsoqlwQ0EuLI
+rbe3YZtRCCLR3AekEhxryhoecEAiqRvqLds2jwDCjnNUVvza83gJX8KwW5WWrhDO
+ZXgWJc+rZ64cUX7z1sX3vAO4ozkD5w==
+=KBPc
 -----END PGP SIGNATURE-----
 
---Sig_/m/=CYt.5H9XPjtvaJipS7Fe--
+--Sig_/Jy=oOH1dTIlGK12s8WfgmxL--

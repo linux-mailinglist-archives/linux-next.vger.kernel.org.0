@@ -2,45 +2,48 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AE436802F5
-	for <lists+linux-next@lfdr.de>; Mon, 30 Jan 2023 00:31:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 472F5680354
+	for <lists+linux-next@lfdr.de>; Mon, 30 Jan 2023 01:41:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229980AbjA2Xbz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 29 Jan 2023 18:31:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59168 "EHLO
+        id S232647AbjA3Alf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 29 Jan 2023 19:41:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbjA2Xby (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 29 Jan 2023 18:31:54 -0500
+        with ESMTP id S229476AbjA3Ale (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 29 Jan 2023 19:41:34 -0500
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 021C01CF64;
-        Sun, 29 Jan 2023 15:31:51 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E2CD1CF42;
+        Sun, 29 Jan 2023 16:41:32 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P4ndf41TXz4x1h;
-        Mon, 30 Jan 2023 10:31:50 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P4qB14Pf6z4x1f;
+        Mon, 30 Jan 2023 11:41:29 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1675035110;
-        bh=MeK0MWegMnTL5j08BS6OVCn91+RP6fBtwkizE8TegEU=;
+        s=201702; t=1675039290;
+        bh=vfw0KuP4GDs2rhjBZ9/klSU5e/SY+spjjpZcGGCs5h4=;
         h=Date:From:To:Cc:Subject:From;
-        b=cBJtMT9kj8v5ayVfMgpEq9dSAfOHSIVqcntyksWhceX09PAaZJao54gT20yW34tW0
-         S51g07hrclpLmM/LJRJ3Ns11VS35JmOT0xFZXmU8v5j7bZF0af12NGZ4cpQbX7wxrm
-         AZSTwfSICAM4zQxZBV6hqlrDNdUDNqWrlffMsaUV5Hvz14uj6LGLyOrfnzjhEYdqvw
-         aOY8oXPs6jwIBOQTEdfgRMwONK1c7UhcEUvP9TFh37D5dvWdSURCcSisxxt6K0E83E
-         Ej4Is45mP3FQS6wo+TGS291t5Err4YVyglEfWXlJHwkPHWeoGh9T34ictgjXQ48aPs
-         pvb1cJSCfScJg==
-Date:   Mon, 30 Jan 2023 10:31:49 +1100
+        b=R8v5/y/Z4uZopN5AzRIp9WkJyccE+xvXoAEtfuzKg8mUUOKTP5tIzYTdFT4gilsdt
+         u04xp4pDTtFhg9RuFYwG6LrVa7wZS7xv9CBoll4umRkH5KU7q5RvKrwoE/6ai2f9e9
+         cdTee/zOQWaUwYqQ9VLri18RlHjM/jkOH2W00Tx2I6CB4NgEveROUw011F9rDh+sr7
+         as5lZFJvnPjYx1vV1jBKBRfRT03SNJb3LNbVgcccmVO9AnYLHcsiLKDPlHVIx4/i8Z
+         GuVoWFJf2z+vPUNDZg9hBL0gdRH1EUE4AnqmDNX/xzM3S/b9Yymm2GrbAejOVHga4e
+         HaVLdpPLCxIxw==
+Date:   Mon, 30 Jan 2023 11:41:28 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Christian Brauner <christian@brauner.io>,
-        Seth Forshee <sforshee@kernel.org>
-Cc:     Christian Brauner <brauner@kernel.org>,
+To:     Herbert Xu <herbert@gondor.apana.org.au>,
+        Linux Crypto List <linux-crypto@vger.kernel.org>,
+        Conor Dooley <Conor.Dooley@microchip.com>
+Cc:     Jenny Zhang <jenny.zhang@starfivetech.com>,
+        Jia Jie Ho <jiajie.ho@starfivetech.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the vfs-idmapping tree with Linus' tree
-Message-ID: <20230130103149.7d09e239@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Walker Chen <walker.chen@starfivetech.com>
+Subject: linux-next: manual merge of the crypto tree with the riscv-soc tree
+Message-ID: <20230130114128.692c7961@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ADAmrXeNq_nWtc_qwTwmyXx";
+Content-Type: multipart/signed; boundary="Sig_/KH5DK6QNIZ/KCUvB7fAl+/w";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
@@ -51,25 +54,25 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/ADAmrXeNq_nWtc_qwTwmyXx
+--Sig_/KH5DK6QNIZ/KCUvB7fAl+/w
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the vfs-idmapping tree got conflicts in:
+Today's linux-next merge of the crypto tree got a conflict in:
 
-  fs/fuse/acl.c
-  fs/fuse/fuse_i.h
-  fs/fuse/xattr.c
+  MAINTAINERS
 
 between commit:
 
-  facd61053cff ("fuse: fixes after adapting to new posix acl api")
+  08b9a94e8654 ("soc: starfive: Add StarFive JH71XX pmu driver")
 
-from Linus' tree and various commits from the vfs-idmapping tree.
+from the riscv-soc tree and commit:
 
-Christian: thanks for supplying the resolution.
+  c388f458bc34 ("hwrng: starfive - Add TRNG driver for StarFive SoC")
+
+from the crypto tree.
 
 I fixed it up (see below) and can carry the fix as necessary. This
 is now fixed as far as linux-next is concerned, but any non trivial
@@ -78,141 +81,58 @@ is submitted for merging.  You may also want to consider cooperating
 with the maintainer of the conflicting tree to minimise any particularly
 complex conflicts.
 
+Note, please keep MAINTAINERS file entries in alphabetical order.
+
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc fs/fuse/acl.c
-index ad670369955f,23d1c263891f..000000000000
---- a/fs/fuse/acl.c
-+++ b/fs/fuse/acl.c
-@@@ -11,10 -11,9 +11,10 @@@
-  #include <linux/posix_acl.h>
-  #include <linux/posix_acl_xattr.h>
+diff --cc MAINTAINERS
+index 3855c1b47e4b,4f59559597ab..000000000000
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@@ -19771,19 -19905,12 +19771,25 @@@ F:	Documentation/devicetree/bindings/=
+re
+  F:	drivers/reset/reset-starfive-jh7100.c
+  F:	include/dt-bindings/reset/starfive-jh7100.h
  =20
- -struct posix_acl *fuse_get_acl(struct inode *inode, int type, bool rcu)
- +static struct posix_acl *__fuse_get_acl(struct fuse_conn *fc,
-- 					struct user_namespace *mnt_userns,
-++					struct mnt_idmap *idmap,
- +					struct inode *inode, int type, bool rcu)
-  {
- -	struct fuse_conn *fc =3D get_fuse_conn(inode);
-  	int size;
-  	const char *name;
-  	void *value =3D NULL;
-@@@ -54,47 -53,7 +54,47 @@@
-  	return acl;
-  }
- =20
- +static inline bool fuse_no_acl(const struct fuse_conn *fc,
- +			       const struct inode *inode)
- +{
- +	/*
- +	 * Refuse interacting with POSIX ACLs for daemons that
- +	 * don't support FUSE_POSIX_ACL and are not mounted on
- +	 * the host to retain backwards compatibility.
- +	 */
- +	return !fc->posix_acl && (i_user_ns(inode) !=3D &init_user_ns);
- +}
+ +STARFIVE SOC DRIVERS
+ +M:	Conor Dooley <conor@kernel.org>
+ +S:	Maintained
+ +T:	git https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/
+ +F:	drivers/soc/starfive/
  +
-- struct posix_acl *fuse_get_acl(struct user_namespace *mnt_userns,
-++struct posix_acl *fuse_get_acl(struct mnt_idmap *idmap,
- +			       struct dentry *dentry, int type)
- +{
- +	struct inode *inode =3D d_inode(dentry);
- +	struct fuse_conn *fc =3D get_fuse_conn(inode);
+ +STARFIVE JH71XX PMU CONTROLLER DRIVER
+ +M:	Walker Chen <walker.chen@starfivetech.com>
+ +S:	Supported
+ +F:	Documentation/devicetree/bindings/power/starfive*
+ +F:	drivers/soc/starfive/jh71xx_pmu.c
+ +F:	include/dt-bindings/power/starfive,jh7110-pmu.h
  +
- +	if (fuse_no_acl(fc, inode))
- +		return ERR_PTR(-EOPNOTSUPP);
- +
-- 	return __fuse_get_acl(fc, mnt_userns, inode, type, false);
-++	return __fuse_get_acl(fc, idmap, inode, type, false);
- +}
- +
- +struct posix_acl *fuse_get_inode_acl(struct inode *inode, int type, bool =
-rcu)
- +{
- +	struct fuse_conn *fc =3D get_fuse_conn(inode);
- +
- +	/*
- +	 * FUSE daemons before FUSE_POSIX_ACL was introduced could get and set
- +	 * POSIX ACLs without them being used for permission checking by the
- +	 * vfs. Retain that behavior for backwards compatibility as there are
- +	 * filesystems that do all permission checking for acls in the daemon
- +	 * and not in the kernel.
- +	 */
- +	if (!fc->posix_acl)
- +		return NULL;
- +
-- 	return __fuse_get_acl(fc, &init_user_ns, inode, type, rcu);
-++	return __fuse_get_acl(fc, &nop_mnt_idmap, inode, type, rcu);
- +}
- +
-- int fuse_set_acl(struct user_namespace *mnt_userns, struct dentry *dentry,
-+ int fuse_set_acl(struct mnt_idmap *idmap, struct dentry *dentry,
-  		 struct posix_acl *acl, int type)
-  {
-  	struct inode *inode =3D d_inode(dentry);
-@@@ -140,14 -99,8 +140,14 @@@
-  			return ret;
-  		}
- =20
- -		if (!vfsgid_in_group_p(i_gid_into_vfsgid(&nop_mnt_idmap, inode)) &&
- +		/*
- +		 * Fuse daemons without FUSE_POSIX_ACL never changed the passed
- +		 * through POSIX ACLs. Such daemons don't expect setgid bits to
- +		 * be stripped.
- +		 */
- +		if (fc->posix_acl &&
-- 		    !vfsgid_in_group_p(i_gid_into_vfsgid(&init_user_ns, inode)) &&
-- 		    !capable_wrt_inode_uidgid(&init_user_ns, inode, CAP_FSETID))
-++		    !vfsgid_in_group_p(i_gid_into_vfsgid(&nop_mnt_idmap, inode)) &&
-+ 		    !capable_wrt_inode_uidgid(&nop_mnt_idmap, inode, CAP_FSETID))
-  			extra_flags |=3D FUSE_SETXATTR_ACL_KILL_SGID;
- =20
-  		ret =3D fuse_setxattr(inode, name, value, size, 0, extra_flags);
-diff --cc fs/fuse/fuse_i.h
-index 46797a171a84,ee084cead402..000000000000
---- a/fs/fuse/fuse_i.h
-+++ b/fs/fuse/fuse_i.h
-@@@ -1264,12 -1264,12 +1264,12 @@@ ssize_t fuse_getxattr(struct inode *ino
-  ssize_t fuse_listxattr(struct dentry *entry, char *list, size_t size);
-  int fuse_removexattr(struct inode *inode, const char *name);
-  extern const struct xattr_handler *fuse_xattr_handlers[];
- -extern const struct xattr_handler *fuse_acl_xattr_handlers[];
- -extern const struct xattr_handler *fuse_no_acl_xattr_handlers[];
- =20
-  struct posix_acl;
- -struct posix_acl *fuse_get_acl(struct inode *inode, int type, bool rcu);
- +struct posix_acl *fuse_get_inode_acl(struct inode *inode, int type, bool =
-rcu);
-- struct posix_acl *fuse_get_acl(struct user_namespace *mnt_userns,
-++struct posix_acl *fuse_get_acl(struct mnt_idmap *idmap,
- +			       struct dentry *dentry, int type);
-- int fuse_set_acl(struct user_namespace *mnt_userns, struct dentry *dentry,
-+ int fuse_set_acl(struct mnt_idmap *idmap, struct dentry *dentry,
-  		 struct posix_acl *acl, int type);
- =20
-  /* readdir.c */
-diff --cc fs/fuse/xattr.c
-index 9fe571ab569e,30aaaa4b3bfb..000000000000
---- a/fs/fuse/xattr.c
-+++ b/fs/fuse/xattr.c
++ STARFIVE TRNG DRIVER
++ M:	Jia Jie Ho <jiajie.ho@starfivetech.com>
++ S:	Supported
++ F:	Documentation/devicetree/bindings/rng/starfive*
++ F:	drivers/char/hw_random/starfive-trng.c
++=20
+  STATIC BRANCH/CALL
+  M:	Peter Zijlstra <peterz@infradead.org>
+  M:	Josh Poimboeuf <jpoimboe@kernel.org>
 
---Sig_/ADAmrXeNq_nWtc_qwTwmyXx
+--Sig_/KH5DK6QNIZ/KCUvB7fAl+/w
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPXAeUACgkQAVBC80lX
-0GzrgggAglqNpT91F1+bwu0VIAgD04hjm2h2rZI6pCvKQTqW4ttHOOrAbyDFkVVk
-3KS3lLV6x3AU64XAqOHCpQJmgGzIXxjDNQ4WoJo8mQcgQumu/n8a+el2g+myBhNW
-SA5wsRlemu/dWnPfleekL9szVGr8K4YNIpnlBf9ds2d9FXSNG6Af1Lus0eG6wPnS
-4zzHTt7pTr2YePo6wxkCOp3yDsaRZJYI28L6brTZKE1kh9p/kp5N84i+YEGr4P9i
-Us53oxJ5Zj5X+q0mbzD4+D4aZu/3k1zcDfWPqYiHNkMOWDN/LOFoo49WBGvL6HWf
-wA7g2gzOf7XdYW/5PBUWz+jOPA6CHQ==
-=ULwG
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPXEjgACgkQAVBC80lX
+0Gwr9Qf7Bcprcfh4uYoEF82I1tYi5zMBZGMCxWP8+1FHwAAdcR0j1BkCg5RMhaOS
+b5fycuDjxwsrhNPHu8Ry8/y5nfN/XIZywrSv+Xh8aIBKsN4/lSd3sg77wNMcFAdJ
+4PS9zJiciOGRpTtsmqQzkodIhvWIaeVm26JCOshOMjU0dqfDlDRJk4MQP2rQ6OQA
+QVjkFhNWwfCCLRuEsHEML3IdDgOydWDqbk27xcqPSPmk/hbtP9z0chKIIb4d79fc
+GQW/bqVeEH7DD5QLeFHsy2aUmIXZ4DGnBRcb07+ZKflCSFBVgYLVwbZptJoiiLv4
+a6njJZc0Bumb/nIaHC/qX4Oiu16g6A==
+=aa7N
 -----END PGP SIGNATURE-----
 
---Sig_/ADAmrXeNq_nWtc_qwTwmyXx--
+--Sig_/KH5DK6QNIZ/KCUvB7fAl+/w--

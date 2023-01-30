@@ -2,107 +2,82 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C43F680723
-	for <lists+linux-next@lfdr.de>; Mon, 30 Jan 2023 09:12:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FF21680725
+	for <lists+linux-next@lfdr.de>; Mon, 30 Jan 2023 09:12:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235886AbjA3IML (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 30 Jan 2023 03:12:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38146 "EHLO
+        id S235775AbjA3IMT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 30 Jan 2023 03:12:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235875AbjA3IMJ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 30 Jan 2023 03:12:09 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2B1118AA7;
-        Mon, 30 Jan 2023 00:11:29 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id BDB08CE11EA;
-        Mon, 30 Jan 2023 08:10:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A62C4C433EF;
-        Mon, 30 Jan 2023 08:09:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675066201;
-        bh=lkZCjdK1sw00gXcaKXHGXN34F8M5n4HX8wdCxMGrCiw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QS/3PAOCULM0n2uMOIr9j755LWg9e5mz5b6AvabQcCLyUO4E6GNEDnwifqLQj6OwL
-         NqkdAIL+ss2LMwqM8kGuF261S76OZFViq8E2hzX71HmhsgROQSnE/f3FkZpiAATIIn
-         HfTID4rV3qr/pfvHZxiaRXlCbaXB62yzKimmXC+zvTc5Ys2ns74RSVi8fdkp866b0W
-         ubjvjyAOlXuNNE+umFw9p4Y4m8ExQWf6BtxdNEIejAZaZd2LPUMQPN67zlZVQErE5t
-         gylqRWbTU8a4+Cm5yU6U3mCi0QDc2lSowQP2mAbstBzPLtqjMUk5hciBODtDUAuA7A
-         egsL35xdmXh2g==
-Date:   Mon, 30 Jan 2023 09:09:56 +0100
-From:   Christian Brauner <brauner@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Christian Brauner <christian@brauner.io>,
-        Giuseppe Scrivano <gscrivan@redhat.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Joey Gouly <joey.gouly@arm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the mm tree
-Message-ID: <20230130080956.ikb3w5cjkhtxqzcr@wittgenstein>
-References: <20230130161414.25a71a87@canb.auug.org.au>
+        with ESMTP id S235911AbjA3IMS (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 30 Jan 2023 03:12:18 -0500
+Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 65646101;
+        Mon, 30 Jan 2023 00:11:43 -0800 (PST)
+Received: (from willy@localhost)
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 30U8AYMh006342;
+        Mon, 30 Jan 2023 09:10:34 +0100
+Date:   Mon, 30 Jan 2023 09:10:34 +0100
+From:   Willy Tarreau <w@1wt.eu>
+To:     Hongyu Xie <xiehongyu1@kylinos.cn>
+Cc:     sfr@canb.auug.org.au, linux-kernel@vger.kernel.org,
+        linux-next@vger.kernel.org
+Subject: Re: Report a compile err
+Message-ID: <20230130081034.GA6262@1wt.eu>
+References: <20230130165442.29f65a51@canb.auug.org.au>
+ <20230130073012.374172-1-xiehongyu1@kylinos.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230130161414.25a71a87@canb.auug.org.au>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230130073012.374172-1-xiehongyu1@kylinos.cn>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Jan 30, 2023 at 04:14:14PM +1100, Stephen Rothwell wrote:
-> Hi all,
+On Mon, Jan 30, 2023 at 03:30:12PM +0800, Hongyu Xie wrote:
+> source code:
+>   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+> base:
+>   ae0c77e1bc6963c67c6c09e8c72959fcb1ed8d5f
+> config tested:
+>   x86_64_defconfig
+>   defconfig(arm64)
+> toolchain:
+>   gcc version 10.4.0 (Ubuntu 10.4.0-4ubuntu1~22.04)
+> cross compile toolchain:
+>   gcc version 10.4.0 (Ubuntu 10.4.0-4ubuntu1~22.04)
 > 
-> After merging the mm tree, today's linux-next build (powerpc
-> ppc64_defconfig) failed like this:
+> reproduce compile err:
+>   CONFIG_WERROR=y && CONFIG_PRINTK=n && CONFIG_UBSAN_ALIGNMENT=y &&
+>   CONFIG_UBSAN_SANITIZE_ALL=y
 > 
-> kernel/sys.c: In function '__do_sys_prctl':
-> kernel/sys.c:2664:9: error: duplicate case value
->  2664 |         case PR_SET_HIDE_SELF_EXE:
->       |         ^~~~
-> kernel/sys.c:2655:9: note: previously used here
->  2655 |         case PR_SET_MDWE:
->       |         ^~~~
-> kernel/sys.c:2669:9: error: duplicate case value
->  2669 |         case PR_GET_HIDE_SELF_EXE:
->       |         ^~~~
-> kernel/sys.c:2658:9: note: previously used here
->  2658 |         case PR_GET_MDWE:
->       |         ^~~~
-> 
-> Caused by commit
-> 
->   ab30677b499c ("mm: implement memory-deny-write-execute as a prctl")
-> 
-> interacting with commit
-> 
->   966eb1ba050d ("exec: add PR_HIDE_SELF_EXE prctl")
-> 
-> from the pidfd tree.
-> 
-> I have applied the following merge fix patch.
-> 
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Mon, 30 Jan 2023 16:08:34 +1100
-> Subject: [PATCH] mm: fixup for "mm: implement memory-deny-write-execute as a prctl"
-> 
-> interacting with
-> 
->   966eb1ba050d ("exec: add PR_HIDE_SELF_EXE prctl")
-> 
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> ---
+> compile err log:
+> kernel/printk/printk.c: In function 'console_flush_all':
+> kernel/printk/printk.c:2845:17: error: array subscript 0 is outside array
+> bounds of 'char[0]' [-Werror=array-bounds]
+>  2845 |  char *outbuf = &pbufs.outbuf[0];
+>       |                 ^~~~~~~~~~~~~~~~
+> In file included from kernel/printk/printk.c:61:
+> kernel/printk/internal.h:87:7: note: while referencing 'outbuf'
+>    87 |  char outbuf[PRINTK_MESSAGE_MAX];
+>       |       ^~~~~~
+> kernel/printk/printk.c:2842:31: note: defined here 'pbufs'
+>  2842 |  static struct printk_buffers pbufs;
+>       |                               ^~~~~
+>
+> I applied the way 5a41237ad1d4 in mainline did for gcc 10, problem goes
+> away. I'm guessing this is a gcc bug.
 
-Thanks Stephen,
+I think it's similar to this one I reported two years ago, that others
+also faced, and was apparently only fixed in later versions:
 
-I'm moving this out of -next for now until we've settled a few more
-details.
+    https://gcc.gnu.org/bugzilla/show_bug.cgi?id=98503
 
-Christian
+Most likely the workaround in 5a41237ad1d4 should be extended to gcc-10.
+
+Willy

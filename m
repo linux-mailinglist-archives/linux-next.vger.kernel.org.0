@@ -2,91 +2,85 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72014683850
-	for <lists+linux-next@lfdr.de>; Tue, 31 Jan 2023 22:07:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82CDC6838BF
+	for <lists+linux-next@lfdr.de>; Tue, 31 Jan 2023 22:37:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231978AbjAaVHU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 31 Jan 2023 16:07:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39592 "EHLO
+        id S231414AbjAaVhO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 31 Jan 2023 16:37:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231972AbjAaVHS (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 31 Jan 2023 16:07:18 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F557C154;
-        Tue, 31 Jan 2023 13:07:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S229613AbjAaVhN (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 31 Jan 2023 16:37:13 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B86C1EFEA;
+        Tue, 31 Jan 2023 13:37:12 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1B459B81ED8;
-        Tue, 31 Jan 2023 21:07:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D89DC433D2;
-        Tue, 31 Jan 2023 21:07:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1675199234;
-        bh=4H4iBjRwVxioiqKFCxXizJYSV6KoeP6hWEgfnJdkrEs=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=oy9jqjN3LqiTDGhC2GGlKK4sF1VMrdmttEVIY6Lx0hops8uEGrRqAZGqXAn4rP+vy
-         pHPSBcpJC7x4yU5vNGkGICeLVcihx07bHo5W+mmmIPt6AIlQOb7FScmO9rxUGcaiRK
-         ozrQLvmGaUnhG2Cp5cPM/HRlhqsCgWzd4cWGXEng=
-Date:   Tue, 31 Jan 2023 13:07:13 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     "Liam R. Howlett" <Liam.Howlett@Oracle.com>,
-        maple-tree@lists.infradead.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
-        Sanan Hasanov <sanan.hasanov@knights.ucf.edu>,
-        Matthew Wilcox <willy@infradead.org>,
-        Hugh Dickins <hughd@google.com>
-Subject: Re: [PATCH] mm/mmap: Fix vma_merge() offset when expanding the next
- vma
-Message-Id: <20230131130713.5d6a5bc9eb0ec957c5d1ba26@linux-foundation.org>
-In-Reply-To: <72dfedd2-a26a-17f4-87c2-3d71ab3f55b4@redhat.com>
-References: <20230130195713.2881766-1-Liam.Howlett@oracle.com>
-        <97ea66a4-54a0-68a3-c42b-f3c36c69768e@redhat.com>
-        <20230131142452.sfrmubta4ojejct2@revolver>
-        <72dfedd2-a26a-17f4-87c2-3d71ab3f55b4@redhat.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P5z0Q3xgMz4x1f;
+        Wed,  1 Feb 2023 08:37:10 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1675201030;
+        bh=70uPOttFwg2oCLYLtz9GLb5TnWu84Alghi/ju4dMvCE=;
+        h=Date:From:To:Cc:Subject:From;
+        b=aQ0hZa5CvnFcFI4CyxBbIu/TL2W1A/Tsu4yWDaA8Usp/REH0K+LtJBSrC/anUA+uX
+         j6Gj2RrF+JYSVp/wJu5NsKvvgdkYfJcWrv3rF2qUCH4XFxTS7O86ePJ+BUZRxtl49u
+         37jTurFDKfEKn1FH67b7jQzs21kGQA1eN0xOP/C0T1VbhOhDAeNsE4eC8kmEi5NyFt
+         ZZVim0q36P4R9ysObNtdGkyEFeaNjmk5unZALDsQr4s3knAGpBQuGxNrG4+s9nCFOD
+         Ux3uJ/ePUV739cS31jnfSA9VP10ipd2YiI4yw4cSEY3bMAc3DYnJgbEJ8QElvyKAyh
+         dpkfVF8DHHr/A==
+Date:   Wed, 1 Feb 2023 08:37:08 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Steven Whitehouse <swhiteho@redhat.com>,
+        Bob Peterson <rpeterso@redhat.com>
+Cc:     Andreas Gruenbacher <agruenba@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the gfs2 tree
+Message-ID: <20230201083708.4bf3b219@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/SfM3rhZDisMD4zNseuXR5nv";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, 31 Jan 2023 15:29:59 +0100 David Hildenbrand <david@redhat.com> wrote:
+--Sig_/SfM3rhZDisMD4zNseuXR5nv
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> On 31.01.23 15:24, Liam R. Howlett wrote:
-> > * David Hildenbrand <david@redhat.com> [230131 03:35]:
-> >> On 30.01.23 20:57, Liam R. Howlett wrote:
-> >>> The vm_pgoff was being set incorrectly when expanding the next VMA to a
-> >>> lower address.  Fix the issue by using the mid->vm_pgoff value for this
-> >>> merge case (aka case 8).  Note that this does not change case 3's
-> >>> vm_pgoff as next and mid are the same VMA.
-> >>>
-> >>> Reported-by: Sanan Hasanov <sanan.hasanov@knights.ucf.edu>
-> >>> Link: https://lore.kernel.org/linux-mm/IA1PR07MB983017D2FBA174D2FF78CEB6ABCE9@IA1PR07MB9830.namprd07.prod.outlook.com/
-> >>> Cc: Matthew Wilcox <willy@infradead.org>
-> >>> Cc: David Hildenbrand <david@redhat.com>
-> >>> Cc: Hugh Dickins <hughd@google.com>
-> >>
-> >> Fixes: ?
-> > 
-> > Fixes: (soon to be invalid git id :) ("mm/mmap: remove __vma_adjust()")
-> 
-> Ah, right, upstream was not affected ... :)
-> 
-> ... so this should be squashed into that commit instead as long as it 
-> doesn't have a stable ID.
+Hi all,
 
-Yup, I queued this as mm-mmap-remove-__vma_adjust-fix.patch so it's
-to-be-squished.
+Commit
 
-Generally, please let's tell people when a patch fixes something which
-is staged in mm-unstable - to save a few brain cycles and to hopefully
-improve review.  A Fixes: with no SHA works, or simply "this fixes X".
+  0e1c26572546 ("gfs2: Improve gfs2_upgrade_iopen_glock comment")
 
+is missing a Signed-off-by from its author and committer.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/SfM3rhZDisMD4zNseuXR5nv
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPZigQACgkQAVBC80lX
+0GwsnQf+KaGb5K0DCyqvZ3nhyHLNhrua3fI5ykihmL/2RISfldFcoUpY7lWoNFf0
+f2jN8KskRHA1vrAUHgXk8i3d0eEauy464BlhYREYp9oElZh+PmC4cMUrqQju8RD3
+3GLWdCiPShYiLX6n+m2K6W9LmELACejaY6zDZ9eXk0JnkbVJZDANP+E+3JtXHeyO
+OuiwPVpDmkCJsL60idjvdVdimxWLq1t10GWzyBxdPDwf7b0uVKYhM5Mt//TXjPDl
+oTLnCqkAEcnXduaOayaQ8ya80HwlpDBJmSLyYW2mL6giurJS3vWl8OiPs9sGb/Tq
+YJKC7Ra/JJQtT7JqA3/8G9MMA56DwA==
+=XzUK
+-----END PGP SIGNATURE-----
+
+--Sig_/SfM3rhZDisMD4zNseuXR5nv--

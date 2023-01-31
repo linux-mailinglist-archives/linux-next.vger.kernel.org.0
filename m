@@ -2,121 +2,92 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F19516839B3
-	for <lists+linux-next@lfdr.de>; Tue, 31 Jan 2023 23:54:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44984683A95
+	for <lists+linux-next@lfdr.de>; Wed,  1 Feb 2023 00:40:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231358AbjAaWyg (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 31 Jan 2023 17:54:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44526 "EHLO
+        id S229909AbjAaXkO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 31 Jan 2023 18:40:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231530AbjAaWyf (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 31 Jan 2023 17:54:35 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F93A410AE;
-        Tue, 31 Jan 2023 14:54:33 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P60jf5xWXz4x1d;
-        Wed,  1 Feb 2023 09:54:30 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1675205671;
-        bh=5V/LAnN0pFO5vCbZcZP47Qcu2W8IXRG/+P4wvCiMzaU=;
-        h=Date:From:To:Cc:Subject:From;
-        b=km+hFuoPZO4BafXVBgVWf1orrIGbH8OSID482RcMFICF+B5Lo+LmRrVqFh+P7i+c+
-         aKZUQ2xEUd3AwV+zCi4GuAgYq610xXPq3SeZIEme2/SP9AgY9x46MCfdlK8rZgElTL
-         R/rWjDaXzATE9BO0Ny9/YaYAN45WxD5HiF8JzTXY7Bv6nR8/w+iPnQrYpg3RRaW4TG
-         O1YDRoZ6MZT4GGD/HeYF7tjlGJJ1wH+uwMZ/Pfpn98E5oyptGSuYbpLJ4P8j3Q0d2f
-         S9HaNELWIc36jpPF6auJP1y86LwFAKGeahQRU4b9+SBi/OWwBXi3+KSih0Lp/2l5sd
-         +bl+/uta5X22w==
-Date:   Wed, 1 Feb 2023 09:54:29 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jonathan Corbet <corbet@lwn.net>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        SeongJae Park <sj@kernel.org>
-Subject: linux-next: manual merge of the jc_docs tree with the hwmon-staging
- tree
-Message-ID: <20230201095429.3aa29df0@canb.auug.org.au>
+        with ESMTP id S229488AbjAaXkN (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 31 Jan 2023 18:40:13 -0500
+Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A2CB1043D
+        for <linux-next@vger.kernel.org>; Tue, 31 Jan 2023 15:40:12 -0800 (PST)
+Received: by mail-vs1-xe2f.google.com with SMTP id j7so17805215vsl.11
+        for <linux-next@vger.kernel.org>; Tue, 31 Jan 2023 15:40:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=yNWJjiHZ40BzwBFNd25x6TMl8GnedoNNCYGCd1mQAeg=;
+        b=Nhou7RN5fM5f5cI/iVGIMo21MZVVTKgkyIJL5ORf8vkscx4DIfYfx71Gf+Fu9zwbhI
+         jKvjlDNed0CaPq2PJhGvQzp7IjTBlAqw1vBWFiqixPH1NoHRTldioPZEGhWzJQyaUvOM
+         QT5DWZTE7nGsM0k6tTPQ0S8mB289q3k5fM4brPNxyCrIy+Usx+m/cH3bFdWUmlouuURb
+         USBnNE8XbO5WB5vrnN97xTXbfmeVijTWmnIxELq/aWzoqP6QZzimfRKRCMNzCw9OrGn4
+         vcvlAo/7Stbrg8A9eE6oB56vVwKhqzKfQb/NnSDK0PIwV0M/8hEHOKkxCBnSWmX5ge/t
+         7BTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yNWJjiHZ40BzwBFNd25x6TMl8GnedoNNCYGCd1mQAeg=;
+        b=2w96xU25jPlOLhrhsrKiSFdheuiiuYNEfz+v0ByayXakx4KsZ5+y9rjp56/ToqXuJr
+         W4DsBwdlA9+W1JWUgf0HCh4SfqsoHBT3Cgw0A/6tduNMnAU898h2f5us/8TM1+CyXnc3
+         J6Fcb0MblaPsbEzyLFyWzNyw3esi1bGY3lOkroi2egUKwkcpRm7u5dJdHVvm8O5lc6Z/
+         GhdRWSFoWV/JyMzzyfjkx6XkIGxJ+GLGE0fVl+IMD659UTzI0YIyHpAqWaq6LGVfy2GA
+         /RW0Ozi/SypYe9wg0mHFe9Igz7r+BPh1I6KPPThV5m6Ed5H9+uyU4VhuJxdd0hT89uLg
+         2odw==
+X-Gm-Message-State: AO0yUKU1TFbXoVJyayQs7xe5qagkkV1dMyiavIQVNqXUdMd8CxSeYS78
+        nWoLKvLPwfj2y5uuAEiptHSB+OeG33mviYmPDHE2ew==
+X-Google-Smtp-Source: AK7set+LGZpVBUq8jBYUp23fV64plVr7SG2DY47NRbmas+5wk9V9BIThjG1yn8uBo52H/ysiEC+SN+XZvlxAE8uICa8=
+X-Received: by 2002:a67:e19a:0:b0:3f7:528b:d25f with SMTP id
+ e26-20020a67e19a000000b003f7528bd25fmr138820vsl.9.1675208410993; Tue, 31 Jan
+ 2023 15:40:10 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/CJ67WxMix1V5wb8YcYKRhI0";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 1 Feb 2023 05:10:00 +0530
+Message-ID: <CA+G9fYsPSJiTXouaMUSeoU3JEwym0baq7OGOAMFNWgrgEWOHfA@mail.gmail.com>
+Subject: Re: ACPICA: Replace fake flexible arrays with flexible array members
+To:     Kees Cook <keescook@chromium.org>
+Cc:     open list <linux-kernel@vger.kernel.org>, devel@acpica.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
+        linux-hardening@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>, robert.moore@intel.com,
+        lkft-triage@lists.linaro.org,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Anders Roxell <anders.roxell@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/CJ67WxMix1V5wb8YcYKRhI0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+The qemu-i386 boot failed on Linux next- 20230131 started from
+next-20230125. Please refer to boot logs [1], [2] & [3].
 
-Hi all,
+The bisection pointed to the following commit,
+# first bad commit:
+  [5f7e8394a70761036e416c7529c937f309e4680f]
+  ACPICA: Replace fake flexible arrays with flexible array members
 
-Today's linux-next merge of the jc_docs tree got a conflict in:
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-  Documentation/hwmon/index.rst
+Reverting the above patch fixes the qemu-i386 boot problem.
 
-between commit:
+[1] https://tuxapi.tuxsuite.com/v1/groups/linaro/projects/lkft/tests/2L4mi3ZZDct0vwmV2tIVY5AtNr0/logs?format=html
+[2] https://tuxapi.tuxsuite.com/v1/groups/linaro/projects/lkft/tests/2L4mi3ZZDct0vwmV2tIVY5AtNr0/logs?format=txt
+[3] https://tuxapi.tuxsuite.com/v1/groups/linaro/projects/lkft/tests/2L4mi32cqUyZvCIhJlV5nR8CuQk
 
-  62485d4ae451 ("Docs/hwmon/index: Add missing SPDX License Identifier")
+Bisection log:
+http://ix.io/4mIP
 
-from the hwmon-staging tree and commit:
-
-  941c95fdd61f ("Docs/subsystem-apis: Remove '[The ]Linux' prefixes from ti=
-tles of listed documents")
-
-from the jc_docs tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc Documentation/hwmon/index.rst
-index 96ce91b7d9a8,c2b3c1a822dd..000000000000
---- a/Documentation/hwmon/index.rst
-+++ b/Documentation/hwmon/index.rst
-@@@ -1,8 -1,6 +1,8 @@@
- +.. SPDX-License-Identifier: GPL-2.0
- +
-- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D
-- Linux Hardware Monitoring
-- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D
-+ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-+ Hardware Monitoring
-+ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
- =20
-  .. toctree::
-     :maxdepth: 1
-
---Sig_/CJ67WxMix1V5wb8YcYKRhI0
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPZnCUACgkQAVBC80lX
-0GzEiwf/SpwV265hCKrMUuF5PhyqXeGUjz0o/CxUwgik7kCBXXh8tlmy40t9MumK
-7F7PXG6r3WWzuWfO8iacPEynAOJLbwaXjKuAMDRnYnQQ6SyfqNn3Nn3hlAfnIlBw
-Cg7NGoSiuf0Pq52o/NZlF+smBrP3W9pOlU2it/+ZgvkBM4xIm/uDwQTbjvkS6JVq
-mw9RojPnuI1lvrZiZ0JvkMRJUXy1EAj7HQWvdTmZyUaKIMlrXyDUQmwcE/9DnfPN
-9woS1L8mSOsjC7MEOeS0RyHzUw/0/+eNJGcHzcRFMiqiCjyPf5q2+jYvhBj80bm3
-viHdjNWrdat32I5XYPpekiaiKlwSQw==
-=gMhQ
------END PGP SIGNATURE-----
-
---Sig_/CJ67WxMix1V5wb8YcYKRhI0--
+--
+Linaro LKFT
+https://lkft.linaro.org

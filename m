@@ -2,72 +2,99 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E0D5682BD3
-	for <lists+linux-next@lfdr.de>; Tue, 31 Jan 2023 12:51:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D780B682C7C
+	for <lists+linux-next@lfdr.de>; Tue, 31 Jan 2023 13:23:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231532AbjAaLvS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 31 Jan 2023 06:51:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48606 "EHLO
+        id S231627AbjAaMXU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 31 Jan 2023 07:23:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231687AbjAaLvR (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 31 Jan 2023 06:51:17 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0619D5FE6;
-        Tue, 31 Jan 2023 03:51:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S229826AbjAaMXT (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 31 Jan 2023 07:23:19 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0B013A90;
+        Tue, 31 Jan 2023 04:23:18 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 95374614BB;
-        Tue, 31 Jan 2023 11:51:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE9E9C433AF;
-        Tue, 31 Jan 2023 11:51:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1675165875;
-        bh=wOrERF5X5WEzWRIC0mThKgFJ6snvf78JNjJijHRaCCM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZE9U5TsAQP9zhwXWCH0H3VP7fhzly0OK10EmV8z40Wauno6uy7y0WRB+N2Nw91no4
-         OWQFMEnkZb9j4gLMrw8mmmWp7N86PmanrpDUFgu4+C48owW6+ZIygs/sVuWEIFaQr/
-         4iqMbuzvzpxJcIUGVPJLy9fp5+K2ydaTM5jo6da8=
-Date:   Tue, 31 Jan 2023 12:51:11 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     =?iso-8859-1?Q?J=F3_=C1gila?= Bitsch <jgilab@gmail.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 78B3F2038F;
+        Tue, 31 Jan 2023 12:23:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1675167797; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=OehRyuo+VcKrzg4xlXQWaR0lEXjv3Oh1VfztNYQkhMo=;
+        b=IRKVWjGBdsb+jzaWicK9ketoVps1vde8vuBbuvuwDayabs7lOeRhNFV54+YK32/ULLHavo
+        ndYbzst38dcFexvE0xoaqTFCtI5iWYyeX4whFaBiffzuM9Vdimb0RrX7qszmLJM3jBYPKh
+        vgSkjJhEQzZlsN5nUFreCeccBuejSUo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1675167797;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=OehRyuo+VcKrzg4xlXQWaR0lEXjv3Oh1VfztNYQkhMo=;
+        b=dNBkZIbtrTjZaczJqdL9yIXGp2kwX4OiNZ2TYYHBRdrMtM4gs+wpuu2brD7hxwnHz1K2dn
+        2M0xJW1yctZAf5BQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3E00F13585;
+        Tue, 31 Jan 2023 12:23:17 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 9j84DjUI2WN3CQAAMHmgww
+        (envelope-from <jack@suse.cz>); Tue, 31 Jan 2023 12:23:17 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id B8D08A06D5; Tue, 31 Jan 2023 13:23:14 +0100 (CET)
+Date:   Tue, 31 Jan 2023 13:23:14 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, Jan Kara <jack@suse.cz>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: [PATCH] usb: gadget: add doc to struct usb_composite_dev
-Message-ID: <Y9kAryJ6Y2lQyKZK@kroah.com>
-References: <Y86cy1AM4w5ju5A4@kroah.com>
- <Y9FmWVF+J08V4RbP@jo-einhundert>
+Subject: Re: linux-next: duplicate patch in the mm tree
+Message-ID: <20230131122314.umasrmx2hwe2epdx@quack3>
+References: <20230131145654.768c6149@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y9FmWVF+J08V4RbP@jo-einhundert>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230131145654.768c6149@canb.auug.org.au>
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Jan 25, 2023 at 06:26:49PM +0100, Jó Ágila Bitsch wrote:
-> Added documentation to the new struct members:
-> * bcd_webusb_version
-> * b_webusb_vendor_code
-> * landing_page
-> * use_webusb
-> to avoid warnings in the build of htmldocs
+Hello!
+
+On Tue 31-01-23 14:56:54, Stephen Rothwell wrote:
+> The following commit is also in the ext3 tree as a different commit
+> (but the same patch):
 > 
-> Signed-off-by: Jó Ágila Bitsch <jgilab@gmail.com>
+>   05a4851d2729 ("fs: gracefully handle ->get_block not mapping bh in __mpage_writepage")
+> 
+> This is commit
+> 
+>   7010839ccfd4 ("fs: gracefully handle ->get_block not mapping bh in __mpage_writepage")
+> 
+> in the ext3 tree.
 
-You forgot a Reported-by: tag?
+Yes, as we already discussed with Andrew, I've merged the patch to my tree
+because otherwise UDF fixes result in triggering this problem and crashing
+machine left-and-right (which results in a flood of emails from testing
+infrastructure). So carrying the patch in my tree seems like by far
+the simplest option (otherwise I'd have to either rebase on top of MM tree
+or pull MM tree into my tree, neither of which looks particularly
+attractive).
+								Honza
 
-Also didn't cc: the linux-usb mailing list?
+[1] https://lore.kernel.org/all/20230127133213.su4cl6zuiuuv2p35@quack3
 
-please fix up and send v2.
-
-thanks,
-
-greg k-h
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

@@ -2,92 +2,103 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44984683A95
-	for <lists+linux-next@lfdr.de>; Wed,  1 Feb 2023 00:40:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B53F683AC9
+	for <lists+linux-next@lfdr.de>; Wed,  1 Feb 2023 00:58:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229909AbjAaXkO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 31 Jan 2023 18:40:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37264 "EHLO
+        id S231138AbjAaX56 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 31 Jan 2023 18:57:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbjAaXkN (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 31 Jan 2023 18:40:13 -0500
-Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A2CB1043D
-        for <linux-next@vger.kernel.org>; Tue, 31 Jan 2023 15:40:12 -0800 (PST)
-Received: by mail-vs1-xe2f.google.com with SMTP id j7so17805215vsl.11
-        for <linux-next@vger.kernel.org>; Tue, 31 Jan 2023 15:40:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=yNWJjiHZ40BzwBFNd25x6TMl8GnedoNNCYGCd1mQAeg=;
-        b=Nhou7RN5fM5f5cI/iVGIMo21MZVVTKgkyIJL5ORf8vkscx4DIfYfx71Gf+Fu9zwbhI
-         jKvjlDNed0CaPq2PJhGvQzp7IjTBlAqw1vBWFiqixPH1NoHRTldioPZEGhWzJQyaUvOM
-         QT5DWZTE7nGsM0k6tTPQ0S8mB289q3k5fM4brPNxyCrIy+Usx+m/cH3bFdWUmlouuURb
-         USBnNE8XbO5WB5vrnN97xTXbfmeVijTWmnIxELq/aWzoqP6QZzimfRKRCMNzCw9OrGn4
-         vcvlAo/7Stbrg8A9eE6oB56vVwKhqzKfQb/NnSDK0PIwV0M/8hEHOKkxCBnSWmX5ge/t
-         7BTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=yNWJjiHZ40BzwBFNd25x6TMl8GnedoNNCYGCd1mQAeg=;
-        b=2w96xU25jPlOLhrhsrKiSFdheuiiuYNEfz+v0ByayXakx4KsZ5+y9rjp56/ToqXuJr
-         W4DsBwdlA9+W1JWUgf0HCh4SfqsoHBT3Cgw0A/6tduNMnAU898h2f5us/8TM1+CyXnc3
-         J6Fcb0MblaPsbEzyLFyWzNyw3esi1bGY3lOkroi2egUKwkcpRm7u5dJdHVvm8O5lc6Z/
-         GhdRWSFoWV/JyMzzyfjkx6XkIGxJ+GLGE0fVl+IMD659UTzI0YIyHpAqWaq6LGVfy2GA
-         /RW0Ozi/SypYe9wg0mHFe9Igz7r+BPh1I6KPPThV5m6Ed5H9+uyU4VhuJxdd0hT89uLg
-         2odw==
-X-Gm-Message-State: AO0yUKU1TFbXoVJyayQs7xe5qagkkV1dMyiavIQVNqXUdMd8CxSeYS78
-        nWoLKvLPwfj2y5uuAEiptHSB+OeG33mviYmPDHE2ew==
-X-Google-Smtp-Source: AK7set+LGZpVBUq8jBYUp23fV64plVr7SG2DY47NRbmas+5wk9V9BIThjG1yn8uBo52H/ysiEC+SN+XZvlxAE8uICa8=
-X-Received: by 2002:a67:e19a:0:b0:3f7:528b:d25f with SMTP id
- e26-20020a67e19a000000b003f7528bd25fmr138820vsl.9.1675208410993; Tue, 31 Jan
- 2023 15:40:10 -0800 (PST)
+        with ESMTP id S231214AbjAaX55 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 31 Jan 2023 18:57:57 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D60086186;
+        Tue, 31 Jan 2023 15:57:54 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P626g31X6z4wgv;
+        Wed,  1 Feb 2023 10:57:47 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1675209469;
+        bh=otidM+6s9MPV+JixMK9xAR6aP5z/OIg+VS6OavtGHBQ=;
+        h=Date:From:To:Cc:Subject:From;
+        b=c970s8k8w05wM7rYLtu/8ubUoK/kCmd8ZeZI7+5q4cO52wyaJb1TKYKFElLI/3eka
+         O5mWeyKG2Mli3lViAELX5g+OxxGBKyTaPnDUJwL9Zawh0kkyyR0GPeQGJkMPILlvco
+         OQdqCnFT+Ymq4r3glvgv9rZfsNcxNeg25fdo5l2yX6r5ruC0sJJhC6W0KhAJUBAsXW
+         kK5CNZFZHTMDJE68A9WEmL+ZSghpWk0xqeE7iXmGeoq+wL6tq434hFJ+Xnd8pi3nHf
+         3E2HsO/j07lge4ufThBO7qSMXr4B9DCIiNLlPsDtyF4Ld0ybXX2sh8G/95n0z//cg+
+         Hd+G3kSRMrYrQ==
+Date:   Wed, 1 Feb 2023 10:57:45 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>
+Cc:     ARM <linux-arm-kernel@lists.infradead.org>,
+        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the sound-asoc tree with the arm-soc
+ tree
+Message-ID: <20230201105745.5f967f15@canb.auug.org.au>
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 1 Feb 2023 05:10:00 +0530
-Message-ID: <CA+G9fYsPSJiTXouaMUSeoU3JEwym0baq7OGOAMFNWgrgEWOHfA@mail.gmail.com>
-Subject: Re: ACPICA: Replace fake flexible arrays with flexible array members
-To:     Kees Cook <keescook@chromium.org>
-Cc:     open list <linux-kernel@vger.kernel.org>, devel@acpica.org,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
-        linux-hardening@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>, robert.moore@intel.com,
-        lkft-triage@lists.linaro.org,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Anders Roxell <anders.roxell@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/GNgInR7_X49actaugsPAcP+";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-The qemu-i386 boot failed on Linux next- 20230131 started from
-next-20230125. Please refer to boot logs [1], [2] & [3].
+--Sig_/GNgInR7_X49actaugsPAcP+
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-The bisection pointed to the following commit,
-# first bad commit:
-  [5f7e8394a70761036e416c7529c937f309e4680f]
-  ACPICA: Replace fake flexible arrays with flexible array members
+Hi all,
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Today's linux-next merge of the sound-asoc tree got a conflict in:
 
-Reverting the above patch fixes the qemu-i386 boot problem.
+  sound/soc/cirrus/ep93xx-ac97.c
 
-[1] https://tuxapi.tuxsuite.com/v1/groups/linaro/projects/lkft/tests/2L4mi3ZZDct0vwmV2tIVY5AtNr0/logs?format=html
-[2] https://tuxapi.tuxsuite.com/v1/groups/linaro/projects/lkft/tests/2L4mi3ZZDct0vwmV2tIVY5AtNr0/logs?format=txt
-[3] https://tuxapi.tuxsuite.com/v1/groups/linaro/projects/lkft/tests/2L4mi32cqUyZvCIhJlV5nR8CuQk
+between commit:
 
-Bisection log:
-http://ix.io/4mIP
+  2b45e1fa9398 ("ASoC: remove unused ep93xx files")
 
---
-Linaro LKFT
-https://lkft.linaro.org
+from the arm-soc tree and commit:
+
+  0e478b88b257 ("ASoC: cirrus: use helper function")
+
+from the sound-asoc tree.
+
+I fixed it up (I just removed the file) and can carry the fix as
+necessary. This is now fixed as far as linux-next is concerned, but any
+non trivial conflicts should be mentioned to your upstream maintainer
+when your tree is submitted for merging.  You may also want to consider
+cooperating with the maintainer of the conflicting tree to minimise any
+particularly complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/GNgInR7_X49actaugsPAcP+
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPZqvkACgkQAVBC80lX
+0GwCGgf/TfAu2o1BqIOkNZ3yXU4ectUq6XlyESTcfXsiixvcHNdDyU0vWv0bhz+c
+ezWT4A5u/d6eXb2bEtcs2O4RuW3Xt87Aiz/SPJjjEkwSkbRvU1Afv4A2tcTjWAgs
+Mdy1Piv+Ufx5773yBLm4QLWXfm2kRKGsBPn3kH2eCziVQ3ZmiqRCQ1tb8lmFa8y4
+KY62Y3IPdxayX/UFz8aAHrXXOUsdOwXHkU4lWj1wz8tGKGOj4pty9bs2qgNhljWn
+wzsPg6OVhqEkfaOXRmKDX3c+m7u/VdjwBN7fewGcF86knYl1/gz6iNzMUC8wqzwv
+upk9UQ86f9LUT2YOBudxCDvexCNBZw==
+=qMdt
+-----END PGP SIGNATURE-----
+
+--Sig_/GNgInR7_X49actaugsPAcP+--

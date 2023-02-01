@@ -2,84 +2,269 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B020E686CA9
-	for <lists+linux-next@lfdr.de>; Wed,  1 Feb 2023 18:19:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B7BB686E3E
+	for <lists+linux-next@lfdr.de>; Wed,  1 Feb 2023 19:39:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232013AbjBARTJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 1 Feb 2023 12:19:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44778 "EHLO
+        id S232224AbjBASjV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 1 Feb 2023 13:39:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231185AbjBARTJ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 1 Feb 2023 12:19:09 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA26444A2;
-        Wed,  1 Feb 2023 09:19:08 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4E81DB82212;
-        Wed,  1 Feb 2023 17:19:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C690FC433D2;
-        Wed,  1 Feb 2023 17:19:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675271945;
-        bh=ySnn85dryuaJrkf6GRr1nILJViUDApMqGZ1g8Scnqn8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dOoCoo+skX6cA7kZj+jyZoPCWodH4fJY3XarTHxQ8f9zUccbLxmWCYhaXnymvdEXY
-         OMGkZ6VcgBEvyMFHQvqXx12bVB5Pu8oTq8HXJ1dRSS6bYTtUQd0qeZP6PEDld6JnSC
-         YYxIScDXWbcqdkl6fhgmuiMhi/g0x3/rPWhkPKVZO0PyGRAqSqoEhYe0+p99F4rRJB
-         XCpxV+G8JgMelCkYD2kIjZbDf1HfiOU0qimG3vh0NDh1DbWjk/YFg13R8e5KFU59bc
-         ssjLfWx7HT1zGNvwa1RCUfGTf0gwzlOYFBrJ38yrOg1BkfWvxY5cS3NN5B1yS7HaZl
-         RnVkk9V6Ze8jQ==
-Date:   Wed, 1 Feb 2023 17:19:01 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        with ESMTP id S230231AbjBASjL (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 1 Feb 2023 13:39:11 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D4937F6AA;
+        Wed,  1 Feb 2023 10:38:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675276715; x=1706812715;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=5wk0TO81aLkRFrjIAqxQij0keO/PwPz359jXwu/kBeM=;
+  b=kY4WRhZRthZPVxh7GXwVRDjo8riE27g45PyHf2U3EwBekw6w9COhUuFW
+   yRhSsEWpap7JyEqPsmVQNRNIzgjiXnnbqr97+TnFpTDtUfXC83UaDiuRh
+   aV8URZTVQVCSDwY4blNCTtdLhQq5/krgWmj3Ldh4QuX+6E/rgvAgmzrOa
+   8mxllXRnVqDCBRfGpXugJUDHFl2zIWyvFUxhhVpTIRz+qHPqDG+rQiZH6
+   HRmg6tLudGiMqzLWg6Zxy/co14bDbsgyi/qCVR6+OZJ9aO4gqA1o99J1T
+   zghPY7HZaqaD6Hjhh8vu2A9zp5zlnKThb/qc/o0n8WnfLgXubhw2QRQ+5
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="307894428"
+X-IronPort-AV: E=Sophos;i="5.97,265,1669104000"; 
+   d="scan'208";a="307894428"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2023 10:37:48 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="658423227"
+X-IronPort-AV: E=Sophos;i="5.97,265,1669104000"; 
+   d="scan'208";a="658423227"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by orsmga007.jf.intel.com with ESMTP; 01 Feb 2023 10:37:16 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Wed, 1 Feb 2023 10:37:15 -0800
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Wed, 1 Feb 2023 10:37:15 -0800
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.176)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Wed, 1 Feb 2023 10:37:15 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lwypWFd7d2gEiE0HJ3V92yaJWX7h+Ukm+mRgiz5wwg/AMdvKMqVvnig43+iwj57OFddSj0qqFCYsuv9pZOAKjSwf/oq4yYZ+uNGGpt9y405WqMqBleELRZNZGFciRapQFr/wJzlIR2pRHSVAqVEEwfzvORIwzTT9T1uxH9yUEyqwCAlVcPjKbQall3hqjLku1+WF9zUvkakgDeRaL0cZ4RA9AgPPZkHDXu3x8CbZsXqShk58zPqtoFpBf6wwXtQu7Xz02M2BRiCB9QTchIdY3XN7eeEGmXGf9VNH8HXm8jzujg2TNDcS6QH/wfV8HD9zW5e/0DD/jZ0indRVr+oqKg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=bhO+t6GofvxsTsiew10gG80l6WZgM//poFXZSHfkUMI=;
+ b=DoJp9AuHUi90PL8uAkEi6hwkhpqfjbCgex5oInUsY8U71LhNSKVAn6cv9Kxx8zJdyWyIP3Vmbj6B8usX9wCPeBInU+7ObSyhvScnwnz11n0i0aGNKZKTj1g5/l/PWOgGX7YrAflD6HojqP7gkykwNMAK0AZXDPuAX6QIu/NyMwYXQdKxYa+7Es2h0tJBy5Ae0yfs3DYb8Jdbi1BKKW2Cun+4PUA0jJB+ix7V8hWBCdym77KfmAirfEP3q0xURIRtZwv1SOTdUw5uHGMLES4CXd+A62mU233zu8BL8XBJHWJEpsb2fSZFl4XlNZ0yVWXZLWmJbcUX5WIC2XQbRpHt/g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from BY5PR11MB3911.namprd11.prod.outlook.com (2603:10b6:a03:18d::29)
+ by DM8PR11MB5590.namprd11.prod.outlook.com (2603:10b6:8:32::8) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6043.33; Wed, 1 Feb 2023 18:37:09 +0000
+Received: from BY5PR11MB3911.namprd11.prod.outlook.com
+ ([fe80::e1a3:6ad3:9f43:5f25]) by BY5PR11MB3911.namprd11.prod.outlook.com
+ ([fe80::e1a3:6ad3:9f43:5f25%4]) with mapi id 15.20.6043.036; Wed, 1 Feb 2023
+ 18:37:09 +0000
+Message-ID: <fed121a6-8ad8-676b-ff6b-f7c6611058ca@intel.com>
+Date:   Wed, 1 Feb 2023 10:37:06 -0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.6.1
+Subject: Re: linux-next: manual merge of the usb tree with the drm-intel-fixes
+ tree
+Content-Language: en-GB
+To:     Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+CC:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Greg KH <greg@kroah.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-next <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patch in the backlight tree
-Message-ID: <Y9qfBVBTzLpIRdCx@google.com>
-References: <20230127161233.5c21c04f@canb.auug.org.au>
- <Y9OaE6M9CaGYvVZD@google.com>
- <4c625a02-f500-4a49-b5b5-b5de57f5b612@app.fastmail.com>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20230131130305.019029ff@canb.auug.org.au>
+ <Y9kNRVppj5Uxa9ub@smile.fi.intel.com>
+ <9566dc52-2ff1-760d-c9cb-fdfef9278f05@intel.com>
+ <20230201151113.22382269@oak.ozlabs.ibm.com> <Y9qFmmi2C20AFQB7@intel.com>
+From:   John Harrison <john.c.harrison@intel.com>
+In-Reply-To: <Y9qFmmi2C20AFQB7@intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BY3PR04CA0014.namprd04.prod.outlook.com
+ (2603:10b6:a03:217::19) To BY5PR11MB3911.namprd11.prod.outlook.com
+ (2603:10b6:a03:18d::29)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <4c625a02-f500-4a49-b5b5-b5de57f5b612@app.fastmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BY5PR11MB3911:EE_|DM8PR11MB5590:EE_
+X-MS-Office365-Filtering-Correlation-Id: 630631e3-db5f-40d0-2f2a-08db0483531b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: gsE3zF9q6JijQ7W5dGwkDM619m5+DK+V2AMY5diF7qPAyjM45y0goB/yHB/N4XW5ROATtiG8Pa8S4mAMjrB1fLiylDAwnLVxFsKvQWsXkNVEj/lV5TPm8tP2eqbyM9Pk05v/7VktD7GWVtMbwogIZF+1KlCUSPGVYZ/yPweyo9B8GyIbo3tJIVGnVmvaK4QkXoSH1C9tfHJubECDlDq3yPiU93xJ9w/c1H6y36EBqgEyW9P7fAIpNjEbzPDvXBVU/GFNkMX9bIJ/FsDZJQdAiUT0ElcFgJx76zow4kSmFDxALFXjnAMJsLBcpe9F/Iuu/A1iPAq/+HEqIViwpVzO+eV5cFfd6eMvM8NuWgi40kxmWVhhlVrpyruRRdR0UbQ1V5MGD7BdGKV+L2HDgyA+xEMoquDcCfd80p7nSbAblKTNq9azJMIyEjimpnfXf2+vjyZv76SjY+JgOVH642tRarCm2eGSeOl+253Jg1+Lv+pCClwkLzUs+nWD97O9DxjQc/rWQJvBb6jvoC4dVFLJnMe17p1H91D9N7R06TA1zZLeqPue6S6DuNVbYS0k6pXSxKcIgGmfHX9y0CYzCp9nHL8XZAexE8Ob7Q9c111fmFZEh1YkRwjXPcN8UpwSrR1fF//ZLm3mMgWSRcFQ3dyPrhPVWYm/3xfJYSgxJjvJWCD+hNtt+mWmV+3Exp5h5sae5Wi/ymq5Q6oSeClNc+3xeCXCLkRn1S3wZYWHttG2sCc=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR11MB3911.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(396003)(39860400002)(366004)(136003)(346002)(376002)(451199018)(186003)(66476007)(41300700001)(86362001)(2616005)(26005)(83380400001)(82960400001)(36756003)(53546011)(38100700002)(31696002)(54906003)(316002)(110136005)(4326008)(6486002)(66946007)(6506007)(66556008)(6666004)(8676002)(478600001)(6512007)(7416002)(2906002)(8936002)(31686004)(5660300002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aGJaY1U1Rmw2VmgvUXhBdWJkY0xNSXhBMlZidTMyVjcyNEVmdEZxeExYQXRB?=
+ =?utf-8?B?L3dPbEp5bzJzbDVQQ1o1YjZvTWZZVVhYQmlBMkNvVTZPbVEvYWFjK0padDA4?=
+ =?utf-8?B?MjQ5SEI3MVVtdEtPQWJFK01mam1jTDNGM3loWnRoRzBBMlo0SDRySkpTS2xu?=
+ =?utf-8?B?ZkRtU2tCT0RsbjdqZXVxTndLT0dWMVdQd3IrU2ZxWWdtSUJUTVVMb3dJMmdK?=
+ =?utf-8?B?TzNkcW1GTWc5dithbHBNWnNDelNYc1ZLODNsSmJLV1Z6ck5JOTcyeCt0ZUcy?=
+ =?utf-8?B?N2I4YVFMMW5meXU1MHM3cjc2YktmZ2ttUXZ6WFVIZDJZMmpsSzljMkFDeFhs?=
+ =?utf-8?B?ajhiUEtFWUpaeStWdDE4QldheExWT3U2Zi8xdjI5MXA0WDRGUWRMbkRRVFhm?=
+ =?utf-8?B?eS91UWhaVlVnV0pDcGdnS2lkYzREZzZyWHRvSGhEd09OR0F0cVZmUmRzRE9C?=
+ =?utf-8?B?K0JmN3VSMGUyWlZQNTdwcTVhejhmY2xEYlVkdmttSTJ2dC9IT0s1NXAvcjJN?=
+ =?utf-8?B?d0V5ME84SWRWWHYvUGh5SVFkUzlNWFhJVWNJdDI1TzgwYWpUSFM4OFZpWTND?=
+ =?utf-8?B?M2RFRmRJbUlNZUM4WG5aWU9yUEsvWnB6NGpWNmw2a3N6NkRwV1R3dU9HVEZs?=
+ =?utf-8?B?V2NhWnpnb2NKMzZTL3FXU29WYklpREt1RkwwVzRrVEdGeEozalNEaGNzQmdH?=
+ =?utf-8?B?eUdxZWdlc2YrWFdlaGJWb1gxZ3NKSldXeTk3endjM2NIaWlKWjBZaW4yQTI1?=
+ =?utf-8?B?Zy9aVkpiTEJpOTI5TldpcU40bndmUU1rWEtNNUZUbE5ibVlOc3g2MndocjZt?=
+ =?utf-8?B?MjI4R1I5Si95VTB5VUFkS2F1RHdQc0tIcXhlbk9rZFNlNE1ZeGplRTFuVnEr?=
+ =?utf-8?B?T0ptQ2s5eXhIOGFLQ01uYjlVR2hFam83c1J4Mm41TFpmdUdVYjlHTUFrdzh6?=
+ =?utf-8?B?bmI5VzRiUXFwR0xXdktZZ3N4Q2F6My9iMzRGNHBKcjdwVmk4TFROUHBNNW9D?=
+ =?utf-8?B?WWIxT1Rhb1RIVWZrdGNqRS9ZKzF5RVBYRHBUM2xMV0lJNHoweUlsMUkxeXhh?=
+ =?utf-8?B?NUdCK1dieVE5SS9Oa0hPSllmbzhpemliQkJ1TEM3MlhtYmUrcnM4NTc1bWs1?=
+ =?utf-8?B?R0Qvc3AwSzdUK05NS2VYWjlLVmZIQUlFRkdkSysvMGV1OVZGZUJHTTluRWV5?=
+ =?utf-8?B?cXEza0IvOU5Kb2U3U0EydHk4OXY4U2hPbStGdnNNcVJoQjdSSXh3ZDVNaWNL?=
+ =?utf-8?B?aEFGNDcxd205dzU0emNHa1VHOWdVb1JGM0ZFNGxhWjJxMDBleTFtMG82RFJy?=
+ =?utf-8?B?Z1ZhMWxMdGRqWkpHZ2tWVVdMQVEzMUpmNFJCSlBmWXRQdGExSnJ2L09nQ3NP?=
+ =?utf-8?B?L2JZMGxRZEVVd3JBVjVYUE1pOFhzM0EzdGV0a2VaVGdqZnI5TGJuRkd6OERk?=
+ =?utf-8?B?bGtpZUY3V1JyRm93b3pDSDlTaVpiWjlMVmF5RGZQTDc0cG1Vazl4bmxlZ0VP?=
+ =?utf-8?B?aUY5aSsrUXhSTkVrVEpSOVhJczk1SE5UYmJUbm42aXJTdVhhcDVLTTdnbWRB?=
+ =?utf-8?B?N3l3b2h4SWszRld2NWJReGgzQUx6enFSQUNxbXByNk52THZHMzhIdmp3WWpM?=
+ =?utf-8?B?RTRLaDNFZjJOQjF0OW1mMkZzT25uUTRqKzlkS2w5Vmx2K0dBRnJ6aUoxMktG?=
+ =?utf-8?B?UTNyUCtpYkk0Q3ozWnplQ0dPc09nOFA3TzEwRGlkVUZTVU90Mlk5bDFFLzdh?=
+ =?utf-8?B?ZW04WmdLeFNYaGQrOFF3VjZQa2F5bG9mUTNyRng0bmVkY3kvUk9SRGt1dlhr?=
+ =?utf-8?B?K3FxeVAxZHVOMU0xMnlnY1lJS0Q3Smw4VFJaMkhQQzE3MWtURkVla2EwTHhn?=
+ =?utf-8?B?d2ZRQVdjZ3l5T2k1Mkw5b3M4VUFiWXo0VjFWMGhuVXBnRVUzS2pwWXAwWUpM?=
+ =?utf-8?B?UU96NFpaT001dnp3Q3FuWGFlOFNFekVxMkduL013QVNDemo4eEFxNTVhMTNv?=
+ =?utf-8?B?NWZHSU11N2dzam1TUGo0ZTlVVEk1V1R3VzQ4RURoRUcva2dTZFNPM0FUcDVC?=
+ =?utf-8?B?dGZVamZWc0dyTkJ2SjR3Mk9aZ1FuZlBXYUJ5Rm45TU4yZElDYWRrVDVXZHBS?=
+ =?utf-8?B?Y1dxc1JRZWJIQ2VXdWVaUDdXSU40OGVmQ1QxWWtqcDlPZWdIbFFjeUV6YjVo?=
+ =?utf-8?B?Q1E9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 630631e3-db5f-40d0-2f2a-08db0483531b
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR11MB3911.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Feb 2023 18:37:08.8480
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: PcW0HavHYiiTVVTx2bBr8RUx7vgv2L2jQU94EuzTz5WzCOHym4KX0JHJFnc9lDtMiMM1Kz2mFnXr7zwO2ueey0am55Kt/jk2hEhMarmxQgw=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM8PR11MB5590
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, 01 Feb 2023, Arnd Bergmann wrote:
+On 2/1/2023 07:31, Rodrigo Vivi wrote:
+> On Wed, Feb 01, 2023 at 03:11:31PM +1100, Stephen Rothwell wrote:
+>> Hi all,
+>>
+>> On Tue, 31 Jan 2023 10:27:29 -0800 John Harrison <john.c.harrison@intel.com> wrote:
+>>> On 1/31/2023 04:44, Andy Shevchenko wrote:
+>>>> On Tue, Jan 31, 2023 at 01:03:05PM +1100, Stephen Rothwell wrote:
+>>>>> Today's linux-next merge of the usb tree got a conflict in:
+>>>>>
+>>>>>     drivers/gpu/drm/i915/gt/intel_engine_cs.c
+>>>>>
+>>>>> between commit:
+>>>>>
+>>>>>     5bc4b43d5c6c ("drm/i915: Fix up locking around dumping requests lists")
+>>>>>
+>>>>> from the drm-intel-fixes tree and commit:
+>>>>>
+>>>>>     4d70c74659d9 ("i915: Move list_count() to list.h as list_count_nodes() for broader use")
+>>>>>
+>>>>> from the usb tree.
+>>>>>
+>>>>> I fixed it up (the former removed the code changed by the latter)
+>>>> Hmm... Currently I see that 20230127002842.3169194-4-John.C.Harrison@Intel.com
+>>>> moves the code to the drivers/gpu/drm/i915/gt/intel_execlists_submission.c.
+>>>>
+>>>> Is there any new series beside the above mentioned that touches that file and
+>>>> actually _removes_ that code?
+>>> As long as the removal is limited to list_count/list_count_nodes,
+>>> that's fine. I only moved it from one file to another because the one
+>>> and only function that was using it was being moved to the other
+>>> file. If someone else has found a use for the same and wants to move
+>>> it to a more common place then great. I assume there was no conflict
+>>> happening in the i915 specific code.
+>> I have added this fix up patch to linux-next today (more or less - this
+>> is a hand hacked version, but you get the idea):
+>>
+>> From: Stephen Rothwell <sfr@canb.auug.org.au>
+>> Date: Wed, 1 Feb 2023 13:13:01 +1100
+>> Subject: [PATCH] i915: fix up for "drm/i915: Fix up locking around dumping requests lists"
+>>
+>> interacting with "i915: Move list_count() to list.h as list_count_nodes() for broader use"
+>>
+>> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+>> ---
+>>   .../gpu/drm/i915/gt/intel_execlists_submission.c    | 15 +------------
+>>   1 file changed, 2 insertion(+), 13 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/i915/gt/intel_execlists_submission.c b/drivers/gpu/drm/i915/gt/intel_execlists_submission.c
+>> index 3c573d41d404..e919d41a48d9 100644
+>> --- a/drivers/gpu/drm/i915/gt/intel_execlists_submission.c
+>> +++ b/drivers/gpu/drm/i915/gt/intel_execlists_submission.c
+>> @@ -4150,17 +4150,6 @@ void intel_execlists_show_requests(struct intel_engine_cs *engine,
+>>   	spin_unlock_irqrestore(&sched_engine->lock, flags);
+>>   }
+>>   
+>> -static unsigned long list_count(struct list_head *list)
+>> -{
+>> -	struct list_head *pos;
+>> -	unsigned long count = 0;
+>> -
+>> -	list_for_each(pos, list)
+>> -		count++;
+>> -
+>> -	return count;
+>> -}
+>> -
+>>   void intel_execlists_dump_active_requests(struct intel_engine_cs *engine,
+>>   					  struct i915_request *hung_rq,
+>>   					  struct drm_printer *m)
+>> @@ -4172,7 +4161,7 @@ void intel_execlists_dump_active_requests(struct intel_engine_cs *engine,
+>>   	intel_engine_dump_active_requests(&engine->sched_engine->requests, hung_rq, m);
+>>   
+>> -	drm_printf(m, "\tOn hold?: %lu\n",
+>> -		   list_count(&engine->sched_engine->hold));
+>> +	drm_printf(m, "\tOn hold?: %zu\n",
+>> +		   list_count_nodes(&engine->sched_engine->hold));
+> something awkward here.
+> The resolution on linux-next should align with the resolution on drm-tip
+> where we have the list_count still there as we preferred the version
+> on drm-intel-gt-next as the resolution of the conflict instead of the
+> fixes one.
+Not following why you want to keep list_count as a local function in the 
+i915 driver? Surely the correct fix is to move it to the common header 
+and share the code? In which case, the correct name is 
+list_count_nodes() as that is what got merged to the common header.
 
-> On Fri, Jan 27, 2023, at 10:32, Lee Jones wrote:
-> > On Fri, 27 Jan 2023, Stephen Rothwell wrote:
-> >
-> >> Hi all,
-> >> 
-> >> The following commit is also in the arm-soc tree as a different commit
-> >> (but the same patch):
-> >> 
-> >>   6e9b5cad13f0 ("backlight: Remove pxa tosa support")
-> >> 
-> >> This ia commit
-> >> 
-> >>   9041bd1aff23 ("backlight: remove pxa tosa support")
-> >> 
-> >> in the arm-soc tree.
-> >
-> > This should be removed from the arm-soc tree.
-> 
-> I had hoped I was done with the rebases, did one more pass and
-> removed this one.
+John.
 
-Thanks Arnd.
+>
+>>   
+>>   	spin_unlock_irqrestore(&engine->sched_engine->lock, flags);
+>>   }
+>> -- 
+>> 2.35.1
+>>
+>> -- 
+>> Cheers,
+>> Stephen Rothwell
+>
 
--- 
-Lee Jones [李琼斯]

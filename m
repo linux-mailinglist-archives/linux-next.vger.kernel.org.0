@@ -2,67 +2,101 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00DDF687610
-	for <lists+linux-next@lfdr.de>; Thu,  2 Feb 2023 07:54:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A63B2687749
+	for <lists+linux-next@lfdr.de>; Thu,  2 Feb 2023 09:26:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229882AbjBBGyB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 2 Feb 2023 01:54:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42656 "EHLO
+        id S232087AbjBBI0t (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 2 Feb 2023 03:26:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbjBBGyB (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 2 Feb 2023 01:54:01 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 01584193EC;
-        Wed,  1 Feb 2023 22:53:59 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4ECD1C14;
-        Wed,  1 Feb 2023 22:54:41 -0800 (PST)
-Received: from bogus (unknown [10.57.12.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2BDCC3F71E;
-        Wed,  1 Feb 2023 22:53:56 -0800 (PST)
-Date:   Thu, 2 Feb 2023 06:53:53 +0000
-From:   Sudeep Holla <sudeep.holla@arm.com>
+        with ESMTP id S229546AbjBBI0t (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 2 Feb 2023 03:26:49 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95F5BA258;
+        Thu,  2 Feb 2023 00:26:48 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2DE0A6185D;
+        Thu,  2 Feb 2023 08:26:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18692C433EF;
+        Thu,  2 Feb 2023 08:26:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675326407;
+        bh=JG1JmI9JBW9yaMzdHTJELLOmEsFpnPZMc9mFf3CBdpM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gcsmWB/b/avIssocnYYRDoKU3Ybm1EFLFE6S7RasCMgm6+grZQY8q/vRflTOfvLUl
+         EUtc3nSazW7FzDUOP9JU+lYE2uP+ooJi2NOA8OrucMjW4LdWZtkkmxQ2zD9ozDsj0z
+         CTgxbasjwf5jc9fRnPYQsGMfV0zP0FWymhLHkaxdxYu+q3b2dgUnYg4M1prFPEaR6S
+         IQ+fU7byfyEtZhLg0EHCUMgyMYfqzp4iakpnhLPaU184II7gyUla9BaDhbFio+oIFk
+         7cTeU7nNGwMx76oGQAtRiXSfrAvUAR/vp4dfbxnXdfnJcW66gItYt0XDZZ+m+n+tcM
+         UWgROdZp0hfIw==
+Date:   Thu, 2 Feb 2023 10:26:43 +0200
+From:   Leon Romanovsky <leon@kernel.org>
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Greg KH <greg@kroah.com>, Sudeep Holla <sudeep.holla@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Pierre Gondois <pierre.gondois@arm.com>,
+Cc:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
+        Jianbo Liu <jianbol@nvidia.com>, Jiri Pirko <jiri@nvidia.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patches in the driver-core tree
-Message-ID: <20230202065353.x7wclzdeui4xylle@bogus>
-References: <20230202121224.54425afd@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Saeed Mahameed <saeedm@nvidia.com>
+Subject: Re: linux-next: manual merge of the mlx5-next tree with the net-next
+ tree
+Message-ID: <Y9tzw0o3/Sz3v0bb@unreal>
+References: <20230202091433.7fb9d936@canb.auug.org.au>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230202121224.54425afd@canb.auug.org.au>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230202091433.7fb9d936@canb.auug.org.au>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Feb 02, 2023 at 12:12:24PM +1100, Stephen Rothwell wrote:
+On Thu, Feb 02, 2023 at 09:14:33AM +1100, Stephen Rothwell wrote:
 > Hi all,
 > 
-> The following commits are also in the scmi tree as different commits
-> (but the same patches):
+> Today's linux-next merge of the mlx5-next tree got a conflict in:
 > 
->   ecaef469920f ("cacheinfo: Initialize variables in fetch_cache_info()")
->   d931b83e62b1 ("cacheinfo: Make default acpi_get_cache_info() return an error")
->   921e672dee91 ("cacheinfo: Remove unused check in init_cache_level()")
+>   include/linux/mlx5/driver.h
 > 
-> They are commits
+> between commit:
 > 
->   7646b6682b41 ("cacheinfo: Initialize variables in fetch_cache_info()")
->   2ebcd557e000 ("cacheinfo: Make default acpi_get_cache_info() return an error")
->   b73679f891d8 ("cacheinfo: Remove unused check in init_cache_level()")
+>   fe298bdf6f65 ("net/mlx5: Prepare for fast crypto key update if hardware supports it")
 > 
-> in the scmi tree.
+> from the net-next tree and commit:
+> 
+>   2fd0e75727a8 ("net/mlx5e: Propagate an internal event in case uplink netdev changes")
+> 
+> from the mlx5-next tree.
+> 
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+> 
+> -- 
+> Cheers,
+> Stephen Rothwell
+> 
+> diff --cc include/linux/mlx5/driver.h
+> index 234334194b38,cc48aa308269..000000000000
+> --- a/include/linux/mlx5/driver.h
+> +++ b/include/linux/mlx5/driver.h
+> @@@ -674,7 -675,7 +675,8 @@@ struct mlx5e_resources 
+>   	} hw_objs;
+>   	struct devlink_port dl_port;
+>   	struct net_device *uplink_netdev;
+>  +	struct mlx5_crypto_dek_priv *dek_priv;
+> + 	struct mutex uplink_netdev_lock;
+>   };
+>   
+>   enum mlx5_sw_icm_type {
 
-Now dropped, sorry for the trouble.
-
--- 
-Regards,
-Sudeep
+LGTM, thanks for the conflict resolution.

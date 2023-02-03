@@ -2,43 +2,44 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F18E688D4C
-	for <lists+linux-next@lfdr.de>; Fri,  3 Feb 2023 03:50:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80A88688D60
+	for <lists+linux-next@lfdr.de>; Fri,  3 Feb 2023 03:53:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231678AbjBCCub (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 2 Feb 2023 21:50:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56350 "EHLO
+        id S230169AbjBCCxH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 2 Feb 2023 21:53:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231364AbjBCCua (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 2 Feb 2023 21:50:30 -0500
+        with ESMTP id S230230AbjBCCxH (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 2 Feb 2023 21:53:07 -0500
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7E83234F8;
-        Thu,  2 Feb 2023 18:50:29 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE4AE22A0E;
+        Thu,  2 Feb 2023 18:53:05 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P7Ks03wBqz4xZj;
-        Fri,  3 Feb 2023 13:50:28 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P7Kw04n6gz4xZj;
+        Fri,  3 Feb 2023 13:53:04 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1675392628;
-        bh=vzoBRyeKZyNzy0K9k4ZvBz8EZZaV0JCQZzIhreFxgkw=;
+        s=201702; t=1675392784;
+        bh=YVCnkJKekD9jf5cUhxiuiMU4drjtSui1/krseXp+DSc=;
         h=Date:From:To:Cc:Subject:From;
-        b=QDcGlCbqLuuRuPUJVWhI/2ucXvQXpnKv05pjJg1a0PNVf11KlF2du2XQZIvQwpg6g
-         ZCVSAc0fAXzBzrg6q0fs3qZqjFWpFFgCMsR8/5mwJArM0H7FCIwGFa2hdYurDwm0Dm
-         Bp4IHzlZr4RDVYkMfFL1pTKes2q157m1hu+RHcbQZ/tVqb8P/lr9zLRho+hVxPRV9n
-         PWsaEBFjvJahJPe+Xx4FMw+c3P50aRwVWkO5gfO7Mb5jERe8B3POrb1XIodPxDb2sR
-         O0mKhGUoDh7dyDmjjPIb8Ha0UQyKNFPjtWGi1U1pehXsGh6AYIA98pRxGKnL/qn5Y3
-         tEME5EmCeAT4w==
-Date:   Fri, 3 Feb 2023 13:50:27 +1100
+        b=dZgvAMh1qgHF8WH/CFSlL6SBA4B55pUJ/feaXaq6CGabzG/kqmU07XP4MOCDu1D24
+         NAuXFhN292m9u5G/VNlZknw8roKsS1QSOJQtL8V6vCBHvdiA/XXnq+eRjIhg2A0Nsq
+         Kk2sq6mz0yAjibhNwjdlRdaS+usi7ewW01Q1/9Rwn0OYDHzmGEeRjWARZc92dNHpW0
+         M+GXMInqjXjN+N/84nZIYB6ZZv0viiW7xQWSRYz87yI53hWsmMTEcSQdTps+AQEjzH
+         PHVT2raDBkTr8P8ydkXwCh9K2rv58Eq2XBAjd8UWtpcr2UngagYrrRvx4PE9PO1xed
+         VrteuaoRBbS3Q==
+Date:   Fri, 3 Feb 2023 13:53:03 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Lucas Stach <l.stach@pengutronix.de>
+To:     Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warnings after merge of the etnaviv tree
-Message-ID: <20230203135027.1a4679d3@canb.auug.org.au>
+Subject: linux-next: build warning after merge of the drivers-x86 tree
+Message-ID: <20230203135303.32da1fc6@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/lZM9KKSoSixAGc_X0NV74Pu";
+Content-Type: multipart/signed; boundary="Sig_/Q6zMJiKUPGUxHfzpyW4b_fV";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
@@ -49,42 +50,41 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/lZM9KKSoSixAGc_X0NV74Pu
+--Sig_/Q6zMJiKUPGUxHfzpyW4b_fV
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the etnaviv tree, today's linux-next build (htmldocs)
-produced these warnings:
+After merging the drivers-x86 tree, today's linux-next build (htmldocs)
+produced this warning:
 
-/home/sfr/next/next/include/drm/gpu_scheduler.h:232: warning: Incorrect use=
- of kernel-doc format:          * @elapsed_ns
-/home/sfr/next/next/include/drm/gpu_scheduler.h:238: warning: Function para=
-meter or member 'elapsed_ns' not described in 'drm_sched_entity'
+include/media/v4l2-subdev.h:1088: warning: Function parameter or member 'pr=
+ivacy_led' not described in 'v4l2_subdev'
 
 Introduced by commit
 
-  248cd9b265fc ("drm/scheduler: track GPU active time per entity")
+  10d96e289fbd ("media: v4l2-core: Make the v4l2-core code enable/disable t=
+he privacy LED if present")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/lZM9KKSoSixAGc_X0NV74Pu
+--Sig_/Q6zMJiKUPGUxHfzpyW4b_fV
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPcdnMACgkQAVBC80lX
-0Gwt2wf+KzK9sOJcqtprLh/lCDLnoOE+W/odzGFrtlLP9qXR6jbWulBrMXp3f138
-5qAGrTPzWZTuAe9WygeZdZwEhOb6B1oUg85I4qPOFWKBRB5Q6Fc7UeOaJAIVOSPI
-NMLRuW83V0vB/36k3aVd3mY5v1JTp1uykq7iQw9b1wYke/Pc8Bq7VEMAph7xafg8
-cq9I/JQdc9w6IWFhWywilV83Lhjw1k1rsvIhNa/aix5O7Kp8COBsDt4WICTdAuTq
-nuaPa07WLV3/48iqcoBlAf7eKiu53EjVQh/9X2t4SRRkJzusZMhWf4DlGbbQGBKz
-t57msIHHTHy4R1S/ztFk22VO2Corzg==
-=s38K
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPcdw8ACgkQAVBC80lX
+0Gxk8wf/RYVrcn1ylnl3Tqb1eIQ7jFoFA2DoxS+pucLNTXg9CICoHzD8pg97Wm90
+5UWi/CkrfVFh44tfIUiQwOzsX/XOct/SQjEL6u90+QmvLcoE6fp/kjJ2tjUnaAfF
+v7TyI5yH7sbgz5M/aF0tqFdbGY4exT6rD2Tctfk4pqz1TTpcZt0XHBONCHYRWTCu
+4NO0JzGitJSm2k5kUzbBn21hzwrH4RYqv2eGzBVVQvYSS2DhMi+T6ul0jcKCZ8Sc
+7ofImc6vT7vl7HZF9QnzUqncuB4z/b1/m+1SNuOKgdEs7CgsM/47lx5dyL73BgZ6
+2yPQRV5XUPB5UNZGzvQ7LzJXzjK1Zw==
+=1DXa
 -----END PGP SIGNATURE-----
 
---Sig_/lZM9KKSoSixAGc_X0NV74Pu--
+--Sig_/Q6zMJiKUPGUxHfzpyW4b_fV--

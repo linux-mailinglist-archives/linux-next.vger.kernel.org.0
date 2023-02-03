@@ -2,80 +2,79 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D67C8689312
-	for <lists+linux-next@lfdr.de>; Fri,  3 Feb 2023 10:07:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04DBA68933F
+	for <lists+linux-next@lfdr.de>; Fri,  3 Feb 2023 10:16:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232442AbjBCJHV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 3 Feb 2023 04:07:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59896 "EHLO
+        id S232579AbjBCJPv (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 3 Feb 2023 04:15:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232142AbjBCJHU (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 3 Feb 2023 04:07:20 -0500
+        with ESMTP id S232568AbjBCJPr (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 3 Feb 2023 04:15:47 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23B198A64
-        for <linux-next@vger.kernel.org>; Fri,  3 Feb 2023 01:06:33 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 501A692EDF
+        for <linux-next@vger.kernel.org>; Fri,  3 Feb 2023 01:14:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675415192;
+        s=mimecast20190719; t=1675415698;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=vhKCB9KNSzkYHejsdvcNaStCQTPERBmDcFyhTdzuPeU=;
-        b=VXsC0qLq5Rd3quS7bkbz04iy9kiFnG5NOrGCmPhI4S1+sU+FX9pJyDfyXs7+nKn0TEGvDp
-        +O9yioULkETCJh3Wr5btAwgKEEGtb4gjLfceyOMtrhr9d4aB0AexJT+D39HKQVVlQBq5F4
-        YSq5lcIe4Sb7aawLcx1VPgmKrcsrHt0=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=VdVLFF4ZVNepL+W9W9AEGXyzGPGEBcVS3tQ9W9CdiMw=;
+        b=dBe2fSpqepExXKrINWWXpsDA/eGyNsPwimNRVvhjB0KtcRktsFWBb0Mm+rBR5+NN3sxF7d
+        szJDVCVMWZv+z/mctm0R3NNyah2FNy9yWGGnS/EOuFPbQb29Zr9+h3cttMlSkzCkbUhO1k
+        onP0dRH0qMnkTVI7wpw6pxbpWA5QtP0=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-34-V_qzQIUCONKeQFgyIII2Kg-1; Fri, 03 Feb 2023 04:06:31 -0500
-X-MC-Unique: V_qzQIUCONKeQFgyIII2Kg-1
-Received: by mail-ej1-f70.google.com with SMTP id ud13-20020a170907c60d00b0088d773d11d6so3467936ejc.17
-        for <linux-next@vger.kernel.org>; Fri, 03 Feb 2023 01:06:31 -0800 (PST)
+ us-mta-278-CWbo7ywzPCqYwmFYCOV86Q-1; Fri, 03 Feb 2023 04:14:57 -0500
+X-MC-Unique: CWbo7ywzPCqYwmFYCOV86Q-1
+Received: by mail-ej1-f72.google.com with SMTP id nd38-20020a17090762a600b00871ff52c6b5so3489756ejc.0
+        for <linux-next@vger.kernel.org>; Fri, 03 Feb 2023 01:14:57 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vhKCB9KNSzkYHejsdvcNaStCQTPERBmDcFyhTdzuPeU=;
-        b=SdcxmFxQfxifJSpHiaJ3Qr0FNOIYFuhujs6mhTcEqWN8JsY0ZLiATej3SAD+XfJLE8
-         y76Zpl0qUWMQECuVDEVoTwTiO/Vif+ZexZsJzmjk9QRfLIPIUiEL5+L9XBDfm8qR3OA2
-         9AEmOcqri2gSNQd9ur+eE7QarS4mBklzURak/SOG3mpGPN7WJ5CfxE6OoRSclcJvC8gA
-         K8gnNRLfxua35ZqRgTxmWZAD3xczo3QjP9FnWAdbg/8+wZpa0KXn6bPnOb5eZ5+896Yr
-         PBJQW/SeYdLJoEzpUTZq7F7sIRioSPZPeQWy6+WH5mglB61BfL99aSR/i/+OFvzzCOeW
-         yHNw==
-X-Gm-Message-State: AO0yUKV239UyC4zmhx46WtX1WF0NAXOqm1dcwOpnHb9I+AkK3CI7AYUM
-        j7QfTFK3WxgKQQyfQT38YcOHWEnwbXIbFG5nU6rOdb8WUvnloa7/5rXEVKvFSSYCia3ulVkygnU
-        fnr5LciRHtuO/KXrDk9eOOw==
-X-Received: by 2002:a17:907:3d87:b0:88f:9c29:d232 with SMTP id he7-20020a1709073d8700b0088f9c29d232mr1301120ejc.57.1675415190052;
-        Fri, 03 Feb 2023 01:06:30 -0800 (PST)
-X-Google-Smtp-Source: AK7set/BNOT1dSdb1YhVnB4GNaZNhLGEVrN6r8pdC7z1PqJ3/f3nOok0MNZiqSQoHXK2GDx/GWc/gw==
-X-Received: by 2002:a17:907:3d87:b0:88f:9c29:d232 with SMTP id he7-20020a1709073d8700b0088f9c29d232mr1301112ejc.57.1675415189939;
-        Fri, 03 Feb 2023 01:06:29 -0800 (PST)
+        bh=VdVLFF4ZVNepL+W9W9AEGXyzGPGEBcVS3tQ9W9CdiMw=;
+        b=rjN5OUbymUA85i5vu36CZr3RAlPObhNVApJ3Qy6SJXEHKm0YwoaQaCiWeITuV5+mny
+         EloD+h0TWdNdtwOibhGB7zsrR6BtESXMJ+MKTzGVl/zcOUNwDDsnmH4MQewGnVbS79uk
+         44pVJBahnEANgu/CB0AJWBNXHbLSg8eLrwkjQne5jXATczg6yXzt68XRgsrNrWYlLrSY
+         tdgcY7j/Sk9aWxDSjqyETXnF6CUV02wAV5Sk6tqGFjn4Xt/wMCQ9s5fWK7RU8tbSDWCV
+         cVnB5z6uyRAIdSPJM0V7cgEy0DKe6bB0J4pU8jF/YRWBQ6M0f2SLKd302G7ebKBu+oTF
+         66oQ==
+X-Gm-Message-State: AO0yUKWSCzbhO+xrr87ENaw8j9oryzwmZfVDoQZ0yPTZZ9UlF+yw+Nzc
+        QbJfX9Duwg4qpyA5Roht+HTtI+//SRAtAIpD2/FZI2fLUAqK1SJCAP9tv2TcOr7DLgiwsforha2
+        guVV6D4QZ8JLzjmjmoJNQqQ==
+X-Received: by 2002:a17:906:3ca1:b0:86f:ae1f:9234 with SMTP id b1-20020a1709063ca100b0086fae1f9234mr8983215ejh.7.1675415695538;
+        Fri, 03 Feb 2023 01:14:55 -0800 (PST)
+X-Google-Smtp-Source: AK7set/5hSanuDwCjarxsrKff30TcGNnzkXTBbhQnT0T5yC8C6ecYja1xuM381wvNO5JAZ0JsNZUDQ==
+X-Received: by 2002:a17:906:3ca1:b0:86f:ae1f:9234 with SMTP id b1-20020a1709063ca100b0086fae1f9234mr8983209ejh.7.1675415695376;
+        Fri, 03 Feb 2023 01:14:55 -0800 (PST)
 Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id z5-20020a1709060ac500b008806a3c22c5sm1076367ejf.25.2023.02.03.01.06.28
+        by smtp.gmail.com with ESMTPSA id 13-20020a170906004d00b008512e1379dbsm1092920ejg.171.2023.02.03.01.14.54
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Feb 2023 01:06:29 -0800 (PST)
-Message-ID: <595e91e0-ae13-471d-2685-5d8f3a49b31c@redhat.com>
-Date:   Fri, 3 Feb 2023 10:06:28 +0100
+        Fri, 03 Feb 2023 01:14:54 -0800 (PST)
+Message-ID: <7a292539-e3d7-958c-a806-54681a0c79ca@redhat.com>
+Date:   Fri, 3 Feb 2023 10:14:54 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.0
-Subject: Re: linux-next: Signed-off-by missing for commit in the drivers-x86
- tree
+Subject: Re: linux-next: duplicate patches in the drivers-x86 tree
+Content-Language: en-US, nl
 To:     Stephen Rothwell <sfr@canb.auug.org.au>,
         Mark Gross <markgross@kernel.org>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20230203083313.53745bdd@canb.auug.org.au>
-Content-Language: en-US, nl
+References: <20230203083455.7a8cdee0@canb.auug.org.au>
 From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20230203083313.53745bdd@canb.auug.org.au>
+In-Reply-To: <20230203083455.7a8cdee0@canb.auug.org.au>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -84,33 +83,44 @@ X-Mailing-List: linux-next@vger.kernel.org
 
 Hi,
 
-On 2/2/23 22:33, Stephen Rothwell wrote:
+On 2/2/23 22:34, Stephen Rothwell wrote:
 > Hi all,
 > 
-> Commits
+> The following commits are also in Linus Torvalds' tree as different
+> commits (but the same patches):
 > 
->   95a579b5c89f ("tools/power/x86/intel-speed-select: v1.14 release")
->   19aceabd7a26 ("tools/power/x86/intel-speed-select: Adjust uncore max/min frequency")
->   75ade1b46b8b ("tools/power/x86/intel-speed-select: Add Emerald Rapid quirk")
->   a06644c7dc9b ("tools/power intel-speed-select: Fix display of uncore min frequency")
->   113943d71f54 ("tools/power/x86/intel-speed-select: turbo-freq auto mode with SMT off")
->   9bd3f4d5ca2e ("tools/power/x86/intel-speed-select: cpufreq reads on offline CPUs")
->   61246ca53e17 ("tools/power/x86/intel-speed-select: Use null-terminated string")
->   e5bf2623cf49 ("tools/power/x86/intel-speed-select: Remove duplicate dup()")
->   1bf2637725f8 ("tools/power/x86/intel-speed-select: Handle open() failure case")
->   1fd93ae6e2b0 ("tools/power/x86/intel-speed-select: Remove unused non_block flag")
->   74ea37879c89 ("tools/power/x86/intel-speed-select: Remove wrong check in set_isst_id()")
-> 
-> are missing a Signed-off-by from their committer.
+>   037d07aeef02 ("platform/x86/amd/pmf: Fix to update SPS default pprof thermals")
+>   5cca42fb5578 ("platform/x86/amd/pmf: Fix to update SPS thermals when power supply change")
+>   66dc77b5c2a7 ("platform/x86/amd: pmc: add CONFIG_SERIO dependency")
+>   8b6ad2361561 ("platform/x86: thinkpad_acpi: Fix thinklight LED brightness returning 255")
+>   9f093aff1dda ("platform/x86: touchscreen_dmi: Add Chuwi Vi8 (CWI501) DMI match")
+>   a63149e5d662 ("platform/x86/amd/pmf: update to auto-mode limits only after AMT event")
+>   b3c37edce7dc ("platform/x86/amd/pmf: Add helper routine to update SPS thermals")
+>   c02576762825 ("platform/x86/amd/pmf: Add helper routine to check pprof is balanced")
+>   f1db3f08b51d ("platform/x86/amd/pmf: Ensure mutexes are initialized before use")
 
-My bad, these came from a pull-request but then I had to rebase them
-making me the commiter. I've added my S-o-b to these now and I'll push
-out a fixed for-next soon.
+Hmm, this appears to be a new warning.
 
-Thank you for catching this.
+This is the result of my workflow for bug-fix patches, I first
+merge all patches into the for-next branch and then I cherry-pick
+fixes into the fixes branch and send out a pull-req from the fixes
+branch for the current cycle.
+
+AFAIK this is a pretty standard workflow ?
+
+Bit I agree that ideally the duplicate commit ids from this workflow
+should be avoided, so I'll try to change my workflow to putting fixes
+directly on the fixes branch and then merging the fixes branch into
+for-next and see how that goes.
+
+I've also fixed the set of above duplicates by rebasing my current
+for-next on top of fixes since I needed to do a forced push because
+of the missing S-o-b-s anyways.
 
 Regards,
 
 Hans
+
+
 
 

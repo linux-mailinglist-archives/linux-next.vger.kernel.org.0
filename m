@@ -2,113 +2,173 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 895326897BE
-	for <lists+linux-next@lfdr.de>; Fri,  3 Feb 2023 12:29:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BADBC6898D3
+	for <lists+linux-next@lfdr.de>; Fri,  3 Feb 2023 13:32:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232276AbjBCL2y convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-next@lfdr.de>); Fri, 3 Feb 2023 06:28:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34266 "EHLO
+        id S233054AbjBCMcl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 3 Feb 2023 07:32:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232653AbjBCL2v (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 3 Feb 2023 06:28:51 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11C1E2734
-        for <linux-next@vger.kernel.org>; Fri,  3 Feb 2023 03:28:37 -0800 (PST)
-Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[IPv6:::1])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <l.stach@pengutronix.de>)
-        id 1pNuEb-00079L-P7; Fri, 03 Feb 2023 12:28:01 +0100
-Message-ID: <99c4db33a1966bd1979817277facb4a42ba2333f.camel@pengutronix.de>
-Subject: Re: [PATCH 2/3] drm/scheduler: Fix elapsed_ns kernel-doc error
-From:   Lucas Stach <l.stach@pengutronix.de>
-To:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        Intel Graphics Development List 
-        <intel-gfx@lists.freedesktop.org>,
-        DRI Development List <dri-devel@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        with ESMTP id S233077AbjBCMcf (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 3 Feb 2023 07:32:35 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19C1F7A496;
+        Fri,  3 Feb 2023 04:32:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675427551; x=1706963551;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=DUWRCs+QYvrEb/4orQ23xPl+EEvjheL3F8/LB+1zaQs=;
+  b=US49dzA+KXQlVe2Vv6YIG+WfQZLzkZqMvAuyaLcC73LdC5O++KcDNAv0
+   n5jQFKgOOdn4ZoMz3DKYY5znue0GtJsDNb2zdBr3yW+meiUXuCPl3mhft
+   zR9I6qo9IyztTkg45OZtjZZYR8/97X1eLknDexmJp+FfLV7V76x7X3xtG
+   /yEAPxst36k50ZQGXUHhfpZh+H2P7Y0yXSHQLc6rikToRckuLDuU+V/c/
+   KTEdCurkJpVzdep7lYRUD1wPAUe3qzeLx3JmoFdwmhZWqwAUHa/Qc1Yqy
+   PQTPiG2349+rXGzlmle4H4xwxL5jYMN2mjyC4MXm8V0H2o2jmw4Pa91z2
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10609"; a="393329153"
+X-IronPort-AV: E=Sophos;i="5.97,270,1669104000"; 
+   d="scan'208";a="393329153"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2023 04:32:30 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10609"; a="729246750"
+X-IronPort-AV: E=Sophos;i="5.97,270,1669104000"; 
+   d="scan'208";a="729246750"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by fmsmga008.fm.intel.com with ESMTP; 03 Feb 2023 04:32:30 -0800
+Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Fri, 3 Feb 2023 04:32:29 -0800
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Fri, 3 Feb 2023 04:32:29 -0800
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.168)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Fri, 3 Feb 2023 04:32:29 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=WICZPsMvd/vcEOiAwVPzIM9eugq5gb/ZoD3GKIpAjM6IMcYgztQk8e1zYPWU7abChIYsni2+T1nm2Nab+mhx+f8KH6E7XJ6/EICCFD12DrzIslnqjq9ioNQybkTpGUw1ce2K87S4Jr352TUJ4KMhYlvKGP+vwlGXukY1lc/pz98aavBgozj8vW5mVyBecTaJFUIKJzMuSdy/prYs0CmpWQ/fgqPJ9/z+cZS6rXxiVZ5eAvedRFR0dsA/hkaR13+H9UL3G/FLTbYjBN0qKoovuSd7dfVNxwBc9doG4RJep/OCAI/2z75GL7vDwugwsG+RJ4pGwhHNDrhNKArTj+zjQA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wn3qflYdeLRXh290pvDwwBccJf19QZTCaugTxEF8Y80=;
+ b=ni4BXYLzSx2Je4R7wbCN9QIiOnzP8s6zOD7Lsw5/WyPxm/MTX6fQPnYE6C3cFxvfsz0tEwOOQyI8vgy68KtZW0ouKpqlgEWYTe5uuu8Q/I8hMoZt0yUD7rAFE4OBudKN7MVVHsVK9jMxOzJxJW7znWs3aYctlxPKigz/+jdJqARwFGOuSQZIkxL4fZ8o3G/nJCcWy9WxJK7BJEubQdoloqdYCt26QDc/nqKauLa/5jZa8rlvlTBTqxjfquwBqzfXC+pOcXBPEeKttHgr7YQf5i7//HaX7iAXv8NvibbyWu/2vfviZM2MgYFvLvRlwcxKg8TYe81cgdnFiPg4iL3jag==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from BN8PR11MB3556.namprd11.prod.outlook.com (2603:10b6:408:8d::31)
+ by SJ0PR11MB6717.namprd11.prod.outlook.com (2603:10b6:a03:44f::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.29; Fri, 3 Feb
+ 2023 12:32:27 +0000
+Received: from BN8PR11MB3556.namprd11.prod.outlook.com
+ ([fe80::8808:cbc4:63f2:eb7e]) by BN8PR11MB3556.namprd11.prod.outlook.com
+ ([fe80::8808:cbc4:63f2:eb7e%4]) with mapi id 15.20.6064.031; Fri, 3 Feb 2023
+ 12:32:26 +0000
+Date:   Fri, 3 Feb 2023 09:32:20 -0300
+From:   Gustavo Sousa <gustavo.sousa@intel.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Dave Airlie <airlied@redhat.com>
+CC:     DRI <dri-devel@lists.freedesktop.org>,
         Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Matt Roper <matthew.d.roper@intel.com>,
-        Gustavo Sousa <gustavo.sousa@intel.com>,
-        Balasubramani Vivekanandan <balasubramani.vivekanandan@intel.com>,
-        Matt Atwood <matthew.s.atwood@intel.com>,
-        =?ISO-8859-1?Q?Jos=E9?= Roberto de Souza 
-        <jose.souza@intel.com>,
-        Srinivasan Shanmugam <srinivasan.s@intel.com>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Date:   Fri, 03 Feb 2023 12:27:55 +0100
-In-Reply-To: <20230203100215.31852-3-bagasdotme@gmail.com>
-References: <20230203100215.31852-1-bagasdotme@gmail.com>
-         <20230203100215.31852-3-bagasdotme@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the drm tree
+Message-ID: <20230203123220.u74adkj6doafjmqu@gjsousa-mobl2>
+References: <20230203134622.0b6315b9@canb.auug.org.au>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230203134622.0b6315b9@canb.auug.org.au>
+X-ClientProxiedBy: BY5PR13CA0014.namprd13.prod.outlook.com
+ (2603:10b6:a03:180::27) To BN8PR11MB3556.namprd11.prod.outlook.com
+ (2603:10b6:408:8d::31)
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
-X-SA-Exim-Mail-From: l.stach@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-next@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8PR11MB3556:EE_|SJ0PR11MB6717:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4a9308bd-1a53-498a-834c-08db05e2b550
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: arNAxsJaQhQ9N/BqTlj0UvDDeUIUO8K9mpGrgbpT4JQ8eD4vzXDYb45cG4EhRoQ90rpU/aq3q7pZXojWoZcitCSJB9PD1KiXe33TokMFAaAWhcozQmLeKfrWoulM/vYELZU5S3jrN+ZPSFObJlvYYFkMN7SXw+XscbvxhMkOEXTOqeWFaMfOMF4t3AzlGbVF8wB5EBCmmTlEsd+QZdXseY0CgiKtuk00aX/5vCp//B0V/7NBJtpXciPXISweD8kEZXhFDk71aLMzE5mFsbdxd4JRY0raKP+Td+mMi0UIhtxvyJTByWaxsXw+D5lu/X1B2Q4oF84taWTMRy0B2k1nA0yXI3spUzytHZRy/h+CZv0TVZJ5vCuFLyD5Y5ZYgNMTdwd6TqPu/Cd8AFCgesYGZmu7wPHcBjflRnPeY5JUHcdHXQ4A/iDTDV91nh6wX3J5WftLoO2OJrCcbPGSFTLRnBFmm/cxabjRXvi3q0DEVuLknWYPFh9S1BhpGYmbCuHCGJdCFbGKv/SbNICjMf4sdAHyu4Vrd+Brphdyye4DH9dKxVW5CUpOkE+9lk+/2yZJjhcN84NTZ8x8T3s3RAOnuZeTx+1XQFxxivnhMzlYmYw=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR11MB3556.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(7916004)(376002)(39860400002)(366004)(346002)(136003)(396003)(451199018)(316002)(110136005)(54906003)(66476007)(66946007)(66556008)(33716001)(8676002)(41300700001)(4326008)(82960400001)(86362001)(38100700002)(6512007)(186003)(9686003)(26005)(478600001)(1076003)(44832011)(4744005)(5660300002)(2906002)(83380400001)(8936002)(6486002)(966005)(6666004)(6506007);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ZvriwuQ8ndK5EwkNIPI+Nm45//oTtUOwAY53vt6THhqSUlXv+UUrFCTUsxRp?=
+ =?us-ascii?Q?EjquTWfLvTMbY7oUncQCxqiOj3vUiMimLPDH4/coT/zwupsJNXjp8V6+/d44?=
+ =?us-ascii?Q?HPHtV6c2ynQ/eqkLPG6nN0LsvBN5uwf73v+di4rYVxeKaMoXvjcN3gjT4Of7?=
+ =?us-ascii?Q?HNGML7zkVhx6hOQ5Yh+kdANfIzqNEmzIaQ888+SanbM05T40f9nu2JGOsNYA?=
+ =?us-ascii?Q?/ScdWrvaL6ADeZiWhfFt+mL51nQLvuKtppgJhkdVzSQgMlGzr6k2ZcJdPS5h?=
+ =?us-ascii?Q?iyd6TShTVeIG7XYqM3YfU+i4+XC2hZ8fb5rKA2J1oqZJo1kk6CXOQOjYqDK/?=
+ =?us-ascii?Q?6mgsaf87RNi/TBowMDpux+lQIy3ngP34ndgu5hR670enE1IjLvXNovehywcD?=
+ =?us-ascii?Q?pDp46Ju9cUmpmmJAs5/qR2oAWU2MhfAViryGdwLFBvdKJkK7Coz2s7rOshfp?=
+ =?us-ascii?Q?HK7JZjjTi2kBRVVvuMpROV7vB9DCaICRQehfPyePrOv1plRAZtb6BYez2FJc?=
+ =?us-ascii?Q?0tuu9rMToWVGdmlcDlPKyBVBhwMTRw+ooaSLOSToL1Mtjj90w33lUMZrdVDh?=
+ =?us-ascii?Q?V51KwtdtcP5JUhZdKjtGSgCpm0V+7uEgB1tslWbi26I5qImhV36jlAbmxYZE?=
+ =?us-ascii?Q?ZYEEQkMxkM4kjS7HDiW1nyIhxJJz7lIrw4OK+7Efd678lotMfESAHVjM+bO0?=
+ =?us-ascii?Q?qpSKtd9J/PZrJa1g9nlxt1XB54wlhcJ9Oz1ajvFmJzfZm5DpZUnn1Owl2ycq?=
+ =?us-ascii?Q?b3yA8l3AD2Kgn6H6rbsLyyv5zpm/YHMqzEcUZkOcRFMtJKYhMLFx9X79t99m?=
+ =?us-ascii?Q?38+mxic2gmFeyfttrgk7FkiHkjv7d/obolPyucm55+9flCApSmKm6AboFgPR?=
+ =?us-ascii?Q?43vgq7k7ku4cpVqfjzcYjZWBKlhBR/Mo/oZUdJXPuRhDQ3+gPjbrHKuj8uoE?=
+ =?us-ascii?Q?KR5neM8/GTIsemW8FJuekd2+oRSwf2FbD/UQMlJKmcbOzM2XluD2NvydKQ+r?=
+ =?us-ascii?Q?JfeQWofcI0N309W4JNYAkN9cG0l3Q0GH5qwz1zc68V5lcD1n9a5iDd8Wyrw6?=
+ =?us-ascii?Q?giMTd3WPjHCpe6eccmhG0JRNpXR0IdHDr2IGlyz2EepI5+hkzasT6mPPNh2T?=
+ =?us-ascii?Q?P/5yXh6z61MKVAVMRxrPz7g5/fQ2VecoEBYVo0IGvMZ83rPz7kL8Nbi6M0Te?=
+ =?us-ascii?Q?9L+GK5wY8ftJdyPVvkaGtY9kslSVn2bWQeNhNvN8Feyjfi1+15mTaLYWRTtx?=
+ =?us-ascii?Q?vm8AssobsImncJrY/9iQPDQAHUqdfD9U4vpnB5Zv0cMHOyfd+WDIIjo48pkc?=
+ =?us-ascii?Q?4ToMebAqaFfUK9AByb8Ui5XiyXjnfpBZ78dLtf2AuRJHyqKvaiBg4Dll+5I8?=
+ =?us-ascii?Q?hP35NLNuStqsh4SHZILZOi4RbWjabgP1uNhbOaz/n6MldQAwYTsud8k0QXdH?=
+ =?us-ascii?Q?+KjYL+waANdm7mgQHLcONpp4TnqjJstSXZxFga/ZCiZRGhQ4GKuTvPFNL8dP?=
+ =?us-ascii?Q?3JXbgry2bTv+8/HOkLrJjssckBQyAHtb43OeNSLXbKiBAdyAn1BHV1YlkEv5?=
+ =?us-ascii?Q?EmcPDBLPTjjqeJGRRuV4sWV9CVzp94lGDvakgiucGqATtx+CJJ6DS3bpHzvN?=
+ =?us-ascii?Q?7A=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4a9308bd-1a53-498a-834c-08db05e2b550
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR11MB3556.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Feb 2023 12:32:26.7163
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: xHf54edSlNoIBS8qFQOnSl7lvpYN0pkjRroXk8AuTypjhZZQH6e0M/6zuUalWX/b1f9LioUIVuyforbqXK5C+w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB6717
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Am Freitag, dem 03.02.2023 um 17:02 +0700 schrieb Bagas Sanjaya:
-> Stephen Rothwell reported htmldocs warnings:
+On Fri, Feb 03, 2023 at 01:46:22PM +1100, Stephen Rothwell wrote:
+> Hi all,
 > 
-> include/drm/gpu_scheduler.h:232: warning: Incorrect use of kernel-doc format:          * @elapsed_ns
-> include/drm/gpu_scheduler.h:238: warning: Function parameter or member 'elapsed_ns' not described in 'drm_sched_entity'
+> After merging the drm tree, today's linux-next build (htmldocs) produced
+> this warning:
 > 
-> Fix the error by appending missing colon to @elapsed_ns name in its
-> kernel-doc comment.
+> Documentation/gpu/i915:64: drivers/gpu/drm/i915/gt/intel_workarounds.c:32: WARNING: Inline emphasis start-string without end-string.
+> Documentation/gpu/i915:64: drivers/gpu/drm/i915/gt/intel_workarounds.c:57: WARNING: Inline emphasis start-string without end-string.
+> Documentation/gpu/i915:64: drivers/gpu/drm/i915/gt/intel_workarounds.c:66: WARNING: Inline emphasis start-string without end-string.
+> 
+> Introduced by commit
+> 
+>   0c3064cf33fb ("drm/i915/doc: Document where to implement register workarounds")
 > 
 
-Thanks, I've added this to the etnaviv tree.
+Hello all.
 
-Since the commit is only in -next and not a non-rebase tree yet, I
-might be tempted to squash the fix into the offending commit. What
-would be the right way to credit you for the fix in that case?
+First of all, sorry about that!
 
-Regards,
-Lucas
+There is already a patch[1] in intel-gfx mailing list fixing that and it has
+already received an r-b. It just needs to be applied by a maintainer.
 
-> Link: https://lore.kernel.org/linux-next/20230203135027.1a4679d3@canb.auug.org.au/
-> Fixes: 248cd9b265fca6 ("drm/scheduler: track GPU active time per entity")
-> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
-> ---
->  include/drm/gpu_scheduler.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/include/drm/gpu_scheduler.h b/include/drm/gpu_scheduler.h
-> index 9a50365621ed8d..9db9e5e504eeb3 100644
-> --- a/include/drm/gpu_scheduler.h
-> +++ b/include/drm/gpu_scheduler.h
-> @@ -229,7 +229,7 @@ struct drm_sched_entity {
->  	struct rb_node			rb_tree_node;
->  
->  	/**
-> -	 * @elapsed_ns
-> +	 * @elapsed_ns:
->  	 *
->  	 * Records the amount of time where jobs from this entity were active
->  	 * on the GPU.
+[1] https://patchwork.freedesktop.org/series/113193/
 
+--
+Gustavo Sousa

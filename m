@@ -2,119 +2,109 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1236368A7B2
-	for <lists+linux-next@lfdr.de>; Sat,  4 Feb 2023 02:56:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E297168A9BD
+	for <lists+linux-next@lfdr.de>; Sat,  4 Feb 2023 13:15:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231511AbjBDB4l (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 3 Feb 2023 20:56:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60216 "EHLO
+        id S231932AbjBDMPH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sat, 4 Feb 2023 07:15:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229657AbjBDB4k (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 3 Feb 2023 20:56:40 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89180113C8;
-        Fri,  3 Feb 2023 17:56:39 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id f16-20020a17090a9b1000b0023058bbd7b2so5944888pjp.0;
-        Fri, 03 Feb 2023 17:56:39 -0800 (PST)
+        with ESMTP id S229877AbjBDMPG (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sat, 4 Feb 2023 07:15:06 -0500
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E962613DD3;
+        Sat,  4 Feb 2023 04:15:04 -0800 (PST)
+Received: by mail-ej1-x62d.google.com with SMTP id mf7so22173709ejc.6;
+        Sat, 04 Feb 2023 04:15:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KAWQVltchINdESu1keirl+Juwz9kMSkbmqmPLABnVbo=;
-        b=QTuOo3d0ewbioZYf6mnFIAlDpeSCJHTbUuksJIgSc6sVTD/qzHLKCQAj5xBdOM2bmO
-         Soo707EBxlJBabfYQwsYxXbrjFzpIxEqeVQPd5sLdmlTvcuBcIi9QE4l1HwQAO+k7bjc
-         boc2GIDowt/ri8sHZRd0uJXZN4qE9R6FUeZwvG0VTWCr229rh3THEWu+0uVg20392Win
-         Im6B9qUX8zWdMoD2w4ivMDJqXf3614CjuknmLhcVurQCzn6AcCFrHDStbLJ3ET1rRjhf
-         XcFEzstYVHWA7dbx2kCTawoGgAjJ3HyKzMNuZ7/wCCcox6ptbGOjmB6fXVCFhq9AoXr/
-         TsrQ==
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:message-id:subject:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=DcLZda2GIW9FF0wLQg8CZVOr2LxDbAuDjShayw2MbDs=;
+        b=XUSif1Fp5FlrgbeYWO8T4vmfWe++TAT9Td+cvqsfyqMtthQx0Xoj5FeEkUIEnE/6j5
+         Dk9QrMWsjSQR22ef2Q777/XZZ8xfQBUFLxt77eXVR3+ArQbzv+CfjHliDIohcb+FhA+X
+         cyrGVEGMcGMb4Vn3r48iBxp2ZN9SkRuPQhfP5YedlgnG+GbYR9mfPkecROK1yA2QtTmf
+         0ygi2Q6ptXh7H9hHj/zFGhrndz3RSvcwByLxkHHNdASlDu/x0BNaUQBVD0vHSJLO5ruU
+         SDb0x3ZTeDskoiV2uyEFxubWaoVRvEni4TfFOKeqsyIl/2pdcI9Bh0XdPYpj+xNKA492
+         mpbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KAWQVltchINdESu1keirl+Juwz9kMSkbmqmPLABnVbo=;
-        b=sfTF80694XOut3g1MEbJCX+qXWAXYeb462CUFwnqg6WO0Th19h/8/nshqavg52Cv8g
-         4H+DJpqGw7oMrVhX8BFwoVa/9Yhs8jmINVJEOTehdkLdDKrRLXth6s8eTx8wt0KDICPS
-         39y2uqurAsjgqZbiO3Zg/NRsjS/3QuuMd6eAUMcqzLOqfpvq4GA2iBnpUJHDD+OaSzFm
-         5YKGfd7HRBdrdtn+4oclh4iitq9wFU5EPbi3CCWjBuSyF7WB0DUTCyScH1J3uTT5/eEk
-         7PVtViBwbi12CBX+X3Jg4we6eGOT/QwObcXK4lPHER0KT5bS7eJ9LhS95zAW+CG01IA4
-         Okyg==
-X-Gm-Message-State: AO0yUKWYgJ+lM+QG+2J5Bbukgg1YLL76cbt4TDIA9eO9uGbWlcX24Eo/
-        grZpngQ2B1wjale7Ulepeq0=
-X-Google-Smtp-Source: AK7set8sBWWRuULWZIPZU3d4F7wNKydipPZKkOR5r2H8zeah5I958RN7LP7qBe8E0SYh9UqoNtYrQA==
-X-Received: by 2002:a17:902:c944:b0:196:4652:7cff with SMTP id i4-20020a170902c94400b0019646527cffmr13150025pla.11.1675475798893;
-        Fri, 03 Feb 2023 17:56:38 -0800 (PST)
-Received: from [192.168.43.80] (subs02-180-214-232-73.three.co.id. [180.214.232.73])
-        by smtp.gmail.com with ESMTPSA id je10-20020a170903264a00b00189e1522982sm2265553plb.168.2023.02.03.17.56.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Feb 2023 17:56:38 -0800 (PST)
-Message-ID: <6a5592a8-10f9-9c08-0a4b-fcf49d8acc1f@gmail.com>
-Date:   Sat, 4 Feb 2023 08:56:30 +0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 2/3] drm/scheduler: Fix elapsed_ns kernel-doc error
-Content-Language: en-US
-To:     Lucas Stach <l.stach@pengutronix.de>,
-        Intel Graphics Development List 
-        <intel-gfx@lists.freedesktop.org>,
-        DRI Development List <dri-devel@lists.freedesktop.org>,
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:message-id:subject:to:from:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=DcLZda2GIW9FF0wLQg8CZVOr2LxDbAuDjShayw2MbDs=;
+        b=v1DNpUdnSiboHLOkLw2X2yjG78YdZ1g606CJ7T5atgSHzHIhaT7A5J7BlAYcpcCE6+
+         RU5U5WmwoV7AunavzvlVxgtHTFQa72rQfihpzYWTZZHDORX51ZbesWK3ZrOwsrHOITDb
+         vfeTIrvkd4HmuaWtswU/EgC0A1+xwGbmPaeYNncZnCZ67DwN5jFtL3pCjtaNgD0gJO5S
+         ehiXrFyJHJRmJsTW1nUGJzVhI9+2+B47DLZwSkDByj6PDUHVvtxMULEdI5wI14RlYdYa
+         a8oX9dGuXw7sOR5bXGmLeo2OumdtNA8nJGRKMK8aDUXKQ0fRBj21kUkQUmsnjPwQ8Jra
+         H77w==
+X-Gm-Message-State: AO0yUKX3uF8TjtCtf8hCX6m8dWvm7I2ZP3bQKBThkhwZGwc012CTMP5d
+        yxTEjjdZUjYVnAB1uLHdUm/J/eXp668=
+X-Google-Smtp-Source: AK7set+ROpQ9L9O2JG0p0RoOuhi61USNBoaXtEKd1Qx8CuJ6L6SlhQTol1M3dhr6th4/Cnid2s5A1A==
+X-Received: by 2002:a17:907:7b99:b0:88d:ba89:1846 with SMTP id ne25-20020a1709077b9900b0088dba891846mr10375569ejc.23.1675512903081;
+        Sat, 04 Feb 2023 04:15:03 -0800 (PST)
+Received: from jo-einhundert ([2a02:908:13d6:2180:e7f7:5368:343b:83fd])
+        by smtp.gmail.com with ESMTPSA id c21-20020a056402101500b004a2440f0150sm2402992edu.97.2023.02.04.04.15.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 04 Feb 2023 04:15:02 -0800 (PST)
+Date:   Sat, 4 Feb 2023 13:15:01 +0100
+From:   =?iso-8859-1?Q?J=F3_=C1gila?= Bitsch <jgilab@gmail.com>
+To:     Greg KH <greg@kroah.com>, Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Matt Roper <matthew.d.roper@intel.com>,
-        Gustavo Sousa <gustavo.sousa@intel.com>,
-        Balasubramani Vivekanandan <balasubramani.vivekanandan@intel.com>,
-        Matt Atwood <matthew.s.atwood@intel.com>,
-        =?UTF-8?Q?Jos=c3=a9_Roberto_de_Souza?= <jose.souza@intel.com>,
-        Srinivasan Shanmugam <srinivasan.s@intel.com>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-References: <20230203100215.31852-1-bagasdotme@gmail.com>
- <20230203100215.31852-3-bagasdotme@gmail.com>
- <99c4db33a1966bd1979817277facb4a42ba2333f.camel@pengutronix.de>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <99c4db33a1966bd1979817277facb4a42ba2333f.camel@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        linux-usb@vger.kernel.org
+Subject: [PATCH v2] usb: gadget: add doc to struct usb_composite_dev
+Message-ID: <Y95MRZZz3yC5lETB@jo-einhundert>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y9kAryJ6Y2lQyKZK@kroah.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 2/3/23 18:27, Lucas Stach wrote:
-> Thanks, I've added this to the etnaviv tree.
-> 
-> Since the commit is only in -next and not a non-rebase tree yet, I
-> might be tempted to squash the fix into the offending commit. What
-> would be the right way to credit you for the fix in that case?
-> 
+Added documentation to new struct members for WebUSB:
+* bcd_webusb_version
+* b_webusb_vendor_code
+* landing_page
+* use_webusb
+to avoid warnings in the build of htmldocs
 
-On SoB area, you can add:
+Fixes: 93c473948c58 ("usb: gadget: add WebUSB landing page support")
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Signed-off-by: Jó Ágila Bitsch <jgilab@gmail.com>
+---
+V0 -> V1: added Reported-By and Fixes Tags
+V1 -> V2: fixed Reported-by tag (capitalization of "-by" was wrong)
+          also post to linux-usb
 
-[Bagas: Append missing colon to @elapsed_ns]
-Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+ include/linux/usb/composite.h | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Thanks.
-
+diff --git a/include/linux/usb/composite.h b/include/linux/usb/composite.h
+index 91d22c3ed458..7ef8cea67f50 100644
+--- a/include/linux/usb/composite.h
++++ b/include/linux/usb/composite.h
+@@ -432,6 +432,10 @@ static inline struct usb_composite_driver *to_cdriver(
+  * @qw_sign: qwSignature part of the OS string
+  * @b_vendor_code: bMS_VendorCode part of the OS string
+  * @use_os_string: false by default, interested gadgets set it
++ * @bcd_webusb_version: 0x0100 by default, WebUSB specification version
++ * @b_webusb_vendor_code: 0x0 by default, vendor code for WebUSB
++ * @landing_page: empty by default, landing page to announce in WebUSB
++ * @use_webusb:: false by default, interested gadgets set it
+  * @os_desc_config: the configuration to be used with OS descriptors
+  * @setup_pending: true when setup request is queued but not completed
+  * @os_desc_pending: true when os_desc request is queued but not completed
 -- 
-An old man doll... just what I always wanted! - Clara
+2.37.2
 

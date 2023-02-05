@@ -2,48 +2,44 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A78668B1AF
-	for <lists+linux-next@lfdr.de>; Sun,  5 Feb 2023 21:53:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C56168B1CA
+	for <lists+linux-next@lfdr.de>; Sun,  5 Feb 2023 22:09:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229513AbjBEUxq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 5 Feb 2023 15:53:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55482 "EHLO
+        id S229494AbjBEVJK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 5 Feb 2023 16:09:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjBEUxq (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 5 Feb 2023 15:53:46 -0500
+        with ESMTP id S229379AbjBEVJJ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 5 Feb 2023 16:09:09 -0500
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8037A1A4A0;
-        Sun,  5 Feb 2023 12:53:44 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 800D9E3B5;
+        Sun,  5 Feb 2023 13:09:07 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P91nv19zMz4xP9;
-        Mon,  6 Feb 2023 07:53:39 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P927j4q91z4xP9;
+        Mon,  6 Feb 2023 08:09:05 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1675630419;
-        bh=WNtafT6Eqdqn9I8Tn/3HQdhCkFl2ZAcSZMuhO2qyoiQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=XpUN6KPsb96bUfMdw2Rd4V19mkexIW/isN+KNg8jYQPmfvKeQxuo/53zTraA0dDA5
-         DVE04L1+ju8p0EoKfqTYgf1N4dB5Jg86fYjFmqgSCUe4vU+oKQW6uQ3W5MSGXOJ/0w
-         c2hOxvR9e40ja4EoMVV3uFGZyyS/OZ5ncjKn2oH3X3Ipu6Yd+ClzfdITXIHL6rt0Tt
-         IBAg/jiSIOVv7w4vlWHrjZf5ojmH3iVOl25HMjG4jEa7gAJC9SE+eCXryqLJUJEQ6e
-         H0sEuDwJY9tdGzGM16bI+RBrmfbukdqAb7rf5uzhNvRw4bMu737ZFQAY9BQB4Qy/YJ
-         aTh5H7neimWjw==
-Date:   Mon, 6 Feb 2023 07:53:37 +1100
+        s=201702; t=1675631345;
+        bh=gzv7BUsqb+iqyfn1FZUDeB/KqUoFa0v4EsNMoW9YcAg=;
+        h=Date:From:To:Cc:Subject:From;
+        b=RGSFId1UHSMYQNaiZZFDnNm/F87HcaQEmxEcAy1SG2oTuK9YA8q9aoEhYl6ohpQtW
+         9ueuGrESc8nW2w2PIPAOxmL3d71GRZKmbD1U+aivG2hetqw1DCWqPF6VtL/qciQLkr
+         umSyOcg9y9mp4qH13+w/bVw7BDF9OPr6wb/LZ7ZIl1YuUxDG/GfAUmgNfuQW9FO/dI
+         ttHCWRpmI3s3WDVZiw7tjbneU/uuft38j04O8ebR7zpC++baoBqayCurvoFjK9M5No
+         P69AqQ+bq39YkHY0u4LxqJzfZbXPxQdoCVrDGFIT3HKjroMovyg9kcBbP84jdVKr6F
+         Sd97YhlRXZ3nw==
+Date:   Mon, 6 Feb 2023 08:09:04 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof =?UTF-8?B?V2ls?= =?UTF-8?B?Y3p5xYRza2k=?= 
-        <kw@linux.com>, Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-next@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: Update PCI git tree location for linux-next
-Message-ID: <20230206075337.43b3e4da@canb.auug.org.au>
-In-Reply-To: <20230203222705.GA2054108@bhelgaas>
-References: <20230203222705.GA2054108@bhelgaas>
+To:     Andy Gross <agross@kernel.org>
+Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the qcom tree
+Message-ID: <20230206080904.4de83254@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/W36l+Qb0OaNZY+dF3rhgxuG";
+Content-Type: multipart/signed; boundary="Sig_/LbqtGm=EbSzIzZn0cuA/JXt";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
@@ -54,46 +50,45 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/W36l+Qb0OaNZY+dF3rhgxuG
+--Sig_/LbqtGm=EbSzIzZn0cuA/JXt
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Bjorn,
+Hi all,
 
-On Fri, 3 Feb 2023 16:27:05 -0600 Bjorn Helgaas <helgaas@kernel.org> wrote:
->
-> Hi Stephen,
->=20
-> Can you please replace this PCI tree:
->=20
->   git://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git
->=20
-> with this new shared one:
->=20
->   git://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git
->=20
-> The branch names intended for linux-next ("for-linus" and "next") are
-> staying the same.
+In commit
 
-All done.  Do you want any contacts for this tree added to my list?
+  19eee67386fe ("arm64: dts: qcom: sc8280xp: add p1 register blocks to DP n=
+odes")
+
+Fixes tag
+
+  Fixes: 6f299ae7f96d ("arm64: dts: qcom: sc8280xp: add p1 register blocks =
+to DP nodes")
+
+has these problem(s):
+
+  - Target SHA1 does not exist and the Fixes commit description is the
+  same as the fixing commit description.
+
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/W36l+Qb0OaNZY+dF3rhgxuG
+--Sig_/LbqtGm=EbSzIzZn0cuA/JXt
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPgF1IACgkQAVBC80lX
-0GxIrAf/ZpmyvpuESO+/u2qbLOHRdV+56ZRGRSuUBJXNRdKKhLHlyVACx2e2yxwP
-WPpAZhroiCx9jS24dPVxrRUVPmFllUnkYQG09P3blC3DhGL1P2mYgFDodc5OAVwf
-HTDuORPalrfjlMUXdWgvR8OZk5UEEWOI0DSb1Wtatj+I8NG+yvJodgLtmXOWBPCD
-NxKEPxrue3s1TnLrtlHmS8UBK2+MMPaPI526XWnD0X3B7XU9cFzIQfaIBpMhfwFQ
-/dTrm7j51leLC8xs1XPs277zxZACln794V4cRfBgRhXOeDT6j2/Ir5aCY5fJ/BxP
-QLjHhGtln+g+0cOlMNI7pKc7tzEWNw==
-=a6kj
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPgGvEACgkQAVBC80lX
+0Gx5/Qf/Snb6eG+vVdD1XPcRnjtMog0sJxzfLInC5taZcjV5GTxFAUFAqqfrsyX9
+CdPA0+Lf2CKRZUhc8mqWRikqH7h5oUxO9mTPsSmjZ0bss5JAPG6ntLo4QZ9uEkyS
+LPxeH5uJe9iCxKCmjecg8DCje7tvzeEztGWw9aAvWN3Zjm6VlYaTv2SDLBgVhbez
+YyTYa7Vb5DfgCRrBr2GBSJVXz3MPMBozi3YetG7j6qm8jxataA1Dg+EyIG/gKroS
+tRUHimtqpV6yhs0zSkgiw+psi+v+bcDmvt92TtQ9FAd0oB2QYsjW70us6IZca0a4
+XQcgUZ4mQ0jkC9FpsAeeTXSx5PcXTw==
+=mWXJ
 -----END PGP SIGNATURE-----
 
---Sig_/W36l+Qb0OaNZY+dF3rhgxuG--
+--Sig_/LbqtGm=EbSzIzZn0cuA/JXt--

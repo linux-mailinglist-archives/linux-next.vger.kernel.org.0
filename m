@@ -2,91 +2,123 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BE3768B32C
-	for <lists+linux-next@lfdr.de>; Mon,  6 Feb 2023 01:17:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D920268B332
+	for <lists+linux-next@lfdr.de>; Mon,  6 Feb 2023 01:21:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229619AbjBFARd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 5 Feb 2023 19:17:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42886 "EHLO
+        id S229606AbjBFAVt (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 5 Feb 2023 19:21:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229640AbjBFARa (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 5 Feb 2023 19:17:30 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4C4A18177;
-        Sun,  5 Feb 2023 16:17:28 -0800 (PST)
+        with ESMTP id S229490AbjBFAVs (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 5 Feb 2023 19:21:48 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A752211E;
+        Sun,  5 Feb 2023 16:21:46 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P96Jy2rMwz4xN4;
-        Mon,  6 Feb 2023 11:17:22 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P96Q008SWz4x1f;
+        Mon,  6 Feb 2023 11:21:43 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1675642644;
-        bh=thd0k+KOJmz5QA2CBM6ENADwCGJnyT9yH3eN29TIr30=;
+        s=201702; t=1675642905;
+        bh=kdSBUm1XzmULWwCbz+MsNw6BwD9DMZRj+DEeYUGV4II=;
         h=Date:From:To:Cc:Subject:From;
-        b=h6B/hzbQjLljSGry/HuSsD1Gj1MHc+e5UBPVqaIP26Pz/+CTXAtrrGZkKy5TTX0GD
-         jdeh5vin/vJpKMKIJJdyXM7RQTdIeFLk57LTiJMzWQ4vqMaWPxXkgpv34hxeJj4UQZ
-         gb7Kx95GiuiY82/y0j/tbp2u1T9VorDKa+TrzPEBtZwnefhscP1IkZ0Z+qOaERU4wC
-         L0OHiE3119avMZU/wtpw9dHDXuV3AscZrYR0nwoAtI1ZkKL0dpWwfToB1uZ27urF6L
-         De+AR93aBnuP++q864Xa12wYNUjp371RAixGEVLnF/GIP2dueusfj4poTrHdXeBuTe
-         mPcYNJXdQJfYQ==
-Date:   Mon, 6 Feb 2023 11:17:21 +1100
+        b=DN8Ju3eQ0NRl/0/u6o+i5RCg68VN6SMS76jrEXkCYcvY8tcvLxrKs9DeSJxDRmWmo
+         OKuFAHpiHhs0fbnbKsVTT8W4m8Lm3KHG/qG66UB6dDQQ9+FGrOvXmBgEI81ciNhTAR
+         CLd25zQnVB+WPf9hhTlAY+7+b0bHDKugWpeIC8ZyFpLN5+5poN9Dzpq/WLED54qMTG
+         HBmRAB5BfqDWHrsh+VANdUZCgBJb50WxSWYwgy2EHvp/9yTdQXzHJ2ZnMWMiSWzdDd
+         Rer+HibenBRBI+ZppWucyXl/5etHE+3lQ8oTA+4G0XpL9w8tW3VBbjSwn/XE1zBgVe
+         u6j+Pa9HKymfw==
+Date:   Mon, 6 Feb 2023 11:21:43 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alexandre Torgue <alexandre.torgue@st.com>,
+To:     Sebastian Reichel <sre@kernel.org>,
         Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>
 Cc:     ARM <linux-arm-kernel@lists.infradead.org>,
-        Patrick Delaunay <patrick.delaunay@foss.st.com>,
+        Alina Yu <alina_yu@richtek.com>,
+        ChiYuan Huang <cy_huang@richtek.com>,
+        ChiaEn Wu <chiaen_wu@richtek.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patch in the stm32 tree
-Message-ID: <20230206111721.034f57e6@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>
+Subject: linux-next: manual merge of the battery tree with the arm-soc tree
+Message-ID: <20230206112143.71d626bd@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/gC9tCr.uC=8k1ggQelnWFPT";
+Content-Type: multipart/signed; boundary="Sig_/CEzHtiX6X7NY758jd=lQFyO";
  protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/gC9tCr.uC=8k1ggQelnWFPT
+--Sig_/CEzHtiX6X7NY758jd=lQFyO
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-The following commit is also in the arm-soc tree as a different commit
-(but the same patch):
+Today's linux-next merge of the battery tree got a conflict in:
 
-  4e74ad9f3af6 ("ARM: configs: multi_v7: enable NVMEM driver for STM32")
+  drivers/power/supply/Makefile
 
-This is commit
+between commit:
 
-  f46bbb7f9eff ("ARM: configs: multi_v7: enable NVMEM driver for STM32")
+  a0f831756b26 ("power: remove s3c adc battery driver")
 
-in the arm-soc tree.
+from the arm-soc tree and commits:
+
+  4a1a5f6781d8 ("power: supply: rt9471: Add Richtek RT9471 charger driver")
+  6f7f70e3a8dd ("power: supply: rt9467: Add Richtek RT9467 charger driver")
+
+from the battery tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/gC9tCr.uC=8k1ggQelnWFPT
+diff --cc drivers/power/supply/Makefile
+index 8cb3c7f5c111,f8f9716d3ba4..000000000000
+--- a/drivers/power/supply/Makefile
++++ b/drivers/power/supply/Makefile
+@@@ -52,8 -54,12 +52,10 @@@ obj-$(CONFIG_BATTERY_DA9150)	+=3D da9150-
+  obj-$(CONFIG_BATTERY_MAX17040)	+=3D max17040_battery.o
+  obj-$(CONFIG_BATTERY_MAX17042)	+=3D max17042_battery.o
+  obj-$(CONFIG_BATTERY_MAX1721X)	+=3D max1721x_battery.o
+ -obj-$(CONFIG_BATTERY_Z2)	+=3D z2_battery.o
+  obj-$(CONFIG_BATTERY_RT5033)	+=3D rt5033_battery.o
+  obj-$(CONFIG_CHARGER_RT9455)	+=3D rt9455_charger.o
++ obj-$(CONFIG_CHARGER_RT9467)	+=3D rt9467-charger.o
++ obj-$(CONFIG_CHARGER_RT9471)	+=3D rt9471.o
+ -obj-$(CONFIG_BATTERY_S3C_ADC)	+=3D s3c_adc_battery.o
+  obj-$(CONFIG_BATTERY_TWL4030_MADC)	+=3D twl4030_madc_battery.o
+  obj-$(CONFIG_CHARGER_88PM860X)	+=3D 88pm860x_charger.o
+  obj-$(CONFIG_CHARGER_PCF50633)	+=3D pcf50633-charger.o
+
+--Sig_/CEzHtiX6X7NY758jd=lQFyO
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPgRxEACgkQAVBC80lX
-0Gw8Bgf+N0SlS5P9uqf51MzXJoaaD3Hw+SKoLMn5CXCkIdrh3uW5mXH4XYS00423
-Z9hVRCvzDRAQxmqfoKb1LQN/2WP+W7ZJtu1jEfyHwg6VQoHulAmz5T7qjr9cLCiq
-stxOXy2CfKveEvf5fwQQurXeAu0GALRiAITtePDU+iLq+fY67nzvkjjq4gY/gVv0
-ilClAq6zfK/ZY3YWi/Q9Su7ujwbPPRc20TgmjS55SdU0pz8LMK52/cs0B6sPNXiE
-wESQ55DkZWgswXhpENBw+AcUG5fLWwFftE70/0beSoSgS6hQCwqJpKb2vFDoPHLn
-lAJEPfmlNX5px/yRJ0U4MWIFGFlBLg==
-=vO3s
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPgSBcACgkQAVBC80lX
+0GzgcAgAjclu0BzM5kku7VdMju5VEq7oVPvkc2p/ZDFq99YPISUuA/MTysfXSmfj
+AbA2Ewqhfpt0DWK82dEGxfmQCbzL/zg4EFdovxQwMa2lrlGPeEFpPoil234lAz7P
+a2JvN1K5M+ZhqY0T5cBEb5PKhSZsyR7M9d2nr0gigJOds2fnVeOT2i8XWPln7JJ1
+M2nkSSJ9hhkBfcDAf4/YRhI4M9WMAGSSCoIxQ+XXLLj//K6CmAqsPH9gqE0+YR5l
+ynrnvHyy7akZ6pEdD7sIwhp0qSMaO9vyHKgGp5HyMOUH1Ccd7Qo5VUDpw8JjnaHA
+4e4Ll/RzE0fE9c83QNE2KAwx6a99rw==
+=8qru
 -----END PGP SIGNATURE-----
 
---Sig_/gC9tCr.uC=8k1ggQelnWFPT--
+--Sig_/CEzHtiX6X7NY758jd=lQFyO--

@@ -2,133 +2,98 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6248F68B429
-	for <lists+linux-next@lfdr.de>; Mon,  6 Feb 2023 03:33:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D63A68B430
+	for <lists+linux-next@lfdr.de>; Mon,  6 Feb 2023 03:40:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229536AbjBFCdO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 5 Feb 2023 21:33:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52390 "EHLO
+        id S229556AbjBFCkZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 5 Feb 2023 21:40:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjBFCdN (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 5 Feb 2023 21:33:13 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8CC61714B;
-        Sun,  5 Feb 2023 18:33:08 -0800 (PST)
+        with ESMTP id S229452AbjBFCkY (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 5 Feb 2023 21:40:24 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 025B7196A9;
+        Sun,  5 Feb 2023 18:40:22 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P99KY0PqSz4x2c;
-        Mon,  6 Feb 2023 13:33:04 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P99Tw45ynz4x1d;
+        Mon,  6 Feb 2023 13:40:19 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1675650786;
-        bh=SLdOLyM7vaI4ciB/in3dg4uOiTibeXrg8ha3uWc292A=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ifd6OVRfeRaYJcTZeCkIthPrQHmDPMeXRs1VrVKvHRMKJZajoB21yYpWFyKaWNJeU
-         M87oDj9QGAWRqE4zbPtlhTEjITRy0/yNofLgWBErptA/2ipRgjw2QKoxp+kT8hiLFM
-         OM2FFn/0nMBEMZ9w4+cSu3Vd5kfwhYf4YKYIuhe1SNfHn0URkYPybQhvdF3qogdGEc
-         qn2ZLbZSUKL+tE44TSMP0IzmMzAoU/hzIZYeQSlM4AZODWXwsvUx7dazrvvNieWjns
-         fKhWzhwnztqsulplkx8Z3emAG0jqtEDZcNZqI+lRMPeJakXAuO41KzkFKBvf8p7Km6
-         qvOTqB85lODmg==
-Date:   Mon, 6 Feb 2023 13:33:03 +1100
+        s=201702; t=1675651221;
+        bh=GFCv0mM+lXv+YO4/gK35PehquY4PuU2+lWqAJ01oLho=;
+        h=Date:From:To:Cc:Subject:From;
+        b=rCoOiCu8widsz7hofDefXeAU6Y7daGNPnv5+xJHusfuVqkOC8ScV31uhN5EtnI5Zo
+         G7MQ/OLjd9vWmbvkxx7cfg5hbu6+GyebBdQg7RL9Q9B5BFnyoGlRGmg7IhGKYd7R4c
+         DaEfBk4ngNBWsGogIoEZ27nSoISw5MBaap9fY/8WDp1dl80jhdGNsiSfDuw4XeGErG
+         noZmUlSbjbMlWMsmfc0fCWuc89PEmFKFa17V8bhdMh4XpLeLt8iWqGtno8s3CZo2VT
+         /m917zJAunfebZ6hWp4wCNB4yfuc4mkW6MwXjq7yOcTljjAn+vlul9NQ/gpWOSijZx
+         eyUD6spdOprvQ==
+Date:   Mon, 6 Feb 2023 13:40:18 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        Greg KH <greg@kroah.com>
-Cc:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
-        ARM <linux-arm-kernel@lists.infradead.org>,
-        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+To:     Richard Weinberger <richard@nod.at>
+Cc:     George Kennedy <george.kennedy@oracle.com>,
+        Erez Zadok <ezk@cs.stonybrook.edu>,
+        Manish Adkar <madkar@cs.stonybrook.edu>,
+        Yifei Liu <yifeliu@cs.stonybrook.edu>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: Re: linux-next: manual merge of the iio tree with the arm-soc tree
-Message-ID: <20230206133303.3924bc31@canb.auug.org.au>
-In-Reply-To: <20230117122552.64f70650@canb.auug.org.au>
-References: <20230117122552.64f70650@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patches in the ubifs tree
+Message-ID: <20230206134018.6d17da1e@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/T/Sp1kehmK3iEHj_5CAOB8X";
+Content-Type: multipart/signed; boundary="Sig_/cgk8FaL7uBApnz9N=/=CUjh";
  protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/T/Sp1kehmK3iEHj_5CAOB8X
+--Sig_/cgk8FaL7uBApnz9N=/=CUjh
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Tue, 17 Jan 2023 12:25:52 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> Today's linux-next merge of the iio tree got a conflict in:
->=20
->   MAINTAINERS
->=20
-> between commit:
->=20
->   59ce53421673 ("MAINTAINERS: update file entries after arm multi-platfor=
-m rework and mach-pxa removal")
->=20
-> from the arm-soc tree and commit:
->=20
->   08025a3bd9e0 ("dt-bindings: iio: adc: ep93xx: Add cirrus,ep9301-adc des=
-cription")
->=20
-> from the iio tree.
->=20
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
->=20
-> --=20
-> Cheers,
-> Stephen Rothwell
->=20
-> diff --cc MAINTAINERS
-> index 390d79c20a59,9ff472ca1244..000000000000
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@@ -2071,8 -2091,10 +2071,10 @@@ M:	Hartley Sweeten <hsweeten@visionengr
->   M:	Alexander Sverdlin <alexander.sverdlin@gmail.com>
->   L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
->   S:	Maintained
-> + F:	Documentation/devicetree/bindings/iio/adc/cirrus,ep9301-adc.yaml
->  +F:	arch/arm/boot/compressed/misc-ep93xx.h
->   F:	arch/arm/mach-ep93xx/
->  -F:	arch/arm/mach-ep93xx/include/mach/
-> + F:	drivers/iio/adc/ep93xx_adc.c
->  =20
->   ARM/CLKDEV SUPPORT
->   M:	Russell King <linux@armlinux.org.uk>
+The following commits are also in the ubifs-fixes tree as different
+commits (but the same patches):
 
-This is now a conflict between the char-misc tree and the arm-soc tree.
+  23892d383bee ("jffs2: correct logic when creating a hole in jffs2_write_b=
+egin")
+  1b42b1a36fc9 ("ubi: ensure that VID header offset + VID header size <=3D =
+alloc, size")
+
+These are commits
+
+  c18a80c6861f ("jffs2: correct logic when creating a hole in jffs2_write_b=
+egin")
+  7bdd6967fec5 ("ubi: ensure that VID header offset + VID header size <=3D =
+alloc, size")
+
+in the ubifs-fixes tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/T/Sp1kehmK3iEHj_5CAOB8X
+--Sig_/cgk8FaL7uBApnz9N=/=CUjh
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPgZt8ACgkQAVBC80lX
-0GxPgQf+LedsDx4QVR/YBtAz9S2spftU9+0DtSPqMogP7IufHDpM+G/VuvXtsiOl
-9dWJ6IIAuB9M+Wq75KUyaThZr4uiFQKKxRf1fB32uYkKAp7UB5GzglzXS0yqo2DS
-SMm6aLHpsoUjV358m2fLdvENk3Iz8t1qAiLJdZY7scKrm53vODQSr7CmOv5983LV
-QlI9I/GtbAM3z+3mBjZGfmZmBa2aSD+xzhM34wWTRGEDfQKzORUza0vJ+LB3Bjkq
-29w5uJpcMNWOnaeosCxLfA8nMlsrSW+hUKtTO1fBHzvTbxkQYWoJCNLR1pdNA48b
-r2pQI8JZqMfUrALg9oEaJUsxHWJ+mw==
-=m2d2
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPgaJMACgkQAVBC80lX
+0Gy6bwf/cNYDNxji0lQeQmlf8KmyNrG6Y6X3VpKX1YAnsFrGSg0Q2m/NqRF2IwrT
+gPOqXeIHLkcKEy4UDW6NDHPbGyy+Q7xSj3kughsTx6IisiOxANJtBQZ+DYGoindD
+pTI3jpZfLvSKwyEB+yQSV9iEnXJBeJz/23KMoD+GTa1QOXPfIgQwGutFA7WmQex8
+503m1yxc4uDSPYdk8khlQHyoT9IQvvbgm8DbOtZ7dY0zyLj9pZYTS3abCRoGwOQ1
+1o5wwu34ILsN21nib+hVKvdp9+cnFc3CpYJszu8G1u533QEX3M8SLemvHeHRvECl
+uoJCi6b6iZwoJOVqmh41RGeLGSCr/A==
+=GTpV
 -----END PGP SIGNATURE-----
 
---Sig_/T/Sp1kehmK3iEHj_5CAOB8X--
+--Sig_/cgk8FaL7uBApnz9N=/=CUjh--

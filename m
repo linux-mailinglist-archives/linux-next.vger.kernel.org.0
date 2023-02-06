@@ -2,79 +2,45 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D90668B66C
-	for <lists+linux-next@lfdr.de>; Mon,  6 Feb 2023 08:31:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4ECD68B69D
+	for <lists+linux-next@lfdr.de>; Mon,  6 Feb 2023 08:46:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229577AbjBFHbO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 6 Feb 2023 02:31:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46308 "EHLO
+        id S229727AbjBFHqI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 6 Feb 2023 02:46:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbjBFHbN (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 6 Feb 2023 02:31:13 -0500
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B25EC1D917;
-        Sun,  5 Feb 2023 23:30:34 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 0AAD532001C6;
-        Mon,  6 Feb 2023 02:29:53 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Mon, 06 Feb 2023 02:29:54 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1675668593; x=1675754993; bh=fiqx19znL1
-        IjOv95/GPeYngB8bz9vW8hRvhO1w0WvC8=; b=IRb65Q6oUQ+jfDdGkGmHbKkk+M
-        oCqH6UCQa0odDTY0grDIZugsBZ1UbLA7faHgRJxxAdeX4AH6U0SOQSavTGYFU5CN
-        9oKtxASxHhtuXLu+HQx7tcvlw/qlNZVjgH1hRKX9l3uyezL/VXem8gGJJL8xrMpf
-        VgiX+9J5jnA406MlzQbe06HEJco5q+U30Pf9mD9SBQFXusodhyT8FB+AHhPsZZJE
-        zgNUkBCTFuAQ6TXL0ShA1Tn+3ot5888tIMwcM7aHTm2FifXyzXVxRDs4DgG8ANPn
-        aiQrFI7C8FqhpM078F8E1YhzJ5YC3BRKlPpcPSukrxrpM9bwaSTwPJJQm2Ug==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1675668593; x=1675754993; bh=fiqx19znL1IjOv95/GPeYngB8bz9
-        vW8hRvhO1w0WvC8=; b=WTz/ZzfTR3GmBU3rXCwQ92DMxQJtpZWWLgDjpVxOKCsA
-        YnWBpIK+XbOyORpV4EdiHKhU+4uGsj2R0WnxoaL1N5alO495+im2RTqYRh1s/86W
-        VVLihCFh/5qknxp45rqGUs8dQC+vekVE5KMUIRbh5SJXm43aIZBmEN/9/JD9n7By
-        BEEy24FNxT/SSEhx341YVYzotzZlPBJ9unAQJ9JmkrW1VHFnDYmm+mMj3qwQq67B
-        fsjcfNfR0ndVvoYfGcaptFo/o02DwulVCZKn3QVEv5ZXdA3CebReLqdKpTuk07H/
-        GBHaBI+htAkLPzyvgvY9Be4H1ZydQU8Ezf/7spLRFg==
-X-ME-Sender: <xms:cazgYxtrg4ZIOY_9aqjSNJfbdxxm1oWLjPF2fck4BC87lkCvUOv5WA>
-    <xme:cazgY6f4CMfuk_QnT95udCiGOqTD9m8WGclvomef5DYgTLs0iZnBwZwDXbMUYzxmA
-    MI_4PINwal_SA>
-X-ME-Received: <xmr:cazgY0xBjNEmRdT09D_RQCb0x4CyZlbKpNzC-yQzJA2w09mDA6S5MZmCmXBmiJHwic2sS-g64uLLpqthCdsn1pjyieHY9J2Z3RH8pg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeghedguddthecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgv
-    ghcumffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeehge
-    dvvedvleejuefgtdduudfhkeeltdeihfevjeekjeeuhfdtueefhffgheekteenucevlhhu
-    shhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhroh
-    grhhdrtghomh
-X-ME-Proxy: <xmx:cazgY4OBVZq9SRKXzjQ3bM2excSmAqobWs-jbFWO1WaIZ1lvFbEvTQ>
-    <xmx:cazgYx-by8Oe_vO-mR5UDqmDcfljncCSgsUehbpky5-ZJkODRI8jfA>
-    <xmx:cazgY4WCia63Sd6XtYPuQZ4htV-mp7w7QQNFQVJqIK5d8lC8OtmYuQ>
-    <xmx:cazgYxzN3YGYjHKUN62SCD77XrRNQGJgjYIrgXTNhOWvg6WAw_mThA>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 6 Feb 2023 02:29:52 -0500 (EST)
-Date:   Mon, 6 Feb 2023 08:29:49 +0100
-From:   Greg KH <greg@kroah.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Daniel Scally <dan.scally@ideasonboard.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the usb tree
-Message-ID: <Y+CsbZTTPGWLnRAA@kroah.com>
-References: <20230206145004.6e043ed3@canb.auug.org.au>
+        with ESMTP id S229643AbjBFHqA (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 6 Feb 2023 02:46:00 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67D8B4EDE;
+        Sun,  5 Feb 2023 23:45:59 -0800 (PST)
+Received: from [192.168.0.43] (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 286794DA;
+        Mon,  6 Feb 2023 08:45:57 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1675669557;
+        bh=w3VNz6O2dOeY6DcvzR7FtI4JX5np0V8jiDeBUs8bso4=;
+        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
+        b=e2b7IIHHvpVNQEZ3NURTL9XZrlmMPOKgw2RtIWi7OcnRS7MxQGobysb9uN1DAbCdj
+         +ngroi4ivf5pSkQJ5igEXgRiWr54M4zRdukb19RAQ5n4dvoIHh0HxS0DH2GsQhKyMU
+         6n0V7BLwdBNy9McmsmR6lyCPijD3NoI5X9Ju5q3c=
+Message-ID: <93b56558-b25c-401a-031d-971fc644054b@ideasonboard.com>
+Date:   Mon, 6 Feb 2023 07:45:54 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Content-Language: en-US
+To:     Stephen Rothwell <sfr@canb.auug.org.au>, Greg KH <greg@kroah.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20230206145004.6e043ed3@canb.auug.org.au>
+From:   Dan Scally <dan.scally@ideasonboard.com>
+Subject: Re: linux-next: build warning after merge of the usb tree
 In-Reply-To: <20230206145004.6e043ed3@canb.auug.org.au>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,29 +48,27 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Feb 06, 2023 at 02:50:04PM +1100, Stephen Rothwell wrote:
+Thanks Stephen, and sorry Greg - I should have noticed that, I'll figure 
+out why I didn't. Does this just need a patch on top or some other 
+process to be fixed?
+
+On 06/02/2023 03:50, Stephen Rothwell wrote:
 > Hi all,
-> 
+>
 > After merging the usb tree, today's linux-next build (htmldocs) produced
 > this warning:
-> 
+>
 > Documentation/ABI/testing/configfs-usb-gadget-uvc:14: ERROR: Malformed table.
 > Text in column margin in table line 4.
-> 
+>
 > ================        =============================
 > bInterfaceNumber        USB interface number for this
->                         streaming interface
+>                          streaming interface
 > enable_interrupt_ep     flag to enable the interrupt
->                         endpoint for the VC interface
+>                          endpoint for the VC interface
 > ================        =============================
-> 
+>
 > Introduced by commit
-> 
->   a36afe780461 ("usb: gadget: uvc: Add new enable_interrupt_ep attribute")
-
-Sorry about this, it's been reported for a while and I think we have a
-working patch for this in my review queue.  I'll push it out soon.
-
-thanks,
-
-greg k-h
+>
+>    a36afe780461 ("usb: gadget: uvc: Add new enable_interrupt_ep attribute")
+>

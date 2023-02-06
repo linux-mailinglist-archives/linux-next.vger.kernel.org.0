@@ -2,83 +2,83 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A274F68C114
-	for <lists+linux-next@lfdr.de>; Mon,  6 Feb 2023 16:11:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDFFB68C344
+	for <lists+linux-next@lfdr.de>; Mon,  6 Feb 2023 17:29:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229735AbjBFPLx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 6 Feb 2023 10:11:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50414 "EHLO
+        id S230033AbjBFQ3y (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 6 Feb 2023 11:29:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229564AbjBFPLx (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 6 Feb 2023 10:11:53 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21B872D71;
-        Mon,  6 Feb 2023 07:11:52 -0800 (PST)
-Received: from mail.ideasonboard.com (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id A80844DA;
-        Mon,  6 Feb 2023 16:11:49 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1675696310;
-        bh=11SGDLDQe7sbPNdpImr651tu3ohy7mJTMkZjZMMEijU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=cXomPMAlHMO14YF0GA/bf1UTPvUmSSX+isS/8KRK6u5jwJR59uQHudvtFMRBsi6v0
-         vwaeJmS2mEc+X2YjQYFGGalvDf41P/2qo2ZkdDLFJ23mvxGa+3tm3e3TD2djZpMvgE
-         ew0EG6sw8RImOm3XymsJxe3phstiKjyo33LdOMmQ=
-From:   Daniel Scally <dan.scally@ideasonboard.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-Cc:     sfr@canb.auug.org.au, linux-next@vger.kernel.org,
-        Daniel Scally <dan.scally@ideasonboard.com>
-Subject: [PATCH v2] usb: gadget: uvc: Correct documentation formatting
-Date:   Mon,  6 Feb 2023 15:11:31 +0000
-Message-Id: <20230206151131.863960-1-dan.scally@ideasonboard.com>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S230057AbjBFQ3t (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 6 Feb 2023 11:29:49 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7B29BBAE;
+        Mon,  6 Feb 2023 08:29:48 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5404B60F79;
+        Mon,  6 Feb 2023 16:29:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E6BEC433EF;
+        Mon,  6 Feb 2023 16:29:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675700987;
+        bh=t+/Gdj3C67a1A/yTEK03Y1DOIWZ1vJ7RZoTdIAgXbYI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=UzNmkbfOh8Eu9LwKxi5rsFG9lowa8FkR3n7xYOC/g6tFeSMEc7I6CyNbWkyfHG7P5
+         if+aFIFSpfi31bWqWHCcp6zm3mwpOLeRbJqiYlpUn4bscH9EtydrZvM2b0qgnjzfYk
+         KUyx5981bZOj4hmx7ox3wZNAnDdQ9JRrY9CRpgZA5QCHguAMhhbH7TBj0iS8kBeO/p
+         2Yep5nyenHTi38YhOUrrTyIDsCIIFUAmc9/IalMBtaPlpySd4jv/891ZFhHGB/VH4G
+         52EISVkM9KYgYYUZACU31/X11k5I+6hF6xbC6wSB/bmoqNboJ8m6CORa3adR+yi+cv
+         fsyoiuq4B0UaA==
+Date:   Mon, 6 Feb 2023 10:29:45 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-next@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: Update PCI git tree location for linux-next
+Message-ID: <20230206162945.GA2214315@bhelgaas>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230206075337.43b3e4da@canb.auug.org.au>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-The documentation table added in a36afe780461 ("usb: gadget: uvc: Add
-new enable_interrupt_ep attribute") was incorrect, resulting in a new
-warning when compiling the documentation.
+On Mon, Feb 06, 2023 at 07:53:37AM +1100, Stephen Rothwell wrote:
+> Hi Bjorn,
+> 
+> On Fri, 3 Feb 2023 16:27:05 -0600 Bjorn Helgaas <helgaas@kernel.org> wrote:
+> >
+> > Hi Stephen,
+> > 
+> > Can you please replace this PCI tree:
+> > 
+> >   git://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git
+> > 
+> > with this new shared one:
+> > 
+> >   git://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git
+> > 
+> > The branch names intended for linux-next ("for-linus" and "next") are
+> > staying the same.
+> 
+> All done.  Do you want any contacts for this tree added to my list?
 
-Correct the formatting to resolve the warning.
+Yes, please!  Can you add:
 
-Fixes: a36afe780461 ("usb: gadget: uvc: Add new enable_interrupt_ep attribute")
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Signed-off-by: Daniel Scally <dan.scally@ideasonboard.com>
----
+  Lorenzo Pieralisi <lpieralisi@kernel.org>
+  Krzysztof Wilczyński <kw@linux.com>
 
-Updated the commit message with the proper Fixes and Reported-by tags.
-
- Documentation/ABI/testing/configfs-usb-gadget-uvc | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/Documentation/ABI/testing/configfs-usb-gadget-uvc b/Documentation/ABI/testing/configfs-usb-gadget-uvc
-index fec205044c87..9c716dd3ae6f 100644
---- a/Documentation/ABI/testing/configfs-usb-gadget-uvc
-+++ b/Documentation/ABI/testing/configfs-usb-gadget-uvc
-@@ -17,12 +17,12 @@ Description:	Control descriptors
- 
- 		All attributes read only except enable_interrupt_ep:
- 
--		================	=============================
-+		===================	=============================
- 		bInterfaceNumber	USB interface number for this
- 					streaming interface
- 		enable_interrupt_ep	flag to enable the interrupt
- 					endpoint for the VC interface
--		================	=============================
-+		===================	=============================
- 
- What:		/config/usb-gadget/gadget/functions/uvc.name/control/class
- Date:		Dec 2014
--- 
-2.34.1
-
+Thanks,
+  Bjorn

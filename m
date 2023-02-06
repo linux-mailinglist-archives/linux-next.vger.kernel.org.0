@@ -2,49 +2,49 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D920268B332
-	for <lists+linux-next@lfdr.de>; Mon,  6 Feb 2023 01:21:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AAA568B3B1
+	for <lists+linux-next@lfdr.de>; Mon,  6 Feb 2023 02:20:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229606AbjBFAVt (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 5 Feb 2023 19:21:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46516 "EHLO
+        id S229478AbjBFBUB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 5 Feb 2023 20:20:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbjBFAVs (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 5 Feb 2023 19:21:48 -0500
+        with ESMTP id S229447AbjBFBUB (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 5 Feb 2023 20:20:01 -0500
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A752211E;
-        Sun,  5 Feb 2023 16:21:46 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40EE317156;
+        Sun,  5 Feb 2023 17:19:59 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P96Q008SWz4x1f;
-        Mon,  6 Feb 2023 11:21:43 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P97j76Rk9z4xG5;
+        Mon,  6 Feb 2023 12:19:55 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1675642905;
-        bh=kdSBUm1XzmULWwCbz+MsNw6BwD9DMZRj+DEeYUGV4II=;
+        s=201702; t=1675646397;
+        bh=lPC3IKVanPO9dkNzXFt0WTexqI63oiTmoCdia64RHBY=;
         h=Date:From:To:Cc:Subject:From;
-        b=DN8Ju3eQ0NRl/0/u6o+i5RCg68VN6SMS76jrEXkCYcvY8tcvLxrKs9DeSJxDRmWmo
-         OKuFAHpiHhs0fbnbKsVTT8W4m8Lm3KHG/qG66UB6dDQQ9+FGrOvXmBgEI81ciNhTAR
-         CLd25zQnVB+WPf9hhTlAY+7+b0bHDKugWpeIC8ZyFpLN5+5poN9Dzpq/WLED54qMTG
-         HBmRAB5BfqDWHrsh+VANdUZCgBJb50WxSWYwgy2EHvp/9yTdQXzHJ2ZnMWMiSWzdDd
-         Rer+HibenBRBI+ZppWucyXl/5etHE+3lQ8oTA+4G0XpL9w8tW3VBbjSwn/XE1zBgVe
-         u6j+Pa9HKymfw==
-Date:   Mon, 6 Feb 2023 11:21:43 +1100
+        b=LHab+XktxSuCFgyHrYyg/3ze+R55DQDFndX5Wd9k7hOjs42WfxLOrsflvuw8i5rRv
+         39XWS+aTs1qoaifvbdXoijx/XUCkxP+E9B/tFfWihsBDMfkgR6jx9l4zBYLC7d2/e1
+         KOOLkIqinFFA4ZQETaL+2CaTmgpWH0DqWSwD9o6E7K+P5I1H00YDC3m7fI4iR6FOyv
+         V7GJqmi9w4XLJ+ELIgeevwX5FzOaCaIi/iRUao5ooALmd7CbXUGSHPdtWCC8mJYNBL
+         Jkj4KxPPt3IeJHNcG0X+SaX9cuKGGAvkaxpyMSPMHGjJHtfDuv8MnoIB0bD5FbVPi5
+         I/Rot2MD+vk+w==
+Date:   Mon, 6 Feb 2023 12:19:54 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Sebastian Reichel <sre@kernel.org>,
-        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>
-Cc:     ARM <linux-arm-kernel@lists.infradead.org>,
-        Alina Yu <alina_yu@richtek.com>,
-        ChiYuan Huang <cy_huang@richtek.com>,
-        ChiaEn Wu <chiaen_wu@richtek.com>,
+To:     Marc Zyngier <maz@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Anup Patel <apatel@ventanamicro.com>,
+        Johan Hovold <johan+linaro@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>
-Subject: linux-next: manual merge of the battery tree with the arm-soc tree
-Message-ID: <20230206112143.71d626bd@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the irqchip tree with the tip tree
+Message-ID: <20230206121954.57b521fe@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/CEzHtiX6X7NY758jd=lQFyO";
+Content-Type: multipart/signed; boundary="Sig_/lr8hQB1aVgSSOf144VAv0Wj";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
@@ -55,70 +55,87 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/CEzHtiX6X7NY758jd=lQFyO
+--Sig_/lr8hQB1aVgSSOf144VAv0Wj
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the battery tree got a conflict in:
+Today's linux-next merge of the irqchip tree got a conflict in:
 
-  drivers/power/supply/Makefile
+  drivers/irqchip/irq-apple-aic.c
 
 between commit:
 
-  a0f831756b26 ("power: remove s3c adc battery driver")
+  0e2213fe0ab4 ("irqchip: Use irq_domain_alloc_irqs()")
 
-from the arm-soc tree and commits:
+from the tip tree and commit:
 
-  4a1a5f6781d8 ("power: supply: rt9471: Add Richtek RT9471 charger driver")
-  6f7f70e3a8dd ("power: supply: rt9467: Add Richtek RT9467 charger driver")
+  c19f89719428 ("irqchip/apple-aic: Move over to core ipi-mux")
 
-from the battery tree.
+from the irqchip tree.
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+I fixed it up (the latter removed the code modified by the former) and
+can carry the fix as necessary. This is now fixed as far as linux-next
+is concerned, but any non trivial conflicts should be mentioned to your
+upstream maintainer when your tree is submitted for merging.  You may
+also want to consider cooperating with the maintainer of the conflicting
+tree to minimise any particularly complex conflicts.
+
+However, an earlier commit in the irqchip tree
+
+  835a486cd9f5 ("genirq: Add mechanism to multiplex a single HW IPI")
+
+created a new user of __irq_domain_alloc_irqs(), so I also added the
+following merge fix up patch:
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Mon, 6 Feb 2023 12:14:47 +1100
+Subject: [PATCH] fix up for "irqchip: Use irq_domain_alloc_irqs()"
+
+interacting with "genirq: Add mechanism to multiplex a single HW IPI"
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ kernel/irq/ipi-mux.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/kernel/irq/ipi-mux.c b/kernel/irq/ipi-mux.c
+index 3a403c3a785d..fa4fc18c6131 100644
+--- a/kernel/irq/ipi-mux.c
++++ b/kernel/irq/ipi-mux.c
+@@ -185,8 +185,7 @@ int ipi_mux_create(unsigned int nr_ipi, void (*mux_send=
+)(unsigned int cpu))
+ 	domain->flags |=3D IRQ_DOMAIN_FLAG_IPI_SINGLE;
+ 	irq_domain_update_bus_token(domain, DOMAIN_BUS_IPI);
+=20
+-	rc =3D __irq_domain_alloc_irqs(domain, -1, nr_ipi,
+-				     NUMA_NO_NODE, NULL, false, NULL);
++	rc =3D irq_domain_alloc_irqs(domain, nr_ipi, NUMA_NO_NODE, NULL);
+ 	if (rc <=3D 0) {
+ 		pr_err("unable to alloc IRQs from IPI Mux domain\n");
+ 		goto fail_free_domain;
+--=20
+2.35.1
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc drivers/power/supply/Makefile
-index 8cb3c7f5c111,f8f9716d3ba4..000000000000
---- a/drivers/power/supply/Makefile
-+++ b/drivers/power/supply/Makefile
-@@@ -52,8 -54,12 +52,10 @@@ obj-$(CONFIG_BATTERY_DA9150)	+=3D da9150-
-  obj-$(CONFIG_BATTERY_MAX17040)	+=3D max17040_battery.o
-  obj-$(CONFIG_BATTERY_MAX17042)	+=3D max17042_battery.o
-  obj-$(CONFIG_BATTERY_MAX1721X)	+=3D max1721x_battery.o
- -obj-$(CONFIG_BATTERY_Z2)	+=3D z2_battery.o
-  obj-$(CONFIG_BATTERY_RT5033)	+=3D rt5033_battery.o
-  obj-$(CONFIG_CHARGER_RT9455)	+=3D rt9455_charger.o
-+ obj-$(CONFIG_CHARGER_RT9467)	+=3D rt9467-charger.o
-+ obj-$(CONFIG_CHARGER_RT9471)	+=3D rt9471.o
- -obj-$(CONFIG_BATTERY_S3C_ADC)	+=3D s3c_adc_battery.o
-  obj-$(CONFIG_BATTERY_TWL4030_MADC)	+=3D twl4030_madc_battery.o
-  obj-$(CONFIG_CHARGER_88PM860X)	+=3D 88pm860x_charger.o
-  obj-$(CONFIG_CHARGER_PCF50633)	+=3D pcf50633-charger.o
-
---Sig_/CEzHtiX6X7NY758jd=lQFyO
+--Sig_/lr8hQB1aVgSSOf144VAv0Wj
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPgSBcACgkQAVBC80lX
-0GzgcAgAjclu0BzM5kku7VdMju5VEq7oVPvkc2p/ZDFq99YPISUuA/MTysfXSmfj
-AbA2Ewqhfpt0DWK82dEGxfmQCbzL/zg4EFdovxQwMa2lrlGPeEFpPoil234lAz7P
-a2JvN1K5M+ZhqY0T5cBEb5PKhSZsyR7M9d2nr0gigJOds2fnVeOT2i8XWPln7JJ1
-M2nkSSJ9hhkBfcDAf4/YRhI4M9WMAGSSCoIxQ+XXLLj//K6CmAqsPH9gqE0+YR5l
-ynrnvHyy7akZ6pEdD7sIwhp0qSMaO9vyHKgGp5HyMOUH1Ccd7Qo5VUDpw8JjnaHA
-4e4Ll/RzE0fE9c83QNE2KAwx6a99rw==
-=8qru
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPgVboACgkQAVBC80lX
+0GwuhQf9FSQwMzVxr6BPPCV/f3w+BsyYsREMxIy+pDYgRfxSBcBeSzlyAWZjT/Sg
+Ftb7YY2wzpuhy8rdMToVfoVEWKAQhadYEzlJDxbNsBYxXI2+gbzht7Gk2jGcP1a8
+BqLHv9vdSdVtVC4JEPnuYSmo9INEiPATKGGcnSHBpRddKl5PIVdtxTKgzp3Sqyo5
+PkoPTodm3jIMFRusPZaUmFqVeyXRnxuKMuTnFde+ULoyp0Iqv0t7vLmWHeXpceSC
+QuDdBG3LrcrbPfkEyi+U0Jvd9Fqh0Ta3vmTCe6jYsiWcCMr6XE0ZnsJLudYKRe5F
+6nOBk3PD128fof5hMqTTluosqkEAig==
+=AxDS
 -----END PGP SIGNATURE-----
 
---Sig_/CEzHtiX6X7NY758jd=lQFyO--
+--Sig_/lr8hQB1aVgSSOf144VAv0Wj--

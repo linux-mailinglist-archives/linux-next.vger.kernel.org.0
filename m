@@ -2,78 +2,99 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B87B668DAB1
-	for <lists+linux-next@lfdr.de>; Tue,  7 Feb 2023 15:26:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4396D68DDF6
+	for <lists+linux-next@lfdr.de>; Tue,  7 Feb 2023 17:29:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232676AbjBGO0x (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 7 Feb 2023 09:26:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39310 "EHLO
+        id S231622AbjBGQ3I (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 7 Feb 2023 11:29:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232636AbjBGO0e (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 7 Feb 2023 09:26:34 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1294F3BDAA
-        for <linux-next@vger.kernel.org>; Tue,  7 Feb 2023 06:25:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675779943;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=FNwOLNIcIOa8N+GIFK2MFiHQPefHbhJcU7pUi7i1bsY=;
-        b=FQDhs4I0DdH9p9gg+0DHecYEE01K8rTx/HDWX5wuBjA851VxzRhGx+Eb/hOPLdx1rRLVoz
-        1LQO4Q3wgM5K5uIfyqr70mpWXEclbkx1prww8nnopdMsivA5vLjJxMFb3tEmEjvx1TI0wI
-        Aey7FVzC3COKwkyOMlm5BP78+APRNXA=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-541-i4xfSdVsNHmBbDvrASF2fw-1; Tue, 07 Feb 2023 09:25:39 -0500
-X-MC-Unique: i4xfSdVsNHmBbDvrASF2fw-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        with ESMTP id S231426AbjBGQ3G (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 7 Feb 2023 11:29:06 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 736493E0B6;
+        Tue,  7 Feb 2023 08:29:01 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 907D688B7A2;
-        Tue,  7 Feb 2023 14:25:38 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.97])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 84F4A2026D38;
-        Tue,  7 Feb 2023 14:25:37 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <Y+JBak3Tt8Pdw3yE@nvidia.com>
-References: <Y+JBak3Tt8Pdw3yE@nvidia.com> <20230207153706.1821393e@canb.auug.org.au>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     dhowells@redhat.com, Stephen Rothwell <sfr@canb.auug.org.au>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the mm tree
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E64FC60DE1;
+        Tue,  7 Feb 2023 16:29:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3BA9C433EF;
+        Tue,  7 Feb 2023 16:28:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675787340;
+        bh=dDevxFmx4nPr6l+g/cb4GQD7A8atVYaQ4UfrYU36L5o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jSHVPFMxSejPzpwEk9GYVVQQ5dNWOxcu/ii2+QHh4kwQGnMZeAqCJchqgWuZ1j6bD
+         y72jJzamDDkZZLD0fN5FLKQ8vzCC2Pzpv+vDjkEIABlVUBjNTqjIz69weiNCK8MZ6Y
+         PKMlKmnr6RKLPJw29OX1HhFa7eBX/srI9Dn554k1lBrKlnFoe6lRsPTCDZXicAgARy
+         X8qIlTK7huyf8no2jar4LDbV4cH1gPB+KCRnhbFjhhhCiyXr14kUMiE9JLzrsABNA9
+         2RLnh8LeF8PVUrbWoz4QGYMwkXK5fP/tdOViD9JoE2XX+HPkePOEiteMSXoA1JBZWP
+         5vcJ7oD467maw==
+Date:   Tue, 7 Feb 2023 09:28:58 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     llvm@lists.linux.dev, open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        lkft-triage@lists.linaro.org, borislav.petkov@amd.com,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Subject: Re: x86/include/asm/arch_hweight.h:49:15: error: invalid input size
+ for constraint 'D'
+Message-ID: <Y+J8SobyVojJWuFv@dev-arch.thelio-3990X>
+References: <CA+G9fYuSWodh1teau4jGG_P15yT-ev1+bS7HAAmMu5D5J-d2vw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <3189180.1675779936.1@warthog.procyon.org.uk>
-Date:   Tue, 07 Feb 2023 14:25:36 +0000
-Message-ID: <3189181.1675779936@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+G9fYuSWodh1teau4jGG_P15yT-ev1+bS7HAAmMu5D5J-d2vw@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Jason Gunthorpe <jgg@nvidia.com> wrote:
+Hi Naresh,
 
-> David can you send a patch to the block tree to fix it?
+On Tue, Feb 07, 2023 at 01:27:05PM +0530, Naresh Kamboju wrote:
+> Following Build regressions warnings / errors noticed on Linux next-20230207.
+> 
+> Regressions found on x86_64:
+> 
+>     - build/clang-15-lkftconfig-compat
+>     - build/clang-nightly-lkftconfig
+>     - build/clang-15-lkftconfig
+>     - build/clang-15-lkftconfig-kcsan
+>     - build/clang-lkftconfig
+> 
+> In file included from arch/x86/entry/vdso/vdso32/vgetcpu.c:2:
+> In file included from arch/x86/entry/vdso/vdso32/../vgetcpu.c:8:
+> In file included from include/linux/kernel.h:22:
+> In file included from include/linux/bitops.h:68:
+> In file included from arch/x86/include/asm/bitops.h:420:
+> arch/x86/include/asm/arch_hweight.h:49:15: error: invalid input size
+> for constraint 'D'
+>                          : REG_IN (w));
+>                                    ^
+> In file included from arch/x86/entry/vdso/vdso32/vgetcpu.c:2:
+> In file included from arch/x86/entry/vdso/vdso32/../vgetcpu.c:8:
+> In file included from include/linux/kernel.h:25:
+> In file included from include/linux/math.h:6:
+> arch/x86/include/asm/div64.h:85:34: error: invalid output size for
+> constraint '=a'
+>         asm ("mulq %2; divq %3" : "=a" (q)
+>                                         ^
+> 2 errors generated.
+> 
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-I'll see.  Given that the patch series introduces a memory corruptor bug that
-someone might bisect through, I want to see if Jens will let me replace it to
-put the fix first, in which case I can just alter the patch that adds the
-FOLL_PIN usage.
+Thanks a lot for the report as always! Looks like there is a fix pending
+on the list:
 
-David
+https://lore.kernel.org/Y+IsCWQdXEr8d9Vy@linutronix.de/
 
+Cheers,
+Nathan

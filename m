@@ -2,111 +2,95 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91DFB68FA61
-	for <lists+linux-next@lfdr.de>; Wed,  8 Feb 2023 23:45:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F2DC68FA76
+	for <lists+linux-next@lfdr.de>; Wed,  8 Feb 2023 23:54:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232479AbjBHWp5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 8 Feb 2023 17:45:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53054 "EHLO
+        id S231480AbjBHWyY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 8 Feb 2023 17:54:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232270AbjBHWp5 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 8 Feb 2023 17:45:57 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B9631A94B;
-        Wed,  8 Feb 2023 14:45:55 -0800 (PST)
+        with ESMTP id S232513AbjBHWyX (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 8 Feb 2023 17:54:23 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A9D729E29;
+        Wed,  8 Feb 2023 14:54:11 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PBw7x2Db7z4xyF;
-        Thu,  9 Feb 2023 09:45:49 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PBwKY4zFXz4xyp;
+        Thu,  9 Feb 2023 09:54:09 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1675896351;
-        bh=Hh2ibYljk7zsLnLjiDF9KL2TAdzmwiAjDyNsMT+2eNU=;
+        s=201702; t=1675896849;
+        bh=qJeZfYZsZ95CdMmRTTcGcPpOnIE8j3xS/nlqggZjCVE=;
         h=Date:From:To:Cc:Subject:From;
-        b=BggeNlfWO3OUWpqnjJQLxfaU5NWm9bV0tAMc+WGzyBAZR02mdTg5U1yN4i1bi5lzg
-         QjworVHZ1OP58w8OlytwHWxCIb9Gtz92amDaxIPOm8Bnn8ZBMWwtzQ9dZayfMCfDlM
-         0NWP5FXjR453n0mBk5jSbUeRjJVvvuqSS2gOIabCGhgGK2KeyKA2VCvw8O2Rv6eewN
-         BuVQmzTYuJ0d/xXJ/89uJgwAZ/NMcwLVbVnz92REBq8XT9WNUx4HYfIUtnPdqXKwZe
-         r7J4ZOhFgK+2n4llh7VjpTUCdMrQ30/eatVPyyGfTTMnraOUY+XpsqKVsGG0ejdfnM
-         ughQVT/26efTA==
-Date:   Thu, 9 Feb 2023 09:45:48 +1100
+        b=CSKora93YE9Vk1WuxmNXiwR6GTvcUXFXCJkj4hilbQIismvke1Jbz4x7lq2uMAbf5
+         WFNHYQQR9wTFvDer7Qxptn6YCC6wvn9jnF0d4ygPWpb/8SPUIHvDbk6ps0YlmsyAgI
+         pKvaCeHuKsJF8o3O6ZLwIAJtkUqbFtjfz8hIJzoGK2jIDRlREOKuguJlSz8/sMOtkC
+         hV4UE94XdsSNwBLlnC6gh0rtoVg+srPWWOrgPK0e1KHvgvWQtsF1fXS+nX1q7h/uQX
+         x6HErLrmUF/TgW5fC2J4S0J8xnjDIjvwElmHttDd1gDnyr3tBqBb5uHErDPoZPMwNx
+         zRxe2vzWJ6oJw==
+Date:   Thu, 9 Feb 2023 09:54:08 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>
-Cc:     ARM <linux-arm-kernel@lists.infradead.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
-        <u.kleine-koenig@pengutronix.de>
-Subject: linux-next: manual merge of the v4l-dvb-next tree with the arm-soc
- tree
-Message-ID: <20230209094548.44b29fd5@canb.auug.org.au>
+To:     Alex Deucher <alexdeucher@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the amdgpu tree
+Message-ID: <20230209095408.59e2469e@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/t5K/X.0WF10MQk7xE/21q6F";
+Content-Type: multipart/signed; boundary="Sig_/DV.10do=caCRq8i92cpRBw2";
  protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/t5K/X.0WF10MQk7xE/21q6F
+--Sig_/DV.10do=caCRq8i92cpRBw2
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the v4l-dvb-next tree got conflicts in:
+In commit
 
-  drivers/media/platform/ti/davinci/vpbe_display.c
-  drivers/media/platform/ti/davinci/vpbe_osd.c
-  drivers/media/platform/ti/davinci/vpbe_venc.c
+  b2d7ff0d8741 ("drm/amd/pm/smu7: move variables to where they are used")
 
-between commit:
+Fixes tag
 
-  eeee69739353 ("media: davinci: remove vpbe support")
+  Fixes: 711d3c39503b ("drm/amd/pm: fulfill powerplay peak profiling mode s=
+hader/memory clock settings")
 
-from the arm-soc tree and commits:
+has these problem(s):
 
-  eb78ca6a0496 ("media: ti/davinci: vpbe_osd: Drop empty platform remove fu=
-nction")
-  5204a5dce04b ("media: ti/davinci: vpbe_venc: Drop empty platform remove f=
-unction")
-  0d3732fb1b20 ("media: ti: davinci: vpbe_display.c: return 0 instead of 'r=
-et'.")
+  - Target SHA1 does not exist
 
-from the v4l-dvb-next tree.
+Maybe you meant
 
-I fixed it up (I removed the files) and can carry the fix as
-necessary. This is now fixed as far as linux-next is concerned, but any
-non trivial conflicts should be mentioned to your upstream maintainer
-when your tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
+Fixes: b1a9557a7d00 ("drm/amd/pm: fulfill powerplay peak profiling mode sha=
+der/memory clock settings")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/t5K/X.0WF10MQk7xE/21q6F
+--Sig_/DV.10do=caCRq8i92cpRBw2
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPkJhwACgkQAVBC80lX
-0Gy4/Qf/W1xH5oBVbSBPiQBDZEFJWMal6Brami1+SjmrHAUkz+67uuwBxWfxvYXZ
-4IfeppwZ7i9YI9n1ZHeaC3TH1RIt9jQ8NXjPSR7bWXVxsuQqiDBcPdNvAWitcyDH
-SkLhxJ5BIj8cKXUquwlZbIwv0PmtoHurgofst18SesqoEOff7SKGzIygFGwceWSb
-jwsMtvKJ2OiReuIbVezfgRn+zQyP6/TkaGX+kTJdhCISmHvUWZmJZjKgIX3sq4OA
-KDOMMbEmks7bi7QCAkhQM7iDdujgG92RdCCJqxwkDe/0syFe9NeMySpFN+eYUunl
-RIjQkfK10hyVLH1j7YZT7FzYDTKTjw==
-=BxCG
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPkKBEACgkQAVBC80lX
+0Gyg1wf+P9Vgjffsk0qVyGJOTpJW3eq8twmhlZt5PnC3T9ga4w3YOrNrKjjsbQG0
+M9MstJwRhYbVz7zV1E3kwCQ/ZXpKG/x1wY8/pJZrF47y+5YQB80v9d6ANjNYQeMx
+JCmFs9WlgAmjsYnknsJBLc8+AFAvUsPkUaf8iuG/X9MlJbEYdWZ+mUO1NSmzXSDq
+qzWdIW15jFjmygmK8xy8vdYZoP5XhwqVZhB8ieFQezl3CIFj7bTkAiZlUNcLXkEr
+FdTMu5guA/847LF+wA/NMucL6qCd9BZqGzMJGuK9aUdq176uxA1TzYwKDN5uvTNK
+2Wy874/z8M75ygHeLOf+ZIy/8CahOg==
+=L0ud
 -----END PGP SIGNATURE-----
 
---Sig_/t5K/X.0WF10MQk7xE/21q6F--
+--Sig_/DV.10do=caCRq8i92cpRBw2--

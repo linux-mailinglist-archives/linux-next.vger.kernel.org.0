@@ -2,46 +2,47 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C21968FCC5
-	for <lists+linux-next@lfdr.de>; Thu,  9 Feb 2023 03:02:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22EEC68FCF6
+	for <lists+linux-next@lfdr.de>; Thu,  9 Feb 2023 03:13:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231167AbjBICCe (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 8 Feb 2023 21:02:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40486 "EHLO
+        id S231395AbjBICNM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 8 Feb 2023 21:13:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230394AbjBICCc (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 8 Feb 2023 21:02:32 -0500
+        with ESMTP id S231666AbjBICNL (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 8 Feb 2023 21:13:11 -0500
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61E4525B90;
-        Wed,  8 Feb 2023 18:02:29 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ECFD14229;
+        Wed,  8 Feb 2023 18:13:01 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PC0Vp5BLXz4xyF;
-        Thu,  9 Feb 2023 13:02:26 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PC0kz3RSnz4xxJ;
+        Thu,  9 Feb 2023 13:12:59 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1675908147;
-        bh=IupGQDHLKSrO1KKSm66jjIg4WXdN8sGhbBsD1Hr6PO8=;
+        s=201702; t=1675908779;
+        bh=SqqF476/gbjX9ylAeRVbe5SjYoh4ca/kGQLCtFrnXwo=;
         h=Date:From:To:Cc:Subject:From;
-        b=VfSwM5mGqsXqknqX9jqoplkn2BY4a0OG7QwvulhoVdRznkTcksh43Hs/DxgNymZql
-         U36gVE3n1vKo1dXb6Hbuj3ywBuabFurhV+KnnV6dOufkVCiuY71+Aeb9rBDr/ohrLM
-         oZZASdT56tX5SDiMsOMFlRp38Iy4XzjxUslyfNIDHQkYy88lGZ8uP3TpLyxJJn6I6C
-         +Ycro1cotClvXnN9kEdpX3AoixRo6hoL95rfzMjTT06JSuLFYpHlrvFj4fh/EevUB9
-         mWsCD4KVUq4tu7B5/8kRkfmK8oWUP235XDogsCuukzU+0OaH5I5Er/wXoiSzqJ6HWt
-         O8s1SWF8oZSeA==
-Date:   Thu, 9 Feb 2023 13:02:24 +1100
+        b=KrD358W7irL6HmUqJ8Xn7pLiYicHck4q2w0fVK50bvaKAQh8J9+7jA6LUZ+J/0CaQ
+         21rguaLdlMHo7JJU8Ic+jGFhsEAd+QKyGy/E2n17FrFTaQ1aYG5EngpufEsyw2rPTM
+         uDmmrPIBgny1igi9IkFbZDg77yHsM/h5vscoQmXYk8R3DAQ54prVi83aONbwJuE/Z2
+         SrMGEB7hfXLplKUGqC+Vt+PPS6p0tdKHeSGoPmklcQqDOZBhJy1NbUPoYrW0XWhr2M
+         AXzsAGnoF4AcG0tI1ZhkA8bpkduV83Xm8aSXo3DWs6Oext9NXpC2Ua5qw32PU/CPq2
+         q28C4rEXdNU1w==
+Date:   Thu, 9 Feb 2023 13:12:58 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Yury Norov <yury.norov@gmail.com>,
-        David Miller <davem@davemloft.net>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patches in the bitmap tree
-Message-ID: <20230209130224.76c7f357@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        "Mike Rapoport (IBM)" <rppt@kernel.org>,
+        SeongJae Park <sj@kernel.org>
+Subject: linux-next: manual merge of the mm-stable tree with the jc_docs
+ tree
+Message-ID: <20230209131258.1d7a28fb@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/quWrNBKlEK6VYwMEZT.yHON";
+Content-Type: multipart/signed; boundary="Sig_/9O9glMUJSxK.Qu1Jzqyzuly";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
@@ -52,60 +53,68 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/quWrNBKlEK6VYwMEZT.yHON
+--Sig_/9O9glMUJSxK.Qu1Jzqyzuly
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-The following commits are also in the net-next tree as different commits
-(but the same patches):
+Today's linux-next merge of the mm-stable tree got a conflict in:
 
-  2386459394d2 ("lib/cpumask: update comment for cpumask_local_spread()")
-  a99b18849bc8 ("net/mlx5e: Improve remote NUMA preferences used for the IR=
-Q affinity hints")
-  af547a927f9f ("sched/topology: Introduce for_each_numa_hop_mask()")
-  439829e1bfba ("sched/topology: Introduce sched_numa_hop_mask()")
-  c0d13fba970d ("lib/cpumask: reorganize cpumask_local_spread() logic")
-  8ec0ffa233ab ("cpumask: improve on cpumask_local_spread() locality")
-  6139966175ca ("sched: add sched_numa_find_nth_cpu()")
-  ded3cee7db80 ("cpumask: introduce cpumask_nth_and_andnot")
+  Documentation/admin-guide/mm/numaperf.rst
 
-These are commits
+between commit:
 
-  2ac4980c57f5 ("lib/cpumask: update comment for cpumask_local_spread()")
-  2acda57736de ("net/mlx5e: Improve remote NUMA preferences used for the IR=
-Q affinity hints")
-  06ac01721f7d ("sched/topology: Introduce for_each_numa_hop_mask()")
-  9feae65845f7 ("sched/topology: Introduce sched_numa_hop_mask()")
-  b1beed72b8b7 ("lib/cpumask: reorganize cpumask_local_spread() logic")
-  406d394abfcd ("cpumask: improve on cpumask_local_spread() locality")
-  cd7f55359c90 ("sched: add sched_numa_find_nth_cpu()")
-  62f4386e564d ("cpumask: introduce cpumask_nth_and_andnot")
+  00cba6b60fed ("docs/admin-guide/mm: remove useless markup")
 
-in the net-next tree.
+from the jc_docs tree and commit:
 
-There are some slight differences (I got a conflict merging the bitmap
-tree today), but the net-next series is newer than the bitmap tree one ...
+  6c364edc194e ("Docs/admin-guide/mm/numaperf: increase depth of subsection=
+s")
+
+from the mm-stable tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/quWrNBKlEK6VYwMEZT.yHON
+diff --cc Documentation/admin-guide/mm/numaperf.rst
+index 24e63e740420,544a6d16c801..000000000000
+--- a/Documentation/admin-guide/mm/numaperf.rst
++++ b/Documentation/admin-guide/mm/numaperf.rst
+@@@ -1,4 -1,9 +1,7 @@@
+- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+ -.. _numaperf:
+ -
++ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
++ NUMA Memory Performance
++ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
++=20
+  NUMA Locality
+  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+ =20
+
+--Sig_/9O9glMUJSxK.Qu1Jzqyzuly
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPkVDEACgkQAVBC80lX
-0Gy0Fgf/cBI2iSbRqrAkZ0sZM40/1c1FJkZFT2hmnSA92PqgcSTOjJfnHugObp3u
-HEYKFZg1VNeg7pLtb58X1SSE41ejRAnhyEhUnsb70UH72KXL4OaLY0Y1A5Nc3NjB
-xh+FhGOEWiv2/aHERC7o5YliTe8QDASAoybYmETcCJUC9Xb79hkJrRnkAU6PUSRa
-BcoxdAR5Jpz+9BaFXdk291Ec2ohFMdczLDLt/qAcU0WxL/uvEsR9IEaLmwvr7CvN
-COLljoue+XM+VETlIR79k3UE7IMN2IwsJvlqr/yiCTKbG31idCjux9seGB8yR86W
-/0Lfz8FcJdCFlQcp0NXU3f/66oEsQw==
-=V8iY
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPkVqoACgkQAVBC80lX
+0GyebQgAnSHiz16KoUVD+5vRL2hVs5unjUdR37Q9+6QNnB6PRTcAX7ha6NdIillh
+FmUVW4GBa4064GnQg+xB0r6S9+oVe2430meQqeuhh/AyvPihctBR3w/+NmUU/sam
+rfyne3hlhhHlp5n5owXslzh+qu1c2NBDBwQ7tpYhvDdPeZ7GUqPBk+iSjjWZistE
+BsytITl5QZSRm472vrIUhMXw3ii4kJumSzTpCnjdRQf45XS38wVnHHvp/ISjOLpI
++2T2/jiMurLzTrGypcKff0UkR0ve8inHYht7kSpRQ+q8EDlaZwJa4mnpd9gyvDuO
++S27MjKEhY0iqGF+/xxEYAuSHbWZug==
+=lCrr
 -----END PGP SIGNATURE-----
 
---Sig_/quWrNBKlEK6VYwMEZT.yHON--
+--Sig_/9O9glMUJSxK.Qu1Jzqyzuly--

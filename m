@@ -2,143 +2,67 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3F72691A19
-	for <lists+linux-next@lfdr.de>; Fri, 10 Feb 2023 09:38:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFC0F691A5D
+	for <lists+linux-next@lfdr.de>; Fri, 10 Feb 2023 09:52:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231342AbjBJIia (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 10 Feb 2023 03:38:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41664 "EHLO
+        id S231630AbjBJIwi (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 10 Feb 2023 03:52:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230286AbjBJIi3 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 10 Feb 2023 03:38:29 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A6745BA45;
-        Fri, 10 Feb 2023 00:38:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676018302; x=1707554302;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=1KCVNmUkzXEjR1Ybai3/0blsm9hfg6Zret/yLhDnBQU=;
-  b=RLq5rtW/i8G7BjQWhkjKrgnSzokUO1bBZc0nhtSkVImgHOFXeYUEKCid
-   rzQTKmCUEAPK5/Ay64TNaOtOpImKoqf89W/8vg7oeCY0w0fceoeRE0nEi
-   b04RgirpeJemMUSDojodVMXqHMoWSZ7vWOSQqzfLr7uPOOYquOWXx8f5i
-   FL53HGyTrd0Jzs7YNn8ZuletQrwj/fBg0Z0ARKG+Cbj/d/RN+blv4r8D+
-   0cfFeDFtBzsQOD6OhlDktkRsF2v9JeUX9F/rql/TyLkpPS2VxShmSpEa3
-   RGq7mMx9Or5bTyzrSVrpKQ2qvzOkVmeX3VYmLFVbDa05j0B0TnVWL+c7z
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="394974257"
-X-IronPort-AV: E=Sophos;i="5.97,286,1669104000"; 
-   d="xz'341?yaml'341?log'341?scan'341,208,341";a="394974257"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2023 00:37:59 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="661330290"
-X-IronPort-AV: E=Sophos;i="5.97,286,1669104000"; 
-   d="xz'341?yaml'341?log'341?scan'341,208,341";a="661330290"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by orsmga007.jf.intel.com with ESMTP; 10 Feb 2023 00:37:23 -0800
-Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Fri, 10 Feb 2023 00:37:22 -0800
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Fri, 10 Feb 2023 00:37:22 -0800
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.105)
- by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Fri, 10 Feb 2023 00:37:19 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RLt581xU//iQFkmyL+7M0OPGHvxb2R3fczwSaa1oNeqUSdv16YvFLTseEUz7pGDKlpz+Bju+s7KXlrpICMFCrgKcuZGY/mOn7aNQ1IWbqBalCVtsbrVWEKdBZ7dbevnfspenKLPq9z2vJCdyulf6XjE5fyiraXuJeHuz/9pXb6W1z70ecIliNQhc+BsvCHznkNjBqeZha9QbOILg42QJgoUJCm13T8XYnQ1UAsWyzsJ7Wxz+sv7KQlw68itTfOWLZ/IX6sc+SkifQqDkrM5ufSPlyNpleqk1R2SUQA2wdYdTpbxHZugH1g/BeD49rDUlN/ty0uErySIUFEMpzX0y9Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=aLGd/RVS//PqFGrZLGllOo0dhDZ2cpX0DGtiw03mkiA=;
- b=UKdWfGQEXJJyEQ3cb/m+IZfTK0EQQB3KQLx+rfJLiCB02xSA/x8tYGq4n1yxix5ZvZffP8cWeFZ4wYDzfW8GWl9q7VD6mdYpnfeFNkmVX1DfCiyCBQknrmLW77KMT6SDnZHJe6Hox9bsDQwW9bTJ6/ay43VflGhBuDrsxcc0b0v8CWfCwUCpJudIMWHnyxZXSGIv1rcn2TwpCsnRKuYR6oooLc/vtBrXLVy4nsSJ6rFEManrsmv1rAsr5tMpWwll8CWHIXxULS6lmJqMr+6e87FNgygrEOYTylp6dm8vYV2wnJuwBBWNoQv7kXgpRlBLV3ekDqgMmAm7YQP/NxOVZg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from CY5PR11MB6392.namprd11.prod.outlook.com (2603:10b6:930:37::15)
- by PH0PR11MB4966.namprd11.prod.outlook.com (2603:10b6:510:42::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.21; Fri, 10 Feb
- 2023 08:37:10 +0000
-Received: from CY5PR11MB6392.namprd11.prod.outlook.com
- ([fe80::30e3:a7ab:35ba:93bb]) by CY5PR11MB6392.namprd11.prod.outlook.com
- ([fe80::30e3:a7ab:35ba:93bb%8]) with mapi id 15.20.6086.017; Fri, 10 Feb 2023
- 08:37:10 +0000
-Date:   Fri, 10 Feb 2023 16:34:34 +0800
-From:   kernel test robot <yujie.liu@intel.com>
-To:     Christoph Hellwig <hch@lst.de>
-CC:     <oe-lkp@lists.linux.dev>, <lkp@intel.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Andreas Herrmann <aherrmann@suse.de>,
-        Tejun Heo <tj@kernel.org>, <linux-block@vger.kernel.org>,
-        <cgroups@vger.kernel.org>, linux-raid <linux-raid@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-next@vger.kernel.org>
-Subject: [linux-next:master] [blk] 84d7d462b1:
- mdadm-selftests.03r5assem-failed.fail
-Message-ID: <202302081333.13878a2e-yujie.liu@intel.com>
-Content-Type: multipart/mixed; boundary="FRFoh8W36iUgEzYB"
-Content-Disposition: inline
-X-ClientProxiedBy: SG2PR02CA0010.apcprd02.prod.outlook.com
- (2603:1096:3:17::22) To CY5PR11MB6392.namprd11.prod.outlook.com
- (2603:10b6:930:37::15)
+        with ESMTP id S231638AbjBJIwg (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 10 Feb 2023 03:52:36 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99B5325946
+        for <linux-next@vger.kernel.org>; Fri, 10 Feb 2023 00:52:31 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id f16-20020a17090a9b1000b0023058bbd7b2so4926303pjp.0
+        for <linux-next@vger.kernel.org>; Fri, 10 Feb 2023 00:52:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=7NXJ76iR5XsGOdmmv4KTvJgutfrSenFwwEjWjWpb3Rk=;
+        b=hg2EaciVa5n+DbmKY1xig3RDrfOxGxBUc1mS4LaYeoiI4v9DnDQG3IRNNUr7q5OTuy
+         yW4GHJKYhjDtNM9FL3FkvgCqS/f1544t5e2tbVkluoaFk/dGfdgimC3nmeKQ49xwDuzW
+         22N/4W+xNjnyl2LkD6m9UT2f7yjfhdwr2Nxl4lB/YMRKfFxRvJHt+kjkpyxDYQex8pPP
+         8EcOgJYzGTiSCxx79iy1CpIqrSjNQjBPsl8wg60oIpfoercZCq8yWEXi/fJYotS3NYKD
+         02F5iqSN+zRfc8+oK4wWPkfsbVvZtOEhxXY9D6+bYdmzx0MR4pMGcI3z2qELplzVHSSu
+         vtVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7NXJ76iR5XsGOdmmv4KTvJgutfrSenFwwEjWjWpb3Rk=;
+        b=fAuP9Druzhp6FdUCNEkmZmeg+0fSBeDcLm0JavATC4tAar+JvGzghMxa03JhgyJvBM
+         8AiX9XbP57qVg0u2IhSHwofnb2h0/DIvP2F2zpXqJntPHmBfx965NSFFvp2ugFoNIstP
+         SiPWdVvtsz2J74ww3BYNfZhk692YC+UPvQvybV1U32PBf/dggdjKzawQZc+u7VlBTKG+
+         GJw5EgCfaIg7c1aLt0jzGeVY2hrFf0K6O7Om4znFUoc2+xWGk5lH54WFS+X/RRMZyI/X
+         SCuIhUCrc6/hD0BrhXEgAeM97iA53vrannFBY5wEBW+0naqiQG4V2aOwitl2FDOqIOSn
+         EYzA==
+X-Gm-Message-State: AO0yUKWRebhMVshoVrkFnTA8VU+aKMYzziSCncyND6okXJ5RCWozW431
+        zRsxnFghl7VJbY85X8/KibJIHiQuFb/n0G82xhhVnw==
+X-Google-Smtp-Source: AK7set+iJ3AeTqY5+Vdha8y/oHrHHdz+xXvRMA4G3PUEh5ksqySYlFYN7N95S+65IE2wPXtsLvE9fw==
+X-Received: by 2002:a05:6a20:42a0:b0:bf:51a0:2a06 with SMTP id o32-20020a056a2042a000b000bf51a02a06mr17446447pzj.10.1676019149103;
+        Fri, 10 Feb 2023 00:52:29 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id z9-20020a637e09000000b004dff15fc121sm2516915pgc.36.2023.02.10.00.52.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Feb 2023 00:52:28 -0800 (PST)
+Message-ID: <63e605cc.630a0220.d37d0.431f@mx.google.com>
+Date:   Fri, 10 Feb 2023 00:52:28 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY5PR11MB6392:EE_|PH0PR11MB4966:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8da9b531-8ea1-48be-35d7-08db0b41ff75
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: nWdAgBuXSyd2zaPqTrErdynGTthdtK6boCDYUKtVKKErrWLZNA+o3qEF1scW2dr8edOThOvkYq+zCfAYaeod5EdjxWbBV5QhNvO/yLEnRy4IpfHjZEKGke2er2hULqH6synOQeMn74gu7cCgxH1jBolddrUIDdTDUw/sZGkUOsa+g+YL6Ly7gZT/3cbs+W4MfDS77li0+PiFJgYz92yfXYwg5pnQLB4B+opeZQwxKjuO5INnE9uTVMzT4E9WnLGQjCoSP3arKczSIJ+X1JIZokKMnSzsPsV8IeWqfHXzbrAexiXxXJw7Sv7om4/eFEL1NXGKjrDD6K6Yc44hmNDtCbgdn+dNQkpIgJBI+338jMQIyLZhKz+5Zvx3vx/w914ufSFtmiqh2z7bZo2vV0yF9A2ImCldwckhMEWk5YzoHCB2Pwr/MpfN6eZ7GFfkXUGKHDXO82nFA8N6VbFAQjEEOP0VF9bHLM9i9VFyso3dBIGHOU73qzKM/ic6vZjvqDr8GOqRRP7F2ivIXGipwxoSRCzsrRhvvsWKqvDq/YPZDE9rPnfmNqn5EMuk6MHSVg5i/ZLMisEE5x/Yni2QUVXpclx0PzQN/tPub0hKYz7+GGmeHdsIgqa/bYfkKmQCBaBxIO4wT/NtQeoBC2568oKALOJpOExw79mu1vk3ikq+Ll7sWgXfI9XbjBJ2g5hpVR9AlAmUDRXjK5U4GqTiDxwIC/nGiaknyLVOzjdGnBubLgDOwA1I65OqYQnUhRqH6Fs4XNeYk1EWGccQqE5V0gM40Q==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR11MB6392.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(39860400002)(366004)(346002)(396003)(136003)(376002)(451199018)(54906003)(316002)(5660300002)(8676002)(4326008)(66946007)(6916009)(66476007)(66556008)(41300700001)(8936002)(38100700002)(82960400001)(36756003)(86362001)(6506007)(6512007)(1076003)(6666004)(21490400003)(21480400003)(186003)(44144004)(26005)(7416002)(235185007)(2616005)(2906002)(6486002)(478600001)(83380400001)(966005)(2700100001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?jVNByfkAKXFqvV5gACYo5PZ8x+IUvXIDCYalJRoOyHM3DNkAbzvwfX9CbzP4?=
- =?us-ascii?Q?K7bvCX0M1EUxPuOy8kK9KSdvxC5nNgDz819uaHzXre5O9+XxH+bLBTux4sOP?=
- =?us-ascii?Q?pEqL2hxvjwzISSdBfQR/pD8d0O47JeWfwPdFWaZfqWpiateKx49njunh7PQO?=
- =?us-ascii?Q?UFonOPV5y190AsgEP316CdxTcRGZuxG1qelU9fff4Kpu4zXYyOdCXjHDjMGq?=
- =?us-ascii?Q?/W81pTbdGMJWYoDeUd/nYta89lTYmBxBk6x/Sr4er4GJxe8NIyqvuJ0T9ZkC?=
- =?us-ascii?Q?RugoHJqQ1NSjsKgMKyVwtGwqt6Ma3q/iSC+E27olI7NKRpJBX0s1Si/6+LQ1?=
- =?us-ascii?Q?sna4jNwgJyjbTdsN//Mi1p6vmNvrYjbouAr2bOKufu0QNXMQCkg846TWlvs2?=
- =?us-ascii?Q?6EgX6Kx3U2iigg2pEzeRDzQZC0T3RZFtklsufcQpMb0uZTRqkb8Xu0RAWYhL?=
- =?us-ascii?Q?YZ6zsYT8WcAHqEEMxG1kBKLODIBOLWNplsQd6Je55CjXktXIG/E4LbSi39ys?=
- =?us-ascii?Q?0GjDAiNWuzL8D3GNps7ANJatL7zN9uAB/QaMbD2mHiS7IEuPLf/LXWgeQ1Gy?=
- =?us-ascii?Q?CBwtrzLVoid2/R8Mq4klb2+JoA+L2c2NR/adBq3lkLg7cSMqWt2xn3nlxzGr?=
- =?us-ascii?Q?ahrY95jOG0rWIVegGbAerg5nxiA/VwdskQTzKpuz2PQdsF7VDhrpGkASXIHm?=
- =?us-ascii?Q?Y5nDyiJxRgJavG3u4ZBJeP+TszoTm83Mf7li5dMMW1zC3xo/ZYEd4/q7uk9u?=
- =?us-ascii?Q?YYNplZyg6SP56f4eMvevrnRQsBrkpGhYXQh8WvzbGvKtckotso8CCRN+tG4L?=
- =?us-ascii?Q?K1LIDgfbdQBjMv+IOkun8vMDcPybNyg561nqMzNL6T3Ejd2UKxj2SZR8QJ9v?=
- =?us-ascii?Q?suJzCjKH5T3iG7QTlSkJQDFp9Fzzscp1v/fsc+Ks8v+871Xvvbe3SUqHHVsY?=
- =?us-ascii?Q?O0Abu+c+wVGfHnLxc/56gb/P07AVndlegMyWflVW37S3mkEli5ghgEl0QtmJ?=
- =?us-ascii?Q?C26dX8U1Tm90Si2WCKhRdTIyxJ1GqJ0avXVf8D/6bC74RxuZJoX9lqUQ12xH?=
- =?us-ascii?Q?t+gE5cfpNjB2V5jJi9LWzJKB79X7RXHXMFmrqfjWzbWb1+HC/HwkSyUZWQs4?=
- =?us-ascii?Q?jrR50yYqBwqxyEx9LN4/UvZRXt/8aFfpOlbnWa8aJ1rkFITVJlsTuCmZJ4YJ?=
- =?us-ascii?Q?QPM0Qp7iml1CdlBxJh7GsSjM8Hc/h/v9M4N4A2KIJVZjkOoeVYI1XOxdVxcl?=
- =?us-ascii?Q?tqL5VLlJNuviKIJ5H0XenGTHQsD3txV2OGyl9HuXuvwbX6/enz+ekvTUMAFL?=
- =?us-ascii?Q?SrZaAFnOBoN1j5lXhCY9R1E6aiokQTkEPeEl49JKyPhKBqn58ZAWJPINnj7Q?=
- =?us-ascii?Q?kAKYY8nYSB+xVsIFlKKcOs7HlXqQxMlL1nl/Jw41NzwH0a3zrJqd9p7QPtBF?=
- =?us-ascii?Q?+QqEz97p4W7467sM4XNP72szvrBtBdhXhl68k8ecm+5JhArtcLwPg4aHnyEO?=
- =?us-ascii?Q?qy4uevHcX/UFALnJWrRQcHyYrBYqFnFLjyVf+1mNiZi+DbzUjNnd+7xRb/ep?=
- =?us-ascii?Q?KJ56tM2ALBVnAvYFgfPkWjeYzRy/MgUmxoPtf5qr?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8da9b531-8ea1-48be-35d7-08db0b41ff75
-X-MS-Exchange-CrossTenant-AuthSource: CY5PR11MB6392.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Feb 2023 08:37:09.8157
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: bgILAvZditNhQ81pCl3Qc1m7nC+61bStO6zyT9dYXbLr8jOkLo/fHLdAYaKYS+CPZK9656P60xjF50HA2uWVMg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB4966
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,UPPERCASE_50_75 autolearn=ham
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: master
+X-Kernelci-Tree: next
+X-Kernelci-Kernel: next-20230210
+X-Kernelci-Report-Type: test
+Subject: next/master baseline: 865 runs, 135 regressions (next-20230210)
+To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+        kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -146,7794 +70,4890 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---FRFoh8W36iUgEzYB
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
+next/master baseline: 865 runs, 135 regressions (next-20230210)
 
-Hi Christoph,
+Regressions Summary
+-------------------
 
-We reported
-  "[axboe-block/for-6.3/block] [blk] 84d7d462b1: mdadm-selftests.03assem-incr.fail"
-at 
-  https://lore.kernel.org/all/202302060916.19871c31-yujie.liu@intel.com/
-
-We noticed this commit has been merged to linux-next, and we caught
-several failed mdadm tests on it, while its parent commit is clean, so
-we report again FYI and Cc linux-raid, thanks.
-
-
-=========================================================================================
-tbox_group/testcase/rootfs/kconfig/compiler/disk:
-  lkp-hsw-d05/mdadm-selftests/debian-11.1-x86_64-20220510.cgz/x86_64-rhel-8.3-func/gcc-11/1HDD
-
-commit:
-  180b04d450a71 ("blk-cgroup: remove the !bdi->dev check in blkg_dev_name")
-  84d7d462b16dd ("blk-cgroup: pin the gendisk in struct blkcg_gq")
-
-180b04d450a71372 84d7d462b16dd5f0bf7c7ca9254
----------------- ---------------------------
-       fail:runs  %reproduction    fail:runs
-           |             |             |
-           :6          100%           6:6     mdadm-selftests.03assem-incr.fail
-           :6          100%           6:6     mdadm-selftests.03r5assem-failed.fail
-           :6          100%           6:6     mdadm-selftests.04r1update.fail
-           :6          100%           6:6     mdadm-selftests.04update-uuid.fail
-           :6           33%           2:2     mdadm-selftests.06name.fail
-           :6           33%           2:2     mdadm-selftests.06wrmostly.fail
-           :6           33%           2:2     mdadm-selftests.02r1add.fail
-           :6           33%           2:2     mdadm-selftests.02r1grow.fail
-           :6           33%           2:2     mdadm-selftests.02r5grow.fail
-           :6           33%           2:2     mdadm-selftests.02r6grow.fail
-
-
-commit: 84d7d462b16dd5f0bf7c7ca9254bf81db2c952a2 ("blk-cgroup: pin the gendisk in struct blkcg_gq")
-https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-
-in testcase: mdadm-selftests
-version: mdadm-selftests-x86_64-5f41845-1_20220826
-
-	disk: 1HDD
-	test_prefix: 03
-
-on test machine: 8 threads 1 sockets Intel(R) Core(TM) i7-4790T CPU @ 2.70GHz (Haswell) with 16G memory
-
-caused below changes (please refer to attached dmesg/kmsg for entire log/backtrace):
-
-
-[  128.373618][ T1704] loop0: detected capacity change from 0 to 40000
-[  128.571618][ T1713] loop1: detected capacity change from 0 to 40000
-[  128.767468][ T1718] loop2: detected capacity change from 0 to 40000
-[  128.965651][ T1723] loop3: detected capacity change from 0 to 40000
-[  129.163065][ T1728] loop4: detected capacity change from 0 to 40000
-[  129.366600][ T1733] loop5: detected capacity change from 0 to 40000
-[  129.566630][ T1741] loop6: detected capacity change from 0 to 40000
-[  129.764382][ T1746] loop7: detected capacity change from 0 to 40000
-[  130.326896][ T1751] loop8: detected capacity change from 0 to 131072
-[  130.898545][ T1759] loop9: detected capacity change from 0 to 131072
-[  131.469675][ T1764] loop10: detected capacity change from 0 to 131072
-[  132.038384][ T1772] loop11: detected capacity change from 0 to 131072
-[  132.603489][ T1780] loop12: detected capacity change from 0 to 131072
-[  133.173539][ T1785] loop13: detected capacity change from 0 to 131072
-[  133.192944][  T282] Testing on linux-6.2.0-rc6-00077-g84d7d462b16d kernel
-[  133.192955][  T282] 
-[  133.537132][  T282] /lkp/benchmarks/mdadm-selftests/tests/03r5assem-failed... FAILED - see /var/tmp/03r5assem-failed.log and /var/tmp/fail03r5assem-failed.log for details
-[  133.537141][  T282] 
-
-
-(03r5assem-failed.log is attached)
-
-
-If you fix the issue, kindly add following tag
-| Reported-by: kernel test robot <yujie.liu@intel.com>
-| Link: https://lore.kernel.org/oe-lkp/202302081333.13878a2e-yujie.liu@intel.com
-
-
-To reproduce:
-
-        git clone https://github.com/intel/lkp-tests.git
-        cd lkp-tests
-        sudo bin/lkp install job.yaml           # job file is attached in this email
-        bin/lkp split-job --compatible job.yaml # generate the yaml file for lkp run
-        sudo bin/lkp run generated-yaml-file
-
-        # if come across any failure that blocks the test,
-        # please remove ~/.lkp and /lkp dir to run from a clean state.
-
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
-
---FRFoh8W36iUgEzYB
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: attachment;
-	filename="config-6.2.0-rc6-00077-g84d7d462b16d"
-
-#
-# Automatically generated file; DO NOT EDIT.
-# Linux/x86_64 6.2.0-rc6 Kernel Configuration
-#
-CONFIG_CC_VERSION_TEXT="gcc-11 (Debian 11.3.0-8) 11.3.0"
-CONFIG_CC_IS_GCC=y
-CONFIG_GCC_VERSION=110300
-CONFIG_CLANG_VERSION=0
-CONFIG_AS_IS_GNU=y
-CONFIG_AS_VERSION=23990
-CONFIG_LD_IS_BFD=y
-CONFIG_LD_VERSION=23990
-CONFIG_LLD_VERSION=0
-CONFIG_CC_CAN_LINK=y
-CONFIG_CC_CAN_LINK_STATIC=y
-CONFIG_CC_HAS_ASM_GOTO_OUTPUT=y
-CONFIG_CC_HAS_ASM_GOTO_TIED_OUTPUT=y
-CONFIG_CC_HAS_ASM_INLINE=y
-CONFIG_CC_HAS_NO_PROFILE_FN_ATTR=y
-CONFIG_PAHOLE_VERSION=123
-CONFIG_CONSTRUCTORS=y
-CONFIG_IRQ_WORK=y
-CONFIG_BUILDTIME_TABLE_SORT=y
-CONFIG_THREAD_INFO_IN_TASK=y
-
-#
-# General setup
-#
-CONFIG_INIT_ENV_ARG_LIMIT=32
-# CONFIG_COMPILE_TEST is not set
-# CONFIG_WERROR is not set
-CONFIG_LOCALVERSION=""
-CONFIG_LOCALVERSION_AUTO=y
-CONFIG_BUILD_SALT=""
-CONFIG_HAVE_KERNEL_GZIP=y
-CONFIG_HAVE_KERNEL_BZIP2=y
-CONFIG_HAVE_KERNEL_LZMA=y
-CONFIG_HAVE_KERNEL_XZ=y
-CONFIG_HAVE_KERNEL_LZO=y
-CONFIG_HAVE_KERNEL_LZ4=y
-CONFIG_HAVE_KERNEL_ZSTD=y
-CONFIG_KERNEL_GZIP=y
-# CONFIG_KERNEL_BZIP2 is not set
-# CONFIG_KERNEL_LZMA is not set
-# CONFIG_KERNEL_XZ is not set
-# CONFIG_KERNEL_LZO is not set
-# CONFIG_KERNEL_LZ4 is not set
-# CONFIG_KERNEL_ZSTD is not set
-CONFIG_DEFAULT_INIT=""
-CONFIG_DEFAULT_HOSTNAME="(none)"
-CONFIG_SYSVIPC=y
-CONFIG_SYSVIPC_SYSCTL=y
-CONFIG_SYSVIPC_COMPAT=y
-CONFIG_POSIX_MQUEUE=y
-CONFIG_POSIX_MQUEUE_SYSCTL=y
-CONFIG_WATCH_QUEUE=y
-CONFIG_CROSS_MEMORY_ATTACH=y
-# CONFIG_USELIB is not set
-CONFIG_AUDIT=y
-CONFIG_HAVE_ARCH_AUDITSYSCALL=y
-CONFIG_AUDITSYSCALL=y
-
-#
-# IRQ subsystem
-#
-CONFIG_GENERIC_IRQ_PROBE=y
-CONFIG_GENERIC_IRQ_SHOW=y
-CONFIG_GENERIC_IRQ_EFFECTIVE_AFF_MASK=y
-CONFIG_GENERIC_PENDING_IRQ=y
-CONFIG_GENERIC_IRQ_MIGRATION=y
-CONFIG_GENERIC_IRQ_INJECTION=y
-CONFIG_HARDIRQS_SW_RESEND=y
-CONFIG_IRQ_DOMAIN=y
-CONFIG_IRQ_DOMAIN_HIERARCHY=y
-CONFIG_GENERIC_MSI_IRQ=y
-CONFIG_IRQ_MSI_IOMMU=y
-CONFIG_GENERIC_IRQ_MATRIX_ALLOCATOR=y
-CONFIG_GENERIC_IRQ_RESERVATION_MODE=y
-CONFIG_IRQ_FORCED_THREADING=y
-CONFIG_SPARSE_IRQ=y
-# CONFIG_GENERIC_IRQ_DEBUGFS is not set
-# end of IRQ subsystem
-
-CONFIG_CLOCKSOURCE_WATCHDOG=y
-CONFIG_ARCH_CLOCKSOURCE_INIT=y
-CONFIG_CLOCKSOURCE_VALIDATE_LAST_CYCLE=y
-CONFIG_GENERIC_TIME_VSYSCALL=y
-CONFIG_GENERIC_CLOCKEVENTS=y
-CONFIG_GENERIC_CLOCKEVENTS_BROADCAST=y
-CONFIG_GENERIC_CLOCKEVENTS_MIN_ADJUST=y
-CONFIG_GENERIC_CMOS_UPDATE=y
-CONFIG_HAVE_POSIX_CPU_TIMERS_TASK_WORK=y
-CONFIG_POSIX_CPU_TIMERS_TASK_WORK=y
-CONFIG_CONTEXT_TRACKING=y
-CONFIG_CONTEXT_TRACKING_IDLE=y
-
-#
-# Timers subsystem
-#
-CONFIG_TICK_ONESHOT=y
-CONFIG_NO_HZ_COMMON=y
-# CONFIG_HZ_PERIODIC is not set
-# CONFIG_NO_HZ_IDLE is not set
-CONFIG_NO_HZ_FULL=y
-CONFIG_CONTEXT_TRACKING_USER=y
-# CONFIG_CONTEXT_TRACKING_USER_FORCE is not set
-CONFIG_NO_HZ=y
-CONFIG_HIGH_RES_TIMERS=y
-CONFIG_CLOCKSOURCE_WATCHDOG_MAX_SKEW_US=100
-# end of Timers subsystem
-
-CONFIG_BPF=y
-CONFIG_HAVE_EBPF_JIT=y
-CONFIG_ARCH_WANT_DEFAULT_BPF_JIT=y
-
-#
-# BPF subsystem
-#
-CONFIG_BPF_SYSCALL=y
-CONFIG_BPF_JIT=y
-CONFIG_BPF_JIT_ALWAYS_ON=y
-CONFIG_BPF_JIT_DEFAULT_ON=y
-CONFIG_BPF_UNPRIV_DEFAULT_OFF=y
-# CONFIG_BPF_PRELOAD is not set
-# CONFIG_BPF_LSM is not set
-# end of BPF subsystem
-
-CONFIG_PREEMPT_VOLUNTARY_BUILD=y
-# CONFIG_PREEMPT_NONE is not set
-CONFIG_PREEMPT_VOLUNTARY=y
-# CONFIG_PREEMPT is not set
-CONFIG_PREEMPT_COUNT=y
-# CONFIG_PREEMPT_DYNAMIC is not set
-# CONFIG_SCHED_CORE is not set
-
-#
-# CPU/Task time and stats accounting
-#
-CONFIG_VIRT_CPU_ACCOUNTING=y
-CONFIG_VIRT_CPU_ACCOUNTING_GEN=y
-CONFIG_IRQ_TIME_ACCOUNTING=y
-CONFIG_HAVE_SCHED_AVG_IRQ=y
-CONFIG_BSD_PROCESS_ACCT=y
-CONFIG_BSD_PROCESS_ACCT_V3=y
-CONFIG_TASKSTATS=y
-CONFIG_TASK_DELAY_ACCT=y
-CONFIG_TASK_XACCT=y
-CONFIG_TASK_IO_ACCOUNTING=y
-# CONFIG_PSI is not set
-# end of CPU/Task time and stats accounting
-
-CONFIG_CPU_ISOLATION=y
-
-#
-# RCU Subsystem
-#
-CONFIG_TREE_RCU=y
-CONFIG_RCU_EXPERT=y
-CONFIG_SRCU=y
-CONFIG_TREE_SRCU=y
-CONFIG_TASKS_RCU_GENERIC=y
-CONFIG_FORCE_TASKS_RCU=y
-CONFIG_TASKS_RCU=y
-# CONFIG_FORCE_TASKS_RUDE_RCU is not set
-CONFIG_TASKS_RUDE_RCU=y
-CONFIG_FORCE_TASKS_TRACE_RCU=y
-CONFIG_TASKS_TRACE_RCU=y
-CONFIG_RCU_STALL_COMMON=y
-CONFIG_RCU_NEED_SEGCBLIST=y
-CONFIG_RCU_FANOUT=64
-CONFIG_RCU_FANOUT_LEAF=16
-CONFIG_RCU_NOCB_CPU=y
-# CONFIG_RCU_NOCB_CPU_DEFAULT_ALL is not set
-# CONFIG_TASKS_TRACE_RCU_READ_MB is not set
-# CONFIG_RCU_LAZY is not set
-# end of RCU Subsystem
-
-CONFIG_IKCONFIG=y
-CONFIG_IKCONFIG_PROC=y
-# CONFIG_IKHEADERS is not set
-CONFIG_LOG_BUF_SHIFT=20
-CONFIG_LOG_CPU_MAX_BUF_SHIFT=12
-CONFIG_PRINTK_SAFE_LOG_BUF_SHIFT=13
-# CONFIG_PRINTK_INDEX is not set
-CONFIG_HAVE_UNSTABLE_SCHED_CLOCK=y
-
-#
-# Scheduler features
-#
-# CONFIG_UCLAMP_TASK is not set
-# end of Scheduler features
-
-CONFIG_ARCH_SUPPORTS_NUMA_BALANCING=y
-CONFIG_ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH=y
-CONFIG_CC_HAS_INT128=y
-CONFIG_CC_IMPLICIT_FALLTHROUGH="-Wimplicit-fallthrough=5"
-CONFIG_GCC11_NO_ARRAY_BOUNDS=y
-CONFIG_GCC12_NO_ARRAY_BOUNDS=y
-CONFIG_CC_NO_ARRAY_BOUNDS=y
-CONFIG_ARCH_SUPPORTS_INT128=y
-CONFIG_NUMA_BALANCING=y
-CONFIG_NUMA_BALANCING_DEFAULT_ENABLED=y
-CONFIG_CGROUPS=y
-CONFIG_PAGE_COUNTER=y
-# CONFIG_CGROUP_FAVOR_DYNMODS is not set
-CONFIG_MEMCG=y
-CONFIG_MEMCG_KMEM=y
-CONFIG_BLK_CGROUP=y
-CONFIG_CGROUP_WRITEBACK=y
-CONFIG_CGROUP_SCHED=y
-CONFIG_FAIR_GROUP_SCHED=y
-CONFIG_CFS_BANDWIDTH=y
-CONFIG_RT_GROUP_SCHED=y
-CONFIG_CGROUP_PIDS=y
-CONFIG_CGROUP_RDMA=y
-CONFIG_CGROUP_FREEZER=y
-CONFIG_CGROUP_HUGETLB=y
-CONFIG_CPUSETS=y
-CONFIG_PROC_PID_CPUSET=y
-CONFIG_CGROUP_DEVICE=y
-CONFIG_CGROUP_CPUACCT=y
-CONFIG_CGROUP_PERF=y
-# CONFIG_CGROUP_BPF is not set
-# CONFIG_CGROUP_MISC is not set
-# CONFIG_CGROUP_DEBUG is not set
-CONFIG_SOCK_CGROUP_DATA=y
-CONFIG_NAMESPACES=y
-CONFIG_UTS_NS=y
-CONFIG_TIME_NS=y
-CONFIG_IPC_NS=y
-CONFIG_USER_NS=y
-CONFIG_PID_NS=y
-CONFIG_NET_NS=y
-CONFIG_CHECKPOINT_RESTORE=y
-CONFIG_SCHED_AUTOGROUP=y
-# CONFIG_SYSFS_DEPRECATED is not set
-CONFIG_RELAY=y
-CONFIG_BLK_DEV_INITRD=y
-CONFIG_INITRAMFS_SOURCE=""
-CONFIG_RD_GZIP=y
-CONFIG_RD_BZIP2=y
-CONFIG_RD_LZMA=y
-CONFIG_RD_XZ=y
-CONFIG_RD_LZO=y
-CONFIG_RD_LZ4=y
-CONFIG_RD_ZSTD=y
-# CONFIG_BOOT_CONFIG is not set
-CONFIG_INITRAMFS_PRESERVE_MTIME=y
-CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE=y
-# CONFIG_CC_OPTIMIZE_FOR_SIZE is not set
-CONFIG_LD_ORPHAN_WARN=y
-CONFIG_LD_ORPHAN_WARN_LEVEL="warn"
-CONFIG_SYSCTL=y
-CONFIG_HAVE_UID16=y
-CONFIG_SYSCTL_EXCEPTION_TRACE=y
-CONFIG_HAVE_PCSPKR_PLATFORM=y
-CONFIG_EXPERT=y
-CONFIG_UID16=y
-CONFIG_MULTIUSER=y
-CONFIG_SGETMASK_SYSCALL=y
-CONFIG_SYSFS_SYSCALL=y
-CONFIG_FHANDLE=y
-CONFIG_POSIX_TIMERS=y
-CONFIG_PRINTK=y
-CONFIG_BUG=y
-CONFIG_ELF_CORE=y
-CONFIG_PCSPKR_PLATFORM=y
-CONFIG_BASE_FULL=y
-CONFIG_FUTEX=y
-CONFIG_FUTEX_PI=y
-CONFIG_EPOLL=y
-CONFIG_SIGNALFD=y
-CONFIG_TIMERFD=y
-CONFIG_EVENTFD=y
-CONFIG_SHMEM=y
-CONFIG_AIO=y
-CONFIG_IO_URING=y
-CONFIG_ADVISE_SYSCALLS=y
-CONFIG_MEMBARRIER=y
-CONFIG_KALLSYMS=y
-# CONFIG_KALLSYMS_SELFTEST is not set
-CONFIG_KALLSYMS_ALL=y
-CONFIG_KALLSYMS_ABSOLUTE_PERCPU=y
-CONFIG_KALLSYMS_BASE_RELATIVE=y
-CONFIG_ARCH_HAS_MEMBARRIER_SYNC_CORE=y
-CONFIG_KCMP=y
-CONFIG_RSEQ=y
-# CONFIG_DEBUG_RSEQ is not set
-# CONFIG_EMBEDDED is not set
-CONFIG_HAVE_PERF_EVENTS=y
-CONFIG_GUEST_PERF_EVENTS=y
-# CONFIG_PC104 is not set
-
-#
-# Kernel Performance Events And Counters
-#
-CONFIG_PERF_EVENTS=y
-# CONFIG_DEBUG_PERF_USE_VMALLOC is not set
-# end of Kernel Performance Events And Counters
-
-CONFIG_SYSTEM_DATA_VERIFICATION=y
-CONFIG_PROFILING=y
-CONFIG_TRACEPOINTS=y
-# end of General setup
-
-CONFIG_64BIT=y
-CONFIG_X86_64=y
-CONFIG_X86=y
-CONFIG_INSTRUCTION_DECODER=y
-CONFIG_OUTPUT_FORMAT="elf64-x86-64"
-CONFIG_LOCKDEP_SUPPORT=y
-CONFIG_STACKTRACE_SUPPORT=y
-CONFIG_MMU=y
-CONFIG_ARCH_MMAP_RND_BITS_MIN=28
-CONFIG_ARCH_MMAP_RND_BITS_MAX=32
-CONFIG_ARCH_MMAP_RND_COMPAT_BITS_MIN=8
-CONFIG_ARCH_MMAP_RND_COMPAT_BITS_MAX=16
-CONFIG_GENERIC_ISA_DMA=y
-CONFIG_GENERIC_CSUM=y
-CONFIG_GENERIC_BUG=y
-CONFIG_GENERIC_BUG_RELATIVE_POINTERS=y
-CONFIG_ARCH_MAY_HAVE_PC_FDC=y
-CONFIG_GENERIC_CALIBRATE_DELAY=y
-CONFIG_ARCH_HAS_CPU_RELAX=y
-CONFIG_ARCH_HIBERNATION_POSSIBLE=y
-CONFIG_ARCH_SUSPEND_POSSIBLE=y
-CONFIG_AUDIT_ARCH=y
-CONFIG_KASAN_SHADOW_OFFSET=0xdffffc0000000000
-CONFIG_HAVE_INTEL_TXT=y
-CONFIG_X86_64_SMP=y
-CONFIG_ARCH_SUPPORTS_UPROBES=y
-CONFIG_FIX_EARLYCON_MEM=y
-CONFIG_DYNAMIC_PHYSICAL_MASK=y
-CONFIG_PGTABLE_LEVELS=5
-CONFIG_CC_HAS_SANE_STACKPROTECTOR=y
-
-#
-# Processor type and features
-#
-CONFIG_SMP=y
-CONFIG_X86_FEATURE_NAMES=y
-CONFIG_X86_X2APIC=y
-CONFIG_X86_MPPARSE=y
-# CONFIG_GOLDFISH is not set
-# CONFIG_X86_CPU_RESCTRL is not set
-CONFIG_X86_EXTENDED_PLATFORM=y
-# CONFIG_X86_NUMACHIP is not set
-# CONFIG_X86_VSMP is not set
-CONFIG_X86_UV=y
-# CONFIG_X86_GOLDFISH is not set
-# CONFIG_X86_INTEL_MID is not set
-CONFIG_X86_INTEL_LPSS=y
-# CONFIG_X86_AMD_PLATFORM_DEVICE is not set
-CONFIG_IOSF_MBI=y
-# CONFIG_IOSF_MBI_DEBUG is not set
-CONFIG_X86_SUPPORTS_MEMORY_FAILURE=y
-# CONFIG_SCHED_OMIT_FRAME_POINTER is not set
-CONFIG_HYPERVISOR_GUEST=y
-CONFIG_PARAVIRT=y
-# CONFIG_PARAVIRT_DEBUG is not set
-CONFIG_PARAVIRT_SPINLOCKS=y
-CONFIG_X86_HV_CALLBACK_VECTOR=y
-# CONFIG_XEN is not set
-CONFIG_KVM_GUEST=y
-CONFIG_ARCH_CPUIDLE_HALTPOLL=y
-# CONFIG_PVH is not set
-CONFIG_PARAVIRT_TIME_ACCOUNTING=y
-CONFIG_PARAVIRT_CLOCK=y
-# CONFIG_JAILHOUSE_GUEST is not set
-# CONFIG_ACRN_GUEST is not set
-CONFIG_INTEL_TDX_GUEST=y
-# CONFIG_MK8 is not set
-# CONFIG_MPSC is not set
-# CONFIG_MCORE2 is not set
-# CONFIG_MATOM is not set
-CONFIG_GENERIC_CPU=y
-CONFIG_X86_INTERNODE_CACHE_SHIFT=6
-CONFIG_X86_L1_CACHE_SHIFT=6
-CONFIG_X86_TSC=y
-CONFIG_X86_CMPXCHG64=y
-CONFIG_X86_CMOV=y
-CONFIG_X86_MINIMUM_CPU_FAMILY=64
-CONFIG_X86_DEBUGCTLMSR=y
-CONFIG_IA32_FEAT_CTL=y
-CONFIG_X86_VMX_FEATURE_NAMES=y
-CONFIG_PROCESSOR_SELECT=y
-CONFIG_CPU_SUP_INTEL=y
-# CONFIG_CPU_SUP_AMD is not set
-# CONFIG_CPU_SUP_HYGON is not set
-# CONFIG_CPU_SUP_CENTAUR is not set
-# CONFIG_CPU_SUP_ZHAOXIN is not set
-CONFIG_HPET_TIMER=y
-CONFIG_HPET_EMULATE_RTC=y
-CONFIG_DMI=y
-CONFIG_BOOT_VESA_SUPPORT=y
-CONFIG_MAXSMP=y
-CONFIG_NR_CPUS_RANGE_BEGIN=8192
-CONFIG_NR_CPUS_RANGE_END=8192
-CONFIG_NR_CPUS_DEFAULT=8192
-CONFIG_NR_CPUS=8192
-CONFIG_SCHED_CLUSTER=y
-CONFIG_SCHED_SMT=y
-CONFIG_SCHED_MC=y
-CONFIG_SCHED_MC_PRIO=y
-CONFIG_X86_LOCAL_APIC=y
-CONFIG_X86_IO_APIC=y
-CONFIG_X86_REROUTE_FOR_BROKEN_BOOT_IRQS=y
-CONFIG_X86_MCE=y
-CONFIG_X86_MCELOG_LEGACY=y
-CONFIG_X86_MCE_INTEL=y
-CONFIG_X86_MCE_THRESHOLD=y
-CONFIG_X86_MCE_INJECT=m
-
-#
-# Performance monitoring
-#
-CONFIG_PERF_EVENTS_INTEL_UNCORE=m
-CONFIG_PERF_EVENTS_INTEL_RAPL=m
-CONFIG_PERF_EVENTS_INTEL_CSTATE=m
-# end of Performance monitoring
-
-CONFIG_X86_16BIT=y
-CONFIG_X86_ESPFIX64=y
-CONFIG_X86_VSYSCALL_EMULATION=y
-CONFIG_X86_IOPL_IOPERM=y
-CONFIG_MICROCODE=y
-CONFIG_MICROCODE_INTEL=y
-CONFIG_MICROCODE_LATE_LOADING=y
-CONFIG_X86_MSR=m
-CONFIG_X86_CPUID=y
-CONFIG_X86_5LEVEL=y
-CONFIG_X86_DIRECT_GBPAGES=y
-# CONFIG_X86_CPA_STATISTICS is not set
-CONFIG_X86_MEM_ENCRYPT=y
-CONFIG_NUMA=y
-# CONFIG_AMD_NUMA is not set
-CONFIG_X86_64_ACPI_NUMA=y
-CONFIG_NUMA_EMU=y
-CONFIG_NODES_SHIFT=10
-CONFIG_ARCH_SPARSEMEM_ENABLE=y
-CONFIG_ARCH_SPARSEMEM_DEFAULT=y
-# CONFIG_ARCH_MEMORY_PROBE is not set
-CONFIG_ARCH_PROC_KCORE_TEXT=y
-CONFIG_ILLEGAL_POINTER_VALUE=0xdead000000000000
-CONFIG_X86_PMEM_LEGACY_DEVICE=y
-CONFIG_X86_PMEM_LEGACY=m
-CONFIG_X86_CHECK_BIOS_CORRUPTION=y
-# CONFIG_X86_BOOTPARAM_MEMORY_CORRUPTION_CHECK is not set
-CONFIG_MTRR=y
-CONFIG_MTRR_SANITIZER=y
-CONFIG_MTRR_SANITIZER_ENABLE_DEFAULT=1
-CONFIG_MTRR_SANITIZER_SPARE_REG_NR_DEFAULT=1
-CONFIG_X86_PAT=y
-CONFIG_ARCH_USES_PG_UNCACHED=y
-CONFIG_X86_UMIP=y
-CONFIG_CC_HAS_IBT=y
-CONFIG_X86_KERNEL_IBT=y
-CONFIG_X86_INTEL_MEMORY_PROTECTION_KEYS=y
-# CONFIG_X86_INTEL_TSX_MODE_OFF is not set
-# CONFIG_X86_INTEL_TSX_MODE_ON is not set
-CONFIG_X86_INTEL_TSX_MODE_AUTO=y
-# CONFIG_X86_SGX is not set
-CONFIG_EFI=y
-CONFIG_EFI_STUB=y
-CONFIG_EFI_HANDOVER_PROTOCOL=y
-CONFIG_EFI_MIXED=y
-# CONFIG_EFI_FAKE_MEMMAP is not set
-CONFIG_EFI_RUNTIME_MAP=y
-# CONFIG_HZ_100 is not set
-# CONFIG_HZ_250 is not set
-# CONFIG_HZ_300 is not set
-CONFIG_HZ_1000=y
-CONFIG_HZ=1000
-CONFIG_SCHED_HRTICK=y
-CONFIG_KEXEC=y
-CONFIG_KEXEC_FILE=y
-CONFIG_ARCH_HAS_KEXEC_PURGATORY=y
-# CONFIG_KEXEC_SIG is not set
-CONFIG_CRASH_DUMP=y
-CONFIG_KEXEC_JUMP=y
-CONFIG_PHYSICAL_START=0x1000000
-CONFIG_RELOCATABLE=y
-# CONFIG_RANDOMIZE_BASE is not set
-CONFIG_PHYSICAL_ALIGN=0x200000
-CONFIG_DYNAMIC_MEMORY_LAYOUT=y
-CONFIG_HOTPLUG_CPU=y
-CONFIG_BOOTPARAM_HOTPLUG_CPU0=y
-# CONFIG_DEBUG_HOTPLUG_CPU0 is not set
-# CONFIG_COMPAT_VDSO is not set
-CONFIG_LEGACY_VSYSCALL_XONLY=y
-# CONFIG_LEGACY_VSYSCALL_NONE is not set
-# CONFIG_CMDLINE_BOOL is not set
-CONFIG_MODIFY_LDT_SYSCALL=y
-# CONFIG_STRICT_SIGALTSTACK_SIZE is not set
-CONFIG_HAVE_LIVEPATCH=y
-CONFIG_LIVEPATCH=y
-# end of Processor type and features
-
-CONFIG_CC_HAS_SLS=y
-CONFIG_CC_HAS_RETURN_THUNK=y
-CONFIG_CC_HAS_ENTRY_PADDING=y
-CONFIG_FUNCTION_PADDING_CFI=11
-CONFIG_FUNCTION_PADDING_BYTES=16
-CONFIG_SPECULATION_MITIGATIONS=y
-CONFIG_PAGE_TABLE_ISOLATION=y
-# CONFIG_RETPOLINE is not set
-CONFIG_CPU_IBRS_ENTRY=y
-# CONFIG_SLS is not set
-CONFIG_ARCH_HAS_ADD_PAGES=y
-CONFIG_ARCH_MHP_MEMMAP_ON_MEMORY_ENABLE=y
-
-#
-# Power management and ACPI options
-#
-CONFIG_ARCH_HIBERNATION_HEADER=y
-CONFIG_SUSPEND=y
-CONFIG_SUSPEND_FREEZER=y
-# CONFIG_SUSPEND_SKIP_SYNC is not set
-CONFIG_HIBERNATE_CALLBACKS=y
-CONFIG_HIBERNATION=y
-CONFIG_HIBERNATION_SNAPSHOT_DEV=y
-CONFIG_PM_STD_PARTITION=""
-CONFIG_PM_SLEEP=y
-CONFIG_PM_SLEEP_SMP=y
-# CONFIG_PM_AUTOSLEEP is not set
-# CONFIG_PM_USERSPACE_AUTOSLEEP is not set
-# CONFIG_PM_WAKELOCKS is not set
-CONFIG_PM=y
-CONFIG_PM_DEBUG=y
-# CONFIG_PM_ADVANCED_DEBUG is not set
-# CONFIG_PM_TEST_SUSPEND is not set
-CONFIG_PM_SLEEP_DEBUG=y
-# CONFIG_DPM_WATCHDOG is not set
-# CONFIG_PM_TRACE_RTC is not set
-CONFIG_PM_CLK=y
-# CONFIG_WQ_POWER_EFFICIENT_DEFAULT is not set
-# CONFIG_ENERGY_MODEL is not set
-CONFIG_ARCH_SUPPORTS_ACPI=y
-CONFIG_ACPI=y
-CONFIG_ACPI_LEGACY_TABLES_LOOKUP=y
-CONFIG_ARCH_MIGHT_HAVE_ACPI_PDC=y
-CONFIG_ACPI_SYSTEM_POWER_STATES_SUPPORT=y
-# CONFIG_ACPI_DEBUGGER is not set
-CONFIG_ACPI_SPCR_TABLE=y
-# CONFIG_ACPI_FPDT is not set
-CONFIG_ACPI_LPIT=y
-CONFIG_ACPI_SLEEP=y
-CONFIG_ACPI_REV_OVERRIDE_POSSIBLE=y
-CONFIG_ACPI_EC_DEBUGFS=m
-CONFIG_ACPI_AC=y
-CONFIG_ACPI_BATTERY=y
-CONFIG_ACPI_BUTTON=y
-CONFIG_ACPI_VIDEO=m
-CONFIG_ACPI_FAN=y
-CONFIG_ACPI_TAD=m
-CONFIG_ACPI_DOCK=y
-CONFIG_ACPI_CPU_FREQ_PSS=y
-CONFIG_ACPI_PROCESSOR_CSTATE=y
-CONFIG_ACPI_PROCESSOR_IDLE=y
-CONFIG_ACPI_CPPC_LIB=y
-CONFIG_ACPI_PROCESSOR=y
-CONFIG_ACPI_IPMI=m
-CONFIG_ACPI_HOTPLUG_CPU=y
-CONFIG_ACPI_PROCESSOR_AGGREGATOR=m
-CONFIG_ACPI_THERMAL=y
-CONFIG_ACPI_PLATFORM_PROFILE=m
-CONFIG_ARCH_HAS_ACPI_TABLE_UPGRADE=y
-CONFIG_ACPI_TABLE_UPGRADE=y
-# CONFIG_ACPI_DEBUG is not set
-CONFIG_ACPI_PCI_SLOT=y
-CONFIG_ACPI_CONTAINER=y
-CONFIG_ACPI_HOTPLUG_MEMORY=y
-CONFIG_ACPI_HOTPLUG_IOAPIC=y
-CONFIG_ACPI_SBS=m
-CONFIG_ACPI_HED=y
-# CONFIG_ACPI_CUSTOM_METHOD is not set
-CONFIG_ACPI_BGRT=y
-# CONFIG_ACPI_REDUCED_HARDWARE_ONLY is not set
-CONFIG_ACPI_NFIT=m
-# CONFIG_NFIT_SECURITY_DEBUG is not set
-CONFIG_ACPI_NUMA=y
-# CONFIG_ACPI_HMAT is not set
-CONFIG_HAVE_ACPI_APEI=y
-CONFIG_HAVE_ACPI_APEI_NMI=y
-CONFIG_ACPI_APEI=y
-CONFIG_ACPI_APEI_GHES=y
-CONFIG_ACPI_APEI_PCIEAER=y
-CONFIG_ACPI_APEI_MEMORY_FAILURE=y
-CONFIG_ACPI_APEI_EINJ=m
-# CONFIG_ACPI_APEI_ERST_DEBUG is not set
-# CONFIG_ACPI_DPTF is not set
-CONFIG_ACPI_WATCHDOG=y
-CONFIG_ACPI_EXTLOG=m
-CONFIG_ACPI_ADXL=y
-# CONFIG_ACPI_CONFIGFS is not set
-# CONFIG_ACPI_PFRUT is not set
-CONFIG_ACPI_PCC=y
-# CONFIG_ACPI_FFH is not set
-CONFIG_PMIC_OPREGION=y
-CONFIG_ACPI_PRMT=y
-CONFIG_X86_PM_TIMER=y
-
-#
-# CPU Frequency scaling
-#
-CONFIG_CPU_FREQ=y
-CONFIG_CPU_FREQ_GOV_ATTR_SET=y
-CONFIG_CPU_FREQ_GOV_COMMON=y
-CONFIG_CPU_FREQ_STAT=y
-CONFIG_CPU_FREQ_DEFAULT_GOV_PERFORMANCE=y
-# CONFIG_CPU_FREQ_DEFAULT_GOV_POWERSAVE is not set
-# CONFIG_CPU_FREQ_DEFAULT_GOV_USERSPACE is not set
-# CONFIG_CPU_FREQ_DEFAULT_GOV_SCHEDUTIL is not set
-CONFIG_CPU_FREQ_GOV_PERFORMANCE=y
-CONFIG_CPU_FREQ_GOV_POWERSAVE=y
-CONFIG_CPU_FREQ_GOV_USERSPACE=y
-CONFIG_CPU_FREQ_GOV_ONDEMAND=y
-CONFIG_CPU_FREQ_GOV_CONSERVATIVE=y
-CONFIG_CPU_FREQ_GOV_SCHEDUTIL=y
-
-#
-# CPU frequency scaling drivers
-#
-CONFIG_X86_INTEL_PSTATE=y
-# CONFIG_X86_PCC_CPUFREQ is not set
-# CONFIG_X86_AMD_PSTATE is not set
-# CONFIG_X86_AMD_PSTATE_UT is not set
-CONFIG_X86_ACPI_CPUFREQ=m
-# CONFIG_X86_POWERNOW_K8 is not set
-# CONFIG_X86_SPEEDSTEP_CENTRINO is not set
-CONFIG_X86_P4_CLOCKMOD=m
-
-#
-# shared options
-#
-CONFIG_X86_SPEEDSTEP_LIB=m
-# end of CPU Frequency scaling
-
-#
-# CPU Idle
-#
-CONFIG_CPU_IDLE=y
-# CONFIG_CPU_IDLE_GOV_LADDER is not set
-CONFIG_CPU_IDLE_GOV_MENU=y
-# CONFIG_CPU_IDLE_GOV_TEO is not set
-# CONFIG_CPU_IDLE_GOV_HALTPOLL is not set
-CONFIG_HALTPOLL_CPUIDLE=y
-# end of CPU Idle
-
-CONFIG_INTEL_IDLE=y
-# end of Power management and ACPI options
-
-#
-# Bus options (PCI etc.)
-#
-CONFIG_PCI_DIRECT=y
-CONFIG_PCI_MMCONFIG=y
-CONFIG_MMCONF_FAM10H=y
-# CONFIG_PCI_CNB20LE_QUIRK is not set
-# CONFIG_ISA_BUS is not set
-CONFIG_ISA_DMA_API=y
-# end of Bus options (PCI etc.)
-
-#
-# Binary Emulations
-#
-CONFIG_IA32_EMULATION=y
-# CONFIG_X86_X32_ABI is not set
-CONFIG_COMPAT_32=y
-CONFIG_COMPAT=y
-CONFIG_COMPAT_FOR_U64_ALIGNMENT=y
-# end of Binary Emulations
-
-CONFIG_HAVE_KVM=y
-CONFIG_HAVE_KVM_PFNCACHE=y
-CONFIG_HAVE_KVM_IRQCHIP=y
-CONFIG_HAVE_KVM_IRQFD=y
-CONFIG_HAVE_KVM_IRQ_ROUTING=y
-CONFIG_HAVE_KVM_DIRTY_RING=y
-CONFIG_HAVE_KVM_DIRTY_RING_TSO=y
-CONFIG_HAVE_KVM_DIRTY_RING_ACQ_REL=y
-CONFIG_HAVE_KVM_EVENTFD=y
-CONFIG_KVM_MMIO=y
-CONFIG_KVM_ASYNC_PF=y
-CONFIG_HAVE_KVM_MSI=y
-CONFIG_HAVE_KVM_CPU_RELAX_INTERCEPT=y
-CONFIG_KVM_VFIO=y
-CONFIG_KVM_GENERIC_DIRTYLOG_READ_PROTECT=y
-CONFIG_KVM_COMPAT=y
-CONFIG_HAVE_KVM_IRQ_BYPASS=y
-CONFIG_HAVE_KVM_NO_POLL=y
-CONFIG_KVM_XFER_TO_GUEST_WORK=y
-CONFIG_HAVE_KVM_PM_NOTIFIER=y
-CONFIG_VIRTUALIZATION=y
-CONFIG_KVM=m
-# CONFIG_KVM_WERROR is not set
-CONFIG_KVM_INTEL=m
-# CONFIG_KVM_AMD is not set
-CONFIG_KVM_SMM=y
-# CONFIG_KVM_XEN is not set
-CONFIG_AS_AVX512=y
-CONFIG_AS_SHA1_NI=y
-CONFIG_AS_SHA256_NI=y
-CONFIG_AS_TPAUSE=y
-
-#
-# General architecture-dependent options
-#
-CONFIG_CRASH_CORE=y
-CONFIG_KEXEC_CORE=y
-CONFIG_HAVE_IMA_KEXEC=y
-CONFIG_HOTPLUG_SMT=y
-CONFIG_GENERIC_ENTRY=y
-CONFIG_KPROBES=y
-CONFIG_JUMP_LABEL=y
-# CONFIG_STATIC_KEYS_SELFTEST is not set
-# CONFIG_STATIC_CALL_SELFTEST is not set
-CONFIG_OPTPROBES=y
-CONFIG_KPROBES_ON_FTRACE=y
-CONFIG_UPROBES=y
-CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS=y
-CONFIG_ARCH_USE_BUILTIN_BSWAP=y
-CONFIG_KRETPROBES=y
-CONFIG_KRETPROBE_ON_RETHOOK=y
-CONFIG_USER_RETURN_NOTIFIER=y
-CONFIG_HAVE_IOREMAP_PROT=y
-CONFIG_HAVE_KPROBES=y
-CONFIG_HAVE_KRETPROBES=y
-CONFIG_HAVE_OPTPROBES=y
-CONFIG_HAVE_KPROBES_ON_FTRACE=y
-CONFIG_ARCH_CORRECT_STACKTRACE_ON_KRETPROBE=y
-CONFIG_HAVE_FUNCTION_ERROR_INJECTION=y
-CONFIG_HAVE_NMI=y
-CONFIG_TRACE_IRQFLAGS_SUPPORT=y
-CONFIG_TRACE_IRQFLAGS_NMI_SUPPORT=y
-CONFIG_HAVE_ARCH_TRACEHOOK=y
-CONFIG_HAVE_DMA_CONTIGUOUS=y
-CONFIG_GENERIC_SMP_IDLE_THREAD=y
-CONFIG_ARCH_HAS_FORTIFY_SOURCE=y
-CONFIG_ARCH_HAS_SET_MEMORY=y
-CONFIG_ARCH_HAS_SET_DIRECT_MAP=y
-CONFIG_HAVE_ARCH_THREAD_STRUCT_WHITELIST=y
-CONFIG_ARCH_WANTS_DYNAMIC_TASK_STRUCT=y
-CONFIG_ARCH_WANTS_NO_INSTR=y
-CONFIG_HAVE_ASM_MODVERSIONS=y
-CONFIG_HAVE_REGS_AND_STACK_ACCESS_API=y
-CONFIG_HAVE_RSEQ=y
-CONFIG_HAVE_RUST=y
-CONFIG_HAVE_FUNCTION_ARG_ACCESS_API=y
-CONFIG_HAVE_HW_BREAKPOINT=y
-CONFIG_HAVE_MIXED_BREAKPOINTS_REGS=y
-CONFIG_HAVE_USER_RETURN_NOTIFIER=y
-CONFIG_HAVE_PERF_EVENTS_NMI=y
-CONFIG_HAVE_HARDLOCKUP_DETECTOR_PERF=y
-CONFIG_HAVE_PERF_REGS=y
-CONFIG_HAVE_PERF_USER_STACK_DUMP=y
-CONFIG_HAVE_ARCH_JUMP_LABEL=y
-CONFIG_HAVE_ARCH_JUMP_LABEL_RELATIVE=y
-CONFIG_MMU_GATHER_TABLE_FREE=y
-CONFIG_MMU_GATHER_RCU_TABLE_FREE=y
-CONFIG_MMU_GATHER_MERGE_VMAS=y
-CONFIG_ARCH_HAVE_NMI_SAFE_CMPXCHG=y
-CONFIG_ARCH_HAS_NMI_SAFE_THIS_CPU_OPS=y
-CONFIG_HAVE_ALIGNED_STRUCT_PAGE=y
-CONFIG_HAVE_CMPXCHG_LOCAL=y
-CONFIG_HAVE_CMPXCHG_DOUBLE=y
-CONFIG_ARCH_WANT_COMPAT_IPC_PARSE_VERSION=y
-CONFIG_ARCH_WANT_OLD_COMPAT_IPC=y
-CONFIG_HAVE_ARCH_SECCOMP=y
-CONFIG_HAVE_ARCH_SECCOMP_FILTER=y
-CONFIG_SECCOMP=y
-CONFIG_SECCOMP_FILTER=y
-# CONFIG_SECCOMP_CACHE_DEBUG is not set
-CONFIG_HAVE_ARCH_STACKLEAK=y
-CONFIG_HAVE_STACKPROTECTOR=y
-CONFIG_STACKPROTECTOR=y
-CONFIG_STACKPROTECTOR_STRONG=y
-CONFIG_ARCH_SUPPORTS_LTO_CLANG=y
-CONFIG_ARCH_SUPPORTS_LTO_CLANG_THIN=y
-CONFIG_LTO_NONE=y
-CONFIG_ARCH_SUPPORTS_CFI_CLANG=y
-CONFIG_HAVE_ARCH_WITHIN_STACK_FRAMES=y
-CONFIG_HAVE_CONTEXT_TRACKING_USER=y
-CONFIG_HAVE_CONTEXT_TRACKING_USER_OFFSTACK=y
-CONFIG_HAVE_VIRT_CPU_ACCOUNTING_GEN=y
-CONFIG_HAVE_IRQ_TIME_ACCOUNTING=y
-CONFIG_HAVE_MOVE_PUD=y
-CONFIG_HAVE_MOVE_PMD=y
-CONFIG_HAVE_ARCH_TRANSPARENT_HUGEPAGE=y
-CONFIG_HAVE_ARCH_TRANSPARENT_HUGEPAGE_PUD=y
-CONFIG_HAVE_ARCH_HUGE_VMAP=y
-CONFIG_HAVE_ARCH_HUGE_VMALLOC=y
-CONFIG_ARCH_WANT_HUGE_PMD_SHARE=y
-CONFIG_HAVE_ARCH_SOFT_DIRTY=y
-CONFIG_HAVE_MOD_ARCH_SPECIFIC=y
-CONFIG_MODULES_USE_ELF_RELA=y
-CONFIG_HAVE_IRQ_EXIT_ON_IRQ_STACK=y
-CONFIG_HAVE_SOFTIRQ_ON_OWN_STACK=y
-CONFIG_SOFTIRQ_ON_OWN_STACK=y
-CONFIG_ARCH_HAS_ELF_RANDOMIZE=y
-CONFIG_HAVE_ARCH_MMAP_RND_BITS=y
-CONFIG_HAVE_EXIT_THREAD=y
-CONFIG_ARCH_MMAP_RND_BITS=28
-CONFIG_HAVE_ARCH_MMAP_RND_COMPAT_BITS=y
-CONFIG_ARCH_MMAP_RND_COMPAT_BITS=8
-CONFIG_HAVE_ARCH_COMPAT_MMAP_BASES=y
-CONFIG_PAGE_SIZE_LESS_THAN_64KB=y
-CONFIG_PAGE_SIZE_LESS_THAN_256KB=y
-CONFIG_HAVE_OBJTOOL=y
-CONFIG_HAVE_JUMP_LABEL_HACK=y
-CONFIG_HAVE_NOINSTR_HACK=y
-CONFIG_HAVE_NOINSTR_VALIDATION=y
-CONFIG_HAVE_UACCESS_VALIDATION=y
-CONFIG_HAVE_STACK_VALIDATION=y
-CONFIG_HAVE_RELIABLE_STACKTRACE=y
-CONFIG_OLD_SIGSUSPEND3=y
-CONFIG_COMPAT_OLD_SIGACTION=y
-CONFIG_COMPAT_32BIT_TIME=y
-CONFIG_HAVE_ARCH_VMAP_STACK=y
-CONFIG_VMAP_STACK=y
-CONFIG_HAVE_ARCH_RANDOMIZE_KSTACK_OFFSET=y
-CONFIG_RANDOMIZE_KSTACK_OFFSET=y
-# CONFIG_RANDOMIZE_KSTACK_OFFSET_DEFAULT is not set
-CONFIG_ARCH_HAS_STRICT_KERNEL_RWX=y
-CONFIG_STRICT_KERNEL_RWX=y
-CONFIG_ARCH_HAS_STRICT_MODULE_RWX=y
-CONFIG_STRICT_MODULE_RWX=y
-CONFIG_HAVE_ARCH_PREL32_RELOCATIONS=y
-CONFIG_ARCH_USE_MEMREMAP_PROT=y
-# CONFIG_LOCK_EVENT_COUNTS is not set
-CONFIG_ARCH_HAS_MEM_ENCRYPT=y
-CONFIG_ARCH_HAS_CC_PLATFORM=y
-CONFIG_HAVE_STATIC_CALL=y
-CONFIG_HAVE_STATIC_CALL_INLINE=y
-CONFIG_HAVE_PREEMPT_DYNAMIC=y
-CONFIG_HAVE_PREEMPT_DYNAMIC_CALL=y
-CONFIG_ARCH_WANT_LD_ORPHAN_WARN=y
-CONFIG_ARCH_SUPPORTS_DEBUG_PAGEALLOC=y
-CONFIG_ARCH_SUPPORTS_PAGE_TABLE_CHECK=y
-CONFIG_ARCH_HAS_ELFCORE_COMPAT=y
-CONFIG_ARCH_HAS_PARANOID_L1D_FLUSH=y
-CONFIG_DYNAMIC_SIGFRAME=y
-CONFIG_ARCH_HAS_NONLEAF_PMD_YOUNG=y
-
-#
-# GCOV-based kernel profiling
-#
-# CONFIG_GCOV_KERNEL is not set
-CONFIG_ARCH_HAS_GCOV_PROFILE_ALL=y
-# end of GCOV-based kernel profiling
-
-CONFIG_HAVE_GCC_PLUGINS=y
-CONFIG_GCC_PLUGINS=y
-# CONFIG_GCC_PLUGIN_LATENT_ENTROPY is not set
-CONFIG_FUNCTION_ALIGNMENT_4B=y
-CONFIG_FUNCTION_ALIGNMENT_16B=y
-CONFIG_FUNCTION_ALIGNMENT=16
-# end of General architecture-dependent options
-
-CONFIG_RT_MUTEXES=y
-CONFIG_BASE_SMALL=0
-CONFIG_MODULE_SIG_FORMAT=y
-CONFIG_MODULES=y
-CONFIG_MODULE_FORCE_LOAD=y
-CONFIG_MODULE_UNLOAD=y
-# CONFIG_MODULE_FORCE_UNLOAD is not set
-# CONFIG_MODULE_UNLOAD_TAINT_TRACKING is not set
-# CONFIG_MODVERSIONS is not set
-# CONFIG_MODULE_SRCVERSION_ALL is not set
-CONFIG_MODULE_SIG=y
-# CONFIG_MODULE_SIG_FORCE is not set
-CONFIG_MODULE_SIG_ALL=y
-# CONFIG_MODULE_SIG_SHA1 is not set
-# CONFIG_MODULE_SIG_SHA224 is not set
-CONFIG_MODULE_SIG_SHA256=y
-# CONFIG_MODULE_SIG_SHA384 is not set
-# CONFIG_MODULE_SIG_SHA512 is not set
-CONFIG_MODULE_SIG_HASH="sha256"
-CONFIG_MODULE_COMPRESS_NONE=y
-# CONFIG_MODULE_COMPRESS_GZIP is not set
-# CONFIG_MODULE_COMPRESS_XZ is not set
-# CONFIG_MODULE_COMPRESS_ZSTD is not set
-# CONFIG_MODULE_ALLOW_MISSING_NAMESPACE_IMPORTS is not set
-CONFIG_MODPROBE_PATH="/sbin/modprobe"
-# CONFIG_TRIM_UNUSED_KSYMS is not set
-CONFIG_MODULES_TREE_LOOKUP=y
-CONFIG_BLOCK=y
-CONFIG_BLOCK_LEGACY_AUTOLOAD=y
-CONFIG_BLK_CGROUP_RWSTAT=y
-CONFIG_BLK_DEV_BSG_COMMON=y
-CONFIG_BLK_ICQ=y
-CONFIG_BLK_DEV_BSGLIB=y
-CONFIG_BLK_DEV_INTEGRITY=y
-CONFIG_BLK_DEV_INTEGRITY_T10=m
-CONFIG_BLK_DEV_ZONED=y
-CONFIG_BLK_DEV_THROTTLING=y
-# CONFIG_BLK_DEV_THROTTLING_LOW is not set
-CONFIG_BLK_WBT=y
-CONFIG_BLK_WBT_MQ=y
-# CONFIG_BLK_CGROUP_IOLATENCY is not set
-# CONFIG_BLK_CGROUP_IOCOST is not set
-# CONFIG_BLK_CGROUP_IOPRIO is not set
-CONFIG_BLK_DEBUG_FS=y
-CONFIG_BLK_DEBUG_FS_ZONED=y
-# CONFIG_BLK_SED_OPAL is not set
-# CONFIG_BLK_INLINE_ENCRYPTION is not set
-
-#
-# Partition Types
-#
-# CONFIG_PARTITION_ADVANCED is not set
-CONFIG_MSDOS_PARTITION=y
-CONFIG_EFI_PARTITION=y
-# end of Partition Types
-
-CONFIG_BLOCK_COMPAT=y
-CONFIG_BLK_MQ_PCI=y
-CONFIG_BLK_MQ_VIRTIO=y
-CONFIG_BLK_MQ_RDMA=y
-CONFIG_BLK_PM=y
-CONFIG_BLOCK_HOLDER_DEPRECATED=y
-CONFIG_BLK_MQ_STACKING=y
-
-#
-# IO Schedulers
-#
-CONFIG_MQ_IOSCHED_DEADLINE=y
-CONFIG_MQ_IOSCHED_KYBER=y
-CONFIG_IOSCHED_BFQ=y
-CONFIG_BFQ_GROUP_IOSCHED=y
-# CONFIG_BFQ_CGROUP_DEBUG is not set
-# end of IO Schedulers
-
-CONFIG_PREEMPT_NOTIFIERS=y
-CONFIG_PADATA=y
-CONFIG_ASN1=y
-CONFIG_INLINE_SPIN_UNLOCK_IRQ=y
-CONFIG_INLINE_READ_UNLOCK=y
-CONFIG_INLINE_READ_UNLOCK_IRQ=y
-CONFIG_INLINE_WRITE_UNLOCK=y
-CONFIG_INLINE_WRITE_UNLOCK_IRQ=y
-CONFIG_ARCH_SUPPORTS_ATOMIC_RMW=y
-CONFIG_MUTEX_SPIN_ON_OWNER=y
-CONFIG_RWSEM_SPIN_ON_OWNER=y
-CONFIG_LOCK_SPIN_ON_OWNER=y
-CONFIG_ARCH_USE_QUEUED_SPINLOCKS=y
-CONFIG_QUEUED_SPINLOCKS=y
-CONFIG_ARCH_USE_QUEUED_RWLOCKS=y
-CONFIG_QUEUED_RWLOCKS=y
-CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE=y
-CONFIG_ARCH_HAS_SYNC_CORE_BEFORE_USERMODE=y
-CONFIG_ARCH_HAS_SYSCALL_WRAPPER=y
-CONFIG_FREEZER=y
-
-#
-# Executable file formats
-#
-CONFIG_BINFMT_ELF=y
-CONFIG_COMPAT_BINFMT_ELF=y
-CONFIG_ELFCORE=y
-CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS=y
-CONFIG_BINFMT_SCRIPT=y
-CONFIG_BINFMT_MISC=m
-CONFIG_COREDUMP=y
-# end of Executable file formats
-
-#
-# Memory Management options
-#
-CONFIG_ZPOOL=y
-CONFIG_SWAP=y
-CONFIG_ZSWAP=y
-# CONFIG_ZSWAP_DEFAULT_ON is not set
-# CONFIG_ZSWAP_COMPRESSOR_DEFAULT_DEFLATE is not set
-CONFIG_ZSWAP_COMPRESSOR_DEFAULT_LZO=y
-# CONFIG_ZSWAP_COMPRESSOR_DEFAULT_842 is not set
-# CONFIG_ZSWAP_COMPRESSOR_DEFAULT_LZ4 is not set
-# CONFIG_ZSWAP_COMPRESSOR_DEFAULT_LZ4HC is not set
-# CONFIG_ZSWAP_COMPRESSOR_DEFAULT_ZSTD is not set
-CONFIG_ZSWAP_COMPRESSOR_DEFAULT="lzo"
-CONFIG_ZSWAP_ZPOOL_DEFAULT_ZBUD=y
-# CONFIG_ZSWAP_ZPOOL_DEFAULT_Z3FOLD is not set
-# CONFIG_ZSWAP_ZPOOL_DEFAULT_ZSMALLOC is not set
-CONFIG_ZSWAP_ZPOOL_DEFAULT="zbud"
-CONFIG_ZBUD=y
-# CONFIG_Z3FOLD is not set
-CONFIG_ZSMALLOC=y
-CONFIG_ZSMALLOC_STAT=y
-
-#
-# SLAB allocator options
-#
-# CONFIG_SLAB is not set
-CONFIG_SLUB=y
-# CONFIG_SLOB_DEPRECATED is not set
-# CONFIG_SLUB_TINY is not set
-CONFIG_SLAB_MERGE_DEFAULT=y
-CONFIG_SLAB_FREELIST_RANDOM=y
-# CONFIG_SLAB_FREELIST_HARDENED is not set
-# CONFIG_SLUB_STATS is not set
-CONFIG_SLUB_CPU_PARTIAL=y
-# end of SLAB allocator options
-
-CONFIG_SHUFFLE_PAGE_ALLOCATOR=y
-# CONFIG_COMPAT_BRK is not set
-CONFIG_SPARSEMEM=y
-CONFIG_SPARSEMEM_EXTREME=y
-CONFIG_SPARSEMEM_VMEMMAP_ENABLE=y
-CONFIG_SPARSEMEM_VMEMMAP=y
-CONFIG_HAVE_FAST_GUP=y
-CONFIG_NUMA_KEEP_MEMINFO=y
-CONFIG_MEMORY_ISOLATION=y
-CONFIG_EXCLUSIVE_SYSTEM_RAM=y
-CONFIG_HAVE_BOOTMEM_INFO_NODE=y
-CONFIG_ARCH_ENABLE_MEMORY_HOTPLUG=y
-CONFIG_ARCH_ENABLE_MEMORY_HOTREMOVE=y
-CONFIG_MEMORY_HOTPLUG=y
-# CONFIG_MEMORY_HOTPLUG_DEFAULT_ONLINE is not set
-CONFIG_MEMORY_HOTREMOVE=y
-CONFIG_MHP_MEMMAP_ON_MEMORY=y
-CONFIG_SPLIT_PTLOCK_CPUS=4
-CONFIG_ARCH_ENABLE_SPLIT_PMD_PTLOCK=y
-CONFIG_MEMORY_BALLOON=y
-CONFIG_BALLOON_COMPACTION=y
-CONFIG_COMPACTION=y
-CONFIG_COMPACT_UNEVICTABLE_DEFAULT=1
-CONFIG_PAGE_REPORTING=y
-CONFIG_MIGRATION=y
-CONFIG_DEVICE_MIGRATION=y
-CONFIG_ARCH_ENABLE_HUGEPAGE_MIGRATION=y
-CONFIG_ARCH_ENABLE_THP_MIGRATION=y
-CONFIG_CONTIG_ALLOC=y
-CONFIG_PHYS_ADDR_T_64BIT=y
-CONFIG_MMU_NOTIFIER=y
-CONFIG_KSM=y
-CONFIG_DEFAULT_MMAP_MIN_ADDR=4096
-CONFIG_ARCH_SUPPORTS_MEMORY_FAILURE=y
-CONFIG_MEMORY_FAILURE=y
-CONFIG_HWPOISON_INJECT=m
-CONFIG_ARCH_WANT_GENERAL_HUGETLB=y
-CONFIG_ARCH_WANTS_THP_SWAP=y
-CONFIG_TRANSPARENT_HUGEPAGE=y
-CONFIG_TRANSPARENT_HUGEPAGE_ALWAYS=y
-# CONFIG_TRANSPARENT_HUGEPAGE_MADVISE is not set
-CONFIG_THP_SWAP=y
-# CONFIG_READ_ONLY_THP_FOR_FS is not set
-CONFIG_NEED_PER_CPU_EMBED_FIRST_CHUNK=y
-CONFIG_NEED_PER_CPU_PAGE_FIRST_CHUNK=y
-CONFIG_USE_PERCPU_NUMA_NODE_ID=y
-CONFIG_HAVE_SETUP_PER_CPU_AREA=y
-CONFIG_FRONTSWAP=y
-CONFIG_CMA=y
-# CONFIG_CMA_DEBUG is not set
-# CONFIG_CMA_DEBUGFS is not set
-# CONFIG_CMA_SYSFS is not set
-CONFIG_CMA_AREAS=19
-# CONFIG_MEM_SOFT_DIRTY is not set
-CONFIG_GENERIC_EARLY_IOREMAP=y
-CONFIG_DEFERRED_STRUCT_PAGE_INIT=y
-CONFIG_PAGE_IDLE_FLAG=y
-CONFIG_IDLE_PAGE_TRACKING=y
-CONFIG_ARCH_HAS_CACHE_LINE_SIZE=y
-CONFIG_ARCH_HAS_CURRENT_STACK_POINTER=y
-CONFIG_ARCH_HAS_PTE_DEVMAP=y
-CONFIG_ARCH_HAS_ZONE_DMA_SET=y
-CONFIG_ZONE_DMA=y
-CONFIG_ZONE_DMA32=y
-CONFIG_ZONE_DEVICE=y
-CONFIG_HMM_MIRROR=y
-CONFIG_GET_FREE_REGION=y
-CONFIG_DEVICE_PRIVATE=y
-CONFIG_VMAP_PFN=y
-CONFIG_ARCH_USES_HIGH_VMA_FLAGS=y
-CONFIG_ARCH_HAS_PKEYS=y
-CONFIG_VM_EVENT_COUNTERS=y
-# CONFIG_PERCPU_STATS is not set
-# CONFIG_GUP_TEST is not set
-CONFIG_ARCH_HAS_PTE_SPECIAL=y
-CONFIG_SECRETMEM=y
-# CONFIG_ANON_VMA_NAME is not set
-# CONFIG_USERFAULTFD is not set
-# CONFIG_LRU_GEN is not set
-
-#
-# Data Access Monitoring
-#
-# CONFIG_DAMON is not set
-# end of Data Access Monitoring
-# end of Memory Management options
-
-CONFIG_NET=y
-CONFIG_COMPAT_NETLINK_MESSAGES=y
-CONFIG_NET_INGRESS=y
-CONFIG_NET_EGRESS=y
-CONFIG_SKB_EXTENSIONS=y
-
-#
-# Networking options
-#
-CONFIG_PACKET=y
-CONFIG_PACKET_DIAG=m
-CONFIG_UNIX=y
-CONFIG_UNIX_SCM=y
-CONFIG_AF_UNIX_OOB=y
-CONFIG_UNIX_DIAG=m
-CONFIG_TLS=m
-CONFIG_TLS_DEVICE=y
-# CONFIG_TLS_TOE is not set
-CONFIG_XFRM=y
-CONFIG_XFRM_OFFLOAD=y
-CONFIG_XFRM_ALGO=y
-CONFIG_XFRM_USER=y
-# CONFIG_XFRM_USER_COMPAT is not set
-# CONFIG_XFRM_INTERFACE is not set
-CONFIG_XFRM_SUB_POLICY=y
-CONFIG_XFRM_MIGRATE=y
-CONFIG_XFRM_STATISTICS=y
-CONFIG_XFRM_AH=m
-CONFIG_XFRM_ESP=m
-CONFIG_XFRM_IPCOMP=m
-CONFIG_NET_KEY=m
-CONFIG_NET_KEY_MIGRATE=y
-# CONFIG_SMC is not set
-CONFIG_XDP_SOCKETS=y
-# CONFIG_XDP_SOCKETS_DIAG is not set
-CONFIG_INET=y
-CONFIG_IP_MULTICAST=y
-CONFIG_IP_ADVANCED_ROUTER=y
-CONFIG_IP_FIB_TRIE_STATS=y
-CONFIG_IP_MULTIPLE_TABLES=y
-CONFIG_IP_ROUTE_MULTIPATH=y
-CONFIG_IP_ROUTE_VERBOSE=y
-CONFIG_IP_ROUTE_CLASSID=y
-CONFIG_IP_PNP=y
-CONFIG_IP_PNP_DHCP=y
-# CONFIG_IP_PNP_BOOTP is not set
-# CONFIG_IP_PNP_RARP is not set
-CONFIG_NET_IPIP=m
-CONFIG_NET_IPGRE_DEMUX=m
-CONFIG_NET_IP_TUNNEL=m
-CONFIG_NET_IPGRE=m
-CONFIG_NET_IPGRE_BROADCAST=y
-CONFIG_IP_MROUTE_COMMON=y
-CONFIG_IP_MROUTE=y
-CONFIG_IP_MROUTE_MULTIPLE_TABLES=y
-CONFIG_IP_PIMSM_V1=y
-CONFIG_IP_PIMSM_V2=y
-CONFIG_SYN_COOKIES=y
-CONFIG_NET_IPVTI=m
-CONFIG_NET_UDP_TUNNEL=m
-# CONFIG_NET_FOU is not set
-# CONFIG_NET_FOU_IP_TUNNELS is not set
-CONFIG_INET_AH=m
-CONFIG_INET_ESP=m
-CONFIG_INET_ESP_OFFLOAD=m
-# CONFIG_INET_ESPINTCP is not set
-CONFIG_INET_IPCOMP=m
-CONFIG_INET_TABLE_PERTURB_ORDER=16
-CONFIG_INET_XFRM_TUNNEL=m
-CONFIG_INET_TUNNEL=m
-CONFIG_INET_DIAG=m
-CONFIG_INET_TCP_DIAG=m
-CONFIG_INET_UDP_DIAG=m
-CONFIG_INET_RAW_DIAG=m
-# CONFIG_INET_DIAG_DESTROY is not set
-CONFIG_TCP_CONG_ADVANCED=y
-CONFIG_TCP_CONG_BIC=m
-CONFIG_TCP_CONG_CUBIC=y
-CONFIG_TCP_CONG_WESTWOOD=m
-CONFIG_TCP_CONG_HTCP=m
-CONFIG_TCP_CONG_HSTCP=m
-CONFIG_TCP_CONG_HYBLA=m
-CONFIG_TCP_CONG_VEGAS=m
-CONFIG_TCP_CONG_NV=m
-CONFIG_TCP_CONG_SCALABLE=m
-CONFIG_TCP_CONG_LP=m
-CONFIG_TCP_CONG_VENO=m
-CONFIG_TCP_CONG_YEAH=m
-CONFIG_TCP_CONG_ILLINOIS=m
-CONFIG_TCP_CONG_DCTCP=m
-# CONFIG_TCP_CONG_CDG is not set
-CONFIG_TCP_CONG_BBR=m
-CONFIG_DEFAULT_CUBIC=y
-# CONFIG_DEFAULT_RENO is not set
-CONFIG_DEFAULT_TCP_CONG="cubic"
-CONFIG_TCP_MD5SIG=y
-CONFIG_IPV6=y
-CONFIG_IPV6_ROUTER_PREF=y
-CONFIG_IPV6_ROUTE_INFO=y
-CONFIG_IPV6_OPTIMISTIC_DAD=y
-CONFIG_INET6_AH=m
-CONFIG_INET6_ESP=m
-CONFIG_INET6_ESP_OFFLOAD=m
-# CONFIG_INET6_ESPINTCP is not set
-CONFIG_INET6_IPCOMP=m
-CONFIG_IPV6_MIP6=m
-# CONFIG_IPV6_ILA is not set
-CONFIG_INET6_XFRM_TUNNEL=m
-CONFIG_INET6_TUNNEL=m
-CONFIG_IPV6_VTI=m
-CONFIG_IPV6_SIT=m
-CONFIG_IPV6_SIT_6RD=y
-CONFIG_IPV6_NDISC_NODETYPE=y
-CONFIG_IPV6_TUNNEL=m
-CONFIG_IPV6_GRE=m
-CONFIG_IPV6_MULTIPLE_TABLES=y
-# CONFIG_IPV6_SUBTREES is not set
-CONFIG_IPV6_MROUTE=y
-CONFIG_IPV6_MROUTE_MULTIPLE_TABLES=y
-CONFIG_IPV6_PIMSM_V2=y
-# CONFIG_IPV6_SEG6_LWTUNNEL is not set
-# CONFIG_IPV6_SEG6_HMAC is not set
-# CONFIG_IPV6_RPL_LWTUNNEL is not set
-# CONFIG_IPV6_IOAM6_LWTUNNEL is not set
-CONFIG_NETLABEL=y
-# CONFIG_MPTCP is not set
-CONFIG_NETWORK_SECMARK=y
-CONFIG_NET_PTP_CLASSIFY=y
-CONFIG_NETWORK_PHY_TIMESTAMPING=y
-CONFIG_NETFILTER=y
-CONFIG_NETFILTER_ADVANCED=y
-CONFIG_BRIDGE_NETFILTER=m
-
-#
-# Core Netfilter Configuration
-#
-CONFIG_NETFILTER_INGRESS=y
-CONFIG_NETFILTER_EGRESS=y
-CONFIG_NETFILTER_SKIP_EGRESS=y
-CONFIG_NETFILTER_NETLINK=m
-CONFIG_NETFILTER_FAMILY_BRIDGE=y
-CONFIG_NETFILTER_FAMILY_ARP=y
-# CONFIG_NETFILTER_NETLINK_HOOK is not set
-# CONFIG_NETFILTER_NETLINK_ACCT is not set
-CONFIG_NETFILTER_NETLINK_QUEUE=m
-CONFIG_NETFILTER_NETLINK_LOG=m
-CONFIG_NETFILTER_NETLINK_OSF=m
-CONFIG_NF_CONNTRACK=m
-CONFIG_NF_LOG_SYSLOG=m
-CONFIG_NETFILTER_CONNCOUNT=m
-CONFIG_NF_CONNTRACK_MARK=y
-CONFIG_NF_CONNTRACK_SECMARK=y
-CONFIG_NF_CONNTRACK_ZONES=y
-CONFIG_NF_CONNTRACK_PROCFS=y
-CONFIG_NF_CONNTRACK_EVENTS=y
-CONFIG_NF_CONNTRACK_TIMEOUT=y
-CONFIG_NF_CONNTRACK_TIMESTAMP=y
-CONFIG_NF_CONNTRACK_LABELS=y
-CONFIG_NF_CT_PROTO_DCCP=y
-CONFIG_NF_CT_PROTO_GRE=y
-CONFIG_NF_CT_PROTO_SCTP=y
-CONFIG_NF_CT_PROTO_UDPLITE=y
-CONFIG_NF_CONNTRACK_AMANDA=m
-CONFIG_NF_CONNTRACK_FTP=m
-CONFIG_NF_CONNTRACK_H323=m
-CONFIG_NF_CONNTRACK_IRC=m
-CONFIG_NF_CONNTRACK_BROADCAST=m
-CONFIG_NF_CONNTRACK_NETBIOS_NS=m
-CONFIG_NF_CONNTRACK_SNMP=m
-CONFIG_NF_CONNTRACK_PPTP=m
-CONFIG_NF_CONNTRACK_SANE=m
-CONFIG_NF_CONNTRACK_SIP=m
-CONFIG_NF_CONNTRACK_TFTP=m
-CONFIG_NF_CT_NETLINK=m
-CONFIG_NF_CT_NETLINK_TIMEOUT=m
-CONFIG_NF_CT_NETLINK_HELPER=m
-CONFIG_NETFILTER_NETLINK_GLUE_CT=y
-CONFIG_NF_NAT=m
-CONFIG_NF_NAT_AMANDA=m
-CONFIG_NF_NAT_FTP=m
-CONFIG_NF_NAT_IRC=m
-CONFIG_NF_NAT_SIP=m
-CONFIG_NF_NAT_TFTP=m
-CONFIG_NF_NAT_REDIRECT=y
-CONFIG_NF_NAT_MASQUERADE=y
-CONFIG_NF_NAT_OVS=y
-CONFIG_NETFILTER_SYNPROXY=m
-CONFIG_NF_TABLES=m
-CONFIG_NF_TABLES_INET=y
-CONFIG_NF_TABLES_NETDEV=y
-CONFIG_NFT_NUMGEN=m
-CONFIG_NFT_CT=m
-CONFIG_NFT_CONNLIMIT=m
-CONFIG_NFT_LOG=m
-CONFIG_NFT_LIMIT=m
-CONFIG_NFT_MASQ=m
-CONFIG_NFT_REDIR=m
-CONFIG_NFT_NAT=m
-# CONFIG_NFT_TUNNEL is not set
-CONFIG_NFT_QUEUE=m
-CONFIG_NFT_QUOTA=m
-CONFIG_NFT_REJECT=m
-CONFIG_NFT_REJECT_INET=m
-CONFIG_NFT_COMPAT=m
-CONFIG_NFT_HASH=m
-CONFIG_NFT_FIB=m
-CONFIG_NFT_FIB_INET=m
-# CONFIG_NFT_XFRM is not set
-CONFIG_NFT_SOCKET=m
-# CONFIG_NFT_OSF is not set
-# CONFIG_NFT_TPROXY is not set
-# CONFIG_NFT_SYNPROXY is not set
-CONFIG_NF_DUP_NETDEV=m
-CONFIG_NFT_DUP_NETDEV=m
-CONFIG_NFT_FWD_NETDEV=m
-CONFIG_NFT_FIB_NETDEV=m
-# CONFIG_NFT_REJECT_NETDEV is not set
-# CONFIG_NF_FLOW_TABLE is not set
-CONFIG_NETFILTER_XTABLES=y
-CONFIG_NETFILTER_XTABLES_COMPAT=y
-
-#
-# Xtables combined modules
-#
-CONFIG_NETFILTER_XT_MARK=m
-CONFIG_NETFILTER_XT_CONNMARK=m
-CONFIG_NETFILTER_XT_SET=m
-
-#
-# Xtables targets
-#
-CONFIG_NETFILTER_XT_TARGET_AUDIT=m
-CONFIG_NETFILTER_XT_TARGET_CHECKSUM=m
-CONFIG_NETFILTER_XT_TARGET_CLASSIFY=m
-CONFIG_NETFILTER_XT_TARGET_CONNMARK=m
-CONFIG_NETFILTER_XT_TARGET_CONNSECMARK=m
-CONFIG_NETFILTER_XT_TARGET_CT=m
-CONFIG_NETFILTER_XT_TARGET_DSCP=m
-CONFIG_NETFILTER_XT_TARGET_HL=m
-CONFIG_NETFILTER_XT_TARGET_HMARK=m
-CONFIG_NETFILTER_XT_TARGET_IDLETIMER=m
-# CONFIG_NETFILTER_XT_TARGET_LED is not set
-CONFIG_NETFILTER_XT_TARGET_LOG=m
-CONFIG_NETFILTER_XT_TARGET_MARK=m
-CONFIG_NETFILTER_XT_NAT=m
-CONFIG_NETFILTER_XT_TARGET_NETMAP=m
-CONFIG_NETFILTER_XT_TARGET_NFLOG=m
-CONFIG_NETFILTER_XT_TARGET_NFQUEUE=m
-CONFIG_NETFILTER_XT_TARGET_NOTRACK=m
-CONFIG_NETFILTER_XT_TARGET_RATEEST=m
-CONFIG_NETFILTER_XT_TARGET_REDIRECT=m
-CONFIG_NETFILTER_XT_TARGET_MASQUERADE=m
-CONFIG_NETFILTER_XT_TARGET_TEE=m
-CONFIG_NETFILTER_XT_TARGET_TPROXY=m
-CONFIG_NETFILTER_XT_TARGET_TRACE=m
-CONFIG_NETFILTER_XT_TARGET_SECMARK=m
-CONFIG_NETFILTER_XT_TARGET_TCPMSS=m
-CONFIG_NETFILTER_XT_TARGET_TCPOPTSTRIP=m
-
-#
-# Xtables matches
-#
-CONFIG_NETFILTER_XT_MATCH_ADDRTYPE=m
-CONFIG_NETFILTER_XT_MATCH_BPF=m
-CONFIG_NETFILTER_XT_MATCH_CGROUP=m
-CONFIG_NETFILTER_XT_MATCH_CLUSTER=m
-CONFIG_NETFILTER_XT_MATCH_COMMENT=m
-CONFIG_NETFILTER_XT_MATCH_CONNBYTES=m
-CONFIG_NETFILTER_XT_MATCH_CONNLABEL=m
-CONFIG_NETFILTER_XT_MATCH_CONNLIMIT=m
-CONFIG_NETFILTER_XT_MATCH_CONNMARK=m
-CONFIG_NETFILTER_XT_MATCH_CONNTRACK=m
-CONFIG_NETFILTER_XT_MATCH_CPU=m
-CONFIG_NETFILTER_XT_MATCH_DCCP=m
-CONFIG_NETFILTER_XT_MATCH_DEVGROUP=m
-CONFIG_NETFILTER_XT_MATCH_DSCP=m
-CONFIG_NETFILTER_XT_MATCH_ECN=m
-CONFIG_NETFILTER_XT_MATCH_ESP=m
-CONFIG_NETFILTER_XT_MATCH_HASHLIMIT=m
-CONFIG_NETFILTER_XT_MATCH_HELPER=m
-CONFIG_NETFILTER_XT_MATCH_HL=m
-# CONFIG_NETFILTER_XT_MATCH_IPCOMP is not set
-CONFIG_NETFILTER_XT_MATCH_IPRANGE=m
-CONFIG_NETFILTER_XT_MATCH_IPVS=m
-# CONFIG_NETFILTER_XT_MATCH_L2TP is not set
-CONFIG_NETFILTER_XT_MATCH_LENGTH=m
-CONFIG_NETFILTER_XT_MATCH_LIMIT=m
-CONFIG_NETFILTER_XT_MATCH_MAC=m
-CONFIG_NETFILTER_XT_MATCH_MARK=m
-CONFIG_NETFILTER_XT_MATCH_MULTIPORT=m
-# CONFIG_NETFILTER_XT_MATCH_NFACCT is not set
-CONFIG_NETFILTER_XT_MATCH_OSF=m
-CONFIG_NETFILTER_XT_MATCH_OWNER=m
-CONFIG_NETFILTER_XT_MATCH_POLICY=m
-CONFIG_NETFILTER_XT_MATCH_PHYSDEV=m
-CONFIG_NETFILTER_XT_MATCH_PKTTYPE=m
-CONFIG_NETFILTER_XT_MATCH_QUOTA=m
-CONFIG_NETFILTER_XT_MATCH_RATEEST=m
-CONFIG_NETFILTER_XT_MATCH_REALM=m
-CONFIG_NETFILTER_XT_MATCH_RECENT=m
-CONFIG_NETFILTER_XT_MATCH_SCTP=m
-CONFIG_NETFILTER_XT_MATCH_SOCKET=m
-CONFIG_NETFILTER_XT_MATCH_STATE=m
-CONFIG_NETFILTER_XT_MATCH_STATISTIC=m
-CONFIG_NETFILTER_XT_MATCH_STRING=m
-CONFIG_NETFILTER_XT_MATCH_TCPMSS=m
-# CONFIG_NETFILTER_XT_MATCH_TIME is not set
-# CONFIG_NETFILTER_XT_MATCH_U32 is not set
-# end of Core Netfilter Configuration
-
-CONFIG_IP_SET=m
-CONFIG_IP_SET_MAX=256
-CONFIG_IP_SET_BITMAP_IP=m
-CONFIG_IP_SET_BITMAP_IPMAC=m
-CONFIG_IP_SET_BITMAP_PORT=m
-CONFIG_IP_SET_HASH_IP=m
-CONFIG_IP_SET_HASH_IPMARK=m
-CONFIG_IP_SET_HASH_IPPORT=m
-CONFIG_IP_SET_HASH_IPPORTIP=m
-CONFIG_IP_SET_HASH_IPPORTNET=m
-CONFIG_IP_SET_HASH_IPMAC=m
-CONFIG_IP_SET_HASH_MAC=m
-CONFIG_IP_SET_HASH_NETPORTNET=m
-CONFIG_IP_SET_HASH_NET=m
-CONFIG_IP_SET_HASH_NETNET=m
-CONFIG_IP_SET_HASH_NETPORT=m
-CONFIG_IP_SET_HASH_NETIFACE=m
-CONFIG_IP_SET_LIST_SET=m
-CONFIG_IP_VS=m
-CONFIG_IP_VS_IPV6=y
-# CONFIG_IP_VS_DEBUG is not set
-CONFIG_IP_VS_TAB_BITS=12
-
-#
-# IPVS transport protocol load balancing support
-#
-CONFIG_IP_VS_PROTO_TCP=y
-CONFIG_IP_VS_PROTO_UDP=y
-CONFIG_IP_VS_PROTO_AH_ESP=y
-CONFIG_IP_VS_PROTO_ESP=y
-CONFIG_IP_VS_PROTO_AH=y
-CONFIG_IP_VS_PROTO_SCTP=y
-
-#
-# IPVS scheduler
-#
-CONFIG_IP_VS_RR=m
-CONFIG_IP_VS_WRR=m
-CONFIG_IP_VS_LC=m
-CONFIG_IP_VS_WLC=m
-CONFIG_IP_VS_FO=m
-CONFIG_IP_VS_OVF=m
-CONFIG_IP_VS_LBLC=m
-CONFIG_IP_VS_LBLCR=m
-CONFIG_IP_VS_DH=m
-CONFIG_IP_VS_SH=m
-# CONFIG_IP_VS_MH is not set
-CONFIG_IP_VS_SED=m
-CONFIG_IP_VS_NQ=m
-# CONFIG_IP_VS_TWOS is not set
-
-#
-# IPVS SH scheduler
-#
-CONFIG_IP_VS_SH_TAB_BITS=8
-
-#
-# IPVS MH scheduler
-#
-CONFIG_IP_VS_MH_TAB_INDEX=12
-
-#
-# IPVS application helper
-#
-CONFIG_IP_VS_FTP=m
-CONFIG_IP_VS_NFCT=y
-CONFIG_IP_VS_PE_SIP=m
-
-#
-# IP: Netfilter Configuration
-#
-CONFIG_NF_DEFRAG_IPV4=m
-CONFIG_NF_SOCKET_IPV4=m
-CONFIG_NF_TPROXY_IPV4=m
-CONFIG_NF_TABLES_IPV4=y
-CONFIG_NFT_REJECT_IPV4=m
-CONFIG_NFT_DUP_IPV4=m
-CONFIG_NFT_FIB_IPV4=m
-CONFIG_NF_TABLES_ARP=y
-CONFIG_NF_DUP_IPV4=m
-CONFIG_NF_LOG_ARP=m
-CONFIG_NF_LOG_IPV4=m
-CONFIG_NF_REJECT_IPV4=m
-CONFIG_NF_NAT_SNMP_BASIC=m
-CONFIG_NF_NAT_PPTP=m
-CONFIG_NF_NAT_H323=m
-CONFIG_IP_NF_IPTABLES=m
-CONFIG_IP_NF_MATCH_AH=m
-CONFIG_IP_NF_MATCH_ECN=m
-CONFIG_IP_NF_MATCH_RPFILTER=m
-CONFIG_IP_NF_MATCH_TTL=m
-CONFIG_IP_NF_FILTER=m
-CONFIG_IP_NF_TARGET_REJECT=m
-CONFIG_IP_NF_TARGET_SYNPROXY=m
-CONFIG_IP_NF_NAT=m
-CONFIG_IP_NF_TARGET_MASQUERADE=m
-CONFIG_IP_NF_TARGET_NETMAP=m
-CONFIG_IP_NF_TARGET_REDIRECT=m
-CONFIG_IP_NF_MANGLE=m
-# CONFIG_IP_NF_TARGET_CLUSTERIP is not set
-CONFIG_IP_NF_TARGET_ECN=m
-CONFIG_IP_NF_TARGET_TTL=m
-CONFIG_IP_NF_RAW=m
-CONFIG_IP_NF_SECURITY=m
-CONFIG_IP_NF_ARPTABLES=m
-CONFIG_IP_NF_ARPFILTER=m
-CONFIG_IP_NF_ARP_MANGLE=m
-# end of IP: Netfilter Configuration
-
-#
-# IPv6: Netfilter Configuration
-#
-CONFIG_NF_SOCKET_IPV6=m
-CONFIG_NF_TPROXY_IPV6=m
-CONFIG_NF_TABLES_IPV6=y
-CONFIG_NFT_REJECT_IPV6=m
-CONFIG_NFT_DUP_IPV6=m
-CONFIG_NFT_FIB_IPV6=m
-CONFIG_NF_DUP_IPV6=m
-CONFIG_NF_REJECT_IPV6=m
-CONFIG_NF_LOG_IPV6=m
-CONFIG_IP6_NF_IPTABLES=m
-CONFIG_IP6_NF_MATCH_AH=m
-CONFIG_IP6_NF_MATCH_EUI64=m
-CONFIG_IP6_NF_MATCH_FRAG=m
-CONFIG_IP6_NF_MATCH_OPTS=m
-CONFIG_IP6_NF_MATCH_HL=m
-CONFIG_IP6_NF_MATCH_IPV6HEADER=m
-CONFIG_IP6_NF_MATCH_MH=m
-CONFIG_IP6_NF_MATCH_RPFILTER=m
-CONFIG_IP6_NF_MATCH_RT=m
-# CONFIG_IP6_NF_MATCH_SRH is not set
-# CONFIG_IP6_NF_TARGET_HL is not set
-CONFIG_IP6_NF_FILTER=m
-CONFIG_IP6_NF_TARGET_REJECT=m
-CONFIG_IP6_NF_TARGET_SYNPROXY=m
-CONFIG_IP6_NF_MANGLE=m
-CONFIG_IP6_NF_RAW=m
-CONFIG_IP6_NF_SECURITY=m
-CONFIG_IP6_NF_NAT=m
-CONFIG_IP6_NF_TARGET_MASQUERADE=m
-CONFIG_IP6_NF_TARGET_NPT=m
-# end of IPv6: Netfilter Configuration
-
-CONFIG_NF_DEFRAG_IPV6=m
-CONFIG_NF_TABLES_BRIDGE=m
-# CONFIG_NFT_BRIDGE_META is not set
-CONFIG_NFT_BRIDGE_REJECT=m
-# CONFIG_NF_CONNTRACK_BRIDGE is not set
-CONFIG_BRIDGE_NF_EBTABLES=m
-CONFIG_BRIDGE_EBT_BROUTE=m
-CONFIG_BRIDGE_EBT_T_FILTER=m
-CONFIG_BRIDGE_EBT_T_NAT=m
-CONFIG_BRIDGE_EBT_802_3=m
-CONFIG_BRIDGE_EBT_AMONG=m
-CONFIG_BRIDGE_EBT_ARP=m
-CONFIG_BRIDGE_EBT_IP=m
-CONFIG_BRIDGE_EBT_IP6=m
-CONFIG_BRIDGE_EBT_LIMIT=m
-CONFIG_BRIDGE_EBT_MARK=m
-CONFIG_BRIDGE_EBT_PKTTYPE=m
-CONFIG_BRIDGE_EBT_STP=m
-CONFIG_BRIDGE_EBT_VLAN=m
-CONFIG_BRIDGE_EBT_ARPREPLY=m
-CONFIG_BRIDGE_EBT_DNAT=m
-CONFIG_BRIDGE_EBT_MARK_T=m
-CONFIG_BRIDGE_EBT_REDIRECT=m
-CONFIG_BRIDGE_EBT_SNAT=m
-CONFIG_BRIDGE_EBT_LOG=m
-CONFIG_BRIDGE_EBT_NFLOG=m
-# CONFIG_BPFILTER is not set
-# CONFIG_IP_DCCP is not set
-CONFIG_IP_SCTP=m
-# CONFIG_SCTP_DBG_OBJCNT is not set
-# CONFIG_SCTP_DEFAULT_COOKIE_HMAC_MD5 is not set
-CONFIG_SCTP_DEFAULT_COOKIE_HMAC_SHA1=y
-# CONFIG_SCTP_DEFAULT_COOKIE_HMAC_NONE is not set
-CONFIG_SCTP_COOKIE_HMAC_MD5=y
-CONFIG_SCTP_COOKIE_HMAC_SHA1=y
-CONFIG_INET_SCTP_DIAG=m
-# CONFIG_RDS is not set
-CONFIG_TIPC=m
-# CONFIG_TIPC_MEDIA_IB is not set
-CONFIG_TIPC_MEDIA_UDP=y
-CONFIG_TIPC_CRYPTO=y
-CONFIG_TIPC_DIAG=m
-CONFIG_ATM=m
-CONFIG_ATM_CLIP=m
-# CONFIG_ATM_CLIP_NO_ICMP is not set
-CONFIG_ATM_LANE=m
-# CONFIG_ATM_MPOA is not set
-CONFIG_ATM_BR2684=m
-# CONFIG_ATM_BR2684_IPFILTER is not set
-CONFIG_L2TP=m
-CONFIG_L2TP_DEBUGFS=m
-CONFIG_L2TP_V3=y
-CONFIG_L2TP_IP=m
-CONFIG_L2TP_ETH=m
-CONFIG_STP=m
-CONFIG_GARP=m
-CONFIG_MRP=m
-CONFIG_BRIDGE=m
-CONFIG_BRIDGE_IGMP_SNOOPING=y
-CONFIG_BRIDGE_VLAN_FILTERING=y
-# CONFIG_BRIDGE_MRP is not set
-# CONFIG_BRIDGE_CFM is not set
-# CONFIG_NET_DSA is not set
-CONFIG_VLAN_8021Q=m
-CONFIG_VLAN_8021Q_GVRP=y
-CONFIG_VLAN_8021Q_MVRP=y
-CONFIG_LLC=m
-# CONFIG_LLC2 is not set
-# CONFIG_ATALK is not set
-# CONFIG_X25 is not set
-# CONFIG_LAPB is not set
-# CONFIG_PHONET is not set
-CONFIG_6LOWPAN=m
-# CONFIG_6LOWPAN_DEBUGFS is not set
-# CONFIG_6LOWPAN_NHC is not set
-# CONFIG_IEEE802154 is not set
-CONFIG_NET_SCHED=y
-
-#
-# Queueing/Scheduling
-#
-CONFIG_NET_SCH_CBQ=m
-CONFIG_NET_SCH_HTB=m
-CONFIG_NET_SCH_HFSC=m
-CONFIG_NET_SCH_ATM=m
-CONFIG_NET_SCH_PRIO=m
-CONFIG_NET_SCH_MULTIQ=m
-CONFIG_NET_SCH_RED=m
-CONFIG_NET_SCH_SFB=m
-CONFIG_NET_SCH_SFQ=m
-CONFIG_NET_SCH_TEQL=m
-CONFIG_NET_SCH_TBF=m
-# CONFIG_NET_SCH_CBS is not set
-# CONFIG_NET_SCH_ETF is not set
-# CONFIG_NET_SCH_TAPRIO is not set
-CONFIG_NET_SCH_GRED=m
-CONFIG_NET_SCH_DSMARK=m
-CONFIG_NET_SCH_NETEM=m
-CONFIG_NET_SCH_DRR=m
-CONFIG_NET_SCH_MQPRIO=m
-# CONFIG_NET_SCH_SKBPRIO is not set
-CONFIG_NET_SCH_CHOKE=m
-CONFIG_NET_SCH_QFQ=m
-CONFIG_NET_SCH_CODEL=m
-CONFIG_NET_SCH_FQ_CODEL=y
-# CONFIG_NET_SCH_CAKE is not set
-CONFIG_NET_SCH_FQ=m
-CONFIG_NET_SCH_HHF=m
-CONFIG_NET_SCH_PIE=m
-# CONFIG_NET_SCH_FQ_PIE is not set
-CONFIG_NET_SCH_INGRESS=m
-CONFIG_NET_SCH_PLUG=m
-# CONFIG_NET_SCH_ETS is not set
-CONFIG_NET_SCH_DEFAULT=y
-# CONFIG_DEFAULT_FQ is not set
-# CONFIG_DEFAULT_CODEL is not set
-CONFIG_DEFAULT_FQ_CODEL=y
-# CONFIG_DEFAULT_SFQ is not set
-# CONFIG_DEFAULT_PFIFO_FAST is not set
-CONFIG_DEFAULT_NET_SCH="fq_codel"
-
-#
-# Classification
-#
-CONFIG_NET_CLS=y
-CONFIG_NET_CLS_BASIC=m
-CONFIG_NET_CLS_TCINDEX=m
-CONFIG_NET_CLS_ROUTE4=m
-CONFIG_NET_CLS_FW=m
-CONFIG_NET_CLS_U32=m
-CONFIG_CLS_U32_PERF=y
-CONFIG_CLS_U32_MARK=y
-CONFIG_NET_CLS_RSVP=m
-CONFIG_NET_CLS_RSVP6=m
-CONFIG_NET_CLS_FLOW=m
-CONFIG_NET_CLS_CGROUP=y
-CONFIG_NET_CLS_BPF=m
-CONFIG_NET_CLS_FLOWER=m
-CONFIG_NET_CLS_MATCHALL=m
-CONFIG_NET_EMATCH=y
-CONFIG_NET_EMATCH_STACK=32
-CONFIG_NET_EMATCH_CMP=m
-CONFIG_NET_EMATCH_NBYTE=m
-CONFIG_NET_EMATCH_U32=m
-CONFIG_NET_EMATCH_META=m
-CONFIG_NET_EMATCH_TEXT=m
-# CONFIG_NET_EMATCH_CANID is not set
-CONFIG_NET_EMATCH_IPSET=m
-# CONFIG_NET_EMATCH_IPT is not set
-CONFIG_NET_CLS_ACT=y
-CONFIG_NET_ACT_POLICE=m
-CONFIG_NET_ACT_GACT=m
-CONFIG_GACT_PROB=y
-CONFIG_NET_ACT_MIRRED=m
-CONFIG_NET_ACT_SAMPLE=m
-# CONFIG_NET_ACT_IPT is not set
-CONFIG_NET_ACT_NAT=m
-CONFIG_NET_ACT_PEDIT=m
-CONFIG_NET_ACT_SIMP=m
-CONFIG_NET_ACT_SKBEDIT=m
-CONFIG_NET_ACT_CSUM=m
-# CONFIG_NET_ACT_MPLS is not set
-CONFIG_NET_ACT_VLAN=m
-CONFIG_NET_ACT_BPF=m
-# CONFIG_NET_ACT_CONNMARK is not set
-# CONFIG_NET_ACT_CTINFO is not set
-CONFIG_NET_ACT_SKBMOD=m
-# CONFIG_NET_ACT_IFE is not set
-CONFIG_NET_ACT_TUNNEL_KEY=m
-# CONFIG_NET_ACT_GATE is not set
-# CONFIG_NET_TC_SKB_EXT is not set
-CONFIG_NET_SCH_FIFO=y
-CONFIG_DCB=y
-CONFIG_DNS_RESOLVER=m
-# CONFIG_BATMAN_ADV is not set
-CONFIG_OPENVSWITCH=m
-CONFIG_OPENVSWITCH_GRE=m
-CONFIG_VSOCKETS=m
-CONFIG_VSOCKETS_DIAG=m
-CONFIG_VSOCKETS_LOOPBACK=m
-CONFIG_VMWARE_VMCI_VSOCKETS=m
-CONFIG_VIRTIO_VSOCKETS=m
-CONFIG_VIRTIO_VSOCKETS_COMMON=m
-CONFIG_NETLINK_DIAG=m
-CONFIG_MPLS=y
-CONFIG_NET_MPLS_GSO=y
-CONFIG_MPLS_ROUTING=m
-CONFIG_MPLS_IPTUNNEL=m
-CONFIG_NET_NSH=y
-# CONFIG_HSR is not set
-CONFIG_NET_SWITCHDEV=y
-CONFIG_NET_L3_MASTER_DEV=y
-# CONFIG_QRTR is not set
-# CONFIG_NET_NCSI is not set
-CONFIG_PCPU_DEV_REFCNT=y
-CONFIG_RPS=y
-CONFIG_RFS_ACCEL=y
-CONFIG_SOCK_RX_QUEUE_MAPPING=y
-CONFIG_XPS=y
-CONFIG_CGROUP_NET_PRIO=y
-CONFIG_CGROUP_NET_CLASSID=y
-CONFIG_NET_RX_BUSY_POLL=y
-CONFIG_BQL=y
-CONFIG_NET_FLOW_LIMIT=y
-
-#
-# Network testing
-#
-CONFIG_NET_PKTGEN=m
-CONFIG_NET_DROP_MONITOR=y
-# end of Network testing
-# end of Networking options
-
-# CONFIG_HAMRADIO is not set
-CONFIG_CAN=m
-CONFIG_CAN_RAW=m
-CONFIG_CAN_BCM=m
-CONFIG_CAN_GW=m
-# CONFIG_CAN_J1939 is not set
-# CONFIG_CAN_ISOTP is not set
-# CONFIG_BT is not set
-# CONFIG_AF_RXRPC is not set
-# CONFIG_AF_KCM is not set
-CONFIG_STREAM_PARSER=y
-# CONFIG_MCTP is not set
-CONFIG_FIB_RULES=y
-CONFIG_WIRELESS=y
-CONFIG_WEXT_CORE=y
-CONFIG_WEXT_PROC=y
-CONFIG_CFG80211=m
-# CONFIG_NL80211_TESTMODE is not set
-# CONFIG_CFG80211_DEVELOPER_WARNINGS is not set
-# CONFIG_CFG80211_CERTIFICATION_ONUS is not set
-CONFIG_CFG80211_REQUIRE_SIGNED_REGDB=y
-CONFIG_CFG80211_USE_KERNEL_REGDB_KEYS=y
-CONFIG_CFG80211_DEFAULT_PS=y
-# CONFIG_CFG80211_DEBUGFS is not set
-CONFIG_CFG80211_CRDA_SUPPORT=y
-CONFIG_CFG80211_WEXT=y
-CONFIG_MAC80211=m
-CONFIG_MAC80211_HAS_RC=y
-CONFIG_MAC80211_RC_MINSTREL=y
-CONFIG_MAC80211_RC_DEFAULT_MINSTREL=y
-CONFIG_MAC80211_RC_DEFAULT="minstrel_ht"
-CONFIG_MAC80211_MESH=y
-CONFIG_MAC80211_LEDS=y
-CONFIG_MAC80211_DEBUGFS=y
-# CONFIG_MAC80211_MESSAGE_TRACING is not set
-# CONFIG_MAC80211_DEBUG_MENU is not set
-CONFIG_MAC80211_STA_HASH_MAX_SIZE=0
-CONFIG_RFKILL=m
-CONFIG_RFKILL_LEDS=y
-CONFIG_RFKILL_INPUT=y
-# CONFIG_RFKILL_GPIO is not set
-CONFIG_NET_9P=y
-CONFIG_NET_9P_FD=y
-CONFIG_NET_9P_VIRTIO=y
-# CONFIG_NET_9P_RDMA is not set
-# CONFIG_NET_9P_DEBUG is not set
-# CONFIG_CAIF is not set
-CONFIG_CEPH_LIB=m
-# CONFIG_CEPH_LIB_PRETTYDEBUG is not set
-CONFIG_CEPH_LIB_USE_DNS_RESOLVER=y
-# CONFIG_NFC is not set
-CONFIG_PSAMPLE=m
-# CONFIG_NET_IFE is not set
-CONFIG_LWTUNNEL=y
-CONFIG_LWTUNNEL_BPF=y
-CONFIG_DST_CACHE=y
-CONFIG_GRO_CELLS=y
-CONFIG_SOCK_VALIDATE_XMIT=y
-CONFIG_NET_SELFTESTS=y
-CONFIG_NET_SOCK_MSG=y
-CONFIG_PAGE_POOL=y
-# CONFIG_PAGE_POOL_STATS is not set
-CONFIG_FAILOVER=m
-CONFIG_ETHTOOL_NETLINK=y
-
-#
-# Device Drivers
-#
-CONFIG_HAVE_EISA=y
-# CONFIG_EISA is not set
-CONFIG_HAVE_PCI=y
-CONFIG_PCI=y
-CONFIG_PCI_DOMAINS=y
-CONFIG_PCIEPORTBUS=y
-CONFIG_HOTPLUG_PCI_PCIE=y
-CONFIG_PCIEAER=y
-CONFIG_PCIEAER_INJECT=m
-CONFIG_PCIE_ECRC=y
-CONFIG_PCIEASPM=y
-CONFIG_PCIEASPM_DEFAULT=y
-# CONFIG_PCIEASPM_POWERSAVE is not set
-# CONFIG_PCIEASPM_POWER_SUPERSAVE is not set
-# CONFIG_PCIEASPM_PERFORMANCE is not set
-CONFIG_PCIE_PME=y
-CONFIG_PCIE_DPC=y
-# CONFIG_PCIE_PTM is not set
-# CONFIG_PCIE_EDR is not set
-CONFIG_PCI_MSI=y
-CONFIG_PCI_QUIRKS=y
-# CONFIG_PCI_DEBUG is not set
-# CONFIG_PCI_REALLOC_ENABLE_AUTO is not set
-CONFIG_PCI_STUB=y
-CONFIG_PCI_PF_STUB=m
-CONFIG_PCI_ATS=y
-CONFIG_PCI_LOCKLESS_CONFIG=y
-CONFIG_PCI_IOV=y
-CONFIG_PCI_PRI=y
-CONFIG_PCI_PASID=y
-# CONFIG_PCI_P2PDMA is not set
-CONFIG_PCI_LABEL=y
-# CONFIG_PCIE_BUS_TUNE_OFF is not set
-CONFIG_PCIE_BUS_DEFAULT=y
-# CONFIG_PCIE_BUS_SAFE is not set
-# CONFIG_PCIE_BUS_PERFORMANCE is not set
-# CONFIG_PCIE_BUS_PEER2PEER is not set
-CONFIG_VGA_ARB=y
-CONFIG_VGA_ARB_MAX_GPUS=64
-CONFIG_HOTPLUG_PCI=y
-CONFIG_HOTPLUG_PCI_ACPI=y
-CONFIG_HOTPLUG_PCI_ACPI_IBM=m
-# CONFIG_HOTPLUG_PCI_CPCI is not set
-CONFIG_HOTPLUG_PCI_SHPC=y
-
-#
-# PCI controller drivers
-#
-CONFIG_VMD=y
-
-#
-# DesignWare PCI Core Support
-#
-# CONFIG_PCIE_DW_PLAT_HOST is not set
-# CONFIG_PCI_MESON is not set
-# end of DesignWare PCI Core Support
-
-#
-# Mobiveil PCIe Core Support
-#
-# end of Mobiveil PCIe Core Support
-
-#
-# Cadence PCIe controllers support
-#
-# end of Cadence PCIe controllers support
-# end of PCI controller drivers
-
-#
-# PCI Endpoint
-#
-# CONFIG_PCI_ENDPOINT is not set
-# end of PCI Endpoint
-
-#
-# PCI switch controller drivers
-#
-# CONFIG_PCI_SW_SWITCHTEC is not set
-# end of PCI switch controller drivers
-
-# CONFIG_CXL_BUS is not set
-# CONFIG_PCCARD is not set
-# CONFIG_RAPIDIO is not set
-
-#
-# Generic Driver Options
-#
-CONFIG_AUXILIARY_BUS=y
-# CONFIG_UEVENT_HELPER is not set
-CONFIG_DEVTMPFS=y
-CONFIG_DEVTMPFS_MOUNT=y
-# CONFIG_DEVTMPFS_SAFE is not set
-CONFIG_STANDALONE=y
-CONFIG_PREVENT_FIRMWARE_BUILD=y
-
-#
-# Firmware loader
-#
-CONFIG_FW_LOADER=y
-CONFIG_FW_LOADER_PAGED_BUF=y
-CONFIG_FW_LOADER_SYSFS=y
-CONFIG_EXTRA_FIRMWARE=""
-CONFIG_FW_LOADER_USER_HELPER=y
-# CONFIG_FW_LOADER_USER_HELPER_FALLBACK is not set
-# CONFIG_FW_LOADER_COMPRESS is not set
-CONFIG_FW_CACHE=y
-# CONFIG_FW_UPLOAD is not set
-# end of Firmware loader
-
-CONFIG_ALLOW_DEV_COREDUMP=y
-# CONFIG_DEBUG_DRIVER is not set
-# CONFIG_DEBUG_DEVRES is not set
-# CONFIG_DEBUG_TEST_DRIVER_REMOVE is not set
-# CONFIG_TEST_ASYNC_DRIVER_PROBE is not set
-CONFIG_GENERIC_CPU_AUTOPROBE=y
-CONFIG_GENERIC_CPU_VULNERABILITIES=y
-CONFIG_REGMAP=y
-CONFIG_REGMAP_I2C=m
-CONFIG_REGMAP_SPI=m
-CONFIG_DMA_SHARED_BUFFER=y
-# CONFIG_DMA_FENCE_TRACE is not set
-# end of Generic Driver Options
-
-#
-# Bus devices
-#
-# CONFIG_MHI_BUS is not set
-# CONFIG_MHI_BUS_EP is not set
-# end of Bus devices
-
-CONFIG_CONNECTOR=y
-CONFIG_PROC_EVENTS=y
-
-#
-# Firmware Drivers
-#
-
-#
-# ARM System Control and Management Interface Protocol
-#
-# end of ARM System Control and Management Interface Protocol
-
-CONFIG_EDD=m
-# CONFIG_EDD_OFF is not set
-CONFIG_FIRMWARE_MEMMAP=y
-CONFIG_DMIID=y
-CONFIG_DMI_SYSFS=y
-CONFIG_DMI_SCAN_MACHINE_NON_EFI_FALLBACK=y
-# CONFIG_ISCSI_IBFT is not set
-CONFIG_FW_CFG_SYSFS=y
-# CONFIG_FW_CFG_SYSFS_CMDLINE is not set
-CONFIG_SYSFB=y
-# CONFIG_SYSFB_SIMPLEFB is not set
-# CONFIG_GOOGLE_FIRMWARE is not set
-
-#
-# EFI (Extensible Firmware Interface) Support
-#
-CONFIG_EFI_ESRT=y
-CONFIG_EFI_VARS_PSTORE=y
-CONFIG_EFI_VARS_PSTORE_DEFAULT_DISABLE=y
-CONFIG_EFI_DXE_MEM_ATTRIBUTES=y
-CONFIG_EFI_RUNTIME_WRAPPERS=y
-# CONFIG_EFI_BOOTLOADER_CONTROL is not set
-# CONFIG_EFI_CAPSULE_LOADER is not set
-# CONFIG_EFI_TEST is not set
-# CONFIG_APPLE_PROPERTIES is not set
-# CONFIG_RESET_ATTACK_MITIGATION is not set
-# CONFIG_EFI_RCI2_TABLE is not set
-# CONFIG_EFI_DISABLE_PCI_DMA is not set
-CONFIG_EFI_EARLYCON=y
-CONFIG_EFI_CUSTOM_SSDT_OVERLAYS=y
-# CONFIG_EFI_DISABLE_RUNTIME is not set
-# CONFIG_EFI_COCO_SECRET is not set
-# end of EFI (Extensible Firmware Interface) Support
-
-CONFIG_UEFI_CPER=y
-CONFIG_UEFI_CPER_X86=y
-
-#
-# Tegra firmware driver
-#
-# end of Tegra firmware driver
-# end of Firmware Drivers
-
-# CONFIG_GNSS is not set
-# CONFIG_MTD is not set
-# CONFIG_OF is not set
-CONFIG_ARCH_MIGHT_HAVE_PC_PARPORT=y
-CONFIG_PARPORT=m
-CONFIG_PARPORT_PC=m
-CONFIG_PARPORT_SERIAL=m
-# CONFIG_PARPORT_PC_FIFO is not set
-# CONFIG_PARPORT_PC_SUPERIO is not set
-# CONFIG_PARPORT_AX88796 is not set
-CONFIG_PARPORT_1284=y
-CONFIG_PNP=y
-# CONFIG_PNP_DEBUG_MESSAGES is not set
-
-#
-# Protocols
-#
-CONFIG_PNPACPI=y
-CONFIG_BLK_DEV=y
-CONFIG_BLK_DEV_NULL_BLK=m
-CONFIG_BLK_DEV_NULL_BLK_FAULT_INJECTION=y
-# CONFIG_BLK_DEV_FD is not set
-CONFIG_CDROM=m
-# CONFIG_PARIDE is not set
-# CONFIG_BLK_DEV_PCIESSD_MTIP32XX is not set
-CONFIG_ZRAM=m
-CONFIG_ZRAM_DEF_COMP_LZORLE=y
-# CONFIG_ZRAM_DEF_COMP_LZO is not set
-CONFIG_ZRAM_DEF_COMP="lzo-rle"
-CONFIG_ZRAM_WRITEBACK=y
-# CONFIG_ZRAM_MEMORY_TRACKING is not set
-# CONFIG_ZRAM_MULTI_COMP is not set
-CONFIG_BLK_DEV_LOOP=m
-CONFIG_BLK_DEV_LOOP_MIN_COUNT=0
-# CONFIG_BLK_DEV_DRBD is not set
-CONFIG_BLK_DEV_NBD=m
-CONFIG_BLK_DEV_RAM=m
-CONFIG_BLK_DEV_RAM_COUNT=16
-CONFIG_BLK_DEV_RAM_SIZE=16384
-CONFIG_CDROM_PKTCDVD=m
-CONFIG_CDROM_PKTCDVD_BUFFERS=8
-# CONFIG_CDROM_PKTCDVD_WCACHE is not set
-# CONFIG_ATA_OVER_ETH is not set
-CONFIG_VIRTIO_BLK=m
-CONFIG_BLK_DEV_RBD=m
-# CONFIG_BLK_DEV_UBLK is not set
-
-#
-# NVME Support
-#
-CONFIG_NVME_CORE=m
-CONFIG_BLK_DEV_NVME=m
-CONFIG_NVME_MULTIPATH=y
-# CONFIG_NVME_VERBOSE_ERRORS is not set
-# CONFIG_NVME_HWMON is not set
-CONFIG_NVME_FABRICS=m
-# CONFIG_NVME_RDMA is not set
-# CONFIG_NVME_FC is not set
-# CONFIG_NVME_TCP is not set
-# CONFIG_NVME_AUTH is not set
-CONFIG_NVME_TARGET=m
-# CONFIG_NVME_TARGET_PASSTHRU is not set
-CONFIG_NVME_TARGET_LOOP=m
-# CONFIG_NVME_TARGET_RDMA is not set
-CONFIG_NVME_TARGET_FC=m
-# CONFIG_NVME_TARGET_TCP is not set
-# CONFIG_NVME_TARGET_AUTH is not set
-# end of NVME Support
-
-#
-# Misc devices
-#
-CONFIG_SENSORS_LIS3LV02D=m
-# CONFIG_AD525X_DPOT is not set
-# CONFIG_DUMMY_IRQ is not set
-# CONFIG_IBM_ASM is not set
-# CONFIG_PHANTOM is not set
-CONFIG_TIFM_CORE=m
-CONFIG_TIFM_7XX1=m
-# CONFIG_ICS932S401 is not set
-CONFIG_ENCLOSURE_SERVICES=m
-CONFIG_SGI_XP=m
-CONFIG_HP_ILO=m
-CONFIG_SGI_GRU=m
-# CONFIG_SGI_GRU_DEBUG is not set
-CONFIG_APDS9802ALS=m
-CONFIG_ISL29003=m
-CONFIG_ISL29020=m
-CONFIG_SENSORS_TSL2550=m
-CONFIG_SENSORS_BH1770=m
-CONFIG_SENSORS_APDS990X=m
-# CONFIG_HMC6352 is not set
-# CONFIG_DS1682 is not set
-CONFIG_VMWARE_BALLOON=m
-# CONFIG_LATTICE_ECP3_CONFIG is not set
-# CONFIG_SRAM is not set
-# CONFIG_DW_XDATA_PCIE is not set
-# CONFIG_PCI_ENDPOINT_TEST is not set
-# CONFIG_XILINX_SDFEC is not set
-CONFIG_MISC_RTSX=m
-# CONFIG_C2PORT is not set
-
-#
-# EEPROM support
-#
-# CONFIG_EEPROM_AT24 is not set
-# CONFIG_EEPROM_AT25 is not set
-CONFIG_EEPROM_LEGACY=m
-CONFIG_EEPROM_MAX6875=m
-CONFIG_EEPROM_93CX6=m
-# CONFIG_EEPROM_93XX46 is not set
-# CONFIG_EEPROM_IDT_89HPESX is not set
-# CONFIG_EEPROM_EE1004 is not set
-# end of EEPROM support
-
-CONFIG_CB710_CORE=m
-# CONFIG_CB710_DEBUG is not set
-CONFIG_CB710_DEBUG_ASSUMPTIONS=y
-
-#
-# Texas Instruments shared transport line discipline
-#
-# CONFIG_TI_ST is not set
-# end of Texas Instruments shared transport line discipline
-
-CONFIG_SENSORS_LIS3_I2C=m
-CONFIG_ALTERA_STAPL=m
-CONFIG_INTEL_MEI=m
-CONFIG_INTEL_MEI_ME=m
-# CONFIG_INTEL_MEI_TXE is not set
-# CONFIG_INTEL_MEI_GSC is not set
-# CONFIG_INTEL_MEI_HDCP is not set
-# CONFIG_INTEL_MEI_PXP is not set
-CONFIG_VMWARE_VMCI=m
-# CONFIG_GENWQE is not set
-# CONFIG_ECHO is not set
-# CONFIG_BCM_VK is not set
-# CONFIG_MISC_ALCOR_PCI is not set
-CONFIG_MISC_RTSX_PCI=m
-# CONFIG_MISC_RTSX_USB is not set
-# CONFIG_HABANA_AI is not set
-# CONFIG_UACCE is not set
-CONFIG_PVPANIC=y
-# CONFIG_PVPANIC_MMIO is not set
-# CONFIG_PVPANIC_PCI is not set
-# CONFIG_GP_PCI1XXXX is not set
-# end of Misc devices
-
-#
-# SCSI device support
-#
-CONFIG_SCSI_MOD=y
-CONFIG_RAID_ATTRS=m
-CONFIG_SCSI_COMMON=y
-CONFIG_SCSI=y
-CONFIG_SCSI_DMA=y
-CONFIG_SCSI_NETLINK=y
-CONFIG_SCSI_PROC_FS=y
-
-#
-# SCSI support type (disk, tape, CD-ROM)
-#
-CONFIG_BLK_DEV_SD=m
-CONFIG_CHR_DEV_ST=m
-CONFIG_BLK_DEV_SR=m
-CONFIG_CHR_DEV_SG=m
-CONFIG_BLK_DEV_BSG=y
-CONFIG_CHR_DEV_SCH=m
-CONFIG_SCSI_ENCLOSURE=m
-CONFIG_SCSI_CONSTANTS=y
-CONFIG_SCSI_LOGGING=y
-CONFIG_SCSI_SCAN_ASYNC=y
-
-#
-# SCSI Transports
-#
-CONFIG_SCSI_SPI_ATTRS=m
-CONFIG_SCSI_FC_ATTRS=m
-CONFIG_SCSI_ISCSI_ATTRS=m
-CONFIG_SCSI_SAS_ATTRS=m
-CONFIG_SCSI_SAS_LIBSAS=m
-CONFIG_SCSI_SAS_ATA=y
-CONFIG_SCSI_SAS_HOST_SMP=y
-CONFIG_SCSI_SRP_ATTRS=m
-# end of SCSI Transports
-
-CONFIG_SCSI_LOWLEVEL=y
-# CONFIG_ISCSI_TCP is not set
-# CONFIG_ISCSI_BOOT_SYSFS is not set
-# CONFIG_SCSI_CXGB3_ISCSI is not set
-# CONFIG_SCSI_CXGB4_ISCSI is not set
-# CONFIG_SCSI_BNX2_ISCSI is not set
-# CONFIG_BE2ISCSI is not set
-# CONFIG_BLK_DEV_3W_XXXX_RAID is not set
-# CONFIG_SCSI_HPSA is not set
-# CONFIG_SCSI_3W_9XXX is not set
-# CONFIG_SCSI_3W_SAS is not set
-# CONFIG_SCSI_ACARD is not set
-# CONFIG_SCSI_AACRAID is not set
-# CONFIG_SCSI_AIC7XXX is not set
-# CONFIG_SCSI_AIC79XX is not set
-# CONFIG_SCSI_AIC94XX is not set
-# CONFIG_SCSI_MVSAS is not set
-# CONFIG_SCSI_MVUMI is not set
-# CONFIG_SCSI_ADVANSYS is not set
-# CONFIG_SCSI_ARCMSR is not set
-# CONFIG_SCSI_ESAS2R is not set
-# CONFIG_MEGARAID_NEWGEN is not set
-# CONFIG_MEGARAID_LEGACY is not set
-# CONFIG_MEGARAID_SAS is not set
-CONFIG_SCSI_MPT3SAS=m
-CONFIG_SCSI_MPT2SAS_MAX_SGE=128
-CONFIG_SCSI_MPT3SAS_MAX_SGE=128
-# CONFIG_SCSI_MPT2SAS is not set
-# CONFIG_SCSI_MPI3MR is not set
-# CONFIG_SCSI_SMARTPQI is not set
-# CONFIG_SCSI_HPTIOP is not set
-# CONFIG_SCSI_BUSLOGIC is not set
-# CONFIG_SCSI_MYRB is not set
-# CONFIG_SCSI_MYRS is not set
-# CONFIG_VMWARE_PVSCSI is not set
-# CONFIG_LIBFC is not set
-# CONFIG_SCSI_SNIC is not set
-# CONFIG_SCSI_DMX3191D is not set
-# CONFIG_SCSI_FDOMAIN_PCI is not set
-CONFIG_SCSI_ISCI=m
-# CONFIG_SCSI_IPS is not set
-# CONFIG_SCSI_INITIO is not set
-# CONFIG_SCSI_INIA100 is not set
-# CONFIG_SCSI_PPA is not set
-# CONFIG_SCSI_IMM is not set
-# CONFIG_SCSI_STEX is not set
-# CONFIG_SCSI_SYM53C8XX_2 is not set
-# CONFIG_SCSI_IPR is not set
-# CONFIG_SCSI_QLOGIC_1280 is not set
-# CONFIG_SCSI_QLA_FC is not set
-# CONFIG_SCSI_QLA_ISCSI is not set
-# CONFIG_SCSI_LPFC is not set
-# CONFIG_SCSI_EFCT is not set
-# CONFIG_SCSI_DC395x is not set
-# CONFIG_SCSI_AM53C974 is not set
-# CONFIG_SCSI_WD719X is not set
-CONFIG_SCSI_DEBUG=m
-# CONFIG_SCSI_PMCRAID is not set
-# CONFIG_SCSI_PM8001 is not set
-# CONFIG_SCSI_BFA_FC is not set
-# CONFIG_SCSI_VIRTIO is not set
-# CONFIG_SCSI_CHELSIO_FCOE is not set
-CONFIG_SCSI_DH=y
-CONFIG_SCSI_DH_RDAC=y
-CONFIG_SCSI_DH_HP_SW=y
-CONFIG_SCSI_DH_EMC=y
-CONFIG_SCSI_DH_ALUA=y
-# end of SCSI device support
-
-CONFIG_ATA=m
-CONFIG_SATA_HOST=y
-CONFIG_PATA_TIMINGS=y
-CONFIG_ATA_VERBOSE_ERROR=y
-CONFIG_ATA_FORCE=y
-CONFIG_ATA_ACPI=y
-# CONFIG_SATA_ZPODD is not set
-CONFIG_SATA_PMP=y
-
-#
-# Controllers with non-SFF native interface
-#
-CONFIG_SATA_AHCI=m
-CONFIG_SATA_MOBILE_LPM_POLICY=0
-CONFIG_SATA_AHCI_PLATFORM=m
-# CONFIG_AHCI_DWC is not set
-# CONFIG_SATA_INIC162X is not set
-# CONFIG_SATA_ACARD_AHCI is not set
-# CONFIG_SATA_SIL24 is not set
-CONFIG_ATA_SFF=y
-
-#
-# SFF controllers with custom DMA interface
-#
-# CONFIG_PDC_ADMA is not set
-# CONFIG_SATA_QSTOR is not set
-# CONFIG_SATA_SX4 is not set
-CONFIG_ATA_BMDMA=y
-
-#
-# SATA SFF controllers with BMDMA
-#
-CONFIG_ATA_PIIX=m
-# CONFIG_SATA_DWC is not set
-# CONFIG_SATA_MV is not set
-# CONFIG_SATA_NV is not set
-# CONFIG_SATA_PROMISE is not set
-# CONFIG_SATA_SIL is not set
-# CONFIG_SATA_SIS is not set
-# CONFIG_SATA_SVW is not set
-# CONFIG_SATA_ULI is not set
-# CONFIG_SATA_VIA is not set
-# CONFIG_SATA_VITESSE is not set
-
-#
-# PATA SFF controllers with BMDMA
-#
-# CONFIG_PATA_ALI is not set
-# CONFIG_PATA_AMD is not set
-# CONFIG_PATA_ARTOP is not set
-# CONFIG_PATA_ATIIXP is not set
-# CONFIG_PATA_ATP867X is not set
-# CONFIG_PATA_CMD64X is not set
-# CONFIG_PATA_CYPRESS is not set
-# CONFIG_PATA_EFAR is not set
-# CONFIG_PATA_HPT366 is not set
-# CONFIG_PATA_HPT37X is not set
-# CONFIG_PATA_HPT3X2N is not set
-# CONFIG_PATA_HPT3X3 is not set
-# CONFIG_PATA_IT8213 is not set
-# CONFIG_PATA_IT821X is not set
-# CONFIG_PATA_JMICRON is not set
-# CONFIG_PATA_MARVELL is not set
-# CONFIG_PATA_NETCELL is not set
-# CONFIG_PATA_NINJA32 is not set
-# CONFIG_PATA_NS87415 is not set
-# CONFIG_PATA_OLDPIIX is not set
-# CONFIG_PATA_OPTIDMA is not set
-# CONFIG_PATA_PDC2027X is not set
-# CONFIG_PATA_PDC_OLD is not set
-# CONFIG_PATA_RADISYS is not set
-# CONFIG_PATA_RDC is not set
-# CONFIG_PATA_SCH is not set
-# CONFIG_PATA_SERVERWORKS is not set
-# CONFIG_PATA_SIL680 is not set
-# CONFIG_PATA_SIS is not set
-# CONFIG_PATA_TOSHIBA is not set
-# CONFIG_PATA_TRIFLEX is not set
-# CONFIG_PATA_VIA is not set
-# CONFIG_PATA_WINBOND is not set
-
-#
-# PIO-only SFF controllers
-#
-# CONFIG_PATA_CMD640_PCI is not set
-# CONFIG_PATA_MPIIX is not set
-# CONFIG_PATA_NS87410 is not set
-# CONFIG_PATA_OPTI is not set
-# CONFIG_PATA_RZ1000 is not set
-
-#
-# Generic fallback / legacy drivers
-#
-# CONFIG_PATA_ACPI is not set
-CONFIG_ATA_GENERIC=m
-# CONFIG_PATA_LEGACY is not set
-CONFIG_MD=y
-CONFIG_BLK_DEV_MD=y
-CONFIG_MD_AUTODETECT=y
-CONFIG_MD_LINEAR=m
-CONFIG_MD_RAID0=m
-CONFIG_MD_RAID1=m
-CONFIG_MD_RAID10=m
-CONFIG_MD_RAID456=m
-CONFIG_MD_MULTIPATH=m
-CONFIG_MD_FAULTY=m
-CONFIG_MD_CLUSTER=m
-# CONFIG_BCACHE is not set
-CONFIG_BLK_DEV_DM_BUILTIN=y
-CONFIG_BLK_DEV_DM=m
-CONFIG_DM_DEBUG=y
-CONFIG_DM_BUFIO=m
-# CONFIG_DM_DEBUG_BLOCK_MANAGER_LOCKING is not set
-CONFIG_DM_BIO_PRISON=m
-CONFIG_DM_PERSISTENT_DATA=m
-# CONFIG_DM_UNSTRIPED is not set
-CONFIG_DM_CRYPT=m
-CONFIG_DM_SNAPSHOT=m
-CONFIG_DM_THIN_PROVISIONING=m
-CONFIG_DM_CACHE=m
-CONFIG_DM_CACHE_SMQ=m
-CONFIG_DM_WRITECACHE=m
-# CONFIG_DM_EBS is not set
-CONFIG_DM_ERA=m
-# CONFIG_DM_CLONE is not set
-CONFIG_DM_MIRROR=m
-CONFIG_DM_LOG_USERSPACE=m
-CONFIG_DM_RAID=m
-CONFIG_DM_ZERO=m
-CONFIG_DM_MULTIPATH=m
-CONFIG_DM_MULTIPATH_QL=m
-CONFIG_DM_MULTIPATH_ST=m
-# CONFIG_DM_MULTIPATH_HST is not set
-# CONFIG_DM_MULTIPATH_IOA is not set
-CONFIG_DM_DELAY=m
-# CONFIG_DM_DUST is not set
-CONFIG_DM_UEVENT=y
-CONFIG_DM_FLAKEY=m
-CONFIG_DM_VERITY=m
-# CONFIG_DM_VERITY_VERIFY_ROOTHASH_SIG is not set
-# CONFIG_DM_VERITY_FEC is not set
-CONFIG_DM_SWITCH=m
-CONFIG_DM_LOG_WRITES=m
-CONFIG_DM_INTEGRITY=m
-# CONFIG_DM_ZONED is not set
-CONFIG_DM_AUDIT=y
-CONFIG_TARGET_CORE=m
-CONFIG_TCM_IBLOCK=m
-CONFIG_TCM_FILEIO=m
-CONFIG_TCM_PSCSI=m
-CONFIG_TCM_USER2=m
-CONFIG_LOOPBACK_TARGET=m
-CONFIG_ISCSI_TARGET=m
-# CONFIG_SBP_TARGET is not set
-# CONFIG_FUSION is not set
-
-#
-# IEEE 1394 (FireWire) support
-#
-CONFIG_FIREWIRE=m
-CONFIG_FIREWIRE_OHCI=m
-CONFIG_FIREWIRE_SBP2=m
-CONFIG_FIREWIRE_NET=m
-# CONFIG_FIREWIRE_NOSY is not set
-# end of IEEE 1394 (FireWire) support
-
-CONFIG_MACINTOSH_DRIVERS=y
-CONFIG_MAC_EMUMOUSEBTN=y
-CONFIG_NETDEVICES=y
-CONFIG_MII=y
-CONFIG_NET_CORE=y
-# CONFIG_BONDING is not set
-CONFIG_DUMMY=m
-# CONFIG_WIREGUARD is not set
-# CONFIG_EQUALIZER is not set
-# CONFIG_NET_FC is not set
-# CONFIG_IFB is not set
-# CONFIG_NET_TEAM is not set
-# CONFIG_MACVLAN is not set
-# CONFIG_IPVLAN is not set
-# CONFIG_VXLAN is not set
-# CONFIG_GENEVE is not set
-# CONFIG_BAREUDP is not set
-# CONFIG_GTP is not set
-# CONFIG_AMT is not set
-CONFIG_MACSEC=m
-CONFIG_NETCONSOLE=m
-CONFIG_NETCONSOLE_DYNAMIC=y
-CONFIG_NETPOLL=y
-CONFIG_NET_POLL_CONTROLLER=y
-CONFIG_TUN=m
-# CONFIG_TUN_VNET_CROSS_LE is not set
-CONFIG_VETH=m
-CONFIG_VIRTIO_NET=m
-# CONFIG_NLMON is not set
-# CONFIG_NET_VRF is not set
-# CONFIG_VSOCKMON is not set
-# CONFIG_ARCNET is not set
-CONFIG_ATM_DRIVERS=y
-# CONFIG_ATM_DUMMY is not set
-# CONFIG_ATM_TCP is not set
-# CONFIG_ATM_LANAI is not set
-# CONFIG_ATM_ENI is not set
-# CONFIG_ATM_NICSTAR is not set
-# CONFIG_ATM_IDT77252 is not set
-# CONFIG_ATM_IA is not set
-# CONFIG_ATM_FORE200E is not set
-# CONFIG_ATM_HE is not set
-# CONFIG_ATM_SOLOS is not set
-CONFIG_ETHERNET=y
-CONFIG_MDIO=y
-# CONFIG_NET_VENDOR_3COM is not set
-CONFIG_NET_VENDOR_ADAPTEC=y
-# CONFIG_ADAPTEC_STARFIRE is not set
-CONFIG_NET_VENDOR_AGERE=y
-# CONFIG_ET131X is not set
-CONFIG_NET_VENDOR_ALACRITECH=y
-# CONFIG_SLICOSS is not set
-CONFIG_NET_VENDOR_ALTEON=y
-# CONFIG_ACENIC is not set
-# CONFIG_ALTERA_TSE is not set
-CONFIG_NET_VENDOR_AMAZON=y
-# CONFIG_ENA_ETHERNET is not set
-# CONFIG_NET_VENDOR_AMD is not set
-CONFIG_NET_VENDOR_AQUANTIA=y
-# CONFIG_AQTION is not set
-CONFIG_NET_VENDOR_ARC=y
-CONFIG_NET_VENDOR_ASIX=y
-# CONFIG_SPI_AX88796C is not set
-CONFIG_NET_VENDOR_ATHEROS=y
-# CONFIG_ATL2 is not set
-# CONFIG_ATL1 is not set
-# CONFIG_ATL1E is not set
-# CONFIG_ATL1C is not set
-# CONFIG_ALX is not set
-# CONFIG_CX_ECAT is not set
-CONFIG_NET_VENDOR_BROADCOM=y
-# CONFIG_B44 is not set
-# CONFIG_BCMGENET is not set
-# CONFIG_BNX2 is not set
-# CONFIG_CNIC is not set
-# CONFIG_TIGON3 is not set
-# CONFIG_BNX2X is not set
-# CONFIG_SYSTEMPORT is not set
-# CONFIG_BNXT is not set
-CONFIG_NET_VENDOR_CADENCE=y
-# CONFIG_MACB is not set
-CONFIG_NET_VENDOR_CAVIUM=y
-# CONFIG_THUNDER_NIC_PF is not set
-# CONFIG_THUNDER_NIC_VF is not set
-# CONFIG_THUNDER_NIC_BGX is not set
-# CONFIG_THUNDER_NIC_RGX is not set
-CONFIG_CAVIUM_PTP=y
-# CONFIG_LIQUIDIO is not set
-# CONFIG_LIQUIDIO_VF is not set
-CONFIG_NET_VENDOR_CHELSIO=y
-# CONFIG_CHELSIO_T1 is not set
-# CONFIG_CHELSIO_T3 is not set
-# CONFIG_CHELSIO_T4 is not set
-# CONFIG_CHELSIO_T4VF is not set
-CONFIG_NET_VENDOR_CISCO=y
-# CONFIG_ENIC is not set
-CONFIG_NET_VENDOR_CORTINA=y
-CONFIG_NET_VENDOR_DAVICOM=y
-# CONFIG_DM9051 is not set
-# CONFIG_DNET is not set
-CONFIG_NET_VENDOR_DEC=y
-# CONFIG_NET_TULIP is not set
-CONFIG_NET_VENDOR_DLINK=y
-# CONFIG_DL2K is not set
-# CONFIG_SUNDANCE is not set
-CONFIG_NET_VENDOR_EMULEX=y
-# CONFIG_BE2NET is not set
-CONFIG_NET_VENDOR_ENGLEDER=y
-# CONFIG_TSNEP is not set
-CONFIG_NET_VENDOR_EZCHIP=y
-CONFIG_NET_VENDOR_FUNGIBLE=y
-# CONFIG_FUN_ETH is not set
-CONFIG_NET_VENDOR_GOOGLE=y
-# CONFIG_GVE is not set
-CONFIG_NET_VENDOR_HUAWEI=y
-# CONFIG_HINIC is not set
-CONFIG_NET_VENDOR_I825XX=y
-CONFIG_NET_VENDOR_INTEL=y
-# CONFIG_E100 is not set
-CONFIG_E1000=y
-CONFIG_E1000E=y
-CONFIG_E1000E_HWTS=y
-CONFIG_IGB=y
-CONFIG_IGB_HWMON=y
-# CONFIG_IGBVF is not set
-# CONFIG_IXGB is not set
-CONFIG_IXGBE=y
-CONFIG_IXGBE_HWMON=y
-# CONFIG_IXGBE_DCB is not set
-# CONFIG_IXGBE_IPSEC is not set
-# CONFIG_IXGBEVF is not set
-CONFIG_I40E=y
-# CONFIG_I40E_DCB is not set
-# CONFIG_I40EVF is not set
-# CONFIG_ICE is not set
-# CONFIG_FM10K is not set
-CONFIG_IGC=y
-CONFIG_NET_VENDOR_WANGXUN=y
-# CONFIG_NGBE is not set
-# CONFIG_TXGBE is not set
-# CONFIG_JME is not set
-CONFIG_NET_VENDOR_ADI=y
-# CONFIG_ADIN1110 is not set
-CONFIG_NET_VENDOR_LITEX=y
-CONFIG_NET_VENDOR_MARVELL=y
-# CONFIG_MVMDIO is not set
-# CONFIG_SKGE is not set
-# CONFIG_SKY2 is not set
-# CONFIG_OCTEON_EP is not set
-# CONFIG_PRESTERA is not set
-CONFIG_NET_VENDOR_MELLANOX=y
-# CONFIG_MLX4_EN is not set
-# CONFIG_MLX5_CORE is not set
-# CONFIG_MLXSW_CORE is not set
-# CONFIG_MLXFW is not set
-CONFIG_NET_VENDOR_MICREL=y
-# CONFIG_KS8842 is not set
-# CONFIG_KS8851 is not set
-# CONFIG_KS8851_MLL is not set
-# CONFIG_KSZ884X_PCI is not set
-CONFIG_NET_VENDOR_MICROCHIP=y
-# CONFIG_ENC28J60 is not set
-# CONFIG_ENCX24J600 is not set
-# CONFIG_LAN743X is not set
-# CONFIG_VCAP is not set
-CONFIG_NET_VENDOR_MICROSEMI=y
-CONFIG_NET_VENDOR_MICROSOFT=y
-CONFIG_NET_VENDOR_MYRI=y
-# CONFIG_MYRI10GE is not set
-CONFIG_NET_VENDOR_NI=y
-# CONFIG_NI_XGE_MANAGEMENT_ENET is not set
-CONFIG_NET_VENDOR_NATSEMI=y
-# CONFIG_NATSEMI is not set
-# CONFIG_NS83820 is not set
-CONFIG_NET_VENDOR_NETERION=y
-# CONFIG_S2IO is not set
-CONFIG_NET_VENDOR_NETRONOME=y
-# CONFIG_NFP is not set
-CONFIG_NET_VENDOR_8390=y
-# CONFIG_NE2K_PCI is not set
-CONFIG_NET_VENDOR_NVIDIA=y
-# CONFIG_FORCEDETH is not set
-CONFIG_NET_VENDOR_OKI=y
-# CONFIG_ETHOC is not set
-CONFIG_NET_VENDOR_PACKET_ENGINES=y
-# CONFIG_HAMACHI is not set
-# CONFIG_YELLOWFIN is not set
-CONFIG_NET_VENDOR_PENSANDO=y
-# CONFIG_IONIC is not set
-CONFIG_NET_VENDOR_QLOGIC=y
-# CONFIG_QLA3XXX is not set
-# CONFIG_QLCNIC is not set
-# CONFIG_NETXEN_NIC is not set
-# CONFIG_QED is not set
-CONFIG_NET_VENDOR_BROCADE=y
-# CONFIG_BNA is not set
-CONFIG_NET_VENDOR_QUALCOMM=y
-# CONFIG_QCOM_EMAC is not set
-# CONFIG_RMNET is not set
-CONFIG_NET_VENDOR_RDC=y
-# CONFIG_R6040 is not set
-CONFIG_NET_VENDOR_REALTEK=y
-# CONFIG_ATP is not set
-# CONFIG_8139CP is not set
-# CONFIG_8139TOO is not set
-CONFIG_R8169=y
-CONFIG_NET_VENDOR_RENESAS=y
-CONFIG_NET_VENDOR_ROCKER=y
-# CONFIG_ROCKER is not set
-CONFIG_NET_VENDOR_SAMSUNG=y
-# CONFIG_SXGBE_ETH is not set
-CONFIG_NET_VENDOR_SEEQ=y
-CONFIG_NET_VENDOR_SILAN=y
-# CONFIG_SC92031 is not set
-CONFIG_NET_VENDOR_SIS=y
-# CONFIG_SIS900 is not set
-# CONFIG_SIS190 is not set
-CONFIG_NET_VENDOR_SOLARFLARE=y
-# CONFIG_SFC is not set
-# CONFIG_SFC_FALCON is not set
-# CONFIG_SFC_SIENA is not set
-CONFIG_NET_VENDOR_SMSC=y
-# CONFIG_EPIC100 is not set
-# CONFIG_SMSC911X is not set
-# CONFIG_SMSC9420 is not set
-CONFIG_NET_VENDOR_SOCIONEXT=y
-CONFIG_NET_VENDOR_STMICRO=y
-# CONFIG_STMMAC_ETH is not set
-CONFIG_NET_VENDOR_SUN=y
-# CONFIG_HAPPYMEAL is not set
-# CONFIG_SUNGEM is not set
-# CONFIG_CASSINI is not set
-# CONFIG_NIU is not set
-CONFIG_NET_VENDOR_SYNOPSYS=y
-# CONFIG_DWC_XLGMAC is not set
-CONFIG_NET_VENDOR_TEHUTI=y
-# CONFIG_TEHUTI is not set
-CONFIG_NET_VENDOR_TI=y
-# CONFIG_TI_CPSW_PHY_SEL is not set
-# CONFIG_TLAN is not set
-CONFIG_NET_VENDOR_VERTEXCOM=y
-# CONFIG_MSE102X is not set
-CONFIG_NET_VENDOR_VIA=y
-# CONFIG_VIA_RHINE is not set
-# CONFIG_VIA_VELOCITY is not set
-CONFIG_NET_VENDOR_WIZNET=y
-# CONFIG_WIZNET_W5100 is not set
-# CONFIG_WIZNET_W5300 is not set
-CONFIG_NET_VENDOR_XILINX=y
-# CONFIG_XILINX_EMACLITE is not set
-# CONFIG_XILINX_AXI_EMAC is not set
-# CONFIG_XILINX_LL_TEMAC is not set
-# CONFIG_FDDI is not set
-# CONFIG_HIPPI is not set
-# CONFIG_NET_SB1000 is not set
-CONFIG_PHYLINK=y
-CONFIG_PHYLIB=y
-CONFIG_SWPHY=y
-# CONFIG_LED_TRIGGER_PHY is not set
-CONFIG_FIXED_PHY=y
-# CONFIG_SFP is not set
-
-#
-# MII PHY device drivers
-#
-# CONFIG_AMD_PHY is not set
-# CONFIG_ADIN_PHY is not set
-# CONFIG_ADIN1100_PHY is not set
-# CONFIG_AQUANTIA_PHY is not set
-CONFIG_AX88796B_PHY=y
-# CONFIG_BROADCOM_PHY is not set
-# CONFIG_BCM54140_PHY is not set
-# CONFIG_BCM7XXX_PHY is not set
-# CONFIG_BCM84881_PHY is not set
-# CONFIG_BCM87XX_PHY is not set
-# CONFIG_CICADA_PHY is not set
-# CONFIG_CORTINA_PHY is not set
-# CONFIG_DAVICOM_PHY is not set
-# CONFIG_ICPLUS_PHY is not set
-# CONFIG_LXT_PHY is not set
-# CONFIG_INTEL_XWAY_PHY is not set
-# CONFIG_LSI_ET1011C_PHY is not set
-# CONFIG_MARVELL_PHY is not set
-# CONFIG_MARVELL_10G_PHY is not set
-# CONFIG_MARVELL_88X2222_PHY is not set
-# CONFIG_MAXLINEAR_GPHY is not set
-# CONFIG_MEDIATEK_GE_PHY is not set
-# CONFIG_MICREL_PHY is not set
-# CONFIG_MICROCHIP_PHY is not set
-# CONFIG_MICROCHIP_T1_PHY is not set
-# CONFIG_MICROSEMI_PHY is not set
-# CONFIG_MOTORCOMM_PHY is not set
-# CONFIG_NATIONAL_PHY is not set
-# CONFIG_NXP_C45_TJA11XX_PHY is not set
-# CONFIG_NXP_TJA11XX_PHY is not set
-# CONFIG_QSEMI_PHY is not set
-CONFIG_REALTEK_PHY=y
-# CONFIG_RENESAS_PHY is not set
-# CONFIG_ROCKCHIP_PHY is not set
-# CONFIG_SMSC_PHY is not set
-# CONFIG_STE10XP is not set
-# CONFIG_TERANETICS_PHY is not set
-# CONFIG_DP83822_PHY is not set
-# CONFIG_DP83TC811_PHY is not set
-# CONFIG_DP83848_PHY is not set
-# CONFIG_DP83867_PHY is not set
-# CONFIG_DP83869_PHY is not set
-# CONFIG_DP83TD510_PHY is not set
-# CONFIG_VITESSE_PHY is not set
-# CONFIG_XILINX_GMII2RGMII is not set
-# CONFIG_MICREL_KS8995MA is not set
-# CONFIG_PSE_CONTROLLER is not set
-CONFIG_CAN_DEV=m
-CONFIG_CAN_VCAN=m
-# CONFIG_CAN_VXCAN is not set
-CONFIG_CAN_NETLINK=y
-CONFIG_CAN_CALC_BITTIMING=y
-# CONFIG_CAN_CAN327 is not set
-# CONFIG_CAN_KVASER_PCIEFD is not set
-CONFIG_CAN_SLCAN=m
-CONFIG_CAN_C_CAN=m
-CONFIG_CAN_C_CAN_PLATFORM=m
-CONFIG_CAN_C_CAN_PCI=m
-CONFIG_CAN_CC770=m
-# CONFIG_CAN_CC770_ISA is not set
-CONFIG_CAN_CC770_PLATFORM=m
-# CONFIG_CAN_CTUCANFD_PCI is not set
-# CONFIG_CAN_IFI_CANFD is not set
-# CONFIG_CAN_M_CAN is not set
-# CONFIG_CAN_PEAK_PCIEFD is not set
-CONFIG_CAN_SJA1000=m
-CONFIG_CAN_EMS_PCI=m
-# CONFIG_CAN_F81601 is not set
-CONFIG_CAN_KVASER_PCI=m
-CONFIG_CAN_PEAK_PCI=m
-CONFIG_CAN_PEAK_PCIEC=y
-CONFIG_CAN_PLX_PCI=m
-# CONFIG_CAN_SJA1000_ISA is not set
-# CONFIG_CAN_SJA1000_PLATFORM is not set
-CONFIG_CAN_SOFTING=m
-
-#
-# CAN SPI interfaces
-#
-# CONFIG_CAN_HI311X is not set
-# CONFIG_CAN_MCP251X is not set
-# CONFIG_CAN_MCP251XFD is not set
-# end of CAN SPI interfaces
-
-#
-# CAN USB interfaces
-#
-# CONFIG_CAN_8DEV_USB is not set
-# CONFIG_CAN_EMS_USB is not set
-# CONFIG_CAN_ESD_USB is not set
-# CONFIG_CAN_ETAS_ES58X is not set
-# CONFIG_CAN_GS_USB is not set
-# CONFIG_CAN_KVASER_USB is not set
-# CONFIG_CAN_MCBA_USB is not set
-# CONFIG_CAN_PEAK_USB is not set
-# CONFIG_CAN_UCAN is not set
-# end of CAN USB interfaces
-
-# CONFIG_CAN_DEBUG_DEVICES is not set
-CONFIG_MDIO_DEVICE=y
-CONFIG_MDIO_BUS=y
-CONFIG_FWNODE_MDIO=y
-CONFIG_ACPI_MDIO=y
-CONFIG_MDIO_DEVRES=y
-# CONFIG_MDIO_BITBANG is not set
-# CONFIG_MDIO_BCM_UNIMAC is not set
-# CONFIG_MDIO_MVUSB is not set
-# CONFIG_MDIO_THUNDER is not set
-
-#
-# MDIO Multiplexers
-#
-
-#
-# PCS device drivers
-#
-# end of PCS device drivers
-
-# CONFIG_PLIP is not set
-# CONFIG_PPP is not set
-# CONFIG_SLIP is not set
-CONFIG_USB_NET_DRIVERS=y
-# CONFIG_USB_CATC is not set
-# CONFIG_USB_KAWETH is not set
-# CONFIG_USB_PEGASUS is not set
-# CONFIG_USB_RTL8150 is not set
-CONFIG_USB_RTL8152=y
-# CONFIG_USB_LAN78XX is not set
-CONFIG_USB_USBNET=y
-CONFIG_USB_NET_AX8817X=y
-CONFIG_USB_NET_AX88179_178A=y
-# CONFIG_USB_NET_CDCETHER is not set
-# CONFIG_USB_NET_CDC_EEM is not set
-# CONFIG_USB_NET_CDC_NCM is not set
-# CONFIG_USB_NET_HUAWEI_CDC_NCM is not set
-# CONFIG_USB_NET_CDC_MBIM is not set
-# CONFIG_USB_NET_DM9601 is not set
-# CONFIG_USB_NET_SR9700 is not set
-# CONFIG_USB_NET_SR9800 is not set
-# CONFIG_USB_NET_SMSC75XX is not set
-# CONFIG_USB_NET_SMSC95XX is not set
-# CONFIG_USB_NET_GL620A is not set
-# CONFIG_USB_NET_NET1080 is not set
-# CONFIG_USB_NET_PLUSB is not set
-# CONFIG_USB_NET_MCS7830 is not set
-# CONFIG_USB_NET_RNDIS_HOST is not set
-# CONFIG_USB_NET_CDC_SUBSET is not set
-# CONFIG_USB_NET_ZAURUS is not set
-# CONFIG_USB_NET_CX82310_ETH is not set
-# CONFIG_USB_NET_KALMIA is not set
-# CONFIG_USB_NET_QMI_WWAN is not set
-# CONFIG_USB_HSO is not set
-# CONFIG_USB_NET_INT51X1 is not set
-# CONFIG_USB_IPHETH is not set
-# CONFIG_USB_SIERRA_NET is not set
-# CONFIG_USB_NET_CH9200 is not set
-# CONFIG_USB_NET_AQC111 is not set
-CONFIG_WLAN=y
-CONFIG_WLAN_VENDOR_ADMTEK=y
-# CONFIG_ADM8211 is not set
-CONFIG_WLAN_VENDOR_ATH=y
-# CONFIG_ATH_DEBUG is not set
-# CONFIG_ATH5K is not set
-# CONFIG_ATH5K_PCI is not set
-# CONFIG_ATH9K is not set
-# CONFIG_ATH9K_HTC is not set
-# CONFIG_CARL9170 is not set
-# CONFIG_ATH6KL is not set
-# CONFIG_AR5523 is not set
-# CONFIG_WIL6210 is not set
-# CONFIG_ATH10K is not set
-# CONFIG_WCN36XX is not set
-# CONFIG_ATH11K is not set
-CONFIG_WLAN_VENDOR_ATMEL=y
-# CONFIG_ATMEL is not set
-# CONFIG_AT76C50X_USB is not set
-CONFIG_WLAN_VENDOR_BROADCOM=y
-# CONFIG_B43 is not set
-# CONFIG_B43LEGACY is not set
-# CONFIG_BRCMSMAC is not set
-# CONFIG_BRCMFMAC is not set
-CONFIG_WLAN_VENDOR_CISCO=y
-# CONFIG_AIRO is not set
-CONFIG_WLAN_VENDOR_INTEL=y
-# CONFIG_IPW2100 is not set
-# CONFIG_IPW2200 is not set
-# CONFIG_IWL4965 is not set
-# CONFIG_IWL3945 is not set
-# CONFIG_IWLWIFI is not set
-CONFIG_WLAN_VENDOR_INTERSIL=y
-# CONFIG_HOSTAP is not set
-# CONFIG_HERMES is not set
-# CONFIG_P54_COMMON is not set
-CONFIG_WLAN_VENDOR_MARVELL=y
-# CONFIG_LIBERTAS is not set
-# CONFIG_LIBERTAS_THINFIRM is not set
-# CONFIG_MWIFIEX is not set
-# CONFIG_MWL8K is not set
-# CONFIG_WLAN_VENDOR_MEDIATEK is not set
-CONFIG_WLAN_VENDOR_MICROCHIP=y
-# CONFIG_WILC1000_SDIO is not set
-# CONFIG_WILC1000_SPI is not set
-CONFIG_WLAN_VENDOR_PURELIFI=y
-# CONFIG_PLFXLC is not set
-CONFIG_WLAN_VENDOR_RALINK=y
-# CONFIG_RT2X00 is not set
-CONFIG_WLAN_VENDOR_REALTEK=y
-# CONFIG_RTL8180 is not set
-# CONFIG_RTL8187 is not set
-CONFIG_RTL_CARDS=m
-# CONFIG_RTL8192CE is not set
-# CONFIG_RTL8192SE is not set
-# CONFIG_RTL8192DE is not set
-# CONFIG_RTL8723AE is not set
-# CONFIG_RTL8723BE is not set
-# CONFIG_RTL8188EE is not set
-# CONFIG_RTL8192EE is not set
-# CONFIG_RTL8821AE is not set
-# CONFIG_RTL8192CU is not set
-# CONFIG_RTL8XXXU is not set
-# CONFIG_RTW88 is not set
-# CONFIG_RTW89 is not set
-CONFIG_WLAN_VENDOR_RSI=y
-# CONFIG_RSI_91X is not set
-CONFIG_WLAN_VENDOR_SILABS=y
-# CONFIG_WFX is not set
-CONFIG_WLAN_VENDOR_ST=y
-# CONFIG_CW1200 is not set
-CONFIG_WLAN_VENDOR_TI=y
-# CONFIG_WL1251 is not set
-# CONFIG_WL12XX is not set
-# CONFIG_WL18XX is not set
-# CONFIG_WLCORE is not set
-CONFIG_WLAN_VENDOR_ZYDAS=y
-# CONFIG_USB_ZD1201 is not set
-# CONFIG_ZD1211RW is not set
-CONFIG_WLAN_VENDOR_QUANTENNA=y
-# CONFIG_QTNFMAC_PCIE is not set
-CONFIG_MAC80211_HWSIM=m
-# CONFIG_USB_NET_RNDIS_WLAN is not set
-# CONFIG_VIRT_WIFI is not set
-# CONFIG_WAN is not set
-
-#
-# Wireless WAN
-#
-# CONFIG_WWAN is not set
-# end of Wireless WAN
-
-# CONFIG_VMXNET3 is not set
-# CONFIG_FUJITSU_ES is not set
-# CONFIG_NETDEVSIM is not set
-CONFIG_NET_FAILOVER=m
-# CONFIG_ISDN is not set
-
-#
-# Input device support
-#
-CONFIG_INPUT=y
-CONFIG_INPUT_LEDS=y
-CONFIG_INPUT_FF_MEMLESS=m
-CONFIG_INPUT_SPARSEKMAP=m
-# CONFIG_INPUT_MATRIXKMAP is not set
-CONFIG_INPUT_VIVALDIFMAP=y
-
-#
-# Userland interfaces
-#
-CONFIG_INPUT_MOUSEDEV=y
-# CONFIG_INPUT_MOUSEDEV_PSAUX is not set
-CONFIG_INPUT_MOUSEDEV_SCREEN_X=1024
-CONFIG_INPUT_MOUSEDEV_SCREEN_Y=768
-CONFIG_INPUT_JOYDEV=m
-CONFIG_INPUT_EVDEV=y
-# CONFIG_INPUT_EVBUG is not set
-
-#
-# Input Device Drivers
-#
-CONFIG_INPUT_KEYBOARD=y
-# CONFIG_KEYBOARD_ADP5588 is not set
-# CONFIG_KEYBOARD_ADP5589 is not set
-# CONFIG_KEYBOARD_APPLESPI is not set
-CONFIG_KEYBOARD_ATKBD=y
-# CONFIG_KEYBOARD_QT1050 is not set
-# CONFIG_KEYBOARD_QT1070 is not set
-# CONFIG_KEYBOARD_QT2160 is not set
-# CONFIG_KEYBOARD_DLINK_DIR685 is not set
-# CONFIG_KEYBOARD_LKKBD is not set
-# CONFIG_KEYBOARD_GPIO is not set
-# CONFIG_KEYBOARD_GPIO_POLLED is not set
-# CONFIG_KEYBOARD_TCA6416 is not set
-# CONFIG_KEYBOARD_TCA8418 is not set
-# CONFIG_KEYBOARD_MATRIX is not set
-# CONFIG_KEYBOARD_LM8323 is not set
-# CONFIG_KEYBOARD_LM8333 is not set
-# CONFIG_KEYBOARD_MAX7359 is not set
-# CONFIG_KEYBOARD_MCS is not set
-# CONFIG_KEYBOARD_MPR121 is not set
-# CONFIG_KEYBOARD_NEWTON is not set
-# CONFIG_KEYBOARD_OPENCORES is not set
-# CONFIG_KEYBOARD_SAMSUNG is not set
-# CONFIG_KEYBOARD_STOWAWAY is not set
-# CONFIG_KEYBOARD_SUNKBD is not set
-# CONFIG_KEYBOARD_TM2_TOUCHKEY is not set
-# CONFIG_KEYBOARD_XTKBD is not set
-# CONFIG_KEYBOARD_CYPRESS_SF is not set
-CONFIG_INPUT_MOUSE=y
-CONFIG_MOUSE_PS2=y
-CONFIG_MOUSE_PS2_ALPS=y
-CONFIG_MOUSE_PS2_BYD=y
-CONFIG_MOUSE_PS2_LOGIPS2PP=y
-CONFIG_MOUSE_PS2_SYNAPTICS=y
-CONFIG_MOUSE_PS2_SYNAPTICS_SMBUS=y
-CONFIG_MOUSE_PS2_CYPRESS=y
-CONFIG_MOUSE_PS2_LIFEBOOK=y
-CONFIG_MOUSE_PS2_TRACKPOINT=y
-CONFIG_MOUSE_PS2_ELANTECH=y
-CONFIG_MOUSE_PS2_ELANTECH_SMBUS=y
-CONFIG_MOUSE_PS2_SENTELIC=y
-# CONFIG_MOUSE_PS2_TOUCHKIT is not set
-CONFIG_MOUSE_PS2_FOCALTECH=y
-CONFIG_MOUSE_PS2_VMMOUSE=y
-CONFIG_MOUSE_PS2_SMBUS=y
-CONFIG_MOUSE_SERIAL=m
-# CONFIG_MOUSE_APPLETOUCH is not set
-# CONFIG_MOUSE_BCM5974 is not set
-CONFIG_MOUSE_CYAPA=m
-CONFIG_MOUSE_ELAN_I2C=m
-CONFIG_MOUSE_ELAN_I2C_I2C=y
-CONFIG_MOUSE_ELAN_I2C_SMBUS=y
-CONFIG_MOUSE_VSXXXAA=m
-# CONFIG_MOUSE_GPIO is not set
-CONFIG_MOUSE_SYNAPTICS_I2C=m
-# CONFIG_MOUSE_SYNAPTICS_USB is not set
-# CONFIG_INPUT_JOYSTICK is not set
-# CONFIG_INPUT_TABLET is not set
-# CONFIG_INPUT_TOUCHSCREEN is not set
-CONFIG_INPUT_MISC=y
-# CONFIG_INPUT_AD714X is not set
-# CONFIG_INPUT_BMA150 is not set
-# CONFIG_INPUT_E3X0_BUTTON is not set
-# CONFIG_INPUT_PCSPKR is not set
-# CONFIG_INPUT_MMA8450 is not set
-# CONFIG_INPUT_APANEL is not set
-# CONFIG_INPUT_GPIO_BEEPER is not set
-# CONFIG_INPUT_GPIO_DECODER is not set
-# CONFIG_INPUT_GPIO_VIBRA is not set
-# CONFIG_INPUT_ATLAS_BTNS is not set
-# CONFIG_INPUT_ATI_REMOTE2 is not set
-# CONFIG_INPUT_KEYSPAN_REMOTE is not set
-# CONFIG_INPUT_KXTJ9 is not set
-# CONFIG_INPUT_POWERMATE is not set
-# CONFIG_INPUT_YEALINK is not set
-# CONFIG_INPUT_CM109 is not set
-CONFIG_INPUT_UINPUT=y
-# CONFIG_INPUT_PCF8574 is not set
-# CONFIG_INPUT_PWM_BEEPER is not set
-# CONFIG_INPUT_PWM_VIBRA is not set
-# CONFIG_INPUT_GPIO_ROTARY_ENCODER is not set
-# CONFIG_INPUT_DA7280_HAPTICS is not set
-# CONFIG_INPUT_ADXL34X is not set
-# CONFIG_INPUT_IMS_PCU is not set
-# CONFIG_INPUT_IQS269A is not set
-# CONFIG_INPUT_IQS626A is not set
-# CONFIG_INPUT_IQS7222 is not set
-# CONFIG_INPUT_CMA3000 is not set
-# CONFIG_INPUT_IDEAPAD_SLIDEBAR is not set
-# CONFIG_INPUT_DRV260X_HAPTICS is not set
-# CONFIG_INPUT_DRV2665_HAPTICS is not set
-# CONFIG_INPUT_DRV2667_HAPTICS is not set
-CONFIG_RMI4_CORE=m
-CONFIG_RMI4_I2C=m
-CONFIG_RMI4_SPI=m
-CONFIG_RMI4_SMB=m
-CONFIG_RMI4_F03=y
-CONFIG_RMI4_F03_SERIO=m
-CONFIG_RMI4_2D_SENSOR=y
-CONFIG_RMI4_F11=y
-CONFIG_RMI4_F12=y
-CONFIG_RMI4_F30=y
-CONFIG_RMI4_F34=y
-# CONFIG_RMI4_F3A is not set
-CONFIG_RMI4_F55=y
-
-#
-# Hardware I/O ports
-#
-CONFIG_SERIO=y
-CONFIG_ARCH_MIGHT_HAVE_PC_SERIO=y
-CONFIG_SERIO_I8042=y
-CONFIG_SERIO_SERPORT=y
-# CONFIG_SERIO_CT82C710 is not set
-# CONFIG_SERIO_PARKBD is not set
-# CONFIG_SERIO_PCIPS2 is not set
-CONFIG_SERIO_LIBPS2=y
-CONFIG_SERIO_RAW=m
-CONFIG_SERIO_ALTERA_PS2=m
-# CONFIG_SERIO_PS2MULT is not set
-CONFIG_SERIO_ARC_PS2=m
-# CONFIG_SERIO_GPIO_PS2 is not set
-# CONFIG_USERIO is not set
-# CONFIG_GAMEPORT is not set
-# end of Hardware I/O ports
-# end of Input device support
-
-#
-# Character devices
-#
-CONFIG_TTY=y
-CONFIG_VT=y
-CONFIG_CONSOLE_TRANSLATIONS=y
-CONFIG_VT_CONSOLE=y
-CONFIG_VT_CONSOLE_SLEEP=y
-CONFIG_HW_CONSOLE=y
-CONFIG_VT_HW_CONSOLE_BINDING=y
-CONFIG_UNIX98_PTYS=y
-# CONFIG_LEGACY_PTYS is not set
-CONFIG_LEGACY_TIOCSTI=y
-CONFIG_LDISC_AUTOLOAD=y
-
-#
-# Serial drivers
-#
-CONFIG_SERIAL_EARLYCON=y
-CONFIG_SERIAL_8250=y
-# CONFIG_SERIAL_8250_DEPRECATED_OPTIONS is not set
-CONFIG_SERIAL_8250_PNP=y
-# CONFIG_SERIAL_8250_16550A_VARIANTS is not set
-# CONFIG_SERIAL_8250_FINTEK is not set
-CONFIG_SERIAL_8250_CONSOLE=y
-CONFIG_SERIAL_8250_DMA=y
-CONFIG_SERIAL_8250_PCI=y
-CONFIG_SERIAL_8250_EXAR=y
-CONFIG_SERIAL_8250_NR_UARTS=64
-CONFIG_SERIAL_8250_RUNTIME_UARTS=4
-CONFIG_SERIAL_8250_EXTENDED=y
-CONFIG_SERIAL_8250_MANY_PORTS=y
-CONFIG_SERIAL_8250_SHARE_IRQ=y
-# CONFIG_SERIAL_8250_DETECT_IRQ is not set
-CONFIG_SERIAL_8250_RSA=y
-CONFIG_SERIAL_8250_DWLIB=y
-CONFIG_SERIAL_8250_DW=y
-# CONFIG_SERIAL_8250_RT288X is not set
-CONFIG_SERIAL_8250_LPSS=y
-CONFIG_SERIAL_8250_MID=y
-CONFIG_SERIAL_8250_PERICOM=y
-
-#
-# Non-8250 serial port support
-#
-# CONFIG_SERIAL_MAX3100 is not set
-# CONFIG_SERIAL_MAX310X is not set
-# CONFIG_SERIAL_UARTLITE is not set
-CONFIG_SERIAL_CORE=y
-CONFIG_SERIAL_CORE_CONSOLE=y
-CONFIG_SERIAL_JSM=m
-# CONFIG_SERIAL_LANTIQ is not set
-# CONFIG_SERIAL_SCCNXP is not set
-# CONFIG_SERIAL_SC16IS7XX is not set
-# CONFIG_SERIAL_ALTERA_JTAGUART is not set
-# CONFIG_SERIAL_ALTERA_UART is not set
-CONFIG_SERIAL_ARC=m
-CONFIG_SERIAL_ARC_NR_PORTS=1
-# CONFIG_SERIAL_RP2 is not set
-# CONFIG_SERIAL_FSL_LPUART is not set
-# CONFIG_SERIAL_FSL_LINFLEXUART is not set
-# CONFIG_SERIAL_SPRD is not set
-# end of Serial drivers
-
-CONFIG_SERIAL_MCTRL_GPIO=y
-CONFIG_SERIAL_NONSTANDARD=y
-# CONFIG_MOXA_INTELLIO is not set
-# CONFIG_MOXA_SMARTIO is not set
-CONFIG_SYNCLINK_GT=m
-CONFIG_N_HDLC=m
-CONFIG_N_GSM=m
-CONFIG_NOZOMI=m
-# CONFIG_NULL_TTY is not set
-CONFIG_HVC_DRIVER=y
-# CONFIG_SERIAL_DEV_BUS is not set
-# CONFIG_TTY_PRINTK is not set
-CONFIG_PRINTER=m
-# CONFIG_LP_CONSOLE is not set
-CONFIG_PPDEV=m
-CONFIG_VIRTIO_CONSOLE=m
-CONFIG_IPMI_HANDLER=m
-CONFIG_IPMI_DMI_DECODE=y
-CONFIG_IPMI_PLAT_DATA=y
-CONFIG_IPMI_PANIC_EVENT=y
-CONFIG_IPMI_PANIC_STRING=y
-CONFIG_IPMI_DEVICE_INTERFACE=m
-CONFIG_IPMI_SI=m
-CONFIG_IPMI_SSIF=m
-CONFIG_IPMI_WATCHDOG=m
-CONFIG_IPMI_POWEROFF=m
-CONFIG_HW_RANDOM=y
-CONFIG_HW_RANDOM_TIMERIOMEM=m
-CONFIG_HW_RANDOM_INTEL=m
-# CONFIG_HW_RANDOM_AMD is not set
-# CONFIG_HW_RANDOM_BA431 is not set
-CONFIG_HW_RANDOM_VIA=m
-CONFIG_HW_RANDOM_VIRTIO=y
-# CONFIG_HW_RANDOM_XIPHERA is not set
-# CONFIG_APPLICOM is not set
-# CONFIG_MWAVE is not set
-CONFIG_DEVMEM=y
-CONFIG_NVRAM=y
-CONFIG_DEVPORT=y
-CONFIG_HPET=y
-CONFIG_HPET_MMAP=y
-# CONFIG_HPET_MMAP_DEFAULT is not set
-CONFIG_HANGCHECK_TIMER=m
-CONFIG_UV_MMTIMER=m
-CONFIG_TCG_TPM=y
-CONFIG_HW_RANDOM_TPM=y
-CONFIG_TCG_TIS_CORE=y
-CONFIG_TCG_TIS=y
-# CONFIG_TCG_TIS_SPI is not set
-# CONFIG_TCG_TIS_I2C is not set
-# CONFIG_TCG_TIS_I2C_CR50 is not set
-CONFIG_TCG_TIS_I2C_ATMEL=m
-CONFIG_TCG_TIS_I2C_INFINEON=m
-CONFIG_TCG_TIS_I2C_NUVOTON=m
-CONFIG_TCG_NSC=m
-CONFIG_TCG_ATMEL=m
-CONFIG_TCG_INFINEON=m
-CONFIG_TCG_CRB=y
-# CONFIG_TCG_VTPM_PROXY is not set
-CONFIG_TCG_TIS_ST33ZP24=m
-CONFIG_TCG_TIS_ST33ZP24_I2C=m
-# CONFIG_TCG_TIS_ST33ZP24_SPI is not set
-CONFIG_TELCLOCK=m
-# CONFIG_XILLYBUS is not set
-# CONFIG_XILLYUSB is not set
-# end of Character devices
-
-#
-# I2C support
-#
-CONFIG_I2C=y
-CONFIG_ACPI_I2C_OPREGION=y
-CONFIG_I2C_BOARDINFO=y
-CONFIG_I2C_COMPAT=y
-CONFIG_I2C_CHARDEV=m
-CONFIG_I2C_MUX=m
-
-#
-# Multiplexer I2C Chip support
-#
-# CONFIG_I2C_MUX_GPIO is not set
-# CONFIG_I2C_MUX_LTC4306 is not set
-# CONFIG_I2C_MUX_PCA9541 is not set
-# CONFIG_I2C_MUX_PCA954x is not set
-# CONFIG_I2C_MUX_REG is not set
-CONFIG_I2C_MUX_MLXCPLD=m
-# end of Multiplexer I2C Chip support
-
-CONFIG_I2C_HELPER_AUTO=y
-CONFIG_I2C_SMBUS=m
-CONFIG_I2C_ALGOBIT=y
-CONFIG_I2C_ALGOPCA=m
-
-#
-# I2C Hardware Bus support
-#
-
-#
-# PC SMBus host controller drivers
-#
-# CONFIG_I2C_ALI1535 is not set
-# CONFIG_I2C_ALI1563 is not set
-# CONFIG_I2C_ALI15X3 is not set
-# CONFIG_I2C_AMD756 is not set
-# CONFIG_I2C_AMD8111 is not set
-# CONFIG_I2C_AMD_MP2 is not set
-CONFIG_I2C_I801=m
-CONFIG_I2C_ISCH=m
-CONFIG_I2C_ISMT=m
-CONFIG_I2C_PIIX4=m
-CONFIG_I2C_NFORCE2=m
-CONFIG_I2C_NFORCE2_S4985=m
-# CONFIG_I2C_NVIDIA_GPU is not set
-# CONFIG_I2C_SIS5595 is not set
-# CONFIG_I2C_SIS630 is not set
-CONFIG_I2C_SIS96X=m
-CONFIG_I2C_VIA=m
-CONFIG_I2C_VIAPRO=m
-
-#
-# ACPI drivers
-#
-CONFIG_I2C_SCMI=m
-
-#
-# I2C system bus drivers (mostly embedded / system-on-chip)
-#
-# CONFIG_I2C_CBUS_GPIO is not set
-CONFIG_I2C_DESIGNWARE_CORE=m
-# CONFIG_I2C_DESIGNWARE_SLAVE is not set
-CONFIG_I2C_DESIGNWARE_PLATFORM=m
-# CONFIG_I2C_DESIGNWARE_AMDPSP is not set
-CONFIG_I2C_DESIGNWARE_BAYTRAIL=y
-# CONFIG_I2C_DESIGNWARE_PCI is not set
-# CONFIG_I2C_EMEV2 is not set
-# CONFIG_I2C_GPIO is not set
-# CONFIG_I2C_OCORES is not set
-CONFIG_I2C_PCA_PLATFORM=m
-CONFIG_I2C_SIMTEC=m
-# CONFIG_I2C_XILINX is not set
-
-#
-# External I2C/SMBus adapter drivers
-#
-# CONFIG_I2C_DIOLAN_U2C is not set
-# CONFIG_I2C_CP2615 is not set
-CONFIG_I2C_PARPORT=m
-# CONFIG_I2C_PCI1XXXX is not set
-# CONFIG_I2C_ROBOTFUZZ_OSIF is not set
-# CONFIG_I2C_TAOS_EVM is not set
-# CONFIG_I2C_TINY_USB is not set
-
-#
-# Other I2C/SMBus bus drivers
-#
-CONFIG_I2C_MLXCPLD=m
-# CONFIG_I2C_VIRTIO is not set
-# end of I2C Hardware Bus support
-
-CONFIG_I2C_STUB=m
-# CONFIG_I2C_SLAVE is not set
-# CONFIG_I2C_DEBUG_CORE is not set
-# CONFIG_I2C_DEBUG_ALGO is not set
-# CONFIG_I2C_DEBUG_BUS is not set
-# end of I2C support
-
-# CONFIG_I3C is not set
-CONFIG_SPI=y
-# CONFIG_SPI_DEBUG is not set
-CONFIG_SPI_MASTER=y
-# CONFIG_SPI_MEM is not set
-
-#
-# SPI Master Controller Drivers
-#
-# CONFIG_SPI_ALTERA is not set
-# CONFIG_SPI_AXI_SPI_ENGINE is not set
-# CONFIG_SPI_BITBANG is not set
-# CONFIG_SPI_BUTTERFLY is not set
-# CONFIG_SPI_CADENCE is not set
-# CONFIG_SPI_DESIGNWARE is not set
-# CONFIG_SPI_NXP_FLEXSPI is not set
-# CONFIG_SPI_GPIO is not set
-# CONFIG_SPI_LM70_LLP is not set
-# CONFIG_SPI_MICROCHIP_CORE is not set
-# CONFIG_SPI_MICROCHIP_CORE_QSPI is not set
-# CONFIG_SPI_LANTIQ_SSC is not set
-# CONFIG_SPI_OC_TINY is not set
-# CONFIG_SPI_PCI1XXXX is not set
-# CONFIG_SPI_PXA2XX is not set
-# CONFIG_SPI_ROCKCHIP is not set
-# CONFIG_SPI_SC18IS602 is not set
-# CONFIG_SPI_SIFIVE is not set
-# CONFIG_SPI_MXIC is not set
-# CONFIG_SPI_XCOMM is not set
-# CONFIG_SPI_XILINX is not set
-# CONFIG_SPI_ZYNQMP_GQSPI is not set
-# CONFIG_SPI_AMD is not set
-
-#
-# SPI Multiplexer support
-#
-# CONFIG_SPI_MUX is not set
-
-#
-# SPI Protocol Masters
-#
-# CONFIG_SPI_SPIDEV is not set
-# CONFIG_SPI_LOOPBACK_TEST is not set
-# CONFIG_SPI_TLE62X0 is not set
-# CONFIG_SPI_SLAVE is not set
-CONFIG_SPI_DYNAMIC=y
-# CONFIG_SPMI is not set
-# CONFIG_HSI is not set
-CONFIG_PPS=y
-# CONFIG_PPS_DEBUG is not set
-
-#
-# PPS clients support
-#
-# CONFIG_PPS_CLIENT_KTIMER is not set
-CONFIG_PPS_CLIENT_LDISC=m
-CONFIG_PPS_CLIENT_PARPORT=m
-CONFIG_PPS_CLIENT_GPIO=m
-
-#
-# PPS generators support
-#
-
-#
-# PTP clock support
-#
-CONFIG_PTP_1588_CLOCK=y
-CONFIG_PTP_1588_CLOCK_OPTIONAL=y
-# CONFIG_DP83640_PHY is not set
-# CONFIG_PTP_1588_CLOCK_INES is not set
-CONFIG_PTP_1588_CLOCK_KVM=m
-# CONFIG_PTP_1588_CLOCK_IDT82P33 is not set
-# CONFIG_PTP_1588_CLOCK_IDTCM is not set
-# CONFIG_PTP_1588_CLOCK_VMW is not set
-# end of PTP clock support
-
-CONFIG_PINCTRL=y
-# CONFIG_DEBUG_PINCTRL is not set
-# CONFIG_PINCTRL_AMD is not set
-# CONFIG_PINCTRL_CY8C95X0 is not set
-# CONFIG_PINCTRL_MCP23S08 is not set
-# CONFIG_PINCTRL_SX150X is not set
-
-#
-# Intel pinctrl drivers
-#
-# CONFIG_PINCTRL_BAYTRAIL is not set
-# CONFIG_PINCTRL_CHERRYVIEW is not set
-# CONFIG_PINCTRL_LYNXPOINT is not set
-# CONFIG_PINCTRL_ALDERLAKE is not set
-# CONFIG_PINCTRL_BROXTON is not set
-# CONFIG_PINCTRL_CANNONLAKE is not set
-# CONFIG_PINCTRL_CEDARFORK is not set
-# CONFIG_PINCTRL_DENVERTON is not set
-# CONFIG_PINCTRL_ELKHARTLAKE is not set
-# CONFIG_PINCTRL_EMMITSBURG is not set
-# CONFIG_PINCTRL_GEMINILAKE is not set
-# CONFIG_PINCTRL_ICELAKE is not set
-# CONFIG_PINCTRL_JASPERLAKE is not set
-# CONFIG_PINCTRL_LAKEFIELD is not set
-# CONFIG_PINCTRL_LEWISBURG is not set
-# CONFIG_PINCTRL_METEORLAKE is not set
-# CONFIG_PINCTRL_SUNRISEPOINT is not set
-# CONFIG_PINCTRL_TIGERLAKE is not set
-# end of Intel pinctrl drivers
-
-#
-# Renesas pinctrl drivers
-#
-# end of Renesas pinctrl drivers
-
-CONFIG_GPIOLIB=y
-CONFIG_GPIOLIB_FASTPATH_LIMIT=512
-CONFIG_GPIO_ACPI=y
-# CONFIG_DEBUG_GPIO is not set
-CONFIG_GPIO_SYSFS=y
-CONFIG_GPIO_CDEV=y
-CONFIG_GPIO_CDEV_V1=y
-
-#
-# Memory mapped GPIO drivers
-#
-# CONFIG_GPIO_AMDPT is not set
-# CONFIG_GPIO_DWAPB is not set
-# CONFIG_GPIO_EXAR is not set
-# CONFIG_GPIO_GENERIC_PLATFORM is not set
-CONFIG_GPIO_ICH=m
-# CONFIG_GPIO_MB86S7X is not set
-# CONFIG_GPIO_VX855 is not set
-# CONFIG_GPIO_AMD_FCH is not set
-# end of Memory mapped GPIO drivers
-
-#
-# Port-mapped I/O GPIO drivers
-#
-# CONFIG_GPIO_F7188X is not set
-# CONFIG_GPIO_IT87 is not set
-# CONFIG_GPIO_SCH is not set
-# CONFIG_GPIO_SCH311X is not set
-# CONFIG_GPIO_WINBOND is not set
-# CONFIG_GPIO_WS16C48 is not set
-# end of Port-mapped I/O GPIO drivers
-
-#
-# I2C GPIO expanders
-#
-# CONFIG_GPIO_MAX7300 is not set
-# CONFIG_GPIO_MAX732X is not set
-# CONFIG_GPIO_PCA953X is not set
-# CONFIG_GPIO_PCA9570 is not set
-# CONFIG_GPIO_PCF857X is not set
-# CONFIG_GPIO_TPIC2810 is not set
-# end of I2C GPIO expanders
-
-#
-# MFD GPIO expanders
-#
-# end of MFD GPIO expanders
-
-#
-# PCI GPIO expanders
-#
-# CONFIG_GPIO_AMD8111 is not set
-# CONFIG_GPIO_BT8XX is not set
-# CONFIG_GPIO_ML_IOH is not set
-# CONFIG_GPIO_PCI_IDIO_16 is not set
-# CONFIG_GPIO_PCIE_IDIO_24 is not set
-# CONFIG_GPIO_RDC321X is not set
-# end of PCI GPIO expanders
-
-#
-# SPI GPIO expanders
-#
-# CONFIG_GPIO_MAX3191X is not set
-# CONFIG_GPIO_MAX7301 is not set
-# CONFIG_GPIO_MC33880 is not set
-# CONFIG_GPIO_PISOSR is not set
-# CONFIG_GPIO_XRA1403 is not set
-# end of SPI GPIO expanders
-
-#
-# USB GPIO expanders
-#
-# end of USB GPIO expanders
-
-#
-# Virtual GPIO drivers
-#
-# CONFIG_GPIO_AGGREGATOR is not set
-# CONFIG_GPIO_LATCH is not set
-# CONFIG_GPIO_MOCKUP is not set
-# CONFIG_GPIO_VIRTIO is not set
-# CONFIG_GPIO_SIM is not set
-# end of Virtual GPIO drivers
-
-# CONFIG_W1 is not set
-CONFIG_POWER_RESET=y
-# CONFIG_POWER_RESET_RESTART is not set
-CONFIG_POWER_SUPPLY=y
-# CONFIG_POWER_SUPPLY_DEBUG is not set
-CONFIG_POWER_SUPPLY_HWMON=y
-# CONFIG_PDA_POWER is not set
-# CONFIG_IP5XXX_POWER is not set
-# CONFIG_TEST_POWER is not set
-# CONFIG_CHARGER_ADP5061 is not set
-# CONFIG_BATTERY_CW2015 is not set
-# CONFIG_BATTERY_DS2780 is not set
-# CONFIG_BATTERY_DS2781 is not set
-# CONFIG_BATTERY_DS2782 is not set
-# CONFIG_BATTERY_SAMSUNG_SDI is not set
-# CONFIG_BATTERY_SBS is not set
-# CONFIG_CHARGER_SBS is not set
-# CONFIG_MANAGER_SBS is not set
-# CONFIG_BATTERY_BQ27XXX is not set
-# CONFIG_BATTERY_MAX17040 is not set
-# CONFIG_BATTERY_MAX17042 is not set
-# CONFIG_CHARGER_MAX8903 is not set
-# CONFIG_CHARGER_LP8727 is not set
-# CONFIG_CHARGER_GPIO is not set
-# CONFIG_CHARGER_LT3651 is not set
-# CONFIG_CHARGER_LTC4162L is not set
-# CONFIG_CHARGER_MAX77976 is not set
-# CONFIG_CHARGER_BQ2415X is not set
-# CONFIG_CHARGER_BQ24257 is not set
-# CONFIG_CHARGER_BQ24735 is not set
-# CONFIG_CHARGER_BQ2515X is not set
-# CONFIG_CHARGER_BQ25890 is not set
-# CONFIG_CHARGER_BQ25980 is not set
-# CONFIG_CHARGER_BQ256XX is not set
-# CONFIG_BATTERY_GAUGE_LTC2941 is not set
-# CONFIG_BATTERY_GOLDFISH is not set
-# CONFIG_BATTERY_RT5033 is not set
-# CONFIG_CHARGER_RT9455 is not set
-# CONFIG_CHARGER_BD99954 is not set
-# CONFIG_BATTERY_UG3105 is not set
-CONFIG_HWMON=y
-CONFIG_HWMON_VID=m
-# CONFIG_HWMON_DEBUG_CHIP is not set
-
-#
-# Native drivers
-#
-CONFIG_SENSORS_ABITUGURU=m
-CONFIG_SENSORS_ABITUGURU3=m
-# CONFIG_SENSORS_AD7314 is not set
-CONFIG_SENSORS_AD7414=m
-CONFIG_SENSORS_AD7418=m
-CONFIG_SENSORS_ADM1025=m
-CONFIG_SENSORS_ADM1026=m
-CONFIG_SENSORS_ADM1029=m
-CONFIG_SENSORS_ADM1031=m
-# CONFIG_SENSORS_ADM1177 is not set
-CONFIG_SENSORS_ADM9240=m
-CONFIG_SENSORS_ADT7X10=m
-# CONFIG_SENSORS_ADT7310 is not set
-CONFIG_SENSORS_ADT7410=m
-CONFIG_SENSORS_ADT7411=m
-CONFIG_SENSORS_ADT7462=m
-CONFIG_SENSORS_ADT7470=m
-CONFIG_SENSORS_ADT7475=m
-# CONFIG_SENSORS_AHT10 is not set
-# CONFIG_SENSORS_AQUACOMPUTER_D5NEXT is not set
-# CONFIG_SENSORS_AS370 is not set
-CONFIG_SENSORS_ASC7621=m
-# CONFIG_SENSORS_AXI_FAN_CONTROL is not set
-CONFIG_SENSORS_K8TEMP=m
-CONFIG_SENSORS_APPLESMC=m
-CONFIG_SENSORS_ASB100=m
-CONFIG_SENSORS_ATXP1=m
-# CONFIG_SENSORS_CORSAIR_CPRO is not set
-# CONFIG_SENSORS_CORSAIR_PSU is not set
-# CONFIG_SENSORS_DRIVETEMP is not set
-CONFIG_SENSORS_DS620=m
-CONFIG_SENSORS_DS1621=m
-# CONFIG_SENSORS_DELL_SMM is not set
-CONFIG_SENSORS_I5K_AMB=m
-CONFIG_SENSORS_F71805F=m
-CONFIG_SENSORS_F71882FG=m
-CONFIG_SENSORS_F75375S=m
-CONFIG_SENSORS_FSCHMD=m
-# CONFIG_SENSORS_FTSTEUTATES is not set
-CONFIG_SENSORS_GL518SM=m
-CONFIG_SENSORS_GL520SM=m
-CONFIG_SENSORS_G760A=m
-# CONFIG_SENSORS_G762 is not set
-# CONFIG_SENSORS_HIH6130 is not set
-CONFIG_SENSORS_IBMAEM=m
-CONFIG_SENSORS_IBMPEX=m
-CONFIG_SENSORS_I5500=m
-CONFIG_SENSORS_CORETEMP=m
-CONFIG_SENSORS_IT87=m
-CONFIG_SENSORS_JC42=m
-# CONFIG_SENSORS_POWR1220 is not set
-CONFIG_SENSORS_LINEAGE=m
-# CONFIG_SENSORS_LTC2945 is not set
-# CONFIG_SENSORS_LTC2947_I2C is not set
-# CONFIG_SENSORS_LTC2947_SPI is not set
-# CONFIG_SENSORS_LTC2990 is not set
-# CONFIG_SENSORS_LTC2992 is not set
-CONFIG_SENSORS_LTC4151=m
-CONFIG_SENSORS_LTC4215=m
-# CONFIG_SENSORS_LTC4222 is not set
-CONFIG_SENSORS_LTC4245=m
-# CONFIG_SENSORS_LTC4260 is not set
-CONFIG_SENSORS_LTC4261=m
-# CONFIG_SENSORS_MAX1111 is not set
-# CONFIG_SENSORS_MAX127 is not set
-CONFIG_SENSORS_MAX16065=m
-CONFIG_SENSORS_MAX1619=m
-CONFIG_SENSORS_MAX1668=m
-CONFIG_SENSORS_MAX197=m
-# CONFIG_SENSORS_MAX31722 is not set
-# CONFIG_SENSORS_MAX31730 is not set
-# CONFIG_SENSORS_MAX31760 is not set
-# CONFIG_SENSORS_MAX6620 is not set
-# CONFIG_SENSORS_MAX6621 is not set
-CONFIG_SENSORS_MAX6639=m
-CONFIG_SENSORS_MAX6650=m
-CONFIG_SENSORS_MAX6697=m
-# CONFIG_SENSORS_MAX31790 is not set
-CONFIG_SENSORS_MCP3021=m
-# CONFIG_SENSORS_MLXREG_FAN is not set
-# CONFIG_SENSORS_TC654 is not set
-# CONFIG_SENSORS_TPS23861 is not set
-# CONFIG_SENSORS_MR75203 is not set
-# CONFIG_SENSORS_ADCXX is not set
-CONFIG_SENSORS_LM63=m
-# CONFIG_SENSORS_LM70 is not set
-CONFIG_SENSORS_LM73=m
-CONFIG_SENSORS_LM75=m
-CONFIG_SENSORS_LM77=m
-CONFIG_SENSORS_LM78=m
-CONFIG_SENSORS_LM80=m
-CONFIG_SENSORS_LM83=m
-CONFIG_SENSORS_LM85=m
-CONFIG_SENSORS_LM87=m
-CONFIG_SENSORS_LM90=m
-CONFIG_SENSORS_LM92=m
-CONFIG_SENSORS_LM93=m
-CONFIG_SENSORS_LM95234=m
-CONFIG_SENSORS_LM95241=m
-CONFIG_SENSORS_LM95245=m
-CONFIG_SENSORS_PC87360=m
-CONFIG_SENSORS_PC87427=m
-# CONFIG_SENSORS_NCT6683 is not set
-CONFIG_SENSORS_NCT6775_CORE=m
-CONFIG_SENSORS_NCT6775=m
-# CONFIG_SENSORS_NCT6775_I2C is not set
-# CONFIG_SENSORS_NCT7802 is not set
-# CONFIG_SENSORS_NCT7904 is not set
-# CONFIG_SENSORS_NPCM7XX is not set
-# CONFIG_SENSORS_NZXT_KRAKEN2 is not set
-# CONFIG_SENSORS_NZXT_SMART2 is not set
-# CONFIG_SENSORS_OCC_P8_I2C is not set
-# CONFIG_SENSORS_OXP is not set
-CONFIG_SENSORS_PCF8591=m
-CONFIG_PMBUS=m
-CONFIG_SENSORS_PMBUS=m
-# CONFIG_SENSORS_ADM1266 is not set
-CONFIG_SENSORS_ADM1275=m
-# CONFIG_SENSORS_BEL_PFE is not set
-# CONFIG_SENSORS_BPA_RS600 is not set
-# CONFIG_SENSORS_DELTA_AHE50DC_FAN is not set
-# CONFIG_SENSORS_FSP_3Y is not set
-# CONFIG_SENSORS_IBM_CFFPS is not set
-# CONFIG_SENSORS_DPS920AB is not set
-# CONFIG_SENSORS_INSPUR_IPSPS is not set
-# CONFIG_SENSORS_IR35221 is not set
-# CONFIG_SENSORS_IR36021 is not set
-# CONFIG_SENSORS_IR38064 is not set
-# CONFIG_SENSORS_IRPS5401 is not set
-# CONFIG_SENSORS_ISL68137 is not set
-CONFIG_SENSORS_LM25066=m
-# CONFIG_SENSORS_LT7182S is not set
-CONFIG_SENSORS_LTC2978=m
-# CONFIG_SENSORS_LTC3815 is not set
-# CONFIG_SENSORS_MAX15301 is not set
-CONFIG_SENSORS_MAX16064=m
-# CONFIG_SENSORS_MAX16601 is not set
-# CONFIG_SENSORS_MAX20730 is not set
-# CONFIG_SENSORS_MAX20751 is not set
-# CONFIG_SENSORS_MAX31785 is not set
-CONFIG_SENSORS_MAX34440=m
-CONFIG_SENSORS_MAX8688=m
-# CONFIG_SENSORS_MP2888 is not set
-# CONFIG_SENSORS_MP2975 is not set
-# CONFIG_SENSORS_MP5023 is not set
-# CONFIG_SENSORS_PIM4328 is not set
-# CONFIG_SENSORS_PLI1209BC is not set
-# CONFIG_SENSORS_PM6764TR is not set
-# CONFIG_SENSORS_PXE1610 is not set
-# CONFIG_SENSORS_Q54SJ108A2 is not set
-# CONFIG_SENSORS_STPDDC60 is not set
-# CONFIG_SENSORS_TPS40422 is not set
-# CONFIG_SENSORS_TPS53679 is not set
-# CONFIG_SENSORS_TPS546D24 is not set
-CONFIG_SENSORS_UCD9000=m
-CONFIG_SENSORS_UCD9200=m
-# CONFIG_SENSORS_XDPE152 is not set
-# CONFIG_SENSORS_XDPE122 is not set
-CONFIG_SENSORS_ZL6100=m
-# CONFIG_SENSORS_SBTSI is not set
-# CONFIG_SENSORS_SBRMI is not set
-CONFIG_SENSORS_SHT15=m
-CONFIG_SENSORS_SHT21=m
-# CONFIG_SENSORS_SHT3x is not set
-# CONFIG_SENSORS_SHT4x is not set
-# CONFIG_SENSORS_SHTC1 is not set
-CONFIG_SENSORS_SIS5595=m
-CONFIG_SENSORS_DME1737=m
-CONFIG_SENSORS_EMC1403=m
-# CONFIG_SENSORS_EMC2103 is not set
-# CONFIG_SENSORS_EMC2305 is not set
-CONFIG_SENSORS_EMC6W201=m
-CONFIG_SENSORS_SMSC47M1=m
-CONFIG_SENSORS_SMSC47M192=m
-CONFIG_SENSORS_SMSC47B397=m
-CONFIG_SENSORS_SCH56XX_COMMON=m
-CONFIG_SENSORS_SCH5627=m
-CONFIG_SENSORS_SCH5636=m
-# CONFIG_SENSORS_STTS751 is not set
-# CONFIG_SENSORS_SMM665 is not set
-# CONFIG_SENSORS_ADC128D818 is not set
-CONFIG_SENSORS_ADS7828=m
-# CONFIG_SENSORS_ADS7871 is not set
-CONFIG_SENSORS_AMC6821=m
-CONFIG_SENSORS_INA209=m
-CONFIG_SENSORS_INA2XX=m
-# CONFIG_SENSORS_INA238 is not set
-# CONFIG_SENSORS_INA3221 is not set
-# CONFIG_SENSORS_TC74 is not set
-CONFIG_SENSORS_THMC50=m
-CONFIG_SENSORS_TMP102=m
-# CONFIG_SENSORS_TMP103 is not set
-# CONFIG_SENSORS_TMP108 is not set
-CONFIG_SENSORS_TMP401=m
-CONFIG_SENSORS_TMP421=m
-# CONFIG_SENSORS_TMP464 is not set
-# CONFIG_SENSORS_TMP513 is not set
-CONFIG_SENSORS_VIA_CPUTEMP=m
-CONFIG_SENSORS_VIA686A=m
-CONFIG_SENSORS_VT1211=m
-CONFIG_SENSORS_VT8231=m
-# CONFIG_SENSORS_W83773G is not set
-CONFIG_SENSORS_W83781D=m
-CONFIG_SENSORS_W83791D=m
-CONFIG_SENSORS_W83792D=m
-CONFIG_SENSORS_W83793=m
-CONFIG_SENSORS_W83795=m
-# CONFIG_SENSORS_W83795_FANCTRL is not set
-CONFIG_SENSORS_W83L785TS=m
-CONFIG_SENSORS_W83L786NG=m
-CONFIG_SENSORS_W83627HF=m
-CONFIG_SENSORS_W83627EHF=m
-# CONFIG_SENSORS_XGENE is not set
-
-#
-# ACPI drivers
-#
-CONFIG_SENSORS_ACPI_POWER=m
-CONFIG_SENSORS_ATK0110=m
-# CONFIG_SENSORS_ASUS_WMI is not set
-# CONFIG_SENSORS_ASUS_EC is not set
-CONFIG_THERMAL=y
-# CONFIG_THERMAL_NETLINK is not set
-# CONFIG_THERMAL_STATISTICS is not set
-CONFIG_THERMAL_EMERGENCY_POWEROFF_DELAY_MS=0
-CONFIG_THERMAL_HWMON=y
-CONFIG_THERMAL_WRITABLE_TRIPS=y
-CONFIG_THERMAL_DEFAULT_GOV_STEP_WISE=y
-# CONFIG_THERMAL_DEFAULT_GOV_FAIR_SHARE is not set
-# CONFIG_THERMAL_DEFAULT_GOV_USER_SPACE is not set
-CONFIG_THERMAL_GOV_FAIR_SHARE=y
-CONFIG_THERMAL_GOV_STEP_WISE=y
-CONFIG_THERMAL_GOV_BANG_BANG=y
-CONFIG_THERMAL_GOV_USER_SPACE=y
-# CONFIG_THERMAL_EMULATION is not set
-
-#
-# Intel thermal drivers
-#
-CONFIG_INTEL_POWERCLAMP=m
-CONFIG_X86_THERMAL_VECTOR=y
-CONFIG_X86_PKG_TEMP_THERMAL=m
-# CONFIG_INTEL_SOC_DTS_THERMAL is not set
-
-#
-# ACPI INT340X thermal drivers
-#
-# CONFIG_INT340X_THERMAL is not set
-# end of ACPI INT340X thermal drivers
-
-CONFIG_INTEL_PCH_THERMAL=m
-# CONFIG_INTEL_TCC_COOLING is not set
-# CONFIG_INTEL_MENLOW is not set
-# CONFIG_INTEL_HFI_THERMAL is not set
-# end of Intel thermal drivers
-
-CONFIG_WATCHDOG=y
-CONFIG_WATCHDOG_CORE=y
-# CONFIG_WATCHDOG_NOWAYOUT is not set
-CONFIG_WATCHDOG_HANDLE_BOOT_ENABLED=y
-CONFIG_WATCHDOG_OPEN_TIMEOUT=0
-CONFIG_WATCHDOG_SYSFS=y
-# CONFIG_WATCHDOG_HRTIMER_PRETIMEOUT is not set
-
-#
-# Watchdog Pretimeout Governors
-#
-# CONFIG_WATCHDOG_PRETIMEOUT_GOV is not set
-
-#
-# Watchdog Device Drivers
-#
-CONFIG_SOFT_WATCHDOG=m
-CONFIG_WDAT_WDT=m
-# CONFIG_XILINX_WATCHDOG is not set
-# CONFIG_ZIIRAVE_WATCHDOG is not set
-# CONFIG_MLX_WDT is not set
-# CONFIG_CADENCE_WATCHDOG is not set
-# CONFIG_DW_WATCHDOG is not set
-# CONFIG_MAX63XX_WATCHDOG is not set
-# CONFIG_ACQUIRE_WDT is not set
-# CONFIG_ADVANTECH_WDT is not set
-# CONFIG_ADVANTECH_EC_WDT is not set
-CONFIG_ALIM1535_WDT=m
-CONFIG_ALIM7101_WDT=m
-# CONFIG_EBC_C384_WDT is not set
-# CONFIG_EXAR_WDT is not set
-CONFIG_F71808E_WDT=m
-# CONFIG_SP5100_TCO is not set
-CONFIG_SBC_FITPC2_WATCHDOG=m
-# CONFIG_EUROTECH_WDT is not set
-CONFIG_IB700_WDT=m
-CONFIG_IBMASR=m
-# CONFIG_WAFER_WDT is not set
-CONFIG_I6300ESB_WDT=y
-CONFIG_IE6XX_WDT=m
-CONFIG_ITCO_WDT=y
-CONFIG_ITCO_VENDOR_SUPPORT=y
-CONFIG_IT8712F_WDT=m
-CONFIG_IT87_WDT=m
-CONFIG_HP_WATCHDOG=m
-CONFIG_HPWDT_NMI_DECODING=y
-# CONFIG_SC1200_WDT is not set
-# CONFIG_PC87413_WDT is not set
-CONFIG_NV_TCO=m
-# CONFIG_60XX_WDT is not set
-# CONFIG_CPU5_WDT is not set
-CONFIG_SMSC_SCH311X_WDT=m
-# CONFIG_SMSC37B787_WDT is not set
-# CONFIG_TQMX86_WDT is not set
-CONFIG_VIA_WDT=m
-CONFIG_W83627HF_WDT=m
-CONFIG_W83877F_WDT=m
-CONFIG_W83977F_WDT=m
-CONFIG_MACHZ_WDT=m
-# CONFIG_SBC_EPX_C3_WATCHDOG is not set
-CONFIG_INTEL_MEI_WDT=m
-# CONFIG_NI903X_WDT is not set
-# CONFIG_NIC7018_WDT is not set
-# CONFIG_MEN_A21_WDT is not set
-
-#
-# PCI-based Watchdog Cards
-#
-CONFIG_PCIPCWATCHDOG=m
-CONFIG_WDTPCI=m
-
-#
-# USB-based Watchdog Cards
-#
-# CONFIG_USBPCWATCHDOG is not set
-CONFIG_SSB_POSSIBLE=y
-# CONFIG_SSB is not set
-CONFIG_BCMA_POSSIBLE=y
-CONFIG_BCMA=m
-CONFIG_BCMA_HOST_PCI_POSSIBLE=y
-CONFIG_BCMA_HOST_PCI=y
-# CONFIG_BCMA_HOST_SOC is not set
-CONFIG_BCMA_DRIVER_PCI=y
-CONFIG_BCMA_DRIVER_GMAC_CMN=y
-CONFIG_BCMA_DRIVER_GPIO=y
-# CONFIG_BCMA_DEBUG is not set
-
-#
-# Multifunction device drivers
-#
-CONFIG_MFD_CORE=y
-# CONFIG_MFD_AS3711 is not set
-# CONFIG_MFD_SMPRO is not set
-# CONFIG_PMIC_ADP5520 is not set
-# CONFIG_MFD_AAT2870_CORE is not set
-# CONFIG_MFD_BCM590XX is not set
-# CONFIG_MFD_BD9571MWV is not set
-# CONFIG_MFD_AXP20X_I2C is not set
-# CONFIG_MFD_MADERA is not set
-# CONFIG_PMIC_DA903X is not set
-# CONFIG_MFD_DA9052_SPI is not set
-# CONFIG_MFD_DA9052_I2C is not set
-# CONFIG_MFD_DA9055 is not set
-# CONFIG_MFD_DA9062 is not set
-# CONFIG_MFD_DA9063 is not set
-# CONFIG_MFD_DA9150 is not set
-# CONFIG_MFD_DLN2 is not set
-# CONFIG_MFD_MC13XXX_SPI is not set
-# CONFIG_MFD_MC13XXX_I2C is not set
-# CONFIG_MFD_MP2629 is not set
-# CONFIG_HTC_PASIC3 is not set
-# CONFIG_MFD_INTEL_QUARK_I2C_GPIO is not set
-CONFIG_LPC_ICH=m
-CONFIG_LPC_SCH=m
-CONFIG_MFD_INTEL_LPSS=y
-CONFIG_MFD_INTEL_LPSS_ACPI=y
-CONFIG_MFD_INTEL_LPSS_PCI=y
-# CONFIG_MFD_INTEL_PMC_BXT is not set
-# CONFIG_MFD_IQS62X is not set
-# CONFIG_MFD_JANZ_CMODIO is not set
-# CONFIG_MFD_KEMPLD is not set
-# CONFIG_MFD_88PM800 is not set
-# CONFIG_MFD_88PM805 is not set
-# CONFIG_MFD_88PM860X is not set
-# CONFIG_MFD_MAX14577 is not set
-# CONFIG_MFD_MAX77693 is not set
-# CONFIG_MFD_MAX77843 is not set
-# CONFIG_MFD_MAX8907 is not set
-# CONFIG_MFD_MAX8925 is not set
-# CONFIG_MFD_MAX8997 is not set
-# CONFIG_MFD_MAX8998 is not set
-# CONFIG_MFD_MT6360 is not set
-# CONFIG_MFD_MT6370 is not set
-# CONFIG_MFD_MT6397 is not set
-# CONFIG_MFD_MENF21BMC is not set
-# CONFIG_MFD_OCELOT is not set
-# CONFIG_EZX_PCAP is not set
-# CONFIG_MFD_VIPERBOARD is not set
-# CONFIG_MFD_RETU is not set
-# CONFIG_MFD_PCF50633 is not set
-# CONFIG_MFD_SY7636A is not set
-# CONFIG_MFD_RDC321X is not set
-# CONFIG_MFD_RT4831 is not set
-# CONFIG_MFD_RT5033 is not set
-# CONFIG_MFD_RT5120 is not set
-# CONFIG_MFD_RC5T583 is not set
-# CONFIG_MFD_SI476X_CORE is not set
-CONFIG_MFD_SM501=m
-CONFIG_MFD_SM501_GPIO=y
-# CONFIG_MFD_SKY81452 is not set
-# CONFIG_MFD_SYSCON is not set
-# CONFIG_MFD_TI_AM335X_TSCADC is not set
-# CONFIG_MFD_LP3943 is not set
-# CONFIG_MFD_LP8788 is not set
-# CONFIG_MFD_TI_LMU is not set
-# CONFIG_MFD_PALMAS is not set
-# CONFIG_TPS6105X is not set
-# CONFIG_TPS65010 is not set
-# CONFIG_TPS6507X is not set
-# CONFIG_MFD_TPS65086 is not set
-# CONFIG_MFD_TPS65090 is not set
-# CONFIG_MFD_TI_LP873X is not set
-# CONFIG_MFD_TPS6586X is not set
-# CONFIG_MFD_TPS65910 is not set
-# CONFIG_MFD_TPS65912_I2C is not set
-# CONFIG_MFD_TPS65912_SPI is not set
-# CONFIG_TWL4030_CORE is not set
-# CONFIG_TWL6040_CORE is not set
-# CONFIG_MFD_WL1273_CORE is not set
-# CONFIG_MFD_LM3533 is not set
-# CONFIG_MFD_TQMX86 is not set
-CONFIG_MFD_VX855=m
-# CONFIG_MFD_ARIZONA_I2C is not set
-# CONFIG_MFD_ARIZONA_SPI is not set
-# CONFIG_MFD_WM8400 is not set
-# CONFIG_MFD_WM831X_I2C is not set
-# CONFIG_MFD_WM831X_SPI is not set
-# CONFIG_MFD_WM8350_I2C is not set
-# CONFIG_MFD_WM8994 is not set
-# CONFIG_MFD_ATC260X_I2C is not set
-# CONFIG_MFD_INTEL_M10_BMC is not set
-# end of Multifunction device drivers
-
-# CONFIG_REGULATOR is not set
-CONFIG_RC_CORE=m
-CONFIG_LIRC=y
-CONFIG_RC_MAP=m
-CONFIG_RC_DECODERS=y
-CONFIG_IR_IMON_DECODER=m
-CONFIG_IR_JVC_DECODER=m
-CONFIG_IR_MCE_KBD_DECODER=m
-CONFIG_IR_NEC_DECODER=m
-CONFIG_IR_RC5_DECODER=m
-CONFIG_IR_RC6_DECODER=m
-# CONFIG_IR_RCMM_DECODER is not set
-CONFIG_IR_SANYO_DECODER=m
-# CONFIG_IR_SHARP_DECODER is not set
-CONFIG_IR_SONY_DECODER=m
-# CONFIG_IR_XMP_DECODER is not set
-CONFIG_RC_DEVICES=y
-CONFIG_IR_ENE=m
-CONFIG_IR_FINTEK=m
-# CONFIG_IR_IGORPLUGUSB is not set
-# CONFIG_IR_IGUANA is not set
-# CONFIG_IR_IMON is not set
-# CONFIG_IR_IMON_RAW is not set
-CONFIG_IR_ITE_CIR=m
-# CONFIG_IR_MCEUSB is not set
-CONFIG_IR_NUVOTON=m
-# CONFIG_IR_REDRAT3 is not set
-CONFIG_IR_SERIAL=m
-CONFIG_IR_SERIAL_TRANSMITTER=y
-# CONFIG_IR_STREAMZAP is not set
-# CONFIG_IR_TOY is not set
-# CONFIG_IR_TTUSBIR is not set
-CONFIG_IR_WINBOND_CIR=m
-# CONFIG_RC_ATI_REMOTE is not set
-# CONFIG_RC_LOOPBACK is not set
-# CONFIG_RC_XBOX_DVD is not set
-
-#
-# CEC support
-#
-# CONFIG_MEDIA_CEC_SUPPORT is not set
-# end of CEC support
-
-CONFIG_MEDIA_SUPPORT=m
-CONFIG_MEDIA_SUPPORT_FILTER=y
-CONFIG_MEDIA_SUBDRV_AUTOSELECT=y
-
-#
-# Media device types
-#
-# CONFIG_MEDIA_CAMERA_SUPPORT is not set
-# CONFIG_MEDIA_ANALOG_TV_SUPPORT is not set
-# CONFIG_MEDIA_DIGITAL_TV_SUPPORT is not set
-# CONFIG_MEDIA_RADIO_SUPPORT is not set
-# CONFIG_MEDIA_SDR_SUPPORT is not set
-# CONFIG_MEDIA_PLATFORM_SUPPORT is not set
-# CONFIG_MEDIA_TEST_SUPPORT is not set
-# end of Media device types
-
-#
-# Media drivers
-#
-
-#
-# Drivers filtered as selected at 'Filter media drivers'
-#
-
-#
-# Media drivers
-#
-# CONFIG_MEDIA_USB_SUPPORT is not set
-# CONFIG_MEDIA_PCI_SUPPORT is not set
-# end of Media drivers
-
-#
-# Media ancillary drivers
-#
-# end of Media ancillary drivers
-
-#
-# Graphics support
-#
-CONFIG_APERTURE_HELPERS=y
-CONFIG_VIDEO_NOMODESET=y
-# CONFIG_AGP is not set
-CONFIG_INTEL_GTT=m
-CONFIG_VGA_SWITCHEROO=y
-CONFIG_DRM=m
-CONFIG_DRM_MIPI_DSI=y
-CONFIG_DRM_USE_DYNAMIC_DEBUG=y
-CONFIG_DRM_KMS_HELPER=m
-# CONFIG_DRM_DEBUG_DP_MST_TOPOLOGY_REFS is not set
-# CONFIG_DRM_DEBUG_MODESET_LOCK is not set
-CONFIG_DRM_FBDEV_EMULATION=y
-CONFIG_DRM_FBDEV_OVERALLOC=100
-# CONFIG_DRM_FBDEV_LEAK_PHYS_SMEM is not set
-CONFIG_DRM_LOAD_EDID_FIRMWARE=y
-CONFIG_DRM_DISPLAY_HELPER=m
-CONFIG_DRM_DISPLAY_DP_HELPER=y
-CONFIG_DRM_DISPLAY_HDCP_HELPER=y
-CONFIG_DRM_DISPLAY_HDMI_HELPER=y
-CONFIG_DRM_DP_AUX_CHARDEV=y
-# CONFIG_DRM_DP_CEC is not set
-CONFIG_DRM_TTM=m
-CONFIG_DRM_BUDDY=m
-CONFIG_DRM_VRAM_HELPER=m
-CONFIG_DRM_TTM_HELPER=m
-CONFIG_DRM_GEM_SHMEM_HELPER=m
-
-#
-# I2C encoder or helper chips
-#
-CONFIG_DRM_I2C_CH7006=m
-CONFIG_DRM_I2C_SIL164=m
-# CONFIG_DRM_I2C_NXP_TDA998X is not set
-# CONFIG_DRM_I2C_NXP_TDA9950 is not set
-# end of I2C encoder or helper chips
-
-#
-# ARM devices
-#
-# end of ARM devices
-
-# CONFIG_DRM_RADEON is not set
-# CONFIG_DRM_AMDGPU is not set
-# CONFIG_DRM_NOUVEAU is not set
-CONFIG_DRM_I915=m
-CONFIG_DRM_I915_FORCE_PROBE=""
-CONFIG_DRM_I915_CAPTURE_ERROR=y
-CONFIG_DRM_I915_COMPRESS_ERROR=y
-CONFIG_DRM_I915_USERPTR=y
-# CONFIG_DRM_I915_GVT_KVMGT is not set
-
-#
-# drm/i915 Debugging
-#
-# CONFIG_DRM_I915_WERROR is not set
-# CONFIG_DRM_I915_DEBUG is not set
-# CONFIG_DRM_I915_DEBUG_MMIO is not set
-# CONFIG_DRM_I915_SW_FENCE_DEBUG_OBJECTS is not set
-# CONFIG_DRM_I915_SW_FENCE_CHECK_DAG is not set
-# CONFIG_DRM_I915_DEBUG_GUC is not set
-# CONFIG_DRM_I915_SELFTEST is not set
-# CONFIG_DRM_I915_LOW_LEVEL_TRACEPOINTS is not set
-# CONFIG_DRM_I915_DEBUG_VBLANK_EVADE is not set
-# CONFIG_DRM_I915_DEBUG_RUNTIME_PM is not set
-# end of drm/i915 Debugging
-
-#
-# drm/i915 Profile Guided Optimisation
-#
-CONFIG_DRM_I915_REQUEST_TIMEOUT=20000
-CONFIG_DRM_I915_FENCE_TIMEOUT=10000
-CONFIG_DRM_I915_USERFAULT_AUTOSUSPEND=250
-CONFIG_DRM_I915_HEARTBEAT_INTERVAL=2500
-CONFIG_DRM_I915_PREEMPT_TIMEOUT=640
-CONFIG_DRM_I915_PREEMPT_TIMEOUT_COMPUTE=7500
-CONFIG_DRM_I915_MAX_REQUEST_BUSYWAIT=8000
-CONFIG_DRM_I915_STOP_TIMEOUT=100
-CONFIG_DRM_I915_TIMESLICE_DURATION=1
-# end of drm/i915 Profile Guided Optimisation
-
-# CONFIG_DRM_VGEM is not set
-# CONFIG_DRM_VKMS is not set
-# CONFIG_DRM_VMWGFX is not set
-CONFIG_DRM_GMA500=m
-# CONFIG_DRM_UDL is not set
-CONFIG_DRM_AST=m
-# CONFIG_DRM_MGAG200 is not set
-CONFIG_DRM_QXL=m
-CONFIG_DRM_VIRTIO_GPU=m
-CONFIG_DRM_PANEL=y
-
-#
-# Display Panels
-#
-# CONFIG_DRM_PANEL_RASPBERRYPI_TOUCHSCREEN is not set
-# CONFIG_DRM_PANEL_WIDECHIPS_WS2401 is not set
-# end of Display Panels
-
-CONFIG_DRM_BRIDGE=y
-CONFIG_DRM_PANEL_BRIDGE=y
-
-#
-# Display Interface Bridges
-#
-# CONFIG_DRM_ANALOGIX_ANX78XX is not set
-# end of Display Interface Bridges
-
-# CONFIG_DRM_ETNAVIV is not set
-CONFIG_DRM_BOCHS=m
-CONFIG_DRM_CIRRUS_QEMU=m
-# CONFIG_DRM_GM12U320 is not set
-# CONFIG_DRM_PANEL_MIPI_DBI is not set
-# CONFIG_DRM_SIMPLEDRM is not set
-# CONFIG_TINYDRM_HX8357D is not set
-# CONFIG_TINYDRM_ILI9163 is not set
-# CONFIG_TINYDRM_ILI9225 is not set
-# CONFIG_TINYDRM_ILI9341 is not set
-# CONFIG_TINYDRM_ILI9486 is not set
-# CONFIG_TINYDRM_MI0283QT is not set
-# CONFIG_TINYDRM_REPAPER is not set
-# CONFIG_TINYDRM_ST7586 is not set
-# CONFIG_TINYDRM_ST7735R is not set
-# CONFIG_DRM_VBOXVIDEO is not set
-# CONFIG_DRM_GUD is not set
-# CONFIG_DRM_SSD130X is not set
-# CONFIG_DRM_LEGACY is not set
-CONFIG_DRM_PANEL_ORIENTATION_QUIRKS=y
-CONFIG_DRM_PRIVACY_SCREEN=y
-
-#
-# Frame buffer Devices
-#
-CONFIG_FB_CMDLINE=y
-CONFIG_FB_NOTIFY=y
-CONFIG_FB=y
-# CONFIG_FIRMWARE_EDID is not set
-CONFIG_FB_CFB_FILLRECT=y
-CONFIG_FB_CFB_COPYAREA=y
-CONFIG_FB_CFB_IMAGEBLIT=y
-CONFIG_FB_SYS_FILLRECT=m
-CONFIG_FB_SYS_COPYAREA=m
-CONFIG_FB_SYS_IMAGEBLIT=m
-# CONFIG_FB_FOREIGN_ENDIAN is not set
-CONFIG_FB_SYS_FOPS=m
-CONFIG_FB_DEFERRED_IO=y
-# CONFIG_FB_MODE_HELPERS is not set
-CONFIG_FB_TILEBLITTING=y
-
-#
-# Frame buffer hardware drivers
-#
-# CONFIG_FB_CIRRUS is not set
-# CONFIG_FB_PM2 is not set
-# CONFIG_FB_CYBER2000 is not set
-# CONFIG_FB_ARC is not set
-# CONFIG_FB_ASILIANT is not set
-# CONFIG_FB_IMSTT is not set
-# CONFIG_FB_VGA16 is not set
-# CONFIG_FB_UVESA is not set
-CONFIG_FB_VESA=y
-CONFIG_FB_EFI=y
-# CONFIG_FB_N411 is not set
-# CONFIG_FB_HGA is not set
-# CONFIG_FB_OPENCORES is not set
-# CONFIG_FB_S1D13XXX is not set
-# CONFIG_FB_NVIDIA is not set
-# CONFIG_FB_RIVA is not set
-# CONFIG_FB_I740 is not set
-# CONFIG_FB_LE80578 is not set
-# CONFIG_FB_MATROX is not set
-# CONFIG_FB_RADEON is not set
-# CONFIG_FB_ATY128 is not set
-# CONFIG_FB_ATY is not set
-# CONFIG_FB_S3 is not set
-# CONFIG_FB_SAVAGE is not set
-# CONFIG_FB_SIS is not set
-# CONFIG_FB_VIA is not set
-# CONFIG_FB_NEOMAGIC is not set
-# CONFIG_FB_KYRO is not set
-# CONFIG_FB_3DFX is not set
-# CONFIG_FB_VOODOO1 is not set
-# CONFIG_FB_VT8623 is not set
-# CONFIG_FB_TRIDENT is not set
-# CONFIG_FB_ARK is not set
-# CONFIG_FB_PM3 is not set
-# CONFIG_FB_CARMINE is not set
-# CONFIG_FB_SM501 is not set
-# CONFIG_FB_SMSCUFX is not set
-# CONFIG_FB_UDL is not set
-# CONFIG_FB_IBM_GXT4500 is not set
-# CONFIG_FB_VIRTUAL is not set
-# CONFIG_FB_METRONOME is not set
-# CONFIG_FB_MB862XX is not set
-# CONFIG_FB_SIMPLE is not set
-# CONFIG_FB_SSD1307 is not set
-# CONFIG_FB_SM712 is not set
-# end of Frame buffer Devices
-
-#
-# Backlight & LCD device support
-#
-CONFIG_LCD_CLASS_DEVICE=m
-# CONFIG_LCD_L4F00242T03 is not set
-# CONFIG_LCD_LMS283GF05 is not set
-# CONFIG_LCD_LTV350QV is not set
-# CONFIG_LCD_ILI922X is not set
-# CONFIG_LCD_ILI9320 is not set
-# CONFIG_LCD_TDO24M is not set
-# CONFIG_LCD_VGG2432A4 is not set
-CONFIG_LCD_PLATFORM=m
-# CONFIG_LCD_AMS369FG06 is not set
-# CONFIG_LCD_LMS501KF03 is not set
-# CONFIG_LCD_HX8357 is not set
-# CONFIG_LCD_OTM3225A is not set
-CONFIG_BACKLIGHT_CLASS_DEVICE=y
-# CONFIG_BACKLIGHT_KTD253 is not set
-# CONFIG_BACKLIGHT_PWM is not set
-CONFIG_BACKLIGHT_APPLE=m
-# CONFIG_BACKLIGHT_QCOM_WLED is not set
-# CONFIG_BACKLIGHT_SAHARA is not set
-# CONFIG_BACKLIGHT_ADP8860 is not set
-# CONFIG_BACKLIGHT_ADP8870 is not set
-# CONFIG_BACKLIGHT_LM3630A is not set
-# CONFIG_BACKLIGHT_LM3639 is not set
-CONFIG_BACKLIGHT_LP855X=m
-# CONFIG_BACKLIGHT_GPIO is not set
-# CONFIG_BACKLIGHT_LV5207LP is not set
-# CONFIG_BACKLIGHT_BD6107 is not set
-# CONFIG_BACKLIGHT_ARCXCNN is not set
-# end of Backlight & LCD device support
-
-CONFIG_HDMI=y
-
-#
-# Console display driver support
-#
-CONFIG_VGA_CONSOLE=y
-CONFIG_DUMMY_CONSOLE=y
-CONFIG_DUMMY_CONSOLE_COLUMNS=80
-CONFIG_DUMMY_CONSOLE_ROWS=25
-CONFIG_FRAMEBUFFER_CONSOLE=y
-# CONFIG_FRAMEBUFFER_CONSOLE_LEGACY_ACCELERATION is not set
-CONFIG_FRAMEBUFFER_CONSOLE_DETECT_PRIMARY=y
-CONFIG_FRAMEBUFFER_CONSOLE_ROTATION=y
-# CONFIG_FRAMEBUFFER_CONSOLE_DEFERRED_TAKEOVER is not set
-# end of Console display driver support
-
-CONFIG_LOGO=y
-# CONFIG_LOGO_LINUX_MONO is not set
-# CONFIG_LOGO_LINUX_VGA16 is not set
-CONFIG_LOGO_LINUX_CLUT224=y
-# end of Graphics support
-
-# CONFIG_DRM_ACCEL is not set
-# CONFIG_SOUND is not set
-
-#
-# HID support
-#
-CONFIG_HID=y
-CONFIG_HID_BATTERY_STRENGTH=y
-CONFIG_HIDRAW=y
-CONFIG_UHID=m
-CONFIG_HID_GENERIC=y
-
-#
-# Special HID drivers
-#
-CONFIG_HID_A4TECH=m
-# CONFIG_HID_ACCUTOUCH is not set
-CONFIG_HID_ACRUX=m
-# CONFIG_HID_ACRUX_FF is not set
-CONFIG_HID_APPLE=m
-# CONFIG_HID_APPLEIR is not set
-CONFIG_HID_ASUS=m
-CONFIG_HID_AUREAL=m
-CONFIG_HID_BELKIN=m
-# CONFIG_HID_BETOP_FF is not set
-# CONFIG_HID_BIGBEN_FF is not set
-CONFIG_HID_CHERRY=m
-# CONFIG_HID_CHICONY is not set
-# CONFIG_HID_CORSAIR is not set
-# CONFIG_HID_COUGAR is not set
-# CONFIG_HID_MACALLY is not set
-CONFIG_HID_CMEDIA=m
-# CONFIG_HID_CP2112 is not set
-# CONFIG_HID_CREATIVE_SB0540 is not set
-CONFIG_HID_CYPRESS=m
-CONFIG_HID_DRAGONRISE=m
-# CONFIG_DRAGONRISE_FF is not set
-# CONFIG_HID_EMS_FF is not set
-# CONFIG_HID_ELAN is not set
-CONFIG_HID_ELECOM=m
-# CONFIG_HID_ELO is not set
-CONFIG_HID_EZKEY=m
-# CONFIG_HID_FT260 is not set
-CONFIG_HID_GEMBIRD=m
-CONFIG_HID_GFRM=m
-# CONFIG_HID_GLORIOUS is not set
-# CONFIG_HID_HOLTEK is not set
-# CONFIG_HID_VIVALDI is not set
-# CONFIG_HID_GT683R is not set
-CONFIG_HID_KEYTOUCH=m
-CONFIG_HID_KYE=m
-# CONFIG_HID_UCLOGIC is not set
-CONFIG_HID_WALTOP=m
-# CONFIG_HID_VIEWSONIC is not set
-# CONFIG_HID_VRC2 is not set
-# CONFIG_HID_XIAOMI is not set
-CONFIG_HID_GYRATION=m
-CONFIG_HID_ICADE=m
-CONFIG_HID_ITE=m
-CONFIG_HID_JABRA=m
-CONFIG_HID_TWINHAN=m
-CONFIG_HID_KENSINGTON=m
-CONFIG_HID_LCPOWER=m
-CONFIG_HID_LED=m
-CONFIG_HID_LENOVO=m
-# CONFIG_HID_LETSKETCH is not set
-CONFIG_HID_LOGITECH=m
-CONFIG_HID_LOGITECH_DJ=m
-CONFIG_HID_LOGITECH_HIDPP=m
-# CONFIG_LOGITECH_FF is not set
-# CONFIG_LOGIRUMBLEPAD2_FF is not set
-# CONFIG_LOGIG940_FF is not set
-# CONFIG_LOGIWHEELS_FF is not set
-CONFIG_HID_MAGICMOUSE=y
-# CONFIG_HID_MALTRON is not set
-# CONFIG_HID_MAYFLASH is not set
-# CONFIG_HID_MEGAWORLD_FF is not set
-# CONFIG_HID_REDRAGON is not set
-CONFIG_HID_MICROSOFT=m
-CONFIG_HID_MONTEREY=m
-CONFIG_HID_MULTITOUCH=m
-# CONFIG_HID_NINTENDO is not set
-CONFIG_HID_NTI=m
-# CONFIG_HID_NTRIG is not set
-CONFIG_HID_ORTEK=m
-CONFIG_HID_PANTHERLORD=m
-# CONFIG_PANTHERLORD_FF is not set
-# CONFIG_HID_PENMOUNT is not set
-CONFIG_HID_PETALYNX=m
-CONFIG_HID_PICOLCD=m
-CONFIG_HID_PICOLCD_FB=y
-CONFIG_HID_PICOLCD_BACKLIGHT=y
-CONFIG_HID_PICOLCD_LCD=y
-CONFIG_HID_PICOLCD_LEDS=y
-CONFIG_HID_PICOLCD_CIR=y
-CONFIG_HID_PLANTRONICS=m
-# CONFIG_HID_PXRC is not set
-# CONFIG_HID_RAZER is not set
-CONFIG_HID_PRIMAX=m
-# CONFIG_HID_RETRODE is not set
-# CONFIG_HID_ROCCAT is not set
-CONFIG_HID_SAITEK=m
-CONFIG_HID_SAMSUNG=m
-# CONFIG_HID_SEMITEK is not set
-# CONFIG_HID_SIGMAMICRO is not set
-# CONFIG_HID_SONY is not set
-CONFIG_HID_SPEEDLINK=m
-# CONFIG_HID_STEAM is not set
-CONFIG_HID_STEELSERIES=m
-CONFIG_HID_SUNPLUS=m
-CONFIG_HID_RMI=m
-CONFIG_HID_GREENASIA=m
-# CONFIG_GREENASIA_FF is not set
-CONFIG_HID_SMARTJOYPLUS=m
-# CONFIG_SMARTJOYPLUS_FF is not set
-CONFIG_HID_TIVO=m
-CONFIG_HID_TOPSEED=m
-# CONFIG_HID_TOPRE is not set
-CONFIG_HID_THINGM=m
-CONFIG_HID_THRUSTMASTER=m
-# CONFIG_THRUSTMASTER_FF is not set
-# CONFIG_HID_UDRAW_PS3 is not set
-# CONFIG_HID_U2FZERO is not set
-# CONFIG_HID_WACOM is not set
-CONFIG_HID_WIIMOTE=m
-CONFIG_HID_XINMO=m
-CONFIG_HID_ZEROPLUS=m
-# CONFIG_ZEROPLUS_FF is not set
-CONFIG_HID_ZYDACRON=m
-CONFIG_HID_SENSOR_HUB=y
-CONFIG_HID_SENSOR_CUSTOM_SENSOR=m
-CONFIG_HID_ALPS=m
-# CONFIG_HID_MCP2221 is not set
-# end of Special HID drivers
-
-#
-# USB HID support
-#
-CONFIG_USB_HID=y
-# CONFIG_HID_PID is not set
-# CONFIG_USB_HIDDEV is not set
-# end of USB HID support
-
-#
-# I2C HID support
-#
-# CONFIG_I2C_HID_ACPI is not set
-# end of I2C HID support
-
-#
-# Intel ISH HID support
-#
-CONFIG_INTEL_ISH_HID=m
-# CONFIG_INTEL_ISH_FIRMWARE_DOWNLOADER is not set
-# end of Intel ISH HID support
-
-#
-# AMD SFH HID Support
-#
-# CONFIG_AMD_SFH_HID is not set
-# end of AMD SFH HID Support
-# end of HID support
-
-CONFIG_USB_OHCI_LITTLE_ENDIAN=y
-CONFIG_USB_SUPPORT=y
-CONFIG_USB_COMMON=y
-# CONFIG_USB_LED_TRIG is not set
-# CONFIG_USB_ULPI_BUS is not set
-# CONFIG_USB_CONN_GPIO is not set
-CONFIG_USB_ARCH_HAS_HCD=y
-CONFIG_USB=y
-CONFIG_USB_PCI=y
-CONFIG_USB_ANNOUNCE_NEW_DEVICES=y
-
-#
-# Miscellaneous USB options
-#
-CONFIG_USB_DEFAULT_PERSIST=y
-# CONFIG_USB_FEW_INIT_RETRIES is not set
-# CONFIG_USB_DYNAMIC_MINORS is not set
-# CONFIG_USB_OTG is not set
-# CONFIG_USB_OTG_PRODUCTLIST is not set
-# CONFIG_USB_OTG_DISABLE_EXTERNAL_HUB is not set
-CONFIG_USB_LEDS_TRIGGER_USBPORT=y
-CONFIG_USB_AUTOSUSPEND_DELAY=2
-CONFIG_USB_MON=y
-
-#
-# USB Host Controller Drivers
-#
-# CONFIG_USB_C67X00_HCD is not set
-CONFIG_USB_XHCI_HCD=y
-# CONFIG_USB_XHCI_DBGCAP is not set
-CONFIG_USB_XHCI_PCI=y
-# CONFIG_USB_XHCI_PCI_RENESAS is not set
-# CONFIG_USB_XHCI_PLATFORM is not set
-CONFIG_USB_EHCI_HCD=y
-CONFIG_USB_EHCI_ROOT_HUB_TT=y
-CONFIG_USB_EHCI_TT_NEWSCHED=y
-CONFIG_USB_EHCI_PCI=y
-# CONFIG_USB_EHCI_FSL is not set
-# CONFIG_USB_EHCI_HCD_PLATFORM is not set
-# CONFIG_USB_OXU210HP_HCD is not set
-# CONFIG_USB_ISP116X_HCD is not set
-# CONFIG_USB_MAX3421_HCD is not set
-CONFIG_USB_OHCI_HCD=y
-CONFIG_USB_OHCI_HCD_PCI=y
-# CONFIG_USB_OHCI_HCD_PLATFORM is not set
-CONFIG_USB_UHCI_HCD=y
-# CONFIG_USB_SL811_HCD is not set
-# CONFIG_USB_R8A66597_HCD is not set
-# CONFIG_USB_HCD_BCMA is not set
-# CONFIG_USB_HCD_TEST_MODE is not set
-
-#
-# USB Device Class drivers
-#
-# CONFIG_USB_ACM is not set
-# CONFIG_USB_PRINTER is not set
-# CONFIG_USB_WDM is not set
-# CONFIG_USB_TMC is not set
-
-#
-# NOTE: USB_STORAGE depends on SCSI but BLK_DEV_SD may
-#
-
-#
-# also be needed; see USB_STORAGE Help for more info
-#
-CONFIG_USB_STORAGE=m
-# CONFIG_USB_STORAGE_DEBUG is not set
-# CONFIG_USB_STORAGE_REALTEK is not set
-# CONFIG_USB_STORAGE_DATAFAB is not set
-# CONFIG_USB_STORAGE_FREECOM is not set
-# CONFIG_USB_STORAGE_ISD200 is not set
-# CONFIG_USB_STORAGE_USBAT is not set
-# CONFIG_USB_STORAGE_SDDR09 is not set
-# CONFIG_USB_STORAGE_SDDR55 is not set
-# CONFIG_USB_STORAGE_JUMPSHOT is not set
-# CONFIG_USB_STORAGE_ALAUDA is not set
-# CONFIG_USB_STORAGE_ONETOUCH is not set
-# CONFIG_USB_STORAGE_KARMA is not set
-# CONFIG_USB_STORAGE_CYPRESS_ATACB is not set
-# CONFIG_USB_STORAGE_ENE_UB6250 is not set
-# CONFIG_USB_UAS is not set
-
-#
-# USB Imaging devices
-#
-# CONFIG_USB_MDC800 is not set
-# CONFIG_USB_MICROTEK is not set
-# CONFIG_USBIP_CORE is not set
-
-#
-# USB dual-mode controller drivers
-#
-# CONFIG_USB_CDNS_SUPPORT is not set
-# CONFIG_USB_MUSB_HDRC is not set
-# CONFIG_USB_DWC3 is not set
-# CONFIG_USB_DWC2 is not set
-# CONFIG_USB_CHIPIDEA is not set
-# CONFIG_USB_ISP1760 is not set
-
-#
-# USB port drivers
-#
-# CONFIG_USB_USS720 is not set
-CONFIG_USB_SERIAL=m
-CONFIG_USB_SERIAL_GENERIC=y
-# CONFIG_USB_SERIAL_SIMPLE is not set
-# CONFIG_USB_SERIAL_AIRCABLE is not set
-# CONFIG_USB_SERIAL_ARK3116 is not set
-# CONFIG_USB_SERIAL_BELKIN is not set
-# CONFIG_USB_SERIAL_CH341 is not set
-# CONFIG_USB_SERIAL_WHITEHEAT is not set
-# CONFIG_USB_SERIAL_DIGI_ACCELEPORT is not set
-# CONFIG_USB_SERIAL_CP210X is not set
-# CONFIG_USB_SERIAL_CYPRESS_M8 is not set
-# CONFIG_USB_SERIAL_EMPEG is not set
-# CONFIG_USB_SERIAL_FTDI_SIO is not set
-# CONFIG_USB_SERIAL_VISOR is not set
-# CONFIG_USB_SERIAL_IPAQ is not set
-# CONFIG_USB_SERIAL_IR is not set
-# CONFIG_USB_SERIAL_EDGEPORT is not set
-# CONFIG_USB_SERIAL_EDGEPORT_TI is not set
-# CONFIG_USB_SERIAL_F81232 is not set
-# CONFIG_USB_SERIAL_F8153X is not set
-# CONFIG_USB_SERIAL_GARMIN is not set
-# CONFIG_USB_SERIAL_IPW is not set
-# CONFIG_USB_SERIAL_IUU is not set
-# CONFIG_USB_SERIAL_KEYSPAN_PDA is not set
-# CONFIG_USB_SERIAL_KEYSPAN is not set
-# CONFIG_USB_SERIAL_KLSI is not set
-# CONFIG_USB_SERIAL_KOBIL_SCT is not set
-# CONFIG_USB_SERIAL_MCT_U232 is not set
-# CONFIG_USB_SERIAL_METRO is not set
-# CONFIG_USB_SERIAL_MOS7720 is not set
-# CONFIG_USB_SERIAL_MOS7840 is not set
-# CONFIG_USB_SERIAL_MXUPORT is not set
-# CONFIG_USB_SERIAL_NAVMAN is not set
-# CONFIG_USB_SERIAL_PL2303 is not set
-# CONFIG_USB_SERIAL_OTI6858 is not set
-# CONFIG_USB_SERIAL_QCAUX is not set
-# CONFIG_USB_SERIAL_QUALCOMM is not set
-# CONFIG_USB_SERIAL_SPCP8X5 is not set
-# CONFIG_USB_SERIAL_SAFE is not set
-# CONFIG_USB_SERIAL_SIERRAWIRELESS is not set
-# CONFIG_USB_SERIAL_SYMBOL is not set
-# CONFIG_USB_SERIAL_TI is not set
-# CONFIG_USB_SERIAL_CYBERJACK is not set
-# CONFIG_USB_SERIAL_OPTION is not set
-# CONFIG_USB_SERIAL_OMNINET is not set
-# CONFIG_USB_SERIAL_OPTICON is not set
-# CONFIG_USB_SERIAL_XSENS_MT is not set
-# CONFIG_USB_SERIAL_WISHBONE is not set
-# CONFIG_USB_SERIAL_SSU100 is not set
-# CONFIG_USB_SERIAL_QT2 is not set
-# CONFIG_USB_SERIAL_UPD78F0730 is not set
-# CONFIG_USB_SERIAL_XR is not set
-CONFIG_USB_SERIAL_DEBUG=m
-
-#
-# USB Miscellaneous drivers
-#
-# CONFIG_USB_EMI62 is not set
-# CONFIG_USB_EMI26 is not set
-# CONFIG_USB_ADUTUX is not set
-# CONFIG_USB_SEVSEG is not set
-# CONFIG_USB_LEGOTOWER is not set
-# CONFIG_USB_LCD is not set
-# CONFIG_USB_CYPRESS_CY7C63 is not set
-# CONFIG_USB_CYTHERM is not set
-# CONFIG_USB_IDMOUSE is not set
-# CONFIG_USB_FTDI_ELAN is not set
-# CONFIG_USB_APPLEDISPLAY is not set
-# CONFIG_APPLE_MFI_FASTCHARGE is not set
-# CONFIG_USB_SISUSBVGA is not set
-# CONFIG_USB_LD is not set
-# CONFIG_USB_TRANCEVIBRATOR is not set
-# CONFIG_USB_IOWARRIOR is not set
-# CONFIG_USB_TEST is not set
-# CONFIG_USB_EHSET_TEST_FIXTURE is not set
-# CONFIG_USB_ISIGHTFW is not set
-# CONFIG_USB_YUREX is not set
-# CONFIG_USB_EZUSB_FX2 is not set
-# CONFIG_USB_HUB_USB251XB is not set
-# CONFIG_USB_HSIC_USB3503 is not set
-# CONFIG_USB_HSIC_USB4604 is not set
-# CONFIG_USB_LINK_LAYER_TEST is not set
-# CONFIG_USB_CHAOSKEY is not set
-# CONFIG_USB_ATM is not set
-
-#
-# USB Physical Layer drivers
-#
-# CONFIG_NOP_USB_XCEIV is not set
-# CONFIG_USB_GPIO_VBUS is not set
-# CONFIG_USB_ISP1301 is not set
-# end of USB Physical Layer drivers
-
-# CONFIG_USB_GADGET is not set
-CONFIG_TYPEC=y
-# CONFIG_TYPEC_TCPM is not set
-CONFIG_TYPEC_UCSI=y
-# CONFIG_UCSI_CCG is not set
-CONFIG_UCSI_ACPI=y
-# CONFIG_UCSI_STM32G0 is not set
-# CONFIG_TYPEC_TPS6598X is not set
-# CONFIG_TYPEC_RT1719 is not set
-# CONFIG_TYPEC_STUSB160X is not set
-# CONFIG_TYPEC_WUSB3801 is not set
-
-#
-# USB Type-C Multiplexer/DeMultiplexer Switch support
-#
-# CONFIG_TYPEC_MUX_FSA4480 is not set
-# CONFIG_TYPEC_MUX_PI3USB30532 is not set
-# end of USB Type-C Multiplexer/DeMultiplexer Switch support
-
-#
-# USB Type-C Alternate Mode drivers
-#
-# CONFIG_TYPEC_DP_ALTMODE is not set
-# end of USB Type-C Alternate Mode drivers
-
-# CONFIG_USB_ROLE_SWITCH is not set
-CONFIG_MMC=m
-CONFIG_MMC_BLOCK=m
-CONFIG_MMC_BLOCK_MINORS=8
-CONFIG_SDIO_UART=m
-# CONFIG_MMC_TEST is not set
-
-#
-# MMC/SD/SDIO Host Controller Drivers
-#
-# CONFIG_MMC_DEBUG is not set
-CONFIG_MMC_SDHCI=m
-CONFIG_MMC_SDHCI_IO_ACCESSORS=y
-CONFIG_MMC_SDHCI_PCI=m
-CONFIG_MMC_RICOH_MMC=y
-CONFIG_MMC_SDHCI_ACPI=m
-CONFIG_MMC_SDHCI_PLTFM=m
-# CONFIG_MMC_SDHCI_F_SDH30 is not set
-# CONFIG_MMC_WBSD is not set
-# CONFIG_MMC_TIFM_SD is not set
-# CONFIG_MMC_SPI is not set
-# CONFIG_MMC_CB710 is not set
-# CONFIG_MMC_VIA_SDMMC is not set
-# CONFIG_MMC_VUB300 is not set
-# CONFIG_MMC_USHC is not set
-# CONFIG_MMC_USDHI6ROL0 is not set
-# CONFIG_MMC_REALTEK_PCI is not set
-CONFIG_MMC_CQHCI=m
-# CONFIG_MMC_HSQ is not set
-# CONFIG_MMC_TOSHIBA_PCI is not set
-# CONFIG_MMC_MTK is not set
-# CONFIG_MMC_SDHCI_XENON is not set
-# CONFIG_SCSI_UFSHCD is not set
-# CONFIG_MEMSTICK is not set
-CONFIG_NEW_LEDS=y
-CONFIG_LEDS_CLASS=y
-# CONFIG_LEDS_CLASS_FLASH is not set
-# CONFIG_LEDS_CLASS_MULTICOLOR is not set
-# CONFIG_LEDS_BRIGHTNESS_HW_CHANGED is not set
-
-#
-# LED drivers
-#
-# CONFIG_LEDS_APU is not set
-CONFIG_LEDS_LM3530=m
-# CONFIG_LEDS_LM3532 is not set
-# CONFIG_LEDS_LM3642 is not set
-# CONFIG_LEDS_PCA9532 is not set
-# CONFIG_LEDS_GPIO is not set
-CONFIG_LEDS_LP3944=m
-# CONFIG_LEDS_LP3952 is not set
-# CONFIG_LEDS_LP50XX is not set
-# CONFIG_LEDS_PCA955X is not set
-# CONFIG_LEDS_PCA963X is not set
-# CONFIG_LEDS_DAC124S085 is not set
-# CONFIG_LEDS_PWM is not set
-# CONFIG_LEDS_BD2802 is not set
-CONFIG_LEDS_INTEL_SS4200=m
-CONFIG_LEDS_LT3593=m
-# CONFIG_LEDS_TCA6507 is not set
-# CONFIG_LEDS_TLC591XX is not set
-# CONFIG_LEDS_LM355x is not set
-# CONFIG_LEDS_IS31FL319X is not set
-
-#
-# LED driver for blink(1) USB RGB LED is under Special HID drivers (HID_THINGM)
-#
-CONFIG_LEDS_BLINKM=m
-CONFIG_LEDS_MLXCPLD=m
-# CONFIG_LEDS_MLXREG is not set
-# CONFIG_LEDS_USER is not set
-# CONFIG_LEDS_NIC78BX is not set
-# CONFIG_LEDS_TI_LMU_COMMON is not set
-
-#
-# Flash and Torch LED drivers
-#
-
-#
-# RGB LED drivers
-#
-
-#
-# LED Triggers
-#
-CONFIG_LEDS_TRIGGERS=y
-CONFIG_LEDS_TRIGGER_TIMER=m
-CONFIG_LEDS_TRIGGER_ONESHOT=m
-# CONFIG_LEDS_TRIGGER_DISK is not set
-CONFIG_LEDS_TRIGGER_HEARTBEAT=m
-CONFIG_LEDS_TRIGGER_BACKLIGHT=m
-# CONFIG_LEDS_TRIGGER_CPU is not set
-# CONFIG_LEDS_TRIGGER_ACTIVITY is not set
-CONFIG_LEDS_TRIGGER_GPIO=m
-CONFIG_LEDS_TRIGGER_DEFAULT_ON=m
-
-#
-# iptables trigger is under Netfilter config (LED target)
-#
-CONFIG_LEDS_TRIGGER_TRANSIENT=m
-CONFIG_LEDS_TRIGGER_CAMERA=m
-# CONFIG_LEDS_TRIGGER_PANIC is not set
-# CONFIG_LEDS_TRIGGER_NETDEV is not set
-# CONFIG_LEDS_TRIGGER_PATTERN is not set
-CONFIG_LEDS_TRIGGER_AUDIO=m
-# CONFIG_LEDS_TRIGGER_TTY is not set
-
-#
-# Simple LED drivers
-#
-# CONFIG_ACCESSIBILITY is not set
-CONFIG_INFINIBAND=m
-CONFIG_INFINIBAND_USER_MAD=m
-CONFIG_INFINIBAND_USER_ACCESS=m
-CONFIG_INFINIBAND_USER_MEM=y
-CONFIG_INFINIBAND_ON_DEMAND_PAGING=y
-CONFIG_INFINIBAND_ADDR_TRANS=y
-CONFIG_INFINIBAND_ADDR_TRANS_CONFIGFS=y
-CONFIG_INFINIBAND_VIRT_DMA=y
-# CONFIG_INFINIBAND_EFA is not set
-# CONFIG_INFINIBAND_ERDMA is not set
-# CONFIG_MLX4_INFINIBAND is not set
-# CONFIG_INFINIBAND_MTHCA is not set
-# CONFIG_INFINIBAND_OCRDMA is not set
-# CONFIG_INFINIBAND_USNIC is not set
-# CONFIG_INFINIBAND_RDMAVT is not set
-CONFIG_RDMA_RXE=m
-CONFIG_RDMA_SIW=m
-CONFIG_INFINIBAND_IPOIB=m
-# CONFIG_INFINIBAND_IPOIB_CM is not set
-CONFIG_INFINIBAND_IPOIB_DEBUG=y
-# CONFIG_INFINIBAND_IPOIB_DEBUG_DATA is not set
-CONFIG_INFINIBAND_SRP=m
-CONFIG_INFINIBAND_SRPT=m
-# CONFIG_INFINIBAND_ISER is not set
-# CONFIG_INFINIBAND_ISERT is not set
-# CONFIG_INFINIBAND_RTRS_CLIENT is not set
-# CONFIG_INFINIBAND_RTRS_SERVER is not set
-# CONFIG_INFINIBAND_OPA_VNIC is not set
-CONFIG_EDAC_ATOMIC_SCRUB=y
-CONFIG_EDAC_SUPPORT=y
-CONFIG_EDAC=y
-CONFIG_EDAC_LEGACY_SYSFS=y
-# CONFIG_EDAC_DEBUG is not set
-CONFIG_EDAC_GHES=y
-CONFIG_EDAC_E752X=m
-CONFIG_EDAC_I82975X=m
-CONFIG_EDAC_I3000=m
-CONFIG_EDAC_I3200=m
-CONFIG_EDAC_IE31200=m
-CONFIG_EDAC_X38=m
-CONFIG_EDAC_I5400=m
-CONFIG_EDAC_I7CORE=m
-CONFIG_EDAC_I5100=m
-CONFIG_EDAC_I7300=m
-CONFIG_EDAC_SBRIDGE=m
-CONFIG_EDAC_SKX=m
-# CONFIG_EDAC_I10NM is not set
-CONFIG_EDAC_PND2=m
-# CONFIG_EDAC_IGEN6 is not set
-CONFIG_RTC_LIB=y
-CONFIG_RTC_MC146818_LIB=y
-CONFIG_RTC_CLASS=y
-CONFIG_RTC_HCTOSYS=y
-CONFIG_RTC_HCTOSYS_DEVICE="rtc0"
-# CONFIG_RTC_SYSTOHC is not set
-# CONFIG_RTC_DEBUG is not set
-CONFIG_RTC_NVMEM=y
-
-#
-# RTC interfaces
-#
-CONFIG_RTC_INTF_SYSFS=y
-CONFIG_RTC_INTF_PROC=y
-CONFIG_RTC_INTF_DEV=y
-# CONFIG_RTC_INTF_DEV_UIE_EMUL is not set
-# CONFIG_RTC_DRV_TEST is not set
-
-#
-# I2C RTC drivers
-#
-# CONFIG_RTC_DRV_ABB5ZES3 is not set
-# CONFIG_RTC_DRV_ABEOZ9 is not set
-# CONFIG_RTC_DRV_ABX80X is not set
-CONFIG_RTC_DRV_DS1307=m
-# CONFIG_RTC_DRV_DS1307_CENTURY is not set
-CONFIG_RTC_DRV_DS1374=m
-# CONFIG_RTC_DRV_DS1374_WDT is not set
-CONFIG_RTC_DRV_DS1672=m
-CONFIG_RTC_DRV_MAX6900=m
-CONFIG_RTC_DRV_RS5C372=m
-CONFIG_RTC_DRV_ISL1208=m
-CONFIG_RTC_DRV_ISL12022=m
-CONFIG_RTC_DRV_X1205=m
-CONFIG_RTC_DRV_PCF8523=m
-# CONFIG_RTC_DRV_PCF85063 is not set
-# CONFIG_RTC_DRV_PCF85363 is not set
-CONFIG_RTC_DRV_PCF8563=m
-CONFIG_RTC_DRV_PCF8583=m
-CONFIG_RTC_DRV_M41T80=m
-CONFIG_RTC_DRV_M41T80_WDT=y
-CONFIG_RTC_DRV_BQ32K=m
-# CONFIG_RTC_DRV_S35390A is not set
-CONFIG_RTC_DRV_FM3130=m
-# CONFIG_RTC_DRV_RX8010 is not set
-CONFIG_RTC_DRV_RX8581=m
-CONFIG_RTC_DRV_RX8025=m
-CONFIG_RTC_DRV_EM3027=m
-# CONFIG_RTC_DRV_RV3028 is not set
-# CONFIG_RTC_DRV_RV3032 is not set
-# CONFIG_RTC_DRV_RV8803 is not set
-# CONFIG_RTC_DRV_SD3078 is not set
-
-#
-# SPI RTC drivers
-#
-# CONFIG_RTC_DRV_M41T93 is not set
-# CONFIG_RTC_DRV_M41T94 is not set
-# CONFIG_RTC_DRV_DS1302 is not set
-# CONFIG_RTC_DRV_DS1305 is not set
-# CONFIG_RTC_DRV_DS1343 is not set
-# CONFIG_RTC_DRV_DS1347 is not set
-# CONFIG_RTC_DRV_DS1390 is not set
-# CONFIG_RTC_DRV_MAX6916 is not set
-# CONFIG_RTC_DRV_R9701 is not set
-CONFIG_RTC_DRV_RX4581=m
-# CONFIG_RTC_DRV_RS5C348 is not set
-# CONFIG_RTC_DRV_MAX6902 is not set
-# CONFIG_RTC_DRV_PCF2123 is not set
-# CONFIG_RTC_DRV_MCP795 is not set
-CONFIG_RTC_I2C_AND_SPI=y
-
-#
-# SPI and I2C RTC drivers
-#
-CONFIG_RTC_DRV_DS3232=m
-CONFIG_RTC_DRV_DS3232_HWMON=y
-# CONFIG_RTC_DRV_PCF2127 is not set
-CONFIG_RTC_DRV_RV3029C2=m
-# CONFIG_RTC_DRV_RV3029_HWMON is not set
-# CONFIG_RTC_DRV_RX6110 is not set
-
-#
-# Platform RTC drivers
-#
-CONFIG_RTC_DRV_CMOS=y
-CONFIG_RTC_DRV_DS1286=m
-CONFIG_RTC_DRV_DS1511=m
-CONFIG_RTC_DRV_DS1553=m
-# CONFIG_RTC_DRV_DS1685_FAMILY is not set
-CONFIG_RTC_DRV_DS1742=m
-CONFIG_RTC_DRV_DS2404=m
-CONFIG_RTC_DRV_STK17TA8=m
-# CONFIG_RTC_DRV_M48T86 is not set
-CONFIG_RTC_DRV_M48T35=m
-CONFIG_RTC_DRV_M48T59=m
-CONFIG_RTC_DRV_MSM6242=m
-CONFIG_RTC_DRV_BQ4802=m
-CONFIG_RTC_DRV_RP5C01=m
-CONFIG_RTC_DRV_V3020=m
-
-#
-# on-CPU RTC drivers
-#
-# CONFIG_RTC_DRV_FTRTC010 is not set
-
-#
-# HID Sensor RTC drivers
-#
-# CONFIG_RTC_DRV_GOLDFISH is not set
-CONFIG_DMADEVICES=y
-# CONFIG_DMADEVICES_DEBUG is not set
-
-#
-# DMA Devices
-#
-CONFIG_DMA_ENGINE=y
-CONFIG_DMA_VIRTUAL_CHANNELS=y
-CONFIG_DMA_ACPI=y
-# CONFIG_ALTERA_MSGDMA is not set
-CONFIG_INTEL_IDMA64=m
-CONFIG_INTEL_IDXD_BUS=m
-CONFIG_INTEL_IDXD=m
-# CONFIG_INTEL_IDXD_COMPAT is not set
-# CONFIG_INTEL_IDXD_SVM is not set
-# CONFIG_INTEL_IDXD_PERFMON is not set
-CONFIG_INTEL_IOATDMA=m
-# CONFIG_PLX_DMA is not set
-# CONFIG_AMD_PTDMA is not set
-# CONFIG_QCOM_HIDMA_MGMT is not set
-# CONFIG_QCOM_HIDMA is not set
-CONFIG_DW_DMAC_CORE=y
-CONFIG_DW_DMAC=m
-CONFIG_DW_DMAC_PCI=y
-# CONFIG_DW_EDMA is not set
-# CONFIG_DW_EDMA_PCIE is not set
-CONFIG_HSU_DMA=y
-# CONFIG_SF_PDMA is not set
-# CONFIG_INTEL_LDMA is not set
-
-#
-# DMA Clients
-#
-CONFIG_ASYNC_TX_DMA=y
-CONFIG_DMATEST=m
-CONFIG_DMA_ENGINE_RAID=y
-
-#
-# DMABUF options
-#
-CONFIG_SYNC_FILE=y
-# CONFIG_SW_SYNC is not set
-# CONFIG_UDMABUF is not set
-# CONFIG_DMABUF_MOVE_NOTIFY is not set
-# CONFIG_DMABUF_DEBUG is not set
-# CONFIG_DMABUF_SELFTESTS is not set
-# CONFIG_DMABUF_HEAPS is not set
-# CONFIG_DMABUF_SYSFS_STATS is not set
-# end of DMABUF options
-
-CONFIG_DCA=m
-# CONFIG_AUXDISPLAY is not set
-# CONFIG_PANEL is not set
-CONFIG_UIO=m
-CONFIG_UIO_CIF=m
-CONFIG_UIO_PDRV_GENIRQ=m
-# CONFIG_UIO_DMEM_GENIRQ is not set
-CONFIG_UIO_AEC=m
-CONFIG_UIO_SERCOS3=m
-CONFIG_UIO_PCI_GENERIC=m
-# CONFIG_UIO_NETX is not set
-# CONFIG_UIO_PRUSS is not set
-# CONFIG_UIO_MF624 is not set
-CONFIG_VFIO=m
-CONFIG_VFIO_CONTAINER=y
-CONFIG_VFIO_IOMMU_TYPE1=m
-CONFIG_VFIO_NOIOMMU=y
-CONFIG_VFIO_VIRQFD=y
-CONFIG_VFIO_PCI_CORE=m
-CONFIG_VFIO_PCI_MMAP=y
-CONFIG_VFIO_PCI_INTX=y
-CONFIG_VFIO_PCI=m
-# CONFIG_VFIO_PCI_VGA is not set
-# CONFIG_VFIO_PCI_IGD is not set
-CONFIG_VFIO_MDEV=m
-CONFIG_IRQ_BYPASS_MANAGER=m
-# CONFIG_VIRT_DRIVERS is not set
-CONFIG_VIRTIO_ANCHOR=y
-CONFIG_VIRTIO=y
-CONFIG_VIRTIO_PCI_LIB=y
-CONFIG_VIRTIO_PCI_LIB_LEGACY=y
-CONFIG_VIRTIO_MENU=y
-CONFIG_VIRTIO_PCI=y
-CONFIG_VIRTIO_PCI_LEGACY=y
-# CONFIG_VIRTIO_PMEM is not set
-CONFIG_VIRTIO_BALLOON=m
-# CONFIG_VIRTIO_MEM is not set
-CONFIG_VIRTIO_INPUT=m
-# CONFIG_VIRTIO_MMIO is not set
-CONFIG_VIRTIO_DMA_SHARED_BUFFER=m
-# CONFIG_VDPA is not set
-CONFIG_VHOST_IOTLB=m
-CONFIG_VHOST=m
-CONFIG_VHOST_MENU=y
-CONFIG_VHOST_NET=m
-# CONFIG_VHOST_SCSI is not set
-CONFIG_VHOST_VSOCK=m
-# CONFIG_VHOST_CROSS_ENDIAN_LEGACY is not set
-
-#
-# Microsoft Hyper-V guest support
-#
-# CONFIG_HYPERV is not set
-# end of Microsoft Hyper-V guest support
-
-# CONFIG_GREYBUS is not set
-# CONFIG_COMEDI is not set
-# CONFIG_STAGING is not set
-# CONFIG_CHROME_PLATFORMS is not set
-CONFIG_MELLANOX_PLATFORM=y
-CONFIG_MLXREG_HOTPLUG=m
-# CONFIG_MLXREG_IO is not set
-# CONFIG_MLXREG_LC is not set
-# CONFIG_NVSW_SN2201 is not set
-CONFIG_SURFACE_PLATFORMS=y
-# CONFIG_SURFACE3_WMI is not set
-# CONFIG_SURFACE_3_POWER_OPREGION is not set
-# CONFIG_SURFACE_GPE is not set
-# CONFIG_SURFACE_HOTPLUG is not set
-# CONFIG_SURFACE_PRO3_BUTTON is not set
-CONFIG_X86_PLATFORM_DEVICES=y
-CONFIG_ACPI_WMI=m
-CONFIG_WMI_BMOF=m
-# CONFIG_HUAWEI_WMI is not set
-# CONFIG_UV_SYSFS is not set
-CONFIG_MXM_WMI=m
-# CONFIG_PEAQ_WMI is not set
-# CONFIG_NVIDIA_WMI_EC_BACKLIGHT is not set
-# CONFIG_XIAOMI_WMI is not set
-# CONFIG_GIGABYTE_WMI is not set
-# CONFIG_YOGABOOK_WMI is not set
-CONFIG_ACERHDF=m
-# CONFIG_ACER_WIRELESS is not set
-CONFIG_ACER_WMI=m
-# CONFIG_AMD_PMF is not set
-# CONFIG_AMD_PMC is not set
-# CONFIG_ADV_SWBUTTON is not set
-CONFIG_APPLE_GMUX=m
-CONFIG_ASUS_LAPTOP=m
-# CONFIG_ASUS_WIRELESS is not set
-CONFIG_ASUS_WMI=m
-CONFIG_ASUS_NB_WMI=m
-# CONFIG_ASUS_TF103C_DOCK is not set
-# CONFIG_MERAKI_MX100 is not set
-CONFIG_EEEPC_LAPTOP=m
-CONFIG_EEEPC_WMI=m
-# CONFIG_X86_PLATFORM_DRIVERS_DELL is not set
-CONFIG_AMILO_RFKILL=m
-CONFIG_FUJITSU_LAPTOP=m
-CONFIG_FUJITSU_TABLET=m
-# CONFIG_GPD_POCKET_FAN is not set
-# CONFIG_X86_PLATFORM_DRIVERS_HP is not set
-# CONFIG_WIRELESS_HOTKEY is not set
-# CONFIG_IBM_RTL is not set
-CONFIG_IDEAPAD_LAPTOP=m
-CONFIG_SENSORS_HDAPS=m
-CONFIG_THINKPAD_ACPI=m
-# CONFIG_THINKPAD_ACPI_DEBUGFACILITIES is not set
-# CONFIG_THINKPAD_ACPI_DEBUG is not set
-# CONFIG_THINKPAD_ACPI_UNSAFE_LEDS is not set
-CONFIG_THINKPAD_ACPI_VIDEO=y
-CONFIG_THINKPAD_ACPI_HOTKEY_POLL=y
-# CONFIG_THINKPAD_LMI is not set
-# CONFIG_INTEL_ATOMISP2_PM is not set
-# CONFIG_INTEL_IFS is not set
-# CONFIG_INTEL_SAR_INT1092 is not set
-CONFIG_INTEL_PMC_CORE=m
-
-#
-# Intel Speed Select Technology interface support
-#
-# CONFIG_INTEL_SPEED_SELECT_INTERFACE is not set
-# end of Intel Speed Select Technology interface support
-
-CONFIG_INTEL_WMI=y
-# CONFIG_INTEL_WMI_SBL_FW_UPDATE is not set
-CONFIG_INTEL_WMI_THUNDERBOLT=m
-
-#
-# Intel Uncore Frequency Control
-#
-# CONFIG_INTEL_UNCORE_FREQ_CONTROL is not set
-# end of Intel Uncore Frequency Control
-
-CONFIG_INTEL_HID_EVENT=m
-CONFIG_INTEL_VBTN=m
-# CONFIG_INTEL_INT0002_VGPIO is not set
-CONFIG_INTEL_OAKTRAIL=m
-# CONFIG_INTEL_ISHTP_ECLITE is not set
-# CONFIG_INTEL_PUNIT_IPC is not set
-CONFIG_INTEL_RST=m
-# CONFIG_INTEL_SMARTCONNECT is not set
-CONFIG_INTEL_TURBO_MAX_3=y
-# CONFIG_INTEL_VSEC is not set
-CONFIG_MSI_LAPTOP=m
-CONFIG_MSI_WMI=m
-# CONFIG_PCENGINES_APU2 is not set
-# CONFIG_BARCO_P50_GPIO is not set
-CONFIG_SAMSUNG_LAPTOP=m
-CONFIG_SAMSUNG_Q10=m
-CONFIG_TOSHIBA_BT_RFKILL=m
-# CONFIG_TOSHIBA_HAPS is not set
-# CONFIG_TOSHIBA_WMI is not set
-CONFIG_ACPI_CMPC=m
-CONFIG_COMPAL_LAPTOP=m
-# CONFIG_LG_LAPTOP is not set
-CONFIG_PANASONIC_LAPTOP=m
-CONFIG_SONY_LAPTOP=m
-CONFIG_SONYPI_COMPAT=y
-# CONFIG_SYSTEM76_ACPI is not set
-CONFIG_TOPSTAR_LAPTOP=m
-# CONFIG_SERIAL_MULTI_INSTANTIATE is not set
-CONFIG_MLX_PLATFORM=m
-CONFIG_INTEL_IPS=m
-# CONFIG_INTEL_SCU_PCI is not set
-# CONFIG_INTEL_SCU_PLATFORM is not set
-# CONFIG_SIEMENS_SIMATIC_IPC is not set
-# CONFIG_WINMATE_FM07_KEYS is not set
-CONFIG_P2SB=y
-CONFIG_HAVE_CLK=y
-CONFIG_HAVE_CLK_PREPARE=y
-CONFIG_COMMON_CLK=y
-# CONFIG_LMK04832 is not set
-# CONFIG_COMMON_CLK_MAX9485 is not set
-# CONFIG_COMMON_CLK_SI5341 is not set
-# CONFIG_COMMON_CLK_SI5351 is not set
-# CONFIG_COMMON_CLK_SI544 is not set
-# CONFIG_COMMON_CLK_CDCE706 is not set
-# CONFIG_COMMON_CLK_CS2000_CP is not set
-# CONFIG_COMMON_CLK_PWM is not set
-# CONFIG_XILINX_VCU is not set
-CONFIG_HWSPINLOCK=y
-
-#
-# Clock Source drivers
-#
-CONFIG_CLKEVT_I8253=y
-CONFIG_I8253_LOCK=y
-CONFIG_CLKBLD_I8253=y
-# end of Clock Source drivers
-
-CONFIG_MAILBOX=y
-CONFIG_PCC=y
-# CONFIG_ALTERA_MBOX is not set
-CONFIG_IOMMU_IOVA=y
-CONFIG_IOASID=y
-CONFIG_IOMMU_API=y
-CONFIG_IOMMU_SUPPORT=y
-
-#
-# Generic IOMMU Pagetable Support
-#
-# end of Generic IOMMU Pagetable Support
-
-# CONFIG_IOMMU_DEBUGFS is not set
-# CONFIG_IOMMU_DEFAULT_DMA_STRICT is not set
-CONFIG_IOMMU_DEFAULT_DMA_LAZY=y
-# CONFIG_IOMMU_DEFAULT_PASSTHROUGH is not set
-CONFIG_IOMMU_DMA=y
-CONFIG_IOMMU_SVA=y
-# CONFIG_AMD_IOMMU is not set
-CONFIG_DMAR_TABLE=y
-CONFIG_INTEL_IOMMU=y
-CONFIG_INTEL_IOMMU_SVM=y
-# CONFIG_INTEL_IOMMU_DEFAULT_ON is not set
-CONFIG_INTEL_IOMMU_FLOPPY_WA=y
-CONFIG_INTEL_IOMMU_SCALABLE_MODE_DEFAULT_ON=y
-# CONFIG_IOMMUFD is not set
-CONFIG_IRQ_REMAP=y
-# CONFIG_VIRTIO_IOMMU is not set
-
-#
-# Remoteproc drivers
-#
-# CONFIG_REMOTEPROC is not set
-# end of Remoteproc drivers
-
-#
-# Rpmsg drivers
-#
-# CONFIG_RPMSG_QCOM_GLINK_RPM is not set
-# CONFIG_RPMSG_VIRTIO is not set
-# end of Rpmsg drivers
-
-# CONFIG_SOUNDWIRE is not set
-
-#
-# SOC (System On Chip) specific Drivers
-#
-
-#
-# Amlogic SoC drivers
-#
-# end of Amlogic SoC drivers
-
-#
-# Broadcom SoC drivers
-#
-# end of Broadcom SoC drivers
-
-#
-# NXP/Freescale QorIQ SoC drivers
-#
-# end of NXP/Freescale QorIQ SoC drivers
-
-#
-# fujitsu SoC drivers
-#
-# end of fujitsu SoC drivers
-
-#
-# i.MX SoC drivers
-#
-# end of i.MX SoC drivers
-
-#
-# Enable LiteX SoC Builder specific drivers
-#
-# end of Enable LiteX SoC Builder specific drivers
-
-#
-# Qualcomm SoC drivers
-#
-# end of Qualcomm SoC drivers
-
-# CONFIG_SOC_TI is not set
-
-#
-# Xilinx SoC drivers
-#
-# end of Xilinx SoC drivers
-# end of SOC (System On Chip) specific Drivers
-
-# CONFIG_PM_DEVFREQ is not set
-# CONFIG_EXTCON is not set
-# CONFIG_MEMORY is not set
-# CONFIG_IIO is not set
-CONFIG_NTB=m
-# CONFIG_NTB_MSI is not set
-# CONFIG_NTB_AMD is not set
-# CONFIG_NTB_IDT is not set
-# CONFIG_NTB_INTEL is not set
-# CONFIG_NTB_EPF is not set
-# CONFIG_NTB_SWITCHTEC is not set
-# CONFIG_NTB_PINGPONG is not set
-# CONFIG_NTB_TOOL is not set
-# CONFIG_NTB_PERF is not set
-# CONFIG_NTB_TRANSPORT is not set
-CONFIG_PWM=y
-CONFIG_PWM_SYSFS=y
-# CONFIG_PWM_DEBUG is not set
-# CONFIG_PWM_CLK is not set
-# CONFIG_PWM_DWC is not set
-CONFIG_PWM_LPSS=m
-CONFIG_PWM_LPSS_PCI=m
-CONFIG_PWM_LPSS_PLATFORM=m
-# CONFIG_PWM_PCA9685 is not set
-
-#
-# IRQ chip support
-#
-# end of IRQ chip support
-
-# CONFIG_IPACK_BUS is not set
-# CONFIG_RESET_CONTROLLER is not set
-
-#
-# PHY Subsystem
-#
-# CONFIG_GENERIC_PHY is not set
-# CONFIG_USB_LGM_PHY is not set
-# CONFIG_PHY_CAN_TRANSCEIVER is not set
-
-#
-# PHY drivers for Broadcom platforms
-#
-# CONFIG_BCM_KONA_USB2_PHY is not set
-# end of PHY drivers for Broadcom platforms
-
-# CONFIG_PHY_PXA_28NM_HSIC is not set
-# CONFIG_PHY_PXA_28NM_USB2 is not set
-# CONFIG_PHY_INTEL_LGM_EMMC is not set
-# end of PHY Subsystem
-
-CONFIG_POWERCAP=y
-CONFIG_INTEL_RAPL_CORE=m
-CONFIG_INTEL_RAPL=m
-# CONFIG_IDLE_INJECT is not set
-# CONFIG_MCB is not set
-
-#
-# Performance monitor support
-#
-# end of Performance monitor support
-
-CONFIG_RAS=y
-# CONFIG_RAS_CEC is not set
-# CONFIG_USB4 is not set
-
-#
-# Android
-#
-# CONFIG_ANDROID_BINDER_IPC is not set
-# end of Android
-
-CONFIG_LIBNVDIMM=m
-CONFIG_BLK_DEV_PMEM=m
-CONFIG_ND_CLAIM=y
-CONFIG_ND_BTT=m
-CONFIG_BTT=y
-CONFIG_ND_PFN=m
-CONFIG_NVDIMM_PFN=y
-CONFIG_NVDIMM_DAX=y
-CONFIG_NVDIMM_KEYS=y
-# CONFIG_NVDIMM_SECURITY_TEST is not set
-CONFIG_DAX=y
-CONFIG_DEV_DAX=m
-CONFIG_DEV_DAX_PMEM=m
-CONFIG_DEV_DAX_KMEM=m
-CONFIG_NVMEM=y
-CONFIG_NVMEM_SYSFS=y
-# CONFIG_NVMEM_RMEM is not set
-
-#
-# HW tracing support
-#
-CONFIG_STM=m
-# CONFIG_STM_PROTO_BASIC is not set
-# CONFIG_STM_PROTO_SYS_T is not set
-CONFIG_STM_DUMMY=m
-CONFIG_STM_SOURCE_CONSOLE=m
-CONFIG_STM_SOURCE_HEARTBEAT=m
-CONFIG_STM_SOURCE_FTRACE=m
-CONFIG_INTEL_TH=m
-CONFIG_INTEL_TH_PCI=m
-CONFIG_INTEL_TH_ACPI=m
-CONFIG_INTEL_TH_GTH=m
-CONFIG_INTEL_TH_STH=m
-CONFIG_INTEL_TH_MSU=m
-CONFIG_INTEL_TH_PTI=m
-# CONFIG_INTEL_TH_DEBUG is not set
-# end of HW tracing support
-
-# CONFIG_FPGA is not set
-# CONFIG_SIOX is not set
-# CONFIG_SLIMBUS is not set
-# CONFIG_INTERCONNECT is not set
-# CONFIG_COUNTER is not set
-# CONFIG_MOST is not set
-# CONFIG_PECI is not set
-# CONFIG_HTE is not set
-# end of Device Drivers
-
-#
-# File systems
-#
-CONFIG_DCACHE_WORD_ACCESS=y
-# CONFIG_VALIDATE_FS_PARSER is not set
-CONFIG_FS_IOMAP=y
-CONFIG_EXT2_FS=m
-CONFIG_EXT2_FS_XATTR=y
-CONFIG_EXT2_FS_POSIX_ACL=y
-CONFIG_EXT2_FS_SECURITY=y
-# CONFIG_EXT3_FS is not set
-CONFIG_EXT4_FS=y
-CONFIG_EXT4_FS_POSIX_ACL=y
-CONFIG_EXT4_FS_SECURITY=y
-# CONFIG_EXT4_DEBUG is not set
-CONFIG_JBD2=y
-# CONFIG_JBD2_DEBUG is not set
-CONFIG_FS_MBCACHE=y
-# CONFIG_REISERFS_FS is not set
-# CONFIG_JFS_FS is not set
-CONFIG_XFS_FS=m
-CONFIG_XFS_SUPPORT_V4=y
-CONFIG_XFS_QUOTA=y
-CONFIG_XFS_POSIX_ACL=y
-CONFIG_XFS_RT=y
-CONFIG_XFS_ONLINE_SCRUB=y
-CONFIG_XFS_ONLINE_REPAIR=y
-CONFIG_XFS_DEBUG=y
-CONFIG_XFS_ASSERT_FATAL=y
-CONFIG_GFS2_FS=m
-CONFIG_GFS2_FS_LOCKING_DLM=y
-CONFIG_OCFS2_FS=m
-CONFIG_OCFS2_FS_O2CB=m
-CONFIG_OCFS2_FS_USERSPACE_CLUSTER=m
-CONFIG_OCFS2_FS_STATS=y
-CONFIG_OCFS2_DEBUG_MASKLOG=y
-# CONFIG_OCFS2_DEBUG_FS is not set
-CONFIG_BTRFS_FS=m
-CONFIG_BTRFS_FS_POSIX_ACL=y
-# CONFIG_BTRFS_FS_CHECK_INTEGRITY is not set
-# CONFIG_BTRFS_FS_RUN_SANITY_TESTS is not set
-# CONFIG_BTRFS_DEBUG is not set
-# CONFIG_BTRFS_ASSERT is not set
-# CONFIG_BTRFS_FS_REF_VERIFY is not set
-# CONFIG_NILFS2_FS is not set
-CONFIG_F2FS_FS=m
-CONFIG_F2FS_STAT_FS=y
-CONFIG_F2FS_FS_XATTR=y
-CONFIG_F2FS_FS_POSIX_ACL=y
-CONFIG_F2FS_FS_SECURITY=y
-# CONFIG_F2FS_CHECK_FS is not set
-# CONFIG_F2FS_FAULT_INJECTION is not set
-# CONFIG_F2FS_FS_COMPRESSION is not set
-CONFIG_F2FS_IOSTAT=y
-# CONFIG_F2FS_UNFAIR_RWSEM is not set
-# CONFIG_ZONEFS_FS is not set
-CONFIG_FS_DAX=y
-CONFIG_FS_DAX_PMD=y
-CONFIG_FS_POSIX_ACL=y
-CONFIG_EXPORTFS=y
-CONFIG_EXPORTFS_BLOCK_OPS=y
-CONFIG_FILE_LOCKING=y
-CONFIG_FS_ENCRYPTION=y
-CONFIG_FS_ENCRYPTION_ALGS=y
-# CONFIG_FS_VERITY is not set
-CONFIG_FSNOTIFY=y
-CONFIG_DNOTIFY=y
-CONFIG_INOTIFY_USER=y
-CONFIG_FANOTIFY=y
-CONFIG_FANOTIFY_ACCESS_PERMISSIONS=y
-CONFIG_QUOTA=y
-CONFIG_QUOTA_NETLINK_INTERFACE=y
-CONFIG_PRINT_QUOTA_WARNING=y
-# CONFIG_QUOTA_DEBUG is not set
-CONFIG_QUOTA_TREE=y
-# CONFIG_QFMT_V1 is not set
-CONFIG_QFMT_V2=y
-CONFIG_QUOTACTL=y
-CONFIG_AUTOFS4_FS=y
-CONFIG_AUTOFS_FS=y
-CONFIG_FUSE_FS=m
-CONFIG_CUSE=m
-# CONFIG_VIRTIO_FS is not set
-CONFIG_OVERLAY_FS=m
-# CONFIG_OVERLAY_FS_REDIRECT_DIR is not set
-# CONFIG_OVERLAY_FS_REDIRECT_ALWAYS_FOLLOW is not set
-# CONFIG_OVERLAY_FS_INDEX is not set
-# CONFIG_OVERLAY_FS_XINO_AUTO is not set
-# CONFIG_OVERLAY_FS_METACOPY is not set
-
-#
-# Caches
-#
-CONFIG_NETFS_SUPPORT=y
-CONFIG_NETFS_STATS=y
-CONFIG_FSCACHE=m
-CONFIG_FSCACHE_STATS=y
-# CONFIG_FSCACHE_DEBUG is not set
-CONFIG_CACHEFILES=m
-# CONFIG_CACHEFILES_DEBUG is not set
-# CONFIG_CACHEFILES_ERROR_INJECTION is not set
-# CONFIG_CACHEFILES_ONDEMAND is not set
-# end of Caches
-
-#
-# CD-ROM/DVD Filesystems
-#
-CONFIG_ISO9660_FS=m
-CONFIG_JOLIET=y
-CONFIG_ZISOFS=y
-CONFIG_UDF_FS=m
-# end of CD-ROM/DVD Filesystems
-
-#
-# DOS/FAT/EXFAT/NT Filesystems
-#
-CONFIG_FAT_FS=m
-CONFIG_MSDOS_FS=m
-CONFIG_VFAT_FS=m
-CONFIG_FAT_DEFAULT_CODEPAGE=437
-CONFIG_FAT_DEFAULT_IOCHARSET="ascii"
-# CONFIG_FAT_DEFAULT_UTF8 is not set
-# CONFIG_EXFAT_FS is not set
-# CONFIG_NTFS_FS is not set
-# CONFIG_NTFS3_FS is not set
-# end of DOS/FAT/EXFAT/NT Filesystems
-
-#
-# Pseudo filesystems
-#
-CONFIG_PROC_FS=y
-CONFIG_PROC_KCORE=y
-CONFIG_PROC_VMCORE=y
-CONFIG_PROC_VMCORE_DEVICE_DUMP=y
-CONFIG_PROC_SYSCTL=y
-CONFIG_PROC_PAGE_MONITOR=y
-CONFIG_PROC_CHILDREN=y
-CONFIG_PROC_PID_ARCH_STATUS=y
-CONFIG_KERNFS=y
-CONFIG_SYSFS=y
-CONFIG_TMPFS=y
-CONFIG_TMPFS_POSIX_ACL=y
-CONFIG_TMPFS_XATTR=y
-# CONFIG_TMPFS_INODE64 is not set
-CONFIG_HUGETLBFS=y
-CONFIG_HUGETLB_PAGE=y
-CONFIG_ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP=y
-CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP=y
-# CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON is not set
-CONFIG_MEMFD_CREATE=y
-CONFIG_ARCH_HAS_GIGANTIC_PAGE=y
-CONFIG_CONFIGFS_FS=y
-CONFIG_EFIVAR_FS=y
-# end of Pseudo filesystems
-
-CONFIG_MISC_FILESYSTEMS=y
-# CONFIG_ORANGEFS_FS is not set
-# CONFIG_ADFS_FS is not set
-# CONFIG_AFFS_FS is not set
-# CONFIG_ECRYPT_FS is not set
-# CONFIG_HFS_FS is not set
-# CONFIG_HFSPLUS_FS is not set
-# CONFIG_BEFS_FS is not set
-# CONFIG_BFS_FS is not set
-# CONFIG_EFS_FS is not set
-CONFIG_CRAMFS=m
-CONFIG_CRAMFS_BLOCKDEV=y
-CONFIG_SQUASHFS=m
-# CONFIG_SQUASHFS_FILE_CACHE is not set
-CONFIG_SQUASHFS_FILE_DIRECT=y
-CONFIG_SQUASHFS_DECOMP_SINGLE=y
-# CONFIG_SQUASHFS_CHOICE_DECOMP_BY_MOUNT is not set
-CONFIG_SQUASHFS_COMPILE_DECOMP_SINGLE=y
-# CONFIG_SQUASHFS_COMPILE_DECOMP_MULTI is not set
-# CONFIG_SQUASHFS_COMPILE_DECOMP_MULTI_PERCPU is not set
-CONFIG_SQUASHFS_XATTR=y
-CONFIG_SQUASHFS_ZLIB=y
-# CONFIG_SQUASHFS_LZ4 is not set
-CONFIG_SQUASHFS_LZO=y
-CONFIG_SQUASHFS_XZ=y
-# CONFIG_SQUASHFS_ZSTD is not set
-# CONFIG_SQUASHFS_4K_DEVBLK_SIZE is not set
-# CONFIG_SQUASHFS_EMBEDDED is not set
-CONFIG_SQUASHFS_FRAGMENT_CACHE_SIZE=3
-# CONFIG_VXFS_FS is not set
-CONFIG_MINIX_FS=m
-# CONFIG_OMFS_FS is not set
-# CONFIG_HPFS_FS is not set
-# CONFIG_QNX4FS_FS is not set
-# CONFIG_QNX6FS_FS is not set
-# CONFIG_ROMFS_FS is not set
-CONFIG_PSTORE=y
-CONFIG_PSTORE_DEFAULT_KMSG_BYTES=10240
-CONFIG_PSTORE_DEFLATE_COMPRESS=y
-# CONFIG_PSTORE_LZO_COMPRESS is not set
-# CONFIG_PSTORE_LZ4_COMPRESS is not set
-# CONFIG_PSTORE_LZ4HC_COMPRESS is not set
-# CONFIG_PSTORE_842_COMPRESS is not set
-# CONFIG_PSTORE_ZSTD_COMPRESS is not set
-CONFIG_PSTORE_COMPRESS=y
-CONFIG_PSTORE_DEFLATE_COMPRESS_DEFAULT=y
-CONFIG_PSTORE_COMPRESS_DEFAULT="deflate"
-# CONFIG_PSTORE_CONSOLE is not set
-# CONFIG_PSTORE_PMSG is not set
-# CONFIG_PSTORE_FTRACE is not set
-CONFIG_PSTORE_RAM=m
-# CONFIG_PSTORE_BLK is not set
-# CONFIG_SYSV_FS is not set
-# CONFIG_UFS_FS is not set
-# CONFIG_EROFS_FS is not set
-CONFIG_NETWORK_FILESYSTEMS=y
-CONFIG_NFS_FS=y
-# CONFIG_NFS_V2 is not set
-CONFIG_NFS_V3=y
-CONFIG_NFS_V3_ACL=y
-CONFIG_NFS_V4=m
-# CONFIG_NFS_SWAP is not set
-CONFIG_NFS_V4_1=y
-CONFIG_NFS_V4_2=y
-CONFIG_PNFS_FILE_LAYOUT=m
-CONFIG_PNFS_BLOCK=m
-CONFIG_PNFS_FLEXFILE_LAYOUT=m
-CONFIG_NFS_V4_1_IMPLEMENTATION_ID_DOMAIN="kernel.org"
-# CONFIG_NFS_V4_1_MIGRATION is not set
-CONFIG_NFS_V4_SECURITY_LABEL=y
-CONFIG_ROOT_NFS=y
-# CONFIG_NFS_USE_LEGACY_DNS is not set
-CONFIG_NFS_USE_KERNEL_DNS=y
-CONFIG_NFS_DEBUG=y
-CONFIG_NFS_DISABLE_UDP_SUPPORT=y
-CONFIG_NFS_V4_2_READ_PLUS=y
-CONFIG_NFSD=m
-# CONFIG_NFSD_V2 is not set
-CONFIG_NFSD_V3_ACL=y
-CONFIG_NFSD_V4=y
-CONFIG_NFSD_PNFS=y
-# CONFIG_NFSD_BLOCKLAYOUT is not set
-CONFIG_NFSD_SCSILAYOUT=y
-# CONFIG_NFSD_FLEXFILELAYOUT is not set
-# CONFIG_NFSD_V4_2_INTER_SSC is not set
-CONFIG_NFSD_V4_SECURITY_LABEL=y
-CONFIG_GRACE_PERIOD=y
-CONFIG_LOCKD=y
-CONFIG_LOCKD_V4=y
-CONFIG_NFS_ACL_SUPPORT=y
-CONFIG_NFS_COMMON=y
-CONFIG_NFS_V4_2_SSC_HELPER=y
-CONFIG_SUNRPC=y
-CONFIG_SUNRPC_GSS=m
-CONFIG_SUNRPC_BACKCHANNEL=y
-CONFIG_RPCSEC_GSS_KRB5=m
-# CONFIG_SUNRPC_DISABLE_INSECURE_ENCTYPES is not set
-CONFIG_SUNRPC_DEBUG=y
-CONFIG_SUNRPC_XPRT_RDMA=m
-CONFIG_CEPH_FS=m
-# CONFIG_CEPH_FSCACHE is not set
-CONFIG_CEPH_FS_POSIX_ACL=y
-# CONFIG_CEPH_FS_SECURITY_LABEL is not set
-CONFIG_CIFS=m
-CONFIG_CIFS_STATS2=y
-CONFIG_CIFS_ALLOW_INSECURE_LEGACY=y
-CONFIG_CIFS_UPCALL=y
-CONFIG_CIFS_XATTR=y
-CONFIG_CIFS_POSIX=y
-CONFIG_CIFS_DEBUG=y
-# CONFIG_CIFS_DEBUG2 is not set
-# CONFIG_CIFS_DEBUG_DUMP_KEYS is not set
-CONFIG_CIFS_DFS_UPCALL=y
-# CONFIG_CIFS_SWN_UPCALL is not set
-# CONFIG_CIFS_SMB_DIRECT is not set
-# CONFIG_CIFS_FSCACHE is not set
-# CONFIG_SMB_SERVER is not set
-CONFIG_SMBFS_COMMON=m
-# CONFIG_CODA_FS is not set
-# CONFIG_AFS_FS is not set
-CONFIG_9P_FS=y
-CONFIG_9P_FS_POSIX_ACL=y
-# CONFIG_9P_FS_SECURITY is not set
-CONFIG_NLS=y
-CONFIG_NLS_DEFAULT="utf8"
-CONFIG_NLS_CODEPAGE_437=y
-CONFIG_NLS_CODEPAGE_737=m
-CONFIG_NLS_CODEPAGE_775=m
-CONFIG_NLS_CODEPAGE_850=m
-CONFIG_NLS_CODEPAGE_852=m
-CONFIG_NLS_CODEPAGE_855=m
-CONFIG_NLS_CODEPAGE_857=m
-CONFIG_NLS_CODEPAGE_860=m
-CONFIG_NLS_CODEPAGE_861=m
-CONFIG_NLS_CODEPAGE_862=m
-CONFIG_NLS_CODEPAGE_863=m
-CONFIG_NLS_CODEPAGE_864=m
-CONFIG_NLS_CODEPAGE_865=m
-CONFIG_NLS_CODEPAGE_866=m
-CONFIG_NLS_CODEPAGE_869=m
-CONFIG_NLS_CODEPAGE_936=m
-CONFIG_NLS_CODEPAGE_950=m
-CONFIG_NLS_CODEPAGE_932=m
-CONFIG_NLS_CODEPAGE_949=m
-CONFIG_NLS_CODEPAGE_874=m
-CONFIG_NLS_ISO8859_8=m
-CONFIG_NLS_CODEPAGE_1250=m
-CONFIG_NLS_CODEPAGE_1251=m
-CONFIG_NLS_ASCII=y
-CONFIG_NLS_ISO8859_1=m
-CONFIG_NLS_ISO8859_2=m
-CONFIG_NLS_ISO8859_3=m
-CONFIG_NLS_ISO8859_4=m
-CONFIG_NLS_ISO8859_5=m
-CONFIG_NLS_ISO8859_6=m
-CONFIG_NLS_ISO8859_7=m
-CONFIG_NLS_ISO8859_9=m
-CONFIG_NLS_ISO8859_13=m
-CONFIG_NLS_ISO8859_14=m
-CONFIG_NLS_ISO8859_15=m
-CONFIG_NLS_KOI8_R=m
-CONFIG_NLS_KOI8_U=m
-CONFIG_NLS_MAC_ROMAN=m
-CONFIG_NLS_MAC_CELTIC=m
-CONFIG_NLS_MAC_CENTEURO=m
-CONFIG_NLS_MAC_CROATIAN=m
-CONFIG_NLS_MAC_CYRILLIC=m
-CONFIG_NLS_MAC_GAELIC=m
-CONFIG_NLS_MAC_GREEK=m
-CONFIG_NLS_MAC_ICELAND=m
-CONFIG_NLS_MAC_INUIT=m
-CONFIG_NLS_MAC_ROMANIAN=m
-CONFIG_NLS_MAC_TURKISH=m
-CONFIG_NLS_UTF8=m
-CONFIG_DLM=m
-# CONFIG_DLM_DEPRECATED_API is not set
-CONFIG_DLM_DEBUG=y
-# CONFIG_UNICODE is not set
-CONFIG_IO_WQ=y
-# end of File systems
-
-#
-# Security options
-#
-CONFIG_KEYS=y
-# CONFIG_KEYS_REQUEST_CACHE is not set
-CONFIG_PERSISTENT_KEYRINGS=y
-CONFIG_TRUSTED_KEYS=y
-CONFIG_TRUSTED_KEYS_TPM=y
-CONFIG_ENCRYPTED_KEYS=y
-# CONFIG_USER_DECRYPTED_DATA is not set
-# CONFIG_KEY_DH_OPERATIONS is not set
-# CONFIG_KEY_NOTIFICATIONS is not set
-# CONFIG_SECURITY_DMESG_RESTRICT is not set
-CONFIG_SECURITY=y
-CONFIG_SECURITYFS=y
-CONFIG_SECURITY_NETWORK=y
-# CONFIG_SECURITY_INFINIBAND is not set
-CONFIG_SECURITY_NETWORK_XFRM=y
-# CONFIG_SECURITY_PATH is not set
-CONFIG_INTEL_TXT=y
-CONFIG_HAVE_HARDENED_USERCOPY_ALLOCATOR=y
-CONFIG_HARDENED_USERCOPY=y
-CONFIG_FORTIFY_SOURCE=y
-# CONFIG_STATIC_USERMODEHELPER is not set
-# CONFIG_SECURITY_SELINUX is not set
-# CONFIG_SECURITY_SMACK is not set
-# CONFIG_SECURITY_TOMOYO is not set
-# CONFIG_SECURITY_APPARMOR is not set
-# CONFIG_SECURITY_LOADPIN is not set
-CONFIG_SECURITY_YAMA=y
-# CONFIG_SECURITY_SAFESETID is not set
-# CONFIG_SECURITY_LOCKDOWN_LSM is not set
-# CONFIG_SECURITY_LANDLOCK is not set
-CONFIG_INTEGRITY=y
-CONFIG_INTEGRITY_SIGNATURE=y
-CONFIG_INTEGRITY_ASYMMETRIC_KEYS=y
-CONFIG_INTEGRITY_TRUSTED_KEYRING=y
-# CONFIG_INTEGRITY_PLATFORM_KEYRING is not set
-CONFIG_INTEGRITY_AUDIT=y
-CONFIG_IMA=y
-# CONFIG_IMA_KEXEC is not set
-CONFIG_IMA_MEASURE_PCR_IDX=10
-CONFIG_IMA_NG_TEMPLATE=y
-# CONFIG_IMA_SIG_TEMPLATE is not set
-CONFIG_IMA_DEFAULT_TEMPLATE="ima-ng"
-CONFIG_IMA_DEFAULT_HASH_SHA1=y
-# CONFIG_IMA_DEFAULT_HASH_SHA256 is not set
-# CONFIG_IMA_DEFAULT_HASH_SHA512 is not set
-CONFIG_IMA_DEFAULT_HASH="sha1"
-CONFIG_IMA_WRITE_POLICY=y
-# CONFIG_IMA_READ_POLICY is not set
-CONFIG_IMA_APPRAISE=y
-# CONFIG_IMA_ARCH_POLICY is not set
-# CONFIG_IMA_APPRAISE_BUILD_POLICY is not set
-CONFIG_IMA_APPRAISE_BOOTPARAM=y
-# CONFIG_IMA_APPRAISE_MODSIG is not set
-CONFIG_IMA_TRUSTED_KEYRING=y
-# CONFIG_IMA_BLACKLIST_KEYRING is not set
-# CONFIG_IMA_LOAD_X509 is not set
-CONFIG_IMA_MEASURE_ASYMMETRIC_KEYS=y
-CONFIG_IMA_QUEUE_EARLY_BOOT_KEYS=y
-# CONFIG_IMA_SECURE_AND_OR_TRUSTED_BOOT is not set
-# CONFIG_IMA_DISABLE_HTABLE is not set
-# CONFIG_EVM is not set
-CONFIG_DEFAULT_SECURITY_DAC=y
-CONFIG_LSM="landlock,lockdown,yama,loadpin,safesetid,integrity,bpf"
-
-#
-# Kernel hardening options
-#
-
-#
-# Memory initialization
-#
-CONFIG_INIT_STACK_NONE=y
-# CONFIG_GCC_PLUGIN_STRUCTLEAK_USER is not set
-# CONFIG_GCC_PLUGIN_STACKLEAK is not set
-# CONFIG_INIT_ON_ALLOC_DEFAULT_ON is not set
-# CONFIG_INIT_ON_FREE_DEFAULT_ON is not set
-CONFIG_CC_HAS_ZERO_CALL_USED_REGS=y
-# CONFIG_ZERO_CALL_USED_REGS is not set
-# end of Memory initialization
-
-CONFIG_RANDSTRUCT_NONE=y
-# CONFIG_RANDSTRUCT_FULL is not set
-# CONFIG_RANDSTRUCT_PERFORMANCE is not set
-# end of Kernel hardening options
-# end of Security options
-
-CONFIG_XOR_BLOCKS=m
-CONFIG_ASYNC_CORE=m
-CONFIG_ASYNC_MEMCPY=m
-CONFIG_ASYNC_XOR=m
-CONFIG_ASYNC_PQ=m
-CONFIG_ASYNC_RAID6_RECOV=m
-CONFIG_CRYPTO=y
-
-#
-# Crypto core or helper
-#
-CONFIG_CRYPTO_ALGAPI=y
-CONFIG_CRYPTO_ALGAPI2=y
-CONFIG_CRYPTO_AEAD=y
-CONFIG_CRYPTO_AEAD2=y
-CONFIG_CRYPTO_SKCIPHER=y
-CONFIG_CRYPTO_SKCIPHER2=y
-CONFIG_CRYPTO_HASH=y
-CONFIG_CRYPTO_HASH2=y
-CONFIG_CRYPTO_RNG=y
-CONFIG_CRYPTO_RNG2=y
-CONFIG_CRYPTO_RNG_DEFAULT=y
-CONFIG_CRYPTO_AKCIPHER2=y
-CONFIG_CRYPTO_AKCIPHER=y
-CONFIG_CRYPTO_KPP2=y
-CONFIG_CRYPTO_KPP=m
-CONFIG_CRYPTO_ACOMP2=y
-CONFIG_CRYPTO_MANAGER=y
-CONFIG_CRYPTO_MANAGER2=y
-CONFIG_CRYPTO_USER=m
-CONFIG_CRYPTO_MANAGER_DISABLE_TESTS=y
-CONFIG_CRYPTO_NULL=y
-CONFIG_CRYPTO_NULL2=y
-CONFIG_CRYPTO_PCRYPT=m
-CONFIG_CRYPTO_CRYPTD=y
-CONFIG_CRYPTO_AUTHENC=m
-# CONFIG_CRYPTO_TEST is not set
-CONFIG_CRYPTO_SIMD=y
-# end of Crypto core or helper
-
-#
-# Public-key cryptography
-#
-CONFIG_CRYPTO_RSA=y
-CONFIG_CRYPTO_DH=m
-# CONFIG_CRYPTO_DH_RFC7919_GROUPS is not set
-CONFIG_CRYPTO_ECC=m
-CONFIG_CRYPTO_ECDH=m
-# CONFIG_CRYPTO_ECDSA is not set
-# CONFIG_CRYPTO_ECRDSA is not set
-# CONFIG_CRYPTO_SM2 is not set
-# CONFIG_CRYPTO_CURVE25519 is not set
-# end of Public-key cryptography
-
-#
-# Block ciphers
-#
-CONFIG_CRYPTO_AES=y
-# CONFIG_CRYPTO_AES_TI is not set
-CONFIG_CRYPTO_ANUBIS=m
-# CONFIG_CRYPTO_ARIA is not set
-CONFIG_CRYPTO_BLOWFISH=m
-CONFIG_CRYPTO_BLOWFISH_COMMON=m
-CONFIG_CRYPTO_CAMELLIA=m
-CONFIG_CRYPTO_CAST_COMMON=m
-CONFIG_CRYPTO_CAST5=m
-CONFIG_CRYPTO_CAST6=m
-CONFIG_CRYPTO_DES=m
-CONFIG_CRYPTO_FCRYPT=m
-CONFIG_CRYPTO_KHAZAD=m
-CONFIG_CRYPTO_SEED=m
-CONFIG_CRYPTO_SERPENT=m
-# CONFIG_CRYPTO_SM4_GENERIC is not set
-CONFIG_CRYPTO_TEA=m
-CONFIG_CRYPTO_TWOFISH=m
-CONFIG_CRYPTO_TWOFISH_COMMON=m
-# end of Block ciphers
-
-#
-# Length-preserving ciphers and modes
-#
-# CONFIG_CRYPTO_ADIANTUM is not set
-CONFIG_CRYPTO_ARC4=m
-CONFIG_CRYPTO_CHACHA20=m
-CONFIG_CRYPTO_CBC=y
-CONFIG_CRYPTO_CFB=y
-CONFIG_CRYPTO_CTR=y
-CONFIG_CRYPTO_CTS=m
-CONFIG_CRYPTO_ECB=y
-# CONFIG_CRYPTO_HCTR2 is not set
-# CONFIG_CRYPTO_KEYWRAP is not set
-CONFIG_CRYPTO_LRW=m
-# CONFIG_CRYPTO_OFB is not set
-CONFIG_CRYPTO_PCBC=m
-CONFIG_CRYPTO_XTS=m
-# end of Length-preserving ciphers and modes
-
-#
-# AEAD (authenticated encryption with associated data) ciphers
-#
-# CONFIG_CRYPTO_AEGIS128 is not set
-# CONFIG_CRYPTO_CHACHA20POLY1305 is not set
-CONFIG_CRYPTO_CCM=m
-CONFIG_CRYPTO_GCM=y
-CONFIG_CRYPTO_SEQIV=y
-CONFIG_CRYPTO_ECHAINIV=m
-CONFIG_CRYPTO_ESSIV=m
-# end of AEAD (authenticated encryption with associated data) ciphers
-
-#
-# Hashes, digests, and MACs
-#
-CONFIG_CRYPTO_BLAKE2B=m
-CONFIG_CRYPTO_CMAC=m
-CONFIG_CRYPTO_GHASH=y
-CONFIG_CRYPTO_HMAC=y
-CONFIG_CRYPTO_MD4=m
-CONFIG_CRYPTO_MD5=y
-CONFIG_CRYPTO_MICHAEL_MIC=m
-# CONFIG_CRYPTO_POLY1305 is not set
-CONFIG_CRYPTO_RMD160=m
-CONFIG_CRYPTO_SHA1=y
-CONFIG_CRYPTO_SHA256=y
-CONFIG_CRYPTO_SHA512=y
-CONFIG_CRYPTO_SHA3=m
-CONFIG_CRYPTO_SM3=m
-CONFIG_CRYPTO_SM3_GENERIC=m
-# CONFIG_CRYPTO_STREEBOG is not set
-CONFIG_CRYPTO_VMAC=m
-CONFIG_CRYPTO_WP512=m
-CONFIG_CRYPTO_XCBC=m
-CONFIG_CRYPTO_XXHASH=m
-# end of Hashes, digests, and MACs
-
-#
-# CRCs (cyclic redundancy checks)
-#
-CONFIG_CRYPTO_CRC32C=y
-CONFIG_CRYPTO_CRC32=m
-CONFIG_CRYPTO_CRCT10DIF=y
-CONFIG_CRYPTO_CRC64_ROCKSOFT=m
-# end of CRCs (cyclic redundancy checks)
-
-#
-# Compression
-#
-CONFIG_CRYPTO_DEFLATE=y
-CONFIG_CRYPTO_LZO=y
-# CONFIG_CRYPTO_842 is not set
-# CONFIG_CRYPTO_LZ4 is not set
-# CONFIG_CRYPTO_LZ4HC is not set
-# CONFIG_CRYPTO_ZSTD is not set
-# end of Compression
-
-#
-# Random number generation
-#
-CONFIG_CRYPTO_ANSI_CPRNG=m
-CONFIG_CRYPTO_DRBG_MENU=y
-CONFIG_CRYPTO_DRBG_HMAC=y
-CONFIG_CRYPTO_DRBG_HASH=y
-CONFIG_CRYPTO_DRBG_CTR=y
-CONFIG_CRYPTO_DRBG=y
-CONFIG_CRYPTO_JITTERENTROPY=y
-# end of Random number generation
-
-#
-# Userspace interface
-#
-CONFIG_CRYPTO_USER_API=y
-CONFIG_CRYPTO_USER_API_HASH=y
-CONFIG_CRYPTO_USER_API_SKCIPHER=y
-CONFIG_CRYPTO_USER_API_RNG=y
-# CONFIG_CRYPTO_USER_API_RNG_CAVP is not set
-CONFIG_CRYPTO_USER_API_AEAD=y
-CONFIG_CRYPTO_USER_API_ENABLE_OBSOLETE=y
-# CONFIG_CRYPTO_STATS is not set
-# end of Userspace interface
-
-CONFIG_CRYPTO_HASH_INFO=y
-
-#
-# Accelerated Cryptographic Algorithms for CPU (x86)
-#
-# CONFIG_CRYPTO_CURVE25519_X86 is not set
-CONFIG_CRYPTO_AES_NI_INTEL=y
-CONFIG_CRYPTO_BLOWFISH_X86_64=m
-CONFIG_CRYPTO_CAMELLIA_X86_64=m
-CONFIG_CRYPTO_CAMELLIA_AESNI_AVX_X86_64=m
-CONFIG_CRYPTO_CAMELLIA_AESNI_AVX2_X86_64=m
-CONFIG_CRYPTO_CAST5_AVX_X86_64=m
-CONFIG_CRYPTO_CAST6_AVX_X86_64=m
-# CONFIG_CRYPTO_DES3_EDE_X86_64 is not set
-CONFIG_CRYPTO_SERPENT_SSE2_X86_64=m
-CONFIG_CRYPTO_SERPENT_AVX_X86_64=m
-CONFIG_CRYPTO_SERPENT_AVX2_X86_64=m
-# CONFIG_CRYPTO_SM4_AESNI_AVX_X86_64 is not set
-# CONFIG_CRYPTO_SM4_AESNI_AVX2_X86_64 is not set
-CONFIG_CRYPTO_TWOFISH_X86_64=m
-CONFIG_CRYPTO_TWOFISH_X86_64_3WAY=m
-CONFIG_CRYPTO_TWOFISH_AVX_X86_64=m
-# CONFIG_CRYPTO_ARIA_AESNI_AVX_X86_64 is not set
-CONFIG_CRYPTO_CHACHA20_X86_64=m
-# CONFIG_CRYPTO_AEGIS128_AESNI_SSE2 is not set
-# CONFIG_CRYPTO_NHPOLY1305_SSE2 is not set
-# CONFIG_CRYPTO_NHPOLY1305_AVX2 is not set
-# CONFIG_CRYPTO_BLAKE2S_X86 is not set
-# CONFIG_CRYPTO_POLYVAL_CLMUL_NI is not set
-# CONFIG_CRYPTO_POLY1305_X86_64 is not set
-CONFIG_CRYPTO_SHA1_SSSE3=y
-CONFIG_CRYPTO_SHA256_SSSE3=y
-CONFIG_CRYPTO_SHA512_SSSE3=m
-# CONFIG_CRYPTO_SM3_AVX_X86_64 is not set
-CONFIG_CRYPTO_GHASH_CLMUL_NI_INTEL=m
-CONFIG_CRYPTO_CRC32C_INTEL=m
-CONFIG_CRYPTO_CRC32_PCLMUL=m
-CONFIG_CRYPTO_CRCT10DIF_PCLMUL=m
-# end of Accelerated Cryptographic Algorithms for CPU (x86)
-
-CONFIG_CRYPTO_HW=y
-CONFIG_CRYPTO_DEV_PADLOCK=m
-CONFIG_CRYPTO_DEV_PADLOCK_AES=m
-CONFIG_CRYPTO_DEV_PADLOCK_SHA=m
-# CONFIG_CRYPTO_DEV_ATMEL_ECC is not set
-# CONFIG_CRYPTO_DEV_ATMEL_SHA204A is not set
-CONFIG_CRYPTO_DEV_CCP=y
-CONFIG_CRYPTO_DEV_QAT=m
-CONFIG_CRYPTO_DEV_QAT_DH895xCC=m
-CONFIG_CRYPTO_DEV_QAT_C3XXX=m
-CONFIG_CRYPTO_DEV_QAT_C62X=m
-# CONFIG_CRYPTO_DEV_QAT_4XXX is not set
-CONFIG_CRYPTO_DEV_QAT_DH895xCCVF=m
-CONFIG_CRYPTO_DEV_QAT_C3XXXVF=m
-CONFIG_CRYPTO_DEV_QAT_C62XVF=m
-CONFIG_CRYPTO_DEV_NITROX=m
-CONFIG_CRYPTO_DEV_NITROX_CNN55XX=m
-# CONFIG_CRYPTO_DEV_VIRTIO is not set
-# CONFIG_CRYPTO_DEV_SAFEXCEL is not set
-# CONFIG_CRYPTO_DEV_AMLOGIC_GXL is not set
-CONFIG_ASYMMETRIC_KEY_TYPE=y
-CONFIG_ASYMMETRIC_PUBLIC_KEY_SUBTYPE=y
-CONFIG_X509_CERTIFICATE_PARSER=y
-# CONFIG_PKCS8_PRIVATE_KEY_PARSER is not set
-CONFIG_PKCS7_MESSAGE_PARSER=y
-# CONFIG_PKCS7_TEST_KEY is not set
-CONFIG_SIGNED_PE_FILE_VERIFICATION=y
-# CONFIG_FIPS_SIGNATURE_SELFTEST is not set
-
-#
-# Certificates for signature checking
-#
-CONFIG_MODULE_SIG_KEY="certs/signing_key.pem"
-CONFIG_MODULE_SIG_KEY_TYPE_RSA=y
-# CONFIG_MODULE_SIG_KEY_TYPE_ECDSA is not set
-CONFIG_SYSTEM_TRUSTED_KEYRING=y
-CONFIG_SYSTEM_TRUSTED_KEYS=""
-# CONFIG_SYSTEM_EXTRA_CERTIFICATE is not set
-# CONFIG_SECONDARY_TRUSTED_KEYRING is not set
-CONFIG_SYSTEM_BLACKLIST_KEYRING=y
-CONFIG_SYSTEM_BLACKLIST_HASH_LIST=""
-# CONFIG_SYSTEM_REVOCATION_LIST is not set
-# CONFIG_SYSTEM_BLACKLIST_AUTH_UPDATE is not set
-# end of Certificates for signature checking
-
-CONFIG_BINARY_PRINTF=y
-
-#
-# Library routines
-#
-CONFIG_RAID6_PQ=m
-CONFIG_RAID6_PQ_BENCHMARK=y
-# CONFIG_PACKING is not set
-CONFIG_BITREVERSE=y
-CONFIG_GENERIC_STRNCPY_FROM_USER=y
-CONFIG_GENERIC_STRNLEN_USER=y
-CONFIG_GENERIC_NET_UTILS=y
-CONFIG_CORDIC=m
-# CONFIG_PRIME_NUMBERS is not set
-CONFIG_RATIONAL=y
-CONFIG_GENERIC_PCI_IOMAP=y
-CONFIG_GENERIC_IOMAP=y
-CONFIG_ARCH_USE_CMPXCHG_LOCKREF=y
-CONFIG_ARCH_HAS_FAST_MULTIPLIER=y
-CONFIG_ARCH_USE_SYM_ANNOTATIONS=y
-
-#
-# Crypto library routines
-#
-CONFIG_CRYPTO_LIB_UTILS=y
-CONFIG_CRYPTO_LIB_AES=y
-CONFIG_CRYPTO_LIB_ARC4=m
-CONFIG_CRYPTO_LIB_GF128MUL=y
-CONFIG_CRYPTO_LIB_BLAKE2S_GENERIC=y
-CONFIG_CRYPTO_ARCH_HAVE_LIB_CHACHA=m
-CONFIG_CRYPTO_LIB_CHACHA_GENERIC=m
-# CONFIG_CRYPTO_LIB_CHACHA is not set
-# CONFIG_CRYPTO_LIB_CURVE25519 is not set
-CONFIG_CRYPTO_LIB_DES=m
-CONFIG_CRYPTO_LIB_POLY1305_RSIZE=11
-# CONFIG_CRYPTO_LIB_POLY1305 is not set
-# CONFIG_CRYPTO_LIB_CHACHA20POLY1305 is not set
-CONFIG_CRYPTO_LIB_SHA1=y
-CONFIG_CRYPTO_LIB_SHA256=y
-# end of Crypto library routines
-
-CONFIG_CRC_CCITT=y
-CONFIG_CRC16=y
-CONFIG_CRC_T10DIF=y
-CONFIG_CRC64_ROCKSOFT=m
-CONFIG_CRC_ITU_T=m
-CONFIG_CRC32=y
-# CONFIG_CRC32_SELFTEST is not set
-CONFIG_CRC32_SLICEBY8=y
-# CONFIG_CRC32_SLICEBY4 is not set
-# CONFIG_CRC32_SARWATE is not set
-# CONFIG_CRC32_BIT is not set
-CONFIG_CRC64=m
-# CONFIG_CRC4 is not set
-CONFIG_CRC7=m
-CONFIG_LIBCRC32C=m
-CONFIG_CRC8=m
-CONFIG_XXHASH=y
-# CONFIG_RANDOM32_SELFTEST is not set
-CONFIG_ZLIB_INFLATE=y
-CONFIG_ZLIB_DEFLATE=y
-CONFIG_LZO_COMPRESS=y
-CONFIG_LZO_DECOMPRESS=y
-CONFIG_LZ4_DECOMPRESS=y
-CONFIG_ZSTD_COMMON=y
-CONFIG_ZSTD_COMPRESS=m
-CONFIG_ZSTD_DECOMPRESS=y
-CONFIG_XZ_DEC=y
-CONFIG_XZ_DEC_X86=y
-CONFIG_XZ_DEC_POWERPC=y
-CONFIG_XZ_DEC_IA64=y
-CONFIG_XZ_DEC_ARM=y
-CONFIG_XZ_DEC_ARMTHUMB=y
-CONFIG_XZ_DEC_SPARC=y
-# CONFIG_XZ_DEC_MICROLZMA is not set
-CONFIG_XZ_DEC_BCJ=y
-# CONFIG_XZ_DEC_TEST is not set
-CONFIG_DECOMPRESS_GZIP=y
-CONFIG_DECOMPRESS_BZIP2=y
-CONFIG_DECOMPRESS_LZMA=y
-CONFIG_DECOMPRESS_XZ=y
-CONFIG_DECOMPRESS_LZO=y
-CONFIG_DECOMPRESS_LZ4=y
-CONFIG_DECOMPRESS_ZSTD=y
-CONFIG_GENERIC_ALLOCATOR=y
-CONFIG_REED_SOLOMON=m
-CONFIG_REED_SOLOMON_ENC8=y
-CONFIG_REED_SOLOMON_DEC8=y
-CONFIG_TEXTSEARCH=y
-CONFIG_TEXTSEARCH_KMP=m
-CONFIG_TEXTSEARCH_BM=m
-CONFIG_TEXTSEARCH_FSM=m
-CONFIG_INTERVAL_TREE=y
-CONFIG_XARRAY_MULTI=y
-CONFIG_ASSOCIATIVE_ARRAY=y
-CONFIG_HAS_IOMEM=y
-CONFIG_HAS_IOPORT_MAP=y
-CONFIG_HAS_DMA=y
-CONFIG_DMA_OPS=y
-CONFIG_NEED_SG_DMA_LENGTH=y
-CONFIG_NEED_DMA_MAP_STATE=y
-CONFIG_ARCH_DMA_ADDR_T_64BIT=y
-CONFIG_ARCH_HAS_FORCE_DMA_UNENCRYPTED=y
-CONFIG_SWIOTLB=y
-CONFIG_DMA_CMA=y
-# CONFIG_DMA_PERNUMA_CMA is not set
-
-#
-# Default contiguous memory area size:
-#
-CONFIG_CMA_SIZE_MBYTES=200
-CONFIG_CMA_SIZE_SEL_MBYTES=y
-# CONFIG_CMA_SIZE_SEL_PERCENTAGE is not set
-# CONFIG_CMA_SIZE_SEL_MIN is not set
-# CONFIG_CMA_SIZE_SEL_MAX is not set
-CONFIG_CMA_ALIGNMENT=8
-# CONFIG_DMA_API_DEBUG is not set
-# CONFIG_DMA_MAP_BENCHMARK is not set
-CONFIG_SGL_ALLOC=y
-CONFIG_CHECK_SIGNATURE=y
-CONFIG_CPUMASK_OFFSTACK=y
-# CONFIG_FORCE_NR_CPUS is not set
-CONFIG_CPU_RMAP=y
-CONFIG_DQL=y
-CONFIG_GLOB=y
-# CONFIG_GLOB_SELFTEST is not set
-CONFIG_NLATTR=y
-CONFIG_CLZ_TAB=y
-CONFIG_IRQ_POLL=y
-CONFIG_MPILIB=y
-CONFIG_SIGNATURE=y
-CONFIG_DIMLIB=y
-CONFIG_OID_REGISTRY=y
-CONFIG_UCS2_STRING=y
-CONFIG_HAVE_GENERIC_VDSO=y
-CONFIG_GENERIC_GETTIMEOFDAY=y
-CONFIG_GENERIC_VDSO_TIME_NS=y
-CONFIG_FONT_SUPPORT=y
-# CONFIG_FONTS is not set
-CONFIG_FONT_8x8=y
-CONFIG_FONT_8x16=y
-CONFIG_SG_POOL=y
-CONFIG_ARCH_HAS_PMEM_API=y
-CONFIG_MEMREGION=y
-CONFIG_ARCH_HAS_CPU_CACHE_INVALIDATE_MEMREGION=y
-CONFIG_ARCH_HAS_UACCESS_FLUSHCACHE=y
-CONFIG_ARCH_HAS_COPY_MC=y
-CONFIG_ARCH_STACKWALK=y
-CONFIG_STACKDEPOT=y
-CONFIG_STACKDEPOT_ALWAYS_INIT=y
-CONFIG_SBITMAP=y
-# end of Library routines
-
-CONFIG_ASN1_ENCODER=y
-
-#
-# Kernel hacking
-#
-
-#
-# printk and dmesg options
-#
-CONFIG_PRINTK_TIME=y
-CONFIG_PRINTK_CALLER=y
-# CONFIG_STACKTRACE_BUILD_ID is not set
-CONFIG_CONSOLE_LOGLEVEL_DEFAULT=7
-CONFIG_CONSOLE_LOGLEVEL_QUIET=4
-CONFIG_MESSAGE_LOGLEVEL_DEFAULT=4
-CONFIG_BOOT_PRINTK_DELAY=y
-CONFIG_DYNAMIC_DEBUG=y
-CONFIG_DYNAMIC_DEBUG_CORE=y
-CONFIG_SYMBOLIC_ERRNAME=y
-CONFIG_DEBUG_BUGVERBOSE=y
-# end of printk and dmesg options
-
-CONFIG_DEBUG_KERNEL=y
-CONFIG_DEBUG_MISC=y
-
-#
-# Compile-time checks and compiler options
-#
-CONFIG_DEBUG_INFO=y
-CONFIG_AS_HAS_NON_CONST_LEB128=y
-# CONFIG_DEBUG_INFO_NONE is not set
-# CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT is not set
-CONFIG_DEBUG_INFO_DWARF4=y
-# CONFIG_DEBUG_INFO_DWARF5 is not set
-CONFIG_DEBUG_INFO_REDUCED=y
-CONFIG_DEBUG_INFO_COMPRESSED_NONE=y
-# CONFIG_DEBUG_INFO_COMPRESSED_ZLIB is not set
-# CONFIG_DEBUG_INFO_SPLIT is not set
-CONFIG_PAHOLE_HAS_SPLIT_BTF=y
-# CONFIG_GDB_SCRIPTS is not set
-CONFIG_FRAME_WARN=8192
-CONFIG_STRIP_ASM_SYMS=y
-# CONFIG_READABLE_ASM is not set
-# CONFIG_HEADERS_INSTALL is not set
-CONFIG_DEBUG_SECTION_MISMATCH=y
-CONFIG_SECTION_MISMATCH_WARN_ONLY=y
-# CONFIG_DEBUG_FORCE_FUNCTION_ALIGN_64B is not set
-CONFIG_OBJTOOL=y
-# CONFIG_VMLINUX_MAP is not set
-# CONFIG_DEBUG_FORCE_WEAK_PER_CPU is not set
-# end of Compile-time checks and compiler options
-
-#
-# Generic Kernel Debugging Instruments
-#
-CONFIG_MAGIC_SYSRQ=y
-CONFIG_MAGIC_SYSRQ_DEFAULT_ENABLE=0x1
-CONFIG_MAGIC_SYSRQ_SERIAL=y
-CONFIG_MAGIC_SYSRQ_SERIAL_SEQUENCE=""
-CONFIG_DEBUG_FS=y
-CONFIG_DEBUG_FS_ALLOW_ALL=y
-# CONFIG_DEBUG_FS_DISALLOW_MOUNT is not set
-# CONFIG_DEBUG_FS_ALLOW_NONE is not set
-CONFIG_HAVE_ARCH_KGDB=y
-# CONFIG_KGDB is not set
-CONFIG_ARCH_HAS_UBSAN_SANITIZE_ALL=y
-CONFIG_UBSAN=y
-# CONFIG_UBSAN_TRAP is not set
-CONFIG_CC_HAS_UBSAN_BOUNDS=y
-CONFIG_UBSAN_BOUNDS=y
-CONFIG_UBSAN_ONLY_BOUNDS=y
-CONFIG_UBSAN_SHIFT=y
-# CONFIG_UBSAN_DIV_ZERO is not set
-# CONFIG_UBSAN_BOOL is not set
-# CONFIG_UBSAN_ENUM is not set
-# CONFIG_UBSAN_ALIGNMENT is not set
-CONFIG_UBSAN_SANITIZE_ALL=y
-# CONFIG_TEST_UBSAN is not set
-CONFIG_HAVE_ARCH_KCSAN=y
-CONFIG_HAVE_KCSAN_COMPILER=y
-# end of Generic Kernel Debugging Instruments
-
-#
-# Networking Debugging
-#
-# CONFIG_NET_DEV_REFCNT_TRACKER is not set
-# CONFIG_NET_NS_REFCNT_TRACKER is not set
-# CONFIG_DEBUG_NET is not set
-# end of Networking Debugging
-
-#
-# Memory Debugging
-#
-CONFIG_PAGE_EXTENSION=y
-# CONFIG_DEBUG_PAGEALLOC is not set
-CONFIG_SLUB_DEBUG=y
-# CONFIG_SLUB_DEBUG_ON is not set
-CONFIG_PAGE_OWNER=y
-# CONFIG_PAGE_TABLE_CHECK is not set
-# CONFIG_PAGE_POISONING is not set
-# CONFIG_DEBUG_PAGE_REF is not set
-# CONFIG_DEBUG_RODATA_TEST is not set
-CONFIG_ARCH_HAS_DEBUG_WX=y
-# CONFIG_DEBUG_WX is not set
-CONFIG_GENERIC_PTDUMP=y
-# CONFIG_PTDUMP_DEBUGFS is not set
-# CONFIG_DEBUG_OBJECTS is not set
-# CONFIG_SHRINKER_DEBUG is not set
-CONFIG_HAVE_DEBUG_KMEMLEAK=y
-# CONFIG_DEBUG_KMEMLEAK is not set
-# CONFIG_DEBUG_STACK_USAGE is not set
-# CONFIG_SCHED_STACK_END_CHECK is not set
-CONFIG_ARCH_HAS_DEBUG_VM_PGTABLE=y
-# CONFIG_DEBUG_VM is not set
-# CONFIG_DEBUG_VM_PGTABLE is not set
-CONFIG_ARCH_HAS_DEBUG_VIRTUAL=y
-# CONFIG_DEBUG_VIRTUAL is not set
-CONFIG_DEBUG_MEMORY_INIT=y
-# CONFIG_DEBUG_PER_CPU_MAPS is not set
-CONFIG_HAVE_ARCH_KASAN=y
-CONFIG_HAVE_ARCH_KASAN_VMALLOC=y
-CONFIG_CC_HAS_KASAN_GENERIC=y
-CONFIG_CC_HAS_WORKING_NOSANITIZE_ADDRESS=y
-CONFIG_KASAN=y
-CONFIG_KASAN_GENERIC=y
-# CONFIG_KASAN_OUTLINE is not set
-CONFIG_KASAN_INLINE=y
-CONFIG_KASAN_STACK=y
-CONFIG_KASAN_VMALLOC=y
-# CONFIG_KASAN_MODULE_TEST is not set
-CONFIG_HAVE_ARCH_KFENCE=y
-# CONFIG_KFENCE is not set
-CONFIG_HAVE_ARCH_KMSAN=y
-# end of Memory Debugging
-
-CONFIG_DEBUG_SHIRQ=y
-
-#
-# Debug Oops, Lockups and Hangs
-#
-CONFIG_PANIC_ON_OOPS=y
-CONFIG_PANIC_ON_OOPS_VALUE=1
-CONFIG_PANIC_TIMEOUT=0
-CONFIG_LOCKUP_DETECTOR=y
-CONFIG_SOFTLOCKUP_DETECTOR=y
-# CONFIG_BOOTPARAM_SOFTLOCKUP_PANIC is not set
-CONFIG_HARDLOCKUP_DETECTOR_PERF=y
-CONFIG_HARDLOCKUP_CHECK_TIMESTAMP=y
-CONFIG_HARDLOCKUP_DETECTOR=y
-CONFIG_BOOTPARAM_HARDLOCKUP_PANIC=y
-CONFIG_DETECT_HUNG_TASK=y
-CONFIG_DEFAULT_HUNG_TASK_TIMEOUT=480
-# CONFIG_BOOTPARAM_HUNG_TASK_PANIC is not set
-CONFIG_WQ_WATCHDOG=y
-# CONFIG_TEST_LOCKUP is not set
-# end of Debug Oops, Lockups and Hangs
-
-#
-# Scheduler Debugging
-#
-CONFIG_SCHED_DEBUG=y
-CONFIG_SCHED_INFO=y
-CONFIG_SCHEDSTATS=y
-# end of Scheduler Debugging
-
-# CONFIG_DEBUG_TIMEKEEPING is not set
-
-#
-# Lock Debugging (spinlocks, mutexes, etc...)
-#
-CONFIG_LOCK_DEBUGGING_SUPPORT=y
-# CONFIG_PROVE_LOCKING is not set
-# CONFIG_LOCK_STAT is not set
-# CONFIG_DEBUG_RT_MUTEXES is not set
-# CONFIG_DEBUG_SPINLOCK is not set
-# CONFIG_DEBUG_MUTEXES is not set
-# CONFIG_DEBUG_WW_MUTEX_SLOWPATH is not set
-# CONFIG_DEBUG_RWSEMS is not set
-# CONFIG_DEBUG_LOCK_ALLOC is not set
-CONFIG_DEBUG_ATOMIC_SLEEP=y
-# CONFIG_DEBUG_LOCKING_API_SELFTESTS is not set
-# CONFIG_LOCK_TORTURE_TEST is not set
-# CONFIG_WW_MUTEX_SELFTEST is not set
-# CONFIG_SCF_TORTURE_TEST is not set
-# CONFIG_CSD_LOCK_WAIT_DEBUG is not set
-# end of Lock Debugging (spinlocks, mutexes, etc...)
-
-# CONFIG_DEBUG_IRQFLAGS is not set
-CONFIG_STACKTRACE=y
-# CONFIG_WARN_ALL_UNSEEDED_RANDOM is not set
-# CONFIG_DEBUG_KOBJECT is not set
-
-#
-# Debug kernel data structures
-#
-CONFIG_DEBUG_LIST=y
-# CONFIG_DEBUG_PLIST is not set
-# CONFIG_DEBUG_SG is not set
-# CONFIG_DEBUG_NOTIFIERS is not set
-CONFIG_BUG_ON_DATA_CORRUPTION=y
-# CONFIG_DEBUG_MAPLE_TREE is not set
-# end of Debug kernel data structures
-
-# CONFIG_DEBUG_CREDENTIALS is not set
-
-#
-# RCU Debugging
-#
-CONFIG_TORTURE_TEST=m
-# CONFIG_RCU_SCALE_TEST is not set
-# CONFIG_RCU_TORTURE_TEST is not set
-CONFIG_RCU_REF_SCALE_TEST=m
-CONFIG_RCU_CPU_STALL_TIMEOUT=60
-CONFIG_RCU_EXP_CPU_STALL_TIMEOUT=0
-# CONFIG_RCU_TRACE is not set
-# CONFIG_RCU_EQS_DEBUG is not set
-# end of RCU Debugging
-
-# CONFIG_DEBUG_WQ_FORCE_RR_CPU is not set
-# CONFIG_CPU_HOTPLUG_STATE_CONTROL is not set
-CONFIG_LATENCYTOP=y
-# CONFIG_DEBUG_CGROUP_REF is not set
-CONFIG_USER_STACKTRACE_SUPPORT=y
-CONFIG_NOP_TRACER=y
-CONFIG_HAVE_RETHOOK=y
-CONFIG_RETHOOK=y
-CONFIG_HAVE_FUNCTION_TRACER=y
-CONFIG_HAVE_FUNCTION_GRAPH_TRACER=y
-CONFIG_HAVE_DYNAMIC_FTRACE=y
-CONFIG_HAVE_DYNAMIC_FTRACE_WITH_REGS=y
-CONFIG_HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS=y
-CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS=y
-CONFIG_HAVE_DYNAMIC_FTRACE_NO_PATCHABLE=y
-CONFIG_HAVE_FTRACE_MCOUNT_RECORD=y
-CONFIG_HAVE_SYSCALL_TRACEPOINTS=y
-CONFIG_HAVE_FENTRY=y
-CONFIG_HAVE_OBJTOOL_MCOUNT=y
-CONFIG_HAVE_OBJTOOL_NOP_MCOUNT=y
-CONFIG_HAVE_C_RECORDMCOUNT=y
-CONFIG_HAVE_BUILDTIME_MCOUNT_SORT=y
-CONFIG_BUILDTIME_MCOUNT_SORT=y
-CONFIG_TRACER_MAX_TRACE=y
-CONFIG_TRACE_CLOCK=y
-CONFIG_RING_BUFFER=y
-CONFIG_EVENT_TRACING=y
-CONFIG_CONTEXT_SWITCH_TRACER=y
-CONFIG_TRACING=y
-CONFIG_GENERIC_TRACER=y
-CONFIG_TRACING_SUPPORT=y
-CONFIG_FTRACE=y
-# CONFIG_BOOTTIME_TRACING is not set
-CONFIG_FUNCTION_TRACER=y
-CONFIG_FUNCTION_GRAPH_TRACER=y
-CONFIG_DYNAMIC_FTRACE=y
-CONFIG_DYNAMIC_FTRACE_WITH_REGS=y
-CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS=y
-CONFIG_DYNAMIC_FTRACE_WITH_ARGS=y
-# CONFIG_FPROBE is not set
-CONFIG_FUNCTION_PROFILER=y
-CONFIG_STACK_TRACER=y
-# CONFIG_IRQSOFF_TRACER is not set
-CONFIG_SCHED_TRACER=y
-CONFIG_HWLAT_TRACER=y
-# CONFIG_OSNOISE_TRACER is not set
-# CONFIG_TIMERLAT_TRACER is not set
-# CONFIG_MMIOTRACE is not set
-CONFIG_FTRACE_SYSCALLS=y
-CONFIG_TRACER_SNAPSHOT=y
-# CONFIG_TRACER_SNAPSHOT_PER_CPU_SWAP is not set
-CONFIG_BRANCH_PROFILE_NONE=y
-# CONFIG_PROFILE_ANNOTATED_BRANCHES is not set
-# CONFIG_BLK_DEV_IO_TRACE is not set
-CONFIG_KPROBE_EVENTS=y
-# CONFIG_KPROBE_EVENTS_ON_NOTRACE is not set
-CONFIG_UPROBE_EVENTS=y
-CONFIG_BPF_EVENTS=y
-CONFIG_DYNAMIC_EVENTS=y
-CONFIG_PROBE_EVENTS=y
-CONFIG_BPF_KPROBE_OVERRIDE=y
-CONFIG_FTRACE_MCOUNT_RECORD=y
-CONFIG_FTRACE_MCOUNT_USE_CC=y
-CONFIG_TRACING_MAP=y
-CONFIG_SYNTH_EVENTS=y
-CONFIG_HIST_TRIGGERS=y
-# CONFIG_TRACE_EVENT_INJECT is not set
-# CONFIG_TRACEPOINT_BENCHMARK is not set
-CONFIG_RING_BUFFER_BENCHMARK=m
-# CONFIG_TRACE_EVAL_MAP_FILE is not set
-# CONFIG_FTRACE_RECORD_RECURSION is not set
-# CONFIG_FTRACE_STARTUP_TEST is not set
-# CONFIG_FTRACE_SORT_STARTUP_TEST is not set
-# CONFIG_RING_BUFFER_STARTUP_TEST is not set
-# CONFIG_RING_BUFFER_VALIDATE_TIME_DELTAS is not set
-# CONFIG_PREEMPTIRQ_DELAY_TEST is not set
-# CONFIG_SYNTH_EVENT_GEN_TEST is not set
-# CONFIG_KPROBE_EVENT_GEN_TEST is not set
-# CONFIG_HIST_TRIGGERS_DEBUG is not set
-# CONFIG_RV is not set
-CONFIG_PROVIDE_OHCI1394_DMA_INIT=y
-# CONFIG_SAMPLES is not set
-CONFIG_HAVE_SAMPLE_FTRACE_DIRECT=y
-CONFIG_HAVE_SAMPLE_FTRACE_DIRECT_MULTI=y
-CONFIG_ARCH_HAS_DEVMEM_IS_ALLOWED=y
-CONFIG_STRICT_DEVMEM=y
-# CONFIG_IO_STRICT_DEVMEM is not set
-
-#
-# x86 Debugging
-#
-CONFIG_EARLY_PRINTK_USB=y
-CONFIG_X86_VERBOSE_BOOTUP=y
-CONFIG_EARLY_PRINTK=y
-CONFIG_EARLY_PRINTK_DBGP=y
-CONFIG_EARLY_PRINTK_USB_XDBC=y
-# CONFIG_EFI_PGT_DUMP is not set
-# CONFIG_DEBUG_TLBFLUSH is not set
-CONFIG_HAVE_MMIOTRACE_SUPPORT=y
-# CONFIG_X86_DECODER_SELFTEST is not set
-CONFIG_IO_DELAY_0X80=y
-# CONFIG_IO_DELAY_0XED is not set
-# CONFIG_IO_DELAY_UDELAY is not set
-# CONFIG_IO_DELAY_NONE is not set
-CONFIG_DEBUG_BOOT_PARAMS=y
-# CONFIG_CPA_DEBUG is not set
-# CONFIG_DEBUG_ENTRY is not set
-# CONFIG_DEBUG_NMI_SELFTEST is not set
-# CONFIG_X86_DEBUG_FPU is not set
-# CONFIG_PUNIT_ATOM_DEBUG is not set
-CONFIG_UNWINDER_ORC=y
-# CONFIG_UNWINDER_FRAME_POINTER is not set
-# end of x86 Debugging
-
-#
-# Kernel Testing and Coverage
-#
-# CONFIG_KUNIT is not set
-# CONFIG_NOTIFIER_ERROR_INJECTION is not set
-CONFIG_FUNCTION_ERROR_INJECTION=y
-CONFIG_FAULT_INJECTION=y
-# CONFIG_FAILSLAB is not set
-# CONFIG_FAIL_PAGE_ALLOC is not set
-# CONFIG_FAULT_INJECTION_USERCOPY is not set
-CONFIG_FAIL_MAKE_REQUEST=y
-# CONFIG_FAIL_IO_TIMEOUT is not set
-# CONFIG_FAIL_FUTEX is not set
-CONFIG_FAULT_INJECTION_DEBUG_FS=y
-# CONFIG_FAIL_FUNCTION is not set
-# CONFIG_FAIL_MMC_REQUEST is not set
-# CONFIG_FAIL_SUNRPC is not set
-# CONFIG_FAULT_INJECTION_STACKTRACE_FILTER is not set
-CONFIG_ARCH_HAS_KCOV=y
-CONFIG_CC_HAS_SANCOV_TRACE_PC=y
-# CONFIG_KCOV is not set
-CONFIG_RUNTIME_TESTING_MENU=y
-# CONFIG_LKDTM is not set
-# CONFIG_TEST_MIN_HEAP is not set
-# CONFIG_TEST_DIV64 is not set
-# CONFIG_BACKTRACE_SELF_TEST is not set
-# CONFIG_TEST_REF_TRACKER is not set
-# CONFIG_RBTREE_TEST is not set
-# CONFIG_REED_SOLOMON_TEST is not set
-# CONFIG_INTERVAL_TREE_TEST is not set
-# CONFIG_PERCPU_TEST is not set
-# CONFIG_ATOMIC64_SELFTEST is not set
-# CONFIG_ASYNC_RAID6_TEST is not set
-# CONFIG_TEST_HEXDUMP is not set
-# CONFIG_STRING_SELFTEST is not set
-# CONFIG_TEST_STRING_HELPERS is not set
-# CONFIG_TEST_KSTRTOX is not set
-# CONFIG_TEST_PRINTF is not set
-# CONFIG_TEST_SCANF is not set
-# CONFIG_TEST_BITMAP is not set
-# CONFIG_TEST_UUID is not set
-# CONFIG_TEST_XARRAY is not set
-# CONFIG_TEST_MAPLE_TREE is not set
-# CONFIG_TEST_RHASHTABLE is not set
-# CONFIG_TEST_IDA is not set
-# CONFIG_TEST_LKM is not set
-# CONFIG_TEST_BITOPS is not set
-# CONFIG_TEST_VMALLOC is not set
-# CONFIG_TEST_USER_COPY is not set
-CONFIG_TEST_BPF=m
-# CONFIG_TEST_BLACKHOLE_DEV is not set
-# CONFIG_FIND_BIT_BENCHMARK is not set
-# CONFIG_TEST_FIRMWARE is not set
-# CONFIG_TEST_SYSCTL is not set
-# CONFIG_TEST_UDELAY is not set
-# CONFIG_TEST_STATIC_KEYS is not set
-# CONFIG_TEST_DYNAMIC_DEBUG is not set
-# CONFIG_TEST_KMOD is not set
-# CONFIG_TEST_MEMCAT_P is not set
-# CONFIG_TEST_LIVEPATCH is not set
-# CONFIG_TEST_MEMINIT is not set
-# CONFIG_TEST_HMM is not set
-# CONFIG_TEST_FREE_PAGES is not set
-# CONFIG_TEST_FPU is not set
-# CONFIG_TEST_CLOCKSOURCE_WATCHDOG is not set
-CONFIG_ARCH_USE_MEMTEST=y
-# CONFIG_MEMTEST is not set
-# end of Kernel Testing and Coverage
-
-#
-# Rust hacking
-#
-# end of Rust hacking
-# end of Kernel hacking
-
---FRFoh8W36iUgEzYB
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: attachment; filename="job-script"
-
-#!/bin/sh
-
-export_top_env()
-{
-	export suite='mdadm-selftests'
-	export testcase='mdadm-selftests'
-	export category='functional'
-	export need_memory='1G'
-	export force_reboot=1
-	export job_origin='mdadm-selftests.yaml'
-	export queue_cmdline_keys='branch
-commit
-kbuild_queue_analysis'
-	export queue='validate'
-	export testbox='lkp-hsw-d05'
-	export tbox_group='lkp-hsw-d05'
-	export submit_id='63e00980e27a88343cba1f24'
-	export job_file='/lkp/jobs/scheduled/lkp-hsw-d05/mdadm-selftests-1HDD-03-debian-11.1-x86_64-20220510.cgz-84d7d462b16dd5f0bf7c7ca9254bf81db2c952a2-20230206-78908-klygq4-5.yaml'
-	export id='d82fd6bae7092ceb3132ee47806fcbe15f44ff3a'
-	export queuer_version='/zday/lkp'
-	export model='Haswell'
-	export nr_node=1
-	export nr_cpu=8
-	export memory='16G'
-	export nr_hdd_partitions=4
-	export hdd_partitions='/dev/disk/by-id/ata-ST1000DM003-1ER162_S4Y1KZEX-part*'
-	export rootfs_partition='/dev/disk/by-id/ata-INTEL_SSDSC2BB800G4_PHWL41710019800RGN-part1'
-	export brand='Intel(R) Core(TM) i7-4790T CPU @ 2.70GHz'
-	export need_kconfig='BLK_DEV_SD
-SCSI
-{"BLOCK"=>"y"}
-SATA_AHCI
-SATA_AHCI_PLATFORM
-ATA
-{"PCI"=>"y"}
-{"MD"=>"y"}
-BLK_DEV_MD
-MD_LINEAR
-MD_RAID0
-MD_RAID1
-MD_RAID10
-MD_RAID456
-MD_MULTIPATH
-BLK_DEV_LOOP'
-	export commit='84d7d462b16dd5f0bf7c7ca9254bf81db2c952a2'
-	export netconsole_port=6687
-	export ucode='0x28'
-	export need_kconfig_hw='{"PTP_1588_CLOCK"=>"y"}
-{"E1000E"=>"y"}
-SATA_AHCI
-DRM_I915'
-	export bisect_dmesg=true
-	export kconfig='x86_64-rhel-8.3-func'
-	export enqueue_time='2023-02-06 03:54:40 +0800'
-	export _id='63e00996e27a88343cba1f26'
-	export _rt='/result/mdadm-selftests/1HDD-03/lkp-hsw-d05/debian-11.1-x86_64-20220510.cgz/x86_64-rhel-8.3-func/gcc-11/84d7d462b16dd5f0bf7c7ca9254bf81db2c952a2'
-	export user='lkp'
-	export compiler='gcc-11'
-	export LKP_SERVER='internal-lkp-server'
-	export head_commit='befbd98289bd185e7ce7da136ed8e971707e2ea7'
-	export base_commit='6d796c50f84ca79f1722bb131799e5a5710c4700'
-	export branch='ammarfaizi2-block/axboe/linux-block/for-6.3/block'
-	export rootfs='debian-11.1-x86_64-20220510.cgz'
-	export result_root='/result/mdadm-selftests/1HDD-03/lkp-hsw-d05/debian-11.1-x86_64-20220510.cgz/x86_64-rhel-8.3-func/gcc-11/84d7d462b16dd5f0bf7c7ca9254bf81db2c952a2/3'
-	export scheduler_version='/lkp/lkp/.src-20230202-171145'
-	export arch='x86_64'
-	export max_uptime=1200
-	export initrd='/osimage/debian/debian-11.1-x86_64-20220510.cgz'
-	export bootloader_append='root=/dev/ram0
-RESULT_ROOT=/result/mdadm-selftests/1HDD-03/lkp-hsw-d05/debian-11.1-x86_64-20220510.cgz/x86_64-rhel-8.3-func/gcc-11/84d7d462b16dd5f0bf7c7ca9254bf81db2c952a2/3
-BOOT_IMAGE=/pkg/linux/x86_64-rhel-8.3-func/gcc-11/84d7d462b16dd5f0bf7c7ca9254bf81db2c952a2/vmlinuz-6.2.0-rc6-00077-g84d7d462b16d
-branch=ammarfaizi2-block/axboe/linux-block/for-6.3/block
-job=/lkp/jobs/scheduled/lkp-hsw-d05/mdadm-selftests-1HDD-03-debian-11.1-x86_64-20220510.cgz-84d7d462b16dd5f0bf7c7ca9254bf81db2c952a2-20230206-78908-klygq4-5.yaml
-user=lkp
-ARCH=x86_64
-kconfig=x86_64-rhel-8.3-func
-commit=84d7d462b16dd5f0bf7c7ca9254bf81db2c952a2
-initcall_debug
-nmi_watchdog=0
-max_uptime=1200
-LKP_SERVER=internal-lkp-server
-nokaslr
-selinux=0
-debug
-apic=debug
-sysrq_always_enabled
-rcupdate.rcu_cpu_stall_timeout=100
-net.ifnames=0
-printk.devkmsg=on
-panic=-1
-softlockup_panic=1
-nmi_watchdog=panic
-oops=panic
-load_ramdisk=2
-prompt_ramdisk=0
-drbd.minor_count=8
-systemd.log_level=err
-ignore_loglevel
-console=tty0
-earlyprintk=ttyS0,115200
-console=ttyS0,115200
-vga=normal
-rw'
-	export modules_initrd='/pkg/linux/x86_64-rhel-8.3-func/gcc-11/84d7d462b16dd5f0bf7c7ca9254bf81db2c952a2/modules.cgz'
-	export bm_initrd='/osimage/deps/debian-11.1-x86_64-20220510.cgz/run-ipconfig_20220515.cgz,/osimage/deps/debian-11.1-x86_64-20220510.cgz/lkp_20220513.cgz,/osimage/deps/debian-11.1-x86_64-20220510.cgz/rsync-rootfs_20220515.cgz,/osimage/deps/debian-11.1-x86_64-20220510.cgz/mdadm-selftests_20220515.cgz,/osimage/pkg/debian-11.1-x86_64-20220510.cgz/mdadm-selftests-x86_64-5f41845-1_20220826.cgz,/osimage/deps/debian-11.1-x86_64-20220510.cgz/hw_20220526.cgz'
-	export ucode_initrd='/osimage/ucode/intel-ucode-20220804.cgz'
-	export lkp_initrd='/osimage/user/lkp/lkp-x86_64.cgz'
-	export site='inn'
-	export LKP_CGI_PORT=80
-	export LKP_CIFS_PORT=139
-	export last_kernel='4.20.0'
-	export repeat_to=6
-	export stop_repeat_if_found='mdadm-selftests.03r5assem-failed.fail'
-	export kbuild_queue_analysis=1
-	export schedule_notify_address=
-	export kernel='/pkg/linux/x86_64-rhel-8.3-func/gcc-11/84d7d462b16dd5f0bf7c7ca9254bf81db2c952a2/vmlinuz-6.2.0-rc6-00077-g84d7d462b16d'
-	export dequeue_time='2023-02-06 03:56:33 +0800'
-	export job_initrd='/lkp/jobs/scheduled/lkp-hsw-d05/mdadm-selftests-1HDD-03-debian-11.1-x86_64-20220510.cgz-84d7d462b16dd5f0bf7c7ca9254bf81db2c952a2-20230206-78908-klygq4-5.cgz'
-
-	[ -n "$LKP_SRC" ] ||
-	export LKP_SRC=/lkp/${user:-lkp}/src
-}
-
-run_job()
-{
-	echo $$ > $TMP/run-job.pid
-
-	. $LKP_SRC/lib/http.sh
-	. $LKP_SRC/lib/job.sh
-	. $LKP_SRC/lib/env.sh
-
-	export_top_env
-
-	run_setup nr_hdd=1 $LKP_SRC/setup/disk
-
-	run_monitor $LKP_SRC/monitors/wrapper kmsg
-	run_monitor $LKP_SRC/monitors/wrapper heartbeat
-	run_monitor $LKP_SRC/monitors/wrapper meminfo
-	run_monitor $LKP_SRC/monitors/wrapper oom-killer
-	run_monitor $LKP_SRC/monitors/plain/watchdog
-
-	run_test test_prefix='03' $LKP_SRC/tests/wrapper mdadm-selftests
-}
-
-extract_stats()
-{
-	export stats_part_begin=
-	export stats_part_end=
-
-	env test_prefix='03' $LKP_SRC/stats/wrapper mdadm-selftests
-	$LKP_SRC/stats/wrapper kmsg
-	$LKP_SRC/stats/wrapper meminfo
-
-	$LKP_SRC/stats/wrapper time mdadm-selftests.time
-	$LKP_SRC/stats/wrapper dmesg
-	$LKP_SRC/stats/wrapper kmsg
-	$LKP_SRC/stats/wrapper last_state
-	$LKP_SRC/stats/wrapper stderr
-	$LKP_SRC/stats/wrapper time
-}
-
-"$@"
-
---FRFoh8W36iUgEzYB
-Content-Type: application/x-xz
-Content-Disposition: attachment; filename="dmesg.xz"
-Content-Transfer-Encoding: base64
-
-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
-5HGoAAGw5AHytArO5EtqscRn+wIAAAAABFla
-
---FRFoh8W36iUgEzYB
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: attachment; filename="mdadm-selftests"
-
-2023-02-05 19:57:36 mkdir -p /var/tmp
-2023-02-05 19:57:36 mke2fs -t ext3 -b 4096 -J size=4 -q /dev/sda1
-2023-02-05 19:58:16 mount -t ext3 /dev/sda1 /var/tmp
-sed -e 's/{DEFAULT_METADATA}/1.2/g' \
--e 's,{MAP_PATH},/run/mdadm/map,g'  mdadm.8.in > mdadm.8
-/usr/bin/install -D -m 644 mdadm.8 /usr/share/man/man8/mdadm.8
-/usr/bin/install -D -m 644 mdmon.8 /usr/share/man/man8/mdmon.8
-/usr/bin/install -D -m 644 md.4 /usr/share/man/man4/md.4
-/usr/bin/install -D -m 644 mdadm.conf.5 /usr/share/man/man5/mdadm.conf.5
-/usr/bin/install -D -m 644 udev-md-raid-creating.rules /lib/udev/rules.d/01-md-raid-creating.rules
-/usr/bin/install -D -m 644 udev-md-raid-arrays.rules /lib/udev/rules.d/63-md-raid-arrays.rules
-/usr/bin/install -D -m 644 udev-md-raid-assembly.rules /lib/udev/rules.d/64-md-raid-assembly.rules
-/usr/bin/install -D -m 644 udev-md-clustered-confirm-device.rules /lib/udev/rules.d/69-md-clustered-confirm-device.rules
-/usr/bin/install -D  -m 755 mdadm /sbin/mdadm
-/usr/bin/install -D  -m 755 mdmon /sbin/mdmon
-Testing on linux-6.2.0-rc6-00077-g84d7d462b16d kernel
-/lkp/benchmarks/mdadm-selftests/tests/03assem-incr... FAILED - see /var/tmp/03assem-incr.log and /var/tmp/fail03assem-incr.log for details
-Testing on linux-6.2.0-rc6-00077-g84d7d462b16d kernel
-/lkp/benchmarks/mdadm-selftests/tests/03r0assem... FAILED - see /var/tmp/03r0assem.log and /var/tmp/fail03r0assem.log for details
-Testing on linux-6.2.0-rc6-00077-g84d7d462b16d kernel
-/lkp/benchmarks/mdadm-selftests/tests/03r5assem... FAILED - see /var/tmp/03r5assem.log and /var/tmp/fail03r5assem.log for details
-Testing on linux-6.2.0-rc6-00077-g84d7d462b16d kernel
-/lkp/benchmarks/mdadm-selftests/tests/03r5assem-failed... FAILED - see /var/tmp/03r5assem-failed.log and /var/tmp/fail03r5assem-failed.log for details
-Testing on linux-6.2.0-rc6-00077-g84d7d462b16d kernel
-/lkp/benchmarks/mdadm-selftests/tests/03r5assemV1... FAILED - see /var/tmp/03r5assemV1.log and /var/tmp/fail03r5assemV1.log for details
-
---FRFoh8W36iUgEzYB
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: attachment; filename="job.yaml"
-
----
-
-#! jobs/mdadm-selftests.yaml
-suite: mdadm-selftests
-testcase: mdadm-selftests
-category: functional
-need_memory: 1G
-disk: 1HDD
-force_reboot: 1
-mdadm-selftests:
-  test_prefix: '03'
-job_origin: mdadm-selftests.yaml
-
-#! queue options
-queue_cmdline_keys:
-- branch
-- commit
-queue: bisect
-testbox: lkp-hsw-d05
-tbox_group: lkp-hsw-d05
-submit_id: 63dfe03b75370618593f54a3
-job_file: "/lkp/jobs/scheduled/lkp-hsw-d05/mdadm-selftests-1HDD-03-debian-11.1-x86_64-20220510.cgz-84d7d462b16dd5f0bf7c7ca9254bf81db2c952a2-20230206-71769-z6vm9-0.yaml"
-id: 0df21b6e0f8b221519ea70de3758ec38002330ff
-queuer_version: "/zday/lkp"
-
-#! /db/releases/20230204235943/lkp-src/hosts/lkp-hsw-d05
-model: Haswell
-nr_node: 1
-nr_cpu: 8
-memory: 16G
-nr_hdd_partitions: 4
-hdd_partitions: "/dev/disk/by-id/ata-ST1000DM003-1ER162_S4Y1KZEX-part*"
-rootfs_partition: "/dev/disk/by-id/ata-INTEL_SSDSC2BB800G4_PHWL41710019800RGN-part1"
-brand: Intel(R) Core(TM) i7-4790T CPU @ 2.70GHz
-
-#! /db/releases/20230204235943/lkp-src/include/category/functional
-kmsg:
-heartbeat:
-meminfo:
-
-#! /db/releases/20230204235943/lkp-src/include/disk/nr_hdd
-need_kconfig:
-- BLK_DEV_SD
-- SCSI
-- BLOCK: y
-- SATA_AHCI
-- SATA_AHCI_PLATFORM
-- ATA
-- PCI: y
-- MD: y
-- BLK_DEV_MD
-- MD_LINEAR
-- MD_RAID0
-- MD_RAID1
-- MD_RAID10
-- MD_RAID456
-- MD_MULTIPATH
-- BLK_DEV_LOOP
-
-#! /db/releases/20230204235943/lkp-src/include/mdadm-selftests
-
-#! /db/releases/20230204235943/lkp-src/include/queue/cyclic
-commit: 84d7d462b16dd5f0bf7c7ca9254bf81db2c952a2
-
-#! /db/releases/20230204235943/lkp-src/include/testbox/lkp-hsw-d05
-netconsole_port: 6687
-ucode: '0x28'
-need_kconfig_hw:
-- PTP_1588_CLOCK: y
-- E1000E: y
-- SATA_AHCI
-- DRM_I915
-bisect_dmesg: true
-kconfig: x86_64-rhel-8.3-func
-enqueue_time: 2023-02-06 00:58:36.478200941 +08:00
-_id: 63dfe03b75370618593f54a3
-_rt: "/result/mdadm-selftests/1HDD-03/lkp-hsw-d05/debian-11.1-x86_64-20220510.cgz/x86_64-rhel-8.3-func/gcc-11/84d7d462b16dd5f0bf7c7ca9254bf81db2c952a2"
-
-#! schedule options
-user: lkp
-compiler: gcc-11
-LKP_SERVER: internal-lkp-server
-head_commit: befbd98289bd185e7ce7da136ed8e971707e2ea7
-base_commit: 6d796c50f84ca79f1722bb131799e5a5710c4700
-branch: linux-devel/devel-hourly-20230204-140208
-rootfs: debian-11.1-x86_64-20220510.cgz
-result_root: "/result/mdadm-selftests/1HDD-03/lkp-hsw-d05/debian-11.1-x86_64-20220510.cgz/x86_64-rhel-8.3-func/gcc-11/84d7d462b16dd5f0bf7c7ca9254bf81db2c952a2/0"
-scheduler_version: "/lkp/lkp/.src-20230202-171145"
-arch: x86_64
-max_uptime: 1200
-initrd: "/osimage/debian/debian-11.1-x86_64-20220510.cgz"
-bootloader_append:
-- root=/dev/ram0
-- RESULT_ROOT=/result/mdadm-selftests/1HDD-03/lkp-hsw-d05/debian-11.1-x86_64-20220510.cgz/x86_64-rhel-8.3-func/gcc-11/84d7d462b16dd5f0bf7c7ca9254bf81db2c952a2/0
-- BOOT_IMAGE=/pkg/linux/x86_64-rhel-8.3-func/gcc-11/84d7d462b16dd5f0bf7c7ca9254bf81db2c952a2/vmlinuz-6.2.0-rc6-00077-g84d7d462b16d
-- branch=linux-devel/devel-hourly-20230204-140208
-- job=/lkp/jobs/scheduled/lkp-hsw-d05/mdadm-selftests-1HDD-03-debian-11.1-x86_64-20220510.cgz-84d7d462b16dd5f0bf7c7ca9254bf81db2c952a2-20230206-71769-z6vm9-0.yaml
-- user=lkp
-- ARCH=x86_64
-- kconfig=x86_64-rhel-8.3-func
-- commit=84d7d462b16dd5f0bf7c7ca9254bf81db2c952a2
-- initcall_debug
-- nmi_watchdog=0
-- max_uptime=1200
-- LKP_SERVER=internal-lkp-server
-- nokaslr
-- selinux=0
-- debug
-- apic=debug
-- sysrq_always_enabled
-- rcupdate.rcu_cpu_stall_timeout=100
-- net.ifnames=0
-- printk.devkmsg=on
-- panic=-1
-- softlockup_panic=1
-- nmi_watchdog=panic
-- oops=panic
-- load_ramdisk=2
-- prompt_ramdisk=0
-- drbd.minor_count=8
-- systemd.log_level=err
-- ignore_loglevel
-- console=tty0
-- earlyprintk=ttyS0,115200
-- console=ttyS0,115200
-- vga=normal
-- rw
-
-#! runtime status
-modules_initrd: "/pkg/linux/x86_64-rhel-8.3-func/gcc-11/84d7d462b16dd5f0bf7c7ca9254bf81db2c952a2/modules.cgz"
-bm_initrd: "/osimage/deps/debian-11.1-x86_64-20220510.cgz/run-ipconfig_20220515.cgz,/osimage/deps/debian-11.1-x86_64-20220510.cgz/lkp_20220513.cgz,/osimage/deps/debian-11.1-x86_64-20220510.cgz/rsync-rootfs_20220515.cgz,/osimage/deps/debian-11.1-x86_64-20220510.cgz/mdadm-selftests_20220515.cgz,/osimage/pkg/debian-11.1-x86_64-20220510.cgz/mdadm-selftests-x86_64-5f41845-1_20220826.cgz,/osimage/deps/debian-11.1-x86_64-20220510.cgz/hw_20220526.cgz"
-ucode_initrd: "/osimage/ucode/intel-ucode-20220804.cgz"
-lkp_initrd: "/osimage/user/lkp/lkp-x86_64.cgz"
-site: inn
-
-#! /db/releases/20230204235943/lkp-src/include/site/inn
-LKP_CGI_PORT: 80
-LKP_CIFS_PORT: 139
-oom-killer:
-watchdog:
-last_kernel: 4.20.0
-schedule_notify_address:
-
-#! user overrides
-kernel: "/pkg/linux/x86_64-rhel-8.3-func/gcc-11/84d7d462b16dd5f0bf7c7ca9254bf81db2c952a2/vmlinuz-6.2.0-rc6-00077-g84d7d462b16d"
-dequeue_time: 2023-02-06 01:09:45.432418832 +08:00
-
-#! /cephfs/db/releases/20230204235943/lkp-src/include/site/inn
-job_state: finished
-loadavg: 1.30 0.58 0.22 1/188 2242
-start_time: '1675617041'
-end_time: '1675617153'
-version: "/lkp/lkp/.src-20230202-171224:1a9fb3013:52879761c"
-
---FRFoh8W36iUgEzYB
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: attachment; filename="reproduce"
-
-mkdir -p /var/tmp
-mke2fs -t ext3 -b 4096 -J size=4 -q /dev/sda1
-mount -t ext3 /dev/sda1 /var/tmp
-
---FRFoh8W36iUgEzYB
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: attachment; filename="03r5assem-failed.log"
-
-+ . /lkp/benchmarks/mdadm-selftests/tests/03r5assem-failed
-++ mdadm -CR /dev/md1 -l5 -n4 /dev/loop0 /dev/loop1 /dev/loop2 /dev/loop3
-++ rm -f /var/tmp/stderr
-++ case $* in
-++ case $* in
-++ for args in $*
-++ [[ -CR =~ /dev/ ]]
-++ for args in $*
-++ [[ /dev/md1 =~ /dev/ ]]
-++ [[ /dev/md1 =~ md ]]
-++ for args in $*
-++ [[ -l5 =~ /dev/ ]]
-++ for args in $*
-++ [[ -n4 =~ /dev/ ]]
-++ for args in $*
-++ [[ /dev/loop0 =~ /dev/ ]]
-++ [[ /dev/loop0 =~ md ]]
-++ /lkp/benchmarks/mdadm-selftests/mdadm --zero /dev/loop0
-mdadm: Unrecognised md component device - /dev/loop0
-++ for args in $*
-++ [[ /dev/loop1 =~ /dev/ ]]
-++ [[ /dev/loop1 =~ md ]]
-++ /lkp/benchmarks/mdadm-selftests/mdadm --zero /dev/loop1
-mdadm: Unrecognised md component device - /dev/loop1
-++ for args in $*
-++ [[ /dev/loop2 =~ /dev/ ]]
-++ [[ /dev/loop2 =~ md ]]
-++ /lkp/benchmarks/mdadm-selftests/mdadm --zero /dev/loop2
-mdadm: Unrecognised md component device - /dev/loop2
-++ for args in $*
-++ [[ /dev/loop3 =~ /dev/ ]]
-++ [[ /dev/loop3 =~ md ]]
-++ /lkp/benchmarks/mdadm-selftests/mdadm --zero /dev/loop3
-mdadm: Unrecognised md component device - /dev/loop3
-++ /lkp/benchmarks/mdadm-selftests/mdadm --quiet -CR /dev/md1 -l5 -n4 /dev/loop0 /dev/loop1 /dev/loop2 /dev/loop3 --auto=yes
-++ rv=1
-++ case $* in
-++ cat /var/tmp/stderr
-mdadm: Fail to create md1 when using /sys/module/md_mod/parameters/new_array, fallback to creation via node
-mdadm: unexpected failure opening /dev/md1
-++ return 1
-++ check wait
-++ case $1 in
-+++ cat /proc/sys/dev/raid/speed_limit_max
-++ p=2000
-++ echo 2000000
-++ sleep 0.1
-++ grep -Eq '(resync|recovery|reshape|check|repair) *=' /proc/mdstat
-++ grep -v idle '/sys/block/md*/md/sync_action'
-grep: /sys/block/md*/md/sync_action: No such file or directory
-++ echo 2000
-++ echo 2000
-/lkp/benchmarks/mdadm-selftests/tests/03r5assem-failed: line 8: /sys/block/md1/md/safe_mode_delay: No such file or directory
-++ mkfs /dev/md1
-mke2fs 1.46.2 (28-Feb-2021)
-The file /dev/md1 does not exist and no size was specified.
-++ mdadm /dev/md1 -f /dev/loop0
-++ rm -f /var/tmp/stderr
-++ case $* in
-++ case $* in
-++ /lkp/benchmarks/mdadm-selftests/mdadm --quiet /dev/md1 -f /dev/loop0
-++ rv=1
-++ case $* in
-++ cat /var/tmp/stderr
-mdadm: error opening /dev/md1: No such file or directory
-++ return 1
-++ mdadm -S /dev/md1
-++ rm -f /var/tmp/stderr
-++ case $* in
-++ udevadm settle
-+++ cat /proc/sys/dev/raid/speed_limit_max
-++ p=2000
-++ echo 20000
-++ case $* in
-++ /lkp/benchmarks/mdadm-selftests/mdadm --quiet -S /dev/md1
-++ rv=1
-++ case $* in
-++ udevadm settle
-++ echo 2000
-++ cat /var/tmp/stderr
-mdadm: error opening /dev/md1: No such file or directory
-++ return 1
-++ mdadm -A /dev/md1 /dev/loop0 /dev/loop1 /dev/loop2 /dev/loop3
-++ rm -f /var/tmp/stderr
-++ case $* in
-++ case $* in
-++ /lkp/benchmarks/mdadm-selftests/mdadm --quiet -A /dev/md1 /dev/loop0 /dev/loop1 /dev/loop2 /dev/loop3
-++ rv=1
-++ case $* in
-++ cat /var/tmp/stderr
-mdadm: /dev/loop0 has no superblock - assembly aborted
-++ return 1
-++ exit 1
-mdadm: /dev/loop0 has no superblock - assembly aborted
-
---FRFoh8W36iUgEzYB--
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+bcm2835-rpi-b-rev2           | arm    | lab-broonie     | gcc-10   | bcm283=
+5_defconfig            | 1          =
+
+cubietruck                   | arm    | lab-baylibre    | gcc-10   | multi_=
+v7_defc...MB2_KERNEL=3Dy | 1          =
+
+cubietruck                   | arm    | lab-baylibre    | gcc-10   | multi_=
+v7_defconfig           | 1          =
+
+cubietruck                   | arm    | lab-baylibre    | gcc-10   | multi_=
+v7_defc...CONFIG_SMP=3Dn | 1          =
+
+fsl-ls1088a-rdb              | arm64  | lab-nxp         | clang-16 | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+fsl-ls1088a-rdb              | arm64  | lab-nxp         | gcc-10   | defcon=
+fig+kselftest          | 1          =
+
+hp-11A-G6-EE-grunt           | x86_64 | lab-collabora   | gcc-10   | x86_64=
+_defcon...6-chromebook | 1          =
+
+hp-11A-G6-EE-grunt           | x86_64 | lab-collabora   | gcc-10   | x86_64=
+_defcon...ebook+amdgpu | 1          =
+
+imx53-qsrb                   | arm    | lab-pengutronix | gcc-10   | multi_=
+v7_defc...MB2_KERNEL=3Dy | 1          =
+
+imx53-qsrb                   | arm    | lab-pengutronix | gcc-10   | multi_=
+v7_defconfig           | 1          =
+
+imx53-qsrb                   | arm    | lab-pengutronix | gcc-10   | multi_=
+v7_defc...CONFIG_SMP=3Dn | 1          =
+
+imx8mp-evk                   | arm64  | lab-nxp         | clang-16 | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+imx8mp-evk                   | arm64  | lab-nxp         | gcc-10   | defcon=
+fig                    | 1          =
+
+imx8mp-evk                   | arm64  | lab-nxp         | gcc-10   | defcon=
+fig+videodec           | 1          =
+
+imx8mp-evk                   | arm64  | lab-nxp         | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+jetson-tk1                   | arm    | lab-baylibre    | gcc-10   | multi_=
+v7_defc...G_ARM_LPAE=3Dy | 1          =
+
+jh7100-starfi...isionfive-v1 | riscv  | lab-clabbe      | gcc-10   | defcon=
+fig+kselftest          | 1          =
+
+kontron-kbox-a-230-ls        | arm64  | lab-kontron     | clang-16 | defcon=
+fig+CON..._64K_PAGES=3Dy | 5          =
+
+kontron-kbox-a-230-ls        | arm64  | lab-kontron     | gcc-10   | defcon=
+fig                    | 5          =
+
+kontron-kbox-a-230-ls        | arm64  | lab-kontron     | gcc-10   | defcon=
+fig+videodec           | 5          =
+
+kontron-kbox-a-230-ls        | arm64  | lab-kontron     | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 5          =
+
+kontron-kbox-a-230-ls        | arm64  | lab-kontron     | gcc-10   | defcon=
+fig+CON...OMIZE_BASE=3Dy | 5          =
+
+kontron-kbox-a-230-ls        | arm64  | lab-kontron     | gcc-10   | defcon=
+fig+kselftest          | 1          =
+
+kontron-kbox-a-230-ls        | arm64  | lab-kontron     | gcc-10   | defcon=
+fig+crypto             | 5          =
+
+kontron-kbox-a-230-ls        | arm64  | lab-kontron     | gcc-10   | defcon=
+fig+ima                | 5          =
+
+kontron-kbox-a-230-ls        | arm64  | lab-kontron     | gcc-10   | defcon=
+fig+debug              | 5          =
+
+kontron-pitx-imx8m           | arm64  | lab-kontron     | gcc-10   | defcon=
+fig                    | 2          =
+
+kontron-pitx-imx8m           | arm64  | lab-kontron     | gcc-10   | defcon=
+fig+videodec           | 2          =
+
+kontron-pitx-imx8m           | arm64  | lab-kontron     | gcc-10   | defcon=
+fig+CON...OMIZE_BASE=3Dy | 2          =
+
+lenovo-TPad-C13-Yoga-zork    | x86_64 | lab-collabora   | clang-13 | x86_64=
+_defcon...6-chromebook | 1          =
+
+lenovo-TPad-C13-Yoga-zork    | x86_64 | lab-collabora   | gcc-10   | x86_64=
+_defcon...6-chromebook | 1          =
+
+lenovo-TPad-C13-Yoga-zork    | x86_64 | lab-collabora   | gcc-10   | x86_64=
+_defcon...ebook+amdgpu | 1          =
+
+lenovo-TPad-C13-Yoga-zork    | x86_64 | lab-collabora   | gcc-10   | x86_64=
+_defcon...ok+kselftest | 1          =
+
+meson-g12a-sei510            | arm64  | lab-baylibre    | clang-16 | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+meson-g12a-sei510            | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig                    | 1          =
+
+meson-g12a-sei510            | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+videodec           | 1          =
+
+meson-g12a-sei510            | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+meson-g12a-sei510            | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON...OMIZE_BASE=3Dy | 1          =
+
+meson-g12a-sei510            | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+meson-g12a-sei510            | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+ima                | 1          =
+
+meson-g12a-u200              | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+kselftest          | 1          =
+
+meson-g12a-x96-max           | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+kselftest          | 1          =
+
+meson-g12b-a311d-khadas-vim3 | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+kselftest          | 1          =
+
+meson-g12b-a311d-khadas-vim3 | arm64  | lab-collabora   | gcc-10   | defcon=
+fig+kselftest          | 1          =
+
+meson-g12b-odroid-n2         | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+kselftest          | 1          =
+
+meson-gxbb-nanopi-k2         | arm64  | lab-baylibre    | clang-16 | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+meson-gxbb-nanopi-k2         | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig                    | 1          =
+
+meson-gxbb-nanopi-k2         | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+videodec           | 1          =
+
+meson-gxbb-nanopi-k2         | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+meson-gxbb-nanopi-k2         | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON...OMIZE_BASE=3Dy | 1          =
+
+meson-gxbb-nanopi-k2         | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+kselftest          | 1          =
+
+meson-gxbb-nanopi-k2         | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+meson-gxbb-nanopi-k2         | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+ima                | 1          =
+
+meson-gxl-s905x-khadas-vim   | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+kselftest          | 1          =
+
+meson-gxl-s905x-libretech-cc | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+kselftest          | 1          =
+
+meson-gxl-s905x-libretech-cc | arm64  | lab-broonie     | gcc-10   | defcon=
+fig+kselftest          | 1          =
+
+meson-gxl-s905x-libretech-cc | arm64  | lab-clabbe      | gcc-10   | defcon=
+fig+kselftest          | 1          =
+
+meson-gxm-khadas-vim2        | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+kselftest          | 1          =
+
+meson-sm1-sei610             | arm64  | lab-baylibre    | clang-16 | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+meson-sm1-sei610             | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON..._16K_PAGES=3Dy | 1          =
+
+meson-sm1-sei610             | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig                    | 1          =
+
+meson-sm1-sei610             | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+videodec           | 1          =
+
+meson-sm1-sei610             | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+meson-sm1-sei610             | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON...OMIZE_BASE=3Dy | 1          =
+
+meson-sm1-sei610             | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+meson-sm1-sei610             | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+ima                | 1          =
+
+mt8173-elm-hana              | arm64  | lab-collabora   | gcc-10   | defcon=
+fig+arm...ok+kselftest | 1          =
+
+mt8183-kukui-...uniper-sku16 | arm64  | lab-collabora   | clang-13 | cros:/=
+/chrome...4-chromebook | 1          =
+
+mt8183-kukui-...uniper-sku16 | arm64  | lab-collabora   | clang-13 | cros:/=
+/chrome...4-chromebook | 1          =
+
+mt8183-kukui-...uniper-sku16 | arm64  | lab-collabora   | gcc-10   | defcon=
+fig+arm...ok+kselftest | 1          =
+
+mt8192-asurada-spherion-r0   | arm64  | lab-collabora   | clang-13 | cros:/=
+/chrome...4-chromebook | 1          =
+
+mt8192-asurada-spherion-r0   | arm64  | lab-collabora   | gcc-10   | defcon=
+fig+arm64-chromebook   | 3          =
+
+mt8192-asurada-spherion-r0   | arm64  | lab-collabora   | gcc-10   | defcon=
+fig+arm...ok+kselftest | 1          =
+
+ox820-clouden...lug-series-3 | arm    | lab-baylibre    | gcc-10   | oxnas_=
+v6_defconfig           | 1          =
+
+qcom-qdf2400                 | arm64  | lab-linaro-lkft | gcc-10   | defcon=
+fig+kselftest          | 1          =
+
+qcom-qdf2400                 | arm64  | lab-linaro-lkft | gcc-10   | defcon=
+fig+arm...ok+kselftest | 1          =
+
+qemu_arm64-virt-gicv2-uefi   | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+debug              | 1          =
+
+qemu_arm64-virt-gicv2-uefi   | arm64  | lab-collabora   | gcc-10   | defcon=
+fig+debug              | 1          =
+
+qemu_arm64-virt-gicv3-uefi   | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+debug              | 1          =
+
+qemu_arm64-virt-gicv3-uefi   | arm64  | lab-collabora   | gcc-10   | defcon=
+fig+debug              | 1          =
+
+rk3288-rock2-square          | arm    | lab-collabora   | gcc-10   | multi_=
+v7_defc...G_ARM_LPAE=3Dy | 1          =
+
+rk3288-veyron-jaq            | arm    | lab-collabora   | gcc-10   | multi_=
+v7_defc...G_ARM_LPAE=3Dy | 1          =
+
+rk3399-gru-kevin             | arm64  | lab-collabora   | gcc-10   | defcon=
+fig+arm...ok+kselftest | 1          =
+
+rk3399-roc-pc                | arm64  | lab-clabbe      | gcc-10   | defcon=
+fig+kselftest          | 1          =
+
+rk3399-roc-pc                | arm64  | lab-clabbe      | gcc-10   | defcon=
+fig+debug              | 1          =
+
+rk3399-rock-pi-4b            | arm64  | lab-collabora   | gcc-10   | defcon=
+fig+kselftest          | 1          =
+
+sc7180-trogdor-kingoftown    | arm64  | lab-collabora   | gcc-10   | defcon=
+fig+arm...ok+kselftest | 1          =
+
+sc7180-trogdo...zor-limozeen | arm64  | lab-collabora   | gcc-10   | defcon=
+fig+arm...ok+kselftest | 1          =
+
+sun50i-a64-bananapi-m64      | arm64  | lab-clabbe      | gcc-10   | defcon=
+fig+kselftest          | 1          =
+
+sun50i-a64-pine64-plus       | arm64  | lab-broonie     | gcc-10   | defcon=
+fig+kselftest          | 1          =
+
+sun50i-h5-lib...ch-all-h3-cc | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+kselftest          | 1          =
+
+sun50i-h5-lib...ch-all-h3-cc | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+debug              | 1          =
+
+sun50i-h5-lib...ch-all-h3-cc | arm64  | lab-broonie     | gcc-10   | defcon=
+fig+kselftest          | 1          =
+
+sun50i-h6-pine-h64           | arm64  | lab-clabbe      | gcc-10   | defcon=
+fig+kselftest          | 1          =
+
+sun50i-h6-pine-h64           | arm64  | lab-collabora   | gcc-10   | defcon=
+fig+kselftest          | 1          =
+
+sun8i-h3-libretech-all-h3-cc | arm    | lab-baylibre    | gcc-10   | sunxi_=
+defconfig              | 1          =
+
+tegra124-nyan-big            | arm    | lab-collabora   | gcc-10   | multi_=
+v7_defc...G_ARM_LPAE=3Dy | 1          =
+
+zynqmp-zcu102                | arm64  | lab-cip         | gcc-10   | defcon=
+fig+debug              | 1          =
+
+
+  Details:  https://kernelci.org/test/job/next/branch/master/kernel/next-20=
+230210/plan/baseline/
+
+  Test:     baseline
+  Tree:     next
+  Branch:   master
+  Describe: next-20230210
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+  SHA:      6ba8a227fd19d19779005fb66ad7562608e1df83 =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+bcm2835-rpi-b-rev2           | arm    | lab-broonie     | gcc-10   | bcm283=
+5_defconfig            | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5cf5f77035629108c863c
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: bcm2835_defconfig
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm/=
+bcm2835_defconfig/gcc-10/lab-broonie/baseline-bcm2835-rpi-b-rev2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm/=
+bcm2835_defconfig/gcc-10/lab-broonie/baseline-bcm2835-rpi-b-rev2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/63e5cf5f77035629108c8645
+        failing since 2 days (last pass: next-20230206, first fail: next-20=
+230207)
+
+    2023-02-10T04:59:54.676823  + set +x
+    2023-02-10T04:59:54.681181  <8>[   18.618152] <LAVA_SIGNAL_ENDRUN 0_dme=
+sg 293286_1.5.2.4.1>
+    2023-02-10T04:59:54.813571  / # #
+    2023-02-10T04:59:54.915890  export SHELL=3D/bin/sh
+    2023-02-10T04:59:54.916587  #
+    2023-02-10T04:59:55.018090  / # export SHELL=3D/bin/sh. /lava-293286/en=
+vironment
+    2023-02-10T04:59:55.018616  =
+
+    2023-02-10T04:59:55.120407  / # . /lava-293286/environment/lava-293286/=
+bin/lava-test-runner /lava-293286/1
+    2023-02-10T04:59:55.121521  =
+
+    2023-02-10T04:59:55.127688  / # /lava-293286/bin/lava-test-runner /lava=
+-293286/1 =
+
+    ... (14 line(s) more)  =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+cubietruck                   | arm    | lab-baylibre    | gcc-10   | multi_=
+v7_defc...MB2_KERNEL=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d1a6c9d93cb9d48c867c
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm/=
+multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/lab-baylibre/baseline-cu=
+bietruck.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm/=
+multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/lab-baylibre/baseline-cu=
+bietruck.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/63e5d1a6c9d93cb9d48c8685
+        failing since 22 days (last pass: next-20221219, first fail: next-2=
+0230118)
+
+    2023-02-10T05:09:42.299567  <8>[   15.286640] <LAVA_SIGNAL_ENDRUN 0_dme=
+sg 3317912_1.5.2.4.1>
+    2023-02-10T05:09:42.406312  / # #
+    2023-02-10T05:09:42.508035  export SHELL=3D/bin/sh
+    2023-02-10T05:09:42.508484  #
+    2023-02-10T05:09:42.609733  / # export SHELL=3D/bin/sh. /lava-3317912/e=
+nvironment
+    2023-02-10T05:09:42.610163  =
+
+    2023-02-10T05:09:42.711419  / # . /lava-3317912/environment/lava-331791=
+2/bin/lava-test-runner /lava-3317912/1
+    2023-02-10T05:09:42.712094  =
+
+    2023-02-10T05:09:42.716939  / # /lava-3317912/bin/lava-test-runner /lav=
+a-3317912/1
+    2023-02-10T05:09:42.804296  + export 'TESTRUN_ID=3D1_bootrr' =
+
+    ... (11 line(s) more)  =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+cubietruck                   | arm    | lab-baylibre    | gcc-10   | multi_=
+v7_defconfig           | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d41c7e33c350d88c86de
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: multi_v7_defconfig
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm/=
+multi_v7_defconfig/gcc-10/lab-baylibre/baseline-cubietruck.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm/=
+multi_v7_defconfig/gcc-10/lab-baylibre/baseline-cubietruck.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/63e5d41c7e33c350d88c86e7
+        failing since 23 days (last pass: next-20221219, first fail: next-2=
+0230117)
+
+    2023-02-10T05:20:17.154168  <8>[   15.502226] <LAVA_SIGNAL_ENDRUN 0_dme=
+sg 3318158_1.5.2.4.1>
+    2023-02-10T05:20:17.264766  / # #
+    2023-02-10T05:20:17.368597  export SHELL=3D/bin/sh
+    2023-02-10T05:20:17.369651  #
+    2023-02-10T05:20:17.471865  / # export SHELL=3D/bin/sh. /lava-3318158/e=
+nvironment
+    2023-02-10T05:20:17.472759  =
+
+    2023-02-10T05:20:17.574951  / # . /lava-3318158/environment/lava-331815=
+8/bin/lava-test-runner /lava-3318158/1
+    2023-02-10T05:20:17.576335  =
+
+    2023-02-10T05:20:17.580826  / # /lava-3318158/bin/lava-test-runner /lav=
+a-3318158/1
+    2023-02-10T05:20:17.670731  + export 'TESTRUN_ID=3D1_bootrr' =
+
+    ... (11 line(s) more)  =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+cubietruck                   | arm    | lab-baylibre    | gcc-10   | multi_=
+v7_defc...CONFIG_SMP=3Dn | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d4aa384741b4808c8658
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: multi_v7_defconfig+CONFIG_SMP=3Dn
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm/=
+multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-10/lab-baylibre/baseline-cubietruck.t=
+xt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm/=
+multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-10/lab-baylibre/baseline-cubietruck.h=
+tml
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/63e5d4aa384741b4808c8661
+        failing since 22 days (last pass: next-20221219, first fail: next-2=
+0230118)
+
+    2023-02-10T05:22:18.709251  <8>[   16.659146] <LAVA_SIGNAL_ENDRUN 0_dme=
+sg 3318192_1.5.2.4.1>
+    2023-02-10T05:22:18.818001  / # #
+    2023-02-10T05:22:18.919460  export SHELL=3D/bin/sh
+    2023-02-10T05:22:18.920174  #
+    2023-02-10T05:22:19.021750  / # export SHELL=3D/bin/sh. /lava-3318192/e=
+nvironment
+    2023-02-10T05:22:19.022217  =
+
+    2023-02-10T05:22:19.123499  / # . /lava-3318192/environment/lava-331819=
+2/bin/lava-test-runner /lava-3318192/1
+    2023-02-10T05:22:19.124123  =
+
+    2023-02-10T05:22:19.128752  / # /lava-3318192/bin/lava-test-runner /lav=
+a-3318192/1
+    2023-02-10T05:22:19.225342  + export 'TESTRUN_ID=3D1_bootrr' =
+
+    ... (11 line(s) more)  =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+fsl-ls1088a-rdb              | arm64  | lab-nxp         | clang-16 | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d3c90fbcdbceb78c8630
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    clang-16 (Debian clang version 16.0.0 (++20230205083021+66c1=
+717f496d-1~exp1~20230205203128.15))
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/clang-16/lab-nxp/baseline-fsl-ls1088=
+a-rdb.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/clang-16/lab-nxp/baseline-fsl-ls1088=
+a-rdb.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/63e5d3c90fbcdbceb78c8637
+        failing since 35 days (last pass: next-20221125, first fail: next-2=
+0230106)
+
+    2023-02-10T05:18:29.868898  [   19.386626] <LAVA_SIGNAL_ENDRUN 0_dmesg =
+1155737_1.5.2.4.1>
+    2023-02-10T05:18:29.975955  / # #
+    2023-02-10T05:18:30.077758  export SHELL=3D/bin/sh
+    2023-02-10T05:18:30.078192  #
+    2023-02-10T05:18:30.179525  / # export SHELL=3D/bin/sh. /lava-1155737/e=
+nvironment
+    2023-02-10T05:18:30.179960  =
+
+    2023-02-10T05:18:30.281308  / # . /lava-1155737/environment/lava-115573=
+7/bin/lava-test-runner /lava-1155737/1
+    2023-02-10T05:18:30.282021  =
+
+    2023-02-10T05:18:30.283995  / # /lava-1155737/bin/lava-test-runner /lav=
+a-1155737/1
+    2023-02-10T05:18:30.309136  + export 'TESTRUN_ID=3D1_bootrr' =
+
+    ... (11 line(s) more)  =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+fsl-ls1088a-rdb              | arm64  | lab-nxp         | gcc-10   | defcon=
+fig+kselftest          | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d644e2a4e8ac138c866a
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: defconfig+kselftest
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+kselftest/gcc-10/lab-nxp/baseline-fsl-ls1088a-rdb.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+kselftest/gcc-10/lab-nxp/baseline-fsl-ls1088a-rdb.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/63e5d644e2a4e8ac138c8671
+        new failure (last pass: next-20230209)
+
+    2023-02-10T05:29:25.295725  + set +x
+    2023-02-10T05:29:25.297547  [   21.617936] <LAVA_SIGNAL_ENDRUN 0_dmesg =
+1155752_1.5.2.4.1>
+    2023-02-10T05:29:25.410975  #
+    2023-02-10T05:29:25.512588  / # #export SHELL=3D/bin/sh
+    2023-02-10T05:29:25.513142  =
+
+    2023-02-10T05:29:25.614527  / # export SHELL=3D/bin/sh. /lava-1155752/e=
+nvironment
+    2023-02-10T05:29:25.615006  =
+
+    2023-02-10T05:29:25.716400  / # . /lava-1155752/environment/lava-115575=
+2/bin/lava-test-runner /lava-1155752/1
+    2023-02-10T05:29:25.717138  =
+
+    2023-02-10T05:29:25.720032  / # /lava-1155752/bin/lava-test-runner /lav=
+a-1155752/1 =
+
+    ... (12 line(s) more)  =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+hp-11A-G6-EE-grunt           | x86_64 | lab-collabora   | gcc-10   | x86_64=
+_defcon...6-chromebook | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d2522ac63b52098c8699
+
+  Results:     18 PASS, 1 FAIL, 0 SKIP
+  Full config: x86_64_defconfig+x86-chromebook
+  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/x86_=
+64/x86_64_defconfig+x86-chromebook/gcc-10/lab-collabora/baseline-hp-11A-G6-=
+EE-grunt.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/x86_=
+64/x86_64_defconfig+x86-chromebook/gcc-10/lab-collabora/baseline-hp-11A-G6-=
+EE-grunt.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/x86/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.tpm-chip-is-online: https://kernelci.org/test/case/id/6=
+3e5d2522ac63b52098c86ac
+        new failure (last pass: next-20230209)
+
+    2023-02-10T05:12:31.210879  /usr/bin/tpm2_getcap
+
+    2023-02-10T05:12:31.242343  ERROR:tcti:src/tss2-tcti/tcti-device.c:286:=
+tcti_device_receive() Failed to read response from fd 3, got errno 14: Bad =
+address =
+
+
+    2023-02-10T05:12:31.251200  ERROR:esys:src/tss2-esys/api/Esys_GetCapabi=
+lity.c:307:Esys_GetCapability_Finish() Received a non-TPM Error =
+
+
+    2023-02-10T05:12:31.260395  ERROR:esys:src/tss2-esys/api/Esys_GetCapabi=
+lity.c:107:Esys_GetCapability() Esys Finish ErrorCode (0x000a000a) =
+
+
+    2023-02-10T05:12:31.266146  ERROR: Esys_GetCapability(0xA000A) - tcti:I=
+O failure
+
+    2023-02-10T05:12:31.268195  ERROR: Unable to run tpm2_getcap
+
+    2023-02-10T05:12:32.264183  ERROR:tcti:src/tss2-tcti/tcti-device.c:286:=
+tcti_device_receive() Failed to read response from fd 3, got errno 14: Bad =
+address =
+
+
+    2023-02-10T05:12:32.273262  ERROR:esys:src/tss2-esys/api/Esys_GetCapabi=
+lity.c:307:Esys_GetCapability_Finish() Received a non-TPM Error =
+
+
+    2023-02-10T05:12:32.283434  ERROR:esys:src/tss2-esys/api/Esys_GetCapabi=
+lity.c:107:Esys_GetCapability() Esys Finish ErrorCode (0x000a000a) =
+
+
+    2023-02-10T05:12:32.287221  ERROR: Esys_GetCapability(0xA000A) - tcti:I=
+O failure
+ =
+
+    ... (43 line(s) more)  =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+hp-11A-G6-EE-grunt           | x86_64 | lab-collabora   | gcc-10   | x86_64=
+_defcon...ebook+amdgpu | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d32361404cf2ba8c8640
+
+  Results:     18 PASS, 1 FAIL, 0 SKIP
+  Full config: x86_64_defconfig+x86-chromebook+amdgpu
+  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/x86_=
+64/x86_64_defconfig+x86-chromebook+amdgpu/gcc-10/lab-collabora/baseline-hp-=
+11A-G6-EE-grunt.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/x86_=
+64/x86_64_defconfig+x86-chromebook+amdgpu/gcc-10/lab-collabora/baseline-hp-=
+11A-G6-EE-grunt.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/x86/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.tpm-chip-is-online: https://kernelci.org/test/case/id/6=
+3e5d32361404cf2ba8c8653
+        new failure (last pass: next-20230209)
+
+    2023-02-10T05:16:01.742792  /usr/bin/tpm2_getcap
+
+    2023-02-10T05:16:01.769461  ERROR:tcti:src/tss2-tcti/tcti-device.c:286:=
+tcti_device_receive() Failed to read response from fd 3, got errno 14: Bad =
+address =
+
+
+    2023-02-10T05:16:01.776603  ERROR:esys:src/tss2-esys/api/Esys_GetCapabi=
+lity.c:307:Esys_GetCapability_Finish() Received a non-TPM Error =
+
+
+    2023-02-10T05:16:01.786553  ERROR:esys:src/tss2-esys/api/Esys_GetCapabi=
+lity.c:107:Esys_GetCapability() Esys Finish ErrorCode (0x000a000a) =
+
+
+    2023-02-10T05:16:01.791631  ERROR: Esys_GetCapability(0xA000A) - tcti:I=
+O failure
+
+    2023-02-10T05:16:01.793708  ERROR: Unable to run tpm2_getcap
+
+    2023-02-10T05:16:02.792168  ERROR:tcti:src/tss2-tcti/tcti-device.c:286:=
+tcti_device_receive() Failed to read response from fd 3, got errno 14: Bad =
+address =
+
+
+    2023-02-10T05:16:02.799873  ERROR:esys:src/tss2-esys/api/Esys_GetCapabi=
+lity.c:307:Esys_GetCapability_Finish() Received a non-TPM Error =
+
+
+    2023-02-10T05:16:02.808329  ERROR:esys:src/tss2-esys/api/Esys_GetCapabi=
+lity.c:107:Esys_GetCapability() Esys Finish ErrorCode (0x000a000a) =
+
+
+    2023-02-10T05:16:02.812726  ERROR: Esys_GetCapability(0xA000A) - tcti:I=
+O failure
+ =
+
+    ... (43 line(s) more)  =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+imx53-qsrb                   | arm    | lab-pengutronix | gcc-10   | multi_=
+v7_defc...MB2_KERNEL=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d144bddef3f0f28c8647
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm/=
+multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/lab-pengutronix/baseline=
+-imx53-qsrb.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm/=
+multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/lab-pengutronix/baseline=
+-imx53-qsrb.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/63e5d144bddef3f0f28c8650
+        failing since 10 days (last pass: next-20221205, first fail: next-2=
+0230130)
+
+    2023-02-10T05:07:58.536502  + set +x
+    2023-02-10T05:07:58.536720  [   12.849011] <LAVA_SIGNAL_ENDRUN 0_dmesg =
+902663_1.5.2.3.1>
+    2023-02-10T05:07:58.643572  / # #
+    2023-02-10T05:07:58.745215  export SHELL=3D/bin/sh
+    2023-02-10T05:07:58.745620  #
+    2023-02-10T05:07:58.847005  / # export SHELL=3D/bin/sh. /lava-902663/en=
+vironment
+    2023-02-10T05:07:58.847480  =
+
+    2023-02-10T05:07:58.948708  / # . /lava-902663/environment/lava-902663/=
+bin/lava-test-runner /lava-902663/1
+    2023-02-10T05:07:58.949291  =
+
+    2023-02-10T05:07:58.952331  / # /lava-902663/bin/lava-test-runner /lava=
+-902663/1 =
+
+    ... (12 line(s) more)  =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+imx53-qsrb                   | arm    | lab-pengutronix | gcc-10   | multi_=
+v7_defconfig           | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d36124f4e4aaa58c865e
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: multi_v7_defconfig
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm/=
+multi_v7_defconfig/gcc-10/lab-pengutronix/baseline-imx53-qsrb.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm/=
+multi_v7_defconfig/gcc-10/lab-pengutronix/baseline-imx53-qsrb.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/63e5d36124f4e4aaa58c8667
+        failing since 10 days (last pass: next-20221206, first fail: next-2=
+0230130)
+
+    2023-02-10T05:17:06.660123  + set +x
+    2023-02-10T05:17:06.660299  [   13.131934] <LAVA_SIGNAL_ENDRUN 0_dmesg =
+902669_1.5.2.3.1>
+    2023-02-10T05:17:06.768158  / # #
+    2023-02-10T05:17:06.869916  export SHELL=3D/bin/sh
+    2023-02-10T05:17:06.870365  #
+    2023-02-10T05:17:06.971769  / # export SHELL=3D/bin/sh. /lava-902669/en=
+vironment
+    2023-02-10T05:17:06.972313  =
+
+    2023-02-10T05:17:07.073779  / # . /lava-902669/environment/lava-902669/=
+bin/lava-test-runner /lava-902669/1
+    2023-02-10T05:17:07.074422  =
+
+    2023-02-10T05:17:07.077942  / # /lava-902669/bin/lava-test-runner /lava=
+-902669/1 =
+
+    ... (12 line(s) more)  =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+imx53-qsrb                   | arm    | lab-pengutronix | gcc-10   | multi_=
+v7_defc...CONFIG_SMP=3Dn | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d4262a5f8c5d328c8640
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: multi_v7_defconfig+CONFIG_SMP=3Dn
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm/=
+multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-10/lab-pengutronix/baseline-imx53-qsr=
+b.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm/=
+multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-10/lab-pengutronix/baseline-imx53-qsr=
+b.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/63e5d4262a5f8c5d328c8649
+        failing since 10 days (last pass: next-20221206, first fail: next-2=
+0230130)
+
+    2023-02-10T05:20:17.907159  + set +x
+    2023-02-10T05:20:17.907426  [   12.192137] <LAVA_SIGNAL_ENDRUN 0_dmesg =
+902674_1.5.2.3.1>
+    2023-02-10T05:20:18.014732  / # #
+    2023-02-10T05:20:18.116308  export SHELL=3D/bin/sh
+    2023-02-10T05:20:18.116858  #
+    2023-02-10T05:20:18.218031  / # export SHELL=3D/bin/sh. /lava-902674/en=
+vironment
+    2023-02-10T05:20:18.218462  =
+
+    2023-02-10T05:20:18.319588  / # . /lava-902674/environment/lava-902674/=
+bin/lava-test-runner /lava-902674/1
+    2023-02-10T05:20:18.320186  =
+
+    2023-02-10T05:20:18.323025  / # /lava-902674/bin/lava-test-runner /lava=
+-902674/1 =
+
+    ... (12 line(s) more)  =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+imx8mp-evk                   | arm64  | lab-nxp         | clang-16 | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d65fc68676a3b68c8642
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    clang-16 (Debian clang version 16.0.0 (++20230205083021+66c1=
+717f496d-1~exp1~20230205203128.15))
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/clang-16/lab-nxp/baseline-imx8mp-evk=
+.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/clang-16/lab-nxp/baseline-imx8mp-evk=
+.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/63e5d65fc68676a3b68c8=
+643
+        failing since 35 days (last pass: next-20221125, first fail: next-2=
+0230106) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+imx8mp-evk                   | arm64  | lab-nxp         | gcc-10   | defcon=
+fig                    | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d32eac97df6b4b8c865a
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig/gcc-10/lab-nxp/baseline-imx8mp-evk.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig/gcc-10/lab-nxp/baseline-imx8mp-evk.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/63e5d32eac97df6b4b8c8=
+65b
+        failing since 35 days (last pass: next-20221125, first fail: next-2=
+0230105) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+imx8mp-evk                   | arm64  | lab-nxp         | gcc-10   | defcon=
+fig+videodec           | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d806bc4eedd2f88c86a3
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+videodec
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+videodec/gcc-10/lab-nxp/baseline-imx8mp-evk.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+videodec/gcc-10/lab-nxp/baseline-imx8mp-evk.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/63e5d806bc4eedd2f88c8=
+6a4
+        failing since 35 days (last pass: next-20221226, first fail: next-2=
+0230105) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+imx8mp-evk                   | arm64  | lab-nxp         | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d98c60421d3ceb8c8657
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-nxp/baseline-imx8mp-evk.t=
+xt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-nxp/baseline-imx8mp-evk.h=
+tml
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/63e5d98c60421d3ceb8c8=
+658
+        failing since 36 days (last pass: next-20221226, first fail: next-2=
+0230105) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+jetson-tk1                   | arm    | lab-baylibre    | gcc-10   | multi_=
+v7_defc...G_ARM_LPAE=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d12bfcb97e16f58c8635
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm/=
+multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy/gcc-10/lab-baylibre/b=
+aseline-jetson-tk1.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm/=
+multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy/gcc-10/lab-baylibre/b=
+aseline-jetson-tk1.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/63e5d12bfcb97e16f58c8=
+636
+        failing since 304 days (last pass: next-20220401, first fail: next-=
+20220411) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+jh7100-starfi...isionfive-v1 | riscv  | lab-clabbe      | gcc-10   | defcon=
+fig+kselftest          | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d77869d0b689b08c862f
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+kselftest
+  Compiler:    gcc-10 (riscv64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/risc=
+v/defconfig+kselftest/gcc-10/lab-clabbe/baseline-jh7100-starfive-visionfive=
+-v1.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/risc=
+v/defconfig+kselftest/gcc-10/lab-clabbe/baseline-jh7100-starfive-visionfive=
+-v1.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/riscv/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/63e5d77869d0b689b08c8=
+630
+        failing since 2 days (last pass: next-20230206, first fail: next-20=
+230207) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+kontron-kbox-a-230-ls        | arm64  | lab-kontron     | clang-16 | defcon=
+fig+CON..._64K_PAGES=3Dy | 5          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d42207bf6f31168c8650
+
+  Results:     90 PASS, 5 FAIL, 1 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    clang-16 (Debian clang version 16.0.0 (++20230205083021+66c1=
+717f496d-1~exp1~20230205203128.15))
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/clang-16/lab-kontron/baseline-kontro=
+n-kbox-a-230-ls.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/clang-16/lab-kontron/baseline-kontro=
+n-kbox-a-230-ls.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/63e5d42207bf6f31168c8657
+        failing since 1 day (last pass: next-20230206, first fail: next-202=
+30208)
+
+    2023-02-10T05:20:08.108682  / # #
+    2023-02-10T05:20:08.210633  export SHELL=3D/bin/sh
+    2023-02-10T05:20:08.211091  #
+    2023-02-10T05:20:08.312509  / # export SHELL=3D/bin/sh. /lava-271145/en=
+vironment
+    2023-02-10T05:20:08.312939  =
+
+    2023-02-10T05:20:08.414456  / # . /lava-271145/environment/lava-271145/=
+bin/lava-test-runner /lava-271145/1
+    2023-02-10T05:20:08.415176  =
+
+    2023-02-10T05:20:08.420706  / # /lava-271145/bin/lava-test-runner /lava=
+-271145/1
+    2023-02-10T05:20:08.488653  + export 'TESTRUN_ID=3D1_bootrr'
+    2023-02-10T05:20:08.488964  + <8>[   22.481373] <LAVA_SIGNAL_STARTRUN 1=
+_bootrr 271145_1.5.2.4.5> =
+
+    ... (17 line(s) more)  =
+
+
+  * baseline.bootrr.fsl_enetc-enetc2-probed: https://kernelci.org/test/case=
+/id/63e5d42207bf6f31168c865b
+        failing since 1 day (last pass: next-20230206, first fail: next-202=
+30208)
+
+    2023-02-10T05:20:10.584774  /lava-271145/1/../bin/lava-test-case
+    2023-02-10T05:20:10.585196  <8>[   24.588935] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dfsl_enetc-enetc2-probed RESULT=3Dfail>
+    2023-02-10T05:20:10.585414  /lava-271145/1/../bin/lava-test-case   =
+
+
+  * baseline.bootrr.mscc_felix-probed: https://kernelci.org/test/case/id/63=
+e5d42207bf6f31168c865d
+        failing since 1 day (last pass: next-20230206, first fail: next-202=
+30208)
+
+    2023-02-10T05:20:11.641682  /lava-271145/1/../bin/lava-test-case
+    2023-02-10T05:20:11.642128  <8>[   25.626998] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dmscc_felix-probed RESULT=3Dfail>
+    2023-02-10T05:20:11.642479  /lava-271145/1/../bin/lava-test-case
+    2023-02-10T05:20:11.642763  <8>[   25.643493] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dleds-gpio-driver-present RESULT=3Dpass>   =
+
+
+  * baseline.bootrr.fsl_enetc-enetc0-probed: https://kernelci.org/test/case=
+/id/63e5d42207bf6f31168c8662
+        failing since 1 day (last pass: next-20230206, first fail: next-202=
+30208)
+
+    2023-02-10T05:20:12.716031  /lava-271145/1/../bin/lava-test-case   =
+
+
+  * baseline.bootrr.fsl_enetc-enetc1-probed: https://kernelci.org/test/case=
+/id/63e5d42207bf6f31168c8663
+        failing since 1 day (last pass: next-20230206, first fail: next-202=
+30208)
+
+    2023-02-10T05:20:12.719284  <8>[   26.737058] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dfsl_enetc-enetc0-probed RESULT=3Dfail>
+    2023-02-10T05:20:13.777332  /lava-271145/1/../bin/lava-test-case
+    2023-02-10T05:20:13.777724  <8>[   27.758118] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dfsl_enetc-enetc1-probed RESULT=3Dfail>
+    2023-02-10T05:20:13.777972  /lava-271145/1/../bin/lava-test-case   =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+kontron-kbox-a-230-ls        | arm64  | lab-kontron     | gcc-10   | defcon=
+fig                    | 5          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d21ac19c96ae348c863d
+
+  Results:     90 PASS, 5 FAIL, 1 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig/gcc-10/lab-kontron/baseline-kontron-kbox-a-230-ls.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig/gcc-10/lab-kontron/baseline-kontron-kbox-a-230-ls.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/63e5d21ac19c96ae348c8644
+        failing since 2 days (last pass: next-20230206, first fail: next-20=
+230207)
+
+    2023-02-10T05:11:40.781489  / # #
+    2023-02-10T05:11:40.883533  export SHELL=3D/bin/sh
+    2023-02-10T05:11:40.883994  #
+    2023-02-10T05:11:40.985408  / # export SHELL=3D/bin/sh. /lava-271128/en=
+vironment
+    2023-02-10T05:11:40.985866  =
+
+    2023-02-10T05:11:41.087307  / # . /lava-271128/environment/lava-271128/=
+bin/lava-test-runner /lava-271128/1
+    2023-02-10T05:11:41.088042  =
+
+    2023-02-10T05:11:41.093502  / # /lava-271128/bin/lava-test-runner /lava=
+-271128/1
+    2023-02-10T05:11:41.160493  + export 'TESTRUN_ID=3D1_bootrr'
+    2023-02-10T05:11:41.160796  + <8>[   22.469052] <LAVA_SIGNAL_STARTRUN 1=
+_bootrr 271128_1.5.2.4.5> =
+
+    ... (17 line(s) more)  =
+
+
+  * baseline.bootrr.fsl_enetc-enetc2-probed: https://kernelci.org/test/case=
+/id/63e5d21ac19c96ae348c8648
+        failing since 2 days (last pass: next-20230206, first fail: next-20=
+230207)
+
+    2023-02-10T05:11:43.254596  /lava-271128/1/../bin/lava-test-case
+    2023-02-10T05:11:43.254970  <8>[   24.575905] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dfsl_enetc-enetc2-probed RESULT=3Dfail>
+    2023-02-10T05:11:43.255220  /lava-271128/1/../bin/lava-test-case   =
+
+
+  * baseline.bootrr.mscc_felix-probed: https://kernelci.org/test/case/id/63=
+e5d21ac19c96ae348c864a
+        failing since 2 days (last pass: next-20230206, first fail: next-20=
+230207)
+
+    2023-02-10T05:11:44.314070  /lava-271128/1/../bin/lava-test-case
+    2023-02-10T05:11:44.314456  <8>[   25.612658] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dmscc_felix-probed RESULT=3Dfail>   =
+
+
+  * baseline.bootrr.fsl_enetc-enetc0-probed: https://kernelci.org/test/case=
+/id/63e5d21ac19c96ae348c864f
+        failing since 2 days (last pass: next-20230206, first fail: next-20=
+230207)
+
+    2023-02-10T05:11:45.390757  /lava-271128/1/../bin/lava-test-case   =
+
+
+  * baseline.bootrr.fsl_enetc-enetc1-probed: https://kernelci.org/test/case=
+/id/63e5d21ac19c96ae348c8650
+        failing since 2 days (last pass: next-20230206, first fail: next-20=
+230207)
+
+    2023-02-10T05:11:45.393952  <8>[   26.728643] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dfsl_enetc-enetc0-probed RESULT=3Dfail>
+    2023-02-10T05:11:46.451444  /lava-271128/1/../bin/lava-test-case
+    2023-02-10T05:11:46.451831  <8>[   27.749603] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dfsl_enetc-enetc1-probed RESULT=3Dfail>
+    2023-02-10T05:11:46.452074  /lava-271128/1/../bin/lava-test-case   =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+kontron-kbox-a-230-ls        | arm64  | lab-kontron     | gcc-10   | defcon=
+fig+videodec           | 5          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d49a59f01b63fb8c8630
+
+  Results:     90 PASS, 5 FAIL, 1 SKIP
+  Full config: defconfig+videodec
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+videodec/gcc-10/lab-kontron/baseline-kontron-kbox-a-230-ls.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+videodec/gcc-10/lab-kontron/baseline-kontron-kbox-a-230-ls.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/63e5d49a59f01b63fb8c8637
+        failing since 2 days (last pass: next-20230206, first fail: next-20=
+230207)
+
+    2023-02-10T05:22:07.295864  / # #
+    2023-02-10T05:22:07.397676  export SHELL=3D/bin/sh
+    2023-02-10T05:22:07.398180  #
+    2023-02-10T05:22:07.499621  / # export SHELL=3D/bin/sh. /lava-271150/en=
+vironment
+    2023-02-10T05:22:07.500127  =
+
+    2023-02-10T05:22:07.601708  / # . /lava-271150/environment/lava-271150/=
+bin/lava-test-runner /lava-271150/1
+    2023-02-10T05:22:07.602475  =
+
+    2023-02-10T05:22:07.608099  / # /lava-271150/bin/lava-test-runner /lava=
+-271150/1
+    2023-02-10T05:22:07.675062  + export 'TESTRUN_ID=3D1_bootrr'
+    2023-02-10T05:22:07.675397  + <8>[   22.391983] <LAVA_SIGNAL_STARTRUN 1=
+_bootrr 271150_1.5.2.4.5> =
+
+    ... (17 line(s) more)  =
+
+
+  * baseline.bootrr.fsl_enetc-enetc2-probed: https://kernelci.org/test/case=
+/id/63e5d49a59f01b63fb8c863b
+        failing since 2 days (last pass: next-20230206, first fail: next-20=
+230207)
+
+    2023-02-10T05:22:09.767183  /lava-271150/1/../bin/lava-test-case
+    2023-02-10T05:22:09.767588  <8>[   24.496881] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dfsl_enetc-enetc2-probed RESULT=3Dfail>
+    2023-02-10T05:22:09.767839  /lava-271150/1/../bin/lava-test-case   =
+
+
+  * baseline.bootrr.mscc_felix-probed: https://kernelci.org/test/case/id/63=
+e5d49a59f01b63fb8c863d
+        failing since 2 days (last pass: next-20230206, first fail: next-20=
+230207)
+
+    2023-02-10T05:22:10.825838  /lava-271150/1/../bin/lava-test-case
+    2023-02-10T05:22:10.826222  <8>[   25.533519] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dmscc_felix-probed RESULT=3Dfail>
+    2023-02-10T05:22:10.826487  /lava-271150/1/../bin/lava-test-case   =
+
+
+  * baseline.bootrr.fsl_enetc-enetc0-probed: https://kernelci.org/test/case=
+/id/63e5d49a59f01b63fb8c8642
+        failing since 2 days (last pass: next-20230206, first fail: next-20=
+230207)
+
+    2023-02-10T05:22:11.903340  /lava-271150/1/../bin/lava-test-case   =
+
+
+  * baseline.bootrr.fsl_enetc-enetc1-probed: https://kernelci.org/test/case=
+/id/63e5d49a59f01b63fb8c8643
+        failing since 2 days (last pass: next-20230206, first fail: next-20=
+230207)
+
+    2023-02-10T05:22:11.906579  <8>[   26.648709] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dfsl_enetc-enetc0-probed RESULT=3Dfail>
+    2023-02-10T05:22:12.963068  /lava-271150/1/../bin/lava-test-case   =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+kontron-kbox-a-230-ls        | arm64  | lab-kontron     | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 5          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d5121b6caf9fed8c863f
+
+  Results:     90 PASS, 5 FAIL, 1 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-kontron/baseline-kontron-=
+kbox-a-230-ls.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-kontron/baseline-kontron-=
+kbox-a-230-ls.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/63e5d5121b6caf9fed8c8646
+        failing since 2 days (last pass: next-20230206, first fail: next-20=
+230207)
+
+    2023-02-10T05:24:20.121645  / # #
+    2023-02-10T05:24:20.223629  export SHELL=3D/bin/sh
+    2023-02-10T05:24:20.224159  #
+    2023-02-10T05:24:20.325587  / # export SHELL=3D/bin/sh. /lava-271156/en=
+vironment
+    2023-02-10T05:24:20.326218  =
+
+    2023-02-10T05:24:20.427695  / # . /lava-271156/environment/lava-271156/=
+bin/lava-test-runner /lava-271156/1
+    2023-02-10T05:24:20.428620  =
+
+    2023-02-10T05:24:20.434489  / # /lava-271156/bin/lava-test-runner /lava=
+-271156/1
+    2023-02-10T05:24:20.501473  + export 'TESTRUN_ID=3D1_bootrr'
+    2023-02-10T05:24:20.501806  + <8>[   22.385563] <LAVA_SIGNAL_STARTRUN 1=
+_bootrr 271156_1.5.2.4.5> =
+
+    ... (15 line(s) more)  =
+
+
+  * baseline.bootrr.fsl_enetc-enetc2-probed: https://kernelci.org/test/case=
+/id/63e5d5121b6caf9fed8c864a
+        failing since 2 days (last pass: next-20230206, first fail: next-20=
+230207)
+
+    2023-02-10T05:24:22.595745  /lava-271156/1/../bin/lava-test-case
+    2023-02-10T05:24:22.596142  <8>[   24.491235] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dfsl_enetc-enetc2-probed RESULT=3Dfail>
+    2023-02-10T05:24:22.596389  /lava-271156/1/../bin/lava-test-case   =
+
+
+  * baseline.bootrr.mscc_felix-probed: https://kernelci.org/test/case/id/63=
+e5d5121b6caf9fed8c864c
+        failing since 2 days (last pass: next-20230206, first fail: next-20=
+230207)
+
+    2023-02-10T05:24:23.652557  /lava-271156/1/../bin/lava-test-case
+    2023-02-10T05:24:23.652964  <8>[   25.529830] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dmscc_felix-probed RESULT=3Dfail>
+    2023-02-10T05:24:23.653222  /lava-271156/1/../bin/lava-test-case
+    2023-02-10T05:24:23.653451  <8>[   25.546734] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dleds-gpio-driver-present RESULT=3Dpass>   =
+
+
+  * baseline.bootrr.fsl_enetc-enetc0-probed: https://kernelci.org/test/case=
+/id/63e5d5121b6caf9fed8c8651
+        failing since 2 days (last pass: next-20230206, first fail: next-20=
+230207)
+
+    2023-02-10T05:24:24.726856  /lava-271156/1/../bin/lava-test-case   =
+
+
+  * baseline.bootrr.fsl_enetc-enetc1-probed: https://kernelci.org/test/case=
+/id/63e5d5121b6caf9fed8c8652
+        failing since 2 days (last pass: next-20230206, first fail: next-20=
+230207)
+
+    2023-02-10T05:24:24.730054  <8>[   26.639911] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dfsl_enetc-enetc0-probed RESULT=3Dfail>
+    2023-02-10T05:24:25.782600  /lava-271156/1/../bin/lava-test-case
+    2023-02-10T05:24:25.782980  <8>[   27.660489] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dfsl_enetc-enetc1-probed RESULT=3Dfail>
+    2023-02-10T05:24:25.783220  /lava-271156/1/../bin/lava-test-case
+    2023-02-10T05:24:25.783447  <8>[   27.677015] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dfsl_enetc_mdio-driver-present RESULT=3Dpass>
+    2023-02-10T05:24:25.783672  /lava-271156/1/../bin/lava-test-case   =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+kontron-kbox-a-230-ls        | arm64  | lab-kontron     | gcc-10   | defcon=
+fig+CON...OMIZE_BASE=3Dy | 5          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d59ea5194f8afb8c865f
+
+  Results:     90 PASS, 5 FAIL, 1 SKIP
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-kontron/baseline-kontron-k=
+box-a-230-ls.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-kontron/baseline-kontron-k=
+box-a-230-ls.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/63e5d59ea5194f8afb8c8666
+        failing since 2 days (last pass: next-20230206, first fail: next-20=
+230207)
+
+    2023-02-10T05:26:23.102572  <8>[   21.957987] <LAVA_SIGNAL_ENDRUN 0_dme=
+sg 271170_1.5.2.4.1>
+    2023-02-10T05:26:23.208078  / # #
+    2023-02-10T05:26:23.310041  export SHELL=3D/bin/sh
+    2023-02-10T05:26:23.310670  #
+    2023-02-10T05:26:23.412015  / # export SHELL=3D/bin/sh. /lava-271170/en=
+vironment
+    2023-02-10T05:26:23.412460  =
+
+    2023-02-10T05:26:23.513680  / # . /lava-271170/environment/lava-271170/=
+bin/lava-test-runner /lava-271170/1
+    2023-02-10T05:26:23.514285  =
+
+    2023-02-10T05:26:23.519572  / # /lava-271170/bin/lava-test-runner /lava=
+-271170/1
+    2023-02-10T05:26:23.585974  + export 'TESTRUN_ID=3D1_bootrr' =
+
+    ... (18 line(s) more)  =
+
+
+  * baseline.bootrr.fsl_enetc-enetc2-probed: https://kernelci.org/test/case=
+/id/63e5d59ea5194f8afb8c866a
+        failing since 2 days (last pass: next-20230206, first fail: next-20=
+230207)
+
+    2023-02-10T05:26:25.680193  /lava-271170/1/../bin/lava-test-case
+    2023-02-10T05:26:25.680926  <8>[   24.522432] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dfsl_enetc-enetc2-probed RESULT=3Dfail>
+    2023-02-10T05:26:25.681205  /lava-271170/1/../bin/lava-test-case   =
+
+
+  * baseline.bootrr.mscc_felix-probed: https://kernelci.org/test/case/id/63=
+e5d59ea5194f8afb8c866c
+        failing since 2 days (last pass: next-20230206, first fail: next-20=
+230207)
+
+    2023-02-10T05:26:26.738153  /lava-271170/1/../bin/lava-test-case
+    2023-02-10T05:26:26.738598  <8>[   25.560104] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dmscc_felix-probed RESULT=3Dfail>
+    2023-02-10T05:26:26.738849  /lava-271170/1/../bin/lava-test-case
+    2023-02-10T05:26:26.739082  <8>[   25.576596] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dleds-gpio-driver-present RESULT=3Dpass>
+    2023-02-10T05:26:26.739315  /lava-271170/1/../bin/lava-test-case
+    2023-02-10T05:26:26.739623  <8>[   25.596878] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dleds-gpio-probed RESULT=3Dpass>
+    2023-02-10T05:26:26.739854  /lava-271170/1/../bin/lava-test-case   =
+
+
+  * baseline.bootrr.fsl_enetc-enetc0-probed: https://kernelci.org/test/case=
+/id/63e5d59ea5194f8afb8c8671
+        failing since 2 days (last pass: next-20230206, first fail: next-20=
+230207)
+
+    2023-02-10T05:26:27.813379  /lava-271170/1/../bin/lava-test-case   =
+
+
+  * baseline.bootrr.fsl_enetc-enetc1-probed: https://kernelci.org/test/case=
+/id/63e5d59ea5194f8afb8c8672
+        failing since 2 days (last pass: next-20230206, first fail: next-20=
+230207)
+
+    2023-02-10T05:26:27.816632  <8>[   26.672732] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dfsl_enetc-enetc0-probed RESULT=3Dfail>
+    2023-02-10T05:26:28.873592  /lava-271170/1/../bin/lava-test-case
+    2023-02-10T05:26:28.874125  <8>[   27.692816] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dfsl_enetc-enetc1-probed RESULT=3Dfail>
+    2023-02-10T05:26:28.874335  /lava-271170/1/../bin/lava-test-case   =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+kontron-kbox-a-230-ls        | arm64  | lab-kontron     | gcc-10   | defcon=
+fig+kselftest          | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d719a8eb0fe5fe8c8630
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+kselftest
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+kselftest/gcc-10/lab-kontron/baseline-kontron-kbox-a-230-ls.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+kselftest/gcc-10/lab-kontron/baseline-kontron-kbox-a-230-ls.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/63e5d719a8eb0fe5fe8c8=
+631
+        failing since 2 days (last pass: next-20230206, first fail: next-20=
+230207) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+kontron-kbox-a-230-ls        | arm64  | lab-kontron     | gcc-10   | defcon=
+fig+crypto             | 5          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d7a69789bcb1c38c8664
+
+  Results:     90 PASS, 5 FAIL, 1 SKIP
+  Full config: defconfig+crypto
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+crypto/gcc-10/lab-kontron/baseline-kontron-kbox-a-230-ls.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+crypto/gcc-10/lab-kontron/baseline-kontron-kbox-a-230-ls.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/63e5d7a69789bcb1c38c866b
+        failing since 2 days (last pass: next-20230206, first fail: next-20=
+230207)
+
+    2023-02-10T05:35:19.579547  <8>[   44.144080] <LAVA_SIGNAL_ENDRUN 0_dme=
+sg 271180_1.5.2.4.1>
+    2023-02-10T05:35:19.685076  / # #
+    2023-02-10T05:35:19.787132  export SHELL=3D/bin/sh
+    2023-02-10T05:35:19.787577  #
+    2023-02-10T05:35:19.889056  / # export SHELL=3D/bin/sh. /lava-271180/en=
+vironment
+    2023-02-10T05:35:19.889512  =
+
+    2023-02-10T05:35:19.991039  / # . /lava-271180/environment/lava-271180/=
+bin/lava-test-runner /lava-271180/1
+    2023-02-10T05:35:19.991900  =
+
+    2023-02-10T05:35:19.997083  / # /lava-271180/bin/lava-test-runner /lava=
+-271180/1
+    2023-02-10T05:35:20.064050  + export 'TESTRUN_ID=3D1_bootrr' =
+
+    ... (16 line(s) more)  =
+
+
+  * baseline.bootrr.fsl_enetc-enetc2-probed: https://kernelci.org/test/case=
+/id/63e5d7a69789bcb1c38c866f
+        failing since 2 days (last pass: next-20230206, first fail: next-20=
+230207)
+
+    2023-02-10T05:35:22.161168  /lava-271180/1/../bin/lava-test-case
+    2023-02-10T05:35:22.161538  <8>[   46.712244] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dfsl_enetc-enetc2-probed RESULT=3Dfail>
+    2023-02-10T05:35:22.161803  /lava-271180/1/../bin/lava-test-case   =
+
+
+  * baseline.bootrr.mscc_felix-probed: https://kernelci.org/test/case/id/63=
+e5d7a69789bcb1c38c8671
+        failing since 2 days (last pass: next-20230206, first fail: next-20=
+230207)
+
+    2023-02-10T05:35:23.217572  /lava-271180/1/../bin/lava-test-case
+    2023-02-10T05:35:23.218217  <8>[   47.749868] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dmscc_felix-probed RESULT=3Dfail>
+    2023-02-10T05:35:23.218472  /lava-271180/1/../bin/lava-test-case
+    2023-02-10T05:35:23.218702  <8>[   47.766748] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dleds-gpio-driver-present RESULT=3Dpass>
+    2023-02-10T05:35:23.218932  /lava-271180/1/../bin/lava-test-case
+    2023-02-10T05:35:23.219155  <8>[   47.785261] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dleds-gpio-probed RESULT=3Dpass>
+    2023-02-10T05:35:23.219376  /lava-271180/1/../bin/lava-test-case   =
+
+
+  * baseline.bootrr.fsl_enetc-enetc0-probed: https://kernelci.org/test/case=
+/id/63e5d7a69789bcb1c38c8676
+        failing since 2 days (last pass: next-20230206, first fail: next-20=
+230207)
+
+    2023-02-10T05:35:24.292257  /lava-271180/1/../bin/lava-test-case   =
+
+
+  * baseline.bootrr.fsl_enetc-enetc1-probed: https://kernelci.org/test/case=
+/id/63e5d7a69789bcb1c38c8677
+        failing since 2 days (last pass: next-20230206, first fail: next-20=
+230207)
+
+    2023-02-10T05:35:24.295434  <8>[   48.860271] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dfsl_enetc-enetc0-probed RESULT=3Dfail>
+    2023-02-10T05:35:25.349994  /lava-271180/1/../bin/lava-test-case
+    2023-02-10T05:35:25.350389  <8>[   49.881369] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dfsl_enetc-enetc1-probed RESULT=3Dfail>
+    2023-02-10T05:35:25.350635  /lava-271180/1/../bin/lava-test-case   =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+kontron-kbox-a-230-ls        | arm64  | lab-kontron     | gcc-10   | defcon=
+fig+ima                | 5          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d823b4169ec1978c8674
+
+  Results:     90 PASS, 5 FAIL, 1 SKIP
+  Full config: defconfig+ima
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+ima/gcc-10/lab-kontron/baseline-kontron-kbox-a-230-ls.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+ima/gcc-10/lab-kontron/baseline-kontron-kbox-a-230-ls.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/63e5d823b4169ec1978c867b
+        failing since 2 days (last pass: next-20230206, first fail: next-20=
+230207)
+
+    2023-02-10T05:37:08.801966  / # #
+    2023-02-10T05:37:08.903810  export SHELL=3D/bin/sh
+    2023-02-10T05:37:08.904221  #
+    2023-02-10T05:37:09.005474  / # export SHELL=3D/bin/sh. /lava-271193/en=
+vironment
+    2023-02-10T05:37:09.005900  =
+
+    2023-02-10T05:37:09.107293  / # . /lava-271193/environment/lava-271193/=
+bin/lava-test-runner /lava-271193/1
+    2023-02-10T05:37:09.108024  =
+
+    2023-02-10T05:37:09.114144  / # /lava-271193/bin/lava-test-runner /lava=
+-271193/1
+    2023-02-10T05:37:09.180310  + export 'TESTRUN_ID=3D1_bootrr'
+    2023-02-10T05:37:09.180689  + <8>[   22.469405] <LAVA_SIGNAL_STARTRUN 1=
+_bootrr 271193_1.5.2.4.5> =
+
+    ... (15 line(s) more)  =
+
+
+  * baseline.bootrr.fsl_enetc-enetc2-probed: https://kernelci.org/test/case=
+/id/63e5d823b4169ec1978c867f
+        failing since 2 days (last pass: next-20230206, first fail: next-20=
+230207)
+
+    2023-02-10T05:37:11.275507  /lava-271193/1/../bin/lava-test-case
+    2023-02-10T05:37:11.275907  <8>[   24.576078] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dfsl_enetc-enetc2-probed RESULT=3Dfail>
+    2023-02-10T05:37:11.276155  /lava-271193/1/../bin/lava-test-case   =
+
+
+  * baseline.bootrr.mscc_felix-probed: https://kernelci.org/test/case/id/63=
+e5d823b4169ec1978c8681
+        failing since 2 days (last pass: next-20230206, first fail: next-20=
+230207)
+
+    2023-02-10T05:37:12.334099  /lava-271193/1/../bin/lava-test-case
+    2023-02-10T05:37:12.334502  <8>[   25.613679] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dmscc_felix-probed RESULT=3Dfail>
+    2023-02-10T05:37:12.334762  /lava-271193/1/../bin/lava-test-case
+    2023-02-10T05:37:12.334992  <8>[   25.630574] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dleds-gpio-driver-present RESULT=3Dpass>   =
+
+
+  * baseline.bootrr.fsl_enetc-enetc0-probed: https://kernelci.org/test/case=
+/id/63e5d823b4169ec1978c8686
+        failing since 2 days (last pass: next-20230206, first fail: next-20=
+230207)
+
+    2023-02-10T05:37:13.410565  /lava-271193/1/../bin/lava-test-case   =
+
+
+  * baseline.bootrr.fsl_enetc-enetc1-probed: https://kernelci.org/test/case=
+/id/63e5d823b4169ec1978c8687
+        failing since 2 days (last pass: next-20230206, first fail: next-20=
+230207)
+
+    2023-02-10T05:37:13.413694  <8>[   26.728079] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dfsl_enetc-enetc0-probed RESULT=3Dfail>
+    2023-02-10T05:37:14.472251  /lava-271193/1/../bin/lava-test-case   =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+kontron-kbox-a-230-ls        | arm64  | lab-kontron     | gcc-10   | defcon=
+fig+debug              | 5          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d8e723d361bdd08c8691
+
+  Results:     90 PASS, 5 FAIL, 1 SKIP
+  Full config: defconfig+debug
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+debug/gcc-10/lab-kontron/baseline-kontron-kbox-a-230-ls.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+debug/gcc-10/lab-kontron/baseline-kontron-kbox-a-230-ls.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/63e5d8e723d361bdd08c8698
+        failing since 2 days (last pass: next-20230206, first fail: next-20=
+230207)
+
+    2023-02-10T05:40:08.510162  + set +x
+    2023-02-10T05:40:08.513305  <8>[   45.691090][  T183] <LAVA_SIGNAL_ENDR=
+UN 0_dmesg 271197_1.5.2.4.1>
+    2023-02-10T05:40:08.632828  #
+    2023-02-10T05:40:08.735042  / # #export SHELL=3D/bin/sh
+    2023-02-10T05:40:08.735496  =
+
+    2023-02-10T05:40:08.836985  / # export SHELL=3D/bin/sh. /lava-271197/en=
+vironment
+    2023-02-10T05:40:08.837614  =
+
+    2023-02-10T05:40:08.939050  / # . /lava-271197/environment/lava-271197/=
+bin/lava-test-runner /lava-271197/1
+    2023-02-10T05:40:08.939941  =
+
+    2023-02-10T05:40:08.960286  / # /lava-271197/bin/lava-test-runner /lava=
+-271197/1 =
+
+    ... (15 line(s) more)  =
+
+
+  * baseline.bootrr.fsl_enetc-enetc2-probed: https://kernelci.org/test/case=
+/id/63e5d8e823d361bdd08c869c
+        failing since 2 days (last pass: next-20230206, first fail: next-20=
+230207)
+
+    2023-02-10T05:40:13.227549  /lava-271197/1/../bin/lava-test-case
+    2023-02-10T05:40:13.345404  <8>[   50.522071][  T252] <LAVA_SIGNAL_TEST=
+CASE TEST_CASE_ID=3Dfsl_enetc-enetc2-probed RESULT=3Dfail>   =
+
+
+  * baseline.bootrr.mscc_felix-probed: https://kernelci.org/test/case/id/63=
+e5d8e823d361bdd08c869e
+        failing since 2 days (last pass: next-20230206, first fail: next-20=
+230207)
+
+    2023-02-10T05:40:14.837756  /lava-271197/1/../bin/lava-test-case
+    2023-02-10T05:40:14.943845  <8>[   52.120205][  T262] <LAVA_SIGNAL_TEST=
+CASE TEST_CASE_ID=3Dmscc_felix-probed RESULT=3Dfail>   =
+
+
+  * baseline.bootrr.fsl_enetc-enetc0-probed: https://kernelci.org/test/case=
+/id/63e5d8e823d361bdd08c86a3
+        failing since 2 days (last pass: next-20230206, first fail: next-20=
+230207)
+
+    2023-02-10T05:40:17.660718  /lava-271197/1/../bin/lava-test-case
+    2023-02-10T05:40:17.764766  <8>[   54.941274][  T293] <LAVA_SIGNAL_TEST=
+CASE TEST_CASE_ID=3Dfsl_enetc-enetc0-probed RESULT=3Dfail>   =
+
+
+  * baseline.bootrr.fsl_enetc-enetc1-probed: https://kernelci.org/test/case=
+/id/63e5d8e823d361bdd08c86a4
+        failing since 2 days (last pass: next-20230206, first fail: next-20=
+230207)
+
+    2023-02-10T05:40:18.996144  /lava-271197/1/../bin/lava-test-case
+    2023-02-10T05:40:19.113213  <8>[   56.288967][  T299] <LAVA_SIGNAL_TEST=
+CASE TEST_CASE_ID=3Dfsl_enetc-enetc1-probed RESULT=3Dfail>   =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+kontron-pitx-imx8m           | arm64  | lab-kontron     | gcc-10   | defcon=
+fig                    | 2          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d21d5191e1f9ef8c8639
+
+  Results:     50 PASS, 2 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig/gcc-10/lab-kontron/baseline-kontron-pitx-imx8m.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig/gcc-10/lab-kontron/baseline-kontron-pitx-imx8m.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.imx6q-pcie-driver-present: https://kernelci.org/test/ca=
+se/id/63e5d21d5191e1f9ef8c864a
+        failing since 21 days (last pass: next-20230118, first fail: next-2=
+0230119)
+
+    2023-02-10T05:11:40.650925  /lava-271130/1/../bin/lava-test-case
+    2023-02-10T05:11:40.654070  <8>[   17.198123] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dimx6q-pcie-driver-present RESULT=3Dfail>   =
+
+
+  * baseline.bootrr.intel-igb-probed: https://kernelci.org/test/case/id/63e=
+5d21d5191e1f9ef8c864c
+        failing since 21 days (last pass: next-20230118, first fail: next-2=
+0230119)
+
+    2023-02-10T05:11:41.662803  <8>[   18.244132] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dintel-igb-driver-present RESULT=3Dpass>
+    2023-02-10T05:11:42.663171  /lava-271130/1/../bin/lava-test-case
+    2023-02-10T05:11:42.663539  <8>[   19.271771] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dintel-igb-probed RESULT=3Dfail>
+    2023-02-10T05:11:42.663781  /lava-271130/1/../bin/lava-test-case   =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+kontron-pitx-imx8m           | arm64  | lab-kontron     | gcc-10   | defcon=
+fig+videodec           | 2          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d486b9bae13e068c86a3
+
+  Results:     50 PASS, 2 FAIL, 0 SKIP
+  Full config: defconfig+videodec
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+videodec/gcc-10/lab-kontron/baseline-kontron-pitx-imx8m.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+videodec/gcc-10/lab-kontron/baseline-kontron-pitx-imx8m.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.imx6q-pcie-driver-present: https://kernelci.org/test/ca=
+se/id/63e5d486b9bae13e068c86b4
+        failing since 21 days (last pass: next-20230118, first fail: next-2=
+0230119)
+
+    2023-02-10T05:21:56.041839  /lava-271146/1/../bin/lava-test-case
+    2023-02-10T05:21:56.044925  <8>[   17.098619] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dimx6q-pcie-driver-present RESULT=3Dfail>   =
+
+
+  * baseline.bootrr.intel-igb-probed: https://kernelci.org/test/case/id/63e=
+5d486b9bae13e068c86b6
+        failing since 21 days (last pass: next-20230118, first fail: next-2=
+0230119)
+
+    2023-02-10T05:21:57.053589  <8>[   18.144716] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dintel-igb-driver-present RESULT=3Dpass>
+    2023-02-10T05:21:58.077032  /lava-271146/1/../bin/lava-test-case
+    2023-02-10T05:21:58.077451  <8>[   19.172265] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dintel-igb-probed RESULT=3Dfail>   =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+kontron-pitx-imx8m           | arm64  | lab-kontron     | gcc-10   | defcon=
+fig+CON...OMIZE_BASE=3Dy | 2          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d57684597427488c862f
+
+  Results:     50 PASS, 2 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-kontron/baseline-kontron-p=
+itx-imx8m.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-kontron/baseline-kontron-p=
+itx-imx8m.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.imx6q-pcie-driver-present: https://kernelci.org/test/ca=
+se/id/63e5d57684597427488c8640
+        failing since 21 days (last pass: next-20230118, first fail: next-2=
+0230119)
+
+    2023-02-10T05:25:59.936568  /lava-271167/1/../bin/lava-test-case
+    2023-02-10T05:25:59.939823  <8>[   17.070088] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dimx6q-pcie-driver-present RESULT=3Dfail>   =
+
+
+  * baseline.bootrr.intel-igb-probed: https://kernelci.org/test/case/id/63e=
+5d57684597427488c8642
+        failing since 21 days (last pass: next-20230118, first fail: next-2=
+0230119)
+
+    2023-02-10T05:26:01.948835  /lava-271167/1/../bin/lava-test-case
+    2023-02-10T05:26:01.949131  <8>[   19.143648] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dintel-igb-probed RESULT=3Dfail>
+    2023-02-10T05:26:01.949281  /lava-271167/1/../bin/lava-test-case   =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+lenovo-TPad-C13-Yoga-zork    | x86_64 | lab-collabora   | clang-13 | x86_64=
+_defcon...6-chromebook | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5cdbb5001d9cd738c865c
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: x86_64_defconfig+x86-chromebook
+  Compiler:    clang-13 (Debian clang version 13.0.1-6~deb11u1)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/x86_=
+64/x86_64_defconfig+x86-chromebook/clang-13/lab-collabora/baseline-lenovo-T=
+Pad-C13-Yoga-zork.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/x86_=
+64/x86_64_defconfig+x86-chromebook/clang-13/lab-collabora/baseline-lenovo-T=
+Pad-C13-Yoga-zork.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/x86/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/63e5cdbb5001d9cd738c8=
+65d
+        failing since 13 days (last pass: next-20230123, first fail: next-2=
+0230127) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+lenovo-TPad-C13-Yoga-zork    | x86_64 | lab-collabora   | gcc-10   | x86_64=
+_defcon...6-chromebook | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d27aadf226c9d48c864e
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: x86_64_defconfig+x86-chromebook
+  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/x86_=
+64/x86_64_defconfig+x86-chromebook/gcc-10/lab-collabora/baseline-lenovo-TPa=
+d-C13-Yoga-zork.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/x86_=
+64/x86_64_defconfig+x86-chromebook/gcc-10/lab-collabora/baseline-lenovo-TPa=
+d-C13-Yoga-zork.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/x86/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/63e5d27aadf226c9d48c8=
+64f
+        failing since 16 days (last pass: next-20230123, first fail: next-2=
+0230124) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+lenovo-TPad-C13-Yoga-zork    | x86_64 | lab-collabora   | gcc-10   | x86_64=
+_defcon...ebook+amdgpu | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d2fe4dc23e05df8c8669
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: x86_64_defconfig+x86-chromebook+amdgpu
+  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/x86_=
+64/x86_64_defconfig+x86-chromebook+amdgpu/gcc-10/lab-collabora/baseline-len=
+ovo-TPad-C13-Yoga-zork.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/x86_=
+64/x86_64_defconfig+x86-chromebook+amdgpu/gcc-10/lab-collabora/baseline-len=
+ovo-TPad-C13-Yoga-zork.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/x86/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/63e5d2fe4dc23e05df8c8=
+66a
+        failing since 16 days (last pass: next-20230123, first fail: next-2=
+0230124) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+lenovo-TPad-C13-Yoga-zork    | x86_64 | lab-collabora   | gcc-10   | x86_64=
+_defcon...ok+kselftest | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d54b3b503e045d8c8630
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: x86_64_defconfig+x86-chromebook+kselftest
+  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/x86_=
+64/x86_64_defconfig+x86-chromebook+kselftest/gcc-10/lab-collabora/baseline-=
+lenovo-TPad-C13-Yoga-zork.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/x86_=
+64/x86_64_defconfig+x86-chromebook+kselftest/gcc-10/lab-collabora/baseline-=
+lenovo-TPad-C13-Yoga-zork.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/x86/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/63e5d54b3b503e045d8c8=
+631
+        failing since 16 days (last pass: next-20230123, first fail: next-2=
+0230124) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-g12a-sei510            | arm64  | lab-baylibre    | clang-16 | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d39c3805fa78318c869b
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    clang-16 (Debian clang version 16.0.0 (++20230205083021+66c1=
+717f496d-1~exp1~20230205203128.15))
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/clang-16/lab-baylibre/baseline-meson=
+-g12a-sei510.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/clang-16/lab-baylibre/baseline-meson=
+-g12a-sei510.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/63e5d39c3805fa78318c86a4
+        failing since 22 days (last pass: next-20230109, first fail: next-2=
+0230118)
+
+    2023-02-10T05:18:08.743271  / # #
+    2023-02-10T05:18:08.844964  export SHELL=3D/bin/sh
+    2023-02-10T05:18:08.845415  #
+    2023-02-10T05:18:08.947240  / # export SHELL=3D/bin/sh. /lava-3318048/e=
+nvironment
+    2023-02-10T05:18:08.947694  <3>[   18.454742] brcmfmac: brcmf_sdio_htcl=
+k: HT Avail timeout (1000000): clkctl 0x50
+    2023-02-10T05:18:08.947932  =
+
+    2023-02-10T05:18:09.049246  / # . /lava-3318048/environment/lava-331804=
+8/bin/lava-test-runner /lava-3318048/1
+    2023-02-10T05:18:09.049905  =
+
+    2023-02-10T05:18:09.054811  / # /lava-3318048/bin/lava-test-runner /lav=
+a-3318048/1
+    2023-02-10T05:18:09.126735  + export 'TESTRUN_ID=3D1_bootrr' =
+
+    ... (11 line(s) more)  =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-g12a-sei510            | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig                    | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d1f9386959d2178c865a
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig/gcc-10/lab-baylibre/baseline-meson-g12a-sei510.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig/gcc-10/lab-baylibre/baseline-meson-g12a-sei510.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/63e5d1f9386959d2178c8663
+        failing since 22 days (last pass: next-20230109, first fail: next-2=
+0230118)
+
+    2023-02-10T05:10:56.705054  / # #
+    2023-02-10T05:10:56.806896  export SHELL=3D/bin/sh
+    2023-02-10T05:10:56.807385  #
+    2023-02-10T05:10:56.908803  / # export SHELL=3D/bin/sh. /lava-3317989/e=
+nvironment
+    2023-02-10T05:10:56.909267  =
+
+    2023-02-10T05:10:56.909533  / # <3>[   18.031898] brcmfmac: brcmf_sdio_=
+htclk: HT Avail timeout (1000000): clkctl 0x50
+    2023-02-10T05:10:57.010804  . /lava-3317989/environment/lava-3317989/bi=
+n/lava-test-runner /lava-3317989/1
+    2023-02-10T05:10:57.011615  =
+
+    2023-02-10T05:10:57.015278  / # /lava-3317989/bin/lava-test-runner /lav=
+a-3317989/1
+    2023-02-10T05:10:57.059192  + export 'TESTRUN_ID=3D1_bootrr' =
+
+    ... (14 line(s) more)  =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-g12a-sei510            | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+videodec           | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d3ec24b0ce68fd8c867c
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: defconfig+videodec
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+videodec/gcc-10/lab-baylibre/baseline-meson-g12a-sei510.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+videodec/gcc-10/lab-baylibre/baseline-meson-g12a-sei510.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/63e5d3ec24b0ce68fd8c8685
+        failing since 22 days (last pass: next-20230109, first fail: next-2=
+0230118)
+
+    2023-02-10T05:19:28.334345  <8>[   17.841105] <LAVA_SIGNAL_ENDRUN 0_dme=
+sg 3318096_1.5.2.4.1>
+    2023-02-10T05:19:28.438349  / # #
+    2023-02-10T05:19:28.541080  export SHELL=3D/bin/sh
+    2023-02-10T05:19:28.541465  #
+    2023-02-10T05:19:28.642837  / # export SHELL=3D/bin/sh. /lava-3318096/e=
+nvironment
+    2023-02-10T05:19:28.643235  =
+
+    2023-02-10T05:19:28.643462  / # <3>[   18.083902] brcmfmac: brcmf_sdio_=
+htclk: HT Avail timeout (1000000): clkctl 0x50
+    2023-02-10T05:19:28.744833  . /lava-3318096/environment/lava-3318096/bi=
+n/lava-test-runner /lava-3318096/1
+    2023-02-10T05:19:28.745457  =
+
+    2023-02-10T05:19:28.764604  / # /lava-3318096/bin/lava-test-runner /lav=
+a-3318096/1 =
+
+    ... (17 line(s) more)  =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-g12a-sei510            | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d43c9aef32589e8c862f
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-baylibre/baseline-meson-g=
+12a-sei510.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-baylibre/baseline-meson-g=
+12a-sei510.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/63e5d43c9aef32589e8c8638
+        failing since 22 days (last pass: next-20230109, first fail: next-2=
+0230118)
+
+    2023-02-10T05:20:50.543584  / # #
+    2023-02-10T05:20:50.645370  export SHELL=3D/bin/sh
+    2023-02-10T05:20:50.645747  #
+    2023-02-10T05:20:50.747135  / # export SHELL=3D/bin/sh. /lava-3318153/e=
+nvironment
+    2023-02-10T05:20:50.747519  <3>[   18.141881] brcmfmac: brcmf_sdio_htcl=
+k: HT Avail timeout (1000000): clkctl 0x50
+    2023-02-10T05:20:50.747776  =
+
+    2023-02-10T05:20:50.849181  / # . /lava-3318153/environment/lava-331815=
+3/bin/lava-test-runner /lava-3318153/1
+    2023-02-10T05:20:50.850524  =
+
+    2023-02-10T05:20:50.864980  / # /lava-3318153/bin/lava-test-runner /lav=
+a-3318153/1
+    2023-02-10T05:20:50.924667  + export 'TESTRUN_ID=3D1_bootrr' =
+
+    ... (11 line(s) more)  =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-g12a-sei510            | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON...OMIZE_BASE=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d4a09a3add7baf8c8660
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-baylibre/baseline-meson-g1=
+2a-sei510.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-baylibre/baseline-meson-g1=
+2a-sei510.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/63e5d4a09a3add7baf8c8669
+        failing since 22 days (last pass: next-20230109, first fail: next-2=
+0230118)
+
+    2023-02-10T05:22:15.776818  <8>[   17.838021] <LAVA_SIGNAL_ENDRUN 0_dme=
+sg 3318202_1.5.2.4.1>
+    2023-02-10T05:22:15.881027  / # #
+    2023-02-10T05:22:15.982808  export SHELL=3D/bin/sh
+    2023-02-10T05:22:15.983312  #
+    2023-02-10T05:22:16.084634  / # export SHELL=3D/bin/sh. /lava-3318202/e=
+nvironment
+    2023-02-10T05:22:16.085145  =
+
+    2023-02-10T05:22:16.085406  / # <3>[   18.079914] brcmfmac: brcmf_sdio_=
+htclk: HT Avail timeout (1000000): clkctl 0x50
+    2023-02-10T05:22:16.186739  . /lava-3318202/environment/lava-3318202/bi=
+n/lava-test-runner /lava-3318202/1
+    2023-02-10T05:22:16.187575  =
+
+    2023-02-10T05:22:16.200700  / # /lava-3318202/bin/lava-test-runner /lav=
+a-3318202/1 =
+
+    ... (11 line(s) more)  =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-g12a-sei510            | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d69491d53002098c8642
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: defconfig+crypto
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+crypto/gcc-10/lab-baylibre/baseline-meson-g12a-sei510.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+crypto/gcc-10/lab-baylibre/baseline-meson-g12a-sei510.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/63e5d69591d53002098c864b
+        failing since 22 days (last pass: next-20230109, first fail: next-2=
+0230118)
+
+    2023-02-10T05:30:55.848092  / # #
+    2023-02-10T05:30:55.949980  export SHELL=3D/bin/sh
+    2023-02-10T05:30:55.950423  #
+    2023-02-10T05:30:56.051847  / # export SHELL=3D/bin/sh. /lava-3318297/e=
+nvironment
+    2023-02-10T05:30:56.052219  =
+
+    2023-02-10T05:30:56.052404  / # <3>[  104.376321] brcmfmac: brcmf_sdio_=
+htclk: HT Avail timeout (1000000): clkctl 0x50
+    2023-02-10T05:30:56.153625  . /lava-3318297/environment/lava-3318297/bi=
+n/lava-test-runner /lava-3318297/1
+    2023-02-10T05:30:56.154363  =
+
+    2023-02-10T05:30:56.168837  / # /lava-3318297/bin/lava-test-runner /lav=
+a-3318297/1
+    2023-02-10T05:30:56.228635  + export 'TESTRUN_ID=3D1_bootrr' =
+
+    ... (11 line(s) more)  =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-g12a-sei510            | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+ima                | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d6e4751632da908c8687
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: defconfig+ima
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+ima/gcc-10/lab-baylibre/baseline-meson-g12a-sei510.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+ima/gcc-10/lab-baylibre/baseline-meson-g12a-sei510.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/63e5d6e4751632da908c8690
+        failing since 22 days (last pass: next-20230109, first fail: next-2=
+0230118)
+
+    2023-02-10T05:32:10.244872  <8>[   18.022377] <LAVA_SIGNAL_ENDRUN 0_dme=
+sg 3318400_1.5.2.4.1>
+    2023-02-10T05:32:10.347963  / # #
+    2023-02-10T05:32:10.450873  export SHELL=3D/bin/sh
+    2023-02-10T05:32:10.451681  #
+    2023-02-10T05:32:10.553576  / # export SHELL=3D/bin/sh. /lava-3318400/e=
+nvironment
+    2023-02-10T05:32:10.554304  =
+
+    2023-02-10T05:32:10.554531  / # <3>[   18.262101] brcmfmac: brcmf_sdio_=
+htclk: HT Avail timeout (1000000): clkctl 0x50
+    2023-02-10T05:32:10.655948  . /lava-3318400/environment/lava-3318400/bi=
+n/lava-test-runner /lava-3318400/1
+    2023-02-10T05:32:10.656607  =
+
+    2023-02-10T05:32:10.672211  / # /lava-3318400/bin/lava-test-runner /lav=
+a-3318400/1 =
+
+    ... (14 line(s) more)  =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-g12a-u200              | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+kselftest          | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d6ed751632da908c869d
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+kselftest
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+kselftest/gcc-10/lab-baylibre/baseline-meson-g12a-u200.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+kselftest/gcc-10/lab-baylibre/baseline-meson-g12a-u200.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/63e5d6ed751632da908c8=
+69e
+        failing since 2 days (last pass: next-20230206, first fail: next-20=
+230207) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-g12a-x96-max           | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+kselftest          | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d7052b4b282bac8c8638
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+kselftest
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+kselftest/gcc-10/lab-baylibre/baseline-meson-g12a-x96-max.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+kselftest/gcc-10/lab-baylibre/baseline-meson-g12a-x96-max.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/63e5d7052b4b282bac8c8=
+639
+        failing since 16 days (last pass: next-20230124, first fail: next-2=
+0230125) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-g12b-a311d-khadas-vim3 | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+kselftest          | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d70000d0a61bdc8c8636
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+kselftest
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+kselftest/gcc-10/lab-baylibre/baseline-meson-g12b-a311d-khadas-=
+vim3.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+kselftest/gcc-10/lab-baylibre/baseline-meson-g12b-a311d-khadas-=
+vim3.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/63e5d70000d0a61bdc8c8=
+637
+        failing since 16 days (last pass: next-20230124, first fail: next-2=
+0230125) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-g12b-a311d-khadas-vim3 | arm64  | lab-collabora   | gcc-10   | defcon=
+fig+kselftest          | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d66d504ee989de8c863c
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+kselftest
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+kselftest/gcc-10/lab-collabora/baseline-meson-g12b-a311d-khadas=
+-vim3.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+kselftest/gcc-10/lab-collabora/baseline-meson-g12b-a311d-khadas=
+-vim3.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/63e5d66d504ee989de8c8=
+63d
+        failing since 16 days (last pass: next-20230124, first fail: next-2=
+0230125) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-g12b-odroid-n2         | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+kselftest          | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d623276c1343718c8640
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+kselftest
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+kselftest/gcc-10/lab-baylibre/baseline-meson-g12b-odroid-n2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+kselftest/gcc-10/lab-baylibre/baseline-meson-g12b-odroid-n2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/63e5d623276c1343718c8=
+641
+        failing since 3 days (last pass: next-20230203, first fail: next-20=
+230206) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-gxbb-nanopi-k2         | arm64  | lab-baylibre    | clang-16 | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d49c9a3add7baf8c863b
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    clang-16 (Debian clang version 16.0.0 (++20230205083021+66c1=
+717f496d-1~exp1~20230205203128.15))
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/clang-16/lab-baylibre/baseline-meson=
+-gxbb-nanopi-k2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/clang-16/lab-baylibre/baseline-meson=
+-gxbb-nanopi-k2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/63e5d49c9a3add7baf8c8644
+        failing since 22 days (last pass: next-20221129, first fail: next-2=
+0230118)
+
+    2023-02-10T05:22:21.476790  / # #
+    2023-02-10T05:22:21.578492  export SHELL=3D/bin/sh
+    2023-02-10T05:22:21.578846  #
+    2023-02-10T05:22:21.680186  / # export SHELL=3D/bin/sh. /lava-3318071/e=
+nvironment
+    2023-02-10T05:22:21.680552  =
+
+    2023-02-10T05:22:21.781884  / # . /lava-3318071/environment/lava-331807=
+1/bin/lava-test-runner /lava-3318071/1
+    2023-02-10T05:22:21.782486  =
+
+    2023-02-10T05:22:21.788249  / # /lava-3318071/bin/lava-test-runner /lav=
+a-3318071/1
+    2023-02-10T05:22:21.864103  + export 'TESTRUN_ID=3D1_bootrr'
+    2023-02-10T05:22:21.864583  + cd /lava-3318071/1/tests/1_bootrr =
+
+    ... (10 line(s) more)  =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-gxbb-nanopi-k2         | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig                    | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d2083658f87ede8c86bb
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig/gcc-10/lab-baylibre/baseline-meson-gxbb-nanopi-k2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig/gcc-10/lab-baylibre/baseline-meson-gxbb-nanopi-k2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/63e5d2083658f87ede8c86c4
+        failing since 22 days (last pass: next-20221129, first fail: next-2=
+0230118)
+
+    2023-02-10T05:11:19.745070  + set +x<8>[   18.212704] <LAVA_SIGNAL_ENDR=
+UN 0_dmesg 3317967_1.5.2.4.1>
+    2023-02-10T05:11:19.850974  / # #
+    2023-02-10T05:11:19.952861  export SHELL=3D/bin/sh
+    2023-02-10T05:11:19.953265  #
+    2023-02-10T05:11:20.054719  / # export SHELL=3D/bin/sh. /lava-3317967/e=
+nvironment
+    2023-02-10T05:11:20.055165  =
+
+    2023-02-10T05:11:20.156619  / # . /lava-3317967/environment/lava-331796=
+7/bin/lava-test-runner /lava-3317967/1
+    2023-02-10T05:11:20.157294  =
+
+    2023-02-10T05:11:20.161727  / # /lava-3317967/bin/lava-test-runner /lav=
+a-3317967/1
+    2023-02-10T05:11:20.233528  + export 'TESTRUN_ID=3D1_bootrr' =
+
+    ... (17 line(s) more)  =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-gxbb-nanopi-k2         | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+videodec           | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d5319d10e04cfa8c862f
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: defconfig+videodec
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+videodec/gcc-10/lab-baylibre/baseline-meson-gxbb-nanopi-k2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+videodec/gcc-10/lab-baylibre/baseline-meson-gxbb-nanopi-k2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/63e5d5319d10e04cfa8c8638
+        failing since 22 days (last pass: next-20221130, first fail: next-2=
+0230118)
+
+    2023-02-10T05:24:23.518701  / # #
+    2023-02-10T05:24:23.620528  export SHELL=3D/bin/sh
+    2023-02-10T05:24:23.620920  #
+    2023-02-10T05:24:23.722253  / # export SHELL=3D/bin/sh. /lava-3318118/e=
+nvironment
+    2023-02-10T05:24:23.722657  =
+
+    2023-02-10T05:24:23.823990  / # . /lava-3318118/environment/lava-331811=
+8/bin/lava-test-runner /lava-3318118/1
+    2023-02-10T05:24:23.824649  =
+
+    2023-02-10T05:24:23.830639  / # /lava-3318118/bin/lava-test-runner /lav=
+a-3318118/1
+    2023-02-10T05:24:23.901662  + export 'TESTRUN_ID=3D1_bootrr'
+    2023-02-10T05:24:23.901948  + cd /lava-3318118/1/tests/1_bootrr =
+
+    ... (15 line(s) more)  =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-gxbb-nanopi-k2         | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d595a5acb2bfe48c862f
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-baylibre/baseline-meson-g=
+xbb-nanopi-k2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-baylibre/baseline-meson-g=
+xbb-nanopi-k2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/63e5d595a5acb2bfe48c8638
+        failing since 22 days (last pass: next-20221129, first fail: next-2=
+0230118)
+
+    2023-02-10T05:26:32.765090  / # #
+    2023-02-10T05:26:32.866928  export SHELL=3D/bin/sh
+    2023-02-10T05:26:32.867321  <3>[   18.119427] brcmfmac: brcmf_sdio_htcl=
+k: HT Avail timeout (1000000): clkctl 0x50
+    2023-02-10T05:26:32.867576  #
+    2023-02-10T05:26:32.968931  / # export SHELL=3D/bin/sh. /lava-3318146/e=
+nvironment
+    2023-02-10T05:26:32.969365  =
+
+    2023-02-10T05:26:33.070799  / # . /lava-3318146/environment/lava-331814=
+6/bin/lava-test-runner /lava-3318146/1
+    2023-02-10T05:26:33.071458  =
+
+    2023-02-10T05:26:33.090624  / # /lava-3318146/bin/lava-test-runner /lav=
+a-3318146/1
+    2023-02-10T05:26:33.155482  + export 'TESTRUN_ID=3D1_bootrr' =
+
+    ... (10 line(s) more)  =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-gxbb-nanopi-k2         | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON...OMIZE_BASE=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d60cef15fde7ba8c86cf
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-baylibre/baseline-meson-gx=
+bb-nanopi-k2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-baylibre/baseline-meson-gx=
+bb-nanopi-k2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/63e5d60cef15fde7ba8c86d8
+        failing since 22 days (last pass: next-20221130, first fail: next-2=
+0230118)
+
+    2023-02-10T05:28:19.321783  / # #
+    2023-02-10T05:28:19.423443  export SHELL=3D/bin/sh
+    2023-02-10T05:28:19.423789  #
+    2023-02-10T05:28:19.525084  / # export SHELL=3D/bin/sh. /lava-3318207/e=
+nvironment
+    2023-02-10T05:28:19.525432  =
+
+    2023-02-10T05:28:19.525659  / # <3>[   17.862736] brcmfmac: brcmf_sdio_=
+htclk: HT Avail timeout (1000000): clkctl 0x50
+    2023-02-10T05:28:19.626956  . /lava-3318207/environment/lava-3318207/bi=
+n/lava-test-runner /lava-3318207/1
+    2023-02-10T05:28:19.627553  =
+
+    2023-02-10T05:28:19.633246  / # /lava-3318207/bin/lava-test-runner /lav=
+a-3318207/1
+    2023-02-10T05:28:19.665264  + export 'TESTRUN_ID=3D1_bootrr' =
+
+    ... (11 line(s) more)  =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-gxbb-nanopi-k2         | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+kselftest          | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d77a9789bcb1c38c8630
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+kselftest
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+kselftest/gcc-10/lab-baylibre/baseline-meson-gxbb-nanopi-k2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+kselftest/gcc-10/lab-baylibre/baseline-meson-gxbb-nanopi-k2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/63e5d77a9789bcb1c38c8=
+631
+        failing since 2 days (last pass: next-20230206, first fail: next-20=
+230207) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-gxbb-nanopi-k2         | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d7eebc4eedd2f88c8630
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: defconfig+crypto
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+crypto/gcc-10/lab-baylibre/baseline-meson-gxbb-nanopi-k2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+crypto/gcc-10/lab-baylibre/baseline-meson-gxbb-nanopi-k2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/63e5d7efbc4eedd2f88c8639
+        failing since 22 days (last pass: next-20221130, first fail: next-2=
+0230118)
+
+    2023-02-10T05:36:35.298120  / # #
+    2023-02-10T05:36:35.400435  export SHELL=3D/bin/sh
+    2023-02-10T05:36:35.400954  #
+    2023-02-10T05:36:35.502279  / # export SHELL=3D/bin/sh. /lava-3318313/e=
+nvironment
+    2023-02-10T05:36:35.503045  =
+
+    2023-02-10T05:36:35.604693  / # . /lava-3318313/environment/lava-331831=
+3/bin/lava-test-runner /lava-3318313/1
+    2023-02-10T05:36:35.605791  =
+
+    2023-02-10T05:36:35.622942  / # /lava-3318313/bin/lava-test-runner /lav=
+a-3318313/1
+    2023-02-10T05:36:35.679863  + export 'TESTRUN_ID=3D1_bootrr'
+    2023-02-10T05:36:35.680651  + cd /lava-3318313/1/tests/1_bootrr =
+
+    ... (16 line(s) more)  =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-gxbb-nanopi-k2         | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+ima                | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d85612d51e24758c866c
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: defconfig+ima
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+ima/gcc-10/lab-baylibre/baseline-meson-gxbb-nanopi-k2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+ima/gcc-10/lab-baylibre/baseline-meson-gxbb-nanopi-k2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/63e5d85612d51e24758c8675
+        failing since 22 days (last pass: next-20221130, first fail: next-2=
+0230118)
+
+    2023-02-10T05:38:17.297085  + set +x<8>[   17.998067] <LAVA_SIGNAL_ENDR=
+UN 0_dmesg 3318375_1.5.2.4.1>
+    2023-02-10T05:38:17.402138  / # #
+    2023-02-10T05:38:17.503878  export SHELL=3D/bin/sh
+    2023-02-10T05:38:17.504266  #
+    2023-02-10T05:38:17.605602  / # export SHELL=3D/bin/sh. /lava-3318375/e=
+nvironment
+    2023-02-10T05:38:17.605972  =
+
+    2023-02-10T05:38:17.707312  / # . /lava-3318375/environment/lava-331837=
+5/bin/lava-test-runner /lava-3318375/1
+    2023-02-10T05:38:17.707929  =
+
+    2023-02-10T05:38:17.727689  / # /lava-3318375/bin/lava-test-runner /lav=
+a-3318375/1
+    2023-02-10T05:38:17.783566  + export 'TESTRUN_ID=3D1_bootrr' =
+
+    ... (16 line(s) more)  =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-gxl-s905x-khadas-vim   | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+kselftest          | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d77c69d0b689b08c8633
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+kselftest
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+kselftest/gcc-10/lab-baylibre/baseline-meson-gxl-s905x-khadas-v=
+im.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+kselftest/gcc-10/lab-baylibre/baseline-meson-gxl-s905x-khadas-v=
+im.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/63e5d77c69d0b689b08c8=
+634
+        failing since 2 days (last pass: next-20230206, first fail: next-20=
+230207) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-gxl-s905x-libretech-cc | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+kselftest          | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d69591d53002098c864f
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+kselftest
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+kselftest/gcc-10/lab-baylibre/baseline-meson-gxl-s905x-libretec=
+h-cc.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+kselftest/gcc-10/lab-baylibre/baseline-meson-gxl-s905x-libretec=
+h-cc.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/63e5d69591d53002098c8=
+650
+        failing since 2 days (last pass: next-20230206, first fail: next-20=
+230207) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-gxl-s905x-libretech-cc | arm64  | lab-broonie     | gcc-10   | defcon=
+fig+kselftest          | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d6012ece3269b38c8640
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+kselftest
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+kselftest/gcc-10/lab-broonie/baseline-meson-gxl-s905x-libretech=
+-cc.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+kselftest/gcc-10/lab-broonie/baseline-meson-gxl-s905x-libretech=
+-cc.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/63e5d6012ece3269b38c8=
+641
+        failing since 2 days (last pass: next-20230206, first fail: next-20=
+230207) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-gxl-s905x-libretech-cc | arm64  | lab-clabbe      | gcc-10   | defcon=
+fig+kselftest          | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d761a8eb0fe5fe8c864b
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+kselftest
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+kselftest/gcc-10/lab-clabbe/baseline-meson-gxl-s905x-libretech-=
+cc.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+kselftest/gcc-10/lab-clabbe/baseline-meson-gxl-s905x-libretech-=
+cc.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/63e5d761a8eb0fe5fe8c8=
+64c
+        failing since 2 days (last pass: next-20230206, first fail: next-20=
+230207) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-gxm-khadas-vim2        | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+kselftest          | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d620276c1343718c8638
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+kselftest
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+kselftest/gcc-10/lab-baylibre/baseline-meson-gxm-khadas-vim2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+kselftest/gcc-10/lab-baylibre/baseline-meson-gxm-khadas-vim2.ht=
+ml
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/63e5d620276c1343718c8=
+639
+        failing since 2 days (last pass: next-20230206, first fail: next-20=
+230207) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-sm1-sei610             | arm64  | lab-baylibre    | clang-16 | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d25c3aac5751ce8c8662
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    clang-16 (Debian clang version 16.0.0 (++20230205083021+66c1=
+717f496d-1~exp1~20230205203128.15))
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/clang-16/lab-baylibre/baseline-meson=
+-sm1-sei610.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/clang-16/lab-baylibre/baseline-meson=
+-sm1-sei610.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/63e5d25c3aac5751ce8c866b
+        failing since 22 days (last pass: next-20230109, first fail: next-2=
+0230118)
+
+    2023-02-10T05:12:36.802584  / # #
+    2023-02-10T05:12:36.903969  export SHELL=3D/bin/sh
+    2023-02-10T05:12:36.904242  #
+    2023-02-10T05:12:37.005378  / # export SHELL=3D/bin/sh. /lava-3318059/e=
+nvironment
+    2023-02-10T05:12:37.005713  =
+
+    2023-02-10T05:12:37.005882  / # <3>[   18.188642] brcmfmac: brcmf_sdio_=
+htclk: HT Avail timeout (1000000): clkctl 0x50
+    2023-02-10T05:12:37.107047  . /lava-3318059/environment/lava-3318059/bi=
+n/lava-test-runner /lava-3318059/1
+    2023-02-10T05:12:37.107607  =
+
+    2023-02-10T05:12:37.121385  / # /lava-3318059/bin/lava-test-runner /lav=
+a-3318059/1
+    2023-02-10T05:12:37.176352  + export 'TESTRUN_ID=3D1_bootrr' =
+
+    ... (14 line(s) more)  =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-sm1-sei610             | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON..._16K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d1fa386959d2178c8665
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: defconfig+CONFIG_ARM64_16K_PAGES=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+CONFIG_ARM64_16K_PAGES=3Dy/gcc-10/lab-baylibre/baseline-meson-s=
+m1-sei610.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+CONFIG_ARM64_16K_PAGES=3Dy/gcc-10/lab-baylibre/baseline-meson-s=
+m1-sei610.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/63e5d1fa386959d2178c866e
+        failing since 22 days (last pass: next-20230109, first fail: next-2=
+0230118)
+
+    2023-02-10T05:11:00.982799  + set +<8>[   17.760461] <LAVA_SIGNAL_ENDRU=
+N 0_dmesg 3318004_1.5.2.4.1>
+    2023-02-10T05:11:00.983077  x
+    2023-02-10T05:11:01.087186  / # #
+    2023-02-10T05:11:01.189057  export SHELL=3D/bin/sh
+    2023-02-10T05:11:01.189545  #
+    2023-02-10T05:11:01.291015  / # export SHELL=3D/bin/sh. /lava-3318004/e=
+nvironment
+    2023-02-10T05:11:01.291421  =
+
+    2023-02-10T05:11:01.291672  / # . /lava-3318004/environment<3>[   18.07=
+2281] brcmfmac: brcmf_sdio_htclk: HT Avail timeout (1000000): clkctl 0x50
+    2023-02-10T05:11:01.393094  /lava-3318004/bin/lava-test-runner /lava-33=
+18004/1
+    2023-02-10T05:11:01.393792   =
+
+    ... (14 line(s) more)  =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-sm1-sei610             | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig                    | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d24ce08f399f998c8635
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig/gcc-10/lab-baylibre/baseline-meson-sm1-sei610.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig/gcc-10/lab-baylibre/baseline-meson-sm1-sei610.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/63e5d24ce08f399f998c863e
+        failing since 22 days (last pass: next-20230109, first fail: next-2=
+0230118)
+
+    2023-02-10T05:12:33.668581  / # #
+    2023-02-10T05:12:33.771668  export SHELL=3D/bin/sh
+    2023-02-10T05:12:33.772793  #
+    2023-02-10T05:12:33.875053  / # export SHELL=3D/bin/sh<3>[   18.022478]=
+ brcmfmac: brcmf_sdio_htclk: HT Avai. /lava-3317985/environment
+    2023-02-10T05:12:33.875943  l timeout (1000000): clkctl 0x50
+    2023-02-10T05:12:33.876445  =
+
+    2023-02-10T05:12:33.978234  / # . /lava-3317985/environment/lava-331798=
+5/bin/lava-test-runner /lava-3317985/1
+    2023-02-10T05:12:33.979851  =
+
+    2023-02-10T05:12:33.991311  / # /lava-3317985/bin/lava-test-runner /lav=
+a-3317985/1
+    2023-02-10T05:12:34.050243  + export 'TESTRUN_ID=3D1_bootrr' =
+
+    ... (12 line(s) more)  =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-sm1-sei610             | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+videodec           | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d31d689837e4ab8c8648
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: defconfig+videodec
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+videodec/gcc-10/lab-baylibre/baseline-meson-sm1-sei610.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+videodec/gcc-10/lab-baylibre/baseline-meson-sm1-sei610.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/63e5d31d689837e4ab8c8651
+        failing since 22 days (last pass: next-20230109, first fail: next-2=
+0230118)
+
+    2023-02-10T05:15:54.717330  / # #
+    2023-02-10T05:15:54.820953  export SHELL=3D/bin/sh
+    2023-02-10T05:15:54.822191  #
+    2023-02-10T05:15:54.924633  / # export SHELL=3D/bin/sh<3>[   1. /lava-3=
+318103/environment
+    2023-02-10T05:15:54.925664  7.980423] brcmfmac: brcmf_sdio_htclk: HT Av=
+ail timeout (1000000): clkctl 0x50
+    2023-02-10T05:15:54.926425  =
+
+    2023-02-10T05:15:55.028337  / # . /lava-3318103/environment/lava-331810=
+3/bin/lava-test-runner /lava-3318103/1
+    2023-02-10T05:15:55.029762  =
+
+    2023-02-10T05:15:55.045827  / # /lava-3318103/bin/lava-test-runner /lav=
+a-3318103/1
+    2023-02-10T05:15:55.099912  + export 'TESTRUN_ID=3D1_bootrr' =
+
+    ... (17 line(s) more)  =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-sm1-sei610             | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d34e305c8105ba8c8632
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-baylibre/baseline-meson-s=
+m1-sei610.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-baylibre/baseline-meson-s=
+m1-sei610.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/63e5d34e305c8105ba8c863b
+        failing since 22 days (last pass: next-20230109, first fail: next-2=
+0230118)
+
+    2023-02-10T05:16:39.224406  / # #
+    2023-02-10T05:16:39.327229  export SHELL=3D/bin/sh
+    2023-02-10T05:16:39.327728  #
+    2023-02-10T05:16:39.429252  / # export SHELL=3D/bin/sh. /lava-3318137/e=
+nvironment
+    2023-02-10T05:16:39.429717  =
+
+    2023-02-10T05:16:39.429975  / # <3>[   18.232549] brcmfmac: brcmf_sdio_=
+htclk: HT Avail timeout (1000000): clkctl 0x50
+    2023-02-10T05:16:39.531374  . /lava-3318137/environment/lava-3318137/bi=
+n/lava-test-runner /lava-3318137/1
+    2023-02-10T05:16:39.532132  =
+
+    2023-02-10T05:16:39.537238  / # /lava-3318137/bin/lava-test-runner /lav=
+a-3318137/1
+    2023-02-10T05:16:39.599354  + export 'TESTRUN_ID=3D1_bootrr' =
+
+    ... (12 line(s) more)  =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-sm1-sei610             | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON...OMIZE_BASE=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d4abd3ef6fcff38c8632
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-baylibre/baseline-meson-sm=
+1-sei610.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-baylibre/baseline-meson-sm=
+1-sei610.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/63e5d4abd3ef6fcff38c863b
+        failing since 22 days (last pass: next-20230109, first fail: next-2=
+0230118)
+
+    2023-02-10T05:22:36.415389  / # #
+    2023-02-10T05:22:36.519899  export SHELL=3D/bin/sh
+    2023-02-10T05:22:36.520889  #
+    2023-02-10T05:22:36.623042  / # export SHELL=3D/bin/sh. /lava-3318225/e=
+nvironment
+    2023-02-10T05:22:36.623935  =
+
+    2023-02-10T05:22:36.624535  / # <3>[   17.950655] brcmfmac: brcmf_sdio_=
+htclk: HT Avail timeout (1000000): clkctl 0x50
+    2023-02-10T05:22:36.726637  . /lava-3318225/environment/lava-3318225/bi=
+n/lava-test-runner /lava-3318225/1
+    2023-02-10T05:22:36.728302  =
+
+    2023-02-10T05:22:36.744747  / # /lava-3318225/bin/lava-test-runner /lav=
+a-3318225/1
+    2023-02-10T05:22:36.799884  + export 'TESTRUN_ID=3D1_bootrr' =
+
+    ... (12 line(s) more)  =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-sm1-sei610             | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d59b14de63e87b8c863c
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: defconfig+crypto
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+crypto/gcc-10/lab-baylibre/baseline-meson-sm1-sei610.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+crypto/gcc-10/lab-baylibre/baseline-meson-sm1-sei610.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/63e5d59b14de63e87b8c8645
+        failing since 22 days (last pass: next-20230109, first fail: next-2=
+0230118)
+
+    2023-02-10T05:26:35.913751  / # #
+    2023-02-10T05:26:36.015234  export SHELL=3D/bin/sh
+    2023-02-10T05:26:36.015647  #
+    2023-02-10T05:26:36.116982  / # export SHELL=3D/bin/sh. /lava-3318284/e=
+nvironment
+    2023-02-10T05:26:36.117399  =
+
+    2023-02-10T05:26:36.117636  / # <3>[  100.425132] brcmfmac: brcmf_sdio_=
+htclk: HT Avail timeout (1000000): clkctl 0x50
+    2023-02-10T05:26:36.219299  . /lava-3318284/environment/lava-3318284/bi=
+n/lava-test-runner /lava-3318284/1
+    2023-02-10T05:26:36.219988  =
+
+    2023-02-10T05:26:36.261864  / # /lava-3318284/bin/lava-test-runner /lav=
+a-3318284/1
+    2023-02-10T05:26:36.292901  + export 'TESTRUN_ID=3D1_bootrr' =
+
+    ... (16 line(s) more)  =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-sm1-sei610             | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+ima                | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d6c711bcab79238c8631
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: defconfig+ima
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+ima/gcc-10/lab-baylibre/baseline-meson-sm1-sei610.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+ima/gcc-10/lab-baylibre/baseline-meson-sm1-sei610.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/63e5d6c711bcab79238c863a
+        failing since 22 days (last pass: next-20230109, first fail: next-2=
+0230118)
+
+    2023-02-10T05:31:40.091888  / # #
+    2023-02-10T05:31:40.195136  export SHELL=3D/bin/sh
+    2023-02-10T05:31:40.196061  #
+    2023-02-10T05:31:40.298270  / # export SHELL=3D/bin/sh<3>[   17.9990. /=
+lava-3318381/environment
+    2023-02-10T05:31:40.299267  03] brcmfmac: brcmf_sdio_htclk: HT Avail ti=
+meout (1000000): clkctl 0x50
+    2023-02-10T05:31:40.299832  =
+
+    2023-02-10T05:31:40.401873  / # . /lava-3318381/environment/lava-331838=
+1/bin/lava-test-runner /lava-3318381/1
+    2023-02-10T05:31:40.403455  =
+
+    2023-02-10T05:31:40.416443  / # /lava-3318381/bin/lava-test-runner /lav=
+a-3318381/1
+    2023-02-10T05:31:40.473389  + export 'TESTRUN_ID=3D1_bootrr' =
+
+    ... (16 line(s) more)  =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+mt8173-elm-hana              | arm64  | lab-collabora   | gcc-10   | defcon=
+fig+arm...ok+kselftest | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d68dfec12a12ca8c8642
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+arm64-chromebook+kselftest
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+arm64-chromebook+kselftest/gcc-10/lab-collabora/baseline-mt8173=
+-elm-hana.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+arm64-chromebook+kselftest/gcc-10/lab-collabora/baseline-mt8173=
+-elm-hana.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/63e5d68dfec12a12ca8c8=
+643
+        failing since 16 days (last pass: next-20230123, first fail: next-2=
+0230124) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+mt8183-kukui-...uniper-sku16 | arm64  | lab-collabora   | clang-13 | cros:/=
+/chrome...4-chromebook | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d55282ba54b6068c8634
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+a=
+rm64-chromebook
+  Compiler:    clang-13 (Debian clang version 13.0.1-6~deb11u1)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/cros---chromeos-5.10-arm64-chromiumos-arm64.flavour.config+arm64-chromebo=
+ok/clang-13/lab-collabora/baseline-mt8183-kukui-jacuzzi-juniper-sku16.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/cros---chromeos-5.10-arm64-chromiumos-arm64.flavour.config+arm64-chromebo=
+ok/clang-13/lab-collabora/baseline-mt8183-kukui-jacuzzi-juniper-sku16.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/63e5d55282ba54b6068c8=
+635
+        failing since 13 days (last pass: next-20230120, first fail: next-2=
+0230127) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+mt8183-kukui-...uniper-sku16 | arm64  | lab-collabora   | clang-13 | cros:/=
+/chrome...4-chromebook | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d4eb7e2e91ec588c864b
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: cros://chromeos-5.10/arm64/chromiumos-mediatek.flavour.confi=
+g+arm64-chromebook
+  Compiler:    clang-13 (Debian clang version 13.0.1-6~deb11u1)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/cros---chromeos-5.10-arm64-chromiumos-mediatek.flavour.config+arm64-chrom=
+ebook/clang-13/lab-collabora/baseline-mt8183-kukui-jacuzzi-juniper-sku16.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/cros---chromeos-5.10-arm64-chromiumos-mediatek.flavour.config+arm64-chrom=
+ebook/clang-13/lab-collabora/baseline-mt8183-kukui-jacuzzi-juniper-sku16.ht=
+ml
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/63e5d4eb7e2e91ec588c8=
+64c
+        failing since 16 days (last pass: next-20230123, first fail: next-2=
+0230124) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+mt8183-kukui-...uniper-sku16 | arm64  | lab-collabora   | gcc-10   | defcon=
+fig+arm...ok+kselftest | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d68f7a4611fe428c8634
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+arm64-chromebook+kselftest
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+arm64-chromebook+kselftest/gcc-10/lab-collabora/baseline-mt8183=
+-kukui-jacuzzi-juniper-sku16.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+arm64-chromebook+kselftest/gcc-10/lab-collabora/baseline-mt8183=
+-kukui-jacuzzi-juniper-sku16.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/63e5d68f7a4611fe428c8=
+635
+        failing since 1 day (last pass: next-20230206, first fail: next-202=
+30208) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+mt8192-asurada-spherion-r0   | arm64  | lab-collabora   | clang-13 | cros:/=
+/chrome...4-chromebook | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d48d39a8881f298c865d
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+a=
+rm64-chromebook
+  Compiler:    clang-13 (Debian clang version 13.0.1-6~deb11u1)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/cros---chromeos-5.10-arm64-chromiumos-arm64.flavour.config+arm64-chromebo=
+ok/clang-13/lab-collabora/baseline-mt8192-asurada-spherion-r0.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/cros---chromeos-5.10-arm64-chromiumos-arm64.flavour.config+arm64-chromebo=
+ok/clang-13/lab-collabora/baseline-mt8192-asurada-spherion-r0.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/63e5d48d39a8881f298c8=
+65e
+        failing since 1 day (last pass: next-20230207, first fail: next-202=
+30208) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+mt8192-asurada-spherion-r0   | arm64  | lab-collabora   | gcc-10   | defcon=
+fig+arm64-chromebook   | 3          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d3e40fbcdbceb78c8658
+
+  Results:     177 PASS, 9 FAIL, 0 SKIP
+  Full config: defconfig+arm64-chromebook
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+arm64-chromebook/gcc-10/lab-collabora/baseline-mt8192-asurada-s=
+pherion-r0.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+arm64-chromebook/gcc-10/lab-collabora/baseline-mt8192-asurada-s=
+pherion-r0.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.clk-mt8192-pericfg-probed: https://kernelci.org/test/ca=
+se/id/63e5d3e40fbcdbceb78c870e
+        failing since 7 days (last pass: next-20230130, first fail: next-20=
+230202)
+
+    2023-02-10T05:18:59.009269  /lava-9092863/1/../bin/lava-test-case
+
+    2023-02-10T05:18:59.015818  <8>[   22.642690] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dclk-mt8192-pericfg-probed RESULT=3Dfail>
+   =
+
+
+  * baseline.bootrr.clk-mt8192-infracfg-probed: https://kernelci.org/test/c=
+ase/id/63e5d3e40fbcdbceb78c870f
+        failing since 7 days (last pass: next-20230130, first fail: next-20=
+230202)
+
+    2023-02-10T05:18:57.989257  /lava-9092863/1/../bin/lava-test-case
+
+    2023-02-10T05:18:57.995980  <8>[   21.622779] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dclk-mt8192-infracfg-probed RESULT=3Dfail>
+   =
+
+
+  * baseline.bootrr.clk-mt8192-topckgen-probed: https://kernelci.org/test/c=
+ase/id/63e5d3e40fbcdbceb78c8710
+        failing since 7 days (last pass: next-20230130, first fail: next-20=
+230202)
+
+    2023-02-10T05:18:55.958920    V:            0
+
+    2023-02-10T05:18:55.958996    Res:          0x0
+
+    2023-02-10T05:18:55.962033  TPM2_CC_TestParms:
+
+    2023-02-10T05:18:55.962115    value: 0x18A
+
+    2023-02-10T05:18:55.965578    commandIndex: 0x18a
+
+    2023-02-10T05:18:55.968845    reserved1:    0x0
+
+    2023-02-10T05:18:55.968938    nv:           0
+
+    2023-02-10T05:18:55.972072    extensive:    0
+
+    2023-02-10T05:18:55.972153    flushed:      0
+
+    2023-02-10T05:18:55.975268    cHandles:     0x0
+ =
+
+    ... (51 line(s) more)  =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+mt8192-asurada-spherion-r0   | arm64  | lab-collabora   | gcc-10   | defcon=
+fig+arm...ok+kselftest | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d68a3a3124def18c864e
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+arm64-chromebook+kselftest
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+arm64-chromebook+kselftest/gcc-10/lab-collabora/baseline-mt8192=
+-asurada-spherion-r0.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+arm64-chromebook+kselftest/gcc-10/lab-collabora/baseline-mt8192=
+-asurada-spherion-r0.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/63e5d68a3a3124def18c8=
+64f
+        failing since 1 day (last pass: next-20230206, first fail: next-202=
+30208) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+ox820-clouden...lug-series-3 | arm    | lab-baylibre    | gcc-10   | oxnas_=
+v6_defconfig           | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d02b9033a341998c8654
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: oxnas_v6_defconfig
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm/=
+oxnas_v6_defconfig/gcc-10/lab-baylibre/baseline-ox820-cloudengines-pogoplug=
+-series-3.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm/=
+oxnas_v6_defconfig/gcc-10/lab-baylibre/baseline-ox820-cloudengines-pogoplug=
+-series-3.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/63e5d02b9033a341998c8=
+655
+        failing since 170 days (last pass: next-20220822, first fail: next-=
+20220823) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+qcom-qdf2400                 | arm64  | lab-linaro-lkft | gcc-10   | defcon=
+fig+kselftest          | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5ecfdae654915f38c865f
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+kselftest
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+kselftest/gcc-10/lab-linaro-lkft/baseline-qcom-qdf2400.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+kselftest/gcc-10/lab-linaro-lkft/baseline-qcom-qdf2400.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/63e5ecfdae654915f38c8=
+660
+        failing since 2 days (last pass: next-20230206, first fail: next-20=
+230207) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+qcom-qdf2400                 | arm64  | lab-linaro-lkft | gcc-10   | defcon=
+fig+arm...ok+kselftest | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5f1adde1c6e4d828c862f
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+arm64-chromebook+kselftest
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+arm64-chromebook+kselftest/gcc-10/lab-linaro-lkft/baseline-qcom=
+-qdf2400.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+arm64-chromebook+kselftest/gcc-10/lab-linaro-lkft/baseline-qcom=
+-qdf2400.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/63e5f1adde1c6e4d828c8=
+630
+        failing since 2 days (last pass: next-20230206, first fail: next-20=
+230208) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+qemu_arm64-virt-gicv2-uefi   | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+debug              | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5da6a205bbd75978c863f
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+debug
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+debug/gcc-10/lab-baylibre/baseline-qemu_arm64-virt-gicv2-uefi.t=
+xt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+debug/gcc-10/lab-baylibre/baseline-qemu_arm64-virt-gicv2-uefi.h=
+tml
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/63e5da6a205bbd75978c8=
+640
+        new failure (last pass: next-20230208) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+qemu_arm64-virt-gicv2-uefi   | arm64  | lab-collabora   | gcc-10   | defcon=
+fig+debug              | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d9852e0bd0f0338c863d
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+debug
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+debug/gcc-10/lab-collabora/baseline-qemu_arm64-virt-gicv2-uefi.=
+txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+debug/gcc-10/lab-collabora/baseline-qemu_arm64-virt-gicv2-uefi.=
+html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/63e5d9852e0bd0f0338c8=
+63e
+        new failure (last pass: next-20230208) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+qemu_arm64-virt-gicv3-uefi   | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+debug              | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5da6b205bbd75978c8643
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+debug
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+debug/gcc-10/lab-baylibre/baseline-qemu_arm64-virt-gicv3-uefi.t=
+xt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+debug/gcc-10/lab-baylibre/baseline-qemu_arm64-virt-gicv3-uefi.h=
+tml
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/63e5da6b205bbd75978c8=
+644
+        new failure (last pass: next-20230208) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+qemu_arm64-virt-gicv3-uefi   | arm64  | lab-collabora   | gcc-10   | defcon=
+fig+debug              | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d98776d9a319d48c8641
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+debug
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+debug/gcc-10/lab-collabora/baseline-qemu_arm64-virt-gicv3-uefi.=
+txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+debug/gcc-10/lab-collabora/baseline-qemu_arm64-virt-gicv3-uefi.=
+html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/63e5d98776d9a319d48c8=
+642
+        new failure (last pass: next-20230208) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+rk3288-rock2-square          | arm    | lab-collabora   | gcc-10   | multi_=
+v7_defc...G_ARM_LPAE=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d25ce08f399f998c8649
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm/=
+multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy/gcc-10/lab-collabora/=
+baseline-rk3288-rock2-square.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm/=
+multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy/gcc-10/lab-collabora/=
+baseline-rk3288-rock2-square.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/63e5d25ce08f399f998c8=
+64a
+        failing since 79 days (last pass: next-20221121, first fail: next-2=
+0221122) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+rk3288-veyron-jaq            | arm    | lab-collabora   | gcc-10   | multi_=
+v7_defc...G_ARM_LPAE=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d2fc4dc23e05df8c8650
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm/=
+multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy/gcc-10/lab-collabora/=
+baseline-rk3288-veyron-jaq.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm/=
+multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy/gcc-10/lab-collabora/=
+baseline-rk3288-veyron-jaq.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/63e5d2fc4dc23e05df8c8=
+651
+        failing since 79 days (last pass: next-20221121, first fail: next-2=
+0221122) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+rk3399-gru-kevin             | arm64  | lab-collabora   | gcc-10   | defcon=
+fig+arm...ok+kselftest | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d68d91d53002098c8634
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+arm64-chromebook+kselftest
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+arm64-chromebook+kselftest/gcc-10/lab-collabora/baseline-rk3399=
+-gru-kevin.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+arm64-chromebook+kselftest/gcc-10/lab-collabora/baseline-rk3399=
+-gru-kevin.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/63e5d68d91d53002098c8=
+635
+        failing since 1 day (last pass: next-20230206, first fail: next-202=
+30208) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+rk3399-roc-pc                | arm64  | lab-clabbe      | gcc-10   | defcon=
+fig+kselftest          | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d69bfccb161dd78c8644
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+kselftest
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+kselftest/gcc-10/lab-clabbe/baseline-rk3399-roc-pc.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+kselftest/gcc-10/lab-clabbe/baseline-rk3399-roc-pc.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/63e5d69bfccb161dd78c8=
+645
+        failing since 2 days (last pass: next-20230206, first fail: next-20=
+230207) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+rk3399-roc-pc                | arm64  | lab-clabbe      | gcc-10   | defcon=
+fig+debug              | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d907a1439515108c8652
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: defconfig+debug
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+debug/gcc-10/lab-clabbe/baseline-rk3399-roc-pc.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+debug/gcc-10/lab-clabbe/baseline-rk3399-roc-pc.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/63e5d907a1439515108c865b
+        failing since 35 days (last pass: next-20221130, first fail: next-2=
+0230105)
+
+    2023-02-10T05:41:11.252967  + set +x
+    2023-02-10T05:41:11.254240  <8>[   68.148292][  T196] <LAVA_SIGNAL_ENDR=
+UN 0_dmesg 395448_1.5.2.4.1>
+    2023-02-10T05:41:11.393106  #
+    2023-02-10T05:41:11.496045  / # #export SHELL=3D/bin/sh
+    2023-02-10T05:41:11.496814  =
+
+    2023-02-10T05:41:11.598557  / # export SHELL=3D/bin/sh. /lava-395448/en=
+vironment
+    2023-02-10T05:41:11.599173  =
+
+    2023-02-10T05:41:11.700712  / # . /lava-395448/environment/lava-395448/=
+bin/lava-test-runner /lava-395448/1
+    2023-02-10T05:41:11.701718  =
+
+    2023-02-10T05:41:11.708431  / # /lava-395448/bin/lava-test-runner /lava=
+-395448/1 =
+
+    ... (43 line(s) more)  =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+rk3399-rock-pi-4b            | arm64  | lab-collabora   | gcc-10   | defcon=
+fig+kselftest          | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d5c210024986088c8659
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+kselftest
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+kselftest/gcc-10/lab-collabora/baseline-rk3399-rock-pi-4b.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+kselftest/gcc-10/lab-collabora/baseline-rk3399-rock-pi-4b.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/63e5d5c210024986088c8=
+65a
+        failing since 2 days (last pass: next-20230206, first fail: next-20=
+230207) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+sc7180-trogdor-kingoftown    | arm64  | lab-collabora   | gcc-10   | defcon=
+fig+arm...ok+kselftest | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d68acd128367e58c864f
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+arm64-chromebook+kselftest
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+arm64-chromebook+kselftest/gcc-10/lab-collabora/baseline-sc7180=
+-trogdor-kingoftown.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+arm64-chromebook+kselftest/gcc-10/lab-collabora/baseline-sc7180=
+-trogdor-kingoftown.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/63e5d68acd128367e58c8=
+650
+        failing since 1 day (last pass: next-20230206, first fail: next-202=
+30208) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+sc7180-trogdo...zor-limozeen | arm64  | lab-collabora   | gcc-10   | defcon=
+fig+arm...ok+kselftest | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d68d3a3124def18c8654
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+arm64-chromebook+kselftest
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+arm64-chromebook+kselftest/gcc-10/lab-collabora/baseline-sc7180=
+-trogdor-lazor-limozeen.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+arm64-chromebook+kselftest/gcc-10/lab-collabora/baseline-sc7180=
+-trogdor-lazor-limozeen.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/63e5d68d3a3124def18c8=
+655
+        failing since 1 day (last pass: next-20230206, first fail: next-202=
+30208) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+sun50i-a64-bananapi-m64      | arm64  | lab-clabbe      | gcc-10   | defcon=
+fig+kselftest          | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d88df03c5ab6158c862f
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+kselftest
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+kselftest/gcc-10/lab-clabbe/baseline-sun50i-a64-bananapi-m64.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+kselftest/gcc-10/lab-clabbe/baseline-sun50i-a64-bananapi-m64.ht=
+ml
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/63e5d88df03c5ab6158c8=
+630
+        new failure (last pass: next-20230127) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+sun50i-a64-pine64-plus       | arm64  | lab-broonie     | gcc-10   | defcon=
+fig+kselftest          | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d72ca4d60f5a838c8636
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+kselftest
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+kselftest/gcc-10/lab-broonie/baseline-sun50i-a64-pine64-plus.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+kselftest/gcc-10/lab-broonie/baseline-sun50i-a64-pine64-plus.ht=
+ml
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/63e5d72ca4d60f5a838c8=
+637
+        failing since 2 days (last pass: next-20230206, first fail: next-20=
+230207) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+sun50i-h5-lib...ch-all-h3-cc | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+kselftest          | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d5e4d271a323898c863c
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+kselftest
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+kselftest/gcc-10/lab-baylibre/baseline-sun50i-h5-libretech-all-=
+h3-cc.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+kselftest/gcc-10/lab-baylibre/baseline-sun50i-h5-libretech-all-=
+h3-cc.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/63e5d5e4d271a323898c8=
+63d
+        failing since 2 days (last pass: next-20230206, first fail: next-20=
+230207) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+sun50i-h5-lib...ch-all-h3-cc | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+debug              | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d8ef23d361bdd08c86f2
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+debug
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+debug/gcc-10/lab-baylibre/baseline-sun50i-h5-libretech-all-h3-c=
+c.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+debug/gcc-10/lab-baylibre/baseline-sun50i-h5-libretech-all-h3-c=
+c.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/63e5d8ef23d361bdd08c8=
+6f3
+        failing since 113 days (last pass: next-20221011, first fail: next-=
+20221019) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+sun50i-h5-lib...ch-all-h3-cc | arm64  | lab-broonie     | gcc-10   | defcon=
+fig+kselftest          | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d62848967982a48c8652
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+kselftest
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+kselftest/gcc-10/lab-broonie/baseline-sun50i-h5-libretech-all-h=
+3-cc.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+kselftest/gcc-10/lab-broonie/baseline-sun50i-h5-libretech-all-h=
+3-cc.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/63e5d62848967982a48c8=
+653
+        failing since 2 days (last pass: next-20230206, first fail: next-20=
+230207) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+sun50i-h6-pine-h64           | arm64  | lab-clabbe      | gcc-10   | defcon=
+fig+kselftest          | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d65e97dbd8b03b8c8632
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+kselftest
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+kselftest/gcc-10/lab-clabbe/baseline-sun50i-h6-pine-h64.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+kselftest/gcc-10/lab-clabbe/baseline-sun50i-h6-pine-h64.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/63e5d65e97dbd8b03b8c8=
+633
+        new failure (last pass: next-20230127) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+sun50i-h6-pine-h64           | arm64  | lab-collabora   | gcc-10   | defcon=
+fig+kselftest          | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d749dc588398bf8c863b
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+kselftest
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+kselftest/gcc-10/lab-collabora/baseline-sun50i-h6-pine-h64.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+kselftest/gcc-10/lab-collabora/baseline-sun50i-h6-pine-h64.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/63e5d749dc588398bf8c8=
+63c
+        new failure (last pass: next-20230127) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+sun8i-h3-libretech-all-h3-cc | arm    | lab-baylibre    | gcc-10   | sunxi_=
+defconfig              | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5cfc02829979c6d8c8645
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: sunxi_defconfig
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm/=
+sunxi_defconfig/gcc-10/lab-baylibre/baseline-sun8i-h3-libretech-all-h3-cc.t=
+xt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm/=
+sunxi_defconfig/gcc-10/lab-baylibre/baseline-sun8i-h3-libretech-all-h3-cc.h=
+tml
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/63e5cfc02829979c6d8c864e
+        failing since 16 days (last pass: next-20230123, first fail: next-2=
+0230124)
+
+    2023-02-10T05:01:30.000134  <8>[    9.989829] <LAVA_SIGNAL_ENDRUN 0_dme=
+sg 3317884_1.5.2.4.1>
+    2023-02-10T05:01:30.105598  / # #
+    2023-02-10T05:01:30.207363  export SHELL=3D/bin/sh
+    2023-02-10T05:01:30.207785  #
+    2023-02-10T05:01:30.309183  / # export SHELL=3D/bin/sh. /lava-3317884/e=
+nvironment
+    2023-02-10T05:01:30.309634  =
+
+    2023-02-10T05:01:30.411068  / # . /lava-3317884/environment/lava-331788=
+4/bin/lava-test-runner /lava-3317884/1
+    2023-02-10T05:01:30.411744  =
+
+    2023-02-10T05:01:30.416775  / # /lava-3317884/bin/lava-test-runner /lav=
+a-3317884/1
+    2023-02-10T05:01:30.543580  + export 'TESTRUN_ID=3D1_bootrr' =
+
+    ... (11 line(s) more)  =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+tegra124-nyan-big            | arm    | lab-collabora   | gcc-10   | multi_=
+v7_defc...G_ARM_LPAE=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d16e67f49293bd8c8664
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm/=
+multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy/gcc-10/lab-collabora/=
+baseline-tegra124-nyan-big.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm/=
+multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy/gcc-10/lab-collabora/=
+baseline-tegra124-nyan-big.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/63e5d16e67f49293bd8c8=
+665
+        failing since 78 days (last pass: next-20221121, first fail: next-2=
+0221123) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+zynqmp-zcu102                | arm64  | lab-cip         | gcc-10   | defcon=
+fig+debug              | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63e5d8cf32883eb9f28c863c
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: defconfig+debug
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+debug/gcc-10/lab-cip/baseline-zynqmp-zcu102.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230210/arm6=
+4/defconfig+debug/gcc-10/lab-cip/baseline-zynqmp-zcu102.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230203.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/63e5d8cf32883eb9f28c8643
+        failing since 35 days (last pass: next-20221207, first fail: next-2=
+0230105)
+
+    2023-02-10T05:40:20.910764  + set +x
+    2023-02-10T05:40:20.917916  <8>[   43.146481][  T170] <LAVA_SIGNAL_ENDR=
+UN 0_dmesg 846296_1.5.2.4.1>
+    2023-02-10T05:40:21.053450  #
+    2023-02-10T05:40:21.155597  / # #export SHELL=3D/bin/sh
+    2023-02-10T05:40:21.156075  =
+
+    2023-02-10T05:40:21.257446  / # export SHELL=3D/bin/sh. /lava-846296/en=
+vironment
+    2023-02-10T05:40:21.257947  =
+
+    2023-02-10T05:40:21.359350  / # . /lava-846296/environment/lava-846296/=
+bin/lava-test-runner /lava-846296/1
+    2023-02-10T05:40:21.360135  =
+
+    2023-02-10T05:40:21.363725  / # /lava-846296/bin/lava-test-runner /lava=
+-846296/1 =
+
+    ... (18 line(s) more)  =
+
+ =20

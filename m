@@ -2,57 +2,83 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D928A6918CC
-	for <lists+linux-next@lfdr.de>; Fri, 10 Feb 2023 07:55:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7D7569190C
+	for <lists+linux-next@lfdr.de>; Fri, 10 Feb 2023 08:18:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231221AbjBJGzb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 10 Feb 2023 01:55:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40086 "EHLO
+        id S231346AbjBJHS6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 10 Feb 2023 02:18:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231191AbjBJGza (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 10 Feb 2023 01:55:30 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2519A35242;
-        Thu,  9 Feb 2023 22:55:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C8FF9B823F2;
-        Fri, 10 Feb 2023 06:55:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D5E8C433D2;
-        Fri, 10 Feb 2023 06:55:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676012115;
-        bh=LFkUV8fHq0P/xykC0A1l4YWNRaeM4NlQSLGmoTNh4O4=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=qAt69rXVc6uPzcNcMfIWe5PFMfsrUmoww3LfkaHZDvvwXBAaSK71vyllpPOXgYqpI
-         cKpSwf0DwwjAy/nvOqA+6mE0zEG/lfyRsY8fzzCCwJCDk2JEHpeg7DI3TO0S1Frc6L
-         u0WdPKRizixGeOXcTJJb/ie0YgNiRXmRTK3hBN2+kvwR+jRiyjHmO06KyBfS79tdWO
-         fTUXYxiEszomXP0BUBw0QLHgbizlVYPvX59R6PmXMDBQbK4ACitgi5UDlRuzRV+NH0
-         68HdyWDAnQv0aJzDDz5KnHMQsLo5rIibfAp206ODt6bKwjQ4h0iCQPrSBYDyaXWl18
-         LDlDv9R4iCnEg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 3072F5C1B2E; Thu,  9 Feb 2023 22:55:15 -0800 (PST)
-Date:   Thu, 9 Feb 2023 22:55:15 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
+        with ESMTP id S231284AbjBJHS6 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 10 Feb 2023 02:18:58 -0500
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 395F738EAE;
+        Thu,  9 Feb 2023 23:18:53 -0800 (PST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id A261F5C00DB;
+        Fri, 10 Feb 2023 02:18:51 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Fri, 10 Feb 2023 02:18:51 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1676013531; x=1676099931; bh=bOL96QWLcZ
+        wI2shOC/MmIQiMA0z2IGE+mq551mYF7Mw=; b=Sv1/S3Ax/d5o82fsXTbxqxqFlB
+        HmL0RV8Dg/8alj/HoHZ0H+d7EucHWWVkmUM/xT9VDASXpF2M+U3Kx98kgWpP22v6
+        IRc8QKCJUytNFR36biuImhTpW4yJUU8S2TCykjmaaCWE1cr3QE+IZ5pQSB74KMWr
+        hXymurXT9zBmcWoT/+xYtRpeVZnqtEYCZSTRpTf/ByCimNILYsuuPUWun9TLdXt5
+        OfGpOUwkmbukdEB+bUoPtEAqYU+lpT62DzKaUZQKcMMCnFo6Ondc4/nezwvJR4ls
+        h+EQW8LlvVilp6ZnhXqm9gi9xCr5xAdDGljomP9f1eqhvzhURLIEu3JOVCcQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1676013531; x=1676099931; bh=bOL96QWLcZwI2shOC/MmIQiMA0z2
+        IGE+mq551mYF7Mw=; b=rGVftYffUwrosZWog9uFHYhmdx/JorNnbID9hNbJYtYw
+        p0mifPkQhadRniTdTqfeXLXcH6Q4aKzVPTN2n9tIuoPYbgUoFoL4yny5j9/6PF79
+        8SAYVmJ8vqUeXo+s8TgEy1L8Br69fu7EoTcjor3lrTr6YDli+Ry2J8es922hHLjl
+        I1vd9c6+LbM89v80s5ulUsCm3saGSntT2F0hLWpJk6j8BwyuPcPe7/4NX4eZWxl9
+        IqqINmlNWqZej8UhIec8MIThVcn5mXcRPi3OvhZRrE9pvWBN6vS/c1EgRG6uJwhC
+        DMh+Q2r6az/Csr5jneu6sMnOnNoVQHZrjiOkoGA4Cw==
+X-ME-Sender: <xms:2-_lY2VyvlTC1NUwLdZRBzlgh4YjDRpGoVQykmj0W_LUJzrzQHOYTA>
+    <xme:2-_lYymP74IPRV_CtV6xAx5eCFxVByNbcqkSWW3vylYO5Bu4U4QFbne-y-bjLzIhU
+    cxu7kDfnslJKw>
+X-ME-Received: <xmr:2-_lY6Yiy3ltoZ0JkjyhlEaQnxO-5uVNWU6HYeBLupZeUKjwat4zK9Z-PSh_1wvX9sJK_wv_bS8lMZwIdXWH96mMIUkWP51b1bU4Tg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudehgedguddtfecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgv
+    ghcumffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeehge
+    dvvedvleejuefgtdduudfhkeeltdeihfevjeekjeeuhfdtueefhffgheekteenucevlhhu
+    shhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhroh
+    grhhdrtghomh
+X-ME-Proxy: <xmx:2-_lY9VQioa14kMwdiRTrcSCrB0hgN3cuITTrgqAAZw8_MnHrYabtg>
+    <xmx:2-_lYwmNIwSxthHMUAmDtc_qZXLRMN1mi4BfSY_lU3DVunoNfUmhAQ>
+    <xmx:2-_lYye_CwdN4EPuJ0shoDi4rj6_e_XL5iXn3CEfCM3FePWdrMfLTA>
+    <xmx:2-_lY64AwK3JE77ABN8BREhz96zU7VhEckwexP3gpvwmVtXJyvovRA>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 10 Feb 2023 02:18:50 -0500 (EST)
+Date:   Fri, 10 Feb 2023 08:18:47 +0100
+From:   Greg KH <greg@kroah.com>
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Greg KH <greg@kroah.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Saravana Kannan <saravanak@google.com>
 Subject: Re: linux-next: manual merge of the driver-core tree with the rcu
  tree
-Message-ID: <20230210065515.GR2948950@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
+Message-ID: <Y+Xv17dLRGZoqUXr@kroah.com>
 References: <20230210124818.2caaa77f@canb.auug.org.au>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <20230210124818.2caaa77f@canb.auug.org.au>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -83,70 +109,6 @@ On Fri, Feb 10, 2023 at 12:48:18PM +1100, Stephen Rothwell wrote:
 > with the maintainer of the conflicting tree to minimise any particularly
 > complex conflicts.
 
-I have added this to my list of conflicts, thank you!
+Fix looks good to me, thanks!
 
-							Thanx, Paul
-
-> -- 
-> Cheers,
-> Stephen Rothwell
-> 
-> diff --cc drivers/base/core.c
-> index bb36aca8d1b7,2712a1a1e959..000000000000
-> --- a/drivers/base/core.c
-> +++ b/drivers/base/core.c
-> @@@ -181,6 -202,52 +202,51 @@@ void fw_devlink_purge_absent_suppliers(
->   }
->   EXPORT_SYMBOL_GPL(fw_devlink_purge_absent_suppliers);
->   
-> + /**
-> +  * __fwnode_links_move_consumers - Move consumer from @from to @to fwnode_handle
-> +  * @from: move consumers away from this fwnode
-> +  * @to: move consumers to this fwnode
-> +  *
-> +  * Move all consumer links from @from fwnode to @to fwnode.
-> +  */
-> + static void __fwnode_links_move_consumers(struct fwnode_handle *from,
-> + 					  struct fwnode_handle *to)
-> + {
-> + 	struct fwnode_link *link, *tmp;
-> + 
-> + 	list_for_each_entry_safe(link, tmp, &from->consumers, s_hook) {
-> + 		__fwnode_link_add(link->consumer, to, link->flags);
-> + 		__fwnode_link_del(link);
-> + 	}
-> + }
-> + 
-> + /**
-> +  * __fw_devlink_pickup_dangling_consumers - Pick up dangling consumers
-> +  * @fwnode: fwnode from which to pick up dangling consumers
-> +  * @new_sup: fwnode of new supplier
-> +  *
-> +  * If the @fwnode has a corresponding struct device and the device supports
-> +  * probing (that is, added to a bus), then we want to let fw_devlink create
-> +  * MANAGED device links to this device, so leave @fwnode and its descendant's
-> +  * fwnode links alone.
-> +  *
-> +  * Otherwise, move its consumers to the new supplier @new_sup.
-> +  */
-> + static void __fw_devlink_pickup_dangling_consumers(struct fwnode_handle *fwnode,
-> + 						   struct fwnode_handle *new_sup)
-> + {
-> + 	struct fwnode_handle *child;
-> + 
-> + 	if (fwnode->dev && fwnode->dev->bus)
-> + 		return;
-> + 
-> + 	fwnode->flags |= FWNODE_FLAG_NOT_DEVICE;
-> + 	__fwnode_links_move_consumers(fwnode, new_sup);
-> + 
-> + 	fwnode_for_each_available_child_node(fwnode, child)
-> + 		__fw_devlink_pickup_dangling_consumers(child, new_sup);
-> + }
-> + 
->  -#ifdef CONFIG_SRCU
->   static DEFINE_MUTEX(device_links_lock);
->   DEFINE_STATIC_SRCU(device_links_srcu);
->   
-
-
+greg k-h

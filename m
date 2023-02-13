@@ -2,103 +2,98 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E8786952D7
-	for <lists+linux-next@lfdr.de>; Mon, 13 Feb 2023 22:14:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2022F69536C
+	for <lists+linux-next@lfdr.de>; Mon, 13 Feb 2023 22:55:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229994AbjBMVOy (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 13 Feb 2023 16:14:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38844 "EHLO
+        id S229539AbjBMVy7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 13 Feb 2023 16:54:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229707AbjBMVOx (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 13 Feb 2023 16:14:53 -0500
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65C412057F;
-        Mon, 13 Feb 2023 13:14:38 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 8C3E3320091B;
-        Mon, 13 Feb 2023 16:14:37 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Mon, 13 Feb 2023 16:14:37 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1676322877; x=1676409277; bh=toJ0aRISUt
-        MBe2PAWCD05F6YdfjUmcb8gkQpLzyWDFw=; b=BrFuVHFtixFjgWUrf3w2F2WqBi
-        q6TIX7hyLg22dy/d35ZSeQpyYoegIJ0RONsRDN+HRus2Kee6Iu+yBW3aV60DT4UM
-        cJjE0ynEjo7Aza7uTjLNAIyvPu8MqmshYX5Au0UxLykxS581wYBN/KjleJ4wtt+t
-        f21GOGik8strKbAW0vy70tszDvbqAEEsIUk6XFcN4zHj7T1RyB9wSx/jJc3R+05z
-        U7W7tf9MGoeN9A6085RCsx0FQyZw5tneo2USK1h2hUOeZVzWd7YZsyE9kQKHDpjj
-        n2b6B7yJAk8TvOKKuvxHlWKFIKAyHZUj34Idqlxd6jAU6lKAddwlkvOTvvOw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1676322877; x=1676409277; bh=toJ0aRISUtMBe2PAWCD05F6YdfjU
-        mcb8gkQpLzyWDFw=; b=DUgZr8PVEUdHZRCNu7zsb4vbtDlv/0a7cJozEOie+2Zr
-        hv5OQa2EZXwIZPaAo6lUNCWYucuuG8yT86uZSWshpxisF6/mXztB/M5zk9/x+2Au
-        PTPzaKRRr4OFMHG/0lPFpHXRojVUz12l4cAv+/pDbSoKFWSH4lDgjMcXhYrdt6Pu
-        SVkJU6sfLdXG6S1E8zzRsK4AOmc29RL+PLARJzgLug3nK7Lcp/lzrUafvAB13Kbc
-        +4k6eTj/I4p5/c/RuqG9NVUbsFsSDoEuRNCcTLzBxKzLjhb8KwjmmY821Nonxb9u
-        ymbqRiJJSe4j3cLVgDfqQTARFuBvrJEnsyldj1K9Zw==
-X-ME-Sender: <xms:PKjqYwRTbD2CxRNZlNFzmwJ2aDHxeOz59BSfyxqxTGNS2lD5gLu3Bg>
-    <xme:PKjqY9wMW8GMzFCyvkzmJIPOP3F5O5sGIXTrM5cMmflqs8_bWdzV1d9TLKW7N88Y1
-    pmJdexwrOvUduERxj8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeiuddgudeggecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
-    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:PKjqY915grt_AWLaIRVg24BTPP0d7FS8L8PL9BgA8CXXr1bNgPnoow>
-    <xmx:PKjqY0DdqVI9AK2B9eyyJgX8E2TsusZSKlng6YIAXP2ZD6SQmoXt1w>
-    <xmx:PKjqY5h4XoJaWL0aARdkIMiLR28LeICoyHlT92iGADFY4_cl7PpOdQ>
-    <xmx:PajqY8sA1w1sHDLzwVwSTDZkyY9WxEapXKhr0z6A0pwG2AtXU9_weg>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 77F45B60089; Mon, 13 Feb 2023 16:14:36 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-156-g081acc5ed5-fm-20230206.001-g081acc5e
-Mime-Version: 1.0
-Message-Id: <8911829f-3f63-4b71-be70-2f3f6bafa2a8@app.fastmail.com>
-In-Reply-To: <20230214075737.3de2f333@canb.auug.org.au>
-References: <20230214075542.0cf88eba@canb.auug.org.au>
- <20230214075737.3de2f333@canb.auug.org.au>
-Date:   Mon, 13 Feb 2023 22:14:17 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Stephen Rothwell" <sfr@canb.auug.org.au>
-Cc:     "Olof Johansson" <olof@lixom.net>,
-        ARM <linux-arm-kernel@lists.infradead.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        linux-next <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Signed-off-by missing for commit in the arm-soc tree
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229686AbjBMVy6 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 13 Feb 2023 16:54:58 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B5DD1554D;
+        Mon, 13 Feb 2023 13:54:55 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PFyms1GCPz4x1f;
+        Tue, 14 Feb 2023 08:54:53 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1676325293;
+        bh=uXTqYMcYh7Xi4vbU4tCul8N3yIIbso/hVsy17YGm2B8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=m2BMWa4qu2GUtJ2icEZtRBJ0LDeyJOsXUtBtKMAuQ7PfW2NZ+UpFdeZyh7IwVEy86
+         gGytOK0qhVxRJenyRhCEGRyhFvnxs97W70x8DQV4orrQqz1PQyLG8pPShtWrGdcCdj
+         DWHOJ/JU2DWFHpI8ODdgQjNGQgSDfOyh7hU7HXuPzfukqh3I9YqqGcb7U3bU0QTYTp
+         5bV2gZgD5tAfsTS9h7u5VrDHe2X3IktDSpDOCFi/yJkbNJSfECxF30138PwVPix4rJ
+         c2WN8sMgDpamjxWecJBCup8GuPX1dnXlBJ66OgRduGA8ffauLpWQ+EBm952Njru/2e
+         F/u4YXB4Xs8Yw==
+Date:   Tue, 14 Feb 2023 08:54:52 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Chunwei Chen <david.chen@nutanix.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: duplicate patch in the mm-hotfixes tree
+Message-ID: <20230214085452.03575f8b@canb.auug.org.au>
+In-Reply-To: <20230213080052.296dddb0@canb.auug.org.au>
+References: <20230213080052.296dddb0@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/XTRjSveIQRa7LxDb/.wgZ1J";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Feb 13, 2023, at 21:57, Stephen Rothwell wrote:
-> Hi all,
->
-> On Tue, 14 Feb 2023 07:55:42 +1100 Stephen Rothwell 
-> <sfr@canb.auug.org.au> wrote:
->>
->> Commits
->> 
->>   51d0bdb1f7f9 ("char/agp: introduce asm-generic/agp.h")
->>   690422657cbf ("char/agp: consolidate {alloc,free}_gatt_pages()")
->> 
->> are missing a Signed-off-by from their committer.
->
-> That is in the asm-generic tree, sorry.
+--Sig_/XTRjSveIQRa7LxDb/.wgZ1J
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Fixed now, thanks for noticing!
+Hi all,
 
-     Arnd
+On Mon, 13 Feb 2023 08:00:52 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> The following commit is also in Linus Torvalds' tree as a different commit
+> (but the same patch):
+>=20
+>   c2d6ac6f92ac ("mm/page_alloc.c: fix page corruption caused by racy chec=
+k in __free_pages")
+
+This is now commit 1a520a4425b0.
+
+> This is commit
+>=20
+>   462a8e08e0e6 ("Fix page corruption caused by racy check in __free_pages=
+")
+>=20
+> in Linus' tree.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/XTRjSveIQRa7LxDb/.wgZ1J
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPqsawACgkQAVBC80lX
+0GxtqAf/T1qp0Q0EVQANAWdqsxTp+XtX0D8MhzB5qRb7JnUpMJsaFqVwdwEsSWEy
+c7fEgNZnH/hVWcrbmjUqUGBJLWAMUEu0YmtdZckYmquE35HrkwcdPJwaIpGTUAZ2
+keYUBKErP7SJvWJQ/CQIULj8GWk3Gev4jSpG70RUOBim7+o0hoL1xPL6T7PW5FHF
+lpXyw0aSKGUMYzaifazcXVpuUSaVgpQIQystl1eLrZIPII41PYbBL4u4gzcenRZI
+9JY1v4zWUHCgnu+b1ZHsiu5t8BAdDNSFPinMD9/DNZjWqBR9ZI4IPDm0gKxjfMKf
+Q+sj+HcH89expdOGyrQEiQT6a8QKAQ==
+=/nJU
+-----END PGP SIGNATURE-----
+
+--Sig_/XTRjSveIQRa7LxDb/.wgZ1J--

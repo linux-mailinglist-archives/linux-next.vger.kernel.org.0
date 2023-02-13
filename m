@@ -2,114 +2,109 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A87AB693E9F
-	for <lists+linux-next@lfdr.de>; Mon, 13 Feb 2023 08:05:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE3C06940E0
+	for <lists+linux-next@lfdr.de>; Mon, 13 Feb 2023 10:24:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229556AbjBMHFZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 13 Feb 2023 02:05:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52510 "EHLO
+        id S229532AbjBMJY1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 13 Feb 2023 04:24:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbjBMHFY (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 13 Feb 2023 02:05:24 -0500
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1860C147;
-        Sun, 12 Feb 2023 23:05:23 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 36FB732002FB;
-        Mon, 13 Feb 2023 02:05:22 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Mon, 13 Feb 2023 02:05:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1676271921; x=1676358321; bh=DBQVAebrmI
-        WqlhZBhjundCNnAZEyy9IeLdHeIoP2zeg=; b=XgxmjIgd/jTQJtiYkdG5myJwk9
-        6R5wRp+yTL79kdAj1RAfi5jto+Qi44ilhcJTf/FQsDT6/ZpfP/rGJUrt8BIONBTB
-        yHZW4YCoASiVrHCG+xwugvORHurnqqt42ZBtdZnh7g4FAytRstSq2DxL3ZIU9ZBc
-        cZ+SQkXWuxoMybRvhK5LkpxqZ7RuELLMotRgP3QQwSQcsQPjHwj59rSVknP5O8qK
-        Z1N7Z47w9k4U0Csl1MkV3grSlph+qAPWHd2B47s92XCwku2Q1aMD1U7/v/mFiXlH
-        K+uuQo4gi1ywK5nqrBgrAzU9+C+YTpQ4dGPXBg9weJ0K+1qRxE6sUDQ2meeA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1676271921; x=1676358321; bh=DBQVAebrmIWqlhZBhjundCNnAZEy
-        y9IeLdHeIoP2zeg=; b=pVQIOmIB+Dx7O3NbOj4r4jzWDo68I6L6Hl7vI/lfGvIt
-        WQpal4QZXv542k48sjP6yyz7a/bKizVHlpOT8OHoMBXQngBtxQzIdJZ3Qozk3z/B
-        TMavyep7v187Nv5Tg/2SiPwtDuu48ceOSKHPtJ55iF6wGM2usY4Kf0JEVLmQoUAt
-        Jrrjk6K1TcynfAMahK0jlXhrTeYAeNyouBO8frOmWbWIPesr5Hgbg75SNaQMTPz6
-        rHYDKQQx3Ba3U+/Fkb/OGlnIi/urJt6SazHWF3/yocf4xK/w5HuxJphPUm0tVH94
-        jInh74KIEl9OeSOS6a3Sdx26hg3FJ9MxAygKecbz+g==
-X-ME-Sender: <xms:MeHpY2FdF_FSe8PdPNu3CXYCQrL5Kne5WK-aSlnPWxRXTbgM5IP8-g>
-    <xme:MeHpY3UEOiAxNx7wTd-kZQ4ubK9L8IJNnAdPhGEPKSvVs5bBKedBk40tifziyJFyK
-    wMEQp5l2oUSPw>
-X-ME-Received: <xmr:MeHpYwJc8WHDBGJ95IEzKgvuk8twKP_RrFGphn6ci3TmM2u6TTg_jiwify540_1-6-C9cD7VwilhB3qHm0XQQnX7dx7EWS-O4dVb2A>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeitddguddtudcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgv
-    ghcumffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeehge
-    dvvedvleejuefgtdduudfhkeeltdeihfevjeekjeeuhfdtueefhffgheekteenucevlhhu
-    shhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhroh
-    grhhdrtghomh
-X-ME-Proxy: <xmx:MeHpYwFlKV-OEhf62ZiJVfem7_bWuVVT7659wDEyOhrVbxw2z6IhHQ>
-    <xmx:MeHpY8Wrjuzw3kahjZvWEkf9WG23NwXWr7UFqM1T4P8jnGJi6hYpMA>
-    <xmx:MeHpYzO9lJeXY45-23pCUAtIQmC2pHcv-ap5XizVaTNIGqX4Km43tg>
-    <xmx:MeHpY9v7om47ElUe0dt5GOBluu2Mpd6A6u5ij3w9mMyis0NcQrKRUA>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 13 Feb 2023 02:05:20 -0500 (EST)
-Date:   Mon, 13 Feb 2023 08:05:18 +0100
-From:   Greg KH <greg@kroah.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Christian Gromm <christian.gromm@microchip.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        with ESMTP id S229645AbjBMJY0 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 13 Feb 2023 04:24:26 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8408355B6
+        for <linux-next@vger.kernel.org>; Mon, 13 Feb 2023 01:24:24 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id ml19so30357923ejb.0
+        for <linux-next@vger.kernel.org>; Mon, 13 Feb 2023 01:24:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tessares.net; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=N4PTsgVXZVP9nPVr6Vq5IA+KQTGdiE1kOiYXYTx8kgQ=;
+        b=T29GxM9lM5ftYpyalPScu4QYm879cGz2cRTeeYiYxhXQwGfYax0Hoa892evr9OkoCC
+         p8g122W9RmEPD1ssNGUpyf0g+3RCmQY6MqWLqeTkrJbeIgc6eZF+lRvLx6MKf0WPIJn3
+         pZCODO6u0CMBElrFT14crRyACA/i9szYbPOluUZOUSkcjW0UIai1LcKy7L4sORHUKHre
+         KiekoO3d3zUs0x8mOTXAKLg+s3vRTGDFU6TsYmqD1/egvvyS0MV1O8xy8jra44HcsNOx
+         vtYegKfKsGocxDm98sc3s7JmyzSclupHYwOMMCfj02rld8tuEzwGg9HsavLn+RjYu4/8
+         T90w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=N4PTsgVXZVP9nPVr6Vq5IA+KQTGdiE1kOiYXYTx8kgQ=;
+        b=RDgAOv7YXHY5X+O3QFublA2gVWsGCY2RPfwsGbKT4KxVAyCk3xD7Ir9aV1pD90bNeU
+         yqI5nDDGLXnrFh0aFChNrMEUCfohHi3tBOcaCXibtQAA4ZK3mT+r4zrNPMXTo/ZEciOj
+         Ny28g2nsZCCVuCEaoEY1eptejdi1upYksEYAcZfmpxSyU29aGt+9OBAV3J/pTjlNjhjS
+         ne1TPiqMOi3NlLyQKmxjfFvb9tPk2BlQxVl6HFYSCsM8gihgvKb3hSOqIPydgSwA9UAv
+         BkQjZZ26cXThT3GvPAch5SwoSllMD7RJ6LSKwrUQ+pFzNUe3khsUNgiDK0OMcP9k7I7a
+         tjzg==
+X-Gm-Message-State: AO0yUKXPQ463Wk4CjdyAfHUi/MyT7kq27PJDx8b+WOaKe3kl9ZLj84nb
+        1yErpzM3vhBF3y6MWlWgZGdonQ==
+X-Google-Smtp-Source: AK7set8PyLO+iZY8MOuOmsmlqMFDI1htp9LHNWIrkbAoeODjk2Ogg8N5+kYcowOV/dSzKKQd70z3NQ==
+X-Received: by 2002:a17:906:ca04:b0:880:e6d0:5794 with SMTP id jt4-20020a170906ca0400b00880e6d05794mr22033397ejb.58.1676280263074;
+        Mon, 13 Feb 2023 01:24:23 -0800 (PST)
+Received: from [10.44.2.5] ([81.246.10.41])
+        by smtp.gmail.com with ESMTPSA id r20-20020a170906705400b0087bd4e34eb8sm6476147ejj.203.2023.02.13.01.24.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Feb 2023 01:24:22 -0800 (PST)
+Message-ID: <e9bd4de4-5edb-b12a-9f80-e3e0b34d4731@tessares.net>
+Date:   Mon, 13 Feb 2023 10:24:22 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: linux-next: manual merge of the net-next tree with the net tree
+Content-Language: en-GB
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Larysa Zaremba <larysa.zaremba@intel.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Parthiban Veerasooran <Parthiban.Veerasooran@microchip.com>
-Subject: Re: linux-next: manual merge of the staging tree with the v4l-dvb
- tree
-Message-ID: <Y+nhLqlblKqae87H@kroah.com>
-References: <20230213131318.2fdaf4fa@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230213131318.2fdaf4fa@canb.auug.org.au>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+References: <20230213102038.54cc9060@canb.auug.org.au>
+From:   Matthieu Baerts <matthieu.baerts@tessares.net>
+In-Reply-To: <20230213102038.54cc9060@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Feb 13, 2023 at 01:13:18PM +1100, Stephen Rothwell wrote:
+Hi Stephen,
+
+On 13/02/2023 00:20, Stephen Rothwell wrote:
 > Hi all,
 > 
-> Today's linux-next merge of the staging tree got a conflict in:
+> Today's linux-next merge of the net-next tree got a conflict in:
 > 
->   MAINTAINERS
+>   drivers/net/ethernet/intel/ice/ice_xsk.c
 > 
 > between commit:
 > 
->   ba47652ba655 ("media: meye: remove this deprecated driver")
+>   1f090494170e ("ice: xsk: Fix cleaning of XDP_TX frames")
 > 
-> from the v4l-dvb tree and commit:
+> from the net tree and commit:
 > 
->   eec8ccab1b57 ("most: add maintainer entry")
+>   a24b4c6e9aab ("ice: xsk: Do not convert to buff to frame for XDP_TX")
 > 
-> from the staging tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
+> from the net-next tree.
 
-Fix up looks good, thanks!
+Thank you for having shared this patch! We had the same conflict on our
+side:
 
-greg k-h
+Tested-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+
+Cheers,
+Matt
+-- 
+Tessares | Belgium | Hybrid Access Solutions
+www.tessares.net

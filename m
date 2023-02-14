@@ -2,91 +2,92 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55CAB695637
-	for <lists+linux-next@lfdr.de>; Tue, 14 Feb 2023 02:57:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 497096956A0
+	for <lists+linux-next@lfdr.de>; Tue, 14 Feb 2023 03:23:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229604AbjBNB5E (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 13 Feb 2023 20:57:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56754 "EHLO
+        id S229648AbjBNCXT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 13 Feb 2023 21:23:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbjBNB5E (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 13 Feb 2023 20:57:04 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24DF9B473;
-        Mon, 13 Feb 2023 17:57:03 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PG48D6g4wz4x5V;
-        Tue, 14 Feb 2023 12:57:00 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1676339821;
-        bh=rWqbuj7Y1Moo07qnSdhR2iyhOqO49E/rwbnmg5NXI4k=;
-        h=Date:From:To:Cc:Subject:From;
-        b=dDx8z4wfox9GQZO9mWASOmZz9Evlf4ptOj7Lxbw9QYtOC15r/C9cJZZrTfw6IWV05
-         0mnAr3DSiahNi56cefkDbgzjsFu3ImrP25Xn+hK9+phKpQ6EAgQDXLDFqG3hvbrRVz
-         Hcmo4kRNSTpTGi5EVF1cNm+mOIpGA4pjeWAKPHfLOo/QdmHsxpJMwKOakUdBvOmMiO
-         3yL0V95OCUbi7leaHJW+V0gsXnezxiacXeqQHgYskE+TdvSQkxObUWZhWqAGTSIqLn
-         WYhjctjGjqJkhoyyeY3l6fq2e8er8sLWEoaumKkM3y5gJaxFQHq66L2SZir4JXOyHC
-         j8tnxVnnG5u/A==
-Date:   Tue, 14 Feb 2023 12:57:00 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Greg KH <greg@kroah.com>, "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patch in the driver-core tree
-Message-ID: <20230214125700.606a89d7@canb.auug.org.au>
+        with ESMTP id S229597AbjBNCXS (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 13 Feb 2023 21:23:18 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF8AA8A76;
+        Mon, 13 Feb 2023 18:23:17 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id z1so15571873plg.6;
+        Mon, 13 Feb 2023 18:23:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1ZjibeV94oq8fSxEtHuWHEuguymt3GezabpggPQomKA=;
+        b=YrhcfSBlWZOoatC8HZJ8FZdgk/gaO8XqWRx9ONYSVZub0sUb23vaFhW5ujCHxeozk1
+         ft6xW0HHPTAGTDuV861QXCKDrz13Mvn1uWD5oUTrgOZWuSwRkXoY+y9ZxQ4M3OeexOuB
+         qUp4mjVdV+7EamPR5EWPOGSzDrrE5fqJ8sQInJhgf3A3utUJ+hFPKNP2ohbJwno8ch5t
+         3CFNNV/ZktxqDDrB2lGF8XyQrlOCDaGmeCERVMbiFrQxrnsdOpLxBpisNN47+3J4C+3k
+         bP7DpF7xUY97XR/SGtSFP3JEBctT839bX0AB0pQNUyL3wiFdOAfDsKID0sp90Nyu8oas
+         UazA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1ZjibeV94oq8fSxEtHuWHEuguymt3GezabpggPQomKA=;
+        b=oi+p8RZj+jCsON6AYmKJInSmUMWvGBUi+10m1h0kcc74kuceqfnM/sxJO8C2RqSwyD
+         b1aga9ckStOD0+7Zx2BjtPCAfYf49BiFDqnb9ZrVCi6nKpgF7CMZx45KWsKjFQJv4vYE
+         OiLgr9qxChVV/ItDrywO60n71AAErjGuPBPHmrs6mNN2UKJzI/mizfnNbZoKyHJwjnDB
+         dzyzv9NMFxr4Vo4rmJdaUOLuBzPZVPNUP0xSTOHPQV0S5dRtlkm8Gd0KmxAS72prMy1Q
+         3WcjaHITmVq8EgEpjVJJXf5SiJaN61FbfzYF47tczppPC0zSrF78/NHqz2oMgFJheyTC
+         EmhA==
+X-Gm-Message-State: AO0yUKXuim7vepumGmT7lfUIlVYSKPdTM7hcSCWlxckLdqqbCGz/bMNc
+        MJvkZCRcBSDf5oK+Uz9tq5WnqHkrMlA=
+X-Google-Smtp-Source: AK7set8WWCW6EofWuhdMavYIWHSKBEKKi42ONcCgZGjVg3tF2gg/96UR6FTUy9yAIc4d2ouWsJ7uVQ==
+X-Received: by 2002:a17:902:f245:b0:19a:7e36:f50a with SMTP id j5-20020a170902f24500b0019a7e36f50amr785622plc.7.1676341397402;
+        Mon, 13 Feb 2023 18:23:17 -0800 (PST)
+Received: from [192.168.43.80] (subs28-116-206-12-37.three.co.id. [116.206.12.37])
+        by smtp.gmail.com with ESMTPSA id w13-20020a1709029a8d00b00194c2f78581sm8871604plp.199.2023.02.13.18.23.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Feb 2023 18:23:17 -0800 (PST)
+Message-ID: <a276d6ae-677d-e4cf-13d7-934c0a7639d2@gmail.com>
+Date:   Tue, 14 Feb 2023 09:23:14 +0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_//WfFgYhdslwXBWyGKKzpXy9";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: nvme boot problems after merge of mm-stable tree into linux-next
+Content-Language: en-US
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        "linux-next@vger.kernel.org" <linux-next@vger.kernel.org>,
+        linux-mm@kvack.org
+References: <ed33b9ff-e6f2-dae8-ede6-59dc3c649ece@roeck-us.net>
+ <20230213094754.397f86af6b2dea4aafd92344@linux-foundation.org>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <20230213094754.397f86af6b2dea4aafd92344@linux-foundation.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_//WfFgYhdslwXBWyGKKzpXy9
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 2/14/23 00:47, Andrew Morton wrote:
+>> I am having problems booting from nvme in linux-next. Bisect points to 06e5887cdcc11
+>> ("Merge branch 'mm-stable' of git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm").
+>> The problem was first seen on February 8.
+>>
 
-Hi all,
+Hi,
 
-The following commit is also in the pm tree as a different commit (but
-the same patch):
+Can you please directly test mm-stable tree instead and bisect from there?
 
-  a0bc3f78d0ff ("kernel/power/energy_model.c: fix memory leak with using de=
-bugfs_lookup()")
+-- 
+An old man doll... just what I always wanted! - Clara
 
-This is commit
-
-  a0e8c13ccd6a ("PM: EM: fix memory leak with using debugfs_lookup()")
-
-in the pm tree.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_//WfFgYhdslwXBWyGKKzpXy9
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPq6mwACgkQAVBC80lX
-0GyocAf/WHwreN81qM51yZB857iWuuGJ6+8AOAYy7EA1pjcuV496ItLrvZaBd2/K
-8yuTcSIhVSPPsXn05IoQBXK0VUPx1hS6Rk9miBUwHTyHtc28gYOSGJRcPxxW7Knl
-3SWx0490SfBs4R85Boq928tkS31isg/rAKWMugJV2ZEOdkh2tNJLUSANR79e9dVt
-7vab5sAsgOoopxg2QhUaNgDwho/6hVqSXY5IF9rwMa3Xv2Frt/CudyH7OcYrZiyp
-8ONYjloEaVTR1ZUwAApMplv65noW6LgkIp6EfwVsFE+PCOwlqczGDF4RZR4RVLod
-md/auQSjAA78AvNTKaDB5Pmm+iokuA==
-=rRD1
------END PGP SIGNATURE-----
-
---Sig_//WfFgYhdslwXBWyGKKzpXy9--

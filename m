@@ -2,156 +2,96 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8408669580A
-	for <lists+linux-next@lfdr.de>; Tue, 14 Feb 2023 05:58:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8B9369586E
+	for <lists+linux-next@lfdr.de>; Tue, 14 Feb 2023 06:20:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230364AbjBNE6U (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 13 Feb 2023 23:58:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34148 "EHLO
+        id S230092AbjBNFUL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 14 Feb 2023 00:20:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230231AbjBNE6T (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 13 Feb 2023 23:58:19 -0500
-Received: from mail-il1-f205.google.com (mail-il1-f205.google.com [209.85.166.205])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E27E17AA9
-        for <linux-next@vger.kernel.org>; Mon, 13 Feb 2023 20:58:17 -0800 (PST)
-Received: by mail-il1-f205.google.com with SMTP id k13-20020a92c24d000000b003127853ef5dso10673862ilo.5
-        for <linux-next@vger.kernel.org>; Mon, 13 Feb 2023 20:58:17 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=FtU6VmT/Bmi1VOgJWA1PDC6Gjq0Dh9pUAmLLSr3qlsk=;
-        b=QRFm/MMexBdNpyncSSVBEhC9YKHXBO72ojWcKZb3RGcxHfI+UT+WHVsiRTU/uVKCKn
-         nfE3X5uxy5EL/cBObx6im0+79JihD7R9bz6NUDW8aOjOmaPQ8u+5MqyNSkiAKI+cXruO
-         40Cl1RxOULitQ5F6QnwZk91kXHqwhy1AIZM4pX7x/HVt0veCpdamKzAF8i0YDJC9Syml
-         z3CxmojcDA2Khopr4LoYwtsWUKPfyEya/NF/hRWqRc/BDnsYupnh6jMeLR9OC9A4fHY0
-         DMZh4yNSM6kjqMYVm5HIqiWPOt0ec0g8l7aC/EPXtj2vpwaeeZFg3BULbU0sIvavOQV7
-         M3Zg==
-X-Gm-Message-State: AO0yUKWB1pC6+joSIQkJEwadmAGqFnBvyRXg3WlNUDmJ7zGSTgtQb+go
-        IztNgSVidj3eEEwwk2ePNefjmDsxBmSXF3Y9ZP32nUcl8Wze
-X-Google-Smtp-Source: AK7set+CO1eepW5P7vGz298OPFKY/8M2YQzv/Sj4KVeFZLAllJ3OytYs62f45LEbhocxSvSnci1Hsa3FpC996k2at3CY/aYYBzpF
+        with ESMTP id S229632AbjBNFUJ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 14 Feb 2023 00:20:09 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F50F271D;
+        Mon, 13 Feb 2023 21:20:06 -0800 (PST)
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31E5HlYT006974;
+        Tue, 14 Feb 2023 05:19:45 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : in-reply-to : references : date : message-id : mime-version :
+ content-type; s=pp1; bh=on/G+7xydrT612HiE9+iKfuHNvPuUmqw1zf4SLBWcm0=;
+ b=Ddf+SX016z+OY+svfB5UhuyzyWyFCKz62U+PzeZfpNx73/+72O/7J420rp0npmVBUq+5
+ 0rJUA1cGeeCEx/yZmj63ym5NJoegwYm9J+KzZnur9aWuxj1DY9xfSLGy7Bkw1f7DTYHK
+ PsmMHE8q5zG8DF36X2WakD5pwkNI6QGEuOu3/m4AmUr+P4XQCD3ze1DYz1W79/AZIld5
+ DJEMh+2ufJLMPR1oo+b4pBVrg4rxf4jzEGwBI5UKulOZyConQO4EfQdnqdjDC/h2Xkks
+ sjrQzRDK2BXzj29bYmtL4H22+UonDwpIkHIIjJmc7NQBgIiYQ/dBtzOcxxXRmSpcSLQD +Q== 
+Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nr41e00kf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 14 Feb 2023 05:19:45 +0000
+Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
+        by ppma04wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31E1BSFv020028;
+        Tue, 14 Feb 2023 05:19:44 GMT
+Received: from smtprelay07.dal12v.mail.ibm.com ([9.208.130.99])
+        by ppma04wdc.us.ibm.com (PPS) with ESMTPS id 3np2n6x2ym-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 14 Feb 2023 05:19:44 +0000
+Received: from smtpav02.wdc07v.mail.ibm.com (smtpav02.wdc07v.mail.ibm.com [10.39.53.229])
+        by smtprelay07.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31E5Jhrv37683604
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 14 Feb 2023 05:19:44 GMT
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B3D535805B;
+        Tue, 14 Feb 2023 05:19:43 +0000 (GMT)
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8C0B858058;
+        Tue, 14 Feb 2023 05:19:43 +0000 (GMT)
+Received: from localhost (unknown [9.211.96.43])
+        by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 14 Feb 2023 05:19:43 +0000 (GMT)
+From:   Nathan Lynch <nathanl@linux.ibm.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        PowerPC <linuxppc-dev@lists.ozlabs.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: linux-next: qemu boot log difference today
+In-Reply-To: <20230214143150.7c7fdd05@canb.auug.org.au>
+References: <20230214143150.7c7fdd05@canb.auug.org.au>
+Date:   Mon, 13 Feb 2023 23:19:43 -0600
+Message-ID: <878rh0aknk.fsf@linux.ibm.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:663:b0:313:fa72:d9aa with SMTP id
- l3-20020a056e02066300b00313fa72d9aamr233892ilt.0.1676350697234; Mon, 13 Feb
- 2023 20:58:17 -0800 (PST)
-Date:   Mon, 13 Feb 2023 20:58:17 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000d3ea0505f4a1cf71@google.com>
-Subject: [syzbot] linux-next boot error: general protection fault in blkg_destroy_all
-From:   syzbot <syzbot+a45b868a1ffcd86bc989@syzkaller.appspotmail.com>
-To:     axboe@kernel.dk, cgroups@vger.kernel.org, josef@toxicpanda.com,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-next@vger.kernel.org, sfr@canb.auug.org.au,
-        syzkaller-bugs@googlegroups.com, tj@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: s3pa4hTPdjUeE41BhGsKVamhkK-zeFZ2
+X-Proofpoint-GUID: s3pa4hTPdjUeE41BhGsKVamhkK-zeFZ2
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-14_03,2023-02-13_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 adultscore=0
+ clxscore=1011 priorityscore=1501 impostorscore=0 suspectscore=0
+ lowpriorityscore=0 malwarescore=0 mlxscore=0 mlxlogscore=999 phishscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302140041
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hello,
+Stephen Rothwell <sfr@canb.auug.org.au> writes:
+>
+> Today's qemu boot log shows 256k extra in reserved memory:
+>
+> - Memory: 2046080K/2097152K available (14720K kernel code, 2944K rwdata, 18048K rodata, 5184K init, 1431K bss, 51072K reserved, 0K cma-reserved)
+> + Memory: 2045824K/2097152K available (14720K kernel code, 2944K rwdata, 18048K rodata, 5184K init, 1439K bss, 51328K reserved, 0K cma-reserved)
+>
+> I don't know what has caused this.
 
-syzbot found the following issue on:
+Assuming it's pseries, it's the RTAS work area allocator reserving the
+memory.
 
-HEAD commit:    3ebb0ac55efa Add linux-next specific files for 20230214
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=175f3600c80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=c6c7c56590b54128
-dashboard link: https://syzkaller.appspot.com/bug?extid=a45b868a1ffcd86bc989
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/45dd3fc90f5f/disk-3ebb0ac5.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/ebf0c2d1789a/vmlinux-3ebb0ac5.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/6a27fab195b7/bzImage-3ebb0ac5.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+a45b868a1ffcd86bc989@syzkaller.appspotmail.com
-
-floppy0: no floppy controllers found
-general protection fault, probably for non-canonical address 0xdffffc0000000000: 0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007]
-CPU: 0 PID: 12 Comm: kworker/u4:1 Not tainted 6.2.0-rc8-next-20230214-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/21/2023
-Workqueue: events_unbound async_run_entry_fn
-RIP: 0010:blkg_destroy_all+0xa6/0x260 block/blk-cgroup.c:529
-Code: 08 e8 7e 87 14 06 48 8b 44 24 10 80 38 00 0f 85 a5 01 00 00 48 8b 04 24 48 8b 98 80 05 00 00 48 8d 6b f8 48 89 d8 48 c1 e8 03 <42> 80 3c 20 00 0f 85 77 01 00 00 48 8b 03 49 39 dd 4c 8d 78 f8 0f
-RSP: 0000:ffffc90000117ad0 EFLAGS: 00010046
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: ffffffff81667f94
-RDX: 1ffff11003cb8019 RSI: 0000000000000004 RDI: ffffc90000117a60
-RBP: fffffffffffffff8 R08: 0000000000000001 R09: 0000000000000003
-R10: fffff52000022f4c R11: 0000000000000001 R12: dffffc0000000000
-R13: ffff88801e5b5580 R14: ffff88801e5b5090 R15: 0000000000000000
-FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffff88823ffff000 CR3: 000000000c571000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- blkcg_exit_disk+0x15/0x50 block/blk-cgroup.c:1352
- disk_release+0xe3/0x490 block/genhd.c:1167
- device_release+0xa3/0x240 drivers/base/core.c:2436
- kobject_cleanup lib/kobject.c:681 [inline]
- kobject_release lib/kobject.c:712 [inline]
- kref_put include/linux/kref.h:65 [inline]
- kobject_put+0x1c2/0x4d0 lib/kobject.c:729
- put_device+0x1f/0x30 drivers/base/core.c:3701
- put_disk+0x45/0x60 block/genhd.c:1453
- do_floppy_init drivers/block/floppy.c:4758 [inline]
- floppy_async_init+0x39e/0x2cc0 drivers/block/floppy.c:4767
- async_run_entry_fn+0x9c/0x530 kernel/async.c:127
- process_one_work+0x9bf/0x1820 kernel/workqueue.c:2390
- worker_thread+0x669/0x1090 kernel/workqueue.c:2537
- kthread+0x2e8/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:blkg_destroy_all+0xa6/0x260 block/blk-cgroup.c:529
-Code: 08 e8 7e 87 14 06 48 8b 44 24 10 80 38 00 0f 85 a5 01 00 00 48 8b 04 24 48 8b 98 80 05 00 00 48 8d 6b f8 48 89 d8 48 c1 e8 03 <42> 80 3c 20 00 0f 85 77 01 00 00 48 8b 03 49 39 dd 4c 8d 78 f8 0f
-RSP: 0000:ffffc90000117ad0 EFLAGS: 00010046
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: ffffffff81667f94
-RDX: 1ffff11003cb8019 RSI: 0000000000000004 RDI: ffffc90000117a60
-RBP: fffffffffffffff8 R08: 0000000000000001 R09: 0000000000000003
-R10: fffff52000022f4c R11: 0000000000000001 R12: dffffc0000000000
-R13: ffff88801e5b5580 R14: ffff88801e5b5090 R15: 0000000000000000
-FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffff88823ffff000 CR3: 000000000c571000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess):
-   0:	08 e8                	or     %ch,%al
-   2:	7e 87                	jle    0xffffff8b
-   4:	14 06                	adc    $0x6,%al
-   6:	48 8b 44 24 10       	mov    0x10(%rsp),%rax
-   b:	80 38 00             	cmpb   $0x0,(%rax)
-   e:	0f 85 a5 01 00 00    	jne    0x1b9
-  14:	48 8b 04 24          	mov    (%rsp),%rax
-  18:	48 8b 98 80 05 00 00 	mov    0x580(%rax),%rbx
-  1f:	48 8d 6b f8          	lea    -0x8(%rbx),%rbp
-  23:	48 89 d8             	mov    %rbx,%rax
-  26:	48 c1 e8 03          	shr    $0x3,%rax
-* 2a:	42 80 3c 20 00       	cmpb   $0x0,(%rax,%r12,1) <-- trapping instruction
-  2f:	0f 85 77 01 00 00    	jne    0x1ac
-  35:	48 8b 03             	mov    (%rbx),%rax
-  38:	49 39 dd             	cmp    %rbx,%r13
-  3b:	4c 8d 78 f8          	lea    -0x8(%rax),%r15
-  3f:	0f                   	.byte 0xf
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+43033bc62d34 powerpc/pseries: add RTAS work area allocator

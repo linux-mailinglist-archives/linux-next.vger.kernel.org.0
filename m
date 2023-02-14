@@ -2,124 +2,91 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF9A6695524
-	for <lists+linux-next@lfdr.de>; Tue, 14 Feb 2023 01:05:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D357F695538
+	for <lists+linux-next@lfdr.de>; Tue, 14 Feb 2023 01:10:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229556AbjBNAFa (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 13 Feb 2023 19:05:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36158 "EHLO
+        id S230141AbjBNAKC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 13 Feb 2023 19:10:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229652AbjBNAF3 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 13 Feb 2023 19:05:29 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B672A974E;
-        Mon, 13 Feb 2023 16:05:26 -0800 (PST)
+        with ESMTP id S229836AbjBNAJ5 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 13 Feb 2023 19:09:57 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 604A9B45A;
+        Mon, 13 Feb 2023 16:09:56 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PG1gQ1N2Qz4x4q;
-        Tue, 14 Feb 2023 11:05:22 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PG1mf6HK7z4x5Y;
+        Tue, 14 Feb 2023 11:09:54 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1676333122;
-        bh=CAzSLDb1dEbfnAtFmlA4dMrg04aRPe2Txx15eZN3dho=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Xr1i8k3oBTZ/5Pqc6KY0CKqYw6LZyBYLX+8RnitJYdvMsMhKlmR+wmfGruokDjLBN
-         oGjjRoJhBxkMd8+PcQTMrVLr7PeczeOph2t8tsl5YK4ES5jU8XnlW1Xl3BWmUnlbbR
-         n1bITYE1TZnxne270aV+7aveDBtrdId5ntM64X8n9DqIta0WCrue8HgTu5MyxY3g7Y
-         OmtkURPc8KQRwXFk/O8Tl13wPGIW/Hq034e46K/kBZYs34bEVFqcZ48IIL/e/JL0nM
-         qIjlm7XqUtVPBSxEksZtcJLWgHdz9ZiXgGmIXAKKgK/nHqqg/klhOj8lxYgCO9b3ki
-         LIEFydIxCmiQQ==
-Date:   Tue, 14 Feb 2023 11:05:21 +1100
+        s=201702; t=1676333395;
+        bh=GPDjkuaOn+jwvXvUbubbCaUSDsW2I1N1o/5T9/Fr2rg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=VA4nCFUkcAzNqqsb/GChH+Ym2QYKOUtft0dd/a45TgvPjcLAWXc/YxYmH+wDewZ4l
+         ZiFvMIwhVIRijzNW9IlVIlz9dS1OT7dnApkYOsdzNdDyygRxDf3rQPg9t7+6xs59cI
+         BqOfrXvwbMLLEnFZ6vTHe/8Ewi9Mhkfpm9/n38SQtoT8EFqhsn5dKJtF9ezaXxnD1h
+         CI6zSVld4Oc5vRt3EPghcWoD4SNzvtp/Xa6KLisM7cX0uhWlHkBi6U/Ekb/bITFxKS
+         92OAweXWF2cV9Ng4XxZ2fpbIvln6hgvKduuA8iw1GaA1Bk7uiWhJIpuqhDqLyEOPGI
+         8YdBfUs1FENIQ==
+Date:   Tue, 14 Feb 2023 11:09:54 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alasdair G Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     Linux Crypto List <linux-crypto@vger.kernel.org>,
-        Heinz Mauelshagen <heinzm@redhat.com>,
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Chunwei Chen <david.chen@nutanix.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the device-mapper tree with the crypto
- tree
-Message-ID: <20230214110521.77685fbb@canb.auug.org.au>
+Subject: Re: linux-next: duplicate patch in the mm-hotfixes tree
+Message-ID: <20230214110954.18874441@canb.auug.org.au>
+In-Reply-To: <20230213142953.9c62494f0db76ba0f8af6ad5@linux-foundation.org>
+References: <20230213080052.296dddb0@canb.auug.org.au>
+        <20230214085452.03575f8b@canb.auug.org.au>
+        <20230213142953.9c62494f0db76ba0f8af6ad5@linux-foundation.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/scfy7q3Wnh0HpAradU4zis/";
+Content-Type: multipart/signed; boundary="Sig_/5X6pTo6M3iC=tV3My4nC//I";
  protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/scfy7q3Wnh0HpAradU4zis/
+--Sig_/5X6pTo6M3iC=tV3My4nC//I
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Hi Andrew,
 
-Today's linux-next merge of the device-mapper tree got a conflict in:
+On Mon, 13 Feb 2023 14:29:53 -0800 Andrew Morton <akpm@linux-foundation.org=
+> wrote:
+>
+> yup, thanks.  I've made a note not to send this upstream.  But I'll
+> keep it around in mm-hotfixes-unstable for a while so that users of the
+> 6.2-rc4 based mm.git trees have it.
 
-  drivers/md/dm-integrity.c
-
-between commits:
-
-  96747228b725 ("dm: Add scaffolding to change completion function signatur=
-e")
-  dcfe653d7cd4 ("dm: Remove completion function scaffolding")
-
-from the crypto tree and commit:
-
-  ff65cea88e49 ("dm: add missing empty lines")
-
-from the device-mapper tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+No worries, thanks.
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc drivers/md/dm-integrity.c
-index c58156deb2b1,16aa68988363..000000000000
---- a/drivers/md/dm-integrity.c
-+++ b/drivers/md/dm-integrity.c
-@@@ -955,9 -963,10 +963,10 @@@ static void xor_journal(struct dm_integ
-  	async_tx_issue_pending_all();
-  }
- =20
- -static void complete_journal_encrypt(struct crypto_async_request *req, in=
-t err)
- +static void complete_journal_encrypt(void *data, int err)
-  {
- -	struct journal_completion *comp =3D req->data;
- +	struct journal_completion *comp =3D data;
-+=20
-  	if (unlikely(err)) {
-  		if (likely(err =3D=3D -EINPROGRESS)) {
-  			complete(&comp->ic->crypto_backoff);
-
---Sig_/scfy7q3Wnh0HpAradU4zis/
+--Sig_/5X6pTo6M3iC=tV3My4nC//I
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPq0EEACgkQAVBC80lX
-0GyJhwf/b0C84ZSrgtO04M3b2so/ej0poAKhCwioIKKpMwf165A5pu5D4AF/mbwX
-VvXHgkosV7goOrTIycLxN4RX71qGQnAeSKWAW6XTFgkLG4XR6ZymruLj/wWdRPi3
-20WreD2Uo/CnncB6xnzntgm8wW45/xogBKEvW6A8KtDb05r6dHIeqJJgq7OGrVjX
-GJ72fHBbhqrbxtJ4hGtC1DAtGAFVSJ2vDxrImD1D7Sz/fv/dWzmHbbuIyccxT677
-rn7U2WZt2Cgi5SnMYqq6Pn0ysK329AT+dW0jWXxRM97fsMPTMW0agmjPHly1VXgc
-iPrrJqatYNak9beEtQ+Wnz9w0HB5uw==
-=7B8D
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPq0VIACgkQAVBC80lX
+0GxS+Af6An70ySmwP4/qL9zX8t7EX5At2rt9N7RGSvDTAqBvSVxKcT//fwfSHmkj
+v/37MpEhuRHpH/PV6AOiovLOC+m8+EK6mySbll9f0fqumSVfXHcvI+Co+YI0AeZ6
+pfAe0qhrYC2jp7CarP9bM6W7ez6xNc0pWmtqVrwPUJgUOCyRP6d9H+UYdUbpIgR7
+SugqJjxcKN/DYbfKvkVUoqelcvVqOUUmqRQpYtC0a5izke7zlM+agWxrLFhjcQus
+zYL4JJrwoZ2mwxqlSo5VRLzHmIBhkqfbELPYI2W4A12/qqJ+t6Js6J+NwwminIGH
+m5JCKOyo0Le/SCl6YGWN3E8GYb+YJA==
+=w6hs
 -----END PGP SIGNATURE-----
 
---Sig_/scfy7q3Wnh0HpAradU4zis/--
+--Sig_/5X6pTo6M3iC=tV3My4nC//I--

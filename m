@@ -2,92 +2,139 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 497096956A0
-	for <lists+linux-next@lfdr.de>; Tue, 14 Feb 2023 03:23:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB5E46956C6
+	for <lists+linux-next@lfdr.de>; Tue, 14 Feb 2023 03:39:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229648AbjBNCXT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 13 Feb 2023 21:23:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43926 "EHLO
+        id S229462AbjBNCjm (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 13 Feb 2023 21:39:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbjBNCXS (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 13 Feb 2023 21:23:18 -0500
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF8AA8A76;
-        Mon, 13 Feb 2023 18:23:17 -0800 (PST)
-Received: by mail-pl1-x62f.google.com with SMTP id z1so15571873plg.6;
-        Mon, 13 Feb 2023 18:23:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1ZjibeV94oq8fSxEtHuWHEuguymt3GezabpggPQomKA=;
-        b=YrhcfSBlWZOoatC8HZJ8FZdgk/gaO8XqWRx9ONYSVZub0sUb23vaFhW5ujCHxeozk1
-         ft6xW0HHPTAGTDuV861QXCKDrz13Mvn1uWD5oUTrgOZWuSwRkXoY+y9ZxQ4M3OeexOuB
-         qUp4mjVdV+7EamPR5EWPOGSzDrrE5fqJ8sQInJhgf3A3utUJ+hFPKNP2ohbJwno8ch5t
-         3CFNNV/ZktxqDDrB2lGF8XyQrlOCDaGmeCERVMbiFrQxrnsdOpLxBpisNN47+3J4C+3k
-         bP7DpF7xUY97XR/SGtSFP3JEBctT839bX0AB0pQNUyL3wiFdOAfDsKID0sp90Nyu8oas
-         UazA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1ZjibeV94oq8fSxEtHuWHEuguymt3GezabpggPQomKA=;
-        b=oi+p8RZj+jCsON6AYmKJInSmUMWvGBUi+10m1h0kcc74kuceqfnM/sxJO8C2RqSwyD
-         b1aga9ckStOD0+7Zx2BjtPCAfYf49BiFDqnb9ZrVCi6nKpgF7CMZx45KWsKjFQJv4vYE
-         OiLgr9qxChVV/ItDrywO60n71AAErjGuPBPHmrs6mNN2UKJzI/mizfnNbZoKyHJwjnDB
-         dzyzv9NMFxr4Vo4rmJdaUOLuBzPZVPNUP0xSTOHPQV0S5dRtlkm8Gd0KmxAS72prMy1Q
-         3WcjaHITmVq8EgEpjVJJXf5SiJaN61FbfzYF47tczppPC0zSrF78/NHqz2oMgFJheyTC
-         EmhA==
-X-Gm-Message-State: AO0yUKXuim7vepumGmT7lfUIlVYSKPdTM7hcSCWlxckLdqqbCGz/bMNc
-        MJvkZCRcBSDf5oK+Uz9tq5WnqHkrMlA=
-X-Google-Smtp-Source: AK7set8WWCW6EofWuhdMavYIWHSKBEKKi42ONcCgZGjVg3tF2gg/96UR6FTUy9yAIc4d2ouWsJ7uVQ==
-X-Received: by 2002:a17:902:f245:b0:19a:7e36:f50a with SMTP id j5-20020a170902f24500b0019a7e36f50amr785622plc.7.1676341397402;
-        Mon, 13 Feb 2023 18:23:17 -0800 (PST)
-Received: from [192.168.43.80] (subs28-116-206-12-37.three.co.id. [116.206.12.37])
-        by smtp.gmail.com with ESMTPSA id w13-20020a1709029a8d00b00194c2f78581sm8871604plp.199.2023.02.13.18.23.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Feb 2023 18:23:17 -0800 (PST)
-Message-ID: <a276d6ae-677d-e4cf-13d7-934c0a7639d2@gmail.com>
-Date:   Tue, 14 Feb 2023 09:23:14 +0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: nvme boot problems after merge of mm-stable tree into linux-next
-Content-Language: en-US
+        with ESMTP id S230342AbjBNCjl (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 13 Feb 2023 21:39:41 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2740217CEE;
+        Mon, 13 Feb 2023 18:39:37 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PG55G205hz4x5Z;
+        Tue, 14 Feb 2023 13:39:30 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1676342375;
+        bh=/ZSO+birFbnmxuQlXlHZMCGvmbGaNnu+kdufeLm0WYQ=;
+        h=Date:From:To:Cc:Subject:From;
+        b=sHUWmgDYxM0s8ijljHaU+QQFhUZXnpKK7jHqPuUNuFaPyo3+nMPiV5ZUO82hWsZD8
+         hZ1EwEueeC1uuwHh5nc95cgc1O8d9Jgso3FUU+GDy5wfgfjHtu3VYmybN7DFfWOxtb
+         X3YDwpFlqyp1s3pK562RYNUXT03nqaioivCs7xSd2AbV5KElMk5Ws1kvbSC+GVKGZP
+         zBgW+G+hrg43eJo/aNjYIdw4FvtabAXWuiFcBNQWArv94/BYbYEN2CYmP+RN9l5EFw
+         GSHr3s4eGSFpQsfatEuYwAmEzgeq7KMnafBVvS2u2LEPcn2xMFPTQ8vizbEoZ1qj6V
+         KbDosiVP9cl5g==
+Date:   Tue, 14 Feb 2023 13:39:29 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
 To:     Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        "linux-next@vger.kernel.org" <linux-next@vger.kernel.org>,
-        linux-mm@kvack.org
-References: <ed33b9ff-e6f2-dae8-ede6-59dc3c649ece@roeck-us.net>
- <20230213094754.397f86af6b2dea4aafd92344@linux-foundation.org>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <20230213094754.397f86af6b2dea4aafd92344@linux-foundation.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Wang Yong <wang.yong12@zte.com.cn>,
+        Yanteng Si <siyanteng@loongson.cn>
+Subject: linux-next: manual merge of the mm tree with the jc_docs tree
+Message-ID: <20230214133929.7d8ed00f@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/Ofx6+7xe7Ge.+wrUvSi1.DL";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 2/14/23 00:47, Andrew Morton wrote:
->> I am having problems booting from nvme in linux-next. Bisect points to 06e5887cdcc11
->> ("Merge branch 'mm-stable' of git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm").
->> The problem was first seen on February 8.
->>
+--Sig_/Ofx6+7xe7Ge.+wrUvSi1.DL
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-Hi,
+Hi all,
 
-Can you please directly test mm-stable tree instead and bisect from there?
+Today's linux-next merge of the mm tree got a conflict in:
 
--- 
-An old man doll... just what I always wanted! - Clara
+  Documentation/translations/zh_CN/accounting/delay-accounting.rst
 
+between commit:
+
+  6ab587e8e8b4 ("docs/zh_CN: Update the translation of delay-accounting to =
+6.1-rc8")
+
+from the jc_docs tree and commit:
+
+  f66f8a7e4730 ("delayacct: improve the average delay precision of getdelay=
+ tool to microsecond")
+
+from the mm tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+I also aligned the last 2 lines with the lines above.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc Documentation/translations/zh_CN/accounting/delay-accounting.rst
+index a01dc3d5b0db,5623f555d7c5..000000000000
+--- a/Documentation/translations/zh_CN/accounting/delay-accounting.rst
++++ b/Documentation/translations/zh_CN/accounting/delay-accounting.rst
+@@@ -92,17 -91,15 +92,17 @@@ getdelays=E5=91=BD=E4=BB=A4=E7=9A=84=E4=B8=80=
+=E8=88=AC=E6=A0=BC=E5=BC=8F:
+  	CPU             count     real total  virtual total    delay total  dela=
+y average
+  	                    8        7000000        6872122        3382277      =
+    0.423ms
+  	IO              count    delay total  delay average
+- 	                    0              0              0ms
++ 	                    0              0              0.000ms
+  	SWAP            count    delay total  delay average
+- 	                    0              0              0ms
++ 	                    0              0              0.000ms
+  	RECLAIM         count    delay total  delay average
+- 	                    0              0              0ms
++ 	                    0              0              0.000ms
+  	THRASHING       count    delay total  delay average
+- 	                    0              0              0ms
++ 	                    0              0              0.000ms
+  	COMPACT         count    delay total  delay average
+- 	                    0              0              0ms
+-     WPCOPY          count    delay total  delay average
+-                        0              0              0ms
++ 	                    0              0              0.000ms
+++	WPCOPY          count    delay total  delay average
+++	                    0              0              0.000ms
+ =20
+  =E8=8E=B7=E5=8F=96pid=E4=B8=BA1=E7=9A=84IO=E8=AE=A1=E6=95=B0=EF=BC=8C=E5=
+=AE=83=E5=8F=AA=E5=92=8C-p=E4=B8=80=E8=B5=B7=E4=BD=BF=E7=94=A8::
+  	# ./getdelays -i -p 1
+
+--Sig_/Ofx6+7xe7Ge.+wrUvSi1.DL
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPq9GEACgkQAVBC80lX
+0GytGQgAlC2ENkthEroyVjYa8VPKbsg4Wh+CszrmtPAghKtJIUzfws2bBypNoEMw
+Gw8k40fRi2hTJRyGA6A/j79qgVic4Vf3rqwRElU4qGhrIF9MiMWFhekcG5KYGrHo
+GMAHBdSraGQ8cO2M84a8PghKQp52jCtUmzmgFAtBpRP/wrNicfnd6NsID/8P8jaa
+c5Ynf8tgqSRQavvfKmzBKq3cHtWrS9qqSDMaxRFF7kEjTofsu5mc8fZnAS1qTY7L
+Xum1Q56K7w9++V6ODZEYMcnPU9mUWXCYiscivF7lF3hFpSPzs5RNmLb9+BUEtdyc
+kznOyV5vWyqTPWaoexMbx4bvh3S4jQ==
+=SlcS
+-----END PGP SIGNATURE-----
+
+--Sig_/Ofx6+7xe7Ge.+wrUvSi1.DL--

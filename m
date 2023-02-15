@@ -2,45 +2,47 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 249DF69852F
-	for <lists+linux-next@lfdr.de>; Wed, 15 Feb 2023 21:06:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DC97698759
+	for <lists+linux-next@lfdr.de>; Wed, 15 Feb 2023 22:30:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229460AbjBOUGW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 15 Feb 2023 15:06:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33920 "EHLO
+        id S229891AbjBOVaM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 15 Feb 2023 16:30:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbjBOUGV (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 15 Feb 2023 15:06:21 -0500
+        with ESMTP id S229831AbjBOVaL (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 15 Feb 2023 16:30:11 -0500
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06C3B3D93A;
-        Wed, 15 Feb 2023 12:06:16 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3443C2365A;
+        Wed, 15 Feb 2023 13:30:09 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PH8GV4H1zz4x4r;
-        Thu, 16 Feb 2023 07:06:10 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PHB7H3TQ3z4x5X;
+        Thu, 16 Feb 2023 08:30:03 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1676491571;
-        bh=nMAwoYxXPHrxlor3Q73lbTOHTIyT9RRacht71KH3FQw=;
+        s=201702; t=1676496603;
+        bh=mG1gvaBbO8hTzuz96CL94P7Xf50HvLn1KywUiJJme8A=;
         h=Date:From:To:Cc:Subject:From;
-        b=GRAxPO0NEmrPLltFk4jntBZy/p81DcwBEeMNciAcxh3QJrPf8pgTsXFeqJ3iyFwGV
-         mRpQ4/62xi04Ac2wWkAwUCJ3TRZGuTvW1yBfGkIBrWCH1ynlp2uQMGIs8sxDdbuHMe
-         Wa5PXBe9Ry6MXJYvtvZegBE0nxB2ohwb8s1gR5uMzgJS/o8K0Svy9Ub8Z2yqq5CfLk
-         QenhunQn10FTtFZjw4Mav/9lzzcdAeZ7m51PhXsa8UzdH0YFgGmpWe+WBdGsW0AFtW
-         P+f8nyKpeicFIkkiIvqpXWNrZ+9q2aX0jWPmqnseHKvWIau7m6Ved+yRl6BEnkZGv0
-         V+kn4mP9WOeCQ==
-Date:   Thu, 16 Feb 2023 07:06:09 +1100
+        b=Eq9CiDZKzvf4iAgAUBtyVdXN3ae1cQ3Ur16K++R0noMVpFMThq+N0jL4vOX1ARZJ6
+         EKDx1uxSrtv2dUxK2JtDwW1hH2tNiMm+8qiZ9vsVtDoWbAHYvy2uI5jrGYRwLMyoxh
+         eQUiS1s/88VRcW4+4hBapeGrupph3nO2B76k8PbgeRdlstCwq0t8SRV5XHvMqzm+7a
+         X8nUvRStT9Hk9SzgnHnswBeoq+fb+nqNg3OwC6LazEpgdbZeIGRcC4BJG3q3mDAhGk
+         9Y6j3jKFBXNHxb/6mH8K+srfTeNcNTjt652LQdIpZ2VPN4KDktK2qssau+Ky0OydBq
+         6KqcInth2KBrw==
+Date:   Thu, 16 Feb 2023 08:30:02 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
-Cc:     Hillf Danton <hdanton@sina.com>,
-        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+To:     Konstantin Komarov <almaz.alexandrovich@paragon-software.com>,
+        Christian Brauner <christian@brauner.io>,
+        Seth Forshee <sforshee@kernel.org>
+Cc:     Christian Brauner <brauner@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patch in the ntfs3 tree
-Message-ID: <20230216070609.7045e2e1@canb.auug.org.au>
+Subject: linux-next: manual merge of the ntfs3 tree with the vfs-idmapping
+ tree
+Message-ID: <20230216083002.6227ba81@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/FVYs7IC=Q4aIYvcF/e3Hd9O";
+Content-Type: multipart/signed; boundary="Sig_/fE1=pPJH3eojyBI4sc0.Zfe";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
@@ -51,43 +53,86 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/FVYs7IC=Q4aIYvcF/e3Hd9O
+--Sig_/fE1=pPJH3eojyBI4sc0.Zfe
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-The following commit is also in Linus Torvalds' tree as a different commit
-(but the same patch):
+Today's linux-next merge of the ntfs3 tree got conflicts in:
 
-  fca02f0f400b ("fs/ntfs3: Don't hold ni_lock when calling truncate_setsize=
-()")
+  fs/ntfs3/file.c
 
-This is commit
+between commit:
 
-  0226635c304c ("fs/ntfs3: don't hold ni_lock when calling truncate_setsize=
-()")
+  c1632a0f1120 ("fs: port ->setattr() to pass mnt_idmap")
 
-in Linus' tree.
+from the vfs-idmapping tree and commit:
+
+  d1468d48fe7a ("fs/ntfs3: Remove noacsrules")
+
+from the ntfs3 tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/FVYs7IC=Q4aIYvcF/e3Hd9O
+diff --cc fs/ntfs3/file.c
+index e9bdc1ff08c9,a10a905ec7ce..000000000000
+--- a/fs/ntfs3/file.c
++++ b/fs/ntfs3/file.c
+@@@ -657,26 -653,16 +653,16 @@@ out
+  /*
+   * ntfs3_setattr - inode_operations::setattr
+   */
+ -int ntfs3_setattr(struct user_namespace *mnt_userns, struct dentry *dentr=
+y,
+ +int ntfs3_setattr(struct mnt_idmap *idmap, struct dentry *dentry,
+  		  struct iattr *attr)
+  {
+- 	struct super_block *sb =3D dentry->d_sb;
+- 	struct ntfs_sb_info *sbi =3D sb->s_fs_info;
+  	struct inode *inode =3D d_inode(dentry);
+  	struct ntfs_inode *ni =3D ntfs_i(inode);
+  	u32 ia_valid =3D attr->ia_valid;
+  	umode_t mode =3D inode->i_mode;
+  	int err;
+ =20
+- 	if (sbi->options->noacsrules) {
+- 		/* "No access rules" - Force any changes of time etc. */
+- 		attr->ia_valid |=3D ATTR_FORCE;
+- 		/* and disable for editing some attributes. */
+- 		attr->ia_valid &=3D ~(ATTR_UID | ATTR_GID | ATTR_MODE);
+- 		ia_valid =3D attr->ia_valid;
+- 	}
+-=20
+ -	err =3D setattr_prepare(mnt_userns, dentry, attr);
+ +	err =3D setattr_prepare(idmap, dentry, attr);
+  	if (err)
+  		goto out;
+ =20
+
+--Sig_/fE1=pPJH3eojyBI4sc0.Zfe
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPtOzEACgkQAVBC80lX
-0GymNQf7BDoEuM/yXa7ZS0Yv/5d2mFSl2sRSuY4I0sF2+ilZiz9RhuoUrezTQ2T/
-fPR/EXE/Jk2mv5eFW5MNnquf+pthkMe3kCpcJgOxnaWXKKmkZaA+VsZ8ctiHpR+d
-VjyXq9Knu9TeWx+zjBEcv4McyHXTJr+wmJL4UidknjWhp1U9ZsLwu3cK8I/Pr6+T
-PcMjINsqvNI62/4aUIjAzTSMlhOM2hlU+LybfOn/ybLxkMa43yp3L1IkRYVG3v4Q
-KUodrtaYN/spR9/HXa7xD705mij2+nDkyTslGYUNk23h9vlluqii+KVVgiprYXQA
-sWLVgiyHKrlfA8rcwwHHH+glKF4bVQ==
-=B2+d
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPtTtoACgkQAVBC80lX
+0GwscQgAnGY2jw2hDLEhW12se8Zp6Fek6Sek6sYQ+7HFJI/HS/GqPa6jjOhv4o7L
+CHLpT0qFffu+HBXvfejAqVRREAn9L4oQiz/vnSx/mwxXN2Vxi11Do94mVlnMgVza
+W7Sw6uFfwaYw3wkXBAY/bx8B90Bt1BMhcUubq0a/OlvPIiQ+HrjlPgDDsbvTWcHf
+IzCSl5MIVhD/RCuqS5sdKULrOzX+zlLL8wt6uSFtSrKRT3sk28NIk/P5vEMLvOMW
+XbSGETTGHrduZ9HMFTIJqfdxlRDcsxjLKZqPak1U0Kwmk+Xpk3uZ4nQfQ5tEkWYh
+EPV7dCijDzAVl5YbARPnlg7ouMd59w==
+=jLdb
 -----END PGP SIGNATURE-----
 
---Sig_/FVYs7IC=Q4aIYvcF/e3Hd9O--
+--Sig_/fE1=pPJH3eojyBI4sc0.Zfe--

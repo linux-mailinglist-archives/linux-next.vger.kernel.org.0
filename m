@@ -2,280 +2,165 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F5FB69740E
-	for <lists+linux-next@lfdr.de>; Wed, 15 Feb 2023 03:03:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6767B697496
+	for <lists+linux-next@lfdr.de>; Wed, 15 Feb 2023 03:57:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232654AbjBOCD0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 14 Feb 2023 21:03:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46956 "EHLO
+        id S232374AbjBOC5n (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 14 Feb 2023 21:57:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232381AbjBOCDQ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 14 Feb 2023 21:03:16 -0500
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 169D32B09C;
-        Tue, 14 Feb 2023 18:03:12 -0800 (PST)
-Received: by mail-pf1-x42e.google.com with SMTP id 16so11575537pfo.8;
-        Tue, 14 Feb 2023 18:03:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=PmW8syz2zNNtStQhfhVL5+Vcz/fTkBT33+R+BuQLTdA=;
-        b=QmDFYDqAF13r1jzKg/L8kuJVHfj63JmeIwWa3XzS/jJJnyGZGVG5MwOL0OLB74Ac+w
-         yQUL5e4Qw9MrEtBiYvf1SO1NWYVTdtEc0GgQVz33p7/w4+aLoHnGyDL2tMbcsRDRcE13
-         QWaSivoLvfmzbm7nSPLGPjG+bHHPYzV/FBAsEHxIRdOEhBhM+byR/+E1o8xXKIDkHwxV
-         78JXwdeNeAtzsm99zUvYw/HEg19TrnFXOdDEGI3z7OouJwB1BZLQveBzeEf/qTtisvfw
-         STS5ebHyK4ips1XxiM5Mv2td3RuwN9qM8cWWjAZH5BO8hHAGvcxdsaKOgUUZSq5z/Zx5
-         KlWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PmW8syz2zNNtStQhfhVL5+Vcz/fTkBT33+R+BuQLTdA=;
-        b=FlSMkMH0FsiDfj3UAaj4rtfhWZ+2cAyEgutfXxqSLGnrGJWkpVPjolD3QV+aKfmnhQ
-         hmUxA/YI+sG3KpUWbg0ws1WvSPEE9ZftDZfPL+LNlBN/0vJ9uRk96gMcY9UDyyIQXK7l
-         LRU2dsoWHRHqzixVkXsF2TCH7kTRX2wreeLK0iJn0SoYtweX893xUACOmEaGVShrkm4F
-         chYHhl0jzyPCxnWDzdHa8bpGmiCiwOV4i+Or2H8/TDXEa71pHg4wmJXV6mlgBhOVfi0G
-         A7nNY6J6mz19LaWvluwcyULwuh/J5jvhAYdFuTWozLW+SjO41JY/8dyH+EamTfFePdFz
-         MKjw==
-X-Gm-Message-State: AO0yUKUP3DHLJl31fEDGVqf+WZAbuaIPHY9Ut/lkJA/Q4ggGL4yZfa3Y
-        B7IOvPJtP69HVweKTwwKcr4=
-X-Google-Smtp-Source: AK7set9H0gjnTLoAb1IYmmc6EOBRCBTYo/dW1Ipht2+jl0gRcBlhVzVk3iHH5TGqRaTz6WzxooewBA==
-X-Received: by 2002:a62:1854:0:b0:5a8:abd2:2beb with SMTP id 81-20020a621854000000b005a8abd22bebmr177579pfy.30.1676426592171;
-        Tue, 14 Feb 2023 18:03:12 -0800 (PST)
-Received: from debian.me (subs09a-223-255-225-66.three.co.id. [223.255.225.66])
-        by smtp.gmail.com with ESMTPSA id h17-20020aa786d1000000b005a8b4dcd213sm4705874pfo.78.2023.02.14.18.03.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Feb 2023 18:03:11 -0800 (PST)
-Received: by debian.me (Postfix, from userid 1000)
-        id 39D3D105563; Wed, 15 Feb 2023 09:03:08 +0700 (WIB)
-Date:   Wed, 15 Feb 2023 09:03:07 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        with ESMTP id S229515AbjBOC5m (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 14 Feb 2023 21:57:42 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4FEF2B639;
+        Tue, 14 Feb 2023 18:57:40 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PGjRg1rGVz4x4q;
+        Wed, 15 Feb 2023 13:57:35 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1676429856;
+        bh=SuXpWZnEeQFvY/oeKHZrR5GwTlkroYww7DMqncK//mk=;
+        h=Date:From:To:Cc:Subject:From;
+        b=M3Wfg1uf/0W5iQnJJ6oXNGFVjHfRu7odY7ooaP4Wj2qmjYPPAUs9KMv+5kbU3Sez4
+         edB0V5kuibXnkusRLsVph+6gciQc7vMFhQ5EYq89pi5dQzYhkYv7IhHlkACj7/Yrz7
+         p1iR/ISutxdWc89+PpTrJmOPhxsO5YQatsStwxWtrqlkpwZj7PLsmvPGMnzI+e7Apl
+         xSdZOlrCEbWwz5aFp69NM8KCqGEabVJMEaZ3ql0k5UnyJvvWv0XsPgS2nddv4+Ee7M
+         kw9F6J7H0mJGE3daP9aVmWsknhze4yVvFSBdg43pZbh2y2qx+d6/NXLotzcL6Edafd
+         Avc9aG0h+OQyA==
+Date:   Wed, 15 Feb 2023 13:57:34 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>
+Cc:     bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Ross Zwisler <zwisler@chromium.org>,
-        Ross Zwisler <zwisler@google.com>
-Subject: Re: linux-next: manual merge of the ftrace tree with the jc_docs tree
-Message-ID: <Y+w9W5JM6zIvnsWZ@debian.me>
-References: <20230215121638.1e86ffa1@canb.auug.org.au>
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Yafang Shao <laoar.shao@gmail.com>
+Subject: linux-next: manual merge of the mm tree with the bpf-next tree
+Message-ID: <20230215135734.4dffcd39@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="pHNxZJhB0m2qZi4p"
-Content-Disposition: inline
-In-Reply-To: <20230215121638.1e86ffa1@canb.auug.org.au>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/fUyJ4JZH/K==rq=60W7H0TR";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-
---pHNxZJhB0m2qZi4p
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+--Sig_/fUyJ4JZH/K==rq=60W7H0TR
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Feb 15, 2023 at 12:16:38PM +1100, Stephen Rothwell wrote:
-> diff --cc Documentation/trace/histogram.rst
-> index 7b7e4893b8f6,8e95295e39b6..000000000000
-> --- a/Documentation/trace/histogram.rst
-> +++ b/Documentation/trace/histogram.rst
-> @@@ -1861,9 -1864,9 +1864,9 @@@ A histogram can now be defined for the=20
->   The above shows the latency "lat" in a power of 2 grouping.
->  =20
->   Like any other event, once a histogram is enabled for the event, the
-> - output can be displayed by reading the event's 'hist' file.
-> + output can be displayed by reading the event's 'hist' file::
->  =20
->  -  # cat /sys/kernel/debug/tracing/events/synthetic/wakeup_latency/hist
->  +  # cat /sys/kernel/tracing/events/synthetic/wakeup_latency/hist
->  =20
->     # event histogram
->     #
-> @@@ -1908,10 -1911,10 +1911,10 @@@
->  =20
->  =20
->   The latency values can also be grouped linearly by a given size with
-> - the ".buckets" modifier and specify a size (in this case groups of 10).
-> + the ".buckets" modifier and specify a size (in this case groups of 10)::
->  =20
->     # echo 'hist:keys=3Dpid,prio,lat.buckets=3D10:sort=3Dlat' >> \
->  -        /sys/kernel/debug/tracing/events/synthetic/wakeup_latency/trigg=
-er
->  +        /sys/kernel/tracing/events/synthetic/wakeup_latency/trigger
->  =20
->     # event histogram
->     #
-> @@@ -2052,13 -2182,13 +2182,13 @@@ The following commonly-used handler.act
->  =20
->         # echo 'hist:keys=3D$testpid:testpid=3Dpid:onmatch(sched.sched_wa=
-keup_new).\
->                 wakeup_new_test($testpid) if comm=3D=3D"cyclictest"' >> \
->  -              /sys/kernel/debug/tracing/events/sched/sched_wakeup_new/t=
-rigger
->  +              /sys/kernel/tracing/events/sched/sched_wakeup_new/trigger
->  =20
-> -     Or, equivalently, using the 'trace' keyword syntax:
-> +     Or, equivalently, using the 'trace' keyword syntax::
->  =20
-> -     # echo 'hist:keys=3D$testpid:testpid=3Dpid:onmatch(sched.sched_wake=
-up_new).\
-> -             trace(wakeup_new_test,$testpid) if comm=3D=3D"cyclictest"' =
->> \
-> -             /sys/kernel/tracing/events/sched/sched_wakeup_new/trigger
-> +       # echo 'hist:keys=3D$testpid:testpid=3Dpid:onmatch(sched.sched_wa=
-keup_new).\
-> +               trace(wakeup_new_test,$testpid) if comm=3D=3D"cyclictest"=
-' >> \
->  -              /sys/kernel/debug/tracing/events/sched/sched_wakeup_new/t=
-rigger
-> ++              /sys/kernel/tracing/events/sched/sched_wakeup_new/trigger
->  =20
->       Creating and displaying a histogram based on those events is now
->       just a matter of using the fields and new synthetic event in the
-> @@@ -2191,48 -2321,48 +2321,48 @@@
->       resulting latency, stored in wakeup_lat, exceeds the current
->       maximum latency, a snapshot is taken.  As part of the setup, all
->       the scheduler events are also enabled, which are the events that
-> -     will show up in the snapshot when it is taken at some point:
-> +     will show up in the snapshot when it is taken at some point::
->  =20
-> -     # echo 1 > /sys/kernel/tracing/events/sched/enable
->  -      # echo 1 > /sys/kernel/debug/tracing/events/sched/enable
-> ++      # echo 1 > /sys/kernel/tracing/events/sched/enable
->  =20
-> -     # echo 'hist:keys=3Dpid:ts0=3Dcommon_timestamp.usecs \
-> -             if comm=3D=3D"cyclictest"' >> \
-> -             /sys/kernel/tracing/events/sched/sched_waking/trigger
-> +       # echo 'hist:keys=3Dpid:ts0=3Dcommon_timestamp.usecs \
-> +               if comm=3D=3D"cyclictest"' >> \
->  -              /sys/kernel/debug/tracing/events/sched/sched_waking/trigg=
-er
-> ++              /sys/kernel/tracing/events/sched/sched_waking/trigger
->  =20
-> -     # echo 'hist:keys=3Dnext_pid:wakeup_lat=3Dcommon_timestamp.usecs-$t=
-s0: \
-> -             onmax($wakeup_lat).save(next_prio,next_comm,prev_pid,prev_p=
-rio, \
-> - 	    prev_comm):onmax($wakeup_lat).snapshot() \
-> - 	    if next_comm=3D=3D"cyclictest"' >> \
-> - 	    /sys/kernel/tracing/events/sched/sched_switch/trigger
-> +       # echo 'hist:keys=3Dnext_pid:wakeup_lat=3Dcommon_timestamp.usecs-=
-$ts0: \
-> +               onmax($wakeup_lat).save(next_prio,next_comm,prev_pid,prev=
-_prio, \
-> + 	      prev_comm):onmax($wakeup_lat).snapshot() \
-> + 	      if next_comm=3D=3D"cyclictest"' >> \
->  -	      /sys/kernel/debug/tracing/events/sched/sched_switch/trigger
-> ++	      /sys/kernel/tracing/events/sched/sched_switch/trigger
->  =20
->       When the histogram is displayed, for each bucket the max value
->       and the saved values corresponding to the max are displayed
->       following the rest of the fields.
->  =20
->       If a snapshot was taken, there is also a message indicating that,
-> -     along with the value and event that triggered the global maximum:
-> +     along with the value and event that triggered the global maximum::
->  =20
-> -     # cat /sys/kernel/tracing/events/sched/sched_switch/hist
-> -       { next_pid:       2101 } hitcount:        200
-> - 	max:         52  next_prio:        120  next_comm: cyclictest \
-> -         prev_pid:          0  prev_prio:        120  prev_comm: swapper=
-/6
->  -      # cat /sys/kernel/debug/tracing/events/sched/sched_switch/hist
-> ++      # cat /sys/kernel/tracing/events/sched/sched_switch/hist
-> +         { next_pid:       2101 } hitcount:        200
-> + 	  max:         52  next_prio:        120  next_comm: cyclictest \
-> +           prev_pid:          0  prev_prio:        120  prev_comm: swapp=
-er/6
->  =20
-> -       { next_pid:       2103 } hitcount:       1326
-> - 	max:        572  next_prio:         19  next_comm: cyclictest \
-> -         prev_pid:          0  prev_prio:        120  prev_comm: swapper=
-/1
-> +         { next_pid:       2103 } hitcount:       1326
-> + 	  max:        572  next_prio:         19  next_comm: cyclictest \
-> +           prev_pid:          0  prev_prio:        120  prev_comm: swapp=
-er/1
->  =20
-> -       { next_pid:       2102 } hitcount:       1982 \
-> - 	max:         74  next_prio:         19  next_comm: cyclictest \
-> -         prev_pid:          0  prev_prio:        120  prev_comm: swapper=
-/5
-> +         { next_pid:       2102 } hitcount:       1982 \
-> + 	  max:         74  next_prio:         19  next_comm: cyclictest \
-> +           prev_pid:          0  prev_prio:        120  prev_comm: swapp=
-er/5
->  =20
-> -     Snapshot taken (see tracing/snapshot).  Details:
-> - 	triggering value { onmax($wakeup_lat) }:        572	\
-> - 	triggered by event with key: { next_pid:       2103 }
-> +       Snapshot taken (see tracing/snapshot).  Details:
-> + 	  triggering value { onmax($wakeup_lat) }:        572	\
-> + 	  triggered by event with key: { next_pid:       2103 }
->  =20
-> -     Totals:
-> -         Hits: 3508
-> -         Entries: 3
-> -         Dropped: 0
-> +       Totals:
-> +           Hits: 3508
-> +           Entries: 3
-> +           Dropped: 0
->  =20
->       In the above case, the event that triggered the global maximum has
->       the key with next_pid =3D=3D 2103.  If you look at the bucket that =
-has
-> @@@ -2310,15 -2440,15 +2440,15 @@@
->       $cwnd variable.  If the value has changed, a snapshot is taken.
->       As part of the setup, all the scheduler and tcp events are also
->       enabled, which are the events that will show up in the snapshot
-> -     when it is taken at some point:
-> +     when it is taken at some point::
->  =20
-> -     # echo 1 > /sys/kernel/tracing/events/sched/enable
-> -     # echo 1 > /sys/kernel/tracing/events/tcp/enable
->  -      # echo 1 > /sys/kernel/debug/tracing/events/sched/enable
->  -      # echo 1 > /sys/kernel/debug/tracing/events/tcp/enable
-> ++      # echo 1 > /sys/kernel/tracing/events/sched/enable
-> ++      # echo 1 > /sys/kernel/tracing/events/tcp/enable
->  =20
-> -     # echo 'hist:keys=3Ddport:cwnd=3Dsnd_cwnd: \
-> -             onchange($cwnd).save(snd_wnd,srtt,rcv_wnd): \
-> - 	    onchange($cwnd).snapshot()' >> \
-> - 	    /sys/kernel/tracing/events/tcp/tcp_probe/trigger
-> +       # echo 'hist:keys=3Ddport:cwnd=3Dsnd_cwnd: \
-> +               onchange($cwnd).save(snd_wnd,srtt,rcv_wnd): \
-> + 	      onchange($cwnd).snapshot()' >> \
->  -	      /sys/kernel/debug/tracing/events/tcp/tcp_probe/trigger
-> ++	      /sys/kernel/tracing/events/tcp/tcp_probe/trigger
->  =20
->       When the histogram is displayed, for each bucket the tracked value
->       and the saved values corresponding to that value are displayed
+Hi all,
 
-The resolution LGTM, thanks!
+Today's linux-next merge of the mm tree got conflicts in:
+
+  include/linux/memcontrol.h
+  mm/memcontrol.c
+
+between commit:
+
+  b6c1a8af5b1e ("mm: memcontrol: add new kernel parameter cgroup.memory=3Dn=
+obpf")
+
+from the bpf-next tree and commit:
+
+  2006d382484e ("mm: memcontrol: rename memcg_kmem_enabled()")
+
+from the mm tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
-An old man doll... just what I always wanted! - Clara
+Cheers,
+Stephen Rothwell
 
---pHNxZJhB0m2qZi4p
-Content-Type: application/pgp-signature; name="signature.asc"
+diff --cc include/linux/memcontrol.h
+index e7310363f0cb,5567319027d1..000000000000
+--- a/include/linux/memcontrol.h
++++ b/include/linux/memcontrol.h
+@@@ -1776,17 -1776,11 +1776,17 @@@ struct obj_cgroup *get_obj_cgroup_from_
+  int obj_cgroup_charge(struct obj_cgroup *objcg, gfp_t gfp, size_t size);
+  void obj_cgroup_uncharge(struct obj_cgroup *objcg, size_t size);
+ =20
+ +extern struct static_key_false memcg_bpf_enabled_key;
+ +static inline bool memcg_bpf_enabled(void)
+ +{
+ +	return static_branch_likely(&memcg_bpf_enabled_key);
+ +}
+ +
+- extern struct static_key_false memcg_kmem_enabled_key;
++ extern struct static_key_false memcg_kmem_online_key;
+ =20
+- static inline bool memcg_kmem_enabled(void)
++ static inline bool memcg_kmem_online(void)
+  {
+- 	return static_branch_likely(&memcg_kmem_enabled_key);
++ 	return static_branch_likely(&memcg_kmem_online_key);
+  }
+ =20
+  static inline int memcg_kmem_charge_page(struct page *page, gfp_t gfp,
+@@@ -1860,12 -1854,7 +1860,12 @@@ static inline struct obj_cgroup *get_ob
+  	return NULL;
+  }
+ =20
+ +static inline bool memcg_bpf_enabled(void)
+ +{
+ +	return false;
+ +}
+ +
+- static inline bool memcg_kmem_enabled(void)
++ static inline bool memcg_kmem_online(void)
+  {
+  	return false;
+  }
+diff --cc mm/memcontrol.c
+index 186a3a56dd7c,3e3cdb9bed95..000000000000
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@@ -348,11 -345,8 +348,11 @@@ static void memcg_reparent_objcgs(struc
+   * conditional to this static branch, we'll have to allow modules that do=
+es
+   * kmem_cache_alloc and the such to see this symbol as well
+   */
+- DEFINE_STATIC_KEY_FALSE(memcg_kmem_enabled_key);
+- EXPORT_SYMBOL(memcg_kmem_enabled_key);
++ DEFINE_STATIC_KEY_FALSE(memcg_kmem_online_key);
++ EXPORT_SYMBOL(memcg_kmem_online_key);
+ +
+ +DEFINE_STATIC_KEY_FALSE(memcg_bpf_enabled_key);
+ +EXPORT_SYMBOL(memcg_bpf_enabled_key);
+  #endif
+ =20
+  /**
+
+--Sig_/fUyJ4JZH/K==rq=60W7H0TR
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY+w9VgAKCRD2uYlJVVFO
-o8IUAQD4I8rJ0HyWNGOhM52MK5ktOacj1ymOJcmNqhAhRq6VlwEAgIAvi8dXUtnY
-wLIyZnedyTrNUlgErWwF560BFsB0Ngw=
-=8AAl
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPsSh4ACgkQAVBC80lX
+0Gxa+Qf/abbZhDuKtWmpJs/t/LThpHp4uYKNTFBA66rnXueNTp2NXIZHQt4IT4Ix
+btNitQjfYVfWWDfNVgBVh8jNO8qRiUqqEkXEjIjZThn0z41SzMQ0DlUS6XDOIwsY
+lj1Bc4TU3JFWI7uufu5htz2qXpQKte+Zd2TC7Qy4/a6b62WHPE9KbA3ALPP77FqD
+nYKkrXgygFCRggy9l80lCgNduw1Z3DT5yFkyOLaaxfHfJpxds2VCxCKgFcr+gQIN
+gMqqoWUcoakXNhjnXrtxchz2YIiU7lYkOs7yyWGC6CDLtK4nNrwI/dfiKr3Hj80E
+azCVuBAWa1jGN0ySrpMqIFCiVTVwfg==
+=OmX7
 -----END PGP SIGNATURE-----
 
---pHNxZJhB0m2qZi4p--
+--Sig_/fUyJ4JZH/K==rq=60W7H0TR--

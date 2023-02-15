@@ -2,91 +2,118 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C8E6697551
-	for <lists+linux-next@lfdr.de>; Wed, 15 Feb 2023 05:21:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E098E69756E
+	for <lists+linux-next@lfdr.de>; Wed, 15 Feb 2023 05:29:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232975AbjBOEVB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 14 Feb 2023 23:21:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48256 "EHLO
+        id S232750AbjBOE31 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 14 Feb 2023 23:29:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233100AbjBOEUm (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 14 Feb 2023 23:20:42 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AB423433A;
-        Tue, 14 Feb 2023 20:20:30 -0800 (PST)
+        with ESMTP id S232996AbjBOE3R (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 14 Feb 2023 23:29:17 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04CB91DBBE;
+        Tue, 14 Feb 2023 20:29:11 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PGlHH4m0mz4x5V;
-        Wed, 15 Feb 2023 15:20:27 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PGlTJ1qPCz4x4r;
+        Wed, 15 Feb 2023 15:29:08 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1676434828;
-        bh=GfiPsfvThIDr+PFMX0Ky8iugsK3oSFmPz2QVPNqMyJ8=;
+        s=201702; t=1676435349;
+        bh=k+UyJ0bzyj6iwA5lq4VzIodTsZc9POWZGOJzSpcD3vM=;
         h=Date:From:To:Cc:Subject:From;
-        b=WUFh66ZYdBeUVOUXmwnA0kVbNoaVZZ5zrs4Uu265MwgS6BplrMuI5kfIPrtnTz9ol
-         BaFHuUWS1qHV6Vc2gHCE3db5u9HtUOrMAlhS3YEOAGTyo48rrHjOlBq+MlKb6+ZPps
-         PgOBCiD64VOhwm5o7ytttYCKVBx/XZY4UejJpyN4Iiesqomy8O70XKcxpAjE5iogMG
-         WZYYElgt0tGEknbs6ZhU3DqaCpVZo7/XNKFEXg38nuxtgNshZ1sg3Pm0sdTBkuXnyu
-         fqZ4YKsIhwN1RdwOKZUSrVrvhC/GOW2KAAhePBEEY5u39OHU7lfNhd0x6qqY/LM1zA
-         OacCDGYYQjdgg==
-Date:   Wed, 15 Feb 2023 15:20:26 +1100
+        b=oG8kVFNPEB8/2E8SMdywJ6CnsIp+8k2PZmw8TbysJy+f4eAQoH9bd+Kx9zt3FUFKX
+         h5IETgUVQDqRLKCBgn7sg224u7vSe36w6I6EQfCuyZ/hAsGgFf2gRLLWkKlYxLtcr8
+         h3bxqxT7k/yCZrZvxTbRpDDbzQASCiVs4/eajmTN1wDfQT3I/XwKLJ5DHQV76YO8N1
+         nqWh8MvENZ8MEmyiQijk6eii1DTpp38mU/2xqiPeHsI4NPgMzgtsmIdA3Thdm27Qvh
+         j4xFNnThd+z5rs+7wBomHk0EsOC2q6/ECxqqKZ65zGMUo5l7by+YDKMcbL6Ug8tEEp
+         8dtGB/N8B5F8Q==
+Date:   Wed, 15 Feb 2023 15:29:07 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Kalle Valo <kvalo@kernel.org>,
-        Johannes Berg <johannes@sipsolutions.net>
-Cc:     Felix Fietkau <nbd@nbd.name>,
-        Wireless <linux-wireless@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the wireless-next tree
-Message-ID: <20230215152026.7fcd88e3@canb.auug.org.au>
+Subject: linux-next: duplicate patches in the clockevents tree
+Message-ID: <20230215152907.238e0ba1@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/AFC3lzUnigufcAib.+eoaX6";
+Content-Type: multipart/signed; boundary="Sig_/P6Y7jCjcak2+er5zS7l16yA";
  protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/AFC3lzUnigufcAib.+eoaX6
+--Sig_/P6Y7jCjcak2+er5zS7l16yA
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the wireless-next tree, today's linux-next build (htmldocs)
-produced this warning:
+The following commits are also in the tip tree as different commits
+(but the same patches):
 
-net/mac80211/sta_info.h:722: warning: Function parameter or member 'amsdu_m=
-esh_control' not described in 'sta_info'
+  e09903cea09e ("clocksource/drivers/riscv: Get rid of clocksource_arch_ini=
+t() callback")
+  f243533b29c5 ("clocksource/drivers/sh_cmt: Mark driver as non-removable")
+  596846da9f03 ("clocksource/drivers/timer-microchip-pit64b: Drop obsolete =
+dependency on COMPILE_TEST")
+  8e148217ffb9 ("clocksource/drivers/riscv: Increase the clock source ratin=
+g")
+  969ec81d5a96 ("clocksource/drivers/timer-riscv: Set CLOCK_EVT_FEAT_C3STOP=
+ based on DT")
+  98ce3981716c ("dt-bindings: timer: Add bindings for the RISC-V timer devi=
+ce")
+  245fe5328dc7 ("RISC-V: time: initialize hrtimer based broadcast clock eve=
+nt device")
+  8cf50035875e ("dt-bindings: timer: rk-timer: Add rktimer for rv1126")
 
-Introduced by commit
+These are commits
 
-  6e4c0d0460bd ("wifi: mac80211: add a workaround for receiving non-standar=
-d mesh A-MSDU")
+  3aff0403f814 ("clocksource/drivers/riscv: Get rid of clocksource_arch_ini=
+t() callback")
+  c3daa4754f3c ("clocksource/drivers/sh_cmt: Mark driver as non-removable")
+  8d17aca90bcf ("clocksource/drivers/timer-microchip-pit64b: Drop obsolete =
+dependency on COMPILE_TEST")
+  674402b0098b ("clocksource/drivers/riscv: Increase the clock source ratin=
+g")
+  8932a9533a9c ("clocksource/drivers/timer-riscv: Set CLOCK_EVT_FEAT_C3STOP=
+ based on DT")
+  e2bcf2d876fd ("dt-bindings: timer: Add bindings for the RISC-V timer devi=
+ce")
+  8b3b8fbb4896 ("RISC-V: time: initialize hrtimer based broadcast clock eve=
+nt device")
+  b3cbfb792792 ("dt-bindings: timer: rk-timer: Add rktimer for rv1126")
+
+in the tip tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/AFC3lzUnigufcAib.+eoaX6
+--Sig_/P6Y7jCjcak2+er5zS7l16yA
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPsXYoACgkQAVBC80lX
-0Gxbogf/d6ZjXeSNPvtZ/8PFU5ujTjkNOJcqWeYtVAQ2X3MHqdKJsDETsxe0bBKE
-n1cMGF6eOPmldtkLajTMxAfNZSHjE3iY3YNefFVSSg5LLHCRCQBipwmwCIZ61YNT
-mh7GSUB/5wwJAFtteFr741OlqJy4zihCvgZXWGRb17/lN4Dmd562/6dH9ejokojt
-zX1Iwttdx0KGzBL1s910WtLDHToChja5HNnekmG1oUHEd4YKgY0pDxLBGd6JGWqI
-npbej9yf9xNkuiuscaLQt5x3EyMSyYCzT6rFhcv0ZXpepo1oSqM4O8jcpUtH9LwE
-8nPCl4uo16TZD0UQ7Vy7H6dH7UFaTw==
-=Qmzd
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPsX5MACgkQAVBC80lX
+0GymMQf+MGhtyWOF/mY26ClVhST/JkHUpSbiGou3WXfLHS3Teu2hlEml2uW7gfoY
+yQKCep8fVkwvmJQ433o79gndI0xnbCLugUNxGUWtsj285XxS4UDxk4zDCoqMstFz
+YcYkw3x0ejNN80v3HdZiQu64UTczy3bjr7JLAndTr+kOgtlNbp209tWelTvDO2mV
+ag5frLhnL53ATm5UrLRo2SLsfVrTC/xsuauLkpRKXjSEeP3GIaoJGjLkzLjpF61B
+dM7cEgc3vGsHCqRFdjPFEcJLZdpGbmD5udtoK3nKkMwAyAAtqutUTaRM0f2WpPiZ
+KFcBOS/NVQMf8TE4+neftR+f/8btiQ==
+=JuDu
 -----END PGP SIGNATURE-----
 
---Sig_/AFC3lzUnigufcAib.+eoaX6--
+--Sig_/P6Y7jCjcak2+er5zS7l16yA--

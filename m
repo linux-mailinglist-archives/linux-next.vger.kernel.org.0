@@ -2,72 +2,116 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3330D698907
-	for <lists+linux-next@lfdr.de>; Thu, 16 Feb 2023 01:04:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D26D698945
+	for <lists+linux-next@lfdr.de>; Thu, 16 Feb 2023 01:30:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229550AbjBPAE5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 15 Feb 2023 19:04:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52366 "EHLO
+        id S229508AbjBPAar (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 15 Feb 2023 19:30:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbjBPAE4 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 15 Feb 2023 19:04:56 -0500
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23B5F7AA3;
-        Wed, 15 Feb 2023 16:04:55 -0800 (PST)
-Received: from fsav413.sakura.ne.jp (fsav413.sakura.ne.jp [133.242.250.112])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 31G04XeN009311;
-        Thu, 16 Feb 2023 09:04:33 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav413.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav413.sakura.ne.jp);
- Thu, 16 Feb 2023 09:04:33 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav413.sakura.ne.jp)
-Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 31G04XaZ009270
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Thu, 16 Feb 2023 09:04:33 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <052a1585-1958-0d9a-5508-2b3eb41e15fa@I-love.SAKURA.ne.jp>
-Date:   Thu, 16 Feb 2023 09:04:32 +0900
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: linux-next: duplicate patch in the ntfs3 tree
-Content-Language: en-US
-To:     Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
-Cc:     Hillf Danton <hdanton@sina.com>,
+        with ESMTP id S229505AbjBPAaq (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 15 Feb 2023 19:30:46 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 452EC42BC9;
+        Wed, 15 Feb 2023 16:30:42 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PHG7c3dmVz4x5X;
+        Thu, 16 Feb 2023 11:30:36 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1676507437;
+        bh=8ToH5Hy9Jqn84CJPYUsxz6idIucqqXBwd1ipim0YCnw=;
+        h=Date:From:To:Cc:Subject:From;
+        b=OULtGq/Ch1HhpMWfCjkC0TQ9QnddGZNdGAcPu1EBWsDg79n4WyxXzlLnyJ/vyy3CT
+         b9egGh7ZnsnPZzEnoYakrArVOH4Lrkkw7Oj7W6exhFU3uqtiNUuo+S+zXWwBZmSntP
+         aRocBO26V/c7LtuyO3XMHEmFTP3/k4U7KmZIP8R1VTNWcW5mojhWDn4p63Cp1918wW
+         E1IBzgNXiSVIPU81fcMH3UvYx4Vfk7NfBhCoCAUiiXeJqZaeyMlmipzIfoFSGX+Ky8
+         MmeNXiBdzGWs0TZsmO7JJ1dfi7m9K6/klUKdrwILi9SwnkhAiesmqSwS3Te3KZGXq2
+         TUO+Xar05/0TA==
+Date:   Thu, 16 Feb 2023 11:30:35 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Mark Brown <broonie@kernel.org>, Wolfram Sang <wsa@the-dreams.de>
+Cc:     Alain Volmat <avolmat@me.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-References: <20230216070609.7045e2e1@canb.auug.org.au>
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <20230216070609.7045e2e1@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Wolfram Sang <wsa@kernel.org>
+Subject: linux-next: manual merge of the spi tree with the i2c tree
+Message-ID: <20230216113035.3050871a@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/_NQtuGwfo+tEnw0WYtHkIEX";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FORGED_SPF_HELO,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,T_SPF_TEMPERROR autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 2023/02/16 5:06, Stephen Rothwell wrote:
-> Hi all,
-> 
-> The following commit is also in Linus Torvalds' tree as a different commit
-> (but the same patch):
-> 
->   fca02f0f400b ("fs/ntfs3: Don't hold ni_lock when calling truncate_setsize()")
-> 
-> This is commit
-> 
->   0226635c304c ("fs/ntfs3: don't hold ni_lock when calling truncate_setsize()")
-> 
-> in Linus' tree.
-> 
+--Sig_/_NQtuGwfo+tEnw0WYtHkIEX
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Linus directly applied that patch; please drop from ntfs3 tree and pull from linux.git tree.
-https://lkml.kernel.org/r/CAHk-=wioYYi=A8r2bXRE9Nvg1FBe-9UV+HB51cGPGwi5d7N_ug@mail.gmail.com
+Hi all,
 
+Today's linux-next merge of the spi tree got a conflict in:
+
+  MAINTAINERS
+
+between commit:
+
+  b3de755d6041 ("dt-bindings: i2c: i2c-st: convert to DT schema")
+
+from the i2c tree and commit:
+
+  7ec844a2c753 ("spi: spi-st-ssc: convert to DT schema")
+
+from the spi tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc MAINTAINERS
+index 71e92d3c51c6,daa33e7bb457..000000000000
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@@ -2791,7 -2925,8 +2791,8 @@@ M:	Patrice Chotard <patrice.chotard@fos
+  L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+  S:	Maintained
+  W:	http://www.stlinux.com
++ F:	Documentation/devicetree/bindings/spi/st,ssc-spi.yaml
+ -F:	Documentation/devicetree/bindings/i2c/i2c-st.txt
+ +F:	Documentation/devicetree/bindings/i2c/st,sti-i2c.yaml
+  F:	arch/arm/boot/dts/sti*
+  F:	arch/arm/mach-sti/
+  F:	drivers/ata/ahci_st.c
+
+--Sig_/_NQtuGwfo+tEnw0WYtHkIEX
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPteSsACgkQAVBC80lX
+0GwVhgf+O092/OcvSItvBp7tlxhdQ+X/IBaoE+0xte68jTS1YIvQCmJXPIJQhW6x
+yyOn+bvws9Fj3wO7+KG26IsspEx5SpWoJjCbgDOgiTBIvYccXhnbL/IB9dP4VaxV
+ckjhbiiO88thG6c3zhWNumFj5RYq8X24Pw4wYzwqHN73WzV7y8WnYOJETBN/dL3Q
+FFNhaRkzKgwT8ooU7wzL+Rv/uAkXkCoki5B7xh4BussCaVsh2dDUMYIEYGGz/aJT
+mWK347SczxgvHEdYy0Oktuvqz81y6fpUHaGPIjdKZuYMOpmpGqKDcsB0YW8wa5W1
+KzOhTvEuVKXUPzhx+4AnCIjXS1luNg==
+=dS3K
+-----END PGP SIGNATURE-----
+
+--Sig_/_NQtuGwfo+tEnw0WYtHkIEX--

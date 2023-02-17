@@ -2,117 +2,113 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A52869A2E8
-	for <lists+linux-next@lfdr.de>; Fri, 17 Feb 2023 01:23:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0B1569A374
+	for <lists+linux-next@lfdr.de>; Fri, 17 Feb 2023 02:35:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229505AbjBQAXf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 16 Feb 2023 19:23:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44692 "EHLO
+        id S230014AbjBQBf2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 16 Feb 2023 20:35:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbjBQAXe (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 16 Feb 2023 19:23:34 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E99453B0ED;
-        Thu, 16 Feb 2023 16:23:31 -0800 (PST)
+        with ESMTP id S229460AbjBQBf1 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 16 Feb 2023 20:35:27 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE31038EAE;
+        Thu, 16 Feb 2023 17:35:24 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PHsww2pLNz4x5X;
-        Fri, 17 Feb 2023 11:23:27 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1676593410;
-        bh=fteKVRXA2Rfl7+Yd+j8rdrzjkIkb9XfcvUiaHcVHB0E=;
-        h=Date:From:To:Cc:Subject:From;
-        b=qzGBqak0ynmE9QH8MrUNNMjlgFRMF9j3LYyg4o5Cx2a3a6FDyEIWEfQYABdvq9xE6
-         cWeysu5OXrFGMd558pNtCQuwBR6QqGna09MxYV1aJ+ytZHvcA1WSCwDfr6nzzfPXjy
-         BczFNoPJkPFzHbUaP+zrCNGEKVy1ISvPeHhUCTHe/v2OiOWBKZOgi9fhmeyhr0cVCL
-         wDGgNZcXH1Xe7Z2cwT9ELMPXmAwVxJeXAVJoxOpgVbsZ7eDXtEYyIaLB8pYEs3U241
-         4CFYYKQMIo6E/MLy92yE9Oe2IMBs2g5wyoU2ZlR6tChLGtPmoX6cFqeS+o/dzJkytu
-         zWCUdyahHL3vA==
-Date:   Fri, 17 Feb 2023 11:23:27 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Takashi Iwai <tiwai@suse.de>, Olof Johansson <olof@lixom.net>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     ARM <linux-arm-kernel@lists.infradead.org>,
-        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PHvWp0pQsz4x82;
+        Fri, 17 Feb 2023 12:35:18 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1676597719;
+        bh=Mr5UOSzMz1dF6Hwpyx5WmT4Yp7+jw+UVJVzxUI67Y90=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=jJrlPrrqLIOcOrprv8svriZs0WsrN10uCdmke9m9QoWSY5OBgJKjBOzWqkwIO9e5n
+         0eYLjw5+WSDG6eQNtn8y3M4O0Rpj82s6Vitc/sIZLoOaLQPepDlzH0kO69krn+uQVQ
+         pF5QDgKdxvAB80hclDX96o2HRMN05YDMqniwaYg7jcOS0C4bZ/qXdiDO9DDfzDNrTy
+         rneoIYMZ+6f8cx+W1cEWGeGOh473fjPp4RMP9QjsIjLIbV4IgykjuX/whrVk2Wclpb
+         xdPIS37QfOPGZdrF93VNzXsJ8/uZnIeJYA6EhW48sM7JqvBmE5j0I/c2MySSH5jV3z
+         3iVh70GdxU/Jg==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Josh Poimboeuf <jpoimboe@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Sathvika Vasireddy <sv@linux.ibm.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
-        <u.kleine-koenig@pengutronix.de>
-Subject: linux-next: manual merge of the sound tree with the arm-soc tree
-Message-ID: <20230217112327.5697baab@canb.auug.org.au>
+        PowerPC <linuxppc-dev@lists.ozlabs.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the powerpc tree
+In-Reply-To: <20230216180607.w666rnbtm5fumziq@treble>
+References: <20230216144031.45b1fc12@canb.auug.org.au>
+ <20230216180607.w666rnbtm5fumziq@treble>
+Date:   Fri, 17 Feb 2023 12:35:17 +1100
+Message-ID: <87k00hysyy.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/4TaH3F.GABl9I135i5olB7h";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/4TaH3F.GABl9I135i5olB7h
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Josh Poimboeuf <jpoimboe@kernel.org> writes:
+> On Thu, Feb 16, 2023 at 02:40:31PM +1100, Stephen Rothwell wrote:
+>> Hi all,
+>> 
+>> After merging the powerpc tree, today's linux-next build (powerpc
+>> pseries_le_defconfig) produced this warning:
+>> 
+>> arch/powerpc/kernel/head_64.o: warning: objtool: .text+0x6128: unannotated intra-function call
+>> 
+>> I have no idea what caused this.
+>
+> Adding Sathvika and Christophe.
+>
+> The short term fix would be something like the below, but...
+>
+> If powerpc objtool is only doing mcount, does it even make sense to run
+> objtool on asm files?  If so, there are probably a lot more cleanups
+> needed for the asm code.
 
-Hi all,
+I would like to enable more of the objtool checks eventually, although I
+don't have a timeline for that. But I'd prefer to keep checking the asm
+code seeing as we've already enabled that.
 
-Today's linux-next merge of the sound tree got conflicts in:
+> So I'm thinking either we should cleanup all the powerpc asm code with
+> annotations like below, or we should try to make objtool mcount-mode
+> ignore asm files.
 
-  sound/soc/cirrus/ep93xx-ac97.c
-  sound/soc/pxa/e740_wm9705.c
-  sound/soc/pxa/e750_wm9705.c
-  sound/soc/pxa/e800_wm9712.c
-  sound/soc/ti/davinci-vcif.c
+I think we have most of the code annotated already, this is a new
+warning because that code is newly refactored by a commit I applied.
 
-between commits:
+I'll have to fix my build scripts to error out on objtool warnings.
 
-  2b45e1fa9398 ("ASoC: remove unused ep93xx files")
-  efe81e9a9273 ("ASoC: remove unused davinci support")
-  b401d1fd8053 ("ASoC: pxa: remove unused board support")
+cheers
 
-from the arm-soc tree and commits:
 
-  f2211ac36ab0 ("ASoC: pxa: e740_wm9705: Drop empty platform remove functio=
-n")
-  4ed923e8076b ("ASoC: pxa: e750_wm9705: Drop empty platform remove functio=
-n")
-  394296eee2c2 ("ASoC: pxa: e800_wm9712: Drop empty platform remove functio=
-n")
-  0e478b88b257 ("ASoC: cirrus: use helper function")
-  2abde57fb82b ("ASoC: ti: use helper function")
-
-from the sound tree.
-
-I fixed it up (I just removed the files) and can carry the fix as
-necessary. This is now fixed as far as linux-next is concerned, but any
-non trivial conflicts should be mentioned to your upstream maintainer
-when your tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/4TaH3F.GABl9I135i5olB7h
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPuyP8ACgkQAVBC80lX
-0GxW7AgAgIaVDgdc78UKu5+53ivzK8wc5dDF3ci7iiaOkpcETzTr5KlwmB+o0FdR
-gpc2/GwLeKDlZo+84H+lf37UgkSEdF2zNeHFa8YHpKt5K1cjizVwPW7GEP8FFWxE
-/reGv7C29xXTufAyBuyvhuRCSSlrY8f+2W39+y9dJCviiE2SCjUkBN/AXufVKWIm
-gpDIllRf3G7wv4HUuMiaKxAEmhUbtyRRZgjoqEeegxoQoLASNYMvOrRQPpPpiRqH
-hgfHb+C16+36JLQnvxaGQwg7lCeBoCmkC7VLQS1EQtRuir7nMlHkxwe3jvdeOWXo
-mJ4pFjK4AlnhvkcZufwi5Idt5HsMxQ==
-=WASK
------END PGP SIGNATURE-----
-
---Sig_/4TaH3F.GABl9I135i5olB7h--
+> diff --git a/arch/powerpc/kernel/head_64.S b/arch/powerpc/kernel/head_64.S
+> index 3a7266fa8a18..1febb56ebaeb 100644
+> --- a/arch/powerpc/kernel/head_64.S
+> +++ b/arch/powerpc/kernel/head_64.S
+> @@ -472,7 +472,7 @@ SYM_FUNC_START_LOCAL(__mmu_off)
+>  	b	.	/* prevent speculative execution */
+>  SYM_FUNC_END(__mmu_off)
+>  
+> -start_initialization_book3s:
+> +SYM_FUNC_START_LOCAL(start_initialization_book3s)
+>  	mflr	r25
+>  
+>  	/* Setup some critical 970 SPRs before switching MMU off */
+> @@ -494,6 +494,7 @@ start_initialization_book3s:
+>  
+>  	mtlr	r25
+>  	blr
+> +SYM_FUNC_END(start_initialization_book3s)
+>  #endif
+>  
+>  /*

@@ -2,133 +2,90 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9A3069A27C
-	for <lists+linux-next@lfdr.de>; Fri, 17 Feb 2023 00:40:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B95B569A2DA
+	for <lists+linux-next@lfdr.de>; Fri, 17 Feb 2023 01:12:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229493AbjBPXkV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 16 Feb 2023 18:40:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47126 "EHLO
+        id S230173AbjBQAMO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 16 Feb 2023 19:12:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjBPXkU (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 16 Feb 2023 18:40:20 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 999704D61D;
-        Thu, 16 Feb 2023 15:40:18 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        with ESMTP id S229448AbjBQAMN (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 16 Feb 2023 19:12:13 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 493CE3A860;
+        Thu, 16 Feb 2023 16:12:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PHrz468HRz4x5c;
-        Fri, 17 Feb 2023 10:40:16 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1676590817;
-        bh=p65Yo3Ha1p0WjPcHA/W572Ft0NLlUcUxtz4s3R8X+iM=;
-        h=Date:From:To:Cc:Subject:From;
-        b=oofnZEWkf6fEHk8VstohJNWoXKp5KGpuNWscVuO1rICAuVlzvMCZxqXbI6wrNtR6I
-         /oEx+yJirw28bd5dwPlBnJXpwM7eOAT9Ocrk6o/SRvHRXbYRLBdx6UGqB3swGc1ydQ
-         AeQfiOfmJmnlWeOReHLKjV0cBfHUJomknefgnAsxYT34NeMpZXOAyMTzeSnVM/iNNi
-         KqQwyeDBoGhJKOBXgNZFT7h4jkQWMh92rf7o2uix+7+1ZGW63bJTUx9vE+Z37nKYNr
-         LsC2fKsdtP+kqA6TJm1e1iqArZ9caVr90+ibvLPufwCA3iLyQnmOuVz6llMHCiyos4
-         DNTqyvJY6vllQ==
-Date:   Fri, 17 Feb 2023 10:40:15 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Ido Schimmel <idosch@nvidia.com>, Jakub Kicinski <kuba@kernel.org>,
-        Jiri Pirko <jiri@nvidia.com>,
+        by ams.source.kernel.org (Postfix) with ESMTPS id F2325B824B7;
+        Fri, 17 Feb 2023 00:12:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4C56C433EF;
+        Fri, 17 Feb 2023 00:12:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676592730;
+        bh=901s5sqkjUBs2YT2kwpAqnITH7jdp8CUol6MbZ6UOJw=;
+        h=Date:From:To:Subject:References:In-Reply-To:From;
+        b=VBTjfEBFjejcJM37X/s0CFwO5iiuTHTv9PrHChhqbYhDSboXEFBbyWjh27wGZO5UI
+         jRbEggm9uH796J0siFEmH0bOYjFSUP+ZmDFj34qNlutm1FYFD8j6ObejwHjoVAaSdu
+         EgF2fN2BX9CCEcikrQ7hnqsbDjvQ4CwzjZ1htLFtKqd+ArXj1O5vmuUf7LpTdeZv2f
+         K3Z7RNg9QBrnzUutA4lzRz4CXNkJg7sKJBJHLqkXZDDjjkwIi/iCnX8umkxqorSezq
+         tReTJSkA1ngWkVafXnupbYFHY6EAhfdCNvp2gf2BGPjblHteU5unCvEvH8VlNYtpy8
+         XOx48YXWHAaYA==
+Date:   Fri, 17 Feb 2023 00:12:06 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Wolfram Sang <wsa@the-dreams.de>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Moshe Shemesh <moshe@nvidia.com>,
-        Paolo Abeni <pabeni@redhat.com>
-Subject: linux-next: manual merge of the net-next tree with Linus' tree
-Message-ID: <20230217104015.3472a131@canb.auug.org.au>
+        Wolfram Sang <wsa@kernel.org>
+Subject: Re: linux-next: manual merge of the spi tree with the i2c tree
+Message-ID: <Y+7GVqNu2ED2xhhR@sirena.org.uk>
+References: <20230216113035.3050871a@canb.auug.org.au>
+ <Y+6IcubsNszRK/59@imac101>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/IsrmcyfBhL615cTZKSKAKw4";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="h2BGgAH1LYWBFZ2B"
+Content-Disposition: inline
+In-Reply-To: <Y+6IcubsNszRK/59@imac101>
+X-Cookie: Serving suggestion.
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/IsrmcyfBhL615cTZKSKAKw4
-Content-Type: text/plain; charset=US-ASCII
+
+--h2BGgAH1LYWBFZ2B
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+On Thu, Feb 16, 2023 at 08:48:02PM +0100, Alain Volmat wrote:
+> Hi,
+>=20
+> sorry for the mistake.  I should have made a serie with those
+> 2 patches in order to avoid this conflict.  Sorry about that.
+> I know now for a next case.
 
-Today's linux-next merge of the net-next tree got a conflict in:
+This sort of trivial add/add change is generally not a problem,
+it's just good for the people sending the trees to be aware.
 
-  net/devlink/leftover.c
-
-between commit:
-
-  b20b8aec6ffc ("devlink: Fix netdev notifier chain corruption")
-
-from Linus' tree and commits:
-
-  dbeeca81bd93 ("devlink: Split out dev get and dump code")
-  7d7e9169a3ec ("devlink: move devlink reload notifications back in between=
- _down() and _up() calls")
-  a131315a47bb ("devlink: send objects notifications during devlink reload")
-
-from the net-next tree.
-
-I fixed it up (I used the latter version of this file and applied the
-following merge fix patch) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Fri, 17 Feb 2023 10:37:43 +1100
-Subject: [PATCH] fix for "devlink: Fix netdev notifier chain corruption"
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- net/devlink/dev.c | 2 --
- 1 file changed, 2 deletions(-)
-
-diff --git a/net/devlink/dev.c b/net/devlink/dev.c
-index b40153fa2680..bf1d6f1bcfc7 100644
---- a/net/devlink/dev.c
-+++ b/net/devlink/dev.c
-@@ -343,8 +343,6 @@ static void devlink_reload_netns_change(struct devlink =
-*devlink,
- 	 * reload process so the notifications are generated separatelly.
- 	 */
- 	devlink_notify_unregister(devlink);
--	move_netdevice_notifier_net(curr_net, dest_net,
--				    &devlink->netdevice_nb);
- 	write_pnet(&devlink->_net, dest_net);
- 	devlink_notify_register(devlink);
- }
---=20
-2.39.1
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/IsrmcyfBhL615cTZKSKAKw4
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+--h2BGgAH1LYWBFZ2B
+Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPuvt8ACgkQAVBC80lX
-0GxbUgf/XuM1uE/p6y9RR966U0ivnzxEtWX/xd62LzsUHk7hdx3I5xFza/1tJ8cg
-837RnaGWmQohZj3qAMrvt1EjoPO3y7bei3hf3RIoztM2ItNQa5JQQdJRYmctcphC
-csG+YKY1kZPfq3dN6LPbfJxmeHQDZ2pJ7qFUBfW3HJ+aJZ6O597Ug/MG5hUVaTHT
-pjWOlCoaw53Kb09MfgJeoVZv4YlnN2VKV8p4HM1nMB9w557gz6UHRVJoKMDXdRcc
-v2084Q1li9XWo4ohpOsGBq4+wxPZYhnyuDRD0mQkejzgB/rZR6SnNc4uNJXWo6PO
-Wfk6geMIdPb1Z7L+v3VRtBDwPOVaKQ==
-=LzY4
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmPuxlUACgkQJNaLcl1U
+h9CqGgf/UuTFY1JXdmgx4nRr/ZQ+LGvSPJa3lfWaLJVpTdCswZSsO/imVlht7WtC
+dTQJGvzNmDkdq2wh/GcZPlkZjCtJrt80XQqrNuNRGRYz/7K9UDw2fnefH234rfAS
+IPr9hnOeWzaHOirKSNI5JSmUs6ROh9oOxHDFnLAPBIvpv9o2fOq+LvyDupc6t+/4
++q/UAwkEAhfSlm7OI7LDOq0aDdbljYsZ62WnbW1Et56D+BSAidSRgPACy9fDDgy7
+nT16ryhhzUryUBauNpuFmJ1OeMKFiG0lY/rBDx2gkVk63WCuaiXiNIUCwmfPb9+q
+b8azATYQbv6CCZFdZyBqhqcLp0YhBw==
+=5yH+
 -----END PGP SIGNATURE-----
 
---Sig_/IsrmcyfBhL615cTZKSKAKw4--
+--h2BGgAH1LYWBFZ2B--

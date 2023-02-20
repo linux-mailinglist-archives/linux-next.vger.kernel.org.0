@@ -2,154 +2,156 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F6D869C901
-	for <lists+linux-next@lfdr.de>; Mon, 20 Feb 2023 11:50:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 146EC69C927
+	for <lists+linux-next@lfdr.de>; Mon, 20 Feb 2023 12:02:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231715AbjBTKuv (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 20 Feb 2023 05:50:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42350 "EHLO
+        id S229503AbjBTLCK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 20 Feb 2023 06:02:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231517AbjBTKuu (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 20 Feb 2023 05:50:50 -0500
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BD5C16305;
-        Mon, 20 Feb 2023 02:50:49 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 59F833200A94;
-        Mon, 20 Feb 2023 05:50:45 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Mon, 20 Feb 2023 05:50:46 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1676890244; x=1676976644; bh=nwwHLFcCSi
-        lvLeymfa6ND58guxpD6ODnAJKVRbTIP2M=; b=bqCJ5Z4HwdWmhMVoU4a9cytWnW
-        aZisjnHYyb4JLyGyORqcGfBYtYCO7kNVrExa7hWh+Mv1pYRtHwDcwfKFiXuuL5qh
-        jYKknkqxU1jTxbwyfFKBhsucydmodivCjTAc79WoPPvcGr8JC/fnhwwg9/zgHeAn
-        3rvtma7nl71PifnQuTjtwKZKbwFBfQC2yHpkhzhucrf3v0MyPRtdQgCp2tpk4S1y
-        9Yq4/droh4AEKGMUFyGe1oReGpOMZPzJxj+pseHmrMkXmbiRTqZ3LcNGBAyuvFDs
-        3rTbWTolm7gk3+coATsryN/gN38lJ1ixoL/givkt77L5bDsKmVlSc9sE8BKQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1676890244; x=1676976644; bh=nwwHLFcCSilvLeymfa6ND58guxpD
-        6ODnAJKVRbTIP2M=; b=CLetfM5Njy0RJsYJYXzrMgk9X+65tJAvwcaMSQjy3JZY
-        ot8cHWNrOAp2ZIGeYCKBazW6+8Ii8uP39M5ixE1V3GCxVvhkNJP21HhA2DTUdiX8
-        Bdu8y2Pbzx+EfF0jTMYEdLyIwhJkM9uxEw/qQs/4+j/D8KQZ9GZp4zQ7Q9uUs2G2
-        3HKG/WkCXK/0lm9PFB8/ZYlDzSJ4NhWY86AutnPBZSLfQUTnITCyrDtBh5Z1Nzjr
-        q5c5zd8qSx/EOZMM4zm9q2WuTQW+c5DuiwqTOf3TBDQ3vGgEgtR8FYsNTOk3G407
-        FKcHkfzp9EUsqWgfkySV1zXEbII08hGQBELVZNMyUg==
-X-ME-Sender: <xms:hFDzY2pvQLu5M2iGuCn4Rhrz5_9BxvcIXBrAa_mgRvGTwrEyb3LFAg>
-    <xme:hFDzY0rINoj1_7U53DZYFUzyoKJt7cmKYKuDQLccStJfILub8sJY9XF-9INWpbS-c
-    gWrx1HqZUc65A>
-X-ME-Received: <xmr:hFDzY7Mb3v6Gg4ATuJXxU2mXzhZ_qWY59YiX3FYF07ClCwZzHN9k8wqNaC9PyYMQ8NSJKmDud-BEwEUNUA2-HYSRKwqp0IbTEa20UA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudejhedgudekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
-    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepheegvd
-    evvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefhgfehkeetnecuvehluhhs
-    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
-    hhrdgtohhm
-X-ME-Proxy: <xmx:hFDzY14JXBnp8_FbIuwJx6ZAhivCDdMpTlLCrStr-hbg1M_mHqbklQ>
-    <xmx:hFDzY141ht-Nx2pOdKpeo7tioCAyKY92a4CDrkO1r9FSvugnLoNAiA>
-    <xmx:hFDzY1jJpfdipnBI-sbD03_2C4ulLdsLz4lS3KurP21JjDrZmwycVg>
-    <xmx:hFDzY_tWZ1cnFECF-XXYgh0i87uBp2WMt5MUJSDUIMnHNALROKtrQg>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 20 Feb 2023 05:50:43 -0500 (EST)
-Date:   Mon, 20 Feb 2023 11:50:40 +0100
-From:   Greg KH <greg@kroah.com>
-To:     Qi Zheng <zhengqi.arch@bytedance.com>
+        with ESMTP id S231539AbjBTLB4 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 20 Feb 2023 06:01:56 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5240E13D72
+        for <linux-next@vger.kernel.org>; Mon, 20 Feb 2023 03:01:30 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id ky4so2096837plb.3
+        for <linux-next@vger.kernel.org>; Mon, 20 Feb 2023 03:01:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CO0WqtLSVvbmkDhBkNjJ8JcFQn7aYAWzdbymccL96S0=;
+        b=eMZ5mV0rj+Kl1gumByh3YRiFiwEDUpenfRL4NNPL/DxrQv8ekDc368ab8LJwEuYpeI
+         aTMha6h41zaaxYGyu4JfQHfka/27M7zPZ1x4gwa71Y+NRHSHlazzG/n2np/TnXBnmNdy
+         udkE8skRosfKLnqwMSfZMBbfV2x3uLioVFvFvJgzexZHHgBa89Y1i+rP9LMHoM9WO3Bg
+         Tgd4zX68q5NmloaoQL2Bj6ZLITModFTPHXZE8BOym7JtrGegT9aDqioaIF4aaOuly7Tl
+         D+whrstZCoaFh2uJ/ipbnkovrsQ5GKeg3bgBrvybd4Uv0/hhFuvMgYWvXaF4wcQbwltK
+         fmNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=CO0WqtLSVvbmkDhBkNjJ8JcFQn7aYAWzdbymccL96S0=;
+        b=5arRbTijDrPLRI0eEGYhNzpocbuQuj5mCJPZ+0qPh/Triv8CBPfLpLRTYTxNLyZqEl
+         nyaGsxAiZ1/DMXpqMtbLoQawHglqEU/QU1CC2hrhvZ0Qe5oB6LO9biwQPe2YgBLcI4gl
+         ZKxGsu+YLceJdhGWWWxscVYgTNJ8MU3U3ih2pKz22awLg4EJ2hY1H2zuWw7Qze5DqLob
+         aer+A+3ONU+lmBBxE7ougq/X2MabAE2bmkF0rxNVTZNBKfKY6jCuA5rq7i+ClT44Bj4y
+         +iNmWBZEr8KtU8Pl5JtpSDe0BBYJQkSPBWNSchpVfgv0Z+PuG8e3dfmhYZlvz2PGZn5N
+         uCMw==
+X-Gm-Message-State: AO0yUKUf3OQlOtqVK2E3hKVHFrua9SDq2+L24CCA3Qrro34FYTxfpRVF
+        RWsYr030CBfCFdQ0CKSVqXlOctmL9uhfD/s5
+X-Google-Smtp-Source: AK7set932lZ75KIZT25H3jrqE3VS0WL23XGxT6c/IgK+FXv57OsimHLBws5nerCbfHyDQWulHm+ZzQ==
+X-Received: by 2002:a17:90a:29a3:b0:233:dd4d:6b1a with SMTP id h32-20020a17090a29a300b00233dd4d6b1amr806500pjd.3.1676890889794;
+        Mon, 20 Feb 2023 03:01:29 -0800 (PST)
+Received: from [10.70.252.135] ([139.177.225.229])
+        by smtp.gmail.com with ESMTPSA id em16-20020a17090b015000b002349fcf17f8sm1019953pjb.15.2023.02.20.03.01.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Feb 2023 03:01:29 -0800 (PST)
+Message-ID: <92d33271-4ee9-9cc7-48c7-c45d4af1e951@bytedance.com>
+Date:   Mon, 20 Feb 2023 19:01:24 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.7.2
+Subject: Re: linux-next: build warning after merge of the driver-core tree
+Content-Language: en-US
+To:     Greg KH <greg@kroah.com>
 Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
         Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the driver-core tree
-Message-ID: <Y/NQgAXYVDAd20cg@kroah.com>
 References: <20230220163133.481e43d8@canb.auug.org.au>
  <896c1146-21bb-35bb-dc25-a12014eb5ccd@bytedance.com>
- <Y/Mh7uA61KMvMHAt@kroah.com>
- <Y/NCPC3rjOT7dJtE@debian.me>
+ <Y/Mh7uA61KMvMHAt@kroah.com> <Y/NCPC3rjOT7dJtE@debian.me>
  <3a449abe-b5c8-cee3-6c2e-bfb79eb51f73@bytedance.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3a449abe-b5c8-cee3-6c2e-bfb79eb51f73@bytedance.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+ <Y/NQgAXYVDAd20cg@kroah.com>
+From:   Qi Zheng <zhengqi.arch@bytedance.com>
+In-Reply-To: <Y/NQgAXYVDAd20cg@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Feb 20, 2023 at 06:15:33PM +0800, Qi Zheng wrote:
-> 
-> 
-> On 2023/2/20 17:49, Bagas Sanjaya wrote:
-> > On Mon, Feb 20, 2023 at 08:31:58AM +0100, Greg KH wrote:
-> > > On Mon, Feb 20, 2023 at 03:26:41PM +0800, Qi Zheng wrote:
-> > > > 
-> > > > 
-> > > > On 2023/2/20 13:31, Stephen Rothwell wrote:
-> > > > > Hi all,
-> > > > > 
-> > > > > After merging the driver-core tree, today's linux-next build
-> > > > > (htmldocs) produced this warning:
-> > > > > 
-> > > > > Documentation/filesystems/api-summary:146: fs/debugfs/inode.c:804: WARNING: Inline literal start-string without end-string.
-> > > > > 
-> > > > > Introduced by commit
-> > > > > 
-> > > > >     d3002468cb5d ("debugfs: update comment of debugfs_rename()")
-> > > > 
-> > > > This is just a comment modification. Didn't see where my modification
-> > > > caused this WARNING. :(
-> > > 
-> > > Yeah, I don't understand either, here's the diff, what's wrong with it?
-> > > 
-> > > 
-> > > --- a/fs/debugfs/inode.c
-> > > +++ b/fs/debugfs/inode.c
-> > > @@ -802,8 +802,8 @@ EXPORT_SYMBOL_GPL(debugfs_lookup_and_remove);
-> > >    * exist for rename to succeed.
-> > >    *
-> > >    * This function will return a pointer to old_dentry (which is updated to
-> > > - * reflect renaming) if it succeeds. If an error occurs, %NULL will be
-> > > - * returned.
-> > > + * reflect renaming) if it succeeds. If an error occurs, %ERR_PTR(-ERROR)
-> > > + * will be returned.
-> > >    *
-> > >    * If debugfs is not enabled in the kernel, the value -%ENODEV will be
-> > >    * returned.
-> > 
-> > Hi Greg and Qi,
-> > 
-> > The simple fix is to drop the percent (which is an inline code variant):
-> > 
-> > ---- >8 ----
-> > diff --git a/fs/debugfs/inode.c b/fs/debugfs/inode.c
-> > index 58a35afb7c5d89..a7a6a0821605a8 100644
-> > --- a/fs/debugfs/inode.c
-> > +++ b/fs/debugfs/inode.c
-> > @@ -802,7 +802,7 @@ EXPORT_SYMBOL_GPL(debugfs_lookup_and_remove);
-> >    * exist for rename to succeed.
-> >    *
-> >    * This function will return a pointer to old_dentry (which is updated to
-> > - * reflect renaming) if it succeeds. If an error occurs, %ERR_PTR(-ERROR)
-> > + * reflect renaming) if it succeeds. If an error occurs, ERR_PTR(-ERROR)
-> >    * will be returned.
-> >    *
-> >    * If debugfs is not enabled in the kernel, the value -%ENODEV will be
-> 
-> LGTM, do I need to resend the patch with this fix?
 
-Bagas needs to send it as a real fix so that I can apply it.
 
-thanks,
+On 2023/2/20 18:50, Greg KH wrote:
+> On Mon, Feb 20, 2023 at 06:15:33PM +0800, Qi Zheng wrote:
+>>
+>>
+>> On 2023/2/20 17:49, Bagas Sanjaya wrote:
+>>> On Mon, Feb 20, 2023 at 08:31:58AM +0100, Greg KH wrote:
+>>>> On Mon, Feb 20, 2023 at 03:26:41PM +0800, Qi Zheng wrote:
+>>>>>
+>>>>>
+>>>>> On 2023/2/20 13:31, Stephen Rothwell wrote:
+>>>>>> Hi all,
+>>>>>>
+>>>>>> After merging the driver-core tree, today's linux-next build
+>>>>>> (htmldocs) produced this warning:
+>>>>>>
+>>>>>> Documentation/filesystems/api-summary:146: fs/debugfs/inode.c:804: WARNING: Inline literal start-string without end-string.
+>>>>>>
+>>>>>> Introduced by commit
+>>>>>>
+>>>>>>      d3002468cb5d ("debugfs: update comment of debugfs_rename()")
+>>>>>
+>>>>> This is just a comment modification. Didn't see where my modification
+>>>>> caused this WARNING. :(
+>>>>
+>>>> Yeah, I don't understand either, here's the diff, what's wrong with it?
+>>>>
+>>>>
+>>>> --- a/fs/debugfs/inode.c
+>>>> +++ b/fs/debugfs/inode.c
+>>>> @@ -802,8 +802,8 @@ EXPORT_SYMBOL_GPL(debugfs_lookup_and_remove);
+>>>>     * exist for rename to succeed.
+>>>>     *
+>>>>     * This function will return a pointer to old_dentry (which is updated to
+>>>> - * reflect renaming) if it succeeds. If an error occurs, %NULL will be
+>>>> - * returned.
+>>>> + * reflect renaming) if it succeeds. If an error occurs, %ERR_PTR(-ERROR)
+>>>> + * will be returned.
+>>>>     *
+>>>>     * If debugfs is not enabled in the kernel, the value -%ENODEV will be
+>>>>     * returned.
+>>>
+>>> Hi Greg and Qi,
+>>>
+>>> The simple fix is to drop the percent (which is an inline code variant):
+>>>
+>>> ---- >8 ----
+>>> diff --git a/fs/debugfs/inode.c b/fs/debugfs/inode.c
+>>> index 58a35afb7c5d89..a7a6a0821605a8 100644
+>>> --- a/fs/debugfs/inode.c
+>>> +++ b/fs/debugfs/inode.c
+>>> @@ -802,7 +802,7 @@ EXPORT_SYMBOL_GPL(debugfs_lookup_and_remove);
+>>>     * exist for rename to succeed.
+>>>     *
+>>>     * This function will return a pointer to old_dentry (which is updated to
+>>> - * reflect renaming) if it succeeds. If an error occurs, %ERR_PTR(-ERROR)
+>>> + * reflect renaming) if it succeeds. If an error occurs, ERR_PTR(-ERROR)
+>>>     * will be returned.
+>>>     *
+>>>     * If debugfs is not enabled in the kernel, the value -%ENODEV will be
+>>
+>> LGTM, do I need to resend the patch with this fix?
+> 
+> Bagas needs to send it as a real fix so that I can apply it.
 
-greg k-h
+Got it. Thank you and Bagas very much.
+
+> 
+> thanks,
+> 
+> greg k-h
+
+-- 
+Thanks,
+Qi

@@ -2,48 +2,44 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A3C169C43B
-	for <lists+linux-next@lfdr.de>; Mon, 20 Feb 2023 03:50:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FFE169C446
+	for <lists+linux-next@lfdr.de>; Mon, 20 Feb 2023 03:58:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229576AbjBTCuB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 19 Feb 2023 21:50:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46170 "EHLO
+        id S229499AbjBTC6t (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 19 Feb 2023 21:58:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbjBTCuB (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 19 Feb 2023 21:50:01 -0500
+        with ESMTP id S229572AbjBTC6s (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 19 Feb 2023 21:58:48 -0500
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A17CD509;
-        Sun, 19 Feb 2023 18:50:00 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BAD3BB8E;
+        Sun, 19 Feb 2023 18:58:47 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PKn2W51wrz4x5Y;
-        Mon, 20 Feb 2023 13:49:55 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PKnDj2vsyz4x5Y;
+        Mon, 20 Feb 2023 13:58:45 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1676861395;
-        bh=9eSY6o2ILY8CmBVhSmnUdXeHBS6sR8zEiUxlUbJhq64=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=FoEkA/XaKXzp3TpYEc8oTb4SceF+OScLWR0VKXUxWu/CZuDExWAGRYP16cslZCOId
-         EuwzxsHk5wYv9HK8BYlh3b2bySyCxn+hrso+heXtjA+zCJnNKXv7zcHx1WLSbMfNIa
-         t/f9qvRZr83nEAyKfGtM5ZmLNHhJBVxHuyuX1H3p1dPWISk+jNwRQlXK23qODC2psU
-         jSDAQsma3S+H3lUWNDAGWezhaPwTN30HDOvdjhq2jCP+jt5nXcl2vg578HD8ryHchz
-         K7YllhIYY6+TKjKnaz2eRudLIUc1oDeowNChYX4Vs4pfaRNNhflc00uQecBQUIreNW
-         GyKJolIXme6eQ==
-Date:   Mon, 20 Feb 2023 13:49:54 +1100
+        s=201702; t=1676861925;
+        bh=q7lP8DrogDLmuyR5YNW/czXfL8KaWmB+HhDmsECEDIk=;
+        h=Date:From:To:Cc:Subject:From;
+        b=q72TMkRWIVqjzxssT4dRG5GgZkhT676yNPcBctgQHrHejaH8HDhiNimCn6ogXBcZn
+         nZj+4mNWHDudAimWy9snvu9NqinKJ/2fLNp2G9WsSVIcWwFonKu+KqomHLfB2gXR3r
+         OyOy6cV5Dy21kRaDm5vDZhXzSlDUJ7S/79OX/avRhvhB8KxmOXOaCuKz3JR9ZUHrTK
+         /akeHTc9evpv4pxlyXSx4fxvq+E10TadF+W6rHIr1i8Ocab1xdisNohFYwedil6E7L
+         uYDR6dOuLr/dMofm4cVpewIArDHL1M0D+0M8CZgkbe3ImsXZC31rV5ZLxeD8/TTMCW
+         szUA0zIVWJVBQ==
+Date:   Mon, 20 Feb 2023 13:58:44 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Howells <dhowells@redhat.com>
-Cc:     Jens Axboe <axboe@kernel.dk>, Steve French <smfrench@gmail.com>,
-        CIFS <linux-cifs@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patches in the block tree
-Message-ID: <20230220134954.7b57b6d7@canb.auug.org.au>
-In-Reply-To: <1214277.1676857660@warthog.procyon.org.uk>
-References: <20230220120234.161a6002@canb.auug.org.au>
-        <1214277.1676857660@warthog.procyon.org.uk>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Pierre Gondois <pierre.gondois@arm.com>
+Subject: linux-next: manual merge of the efi tree with Linus' tree
+Message-ID: <20230220135844.73e9dcae@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/YZap3Z58ufl5T5GIB+/jv/a";
+Content-Type: multipart/signed; boundary="Sig_/cNYlBCqbc_9Zi4hLFVflN2c";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
@@ -54,51 +50,78 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/YZap3Z58ufl5T5GIB+/jv/a
+--Sig_/cNYlBCqbc_9Zi4hLFVflN2c
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi David,
+Hi all,
 
-On Mon, 20 Feb 2023 01:47:40 +0000 David Howells <dhowells@redhat.com> wrot=
-e:
->
-> Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->=20
-> > The following commits are also in Linus Torvalds' tree as different
-> > commits (but the same patches):
-> >=20
-> >   78e11ab5adf7 ("mm: Pass info, not iter, into filemap_get_pages()")
-> >   a53cad008099 ("splice: Add a func to do a splice from a buffered file=
- without ITER_PIPE")
-> >   f2aa2c5707ac ("splice: Add a func to do a splice from an O_DIRECT fil=
-e without ITER_PIPE")
-> >   51e851b5d16f ("iov_iter: Define flags to qualify page extraction.")
-> >   0fff5a38a770 ("iov_iter: Add a function to extract a page list from a=
-n iterator") =20
->=20
-> In Linus's tree?  Did you mean the block tree?
+Today's linux-next merge of the efi tree got a conflict in:
 
-Oops, actually they are in the block tree and the cifs tree.
+  arch/arm64/include/asm/efi.h
+
+between commit:
+
+  8a9a1a18731e ("arm64: efi: Avoid workqueue to check whether EFI runtime i=
+s live")
+
+from Linus' tree and commit:
+
+  0e68b5517d37 ("arm64: efi: Make efi_rt_lock a raw_spinlock")
+
+from the efi tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/YZap3Z58ufl5T5GIB+/jv/a
+diff --cc arch/arm64/include/asm/efi.h
+index acaa39f6381a,1b81dd5554cb..000000000000
+--- a/arch/arm64/include/asm/efi.h
++++ b/arch/arm64/include/asm/efi.h
+@@@ -47,18 -48,9 +48,18 @@@ int efi_set_mapping_permissions(struct=20
+  	efi_virtmap_unload();						\
+  })
+ =20
+- extern spinlock_t efi_rt_lock;
++ extern raw_spinlock_t efi_rt_lock;
+ +extern u64 *efi_rt_stack_top;
+  efi_status_t __efi_rt_asm_wrapper(void *, const char *, ...);
+ =20
+ +/*
+ + * efi_rt_stack_top[-1] contains the value the stack pointer had before
+ + * switching to the EFI runtime stack.
+ + */
+ +#define current_in_efi()						\
+ +	(!preemptible() && efi_rt_stack_top !=3D NULL &&			\
+ +	 on_task_stack(current, READ_ONCE(efi_rt_stack_top[-1]), 1))
+ +
+  #define ARCH_EFI_IRQ_FLAGS_MASK (PSR_D_BIT | PSR_A_BIT | PSR_I_BIT | PSR_=
+F_BIT)
+ =20
+  /*
+
+--Sig_/cNYlBCqbc_9Zi4hLFVflN2c
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPy39IACgkQAVBC80lX
-0GwGPQf9F8XGoMi2HRt3A1/BRk/PKKr0aTAzVJU5Lro/UKDQcLT92j+Gr5PCSjmP
-KjBB2G6tvteEl3bniGYfWanmBTyB/hH8dAcdfV+BnxshAM6Q279gp6paAQrggip3
-2RMG0vnbM6VDfIGXMEJgbt8RLRF0SjYAo8bMlZGpbL6ZLHfAR4qZMuEWOqZ4klBn
-MrtWKiTvq0Ub4DjcIxQibSjG6m1tuTV+HzBh5yyxCHF5VXlzDgJKoMwlk5fIz6jv
-Ps1/5e4QgNCPEgrP5AeEg+qG6R06APu3eVIaKp3gutECc7HlpLHsZ2nHvQQFY2hg
-7BRGeLWc6TeYHOyFXkSutNrdOeb33A==
-=uBgP
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPy4eQACgkQAVBC80lX
+0GxDZAgAmQMAhjeaOZtoS3wIaCO9sa2C/EqeGcops8N3A/DL+Q7ESeJhDRaDpsSD
+C+qdqlnZpSjWrmAg/Rw8iZenzddhOGtdKjvIWz+g5HDFltyC5RdMMYzfie9VWVA5
+T897r14pVFsLnq//qyfrVegn0tcUWSu23Yu7NAlqGztR4EyRGz3lQYHnmvOn4tLr
+YRF+jGiFpAnod9KDEpWbnDH0RclEAZXic9ePi0rOLUYs4oj9lDgY5YEP2Xw4ri1V
+Er1VlWNAy+D1KcbFxJ8OeqT53r5auJXjWCQ1HXDaTeLpRUQGYRsszEjcQYIUXQNu
+TohVHNT+e4HSBjKSbH4RcxruALq6GA==
+=1XgF
 -----END PGP SIGNATURE-----
 
---Sig_/YZap3Z58ufl5T5GIB+/jv/a--
+--Sig_/cNYlBCqbc_9Zi4hLFVflN2c--

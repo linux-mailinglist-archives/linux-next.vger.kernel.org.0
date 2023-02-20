@@ -2,47 +2,45 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB3B969C4BD
-	for <lists+linux-next@lfdr.de>; Mon, 20 Feb 2023 05:29:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26CD369C4F4
+	for <lists+linux-next@lfdr.de>; Mon, 20 Feb 2023 06:31:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229687AbjBTE3p (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 19 Feb 2023 23:29:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55910 "EHLO
+        id S229723AbjBTFbq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 20 Feb 2023 00:31:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjBTE3n (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 19 Feb 2023 23:29:43 -0500
+        with ESMTP id S229736AbjBTFbp (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 20 Feb 2023 00:31:45 -0500
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AFACEB49;
-        Sun, 19 Feb 2023 20:29:42 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 754FEBDFD;
+        Sun, 19 Feb 2023 21:31:39 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PKqFb5NJ5z4x7s;
-        Mon, 20 Feb 2023 15:29:39 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PKrd25Pkvz4x82;
+        Mon, 20 Feb 2023 16:31:34 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1676867380;
-        bh=47yAsNBVz/bF8v+GyORW2D28SeE3SrcQHkb19R889NY=;
+        s=201702; t=1676871095;
+        bh=gBmo0TN95mb7CUHM3s3ZvsNFVOEMgcqzQUoS0x4tA8w=;
         h=Date:From:To:Cc:Subject:From;
-        b=QsHeLFR1lDNIOX8KiKdIlCg+c9QrshDaNx5JWnSQhzsyKT9gdHE+W/ZYq6OCl6mf4
-         Pl8F6ksY4+WOjZR6WBRr4r0znGi8xuIuvcoBimRtFGIZOGbeE00UXLXmtt74h9JD/W
-         4LRM4hs+0wP8xSRqlCRXJdXuxz+JV5kK73kGe19C95eNYKKP3Mo7/V8uzPibC/1kZq
-         TYP3fQp4qj2CH+YXXlSDKbHO5PY8dfvsSxCbEPK8t2FV0/KnhvEmNPqiwTeTNoaq/3
-         fPLvZjP69OQRUEoLc8BImbTm0mPRebxOF+f3iGkddFUZYWOagMoxtlFs5Th/qthZqu
-         opDOWWpOGQ2Lg==
-Date:   Mon, 20 Feb 2023 15:29:38 +1100
+        b=JliKbLjDZ7xBu+f1+kT2gbnlZhECHdKn5E8SYforSoOhewnJWsxBTm+AiUzqC8iXB
+         V3BVYWs6dpDFa4aNQhHotkEN+Zs5K2Ylqc2f1V7qcp7EMVTPdfAZ/aIqFG6bz+57q1
+         4o96+EgXmVu6HCbbySw7EtsFnj3Uam0n3iN3MrbnvRkKKJ36JvuJ1wWE6goBhwMD8K
+         GD6/+2+27XpLV/SiqQL1xl4qS+Ez74iPDR7DL/eNk8SlAARn9P/+l2jzfsWNdEzJ2T
+         L+bthiwbmCYD9H5x6aHERZIhfZRmEMHG9+SVEPnhWHathqZDWJ1GTLfJRbW17QKlF0
+         SspjHkXxcJWyQ==
+Date:   Mon, 20 Feb 2023 16:31:33 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Theodore Ts'o <tytso@mit.edu>
-Cc:     Jan Kara <jack@suse.cz>,
+To:     Greg KH <greg@kroah.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
-Subject: linux-next: manual merge of the mm-stable tree with the ext4 tree
-Message-ID: <20230220152938.45f62d5a@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build warning after merge of the driver-core tree
+Message-ID: <20230220163133.481e43d8@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/uyn7bLrtRm3WzoG1k/4goUs";
+Content-Type: multipart/signed; boundary="Sig_/v+1hp8+gtYxSdL44PGiY79/";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
@@ -53,54 +51,40 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/uyn7bLrtRm3WzoG1k/4goUs
+--Sig_/v+1hp8+gtYxSdL44PGiY79/
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the mm-stable tree got a conflict in:
+After merging the driver-core tree, today's linux-next build
+(htmldocs) produced this warning:
 
-  fs/ext4/inode.c
+Documentation/filesystems/api-summary:146: fs/debugfs/inode.c:804: WARNING:=
+ Inline literal start-string without end-string.
 
-between commits:
+Introduced by commit
 
-  726432969963 ("ext4: use nr_to_write directly in mpage_prepare_extent_to_=
-map()")
-  9ff6a9153c8f ("ext4: move page unlocking out of mpage_submit_page()")
-  b4d26e70a755 ("ext4: move mpage_page_done() calls after error handling")
-  9b18c23c131a ("ext4: convert data=3Djournal writeback to use ext4_writepa=
-ges()")
-
-from the ext4 tree and commits:
-
-  50ead2537441 ("ext4: convert mpage_prepare_extent_to_map() to use filemap=
-_get_folios_tag()")
-  d585bdbeb79a ("fs: convert writepage_t callback to pass a folio")
-
-from the mm-stable tree.
-
-I have no idea how to fix this up, so I have used the ext4 tree from
-next-20230217 for today.
+  d3002468cb5d ("debugfs: update comment of debugfs_rename()")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/uyn7bLrtRm3WzoG1k/4goUs
+--Sig_/v+1hp8+gtYxSdL44PGiY79/
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPy9zMACgkQAVBC80lX
-0GwsgQf/Xfs+3JaBpg1PquuhVr1B0sx2lv9bfr68LMGqavvWKqBrQ5NT6rFlKjaI
-1XToHXSpNAwBo3XF34i8MWZHxU643BxHxostWnHV70VMzmZmvxcvqrMXLYWeOgUn
-9NMdy5P5gI1XUwlb04VccXtK2o6hTn+pwu3vTrwJdr3pBw0RlnyWtIfL3Vpic9G9
-TOX199h8RQDt4PscTEOLrvRcJr4rPdo49MEjZ/783ghCwTiLjeT0BneAXt2ZPPbh
-ZNC9azHhR8brRbnyP5f9ggAEQnG6p9u8Bdn94DgffLy+j8NFu6s/A5/YxI5O2hwO
-TuRhxRhRKBhRlxaymQ2UgJIGicZNDA==
-=Vy1o
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPzBbUACgkQAVBC80lX
+0Gyf3wgAjiXdcYU+fPh8hp/rmr5RKjreo5nJVkSR5VFR8dkQTjH+x3Gbyr0GfI8f
+o8JftQNYOCgZ3GCFZBZYKDXtyKiqBWWC+IxICxZPZDWc6xpBX+ulknaRU/Fsl+8j
+apqgFr+i91MVlrGVNa93ypNFpYDUFegOYcbKPYK9lUiBD/ueFqBOHBAV3rgUV1WU
+1ZCv2cPQyX7Rsam2z5CAqi16J7ui0fTDd/Euu6gp4fNPWaBeQEaVOImF10bCQLhX
+wA3/FkDEQWW5JDL0H/lm/LL55PWri8IWKrgjh7tP1Z6gvQQcPtMoRaoUuIa1VK2R
+ZLXtHMO+qMQHzVYTaG4dRIq1HdAahQ==
+=D4Em
 -----END PGP SIGNATURE-----
 
---Sig_/uyn7bLrtRm3WzoG1k/4goUs--
+--Sig_/v+1hp8+gtYxSdL44PGiY79/--

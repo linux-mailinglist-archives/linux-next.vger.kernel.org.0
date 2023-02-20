@@ -2,124 +2,154 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4E9469C8DB
-	for <lists+linux-next@lfdr.de>; Mon, 20 Feb 2023 11:45:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F6D869C901
+	for <lists+linux-next@lfdr.de>; Mon, 20 Feb 2023 11:50:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231654AbjBTKo7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 20 Feb 2023 05:44:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36752 "EHLO
+        id S231715AbjBTKuv (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 20 Feb 2023 05:50:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231657AbjBTKov (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 20 Feb 2023 05:44:51 -0500
-Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD9E7BB81
-        for <linux-next@vger.kernel.org>; Mon, 20 Feb 2023 02:44:45 -0800 (PST)
-Received: by mail-vs1-xe2d.google.com with SMTP id df34so2083442vsb.6
-        for <linux-next@vger.kernel.org>; Mon, 20 Feb 2023 02:44:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1676889884;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=SdbFyaUotfrnGaxTQFQI5slhKlHiFD8ZqAfdVqy1S9s=;
-        b=xNuknyL9AQ1n+Up+CuP5ygJOO7YdsgCedODTBuoHxiY7ZM3rXCprZkl2u424znjDfb
-         OqdWS+xjf9YclyvuocLIDYfwD2GdWqkzhGQe+APRN3tJl11vQKjXUhhsoM5lAvEnInd9
-         lB1NlYqShVlcYoqEu7GxKFOlLmEtigfnT7+ncqE+4SNB1gVIiFif2C8HRQZcnFlBqyAE
-         j0RN3bJTCxQC7ULzSGeRv6HMhva/19b9PS+D9xsrvzrn6Vc3vDoia4qGxmkBxBqOOp01
-         9rDP+Queb6MCJrDH2A3vYo7vBxUzhVW7550/er6k0SjRiB3kDF8KqRRY5NV9GCpZrBtR
-         53qQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1676889884;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=SdbFyaUotfrnGaxTQFQI5slhKlHiFD8ZqAfdVqy1S9s=;
-        b=EhMeIsGswpK8ejt0CzQ25FgpjNicKgeBkAOe3l3vHMO0qtJ/ew4m6hB43ynTn018i+
-         /1T45nC6YSrrfi9wJ/p8p/lKOvK0j2JNKPf235ya7zTC5BArJqW0clXZRZk9FqRPr9oy
-         6VP0bFCFlBifazRPBXwjcnSSRgsFziy/Y9+zO4ceDzBqVrbBUwFlB8NOf2Zvjg8Yie3P
-         4kVq+rGr3QHhRaxJaJdCLD05WMDjsB1DHCagPJLogENyLdcly5W2C7A0adRuZwQHIdUA
-         ILv2A9LAZT3+mTooeLnHvTHvDifp0k0EG7jfUTIoXhPgU2S1JXa/EIspKUMyamaf0EHo
-         +xaQ==
-X-Gm-Message-State: AO0yUKXIVg2ga0GelFEKIxl8A3ltjqNhlvMfDTk2ydrmozbPw4GLS1Mv
-        NwjilOwDFksHlOk+k5zJr5yr8MBjhMZlv3DaTrA7kA==
-X-Google-Smtp-Source: AK7set/qMZP6wYZOsm0gA0Ih1aDYNjaLRXmFUrbSAhFGkTnveqvXNAHg081fU1+g6sU/C5m1xHwgm38ukLbJWVMMO9Y=
-X-Received: by 2002:a67:d61e:0:b0:414:4aab:3c73 with SMTP id
- n30-20020a67d61e000000b004144aab3c73mr57980vsj.71.1676889884253; Mon, 20 Feb
- 2023 02:44:44 -0800 (PST)
+        with ESMTP id S231517AbjBTKuu (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 20 Feb 2023 05:50:50 -0500
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BD5C16305;
+        Mon, 20 Feb 2023 02:50:49 -0800 (PST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 59F833200A94;
+        Mon, 20 Feb 2023 05:50:45 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Mon, 20 Feb 2023 05:50:46 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1676890244; x=1676976644; bh=nwwHLFcCSi
+        lvLeymfa6ND58guxpD6ODnAJKVRbTIP2M=; b=bqCJ5Z4HwdWmhMVoU4a9cytWnW
+        aZisjnHYyb4JLyGyORqcGfBYtYCO7kNVrExa7hWh+Mv1pYRtHwDcwfKFiXuuL5qh
+        jYKknkqxU1jTxbwyfFKBhsucydmodivCjTAc79WoPPvcGr8JC/fnhwwg9/zgHeAn
+        3rvtma7nl71PifnQuTjtwKZKbwFBfQC2yHpkhzhucrf3v0MyPRtdQgCp2tpk4S1y
+        9Yq4/droh4AEKGMUFyGe1oReGpOMZPzJxj+pseHmrMkXmbiRTqZ3LcNGBAyuvFDs
+        3rTbWTolm7gk3+coATsryN/gN38lJ1ixoL/givkt77L5bDsKmVlSc9sE8BKQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1676890244; x=1676976644; bh=nwwHLFcCSilvLeymfa6ND58guxpD
+        6ODnAJKVRbTIP2M=; b=CLetfM5Njy0RJsYJYXzrMgk9X+65tJAvwcaMSQjy3JZY
+        ot8cHWNrOAp2ZIGeYCKBazW6+8Ii8uP39M5ixE1V3GCxVvhkNJP21HhA2DTUdiX8
+        Bdu8y2Pbzx+EfF0jTMYEdLyIwhJkM9uxEw/qQs/4+j/D8KQZ9GZp4zQ7Q9uUs2G2
+        3HKG/WkCXK/0lm9PFB8/ZYlDzSJ4NhWY86AutnPBZSLfQUTnITCyrDtBh5Z1Nzjr
+        q5c5zd8qSx/EOZMM4zm9q2WuTQW+c5DuiwqTOf3TBDQ3vGgEgtR8FYsNTOk3G407
+        FKcHkfzp9EUsqWgfkySV1zXEbII08hGQBELVZNMyUg==
+X-ME-Sender: <xms:hFDzY2pvQLu5M2iGuCn4Rhrz5_9BxvcIXBrAa_mgRvGTwrEyb3LFAg>
+    <xme:hFDzY0rINoj1_7U53DZYFUzyoKJt7cmKYKuDQLccStJfILub8sJY9XF-9INWpbS-c
+    gWrx1HqZUc65A>
+X-ME-Received: <xmr:hFDzY7Mb3v6Gg4ATuJXxU2mXzhZ_qWY59YiX3FYF07ClCwZzHN9k8wqNaC9PyYMQ8NSJKmDud-BEwEUNUA2-HYSRKwqp0IbTEa20UA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudejhedgudekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
+    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepheegvd
+    evvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefhgfehkeetnecuvehluhhs
+    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
+    hhrdgtohhm
+X-ME-Proxy: <xmx:hFDzY14JXBnp8_FbIuwJx6ZAhivCDdMpTlLCrStr-hbg1M_mHqbklQ>
+    <xmx:hFDzY141ht-Nx2pOdKpeo7tioCAyKY92a4CDrkO1r9FSvugnLoNAiA>
+    <xmx:hFDzY1jJpfdipnBI-sbD03_2C4ulLdsLz4lS3KurP21JjDrZmwycVg>
+    <xmx:hFDzY_tWZ1cnFECF-XXYgh0i87uBp2WMt5MUJSDUIMnHNALROKtrQg>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 20 Feb 2023 05:50:43 -0500 (EST)
+Date:   Mon, 20 Feb 2023 11:50:40 +0100
+From:   Greg KH <greg@kroah.com>
+To:     Qi Zheng <zhengqi.arch@bytedance.com>
+Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the driver-core tree
+Message-ID: <Y/NQgAXYVDAd20cg@kroah.com>
+References: <20230220163133.481e43d8@canb.auug.org.au>
+ <896c1146-21bb-35bb-dc25-a12014eb5ccd@bytedance.com>
+ <Y/Mh7uA61KMvMHAt@kroah.com>
+ <Y/NCPC3rjOT7dJtE@debian.me>
+ <3a449abe-b5c8-cee3-6c2e-bfb79eb51f73@bytedance.com>
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Mon, 20 Feb 2023 16:14:33 +0530
-Message-ID: <CA+G9fYsQZrpiLRN1=zW-VRGZ57smV5OW5ZAF4rbLPFA05F5zYg@mail.gmail.com>
-Subject: next: 32-bit: ERROR: modpost: "__aeabi_uldivmod" [fs/btrfs/btrfs.ko] undefined!
-To:     open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        lkft-triage@lists.linaro.org
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        linux-btrfs@vger.kernel.org, David Sterba <dsterba@suse.com>,
-        Josef Bacik <josef@toxicpanda.com>, Chris Mason <clm@fb.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3a449abe-b5c8-cee3-6c2e-bfb79eb51f73@bytedance.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-[Please ignore this email if it is already reported]
+On Mon, Feb 20, 2023 at 06:15:33PM +0800, Qi Zheng wrote:
+> 
+> 
+> On 2023/2/20 17:49, Bagas Sanjaya wrote:
+> > On Mon, Feb 20, 2023 at 08:31:58AM +0100, Greg KH wrote:
+> > > On Mon, Feb 20, 2023 at 03:26:41PM +0800, Qi Zheng wrote:
+> > > > 
+> > > > 
+> > > > On 2023/2/20 13:31, Stephen Rothwell wrote:
+> > > > > Hi all,
+> > > > > 
+> > > > > After merging the driver-core tree, today's linux-next build
+> > > > > (htmldocs) produced this warning:
+> > > > > 
+> > > > > Documentation/filesystems/api-summary:146: fs/debugfs/inode.c:804: WARNING: Inline literal start-string without end-string.
+> > > > > 
+> > > > > Introduced by commit
+> > > > > 
+> > > > >     d3002468cb5d ("debugfs: update comment of debugfs_rename()")
+> > > > 
+> > > > This is just a comment modification. Didn't see where my modification
+> > > > caused this WARNING. :(
+> > > 
+> > > Yeah, I don't understand either, here's the diff, what's wrong with it?
+> > > 
+> > > 
+> > > --- a/fs/debugfs/inode.c
+> > > +++ b/fs/debugfs/inode.c
+> > > @@ -802,8 +802,8 @@ EXPORT_SYMBOL_GPL(debugfs_lookup_and_remove);
+> > >    * exist for rename to succeed.
+> > >    *
+> > >    * This function will return a pointer to old_dentry (which is updated to
+> > > - * reflect renaming) if it succeeds. If an error occurs, %NULL will be
+> > > - * returned.
+> > > + * reflect renaming) if it succeeds. If an error occurs, %ERR_PTR(-ERROR)
+> > > + * will be returned.
+> > >    *
+> > >    * If debugfs is not enabled in the kernel, the value -%ENODEV will be
+> > >    * returned.
+> > 
+> > Hi Greg and Qi,
+> > 
+> > The simple fix is to drop the percent (which is an inline code variant):
+> > 
+> > ---- >8 ----
+> > diff --git a/fs/debugfs/inode.c b/fs/debugfs/inode.c
+> > index 58a35afb7c5d89..a7a6a0821605a8 100644
+> > --- a/fs/debugfs/inode.c
+> > +++ b/fs/debugfs/inode.c
+> > @@ -802,7 +802,7 @@ EXPORT_SYMBOL_GPL(debugfs_lookup_and_remove);
+> >    * exist for rename to succeed.
+> >    *
+> >    * This function will return a pointer to old_dentry (which is updated to
+> > - * reflect renaming) if it succeeds. If an error occurs, %ERR_PTR(-ERROR)
+> > + * reflect renaming) if it succeeds. If an error occurs, ERR_PTR(-ERROR)
+> >    * will be returned.
+> >    *
+> >    * If debugfs is not enabled in the kernel, the value -%ENODEV will be
+> 
+> LGTM, do I need to resend the patch with this fix?
 
-Following build error noticed on 32bit arm and i386 with kselftest merge
-configs with gcc-10/12 on today's Linux next-20230220 tag.
+Bagas needs to send it as a real fix so that I can apply it.
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+thanks,
 
-Build regression:
-  - gcc-10-lkftconfig-kselftest
-  - gcc-12-lkftconfig-kselftest
-
-Build error:
-ERROR: modpost: "__aeabi_uldivmod" [fs/btrfs/btrfs.ko] undefined!
-make[2]: *** [scripts/Makefile.modpost:136: Module.symvers] Error 1
-make[2]: Target '__modpost' not remade because of errors.
-make[1]: *** [Makefile:1980: modpost] Error 2
-
-
-Build details,
-https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230220/testrun/14861694/suite/build/test/gcc-10-lkftconfig-kselftest/details/
-config: https://storage.tuxsuite.com/public/linaro/lkft/builds/2LzUSQ9Y7f1N6Op0juNKcpbfGiM/config
-
-
-# To install tuxmake on your system globally:
-# sudo pip3 install -U tuxmake
-#
-# See https://docs.tuxmake.org/ for complete documentation.
-# Original tuxmake command with fragments listed below.
-# tuxmake  \
- --runtime podman  \
- --target-arch arm  \
- --toolchain gcc-10  \
- --kconfig defconfig  \
- --kconfig-add https://raw.githubusercontent.com/Linaro/meta-lkft/kirkstone/meta/recipes-kernel/linux/files/lkft.config
- \
- --kconfig-add https://raw.githubusercontent.com/Linaro/meta-lkft/kirkstone/meta/recipes-kernel/linux/files/lkft-crypto.config
- \
- --kconfig-add https://raw.githubusercontent.com/Linaro/meta-lkft/kirkstone/meta/recipes-kernel/linux/files/distro-overrides.config
- \
- --kconfig-add https://raw.githubusercontent.com/Linaro/meta-lkft/kirkstone/meta/recipes-kernel/linux/files/systemd.config
- \
- --kconfig-add https://raw.githubusercontent.com/Linaro/meta-lkft/kirkstone/meta/recipes-kernel/linux/files/virtio.config
- \
- --kconfig-add CONFIG_ARM_TI_CPUFREQ=y  \
- --kconfig-add CONFIG_SERIAL_8250_OMAP=y  \
- --kconfig-add CONFIG_POSIX_MQUEUE=y  \
- --kconfig-add CONFIG_OF=y  \
- --kconfig-add make:kselftest-merge  \
- --kconfig-add CONFIG_KFENCE=n  \
- --kconfig-add CONFIG_AHCI_DWC=y debugkernel dtbs dtbs-legacy headers
-kernel kselftest modules
-
-
---
-Linaro LKFT
-https://lkft.linaro.org
+greg k-h

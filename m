@@ -2,104 +2,97 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8B5169C5DE
-	for <lists+linux-next@lfdr.de>; Mon, 20 Feb 2023 08:13:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52BE969C5F1
+	for <lists+linux-next@lfdr.de>; Mon, 20 Feb 2023 08:27:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229955AbjBTHNh (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 20 Feb 2023 02:13:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55350 "EHLO
+        id S230133AbjBTH1M (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 20 Feb 2023 02:27:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229700AbjBTHNe (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 20 Feb 2023 02:13:34 -0500
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F8896EA4;
-        Sun, 19 Feb 2023 23:13:29 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 7593D32003CE;
-        Mon, 20 Feb 2023 02:13:25 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Mon, 20 Feb 2023 02:13:26 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1676877205; x=1676963605; bh=67c1IIuZHX
-        18iDaWAaPszosm6lxR2+rVic8oeofJ/oQ=; b=FPMfv2De1XwIJmtJ0WY5XuSlVy
-        7zU5izDopRuCcuf2UMBBz4DN/zXlaT44yvgPxga45C9YykZMPnYJiehR21ZluCsl
-        W3z68Jf8UwP92rVwBTcdHz3ZgzyQh4WNMM/GGB6htJLR3aaFfWWmO2mN0OrqFNDW
-        Rm84xTMa/Yeac/6Oyy0YvfviWmuDnlC0q+7e2Ya2lNWauu4kOKOa5gCn+JrxrM7T
-        nBJ0ZqqrV3uQvQ6jVGj180Z+ogiUyIWPlSwSXsOLLEao/3NlpR+y1jXbMwFIsDin
-        mHB4ZIkEMwotTtHOBr+i/2YK3fnvzMCMj7j1r0t07RSw4Cn5O9ZPHlIC38kQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1676877205; x=1676963605; bh=67c1IIuZHX18iDaWAaPszosm6lxR
-        2+rVic8oeofJ/oQ=; b=bYeoEHNvMrmmqWAvwu2+jOC5VyVgMZA1anTrLNx77RhU
-        oC2dFukWkiI/OGicPN6PK28oZ4mIRmEPk3ML3+ZEKM96E67GJQv/aCFsy4POXhkz
-        6ESq9II3F05rQ/ron8Oj0aNErpgDPQg3UPyOues+Ex0zGC8W6Bv1AXGCVV+M0Rcn
-        925wz1FLd9O8RnlnTYMqxXwFHenwUUPVR1KJz9jaEXeRZFs84d62TIWBWIsJ0YTT
-        gK6iR6U8KW+kYtL1cfxFlqo/MU9qimrI0BIGIjnPvvEPfUeHIm9dPY+5JtTPd15J
-        JOfJF5QkhU9hUrAmnHpxXtun6cJ3g3pu19JmzHEzHA==
-X-ME-Sender: <xms:kx3zY77mVL-ia_UTTPMfNQ0zR_01e25BM_yo2NQm3wjhkLRda2aGuQ>
-    <xme:kx3zYw4Pk4GtN0917dJPFlxa53u45_Wx8KRgR7gdlPE49pKaGTOIZKWa5SzF0Ha6E
-    arYIb22K7m9Qg>
-X-ME-Received: <xmr:kx3zYydVbEcCI_49wrLPXN3SV52TbY_JgSXalDr_uir7jHMl4tiR_rUtCk7q9u4WBTDNvSY09tbY1_XvtQL4Oi-wk9mZ0Umkr9chpw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudejgedguddtvdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgv
-    ghcumffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeehge
-    dvvedvleejuefgtdduudfhkeeltdeihfevjeekjeeuhfdtueefhffgheekteenucevlhhu
-    shhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhroh
-    grhhdrtghomh
-X-ME-Proxy: <xmx:kx3zY8K3eFSlm7qlMjyVSEjk0OX8IDMSRYvGyqfXwoXbCmxvdADkow>
-    <xmx:kx3zY_JNmktPg1-VwnPPbcPWk2lO_9YXVJqzjOsL8XYb19Gaji-Hlw>
-    <xmx:kx3zY1w4uQqL1VQ9JNdH112z7KWWVgHIPaBA5Pz3F-oe-rUIBNr7QA>
-    <xmx:lR3zY8BA2AhvZfHcuorORd7m4SfF9yvoyo-7Ijdfr-31lnW956HITQ>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 20 Feb 2023 02:13:22 -0500 (EST)
-Date:   Mon, 20 Feb 2023 08:13:19 +0100
-From:   Greg KH <greg@kroah.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
+        with ESMTP id S229451AbjBTH1M (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 20 Feb 2023 02:27:12 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81300E3B6
+        for <linux-next@vger.kernel.org>; Sun, 19 Feb 2023 23:26:47 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id 99so450608pjz.4
+        for <linux-next@vger.kernel.org>; Sun, 19 Feb 2023 23:26:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Z8cjV9tBotVQoVLeoP2FgDZXVqOq0e7x0vn0sOuSOa0=;
+        b=Xnb7NRKMt8MYXu9k7qM8ig0x/Cb/XyWlbHHJdwLidqfjzJHpaNGxrAr5wHoQF8a7fI
+         E3EwTbgj0y+qLJ2Mf99kt9jEzE2BbRlFY9SPmsuldOUBKGwiLP6v1POabszUUKemEZ1E
+         OCHCYD8QbDlkVHmApwfLHcY1uPngcktSUNuDbZ6k6RgKFEj2H7I+T/3ET+AZu5iVuIZg
+         hxBwWbOc6j5bgH0Ec9CqCCr2bn1ljA1Z5dYqlf/z2O029yXh8mFMOiarwXoOnmrYXdDV
+         j7UvrBhlhNwmOICmjwRIfQf5SHFRJvx4vCwUCrn54rS18noAo4iZYvk4neo3wG9DjTBQ
+         sevA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Z8cjV9tBotVQoVLeoP2FgDZXVqOq0e7x0vn0sOuSOa0=;
+        b=bpzkWVInXdCXT7Kt7GA7sjSx08yh/6ZuB7He07x9vPa+O9YWbXKSBKn2qSdWtZGBMc
+         CoQ7WNP43EwMEVqeyTx9gWrzMO2ka/t9o2W5YfxJTQKNwAnxoJanRwg1IxE2DOuMyOXF
+         LxOFuYwZE2bDx/JP2sxntGMs8Eerc2VnG9bzW2qAPCmRdKw5hI56X4enUMIiCR5RVT+d
+         c+KYxVRU8UitksFwzkrFadknxfGkAyaF08CUhUZkBN/+e47/AVOl6GncwI9LYP+v1X1F
+         QYZ32vrsDXZGFTsuR8fwhwW9SRlJkJysBGrgb5jWHrFYioASiuod7x4B17wG5tZ86xuS
+         gGBg==
+X-Gm-Message-State: AO0yUKWN3AP6rkXXE13GHEdQGPRZDIXI/Iwuim23oxOTthtbB/lxFmZq
+        M0ZvZVEy77YdZvSTurmxEDPfww==
+X-Google-Smtp-Source: AK7set/DeED0wXvq2tFZ0anEIxa+MnnkNcRSpD6q5g0JxwlcapDjJFYNK/TDmG4CNonjJ3ERU3VU5g==
+X-Received: by 2002:a17:90a:20b:b0:22c:64c6:b7c4 with SMTP id c11-20020a17090a020b00b0022c64c6b7c4mr445184pjc.2.1676878006950;
+        Sun, 19 Feb 2023 23:26:46 -0800 (PST)
+Received: from [10.70.252.135] ([139.177.225.229])
+        by smtp.gmail.com with ESMTPSA id d14-20020a17090a3b0e00b002369d3b282csm747286pjc.40.2023.02.19.23.26.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 19 Feb 2023 23:26:46 -0800 (PST)
+Message-ID: <896c1146-21bb-35bb-dc25-a12014eb5ccd@bytedance.com>
+Date:   Mon, 20 Feb 2023 15:26:41 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.7.2
+Subject: Re: linux-next: build warning after merge of the driver-core tree
+Content-Language: en-US
+To:     Stephen Rothwell <sfr@canb.auug.org.au>, Greg KH <greg@kroah.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patch in the driver-core tree
-Message-ID: <Y/Mdj8q6jHugVSBn@kroah.com>
-References: <20230220133847.11dacf2b@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230220133847.11dacf2b@canb.auug.org.au>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230220163133.481e43d8@canb.auug.org.au>
+From:   Qi Zheng <zhengqi.arch@bytedance.com>
+In-Reply-To: <20230220163133.481e43d8@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Feb 20, 2023 at 01:38:47PM +1100, Stephen Rothwell wrote:
+
+
+On 2023/2/20 13:31, Stephen Rothwell wrote:
 > Hi all,
 > 
-> The following commit is also in the pm and opp trees as a different commit
-> (but the same patch):
+> After merging the driver-core tree, today's linux-next build
+> (htmldocs) produced this warning:
 > 
->   9f467f6375af ("OPP: fix error checking in opp_migrate_dentry()")
+> Documentation/filesystems/api-summary:146: fs/debugfs/inode.c:804: WARNING: Inline literal start-string without end-string.
 > 
-> This is commit
+> Introduced by commit
 > 
->   eca4c0eea534 ("OPP: fix error checking in opp_migrate_dentry()")
-> 
-> in the pm and opp trees.
+>    d3002468cb5d ("debugfs: update comment of debugfs_rename()")
 
-Thanks for the note, this should be fine, I didn't realize it ended up
-in the opp tree as well, sorry about that.
+This is just a comment modification. Didn't see where my modification
+caused this WARNING. :(
 
-greg k-h
+> 
+
+-- 
+Thanks,
+Qi

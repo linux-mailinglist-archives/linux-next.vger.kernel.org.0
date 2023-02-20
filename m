@@ -2,173 +2,91 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8D9169C703
-	for <lists+linux-next@lfdr.de>; Mon, 20 Feb 2023 09:53:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63D0769C73B
+	for <lists+linux-next@lfdr.de>; Mon, 20 Feb 2023 10:04:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230187AbjBTIxv (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 20 Feb 2023 03:53:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37168 "EHLO
+        id S231424AbjBTJEH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 20 Feb 2023 04:04:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230007AbjBTIxu (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 20 Feb 2023 03:53:50 -0500
-Received: from michel.telenet-ops.be (michel.telenet-ops.be [IPv6:2a02:1800:110:4::f00:18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 410F39EEA
-        for <linux-next@vger.kernel.org>; Mon, 20 Feb 2023 00:53:48 -0800 (PST)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed50:e2ba:5470:259d:9c84])
-        by michel.telenet-ops.be with bizsmtp
-        id PLtl290072zSf1N06LtlMR; Mon, 20 Feb 2023 09:53:45 +0100
-Received: from geert (helo=localhost)
-        by ramsan.of.borg with local-esmtp (Exim 4.95)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1pU1vd-009WV9-4b;
-        Mon, 20 Feb 2023 09:53:45 +0100
-Date:   Mon, 20 Feb 2023 09:53:45 +0100 (CET)
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-To:     Qu Wenruo <wqu@suse.com>
-cc:     David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
-        linux-next@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 4/4] btrfs: replace btrfs_io_context::raid_map[] with
- a fixed u64 value
-In-Reply-To: <f82eed6746d19cf3bea15631a120648eadf20852.1675743217.git.wqu@suse.com>
-Message-ID: <e3c9bab1-41e-7fe0-1833-1c81ced89a20@linux-m68k.org>
-References: <cover.1675743217.git.wqu@suse.com> <f82eed6746d19cf3bea15631a120648eadf20852.1675743217.git.wqu@suse.com>
+        with ESMTP id S231340AbjBTJEG (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 20 Feb 2023 04:04:06 -0500
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2773B61BE
+        for <linux-next@vger.kernel.org>; Mon, 20 Feb 2023 01:04:05 -0800 (PST)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-536a22b2fd9so28648987b3.4
+        for <linux-next@vger.kernel.org>; Mon, 20 Feb 2023 01:04:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=bgvDnaL1+3BWC5gc6oXKKiEeKgRXRRUwdoGUW4fyHSc=;
+        b=IaurzHwU20Sl0Ocm6BljurNJLo4381RQcMZfezsUTYDkAOIRF5rNMn191Q192cuGZ2
+         WkgDBf1a0lSPmxnUfXkDol1HWNT/EmCRm/BkMsk21MZtH1FSHtFYcRrIzpJAdVFM9W01
+         Rtv5Xo5cfKLc6Kh1pBGg6+aeIVN3hAH5EEWnRIA4CREkeUs7hYpE1OK74inswAAXwhwu
+         gsmYJOg1kYMn3/CQ9xKXiwO4f2WGRoyr9VWs/BKHzzxUMbeYOhMJngr/PfyC14RSAfzi
+         dCdDuXWWdQs8pNHWrXr9tnbIsldAgi2k7Gcjj5Ri7wf7XmSOwWXrthzHiQ7tOSKo3CF/
+         8o9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bgvDnaL1+3BWC5gc6oXKKiEeKgRXRRUwdoGUW4fyHSc=;
+        b=V187bEeGWCAyRapjbk8gawDPvYMohspj4OwrqPFfssb+vl2qdLZdLGxXDVH51mWgBO
+         A42ntmgQK3DUzjB4Y1sMBAzo6h0mu0vtrM3Yszjh7qjLDalfrytjGAvrEO1oLhusk5gB
+         0y34xkH5JCYKcw0pAtktrUKEdH9E519gNr+UZO2pgIg45exTRfQDu+pyQG8Lwubho3bH
+         vboLNTEk3YmcV8aBWAOQ30BEovppL0Cz07maN1noWHdH9Rt9qLh4Ga9sMBhXxeBes+60
+         Q3m8ez2jKg2kHqUM0Nr653x6QSLTova0//mvRKadmHphflnmLHzHwZCXhNpeSrgzIT9Y
+         WGtw==
+X-Gm-Message-State: AO0yUKWlmWfRR2j9ATA6qCKNteNOOPqL81N30VYrf7ienXi6lwVSf3Kh
+        NSrLgF6cJyvUVFegQvcqHWm6cC5GYcwRsBotYY+fRg==
+X-Google-Smtp-Source: AK7set/5rSVwl4bI5FUAjAzrA4hlcjFa1ZGyM/pLZ6w3G602+dDKp6FSLg10UYQ2D71dRG9o+5v225A8O+R75Mkom3w=
+X-Received: by 2002:a81:bb41:0:b0:530:a598:e23a with SMTP id
+ a1-20020a81bb41000000b00530a598e23amr510102ywl.360.1676883844350; Mon, 20 Feb
+ 2023 01:04:04 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230220091338.1608ab57@canb.auug.org.au>
+In-Reply-To: <20230220091338.1608ab57@canb.auug.org.au>
+From:   Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Date:   Mon, 20 Feb 2023 10:03:53 +0100
+Message-ID: <CACMJSeviLF4BJXAsK-r2=metMugbhMP_DTGAgepRTOxTLaj-GQ@mail.gmail.com>
+Subject: Re: linux-next: duplicate patch in the davinci tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
- 	Hi Qu,
+On Sun, 19 Feb 2023 at 23:13, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> The following commit is also in the arm-soc-fixes tree as a different
+> commit (but the same patch):
+>
+>   eaafab7e8e26 ("MAINTAINERS: make me the maintainer of DaVinci platforms")
+>
+> This is commit
+>
+>   88941ddefc2a ("MAINTAINERS: make me the maintainer of DaVinci platforms")
+>
+> in the arm-soc-fixes tree.
+>
+> --
+> Cheers,
+> Stephen Rothwell
 
-On Tue, 7 Feb 2023, Qu Wenruo wrote:
-> In btrfs_io_context structure, we have a pointer raid_map, which is to
-> indicate the logical bytenr for each stripe.
->
-> But considering we always call sort_parity_stripes(), the result
-> raid_map[] is always sorted, thus raid_map[0] is always the logical
-> bytenr of the full stripe.
->
-> So why we waste the space and time (for sorting) for raid_map[]?
->
-> This patch will replace btrfs_io_context::raid_map with a single u64
-> number, full_stripe_start, by:
->
-> - Replace btrfs_io_context::raid_map with full_stripe_start
->
-> - Replace call sites using raid_map[0] to use full_stripe_start
->
-> - Replace call sites using raid_map[i] to compare with nr_data_stripes.
->
-> The benefits are:
->
-> - Less memory wasted on raid_map
->  It's sizeof(u64) * num_stripes vs size(u64).
->  It's always a save for at least one u64, and the benefit grows larger
->  with num_stripes.
->
-> - No more weird alloc_btrfs_io_context() behavior
->  As there is only one fixed size + one variable length array.
->
-> Signed-off-by: Qu Wenruo <wqu@suse.com>
+Now fixed.
 
-Thanks for your patch, which is now commit 4a8c6e8a6dc8ae4c ("btrfs:
-replace btrfs_io_context::raid_map with a fixed u64 value") in
-next-20230220.
-
-noreply@ellerman.id.au reported several build failures when
-building for 32-bit platforms:
-
-     ERROR: modpost: "__umoddi3" [fs/btrfs/btrfs.ko] undefined!
-
-> --- a/fs/btrfs/volumes.c
-> +++ b/fs/btrfs/volumes.c
-> @@ -6556,35 +6532,44 @@ int __btrfs_map_block(struct btrfs_fs_info *fs_info, enum btrfs_map_op op,
-> 	}
-> 	bioc->map_type = map->type;
->
-> -	for (i = 0; i < num_stripes; i++) {
-> -		set_io_stripe(&bioc->stripes[i], map, stripe_index, stripe_offset,
-> -			      stripe_nr);
-> -		stripe_index++;
-> -	}
-> -
-> -	/* Build raid_map */
-> +	/*
-> +	 * For RAID56 full map, we need to make sure the stripes[] follows
-> +	 * the rule that data stripes are all ordered, then followed with P
-> +	 * and Q (if we have).
-> +	 *
-> +	 * It's still mostly the same as other profiles, just with extra
-> +	 * rotataion.
-> +	 */
-> 	if (map->type & BTRFS_BLOCK_GROUP_RAID56_MASK && need_raid_map &&
-> 	    (need_full_stripe(op) || mirror_num > 1)) {
-> -		u64 tmp;
-> -		unsigned rot;
-> -
-> -		/* Work out the disk rotation on this stripe-set */
-> -		rot = stripe_nr % num_stripes;
-> -
-> -		/* Fill in the logical address of each stripe */
-> -		tmp = stripe_nr * data_stripes;
-> -		for (i = 0; i < data_stripes; i++)
-> -			bioc->raid_map[(i + rot) % num_stripes] =
-> -				em->start + ((tmp + i) << BTRFS_STRIPE_LEN_SHIFT);
-> -
-> -		bioc->raid_map[(i + rot) % map->num_stripes] = RAID5_P_STRIPE;
-> -		if (map->type & BTRFS_BLOCK_GROUP_RAID6)
-> -			bioc->raid_map[(i + rot + 1) % num_stripes] =
-> -				RAID6_Q_STRIPE;
-> -
-> -		sort_parity_stripes(bioc, num_stripes);
-> +		/*
-> +		 * For RAID56 @stripe_nr is already the number of full stripes
-> +		 * before us, which is also the rotation value (needs to modulo
-> +		 * with num_stripes).
-> +		 *
-> +		 * In this case, we just add @stripe_nr with @i, then do the
-> +		 * modulo, to reduce one modulo call.
-> +		 */
-> +		bioc->full_stripe_logical = em->start +
-> +			((stripe_nr * data_stripes) << BTRFS_STRIPE_LEN_SHIFT);
-> +		for (i = 0; i < num_stripes; i++) {
-> +			set_io_stripe(&bioc->stripes[i], map,
-> +				      (i + stripe_nr) % num_stripes,
-
-As stripe_nr is u64, this is a 64-by-32 modulo operation, which
-should be implemented using a helper from include/linux/math64.h
-instead.
-
-> +				      stripe_offset, stripe_nr);
-> +		}
-> +	} else {
-> +		/*
-> +		 * For all other non-RAID56 profiles, just copy the target
-> +		 * stripe into the bioc.
-> +		 */
-> +		for (i = 0; i < num_stripes; i++) {
-> +			set_io_stripe(&bioc->stripes[i], map, stripe_index,
-> +				      stripe_offset, stripe_nr);
-> +			stripe_index++;
-> +		}
-> 	}
->
-> +
-> 	if (need_full_stripe(op))
-> 		max_errors = btrfs_chunk_max_errors(map);
-
-Gr{oetje,eeting}s,
-
- 						Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
- 							    -- Linus Torvalds
+Bart

@@ -2,46 +2,45 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2952769C3BA
-	for <lists+linux-next@lfdr.de>; Mon, 20 Feb 2023 01:51:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5419269C3DE
+	for <lists+linux-next@lfdr.de>; Mon, 20 Feb 2023 02:02:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229558AbjBTAvB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 19 Feb 2023 19:51:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33158 "EHLO
+        id S229790AbjBTBCi (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 19 Feb 2023 20:02:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjBTAvA (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 19 Feb 2023 19:51:00 -0500
+        with ESMTP id S229567AbjBTBCi (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 19 Feb 2023 20:02:38 -0500
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1218BDEC;
-        Sun, 19 Feb 2023 16:50:59 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 662B4D52C;
+        Sun, 19 Feb 2023 17:02:37 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PKkPF5mWRz4x7j;
-        Mon, 20 Feb 2023 11:50:57 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PKkfg3k0sz4x87;
+        Mon, 20 Feb 2023 12:02:35 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1676854258;
-        bh=FT4HmflXkNRJsCIexIFENG2HM0fP4ER5q6khNnErFwA=;
+        s=201702; t=1676854955;
+        bh=99/2cu/oKbkgwuErf6nmajBlS2oLtDnVrf5Qoar4UlM=;
         h=Date:From:To:Cc:Subject:From;
-        b=YC20eCPmuI2GYmxG7zrl+Q+Nbaz1fN4kW6Dh02fjAUm55LJm9UZD15I0qjgxw7aza
-         4HDLTBkrDPcZpN1rTyuTxZFgWiHf1xddZNr5hugxAEG0vubKcjZk4cuxGmBBfBdEoY
-         D6j3o3sY6qxPpBwC5LZhMfAPUXr+0/y7d+vGnGzuDXFT6fHr07NOgeILM/ml7Zs6Sq
-         GNmI2nJ9ZaMGoF8v5emgyoD4wBxYXisZAyIN8BCXnlvvf+avfIb3Mxv3BF9f6GPbhb
-         +tIlb6pFPRpbfyaxeZGPi0d4enVyGODlFSTYf1ecxF+Dk+pEq4RAunIsJNcL7qhEt0
-         hrP1vGQCFefYg==
-Date:   Mon, 20 Feb 2023 11:50:56 +1100
+        b=u9VpCBMIAkWUgR/HTyt/Vo2tOoQTn+Wocjf46LioD3xn8lJCTHN1rA5kANC3QnFvL
+         b49ld7bwfqfKtdcO6Xd38cgC1C6vvR7zjmdfG2O0l3m/T2bk1LSFQFXYjftVTqHYKq
+         zD6DTpqCWqcKZPGzMOWR7Wm1WRHLS3f5KO50HnKmv00v7abe1kdouw1oqpaZesriS/
+         DujunLhN93AEBc2BdsCEvKO7HEeSPO/XVqRbV83rPaWyW8NIELx1PueOJ74mNBYkY9
+         IumS3+aDGrQTddEndNTbX0cBwBeD/Dwj8gVu5/pl4Jm5JqX7f6zr4j1QwBh+dP5a/m
+         17qlsCSKA4HwA==
+Date:   Mon, 20 Feb 2023 12:02:34 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
 To:     Jens Axboe <axboe@kernel.dk>, Steve French <smfrench@gmail.com>
-Cc:     CIFS <linux-cifs@vger.kernel.org>, Christoph Hellwig <hch@lst.de>,
+Cc:     CIFS <linux-cifs@vger.kernel.org>,
         David Howells <dhowells@redhat.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Steve French <stfrench@microsoft.com>
-Subject: linux-next: manual merge of the block tree with the cifs tree
-Message-ID: <20230220115056.22751cf6@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patches in the block tree
+Message-ID: <20230220120234.161a6002@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/.pnJTFBH=.MHEZKa1YOF8LE";
+Content-Type: multipart/signed; boundary="Sig_/WHhgSQWrYHIpG74LLPSKD21";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
@@ -52,52 +51,57 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/.pnJTFBH=.MHEZKa1YOF8LE
+--Sig_/WHhgSQWrYHIpG74LLPSKD21
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the block tree got a conflict in:
+The following commits are also in Linus Torvalds' tree as different
+commits (but the same patches):
 
-  fs/cifs/smb2ops.c
+  78e11ab5adf7 ("mm: Pass info, not iter, into filemap_get_pages()")
+  a53cad008099 ("splice: Add a func to do a splice from a buffered file wit=
+hout ITER_PIPE")
+  f2aa2c5707ac ("splice: Add a func to do a splice from an O_DIRECT file wi=
+thout ITER_PIPE")
+  51e851b5d16f ("iov_iter: Define flags to qualify page extraction.")
+  0fff5a38a770 ("iov_iter: Add a function to extract a page list from an it=
+erator")
 
-between commit:
+These are commits
 
-  8378eea2e41f ("cifs: Change the I/O paths to use an iterator rather than =
-a page list")
+  c935d7b85ae1 ("mm: Pass info, not iter, into filemap_get_pages()")
+  03aaa67b45e7 ("splice: Add a func to do a splice from a buffered file wit=
+hout ITER_PIPE")
+  1dba0a6d58da ("splice: Add a func to do a splice from an O_DIRECT file wi=
+thout ITER_PIPE")
+  f48b6bcd02a1 ("iov_iter: Define flags to qualify page extraction.")
+  c82edb69b878 ("iov_iter: Add a function to extract a page list from an it=
+erator")
 
-from the cifs tree and commit:
+in the cifs tree.
 
-  220ae4a5c2ba ("cifs: use bvec_set_page to initialize bvecs")
-
-from the block tree.
-
-I fixed it up (the former removed the code updated by the latter) and
-can carry the fix as necessary. This is now fixed as far as linux-next
-is concerned, but any non trivial conflicts should be mentioned to your
-upstream maintainer when your tree is submitted for merging.  You may
-also want to consider cooperating with the maintainer of the conflicting
-tree to minimise any particularly complex conflicts.
+(A few of these are not exactly the same, but very similar)
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/.pnJTFBH=.MHEZKa1YOF8LE
+--Sig_/WHhgSQWrYHIpG74LLPSKD21
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPyw/EACgkQAVBC80lX
-0GzA4gf/ezrbWjNJmt0MuSYZNGCQ6RbWYoB2gSDqn4MqMla5Mh0Oi0MRxY0c+Oat
-S/AYZXxICXcUJcleCmFgdUczrSCdiqW/YUpthvAhMF60jYpWCr8TINLM2eMatLL9
-qGztP1NrJIrike32F8qQC3WfmKTysREHZF6TuPnm3zjfHDCRi4mgEY+CdYnrTu3O
-dMQrCI1nrtrmb4rS2g3fIhWaPEgVCnUTY0/iegXOeYIDZRJqHPbKlbrFM4edE8vw
-sE49iC2tlyfKcExZmcJa3JXhvSDf0j3BpyO4f0Kx8nedoiKwp4qh5FFjDWH8ziI5
-WTUYTYkGv/ZOv3mYn2fe0AuJBi4xVg==
-=AmTV
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPyxqoACgkQAVBC80lX
+0GwhBQf/fd8qSVaIOvjzRqfosD1J2I+EdQtkwUE2Da4HRDKjoTCD/EMMtmTXEI9R
+QIApyz/zQYpait3JUT/ukFm3lpxUSlo0Vb8eaAt6u7sG9IorWvsl4U/U2BiXizJk
+zICpMZS7dHblaihaYwcnyb1MwQ2v2Dz5c3NGosI9TjPpXFzMmlq+aiSkfWi0RFLA
+zn440tDKGBe8DhUi3eK/LAOMKoNriooX2ORLfxXwv+Hm2Riv5yp1ckJWVpU2CSVD
+XO0nQohslTNNdiC5Q+NhtfVGpn+hp27qMoN6qhmz3r+cib+GXRplkoa4o6hnoXKE
+YwRViAAQ+1t9rEv/ioXcUfsNrVxUdw==
+=zCMy
 -----END PGP SIGNATURE-----
 
---Sig_/.pnJTFBH=.MHEZKa1YOF8LE--
+--Sig_/WHhgSQWrYHIpG74LLPSKD21--

@@ -2,124 +2,114 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B786269CA99
-	for <lists+linux-next@lfdr.de>; Mon, 20 Feb 2023 13:17:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86DD969CB46
+	for <lists+linux-next@lfdr.de>; Mon, 20 Feb 2023 13:47:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229700AbjBTMQj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 20 Feb 2023 07:16:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34776 "EHLO
+        id S229646AbjBTMrf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 20 Feb 2023 07:47:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231793AbjBTMQZ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 20 Feb 2023 07:16:25 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32E251B33A;
-        Mon, 20 Feb 2023 04:16:23 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PL1c12Crwz4x4p;
-        Mon, 20 Feb 2023 23:16:16 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1676895378;
-        bh=N4TG4gGFRHnE28Si8js6f2rag25mIHAHZaYiIzZm1jQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=bQJf0aq7N00nGNTO61pCnvFhpNPPxUwQgaCPo9haUXtlfKPBx2N+e6MsquTA5zQA8
-         DGV+u2CdY8KsSs3Z05xxtvoln32nNx4+nzWxCPl6sTMUpzujMBALGSaQU18gRGVRGV
-         WGzVU8Zi1iYyPfR8tEAAhB3yt7GZumFyAt+6oKUjON/hc3MWVGl863OF6EMRF0NvsE
-         pPV4S5AZyZWKxmhe8hAcZMSEagsU05ihrKW8xF3iHahBEyJmFJTVv7EVLKnEKsBeYp
-         h4d4/ZG5vONU8/QS3XroN2dhknMzdBFu+DdcPMlZOaBpDj+74GL4TmDK5t3NMrok32
-         sdYcEnx8tXXsg==
-Date:   Mon, 20 Feb 2023 23:16:14 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Greg KH <greg@kroah.com>
-Cc:     "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        with ESMTP id S229579AbjBTMre (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 20 Feb 2023 07:47:34 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66AFB26B2;
+        Mon, 20 Feb 2023 04:47:32 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id na9-20020a17090b4c0900b0023058bbd7b2so1230130pjb.0;
+        Mon, 20 Feb 2023 04:47:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Rlp+7fpFeHOdwpiHv1PnpGgqFl6+DvO/A7P2r7Vg5wM=;
+        b=QoISZtRP4onmfzFkfiaiO7B+QT812k/qnfrliIUXk39vKRNo9ze4QQK0fYIEgH9ZU+
+         wfPIzRScwTjHzzD53D9lv5KhOj9jihX3stcwDC2bGPVmdWYxi9r+fU5mfEZJudRB0M2J
+         hLgcS5krMndUoK8FwiyfdV8VIOqKs1INYgdo8thZWwBka8f7TTSKg6RuYTIkXFXrT9xy
+         qH/ZoDewxwUn0iy8gLhNnLV1da7ZNNTehIlmLtDZjwIHFW2/h+3aks4iuQAQlvTyNQrX
+         UK/7MAd35sCrq80X7V9pJ+rpAku5dfZTH5MzSDnQe5seVoQi3XvSc/w2FjmbQP63oHN7
+         W1DA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Rlp+7fpFeHOdwpiHv1PnpGgqFl6+DvO/A7P2r7Vg5wM=;
+        b=hVASyrIBDQItJ3cCpSad50nIjs9eX6/N35oIaq75MkBNRUd8TsN5bwmJJ3QZFtNnhj
+         BNpx1DXgrR04fXBEMAL0w/eSMhLSXWFe2ppqd88MTmnjmuZGxlsn+GTqVRLz1LNJwno/
+         sEVJs+OdJZNMLt8C0drlIHBaD58IFVrwC/+fyEmaH+87rkEkH+fV2b/9GuDomTyLEvEG
+         riszO2VNUpXn5PUGac74StrW+eSVnc/VbZ7V95maINltuDpA8AqV4CUE5Rnw4jqa7tlo
+         3qV5T9E+v1WOUl4S5H56EpGnOpIhnir/of6K7tZrNWV6q6gxuqgJl2xrm3Nfi55ymZqy
+         T/8A==
+X-Gm-Message-State: AO0yUKW27xbfw8twFZ2L6KPsP1J+qrPWfPlplsRbP60fRAvxcNjp0QrK
+        taLe5eURW8Mhiym5LcUd4IPXmNRwZQ4=
+X-Google-Smtp-Source: AK7set+sSj37syg4zbIanE+y2AbEfxkvnB8SWLgQJugSFotEyx8FSQ3SmJJ5HKerLxFAf86hB/BeOA==
+X-Received: by 2002:a17:90b:3e86:b0:230:b53a:fa13 with SMTP id rj6-20020a17090b3e8600b00230b53afa13mr2737401pjb.44.1676897251810;
+        Mon, 20 Feb 2023 04:47:31 -0800 (PST)
+Received: from debian.me (subs02-180-214-232-87.three.co.id. [180.214.232.87])
+        by smtp.gmail.com with ESMTPSA id s16-20020a17090ad49000b00234e6d2de3dsm1093078pju.11.2023.02.20.04.47.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Feb 2023 04:47:31 -0800 (PST)
+Received: by debian.me (Postfix, from userid 1000)
+        id E72611048BF; Mon, 20 Feb 2023 19:47:25 +0700 (WIB)
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patch in the driver-core tree
-Message-ID: <20230220231614.252a5fda@canb.auug.org.au>
-In-Reply-To: <Y+u+B/yi51JB26If@kroah.com>
-References: <20230214125700.606a89d7@canb.auug.org.au>
-        <Y+suRQBtzCWx+mjo@kroah.com>
-        <eade11f9-22a2-1e7b-93da-d52b63cf9a5f@intel.com>
-        <Y+u+B/yi51JB26If@kroah.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: [PATCH] debugfs: drop inline constant formatting for ERR_PTR(-ERROR)
+Date:   Mon, 20 Feb 2023 19:47:21 +0700
+Message-Id: <20230220124721.11657-1-bagasdotme@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/7W.xPThyC_4G4PI/3AY_be3";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1524; i=bagasdotme@gmail.com; h=from:subject; bh=OrnQooVxHrB/Bbw1qFZhqZCTvcpat2soHW4Jfe/P2JQ=; b=owGbwMvMwCX2bWenZ2ig32LG02pJDMmfsy8tu7e3J+ih0OJPc0+7yH5ScT1XfFYzM0ipqTP7In/Y Wu/3HaUsDGJcDLJiiiyTEvmaTu8yErnQvtYRZg4rE8gQBi5OAZhIsyvD/xwTTdHjRzj9thyU0lkfb3 RnSsjOz9P2f5iUKC244OnGIxyMDFMCNP0fq81VS3//7EaOCcOP7tvP286mGB9i19f3DHs7mR0A
+X-Developer-Key: i=bagasdotme@gmail.com; a=openpgp; fpr=701B806FDCA5D3A58FFB8F7D7C276C64A5E44A1D
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/7W.xPThyC_4G4PI/3AY_be3
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Stephen Rothwell reported htmldocs warning when merging driver-core tree
+for linux-next:
 
-Hi Greg,
+Documentation/filesystems/api-summary:146: fs/debugfs/inode.c:804: WARNING: Inline literal start-string without end-string.
 
-On Tue, 14 Feb 2023 17:59:51 +0100 Greg KH <greg@kroah.com> wrote:
->
-> On Tue, Feb 14, 2023 at 05:47:16PM +0100, Wysocki, Rafael J wrote:
-> >=20
-> > On 2/14/2023 7:46 AM, Greg KH wrote: =20
-> > > On Tue, Feb 14, 2023 at 12:57:00PM +1100, Stephen Rothwell wrote: =20
-> > > > Hi all,
-> > > >=20
-> > > > The following commit is also in the pm tree as a different commit (=
-but
-> > > > the same patch):
-> > > >=20
-> > > >    a0bc3f78d0ff ("kernel/power/energy_model.c: fix memory leak with=
- using debugfs_lookup()")
-> > > >=20
-> > > > This is commit
-> > > >=20
-> > > >    a0e8c13ccd6a ("PM: EM: fix memory leak with using debugfs_lookup=
-()")
-> > > >=20
-> > > > in the pm tree. =20
-> > > That will be fine, thanks for the warning. =20
-> >=20
-> > I can drop the EM change, though, if you are going to carry it. =20
->=20
-> When one branch adds it, and another adds and then removes it, and then
-> the two branches are merged, what is the result?  The patch added, or
-> removed?
+The warning is due to inline constant formatting (``%CONST``) doesn't play
+nice with complex-name constants like ERR_PTR(-ERROR).
 
-Well, as far as git is concerned that is as if one side did nothing and
-the other added the patch.  So the resolution would be the patch added.
-This could still possibly be not what you want, though.
+Drop the formatting for that constant above to be consistent with similar
+error constants and also to fix the above warning.
 
-> It's safer to just leave this as a duplicate, I know git can handle that
-> just fine.
+Link: https://lore.kernel.org/lkml/20230220163133.481e43d8@canb.auug.org.au/
+Fixes: d3002468cb5d5d ("debugfs: update comment of debugfs_rename()")
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+---
+ fs/debugfs/inode.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-In a simple case when no further conflicting changes occur, that is
-fine.  I have been getting quite a few (especially today) where that is
-not the case, however.
+diff --git a/fs/debugfs/inode.c b/fs/debugfs/inode.c
+index 58a35afb7c5d89..a7a6a0821605a8 100644
+--- a/fs/debugfs/inode.c
++++ b/fs/debugfs/inode.c
+@@ -802,7 +802,7 @@ EXPORT_SYMBOL_GPL(debugfs_lookup_and_remove);
+  * exist for rename to succeed.
+  *
+  * This function will return a pointer to old_dentry (which is updated to
+- * reflect renaming) if it succeeds. If an error occurs, %ERR_PTR(-ERROR)
++ * reflect renaming) if it succeeds. If an error occurs, ERR_PTR(-ERROR)
+  * will be returned.
+  *
+  * If debugfs is not enabled in the kernel, the value -%ENODEV will be
 
---=20
-Cheers,
-Stephen Rothwell
+base-commit: 9f467f6375afd3c7667dbabcfff35c22961e1c0b
+-- 
+An old man doll... just what I always wanted! - Clara
 
---Sig_/7W.xPThyC_4G4PI/3AY_be3
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPzZI4ACgkQAVBC80lX
-0GzjSwgAhlZCslZFgM8FxbJsSwex5l1ESDGzr1l/RFhQq6xWVaRs3sDKPeb5DAcZ
-xT1QmRsVAICaCBh8aNzk8BcY5Tck/NAKaM7Pp6afwSmDU8fnjQi2srOyzTI6Uqio
-mu6Kc25sJoYEizR+IPV+cNxVAEJdsmB2HD1ZpVV6bC5ym2aopIGBBDp++POXivoq
-bJm4it38GKWFbjzhQIvlL430nzTKDUY7HlorXTUz/FCsU4OWzrV/L2ZLwewWu1H6
-zMmEFv5v6J2FibuiSwvU5VMV3X7140FS1Q1Hq99ExVhdhaw2Ng5HPotDeZYNB5O3
-FJ66HwkN6CK90TRd9IRlb2AOZblo9w==
-=NRDq
------END PGP SIGNATURE-----
-
---Sig_/7W.xPThyC_4G4PI/3AY_be3--

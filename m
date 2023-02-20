@@ -2,49 +2,34 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88D6369CF69
-	for <lists+linux-next@lfdr.de>; Mon, 20 Feb 2023 15:30:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E670D69D05E
+	for <lists+linux-next@lfdr.de>; Mon, 20 Feb 2023 16:14:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231901AbjBTOab (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 20 Feb 2023 09:30:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52762 "EHLO
+        id S229451AbjBTPOj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 20 Feb 2023 10:14:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231661AbjBTOaa (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 20 Feb 2023 09:30:30 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8D26113D0
-        for <linux-next@vger.kernel.org>; Mon, 20 Feb 2023 06:29:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676903390;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=x5p6lK28Ra573v7+UHzSn0UqRqk59msus4yoHKjo37Y=;
-        b=Jt0UNBnHGCzm+L0RHqWxYpFD41YEs3W9hip31AxTf8nLgxEAAptoWRZtIx+ApYWrphCDti
-        4Uu6wBVJsv0cmWFjFZKzO2x5Y3dL0w3jGmTPVHlOqB7K3PUJAgOBph3xJVEAYtcCyW21JU
-        PsK0sG0XYcYDf5axjqNlszHrYAWPlMs=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-74-BUWw3wZaOMeCm6RwB8xb4Q-1; Mon, 20 Feb 2023 09:29:44 -0500
-X-MC-Unique: BUWw3wZaOMeCm6RwB8xb4Q-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DF90329AB44F;
-        Mon, 20 Feb 2023 14:29:43 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.18])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 702734097544;
-        Mon, 20 Feb 2023 14:29:42 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <Y/N8hVWeR3AjssUC@casper.infradead.org>
-References: <Y/N8hVWeR3AjssUC@casper.infradead.org> <20230220152933.1ab8fa4a@canb.auug.org.au>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     dhowells@redhat.com, Stephen Rothwell <sfr@canb.auug.org.au>,
+        with ESMTP id S230366AbjBTPOi (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 20 Feb 2023 10:14:38 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B0D020575;
+        Mon, 20 Feb 2023 07:14:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=8Dz7+E0DgtNe+NnToeaQ7oDkq6qlY0laWzUyQElblbw=; b=l5Y/xa7PROSW81A3IZgOy1SZNN
+        7NKb00qJ2CBDI+F+o2JzOzvSHp8n17ds5C0p79kcQMQTztHchuBP1aq+VDOihbn8R9wHSeJJDv6I9
+        Kc+/VbhIUKJ6lydcTq0dd4YtnWxLcF1R/MTDY3XCosBn2aHEp9n0KsY3RS6dd2VgPCOrPzNCr0vgN
+        ggjwP7NbsrRIQQ9pGJjuc5iTz4iJo3IA6BogNBwW+YHajyCfSOKKydUSLAILfrn0yTFhc3kFhywfs
+        eI4/IU03BPzdv+eIzxSYHjFtGlzMrfoJo6iGJ/Wao2w/vE5aNe9t/5tWU06HW1JXYs4QwpdeoZdNA
+        V4XIQj9w==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pU7qc-00Boho-Sy; Mon, 20 Feb 2023 15:12:58 +0000
+Date:   Mon, 20 Feb 2023 15:12:58 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     David Howells <dhowells@redhat.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
         Andrew Morton <akpm@linux-foundation.org>,
         Steve French <smfrench@gmail.com>,
         CIFS <linux-cifs@vger.kernel.org>,
@@ -53,34 +38,36 @@ Cc:     dhowells@redhat.com, Stephen Rothwell <sfr@canb.auug.org.au>,
         Steve French <stfrench@microsoft.com>,
         "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
 Subject: Re: linux-next: manual merge of the mm-stable tree with the cifs tree
+Message-ID: <Y/ON+ugfcFBdeZ4i@casper.infradead.org>
+References: <Y/N8hVWeR3AjssUC@casper.infradead.org>
+ <20230220152933.1ab8fa4a@canb.auug.org.au>
+ <1676391.1676903381@warthog.procyon.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <1676389.1676903381.1@warthog.procyon.org.uk>
-Date:   Mon, 20 Feb 2023 14:29:41 +0000
-Message-ID: <1676391.1676903381@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1676391.1676903381@warthog.procyon.org.uk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Matthew Wilcox <willy@infradead.org> wrote:
-
-> Doesn't look too bad to me.  Dave's commit is just removing the
-> functions, so it doesn't matter how they're being changed.
+On Mon, Feb 20, 2023 at 02:29:41PM +0000, David Howells wrote:
+> Matthew Wilcox <willy@infradead.org> wrote:
 > 
-> The real question in my mind is why for-next is being updated two days
-> before the merge window with new patches.  What's the point in -next
-> if patches are being added at this late point?
+> > Doesn't look too bad to me.  Dave's commit is just removing the
+> > functions, so it doesn't matter how they're being changed.
+> > 
+> > The real question in my mind is why for-next is being updated two days
+> > before the merge window with new patches.  What's the point in -next
+> > if patches are being added at this late point?
+> 
+> It's more of a transfer of a subset of my iov/splice patches from the
+> linux-block tree to the cifs tree.  I thought Jens would've dropped my branch
+> from his tree for the moment.
 
-It's more of a transfer of a subset of my iov/splice patches from the
-linux-block tree to the cifs tree.  I thought Jens would've dropped my branch
-from his tree for the moment.
-
-David
-
+Your iov/splice patches don't conflict.  The part that you snipped says
+it's c8859bc0c129 ("cifs: Remove unused code")

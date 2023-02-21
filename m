@@ -2,135 +2,93 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D855F69E548
-	for <lists+linux-next@lfdr.de>; Tue, 21 Feb 2023 17:57:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C728969E583
+	for <lists+linux-next@lfdr.de>; Tue, 21 Feb 2023 18:05:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234146AbjBUQ54 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 21 Feb 2023 11:57:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59218 "EHLO
+        id S233430AbjBURFW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 21 Feb 2023 12:05:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234921AbjBUQ5u (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 21 Feb 2023 11:57:50 -0500
-Received: from mr85p00im-zteg06011501.me.com (mr85p00im-zteg06011501.me.com [17.58.23.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CA042D7D
-        for <linux-next@vger.kernel.org>; Tue, 21 Feb 2023 08:57:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=me.com; s=1a1hai;
-        t=1676998668; bh=LGdUnPSYhPebUFlFuinp+U3AI4mwBiZXzxkqFitQAjk=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=Swhj8mQ9wIBGrCY8sF2EyX9wREfJ7P+x3YEQKj+cej3iKQSbGqeBCoUmlE3e8UguV
-         GVyY/2ZYM2bw1JBbe5VWcQVc2R/FVtJljf7RdydKwQaJUGA/XL3hhLdmOyxRywfmYX
-         fItFVXEcGbRAg6BAofVApAJpB0rq+t3wSBE518H7ShvJ8qV03Ka61wE1BEe4j5vvpU
-         GF8HzZA+B7LwdW/aCJ1F7dOuVRSdYPFDd/dkukd5R6r/1UoQVnn3WkESsaSRrjPMl0
-         DrF4bMLMi1IkoJihySaNDWt24ro4E47mGB45DzsycS1FYdz7dg5LgilHmh3RRoo1Yn
-         q5EHndMAu7pBw==
-Received: from imac101 (mr38p00im-dlb-asmtp-mailmevip.me.com [17.57.152.18])
-        by mr85p00im-zteg06011501.me.com (Postfix) with ESMTPSA id 7B190482315;
-        Tue, 21 Feb 2023 16:57:46 +0000 (UTC)
-Date:   Tue, 21 Feb 2023 17:57:41 +0100
-From:   Alain Volmat <avolmat@me.com>
-To:     Mark Brown <broonie@kernel.org>, Wolfram Sang <wsa@the-dreams.de>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Wolfram Sang <wsa@kernel.org>
-Subject: Re: linux-next: manual merge of the spi tree with the i2c tree
-Message-ID: <Y/T4BTCCzIWzE1oe@imac101>
-Mail-Followup-To: Mark Brown <broonie@kernel.org>,
-        Wolfram Sang <wsa@the-dreams.de>,
+        with ESMTP id S234187AbjBURFV (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 21 Feb 2023 12:05:21 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D9942A6E1;
+        Tue, 21 Feb 2023 09:04:59 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9415360F82;
+        Tue, 21 Feb 2023 17:04:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 911F4C433EF;
+        Tue, 21 Feb 2023 17:04:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676999098;
+        bh=hAEQa0Cu32XX4S5t98j4S5gV6lruGeDQSN/4bgvhn/A=;
+        h=Date:From:To:Subject:References:In-Reply-To:From;
+        b=Ww6WfLdupADK0MXFIBnDSmjGalJXiMhimIkN+R4Rkl1zvQcxVgkl9l6c0/DzjWE/n
+         TDhyDNklDu3+5PlyMk98AAFHGbmbMwwSNVSo+/EQ08lSPLGKpeH5rsv0DzsJAa+z8y
+         ch+3PaKDBB8al2GFd/mpDBmvuJIuteHClzR3TKr5oIYBL5rsx8ET3NftGmBASbxFsj
+         IglR6c560Ivtx+lMiux+/35+/J4m2COluMH0OHby9txUMP9GKvT0iNpCSSetJvoEZS
+         X/R04jVPJbBc0rMJV8k336bpWY8+Atc9NAZ6AdoWkalqWbq26D5OqxEeh8c+ynKHlF
+         iJjP3bda0I3TA==
+Date:   Tue, 21 Feb 2023 17:04:53 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Wolfram Sang <wsa@the-dreams.de>,
         Stephen Rothwell <sfr@canb.auug.org.au>,
         Geert Uytterhoeven <geert@linux-m68k.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Wolfram Sang <wsa@kernel.org>
+Subject: Re: linux-next: manual merge of the spi tree with the i2c tree
+Message-ID: <Y/T5tevqPapMy/g6@sirena.org.uk>
 References: <20230216113035.3050871a@canb.auug.org.au>
  <CAMuHMdVuudSDrWguMJiHsZ3GJhs+muK566M5GqK2vfMyBeo2pQ@mail.gmail.com>
+ <Y/T4BTCCzIWzE1oe@imac101>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="KAJzZplwoo3a+Wx5"
 Content-Disposition: inline
-In-Reply-To: <CAMuHMdVuudSDrWguMJiHsZ3GJhs+muK566M5GqK2vfMyBeo2pQ@mail.gmail.com>
-X-Proofpoint-ORIG-GUID: MeMvgzMQWiFnEy1KrMx2UW9R99Kz5wfG
-X-Proofpoint-GUID: MeMvgzMQWiFnEy1KrMx2UW9R99Kz5wfG
-X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
- =?UTF-8?Q?2903e8d5c8f:6.0.425,18.0.816,17.11.62.513.0000000_definitions?=
- =?UTF-8?Q?=3D2022-01-18=5F01:2022-01-14=5F01,2022-01-18=5F01,2021-12-02?=
- =?UTF-8?Q?=5F01_signatures=3D0?=
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 bulkscore=0 suspectscore=0
- adultscore=0 phishscore=0 clxscore=1011 malwarescore=0 mlxlogscore=999
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2302210142
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y/T4BTCCzIWzE1oe@imac101>
+X-Cookie: MOUNT TAPE U1439 ON B3, NO RING
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Mark, Wolfram,
 
-should I update something to avoid this conflict before you push the
-pull request for v6.3 ?
+--KAJzZplwoo3a+Wx5
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Cheers,
-Alain
+On Tue, Feb 21, 2023 at 05:57:41PM +0100, Alain Volmat wrote:
 
+> should I update something to avoid this conflict before you push the
+> pull request for v6.3 ?
 
-On Tue, Feb 21, 2023 at 10:11:03AM +0100, Geert Uytterhoeven wrote:
-> Hi Stephen,
-> 
-> On Thu, Feb 16, 2023 at 1:37 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> > Today's linux-next merge of the spi tree got a conflict in:
-> >
-> >   MAINTAINERS
-> >
-> > between commit:
-> >
-> >   b3de755d6041 ("dt-bindings: i2c: i2c-st: convert to DT schema")
-> >
-> > from the i2c tree and commit:
-> >
-> >   7ec844a2c753 ("spi: spi-st-ssc: convert to DT schema")
-> >
-> > from the spi tree.
-> >
-> > I fixed it up (see below) and can carry the fix as necessary. This
-> > is now fixed as far as linux-next is concerned, but any non trivial
-> > conflicts should be mentioned to your upstream maintainer when your tree
-> > is submitted for merging.  You may also want to consider cooperating
-> > with the maintainer of the conflicting tree to minimise any particularly
-> > complex conflicts.
-> >
-> > --
-> > Cheers,
-> > Stephen Rothwell
-> >
-> > diff --cc MAINTAINERS
-> > index 71e92d3c51c6,daa33e7bb457..000000000000
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@@ -2791,7 -2925,8 +2791,8 @@@ M:      Patrice Chotard <patrice.chotard@fos
-> >   L:    linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
-> >   S:    Maintained
-> >   W:    http://www.stlinux.com
-> > + F:    Documentation/devicetree/bindings/spi/st,ssc-spi.yaml
-> >  -F:    Documentation/devicetree/bindings/i2c/i2c-st.txt
-> >  +F:    Documentation/devicetree/bindings/i2c/st,sti-i2c.yaml
-> >   F:    arch/arm/boot/dts/sti*
-> >   F:    arch/arm/mach-sti/
-> >   F:    drivers/ata/ahci_st.c
-> 
-> Thanks, but please preserve sort order.
-> 
-> Gr{oetje,eeting}s,
-> 
->                         Geert
-> 
-> -- 
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-> 
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                 -- Linus Torvalds
+No, it's fine.
+
+Please don't top post, reply in line with needed context.  This allows
+readers to readily follow the flow of conversation and understand what
+you are talking about and also helps ensure that everything in the
+discussion is being addressed.
+
+--KAJzZplwoo3a+Wx5
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmP0+bQACgkQJNaLcl1U
+h9Dwjgf+JImyOC1iwoQTkysyQOyUpH4SoFTff9yxJz8dB6gDovtG4b5qktoSO29W
+sx7F8yYiri0iZSccTA+uaO6OpTVZa+Wnna+zN4EgTBoC00uGhWP/Xo7iutX7O1p3
+MQ8dYev2imIAH+SfddS67eP11OxfNvV3bLYCwGiWWYJ3bxHDGpBqm44o/vOoy5UD
+LLQAYFlgDJdJl0z8w9saRiiCRPDfh1xhyEFc2rMQtu2AulDX5H2+7yKSA44vbLy9
+V2ukLqNOXfNTOzkVMZCeKMmJYlY/vc72p+3ndFJqT3J+/XinNVKUJUud1psC6WFF
+r4gDQgKjVx4RD9GYJvJ+JkPI3c6M5w==
+=gK+/
+-----END PGP SIGNATURE-----
+
+--KAJzZplwoo3a+Wx5--

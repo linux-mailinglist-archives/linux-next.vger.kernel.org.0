@@ -2,60 +2,62 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C50269DC94
-	for <lists+linux-next@lfdr.de>; Tue, 21 Feb 2023 10:11:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CEBB69DD1A
+	for <lists+linux-next@lfdr.de>; Tue, 21 Feb 2023 10:44:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233144AbjBUJLS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 21 Feb 2023 04:11:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51564 "EHLO
+        id S234006AbjBUJoS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 21 Feb 2023 04:44:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233070AbjBUJLS (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 21 Feb 2023 04:11:18 -0500
-Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F14AA23858;
-        Tue, 21 Feb 2023 01:11:16 -0800 (PST)
-Received: by mail-qt1-f177.google.com with SMTP id k20so428601qtj.5;
-        Tue, 21 Feb 2023 01:11:16 -0800 (PST)
+        with ESMTP id S233967AbjBUJoQ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 21 Feb 2023 04:44:16 -0500
+Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92A87241E7;
+        Tue, 21 Feb 2023 01:44:12 -0800 (PST)
+Received: by mail-qt1-f178.google.com with SMTP id bt6so3771554qtb.4;
+        Tue, 21 Feb 2023 01:44:12 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=JT/nxkLUPPvSyT1XAkGQT7iXH75kIoeZitZQ4pmGywk=;
-        b=TYWQ5/3eY8ltI6iIel7iJ6Fh1xDGIQUZUkbIVkxzcoulo4BZTfsruH0nCzJjx/rPG2
-         k1XsDDsKxO3RHpY9YExfXYF2P25Bkrk9S6lVWbPSHpqeXMZcokgCzdyn9o51+mF63MHb
-         j2SLnPmeGfyxD3pcNJvgWHDf4H9yYHkCAwXw25k780Tm5Cp7k1xh6U2qt+J7ghBecWAZ
-         pZpobwwagNyaab2euGC1HONPRPgaso+zt+YSIKIouuD+ZP3mIXlbHzrqMpkweFds14Xi
-         m7yjgEsHLFNUDxoThoaTVCOBuLTOOTIKOYk2aePPyoF4POUipA1E64IQIwJTZ72+EPeQ
-         Xjkw==
-X-Gm-Message-State: AO0yUKUJaWoSkN3/ftTYuTfgZkjOA51r35a34enB1JUcerKVTH+HCYsL
-        SWUBaMSn6mmU0v7xjFhkizeKN+2a5Jg7ew==
-X-Google-Smtp-Source: AK7set/HIY58J0mczc0Kaeyq9M2m6fkGVtBFcOjNdRwbdOXwxI1/wiWc5rwHayj1TpXX0Yz1ZJQo/A==
-X-Received: by 2002:a05:622a:d1:b0:3ba:1c07:e472 with SMTP id p17-20020a05622a00d100b003ba1c07e472mr22965931qtw.51.1676970676004;
-        Tue, 21 Feb 2023 01:11:16 -0800 (PST)
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com. [209.85.128.179])
-        by smtp.gmail.com with ESMTPSA id cn6-20020a05622a248600b003b85ed59fa2sm780333qtb.50.2023.02.21.01.11.15
+        bh=UCnM9wXqkmlFB6XnS3dzL0q9gjTVsqjq14K4eWvtVZg=;
+        b=Nw9IxtCEXDvwEZvbD/aDwTiMVLbCtx8YXxbzE9dHEezq5UUlIqoAECJcE/MqhdzQb4
+         M+soudesqmvm4lbYVynSo5ouY2ESLIcJ1knntEBJqx6865Q3WRLgNBNQJ46jwGsVan/w
+         WPBeAqX1KKaE3P3rz9JTp6pFWLZwVbD1RqtaEgRTpa7McucfvDbB/2Pg3tN8AM1BGemI
+         kE7SkEry6TwIS633BxpddpH55pes4ObJXjD8IYdYbTb0kaZHx+i0hnTUqleurAL8Db1g
+         CYLr3YHiQadSOoDGt++7dvh+bsogAkmeINGpHA+Ir3yIvkrGo3EJmnD65tClqdO1mXBp
+         sbmQ==
+X-Gm-Message-State: AO0yUKVZe7mexwIy2OWwQYxdjwY4AQpV1x32r+iX8yuh1mJWehN532h2
+        0cVNLpmXEb618OjZQmwrY6i2zGXpBDM0qQ==
+X-Google-Smtp-Source: AK7set8Jzc01sdrswJREkxD3EmcR5f9hxxyMDyo2+Zn28PtYd+zrgG2wCsxz7Mot4825XGtXy9zJbA==
+X-Received: by 2002:ac8:594b:0:b0:3b4:79f8:26c3 with SMTP id 11-20020ac8594b000000b003b479f826c3mr8439258qtz.33.1676972651355;
+        Tue, 21 Feb 2023 01:44:11 -0800 (PST)
+Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com. [209.85.219.182])
+        by smtp.gmail.com with ESMTPSA id s204-20020a3745d5000000b0071b368cf074sm1593926qka.118.2023.02.21.01.44.09
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Feb 2023 01:11:15 -0800 (PST)
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-536bf92b55cso43588777b3.12;
-        Tue, 21 Feb 2023 01:11:15 -0800 (PST)
-X-Received: by 2002:a81:d351:0:b0:536:e16d:23ea with SMTP id
- d17-20020a81d351000000b00536e16d23eamr47472ywl.526.1676970674915; Tue, 21 Feb
- 2023 01:11:14 -0800 (PST)
+        Tue, 21 Feb 2023 01:44:10 -0800 (PST)
+Received: by mail-yb1-f182.google.com with SMTP id d14so4038041ybn.2;
+        Tue, 21 Feb 2023 01:44:09 -0800 (PST)
+X-Received: by 2002:a05:6902:2d0:b0:920:2b79:84b4 with SMTP id
+ w16-20020a05690202d000b009202b7984b4mr1039329ybh.386.1676972649696; Tue, 21
+ Feb 2023 01:44:09 -0800 (PST)
 MIME-Version: 1.0
-References: <20230216113035.3050871a@canb.auug.org.au>
-In-Reply-To: <20230216113035.3050871a@canb.auug.org.au>
+References: <20230214124001.5f5341b4@canb.auug.org.au>
+In-Reply-To: <20230214124001.5f5341b4@canb.auug.org.au>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 21 Feb 2023 10:11:03 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVuudSDrWguMJiHsZ3GJhs+muK566M5GqK2vfMyBeo2pQ@mail.gmail.com>
-Message-ID: <CAMuHMdVuudSDrWguMJiHsZ3GJhs+muK566M5GqK2vfMyBeo2pQ@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the spi tree with the i2c tree
+Date:   Tue, 21 Feb 2023 10:43:58 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXC2n9dg=D4QqJQzv6cnk-WpUUSZXby-umdtGkU8fmF_A@mail.gmail.com>
+Message-ID: <CAMuHMdXC2n9dg=D4QqJQzv6cnk-WpUUSZXby-umdtGkU8fmF_A@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the usb tree with the qcom tree
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Mark Brown <broonie@kernel.org>, Wolfram Sang <wsa@the-dreams.de>,
-        Alain Volmat <avolmat@me.com>,
+Cc:     Greg KH <greg@kroah.com>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jon Hunter <jonathanh@nvidia.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Wolfram Sang <wsa@kernel.org>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -69,20 +71,20 @@ X-Mailing-List: linux-next@vger.kernel.org
 
 Hi Stephen,
 
-On Thu, Feb 16, 2023 at 1:37 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> Today's linux-next merge of the spi tree got a conflict in:
+On Tue, Feb 14, 2023 at 2:47 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> Today's linux-next merge of the usb tree got a conflict in:
 >
->   MAINTAINERS
+>   arch/arm64/configs/defconfig
 >
 > between commit:
 >
->   b3de755d6041 ("dt-bindings: i2c: i2c-st: convert to DT schema")
+>   85d81e15862a ("arm64: defconfig: Enable DisplayPort on SC8280XP laptops")
 >
-> from the i2c tree and commit:
+> from the qcom tree and commit:
 >
->   7ec844a2c753 ("spi: spi-st-ssc: convert to DT schema")
+>   1f6d59f7f82d ("arm64: defconfig: Enable UCSI support")
 >
-> from the spi tree.
+> from the usb tree.
 >
 > I fixed it up (see below) and can carry the fix as necessary. This
 > is now fixed as far as linux-next is concerned, but any non trivial
@@ -90,27 +92,26 @@ On Thu, Feb 16, 2023 at 1:37 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 > is submitted for merging.  You may also want to consider cooperating
 > with the maintainer of the conflicting tree to minimise any particularly
 > complex conflicts.
->
-> --
-> Cheers,
-> Stephen Rothwell
->
-> diff --cc MAINTAINERS
-> index 71e92d3c51c6,daa33e7bb457..000000000000
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@@ -2791,7 -2925,8 +2791,8 @@@ M:      Patrice Chotard <patrice.chotard@fos
->   L:    linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
->   S:    Maintained
->   W:    http://www.stlinux.com
-> + F:    Documentation/devicetree/bindings/spi/st,ssc-spi.yaml
->  -F:    Documentation/devicetree/bindings/i2c/i2c-st.txt
->  +F:    Documentation/devicetree/bindings/i2c/st,sti-i2c.yaml
->   F:    arch/arm/boot/dts/sti*
->   F:    arch/arm/mach-sti/
->   F:    drivers/ata/ahci_st.c
 
-Thanks, but please preserve sort order.
+Thanks for your resolution!
+
+> --- a/arch/arm64/configs/defconfig
+> +++ b/arch/arm64/configs/defconfig
+> @@@ -960,7 -946,8 +961,9 @@@ CONFIG_TYPEC_TCPCI=
+>   CONFIG_TYPEC_FUSB302=m
+>   CONFIG_TYPEC_TPS6598X=m
+>   CONFIG_TYPEC_HD3SS3220=m
+>  +CONFIG_TYPEC_MUX_GPIO_SBU=m
+> + CONFIG_TYPEC_UCSI=m
+> + CONFIG_UCSI_CCG=m
+
+CONFIG_TYPEC_MUX_GPIO_SBU=m should be last, cfr.
+drivers/usb/typec/Kconfig:source "drivers/usb/typec/ucsi/Kconfig"
+drivers/usb/typec/Kconfig:source "drivers/usb/typec/mux/Kconfig"
+
+>   CONFIG_MMC=y
+>   CONFIG_MMC_BLOCK_MINORS=32
+>   CONFIG_MMC_ARMMMCI=y
 
 Gr{oetje,eeting}s,
 

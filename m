@@ -2,49 +2,38 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 879F169DB12
-	for <lists+linux-next@lfdr.de>; Tue, 21 Feb 2023 08:20:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E57069DB63
+	for <lists+linux-next@lfdr.de>; Tue, 21 Feb 2023 08:42:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233558AbjBUHUM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 21 Feb 2023 02:20:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53006 "EHLO
+        id S233306AbjBUHme (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 21 Feb 2023 02:42:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232992AbjBUHUL (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 21 Feb 2023 02:20:11 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFDEB658F
-        for <linux-next@vger.kernel.org>; Mon, 20 Feb 2023 23:19:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676963964;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=DkIg+wanBd11Z/7UnnKjYFa+oSlHGs/qlgwPU2NatOs=;
-        b=YuKObMFMlgfTZSwwPV4j0mBQMVBm/gzb4zl4LvlcvrTWBt9lIwZ70FqW1hMklLngzcCaF1
-        LjIOjNkrW3+iMyOD/IVgLSNiR12BIE7jeej2pebX6kmFGZ4kXK6rLnCqxmqXFZAHeBz8BJ
-        B+jY/KczDy27FfvFEK0BlkB9v0s4OhQ=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-91-hys1ylktOw-SM318ZO8Oyg-1; Tue, 21 Feb 2023 02:19:20 -0500
-X-MC-Unique: hys1ylktOw-SM318ZO8Oyg-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        with ESMTP id S229697AbjBUHmd (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 21 Feb 2023 02:42:33 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5B6C23313;
+        Mon, 20 Feb 2023 23:42:30 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C29B4101A5BA;
-        Tue, 21 Feb 2023 07:19:19 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.18])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 6EACE492B05;
-        Tue, 21 Feb 2023 07:19:18 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <20230221174401.7198357d@canb.auug.org.au>
-References: <20230221174401.7198357d@canb.auug.org.au> <20230220152933.1ab8fa4a@canb.auug.org.au> <Y/N8hVWeR3AjssUC@casper.infradead.org> <20230220190157.3b43b9a7@canb.auug.org.au> <Y/Pe2xHklSr1hDtz@casper.infradead.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     dhowells@redhat.com, Matthew Wilcox <willy@infradead.org>,
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PLWTZ5DBWz4x7W;
+        Tue, 21 Feb 2023 18:42:26 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1676965347;
+        bh=NNJlaJnQ2uPkWB+DfoayA3t3cxA5NsFvq1iXGovK7i8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=uEKYT9n5GowZYqmKQyQe7GLQWOMY5xtrsVELMLHUNRNdxVwa3+CNDrXH0pKuzxTrt
+         bn+2QDW0/uJikzxH/loMMRamEh4psbNsuE6JhXtN9VugqAngirjulmxi87bMMdv0KS
+         PQqaFbxDZ88IxhqWBlyaSsKJcHLae53X74wel273xx5/tWHtKzFnZSibV/U6wqJoGj
+         HSGvph8gBtmPn/WySkyIOrfsh0PUbmOgapsXadPJlWxSScBucwviFYUgw7ewfVPVNP
+         NV8pSIUGb1lnzYRbE7fjlNy0Dm7CGqOZF3bCbWh5trSN44hT4f85LyMNgFMLGWsu8r
+         7nJQOns+fm2Ug==
+Date:   Tue, 21 Feb 2023 18:42:25 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Howells <dhowells@redhat.com>
+Cc:     Matthew Wilcox <willy@infradead.org>,
         Andrew Morton <akpm@linux-foundation.org>,
         Steve French <smfrench@gmail.com>,
         CIFS <linux-cifs@vger.kernel.org>,
@@ -52,34 +41,76 @@ Cc:     dhowells@redhat.com, Matthew Wilcox <willy@infradead.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Steve French <stfrench@microsoft.com>,
         "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
-Subject: Re: linux-next: manual merge of the mm-stable tree with the cifs tree
+Subject: Re: linux-next: manual merge of the mm-stable tree with the cifs
+ tree
+Message-ID: <20230221184225.0e734f0e@canb.auug.org.au>
+In-Reply-To: <2351091.1676963957@warthog.procyon.org.uk>
+References: <20230221174401.7198357d@canb.auug.org.au>
+        <20230220152933.1ab8fa4a@canb.auug.org.au>
+        <Y/N8hVWeR3AjssUC@casper.infradead.org>
+        <20230220190157.3b43b9a7@canb.auug.org.au>
+        <Y/Pe2xHklSr1hDtz@casper.infradead.org>
+        <2351091.1676963957@warthog.procyon.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <2351090.1676963957.1@warthog.procyon.org.uk>
-Date:   Tue, 21 Feb 2023 07:19:17 +0000
-Message-ID: <2351091.1676963957@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/BQfQQmO37yFZXaMtd6DZd.r";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+--Sig_/BQfQQmO37yFZXaMtd6DZd.r
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> in the cifs tree introduces a new usage of it in code that is used in
-> the cifs code ... so someone has to figure out what the merge
-> resolution is between the 2 trees (how to replace that new usage) and
-> let me know and then we need to test that combination for a while
-> before asking Linus to take it.
+Hi David,
 
-It seems I can't fix my patch and give Steve a replacement patch because the
-new filemap_get_folios_tag() that I would need to use hasn't been added
-upstream yet.  Do we have any idea when the mm tree might land?
+On Tue, 21 Feb 2023 07:19:17 +0000 David Howells <dhowells@redhat.com> wrot=
+e:
+>
+> Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>=20
+> > in the cifs tree introduces a new usage of it in code that is used in
+> > the cifs code ... so someone has to figure out what the merge
+> > resolution is between the 2 trees (how to replace that new usage) and
+> > let me know and then we need to test that combination for a while
+> > before asking Linus to take it. =20
+>=20
+> It seems I can't fix my patch and give Steve a replacement patch because =
+the
+> new filemap_get_folios_tag() that I would need to use hasn't been added
+> upstream yet.  Do we have any idea when the mm tree might land?
 
-David
+Andrew has already asked for it to be merged, so its up to Linus.
 
+You could fetch it yourself and do a trial merge and send me your
+resolution ..
+
+git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm tags/mm-stable-2023-0=
+2-20-13-37
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/BQfQQmO37yFZXaMtd6DZd.r
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmP0deEACgkQAVBC80lX
+0Gy8agf+NF0EKA/5akG/J9oSYE2bLsctMt1AaZRa4fQtEEpPBmPM//r95sTGbIMd
+V/UnrtBpjAlI5ibR6MCMGFK2PpXYZEqgKhl02988ggKRhlwrN/AwuN+uEKzlY0Sd
+dAnQUW8RfqvgcwFmwD1tsxuJRM6HxXSccx8s8RGFaBlwzAhQiOh4/pyD0lsy/bhY
+NGQTDDzTniZ2naiXJPESWJ1l2jOr+qQWoZOuwbcFjOH1na/78RKX3LZPj2e6hZ0u
+Z0/foMjQiGmvfz0M5ulTghTkKEDOIiwpI33JYQsxKHypW2n76UTMMsrJkPnB3i5+
+5PiAoW4a6sugyxAB1lGMAvoc0FixJg==
+=gC/P
+-----END PGP SIGNATURE-----
+
+--Sig_/BQfQQmO37yFZXaMtd6DZd.r--

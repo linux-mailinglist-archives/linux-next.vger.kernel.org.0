@@ -2,68 +2,48 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C33669D7AD
-	for <lists+linux-next@lfdr.de>; Tue, 21 Feb 2023 01:47:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F45369D80F
+	for <lists+linux-next@lfdr.de>; Tue, 21 Feb 2023 02:40:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232800AbjBUArr (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 20 Feb 2023 19:47:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34954 "EHLO
+        id S231976AbjBUBkP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 20 Feb 2023 20:40:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229709AbjBUArr (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 20 Feb 2023 19:47:47 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 025F71C7F1;
-        Mon, 20 Feb 2023 16:47:46 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id m7so3601026lfj.8;
-        Mon, 20 Feb 2023 16:47:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=YUYO8E9O6ODuJMvaLPRZa6MMp8VX9JxblM5j/UG0tI8=;
-        b=f8ZIo8vNCNCQuOQ88sg7/nVSh6iZjpYt8b4J7ArdWqIzKGUeQT4JUHXTBMah7cvcq7
-         iEpdop6Up/38Bi/GEtxaJ4HPsqGOIgl0L5Br0su3btk9uMxVYIN1Be2sXQ0Rf4ThqFS9
-         K/9/czmjAsxFykTJLn6GQEnz57obC4l9Y2YJhFImzNOhvqkv8gA00n55WDafCvOvxi3s
-         xIY+SRFCCsQbv1g0UKLqVBiX3qB5xHTu+DWXhBhC1V1+PoZ38GZX3rkJEn2RRTmH83ZC
-         ADuXY75mcJT/R+nBr4BTOEZ5WaqIwlXh3iq5g9OrZzhAOCLcyYLf/0zcsYIn9tixizj+
-         EIwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YUYO8E9O6ODuJMvaLPRZa6MMp8VX9JxblM5j/UG0tI8=;
-        b=QIBgMzEghACYu3V2fZpZga0wn8Ch7xRbKVp6Xe8eDk1RWg79VERXqGi0v9N2xeClyl
-         /mxV4v2kqdg4F0Gmj2zmr/9wWlFHKr2Cvt15v5j+30LQvC29HjGvx6cv6g6N42h+Dw0A
-         RlNa9stMot3KiNGU+mW74XFbgSbBDknFLIiZ0GpQL/+Bv04vSBFGVJrWrAgK9Lll7qE8
-         QFM9cfDOBEybbK79v7IW7OCE8bW25ImQq5jp0SB+FCMgzrVoXylREaQ7WSloYidx7L72
-         sFox6gWZ66KiciqQUBd4gMKopSGIin57e79/Fi5cHg2qDFehS8uq1t4ErQXmjkW4BIh+
-         zBlw==
-X-Gm-Message-State: AO0yUKWGGLbAe8rzDCACPSBHLFvL1hfFkO4mVHDPssTUURVVMYxaJQiE
-        8yramwZl7nN2p4qqUZDDiuv37YQDneTX2ujjx+3UuInMa8k=
-X-Google-Smtp-Source: AK7set9hY4nprlqYsh+SRppL45xiTx/FRnmHRpvTiSSb44KajRfLchJpvPtkFWpqFBz30rYlLu25EaV26LNHs8QYYjc=
-X-Received: by 2002:ac2:50da:0:b0:4db:2554:93a6 with SMTP id
- h26-20020ac250da000000b004db255493a6mr1104224lfm.10.1676940464179; Mon, 20
- Feb 2023 16:47:44 -0800 (PST)
-MIME-Version: 1.0
-References: <20230220115056.22751cf6@canb.auug.org.au> <20230221113942.0d0ca13c@canb.auug.org.au>
-In-Reply-To: <20230221113942.0d0ca13c@canb.auug.org.au>
-From:   Steve French <smfrench@gmail.com>
-Date:   Mon, 20 Feb 2023 18:47:33 -0600
-Message-ID: <CAH2r5msX0HOjqHLmkpXOx0PQdjFAZgqeb22kHQ_F2RpUKBWG7A@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the block tree with the cifs tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Jens Axboe <axboe@kernel.dk>, CIFS <linux-cifs@vger.kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        David Howells <dhowells@redhat.com>,
+        with ESMTP id S231872AbjBUBkO (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 20 Feb 2023 20:40:14 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5675B22008;
+        Mon, 20 Feb 2023 17:40:12 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PLMRZ35bRz4x5c;
+        Tue, 21 Feb 2023 12:40:09 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1676943610;
+        bh=R633ZxmFQr05Wn7nHXnT2zdbX27p0BgtOVKvAKbviB4=;
+        h=Date:From:To:Cc:Subject:From;
+        b=NvSHKmlLYKF5iVuCmrtMCLfnFJiduJnzuarxfAQ1r6XLc7NgznUX/O32CzqoM5ZYC
+         dlj4/O9GCcXVqX6YNwADoSoY1LEqpLXpECmQrUnqwjesl2J/Xdt+BomGV0370BSJJ3
+         vaoTYCWS5HMMhpfg2hVpdAv0nLs0SwTI1Jy2eE58I2XHQ9HZ5h//638k8T89SttKRs
+         HgdeAA0oB2QR2VjQxAeu1Le9aFVCob+if44Qx46Sbr+XJ3oAGcRCdyzIO7c1GtlyO3
+         jlZhOWaleq5ftMEJB0WTmvIWicKiSDhyG9o5bXA+4VCGo4fJCNI1ucRNsQ3eE/NLXk
+         OksIm0aGuyTrA==
+Date:   Tue, 21 Feb 2023 12:40:08 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     "D. Wythe" <alibuda@linux.alibaba.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Steve French <stfrench@microsoft.com>,
-        Paulo Alcantara <pc@cjr.nz>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the net-next tree
+Message-ID: <20230221124008.6303c330@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/q.NHokfwG8o5oNYogd0b7kn";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,53 +51,115 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Should I rebase my cifs for-next branch on Christoph's patch (now in
-mainline) to make it easier to merge my branch later in the week?
+--Sig_/q.NHokfwG8o5oNYogd0b7kn
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-       cifs: use bvec_set_page to initialize bvecs
-         Use the bvec_set_page helper to initialize bvecs.
-       Signed-off-by: Christoph Hellwig <hch@lst.de>
+Hi all,
 
-This would avoid merge conflicts in various of David Howell's patches
-in my tree.
+After merging the net-next tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-Thoughts?
+In file included from include/linux/notifier.h:14,
+                 from arch/x86/include/asm/uprobes.h:13,
+                 from include/linux/uprobes.h:49,
+                 from include/linux/mm_types.h:16,
+                 from include/linux/buildid.h:5,
+                 from include/linux/module.h:14,
+                 from net/smc/af_smc.c:22:
+net/smc/af_smc.c: In function 'smcr_serv_conf_first_link':
+net/smc/af_smc.c:1842:20: error: passing argument 1 of 'mutex_lock_nested' =
+from incompatible pointer type [-Werror=3Dincompatible-pointer-types]
+ 1842 |         mutex_lock(&link->lgr->llc_conf_mutex);
+      |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                    |
+      |                    struct rw_semaphore *
+include/linux/mutex.h:187:44: note: in definition of macro 'mutex_lock'
+  187 | #define mutex_lock(lock) mutex_lock_nested(lock, 0)
+      |                                            ^~~~
+include/linux/mutex.h:178:45: note: expected 'struct mutex *' but argument =
+is of type 'struct rw_semaphore *'
+  178 | extern void mutex_lock_nested(struct mutex *lock, unsigned int subc=
+lass);
+      |                               ~~~~~~~~~~~~~~^~~~
+net/smc/af_smc.c:1845:22: error: passing argument 1 of 'mutex_unlock' from =
+incompatible pointer type [-Werror=3Dincompatible-pointer-types]
+ 1845 |         mutex_unlock(&link->lgr->llc_conf_mutex);
+      |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                      |
+      |                      struct rw_semaphore *
+include/linux/mutex.h:218:40: note: expected 'struct mutex *' but argument =
+is of type 'struct rw_semaphore *'
+  218 | extern void mutex_unlock(struct mutex *lock);
+      |                          ~~~~~~~~~~~~~~^~~~
 
-On Mon, Feb 20, 2023 at 6:39 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> On Mon, 20 Feb 2023 11:50:56 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> >
-> > Today's linux-next merge of the block tree got a conflict in:
-> >
-> >   fs/cifs/smb2ops.c
-> >
-> > between commit:
-> >
-> >   8378eea2e41f ("cifs: Change the I/O paths to use an iterator rather than a page list")
-> >
-> > from the cifs tree and commit:
-> >
-> >   220ae4a5c2ba ("cifs: use bvec_set_page to initialize bvecs")
-> >
-> > from the block tree.
-> >
-> > I fixed it up (the former removed the code updated by the latter) and
-> > can carry the fix as necessary. This is now fixed as far as linux-next
-> > is concerned, but any non trivial conflicts should be mentioned to your
-> > upstream maintainer when your tree is submitted for merging.  You may
-> > also want to consider cooperating with the maintainer of the conflicting
-> > tree to minimise any particularly complex conflicts.
->
-> This is now a conflict between the cifs tree and Linus' tree.
-> --
-> Cheers,
-> Stephen Rothwell
+Caused by commit
+
+  b5dd4d698171 ("net/smc: llc_conf_mutex refactor, replace it with rw_semap=
+hore")
+
+interacting with commit
+
+  e40b801b3603 ("net/smc: fix potential panic dues to unprotected smc_llc_s=
+rv_add_link()")
+
+from the net tree.
+
+I applied the following merge resolution patch.
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Tue, 21 Feb 2023 12:30:46 +1100
+Subject: [PATCH] fix up for "net/smc: llc_conf_mutex refactor, replace it w=
+ith rw_semaphore"
+
+interacting with "net/smc: fix potential panic dues to unprotected smc_llc_=
+srv_add_link()"
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ net/smc/af_smc.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/net/smc/af_smc.c b/net/smc/af_smc.c
+index 0f6a61e44e93..a4cccdfdc00a 100644
+--- a/net/smc/af_smc.c
++++ b/net/smc/af_smc.c
+@@ -1839,10 +1839,10 @@ static int smcr_serv_conf_first_link(struct smc_soc=
+k *smc)
+ 	smc_llc_link_active(link);
+ 	smcr_lgr_set_type(link->lgr, SMC_LGR_SINGLE);
+=20
+-	mutex_lock(&link->lgr->llc_conf_mutex);
++	down_write(&link->lgr->llc_conf_mutex);
+ 	/* initial contact - try to establish second link */
+ 	smc_llc_srv_add_link(link, NULL);
+-	mutex_unlock(&link->lgr->llc_conf_mutex);
++	up_write(&link->lgr->llc_conf_mutex);
+ 	return 0;
+ }
+=20
+--=20
+2.39.1
 
 
+--=20
+Cheers,
+Stephen Rothwell
 
--- 
-Thanks,
+--Sig_/q.NHokfwG8o5oNYogd0b7kn
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-Steve
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmP0IPgACgkQAVBC80lX
+0Gy7Dgf8DyiUAhmBBjXWXvL9D7J02tPw9+FDi7zqJ5JTGVfk+WT7g+ZhYpOsFLfh
+6H2NVRJvHSwI7vJEdJb8gD56NAj7HaxiH+SaFG6zpUFFGXj41qdu8gyphbrkBZ3m
+UlW2+TJuxpKzgTLAQwKIhb1s3aMzMiBd2/CRWr+DNEr/GfHuwDyoFwNbvsPFvX+n
+W2PvG/ZUP6UWJKL8blnD94mNkyWNA6x1BsMa/PABnWvlFtXC/AtoXaxOBvx4NBQp
+MBnpkoCjXIq+Bi4Juzn+JtuDmatDoAo8+ZdfGW6zcgfRj7daVZhZcpiSYH0BS6bc
+cRtpJ2mrR3aDgWuqQCIFhuSaStDqaw==
+=SfSQ
+-----END PGP SIGNATURE-----
+
+--Sig_/q.NHokfwG8o5oNYogd0b7kn--

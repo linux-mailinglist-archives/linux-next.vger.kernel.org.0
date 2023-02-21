@@ -2,80 +2,64 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39A3669DC3F
-	for <lists+linux-next@lfdr.de>; Tue, 21 Feb 2023 09:40:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C50269DC94
+	for <lists+linux-next@lfdr.de>; Tue, 21 Feb 2023 10:11:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233253AbjBUIkf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 21 Feb 2023 03:40:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58278 "EHLO
+        id S233144AbjBUJLS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 21 Feb 2023 04:11:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233792AbjBUIk0 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 21 Feb 2023 03:40:26 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 927D223640;
-        Tue, 21 Feb 2023 00:39:51 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id s26so13858261edw.11;
-        Tue, 21 Feb 2023 00:39:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+s3LghqL/xNmAVCsHxyUzyrjEgIj+4vMZ5iip7icUXw=;
-        b=BeQAjFO9ydOReLQGkvdAAU/LRuf7WcC3QQk2V7giMfmBzOpAzm9xlK5CC7pqR25XYO
-         vlGacp8gx2xLItmgNYKS/IMUAEXYqgc+2k0Llwn68G+WN8w0cw1eIrlBvugyaO8H4lS/
-         BzIg3kd5h5tmPj7T9vF1Fs/6Dk+Iqc87s1guyXkDF9rMOCXyoQZIOv3D1LDA4GZHESE0
-         EYzFl3AVlvWz0sIpKB8UluoBij7uzBsbQK8gurSlP8igsiOZW6EplyCpUfnkjf9HNkcM
-         RlhbNcoeXHkIW/eq4lkUtsoDgBuMy/6lmqx1/QUZVYjWkOZ3D5R0BXviU0TBpy30MiOL
-         YvNQ==
+        with ESMTP id S233070AbjBUJLS (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 21 Feb 2023 04:11:18 -0500
+Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F14AA23858;
+        Tue, 21 Feb 2023 01:11:16 -0800 (PST)
+Received: by mail-qt1-f177.google.com with SMTP id k20so428601qtj.5;
+        Tue, 21 Feb 2023 01:11:16 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+s3LghqL/xNmAVCsHxyUzyrjEgIj+4vMZ5iip7icUXw=;
-        b=MS8fCp7itGrHuddGm4q613S5b1MRDvov8PPOx3deUmr+5BsVSDVynaLkCywW2dy0/D
-         qpRa5ia+zViGntKC4KNUiyXjRLinHq/NNrKdQR+ukcc+K+oVa9ykv/l/VFzMA5CKepvy
-         wh5upOY9W6hqmO8APryrQPPSaBfI8nuH1kpuSsJV86u9g2hIqRZ0yeInbqEgV2eDMJnn
-         S7scNu3aJx0GuyLWFXATQp+iZ3iexV/traygZjafQhBcjkxQ7I9sh8hxACUxPgkCJZWc
-         v9Wa3QkkfZIblnoEvXTh2qNu2emzixMYdkKeCs5TfdOMKuySE+jKNhb7apee/NzPVQ38
-         LqCA==
-X-Gm-Message-State: AO0yUKWXHcRHsPq40iKatsleJf4+N4gQm9ykotL4unEs5ai3+ZywfaY1
-        JtYTEHJaO86SDSkHAwcE2Po=
-X-Google-Smtp-Source: AK7set8zE5R9imDjkfkNuxiJSk0+e0JA3dNsTUxWIeITlzljnpOOVxOFMIa6S9dDuddJcALQVRJnQQ==
-X-Received: by 2002:a17:906:2358:b0:88d:d700:fe15 with SMTP id m24-20020a170906235800b0088dd700fe15mr10557817eja.0.1676968789991;
-        Tue, 21 Feb 2023 00:39:49 -0800 (PST)
-Received: from gmail.com (1F2EF163.nat.pool.telekom.hu. [31.46.241.99])
-        by smtp.gmail.com with ESMTPSA id g23-20020a170906539700b008b128106fc7sm6835503ejo.46.2023.02.21.00.39.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Feb 2023 00:39:49 -0800 (PST)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Tue, 21 Feb 2023 09:39:47 +0100
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Juergen Gross <jgross@suse.com>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Xen Devel <xen-devel@lists.xenproject.org>,
-        Per Bilse <per.bilse@citrix.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patches in the xen-tip tree
-Message-ID: <Y/SDU7d2LS9ka1+a@gmail.com>
-References: <20230214124700.22f0a62e@canb.auug.org.au>
- <Y+tu6Xqqb6cdiDAA@hirez.programming.kicks-ass.net>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JT/nxkLUPPvSyT1XAkGQT7iXH75kIoeZitZQ4pmGywk=;
+        b=TYWQ5/3eY8ltI6iIel7iJ6Fh1xDGIQUZUkbIVkxzcoulo4BZTfsruH0nCzJjx/rPG2
+         k1XsDDsKxO3RHpY9YExfXYF2P25Bkrk9S6lVWbPSHpqeXMZcokgCzdyn9o51+mF63MHb
+         j2SLnPmeGfyxD3pcNJvgWHDf4H9yYHkCAwXw25k780Tm5Cp7k1xh6U2qt+J7ghBecWAZ
+         pZpobwwagNyaab2euGC1HONPRPgaso+zt+YSIKIouuD+ZP3mIXlbHzrqMpkweFds14Xi
+         m7yjgEsHLFNUDxoThoaTVCOBuLTOOTIKOYk2aePPyoF4POUipA1E64IQIwJTZ72+EPeQ
+         Xjkw==
+X-Gm-Message-State: AO0yUKUJaWoSkN3/ftTYuTfgZkjOA51r35a34enB1JUcerKVTH+HCYsL
+        SWUBaMSn6mmU0v7xjFhkizeKN+2a5Jg7ew==
+X-Google-Smtp-Source: AK7set/HIY58J0mczc0Kaeyq9M2m6fkGVtBFcOjNdRwbdOXwxI1/wiWc5rwHayj1TpXX0Yz1ZJQo/A==
+X-Received: by 2002:a05:622a:d1:b0:3ba:1c07:e472 with SMTP id p17-20020a05622a00d100b003ba1c07e472mr22965931qtw.51.1676970676004;
+        Tue, 21 Feb 2023 01:11:16 -0800 (PST)
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com. [209.85.128.179])
+        by smtp.gmail.com with ESMTPSA id cn6-20020a05622a248600b003b85ed59fa2sm780333qtb.50.2023.02.21.01.11.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Feb 2023 01:11:15 -0800 (PST)
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-536bf92b55cso43588777b3.12;
+        Tue, 21 Feb 2023 01:11:15 -0800 (PST)
+X-Received: by 2002:a81:d351:0:b0:536:e16d:23ea with SMTP id
+ d17-20020a81d351000000b00536e16d23eamr47472ywl.526.1676970674915; Tue, 21 Feb
+ 2023 01:11:14 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y+tu6Xqqb6cdiDAA@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+References: <20230216113035.3050871a@canb.auug.org.au>
+In-Reply-To: <20230216113035.3050871a@canb.auug.org.au>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 21 Feb 2023 10:11:03 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVuudSDrWguMJiHsZ3GJhs+muK566M5GqK2vfMyBeo2pQ@mail.gmail.com>
+Message-ID: <CAMuHMdVuudSDrWguMJiHsZ3GJhs+muK566M5GqK2vfMyBeo2pQ@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the spi tree with the i2c tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Mark Brown <broonie@kernel.org>, Wolfram Sang <wsa@the-dreams.de>,
+        Alain Volmat <avolmat@me.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Wolfram Sang <wsa@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
         SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,35 +67,58 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+Hi Stephen,
 
-* Peter Zijlstra <peterz@infradead.org> wrote:
+On Thu, Feb 16, 2023 at 1:37 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> Today's linux-next merge of the spi tree got a conflict in:
+>
+>   MAINTAINERS
+>
+> between commit:
+>
+>   b3de755d6041 ("dt-bindings: i2c: i2c-st: convert to DT schema")
+>
+> from the i2c tree and commit:
+>
+>   7ec844a2c753 ("spi: spi-st-ssc: convert to DT schema")
+>
+> from the spi tree.
+>
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+>
+> --
+> Cheers,
+> Stephen Rothwell
+>
+> diff --cc MAINTAINERS
+> index 71e92d3c51c6,daa33e7bb457..000000000000
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@@ -2791,7 -2925,8 +2791,8 @@@ M:      Patrice Chotard <patrice.chotard@fos
+>   L:    linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+>   S:    Maintained
+>   W:    http://www.stlinux.com
+> + F:    Documentation/devicetree/bindings/spi/st,ssc-spi.yaml
+>  -F:    Documentation/devicetree/bindings/i2c/i2c-st.txt
+>  +F:    Documentation/devicetree/bindings/i2c/st,sti-i2c.yaml
+>   F:    arch/arm/boot/dts/sti*
+>   F:    arch/arm/mach-sti/
+>   F:    drivers/ata/ahci_st.c
 
-> On Tue, Feb 14, 2023 at 12:47:00PM +1100, Stephen Rothwell wrote:
-> > Hi all,
-> > 
-> > The following commits are also in the tip tree as different commits
-> > (but the same patches):
-> > 
-> >   415dab3c1796 ("drivers/xen/hypervisor: Expose Xen SIF flags to userspace")
-> >   336f560a8917 ("x86/xen: don't let xen_pv_play_dead() return")
-> >   f697cb00afa9 ("x86/xen: mark xen_pv_play_dead() as __noreturn")
-> > 
-> > These are commits
-> > 
-> >   859761e770f8 ("drivers/xen/hypervisor: Expose Xen SIF flags to userspace")
-> >   076cbf5d2163 ("x86/xen: don't let xen_pv_play_dead() return")
-> >   1aff0d2658e5 ("x86/xen: mark xen_pv_play_dead() as __noreturn")
-> > 
-> > in the tip tree.
-> 
-> This was intentional (dependencies) and the plan is to only offer the
-> tip branch for merge after the Xen tree goes in.
+Thanks, but please preserve sort order.
 
-The rebase & *duplication* was not intentional at all - I assumed 
-1aff0d2658e5 won't get rebased. :-/
+Gr{oetje,eeting}s,
 
-We'll probably have to redo the objtool tree.
+                        Geert
 
-Thanks,
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-	Ingo
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

@@ -2,34 +2,49 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76FAD69E2C4
-	for <lists+linux-next@lfdr.de>; Tue, 21 Feb 2023 15:55:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82B8D69E316
+	for <lists+linux-next@lfdr.de>; Tue, 21 Feb 2023 16:08:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233901AbjBUOzz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 21 Feb 2023 09:55:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46874 "EHLO
+        id S233498AbjBUPIj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 21 Feb 2023 10:08:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233907AbjBUOzy (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 21 Feb 2023 09:55:54 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80394298C3;
-        Tue, 21 Feb 2023 06:55:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=GJ/lGaiDep3rI6o4zuif/LYm8VGuPp/Xyo4Q403/+AY=; b=itvDGE7OyiwtJnUFZGW72WFl3Q
-        aN9oxHPb8Sg+o5BEQa9qjUIDPJT6mqFkhnKXt5BVO6i20AugV7v2NUCf/jxK1TucEiLbz4mI3ofDJ
-        etJwCGBJR9na9yTI3F7BO2XQCE2lTXPOjXxrqfKK+9wvUrDgmvw+5nn83aeV183j6xpwryXj18Xnf
-        MQr6xCT7y/H59ztpr4guMzQEuOA1SdDV+oAwoupwjab3Xpti3dXz4lU+2jiiOaxK9Up/1ACc2BCI/
-        PJtpHU/1SAZ3B5ZarJ4m3PL4fVgVVusXk54KHW7UXmOZGTXURaZ1rbmyzTX8xfF/ktftkjipMVPBm
-        NThVXqhA==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pUU3E-00Cgmo-C1; Tue, 21 Feb 2023 14:55:28 +0000
-Date:   Tue, 21 Feb 2023 14:55:28 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     David Howells <dhowells@redhat.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        with ESMTP id S234187AbjBUPIf (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 21 Feb 2023 10:08:35 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A4AB35AF
+        for <linux-next@vger.kernel.org>; Tue, 21 Feb 2023 07:07:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676992071;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=nRbZSwTHEqvgaS+hpisyueNsusAq0MvEujgh1o0fe7Y=;
+        b=HPm0uFTzgUfuY0ar574N9TngS8K45oNLjmebyKLpfuP+TuWbysvNZKeDOkg52raVqivi2E
+        nW9M7KjDcDBwT93g4yMH47t2cCnFTNw+r9DPl0wl2Z9WwpHGEX1pUn7bIl9d1WA4r392Xa
+        x6ZvHYwhBcaq8f7H/sfgp+a25+Z8PlE=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-41-ZnrB6bV6Ogi6AgxSPHU7VA-1; Tue, 21 Feb 2023 10:07:49 -0500
+X-MC-Unique: ZnrB6bV6Ogi6AgxSPHU7VA-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B81FD3C1834B;
+        Tue, 21 Feb 2023 15:05:28 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.18])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 16C99C15BA0;
+        Tue, 21 Feb 2023 15:05:26 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <Y/TbYGXC4HKunymf@casper.infradead.org>
+References: <Y/TbYGXC4HKunymf@casper.infradead.org> <20230221184225.0e734f0e@canb.auug.org.au> <20230221174401.7198357d@canb.auug.org.au> <20230220152933.1ab8fa4a@canb.auug.org.au> <Y/N8hVWeR3AjssUC@casper.infradead.org> <20230220190157.3b43b9a7@canb.auug.org.au> <Y/Pe2xHklSr1hDtz@casper.infradead.org> <2351091.1676963957@warthog.procyon.org.uk> <2885897.1676990364@warthog.procyon.org.uk>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     dhowells@redhat.com, Stephen Rothwell <sfr@canb.auug.org.au>,
         "Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
         Andrew Morton <akpm@linux-foundation.org>,
         Steve French <smfrench@gmail.com>,
@@ -40,46 +55,45 @@ Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
         Jeff Layton <jlayton@kernel.org>, linux-cifs@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
 Subject: Re: linux-next: manual merge of the mm-stable tree with the cifs tree
-Message-ID: <Y/TbYGXC4HKunymf@casper.infradead.org>
-References: <20230221184225.0e734f0e@canb.auug.org.au>
- <20230221174401.7198357d@canb.auug.org.au>
- <20230220152933.1ab8fa4a@canb.auug.org.au>
- <Y/N8hVWeR3AjssUC@casper.infradead.org>
- <20230220190157.3b43b9a7@canb.auug.org.au>
- <Y/Pe2xHklSr1hDtz@casper.infradead.org>
- <2351091.1676963957@warthog.procyon.org.uk>
- <2885897.1676990364@warthog.procyon.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2885897.1676990364@warthog.procyon.org.uk>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2887474.1676991926.1@warthog.procyon.org.uk>
+Date:   Tue, 21 Feb 2023 15:05:26 +0000
+Message-ID: <2887475.1676991926@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Feb 21, 2023 at 02:39:24PM +0000, David Howells wrote:
-> -		folio = page_folio(head_page);
-> -		start = folio_pos(folio); /* May regress with THPs */
-> +		for (i = 0; i < n; i++) {
-> +			folio = fbatch.folios[i];
-> +			start = folio_pos(folio); /* May regress with THPs */
+Matthew Wilcox <willy@infradead.org> wrote:
 
-What does this comment mean?
+> > +			start = folio_pos(folio); /* May regress with THPs */
+> 
+> What does this comment mean?
 
-> +			/* At this point we hold neither the i_pages lock nor the
-> +			 * page lock: the page may be truncated or invalidated
-> +			 * (changing page->mapping to NULL), or even swizzled
-> +			 * back from swapper_space to tmpfs file mapping
+"start" may end up going backwards if it's pointing to the middle of a folio.
 
-Where does this comment come from?  This is cifs, not tmpfs.  You'll
-never be asked to writeback a page from the swap cache.  Dirty pages
-can be truncated, so the first half of the comment is still accurate.
-I'd rather it moved down to below the folio lock, and was rephrased
-so it described why we're checking everything again.
+> > +			/* At this point we hold neither the i_pages lock nor the
+> > +			 * page lock: the page may be truncated or invalidated
+> > +			 * (changing page->mapping to NULL), or even swizzled
+> > +			 * back from swapper_space to tmpfs file mapping
+> 
+> Where does this comment come from?  This is cifs, not tmpfs.  You'll
+> never be asked to writeback a page from the swap cache.  Dirty pages
+> can be truncated, so the first half of the comment is still accurate.
+> I'd rather it moved down to below the folio lock, and was rephrased
+> so it described why we're checking everything again.
 
-The actual code looks right.
+I picked it up into afs from somewhere - nfs maybe?  The same comment is in
+fs/btrfs/extent_io.c.  grep for 'swizzled' in fs/.  You modified the comment
+in b93b016313b3ba8003c3b8bb71f569af91f19fc7 in 2018, so it's been around a
+while.
+
+David
+

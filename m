@@ -2,110 +2,89 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA38869F416
-	for <lists+linux-next@lfdr.de>; Wed, 22 Feb 2023 13:13:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74A1469F473
+	for <lists+linux-next@lfdr.de>; Wed, 22 Feb 2023 13:23:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231452AbjBVMNt (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 22 Feb 2023 07:13:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33238 "EHLO
+        id S231949AbjBVMXE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 22 Feb 2023 07:23:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229884AbjBVMNs (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 22 Feb 2023 07:13:48 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D705B7A87;
-        Wed, 22 Feb 2023 04:13:45 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PMFS41Nh5z4x7W;
-        Wed, 22 Feb 2023 23:13:40 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1677068021;
-        bh=CCCioTOAL95lINYsTc0QjL/cyM1/Zvh2V1qPLfQyFGk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=SRhKyWt94W4krAAzBoj1L28ZgJYnMDgOjaTAYe6Tda/8TOSbtiTmlilRuzHDv6MYL
-         1CZvEjFFv8fANoaBud0knqTmCxqt/iyMO8OILAOh3WymsO51T8Wp9sO0EL6TigIdb9
-         6AwVbP958lhs/YVzMmjBkKZceS5tBFDIbY/3ZIT5u1vA6+2wAos48KJvr+7u1lZYqn
-         eqB7/RZ7xFsFDAr05lyXspmDZJLEYjFLQSucIQNHHZ3Rei0yqylS8sWPkXbXdgF0pQ
-         UB84pfphYOzHlFrb8AcuARmCN32XPGsl9eUZilYUZKswJIb+wtWZt4Ej8LNCqd+bcq
-         KB3EY5p+iN4TA==
-Date:   Wed, 22 Feb 2023 23:13:37 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Howells <dhowells@redhat.com>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        "Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Steve French <smfrench@gmail.com>,
-        Steve French <stfrench@microsoft.com>,
-        Shyam Prasad N <nspmangalore@gmail.com>,
-        Rohith Surabattula <rohiths.msft@gmail.com>,
-        Tom Talpey <tom@talpey.com>, Paulo Alcantara <pc@cjr.nz>,
-        Jeff Layton <jlayton@kernel.org>, linux-cifs@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
-Subject: Re: linux-next: manual merge of the mm-stable tree with the cifs
- tree
-Message-ID: <20230222231337.3316440a@canb.auug.org.au>
-In-Reply-To: <3325858.1677054470@warthog.procyon.org.uk>
-References: <20230222134927.459b036b@canb.auug.org.au>
-        <20230221184225.0e734f0e@canb.auug.org.au>
-        <20230221174401.7198357d@canb.auug.org.au>
-        <20230220152933.1ab8fa4a@canb.auug.org.au>
-        <Y/N8hVWeR3AjssUC@casper.infradead.org>
-        <20230220190157.3b43b9a7@canb.auug.org.au>
-        <Y/Pe2xHklSr1hDtz@casper.infradead.org>
-        <2351091.1676963957@warthog.procyon.org.uk>
-        <2885897.1676990364@warthog.procyon.org.uk>
-        <3325858.1677054470@warthog.procyon.org.uk>
+        with ESMTP id S231926AbjBVMXE (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 22 Feb 2023 07:23:04 -0500
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC41938B5D
+        for <linux-next@vger.kernel.org>; Wed, 22 Feb 2023 04:22:29 -0800 (PST)
+Received: by mail-pf1-x42e.google.com with SMTP id s15so2819772pfg.3
+        for <linux-next@vger.kernel.org>; Wed, 22 Feb 2023 04:22:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=J0zIsh8Bj6elQ9e9ElCXMRZbUBkH4I43/+9DyamMhIU=;
+        b=PO25MBZG0E5W+OEJqoSOY28lOrPlpC98wfgUrwfFl9o/K+CNuPRFRtbMMX1ZACCz6L
+         iCOxFx/aEj9Y54aVINJGEzirvgKl4EkoDZeus2NxpV6gH88FMHaHSHX8W9Dxf/VTEct6
+         ylwB7ByycxIJwgbXpS+D7jiZpDvlJv6nHZTwN7z1ztcnt2woaqh62RUKox96t2R4Ddj9
+         m47AT3EPv4tm9IUmhMZ5ux8J+SJzAJxpTJqV4bGsN0xrwQuUhyNMisp6OBrtwsD30fDD
+         ojaZl8rGX8YydcmY6VIPCPdSR3Mj+Us6156OWKJ2Rtbsd0lpfVAsI1f3kQggcqEStusk
+         2IgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=J0zIsh8Bj6elQ9e9ElCXMRZbUBkH4I43/+9DyamMhIU=;
+        b=TtaYK1SbArvXdwW4/mE/OhIBCmje+vDKye1kwkWrLNo0d7479vKu0nNcF98SjPBE4Q
+         7sbVNG0ICY/Z6Y4qIr+UtCSxQiQ5GIhqdKDtSoOuGpOzxzrMNe1OvkGGcrqVZkqNtXHb
+         NIg8oD5VsCq2/m6j/c/PZ8UjDYoM+ioh3Wy9W22Nwm25Tb+sEwNnqlx2nrQZklRmquB8
+         gMV1YXh1WR1bCTcmErafn0kF5u1UH5abEiB6ugRrM2Bh0++W6eGVXepMspJbGa7108I+
+         Cox+BcAlSzeOHZWRsUm5wRJq4+BKVJ4fdhWLamPU1qoGzzAN87O1+hIOOTX38JspEib7
+         yhnw==
+X-Gm-Message-State: AO0yUKUs13RyD/MBj7lKl4Njvq+VBjSieH4PlifPKeRnQcczbYJj1J4G
+        lyFV0JU3HCYjGLVOeLxAIxo=
+X-Google-Smtp-Source: AK7set8PxiycLre5bahVPAidCVKEo+/sb6ZGb0Kk6FEAdx0lylT2Lhxy5yALgrciJiMuqWECmJWEUQ==
+X-Received: by 2002:a62:1784:0:b0:5a8:b2a0:9b4d with SMTP id 126-20020a621784000000b005a8b2a09b4dmr7743376pfx.15.1677068491547;
+        Wed, 22 Feb 2023 04:21:31 -0800 (PST)
+Received: from [192.168.43.80] (subs02-180-214-232-68.three.co.id. [180.214.232.68])
+        by smtp.gmail.com with ESMTPSA id a20-20020aa78654000000b005a8bfe3b241sm1743795pfo.167.2023.02.22.04.21.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Feb 2023 04:21:31 -0800 (PST)
+Message-ID: <d96f1c64-a82a-afde-0ecf-3b1dab6510a8@gmail.com>
+Date:   Wed, 22 Feb 2023 19:21:24 +0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ygwXD6lRg3GxyS/ln.n=Vs_";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: linux-next tree panic on ppc64le
+To:     Murphy Zhou <jencce.kernel@gmail.com>
+Cc:     Linux-Next <linux-next@vger.kernel.org>,
+        linuxppc-dev@lists.ozlabs.org
+References: <CADJHv_tWJKgqfXy=2mynVG0U2bJaVqYo59F_OPfdRRptNOV-WQ@mail.gmail.com>
+ <c69dc6be-9642-2876-5375-d536f49d0403@gmail.com>
+ <CADJHv_tzBWoGDBfNCsg-HKt8aKacXgmvY31mS47y30XkNyAw4w@mail.gmail.com>
+Content-Language: en-US
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <CADJHv_tzBWoGDBfNCsg-HKt8aKacXgmvY31mS47y30XkNyAw4w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/ygwXD6lRg3GxyS/ln.n=Vs_
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 2/22/23 16:13, Murphy Zhou wrote:
+> next-20230221
+> 
+> I'll try powerpc/next.
+> 
 
-Hi David,
+OK, but next time when you reply, don't top-post; reply inline
+with appropriate context instead.
 
-On Wed, 22 Feb 2023 08:27:50 +0000 David Howells <dhowells@redhat.com> wrot=
-e:
->
-> Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->=20
-> > OK, so in the merge of mm-stable, I used the cifs version of
-> > fs/cifs/file.c with this patch applied.  The merge resolution for that
-> > file looks like this: =20
->=20
-> I checked it out and diffed it against mine.  Looks right, thanks!
+-- 
+An old man doll... just what I always wanted! - Clara
 
-Thanks for checking.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/ygwXD6lRg3GxyS/ln.n=Vs_
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmP2BvEACgkQAVBC80lX
-0GxcWwf9HniWWVZROA72eHBznLGITsOKf6EmTYN1iQenlMOublvbyQroPeBnEPSa
-Vm3Mv7a218GPpHnej7JrrndfFJa1s/7f7yHVx7z7wI153rtPc1gFYBgSxKeorgbg
-sO94YGKRp6D3Ro0XOJgmSky+ScVUY2d5YbbogN/YGrZcQz59SkFh4bm8/VG/bvEB
-ZJymKCVTugr4tRLxPCD/Tw7XDZgspbxfRSFrXZTMpe21xNHL7WNuuNZZAAKNH/33
-slGBsGZ07LV6LULGyYYN/9lpB5esiGOfGTy4X0VpmppItjEm/SC8a3QabKgv0eCF
-KfK3pShbs+G67Xy07ywDgAgmST7JKQ==
-=gpVM
------END PGP SIGNATURE-----
-
---Sig_/ygwXD6lRg3GxyS/ln.n=Vs_--

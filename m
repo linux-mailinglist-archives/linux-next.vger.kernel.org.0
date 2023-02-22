@@ -2,52 +2,76 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A29969FDC6
-	for <lists+linux-next@lfdr.de>; Wed, 22 Feb 2023 22:39:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B783B69FDD4
+	for <lists+linux-next@lfdr.de>; Wed, 22 Feb 2023 22:44:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231984AbjBVVjh (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 22 Feb 2023 16:39:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39234 "EHLO
+        id S232842AbjBVVoF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 22 Feb 2023 16:44:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231684AbjBVVjg (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 22 Feb 2023 16:39:36 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C99A2DE55;
-        Wed, 22 Feb 2023 13:39:35 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PMV114MNxz4x1h;
-        Thu, 23 Feb 2023 08:39:33 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1677101974;
-        bh=OTUn1q3utxkbFQDCyursLifFDedmceapAyJzXwEbnLU=;
-        h=Date:From:To:Cc:Subject:From;
-        b=A62xzaC2+uD5F0WxjO+TNPQBri0O5n6nVap5Ma34ZCJs3huF4iCMbKtpY8XTVcUOq
-         jq1utDwKNAdZUoS1JvS2FjZfTbqoAajcNXS2HKvl53depDpb7QL7jQiUm5gdVyJv8O
-         AR8Xab7axrA+WrArB0eDSgd4Oe4MCdRGvkYH7Z8pLiJUW+em44pRktnf8IqGc8WhgC
-         394B8Ffpz48ToxUdzod5LH32pz4aZa/bnp5Wi9+wvX0UbccE6rdHhBpDFqhetZ4wYj
-         nSYQdwmVJdBa7CBP+Q9UqwTYT6rFw2+Ulq8kaDm442c4w1au4wgL0Yiq2JdhurnZlH
-         15q8tT2Ugnu7A==
-Date:   Thu, 23 Feb 2023 08:39:32 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Daniel Borkmann <daniel@iogearbox.net>,
+        with ESMTP id S232554AbjBVVoE (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 22 Feb 2023 16:44:04 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9D5C32517
+        for <linux-next@vger.kernel.org>; Wed, 22 Feb 2023 13:44:03 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id ck15so37371262edb.0
+        for <linux-next@vger.kernel.org>; Wed, 22 Feb 2023 13:44:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=8oYWKIc1S3uxITVpxd8tWdXuh6CEoVI7L8XjQ7W6G1A=;
+        b=HhUHBtTjub8KdQHhqu1fxHUgmYd9w+ceHrZK9zRemdaggPWtv2iGPX6Cql9YcsRCzv
+         ew7JVcXnoVO+4cDmGI33ch5+YbLrwqZNZFUyY25F96N4PowEGSsYLjkRYiFYdoihT7td
+         zjBWY+nzFImFuPwTQP0fDvzUFTGKWAxaIS278=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8oYWKIc1S3uxITVpxd8tWdXuh6CEoVI7L8XjQ7W6G1A=;
+        b=DIAtSNNUXfLeWsJUUKlAZc5LMA26P1yAEO8cFy+mbpPwl4rTir0OawQwFmVjXTCP95
+         mNEWjdhmu6F8RupcbeVpRj/HocIakSu/oC7RZx83pGXnm+C6UlDnUpNckZlT2zyAFNyQ
+         B3Cgu6l0iv74TKwbS5AIkle+++SfJgYuE42bv1GFTbzg4tIDmT4Tk+CLXKW/xqB3o2Ff
+         NLxNmwtHXgVPMW5L53ZxCb3BQ+iLeE+c46uENgREbOPEgGOkhlzR3R5gjdKFtIpdpNp1
+         g03CpTCdaD6iFC3SqBAsJeH8vm+7NH3+ev1FjGMEyiS4u8oR7UyDyCkP6Bq9k9quudc+
+         sstg==
+X-Gm-Message-State: AO0yUKVwUbMPfyu5kGR9sS+Uv/uZWCnsHUV21n8DczSmzInHic9IES8V
+        tKc11D3w2XBJI3yqf+qQa8xum0Eexj7OsFxfKwQ=
+X-Google-Smtp-Source: AK7set9mP1u7SFaZKIDIAvn+jz6GJUvCMNy2kiWTPH2mH/eDQNom/Ep0+Kl6PgLzFh2m/nInRnXEOw==
+X-Received: by 2002:a17:907:212d:b0:882:2027:c8e2 with SMTP id qo13-20020a170907212d00b008822027c8e2mr15367608ejb.56.1677102241703;
+        Wed, 22 Feb 2023 13:44:01 -0800 (PST)
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com. [209.85.208.41])
+        by smtp.gmail.com with ESMTPSA id a9-20020a170906468900b008dd76b67ae6sm2914301ejr.175.2023.02.22.13.44.01
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Feb 2023 13:44:01 -0800 (PST)
+Received: by mail-ed1-f41.google.com with SMTP id h16so36295599edz.10
+        for <linux-next@vger.kernel.org>; Wed, 22 Feb 2023 13:44:01 -0800 (PST)
+X-Received: by 2002:a50:f694:0:b0:4ad:6d57:4e16 with SMTP id
+ d20-20020a50f694000000b004ad6d574e16mr4649056edn.5.1677102240934; Wed, 22 Feb
+ 2023 13:44:00 -0800 (PST)
+MIME-Version: 1.0
+References: <20230223083932.0272906f@canb.auug.org.au>
+In-Reply-To: <20230223083932.0272906f@canb.auug.org.au>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 22 Feb 2023 13:43:44 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wjXpth1kQRCeAXhxoAmsr8dnLLW9KJ0haMiXmdF6-hFfw@mail.gmail.com>
+Message-ID: <CAHk-=wjXpth1kQRCeAXhxoAmsr8dnLLW9KJ0haMiXmdF6-hFfw@mail.gmail.com>
+Subject: Re: linux-next: duplicate patch in the bpf tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>,
         Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Huacai Chen <chenhuacai@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
         Huacai Chen <chenhuacai@loongson.cn>,
         bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patch in the bpf tree
-Message-ID: <20230223083932.0272906f@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/JRqgbQ4N4E7IJLAyr_RT5Yc";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,41 +79,12 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/JRqgbQ4N4E7IJLAyr_RT5Yc
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Wed, Feb 22, 2023 at 1:39 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> The following commit is also in Linus Torvalds' tree as a different commit
+> (but the same patch):
 
-Hi all,
+Yup, that was very intentional to keep the fallout of the problem on
+random architectures minimal.
 
-The following commit is also in Linus Torvalds' tree as a different commit
-(but the same patch):
-
-  345d24a91c79 ("bpf: Include missing nospec.h to avoid build error.")
-
-This is commit
-
-  f3dd0c53370e ("bpf: add missing header file include")
-
-in Linus' tree.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/JRqgbQ4N4E7IJLAyr_RT5Yc
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmP2i5QACgkQAVBC80lX
-0GyVbQf9GzToz130+z/mogNO8jvshZIPr1m1BqLrk25SdiGfdkXVOS9QCIv3btgh
-3p+F0rwt+WeZR81LZS4KtrHH8zasxlzgbp92jEUpYJiv8JNhUky0diJAWd3hl8FC
-Qe/ThlqR7/6t6Jps2vGP2pG5QX0X8wRNwyLC+DhdXBadye19vwGd7yOsyiD11Ifo
-/hV/RyNvUsSIjVfOS/BF8NYtizmLLtwP0f5GkVtxJA6l+OParihxov7BwjhC7Uzv
-bsLH4V90GnoNg5yQTK2HQtraPr2cfVbXDLuCLbORbx3BqOTrAwZntqFgSPPUJlFf
-knBoDUqs5mnqi2HlmT7FpIoF+iHcSQ==
-=0a4c
------END PGP SIGNATURE-----
-
---Sig_/JRqgbQ4N4E7IJLAyr_RT5Yc--
+         Linus

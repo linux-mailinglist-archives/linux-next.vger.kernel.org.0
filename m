@@ -2,79 +2,64 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A93A69FFBB
-	for <lists+linux-next@lfdr.de>; Thu, 23 Feb 2023 00:43:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C95D69FFC8
+	for <lists+linux-next@lfdr.de>; Thu, 23 Feb 2023 00:53:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229567AbjBVXnx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 22 Feb 2023 18:43:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53788 "EHLO
+        id S232217AbjBVXxF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 22 Feb 2023 18:53:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230454AbjBVXnw (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 22 Feb 2023 18:43:52 -0500
-Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A709137729;
-        Wed, 22 Feb 2023 15:43:50 -0800 (PST)
-Received: by mail-il1-x12b.google.com with SMTP id z5so798375ilq.0;
-        Wed, 22 Feb 2023 15:43:50 -0800 (PST)
+        with ESMTP id S230454AbjBVXxE (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 22 Feb 2023 18:53:04 -0500
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 325A51024A
+        for <linux-next@vger.kernel.org>; Wed, 22 Feb 2023 15:53:03 -0800 (PST)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-536af432ee5so155869897b3.0
+        for <linux-next@vger.kernel.org>; Wed, 22 Feb 2023 15:53:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=w615umHxEk17AwNmh6Rkv++nzAZUwayUgTAtwm+Vzf4=;
-        b=oAWVAveDB8TmLjZhNFrVTh5UbQoHVtkmR/M7meKoRyd8sksCgrdzLuZJQtLwLv4hXs
-         CBlDWJGdV1++tuShfYkxOppLUjqMladX60zIyfvdaG2kyw00xz+vfZNiguqI84yyUrB5
-         3cD8y5v4eNaotid3HAJeEbTWF/TtBFVhJwmsqRko/S9awePxKOr+LXGZEQg9pLy1s03l
-         jzPU7EP9+0orU02IlkPBpDAPEuUok6d2lOfMv41TsCabYiD79ZDpCsr9iz+APoeUDQ35
-         pvUnopWu5TSwAUYI7Mdyo/HS/LHoyyr3sT4tACpK1kxkiEgFpCi91LyCN2IsCXFY5wBL
-         eksQ==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=bNTVHjmvhxzX71pIWdHJsptd297HTrcV0gR8a6NR270=;
+        b=YBM5j+yWE/me5LJBczP6iBCA2LZyAzuKM62CfaZCjQimVdGCiBn+TtwEMenNVY326E
+         zdgIFSUhAfy719TFHlmIY4DAtDmvE9uQ4cidtCiBTYjhJSbsL31bRh37yyBJJdmjEzMU
+         YZBvoH4iyQq7kQgtUW4AqXXLz7UtXUta57JbMQ5QscsTok0dN7w7xVQnShw5hFRRxBYk
+         57PqO104aNYkSapVX0PV39R5y9vkAQoGY+82DB1zaPBLQjyD2jRefVQnJbiNvBNK5OHO
+         cHDYlYGamj9CsL7xeQ/Hv+/o4d3O5pb9Cnwf9Qhysaq0v5MDV+0OWQgFXQk+BZAuVNLO
+         q5EQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=w615umHxEk17AwNmh6Rkv++nzAZUwayUgTAtwm+Vzf4=;
-        b=O5q9SsDWCJBNHxBiZO2z+fHWyvb9EKeLHJIKa9b4mLWFQKWb47cadl3P7aQsosXMej
-         UrUcXuTOQAcPOb6ef5dt2jgIrr1elo7IoVLyJp2hgUhPbpDmVPChqeS5Z42XgluDMALQ
-         A09xFKZJNi+Fw8uu9Hd220Rb9Huh8EDFM5MD0lmtJN/hKMFrUSpO1nHsjUuCf3i4o/eO
-         hTbGnCk/uhBK7bW5PCV4P1iUO8h0CcXvGuW+rHylxmDFhntArF5OmO1/lfoxKKse8hty
-         LH7QE8S152xCDLHxd6zfSgXQ26iL5vaF+sRDcGFNahk1MPrTmmv/UZYPXSbtoonMq5WE
-         xkig==
-X-Gm-Message-State: AO0yUKVkHmH1qahDUMMoMd7amzNIMW1LSqYFMS2i+/lzC6mw5bn3Las5
-        B1j/gfy5jmOfVOXfkKy7xtk=
-X-Google-Smtp-Source: AK7set9zoOCU1uIvr79S0/3UQJYEVqaU/WG1dobXEzOMPPQ/se28I4qpUymBHk9y8d6eyaxg7eTI/w==
-X-Received: by 2002:a05:6e02:1d10:b0:315:9749:7a25 with SMTP id i16-20020a056e021d1000b0031597497a25mr8616953ila.17.1677109429922;
-        Wed, 22 Feb 2023 15:43:49 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id l25-20020a02cd99000000b003af2cdde559sm2002892jap.35.2023.02.22.15.43.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Feb 2023 15:43:49 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <b1b1b9db-8356-a43e-a01b-73bbef32d3ce@roeck-us.net>
-Date:   Wed, 22 Feb 2023 15:43:47 -0800
+        bh=bNTVHjmvhxzX71pIWdHJsptd297HTrcV0gR8a6NR270=;
+        b=VgDgfq7zatD/nalOYf8Hn74TbiMxoaNTRbRadB8dysp8I7HSpNcz9kF93FGXCg5h1f
+         OymN7VKGB6SRVvSYv+g95KT3b89x/MTiNPOVI8ZFNopF1W2YzKYYK7v96mHB7iGXxT3B
+         Jrkd9aTw5dN3RRZ2MTz+um6Vu6q5uAtR8KIEH36GrUt0a9zjWNQh8RAocUTgWWReD4jB
+         PTuo3K4Xk1xuj/o7yAJXmMpT5TGpK/WIGWSP2QvgOBDJAxok+sJsFAlV7M08yBJ5Y993
+         LQwhsZmu31fFRS6aPc0JUJeTGpXgZWNKDojU6oc1w564zmRHd7jfhLhfByC4OZVS0IuJ
+         1neQ==
+X-Gm-Message-State: AO0yUKVCDOgkzJH3sdhKHlad/rrMhTY4GMGHJ9npWmlj6RMzXZfydaZq
+        DRAU7ST5DI449n4yJKTitfz0IcNFZV0W7I6mGdKBh8O1rOU=
+X-Google-Smtp-Source: AK7set8n3hHrBDjWHBv56b8R4iNkjWMwgJ3hPYmYV6BhOH6dbVA+cpgO550juwuLlKNdtG02kPJth/2TE/E3phkrL3c=
+X-Received: by 2002:a81:a784:0:b0:52e:ce9e:f0a4 with SMTP id
+ e126-20020a81a784000000b0052ece9ef0a4mr1472028ywh.1.1677109982354; Wed, 22
+ Feb 2023 15:53:02 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: linux-next: manual merge of the hwmon-staging tree with the i2c
- tree
-Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Wolfram Sang <wsa@the-dreams.de>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Nick Hawkins <nick.hawkins@hpe.com>,
-        Wolfram Sang <wsa@kernel.org>
-References: <20230220090724.6c3d6f87@canb.auug.org.au>
- <20230223103018.08088e0c@canb.auug.org.au>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20230223103018.08088e0c@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+References: <CADJHv_tWJKgqfXy=2mynVG0U2bJaVqYo59F_OPfdRRptNOV-WQ@mail.gmail.com>
+ <c69dc6be-9642-2876-5375-d536f49d0403@gmail.com>
+In-Reply-To: <c69dc6be-9642-2876-5375-d536f49d0403@gmail.com>
+From:   Murphy Zhou <jencce.kernel@gmail.com>
+Date:   Thu, 23 Feb 2023 07:52:51 +0800
+Message-ID: <CADJHv_u7CGt9oM68YCLSmZTJvdq0rXcVu_1VMT=a9R3VNf8pKg@mail.gmail.com>
+Subject: Re: linux-next tree panic on ppc64le
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     Linux-Next <linux-next@vger.kernel.org>,
+        linuxppc-dev@lists.ozlabs.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,65 +67,95 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 2/22/23 15:30, Stephen Rothwell wrote:
-> Hi all,
-> 
-> On Mon, 20 Feb 2023 09:07:24 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->>
->> Today's linux-next merge of the hwmon-staging tree got a conflict in:
->>
->>    MAINTAINERS
->>
->> between commit:
->>
->>    e8444bb9fd77 ("MAINTAINERS: Add HPE GXP I2C Support")
->>
->> from the i2c tree and commit:
->>
->>    d5f80ff774d1 ("MAINTAINERS: add gxp fan controller and documents")
->>
->> from the hwmon-staging tree.
->>
->> I fixed it up (see below) and can carry the fix as necessary. This
->> is now fixed as far as linux-next is concerned, but any non trivial
->> conflicts should be mentioned to your upstream maintainer when your tree
->> is submitted for merging.  You may also want to consider cooperating
->> with the maintainer of the conflicting tree to minimise any particularly
->> complex conflicts.
->>
->> -- 
->> Cheers,
->> Stephen Rothwell
->>
->> diff --cc MAINTAINERS
->> index a58c22a7adc8,98e16168d6e9..000000000000
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@@ -2232,15 -2280,16 +2232,18 @@@ ARM/HPE GXP ARCHITECTUR
->>    M:	Jean-Marie Verdun <verdun@hpe.com>
->>    M:	Nick Hawkins <nick.hawkins@hpe.com>
->>    S:	Maintained
->> + F:	Documentation/hwmon/gxp-fan-ctrl.rst
->>    F:	Documentation/devicetree/bindings/arm/hpe,gxp.yaml
->> + F:	Documentation/devicetree/bindings/hwmon/hpe,gxp-fan-ctrl.yaml
->>   +F:	Documentation/devicetree/bindings/i2c/hpe,gxp-i2c.yaml
->>    F:	Documentation/devicetree/bindings/spi/hpe,gxp-spifi.yaml
->>    F:	Documentation/devicetree/bindings/timer/hpe,gxp-timer.yaml
->>    F:	arch/arm/boot/dts/hpe-bmc*
->>    F:	arch/arm/boot/dts/hpe-gxp*
->>    F:	arch/arm/mach-hpe/
->>    F:	drivers/clocksource/timer-gxp.c
->> + F:	drivers/hwmon/gxp-fan-ctrl.c
->>   +F:	drivers/i2c/busses/i2c-gxp.c
->>    F:	drivers/spi/spi-gxp.c
->>    F:	drivers/watchdog/gxp-wdt.c
->>    
-> 
-> This is now a conflict between the i2c tree and Linus' tree.
-> 
+On Wed, Feb 22, 2023 at 10:35 AM Bagas Sanjaya <bagasdotme@gmail.com> wrote:
+>
+> On 2/22/23 07:55, Murphy Zhou wrote:
+> > Hi,
+> >
+> > [   59.558339] ------------[ cut here ]------------
+> > [   59.558361] kernel BUG at arch/powerpc/kernel/syscall.c:34!
+> > [   59.558373] Oops: Exception in kernel mode, sig: 5 [#1]
+> > [   59.558384] LE PAGE_SIZE=64K MMU=Radix SMP NR_CPUS=2048 NUMA PowerNV
+> > [   59.558397] Modules linked in: rfkill i2c_dev sunrpc ast
+> > i2c_algo_bit drm_shmem_helper drm_kms_helper ext4 syscopyarea
+> > sysfillrect sysimgblt ofpart ses powernv_flash enclosure
+> > scsi_transport_sas ipmi_powernv at24 mbcache jbd2 ipmi_devintf
+> > regmap_i2c opal_prd ipmi_msghandler mtd ibmpowernv drm fuse
+> > drm_panel_orientation_quirks xfs libcrc32c sd_mod t10_pi
+> > crc64_rocksoft_generic crc64_rocksoft crc64 sg i40e aacraid vmx_crypto
+> > [   59.558494] CPU: 29 PID: 6366 Comm: kexec Not tainted 6.2.0-next-20230221 #1
+> > [   59.558508] Hardware name: CSE-829U POWER9 0x4e1202
+> > opal:skiboot-v6.0.7 PowerNV
+> > [   59.558521] NIP:  c000000000031e4c LR: c00000000000d520 CTR: c00000000000d3c0
+> > [   59.558534] REGS: c000000097247b70 TRAP: 0700   Not tainted
+> > (6.2.0-next-20230221)
+> > [   59.558548] MSR:  9000000000029033 <SF,HV,EE,ME,IR,DR,RI,LE>  CR:
+> > 84424840  XER: 00000000
+> > [   59.558570] CFAR: c00000000000d51c IRQMASK: 3
+> > [   59.558570] GPR00: c00000000000d520 c000000097247e10
+> > c0000000014b1400 c000000097247e80
+> > [   59.558570] GPR04: 0000000084424840 0000000000000000
+> > 0000000000000000 0000000000000000
+> > [   59.558570] GPR08: 0000000000000000 900000000280b033
+> > 0000000000000001 0000000000000000
+> > [   59.558570] GPR12: 0000000000000000 c0000007fffcb280
+> > 0000000000000000 0000000000000000
+> > [   59.558570] GPR16: 0000000000000000 0000000000000000
+> > 0000000000000000 0000000000000000
+> > [   59.558570] GPR20: 0000000000000000 0000000000000000
+> > 0000000000000000 0000000000000000
+> > [   59.558570] GPR24: 0000000000000000 0000000000000000
+> > 0000000000000000 0000000000000000
+> > [   59.558570] GPR28: 0000000000000000 0000000084424840
+> > c000000097247e80 c000000097247e10
+> > [   59.558689] NIP [c000000000031e4c] system_call_exception+0x5c/0x340
+> > [   59.558705] LR [c00000000000d520] system_call_common+0x160/0x2c4
+> > [   59.558719] Call Trace:
+> > [   59.558725] [c000000097247e10] [c000000000031f18]
+> > system_call_exception+0x128/0x340 (unreliable)
+> > [   59.558743] [c000000097247e50] [c00000000000d520]
+> > system_call_common+0x160/0x2c4
+> > [   59.558759] --- interrupt: c00 at plpar_hcall+0x38/0x60
+> > [   59.558770] NIP:  c0000000000f58dc LR: c00000000011277c CTR: 0000000000000000
+> > [   59.558783] REGS: c000000097247e80 TRAP: 0c00   Not tainted
+> > (6.2.0-next-20230221)
+> > [   59.558796] MSR:  900000000280b033
+> > <SF,HV,VEC,VSX,EE,FP,ME,IR,DR,RI,LE>  CR: 84424840  XER: 00000000
+> > [   59.558821] IRQMASK: 0
+> > [   59.558821] GPR00: 0000000084424840 c0000000972479e0
+> > c0000000014b1400 000000000000041c
+> > [   59.558821] GPR04: 0000000097ff4000 0000000000000200
+> > c000000097247930 c0000007fe233ef8
+> > [   59.558821] GPR08: 0000000000000000 0000000000000000
+> > 0000000000000000 0000000000000000
+> > [   59.558821] GPR12: 0000000000000000 c0000007fffcb280
+> > 0000000000000000 0000000000000000
+> > [   59.558821] GPR16: 0000000000000000 0000000000000000
+> > 0000000000000000 0000000000000000
+> > [   59.558821] GPR20: 0000000000000000 0000000000000000
+> > 0000000000000000 0000000000000000
+> > [   59.558821] GPR24: 0000000000000004 c0000000ba704000
+> > 00000000000000c6 c008000014d20000
+> > [   59.558821] GPR28: 000000000417b200 0000000000000000
+> > c0000000af848800 c000000097ff4000
+> > [   59.558935] NIP [c0000000000f58dc] plpar_hcall+0x38/0x60
+> > [   59.558946] LR [c00000000011277c] _plpks_get_config+0x7c/0x270
+> > [   59.558958] --- interrupt: c00
+> > [   59.558966] [c0000000972479e0] [c00000000011275c]
+> > _plpks_get_config+0x5c/0x270 (unreliable)
+> > [   59.558982] Code: 7c9d2378 60000000 60000000 39200000 0b090000
+> > 60000000 e93e0108 692a0002 794affe2 0b0a0000 692a4000 794a97e2
+> > <0b0a0000> e95e0138 794a07e0 0b0a0000
+> > [   59.559018] ---[ end trace 0000000000000000 ]---
+> > [   60.564314] pstore: backend (nvram) writing error (-1)
+> > [   60.564336]
+> > [   61.564343] Kernel panic - not syncing: Fatal exception
+>
+> Panic on what linux-next tag? Can you test powerpc/next tree?
+powerpc/next tree does not panic.
 
-I mentioned the potential conflict in my pull request, so Linus should
-be aware of it when he applies the i2c changes.
-
-Guenter
-
+Thanks,
+>
+> --
+> An old man doll... just what I always wanted! - Clara
+>

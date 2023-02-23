@@ -2,128 +2,95 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 779BF6A057E
-	for <lists+linux-next@lfdr.de>; Thu, 23 Feb 2023 10:58:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E12D6A11AE
+	for <lists+linux-next@lfdr.de>; Thu, 23 Feb 2023 22:10:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232910AbjBWJ6w (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 23 Feb 2023 04:58:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33152 "EHLO
+        id S229462AbjBWVK6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 23 Feb 2023 16:10:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232166AbjBWJ6u (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 23 Feb 2023 04:58:50 -0500
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00FDA35BD;
-        Thu, 23 Feb 2023 01:58:48 -0800 (PST)
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-536bbef1c5eso173498617b3.9;
-        Thu, 23 Feb 2023 01:58:48 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=EQXyU9aqprtIrOITCHfSd392PrwvkOblOpb+a1D8YlQ=;
-        b=CzEm/omA6DWjcC35rQff3w8Bv5R9VlO1Xp6TNrDnhP4AuXktvAoysPRoFYj4VtYOGP
-         47doCR+dWGXJFAWfy3hjlv38TNfX7oTS9t8Ez5M5awhFS1tXfKmIm9fpHLNrZUCZ84wG
-         +EWY53ORCzTgU5L+JlTLx4rm3+6x5a0tJhzRVmtGu61P2podHrLh6yK4kSAi4QG0dsx3
-         b/YOdbTnEhIIdCzfSwZAes4IsoiqVGPm3ti72++2moLG/to9pyCh+rO3hr62DUEvPUCC
-         8+DEW6pg9zILO6JO1nW8/+Z/X2WR6vhj26Oyi9PqbAdXfRjW85meF5hFlXdxPQ2T/22C
-         lwNQ==
-X-Gm-Message-State: AO0yUKXs+E1HzcRqoh/7XZ9J3bs1a4HtYDGZNAS9Ouk3c8PpdlFqouIk
-        +xA8zbO989P7EWOTygdUbfEEHD7LUGBLfA72Oz+FqFRV
-X-Google-Smtp-Source: AK7set+szEZeobfmVyemPx9mqzw4kw9oAbz7SR0CZxyY00AD3J0LYnMCO9v1m3LefSWiaiO6brBL4fopBL1eExPTt+o=
-X-Received: by 2002:a5b:14c:0:b0:a1e:de8e:76b with SMTP id c12-20020a5b014c000000b00a1ede8e076bmr998132ybp.1.1677146328124;
- Thu, 23 Feb 2023 01:58:48 -0800 (PST)
-MIME-Version: 1.0
-References: <20230216124004.2be84a01@canb.auug.org.au> <20230223111342.7177513b@canb.auug.org.au>
-In-Reply-To: <20230223111342.7177513b@canb.auug.org.au>
-From:   Emil Renner Berthing <kernel@esmil.dk>
-Date:   Thu, 23 Feb 2023 10:58:36 +0100
-Message-ID: <CANBLGcxRJ+Hd2eqB7NFBCZEwV2CnLhkL3L1NCTvm5_fMt7PFPA@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the pinctrl tree with the mmc tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Hal Feng <hal.feng@starfivetech.com>,
-        Jianlong Huang <jianlong.huang@starfivetech.com>,
+        with ESMTP id S229436AbjBWVK5 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 23 Feb 2023 16:10:57 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B47A61EE6;
+        Thu, 23 Feb 2023 13:10:16 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PN5Hw5ZD0z4x4r;
+        Fri, 24 Feb 2023 08:09:32 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1677186573;
+        bh=IjET4LaTsMosOZdyCGu9jMUfom0oOQ8pCqeH0r0uRLc=;
+        h=Date:From:To:Cc:Subject:From;
+        b=jSFBIoA6Bs5zddJ07S4GFD43qZYp39wV5zYHksxhhMdrsu7y+K+wjcHTFMJtNzZ8V
+         6BirU/r9Df4wPmrP1NXBjkhYgZiQD+zgLCdQ8LNmOnQLl6QBteAN2p7NHhj+fx3NAe
+         YD+h6FFma4/MwUZzpQOX9Fyx2F6CyXTfj6yl94hu2Qdrr8p9Sf03guWUaT7dWhfvmH
+         32lEnzhNj7GYfSsml4TM3NUPpwrHPmyfeI2METBydkeCRGz4y4TfoAtT/szhHJnj1a
+         zCbzq9Xv9WeFEavHYi/I+oka9jWQsstUQ1zd2bYAU/LLb7Q0APHkQUD+6qmK8T67KW
+         xMj8e+uotPD+A==
+Date:   Fri, 24 Feb 2023 08:09:31 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Steve French <smfrench@gmail.com>
+Cc:     CIFS <linux-cifs@vger.kernel.org>,
+        David Howells <dhowells@redhat.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        William Qiu <william.qiu@starfivetech.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the cifs tree
+Message-ID: <20230224080931.6433105a@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/00Yl2C+ngHrtSKek.=3.r3=";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, 23 Feb 2023 at 01:13, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> Hi all,
->
-> On Thu, 16 Feb 2023 12:40:04 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> >
-> > Today's linux-next merge of the pinctrl tree got a conflict in:
-> >
-> >   MAINTAINERS
-> >
-> > between commit:
-> >
-> >   9e622229bbf4 ("mmc: starfive: Add sdio/emmc driver support")
-> >
-> > from the mmc tree and commit:
-> >
-> >   d6e0a660097d ("dt-bindings: pinctrl: Add StarFive JH7110 sys pinctrl")
-> >
-> > from the pinctrl tree.
-> >
-> > I fixed it up (see below) and can carry the fix as necessary. This
-> > is now fixed as far as linux-next is concerned, but any non trivial
-> > conflicts should be mentioned to your upstream maintainer when your tree
-> > is submitted for merging.  You may also want to consider cooperating
-> > with the maintainer of the conflicting tree to minimise any particularly
-> > complex conflicts.
-> >
-> > --
-> > Cheers,
-> > Stephen Rothwell
-> >
-> > diff --cc MAINTAINERS
-> > index 1208b0380fa5,8a851eb053ca..000000000000
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@@ -19914,19 -19890,15 +19914,21 @@@ F:      Documentation/devicetree/bindings/cl
-> >   F:  drivers/clk/starfive/clk-starfive-jh7100*
-> >   F:  include/dt-bindings/clock/starfive-jh7100*.h
-> >
-> >  +STARFIVE JH7110 MMC/SD/SDIO DRIVER
-> >  +M:  William Qiu <william.qiu@starfivetech.com>
-> >  +S:  Supported
-> >  +F:  Documentation/devicetree/bindings/mmc/starfive*
-> >  +F:  drivers/mmc/host/dw_mmc-starfive.c
-> >  +
-> > - STARFIVE JH7100 PINCTRL DRIVER
-> > + STARFIVE JH71X0 PINCTRL DRIVERS
-> >   M:  Emil Renner Berthing <kernel@esmil.dk>
-> > + M:  Jianlong Huang <jianlong.huang@starfivetech.com>
-> >   L:  linux-gpio@vger.kernel.org
-> >   S:  Maintained
-> > - F:  Documentation/devicetree/bindings/pinctrl/starfive,jh7100-pinctrl.yaml
-> > - F:  drivers/pinctrl/starfive/
-> > + F:  Documentation/devicetree/bindings/pinctrl/starfive,jh71*.yaml
-> > + F:  drivers/pinctrl/starfive/pinctrl-starfive-jh71*
-> >   F:  include/dt-bindings/pinctrl/pinctrl-starfive-jh7100.h
-> > + F:  include/dt-bindings/pinctrl/starfive,jh7110-pinctrl.h
-> >
-> >   STARFIVE JH7100 RESET CONTROLLER DRIVER
-> >   M:  Emil Renner Berthing <kernel@esmil.dk>
->
-> This is now a conflict between the mmc tree and Linus' tree.
+--Sig_/00Yl2C+ngHrtSKek.=3.r3=
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Hi Stephen,
+Hi all,
 
-I don't control any of the trees, but fwiw your fixup looks correct to me:
-Reviewed-by: Emil Renner Berthing <kernel@esmil.dk>
+In commit
 
-/Emil
+  d7830041d59a ("cifs: Add some missing xas_retry() calls")
+
+Fixes tag
+
+  Fixes: 5f0955c98375 ("cifs: Add some helper functions")
+
+has these problem(s):
+
+  - Target SHA1 does not exist
+
+Maybe you meant
+
+Fixes: b8713c4dbfa3 ("cifs: Add some helper functions")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/00Yl2C+ngHrtSKek.=3.r3=
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmP31gsACgkQAVBC80lX
+0GzlbggAk5m2l/jgc0RZVN2QrEW171HecCxLgCYbXqs00caVvWVmy+ylQtCMbx/Y
+htea2PICrsdlt1WctDvgWbQGlWD+LhX/N/xJ6LammXbkoq2IuhMxNXT6OHyvcXSN
+APQJMIJfMkKsVSTeByYRCUkPDRwEUa3yvGaIYHkDwIvbwAGnTfEWuAsSfOP1VQuh
+cIzSCfFQtdTSoqZSr6O1tQiwHY7NbeIxcnJUoGpXGTwt8aIJENbRdoBNpsZcAhd7
+x5O4D+UcnEnU0RWnoPgXN42jTHr83QrQhgwvXl+e5Ko09BRDwFo7uEEe0YWj2sP8
+3wayqxchWCFbUBLFjFO4j1Xpq+aSqQ==
+=7HPT
+-----END PGP SIGNATURE-----
+
+--Sig_/00Yl2C+ngHrtSKek.=3.r3=--

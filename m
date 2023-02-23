@@ -2,82 +2,79 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E6FE69FFE0
-	for <lists+linux-next@lfdr.de>; Thu, 23 Feb 2023 01:13:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2532A6A0053
+	for <lists+linux-next@lfdr.de>; Thu, 23 Feb 2023 01:58:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230454AbjBWANs (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 22 Feb 2023 19:13:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42114 "EHLO
+        id S233064AbjBWA6u (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 22 Feb 2023 19:58:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjBWANr (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 22 Feb 2023 19:13:47 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D81EA24109;
-        Wed, 22 Feb 2023 16:13:45 -0800 (PST)
+        with ESMTP id S233062AbjBWA6T (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 22 Feb 2023 19:58:19 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83C5239CE9;
+        Wed, 22 Feb 2023 16:58:13 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PMYQt6zc5z4x4n;
-        Thu, 23 Feb 2023 11:13:42 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PMZQC3lF3z4x5d;
+        Thu, 23 Feb 2023 11:58:11 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1677111224;
-        bh=rHOQEcCUbLerBSAXShl1mdrbfj1msY+pPXnEyEd1HJw=;
+        s=201702; t=1677113891;
+        bh=ztxbZdscDinWNA8JxkiaTpX0fD/X3cvFoxGXemclLVA=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=QAn6JR03eA2ghJS4i9SOe4U3zUfoIoCyTMKnxfcqPM/40oD/NN01oadwXeK/hx3jf
-         C/DmkDaHlbhXIfalxAIK4Ca9MFdmxCMIGU2D/UEavsM//hjG0p5DDM/JmewH8X8pSo
-         x+AQlXjZR8GoCYKZiKQ+a3Xs5vai8oMCIPUNuQqaa6PZSo0L3W3bpTYswGjzJR7Vw7
-         h6rhzfjXYQnCjcKOjMcsIsYh3kP8iy7FXioup4+jeHTYMaHKF8spLPiA01FXjTsO6m
-         XvVYM6uE0zTtQatSixu7vGdN3NYEDyJT/MXPMJl2cSA/bylTDA6/PAQkqkNPFL3Cb6
-         w+HxaAl15Kcgg==
-Date:   Thu, 23 Feb 2023 11:13:42 +1100
+        b=U1z+cqqeIrKmmpl7Db6MDKpBEhPYAkmm9+pXJvIV9SmtW1ivsBkjWmhPuzwOblA5e
+         T8GRl6Erj03r+sG0iOKhK1H6ztSc2w3gSgkfq8jRZ1GFEsRZAyN8NTcknJUtT31QH8
+         R9maTPaE1mIrRpaxKKx+h7mHWPVqGU27FI2fcSMMI3iQqotjf95OB1bliLeZl5ySAF
+         dgUpiSl04glTZ12FTi/B41dwg2qFwAqadeLvstkBDc0XSF1flNS6bD2MZ2Dgz2iDlc
+         Xv4hfZtW1QcIpZxe6HecPK7B5+r2B/Dm7S/Tc8j7V+bnjy1BePd7TB7bvBKtxPu81q
+         yHKDjooO7ppqg==
+Date:   Thu, 23 Feb 2023 11:58:10 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Hal Feng <hal.feng@starfivetech.com>,
-        Jianlong Huang <jianlong.huang@starfivetech.com>,
+To:     Wolfram Sang <wsa@the-dreams.de>
+Cc:     Mark Brown <broonie@kernel.org>, Alain Volmat <avolmat@me.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        William Qiu <william.qiu@starfivetech.com>
-Subject: Re: linux-next: manual merge of the pinctrl tree with the mmc tree
-Message-ID: <20230223111342.7177513b@canb.auug.org.au>
-In-Reply-To: <20230216124004.2be84a01@canb.auug.org.au>
-References: <20230216124004.2be84a01@canb.auug.org.au>
+        Wolfram Sang <wsa@kernel.org>
+Subject: Re: linux-next: manual merge of the spi tree with the i2c tree
+Message-ID: <20230223115810.56134cbe@canb.auug.org.au>
+In-Reply-To: <20230216113035.3050871a@canb.auug.org.au>
+References: <20230216113035.3050871a@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/_9=sdbnY1po0KZ9=MCz8NlM";
+Content-Type: multipart/signed; boundary="Sig_/WkjcS3PsLpgLma5i_aEpZyB";
  protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/_9=sdbnY1po0KZ9=MCz8NlM
+--Sig_/WkjcS3PsLpgLma5i_aEpZyB
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Thu, 16 Feb 2023 12:40:04 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+On Thu, 16 Feb 2023 11:30:35 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
 wrote:
 >=20
-> Today's linux-next merge of the pinctrl tree got a conflict in:
+> Today's linux-next merge of the spi tree got a conflict in:
 >=20
 >   MAINTAINERS
 >=20
 > between commit:
 >=20
->   9e622229bbf4 ("mmc: starfive: Add sdio/emmc driver support")
+>   b3de755d6041 ("dt-bindings: i2c: i2c-st: convert to DT schema")
 >=20
-> from the mmc tree and commit:
+> from the i2c tree and commit:
 >=20
->   d6e0a660097d ("dt-bindings: pinctrl: Add StarFive JH7110 sys pinctrl")
+>   7ec844a2c753 ("spi: spi-st-ssc: convert to DT schema")
 >=20
-> from the pinctrl tree.
+> from the spi tree.
 >=20
 > I fixed it up (see below) and can carry the fix as necessary. This
 > is now fixed as far as linux-next is concerned, but any non trivial
@@ -86,62 +83,42 @@ wrote:
 > with the maintainer of the conflicting tree to minimise any particularly
 > complex conflicts.
 >=20
-> --=20
-> Cheers,
-> Stephen Rothwell
 >=20
 > diff --cc MAINTAINERS
-> index 1208b0380fa5,8a851eb053ca..000000000000
+> index 71e92d3c51c6,daa33e7bb457..000000000000
 > --- a/MAINTAINERS
 > +++ b/MAINTAINERS
-> @@@ -19914,19 -19890,15 +19914,21 @@@ F:	Documentation/devicetree/binding=
-s/cl
->   F:	drivers/clk/starfive/clk-starfive-jh7100*
->   F:	include/dt-bindings/clock/starfive-jh7100*.h
->  =20
->  +STARFIVE JH7110 MMC/SD/SDIO DRIVER
->  +M:	William Qiu <william.qiu@starfivetech.com>
->  +S:	Supported
->  +F:	Documentation/devicetree/bindings/mmc/starfive*
->  +F:	drivers/mmc/host/dw_mmc-starfive.c
->  +
-> - STARFIVE JH7100 PINCTRL DRIVER
-> + STARFIVE JH71X0 PINCTRL DRIVERS
->   M:	Emil Renner Berthing <kernel@esmil.dk>
-> + M:	Jianlong Huang <jianlong.huang@starfivetech.com>
->   L:	linux-gpio@vger.kernel.org
+> @@@ -2791,7 -2925,8 +2791,8 @@@ M:	Patrice Chotard <patrice.chotard@fos
+>   L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
 >   S:	Maintained
-> - F:	Documentation/devicetree/bindings/pinctrl/starfive,jh7100-pinctrl.ya=
-ml
-> - F:	drivers/pinctrl/starfive/
-> + F:	Documentation/devicetree/bindings/pinctrl/starfive,jh71*.yaml
-> + F:	drivers/pinctrl/starfive/pinctrl-starfive-jh71*
->   F:	include/dt-bindings/pinctrl/pinctrl-starfive-jh7100.h
-> + F:	include/dt-bindings/pinctrl/starfive,jh7110-pinctrl.h
->  =20
->   STARFIVE JH7100 RESET CONTROLLER DRIVER
->   M:	Emil Renner Berthing <kernel@esmil.dk>
+>   W:	http://www.stlinux.com
+> + F:	Documentation/devicetree/bindings/spi/st,ssc-spi.yaml
+>  -F:	Documentation/devicetree/bindings/i2c/i2c-st.txt
+>  +F:	Documentation/devicetree/bindings/i2c/st,sti-i2c.yaml
+>   F:	arch/arm/boot/dts/sti*
+>   F:	arch/arm/mach-sti/
+>   F:	drivers/ata/ahci_st.c
 
-This is now a conflict between the mmc tree and Linus' tree.
+This is now a conflict between the i2c tree and Linus' tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/_9=sdbnY1po0KZ9=MCz8NlM
+--Sig_/WkjcS3PsLpgLma5i_aEpZyB
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmP2r7YACgkQAVBC80lX
-0Gw58Qf/aL6sDMlZhTKxlEKQfAFa7xFCJJ3ol8+Ax+U31sRQ5GIMjgS5MHmyhwK3
-0ElS1IewbjdtXInsg1g+JfMKEHb33qjsY+WTrtp5CXgaXWmGCfuBG2UTaHJqxkVc
-QJ/dupzye+qqeauNnorPi1qdKn6EajhKSC/Mfspo2gbNYxT/Huy94Wi1BHCMOV2I
-Caznw7EY9nztB40JHIsM+iKDsLZHCOH0dAEP79OL1dRblWnmXoSklafTJrYg8kbX
-ih7uBKBskwGYLk/RmETrFhJW+OCVa9RMUMEcWTXZb4vQgL1sj3J1uWFYnKRqUCaR
-fNa+wDKf8F40zKHlATVOlm++yXB8sg==
-=QN80
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmP2uiIACgkQAVBC80lX
+0GxgAwf/Vfg+WXMgrhRiP6qidy7pmaKmiI3QQcCVOTycLCTG5RGDQQoyYow3jtew
+PjHorCgiQKTliZKG10cQyxUAcXkgmUXguKvmm0P8qtM9ILJTp4tXlPTNQjTXU8df
+gLCz/EWv1j0XPSnzZDebAWUgKtGfCzvye7mf9vJEVDz+GH2xKmWj+tGeoJ6eJQsP
+g8d5RQRNVcmieRZ9mLX76EGzKLCQHLWumBtGfmVdWQG+V7nFPQCvFADnEXEHzWrR
+etmSiUhVCJlHHiVLo+s1nmrrzDUcF5PhdDFqQGHWnMNxJG7yMb85tWEwFaljPIMo
+MQ+WTFMJBa88seZ+USdCpHHLDksf5w==
+=7seG
 -----END PGP SIGNATURE-----
 
---Sig_/_9=sdbnY1po0KZ9=MCz8NlM--
+--Sig_/WkjcS3PsLpgLma5i_aEpZyB--

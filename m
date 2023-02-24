@@ -2,103 +2,117 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B56B6A164A
-	for <lists+linux-next@lfdr.de>; Fri, 24 Feb 2023 06:34:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AA9F6A1672
+	for <lists+linux-next@lfdr.de>; Fri, 24 Feb 2023 07:01:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229589AbjBXFec (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 24 Feb 2023 00:34:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54002 "EHLO
+        id S229491AbjBXGBr (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 24 Feb 2023 01:01:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjBXFeb (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 24 Feb 2023 00:34:31 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 203F3166D9;
-        Thu, 23 Feb 2023 21:34:30 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PNJVX1Vkxz4x1N;
-        Fri, 24 Feb 2023 16:34:27 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1677216868;
-        bh=6A7twci1N4LarMfKhdKYaWjpyVlHaS+Pf63aEFyRu0c=;
-        h=Date:From:To:Cc:Subject:From;
-        b=q6bjbrK1zku1eAlWyWqsSS1KWz+z/hCmQSimDhn7gzqK0JG6FgK6dV2cHAeMwxFM9
-         sGSKadWlAABmrrQHAPsZLVyipKwuaemCRTc4AVx4AISJqQWHze65jDTCmFrXhTcQqQ
-         maFE5KevOTpBarR+TlYmGIs/iSyuip9i9BG2pEjmct8h0fkN4P1tc6IOhMYxUOBz01
-         PA8OvJcPoQI90hQCF5rBpJQ9jDv0US7L5eewha3gCl3FjaF7QQmHLE4d00jrV7ZboP
-         pQgDBJ22so1Fhrzx/535CbHdZqvt2D3c2536bJHFTaOaQQ6O1KEQ7fUPbmya90+ajM
-         Rq79DcxAD3wGg==
-Date:   Fri, 24 Feb 2023 16:34:26 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Donglin Peng <dolinux.peng@gmail.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
+        with ESMTP id S229484AbjBXGBq (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 24 Feb 2023 01:01:46 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FF5737571
+        for <linux-next@vger.kernel.org>; Thu, 23 Feb 2023 22:01:45 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id da10so51973250edb.3
+        for <linux-next@vger.kernel.org>; Thu, 23 Feb 2023 22:01:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=s8trhdyXMwKOxRlrbXpbVcz3CsltizxKWND/hlf/M2I=;
+        b=C6C6z6vh6WHPnogSJliX+y8RZ/ohNh4ra7mjmuLYthgkD6do5jegYHQx9fe1zUm5kX
+         LzSg22lZhEjDV5AjAmaQXrIfqzi4UIvGnxYjZ2LV4ob1jY5isUMY6OZaNOzDzJY2Eac9
+         VU78YkMp35eoh5YuOdaekJkO5qXhticIo0C2I=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=s8trhdyXMwKOxRlrbXpbVcz3CsltizxKWND/hlf/M2I=;
+        b=O4+vAz6jjtvy/LerMrV1ZN/C31rdmc/3xoiNCHXbq7nKHVAa9ArZVtFGill2rvEpCk
+         B2pjWg3XJ27etdwakhJWNn6EF709d1vUNuJBJYpR4S8oWTZcYuW1nMWi//+lfgjtR0GT
+         pNHN1bfLajEScaYwLav1n6m6jGF3R4b9X9iCs3NdWWBuJt9l+zdIXW/ehXA20xVe99H5
+         NjeyxRLLh+PB1km1Pv+rG1FnzD5e3xIfVSUljxP6Ro1Hnawy+gQodu4/Mhu8DVcmqFSp
+         wNJ7ul6KqxgTubSBuyIc6z6SgmHOmDyHvruyN7RzvA3mrzmlvx8m8llogTBsvoDOe290
+         g+UA==
+X-Gm-Message-State: AO0yUKVYVE9kv9AmxezebeHveABsbdlhE9fymoQIK9RMTcK2Q7rGFVkq
+        Hdw7V0Y+MyEH9BEM/SDNa5cliK25a94VdH3kLsywOg==
+X-Google-Smtp-Source: AK7set81UtsAkB9P8cbEHzv/SMuDiZ7hCfbXzRNIt1OVVW4UAiQnYYcE96cL5pyOK3RDvq1tnCFIoA==
+X-Received: by 2002:a17:906:71c2:b0:88d:2a41:2a4b with SMTP id i2-20020a17090671c200b0088d2a412a4bmr20769444ejk.60.1677218503629;
+        Thu, 23 Feb 2023 22:01:43 -0800 (PST)
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com. [209.85.208.42])
+        by smtp.gmail.com with ESMTPSA id md16-20020a170906ae9000b008cafeec917dsm6770316ejb.101.2023.02.23.22.01.42
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Feb 2023 22:01:42 -0800 (PST)
+Received: by mail-ed1-f42.google.com with SMTP id s26so50703113edw.11
+        for <linux-next@vger.kernel.org>; Thu, 23 Feb 2023 22:01:42 -0800 (PST)
+X-Received: by 2002:a17:906:4f0a:b0:878:561c:6665 with SMTP id
+ t10-20020a1709064f0a00b00878561c6665mr10274948eju.0.1677218502530; Thu, 23
+ Feb 2023 22:01:42 -0800 (PST)
+MIME-Version: 1.0
+References: <20230127165912.0e4a7b66@canb.auug.org.au> <20230127131142.yrlel7df3yvp56rx@quack3>
+ <20230201084741.0ca1c414@canb.auug.org.au> <20230224154010.17a5b949@canb.auug.org.au>
+In-Reply-To: <20230224154010.17a5b949@canb.auug.org.au>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 23 Feb 2023 22:01:25 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wiCrVFpwP6h=US7K=T=aYQuHCRc06cy8K8Y5upTQfQsAQ@mail.gmail.com>
+Message-ID: <CAHk-=wiCrVFpwP6h=US7K=T=aYQuHCRc06cy8K8Y5upTQfQsAQ@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the mm tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Jan Kara <jack@suse.cz>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patches in the ftrace tree
-Message-ID: <20230224163426.7e4d956b@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/WmOnlEwEiVnO8d7QI=6q3U8";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/WmOnlEwEiVnO8d7QI=6q3U8
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Thu, Feb 23, 2023 at 8:40 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> I think Linus may have missed the last 2 changes in this merge
+> resolution ...
 
-Hi all,
+Well, not exactly missed, in that I didn't actually even look at it,
+because that one wasn't one I worried about (unlike the cifs one that
+I'm very leery of).
 
-The following commits are also in Linus Torvalds' tree as different
-commits (but the same patches):
+And I actually really dislike your particular resolution and wouldn't
+prefer it done that way anyway. It mixes folios and pages in ugly
+ways.
 
-  2740abcc36cb ("Allow forcing unconditional bootconfig processing")
-  d3a1913404bf ("bootconfig: Default BOOT_CONFIG_FORCE to y if BOOT_CONFIG_=
-EMBED")
-  9739868a6e5b ("bootconfig: Increase max nodes of bootconfig from 1024 to =
-8192 for DCC support")
-  9f58b99c9c40 ("tracing/probe: add a char type to show the character value=
- of traced arguments")
+Either do it all with the page pointer (like I did), or convert it
+*all* to be folios, but don't do that odd "use a mixture of both
+intertwined".
 
-These are commits
+Of course, I do see _why_ you are mixing 'page' and 'folio' - there's
+no memcpy_to_folio() helper (although once it eventually exists it
+might be called "memcpy_to_file_folio()" to match the naming of the
+"from" version).
 
-  b743852ccc1d ("Allow forcing unconditional bootconfig processing")
-  6ded8a28ed80 ("bootconfig: Default BOOT_CONFIG_FORCE to y if BOOT_CONFIG_=
-EMBED")
-  6c40624930c5 ("bootconfig: Increase max nodes of bootconfig from 1024 to =
-8192 for DCC support")
-  8478cca1e3ab ("tracing/probe: add a char type to show the character value=
- of traced arguments")
+But that's exactly why I stopped where I stopped - I think it's
+pointless doing the other conversions when you can't easily do that
+memcpy_to_page() one.
 
-in Linus' tree.
+So I think the UDF folio conversion needs a bit more infrastructure to
+really work well.
 
---=20
-Cheers,
-Stephen Rothwell
+(There's also the whole kmap issue - we don't kmap whole folios, only
+individual pages, so a "real" folio conversion would have to have a
+loop).
 
---Sig_/WmOnlEwEiVnO8d7QI=6q3U8
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+End result: I explicitly left it in its minimal form, because I think
+anything else is a "future endeavor". The udf code only works with
+page-sized folios, and pretending anything else (using
+"folio_unlock()" etc) would be just that - pretending
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmP4TGIACgkQAVBC80lX
-0Gz7BAf9FQ2pqTGHXxrcyr89r6TOLGTVWqh7F44aa3B5IrXR7ZGxdp94uV3xDiFi
-IxpegDozpZ0bUR43NVKjEGD36zcbPYZOAnTlGO18atFBTb9pGjc6ZGSX3gqlWCJH
-tLFhGa2XKWNVwAYIQa2D9OiPBicy3jLltxWM6K4X81xFWREd9mMgDWPf8aBcQ2D/
-H486M4Qf+O4M2l43hrtfvyVNbvq9q1GQs27yqkkjjcN4GTa7bJCA+WQQ9QQbNjzK
-PEFtAWIW/jz/LtzeW2+lT7a/TxexOqh2jpfxBQXEThosfDRABGhmYI9vxK6TaLK0
-NZYFFOATPVy8aS+v3hEKNfV119+18g==
-=2jcZ
------END PGP SIGNATURE-----
-
---Sig_/WmOnlEwEiVnO8d7QI=6q3U8--
+               Linus

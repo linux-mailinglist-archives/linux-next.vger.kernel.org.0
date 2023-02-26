@@ -2,141 +2,111 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66A346A3490
-	for <lists+linux-next@lfdr.de>; Sun, 26 Feb 2023 23:18:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 321116A34D2
+	for <lists+linux-next@lfdr.de>; Sun, 26 Feb 2023 23:53:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229695AbjBZWSI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 26 Feb 2023 17:18:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37356 "EHLO
+        id S229557AbjBZWxf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 26 Feb 2023 17:53:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229682AbjBZWSI (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 26 Feb 2023 17:18:08 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6F49BBB3;
-        Sun, 26 Feb 2023 14:18:06 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PPygc2nm8z4x80;
-        Mon, 27 Feb 2023 09:18:04 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1677449885;
-        bh=AiXfxdXTWzEsQr34CRW3iDvQyVOgrswdRHZ4Y6rELTo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Ps++lvJA+yZaLNtxbZt/mzhOsekkdFcVsf4UPvyYVFmDeGVVa8IAljJiBUiYpLZbu
-         j3sFtvM8bNC7oVGJv8U5qu1tTXd49zmQicgdHpqFxiojpaA1LGbIEBAegGDTIBB2O4
-         gQia9uKXKFiWbbnRCY2FkpvC3yjV1SRgftUq448gMvior9Uae5CjIVkpYnmNWTyFBV
-         q+f1FObI99YP3erIPjaifowucqaLh67afoK218SLdPmy77XzhITQJxQFGg4l6gzF5Y
-         MaYoZlisG0zCaxPVoLOB/SOgi+9MybW+UX/6iw0gB1oJQSvxpa/U+YFJwRIvRTtHgd
-         tQQkY/uxW+TxA==
-Date:   Mon, 27 Feb 2023 09:18:03 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Christian Brauner <christian@brauner.io>,
-        Giuseppe Scrivano <gscrivan@redhat.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Joey Gouly <joey.gouly@arm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the mm tree
-Message-ID: <20230227091803.5e29b563@canb.auug.org.au>
-In-Reply-To: <20230130080956.ikb3w5cjkhtxqzcr@wittgenstein>
-References: <20230130161414.25a71a87@canb.auug.org.au>
-        <20230130080956.ikb3w5cjkhtxqzcr@wittgenstein>
+        with ESMTP id S229379AbjBZWxd (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 26 Feb 2023 17:53:33 -0500
+Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0EEABB9B;
+        Sun, 26 Feb 2023 14:53:32 -0800 (PST)
+Received: by mail-il1-x133.google.com with SMTP id a1so3074378iln.9;
+        Sun, 26 Feb 2023 14:53:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=5jgNfCvYzvN77d+Vnzv3F6iStq1dV6fR66liem9uZWY=;
+        b=XFNJv98AaOxc5miUbXWdMakI26ttWvj9IoHwxD91yr2wnQKOpfyWa+wYD5eI0WEiJ/
+         UUqQVtGftKKpuqWXU5X6bXHrU7XZcn0u+tUYQuCEUf9WvT0NsjL5SNbus5rfZDVslmTj
+         YToBNCFuRm/slk/o4sWhYz9WwnPSf7Q8rIK6WFyn0mnGL5+GSbwr6ruHTsPgmeF080zg
+         ok28nGEoSfk4dcWEXxwNta+aSpQ1Rfd7YeOtq6E6XMldLLx6gwutOqZPsr38MS4e0TJT
+         bfX5r0J4H2RXipbltc0gTpeZc3WtuvrR63gd7nov8G+t8kDjz7tLS+qL0OM1bgQBRw5u
+         Gaig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5jgNfCvYzvN77d+Vnzv3F6iStq1dV6fR66liem9uZWY=;
+        b=7ZE+q249VOB6SVKTq7k9XZshP7wtuel9z7DDioimj52+7D7zPa/P3o9d+bqChDQFyc
+         ZZe6iIk1FL1FAjsN0SDuGxqUwQDW+zmqDZzsigZHE4X5vJ6Wt3ltFD9iAsbMKt26lHi1
+         Ytog/yvTjSDoFtQTlVzN9Ew66KziOcQrQO1qxQ6hxPpz76HNCCn1xPHbbIQWz6OC1oo5
+         MmVsn/dlos5O7o0m9rScL/RUwZlMczJOUsXjad6hqD/iaOkkp3J4rkD4g+cTJgZVSJM/
+         5q+rD6WfiGSEIiZbk+0s0f3GQ/y0l/7xksJ2cWe7aLZAcAXkTQ2oC1Ql5VJrE4q6Fjqq
+         uPaw==
+X-Gm-Message-State: AO0yUKXWSAEmTYjuVKR7rLjJqyeAmpNqDrlH9C7kljrOyE/63GEGn+oz
+        19HnXr7lFrksdgOiLuc2ABs=
+X-Google-Smtp-Source: AK7set/szAq8J569eo93vQZA9bbPjV2Usxi5VS/hbbkVQEnsIitb7UupEy+TPH0rRm+2GeDHTTUOeQ==
+X-Received: by 2002:a92:1a4b:0:b0:315:56e7:7f39 with SMTP id z11-20020a921a4b000000b0031556e77f39mr15954171ill.2.1677452012220;
+        Sun, 26 Feb 2023 14:53:32 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id c13-20020a02a60d000000b003b39dcca1dfsm1603138jam.170.2023.02.26.14.53.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 26 Feb 2023 14:53:31 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <d4260bee-2bec-40e4-b07f-3a9fa18c3d72@roeck-us.net>
+Date:   Sun, 26 Feb 2023 14:53:29 -0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/MDSDkz7un69i84TtOnuOtUC";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: nvme boot problems after merge of mm-stable tree into linux-next
+Content-Language: en-US
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        linux-mm@kvack.org
+References: <ed33b9ff-e6f2-dae8-ede6-59dc3c649ece@roeck-us.net>
+ <20230213094754.397f86af6b2dea4aafd92344@linux-foundation.org>
+ <a276d6ae-677d-e4cf-13d7-934c0a7639d2@gmail.com>
+ <58fb32f8-ce1e-913b-3b85-c41b0630d4c6@roeck-us.net>
+ <20230214172040.60657882@canb.auug.org.au>
+ <07c870d3-5d98-ca51-5de8-034abc631673@roeck-us.net>
+ <02f796c7-c1d5-2f2b-3385-e72298f5f470@gmail.com>
+ <20230227091423.3797ba8e@canb.auug.org.au>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20230227091423.3797ba8e@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/MDSDkz7un69i84TtOnuOtUC
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 2/26/23 14:14, Stephen Rothwell wrote:
+> Hi all,
+> 
+> On Tue, 14 Feb 2023 14:29:29 +0700 Bagas Sanjaya <bagasdotme@gmail.com> wrote:
+>>
+>> On 2/14/23 13:49, Guenter Roeck wrote:
+>>> In next-20230210, the crash happened after the merge of mm-stable.
+>>> In next-20230213, the crash happens after the merge of mm-everything.
+>>> That means both the merge of mm-stable and mm-nonmm-stable are now fine.
+>>> So I would suspect that something in the merge of mm-everything
+>>> interacts with the rest of -next.
+>>>    
+>>
+>> OK, thanks!
+> 
+> Did this get resolved?
+> 
 
-Hi Christian,
+I think so. Either the offending patch was reverted, or it has been fixed.
+I still see various boot problems in -next (and most of them are now
+seen in mainline as well), but none of them are nvme related.
 
-On Mon, 30 Jan 2023 09:09:56 +0100 Christian Brauner <brauner@kernel.org> w=
-rote:
->
-> On Mon, Jan 30, 2023 at 04:14:14PM +1100, Stephen Rothwell wrote:
-> > Hi all,
-> >=20
-> > After merging the mm tree, today's linux-next build (powerpc
-> > ppc64_defconfig) failed like this:
-> >=20
-> > kernel/sys.c: In function '__do_sys_prctl':
-> > kernel/sys.c:2664:9: error: duplicate case value
-> >  2664 |         case PR_SET_HIDE_SELF_EXE:
-> >       |         ^~~~
-> > kernel/sys.c:2655:9: note: previously used here
-> >  2655 |         case PR_SET_MDWE:
-> >       |         ^~~~
-> > kernel/sys.c:2669:9: error: duplicate case value
-> >  2669 |         case PR_GET_HIDE_SELF_EXE:
-> >       |         ^~~~
-> > kernel/sys.c:2658:9: note: previously used here
-> >  2658 |         case PR_GET_MDWE:
-> >       |         ^~~~
-> >=20
-> > Caused by commit
-> >=20
-> >   ab30677b499c ("mm: implement memory-deny-write-execute as a prctl")
-> >=20
-> > interacting with commit
-> >=20
-> >   966eb1ba050d ("exec: add PR_HIDE_SELF_EXE prctl")
-> >=20
-> > from the pidfd tree.
-> >=20
-> > I have applied the following merge fix patch.
-> >=20
-> > From: Stephen Rothwell <sfr@canb.auug.org.au>
-> > Date: Mon, 30 Jan 2023 16:08:34 +1100
-> > Subject: [PATCH] mm: fixup for "mm: implement memory-deny-write-execute=
- as a prctl"
-> >=20
-> > interacting with
-> >=20
-> >   966eb1ba050d ("exec: add PR_HIDE_SELF_EXE prctl")
-> >=20
-> > Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> > --- =20
->=20
-> Thanks Stephen,
->=20
-> I'm moving this out of -next for now until we've settled a few more
-> details.
+Guenter
 
-I am still applying this to the merge of the pidfd tree.  Also I
-noticed that a similar fixup will need to be applied to
-tools/testing/selftests/prctl/hide-self-exe.c
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/MDSDkz7un69i84TtOnuOtUC
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmP72psACgkQAVBC80lX
-0GyPQQf+IXLCzLRVcFE2V22gMpcgkUwWa0ErgmMOQPeUBlV59213loGEByX2LhPN
-gaKH3FiCW/cfRKgdiMMTh/4u/v13h4xKgEt4D67HFtPKXcb/UqKW6+PuU3O/Xh+v
-2Ktr4QR3eKSV8W2I9sK78La847K5LjbfpOvNYFmA/aOFJO0Iv/b5e+zDPmMSONO7
-OIwrtEb/x6OMVhTX8mO6y6Qt8FTfmmcyP0Am33n131Zl9wC6tQUwVJq0iE0rnE8b
-LocUffkPLWrrVTbCLfj84LRFtzT/XemUuoVI4HOGAKWgS3Hvn8LFDn5hXRBMAgDB
-n8DDyLXhhS0Dk1OQAdIUzcNxK5RXKA==
-=DvlT
------END PGP SIGNATURE-----
-
---Sig_/MDSDkz7un69i84TtOnuOtUC--

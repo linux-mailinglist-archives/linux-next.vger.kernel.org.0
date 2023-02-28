@@ -2,96 +2,93 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A03996A6138
-	for <lists+linux-next@lfdr.de>; Tue, 28 Feb 2023 22:29:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB1546A63B2
+	for <lists+linux-next@lfdr.de>; Wed,  1 Mar 2023 00:13:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229510AbjB1V3L (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 28 Feb 2023 16:29:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44492 "EHLO
+        id S229910AbjB1XNN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 28 Feb 2023 18:13:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbjB1V3K (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 28 Feb 2023 16:29:10 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43FBE29153;
-        Tue, 28 Feb 2023 13:29:08 -0800 (PST)
+        with ESMTP id S229548AbjB1XNM (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 28 Feb 2023 18:13:12 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 174707DAC;
+        Tue, 28 Feb 2023 15:13:10 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PR9V74dVzz4x1R;
-        Wed,  1 Mar 2023 08:29:03 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PRCp86559z4x7x;
+        Wed,  1 Mar 2023 10:13:04 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1677619743;
-        bh=1YTwPo7oLOtuSR38KjHXSv+yT55KdVYy1P9mQp9lAF8=;
+        s=201702; t=1677625985;
+        bh=0+laPdOYcc037NqVOAd/LAR9BTIYDIohensY42Dxvvo=;
         h=Date:From:To:Cc:Subject:From;
-        b=XTL2doQNxhXJfn2VHW66N6ZXB9TDlwJZhuK6qLfIPFaiQKqhca40v//4DQjscyGZN
-         BBm6TZKsVgb9Ck6+VzMKWYP/rxVYEhZRmKKLrstQu/7RZ1UG0G8iJhxj02phyWv3Id
-         qt2aEdi7TPCoj4NoSGdrfB4Nu3vOStbZ2e77bgGMqwxSeryFP/pY2WQOJS3w7d8jC2
-         qTznYWH7fRdyAk2/YWCOCxkTOdcMz0KcFiWDIuXTHYvyoTdrPp7FwR80q2LDxGv2AG
-         eTfIXydczgDfnJ4Y4ujx9ICNorFr3opWMw8uxPaTkvCL490ezCWtm5yxW1TbFT9Tt7
-         8glDefKtOG/ZA==
-Date:   Wed, 1 Mar 2023 08:28:51 +1100
+        b=eb9TRUh2q0CW13Cxb9spftI0SddmnwFykcx4Y6iX5LVYNhWGvAftgmFJ0dRZJISh8
+         FbfXzKrc+lE6pqYojUK48/2ptZDGd26PgwN1pwZb/8sfUel4ZXgnkPq/KU2a0qcDyT
+         afMxxZGamtKg7AMoVuG2nZ/CvXfgJWKCZiim+zJteQyNzasC18/5DoUCXuNsDIMxcp
+         FT1h1uIGn/upxsEIuBap3tSHro84zmrLByYQV58FOQlnN0ihBfQjgoZeQOR1vSpfPv
+         /c+aliMH+9FXKGNVJOJGLNPCxtyjcHbEGrRL9+C8+iakkuVjNOMMRMInCNvhGosQgj
+         F4+LKy20j6Jig==
+Date:   Wed, 1 Mar 2023 10:13:03 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Theodore Ts'o <tytso@mit.edu>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Helge Deller <deller@gmx.de>
+Cc:     Parisc List <linux-parisc@vger.kernel.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patches in the ext4 tree
-Message-ID: <20230301082851.221dbf83@canb.auug.org.au>
+Subject: linux-next: duplicate patch in the input tree
+Message-ID: <20230301101303.2223f88e@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/MUCAmb=tFHq6hPf8mcPXyk5";
+Content-Type: multipart/signed; boundary="Sig_/F2.+VUjmh4HTtoVA0Dac5n=";
  protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/MUCAmb=tFHq6hPf8mcPXyk5
+--Sig_/F2.+VUjmh4HTtoVA0Dac5n=
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-The following commits are also in Linus Torvalds' tree as different
-commits (but the same patches):
+The following commit is also in the parisc-hd tree as a different commit
+(but the same patch):
 
-  2806abcc9782 ("ext4: init error handle resource before init group descrip=
-tors")
-  98c8afa3038a ("ext4: Fix possible corruption when moving a directory")
-  2c2dec1e86cc ("ext4: fix incorrect options show of original mount_opt and=
- extend mount_opt2")
+  586dc36226dd ("Input: hp_sdc_rtc - mark an unused function as __maybe_unu=
+sed")
 
-these are commits
+This is commit
 
-  172e344e6f82 ("ext4: init error handle resource before init group descrip=
-tors")
-  0813299c586b ("ext4: Fix possible corruption when moving a directory")
-  e3645d72f886 ("ext4: fix incorrect options show of original mount_opt and=
- extend mount_opt2")
+  ab898955932e ("input/misc: hp_sdc_rtc: mark an unused function as __maybe=
+_unused")
 
-in Linus' tree.
+in the parisc-hd tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/MUCAmb=tFHq6hPf8mcPXyk5
+--Sig_/F2.+VUjmh4HTtoVA0Dac5n=
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmP+chQACgkQAVBC80lX
-0GyR4wgAjxCMeWkrpo0ov4Ucfz5vR2FjYzv1D2KsnoDM+qgLbOcxU6XCNADFKq3Q
-Pf2TwMBtmiszlWpnq+8yX1jZps8AUAC3Tdg5GME6Ie7zIcxz7fB0gGDHx/jMCDId
-oYakJkgdJ2f2H1S2YciFTdfo02EkfCyyGRiRtXkErOSqvWSkUZnMzZDMJ6eO0BIr
-vgPizZ1kdf66VsZABZjXX/qPjNsVmE/QslWVnCo/HFaAqOP7Q79MDzVZ3l+/1vpT
-LtLrQO0ZcKU93zulR1ju//wCgY6iHTJXjfYe+EJ27jCp63xUlZd18XjROVmajSSO
-+DCPWORRsrIWAKqrmtRFyDMnTdqCww==
-=4sQZ
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmP+in8ACgkQAVBC80lX
+0Gy6tAf/XQ3GFVHd3/CEGVKFP6I0uOuRg7nnNYEryHQ6pNwg+FO4H1Zmz4YVNa2n
+HnaSS7jIWSj1P2oOCExmkR/a69UX46piEEhGr4y8dSA39f/rtRnS/Q9VmqYqwZFe
+QTU2cvQbPj5KlFAiHfrrLbJEHaGtlwswgjrMifQ/urqTuzdbVkjTimAn/dPb0yQO
+2jZbrLEW2Zsx+7G8ETwr6DdK2zXRZvX6yOP2wzmmuwf9ypO4rvxuA/FvCtBwB0dV
+X+rsXB7Wyiil5jEGQ8r9qdCLVsH91tVQJ0YLFfQmrNfOHxem3PxT9kD7eF1gMVHg
+l/n2+2zkWtc5IMwJ0pJej/TX6od6iw==
+=Xq7f
 -----END PGP SIGNATURE-----
 
---Sig_/MUCAmb=tFHq6hPf8mcPXyk5--
+--Sig_/F2.+VUjmh4HTtoVA0Dac5n=--

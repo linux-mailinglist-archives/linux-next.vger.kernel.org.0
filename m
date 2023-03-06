@@ -2,126 +2,128 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B82E96AD225
-	for <lists+linux-next@lfdr.de>; Mon,  6 Mar 2023 23:58:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ECF66AD285
+	for <lists+linux-next@lfdr.de>; Tue,  7 Mar 2023 00:09:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229928AbjCFW6i (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 6 Mar 2023 17:58:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40968 "EHLO
+        id S230085AbjCFXJR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 6 Mar 2023 18:09:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229646AbjCFW6h (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 6 Mar 2023 17:58:37 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8605301A2;
-        Mon,  6 Mar 2023 14:58:32 -0800 (PST)
+        with ESMTP id S229702AbjCFXJQ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 6 Mar 2023 18:09:16 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 619C0303DE;
+        Mon,  6 Mar 2023 15:09:11 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PVvBW2Yldz4x80;
-        Tue,  7 Mar 2023 09:58:27 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PVvQr1kRHz4xDh;
+        Tue,  7 Mar 2023 10:09:07 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1678143507;
-        bh=h5XIYN5L+EoItQ8HxafPRNG77c3wSJgo16ZNnxBR3Es=;
+        s=201702; t=1678144149;
+        bh=Zu980PEf3uYdJqFmYlQ36m7G+AYyS3zkGCPtGK8eeqI=;
         h=Date:From:To:Cc:Subject:From;
-        b=bOs5su7ciaqw/yKhjZ7qLbanP2hVmgE7EhMpI3QYSN3MDjAuBTbPBCIkB/V7nMZRb
-         HV1zj27yRmk0ViLD4qpDhOiUMIEsJXf2EoZFvP16QBoH6T9hJt97yIunlJc0vNfKCm
-         2sbNSxBN5eSZ/959kPfY/y4BGW3i3ZGwUloUmqvIBKionrG5OkRXmzihLi2Rr1y0Bo
-         +xyqt+5s7VsMoGrvhhRq5rcXs7bFTPgXQhKHj1SsMjdZNZsm+PCcSlvSoSVxi8ER0I
-         d/E+EwB1mEhulUvpkzDnsj/eeLcR3nqWs87Ux3OsKumDdJcMtbnmHlHs5yUvX+cMFI
-         5HTqYTrnXYJ3Q==
-Date:   Tue, 7 Mar 2023 09:58:12 +1100
+        b=oc3cmjg40DSfntGJbigyvNXzPHUs7bTKLHKGbox8PerHedolSp/qLpt9K9j3z+KH3
+         J3Es0KLANBikK6IYFSI436dBuXCoL3T04coddv6aj6IJYqJFYA4wlDy2yuUYTVdmd3
+         519foK98XxnQ3pfvUP0jPP3EPs2J2uC3Lq2e8c6Y9yjEZXPE20wNu5i7HRkC+FOFOO
+         St9wVITQOFlvNmlrYOL64SdFbooFmEQyiA7C55pVpHXXsvYu27/X/cac8jJEaWRQOq
+         4TWrdydj6uxoMdsfmFvCNItmdRgV5tfCeiED5Q4LbI1JNZyHTLvyhJRCtOhqt0KjDP
+         EAkCfX5a7FIzA==
+Date:   Tue, 7 Mar 2023 10:09:06 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        David Vernet <void@manifault.com>,
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>
+Cc:     Andi Shyti <andi.shyti@linux.intel.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the bpf-next tree with the bpf tree
-Message-ID: <20230307095812.236eb1be@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Nirmoy Das <nirmoy.das@intel.com>
+Subject: linux-next: manual merge of the drm-intel tree with Linus' tree
+Message-ID: <20230307100906.60384f71@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_//ojnktPX=ubI7kDj46Szf7e";
+Content-Type: multipart/signed; boundary="Sig_/KfzsMz2nuDG5O7oKpHgeQgG";
  protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_//ojnktPX=ubI7kDj46Szf7e
+--Sig_/KfzsMz2nuDG5O7oKpHgeQgG
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the bpf-next tree got a conflict in:
+Today's linux-next merge of the drm-intel tree got a conflict in:
 
-  Documentation/bpf/bpf_devel_QA.rst
+  drivers/gpu/drm/i915/i915_driver.c
 
 between commit:
 
-  b7abcd9c656b ("bpf, doc: Link to submitting-patches.rst for general patch=
- submission info")
+  2293a73ad4f3 ("drm/i915: Remove unused variable")
 
-from the bpf tree and commit:
+from Linus' tree and commit:
 
-  d56b0c461d19 ("bpf, docs: Fix link to netdev-FAQ target")
+  e5e43d3363d7 ("drm/i915/display: Pass drm_i915_private as param to i915 f=
+uncs")
 
-from the bpf-next tree.
+from the drm-intel tree.
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+I fixed it up (the latter commit means that the variable removed in
+the former is still needed - see below ) and can carry the fix as
+necessary. This is now fixed as far as linux-next is concerned, but any
+non trivial conflicts should be mentioned to your upstream maintainer
+when your tree is submitted for merging.  You may also want to consider
+cooperating with the maintainer of the conflicting tree to minimise any
+particularly complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc Documentation/bpf/bpf_devel_QA.rst
-index b421d94dc9f2,5f5f9ccc3862..000000000000
---- a/Documentation/bpf/bpf_devel_QA.rst
-+++ b/Documentation/bpf/bpf_devel_QA.rst
-@@@ -684,8 -684,12 +684,8 @@@ when
+diff --cc drivers/gpu/drm/i915/i915_driver.c
+index cf1c0970ecb4,4a2dc43791c3..000000000000
+--- a/drivers/gpu/drm/i915/i915_driver.c
++++ b/drivers/gpu/drm/i915/i915_driver.c
+@@@ -936,9 -930,12 +930,11 @@@ static int i915_driver_open(struct drm_
+   */
+  static void i915_driver_lastclose(struct drm_device *dev)
+  {
+- 	intel_fbdev_restore_mode(dev);
++ 	struct drm_i915_private *i915 =3D to_i915(dev);
++=20
++ 	intel_fbdev_restore_mode(i915);
  =20
+ -	if (HAS_DISPLAY(i915))
+ -		vga_switcheroo_process_delayed_switch();
+ +	vga_switcheroo_process_delayed_switch();
+  }
  =20
-  .. Links
-- .. _netdev-FAQ: Documentation/process/maintainer-netdev.rst
- -.. _Documentation/process/: https://www.kernel.org/doc/html/latest/proces=
-s/
-+ .. _netdev-FAQ: https://www.kernel.org/doc/html/latest/process/maintainer=
--netdev.html
-  .. _selftests:
-     https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tre=
-e/tools/testing/selftests/bpf/
- -.. _Documentation/dev-tools/kselftest.rst:
- -   https://www.kernel.org/doc/html/latest/dev-tools/kselftest.html
- -.. _Documentation/bpf/btf.rst: btf.rst
- =20
-  Happy BPF hacking!
+  static void i915_driver_postclose(struct drm_device *dev, struct drm_file=
+ *file)
 
---Sig_//ojnktPX=ubI7kDj46Szf7e
+--Sig_/KfzsMz2nuDG5O7oKpHgeQgG
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQGcAQACgkQAVBC80lX
-0Gzo3ggAnAwF8pcK2Kgrbc2Gbw7zflcf000en2d5pNmMqM6mnK52SVm8vlJ+HCEV
-GHy7UMv4SWf7mFe8jcN7II58aW5s2xzt1ZRU8v0grEOJq1kIYEF1Ei42raeEJ9dm
-IIriGREcFGWrMSM41tt7Pfw6v7O7pSkxCz4bHztHbYcRDcBQ/LqxUmulE9JWmtlU
-cCSJ85UFLn20XDUkHf1bhTQZM/4QK/K61vNqNPuM9eniyVgSh66USPEDDDV3xSme
-RXKKaoIZ7bytDwV4VO2Z0wLemdfuFXTBQ4WjDtLnJQKQSfNDjOousvdfSTaBZZ51
-ivV1HIKCKsgzAVdQEgIiVSG0c8wdfA==
-=scRr
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQGcpIACgkQAVBC80lX
+0Gx6Ygf/RZZReLwAWdHhqnVcS9m61JdNvARZPjvB04KgE4yeoIKbwECCleSBbSOC
+c5xBxJobMri0Bqs6EXRXphRq+4lZpszt1VhbAo8jA3im3OIcoxkjH+RdhW0Vuk8L
+AjAGuoRlW7IzM6Lv1ABq0CRWb3BbFM8mrqdqzU3GQ/SYekibILqtrch+zZBAa1DD
+o2ETeeFfWlG1OQpwUMO01XDQFzv86Na0hBQazcjFMpxoDz44up7J2zM2q2+qic2q
+MFraf6xh9iTAV4jLZGG7g3i/t9xikvqL32JA4Bqe0tefVNl5nlOvaX5F80Q6J5KX
+kr5s88TzGbCQZMZjATuboLfbi++tnA==
+=5ab0
 -----END PGP SIGNATURE-----
 
---Sig_//ojnktPX=ubI7kDj46Szf7e--
+--Sig_/KfzsMz2nuDG5O7oKpHgeQgG--

@@ -2,74 +2,51 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A8BD6AD145
-	for <lists+linux-next@lfdr.de>; Mon,  6 Mar 2023 23:16:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B82E96AD225
+	for <lists+linux-next@lfdr.de>; Mon,  6 Mar 2023 23:58:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229757AbjCFWQO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 6 Mar 2023 17:16:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42338 "EHLO
+        id S229928AbjCFW6i (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 6 Mar 2023 17:58:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229646AbjCFWQN (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 6 Mar 2023 17:16:13 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 695B73E62B;
-        Mon,  6 Mar 2023 14:16:12 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id c18so6631960wmr.3;
-        Mon, 06 Mar 2023 14:16:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678140971;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/np7LTt0kPylI77w/zYzftVt9xv6o8UgeSBcijuygZ8=;
-        b=OyY0qjlxGPI9MrjPz/G8v0QASAzgt1AATjxNJldMeDn5F+EIcmiWPVY+C53jA2X6Wa
-         Mtf6jSV6rXP96ZrE9Lo4AT6AUO2E062uK/coUcMtuKYscSmdrfXPW6HMD4jxK7AWoyDQ
-         cy4HjKazG4lcTrM1ecljphlDxla7TxUZpcOAIK/d4zBvt95mLc3OvkzBYdtpSW4QvFhr
-         j5b6deICww2IHf6rOzROfnBeH48MId3e072VH00XcLP3MkFllrMdsNZe/+B+oKGv5cvX
-         0L+M3MtJdfS3BoRFiNFLnYI4Bd/5GmF7UwLCQq8fq9c/oNXGvC3G+4sHPtVtSTtp92kz
-         SnXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678140971;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/np7LTt0kPylI77w/zYzftVt9xv6o8UgeSBcijuygZ8=;
-        b=gAGHV9/6kPijni/CiJ53POJUg6o91P2xyyYszwdY2xkG+sdNE/61ojMkpfTN+Uop/Z
-         OqpXj5FyG9zrpmiiwakZ1a7tyZiK/kOfz7WKHLe/rw1wNkReMCiRpD7yOeBQLVwZ20iI
-         t2/83hpmMVzRu06lIldLgDe7IRMjiWDTNvKQ6iGD3xuhLgO+nAzSliypwRF+CtF4DMCP
-         NUeERRrAKMXXCV0uF//jOzbk2bbhS2/OWXZL1l4IGoES0WyylGiYOy/HYrWDDRISosoo
-         DPE1T70rwhBIHUTzNYaCYHxI4s+PBXTnT+K/RtqfD4AiVsKFtydhd7ECt0kcjMiikCAP
-         xbQw==
-X-Gm-Message-State: AO0yUKXc9JKLFOsMq2rsdnWDEGVnZ0n+EfD2x3jwD+y6MM7ZDao7fqfb
-        JQCojqjCtPqK269VIjnv0co=
-X-Google-Smtp-Source: AK7set8me7kyk7DK81kOYPo/vCehL750oq9qIGwsvDqa4DCiaennXbMy4+03nGVf0UcUBtJN3w0sog==
-X-Received: by 2002:a05:600c:444c:b0:3eb:39e2:915b with SMTP id v12-20020a05600c444c00b003eb39e2915bmr10513783wmn.31.1678140970738;
-        Mon, 06 Mar 2023 14:16:10 -0800 (PST)
-Received: from ?IPV6:2a01:c22:7bf4:7d00:9590:4142:18ea:aa32? (dynamic-2a01-0c22-7bf4-7d00-9590-4142-18ea-aa32.c22.pool.telefonica.de. [2a01:c22:7bf4:7d00:9590:4142:18ea:aa32])
-        by smtp.googlemail.com with ESMTPSA id m23-20020a05600c3b1700b003daf6e3bc2fsm40143wms.1.2023.03.06.14.16.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Mar 2023 14:16:10 -0800 (PST)
-Message-ID: <d5b3d530-e050-1891-e5c0-8c98e136b744@gmail.com>
-Date:   Mon, 6 Mar 2023 23:16:09 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: linux-next: Signed-off-by missing for commit in the net tree
-Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        David Miller <davem@davemloft.net>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        Networking <netdev@vger.kernel.org>,
+        with ESMTP id S229646AbjCFW6h (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 6 Mar 2023 17:58:37 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8605301A2;
+        Mon,  6 Mar 2023 14:58:32 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PVvBW2Yldz4x80;
+        Tue,  7 Mar 2023 09:58:27 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1678143507;
+        bh=h5XIYN5L+EoItQ8HxafPRNG77c3wSJgo16ZNnxBR3Es=;
+        h=Date:From:To:Cc:Subject:From;
+        b=bOs5su7ciaqw/yKhjZ7qLbanP2hVmgE7EhMpI3QYSN3MDjAuBTbPBCIkB/V7nMZRb
+         HV1zj27yRmk0ViLD4qpDhOiUMIEsJXf2EoZFvP16QBoH6T9hJt97yIunlJc0vNfKCm
+         2sbNSxBN5eSZ/959kPfY/y4BGW3i3ZGwUloUmqvIBKionrG5OkRXmzihLi2Rr1y0Bo
+         +xyqt+5s7VsMoGrvhhRq5rcXs7bFTPgXQhKHj1SsMjdZNZsm+PCcSlvSoSVxi8ER0I
+         d/E+EwB1mEhulUvpkzDnsj/eeLcR3nqWs87Ux3OsKumDdJcMtbnmHlHs5yUvX+cMFI
+         5HTqYTrnXYJ3Q==
+Date:   Tue, 7 Mar 2023 09:58:12 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
+        David Vernet <void@manifault.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20230307083703.558634a9@canb.auug.org.au>
-From:   Heiner Kallweit <hkallweit1@gmail.com>
-In-Reply-To: <20230307083703.558634a9@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+Subject: linux-next: manual merge of the bpf-next tree with the bpf tree
+Message-ID: <20230307095812.236eb1be@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_//ojnktPX=ubI7kDj46Szf7e";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,24 +54,74 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 06.03.2023 22:37, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Commit
-> 
->   58aac3a2ef41 ("net: phy: smsc: fix link up detection in forced irq mode")
-> 
-> is missing a Signed-off-by from its committer.
-> 
+--Sig_//ojnktPX=ubI7kDj46Szf7e
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Seems to be ok, false positive?
+Hi all,
 
-net: phy: smsc: fix link up detection in forced irq mode
-Currently link up can't be detected in forced mode if polling
-isn't used. Only link up interrupt source we have is aneg
-complete which isn't applicable in forced mode. Therefore we
-have to use energy-on as link up indicator.
+Today's linux-next merge of the bpf-next tree got a conflict in:
 
-Fixes: 7365494550f6 ("net: phy: smsc: skip ENERGYON interrupt if disabled")
-Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+  Documentation/bpf/bpf_devel_QA.rst
+
+between commit:
+
+  b7abcd9c656b ("bpf, doc: Link to submitting-patches.rst for general patch=
+ submission info")
+
+from the bpf tree and commit:
+
+  d56b0c461d19 ("bpf, docs: Fix link to netdev-FAQ target")
+
+from the bpf-next tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc Documentation/bpf/bpf_devel_QA.rst
+index b421d94dc9f2,5f5f9ccc3862..000000000000
+--- a/Documentation/bpf/bpf_devel_QA.rst
++++ b/Documentation/bpf/bpf_devel_QA.rst
+@@@ -684,8 -684,12 +684,8 @@@ when
+ =20
+ =20
+  .. Links
+- .. _netdev-FAQ: Documentation/process/maintainer-netdev.rst
+ -.. _Documentation/process/: https://www.kernel.org/doc/html/latest/proces=
+s/
++ .. _netdev-FAQ: https://www.kernel.org/doc/html/latest/process/maintainer=
+-netdev.html
+  .. _selftests:
+     https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tre=
+e/tools/testing/selftests/bpf/
+ -.. _Documentation/dev-tools/kselftest.rst:
+ -   https://www.kernel.org/doc/html/latest/dev-tools/kselftest.html
+ -.. _Documentation/bpf/btf.rst: btf.rst
+ =20
+  Happy BPF hacking!
+
+--Sig_//ojnktPX=ubI7kDj46Szf7e
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQGcAQACgkQAVBC80lX
+0Gzo3ggAnAwF8pcK2Kgrbc2Gbw7zflcf000en2d5pNmMqM6mnK52SVm8vlJ+HCEV
+GHy7UMv4SWf7mFe8jcN7II58aW5s2xzt1ZRU8v0grEOJq1kIYEF1Ei42raeEJ9dm
+IIriGREcFGWrMSM41tt7Pfw6v7O7pSkxCz4bHztHbYcRDcBQ/LqxUmulE9JWmtlU
+cCSJ85UFLn20XDUkHf1bhTQZM/4QK/K61vNqNPuM9eniyVgSh66USPEDDDV3xSme
+RXKKaoIZ7bytDwV4VO2Z0wLemdfuFXTBQ4WjDtLnJQKQSfNDjOousvdfSTaBZZ51
+ivV1HIKCKsgzAVdQEgIiVSG0c8wdfA==
+=scRr
+-----END PGP SIGNATURE-----
+
+--Sig_//ojnktPX=ubI7kDj46Szf7e--

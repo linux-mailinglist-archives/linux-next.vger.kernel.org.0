@@ -2,70 +2,48 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E79BF6AC976
-	for <lists+linux-next@lfdr.de>; Mon,  6 Mar 2023 18:12:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21EBE6AD0A9
+	for <lists+linux-next@lfdr.de>; Mon,  6 Mar 2023 22:37:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230171AbjCFRMC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 6 Mar 2023 12:12:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58216 "EHLO
+        id S229580AbjCFVhM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 6 Mar 2023 16:37:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229736AbjCFRMB (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 6 Mar 2023 12:12:01 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2907565130
-        for <linux-next@vger.kernel.org>; Mon,  6 Mar 2023 09:11:24 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id bx12so9559113wrb.11
-        for <linux-next@vger.kernel.org>; Mon, 06 Mar 2023 09:11:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678122606;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=4PzzPL3yf/OvHrUyvtjdzmob9yX9CWqWw1Cbp7amTnc=;
-        b=G8dExvrsNRqq6dp23s57GMB3tat6Oh3IGRZEq7Lil7Y/MafWTAwc1xARppZ/yIAlER
-         9/r5yAqKcZSPmd0KF3KGlKcrESpGgyE2b2zWEHgmwGZsbDsq8BUnPc0T1qgikT4WSSJw
-         s5zfl4HsPMFdNc58HIWgGrOYxmjxEjwh4q4tIbEFxpZVDAuLSAzf+miPIxe1lcCFB/U0
-         gL1tXPgrlpRCxQQVQSt9kaNrpYwb6ExbDSQECMiEwsqhTlyovT+kRzAyWai/6EiQyUNV
-         gksvFpxbBic9TYSYhbPAtaWxzQ8Dr08wxncjbKHeJYU2m9ms8tJr+PhpFk6Ja1g6whhP
-         0tyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678122606;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4PzzPL3yf/OvHrUyvtjdzmob9yX9CWqWw1Cbp7amTnc=;
-        b=n9DxJuONVxNOh48rHoq8oqgXPxXsTSWKjhoV3ugROQAAbTRTgOA4V/4dvRR4VAVwxi
-         awIii37W4QKJjQcclkSev19hYkBgZWi9wEOZJ+2+Exd8wdoXw+VjgDGW723Y1UbuvAp8
-         8ksHnXyh5AGXCk8SAlok0oNH/2IfBdPhQZYo/GLrd3A3EDP1aGykK9k4+L9JigGZz2KZ
-         QJ++SaNmP1eY3BOEg66pkV5p1tjdX7YObrba+oF92r4GXQn4OfFcBv/EUI+UeN+4pACm
-         nCapZyzjXutLDdVpfmWES+TkoZ1U9Bs4/nTtyg4a0h6kR28wCR6xhASOvLYgg/0wSZMj
-         xTAA==
-X-Gm-Message-State: AO0yUKU5LrML7J+L7KseRgu7JNmo9xxAzGjshRmG324+yrUtY5DIDJpG
-        qXe6AywrQuEoy8GrhOW4cUpZyGSybhb8AASvLV8RMXINH31dm8pFX14SPw==
-X-Google-Smtp-Source: AK7set/hlySjQjG9XahK1Wr1L2iX8UrH1gzGxxXqeuWd8StHpPzUUpQ8ndgAdNdgjYv9LluMSUP3FOfArTNRFu85UMc=
-X-Received: by 2002:adf:ee4e:0:b0:2c7:17b8:5759 with SMTP id
- w14-20020adfee4e000000b002c717b85759mr2138518wro.3.1678122605647; Mon, 06 Mar
- 2023 09:10:05 -0800 (PST)
+        with ESMTP id S229557AbjCFVhL (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 6 Mar 2023 16:37:11 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E26D31E3E;
+        Mon,  6 Mar 2023 13:37:09 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PVsNd17wqz4x80;
+        Tue,  7 Mar 2023 08:37:04 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1678138625;
+        bh=r3AVatlEtKngOEy1MVVQV8rLTGTVB8fMDdpZuiNjlYQ=;
+        h=Date:From:To:Cc:Subject:From;
+        b=b05xY+IPLLR40P1OFpUFe3icgzS4DbcVX2fcuH1ObJtRJaVQL4aarJSlSAOE4PY3f
+         rlPhLKg5LiAApyRUQb9OnRjwUzTGVrlYlsLDZHmNVLGMgQSG+QtOTDVIpNCrpYwFsU
+         9c6TIfEY2IwLxNTjVyeH2tEyvYhAnd0zuFjIX2EJIp5+6x1Q2Ca1hbHdpeR6B/d4S6
+         AuSpMGinQ0SePBfX2jrTtk6/Citn1hc4dljCae9C1R+Efwyvw3XZ6dr44bK5S6Thb9
+         0fjbpAgiYzK/BY8vuen7+BBgfQAykoPFNj9q3jtR/RPz5aXZMlBHxDHy4/rvSkp/z/
+         S2RqLH9eOqMLQ==
+Date:   Tue, 7 Mar 2023 08:37:03 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the net tree
+Message-ID: <20230307083703.558634a9@canb.auug.org.au>
 MIME-Version: 1.0
-References: <CA+G9fYtwqro9qaCmxOBAM1qt8L7k5ZwceaYBLY8RWoELDghhsw@mail.gmail.com>
-In-Reply-To: <CA+G9fYtwqro9qaCmxOBAM1qt8L7k5ZwceaYBLY8RWoELDghhsw@mail.gmail.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Mon, 6 Mar 2023 09:09:53 -0800
-Message-ID: <CAJuCfpEiO1Kg5apwfiQ+apjAu+NCXe4TwtLX6oRTXWYroRW1SQ@mail.gmail.com>
-Subject: Re: next: mm/khugepaged.c:1702:30: error: implicit declaration of
- function 'vma_try_start_write'; did you mean 'vma_start_write'? [-Werror=implicit-function-declaration]
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        lkft-triage@lists.linaro.org, linux-mm <linux-mm@kvack.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Xu <peterx@redhat.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: multipart/signed; boundary="Sig_/qCBZSmhRet+g2C77uRykZCq";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,41 +51,36 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Mar 6, 2023 at 3:13 AM Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
->
-> Following build regression noticed on i386, mips and s390.
->
-> mm/khugepaged.c: In function 'retract_page_tables':
-> mm/khugepaged.c:1702:30: error: implicit declaration of function
-> 'vma_try_start_write'; did you mean 'vma_start_write'?
-> [-Werror=implicit-function-declaration]
->  1702 |                         if (!vma_try_start_write(vma))
->       |                              ^~~~~~~~~~~~~~~~~~~
->       |                              vma_start_write
-> cc1: all warnings being treated as errors
+--Sig_/qCBZSmhRet+g2C77uRykZCq
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks for reporting. I posted a fix over the weekend:
-https://lore.kernel.org/all/20230304232856.DD36BC433D2@smtp.kernel.org/
-which should be merged soon.
+Hi all,
 
->
-> build details:
-> - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230306/testrun/15286608/suite/build/test/gcc-11-lkftconfig-rcutorture/details/
-> - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230306/testrun/15286608/suite/build/test/gcc-11-lkftconfig-rcutorture/log
->
-> # To install tuxmake on your system globally:
-> # sudo pip3 install -U tuxmake
-> #
->
-> tuxmake --runtime podman \
->          --target-arch i386 \
->          --toolchain gcc-12 \
->          --kconfig
-> https://storage.tuxsuite.com/public/linaro/lkft/builds/2McWOXP1OH5MiYficVNv8hJCR4F/config
->
-> Similar issues have been reported and discussed on the mailing list.
-> - https://lore.kernel.org/all/20230305191335.fee8e6aa285b0ca771cab9dd@linux-foundation.org/
->
-> --
-> Linaro LKFT
-> https://lkft.linaro.org
+Commit
+
+  58aac3a2ef41 ("net: phy: smsc: fix link up detection in forced irq mode")
+
+is missing a Signed-off-by from its committer.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/qCBZSmhRet+g2C77uRykZCq
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQGXP8ACgkQAVBC80lX
+0GzoMggAlKW3DK3RuOD9zynSgqf9RwJdKJ+GO+qLv1Zx7y++FM2P5iBE4b+1hXSh
+p3M4UeGnCrbWlkmSYFH/0cy9eAX3slxBihxer/DjTIFeRPSzF2SI4VHA4/QQ5PC8
+gFVuq3/NdepGPmphY1/zrM7IIi7D0UROLphJEGSFSCutLyW+D61eQ+8qwst7FzMC
+wF2L0yoaB1L5UdgHrsu4G5x5ptB2XzWmP+z5nbLMjBjFqkdtZvo52jh1RXqLiXeb
+SsLFlayOW5tF1kzIKmTtrpfVcjOnYo/1FVidT+/91ZFk2tuTy8TM7J7NYf52sm/h
+y9dEOfAXwLcLCdk8g6PGp4BkLb9xmg==
+=55N4
+-----END PGP SIGNATURE-----
+
+--Sig_/qCBZSmhRet+g2C77uRykZCq--

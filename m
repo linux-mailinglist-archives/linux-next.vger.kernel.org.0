@@ -2,101 +2,101 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1504C6AD76F
-	for <lists+linux-next@lfdr.de>; Tue,  7 Mar 2023 07:32:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 789726AD7A0
+	for <lists+linux-next@lfdr.de>; Tue,  7 Mar 2023 07:49:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230248AbjCGGcF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 7 Mar 2023 01:32:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36478 "EHLO
+        id S230012AbjCGGtU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 7 Mar 2023 01:49:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230240AbjCGGcE (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 7 Mar 2023 01:32:04 -0500
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 879E7515C3;
-        Mon,  6 Mar 2023 22:32:03 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id EA5675C0524;
-        Tue,  7 Mar 2023 01:32:01 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Tue, 07 Mar 2023 01:32:01 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1678170721; x=1678257121; bh=JN
-        NUYCnkXweyF5D43Jgpx00DAkQIyN+bBZ5xRNByPbw=; b=hhC07T/R3EcIqvvwgO
-        QgpfqL8WBEBf4nvuFx34osznklLBKLAzpQRIOEL+pjc6KAOYl25YJZy7LNZx+fIT
-        LkBCkN/2NKD0H0lZdPB7Siv4lqR4UJBuBge1UWxg/quaS8PFzpFh6KnKpg938wiF
-        Em+A2HJwJErcaD4cf1Z4Wcxmc3xY/139QhlqriyXNHoXt3CnIYLfH92fwxigt4qW
-        bQ2o/hJ2RnbG69FrqaP1pATivKG7ai2B1eur3MrqmjL9i6wprpuUcbXXafDdSVGs
-        4Piip54pS18Xtjmw5DhDzxyvJDLfooSD/tddcDTTkkJ2fvwozZt0NDd8zbDhYg/u
-        65jg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1678170721; x=1678257121; bh=JNNUYCnkXweyF
-        5D43Jgpx00DAkQIyN+bBZ5xRNByPbw=; b=QDZLX95UdgLVEslW0xYtV+fttAPGN
-        pxAu+ELUXUjEqA7PmylTWA8p9v7gCaE1w8HZkpFv1uDcQWMPURjy9efLCJPzhzwu
-        qAjx0MM/yEpkmCi5VReRx7WHICBjSiBl2j6i5JT+pHwxVVI7dYvN/0iZll7clzUZ
-        xaiH0Vf287lClgl2e7kEx0+qvPE58kSDRYMniThImwcVMpSHW46JBcIGEqKJ6lwK
-        M2uGlGVMFKe4OhIHE4odNB0oyO/jkD3GDcir/cS0HWd/+w00SxeKtlgUnCmF2tK+
-        k82QGaCPzw6qfHcJxovUmxUPq8WCCBiEzzRY+Atw5EhEJ8lUtJr/vFCWw==
-X-ME-Sender: <xms:YdoGZFOXkndFfI5XOZFCmdJ5cdIOCD__XgyRTR4ErHYWesOS5b7saw>
-    <xme:YdoGZH8c2V9cE9HRgExBqRYkE_DKmncD0AJVayykqSlscoh1QLVYlPqv4nYKTsIcH
-    ybwpLEoB86H4g>
-X-ME-Received: <xmr:YdoGZESUfz2BblFIIwVNvXr6Oaw0wjVssx83xH8xJf0Dt11sFYmXHN9nTlAnKIBnOPqsEBTu9C-EuAcbQk57RRwN6EFWu_CBTrERfA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvddtledgleehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
-    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepheegvd
-    evvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefhgfehkeetnecuvehluhhs
-    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
-    hhrdgtohhm
-X-ME-Proxy: <xmx:YdoGZBulGrpwWISrH1cW0HeoeqV_SSkLDOG_4aDr-_BiSEtnm1b6Jw>
-    <xmx:YdoGZNdS1gjoz1FyuA5FJJDeC-c9-t21gLTJP-PaPPiaNr6nXngX3g>
-    <xmx:YdoGZN0LyaJpe3pr09wxqCQOmuNHVzpxvyz3Vrsuk5z2g6QzWoWDTQ>
-    <xmx:YdoGZE4QxZSdpo13LKkesvkqnzRyBnpsdoJunUp8Q4W1WpECTY-Ovg>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 7 Mar 2023 01:32:00 -0500 (EST)
-Date:   Tue, 7 Mar 2023 07:31:57 +0100
-From:   Greg KH <greg@kroah.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
+        with ESMTP id S229483AbjCGGtS (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 7 Mar 2023 01:49:18 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4CBD39B9A;
+        Mon,  6 Mar 2023 22:49:16 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PW5dl2NJSz4x7y;
+        Tue,  7 Mar 2023 17:49:15 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1678171755;
+        bh=C57doB76oZtZeB1izZFMORaRw6d8p4PWKsCdpVl0ZLs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=esVyxfiMajTrWwa/bVhOhDpzhsXV+TcX5uSE0i9Vp986crLOqYBkR3Ib7gQepSyy8
+         Yy1nzVa36446HTH5JRfxmq/G3ZWVi6OmmBHxkbYv1Yq4g7GeC6ChV3w3vEfdwo2UYY
+         iBu4jCMgAt1IP493jrsbEj+0tj4UH9wu4io9qynKu9cGMKvckbnUZURfzNC/Alvb6j
+         4BoLywbKUGj0bPehG0TvWMaveMcKl8fbMZ+n8Bkd92F/DtoLU/ZmD1xzOGuSSnoosg
+         hMvt+eAtovdIWr2fsqK1ZU+LBf9ZdIxPAa8D7wZuyzPQoQ6SYVIA4c/7BNvrG9ArSN
+         WABozHESGmcgA==
+Date:   Tue, 7 Mar 2023 17:48:55 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Greg KH <greg@kroah.com>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
 Subject: Re: linux-next: runtime warning after merge of the driver-core tree
-Message-ID: <ZAbaXeEKfUJY+hYx@kroah.com>
+Message-ID: <20230307174855.73b474df@canb.auug.org.au>
+In-Reply-To: <ZAbaXeEKfUJY+hYx@kroah.com>
 References: <20230307134313.1b2aa555@canb.auug.org.au>
+        <ZAbaXeEKfUJY+hYx@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230307134313.1b2aa555@canb.auug.org.au>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/fhv/M53NODkifjJe4MxJr_u";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Mar 07, 2023 at 01:43:13PM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the driver-core tree, today's linux-next qemu boot
-> (powerpc pseries_le_defconfig) produced this boot time warning:
-> 
-> HugeTLB: 0 KiB vmemmap can be freed for a 1.00 GiB page
-> sysfs: cannot create duplicate filename '//block'
+--Sig_/fhv/M53NODkifjJe4MxJr_u
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-That is odd.  What type of userspace are you running this with?  And is
-there a pointer to the .config anywhere?  No one should be needing this
-old config option anymore, but maybe I messed something up in removing
-it...
+Hi Greg,
 
-thanks,
+On Tue, 7 Mar 2023 07:31:57 +0100 Greg KH <greg@kroah.com> wrote:
+>
+> On Tue, Mar 07, 2023 at 01:43:13PM +1100, Stephen Rothwell wrote:
+> > Hi all,
+> >=20
+> > After merging the driver-core tree, today's linux-next qemu boot
+> > (powerpc pseries_le_defconfig) produced this boot time warning:
+> >=20
+> > HugeTLB: 0 KiB vmemmap can be freed for a 1.00 GiB page
+> > sysfs: cannot create duplicate filename '//block' =20
+>=20
+> That is odd.  What type of userspace are you running this with?  And is
+> there a pointer to the .config anywhere?  No one should be needing this
+> old config option anymore, but maybe I messed something up in removing
+> it...
+The userspace is a trivial PowerPC LE initramfs that just shuts down
+after it boots.  However, the warning occurs before the initramfs is
+even unpacked.
 
-greg k-h
+I have attached the generated .config
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/fhv/M53NODkifjJe4MxJr_u
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQG3lgACgkQAVBC80lX
+0Gy4Pwf9Gh50vWys0zmFYMiMv8YhhVF2V1DcGwwBFGkHGTONTcpUqcS9OqXM9kSc
+JgcL+YsBfzGqNPZB3JjLJ1IrtKldZDZcP6DwhLi8EPcWmSPSH7tELSA1JgXH+iha
+6/MVwxsUOzo88z5LlxB8BeaaYcgbI3HBV4YbtQqiQxppOi+N22qo/TOkK/KsX0nw
+OcBhFgbaa7mhbgysa8wzaSAdQYvkwUnB2xmfZWt/C3u3Zpz74Ob1wKOmIgrOMog/
+bD4cb+cnuwtmBd2P/JEkpw9PjVD8qWsV9a19vHwnUg1MXfXSaOD0u2tzFt/XGMf0
++y0KySGZBOnWnvR9z3aQymm+Rvn7DQ==
+=JF3a
+-----END PGP SIGNATURE-----
+
+--Sig_/fhv/M53NODkifjJe4MxJr_u--

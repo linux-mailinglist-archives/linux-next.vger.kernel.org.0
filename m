@@ -2,120 +2,91 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B33706AD380
-	for <lists+linux-next@lfdr.de>; Tue,  7 Mar 2023 01:53:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FC926AD3EE
+	for <lists+linux-next@lfdr.de>; Tue,  7 Mar 2023 02:32:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229659AbjCGAxA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 6 Mar 2023 19:53:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52620 "EHLO
+        id S229616AbjCGBcN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 6 Mar 2023 20:32:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbjCGAw7 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 6 Mar 2023 19:52:59 -0500
-X-Greylist: delayed 10246 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 06 Mar 2023 16:52:57 PST
-Received: from gimli.rothwell.id.au (unknown [IPv6:2404:9400:2:0:216:3eff:fee1:997a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB2187AB7;
-        Mon,  6 Mar 2023 16:52:57 -0800 (PST)
-Received: from authenticated.rothwell.id.au (localhost [127.0.0.1])
+        with ESMTP id S229619AbjCGBcF (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 6 Mar 2023 20:32:05 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71BBD5D456;
+        Mon,  6 Mar 2023 17:31:20 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.rothwell.id.au (Postfix) with ESMTPSA id 4PVxkY60MSzykW;
-        Tue,  7 Mar 2023 11:52:53 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rothwell.id.au;
-        s=201702; t=1678150375;
-        bh=OTQcyoWW8W+dsJF+tizzSxsNTDpMqcgj3C/Jk1CfLyw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=kBv0M9YGt+4BkOhekgqRUvPeP9jfVDVtj2jcj/Xe3rr8uCXkSetjywfAFyeTOPaJ8
-         sctjdqoGJrhG+lQR74xx1NMCPpyCgdRsFEjf1SKIGh0vO8c8GJGN9l6UTdJ813TjZw
-         rmqzNKb7uoSTu61eqe72w7I9OWjUgKPrw9/OFxY6/UXLiDM6Yfu0rsLYYl5NBk6Ns5
-         9zmbEz4caKV/9l3He1o/JjhSNbpwv57SzicIC7+6b4W5j0oJstR51izSbBCDffLESZ
-         1T+DxFZt6PYBwxRAayymjsOhPbU8UJmJylQoucrkC03utRQxazKkPGzV9NXd1ACxR+
-         tP5w3MXZlqvOg==
-Date:   Tue, 7 Mar 2023 11:52:52 +1100
-From:   Stephen Rothwell <sfr@rothwell.id.au>
-To:     Heiner Kallweit <hkallweit1@gmail.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Networking <netdev@vger.kernel.org>,
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PVyZt0Nmvz4xD5;
+        Tue,  7 Mar 2023 12:31:18 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1678152678;
+        bh=ywg8C2FgT2G2NSOznzujNR6UIlLOW0CYkEK4MbPbt/g=;
+        h=Date:From:To:Cc:Subject:From;
+        b=tuaCQRxlc87tf6H+6qFhd1GVwEA7KQCfmb5JkG9Tuo2Y+v8MaPLn5XIGxDhI2qFC/
+         4bwxKZirIu6XN639zmIa1t1UieJIltNgrlHlg/KtRIQhiIFzmm+m1KnJq7b93j+CpO
+         m4VaS2M45XVecfEU48j1PhHTUcyuBMav6o4I65LPe6wgA64Wm4mhF2s6G6VKKPT8ZG
+         xIaAaihR7Gwm49WEoxp/tKO09Qkn0SLYXHpw6K4rQElkX4uvYtGPwOhprPUyUn56pY
+         QI1F7fIPz4YW3kfIeWiCAFSf0JNhk1exphxLr8/gkD3dn6BzKXJX6RBX3T/ODpRGD2
+         OXxqSwlYx9/QA==
+Date:   Tue, 7 Mar 2023 12:31:16 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Shawn Guo <shawnguo@kernel.org>
+Cc:     Johannes Schneider <johannes.schneider@leica-geosystems.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Signed-off-by missing for commit in the net tree
-Message-ID: <20230307115252.2b23c4f5@oak.ozlabs.ibm.com>
-In-Reply-To: <d5b3d530-e050-1891-e5c0-8c98e136b744@gmail.com>
-References: <20230307083703.558634a9@canb.auug.org.au>
-        <d5b3d530-e050-1891-e5c0-8c98e136b744@gmail.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.36; aarch64-unknown-linux-gnu)
+Subject: linux-next: build failure after merge of the imx-mxs tree
+Message-ID: <20230307123116.5f511aea@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/QZfzygOe5M27vvB.wvaVLQK";
+Content-Type: multipart/signed; boundary="Sig_/_+=hh.+urERihKyFulqKAFN";
  protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/QZfzygOe5M27vvB.wvaVLQK
+--Sig_/_+=hh.+urERihKyFulqKAFN
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Heiner,
+Hi all,
 
-On Mon, 6 Mar 2023 23:16:09 +0100 Heiner Kallweit <hkallweit1@gmail.com> wr=
-ote:
->
-> On 06.03.2023 22:37, Stephen Rothwell wrote:
-> >=20
-> > Commit
-> >=20
-> >   58aac3a2ef41 ("net: phy: smsc: fix link up detection in forced irq mo=
-de")
-> >=20
-> > is missing a Signed-off-by from its committer.
->=20
-> Seems to be ok, false positive?
->=20
-> net: phy: smsc: fix link up detection in forced irq mode
-> Currently link up can't be detected in forced mode if polling
-> isn't used. Only link up interrupt source we have is aneg
-> complete which isn't applicable in forced mode. Therefore we
-> have to use energy-on as link up indicator.
->=20
-> Fixes: 7365494550f6 ("net: phy: smsc: skip ENERGYON interrupt if disabled=
-")
-> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
-> Signed-off-by: David S. Miller <davem@davemloft.net>
+After merging the imx-mxs tree, today's linux-next build (arm64 defconfig)
+failed like this:
 
-It was committed by Jakub Kicinski <kuba@kernel.org>
+Error: /home/sfr/next/next/arch/arm64/boot/dts/freescale/imx8mm-evkb.dts:22=
+.2-7 syntax error
+FATAL ERROR: Unable to parse input tree
 
-$ git show --pretty=3Draw 58aac3a2ef41
-commit 58aac3a2ef414fea6d7fdf823ea177744a087d13
-tree 26bf9b3b866bd43baa1b8055d42536ac7ce3b3cf
-parent 89b59a84cb166f1ab5b6de9830e61324937c661e
-author Heiner Kallweit <hkallweit1@gmail.com> 1677927164 +0100
-committer Jakub Kicinski <kuba@kernel.org> 1678137790 -0800
+Caused by commit
+
+  c288f420e3c6 ("arm64: dts: imx8mm-evkb: add support for i.MX8MM-EVKB")
+
+I have reverted that commit for today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/QZfzygOe5M27vvB.wvaVLQK
+--Sig_/_+=hh.+urERihKyFulqKAFN
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQGiuQACgkQAVBC80lX
-0GyXywf+N2S0korooYAI10TLOcpdf2nsSWuCLwlezBTU/cqR4cC69Bgzi7i+4vf1
-clTfhbWTVBd5aYcIvq4wOWoTuQRoHHcPIVdKPAl+grip7wdPdKHLyngeF7xrTiqJ
-DKtDq8cjPMeE6Dhr9bsx9WR18ROAQmRELyU5ZA+hTPKd/KgvXzKrRpFuyz8UBxTc
-v1GHZdb5sgTJxISPNWlW3XefsUc4H42ZBHmUy34/fDrW2aTXHGeMmHN8u7R+/L2W
-oie70dPm3+KovnnC9lWadkg0/jqH49aW4xDDres3NbRexY+WMT67Dm8gutU78qLm
-4D779FSb1NMVRkjhem4H5mAsxPxA2g==
-=BX3z
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQGk+QACgkQAVBC80lX
+0GxyRAgAm3q7vrXE5CVZibyW/C2KmdsreC3mp25plIU6/Kbl4X3tTo7hQsHwjlAc
+Iw3j9NAd43yeHAXHwfBGN99TcAY1NV4BRd+iniSlotccZ5qUbtUOan/YTTOaaCeF
+TPMy/mOYQACvb0RUeqdbdUg9Ail2iSHB90G5kvkkeGBZe1BGUBWBaXFY6L67j95t
+foCv6n2ovrTJOMcxzfimc5yR1+WRIQfcUJgmHxLGj798Ft1Dw2YD9djX8EMSwHTM
+ywSh5389eimX2bKksRDDEWTT59/Q4M0cYlVj8+Wby7MXbnGBUQc5RpaZOQkhmoID
+swtL+mfH59ulQJzobDR4pHyJ+ap9mg==
+=bn01
 -----END PGP SIGNATURE-----
 
---Sig_/QZfzygOe5M27vvB.wvaVLQK--
+--Sig_/_+=hh.+urERihKyFulqKAFN--

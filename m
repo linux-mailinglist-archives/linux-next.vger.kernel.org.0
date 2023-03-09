@@ -2,68 +2,72 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 301146B209F
-	for <lists+linux-next@lfdr.de>; Thu,  9 Mar 2023 10:50:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E21996B21BA
+	for <lists+linux-next@lfdr.de>; Thu,  9 Mar 2023 11:42:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229905AbjCIJuL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 9 Mar 2023 04:50:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47198 "EHLO
+        id S230367AbjCIKmi (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 9 Mar 2023 05:42:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231373AbjCIJt6 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 9 Mar 2023 04:49:58 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A74B622A3B
-        for <linux-next@vger.kernel.org>; Thu,  9 Mar 2023 01:49:57 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id 6-20020a17090a190600b00237c5b6ecd7so5457317pjg.4
-        for <linux-next@vger.kernel.org>; Thu, 09 Mar 2023 01:49:57 -0800 (PST)
+        with ESMTP id S231283AbjCIKly (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 9 Mar 2023 05:41:54 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 279B759801;
+        Thu,  9 Mar 2023 02:40:41 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id y11so1532649plg.1;
+        Thu, 09 Mar 2023 02:40:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112; t=1678355397;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=qBE8/bUIu8uFihmrZzb4200HkAzHyGtmvWgen2dzv4A=;
-        b=xR5tujewJvkoCH+ZHyhlbgtBYSzR4MCjIihLgGpEvZGWK8CxQBmpg5LGFJhFpoG0t9
-         K8zgE/v04JuW5C1o7yNHmSjTegK9tdQTLcOVX9usFpIY9Qpdu31jj7GXIGvmv30JVEos
-         KV3cSdA0ICx5lypD7OFo61kGM5El+jWqYgJHV/+cBaFnvyB8rxiA2qBU+G+T7L3BRFDF
-         CSrFN5i/S5/fQSH8E4uPIziTtzZ7nV2mUD62oD08OFHvrei5EInPGBWKovt/p4COYxHD
-         g0ZpA/o8FOVOT65GPT+i55nD5kBDTYhsaC+VLYAeg2gqxTyz5Obi3ej/4R1DNFsGsUDb
-         1VLA==
+        d=gmail.com; s=20210112; t=1678358441;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kyl81I8ADQB7ZEDVkfI8Lf6EZZv8XRoJjGLTIx+4w3Y=;
+        b=X2DxsFWO7354x7Wcg2S1XxO6fQllb+Ut9X5C/gCorM/8OaoPrDIFI4aSH5CVgv1d26
+         4SHeRn37N8SpdOoHFfZGP08RjJwoQ8NqHlnVCKPqr0ZYAgoT41kKadTZS1HP3VfndaSd
+         4Mo5OwlQjVhqypCfikgkP2jQVeqxLdgHMlh2L4STrFQdoxL5U8hz9dYSOojeDjZ/ry1H
+         XIjY78Z8YgljvpSUo0kdXwAFJxDsghqsGMTAd9j6XeOtYGR5hnMBfUsb6NRuDcGkiYCc
+         f7KUGlDQ8DBwIOfevA9/vld+JnKOMX7ySvqZjueHURfdgd0zNbqNEM0dhFy4Lj3DUym5
+         3/Ig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678355397;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qBE8/bUIu8uFihmrZzb4200HkAzHyGtmvWgen2dzv4A=;
-        b=v/Oig+wkp+rsMqCN14Rk+7dAkvSWmRDPclnNNBUuLdvVWuWZD+QZi+h7woempr81vL
-         rnShvNltqwRQ9FO11LdFkonRAOesnEUcCANWLjEW4e6L08V1DCRQ39JiucLR5QUxwNQP
-         7jYS9u1wzbWp43AR/ntasVFQkT5pc/ZmagxmNIurMz2enyuJ1BhszG1R6AIWchkoirJp
-         ECmx1x4EEsgs040wYoxTkidTQDldIcEhw0DhRYxgz1VLNQlKjjQUoKe9aLLlXrznaCfV
-         XY/UzO6RSawTXRmWJgPU9rbA9hKLkyEfo9PBKs2w3E1wsfSlPmTxD7+B519Z3CoYqMzg
-         GI0w==
-X-Gm-Message-State: AO0yUKVeOsupdejUPoLqXlBlnb2JKmYEdrt6UwuPt3x+myqYPGDJ/hv8
-        PGeDXmaL8or8Ts9EjVu9d9i9j3FTQFp7jq64rOvC+6f2
-X-Google-Smtp-Source: AK7set8ZJsrU8aWDHgY16DG9xPkR+ZCFyvLYJWorAu22nuAqnyZq8EV22yJEhd4KW+sR5XZihamaLw==
-X-Received: by 2002:a17:902:8c8d:b0:19a:9880:175f with SMTP id t13-20020a1709028c8d00b0019a9880175fmr18046716plo.51.1678355396862;
-        Thu, 09 Mar 2023 01:49:56 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id km12-20020a17090327cc00b0019e30e3068bsm11289182plb.168.2023.03.09.01.49.56
-        for <linux-next@vger.kernel.org>
+        d=1e100.net; s=20210112; t=1678358441;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kyl81I8ADQB7ZEDVkfI8Lf6EZZv8XRoJjGLTIx+4w3Y=;
+        b=n3iWj3nU6gDZ+3P1wlDIeMwZCYGrjeJy4nOTZnOifQHimpwYyjEn81guki3ZrhMXNg
+         SwGJ2jI5GsOk9gcqQn67aX9qCMilmhbpzCFQ+FeOPbMdGYij2eCJ77ceM0f1In7RKNE5
+         CAIxWoQyFPF4nCmE3R+RxfhSuRzYAQUBhcAcxIHGLgT5UBav9YORB5ZTGr/jYoHtHWun
+         F9pgllqeHEm47zFBD08eTzKjyNgIQkc+hYeaf4glj+7r12C04Xb8k+ZzWkSWU/9G7A2h
+         EPTCQj0BVDXNGBcwZGLiw5ZxbYkLozvZeN3ln64zsTYyKQcmN9hztmJ3IeDPOr0aZcuw
+         8ZVg==
+X-Gm-Message-State: AO0yUKXnxg+o1zvNKzMOVVJjHGyoda2Klb7+cqH7Biarr/CIF9kycPtc
+        VFEBU5mmdzAYWeutSFuDQZA=
+X-Google-Smtp-Source: AK7set8dJtkAozR27n4w+Dp/CLZ6CxAmWHkP6lUx1GXw2VrnzQzDrGp5AVjBGZc33bBEYEqs0TCH9w==
+X-Received: by 2002:a17:902:d492:b0:19d:abd:bb7e with SMTP id c18-20020a170902d49200b0019d0abdbb7emr26319563plg.34.1678358441477;
+        Thu, 09 Mar 2023 02:40:41 -0800 (PST)
+Received: from redecorated-mbp (124-148-239-17.tpgi.com.au. [124.148.239.17])
+        by smtp.gmail.com with ESMTPSA id az11-20020a170902a58b00b0019aa8fd9485sm11256199plb.145.2023.03.09.02.40.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Mar 2023 01:49:56 -0800 (PST)
-Message-ID: <6409abc4.170a0220.509e7.4f7a@mx.google.com>
-Date:   Thu, 09 Mar 2023 01:49:56 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 09 Mar 2023 02:40:41 -0800 (PST)
+Date:   Thu, 9 Mar 2023 21:40:32 +1100
+From:   Orlando Chamberlain <orlandoch.dev@gmail.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Mark Gross <markgross@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warnings after merge of the drivers-x86 tree
+Message-ID: <20230309214032.3683db01@redecorated-mbp>
+In-Reply-To: <4c63d660-1105-9a8a-1010-cc05125d06d3@redhat.com>
+References: <20230309122822.77435e33@canb.auug.org.au>
+        <4c63d660-1105-9a8a-1010-cc05125d06d3@redhat.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.35; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: master
-X-Kernelci-Tree: next
-X-Kernelci-Kernel: next-20230309
-X-Kernelci-Report-Type: build
-Subject: next/master build: 14 builds: 1 failed, 13 passed, 3 errors,
- 3 warnings (next-20230309)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,161 +75,38 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master build: 14 builds: 1 failed, 13 passed, 3 errors, 3 warnings (ne=
-xt-20230309)
+On Thu, 9 Mar 2023 09:48:58 +0100
+Hans de Goede <hdegoede@redhat.com> wrote:
 
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20230309/
+> Hi all,
+> 
+> On 3/9/23 02:28, Stephen Rothwell wrote:
+> > Hi all,
+> > 
+> > After merging the drivers-x86 tree, today's linux-next build
+> > (htmldocs) produced these warning:
+> > 
+> > include/linux/apple-gmux.h:99: warning: Function parameter or
+> > member 'type_ret' not described in 'apple_gmux_detect'
+> > include/linux/apple-gmux.h:99: warning: Excess function parameter
+> > 'indexed_ret' description in 'apple_gmux_detect'
+> > 
+> > Introduced by commit
+> > 
+> >   fc83fbc80e1a ("platform/x86: apple-gmux: refactor gmux types")  
 
-Tree: next
-Branch: master
-Git Describe: next-20230309
-Git Commit: 2c6433e9294b6d0f4d8f08c3c70a3eac434d3ec8
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Built: 3 unique architectures
+Thanks Stephen.
+> 
+> Stephen, thank you for reporting this.
+> 
+> Orlando, can you do a follow-up patch on top of your
+> latest series fixing this ?
 
-Build Failure Detected:
+Yes, I'll send one soon.
 
-x86_64:
-    cros://chromeos-5.10/x86_64/chromeos-amd-stoneyridge.flavour.config+x86=
--chromebook: (clang-13) FAIL
+> 
+> Regards,
+> 
+> Hans
+> 
 
-Errors and Warnings Detected:
-
-arm64:
-
-arm:
-
-x86_64:
-    cros://chromeos-5.10/x86_64/chromeos-amd-stoneyridge.flavour.config+x86=
--chromebook (clang-13): 3 errors, 3 warnings
-
-Errors summary:
-
-    1    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:115=
-2:34: error: variable 'software_shutdown_temp' is uninitialized when used h=
-ere [-Werror,-Wuninitialized]
-    1    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:114=
-9:24: error: variable 'memlimit' is uninitialized when used here [-Werror,-=
-Wuninitialized]
-    1    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:114=
-6:3: error: variable 'hotspotlimit' is uninitialized when used here [-Werro=
-r,-Wuninitialized]
-
-Warnings summary:
-
-    1    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:113=
-6:18: note: initialize the variable 'memlimit' to silence this warning
-    1    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:113=
-5:22: note: initialize the variable 'hotspotlimit' to silence this warning
-    1    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:113=
-4:32: note: initialize the variable 'software_shutdown_temp' to silence thi=
-s warning
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config (arm64, clang-13=
-) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+arm64-chromebook=
- (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatch=
-es
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-mediatek.flavour.config+arm64-chromeb=
-ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
-tches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-qualcomm.flavour.config+arm64-chromeb=
-ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
-tches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-rockchip64.flavour.config+arm64-chrom=
-ebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mis=
-matches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (arm, clang-13) =
-=E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (arm, clang-1=
-3) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromeos-amd-stoneyridge.flavour.config+x86-chr=
-omebook (x86_64, clang-13) =E2=80=94 FAIL, 3 errors, 3 warnings, 0 section =
-mismatches
-
-Errors:
-    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:1146:3: =
-error: variable 'hotspotlimit' is uninitialized when used here [-Werror,-Wu=
-ninitialized]
-    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:1149:24:=
- error: variable 'memlimit' is uninitialized when used here [-Werror,-Wunin=
-itialized]
-    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:1152:34:=
- error: variable 'software_shutdown_temp' is uninitialized when used here [=
--Werror,-Wuninitialized]
-
-Warnings:
-    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:1135:22:=
- note: initialize the variable 'hotspotlimit' to silence this warning
-    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:1136:18:=
- note: initialize the variable 'memlimit' to silence this warning
-    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:1134:32:=
- note: initialize the variable 'software_shutdown_temp' to silence this war=
-ning
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromeos-intel-denverton.flavour.config+x86-chr=
-omebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
-mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromeos-intel-pineview.flavour.config+x86-chro=
-mebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config (x86_64, clang=
--13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config+x86-chromebook=
- (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatc=
-hes
-
----------------------------------------------------------------------------=
------
-defconfig+arm64-chromebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 wa=
-rnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86-chromebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors=
-, 0 warnings, 0 section mismatches
-
----
-For more info write to <info@kernelci.org>

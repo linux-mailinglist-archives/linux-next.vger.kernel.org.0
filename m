@@ -2,64 +2,64 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D798B6B3FC1
-	for <lists+linux-next@lfdr.de>; Fri, 10 Mar 2023 13:54:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61F106B4ACC
+	for <lists+linux-next@lfdr.de>; Fri, 10 Mar 2023 16:26:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229623AbjCJMyy (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 10 Mar 2023 07:54:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44404 "EHLO
+        id S234227AbjCJP06 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 10 Mar 2023 10:26:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230456AbjCJMyj (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 10 Mar 2023 07:54:39 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E85B4AFD1
-        for <linux-next@vger.kernel.org>; Fri, 10 Mar 2023 04:54:18 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id 6-20020a17090a190600b00237c5b6ecd7so9643543pjg.4
-        for <linux-next@vger.kernel.org>; Fri, 10 Mar 2023 04:54:18 -0800 (PST)
+        with ESMTP id S232071AbjCJP0e (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 10 Mar 2023 10:26:34 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C642A222EB
+        for <linux-next@vger.kernel.org>; Fri, 10 Mar 2023 07:15:42 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id ky4so5927768plb.3
+        for <linux-next@vger.kernel.org>; Fri, 10 Mar 2023 07:15:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112; t=1678452857;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112; t=1678461306;
         h=from:to:subject:content-transfer-encoding:mime-version:date
          :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=NN2BqPfCGBddYp5Ip2gx8lj/YLypEHUcStsmFLdtexc=;
-        b=4u8kKDVUFuS7Ztrla+GSjpYqIxPiRS4HSw8mqkC4eu0ZaTx0drp+qxyv7OQBG64vxS
-         MJ8bM+2jJKLqe2+iekNDzHgEzEkowwLk4i187SzgSp1WFkE82vG4mqhCUQltm+Bn7bXF
-         B8MuPLjVsQAXqYPTR4NVa8olWZiPrLK2T263t/NTS0gmc3xk6l7tAyVVEUPnJ046fddS
-         NrxS819/aQ2I3NVqhXtvBoAFnEN16WXT0McArAa0C7nMRTHwMutoQF0NKNC34eHnu0wi
-         iCQots9yUUa28HTMYnYQmyMIw391jiKG8K1OgRVDBgsPE1QmDsppxe0v6i2OO+pJT9+S
-         NbLA==
+        bh=4hRGSC2B6B4ssppSE89/QbGdecXfjJ2hLjBH23zsfrU=;
+        b=r/rmk4eZLfJq1YhFuBMITtQtQbOxPwHyhVtkOGAxIpS9XfleGY62Do+pP1YMZrsriN
+         a8KgdzXit5xLK4q/VCkAB5V6QaIWVfedn/GiiNVvNfqDOQRBzw/7fu3hKvpiz2AOTx5D
+         moB8FXmomzBMwjMe9z9xKw26NUMZak1sQKzk8XGZryVgrTAtzi6sadJQ6RNYhou/3VQq
+         UwRr8UeQoMO0Z0kk6eKx/+ouj4nWdN5dzPaREfzHBPTVGElf8yZmMU2z8SrSthlF/Lt1
+         q/Ve8HwLYrClmsXRWEj+0LdMb+VtTB1CdwQxER4sk6MgXH3R+cUozSjDcvlsR/8FAqqB
+         IyCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678452857;
+        d=1e100.net; s=20210112; t=1678461306;
         h=from:to:subject:content-transfer-encoding:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=NN2BqPfCGBddYp5Ip2gx8lj/YLypEHUcStsmFLdtexc=;
-        b=QcTvqL23QH1Dv08IluZybFJlS5+iFQIFjr8R0lDWr2zWyzqpBoJiqL6EdLCUmZaTpS
-         JnTYGFVAv9Bg+g93SGLDDGdqDJxBLJRYFLQUkht5R7AIJlR6PxkqQtopAl3lGR9XQAw0
-         iHUvqVDyqBh1gX0SU5Xbdrg89WCWayWRIRaeAlYIWOmBheVZAmtkWh+HQ3UFDZdcHM/+
-         QjxLkfM8ZP1QnaA56sBQLGZJ5oDcgledWYyl3cbh0hYTDQhzl+wylswUdfqgq3X9wp3C
-         x41qS1A4r6hwIQtGD/bI3VrTMf7EVd3Ib3s/A5FutHI/cp3BXo3ghqOwm3L0mysGDDJf
-         nnrQ==
-X-Gm-Message-State: AO0yUKWtHaRVBsPf+sI9yhOD7Mf1lOQ2KfxIZk1K236k/ZP4bX2qMHOV
-        UwkHvs3XdQXjjpRSicbYjVCcY+aRvuTNSeqothJP2R6v
-X-Google-Smtp-Source: AK7set/6OQJHBlqmWfbAfaVeXekAYPhKC7ptyySfCUOtj90U51Dp+AeNPKqGIujmi9sG7IASKc+Atg==
-X-Received: by 2002:a17:903:1cb:b0:19e:f647:6075 with SMTP id e11-20020a17090301cb00b0019ef6476075mr2303774plh.27.1678452856440;
-        Fri, 10 Mar 2023 04:54:16 -0800 (PST)
+        bh=4hRGSC2B6B4ssppSE89/QbGdecXfjJ2hLjBH23zsfrU=;
+        b=UcS7kSVTPntkGoWgBcP5hh8VM7BnUUYuMMRenC+HyZthxj2SMjIHr0N8uToVfyeZya
+         rE3yn7ygWepz2gLneaQLZ7ANLyJFykDjb9FU0hgKHBocSVveDSG2l7khsrfvMaapxKAB
+         GdHozwygOas1TZ8d/nMIddEcn/SNK3/l01D8U24bHAIrdaRLVpzpcc77+75LO/U8vU6c
+         G6bCNIFn6SjsNkWZ1cf1yjV1tdqFLp0VNvDseWopVcT+DfBO7VHV354jqEw4jNO/oQXL
+         5DJvCFFlH26T95VcRQWSxo4xehx3y/0MKQV2PhMvvuZbv1zecN2u5fYoeeQGdax0TE/V
+         2QKQ==
+X-Gm-Message-State: AO0yUKV+VfVvW0jLbv5P7jMhQ0lMKeIxNYI1lgaKiuc2UrISuc18D4ZA
+        m3ylgATUULXlLHzACVS2HB27KEFAaj2Mc7nO6MkYJfrG
+X-Google-Smtp-Source: AK7set8ScQH2/DtHfHW3aSldc3E149PHjQkuMUHtZEXmuUNr995AgQoXnmYhipKVpYXyhPdogJM4rQ==
+X-Received: by 2002:a17:902:ef91:b0:19e:898f:8813 with SMTP id iz17-20020a170902ef9100b0019e898f8813mr21826689plb.13.1678461305016;
+        Fri, 10 Mar 2023 07:15:05 -0800 (PST)
 Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id p6-20020a170902780600b001994a0f3380sm1374882pll.265.2023.03.10.04.54.15
+        by smtp.gmail.com with ESMTPSA id j6-20020a170902c08600b0019f0ef1cdeasm175651pld.63.2023.03.10.07.15.04
         for <linux-next@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Mar 2023 04:54:15 -0800 (PST)
-Message-ID: <640b2877.170a0220.6d529.250c@mx.google.com>
-Date:   Fri, 10 Mar 2023 04:54:15 -0800 (PST)
+        Fri, 10 Mar 2023 07:15:04 -0800 (PST)
+Message-ID: <640b4978.170a0220.804c8.0615@mx.google.com>
+Date:   Fri, 10 Mar 2023 07:15:04 -0800 (PST)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: pending-fixes
+X-Kernelci-Branch: master
 X-Kernelci-Tree: next
-X-Kernelci-Kernel: v6.3-rc1-336-gbec2983895c5
+X-Kernelci-Kernel: next-20230310
 X-Kernelci-Report-Type: build
-Subject: next/pending-fixes build: 179 builds: 4 failed, 175 passed, 7 errors,
- 12 warnings (v6.3-rc1-336-gbec2983895c5)
+Subject: next/master build: 204 builds: 13 failed, 191 passed, 36 errors,
+ 33 warnings (next-20230310)
 To:     linux-next@vger.kernel.org
 From:   "kernelci.org bot" <bot@kernelci.org>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -71,16 +71,16 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes build: 179 builds: 4 failed, 175 passed, 7 errors, 12 wa=
-rnings (v6.3-rc1-336-gbec2983895c5)
+next/master build: 204 builds: 13 failed, 191 passed, 36 errors, 33 warning=
+s (next-20230310)
 
-Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
-rnel/v6.3-rc1-336-gbec2983895c5/
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20230310/
 
 Tree: next
-Branch: pending-fixes
-Git Describe: v6.3-rc1-336-gbec2983895c5
-Git Commit: bec2983895c59be65fa3484bfd68bc7ccbebd2d0
+Branch: master
+Git Describe: next-20230310
+Git Commit: 24469a0e5052ba01a35a15f104717a82b7a4798b
 Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
 Built: 8 unique architectures
 
@@ -89,12 +89,28 @@ Build Failures Detected:
 arc:
     haps_hs_smp_defconfig+kselftest: (gcc-10) FAIL
 
+arm64:
+    allmodconfig: (clang-17) FAIL
+
 arm:
+    allmodconfig: (clang-17) FAIL
+    multi_v5_defconfig: (clang-17) FAIL
+    multi_v5_defconfig: (gcc-10) FAIL
+    mvebu_v5_defconfig: (gcc-10) FAIL
     rpc_defconfig: (gcc-10) FAIL
+
+i386:
+    allmodconfig: (clang-17) FAIL
 
 mips:
     32r2el_defconfig+debug: (gcc-10) FAIL
     decstation_64_defconfig: (gcc-10) FAIL
+    xway_defconfig: (gcc-10) FAIL
+
+x86_64:
+    cros://chromeos-5.10/x86_64/chromeos-amd-stoneyridge.flavour.config+x86=
+-chromebook: (clang-13) FAIL
+    allmodconfig: (clang-17) FAIL
 
 Errors and Warnings Detected:
 
@@ -102,17 +118,23 @@ arc:
     haps_hs_smp_defconfig+kselftest (gcc-10): 1 error
 
 arm64:
+    allmodconfig (clang-17): 3 errors, 3 warnings
 
 arm:
+    allmodconfig (clang-17): 3 errors, 3 warnings
+    multi_v5_defconfig (gcc-10): 5 errors
+    multi_v5_defconfig (clang-17): 4 errors
+    mvebu_v5_defconfig (gcc-10): 5 errors
     rpc_defconfig (gcc-10): 2 errors
 
 i386:
+    allmodconfig (clang-17): 3 errors, 3 warnings
 
 mips:
     fuloong2e_defconfig (gcc-10): 1 error
-    lemote2f_defconfig (gcc-10): 1 error
     loongson2k_defconfig (gcc-10): 1 error
     loongson3_defconfig (gcc-10): 1 error
+    xway_defconfig (gcc-10): 1 error
 
 riscv:
 
@@ -125,13 +147,36 @@ sparc:
     tinyconfig (gcc-10): 1 warning
 
 x86_64:
+    allmodconfig (clang-17): 3 errors, 6 warnings
+    cros://chromeos-5.10/x86_64/chromeos-amd-stoneyridge.flavour.config+x86=
+-chromebook (clang-13): 3 errors, 3 warnings
+    x86_64_defconfig+kselftest (rustc-1.62): 3 warnings
 
 Errors summary:
 
-    4    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=
+    8    drivers/clk/mvebu/kirkwood.c:358:16: error: invalid suffix "dx1135=
+_clk_of_clk_init_declare" on integer constant
+    5    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:115=
+2:34: error: variable 'software_shutdown_temp' is uninitialized when used h=
+ere [-Werror,-Wuninitialized]
+    5    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:114=
+9:24: error: variable 'memlimit' is uninitialized when used here [-Werror,-=
+Wuninitialized]
+    5    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:114=
+6:3: error: variable 'hotspotlimit' is uninitialized when used here [-Werro=
+r,-Wuninitialized]
+    3    drivers/clk/mvebu/kirkwood.c:358:1: error: invalid digit 'd' in de=
+cimal constant
+    3    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=
 =80=98-mhard-float=E2=80=99
+    2    drivers/clk/mvebu/kirkwood.c:358:16: error: expected identifier or=
+ =E2=80=98(=E2=80=99 before numeric constant
     1    net/bpfilter/main.c:3:10: fatal error: sys/uio.h: No such file or =
 directory
+    1    drivers/gpio/gpio-mm-lantiq.c:13:10: fatal error: linux/gpio/legac=
+y-of-mm-gpiochip.h.h: No such file or directory
+    1    drivers/clk/mvebu/kirkwood.c:358:1: error: expected identifier or =
+'('
     1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=
 =3D0x'
     1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=
@@ -141,8 +186,27 @@ Warnings summary:
 
     10   <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
 -Wcpp]
+    5    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:113=
+6:18: note: initialize the variable 'memlimit' to silence this warning
+    5    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:113=
+5:22: note: initialize the variable 'hotspotlimit' to silence this warning
+    5    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:113=
+4:32: note: initialize the variable 'software_shutdown_temp' to silence thi=
+s warning
     2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
 tion failed, symbol will not be versioned.
+    1    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x3e: relocation to=
+ !ENDBR: .text+0x143136
+    1    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x28: relocation to=
+ !ENDBR: machine_kexec_prepare+0x27d
+    1    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x28: relocation to=
+ !ENDBR: .text+0x1432ab
+    1    vmlinux.o: warning: objtool: lkdtm_UNSET_SMEP+0xcc: relocation to =
+!ENDBR: native_write_cr4+0x4
+    1    fs/reiserfs/reiserfs.o: warning: objtool: balance_leaf+0x7612: sta=
+ck state mismatch: cfa1=3D4+360 cfa2=3D4+352
+    1    drivers/media/i2c/m5mols/m5mols.o: warning: objtool: m5mols_set_fm=
+t() falls through to next function __cfi_m5mols_get_frame_desc()
 
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
@@ -168,8 +232,28 @@ ngs, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
-allmodconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+allmodconfig (arm, clang-17) =E2=80=94 FAIL, 3 errors, 3 warnings, 0 sectio=
 n mismatches
+
+Errors:
+    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:1146:3: =
+error: variable 'hotspotlimit' is uninitialized when used here [-Werror,-Wu=
+ninitialized]
+    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:1149:24:=
+ error: variable 'memlimit' is uninitialized when used here [-Werror,-Wunin=
+itialized]
+    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:1152:34:=
+ error: variable 'software_shutdown_temp' is uninitialized when used here [=
+-Werror,-Wuninitialized]
+
+Warnings:
+    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:1135:22:=
+ note: initialize the variable 'hotspotlimit' to silence this warning
+    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:1136:18:=
+ note: initialize the variable 'memlimit' to silence this warning
+    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:1134:32:=
+ note: initialize the variable 'software_shutdown_temp' to silence this war=
+ning
 
 ---------------------------------------------------------------------------=
 -----
@@ -178,16 +262,89 @@ mismatches
 
 ---------------------------------------------------------------------------=
 -----
-allnoconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
+allmodconfig (i386, clang-17) =E2=80=94 FAIL, 3 errors, 3 warnings, 0 secti=
+on mismatches
+
+Errors:
+    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:1146:3: =
+error: variable 'hotspotlimit' is uninitialized when used here [-Werror,-Wu=
+ninitialized]
+    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:1149:24:=
+ error: variable 'memlimit' is uninitialized when used here [-Werror,-Wunin=
+itialized]
+    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:1152:34:=
+ error: variable 'software_shutdown_temp' is uninitialized when used here [=
+-Werror,-Wuninitialized]
+
+Warnings:
+    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:1135:22:=
+ note: initialize the variable 'hotspotlimit' to silence this warning
+    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:1136:18:=
+ note: initialize the variable 'memlimit' to silence this warning
+    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:1134:32:=
+ note: initialize the variable 'software_shutdown_temp' to silence this war=
+ning
 
 ---------------------------------------------------------------------------=
 -----
-allnoconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
-mismatches
+allmodconfig (x86_64, clang-17) =E2=80=94 FAIL, 3 errors, 6 warnings, 0 sec=
+tion mismatches
+
+Errors:
+    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:1146:3: =
+error: variable 'hotspotlimit' is uninitialized when used here [-Werror,-Wu=
+ninitialized]
+    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:1149:24:=
+ error: variable 'memlimit' is uninitialized when used here [-Werror,-Wunin=
+itialized]
+    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:1152:34:=
+ error: variable 'software_shutdown_temp' is uninitialized when used here [=
+-Werror,-Wuninitialized]
 
 Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x28: relocation to !END=
+BR: machine_kexec_prepare+0x27d
+    fs/reiserfs/reiserfs.o: warning: objtool: balance_leaf+0x7612: stack st=
+ate mismatch: cfa1=3D4+360 cfa2=3D4+352
+    drivers/media/i2c/m5mols/m5mols.o: warning: objtool: m5mols_set_fmt() f=
+alls through to next function __cfi_m5mols_get_frame_desc()
+    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:1135:22:=
+ note: initialize the variable 'hotspotlimit' to silence this warning
+    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:1136:18:=
+ note: initialize the variable 'memlimit' to silence this warning
+    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:1134:32:=
+ note: initialize the variable 'software_shutdown_temp' to silence this war=
+ning
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm64, clang-17) =E2=80=94 FAIL, 3 errors, 3 warnings, 0 sect=
+ion mismatches
+
+Errors:
+    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:1146:3: =
+error: variable 'hotspotlimit' is uninitialized when used here [-Werror,-Wu=
+ninitialized]
+    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:1149:24:=
+ error: variable 'memlimit' is uninitialized when used here [-Werror,-Wunin=
+itialized]
+    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:1152:34:=
+ error: variable 'software_shutdown_temp' is uninitialized when used here [=
+-Werror,-Wuninitialized]
+
+Warnings:
+    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:1135:22:=
+ note: initialize the variable 'hotspotlimit' to silence this warning
+    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:1136:18:=
+ note: initialize the variable 'memlimit' to silence this warning
+    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:1134:32:=
+ note: initialize the variable 'software_shutdown_temp' to silence this war=
+ning
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -198,6 +355,24 @@ mismatches
 -----
 allnoconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
 n mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
+mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
 
 ---------------------------------------------------------------------------=
 -----
@@ -213,6 +388,11 @@ n mismatches
 -----
 aspeed_g4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
 ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -306,6 +486,55 @@ ion mismatches
 
 ---------------------------------------------------------------------------=
 -----
+cros://chromeos-5.10/arm64/chromiumos-mediatek.flavour.config+arm64-chromeb=
+ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
+tches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-rockchip64.flavour.config+arm64-chrom=
+ebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mis=
+matches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (arm, clang-1=
+3) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromeos-amd-stoneyridge.flavour.config+x86-chr=
+omebook (x86_64, clang-13) =E2=80=94 FAIL, 3 errors, 3 warnings, 0 section =
+mismatches
+
+Errors:
+    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:1146:3: =
+error: variable 'hotspotlimit' is uninitialized when used here [-Werror,-Wu=
+ninitialized]
+    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:1149:24:=
+ error: variable 'memlimit' is uninitialized when used here [-Werror,-Wunin=
+itialized]
+    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:1152:34:=
+ error: variable 'software_shutdown_temp' is uninitialized when used here [=
+-Werror,-Wuninitialized]
+
+Warnings:
+    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:1135:22:=
+ note: initialize the variable 'hotspotlimit' to silence this warning
+    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:1136:18:=
+ note: initialize the variable 'memlimit' to silence this warning
+    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:1134:32:=
+ note: initialize the variable 'software_shutdown_temp' to silence this war=
+ning
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromeos-intel-denverton.flavour.config+x86-chr=
+omebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
 cu1000-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
  section mismatches
 
@@ -341,13 +570,33 @@ s, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
+defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
 defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
 ismatches
 
 ---------------------------------------------------------------------------=
 -----
+defconfig (arm64, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
 defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
 ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_16K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -366,22 +615,17 @@ ings, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
-defconfig+arm64-chromebook+videodec (arm64, gcc-10) =E2=80=94 PASS, 0 error=
-s, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+crypto (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+debug (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
+defconfig+arm64-chromebook+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
 defconfig+debug (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+debug (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
 tion mismatches
 
 ---------------------------------------------------------------------------=
@@ -391,12 +635,12 @@ on mismatches
 
 ---------------------------------------------------------------------------=
 -----
-defconfig+kselftest (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
  section mismatches
 
 ---------------------------------------------------------------------------=
 -----
-defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+defconfig+kselftest (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
  section mismatches
 
 ---------------------------------------------------------------------------=
@@ -484,6 +728,11 @@ on mismatches
 
 ---------------------------------------------------------------------------=
 -----
+i386_defconfig (i386, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
 i386_defconfig+debug (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
  section mismatches
 
@@ -551,15 +800,6 @@ section mismatches
 -----
 keystone_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
 ction mismatches
-
----------------------------------------------------------------------------=
------
-lemote2f_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 se=
-ction mismatches
-
-Errors:
-    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
-=98-mhard-float=E2=80=99
 
 ---------------------------------------------------------------------------=
 -----
@@ -671,13 +911,44 @@ ection mismatches
 
 ---------------------------------------------------------------------------=
 -----
-multi_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+multi_v5_defconfig (arm, gcc-10) =E2=80=94 FAIL, 5 errors, 0 warnings, 0 se=
 ction mismatches
+
+Errors:
+    drivers/clk/mvebu/kirkwood.c:358:16: error: invalid suffix "dx1135_clk_=
+of_clk_init_declare" on integer constant
+    drivers/clk/mvebu/kirkwood.c:358:16: error: expected identifier or =E2=
+=80=98(=E2=80=99 before numeric constant
+    drivers/clk/mvebu/kirkwood.c:358:16: error: invalid suffix "dx1135_clk_=
+of_clk_init_declare" on integer constant
+    drivers/clk/mvebu/kirkwood.c:358:16: error: invalid suffix "dx1135_clk_=
+of_clk_init_declare" on integer constant
+    drivers/clk/mvebu/kirkwood.c:358:16: error: invalid suffix "dx1135_clk_=
+of_clk_init_declare" on integer constant
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, clang-17) =E2=80=94 FAIL, 4 errors, 0 warnings, 0 =
+section mismatches
+
+Errors:
+    drivers/clk/mvebu/kirkwood.c:358:1: error: expected identifier or '('
+    drivers/clk/mvebu/kirkwood.c:358:1: error: invalid digit 'd' in decimal=
+ constant
+    drivers/clk/mvebu/kirkwood.c:358:1: error: invalid digit 'd' in decimal=
+ constant
+    drivers/clk/mvebu/kirkwood.c:358:1: error: invalid digit 'd' in decimal=
+ constant
 
 ---------------------------------------------------------------------------=
 -----
 multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
 ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -701,13 +972,8 @@ multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy (arm, gcc-10) =E2=80=94 PASS, 0=
 
 ---------------------------------------------------------------------------=
 -----
-multi_v7_defconfig+crypto (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
-s, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+ima (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
-0 section mismatches
+multi_v7_defconfig+debug (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -716,8 +982,20 @@ ings, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
-mvebu_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+mvebu_v5_defconfig (arm, gcc-10) =E2=80=94 FAIL, 5 errors, 0 warnings, 0 se=
 ction mismatches
+
+Errors:
+    drivers/clk/mvebu/kirkwood.c:358:16: error: invalid suffix "dx1135_clk_=
+of_clk_init_declare" on integer constant
+    drivers/clk/mvebu/kirkwood.c:358:16: error: expected identifier or =E2=
+=80=98(=E2=80=99 before numeric constant
+    drivers/clk/mvebu/kirkwood.c:358:16: error: invalid suffix "dx1135_clk_=
+of_clk_init_declare" on integer constant
+    drivers/clk/mvebu/kirkwood.c:358:16: error: invalid suffix "dx1135_clk_=
+of_clk_init_declare" on integer constant
+    drivers/clk/mvebu/kirkwood.c:358:16: error: invalid suffix "dx1135_clk_=
+of_clk_init_declare" on integer constant
 
 ---------------------------------------------------------------------------=
 -----
@@ -751,8 +1029,18 @@ nommu_k210_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
 
 ---------------------------------------------------------------------------=
 -----
+nommu_k210_defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
 nommu_k210_sdcard_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
 nings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_sdcard_defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 w=
+arnings, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -857,6 +1145,11 @@ on mismatches
 -----
 rt305x_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
 tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rv32_defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -980,14 +1273,6 @@ on mismatches
 
 ---------------------------------------------------------------------------=
 -----
-tinyconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section m=
-ismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
 tinyconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
 smatches
 
@@ -995,6 +1280,14 @@ smatches
 -----
 tinyconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
 ismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section m=
+ismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
 
 ---------------------------------------------------------------------------=
 -----
@@ -1053,6 +1346,16 @@ ection mismatches
 
 ---------------------------------------------------------------------------=
 -----
+x86_64_defconfig (x86_64, rustc-1.62) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
 x86_64_defconfig+amdgpu (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
 gs, 0 section mismatches
 
@@ -1078,8 +1381,36 @@ nings, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
+x86_64_defconfig+kselftest (x86_64, rustc-1.62) =E2=80=94 PASS, 0 errors, 3=
+ warnings, 0 section mismatches
+
+Warnings:
+    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x28: relocation to !END=
+BR: .text+0x1432ab
+    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x3e: relocation to !END=
+BR: .text+0x143136
+    vmlinux.o: warning: objtool: lkdtm_UNSET_SMEP+0xcc: relocation to !ENDB=
+R: native_write_cr4+0x4
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+rust (x86_64, rustc-1.62) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+rust-samples (x86_64, rustc-1.62) =E2=80=94 PASS, 0 errors=
+, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
 x86_64_defconfig+x86-chromebook (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, =
 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors=
+, 0 warnings, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -1095,6 +1426,15 @@ x86_64_defconfig+x86-chromebook+kselftest (x86_64, gcc-10) =E2=80=94 PASS, =
 -----
 x86_64_defconfig+x86_kvm_guest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0=
  warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+xway_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 sectio=
+n mismatches
+
+Errors:
+    drivers/gpio/gpio-mm-lantiq.c:13:10: fatal error: linux/gpio/legacy-of-=
+mm-gpiochip.h.h: No such file or directory
 
 ---
 For more info write to <info@kernelci.org>

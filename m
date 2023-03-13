@@ -2,83 +2,126 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61E0A6B85D6
-	for <lists+linux-next@lfdr.de>; Tue, 14 Mar 2023 00:07:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 853DE6B865F
+	for <lists+linux-next@lfdr.de>; Tue, 14 Mar 2023 00:54:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229535AbjCMXHG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 13 Mar 2023 19:07:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58240 "EHLO
+        id S230173AbjCMXyd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 13 Mar 2023 19:54:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbjCMXHF (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 13 Mar 2023 19:07:05 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1DAE93E2B;
-        Mon, 13 Mar 2023 16:06:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S230061AbjCMXy3 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 13 Mar 2023 19:54:29 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 183D619F1E;
+        Mon, 13 Mar 2023 16:54:26 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 80F91CE128C;
-        Mon, 13 Mar 2023 23:06:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6824C4339B;
-        Mon, 13 Mar 2023 23:06:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678748791;
-        bh=32LMZRRgY9Heh5Zy6mgD96NQ/9UxqafJlIGe3iNJPR0=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=p1Fhflo7e16PkWua2VrmfmNhClucrWIotAR0EQNI3avp3iSqwrm19UObZ0SoXMJ0D
-         gZwYtyS3B7djgkM8MSTnZfDwQwAuIAHPooIYOaKsNK9GBrajAupyPJv1ITffYkwtgP
-         GdCfag/1KRljaH8Hn8kUf/9o68AdVRIehQFbhBTNSGDzcqVtLSZqAKZQ03lWL0dEUq
-         WEhZgw6x0zPKa3LtUQXSpqKljOfNhmcD3dKXhRsaQIjAGcnSoQQw+miQgr7mMpiEjk
-         4iwDTlbEShCHOh9DSsXKTROOMRApcNhDcyEfOmtQAdc1jQoq9n+3cWWnefnHesyKJl
-         jU9lBjsNWcu4w==
-Received: by mail-lj1-f177.google.com with SMTP id a32so14263689ljq.1;
-        Mon, 13 Mar 2023 16:06:31 -0700 (PDT)
-X-Gm-Message-State: AO0yUKXu+Mp6HUKz/Z5hfKoylxZnhIO4cfXhqTPpVW3NKOSgWrzgRKYf
-        joNTvDL1ebm40y9ISWw/ldobQoOPZh9AVsTGi2U=
-X-Google-Smtp-Source: AK7set+3q0078CPE9b4taUG2K/RIOge027FCjRP30Js9cL88qNhljrFGUc2F1lvSpYqrE7I3qOUo2y0NrVFUC6XjyLU=
-X-Received: by 2002:a05:651c:169a:b0:28e:d4ae:90ab with SMTP id
- bd26-20020a05651c169a00b0028ed4ae90abmr11003305ljb.2.1678748789638; Mon, 13
- Mar 2023 16:06:29 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230314094002.50555b2c@canb.auug.org.au>
-In-Reply-To: <20230314094002.50555b2c@canb.auug.org.au>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Tue, 14 Mar 2023 00:06:18 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXHb8TK4WdA_Px5WOcNaBzj9E+gXcNnxJNPjnyGdLZBYKA@mail.gmail.com>
-Message-ID: <CAMj1kXHb8TK4WdA_Px5WOcNaBzj9E+gXcNnxJNPjnyGdLZBYKA@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the efi-fixes tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PbD5q6gSmz4whr;
+        Tue, 14 Mar 2023 10:54:22 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1678751665;
+        bh=T0N+rXIbClzSIFFsBqWugRWo9U1U5OtD1gue76ktyYo=;
+        h=Date:From:To:Cc:Subject:From;
+        b=IodiPqO7SvTvCuvWRiCg3vHnSD9pqmlmnKqxXYjtntkJmSuX9gf5XRDMJafIYV1M8
+         G5EOBBisIhXhTt/6S+vqgy9UkawFueBq1Jb7ouj9HjRrS7qM66sR2sowJlQIYVTYt6
+         WzzO4VsBNgoIdQZ9xxLKip1UUFZZOekNf11jANuUqxelBUQc+N7jZ1/WXcnC88BZa7
+         FYbIso6E5pIuwwJ1vVKj951EeaSPQEuG4MpDIWLgkKtryuYuQJ+CXScP4MW+iwgmGz
+         ZOKF9cG7rQMytn3pxWG5TzcqUO7faqN9jqphb3fHhHeJH1rzNCl/TfebqrFsYpdnyM
+         L6Z5cQeSnPLbg==
+Date:   Tue, 14 Mar 2023 10:54:21 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        <linux-wireless@vger.kernel.org>,
+        Avraham Stern <avraham.stern@intel.com>,
+        Gregory Greenman <gregory.greenman@intel.com>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Matthieu Baerts <matthieu.baerts@tessares.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Subject: linux-next: manual merge of the net-next tree with the net tree
+Message-ID: <20230314105421.3608efae@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/MEZkc5nIJ4_ySymOX4LxTp.";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, 13 Mar 2023 at 23:40, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> After merging the efi-fixes tree, today's linux-next build (arm
-> multi_v7_defconfig) failed like this:
->
-> arm-linux-gnueabi-ld: drivers/firmware/efi/efi-init.o: in function `efi_init':
-> efi-init.c:(.init.text+0x474): undefined reference to `efi_earlycon_reprobe'
->
-> Caused by commit
->
->   3923c4cf06af ("efi: earlycon: Reprobe after parsing config tables")
->
-> $ grep CONFIG_EFI_EARLYCON .config
-> $
->
-> I have used the efi-fixes tree from next-20230310 for today.
->
+--Sig_/MEZkc5nIJ4_ySymOX4LxTp.
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks for the report. It has already been fixed on the branch, so the
-next time you pull it, things should build as expected.
+Hi all,
+
+Today's linux-next merge of the net-next tree got a conflict in:
+
+  net/wireless/nl80211.c
+
+between commit:
+
+  b27f07c50a73 ("wifi: nl80211: fix puncturing bitmap policy")
+
+from the net tree and commit:
+
+  cbbaf2bb829b ("wifi: nl80211: add a command to enable/disable HW timestam=
+ping")
+
+from the net-next tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+Thanks for the heads up.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc net/wireless/nl80211.c
+index 4f63059efd81,0a31b1d2845d..000000000000
+--- a/net/wireless/nl80211.c
++++ b/net/wireless/nl80211.c
+@@@ -810,8 -805,10 +810,11 @@@ static const struct nla_policy nl80211_
+  	[NL80211_ATTR_MLD_ADDR] =3D NLA_POLICY_EXACT_LEN(ETH_ALEN),
+  	[NL80211_ATTR_MLO_SUPPORT] =3D { .type =3D NLA_FLAG },
+  	[NL80211_ATTR_MAX_NUM_AKM_SUITES] =3D { .type =3D NLA_REJECT },
+ -	[NL80211_ATTR_PUNCT_BITMAP] =3D NLA_POLICY_RANGE(NLA_U8, 0, 0xffff),
+ +	[NL80211_ATTR_PUNCT_BITMAP] =3D
+ +		NLA_POLICY_FULL_RANGE(NLA_U32, &nl80211_punct_bitmap_range),
++=20
++ 	[NL80211_ATTR_MAX_HW_TIMESTAMP_PEERS] =3D { .type =3D NLA_U16 },
++ 	[NL80211_ATTR_HW_TIMESTAMP_ENABLED] =3D { .type =3D NLA_FLAG },
+  };
+ =20
+  /* policy for the key attributes */
+
+--Sig_/MEZkc5nIJ4_ySymOX4LxTp.
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQPt60ACgkQAVBC80lX
+0GzG0Qf/S/+TJT8EYGeMTSio88Y3eGykDwxmvZpm1MTYQ4MoYkNVQJvq8fulq7Ee
+1srl8kfjYJQ6/usDxPNXuzY6rbLvD/aKQ6A4uxF3Oj+G4tJ5w09l42KX6rl2U6zs
+sW02ofFCrbhOTM4HVMWtlg4YADo8djPPK9cltHF56i8bZttY1gfHi1Ga9Jp+N8A5
+c5dLgPtEInnlN0AKhd3YxnhmldL9IoqEQLjPzBrORj2YlN2a6f78eIBawgeYbW9d
+v7EE5fnbGSSFOjCm140Pa/vXZws/sMAWyTo0/fftOfBjI0WmVd9socANHKS9ABWw
+FM7I4tRzkkPLewTlTjivu1fv5Zj/0Q==
+=PA4D
+-----END PGP SIGNATURE-----
+
+--Sig_/MEZkc5nIJ4_ySymOX4LxTp.--

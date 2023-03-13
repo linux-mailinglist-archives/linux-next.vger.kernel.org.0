@@ -2,44 +2,46 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 893326B840A
-	for <lists+linux-next@lfdr.de>; Mon, 13 Mar 2023 22:37:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B4BC6B841E
+	for <lists+linux-next@lfdr.de>; Mon, 13 Mar 2023 22:42:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229635AbjCMVhq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 13 Mar 2023 17:37:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52432 "EHLO
+        id S229535AbjCMVmW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 13 Mar 2023 17:42:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjCMVhp (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 13 Mar 2023 17:37:45 -0400
+        with ESMTP id S229493AbjCMVmV (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 13 Mar 2023 17:42:21 -0400
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 733BB898D9;
-        Mon, 13 Mar 2023 14:37:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CDF88ABF4;
+        Mon, 13 Mar 2023 14:42:17 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Pb9454VpKz4whh;
-        Tue, 14 Mar 2023 08:37:41 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Pb99L6T25z4whr;
+        Tue, 14 Mar 2023 08:42:14 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1678743461;
-        bh=49K12yWWdtmrUou9Tpbx/H8QMp/k/kD118qkD2thWhI=;
+        s=201702; t=1678743735;
+        bh=17d+EcKlY/En8UZdp52sksh6GRy/ocvPXgStvvw3rJ0=;
         h=Date:From:To:Cc:Subject:From;
-        b=f5H3WW1XPLzcG0bTKuo5IB5bmDo7OOmQXr/gDidNqdlQmka3lJpVnYlOa5LFZTx9y
-         cpHF1FhRDWjVHkRTWZRIa84v9a/hDzQOH0afz1pimd6s0jv/1lkhPp+JHkjQoqQlpz
-         Ze4/LbZPRgVXQv+WvvUygfywAF7so7v4LUCX/+6W30Sqs/bhFB6Ue2bdQWe5ZApJpV
-         st3uhehlDy7OIinF9HAhFynq4dYMgMLBmypi7EJsr4rL+vZc3x4hx0C3RTy8W6bmmw
-         iicyoUkgtkOPCfkXNCce/taytkEa2n3M36EL58E9W2Bcw8iDNZRHvWjZsDKXE64pyG
-         ts4KLa1i1Zl3Q==
-Date:   Tue, 14 Mar 2023 08:37:40 +1100
+        b=jixGxLlLUz3SLOEsHfBLB1bAZ3vS4cSSIgN0l0WC95kCg425TPzkTp5TGa9dRKMcj
+         VvnoXxSpOuU/KPkZPGMe8P9Kek9Tx9chvK9VFzGJbkBr6+zmAvA4AqnFR+rFywICWo
+         ZvU8fdDf1mejt34n63C2P9o5f/w++cVNW0yn/5UGIzFhvrdSOFm1z5IqfjYF3Cb0TN
+         kCXmu7EYk4PbBg5b2wd/maXYJpp/AZx4h1bwBTcgonvUWRQjRa2eQeGQxz5fDTPwOm
+         2BBa15wF60MtlGWf9zng43A0tkafI2hGjesw5Cv2M/tKXM133qfwdVzr03vvfbFAVP
+         4+PLsgJRZ/Zfw==
+Date:   Tue, 14 Mar 2023 08:42:14 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andy Gross <agross@kernel.org>
-Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     Linux Crypto List <linux-crypto@vger.kernel.org>,
+        Uwe =?UTF-8?B?S2xl?= =?UTF-8?B?aW5lLUvDtm5pZw==?= 
+        <u.kleine-koenig@pengutronix.de>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the qcom tree
-Message-ID: <20230314083740.758e909b@canb.auug.org.au>
+Subject: linux-next: Signed-off-by missing for commit in the crypto tree
+Message-ID: <20230314084214.113e74dc@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/qjPLLPcjp=JZjD6ho15UTsM";
+Content-Type: multipart/signed; boundary="Sig_/yuUr.7MdmN_.eaT8M0Qqkc/";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
@@ -50,68 +52,37 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/qjPLLPcjp=JZjD6ho15UTsM
+--Sig_/yuUr.7MdmN_.eaT8M0Qqkc/
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-In commits
+Commit
 
-  2e498f35c385 ("arm64: dts: qcom: sc8280xp-x13s: fix va dmic dai links and=
- routing")
-  4def7aa377ba ("arm64: dts: qcom: sc8280xp-x13s: fix dmic sample rate")
+  b4fb7f4afa5d ("hwrng: xgene - Improve error reporting for problems during=
+ .remove()")
 
-Fixes tag
-
-  Fixes: 8c1ea87e80b4 ("arm64: dts: qcom: sc8280xp-x13s: Add soundcard supp=
-ort")
-
-has these problem(s):
-
-  - Target SHA1 does not exist
-
-Maybe you meant
-
-Fixes: f29077d86652 ("arm64: dts: qcom: sc8280xp-x13s: Add soundcard suppor=
-t")
-
-In commits
-
-  e43bd22cb377 ("arm64: dts: qcom: sc8280xp: fix lpass tx macro clocks")
-  670b7d6569bf ("arm64: dts: qcom: sc8280xp: fix rx frame shapping info")
-
-Fixes tag
-
-  Fixes: 1749a8ae49a3 ("arm64: dts: qcom: sc8280xp: add SoundWire and LPASS=
-")
-
-has these problem(s):
-
-  - Target SHA1 does not exist
-
-Maybe you meant
-
-Fixes: c18773d162a6 ("arm64: dts: qcom: sc8280xp: add SoundWire and LPASS")
+is missing a Signed-off-by from its author.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/qjPLLPcjp=JZjD6ho15UTsM
+--Sig_/yuUr.7MdmN_.eaT8M0Qqkc/
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQPl6QACgkQAVBC80lX
-0Gyt+gf7BmB+lKEk38ogQl6EulcksxNvF/J3cEgOGTC+tr3UfbRVjf3K1eQ8BC+0
-L1hq+sSFBCdRc0Y2wMuc0Tv9Byp4LH9kXh644G/ShYTqwZyrmEpUg2S+QdUiMb1F
-dtLkxgl5mdHlc8cgIqugtEWLiinI5cFa91kCBTB4ut67JfE9c3sFvLbi9TR/0Q8/
-0wpkm/0FG8TXsMujsWrFGKqKgLsoHg9ZO/UlZ3Sg66DtoDUW2HNKCoMRUnT/Y+Kz
-PJn0UQsGpL1uFZEtgv8pCIECxaNXhClrDIiDZe/9av1oUnAjqIAHFod7p14+QpGG
-xFhVpTqZvYEJbgMXsXzGpqnT1FNk9Q==
-=10Xk
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQPmLYACgkQAVBC80lX
+0GzlxAgAhKeWO6dELwmRH1XAyqaQzS35NS4CYTtJz5Hqt+nY0Qi/hbj+80mic5T/
+dtlhpw1A24/XK3jV+2LZRnswaBzsNqcbfP/dHG2wmZ9F/bEDWKqq8K3yuZVMuz7Z
+tLbJQcT+UuI2luwrhyVHGooECvhAr7WoLeh1v1q0wxVFe/2+ttsz+vX5hqJqakmz
+4uMwZ4WhLKAdA84gHYYVxkgBYE2/KzzuSR9ltb1mGJKxVne2NgQLBa3z4pguTcjK
+TVUQK8+TLrMdV2Mynh34xO+HzikpJTN3l0YkDgAHQr+8vJlfe1+4mSD7JSRjdswK
+O98W1W6C1nDXXkuBPLoBuSrDO6D37w==
+=Yf9r
 -----END PGP SIGNATURE-----
 
---Sig_/qjPLLPcjp=JZjD6ho15UTsM--
+--Sig_/yuUr.7MdmN_.eaT8M0Qqkc/--

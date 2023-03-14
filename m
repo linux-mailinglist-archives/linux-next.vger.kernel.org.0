@@ -2,125 +2,99 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9358D6B89BC
-	for <lists+linux-next@lfdr.de>; Tue, 14 Mar 2023 05:43:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F026F6B8A05
+	for <lists+linux-next@lfdr.de>; Tue, 14 Mar 2023 06:02:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229540AbjCNEnn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 14 Mar 2023 00:43:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34478 "EHLO
+        id S229571AbjCNFCu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 14 Mar 2023 01:02:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjCNEnm (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 14 Mar 2023 00:43:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B1E616336;
-        Mon, 13 Mar 2023 21:43:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A152DB815C6;
-        Tue, 14 Mar 2023 04:43:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E66BC4339B;
-        Tue, 14 Mar 2023 04:43:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678769016;
-        bh=j0UbdKLqN7PL42qby+oAyPBxzwyH7KWgVYQ0X5bqS7o=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=HSgJGh+hQmqvJlnm/85VW0rC0EGTxwtt9+wIJoEQOxFjhqNZMBueE1B0LPX4AqrPH
-         ntrOBeYLK8gDY3Yx+q1/tYOru5bU0rFZsxdcG6qNyR9xGya/UNa7HTdYtYXq6guDpP
-         i+NnxOrzwbU515uVIh3rMm3NYLCBzVyEObNxIyBGgJMEKmCKxqCCG9obFd2IsxE5Ly
-         1KHnJRvQDoTwemIchRGHRRACNiuI1RSsnvdB+77xP1A4OJmHNFSY84/jsEiDNC2gvo
-         6nE8/SKHk5/bCpKqKWtylucj+/OISjqsztuHJeF9n3L+Po8HeByJCuPAbcBmZQQQ+N
-         Poj22xw9dmyvQ==
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id C9F851540395; Mon, 13 Mar 2023 21:43:35 -0700 (PDT)
-Date:   Mon, 13 Mar 2023 21:43:35 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
+        with ESMTP id S229486AbjCNFCt (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 14 Mar 2023 01:02:49 -0400
+Received: from 167-179-156-38.a7b39c.syd.nbn.aussiebb.net (167-179-156-38.a7b39c.syd.nbn.aussiebb.net [167.179.156.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F90B6F4A2;
+        Mon, 13 Mar 2023 22:02:46 -0700 (PDT)
+Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
+        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
+        id 1pbwo3-003zBJ-Lv; Tue, 14 Mar 2023 13:02:40 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Tue, 14 Mar 2023 13:02:39 +0800
+Date:   Tue, 14 Mar 2023 13:02:39 +0800
+From:   Herbert Xu <herbert@gondor.apana.org.au>
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
+Cc:     Linux Crypto List <linux-crypto@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the rcu tree
-Message-ID: <e6bc7d01-1889-4fa0-8ce5-80a10cdab2a5@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <20230314122922.43c81767@canb.auug.org.au>
+Subject: [PATCH] crypto: hash - Fix kdoc errors about HASH_ALG_COMMON
+Message-ID: <ZA//781k0UXRIKdW@gondor.apana.org.au>
+References: <20230314141947.18574ae8@canb.auug.org.au>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230314122922.43c81767@canb.auug.org.au>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230314141947.18574ae8@canb.auug.org.au>
+X-Spam-Status: No, score=2.7 required=5.0 tests=BAYES_00,HELO_DYNAMIC_IPADDR2,
+        PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,TVD_RCVD_IP,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Mar 14, 2023 at 12:29:22PM +1100, Stephen Rothwell wrote:
+On Tue, Mar 14, 2023 at 02:19:47PM +1100, Stephen Rothwell wrote:
 > Hi all,
 > 
-> After merging the rcu tree, today's linux-next build (x86_64 allmodconfig)
-> failed like this:
+> After merging the crypto tree, today's linux-next build (htmldocs)
+> produced these warnings:
 > 
-> net/mac802154/scan.c: In function 'mac802154_scan_cleanup_locked':
-> net/mac802154/scan.c:55:26: error: macro "kfree_rcu" requires 2 arguments, but only 1 given
->    55 |         kfree_rcu(request);
->       |                          ^
-> In file included from include/linux/rbtree.h:24,
->                  from include/linux/mm_types.h:11,
->                  from include/linux/buildid.h:5,
->                  from include/linux/module.h:14,
->                  from net/mac802154/scan.c:11:
-> include/linux/rcupdate.h:984: note: macro "kfree_rcu" defined here
->   984 | #define kfree_rcu(ptr, rhf) kvfree_rcu_arg_2(ptr, rhf)
->       | 
-> net/mac802154/scan.c:55:9: error: 'kfree_rcu' undeclared (first use in this function); did you mean 'kfree_skb'?
->    55 |         kfree_rcu(request);
->       |         ^~~~~~~~~
->       |         kfree_skb
-> net/mac802154/scan.c:55:9: note: each undeclared identifier is reported only once for each function it appears in
-> net/mac802154/scan.c: In function 'mac802154_stop_beacons_locked':
-> net/mac802154/scan.c:406:26: error: macro "kfree_rcu" requires 2 arguments, but only 1 given
->   406 |         kfree_rcu(request);
->       |                          ^
-> include/linux/rcupdate.h:984: note: macro "kfree_rcu" defined here
->   984 | #define kfree_rcu(ptr, rhf) kvfree_rcu_arg_2(ptr, rhf)
->       | 
-> net/mac802154/scan.c:406:9: error: 'kfree_rcu' undeclared (first use in this function); did you mean 'kfree_skb'?
->   406 |         kfree_rcu(request);
->       |         ^~~~~~~~~
->       |         kfree_skb
-> drivers/infiniband/sw/rxe/rxe_mr.c: In function 'rxe_dereg_mr':
-> drivers/infiniband/sw/rxe/rxe_mr.c:734:21: error: macro "kfree_rcu" requires 2 arguments, but only 1 given
->   734 |         kfree_rcu(mr);
->       |                     ^
-> In file included from include/linux/rculist.h:11,
->                  from include/linux/dcache.h:8,
->                  from include/linux/fs.h:8,
->                  from include/linux/highmem.h:5,
->                  from include/linux/bvec.h:10,
->                  from include/linux/blk_types.h:10,
->                  from include/linux/bio.h:10,
->                  from include/linux/libnvdimm.h:14,
->                  from drivers/infiniband/sw/rxe/rxe_mr.c:7:
-> include/linux/rcupdate.h:984: note: macro "kfree_rcu" defined here
->   984 | #define kfree_rcu(ptr, rhf) kvfree_rcu_arg_2(ptr, rhf)
->       | 
-> drivers/infiniband/sw/rxe/rxe_mr.c:734:9: error: 'kfree_rcu' undeclared (first use in this function); did you mean 'kfree_skb'?
->   734 |         kfree_rcu(mr);
->       |         ^~~~~~~~~
->       |         kfree_skb
-> drivers/infiniband/sw/rxe/rxe_mr.c:734:9: note: each undeclared identifier is reported only once for each function it appears in
+> include/crypto/hash.h:69: error: Cannot parse struct or union!
+> include/crypto/hash.h:69: error: Cannot parse struct or union!
+> include/crypto/hash.h:245: warning: Function parameter or member 'HASH_ALG_COMMON' not described in 'shash_alg'
+> include/crypto/hash.h:69: error: Cannot parse struct or union!
+> include/crypto/hash.h:69: error: Cannot parse struct or union!
+> include/crypto/hash.h:69: error: Cannot parse struct or union!
+> include/crypto/hash.h:69: error: Cannot parse struct or union!
+> include/crypto/hash.h:69: error: Cannot parse struct or union!
+> include/crypto/hash.h:69: error: Cannot parse struct or union!
 > 
-> Caused by commit
+> Introduced by commit
 > 
->   62a2ac23b35f ("rcu/kvfree: Eliminate k[v]free_rcu() single argument macro")
-> 
-> I have used the rcu tree from next-20230310 for today.
+>   0e4e6d7094df ("crypto: hash - Count error stats differently")
 
-Please accept my apologies -- I left out that revert.  I have pushed
-out an rcu/next including it.
+Thanks for the report Stephen.  I hope this patch makes them go
+away:
 
-But I guess we now know for sure that this revert is still needed.  :-/
+---8<---
+The HASH_ALG_COMMON macro cannot be parsed by kdoc so mark it as
+a normal comment instead of kdoc.  Also add HASH_ALG_COMMON as a
+structure member of shash_alg.
 
-							Thanx, Paul
+Fixes: 0e4e6d7094df ("crypto: hash - Count error stats differently")
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+
+diff --git a/include/crypto/hash.h b/include/crypto/hash.h
+index 2aa61e7679db..1ed674ba8429 100644
+--- a/include/crypto/hash.h
++++ b/include/crypto/hash.h
+@@ -41,7 +41,7 @@ struct crypto_istat_hash {
+ #define HASH_ALG_COMMON_STAT
+ #endif
+ 
+-/**
++/*
+  * struct hash_alg_common - define properties of message digest
+  * @stat: Statistics for hash algorithm.
+  * @digestsize: Size of the result of the transformation. A buffer of this size
+@@ -219,6 +219,7 @@ struct shash_desc {
+  * @stat: Statistics for hash algorithm.
+  * @base: internally used
+  * @halg: see struct hash_alg_common
++ * @HASH_ALG_COMMON: see struct hash_alg_common
+  */
+ struct shash_alg {
+ 	int (*init)(struct shash_desc *desc);
+-- 
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt

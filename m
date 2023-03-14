@@ -2,253 +2,91 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70D3F6BA049
-	for <lists+linux-next@lfdr.de>; Tue, 14 Mar 2023 21:02:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60A726BA138
+	for <lists+linux-next@lfdr.de>; Tue, 14 Mar 2023 22:11:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230372AbjCNUBw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 14 Mar 2023 16:01:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38650 "EHLO
+        id S229606AbjCNVLd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 14 Mar 2023 17:11:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230443AbjCNUBj (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 14 Mar 2023 16:01:39 -0400
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06008234CC
-        for <linux-next@vger.kernel.org>; Tue, 14 Mar 2023 13:01:27 -0700 (PDT)
-Received: by mail-il1-x130.google.com with SMTP id 4so9243610ilz.6
-        for <linux-next@vger.kernel.org>; Tue, 14 Mar 2023 13:01:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678824087;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=daEuCuG7DXOdjWhiCTyJik6XgyB8D3WRZ/VzAWKx3KA=;
-        b=eSQRb8tXj9GGNO4A71DATPGrLAjfPar+fRCBJgreepWxbtWxZSZhNptR80zD3O+KEM
-         TEThEkfKvl1Y8Dp+lGsY2RCsUwm1bz8738EFr0eSLg/c4X7tzawk/OQRpQZYRTYBkv96
-         O2dI7jgYH+vYDEx9OBpvW9UUaessOMV5uQ9hFTTbhlzGeKQmkvQCp2kNlmp5Q5rzg5CF
-         H3Nlj+aRn/5m2l7+W/I0xgmI1SfqjuBTkbeP3SJUQbOIt6ZZRPlP6IORcE3mShl6m5TT
-         YMbgh8fEnycZvROkqzeKDxsTKKhfDJEIwzuNlm672k5E8pYSL2CDR6LAtasbfoqln6d8
-         +VVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678824087;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=daEuCuG7DXOdjWhiCTyJik6XgyB8D3WRZ/VzAWKx3KA=;
-        b=UMIhmVeP2l62dFFp0b72FS29NDRYy/B8T8RgdEYNeXTtgaI7Q7QpUEmeVYn7BvwpD5
-         MU65if8s23lRmNVSnGwWDxDA35u4nrkmBSTPQJV1VE2nFzRtfP/V44maGgHxJCbgVZ++
-         6Kt6g0K7byTtTzgrSY1dz3F8BOQkuP9+1ESqmXoep6xiWtGNY02YxOatiBSLtfFAdS+l
-         nBJXm6xfwdHPO/aa8iODqvwQXTTpMDlx4skNucngyGEKKlgwzP3yVVvwAdEIgEQd7aSf
-         pVWF/ggIiVf7SBLuqrba70z+P1a1pltnZfYq2n23j2yZalWaI5ZM1vZMUJcCDf7loigI
-         WKzQ==
-X-Gm-Message-State: AO0yUKWw60DIl9awkkDytidHi6m9XjFk37x34m9vmkFRf7LmO7mNWsm7
-        li0LaifCLdDCpUdkkzgWMWtDbGCREy2p+DnXvVYNPA==
-X-Google-Smtp-Source: AK7set96x6suxfGHScWxcXUHwap0eV9HJEwIfYQuknkf9aG7fLFjai5z7b95ejSc9XOLkUfd8utZv/hV6VfBvk3Z8DA=
-X-Received: by 2002:a05:6e02:66e:b0:313:93c8:e714 with SMTP id
- l14-20020a056e02066e00b0031393c8e714mr297734ilt.8.1678824086871; Tue, 14 Mar
- 2023 13:01:26 -0700 (PDT)
+        with ESMTP id S229456AbjCNVLc (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 14 Mar 2023 17:11:32 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A37F19B2;
+        Tue, 14 Mar 2023 14:11:31 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PbmRK1gtyz4x5Z;
+        Wed, 15 Mar 2023 08:11:25 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1678828286;
+        bh=fIQHoPSvibSHu4TS2oQgYdG05lQ5UrRwOyPQIAqWekc=;
+        h=Date:From:To:Cc:Subject:From;
+        b=X82blIAV7ew2Q04lc6Uu7b29oO9XDxdBH8mwaZDMrHhTVQlj7fBJvwQmTb28TG95R
+         3HW+JBnzlfifs6HiBCGdMwvGCoSbCpX6HFupeK4M5vO5d3r+vSREjBzHByfmBml25C
+         YMF1uz2RbUByX2PG16FZ5WLQqr/MEFRMaT3DTUwaomVLO79NP8r1m0Q+cCKE7KLZjb
+         ZMwm1fmR2hEeP11zjI4s0UGVmaviVqImpVeWUGkS6TbjJCWk766ib92A7fnnl+L+5p
+         erQdWCBxbD4OzBykCL45AWi7BNY76dhC1PJktS0Ew1zvXKjKsPUU8VOfgdUlXo1uuO
+         EGvNIuwnZI9Qg==
+Date:   Wed, 15 Mar 2023 08:11:23 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Tzafrir Cohen <nvidia@cohens.org.il>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the kbuild-current tree
+Message-ID: <20230315081123.704ad19b@canb.auug.org.au>
 MIME-Version: 1.0
-References: <CA+G9fYtBnwxAWXi2+GyNByApxnf_DtP1-6+_zOKAdJKnJBexjg@mail.gmail.com>
- <CAEf4Bzb9_5KvWKxEAgz0V_OS0+h6PQN_Pir_rfrcviu2O80cqQ@mail.gmail.com>
-In-Reply-To: <CAEf4Bzb9_5KvWKxEAgz0V_OS0+h6PQN_Pir_rfrcviu2O80cqQ@mail.gmail.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Tue, 14 Mar 2023 13:01:16 -0700
-Message-ID: <CAP-5=fXURWoZu2j6Y8xQy23i7=DfgThq3WC1RkGFBx-4moQKYQ@mail.gmail.com>
-Subject: Re: next: zip.c:35:8: error: packed attribute causes inefficient
- alignment for 'magic' [-Werror=attributes]
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        =?UTF-8?Q?Daniel_M=C3=BCller?= <deso@posteo.net>,
-        open list <linux-kernel@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, lkft-triage@lists.linaro.org,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Anders Roxell <anders.roxell@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/8KcUd3sAQ9t+LWh3nI0QFip";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Mar 14, 2023 at 11:52=E2=80=AFAM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
->
-> On Mon, Mar 13, 2023 at 11:38=E2=80=AFPM Naresh Kamboju
-> <naresh.kamboju@linaro.org> wrote:
-> >
-> > perf builds failing from Linux next-20230307..next-20230314 but pass on
-> > Linux mainline v6.3-rc2.
-> >
-> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
->
-> Thanks for the report, but I'm not sure what's wrong here. We added
-> __attribute__((packed)) attribute intentionally and want to keep it
-> this way. It seems like perf itself is using packed structs (e.g.,
-> struct debug_line_header in util/genelf_debug.c), so I'm wondering why
-> that code doesn't cause any problems.
->
-> Any hints from perf folks?
+--Sig_/8KcUd3sAQ9t+LWh3nI0QFip
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-We use a #pragma to disable the warnings in at least one place:
-https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/l=
-ib/perf/include/perf/event.h?h=3Dperf-tools#n194
+Hi all,
 
-Thanks,
-Ian
+In commit
 
-> >
-> > Build log:
-> > ---
-> > libbpf/staticobjs/zip.o
-> > zip.c:35:8: error: packed attribute causes inefficient alignment for
-> > 'magic' [-Werror=3Dattributes]
-> >    35 |  __u32 magic;
-> >       |        ^~~~~
-> > zip.c:40:8: error: packed attribute causes inefficient alignment for
-> > 'this_disk' [-Werror=3Dattributes]
-> >    40 |  __u16 this_disk;
-> >       |        ^~~~~~~~~
-> > zip.c:45:8: error: packed attribute causes inefficient alignment for
-> > 'cd_disk' [-Werror=3Dattributes]
-> >    45 |  __u16 cd_disk;
-> >       |        ^~~~~~~
-> > zip.c:50:8: error: packed attribute causes inefficient alignment for
-> > 'cd_records' [-Werror=3Dattributes]
-> >    50 |  __u16 cd_records;
-> >       |        ^~~~~~~~~~
-> > zip.c:55:8: error: packed attribute causes inefficient alignment for
-> > 'cd_records_total' [-Werror=3Dattributes]
-> >    55 |  __u16 cd_records_total;
-> >       |        ^~~~~~~~~~~~~~~~
-> > zip.c:58:8: error: packed attribute causes inefficient alignment for
-> > 'cd_size' [-Werror=3Dattributes]
-> >    58 |  __u32 cd_size;
-> >       |        ^~~~~~~
-> > zip.c:63:8: error: packed attribute causes inefficient alignment for
-> > 'cd_offset' [-Werror=3Dattributes]
-> >    63 |  __u32 cd_offset;
-> >       |        ^~~~~~~~~
-> > zip.c:66:8: error: packed attribute causes inefficient alignment for
-> > 'comment_length' [-Werror=3Dattributes]
-> >    66 |  __u16 comment_length;
-> >       |        ^~~~~~~~~~~~~~
-> > zip.c:79:8: error: packed attribute causes inefficient alignment for
-> > 'magic' [-Werror=3Dattributes]
-> >    79 |  __u32 magic;
-> >       |        ^~~~~
-> > zip.c:80:8: error: packed attribute causes inefficient alignment for
-> > 'version' [-Werror=3Dattributes]
-> >    80 |  __u16 version;
-> >       |        ^~~~~~~
-> > zip.c:82:8: error: packed attribute causes inefficient alignment for
-> > 'min_version' [-Werror=3Dattributes]
-> >    82 |  __u16 min_version;
-> >       |        ^~~~~~~~~~~
-> > zip.c:83:8: error: packed attribute causes inefficient alignment for
-> > 'flags' [-Werror=3Dattributes]
-> >    83 |  __u16 flags;
-> >       |        ^~~~~
-> > zip.c:84:8: error: packed attribute causes inefficient alignment for
-> > 'compression' [-Werror=3Dattributes]
-> >    84 |  __u16 compression;
-> >       |        ^~~~~~~~~~~
-> > zip.c:85:8: error: packed attribute causes inefficient alignment for
-> > 'last_modified_time' [-Werror=3Dattributes]
-> >    85 |  __u16 last_modified_time;
-> >       |        ^~~~~~~~~~~~~~~~~~
-> > zip.c:86:8: error: packed attribute causes inefficient alignment for
-> > 'last_modified_date' [-Werror=3Dattributes]
-> >    86 |  __u16 last_modified_date;
-> >       |        ^~~~~~~~~~~~~~~~~~
-> > zip.c:87:8: error: packed attribute causes inefficient alignment for
-> > 'crc' [-Werror=3Dattributes]
-> >    87 |  __u32 crc;
-> >       |        ^~~
-> > zip.c:88:8: error: packed attribute causes inefficient alignment for
-> > 'compressed_size' [-Werror=3Dattributes]
-> >    88 |  __u32 compressed_size;
-> >       |        ^~~~~~~~~~~~~~~
-> > zip.c:89:8: error: packed attribute causes inefficient alignment for
-> > 'uncompressed_size' [-Werror=3Dattributes]
-> >    89 |  __u32 uncompressed_size;
-> >       |        ^~~~~~~~~~~~~~~~~
-> > zip.c:90:8: error: packed attribute causes inefficient alignment for
-> > 'file_name_length' [-Werror=3Dattributes]
-> >    90 |  __u16 file_name_length;
-> >       |        ^~~~~~~~~~~~~~~~
-> > zip.c:91:8: error: packed attribute causes inefficient alignment for
-> > 'extra_field_length' [-Werror=3Dattributes]
-> >    91 |  __u16 extra_field_length;
-> >       |        ^~~~~~~~~~~~~~~~~~
-> > zip.c:92:8: error: packed attribute causes inefficient alignment for
-> > 'file_comment_length' [-Werror=3Dattributes]
-> >    92 |  __u16 file_comment_length;
-> >       |        ^~~~~~~~~~~~~~~~~~~
-> > zip.c:94:8: error: packed attribute causes inefficient alignment for
-> > 'disk' [-Werror=3Dattributes]
-> >    94 |  __u16 disk;
-> >       |        ^~~~
-> > zip.c:95:8: error: packed attribute causes inefficient alignment for
-> > 'internal_attributes' [-Werror=3Dattributes]
-> >    95 |  __u16 internal_attributes;
-> >       |        ^~~~~~~~~~~~~~~~~~~
-> > zip.c:108:8: error: packed attribute causes inefficient alignment for
-> > 'magic' [-Werror=3Dattributes]
-> >   108 |  __u32 magic;
-> >       |        ^~~~~
-> > zip.c:110:8: error: packed attribute causes inefficient alignment for
-> > 'min_version' [-Werror=3Dattributes]
-> >   110 |  __u16 min_version;
-> >       |        ^~~~~~~~~~~
-> > zip.c:111:8: error: packed attribute causes inefficient alignment for
-> > 'flags' [-Werror=3Dattributes]
-> >   111 |  __u16 flags;
-> >       |        ^~~~~
-> > zip.c:112:8: error: packed attribute causes inefficient alignment for
-> > 'compression' [-Werror=3Dattributes]
-> >   112 |  __u16 compression;
-> >       |        ^~~~~~~~~~~
-> > zip.c:113:8: error: packed attribute causes inefficient alignment for
-> > 'last_modified_time' [-Werror=3Dattributes]
-> >   113 |  __u16 last_modified_time;
-> >       |        ^~~~~~~~~~~~~~~~~~
-> > zip.c:114:8: error: packed attribute causes inefficient alignment for
-> > 'last_modified_date' [-Werror=3Dattributes]
-> >   114 |  __u16 last_modified_date;
-> >       |        ^~~~~~~~~~~~~~~~~~
-> > zip.c:118:8: error: packed attribute causes inefficient alignment for
-> > 'file_name_length' [-Werror=3Dattributes]
-> >   118 |  __u16 file_name_length;
-> >       |        ^~~~~~~~~~~~~~~~
-> > zip.c:119:8: error: packed attribute causes inefficient alignment for
-> > 'extra_field_length' [-Werror=3Dattributes]
-> >   119 |  __u16 extra_field_length;
-> >       |        ^~~~~~~~~~~~~~~~~~
-> > cc1: all warnings being treated as errors
-> >
-> > Build links,
-> > https://storage.tuxsuite.com/public/linaro/lkft/builds/2MfXEyvgh4ba9y3r=
-kt6KPf6sUMR/
-> >
-> >
-> > History link,
-> > https://qa-reports.linaro.org/lkft/linux-next-master/build/next-2023031=
-4/testrun/15564056/suite/build/test/gcc-10-lkftconfig-perf/history/
-> >
-> >
-> > --
-> > Linaro LKFT
-> > https://lkft.linaro.org
+  51ab7ee81f5f ("Makefile: Make kernelrelease target work with M=3D")
+
+Fixes tag
+
+  Fixes: commit 1cb86b6c3136 ("kbuild: save overridden KERNELRELEASE in inc=
+lude/config/kernel.release")
+
+has these problem(s):
+
+  - leading word 'commit' unexpected
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/8KcUd3sAQ9t+LWh3nI0QFip
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQQ4vsACgkQAVBC80lX
+0Gz2FwgAkGjcuyCXGsXupTn65rBKzbAlFMJOf7aASOB0z7gz+psjsjrrp6npaMkQ
+9HSQAbQBpTyjhzp/iFxNqL5hNUCSk7uua3QLzSlH/p/Dz9C0WXDuRnt1kSOesYoa
+Ni3DEk68yOl8uvpF4zIiNZZ2j07KsG/BKyqzsK5N2zoT/WQZ52pkF/TZ9Z+aLyvN
+Yreip8Qr6unN/FEV/FqNpbf0wuzypkD3w2ijTmpc68vNfBMMSfzghGWx+E+QWgnn
+lQvKYkgg8NHjx72n5uDb6II0L7079fholEV2HqeYJPVlTFjFhntW2RXIODM+cikR
+k8uOC6FH1dxRmFcUQbGbTKRg8JtbBQ==
+=zY/L
+-----END PGP SIGNATURE-----
+
+--Sig_/8KcUd3sAQ9t+LWh3nI0QFip--

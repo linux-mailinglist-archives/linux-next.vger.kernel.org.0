@@ -2,44 +2,43 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A95BB6BA4CD
-	for <lists+linux-next@lfdr.de>; Wed, 15 Mar 2023 02:46:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F31F6BA4D6
+	for <lists+linux-next@lfdr.de>; Wed, 15 Mar 2023 02:48:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230274AbjCOBq3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 14 Mar 2023 21:46:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33854 "EHLO
+        id S230318AbjCOBsg (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 14 Mar 2023 21:48:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229778AbjCOBq3 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 14 Mar 2023 21:46:29 -0400
+        with ESMTP id S230305AbjCOBsf (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 14 Mar 2023 21:48:35 -0400
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 870B74BEAF;
-        Tue, 14 Mar 2023 18:46:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E94DA211E4;
+        Tue, 14 Mar 2023 18:48:33 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PbtXR27tjz4xDq;
-        Wed, 15 Mar 2023 12:46:14 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Pbtb44XjJz4x5Z;
+        Wed, 15 Mar 2023 12:48:31 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1678844775;
-        bh=8obVoLw0IvwVZvweGkMPIQlFDHnT37gEuT4Gsl4XnQg=;
+        s=201702; t=1678844912;
+        bh=ja9Sm8hHcWv45CeBMHVbMbvNxQBLUKYxEQvTPcNJq4A=;
         h=Date:From:To:Cc:Subject:From;
-        b=F7BQtIoNtAZb78MS3DJPRH6eLm2QE2buIyCGRP/930ndZ6mjDom04FZCmj11hhzxZ
-         xNygUYvX7wa1RAonAlfDKKJN8N4cye9Ei16O33T8d+bFMH/128dqKK5mb3dphiMBVj
-         yirkGionpuD6QSzefbzD7b5aawoRjVxxwoGPqCfl5mHUf6K88GOd20rvXlXn5XOTuR
-         IlJ2LLCnhTYGmTViESohLKPWerS70x8jYqKkb/All01GHiN7E/AWiUOtBpEY4DtciF
-         Ya9JiUYyjng6fBqWofdT37QE1J0w0GBMVnRB3w68oBLplxVAwQpPAfcof+8uW1GLB4
-         RCM1F3FOJiAZQ==
-Date:   Wed, 15 Mar 2023 12:46:12 +1100
+        b=nQBkAtfrWqyeLzLogGjzZlyWUbQC9iLJi8GlaSLR/MuKNbKnFgF//LqimdhORK7JF
+         prr2QofeelcLo9h/hV8PmZhALgWkPH1/zehT67jlYjZnwul7eFyLW4zOJ9mCA5kWRP
+         koIzrWLCmP70jla/fXVcm3pEdAMj6Dva+aMJSK6mWPoFclsUQV4+nPeGNDJillbxxv
+         Lv+BKGNt5MTqRZS8OmXRWoDYFmgTo9s8PuvQS4ZyUUvjCEBcF/uDZzYerGONbub58A
+         Fyjl98fI2IGm3ATxiP1uoucyVxEtDcanQLmvZ9BhCu+nTh0dXsbxBxokIdne9x/hAi
+         86asQY6h+tzTw==
+Date:   Wed, 15 Mar 2023 12:48:30 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warnings after merge of the nvmem tree
-Message-ID: <20230315124612.6cb48c72@canb.auug.org.au>
+Subject: linux-next: build warning after merge of the block tree
+Message-ID: <20230315124830.1c2bd002@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/2aahZ+9Gy1CJJdbIDcztN+C";
+Content-Type: multipart/signed; boundary="Sig_/.TYFl+Rk6=kL+.ucXFn9ceZ";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED
@@ -50,42 +49,41 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/2aahZ+9Gy1CJJdbIDcztN+C
+--Sig_/.TYFl+Rk6=kL+.ucXFn9ceZ
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the nvmem tree, today's linux-next build (htmldocs)
-produced these warnings:
+After merging the block tree, today's linux-next build (htmldocs)
+produced this warning:
 
-drivers/of/base.c:1228: warning: Function parameter or member 'alias' not d=
-escribed in 'of_alias_from_compatible'
-drivers/of/base.c:1228: warning: Excess function parameter 'modalias' descr=
-iption in 'of_alias_from_compatible'
+include/linux/pipe_fs_i.h:214: warning: Function parameter or member 'nonbl=
+ock' not described in 'pipe_buf_confirm'
 
 Introduced by commit
 
-  c077ed868e50 ("of: Rename of_modalias_node()")
+  342a048d7390 ("fs: add 'nonblock' parameter to pipe_buf_confirm() and fop=
+s method")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/2aahZ+9Gy1CJJdbIDcztN+C
+--Sig_/.TYFl+Rk6=kL+.ucXFn9ceZ
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQRI2QACgkQAVBC80lX
-0GzxWQf9GkQR0JjpnN4x4VBtf5a/xoBLYEDu5jwupHBIpECIvhLxZv2KArcjLm8Q
-7yQ7IwQzFpq3ENZwFjFBKYbG7w3Bdarn6MGvsZ6JlgnK2XXOj+hSke+/oE6XcKdP
-fJjfORXiei4WMFHF1YBRAjdXeCtnJP+jgKeHbfoGfSySHrGzRgkYvD3px7BL13eO
-ghUmXptAQRawzZQ9OrgRV2rGFE8z+1D/rTZONC7Bj9h9PcygwXRdJ5j0cVcrFhvj
-iRc260dkBuP6ONXnbkXRM+9mzm+mf1HbfmUxUdqJOCoIAMYpN2gzhAO/SLuooxX2
-Kbh5nUIIykKHNiRW3r1Q0ozNcNu42Q==
-=Yslb
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQRI+4ACgkQAVBC80lX
+0GzDNAf/V0Ki+F/H3ADRwIUCchjEx9I0vcxRJQNVYz63pawuh4mQ65iAjzgsQ6Bj
+/qYZfRwJ4p92u5+nvH1kNGSIPVua3Y3Z6tBSOoCGdG9uaYBzbVZ+ZjalsZf4Fv5p
+HLXYqWBIwfzx4EcaO1fsCDVLhDJ3NpCYUosCsac50t6inMT5cqHL69IbIkUT+Nu5
+esojg0Ku8MpljWKSMa9apUgkS4so7g3RF9exdJrC1JZekF6Ayf6jPoB0Xtg9ACAz
+QkNYTap1RxTaphGA2ZUTY/yiq4KlY++KbAxCSenWkW+B/beepdnZyStvWjnaq0xG
+maQdjTPv8qnkuotb4XX17tqrx57+Og==
+=nhum
 -----END PGP SIGNATURE-----
 
---Sig_/2aahZ+9Gy1CJJdbIDcztN+C--
+--Sig_/.TYFl+Rk6=kL+.ucXFn9ceZ--

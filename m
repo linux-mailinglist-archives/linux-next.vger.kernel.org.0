@@ -2,110 +2,108 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8F056BABC5
-	for <lists+linux-next@lfdr.de>; Wed, 15 Mar 2023 10:12:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6CFB6BAC32
+	for <lists+linux-next@lfdr.de>; Wed, 15 Mar 2023 10:31:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231559AbjCOJMb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 15 Mar 2023 05:12:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60982 "EHLO
+        id S231289AbjCOJbD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 15 Mar 2023 05:31:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232017AbjCOJMG (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 15 Mar 2023 05:12:06 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67E401EFFF
-        for <linux-next@vger.kernel.org>; Wed, 15 Mar 2023 02:11:59 -0700 (PDT)
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 2CF8C41B46
-        for <linux-next@vger.kernel.org>; Wed, 15 Mar 2023 09:11:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1678871518;
-        bh=MpqJ7yUI5cExdfWQOS/tjCzS7DTEtC5WTJpFk2vxYHI=;
-        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version;
-        b=js36bwQskzpoYlOzoMm7kCN/sfJiY+VctCn1fEFfBIpHsF+VHJsboxBuY4xhbbTz9
-         e9C5+jaWhQNIcN6nNC7vXCcI5Vu4fB5G/OrP6DnwA1mW3OUyBTSM2fzNaFOfauKW+H
-         DLcwbtbw5Q4c1JtRoc4cLzv0jQz1PIdyTFwPKeBgronDcGoZ6wgtUXLgUOp3QzvFLm
-         B1+/tzTlU0x8IVq1OsTSfYwe5CQhtYUMAVVkHuBTpxc3a9sVrhhMu+6t/jEIjLZVbL
-         4oZz8y2UhGh1EWO+2tOkg/aRLGiaj6n1kEb9+YR4XzW6yDUXJM0NdfnAd36N3PDaeq
-         4CnaXn4FVTL7g==
-Received: by mail-ed1-f70.google.com with SMTP id c1-20020a0564021f8100b004acbe232c03so25476359edc.9
-        for <linux-next@vger.kernel.org>; Wed, 15 Mar 2023 02:11:58 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678871517;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MpqJ7yUI5cExdfWQOS/tjCzS7DTEtC5WTJpFk2vxYHI=;
-        b=fDcbu4eyLx1kDj9vD5XNHOe4Q+iVDp9MZHYnmKDhoELgh6TzLmS0t/PmgJRKtMVlGe
-         UbI19v9blxRD7474u1kKRGz9Lbh6giREqbuQjCOiV7xZ+nhdbaPWieuc2xr+nVQ31xde
-         JBMz8cN49zw7DEczRbamAl//rVnYpViMk27MAIbrmhUJQLWAo0g2edxs+zrwSKuOAhBn
-         gX7lSUumGv0HhIzIZCM3qS/zlfzlutLoTrHranE/GOB426hiK6fkSMBRGKtX6/vl/W4E
-         l8mPc9Q+TEf3sbQWzJVhGo2LNg/mdO9hHzGg1vg1bmoap5Tg29mq7K2GPQRBrxXslMUT
-         /Kpw==
-X-Gm-Message-State: AO0yUKUSqQHTXumxX96hY7PJr6B46erOf66rjkHLN5e7Mth1ovlUzsTE
-        gN91WaUp1MN/bzd0dLBR4CUr6edV3qWhUJN1WpZIuW6jN09UqfUpvNtlec+c4CLwmxyXY2OtO96
-        7zBNiRL+HnzSWBLawH3tau9A8J4MXSXsN36r9Q4I=
-X-Received: by 2002:a50:fa8e:0:b0:4fb:98e2:3df8 with SMTP id w14-20020a50fa8e000000b004fb98e23df8mr2001078edr.27.1678871517727;
-        Wed, 15 Mar 2023 02:11:57 -0700 (PDT)
-X-Google-Smtp-Source: AK7set/nzaWIB774alFcqWYrbiez5la/w6tU6YOVja/BGwglwNB9o+vB78bdA/MbM7nnBlLjDcjq0g==
-X-Received: by 2002:a50:fa8e:0:b0:4fb:98e2:3df8 with SMTP id w14-20020a50fa8e000000b004fb98e23df8mr2001059edr.27.1678871517511;
-        Wed, 15 Mar 2023 02:11:57 -0700 (PDT)
-Received: from gollum.fritz.box ([194.191.244.86])
-        by smtp.gmail.com with ESMTPSA id t26-20020a50d71a000000b004bc15a440f1sm2075719edi.78.2023.03.15.02.11.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Mar 2023 02:11:57 -0700 (PDT)
-From:   Juerg Haefliger <juerg.haefliger@canonical.com>
-To:     tony@atomide.com
-Cc:     arnd@arndb.de, juerg.haefliger@canonical.com, juergh@canonical.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-next@vger.kernel.org, olof@lixom.net, sfr@canb.auug.org.au
-Subject: [PATCH v2] ARM: omap1: Kconfig: Fix indentation
-Date:   Wed, 15 Mar 2023 10:11:52 +0100
-Message-Id: <20230315091152.132443-1-juerg.haefliger@canonical.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <Y8kXVekfGHEcPvWg@atomide.com>
-References: <Y8kXVekfGHEcPvWg@atomide.com>
+        with ESMTP id S232038AbjCOJa5 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 15 Mar 2023 05:30:57 -0400
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECA5E7D0AE;
+        Wed, 15 Mar 2023 02:30:52 -0700 (PDT)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 8688920004;
+        Wed, 15 Mar 2023 09:30:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1678872651;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=pZozf4Q4AGLD4ormvTVzyOVy0WVpjJnBsg4P2LTdMtc=;
+        b=iTpu4NMSMLGRab9Zlk6CQHqSaR1wfr1Hg3vVEJW56Yd6lgLysaFJMDMnnG77LD5g0YjW+M
+        +kOkAFTDzrr6TP5Otp+7yK0Iud3vJeqyqTn3+OY9AznXJQcY8oRARuyl//t8g3oe7p2VaH
+        9TOQNw0lb9j1DkgDeAGCMXg9mcq+B2vpe97mqe/KhTv6/jwmBO1R8FYopbevL8q9gDhHrt
+        EgYZsVCb5rI88vYkp4KVdPDL3Esik3VQ/aV8uV1bzSKmUjNoTVd2GgiJdFa/OUxbnDX8z2
+        ay0LcIn/UvPJS0/ayXBJjk/NHlHR3gqCkhoc9nc+2Pfe2qKu4atjKMOXKPZeIg==
+Date:   Wed, 15 Mar 2023 10:30:48 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warnings after merge of the nvmem tree
+Message-ID: <20230315103048.2af51629@xps-13>
+In-Reply-To: <20230315124612.6cb48c72@canb.auug.org.au>
+References: <20230315124612.6cb48c72@canb.auug.org.au>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-The convention for indentation seems to be a single tab. Help text is
-further indented by an additional two whitespaces. Fix the lines that
-violate these rules.
+Hi Srinivas,
 
-Signed-off-by: Juerg Haefliger <juerg.haefliger@canonical.com>
+sfr@canb.auug.org.au wrote on Wed, 15 Mar 2023 12:46:12 +1100:
+
+> Hi all,
+>=20
+> After merging the nvmem tree, today's linux-next build (htmldocs)
+> produced these warnings:
+>=20
+> drivers/of/base.c:1228: warning: Function parameter or member 'alias' not=
+ described in 'of_alias_from_compatible'
+> drivers/of/base.c:1228: warning: Excess function parameter 'modalias' des=
+cription in 'of_alias_from_compatible'
+>=20
+> Introduced by commit
+>=20
+>   c077ed868e50 ("of: Rename of_modalias_node()")
+
+I failed to update all occurrences of "modalias" in this function. Here
+is a diff that you can squash directly with the above mentioned commit.
+I can submit it through the mailing list as well, but I believe it's
+best to squash that based on the previous conversations (and it does
+not matter since you re-send the patches to Greg in the end).
+
+Thanks,
+Miqu=C3=A8l
 
 ---
-v2: Updated for latest upstream.
+
+=46rom f1378f89b9964fea759eabf5a54beee2782890c7 Mon Sep 17 00:00:00 2001
+From: Miquel Raynal <miquel.raynal@bootlin.com>
+Date: Wed, 15 Mar 2023 10:25:28 +0100
+Subject: [PATCH] fixup! of: Rename of_modalias_node()
 
 ---
- arch/arm/mach-omap1/Kconfig | 2 +-
+ drivers/of/base.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm/mach-omap1/Kconfig b/arch/arm/mach-omap1/Kconfig
-index 8df9a4de0e79..cbf703f0d850 100644
---- a/arch/arm/mach-omap1/Kconfig
-+++ b/arch/arm/mach-omap1/Kconfig
-@@ -118,7 +118,7 @@ config MACH_OMAP_OSK
- 	depends on ARCH_OMAP16XX
- 	help
- 	  TI OMAP 5912 OSK (OMAP Starter Kit) board support. Say Y here
--          if you have such a board.
-+	  if you have such a board.
- 
- config MACH_OMAP_PALMTE
- 	bool "Palm Tungsten E"
--- 
+diff --git a/drivers/of/base.c b/drivers/of/base.c
+index 3c1badab287f..161fe3192c46 100644
+--- a/drivers/of/base.c
++++ b/drivers/of/base.c
+@@ -1211,7 +1211,7 @@ EXPORT_SYMBOL(of_find_matching_node_and_match);
+  * of_alias_from_compatible - Lookup appropriate alias for a device node
+  *			      depending on compatible
+  * @node:	pointer to a device tree node
+- * @modalias:	Pointer to buffer that alias value will be copied into
++ * @alias:	Pointer to buffer that alias value will be copied into
+  * @len:	Length of alias value
+  *
+  * Based on the value of the compatible property, this routine will attempt
+--=20
 2.34.1
 

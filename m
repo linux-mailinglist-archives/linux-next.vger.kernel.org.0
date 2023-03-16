@@ -2,67 +2,84 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30DE36BDB0F
-	for <lists+linux-next@lfdr.de>; Thu, 16 Mar 2023 22:36:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 438116BDAFD
+	for <lists+linux-next@lfdr.de>; Thu, 16 Mar 2023 22:30:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229985AbjCPVgX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 16 Mar 2023 17:36:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37630 "EHLO
+        id S229770AbjCPVa3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 16 Mar 2023 17:30:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbjCPVgX (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 16 Mar 2023 17:36:23 -0400
-Received: from sragenkab.go.id (mail.sragenkab.go.id [103.172.109.4])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id A3F8060AA9
-        for <linux-next@vger.kernel.org>; Thu, 16 Mar 2023 14:36:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=sragenkab.go.id;
-         h=mime-version:content-type:content-transfer-encoding:date:from
-        :to:subject:reply-to:message-id; q=dns/txt; s=dkim1; bh=QGcIAmD5
-        O/Y9qXzDV8MxyimbsW3+rMaQ/kz75GzBHbk=; b=qaxj4dUxOVFwqa1ijOXiOM+h
-        DAyYzgD/heliEQc0iqereYdrwE0IbwRbmNf4Vy//1IQnKnuhmBCmz4cCYCSnEHMm
-        NLPLwpXF6fdM5BFbrcE0Zt4HbXg0P/yx9ySN9xe3vUJwvvmS0FI2cBzPYLmRA5La
-        YI76/Xl/upU0llabR+T8N0Q8RhMWEkA9lEZBHrkn2zyDGy2iSvW073HUM/SVRNNI
-        ic3umxZSJ4KiH2xm2u8ePVY5Fzl3ambUfduOI2EzZLFDAP3B6oQ+uyaoSeNSJtYL
-        lf4raskS0m1HYGPstPr9FaAZlwMRqHZ2niKV3/ub+1e1o4rJU1q05Mj1UYiZjA==
-Received: (qmail 67778 invoked from network); 15 Mar 2023 02:20:46 -0000
-Received: from localhost (HELO mail2.sragenkab.go.id) (127.0.0.1)
-  by localhost with SMTP; 15 Mar 2023 02:20:46 -0000
+        with ESMTP id S229702AbjCPVa1 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 16 Mar 2023 17:30:27 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97E343581;
+        Thu, 16 Mar 2023 14:30:23 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Pd0mB3VxYz4x8y;
+        Fri, 17 Mar 2023 08:30:18 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1679002218;
+        bh=d7CZnlyHwzcaacv6olGZ1NTe9PfgfeOOBfqcODtWMFQ=;
+        h=Date:From:To:Cc:Subject:From;
+        b=dR6O14o1ynyWkuismUysLFvlYaQHlh2p5m0CvU9zpRujfR7aAhvLFOigeUkNz5yRA
+         rBacaxMvOknCtxJu3pk6Lg9GQvdqgv0VbkP8XCzwMdmeCf2+8gTTCIGdq4VzpG7R91
+         BaFjLDf0iIERohykiVEkVTpSIYrmSg45UoyXyrDpexsfwwuH9Gq6QzTRVxRhL5+W3f
+         AkMPR37vTPNSHxXzayt0JFbG3PBigyPHy83y8DgfqrRvZ3BamVdkFQreV06TD5KA/S
+         7RSbvCmrUyANeeyzVXVdDmitTSyLsow0xQv46SbZX+vF7ncfIzmnpIcfnc1+pgkIip
+         qIjzeQNlHioEg==
+Date:   Fri, 17 Mar 2023 08:30:03 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the efi-fixes tree
+Message-ID: <20230317083003.1b8b0ffe@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Tue, 14 Mar 2023 19:20:45 -0700
-From:   Ibrahim Tafa <jurnalsukowati@sragenkab.go.id>
-To:     undisclosed-recipients:;
-Subject: LOAN OPPORTUNITY AT LOW-INTEREST RATE.!
-Reply-To: <ibrahimtafa@abienceinvestmentsfze.com>
-Mail-Reply-To: <ibrahimtafa@abienceinvestmentsfze.com>
-Message-ID: <eedb6b710f8a180efdaef8c4f58a4c4c@sragenkab.go.id>
-X-Sender: jurnalsukowati@sragenkab.go.id
-User-Agent: Roundcube Webmail/0.8.1
-X-Spam-Status: No, score=3.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        SUBJ_ALL_CAPS,UNDISC_MONEY autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ***
+Content-Type: multipart/signed; boundary="Sig_/rSy/7q+Tn.tW2bQdCJX7lsc";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+--Sig_/rSy/7q+Tn.tW2bQdCJX7lsc
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
 
--- 
-Greetings,
-   I am contacting you based on the Investment/Loan opportunity for 
-companies in need of financing a project/business, We have developed a 
-new method of financing that doesn't take long to receive financing from 
-our clients.
-    If you are looking for funds to finance your project/Business or if 
-you are willing to work as our agent in your country to find clients in 
-need of financing and earn commissions, then get back to me for more 
-details.
+Commit
 
-Regards,
-Ibrahim Tafa
-ABIENCE INVESTMENT GROUP FZE, United Arab Emirates
+  261b4ba2d70c ("fixup! arm64: efi: Use SMBIOS processor version to key off=
+ Ampere quirk")
+
+is missing a Signed-off-by from its author and committer.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/rSy/7q+Tn.tW2bQdCJX7lsc
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQTilsACgkQAVBC80lX
+0GwKsQgAjEJkmWImvmCAQYmHBlKnqbbkbbFXFYOURCMEr9tFrpFELwA5x8E8T3h/
+MJXKdhIunmR6DjOZIDeS6IlSqDA/4GfRBEK87vKp3A7Jlzw2BfIDlI3GRmOP6CJr
+dgZtoeKx0KgWbZ+WkO3sj/mr0CpW2j8TrQMv6X171ZEH3CVeMqFZvejyoTrWw/dW
+5ZA2HiFHEb4kVzG1vapGMRU3MtmrJVeHMrhGO9C9KzMsnt0n54oKDDkZb+qq2arB
+H6J7L8WDW6uMa5yQlxSfJoLAO5Y/3aLUANmBPF+FZlCXnnZk1ghu6I134qsS5iE6
+vb/Mhk47cJCvFEcBypdjMf+zv7lNug==
+=II9h
+-----END PGP SIGNATURE-----
+
+--Sig_/rSy/7q+Tn.tW2bQdCJX7lsc--

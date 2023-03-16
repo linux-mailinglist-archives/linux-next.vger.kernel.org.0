@@ -2,46 +2,71 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3343A6BDBFB
-	for <lists+linux-next@lfdr.de>; Thu, 16 Mar 2023 23:50:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 006D46BDCBA
+	for <lists+linux-next@lfdr.de>; Fri, 17 Mar 2023 00:11:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229798AbjCPWua (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 16 Mar 2023 18:50:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52618 "EHLO
+        id S229804AbjCPXLV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 16 Mar 2023 19:11:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229780AbjCPWua (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 16 Mar 2023 18:50:30 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DEFA1EFE6;
-        Thu, 16 Mar 2023 15:50:28 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Pd2Xf3Djfz4x1f;
-        Fri, 17 Mar 2023 09:50:26 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1679007026;
-        bh=mI2/fUJBhDj7jPXmsGAJd7HxRPxBeVk95YeH85yjdEI=;
-        h=Date:From:To:Cc:Subject:From;
-        b=nBjbY/XiDFxPYpwfs5At6gWQjkXcesvPs0tFbS755opMshjevEjNT6tuQmBh/w7R6
-         GXV5bbxcyZ6hH1caCPF2Qsx39sLnZyMz88ccP+1FH68WED3uThCR2Bd4QEy2QKUKXB
-         Fz3BMnl1u2MbL9Z9HT9UU9flpzGbEEAG/p0fU6pF1f1y1IjBI+qU5HPI0Q1rC0zbup
-         WaTTKZBDKbHxdhnjLtJ1syLuAtNqiDcPkoPn0uGfo2SMFj9QfzzTa5dyc8u84OWIbw
-         DGpzvHE2FBI5G9LATTxWka39H83eBje0YSF2ZA/mw+XOizuS2XcoXooW0t/3SMgnXY
-         C2G6oRjUPEheQ==
-Date:   Fri, 17 Mar 2023 09:50:25 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the perf tree
-Message-ID: <20230317095025.49aa34f9@canb.auug.org.au>
+        with ESMTP id S229590AbjCPXLU (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 16 Mar 2023 19:11:20 -0400
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A1CC234C7;
+        Thu, 16 Mar 2023 16:11:19 -0700 (PDT)
+Received: by mail-ot1-x335.google.com with SMTP id r23-20020a05683001d700b00690eb18529fso1934594ota.1;
+        Thu, 16 Mar 2023 16:11:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679008278;
+        h=content-transfer-encoding:mime-version:message-id:references
+         :in-reply-to:user-agent:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=YcdmFaDt/Cf3OEZTuhE6C+fH1voZvs0au3xzuaV9u5Y=;
+        b=NHqiaZ38ESCpwnaQAzL6DB3Rgds+gFstT1N5yF3hqRVRYpBe4Bx7fJmh4IdWqsQ22r
+         NauoV7t7y6EYPEZ8WUGH8h6sZ8ntReyUwwn6e4bmgjwg2SeitRzh4X0b3+wW/W4qU37b
+         m01COCxCYPXJRgiJJQXXeEwr9g4mcAd/U/tpBcAJSOArr6k9f9P5FlyN3SxLv15/6chh
+         XLWibuN1k+ZgOqsaabzu5gv6nr+a4mGOf7GP2a14UKIoTaA9TjeqGKwvrn8Md3GAf3KS
+         cjKjK+u8BtnBL010MxphmKoc95XpCGtvvTzk5r6G1jZHTo8vQ7Bcj4AowExp36fb3Pp+
+         Q+mQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679008278;
+        h=content-transfer-encoding:mime-version:message-id:references
+         :in-reply-to:user-agent:subject:cc:to:from:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=YcdmFaDt/Cf3OEZTuhE6C+fH1voZvs0au3xzuaV9u5Y=;
+        b=kIcE6jA99qn1fGDI9Pf9kNh24sb7wSUDbHynSLPGaE3ARznP7R5fy1bNGP6SvFeeaD
+         fdU9AP0w4J4r7p8e7Ic4ppr/no43rs5NQYce8SYbzuYlPi+8lNbqZ4AACp3Z1oz/GkqM
+         eoH2VwK7s1S2N93GYfkwXbC9OAuHTwPd9desAnAalj7x+G+V4bAQHKJ6BbXi9JaQMHp+
+         IbgppFf7XUGesCfBnhltLMpB5V1aN/99/GXmL+hBYYy6zrDd15eUT2Igzy2P9rw9sXFJ
+         dxydqHSMnLnFoKRsviUSF1nS8r0QZlsvF3yRrjy4IxpITbbS/U81v1XKmllL4vsEob6f
+         rtnA==
+X-Gm-Message-State: AO0yUKXm1LjC5VznQRHlHMu9agYv0McoVSEbPWUfOvP2AqvzNFZMvxdp
+        kg9k1I4f8GhxaDREXOsatNE=
+X-Google-Smtp-Source: AK7set/ql1xaD1GZvmGqHKAwEjxQRA7/0GbY8h5F17WCkLSNgM3Fc5gunpWG2i+FvDx5HEKVMPiCgg==
+X-Received: by 2002:a9d:2f0:0:b0:68b:caa8:6ef1 with SMTP id 103-20020a9d02f0000000b0068bcaa86ef1mr22677270otl.12.1679008278713;
+        Thu, 16 Mar 2023 16:11:18 -0700 (PDT)
+Received: from [127.0.0.1] (187-26-169-5.3g.claro.net.br. [187.26.169.5])
+        by smtp.gmail.com with ESMTPSA id v13-20020a9d5a0d000000b00693c9f984b4sm354610oth.70.2023.03.16.16.11.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Mar 2023 16:11:18 -0700 (PDT)
+Date:   Thu, 16 Mar 2023 20:11:11 -0300
+From:   Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        irogers@google.com, namhyung@kernel.org
+Subject: Re: linux-next: build failure after merge of the perf tree
+User-Agent: K-9 Mail for Android
+In-Reply-To: <20230317095025.49aa34f9@canb.auug.org.au>
+References: <20230317095025.49aa34f9@canb.auug.org.au>
+Message-ID: <7D15C431-1AB6-482E-B4B9-289A15C0E2E4@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/VgnywP8Ly_Ed5l=+iE5JNPy";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,65 +74,50 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/VgnywP8Ly_Ed5l=+iE5JNPy
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-Hi all,
-
-After merging the perf tree, today's linux-next build (native perf)
-failed like this:
-
-Auto-detecting system features:
-...                         clang-bpf-co-re: [ =1B[32mon=1B[m  ]
-...                                    llvm: [ =1B[31mOFF=1B[m ]
-...                                  libcap: [ =1B[32mon=1B[m  ]
-...                                  libbfd: [ =1B[32mon=1B[m  ]
-
-make[1]: *** Deleting file '/home/sfr/next/perf/util/bpf_skel/vmlinux.h'
-libbpf: failed to find '.BTF' ELF section in /boot/vmlinux-6.0.0-5-powerpc6=
-4le
-Error: failed to load BTF from /boot/vmlinux-6.0.0-5-powerpc64le: No data a=
-vailable
-make[1]: *** [Makefile.perf:1075: /home/sfr/next/perf/util/bpf_skel/vmlinux=
-.h] Error 195
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile.perf:236: sub-make] Error 2
-Command exited with non-zero status 2
-
-To be clear this is a native build of perf on a PPC64le host using this
-command line:
-
-make -C tools/perf -f Makefile.perf -s -O -j60 O=3D../perf EXTRA_CFLAGS=3D-=
-Wno-psabi
-
-(I could probably remove the EXTRA_CLFAGS now that I am building with
-gcc 12.2)
-
-I don't know which commit caused this.
-
-I have used the perf tree from next-20230316 for today.
 
 
+On March 16, 2023 7:50:25 PM GMT-03:00, Stephen Rothwell <sfr@canb=2Eauug=
+=2Eorg=2Eau> wrote:
+>Hi all,
+>
+>After merging the perf tree, today's linux-next build (native perf)
+>failed like this:
+>
+>Auto-detecting system features:
+>=2E=2E=2E                         clang-bpf-co-re: [ =1B[32mon=1B[m  ]
+>=2E=2E=2E                                    llvm: [ =1B[31mOFF=1B[m ]
+>=2E=2E=2E                                  libcap: [ =1B[32mon=1B[m  ]
+>=2E=2E=2E                                  libbfd: [ =1B[32mon=1B[m  ]
+>
+>make[1]: *** Deleting file '/home/sfr/next/perf/util/bpf_skel/vmlinux=2Eh=
+'
+>libbpf: failed to find '=2EBTF' ELF section in /boot/vmlinux-6=2E0=2E0-5-=
+powerpc64le
+>Error: failed to load BTF from /boot/vmlinux-6=2E0=2E0-5-powerpc64le: No =
+data available
+>make[1]: *** [Makefile=2Eperf:1075: /home/sfr/next/perf/util/bpf_skel/vml=
+inux=2Eh] Error 195
+>make[1]: *** Waiting for unfinished jobs=2E=2E=2E=2E
+>make: *** [Makefile=2Eperf:236: sub-make] Error 2
+>Command exited with non-zero status 2
+>
+>To be clear this is a native build of perf on a PPC64le host using this
+>command line:
+>
+>make -C tools/perf -f Makefile=2Eperf -s -O -j60 O=3D=2E=2E/perf EXTRA_CF=
+LAGS=3D-Wno-psabi
+>
+>(I could probably remove the EXTRA_CLFAGS now that I am building with
+>gcc 12=2E2)
+>
+>I don't know which commit caused this=2E
 
---=20
-Cheers,
-Stephen Rothwell
+Can you try adding NO_BPF_SKEL=3D1 to the make -C tools/perf command line?
 
---Sig_/VgnywP8Ly_Ed5l=+iE5JNPy
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+- Arnaldo
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQTnTEACgkQAVBC80lX
-0GwAtAf9EGJ31eQFrlfJcE5lvwm2hRcuSjeXKI7Zw3auU4/00dB4DnKOCFEsoRIL
-afBE0r8Zo48eVwngOlhPsrnayA66xQM5koU1nstJTUfFuk1EmlIqvWDo0mgWqDvj
-IJO6nBrxxORJj3dBGNJakZFpEFKrBXGlyrXyyGnR+/PbpImjc88TQlP0UZBB0ZCn
-d3amGgDP9qmmLJTLmjM8mBZjxs6TkhXfvbxWoIkGoa6UGnqcO263VJKROYTqhNAT
-iJDogBzb6qe0lXFb1e+QG3aEBUPmv0sJWmGGmIoF9JvpW6Z1t9AYM9RUYAGTZr+U
-iLIfsfVa9frX+72UkV+nF/JqhlXr5w==
-=Ou++
------END PGP SIGNATURE-----
-
---Sig_/VgnywP8Ly_Ed5l=+iE5JNPy--
+>
+>I have used the perf tree from next-20230316 for today=2E
+>
+>
+>

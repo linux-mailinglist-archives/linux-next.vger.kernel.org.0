@@ -2,87 +2,94 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86E256BC327
-	for <lists+linux-next@lfdr.de>; Thu, 16 Mar 2023 02:13:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA63E6BC339
+	for <lists+linux-next@lfdr.de>; Thu, 16 Mar 2023 02:18:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229627AbjCPBNH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 15 Mar 2023 21:13:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51732 "EHLO
+        id S229634AbjCPBS5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 15 Mar 2023 21:18:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbjCPBNG (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 15 Mar 2023 21:13:06 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20279A8C77;
-        Wed, 15 Mar 2023 18:13:04 -0700 (PDT)
+        with ESMTP id S229682AbjCPBSz (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 15 Mar 2023 21:18:55 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3360C38B4C;
+        Wed, 15 Mar 2023 18:18:45 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PcTlb25gXz4xD5;
-        Thu, 16 Mar 2023 12:12:59 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PcTtC6WZVz4x8y;
+        Thu, 16 Mar 2023 12:18:43 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1678929179;
-        bh=BH3+/7RYEC52C+Ss/I1lr0J68DQj2CK/PR3cnKRr5C8=;
+        s=201702; t=1678929524;
+        bh=rnFBpHYVb+miKgOWyaufPIxNMiKQuJ+xTmGc0LGgw5I=;
         h=Date:From:To:Cc:Subject:From;
-        b=KphFU/ZaOyWhxnIJdYYQBN2vuyieLpbc/U+W8EZwn31aODDEBqvZ/7OGd23nJ3edk
-         Gq0RMyiJQ7AG4/o09wG6Ct5zHUUOc1r4ihZI9e6+fI3DseohMpcfFhQceSsiPds4aS
-         JkrTFoxpogFUALqe4e4KkvBsYCoTZYrbOsU13CR08wyv/cABY8rbdpqtc6/J+wrf4g
-         U42NnbEwsmcLjKrFPTSgsIuwIUQu+kOKOBc8pDQRpRffv09yIrAatSfCJQpbq1XzCE
-         vQjsG281P8yY6bsldeTPTwm4Yf9rEX6oxH7KoJzyyykFh7AvkLHyM1KUu12Crs+pk1
-         AkdOQ81MXK7aA==
-Date:   Thu, 16 Mar 2023 12:12:46 +1100
+        b=jotae6KFb67x5z8ge5UYp9RZm0OfSn6RavleAAcN9BtadEt/DO2kxEqNnGmKPCE6y
+         LH+INJzZSW+yNCie6kJP34v9lzJ7BNkpsRp6AQ32fcp+DXHbYjuksUIqtqony8kQv+
+         vS4JxjDR3JDzoyQeCDU+rKdVoAEiNtLKHoNBCdaQKnS6byQWntsHUZ4oaTVIXZpK2Z
+         ogjbqizXbCRvNlMRf6jRdVIC7+KWIxwjdw9WrGyTmyAQtsHOkr7DhqkpdMLq+mcE/F
+         bgGHDj+LDGIQvaciEoEqfLJ/VdpbkFfYv8OFzNVgnVfFSEAn7ykDVKZ50e+URyi/sd
+         2SoUp3cqmBMMQ==
+Date:   Thu, 16 Mar 2023 12:18:43 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Alexey Dobriyan <adobriyan@gmail.com>,
+To:     Alex Deucher <alexdeucher@gmail.com>
+Cc:     Hawking Zhang <Hawking.Zhang@amd.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the mm tree
-Message-ID: <20230316121246.2627d009@canb.auug.org.au>
+Subject: linux-next: build warnings after merge of the amdgpu tree
+Message-ID: <20230316121843.23b21695@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/rBQYc9HJZZAuFVzCQS9UoiR";
+Content-Type: multipart/signed; boundary="Sig_/WxqvbzyzqnU3.4_FsoNBV2k";
  protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/rBQYc9HJZZAuFVzCQS9UoiR
+--Sig_/WxqvbzyzqnU3.4_FsoNBV2k
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the mm tree, today's linux-next build (htmldocs) produced
-this warning:
+After merging the amdgpu tree, today's linux-next build (htmldocs)
+produced these warnings:
 
-Documentation/ELF/ELF.rst: WARNING: document isn't included in any toctree
+drivers/gpu/drm/amd/amdgpu/amdgpu_device.c:754: warning: Excess function pa=
+rameter 'pcie_index' description in 'amdgpu_device_indirect_wreg'
+drivers/gpu/drm/amd/amdgpu/amdgpu_device.c:754: warning: Excess function pa=
+rameter 'pcie_data' description in 'amdgpu_device_indirect_wreg'
+drivers/gpu/drm/amd/amdgpu/amdgpu_device.c:785: warning: Excess function pa=
+rameter 'pcie_index' description in 'amdgpu_device_indirect_wreg64'
+drivers/gpu/drm/amd/amdgpu/amdgpu_device.c:785: warning: Excess function pa=
+rameter 'pcie_data' description in 'amdgpu_device_indirect_wreg64'
 
 Introduced by commit
 
-  6d73cfdeee15 ("ELF: document some de-facto PT_* ABI quirks")
+  3069956c8cfb ("drm/amdgpu: Move to common indirect reg access helper")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/rBQYc9HJZZAuFVzCQS9UoiR
+--Sig_/WxqvbzyzqnU3.4_FsoNBV2k
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQSbQ4ACgkQAVBC80lX
-0GzvyQf/WvwMLy/ahd+L8YJOrcu7AgJzZayZifKZs9K+CEEYQkR8fCy1P1VCyb9c
-0k/iEyPI9V8C3AjuEfB72pl4sBt2LF9YghGAovGrm3ABT1ouEXCtReIXSbkkfYpJ
-HAFwszxIS+Fv9Vn+UA/c0s9/9vAGvpiPx/sjRbapNK7ALc0Ay+NixcUWQQdmTjLi
-hrRTsu/OjgnCtIEdwZDsphUyOeqGZK+8JAQu5VyknedGyvca1dbHVdFhK9lG7rSQ
-+/Q/V7aPujNF+9tBPck/77up543DQmaEYX4vDlNi7vikpT7o3wG0gzcyAaPoluN4
-3H+423m8Bb4ask6TXs9WE4y/CuSmqw==
-=Kw7/
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQSbnMACgkQAVBC80lX
+0GxvBggAhJvY4GVszUG8z/ExK/DrtWTBQwVHbaMC+u32Agq+o2pA6F7U/bkvZr1P
+Z/eU+S4XNsxZUvqQ4OW68/vokxcfZt12JPAOWrKOqPUZnGH0WtMOgMbp13nKXr5G
+al3Q2AeEInrN6tM1I2ykuT5Bb7tf0XyIv+UNt7s8GpT+W/1QPwKidJ8B7O0QITNa
+99VncUPSRjMNOMoz/B2DMKjY7B12uWy4PAmXmqUzuW2uccb2MyPb6/r18gwyIIP9
+ITrDlFZuLfc96tUhD3rzWcaFq2cGrL+Y0S/YCLZaH5JInG/K3CdABbGQ2OIkYcH7
+t3SJzvpYKG/RuhUQ+1b16SIU5kjqXw==
+=eTq4
 -----END PGP SIGNATURE-----
 
---Sig_/rBQYc9HJZZAuFVzCQS9UoiR--
+--Sig_/WxqvbzyzqnU3.4_FsoNBV2k--

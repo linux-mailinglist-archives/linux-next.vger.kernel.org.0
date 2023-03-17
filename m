@@ -2,64 +2,64 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 848066BE035
-	for <lists+linux-next@lfdr.de>; Fri, 17 Mar 2023 05:40:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF80B6BE05E
+	for <lists+linux-next@lfdr.de>; Fri, 17 Mar 2023 06:02:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229620AbjCQEkG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 17 Mar 2023 00:40:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60448 "EHLO
+        id S229541AbjCQFCX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 17 Mar 2023 01:02:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjCQEkE (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 17 Mar 2023 00:40:04 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D09D27497
-        for <linux-next@vger.kernel.org>; Thu, 16 Mar 2023 21:40:01 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id h12-20020a17090aea8c00b0023d1311fab3so3868356pjz.1
-        for <linux-next@vger.kernel.org>; Thu, 16 Mar 2023 21:40:01 -0700 (PDT)
+        with ESMTP id S229908AbjCQFCJ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 17 Mar 2023 01:02:09 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADA90B06ED
+        for <linux-next@vger.kernel.org>; Thu, 16 Mar 2023 22:01:46 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id l14so2401334pfc.11
+        for <linux-next@vger.kernel.org>; Thu, 16 Mar 2023 22:01:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112; t=1679028000;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112; t=1679029306;
         h=from:to:subject:content-transfer-encoding:mime-version:date
          :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=t62nI0EWHmYBm0YednHxvx6b0sCgje6s/oR4EfrsxuI=;
-        b=x4Zz8XF3ZkQ+XyrPTgb1bzos0mjKuluIuAf9psQEqQqpoYqIXC0pI28ztrtfvY+LI6
-         +j/38tsDdL/ZlNTggP56Xq8LEWv5yHrl1zTq0yL1Ml+bhu1VPpcsOhEvVzZgku72ibVQ
-         JZ+Rlj1sfio7NucWvHmKXzufv5jGodsIePAXJuEz4hwv6MTCJcWo8neqk875NNFomRCC
-         MGyB29FYty0pA04OZH+vWup4+tBgYvmysX/De63Wi5blaPOa3TIr0mDgdwwUbbZph999
-         +1ifyTVQ0eLplgizuNBmhsL3dKZ0eHZitnL86GFSlirEBK5EasSao2gwvKaIvTjdYOC4
-         NZ6g==
+        bh=SHu2jG1jyyo25vvwBAImoUBzjlfSgO7IODl+dwpUaX8=;
+        b=dTR6er9zBFt45WAwY8lKvPrukC0zuUBzHZD9mipWQ9kcu2YknWuIkNDI/NqC8+Rw6v
+         IiSNfBuGJFXtTKOdmNfj0hVBjPzdAQmenQpemhSJ3HwLQuAnt32G0cGsBM6nsGALzlK/
+         jEG+VDgPT4EfjkwmvkhmAbZo9w0zFpYAlsPHMBKSKy6PafGMO1pM1VUowP3FluGNoQVF
+         LH0EMx87eHN+aJJ2Kc3zYq278ulOvymxhT7pc0usnXPBcAEnHl2XmOpr3Ace8qNc+l2y
+         jYTp9ka6/mMvuEY08p4lINmlYYYaSCXOpBClvVzEbao8fTZ0b/ffYjXM0D5Awb8naVFL
+         bsVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679028000;
+        d=1e100.net; s=20210112; t=1679029306;
         h=from:to:subject:content-transfer-encoding:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=t62nI0EWHmYBm0YednHxvx6b0sCgje6s/oR4EfrsxuI=;
-        b=wGxIrB9+d2G+QghGMrn2nOAtaHsd8VipFOz9oZo7Bfcx/l9GshqappIWXB4y+K5/BU
-         NgQ3TDkoFjALLrWrB3GEVgz07ZMBB3+V0Y/uiXDD/2O5pnypOhAP3RUYxIOnRnIBADAK
-         0m/yDLiV/hDzWYk7n6bBAApFe9dhL6HJr/hnpy3Dy/63FQxfqO/XR2Lo+epm05ACP9na
-         QWFDPDufNejIjy5coRZEsTgZQXZsdJrq1o1SNph3yMvqy9Rlknp04xcpakXy0V/inykz
-         KSzRmmse7bwo26hBWImw74CUg5YtesEd2eSdmg5uX7g2rYBRqTr0jV0Wu+zHnarQXSsv
-         u63A==
-X-Gm-Message-State: AO0yUKUFvqZQDzGeJf5Y5kyL0OSDwHc1mb8Sv67jjihXtqVoAmBGgBuR
-        CilDPDwonwxRaAbKMvRGme6n6vRmOSFTW0q4pPR0IA==
-X-Google-Smtp-Source: AK7set9gc+/CWrKixruvGkposAJvNqvIr4S/6JU8p2g26oSffnmno5dddMVY1MMtCaBKO5IeMBKD6Q==
-X-Received: by 2002:a05:6a20:7fa3:b0:cb:77f0:9a42 with SMTP id d35-20020a056a207fa300b000cb77f09a42mr7459364pzj.33.1679027999241;
-        Thu, 16 Mar 2023 21:39:59 -0700 (PDT)
+        bh=SHu2jG1jyyo25vvwBAImoUBzjlfSgO7IODl+dwpUaX8=;
+        b=4xnIdOzgf4to88afO1z0I8dD2PCPclQdW7YLzx5qJllHSg/oCvX0E9Rj8MjQC4AKHS
+         c0BKHSYvM3f2pRWfYlmcZuWaAGBQ1JltMrg7VqAOXbEB/j00VowNCwaD4SU+O2D0c2hq
+         PzRg5xdy4c7EOTOlPqtL9MDB58qlPcjH7fq9MicIfTU4LxVzs+TE62TX+nUCUSyZPJfI
+         azhhnx1/5PIBBxX4VMYWmuFBdk0IJBku2QvFUA6qBvV+HjXAodnJtUjzTNnHpOh0afs1
+         XMKzFgMjDZ+/Ixm7XRcGEX/5ZY4I3f5n3PGaepwfxh7Q9EZXeRGvJd4wSe0O4G8is/pV
+         wlSg==
+X-Gm-Message-State: AO0yUKX8CgSczyz14HHx6BeM0NZcyF47J1LQvZrK7q9qTahliuBUE6VR
+        RiwYq97P3Npm7bMI+MeVPAc2xPKKbiMq6rT73IKMyg==
+X-Google-Smtp-Source: AK7set/pg3KNRBBmxGZH237GTdmtaChirbZFe+kqtgKGIeQbtEYlgvy7JsZm3Bn2REFuEecyGW1qPQ==
+X-Received: by 2002:a62:180e:0:b0:623:d058:8661 with SMTP id 14-20020a62180e000000b00623d0588661mr4365556pfy.28.1679029304764;
+        Thu, 16 Mar 2023 22:01:44 -0700 (PDT)
 Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id h23-20020a635757000000b0050300e81eb9sm474095pgm.54.2023.03.16.21.39.58
+        by smtp.gmail.com with ESMTPSA id k17-20020a63d111000000b004fbb4a55b64sm507088pgg.86.2023.03.16.22.01.44
         for <linux-next@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Mar 2023 21:39:58 -0700 (PDT)
-Message-ID: <6413ef1e.630a0220.eb999.1360@mx.google.com>
-Date:   Thu, 16 Mar 2023 21:39:58 -0700 (PDT)
+        Thu, 16 Mar 2023 22:01:44 -0700 (PDT)
+Message-ID: <6413f438.630a0220.eca3.129e@mx.google.com>
+Date:   Thu, 16 Mar 2023 22:01:44 -0700 (PDT)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: pending-fixes
+X-Kernelci-Branch: master
 X-Kernelci-Tree: next
-X-Kernelci-Kernel: v6.3-rc2-423-g0e8bb497921e
+X-Kernelci-Kernel: next-20230317
 X-Kernelci-Report-Type: build
-Subject: next/pending-fixes build: 176 builds: 4 failed, 172 passed, 7 errors,
- 12 warnings (v6.3-rc2-423-g0e8bb497921e)
+Subject: next/master build: 198 builds: 12 failed, 186 passed, 115 errors,
+ 27 warnings (next-20230317)
 To:     linux-next@vger.kernel.org
 From:   "kernelci.org bot" <bot@kernelci.org>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -71,16 +71,16 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes build: 176 builds: 4 failed, 172 passed, 7 errors, 12 wa=
-rnings (v6.3-rc2-423-g0e8bb497921e)
+next/master build: 198 builds: 12 failed, 186 passed, 115 errors, 27 warnin=
+gs (next-20230317)
 
-Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
-rnel/v6.3-rc2-423-g0e8bb497921e/
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20230317/
 
 Tree: next
-Branch: pending-fixes
-Git Describe: v6.3-rc2-423-g0e8bb497921e
-Git Commit: 0e8bb497921ed7a14859725fc9a6f5d70533ff8f
+Branch: master
+Git Describe: next-20230317
+Git Commit: 6f08c1de13a9403341c18b66638a05588b2663ce
 Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
 Built: 8 unique architectures
 
@@ -89,12 +89,26 @@ Build Failures Detected:
 arc:
     haps_hs_smp_defconfig+kselftest: (gcc-10) FAIL
 
+arm64:
+    allmodconfig: (clang-17) FAIL
+
 arm:
+    allmodconfig: (clang-17) FAIL
+    aspeed_g5_defconfig: (clang-17) FAIL
+    aspeed_g4_defconfig: (gcc-10) FAIL
+    aspeed_g5_defconfig: (gcc-10) FAIL
+    imxrt_defconfig: (gcc-10) FAIL
     rpc_defconfig: (gcc-10) FAIL
+
+i386:
+    allmodconfig: (clang-17) FAIL
 
 mips:
     32r2el_defconfig+debug: (gcc-10) FAIL
     decstation_64_defconfig: (gcc-10) FAIL
+
+x86_64:
+    allmodconfig: (clang-17) FAIL
 
 Errors and Warnings Detected:
 
@@ -102,11 +116,18 @@ arc:
     haps_hs_smp_defconfig+kselftest (gcc-10): 1 error
 
 arm64:
+    allmodconfig (clang-17): 1 error, 1 warning
 
 arm:
+    allmodconfig (clang-17): 1 error, 1 warning
+    aspeed_g4_defconfig (gcc-10): 28 errors, 1 warning
+    aspeed_g5_defconfig (clang-17): 20 errors, 2 warnings
+    aspeed_g5_defconfig (gcc-10): 28 errors, 1 warning
+    imxrt_defconfig (gcc-10): 28 errors, 1 warning
     rpc_defconfig (gcc-10): 2 errors
 
 i386:
+    allmodconfig (clang-17): 1 error, 1 warning
 
 mips:
     fuloong2e_defconfig (gcc-10): 1 error
@@ -125,13 +146,38 @@ sparc:
     tinyconfig (gcc-10): 1 warning
 
 x86_64:
+    allmodconfig (clang-17): 1 error, 4 warnings
+    x86_64_defconfig+kselftest (rustc-1.62): 3 warnings
 
 Errors summary:
 
+    63   include/linux/rculist.h:393:27: error: invalid use of undefined ty=
+pe =E2=80=98struct module=E2=80=99
+    16   kernel/bpf/../module/internal.h:205:2: error: incomplete definitio=
+n of type 'struct module'
+    6    include/linux/stddef.h:16:32: error: invalid use of undefined type=
+ =E2=80=98struct module=E2=80=99
+    6    include/linux/container_of.h:20:47: error: invalid use of undefine=
+d type =E2=80=98struct module=E2=80=99
+    6    ./../include/linux/compiler_types.h:338:27: error: expression in s=
+tatic assertion is not an integer
+    4    drivers/gpu/drm/rockchip/rockchip_drm_vop2.c:2322:8: error: variab=
+le 'possible_crtcs' is used uninitialized whenever 'if' condition is false =
+[-Werror,-Wsometimes-uninitialized]
     4    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=
 =80=98-mhard-float=E2=80=99
+    3    include/linux/rculist.h:392:7: error: invalid use of undefined typ=
+e =E2=80=98struct module=E2=80=99
     1    net/bpfilter/main.c:3:10: fatal error: sys/uio.h: No such file or =
 directory
+    1    kernel/bpf/../module/internal.h:205:2: error: operand of type 'voi=
+d' where arithmetic or pointer type is required
+    1    kernel/bpf/../module/internal.h:205:2: error: offsetof of incomple=
+te type 'typeof (*mod)' (aka 'struct module')
+    1    kernel/bpf/../module/internal.h:205:2: error: assigning to 'struct=
+ module *' from incompatible type 'void'
+    1    fatal error: too many errors emitted, stopping now [-ferror-limit=
+=3D]
     1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=
 =3D0x'
     1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=
@@ -141,8 +187,28 @@ Warnings summary:
 
     10   <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
 -Wcpp]
+    4    drivers/gpu/drm/rockchip/rockchip_drm_vop2.c:2304:21: note: initia=
+lize the variable 'possible_crtcs' to silence this warning
+    3    kernel/bpf/../module/internal.h:94:58: warning: =E2=80=98enum mod_=
+mem_type=E2=80=99 declared inside parameter list will not be visible outsid=
+e of this definition or declaration
     2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
 tion failed, symbol will not be versioned.
+    1    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x3e: relocation to=
+ !ENDBR: .text+0x1406d6
+    1    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x28: relocation to=
+ !ENDBR: machine_kexec_prepare+0x27d
+    1    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x28: relocation to=
+ !ENDBR: .text+0x14084b
+    1    vmlinux.o: warning: objtool: lkdtm_UNSET_SMEP+0xcc: relocation to =
+!ENDBR: native_write_cr4+0x4
+    1    kernel/bpf/../module/internal.h:94:58: warning: declaration of 'en=
+um mod_mem_type' will not be visible outside of this function [-Wvisibility]
+    1    fs/reiserfs/reiserfs.o: warning: objtool: balance_leaf+0x7612: sta=
+ck state mismatch: cfa1=3D4+360 cfa2=3D4+352
+    1    drivers/media/i2c/m5mols/m5mols.o: warning: objtool: m5mols_set_fm=
+t() falls through to next function __cfi_m5mols_enum_mbus_code()
+    1    1 warning and 20 errors generated.
 
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
@@ -168,8 +234,31 @@ ngs, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
-allmodconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+allmodconfig (arm, clang-17) =E2=80=94 FAIL, 1 error, 1 warning, 0 section =
 mismatches
+
+Errors:
+    drivers/gpu/drm/rockchip/rockchip_drm_vop2.c:2322:8: error: variable 'p=
+ossible_crtcs' is used uninitialized whenever 'if' condition is false [-Wer=
+ror,-Wsometimes-uninitialized]
+
+Warnings:
+    drivers/gpu/drm/rockchip/rockchip_drm_vop2.c:2304:21: note: initialize =
+the variable 'possible_crtcs' to silence this warning
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm64, clang-17) =E2=80=94 FAIL, 1 error, 1 warning, 0 sectio=
+n mismatches
+
+Errors:
+    drivers/gpu/drm/rockchip/rockchip_drm_vop2.c:2322:8: error: variable 'p=
+ossible_crtcs' is used uninitialized whenever 'if' condition is false [-Wer=
+ror,-Wsometimes-uninitialized]
+
+Warnings:
+    drivers/gpu/drm/rockchip/rockchip_drm_vop2.c:2304:21: note: initialize =
+the variable 'possible_crtcs' to silence this warning
 
 ---------------------------------------------------------------------------=
 -----
@@ -178,13 +267,42 @@ n mismatches
 
 ---------------------------------------------------------------------------=
 -----
-allnoconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
+allmodconfig (i386, clang-17) =E2=80=94 FAIL, 1 error, 1 warning, 0 section=
+ mismatches
+
+Errors:
+    drivers/gpu/drm/rockchip/rockchip_drm_vop2.c:2322:8: error: variable 'p=
+ossible_crtcs' is used uninitialized whenever 'if' condition is false [-Wer=
+ror,-Wsometimes-uninitialized]
+
+Warnings:
+    drivers/gpu/drm/rockchip/rockchip_drm_vop2.c:2304:21: note: initialize =
+the variable 'possible_crtcs' to silence this warning
 
 ---------------------------------------------------------------------------=
 -----
-allnoconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
+allmodconfig (x86_64, clang-17) =E2=80=94 FAIL, 1 error, 4 warnings, 0 sect=
+ion mismatches
+
+Errors:
+    drivers/gpu/drm/rockchip/rockchip_drm_vop2.c:2322:8: error: variable 'p=
+ossible_crtcs' is used uninitialized whenever 'if' condition is false [-Wer=
+ror,-Wsometimes-uninitialized]
+
+Warnings:
+    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x28: relocation to !END=
+BR: machine_kexec_prepare+0x27d
+    fs/reiserfs/reiserfs.o: warning: objtool: balance_leaf+0x7612: stack st=
+ate mismatch: cfa1=3D4+360 cfa2=3D4+352
+    drivers/media/i2c/m5mols/m5mols.o: warning: objtool: m5mols_set_fmt() f=
+alls through to next function __cfi_m5mols_enum_mbus_code()
+    drivers/gpu/drm/rockchip/rockchip_drm_vop2.c:2304:21: note: initialize =
+the variable 'possible_crtcs' to silence this warning
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -196,8 +314,23 @@ Warnings:
 
 ---------------------------------------------------------------------------=
 -----
+allnoconfig (i386, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
 allnoconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
 mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -211,13 +344,190 @@ n mismatches
 
 ---------------------------------------------------------------------------=
 -----
-aspeed_g4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+aspeed_g4_defconfig (arm, gcc-10) =E2=80=94 FAIL, 28 errors, 1 warning, 0 s=
 ection mismatches
+
+Errors:
+    include/linux/container_of.h:20:47: error: invalid use of undefined typ=
+e =E2=80=98struct module=E2=80=99
+    ./../include/linux/compiler_types.h:338:27: error: expression in static=
+ assertion is not an integer
+    include/linux/stddef.h:16:32: error: invalid use of undefined type =E2=
+=80=98struct module=E2=80=99
+    include/linux/rculist.h:392:7: error: invalid use of undefined type =E2=
+=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/container_of.h:20:47: error: invalid use of undefined typ=
+e =E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    ./../include/linux/compiler_types.h:338:27: error: expression in static=
+ assertion is not an integer
+    include/linux/stddef.h:16:32: error: invalid use of undefined type =E2=
+=80=98struct module=E2=80=99
+
+Warnings:
+    kernel/bpf/../module/internal.h:94:58: warning: =E2=80=98enum mod_mem_t=
+ype=E2=80=99 declared inside parameter list will not be visible outside of =
+this definition or declaration
 
 ---------------------------------------------------------------------------=
 -----
-aspeed_g5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+aspeed_g5_defconfig (arm, clang-17) =E2=80=94 FAIL, 20 errors, 2 warnings, =
+0 section mismatches
+
+Errors:
+    kernel/bpf/../module/internal.h:205:2: error: incomplete definition of =
+type 'struct module'
+    kernel/bpf/../module/internal.h:205:2: error: offsetof of incomplete ty=
+pe 'typeof (*mod)' (aka 'struct module')
+    kernel/bpf/../module/internal.h:205:2: error: assigning to 'struct modu=
+le *' from incompatible type 'void'
+    kernel/bpf/../module/internal.h:205:2: error: incomplete definition of =
+type 'struct module'
+    kernel/bpf/../module/internal.h:205:2: error: incomplete definition of =
+type 'struct module'
+    kernel/bpf/../module/internal.h:205:2: error: incomplete definition of =
+type 'struct module'
+    kernel/bpf/../module/internal.h:205:2: error: incomplete definition of =
+type 'struct module'
+    kernel/bpf/../module/internal.h:205:2: error: incomplete definition of =
+type 'struct module'
+    kernel/bpf/../module/internal.h:205:2: error: incomplete definition of =
+type 'struct module'
+    kernel/bpf/../module/internal.h:205:2: error: incomplete definition of =
+type 'struct module'
+    kernel/bpf/../module/internal.h:205:2: error: incomplete definition of =
+type 'struct module'
+    kernel/bpf/../module/internal.h:205:2: error: incomplete definition of =
+type 'struct module'
+    kernel/bpf/../module/internal.h:205:2: error: operand of type 'void' wh=
+ere arithmetic or pointer type is required
+    kernel/bpf/../module/internal.h:205:2: error: incomplete definition of =
+type 'struct module'
+    kernel/bpf/../module/internal.h:205:2: error: incomplete definition of =
+type 'struct module'
+    kernel/bpf/../module/internal.h:205:2: error: incomplete definition of =
+type 'struct module'
+    kernel/bpf/../module/internal.h:205:2: error: incomplete definition of =
+type 'struct module'
+    kernel/bpf/../module/internal.h:205:2: error: incomplete definition of =
+type 'struct module'
+    kernel/bpf/../module/internal.h:205:2: error: incomplete definition of =
+type 'struct module'
+    fatal error: too many errors emitted, stopping now [-ferror-limit=3D]
+
+Warnings:
+    kernel/bpf/../module/internal.h:94:58: warning: declaration of 'enum mo=
+d_mem_type' will not be visible outside of this function [-Wvisibility]
+    1 warning and 20 errors generated.
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, gcc-10) =E2=80=94 FAIL, 28 errors, 1 warning, 0 s=
 ection mismatches
+
+Errors:
+    include/linux/container_of.h:20:47: error: invalid use of undefined typ=
+e =E2=80=98struct module=E2=80=99
+    ./../include/linux/compiler_types.h:338:27: error: expression in static=
+ assertion is not an integer
+    include/linux/stddef.h:16:32: error: invalid use of undefined type =E2=
+=80=98struct module=E2=80=99
+    include/linux/rculist.h:392:7: error: invalid use of undefined type =E2=
+=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/container_of.h:20:47: error: invalid use of undefined typ=
+e =E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    ./../include/linux/compiler_types.h:338:27: error: expression in static=
+ assertion is not an integer
+    include/linux/stddef.h:16:32: error: invalid use of undefined type =E2=
+=80=98struct module=E2=80=99
+
+Warnings:
+    kernel/bpf/../module/internal.h:94:58: warning: =E2=80=98enum mod_mem_t=
+ype=E2=80=99 declared inside parameter list will not be visible outside of =
+this definition or declaration
 
 ---------------------------------------------------------------------------=
 -----
@@ -346,8 +656,38 @@ ismatches
 
 ---------------------------------------------------------------------------=
 -----
+defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
 defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
 ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_16K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, clang-17) =E2=80=94 PASS, 0 er=
+rors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
+s, 0 warnings, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -366,11 +706,6 @@ rs, 0 warnings, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
-defconfig+arm64-chromebook+videodec (arm64, gcc-10) =E2=80=94 PASS, 0 error=
-s, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
 defconfig+crypto (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
 ction mismatches
 
@@ -381,13 +716,13 @@ tion mismatches
 
 ---------------------------------------------------------------------------=
 -----
-defconfig+ima (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
+defconfig+debug (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
 
 ---------------------------------------------------------------------------=
 -----
-defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
+defconfig+ima (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -474,6 +809,11 @@ n mismatches
 
 ---------------------------------------------------------------------------=
 -----
+i386_defconfig (i386, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
 i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
 on mismatches
 
@@ -499,8 +839,71 @@ ection mismatches
 
 ---------------------------------------------------------------------------=
 -----
-imxrt_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+imxrt_defconfig (arm, gcc-10) =E2=80=94 FAIL, 28 errors, 1 warning, 0 secti=
 on mismatches
+
+Errors:
+    include/linux/container_of.h:20:47: error: invalid use of undefined typ=
+e =E2=80=98struct module=E2=80=99
+    ./../include/linux/compiler_types.h:338:27: error: expression in static=
+ assertion is not an integer
+    include/linux/stddef.h:16:32: error: invalid use of undefined type =E2=
+=80=98struct module=E2=80=99
+    include/linux/rculist.h:392:7: error: invalid use of undefined type =E2=
+=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/container_of.h:20:47: error: invalid use of undefined typ=
+e =E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    ./../include/linux/compiler_types.h:338:27: error: expression in static=
+ assertion is not an integer
+    include/linux/stddef.h:16:32: error: invalid use of undefined type =E2=
+=80=98struct module=E2=80=99
+
+Warnings:
+    kernel/bpf/../module/internal.h:94:58: warning: =E2=80=98enum mod_mem_t=
+ype=E2=80=99 declared inside parameter list will not be visible outside of =
+this definition or declaration
 
 ---------------------------------------------------------------------------=
 -----
@@ -671,8 +1074,18 @@ ction mismatches
 
 ---------------------------------------------------------------------------=
 -----
+multi_v5_defconfig (arm, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
 multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
 ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -698,11 +1111,6 @@ multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy (arm, gcc-10) =E2=80=94 PASS, 0=
 -----
 multi_v7_defconfig+debug (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
 , 0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+ima (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
-0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -741,8 +1149,18 @@ tion mismatches
 
 ---------------------------------------------------------------------------=
 -----
+nommu_k210_defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
 nommu_k210_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_sdcard_defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 w=
+arnings, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -857,6 +1275,11 @@ tion mismatches
 -----
 rv32_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
 ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rv32_defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -975,8 +1398,8 @@ on mismatches
 
 ---------------------------------------------------------------------------=
 -----
-tinyconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
+tinyconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -988,13 +1411,13 @@ Warnings:
 
 ---------------------------------------------------------------------------=
 -----
-tinyconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
+tinyconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
 
 ---------------------------------------------------------------------------=
 -----
-tinyconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
+tinyconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -1033,13 +1456,18 @@ ction mismatches
 
 ---------------------------------------------------------------------------=
 -----
-vt8500_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
-0 section mismatches
+wpcm450_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
 
 ---------------------------------------------------------------------------=
 -----
-wpcm450_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
+x86_64_defconfig (x86_64, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, rustc-1.62) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -1068,8 +1496,31 @@ x86_64_defconfig+ima (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
 
 ---------------------------------------------------------------------------=
 -----
+x86_64_defconfig+kselftest (x86_64, rustc-1.62) =E2=80=94 PASS, 0 errors, 3=
+ warnings, 0 section mismatches
+
+Warnings:
+    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x28: relocation to !END=
+BR: .text+0x14084b
+    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x3e: relocation to !END=
+BR: .text+0x1406d6
+    vmlinux.o: warning: objtool: lkdtm_UNSET_SMEP+0xcc: relocation to !ENDB=
+R: native_write_cr4+0x4
+
+---------------------------------------------------------------------------=
+-----
 x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
 nings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+rust (x86_64, rustc-1.62) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+rust-samples (x86_64, rustc-1.62) =E2=80=94 PASS, 0 errors=
+, 0 warnings, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -1080,6 +1531,11 @@ x86_64_defconfig+x86-chromebook (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, =
 -----
 x86_64_defconfig+x86-chromebook+amdgpu (x86_64, gcc-10) =E2=80=94 PASS, 0 e=
 rrors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook+kselftest (x86_64, gcc-10) =E2=80=94 PASS, =
+0 errors, 0 warnings, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----

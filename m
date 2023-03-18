@@ -2,67 +2,154 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D3EA6BE654
-	for <lists+linux-next@lfdr.de>; Fri, 17 Mar 2023 11:15:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FB2F6BFB35
+	for <lists+linux-next@lfdr.de>; Sat, 18 Mar 2023 16:28:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229963AbjCQKO7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 17 Mar 2023 06:14:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52732 "EHLO
+        id S229767AbjCRP2H (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sat, 18 Mar 2023 11:28:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbjCQKO6 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 17 Mar 2023 06:14:58 -0400
-Received: from sragenkab.go.id (mail.sragenkab.go.id [103.172.109.4])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id B5A5E7D81
-        for <linux-next@vger.kernel.org>; Fri, 17 Mar 2023 03:14:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=sragenkab.go.id;
-         h=mime-version:content-type:content-transfer-encoding:date:from
-        :to:subject:reply-to:message-id; q=dns/txt; s=dkim1; bh=QGcIAmD5
-        O/Y9qXzDV8MxyimbsW3+rMaQ/kz75GzBHbk=; b=yVxX3+WBQo3sGJb28wHP45qe
-        I6LWvEOpiT4dHZ1Rnn/FfwD5yTbW3mQD8/bfW7z1khsaxflagoQsuxsua+OzXdWN
-        lAvjJoh05krrM630tvaGG2Y8n3Tz4GjUvaDPHYVQhM8MDiLadqWijXE9x+gmsWGQ
-        T7g6n4WYICG3FKk8/5R8Cn+EL49OcjIYOiOSFikoueXaJi6YQRATTefBHbbYyb28
-        Y5AoR5bDMkIeEuMcP3dg9Rm5g7M0tRRv0ZepQutqhIw+8ifgZwm/4mwJaZfPvQ+I
-        lab1HaOnMk9H64S8sfRW63lDuIqcD/pWWOcNV+4KMBiDKnwIvcG5NjBpbRupNw==
-Received: (qmail 88172 invoked from network); 14 Mar 2023 21:21:47 -0000
-Received: from localhost (HELO mail2.sragenkab.go.id) (127.0.0.1)
-  by localhost with SMTP; 14 Mar 2023 21:21:47 -0000
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Tue, 14 Mar 2023 14:21:46 -0700
-From:   Ibrahim Tafa <jurnalsukowati@sragenkab.go.id>
-To:     undisclosed-recipients:;
-Subject: LOAN OPPORTUNITY AT LOW-INTEREST RATE
-Reply-To: <ibrahimtafa@abienceinvestmentsfze.com>
-Mail-Reply-To: <ibrahimtafa@abienceinvestmentsfze.com>
-Message-ID: <b8a601f09ac660119fe78f6ee653386a@sragenkab.go.id>
-X-Sender: jurnalsukowati@sragenkab.go.id
-User-Agent: Roundcube Webmail/0.8.1
-X-Spam-Status: No, score=3.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,SUBJ_ALL_CAPS,UNDISC_MONEY,URIBL_BLOCKED autolearn=no
+        with ESMTP id S229813AbjCRP2H (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sat, 18 Mar 2023 11:28:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E7A0168A5;
+        Sat, 18 Mar 2023 08:28:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 537C5B8015A;
+        Sat, 18 Mar 2023 15:28:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72901C433D2;
+        Sat, 18 Mar 2023 15:28:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679153282;
+        bh=TfkymS/0UtxxXLVQX0IAZAlCFa1g/qoFFz33Aw2cDP4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=EYzi7k5Shpe1V/FX4jtI7ba2bvlLmXhkezcgjC3YlwSXarKkuA8EJFeS3md6T5+eG
+         K8WEKNdaN3Ai8k+mVF3zEHPnVwRv2usaOCwd1eziABm+jZpxm5enKmHqa4HnrfqmJU
+         lD8/M6dbLgTOY0fKaMubpYydknDb56kfooQLaVn4Tn9Z8Tzwqi9sdW5vvLq1vYnhiT
+         9OXBzJ9koG0owY1T7wAIY1rhgYRtNFFeXwL23uDw4stPuVgSeslEk0i3cTYQujyeMc
+         baPoJPjd6IsSxRSojAkfZl4UCVVR/hIiQ2RiKztLh5+LSRlB7F8p12ZcaVZWLnBQ1n
+         pWdkLH0Z8NMFw==
+Date:   Sun, 19 Mar 2023 00:27:58 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     open list <linux-kernel@vger.kernel.org>,
+        linux-trace-kernel@vger.kernel.org,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        lkft-triage@lists.linaro.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Anders Roxell <anders.roxell@linaro.org>
+Subject: Re: selftests: ftrace: event filter function - test event filtering
+ on functions [FAIL]
+Message-Id: <20230319002758.84a3893c88f6bfbf7ff9ad85@kernel.org>
+In-Reply-To: <CA+G9fYv5G5Hows6Ex=1NMgSW3wtieKNNsFPBTpaLcF-bzaUtrw@mail.gmail.com>
+References: <CA+G9fYtF-XEKi9YNGgR=Kf==7iRb2FrmEC7qtwAeQbfyah-UhA@mail.gmail.com>
+        <20230315173257.1311e50729c73e0cb6e0aa0d@kernel.org>
+        <CA+G9fYv5G5Hows6Ex=1NMgSW3wtieKNNsFPBTpaLcF-bzaUtrw@mail.gmail.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+Hi Naresh,
+
+On Wed, 15 Mar 2023 14:41:51 +0530
+Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
+
+> Hi Masami San,
+> 
+> 
+> On Wed, 15 Mar 2023 at 14:03, Masami Hiramatsu <mhiramat@kernel.org> wrote:
+> >
+> > Hi Naresh,
+> >
+> > On Tue, 14 Mar 2023 15:52:44 +0530
+> > Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
+> >
+> > > Results from Linaro’s test farm.
+> > >
+> > > selftests ftrace failed on qemu-x86_64 and qemu-arm64.
+> > > Please find the test log below.
+> >
+> > Thanks for reporting!
+> > Can you share the kernel config which you used for this build?
+> > And the kernel is "next-20230314", is that correct?
+> 
+> I have attached a test log file and Kconfig file.
+
+Thanks! I could reproduced.
+
+The error log is here.
+----
++ . /mnt/ftrace/test.d/filter/event-filter-function.tc
++ echo 'Test event filter function name'
+Test event filter function name
++ echo 0
++ echo 0
++ echo
++ echo 'call_site.function == exit_mmap'
++ echo 1
++ echo 1
++ ls
++ echo 0
++ + wcgrep -l
+ exit_mmap
++ grep kmem_cache_free trace
++ hitcnt=0
++ + wcgrep -l
+ -v+  exit_mmap
+grep kmem_cache_free trace
++ misscnt=0
++ '[' 0 -eq 0 ]
++ exit_fail
++ exit 1
+
+And the test case is here.
+-----
+echo 'call_site.function == exit_mmap' > events/kmem/kmem_cache_free/filter
+echo 1 > events/kmem/kmem_cache_free/enable
+echo 1 > tracing_on
+ls > /dev/null
+echo 0 > events/kmem/kmem_cache_free/enable
+
+hitcnt=`grep kmem_cache_free trace| grep exit_mmap | wc -l`
+misscnt=`grep kmem_cache_free trace| grep -v exit_mmap | wc -l`
+
+if [ $hitcnt -eq 0 ]; then
+        exit_fail
+fi
+-----
+
+The test case expects the `ls > /dev/null` involves 'kmem_cache_free' trace
+event, but it doesn't.
+
+BTW, this code is a bit fragile because the function caller can be changed
+frequently. I think it should sample the events and use one of them.
+Let me fix that.
+
+Thank you,
+
+
+> 
+> >
+> > >
+> > > Is this expected to fail ? Am I missing anything ?
+> >
+> > No, it should be a bug. I would like to reproduce it.
+> 
+> - Naresh
 
 
 -- 
-Greetings,
-   I am contacting you based on the Investment/Loan opportunity for 
-companies in need of financing a project/business, We have developed a 
-new method of financing that doesn't take long to receive financing from 
-our clients.
-    If you are looking for funds to finance your project/Business or if 
-you are willing to work as our agent in your country to find clients in 
-need of financing and earn commissions, then get back to me for more 
-details.
-
-Regards,
-Ibrahim Tafa
-ABIENCE INVESTMENT GROUP FZE, United Arab Emirates
+Masami Hiramatsu (Google) <mhiramat@kernel.org>

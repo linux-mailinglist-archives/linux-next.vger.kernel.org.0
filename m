@@ -2,154 +2,149 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FB2F6BFB35
-	for <lists+linux-next@lfdr.de>; Sat, 18 Mar 2023 16:28:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F1CE6BFF25
+	for <lists+linux-next@lfdr.de>; Sun, 19 Mar 2023 03:53:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229767AbjCRP2H (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 18 Mar 2023 11:28:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46996 "EHLO
+        id S229778AbjCSCxn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sat, 18 Mar 2023 22:53:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229813AbjCRP2H (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sat, 18 Mar 2023 11:28:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E7A0168A5;
-        Sat, 18 Mar 2023 08:28:04 -0700 (PDT)
+        with ESMTP id S229553AbjCSCxm (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sat, 18 Mar 2023 22:53:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C24CD113EF;
+        Sat, 18 Mar 2023 19:53:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 537C5B8015A;
-        Sat, 18 Mar 2023 15:28:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72901C433D2;
-        Sat, 18 Mar 2023 15:28:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6AD85B801C1;
+        Sun, 19 Mar 2023 02:53:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 417A7C433D2;
+        Sun, 19 Mar 2023 02:53:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679153282;
-        bh=TfkymS/0UtxxXLVQX0IAZAlCFa1g/qoFFz33Aw2cDP4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=EYzi7k5Shpe1V/FX4jtI7ba2bvlLmXhkezcgjC3YlwSXarKkuA8EJFeS3md6T5+eG
-         K8WEKNdaN3Ai8k+mVF3zEHPnVwRv2usaOCwd1eziABm+jZpxm5enKmHqa4HnrfqmJU
-         lD8/M6dbLgTOY0fKaMubpYydknDb56kfooQLaVn4Tn9Z8Tzwqi9sdW5vvLq1vYnhiT
-         9OXBzJ9koG0owY1T7wAIY1rhgYRtNFFeXwL23uDw4stPuVgSeslEk0i3cTYQujyeMc
-         baPoJPjd6IsSxRSojAkfZl4UCVVR/hIiQ2RiKztLh5+LSRlB7F8p12ZcaVZWLnBQ1n
-         pWdkLH0Z8NMFw==
-Date:   Sun, 19 Mar 2023 00:27:58 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     open list <linux-kernel@vger.kernel.org>,
-        linux-trace-kernel@vger.kernel.org,
+        s=k20201202; t=1679194417;
+        bh=saZ8wv4j3wfSLyQf7Xb0BX856GFJ9sSJfSezK1JR4UQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Y4i8SlqtvGdENnGEL3Kv5ln64l7tJgn5UyJhB+9zp6e7i1Die9V+M+2b0q6xdnTQU
+         88NdG6qaPfkLP79NrP2oju4eRN/FcpulDuNCvv+m5Aq6Noux8UfAHWooSgbgTcbjL9
+         vv899EeeiIfU9DKoucOQoSDFoZI1lHaBhUZOVJ06zICISG9ePpO8cd87A404bO8eGZ
+         GI95CHsoitqsqkECVXPPj4HL9y1X9ay2sANcpWzPdoUBB/MIS232N5P87D7i32qSjn
+         xT6jPNAwgHsofF0yQzm6Fl0/MZjIuX+xmKP/Sv5VB0eorsht70XoGgt5s40lUKRtKe
+         M5LUoYF04jGZw==
+From:   "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        linux-trace-kernel@vger.kernel.org
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        linux-kernel@vger.kernel.org,
         Linux-Next Mailing List <linux-next@vger.kernel.org>,
         lkft-triage@lists.linaro.org,
         Stephen Rothwell <sfr@canb.auug.org.au>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
         Arnd Bergmann <arnd@arndb.de>,
         Anders Roxell <anders.roxell@linaro.org>
-Subject: Re: selftests: ftrace: event filter function - test event filtering
- on functions [FAIL]
-Message-Id: <20230319002758.84a3893c88f6bfbf7ff9ad85@kernel.org>
-In-Reply-To: <CA+G9fYv5G5Hows6Ex=1NMgSW3wtieKNNsFPBTpaLcF-bzaUtrw@mail.gmail.com>
-References: <CA+G9fYtF-XEKi9YNGgR=Kf==7iRb2FrmEC7qtwAeQbfyah-UhA@mail.gmail.com>
-        <20230315173257.1311e50729c73e0cb6e0aa0d@kernel.org>
-        <CA+G9fYv5G5Hows6Ex=1NMgSW3wtieKNNsFPBTpaLcF-bzaUtrw@mail.gmail.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Subject: [PATCH] selftests/ftrace: Choose target function for filter test from samples
+Date:   Sun, 19 Mar 2023 11:53:32 +0900
+Message-Id:  <167919441260.1922645.18355804179347364057.stgit@mhiramat.roam.corp.google.com>
+X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
+User-Agent: StGit/0.19
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Naresh,
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-On Wed, 15 Mar 2023 14:41:51 +0530
-Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
+Since the event-filter-function.tc expects the 'exit_mmap()' directly
+calls 'kmem_cache_free()', this is vulnerable to code modifications.
 
-> Hi Masami San,
-> 
-> 
-> On Wed, 15 Mar 2023 at 14:03, Masami Hiramatsu <mhiramat@kernel.org> wrote:
-> >
-> > Hi Naresh,
-> >
-> > On Tue, 14 Mar 2023 15:52:44 +0530
-> > Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
-> >
-> > > Results from Linaro’s test farm.
-> > >
-> > > selftests ftrace failed on qemu-x86_64 and qemu-arm64.
-> > > Please find the test log below.
-> >
-> > Thanks for reporting!
-> > Can you share the kernel config which you used for this build?
-> > And the kernel is "next-20230314", is that correct?
-> 
-> I have attached a test log file and Kconfig file.
+Choose the target function for the filter test from the sample
+event data so that it can keep test running correctly even if the caller
+function name will be changed.
 
-Thanks! I could reproduced.
+Link: https://lore.kernel.org/all/CA+G9fYtF-XEKi9YNGgR=Kf==7iRb2FrmEC7qtwAeQbfyah-UhA@mail.gmail.com/
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Fixes: 7f09d639b8c4 ("tracing/selftests: Add test for event filtering on function name")
+Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+---
+ .../ftrace/test.d/filter/event-filter-function.tc  |   45 ++++++++++++--------
+ 1 file changed, 27 insertions(+), 18 deletions(-)
 
-The error log is here.
-----
-+ . /mnt/ftrace/test.d/filter/event-filter-function.tc
-+ echo 'Test event filter function name'
-Test event filter function name
-+ echo 0
-+ echo 0
-+ echo
-+ echo 'call_site.function == exit_mmap'
-+ echo 1
-+ echo 1
-+ ls
-+ echo 0
-+ + wcgrep -l
- exit_mmap
-+ grep kmem_cache_free trace
-+ hitcnt=0
-+ + wcgrep -l
- -v+  exit_mmap
-grep kmem_cache_free trace
-+ misscnt=0
-+ '[' 0 -eq 0 ]
-+ exit_fail
-+ exit 1
+diff --git a/tools/testing/selftests/ftrace/test.d/filter/event-filter-function.tc b/tools/testing/selftests/ftrace/test.d/filter/event-filter-function.tc
+index e2ff3bf4df80..2de7c61d1ae3 100644
+--- a/tools/testing/selftests/ftrace/test.d/filter/event-filter-function.tc
++++ b/tools/testing/selftests/ftrace/test.d/filter/event-filter-function.tc
+@@ -9,18 +9,33 @@ fail() { #msg
+     exit_fail
+ }
+ 
+-echo "Test event filter function name"
++sample_events() {
++    echo > trace
++    echo 1 > events/kmem/kmem_cache_free/enable
++    echo 1 > tracing_on
++    ls > /dev/null
++    echo 0 > tracing_on
++    echo 0 > events/kmem/kmem_cache_free/enable
++}
++
+ echo 0 > tracing_on
+ echo 0 > events/enable
++
++echo "Get the most frequently calling function"
++sample_events
++
++target_func=`cut -d: -f3 trace | sed 's/call_site=\([^+]*\)+0x.*/\1/' | sort | uniq -c | sort | tail -n 1 | sed 's/^[ 0-9]*//'`
++if [ -z "$target_func" ]; then
++    exit_fail
++fi
+ echo > trace
+-echo 'call_site.function == exit_mmap' > events/kmem/kmem_cache_free/filter
+-echo 1 > events/kmem/kmem_cache_free/enable
+-echo 1 > tracing_on
+-ls > /dev/null
+-echo 0 > events/kmem/kmem_cache_free/enable
+ 
+-hitcnt=`grep kmem_cache_free trace| grep exit_mmap | wc -l`
+-misscnt=`grep kmem_cache_free trace| grep -v exit_mmap | wc -l`
++echo "Test event filter function name"
++echo "call_site.function == $target_func" > events/kmem/kmem_cache_free/filter
++sample_events
++
++hitcnt=`grep kmem_cache_free trace| grep $target_func | wc -l`
++misscnt=`grep kmem_cache_free trace| grep -v $target_func | wc -l`
+ 
+ if [ $hitcnt -eq 0 ]; then
+ 	exit_fail
+@@ -30,20 +45,14 @@ if [ $misscnt -gt 0 ]; then
+ 	exit_fail
+ fi
+ 
+-address=`grep ' exit_mmap$' /proc/kallsyms | cut -d' ' -f1`
++address=`grep " ${target_func}\$" /proc/kallsyms | cut -d' ' -f1`
+ 
+ echo "Test event filter function address"
+-echo 0 > tracing_on
+-echo 0 > events/enable
+-echo > trace
+ echo "call_site.function == 0x$address" > events/kmem/kmem_cache_free/filter
+-echo 1 > events/kmem/kmem_cache_free/enable
+-echo 1 > tracing_on
+-sleep 1
+-echo 0 > events/kmem/kmem_cache_free/enable
++sample_events
+ 
+-hitcnt=`grep kmem_cache_free trace| grep exit_mmap | wc -l`
+-misscnt=`grep kmem_cache_free trace| grep -v exit_mmap | wc -l`
++hitcnt=`grep kmem_cache_free trace| grep $target_func | wc -l`
++misscnt=`grep kmem_cache_free trace| grep -v $target_func | wc -l`
+ 
+ if [ $hitcnt -eq 0 ]; then
+ 	exit_fail
 
-And the test case is here.
------
-echo 'call_site.function == exit_mmap' > events/kmem/kmem_cache_free/filter
-echo 1 > events/kmem/kmem_cache_free/enable
-echo 1 > tracing_on
-ls > /dev/null
-echo 0 > events/kmem/kmem_cache_free/enable
-
-hitcnt=`grep kmem_cache_free trace| grep exit_mmap | wc -l`
-misscnt=`grep kmem_cache_free trace| grep -v exit_mmap | wc -l`
-
-if [ $hitcnt -eq 0 ]; then
-        exit_fail
-fi
------
-
-The test case expects the `ls > /dev/null` involves 'kmem_cache_free' trace
-event, but it doesn't.
-
-BTW, this code is a bit fragile because the function caller can be changed
-frequently. I think it should sample the events and use one of them.
-Let me fix that.
-
-Thank you,
-
-
-> 
-> >
-> > >
-> > > Is this expected to fail ? Am I missing anything ?
-> >
-> > No, it should be a bug. I would like to reproduce it.
-> 
-> - Naresh
-
-
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>

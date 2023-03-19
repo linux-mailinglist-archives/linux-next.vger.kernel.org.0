@@ -2,102 +2,128 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38C826C058F
-	for <lists+linux-next@lfdr.de>; Sun, 19 Mar 2023 22:29:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA35E6C067C
+	for <lists+linux-next@lfdr.de>; Mon, 20 Mar 2023 00:09:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230313AbjCSV31 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 19 Mar 2023 17:29:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46650 "EHLO
+        id S229481AbjCSXJg (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 19 Mar 2023 19:09:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230356AbjCSV3G (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 19 Mar 2023 17:29:06 -0400
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 788091F490;
-        Sun, 19 Mar 2023 14:28:20 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id DA915320091A;
-        Sun, 19 Mar 2023 17:28:14 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Sun, 19 Mar 2023 17:28:15 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1679261294; x=1679347694; bh=+n
-        bSnyLU6yl2KmpB/zPsJtib/REyWaxwDq6pNd+Q7og=; b=PuS5eKn/GnNNDUlmXF
-        3tKhtb6SErYLbFTjOMwB7MiS0EQECE/eT1YBtTpys7f1NydKzj4RpIP/P3E5BF3m
-        DsoR1rt6fJVl+yFmZkogf2emMeypZYtOSh6onkDssKmHit24JXcx4zB7NCT9QGWT
-        rnBM7xYKw4y1Kowo5h+71HrAUYBB3VdQmQiV1pSmNxT987t4zuLXoomzQQ5PUf/3
-        EfVUElEpVvKaaImTNpK5c+z3w9fPO074sV2KQnSFWVy6rW/XRkKcfgeIxDKvP2NZ
-        e/vvZfY5en4DpJYBWbgBVi6sO+2TQofjZpt0/LJQYVO2FRNzwDcn7YX8aAnwu6ji
-        yQow==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1679261294; x=1679347694; bh=+nbSnyLU6yl2K
-        mpB/zPsJtib/REyWaxwDq6pNd+Q7og=; b=eVyRyTFDKWvZYcV2wR6Ph3WDSUUv2
-        2gb54Y/4sDhE/oHHOk5AHGcMiNiFsCa2+B2ejFrRSUuKdzMlWvd+DQz44S6MqcYs
-        T7H8YpMpgOQL+ceSeIYgK6+b+teJhy5pbDg7aUd3ixnBmCVjC53hQQy6Ad3rMFWY
-        ItfwJfEOnjhTfXqyyYC6tqif19bglDPL/wEq4T+mCqx3EiInIcahnlF+cJr3wKJ6
-        qIM4haH31EIFYZYXcdIhq22HwTHdns0pEMIKQlH07OwR6cKAxaWjpCCYkcWDg1dE
-        FawhJ2uFNyLCGpxBmoOFqfoFFBNSneS0fJzx0cxybx0O8U43F1fHgnx2Q==
-X-ME-Sender: <xms:bn4XZI3Fg7N0TDC9ttp2OwK9xCdg5089H6TiW_lTIWP4emUEl16tNQ>
-    <xme:bn4XZDHniX7MsFfgcOyePdyaqZkzX8GkzGxUot-xZwRttrbMqHi-lpoPPWbFjrKPG
-    2ckhg6V5EMXta97208>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdefiedgudehfecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
-    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:bn4XZA7O-VzK5RR4lHueT9u478y-cBCKityWJ5wtwdVwJPfAGHyGrg>
-    <xmx:bn4XZB28SGNKqixB8gJLle1Dpp8eMnxH9tcY3YN0ljTTNkOiKLZtQQ>
-    <xmx:bn4XZLHq-WuPwIH323-Fu7OztBG4KJQvFxB9yQEhcVN2g-OSy_JhNQ>
-    <xmx:bn4XZAQ9W7vIdP4BbMjqc4sp4yZ7PWTUlzGwvhCTA3TcLBZ5-MnOzA>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 1B698B60086; Sun, 19 Mar 2023 17:28:13 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-221-gec32977366-fm-20230306.001-gec329773
-Mime-Version: 1.0
-Message-Id: <53e4c004-003a-47dc-9376-06c2571e0ae9@app.fastmail.com>
-In-Reply-To: <20230320082323.61889e67@canb.auug.org.au>
-References: <20230320082323.61889e67@canb.auug.org.au>
-Date:   Sun, 19 Mar 2023 22:27:52 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Stephen Rothwell" <sfr@canb.auug.org.au>,
-        "Olof Johansson" <olof@lixom.net>,
-        ARM <linux-arm-kernel@lists.infradead.org>
-Cc:     "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        linux-next <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Signed-off-by missing for commit in the arm-soc tree
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S229449AbjCSXJf (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 19 Mar 2023 19:09:35 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB613903A;
+        Sun, 19 Mar 2023 16:09:29 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Pftq808xSz4x7y;
+        Mon, 20 Mar 2023 10:09:23 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1679267365;
+        bh=TZLxrj5/6fHM8y+5KOD9ISidLDcprEMDdYcd/FhT4O8=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Uwo8NvBQuOE68JEs9Xr4y4cZA5nYyadiiUGFlLzi/lQyA19n9JHL0+9Hfusl6ViBP
+         v5azRqiLAnb4j7kX4+9q5Qm85cgwLeoGoBz3exmp10t+c4NjeU+nVQWRVx4CaGucCy
+         Ei94Uf+o41wKZgqJ0fvkikxm6+KaOLT38241lM6ORawUgo8gg04To7hwp8XSmDKlfj
+         Cik3QMKxJznee4C26Ej+JYJ1sMedcMDfmLXb910UQyITOud0qeggL+a91CbLlgyyVO
+         hl9y0BvFQcHPiM+6JbRa/9KPt+ojxcc7WkFfHHpZo7Ub1lykL8V+vHhnQs0CJsTQlV
+         /7bzS2qXpcXMg==
+Date:   Mon, 20 Mar 2023 10:09:22 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        David Miller <davem@davemloft.net>
+Cc:     bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the bpf-next tree with the net-next
+ tree
+Message-ID: <20230320100922.0f877bb9@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/mKk_Hs=FSMAtsGa8pI=eLM.";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Sun, Mar 19, 2023, at 22:23, Stephen Rothwell wrote:
-> Hi all,
->
-> Commit
->
->   41341224e4fd ("ARM: mmp: remove obsolete config USB_EHCI_MV_U2O")
->
-> is missing a Signed-off-by from its committer.
+--Sig_/mKk_Hs=FSMAtsGa8pI=eLM.
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Ok, thanks for letting me know. I've pushed out
-the fixed soc/arm branch and the for-next branch now.
+Hi all,
 
-for-next still has both the broken and the fixed
-commit until I regenerate it.
+Today's linux-next merge of the bpf-next tree got a conflict in:
 
-      Arnd
+  Documentation/bpf/bpf_devel_QA.rst
+
+between commit:
+
+  d0ddf5065ffe ("Merge git://git.kernel.org/pub/scm/linux/kernel/git/netdev=
+/net")
+
+from the net-next tree and commit:
+
+  0f10f647f455 ("bpf, docs: Use internal linking for link to netdev subsyst=
+em doc")
+
+from the bpf-next tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc Documentation/bpf/bpf_devel_QA.rst
+index 7403f81c995c,e151e61dff38..000000000000
+--- a/Documentation/bpf/bpf_devel_QA.rst
++++ b/Documentation/bpf/bpf_devel_QA.rst
+@@@ -684,8 -689,11 +689,7 @@@ when
+ =20
+ =20
+  .. Links
+- .. _netdev-FAQ: https://www.kernel.org/doc/html/latest/process/maintainer=
+-netdev.html
+ -.. _Documentation/process/: https://www.kernel.org/doc/html/latest/proces=
+s/
+  .. _selftests:
+     https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tre=
+e/tools/testing/selftests/bpf/
+ -.. _Documentation/dev-tools/kselftest.rst:
+ -   https://www.kernel.org/doc/html/latest/dev-tools/kselftest.html
+ -.. _Documentation/bpf/btf.rst: btf.rst
+ =20
+  Happy BPF hacking!
+
+--Sig_/mKk_Hs=FSMAtsGa8pI=eLM.
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQXliIACgkQAVBC80lX
+0GzBoQf/aLTrlT3xp30d+NW/2ybvlwzA7fD/ahnIGvDGzDefKcZa7ZwAbE/Brmx3
+Dfcp9AqUlnx7bUPGg/YqXgzZS92sp/lZBmr+LoNKPE3CjXeJCnC3jkZZM9uDUuCm
+5IiIfwkS9Tj5ow2BYE1fG/BWI9X1LzlsbfmjDHbKHA//YKZlLpY8BVC/OYkWsVAW
+8sZY6eZnu4h5OmroHhAvZ335RWcjx8Dc3HaQNnCmfXxhv8evaMB8UnS/zV0ZI1oH
+L3Fk6u5Wd1rCHTp43lIaJ9h0qHnSTMq2WJUTD9m1y6JcYuAz9lIdFVJEXpLenqQA
+KFZt2g68X/vhtQ8itXLPipH+aZMZ1g==
+=x0W3
+-----END PGP SIGNATURE-----
+
+--Sig_/mKk_Hs=FSMAtsGa8pI=eLM.--

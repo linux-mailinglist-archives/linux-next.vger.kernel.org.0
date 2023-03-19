@@ -2,149 +2,84 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F1CE6BFF25
-	for <lists+linux-next@lfdr.de>; Sun, 19 Mar 2023 03:53:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D8466C056F
+	for <lists+linux-next@lfdr.de>; Sun, 19 Mar 2023 22:23:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229778AbjCSCxn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 18 Mar 2023 22:53:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50262 "EHLO
+        id S230035AbjCSVXg (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 19 Mar 2023 17:23:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbjCSCxm (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sat, 18 Mar 2023 22:53:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C24CD113EF;
-        Sat, 18 Mar 2023 19:53:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S229619AbjCSVXf (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 19 Mar 2023 17:23:35 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5AFA11E8C;
+        Sun, 19 Mar 2023 14:23:32 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6AD85B801C1;
-        Sun, 19 Mar 2023 02:53:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 417A7C433D2;
-        Sun, 19 Mar 2023 02:53:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679194417;
-        bh=saZ8wv4j3wfSLyQf7Xb0BX856GFJ9sSJfSezK1JR4UQ=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Y4i8SlqtvGdENnGEL3Kv5ln64l7tJgn5UyJhB+9zp6e7i1Die9V+M+2b0q6xdnTQU
-         88NdG6qaPfkLP79NrP2oju4eRN/FcpulDuNCvv+m5Aq6Noux8UfAHWooSgbgTcbjL9
-         vv899EeeiIfU9DKoucOQoSDFoZI1lHaBhUZOVJ06zICISG9ePpO8cd87A404bO8eGZ
-         GI95CHsoitqsqkECVXPPj4HL9y1X9ay2sANcpWzPdoUBB/MIS232N5P87D7i32qSjn
-         xT6jPNAwgHsofF0yQzm6Fl0/MZjIuX+xmKP/Sv5VB0eorsht70XoGgt5s40lUKRtKe
-         M5LUoYF04jGZw==
-From:   "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        linux-trace-kernel@vger.kernel.org
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        linux-kernel@vger.kernel.org,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        lkft-triage@lists.linaro.org,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Anders Roxell <anders.roxell@linaro.org>
-Subject: [PATCH] selftests/ftrace: Choose target function for filter test from samples
-Date:   Sun, 19 Mar 2023 11:53:32 +0900
-Message-Id:  <167919441260.1922645.18355804179347364057.stgit@mhiramat.roam.corp.google.com>
-X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
-User-Agent: StGit/0.19
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PfrSt3vSPz4xDh;
+        Mon, 20 Mar 2023 08:23:25 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1679261006;
+        bh=XkS7pprV68cGMowEZ+ra4Y4qjCJrNuxnxjTHRouwXtc=;
+        h=Date:From:To:Cc:Subject:From;
+        b=sjYPMmYLY1wQolMzmjeBuVebkcD25MQOhflUX+7z6NLltcf6+78UQ6UXaKBip+KfK
+         L3eugIc0ueQC4IlUU9yjA5fuHveThMp/fQZzrnpJbSnHWBASioZ8hUjOoDwYaPu1/U
+         vW23NVALdA33AkHn+cXezl5uYEGupnEiyOif86ob08sa1gFuY4wWicW9/PELYBBaJq
+         HeEr/VtRtQunzAkKC0q7jXC90yA3s8wFDUxYp2pEibTB3CUzwpH2dlzPD76EHGtISk
+         pbEWkQFZEKfYJWe0y3eoqdT7IglEHu7GpvAJ7wnGWq9+FcCA/jsE4uBN0zxYKwNTW7
+         bshXl+30cwaKw==
+Date:   Mon, 20 Mar 2023 08:23:23 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        ARM <linux-arm-kernel@lists.infradead.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the arm-soc tree
+Message-ID: <20230320082323.61889e67@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/7dNVcUZ2iI/1zWk=87VNLFw";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+--Sig_/7dNVcUZ2iI/1zWk=87VNLFw
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Since the event-filter-function.tc expects the 'exit_mmap()' directly
-calls 'kmem_cache_free()', this is vulnerable to code modifications.
+Hi all,
 
-Choose the target function for the filter test from the sample
-event data so that it can keep test running correctly even if the caller
-function name will be changed.
+Commit
 
-Link: https://lore.kernel.org/all/CA+G9fYtF-XEKi9YNGgR=Kf==7iRb2FrmEC7qtwAeQbfyah-UhA@mail.gmail.com/
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-Fixes: 7f09d639b8c4 ("tracing/selftests: Add test for event filtering on function name")
-Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
----
- .../ftrace/test.d/filter/event-filter-function.tc  |   45 ++++++++++++--------
- 1 file changed, 27 insertions(+), 18 deletions(-)
+  41341224e4fd ("ARM: mmp: remove obsolete config USB_EHCI_MV_U2O")
 
-diff --git a/tools/testing/selftests/ftrace/test.d/filter/event-filter-function.tc b/tools/testing/selftests/ftrace/test.d/filter/event-filter-function.tc
-index e2ff3bf4df80..2de7c61d1ae3 100644
---- a/tools/testing/selftests/ftrace/test.d/filter/event-filter-function.tc
-+++ b/tools/testing/selftests/ftrace/test.d/filter/event-filter-function.tc
-@@ -9,18 +9,33 @@ fail() { #msg
-     exit_fail
- }
- 
--echo "Test event filter function name"
-+sample_events() {
-+    echo > trace
-+    echo 1 > events/kmem/kmem_cache_free/enable
-+    echo 1 > tracing_on
-+    ls > /dev/null
-+    echo 0 > tracing_on
-+    echo 0 > events/kmem/kmem_cache_free/enable
-+}
-+
- echo 0 > tracing_on
- echo 0 > events/enable
-+
-+echo "Get the most frequently calling function"
-+sample_events
-+
-+target_func=`cut -d: -f3 trace | sed 's/call_site=\([^+]*\)+0x.*/\1/' | sort | uniq -c | sort | tail -n 1 | sed 's/^[ 0-9]*//'`
-+if [ -z "$target_func" ]; then
-+    exit_fail
-+fi
- echo > trace
--echo 'call_site.function == exit_mmap' > events/kmem/kmem_cache_free/filter
--echo 1 > events/kmem/kmem_cache_free/enable
--echo 1 > tracing_on
--ls > /dev/null
--echo 0 > events/kmem/kmem_cache_free/enable
- 
--hitcnt=`grep kmem_cache_free trace| grep exit_mmap | wc -l`
--misscnt=`grep kmem_cache_free trace| grep -v exit_mmap | wc -l`
-+echo "Test event filter function name"
-+echo "call_site.function == $target_func" > events/kmem/kmem_cache_free/filter
-+sample_events
-+
-+hitcnt=`grep kmem_cache_free trace| grep $target_func | wc -l`
-+misscnt=`grep kmem_cache_free trace| grep -v $target_func | wc -l`
- 
- if [ $hitcnt -eq 0 ]; then
- 	exit_fail
-@@ -30,20 +45,14 @@ if [ $misscnt -gt 0 ]; then
- 	exit_fail
- fi
- 
--address=`grep ' exit_mmap$' /proc/kallsyms | cut -d' ' -f1`
-+address=`grep " ${target_func}\$" /proc/kallsyms | cut -d' ' -f1`
- 
- echo "Test event filter function address"
--echo 0 > tracing_on
--echo 0 > events/enable
--echo > trace
- echo "call_site.function == 0x$address" > events/kmem/kmem_cache_free/filter
--echo 1 > events/kmem/kmem_cache_free/enable
--echo 1 > tracing_on
--sleep 1
--echo 0 > events/kmem/kmem_cache_free/enable
-+sample_events
- 
--hitcnt=`grep kmem_cache_free trace| grep exit_mmap | wc -l`
--misscnt=`grep kmem_cache_free trace| grep -v exit_mmap | wc -l`
-+hitcnt=`grep kmem_cache_free trace| grep $target_func | wc -l`
-+misscnt=`grep kmem_cache_free trace| grep -v $target_func | wc -l`
- 
- if [ $hitcnt -eq 0 ]; then
- 	exit_fail
+is missing a Signed-off-by from its committer.
 
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/7dNVcUZ2iI/1zWk=87VNLFw
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQXfUwACgkQAVBC80lX
+0Gz63Qf8CZv7XpPwiosE7ejDdQaWC1B0XO1cyfMzaTZISJkKoXdJgoBCJVfiztUp
+9PMI//KhMSaETYLBUJyfcCbLErSlJ1O6KUO+3kak48jbo1Tk94rP3Xeg3yAWsZRy
+gwV3GG12vGDrOpxntNIMnyLIIjRKZIA8abu72gZRnlYtmp07UlvBlK3mFJ/wJV4Z
+zvmqeR4TNh6QQoS2ZEHi0kGVwNP0onz0fBO716xDFC2M7NXW73ztSccMALUdr+8d
+hJPXDDXp/2dgefrjZBw2bzycMwCsxcz5Rcu2MKDThqTdO5q3nji9tn/D7V8iWahx
+MZ3FVA7InDNs1sGDgNv1c+j+BiPSQg==
+=B3gN
+-----END PGP SIGNATURE-----
+
+--Sig_/7dNVcUZ2iI/1zWk=87VNLFw--

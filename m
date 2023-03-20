@@ -2,107 +2,127 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4A146C0788
-	for <lists+linux-next@lfdr.de>; Mon, 20 Mar 2023 01:59:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1DE06C0842
+	for <lists+linux-next@lfdr.de>; Mon, 20 Mar 2023 02:08:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230345AbjCTA7I (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 19 Mar 2023 20:59:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34096 "EHLO
+        id S231499AbjCTBIQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 19 Mar 2023 21:08:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230217AbjCTA6A (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 19 Mar 2023 20:58:00 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40ED81E1F9;
-        Sun, 19 Mar 2023 17:55:33 -0700 (PDT)
+        with ESMTP id S231136AbjCTBHx (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 19 Mar 2023 21:07:53 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B8251B2D8;
+        Sun, 19 Mar 2023 18:00:03 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Pfx8R4x99z4xFM;
-        Mon, 20 Mar 2023 11:54:31 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PfxFD6GFQz4xFM;
+        Mon, 20 Mar 2023 11:58:40 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1679273672;
-        bh=jCYWUFqeEcq/iKk9UVbJulf34mhqjekmp+jzoMspAKE=;
+        s=201702; t=1679273921;
+        bh=MI0XYywYczG3K7bOaIATz4F8xLX9bPF1QWo/wnhTVbM=;
         h=Date:From:To:Cc:Subject:From;
-        b=Jql0g2mioz1pb4aUO97w+SldgnyDL5hiBtRO9P+uK69BiFH2jnbjIAawp+Eii1TJV
-         /N52S3PdzBDUvu0R1xEphOgZMSXhBVRdD1mJ/JyKJWmyXeqAvphvDjGcR79/fMI4yX
-         Sjk6OI6OVaaerkXtBhDETRgEGmSPEN369c2rkKePUGu2+R7mlc1DOLewGTgyx4p0+H
-         hnl2jid74xgfXhD0zuAU1a2skSJKRoZ3gKxuCdgCUOzrIDfUwmUMe6HJ4Zoz0wokil
-         2B5T/J7xUpXnJOSaFGczoS9e0GblrGR6C1Xd9ZBCht4hfk7WNHDKZOhW68hIXbwk1k
-         bQjgLfN1Itybw==
-Date:   Mon, 20 Mar 2023 11:54:30 +1100
+        b=EjoNjXUaHJYcaGK8LCNq9tx487dNSkl8O22usVQYG7n0BflA6InYfZXvJGRHHdKdx
+         Oq6sXbruo5dECZD6UWRco8/zZCVdiE1GwB2PD+zxv1fBJkmwOHXNB2X+RQVe2pDXnW
+         Sc25u1BlRUZdljNWvAWpfr0G77MZDaYGvhGzu+CBdzAfdr7yKNOGlXnvmAISvIWMLP
+         aDIvqx49U7bRAA23K3GGjW7heGEy+qy1zKIIz6MoNI/ez3SCrhkgQftH3zWDvKmYFV
+         H6H54oBir/bS4cuKb17E1NbKP+BKmSbXvrilENsDomoYkmCkIhbgZUERAXAJ5brTfa
+         og1pGpDOSsmWA==
+Date:   Mon, 20 Mar 2023 11:58:39 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Greg KH <greg@kroah.com>, Arnd Bergmann <arnd@arndb.de>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ilpo =?UTF-8?B?SsOk?= =?UTF-8?B?cnZpbmVu?= 
-        <ilpo.jarvinen@linux.intel.com>,
-        "Jiri Slaby (SUSE)" <jirislaby@kernel.org>,
+To:     Chanwoo Choi <cw00.choi@samsung.com>, Greg KH <greg@kroah.com>
+Cc:     Bumwoo Lee <bw365.lee@samsung.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the char-misc tree with the driver-core
- and tty trees
-Message-ID: <20230320115430.06f26c33@canb.auug.org.au>
+Subject: linux-next: manual merge of the extcon tree with the driver-core
+ tree
+Message-ID: <20230320115839.5e645bb0@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/u9oc98YIT5GZz45tPttyH3e";
+Content-Type: multipart/signed; boundary="Sig_/0x8HCvzLhbJihMlPQzTJxu1";
  protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/u9oc98YIT5GZz45tPttyH3e
+--Sig_/0x8HCvzLhbJihMlPQzTJxu1
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the char-misc tree got conflicts in:
+Today's linux-next merge of the extcon tree got a conflict in:
 
-  drivers/char/pcmcia/cm4000_cs.c
-  drivers/char/pcmcia/cm4040_cs.c
-  drivers/char/pcmcia/scr24x_cs.c
-  drivers/char/pcmcia/synclink_cs.c
+  drivers/extcon/extcon.c
 
-between commits:
+between commit:
 
   1aaba11da9aa ("driver core: class: remove module * from class_create()")
-  035173c91c6b ("tty: Convert hw_stopped in tty_struct to bool")
 
-from the driver-core, tty trees and commit:
+from the driver-core tree and commit:
 
-  9b12f050c76f ("char: pcmcia: remove all the drivers")
+  6384c02f33a9 ("extcon: Remove redundant null checking for class")
 
-from the char-misc tree.
+from the extcon tree.
 
-I fixed it up (I removed the files) and can carry the fix as
-necessary. This is now fixed as far as linux-next is concerned, but any
-non trivial conflicts should be mentioned to your upstream maintainer
-when your tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/u9oc98YIT5GZz45tPttyH3e
+diff --cc drivers/extcon/extcon.c
+index d43ba8e7260d,adcf01132f70..000000000000
+--- a/drivers/extcon/extcon.c
++++ b/drivers/extcon/extcon.c
+@@@ -1012,12 -1012,13 +1012,13 @@@ ATTRIBUTE_GROUPS(extcon)
+ =20
+  static int create_extcon_class(void)
+  {
+- 	if (!extcon_class) {
+- 		extcon_class =3D class_create("extcon");
+- 		if (IS_ERR(extcon_class))
+- 			return PTR_ERR(extcon_class);
+- 		extcon_class->dev_groups =3D extcon_groups;
+- 	}
++ 	if (extcon_class)
++ 		return 0;
++=20
+ -	extcon_class =3D class_create(THIS_MODULE, "extcon");
+++	extcon_class =3D class_create("extcon");
++ 	if (IS_ERR(extcon_class))
++ 		return PTR_ERR(extcon_class);
++ 	extcon_class->dev_groups =3D extcon_groups;
+ =20
+  	return 0;
+  }
+
+--Sig_/0x8HCvzLhbJihMlPQzTJxu1
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQXrsYACgkQAVBC80lX
-0GxFTQf+J9cw/QqUJh0Fasg5+N1H8N3DrdK4/jiSwlQw5WyHRrJ/najgsLvx3m0q
-hiXv7kaOBXPuKGEi8xyGrxR+jcoGvncJicuE7gFfR/L7Jchj6BwceOWInQM1zLpi
-ceIDljHU3IECvLjnRdgZESzFdMjSgoM756YKCFfA5rbZ5+YHU7Jf0HQ7idiLgJJj
-gyXA9OM4v9RTIFFtbQ2/kAch8QVhyUv/TjrBL9fprCa1LusXkod33zUa26qWBbfC
-v0bLIp0yBJOSKubkXDinqPA2fu6RGDh9h8F2UmNAUrvKaMDSPxuFRKqPCu9QftaX
-fAdwgQsDA5lyBVF9dFUowM63XOpc5Q==
-=Gx97
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQXr78ACgkQAVBC80lX
+0GwhvggAnjMc+pdxTWPFLXElgxvzQBFwoqvSAw8pMnYb8D01Mko1U/L6W30SN4MM
+N8KRzeYgYJrIq/kBEknbhMJSxtJAPs9zMAXzYYjkdmPC8F2nLzbBQkMaro6xEJpP
+WFjudA0yzxB0DtTK++e6aHr/js37Qubxh0kR69mc9rJK71trs7Z+OjYc0oFCfWXC
+E9FSoiChjvgFyAGXhP63RboO+hFxTdKTCiAK59sJoP/rOWfFyt3unNMK1uQVHvmO
+xkRHF6ITgKQMvVF/s+4YLLHmOv984Wa0RHCjhsTyGhZwpIwjKowuU7Eksae8PgRG
+sPADgFN+b5kLrld7vs25G2u8BIIfJA==
+=p4XR
 -----END PGP SIGNATURE-----
 
---Sig_/u9oc98YIT5GZz45tPttyH3e--
+--Sig_/0x8HCvzLhbJihMlPQzTJxu1--

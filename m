@@ -2,47 +2,71 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01A806C23B1
-	for <lists+linux-next@lfdr.de>; Mon, 20 Mar 2023 22:31:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B6616C23B8
+	for <lists+linux-next@lfdr.de>; Mon, 20 Mar 2023 22:32:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230357AbjCTVbC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 20 Mar 2023 17:31:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57610 "EHLO
+        id S230483AbjCTVc1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 20 Mar 2023 17:32:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230366AbjCTVbB (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 20 Mar 2023 17:31:01 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6144305CE;
-        Mon, 20 Mar 2023 14:30:15 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PgSXd58H8z4whr;
-        Tue, 21 Mar 2023 08:28:49 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1679347729;
-        bh=/891SqKTihULGqE584S2ffNFUuwiGnvxePH/HRWK3zA=;
-        h=Date:From:To:Cc:Subject:From;
-        b=DDLANSpHAnflOvMY9ODXLZ3SJnoQ+FofmI3Z3slv1TQ1u3VjB8cRZUihzUDbtRCE4
-         XxSD1bgYF0me3P3Se29fhSXXIEYDSUhYqhx0rFXs8EuyIWYk6OYv+LeiQuWQW6seJy
-         MWXn64VxRMHD2suGJGaasb7nwIq1YVfjCG/X5aFuKfyIBjOW0UgPqAb74cuW/LEvAl
-         19rKKIPywOUkYnP9XJhv0KYGM+c3DsKvr1HLXtDapZVMi79D1KZVQj6VmWT63K6kOa
-         qi8Vws2JgAzZx3gCnUGRaufrsriskkG//GSVU5a34Ytm9RyAvNIimGynO1xLPPIE3e
-         qYhkzshudoPgg==
-Date:   Tue, 21 Mar 2023 08:28:48 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jens Axboe <axboe@kernel.dk>
+        with ESMTP id S230475AbjCTVcZ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 20 Mar 2023 17:32:25 -0400
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 540BC301B7
+        for <linux-next@vger.kernel.org>; Mon, 20 Mar 2023 14:31:37 -0700 (PDT)
+Received: by mail-io1-xd2a.google.com with SMTP id q6so6113626iot.2
+        for <linux-next@vger.kernel.org>; Mon, 20 Mar 2023 14:31:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1679347857;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=cFl6RMvoZ1o/0fkcBGL9q9oP4iImAYwQZJB7vl9W6go=;
+        b=SgViGczq8oVLiTbEQosMBSfkjsTE6pcKCyIpGh7CPyjwFgQMxtgD/7i3AjWprNwTuH
+         D3YMm71PqNeVJ/36zfy6XsKX3hGBS0/51zmXKR1+K3u/4Bh5Y5eUrEz6umuF8O8cB5Ea
+         cHGnNPw/K+lgWEbvHijEd3ONdwlB/jax8Z9A23PJVv67LNage0wnmY0UX13u1lGMV/i7
+         iaBMWoQS8LRyqEQJAe6BKytOPQUyFJ4uzu/bqVmetfnV5Edyu2YPSAt00sQNhE5QNtMT
+         HFPlI6n2OsiFicFX2umGFsNb7CZpbMNpBvgstANjOfHC2jaCqUK2FvTDPi17yt0vLcqi
+         unVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679347857;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=cFl6RMvoZ1o/0fkcBGL9q9oP4iImAYwQZJB7vl9W6go=;
+        b=cHH/y7pggJT8df7BQJpgvMy7bHz8BZs1qAExBpFv6x7pc8NnLT0GMBlS9ZCXybrLZs
+         emCD8VWDSCW6Zls1Q9EtOrRrDYzagJmux05VFxLhNvCrlVU4HDQPCSSlvvNZZDd00wTe
+         OFl28APmk1fZf5Zoi9pycp/61RQaeZNDMwBVS9lmAHAn0kBzOxT2mNljwNWgKKLlT6zs
+         8mpc4tbqUrKsk9phstR93XWUmLo6jwGZ8ky54B09SzS6VuleDEQUVm1hgj8yPerhv69n
+         O1/eMMspsvekOihRdVDObdA3/9XuAFpHP/pgNKWBEUs+xmiODrQSatx0pA1FqCAhx+wF
+         Dxvw==
+X-Gm-Message-State: AO0yUKUiW3qBL0/URBzrZOkZiY7MPQ+qNUUyyzYCUxWBelVIqDWGzIXx
+        EVv5Pcsdl8dbVhEgKrzs4MwA06cPeZk72qaD6RDfXg==
+X-Google-Smtp-Source: AK7set+RLeI2Na9krLh1MuCMBL4O+d8K+aErBKkkVd3FFd38/+GqfFZCG9rE4ZGf5usBW64PAidtyw==
+X-Received: by 2002:a05:6602:2c96:b0:74c:99e8:7f44 with SMTP id i22-20020a0566022c9600b0074c99e87f44mr591794iow.2.1679347856831;
+        Mon, 20 Mar 2023 14:30:56 -0700 (PDT)
+Received: from [192.168.1.94] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id a190-20020a0216c7000000b0040644c4a7a1sm3399122jaa.129.2023.03.20.14.30.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Mar 2023 14:30:56 -0700 (PDT)
+Message-ID: <da44d68e-34d7-40a0-d941-3951be1e56d3@kernel.dk>
+Date:   Mon, 20 Mar 2023 15:30:55 -0600
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: linux-next: Fixes tag needs some work in the block tree
+Content-Language: en-US
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
 Cc:     Keith Busch <kbusch@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the block tree
-Message-ID: <20230321082848.25cfe9a1@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/YhK9Dp1s3M_lAn5DRYLh5Uy";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+References: <20230321082848.25cfe9a1@canb.auug.org.au>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20230321082848.25cfe9a1@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,51 +74,21 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/YhK9Dp1s3M_lAn5DRYLh5Uy
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 3/20/23 3:28 PM, Stephen Rothwell wrote:
+> Hi all,
+> 
+> In commit
+> 
+>   aa939e415c6c ("blk-mq: remove hybrid polling")
+> 
+> Fixes tags
+> 
+>   Fixes: 9650b453a3d4b1, "block: ignore RWF_HIPRI hint for sync dio"
+>   Fixes: d729cf9acb93119, "io_uring: don't sleep when polling for I/O"
 
-Hi all,
+Oops, too much copying. Fixed them up.
 
-In commit
+-- 
+Jens Axboe
 
-  aa939e415c6c ("blk-mq: remove hybrid polling")
 
-Fixes tags
-
-  Fixes: 9650b453a3d4b1, "block: ignore RWF_HIPRI hint for sync dio"
-  Fixes: d729cf9acb93119, "io_uring: don't sleep when polling for I/O"
-
-have these problem(s):
-
-  - missing space between the SHA1 and the subject
-  - Subject does not match target commit subject
-    Just use
-	git log -1 --format=3D'Fixes: %h ("%s")'
-
-So:
-
-Fixes: 9650b453a3d4 ("block: ignore RWF_HIPRI hint for sync dio")
-Fixes: d729cf9acb93 ("io_uring: don't sleep when polling for I/O")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/YhK9Dp1s3M_lAn5DRYLh5Uy
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQY0BAACgkQAVBC80lX
-0GygXAf/Wi59ndcB/sQ5Nw4oaqnzkjCrQeqjY9APFigEtDHNznTLjzEmEUOdUOlu
-0UaJKA/CFTbjGIAGWRNJp4TCddLqvyVpn8mruobUNdDALI9opF8bPaRQ/HX93kDF
-I719LR75jETMZJIRW6LEIFA+BnbXlM5wYZs2gVARJlb5WJJv4i0HQyaovUPgND0L
-sCMuElM4T3W9FVK0ddHc/VJgjO3NEOvH5BykbzY1GzFfiEn/x/zlCr3EpVTDutM5
-FSR1eqiiBTkBVNlgdopuggn6ALtoQBrvzld1tLzHBl6EAwa+JqupNKAxyGKiivlS
-gqRXEvrY02LZBR/ZXyBDXZ7CSkgaog==
-=zfec
------END PGP SIGNATURE-----
-
---Sig_/YhK9Dp1s3M_lAn5DRYLh5Uy--

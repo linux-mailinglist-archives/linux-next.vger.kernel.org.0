@@ -2,47 +2,46 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDE286C0695
-	for <lists+linux-next@lfdr.de>; Mon, 20 Mar 2023 00:26:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CB586C06E4
+	for <lists+linux-next@lfdr.de>; Mon, 20 Mar 2023 01:48:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229541AbjCSX0Y (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 19 Mar 2023 19:26:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44210 "EHLO
+        id S229705AbjCTAsZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 19 Mar 2023 20:48:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbjCSX0X (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 19 Mar 2023 19:26:23 -0400
+        with ESMTP id S229493AbjCTAsY (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 19 Mar 2023 20:48:24 -0400
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FEC718A9D;
-        Sun, 19 Mar 2023 16:26:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7CBA1A651;
+        Sun, 19 Mar 2023 17:48:22 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PfvBh0kMYz4x7v;
-        Mon, 20 Mar 2023 10:26:20 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Pfx1D6mPgz4whr;
+        Mon, 20 Mar 2023 11:48:16 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1679268380;
-        bh=fiRI2j4JNgYg2e5UcM6zUXiHtu7sFp98oVTTEl+NmGM=;
+        s=201702; t=1679273297;
+        bh=QcLIfaZPezFlMCQYfvgh1M5erf9QtnCKDR4foIcR2po=;
         h=Date:From:To:Cc:Subject:From;
-        b=LXjC5bIq5HZUJDV0Q5SMzU5JvtC4zXKuXGiDDY9zxh0YZoMfTpY/zOiNWe/q+zgCz
-         0kHuyZWriNFtGs3ILqjFUPjcWQcX00oX0TKAL7tdWE3shWHtvzUGJ64GrqoJEfKowU
-         qU8/Ce+aOB40DcfAWOvjmNnvgsNc1nHsLcJRJ4V/nZf1xbOXGwwoJX4JavLnkOGLAS
-         03KJFdmBinxITywX/JXleRSQG/QX7V+fmDhyM+HqElNbFYYB/ciM8HJiRAqYXFPdBz
-         TU1rfjjuNrzDaBPS7Gspwgvt3u4GIOCnntrwpNKgmta2C0hBIIPLdK37QBlcCxI7qd
-         kersRLwGqoTaQ==
-Date:   Mon, 20 Mar 2023 10:26:19 +1100
+        b=qeFCgw00UedFknB0zCGwXtTt7IoW/tqT4/e6YsTzkCawbLHo+j1OEHjMdX4dIfpOX
+         UcsQxol3mNPbqopgTqdlzSajwvah/NfrQ1G2VRm/OD1b84j/2CZaCQsOTDVb0IJdQz
+         XaQym/BM+z27evrFdU106svP6d1K490NNtaXEbO11G+gaQO40Tvp5ez+5Y1sJbr2hK
+         ETI2mqeWic3lcahMbvD8M/6khw53BPzVS8Wl424aaZ55WDMiKaBvNMVSKvSfTGQRKZ
+         y5iomJ0DwHmHihzeY9Yq9xwjHCJC28d2IaHEf4q0O2XekMnWc0rCCMdlRpqK9q91zJ
+         E1euUvYzQOM1g==
+Date:   Mon, 20 Mar 2023 11:48:16 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc:     Alexander Lobakin <aleksander.lobakin@intel.com>,
-        bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
+To:     Lee Jones <lee@kernel.org>
+Cc:     Alice Chen <alice_chen@richtek.com>,
+        ChiYuan Huang <cy_huang@richtek.com>,
+        ChiaEn Wu <chiaen_wu@richtek.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the bpf-next tree
-Message-ID: <20230320102619.05b80a98@canb.auug.org.au>
+Subject: linux-next: build failure after merge of the leds-lj tree
+Message-ID: <20230320114816.2abe5751@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/WemvQLbiQPTRyAAQ3uipdGc";
+Content-Type: multipart/signed; boundary="Sig_/isvlHpMjxe2I3lD7Cg4I/iS";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
@@ -53,52 +52,46 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/WemvQLbiQPTRyAAQ3uipdGc
+--Sig_/isvlHpMjxe2I3lD7Cg4I/iS
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the bpf-next tree, today's linux-next build (powerpc
-ppc64_defconfig) failed like this:
+After merging the leds-lj tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-net/bpf/test_run.c: In function 'frame_was_changed':
-net/bpf/test_run.c:224:22: error: 'const struct xdp_page_head' has no membe=
-r named 'frm'; did you mean 'frame'?
-  224 |         return head->frm.data !=3D head->orig_ctx.data ||
-      |                      ^~~
-      |                      frame
-net/bpf/test_run.c:225:22: error: 'const struct xdp_page_head' has no membe=
-r named 'frm'; did you mean 'frame'?
-  225 |                head->frm.flags !=3D head->orig_ctx.flags;
-      |                      ^~~
-      |                      frame
+drivers/leds/rgb/leds-mt6370-rgb.c: In function 'mt6370_check_vendor_info':
+drivers/leds/rgb/leds-mt6370-rgb.c:889:15: error: implicit declaration of f=
+unction 'FIELD_GET' [-Werror=3Dimplicit-function-declaration]
+  889 |         vid =3D FIELD_GET(MT6370_VENDOR_ID_MASK, devinfo);
+      |               ^~~~~~~~~
 
 Caused by commit
 
-  e5995bc7e2ba ("bpf, test_run: fix crashes due to XDP frame overwriting/co=
-rruption")
+  55a8a5c16eb3 ("leds: rgb: mt6370: Add MediaTek MT6370 current sink type L=
+ED Indicator support")
 
-I have used the bpf-next tree from next-20230317 for today.
+I have used the leds-lj tree from next-20230317 for today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/WemvQLbiQPTRyAAQ3uipdGc
+--Sig_/isvlHpMjxe2I3lD7Cg4I/iS
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQXmhsACgkQAVBC80lX
-0GxcUQf+JcY5gyg2PpbRTN7oF+fzPcLL2UCJF+iFiWLewPMOgYvcFuM3lBkGJuQ2
-l6MT3VoSQqO6nGg7Hf0NOgIQQvVJiKUMM6IL8SYe9V2deE/9/cfpIlba12sxuIzM
-FXRgLCfDi9Fiev5DZRwg4JykU/TPQdabQeeYn2FqC71AxVNGNfFcJd5SJ8wzS5hP
-wHc4MYeozuaoqOnCSoAgGpOvlR0oA08ucIIT6D5EujYIzMNV02Clm64ecAk6hI2C
-zcDBLvJWMcWRK+UhmU8HuDs3PXxzRxscmpwwJT9MjYoff1klVdEaVO5AC9Sq7xi1
-P58EsuznZZzK9rtt32z/GD+CG0p1kg==
-=Nw/B
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQXrVAACgkQAVBC80lX
+0Gx3Vwf+MArjrV4EynLd3zfNyIyMIsvFZc4c+/6Ct7ovau0FdQg+CdEPHI+VCouY
+v7tHRJs6z5pk0zNuOPfXq4PjMoKvtmD+oo+vB7KbPenaZFwxDDxsQNfAurjJ2Z7T
+tTDMDCejGAgzJBKaiobKdMNzuH2wm44TvQk56UMJjduv3hp7v2qXMtEgEOBFXur3
+XXIgfctbFhYsfJLKHdIvht6rvk8y6lqxHP16Roc4S97t2x8ujq27Y3ZYFensAqXJ
+3LF4PU71Thk23YEBeYIAfL+DVxlpe6kVWrZw+DPL9HvBLO+0JARN6ZI5VkrriTTx
+idU6xisv8RCLrrhVGQppvWK4nM3inw==
+=m4bJ
 -----END PGP SIGNATURE-----
 
---Sig_/WemvQLbiQPTRyAAQ3uipdGc--
+--Sig_/isvlHpMjxe2I3lD7Cg4I/iS--

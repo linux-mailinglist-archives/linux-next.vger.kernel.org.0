@@ -2,127 +2,79 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1DE06C0842
-	for <lists+linux-next@lfdr.de>; Mon, 20 Mar 2023 02:08:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 988766C0884
+	for <lists+linux-next@lfdr.de>; Mon, 20 Mar 2023 02:31:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231499AbjCTBIQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 19 Mar 2023 21:08:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54826 "EHLO
+        id S230204AbjCTBa7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 19 Mar 2023 21:30:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231136AbjCTBHx (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 19 Mar 2023 21:07:53 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B8251B2D8;
-        Sun, 19 Mar 2023 18:00:03 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PfxFD6GFQz4xFM;
-        Mon, 20 Mar 2023 11:58:40 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1679273921;
-        bh=MI0XYywYczG3K7bOaIATz4F8xLX9bPF1QWo/wnhTVbM=;
-        h=Date:From:To:Cc:Subject:From;
-        b=EjoNjXUaHJYcaGK8LCNq9tx487dNSkl8O22usVQYG7n0BflA6InYfZXvJGRHHdKdx
-         Oq6sXbruo5dECZD6UWRco8/zZCVdiE1GwB2PD+zxv1fBJkmwOHXNB2X+RQVe2pDXnW
-         Sc25u1BlRUZdljNWvAWpfr0G77MZDaYGvhGzu+CBdzAfdr7yKNOGlXnvmAISvIWMLP
-         aDIvqx49U7bRAA23K3GGjW7heGEy+qy1zKIIz6MoNI/ez3SCrhkgQftH3zWDvKmYFV
-         H6H54oBir/bS4cuKb17E1NbKP+BKmSbXvrilENsDomoYkmCkIhbgZUERAXAJ5brTfa
-         og1pGpDOSsmWA==
-Date:   Mon, 20 Mar 2023 11:58:39 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Chanwoo Choi <cw00.choi@samsung.com>, Greg KH <greg@kroah.com>
-Cc:     Bumwoo Lee <bw365.lee@samsung.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        with ESMTP id S229568AbjCTBal (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 19 Mar 2023 21:30:41 -0400
+Received: from mg.richtek.com (mg.richtek.com [220.130.44.152])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 154FB1556A;
+        Sun, 19 Mar 2023 18:23:19 -0700 (PDT)
+X-MailGates: (compute_score:DELIVER,40,3)
+Received: from 192.168.8.21
+        by mg.richtek.com with MailGates ESMTP Server V3.0(2727:0:AUTH_RELAY)
+        (envelope-from <prvs=1442F5243D=cy_huang@richtek.com>); Mon, 20 Mar 2023 09:14:30 +0800 (CST)
+X-MailGates: (compute_score:DELIVER,40,3)
+Received: from 192.168.10.47
+        by mg.richtek.com with MailGates ESMTP Server V5.0(14131:0:AUTH_RELAY)
+        (envelope-from <cy_huang@richtek.com>); Mon, 20 Mar 2023 09:00:51 +0800 (CST)
+Received: from ex4.rt.l (192.168.10.47) by ex4.rt.l (192.168.10.47) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.25; Mon, 20 Mar
+ 2023 09:00:50 +0800
+Received: from linuxcarl2.richtek.com (192.168.10.154) by ex4.rt.l
+ (192.168.10.45) with Microsoft SMTP Server id 15.2.1118.25 via Frontend
+ Transport; Mon, 20 Mar 2023 09:00:50 +0800
+Date:   Mon, 20 Mar 2023 09:00:50 +0800
+From:   ChiYuan Huang <cy_huang@richtek.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+CC:     Lee Jones <lee@kernel.org>, Alice Chen <alice_chen@richtek.com>,
+        ChiaEn Wu <chiaen_wu@richtek.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the extcon tree with the driver-core
- tree
-Message-ID: <20230320115839.5e645bb0@canb.auug.org.au>
+Subject: Re: linux-next: build failure after merge of the leds-lj tree
+Message-ID: <20230320010050.GA23894@linuxcarl2.richtek.com>
+References: <20230320114816.2abe5751@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/0x8HCvzLhbJihMlPQzTJxu1";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230320114816.2abe5751@canb.auug.org.au>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/0x8HCvzLhbJihMlPQzTJxu1
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Mon, Mar 20, 2023 at 11:48:16AM +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the leds-lj tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+> 
+> drivers/leds/rgb/leds-mt6370-rgb.c: In function 'mt6370_check_vendor_info':
+> drivers/leds/rgb/leds-mt6370-rgb.c:889:15: error: implicit declaration of function 'FIELD_GET' [-Werror=implicit-function-declaration]
+>   889 |         vid = FIELD_GET(MT6370_VENDOR_ID_MASK, devinfo);
+>       |               ^~~~~~~~~
+> 
+> Caused by commit
+> 
+>   55a8a5c16eb3 ("leds: rgb: mt6370: Add MediaTek MT6370 current sink type LED Indicator support")
+> 
+> I have used the leds-lj tree from next-20230317 for today.
+>
+Already sent the patch.
+https://lore.kernel.org/lkml/1679067760-19098-1-git-send-email-cy_huang@richtek.com/ 
 
-Hi all,
+Wait for reviewing.
+> -- 
+> Cheers,
+> Stephen Rothwell
 
-Today's linux-next merge of the extcon tree got a conflict in:
 
-  drivers/extcon/extcon.c
-
-between commit:
-
-  1aaba11da9aa ("driver core: class: remove module * from class_create()")
-
-from the driver-core tree and commit:
-
-  6384c02f33a9 ("extcon: Remove redundant null checking for class")
-
-from the extcon tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc drivers/extcon/extcon.c
-index d43ba8e7260d,adcf01132f70..000000000000
---- a/drivers/extcon/extcon.c
-+++ b/drivers/extcon/extcon.c
-@@@ -1012,12 -1012,13 +1012,13 @@@ ATTRIBUTE_GROUPS(extcon)
- =20
-  static int create_extcon_class(void)
-  {
-- 	if (!extcon_class) {
-- 		extcon_class =3D class_create("extcon");
-- 		if (IS_ERR(extcon_class))
-- 			return PTR_ERR(extcon_class);
-- 		extcon_class->dev_groups =3D extcon_groups;
-- 	}
-+ 	if (extcon_class)
-+ 		return 0;
-+=20
- -	extcon_class =3D class_create(THIS_MODULE, "extcon");
-++	extcon_class =3D class_create("extcon");
-+ 	if (IS_ERR(extcon_class))
-+ 		return PTR_ERR(extcon_class);
-+ 	extcon_class->dev_groups =3D extcon_groups;
- =20
-  	return 0;
-  }
-
---Sig_/0x8HCvzLhbJihMlPQzTJxu1
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQXr78ACgkQAVBC80lX
-0GwhvggAnjMc+pdxTWPFLXElgxvzQBFwoqvSAw8pMnYb8D01Mko1U/L6W30SN4MM
-N8KRzeYgYJrIq/kBEknbhMJSxtJAPs9zMAXzYYjkdmPC8F2nLzbBQkMaro6xEJpP
-WFjudA0yzxB0DtTK++e6aHr/js37Qubxh0kR69mc9rJK71trs7Z+OjYc0oFCfWXC
-E9FSoiChjvgFyAGXhP63RboO+hFxTdKTCiAK59sJoP/rOWfFyt3unNMK1uQVHvmO
-xkRHF6ITgKQMvVF/s+4YLLHmOv984Wa0RHCjhsTyGhZwpIwjKowuU7Eksae8PgRG
-sPADgFN+b5kLrld7vs25G2u8BIIfJA==
-=p4XR
------END PGP SIGNATURE-----
-
---Sig_/0x8HCvzLhbJihMlPQzTJxu1--

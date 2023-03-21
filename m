@@ -2,93 +2,97 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C99FF6C2418
-	for <lists+linux-next@lfdr.de>; Mon, 20 Mar 2023 22:50:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 263B66C2690
+	for <lists+linux-next@lfdr.de>; Tue, 21 Mar 2023 01:54:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229473AbjCTVug (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 20 Mar 2023 17:50:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34870 "EHLO
+        id S229524AbjCUAyY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 20 Mar 2023 20:54:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjCTVuf (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 20 Mar 2023 17:50:35 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D70C28852;
-        Mon, 20 Mar 2023 14:50:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679349034; x=1710885034;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=LeAa6DuhRYRCQma2nsqwLazbP8SFz0u7Pm23olEi4bk=;
-  b=VTGv69ck+rYQlrNEo92h3S78EfYhYK3yljtdWO9D90PYf7TnBnjs8jip
-   90cD0OhuCRPZ5YFygM7ADc54NCyqQEitryyRsmHHygk+Jy8rx31j7f327
-   E5z6NpBMHNCzNGypo/zu6Qz0hO2hrORIpjQOWRM9BbSstp9gjWEghNlg4
-   3YORwDIiCerbhU2coN00zTUwgz4eRIHJD478Wp0jb7KTq+XqyGVSsB77b
-   zMwCZgxLQVn9e51YV+hnEM61MS+fmij0N3P4NTR0VP2V0Q1xwn8WGSKNc
-   6escV54l1U0MZYZuvfBsk34diQUgU0x6Bvj0QqpQRv3cB+CHZnQTvFmm6
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="403660032"
-X-IronPort-AV: E=Sophos;i="5.98,276,1673942400"; 
-   d="scan'208";a="403660032"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 14:50:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="745566166"
-X-IronPort-AV: E=Sophos;i="5.98,276,1673942400"; 
-   d="scan'208";a="745566166"
-Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 14:50:32 -0700
-Received: from kekkonen.localdomain (localhost [IPv6:::1])
-        by kekkonen.fi.intel.com (Postfix) with SMTP id 68BE212160F;
-        Mon, 20 Mar 2023 23:50:29 +0200 (EET)
-Date:   Mon, 20 Mar 2023 23:50:29 +0200
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        with ESMTP id S229497AbjCUAyX (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 20 Mar 2023 20:54:23 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F9C534007;
+        Mon, 20 Mar 2023 17:54:21 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PgY5g4jd9z4x80;
+        Tue, 21 Mar 2023 11:54:15 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1679360056;
+        bh=S0dRr7aWTlOpD1xt7LZSTRtV8AEzS+uBW3ImPemQflM=;
+        h=Date:From:To:Cc:Subject:From;
+        b=cRRH1Yfxxk+nvxPAUbuRC6fXG3rVHpKJuZzzXd4smjbTIgjuI0tNaKPGX0X9I2fyW
+         44+qkXwxTrce9569TxeGXbNj4Y5o8Pj2+jmPp7kbwjQf0j3q3LqwAGHoXmVjviTHej
+         7AYYu5T7wCzYukfXTPI7Mf2sa5mH1KKoyjxWx2WQgVI9wHrlikzebUTDo8gB6V8yiL
+         Q8TBHNZLAIkIN9xz6w1f81WzsliIutKGVR24CECdhhP3fZsAx0+7YECqJvOsDxYu9m
+         AeI68yV4+Fq8D0VD8lVXCgzhDZjvPEMCOvDjrSC9q95bVGBYouxqRYz73MPsiyLJ4E
+         q7pKMP+6UrNng==
+Date:   Tue, 21 Mar 2023 11:54:13 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     James Bottomley <James.Bottomley@HansenPartnership.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Fixes tag needs some work in the v4l-dvb-next tree
-Message-ID: <ZBjVJeynfimHknol@kekkonen.localdomain>
-References: <20230321082344.6250cfc6@canb.auug.org.au>
+Subject: linux-next: build failure after merge of the tpmdd tree
+Message-ID: <20230321115413.106fa139@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230321082344.6250cfc6@canb.auug.org.au>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/H4+CtQroBqnlXTlSJkZl4o=";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Stephen,
+--Sig_/H4+CtQroBqnlXTlSJkZl4o=
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Mar 21, 2023 at 08:23:44AM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> In commit
-> 
->   71937240a472 ("media: ov2685: Select VIDEO_V4L2_SUBDEV_API")
-> 
-> Fixes tag
-> 
->   Fixes: ("media: i2c: ov2685: Add .get_selection() support")
-> 
-> has these problem(s):
-> 
->   - No SHA1 recognised
-> 
-> Maybe you meant
-> 
-> Fixes: 859128ab6f0f ("media: i2c: ov2685: Add .get_selection() support")
+Hi all,
 
-Yes. So far at least. I'm not sure if the commit id might still change when
-it gets to media tree master.
+After merging the tpmdd tree, today's linux-next build (arm
+multi_v7_defconfig) failed like this:
 
--- 
-Kind regards,
+drivers/char/tpm/tpm-chip.c: In function 'tpm_amd_is_rng_defective':
+drivers/char/tpm/tpm-chip.c:531:15: error: too many arguments to function '=
+tpm_request_locality'
+  531 |         ret =3D tpm_request_locality(chip, 0);
+      |               ^~~~~~~~~~~~~~~~~~~~
+drivers/char/tpm/tpm-chip.c:35:12: note: declared here
+   35 | static int tpm_request_locality(struct tpm_chip *chip)
+      |            ^~~~~~~~~~~~~~~~~~~~
 
-Sakari Ailus
+Caused by commit
+
+  923c8dfa9a36 ("tpm: fix build break in tpm-chip.c caused by AMD fTPM quir=
+k")
+
+I have used the tmpdd tree from next-20230320 for today.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/H4+CtQroBqnlXTlSJkZl4o=
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQZADUACgkQAVBC80lX
+0GwgIAf/a+5AHKX5Utrvn5hF87Cd93QR2/YCLz44lnQketHZet+bZZZxDUXUAs4B
+y/ur2zEdHhaViWyjwKF2AA44YP/e4bCm4fJId45gwdKEPfjMrSsaZiDeT+Gh/3kQ
+Io/TNpPa1ueVZB1aDJpSgRNYgeZDxE5uHbq2cS6VnuHz2UWGC3FlFxCwjv4mUhNv
+SAkLBsZfoKjZUVPKcOdx1NY6qinq9AIvbQ0gRFrGz77D1BNnPbC7y0UdZ6MzzwJd
+PuA+0+xhvc/WkQwtJlf7+G+axjrXmwNl7ZTnJYEt8d8uYOl2qr1IYF7ctB+pSNbD
+coHe5VVKVwtcRAOOaw1ViqyuMbi+FQ==
+=jGn4
+-----END PGP SIGNATURE-----
+
+--Sig_/H4+CtQroBqnlXTlSJkZl4o=--

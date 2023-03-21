@@ -2,211 +2,1510 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7C386C2DCD
-	for <lists+linux-next@lfdr.de>; Tue, 21 Mar 2023 10:27:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A47696C2E3D
+	for <lists+linux-next@lfdr.de>; Tue, 21 Mar 2023 10:51:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229552AbjCUJ1N (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 21 Mar 2023 05:27:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56116 "EHLO
+        id S229993AbjCUJvI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 21 Mar 2023 05:51:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229847AbjCUJ1M (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 21 Mar 2023 05:27:12 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF66938647;
-        Tue, 21 Mar 2023 02:27:09 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 3437F1FD70;
-        Tue, 21 Mar 2023 09:27:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1679390828; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/4Dmz7Bb/7dAmw2gWDTZ7maJ57hvgvn0ocBbIsC0u20=;
-        b=snyS7ZytyXxk6w97GzVO+ZAS316Z2I8mwCMJ8jRQTClZhFqzyGzYuVuaOQ5m4m5fS9465P
-        VGlI4PmLvf34pb3pDbOHbdVZs8TIqslzZyAl2Bw3BZXW6uKiNH+RezMPZE7UI8X6t04Non
-        oFz8WZ1f/O8sPkGRK/d4gpibBDYOmTk=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 6E63A2C141;
-        Tue, 21 Mar 2023 09:27:05 +0000 (UTC)
-Date:   Tue, 21 Mar 2023 10:27:02 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        lkft-triage@lists.linaro.org, linux-mm <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>
-Subject: Re: next-20230321: arm64: Unable to handle kernel paging request at
- virtual address
-Message-ID: <ZBl4Zi03pzURXkD9@alley>
-References: <CA+G9fYsTk0GPOTEMm1KG2iJvMLG0SqUfG0JSenRYFHuOQTpuxw@mail.gmail.com>
+        with ESMTP id S229866AbjCUJvF (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 21 Mar 2023 05:51:05 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B32F42E0C9
+        for <linux-next@vger.kernel.org>; Tue, 21 Mar 2023 02:50:54 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id kq3so3020323plb.13
+        for <linux-next@vger.kernel.org>; Tue, 21 Mar 2023 02:50:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112; t=1679392254;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=OPDrqvveuVs2cKY9yVx5e9GlIXXkl35IDf4aFNEJInE=;
+        b=SOCOCVbzgm1Uxen3On5AzUWYBRUxuZTSL8lX0d1wlUXuDRU7fKC4H4oESzcyQty/8a
+         vVSjXyi7kqu6dL0Netb7FN7tf6XLcKlo4/JbNBYXiJRAbVM/gHY8BFBeWZw3p6Wy7OKh
+         ddDCALLPedrJzW4fkBSiibMSJVgPndOzVfnJwFFEkjFFzcGZ4mSRZgEYX614c7kLueIq
+         iC7KEKga9IA5oXiW/OBohh2gNdM9KS5MhMDYq5UinZ4NkxEq+L+yL4bH6s5FC1Mko5is
+         BYOM5GjNo/zHAYtEQ0wwDINcqtYgPFY8mYU3mCRIXqL/5+2zE+us51xGAUoV5mKclBaS
+         L67A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679392254;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OPDrqvveuVs2cKY9yVx5e9GlIXXkl35IDf4aFNEJInE=;
+        b=euwc81Ud5+tYNYkz0XmG3WGFrprOEMLmqzZE0aIqX1vw4HC5zsoywgGMAuy6Ol/dYE
+         RIdsp2ZZ+8GWwcGO2UxjoKAfXh07MjOt/m7nRU1wxqt9PS18Ckdfq+l59r1pp19x/6FX
+         eYyO5OuE50Dxk2Hb5mPlUZ/0b1pIV8Yf/Ps7HCbpCjp2sIp1nj7DJkT8lWmlC7w0Jfoc
+         zRLLKCSadt8g59jvWifNJC4ZEdj1s2iimTtZCsdd7M3/yAcCkhYj8uN2B037EcG/3ZK7
+         c/GAnuocmKkfW8sUySYdp09aDJp3O78Ly8OYlyR1nBTg4pC4/SOkOQOTxhNk6r4H5Si3
+         FQvQ==
+X-Gm-Message-State: AO0yUKWqXf+3PjrjLLS4rfhaG3wvif68qgtl0u2ve+Z3TGSCWa0XVFEh
+        n8BR8NQd/JfrlEYlnQ46h+zo2c/vnGmEe06OTkgWdA==
+X-Google-Smtp-Source: AK7set9w2zQWnK0+7cgMC1PXoIJqVIv7XqgnKaLfEH/MNx6waoVw/w9haOjUNwDAuZdZLpzRbkaXyQ==
+X-Received: by 2002:a17:902:e806:b0:19b:afb:b92e with SMTP id u6-20020a170902e80600b0019b0afbb92emr1649450plg.40.1679392252989;
+        Tue, 21 Mar 2023 02:50:52 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id o12-20020a1709026b0c00b001a1a9a5e53fsm7928246plk.136.2023.03.21.02.50.52
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Mar 2023 02:50:52 -0700 (PDT)
+Message-ID: <64197dfc.170a0220.bbb3f.d27a@mx.google.com>
+Date:   Tue, 21 Mar 2023 02:50:52 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+G9fYsTk0GPOTEMm1KG2iJvMLG0SqUfG0JSenRYFHuOQTpuxw@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: master
+X-Kernelci-Tree: next
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: next-20230321
+Subject: next/master build: 197 builds: 10 failed, 187 passed, 113 errors,
+ 24 warnings (next-20230321)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi,
+next/master build: 197 builds: 10 failed, 187 passed, 113 errors, 24 warnin=
+gs (next-20230321)
 
-I add Luis into Cc.
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20230321/
 
-On Tue 2023-03-21 11:42:56, Naresh Kamboju wrote:
-> The following kernel crash was noticed on arm64 Juno-r2 and Raspberry Pi 4
-> Model B on Linux next-20230321.
-> 
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> 
-> log:
-> ----
-> [    3.071500] Unable to handle kernel paging request at virtual
-> address 0000000000001000
+Tree: next
+Branch: master
+Git Describe: next-20230321
+Git Commit: f3594f0204b756638267242e26d9de611435c3ba
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Built: 8 unique architectures
 
-I guess that this is exactly PAGE_SIZE (4k).
+Build Failures Detected:
 
-> [    3.079432] Mem abort info:
-> [    3.082225]   ESR = 0x0000000096000004
-> [    3.085977]   EC = 0x25: DABT (current EL), IL = 32 bits
-> [    3.091295]   SET = 0, FnV = 0
-> [    3.094350]   EA = 0, S1PTW = 0
-> [    3.097491]   FSC = 0x04: level 0 translation fault
-> [    3.102373] Data abort info:
-> [    3.105252]   ISV = 0, ISS = 0x00000004
-> [    3.109089]   CM = 0, WnR = 0
-> [    3.112055] [0000000000001000] user address but active_mm is swapper
-> [    3.114230] usb 1-1: new high-speed USB device number 2 using ehci-platform
-> [    3.118418] Internal error: Oops: 0000000096000004 [#1] PREEMPT SMP
-> [    3.118426] Modules linked in:
-> [    3.134717] CPU: 1 PID: 1 Comm: swapper/0 Not tainted
-> 6.3.0-rc3-next-20230321 #1
-> [    3.142126] Hardware name: ARM Juno development board (r2) (DT)
-> [    3.148052] pstate: 000000c5 (nzcv daIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> [    3.155027] pc : string (lib/vsprintf.c:644 lib/vsprintf.c:726)
-> [    3.158443] lr : vsnprintf (lib/vsprintf.c:2817)
-> [    3.162196] sp : ffff80000b34b8f0
-> [    3.165511] x29: ffff80000b34b8f0 x28: ffff800009d7b1ca x27: ffff80000b34bab0
-> [    3.172666] x26: ffff800009d7b1ca x25: 0000000000000020 x24: 0000000000000008
-> [    3.179820] x23: 00000000ffffffd8 x22: ffff8000099858a0 x21: ffff80000b34bc30
-> [    3.186973] x20: ffff80000b34ba90 x19: ffff80000b34ba98 x18: 000000003c98bfdd
-> [    3.194127] x17: 000000000000001c x16: 00000000eec48da2 x15: 00000000a9dbdd17
-> [    3.201280] x14: ffff80000b0242e8 x13: 0000000057a049ef x12: 00000000cfa47237
-> [    3.208433] x11: 0000000000000001 x10: 00000000bd5b8780 x9 : ffff80000812cbec
-> [    3.215586] x8 : 00000000ffffffff x7 : 0000000000000002 x6 : ffff80000b34ba98
-> [    3.222739] x5 : ffffffffffffffff x4 : 0000000000000000 x3 : ffff0a00ffffff04
-> [    3.229891] x2 : 0000000000001000 x1 : 0000000000000000 x0 : ffff80000b34bab0
-> [    3.237044] Call trace:
-> [    3.239489] string (lib/vsprintf.c:644 lib/vsprintf.c:726)
+arc:
+    haps_hs_smp_defconfig+kselftest: (gcc-10) FAIL
 
-This is the line where vsprintf() reads a string to be printed:
+arm64:
+    allmodconfig: (clang-17) FAIL
 
-static char *string_nocheck(char *buf, char *end, const char *s,
-			    struct printf_spec spec)
-{
-	int len = 0;
-	int lim = spec.precision;
+arm:
+    aspeed_g5_defconfig: (clang-17) FAIL
+    aspeed_g4_defconfig: (gcc-10) FAIL
+    aspeed_g5_defconfig: (gcc-10) FAIL
+    imxrt_defconfig: (gcc-10) FAIL
+    rpc_defconfig: (gcc-10) FAIL
 
-	while (lim--) {
----->		char c = *s++;
+i386:
+    allmodconfig: (clang-17) FAIL
 
+mips:
+    32r2el_defconfig+debug: (gcc-10) FAIL
+    decstation_64_defconfig: (gcc-10) FAIL
 
-> [    3.242551] vsnprintf (lib/vsprintf.c:2817)
-> [    3.245954] vprintk_store (kernel/printk/printk.c:2200)
-> [    3.249712] vprintk_emit (kernel/printk/printk.c:2297)
-> [    3.253381] vprintk_default (kernel/printk/printk.c:2328)
-> [    3.257137] vprintk (kernel/printk/printk_safe.c:50)
-> [    3.260198] _printk (kernel/printk/printk.c:2341)
-> [    3.263257] sysctl_err (fs/proc/proc_sysctl.c:1109)
-> [    3.266577] __register_sysctl_table (fs/proc/proc_sysctl.c:1140
-> fs/proc/proc_sysctl.c:1383)
-> [    3.271202] __register_sysctl_init (fs/proc/proc_sysctl.c:1462)
+Errors and Warnings Detected:
 
-The has been done some reractoring/modification of this code
-by the patchset ("[PATCH 00/11] sysctl: deprecate
-register_sysctl_paths()"), see
-https://lore.kernel.org/lkml/20230302202826.776286-1-mcgrof@kernel.org/
+arc:
+    haps_hs_smp_defconfig+kselftest (gcc-10): 1 error
 
-Luis, does it trigger any bell, please?
-Do you have an idea where this code could pass a pointer PAGE_SIZE
-as string to printk("%s")?
+arm64:
+    allmodconfig (clang-17): 1 error, 1 warning
 
-Best Regards,
-Petr
+arm:
+    aspeed_g4_defconfig (gcc-10): 28 errors, 1 warning
+    aspeed_g5_defconfig (clang-17): 20 errors, 2 warnings
+    aspeed_g5_defconfig (gcc-10): 28 errors, 1 warning
+    imxrt_defconfig (gcc-10): 28 errors, 1 warning
+    mps2_defconfig (gcc-10): 2 warnings
+    rpc_defconfig (gcc-10): 2 errors
 
-> [    3.275569] memory_failure_sysctl_init (mm/memory-failure.c:152)
-> [    3.280281] do_one_initcall (init/main.c:1306)
-> [    3.280453] hub 1-1:1.0: USB hub found
-> [    3.284123] kernel_init_freeable (init/main.c:1378 init/main.c:1395
-> init/main.c:1414 init/main.c:1634)
-> [    3.284133] kernel_init (init/main.c:1526)
-> [    3.288246] hub 1-1:1.0: 4 ports detected
-> [    3.292239] ret_from_fork (arch/arm64/kernel/entry.S:871)
-> [ 3.292250] Code: 91000400 110004e1 eb08009f 540000c0 (38646845)
-> All code
-> ========
->    0:* 00 04 00              add    %al,(%rax,%rax,1) <-- trapping instruction
->    3: 91                    xchg   %eax,%ecx
->    4: e1 04                loope  0xa
->    6: 00 11                add    %dl,(%rcx)
->    8: 9f                    lahf
->    9: 00 08                add    %cl,(%rax)
->    b: eb c0                jmp    0xffffffffffffffcd
->    d: 00 00                add    %al,(%rax)
->    f: 54                    push   %rsp
->   10: 45                    rex.RB
->   11: 68                    .byte 0x68
->   12: 64                    fs
->   13: 38                    .byte 0x38
-> 
-> Code starting with the faulting instruction
-> ===========================================
->    0: 45                    rex.RB
->    1: 68                    .byte 0x68
->    2: 64                    fs
->    3: 38                    .byte 0x38
-> [    3.309416] ---[ end trace 0000000000000000 ]---
-> [    3.314037] note: swapper/0[1] exited with irqs disabled
-> [    3.319392] Kernel panic - not syncing: Attempted to kill init!
-> exitcode=0x0000000b
-> [    3.327060] SMP: stopping secondary CPUs
-> [    3.331189] Kernel Offset: disabled
-> [    3.334678] CPU features: 0x400002,0c3c0400,0000421b
-> [    3.339649] Memory Limit: none
-> [    3.342708] ---[ end Kernel panic - not syncing: Attempted to kill
-> init! exitcode=0x0000000b ]---
-> 
-> links:
-> ----
->  - https://qa-reports.linaro.org/lkft/linux-next-master-sanity/build/next-20230321/testrun/15765295/suite/log-parser-test/tests/
->  - https://qa-reports.linaro.org/lkft/linux-next-master-sanity/build/next-20230321/testrun/15765168/suite/log-parser-test/tests/
->  - https://qa-reports.linaro.org/lkft/linux-next-master-sanity/build/next-20230321/testrun/15765168/suite/log-parser-test/test/check-kernel-panic/details/
-> 
-> metadata:
->   git_ref: master
->   git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
->   git_sha: f3594f0204b756638267242e26d9de611435c3ba
->   git_describe: next-20230321
->   kernel_version: 6.3.0-rc3
->   kernel-config:
-> https://storage.tuxsuite.com/public/linaro/lkft/builds/2NJ83YzjXEfP00u1LgnjMjjZfxo/config
->   build-url: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next/-/pipelines/812627412/
->   artifact-location:
-> https://storage.tuxsuite.com/public/linaro/lkft/builds/2NJ83YzjXEfP00u1LgnjMjjZfxo
->   toolchain: gcc-11
-> 
-> 
-> --
-> Linaro LKFT
-> https://lkft.linaro.org
+i386:
+    allmodconfig (clang-17): 1 error, 1 warning
+
+mips:
+    fuloong2e_defconfig (gcc-10): 1 error
+    lemote2f_defconfig (gcc-10): 1 error
+    loongson2k_defconfig (gcc-10): 1 error
+    loongson3_defconfig (gcc-10): 1 error
+
+riscv:
+
+sparc:
+    allnoconfig (gcc-10): 1 warning
+    sparc32_defconfig (gcc-10): 2 warnings
+    sparc64_defconfig (gcc-10): 4 warnings
+    sparc64_defconfig+debug (gcc-10): 2 warnings
+    sparc64_defconfig+kselftest (gcc-10): 2 warnings
+    tinyconfig (gcc-10): 1 warning
+
+x86_64:
+    x86_64_defconfig+kselftest (rustc-1.62): 3 warnings
+
+Errors summary:
+
+    63   include/linux/rculist.h:393:27: error: invalid use of undefined ty=
+pe =E2=80=98struct module=E2=80=99
+    16   kernel/bpf/../module/internal.h:205:2: error: incomplete definitio=
+n of type 'struct module'
+    6    include/linux/stddef.h:16:32: error: invalid use of undefined type=
+ =E2=80=98struct module=E2=80=99
+    6    include/linux/container_of.h:20:47: error: invalid use of undefine=
+d type =E2=80=98struct module=E2=80=99
+    6    ./../include/linux/compiler_types.h:338:27: error: expression in s=
+tatic assertion is not an integer
+    4    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=
+=80=98-mhard-float=E2=80=99
+    3    include/linux/rculist.h:392:7: error: invalid use of undefined typ=
+e =E2=80=98struct module=E2=80=99
+    2    drivers/gpu/drm/rockchip/rockchip_drm_vop2.c:2322:8: error: variab=
+le 'possible_crtcs' is used uninitialized whenever 'if' condition is false =
+[-Werror,-Wsometimes-uninitialized]
+    1    net/bpfilter/main.c:3:10: fatal error: sys/uio.h: No such file or =
+directory
+    1    kernel/bpf/../module/internal.h:205:2: error: operand of type 'voi=
+d' where arithmetic or pointer type is required
+    1    kernel/bpf/../module/internal.h:205:2: error: offsetof of incomple=
+te type 'typeof (*mod)' (aka 'struct module')
+    1    kernel/bpf/../module/internal.h:205:2: error: assigning to 'struct=
+ module *' from incompatible type 'void'
+    1    fatal error: too many errors emitted, stopping now [-ferror-limit=
+=3D]
+    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=
+=3D0x'
+    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=
+=3D0x'
+
+Warnings summary:
+
+    10   <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+    3    kernel/bpf/../module/internal.h:94:58: warning: =E2=80=98enum mod_=
+mem_type=E2=80=99 declared inside parameter list will not be visible outsid=
+e of this definition or declaration
+    2    drivers/gpu/drm/rockchip/rockchip_drm_vop2.c:2304:21: note: initia=
+lize the variable 'possible_crtcs' to silence this warning
+    2    WARNING: unmet direct dependencies detected for RPCSEC_GSS_KRB5
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    1    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x3e: relocation to=
+ !ENDBR: .text+0x140856
+    1    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x28: relocation to=
+ !ENDBR: .text+0x1409cb
+    1    vmlinux.o: warning: objtool: lkdtm_UNSET_SMEP+0xcc: relocation to =
+!ENDBR: native_write_cr4+0x4
+    1    kernel/bpf/../module/internal.h:94:58: warning: declaration of 'en=
+um mod_mem_type' will not be visible outside of this function [-Wvisibility]
+    1    1 warning and 20 errors generated.
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig+debug (mips, gcc-10) =E2=80=94 FAIL, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig+kselftest (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warni=
+ngs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm64, clang-17) =E2=80=94 FAIL, 1 error, 1 warning, 0 sectio=
+n mismatches
+
+Errors:
+    drivers/gpu/drm/rockchip/rockchip_drm_vop2.c:2322:8: error: variable 'p=
+ossible_crtcs' is used uninitialized whenever 'if' condition is false [-Wer=
+ror,-Wsometimes-uninitialized]
+
+Warnings:
+    drivers/gpu/drm/rockchip/rockchip_drm_vop2.c:2304:21: note: initialize =
+the variable 'possible_crtcs' to silence this warning
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (i386, clang-17) =E2=80=94 FAIL, 1 error, 1 warning, 0 section=
+ mismatches
+
+Errors:
+    drivers/gpu/drm/rockchip/rockchip_drm_vop2.c:2322:8: error: variable 'p=
+ossible_crtcs' is used uninitialized whenever 'if' condition is false [-Wer=
+ror,-Wsometimes-uninitialized]
+
+Warnings:
+    drivers/gpu/drm/rockchip/rockchip_drm_vop2.c:2304:21: note: initialize =
+the variable 'possible_crtcs' to silence this warning
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
+mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+am200epdkit_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+ar7_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g4_defconfig (arm, gcc-10) =E2=80=94 FAIL, 28 errors, 1 warning, 0 s=
+ection mismatches
+
+Errors:
+    include/linux/container_of.h:20:47: error: invalid use of undefined typ=
+e =E2=80=98struct module=E2=80=99
+    ./../include/linux/compiler_types.h:338:27: error: expression in static=
+ assertion is not an integer
+    include/linux/stddef.h:16:32: error: invalid use of undefined type =E2=
+=80=98struct module=E2=80=99
+    include/linux/rculist.h:392:7: error: invalid use of undefined type =E2=
+=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/container_of.h:20:47: error: invalid use of undefined typ=
+e =E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    ./../include/linux/compiler_types.h:338:27: error: expression in static=
+ assertion is not an integer
+    include/linux/stddef.h:16:32: error: invalid use of undefined type =E2=
+=80=98struct module=E2=80=99
+
+Warnings:
+    kernel/bpf/../module/internal.h:94:58: warning: =E2=80=98enum mod_mem_t=
+ype=E2=80=99 declared inside parameter list will not be visible outside of =
+this definition or declaration
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, clang-17) =E2=80=94 FAIL, 20 errors, 2 warnings, =
+0 section mismatches
+
+Errors:
+    kernel/bpf/../module/internal.h:205:2: error: incomplete definition of =
+type 'struct module'
+    kernel/bpf/../module/internal.h:205:2: error: offsetof of incomplete ty=
+pe 'typeof (*mod)' (aka 'struct module')
+    kernel/bpf/../module/internal.h:205:2: error: assigning to 'struct modu=
+le *' from incompatible type 'void'
+    kernel/bpf/../module/internal.h:205:2: error: incomplete definition of =
+type 'struct module'
+    kernel/bpf/../module/internal.h:205:2: error: incomplete definition of =
+type 'struct module'
+    kernel/bpf/../module/internal.h:205:2: error: incomplete definition of =
+type 'struct module'
+    kernel/bpf/../module/internal.h:205:2: error: incomplete definition of =
+type 'struct module'
+    kernel/bpf/../module/internal.h:205:2: error: incomplete definition of =
+type 'struct module'
+    kernel/bpf/../module/internal.h:205:2: error: incomplete definition of =
+type 'struct module'
+    kernel/bpf/../module/internal.h:205:2: error: incomplete definition of =
+type 'struct module'
+    kernel/bpf/../module/internal.h:205:2: error: incomplete definition of =
+type 'struct module'
+    kernel/bpf/../module/internal.h:205:2: error: incomplete definition of =
+type 'struct module'
+    kernel/bpf/../module/internal.h:205:2: error: operand of type 'void' wh=
+ere arithmetic or pointer type is required
+    kernel/bpf/../module/internal.h:205:2: error: incomplete definition of =
+type 'struct module'
+    kernel/bpf/../module/internal.h:205:2: error: incomplete definition of =
+type 'struct module'
+    kernel/bpf/../module/internal.h:205:2: error: incomplete definition of =
+type 'struct module'
+    kernel/bpf/../module/internal.h:205:2: error: incomplete definition of =
+type 'struct module'
+    kernel/bpf/../module/internal.h:205:2: error: incomplete definition of =
+type 'struct module'
+    kernel/bpf/../module/internal.h:205:2: error: incomplete definition of =
+type 'struct module'
+    fatal error: too many errors emitted, stopping now [-ferror-limit=3D]
+
+Warnings:
+    kernel/bpf/../module/internal.h:94:58: warning: declaration of 'enum mo=
+d_mem_type' will not be visible outside of this function [-Wvisibility]
+    1 warning and 20 errors generated.
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, gcc-10) =E2=80=94 FAIL, 28 errors, 1 warning, 0 s=
+ection mismatches
+
+Errors:
+    include/linux/container_of.h:20:47: error: invalid use of undefined typ=
+e =E2=80=98struct module=E2=80=99
+    ./../include/linux/compiler_types.h:338:27: error: expression in static=
+ assertion is not an integer
+    include/linux/stddef.h:16:32: error: invalid use of undefined type =E2=
+=80=98struct module=E2=80=99
+    include/linux/rculist.h:392:7: error: invalid use of undefined type =E2=
+=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/container_of.h:20:47: error: invalid use of undefined typ=
+e =E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    ./../include/linux/compiler_types.h:338:27: error: expression in static=
+ assertion is not an integer
+    include/linux/stddef.h:16:32: error: invalid use of undefined type =E2=
+=80=98struct module=E2=80=99
+
+Warnings:
+    kernel/bpf/../module/internal.h:94:58: warning: =E2=80=98enum mod_mem_t=
+ype=E2=80=99 declared inside parameter list will not be visible outside of =
+this definition or declaration
+
+---------------------------------------------------------------------------=
+-----
+assabet_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+at91_dt_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ath25_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ath79_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+axm55xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+axs103_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+axs103_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm2835_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm47xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm63xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+bigsur_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bmips_be_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+bmips_stb_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cavium_octeon_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+ci20_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+cobalt_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+collie_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+cu1000-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cu1830-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+davinci_all_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+db1xxx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+decstation_64_defconfig (mips, gcc-10) =E2=80=94 FAIL, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+decstation_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+decstation_r4k_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, clang-17) =E2=80=94 PASS, 0 er=
+rors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
+s, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_RANDOMIZE_BASE=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
+s, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+crypto (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+debug (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+debug (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+ima (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+videodec (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+exynos_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+footbridge_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+fuloong2e_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 s=
+ection mismatches
+
+Errors:
+    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
+=98-mhard-float=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+gcw0_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+gemini_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+gpr_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+h3600_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig+debug (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warni=
+ngs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig+kselftest (arc, gcc-10) =E2=80=94 FAIL, 1 error, 0 wa=
+rnings, 0 section mismatches
+
+Errors:
+    net/bpfilter/main.c:3:10: fatal error: sys/uio.h: No such file or direc=
+tory
+
+---------------------------------------------------------------------------=
+-----
+hisi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+hsdk_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+debug (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+imx_v4_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+imx_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+imxrt_defconfig (arm, gcc-10) =E2=80=94 FAIL, 28 errors, 1 warning, 0 secti=
+on mismatches
+
+Errors:
+    include/linux/container_of.h:20:47: error: invalid use of undefined typ=
+e =E2=80=98struct module=E2=80=99
+    ./../include/linux/compiler_types.h:338:27: error: expression in static=
+ assertion is not an integer
+    include/linux/stddef.h:16:32: error: invalid use of undefined type =E2=
+=80=98struct module=E2=80=99
+    include/linux/rculist.h:392:7: error: invalid use of undefined type =E2=
+=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/container_of.h:20:47: error: invalid use of undefined typ=
+e =E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    include/linux/rculist.h:393:27: error: invalid use of undefined type =
+=E2=80=98struct module=E2=80=99
+    ./../include/linux/compiler_types.h:338:27: error: expression in static=
+ assertion is not an integer
+    include/linux/stddef.h:16:32: error: invalid use of undefined type =E2=
+=80=98struct module=E2=80=99
+
+Warnings:
+    kernel/bpf/../module/internal.h:94:58: warning: =E2=80=98enum mod_mem_t=
+ype=E2=80=99 declared inside parameter list will not be visible outside of =
+this definition or declaration
+
+---------------------------------------------------------------------------=
+-----
+integrator_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip22_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip27_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip28_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip32_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ixp4xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+jazz_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+jornada720_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+keystone_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+lemote2f_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 se=
+ction mismatches
+
+Errors:
+    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
+=98-mhard-float=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+loongson1b_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson1c_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson2k_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 =
+section mismatches
+
+Errors:
+    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
+=98-mhard-float=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+loongson3_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 s=
+ection mismatches
+
+Errors:
+    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
+=98-mhard-float=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+lpc18xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+lpc32xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_kvm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_qemu_32r6_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
+gs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaaprp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltasmvp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltasmvp_eva_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaup_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaup_xpa_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+milbeaut_m10v_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+mmp2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+moxart_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+mps2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sectio=
+n mismatches
+
+Warnings:
+    WARNING: unmet direct dependencies detected for RPCSEC_GSS_KRB5
+    WARNING: unmet direct dependencies detected for RPCSEC_GSS_KRB5
+
+---------------------------------------------------------------------------=
+-----
+mtx1_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v4t_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm, gcc-10) =E2=80=94 PASS, =
+0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (arm, gcc-10) =E2=80=
+=94 PASS, 0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_SMP=3Dn (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0=
+ warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy (arm, gcc-10) =E2=80=94 PASS, 0=
+ errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+debug (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+mvebu_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+mvebu_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+mxs_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+neponset_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+netwinder_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+nhk8815_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_sdcard_defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 w=
+arnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_sdcard_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+omap2plus_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+omega2p_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+orion5x_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+oxnas_v6_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+pic32mzda_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa168_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa910_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+qcom_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+qi_lb60_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+rb532_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rbtx49xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+realview_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+rm200_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rpc_defconfig (arm, gcc-10) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 section=
+ mismatches
+
+Errors:
+    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=3D0x'
+    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=3D0x'
+
+---------------------------------------------------------------------------=
+-----
+rs90_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+rt305x_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rv32_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rv32_defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+s3c6400_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+s5pv210_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+sama5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+sama7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+sb1250_swarm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+shmobile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+socfpga_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+sp7021_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc32_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig+debug (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 2 warning=
+s, 0 section mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig+kselftest (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 2 war=
+nings, 0 section mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+spear13xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+spear3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+spear6xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+spitz_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+stm32_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+sunxi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+tegra_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section m=
+ismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+u8500_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+versatile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+vexpress_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+vf610m4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+vocore2_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+vt8500_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+wpcm450_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, rustc-1.62) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+amdgpu (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
+gs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+crypto (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
+gs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+debug (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+ima (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, rustc-1.62) =E2=80=94 PASS, 0 errors, 3=
+ warnings, 0 section mismatches
+
+Warnings:
+    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x28: relocation to !END=
+BR: .text+0x1409cb
+    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x3e: relocation to !END=
+BR: .text+0x140856
+    vmlinux.o: warning: objtool: lkdtm_UNSET_SMEP+0xcc: relocation to !ENDB=
+R: native_write_cr4+0x4
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+rust (x86_64, rustc-1.62) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+rust-samples (x86_64, rustc-1.62) =E2=80=94 PASS, 0 errors=
+, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, =
+0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook+amdgpu (x86_64, gcc-10) =E2=80=94 PASS, 0 e=
+rrors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook+kselftest (x86_64, gcc-10) =E2=80=94 PASS, =
+0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86_kvm_guest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0=
+ warnings, 0 section mismatches
+
+---
+For more info write to <info@kernelci.org>

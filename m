@@ -2,77 +2,76 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A42AC6C2780
-	for <lists+linux-next@lfdr.de>; Tue, 21 Mar 2023 02:34:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ACEE6C2807
+	for <lists+linux-next@lfdr.de>; Tue, 21 Mar 2023 03:21:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230005AbjCUBef (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 20 Mar 2023 21:34:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44738 "EHLO
+        id S229735AbjCUCU5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 20 Mar 2023 22:20:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229755AbjCUBee (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 20 Mar 2023 21:34:34 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB28B23879;
-        Mon, 20 Mar 2023 18:34:31 -0700 (PDT)
+        with ESMTP id S229651AbjCUCU5 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 20 Mar 2023 22:20:57 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2D44A250;
+        Mon, 20 Mar 2023 19:20:55 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PgZ052DbLz4x7s;
-        Tue, 21 Mar 2023 12:34:28 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Pgb1d1hqzz4x1f;
+        Tue, 21 Mar 2023 13:20:53 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1679362469;
-        bh=ZlA4pbaiTF3e9ngHL/ahUie9GZ/wITT5iUPnRg/sE54=;
+        s=201702; t=1679365254;
+        bh=nqgTdeGG7OlP5UnnCB0RdzneM0UnQwv6EGrVYrt9vc4=;
         h=Date:From:To:Cc:Subject:From;
-        b=Z5RXzgslvAjsU0srKmxM5gq4vRPHAU6bAH6T1TNFEI6vo0BYUCNQBKoD0yJxC953U
-         /zXyqne1M/rU2UDcD6zSf956P/N3xUQfVTyLkbhtj4Px2mKlkDc9OJc3vgV8AaXC5d
-         RbBoSyNaO0Epe3ygU8HFChiwG7ODmKe/KcrjvrF701ZXSF0LLYLNxzTewzwvJ5nMXp
-         AuSnOgh9RB1BYO3cwGK5F2W9HoxXdX4oshkPibgExWoFfNcBgoxP06SfhvD2FE0Xjr
-         dYMt1OCJSx+SdgfKG2Mqnn5Ckv1FQD1+K4+hB2wGPqkh0SjdAZznZFKPykajYmgqQD
-         L4TApARfCOFwA==
-Date:   Tue, 21 Mar 2023 12:34:28 +1100
+        b=IaI25pv9KD4s485MxFU1ZVitScQWg63m3g6qEPhCgxFcpz8IrEkSfpkp/6Ka9UD/5
+         N0S5Ao17oeN9oQwYcLjcjshNggp7A36w6QKi29NdJYAndi2hz7hwlkH/3gBDs83hNV
+         12CpyhTUU0WSzPiw/7q85i1Aj0eb+tA3/8SuvkgD2/O3zif+lhkcXc6T0L6caXytSL
+         3OdC0DjgTPAVyCAJi6Bu/X+rqwsFmVS6CBozNZDu8TCglWY0P5P1e+jBLlDkwu797h
+         C/eyErIFaI/WIa73/ll21JctyHFeZDQYQYHylGwobt+q2ffQZI3sPgpow6KGBEO8ao
+         gPFgaTUi+IiUA==
+Date:   Tue, 21 Mar 2023 13:20:52 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Greg KH <greg@kroah.com>, Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Jiaqi Yan <jiaqiyan@google.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Luis Chamberlain <mcgrof@kernel.org>
-Subject: linux-next: manual merge of the driver-core tree with the s390 tree
-Message-ID: <20230321123428.5c6956f8@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the sysctl tree with Linus' tree
+Message-ID: <20230321132052.7d12fd7d@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/PbTEiaHO3HQCdXicM/QjMW2";
+Content-Type: multipart/signed; boundary="Sig_/EBOE0W6zM5Kqjzbw1oQHgJO";
  protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/PbTEiaHO3HQCdXicM/QjMW2
+--Sig_/EBOE0W6zM5Kqjzbw1oQHgJO
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the driver-core tree got a conflict in:
+Today's linux-next merge of the sysctl tree got a conflict in:
 
-  arch/s390/kernel/topology.c
+  mm/memory-failure.c
 
 between commit:
 
-  0599331c3da6 ("s390: simplify one-level sysctl registration for topology_=
-ctl_table")
+  44b8f8bf2438 ("mm: memory-failure: add memory failure stats to sysfs")
 
-from the s390 tree and commit:
+from Linus' tree and commit:
 
-  9493ed19fbc3 ("s390/topology: move to use bus_get_dev_root()")
+  cfe7e6ea5ee2 ("mm: memory-failure: Move memory failure sysctls to its own=
+ file")
 
-from the driver-core tree.
+from the sysctl tree.
 
 I fixed it up (see below) and can carry the fix as necessary. This
 is now fixed as far as linux-next is concerned, but any non trivial
@@ -81,65 +80,26 @@ is submitted for merging.  You may also want to consider cooperating
 with the maintainer of the conflicting tree to minimise any particularly
 complex conflicts.
 
+
+
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc arch/s390/kernel/topology.c
-index e5d6a1c25d13,72af753d1bba..000000000000
---- a/arch/s390/kernel/topology.c
-+++ b/arch/s390/kernel/topology.c
-@@@ -637,14 -637,33 +637,23 @@@ static struct ctl_table topology_ctl_ta
-  	{ },
-  };
- =20
- -static struct ctl_table topology_dir_table[] =3D {
- -	{
- -		.procname	=3D "s390",
- -		.maxlen		=3D 0,
- -		.mode		=3D 0555,
- -		.child		=3D topology_ctl_table,
- -	},
- -	{ },
- -};
- -
-  static int __init topology_init(void)
-  {
-+ 	struct device *dev_root;
-+ 	int rc =3D 0;
-+=20
-  	timer_setup(&topology_timer, topology_timer_fn, TIMER_DEFERRABLE);
-  	if (MACHINE_HAS_TOPOLOGY)
-  		set_topology_timer();
-  	else
-  		topology_update_polarization_simple();
- -	register_sysctl_table(topology_dir_table);
- +	register_sysctl("s390", topology_ctl_table);
-- 	return device_create_file(cpu_subsys.dev_root, &dev_attr_dispatching);
-+=20
-+ 	dev_root =3D bus_get_dev_root(&cpu_subsys);
-+ 	if (dev_root) {
-+ 		rc =3D device_create_file(dev_root, &dev_attr_dispatching);
-+ 		put_device(dev_root);
-+ 	}
-+ 	return rc;
-  }
-  device_initcall(topology_init);
-
---Sig_/PbTEiaHO3HQCdXicM/QjMW2
+--Sig_/EBOE0W6zM5Kqjzbw1oQHgJO
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQZCaQACgkQAVBC80lX
-0GwXlwgAjKQOBV0TWFS/qzghNSsQoRGhctl6iCo9/8hNJISP2s6Hon1aU1+u/QYb
-h5MJ6xEbYqZ7SawaalGuOLVfc+kg7qC0PFyLET/epcuPhFZ4yM5FD4ltRuugFHwf
-xRNUgnYUthSf8l+ZPDjro8+T2PPEF4iwRNP4hkYvKsnx78LnR8Mn95ZkykY1UAMH
-UucYyB9zH8beReorfz/hnSzBmQuFKZZK41/8In0fK77moWQBQS8E0YwhfMbzObbg
-SnFfZniWhndRkFP1zf0NUtrSrkW1HP3lnKQBtefapK1MiqfjgmLRku/CD7rcOE9F
-sE1Qb1d0NOvNk4WCbGes5DhGimed+A==
-=QEQY
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQZFIQACgkQAVBC80lX
+0GztSgf/akU9uLwzQlanwW8vpegUahFakzjTdqZlNtXUhd1ATz0+cK7qHhRwD4Fo
+Me+rLfqkMvnSJ9JOrNAGDh1/KrrzKLqIvqekIjNKtRmUHb27UcZ894fBt6cfsqXG
+qSYf5RuUntvwYU5dTnEu2QVDrAUsyTFSYZm1YmBaqxqAGRfWjnbwvTvWGC/DdTQ4
+MgLcma0ZJ4SOstWr+9ue25evo831s1cGXiG6C/PxHYk8PdRVOqigax0WsFp+KePa
+y9WPo9GJIH9vz9NnNuRqK+ATE9lXmFdMZoyiZDw1+IJY9y3CyRKkDyMBvvA1brbL
+BU2Ufa1/z/jLp7L5+5STUy5vHoOM+Q==
+=gxLT
 -----END PGP SIGNATURE-----
 
---Sig_/PbTEiaHO3HQCdXicM/QjMW2--
+--Sig_/EBOE0W6zM5Kqjzbw1oQHgJO--

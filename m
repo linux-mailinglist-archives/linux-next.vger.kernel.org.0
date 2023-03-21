@@ -2,63 +2,62 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC8686C31FF
-	for <lists+linux-next@lfdr.de>; Tue, 21 Mar 2023 13:46:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C5386C3278
+	for <lists+linux-next@lfdr.de>; Tue, 21 Mar 2023 14:20:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229914AbjCUMqL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 21 Mar 2023 08:46:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46796 "EHLO
+        id S229734AbjCUNUm (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 21 Mar 2023 09:20:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230104AbjCUMqH (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 21 Mar 2023 08:46:07 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A2BC46AA
-        for <linux-next@vger.kernel.org>; Tue, 21 Mar 2023 05:45:30 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id fb38so3974198pfb.7
-        for <linux-next@vger.kernel.org>; Tue, 21 Mar 2023 05:45:30 -0700 (PDT)
+        with ESMTP id S229754AbjCUNUk (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 21 Mar 2023 09:20:40 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAF3C18AB1
+        for <linux-next@vger.kernel.org>; Tue, 21 Mar 2023 06:20:34 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id iw3so15959613plb.6
+        for <linux-next@vger.kernel.org>; Tue, 21 Mar 2023 06:20:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112; t=1679402729;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112; t=1679404833;
         h=from:to:subject:content-transfer-encoding:mime-version:date
          :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=59OMfzaMg4UAhHPMSWSvcevnekBbqSWU9c7Lxam6kvs=;
-        b=3xRaZ2audVbNERzU9ry5/IbYnfXO+gGvDvkRwFPBHen0EgERwEOy/zYrHfrdSKAbK0
-         asz6PLEDhoEeOvdu8+U5t+HGeeB9NHZiMapRugYjHWmCHK+SjqOKNw3AO+mtYsWPe0p3
-         KOa1Axl6fSoboti7Jprq+IcvZNKRr4/1FCFOmK3qbQNydp/jajeE7feyaII1uA4xZzVs
-         psPfYWL6PbkxZRGshvYw2wYFMu3qtp+QNa7YrjUwhqhDhgSzPwSAVmFRitZICjqVhGJY
-         RR5iOfsRDAAfZ6pNBP4CLpTyY5XW76/AZJxKK/qcNqhxoSwHkOb7YC1LvGGGtRWW3zjl
-         LsnA==
+        bh=giXyDxc1vbTT7+RqCiG3SwhWO4huYZ3L8Uiz7DQuH8E=;
+        b=6v1iVV+/PFguMJho84iyQp74IN1TaU6qCJpvemDudmHCDLDOrtxv8LzFa2B/0J7sVd
+         XLb0DwN/WwHAk9ZK4j2nUwUBrY3y+x7L+cGi7NACFh+49rDeBsSc8toFsMPwBiTKkWLp
+         lghYxNbTk1se7woWo6gDPN3SQHKQ6NVfnV5z+/xWKPJ9sjoW+0x5K8e9W06nKG79qaGe
+         blWWilPZ/WX30VJ3kfKNY3cKpKoF3BFvuejR1a2B7HDscH0LQBt8diMrM4SLPO1B8Ouk
+         iX3LSmN2VEZXcqxKhJtrNPXJIomAbnAUPUrp4XzasCkAlhRGthYBOFnbNJtMKgnp8+ey
+         NgYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679402729;
+        d=1e100.net; s=20210112; t=1679404833;
         h=from:to:subject:content-transfer-encoding:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=59OMfzaMg4UAhHPMSWSvcevnekBbqSWU9c7Lxam6kvs=;
-        b=B0AbtkVwcE02ozvZF1aWgPy6suDS3eryhBmlax6rqwZxa06HMb8z/56nChc2Mt5RDX
-         AZ3t9EVd9IhvzyWPC+KZpp6ci0pruAFdwJz5lEXmwkst1hktu2ESKf6pwyW2GQYMbioY
-         6I11CEXufesqFurEr7WL7HlGCXWJG5MSaTOyFZNHpQgUWb6/3bJSobVod73oqy1dMFMX
-         /HeRodfkBEQCCMgC00KmPmSsXlEReqynugFEKaWbVn+ssSQIV7Ghz+1Vjrm21zqB28A0
-         EfYsqhcx71qkj+042DVq0cET1YdE2EFCKR0iszO4p54vu7e/oABATs54I1WyylCJ9Ix1
-         diJw==
-X-Gm-Message-State: AO0yUKXnJRzml8RzrOBYLn7FY/1//7J9FAZXTV7h3kLUcpEfKDMXncYR
-        REvo66TYq8XvCtRmlDfrXixITKlUtN8AgurvVfzC8w==
-X-Google-Smtp-Source: AK7set8ppxQo1YXwrkaNkMSuKGZAUe33+9oHyuPewvOv3cy3dzWp1LFsdAXFx449LUAAgnOQ+UzPKw==
-X-Received: by 2002:a62:1c45:0:b0:626:80f:7a0d with SMTP id c66-20020a621c45000000b00626080f7a0dmr2137073pfc.8.1679402725823;
-        Tue, 21 Mar 2023 05:45:25 -0700 (PDT)
+        bh=giXyDxc1vbTT7+RqCiG3SwhWO4huYZ3L8Uiz7DQuH8E=;
+        b=csgu2p4U9/1fiURhZUUSTeY+gr/pTQP7UMUpkI3Q40gYkE9di+7suiage/YZjjsDLz
+         izoyhEPec05HAbLILZSIupvwj9MykfhEhJ62wyoHcXl9G95jVmCr9iBlluVY4LXH4Qcn
+         N7iMpBACpCX/S8SyI5d+s4lRfAwe7iYrqpcANJZrxqNvUIpxw+wvaJiJYISqzCJUjzwV
+         u+9pOWcryGLgvhxCAGZtJVr1VqOKwy3UmZvG8yrUvQsHfS66P/YmdeZvfwo8scAQA4nB
+         mYyFdCt/oqL1MSCboNdEkO11Yld1iSbnfT5aRuApiK3ThmFkbrAXQOxK92ivcJvwWCuo
+         vPUQ==
+X-Gm-Message-State: AO0yUKV88qUAnX1PxDrK86scTBVtGPywMCTa1hifGaurgYNK6fyAiGSN
+        r7fmzgY72JAphErtwUySsCegGxcVLiBU4CUHB+fDvQ==
+X-Google-Smtp-Source: AK7set8tCLxLgv/xc9RTnl79DuLLmnFj6lSki2SnWaSvoBKjzwJ9Q3G5/7yvoX8u+N9cxeYi046B/A==
+X-Received: by 2002:a17:903:1c8:b0:19d:20a:a219 with SMTP id e8-20020a17090301c800b0019d020aa219mr2563551plh.66.1679404831533;
+        Tue, 21 Mar 2023 06:20:31 -0700 (PDT)
 Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id 14-20020aa7914e000000b005e099d7c30bsm8112610pfi.205.2023.03.21.05.45.25
+        by smtp.gmail.com with ESMTPSA id jf20-20020a170903269400b0019f1264c7d7sm8726605plb.103.2023.03.21.06.20.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 05:45:25 -0700 (PDT)
-Message-ID: <6419a6e5.a70a0220.bd484.e2c0@mx.google.com>
-Date:   Tue, 21 Mar 2023 05:45:25 -0700 (PDT)
+        Tue, 21 Mar 2023 06:20:31 -0700 (PDT)
+Message-ID: <6419af1f.170a0220.6cc00.f4ff@mx.google.com>
+Date:   Tue, 21 Mar 2023 06:20:31 -0700 (PDT)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: pending-fixes
+X-Kernelci-Branch: master
 X-Kernelci-Tree: next
 X-Kernelci-Report-Type: test
-X-Kernelci-Kernel: v6.3-rc3-224-ga0d6a906c6a2
-Subject: next/pending-fixes baseline: 600 runs,
- 72 regressions (v6.3-rc3-224-ga0d6a906c6a2)
+X-Kernelci-Kernel: next-20230321
+Subject: next/master baseline: 696 runs, 228 regressions (next-20230321)
 To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
         kernelci-results@groups.io
 From:   "kernelci.org bot" <bot@kernelci.org>
@@ -71,8 +70,7 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes baseline: 600 runs, 72 regressions (v6.3-rc3-224-ga0d6a9=
-06c6a2)
+next/master baseline: 696 runs, 228 regressions (next-20230321)
 
 Regressions Summary
 -------------------
@@ -81,23 +79,26 @@ platform                     | arch   | lab             | compiler | defcon=
 fig                    | regressions
 -----------------------------+--------+-----------------+----------+-------=
 -----------------------+------------
-am57xx-beagle-x15            | arm    | lab-linaro-lkft | gcc-10   | multi_=
-v7_defc...CONFIG_SMP=3Dn | 1          =
+acer-R721T-grunt             | x86_64 | lab-collabora   | clang-13 | x86_64=
+_defcon...6-chromebook | 2          =
+
+acer-R721T-grunt             | x86_64 | lab-collabora   | gcc-10   | x86_64=
+_defcon...6-chromebook | 1          =
+
+acer-R721T-grunt             | x86_64 | lab-collabora   | gcc-10   | x86_64=
+_defcon...ebook+amdgpu | 1          =
 
 am57xx-beagle-x15            | arm    | lab-linaro-lkft | gcc-10   | multi_=
-v7_defconfig+debug     | 1          =
+v7_defc...CONFIG_SMP=3Dn | 1          =
 
 asus-CM1400CXA-dalboz        | x86_64 | lab-collabora   | gcc-10   | x86_64=
 _defcon...ok+kselftest | 1          =
 
+at91-sama5d4_xplained        | arm    | lab-baylibre    | gcc-10   | sama5_=
+defconfig              | 1          =
+
 bcm2835-rpi-b-rev2           | arm    | lab-broonie     | gcc-10   | bcm283=
 5_defconfig            | 1          =
-
-bcm2836-rpi-2-b              | arm    | lab-collabora   | gcc-10   | bcm283=
-5_defconfig            | 1          =
-
-bcm2836-rpi-2-b              | arm    | lab-collabora   | gcc-10   | multi_=
-v7_defc...MB2_KERNEL=3Dy | 1          =
 
 cubietruck                   | arm    | lab-baylibre    | gcc-10   | multi_=
 v7_defc...MB2_KERNEL=3Dy | 1          =
@@ -106,31 +107,94 @@ cubietruck                   | arm    | lab-baylibre    | gcc-10   | multi_=
 v7_defc...CONFIG_SMP=3Dn | 1          =
 
 cubietruck                   | arm    | lab-baylibre    | gcc-10   | multi_=
-v7_defconfig+ima       | 1          =
-
-cubietruck                   | arm    | lab-baylibre    | gcc-10   | multi_=
 v7_defconfig           | 1          =
 
-cubietruck                   | arm    | lab-baylibre    | gcc-10   | multi_=
-v7_defconfig+crypto    | 1          =
-
 da850-lcdk                   | arm    | lab-baylibre    | gcc-10   | davinc=
-i_all_defconfig        | 2          =
+i_all_defconfig        | 1          =
 
-imx6qp-wandboard-revd1       | arm    | lab-pengutronix | gcc-10   | multi_=
-v7_defconfig+debug     | 1          =
+fsl-ls1028a-rdb              | arm64  | lab-nxp         | gcc-10   | defcon=
+fig+CON...OMIZE_BASE=3Dy | 1          =
 
-imx6sx-sdb                   | arm    | lab-nxp         | gcc-10   | multi_=
-v7_defconfig+crypto    | 1          =
+fsl-ls1028a-rdb              | arm64  | lab-nxp         | gcc-10   | defcon=
+fig+crypto             | 1          =
 
-imx6ul-14x14-evk             | arm    | lab-nxp         | gcc-10   | multi_=
-v7_defconfig+crypto    | 1          =
+fsl-ls1028a-rdb              | arm64  | lab-nxp         | gcc-10   | defcon=
+fig+ima                | 1          =
 
-imx7d-sdb                    | arm    | lab-nxp         | gcc-10   | multi_=
-v7_defconfig+crypto    | 1          =
+fsl-ls1028a-rdb              | arm64  | lab-nxp         | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
 
-imx7ulp-evk                  | arm    | lab-nxp         | gcc-10   | multi_=
-v7_defconfig+crypto    | 1          =
+fsl-ls1088a-rdb              | arm64  | lab-nxp         | gcc-10   | defcon=
+fig+CON...OMIZE_BASE=3Dy | 1          =
+
+fsl-ls1088a-rdb              | arm64  | lab-nxp         | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+fsl-ls1088a-rdb              | arm64  | lab-nxp         | gcc-10   | defcon=
+fig+ima                | 1          =
+
+fsl-ls1088a-rdb              | arm64  | lab-nxp         | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+fsl-lx2160a-rdb              | arm64  | lab-nxp         | gcc-10   | defcon=
+fig+CON...OMIZE_BASE=3Dy | 1          =
+
+fsl-lx2160a-rdb              | arm64  | lab-nxp         | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+fsl-lx2160a-rdb              | arm64  | lab-nxp         | gcc-10   | defcon=
+fig+ima                | 1          =
+
+fsl-lx2160a-rdb              | arm64  | lab-nxp         | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+hp-11A-G6-EE-grunt           | x86_64 | lab-collabora   | clang-13 | x86_64=
+_defcon...6-chromebook | 1          =
+
+hp-11A-G6-EE-grunt           | x86_64 | lab-collabora   | gcc-10   | x86_64=
+_defcon...6-chromebook | 1          =
+
+hp-11A-G6-EE-grunt           | x86_64 | lab-collabora   | gcc-10   | x86_64=
+_defcon...ok+kselftest | 1          =
+
+hp-11A-G6-EE-grunt           | x86_64 | lab-collabora   | gcc-10   | x86_64=
+_defcon...ebook+amdgpu | 1          =
+
+hp-14-db0003na-grunt         | x86_64 | lab-collabora   | clang-13 | x86_64=
+_defcon...6-chromebook | 1          =
+
+hp-14-db0003na-grunt         | x86_64 | lab-collabora   | gcc-10   | x86_64=
+_defcon...6-chromebook | 1          =
+
+hp-14-db0003na-grunt         | x86_64 | lab-collabora   | gcc-10   | x86_64=
+_defcon...ebook+amdgpu | 1          =
+
+hp-14-db0003na-grunt         | x86_64 | lab-collabora   | gcc-10   | x86_64=
+_defcon...ok+kselftest | 1          =
+
+imx8mn-ddr4-evk              | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON...OMIZE_BASE=3Dy | 1          =
+
+imx8mn-ddr4-evk              | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+imx8mn-ddr4-evk              | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+ima                | 1          =
+
+imx8mn-ddr4-evk              | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+imx8mn-ddr4-evk              | arm64  | lab-nxp         | gcc-10   | defcon=
+fig+CON...OMIZE_BASE=3Dy | 1          =
+
+imx8mn-ddr4-evk              | arm64  | lab-nxp         | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+imx8mn-ddr4-evk              | arm64  | lab-nxp         | gcc-10   | defcon=
+fig+ima                | 1          =
+
+imx8mn-ddr4-evk              | arm64  | lab-nxp         | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
 
 jetson-tk1                   | arm    | lab-baylibre    | gcc-10   | multi_=
 v7_defc...G_ARM_LPAE=3Dy | 1          =
@@ -138,161 +202,575 @@ v7_defc...G_ARM_LPAE=3Dy | 1          =
 jh7100-starfi...isionfive-v1 | riscv  | lab-clabbe      | gcc-10   | defcon=
 fig+kselftest          | 1          =
 
+juno-uboot                   | arm64  | lab-broonie     | gcc-10   | defcon=
+fig+CON...OMIZE_BASE=3Dy | 1          =
+
+juno-uboot                   | arm64  | lab-broonie     | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+juno-uboot                   | arm64  | lab-broonie     | gcc-10   | defcon=
+fig+ima                | 1          =
+
+juno-uboot                   | arm64  | lab-broonie     | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
 meson-g12a-sei510            | arm64  | lab-baylibre    | gcc-10   | defcon=
-fig+kselftest          | 1          =
+fig+CON...OMIZE_BASE=3Dy | 1          =
+
+meson-g12a-sei510            | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+meson-g12a-sei510            | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+ima                | 1          =
+
+meson-g12a-sei510            | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
 
 meson-g12a-u200              | arm64  | lab-baylibre    | gcc-10   | defcon=
-fig+kselftest          | 1          =
+fig+CON...OMIZE_BASE=3Dy | 1          =
+
+meson-g12a-u200              | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+meson-g12a-u200              | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+ima                | 1          =
+
+meson-g12a-u200              | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
 
 meson-g12a-x96-max           | arm64  | lab-baylibre    | gcc-10   | defcon=
-fig+kselftest          | 1          =
+fig+CON...OMIZE_BASE=3Dy | 1          =
+
+meson-g12a-x96-max           | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+meson-g12a-x96-max           | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+ima                | 1          =
+
+meson-g12a-x96-max           | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
 
 meson-g12b-a311d-khadas-vim3 | arm64  | lab-baylibre    | gcc-10   | defcon=
-fig+kselftest          | 1          =
+fig+CON...OMIZE_BASE=3Dy | 1          =
+
+meson-g12b-a311d-khadas-vim3 | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+meson-g12b-a311d-khadas-vim3 | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+ima                | 1          =
+
+meson-g12b-a311d-khadas-vim3 | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
 
 meson-g12b-a311d-khadas-vim3 | arm64  | lab-collabora   | gcc-10   | defcon=
-fig+kselftest          | 1          =
+fig+CON...OMIZE_BASE=3Dy | 1          =
+
+meson-g12b-a311d-khadas-vim3 | arm64  | lab-collabora   | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+meson-g12b-a311d-khadas-vim3 | arm64  | lab-collabora   | gcc-10   | defcon=
+fig+ima                | 1          =
+
+meson-g12b-a311d-khadas-vim3 | arm64  | lab-collabora   | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
 
 meson-g12b-odroid-n2         | arm64  | lab-baylibre    | gcc-10   | defcon=
-fig+kselftest          | 1          =
+fig+CON...OMIZE_BASE=3Dy | 1          =
+
+meson-g12b-odroid-n2         | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+meson-g12b-odroid-n2         | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+meson-g12b-odroid-n2         | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+ima                | 1          =
 
 meson-gxbb-nanopi-k2         | arm64  | lab-baylibre    | gcc-10   | defcon=
-fig+kselftest          | 1          =
+fig+CON...OMIZE_BASE=3Dy | 1          =
+
+meson-gxbb-nanopi-k2         | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON...BIG_ENDIAN=3Dy | 1          =
+
+meson-gxbb-nanopi-k2         | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+meson-gxbb-nanopi-k2         | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+ima                | 1          =
+
+meson-gxbb-nanopi-k2         | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+meson-gxl-s805x-libretech-ac | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON...OMIZE_BASE=3Dy | 1          =
+
+meson-gxl-s805x-libretech-ac | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON...BIG_ENDIAN=3Dy | 1          =
+
+meson-gxl-s805x-libretech-ac | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+meson-gxl-s805x-libretech-ac | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+ima                | 1          =
+
+meson-gxl-s805x-libretech-ac | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
 
 meson-gxl-s905d-p230         | arm64  | lab-baylibre    | gcc-10   | defcon=
-fig+kselftest          | 1          =
+fig+CON...OMIZE_BASE=3Dy | 1          =
+
+meson-gxl-s905d-p230         | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON...BIG_ENDIAN=3Dy | 1          =
+
+meson-gxl-s905d-p230         | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+meson-gxl-s905d-p230         | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+ima                | 1          =
+
+meson-gxl-s905d-p230         | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
 
 meson-gxl-s905x-khadas-vim   | arm64  | lab-baylibre    | gcc-10   | defcon=
-fig+kselftest          | 1          =
+fig+CON...OMIZE_BASE=3Dy | 1          =
+
+meson-gxl-s905x-khadas-vim   | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON...BIG_ENDIAN=3Dy | 1          =
+
+meson-gxl-s905x-khadas-vim   | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+meson-gxl-s905x-khadas-vim   | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+ima                | 1          =
+
+meson-gxl-s905x-khadas-vim   | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+meson-gxl-s905x-libretech-cc | arm64  | lab-baylibre    | clang-13 | defcon=
+fig+arm64-chromebook   | 1          =
+
+meson-gxl-s905x-libretech-cc | arm64  | lab-broonie     | clang-13 | defcon=
+fig+arm64-chromebook   | 1          =
 
 meson-gxl-s905x-libretech-cc | arm64  | lab-baylibre    | gcc-10   | defcon=
-fig+kselftest          | 1          =
+fig+CON...OMIZE_BASE=3Dy | 1          =
+
+meson-gxl-s905x-libretech-cc | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON...BIG_ENDIAN=3Dy | 1          =
+
+meson-gxl-s905x-libretech-cc | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+meson-gxl-s905x-libretech-cc | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+ima                | 1          =
+
+meson-gxl-s905x-libretech-cc | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
 
 meson-gxl-s905x-libretech-cc | arm64  | lab-broonie     | gcc-10   | defcon=
-fig+kselftest          | 1          =
+fig+CON...OMIZE_BASE=3Dy | 1          =
+
+meson-gxl-s905x-libretech-cc | arm64  | lab-broonie     | gcc-10   | defcon=
+fig+CON...BIG_ENDIAN=3Dy | 1          =
+
+meson-gxl-s905x-libretech-cc | arm64  | lab-broonie     | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+meson-gxl-s905x-libretech-cc | arm64  | lab-broonie     | gcc-10   | defcon=
+fig+ima                | 1          =
+
+meson-gxl-s905x-libretech-cc | arm64  | lab-broonie     | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
 
 meson-gxm-khadas-vim2        | arm64  | lab-baylibre    | gcc-10   | defcon=
-fig+kselftest          | 1          =
+fig+CON...OMIZE_BASE=3Dy | 1          =
+
+meson-gxm-khadas-vim2        | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON...BIG_ENDIAN=3Dy | 1          =
+
+meson-gxm-khadas-vim2        | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+meson-gxm-khadas-vim2        | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+ima                | 1          =
+
+meson-gxm-khadas-vim2        | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
 
 meson-sm1-khadas-vim3l       | arm64  | lab-baylibre    | gcc-10   | defcon=
-fig+kselftest          | 1          =
+fig+CON...OMIZE_BASE=3Dy | 1          =
+
+meson-sm1-khadas-vim3l       | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON...BIG_ENDIAN=3Dy | 1          =
+
+meson-sm1-khadas-vim3l       | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+meson-sm1-khadas-vim3l       | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+ima                | 1          =
+
+meson-sm1-khadas-vim3l       | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
 
 meson-sm1-sei610             | arm64  | lab-baylibre    | gcc-10   | defcon=
-fig+kselftest          | 1          =
+fig+CON...OMIZE_BASE=3Dy | 1          =
 
-mt8173-elm-hana              | arm64  | lab-collabora   | gcc-10   | defcon=
-fig+arm...ok+kselftest | 1          =
+meson-sm1-sei610             | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+crypto             | 1          =
 
-mt8183-kukui-...uniper-sku16 | arm64  | lab-collabora   | gcc-10   | defcon=
-fig+arm...ok+kselftest | 1          =
+meson-sm1-sei610             | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+ima                | 1          =
 
-mt8183-kukui-...uniper-sku16 | arm64  | lab-collabora   | gcc-10   | defcon=
-fig+arm...ook+videodec | 3          =
+meson-sm1-sei610             | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
 
-mt8192-asurada-spherion-r0   | arm64  | lab-collabora   | gcc-10   | defcon=
-fig+arm...ok+kselftest | 1          =
+mt8173-elm-hana              | arm64  | lab-collabora   | clang-13 | defcon=
+fig+arm64-chromebook   | 1          =
 
-mt8192-asurada-spherion-r0   | arm64  | lab-collabora   | gcc-10   | defcon=
-fig+arm...ook+videodec | 3          =
+mt8183-kukui-...uniper-sku16 | arm64  | lab-collabora   | clang-13 | cros:/=
+/chrome...4-chromebook | 1          =
+
+mt8183-kukui-...uniper-sku16 | arm64  | lab-collabora   | clang-13 | cros:/=
+/chrome...4-chromebook | 1          =
+
+mt8183-kukui-...uniper-sku16 | arm64  | lab-collabora   | clang-13 | defcon=
+fig+arm64-chromebook   | 1          =
+
+mt8192-asurada-spherion-r0   | arm64  | lab-collabora   | clang-13 | cros:/=
+/chrome...4-chromebook | 1          =
+
+mt8192-asurada-spherion-r0   | arm64  | lab-collabora   | clang-13 | defcon=
+fig+arm64-chromebook   | 1          =
 
 ox820-clouden...lug-series-3 | arm    | lab-baylibre    | gcc-10   | oxnas_=
 v6_defconfig           | 1          =
 
-qcom-qdf2400                 | arm64  | lab-linaro-lkft | gcc-10   | defcon=
-fig+arm...ok+kselftest | 1          =
+qcom-qdf2400                 | arm64  | lab-linaro-lkft | clang-13 | defcon=
+fig+arm64-chromebook   | 1          =
 
 qcom-qdf2400                 | arm64  | lab-linaro-lkft | gcc-10   | defcon=
-fig+kselftest          | 1          =
+fig+CON...OMIZE_BASE=3Dy | 1          =
 
-qemu_arm-virt-gicv2          | arm    | lab-baylibre    | gcc-10   | multi_=
-v7_defconfig+debug     | 1          =
+qcom-qdf2400                 | arm64  | lab-linaro-lkft | gcc-10   | defcon=
+fig+crypto             | 1          =
 
-qemu_arm-virt-gicv2          | arm    | lab-broonie     | gcc-10   | multi_=
-v7_defconfig+debug     | 1          =
+qcom-qdf2400                 | arm64  | lab-linaro-lkft | gcc-10   | defcon=
+fig+ima                | 1          =
 
-qemu_arm-virt-gicv2          | arm    | lab-collabora   | gcc-10   | multi_=
-v7_defconfig+debug     | 1          =
+qcom-qdf2400                 | arm64  | lab-linaro-lkft | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
 
-qemu_arm-virt-gicv2-uefi     | arm    | lab-baylibre    | gcc-10   | multi_=
-v7_defconfig+debug     | 1          =
+qemu_arm-vexpress-a9         | arm    | lab-baylibre    | gcc-10   | vexpre=
+ss_defconfig           | 1          =
 
-qemu_arm-virt-gicv2-uefi     | arm    | lab-broonie     | gcc-10   | multi_=
-v7_defconfig+debug     | 1          =
+qemu_arm-vexpress-a9         | arm    | lab-broonie     | gcc-10   | vexpre=
+ss_defconfig           | 1          =
 
-qemu_arm-virt-gicv2-uefi     | arm    | lab-collabora   | gcc-10   | multi_=
-v7_defconfig+debug     | 1          =
+qemu_arm-vexpress-a9         | arm    | lab-collabora   | gcc-10   | vexpre=
+ss_defconfig           | 1          =
 
-qemu_arm-virt-gicv3          | arm    | lab-baylibre    | gcc-10   | multi_=
-v7_defconfig+debug     | 1          =
+qemu_arm64-virt-gicv2        | arm64  | lab-baylibre    | clang-13 | defcon=
+fig+arm64-chromebook   | 1          =
 
-qemu_arm-virt-gicv3          | arm    | lab-broonie     | gcc-10   | multi_=
-v7_defconfig+debug     | 1          =
+qemu_arm64-virt-gicv2        | arm64  | lab-broonie     | clang-13 | defcon=
+fig+arm64-chromebook   | 1          =
 
-qemu_arm-virt-gicv3          | arm    | lab-collabora   | gcc-10   | multi_=
-v7_defconfig+debug     | 1          =
+qemu_arm64-virt-gicv2        | arm64  | lab-collabora   | clang-13 | defcon=
+fig+arm64-chromebook   | 1          =
 
-qemu_arm-virt-gicv3-uefi     | arm    | lab-baylibre    | gcc-10   | multi_=
-v7_defconfig+debug     | 1          =
+qemu_arm64-virt-gicv2        | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON...OMIZE_BASE=3Dy | 1          =
 
-qemu_arm-virt-gicv3-uefi     | arm    | lab-broonie     | gcc-10   | multi_=
-v7_defconfig+debug     | 1          =
+qemu_arm64-virt-gicv2        | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+crypto             | 1          =
 
-qemu_arm-virt-gicv3-uefi     | arm    | lab-collabora   | gcc-10   | multi_=
-v7_defconfig+debug     | 1          =
+qemu_arm64-virt-gicv2        | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+ima                | 1          =
 
-qemu_mips-malta              | mips   | lab-collabora   | gcc-10   | malta_=
-defconfig              | 1          =
+qemu_arm64-virt-gicv2        | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+qemu_arm64-virt-gicv2        | arm64  | lab-broonie     | gcc-10   | defcon=
+fig+CON...OMIZE_BASE=3Dy | 1          =
+
+qemu_arm64-virt-gicv2        | arm64  | lab-broonie     | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+qemu_arm64-virt-gicv2        | arm64  | lab-broonie     | gcc-10   | defcon=
+fig+ima                | 1          =
+
+qemu_arm64-virt-gicv2        | arm64  | lab-broonie     | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+qemu_arm64-virt-gicv2        | arm64  | lab-collabora   | gcc-10   | defcon=
+fig+ima                | 1          =
+
+qemu_arm64-virt-gicv2        | arm64  | lab-collabora   | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+qemu_arm64-virt-gicv2-uefi   | arm64  | lab-baylibre    | clang-13 | defcon=
+fig+arm64-chromebook   | 1          =
+
+qemu_arm64-virt-gicv2-uefi   | arm64  | lab-broonie     | clang-13 | defcon=
+fig+arm64-chromebook   | 1          =
+
+qemu_arm64-virt-gicv2-uefi   | arm64  | lab-collabora   | clang-13 | defcon=
+fig+arm64-chromebook   | 1          =
+
+qemu_arm64-virt-gicv2-uefi   | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON...OMIZE_BASE=3Dy | 1          =
+
+qemu_arm64-virt-gicv2-uefi   | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+qemu_arm64-virt-gicv2-uefi   | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+ima                | 1          =
+
+qemu_arm64-virt-gicv2-uefi   | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+qemu_arm64-virt-gicv2-uefi   | arm64  | lab-broonie     | gcc-10   | defcon=
+fig+CON...OMIZE_BASE=3Dy | 1          =
+
+qemu_arm64-virt-gicv2-uefi   | arm64  | lab-broonie     | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+qemu_arm64-virt-gicv2-uefi   | arm64  | lab-broonie     | gcc-10   | defcon=
+fig+ima                | 1          =
+
+qemu_arm64-virt-gicv2-uefi   | arm64  | lab-broonie     | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+qemu_arm64-virt-gicv3        | arm64  | lab-baylibre    | clang-13 | defcon=
+fig+arm64-chromebook   | 1          =
+
+qemu_arm64-virt-gicv3        | arm64  | lab-broonie     | clang-13 | defcon=
+fig+arm64-chromebook   | 1          =
+
+qemu_arm64-virt-gicv3        | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON...OMIZE_BASE=3Dy | 1          =
+
+qemu_arm64-virt-gicv3        | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+qemu_arm64-virt-gicv3        | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+ima                | 1          =
+
+qemu_arm64-virt-gicv3        | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+qemu_arm64-virt-gicv3        | arm64  | lab-broonie     | gcc-10   | defcon=
+fig+CON...OMIZE_BASE=3Dy | 1          =
+
+qemu_arm64-virt-gicv3        | arm64  | lab-broonie     | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+qemu_arm64-virt-gicv3        | arm64  | lab-broonie     | gcc-10   | defcon=
+fig+ima                | 1          =
+
+qemu_arm64-virt-gicv3        | arm64  | lab-broonie     | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+qemu_arm64-virt-gicv3        | arm64  | lab-collabora   | gcc-10   | defcon=
+fig+ima                | 1          =
+
+qemu_arm64-virt-gicv3        | arm64  | lab-collabora   | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+qemu_arm64-virt-gicv3-uefi   | arm64  | lab-baylibre    | clang-13 | defcon=
+fig+arm64-chromebook   | 1          =
+
+qemu_arm64-virt-gicv3-uefi   | arm64  | lab-broonie     | clang-13 | defcon=
+fig+arm64-chromebook   | 1          =
+
+qemu_arm64-virt-gicv3-uefi   | arm64  | lab-collabora   | clang-13 | defcon=
+fig+arm64-chromebook   | 1          =
+
+qemu_arm64-virt-gicv3-uefi   | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON...OMIZE_BASE=3Dy | 1          =
+
+qemu_arm64-virt-gicv3-uefi   | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+qemu_arm64-virt-gicv3-uefi   | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+ima                | 1          =
+
+qemu_arm64-virt-gicv3-uefi   | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+qemu_arm64-virt-gicv3-uefi   | arm64  | lab-broonie     | gcc-10   | defcon=
+fig+CON...OMIZE_BASE=3Dy | 1          =
+
+qemu_arm64-virt-gicv3-uefi   | arm64  | lab-broonie     | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+qemu_arm64-virt-gicv3-uefi   | arm64  | lab-broonie     | gcc-10   | defcon=
+fig+ima                | 1          =
+
+qemu_arm64-virt-gicv3-uefi   | arm64  | lab-broonie     | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+qemu_arm64-virt-gicv3-uefi   | arm64  | lab-collabora   | gcc-10   | defcon=
+fig+ima                | 1          =
 
 r8a7743-iwg20d-q7            | arm    | lab-cip         | gcc-10   | shmobi=
 le_defconfig           | 1          =
+
+r8a774a1-hihope-rzg2m-ex     | arm64  | lab-cip         | gcc-10   | defcon=
+fig+CON...OMIZE_BASE=3Dy | 1          =
+
+r8a774a1-hihope-rzg2m-ex     | arm64  | lab-cip         | gcc-10   | defcon=
+fig+ima                | 1          =
+
+r8a774c0-ek874               | arm64  | lab-cip         | clang-13 | defcon=
+fig+arm64-chromebook   | 1          =
+
+r8a774c0-ek874               | arm64  | lab-cip         | gcc-10   | defcon=
+fig+CON...OMIZE_BASE=3Dy | 1          =
+
+r8a774c0-ek874               | arm64  | lab-cip         | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+r8a774c0-ek874               | arm64  | lab-cip         | gcc-10   | defcon=
+fig+ima                | 1          =
+
+r8a774c0-ek874               | arm64  | lab-cip         | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+r8a77960-ulcb                | arm64  | lab-collabora   | gcc-10   | defcon=
+fig+CON...OMIZE_BASE=3Dy | 1          =
+
+r8a77960-ulcb                | arm64  | lab-collabora   | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+r8a77960-ulcb                | arm64  | lab-collabora   | gcc-10   | defcon=
+fig+ima                | 1          =
+
+r8a77960-ulcb                | arm64  | lab-collabora   | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
 
 rk3288-rock2-square          | arm    | lab-collabora   | gcc-10   | multi_=
 v7_defc...G_ARM_LPAE=3Dy | 1          =
 
 rk3288-veyron-jaq            | arm    | lab-collabora   | gcc-10   | multi_=
-v7_defc...CONFIG_SMP=3Dn | 1          =
-
-rk3288-veyron-jaq            | arm    | lab-collabora   | gcc-10   | multi_=
 v7_defc...G_ARM_LPAE=3Dy | 1          =
 
-rk3399-gru-kevin             | arm64  | lab-collabora   | gcc-10   | defcon=
-fig+arm...ok+kselftest | 1          =
+rk3399-gru-kevin             | arm64  | lab-collabora   | clang-13 | defcon=
+fig+arm64-chromebook   | 1          =
 
 rk3399-roc-pc                | arm64  | lab-clabbe      | gcc-10   | defcon=
-fig+kselftest          | 1          =
+fig+CON...OMIZE_BASE=3Dy | 1          =
+
+rk3399-roc-pc                | arm64  | lab-clabbe      | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+rk3399-roc-pc                | arm64  | lab-clabbe      | gcc-10   | defcon=
+fig+ima                | 1          =
+
+rk3399-roc-pc                | arm64  | lab-clabbe      | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
 
 rk3399-rock-pi-4b            | arm64  | lab-collabora   | gcc-10   | defcon=
-fig+kselftest          | 1          =
+fig+CON...OMIZE_BASE=3Dy | 1          =
 
-sc7180-trogdor-kingoftown    | arm64  | lab-collabora   | gcc-10   | defcon=
-fig+arm...ok+kselftest | 1          =
+rk3399-rock-pi-4b            | arm64  | lab-collabora   | gcc-10   | defcon=
+fig+crypto             | 1          =
 
-sc7180-trogdo...zor-limozeen | arm64  | lab-collabora   | gcc-10   | defcon=
-fig+arm...ok+kselftest | 1          =
+rk3399-rock-pi-4b            | arm64  | lab-collabora   | gcc-10   | defcon=
+fig+ima                | 1          =
+
+rk3399-rock-pi-4b            | arm64  | lab-collabora   | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+sc7180-trogdo...zor-limozeen | arm64  | lab-collabora   | clang-13 | defcon=
+fig+arm64-chromebook   | 1          =
 
 sun50i-a64-pine64-plus       | arm64  | lab-broonie     | gcc-10   | defcon=
-fig+kselftest          | 1          =
+fig+CON...OMIZE_BASE=3Dy | 1          =
+
+sun50i-a64-pine64-plus       | arm64  | lab-broonie     | gcc-10   | defcon=
+fig+CON...BIG_ENDIAN=3Dy | 1          =
+
+sun50i-a64-pine64-plus       | arm64  | lab-broonie     | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+sun50i-a64-pine64-plus       | arm64  | lab-broonie     | gcc-10   | defcon=
+fig+ima                | 1          =
+
+sun50i-a64-pine64-plus       | arm64  | lab-broonie     | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
 
 sun50i-h5-lib...ch-all-h3-cc | arm64  | lab-broonie     | gcc-10   | defcon=
-fig+kselftest          | 1          =
+fig+CON...OMIZE_BASE=3Dy | 1          =
+
+sun50i-h5-lib...ch-all-h3-cc | arm64  | lab-broonie     | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+sun50i-h5-lib...ch-all-h3-cc | arm64  | lab-broonie     | gcc-10   | defcon=
+fig+ima                | 1          =
+
+sun50i-h5-lib...ch-all-h3-cc | arm64  | lab-broonie     | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+sun50i-h6-pine-h64           | arm64  | lab-clabbe      | gcc-10   | defcon=
+fig+CON...OMIZE_BASE=3Dy | 1          =
+
+sun50i-h6-pine-h64           | arm64  | lab-clabbe      | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+sun50i-h6-pine-h64           | arm64  | lab-clabbe      | gcc-10   | defcon=
+fig+ima                | 1          =
+
+sun50i-h6-pine-h64           | arm64  | lab-clabbe      | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+sun50i-h6-pine-h64           | arm64  | lab-collabora   | gcc-10   | defcon=
+fig+CON...OMIZE_BASE=3Dy | 1          =
+
+sun50i-h6-pine-h64           | arm64  | lab-collabora   | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+sun50i-h6-pine-h64           | arm64  | lab-collabora   | gcc-10   | defcon=
+fig+ima                | 1          =
+
+sun50i-h6-pine-h64           | arm64  | lab-collabora   | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
 
 sun8i-h2-plus-orangepi-zero  | arm    | lab-baylibre    | gcc-10   | sunxi_=
+defconfig              | 1          =
+
+sun8i-h3-libretech-all-h3-cc | arm    | lab-baylibre    | gcc-10   | sunxi_=
 defconfig              | 1          =
 
 tegra124-nyan-big            | arm    | lab-collabora   | gcc-10   | multi_=
 v7_defc...G_ARM_LPAE=3Dy | 1          =
 
+zynqmp-zcu102                | arm64  | lab-cip         | clang-13 | defcon=
+fig+arm64-chromebook   | 1          =
 
-  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
-v6.3-rc3-224-ga0d6a906c6a2/plan/baseline/
+zynqmp-zcu102                | arm64  | lab-cip         | gcc-10   | defcon=
+fig+CON...OMIZE_BASE=3Dy | 1          =
+
+zynqmp-zcu102                | arm64  | lab-cip         | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+zynqmp-zcu102                | arm64  | lab-cip         | gcc-10   | defcon=
+fig+ima                | 1          =
+
+zynqmp-zcu102                | arm64  | lab-cip         | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:  https://kernelci.org/test/job/next/branch/master/kernel/next-20=
+230321/plan/baseline/
 
   Test:     baseline
   Tree:     next
-  Branch:   pending-fixes
-  Describe: v6.3-rc3-224-ga0d6a906c6a2
+  Branch:   master
+  Describe: next-20230321
   URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
 .git
-  SHA:      a0d6a906c6a2e6054b6fa36e4657b17368577511 =
+  SHA:      f3594f0204b756638267242e26d9de611435c3ba =
 
 
 
@@ -305,31 +783,124 @@ platform                     | arch   | lab             | compiler | defcon=
 fig                    | regressions
 -----------------------------+--------+-----------------+----------+-------=
 -----------------------+------------
-am57xx-beagle-x15            | arm    | lab-linaro-lkft | gcc-10   | multi_=
-v7_defc...CONFIG_SMP=3Dn | 1          =
+acer-R721T-grunt             | x86_64 | lab-collabora   | clang-13 | x86_64=
+_defcon...6-chromebook | 2          =
 
 
-  Details:     https://kernelci.org/test/plan/id/64196ddacd0b4872699c9561
+  Details:     https://kernelci.org/test/plan/id/6419895086e28d558f9c952b
 
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+CONFIG_SMP=3Dn
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-10/lab-linaro-lkf=
-t/baseline-am57xx-beagle-x15.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-10/lab-linaro-lkf=
-t/baseline-am57xx-beagle-x15.html
+  Results:     17 PASS, 2 FAIL, 0 SKIP
+  Full config: x86_64_defconfig+x86-chromebook
+  Compiler:    clang-13 (Debian clang version 13.0.1-6~deb11u1)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/x86_=
+64/x86_64_defconfig+x86-chromebook/clang-13/lab-collabora/baseline-acer-R72=
+1T-grunt.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/x86_=
+64/x86_64_defconfig+x86-chromebook/clang-13/lab-collabora/baseline-acer-R72=
+1T-grunt.html
   Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230310.0/armel/rootfs.cpio.gz =
+t-baseline/20230310.0/x86/rootfs.cpio.gz =
 
 
 
-  * baseline.login: https://kernelci.org/test/case/id/64196ddacd0b4872699c9=
-562
-        failing since 162 days (last pass: v6.0-6424-g1af0c6a154d32, first =
-fail: v6.0-9666-g02c05e0b8d5c) =
+  * baseline.bootrr.battery-device-probed: https://kernelci.org/test/case/i=
+d/6419895086e28d558f9c953a
+        new failure (last pass: next-20230316)
+
+    2023-03-21T10:38:59.308568  /lava-9713019/1/../bin/lava-test-case
+
+    2023-03-21T10:38:59.325797  <8>[   24.163955] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dbattery-device-probed RESULT=3Dfail>
+   =
+
+
+  * baseline.bootrr.tpm-chip-is-online: https://kernelci.org/test/case/id/6=
+419895086e28d558f9c953e
+        new failure (last pass: next-20230316)
+
+    2023-03-21T10:38:47.708618  /usr/bin/tpm2_getcap
+
+    2023-03-21T10:38:58.109815  /lava-9713019/1/../bin/lava-test-case
+
+    2023-03-21T10:38:58.126729  <8>[   22.965117] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dtpm-chip-is-online RESULT=3Dfail>
+   =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+acer-R721T-grunt             | x86_64 | lab-collabora   | gcc-10   | x86_64=
+_defcon...6-chromebook | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/64197395bd7e2667a79c952d
+
+  Results:     18 PASS, 1 FAIL, 0 SKIP
+  Full config: x86_64_defconfig+x86-chromebook
+  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/x86_=
+64/x86_64_defconfig+x86-chromebook/gcc-10/lab-collabora/baseline-acer-R721T=
+-grunt.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/x86_=
+64/x86_64_defconfig+x86-chromebook/gcc-10/lab-collabora/baseline-acer-R721T=
+-grunt.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/x86/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.battery-device-probed: https://kernelci.org/test/case/i=
+d/64197395bd7e2667a79c953c
+        new failure (last pass: next-20230320)
+
+    2023-03-21T09:06:21.367263  /lava-9710162/1/../bin/lava-test-case
+
+    2023-03-21T09:06:21.373949  <8>[    9.373100] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dbattery-device-probed RESULT=3Dfail>
+   =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+acer-R721T-grunt             | x86_64 | lab-collabora   | gcc-10   | x86_64=
+_defcon...ebook+amdgpu | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/64197436fd20979be39c9552
+
+  Results:     18 PASS, 1 FAIL, 0 SKIP
+  Full config: x86_64_defconfig+x86-chromebook+amdgpu
+  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/x86_=
+64/x86_64_defconfig+x86-chromebook+amdgpu/gcc-10/lab-collabora/baseline-ace=
+r-R721T-grunt.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/x86_=
+64/x86_64_defconfig+x86-chromebook+amdgpu/gcc-10/lab-collabora/baseline-ace=
+r-R721T-grunt.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/x86/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.battery-device-probed: https://kernelci.org/test/case/i=
+d/64197436fd20979be39c9561
+        new failure (last pass: next-20230320)
+
+    2023-03-21T09:08:59.259331  /lava-9710415/1/../bin/lava-test-case
+
+    2023-03-21T09:08:59.265468  <8>[    9.896201] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dbattery-device-probed RESULT=3Dfail>
+   =
 
  =
 
@@ -340,30 +911,30 @@ fig                    | regressions
 -----------------------------+--------+-----------------+----------+-------=
 -----------------------+------------
 am57xx-beagle-x15            | arm    | lab-linaro-lkft | gcc-10   | multi_=
-v7_defconfig+debug     | 1          =
+v7_defc...CONFIG_SMP=3Dn | 1          =
 
 
-  Details:     https://kernelci.org/test/plan/id/64199bdee1f33b84549c9509
+  Details:     https://kernelci.org/test/plan/id/64199b670cd394ecdb9c958e
 
   Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+debug
+  Full config: multi_v7_defconfig+CONFIG_SMP=3Dn
   Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
 10110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm/multi_v7_defconfig+debug/gcc-10/lab-linaro-lkft/baselin=
-e-am57xx-beagle-x15.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm/multi_v7_defconfig+debug/gcc-10/lab-linaro-lkft/baselin=
-e-am57xx-beagle-x15.html
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm/=
+multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-10/lab-linaro-lkft/baseline-am57xx-be=
+agle-x15.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm/=
+multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-10/lab-linaro-lkft/baseline-am57xx-be=
+agle-x15.html
   Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
 t-baseline/20230310.0/armel/rootfs.cpio.gz =
 
 
 
-  * baseline.login: https://kernelci.org/test/case/id/64199bdee1f33b84549c9=
-50a
-        failing since 160 days (last pass: v6.0-9666-g02c05e0b8d5c, first f=
-ail: v6.0-11312-g1778d6da389c) =
+  * baseline.login: https://kernelci.org/test/case/id/64199b670cd394ecdb9c9=
+58f
+        failing since 185 days (last pass: next-20220915, first fail: next-=
+20220916) =
 
  =
 
@@ -377,40 +948,70 @@ asus-CM1400CXA-dalboz        | x86_64 | lab-collabora   | gcc-10   | x86_64=
 _defcon...ok+kselftest | 1          =
 
 
-  Details:     https://kernelci.org/test/plan/id/64196cee397d4058789c9516
+  Details:     https://kernelci.org/test/plan/id/64197423f684e574f49c951f
 
   Results:     6 PASS, 1 FAIL, 0 SKIP
   Full config: x86_64_defconfig+x86-chromebook+kselftest
   Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/x86_64/x86_64_defconfig+x86-chromebook+kselftest/gcc-10/lab=
--collabora/baseline-asus-CM1400CXA-dalboz.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/x86_64/x86_64_defconfig+x86-chromebook+kselftest/gcc-10/lab=
--collabora/baseline-asus-CM1400CXA-dalboz.html
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/x86_=
+64/x86_64_defconfig+x86-chromebook+kselftest/gcc-10/lab-collabora/baseline-=
+asus-CM1400CXA-dalboz.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/x86_=
+64/x86_64_defconfig+x86-chromebook+kselftest/gcc-10/lab-collabora/baseline-=
+asus-CM1400CXA-dalboz.html
   Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
 t-baseline/20230310.0/x86/rootfs.cpio.gz =
 
 
 
-  * baseline.dmesg.emerg: https://kernelci.org/test/case/id/64196cee397d405=
-8789c9519
-        failing since 6 days (last pass: v6.3-rc2-254-g7f35d1f08bb0, first =
-fail: v6.3-rc2-307-g900e881df1ea3)
+  * baseline.dmesg.emerg: https://kernelci.org/test/case/id/64197423f684e57=
+4f49c9522
+        failing since 10 days (last pass: next-20230309, first fail: next-2=
+0230310)
         3 lines
 
-    2023-03-21T08:37:48.105831  kern  :emerg : __common_interrupt: 1.55 No =
+    2023-03-21T09:08:38.107663  kern  :emerg : __common_interrupt: 1.55 No =
 irq handler for vector
 
-    2023-03-21T08:37:48.112191  kern  :emerg : __common_interrupt: 2.55 No =
-irq handler for vector
+    2023-03-21T09:08:38.124478  kern  :emerg : __common_interrupt: 2.55 No =
+irq handler for vector<8>[   14.141638] <LAVA_SIGNAL_TESTCASE TEST_CASE_ID=
+=3Demerg RESULT=3Dfail UNITS=3Dlines MEASUREMENT=3D3>
 
-    2023-03-21T08:37:48.118821  kern  :emerg : __common_interrupt: 3.55 No =
-irq handler for vector
+    2023-03-21T09:08:38.125072  =
 
-    2023-03-21T08:37:48.125561  <8>[   15.003353] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Demerg RESULT=3Dfail UNITS=3Dlines MEASUREMENT=3D3>
    =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+at91-sama5d4_xplained        | arm    | lab-baylibre    | gcc-10   | sama5_=
+defconfig              | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641976bab47897ec229c9508
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: sama5_defconfig
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm/=
+sama5_defconfig/gcc-10/lab-baylibre/baseline-at91-sama5d4_xplained.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm/=
+sama5_defconfig/gcc-10/lab-baylibre/baseline-at91-sama5d4_xplained.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641976bab47897ec229c9=
+509
+        failing since 48 days (last pass: next-20230125, first fail: next-2=
+0230131) =
 
  =
 
@@ -424,142 +1025,44 @@ bcm2835-rpi-b-rev2           | arm    | lab-broonie     | gcc-10   | bcm283=
 5_defconfig            | 1          =
 
 
-  Details:     https://kernelci.org/test/plan/id/64196c2d42200809489c953d
+  Details:     https://kernelci.org/test/plan/id/6419780f0ab274244f9c9519
 
   Results:     50 PASS, 2 FAIL, 1 SKIP
   Full config: bcm2835_defconfig
   Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
 10110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm/bcm2835_defconfig/gcc-10/lab-broonie/baseline-bcm2835-r=
-pi-b-rev2.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm/bcm2835_defconfig/gcc-10/lab-broonie/baseline-bcm2835-r=
-pi-b-rev2.html
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm/=
+bcm2835_defconfig/gcc-10/lab-broonie/baseline-bcm2835-rpi-b-rev2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm/=
+bcm2835_defconfig/gcc-10/lab-broonie/baseline-bcm2835-rpi-b-rev2.html
   Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
 t-baseline/20230310.0/armel/rootfs.cpio.gz =
 
 
 
   * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/64196c2d42200809489c9573
-        failing since 6 days (last pass: v6.3-rc1-336-gbec2983895c5, first =
-fail: v6.3-rc2-254-g7f35d1f08bb0)
+/6419780f0ab274244f9c9550
+        failing since 1 day (last pass: next-20230317, first fail: next-202=
+30320)
 
-    2023-03-21T08:34:27.981720  + set +x
-    2023-03-21T08:34:27.985261  <8>[   17.988562] <LAVA_SIGNAL_ENDRUN 0_dme=
-sg 197189_1.5.2.4.1>
-    2023-03-21T08:34:28.117074  / # #
-    2023-03-21T08:34:28.220294  export SHELL=3D/bin/sh
-    2023-03-21T08:34:28.221039  #
-    2023-03-21T08:34:28.323025  / # export SHELL=3D/bin/sh. /lava-197189/en=
+    2023-03-21T09:25:13.455613  + set +x
+    2023-03-21T09:25:13.459546  <8>[   17.923115] <LAVA_SIGNAL_ENDRUN 0_dme=
+sg 198031_1.5.2.4.1>
+    2023-03-21T09:25:13.592215  / # #
+    2023-03-21T09:25:13.695124  export SHELL=3D/bin/sh
+    2023-03-21T09:25:13.695810  #
+    2023-03-21T09:25:13.798067  / # export SHELL=3D/bin/sh. /lava-198031/en=
 vironment
-    2023-03-21T08:34:28.324242  =
+    2023-03-21T09:25:13.798792  =
 
-    2023-03-21T08:34:28.427278  / # . /lava-197189/environment/lava-197189/=
-bin/lava-test-runner /lava-197189/1
-    2023-03-21T08:34:28.429536  =
+    2023-03-21T09:25:13.901287  / # . /lava-198031/environment/lava-198031/=
+bin/lava-test-runner /lava-198031/1
+    2023-03-21T09:25:13.902434  =
 
-    2023-03-21T08:34:28.434943  / # /lava-197189/bin/lava-test-runner /lava=
--197189/1 =
+    2023-03-21T09:25:13.908907  / # /lava-198031/bin/lava-test-runner /lava=
+-198031/1 =
 
     ... (14 line(s) more)  =
-
- =
-
-
-
-platform                     | arch   | lab             | compiler | defcon=
-fig                    | regressions
------------------------------+--------+-----------------+----------+-------=
------------------------+------------
-bcm2836-rpi-2-b              | arm    | lab-collabora   | gcc-10   | bcm283=
-5_defconfig            | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/64196d98dd796297519c9536
-
-  Results:     5 PASS, 1 FAIL, 1 SKIP
-  Full config: bcm2835_defconfig
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm/bcm2835_defconfig/gcc-10/lab-collabora/baseline-bcm2836=
--rpi-2-b.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm/bcm2835_defconfig/gcc-10/lab-collabora/baseline-bcm2836=
--rpi-2-b.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230310.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/64196d98dd796297519c953f
-        failing since 68 days (last pass: v6.2-rc3-243-g3145d9dfed32, first=
- fail: v6.2-rc3-296-g79fa898551af)
-
-    2023-03-21T08:40:30.278974  / # #
-
-    2023-03-21T08:40:30.380866  export SHELL=3D/bin/sh
-
-    2023-03-21T08:40:30.381681  #
-
-    2023-03-21T08:40:30.484592  / # export SHELL=3D/bin/sh. /lava-9709449/e=
-nvironment
-
-    2023-03-21T08:40:30.485452  =
-
-
-    2023-03-21T08:40:30.587038  / # . /lava-9709449/environment/lava-970944=
-9/bin/lava-test-runner /lava-9709449/1
-
-    2023-03-21T08:40:30.588138  =
-
-
-    2023-03-21T08:40:30.604559  / # /lava-9709449/bin/lava-test-runner /lav=
-a-9709449/1
-
-    2023-03-21T08:40:30.712897  + export 'TESTRUN_ID=3D1_bootrr'
-
-    2023-03-21T08:40:30.713238  + cd /lava-9709449/1/tests/1_bootrr
- =
-
-    ... (12 line(s) more)  =
-
- =
-
-
-
-platform                     | arch   | lab             | compiler | defcon=
-fig                    | regressions
------------------------------+--------+-----------------+----------+-------=
------------------------+------------
-bcm2836-rpi-2-b              | arm    | lab-collabora   | gcc-10   | multi_=
-v7_defc...MB2_KERNEL=3Dy | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/64196e46e6c1beb2f09c953f
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm/multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/lab-=
-collabora/baseline-bcm2836-rpi-2-b.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm/multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/lab-=
-collabora/baseline-bcm2836-rpi-2-b.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230310.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/64196e46e6c1beb2f09c9=
-540
-        failing since 22 days (last pass: v6.2-8700-gab98cc06b683, first fa=
-il: v6.2-12625-g13efc3a9f23b) =
 
  =
 
@@ -573,45 +1076,44 @@ cubietruck                   | arm    | lab-baylibre    | gcc-10   | multi_=
 v7_defc...MB2_KERNEL=3Dy | 1          =
 
 
-  Details:     https://kernelci.org/test/plan/id/64196c5a4bceb59a429c953f
+  Details:     https://kernelci.org/test/plan/id/641973726bb7440a839c9526
 
   Results:     5 PASS, 1 FAIL, 1 SKIP
   Full config: multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy
   Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
 10110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm/multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/lab-=
-baylibre/baseline-cubietruck.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm/multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/lab-=
-baylibre/baseline-cubietruck.html
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm/=
+multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/lab-baylibre/baseline-cu=
+bietruck.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm/=
+multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/lab-baylibre/baseline-cu=
+bietruck.html
   Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
 t-baseline/20230310.0/armel/rootfs.cpio.gz =
 
 
 
   * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/64196c5a4bceb59a429c9548
-        failing since 62 days (last pass: v6.1-13341-g16cba743aec0, first f=
-ail: v6.2-rc4-302-g48ed69cf21b2)
+/641973726bb7440a839c952f
+        failing since 61 days (last pass: next-20221219, first fail: next-2=
+0230118)
 
-    2023-03-21T08:35:26.444182  <8>[   14.995459] <LAVA_SIGNAL_ENDRUN 0_dme=
-sg 3430314_1.5.2.4.1>
-    2023-03-21T08:35:26.552744  / # #
-    2023-03-21T08:35:26.654540  export SHELL=3D/bin/sh
-    2023-03-21T08:35:26.655412  #
-    2023-03-21T08:35:26.757558  / # export SHELL=3D/bin/sh. /lava-3430314/e=
+    2023-03-21T09:05:42.026033  <8>[   14.525091] <LAVA_SIGNAL_ENDRUN 0_dme=
+sg 3430612_1.5.2.4.1>
+    2023-03-21T09:05:42.139275  / # #
+    2023-03-21T09:05:42.242901  export SHELL=3D/bin/sh
+    2023-03-21T09:05:42.243686  #
+    2023-03-21T09:05:42.345233  / # export SHELL=3D/bin/sh. /lava-3430612/e=
 nvironment
-    2023-03-21T08:35:26.758275  =
+    2023-03-21T09:05:42.345876  =
 
-    2023-03-21T08:35:26.859811  / # . /lava-3430314/environment/lava-343031=
-4/bin/lava-test-runner /lava-3430314/1
-    2023-03-21T08:35:26.861383  =
+    2023-03-21T09:05:42.449748  / # . /lava-3430612/environment/lava-343061=
+2/bin/lava-test-runner /lava-3430612/1
+    2023-03-21T09:05:42.450418  =
 
-    2023-03-21T08:35:26.868717  / # /lava-3430314/bin/lava-test-runner /lav=
-a-3430314/1
-    2023-03-21T08:35:26.934000  <3>[   15.485903] Bluetooth: hci0: command =
-0x0c03 tx timeout =
+    2023-03-21T09:05:42.450584  / # /lava-3430612/bin/lava-test-runner /lav=
+a-3430612/1<3>[   14.921423] Bluetooth: hci0: command 0x0c03 tx timeout
+    2023-03-21T09:05:42.456464   =
 
     ... (12 line(s) more)  =
 
@@ -627,100 +1129,46 @@ cubietruck                   | arm    | lab-baylibre    | gcc-10   | multi_=
 v7_defc...CONFIG_SMP=3Dn | 1          =
 
 
-  Details:     https://kernelci.org/test/plan/id/64196e4ce386f209409c950b
+  Details:     https://kernelci.org/test/plan/id/64197422a50df217699c9508
 
   Results:     5 PASS, 1 FAIL, 1 SKIP
   Full config: multi_v7_defconfig+CONFIG_SMP=3Dn
   Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
 10110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-10/lab-baylibre/b=
-aseline-cubietruck.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-10/lab-baylibre/b=
-aseline-cubietruck.html
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm/=
+multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-10/lab-baylibre/baseline-cubietruck.t=
+xt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm/=
+multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-10/lab-baylibre/baseline-cubietruck.h=
+tml
   Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
 t-baseline/20230310.0/armel/rootfs.cpio.gz =
 
 
 
   * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/64196e4ce386f209409c9514
-        failing since 62 days (last pass: v6.1-13341-g16cba743aec0, first f=
-ail: v6.2-rc4-302-g48ed69cf21b2)
+/64197422a50df217699c9511
+        failing since 61 days (last pass: next-20221219, first fail: next-2=
+0230118)
 
-    2023-03-21T08:43:31.422909  <8>[   16.682919] <LAVA_SIGNAL_ENDRUN 0_dme=
-sg 3430409_1.5.2.4.1>
-    2023-03-21T08:43:31.539897  / # #
-    2023-03-21T08:43:31.644277  export SHELL=3D/bin/sh
-    2023-03-21T08:43:31.645437  #
-    2023-03-21T08:43:31.747981  / # export SHELL=3D/bin/sh. /lava-3430409/e=
+    2023-03-21T09:08:27.539315  <8>[   16.814622] <LAVA_SIGNAL_ENDRUN 0_dme=
+sg 3430626_1.5.2.4.1>
+    2023-03-21T09:08:27.651864  / # #
+    2023-03-21T09:08:27.754063  export SHELL=3D/bin/sh
+    2023-03-21T09:08:27.754646  #
+    2023-03-21T09:08:27.861745  / # export SHELL=3D/bin/sh. /lava-3430626/e=
 nvironment
-    2023-03-21T08:43:31.749130  =
+    2023-03-21T09:08:27.862142  =
 
-    2023-03-21T08:43:31.851703  / # . /lava-3430409/environment/lava-343040=
-9/bin/lava-test-runner /lava-3430409/1
-    2023-03-21T08:43:31.853371  =
+    2023-03-21T09:08:27.972052  / # . /lava-3430626/environment/lava-343062=
+6/bin/lava-test-runner /lava-3430626/1
+    2023-03-21T09:08:27.972899  =
 
-    2023-03-21T08:43:31.858206  / # /lava-3430409/bin/lava-test-runner /lav=
-a-3430409/1
-    2023-03-21T08:43:31.949680  + export 'TESTRUN_ID=3D1_bootrr' =
+    2023-03-21T09:08:27.977669  / # /lava-3430626/bin/lava-test-runner /lav=
+a-3430626/1
+    2023-03-21T09:08:28.070106  + export 'TESTRUN_ID=3D1_bootrr' =
 
     ... (11 line(s) more)  =
-
- =
-
-
-
-platform                     | arch   | lab             | compiler | defcon=
-fig                    | regressions
------------------------------+--------+-----------------+----------+-------=
------------------------+------------
-cubietruck                   | arm    | lab-baylibre    | gcc-10   | multi_=
-v7_defconfig+ima       | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/64196f7ccb8d8cfa709c9520
-
-  Results:     5 PASS, 1 FAIL, 1 SKIP
-  Full config: multi_v7_defconfig+ima
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm/multi_v7_defconfig+ima/gcc-10/lab-baylibre/baseline-cub=
-ietruck.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm/multi_v7_defconfig+ima/gcc-10/lab-baylibre/baseline-cub=
-ietruck.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230310.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/64196f7ccb8d8cfa709c9529
-        failing since 62 days (last pass: v6.1-13341-g16cba743aec0, first f=
-ail: v6.2-rc4-302-g48ed69cf21b2)
-
-    2023-03-21T08:48:47.558016  + set +x<8>[   15.437237] <LAVA_SIGNAL_ENDR=
-UN 0_dmesg 3430429_1.5.2.4.1>
-    2023-03-21T08:48:47.558320  =
-
-    2023-03-21T08:48:47.665477  / # #
-    2023-03-21T08:48:47.767231  export SHELL=3D/bin/sh
-    2023-03-21T08:48:47.767763  #
-    2023-03-21T08:48:47.869060  / # export SHELL=3D/bin/sh. /lava-3430429/e=
-nvironment
-    2023-03-21T08:48:47.869609  =
-
-    2023-03-21T08:48:47.971196  / # . /lava-3430429/environment/lava-343042=
-9/bin/lava-test-runner /lava-3430429/1
-    2023-03-21T08:48:47.971882  =
-
-    2023-03-21T08:48:47.972093  / # <3>[   15.797557] Bluetooth: hci0: comm=
-and 0xfc18 tx timeout =
-
-    ... (13 line(s) more)  =
 
  =
 
@@ -734,98 +1182,42 @@ cubietruck                   | arm    | lab-baylibre    | gcc-10   | multi_=
 v7_defconfig           | 1          =
 
 
-  Details:     https://kernelci.org/test/plan/id/6419700775511764fb9c9600
+  Details:     https://kernelci.org/test/plan/id/6419764071aebd4fe89c95ce
 
   Results:     5 PASS, 1 FAIL, 1 SKIP
   Full config: multi_v7_defconfig
   Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
 10110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm/multi_v7_defconfig/gcc-10/lab-baylibre/baseline-cubietr=
-uck.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm/multi_v7_defconfig/gcc-10/lab-baylibre/baseline-cubietr=
-uck.html
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm/=
+multi_v7_defconfig/gcc-10/lab-baylibre/baseline-cubietruck.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm/=
+multi_v7_defconfig/gcc-10/lab-baylibre/baseline-cubietruck.html
   Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
 t-baseline/20230310.0/armel/rootfs.cpio.gz =
 
 
 
   * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/6419700775511764fb9c9609
-        failing since 62 days (last pass: v6.1-13341-g16cba743aec0, first f=
-ail: v6.2-rc4-302-g48ed69cf21b2)
+/6419764071aebd4fe89c95d7
+        failing since 62 days (last pass: next-20221219, first fail: next-2=
+0230117)
 
-    2023-03-21T08:51:02.351925  <8>[   14.833118] <LAVA_SIGNAL_ENDRUN 0_dme=
-sg 3430449_1.5.2.4.1>
-    2023-03-21T08:51:02.460618  / # #
-    2023-03-21T08:51:02.562043  export SHELL=3D/bin/sh
-    2023-03-21T08:51:02.562394  #
-    2023-03-21T08:51:02.562541  / # <3>[   14.997334] Bluetooth: hci0: comm=
-and 0x0c03 tx timeout
-    2023-03-21T08:51:02.663629  export SHELL=3D/bin/sh. /lava-3430449/envir=
-onment
-    2023-03-21T08:51:02.663964  =
-
-    2023-03-21T08:51:02.765116  / # . /lava-3430449/environment/lava-343044=
-9/bin/lava-test-runner /lava-3430449/1
-    2023-03-21T08:51:02.765690  =
-
-    2023-03-21T08:51:02.771020  / # /lava-3430449/bin/lava-test-runner /lav=
-a-3430449/1 =
-
-    ... (12 line(s) more)  =
-
- =
-
-
-
-platform                     | arch   | lab             | compiler | defcon=
-fig                    | regressions
------------------------------+--------+-----------------+----------+-------=
------------------------+------------
-cubietruck                   | arm    | lab-baylibre    | gcc-10   | multi_=
-v7_defconfig+crypto    | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/64197092848c633b509c95a0
-
-  Results:     5 PASS, 1 FAIL, 1 SKIP
-  Full config: multi_v7_defconfig+crypto
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm/multi_v7_defconfig+crypto/gcc-10/lab-baylibre/baseline-=
-cubietruck.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm/multi_v7_defconfig+crypto/gcc-10/lab-baylibre/baseline-=
-cubietruck.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230310.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/64197092848c633b509c95a9
-        failing since 62 days (last pass: v6.1-13341-g16cba743aec0, first f=
-ail: v6.2-rc4-302-g48ed69cf21b2)
-
-    2023-03-21T08:53:21.870771  <8>[   24.456837] <LAVA_SIGNAL_ENDRUN 0_dme=
-sg 3430466_1.5.2.4.1>
-    2023-03-21T08:53:21.983851  / # #
-    2023-03-21T08:53:22.088339  export SHELL=3D/bin/sh
-    2023-03-21T08:53:22.089220  #
-    2023-03-21T08:53:22.191334  / # export SHELL=3D/bin/sh. /lava-3430466/e=
+    2023-03-21T09:17:25.100125  <8>[   14.729274] <LAVA_SIGNAL_ENDRUN 0_dme=
+sg 3430736_1.5.2.4.1>
+    2023-03-21T09:17:25.209749  / # #
+    2023-03-21T09:17:25.311251  export SHELL=3D/bin/sh
+    2023-03-21T09:17:25.311666  #
+    2023-03-21T09:17:25.412877  / # export SHELL=3D/bin/sh. /lava-3430736/e=
 nvironment
-    2023-03-21T08:53:22.192173  =
+    2023-03-21T09:17:25.413269  =
 
-    2023-03-21T08:53:22.294340  / # . /lava-3430466/environment/lava-343046=
-6/bin/lava-test-runner /lava-3430466/1
-    2023-03-21T08:53:22.295866  =
+    2023-03-21T09:17:25.514531  / # . /lava-3430736/environment/lava-343073=
+6/bin/lava-test-runner /lava-3430736/1
+    2023-03-21T09:17:25.515245  =
 
-    2023-03-21T08:53:22.301139  / # /lava-3430466/bin/lava-test-runner /lav=
-a-3430466/1
-    2023-03-21T08:53:22.388586  + export 'TESTRUN_ID=3D1_bootrr' =
+    2023-03-21T09:17:25.520017  / # /lava-3430736/bin/lava-test-runner /lav=
+a-3430736/1
+    2023-03-21T09:17:25.615500  + export 'TESTRUN_ID=3D1_bootrr' =
 
     ... (11 line(s) more)  =
 
@@ -838,85 +1230,53 @@ fig                    | regressions
 -----------------------------+--------+-----------------+----------+-------=
 -----------------------+------------
 da850-lcdk                   | arm    | lab-baylibre    | gcc-10   | davinc=
-i_all_defconfig        | 2          =
+i_all_defconfig        | 1          =
 
 
-  Details:     https://kernelci.org/test/plan/id/64196c4e4dddb2cf3e9c950c
+  Details:     https://kernelci.org/test/plan/id/6419714498611ddd259c957c
 
   Results:     3 PASS, 3 FAIL, 1 SKIP
   Full config: davinci_all_defconfig
   Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
 10110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm/davinci_all_defconfig/gcc-10/lab-baylibre/baseline-da85=
-0-lcdk.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm/davinci_all_defconfig/gcc-10/lab-baylibre/baseline-da85=
-0-lcdk.html
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm/=
+davinci_all_defconfig/gcc-10/lab-baylibre/baseline-da850-lcdk.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm/=
+davinci_all_defconfig/gcc-10/lab-baylibre/baseline-da850-lcdk.html
   Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
 t-baseline/20230310.0/armel/rootfs.cpio.gz =
 
 
 
-  * baseline.dmesg.emerg: https://kernelci.org/test/case/id/64196c4e4dddb2c=
-f3e9c950f
-        failing since 18 days (last pass: v6.2-1218-g2d4a54ee969d, first fa=
-il: v6.2-13370-g5872d227b73f)
-        30 lines
+  * baseline.dmesg.emerg: https://kernelci.org/test/case/id/6419714498611dd=
+d259c957f
+        failing since 36 days (last pass: next-20230208, first fail: next-2=
+0230213)
+        29 lines
 
-    2023-03-21T08:35:11.903158  kern  :alert : Register r7 information: non=
+    2023-03-21T08:56:22.143749  kern  :alert : Register r8 information: sla=
+b kmalloc-512 start c4f33200 pointer offset 4 size 512
+    2023-03-21T08:56:22.177319  kern  :alert : Register r9 information: non=
 -paged memory
-    2023-03-21T08:35:11.904199  kern  :alert : Register r8 information: sla=
-b kmalloc-512 start c4c51200 pointer offset 4 size 512
-    2023-03-21T08:35:11.904982  kern  :alert : Register r9 information: non=
--paged memory
-    2023-03-21T08:35:11.905868  kern  :alert : Register r10 information: NU=
+    2023-03-21T08:56:22.177621  kern  :alert : Register r10 information: NU=
 LL pointer
-    2023-03-21T08:35:11.906652  kern  :alert : Register r11 information: 5-=
-page vmalloc region starting at 0xbf3e2000 allocated at load_module+0x898/0=
-x1b10
-    2023-03-21T08:35:11.907833  kern  :alert : Register r12 information: no=
+    2023-03-21T08:56:22.177854  kern  :alert : Register r11 information: 1-=
+page vmalloc region starting at 0xbf271000 allocated at load_module+0x6d4/0=
+x18ec
+    2023-03-21T08:56:22.180435  kern  :alert : Register r12 information: no=
 n-paged memory
-    2023-03-21T08:35:11.995169  kern  :emerg : Internal error: Oops: 17 [#1=
+    2023-03-21T08:56:22.284484  kern  :emerg : Internal error: Oops: 17 [#1=
 ] PREEMPT ARM
-    2023-03-21T08:35:11.995844  kern  :emerg : Process udevd (pid: 74, stac=
-k limit =3D 0x86f36462)
-    2023-03-21T08:35:11.996284  kern  :emerg : Stack: (0xc8995cf8 to 0xc899=
-6000)
-    2023-03-21T08:35:11.997102  kern  :emerg : 5ce0:                       =
-                                c4c51200 c076f860 =
+    2023-03-21T08:56:22.284729  kern  :emerg : Process udevd (pid: 71, stac=
+k limit =3D 0x971240e8)
+    2023-03-21T08:56:22.284934  kern  :emerg : Stack: (0xc88b1d08 to 0xc88b=
+2000)
+    2023-03-21T08:56:22.285347  kern  :emerg : 1d00:                   c4f3=
+3200 c076f880 00000000 c03ac820 00000000 43733701
+    2023-03-21T08:56:22.285550  kern  :emerg : 1d20: 0000005d 43733701 c076=
+f880 bf271220 00000000 00000000 00000000 00000001 =
 
-    ... (7 line(s) more)  =
-
-
-  * baseline.dmesg.alert: https://kernelci.org/test/case/id/64196c4e4dddb2c=
-f3e9c9510
-        failing since 421 days (last pass: v5.16-11577-gffd79fec234d, first=
- fail: v5.17-rc1-180-g86539e2bdb99)
-        18 lines
-
-    2023-03-21T08:35:11.811927  kern  :alert : BUG: Bad page state in proce=
-ss kworker/u2:0  pfn:c3400
-    2023-03-21T08:35:11.812877  kern  :alert : BUG: Bad page state in proce=
-ss kworker/u2:0  pfn:c3800
-    2023-03-21T08:35:11.813324  kern  :alert : 8<--- cut here ---
-    2023-03-21T08:35:11.813819  kern  :alert : Unable to handle kernel NULL=
- pointer dereference at virtual address 00000060 when read
-    2023-03-21T08:35:11.814262  kern  :alert : [00000060] *pgd=3Dc4aaf831, =
-*pte=3D00000000, *ppte=3D00000000
-    2023-03-21T08:35:11.814744  kern  :alert : Register r0 information: non=
--paged memory
-    2023-03-21T08:35:11.855164  kern  :alert : Register r1 information: 2-p=
-age vmalloc region starting at 0xc8994000 allocated at kernel_clone+0x98/0x=
-3a0
-    2023-03-21T08:35:11.856263  kern  :alert : Register r2 information: non=
--slab/vmalloc memory
-    2023-03-21T08:35:11.856816  kern  :alert : Register r3 information: non=
--paged memory
-    2023-03-21T08:35:11.857245  kern  :alert : R<8><LAVA_SIGNAL_TESTCASE TE=
-ST_CASE_ID=3Dalert RESULT=3Dfail UNITS=3Dlines MEASUREMENT=3D18> =
-
-    ... (3 line(s) more)  =
+    ... (4 line(s) more)  =
 
  =
 
@@ -926,31 +1286,30 @@ platform                     | arch   | lab             | compiler | defcon=
 fig                    | regressions
 -----------------------------+--------+-----------------+----------+-------=
 -----------------------+------------
-imx6qp-wandboard-revd1       | arm    | lab-pengutronix | gcc-10   | multi_=
-v7_defconfig+debug     | 1          =
+fsl-ls1028a-rdb              | arm64  | lab-nxp         | gcc-10   | defcon=
+fig+CON...OMIZE_BASE=3Dy | 1          =
 
 
-  Details:     https://kernelci.org/test/plan/id/64197222451531bc949c9522
+  Details:     https://kernelci.org/test/plan/id/641974452466b1b6379c951e
 
   Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+debug
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm/multi_v7_defconfig+debug/gcc-10/lab-pengutronix/baselin=
-e-imx6qp-wandboard-revd1.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm/multi_v7_defconfig+debug/gcc-10/lab-pengutronix/baselin=
-e-imx6qp-wandboard-revd1.html
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-nxp/baseline-fsl-ls1028a-r=
+db.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-nxp/baseline-fsl-ls1028a-r=
+db.html
   Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230310.0/armel/rootfs.cpio.gz =
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
 
 
 
-  * baseline.login: https://kernelci.org/test/case/id/64197222451531bc949c9=
-523
-        failing since 187 days (last pass: v6.0-rc4-291-g83a56f559828, firs=
-t fail: v6.0-rc5-197-ga6a750a2f4166) =
+  * baseline.login: https://kernelci.org/test/case/id/641974452466b1b6379c9=
+51f
+        new failure (last pass: next-20230320) =
 
  =
 
@@ -960,50 +1319,28 @@ platform                     | arch   | lab             | compiler | defcon=
 fig                    | regressions
 -----------------------------+--------+-----------------+----------+-------=
 -----------------------+------------
-imx6sx-sdb                   | arm    | lab-nxp         | gcc-10   | multi_=
-v7_defconfig+crypto    | 1          =
+fsl-ls1028a-rdb              | arm64  | lab-nxp         | gcc-10   | defcon=
+fig+crypto             | 1          =
 
 
-  Details:     https://kernelci.org/test/plan/id/64197393bd7e2667a79c9522
+  Details:     https://kernelci.org/test/plan/id/6419762e71aebd4fe89c957e
 
-  Results:     5 PASS, 1 FAIL, 1 SKIP
-  Full config: multi_v7_defconfig+crypto
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm/multi_v7_defconfig+crypto/gcc-10/lab-nxp/baseline-imx6s=
-x-sdb.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm/multi_v7_defconfig+crypto/gcc-10/lab-nxp/baseline-imx6s=
-x-sdb.html
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+crypto
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-nxp/baseline-fsl-ls1028a-rdb.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-nxp/baseline-fsl-ls1028a-rdb.html
   Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230310.0/armel/rootfs.cpio.gz =
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
 
 
 
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/64197393bd7e2667a79c952b
-        failing since 75 days (last pass: v6.1-rc4-405-g5cc6cef624e2, first=
- fail: v6.2-rc2-332-g2d3ca5d07c8e)
-
-    2023-03-21T09:06:13.250049  <8>[   43.696700] <LAVA_SIGNAL_ENDRUN 0_dme=
-sg 1179719_1.5.2.4.1>
-    2023-03-21T09:06:13.353110  / # #
-    2023-03-21T09:06:14.510945  export SHELL=3D/bin/sh
-    2023-03-21T09:06:14.516332  #
-    2023-03-21T09:06:16.060988  / # export SHELL=3D/bin/sh. /lava-1179719/e=
-nvironment
-    2023-03-21T09:06:16.066373  =
-
-    2023-03-21T09:06:18.884550  / # . /lava-1179719/environment/lava-117971=
-9/bin/lava-test-runner /lava-1179719/1
-    2023-03-21T09:06:18.890112  =
-
-    2023-03-21T09:06:18.897006  / # /lava-1179719/bin/lava-test-runner /lav=
-a-1179719/1
-    2023-03-21T09:06:18.990761  + export 'TESTRUN_ID=3D1_bootrr' =
-
-    ... (21 line(s) more)  =
+  * baseline.login: https://kernelci.org/test/case/id/6419762e71aebd4fe89c9=
+57f
+        new failure (last pass: next-20230317) =
 
  =
 
@@ -1013,50 +1350,28 @@ platform                     | arch   | lab             | compiler | defcon=
 fig                    | regressions
 -----------------------------+--------+-----------------+----------+-------=
 -----------------------+------------
-imx6ul-14x14-evk             | arm    | lab-nxp         | gcc-10   | multi_=
-v7_defconfig+crypto    | 1          =
+fsl-ls1028a-rdb              | arm64  | lab-nxp         | gcc-10   | defcon=
+fig+ima                | 1          =
 
 
-  Details:     https://kernelci.org/test/plan/id/6419737d056cfd0ee99c950a
+  Details:     https://kernelci.org/test/plan/id/641977cfedb9cd57d19c9532
 
-  Results:     5 PASS, 1 FAIL, 1 SKIP
-  Full config: multi_v7_defconfig+crypto
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm/multi_v7_defconfig+crypto/gcc-10/lab-nxp/baseline-imx6u=
-l-14x14-evk.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm/multi_v7_defconfig+crypto/gcc-10/lab-nxp/baseline-imx6u=
-l-14x14-evk.html
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+ima
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-nxp/baseline-fsl-ls1028a-rdb.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-nxp/baseline-fsl-ls1028a-rdb.html
   Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230310.0/armel/rootfs.cpio.gz =
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
 
 
 
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/6419737d056cfd0ee99c9513
-        failing since 75 days (last pass: v6.1-rc4-339-g185da88d03ed, first=
- fail: v6.2-rc2-332-g2d3ca5d07c8e)
-
-    2023-03-21T09:05:51.362424  + set +x
-    2023-03-21T09:05:51.363541  <8>[   57.476541] <LAVA_SIGNAL_ENDRUN 0_dme=
-sg 1179718_1.5.2.4.1>
-    2023-03-21T09:05:51.472697  / # #
-    2023-03-21T09:05:52.632184  export SHELL=3D/bin/sh
-    2023-03-21T09:05:52.637851  #
-    2023-03-21T09:05:54.184454  / # export SHELL=3D/bin/sh. /lava-1179718/e=
-nvironment
-    2023-03-21T09:05:54.190103  =
-
-    2023-03-21T09:05:57.010974  / # . /lava-1179718/environment/lava-117971=
-8/bin/lava-test-runner /lava-1179718/1
-    2023-03-21T09:05:57.016837  =
-
-    2023-03-21T09:05:57.017382  / # /lava-1179718/bin/lava-test-runner /lav=
-a-1179718/1 =
-
-    ... (18 line(s) more)  =
+  * baseline.login: https://kernelci.org/test/case/id/641977cfedb9cd57d19c9=
+533
+        new failure (last pass: next-20230317) =
 
  =
 
@@ -1066,50 +1381,30 @@ platform                     | arch   | lab             | compiler | defcon=
 fig                    | regressions
 -----------------------------+--------+-----------------+----------+-------=
 -----------------------+------------
-imx7d-sdb                    | arm    | lab-nxp         | gcc-10   | multi_=
-v7_defconfig+crypto    | 1          =
+fsl-ls1028a-rdb              | arm64  | lab-nxp         | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
 
 
-  Details:     https://kernelci.org/test/plan/id/641970a6833d1153dc9c9515
+  Details:     https://kernelci.org/test/plan/id/64197888da1c43a4109c9537
 
-  Results:     5 PASS, 1 FAIL, 1 SKIP
-  Full config: multi_v7_defconfig+crypto
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm/multi_v7_defconfig+crypto/gcc-10/lab-nxp/baseline-imx7d=
--sdb.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm/multi_v7_defconfig+crypto/gcc-10/lab-nxp/baseline-imx7d=
--sdb.html
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-nxp/baseline-fsl-ls1028a-=
+rdb.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-nxp/baseline-fsl-ls1028a-=
+rdb.html
   Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230310.0/armel/rootfs.cpio.gz =
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
 
 
 
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/641970a6833d1153dc9c951c
-        failing since 75 days (last pass: v6.1-rc6-391-gf445421fe4c7, first=
- fail: v6.2-rc2-332-g2d3ca5d07c8e)
-
-    2023-03-21T08:53:32.890391  + set<8>[   37.146710] <LAVA_SIGNAL_ENDRUN =
-0_dmesg 1179720_1.5.2.4.1>
-    2023-03-21T08:53:32.890646   +x
-    2023-03-21T08:53:32.996284  / # #
-    2023-03-21T08:53:34.156400  export SHELL=3D/bin/sh
-    2023-03-21T08:53:34.162159  #
-    2023-03-21T08:53:35.709098  / # export SHELL=3D/bin/sh. /lava-1179720/e=
-nvironment
-    2023-03-21T08:53:35.714745  =
-
-    2023-03-21T08:53:38.536601  / # . /lava-1179720/environment/lava-117972=
-0/bin/lava-test-runner /lava-1179720/1
-    2023-03-21T08:53:38.542608  =
-
-    2023-03-21T08:53:38.550179  / # /lava-1179720/bin/lava-test-runner /lav=
-a-1179720/1 =
-
-    ... (23 line(s) more)  =
+  * baseline.login: https://kernelci.org/test/case/id/64197888da1c43a4109c9=
+538
+        new failure (last pass: next-20230320) =
 
  =
 
@@ -1119,48 +1414,815 @@ platform                     | arch   | lab             | compiler | defcon=
 fig                    | regressions
 -----------------------------+--------+-----------------+----------+-------=
 -----------------------+------------
-imx7ulp-evk                  | arm    | lab-nxp         | gcc-10   | multi_=
-v7_defconfig+crypto    | 1          =
+fsl-ls1088a-rdb              | arm64  | lab-nxp         | gcc-10   | defcon=
+fig+CON...OMIZE_BASE=3Dy | 1          =
 
 
-  Details:     https://kernelci.org/test/plan/id/641974950950a61edc9c95cf
+  Details:     https://kernelci.org/test/plan/id/641974814eac1e37b39c9580
 
-  Results:     5 PASS, 1 FAIL, 1 SKIP
-  Full config: multi_v7_defconfig+crypto
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm/multi_v7_defconfig+crypto/gcc-10/lab-nxp/baseline-imx7u=
-lp-evk.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm/multi_v7_defconfig+crypto/gcc-10/lab-nxp/baseline-imx7u=
-lp-evk.html
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-nxp/baseline-fsl-ls1088a-r=
+db.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-nxp/baseline-fsl-ls1088a-r=
+db.html
   Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230310.0/armel/rootfs.cpio.gz =
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
 
 
 
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/641974950950a61edc9c95d8
-        failing since 75 days (last pass: v6.1-rc6-391-gf445421fe4c7, first=
- fail: v6.2-rc2-332-g2d3ca5d07c8e)
+  * baseline.login: https://kernelci.org/test/case/id/641974814eac1e37b39c9=
+581
+        new failure (last pass: next-20230320) =
 
-    2023-03-21T09:10:29.227714  + set +x<8>[   67.107576] <LAVA_SIGNAL_ENDR=
-UN 0_dmesg 1179717_1.5.2.4.1>
-    2023-03-21T09:10:29.227991  =
+ =
 
-    2023-03-21T09:10:29.336334  / # #
-    2023-03-21T09:10:30.496273  export SHELL=3D/bin/sh
-    2023-03-21T09:10:30.501699  #
-    2023-03-21T09:10:30.501867  / # export SHELL=3D/bin/sh
-    2023-03-21T09:10:32.048684  / # . /lava-1179717/environment
-    2023-03-21T09:10:34.876692  /lava-1179717/bin/lava-test-runner /lava-11=
-79717/1
-    2023-03-21T09:10:34.882758  . /lava-1179717/environment
-    2023-03-21T09:10:34.883066  / # /lava-1179717/bin/lava-test-runner /lav=
-a-1179717/1 =
 
-    ... (12 line(s) more)  =
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+fsl-ls1088a-rdb              | arm64  | lab-nxp         | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/64197647214d103e769c9507
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+crypto
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-nxp/baseline-fsl-ls1088a-rdb.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-nxp/baseline-fsl-ls1088a-rdb.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/64197647214d103e769c9=
+508
+        new failure (last pass: next-20230317) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+fsl-ls1088a-rdb              | arm64  | lab-nxp         | gcc-10   | defcon=
+fig+ima                | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/64197885b7fa2afd3b9c954b
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+ima
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-nxp/baseline-fsl-ls1088a-rdb.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-nxp/baseline-fsl-ls1088a-rdb.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/64197885b7fa2afd3b9c9=
+54c
+        new failure (last pass: next-20230317) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+fsl-ls1088a-rdb              | arm64  | lab-nxp         | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6419793bd4c0c55bd79c9509
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-nxp/baseline-fsl-ls1088a-=
+rdb.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-nxp/baseline-fsl-ls1088a-=
+rdb.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6419793bd4c0c55bd79c9=
+50a
+        new failure (last pass: next-20230315) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+fsl-lx2160a-rdb              | arm64  | lab-nxp         | gcc-10   | defcon=
+fig+CON...OMIZE_BASE=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/64197498a57193e5a69c954f
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-nxp/baseline-fsl-lx2160a-r=
+db.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-nxp/baseline-fsl-lx2160a-r=
+db.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/64197498a57193e5a69c9=
+550
+        new failure (last pass: next-20230320) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+fsl-lx2160a-rdb              | arm64  | lab-nxp         | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/64197659f7b2cabfd39c9550
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+crypto
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-nxp/baseline-fsl-lx2160a-rdb.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-nxp/baseline-fsl-lx2160a-rdb.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/64197659f7b2cabfd39c9=
+551
+        new failure (last pass: next-20230306) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+fsl-lx2160a-rdb              | arm64  | lab-nxp         | gcc-10   | defcon=
+fig+ima                | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641978334af7e666bc9c9507
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+ima
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-nxp/baseline-fsl-lx2160a-rdb.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-nxp/baseline-fsl-lx2160a-rdb.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641978334af7e666bc9c9=
+508
+        new failure (last pass: next-20230316) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+fsl-lx2160a-rdb              | arm64  | lab-nxp         | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641978d34551b451759c951f
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-nxp/baseline-fsl-lx2160a-=
+rdb.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-nxp/baseline-fsl-lx2160a-=
+rdb.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641978d34551b451759c9=
+520
+        new failure (last pass: next-20230320) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+hp-11A-G6-EE-grunt           | x86_64 | lab-collabora   | clang-13 | x86_64=
+_defcon...6-chromebook | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6419893c31bbf3868b9c9527
+
+  Results:     18 PASS, 1 FAIL, 0 SKIP
+  Full config: x86_64_defconfig+x86-chromebook
+  Compiler:    clang-13 (Debian clang version 13.0.1-6~deb11u1)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/x86_=
+64/x86_64_defconfig+x86-chromebook/clang-13/lab-collabora/baseline-hp-11A-G=
+6-EE-grunt.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/x86_=
+64/x86_64_defconfig+x86-chromebook/clang-13/lab-collabora/baseline-hp-11A-G=
+6-EE-grunt.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/x86/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.battery-device-probed: https://kernelci.org/test/case/i=
+d/6419893c31bbf3868b9c9536
+        new failure (last pass: next-20230316)
+
+    2023-03-21T10:38:40.632838  /lava-9713025/1/../bin/lava-test-case
+
+    2023-03-21T10:38:40.648833  <8>[   14.203832] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dbattery-device-probed RESULT=3Dfail>
+   =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+hp-11A-G6-EE-grunt           | x86_64 | lab-collabora   | gcc-10   | x86_64=
+_defcon...6-chromebook | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641971b3128e8dbc369c958c
+
+  Results:     17 PASS, 1 FAIL, 1 SKIP
+  Full config: x86_64_defconfig+x86-chromebook
+  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/x86_=
+64/x86_64_defconfig+x86-chromebook/gcc-10/lab-collabora/baseline-hp-11A-G6-=
+EE-grunt.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/x86_=
+64/x86_64_defconfig+x86-chromebook/gcc-10/lab-collabora/baseline-hp-11A-G6-=
+EE-grunt.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/x86/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.battery-device-probed: https://kernelci.org/test/case/i=
+d/641971b3128e8dbc369c959b
+        new failure (last pass: next-20230320)
+
+    2023-03-21T08:58:06.698746  /lava-9710195/1/../bin/lava-test-case<8>[  =
+ 11.131863] <LAVA_SIGNAL_TESTCASE TEST_CASE_ID=3Dbattery-device-probed RESU=
+LT=3Dfail>
+
+    2023-03-21T08:58:06.698895  =
+
+   =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+hp-11A-G6-EE-grunt           | x86_64 | lab-collabora   | gcc-10   | x86_64=
+_defcon...ok+kselftest | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6419747285b38ffdaf9c95c9
+
+  Results:     18 PASS, 1 FAIL, 0 SKIP
+  Full config: x86_64_defconfig+x86-chromebook+kselftest
+  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/x86_=
+64/x86_64_defconfig+x86-chromebook+kselftest/gcc-10/lab-collabora/baseline-=
+hp-11A-G6-EE-grunt.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/x86_=
+64/x86_64_defconfig+x86-chromebook+kselftest/gcc-10/lab-collabora/baseline-=
+hp-11A-G6-EE-grunt.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/x86/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.battery-device-probed: https://kernelci.org/test/case/i=
+d/6419747285b38ffdaf9c95d8
+        new failure (last pass: next-20230320)
+
+    2023-03-21T09:09:56.151337  /lava-9710353/1/../bin/lava-test-case
+
+    2023-03-21T09:09:56.167658  <8>[   95.913584] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dbattery-device-probed RESULT=3Dfail>
+   =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+hp-11A-G6-EE-grunt           | x86_64 | lab-collabora   | gcc-10   | x86_64=
+_defcon...ebook+amdgpu | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641974c11d8139e8eb9c957f
+
+  Results:     17 PASS, 1 FAIL, 1 SKIP
+  Full config: x86_64_defconfig+x86-chromebook+amdgpu
+  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/x86_=
+64/x86_64_defconfig+x86-chromebook+amdgpu/gcc-10/lab-collabora/baseline-hp-=
+11A-G6-EE-grunt.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/x86_=
+64/x86_64_defconfig+x86-chromebook+amdgpu/gcc-10/lab-collabora/baseline-hp-=
+11A-G6-EE-grunt.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/x86/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.battery-device-probed: https://kernelci.org/test/case/i=
+d/641974c11d8139e8eb9c958e
+        new failure (last pass: next-20230320)
+
+    2023-03-21T09:11:07.399528  /lava-9710400/1/../bin/lava-test-case
+
+    2023-03-21T09:11:07.406630  <8>[   12.427727] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dbattery-device-probed RESULT=3Dfail>
+   =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+hp-14-db0003na-grunt         | x86_64 | lab-collabora   | clang-13 | x86_64=
+_defcon...6-chromebook | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/64198b95b2210ac0af9c951c
+
+  Results:     18 PASS, 1 FAIL, 0 SKIP
+  Full config: x86_64_defconfig+x86-chromebook
+  Compiler:    clang-13 (Debian clang version 13.0.1-6~deb11u1)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/x86_=
+64/x86_64_defconfig+x86-chromebook/clang-13/lab-collabora/baseline-hp-14-db=
+0003na-grunt.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/x86_=
+64/x86_64_defconfig+x86-chromebook/clang-13/lab-collabora/baseline-hp-14-db=
+0003na-grunt.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/x86/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.battery-device-probed: https://kernelci.org/test/case/i=
+d/64198b95b2210ac0af9c952b
+        new failure (last pass: next-20230316)
+
+    2023-03-21T10:48:29.545282  /lava-9713033/1/../bin/lava-test-case
+
+    2023-03-21T10:48:29.562183  <8>[   13.144210] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dbattery-device-probed RESULT=3Dfail>
+   =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+hp-14-db0003na-grunt         | x86_64 | lab-collabora   | gcc-10   | x86_64=
+_defcon...6-chromebook | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641973a7ebfcba32ad9c9512
+
+  Results:     18 PASS, 1 FAIL, 0 SKIP
+  Full config: x86_64_defconfig+x86-chromebook
+  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/x86_=
+64/x86_64_defconfig+x86-chromebook/gcc-10/lab-collabora/baseline-hp-14-db00=
+03na-grunt.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/x86_=
+64/x86_64_defconfig+x86-chromebook/gcc-10/lab-collabora/baseline-hp-14-db00=
+03na-grunt.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/x86/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.battery-device-probed: https://kernelci.org/test/case/i=
+d/641973a7ebfcba32ad9c9521
+        new failure (last pass: next-20230320)
+
+    2023-03-21T09:06:25.937105  /lava-9710152/1/../bin/lava-test-case
+
+    2023-03-21T09:06:25.943671  <8>[   12.082597] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dbattery-device-probed RESULT=3Dfail>
+   =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+hp-14-db0003na-grunt         | x86_64 | lab-collabora   | gcc-10   | x86_64=
+_defcon...ebook+amdgpu | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/64197423a50df217699c9513
+
+  Results:     17 PASS, 1 FAIL, 1 SKIP
+  Full config: x86_64_defconfig+x86-chromebook+amdgpu
+  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/x86_=
+64/x86_64_defconfig+x86-chromebook+amdgpu/gcc-10/lab-collabora/baseline-hp-=
+14-db0003na-grunt.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/x86_=
+64/x86_64_defconfig+x86-chromebook+amdgpu/gcc-10/lab-collabora/baseline-hp-=
+14-db0003na-grunt.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/x86/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.battery-device-probed: https://kernelci.org/test/case/i=
+d/64197423a50df217699c9522
+        new failure (last pass: next-20230320)
+
+    2023-03-21T09:08:43.317211  /lava-9710412/1/../bin/lava-test-case
+
+    2023-03-21T09:08:43.323612  <8>[   12.231369] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dbattery-device-probed RESULT=3Dfail>
+   =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+hp-14-db0003na-grunt         | x86_64 | lab-collabora   | gcc-10   | x86_64=
+_defcon...ok+kselftest | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/64197448fd20979be39c95ae
+
+  Results:     18 PASS, 1 FAIL, 0 SKIP
+  Full config: x86_64_defconfig+x86-chromebook+kselftest
+  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/x86_=
+64/x86_64_defconfig+x86-chromebook+kselftest/gcc-10/lab-collabora/baseline-=
+hp-14-db0003na-grunt.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/x86_=
+64/x86_64_defconfig+x86-chromebook+kselftest/gcc-10/lab-collabora/baseline-=
+hp-14-db0003na-grunt.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/x86/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.battery-device-probed: https://kernelci.org/test/case/i=
+d/64197448fd20979be39c95bd
+        new failure (last pass: next-20230320)
+
+    2023-03-21T09:09:20.293028  /lava-9710349/1/../bin/lava-test-case
+
+    2023-03-21T09:09:20.309392  <8>[   91.617026] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dbattery-device-probed RESULT=3Dfail>
+   =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+imx8mn-ddr4-evk              | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON...OMIZE_BASE=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641974d8b84652f0dd9c957d
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-baylibre/baseline-imx8mn-d=
+dr4-evk.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-baylibre/baseline-imx8mn-d=
+dr4-evk.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641974d8b84652f0dd9c9=
+57e
+        new failure (last pass: next-20230320) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+imx8mn-ddr4-evk              | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641976559931c9ff199c955f
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+crypto
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-baylibre/baseline-imx8mn-ddr4-evk.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-baylibre/baseline-imx8mn-ddr4-evk.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641976559931c9ff199c9=
+560
+        new failure (last pass: next-20230317) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+imx8mn-ddr4-evk              | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+ima                | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6419776d876da68fbb9c9526
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+ima
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-baylibre/baseline-imx8mn-ddr4-evk.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-baylibre/baseline-imx8mn-ddr4-evk.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6419776d876da68fbb9c9=
+527
+        new failure (last pass: next-20230317) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+imx8mn-ddr4-evk              | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/64197899a1f65627709c9506
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-baylibre/baseline-imx8mn-=
+ddr4-evk.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-baylibre/baseline-imx8mn-=
+ddr4-evk.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/64197899a1f65627709c9=
+507
+        new failure (last pass: next-20230320) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+imx8mn-ddr4-evk              | arm64  | lab-nxp         | gcc-10   | defcon=
+fig+CON...OMIZE_BASE=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641974593526fde3ef9c9525
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-nxp/baseline-imx8mn-ddr4-e=
+vk.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-nxp/baseline-imx8mn-ddr4-e=
+vk.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641974593526fde3ef9c9=
+526
+        new failure (last pass: next-20230320) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+imx8mn-ddr4-evk              | arm64  | lab-nxp         | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6419764371aebd4fe89c95dc
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+crypto
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-nxp/baseline-imx8mn-ddr4-evk.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-nxp/baseline-imx8mn-ddr4-evk.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6419764371aebd4fe89c9=
+5dd
+        new failure (last pass: next-20230317) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+imx8mn-ddr4-evk              | arm64  | lab-nxp         | gcc-10   | defcon=
+fig+ima                | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/64197667edec55ae519c950b
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+ima
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-nxp/baseline-imx8mn-ddr4-evk.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-nxp/baseline-imx8mn-ddr4-evk.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/64197667edec55ae519c9=
+50c
+        new failure (last pass: next-20230317) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+imx8mn-ddr4-evk              | arm64  | lab-nxp         | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641977f80ab274244f9c9505
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-nxp/baseline-imx8mn-ddr4-=
+evk.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-nxp/baseline-imx8mn-ddr4-=
+evk.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641977f80ab274244f9c9=
+506
+        new failure (last pass: next-20230320) =
 
  =
 
@@ -1174,27 +2236,27 @@ jetson-tk1                   | arm    | lab-baylibre    | gcc-10   | multi_=
 v7_defc...G_ARM_LPAE=3Dy | 1          =
 
 
-  Details:     https://kernelci.org/test/plan/id/6419735c7b4a3ca3739c9523
+  Details:     https://kernelci.org/test/plan/id/6419773a6778d7fade9c950b
 
   Results:     0 PASS, 1 FAIL, 0 SKIP
   Full config: multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy
   Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
 10110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm/multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy/g=
-cc-10/lab-baylibre/baseline-jetson-tk1.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm/multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy/g=
-cc-10/lab-baylibre/baseline-jetson-tk1.html
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm/=
+multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy/gcc-10/lab-baylibre/b=
+aseline-jetson-tk1.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm/=
+multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy/gcc-10/lab-baylibre/b=
+aseline-jetson-tk1.html
   Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
 t-baseline/20230310.0/armel/rootfs.cpio.gz =
 
 
 
-  * baseline.login: https://kernelci.org/test/case/id/6419735c7b4a3ca3739c9=
-524
-        failing since 325 days (last pass: v5.18-rc2-366-ga3e1163f7eb1a, fi=
-rst fail: v5.18-rc4-464-g425675974eb3) =
+  * baseline.login: https://kernelci.org/test/case/id/6419773a6778d7fade9c9=
+50c
+        failing since 343 days (last pass: next-20220401, first fail: next-=
+20220411) =
 
  =
 
@@ -1208,27 +2270,155 @@ jh7100-starfi...isionfive-v1 | riscv  | lab-clabbe      | gcc-10   | defcon=
 fig+kselftest          | 1          =
 
 
-  Details:     https://kernelci.org/test/plan/id/64196d5b4af5f694329c951c
+  Details:     https://kernelci.org/test/plan/id/641979b5c75898d7189c9506
 
   Results:     0 PASS, 1 FAIL, 0 SKIP
   Full config: defconfig+kselftest
   Compiler:    gcc-10 (riscv64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
 110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/riscv/defconfig+kselftest/gcc-10/lab-clabbe/baseline-jh7100=
--starfive-visionfive-v1.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/riscv/defconfig+kselftest/gcc-10/lab-clabbe/baseline-jh7100=
--starfive-visionfive-v1.html
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/risc=
+v/defconfig+kselftest/gcc-10/lab-clabbe/baseline-jh7100-starfive-visionfive=
+-v1.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/risc=
+v/defconfig+kselftest/gcc-10/lab-clabbe/baseline-jh7100-starfive-visionfive=
+-v1.html
   Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
 t-baseline/20230310.0/riscv/rootfs.cpio.gz =
 
 
 
-  * baseline.login: https://kernelci.org/test/case/id/64196d5b4af5f694329c9=
-51d
-        failing since 42 days (last pass: v6.2-rc7-120-g11b3628314a5, first=
- fail: v6.2-rc7-136-g39693c3ba989) =
+  * baseline.login: https://kernelci.org/test/case/id/641979b5c75898d7189c9=
+507
+        failing since 42 days (last pass: next-20230206, first fail: next-2=
+0230207) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+juno-uboot                   | arm64  | lab-broonie     | gcc-10   | defcon=
+fig+CON...OMIZE_BASE=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/64197687298611d7239c9505
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-broonie/baseline-juno-uboo=
+t.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-broonie/baseline-juno-uboo=
+t.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/64197687298611d7239c9=
+506
+        new failure (last pass: next-20230320) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+juno-uboot                   | arm64  | lab-broonie     | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641978e04551b451759c9525
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+crypto
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-broonie/baseline-juno-uboot.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-broonie/baseline-juno-uboot.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641978e04551b451759c9=
+526
+        new failure (last pass: next-20230317) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+juno-uboot                   | arm64  | lab-broonie     | gcc-10   | defcon=
+fig+ima                | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641979e413a48b4bfd9c9506
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+ima
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-broonie/baseline-juno-uboot.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-broonie/baseline-juno-uboot.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641979e413a48b4bfd9c9=
+507
+        new failure (last pass: next-20230317) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+juno-uboot                   | arm64  | lab-broonie     | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/64197ad436dd5dda919c9512
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-broonie/baseline-juno-ubo=
+ot.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-broonie/baseline-juno-ubo=
+ot.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/64197ad436dd5dda919c9=
+513
+        new failure (last pass: next-20230320) =
 
  =
 
@@ -1239,30 +2429,124 @@ fig                    | regressions
 -----------------------------+--------+-----------------+----------+-------=
 -----------------------+------------
 meson-g12a-sei510            | arm64  | lab-baylibre    | gcc-10   | defcon=
-fig+kselftest          | 1          =
+fig+CON...OMIZE_BASE=3Dy | 1          =
 
 
-  Details:     https://kernelci.org/test/plan/id/641972235e84b9b4b69c9525
+  Details:     https://kernelci.org/test/plan/id/641973c6d8799301db9c9527
 
   Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+kselftest
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
   Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
 110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm64/defconfig+kselftest/gcc-10/lab-baylibre/baseline-meso=
-n-g12a-sei510.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm64/defconfig+kselftest/gcc-10/lab-baylibre/baseline-meso=
-n-g12a-sei510.html
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-baylibre/baseline-meson-g1=
+2a-sei510.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-baylibre/baseline-meson-g1=
+2a-sei510.html
   Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
 t-baseline/20230310.0/arm64/rootfs.cpio.gz =
 
 
 
-  * baseline.login: https://kernelci.org/test/case/id/641972235e84b9b4b69c9=
-526
-        failing since 42 days (last pass: v6.2-rc7-120-g11b3628314a5, first=
- fail: v6.2-rc7-136-g39693c3ba989) =
+  * baseline.login: https://kernelci.org/test/case/id/641973c6d8799301db9c9=
+528
+        new failure (last pass: next-20230320) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-g12a-sei510            | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6419756b7463ccfe8b9c9548
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+crypto
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-baylibre/baseline-meson-g12a-sei510.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-baylibre/baseline-meson-g12a-sei510.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6419756b7463ccfe8b9c9=
+549
+        new failure (last pass: next-20230317) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-g12a-sei510            | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+ima                | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641975cf0ff408265e9c9506
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+ima
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-baylibre/baseline-meson-g12a-sei510.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-baylibre/baseline-meson-g12a-sei510.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641975cf0ff408265e9c9=
+507
+        new failure (last pass: next-20230317) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-g12a-sei510            | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6419768345ac8e2cca9c950f
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-baylibre/baseline-meson-g=
+12a-sei510.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-baylibre/baseline-meson-g=
+12a-sei510.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6419768345ac8e2cca9c9=
+510
+        new failure (last pass: next-20230320) =
 
  =
 
@@ -1273,30 +2557,124 @@ fig                    | regressions
 -----------------------------+--------+-----------------+----------+-------=
 -----------------------+------------
 meson-g12a-u200              | arm64  | lab-baylibre    | gcc-10   | defcon=
-fig+kselftest          | 1          =
+fig+CON...OMIZE_BASE=3Dy | 1          =
 
 
-  Details:     https://kernelci.org/test/plan/id/6419725852c130dda09c9512
+  Details:     https://kernelci.org/test/plan/id/64197424f684e574f49c952c
 
   Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+kselftest
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
   Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
 110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm64/defconfig+kselftest/gcc-10/lab-baylibre/baseline-meso=
-n-g12a-u200.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm64/defconfig+kselftest/gcc-10/lab-baylibre/baseline-meso=
-n-g12a-u200.html
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-baylibre/baseline-meson-g1=
+2a-u200.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-baylibre/baseline-meson-g1=
+2a-u200.html
   Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
 t-baseline/20230310.0/arm64/rootfs.cpio.gz =
 
 
 
-  * baseline.login: https://kernelci.org/test/case/id/6419725852c130dda09c9=
-513
-        failing since 42 days (last pass: v6.2-rc7-120-g11b3628314a5, first=
- fail: v6.2-rc7-136-g39693c3ba989) =
+  * baseline.login: https://kernelci.org/test/case/id/64197424f684e574f49c9=
+52d
+        new failure (last pass: next-20230320) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-g12a-u200              | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641975a3a844e023549c970e
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+crypto
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-baylibre/baseline-meson-g12a-u200.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-baylibre/baseline-meson-g12a-u200.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641975a3a844e023549c9=
+70f
+        new failure (last pass: next-20230317) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-g12a-u200              | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+ima                | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6419762a71aebd4fe89c9565
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+ima
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-baylibre/baseline-meson-g12a-u200.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-baylibre/baseline-meson-g12a-u200.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6419762a71aebd4fe89c9=
+566
+        new failure (last pass: next-20230317) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-g12a-u200              | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641976bd3709622b499c9509
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-baylibre/baseline-meson-g=
+12a-u200.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-baylibre/baseline-meson-g=
+12a-u200.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641976bd3709622b499c9=
+50a
+        new failure (last pass: next-20230320) =
 
  =
 
@@ -1307,30 +2685,124 @@ fig                    | regressions
 -----------------------------+--------+-----------------+----------+-------=
 -----------------------+------------
 meson-g12a-x96-max           | arm64  | lab-baylibre    | gcc-10   | defcon=
-fig+kselftest          | 1          =
+fig+CON...OMIZE_BASE=3Dy | 1          =
 
 
-  Details:     https://kernelci.org/test/plan/id/641972705b631202fc9c95d1
+  Details:     https://kernelci.org/test/plan/id/6419743e1656a611549c9530
 
   Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+kselftest
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
   Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
 110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm64/defconfig+kselftest/gcc-10/lab-baylibre/baseline-meso=
-n-g12a-x96-max.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm64/defconfig+kselftest/gcc-10/lab-baylibre/baseline-meso=
-n-g12a-x96-max.html
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-baylibre/baseline-meson-g1=
+2a-x96-max.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-baylibre/baseline-meson-g1=
+2a-x96-max.html
   Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
 t-baseline/20230310.0/arm64/rootfs.cpio.gz =
 
 
 
-  * baseline.login: https://kernelci.org/test/case/id/641972705b631202fc9c9=
-5d2
-        failing since 42 days (last pass: v6.2-rc7-120-g11b3628314a5, first=
- fail: v6.2-rc7-136-g39693c3ba989) =
+  * baseline.login: https://kernelci.org/test/case/id/6419743e1656a611549c9=
+531
+        new failure (last pass: next-20230320) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-g12a-x96-max           | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641975ba5059856e9e9c9521
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+crypto
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-baylibre/baseline-meson-g12a-x96-max.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-baylibre/baseline-meson-g12a-x96-max.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641975ba5059856e9e9c9=
+522
+        new failure (last pass: next-20230317) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-g12a-x96-max           | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+ima                | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641976499931c9ff199c952d
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+ima
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-baylibre/baseline-meson-g12a-x96-max.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-baylibre/baseline-meson-g12a-x96-max.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641976499931c9ff199c9=
+52e
+        new failure (last pass: next-20230317) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-g12a-x96-max           | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641976c4b47897ec229c9513
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-baylibre/baseline-meson-g=
+12a-x96-max.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-baylibre/baseline-meson-g=
+12a-x96-max.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641976c4b47897ec229c9=
+514
+        new failure (last pass: next-20230320) =
 
  =
 
@@ -1341,30 +2813,128 @@ fig                    | regressions
 -----------------------------+--------+-----------------+----------+-------=
 -----------------------+------------
 meson-g12b-a311d-khadas-vim3 | arm64  | lab-baylibre    | gcc-10   | defcon=
-fig+kselftest          | 1          =
+fig+CON...OMIZE_BASE=3Dy | 1          =
 
 
-  Details:     https://kernelci.org/test/plan/id/6419725a52c130dda09c9517
+  Details:     https://kernelci.org/test/plan/id/6419742af684e574f49c9533
 
   Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+kselftest
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
   Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
 110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm64/defconfig+kselftest/gcc-10/lab-baylibre/baseline-meso=
-n-g12b-a311d-khadas-vim3.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm64/defconfig+kselftest/gcc-10/lab-baylibre/baseline-meso=
-n-g12b-a311d-khadas-vim3.html
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-baylibre/baseline-meson-g1=
+2b-a311d-khadas-vim3.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-baylibre/baseline-meson-g1=
+2b-a311d-khadas-vim3.html
   Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
 t-baseline/20230310.0/arm64/rootfs.cpio.gz =
 
 
 
-  * baseline.login: https://kernelci.org/test/case/id/6419725a52c130dda09c9=
-518
-        failing since 42 days (last pass: v6.2-rc7-120-g11b3628314a5, first=
- fail: v6.2-rc7-136-g39693c3ba989) =
+  * baseline.login: https://kernelci.org/test/case/id/6419742af684e574f49c9=
+534
+        new failure (last pass: next-20230320) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-g12b-a311d-khadas-vim3 | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641976b2f94895c2929c9535
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+crypto
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-baylibre/baseline-meson-g12b-a311d-khadas-vim=
+3.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-baylibre/baseline-meson-g12b-a311d-khadas-vim=
+3.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641976b2f94895c2929c9=
+536
+        new failure (last pass: next-20230317) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-g12b-a311d-khadas-vim3 | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+ima                | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/64197703bc9bf9cf989c9527
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+ima
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-baylibre/baseline-meson-g12b-a311d-khadas-vim3.t=
+xt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-baylibre/baseline-meson-g12b-a311d-khadas-vim3.h=
+tml
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/64197703bc9bf9cf989c9=
+528
+        new failure (last pass: next-20230317) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-g12b-a311d-khadas-vim3 | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/64197771876da68fbb9c9539
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-baylibre/baseline-meson-g=
+12b-a311d-khadas-vim3.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-baylibre/baseline-meson-g=
+12b-a311d-khadas-vim3.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/64197771876da68fbb9c9=
+53a
+        new failure (last pass: next-20230320) =
 
  =
 
@@ -1375,30 +2945,128 @@ fig                    | regressions
 -----------------------------+--------+-----------------+----------+-------=
 -----------------------+------------
 meson-g12b-a311d-khadas-vim3 | arm64  | lab-collabora   | gcc-10   | defcon=
-fig+kselftest          | 1          =
+fig+CON...OMIZE_BASE=3Dy | 1          =
 
 
-  Details:     https://kernelci.org/test/plan/id/64197254b2ad47a0eb9c953d
+  Details:     https://kernelci.org/test/plan/id/641974e8af4db4e6ce9c951d
 
   Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+kselftest
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
   Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
 110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm64/defconfig+kselftest/gcc-10/lab-collabora/baseline-mes=
-on-g12b-a311d-khadas-vim3.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm64/defconfig+kselftest/gcc-10/lab-collabora/baseline-mes=
-on-g12b-a311d-khadas-vim3.html
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-collabora/baseline-meson-g=
+12b-a311d-khadas-vim3.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-collabora/baseline-meson-g=
+12b-a311d-khadas-vim3.html
   Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
 t-baseline/20230310.0/arm64/rootfs.cpio.gz =
 
 
 
-  * baseline.login: https://kernelci.org/test/case/id/64197254b2ad47a0eb9c9=
-53e
-        failing since 42 days (last pass: v6.2-rc7-120-g11b3628314a5, first=
- fail: v6.2-rc7-136-g39693c3ba989) =
+  * baseline.login: https://kernelci.org/test/case/id/641974e8af4db4e6ce9c9=
+51e
+        new failure (last pass: next-20230320) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-g12b-a311d-khadas-vim3 | arm64  | lab-collabora   | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641976a10586da08ad9c951e
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+crypto
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-collabora/baseline-meson-g12b-a311d-khadas-vi=
+m3.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-collabora/baseline-meson-g12b-a311d-khadas-vi=
+m3.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641976a10586da08ad9c9=
+51f
+        new failure (last pass: next-20230317) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-g12b-a311d-khadas-vim3 | arm64  | lab-collabora   | gcc-10   | defcon=
+fig+ima                | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641976f6f770499b0b9c9506
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+ima
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-collabora/baseline-meson-g12b-a311d-khadas-vim3.=
+txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-collabora/baseline-meson-g12b-a311d-khadas-vim3.=
+html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641976f6f770499b0b9c9=
+507
+        new failure (last pass: next-20230317) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-g12b-a311d-khadas-vim3 | arm64  | lab-collabora   | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641977a5ec64923fc79c950c
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-collabora/baseline-meson-=
+g12b-a311d-khadas-vim3.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-collabora/baseline-meson-=
+g12b-a311d-khadas-vim3.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641977a5ec64923fc79c9=
+50d
+        new failure (last pass: next-20230320) =
 
  =
 
@@ -1409,30 +3077,124 @@ fig                    | regressions
 -----------------------------+--------+-----------------+----------+-------=
 -----------------------+------------
 meson-g12b-odroid-n2         | arm64  | lab-baylibre    | gcc-10   | defcon=
-fig+kselftest          | 1          =
+fig+CON...OMIZE_BASE=3Dy | 1          =
 
 
-  Details:     https://kernelci.org/test/plan/id/6419726dd2b529901a9c951b
+  Details:     https://kernelci.org/test/plan/id/641974cbb84652f0dd9c9521
 
   Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+kselftest
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
   Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
 110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm64/defconfig+kselftest/gcc-10/lab-baylibre/baseline-meso=
-n-g12b-odroid-n2.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm64/defconfig+kselftest/gcc-10/lab-baylibre/baseline-meso=
-n-g12b-odroid-n2.html
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-baylibre/baseline-meson-g1=
+2b-odroid-n2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-baylibre/baseline-meson-g1=
+2b-odroid-n2.html
   Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
 t-baseline/20230310.0/arm64/rootfs.cpio.gz =
 
 
 
-  * baseline.login: https://kernelci.org/test/case/id/6419726dd2b529901a9c9=
-51c
-        failing since 29 days (last pass: v6.2-rc8-150-g30cd52e17d48, first=
- fail: v6.2-rc8-211-g05def2d212c6) =
+  * baseline.login: https://kernelci.org/test/case/id/641974cbb84652f0dd9c9=
+522
+        new failure (last pass: next-20230320) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-g12b-odroid-n2         | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6419766af7b2cabfd39c959c
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+crypto
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-baylibre/baseline-meson-g12b-odroid-n2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-baylibre/baseline-meson-g12b-odroid-n2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6419766af7b2cabfd39c9=
+59d
+        new failure (last pass: next-20230317) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-g12b-odroid-n2         | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641976abf94895c2929c9523
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-baylibre/baseline-meson-g=
+12b-odroid-n2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-baylibre/baseline-meson-g=
+12b-odroid-n2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641976abf94895c2929c9=
+524
+        new failure (last pass: next-20230320) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-g12b-odroid-n2         | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+ima                | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641976e7f0f8d1b6819c951a
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+ima
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-baylibre/baseline-meson-g12b-odroid-n2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-baylibre/baseline-meson-g12b-odroid-n2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641976e7f0f8d1b6819c9=
+51b
+        new failure (last pass: next-20230317) =
 
  =
 
@@ -1443,30 +3205,322 @@ fig                    | regressions
 -----------------------------+--------+-----------------+----------+-------=
 -----------------------+------------
 meson-gxbb-nanopi-k2         | arm64  | lab-baylibre    | gcc-10   | defcon=
-fig+kselftest          | 1          =
+fig+CON...OMIZE_BASE=3Dy | 1          =
 
 
-  Details:     https://kernelci.org/test/plan/id/641972444c92e7b2fa9c9568
+  Details:     https://kernelci.org/test/plan/id/641973fadd29f4c1139c9518
 
   Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+kselftest
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
   Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
 110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm64/defconfig+kselftest/gcc-10/lab-baylibre/baseline-meso=
-n-gxbb-nanopi-k2.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm64/defconfig+kselftest/gcc-10/lab-baylibre/baseline-meso=
-n-gxbb-nanopi-k2.html
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-baylibre/baseline-meson-gx=
+bb-nanopi-k2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-baylibre/baseline-meson-gx=
+bb-nanopi-k2.html
   Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
 t-baseline/20230310.0/arm64/rootfs.cpio.gz =
 
 
 
-  * baseline.login: https://kernelci.org/test/case/id/641972444c92e7b2fa9c9=
-569
-        failing since 42 days (last pass: v6.2-rc7-120-g11b3628314a5, first=
- fail: v6.2-rc7-136-g39693c3ba989) =
+  * baseline.login: https://kernelci.org/test/case/id/641973fadd29f4c1139c9=
+519
+        new failure (last pass: next-20230320) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-gxbb-nanopi-k2         | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON...BIG_ENDIAN=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/64197468328efb901c9c953c
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy/gcc-10/lab-baylibre/baseline-meson-gx=
+bb-nanopi-k2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy/gcc-10/lab-baylibre/baseline-meson-gx=
+bb-nanopi-k2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64be/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/64197468328efb901c9c9=
+53d
+        new failure (last pass: next-20230320) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-gxbb-nanopi-k2         | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641975a8a844e023549c971f
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+crypto
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-baylibre/baseline-meson-gxbb-nanopi-k2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-baylibre/baseline-meson-gxbb-nanopi-k2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641975a8a844e023549c9=
+720
+        new failure (last pass: next-20230317) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-gxbb-nanopi-k2         | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+ima                | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6419762415fa99fc459c9592
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+ima
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-baylibre/baseline-meson-gxbb-nanopi-k2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-baylibre/baseline-meson-gxbb-nanopi-k2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6419762415fa99fc459c9=
+593
+        new failure (last pass: next-20230317) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-gxbb-nanopi-k2         | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641976bd2a6f4c34fa9c9522
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-baylibre/baseline-meson-g=
+xbb-nanopi-k2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-baylibre/baseline-meson-g=
+xbb-nanopi-k2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641976bd2a6f4c34fa9c9=
+523
+        new failure (last pass: next-20230320) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-gxl-s805x-libretech-ac | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON...OMIZE_BASE=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641973f5dd29f4c1139c950b
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-baylibre/baseline-meson-gx=
+l-s805x-libretech-ac.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-baylibre/baseline-meson-gx=
+l-s805x-libretech-ac.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641973f5dd29f4c1139c9=
+50c
+        new failure (last pass: next-20230320) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-gxl-s805x-libretech-ac | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON...BIG_ENDIAN=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6419747985b38ffdaf9c95ff
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy/gcc-10/lab-baylibre/baseline-meson-gx=
+l-s805x-libretech-ac.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy/gcc-10/lab-baylibre/baseline-meson-gx=
+l-s805x-libretech-ac.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64be/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6419747985b38ffdaf9c9=
+600
+        new failure (last pass: next-20230320) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-gxl-s805x-libretech-ac | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641975aa421d2a4ce89c950f
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+crypto
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-baylibre/baseline-meson-gxl-s805x-libretech-a=
+c.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-baylibre/baseline-meson-gxl-s805x-libretech-a=
+c.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641975aa421d2a4ce89c9=
+510
+        new failure (last pass: next-20230317) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-gxl-s805x-libretech-ac | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+ima                | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6419762105a880ef159c950a
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+ima
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-baylibre/baseline-meson-gxl-s805x-libretech-ac.t=
+xt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-baylibre/baseline-meson-gxl-s805x-libretech-ac.h=
+tml
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6419762105a880ef159c9=
+50b
+        new failure (last pass: next-20230317) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-gxl-s805x-libretech-ac | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641976d53709622b499c9530
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-baylibre/baseline-meson-g=
+xl-s805x-libretech-ac.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-baylibre/baseline-meson-g=
+xl-s805x-libretech-ac.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641976d53709622b499c9=
+531
+        new failure (last pass: next-20230320) =
 
  =
 
@@ -1477,30 +3531,157 @@ fig                    | regressions
 -----------------------------+--------+-----------------+----------+-------=
 -----------------------+------------
 meson-gxl-s905d-p230         | arm64  | lab-baylibre    | gcc-10   | defcon=
-fig+kselftest          | 1          =
+fig+CON...OMIZE_BASE=3Dy | 1          =
 
 
-  Details:     https://kernelci.org/test/plan/id/641972725b631202fc9c95d4
+  Details:     https://kernelci.org/test/plan/id/64197426a50df217699c953c
 
   Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+kselftest
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
   Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
 110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm64/defconfig+kselftest/gcc-10/lab-baylibre/baseline-meso=
-n-gxl-s905d-p230.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm64/defconfig+kselftest/gcc-10/lab-baylibre/baseline-meso=
-n-gxl-s905d-p230.html
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-baylibre/baseline-meson-gx=
+l-s905d-p230.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-baylibre/baseline-meson-gx=
+l-s905d-p230.html
   Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
 t-baseline/20230310.0/arm64/rootfs.cpio.gz =
 
 
 
-  * baseline.login: https://kernelci.org/test/case/id/641972725b631202fc9c9=
-5d5
-        failing since 42 days (last pass: v6.2-rc6-351-gf42837eac380f, firs=
-t fail: v6.2-rc7-136-g39693c3ba989) =
+  * baseline.login: https://kernelci.org/test/case/id/64197426a50df217699c9=
+53d
+        new failure (last pass: next-20230320) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-gxl-s905d-p230         | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON...BIG_ENDIAN=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641974894eac1e37b39c95ce
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy/gcc-10/lab-baylibre/baseline-meson-gx=
+l-s905d-p230.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy/gcc-10/lab-baylibre/baseline-meson-gx=
+l-s905d-p230.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64be/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641974894eac1e37b39c9=
+5cf
+        new failure (last pass: next-20230320) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-gxl-s905d-p230         | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641975b789d742e7cf9c9518
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+crypto
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-baylibre/baseline-meson-gxl-s905d-p230.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-baylibre/baseline-meson-gxl-s905d-p230.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641975b789d742e7cf9c9=
+519
+        new failure (last pass: next-20230317) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-gxl-s905d-p230         | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+ima                | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6419764671aebd4fe89c9605
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+ima
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-baylibre/baseline-meson-gxl-s905d-p230.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-baylibre/baseline-meson-gxl-s905d-p230.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6419764671aebd4fe89c9=
+606
+        new failure (last pass: next-20230317) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-gxl-s905d-p230         | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641976c03709622b499c950f
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-baylibre/baseline-meson-g=
+xl-s905d-p230.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-baylibre/baseline-meson-g=
+xl-s905d-p230.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641976c03709622b499c9=
+510
+        new failure (last pass: next-20230320) =
 
  =
 
@@ -1511,30 +3692,223 @@ fig                    | regressions
 -----------------------------+--------+-----------------+----------+-------=
 -----------------------+------------
 meson-gxl-s905x-khadas-vim   | arm64  | lab-baylibre    | gcc-10   | defcon=
-fig+kselftest          | 1          =
+fig+CON...OMIZE_BASE=3Dy | 1          =
 
 
-  Details:     https://kernelci.org/test/plan/id/641972425b8acfcc509c9506
+  Details:     https://kernelci.org/test/plan/id/641973f8dd29f4c1139c9512
 
   Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+kselftest
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
   Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
 110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm64/defconfig+kselftest/gcc-10/lab-baylibre/baseline-meso=
-n-gxl-s905x-khadas-vim.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm64/defconfig+kselftest/gcc-10/lab-baylibre/baseline-meso=
-n-gxl-s905x-khadas-vim.html
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-baylibre/baseline-meson-gx=
+l-s905x-khadas-vim.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-baylibre/baseline-meson-gx=
+l-s905x-khadas-vim.html
   Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
 t-baseline/20230310.0/arm64/rootfs.cpio.gz =
 
 
 
-  * baseline.login: https://kernelci.org/test/case/id/641972425b8acfcc509c9=
-507
-        failing since 42 days (last pass: v6.2-rc7-120-g11b3628314a5, first=
- fail: v6.2-rc7-136-g39693c3ba989) =
+  * baseline.login: https://kernelci.org/test/case/id/641973f8dd29f4c1139c9=
+513
+        new failure (last pass: next-20230320) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-gxl-s905x-khadas-vim   | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON...BIG_ENDIAN=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6419746c328efb901c9c954a
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy/gcc-10/lab-baylibre/baseline-meson-gx=
+l-s905x-khadas-vim.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy/gcc-10/lab-baylibre/baseline-meson-gx=
+l-s905x-khadas-vim.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64be/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6419746c328efb901c9c9=
+54b
+        new failure (last pass: next-20230320) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-gxl-s905x-khadas-vim   | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641975a6ff9f4835969c9522
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+crypto
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-baylibre/baseline-meson-gxl-s905x-khadas-vim.=
+txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-baylibre/baseline-meson-gxl-s905x-khadas-vim.=
+html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641975a6ff9f4835969c9=
+523
+        new failure (last pass: next-20230317) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-gxl-s905x-khadas-vim   | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+ima                | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6419760c15fa99fc459c9505
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+ima
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-baylibre/baseline-meson-gxl-s905x-khadas-vim.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-baylibre/baseline-meson-gxl-s905x-khadas-vim.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6419760c15fa99fc459c9=
+506
+        new failure (last pass: next-20230317) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-gxl-s905x-khadas-vim   | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641976bfb47897ec229c950d
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-baylibre/baseline-meson-g=
+xl-s905x-khadas-vim.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-baylibre/baseline-meson-g=
+xl-s905x-khadas-vim.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641976bfb47897ec229c9=
+50e
+        new failure (last pass: next-20230320) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-gxl-s905x-libretech-cc | arm64  | lab-baylibre    | clang-13 | defcon=
+fig+arm64-chromebook   | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6419897484b50992e89c950a
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+arm64-chromebook
+  Compiler:    clang-13 (Debian clang version 13.0.1-6~deb11u1)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-baylibre/baseline-meson-gxl-s905x=
+-libretech-cc.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-baylibre/baseline-meson-gxl-s905x=
+-libretech-cc.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6419897484b50992e89c9=
+50b
+        new failure (last pass: next-20230310) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-gxl-s905x-libretech-cc | arm64  | lab-broonie     | clang-13 | defcon=
+fig+arm64-chromebook   | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641989e3535fc5c5829c9529
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+arm64-chromebook
+  Compiler:    clang-13 (Debian clang version 13.0.1-6~deb11u1)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-broonie/baseline-meson-gxl-s905x-=
+libretech-cc.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-broonie/baseline-meson-gxl-s905x-=
+libretech-cc.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641989e3535fc5c5829c9=
+52a
+        new failure (last pass: next-20230310) =
 
  =
 
@@ -1545,30 +3919,161 @@ fig                    | regressions
 -----------------------------+--------+-----------------+----------+-------=
 -----------------------+------------
 meson-gxl-s905x-libretech-cc | arm64  | lab-baylibre    | gcc-10   | defcon=
-fig+kselftest          | 1          =
+fig+CON...OMIZE_BASE=3Dy | 1          =
 
 
-  Details:     https://kernelci.org/test/plan/id/641973d972ab579c279c9511
+  Details:     https://kernelci.org/test/plan/id/641974faaf4db4e6ce9c9544
 
   Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+kselftest
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
   Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
 110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm64/defconfig+kselftest/gcc-10/lab-baylibre/baseline-meso=
-n-gxl-s905x-libretech-cc.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm64/defconfig+kselftest/gcc-10/lab-baylibre/baseline-meso=
-n-gxl-s905x-libretech-cc.html
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-baylibre/baseline-meson-gx=
+l-s905x-libretech-cc.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-baylibre/baseline-meson-gx=
+l-s905x-libretech-cc.html
   Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
 t-baseline/20230310.0/arm64/rootfs.cpio.gz =
 
 
 
-  * baseline.login: https://kernelci.org/test/case/id/641973d972ab579c279c9=
-512
-        failing since 42 days (last pass: v6.2-rc7-120-g11b3628314a5, first=
- fail: v6.2-rc7-136-g39693c3ba989) =
+  * baseline.login: https://kernelci.org/test/case/id/641974faaf4db4e6ce9c9=
+545
+        new failure (last pass: next-20230320) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-gxl-s905x-libretech-cc | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON...BIG_ENDIAN=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6419758152887c15b69c9598
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy/gcc-10/lab-baylibre/baseline-meson-gx=
+l-s905x-libretech-cc.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy/gcc-10/lab-baylibre/baseline-meson-gx=
+l-s905x-libretech-cc.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64be/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6419758152887c15b69c9=
+599
+        new failure (last pass: next-20230320) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-gxl-s905x-libretech-cc | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6419760b476b4e82819c9508
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+crypto
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-baylibre/baseline-meson-gxl-s905x-libretech-c=
+c.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-baylibre/baseline-meson-gxl-s905x-libretech-c=
+c.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6419760b476b4e82819c9=
+509
+        new failure (last pass: next-20230317) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-gxl-s905x-libretech-cc | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+ima                | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6419762715fa99fc459c9598
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+ima
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-baylibre/baseline-meson-gxl-s905x-libretech-cc.t=
+xt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-baylibre/baseline-meson-gxl-s905x-libretech-cc.h=
+tml
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6419762715fa99fc459c9=
+599
+        new failure (last pass: next-20230317) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-gxl-s905x-libretech-cc | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641977a72e07ba2d2f9c950b
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-baylibre/baseline-meson-g=
+xl-s905x-libretech-cc.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-baylibre/baseline-meson-g=
+xl-s905x-libretech-cc.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641977a72e07ba2d2f9c9=
+50c
+        new failure (last pass: next-20230320) =
 
  =
 
@@ -1579,30 +4084,160 @@ fig                    | regressions
 -----------------------------+--------+-----------------+----------+-------=
 -----------------------+------------
 meson-gxl-s905x-libretech-cc | arm64  | lab-broonie     | gcc-10   | defcon=
-fig+kselftest          | 1          =
+fig+CON...OMIZE_BASE=3Dy | 1          =
 
 
-  Details:     https://kernelci.org/test/plan/id/6419726495b36721c49c9541
+  Details:     https://kernelci.org/test/plan/id/64197459e8ee256ed89c9526
 
   Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+kselftest
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
   Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
 110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm64/defconfig+kselftest/gcc-10/lab-broonie/baseline-meson=
--gxl-s905x-libretech-cc.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm64/defconfig+kselftest/gcc-10/lab-broonie/baseline-meson=
--gxl-s905x-libretech-cc.html
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-broonie/baseline-meson-gxl=
+-s905x-libretech-cc.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-broonie/baseline-meson-gxl=
+-s905x-libretech-cc.html
   Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
 t-baseline/20230310.0/arm64/rootfs.cpio.gz =
 
 
 
-  * baseline.login: https://kernelci.org/test/case/id/6419726495b36721c49c9=
-542
-        failing since 42 days (last pass: v6.2-rc7-120-g11b3628314a5, first=
- fail: v6.2-rc7-136-g39693c3ba989) =
+  * baseline.login: https://kernelci.org/test/case/id/64197459e8ee256ed89c9=
+527
+        new failure (last pass: next-20230320) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-gxl-s905x-libretech-cc | arm64  | lab-broonie     | gcc-10   | defcon=
+fig+CON...BIG_ENDIAN=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641974c8b84652f0dd9c951e
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy/gcc-10/lab-broonie/baseline-meson-gxl=
+-s905x-libretech-cc.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy/gcc-10/lab-broonie/baseline-meson-gxl=
+-s905x-libretech-cc.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64be/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641974c8b84652f0dd9c9=
+51f
+        new failure (last pass: next-20230320) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-gxl-s905x-libretech-cc | arm64  | lab-broonie     | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641975ca811b1efd199c951f
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+crypto
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-broonie/baseline-meson-gxl-s905x-libretech-cc=
+.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-broonie/baseline-meson-gxl-s905x-libretech-cc=
+.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641975ca811b1efd199c9=
+520
+        new failure (last pass: next-20230317) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-gxl-s905x-libretech-cc | arm64  | lab-broonie     | gcc-10   | defcon=
+fig+ima                | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6419764271aebd4fe89c95d9
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+ima
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-broonie/baseline-meson-gxl-s905x-libretech-cc.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-broonie/baseline-meson-gxl-s905x-libretech-cc.ht=
+ml
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6419764271aebd4fe89c9=
+5da
+        new failure (last pass: next-20230317) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-gxl-s905x-libretech-cc | arm64  | lab-broonie     | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641976bab47897ec229c9505
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-broonie/baseline-meson-gx=
+l-s905x-libretech-cc.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-broonie/baseline-meson-gx=
+l-s905x-libretech-cc.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641976bab47897ec229c9=
+506
+        new failure (last pass: next-20230320) =
 
  =
 
@@ -1613,30 +4248,157 @@ fig                    | regressions
 -----------------------------+--------+-----------------+----------+-------=
 -----------------------+------------
 meson-gxm-khadas-vim2        | arm64  | lab-baylibre    | gcc-10   | defcon=
-fig+kselftest          | 1          =
+fig+CON...OMIZE_BASE=3Dy | 1          =
 
 
-  Details:     https://kernelci.org/test/plan/id/641972485b8acfcc509c950f
+  Details:     https://kernelci.org/test/plan/id/641973f3dd29f4c1139c9508
 
   Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+kselftest
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
   Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
 110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm64/defconfig+kselftest/gcc-10/lab-baylibre/baseline-meso=
-n-gxm-khadas-vim2.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm64/defconfig+kselftest/gcc-10/lab-baylibre/baseline-meso=
-n-gxm-khadas-vim2.html
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-baylibre/baseline-meson-gx=
+m-khadas-vim2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-baylibre/baseline-meson-gx=
+m-khadas-vim2.html
   Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
 t-baseline/20230310.0/arm64/rootfs.cpio.gz =
 
 
 
-  * baseline.login: https://kernelci.org/test/case/id/641972485b8acfcc509c9=
-510
-        failing since 42 days (last pass: v6.2-rc7-120-g11b3628314a5, first=
- fail: v6.2-rc7-136-g39693c3ba989) =
+  * baseline.login: https://kernelci.org/test/case/id/641973f3dd29f4c1139c9=
+509
+        new failure (last pass: next-20230320) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-gxm-khadas-vim2        | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON...BIG_ENDIAN=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6419746af719c155b19c9505
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy/gcc-10/lab-baylibre/baseline-meson-gx=
+m-khadas-vim2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy/gcc-10/lab-baylibre/baseline-meson-gx=
+m-khadas-vim2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64be/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6419746af719c155b19c9=
+506
+        new failure (last pass: next-20230320) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-gxm-khadas-vim2        | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641975a4421d2a4ce89c9508
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+crypto
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-baylibre/baseline-meson-gxm-khadas-vim2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-baylibre/baseline-meson-gxm-khadas-vim2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641975a4421d2a4ce89c9=
+509
+        new failure (last pass: next-20230317) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-gxm-khadas-vim2        | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+ima                | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6419760f15fa99fc459c9513
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+ima
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-baylibre/baseline-meson-gxm-khadas-vim2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-baylibre/baseline-meson-gxm-khadas-vim2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6419760f15fa99fc459c9=
+514
+        new failure (last pass: next-20230317) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-gxm-khadas-vim2        | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641976bc2a6f4c34fa9c951f
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-baylibre/baseline-meson-g=
+xm-khadas-vim2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-baylibre/baseline-meson-g=
+xm-khadas-vim2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641976bc2a6f4c34fa9c9=
+520
+        new failure (last pass: next-20230320) =
 
  =
 
@@ -1647,30 +4409,157 @@ fig                    | regressions
 -----------------------------+--------+-----------------+----------+-------=
 -----------------------+------------
 meson-sm1-khadas-vim3l       | arm64  | lab-baylibre    | gcc-10   | defcon=
-fig+kselftest          | 1          =
+fig+CON...OMIZE_BASE=3Dy | 1          =
 
 
-  Details:     https://kernelci.org/test/plan/id/6419726f5b631202fc9c9593
+  Details:     https://kernelci.org/test/plan/id/6419745785b38ffdaf9c9509
 
   Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+kselftest
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
   Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
 110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm64/defconfig+kselftest/gcc-10/lab-baylibre/baseline-meso=
-n-sm1-khadas-vim3l.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm64/defconfig+kselftest/gcc-10/lab-baylibre/baseline-meso=
-n-sm1-khadas-vim3l.html
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-baylibre/baseline-meson-sm=
+1-khadas-vim3l.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-baylibre/baseline-meson-sm=
+1-khadas-vim3l.html
   Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
 t-baseline/20230310.0/arm64/rootfs.cpio.gz =
 
 
 
-  * baseline.login: https://kernelci.org/test/case/id/6419726f5b631202fc9c9=
-594
-        failing since 42 days (last pass: v6.2-rc7-120-g11b3628314a5, first=
- fail: v6.2-rc7-136-g39693c3ba989) =
+  * baseline.login: https://kernelci.org/test/case/id/6419745785b38ffdaf9c9=
+50a
+        new failure (last pass: next-20230320) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-sm1-khadas-vim3l       | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON...BIG_ENDIAN=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641974deb84652f0dd9c958f
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy/gcc-10/lab-baylibre/baseline-meson-sm=
+1-khadas-vim3l.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy/gcc-10/lab-baylibre/baseline-meson-sm=
+1-khadas-vim3l.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64be/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641974deb84652f0dd9c9=
+590
+        new failure (last pass: next-20230320) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-sm1-khadas-vim3l       | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641975f43e08dfe0389c9505
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+crypto
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-baylibre/baseline-meson-sm1-khadas-vim3l.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-baylibre/baseline-meson-sm1-khadas-vim3l.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641975f43e08dfe0389c9=
+506
+        new failure (last pass: next-20230317) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-sm1-khadas-vim3l       | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+ima                | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6419768045ac8e2cca9c9509
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+ima
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-baylibre/baseline-meson-sm1-khadas-vim3l.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-baylibre/baseline-meson-sm1-khadas-vim3l.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6419768045ac8e2cca9c9=
+50a
+        new failure (last pass: next-20230317) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-sm1-khadas-vim3l       | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/64197709bc9bf9cf989c953e
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-baylibre/baseline-meson-s=
+m1-khadas-vim3l.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-baylibre/baseline-meson-s=
+m1-khadas-vim3l.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/64197709bc9bf9cf989c9=
+53f
+        new failure (last pass: next-20230320) =
 
  =
 
@@ -1681,30 +4570,29 @@ fig                    | regressions
 -----------------------------+--------+-----------------+----------+-------=
 -----------------------+------------
 meson-sm1-sei610             | arm64  | lab-baylibre    | gcc-10   | defcon=
-fig+kselftest          | 1          =
+fig+CON...OMIZE_BASE=3Dy | 1          =
 
 
-  Details:     https://kernelci.org/test/plan/id/641972225e84b9b4b69c9522
+  Details:     https://kernelci.org/test/plan/id/641973c8d8799301db9c952b
 
   Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+kselftest
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
   Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
 110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm64/defconfig+kselftest/gcc-10/lab-baylibre/baseline-meso=
-n-sm1-sei610.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm64/defconfig+kselftest/gcc-10/lab-baylibre/baseline-meso=
-n-sm1-sei610.html
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-baylibre/baseline-meson-sm=
+1-sei610.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-baylibre/baseline-meson-sm=
+1-sei610.html
   Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
 t-baseline/20230310.0/arm64/rootfs.cpio.gz =
 
 
 
-  * baseline.login: https://kernelci.org/test/case/id/641972225e84b9b4b69c9=
-523
-        failing since 42 days (last pass: v6.2-rc7-120-g11b3628314a5, first=
- fail: v6.2-rc7-136-g39693c3ba989) =
+  * baseline.login: https://kernelci.org/test/case/id/641973c8d8799301db9c9=
+52c
+        new failure (last pass: next-20230320) =
 
  =
 
@@ -1714,31 +4602,124 @@ platform                     | arch   | lab             | compiler | defcon=
 fig                    | regressions
 -----------------------------+--------+-----------------+----------+-------=
 -----------------------+------------
-mt8173-elm-hana              | arm64  | lab-collabora   | gcc-10   | defcon=
-fig+arm...ok+kselftest | 1          =
+meson-sm1-sei610             | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+crypto             | 1          =
 
 
-  Details:     https://kernelci.org/test/plan/id/64196f477c4e3ea6979c9508
+  Details:     https://kernelci.org/test/plan/id/6419756c7463ccfe8b9c9556
 
   Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+arm64-chromebook+kselftest
+  Full config: defconfig+crypto
   Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
 110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm64/defconfig+arm64-chromebook+kselftest/gcc-10/lab-colla=
-bora/baseline-mt8173-elm-hana.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm64/defconfig+arm64-chromebook+kselftest/gcc-10/lab-colla=
-bora/baseline-mt8173-elm-hana.html
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-baylibre/baseline-meson-sm1-sei610.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-baylibre/baseline-meson-sm1-sei610.html
   Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
 t-baseline/20230310.0/arm64/rootfs.cpio.gz =
 
 
 
-  * baseline.login: https://kernelci.org/test/case/id/64196f477c4e3ea6979c9=
+  * baseline.login: https://kernelci.org/test/case/id/6419756c7463ccfe8b9c9=
+557
+        new failure (last pass: next-20230317) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-sm1-sei610             | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+ima                | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641975d0db2fd30d439c9513
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+ima
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-baylibre/baseline-meson-sm1-sei610.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-baylibre/baseline-meson-sm1-sei610.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641975d0db2fd30d439c9=
+514
+        new failure (last pass: next-20230317) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+meson-sm1-sei610             | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6419769756d7cadb4c9c951e
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-baylibre/baseline-meson-s=
+m1-sei610.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-baylibre/baseline-meson-s=
+m1-sei610.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6419769756d7cadb4c9c9=
+51f
+        new failure (last pass: next-20230320) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+mt8173-elm-hana              | arm64  | lab-collabora   | clang-13 | defcon=
+fig+arm64-chromebook   | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6419891308287782059c9508
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+arm64-chromebook
+  Compiler:    clang-13 (Debian clang version 13.0.1-6~deb11u1)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-collabora/baseline-mt8173-elm-han=
+a.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-collabora/baseline-mt8173-elm-han=
+a.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6419891308287782059c9=
 509
-        failing since 56 days (last pass: v6.2-rc5-157-g1f16e03afb18, first=
- fail: v6.2-rc5-174-gc5f142de047d) =
+        new failure (last pass: next-20230310) =
 
  =
 
@@ -1748,31 +4729,31 @@ platform                     | arch   | lab             | compiler | defcon=
 fig                    | regressions
 -----------------------------+--------+-----------------+----------+-------=
 -----------------------+------------
-mt8183-kukui-...uniper-sku16 | arm64  | lab-collabora   | gcc-10   | defcon=
-fig+arm...ok+kselftest | 1          =
+mt8183-kukui-...uniper-sku16 | arm64  | lab-collabora   | clang-13 | cros:/=
+/chrome...4-chromebook | 1          =
 
 
-  Details:     https://kernelci.org/test/plan/id/64196f5fa28025fd669c9578
+  Details:     https://kernelci.org/test/plan/id/641987c49eb6c7c23f9c9505
 
   Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+arm64-chromebook+kselftest
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm64/defconfig+arm64-chromebook+kselftest/gcc-10/lab-colla=
-bora/baseline-mt8183-kukui-jacuzzi-juniper-sku16.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm64/defconfig+arm64-chromebook+kselftest/gcc-10/lab-colla=
-bora/baseline-mt8183-kukui-jacuzzi-juniper-sku16.html
+  Full config: cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+a=
+rm64-chromebook
+  Compiler:    clang-13 (Debian clang version 13.0.1-6~deb11u1)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/cros---chromeos-5.10-arm64-chromiumos-arm64.flavour.config+arm64-chromebo=
+ok/clang-13/lab-collabora/baseline-mt8183-kukui-jacuzzi-juniper-sku16.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/cros---chromeos-5.10-arm64-chromiumos-arm64.flavour.config+arm64-chromebo=
+ok/clang-13/lab-collabora/baseline-mt8183-kukui-jacuzzi-juniper-sku16.html
   Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
 t-baseline/20230310.0/arm64/rootfs.cpio.gz =
 
 
 
-  * baseline.login: https://kernelci.org/test/case/id/64196f5fa28025fd669c9=
-579
-        failing since 42 days (last pass: v6.2-rc7-120-g11b3628314a5, first=
- fail: v6.2-rc7-136-g39693c3ba989) =
+  * baseline.login: https://kernelci.org/test/case/id/641987c49eb6c7c23f9c9=
+506
+        failing since 53 days (last pass: next-20230120, first fail: next-2=
+0230127) =
 
  =
 
@@ -1782,95 +4763,32 @@ platform                     | arch   | lab             | compiler | defcon=
 fig                    | regressions
 -----------------------------+--------+-----------------+----------+-------=
 -----------------------+------------
-mt8183-kukui-...uniper-sku16 | arm64  | lab-collabora   | gcc-10   | defcon=
-fig+arm...ook+videodec | 3          =
+mt8183-kukui-...uniper-sku16 | arm64  | lab-collabora   | clang-13 | cros:/=
+/chrome...4-chromebook | 1          =
 
 
-  Details:     https://kernelci.org/test/plan/id/64197163546d9665c19c9521
-
-  Results:     166 PASS, 6 FAIL, 0 SKIP
-  Full config: defconfig+arm64-chromebook+videodec
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm64/defconfig+arm64-chromebook+videodec/gcc-10/lab-collab=
-ora/baseline-mt8183-kukui-jacuzzi-juniper-sku16.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm64/defconfig+arm64-chromebook+videodec/gcc-10/lab-collab=
-ora/baseline-mt8183-kukui-jacuzzi-juniper-sku16.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230310.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.panel-edp-probed: https://kernelci.org/test/case/id/641=
-97164546d9665c19c9575
-        failing since 25 days (last pass: v6.2-1218-g2d4a54ee969d, first fa=
-il: v6.2-8700-gab98cc06b683)
-
-    2023-03-21T08:56:58.373652  /lava-9710120/1/../bin/lava-test-case
-
-    2023-03-21T08:56:58.380085  <8>[   23.429320] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Dpanel-edp-probed RESULT=3Dfail>
-   =
-
-
-  * baseline.bootrr.clk-mt8183-pericfg-probed: https://kernelci.org/test/ca=
-se/id/64197164546d9665c19c95c7
-        failing since 15 days (last pass: v6.2-8700-gab98cc06b683, first fa=
-il: v6.2-13684-gf93c476d9769)
-
-    2023-03-21T08:56:55.493140  /lava-9710120/1/../bin/lava-test-case
-
-    2023-03-21T08:56:55.504273  <8>[   20.550822] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Dclk-mt8183-pericfg-probed RESULT=3Dfail>
-   =
-
-
-  * baseline.bootrr.clk-mt8183-infracfg-probed: https://kernelci.org/test/c=
-ase/id/64197164546d9665c19c95c8
-        failing since 15 days (last pass: v6.2-8700-gab98cc06b683, first fa=
-il: v6.2-13684-gf93c476d9769)
-
-    2023-03-21T08:56:54.462371  /lava-9710120/1/../bin/lava-test-case
-
-    2023-03-21T08:56:54.472512  <8>[   19.519030] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Dclk-mt8183-infracfg-probed RESULT=3Dfail>
-   =
-
- =
-
-
-
-platform                     | arch   | lab             | compiler | defcon=
-fig                    | regressions
------------------------------+--------+-----------------+----------+-------=
------------------------+------------
-mt8192-asurada-spherion-r0   | arm64  | lab-collabora   | gcc-10   | defcon=
-fig+arm...ok+kselftest | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/64196f5c1d9fe0899e9c9515
+  Details:     https://kernelci.org/test/plan/id/64198581a24c53eee49c9509
 
   Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+arm64-chromebook+kselftest
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm64/defconfig+arm64-chromebook+kselftest/gcc-10/lab-colla=
-bora/baseline-mt8192-asurada-spherion-r0.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm64/defconfig+arm64-chromebook+kselftest/gcc-10/lab-colla=
-bora/baseline-mt8192-asurada-spherion-r0.html
+  Full config: cros://chromeos-5.10/arm64/chromiumos-mediatek.flavour.confi=
+g+arm64-chromebook
+  Compiler:    clang-13 (Debian clang version 13.0.1-6~deb11u1)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/cros---chromeos-5.10-arm64-chromiumos-mediatek.flavour.config+arm64-chrom=
+ebook/clang-13/lab-collabora/baseline-mt8183-kukui-jacuzzi-juniper-sku16.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/cros---chromeos-5.10-arm64-chromiumos-mediatek.flavour.config+arm64-chrom=
+ebook/clang-13/lab-collabora/baseline-mt8183-kukui-jacuzzi-juniper-sku16.ht=
+ml
   Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
 t-baseline/20230310.0/arm64/rootfs.cpio.gz =
 
 
 
-  * baseline.login: https://kernelci.org/test/case/id/64196f5c1d9fe0899e9c9=
-516
-        failing since 42 days (last pass: v6.2-rc7-120-g11b3628314a5, first=
- fail: v6.2-rc7-136-g39693c3ba989) =
+  * baseline.login: https://kernelci.org/test/case/id/64198581a24c53eee49c9=
+50a
+        failing since 56 days (last pass: next-20230123, first fail: next-2=
+0230124) =
 
  =
 
@@ -1880,61 +4798,100 @@ platform                     | arch   | lab             | compiler | defcon=
 fig                    | regressions
 -----------------------------+--------+-----------------+----------+-------=
 -----------------------+------------
-mt8192-asurada-spherion-r0   | arm64  | lab-collabora   | gcc-10   | defcon=
-fig+arm...ook+videodec | 3          =
+mt8183-kukui-...uniper-sku16 | arm64  | lab-collabora   | clang-13 | defcon=
+fig+arm64-chromebook   | 1          =
 
 
-  Details:     https://kernelci.org/test/plan/id/641971a40e9e52ab3e9c9546
+  Details:     https://kernelci.org/test/plan/id/6419892b31bbf3868b9c9516
 
-  Results:     177 PASS, 9 FAIL, 0 SKIP
-  Full config: defconfig+arm64-chromebook+videodec
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm64/defconfig+arm64-chromebook+videodec/gcc-10/lab-collab=
-ora/baseline-mt8192-asurada-spherion-r0.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm64/defconfig+arm64-chromebook+videodec/gcc-10/lab-collab=
-ora/baseline-mt8192-asurada-spherion-r0.html
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+arm64-chromebook
+  Compiler:    clang-13 (Debian clang version 13.0.1-6~deb11u1)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-collabora/baseline-mt8183-kukui-j=
+acuzzi-juniper-sku16.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-collabora/baseline-mt8183-kukui-j=
+acuzzi-juniper-sku16.html
   Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
 t-baseline/20230310.0/arm64/rootfs.cpio.gz =
 
 
 
-  * baseline.bootrr.clk-mt8192-pericfg-probed: https://kernelci.org/test/ca=
-se/id/641971a40e9e52ab3e9c95ce
-        failing since 18 days (last pass: v6.2-8700-gab98cc06b683, first fa=
-il: v6.2-13370-g5872d227b73f)
+  * baseline.login: https://kernelci.org/test/case/id/6419892b31bbf3868b9c9=
+517
+        new failure (last pass: next-20230310) =
 
-    2023-03-21T08:57:43.662122  /lava-9710112/1/../bin/lava-test-case
+ =
 
-    2023-03-21T08:57:43.669104  <8>[   21.061340] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Dclk-mt8192-pericfg-probed RESULT=3Dfail>
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+mt8192-asurada-spherion-r0   | arm64  | lab-collabora   | clang-13 | cros:/=
+/chrome...4-chromebook | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641984de99bdff0dcb9c9814
+
+  Results:     177 PASS, 8 FAIL, 0 SKIP
+  Full config: cros://chromeos-5.10/arm64/chromiumos-mediatek.flavour.confi=
+g+arm64-chromebook
+  Compiler:    clang-13 (Debian clang version 13.0.1-6~deb11u1)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/cros---chromeos-5.10-arm64-chromiumos-mediatek.flavour.config+arm64-chrom=
+ebook/clang-13/lab-collabora/baseline-mt8192-asurada-spherion-r0.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/cros---chromeos-5.10-arm64-chromiumos-mediatek.flavour.config+arm64-chrom=
+ebook/clang-13/lab-collabora/baseline-mt8192-asurada-spherion-r0.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.clk-mt8192-apmixedsys-probed: https://kernelci.org/test=
+/case/id/641984de99bdff0dcb9c98c8
+        new failure (last pass: next-20230316)
+
+    2023-03-21T10:19:48.418084  /lava-9712129/1/../bin/lava-test-case
+
+    2023-03-21T10:19:48.424893  <8>[    5.881820] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dclk-mt8192-apmixedsys-probed RESULT=3Dfail>
    =
 
-
-  * baseline.bootrr.clk-mt8192-infracfg-probed: https://kernelci.org/test/c=
-ase/id/641971a40e9e52ab3e9c95fd
-        failing since 18 days (last pass: v6.2-8700-gab98cc06b683, first fa=
-il: v6.2-13370-g5872d227b73f)
-
-    2023-03-21T08:57:42.643291  /lava-9710112/1/../bin/lava-test-case
-
-    2023-03-21T08:57:42.649985  <8>[   20.042267] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Dclk-mt8192-infracfg-probed RESULT=3Dfail>
-   =
+ =
 
 
-  * baseline.bootrr.clk-mt8192-topckgen-probed: https://kernelci.org/test/c=
-ase/id/641971a40e9e52ab3e9c95fe
-        failing since 18 days (last pass: v6.2-8700-gab98cc06b683, first fa=
-il: v6.2-13370-g5872d227b73f)
 
-    2023-03-21T08:57:41.623460  /lava-9710112/1/../bin/lava-test-case
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+mt8192-asurada-spherion-r0   | arm64  | lab-collabora   | clang-13 | defcon=
+fig+arm64-chromebook   | 1          =
 
-    2023-03-21T08:57:41.630367  <8>[   19.022695] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Dclk-mt8192-topckgen-probed RESULT=3Dfail>
-   =
+
+  Details:     https://kernelci.org/test/plan/id/6419892831bbf3868b9c9510
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+arm64-chromebook
+  Compiler:    clang-13 (Debian clang version 13.0.1-6~deb11u1)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-collabora/baseline-mt8192-asurada=
+-spherion-r0.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-collabora/baseline-mt8192-asurada=
+-spherion-r0.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6419892831bbf3868b9c9=
+511
+        new failure (last pass: next-20230310) =
 
  =
 
@@ -1948,401 +4905,27 @@ ox820-clouden...lug-series-3 | arm    | lab-baylibre    | gcc-10   | oxnas_=
 v6_defconfig           | 1          =
 
 
-  Details:     https://kernelci.org/test/plan/id/64196a3d92d14ada9a9c957f
+  Details:     https://kernelci.org/test/plan/id/64196fca69462d3b429c950c
 
   Results:     0 PASS, 1 FAIL, 0 SKIP
   Full config: oxnas_v6_defconfig
   Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
 10110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm/oxnas_v6_defconfig/gcc-10/lab-baylibre/baseline-ox820-c=
-loudengines-pogoplug-series-3.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm/oxnas_v6_defconfig/gcc-10/lab-baylibre/baseline-ox820-c=
-loudengines-pogoplug-series-3.html
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm/=
+oxnas_v6_defconfig/gcc-10/lab-baylibre/baseline-ox820-cloudengines-pogoplug=
+-series-3.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm/=
+oxnas_v6_defconfig/gcc-10/lab-baylibre/baseline-ox820-cloudengines-pogoplug=
+-series-3.html
   Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
 t-baseline/20230310.0/armel/rootfs.cpio.gz =
 
 
 
-  * baseline.login: https://kernelci.org/test/case/id/64196a3d92d14ada9a9c9=
-580
-        failing since 160 days (last pass: v6.0-9666-g02c05e0b8d5c, first f=
-ail: v6.0-11312-g1778d6da389c) =
-
- =
-
-
-
-platform                     | arch   | lab             | compiler | defcon=
-fig                    | regressions
------------------------------+--------+-----------------+----------+-------=
------------------------+------------
-qcom-qdf2400                 | arm64  | lab-linaro-lkft | gcc-10   | defcon=
-fig+arm...ok+kselftest | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/64197339f397e5462b9c958d
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+arm64-chromebook+kselftest
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm64/defconfig+arm64-chromebook+kselftest/gcc-10/lab-linar=
-o-lkft/baseline-qcom-qdf2400.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm64/defconfig+arm64-chromebook+kselftest/gcc-10/lab-linar=
-o-lkft/baseline-qcom-qdf2400.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230310.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/64197339f397e5462b9c9=
-58e
-        failing since 42 days (last pass: v6.2-rc7-120-g11b3628314a5, first=
- fail: v6.2-rc7-136-g39693c3ba989) =
-
- =
-
-
-
-platform                     | arch   | lab             | compiler | defcon=
-fig                    | regressions
------------------------------+--------+-----------------+----------+-------=
------------------------+------------
-qcom-qdf2400                 | arm64  | lab-linaro-lkft | gcc-10   | defcon=
-fig+kselftest          | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6419783bf3abd043e19c955b
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+kselftest
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm64/defconfig+kselftest/gcc-10/lab-linaro-lkft/baseline-q=
-com-qdf2400.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm64/defconfig+kselftest/gcc-10/lab-linaro-lkft/baseline-q=
-com-qdf2400.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230310.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6419783bf3abd043e19c9=
-55c
-        failing since 42 days (last pass: v6.2-rc7-120-g11b3628314a5, first=
- fail: v6.2-rc7-136-g39693c3ba989) =
-
- =
-
-
-
-platform                     | arch   | lab             | compiler | defcon=
-fig                    | regressions
------------------------------+--------+-----------------+----------+-------=
------------------------+------------
-qemu_arm-virt-gicv2          | arm    | lab-baylibre    | gcc-10   | multi_=
-v7_defconfig+debug     | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/641972c2036eb2903e9c9541
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+debug
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm/multi_v7_defconfig+debug/gcc-10/lab-baylibre/baseline-q=
-emu_arm-virt-gicv2.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm/multi_v7_defconfig+debug/gcc-10/lab-baylibre/baseline-q=
-emu_arm-virt-gicv2.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230310.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/641972c2036eb2903e9c9=
-542
-        failing since 160 days (last pass: v6.0-5324-g7871897dadfa9, first =
-fail: v6.0-11312-g1778d6da389c) =
-
- =
-
-
-
-platform                     | arch   | lab             | compiler | defcon=
-fig                    | regressions
------------------------------+--------+-----------------+----------+-------=
------------------------+------------
-qemu_arm-virt-gicv2          | arm    | lab-broonie     | gcc-10   | multi_=
-v7_defconfig+debug     | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/641972b09be4ae5fe39c9505
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+debug
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm/multi_v7_defconfig+debug/gcc-10/lab-broonie/baseline-qe=
-mu_arm-virt-gicv2.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm/multi_v7_defconfig+debug/gcc-10/lab-broonie/baseline-qe=
-mu_arm-virt-gicv2.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230310.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/641972b09be4ae5fe39c9=
-506
-        failing since 160 days (last pass: v6.0-5324-g7871897dadfa9, first =
-fail: v6.0-11312-g1778d6da389c) =
-
- =
-
-
-
-platform                     | arch   | lab             | compiler | defcon=
-fig                    | regressions
------------------------------+--------+-----------------+----------+-------=
------------------------+------------
-qemu_arm-virt-gicv2          | arm    | lab-collabora   | gcc-10   | multi_=
-v7_defconfig+debug     | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6419722ecc35d5696a9c9508
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+debug
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm/multi_v7_defconfig+debug/gcc-10/lab-collabora/baseline-=
-qemu_arm-virt-gicv2.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm/multi_v7_defconfig+debug/gcc-10/lab-collabora/baseline-=
-qemu_arm-virt-gicv2.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230310.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6419722ecc35d5696a9c9=
-509
-        failing since 160 days (last pass: v6.0-5324-g7871897dadfa9, first =
-fail: v6.0-11312-g1778d6da389c) =
-
- =
-
-
-
-platform                     | arch   | lab             | compiler | defcon=
-fig                    | regressions
------------------------------+--------+-----------------+----------+-------=
------------------------+------------
-qemu_arm-virt-gicv2-uefi     | arm    | lab-baylibre    | gcc-10   | multi_=
-v7_defconfig+debug     | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/641972c0036eb2903e9c953e
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+debug
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm/multi_v7_defconfig+debug/gcc-10/lab-baylibre/baseline-q=
-emu_arm-virt-gicv2-uefi.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm/multi_v7_defconfig+debug/gcc-10/lab-baylibre/baseline-q=
-emu_arm-virt-gicv2-uefi.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230310.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/641972c0036eb2903e9c9=
-53f
-        failing since 160 days (last pass: v6.0-5324-g7871897dadfa9, first =
-fail: v6.0-11312-g1778d6da389c) =
-
- =
-
-
-
-platform                     | arch   | lab             | compiler | defcon=
-fig                    | regressions
------------------------------+--------+-----------------+----------+-------=
------------------------+------------
-qemu_arm-virt-gicv2-uefi     | arm    | lab-broonie     | gcc-10   | multi_=
-v7_defconfig+debug     | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/641972aee28c2f14099c9545
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+debug
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm/multi_v7_defconfig+debug/gcc-10/lab-broonie/baseline-qe=
-mu_arm-virt-gicv2-uefi.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm/multi_v7_defconfig+debug/gcc-10/lab-broonie/baseline-qe=
-mu_arm-virt-gicv2-uefi.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230310.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/641972aee28c2f14099c9=
-546
-        failing since 160 days (last pass: v6.0-5324-g7871897dadfa9, first =
-fail: v6.0-11312-g1778d6da389c) =
-
- =
-
-
-
-platform                     | arch   | lab             | compiler | defcon=
-fig                    | regressions
------------------------------+--------+-----------------+----------+-------=
------------------------+------------
-qemu_arm-virt-gicv2-uefi     | arm    | lab-collabora   | gcc-10   | multi_=
-v7_defconfig+debug     | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6419722fcc35d5696a9c950b
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+debug
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm/multi_v7_defconfig+debug/gcc-10/lab-collabora/baseline-=
-qemu_arm-virt-gicv2-uefi.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm/multi_v7_defconfig+debug/gcc-10/lab-collabora/baseline-=
-qemu_arm-virt-gicv2-uefi.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230310.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6419722fcc35d5696a9c9=
-50c
-        failing since 160 days (last pass: v6.0-5324-g7871897dadfa9, first =
-fail: v6.0-11312-g1778d6da389c) =
-
- =
-
-
-
-platform                     | arch   | lab             | compiler | defcon=
-fig                    | regressions
------------------------------+--------+-----------------+----------+-------=
------------------------+------------
-qemu_arm-virt-gicv3          | arm    | lab-baylibre    | gcc-10   | multi_=
-v7_defconfig+debug     | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/641972c49ecd4b5f769c9505
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+debug
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm/multi_v7_defconfig+debug/gcc-10/lab-baylibre/baseline-q=
-emu_arm-virt-gicv3.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm/multi_v7_defconfig+debug/gcc-10/lab-baylibre/baseline-q=
-emu_arm-virt-gicv3.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230310.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/641972c49ecd4b5f769c9=
-506
-        failing since 160 days (last pass: v6.0-5324-g7871897dadfa9, first =
-fail: v6.0-11312-g1778d6da389c) =
-
- =
-
-
-
-platform                     | arch   | lab             | compiler | defcon=
-fig                    | regressions
------------------------------+--------+-----------------+----------+-------=
------------------------+------------
-qemu_arm-virt-gicv3          | arm    | lab-broonie     | gcc-10   | multi_=
-v7_defconfig+debug     | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/641973501a1ed513349c950b
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+debug
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm/multi_v7_defconfig+debug/gcc-10/lab-broonie/baseline-qe=
-mu_arm-virt-gicv3.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm/multi_v7_defconfig+debug/gcc-10/lab-broonie/baseline-qe=
-mu_arm-virt-gicv3.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230310.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/641973501a1ed513349c9=
-50c
-        failing since 160 days (last pass: v6.0-5324-g7871897dadfa9, first =
-fail: v6.0-11312-g1778d6da389c) =
-
- =
-
-
-
-platform                     | arch   | lab             | compiler | defcon=
-fig                    | regressions
------------------------------+--------+-----------------+----------+-------=
------------------------+------------
-qemu_arm-virt-gicv3          | arm    | lab-collabora   | gcc-10   | multi_=
-v7_defconfig+debug     | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6419725695b36721c49c950c
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+debug
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm/multi_v7_defconfig+debug/gcc-10/lab-collabora/baseline-=
-qemu_arm-virt-gicv3.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm/multi_v7_defconfig+debug/gcc-10/lab-collabora/baseline-=
-qemu_arm-virt-gicv3.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230310.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6419725695b36721c49c9=
+  * baseline.login: https://kernelci.org/test/case/id/64196fca69462d3b429c9=
 50d
-        failing since 160 days (last pass: v6.0-5324-g7871897dadfa9, first =
-fail: v6.0-11312-g1778d6da389c) =
+        failing since 210 days (last pass: next-20220822, first fail: next-=
+20220823) =
 
  =
 
@@ -2352,31 +4935,193 @@ platform                     | arch   | lab             | compiler | defcon=
 fig                    | regressions
 -----------------------------+--------+-----------------+----------+-------=
 -----------------------+------------
-qemu_arm-virt-gicv3-uefi     | arm    | lab-baylibre    | gcc-10   | multi_=
-v7_defconfig+debug     | 1          =
+qcom-qdf2400                 | arm64  | lab-linaro-lkft | clang-13 | defcon=
+fig+arm64-chromebook   | 1          =
 
 
-  Details:     https://kernelci.org/test/plan/id/641972c3c47c1d6c5c9c9506
+  Details:     https://kernelci.org/test/plan/id/6419966c0bd1f542a89c950b
 
   Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+debug
+  Full config: defconfig+arm64-chromebook
+  Compiler:    clang-13 (Debian clang version 13.0.1-6~deb11u1)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-linaro-lkft/baseline-qcom-qdf2400=
+.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-linaro-lkft/baseline-qcom-qdf2400=
+.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6419966c0bd1f542a89c9=
+50c
+        new failure (last pass: next-20230310) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+qcom-qdf2400                 | arm64  | lab-linaro-lkft | gcc-10   | defcon=
+fig+CON...OMIZE_BASE=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6419809be5971efd009c9538
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-linaro-lkft/baseline-qcom-=
+qdf2400.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-linaro-lkft/baseline-qcom-=
+qdf2400.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6419809be5971efd009c9=
+539
+        new failure (last pass: next-20230320) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+qcom-qdf2400                 | arm64  | lab-linaro-lkft | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641984227184adbb9e9c9524
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+crypto
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-linaro-lkft/baseline-qcom-qdf2400.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-linaro-lkft/baseline-qcom-qdf2400.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641984227184adbb9e9c9=
+525
+        new failure (last pass: next-20230317) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+qcom-qdf2400                 | arm64  | lab-linaro-lkft | gcc-10   | defcon=
+fig+ima                | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/64198539ae0cba48a29c9559
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+ima
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-linaro-lkft/baseline-qcom-qdf2400.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-linaro-lkft/baseline-qcom-qdf2400.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/64198539ae0cba48a29c9=
+55a
+        new failure (last pass: next-20230317) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+qcom-qdf2400                 | arm64  | lab-linaro-lkft | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/64198666bbdaee0b6a9c954f
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-linaro-lkft/baseline-qcom=
+-qdf2400.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-linaro-lkft/baseline-qcom=
+-qdf2400.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/64198666bbdaee0b6a9c9=
+550
+        new failure (last pass: next-20230320) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+qemu_arm-vexpress-a9         | arm    | lab-baylibre    | gcc-10   | vexpre=
+ss_defconfig           | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641973b32a0f73fdf69c9562
+
+  Results:     3 PASS, 2 FAIL, 2 SKIP
+  Full config: vexpress_defconfig
   Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
 10110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm/multi_v7_defconfig+debug/gcc-10/lab-baylibre/baseline-q=
-emu_arm-virt-gicv3-uefi.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm/multi_v7_defconfig+debug/gcc-10/lab-baylibre/baseline-q=
-emu_arm-virt-gicv3-uefi.html
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm/=
+vexpress_defconfig/gcc-10/lab-baylibre/baseline-qemu_arm-vexpress-a9.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm/=
+vexpress_defconfig/gcc-10/lab-baylibre/baseline-qemu_arm-vexpress-a9.html
   Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
 t-baseline/20230310.0/armel/rootfs.cpio.gz =
 
 
 
-  * baseline.login: https://kernelci.org/test/case/id/641972c3c47c1d6c5c9c9=
-507
-        failing since 160 days (last pass: v6.0-5324-g7871897dadfa9, first =
-fail: v6.0-11312-g1778d6da389c) =
+  * baseline.bootrr.all-cpus-are-online: https://kernelci.org/test/case/id/=
+641973b32a0f73fdf69c956a
+        failing since 34 days (last pass: next-20230213, first fail: next-2=
+0230215)
+
+    2023-03-21T09:06:13.820622  /lava-3430655/1/../bin/lava-test-case
+    2023-03-21T09:06:13.915782  <8><LAVA_SIGNAL_TESTCASE TEST_CASE_ID=3Dall=
+-cpus-are-online RESULT=3Dfail>   =
 
  =
 
@@ -2386,31 +5131,33 @@ platform                     | arch   | lab             | compiler | defcon=
 fig                    | regressions
 -----------------------------+--------+-----------------+----------+-------=
 -----------------------+------------
-qemu_arm-virt-gicv3-uefi     | arm    | lab-broonie     | gcc-10   | multi_=
-v7_defconfig+debug     | 1          =
+qemu_arm-vexpress-a9         | arm    | lab-broonie     | gcc-10   | vexpre=
+ss_defconfig           | 1          =
 
 
-  Details:     https://kernelci.org/test/plan/id/6419734f1a1ed513349c9508
+  Details:     https://kernelci.org/test/plan/id/64197558b346cf12b89c951e
 
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+debug
+  Results:     3 PASS, 2 FAIL, 2 SKIP
+  Full config: vexpress_defconfig
   Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
 10110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm/multi_v7_defconfig+debug/gcc-10/lab-broonie/baseline-qe=
-mu_arm-virt-gicv3-uefi.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm/multi_v7_defconfig+debug/gcc-10/lab-broonie/baseline-qe=
-mu_arm-virt-gicv3-uefi.html
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm/=
+vexpress_defconfig/gcc-10/lab-broonie/baseline-qemu_arm-vexpress-a9.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm/=
+vexpress_defconfig/gcc-10/lab-broonie/baseline-qemu_arm-vexpress-a9.html
   Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
 t-baseline/20230310.0/armel/rootfs.cpio.gz =
 
 
 
-  * baseline.login: https://kernelci.org/test/case/id/6419734f1a1ed513349c9=
-509
-        failing since 160 days (last pass: v6.0-5324-g7871897dadfa9, first =
-fail: v6.0-11312-g1778d6da389c) =
+  * baseline.bootrr.all-cpus-are-online: https://kernelci.org/test/case/id/=
+64197558b346cf12b89c9526
+        failing since 34 days (last pass: next-20230213, first fail: next-2=
+0230215)
+
+    2023-03-21T09:13:47.108876  /lava-197697/1/../bin/lava-test-case
+    2023-03-21T09:13:47.169397  <8><LAVA_SIGNAL_TESTCASE TEST_CASE_ID=3Dall=
+-cpus-are-online RESULT=3Dfail>   =
 
  =
 
@@ -2420,76 +5167,1583 @@ platform                     | arch   | lab             | compiler | defcon=
 fig                    | regressions
 -----------------------------+--------+-----------------+----------+-------=
 -----------------------+------------
-qemu_arm-virt-gicv3-uefi     | arm    | lab-collabora   | gcc-10   | multi_=
-v7_defconfig+debug     | 1          =
+qemu_arm-vexpress-a9         | arm    | lab-collabora   | gcc-10   | vexpre=
+ss_defconfig           | 1          =
 
 
-  Details:     https://kernelci.org/test/plan/id/6419725752c130dda09c950e
+  Details:     https://kernelci.org/test/plan/id/64197321f397e5462b9c9507
 
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+debug
+  Results:     3 PASS, 2 FAIL, 2 SKIP
+  Full config: vexpress_defconfig
   Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
 10110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm/multi_v7_defconfig+debug/gcc-10/lab-collabora/baseline-=
-qemu_arm-virt-gicv3-uefi.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm/multi_v7_defconfig+debug/gcc-10/lab-collabora/baseline-=
-qemu_arm-virt-gicv3-uefi.html
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm/=
+vexpress_defconfig/gcc-10/lab-collabora/baseline-qemu_arm-vexpress-a9.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm/=
+vexpress_defconfig/gcc-10/lab-collabora/baseline-qemu_arm-vexpress-a9.html
   Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
 t-baseline/20230310.0/armel/rootfs.cpio.gz =
 
 
 
-  * baseline.login: https://kernelci.org/test/case/id/6419725752c130dda09c9=
-50f
-        failing since 160 days (last pass: v6.0-5324-g7871897dadfa9, first =
-fail: v6.0-11312-g1778d6da389c) =
+  * baseline.bootrr.all-cpus-are-online: https://kernelci.org/test/case/id/=
+64197321f397e5462b9c9510
+        failing since 34 days (last pass: next-20230213, first fail: next-2=
+0230215)
 
- =
-
-
-
-platform                     | arch   | lab             | compiler | defcon=
-fig                    | regressions
------------------------------+--------+-----------------+----------+-------=
------------------------+------------
-qemu_mips-malta              | mips   | lab-collabora   | gcc-10   | malta_=
-defconfig              | 1          =
+    2023-03-21T09:04:25.495004  /lava-9710281/1/../bin/lava-test-case
+    2023-03-21T09:04:25.495158  =
 
 
-  Details:     https://kernelci.org/test/plan/id/64196e33f2ea1d02539c95af
-
-  Results:     4 PASS, 1 FAIL, 2 SKIP
-  Full config: malta_defconfig
-  Compiler:    gcc-10 (mips-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/mips/malta_defconfig/gcc-10/lab-collabora/baseline-qemu_mip=
-s-malta.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/mips/malta_defconfig/gcc-10/lab-collabora/baseline-qemu_mip=
-s-malta.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230310.0/mipsel/rootfs.cpio.gz =
-
-
-
-  * baseline.dmesg.alert: https://kernelci.org/test/case/id/64196e33f2ea1d0=
-2539c95b3
-        new failure (last pass: v6.3-rc3-188-g9f7814c09ae60)
-        1 lines
-
-    2023-03-21T08:43:22.801139  kern  :alert : CPU 0 Unable to handle kerne=
-l paging request at virtual address 565ec46c, epc =3D=3D 80200868, ra =3D=
-=3D 8020085c
-    2023-03-21T08:43:22.801291  =
-
-
-    2023-03-21T08:43:22.821416  <8><LAVA_SIGNAL_TESTCASE TEST_CASE_ID=3Dale=
-rt RESULT=3Dfail UNITS=3Dlines MEASUREMENT=3D1>
-    2023-03-21T08:43:22.821505  =
+    2023-03-21T09:04:25.516726  <8><LAVA_SIGNAL_TESTCASE TEST_CASE_ID=3Dall=
+-cpus-are-online RESULT=3Dfail>
+    2023-03-21T09:04:25.516868  =
 
    =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+qemu_arm64-virt-gicv2        | arm64  | lab-baylibre    | clang-13 | defcon=
+fig+arm64-chromebook   | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641989516c76bc55d49c9518
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+arm64-chromebook
+  Compiler:    clang-13 (Debian clang version 13.0.1-6~deb11u1)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-baylibre/baseline-qemu_arm64-virt=
+-gicv2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-baylibre/baseline-qemu_arm64-virt=
+-gicv2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641989516c76bc55d49c9=
+519
+        new failure (last pass: next-20230308) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+qemu_arm64-virt-gicv2        | arm64  | lab-broonie     | clang-13 | defcon=
+fig+arm64-chromebook   | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6419891f61a73578949c950d
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+arm64-chromebook
+  Compiler:    clang-13 (Debian clang version 13.0.1-6~deb11u1)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-broonie/baseline-qemu_arm64-virt-=
+gicv2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-broonie/baseline-qemu_arm64-virt-=
+gicv2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6419891f61a73578949c9=
+50e
+        new failure (last pass: next-20230308) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+qemu_arm64-virt-gicv2        | arm64  | lab-collabora   | clang-13 | defcon=
+fig+arm64-chromebook   | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641988db1229ef15be9c95f0
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+arm64-chromebook
+  Compiler:    clang-13 (Debian clang version 13.0.1-6~deb11u1)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-collabora/baseline-qemu_arm64-vir=
+t-gicv2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-collabora/baseline-qemu_arm64-vir=
+t-gicv2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641988db1229ef15be9c9=
+5f1
+        new failure (last pass: next-20230308) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+qemu_arm64-virt-gicv2        | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON...OMIZE_BASE=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6419749524b51137bf9c9522
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-baylibre/baseline-qemu_arm=
+64-virt-gicv2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-baylibre/baseline-qemu_arm=
+64-virt-gicv2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6419749524b51137bf9c9=
+523
+        new failure (last pass: next-20230320) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+qemu_arm64-virt-gicv2        | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641976b0f94895c2929c952c
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+crypto
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-baylibre/baseline-qemu_arm64-virt-gicv2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-baylibre/baseline-qemu_arm64-virt-gicv2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641976b0f94895c2929c9=
+52d
+        new failure (last pass: next-20230317) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+qemu_arm64-virt-gicv2        | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+ima                | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641976d13709622b499c9528
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+ima
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-baylibre/baseline-qemu_arm64-virt-gicv2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-baylibre/baseline-qemu_arm64-virt-gicv2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641976d13709622b499c9=
+529
+        new failure (last pass: next-20230317) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+qemu_arm64-virt-gicv2        | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/64197770c2343e8dc19c9525
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-baylibre/baseline-qemu_ar=
+m64-virt-gicv2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-baylibre/baseline-qemu_ar=
+m64-virt-gicv2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/64197770c2343e8dc19c9=
+526
+        new failure (last pass: next-20230320) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+qemu_arm64-virt-gicv2        | arm64  | lab-broonie     | gcc-10   | defcon=
+fig+CON...OMIZE_BASE=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641975aa811b1efd199c9508
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-broonie/baseline-qemu_arm6=
+4-virt-gicv2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-broonie/baseline-qemu_arm6=
+4-virt-gicv2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641975aa811b1efd199c9=
+509
+        new failure (last pass: next-20230320) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+qemu_arm64-virt-gicv2        | arm64  | lab-broonie     | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641976bf2a6f4c34fa9c9527
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+crypto
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-broonie/baseline-qemu_arm64-virt-gicv2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-broonie/baseline-qemu_arm64-virt-gicv2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641976bf2a6f4c34fa9c9=
+528
+        new failure (last pass: next-20230317) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+qemu_arm64-virt-gicv2        | arm64  | lab-broonie     | gcc-10   | defcon=
+fig+ima                | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6419774fd0bf7981ae9c950b
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+ima
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-broonie/baseline-qemu_arm64-virt-gicv2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-broonie/baseline-qemu_arm64-virt-gicv2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6419774fd0bf7981ae9c9=
+50c
+        new failure (last pass: next-20230317) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+qemu_arm64-virt-gicv2        | arm64  | lab-broonie     | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6419789f39207fe5959c952c
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-broonie/baseline-qemu_arm=
+64-virt-gicv2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-broonie/baseline-qemu_arm=
+64-virt-gicv2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6419789f39207fe5959c9=
+52d
+        new failure (last pass: next-20230320) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+qemu_arm64-virt-gicv2        | arm64  | lab-collabora   | gcc-10   | defcon=
+fig+ima                | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641975b55059856e9e9c950e
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+ima
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-collabora/baseline-qemu_arm64-virt-gicv2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-collabora/baseline-qemu_arm64-virt-gicv2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641975b55059856e9e9c9=
+50f
+        new failure (last pass: next-20230317) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+qemu_arm64-virt-gicv2        | arm64  | lab-collabora   | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/64197667f7b2cabfd39c9593
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-collabora/baseline-qemu_a=
+rm64-virt-gicv2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-collabora/baseline-qemu_a=
+rm64-virt-gicv2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/64197667f7b2cabfd39c9=
+594
+        new failure (last pass: next-20230320) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+qemu_arm64-virt-gicv2-uefi   | arm64  | lab-baylibre    | clang-13 | defcon=
+fig+arm64-chromebook   | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/64198950e689ba24759c9567
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+arm64-chromebook
+  Compiler:    clang-13 (Debian clang version 13.0.1-6~deb11u1)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-baylibre/baseline-qemu_arm64-virt=
+-gicv2-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-baylibre/baseline-qemu_arm64-virt=
+-gicv2-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/64198950e689ba24759c9=
+568
+        new failure (last pass: next-20230309) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+qemu_arm64-virt-gicv2-uefi   | arm64  | lab-broonie     | clang-13 | defcon=
+fig+arm64-chromebook   | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6419891e31bbf3868b9c950a
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+arm64-chromebook
+  Compiler:    clang-13 (Debian clang version 13.0.1-6~deb11u1)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-broonie/baseline-qemu_arm64-virt-=
+gicv2-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-broonie/baseline-qemu_arm64-virt-=
+gicv2-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6419891e31bbf3868b9c9=
+50b
+        new failure (last pass: next-20230309) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+qemu_arm64-virt-gicv2-uefi   | arm64  | lab-collabora   | clang-13 | defcon=
+fig+arm64-chromebook   | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641988dadfd49c92f39c9551
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+arm64-chromebook
+  Compiler:    clang-13 (Debian clang version 13.0.1-6~deb11u1)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-collabora/baseline-qemu_arm64-vir=
+t-gicv2-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-collabora/baseline-qemu_arm64-vir=
+t-gicv2-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641988dadfd49c92f39c9=
+552
+        new failure (last pass: next-20230309) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+qemu_arm64-virt-gicv2-uefi   | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON...OMIZE_BASE=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/64197498a57193e5a69c954c
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-baylibre/baseline-qemu_arm=
+64-virt-gicv2-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-baylibre/baseline-qemu_arm=
+64-virt-gicv2-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/64197498a57193e5a69c9=
+54d
+        new failure (last pass: next-20230320) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+qemu_arm64-virt-gicv2-uefi   | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641976aef94895c2929c9529
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+crypto
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-baylibre/baseline-qemu_arm64-virt-gicv2-uefi.=
+txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-baylibre/baseline-qemu_arm64-virt-gicv2-uefi.=
+html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641976aef94895c2929c9=
+52a
+        new failure (last pass: next-20230317) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+qemu_arm64-virt-gicv2-uefi   | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+ima                | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641976d340fd77b5509c9507
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+ima
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-baylibre/baseline-qemu_arm64-virt-gicv2-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-baylibre/baseline-qemu_arm64-virt-gicv2-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641976d340fd77b5509c9=
+508
+        new failure (last pass: next-20230317) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+qemu_arm64-virt-gicv2-uefi   | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/64197773876da68fbb9c953e
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-baylibre/baseline-qemu_ar=
+m64-virt-gicv2-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-baylibre/baseline-qemu_ar=
+m64-virt-gicv2-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/64197773876da68fbb9c9=
+53f
+        new failure (last pass: next-20230320) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+qemu_arm64-virt-gicv2-uefi   | arm64  | lab-broonie     | gcc-10   | defcon=
+fig+CON...OMIZE_BASE=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641975ac811b1efd199c950b
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-broonie/baseline-qemu_arm6=
+4-virt-gicv2-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-broonie/baseline-qemu_arm6=
+4-virt-gicv2-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641975ac811b1efd199c9=
+50c
+        new failure (last pass: next-20230320) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+qemu_arm64-virt-gicv2-uefi   | arm64  | lab-broonie     | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6419769c56d7cadb4c9c953d
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+crypto
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-broonie/baseline-qemu_arm64-virt-gicv2-uefi.t=
+xt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-broonie/baseline-qemu_arm64-virt-gicv2-uefi.h=
+tml
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6419769c56d7cadb4c9c9=
+53e
+        new failure (last pass: next-20230317) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+qemu_arm64-virt-gicv2-uefi   | arm64  | lab-broonie     | gcc-10   | defcon=
+fig+ima                | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/64197773c2343e8dc19c952b
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+ima
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-broonie/baseline-qemu_arm64-virt-gicv2-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-broonie/baseline-qemu_arm64-virt-gicv2-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/64197773c2343e8dc19c9=
+52c
+        new failure (last pass: next-20230317) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+qemu_arm64-virt-gicv2-uefi   | arm64  | lab-broonie     | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641978a239207fe5959c9532
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-broonie/baseline-qemu_arm=
+64-virt-gicv2-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-broonie/baseline-qemu_arm=
+64-virt-gicv2-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641978a239207fe5959c9=
+533
+        new failure (last pass: next-20230320) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+qemu_arm64-virt-gicv3        | arm64  | lab-baylibre    | clang-13 | defcon=
+fig+arm64-chromebook   | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6419894e86e28d558f9c9516
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+arm64-chromebook
+  Compiler:    clang-13 (Debian clang version 13.0.1-6~deb11u1)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-baylibre/baseline-qemu_arm64-virt=
+-gicv3.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-baylibre/baseline-qemu_arm64-virt=
+-gicv3.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6419894e86e28d558f9c9=
+517
+        new failure (last pass: next-20230310) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+qemu_arm64-virt-gicv3        | arm64  | lab-broonie     | clang-13 | defcon=
+fig+arm64-chromebook   | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641988e30446a0c1009c9517
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+arm64-chromebook
+  Compiler:    clang-13 (Debian clang version 13.0.1-6~deb11u1)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-broonie/baseline-qemu_arm64-virt-=
+gicv3.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-broonie/baseline-qemu_arm64-virt-=
+gicv3.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641988e30446a0c1009c9=
+518
+        new failure (last pass: next-20230310) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+qemu_arm64-virt-gicv3        | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON...OMIZE_BASE=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/64197493d013845d099c9506
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-baylibre/baseline-qemu_arm=
+64-virt-gicv3.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-baylibre/baseline-qemu_arm=
+64-virt-gicv3.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/64197493d013845d099c9=
+507
+        new failure (last pass: next-20230320) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+qemu_arm64-virt-gicv3        | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6419761f05a880ef159c9507
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+crypto
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-baylibre/baseline-qemu_arm64-virt-gicv3.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-baylibre/baseline-qemu_arm64-virt-gicv3.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6419761f05a880ef159c9=
+508
+        new failure (last pass: next-20230317) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+qemu_arm64-virt-gicv3        | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+ima                | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641976cd3709622b499c9522
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+ima
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-baylibre/baseline-qemu_arm64-virt-gicv3.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-baylibre/baseline-qemu_arm64-virt-gicv3.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641976cd3709622b499c9=
+523
+        new failure (last pass: next-20230317) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+qemu_arm64-virt-gicv3        | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6419777f13bb6db11b9c9519
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-baylibre/baseline-qemu_ar=
+m64-virt-gicv3.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-baylibre/baseline-qemu_ar=
+m64-virt-gicv3.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6419777f13bb6db11b9c9=
+51a
+        new failure (last pass: next-20230320) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+qemu_arm64-virt-gicv3        | arm64  | lab-broonie     | gcc-10   | defcon=
+fig+CON...OMIZE_BASE=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641975a8f0c78d798d9c9528
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-broonie/baseline-qemu_arm6=
+4-virt-gicv3.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-broonie/baseline-qemu_arm6=
+4-virt-gicv3.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641975a8f0c78d798d9c9=
+529
+        new failure (last pass: next-20230320) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+qemu_arm64-virt-gicv3        | arm64  | lab-broonie     | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6419769b56d7cadb4c9c953a
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+crypto
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-broonie/baseline-qemu_arm64-virt-gicv3.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-broonie/baseline-qemu_arm64-virt-gicv3.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6419769b56d7cadb4c9c9=
+53b
+        new failure (last pass: next-20230317) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+qemu_arm64-virt-gicv3        | arm64  | lab-broonie     | gcc-10   | defcon=
+fig+ima                | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641977398899591e649c951a
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+ima
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-broonie/baseline-qemu_arm64-virt-gicv3.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-broonie/baseline-qemu_arm64-virt-gicv3.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641977398899591e649c9=
+51b
+        new failure (last pass: next-20230317) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+qemu_arm64-virt-gicv3        | arm64  | lab-broonie     | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641978a14551b451759c9505
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-broonie/baseline-qemu_arm=
+64-virt-gicv3.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-broonie/baseline-qemu_arm=
+64-virt-gicv3.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641978a14551b451759c9=
+506
+        new failure (last pass: next-20230320) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+qemu_arm64-virt-gicv3        | arm64  | lab-collabora   | gcc-10   | defcon=
+fig+ima                | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641975b389d742e7cf9c950c
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+ima
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-collabora/baseline-qemu_arm64-virt-gicv3.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-collabora/baseline-qemu_arm64-virt-gicv3.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641975b389d742e7cf9c9=
+50d
+        new failure (last pass: next-20230317) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+qemu_arm64-virt-gicv3        | arm64  | lab-collabora   | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6419767c09ce5e5dfd9c9525
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-collabora/baseline-qemu_a=
+rm64-virt-gicv3.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-collabora/baseline-qemu_a=
+rm64-virt-gicv3.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6419767c09ce5e5dfd9c9=
+526
+        new failure (last pass: next-20230320) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+qemu_arm64-virt-gicv3-uefi   | arm64  | lab-baylibre    | clang-13 | defcon=
+fig+arm64-chromebook   | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6419894ddb11f94e599c9528
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+arm64-chromebook
+  Compiler:    clang-13 (Debian clang version 13.0.1-6~deb11u1)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-baylibre/baseline-qemu_arm64-virt=
+-gicv3-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-baylibre/baseline-qemu_arm64-virt=
+-gicv3-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6419894ddb11f94e599c9=
+529
+        new failure (last pass: next-20230310) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+qemu_arm64-virt-gicv3-uefi   | arm64  | lab-broonie     | clang-13 | defcon=
+fig+arm64-chromebook   | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641988f60446a0c1009c9526
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+arm64-chromebook
+  Compiler:    clang-13 (Debian clang version 13.0.1-6~deb11u1)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-broonie/baseline-qemu_arm64-virt-=
+gicv3-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-broonie/baseline-qemu_arm64-virt-=
+gicv3-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641988f60446a0c1009c9=
+527
+        new failure (last pass: next-20230310) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+qemu_arm64-virt-gicv3-uefi   | arm64  | lab-collabora   | clang-13 | defcon=
+fig+arm64-chromebook   | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641988c6dfd49c92f39c952d
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+arm64-chromebook
+  Compiler:    clang-13 (Debian clang version 13.0.1-6~deb11u1)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-collabora/baseline-qemu_arm64-vir=
+t-gicv3-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-collabora/baseline-qemu_arm64-vir=
+t-gicv3-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641988c6dfd49c92f39c9=
+52e
+        new failure (last pass: next-20230310) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+qemu_arm64-virt-gicv3-uefi   | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON...OMIZE_BASE=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641974a62e04e527bb9c9516
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-baylibre/baseline-qemu_arm=
+64-virt-gicv3-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-baylibre/baseline-qemu_arm=
+64-virt-gicv3-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641974a62e04e527bb9c9=
+517
+        new failure (last pass: next-20230320) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+qemu_arm64-virt-gicv3-uefi   | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641976c4151bb02e8d9c9514
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+crypto
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-baylibre/baseline-qemu_arm64-virt-gicv3-uefi.=
+txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-baylibre/baseline-qemu_arm64-virt-gicv3-uefi.=
+html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641976c4151bb02e8d9c9=
+515
+        new failure (last pass: next-20230317) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+qemu_arm64-virt-gicv3-uefi   | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+ima                | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641976cfde38909f9f9c9529
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+ima
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-baylibre/baseline-qemu_arm64-virt-gicv3-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-baylibre/baseline-qemu_arm64-virt-gicv3-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641976cfde38909f9f9c9=
+52a
+        new failure (last pass: next-20230317) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+qemu_arm64-virt-gicv3-uefi   | arm64  | lab-baylibre    | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6419777ec875a8ac849c9515
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-baylibre/baseline-qemu_ar=
+m64-virt-gicv3-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-baylibre/baseline-qemu_ar=
+m64-virt-gicv3-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6419777ec875a8ac849c9=
+516
+        new failure (last pass: next-20230320) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+qemu_arm64-virt-gicv3-uefi   | arm64  | lab-broonie     | gcc-10   | defcon=
+fig+CON...OMIZE_BASE=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641975bb5059856e9e9c9525
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-broonie/baseline-qemu_arm6=
+4-virt-gicv3-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-broonie/baseline-qemu_arm6=
+4-virt-gicv3-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641975bb5059856e9e9c9=
+526
+        new failure (last pass: next-20230320) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+qemu_arm64-virt-gicv3-uefi   | arm64  | lab-broonie     | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641976d43709622b499c952d
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+crypto
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-broonie/baseline-qemu_arm64-virt-gicv3-uefi.t=
+xt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-broonie/baseline-qemu_arm64-virt-gicv3-uefi.h=
+tml
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641976d53709622b499c9=
+52e
+        new failure (last pass: next-20230317) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+qemu_arm64-virt-gicv3-uefi   | arm64  | lab-broonie     | gcc-10   | defcon=
+fig+ima                | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6419774df4aae544b39c9558
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+ima
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-broonie/baseline-qemu_arm64-virt-gicv3-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-broonie/baseline-qemu_arm64-virt-gicv3-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6419774df4aae544b39c9=
+559
+        new failure (last pass: next-20230317) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+qemu_arm64-virt-gicv3-uefi   | arm64  | lab-broonie     | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/64197877b7fa2afd3b9c9505
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-broonie/baseline-qemu_arm=
+64-virt-gicv3-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-broonie/baseline-qemu_arm=
+64-virt-gicv3-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/64197877b7fa2afd3b9c9=
+506
+        new failure (last pass: next-20230320) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+qemu_arm64-virt-gicv3-uefi   | arm64  | lab-collabora   | gcc-10   | defcon=
+fig+ima                | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641975b45059856e9e9c9508
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+ima
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-collabora/baseline-qemu_arm64-virt-gicv3-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-collabora/baseline-qemu_arm64-virt-gicv3-uefi.ht=
+ml
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641975b45059856e9e9c9=
+509
+        new failure (last pass: next-20230317) =
 
  =
 
@@ -2503,27 +6757,375 @@ r8a7743-iwg20d-q7            | arm    | lab-cip         | gcc-10   | shmobi=
 le_defconfig           | 1          =
 
 
-  Details:     https://kernelci.org/test/plan/id/64196fc0e2703086eb9c950c
+  Details:     https://kernelci.org/test/plan/id/641971da0d73b1910e9c9547
 
   Results:     0 PASS, 1 FAIL, 0 SKIP
   Full config: shmobile_defconfig
   Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
 10110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm/shmobile_defconfig/gcc-10/lab-cip/baseline-r8a7743-iwg2=
-0d-q7.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm/shmobile_defconfig/gcc-10/lab-cip/baseline-r8a7743-iwg2=
-0d-q7.html
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm/=
+shmobile_defconfig/gcc-10/lab-cip/baseline-r8a7743-iwg20d-q7.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm/=
+shmobile_defconfig/gcc-10/lab-cip/baseline-r8a7743-iwg20d-q7.html
   Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
 t-baseline/20230310.0/armel/rootfs.cpio.gz =
 
 
 
-  * baseline.login: https://kernelci.org/test/case/id/64196fc0e2703086eb9c9=
+  * baseline.login: https://kernelci.org/test/case/id/641971da0d73b1910e9c9=
+548
+        failing since 6 days (last pass: next-20230310, first fail: next-20=
+230315) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+r8a774a1-hihope-rzg2m-ex     | arm64  | lab-cip         | gcc-10   | defcon=
+fig+CON...OMIZE_BASE=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641979bfc75898d7189c959c
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-cip/baseline-r8a774a1-hiho=
+pe-rzg2m-ex.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-cip/baseline-r8a774a1-hiho=
+pe-rzg2m-ex.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641979bfc75898d7189c9=
+59d
+        new failure (last pass: next-20230317) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+r8a774a1-hihope-rzg2m-ex     | arm64  | lab-cip         | gcc-10   | defcon=
+fig+ima                | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/64197df733b56468219c9506
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+ima
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-cip/baseline-r8a774a1-hihope-rzg2m-ex.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-cip/baseline-r8a774a1-hihope-rzg2m-ex.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/64197df733b56468219c9=
+507
+        new failure (last pass: next-20230315) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+r8a774c0-ek874               | arm64  | lab-cip         | clang-13 | defcon=
+fig+arm64-chromebook   | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/64198974113172bd6d9c9529
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+arm64-chromebook
+  Compiler:    clang-13 (Debian clang version 13.0.1-6~deb11u1)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-cip/baseline-r8a774c0-ek874.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-cip/baseline-r8a774c0-ek874.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/64198974113172bd6d9c9=
+52a
+        new failure (last pass: next-20230310) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+r8a774c0-ek874               | arm64  | lab-cip         | gcc-10   | defcon=
+fig+CON...OMIZE_BASE=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641974c0b84652f0dd9c950c
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-cip/baseline-r8a774c0-ek87=
+4.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-cip/baseline-r8a774c0-ek87=
+4.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641974c0b84652f0dd9c9=
 50d
-        failing since 4 days (last pass: v6.3-rc2-369-g71c206ed429b, first =
-fail: v6.3-rc2-423-g0e8bb497921e) =
+        new failure (last pass: next-20230320) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+r8a774c0-ek874               | arm64  | lab-cip         | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641975ffca77ce6aa49c9564
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+crypto
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-cip/baseline-r8a774c0-ek874.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-cip/baseline-r8a774c0-ek874.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641975ffca77ce6aa49c9=
+565
+        new failure (last pass: next-20230317) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+r8a774c0-ek874               | arm64  | lab-cip         | gcc-10   | defcon=
+fig+ima                | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641976a40586da08ad9c9529
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+ima
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-cip/baseline-r8a774c0-ek874.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-cip/baseline-r8a774c0-ek874.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641976a40586da08ad9c9=
+52a
+        new failure (last pass: next-20230317) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+r8a774c0-ek874               | arm64  | lab-cip         | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/64197753d0bf7981ae9c9511
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-cip/baseline-r8a774c0-ek8=
+74.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-cip/baseline-r8a774c0-ek8=
+74.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/64197753d0bf7981ae9c9=
+512
+        new failure (last pass: next-20230320) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+r8a77960-ulcb                | arm64  | lab-collabora   | gcc-10   | defcon=
+fig+CON...OMIZE_BASE=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6419a824548bf231879c9600
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-collabora/baseline-r8a7796=
+0-ulcb.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-collabora/baseline-r8a7796=
+0-ulcb.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6419a824548bf231879c9=
+601
+        new failure (last pass: next-20230320) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+r8a77960-ulcb                | arm64  | lab-collabora   | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6419a88806d976294b9c9535
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+crypto
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-collabora/baseline-r8a77960-ulcb.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-collabora/baseline-r8a77960-ulcb.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6419a88806d976294b9c9=
+536
+        new failure (last pass: next-20230317) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+r8a77960-ulcb                | arm64  | lab-collabora   | gcc-10   | defcon=
+fig+ima                | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6419a9dcf87fc499029c9518
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+ima
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-collabora/baseline-r8a77960-ulcb.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-collabora/baseline-r8a77960-ulcb.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6419a9dcf87fc499029c9=
+519
+        new failure (last pass: next-20230317) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+r8a77960-ulcb                | arm64  | lab-collabora   | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6419aa2c81721ad0599c950b
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-collabora/baseline-r8a779=
+60-ulcb.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-collabora/baseline-r8a779=
+60-ulcb.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6419aa2c81721ad0599c9=
+50c
+        new failure (last pass: next-20230320) =
 
  =
 
@@ -2537,68 +7139,27 @@ rk3288-rock2-square          | arm    | lab-collabora   | gcc-10   | multi_=
 v7_defc...G_ARM_LPAE=3Dy | 1          =
 
 
-  Details:     https://kernelci.org/test/plan/id/641975dc0ff408265e9c9518
+  Details:     https://kernelci.org/test/plan/id/6419799d0c1dd3a0fe9c9527
 
   Results:     0 PASS, 1 FAIL, 0 SKIP
   Full config: multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy
   Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
 10110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm/multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy/g=
-cc-10/lab-collabora/baseline-rk3288-rock2-square.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm/multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy/g=
-cc-10/lab-collabora/baseline-rk3288-rock2-square.html
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm/=
+multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy/gcc-10/lab-collabora/=
+baseline-rk3288-rock2-square.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm/=
+multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy/gcc-10/lab-collabora/=
+baseline-rk3288-rock2-square.html
   Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
 t-baseline/20230310.0/armel/rootfs.cpio.gz =
 
 
 
-  * baseline.login: https://kernelci.org/test/case/id/641975dc0ff408265e9c9=
-519
-        failing since 96 days (last pass: v6.1-6378-g44d433ee7540, first fa=
-il: v6.1-10792-g244d284981da) =
-
- =
-
-
-
-platform                     | arch   | lab             | compiler | defcon=
-fig                    | regressions
------------------------------+--------+-----------------+----------+-------=
------------------------+------------
-rk3288-veyron-jaq            | arm    | lab-collabora   | gcc-10   | multi_=
-v7_defc...CONFIG_SMP=3Dn | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/64196de4cd0b4872699c9596
-
-  Results:     65 PASS, 5 FAIL, 1 SKIP
-  Full config: multi_v7_defconfig+CONFIG_SMP=3Dn
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-10/lab-collabora/=
-baseline-rk3288-veyron-jaq.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-10/lab-collabora/=
-baseline-rk3288-veyron-jaq.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230310.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.cros-ec-keyb-probed: https://kernelci.org/test/case/id/=
-64196de4cd0b4872699c95d9
-        new failure (last pass: v6.3-rc3-188-g9f7814c09ae60)
-
-    2023-03-21T08:42:01.009514  /lava-9709786/1/../bin/lava-test-case<8>[  =
- 23.261834] <LAVA_SIGNAL_TESTCASE TEST_CASE_ID=3Dcros-ec-keyb-driver-presen=
-t RESULT=3Dpass>
-
-    2023-03-21T08:42:01.009744  =
-
-   =
+  * baseline.login: https://kernelci.org/test/case/id/6419799d0c1dd3a0fe9c9=
+528
+        failing since 119 days (last pass: next-20221121, first fail: next-=
+20221122) =
 
  =
 
@@ -2612,27 +7173,27 @@ rk3288-veyron-jaq            | arm    | lab-collabora   | gcc-10   | multi_=
 v7_defc...G_ARM_LPAE=3Dy | 1          =
 
 
-  Details:     https://kernelci.org/test/plan/id/6419725d52c130dda09c9522
+  Details:     https://kernelci.org/test/plan/id/641976b96ce7b1e2cf9c9533
 
   Results:     0 PASS, 1 FAIL, 0 SKIP
   Full config: multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy
   Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
 10110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm/multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy/g=
-cc-10/lab-collabora/baseline-rk3288-veyron-jaq.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm/multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy/g=
-cc-10/lab-collabora/baseline-rk3288-veyron-jaq.html
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm/=
+multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy/gcc-10/lab-collabora/=
+baseline-rk3288-veyron-jaq.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm/=
+multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy/gcc-10/lab-collabora/=
+baseline-rk3288-veyron-jaq.html
   Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
 t-baseline/20230310.0/armel/rootfs.cpio.gz =
 
 
 
-  * baseline.login: https://kernelci.org/test/case/id/6419725d52c130dda09c9=
-523
-        failing since 95 days (last pass: v6.1-6378-g44d433ee7540, first fa=
-il: v6.1-10792-g244d284981da) =
+  * baseline.login: https://kernelci.org/test/case/id/641976b96ce7b1e2cf9c9=
+534
+        failing since 119 days (last pass: next-20221121, first fail: next-=
+20221122) =
 
  =
 
@@ -2642,31 +7203,29 @@ platform                     | arch   | lab             | compiler | defcon=
 fig                    | regressions
 -----------------------------+--------+-----------------+----------+-------=
 -----------------------+------------
-rk3399-gru-kevin             | arm64  | lab-collabora   | gcc-10   | defcon=
-fig+arm...ok+kselftest | 1          =
+rk3399-gru-kevin             | arm64  | lab-collabora   | clang-13 | defcon=
+fig+arm64-chromebook   | 1          =
 
 
-  Details:     https://kernelci.org/test/plan/id/64196f467c4e3ea6979c9505
+  Details:     https://kernelci.org/test/plan/id/64198963113172bd6d9c9514
 
   Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+arm64-chromebook+kselftest
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm64/defconfig+arm64-chromebook+kselftest/gcc-10/lab-colla=
-bora/baseline-rk3399-gru-kevin.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm64/defconfig+arm64-chromebook+kselftest/gcc-10/lab-colla=
-bora/baseline-rk3399-gru-kevin.html
+  Full config: defconfig+arm64-chromebook
+  Compiler:    clang-13 (Debian clang version 13.0.1-6~deb11u1)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-collabora/baseline-rk3399-gru-kev=
+in.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-collabora/baseline-rk3399-gru-kev=
+in.html
   Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
 t-baseline/20230310.0/arm64/rootfs.cpio.gz =
 
 
 
-  * baseline.login: https://kernelci.org/test/case/id/64196f467c4e3ea6979c9=
-506
-        failing since 42 days (last pass: v6.2-rc7-120-g11b3628314a5, first=
- fail: v6.2-rc7-136-g39693c3ba989) =
+  * baseline.login: https://kernelci.org/test/case/id/64198963113172bd6d9c9=
+515
+        new failure (last pass: next-20230310) =
 
  =
 
@@ -2677,30 +7236,124 @@ fig                    | regressions
 -----------------------------+--------+-----------------+----------+-------=
 -----------------------+------------
 rk3399-roc-pc                | arm64  | lab-clabbe      | gcc-10   | defcon=
-fig+kselftest          | 1          =
+fig+CON...OMIZE_BASE=3Dy | 1          =
 
 
-  Details:     https://kernelci.org/test/plan/id/6419724984f64683be9c952a
+  Details:     https://kernelci.org/test/plan/id/6419748c75cc6bafac9c956f
 
   Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+kselftest
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
   Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
 110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm64/defconfig+kselftest/gcc-10/lab-clabbe/baseline-rk3399=
--roc-pc.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm64/defconfig+kselftest/gcc-10/lab-clabbe/baseline-rk3399=
--roc-pc.html
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-clabbe/baseline-rk3399-roc=
+-pc.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-clabbe/baseline-rk3399-roc=
+-pc.html
   Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
 t-baseline/20230310.0/arm64/rootfs.cpio.gz =
 
 
 
-  * baseline.login: https://kernelci.org/test/case/id/6419724984f64683be9c9=
-52b
-        failing since 42 days (last pass: v6.2-rc7-120-g11b3628314a5, first=
- fail: v6.2-rc7-136-g39693c3ba989) =
+  * baseline.login: https://kernelci.org/test/case/id/6419748c75cc6bafac9c9=
+570
+        new failure (last pass: next-20230320) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+rk3399-roc-pc                | arm64  | lab-clabbe      | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641975914f9dec0c419c9578
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+crypto
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-clabbe/baseline-rk3399-roc-pc.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-clabbe/baseline-rk3399-roc-pc.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641975914f9dec0c419c9=
+579
+        new failure (last pass: next-20230317) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+rk3399-roc-pc                | arm64  | lab-clabbe      | gcc-10   | defcon=
+fig+ima                | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6419769656d7cadb4c9c951b
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+ima
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-clabbe/baseline-rk3399-roc-pc.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-clabbe/baseline-rk3399-roc-pc.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6419769656d7cadb4c9c9=
+51c
+        new failure (last pass: next-20230317) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+rk3399-roc-pc                | arm64  | lab-clabbe      | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641976e6154f83fa9b9c9567
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-clabbe/baseline-rk3399-ro=
+c-pc.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-clabbe/baseline-rk3399-ro=
+c-pc.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641976e6154f83fa9b9c9=
+568
+        new failure (last pass: next-20230320) =
 
  =
 
@@ -2711,30 +7364,29 @@ fig                    | regressions
 -----------------------------+--------+-----------------+----------+-------=
 -----------------------+------------
 rk3399-rock-pi-4b            | arm64  | lab-collabora   | gcc-10   | defcon=
-fig+kselftest          | 1          =
+fig+CON...OMIZE_BASE=3Dy | 1          =
 
 
-  Details:     https://kernelci.org/test/plan/id/6419725552c130dda09c9509
+  Details:     https://kernelci.org/test/plan/id/641973e572ab579c279c9572
 
   Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+kselftest
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
   Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
 110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm64/defconfig+kselftest/gcc-10/lab-collabora/baseline-rk3=
-399-rock-pi-4b.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm64/defconfig+kselftest/gcc-10/lab-collabora/baseline-rk3=
-399-rock-pi-4b.html
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-collabora/baseline-rk3399-=
+rock-pi-4b.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-collabora/baseline-rk3399-=
+rock-pi-4b.html
   Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
 t-baseline/20230310.0/arm64/rootfs.cpio.gz =
 
 
 
-  * baseline.login: https://kernelci.org/test/case/id/6419725552c130dda09c9=
-50a
-        failing since 42 days (last pass: v6.2-rc7-120-g11b3628314a5, first=
- fail: v6.2-rc7-136-g39693c3ba989) =
+  * baseline.login: https://kernelci.org/test/case/id/641973e572ab579c279c9=
+573
+        new failure (last pass: next-20230320) =
 
  =
 
@@ -2744,31 +7396,28 @@ platform                     | arch   | lab             | compiler | defcon=
 fig                    | regressions
 -----------------------------+--------+-----------------+----------+-------=
 -----------------------+------------
-sc7180-trogdor-kingoftown    | arm64  | lab-collabora   | gcc-10   | defcon=
-fig+arm...ok+kselftest | 1          =
+rk3399-rock-pi-4b            | arm64  | lab-collabora   | gcc-10   | defcon=
+fig+crypto             | 1          =
 
 
-  Details:     https://kernelci.org/test/plan/id/64196f477c4e3ea6979c950b
+  Details:     https://kernelci.org/test/plan/id/641975b089d742e7cf9c9507
 
   Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+arm64-chromebook+kselftest
+  Full config: defconfig+crypto
   Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
 110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm64/defconfig+arm64-chromebook+kselftest/gcc-10/lab-colla=
-bora/baseline-sc7180-trogdor-kingoftown.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm64/defconfig+arm64-chromebook+kselftest/gcc-10/lab-colla=
-bora/baseline-sc7180-trogdor-kingoftown.html
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-collabora/baseline-rk3399-rock-pi-4b.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-collabora/baseline-rk3399-rock-pi-4b.html
   Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
 t-baseline/20230310.0/arm64/rootfs.cpio.gz =
 
 
 
-  * baseline.login: https://kernelci.org/test/case/id/64196f477c4e3ea6979c9=
-50c
-        failing since 42 days (last pass: v6.2-rc7-120-g11b3628314a5, first=
- fail: v6.2-rc7-136-g39693c3ba989) =
+  * baseline.login: https://kernelci.org/test/case/id/641975b089d742e7cf9c9=
+508
+        new failure (last pass: next-20230317) =
 
  =
 
@@ -2778,31 +7427,93 @@ platform                     | arch   | lab             | compiler | defcon=
 fig                    | regressions
 -----------------------------+--------+-----------------+----------+-------=
 -----------------------+------------
-sc7180-trogdo...zor-limozeen | arm64  | lab-collabora   | gcc-10   | defcon=
-fig+arm...ok+kselftest | 1          =
+rk3399-rock-pi-4b            | arm64  | lab-collabora   | gcc-10   | defcon=
+fig+ima                | 1          =
 
 
-  Details:     https://kernelci.org/test/plan/id/64196f487c4e3ea6979c9523
+  Details:     https://kernelci.org/test/plan/id/6419761615fa99fc459c9586
 
   Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+arm64-chromebook+kselftest
+  Full config: defconfig+ima
   Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
 110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm64/defconfig+arm64-chromebook+kselftest/gcc-10/lab-colla=
-bora/baseline-sc7180-trogdor-lazor-limozeen.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm64/defconfig+arm64-chromebook+kselftest/gcc-10/lab-colla=
-bora/baseline-sc7180-trogdor-lazor-limozeen.html
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-collabora/baseline-rk3399-rock-pi-4b.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-collabora/baseline-rk3399-rock-pi-4b.html
   Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
 t-baseline/20230310.0/arm64/rootfs.cpio.gz =
 
 
 
-  * baseline.login: https://kernelci.org/test/case/id/64196f487c4e3ea6979c9=
-524
-        failing since 42 days (last pass: v6.2-rc7-120-g11b3628314a5, first=
- fail: v6.2-rc7-136-g39693c3ba989) =
+  * baseline.login: https://kernelci.org/test/case/id/6419761615fa99fc459c9=
+587
+        new failure (last pass: next-20230317) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+rk3399-rock-pi-4b            | arm64  | lab-collabora   | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641976c9151bb02e8d9c9519
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-collabora/baseline-rk3399=
+-rock-pi-4b.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-collabora/baseline-rk3399=
+-rock-pi-4b.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641976c9151bb02e8d9c9=
+51a
+        new failure (last pass: next-20230320) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+sc7180-trogdo...zor-limozeen | arm64  | lab-collabora   | clang-13 | defcon=
+fig+arm64-chromebook   | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6419891940b299db5e9c9526
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+arm64-chromebook
+  Compiler:    clang-13 (Debian clang version 13.0.1-6~deb11u1)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-collabora/baseline-sc7180-trogdor=
+-lazor-limozeen.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-collabora/baseline-sc7180-trogdor=
+-lazor-limozeen.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6419891940b299db5e9c9=
+527
+        new failure (last pass: next-20230310) =
 
  =
 
@@ -2813,30 +7524,157 @@ fig                    | regressions
 -----------------------------+--------+-----------------+----------+-------=
 -----------------------+------------
 sun50i-a64-pine64-plus       | arm64  | lab-broonie     | gcc-10   | defcon=
-fig+kselftest          | 1          =
+fig+CON...OMIZE_BASE=3Dy | 1          =
 
 
-  Details:     https://kernelci.org/test/plan/id/641972d29ecd4b5f769c956c
+  Details:     https://kernelci.org/test/plan/id/641974c77f37aba91f9c9507
 
   Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+kselftest
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
   Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
 110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm64/defconfig+kselftest/gcc-10/lab-broonie/baseline-sun50=
-i-a64-pine64-plus.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm64/defconfig+kselftest/gcc-10/lab-broonie/baseline-sun50=
-i-a64-pine64-plus.html
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-broonie/baseline-sun50i-a6=
+4-pine64-plus.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-broonie/baseline-sun50i-a6=
+4-pine64-plus.html
   Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
 t-baseline/20230310.0/arm64/rootfs.cpio.gz =
 
 
 
-  * baseline.login: https://kernelci.org/test/case/id/641972d29ecd4b5f769c9=
-56d
-        failing since 42 days (last pass: v6.2-rc7-120-g11b3628314a5, first=
- fail: v6.2-rc7-136-g39693c3ba989) =
+  * baseline.login: https://kernelci.org/test/case/id/641974c77f37aba91f9c9=
+508
+        new failure (last pass: next-20230320) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+sun50i-a64-pine64-plus       | arm64  | lab-broonie     | gcc-10   | defcon=
+fig+CON...BIG_ENDIAN=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6419752b5dd5cfc12b9c959d
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy/gcc-10/lab-broonie/baseline-sun50i-a6=
+4-pine64-plus.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy/gcc-10/lab-broonie/baseline-sun50i-a6=
+4-pine64-plus.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64be/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6419752b5dd5cfc12b9c9=
+59e
+        new failure (last pass: next-20230320) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+sun50i-a64-pine64-plus       | arm64  | lab-broonie     | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6419758e4f9dec0c419c9575
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+crypto
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-broonie/baseline-sun50i-a64-pine64-plus.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-broonie/baseline-sun50i-a64-pine64-plus.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6419758e4f9dec0c419c9=
+576
+        new failure (last pass: next-20230317) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+sun50i-a64-pine64-plus       | arm64  | lab-broonie     | gcc-10   | defcon=
+fig+ima                | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641976e240fd77b5509c9520
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+ima
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-broonie/baseline-sun50i-a64-pine64-plus.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-broonie/baseline-sun50i-a64-pine64-plus.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641976e240fd77b5509c9=
+521
+        new failure (last pass: next-20230317) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+sun50i-a64-pine64-plus       | arm64  | lab-broonie     | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/64197747f4aae544b39c954a
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-broonie/baseline-sun50i-a=
+64-pine64-plus.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-broonie/baseline-sun50i-a=
+64-pine64-plus.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/64197747f4aae544b39c9=
+54b
+        new failure (last pass: next-20230320) =
 
  =
 
@@ -2847,30 +7685,384 @@ fig                    | regressions
 -----------------------------+--------+-----------------+----------+-------=
 -----------------------+------------
 sun50i-h5-lib...ch-all-h3-cc | arm64  | lab-broonie     | gcc-10   | defcon=
-fig+kselftest          | 1          =
+fig+CON...OMIZE_BASE=3Dy | 1          =
 
 
-  Details:     https://kernelci.org/test/plan/id/64197281031bce38f59c951f
+  Details:     https://kernelci.org/test/plan/id/64197427fd20979be39c952b
 
   Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+kselftest
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
   Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
 110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm64/defconfig+kselftest/gcc-10/lab-broonie/baseline-sun50=
-i-h5-libretech-all-h3-cc.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm64/defconfig+kselftest/gcc-10/lab-broonie/baseline-sun50=
-i-h5-libretech-all-h3-cc.html
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-broonie/baseline-sun50i-h5=
+-libretech-all-h3-cc.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-broonie/baseline-sun50i-h5=
+-libretech-all-h3-cc.html
   Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
 t-baseline/20230310.0/arm64/rootfs.cpio.gz =
 
 
 
-  * baseline.login: https://kernelci.org/test/case/id/64197281031bce38f59c9=
-520
-        failing since 41 days (last pass: v6.2-rc7-120-g11b3628314a5, first=
- fail: v6.2-rc7-157-ga82755b498dd) =
+  * baseline.login: https://kernelci.org/test/case/id/64197427fd20979be39c9=
+52c
+        new failure (last pass: next-20230320) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+sun50i-h5-lib...ch-all-h3-cc | arm64  | lab-broonie     | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/64197609476b4e82819c9505
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+crypto
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-broonie/baseline-sun50i-h5-libretech-all-h3-c=
+c.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-broonie/baseline-sun50i-h5-libretech-all-h3-c=
+c.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/64197609476b4e82819c9=
+506
+        new failure (last pass: next-20230317) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+sun50i-h5-lib...ch-all-h3-cc | arm64  | lab-broonie     | gcc-10   | defcon=
+fig+ima                | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6419766a46a4a7397e9c950b
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+ima
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-broonie/baseline-sun50i-h5-libretech-all-h3-cc.t=
+xt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-broonie/baseline-sun50i-h5-libretech-all-h3-cc.h=
+tml
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6419766a46a4a7397e9c9=
+50c
+        new failure (last pass: next-20230317) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+sun50i-h5-lib...ch-all-h3-cc | arm64  | lab-broonie     | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641976ceb47897ec229c9526
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-broonie/baseline-sun50i-h=
+5-libretech-all-h3-cc.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-broonie/baseline-sun50i-h=
+5-libretech-all-h3-cc.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641976ceb47897ec229c9=
+527
+        new failure (last pass: next-20230320) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+sun50i-h6-pine-h64           | arm64  | lab-clabbe      | gcc-10   | defcon=
+fig+CON...OMIZE_BASE=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641973c58aab76c8a69c9581
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-clabbe/baseline-sun50i-h6-=
+pine-h64.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-clabbe/baseline-sun50i-h6-=
+pine-h64.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641973c58aab76c8a69c9=
+582
+        new failure (last pass: next-20230320) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+sun50i-h6-pine-h64           | arm64  | lab-clabbe      | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6419757e52887c15b69c957f
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+crypto
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-clabbe/baseline-sun50i-h6-pine-h64.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-clabbe/baseline-sun50i-h6-pine-h64.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6419757e52887c15b69c9=
+580
+        new failure (last pass: next-20230317) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+sun50i-h6-pine-h64           | arm64  | lab-clabbe      | gcc-10   | defcon=
+fig+ima                | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6419769756d7cadb4c9c9521
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+ima
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-clabbe/baseline-sun50i-h6-pine-h64.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-clabbe/baseline-sun50i-h6-pine-h64.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6419769756d7cadb4c9c9=
+522
+        new failure (last pass: next-20230317) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+sun50i-h6-pine-h64           | arm64  | lab-clabbe      | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641976e7154f83fa9b9c956d
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-clabbe/baseline-sun50i-h6=
+-pine-h64.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-clabbe/baseline-sun50i-h6=
+-pine-h64.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641976e7154f83fa9b9c9=
+56e
+        new failure (last pass: next-20230320) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+sun50i-h6-pine-h64           | arm64  | lab-collabora   | gcc-10   | defcon=
+fig+CON...OMIZE_BASE=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641973e9dd29f4c1139c9505
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-collabora/baseline-sun50i-=
+h6-pine-h64.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-collabora/baseline-sun50i-=
+h6-pine-h64.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641973e9dd29f4c1139c9=
+506
+        new failure (last pass: next-20230320) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+sun50i-h6-pine-h64           | arm64  | lab-collabora   | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641975b489d742e7cf9c9512
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+crypto
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-collabora/baseline-sun50i-h6-pine-h64.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-collabora/baseline-sun50i-h6-pine-h64.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641975b489d742e7cf9c9=
+513
+        new failure (last pass: next-20230317) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+sun50i-h6-pine-h64           | arm64  | lab-collabora   | gcc-10   | defcon=
+fig+ima                | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6419762f71aebd4fe89c9581
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+ima
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-collabora/baseline-sun50i-h6-pine-h64.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-collabora/baseline-sun50i-h6-pine-h64.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6419762f71aebd4fe89c9=
+582
+        new failure (last pass: next-20230317) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+sun50i-h6-pine-h64           | arm64  | lab-collabora   | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641976d4de38909f9f9c952f
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-collabora/baseline-sun50i=
+-h6-pine-h64.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-collabora/baseline-sun50i=
+-h6-pine-h64.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641976d4de38909f9f9c9=
+530
+        new failure (last pass: next-20230320) =
 
  =
 
@@ -2884,45 +8076,97 @@ sun8i-h2-plus-orangepi-zero  | arm    | lab-baylibre    | gcc-10   | sunxi_=
 defconfig              | 1          =
 
 
-  Details:     https://kernelci.org/test/plan/id/641971687492a2150e9c954c
+  Details:     https://kernelci.org/test/plan/id/641971e0f28fea46749c952f
 
   Results:     5 PASS, 1 FAIL, 1 SKIP
   Full config: sunxi_defconfig
   Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
 10110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm/sunxi_defconfig/gcc-10/lab-baylibre/baseline-sun8i-h2-p=
-lus-orangepi-zero.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm/sunxi_defconfig/gcc-10/lab-baylibre/baseline-sun8i-h2-p=
-lus-orangepi-zero.html
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm/=
+sunxi_defconfig/gcc-10/lab-baylibre/baseline-sun8i-h2-plus-orangepi-zero.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm/=
+sunxi_defconfig/gcc-10/lab-baylibre/baseline-sun8i-h2-plus-orangepi-zero.ht=
+ml
   Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
 t-baseline/20230310.0/armel/rootfs.cpio.gz =
 
 
 
   * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/641971687492a2150e9c9555
-        failing since 18 days (last pass: v6.2-12625-g13efc3a9f23b, first f=
-ail: v6.2-13370-g5872d227b73f)
+/641971e0f28fea46749c9538
+        failing since 24 days (last pass: next-20230224, first fail: next-2=
+0230225)
 
-    2023-03-21T08:56:51.501067  / # #
-    2023-03-21T08:56:51.606613  export SHELL=3D/bin/sh
-    2023-03-21T08:56:51.608144  #
-    2023-03-21T08:56:51.711506  / # export SHELL=3D/bin/sh. /lava-3430478/e=
+    2023-03-21T08:58:59.057569  / # #
+    2023-03-21T08:58:59.163435  export SHELL=3D/bin/sh
+    2023-03-21T08:58:59.164996  #
+    2023-03-21T08:58:59.268328  / # export SHELL=3D/bin/sh. /lava-3430483/e=
 nvironment
-    2023-03-21T08:56:51.713077  =
+    2023-03-21T08:58:59.269984  =
 
-    2023-03-21T08:56:51.816408  / # . /lava-3430478/environment/lava-343047=
-8/bin/lava-test-runner /lava-3430478/1
-    2023-03-21T08:56:51.819150  =
+    2023-03-21T08:58:59.373346  / # . /lava-3430483/environment/lava-343048=
+3/bin/lava-test-runner /lava-3430483/1
+    2023-03-21T08:58:59.375972  =
 
-    2023-03-21T08:56:51.826715  / # /lava-3430478/bin/lava-test-runner /lav=
-a-3430478/1
-    2023-03-21T08:56:51.969515  + export 'TESTRUN_ID=3D1_bootrr'
-    2023-03-21T08:56:51.970569  + cd /lava-3430478/1/tests/1_bootrr =
+    2023-03-21T08:58:59.381040  / # /lava-3430483/bin/lava-test-runner /lav=
+a-3430483/1
+    2023-03-21T08:58:59.510094  + export 'TESTRUN_ID=3D1_bootrr'
+    2023-03-21T08:58:59.511186  + cd /lava-3430483/1/tests/1_bootrr =
 
     ... (11 line(s) more)  =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+sun8i-h3-libretech-all-h3-cc | arm    | lab-baylibre    | gcc-10   | sunxi_=
+defconfig              | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641970f527cf4c36f89c9517
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: sunxi_defconfig
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm/=
+sunxi_defconfig/gcc-10/lab-baylibre/baseline-sun8i-h3-libretech-all-h3-cc.t=
+xt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm/=
+sunxi_defconfig/gcc-10/lab-baylibre/baseline-sun8i-h3-libretech-all-h3-cc.h=
+tml
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/641970f527cf4c36f89c9520
+        failing since 56 days (last pass: next-20230123, first fail: next-2=
+0230124)
+
+    2023-03-21T08:54:49.535007  <8>[   10.181335] <LAVA_SIGNAL_ENDRUN 0_dme=
+sg 3430486_1.5.2.4.1>
+    2023-03-21T08:54:49.640042  / # #
+    2023-03-21T08:54:49.741755  export SHELL=3D/bin/sh
+    2023-03-21T08:54:49.742110  #
+    2023-03-21T08:54:49.843430  / # export SHELL=3D/bin/sh. /lava-3430486/e=
+nvironment
+    2023-03-21T08:54:49.843789  =
+
+    2023-03-21T08:54:49.945140  / # . /lava-3430486/environment/lava-343048=
+6/bin/lava-test-runner /lava-3430486/1
+    2023-03-21T08:54:49.945752  =
+
+    2023-03-21T08:54:49.950720  / # /lava-3430486/bin/lava-test-runner /lav=
+a-3430486/1
+    2023-03-21T08:54:50.116702  + export 'TESTRUN_ID=3D1_bootrr' =
+
+    ... (10 line(s) more)  =
 
  =
 
@@ -2936,26 +8180,184 @@ tegra124-nyan-big            | arm    | lab-collabora   | gcc-10   | multi_=
 v7_defc...G_ARM_LPAE=3Dy | 1          =
 
 
-  Details:     https://kernelci.org/test/plan/id/641974372466b1b6379c9513
+  Details:     https://kernelci.org/test/plan/id/6419779405ac8a05619c9529
 
   Results:     0 PASS, 1 FAIL, 0 SKIP
   Full config: multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy
   Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
 10110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm/multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy/g=
-cc-10/lab-collabora/baseline-tegra124-nyan-big.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.3-rc3-22=
-4-ga0d6a906c6a2/arm/multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy/g=
-cc-10/lab-collabora/baseline-tegra124-nyan-big.html
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm/=
+multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy/gcc-10/lab-collabora/=
+baseline-tegra124-nyan-big.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm/=
+multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy/gcc-10/lab-collabora/=
+baseline-tegra124-nyan-big.html
   Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
 t-baseline/20230310.0/armel/rootfs.cpio.gz =
 
 
 
-  * baseline.login: https://kernelci.org/test/case/id/641974372466b1b6379c9=
-514
-        failing since 95 days (last pass: v6.1-6378-g44d433ee7540, first fa=
-il: v6.1-10792-g244d284981da) =
+  * baseline.login: https://kernelci.org/test/case/id/6419779405ac8a05619c9=
+52a
+        failing since 117 days (last pass: next-20221121, first fail: next-=
+20221123) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+zynqmp-zcu102                | arm64  | lab-cip         | clang-13 | defcon=
+fig+arm64-chromebook   | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641988fe0446a0c1009c9529
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+arm64-chromebook
+  Compiler:    clang-13 (Debian clang version 13.0.1-6~deb11u1)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-cip/baseline-zynqmp-zcu102.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-cip/baseline-zynqmp-zcu102.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641988fe0446a0c1009c9=
+52a
+        new failure (last pass: next-20230310) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+zynqmp-zcu102                | arm64  | lab-cip         | gcc-10   | defcon=
+fig+CON...OMIZE_BASE=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641973d2b28a1d56659c956d
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-cip/baseline-zynqmp-zcu102=
+.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-cip/baseline-zynqmp-zcu102=
+.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641973d2b28a1d56659c9=
+56e
+        new failure (last pass: next-20230320) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+zynqmp-zcu102                | arm64  | lab-cip         | gcc-10   | defcon=
+fig+crypto             | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6419758a4f9dec0c419c9572
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+crypto
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-cip/baseline-zynqmp-zcu102.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+crypto/gcc-10/lab-cip/baseline-zynqmp-zcu102.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6419758b4f9dec0c419c9=
+573
+        new failure (last pass: next-20230317) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+zynqmp-zcu102                | arm64  | lab-cip         | gcc-10   | defcon=
+fig+ima                | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641975ee0ff408265e9c952b
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+ima
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-cip/baseline-zynqmp-zcu102.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+ima/gcc-10/lab-cip/baseline-zynqmp-zcu102.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641975ee0ff408265e9c9=
+52c
+        new failure (last pass: next-20230317) =
+
+ =
+
+
+
+platform                     | arch   | lab             | compiler | defcon=
+fig                    | regressions
+-----------------------------+--------+-----------------+----------+-------=
+-----------------------+------------
+zynqmp-zcu102                | arm64  | lab-cip         | gcc-10   | defcon=
+fig+CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/641976a3b5db18d77f9c9514
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-cip/baseline-zynqmp-zcu10=
+2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230321/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-cip/baseline-zynqmp-zcu10=
+2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230310.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/641976a3b5db18d77f9c9=
+515
+        new failure (last pass: next-20230320) =
 
  =20

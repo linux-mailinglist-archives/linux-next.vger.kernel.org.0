@@ -2,135 +2,133 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82E5F6C5312
-	for <lists+linux-next@lfdr.de>; Wed, 22 Mar 2023 18:55:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D29A6C53D4
+	for <lists+linux-next@lfdr.de>; Wed, 22 Mar 2023 19:37:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229786AbjCVRzX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 22 Mar 2023 13:55:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56472 "EHLO
+        id S230400AbjCVShy (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 22 Mar 2023 14:37:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229584AbjCVRzW (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 22 Mar 2023 13:55:22 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 845125DEEA;
-        Wed, 22 Mar 2023 10:55:20 -0700 (PDT)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32MHsuO5033668;
-        Wed, 22 Mar 2023 17:55:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=gfC0z9F5EeG8mzQKSfB5cas3CbGhnxdksdcE8CAPS3M=;
- b=MROidBYEqArqxyWD2tlMQ15Nc/TjlKcGK4RwXNtktWxdNUCcT1o0DDvqPZP1d3zSgvaz
- Re6m6o5NAhCu7ldYk2XwYZVUftOOvrCE7zo48Rn/EWvXOzZPTUZghdi0Ug0AsALFa6au
- 5NxZ8++vEc87paHdGCjMIZzN1aKOfWs7p7nvCfm6AsnDzX29dbUQqzmQCZCB6cUJe7Pm
- mnikb4C8PcJ9QWAEyEVeE7oApI+SVThdFlK7ceTXMZm/sPM+mDpdWed4qk3VNDPTIiRa
- IuywlJjSgyvZPDSjS/56MWzO5Fcl4EN8gQZNcyvCMiuYgdgVmghT4k4Te3i3gujc88mF CQ== 
-Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pg6g1g048-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 22 Mar 2023 17:55:07 +0000
-Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
-        by ppma01dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32MH4arj018405;
-        Wed, 22 Mar 2023 17:54:23 GMT
-Received: from smtprelay03.dal12v.mail.ibm.com ([9.208.130.98])
-        by ppma01dal.us.ibm.com (PPS) with ESMTPS id 3pd4x7qvsh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 22 Mar 2023 17:54:23 +0000
-Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
-        by smtprelay03.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32MHsM0q16646748
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 22 Mar 2023 17:54:22 GMT
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 20BA05805A;
-        Wed, 22 Mar 2023 17:54:22 +0000 (GMT)
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BEAC758066;
-        Wed, 22 Mar 2023 17:54:19 +0000 (GMT)
-Received: from [9.43.89.247] (unknown [9.43.89.247])
-        by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Wed, 22 Mar 2023 17:54:19 +0000 (GMT)
-Message-ID: <15173797-c28b-f1d9-9488-9cd4cebdaad4@linux.vnet.ibm.com>
-Date:   Wed, 22 Mar 2023 23:24:18 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [next-20230317][PPC/MLX5][bisected 4d5ab0a] Boot WARNING: CPU: 0
- PID: 9 at net/core/dev.c:1928 call_netdevice_notifiers_info
-To:     Lorenzo Bianconi <lorenzo@kernel.org>
-Cc:     linux-next <linux-next@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        Brian King <brking@linux.vnet.ibm.com>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
-References: <7fe9d0b0-7d77-79cc-405d-3ca38b552782@linux.vnet.ibm.com>
- <ZBheva8pJ3VJq/pO@lore-desk>
-Content-Language: en-US
-From:   Abdul Haleem <abdhalee@linux.vnet.ibm.com>
-In-Reply-To: <ZBheva8pJ3VJq/pO@lore-desk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 4j3xZ1vfW6pw_gjz4qkqYSUxH1ULMYRU
-X-Proofpoint-GUID: 4j3xZ1vfW6pw_gjz4qkqYSUxH1ULMYRU
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        with ESMTP id S229833AbjCVShx (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 22 Mar 2023 14:37:53 -0400
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7532F664DA
+        for <linux-next@vger.kernel.org>; Wed, 22 Mar 2023 11:37:48 -0700 (PDT)
+Received: by mail-qt1-x82f.google.com with SMTP id d75a77b69052e-3e0965f70ecso111551cf.0
+        for <linux-next@vger.kernel.org>; Wed, 22 Mar 2023 11:37:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1679510267;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qEa8ZQqJY8c5a1eI+uTtPtBep6jdcYziCgq9THKTvCo=;
+        b=iaBltZp9qgru2Qr3xnojKVvwqTNKD1oPtsnZa8t+n6FSRhnJGOH5TcIWXWcKka995w
+         CMBwMzxyQl1qczGtBz+RjE3CvIWwXWJVXMUq2QWAD8+o7RmzsWK8jldL6jNLlrq4DgWG
+         shn0ET5yp2w2CodN/m9HhGBuAeQhBPhB2zS0heDVySNeQcFQn2K3y+C+DhDN1CtnlVd7
+         wHQ/fYSWSbz4XJRmyu/FJ3AQ6TVq3Gz2MS3KkYo8rH0SXQMMGT7uGtHPnPkh/wQX7I7n
+         o6Y9Nn40NoBRSjdBhP21GmzrCvXHZn/93Ujy+Zl4v4EpZF+8PRT2dkMG9xSvqJnlFvtL
+         75YQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679510267;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qEa8ZQqJY8c5a1eI+uTtPtBep6jdcYziCgq9THKTvCo=;
+        b=jxGjgBjc9wASFbqjJsG6z1UrkI51WFydAV6n9n9MVfUK9xwom3o8ickXvbVEzLTisf
+         KAZOEbpwOnb9nR0iBIV9E8yUEO+Gkaz7l3+AwGEHmQl8FRYxa8qQgfnALJ0/GQrXhmet
+         W/CmYTuYHaBk1Q0vXlno463iSF0rhZWPe17b51qfm5zDY36j22mkfbvQZlfHYBkSF0Me
+         7g42MXN2rrTBJGCMev5FPigZnt99Yn1nYl4C7x5ZRR3PB/Y3RWcLnbXK2Mmh4Ecdqoph
+         QKizAN+CPN8DYyIBa3AVKYdkotzfBOPk0YiNRWFGsUjtZk7y7NZdea76JQwrQiq+ztpd
+         ypKg==
+X-Gm-Message-State: AO0yUKULT4gQDqgpWwjPahrw3UbfKxs+vx3WGUG4BmHf+L5b/KAl2i4K
+        oZjz0IBq09e3pIlpNnEHHNgoZTIYWQi6LHhXKiFr+w==
+X-Google-Smtp-Source: AK7set8+MTulszs4pATd9dbsaBEA2GjVGj0CpFE+w5e7zQlI3EMpBbPUC3d6xZYXZOaX04NLlz87Jx3DafILCumhHVw=
+X-Received: by 2002:a05:622a:1a16:b0:3e3:7d41:719c with SMTP id
+ f22-20020a05622a1a1600b003e37d41719cmr476728qtb.1.1679510267435; Wed, 22 Mar
+ 2023 11:37:47 -0700 (PDT)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-22_14,2023-03-22_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- adultscore=0 bulkscore=0 spamscore=0 suspectscore=0 lowpriorityscore=0
- phishscore=0 mlxscore=0 impostorscore=0 clxscore=1015 malwarescore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303150002 definitions=main-2303220121
-X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230317095025.49aa34f9@canb.auug.org.au> <20230322083956.5c051777@canb.auug.org.au>
+In-Reply-To: <20230322083956.5c051777@canb.auug.org.au>
+From:   Ian Rogers <irogers@google.com>
+Date:   Wed, 22 Mar 2023 11:37:31 -0700
+Message-ID: <CAP-5=fUHqrQWPjk7QJB=r2Gzj7z5X3nL4bRuBAKzy2HvdSAr-A@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the perf tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        namhyung@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+On Tue, Mar 21, 2023 at 2:40=E2=80=AFPM Stephen Rothwell <sfr@canb.auug.org=
+.au> wrote:
+>
+> Hi all,
+>
+> On Fri, 17 Mar 2023 09:50:25 +1100 Stephen Rothwell <sfr@canb.auug.org.au=
+> wrote:
+> >
+> > After merging the perf tree, today's linux-next build (native perf)
+> > failed like this:
+> >
+> > Auto-detecting system features:
+> > ...                         clang-bpf-co-re: [  [32mon [m  ]
+> > ...                                    llvm: [  [31mOFF [m ]
+> > ...                                  libcap: [  [32mon [m  ]
+> > ...                                  libbfd: [  [32mon [m  ]
+> >
+> > make[1]: *** Deleting file '/home/sfr/next/perf/util/bpf_skel/vmlinux.h=
+'
+> > libbpf: failed to find '.BTF' ELF section in /boot/vmlinux-6.0.0-5-powe=
+rpc64le
+> > Error: failed to load BTF from /boot/vmlinux-6.0.0-5-powerpc64le: No da=
+ta available
+> > make[1]: *** [Makefile.perf:1075: /home/sfr/next/perf/util/bpf_skel/vml=
+inux.h] Error 195
+> > make[1]: *** Waiting for unfinished jobs....
+> > make: *** [Makefile.perf:236: sub-make] Error 2
+> > Command exited with non-zero status 2
+> >
+> > To be clear this is a native build of perf on a PPC64le host using this
+> > command line:
+> >
+> > make -C tools/perf -f Makefile.perf -s -O -j60 O=3D../perf EXTRA_CFLAGS=
+=3D-Wno-psabi
+> >
+> > (I could probably remove the EXTRA_CLFAGS now that I am building with
+> > gcc 12.2)
+> >
+> > I don't know which commit caused this.
+> >
+> > I have used the perf tree from next-20230316 for today.
+>
+> I am still getting this build failure.
 
+Hi Stephen,
 
-On 3/20/23 6:55 PM, Lorenzo Bianconi wrote:
->> Greeting's
->>
->> Warning is seen while booting kernels from 6.3.0-rc3-next-20230317 on my
->> powerpc Power 10 LPAR
->>
->> Boots fine without warnings when below patch is reverted
->>
->> commit 4d5ab0ad964df178beba031b89429a601893ff61
->> Author: Lorenzo Bianconi <lorenzo@kernel.org>
->> Date:   Thu Mar 9 13:25:31 2023 +0100
->>
->>      net/mlx5e: take into account device reconfiguration for xdp_features
->> flag
->>
->>      Take into account LRO and GRO configuration setting device xdp_features
->>      flag. Consider channel rq_wq_type enabling rx scatter-gatter support in
->>      xdp_features flag and disable NETDEV_XDP_ACT_NDO_XMIT_SG since it is not
->>      supported yet by the driver.
->>      Moreover always enable NETDEV_XDP_ACT_NDO_XMIT as the ndo_xdp_xmit
->>
->> 4d5ab0ad got introduced in next-20230314
->>
->> @Lorenzo Could you please look into this
-> 
-> I would say this issue has been already fixed by Jakub here:
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git/commit/net/core/xdp.c?id=769639c1fe8a98129aa97c8ee981639db1e8955c
+The build failure is intentional as not having BPF skeleton support in
+the perf tool will remove features. I've just sent:
+https://lore.kernel.org/lkml/20230322183108.1380882-1-irogers@google.com/
+Which will recommend adding NO_BPF_SKEL=3D1 to your build options when
+this failure occurs. I didn't think a features test was appropriate
+for this as the feature test would basically replicate the vmlinux.h
+generation and I didn't want to move that support through the build
+system.
 
+Thanks,
+Ian
 
-Thanks Lorenzo,
-
-Verified the patch and it fixes the problem and next-20230321 kernel 
-boots fine on my powerpc lpar
-
-Tested-by: Abdul Haleem <abdhalee@linux.vnet.ibm.com>
--- 
-Regard's
-
-Abdul Haleem
-IBM Linux Technology Center
+> --
+> Cheers,
+> Stephen Rothwell

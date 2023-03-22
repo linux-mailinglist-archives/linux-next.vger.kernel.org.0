@@ -2,115 +2,211 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D6346C5B84
-	for <lists+linux-next@lfdr.de>; Thu, 23 Mar 2023 01:49:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A781A6C5C43
+	for <lists+linux-next@lfdr.de>; Thu, 23 Mar 2023 02:47:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229543AbjCWAtR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 22 Mar 2023 20:49:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40848 "EHLO
+        id S229690AbjCWBr0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 22 Mar 2023 21:47:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjCWAtQ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 22 Mar 2023 20:49:16 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02A163C0E
-        for <linux-next@vger.kernel.org>; Wed, 22 Mar 2023 17:49:15 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id l7so3004703pjg.5
-        for <linux-next@vger.kernel.org>; Wed, 22 Mar 2023 17:49:14 -0700 (PDT)
+        with ESMTP id S229543AbjCWBrZ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 22 Mar 2023 21:47:25 -0400
+Received: from mail-oo1-xc2d.google.com (mail-oo1-xc2d.google.com [IPv6:2607:f8b0:4864:20::c2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FB4C35AF
+        for <linux-next@vger.kernel.org>; Wed, 22 Mar 2023 18:47:24 -0700 (PDT)
+Received: by mail-oo1-xc2d.google.com with SMTP id n6-20020a4abd06000000b0053b59893660so1122453oop.0
+        for <linux-next@vger.kernel.org>; Wed, 22 Mar 2023 18:47:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1679532554;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=yFinEt8kHc7HQLo+1UsNq4JpKO4209Jy1HzJsb1u+qk=;
-        b=tSPmm7XzHxdrOtOYSJ9lf0e6pwuA3cihNFEXId0XA72Duarh0XB3OjjFwSf4zbAHpL
-         5cIQOZ1xF7sTNtjfzqMVpEunKYsmhtVxeJZEBVJiueftjO+m0+mpdsPKyqEjo1dJbROG
-         LhXAPeLcAEuAvIyw0cHVOtSeRJ00ZxWRaHe3CJELjtOah3HkF29hS3nXf4qbblnjuMu2
-         bTe57X/XXd3QzGQmJF6f7JTXDlZEeVmag4Fll46LAhnrfoS9mfcLyTprNCKEubcWoE4s
-         RZkpd1ajyBiS+Er7l+3hbgl2wnUycCuOMBJzXXBXWtOrc++utfClFA+wFfcehlM8Mmn/
-         cvng==
+        d=linaro.org; s=google; t=1679536043;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=lK7QVFfOQBKFYTRiRkRUQTZo9g0ScVlTvvUuZwddc2Q=;
+        b=EeLkLvkG1Pnry2U6usWKyJsdt4p+JLbPDzy0jif8flMd9H8MCtfTsSb1Yh7QtBELzf
+         HeBZXCaLX9RBZaJWf+rRe6aF8cfAFESqoviS19b5sCZjplMskwL7XHTRjG3J4tulYkKB
+         +etVtfiTM6VhFcvmi6ZhpZWRjjoPMBMNTrdN9wgRG+LVZpRXZzpkiv2spKvvsBlP6Nux
+         sCFyWF5/yPMiYS5HEEgi68eEHxNv6/8+3v7kPixtGk5uInuQTNKE1gJdjuDhZMQqsXwX
+         /313w7h8im+bPeGpVY8z3Y+LoixTivrn5leHRGLDN1N+Fvv9U5Ff5i2CFd5h0Vt+huMy
+         hDhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679532554;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yFinEt8kHc7HQLo+1UsNq4JpKO4209Jy1HzJsb1u+qk=;
-        b=IDtG65HO21fDGThk+JpjVV6HEPsUQ+MaMJ8zvUTGRlPgWfV4SZi+xDa8DhLlcOATeH
-         OkweNtyr/q13fiLDOxj3ELaB6V6Np//s+QwBDiHVGhhoYNDWAVlhtIJnBv7bTm2+7Khp
-         vRW0UEfAu3uGGP0888L82IZ/MwPHF6rlS4wn19PD8yymIx4Y481ns7oCz9e55cEQhF7J
-         OU5Sa+FloJOm1swh/uZm50lO0BNj25N8cyJjc5mjid3ACuCn3PixMCXyh14cKHX14K7v
-         OcCIZ/vs8q8qiY4CJHo6uzKakvRxrYrcGROKLgN81p/XXyTR8DIvJtPcdMEmUqZmV7tF
-         2mbg==
-X-Gm-Message-State: AO0yUKVvhXjcV5MyaSX8177seqQQz9FyFoYmOoWhnogbApqbd2G+yPII
-        i85OR+yzV3V4x62EDDZUQ8puMg==
-X-Google-Smtp-Source: AK7set/Ugqwpuo0LoGUKSS82SOIYdcMIG+P3fgnkCA/4i10sb9Scd9m+KpqKu1/i9BFAcZoJ76V7mw==
-X-Received: by 2002:a05:6a20:7f8c:b0:da:4b41:8606 with SMTP id d12-20020a056a207f8c00b000da4b418606mr8717063pzj.5.1679532554375;
-        Wed, 22 Mar 2023 17:49:14 -0700 (PDT)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id d19-20020aa78693000000b0061ddff8c53dsm10619584pfo.151.2023.03.22.17.49.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Mar 2023 17:49:13 -0700 (PDT)
-Message-ID: <85e0405e-98e7-9610-c76a-de8ab8131a2b@kernel.dk>
-Date:   Wed, 22 Mar 2023 18:49:12 -0600
+        d=1e100.net; s=20210112; t=1679536043;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lK7QVFfOQBKFYTRiRkRUQTZo9g0ScVlTvvUuZwddc2Q=;
+        b=ycKcikHCuXinIwAr+TsbNt082rvSxSQUdbiTBVgxAcv1yicjoVRftYyO0zdIGDSxio
+         HZhalDjc2Q19rAjnmx4WZ20nzL2wLf/JGh8zyKEscQEj6yurT9plQzY45+e7HM/N7WG/
+         rSWeKyhILk5w89XZL3ytx6S/oo+3ppzIuEmNT8fWED6BdZQ1ge9bt0gEGAcrmBhg7Kbk
+         G4MhwiYYC/085xXMGFXvK64SppM9ckIcHIWuTrzCGfdhHXAQqmOWylazjnK7Dlpbd9A3
+         bRWauJccSw4nfW8j4m8yidkozUpcEqH1wUo7hplSIeymapCW2lTgjCOseZ9YwWPdElQB
+         J04Q==
+X-Gm-Message-State: AO0yUKVeToKC3jnlYXYkCBX8RHXxUUgFS553nLr9k4XTdGE5X2Kjeb1v
+        b6acaQCosIMuhPAzRBJDmsSkmQ==
+X-Google-Smtp-Source: AK7set+3xXLR1dgb32hph+I0pKJcJFERnSJJsKR/987fHU1xyfNHT6K9h9Yixp0+k9uwNLyHyRcLpg==
+X-Received: by 2002:a4a:94a1:0:b0:536:a447:b270 with SMTP id k30-20020a4a94a1000000b00536a447b270mr2280976ooi.6.1679536043550;
+        Wed, 22 Mar 2023 18:47:23 -0700 (PDT)
+Received: from fedora (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
+        by smtp.gmail.com with ESMTPSA id f12-20020a4a890c000000b0053a7aaa85a0sm5376988ooi.0.2023.03.22.18.47.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Mar 2023 18:47:22 -0700 (PDT)
+Date:   Wed, 22 Mar 2023 15:50:00 -0400
+From:   William Breathitt Gray <william.gray@linaro.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the gpio-brgl tree
+Message-ID: <ZBtb6ML7FmMZ6uQ3@fedora>
+References: <20230323122913.4f0410b8@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: linux-next: manual merge of the block tree with the mm tree
-Content-Language: en-US
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     David Howells <dhowells@redhat.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Lorenzo Stoakes <lstoakes@gmail.com>
-References: <20230323100204.0917cecf@canb.auug.org.au>
- <3431084.1679526799@warthog.procyon.org.uk>
- <82ade7f2-017e-af6b-2fb3-eb1a3f570505@kernel.dk>
- <20230322162638.d940201434ac3a3a29968979@linux-foundation.org>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20230322162638.d940201434ac3a3a29968979@linux-foundation.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="swKWi4Hlp6vhftZ+"
+Content-Disposition: inline
+In-Reply-To: <20230323122913.4f0410b8@canb.auug.org.au>
+X-Spam-Status: No, score=0.9 required=5.0 tests=DATE_IN_PAST_03_06,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 3/22/23 5:26?PM, Andrew Morton wrote:
-> On Wed, 22 Mar 2023 17:15:48 -0600 Jens Axboe <axboe@kernel.dk> wrote:
-> 
->> On 3/22/23 5:13?PM, David Howells wrote:
->>> Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->>>
->>>>  +	if (unlikely(iov_iter_is_pipe(i))) {
->>>>  +		copied = copy_page_to_iter_pipe(page, offset, bytes, i);
->>>>  +		goto out;
->>>>  +	}
->>>
->>> This bit would need to be removed from copy_page_to_iter_atomic() as the two
->>> functions it calls should be removed by the patch in the block tree.
->>
->> Maybe it'd be better to consolidate rather than split the changes over
->> two trees?
-> 
-> fyi, Lorenzo has sent out v7 of this series.  I'll be pushing this in
-> an hour or so.  After which I suggest Stephen removes those (now) two
-> lines and sends out one of his "build fix" emails which can be the
-> basis for Linus's resolution.
-> 
-> Or I can just steal "iov_iter: Kill ITER_PIPE"...
 
-Or how about we just make sure to queue up items that touch them same
-stuff in the same tree? I've already had this queued for a week, and
-seems pretty silly to shuffle things around because some thing got
-posted in 4 iterations today and then queued up right after.
+--swKWi4Hlp6vhftZ+
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Plus the build is now broken, so maybe a bit more diligence would be
-required here than the drive-by-merging.
+On Thu, Mar 23, 2023 at 12:29:13PM +1100, Stephen Rothwell wrote:
+> Hi all,
+>=20
+> After merging the gpio-brgl tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+>=20
+> drivers/gpio/gpio-pci-idio-16.c:32:30: error: field 'state' has incomplet=
+e type
+>    32 |         struct idio_16_state state;
+>       |                              ^~~~~
+> drivers/gpio/gpio-pci-idio-16.c: In function 'idio_16_gpio_get_direction':
+> drivers/gpio/gpio-pci-idio-16.c:39:13: error: implicit declaration of fun=
+ction 'idio_16_get_direction'; did you mean 'idio_16_gpio_get_direction'? [=
+-Werror=3Dimplicit-function-declaration]
+>    39 |         if (idio_16_get_direction(offset))
+>       |             ^~~~~~~~~~~~~~~~~~~~~
+>       |             idio_16_gpio_get_direction
+> drivers/gpio/gpio-pci-idio-16.c: In function 'idio_16_gpio_get':
+> drivers/gpio/gpio-pci-idio-16.c:62:16: error: implicit declaration of fun=
+ction 'idio_16_get'; did you mean 'idio_16_gpio_get'? [-Werror=3Dimplicit-f=
+unction-declaration]
+>    62 |         return idio_16_get(idio16gpio->reg, &idio16gpio->state, o=
+ffset);
+>       |                ^~~~~~~~~~~
+>       |                idio_16_gpio_get
+> drivers/gpio/gpio-pci-idio-16.c: In function 'idio_16_gpio_get_multiple':
+> drivers/gpio/gpio-pci-idio-16.c:70:9: error: implicit declaration of func=
+tion 'idio_16_get_multiple'; did you mean 'idio_16_gpio_get_multiple'? [-We=
+rror=3Dimplicit-function-declaration]
+>    70 |         idio_16_get_multiple(idio16gpio->reg, &idio16gpio->state,=
+ mask, bits);
+>       |         ^~~~~~~~~~~~~~~~~~~~
+>       |         idio_16_gpio_get_multiple
+> drivers/gpio/gpio-pci-idio-16.c: In function 'idio_16_gpio_set':
+> drivers/gpio/gpio-pci-idio-16.c:79:9: error: implicit declaration of func=
+tion 'idio_16_set'; did you mean 'idio_16_gpio_set'? [-Werror=3Dimplicit-fu=
+nction-declaration]
+>    79 |         idio_16_set(idio16gpio->reg, &idio16gpio->state, offset, =
+value);
+>       |         ^~~~~~~~~~~
+>       |         idio_16_gpio_set
+> drivers/gpio/gpio-pci-idio-16.c: In function 'idio_16_gpio_set_multiple':
+> drivers/gpio/gpio-pci-idio-16.c:87:9: error: implicit declaration of func=
+tion 'idio_16_set_multiple'; did you mean 'idio_16_gpio_set_multiple'? [-We=
+rror=3Dimplicit-function-declaration]
+>    87 |         idio_16_set_multiple(idio16gpio->reg, &idio16gpio->state,=
+ mask, bits);
+>       |         ^~~~~~~~~~~~~~~~~~~~
+>       |         idio_16_gpio_set_multiple
+> drivers/gpio/gpio-pci-idio-16.c: In function 'idio_16_irq_mask':
+> drivers/gpio/gpio-pci-idio-16.c:106:45: error: invalid use of undefined t=
+ype 'struct idio_16'
+>   106 |                 iowrite8(0, &idio16gpio->reg->irq_ctl);
+>       |                                             ^~
+> drivers/gpio/gpio-pci-idio-16.c: In function 'idio_16_irq_unmask':
+> drivers/gpio/gpio-pci-idio-16.c:129:41: error: invalid use of undefined t=
+ype 'struct idio_16'
+>   129 |                 ioread8(&idio16gpio->reg->irq_ctl);
+>       |                                         ^~
+> drivers/gpio/gpio-pci-idio-16.c: In function 'idio_16_irq_handler':
+> drivers/gpio/gpio-pci-idio-16.c:164:46: error: invalid use of undefined t=
+ype 'struct idio_16'
+>   164 |         irq_status =3D ioread8(&idio16gpio->reg->irq_status);
+>       |                                              ^~
+> drivers/gpio/gpio-pci-idio-16.c:178:37: error: invalid use of undefined t=
+ype 'struct idio_16'
+>   178 |         iowrite8(0, &idio16gpio->reg->in0_7);
+>       |                                     ^~
+> drivers/gpio/gpio-pci-idio-16.c: In function 'idio_16_irq_init_hw':
+> drivers/gpio/gpio-pci-idio-16.c:198:37: error: invalid use of undefined t=
+ype 'struct idio_16'
+>   198 |         iowrite8(0, &idio16gpio->reg->irq_ctl);
+>       |                                     ^~
+> drivers/gpio/gpio-pci-idio-16.c:199:37: error: invalid use of undefined t=
+ype 'struct idio_16'
+>   199 |         iowrite8(0, &idio16gpio->reg->in0_7);
+>       |                                     ^~
+> drivers/gpio/gpio-pci-idio-16.c: In function 'idio_16_probe':
+> drivers/gpio/gpio-pci-idio-16.c:232:37: error: invalid use of undefined t=
+ype 'struct idio_16'
+>   232 |         iowrite8(0, &idio16gpio->reg->filter_ctl);
+>       |                                     ^~
+> drivers/gpio/gpio-pci-idio-16.c:248:9: error: implicit declaration of fun=
+ction 'idio_16_state_init'; did you mean 'file_ra_state_init'? [-Werror=3Di=
+mplicit-function-declaration]
+>   248 |         idio_16_state_init(&idio16gpio->state);
+>       |         ^~~~~~~~~~~~~~~~~~
+>       |         file_ra_state_init
+> drivers/gpio/gpio-pci-idio-16.c: In function 'idio_16_gpio_get':
+> drivers/gpio/gpio-pci-idio-16.c:63:1: error: control reaches end of non-v=
+oid function [-Werror=3Dreturn-type]
+>    63 | }
+>       | ^
+>=20
+> Caused by commit
+>=20
+>   473b79057bbd ("gpio: idio-16: Remove unused legacy interface")
+>=20
+> I have used the gpio-brgl tree from next-20230322 for today.
+>=20
+> --=20
+> Cheers,
+> Stephen Rothwell
 
--- 
-Jens Axboe
+Commit 473b79057bbd shouldn't be merged until all of the IDIO-16 legacy
+interface is first removed.
 
+Bart, would you revert all of the "Migrate IDIO-16 GPIO drivers to
+regmap API" patches [0]? That patchset needs to be revised anyway to
+prevent conflicts with the handle_mask_sync() API change [1]; I'll
+submit a v3 later this week that resolves the incompatibilies and
+rebase on the latest gpio/for-next.
+
+William Breathitt Gray
+
+[0] https://lore.kernel.org/all/cover.1677515341.git.william.gray@linaro.or=
+g/
+[1] https://lore.kernel.org/all/cover.1679323449.git.william.gray@linaro.or=
+g/
+
+--swKWi4Hlp6vhftZ+
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCZBtb6AAKCRC1SFbKvhIj
+K4NCAQCqLDrnXwSgH7e8UiVOm13v/dU+QyDRY6iFiL2k7CupWwEAw/vXToO6FJov
+2fmlH+ZUqaTfPr4iLpdwwXhWPdMBeAw=
+=EHEJ
+-----END PGP SIGNATURE-----
+
+--swKWi4Hlp6vhftZ+--

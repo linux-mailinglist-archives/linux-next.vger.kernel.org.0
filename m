@@ -2,52 +2,49 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2B116C59A2
-	for <lists+linux-next@lfdr.de>; Wed, 22 Mar 2023 23:54:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 159B86C59FA
+	for <lists+linux-next@lfdr.de>; Thu, 23 Mar 2023 00:02:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229902AbjCVWyz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 22 Mar 2023 18:54:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49962 "EHLO
+        id S229555AbjCVXCK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 22 Mar 2023 19:02:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbjCVWyu (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 22 Mar 2023 18:54:50 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D465F2B9DF;
-        Wed, 22 Mar 2023 15:54:44 -0700 (PDT)
+        with ESMTP id S229497AbjCVXCJ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 22 Mar 2023 19:02:09 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AB7B6588;
+        Wed, 22 Mar 2023 16:02:07 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PhkLl5lvLz4x4r;
-        Thu, 23 Mar 2023 09:54:39 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PhkWK5Wy0z4wgv;
+        Thu, 23 Mar 2023 10:02:05 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1679525680;
-        bh=Dw9KKHFRKsyBtU+fKJlSyEZzpIz6Kgnh88k47o4lQ3c=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=VNyHo+YwULsiYliqm+LCt6aT/ZSZV8lwc5+WCq9lmwEsq5jZlmXkyozvOFzr7JxX7
-         DbwWT+8tAGIMsCW4E3KGwcWTBli2yQCsn/ai7P9Ri+OD36QpvfkaBV57XAgvPNUpmz
-         vaZfJvGkHpQpqWoy3NZ2xeugxmbnIulNAVNu1NqOaNXktJmAK2O8vkC/GABxq3nrOi
-         x7HIfmLykDHx6gT/MqaC4H5iE7JMTB4kgtIa0pSzARJYik9c+COTdyxRNSb8jlAKXj
-         lrlCJD8budbcmyXbCxBkgjoHtQQsttQk32+jKxpTjYHW6ncOS79kYCWBtvBRMfv7hg
-         0cxoyci7Ig9Jg==
-Date:   Thu, 23 Mar 2023 09:54:37 +1100
+        s=201702; t=1679526126;
+        bh=rsjvqVJpvHhn9wRdeV5pStst41E897IWLfvCHN97eSk=;
+        h=Date:From:To:Cc:Subject:From;
+        b=b/1l+aN6FdtzsGnJeU4vZ6zfMymHuKX1qf4TrxKM93Q1oH0DApKA9+8YbQlCYOcP8
+         XUqBXrZhkanYla8b7fc8hw2YrwE6BQiZImi7723RXJU2SKTCgZplo2koP6LVFL9hqc
+         CfxZxGcuGxXgFqsi2DEyZs88cXLhesPj8hdiqyuPPB5EvM48fIouujekuu+TwjadFc
+         AYWiZ8IlRYLuySQmur8TpFcQ7aOjSzFV5y5NvzHV096sQfWb8c4I/PXPLtIzKI9J/F
+         vCB00TtLdLu8X5hXAQoCyBAHqIYLhtk0xrtd+DhCeWMIRTl5iBVT3fX4gxV7q77N5s
+         bBnFoVxRB0zrw==
+Date:   Thu, 23 Mar 2023 10:02:04 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+To:     Jens Axboe <axboe@kernel.dk>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     David Howells <dhowells@redhat.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        namhyung@kernel.org
-Subject: Re: linux-next: build failure after merge of the perf tree
-Message-ID: <20230323095437.1ecccec1@canb.auug.org.au>
-In-Reply-To: <CAP-5=fUHqrQWPjk7QJB=r2Gzj7z5X3nL4bRuBAKzy2HvdSAr-A@mail.gmail.com>
-References: <20230317095025.49aa34f9@canb.auug.org.au>
-        <20230322083956.5c051777@canb.auug.org.au>
-        <CAP-5=fUHqrQWPjk7QJB=r2Gzj7z5X3nL4bRuBAKzy2HvdSAr-A@mail.gmail.com>
+        Lorenzo Stoakes <lstoakes@gmail.com>
+Subject: linux-next: manual merge of the block tree with the mm tree
+Message-ID: <20230323100204.0917cecf@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/rQxJ09ZAjJuMdiri0xFiojP";
+Content-Type: multipart/signed; boundary="Sig_/F_Hox9gVbvq./rE=fe37W1n";
  protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,95 +52,118 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/rQxJ09ZAjJuMdiri0xFiojP
-Content-Type: text/plain; charset=UTF-8
+--Sig_/F_Hox9gVbvq./rE=fe37W1n
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Ian,
+Hi all,
 
-On Wed, 22 Mar 2023 11:37:31 -0700 Ian Rogers <irogers@google.com> wrote:
->
-> On Tue, Mar 21, 2023 at 2:40=E2=80=AFPM Stephen Rothwell <sfr@canb.auug.o=
-rg.au> wrote:
-> >
-> > Hi all,
-> >
-> > On Fri, 17 Mar 2023 09:50:25 +1100 Stephen Rothwell <sfr@canb.auug.org.=
-au> wrote: =20
-> > >
-> > > After merging the perf tree, today's linux-next build (native perf)
-> > > failed like this:
-> > >
-> > > Auto-detecting system features:
-> > > ...                         clang-bpf-co-re: [  [32mon [m  ]
-> > > ...                                    llvm: [  [31mOFF [m ]
-> > > ...                                  libcap: [  [32mon [m  ]
-> > > ...                                  libbfd: [  [32mon [m  ]
-> > >
-> > > make[1]: *** Deleting file '/home/sfr/next/perf/util/bpf_skel/vmlinux=
-.h'
-> > > libbpf: failed to find '.BTF' ELF section in /boot/vmlinux-6.0.0-5-po=
-werpc64le
-> > > Error: failed to load BTF from /boot/vmlinux-6.0.0-5-powerpc64le: No =
-data available
-> > > make[1]: *** [Makefile.perf:1075: /home/sfr/next/perf/util/bpf_skel/v=
-mlinux.h] Error 195
-> > > make[1]: *** Waiting for unfinished jobs....
-> > > make: *** [Makefile.perf:236: sub-make] Error 2
-> > > Command exited with non-zero status 2
-> > >
-> > > To be clear this is a native build of perf on a PPC64le host using th=
-is
-> > > command line:
-> > >
-> > > make -C tools/perf -f Makefile.perf -s -O -j60 O=3D../perf EXTRA_CFLA=
-GS=3D-Wno-psabi
-> > >
-> > > (I could probably remove the EXTRA_CLFAGS now that I am building with
-> > > gcc 12.2)
-> > >
-> > > I don't know which commit caused this.
-> > >
-> > > I have used the perf tree from next-20230316 for today. =20
-> >
-> > I am still getting this build failure. =20
->=20
-> The build failure is intentional as not having BPF skeleton support in
-> the perf tool will remove features. I've just sent:
-> https://lore.kernel.org/lkml/20230322183108.1380882-1-irogers@google.com/
-> Which will recommend adding NO_BPF_SKEL=3D1 to your build options when
-> this failure occurs. I didn't think a features test was appropriate
-> for this as the feature test would basically replicate the vmlinux.h
-> generation and I didn't want to move that support through the build
-> system.
+Today's linux-next merge of the block tree got a conflict in:
 
-I was trying to understand why this step fails, but from the error
-messages, it seems to require something to be present in the distro
-supplied kernel image?  Is there something missing from the ppc
-build process?  Or toolchain?  Why is it looking at the installed
-kernel and not the built kernel?  Does the perf build now depend on the
-kernel being built first?
+  lib/iov_iter.c
 
-I will add NO_BPF_SKEL=3D1 to my build from tomorrow, but surely that
-means that we miss some perf build testing :-(
+between commit:
+
+  c4cf24ce34b7 ("iov_iter: add copy_page_to_iter_atomic()")
+
+from the mm tree and commit:
+
+  a53f5dee3448 ("iov_iter: Kill ITER_PIPE")
+
+from the block tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/rQxJ09ZAjJuMdiri0xFiojP
+diff --cc lib/iov_iter.c
+index 48ca1c5dfc04,fad95e4cf372..000000000000
+--- a/lib/iov_iter.c
++++ b/lib/iov_iter.c
+@@@ -821,60 -532,6 +532,34 @@@ size_t copy_page_from_iter_atomic(struc
+  }
+  EXPORT_SYMBOL(copy_page_from_iter_atomic);
+ =20
+ +size_t copy_page_to_iter_atomic(struct page *page, unsigned offset, size_=
+t bytes,
+ +				struct iov_iter *i)
+ +{
+ +	char *kaddr =3D kmap_local_page(page);
+ +	char *p =3D kaddr + offset;
+ +	size_t copied =3D 0;
+ +
+ +	if (!page_copy_sane(page, offset, bytes) ||
+ +	    WARN_ON_ONCE(i->data_source))
+ +		goto out;
+ +
+ +	if (unlikely(iov_iter_is_pipe(i))) {
+ +		copied =3D copy_page_to_iter_pipe(page, offset, bytes, i);
+ +		goto out;
+ +	}
+ +
+ +	iterate_and_advance(i, bytes, base, len, off,
+ +		copyout(base, p + off, len),
+ +		memcpy(base, p + off, len)
+ +	)
+ +	copied =3D bytes;
+ +
+ +out:
+ +	kunmap_local(kaddr);
+ +	return copied;
+ +}
+ +EXPORT_SYMBOL(copy_page_to_iter_atomic);
+ +
+- static void pipe_advance(struct iov_iter *i, size_t size)
+- {
+- 	struct pipe_inode_info *pipe =3D i->pipe;
+- 	int off =3D i->last_offset;
+-=20
+- 	if (!off && !size) {
+- 		pipe_discard_from(pipe, i->start_head); // discard everything
+- 		return;
+- 	}
+- 	i->count -=3D size;
+- 	while (1) {
+- 		struct pipe_buffer *buf =3D pipe_buf(pipe, i->head);
+- 		if (off) /* make it relative to the beginning of buffer */
+- 			size +=3D abs(off) - buf->offset;
+- 		if (size <=3D buf->len) {
+- 			buf->len =3D size;
+- 			i->last_offset =3D last_offset(buf);
+- 			break;
+- 		}
+- 		size -=3D buf->len;
+- 		i->head++;
+- 		off =3D 0;
+- 	}
+- 	pipe_discard_from(pipe, i->head + 1); // discard everything past this one
+- }
+-=20
+  static void iov_iter_bvec_advance(struct iov_iter *i, size_t size)
+  {
+  	const struct bio_vec *bvec, *end;
+
+--Sig_/F_Hox9gVbvq./rE=fe37W1n
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQbhy4ACgkQAVBC80lX
-0GzwWAf/UuEFMTTa5jcaleQQeBi0lX8Ewaa8JCUjQXXPj3+i8zzXQCwJPNR1ALTI
-R5w/eWZAa26XrGG+BYEnq0kB/CCLxOj4LNLXwGUDZMvOuELcHuDoUelOoK5M9d9/
-xi+4PuKSGxieXZ5Yu5pEe6zvu3c5I8JlX1njDjirNyNX/xd5qP9VD7Qn7Cfk4j1E
-n3p6Wjm3jp4SaIQLizsME0KbR7DdT3mIEr/E19mcuSFx+J5kIYrmWCtPidUuR21f
-1UbkvXPKtqo9VO84ZWeEp0lICxPaJkSoWOM+EGWW81C8HGXYkuKRC2wDSkDjN26u
-H3kgSW+IRV7xzgQxsyW4SqOGnlowZw==
-=a4HK
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQbiOwACgkQAVBC80lX
+0GyEnQf/adjSrEyVT5xgEmHcYmkA53kR4C6XwCEYlKz0LJsi9EDBenLoQD+UAywd
+TMfEaC46VrVnxytjGdRFaCDOVmNRJ958dzBMhFQyJ8z3pmefRUHN7YEPTUoiLvsB
+HAxklMthx7EdmurBJWxEDnhLyo0I+yhUWT5yTSyRqD6NbRxnCrF292OYF+EvxuVy
+JbGfH2TPmi1gSkQsikDYPcdn9gbCIBVB0OPBOd0qXZSdKAc9FAzw/rB5Z2nxbuw5
+2WlmHjhYd29wIh7hNnMr9PHDIycW7E76b/AXBPgeZVb2H+j+6R6RpJ2zw6WYdQgc
+KVsD9ja8e4NzrHRv5R1zYbtFHr+2vA==
+=O9gB
 -----END PGP SIGNATURE-----
 
---Sig_/rQxJ09ZAjJuMdiri0xFiojP--
+--Sig_/F_Hox9gVbvq./rE=fe37W1n--

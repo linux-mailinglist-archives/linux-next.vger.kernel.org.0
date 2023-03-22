@@ -2,51 +2,59 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18C916C3EDA
-	for <lists+linux-next@lfdr.de>; Wed, 22 Mar 2023 00:55:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 916936C3F6A
+	for <lists+linux-next@lfdr.de>; Wed, 22 Mar 2023 02:05:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229642AbjCUXz2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 21 Mar 2023 19:55:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49994 "EHLO
+        id S229838AbjCVBFf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 21 Mar 2023 21:05:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjCUXzZ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 21 Mar 2023 19:55:25 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A350113C2;
-        Tue, 21 Mar 2023 16:55:24 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Ph7lB6Bt9z4xDr;
-        Wed, 22 Mar 2023 10:55:18 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1679442919;
-        bh=mUZ3M2bpMU+bvypHCX8Kj2BpUXnJw5dxNVVsIajAHz8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=RmhNl8yTQkIRAz7FFrmfI8nk/FiTkzq3fSe4PeU5vJNETI6Nubx7u/QW+KffiobZh
-         4SyMi+l0v20SbkoZhFC5S69EWJzav4OVq+JppjQP2UvpR++TJXOi1wU0jFwGOue+CB
-         hkDQwrsC5q7+uf0OvmQwlGLLbmb1psZcKo809D2v5DoMH2ol32H1oCIsNCgQGy6LUK
-         rp/Fqblic8ATRSYeYSHICtJWkj+d8TVquI3LuItC4+2mQzZ+QjJqHlAhpyTf0iYz4v
-         SVEZXioyPeXlSwoSY/3WOKG8OLjMyof+IEot3Uw638OA+hJudI3gR6Bd2iwyuXysWC
-         NlS4GXPVlBXFA==
-Date:   Wed, 22 Mar 2023 10:55:17 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Lee Jones <lee@kernel.org>
-Cc:     Alice Chen <alice_chen@richtek.com>,
-        ChiYuan Huang <cy_huang@richtek.com>,
-        ChiaEn Wu <chiaen_wu@richtek.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the leds-lj tree
-Message-ID: <20230322105517.06e4508a@canb.auug.org.au>
-In-Reply-To: <20230320114816.2abe5751@canb.auug.org.au>
-References: <20230320114816.2abe5751@canb.auug.org.au>
+        with ESMTP id S229820AbjCVBFe (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 21 Mar 2023 21:05:34 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54EA650718;
+        Tue, 21 Mar 2023 18:05:32 -0700 (PDT)
+Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Ph9GY1Fr1zrW1T;
+        Wed, 22 Mar 2023 09:04:05 +0800 (CST)
+Received: from [10.174.177.243] (10.174.177.243) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Wed, 22 Mar 2023 09:05:05 +0800
+Message-ID: <51651742-8c48-73c7-b283-4465b28fc0a0@huawei.com>
+Date:   Wed, 22 Mar 2023 09:05:04 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/xF/4jJx+3oj2OoeJyS.mcEl";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: next-20230321: arm64: Unable to handle kernel paging request at
+ virtual address
+Content-Language: en-US
+To:     Luis Chamberlain <mcgrof@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>
+CC:     Petr Mladek <pmladek@suse.com>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        <lkft-triage@lists.linaro.org>, linux-mm <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>
+References: <CA+G9fYsTk0GPOTEMm1KG2iJvMLG0SqUfG0JSenRYFHuOQTpuxw@mail.gmail.com>
+ <ZBl4Zi03pzURXkD9@alley> <20230321155626.GA3765079@dev-arch.thelio-3990X>
+ <ZBnifM5B/E5weCnF@bombadil.infradead.org>
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+In-Reply-To: <ZBnifM5B/E5weCnF@bombadil.infradead.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.243]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,52 +62,114 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/xF/4jJx+3oj2OoeJyS.mcEl
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
 
-On Mon, 20 Mar 2023 11:48:16 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> After merging the leds-lj tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
->=20
-> drivers/leds/rgb/leds-mt6370-rgb.c: In function 'mt6370_check_vendor_info=
-':
-> drivers/leds/rgb/leds-mt6370-rgb.c:889:15: error: implicit declaration of=
- function 'FIELD_GET' [-Werror=3Dimplicit-function-declaration]
->   889 |         vid =3D FIELD_GET(MT6370_VENDOR_ID_MASK, devinfo);
->       |               ^~~~~~~~~
->=20
-> Caused by commit
->=20
->   55a8a5c16eb3 ("leds: rgb: mt6370: Add MediaTek MT6370 current sink type=
- LED Indicator support")
->=20
-> I have used the leds-lj tree from next-20230317 for today.
+On 2023/3/22 0:59, Luis Chamberlain wrote:
+> On Tue, Mar 21, 2023 at 08:56:26AM -0700, Nathan Chancellor wrote:
+>> On Tue, Mar 21, 2023 at 10:27:02AM +0100, Petr Mladek wrote:
+>>> Hi,
+>>>
+>>> I add Luis into Cc.
+>>>
+>>> On Tue 2023-03-21 11:42:56, Naresh Kamboju wrote:
+>>>> The following kernel crash was noticed on arm64 Juno-r2 and Raspberry Pi 4
+>>>> Model B on Linux next-20230321.
+>>>>
+>>>> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+>>>>
+>>>> log:
+>>>> ----
+>>>> [    3.071500] Unable to handle kernel paging request at virtual
+>>>> address 0000000000001000
+>>>
+>>> I guess that this is exactly PAGE_SIZE (4k).
+>>>
+>>>> [    3.079432] Mem abort info:
+>>>> [    3.082225]   ESR = 0x0000000096000004
+>>>> [    3.085977]   EC = 0x25: DABT (current EL), IL = 32 bits
+>>>> [    3.091295]   SET = 0, FnV = 0
+>>>> [    3.094350]   EA = 0, S1PTW = 0
+>>>> [    3.097491]   FSC = 0x04: level 0 translation fault
+>>>> [    3.102373] Data abort info:
+>>>> [    3.105252]   ISV = 0, ISS = 0x00000004
+>>>> [    3.109089]   CM = 0, WnR = 0
+>>>> [    3.112055] [0000000000001000] user address but active_mm is swapper
+>>>> [    3.114230] usb 1-1: new high-speed USB device number 2 using ehci-platform
+>>>> [    3.118418] Internal error: Oops: 0000000096000004 [#1] PREEMPT SMP
+>>>> [    3.118426] Modules linked in:
+>>>> [    3.134717] CPU: 1 PID: 1 Comm: swapper/0 Not tainted
+>>>> 6.3.0-rc3-next-20230321 #1
+>>>> [    3.142126] Hardware name: ARM Juno development board (r2) (DT)
+>>>> [    3.148052] pstate: 000000c5 (nzcv daIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+>>>> [    3.155027] pc : string (lib/vsprintf.c:644 lib/vsprintf.c:726)
+>>>> [    3.158443] lr : vsnprintf (lib/vsprintf.c:2817)
+>>>> [    3.162196] sp : ffff80000b34b8f0
+>>>> [    3.165511] x29: ffff80000b34b8f0 x28: ffff800009d7b1ca x27: ffff80000b34bab0
+>>>> [    3.172666] x26: ffff800009d7b1ca x25: 0000000000000020 x24: 0000000000000008
+>>>> [    3.179820] x23: 00000000ffffffd8 x22: ffff8000099858a0 x21: ffff80000b34bc30
+>>>> [    3.186973] x20: ffff80000b34ba90 x19: ffff80000b34ba98 x18: 000000003c98bfdd
+>>>> [    3.194127] x17: 000000000000001c x16: 00000000eec48da2 x15: 00000000a9dbdd17
+>>>> [    3.201280] x14: ffff80000b0242e8 x13: 0000000057a049ef x12: 00000000cfa47237
+>>>> [    3.208433] x11: 0000000000000001 x10: 00000000bd5b8780 x9 : ffff80000812cbec
+>>>> [    3.215586] x8 : 00000000ffffffff x7 : 0000000000000002 x6 : ffff80000b34ba98
+>>>> [    3.222739] x5 : ffffffffffffffff x4 : 0000000000000000 x3 : ffff0a00ffffff04
+>>>> [    3.229891] x2 : 0000000000001000 x1 : 0000000000000000 x0 : ffff80000b34bab0
+>>>> [    3.237044] Call trace:
+>>>> [    3.239489] string (lib/vsprintf.c:644 lib/vsprintf.c:726)
+>>>
+>>> This is the line where vsprintf() reads a string to be printed:
+>>>
+>>> static char *string_nocheck(char *buf, char *end, const char *s,
+>>> 			    struct printf_spec spec)
+>>> {
+>>> 	int len = 0;
+>>> 	int lim = spec.precision;
+>>>
+>>> 	while (lim--) {
+>>> ---->		char c = *s++;
+>>>
+>>>
+>>>> [    3.242551] vsnprintf (lib/vsprintf.c:2817)
+>>>> [    3.245954] vprintk_store (kernel/printk/printk.c:2200)
+>>>> [    3.249712] vprintk_emit (kernel/printk/printk.c:2297)
+>>>> [    3.253381] vprintk_default (kernel/printk/printk.c:2328)
+>>>> [    3.257137] vprintk (kernel/printk/printk_safe.c:50)
+>>>> [    3.260198] _printk (kernel/printk/printk.c:2341)
+>>>> [    3.263257] sysctl_err (fs/proc/proc_sysctl.c:1109)
+>>>> [    3.266577] __register_sysctl_table (fs/proc/proc_sysctl.c:1140
+>>>> fs/proc/proc_sysctl.c:1383)
+>>>> [    3.271202] __register_sysctl_init (fs/proc/proc_sysctl.c:1462)
+>>>
+>>> The has been done some reractoring/modification of this code
+>>> by the patchset ("[PATCH 00/11] sysctl: deprecate
+>>> register_sysctl_paths()"), see
+>>> https://lore.kernel.org/lkml/20230302202826.776286-1-mcgrof@kernel.org/
+>>>
+>>> Luis, does it trigger any bell, please?
+>>> Do you have an idea where this code could pass a pointer PAGE_SIZE
+>>> as string to printk("%s")?
+>>
+>> My bisect actually landed on commit cfe7e6ea5ee2 ("mm: memory-failure:
+>> Move memory failure sysctls to its own file"). The new sysctl table is
+>> missing a sentinel. The following diff resolves it for me.
+>>
+>> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+>> index 6367714af61d..b2377f12f062 100644
+>> --- a/mm/memory-failure.c
+>> +++ b/mm/memory-failure.c
+>> @@ -143,6 +143,7 @@ static struct ctl_table memory_failure_table[] = {
+>>   		.extra1		= SYSCTL_ZERO,
+>>   		.extra2		= SYSCTL_ONE,
+>>   	},
+>> +	{ }
+>>   };
+> 
 
-I am still getting this build failure.
+Sorry, I don't know why this is removed after v1[1] when resend :(
+thanks for your fix.
 
---=20
-Cheers,
-Stephen Rothwell
+[1] https://lkml.org/lkml/2023/3/8/1644
 
---Sig_/xF/4jJx+3oj2OoeJyS.mcEl
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQaQ+UACgkQAVBC80lX
-0Gzcywf6AquCNI4sWapHNlYKAUkcp9IrpLuppWouNTtaYMFQ8q4EvZ7WmMKjf+Um
-m/5g+7LrkWmOcUbj/15TdPaWKT2gpk5Itte3vLs3MXXM3R9CZI1B4YJu9gKqRJCB
-epcfP5KNjtGUUooWkCLCUYPlcwXyBaBVPnGlBgDO54lymjneE3ebfqU6boe9nfZ4
-0ZwSk1OrVGgXn8YBTvbfhT91ChvHiUs7jpr01vD/A1fX7j53H23J6Me+xZwQt+Et
-qM7+nFGa8fhoK+ZSF+Yosh5WtIAglNnRwYDTAYTL1kvs2ceyBEvYYpH3IRDtjudv
-6hk/QcpsWjUEQMLmLX3VB+dunqfJIw==
-=oEwC
------END PGP SIGNATURE-----
-
---Sig_/xF/4jJx+3oj2OoeJyS.mcEl--
+> Thanks pushed this fix in to sysctl-next.
+> 
+>    Luis

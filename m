@@ -2,201 +2,134 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEB0F6C6126
-	for <lists+linux-next@lfdr.de>; Thu, 23 Mar 2023 08:51:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 714256C6130
+	for <lists+linux-next@lfdr.de>; Thu, 23 Mar 2023 08:58:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231311AbjCWHvd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 23 Mar 2023 03:51:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45854 "EHLO
+        id S231221AbjCWH6Z (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 23 Mar 2023 03:58:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231338AbjCWHva (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 23 Mar 2023 03:51:30 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D92F52004A;
-        Thu, 23 Mar 2023 00:51:27 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 8AEFC33AFE;
-        Thu, 23 Mar 2023 07:51:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1679557886; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4sMfHQNRBwTeWPYpKCeeBOpXRsTl5XsybjH4BcrOhm4=;
-        b=ZQcXOMeEX/ssjaj2B7qx1/EyZSFJyQPEzX6WcQXCE2Nqd/CY5yLbeYv1R4btu7gJMcHBt/
-        9DQgLKjjy1MbLMgYkdkoWdj/W9IoVs7inQnmjP4wUnQkzIDAXUjZ9DDe5NGD+zL6nm0qgf
-        +9X3WBEwvQWFWJuAF8w0fhrXPlDAnrM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1679557886;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4sMfHQNRBwTeWPYpKCeeBOpXRsTl5XsybjH4BcrOhm4=;
-        b=pfWG7XBaITz0EKOdwgIT7bd+SgjiGVaKGEtHzEZP32S9p6DOSOFc5Ipy2hgDAcg7m9Mt0F
-        NbruIuQaAj6PSGCA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5FE98132C2;
-        Thu, 23 Mar 2023 07:51:26 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id zPniFv4EHGSKDgAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Thu, 23 Mar 2023 07:51:26 +0000
-Message-ID: <f8628535-05a4-4d42-217f-88d68749010f@suse.cz>
-Date:   Thu, 23 Mar 2023 08:51:25 +0100
+        with ESMTP id S229463AbjCWH6Y (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 23 Mar 2023 03:58:24 -0400
+Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05E28F974
+        for <linux-next@vger.kernel.org>; Thu, 23 Mar 2023 00:58:23 -0700 (PDT)
+Received: by mail-vs1-xe31.google.com with SMTP id c10so11087763vsh.12
+        for <linux-next@vger.kernel.org>; Thu, 23 Mar 2023 00:58:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679558301;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=qy+avBLXTpqBs7wiLv4nHuWGknSEznmW36KI6MrLqak=;
+        b=XXv51V0gWpl8UrC6TIbTl/Nsx6t1lMItjiNjdwnbK9G4GQZp7r518YdFtkkZfQSPm9
+         5t9QmO87cXoLBPZLjE3ffFYfiBMh+Fzm6ag1FApovASZRizeFttP6VTDwDXgEGg8I4Ca
+         EddOmS1e/8vj2F8EbdMEOfwPPFUMD1MokOKMj9f7Dt9Hk/NDbPIGRmDQecaBhAJcOt9Q
+         rPib6lHQTRdROEuAVn3L0u+JUOVvC6/de6EoHu3VbJ6mUVk0MDY0Ve3mrS9A6puCpPuM
+         ET3o27jrpGF9MUtaHfpIeBs6ikBzbwd3edyrpPfB6Lln/1NOrpySifRo0QhlnRZoqFaS
+         /xew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679558301;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qy+avBLXTpqBs7wiLv4nHuWGknSEznmW36KI6MrLqak=;
+        b=eH95D7XVK9HB5kBAIrsiACYlyOBpCXrhyqymAMvTouCGbIZHcy3A9HCFwO3vA5LOSy
+         8JI1lQ6tjHR6JsIb1BQcJZqQZ6rgbFWcnU0DGnhj1nViXmueRxD/bF9E+8ivdSX2SSJ9
+         VFbn9otOUdYR1xMqz87RejElHnM9ZQeeVi0tR5UURz4tUQICEPwCU9bBu8ihFjqzXk1j
+         rJjittiCg3mBOCEN8nx8b3049cMach1HxuCWcO17wCfFeEUV0CS/3SXcqrbRz83OJeTH
+         UUl30/XCPPrVX5zeu5vmF0/AmzcYYfPj8gbihucxNr37rTyJvumIouYoTpnQ2Yr9yW6s
+         xEaQ==
+X-Gm-Message-State: AO0yUKXa7/pRiDehCqeRUhFDNCfVq1BzDUiHoowSD1nV92LzukADveXm
+        kF8DXoaclqJ06IqkbqErJCBEedBwOQeHcXyA7lx+i131wq5m1rBJkdI=
+X-Google-Smtp-Source: AK7set+2jSxcjk2ShsjiG4KrocUujp4Queqnqp3zqlHipOMcCbLh4yZmFjwK6WEb+j/oACpaL/fM0x6CwZsXKs06MIQ=
+X-Received: by 2002:a67:d20f:0:b0:426:392a:92bc with SMTP id
+ y15-20020a67d20f000000b00426392a92bcmr1341687vsi.1.1679558301631; Thu, 23 Mar
+ 2023 00:58:21 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: next-20230323: arm64: vma_merge (mm/mmap.c:952 (discriminator 1))
- - Unable to handle kernel paging request at virtual address 0000000000100111
- -
-Content-Language: en-US
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>, lkft-triage@lists.linaro.org
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>, lstoakes@gmail.com,
-        David Hildenbrand <david@redhat.com>,
-        "Liam R. Howlett" <liam.howlett@oracle.com>, willy@infradead.org,
-        vernon2gm@gmail.com, Arnd Bergmann <arnd@arndb.de>,
-        Anders Roxell <anders.roxell@linaro.org>
-References: <CA+G9fYvBxp38KEggtvtvVtGMaSBdL3NDV9ns=Zi9-Jtx7H9g1A@mail.gmail.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <CA+G9fYvBxp38KEggtvtvVtGMaSBdL3NDV9ns=Zi9-Jtx7H9g1A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 23 Mar 2023 13:28:10 +0530
+Message-ID: <CA+G9fYvEqk8tC7w3xxPcFhycctZeOj4CMJj3JbrtWKkp3w9qPQ@mail.gmail.com>
+Subject: mm/mmap.c:939:11: error: variable 'next' is used uninitialized
+ whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
+To:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev,
+        linux-mm <linux-mm@kvack.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 3/23/23 08:35, Naresh Kamboju wrote:
-> The following kernel crash was noticed on arm x15, arm64 hikey-6220, Juno-r2,
-> x86_64 and i386 devices on Linux next-20230323.
-> 
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> 
-> crash log on arm64:
-> ---------------
-> [   19.281223] Unable to handle kernel paging request at virtual
-> address 0000000000100111
-> [   19.289189] Mem abort info:
-> [   19.291995]   ESR = 0x0000000096000006
-> [   19.295757]   EC = 0x25: DABT (current EL), IL = 32 bits
-> [   19.301086]   SET = 0, FnV = 0
-> [   19.304151]   EA = 0, S1PTW = 0
-> [   19.307302]   FSC = 0x06: level 2 translation fault
-> [   19.312194] Data abort info:
-> [   19.315083]   ISV = 0, ISS = 0x00000006
-> [   19.318930]   CM = 0, WnR = 0
-> [   19.321901] user pgtable: 4k pages, 48-bit VAs, pgdp=00000008a23c5000
-> [   19.328374] [0000000000100111] pgd=08000008a14c5003,
-> p4d=08000008a14c5003, pud=08000008a14c6003, pmd=0000000000000000
-> [   19.339037] Internal error: Oops: 0000000096000006 [#1] PREEMPT SMP
-> [   19.345315] Modules linked in:
-> [   19.348373] CPU: 2 PID: 1 Comm: init Not tainted 6.3.0-rc3-next-20230323 #1
+Following multiple build warnings / errors noticed while building
+Linux next-20230323 with clang-16 for x86_64.
 
-next-20230323 seems to contain v2 of Lorenzo's vma_merge cleanups
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-> [   19.355347] Hardware name: ARM Juno development board (r2) (DT)
-> [   19.361273] pstate: 40000005 (nZcv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> [   19.368246] pc : vma_merge (mm/mmap.c:952 (discriminator 1))
+Build warnings / errors:
+---------
+mm/mmap.c:939:11: error: variable 'next' is used uninitialized
+whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
+        else if (!curr)
+                 ^~~~~
+mm/mmap.c:952:15: note: uninitialized use occurs here
+        merge_next = next && mpol_equal(policy, vma_policy(next)) &&
+                     ^~~~
+mm/mmap.c:939:7: note: remove the 'if' if its condition is always true
+        else if (!curr)
+             ^~~~~~~~~~
+mm/mmap.c:912:36: note: initialize the variable 'next' to silence this warning
+        struct vm_area_struct *curr, *next, *res;
+                                          ^
+                                           = NULL
+1 error generated.
+make[3]: *** [scripts/Makefile.build:252: mm/mmap.o] Error 1
 
-And this is a line involving 'next' and Liam pointed out a possibly
-unitialized next in v2, so that's probably it.
-Andrew replaced it with a fixed version so it should make its way to -next
-as well.
+mm/vmalloc.c:3543:6: error: variable 'remains' is used uninitialized
+whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
+        if (bitmap_empty(vb->used_map, VMAP_BBMAP_BITS)) {
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+mm/vmalloc.c:3587:17: note: uninitialized use occurs here
+        return count - remains + zero_iter(iter, remains);
+                       ^~~~~~~
+mm/vmalloc.c:3543:2: note: remove the 'if' if its condition is always false
+        if (bitmap_empty(vb->used_map, VMAP_BBMAP_BITS)) {
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+mm/vmalloc.c:3539:6: error: variable 'remains' is used uninitialized
+whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
+        if (!vb)
+            ^~~
+mm/vmalloc.c:3587:17: note: uninitialized use occurs here
+        return count - remains + zero_iter(iter, remains);
+                       ^~~~~~~
+mm/vmalloc.c:3539:2: note: remove the 'if' if its condition is always false
+        if (!vb)
+        ^~~~~~~~
+mm/vmalloc.c:3524:16: note: initialize the variable 'remains' to
+silence this warning
+        size_t remains, n;
+                      ^
+                       = 0
+2 errors generated.
+make[3]: *** [scripts/Makefile.build:252: mm/vmalloc.o] Error 1
+make[3]: Target 'mm/' not remade because of errors.
 
-> [   19.371917] lr : vma_merge (mm/mmap.c:945)
-> [   19.375670] sp : ffff80000b37bb40
-> [   19.378985] x29: ffff80000b37bb40 x28: ffff000820c0ff20 x27: 0000000000000000
-> [   19.386139] x26: ffff000820c17210 x25: ffff000800bfac00 x24: 0000ffff8e8b7000
-> [   19.393293] x23: 0000000000100071 x22: ffff000800898d80 x21: 0000000000100071
-> [   19.400446] x20: ffff80000b37bd18 x19: 0000ffff8e8ba000 x18: ffff80000b37bd18
-> [   19.407599] x17: 0000000000000000 x16: ffff8000099a58c8 x15: 0000ffff8e9aefff
-> [   19.414752] x14: 0000ffff8e8b7000 x13: 1fffe001041bb361 x12: ffff80000b37baf8
-> [   19.421905] x11: ffff000822473400 x10: ffff000820dd9b08 x9 : ffff80000830fc64
-> [   19.429057] x8 : 0000ffff8e8b7000 x7 : 0000ffff8e8b7000 x6 : ffff000820dd9b50
-> [   19.436210] x5 : ffff000820c0ff20 x4 : 0000000000000187 x3 : ffff000800bfac00
-> [   19.443363] x2 : 0000000000000000 x1 : 0000000000100071 x0 : 0000000000000000
-> [   19.450515] Call trace:
-> [   19.452960] vma_merge (mm/mmap.c:952 (discriminator 1))
-> [   19.456279] mprotect_fixup (mm/mprotect.c:676)
-> [   19.460034] do_mprotect_pkey.constprop.0 (mm/mprotect.c:862)
-> [   19.465094] __arm64_sys_mprotect (mm/mprotect.c:880)
-> [   19.469283] invoke_syscall (arch/arm64/include/asm/current.h:19
-> arch/arm64/kernel/syscall.c:57)
-> [   19.473041] el0_svc_common (arch/arm64/include/asm/daifflags.h:28
-> arch/arm64/kernel/syscall.c:150)
-> [   19.476796] do_el0_svc (arch/arm64/kernel/syscall.c:194)
-> [   19.480117] el0_svc (arch/arm64/include/asm/daifflags.h:28
-> arch/arm64/kernel/entry-common.c:133
-> arch/arm64/kernel/entry-common.c:142
-> arch/arm64/kernel/entry-common.c:638)
-> [   19.483177] el0t_64_sync_handler (arch/arm64/kernel/entry-common.c:656)
-> [   19.487454] el0t_64_sync (arch/arm64/kernel/entry.S:591)
-> [ 19.491123] Code: eb18001f 54000800 52800002 b40004d7 (f94052e1)
-> All code
-> ========
->    0:* 1f                    (bad)  <-- trapping instruction
->    1: 00 18                add    %bl,(%rax)
->    3: eb 00                jmp    0x5
->    5: 08 00                or     %al,(%rax)
->    7: 54                    push   %rsp
->    8: 02 00                add    (%rax),%al
->    a: 80 52 d7 04          adcb   $0x4,-0x29(%rdx)
->    e: 00                    .byte 0x0
->    f: b4 e1                mov    $0xe1,%ah
->   11: 52                    push   %rdx
->   12: 40 f9                rex stc
-> 
-> Code starting with the faulting instruction
-> ===========================================
->    0: e1 52                loope  0x54
->    2: 40 f9                rex stc
+steps to reproduce:
+----------
 
-Looks like an x86 decodecode of arm64 code :) calling a wrong objdump or
-something?
+tuxmake  \
+  --runtime podman \
+  --target-arch x86_64 \
+  --toolchain clang-16 LLVM=1 LLVM_IAS=1 \
+  --kconfig https://storage.tuxsuite.com/public/linaro/lkft/builds/2NOjxURhByyb4dR3Ld788iuYvAR/config
 
-> [   19.497226] ---[ end trace 0000000000000000 ]---
-> [   19.501883] Kernel panic - not syncing: Attempted to kill init!
-> exitcode=0x0000000b
-> [   19.509551] SMP: stopping secondary CPUs
-> [   19.513665] Kernel Offset: disabled
-> [   19.517152] CPU features: 0x400002,0c3c0400,0000421b
-> [   19.522123] Memory Limit: none
-> [   19.525181] ---[ end Kernel panic - not syncing: Attempted to kill
-> init! exitcode=0x0000000b ]---
-> 
-> 
-> metadata:
->   git_ref: master
->   git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
->   git_sha: 7c4a254d78f89546d0e74a40617ef24c6151c8d1
->   git_describe: next-20230323
->   kernel_version: 6.3.0-rc3
->   kernel-config:
-> https://storage.tuxsuite.com/public/linaro/lkft/builds/2NOjwfRUa0fjWWZBWCUG4Ypift7/config
->   build-url: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next/-/pipelines/815177945
->   artifact-location:
-> https://storage.tuxsuite.com/public/linaro/lkft/builds/2NOjwfRUa0fjWWZBWCUG4Ypift7
->   toolchain: gcc-11
-> 
-> 
-> --
-> Linaro LKFT
-> https://lkft.linaro.org
-> 
+Related discussion on mailing list,
+ - https://lore.kernel.org/llvm/202303231055.DeninwHS-lkp@intel.com/
+ - https://lore.kernel.org/llvm/14c60785-2427-45db-9613-683410ff6802@lucifer.local/T/#t
 
+
+--
+Linaro LKFT
+https://lkft.linaro.org

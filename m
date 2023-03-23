@@ -2,44 +2,44 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 016146C7122
-	for <lists+linux-next@lfdr.de>; Thu, 23 Mar 2023 20:38:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB9A86C7131
+	for <lists+linux-next@lfdr.de>; Thu, 23 Mar 2023 20:41:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231644AbjCWTiG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 23 Mar 2023 15:38:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40340 "EHLO
+        id S229642AbjCWTlk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 23 Mar 2023 15:41:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231668AbjCWTiG (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 23 Mar 2023 15:38:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A43BCC11;
-        Thu, 23 Mar 2023 12:38:04 -0700 (PDT)
+        with ESMTP id S229508AbjCWTlj (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 23 Mar 2023 15:41:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12E14227BF;
+        Thu, 23 Mar 2023 12:41:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2472E62880;
-        Thu, 23 Mar 2023 19:38:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 564DFC433EF;
-        Thu, 23 Mar 2023 19:38:03 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C3D10B82081;
+        Thu, 23 Mar 2023 19:41:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5880BC433D2;
+        Thu, 23 Mar 2023 19:41:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1679600283;
-        bh=dGaKZA8A8KfO/ta/dS5PjEMTliu8Xt3rxSYy6IGrzs4=;
+        s=korg; t=1679600496;
+        bh=PX6lvYGRYjaiS28foSYb5qozMIAi+w0uULCWhhV/XWo=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=A5TjiufTDyWzyFq1S++++V/Ll9zTJneNUEuk4vGvd4QAe38IHYL+4dUAXqbDTSB4u
-         qS4/vfXx92USi8+4BvMcjPyiS/xTyhiqr9BcC6tVOuZ0rLsSpnbYQ6mqXZZegrFRGV
-         KUScLVkHqyAFZy6r5rDk+O8SLvm3/4Dh3r68I/Io=
-Date:   Thu, 23 Mar 2023 12:38:02 -0700
+        b=Xvz2FZzn4zn6BV/AdITaKX+93PIW2AR41tEHuW1b16uKslYMJDBblVD05RfXg7Kbs
+         Di8wo1WlpaPV8AqE97pAM2plz5bQrL++Vx0iORE7GwUmrfhh6GMwMLA+MmL9y1Kggu
+         ovEL8fzXxkzvljl2IWyqu4VIph3qrBVc5hZuW85M=
+Date:   Thu, 23 Mar 2023 12:41:35 -0700
 From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     David Miller <davem@davemloft.net>,
+To:     paulmck@kernel.org
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Randy Dunlap <rdunlap@infradead.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Lorenzo Stoakes <lstoakes@gmail.com>
-Subject: Re: linux-next: build warning after merge of the mm tree
-Message-Id: <20230323123802.dabe9aae5de69dd07a88b96b@linux-foundation.org>
-In-Reply-To: <20230323135835.747893ef@canb.auug.org.au>
-References: <20230320144721.663280c3@canb.auug.org.au>
-        <20230323135835.747893ef@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: duplicate patch in the rcu tree
+Message-Id: <20230323124135.a3c436d8b29dec5bddf47f34@linux-foundation.org>
+In-Reply-To: <43b7534f-15ee-4cd7-a205-fa16fdb1ab14@paulmck-laptop>
+References: <20230323144411.0edde523@canb.auug.org.au>
+        <43b7534f-15ee-4cd7-a205-fa16fdb1ab14@paulmck-laptop>
 X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -54,13 +54,12 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, 23 Mar 2023 13:58:35 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+On Wed, 22 Mar 2023 22:11:12 -0700 "Paul E. McKenney" <paulmck@kernel.org> wrote:
 
-> > arch/sparc/include/asm/current.h:18:30: warning: call-clobbered register used for global register variable
-> >    18 | register struct task_struct *current asm("g4");
-> >       |                              ^~~~~~~
+> >   ce5e77e7b2cc ("instrumented.h: fix all kernel-doc format warnings")
+> > 
+> > in the mm tree)
 > 
-> This has come back today.  Did my fix up get dropped accidentally?
+> Andrew, do you want to keep this one, or would you rather that I carry it?
 
-Yes, looks like Lorenzo didn't integrate that fixup when redoing.  And
-I failed to check for that (I usually do...).
+I dropped my copy, thanks.

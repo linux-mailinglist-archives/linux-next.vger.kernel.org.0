@@ -2,74 +2,84 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9240D6C721A
-	for <lists+linux-next@lfdr.de>; Thu, 23 Mar 2023 22:04:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB8D56C73F5
+	for <lists+linux-next@lfdr.de>; Fri, 24 Mar 2023 00:18:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230281AbjCWVEC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 23 Mar 2023 17:04:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33068 "EHLO
+        id S229954AbjCWXSc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 23 Mar 2023 19:18:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229644AbjCWVEB (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 23 Mar 2023 17:04:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61C55E9;
-        Thu, 23 Mar 2023 14:04:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S229586AbjCWXSb (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 23 Mar 2023 19:18:31 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A9AFAF19;
+        Thu, 23 Mar 2023 16:18:30 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 13C04B82251;
-        Thu, 23 Mar 2023 21:03:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB18EC433D2;
-        Thu, 23 Mar 2023 21:03:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679605437;
-        bh=s0qiIm7I/VHyfumO8JsVX4FErKUCS+Lp4X/oi6opOuE=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=M3HQSnF7t4/k+nTTuYK8e2v1DO/iO5RUEspNscbBCzluzfa94KuFUwqUjwj2ci4L9
-         IX45/FlqfKseDjnACN4L3Hoj5GZI/4M5qvgIemLvt+jwtrgbMlsi/0bfPkUFtZM6QZ
-         vEDliWzk/8bcMrJ5o+pn84mqoO9D6mDFW6gyNxKO3Tnlgl1wlhdl0IoeX+oUTUACsj
-         bHXm/+0LwQj4BYn+DBudd9xxaPf4RvpTUzAllZPzvB//OKSx1H9/W4hUo8JLXFAhtk
-         gTJe+AP0Fvu/A+IwnIt851ZzZWAaNdoM+UIlHsa5N/cjYwzKIBx1ajlVYdGEIjT+V5
-         KjhFccwq9DISA==
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id 322961540398; Thu, 23 Mar 2023 14:03:57 -0700 (PDT)
-Date:   Thu, 23 Mar 2023 14:03:57 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PjLqj4mYnz4xDj;
+        Fri, 24 Mar 2023 10:18:25 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1679613506;
+        bh=zAfVv2ov8IOdqKsXrg7NCnHgMlsZf6l3vG5Nr7aUpVA=;
+        h=Date:From:To:Cc:Subject:From;
+        b=BjhRy7Tc0Wf9fdk2YRcKvGC0GcFgpn7h1ZdFz112vK6/++UjM/v3Ve73WxvENKzYF
+         gti5fNQpLXI58GPagzXG59EvYKpTGGDVNL/7mST+xynvlHxT/RQQ1aRbHzqrVbeIpE
+         ZBEQCuldbcUauQkEasn5uCHHUWz75Z7p9xR0yFLoxpBWYGXzLVPkjBkrPYB7y0YF+d
+         u4UGx5WvFKZXlng5HJeyRAggRdOu5PwKCIageA4cRU44GK9BX+rWDERXGSPeKqtPAg
+         7qRTPm8BTrUfL4QHnLQgqDzzi2NdflwtuFKuuGW8LJrPwJuXzhpSujyy5SPuuP+TZJ
+         wOePHBiukEaNw==
+Date:   Fri, 24 Mar 2023 10:18:12 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Borislav Petkov <bp@alien8.de>, Tony Luck <tony.luck@intel.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patch in the rcu tree
-Message-ID: <e448fcdb-56ba-4c58-8562-059409c1716d@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <20230323144411.0edde523@canb.auug.org.au>
- <43b7534f-15ee-4cd7-a205-fa16fdb1ab14@paulmck-laptop>
- <20230323124135.a3c436d8b29dec5bddf47f34@linux-foundation.org>
+Subject: linux-next: Signed-off-by missing for commit in the edac tree
+Message-ID: <20230324101812.37f2fe5b@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230323124135.a3c436d8b29dec5bddf47f34@linux-foundation.org>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/nF7k5HIWcv7rAFV88n9STyR";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 12:41:35PM -0700, Andrew Morton wrote:
-> On Wed, 22 Mar 2023 22:11:12 -0700 "Paul E. McKenney" <paulmck@kernel.org> wrote:
-> 
-> > >   ce5e77e7b2cc ("instrumented.h: fix all kernel-doc format warnings")
-> > > 
-> > > in the mm tree)
-> > 
-> > Andrew, do you want to keep this one, or would you rather that I carry it?
-> 
-> I dropped my copy, thanks.
+--Sig_/nF7k5HIWcv7rAFV88n9STyR
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thank you!
+Hi all,
 
-							Thanx, Paul
+Commit
+
+  44fe68df7832 ("EDAC/amd64: Rename debug_display_dimm_sizes()")
+
+is missing a Signed-off-by from its committer.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/nF7k5HIWcv7rAFV88n9STyR
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQc3jQACgkQAVBC80lX
+0GwrHQgApigs1ANVPjYwfJA7fV3UWI81QEDD3A0cjSm0chT4patODy6ggAwlNsct
+fNbNTNhXatolIdvmeb/OYgKoS6z8tpZsPHck+rJ1qtYuDmlarOds9U6b3LMiGbGV
++QJK6pqZ7amP5RhSAKxrefJ3vlfT/8tFGzhAeVpu8p5ZjW03Tfml/ERPB3n8aX0a
+GIofsfi21F/OPBtLCZ2Yc0EVPp/uVVRwpg7nSIZs3b6IWhXQ8PU0JsFRjybPrtCB
+kougrmm9grWCExPqMnW//MuyU71jYfV9qnEAaWyZ/ND/MahPmhpay4aqNFGcL8ii
+WpyT3AjCm5RSuHavkmHzd9ChxsOeMg==
+=EIU2
+-----END PGP SIGNATURE-----
+
+--Sig_/nF7k5HIWcv7rAFV88n9STyR--

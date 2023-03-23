@@ -2,208 +2,167 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DA606C6979
-	for <lists+linux-next@lfdr.de>; Thu, 23 Mar 2023 14:27:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AD386C6990
+	for <lists+linux-next@lfdr.de>; Thu, 23 Mar 2023 14:33:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229600AbjCWN1l (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 23 Mar 2023 09:27:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37836 "EHLO
+        id S231806AbjCWNdE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 23 Mar 2023 09:33:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231529AbjCWN1k (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 23 Mar 2023 09:27:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFADD23A62;
-        Thu, 23 Mar 2023 06:27:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5C6D7626C2;
-        Thu, 23 Mar 2023 13:27:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C0C5C433D2;
-        Thu, 23 Mar 2023 13:27:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679578058;
-        bh=yGbF5Q3qHUa3pndqRjQnQx3tEe3gowJu+n88KB3G++c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ITDZtljquGRjLZwSbnlTqd/Ku/JhcLqsTDc8JIMl3CTm51cs8MwRCN4ZMV/Pa3PMS
-         tq46rpXPLD/zOvTM9AfM0R33X1/U5rSXbUi9Zu0cMbmZiOkCTHjbEQKSHqLuvlxU0b
-         hWXd90deIKteXf7VtCgeBq/eEFn4VilMNTtmzhab63ZajiV260Mq2tC2XPObdnTyVL
-         GGptvLi4t5F06KJImm/VDS7Hay1U4cJ4eI0l0GSBz0ocil5+Bbiq6SMxqyOiWCu7YG
-         czy7DXoPiNvWJocrRkGvaL20/VuLPIDMPfWGQMmNRm4ID79JTwKR4vEsCu9JgSmrv3
-         08EG9kRvA1I6Q==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 34F2E4052D; Thu, 23 Mar 2023 10:27:36 -0300 (-03)
-Date:   Thu, 23 Mar 2023 10:27:36 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Ian Rogers <irogers@google.com>,
-        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        namhyung@kernel.org
-Subject: Re: linux-next: build failure after merge of the perf tree
-Message-ID: <ZBxTyLqkIaoVhIXU@kernel.org>
-References: <20230317095025.49aa34f9@canb.auug.org.au>
- <20230322083956.5c051777@canb.auug.org.au>
- <CAP-5=fUHqrQWPjk7QJB=r2Gzj7z5X3nL4bRuBAKzy2HvdSAr-A@mail.gmail.com>
- <20230323095437.1ecccec1@canb.auug.org.au>
+        with ESMTP id S231766AbjCWNdA (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 23 Mar 2023 09:33:00 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC11A23305
+        for <linux-next@vger.kernel.org>; Thu, 23 Mar 2023 06:32:57 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id i6so24809367ybu.8
+        for <linux-next@vger.kernel.org>; Thu, 23 Mar 2023 06:32:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679578377;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Xmves1iun0LubRv/Ys4nZA2xeBzv8UQwNvC60f9TikY=;
+        b=gqkCvl2kGvvcTFaJQcV+x+kJOcpeu9ZiQhIHPJC0OblCLfOis7YK/eGv26OVsFrtoz
+         yF7QAL9IeR7Rl/5uP7zwJhv0/2wQ9lovpDLkPDqEoknhnuHKlupaLBiMsYcIMBjQN/ed
+         eP+12pBn9LjvItcCaIc6NJaeVb0/CYZqx2OqluVyrt/SyExWWDSE5s4Hawf/NJFUuHbv
+         yehmkzEfSAkzQpT3dy0bztCSWWIGWcO1inuFAzLwo2eWq626YjqVNy+F71C6YMb4kOTJ
+         fAvYxsa0SAZhPy2sbgpYsINZoBew9fe47bzdP3TSHNh2fuNAf2deKx4v0EWeaStgK6Bg
+         F+oQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679578377;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Xmves1iun0LubRv/Ys4nZA2xeBzv8UQwNvC60f9TikY=;
+        b=ckvZLpSDb0UkPL/4tHz4SfywpP2WmsKjJtWDiXo0bScfH5WGdQMkMXYANrsT8vQg+7
+         JIFAq6S/uNRsiU+uBjG6ZCzEsm/6fbfUS/FvboyUGBJlbb2XpwBZcu35xZ08iPSsjyOt
+         NsCiPRN8RrzhAAgl8w0W3OsZMAhib6yONjC22cT0htfBzOQHLG8f5KUe67DkXD9niVM6
+         ZmFNCHauuUl4hQ9cFk15H7eN/rEMnqxaiKVqKJvaUCqpH6p1iPMhQQyWeEGEzXhkfADZ
+         s6L7EByrNZvHolX7r9BCKrWtG2wV1ygYJyFxjcdm0shxP+pg3ylndF2uVB0H6HwqbKpa
+         JyrA==
+X-Gm-Message-State: AAQBX9ddpxyz7SSr6kubhawh19j5DS3n4AUVX7f3Jb2w+CDEGgEw1wWK
+        d5WEmTzSvLoBd5VgZLspUd3VHi8pYM+H4M4sTdEtKg==
+X-Google-Smtp-Source: AKy350YvJQnyVMRG28Mg7eTiOxvu2RSo5Ia+/3VnicOc+rmBAoLIdzonkW39U5RjqaDQaMKRmgLmwP/lEA4ZnbSOUxQ=
+X-Received: by 2002:a05:6902:728:b0:a09:314f:a3ef with SMTP id
+ l8-20020a056902072800b00a09314fa3efmr2229914ybt.12.1679578377145; Thu, 23 Mar
+ 2023 06:32:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230323095437.1ecccec1@canb.auug.org.au>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230323122913.4f0410b8@canb.auug.org.au> <ZBtb6ML7FmMZ6uQ3@fedora>
+In-Reply-To: <ZBtb6ML7FmMZ6uQ3@fedora>
+From:   Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Date:   Thu, 23 Mar 2023 14:32:46 +0100
+Message-ID: <CACMJSev=ojX5j1qsMjTDev-cXxrKmT3o2rF=YpuuSbsVsuNzgw@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the gpio-brgl tree
+To:     William Breathitt Gray <william.gray@linaro.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Em Thu, Mar 23, 2023 at 09:54:37AM +1100, Stephen Rothwell escreveu:
-> Hi Ian,
-> 
-> On Wed, 22 Mar 2023 11:37:31 -0700 Ian Rogers <irogers@google.com> wrote:
+On Thu, 23 Mar 2023 at 02:47, William Breathitt Gray
+<william.gray@linaro.org> wrote:
+>
+> On Thu, Mar 23, 2023 at 12:29:13PM +1100, Stephen Rothwell wrote:
+> > Hi all,
 > >
-> > On Tue, Mar 21, 2023 at 2:40 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> > >
-> > > Hi all,
-> > >
-> > > On Fri, 17 Mar 2023 09:50:25 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:  
-> > > >
-> > > > After merging the perf tree, today's linux-next build (native perf)
-> > > > failed like this:
-> > > >
-> > > > Auto-detecting system features:
-> > > > ...                         clang-bpf-co-re: [  [32mon [m  ]
-> > > > ...                                    llvm: [  [31mOFF [m ]
-> > > > ...                                  libcap: [  [32mon [m  ]
-> > > > ...                                  libbfd: [  [32mon [m  ]
-> > > >
-> > > > make[1]: *** Deleting file '/home/sfr/next/perf/util/bpf_skel/vmlinux.h'
-> > > > libbpf: failed to find '.BTF' ELF section in /boot/vmlinux-6.0.0-5-powerpc64le
-> > > > Error: failed to load BTF from /boot/vmlinux-6.0.0-5-powerpc64le: No data available
-> > > > make[1]: *** [Makefile.perf:1075: /home/sfr/next/perf/util/bpf_skel/vmlinux.h] Error 195
-> > > > make[1]: *** Waiting for unfinished jobs....
-> > > > make: *** [Makefile.perf:236: sub-make] Error 2
-> > > > Command exited with non-zero status 2
-> > > >
-> > > > To be clear this is a native build of perf on a PPC64le host using this
-> > > > command line:
-> > > >
-> > > > make -C tools/perf -f Makefile.perf -s -O -j60 O=../perf EXTRA_CFLAGS=-Wno-psabi
-> > > >
-> > > > (I could probably remove the EXTRA_CLFAGS now that I am building with
-> > > > gcc 12.2)
-> > > >
-> > > > I don't know which commit caused this.
-> > > >
-> > > > I have used the perf tree from next-20230316 for today.  
-> > >
-> > > I am still getting this build failure.  
+> > After merging the gpio-brgl tree, today's linux-next build (x86_64
+> > allmodconfig) failed like this:
+> >
+> > drivers/gpio/gpio-pci-idio-16.c:32:30: error: field 'state' has incomplete type
+> >    32 |         struct idio_16_state state;
+> >       |                              ^~~~~
+> > drivers/gpio/gpio-pci-idio-16.c: In function 'idio_16_gpio_get_direction':
+> > drivers/gpio/gpio-pci-idio-16.c:39:13: error: implicit declaration of function 'idio_16_get_direction'; did you mean 'idio_16_gpio_get_direction'? [-Werror=implicit-function-declaration]
+> >    39 |         if (idio_16_get_direction(offset))
+> >       |             ^~~~~~~~~~~~~~~~~~~~~
+> >       |             idio_16_gpio_get_direction
+> > drivers/gpio/gpio-pci-idio-16.c: In function 'idio_16_gpio_get':
+> > drivers/gpio/gpio-pci-idio-16.c:62:16: error: implicit declaration of function 'idio_16_get'; did you mean 'idio_16_gpio_get'? [-Werror=implicit-function-declaration]
+> >    62 |         return idio_16_get(idio16gpio->reg, &idio16gpio->state, offset);
+> >       |                ^~~~~~~~~~~
+> >       |                idio_16_gpio_get
+> > drivers/gpio/gpio-pci-idio-16.c: In function 'idio_16_gpio_get_multiple':
+> > drivers/gpio/gpio-pci-idio-16.c:70:9: error: implicit declaration of function 'idio_16_get_multiple'; did you mean 'idio_16_gpio_get_multiple'? [-Werror=implicit-function-declaration]
+> >    70 |         idio_16_get_multiple(idio16gpio->reg, &idio16gpio->state, mask, bits);
+> >       |         ^~~~~~~~~~~~~~~~~~~~
+> >       |         idio_16_gpio_get_multiple
+> > drivers/gpio/gpio-pci-idio-16.c: In function 'idio_16_gpio_set':
+> > drivers/gpio/gpio-pci-idio-16.c:79:9: error: implicit declaration of function 'idio_16_set'; did you mean 'idio_16_gpio_set'? [-Werror=implicit-function-declaration]
+> >    79 |         idio_16_set(idio16gpio->reg, &idio16gpio->state, offset, value);
+> >       |         ^~~~~~~~~~~
+> >       |         idio_16_gpio_set
+> > drivers/gpio/gpio-pci-idio-16.c: In function 'idio_16_gpio_set_multiple':
+> > drivers/gpio/gpio-pci-idio-16.c:87:9: error: implicit declaration of function 'idio_16_set_multiple'; did you mean 'idio_16_gpio_set_multiple'? [-Werror=implicit-function-declaration]
+> >    87 |         idio_16_set_multiple(idio16gpio->reg, &idio16gpio->state, mask, bits);
+> >       |         ^~~~~~~~~~~~~~~~~~~~
+> >       |         idio_16_gpio_set_multiple
+> > drivers/gpio/gpio-pci-idio-16.c: In function 'idio_16_irq_mask':
+> > drivers/gpio/gpio-pci-idio-16.c:106:45: error: invalid use of undefined type 'struct idio_16'
+> >   106 |                 iowrite8(0, &idio16gpio->reg->irq_ctl);
+> >       |                                             ^~
+> > drivers/gpio/gpio-pci-idio-16.c: In function 'idio_16_irq_unmask':
+> > drivers/gpio/gpio-pci-idio-16.c:129:41: error: invalid use of undefined type 'struct idio_16'
+> >   129 |                 ioread8(&idio16gpio->reg->irq_ctl);
+> >       |                                         ^~
+> > drivers/gpio/gpio-pci-idio-16.c: In function 'idio_16_irq_handler':
+> > drivers/gpio/gpio-pci-idio-16.c:164:46: error: invalid use of undefined type 'struct idio_16'
+> >   164 |         irq_status = ioread8(&idio16gpio->reg->irq_status);
+> >       |                                              ^~
+> > drivers/gpio/gpio-pci-idio-16.c:178:37: error: invalid use of undefined type 'struct idio_16'
+> >   178 |         iowrite8(0, &idio16gpio->reg->in0_7);
+> >       |                                     ^~
+> > drivers/gpio/gpio-pci-idio-16.c: In function 'idio_16_irq_init_hw':
+> > drivers/gpio/gpio-pci-idio-16.c:198:37: error: invalid use of undefined type 'struct idio_16'
+> >   198 |         iowrite8(0, &idio16gpio->reg->irq_ctl);
+> >       |                                     ^~
+> > drivers/gpio/gpio-pci-idio-16.c:199:37: error: invalid use of undefined type 'struct idio_16'
+> >   199 |         iowrite8(0, &idio16gpio->reg->in0_7);
+> >       |                                     ^~
+> > drivers/gpio/gpio-pci-idio-16.c: In function 'idio_16_probe':
+> > drivers/gpio/gpio-pci-idio-16.c:232:37: error: invalid use of undefined type 'struct idio_16'
+> >   232 |         iowrite8(0, &idio16gpio->reg->filter_ctl);
+> >       |                                     ^~
+> > drivers/gpio/gpio-pci-idio-16.c:248:9: error: implicit declaration of function 'idio_16_state_init'; did you mean 'file_ra_state_init'? [-Werror=implicit-function-declaration]
+> >   248 |         idio_16_state_init(&idio16gpio->state);
+> >       |         ^~~~~~~~~~~~~~~~~~
+> >       |         file_ra_state_init
+> > drivers/gpio/gpio-pci-idio-16.c: In function 'idio_16_gpio_get':
+> > drivers/gpio/gpio-pci-idio-16.c:63:1: error: control reaches end of non-void function [-Werror=return-type]
+> >    63 | }
+> >       | ^
+> >
+> > Caused by commit
+> >
+> >   473b79057bbd ("gpio: idio-16: Remove unused legacy interface")
+> >
+> > I have used the gpio-brgl tree from next-20230322 for today.
+> >
+> > --
+> > Cheers,
+> > Stephen Rothwell
+>
+> Commit 473b79057bbd shouldn't be merged until all of the IDIO-16 legacy
+> interface is first removed.
+>
+> Bart, would you revert all of the "Migrate IDIO-16 GPIO drivers to
+> regmap API" patches [0]? That patchset needs to be revised anyway to
+> prevent conflicts with the handle_mask_sync() API change [1]; I'll
+> submit a v3 later this week that resolves the incompatibilies and
+> rebase on the latest gpio/for-next.
+>
+> William Breathitt Gray
+>
+> [0] https://lore.kernel.org/all/cover.1677515341.git.william.gray@linaro.org/
+> [1] https://lore.kernel.org/all/cover.1679323449.git.william.gray@linaro.org/
 
-> > The build failure is intentional as not having BPF skeleton support in
-> > the perf tool will remove features. I've just sent:
-> > https://lore.kernel.org/lkml/20230322183108.1380882-1-irogers@google.com/
-> > Which will recommend adding NO_BPF_SKEL=1 to your build options when
-> > this failure occurs. I didn't think a features test was appropriate
-> > for this as the feature test would basically replicate the vmlinux.h
-> > generation and I didn't want to move that support through the build
-> > system.
- 
-> I was trying to understand why this step fails, but from the error
-> messages, it seems to require something to be present in the distro
-> supplied kernel image?  Is there something missing from the ppc
-> build process?  Or toolchain?  Why is it looking at the installed
-> kernel and not the built kernel?  Does the perf build now depend on the
-> kernel being built first?
-> 
-> I will add NO_BPF_SKEL=1 to my build from tomorrow, but surely that
-> means that we miss some perf build testing :-(
+Done, thanks!
 
-Before this BUILD_BPF_SKEL wasn't on by default, so you're back testing
-as much as before.
-
-Having said that, we need to improve the warning and I processed a patch
-from Ian to that extent:
-
-https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/commit/?h=tmp.perf-tools-next&id=12a83df53444165d39d3e09fcd9627e7bec7828e
-
- $(SKEL_OUT)/vmlinux.h: $(VMLINUX_BTF) $(BPFTOOL)
- ifeq ($(VMLINUX_H),)
--	$(QUIET_GEN)$(BPFTOOL) btf dump file $< format c > $@
-+	$(QUIET_GEN)$(BPFTOOL) btf dump file $< format c > $@ || \
-+	(echo "Failure to generate vmlinux.h needed for the recommended BPF skeleton support." && \
-+	echo "To disable this use the build option NO_BPF_SKEL=1." && \
-+	echo "Alternatively point at a pre-generated vmlinux.h with VMLINUX_H=<path>." && \
-+	false)
- else
- 	$(Q)cp "$(VMLINUX_H)" $@
- endif
-
- Which improves a bit the situation.
-
-We could check if bpftool is available and if not, suggest installing
-it.
-
-If it is available, we could check if /sys/kernel/bpf/ is available, if
-not suggest using a kernel with CONFIG_DEBUG_INFO_BTF=y, as most distros
-have by now.
-
-As to the features this enables:
-
-⬢[acme@toolbox perf-tools-next]$ ls -la tools/perf/util/bpf_skel/*.c
--rw-r--r--. 1 acme acme 5581 Oct 17 09:07 tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
--rw-r--r--. 1 acme acme 1764 May  5  2022 tools/perf/util/bpf_skel/bperf_follower.bpf.c
--rw-r--r--. 1 acme acme 1438 May  5  2022 tools/perf/util/bpf_skel/bperf_leader.bpf.c
--rw-r--r--. 1 acme acme 2290 May  5  2022 tools/perf/util/bpf_skel/bpf_prog_profiler.bpf.c
--rw-r--r--. 1 acme acme 2164 May  5  2022 tools/perf/util/bpf_skel/func_latency.bpf.c
--rw-r--r--. 1 acme acme 9017 Aug 26  2022 tools/perf/util/bpf_skel/kwork_trace.bpf.c
--rw-r--r--. 1 acme acme 9251 Mar 14 08:33 tools/perf/util/bpf_skel/lock_contention.bpf.c
--rw-r--r--. 1 acme acme 6109 Feb 27 17:47 tools/perf/util/bpf_skel/off_cpu.bpf.c
--rw-r--r--. 1 acme acme 4310 Mar 15 11:08 tools/perf/util/bpf_skel/sample_filter.bpf.c
-⬢[acme@toolbox perf-tools-next]$
-
-For instance, take a look at these csets:
-
-⬢[acme@toolbox perf-tools-next]$ git log --oneline tools/perf/util/bpf_skel/lock_contention.bpf.c
-d24c0144b1dde00f perf lock contention: Show per-cpu rq_lock with address
-1811e82767dcc6eb perf lock contention: Track and show siglock with address
-3ace2435bb93445e perf lock contention: Track and show mmap_lock with address
-17535a33a9c1e4fb perf lock contention: Fix compiler builtin detection
-1bece1351c653c3d perf lock contention: Support old rw_semaphore type
-3477f079fe70b3c9 perf lock contention: Add -o/--lock-owner option
-ebab291641bed48f perf lock contention: Support filters for different aggregation
-5e3febe7b7b99f94 perf lock contention: Support lock addr/name filtering for BPF
-529772c4df286159 perf lock contention: Support lock type filtering for BPF
-688d2e8de231c54e perf lock contention: Add -l/--lock-addr option
-eca949b2b4addd94 perf lock contention: Implement -t/--threads option for BPF
-fd507d3e359c7e06 perf lock contention: Add lock_data.h for common data
-c66a36af7ba3a628 perf lock contention: Do not use BPF task local storage
-433b31fa00797a2a perf lock contention: Fix a build error on 32-bit
-c1da8dd5c11dabd5 perf lock contention: Skip stack trace from BPF
-6d499a6b3d90277d perf lock: Print the number of lost entries for BPF
-6fda2405f414b24a perf lock: Implement cpu and task filters for BPF
-407b36f69efbdccf perf lock: Use BPF for lock contention analysis
-⬢[acme@toolbox perf-tools-next]$
-
-
-or:
-
-⬢[acme@toolbox perf-tools-next]$ git log --oneline tools/perf/util/bpf_skel/kwork_trace.bpf.c
-acfb65fe1d11a97f perf kwork: Add workqueue trace BPF support
-5a81927a407c050a perf kwork: Add softirq trace BPF support
-420298aefe94840f perf kwork: Add IRQ trace BPF support
-daf07d220710a3c8 perf kwork: Implement BPF trace
-⬢[acme@toolbox perf-tools-next]$
-
-So we need to fine tune this detection of needed components to build
-these features, in time for the v6.4 merge window, that is why we
-decided  to make this opt-out to hammer out problems.
-
-Other arches probably will hit some of these problems, lets try to
-encourage others to try what is in linux-next.
-
-- Arnaldo
+Bart

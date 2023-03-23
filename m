@@ -2,155 +2,280 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B6F96C63E6
-	for <lists+linux-next@lfdr.de>; Thu, 23 Mar 2023 10:43:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 246726C6678
+	for <lists+linux-next@lfdr.de>; Thu, 23 Mar 2023 12:26:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230217AbjCWJnf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 23 Mar 2023 05:43:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56042 "EHLO
+        id S231303AbjCWL0T (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 23 Mar 2023 07:26:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229738AbjCWJn0 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 23 Mar 2023 05:43:26 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 761AEC155;
-        Thu, 23 Mar 2023 02:43:23 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 0468A33AFE;
-        Thu, 23 Mar 2023 09:43:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1679564602; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=klNWhIy8hiXGSUgaFtlmoMw45I3AHJjiiJxXlBCB2YE=;
-        b=y4bAYuP0tUJ3WO7M9lYm1GYFACckupaP7f4nLoIji81aKWP13DWy7vrrxxcK+E/DnRROQy
-        OzxG4JcYmNC9gf4Lq3S7tEMWWmzgw9yw+lupH3uAtlc42Rgj+nSwO9iuFPAIPXMoymZCi7
-        IjgcsnSULtkBXblwaSPAXU7/r3nNa9I=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1679564602;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=klNWhIy8hiXGSUgaFtlmoMw45I3AHJjiiJxXlBCB2YE=;
-        b=lCCTR4LTrC40Hd8pcwb7sUO5Hc564tiR4anU1tdXp0GhiqbkppSIVUSZOvAah/90rHxqz6
-        aTVZYD0sd55bwLCw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D3BE6132C2;
-        Thu, 23 Mar 2023 09:43:21 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id CZGvMjkfHGToTwAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Thu, 23 Mar 2023 09:43:21 +0000
-Message-ID: <1fcc9df0-10a6-f31c-e3d3-e2474c9da817@suse.cz>
-Date:   Thu, 23 Mar 2023 10:43:21 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: mm/mmap.c:939:11: error: variable 'next' is used uninitialized
- whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
-Content-Language: en-US
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev,
-        linux-mm <linux-mm@kvack.org>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-References: <CA+G9fYvEqk8tC7w3xxPcFhycctZeOj4CMJj3JbrtWKkp3w9qPQ@mail.gmail.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <CA+G9fYvEqk8tC7w3xxPcFhycctZeOj4CMJj3JbrtWKkp3w9qPQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        with ESMTP id S231166AbjCWL0S (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 23 Mar 2023 07:26:18 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE4182C649;
+        Thu, 23 Mar 2023 04:26:16 -0700 (PDT)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32N9fhsi012465;
+        Thu, 23 Mar 2023 11:26:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : content-type :
+ content-transfer-encoding : mime-version : subject : message-id : date :
+ cc : to; s=pp1; bh=xoje3N/M3YiHI7gHX+8r9SYjAJQE4s6xSGAisoOTOWw=;
+ b=FuoohEil1GcdFM0P5mJuYEd4oC3MxFw+XYvhhiZgCs35BqC5QLoiVoLbCcTmOLENe0W5
+ 1aliHJHZEiBAAC3M/4+yoAM98POx9gxzvRXMhgDuVxx6xT4gt6FkE49z9ue+k/hmqViJ
+ BVrJ4c3BQzXeZWqYGwMlABCjwuQ34w1eV7L8MHXrSnuw096gNJf21WsRM8QVAIkpUeer
+ WTSWkUwwp1jttQs+LacILhdQS1pz40WcMSNqBat5WwNyn+84wmSsjgLCJLrw4CzzMk6u
+ DHHNJCi5ttT+FanEi1H5qhvW10ILFgdf6uryhZpbTYD5vTv0gCe+gjQPgIiYLZHoWs9n 5Q== 
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pgmc2javn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Mar 2023 11:26:10 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32N9QxWd017855;
+        Thu, 23 Mar 2023 11:26:08 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3pd4x6f8j0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Mar 2023 11:26:08 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32NBQ5CG27198198
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 23 Mar 2023 11:26:05 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CF3EE20043;
+        Thu, 23 Mar 2023 11:26:05 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 023B520040;
+        Thu, 23 Mar 2023 11:26:05 +0000 (GMT)
+Received: from smtpclient.apple (unknown [9.109.241.16])
+        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Thu, 23 Mar 2023 11:26:04 +0000 (GMT)
+From:   Sachin Sant <sachinp@linux.ibm.com>
+Content-Type: text/plain;
+        charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.400.51.1.1\))
+Subject: [next-20230322] Kernel WARN at kernel/workqueue.c:3182 (rcutorture)
+Message-Id: <139BEB3F-BC1C-4ABA-8928-9A8EF3FB5EDD@linux.ibm.com>
+Date:   Thu, 23 Mar 2023 16:55:54 +0530
+Cc:     linux-next@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>
+To:     linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>
+X-Mailer: Apple Mail (2.3731.400.51.1.1)
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: iUE4C630IDqL7XBPTaUONAr9MgdWcVdJ
+X-Proofpoint-ORIG-GUID: iUE4C630IDqL7XBPTaUONAr9MgdWcVdJ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-22_21,2023-03-22_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 adultscore=0
+ bulkscore=0 impostorscore=0 mlxscore=0 spamscore=0 malwarescore=0
+ priorityscore=1501 mlxlogscore=999 phishscore=0 suspectscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303150002 definitions=main-2303230084
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 3/23/23 08:58, Naresh Kamboju wrote:
-> Following multiple build warnings / errors noticed while building
-> Linux next-20230323 with clang-16 for x86_64.
-> 
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> 
-> Build warnings / errors:
-> ---------
-> mm/mmap.c:939:11: error: variable 'next' is used uninitialized
-> whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
->         else if (!curr)
->                  ^~~~~
-> mm/mmap.c:952:15: note: uninitialized use occurs here
->         merge_next = next && mpol_equal(policy, vma_policy(next)) &&
->                      ^~~~
-> mm/mmap.c:939:7: note: remove the 'if' if its condition is always true
->         else if (!curr)
->              ^~~~~~~~~~
-> mm/mmap.c:912:36: note: initialize the variable 'next' to silence this warning
->         struct vm_area_struct *curr, *next, *res;
->                                           ^
->                                            = NULL
+While running rcutorture tests from LTP on an IBM Power10 server booted =
+with
+6.3.0-rc3-next-20230322 following warning is observed:
 
-Same issue as https://lore.kernel.org/all/CA%2BG9fYvBxp38KEggtvtvVtGMaSBdL3NDV9ns%3DZi9-Jtx7H9g1A@mail.gmail.com/
-Thus already resolved in the next -next hopefully.
+[ 3629.242831] ------------[ cut here ]------------
+[ 3629.242835] WARNING: CPU: 8 PID: 614614 at kernel/workqueue.c:3182 =
+__flush_work.isra.44+0x44/0x370
+[ 3629.242845] Modules linked in: rcutorture(-) torture vmac =
+poly1305_generic chacha_generic chacha20poly1305 n_gsm pps_ldisc =
+ppp_synctty ppp_async ppp_generic serport slcan can_dev slip slhc =
+snd_hrtimer snd_seq snd_seq_device snd_timer snd soundcore pcrypt =
+crypto_user n_hdlc dummy veth tun nfsv3 nfs_acl nfs lockd grace fscache =
+netfs brd overlay exfat vfat fat btrfs blake2b_generic xor raid6_pq =
+zstd_compress xfs loop sctp ip6_udp_tunnel udp_tunnel libcrc32c dm_mod =
+bonding rfkill tls sunrpc kmem device_dax nd_pmem nd_btt dax_pmem =
+papr_scm pseries_rng libnvdimm vmx_crypto ext4 mbcache jbd2 sd_mod =
+t10_pi crc64_rocksoft crc64 sg ibmvscsi scsi_transport_srp ibmveth fuse =
+[last unloaded: ltp_uaccess(O)]
+[ 3629.242911] CPU: 8 PID: 614614 Comm: modprobe Tainted: G O =
+6.3.0-rc3-next-20230322 #1
+[ 3629.242917] Hardware name: IBM,9080-HEX POWER10 (raw) 0x800200 =
+0xf000006 of:IBM,FW1030.00 (NH1030_026) hv:phyp pSeries
+[ 3629.242923] NIP: c00000000018c204 LR: c00000000022306c CTR: =
+c0000000002233c0
+[ 3629.242927] REGS: c0000005c14e3880 TRAP: 0700 Tainted: G O =
+(6.3.0-rc3-next-20230322)
+[ 3629.242932] MSR: 800000000282b033 <SF,VEC,VSX,EE,FP,ME,IR,DR,RI,LE> =
+CR: 48002222 XER: 0000000a
+[ 3629.242943] CFAR: c00000000018c5b0 IRQMASK: 0=20
+[ 3629.242943] GPR00: c00000000022306c c0000005c14e3b20 c000000001401200 =
+c00800000c4419e8=20
+[ 3629.242943] GPR04: 0000000000000001 0000000000000001 0000000000000011 =
+fffffffffffe0000=20
+[ 3629.242943] GPR08: c000000efe9a8300 0000000000000001 0000000000000000 =
+c00800000c42afe0=20
+[ 3629.242943] GPR12: c0000000002233c0 c000000effff6700 0000000000000000 =
+0000000000000000=20
+[ 3629.242943] GPR16: 0000000000000000 0000000000000000 0000000000000000 =
+0000000000000000=20
+[ 3629.242943] GPR20: 0000000000000000 0000000000000000 0000000000000000 =
+0000000000000000=20
+[ 3629.242943] GPR24: c00800000c443400 c00800000c440f60 c00800000c4418c8 =
+c000000002abb368=20
+[ 3629.242943] GPR28: c00800000c440f58 0000000000000000 c00800000c4419e8 =
+c00800000c443400=20
+[ 3629.242987] NIP [c00000000018c204] __flush_work.isra.44+0x44/0x370
+[ 3629.242993] LR [c00000000022306c] cleanup_srcu_struct+0x6c/0x1e0
+[ 3629.242998] Call Trace:
+[ 3629.243000] [c0000005c14e3b20] [c00800000c440f58] =
+srcu9+0x0/0xfffffffffffef0a8 [rcutorture] (unreliable)
+[ 3629.243009] [c0000005c14e3bb0] [c00000000022306c] =
+cleanup_srcu_struct+0x6c/0x1e0
+[ 3629.243015] [c0000005c14e3c50] [c000000000223428] =
+srcu_module_notify+0x68/0x180
+[ 3629.243021] [c0000005c14e3c90] [c00000000019a1e0] =
+notifier_call_chain+0xc0/0x1b0
+[ 3629.243027] [c0000005c14e3cf0] [c00000000019ad24] =
+blocking_notifier_call_chain+0x64/0xa0
+[ 3629.243033] [c0000005c14e3d30] [c00000000024a4c8] =
+sys_delete_module+0x1f8/0x3c0
+[ 3629.243039] [c0000005c14e3e10] [c000000000037480] =
+system_call_exception+0x140/0x350
+[ 3629.243044] [c0000005c14e3e50] [c00000000000d6a0] =
+system_call_common+0x160/0x2e4
+[ 3629.243050] --- interrupt: c00 at 0x7fff8cd39558
+[ 3629.243054] NIP: 00007fff8cd39558 LR: 000000010d800398 CTR: =
+0000000000000000
+[ 3629.243057] REGS: c0000005c14e3e80 TRAP: 0c00 Tainted: G O =
+(6.3.0-rc3-next-20230322)
+[ 3629.243062] MSR: 800000000280f033 =
+<SF,VEC,VSX,EE,PR,FP,ME,IR,DR,RI,LE> CR: 28008282 XER: 00000000
+[ 3629.243072] IRQMASK: 0=20
+[ 3629.243072] GPR00: 0000000000000081 00007fffe99fd9c0 00007fff8ce07300 =
+000000013df30ec8=20
+[ 3629.243072] GPR04: 0000000000000800 000000000000000a 1999999999999999 =
+0000000000000000=20
+[ 3629.243072] GPR08: 00007fff8cd98160 0000000000000000 0000000000000000 =
+0000000000000000=20
+[ 3629.243072] GPR12: 0000000000000000 00007fff8d5fcb50 000000010d80a650 =
+000000010d80a648=20
+[ 3629.243072] GPR16: 0000000000000000 0000000000000001 0000000000000000 =
+000000010d80a428=20
+[ 3629.243072] GPR20: 000000010d830068 0000000000000000 00007fffe99ff2f8 =
+000000013df304f0=20
+[ 3629.243072] GPR24: 0000000000000000 00007fffe99ff2f8 000000013df30ec8 =
+0000000000000000=20
+[ 3629.243072] GPR28: 0000000000000000 000000013df30e60 000000013df30ec8 =
+000000013df30e60=20
+[ 3629.243115] NIP [00007fff8cd39558] 0x7fff8cd39558
+[ 3629.243118] LR [000000010d800398] 0x10d800398
+[ 3629.243121] --- interrupt: c00
+[ 3629.243123] Code: 89292e39 f821ff71 e94d0c78 f9410068 39400000 =
+69290001 0b090000 fbc10080 7c7e1b78 e9230018 7d290074 7929d182 =
+<0b090000> 7c0802a6 fb810070 f80100a0=20
+[ 3629.243138] ---[ end trace 0000000000000000 ]=E2=80=94
 
-> 1 error generated.
-> make[3]: *** [scripts/Makefile.build:252: mm/mmap.o] Error 1
-> 
-> mm/vmalloc.c:3543:6: error: variable 'remains' is used uninitialized
-> whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
->         if (bitmap_empty(vb->used_map, VMAP_BBMAP_BITS)) {
->             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> mm/vmalloc.c:3587:17: note: uninitialized use occurs here
->         return count - remains + zero_iter(iter, remains);
->                        ^~~~~~~
-> mm/vmalloc.c:3543:2: note: remove the 'if' if its condition is always false
->         if (bitmap_empty(vb->used_map, VMAP_BBMAP_BITS)) {
->         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> mm/vmalloc.c:3539:6: error: variable 'remains' is used uninitialized
-> whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
->         if (!vb)
->             ^~~
-> mm/vmalloc.c:3587:17: note: uninitialized use occurs here
->         return count - remains + zero_iter(iter, remains);
->                        ^~~~~~~
-> mm/vmalloc.c:3539:2: note: remove the 'if' if its condition is always false
->         if (!vb)
->         ^~~~~~~~
-> mm/vmalloc.c:3524:16: note: initialize the variable 'remains' to
-> silence this warning
->         size_t remains, n;
->                       ^
->                        = 0
-> 2 errors generated.
-> make[3]: *** [scripts/Makefile.build:252: mm/vmalloc.o] Error 1
-> make[3]: Target 'mm/' not remade because of errors.
-> 
-> steps to reproduce:
-> ----------
-> 
-> tuxmake  \
->   --runtime podman \
->   --target-arch x86_64 \
->   --toolchain clang-16 LLVM=1 LLVM_IAS=1 \
->   --kconfig https://storage.tuxsuite.com/public/linaro/lkft/builds/2NOjxURhByyb4dR3Ld788iuYvAR/config
-> 
-> Related discussion on mailing list,
->  - https://lore.kernel.org/llvm/202303231055.DeninwHS-lkp@intel.com/
->  - https://lore.kernel.org/llvm/14c60785-2427-45db-9613-683410ff6802@lucifer.local/T/#t
-> 
-> 
-> --
-> Linaro LKFT
-> https://lkft.linaro.org
-> 
+Followed by following traces:
 
+[ 3629.243149] ------------[ cut here ]------------
+[ 3629.243152] WARNING: CPU: 8 PID: 614614 at kernel/rcu/srcutree.c:663 =
+cleanup_srcu_struct+0x11c/0x1e0
+[ 3629.243159] Modules linked in: rcutorture(-) torture vmac =
+poly1305_generic chacha_generic chacha20poly1305 n_gsm pps_ldisc =
+ppp_synctty ppp_async ppp_generic serport slcan can_dev slip slhc =
+snd_hrtimer snd_seq snd_seq_device snd_timer snd soundcore pcrypt =
+crypto_user n_hdlc dummy veth tun nfsv3 nfs_acl nfs lockd grace fscache =
+netfs brd overlay exfat vfat fat btrfs blake2b_generic xor raid6_pq =
+zstd_compress xfs loop sctp ip6_udp_tunnel udp_tunnel libcrc32c dm_mod =
+bonding rfkill tls sunrpc kmem device_dax nd_pmem nd_btt dax_pmem =
+papr_scm pseries_rng libnvdimm vmx_crypto ext4 mbcache jbd2 sd_mod =
+t10_pi crc64_rocksoft crc64 sg ibmvscsi scsi_transport_srp ibmveth fuse =
+[last unloaded: ltp_uaccess(O)]
+[ 3629.243217] CPU: 8 PID: 614614 Comm: modprobe Tainted: G W O =
+6.3.0-rc3-next-20230322 #1
+[ 3629.243222] Hardware name: IBM,9080-HEX POWER10 (raw) 0x800200 =
+0xf000006 of:IBM,FW1030.00 (NH1030_026) hv:phyp pSeries
+[ 3629.243227] NIP: c00000000022311c LR: c0000000002230d8 CTR: =
+c0000000002233c0
+[ 3629.243230] REGS: c0000005c14e3910 TRAP: 0700 Tainted: G W O =
+(6.3.0-rc3-next-20230322)
+[ 3629.243235] MSR: 800000000282b033 <SF,VEC,VSX,EE,FP,ME,IR,DR,RI,LE> =
+CR: 28002228 XER: 0000000a
+[ 3629.243245] CFAR: c0000000008040c0 IRQMASK: 0=20
+[ 3629.243245] GPR00: c0000000002230b8 c0000005c14e3bb0 c000000001401200 =
+0000000000000040=20
+[ 3629.243245] GPR04: 0000000000000040 0000000000000040 0000000000000011 =
+fffffffffffe0000=20
+[ 3629.243245] GPR08: ffffffffffffffff 0000000000000001 0000000000000000 =
+c00800000c42afe0=20
+[ 3629.243245] GPR12: c0000000002233c0 c000000effff6700 0000000000000000 =
+0000000000000000=20
+[ 3629.243245] GPR16: 0000000000000000 0000000000000000 0000000000000000 =
+0000000000000000=20
+[ 3629.243245] GPR20: 0000000000000000 0000000000000000 0000000000000000 =
+0000000000000000=20
+[ 3629.243245] GPR24: c00800000c443400 c00800000c440f60 c00800000c4418c8 =
+c000000002bdabe0=20
+[ 3629.243245] GPR28: c00800000c440f58 c000000002bdbe00 0000000000000040 =
+c009fffffeb8c500=20
+[ 3629.243288] NIP [c00000000022311c] cleanup_srcu_struct+0x11c/0x1e0
+[ 3629.243293] LR [c0000000002230d8] cleanup_srcu_struct+0xd8/0x1e0
+[ 3629.243298] Call Trace:
+[ 3629.243300] [c0000005c14e3bb0] [c0000000002230b8] =
+cleanup_srcu_struct+0xb8/0x1e0 (unreliable)
+[ 3629.243306] [c0000005c14e3c50] [c000000000223428] =
+srcu_module_notify+0x68/0x180
+[ 3629.243312] [c0000005c14e3c90] [c00000000019a1e0] =
+notifier_call_chain+0xc0/0x1b0
+[ 3629.243318] [c0000005c14e3cf0] [c00000000019ad24] =
+blocking_notifier_call_chain+0x64/0xa0
+[ 3629.243324] [c0000005c14e3d30] [c00000000024a4c8] =
+sys_delete_module+0x1f8/0x3c0
+[ 3629.243329] [c0000005c14e3e10] [c000000000037480] =
+system_call_exception+0x140/0x350
+[ 3629.243335] [c0000005c14e3e50] [c00000000000d6a0] =
+system_call_common+0x160/0x2e4
+[ 3629.243341] --- interrupt: c00 at 0x7fff8cd39558
+[ 3629.243344] NIP: 00007fff8cd39558 LR: 000000010d800398 CTR: =
+0000000000000000
+[ 3629.243348] REGS: c0000005c14e3e80 TRAP: 0c00 Tainted: G W O =
+(6.3.0-rc3-next-20230322)
+[ 3629.243353] MSR: 800000000280f033 =
+<SF,VEC,VSX,EE,PR,FP,ME,IR,DR,RI,LE> CR: 28008282 XER: 00000000
+[ 3629.243363] IRQMASK: 0=20
+[ 3629.243363] GPR00: 0000000000000081 00007fffe99fd9c0 00007fff8ce07300 =
+000000013df30ec8=20
+[ 3629.243363] GPR04: 0000000000000800 000000000000000a 1999999999999999 =
+0000000000000000=20
+[ 3629.243363] GPR08: 00007fff8cd98160 0000000000000000 0000000000000000 =
+0000000000000000=20
+[ 3629.243363] GPR12: 0000000000000000 00007fff8d5fcb50 000000010d80a650 =
+000000010d80a648=20
+[ 3629.243363] GPR16: 0000000000000000 0000000000000001 0000000000000000 =
+000000010d80a428=20
+[ 3629.243363] GPR20: 000000010d830068 0000000000000000 00007fffe99ff2f8 =
+000000013df304f0=20
+[ 3629.243363] GPR24: 0000000000000000 00007fffe99ff2f8 000000013df30ec8 =
+0000000000000000=20
+[ 3629.243363] GPR28: 0000000000000000 000000013df30e60 000000013df30ec8 =
+000000013df30e60=20
+[ 3629.243407] NIP [00007fff8cd39558] 0x7fff8cd39558
+[ 3629.243410] LR [000000010d800398] 0x10d800398
+[ 3629.243413] --- interrupt: c00
+[ 3629.243415] Code: 419dffa4 e93a0078 39400001 552907be 2f890000 =
+7d20579e 0b090000 e95a0078 e91a0080 39200001 7fa85000 7d204f9e =
+<0b090000> 7f23cb78 4bfffd65 0b030000=20
+[ 3629.243430] ---[ end trace 0000000000000000 ]=E2=80=94
+
+These warnings are repeated few times. The LTP test is marked as PASS.
+
+Git bisect point to the following patch
+commit f46a5170e6e7d5f836f2199fe82cdb0b4363427f
+    srcu: Use static init for statically allocated in-module srcu_struct
+
+
+Thanks
+- Sachin=

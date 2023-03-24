@@ -2,64 +2,64 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1FA36C7823
-	for <lists+linux-next@lfdr.de>; Fri, 24 Mar 2023 07:48:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F3976C7889
+	for <lists+linux-next@lfdr.de>; Fri, 24 Mar 2023 08:13:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231447AbjCXGsJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 24 Mar 2023 02:48:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55936 "EHLO
+        id S229868AbjCXHNx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 24 Mar 2023 03:13:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230043AbjCXGsI (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 24 Mar 2023 02:48:08 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACF023C2F
-        for <linux-next@vger.kernel.org>; Thu, 23 Mar 2023 23:48:04 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id ja10so1011578plb.5
-        for <linux-next@vger.kernel.org>; Thu, 23 Mar 2023 23:48:04 -0700 (PDT)
+        with ESMTP id S229536AbjCXHNw (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 24 Mar 2023 03:13:52 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C124BD523
+        for <linux-next@vger.kernel.org>; Fri, 24 Mar 2023 00:13:49 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id a16so765075pjs.4
+        for <linux-next@vger.kernel.org>; Fri, 24 Mar 2023 00:13:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112; t=1679640484;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112; t=1679642029;
         h=from:to:subject:content-transfer-encoding:mime-version:date
          :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=FAMCMWltYjnB7DBJrqUoruJSxXyPEEe88pMVnl+QblU=;
-        b=s+A3lyXKt0njRBfpzEgcgjvH9eXRAZmfCU3Ls6djK7GEL9r1XRRI417uxXJEPktx68
-         O+/vxdmg6u3L+ViMSGkrNUQ2KOdDuIIyB2M89q/G6nKqPmsYv14Lf1JM+gVGBlq55tSe
-         neas65F2Voulm7AIMsigIXvdqcYSsH8XvAq9NYlVyW9zt0pY1EyPKCViCtdePcWCB+jC
-         +muT9YaopqN93gLH/5gmJFIoymYEt+jzFAmUhGprQnJ47DvATvA8Pi/W0rQ9EHaJIyNN
-         tRUxc+h7/Tfd8rk2gWlxIA5CIn5FbBJqFy1JKmpU399fINZdoL7Sr9jhV/iwFuBjo5HC
-         DcSg==
+        bh=3ZBBo2U9slkgtxm2nbpj0G9XPTBohuT0b/H1oeMqnlY=;
+        b=TnKutFfo8iS9p6NUIJp7uigkixCuiLmpfgK2XqtlGWWxpyVnGS+qRV0YAwbQBoB36Z
+         VVDihn4Z4dip5QDZzjIRv0d6th0Pa4IHq2f4TqRauZgEMZVftbXGUY9+IfOm644eAzOG
+         1s2mQBjZebWz0m4o8G3kGVjxNdk1pgL02/4zY4g4vF8ii9bXy/zMrsDkWznu7I/JXCX3
+         UV+rozhFoXilp537F5s78RbAJhEb2SF5WbZfzgmq8MvZaqiXtDq9zlNeSB/kJe54Fm20
+         LKxYUi75s9YSi5cDo95Z/WzJzO+39okUVC0mU9S1fA4FzW7HvtwzPtRaErvhnTG5Qhup
+         L7FA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679640484;
+        d=1e100.net; s=20210112; t=1679642029;
         h=from:to:subject:content-transfer-encoding:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=FAMCMWltYjnB7DBJrqUoruJSxXyPEEe88pMVnl+QblU=;
-        b=0feoI3ZYsgGcfvhwDICHDdufmEWmSKkgvUfNyol6W3WFc33kDZtqSmqsh92LFh9mYz
-         6Tcsa3uYZVJyackAbrXAD1idxcej4EbT6aus3iwNaVQLyocKHv0QXOc0vbvGScu05ZXv
-         MTmXK/hf32VvmdqLtA0n70GFctVre44YMX4TRjtfFyCKxi/okdemwer/082P1ZRaF5xp
-         EkTqd92I3N3CcDaJW4D3tGyNLXhTKq5ZHQTapMjWJQGnrf9Ej2pCuHvnt/1CL67Y6jkH
-         ZXb/B+Wn6d+HupxufMJg4TbZdikc2gj55Kxwv90ChSaRs5er3us8rpbW0p+DbhXGxapT
-         Abeg==
-X-Gm-Message-State: AO0yUKUjEJIDJ1zi/VIST524+O6+4k9Uh6GJBEraffdcj1+2GsIx6R7I
-        JTxN0s3EEsIdYMCMZQhRw1kdds0QpQlO4yaGDBJAgQ==
-X-Google-Smtp-Source: AK7set8QDvZOkzTW9u+DRKg7WaLOhiK3peSmmozUIaxEWF6t6I9bTo8eHn+9ffr1CoL56az9LVu7oQ==
-X-Received: by 2002:a05:6a20:8ba6:b0:cc:c5db:ea4a with SMTP id m38-20020a056a208ba600b000ccc5dbea4amr2011481pzh.33.1679640483238;
-        Thu, 23 Mar 2023 23:48:03 -0700 (PDT)
+        bh=3ZBBo2U9slkgtxm2nbpj0G9XPTBohuT0b/H1oeMqnlY=;
+        b=RIegB3s+Co+FfZz17uzlnMKv6ZoC9YEIOYu2doS/tnFsod5DCg+zfarrEy+55zI9C4
+         StDKbI6mIujUpoDwj65jm13ieNaYRhb7Bl/3qziZqQPY0+68v0vSu0wPivvik45B2C7o
+         wqPEi6xC7so6qpNPIoMUeaG4cPgeuDAMe2pCKxtoXGTApRQeZ+2Re9yAjGx0uRQNxweX
+         SHIr6IC/d3j/qHF3aCeKlbEyk76lnlcGal3KVg9ynSoUKFdXBb+0x/yHLPS2n/rHt5kV
+         DwjOOOtxmC4OJKqBcImOmXISDFx5LaQsW13tS5V4Msia369CXcWlvsbFAoAmXsq+DTUD
+         R6mQ==
+X-Gm-Message-State: AAQBX9eP0qVew2Y2N9CyB3jvj+Jv/OojBCVGF0fNEMV3srUYVkKRCXE1
+        9atTfQNB2N83bt61K+VdiyUGxHSRHcmmyDZshgMsGg==
+X-Google-Smtp-Source: AKy350b/hX8EXbIy9456EiQtF5/KJGFHOX+VY9o5lKM8pc0LcKJcnGofSadbJwuK30KhhFcHTqk2Hg==
+X-Received: by 2002:a17:903:189:b0:1a1:bede:5e34 with SMTP id z9-20020a170903018900b001a1bede5e34mr1888687plg.3.1679642028276;
+        Fri, 24 Mar 2023 00:13:48 -0700 (PDT)
 Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id u20-20020aa78394000000b00608dae58695sm12944241pfm.209.2023.03.23.23.48.02
+        by smtp.gmail.com with ESMTPSA id 1-20020a170902c10100b0019ac9c4f32esm13375577pli.309.2023.03.24.00.13.47
         for <linux-next@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Mar 2023 23:48:02 -0700 (PDT)
-Message-ID: <641d47a2.a70a0220.7292c.882f@mx.google.com>
-Date:   Thu, 23 Mar 2023 23:48:02 -0700 (PDT)
+        Fri, 24 Mar 2023 00:13:47 -0700 (PDT)
+Message-ID: <641d4dab.170a0220.4aea0.94a5@mx.google.com>
+Date:   Fri, 24 Mar 2023 00:13:47 -0700 (PDT)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: master
+X-Kernelci-Branch: pending-fixes
 X-Kernelci-Tree: next
 X-Kernelci-Report-Type: build
-X-Kernelci-Kernel: next-20230324
-Subject: next/master build: 200 builds: 4 failed, 196 passed, 7 errors,
- 14 warnings (next-20230324)
+X-Kernelci-Kernel: v6.3-rc3-370-g8269040171a02
+Subject: next/pending-fixes build: 178 builds: 4 failed, 174 passed, 7 errors,
+ 14 warnings (v6.3-rc3-370-g8269040171a02)
 To:     linux-next@vger.kernel.org
 From:   "kernelci.org bot" <bot@kernelci.org>
 X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -71,23 +71,25 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master build: 200 builds: 4 failed, 196 passed, 7 errors, 14 warnings =
-(next-20230324)
+next/pending-fixes build: 178 builds: 4 failed, 174 passed, 7 errors, 14 wa=
+rnings (v6.3-rc3-370-g8269040171a02)
 
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20230324/
+Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
+rnel/v6.3-rc3-370-g8269040171a02/
 
 Tree: next
-Branch: master
-Git Describe: next-20230324
-Git Commit: e5dbf24e8b9e6aa0a185d86ce46a7a9c79ebb40f
+Branch: pending-fixes
+Git Describe: v6.3-rc3-370-g8269040171a02
+Git Commit: 8269040171a02baf7b09f056d84e0c1d9814fd2d
 Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
 Built: 8 unique architectures
 
 Build Failures Detected:
 
+arc:
+    haps_hs_smp_defconfig+kselftest: (gcc-10) FAIL
+
 arm:
-    allmodconfig: (clang-17) FAIL
     rpc_defconfig: (gcc-10) FAIL
 
 mips:
@@ -97,11 +99,11 @@ mips:
 Errors and Warnings Detected:
 
 arc:
+    haps_hs_smp_defconfig+kselftest (gcc-10): 1 error
 
 arm64:
 
 arm:
-    allmodconfig (clang-17): 1 error
     mps2_defconfig (gcc-10): 2 warnings
     rpc_defconfig (gcc-10): 2 errors
 
@@ -129,12 +131,12 @@ Errors summary:
 
     4    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=
 =80=98-mhard-float=E2=80=99
+    1    net/bpfilter/main.c:3:10: fatal error: sys/uio.h: No such file or =
+directory
     1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=
 =3D0x'
     1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=
 =3D0x'
-    1    ERROR: modpost: "__aeabi_uldivmod" [drivers/net/wireless/intel/iwl=
-wifi/mvm/iwlmvm.ko] undefined!
 
 Warnings summary:
 
@@ -153,6 +155,11 @@ Detailed per-defconfig build reports:
 
 ---------------------------------------------------------------------------=
 -----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
 32r2el_defconfig+debug (mips, gcc-10) =E2=80=94 FAIL, 0 errors, 0 warnings,=
  0 section mismatches
 
@@ -163,12 +170,8 @@ ngs, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
-allmodconfig (arm, clang-17) =E2=80=94 FAIL, 1 error, 0 warnings, 0 section=
- mismatches
-
-Errors:
-    ERROR: modpost: "__aeabi_uldivmod" [drivers/net/wireless/intel/iwlwifi/=
-mvm/iwlmvm.ko] undefined!
+allmodconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -177,17 +180,12 @@ n mismatches
 
 ---------------------------------------------------------------------------=
 -----
-allmodconfig (arm64, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
+allnoconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
 
 ---------------------------------------------------------------------------=
 -----
 allnoconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (i386, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
 n mismatches
 
 ---------------------------------------------------------------------------=
@@ -202,16 +200,6 @@ Warnings:
 -----
 allnoconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
 mismatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (x86_64, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -232,11 +220,6 @@ ection mismatches
 -----
 aspeed_g5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
 ection mismatches
-
----------------------------------------------------------------------------=
------
-aspeed_g5_defconfig (arm, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -325,69 +308,6 @@ ion mismatches
 
 ---------------------------------------------------------------------------=
 -----
-cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config (arm64, clang-13=
-) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+arm64-chromebook=
- (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatch=
-es
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-mediatek.flavour.config+arm64-chromeb=
-ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
-tches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-qualcomm.flavour.config+arm64-chromeb=
-ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
-tches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-rockchip64.flavour.config+arm64-chrom=
-ebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mis=
-matches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (arm, clang-13) =
-=E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (arm, clang-1=
-3) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromeos-amd-stoneyridge.flavour.config+x86-chr=
-omebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
-mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromeos-intel-denverton.flavour.config+x86-chr=
-omebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
-mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromeos-intel-pineview.flavour.config+x86-chro=
-mebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config+x86-chromebook=
- (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatc=
-hes
-
----------------------------------------------------------------------------=
------
 cu1000-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
  section mismatches
 
@@ -423,11 +343,6 @@ s, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
-defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
----------------------------------------------------------------------------=
------
 defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
 ismatches
 
@@ -438,8 +353,13 @@ ismatches
 
 ---------------------------------------------------------------------------=
 -----
-defconfig+CONFIG_ARM64_16K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
-rs, 0 warnings, 0 section mismatches
+defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
+s, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_RANDOMIZE_BASE=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
+s, 0 warnings, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -448,23 +368,18 @@ ings, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
-defconfig+arm64-chromebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 wa=
-rnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
 defconfig+arm64-chromebook+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
 rs, 0 warnings, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
-defconfig+crypto (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
+defconfig+arm64-chromebook+videodec (arm64, gcc-10) =E2=80=94 PASS, 0 error=
+s, 0 warnings, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
-defconfig+debug (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
+defconfig+crypto (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -475,6 +390,11 @@ tion mismatches
 -----
 defconfig+ima (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
 on mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -537,6 +457,15 @@ ngs, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
+haps_hs_smp_defconfig+kselftest (arc, gcc-10) =E2=80=94 FAIL, 1 error, 0 wa=
+rnings, 0 section mismatches
+
+Errors:
+    net/bpfilter/main.c:3:10: fatal error: sys/uio.h: No such file or direc=
+tory
+
+---------------------------------------------------------------------------=
+-----
 hisi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
 n mismatches
 
@@ -544,11 +473,6 @@ n mismatches
 -----
 hsdk_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
 n mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -753,18 +677,8 @@ ction mismatches
 
 ---------------------------------------------------------------------------=
 -----
-multi_v5_defconfig (arm, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
 multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
 ction mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -788,8 +702,18 @@ multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy (arm, gcc-10) =E2=80=94 PASS, 0=
 
 ---------------------------------------------------------------------------=
 -----
-multi_v7_defconfig+debug (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
-, 0 section mismatches
+multi_v7_defconfig+crypto (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+ima (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -825,16 +749,6 @@ tion mismatches
 -----
 nommu_k210_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
 0 section mismatches
-
----------------------------------------------------------------------------=
------
-nommu_k210_defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-nommu_k210_sdcard_defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 w=
-arnings, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -949,11 +863,6 @@ tion mismatches
 -----
 rv32_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
 ion mismatches
-
----------------------------------------------------------------------------=
------
-rv32_defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -1072,11 +981,6 @@ on mismatches
 
 ---------------------------------------------------------------------------=
 -----
-tinyconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
 tinyconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
  mismatches
 
@@ -1092,6 +996,11 @@ Warnings:
 -----
 tinyconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
 smatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -1140,18 +1049,8 @@ tion mismatches
 
 ---------------------------------------------------------------------------=
 -----
-x86_64_defconfig (x86_64, rustc-1.62) =E2=80=94 PASS, 0 errors, 0 warnings,=
- 0 section mismatches
-
----------------------------------------------------------------------------=
------
 x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
 ection mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -1180,23 +1079,8 @@ nings, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
-x86_64_defconfig+rust (x86_64, rustc-1.62) =E2=80=94 PASS, 0 errors, 0 warn=
-ings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+rust-samples (x86_64, rustc-1.62) =E2=80=94 PASS, 0 errors=
-, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
 x86_64_defconfig+x86-chromebook (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, =
 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86-chromebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors=
-, 0 warnings, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----

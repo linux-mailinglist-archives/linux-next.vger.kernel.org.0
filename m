@@ -2,49 +2,87 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 837AE6C7586
-	for <lists+linux-next@lfdr.de>; Fri, 24 Mar 2023 03:21:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1200F6C7633
+	for <lists+linux-next@lfdr.de>; Fri, 24 Mar 2023 04:18:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231488AbjCXCVJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 23 Mar 2023 22:21:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57730 "EHLO
+        id S230430AbjCXDSP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 23 Mar 2023 23:18:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229773AbjCXCVI (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 23 Mar 2023 22:21:08 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10CA62A175;
-        Thu, 23 Mar 2023 19:20:54 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PjQtC4WRmz4xDr;
-        Fri, 24 Mar 2023 13:20:51 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1679624452;
-        bh=exnALh0tsJi9M6nMCIRST+svU39hd/lV5lwtMCzYb7Y=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=fw5oiDSwrE21yxyXMzXqICEA5qlqI0QSNIXfRXBWrqmvms1zfvCZ22pDBFJuAuNE8
-         gpZCBSdM+0wL78lsq5wEHyATQRbW5VL88DI3cMoFR4GUaBBSJo5LKvK2+Lx8whg8AA
-         QrhYcttHOOfexpiWEItTamBkQ/FpOluYdmk+gPthv2IxxRAfVOGM0c3Ioxi7V+OYke
-         9E9xVPdCKQovvlEoO0DIHV3nXHBXHl4N9y7fu6RpkMdsPMGki7dfo5lkbaDg+PgR/z
-         5EM/imjxpAouDdkJ3kWFvnqdrCzgofmjrXb7h4+V+PISI7ihaXy9YZlhspHwDHaeiV
-         prHPJ+moot/fg==
-Date:   Fri, 24 Mar 2023 13:20:50 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     James Bottomley <James.Bottomley@HansenPartnership.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the tpmdd tree
-Message-ID: <20230324132050.050d4780@canb.auug.org.au>
-In-Reply-To: <20230321115413.106fa139@canb.auug.org.au>
-References: <20230321115413.106fa139@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/F4VH1hU34KpDmZLtMkgTgJN";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        with ESMTP id S229508AbjCXDSN (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 23 Mar 2023 23:18:13 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B389A55AD;
+        Thu, 23 Mar 2023 20:18:11 -0700 (PDT)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32O1dvEn016924;
+        Fri, 24 Mar 2023 03:17:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=content-type :
+ mime-version : subject : from : in-reply-to : date : cc :
+ content-transfer-encoding : message-id : references : to; s=pp1;
+ bh=BNbeD3ySaTQDwCEDcLt5eGh9bouiy1EAvy296wcI/hQ=;
+ b=JchxvEydFK8o3Hh414Y1ok7FUfexcwJnCqjA7RUohRBsM7wi8LvfL5mcHTcE7UNniAOE
+ qYqd5CQIQO3TSON11VHf/RiIzznQUkmgoa26poZ5sREJCMpLHpA9+ZQy6ZIYCCBJ+YsJ
+ PynNgIz8y7qcm4NrJoeOjf9bp0RoZ0V1zvZwg/lkqgW3zKbk+Pz71AjO5UNUYVolYDTJ
+ ahhuzD2TKXxcp6DrHnGmhiP0OOhMikjx4bYJ0lmn2ZTPe4TI6mj/ECDLzrmRfUAieHCu
+ SbYx8FT3yFdZnTNx3Jiut7L3oIZAPU+BD5miU12/n3vR+/FVqtPQgxG6UkPXPVb8i5Lh dA== 
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pgxtbx10a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 24 Mar 2023 03:17:54 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32NLLPZ9025320;
+        Fri, 24 Mar 2023 03:17:53 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3pgxkrr96s-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 24 Mar 2023 03:17:53 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32O3Hoco29754022
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 24 Mar 2023 03:17:50 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 283CA20043;
+        Fri, 24 Mar 2023 03:17:50 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 16A7920040;
+        Fri, 24 Mar 2023 03:17:49 +0000 (GMT)
+Received: from smtpclient.apple (unknown [9.43.122.5])
+        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Fri, 24 Mar 2023 03:17:48 +0000 (GMT)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.400.51.1.1\))
+Subject: Re: [next-20230322] Kernel WARN at kernel/workqueue.c:3182
+ (rcutorture)
+From:   Sachin Sant <sachinp@linux.ibm.com>
+In-Reply-To: <ae015179-03b5-4e4b-86dd-cbab75230c7f@paulmck-laptop>
+Date:   Fri, 24 Mar 2023 08:47:38 +0530
+Cc:     linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-next@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>,
+        Zqiang <qiang1.zhang@intel.com>
+Content-Transfer-Encoding: 7bit
+Message-Id: <23F7ADE0-0B96-4257-8910-6B678E0F0C7A@linux.ibm.com>
+References: <139BEB3F-BC1C-4ABA-8928-9A8EF3FB5EDD@linux.ibm.com>
+ <fbb628c1-08bd-44ff-a613-794b134f6d46@paulmck-laptop>
+ <233B28DA-70DD-4AD8-9C72-1FFCA6EFE56D@linux.ibm.com>
+ <ae015179-03b5-4e4b-86dd-cbab75230c7f@paulmck-laptop>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+X-Mailer: Apple Mail (2.3731.400.51.1.1)
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: OoTAlPW90XYFrUCV3SZOFYP3mlusXGsr
+X-Proofpoint-GUID: OoTAlPW90XYFrUCV3SZOFYP3mlusXGsr
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-23_15,2023-03-23_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ clxscore=1015 suspectscore=0 phishscore=0 mlxlogscore=999 malwarescore=0
+ spamscore=0 priorityscore=1501 adultscore=0 bulkscore=0 impostorscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2303240025
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,57 +90,22 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/F4VH1hU34KpDmZLtMkgTgJN
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+>>> Hello, Sachin, and it looks like you hit something that Zqiang and I
+>>> have been tracking down.  I am guessing that you were using modprobe
+>>> and rmmod to make this happen, and that this happened at rmmod time.
+>>> 
+>> Yes, the LTP test script rcu_torture.sh relies on modprobe to load/unload
+>> the rcutorture module.
+>> 
+>>> Whatever the reproducer, does the following patch help?
+>> 
+>> Thank you for the patch. Yes, with this patch applied, the test completes
+>> successfully without the reported warning.
+> 
+> Very good, thank you!  May we have your Tested-by?
 
-On Tue, 21 Mar 2023 11:54:13 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> After merging the tpmdd tree, today's linux-next build (arm
-> multi_v7_defconfig) failed like this:
->=20
-> drivers/char/tpm/tpm-chip.c: In function 'tpm_amd_is_rng_defective':
-> drivers/char/tpm/tpm-chip.c:531:15: error: too many arguments to function=
- 'tpm_request_locality'
->   531 |         ret =3D tpm_request_locality(chip, 0);
->       |               ^~~~~~~~~~~~~~~~~~~~
-> drivers/char/tpm/tpm-chip.c:35:12: note: declared here
->    35 | static int tpm_request_locality(struct tpm_chip *chip)
->       |            ^~~~~~~~~~~~~~~~~~~~
->=20
-> Caused by commit
->=20
->   923c8dfa9a36 ("tpm: fix build break in tpm-chip.c caused by AMD fTPM qu=
-irk")
->=20
-> I have used the tmpdd tree from next-20230320 for today.
+Tested-by: Sachin Sant <sachinp@linux.ibm.com>
 
-I am still getting this build failure.
+- Sachin
 
-The commit above is trying to fix a build failure that does not exist
-in the tmpdd tree!
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/F4VH1hU34KpDmZLtMkgTgJN
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQdCQIACgkQAVBC80lX
-0GwUkgf9HZbQTnYxg5xw88OvtOnQPi8MQzOX0HQm4fOlljM3/1dM5PCQQ85ja4qo
-9/L8lH1OQvIiajmZ59gjI7k16QWhKty9STzLanV7OZdo43Gh67DaTWU7ptil6TjR
-B8Iu7ycE9/fYCyQ06iLy6E3CyFLamPB1qjgAzi/PAaz7lUJYVNAv0JEhFSH2yT+j
-Z2E8AxopgYSimQttq3zHlYlhT5Fol6HJ/HnkfWEgp2O2AiHI+5CGJbcjcdieN3aw
-6HcHIaI1cmjjogksmrxK/u3IIyssj7oSozkRkDMipBEPg+4DGDzUXfMjSeCKZUKR
-mB9O19XwtbnG1OVJFu827Uc4y1TtQw==
-=6lFG
------END PGP SIGNATURE-----
-
---Sig_/F4VH1hU34KpDmZLtMkgTgJN--

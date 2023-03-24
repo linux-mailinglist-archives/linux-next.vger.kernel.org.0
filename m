@@ -2,47 +2,46 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4BB16C74F4
-	for <lists+linux-next@lfdr.de>; Fri, 24 Mar 2023 02:22:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 751446C7543
+	for <lists+linux-next@lfdr.de>; Fri, 24 Mar 2023 02:57:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229794AbjCXBWJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 23 Mar 2023 21:22:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44560 "EHLO
+        id S231143AbjCXB5R (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 23 Mar 2023 21:57:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229589AbjCXBWJ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 23 Mar 2023 21:22:09 -0400
+        with ESMTP id S231135AbjCXB5N (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 23 Mar 2023 21:57:13 -0400
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BD8ED515;
-        Thu, 23 Mar 2023 18:22:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D144B252A9;
+        Thu, 23 Mar 2023 18:57:09 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PjPZJ6Jdsz4xDn;
-        Fri, 24 Mar 2023 12:22:00 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PjQLq634vz4x4r;
+        Fri, 24 Mar 2023 12:57:07 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1679620921;
-        bh=QJyYt0zaRUYHxyT+kUDN1KRXALcFkkSiTA4EgDMKxYA=;
+        s=201702; t=1679623028;
+        bh=oHihvewVwDnXNl4zUqa8R15d/bxI1Sr8bzJkv0X3MpE=;
         h=Date:From:To:Cc:Subject:From;
-        b=E8v/nzOpFa20q74xzPFSdBWoR/53Tnmp1+nzD3Ci8knO5S644QllsGIxdoPd8Iw3X
-         wR5A91iP4DzrqkpgXPD7Sae7qTzpYAZ9qHR0PXWBsRShvXY+S29in9BJRJ11qmgvHP
-         4xuSWG6zZLppeUVmf1ifvTIAMgzhGHV3Kt5X/3RwzEHXBSKCubD2nblPQeTAiVUL4B
-         ePPq+pBpSdxAkIRDNyBSPIOPM+ZF3WYjCWa5xh0/BIJUZ0E1TbKVdQFyQ1IycdMZSK
-         B707dfQgirIM8/+SAzfsVXb9THKbuXMcwXxqlpP27knk4UqAiLf7PPK775IkDqxZ/e
-         KT/x+StQ1tM/Q==
-Date:   Fri, 24 Mar 2023 12:21:59 +1100
+        b=PmV+MbdAIcOKnyoID8DeC8lpkf5nXNWvbiqC5wMqtQNkIR7KNLeyec4Stc1aJWDZk
+         yrtcLsR/Ibrw27P4EZX2dZxMJ8B6h+0apWNvsvPNJAz04LNxMXu2NAOOcwK1C/GHDH
+         cSHW9QUCW99B+syUqMEkRgYTGqhXHOS8ESwVIxFJh5Scgjri5TgaohDx7/FaTxC+bl
+         tFSZ31ONCiYb+xvv4JvvEGQn3otH8au5QKCDSwdZ0bqBMPKmrVYUPuz+PrA1zCFl9h
+         DWV3pIIetflHZY1dyPHlb8A1IlUZ5eIELziIpi/BZkHNNVf39Nyqjj+GXtf7BNRlM4
+         fDsDLQ5TxI9JQ==
+Date:   Fri, 24 Mar 2023 12:57:06 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: linux-next: duplicate patches in the bluetooth tree
-Message-ID: <20230324122159.0f34ffcb@canb.auug.org.au>
+To:     Jens Axboe <axboe@kernel.dk>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Lorenzo Stoakes <lstoakes@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the block tree
+Message-ID: <20230324125706.2c6d955d@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/CJwEIDzeJZ01xxFtChdXG0w";
+Content-Type: multipart/signed; boundary="Sig_/yP/MIZnYfmpXjMQbYCd6QXM";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
@@ -53,55 +52,95 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/CJwEIDzeJZ01xxFtChdXG0w
+--Sig_/yP/MIZnYfmpXjMQbYCd6QXM
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-The following commits are also in the net tree as different commits
-(but the same patches):
+After merging the block tree, today's linux-next build (powerpc
+ppc64_defconfig) failed like this:
 
-  0b0501e48331 ("Bluetooth: Fix race condition in hci_cmd_sync_clear")
-  1446dcd9dcfc ("Bluetooth: btintel: Iterate only bluetooth device ACPI ent=
-ries")
-  23942ce75b8c ("Bluetooth: L2CAP: Fix responding with wrong PDU type")
-  363bb3fbb249 ("Bluetooth: hci_core: Detect if an ACL packet is in fact an=
- ISO packet")
-  36ecf4d48b5a ("Bluetooth: btusb: Remove detection of ISO packets over bul=
-k")
-  3ebbba4feafd ("Bluetooth: btqcomsmd: Fix command timeout after setting BD=
- address")
-  592916198977 ("Bluetooth: ISO: fix timestamped HCI ISO data packet parsin=
-g")
-  59ba62c59bfe ("Bluetooth: HCI: Fix global-out-of-bounds")
-  6eaae76b4aed ("Bluetooth: btsdio: fix use after free bug in btsdio_remove=
- due to unfinished work")
-  81183a159b36 ("Bluetooth: hci_sync: Resume adv with no RPA when active sc=
-an")
-  853c3e629079 ("Bluetooth: mgmt: Fix MGMT add advmon with RSSI command")
-  906d721e4897 ("Bluetooth: btinel: Check ACPI handle for NULL before acces=
-sing")
-  bfcd8f0d273d ("Bluetooth: Remove "Power-on" check from Mesh feature")
+In file included from arch/powerpc/include/asm/cmpxchg.h:6,
+                 from arch/powerpc/include/asm/atomic.h:11,
+                 from include/linux/atomic.h:7,
+                 from include/crypto/hash.h:11,
+                 from lib/iov_iter.c:2:
+lib/iov_iter.c: In function 'copy_page_to_iter_nofault':
+lib/iov_iter.c:497:22: error: implicit declaration of function 'iov_iter_is=
+_pipe'; did you mean 'iov_iter_is_bvec'? [-Werror=3Dimplicit-function-decla=
+ration]
+  497 |         if (unlikely(iov_iter_is_pipe(i)))
+      |                      ^~~~~~~~~~~~~~~~
+include/linux/compiler.h:78:45: note: in definition of macro 'unlikely'
+   78 | # define unlikely(x)    __builtin_expect(!!(x), 0)
+      |                                             ^
+lib/iov_iter.c:498:24: error: implicit declaration of function 'copy_page_t=
+o_iter_pipe'; did you mean 'copy_page_to_iter'? [-Werror=3Dimplicit-functio=
+n-declaration]
+  498 |                 return copy_page_to_iter_pipe(page, offset, bytes, =
+i);
+      |                        ^~~~~~~~~~~~~~~~~~~~~~
+      |                        copy_page_to_iter
+
+Caused by commit
+
+  a53f5dee3448 ("iov_iter: Kill ITER_PIPE")
+
+interacting with commit
+
+  14116ab76dc2 ("iov_iter: add copy_page_to_iter_nofault()")
+
+from the mm tree.
+
+I have applied the following merge fix patch for today.
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Fri, 24 Mar 2023 12:44:44 +1100
+Subject: [PATCH] fix up for "iov_iter: add copy_page_to_iter_nofault()"
+
+interatcing with "iov_iter: Kill ITER_PIPE"
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ lib/iov_iter.c | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/lib/iov_iter.c b/lib/iov_iter.c
+index 9f4ec9adc036..f7b06366882b 100644
+--- a/lib/iov_iter.c
++++ b/lib/iov_iter.c
+@@ -494,8 +494,6 @@ size_t copy_page_to_iter_nofault(struct page *page, uns=
+igned offset, size_t byte
+ 		return 0;
+ 	if (WARN_ON_ONCE(i->data_source))
+ 		return 0;
+-	if (unlikely(iov_iter_is_pipe(i)))
+-		return copy_page_to_iter_pipe(page, offset, bytes, i);
+ 	page +=3D offset / PAGE_SIZE; // first subpage
+ 	offset %=3D PAGE_SIZE;
+ 	while (1) {
+--=20
+2.39.2
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/CJwEIDzeJZ01xxFtChdXG0w
+--Sig_/yP/MIZnYfmpXjMQbYCd6QXM
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQc+zcACgkQAVBC80lX
-0Gyzagf+IFiafALspAZ6e8kJXux1S3N0cIhDOs5tZzw4ZnYZleC/STwHxyGhwn7e
-qh1dlbmVRWewocg+YIKi9g288IMKaxZJxk9CsjJdJHCb56BnB+n/52DjC0bowv7S
-Se3NkqNbj13rEr9sYs3b7kFitZaG+ZrxL9nawrhUWCtCGrRDPeyPvewpJHvuM50A
-7jA4ZrKQA7utcbz211BDuXlx5qVGrwt+eTYAhkRo91CYJ80cczz4tmUIB6Z20BFm
-O7C9rTyn2p+tE7nr8/32A/ZKHFuShU0OMT1uBWcn+NEo9HOdH6ypTF4KC8pG3mD0
-ep2OHe9iiVQ81lcBRXYZl/D5ywlQag==
-=SBdP
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQdA3IACgkQAVBC80lX
+0GyzEgf/Se7iOpy7IJjKB2Wl8RN4aPMUQnF6+M1wfPTazJEpQtkXFRoNxDLnbCcZ
+u9q87HxjmPbRiTxD+OMN+SCO2Fvcy5MnYNQpTH54ab3vob3s2CdkIf3ZOBgFfPPh
+2LuZdGJsoWVMNAej23z8seWeFwO0Yih+3x+nkXK4/IQuBW/WEPLxo4jbWmi3Swlk
+p3p7G/iR9xYWo7QkTiWe18n5YuauanJKyvde/0zBsHWODqvFgYU1KA0PqOORnLBY
+Hc7v12RpcCjBQ3PMhm9eeqUtHz+nbtVkslf1wKT53lQiQSdAND9Gu1J9YuSKh/nh
+48nMd+lQR1mVl9WqLOSM4XDJVafFqQ==
+=B619
 -----END PGP SIGNATURE-----
 
---Sig_/CJwEIDzeJZ01xxFtChdXG0w--
+--Sig_/yP/MIZnYfmpXjMQbYCd6QXM--

@@ -2,159 +2,71 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37D7B6CACC2
-	for <lists+linux-next@lfdr.de>; Mon, 27 Mar 2023 20:11:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C95066CB002
+	for <lists+linux-next@lfdr.de>; Mon, 27 Mar 2023 22:32:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229959AbjC0SLs (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 27 Mar 2023 14:11:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52968 "EHLO
+        id S231437AbjC0UcD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 27 Mar 2023 16:32:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbjC0SLr (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 27 Mar 2023 14:11:47 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA8AF95;
-        Mon, 27 Mar 2023 11:11:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679940706; x=1711476706;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=OWH2uOgNeiZW7Bw/QuQRkVHwLq0qsNjVWxbSTLJc9OY=;
-  b=Vjfsy5NJsbEGC3/TnLuPKcN8UfyPgQVR1T1fAWlmFCmggBtPa81Utfve
-   SS8To+ih1XKtRpOeavFdI+UpWKVRfBro5QuTq+b+XRLSi7UST/uEBeFIR
-   4jlYt/VhTRS7Oi+w8C+wSfRSAFOJfV7FPD+fycvZYBk6hxy9iyULsREAc
-   vYegjsJJYkj9jLUGtxlcNAhLSRBQu2lVHdpwJL0y/etLY3KwdbJmZmVfz
-   zk43xdKxt4rGbRf9LvaJUt76wWZuVJdxi8cnv3bgqcoarBUGYaOVttyhc
-   gQqTuLCXXgeZ2OzeZarLbbv0nOUGw983fDtzc+U2qj6l9YbolJPQOSPK6
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="342752959"
-X-IronPort-AV: E=Sophos;i="5.98,295,1673942400"; 
-   d="scan'208";a="342752959"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2023 11:11:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="677072639"
-X-IronPort-AV: E=Sophos;i="5.98,295,1673942400"; 
-   d="scan'208";a="677072639"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by orsmga007.jf.intel.com with ESMTP; 27 Mar 2023 11:11:46 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 27 Mar 2023 11:11:45 -0700
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 27 Mar 2023 11:11:45 -0700
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21 via Frontend Transport; Mon, 27 Mar 2023 11:11:45 -0700
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.49) by
- edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.21; Mon, 27 Mar 2023 11:11:44 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HyFhoxxAqDGo/5S2F+JjtZuk5f1ESglUenoE3ZNY1S8kjx6qpjCaa+TCL/aCRpQUAjZp93VRSTGT6EKq9uLCns/V++9DgE/ONLgHihOcTyt86RpXUvPF/lNPklMtNr0RFcnlbI915aJGv7HqLx00gH3117cNNX/3qj2t+m4wQySPjyq6FI8iCv/xptqhoMFD0GjS05A9h2xkePohDIs8GPaHh9n9vPsdcrJVYU1y7SR1Ig8ArV9kgX1YdXBs3RnT5aOdr1OvxfCL5BOL/5cSiY94xjpzBH2QpLRSM2MBE4PZf7U0w/gTPJlwcWS+XLZZS/cK/8+SgH6Ujpkji/zDBQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6gLsXOsLUH3S4+h37r8zhItmiJtXGMIyWV6YdVcYT8k=;
- b=StZ9LD8vcCTfPB4ZjBUe9JzgeNvPXTYeo/YeBmjYzqr2wb+BgHKW4RK88ShBbh7GEy/UQ66o0wfYTAOEkkG4aBYo/qeVXFwfbMDv0BubIxvLORs7DkH1kkpjFOjpkSkR+mIaHj+FNirFKs/Rw7whPuU8Jf0+ap1eGdF5BDrBcsaehPkrs3j5yoNYnlj3jvt+ozGC+qwD6k6BFmXL7J/IfTt94ChN0b3rRGo1MDtB2KE899j2L/ayml+smRcfYw3CiLyWNoUVMx49q5Ec5WJ4BIMhFdRS2CH9zZq7rcdVkXciQy/VUD2Xv5lvvL8nKJ13cc6nXrI0eHkpB3ImufuCWg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MW5PR11MB5810.namprd11.prod.outlook.com (2603:10b6:303:192::22)
- by DS0PR11MB8205.namprd11.prod.outlook.com (2603:10b6:8:162::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.30; Mon, 27 Mar
- 2023 18:11:43 +0000
-Received: from MW5PR11MB5810.namprd11.prod.outlook.com
- ([fe80::9121:8fa8:e7d9:8e46]) by MW5PR11MB5810.namprd11.prod.outlook.com
- ([fe80::9121:8fa8:e7d9:8e46%8]) with mapi id 15.20.6178.038; Mon, 27 Mar 2023
- 18:11:43 +0000
-Message-ID: <5ea54045-e5d6-720f-5b37-5f019c147a66@intel.com>
-Date:   Mon, 27 Mar 2023 20:11:35 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: linux-next: duplicate patch in the pm tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-CC:     Aymeric Wibo <obiwac@gmail.com>,
+        with ESMTP id S231266AbjC0UcC (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 27 Mar 2023 16:32:02 -0400
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13A402685
+        for <linux-next@vger.kernel.org>; Mon, 27 Mar 2023 13:32:01 -0700 (PDT)
+Received: by mail-qt1-x834.google.com with SMTP id d75a77b69052e-3ddbf70d790so957671cf.1
+        for <linux-next@vger.kernel.org>; Mon, 27 Mar 2023 13:32:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1679949120;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=V8buFQZRwGFYWuvgXw7mTs6dL6p4jwzsNfT9CCqkkZA=;
+        b=XQ+WGNLz3dJeMw66PPqfzOvsE2XAhks+3i8XyV2k43cBtb7EdczGg64gF39vCO6tg2
+         N0FKgvlJSIa6iY9815LbySCwLB93QMseqUMarU4VqpG0EsbOQus3yedenTauDQ1s38Wp
+         osPBUnfiloCadZNqVaxFRRhfEfH19L5/YqknYY3596IPRsCsUDsUXcqtbmKtED59FmKU
+         0GAbtgqVMKFKIky9FuPzBfAJQ/Oiiggsp81ctaCkyOxQFDQ2F79hmGWY39Vba96CqEeu
+         VfTUKp8WPgHDLYljPTftYHtNB7NP90OMrwcxMjkwVs9kvUUY7XkTWfnRSfur01wqwxki
+         0HpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679949120;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=V8buFQZRwGFYWuvgXw7mTs6dL6p4jwzsNfT9CCqkkZA=;
+        b=b8g4sbnb1uZivcyVJ3MuZTf7aK7RdLThTvnz0WjACaK8IaPbINyWfhmZ8quJk3EUSU
+         93Kv8Y3qJdTaxmPXVrtcnx1jl+Uw0io9KLeeaB7PTfgJeZEW8Xl4R9SwSm6fxPcAVkgp
+         xTGYn/4SiwSp1sBn5L8Npm3kJHKK2F2LTCTaDe17LaW5kLi9BNiBKRgjTn4eprQvEXjO
+         bo8FP1sDYO38qJ1gQJFDVZGPAjTQJXh1jMLEunxIWIYQfNH6jTyJ2PsRSysriXc8KuFT
+         iMJSRcvrff9lN4U3iYZtM9BsspnBEJ8CNyK+B6TzQlg3LLpuyIHByXBohf4VwVpIofXk
+         749w==
+X-Gm-Message-State: AAQBX9cr1qUehc2EiLrwtak8sUrEa2YaavAEBG8mV5rKAgi4Vw/OWuj5
+        7nHXLd7ZV0Kg3ujmvcB4z6oRtIb+LWdOVtIY1vgUdg==
+X-Google-Smtp-Source: AKy350YZO8lsOPSUs+lk54v79nIqLBR/D8f0TspIw1KHdh/9jUq0GjTwwuRjEz1NHyU9Pz7L+CfuNdmxNQPnCoi1kBE=
+X-Received: by 2002:ac8:7fc3:0:b0:3e2:3de:3732 with SMTP id
+ b3-20020ac87fc3000000b003e203de3732mr70271qtk.7.1679949119939; Mon, 27 Mar
+ 2023 13:31:59 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230317095025.49aa34f9@canb.auug.org.au> <20230322083956.5c051777@canb.auug.org.au>
+ <CAP-5=fUHqrQWPjk7QJB=r2Gzj7z5X3nL4bRuBAKzy2HvdSAr-A@mail.gmail.com>
+ <20230323095437.1ecccec1@canb.auug.org.au> <ZBxTyLqkIaoVhIXU@kernel.org>
+In-Reply-To: <ZBxTyLqkIaoVhIXU@kernel.org>
+From:   Ian Rogers <irogers@google.com>
+Date:   Mon, 27 Mar 2023 13:31:48 -0700
+Message-ID: <CAP-5=fXx=xRfmQFk-MbkdO9SYd3ZgCDfUscO2srfAQU0aThk_A@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the perf tree
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-References: <20230327074547.5c418918@canb.auug.org.au>
-Content-Language: en-US
-From:   "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>
-In-Reply-To: <20230327074547.5c418918@canb.auug.org.au>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR3P281CA0017.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:1d::20) To MW5PR11MB5810.namprd11.prod.outlook.com
- (2603:10b6:303:192::22)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MW5PR11MB5810:EE_|DS0PR11MB8205:EE_
-X-MS-Office365-Filtering-Correlation-Id: b820216c-085a-428d-d297-08db2eeeb804
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: sMIw8uIxV9l+CmC/sosUkax2BzG730pLO03gSZ0yOW55bImtOxiH8+Uvp+5be2rtnu+MYN55c9JFm4+v8UlVyLiZquVFWATI9ip0J61kn3G1/FrvrIQhqCr28Egi5qyMgadgwWZBIYzCwSvB4GOP1smuUgkbtH4IDXVWLv0YUpeoiYlvRrh+iR3U5VeiZe2jGMom8ex3tLwjtWMi9Oii3faXcS9CAoZ+VuDg/83cHfUVPt/ABLelyeXJiS80XV0QOTK1ZAs9NINbFl7Klw4Tt+HHogUimVtU3rScCJwu837g8YBYKHXF+NRJUUjtRwBx63giTGwjvIsGDdaLXNXi9AUycqvEU/Xe0jY9X4BAXUjGRtPv+j2y7wU/qOY5MwZzXVyZ7ocLFULQa+7xXBMOHHpya10+pdAoaAdqlUDDbzYHclNUnO+YDmbIaBZI3uNJ3sanZG+y6cziTfgGmI7i/08CMxcRqOrpn65Wlu3bdMZn8E2jQCVCmiuj03Pr+XbM/sMlFc3gqpd6uhgg+lYOtK35L1EvX2GoIQCr2ZBHEoAcT6rtKKmliQDzJ5c0dWT0lTYO+jGpfLQdN48X4A9PxymWNPGeVAo6z2B15vH3Cdtl2aGU2UYMrlF1wA5uXAf2XiSbAeFFvaRgkHuocUog1A==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW5PR11MB5810.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(346002)(396003)(366004)(136003)(39860400002)(376002)(451199021)(6512007)(6506007)(26005)(54906003)(6486002)(316002)(6666004)(4326008)(186003)(53546011)(6916009)(66476007)(66556008)(66946007)(8676002)(478600001)(31686004)(41300700001)(86362001)(5660300002)(82960400001)(38100700002)(2906002)(36756003)(4744005)(2616005)(31696002)(8936002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?d3dWN2toMG1YMVFCcEszYiswYlVVSHJOZzZidTdKa3JWVVMwd2tHRnordnRx?=
- =?utf-8?B?N21nRE9WcCtqN2ZkdmVWNnVVR3ZYTXJ2TS9MR0N2YzVESFNMbUtBdWpqbVND?=
- =?utf-8?B?bnc0UTlqcGgwVHVPYlJQS3luV2V1VTNZejNIOW9EZWN0UWZQUy9oUEFCTGVs?=
- =?utf-8?B?ZmxJV2VhZGh1VGN1b2tJT2lxV2lVVlFOK0NLMi9sdFFkaW00LzRpcmNJcytp?=
- =?utf-8?B?cFJHMVlvRHdGeWRTVlBMalFCT2pvaUVrYmpKOTJ1SktoVUZrdm9KY3RNeVlK?=
- =?utf-8?B?NEY3SGJlMGEzbTkwSGRyVFE3TmtlSjdVd3VFVlhNaXZRcjd3eXBibGxkVCtl?=
- =?utf-8?B?S3NNSzBLNmE3MHNJMW9jQU91OUh6NWRQQkxndWFYVHR6dThKWUpTRENHYU1F?=
- =?utf-8?B?RnRxeTEwczR6VitsZVN1enVQait4L3J0aEpScFdoREtmMXRveDZGai9BK3lB?=
- =?utf-8?B?dllqaGl4TU5FOWVUN2xiclRaU0lBaUd6anV2cUR1STczUzNHcHVPVzZwWUN0?=
- =?utf-8?B?Tkw5RWlIUlJZcFNzK2xUQWdrRUtUcVhJSUZpN1J5UTFQdytPa0ZzMzNwTFBt?=
- =?utf-8?B?b2tkckNjQnNHakg2a2UyZUdjN0s2TWZBcGhFZjlaSWdKeEdzN0w4SkphQXEw?=
- =?utf-8?B?WDltT1FKY0J1REFYaERIMW9nL01GaVh6aDJ3THN5VUpUT0xzcmxpamZNcFNG?=
- =?utf-8?B?akpoZm80NS9QYkVjd3RUV1VoQTNEeWVxM2syZEZ0N24vcGg5MW8yMXNYZ29I?=
- =?utf-8?B?Z3g2dlpFdExRdnNHTXBWc09kRmZQVVVRY2g0bzg0OU00OHVYQXdNQXRhZzdG?=
- =?utf-8?B?MWJqck1lWFJEcTlGRXBrRHJsOUxpUzRPc1JpU3ZPSW9QTEZWQUtHakxZeHNo?=
- =?utf-8?B?SFpHNWJNWVZEMWFuQlhzVXpwRUlZVWM5c1Z6MTBHTVo0RnJsT1B0VHZDNnNo?=
- =?utf-8?B?K0Izenp1NExyZEZsV041cEltdG9FazE1MVI0b2g3dTVoSk4vZEttUytqTTVv?=
- =?utf-8?B?cnhRVXh5UmVNaVdTZ1BJNjdtbStDWURxR1dCOEN0ZzNrejJhWkYyNGo4SnJ3?=
- =?utf-8?B?T2h2S2tVcS9RL2JRb1g2clBZK2VzbVU2NUFxbTJtcklRQVN6Z0dtYklXdEZJ?=
- =?utf-8?B?UkF1Y3BuMFJvYUpNYmhZWXNON2tNa3hycVlXQzFpNmh6YUEzd01Ub0RlTmRV?=
- =?utf-8?B?MzNDVnRDYmp4KzlVU211UjBtN0FpaXhDbWx1OVBzd3c0Uk5PYzlCdkhYb0Zi?=
- =?utf-8?B?d0J3Vm10dVFvc3NsaHJVSjA4bFppUEpyVG1JcHFBb0RETy95YjBHK3hTeUF2?=
- =?utf-8?B?UzB4S0tOT2tiOHYrREwxWmRaQnJDbm9rblR4WE1rbmtzWDQ5TXJwSzFtcnZP?=
- =?utf-8?B?dUNHeTVUZFQwamttYUE3ZWhQd1hSeVJYaEEvZE8wNEdpZnh2SVRES2xjR2pL?=
- =?utf-8?B?VDJ1NVk1MU5qeDE1TnVCZ0ljdmZ6UUR4d05FaXB4R2Jrck5CMDRxVGJWMjdl?=
- =?utf-8?B?NDc4a1VMUHlzayt0SFozUlhab2dYWEJOY0ZVQUpHemREaFdZV2tOQXlIUitn?=
- =?utf-8?B?MXhkc256dk4vNkpTVUJJY0QxQXNsRGc4QnFOdmVYRnlGSFBXYkFQNEttZjBX?=
- =?utf-8?B?OGJTeW82NlU0eTlKQVNVazRLaFFuZnBpc2hUcmJRc1BwVk4xRytDSGs1SkNy?=
- =?utf-8?B?YURPNUw1NzZLbFpMUitlTURndmFyS0J0Y0NsRmRpME9OMWk3VGQxRDdITWda?=
- =?utf-8?B?blVBQWtjd2p5RkV5T0pyWGNaWVpCOS9BRWNtVHpUMlIyZlY4Y1hEbWIvUGhx?=
- =?utf-8?B?dmNUV3FKVnJwM0tSMmxtNjh6ZW5qdXppNE04bDVpNnRoZTB2U0xQZHlUNmZE?=
- =?utf-8?B?cmNMUWVLQjRROGFoUDhEaUgvWkc4SGdqV0ljVGpYbDBEUzFKOEhZcFJVd29F?=
- =?utf-8?B?UlBXMUFyVlhYOGhlUE4rUFBxOXhDMHNWRENnS1BqMzlJSVpwTFArdmhLSjQz?=
- =?utf-8?B?MVBMQzV2emJZUDE2L1ZxSGFkSXExWldLQUg0UjNMMmxKWTlhN2NCMk9oK0t1?=
- =?utf-8?B?QnN5Zzk2L3RmdDNJTEFRanNWbUs0RVpUMlZYaHN3ODArekxCNjk4aFpRMUNn?=
- =?utf-8?B?OXZUVjJpYXgrb01MYXFXN3hkZXJ3R21CN3VEUFREdmVkU1ZvZlcrN3EwVVU1?=
- =?utf-8?B?b1E9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: b820216c-085a-428d-d297-08db2eeeb804
-X-MS-Exchange-CrossTenant-AuthSource: MW5PR11MB5810.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Mar 2023 18:11:43.1380
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: u7uShfNSfgED3UAxmg2H1mVNAL8Ivc0yM7kxtmp1S4X4w8PCZnyy/GBzmah3qyyD0zD8/m/aggq3WPm8La3AOd+rX/ERQqS+bPBPgBKlOZQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR11MB8205
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        namhyung@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -162,21 +74,195 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 3/26/2023 10:45 PM, Stephen Rothwell wrote:
-> Hi all,
+On Thu, Mar 23, 2023 at 6:27=E2=80=AFAM Arnaldo Carvalho de Melo
+<acme@kernel.org> wrote:
 >
-> The following commit is also in Linus Torvalds' tree as a different commit
-> (but the same patch):
+> Em Thu, Mar 23, 2023 at 09:54:37AM +1100, Stephen Rothwell escreveu:
+> > Hi Ian,
+> >
+> > On Wed, 22 Mar 2023 11:37:31 -0700 Ian Rogers <irogers@google.com> wrot=
+e:
+> > >
+> > > On Tue, Mar 21, 2023 at 2:40=E2=80=AFPM Stephen Rothwell <sfr@canb.au=
+ug.org.au> wrote:
+> > > >
+> > > > Hi all,
+> > > >
+> > > > On Fri, 17 Mar 2023 09:50:25 +1100 Stephen Rothwell <sfr@canb.auug.=
+org.au> wrote:
+> > > > >
+> > > > > After merging the perf tree, today's linux-next build (native per=
+f)
+> > > > > failed like this:
+> > > > >
+> > > > > Auto-detecting system features:
+> > > > > ...                         clang-bpf-co-re: [  [32mon [m  ]
+> > > > > ...                                    llvm: [  [31mOFF [m ]
+> > > > > ...                                  libcap: [  [32mon [m  ]
+> > > > > ...                                  libbfd: [  [32mon [m  ]
+> > > > >
+> > > > > make[1]: *** Deleting file '/home/sfr/next/perf/util/bpf_skel/vml=
+inux.h'
+> > > > > libbpf: failed to find '.BTF' ELF section in /boot/vmlinux-6.0.0-=
+5-powerpc64le
+> > > > > Error: failed to load BTF from /boot/vmlinux-6.0.0-5-powerpc64le:=
+ No data available
+> > > > > make[1]: *** [Makefile.perf:1075: /home/sfr/next/perf/util/bpf_sk=
+el/vmlinux.h] Error 195
+> > > > > make[1]: *** Waiting for unfinished jobs....
+> > > > > make: *** [Makefile.perf:236: sub-make] Error 2
+> > > > > Command exited with non-zero status 2
+> > > > >
+> > > > > To be clear this is a native build of perf on a PPC64le host usin=
+g this
+> > > > > command line:
+> > > > >
+> > > > > make -C tools/perf -f Makefile.perf -s -O -j60 O=3D../perf EXTRA_=
+CFLAGS=3D-Wno-psabi
+> > > > >
+> > > > > (I could probably remove the EXTRA_CLFAGS now that I am building =
+with
+> > > > > gcc 12.2)
+> > > > >
+> > > > > I don't know which commit caused this.
+> > > > >
+> > > > > I have used the perf tree from next-20230316 for today.
+> > > >
+> > > > I am still getting this build failure.
 >
->    bb796d5112d2 ("ACPI: resource: Add Medion S17413 to IRQ override quirk")
+> > > The build failure is intentional as not having BPF skeleton support i=
+n
+> > > the perf tool will remove features. I've just sent:
+> > > https://lore.kernel.org/lkml/20230322183108.1380882-1-irogers@google.=
+com/
+> > > Which will recommend adding NO_BPF_SKEL=3D1 to your build options whe=
+n
+> > > this failure occurs. I didn't think a features test was appropriate
+> > > for this as the feature test would basically replicate the vmlinux.h
+> > > generation and I didn't want to move that support through the build
+> > > system.
 >
-> This is commit
+> > I was trying to understand why this step fails, but from the error
+> > messages, it seems to require something to be present in the distro
+> > supplied kernel image?  Is there something missing from the ppc
+> > build process?  Or toolchain?  Why is it looking at the installed
+> > kernel and not the built kernel?  Does the perf build now depend on the
+> > kernel being built first?
+> >
+> > I will add NO_BPF_SKEL=3D1 to my build from tomorrow, but surely that
+> > means that we miss some perf build testing :-(
 >
->    2d0ab14634a2 ("ACPI: resource: Add Medion S17413 to IRQ override quirk")
+> Before this BUILD_BPF_SKEL wasn't on by default, so you're back testing
+> as much as before.
 >
-> in Linus' tree.
+> Having said that, we need to improve the warning and I processed a patch
+> from Ian to that extent:
+>
+> https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/commit/?h=
+=3Dtmp.perf-tools-next&id=3D12a83df53444165d39d3e09fcd9627e7bec7828e
+>
+>  $(SKEL_OUT)/vmlinux.h: $(VMLINUX_BTF) $(BPFTOOL)
+>  ifeq ($(VMLINUX_H),)
+> -       $(QUIET_GEN)$(BPFTOOL) btf dump file $< format c > $@
+> +       $(QUIET_GEN)$(BPFTOOL) btf dump file $< format c > $@ || \
+> +       (echo "Failure to generate vmlinux.h needed for the recommended B=
+PF skeleton support." && \
+> +       echo "To disable this use the build option NO_BPF_SKEL=3D1." && \
+> +       echo "Alternatively point at a pre-generated vmlinux.h with VMLIN=
+UX_H=3D<path>." && \
+> +       false)
+>  else
+>         $(Q)cp "$(VMLINUX_H)" $@
+>  endif
+>
+>  Which improves a bit the situation.
+>
+> We could check if bpftool is available and if not, suggest installing
+> it.
+>
+> If it is available, we could check if /sys/kernel/bpf/ is available, if
+> not suggest using a kernel with CONFIG_DEBUG_INFO_BTF=3Dy, as most distro=
+s
+> have by now.
+>
+> As to the features this enables:
+>
+> =E2=AC=A2[acme@toolbox perf-tools-next]$ ls -la tools/perf/util/bpf_skel/=
+*.c
+> -rw-r--r--. 1 acme acme 5581 Oct 17 09:07 tools/perf/util/bpf_skel/bperf_=
+cgroup.bpf.c
+> -rw-r--r--. 1 acme acme 1764 May  5  2022 tools/perf/util/bpf_skel/bperf_=
+follower.bpf.c
+> -rw-r--r--. 1 acme acme 1438 May  5  2022 tools/perf/util/bpf_skel/bperf_=
+leader.bpf.c
+> -rw-r--r--. 1 acme acme 2290 May  5  2022 tools/perf/util/bpf_skel/bpf_pr=
+og_profiler.bpf.c
+> -rw-r--r--. 1 acme acme 2164 May  5  2022 tools/perf/util/bpf_skel/func_l=
+atency.bpf.c
+> -rw-r--r--. 1 acme acme 9017 Aug 26  2022 tools/perf/util/bpf_skel/kwork_=
+trace.bpf.c
+> -rw-r--r--. 1 acme acme 9251 Mar 14 08:33 tools/perf/util/bpf_skel/lock_c=
+ontention.bpf.c
+> -rw-r--r--. 1 acme acme 6109 Feb 27 17:47 tools/perf/util/bpf_skel/off_cp=
+u.bpf.c
+> -rw-r--r--. 1 acme acme 4310 Mar 15 11:08 tools/perf/util/bpf_skel/sample=
+_filter.bpf.c
+> =E2=AC=A2[acme@toolbox perf-tools-next]$
+>
+> For instance, take a look at these csets:
+>
+> =E2=AC=A2[acme@toolbox perf-tools-next]$ git log --oneline tools/perf/uti=
+l/bpf_skel/lock_contention.bpf.c
+> d24c0144b1dde00f perf lock contention: Show per-cpu rq_lock with address
+> 1811e82767dcc6eb perf lock contention: Track and show siglock with addres=
+s
+> 3ace2435bb93445e perf lock contention: Track and show mmap_lock with addr=
+ess
+> 17535a33a9c1e4fb perf lock contention: Fix compiler builtin detection
+> 1bece1351c653c3d perf lock contention: Support old rw_semaphore type
+> 3477f079fe70b3c9 perf lock contention: Add -o/--lock-owner option
+> ebab291641bed48f perf lock contention: Support filters for different aggr=
+egation
+> 5e3febe7b7b99f94 perf lock contention: Support lock addr/name filtering f=
+or BPF
+> 529772c4df286159 perf lock contention: Support lock type filtering for BP=
+F
+> 688d2e8de231c54e perf lock contention: Add -l/--lock-addr option
+> eca949b2b4addd94 perf lock contention: Implement -t/--threads option for =
+BPF
+> fd507d3e359c7e06 perf lock contention: Add lock_data.h for common data
+> c66a36af7ba3a628 perf lock contention: Do not use BPF task local storage
+> 433b31fa00797a2a perf lock contention: Fix a build error on 32-bit
+> c1da8dd5c11dabd5 perf lock contention: Skip stack trace from BPF
+> 6d499a6b3d90277d perf lock: Print the number of lost entries for BPF
+> 6fda2405f414b24a perf lock: Implement cpu and task filters for BPF
+> 407b36f69efbdccf perf lock: Use BPF for lock contention analysis
+> =E2=AC=A2[acme@toolbox perf-tools-next]$
+>
+>
+> or:
+>
+> =E2=AC=A2[acme@toolbox perf-tools-next]$ git log --oneline tools/perf/uti=
+l/bpf_skel/kwork_trace.bpf.c
+> acfb65fe1d11a97f perf kwork: Add workqueue trace BPF support
+> 5a81927a407c050a perf kwork: Add softirq trace BPF support
+> 420298aefe94840f perf kwork: Add IRQ trace BPF support
+> daf07d220710a3c8 perf kwork: Implement BPF trace
+> =E2=AC=A2[acme@toolbox perf-tools-next]$
+>
+> So we need to fine tune this detection of needed components to build
+> these features, in time for the v6.4 merge window, that is why we
+> decided  to make this opt-out to hammer out problems.
+>
+> Other arches probably will hit some of these problems, lets try to
+> encourage others to try what is in linux-next.
 
-The duplicate patch should be gone from linux-next tomorrow, sorry for 
-the trouble.
+Just to throw out, perhaps we could ship a vmlinux.h in the perf
+source tree. We could also validate it with something similar to the
+header file checking. This would remove the bpftool and properly built
+kernel issues. It may make a package maintainer's life easier.
 
+Thanks,
+Ian
 
+> - Arnaldo

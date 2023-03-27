@@ -2,47 +2,44 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5D106C9AAB
-	for <lists+linux-next@lfdr.de>; Mon, 27 Mar 2023 07:02:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7A046C9AD1
+	for <lists+linux-next@lfdr.de>; Mon, 27 Mar 2023 07:12:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229887AbjC0FCk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 27 Mar 2023 01:02:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49840 "EHLO
+        id S232056AbjC0FMc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 27 Mar 2023 01:12:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjC0FCj (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 27 Mar 2023 01:02:39 -0400
+        with ESMTP id S231980AbjC0FM3 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 27 Mar 2023 01:12:29 -0400
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89F113A8C;
-        Sun, 26 Mar 2023 22:02:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8B505262;
+        Sun, 26 Mar 2023 22:12:20 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PlLKP1vrlz4xDk;
-        Mon, 27 Mar 2023 16:02:33 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PlLXf4yQ0z4x5c;
+        Mon, 27 Mar 2023 16:12:18 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1679893354;
-        bh=gxoGW8cn7vBlEWmFx0Ppf1kiasx+hNOehOeHL3jepAs=;
+        s=201702; t=1679893938;
+        bh=NmVwBuNMuoG+achc19MswavOU5HtJpHUdNA2NB7aQz8=;
         h=Date:From:To:Cc:Subject:From;
-        b=rIATjPQUN3CzO9oHem+hSL7cnUe1ixq5PasAl9+BE4X54ULrwZa4Uei0HIokcaTV1
-         gPOEMRwccz+v3mVLBMHyfkDwccGQ3pAJwy1FH+Z6FLMBLXRFUZBep787JkuLgGHwzS
-         C7QfO32Os60ViRhofQNRiR2PX4L3qx1DXLOL7/3/AFHvHkvibt9g/94JCCTM6Y0zoR
-         AtBwKFSpPsEhhlKuKnYcdPz8TelXlls5RXzBxzp7I//1+TB96FfDoAi10r0/X2jWT6
-         a2vKIqtYkOI5Aao/1oeoVewNNs9lgsiTHssc3Sf4N3qDItoJzKTnWgdBFOtXB577fC
-         0IbRBxn18FKag==
-Date:   Mon, 27 Mar 2023 16:02:32 +1100
+        b=uuJ+JrYswWIlpt+GNgeEbWRQC0IuZaRjCRSou3kD+Zsx3UXa37tAG7oEKc5PraMF2
+         7EDDuiYr3RDgdTfq/d/++R5MAmA07GE2XTZ9xPZQa/wZM7MsJvzJY79ikLfoT+pFRs
+         EGfiUoF/jNpFKYl0YDfEdblW1WdsXHBMKIGB8sQ0xZvNrCvir6KDkemZbz2OgkFZKB
+         VwT/8yi14O3I4Z12LCyHESR1ZRlh0P7tZBQtSvc77t0CK58CTULIlvH2djPcjMDH4j
+         bliguqJaLmcytZjQsjKbJoCef+sH+W4s1RDRV91ExlInkuKw4ZckNsjFCWP1TBP+tv
+         R2Mt8XattaL4Q==
+Date:   Mon, 27 Mar 2023 16:12:17 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Greg KH <greg@kroah.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Josue David Hernandez Gutierrez 
-        <josue.d.hernandez.gutierrez@intel.com>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Rob Herring <robh@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the usb tree
-Message-ID: <20230327160232.6119b93f@canb.auug.org.au>
+Subject: linux-next: build failure after merge of the mips tree
+Message-ID: <20230327161217.7cc4b439@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/E/2j.JLfKbNNGp5Ql=8YJbc";
+Content-Type: multipart/signed; boundary="Sig_/uPpYLtJqbGBuvCx5WFUe/Yj";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
@@ -53,45 +50,45 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/E/2j.JLfKbNNGp5Ql=8YJbc
-Content-Type: text/plain; charset=US-ASCII
+--Sig_/uPpYLtJqbGBuvCx5WFUe/Yj
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the usb tree, today's linux-next build (s390 allmodconfig)
-failed like this:
+After merging the mips tree, today's linux-next build (mips
+cavium_octeon_defconfig) failed like this:
 
-drivers/usb/host/xhci-pci.c:91:13: error: 'xhci_msix_sync_irqs' defined but=
- not used [-Werror=3Dunused-function]
+arch/mips/cavium-octeon/octeon-irq.c:2893:35: error: assignment to =E2=80=
+=98u64=E2=80=99 {aka =E2=80=98long long unsigned int=E2=80=99} from =E2=80=
+=98void *=E2=80=99 makes integer from pointer without a cast [-Werror=3Dint=
+-conversion]
 
-(reported here: http://kisskb.ellerman.id.au/kisskb/buildresult/14902506/)
+(reported here: https://linux.kernelci.org/build/id/6420fc4409ffd05fb69c951=
+a/logs/)
 
 Caused by commit
 
-  9abe15d55dcc ("xhci: Move xhci MSI sync function to to xhci-pci")
-
-The function is only called if CONFIG_PM is set, but defined
-unconditionally.
+  ed6a0b6e9fd7 ("MIPS: octeon: Use of_address_to_resource()")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/E/2j.JLfKbNNGp5Ql=8YJbc
+--Sig_/uPpYLtJqbGBuvCx5WFUe/Yj
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQhI2gACgkQAVBC80lX
-0Gwa1Qf8DBNK6PMVd9sPAn0aIWVA4jHwLeVsWEalo4SufKwWY2zzhi7QLopSyKt4
-X/mjweEYuw4XMfxeW2tK2KdWucXv5ja9C3BQlXVGsTlcrVlJdrbH2pMZRWHCwuUE
-uvzX9Sg20d1opl49NuT8fupKC6/mz/GCMZlmMyIg6nJbvaMp9emykOJeZpjdg74k
-fk+ZHwtaGvR4b2G9Qstf3lD2tDPcoyAyUzjXranqHXKQK7oDT7wDO4LZ8gclErK7
-kpvPTSLnwpA6AGVaoU6LiXU4uid+hVOFsUSgjCh/xmhDYUD3NbqxCcvHGR0eO8nX
-095NdUOxeHUcQviISmWYVRYL/NE/jw==
-=vdz+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQhJbEACgkQAVBC80lX
+0Gy5QQf/UYmwkLBKKOEK2XjWHjJFg499M5mG+t30MPjFB141UZsc/6ifm/NzbdPb
+hGGn+EB1Vhz7Na0e/720GwefDanIZpfapHxeAPQPwrcyI/JYz0b8AsYVmBh30xlD
+9UQARNRXHXpqCVmJGCftslK0cvARG/JQXpsftAlBnzr5TDFEymq/1jwBvqY9L2E6
+yTIeytGB0W7DrLh4x+rK+gwceSI/omVn6NJpPgMozGGfeeV/506CCiJ0Syga3XXE
+J7BcwrV/hd+bo91/95XdUTc4fdBv+z38SlXtRiwTtAYQYexXT0FI9FEZG9s5KMG7
+3YdZusQPJITEBJ/mB+MCyCMKSm0rRg==
+=RdTd
 -----END PGP SIGNATURE-----
 
---Sig_/E/2j.JLfKbNNGp5Ql=8YJbc--
+--Sig_/uPpYLtJqbGBuvCx5WFUe/Yj--

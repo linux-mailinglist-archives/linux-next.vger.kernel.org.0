@@ -2,78 +2,87 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26D706CAA88
-	for <lists+linux-next@lfdr.de>; Mon, 27 Mar 2023 18:26:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C46016CAC98
+	for <lists+linux-next@lfdr.de>; Mon, 27 Mar 2023 20:04:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232220AbjC0Q0k (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 27 Mar 2023 12:26:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38904 "EHLO
+        id S229550AbjC0SEB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 27 Mar 2023 14:04:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229677AbjC0Q0g (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 27 Mar 2023 12:26:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61C661BE8;
-        Mon, 27 Mar 2023 09:26:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 01F0BB8170C;
-        Mon, 27 Mar 2023 16:26:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80DC2C433EF;
-        Mon, 27 Mar 2023 16:26:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679934392;
-        bh=4pIuc9A52G9w0T0G5dmVhtnXgoYMhwTan2323fMt7Ww=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KJBNAQI7hUUfZvr3HqpZUDiESll5GYalC0D1MjvZfRLn+J/I1TYxg9MNKBW9A1ICV
-         RzxSHjgBpimysipDCQjrxW7R/oGCp8P6fqYgmzeYySKjZEs2DxHTG4LZasBAcK90SQ
-         SR3egae/XnNHtO5Xaf7+aJ07j1f0hRcVfleHK16qXMOWuWncZc80tWku2rRQfAbNvV
-         NplrroNp3Za1HoCNspaoWqB+3lMkDpLBK6FGKCEkZLfVA+53yHuGJzJh+tRNzqGEhU
-         zLGjlqTXmkB2RXpkXHWMBYUCYOR7cfiJaGCiNOCLxdeDcBHK/VR3STp4lqPo6wqxky
-         6b7YBfNzxCwjw==
-Date:   Mon, 27 Mar 2023 09:26:30 -0700
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Jens Axboe <axboe@kernel.dk>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warnings after merge of the block tree
-Message-ID: <20230327162630.wmxpycxhllt4clpt@treble>
-References: <20230327120017.6bb826d7@canb.auug.org.au>
+        with ESMTP id S229462AbjC0SEA (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 27 Mar 2023 14:04:00 -0400
+Received: from mail-il1-f206.google.com (mail-il1-f206.google.com [209.85.166.206])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61CFC2D60
+        for <linux-next@vger.kernel.org>; Mon, 27 Mar 2023 11:03:59 -0700 (PDT)
+Received: by mail-il1-f206.google.com with SMTP id a17-20020a921a11000000b00325f9878441so3434842ila.7
+        for <linux-next@vger.kernel.org>; Mon, 27 Mar 2023 11:03:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679940238;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=PtFBdDBuZWHwp8r6frrUdQqAmuJLKC58weRQJuwp+G4=;
+        b=UduNr8UW+kIl6QFUiWu+Sl7iAO6zFB7wZbqMc5Jy4W31IIen5Pwcu5CjWrpZygVF2R
+         jssYcevKTMt6gRZQOMdqfgKmIe5jQ/qN5sdbeoOFwxFnggNWcLoOB0gQQ7NxRyLzizGF
+         rhfL+zMNI/IgPGW4g+nKSfILiMrbStTA2SSQW/76SNEHw89GQ+E5wvxDpCv8wQkoHF/h
+         7u0jElfJavzJVafyYwrMt4OxRR4wbGF1T1bidg/EKt0JYwi92FYDGL6CZzUUgA5dnxPl
+         krWN+rVzs5CYrxamKtdrBTEuFg0XC81TYiwM11Opv/xEVfZ/vEMTfPFrYpZ1QFY9D2i2
+         Cb7Q==
+X-Gm-Message-State: AO0yUKWoGbKmEVey6Iq8m42nBLSxk81K4qoH18tQUiwetpCgNlm4dfLk
+        3cRxhojND1uiyVhk8GEumwNeQrSXadjMcwhG1SDmYQ683Saq
+X-Google-Smtp-Source: AK7set89N7ikLO8rxpqpAce4FBxmvYkRm32tsnNSki0SuCecVYDVDT0zP19RMbezxQJVt9P8TlPTuwNwrwPUiQFnff2v4oxL5HWZ
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230327120017.6bb826d7@canb.auug.org.au>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:2208:0:b0:3ad:65e:e489 with SMTP id
+ o8-20020a022208000000b003ad065ee489mr5117760jao.1.1679940238739; Mon, 27 Mar
+ 2023 11:03:58 -0700 (PDT)
+Date:   Mon, 27 Mar 2023 11:03:58 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000002c916d05f7e591b7@google.com>
+Subject: [syzbot] linux-next boot error: general protection fault in corrupted
+From:   syzbot <syzbot+8fddae658688311a9edc@syzkaller.appspotmail.com>
+To:     linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        sfr@canb.auug.org.au, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.6 required=5.0 tests=FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 12:00:17PM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the block tree, today's linux-next build (x86_64
-> allnoconfig) produced these warnings:
-> 
-> lib/iov_iter.o: warning: objtool: .altinstr_replacement+0x0: redundant UACCESS d
-> isable
-> lib/iov_iter.o: warning: objtool: iovec_from_user.part.0+0xc7: call to copy_comp
-> at_iovec_from_user.part.0() with UACCESS enabled
-> lib/iov_iter.o: warning: objtool: __import_iovec+0x21d: call to copy_compat_iovec_from_user.part.0() with UACCESS enabled
-> 
-> Presumably introduced by commit
-> 
->   6376ce56feb6 ("iov_iter: import single vector iovecs as ITER_UBUF")
+Hello,
 
-I'm not able to recreate.  What's your compiler version?
+syzbot found the following issue on:
 
-It's complaining about a call to a "part.0" function, maybe the IPA
-optimization is moving the STAC to before the call.
+HEAD commit:    7c4a254d78f8 Add linux-next specific files for 20230323
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=14001a7ac80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=20fd034702e6edd2
+dashboard link: https://syzkaller.appspot.com/bug?extid=8fddae658688311a9edc
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
--- 
-Josh
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/dc0bbbecd2a5/disk-7c4a254d.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/6b2c8c7cfd4b/vmlinux-7c4a254d.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/ae312a388585/bzImage-7c4a254d.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+8fddae658688311a9edc@syzkaller.appspotmail.com
+
+mount: mounting selinuxfs on /sys/fs/selinux failed: No such file or directory
+mount: mounting mqueue on /dev/mqueue failed: No such file or di[   19.342818][ T4416] mount (4416) used greatest stack depth: 23336 bytes left
+rectory
+mount: mounting hugetlbfs on /dev/hugepages failed: No such file or directory
+mount: mounting fuse.lxcfs on /var/lib/lxcfs failed: No such file or directory
+Starting syslogd: [   19.633755][ T4426] general protection fault, probably for non-canonical address 0xdffffc000000005d: 0000 [#1] PREEMPT SMP KASAN
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

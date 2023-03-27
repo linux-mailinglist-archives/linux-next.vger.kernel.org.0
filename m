@@ -2,111 +2,99 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE3B76CA8A7
-	for <lists+linux-next@lfdr.de>; Mon, 27 Mar 2023 17:10:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A404E6CA97C
+	for <lists+linux-next@lfdr.de>; Mon, 27 Mar 2023 17:46:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232689AbjC0PKA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 27 Mar 2023 11:10:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56070 "EHLO
+        id S232758AbjC0Pqd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 27 Mar 2023 11:46:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232710AbjC0PJ5 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 27 Mar 2023 11:09:57 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 761C62D75;
-        Mon, 27 Mar 2023 08:09:56 -0700 (PDT)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32RE4gQk035101;
-        Mon, 27 Mar 2023 15:09:48 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=Haa1ahbXKuDgXKJ5hUlsNd69zw0QjFs2ThODvK2MJ0U=;
- b=rDDdmHtaFsQa+PYBV9mPVZcFCdNqGv26EWsON9BJSkZOCLJGXOmYRptN7xHT8pmcNZso
- 9sgbxYIYemTtPnvNqmBXjfIGyL/2GVwnAJGZm57QmIexAISSVynwLekwCfVGX1k3PbBR
- OCWM9zD2Hrj7XJ7AGoI9GA1HmQ0yWvF79lShwMHH5Yirx1trhM91bML3B07AlivDrVu8
- jjzqWmCCHcTMrHBLl6s3ZYSEe2+VUXWbRHLElZViWLDY4rOM7PHVaNJ1LPs2ecTj9HBl
- 9Ja9VrD6wuTmJu+PeOknG7JnBfvn6AlyZ3wGtlo/C9CIxxn71U5WM7bIQCEw3LU1iG1i LA== 
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pjb1ammh5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Mar 2023 15:09:48 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32R5QOjt020475;
-        Mon, 27 Mar 2023 15:09:45 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-        by ppma03fra.de.ibm.com (PPS) with ESMTPS id 3phrk6jhe2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Mar 2023 15:09:45 +0000
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32RF9gaX27001324
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 27 Mar 2023 15:09:42 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1C1CA2004E;
-        Mon, 27 Mar 2023 15:09:42 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 92A2720043;
-        Mon, 27 Mar 2023 15:09:41 +0000 (GMT)
-Received: from localhost (unknown [9.171.67.53])
-        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-        Mon, 27 Mar 2023 15:09:41 +0000 (GMT)
-Date:   Mon, 27 Mar 2023 17:09:40 +0200
-From:   Vasily Gorbik <gor@linux.ibm.com>
-To:     Greg KH <greg@kroah.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Harald Freudenberger <freude@linux.ibm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the driver-core tree
-Message-ID: <your-ad-here.call-01679929780-ext-1002@work.hours>
-References: <20230327154655.58dd627d@canb.auug.org.au>
- <ZCFG1hUpsoB9acpi@kroah.com>
- <20230327192215.060fd858@canb.auug.org.au>
- <ZCFepL_u27Dxq9jd@kroah.com>
+        with ESMTP id S232950AbjC0Pq2 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 27 Mar 2023 11:46:28 -0400
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23E8D4489
+        for <linux-next@vger.kernel.org>; Mon, 27 Mar 2023 08:46:20 -0700 (PDT)
+Received: by mail-io1-xd2f.google.com with SMTP id p17so4051563ioj.10
+        for <linux-next@vger.kernel.org>; Mon, 27 Mar 2023 08:46:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1679931979;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=tZwAqUq38LWbbRXveAPtCbJ8i9E1aUhFu3Kbzb9UA0g=;
+        b=ubMPdNS18Ypllanmkqdb6FnctPLZ7rp9kOmEMxhfG5A6nmyia9rxZ8cvJbS8koxQpc
+         pdxkIayiubjB8wg1VhwgbhFDrnCtmszQsau5gtvz+cSF2v7frY96TX3+U78Pcw9kN0V9
+         QDT77x2649scvpNkCE0EsJQoIa4S5j8AJ/A2MJFczkD/FNa96zS2G/GSqU/NyJU5unwC
+         OMSTbaa0Jg66kMSkf5l5Q7J5vyY4oa8pd6+sZm6lDZCIIF+0GiQ/ybsYpKglmUTEUWG+
+         KTQ1TU9gaiYlgdHwcJIDWNhEiE55kcIjNkmEgMjr7McXrlUbB8RTZYxPG09ir7zMU1Jd
+         4Lsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679931979;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=tZwAqUq38LWbbRXveAPtCbJ8i9E1aUhFu3Kbzb9UA0g=;
+        b=0jt/zgauXp9Iigni8OVH0VQkZRgi/I08yaXN4jJzP1Ot1XP5/NAoBPS50wpFXKinHF
+         brlkA7eYvjAzgGVpMEI5MKpYrPOtE20XHbqblhhaPytfKyET3ArlH3avQ4CupBoUnpA8
+         KMJ45OsMgR2O8QO4g9yoBZQLGhaaAvEOB2fpp2bHqe+vFg/FDK1L2vnbvb9cBeNlM30e
+         RmIkhs6sas0dCijU3P4lqLcZ/yHqi0whUH76eNzUKhfg35X5qtA8W7SC2MowtmtYzzLU
+         53NBjIONMDtqeh2KiL1y8hovwxIVFs/ZuvFiHfuXehknw0HqgYaku8N6bzTRHM8qTeSb
+         X7BQ==
+X-Gm-Message-State: AO0yUKUYc50T5PolKszFST9dvOScgaXQh6WK01ThUMm82kOa/dJyJvF5
+        vOoiqHh4IhxoQFiVkRVLTodC/Ol/zdtuvhd/KnVVjA==
+X-Google-Smtp-Source: AK7set/JJkb11nsQMtzvyqc9BOV1bCICTfG3HNgaCQya39xeBSvUNmzo8SNpivEGtFFunjnVXtLykg==
+X-Received: by 2002:a05:6602:1301:b0:758:6ae8:8e92 with SMTP id h1-20020a056602130100b007586ae88e92mr7166727iov.1.1679931979423;
+        Mon, 27 Mar 2023 08:46:19 -0700 (PDT)
+Received: from [192.168.1.94] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id f18-20020a02a112000000b00408b3bc8061sm4180511jag.43.2023.03.27.08.46.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Mar 2023 08:46:19 -0700 (PDT)
+Message-ID: <c1fcc9c4-1409-0890-7032-c247c15097e5@kernel.dk>
+Date:   Mon, 27 Mar 2023 09:46:17 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ZCFepL_u27Dxq9jd@kroah.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 9bgS2QcxqLxnrSRQ9Vtj71-yFNwmrS90
-X-Proofpoint-GUID: 9bgS2QcxqLxnrSRQ9Vtj71-yFNwmrS90
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-24_11,2023-03-27_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 bulkscore=0
- mlxscore=0 adultscore=0 clxscore=1011 malwarescore=0 priorityscore=1501
- impostorscore=0 spamscore=0 mlxlogscore=687 lowpriorityscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2303270119
-X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: next: x86: RIP: 0010:do_iter_read+0x241/0x340 - BUG: unable to
+ handle page fault for address: 000000000042da60
+To:     Christian Brauner <brauner@kernel.org>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>, linux-fsdevel@vger.kernel.org,
+        lkft-triage@lists.linaro.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Anders Roxell <anders.roxell@linaro.org>
+References: <CA+G9fYs1ytc7B2ffLpYCqscwVTZ2vb7aAV0cEc-s+2QS1g3hyA@mail.gmail.com>
+ <20230327075841.pblnllclg2idy3rp@wittgenstein>
+Content-Language: en-US
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20230327075841.pblnllclg2idy3rp@wittgenstein>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 11:15:16AM +0200, Greg KH wrote:
-> On Mon, Mar 27, 2023 at 07:22:15PM +1100, Stephen Rothwell wrote:
-> > Hi All,
-> > 
-> > On Mon, 27 Mar 2023 09:33:42 +0200 Greg KH <greg@kroah.com> wrote:
-> > >
-> > > Patch is correct, thank you.
-> > 
-> > Thanks for checking.
-> > 
-> > > s390 developers, if you have a persistent tag/branch, I can suck this
-> > > into the driver core tree and apply this fixup there so that you don't
-> > > have to deal with any merge issues for 6.4-rc1 if you want.  Or I can
-> > > provide one for you if you need/want that instead.  Or we can just leave
-> > > it alone and deal with it during the 6.4-rc1 merge window, your choice.
-> > 
-> > Or (it being pretty trivial) you could both just let Linus know when
-> > you send your merge requests ...
+On 3/27/23 1:58 AM, Christian Brauner wrote:
+> +Jens for awareness because of
 > 
-> True, that works for me!
+> Subject: [PATCHSET 0/2] Turn single segment imports into ITER_UBUF
+> https://lore.kernel.org/linux-fsdevel/20230324204443.45950-1-axboe@kernel.dk
+> 
+> which seems like a likely candidate.
 
-Sounds good for s390 as well, thank you!
+It's certainly that. So odd, I even ran these test cases! I'll drop the series
+from for-next for now and dig into this separately.
+
+-- 
+Jens Axboe
+
+

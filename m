@@ -2,55 +2,63 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7718B6CA179
-	for <lists+linux-next@lfdr.de>; Mon, 27 Mar 2023 12:30:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F27A16CA188
+	for <lists+linux-next@lfdr.de>; Mon, 27 Mar 2023 12:37:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233784AbjC0Ka5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 27 Mar 2023 06:30:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39000 "EHLO
+        id S233597AbjC0KhB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 27 Mar 2023 06:37:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233761AbjC0Ka1 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 27 Mar 2023 06:30:27 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0307712C;
-        Mon, 27 Mar 2023 03:30:15 -0700 (PDT)
+        with ESMTP id S232739AbjC0Kg4 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 27 Mar 2023 06:36:56 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B13D32D41;
+        Mon, 27 Mar 2023 03:36:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679913016; x=1711449016;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=6b+JZbgMIdH+86rT3ucg7q7CshE9iTeKyV7ukqf9I+k=;
-  b=LHsIrsONAvBubFxYMDZHtaDNU/hv3S1QLS21WBSsnS7V0Dpw0Xj+fBHK
-   D0wFMvaM3MOmy9r19Rrr27bCrV+K7j8ir/Tgysr6q/OZjsTthPQdE9f8r
-   St+S7z9Y9dMZFn1FUirZCI2uiBrSJF5r74rW0xD61vIoc7Ctp/RKR6/Yx
-   /bwkHpUtPmKV9sz4RnxrPaa0UD5xTFzG13cPH7iXGRoJV650996+Ry9qy
-   CCBASgrdXCCAZsYMYqmujioyPzmH3Ws042qvJtd5Ahxi4GElyOYvbwT78
-   fV83HPG0e859FND2BMND6ahjkJMos8//LC8nRXM8ZITveutAOyfsLLXnn
+  t=1679913415; x=1711449415;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=S0i4W1W4m+Lq94hxja6SL1wsscjOQ463mDMWVOPfQOs=;
+  b=ZjJx3e+UnDG8RvuOZ4yCGNvolEbVO1GcyUOs0QMxcSZbftOlJiwE4s/r
+   +/bdl0/gONEXZ86rwqBbleSxcXNc6orm7Z6TY8LLhdAhRO0a+Dx2u8vP/
+   /wIKR5vXTuyUxrn40Wj6iiG6y1M/H27cpo6AoR5BlwJmPnHrBKxgcljOx
+   X5bpdOI6Q+cFDKa5uZymtzfB8h1hZQ9tgl424aKsgUrOZQYD8gJg58jdV
+   fu7rcZno/MxSz5Sl7UEwKQHyeOjhedrP/aneW0ee/zKh3gRzSk4vNrVo7
+   EfGKaq+nu3KdQBSo20uM1ud46yz0iVpzvO6+zfsLpFgLWdija84hA+ukC
    w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10661"; a="341805390"
+X-IronPort-AV: E=McAfee;i="6600,9927,10661"; a="367976394"
 X-IronPort-AV: E=Sophos;i="5.98,294,1673942400"; 
-   d="scan'208";a="341805390"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2023 03:30:15 -0700
+   d="scan'208";a="367976394"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2023 03:36:55 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10661"; a="685926196"
+X-IronPort-AV: E=McAfee;i="6600,9927,10661"; a="676921847"
 X-IronPort-AV: E=Sophos;i="5.98,294,1673942400"; 
-   d="scan'208";a="685926196"
-Received: from mattu-haswell.fi.intel.com ([10.237.72.199])
-  by fmsmga007.fm.intel.com with ESMTP; 27 Mar 2023 03:30:10 -0700
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-To:     greg@kroah.com, sfr@canb.auug.org.au
-Cc:     josue.d.hernandez.gutierrez@intel.com,
-        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
-        Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: [PATCH] xhci: only define xhci_msix_sync_irqs() when CONFIG_PM is set
-Date:   Mon, 27 Mar 2023 13:31:03 +0300
-Message-Id: <20230327103103.1060696-1-mathias.nyman@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <ZCFHsSkxXAahISuK@kroah.com>
-References: <ZCFHsSkxXAahISuK@kroah.com>
+   d="scan'208";a="676921847"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga007.jf.intel.com with ESMTP; 27 Mar 2023 03:36:53 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pgkDb-009B5o-1v;
+        Mon, 27 Mar 2023 13:36:51 +0300
+Date:   Mon, 27 Mar 2023 13:36:51 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Werner Sembach <wse@tuxedocomputers.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: duplicate patch in the gpio-intel tree
+Message-ID: <ZCFxw+6QGYJzl+sK@smile.fi.intel.com>
+References: <20230327112026.409883c2@canb.auug.org.au>
+ <CACMJSevvO0B8O0K4HtdTdxsGYGVfyHOug=qSg00SwVU+vw8Xsw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACMJSevvO0B8O0K4HtdTdxsGYGVfyHOug=qSg00SwVU+vw8Xsw@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,
         RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
@@ -61,60 +69,29 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-xhci_msic_sync_irqs() function is only called during suspend, when
-CONFIG_PM is set, so don't define it unconditionally.
+On Mon, Mar 27, 2023 at 09:14:00AM +0200, Bartosz Golaszewski wrote:
+> On Mon, 27 Mar 2023 at 02:20, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> >
+> > Hi all,
+> >
+> > The following commits are also in the gpio-brgl-fixes tree as a different
+> > commit (but the same patch):
+> >
+> >   782eea0c89f7 ("gpiolib: acpi: Add a ignore wakeup quirk for Clevo NL5xNU")
+> >
+> > This is commit
+> >
+> >   a21031ccf31b ("gpiolib: acpi: Add a ignore wakeup quirk for Clevo NL5xNU")
+> >
+> > in the gpio-brgl-fixes tree.
+> >
+> I missed the fact Andy already picked it up. Now backed out of my tree.
 
-Fixes: 9abe15d55dcc ("xhci: Move xhci MSI sync function to to xhci-pci")
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
----
- drivers/usb/host/xhci-pci.c | 27 ++++++++++++++-------------
- 1 file changed, 14 insertions(+), 13 deletions(-)
+Oh, thank you, folks. for sorting this out!
 
-diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-index a53ecc8ff8c5..1e826a159b96 100644
---- a/drivers/usb/host/xhci-pci.c
-+++ b/drivers/usb/host/xhci-pci.c
-@@ -88,19 +88,6 @@ static const struct xhci_driver_overrides xhci_pci_overrides __initconst = {
- 	.update_hub_device = xhci_pci_update_hub_device,
- };
- 
--static void xhci_msix_sync_irqs(struct xhci_hcd *xhci)
--{
--	struct usb_hcd *hcd = xhci_to_hcd(xhci);
--
--	if (hcd->msix_enabled) {
--		struct pci_dev *pdev = to_pci_dev(hcd->self.controller);
--		int i;
--
--		for (i = 0; i < xhci->msix_count; i++)
--			synchronize_irq(pci_irq_vector(pdev, i));
--	}
--}
--
- /* Free any IRQs and disable MSI-X */
- static void xhci_cleanup_msix(struct xhci_hcd *xhci)
- {
-@@ -729,6 +716,20 @@ static void xhci_pci_remove(struct pci_dev *dev)
- }
- 
- #ifdef CONFIG_PM
-+
-+static void xhci_msix_sync_irqs(struct xhci_hcd *xhci)
-+{
-+	struct usb_hcd *hcd = xhci_to_hcd(xhci);
-+
-+	if (hcd->msix_enabled) {
-+		struct pci_dev *pdev = to_pci_dev(hcd->self.controller);
-+		int i;
-+
-+		for (i = 0; i < xhci->msix_count; i++)
-+			synchronize_irq(pci_irq_vector(pdev, i));
-+	}
-+}
-+
- /*
-  * In some Intel xHCI controllers, in order to get D3 working,
-  * through a vendor specific SSIC CONFIG register at offset 0x883c,
+
 -- 
-2.25.1
+With Best Regards,
+Andy Shevchenko
+
 

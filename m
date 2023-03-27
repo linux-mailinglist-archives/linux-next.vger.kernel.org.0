@@ -2,72 +2,86 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C26596C9E9B
-	for <lists+linux-next@lfdr.de>; Mon, 27 Mar 2023 10:52:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D315D6C9F22
+	for <lists+linux-next@lfdr.de>; Mon, 27 Mar 2023 11:15:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233252AbjC0IwY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 27 Mar 2023 04:52:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58964 "EHLO
+        id S232827AbjC0JP0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 27 Mar 2023 05:15:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233245AbjC0Ivx (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 27 Mar 2023 04:51:53 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48DEC65B0;
-        Mon, 27 Mar 2023 01:47:50 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id BC1F321B2E;
-        Mon, 27 Mar 2023 08:42:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1679906567; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=CZKboqUHI/6gJOZvhB30fR9xntPa2QoVQjkmdLgpJsA=;
-        b=dPS5YBD8q1EdTV+vU47/4eO7xmkxnK1BKk+ZfLUsqg38SBUSyHLd1oIFdVhJ1HguaNhcFY
-        nKW2g1dglGbmvtMlIXXgnwYBsNyWStSmcH4ezSJWrYvOzbgmK7jWfOxd2fXi6ZBveB9Azo
-        sr2cySZgETinBo+jOsiH+2ufY/M+Oz4=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1679906567;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=CZKboqUHI/6gJOZvhB30fR9xntPa2QoVQjkmdLgpJsA=;
-        b=Py296J0/E9moC1pQe0cbN+LozO2SckLVlx9RkdU9LSck0s9namJ8JA9HjY5eQYZLG/iFJj
-        IZIuGhjPYfMK6mCg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9314213329;
-        Mon, 27 Mar 2023 08:42:47 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id dRRJIgdXIWQyTAAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Mon, 27 Mar 2023 08:42:47 +0000
-Message-ID: <098c59e8-166c-ffa6-2742-9c7d32faa5e7@suse.cz>
-Date:   Mon, 27 Mar 2023 10:42:47 +0200
+        with ESMTP id S232345AbjC0JPY (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 27 Mar 2023 05:15:24 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 477AF3C26;
+        Mon, 27 Mar 2023 02:15:23 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id E602D5C00FE;
+        Mon, 27 Mar 2023 05:15:20 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Mon, 27 Mar 2023 05:15:20 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1679908520; x=1679994920; bh=A5
+        +gI2srvfn+f8eE2nwKRdqo4mc6G9sjufQGQbcwNyg=; b=aXkRMHccd8a4geZ+52
+        uwp9RwQecgEi3YJNVgKAQ+ZqZyt4Y2dAVO2gdQunyAGOPra/SG5mU0XkziDtZJay
+        VKAK4oMU7QQ27FHnmCpEkLRnsYbCi56S0ORgv3zejaQjAPrP71SGhq0kXH43ovCR
+        l+wHsqbP3+flivnMycP7t56gsJKFc2jMUG+rHdT+K3Nlb0v0gU3lObSvaxFJLO6+
+        TEDT8REeOTTbVifNqqkIpyQTckwg8r7oXwfN+MxIunr7mncxCRdI+HuWr7Lkm6Kn
+        ahdgbnUgOrFIXc2G5iJ7lKf+10an8VR8AMRxRm7C7sjKYqlrFHzRUzXJBUsZP56V
+        Yojg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1679908520; x=1679994920; bh=A5+gI2srvfn+f
+        8eE2nwKRdqo4mc6G9sjufQGQbcwNyg=; b=CMiPOPKE7dMI3gBff9OWxR9YwKMrk
+        AVvjTC2iDWQppJUw/3VTompsO19d8EmtSxPwMeJ+vF0bqS6k4/AJJDOL/+kMqL4t
+        r1lsAl+O+0Alp2P8lKU8jZPiIkE7UH/y/gQ06Z+YYInlkdl9d2gd+8M+lDukZTr8
+        KGF8Az1v197Twkb3PsBiN1E2U7V2xFBtnPgoiSbERcapCdK07ZE0zA8zg3HjUd11
+        xPnasqVVLo1JX+N8uW9FLJCmSA+hXZp8u1ERm4Znnw7njsMTyi78PqrWo2tzcaTY
+        noThQoYVa0G80lVKvUCVgyMxOlPD9SpD1y6HYSv+B5/MMsiW2Yo2Dq0Jg==
+X-ME-Sender: <xms:qF4hZL8qs4JNn2r7UeRwkjWyMnRfg-HWYDfdN9tKr3ooSDl0RGxGaw>
+    <xme:qF4hZHvpuvBEUPcCbnDTWuRoKzfOSPqmoox9ps5PGbrLfeYXBHGoh2EzSlTur3tAA
+    NuM5zLzFQ_iDA>
+X-ME-Received: <xmr:qF4hZJBDHkze57I9_RU04Dz45sRxI1ruco1MSJ5kYx4GEYbG7quMTqdSsCyhLGT6_HPLB6FkAoCDw-P5MD_mr_cI>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdehvddgudegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
+    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepheegvd
+    evvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefhgfehkeetnecuvehluhhs
+    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
+    hhrdgtohhm
+X-ME-Proxy: <xmx:qF4hZHeQOQcAHiJN-hsOKvbtxbGOhWWliYvq8XnpHNMOY-tdf5QyWA>
+    <xmx:qF4hZAMxRWcPNlGml6sIH40E55ZykBemkiHuGLM6J4oJK7iDoUGN6w>
+    <xmx:qF4hZJksKWzyAiZJOQ_bAO2E7eiZnM_zvHABP1tzDxeBcasmb8qFTw>
+    <xmx:qF4hZMmFNQRKONQoa9llhLlr4X1_HTa6AUyN0PCrcAa3C4A0NusMuQ>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 27 Mar 2023 05:15:19 -0400 (EDT)
+Date:   Mon, 27 Mar 2023 11:15:16 +0200
+From:   Greg KH <greg@kroah.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Harald Freudenberger <freude@linux.ibm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the driver-core tree
+Message-ID: <ZCFepL_u27Dxq9jd@kroah.com>
+References: <20230327154655.58dd627d@canb.auug.org.au>
+ <ZCFG1hUpsoB9acpi@kroah.com>
+ <20230327192215.060fd858@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [syzbot] linux-next test error: general protection fault in
- vma_merge
-To:     syzbot <syzbot+a2fd5af4a33891110a79@syzkaller.appspotmail.com>,
-        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-next@vger.kernel.org,
-        sfr@canb.auug.org.au, syzkaller-bugs@googlegroups.com
-References: <000000000000c0822e05f7d9812d@google.com>
-Content-Language: en-US
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <000000000000c0822e05f7d9812d@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230327192215.060fd858@canb.auug.org.au>
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,106 +89,22 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 3/27/23 05:40, syzbot wrote:
-> Hello,
+On Mon, Mar 27, 2023 at 07:22:15PM +1100, Stephen Rothwell wrote:
+> Hi All,
 > 
-> syzbot found the following issue on:
+> On Mon, 27 Mar 2023 09:33:42 +0200 Greg KH <greg@kroah.com> wrote:
+> >
+> > Patch is correct, thank you.
 > 
-> HEAD commit:    7c4a254d78f8 Add linux-next specific files for 20230323
+> Thanks for checking.
+> 
+> > s390 developers, if you have a persistent tag/branch, I can suck this
+> > into the driver core tree and apply this fixup there so that you don't
+> > have to deal with any merge issues for 6.4-rc1 if you want.  Or I can
+> > provide one for you if you need/want that instead.  Or we can just leave
+> > it alone and deal with it during the 6.4-rc1 merge window, your choice.
+> 
+> Or (it being pretty trivial) you could both just let Linus know when
+> you send your merge requests ...
 
-Known issue already fixed in newer -next.
-
-> git tree:       linux-next
-> console output: https://syzkaller.appspot.com/x/log.txt?x=15f70246c80000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=20fd034702e6edd2
-> dashboard link: https://syzkaller.appspot.com/bug?extid=a2fd5af4a33891110a79
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> 
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/dc0bbbecd2a5/disk-7c4a254d.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/6b2c8c7cfd4b/vmlinux-7c4a254d.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/ae312a388585/bzImage-7c4a254d.xz
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+a2fd5af4a33891110a79@syzkaller.appspotmail.com
-> 
-> general protection fault, probably for non-canonical address 0xdffffc0000000018: 0000 [#1] PREEMPT SMP KASAN
-> KASAN: null-ptr-deref in range [0x00000000000000c0-0x00000000000000c7]
-> CPU: 1 PID: 5080 Comm: syz-fuzzer Not tainted 6.3.0-rc3-next-20230323-syzkaller #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
-> RIP: 0010:vma_merge+0x234/0x1fd0 mm/mmap.c:952
-> Code: 08 00 0f 84 b0 03 00 00 e8 e9 54 bf ff 48 8b 44 24 08 48 8d b8 a8 00 00 00 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f 85 4d 18 00 00 48 8b 44 24 08 48 8b b0 a8 00 00 00
-> RSP: 0018:ffffc90003d0f998 EFLAGS: 00010207
-> RAX: dffffc0000000000 RBX: ffff88802974b800 RCX: 0000000000000000
-> RDX: 0000000000000018 RSI: ffffffff81c37957 RDI: 00000000000000c7
-> RBP: ffff888079aaa400 R08: 0000000000000006 R09: 0000000000000000
-> R10: 000000c001ffffff R11: 0000000000000000 R12: 0000000000000001
-> R13: 0000000000000000 R14: 000000c002000000 R15: 0000000000000000
-> FS:  000000c000524890(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00007fe510676000 CR3: 00000000249a5000 CR4: 00000000003506e0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->  <TASK>
->  madvise_update_vma+0x23f/0xd40 mm/madvise.c:153
->  madvise_vma_behavior+0x7f6/0x20e0 mm/madvise.c:1091
->  madvise_walk_vmas+0x1c7/0x2b0 mm/madvise.c:1260
->  do_madvise.part.0+0x193/0x470 mm/madvise.c:1439
->  do_madvise mm/madvise.c:1452 [inline]
->  __do_sys_madvise mm/madvise.c:1452 [inline]
->  __se_sys_madvise mm/madvise.c:1450 [inline]
->  __x64_sys_madvise+0x117/0x150 mm/madvise.c:1450
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> RIP: 0033:0x46b557
-> Code: 8b 24 24 48 8b 6c 24 10 48 83 c4 18 c3 cc cc cc cc cc cc 48 8b 7c 24 08 48 8b 74 24 10 8b 54 24 18 48 c7 c0 1c 00 00 00 0f 05 <89> 44 24 20 c3 cc cc cc cc 48 8b 7c 24 08 8b 74 24 10 8b 54 24 14
-> RSP: 002b:000000c00022de60 EFLAGS: 00000206 ORIG_RAX: 000000000000001c
-> RAX: ffffffffffffffda RBX: 0000000000a12000 RCX: 000000000046b557
-> RDX: 000000000000000e RSI: 0000000000800000 RDI: 000000c001c00000
-> RBP: 000000c00022de88 R08: 0000000000000509 R09: 000000c001b6a000
-> R10: 00000000000012bd R11: 0000000000000206 R12: 0000000000000509
-> R13: 0000000000000003 R14: 000000c0003f1a00 R15: 00000000010e0700
->  </TASK>
-> Modules linked in:
-> ---[ end trace 0000000000000000 ]---
-> RIP: 0010:vma_merge+0x234/0x1fd0 mm/mmap.c:952
-> Code: 08 00 0f 84 b0 03 00 00 e8 e9 54 bf ff 48 8b 44 24 08 48 8d b8 a8 00 00 00 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f 85 4d 18 00 00 48 8b 44 24 08 48 8b b0 a8 00 00 00
-> RSP: 0018:ffffc90003d0f998 EFLAGS: 00010207
-> RAX: dffffc0000000000 RBX: ffff88802974b800 RCX: 0000000000000000
-> RDX: 0000000000000018 RSI: ffffffff81c37957 RDI: 00000000000000c7
-> RBP: ffff888079aaa400 R08: 0000000000000006 R09: 0000000000000000
-> R10: 000000c001ffffff R11: 0000000000000000 R12: 0000000000000001
-> R13: 0000000000000000 R14: 000000c002000000 R15: 0000000000000000
-> FS:  000000c000524890(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 0000564702bbb078 CR3: 00000000249a5000 CR4: 00000000003506f0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> ----------------
-> Code disassembly (best guess):
->    0:	08 00                	or     %al,(%rax)
->    2:	0f 84 b0 03 00 00    	je     0x3b8
->    8:	e8 e9 54 bf ff       	callq  0xffbf54f6
->    d:	48 8b 44 24 08       	mov    0x8(%rsp),%rax
->   12:	48 8d b8 a8 00 00 00 	lea    0xa8(%rax),%rdi
->   19:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
->   20:	fc ff df
->   23:	48 89 fa             	mov    %rdi,%rdx
->   26:	48 c1 ea 03          	shr    $0x3,%rdx
-> * 2a:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1) <-- trapping instruction
->   2e:	0f 85 4d 18 00 00    	jne    0x1881
->   34:	48 8b 44 24 08       	mov    0x8(%rsp),%rax
->   39:	48 8b b0 a8 00 00 00 	mov    0xa8(%rax),%rsi
-> 
-> 
-> ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
-> 
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> 
-
+True, that works for me!

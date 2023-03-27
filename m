@@ -2,151 +2,135 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 667D46C9A47
-	for <lists+linux-next@lfdr.de>; Mon, 27 Mar 2023 05:40:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78C456C9A9C
+	for <lists+linux-next@lfdr.de>; Mon, 27 Mar 2023 06:47:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232066AbjC0Dkn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 26 Mar 2023 23:40:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47126 "EHLO
+        id S229577AbjC0ErC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 27 Mar 2023 00:47:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229679AbjC0Dkm (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 26 Mar 2023 23:40:42 -0400
-Received: from mail-il1-f208.google.com (mail-il1-f208.google.com [209.85.166.208])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1024649E8
-        for <linux-next@vger.kernel.org>; Sun, 26 Mar 2023 20:40:41 -0700 (PDT)
-Received: by mail-il1-f208.google.com with SMTP id z19-20020a056e02089300b00326098d01d9so911603ils.2
-        for <linux-next@vger.kernel.org>; Sun, 26 Mar 2023 20:40:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679888440;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vBmRuY0titHxK9jm3zIYfXCs7kYdreINgFapoYnk6EY=;
-        b=UpgBQ6KXHx3/9exbdRnb4EdMAqVzUokIVKbyTvkRJj96ivh35QdG3zQf/j+CJO6iOQ
-         4xVH6LryTZtNfXd5ut2m/m4HyrUCMjcny5o4VDUvdJwTmLch1ZrYTz2DwQtrU0iBGm4f
-         a7bqUQmY4W13LKChWykcaps5GkBOk5CLcuJD3POnuYtP5eqJK6XlLKIV0TqcDw5P0ev7
-         S1at8VWj07wkxvH4Hn0qGAoHC5P+oK/euffvdFSD+UCadQX0g6cSM08V4ClecYhJlK8M
-         AjOW5ZkW8Jra6NhbYSe2HH+hLn53g3oJHHQJ0VNKhHcdY8eOWKzmEn8dw7HVCBtSsLqt
-         hMIg==
-X-Gm-Message-State: AO0yUKVWdtCKyX1UGOdhBo0LLYdBn0c8XR0Naakr3ojllJ2lGpw8iJCa
-        FWjsVAmoQvFMUJNDeUx+bFegbAQdwNKkYs7GM/uVT/0Fp6KX
-X-Google-Smtp-Source: AK7set+y267l1chfZnErITPTXtnox2QC9BSFt9ulwJPdMTQrRZoaXqzPt3xAsPp/rCrEh5PoTA/7SzRxcSTSrS1K9Yd2dgjhr8ei
+        with ESMTP id S229525AbjC0ErB (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 27 Mar 2023 00:47:01 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 171494C39;
+        Sun, 26 Mar 2023 21:47:00 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PlKzQ1VYgz4x7y;
+        Mon, 27 Mar 2023 15:46:57 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1679892418;
+        bh=jrRfcG5Zjod8TfEOCSntQFkDHdEiZeUh7G8zxbO3qnQ=;
+        h=Date:From:To:Cc:Subject:From;
+        b=S83D+GpYhKC06R3Pm5NWIwbyJgnDZZBemyBoYtREqxg5NJwyxmXVKpJvm3yiVEzWt
+         iUMMAbv+u9yxCs/GqCXzXK48YgTzlUvxn6sLeBUwq7RfH7K6X/XveurBRtWAts/Q8J
+         GZPaMlCOWp2p52FYNmV9u5FrIxiOdCLMwl1Pvg2h3kyFv2vLJLDeh/Ubv766g4ZI1M
+         pZwWFLqVZUqj+vTk16vO9Cps+QgEOMgcHgrtkyJT6FrdX0NanB0UY4/JES/imMHhc5
+         4yQNDraf1CrZmZ1cwIuRIgxWq1tBNh9BOi7D8o8rYW24IeEDTO0nwx7sKJIHjx5EXX
+         9B+glGrvK9pSA==
+Date:   Mon, 27 Mar 2023 15:46:55 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Greg KH <greg@kroah.com>, Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>
+Cc:     Harald Freudenberger <freude@linux.ibm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the driver-core tree
+Message-ID: <20230327154655.58dd627d@canb.auug.org.au>
 MIME-Version: 1.0
-X-Received: by 2002:a5e:9901:0:b0:745:c41a:8f0f with SMTP id
- t1-20020a5e9901000000b00745c41a8f0fmr3899286ioj.2.1679888440391; Sun, 26 Mar
- 2023 20:40:40 -0700 (PDT)
-Date:   Sun, 26 Mar 2023 20:40:40 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000c0822e05f7d9812d@google.com>
-Subject: [syzbot] linux-next test error: general protection fault in vma_merge
-From:   syzbot <syzbot+a2fd5af4a33891110a79@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-next@vger.kernel.org,
-        sfr@canb.auug.org.au, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.6 required=5.0 tests=FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/4lkzB.XAawV57U7A+8Z8xbU";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hello,
+--Sig_/4lkzB.XAawV57U7A+8Z8xbU
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-syzbot found the following issue on:
+Hi all,
 
-HEAD commit:    7c4a254d78f8 Add linux-next specific files for 20230323
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=15f70246c80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=20fd034702e6edd2
-dashboard link: https://syzkaller.appspot.com/bug?extid=a2fd5af4a33891110a79
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+After merging the driver-core tree, today's linux-next build
+(s390-defconfig) failed like this:
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/dc0bbbecd2a5/disk-7c4a254d.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/6b2c8c7cfd4b/vmlinux-7c4a254d.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/ae312a388585/bzImage-7c4a254d.xz
+drivers/s390/crypto/ap_bus.c:1596:20: error: initialization of 'ssize_t (*)=
+(const struct bus_type *, char *)' {aka 'long int (*)(const struct bus_type=
+ *, char *)'} from incompatible pointer type 'ssize_t (*)(struct bus_type *=
+, char *)' {aka 'long int (*)(struct bus_type *, char *)'} [-Werror=3Dincom=
+patible-pointer-types]
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+a2fd5af4a33891110a79@syzkaller.appspotmail.com
+(reported here: http://kisskb.ellerman.id.au/kisskb/buildresult/14902509/)
 
-general protection fault, probably for non-canonical address 0xdffffc0000000018: 0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x00000000000000c0-0x00000000000000c7]
-CPU: 1 PID: 5080 Comm: syz-fuzzer Not tainted 6.3.0-rc3-next-20230323-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
-RIP: 0010:vma_merge+0x234/0x1fd0 mm/mmap.c:952
-Code: 08 00 0f 84 b0 03 00 00 e8 e9 54 bf ff 48 8b 44 24 08 48 8d b8 a8 00 00 00 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f 85 4d 18 00 00 48 8b 44 24 08 48 8b b0 a8 00 00 00
-RSP: 0018:ffffc90003d0f998 EFLAGS: 00010207
-RAX: dffffc0000000000 RBX: ffff88802974b800 RCX: 0000000000000000
-RDX: 0000000000000018 RSI: ffffffff81c37957 RDI: 00000000000000c7
-RBP: ffff888079aaa400 R08: 0000000000000006 R09: 0000000000000000
-R10: 000000c001ffffff R11: 0000000000000000 R12: 0000000000000001
-R13: 0000000000000000 R14: 000000c002000000 R15: 0000000000000000
-FS:  000000c000524890(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fe510676000 CR3: 00000000249a5000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- madvise_update_vma+0x23f/0xd40 mm/madvise.c:153
- madvise_vma_behavior+0x7f6/0x20e0 mm/madvise.c:1091
- madvise_walk_vmas+0x1c7/0x2b0 mm/madvise.c:1260
- do_madvise.part.0+0x193/0x470 mm/madvise.c:1439
- do_madvise mm/madvise.c:1452 [inline]
- __do_sys_madvise mm/madvise.c:1452 [inline]
- __se_sys_madvise mm/madvise.c:1450 [inline]
- __x64_sys_madvise+0x117/0x150 mm/madvise.c:1450
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x46b557
-Code: 8b 24 24 48 8b 6c 24 10 48 83 c4 18 c3 cc cc cc cc cc cc 48 8b 7c 24 08 48 8b 74 24 10 8b 54 24 18 48 c7 c0 1c 00 00 00 0f 05 <89> 44 24 20 c3 cc cc cc cc 48 8b 7c 24 08 8b 74 24 10 8b 54 24 14
-RSP: 002b:000000c00022de60 EFLAGS: 00000206 ORIG_RAX: 000000000000001c
-RAX: ffffffffffffffda RBX: 0000000000a12000 RCX: 000000000046b557
-RDX: 000000000000000e RSI: 0000000000800000 RDI: 000000c001c00000
-RBP: 000000c00022de88 R08: 0000000000000509 R09: 000000c001b6a000
-R10: 00000000000012bd R11: 0000000000000206 R12: 0000000000000509
-R13: 0000000000000003 R14: 000000c0003f1a00 R15: 00000000010e0700
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:vma_merge+0x234/0x1fd0 mm/mmap.c:952
-Code: 08 00 0f 84 b0 03 00 00 e8 e9 54 bf ff 48 8b 44 24 08 48 8d b8 a8 00 00 00 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f 85 4d 18 00 00 48 8b 44 24 08 48 8b b0 a8 00 00 00
-RSP: 0018:ffffc90003d0f998 EFLAGS: 00010207
-RAX: dffffc0000000000 RBX: ffff88802974b800 RCX: 0000000000000000
-RDX: 0000000000000018 RSI: ffffffff81c37957 RDI: 00000000000000c7
-RBP: ffff888079aaa400 R08: 0000000000000006 R09: 0000000000000000
-R10: 000000c001ffffff R11: 0000000000000000 R12: 0000000000000001
-R13: 0000000000000000 R14: 000000c002000000 R15: 0000000000000000
-FS:  000000c000524890(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000564702bbb078 CR3: 00000000249a5000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess):
-   0:	08 00                	or     %al,(%rax)
-   2:	0f 84 b0 03 00 00    	je     0x3b8
-   8:	e8 e9 54 bf ff       	callq  0xffbf54f6
-   d:	48 8b 44 24 08       	mov    0x8(%rsp),%rax
-  12:	48 8d b8 a8 00 00 00 	lea    0xa8(%rax),%rdi
-  19:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
-  20:	fc ff df
-  23:	48 89 fa             	mov    %rdi,%rdx
-  26:	48 c1 ea 03          	shr    $0x3,%rdx
-* 2a:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1) <-- trapping instruction
-  2e:	0f 85 4d 18 00 00    	jne    0x1881
-  34:	48 8b 44 24 08       	mov    0x8(%rsp),%rax
-  39:	48 8b b0 a8 00 00 00 	mov    0xa8(%rax),%rsi
+Caused by commit
 
+  75cff725d956 ("driver core: bus: mark the struct bus_type for sysfs callb=
+acks as constant")
 
+interacting with commit
+
+  d7b1813af6a5 ("s390/ap: introduce new AP bus sysfs attribute features")
+
+from the s390 tree.
+
+I will apply the following (currently untested) merge fix up patch from
+tomorrow:
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Mon, 27 Mar 2023 15:42:41 +1100
+Subject: [PATCH] fixup for "driver core: bus: mark the struct bus_type for =
+sysfs callbacks as constant"
+
+interacting with "s390/ap: introduce new AP bus sysfs attribute features"
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ drivers/s390/crypto/ap_bus.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+diff --git a/drivers/s390/crypto/ap_bus.c b/drivers/s390/crypto/ap_bus.c
+index 85bb0de15e76..8d6b9a52bf3c 100644
+--- a/drivers/s390/crypto/ap_bus.c
++++ b/drivers/s390/crypto/ap_bus.c
+@@ -1570,7 +1570,7 @@ static ssize_t bindings_show(const struct bus_type *b=
+us, char *buf)
+=20
+ static BUS_ATTR_RO(bindings);
+=20
+-static ssize_t features_show(struct bus_type *bus, char *buf)
++static ssize_t features_show(const struct bus_type *bus, char *buf)
+ {
+ 	int n =3D 0;
+=20
+--=20
+2.39.2
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/4lkzB.XAawV57U7A+8Z8xbU
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQhH78ACgkQAVBC80lX
+0GyuoAf9GJWWMegIH7/TVMT1210oHmIZCxIzUqFZRBe+/5lt0vZYn0qhJufB+Y4p
+f83Nuw88Y7tI40xxQ9PRpDOPE6ZFlEjpN2vpmS/uDx5rcOyV/yDmeWXgsde/pJUr
+E//JddN4AEW1nixh/4jPJVAlGluG0VUmt9EQPhmkp4cApauqcmecdnciOCeRj0ax
+uPdGe750Z6y3wBDly4xQ4MVaT72xWXwiKvcbH0IOSUCA0mPIXtL/zBW42ILfGESA
+42sR7m2wzx9xaqU2rn7ZUpjHj/O+CO3xwVp9mxeX3X6VIYouvRHRW3zBr1FNn3g6
+7dOtHwTviDlUKJoZ9mtBsV3L7oOEhA==
+=WhuF
+-----END PGP SIGNATURE-----
+
+--Sig_/4lkzB.XAawV57U7A+8Z8xbU--

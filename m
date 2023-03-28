@@ -2,47 +2,52 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 554786CB308
-	for <lists+linux-next@lfdr.de>; Tue, 28 Mar 2023 03:16:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 853016CB32F
+	for <lists+linux-next@lfdr.de>; Tue, 28 Mar 2023 03:33:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229611AbjC1BQW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 27 Mar 2023 21:16:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52154 "EHLO
+        id S229952AbjC1Bdj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 27 Mar 2023 21:33:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229575AbjC1BQV (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 27 Mar 2023 21:16:21 -0400
+        with ESMTP id S229610AbjC1Bdi (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 27 Mar 2023 21:33:38 -0400
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1AFA1990;
-        Mon, 27 Mar 2023 18:16:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB1FD1BFB;
+        Mon, 27 Mar 2023 18:33:35 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PlsFm4Fsvz4wj7;
-        Tue, 28 Mar 2023 12:16:12 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Plsdn4rnzz4wj7;
+        Tue, 28 Mar 2023 12:33:33 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1679966173;
-        bh=irygyRkRlyX2cdL/E2vtShPNtwz4329GDBAPOp7SEl0=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Q5vrpyoTsDF5+0B+vlRql4IaKVdbiOpbR89urQHTpRhixTy8iWXTOm3xUjbv0w5Zq
-         Pu+Q4PWDYxvyF3C6UzFEOijDD8y+IqfnCIX36cr3VyuE678AYWy9gLwoyEg00PLokK
-         UwjiqinGa0TpdsenRa2ITm3qj4sZOdy08yVCmWBjNySgM/mLEntw2rjl2kfGF/xc0r
-         Lhc/uRwllasyUOjPbOcZZ/yI2ss3/Y5lkkVYUPvzfGeUU+WMyKtV+9kHBgR/WJs8ZZ
-         P0rq1CLX8awa82+pWI4wb6aFaB5Pn0XnYWNRAITIfgQ/VleVCHlFm9c6HToB+jBwN2
-         53Wst2b6xY8oQ==
-Date:   Tue, 28 Mar 2023 12:16:09 +1100
+        s=201702; t=1679967214;
+        bh=t0lpS9FXUassEuzLmJw8ESyJHbSC3KamqfDxSt8zTqk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=FZI4HCHGwFUtThX/eq4ejOrz2CFB8z5GlA77LVZEOJY7MCkETaOolg47AEzo8zreU
+         idugxYxbWu0+6yWjvPwXYsynbvJ6EYM9xG0HCNGGNtg9AujGz2aFmbW6K2OnKi6llP
+         5LCNoft8VmVicQ7f332tHEqGtlxOTyyKfLA/fzSbX7vmWVIgvrpWe/ovbKJXoe1Kmu
+         DTEuCnSYXPuOicozOkD6HssihWvL5XRQwo9FKKrnRfzNcJwevn+FfTib0fm+6zcO4w
+         LO7mB0XbpfTgp9LFeWCfkyER8Vi06ySXT9M5zotPXRogJBV4GzfUhdyIfSyfLj3vLJ
+         wpH/VJgIYt/Dw==
+Date:   Tue, 28 Mar 2023 12:33:32 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Bob Pearson <rpearsonhpe@gmail.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Ian Rogers <irogers@google.com>,
+        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the rcu tree with the rdma tree
-Message-ID: <20230328121609.68105dd5@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        namhyung@kernel.org
+Subject: Re: linux-next: build failure after merge of the perf tree
+Message-ID: <20230328123332.0a3e2b6d@canb.auug.org.au>
+In-Reply-To: <ZBxTyLqkIaoVhIXU@kernel.org>
+References: <20230317095025.49aa34f9@canb.auug.org.au>
+        <20230322083956.5c051777@canb.auug.org.au>
+        <CAP-5=fUHqrQWPjk7QJB=r2Gzj7z5X3nL4bRuBAKzy2HvdSAr-A@mail.gmail.com>
+        <20230323095437.1ecccec1@canb.auug.org.au>
+        <ZBxTyLqkIaoVhIXU@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/bfS8Ymd/nxdZ._8SdcwmK4t";
+Content-Type: multipart/signed; boundary="Sig_/8agte_UkCldEHOKp5iS.jQA";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
@@ -53,84 +58,94 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/bfS8Ymd/nxdZ._8SdcwmK4t
+--Sig_/8agte_UkCldEHOKp5iS.jQA
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Hi Arnaldo,
 
-FIXME: Add owner of second tree to To:
-       Add author(s)/SOB of conflicting commits.
+Just a few datapoints:
 
-Today's linux-next merge of the rcu tree got a conflict in:
+My build machine (Debian Testing PowerpcLE, not quite the latest
+kernel):
 
-  drivers/infiniband/sw/rxe/rxe_mr.c
+On Thu, 23 Mar 2023 10:27:36 -0300 Arnaldo Carvalho de Melo <acme@kernel.or=
+g> wrote:
+>  Which improves a bit the situation.
+>=20
+> We could check if bpftool is available and if not, suggest installing
+> it.
 
-between commit:
+$ ls -l /usr/sbin/bpftool
+-rwxr-xr-x 1 root root 790504 Mar  6 02:33 /usr/sbin/bpftool
 
-  5bf944f24129 ("RDMA/rxe: Add error messages")
+> If it is available, we could check if /sys/kernel/bpf/ is available, if
+> not suggest using a kernel with CONFIG_DEBUG_INFO_BTF=3Dy, as most distros
+> have by now.
 
-from the rdma tree and commit:
+$ uname -a
+Linux zz1 6.0.0-5-powerpc64le #1 SMP Debian 6.0.10-2 (2022-12-01) ppc64le G=
+NU/Linux
+$ ls -l /sys/kernel/bpf/
+ls: cannot access '/sys/kernel/bpf/': No such file or directory
+$ grep CONFIG_DEBUG_INFO_BTF /boot/config-6.0.0-5-powerpc64le
+# CONFIG_DEBUG_INFO_BTF is not set
 
-  330f72b82ab0 ("RDMA/rxe: Rename kfree_rcu() to kvfree_rcu_mightsleep()")
+And in the latest powerpc64le kernel:
 
-from the rcu tree.
+$ grep CONFIG_DEBUG_INFO_BTF /boot/config-6.1.0-5-powerpc64le
+# CONFIG_DEBUG_INFO_BTF is not set
 
-I fixed it up (the code modified by the latter was moved by the former,
-so I used this files from the former and applied the following merge fix
-patch) and can carry the fix as necessary. This is now fixed as far as
-linux-next is concerned, but any non trivial conflicts should be mentioned
-to your upstream maintainer when your tree is submitted for merging.
-You may also want to consider cooperating with the maintainer of the
-conflicting tree to minimise any particularly complex conflicts.
+Debian Testing arm64, not quite the latest kernel:
 
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Tue, 28 Mar 2023 12:12:24 +1100
-Subject: [PATCH] fixup for "RDMA/rxe: Add error messages"
+$ uname -a
+Linux oak 6.1.0-5-arm64 #1 SMP Debian 6.1.12-1 (2023-02-15) aarch64 GNU/Lin=
+ux
+$ ls -l /sys/kernel/bpf/
+ls: cannot access '/sys/kernel/bpf/': No such file or directory
+$ grep CONFIG_DEBUG_INFO_BTF /boot/config-6.1.0-5-arm64
+CONFIG_DEBUG_INFO_BTF=3Dy
+CONFIG_DEBUG_INFO_BTF_MODULES=3Dy
 
-interacting with "RDMA/rxe: Rename kfree_rcu() to kvfree_rcu_mightsleep()"
+Debian Testing amd64, the latest kernel:
 
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- drivers/infiniband/sw/rxe/rxe_verbs.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+$ uname -a
+Linux pine 6.1.0-6-amd64 #1 SMP PREEMPT_DYNAMIC Debian 6.1.15-1 (2023-03-05=
+) x86_64 GNU/Linux
+$ ls -l /sys/kernel/bpf/
+ls: cannot access '/sys/kernel/bpf/': No such file or directory
+$ grep CONFIG_DEBUG_INFO_BTF /boot/config-6.1.0-6-amd64
+CONFIG_DEBUG_INFO_BTF=3Dy
+CONFIG_DEBUG_INFO_BTF_MODULES=3Dy
 
-diff --git a/drivers/infiniband/sw/rxe/rxe_verbs.c b/drivers/infiniband/sw/=
-rxe/rxe_verbs.c
-index 84b53c070fc5..bbdfbff5c752 100644
---- a/drivers/infiniband/sw/rxe/rxe_verbs.c
-+++ b/drivers/infiniband/sw/rxe/rxe_verbs.c
-@@ -1341,7 +1341,7 @@ static int rxe_dereg_mr(struct ib_mr *ibmr, struct ib=
-_udata *udata)
- 	if (cleanup_err)
- 		rxe_err_mr(mr, "cleanup failed, err =3D %d", cleanup_err);
-=20
--	kfree_rcu(mr);
-+	kfree(mr);
- 	return 0;
-=20
- err_out:
---=20
-2.39.2
+Debian Stable amd64, the latest kernel:
+
+$ uname -a
+Linux gimli 5.10.0-21-cloud-amd64 #1 SMP Debian 5.10.162-1 (2023-01-21) x86=
+_64 GNU/Linux
+$ ls -l /sys/kernel/bpf/
+ls: cannot access '/sys/kernel/bpf/': No such file or directory
+$ grep CONFIG_DEBUG_INFO_BTF /boot/config-5.10.0-21-cloud-amd64
+CONFIG_DEBUG_INFO_BTF=3Dy
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/bfS8Ymd/nxdZ._8SdcwmK4t
+--Sig_/8agte_UkCldEHOKp5iS.jQA
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQiP9oACgkQAVBC80lX
-0Gx9Tgf/eeuAd19cygA14gyTfW2H9c7btla27HFqlUK4zuMPCKigw6/BgUF72I4a
-2KQIapTEnBy0jzPgvTvlqLFqMjVOGyuCV293i4vRPh2c+kyA2KQSdxGrKedp6dMj
-CSKHUk42ly77tr+1n7v5AeOjriqs0k0zGYw1C8w4TCde9Fzt21ypsSxMg8R/fTkE
-4/5S5MKqoIvPqc5JkvfoRAgEAFR4JHfdn+rsSk/YaDqj9VUZTh1CmDBgG0MkpYYV
-pq25W6bx1NIKUySICTw64xqElSbxfVkBoxkPzRgTPG6eYC93dKY3lfssrIzQkrwI
-g3CT7V67TqQZ9PlwrPyOKFCGhKR8tA==
-=AccV
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQiQ+wACgkQAVBC80lX
+0GzPhQf+Ldop15C1ck90Lq132iop1M7jyCgZTGriS49jn2UfUzZMqXf7DREWvGi1
+oEARIV067SyknUig0/XWzfs4v0oa7Q3fPubijmBBQMIUfYvKoJvUg83AOZRZxlAz
+YebKK1HJw8GmazLXInHgFBy14Xd90sVPoGgBZQkbMXjnKlm/DUccv09h6MRXVFdZ
+TTRGzrBWJp3tS7bhPFXNKGQSFahlQV82W3EK3N2uJGRlvbErOOBfMaQEj+Vv1sKa
+xJrf9FhdYxbEN/uHdJBG4CFcyo7P6GfDCNXmAjYFi5RkH0ztF+/brXyuHew8CKGR
+xbcSSUN+31EhfOyMsCPTQ5tD5SBKBQ==
+=G2XS
 -----END PGP SIGNATURE-----
 
---Sig_/bfS8Ymd/nxdZ._8SdcwmK4t--
+--Sig_/8agte_UkCldEHOKp5iS.jQA--

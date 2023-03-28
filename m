@@ -2,48 +2,47 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03DBB6CB29E
-	for <lists+linux-next@lfdr.de>; Tue, 28 Mar 2023 01:47:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 554786CB308
+	for <lists+linux-next@lfdr.de>; Tue, 28 Mar 2023 03:16:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230514AbjC0Xrr (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 27 Mar 2023 19:47:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52072 "EHLO
+        id S229611AbjC1BQW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 27 Mar 2023 21:16:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbjC0Xrq (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 27 Mar 2023 19:47:46 -0400
+        with ESMTP id S229575AbjC1BQV (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 27 Mar 2023 21:16:21 -0400
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A86C1B8;
-        Mon, 27 Mar 2023 16:47:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1AFA1990;
+        Mon, 27 Mar 2023 18:16:18 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PlqHZ0nKXz4wj7;
-        Tue, 28 Mar 2023 10:47:38 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PlsFm4Fsvz4wj7;
+        Tue, 28 Mar 2023 12:16:12 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1679960859;
-        bh=mE6ZWZFMqxR2adS0ArGXuJsCZc7MucNRR2NBIDM+e4A=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=CDUqV0yH1bNMJJDXyqMMAgT7xqc7WcIEXBdW0VFNfzU6MGA3JdOwyRdi+kKl8RkZy
-         L9UmQCF4AaF8VxEkEjzpHAEzR7sNvhLIeiZ1QoVcYk7BB5CUdy1pBvWKEbuDIUHKEX
-         UiecRk+1i7tNmOvHJSt3CF4nE3kaT4zgniXeaPFgkCYuWl1ezi7Hwaj8rqLWM4pP2X
-         us+AUQzPLducBuFpLMB6kV9RQFDsyHNrqGvy3iWX+quUO78BI9YSAM9AhINxvh+ytj
-         /hHdz3dUuH1BStWygTMsMUMg7kMvPnd/9Su3ZFwNzQsH6a7k2yZ7alQMWobZMYY9Y7
-         xiK2G9qScjyjA==
-Date:   Tue, 28 Mar 2023 10:47:19 +1100
+        s=201702; t=1679966173;
+        bh=irygyRkRlyX2cdL/E2vtShPNtwz4329GDBAPOp7SEl0=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Q5vrpyoTsDF5+0B+vlRql4IaKVdbiOpbR89urQHTpRhixTy8iWXTOm3xUjbv0w5Zq
+         Pu+Q4PWDYxvyF3C6UzFEOijDD8y+IqfnCIX36cr3VyuE678AYWy9gLwoyEg00PLokK
+         UwjiqinGa0TpdsenRa2ITm3qj4sZOdy08yVCmWBjNySgM/mLEntw2rjl2kfGF/xc0r
+         Lhc/uRwllasyUOjPbOcZZ/yI2ss3/Y5lkkVYUPvzfGeUU+WMyKtV+9kHBgR/WJs8ZZ
+         P0rq1CLX8awa82+pWI4wb6aFaB5Pn0XnYWNRAITIfgQ/VleVCHlFm9c6HToB+jBwN2
+         53Wst2b6xY8oQ==
+Date:   Tue, 28 Mar 2023 12:16:09 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Josh Poimboeuf <jpoimboe@kernel.org>
-Cc:     Jens Axboe <axboe@kernel.dk>,
-        Peter Zijlstra <peterz@infradead.org>,
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Bob Pearson <rpearsonhpe@gmail.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warnings after merge of the block tree
-Message-ID: <20230328104719.65133586@canb.auug.org.au>
-In-Reply-To: <20230327162630.wmxpycxhllt4clpt@treble>
-References: <20230327120017.6bb826d7@canb.auug.org.au>
-        <20230327162630.wmxpycxhllt4clpt@treble>
+Subject: linux-next: manual merge of the rcu tree with the rdma tree
+Message-ID: <20230328121609.68105dd5@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/iL.VgJZERbHq89f.1B7mz_K";
+Content-Type: multipart/signed; boundary="Sig_/bfS8Ymd/nxdZ._8SdcwmK4t";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
@@ -54,57 +53,84 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/iL.VgJZERbHq89f.1B7mz_K
+--Sig_/bfS8Ymd/nxdZ._8SdcwmK4t
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Josh,
+Hi all,
 
-On Mon, 27 Mar 2023 09:26:30 -0700 Josh Poimboeuf <jpoimboe@kernel.org> wro=
-te:
->
-> On Mon, Mar 27, 2023 at 12:00:17PM +1100, Stephen Rothwell wrote:
-> >=20
-> > After merging the block tree, today's linux-next build (x86_64
-> > allnoconfig) produced these warnings:
-> >=20
-> > lib/iov_iter.o: warning: objtool: .altinstr_replacement+0x0: redundant =
-UACCESS d
-> > isable
-> > lib/iov_iter.o: warning: objtool: iovec_from_user.part.0+0xc7: call to =
-copy_comp
-> > at_iovec_from_user.part.0() with UACCESS enabled
-> > lib/iov_iter.o: warning: objtool: __import_iovec+0x21d: call to copy_co=
-mpat_iovec_from_user.part.0() with UACCESS enabled
-> >=20
-> > Presumably introduced by commit
-> >=20
-> >   6376ce56feb6 ("iov_iter: import single vector iovecs as ITER_UBUF") =
+FIXME: Add owner of second tree to To:
+       Add author(s)/SOB of conflicting commits.
+
+Today's linux-next merge of the rcu tree got a conflict in:
+
+  drivers/infiniband/sw/rxe/rxe_mr.c
+
+between commit:
+
+  5bf944f24129 ("RDMA/rxe: Add error messages")
+
+from the rdma tree and commit:
+
+  330f72b82ab0 ("RDMA/rxe: Rename kfree_rcu() to kvfree_rcu_mightsleep()")
+
+from the rcu tree.
+
+I fixed it up (the code modified by the latter was moved by the former,
+so I used this files from the former and applied the following merge fix
+patch) and can carry the fix as necessary. This is now fixed as far as
+linux-next is concerned, but any non trivial conflicts should be mentioned
+to your upstream maintainer when your tree is submitted for merging.
+You may also want to consider cooperating with the maintainer of the
+conflicting tree to minimise any particularly complex conflicts.
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Tue, 28 Mar 2023 12:12:24 +1100
+Subject: [PATCH] fixup for "RDMA/rxe: Add error messages"
+
+interacting with "RDMA/rxe: Rename kfree_rcu() to kvfree_rcu_mightsleep()"
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ drivers/infiniband/sw/rxe/rxe_verbs.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/infiniband/sw/rxe/rxe_verbs.c b/drivers/infiniband/sw/=
+rxe/rxe_verbs.c
+index 84b53c070fc5..bbdfbff5c752 100644
+--- a/drivers/infiniband/sw/rxe/rxe_verbs.c
++++ b/drivers/infiniband/sw/rxe/rxe_verbs.c
+@@ -1341,7 +1341,7 @@ static int rxe_dereg_mr(struct ib_mr *ibmr, struct ib=
+_udata *udata)
+ 	if (cleanup_err)
+ 		rxe_err_mr(mr, "cleanup failed, err =3D %d", cleanup_err);
 =20
->=20
-> I'm not able to recreate.  What's your compiler version?
-
-$ x86_64-linux-gnu-gcc --version
-x86_64-linux-gnu-gcc (Debian 12.2.0-14) 12.2.0
+-	kfree_rcu(mr);
++	kfree(mr);
+ 	return 0;
+=20
+ err_out:
+--=20
+2.39.2
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/iL.VgJZERbHq89f.1B7mz_K
+--Sig_/bfS8Ymd/nxdZ._8SdcwmK4t
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQiKwcACgkQAVBC80lX
-0GzHMwf/XCukPnOhDu0//9VDm+QTIKR53e2mG83gWn6dopOLQyVUVyuaD79T1Neo
-OW6JBElqRA1exIuhnrFXpI8GRn03svU7yZ3pbEy5zar6hKzqz+8vNepjyxlOmk5o
-lvUjJAzPUQjknqyAa7s+GIKhi1X/UuNEyR4Jzq1UzSD0vBXVu19Z1fkLqethK5Eu
-4niAxahxoERRnKP997iCIrDfG+6bQ54KWrJ0FK2+WhV8DuhTZVSg7agU4bW22/lx
-NdzG5Mwt+XdAjtsFaqrI67MXhFfE7zKDuLBYb75z8LME1rou/LeGWECGutZ8CMtw
-6DO298jputtXpFi1AUC14h09zJyFZQ==
-=s1DJ
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQiP9oACgkQAVBC80lX
+0Gx9Tgf/eeuAd19cygA14gyTfW2H9c7btla27HFqlUK4zuMPCKigw6/BgUF72I4a
+2KQIapTEnBy0jzPgvTvlqLFqMjVOGyuCV293i4vRPh2c+kyA2KQSdxGrKedp6dMj
+CSKHUk42ly77tr+1n7v5AeOjriqs0k0zGYw1C8w4TCde9Fzt21ypsSxMg8R/fTkE
+4/5S5MKqoIvPqc5JkvfoRAgEAFR4JHfdn+rsSk/YaDqj9VUZTh1CmDBgG0MkpYYV
+pq25W6bx1NIKUySICTw64xqElSbxfVkBoxkPzRgTPG6eYC93dKY3lfssrIzQkrwI
+g3CT7V67TqQZ9PlwrPyOKFCGhKR8tA==
+=AccV
 -----END PGP SIGNATURE-----
 
---Sig_/iL.VgJZERbHq89f.1B7mz_K--
+--Sig_/bfS8Ymd/nxdZ._8SdcwmK4t--

@@ -2,121 +2,148 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0FF96CD959
-	for <lists+linux-next@lfdr.de>; Wed, 29 Mar 2023 14:28:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CEAF6CF3DD
+	for <lists+linux-next@lfdr.de>; Wed, 29 Mar 2023 21:58:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229456AbjC2M2q (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 29 Mar 2023 08:28:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39728 "EHLO
+        id S231152AbjC2T6n (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 29 Mar 2023 15:58:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbjC2M2p (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 29 Mar 2023 08:28:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2AAA3C32;
-        Wed, 29 Mar 2023 05:28:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 714A7B822EF;
-        Wed, 29 Mar 2023 12:28:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF8CFC433D2;
-        Wed, 29 Mar 2023 12:28:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680092922;
-        bh=Tma0nx8qcRtkWCc9Gjurf+Xd13FP8BlcwH32Awk9oTQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nXzP+wP+L4+UzendYyyBTPCCLeqdzeecjA30dTlujZjH7fPh0k4AnzRJ4k7P9oIZk
-         vOV8eGuLxUC0toPf2Xe2n9Rli2EeP443RCAtf7KPulpSdejYraODI6irGmepOLmXfw
-         ym8fNetsLnr1yZK4O6iTPw8aq7J2iN0pArzdLuu+UOxvexvkOCQZcs+ZKqzxPnDMwN
-         CsSFs2iU//4e6Qj/bmekDHrBk2XR/ME9h8eeXZ/tCKQ8opObiTjU18kS3qKhUjBrkR
-         9guSQS5IZpwbBjcyqgq5/wv7Q4SM1pgi6XNtd4Sn5tKdXhor81PnaiQH+hR1QGm1wA
-         5cxdAfwpvTcqQ==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 6D80C4052D; Wed, 29 Mar 2023 09:28:39 -0300 (-03)
-Date:   Wed, 29 Mar 2023 09:28:39 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Ian Rogers <irogers@google.com>,
-        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        namhyung@kernel.org
-Subject: Re: linux-next: build failure after merge of the perf tree
-Message-ID: <ZCQu9+J8/AhAXgNI@kernel.org>
-References: <20230317095025.49aa34f9@canb.auug.org.au>
- <20230322083956.5c051777@canb.auug.org.au>
- <CAP-5=fUHqrQWPjk7QJB=r2Gzj7z5X3nL4bRuBAKzy2HvdSAr-A@mail.gmail.com>
- <20230323095437.1ecccec1@canb.auug.org.au>
- <ZBxTyLqkIaoVhIXU@kernel.org>
- <20230328123332.0a3e2b6d@canb.auug.org.au>
- <ZCNES6N7AkskjD0o@kernel.org>
- <20230329100612.074b18d0@canb.auug.org.au>
+        with ESMTP id S230338AbjC2T6l (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 29 Mar 2023 15:58:41 -0400
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D259618F
+        for <linux-next@vger.kernel.org>; Wed, 29 Mar 2023 12:58:33 -0700 (PDT)
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-54601d90118so158506857b3.12
+        for <linux-next@vger.kernel.org>; Wed, 29 Mar 2023 12:58:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google; t=1680119912;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=e4EJkdGyxMVcGxifO1qafyN9ve0DpJKcD1zNZPvkoOQ=;
+        b=X7Pqfv0UK+v9i1cGCHrYEiTNG6rNWMy3nKSoSP69TUwEbb/VWxwJVWvgxXWGmfs0Ap
+         y9phc0S0DAoRi77m3KGFUynMRyqcy59esvGK2+OUdkAQwkwL+sitXQu+ABjPu61jJ3IN
+         fCySkM3AHpmLiN2nDRaI4fqn1aiywYTNjl09Q=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680119912;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=e4EJkdGyxMVcGxifO1qafyN9ve0DpJKcD1zNZPvkoOQ=;
+        b=oA6mhnBo/YJ8JbK0c0Y6rHz5NMounSU7svMm+9QSreeVw7G4qoHkO4X3mEjZSFw4Gg
+         WzLq4AdOXopSAgPdfu85OOYfdOUO2/SPs4iPKeENHY4UUUZBdS0IxPgxOlmcFcndskPn
+         TNsurV17HsePeBc3NRjV1S0uUu0kqDRXLiHm6jbkXvo8cGmKPg4brIrguvaEbGuQSWIX
+         D+NL+FkbcP4FuMob8L/S1a3eCnzL0ZDWgo0bH9mNqCQRwYvBjP/n5TOW2V8Ym39bOKI0
+         49YgZedh20Vh/z/Lq9ahAlB4scUXebzUvImVmWcnyWSfbLSPzew/LixA6vAggVa1ZhY3
+         6dEg==
+X-Gm-Message-State: AAQBX9emg7c0yx6g7gtXYSd2EvANYp9gTpRqDcgLYQSWV/nOOz57u9BW
+        dyZFbntS9UDpnb3wLNswn0XCMvLq+KZzgPfW6zuHKw==
+X-Google-Smtp-Source: AKy350Zxl1w9uKQOFJbJozgdk2onV0JTPFVvHfQK6FKbD2iD8tQ3HNsJrLn371sk+ohcuprwiigk4AQFfG32UhEiIkY=
+X-Received: by 2002:a81:e308:0:b0:532:e887:2c23 with SMTP id
+ q8-20020a81e308000000b00532e8872c23mr10210700ywl.9.1680119912635; Wed, 29 Mar
+ 2023 12:58:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230329100612.074b18d0@canb.auug.org.au>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230328121609.68105dd5@canb.auug.org.au> <4fd06223-e307-50e6-f4ec-40ca34fc1a4b@gmail.com>
+In-Reply-To: <4fd06223-e307-50e6-f4ec-40ca34fc1a4b@gmail.com>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Wed, 29 Mar 2023 15:58:20 -0400
+Message-ID: <CAEXW_YRMjXpRoss_cgF_mghseZbY-86UouDmcLbVW-oOpZ_D2A@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the rcu tree with the rdma tree
+To:     Bob Pearson <rpearsonhpe@gmail.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Em Wed, Mar 29, 2023 at 10:06:12AM +1100, Stephen Rothwell escreveu:
-> Hi Arnaldo,
- 
-> On Tue, 28 Mar 2023 16:47:23 -0300 Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
-> > The config files you used don't match the running kernels
- 
-> This is just the way Debian names its kernel packages.
- 
-> > > $ uname -a
-> > > Linux zz1 6.0.0-5-powerpc64le #1 SMP Debian 6.0.10-2 (2022-12-01) ppc64le GNU/Linux
->               ^^^^^^^^^^^^^^^^^^^
-> > > $ ls -l /sys/kernel/bpf/
-> > > ls: cannot access '/sys/kernel/bpf/': No such file or directory
-> > > $ grep CONFIG_DEBUG_INFO_BTF /boot/config-6.0.0-5-powerpc64le
->                                               ^^^^^^^^^^^^^^^^^^^
-> And so on.  It just happens that this kernel is based on v6.0.10.
- 
-> $ uname -r
-> 6.0.0-5-powerpc64le
- 
-> So they are the correct config files.
- 
-> Also, the mail I replied to talked about checking /sys/kernel/bpf/ (not
-> btf) :-(
+On Tue, Mar 28, 2023 at 12:38=E2=80=AFPM Bob Pearson <rpearsonhpe@gmail.com=
+> wrote:
+>
+> On 3/27/23 20:16, Stephen Rothwell wrote:
+> > Hi all,
+> >
+> > FIXME: Add owner of second tree to To:
+> >        Add author(s)/SOB of conflicting commits.
+> >
+> > Today's linux-next merge of the rcu tree got a conflict in:
+> >
+> >   drivers/infiniband/sw/rxe/rxe_mr.c
+> >
+> > between commit:
+> >
+> >   5bf944f24129 ("RDMA/rxe: Add error messages")
+> >
+> > from the rdma tree and commit:
+> >
+> >   330f72b82ab0 ("RDMA/rxe: Rename kfree_rcu() to kvfree_rcu_mightsleep(=
+)")
+> >
+> > from the rcu tree.
+> >
+> > I fixed it up (the code modified by the latter was moved by the former,
+> > so I used this files from the former and applied the following merge fi=
+x
+> > patch) and can carry the fix as necessary. This is now fixed as far as
+> > linux-next is concerned, but any non trivial conflicts should be mentio=
+ned
+> > to your upstream maintainer when your tree is submitted for merging.
+> > You may also want to consider cooperating with the maintainer of the
+> > conflicting tree to minimise any particularly complex conflicts.
+> >
+> > From: Stephen Rothwell <sfr@canb.auug.org.au>
+> > Date: Tue, 28 Mar 2023 12:12:24 +1100
+> > Subject: [PATCH] fixup for "RDMA/rxe: Add error messages"
+> >
+> > interacting with "RDMA/rxe: Rename kfree_rcu() to kvfree_rcu_mightsleep=
+()"
+> >
+> > Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> > ---
+> >  drivers/infiniband/sw/rxe/rxe_verbs.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/infiniband/sw/rxe/rxe_verbs.c b/drivers/infiniband=
+/sw/rxe/rxe_verbs.c
+> > index 84b53c070fc5..bbdfbff5c752 100644
+> > --- a/drivers/infiniband/sw/rxe/rxe_verbs.c
+> > +++ b/drivers/infiniband/sw/rxe/rxe_verbs.c
+> > @@ -1341,7 +1341,7 @@ static int rxe_dereg_mr(struct ib_mr *ibmr, struc=
+t ib_udata *udata)
+> >       if (cleanup_err)
+> >               rxe_err_mr(mr, "cleanup failed, err =3D %d", cleanup_err)=
+;
+> >
+> > -     kfree_rcu(mr);
+> > +     kfree(mr);
+> >       return 0;
+> >
+> >  err_out:
+>
+> Thanks, I thought we had already done this. If not then we should. This i=
+s the correct fix
+> for that rcu mightsleep business.
+>
+> Reviewed-by: Bob Pearson <rpearsonhpe@gmail.com>
+>
 
-Sorry about that, I replied from my smartphone, when on my workstation
-I try to try the commands and copy'n'paste the whole command + output
-sequence to avoid such mistakes.
- 
-> still on my build machine (of course):
- 
-> $ ls -l /sys/kernel/btf/
-> ls: cannot access '/sys/kernel/btf/': No such file or directory
- 
-> So it seems that Debian do not build their powerpcle kernels with
-> CONFIG_DEBUG_INFO_BTF. I don't know why not since all the dependencies
-> seem to be OK.
+Bob, could you please squash Jon's diff into your original patch
+("RDMA/rxe: Add error messages".) before you send your pull request
+for 6.4? Then I can just drop my patch.
 
-Right, at this point they should if they want to properly support the
-full set of BPF functionalities, notably CO-RE.
- 
-> [On my arm64 machine:
-> 
-> $ ls -l /sys/kernel/btf/vmlinux
-> -r--r--r-- 1 root root 5209570 Mar 29 09:52 /sys/kernel/btf/vmlinux
-> 
-> and on my amd64 machine:
-> 
-> $ ls -l /sys/kernel/btf/vmlinux
-> -r--r--r-- 1 root root 8536946 Mar 29 10:04 /sys/kernel/btf/vmlinux
-> ]
+That will be best. WDYT?
 
-Everything should be working fine on those machines, right?
+thanks,
 
-- Arnaldo
+- Joel

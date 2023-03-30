@@ -2,44 +2,47 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABE6F6CF8E6
-	for <lists+linux-next@lfdr.de>; Thu, 30 Mar 2023 03:54:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8298F6CF98F
+	for <lists+linux-next@lfdr.de>; Thu, 30 Mar 2023 05:28:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229889AbjC3ByV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 29 Mar 2023 21:54:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38416 "EHLO
+        id S229588AbjC3D2Z (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 29 Mar 2023 23:28:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229895AbjC3ByS (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 29 Mar 2023 21:54:18 -0400
+        with ESMTP id S229452AbjC3D2Y (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 29 Mar 2023 23:28:24 -0400
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A36651732;
-        Wed, 29 Mar 2023 18:54:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26D833AB2;
+        Wed, 29 Mar 2023 20:28:23 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Pn60g5nGxz4x91;
-        Thu, 30 Mar 2023 12:54:11 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Pn85J4Q6nz4whh;
+        Thu, 30 Mar 2023 14:28:20 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1680141252;
-        bh=wsBgS0+7q4Iz1HSFPTFRTmyyDzUExa0HhMIFPwLBehs=;
+        s=201702; t=1680146901;
+        bh=yUhZNgkn5eV0Ur1aC/2fo4WMW7FvsdeGN/s4ulLNmuQ=;
         h=Date:From:To:Cc:Subject:From;
-        b=qV4negvnuoGXhZFJGWjK5khxbVUJ6p5i4XCAfcVtPGwPSQw/5QsmNF+VWHEoO/y8i
-         k8nqL3xpf8gVC0D5qp9mCED6WxFNZli3yjGwrLm7WG2Fn0kq7eRFv9ReSyVo2rk58X
-         qQAmzjJ2wf0OA88p+CDupblwu1e+Dk6J/WcuIEPfPhMrcXeGFD+zFA4tLwLww/bUsS
-         ZOF9wSJdfeXu+b+NPdbpPgVVUk/vQeAIv9n0V41yta+QfOSMn2RWWVfgO0Y1+kDk9F
-         w0zsGCRT0E5MzEwO88tXomUt7qNPKnfde0CHZF84wdXqS2pSK0iZ5ep0y96Wq8bZBL
-         qhDA7ak7GpUdw==
-Date:   Thu, 30 Mar 2023 12:54:08 +1100
+        b=ScOs66Kpn9gmT6y4QXJl4J8jPe9G2bh/5r0o8QNK4hiusxcLC6zQDl3OPl0++/7Yz
+         Mwt9qoa2Hgm6mwWLHeB0XRiNSQU9i5zqUoeMPZ/Jtop5KVArwk7sAzm+XwiFGt3M5t
+         Q6rffQiNgpy81H17Htm1gRqkuzeEEzdALA/pNZ0OF+Qngkac1WAa10x4WTWWFdlPi1
+         5HSB8uIHRshfEZ0JnS7aRA/bMcGOne6TJcrjapaINg0Fsh58gCU51MBZXW7/85h+Mb
+         ovE5VTD3ZnjKsOOkTZP1CemgY7TgwauBfU4jh4o2CNJMksBfvB3tjSEzFTW6yImB2/
+         ChdjKG4EGgPJA==
+Date:   Thu, 30 Mar 2023 14:28:18 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Jason Gunthorpe <jgg@ziepe.ca>, Yi Liu <yi.l.liu@intel.com>,
+To:     Dave Airlie <airlied@redhat.com>
+Cc:     DRI <dri-devel@lists.freedesktop.org>,
+        Rob Clark <robdclark@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Gustavo Padovan <gustavo.padovan@collabora.co.uk>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the iommufd tree
-Message-ID: <20230330125408.42b444a0@canb.auug.org.au>
+Subject: linux-next: build warning after merge of the drm tree
+Message-ID: <20230330142818.7efb6d05@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/1lE8XqAfog1QPAxNGMj2lTY";
+Content-Type: multipart/signed; boundary="Sig_/uV74ZoVXfihRgGftLI6mCY8";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
@@ -50,65 +53,46 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/1lE8XqAfog1QPAxNGMj2lTY
+--Sig_/uV74ZoVXfihRgGftLI6mCY8
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the iommufd tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+After merging the drm tree, today's linux-next build (htmldocs) produced
+this warning:
 
-drivers/iommu/iommufd/hw_pagetable.c: In function 'iommufd_hwpt_alloc':
-drivers/iommu/iommufd/hw_pagetable.c:135:33: error: passing argument 1 of '=
-iommufd_get_ioas' from incompatible pointer type [-Werror=3Dincompatible-po=
-inter-types]
-  135 |         ioas =3D iommufd_get_ioas(ucmd, cmd->pt_id);
-      |                                 ^~~~
-      |                                 |
-      |                                 struct iommufd_ucmd *
-In file included from drivers/iommu/iommufd/hw_pagetable.c:8:
-drivers/iommu/iommufd/iommufd_private.h:216:73: note: expected 'struct iomm=
-ufd_ctx *' but argument is of type 'struct iommufd_ucmd *'
-  216 | static inline struct iommufd_ioas *iommufd_get_ioas(struct iommufd_=
-ctx *ictx,
-      |                                                     ~~~~~~~~~~~~~~~=
-~~~~~^~~~
+include/uapi/linux/sync_file.h:77: warning: Function parameter or member 'n=
+um_fences' not described in 'sync_file_info'
 
-Caused by commit
+Revealed by commit
 
-  a7358b11764e ("iommu/iommufd: Pass iommufd_ctx pointer in iommufd_get_ioa=
-s()")
+  d71c11cc79d2 ("dma-buf/sync_file: Surface sync-file uABI")
 
-interacting with commit
+Introduced by commit
 
-  8295188cc9e6 ("iommufd: Add IOMMU_HWPT_ALLOC")
+  2d75c88fefb2 ("staging/android: refactor SYNC IOCTLs")
 
-it should have been fixed up in the merge commit
-
-  085121c1d1bb ("Merge branch 'ko-iommufd/wip/for-nesting' into k.o-iommufd=
-/for-next")
-
-I have used the iommufd tree from next-20230329 for today.
+in 2016.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/1lE8XqAfog1QPAxNGMj2lTY
+--Sig_/uV74ZoVXfihRgGftLI6mCY8
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQk68EACgkQAVBC80lX
-0GyoZQf7B+g9RGscwgpoOe1Gv9VYwUYVfcm3H1e7YT0E4p2/TVxlwmCC7742dRbM
-KIaoA4dEQKRuJP74mAs9YI3yux4iKFh4mK6AvBjf5iJ1yz0RoLTAFVKWT2CVCs9w
-DNbk3a00wUxLmXszhauYznioQqD62OZ1Qgo38qITWDKpO8PxhDe5y+ALYQyz5KO1
-9tRyHcUFaw63bT7gwUdGVOryBA9HTJG/mzMPZH3dd95KAFmpe7TMYEuxBgPOYLj5
-fQeP05mLvDHPW2eEZgrkjcHgYvi4KObU2F3paSpW2hQbowEmmmJO+o/cbVX7aztA
-bMD+wQUHLZfBQ51u6MDiFL4czsXNYg==
-=8lZ+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQlAdIACgkQAVBC80lX
+0GxLKAgAhY+x2b23WFikyQa/VmcvBT3Akt8K2AnHpi/1OEaE/JEBnT88uxPK8uYS
+XQJ/VALbugRZ5XsDnyRuAIyxlxcM05mpdOF1Z+jE2y1aFpOUmTVjMAuWTdBwn2b/
+2NVAJhb+mS+IhlIQAkJvJIaaVDHlu33IhzY2WQf1wBLd9kJ1yVs1PCWpZdYYcO4J
+inSriPiQ88E4DqYeo9CR6k+Fv4e40tB+12zJ/5rvUvYfppraE3Q1uDw3iVDJdqH1
+mXHaOnM9V1Bt4DP5G8SfelZj1XVj4eSEeZr5hpYGKpB9Y0KkfVDOogguF1hiF3p1
+L8t3ue2CyVDcJWXU3iP9quv/8AQU6Q==
+=t6GX
 -----END PGP SIGNATURE-----
 
---Sig_/1lE8XqAfog1QPAxNGMj2lTY--
+--Sig_/uV74ZoVXfihRgGftLI6mCY8--

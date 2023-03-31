@@ -2,105 +2,89 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F1386D1552
-	for <lists+linux-next@lfdr.de>; Fri, 31 Mar 2023 03:48:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FE5F6D157E
+	for <lists+linux-next@lfdr.de>; Fri, 31 Mar 2023 04:14:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229567AbjCaBsa (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 30 Mar 2023 21:48:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55062 "EHLO
+        id S229643AbjCaCOS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 30 Mar 2023 22:14:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbjCaBsa (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 30 Mar 2023 21:48:30 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F665768C;
-        Thu, 30 Mar 2023 18:48:02 -0700 (PDT)
+        with ESMTP id S229531AbjCaCOQ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 30 Mar 2023 22:14:16 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DBE18A7D;
+        Thu, 30 Mar 2023 19:14:15 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Pnjq34l0hz4x4r;
-        Fri, 31 Mar 2023 12:47:59 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PnkPJ5sMXz4xDp;
+        Fri, 31 Mar 2023 13:14:12 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1680227280;
-        bh=U8nCrbVruhyvA7LfoiI3ZeZd7L605M5xPTJX1LcWDvg=;
+        s=201702; t=1680228853;
+        bh=NpE/ZVmO3xm89zodeB5a+4PPfpRqJI47zIn0Q8XXhf8=;
         h=Date:From:To:Cc:Subject:From;
-        b=DSGAMbkU2eoyVlZFdFJxBqvwjiazQmM2NlAN+vxgsL3uKdYsz72TGoX3nC7NQJTTw
-         tZw3G0RFl8mlRTRB0Ts5zxNFqMId7hBG9MnGydGaccORoT5EeUmnSXWXDZln4ftBab
-         Te7SuNKzdJSw3eWXUMhra31fs1CMcc1F/r0YhK0yEWkVkfBeKEGvK+E0lZrEJMykpc
-         5CGHTxmFFsvaptxYyAP0w+clrj9DX2KMBgptQShJ118y8ZypkfNky2vqLvCGqjBXoM
-         zKWnM1nl15GZqT5mEQ77kSmiyxIz6LG50/K1lC31hWJGF4b3L9YP1nJ0uxT6a6d+Pa
-         QbtPi7gYYWc9Q==
-Date:   Fri, 31 Mar 2023 12:47:58 +1100
+        b=LszhbWRHM8uaVbmW1MQBlCMkwh3OBtf3d9XaobBCb7SvFI5fPeTWS9Yxn4EkI4dy6
+         FGcuLEQ+RWDR2gUINAeopIamA8qrwXN4wdwSKCg6QmyIJLpAexEr1yPePWbDHLN+zU
+         RrqNE46aBg2tXx3VNNI2TndW1mvF7nLcnkBNc56wl/txNJbwRtSP1aUofSKJ6hux7V
+         MUNxzMUUXyyYLgEcl6W7Ar+ZQ/9GVVEFTp8StMUbjPMzftdjqiV3fEos+qjw3pNDqO
+         y2R0boinvr8LZ7EU+fvAi6LwlsSFlQCpcALT6t8kszbe7BU311GLMKejcOxqX8uV6c
+         uqhFShhHGOv5Q==
+Date:   Fri, 31 Mar 2023 13:14:10 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Rob Herring <robherring2@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+To:     Gabriel Krisman Bertazi <krisman@collabora.com>
+Cc:     jianchunfu <jianchunfu@cmss.chinamobile.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Rob Herring <robh@kernel.org>
-Subject: linux-next: manual merge of the devicetree tree with the sound-asoc
- tree
-Message-ID: <20230331124758.501257d7@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: old commit in the unicode tree
+Message-ID: <20230331131410.0cb9b3f8@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/WLD4kryHRjB6dvur894ssH9";
+Content-Type: multipart/signed; boundary="Sig_/1sgydZJB1YBqpQc1jBjSwqU";
  protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/WLD4kryHRjB6dvur894ssH9
+--Sig_/1sgydZJB1YBqpQc1jBjSwqU
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the devicetree tree got a conflict in:
+The unicode tree (git://git.kernel.org/pub/scm/linux/kernel/git/krisman/uni=
+code.git#for-next) contains only one commit:
 
-  Documentation/devicetree/bindings/sound/qcom,lpass-va-macro.yaml
+  b500d6d7243d ("unicode: Handle memory allocation failures in mkutf8data")
 
-between commit:
+that was committed in April, 2020.  Is this ever going to be merged
+into Linus' tree?  If not, should I just remove the unicode tree fro
+linux-next?
 
-  cfad817095e1 ("ASoC: dt-bindings: qcom,lpass-va-macro: Add missing NPL cl=
-ock")
 
-from the sound-asoc tree and commit:
-
-  d0dcd0ce8437 ("dt-bindings: yamllint: Require a space after a comment '#'=
-")
-
-from the devicetree tree.
-
-I fixed it up (the former removed the text updated by the latter) and
-can carry the fix as necessary. This is now fixed as far as linux-next
-is concerned, but any non trivial conflicts should be mentioned to your
-upstream maintainer when your tree is submitted for merging.  You may
-also want to consider cooperating with the maintainer of the conflicting
-tree to minimise any particularly complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/WLD4kryHRjB6dvur894ssH9
+--Sig_/1sgydZJB1YBqpQc1jBjSwqU
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQmO84ACgkQAVBC80lX
-0GyfkAgAi7KhLv8weXSBkpBmVzrxyT6MIri4YbLfUstlypFfa9oD92yiAfxhgDMJ
-CD3zyv31ymKEz2rictxQZmno5NGApP39qogH9B2ZXhGIPzQycaxSnVLIQSbzjmKB
-3i0Csfj8hW9n8sDtnXrwR8H2hjRnQRvWoVXauS1diuKSYQ+sW+qfAv4BVYfpxc45
-npU7ThifMM0LOg+zD8+zQViEOGyFvvYJji7GOXHGEw2oGMNEcisSw6Kib1LvHVdC
-PHhOG56sbjOQq/+Etfm8iv9bOlgt+Phwzkv2jgCTImro5+ff9BVmlOcpuEdLulzX
-7a9UxK/cmCdoCAP0nNGbVo6/L9/h5A==
-=HFmQ
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQmQfIACgkQAVBC80lX
+0Gxr9gf/XX8rXS9oEJsNtDkvoAzM1um+kmIcLE46i4D/HSsc2aGA73nxVkSPcUJs
+EhJxyjBmrReaiSl8Jawr8gyCTWbeHDq69kugNc4Ipq7n5b9kxtoW7Fc47fnpuoHL
+gnd1tBV2AJlEWKQOpafcOeMpMOUT79f1hdZq3RUpGvMt21u7i/gRKlu9uf68U5Ce
+VTRmZQJRWB3X7VwOwhJ9B7n0a8ke3rwvz88x3zUZlzAL+K5Yl8Z8PIzbhJYKZuRc
+wAJxXQM8WF3qWkNMJlL8fBiTUTVl2KKfwEYRog0wDVtC2ZSnyuvVfCOz0GXwSByz
+tIJCcdx5WQFBsw6KCEnhYS0PAKyasA==
+=Wk6Z
 -----END PGP SIGNATURE-----
 
---Sig_/WLD4kryHRjB6dvur894ssH9--
+--Sig_/1sgydZJB1YBqpQc1jBjSwqU--

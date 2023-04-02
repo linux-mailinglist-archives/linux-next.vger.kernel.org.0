@@ -2,122 +2,111 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 642226D3AF0
-	for <lists+linux-next@lfdr.de>; Mon,  3 Apr 2023 01:28:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30D8A6D3B04
+	for <lists+linux-next@lfdr.de>; Mon,  3 Apr 2023 01:59:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229379AbjDBX2c (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 2 Apr 2023 19:28:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46476 "EHLO
+        id S230347AbjDBX7v (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 2 Apr 2023 19:59:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbjDBX2b (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 2 Apr 2023 19:28:31 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09993AF29;
-        Sun,  2 Apr 2023 16:28:29 -0700 (PDT)
+        with ESMTP id S230328AbjDBX7u (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 2 Apr 2023 19:59:50 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90B6F5241;
+        Sun,  2 Apr 2023 16:59:48 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PqVZf0BkHz4x1d;
-        Mon,  3 Apr 2023 09:28:25 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PqWGj2Lq4z4x1d;
+        Mon,  3 Apr 2023 09:59:41 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1680478108;
-        bh=scqXINyn5PkPyesGIzKR6g3bD+rz5JUuwzD7IWl2tZg=;
+        s=201702; t=1680479982;
+        bh=BCqdPfGxR3iXmxIIQroDKtqaoRU4eM/i8SKEIAgbIBU=;
         h=Date:From:To:Cc:Subject:From;
-        b=FX4dsGWmC4R3W/oLVGwg4sHwZHrwRlC3hUlM/9eXh1OT4DJwlfkd2ezkviDcaju5+
-         ACq5hmXEW3JF7BFsETAAxzhqhB8Vfd0yanr5psftOE1zwWL83XLiAq8PUE8iWGffsz
-         YmeRtUvKlVJeV0JCPpEZh6I1wdWIKeYCEMpN/1mehw5Mtg1l5zSuvxAaQ+MA755xwM
-         GMVHy/7pRsi+MVHfV9fWLfiSnISFTbIdOuiglmBf2CwWe5Jl8UX6UvdXY23wg8wqYx
-         YMCXgT4E50BprAKhuPQ21gzcPPHgkm1QJU5Butwf2E4h4h4slf6723MO6kAeBKJB5X
-         j6aYcZUo+RAFw==
-Date:   Mon, 3 Apr 2023 09:28:24 +1000
+        b=TKsonUC+kXomeRwiuUMwGOvrmimWhlOaKoHEqmPYqsYmVhTYq+WEWe0n4B91iO5Ch
+         I9K3TRl2Eo3vke2uK61cVJUI4AUQWCz+5HuGhuOEq+krM8rszuS1VPh85lczLOlkks
+         I14AjGACBgNC6dx7Z6QHlCPAowZYwy43kzt7bJI+BfKX8CpisrtBytdtm8VPW2INZR
+         EDI6tvQYO7EFpkC2fhdZreSWdrDML0tXE+o7OXnDDoEKdcmCSt2j6ATjQ6I8QT5Orq
+         121nczKqFRlR8PZnXbDpb8THQulSUIx1OgPkHOUw/IkmyQVHLjo+KKSk7HTbKIu1wE
+         OkFgBhhw4IOEQ==
+Date:   Mon, 3 Apr 2023 09:59:39 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Abel Vesa <abel.vesa@nxp.com>,
-        Mike Turquette <mturquette@baylibre.com>,
+To:     Mike Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>
-Cc:     Abel Vesa <abel.vesa@linaro.org>,
+Cc:     "Garmin.Chang" <Garmin.Chang@mediatek.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Marek Vasut <marex@denx.de>, Qin Jian <qinjian@cqplus1.com>
-Subject: linux-next: manual merge of the clk-imx tree with the clk tree
-Message-ID: <20230403092824.67117617@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the clk tree
+Message-ID: <20230403095939.423806fa@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/WS.qhpd_80KTRl8sU9poFhx";
+Content-Type: multipart/signed; boundary="Sig_/EUcM.HxKayhTipK6IvJl7zZ";
  protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/WS.qhpd_80KTRl8sU9poFhx
+--Sig_/EUcM.HxKayhTipK6IvJl7zZ
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the clk-imx tree got a conflict in:
+After merging the clk tree, today's linux-next build (x86_64 allmodconfig)
+failed like this:
 
-  include/linux/clk-provider.h
+In file included from include/linux/device/driver.h:21,
+                 from include/linux/device.h:32,
+                 from include/linux/platform_device.h:13,
+                 from drivers/clk/mediatek/clk-mt8188-wpe.c:9:
+drivers/clk/mediatek/clk-mt8188-wpe.c:91:31: error: 'clk_mt8188_vpp1_id_tab=
+le' undeclared here (not in a function)
+   91 | MODULE_DEVICE_TABLE(platform, clk_mt8188_vpp1_id_table);
+      |                               ^~~~~~~~~~~~~~~~~~~~~~~~
+include/linux/module.h:243:15: note: in definition of macro 'MODULE_DEVICE_=
+TABLE'
+  243 | extern typeof(name) __mod_##type##__##name##_device_table          =
+     \
+      |               ^~~~
+include/linux/module.h:243:21: error: '__mod_platform__clk_mt8188_vpp1_id_t=
+able_device_table' aliased to undefined symbol 'clk_mt8188_vpp1_id_table'
+  243 | extern typeof(name) __mod_##type##__##name##_device_table          =
+     \
+      |                     ^~~~~~
+drivers/clk/mediatek/clk-mt8188-wpe.c:91:1: note: in expansion of macro 'MO=
+DULE_DEVICE_TABLE'
+   91 | MODULE_DEVICE_TABLE(platform, clk_mt8188_vpp1_id_table);
+      | ^~~~~~~~~~~~~~~~~~~
 
-between commit:
+Caused by commit
 
-  d54c1fd4a51e ("clk: Add Sunplus SP7021 clock driver")
+  f42b9e9a43e3 ("clk: mediatek: Add MT8188 wpesys clock support")
 
-from the clk tree and commit:
-
-  27fc5ec673b5 ("clk: Introduce devm_clk_hw_register_gate_parent_data()")
-
-from the clk-imx tree.
-
-These add the same macro, but the letter has the docmenting comment wrong.
-
-I fixed it up (I just used the former) and can carry the fix as
-necessary. This is now fixed as far as linux-next is concerned, but any
-non trivial conflicts should be mentioned to your upstream maintainer
-when your tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
+I have used the clk tree from next-20230331 for today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc include/linux/clk-provider.h
-index faad3cdc1e48,92b7c794c627..000000000000
---- a/include/linux/clk-provider.h
-+++ b/include/linux/clk-provider.h
-@@@ -608,9 -608,9 +608,10 @@@ struct clk *clk_register_gate(struct de
-  	__devm_clk_hw_register_gate((dev), NULL, (name), (parent_name), NULL, \
-  			       NULL, (flags), (reg), (bit_idx),		      \
-  			       (clk_gate_flags), (lock))
-+=20
-  /**
- - * devm_clk_hw_register_gate - register a gate clock with the clock frame=
-work
- + * devm_clk_hw_register_gate_parent_data - register a gate clock with the
- + * clock framework
-   * @dev: device that is registering this clock
-   * @name: name of this clock
-   * @parent_data: parent clk data
-
---Sig_/WS.qhpd_80KTRl8sU9poFhx
+--Sig_/EUcM.HxKayhTipK6IvJl7zZ
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQqD5gACgkQAVBC80lX
-0Gz3wgf8CigVtHHO3b8Z8RPXi8Zh42yH4ewp1KFVUsR8i8tPg74ibnABKdkum8Hx
-PrGp4H0kjlxUxDP1dkGP/vXgZJy3yJRa5IQByvNs5nqJG01J7dk8CHw+iaHD5+bS
-nLua0IrNloAc20gD9NBpL0L+yVmciKY8B1x7Kj8pjayJkC09tH5wkx4ciSXdRFWm
-hsBQYchYAq1myBc7i0C2mAsshz7q53T1kOiMk87B6PvfCazOsSwY1wY8JtVuHyVK
-kSqnfEWhrMfnU4A+ar/sgWiiXLc8NceSr+eVSeRAyhro3qNdInu3R11zpwUtURMy
-n4SNybMsSML5P2QMAXpxyJyFvH3qFg==
-=KqOs
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQqFuwACgkQAVBC80lX
+0GxZlQgApgR6zgP+URPXuMmB4/LBfktsX0xBYjRjRZvgJhS1n0mumL7mbbYp6nTb
+JWbVbMn6pzMgfxWWKS7qbCQ2QPkr/slrAhKkOQ721SgYJ9pkGZcWad6cyB2DtOh1
+JoLslFCPQMm3e5rlXizLN6gVm80gKcVDDxrjioVAfPLuDAxGyCbCREVXJ9+yVMnK
+IU52SaOVqbDM3lUvyI3dWu0aFFzYcSqfWF773+A2IHpS0I0LHMguU8UbcuVLuB4y
+kyPoebmu/D7PBLTR8bBQF9vMLcsTHW+fEsdLaVEPJlKePuUboTaGXoPDEjJosa0F
+/A1oSdPBJ1K0W5tKCbSV4grl33Wdsg==
+=sU6l
 -----END PGP SIGNATURE-----
 
---Sig_/WS.qhpd_80KTRl8sU9poFhx--
+--Sig_/EUcM.HxKayhTipK6IvJl7zZ--

@@ -2,136 +2,196 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F13D26D41A3
-	for <lists+linux-next@lfdr.de>; Mon,  3 Apr 2023 12:15:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 634F16D41BB
+	for <lists+linux-next@lfdr.de>; Mon,  3 Apr 2023 12:18:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232126AbjDCKPL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 3 Apr 2023 06:15:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32810 "EHLO
+        id S231925AbjDCKS3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 3 Apr 2023 06:18:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232068AbjDCKPC (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 3 Apr 2023 06:15:02 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2F5761AE
-        for <linux-next@vger.kernel.org>; Mon,  3 Apr 2023 03:14:54 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id y4so115214795edo.2
-        for <linux-next@vger.kernel.org>; Mon, 03 Apr 2023 03:14:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680516893;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rsukYsJ96WFhINrGZt8e0Hi8C2AMBaXqrSAuDDAO/Rg=;
-        b=BY28xNWZdbIjPoGs5FyuM0H0/iQZ9xP5S3mvSXUOZsf7KoDznXc+EbRZUslHHE+gHg
-         tYSvEpvc8BFMbUa16CtP6UZO8jZAPYe+rcGcFnNDE2K8qw/Fc8BTJKfTBxxbYOs0paEr
-         gu30e2Abc1P1ocugd+Eh7hQWQCRmpjmyaupMEQLnRveZqaRuE/bA3dxigQYh4IyeuKed
-         v5EEqJFgDkA756zSoD3ubqwPM0INDDiCmazJq1V4cYSKL0a+loTRLHujO4G2sn///wPi
-         jRGnOE1N1xx9icgyGtqdvPJwszr3Y+boICrCQsLpSrT4ai/9HL09Z4jXORa6i+qFdKpl
-         Gl6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680516893;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rsukYsJ96WFhINrGZt8e0Hi8C2AMBaXqrSAuDDAO/Rg=;
-        b=7EYWwEjsFReumkvALS/LK/jDAMiXA0isrlc4bgHgDs6mA7tAsuHPez1c6OxYjUNu6j
-         g7jtZh2RiND8f81ZWKbBWT9iPqDDxL5c2Y3pVQB2Buv7kzWbVOBv4Il73hSK9P2axS9Y
-         6LyzPj+sa2z+QBOBFsncW6KUcLIVYzMZIpvc5nN2wlIL6Cq3CgtmiZeT8CkMXMymr0xm
-         2xNy7tSJtj1cOfrByw7EW22bfBB1EdyQxNuR43oE0U/NGkbgHB3qT6w0nbTCiBFUvTOK
-         YDzj5ucBfjRL4d2Yk7yEoGbjyD6dh0WKhYVXbT1CUopWN6KYBSe/LJ4r1l2TbXgaIoCt
-         4VLQ==
-X-Gm-Message-State: AAQBX9fNq2CgeUTACfqXuQlLuGVHxgANuPQw4cSYnlkJxfjFAFCRy076
-        WU7r88L9NrwTVGjdhaGENTohbQ==
-X-Google-Smtp-Source: AKy350bXEqO3rpHKXWUl2fdzn49JdhrIFS/nJ+i2jxJIMcKE7p3+277RQ8UUiCAsv2LnM5GKDBRi7Q==
-X-Received: by 2002:a17:907:205b:b0:931:cac0:60ec with SMTP id pg27-20020a170907205b00b00931cac060ecmr33516704ejb.48.1680516893151;
-        Mon, 03 Apr 2023 03:14:53 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:ae90:d80:1069:4805? ([2a02:810d:15c0:828:ae90:d80:1069:4805])
-        by smtp.gmail.com with ESMTPSA id os3-20020a170906af6300b0093f3d41b9ebsm4306277ejb.220.2023.04.03.03.14.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Apr 2023 03:14:52 -0700 (PDT)
-Message-ID: <0f757582-6bae-123c-7e21-ec8a6ac1447a@linaro.org>
-Date:   Mon, 3 Apr 2023 12:14:52 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: linux-next: build failure after merge of the mediatek tree
-Content-Language: en-US
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        with ESMTP id S232118AbjDCKSR (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 3 Apr 2023 06:18:17 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 727CAEFAC;
+        Mon,  3 Apr 2023 03:18:11 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Pqn0G2lPqz4x4r;
+        Mon,  3 Apr 2023 20:18:06 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1680517086;
+        bh=ru5t21vmlUCJYLbm/kwT474oscAtcYuhx1bI+RTdVmI=;
+        h=Date:From:To:Cc:Subject:From;
+        b=bZAKXePH/eHH+pyxxQd39poz/AVjbg8Pxkv2kumzmt8ISh7mCIjRuHsN/AbvA4LA4
+         YCCAw04+Ta5nlMhkbTmwwKGiR067v6fRUdbtjstosxFYkV53+Z/piz/LlU03OC8VI3
+         19NeJX0Rsf+0P9NKLWPOF9lMCBm0sS/UocKUY1tFsAkWQ/KfiK/nkM5JUd7o2SC+xT
+         JtcnpQLZRAnVkGUqSU0oC9+5afXEdsKJRk7/MCkqdAU+ZvYdAj6cT55rdM3j/rwP2H
+         Zv1QYa4DXdVrwE0Ji1zFDWbnW9OV+2bYC32g4QR4jiJr2mTGz9/tOQxL/iUMA/LprJ
+         FTbLSYs+DLhcQ==
+Date:   Mon, 3 Apr 2023 20:18:01 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Rob Herring <robh@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20230403175220.5b946b60@canb.auug.org.au>
- <98a774d3-ade4-72a8-1c6a-3712d596682a@collabora.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <98a774d3-ade4-72a8-1c6a-3712d596682a@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Subject: linux-next: build failure after merge of the pm tree
+Message-ID: <20230403201801.02839c9a@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/42w0VrcIT_O2t+VtyAP99_3";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 03/04/2023 10:43, AngeloGioacchino Del Regno wrote:
-> Il 03/04/23 09:52, Stephen Rothwell ha scritto:
->> Hi all,
->>
->> After merging the mediatek tree, today's linux-next build (arm64
->> defconfig) failed like this:
->>
->> Error: arch/arm64/boot/dts/mediatek/mt6795.dtsi:647.21-22 syntax error
->> FATAL ERROR: Unable to parse input tree
->>
->> Maybe caused by commit
->>
->>    a7c7f1fe2fde ("arm64: dts: mediatek: mt6795: Add MMSYS node for multimedia clocks")
->>
->> but I don't know how.
->>
->> I have reverted that commit (and the following 2) for today.
->>
-> 
-> Matthias, this issue happens because you didn't apply 07/17 [1] from the
-> 6795/xperia-m5 series...
-> 
-> [1]: 
-> https://lore.kernel.org/all/20230327083647.22017-8-angelogioacchino.delregno@collabora.com/
+--Sig_/42w0VrcIT_O2t+VtyAP99_3
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Bindings are supposed to go via subsystem (driver) tree and only via ARM
-SoC if the former is not interested in them.
+Hi all,
 
-I don't think the issue happens because Matthias did not apply binding
-patch. Nothing in the cover letter or the patch mentioned such
-dependency, so why he should pick up unrelated patch?
+After merging the pm tree, today's linux-next build (powerpc allyesconfig)
+failed like this:
 
-The submitter should clearly mark such dependencies or make patches
-independent. It's nothing new, for clock/reset drivers (driver + binding
-+ DTS) uncoupling the dependency is pretty often a requirement or
-maintainers need to coordinate with cross-tree pulls (and DTS cannot get
-pulled into the driver tree/branch).
+In file included from drivers/char/tpm/tpm_atmel.c:18:
+drivers/char/tpm/tpm_atmel.h: In function 'atmel_get_base_addr':
+drivers/char/tpm/tpm_atmel.h:50:14: error: implicit declaration of function=
+ 'of_find_node_by_name'; did you mean 'bus_find_device_by_name'? [-Werror=
+=3Dimplicit-function-declaration]
+   50 |         dn =3D of_find_node_by_name(NULL, "tpm");
+      |              ^~~~~~~~~~~~~~~~~~~~
+      |              bus_find_device_by_name
+drivers/char/tpm/tpm_atmel.h:50:12: error: assignment to 'struct device_nod=
+e *' from 'int' makes pointer from integer without a cast [-Werror=3Dint-co=
+nversion]
+   50 |         dn =3D of_find_node_by_name(NULL, "tpm");
+      |            ^
+drivers/char/tpm/tpm_atmel.h:55:14: error: implicit declaration of function=
+ 'of_device_is_compatible'; did you mean 'fwnode_device_is_compatible'? [-W=
+error=3Dimplicit-function-declaration]
+   55 |         if (!of_device_is_compatible(dn, "AT97SC3201")) {
+      |              ^~~~~~~~~~~~~~~~~~~~~~~
+      |              fwnode_device_is_compatible
+drivers/char/tpm/tpm_atmel.h:56:17: error: implicit declaration of function=
+ 'of_node_put' [-Werror=3Dimplicit-function-declaration]
+   56 |                 of_node_put(dn);
+      |                 ^~~~~~~~~~~
+drivers/char/tpm/tpm_atmel.h:60:15: error: implicit declaration of function=
+ 'of_get_property' [-Werror=3Dimplicit-function-declaration]
+   60 |         reg =3D of_get_property(dn, "reg", &reglen);
+      |               ^~~~~~~~~~~~~~~
+drivers/char/tpm/tpm_atmel.h:60:13: error: assignment to 'const unsigned in=
+t *' from 'int' makes pointer from integer without a cast [-Werror=3Dint-co=
+nversion]
+   60 |         reg =3D of_get_property(dn, "reg", &reglen);
+      |             ^
+drivers/char/tpm/tpm_atmel.h:61:18: error: implicit declaration of function=
+ 'of_n_addr_cells' [-Werror=3Dimplicit-function-declaration]
+   61 |         naddrc =3D of_n_addr_cells(dn);
+      |                  ^~~~~~~~~~~~~~~
+drivers/char/tpm/tpm_atmel.h:62:18: error: implicit declaration of function=
+ 'of_n_size_cells' [-Werror=3Dimplicit-function-declaration]
+   62 |         nsizec =3D of_n_size_cells(dn);
+      |                  ^~~~~~~~~~~~~~~
+drivers/perf/arm_dmc620_pmu.c:710:36: error: array type has incomplete elem=
+ent type 'struct acpi_device_id'
+  710 | static const struct acpi_device_id dmc620_acpi_match[] =3D {
+      |                                    ^~~~~~~~~~~~~~~~~
+drivers/perf/arm_dmc620_pmu.c:710:36: error: 'dmc620_acpi_match' defined bu=
+t not used [-Werror=3Dunused-variable]
+drivers/perf/alibaba_uncore_drw_pmu.c:757:36: error: array type has incompl=
+ete element type 'struct acpi_device_id'
+  757 | static const struct acpi_device_id ali_drw_acpi_match[] =3D {
+      |                                    ^~~~~~~~~~~~~~~~~~
+drivers/perf/alibaba_uncore_drw_pmu.c:757:36: error: 'ali_drw_acpi_match' d=
+efined but not used [-Werror=3Dunused-variable]
 
-> 
-> That contains the mediatek,mt6795-gce.h header that has the definitions used in
-> a7c7f1fe2fde ("arm64: dts: mediatek: mt6795: Add MMSYS node for multimedia clocks")
-> ....and this is the reason of the syntax error.
-> 
-> Does this commit have to go through devicetree trees?
+Caused by commit
 
-Bindings go via subsystem maintainer, so here rather mailbox. Not DT tree.
+  054e68aae050 ("ACPI: Replace irqdomain.h include with struct declarations=
+")
 
-> I'm adding Krzysztof and Rob to the loop for this.
+I have applied the following fixup patch:
 
-I guess now, the easiest would be if Matthias takes the binding change
-with mailbox Ack. Assuming there are no conflicts there...
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Mon, 3 Apr 2023 19:58:19 +1000
+Subject: [PATCH] more fixups for "ACPI: Replace irqdomain.h include with
+ struct declarations"
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ drivers/char/tpm/tpm_atmel.h          | 2 ++
+ drivers/perf/alibaba_uncore_drw_pmu.c | 1 +
+ drivers/perf/arm_dmc620_pmu.c         | 1 +
+ 3 files changed, 4 insertions(+)
+
+diff --git a/drivers/char/tpm/tpm_atmel.h b/drivers/char/tpm/tpm_atmel.h
+index ba37e77e8af3..0129d76a4fa3 100644
+--- a/drivers/char/tpm/tpm_atmel.h
++++ b/drivers/char/tpm/tpm_atmel.h
+@@ -26,6 +26,8 @@ struct tpm_atmel_priv {
+=20
+ #ifdef CONFIG_PPC64
+=20
++#include <linux/of.h>
++
+ #include <asm/prom.h>
+=20
+ #define atmel_getb(priv, offset) readb(priv->iobase + offset)
+diff --git a/drivers/perf/alibaba_uncore_drw_pmu.c b/drivers/perf/alibaba_u=
+ncore_drw_pmu.c
+index 5c5be9fc1b15..208b1fe1d247 100644
+--- a/drivers/perf/alibaba_uncore_drw_pmu.c
++++ b/drivers/perf/alibaba_uncore_drw_pmu.c
+@@ -28,6 +28,7 @@
+ #include <linux/printk.h>
+ #include <linux/rculist.h>
+ #include <linux/refcount.h>
++#include <linux/mod_devicetable.h>
+=20
+=20
+ #define ALI_DRW_PMU_COMMON_MAX_COUNTERS			16
+diff --git a/drivers/perf/arm_dmc620_pmu.c b/drivers/perf/arm_dmc620_pmu.c
+index 5de06f9a4dd3..3a006b34b515 100644
+--- a/drivers/perf/arm_dmc620_pmu.c
++++ b/drivers/perf/arm_dmc620_pmu.c
+@@ -27,6 +27,7 @@
+ #include <linux/printk.h>
+ #include <linux/rculist.h>
+ #include <linux/refcount.h>
++#include <linux/mod_devicetable.h>
+=20
+ #define DMC620_PA_SHIFT					12
+ #define DMC620_CNT_INIT					0x80000000
+--=20
+2.39.2
 
 
-Best regards,
-Krzysztof
 
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/42w0VrcIT_O2t+VtyAP99_3
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQqp9kACgkQAVBC80lX
+0GyFzwf+IbCP/bBYmKBeioQ0d/k0ev2xVd2UbK86K9Vnj/MAph3qxPqgY4JVnh2L
+NpHiiQCXfJPk652kXtVYWbPK2rnRtX2pUtV1Di4WbM2BtyQBRvReJwzLW0XZMLX5
+7n2Hdoc226hQ/XnVKllkGDz5jKH9+N7n6b6TPEbYPnGZOEeaVBdFlvp/KajuBdjJ
+6L4goxT9eok87Ae/squvKxgUh5iRPpEpCsUPSDOTc4Dz7MKLPuQgtZWMmchy8mjc
+MV3n/tySrL+Zn+9V9EraOHK1ERvFni4m7U1Ivsy5w7k0GeX+lDTQTGX5dqlDEJXt
+Vh7TaLppMmr8LuiCm+zEZyYBSV1hPQ==
+=yGVs
+-----END PGP SIGNATURE-----
+
+--Sig_/42w0VrcIT_O2t+VtyAP99_3--

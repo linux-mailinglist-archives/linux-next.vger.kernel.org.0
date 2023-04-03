@@ -2,123 +2,101 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2738F6D3EBF
-	for <lists+linux-next@lfdr.de>; Mon,  3 Apr 2023 10:16:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC0676D3F44
+	for <lists+linux-next@lfdr.de>; Mon,  3 Apr 2023 10:43:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231245AbjDCIQU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 3 Apr 2023 04:16:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38126 "EHLO
+        id S231646AbjDCInn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 3 Apr 2023 04:43:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230269AbjDCIQR (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 3 Apr 2023 04:16:17 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D75EFAF1C;
-        Mon,  3 Apr 2023 01:15:57 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        with ESMTP id S231753AbjDCInj (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 3 Apr 2023 04:43:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 821257EE6;
+        Mon,  3 Apr 2023 01:43:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PqkHG6TFHz4xFj;
-        Mon,  3 Apr 2023 18:15:54 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1680509755;
-        bh=Q2R8Dot9lOgfCR3BJoYVs7FXCpjz1nOl+0DsGoZait4=;
-        h=Date:From:To:Cc:Subject:From;
-        b=c+XVBGDMaK8MrO6IGSvgSsDSR+kSZ5kr6DTpwUdvWsy+MNndoCDRiqEc/jD5SC7N0
-         uhS2IhtVYNpUCDrS1fnBaIFH5jWwuPxWjZFuXhstqoKkQxqaON3fwoTRoMAMGgQk2p
-         pfK2WoLjXz7NBifywH35cvukBJxz1Unk6iopm15RuZNkqtPYWmsIXat+oF4KDKCHC1
-         JDusUJyP4QmdCYfWxIq8uuVTJhkNbSGhFbp2b06ijQbZsyAMnnOuuWDBfCYjRHJxzs
-         v52dt06xzNk5rfQ3WlT6eyxHR/Vn4ywh7kadAqYtfndhjA7zAmkYEaALYu1c3jJxsX
-         WGjQJ/gMNL05g==
-Date:   Mon, 3 Apr 2023 18:15:52 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2067261150;
+        Mon,  3 Apr 2023 08:43:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23EE8C4339B;
+        Mon,  3 Apr 2023 08:43:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680511417;
+        bh=za2PYURTwJ1KDJ92WhwP6ERqBjgmVTFChbJRUTKlZwc=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=OeZRvvLJX5dQ487Wh97mIMEJ9FzYb0XADQFQCn47zIj14QWEAjCRvyhr4W8p+nWuL
+         sZMQcTh6yf9+EJx4IzgR0ExjhAA3rM4EV9BwUM7aqoKDzWpFdyKP1Om4NQLyYiAhib
+         pH87Hj6q2UGCqFoOwFCsiP6c++1vYgP2D2F+PEspihyXKPtspOhNUjBTTrOXXG1zZ7
+         eCLxIjUGoJhS1m6kadkh6Gkid823BxsGRe1jb+2Xr7F7guZVNPsVmkevEO0fulwM4l
+         VglD13lRvYfi6ZEnK/xPYT+Sm5sWQX6lXSfMiu+E0satOB+BzGRojohhN77fTk0kWq
+         dIMhtI5VvEmlQ==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     David Miller <davem@davemloft.net>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Wireless <linux-wireless@vger.kernel.org>,
+        Felix Fietkau <nbd@nbd.name>,
+        Johannes Berg <johannes.berg@intel.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the mediatek tree
-Message-ID: <20230403181552.607a8b64@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Networking <netdev@vger.kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: Re: linux-next: manual merge of the wireless-next tree with the wireless tree
+References: <20230331104959.0b30604d@canb.auug.org.au>
+        <20230403122313.6006576b@canb.auug.org.au>
+Date:   Mon, 03 Apr 2023 11:43:31 +0300
+In-Reply-To: <20230403122313.6006576b@canb.auug.org.au> (Stephen Rothwell's
+        message of "Mon, 3 Apr 2023 12:23:13 +1000")
+Message-ID: <87iledbbkc.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/95aa3W4Sir8AnNa+cGlkH8d";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/95aa3W4Sir8AnNa+cGlkH8d
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Stephen Rothwell <sfr@canb.auug.org.au> writes:
 
-Hi all,
+> Hi all,
+>
+> On Fri, 31 Mar 2023 10:49:59 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>>
+>> Today's linux-next merge of the wireless-next tree got a conflict in:
+>> 
+>>   net/mac80211/rx.c
+>> 
+>> between commit:
+>> 
+>>   a16fc38315f2 ("wifi: mac80211: fix potential null pointer dereference")
+>> 
+>> from the wireless tree and commit:
+>> 
+>>   fe4a6d2db3ba ("wifi: mac80211: implement support for yet another mesh A-MSDU format")
+>> 
+>> from the wireless-next tree.
+>> 
+>> I fixed it up (see below) and can carry the fix as necessary. This
+>> is now fixed as far as linux-next is concerned, but any non trivial
+>> conflicts should be mentioned to your upstream maintainer when your tree
+>> is submitted for merging.  You may also want to consider cooperating
+>> with the maintainer of the conflicting tree to minimise any particularly
+>> complex conflicts.
 
-After merging the mediatek tree, today's linux-next build (arm64
-defconfig) failed like this:
+[...]
 
-aarch64-linux-gnu-ld: Unexpected GOT/PLT entries detected!
-aarch64-linux-gnu-ld: Unexpected run-time procedure linkages detected!
-aarch64-linux-gnu-ld: drivers/soc/mediatek/mtk-mmsys.o: in function `mtk_mm=
-sys_update_bits':
-drivers/soc/mediatek/mtk-mmsys.c:147: undefined reference to `cmdq_pkt_writ=
-e_mask'
-aarch64-linux-gnu-ld: drivers/soc/mediatek/mtk-mmsys.o: in function `mtk_mm=
-sys_probe':
-drivers/soc/mediatek/mtk-mmsys.c:386: undefined reference to `cmdq_dev_get_=
-client_reg'
-aarch64-linux-gnu-ld: drivers/soc/mediatek/mtk-mutex.o: in function `mtk_mu=
-tex_enable_by_cmdq':
-drivers/soc/mediatek/mtk-mutex.c:883: undefined reference to `cmdq_pkt_writ=
-e'
-aarch64-linux-gnu-ld: drivers/soc/mediatek/mtk-mutex.o: in function `mtk_mu=
-tex_probe':
-drivers/soc/mediatek/mtk-mutex.c:1023: undefined reference to `cmdq_dev_get=
-_client_reg'
+> This is now a conflict between the net-next and net trees.
 
-Caused by commit
+My plan is to submit wireless-next pull request to net-next by
+Wednesday, that should fix the conflict.
 
-  b34884b4c878 ("soc: mediatek: Cleanup ifdefs for IS_REACHABLE(CONFIG_MTK_=
-CMDQ)")
+-- 
+https://patchwork.kernel.org/project/linux-wireless/list/
 
-I have used the mediatek tree from next-20230331 for today.
-
-There were also the following warnings:
-
-arch/arm64/boot/dts/mediatek/mt6795-sony-xperia-m5.dts:104.21-109.4: Warnin=
-g (unit_address_format): /soc/i2c@11010000/accelerometer@0x10: unit name sh=
-ould not have leading "0x"
-arch/arm64/boot/dts/mediatek/mt6795-sony-xperia-m5.dts:111.20-114.4: Warnin=
-g (unit_address_format): /soc/i2c@11010000/magnetometer@0x12: unit name sho=
-uld not have leading "0x"
-arch/arm64/boot/dts/mediatek/mt6795-sony-xperia-m5.dts:104.21-109.4: Warnin=
-g (i2c_bus_reg): /soc/i2c@11010000/accelerometer@0x10: I2C bus unit address=
- format error, expected "10"
-arch/arm64/boot/dts/mediatek/mt6795-sony-xperia-m5.dts:111.20-114.4: Warnin=
-g (i2c_bus_reg): /soc/i2c@11010000/magnetometer@0x12: I2C bus unit address =
-format error, expected "12"
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/95aa3W4Sir8AnNa+cGlkH8d
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQqizgACgkQAVBC80lX
-0GxoTAf9GFGRRE0fwnjtKsbJGJp/i9zy31ytzJkMewVHdASpZWs4QRijKiSVPIKQ
-+e5+OV8KsKLHDo+JBmiUyTCFTKqPDz7yGQjJ3LwgX+LTs9GXxhjk39G6whvkdUZj
-cMU19DsToRUzVDzW0D8Po8DVSwbZY5+8khKVr/ZfcUNYQomC3oLlKiPN81PZpZRf
-Eob/alYCrdND/FWpONNOHd+754kIt8ZFRooc4poIQHvmpwPsde03VBG+c4aI1Ycb
-p5WMqeK87Ap5f2vz2xCP+Ow4SIHu97+RiqD8iESOlPYU7Rfz9IOn3w5UJvQ0pdyN
-VWwDDf1r6diSx/4ryGG8evoAn382IQ==
-=JJ+I
------END PGP SIGNATURE-----
-
---Sig_/95aa3W4Sir8AnNa+cGlkH8d--
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches

@@ -2,52 +2,50 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4901E6D3F49
-	for <lists+linux-next@lfdr.de>; Mon,  3 Apr 2023 10:43:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10CD56D3F5A
+	for <lists+linux-next@lfdr.de>; Mon,  3 Apr 2023 10:46:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231467AbjDCInp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 3 Apr 2023 04:43:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36074 "EHLO
+        id S231433AbjDCIqF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 3 Apr 2023 04:46:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231793AbjDCIno (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 3 Apr 2023 04:43:44 -0400
+        with ESMTP id S231416AbjDCIqE (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 3 Apr 2023 04:46:04 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31D79729A;
-        Mon,  3 Apr 2023 01:43:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F7B37EE9;
+        Mon,  3 Apr 2023 01:46:03 -0700 (PDT)
 Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id EF6866600357;
-        Mon,  3 Apr 2023 09:43:40 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id DD82166030F1;
+        Mon,  3 Apr 2023 09:46:01 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1680511421;
-        bh=rbDlcT8qTYcqq8cEMegnVryZ0bTQ1eDdWF0iSr9Dkw4=;
+        s=mail; t=1680511562;
+        bh=Fhgq8JItzHKrMtYr/qUtaRmG44PqEvs1zKAfcmwP4Mg=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Zia9iO5HAIZ9wnzF2QEAAEnv9ZofTGPxQVph7sr5q5o+66Tke5K5C24xQRFodznf/
-         LCTIYaW8mFw5ccNLk/SRJZLLtQafF2ty0mHXFvWn8l5Vq5GWyHXGjtLmtosOaB6trj
-         UU/T6nov2MwpfzMioLWMD0F4UbX1L1lAqUpSKlXnxhyIm2uIPad1f6W7ziv/ZKK3Ua
-         Ltcg3yyBvDoKGnWVixfqWob9qkcoegB/5zpDq+Uey3ZD/3FOzDYp1grZdRV3QXP9T+
-         Eo5GZbJ4CcP7quw+jaAhezkUE6yKk16bKeYHqELV0sYsV3RcLG6O1gcsUUVo4vFDMM
-         VuHsg8qMHFW5w==
-Message-ID: <98a774d3-ade4-72a8-1c6a-3712d596682a@collabora.com>
-Date:   Mon, 3 Apr 2023 10:43:37 +0200
+        b=hqVxJMfPFUt6Y8pTlaaLtksiUT2Dyi+mS6RqvbaN9qfvh2r/2Ru+YSLlfgMWx7hTO
+         ML6CV8bl73mSx8tAG75R/4rYnjMrcILBYH1wHfgDDWNYRX9gVzJyM7vBHPR72aL0Wq
+         oTCC20G2wgRvOXGsEAoQaoklmDSIbIOlBUKze8AMkJJYoBh2WK2JGssPL1kmTcg9tZ
+         ij7csLVAAGh8SHElzNAQN6zKQor6elocz9upqd6GktLYRvVt9BmMCKwWJhKyRdtjNL
+         VWlAKQgtFLy9c8/rD/BJ8o9NtDQCfz+ZSd4Z19sp66Xyk/Ud9vodL0IJQeZQYx/m9r
+         VJm/XldxQAiYw==
+Message-ID: <c6b97f15-fd43-d9c4-8a07-04d4063f8b98@collabora.com>
+Date:   Mon, 3 Apr 2023 10:45:59 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.1
 Subject: Re: linux-next: build failure after merge of the mediatek tree
+Content-Language: en-US
 To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
+        Matthias Brugger <matthias.bgg@gmail.com>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20230403175220.5b946b60@canb.auug.org.au>
-Content-Language: en-US
+References: <20230403181552.607a8b64@canb.auug.org.au>
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230403175220.5b946b60@canb.auug.org.au>
+In-Reply-To: <20230403181552.607a8b64@canb.auug.org.au>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -59,36 +57,47 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Il 03/04/23 09:52, Stephen Rothwell ha scritto:
+Il 03/04/23 10:15, Stephen Rothwell ha scritto:
 > Hi all,
 > 
 > After merging the mediatek tree, today's linux-next build (arm64
 > defconfig) failed like this:
 > 
-> Error: arch/arm64/boot/dts/mediatek/mt6795.dtsi:647.21-22 syntax error
-> FATAL ERROR: Unable to parse input tree
+> aarch64-linux-gnu-ld: Unexpected GOT/PLT entries detected!
+> aarch64-linux-gnu-ld: Unexpected run-time procedure linkages detected!
+> aarch64-linux-gnu-ld: drivers/soc/mediatek/mtk-mmsys.o: in function `mtk_mmsys_update_bits':
+> drivers/soc/mediatek/mtk-mmsys.c:147: undefined reference to `cmdq_pkt_write_mask'
+> aarch64-linux-gnu-ld: drivers/soc/mediatek/mtk-mmsys.o: in function `mtk_mmsys_probe':
+> drivers/soc/mediatek/mtk-mmsys.c:386: undefined reference to `cmdq_dev_get_client_reg'
+> aarch64-linux-gnu-ld: drivers/soc/mediatek/mtk-mutex.o: in function `mtk_mutex_enable_by_cmdq':
+> drivers/soc/mediatek/mtk-mutex.c:883: undefined reference to `cmdq_pkt_write'
+> aarch64-linux-gnu-ld: drivers/soc/mediatek/mtk-mutex.o: in function `mtk_mutex_probe':
+> drivers/soc/mediatek/mtk-mutex.c:1023: undefined reference to `cmdq_dev_get_client_reg'
 > 
-> Maybe caused by commit
+> Caused by commit
 > 
->    a7c7f1fe2fde ("arm64: dts: mediatek: mt6795: Add MMSYS node for multimedia clocks")
-> 
-> but I don't know how.
-> 
-> I have reverted that commit (and the following 2) for today.
+>    b34884b4c878 ("soc: mediatek: Cleanup ifdefs for IS_REACHABLE(CONFIG_MTK_CMDQ)")
 > 
 
-Matthias, this issue happens because you didn't apply 07/17 [1] from the
-6795/xperia-m5 series...
+I can recheck why this happens - otherwise we can simply avoid applying that commit
+if there's no time.
 
-[1]: 
-https://lore.kernel.org/all/20230327083647.22017-8-angelogioacchino.delregno@collabora.com/
+> I have used the mediatek tree from next-20230331 for today.
+> 
+> There were also the following warnings:
+> 
+> arch/arm64/boot/dts/mediatek/mt6795-sony-xperia-m5.dts:104.21-109.4: Warning (unit_address_format): /soc/i2c@11010000/accelerometer@0x10: unit name should not have leading "0x"
+> arch/arm64/boot/dts/mediatek/mt6795-sony-xperia-m5.dts:111.20-114.4: Warning (unit_address_format): /soc/i2c@11010000/magnetometer@0x12: unit name should not have leading "0x"
+> arch/arm64/boot/dts/mediatek/mt6795-sony-xperia-m5.dts:104.21-109.4: Warning (i2c_bus_reg): /soc/i2c@11010000/accelerometer@0x10: I2C bus unit address format error, expected "10"
+> arch/arm64/boot/dts/mediatek/mt6795-sony-xperia-m5.dts:111.20-114.4: Warning (i2c_bus_reg): /soc/i2c@11010000/magnetometer@0x12: I2C bus unit address format error, expected "12"
+> 
 
-That contains the mediatek,mt6795-gce.h header that has the definitions used in
-a7c7f1fe2fde ("arm64: dts: mediatek: mt6795: Add MMSYS node for multimedia clocks")
-....and this is the reason of the syntax error.
+Matthias, should I send new versions of the commits, addressing this sad overlook
+from my side, or would you fix that, or should I send new commits cleaning that up
+on top?
 
-Does this commit have to go through devicetree trees?
-I'm adding Krzysztof and Rob to the loop for this.
+Please let me know how to proceed here.
 
-Regards,
+Thanks,
 Angelo
+

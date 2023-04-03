@@ -2,117 +2,95 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91C806D3C86
-	for <lists+linux-next@lfdr.de>; Mon,  3 Apr 2023 06:41:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E61B6D3C91
+	for <lists+linux-next@lfdr.de>; Mon,  3 Apr 2023 06:51:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231435AbjDCElg (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 3 Apr 2023 00:41:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42556 "EHLO
+        id S231382AbjDCEv1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 3 Apr 2023 00:51:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231442AbjDCEle (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 3 Apr 2023 00:41:34 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B502F8A5C;
-        Sun,  2 Apr 2023 21:41:33 -0700 (PDT)
+        with ESMTP id S231408AbjDCEvX (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 3 Apr 2023 00:51:23 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10F33BBA8;
+        Sun,  2 Apr 2023 21:51:18 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PqdWv2fd2z4xD8;
-        Mon,  3 Apr 2023 14:41:30 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Pqdl867S2z4xFX;
+        Mon,  3 Apr 2023 14:51:16 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1680496892;
-        bh=W6GP7q6wi5GJwj7Dq38b9nmo+P5VQXSeAtja9XIG3Uc=;
+        s=201702; t=1680497477;
+        bh=CI3WCEpLiiUFOSCs3M8n7Nsr6x1Qk746fdzaOak04E0=;
         h=Date:From:To:Cc:Subject:From;
-        b=g0nfWgnGj3VP8OVsM5Ry5OyxGrYsrRiC9qCTlkfrLQeMuhu6vN3wLZe+OGKbrhucb
-         ntlqK4qZAR4F1KoheUEVhuvif8YwHuahLsbJlGFOnURZTwgfIy7wp8oDc3DSkQmOwh
-         1mwor4mHSTrSFGnk04GlZIxnKyZfHByqY56NObfyy+ChnFLQyHqTbLrwi5OYh677vL
-         Lz1nU++bZATpcY79dlUKzX46e+NX8QxAy8SCUrV0DFnUCfojB0Je7+pcRJMRc1z7Jl
-         DXU/vJDLgNbqaCyftk4As50kPIZ5HcYmfg8eSs2vvX2pAbbavkQ08QlQ6f1gR/Uc2w
-         O22YJajdcZWog==
-Date:   Mon, 3 Apr 2023 14:41:29 +1000
+        b=df+WLqBtL8dpogPV/oRb9I9nzJCu+ymmif+vEKs5LtfqEWR/8E8QMeQQoZZ9JPIJX
+         gQEocl1CU/UEtEJPS/aO9LfI23+kwW4Lgcjwrr7Gkvg2c3J526FIywJ6zoG0394CKB
+         RqGvSEWlCrAo6U+H0I9JR38d4CyZpBGvvhfSkljeoSMZtumwWaEeBS/6jfhD+Rzd1m
+         PP8YhjsrdmGO6F0q+GoDXOu7luqAVW7t9Xdouf9CZsE3ZH9ciSGeXH2a7Ym7slqnEQ
+         aOwWJu5QfhlIfOxP4AXTR/1uQ9TImWPhqhJaHFJjdPTUkcjt7UyjS+gw64Jk6D2B26
+         uubi1GD8ye2HA==
+Date:   Mon, 3 Apr 2023 14:51:15 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
 To:     Steven Rostedt <rostedt@goodmis.org>,
         Masami Hiramatsu <mhiramat@kernel.org>,
-        Joerg Roedel <joro@8bytes.org>
-Cc:     Beau Belgrave <beaub@linux.microsoft.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Joerg Roedel <jroedel@suse.de>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Ross Zwisler <zwisler@google.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the ftrace tree with the iommu tree
-Message-ID: <20230403144129.250c7095@canb.auug.org.au>
+Subject: linux-next: duplicate patches in the ftrace tree
+Message-ID: <20230403145115.2849e079@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/DvWvXKmidxV1SDWJWy8u9Xk";
+Content-Type: multipart/signed; boundary="Sig_/M5cOPS7S0mpLAIWeixd1ZrW";
  protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/DvWvXKmidxV1SDWJWy8u9Xk
+--Sig_/M5cOPS7S0mpLAIWeixd1ZrW
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the ftrace tree got a conflict in:
+The following commits are also in the mm tree as different commits
+(but the same patches):
 
-  kernel/fork.c
+  4336cc15b9f7 ("selftests: use canonical ftrace path")
+  d1c27c55427e ("leaking_addresses: also skip canonical ftrace path")
+  c2f92e8b2d24 ("tools/kvm_stat: use canonical ftrace path")
 
-between commit:
+these are commits
 
-  cd3891158a77 ("iommu/sva: Move PASID helpers to sva code")
+  7dcf5bf9ae8a ("selftests: use canonical ftrace path")
+  4ea6b3463c3e ("leaking_addresses: also skip canonical ftrace path")
+  d791c1b3e996 ("tools/kvm_stat: use canonical ftrace path")
 
-from the iommu tree and commit:
-
-  fd593511cdfc ("tracing/user_events: Track fork/exec/exit for mm lifetime")
-
-from the ftrace tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+in the mm tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc kernel/fork.c
-index 4a8f43aa554d,efb1f2257772..000000000000
---- a/kernel/fork.c
-+++ b/kernel/fork.c
-@@@ -97,7 -97,7 +97,8 @@@
-  #include <linux/io_uring.h>
-  #include <linux/bpf.h>
-  #include <linux/stackprotector.h>
- +#include <linux/iommu.h>
-+ #include <linux/user_events.h>
- =20
-  #include <asm/pgalloc.h>
-  #include <linux/uaccess.h>
-
---Sig_/DvWvXKmidxV1SDWJWy8u9Xk
+--Sig_/M5cOPS7S0mpLAIWeixd1ZrW
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQqWPoACgkQAVBC80lX
-0Gz72Af+KiLZCohIEh+MgCSTaUO0nXgpchD9kQAyCk/thFxLvtNBuZ8zU/HheIhP
-S4XnCEWwdcqQdu/iAiq+sgdT99a0171M3cBzkhczQ+kpNNFsH4lvPfGpDByAQ9rv
-uroJn7O9HBPP+nYgqC6GlrU2udwN1mT7eNjJTQ6KMTqvovKstY38lOCJ99RSYWvJ
-1KYYO4oSogiBf1CBBzA+4b5UzPzyXCQZs43/XWO3QBhBx1LnW1OcPeHEDVxSr7/9
-6ce1ET6bXFiJQNx3L0EDkJ6h+qYRmZ6Q2OIgoR0c8whMkzIDBAOMJWXtqxXLrhgE
-ouo1wIj5KVIK0A5vnmjWaoYEaBpjHw==
-=XIXx
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQqW0QACgkQAVBC80lX
+0GyXJgf/VmXFONcFKW5FkrZkPslOqwb7vSMd0e0/J+8S6OgteW31vXYkkxV+K7IY
+HC2AuPDwkTLVtoaK4LJ8SKkAAAu1UlP59CXBCPoXNRm6MbnobJpPkt9Ejs7/8Fdy
+jk9qTA0wEEiEqelRhM2gxKAHDbLCSZ1mXLwUz3ujLKS6xtEL6YBlRUIYcmNiDuYX
+sAB1n7ChI5UvucBRQfvc1S2w77QJ5vLXfreNfEAVV7h/44ednC5Jwlrx3BnJYA79
+VDDAQc3ieDcNxfX1QHn66Z+DdbeRpnKAh50SYOQNuqIAVsLLbwGyaOdAuV7BVu7y
+TIdd+DgWcgI8MPt+WTIlij496Ao/zw==
+=8X9p
 -----END PGP SIGNATURE-----
 
---Sig_/DvWvXKmidxV1SDWJWy8u9Xk--
+--Sig_/M5cOPS7S0mpLAIWeixd1ZrW--

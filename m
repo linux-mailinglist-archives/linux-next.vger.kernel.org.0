@@ -2,118 +2,126 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8F6D6D3F70
-	for <lists+linux-next@lfdr.de>; Mon,  3 Apr 2023 10:51:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD09F6D40E5
+	for <lists+linux-next@lfdr.de>; Mon,  3 Apr 2023 11:42:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230246AbjDCIvl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 3 Apr 2023 04:51:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45304 "EHLO
+        id S232081AbjDCJm0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 3 Apr 2023 05:42:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229785AbjDCIvk (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 3 Apr 2023 04:51:40 -0400
-Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com [IPv6:2607:f8b0:4864:20::92b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD2653AB2;
-        Mon,  3 Apr 2023 01:51:39 -0700 (PDT)
-Received: by mail-ua1-x92b.google.com with SMTP id m5so20276578uae.11;
-        Mon, 03 Apr 2023 01:51:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680511899;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FymDryzt1xBzbE+SpKvnTozEFbclbNgIFpbMS++SyVU=;
-        b=WQLhONVAXpN5OHyuTesxZLQCVH84lLcS8R//4zp4N5W1jHxF5GlEOMu++thn0Z8osa
-         wse+65L8OESh9bizgwSYVrNCi5XOk2wqGxaeu9Jxmgn9TswzAZPTyxn8SbhIhHNbLlwk
-         giSe4Ewsddb2G9rIwlLNlJdMjHjB19E39XCmz6rhVoPMVxtkOKu0NmFmvPeczy7Lmq/+
-         Ne6t3WZ+wZXYABufxAHZokA+Q9B2D8HCKfkyK+yTg4Sa5g5/DiZnb7eYyOKjkmS56/BD
-         13NPRof6md+4O6dicSgoOh5+j6l/+pCyvlFC5fZ2DLSyGJjreVZCYeHqHgz1x/zNg8lH
-         0BnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680511899;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FymDryzt1xBzbE+SpKvnTozEFbclbNgIFpbMS++SyVU=;
-        b=Hjx5KhezhMm0BT3/r1LXb1qyNPu6+boXvynn1o560iA7QVj+FBn0B3gZZqjWxqoNu/
-         L/W0hBdtYDN8KxMiPV1lQy2GPsAF4QOxesM0HHC5VYQVQxIwodMroIvdWoAa5iV9HQmu
-         hALKT/oWDwJB9ANiFqj58jwPiTTdIuAPUynKiG8OCnLz1ETbRNd3hsweT5cwV6+i251W
-         w7Wpj1e153GlMkQ/qT641G+gBkMlPO30SDi+MuCsjgbYLd15IsMo/e1UD7eFSVf5KNrl
-         rW2hax6p+c4xD02z62fHowQpPeEn+W6xGrSpZyoFOuiqKr0U+l35A0pjahWXVJ5wcK0h
-         aTnA==
-X-Gm-Message-State: AAQBX9crVi7l5+mLaawslpggxErt99Qt2912gHz0UcqWszmhsCfXNRnS
-        pqJNe+CxA4tj38poVQJ6Dddo97yuQTfZDb6IpXk=
-X-Google-Smtp-Source: AKy350b4qh7ooTYUZmD0lqPsElUdZR/+GMJIQH4u47foRbem0nU3YeXjFhuoxUqXFrG8UrY6FG7/2VR2qiQ4iBbIXAk=
-X-Received: by 2002:a1f:a8d4:0:b0:43c:6ef1:7200 with SMTP id
- r203-20020a1fa8d4000000b0043c6ef17200mr1391338vke.3.1680511898929; Mon, 03
- Apr 2023 01:51:38 -0700 (PDT)
+        with ESMTP id S231484AbjDCJl5 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 3 Apr 2023 05:41:57 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DD3F10AAF;
+        Mon,  3 Apr 2023 02:41:49 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8B1E266003AC;
+        Mon,  3 Apr 2023 10:41:47 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1680514907;
+        bh=yGQW+RsdLz3zsU0uhQhgjYH5b+qFEACrFhpDyGP/USQ=;
+        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+        b=c7zZUCTGZHXDjVnF0waGyq29bWYrauWP3P1JK1iny0dI7oDgtifm7Own5ozu8Hitt
+         W/BdzT3aYT/E6VkgiyV1y6hShdda0PH2RxYUSYdFUqnyLN036L7TnTAorTvnLDl3Eu
+         vSKAKv9TL3kirQyzOgIcVfe+Y9PNP40/ay8LYbgeSkR11xSJJjua0hWYnhSIBeu76u
+         /wppMDE3yUvYResE8KVYkt3ONmiprL8LHwnWxsKa9+s706qRD/g0hbJ/yGlzrJq38Q
+         la0cJu5ief1jtaELTlOWP3c8YEaBVOBvjfixCxqudSwpkTAwP8aZvtK4ILuDBRaKPS
+         3r2MGcciaxFiw==
+Message-ID: <7dd87d0c-c5fc-fe00-f021-34061f0705e4@collabora.com>
+Date:   Mon, 3 Apr 2023 11:41:44 +0200
 MIME-Version: 1.0
-References: <20230403121617.61e2a929@canb.auug.org.au>
-In-Reply-To: <20230403121617.61e2a929@canb.auug.org.au>
-From:   Qiang Yu <yuq825@gmail.com>
-Date:   Mon, 3 Apr 2023 16:51:27 +0800
-Message-ID: <CAKGbVbv=eyaKPQM8QfD-999-=vbrrqnEXkhuE7dy=vpK7OFY6Q@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the drm-misc tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Erico Nunes <nunes.erico@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: linux-next: build failure after merge of the mediatek tree
+Content-Language: en-US
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230403181552.607a8b64@canb.auug.org.au>
+ <c6b97f15-fd43-d9c4-8a07-04d4063f8b98@collabora.com>
+In-Reply-To: <c6b97f15-fd43-d9c4-8a07-04d4063f8b98@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-I think you can just revert the following three lima commits when merge:
-* 4a66f3da99dc ("drm/lima: add show_fdinfo for drm usage stats")
-* 87767de835ed ("drm/lima: allocate unique id per drm_file")
-* bccafec957a5 ("drm/lima: add usage counting method to ctx_mgr")
+Il 03/04/23 10:45, AngeloGioacchino Del Regno ha scritto:
+> Il 03/04/23 10:15, Stephen Rothwell ha scritto:
+>> Hi all,
+>>
+>> After merging the mediatek tree, today's linux-next build (arm64
+>> defconfig) failed like this:
+>>
+>> aarch64-linux-gnu-ld: Unexpected GOT/PLT entries detected!
+>> aarch64-linux-gnu-ld: Unexpected run-time procedure linkages detected!
+>> aarch64-linux-gnu-ld: drivers/soc/mediatek/mtk-mmsys.o: in function 
+>> `mtk_mmsys_update_bits':
+>> drivers/soc/mediatek/mtk-mmsys.c:147: undefined reference to `cmdq_pkt_write_mask'
+>> aarch64-linux-gnu-ld: drivers/soc/mediatek/mtk-mmsys.o: in function 
+>> `mtk_mmsys_probe':
+>> drivers/soc/mediatek/mtk-mmsys.c:386: undefined reference to 
+>> `cmdq_dev_get_client_reg'
+>> aarch64-linux-gnu-ld: drivers/soc/mediatek/mtk-mutex.o: in function 
+>> `mtk_mutex_enable_by_cmdq':
+>> drivers/soc/mediatek/mtk-mutex.c:883: undefined reference to `cmdq_pkt_write'
+>> aarch64-linux-gnu-ld: drivers/soc/mediatek/mtk-mutex.o: in function 
+>> `mtk_mutex_probe':
+>> drivers/soc/mediatek/mtk-mutex.c:1023: undefined reference to 
+>> `cmdq_dev_get_client_reg'
+>>
+>> Caused by commit
+>>
+>>    b34884b4c878 ("soc: mediatek: Cleanup ifdefs for IS_REACHABLE(CONFIG_MTK_CMDQ)")
+>>
+> 
+> I can recheck why this happens - otherwise we can simply avoid applying that commit
+> if there's no time.
+> 
 
-Regards,
-Qiang
+Followup: I've rechecked and sent a solution for that; please check [1].
 
-On Mon, Apr 3, 2023 at 10:16=E2=80=AFAM Stephen Rothwell <sfr@canb.auug.org=
-.au> wrote:
->
-> Hi all,
->
-> After merging the drm-misc tree, today's linux-next build (arm
-> multi_v7_defconfig) failed like this:
->
-> drivers/gpu/drm/lima/lima_ctx.c: In function 'lima_ctx_do_release':
-> drivers/gpu/drm/lima/lima_ctx.c:53:45: error: 'struct drm_sched_entity' h=
-as no member named 'elapsed_ns'
->    53 |                 mgr->elapsed_ns[i] +=3D entity->elapsed_ns;
->       |                                             ^~
-> drivers/gpu/drm/lima/lima_ctx.c: In function 'lima_ctx_mgr_usage':
-> drivers/gpu/drm/lima/lima_ctx.c:125:43: error: 'struct drm_sched_entity' =
-has no member named 'elapsed_ns'
->   125 |                         usage[i] +=3D entity->elapsed_ns;
->       |                                           ^~
->
-> Caused by commit
->
->   bccafec957a5 ("drm/lima: add usage counting method to ctx_mgr")
->
-> interacting with commit
->
->   baad10973fdb ("Revert "drm/scheduler: track GPU active time per entity"=
-")
->
-> from Linus' tree.
->
-> I can't see any obvious way to fix this up, so I have used teh drm-misc
-> tree from next-20230331 for today.
->
-> --
-> Cheers,
-> Stephen Rothwell
+[1]: 
+https://lore.kernel.org/lkml/20230403093304.276418-1-angelogioacchino.delregno@collabora.com/
+
+
+>> I have used the mediatek tree from next-20230331 for today.
+>>
+>> There were also the following warnings:
+>>
+>> arch/arm64/boot/dts/mediatek/mt6795-sony-xperia-m5.dts:104.21-109.4: Warning 
+>> (unit_address_format): /soc/i2c@11010000/accelerometer@0x10: unit name should not 
+>> have leading "0x"
+>> arch/arm64/boot/dts/mediatek/mt6795-sony-xperia-m5.dts:111.20-114.4: Warning 
+>> (unit_address_format): /soc/i2c@11010000/magnetometer@0x12: unit name should not 
+>> have leading "0x"
+>> arch/arm64/boot/dts/mediatek/mt6795-sony-xperia-m5.dts:104.21-109.4: Warning 
+>> (i2c_bus_reg): /soc/i2c@11010000/accelerometer@0x10: I2C bus unit address format 
+>> error, expected "10"
+>> arch/arm64/boot/dts/mediatek/mt6795-sony-xperia-m5.dts:111.20-114.4: Warning 
+>> (i2c_bus_reg): /soc/i2c@11010000/magnetometer@0x12: I2C bus unit address format 
+>> error, expected "12"
+>>
+> 
+> Matthias, should I send new versions of the commits, addressing this sad overlook
+> from my side, or would you fix that, or should I send new commits cleaning that up
+> on top?
+> 
+> Please let me know how to proceed here.
+> 
+> Thanks,
+> Angelo
+> 
+

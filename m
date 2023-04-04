@@ -2,112 +2,87 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 801FC6D5BAF
-	for <lists+linux-next@lfdr.de>; Tue,  4 Apr 2023 11:18:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D0DB6D5BE2
+	for <lists+linux-next@lfdr.de>; Tue,  4 Apr 2023 11:29:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233200AbjDDJSo convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-next@lfdr.de>); Tue, 4 Apr 2023 05:18:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52466 "EHLO
+        id S233741AbjDDJ3R (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 4 Apr 2023 05:29:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233955AbjDDJSm (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 4 Apr 2023 05:18:42 -0400
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06E9C1981;
-        Tue,  4 Apr 2023 02:18:39 -0700 (PDT)
-Received: (Authenticated sender: hadess@hadess.net)
-        by mail.gandi.net (Postfix) with ESMTPSA id DA2E5FF815;
-        Tue,  4 Apr 2023 09:18:35 +0000 (UTC)
-Message-ID: <366ab6c4d488645aee5cbf49fb2e9b39d9bb1e22.camel@hadess.net>
-Subject: Re: linux-next: build warning after merge of the hid tree
-From:   Bastien Nocera <hadess@hadess.net>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Date:   Tue, 04 Apr 2023 11:18:35 +0200
-In-Reply-To: <20230404185500.7953d9d2@canb.auug.org.au>
-References: <20230404154005.449800c3@canb.auug.org.au>
-         <20230404154254.6c3be26b@canb.auug.org.au>
-         <e1eb90db85ed7adad08bb99054f5cda3cb626794.camel@hadess.net>
-         <20230404185500.7953d9d2@canb.auug.org.au>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.48.0 (3.48.0-1.fc38) 
+        with ESMTP id S230193AbjDDJ3Q (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 4 Apr 2023 05:29:16 -0400
+Received: from smtp-fw-6002.amazon.com (smtp-fw-6002.amazon.com [52.95.49.90])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B10919BF;
+        Tue,  4 Apr 2023 02:29:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1680600555; x=1712136555;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=C5mQMP0x01Rrk1sey3GbQMsD215Z+M11qPtbaqbwWLU=;
+  b=vfH7qUmMpB9c1MC8ZaW1zngK4e0fT29ErAfHpmHD82P8U4/QxEEkQc6O
+   rEDkp5++euIksKUYLX/nBDknu9G/u/GIBegNdKupGhdP8GqhH/wx8Fq1V
+   CJZjZqWExWjWOKHz1PVr5Td9dJfqyVD6kLJffWcpY1eMSRvRPNOepzZ3d
+   M=;
+X-IronPort-AV: E=Sophos;i="5.98,317,1673913600"; 
+   d="scan'208";a="314520683"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-pdx-2c-m6i4x-b1c0e1d0.us-west-2.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-6002.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2023 09:29:11 +0000
+Received: from EX19MTAUWB002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
+        by email-inbound-relay-pdx-2c-m6i4x-b1c0e1d0.us-west-2.amazon.com (Postfix) with ESMTPS id F0E4C80456;
+        Tue,  4 Apr 2023 09:29:09 +0000 (UTC)
+Received: from EX19D002ANA003.ant.amazon.com (10.37.240.141) by
+ EX19MTAUWB002.ant.amazon.com (10.250.64.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.25; Tue, 4 Apr 2023 09:29:09 +0000
+Received: from b0f1d8753182.ant.amazon.com (10.95.136.176) by
+ EX19D002ANA003.ant.amazon.com (10.37.240.141) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Tue, 4 Apr 2023 09:29:06 +0000
+From:   Takahiro Itazuri <itazur@amazon.com>
+To:     <sfr@canb.auug.org.au>
+CC:     <itazur@amazon.com>, <kvm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-next@vger.kernel.org>,
+        <pbonzini@redhat.com>
+Subject: Re: linux-next: build warning after merge of the kvm-fixes tree
+Date:   Tue, 4 Apr 2023 10:28:55 +0100
+Message-ID: <20230404092855.15368-1-itazur@amazon.com>
+X-Mailer: git-send-email 2.38.0
+In-Reply-To: <20230404153642.769f5fb3@canb.auug.org.au>
+References: <20230404153642.769f5fb3@canb.auug.org.au>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-0.7 required=5.0 tests=RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.95.136.176]
+X-ClientProxiedBy: EX19D032UWB002.ant.amazon.com (10.13.139.190) To
+ EX19D002ANA003.ant.amazon.com (10.37.240.141)
+X-Spam-Status: No, score=-9.7 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, 2023-04-04 at 18:55 +1000, Stephen Rothwell wrote:
-> Hi Bastien,
+Date:   Tue, 4 Apr 2023 15:36:42 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+> After merging the kvm-fixes tree, today's linux-next build (htmldocs)
+> produced this warning:
 > 
-> On Tue, 04 Apr 2023 10:22:35 +0200 Bastien Nocera <hadess@hadess.net>
-> wrote:
-> > 
-> > On Tue, 2023-04-04 at 15:42 +1000, Stephen Rothwell wrote:
-> > > 
-> > > On Tue, 4 Apr 2023 15:40:05 +1000 Stephen Rothwell
-> > > <sfr@canb.auug.org.au> wrote:  
-> > > > 
-> > > > After merging the hid tree, today's linux-next build (htmldocs)
-> > > > produced
-> > > > this warning:
-> > > > 
-> > > > drivers/usb/core/message.c:1939: warning: Function parameter or
-> > > > member 'iface' not described in 'usb_set_wireless_status'
-> > > > drivers/usb/core/message.c:1939: warning: Excess function
-> > > > parameter
-> > > > 'dev' description in 'usb_set_wireless_status'
-> > > > 
-> > > > Introduced by commit
-> > > > 
-> > > >   0a4db185f078 ("USB: core: Add API to change the
-> > > > wireless_status")  
-> > > 
-> > > Also this:
-> > > 
-> > > include/linux/usb.h:270: warning: Function parameter or member
-> > > 'wireless_status_work' not described in 'usb_interface'
-> > 
-> > How does one reproduce those warnings?
+> Documentation/virt/kvm/api.rst:8343: WARNING: Field list ends without a blank line; unexpected unindent.
 > 
-> I just ran "make htmldocs" (see above).  You may need to install some
-> software - but it will tell you if so.
+> Introduced by commit
 > 
+>   c2594091d0e5 ("docs: kvm: x86: Fix broken field list")
 
-Before I send patches, does this look correct to you?
+It is my mistake. I do apologize.
 
-diff --git a/drivers/usb/core/message.c b/drivers/usb/core/message.c
-index 7930dca84616..7c7f88ca4f62 100644
---- a/drivers/usb/core/message.c
-+++ b/drivers/usb/core/message.c
-@@ -1926,7 +1926,7 @@ static void __usb_wireless_status_intf(struct work_struct *ws)
-1926⋮1926│ 
-1927⋮1927│ /**
-1928⋮1928│  * usb_set_wireless_status - sets the wireless_status struct member
-1929⋮    │- * @dev: the device to modify
-    ⋮1929│+ * @iface: the interface to modify
-1930⋮1930│  * @status: the new wireless status
-1931⋮1931│  *
-1932⋮1932│  * Set the wireless_status struct member to the new value, and emit
-diff --git a/include/linux/usb.h b/include/linux/usb.h
-index a48eeec62a66..3d523ebf0c09 100644
---- a/include/linux/usb.h
-+++ b/include/linux/usb.h
-@@ -261,7 +261,8 @@ struct usb_interface {
- 261⋮ 261│      unsigned needs_binding:1;       /* needs delayed unbind/rebind */
- 262⋮ 262│      unsigned resetting_device:1;    /* true: bandwidth alloc after reset */
- 263⋮ 263│      unsigned authorized:1;          /* used for interface authorization */
- 264⋮    │-     enum usb_wireless_status wireless_status;
-    ⋮ 264│+     enum usb_wireless_status wireless_status; /* whether the emitter is
-    ⋮ 265│+                                                * connected to this receiver */
- 265⋮ 266│      struct work_struct wireless_status_work;
- 266⋮ 267│ 
- 267⋮ 268│      struct device dev;              /* interface specific device info */
+I sent a new patch version to remove the warning.
+https://lore.kernel.org/all/20230404090052.9872-1-itazur@amazon.com/
+
+Best regards,
+Takahiro Itazuri
 

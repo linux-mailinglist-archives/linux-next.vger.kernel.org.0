@@ -2,114 +2,178 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 990966D5B47
-	for <lists+linux-next@lfdr.de>; Tue,  4 Apr 2023 10:55:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 546D66D5B74
+	for <lists+linux-next@lfdr.de>; Tue,  4 Apr 2023 11:04:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232063AbjDDIzQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 4 Apr 2023 04:55:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60826 "EHLO
+        id S234319AbjDDJE1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 4 Apr 2023 05:04:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234063AbjDDIzP (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 4 Apr 2023 04:55:15 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C58D61BE6;
-        Tue,  4 Apr 2023 01:55:13 -0700 (PDT)
+        with ESMTP id S234320AbjDDJDx (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 4 Apr 2023 05:03:53 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CB8D3A86
+        for <linux-next@vger.kernel.org>; Tue,  4 Apr 2023 02:02:35 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PrM600G0Hz4wgv;
-        Tue,  4 Apr 2023 18:55:04 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PrMGJ73z5z4wj7;
+        Tue,  4 Apr 2023 19:02:16 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1680598504;
-        bh=VC5K2z8Xgep68yVp7XJHwwXmzMI3h368uMPpyX8Jh3M=;
+        s=201702; t=1680598937;
+        bh=Fg1IEgg00jbj6kC4Xvhi2Dhkw2r/BzGnqSbvMCetg+Q=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=SbWySmgoVUrripRgvLgYccrFoW3EWBB3sKhjrzzc0PwjaobKWEBPmWiEkWLXCsQ4N
-         n+tqZ8ns9heUB+OvTXvtMl8wMaohztYqjrJ4oBA/LwT1o5SkPQzmfLcQya0ZFvq2Z5
-         lOjXFlyR0yWaj2kqNtHs1cVUJcECkyXbjqRzt7jQjE3hTBTYOQkgF6Gqu9BFKhPvfr
-         URBTde7MrcaHsIkp8/6mwe2LnMySyZJzuReA81rQq1PHkM/wd6VR+9pEJs7cNF0yQT
-         3C+z3GwkeZOYaMnSSMY/vBjmi50eyg99NdjYLgZoDLEpKoezQ5+gxXRot8pb4f4Fw7
-         AGSi7GbeU0tUw==
-Date:   Tue, 4 Apr 2023 18:55:00 +1000
+        b=XrDnCBxmaDrF1D+E1yWRIwJ0FutbdU/49/X6lGjjZOxLApT7CpF5QFgmpcYmaflRu
+         FQ5sDalVMMdyCMlPOeh5Yk1dRZA/krvBF1cv35BWEWkkG9pXvOFuoDo9bLn6+xlOX8
+         VRtnff2v/WbO2+O4rnuY8qxMoRR3jWQcqoroZ88zDhyQUQB1h5OeCNu8XmX0f7Sm0J
+         eliD1kq/l8KIJZLRYtmx8cOz/wkMZxHAnXd/39nGc/yItQY33dOQWgzB2SjHo915+E
+         wZr9d2kD0bKTFZqd7fta/PljwwX007R3Eo9MkJHVbc6NySSelky5ON3TV8RbuJric7
+         pSm3G/+lBLWGw==
+Date:   Tue, 4 Apr 2023 19:02:15 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Bastien Nocera <hadess@hadess.net>
-Cc:     Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the hid tree
-Message-ID: <20230404185500.7953d9d2@canb.auug.org.au>
-In-Reply-To: <e1eb90db85ed7adad08bb99054f5cda3cb626794.camel@hadess.net>
-References: <20230404154005.449800c3@canb.auug.org.au>
-        <20230404154254.6c3be26b@canb.auug.org.au>
-        <e1eb90db85ed7adad08bb99054f5cda3cb626794.camel@hadess.net>
+To:     "Aithal, Srikanth" <sraithal@amd.com>
+Cc:     linux-next@vger.kernel.org, Rob Clark <robdclark@chromium.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Dave Airlie <airlied@redhat.com>,
+        DRI <dri-devel@lists.freedesktop.org>
+Subject: Re: next-20230404: amd64: drm_crtc_next_vblank_start - kernel NULL
+ pointer dereference, address: 0000000000000074
+Message-ID: <20230404190215.6a480861@canb.auug.org.au>
+In-Reply-To: <dfd986d8-b7b7-a307-0a5c-87d03afba136@amd.com>
+References: <dfd986d8-b7b7-a307-0a5c-87d03afba136@amd.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/=YoKvMi3e8.pq8XCk/Z_N37";
+Content-Type: multipart/signed; boundary="Sig_/QELA+RTmtD/5gXWGj0yRgMi";
  protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/=YoKvMi3e8.pq8XCk/Z_N37
-Content-Type: text/plain; charset=UTF-8
+--Sig_/QELA+RTmtD/5gXWGj0yRgMi
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Bastien,
+Hi Srikanth,
 
-On Tue, 04 Apr 2023 10:22:35 +0200 Bastien Nocera <hadess@hadess.net> wrote:
+[Just cc'ing a few people who may be able to help]
+
+On Tue, 4 Apr 2023 13:26:47 +0530 "Aithal, Srikanth" <sraithal@amd.com> wro=
+te:
 >
-> On Tue, 2023-04-04 at 15:42 +1000, Stephen Rothwell wrote:
-> >=20
-> > On Tue, 4 Apr 2023 15:40:05 +1000 Stephen Rothwell
-> > <sfr@canb.auug.org.au> wrote: =20
-> > >=20
-> > > After merging the hid tree, today's linux-next build (htmldocs)
-> > > produced
-> > > this warning:
-> > >=20
-> > > drivers/usb/core/message.c:1939: warning: Function parameter or
-> > > member 'iface' not described in 'usb_set_wireless_status'
-> > > drivers/usb/core/message.c:1939: warning: Excess function parameter
-> > > 'dev' description in 'usb_set_wireless_status'
-> > >=20
-> > > Introduced by commit
-> > >=20
-> > > =C2=A0 0a4db185f078 ("USB: core: Add API to change the wireless_statu=
-s") =20
-> >=20
-> > Also this:
-> >=20
-> > include/linux/usb.h:270: warning: Function parameter or member
-> > 'wireless_status_work' not described in 'usb_interface'
+> Hello,
 >=20
-> How does one reproduce those warnings?
+> Observing below kernel crash on AMD arch, from next-20230330 onwards till=
+ recent build [next-20230404]:
+>=20
+> [   68.282610] BUG: kernel NULL pointer dereference, address: 00000000000=
+00074
+> [   68.282611] #PF: supervisor read access in kernel mode
+> [   68.282613] #PF: error_code(0x0000) - not-present page
+> [   68.282614] PGD 0 P4D 0
+> [   68.282615] Oops: 0000 [#1] PREEMPT SMP NOPTI
+> [   68.282618] CPU: 24 PID: 905 Comm: kworker/24:1 Not tainted 6.3.0-rc5-=
+next-20230403next-20230403 #1
+> [   68.282620] Hardware name: Dell Inc. PowerEdge R6515/07PXPY, BIOS 2.8.=
+5 08/18/2022
+> [   68.282621] Workqueue: events fbcon_register_existing_fbs
+> [   68.282626] RIP: 0010:drm_crtc_next_vblank_start+0x2c/0x80 [drm]
+> [   68.282653] Code: 1e fa 0f 1f 44 00 00 8b 87 90 00 00 00 48 8b 17 55 4=
+8 8d 0c c0 48 89 e5 41 54 53 48 8d 1c 48 48 c1 e3 04 48 03 9a 40 01 00 00 <=
+8b> 53 74 85 d2 74 3f 8b 43 78 85 c0 74 38 31 d2 49 89 f4 e8 1c ff
+> [   68.282655] RSP: 0018:ffffb30e0fbf7b00 EFLAGS: 00010246
+> [   68.282656] RAX: 0000000000000000 RBX: 0000000000000000 RCX: 000000000=
+0000000
+> [   68.282657] RDX: ffff896b06f26000 RSI: ffffb30e0fbf7b20 RDI: ffff896b0=
+6f26928
+> [   68.282657] RBP: ffffb30e0fbf7b10 R08: ffff898a7fcd4000 R09: ffff896b1=
+078f580
+> [   68.282658] R10: 0000000000000100 R11: 0000000000000000 R12: 000000000=
+0000000
+> [   68.282659] R13: ffff896b12280600 R14: 0000000000000000 R15: ffff896b2=
+f375330
+> [   68.282659] FS:  0000000000000000(0000) GS:ffff898a00400000(0000) knlG=
+S:0000000000000000
+> [   68.282660] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [   68.282661] CR2: 0000000000000074 CR3: 00000001513b8001 CR4: 000000000=
+0770ee0
+> [   68.282662] PKRU: 55555554
+> [   68.282663] Call Trace:
+> [   68.282664]  <TASK>
+> [   68.282667]  drm_atomic_helper_wait_for_fences+0x87/0x1f0 [drm_kms_hel=
+per]
+> [   68.282679]  ? drm_gem_begin_shadow_fb_access+0x29/0x40 [drm_kms_helpe=
+r]
+> [   68.282691]  drm_atomic_helper_commit+0x9e/0x150 [drm_kms_helper]
+> [   68.282701]  drm_atomic_commit+0x9d/0xd0 [drm]
+> [   68.282722]  ? __pfx___drm_printfn_info+0x10/0x10 [drm]
+> [   68.282745]  drm_client_modeset_commit_atomic+0x1e2/0x220 [drm]
+> [   68.282767]  drm_client_modeset_commit_locked+0x5b/0x170 [drm]
+> [   68.282788]  drm_client_modeset_commit+0x2a/0x50 [drm]
+> [   68.282808]  __drm_fb_helper_restore_fbdev_mode_unlocked+0xa1/0xd0 [dr=
+m_kms_helper]
+> [   68.282819]  drm_fb_helper_set_par+0x3d/0x70 [drm_kms_helper]
+> [   68.282829]  fbcon_init+0x27d/0x500
+> [   68.282831]  visual_init+0xd5/0x140
+> [   68.282834]  do_bind_con_driver+0x1a0/0x3b0
+> [   68.282836]  do_take_over_console+0x112/0x1b0
+> [   68.282838]  do_fbcon_takeover+0x60/0xc0
+> [   68.282840]  do_fb_registered+0x1bc/0x1d0
+> [   68.282842]  fbcon_register_existing_fbs+0x51/0x90
+> [   68.282843]  process_one_work+0x215/0x430
+> [   68.282847]  worker_thread+0x38/0x3d0
+> [   68.282848]  ? __pfx_worker_thread+0x10/0x10
+> [   68.282850]  kthread+0xfd/0x130
+> [   68.282852]  ? __pfx_kthread+0x10/0x10
+> [   68.282853]  ret_from_fork+0x2c/0x50
+> [   68.282856]  </TASK>
+> [   68.282857] Modules linked in: stp llc nft_fib_inet nft_fib_ipv4 nft_f=
+ib_ipv6 nft_fib nft_reject_inet nf_reject_ipv4 nf_reject_ipv6 nft_reject nf=
+t_ct nft_chain_nat nf_nat nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 ip_set=
+ nf_tables nfnetlink sunrpc nls_iso8859_1 ipmi_ssif intel_rapl_msr intel_ra=
+pl_common amd64_edac kvm_amd kvm crct10dif_pclmul crc32_pclmul ghash_clmuln=
+i_intel sha512_ssse3 aesni_intel acpi_ipmi crypto_simd cryptd ipmi_si ccp r=
+apl sp5100_tco ipmi_devintf input_leds joydev wmi_bmof pcspkr efi_pstore i2=
+c_piix4 k10temp ipmi_msghandler acpi_power_meter evbug mac_hid sch_fq_codel=
+ xfs libcrc32c hid_generic usbkbd usbmouse usbhid hid mgag200 drm_kms_helpe=
+r syscopyarea sysfillrect sysimgblt i2c_algo_bit drm_shmem_helper drm mpt3s=
+as tg3 raid_class scsi_transport_sas wmi msr autofs4
+> [   68.282891] CR2: 0000000000000074
+> [   68.282892] ---[ end trace 0000000000000000 ]---
+> [   68.302761] pstore: backend (erst) writing error (-28)
+> [   68.302763] RIP: 0010:drm_crtc_next_vblank_start+0x2c/0x80 [drm]
+>=20
+>=20
+> Commit d39e48ca80c0  is causing the issue. I have verified same issue exi=
+sts on https://gitlab.freedesktop.org/drm/msm [tag: dma-fence-deadline].
+>=20
+> Thanks,
+> Srikanth Aithal <sraithal@amd.com>
 
-I just ran "make htmldocs" (see above).  You may need to install some
-software - but it will tell you if so.
+
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/=YoKvMi3e8.pq8XCk/Z_N37
+--Sig_/QELA+RTmtD/5gXWGj0yRgMi
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQr5eQACgkQAVBC80lX
-0Gwougf/dELCtU4Kj1seXlKgERQs2QIsXhtE3NKYtV1bUmPBBu3XfmAMpjjQnkck
-YNfrrSSxV7c7W5r7Er8kNbS1lgmCRvOU7fDiR5Tqe1kW/UsdrCuWOSQE3FKzdhFJ
-EepFfjNOljCfZBr4wE4iIw0LY+AHnainXwVqopSbv93y521OgNQKiFy1A+jeidF4
-nNlQS5YMy3L3tHVYNLYt4FwVWeAt8fJPZcfkyz4o/amGHPE0ZgVTcVGkWJEDJRb7
-hjGxbj5lZEc4hCHTtFFqEVgBV9vkB5tPlReWdGKtIRKZTEKhxqvEiLy3JTL+44bW
-+L3IsQwfxDk+3MJaiBGigZC1xBy0Ow==
-=87RW
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQr55gACgkQAVBC80lX
+0Gy3iwgAgHbK/99rubJMumiuUUzRb4Yr41YKSCycEaCgj5I4cjf6V1M03XsV4CW0
+s8+A1AQM28YU1qbEYMUji3t9G4Wv+4SD5D6esDUT91gS1n+DwxrxFMB3VR5HYm8C
+KldTYduw+xfBq8J4l5LPQJCfMxgmabaVw5NY+LgsScN4mCKaS118Pi1entuEXrhx
+Eay6Y4XFZgAwS0RX9SOpmTu1Aesx1JXmrDNYRHQXJcerpFkDVo6CeZA8isjcXxSG
+keTcSeefk3M89MyXxku32CPxGrPuuMokHAlWBOx3NhqpDnFyyvWooeavi+Tmlg0M
+Kdqu9ylg/r4BhdWiAuBuV/M4FTJriA==
+=67gh
 -----END PGP SIGNATURE-----
 
---Sig_/=YoKvMi3e8.pq8XCk/Z_N37--
+--Sig_/QELA+RTmtD/5gXWGj0yRgMi--

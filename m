@@ -2,157 +2,95 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A0A86D54F2
-	for <lists+linux-next@lfdr.de>; Tue,  4 Apr 2023 00:53:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 274156D55C1
+	for <lists+linux-next@lfdr.de>; Tue,  4 Apr 2023 03:14:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233239AbjDCWxQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 3 Apr 2023 18:53:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60192 "EHLO
+        id S231269AbjDDBO2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 3 Apr 2023 21:14:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232284AbjDCWxP (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 3 Apr 2023 18:53:15 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CA3F19A9;
-        Mon,  3 Apr 2023 15:52:58 -0700 (PDT)
+        with ESMTP id S229596AbjDDBO1 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 3 Apr 2023 21:14:27 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF7642117;
+        Mon,  3 Apr 2023 18:14:23 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Pr5l875Gbz4x4r;
-        Tue,  4 Apr 2023 08:52:52 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Pr8tJ23Skz4xD5;
+        Tue,  4 Apr 2023 11:14:16 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1680562373;
-        bh=SYaIKZ+ajoRiBsT2jMRGQlpJDQte1oTrH+VBxkS6uWc=;
+        s=201702; t=1680570858;
+        bh=xWnFz3omlSSUQ6pvXBh3mJjfwj9wtwa5df2BWKY78pc=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ui0dmZO32c2bFn6/PIml5CJzHrk0aVQj+r4eRzHLiiXf0ujjvb6C8o6yWhG/mjgWN
-         62OXGWpSnJanH+WXn09UvLUL4zOhukQcmjua/8O5tXbvAUkciHchWqIXqjdg5Q+J5p
-         h1CbiwpbQyhkALN+QQU0N9WtbTnRczCQuauR38gUKy2Oc8mWTULgxvaiDJNJIx2FRo
-         WtV/UJg81hcte65dx1vB7crII4EQoFUunDUUC93op0qNqIJACf0P8fuYsVC38/XZhH
-         4MHXPDuJxR5JkwnbOU7pKJPNJ2yMWA3ZLEHjIdNEoXUwo2Eh8IVNDkiardlBm7p2nY
-         Ged2ZqXRghtAA==
-Date:   Tue, 4 Apr 2023 08:52:50 +1000
+        b=G9E55lfuGdGA131O4+pTINB+ymgUrF2mgfKAeOte7YN8cB77cZRgUQCWUAKl/+8Fo
+         XrvHBGmVPXLFTwOX7O8+wR6kjrGlwvmEhogO7Mo5VkUKHFoE0Q2rZ6+GvtWEr0RE1J
+         86hTC2myip1AymwrAo4esue0g30P5fQWF/vR9+HAiPGVZGh5OU+4FfOqlaPGtAaPrf
+         I6OhWu9SFIMwDuRNN/p1UISrGs/pcOrkCiKETxRwBv/RCkd9VVZIE8yThP4hqsc8Kn
+         NRJErWRk+hFPwrGnUdQcoIAiC5aqBh8V+s/j3AGiljBT9agf9WHh6wox9f3e5zPyza
+         D/fjvFNBkM2Lg==
+Date:   Tue, 4 Apr 2023 11:14:14 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
+To:     Qiang Yu <yuq825@gmail.com>
+Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Erico Nunes <nunes.erico@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: Tree for Apr 3
-Message-ID: <20230404085224.21843f6e@canb.auug.org.au>
-In-Reply-To: <2023040305-childlike-stew-4f8e@gregkh>
-References: <20230403202412.66d43f13@canb.auug.org.au>
-        <20230403155147.GA239124@dev-arch.thelio-3990X>
-        <2023040305-childlike-stew-4f8e@gregkh>
+        Dave Airlie <airlied@redhat.com>
+Subject: Re: linux-next: build failure after merge of the drm-misc tree
+Message-ID: <20230404111414.249956af@canb.auug.org.au>
+In-Reply-To: <CAKGbVbv=eyaKPQM8QfD-999-=vbrrqnEXkhuE7dy=vpK7OFY6Q@mail.gmail.com>
+References: <20230403121617.61e2a929@canb.auug.org.au>
+        <CAKGbVbv=eyaKPQM8QfD-999-=vbrrqnEXkhuE7dy=vpK7OFY6Q@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/t1Iy2OJH1p5M2l_wF3K7gWE";
+Content-Type: multipart/signed; boundary="Sig_/.Jf/o1jzUlq4sM1feIx+gKn";
  protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/t1Iy2OJH1p5M2l_wF3K7gWE
+--Sig_/.Jf/o1jzUlq4sM1feIx+gKn
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Greg,
+Hi Qiang,
 
-On Mon, 3 Apr 2023 18:01:38 +0200 Greg Kroah-Hartman <gregkh@linuxfoundatio=
-n.org> wrote:
+On Mon, 3 Apr 2023 16:51:27 +0800 Qiang Yu <yuq825@gmail.com> wrote:
 >
-> On Mon, Apr 03, 2023 at 08:51:47AM -0700, Nathan Chancellor wrote:
-> > Hi Stephen (and Greg, just as an FYI):
-> >=20
-> > On Mon, Apr 03, 2023 at 08:24:12PM +1000, Stephen Rothwell wrote:
-> >=20
-> > ...
-> >  =20
-> > > Merging driver-core/driver-core-next (43ba3d4af7a7 pktcdvd: simplify =
-the class_pktcdvd logic) =20
-> >=20
-> > ...
-> >  =20
-> > > Merging char-misc/char-misc-next (48a6c7bced2a cdx: add device attrib=
-utes) =20
-> >=20
-> > There is a semantic conflict between these two trees:
-> >=20
-> >   drivers/cdx/cdx.c:393:8: error: incompatible function pointer types i=
-nitializing 'ssize_t (*)(const struct bus_type *, const char *, size_t)' (a=
-ka 'long (*)(const struct bus_type *, const char *, unsigned long)') with a=
-n expression of type
-> >    'ssize_t (struct bus_type *, const char *, size_t)' (aka 'long (stru=
-ct bus_type *, const char *, unsigned long)') [-Wincompatible-function-poin=
-ter-types]
-> >   static BUS_ATTR_WO(rescan);
-> >          ^~~~~~~~~~~~~~~~~~~
-> >   include/linux/device/bus.h:129:42: note: expanded from macro 'BUS_ATT=
-R_WO'
-> >           struct bus_attribute bus_attr_##_name =3D __ATTR_WO(_name)
-> >                                                   ^~~~~~~~~~~~~~~~
-> >   include/linux/sysfs.h:135:11: note: expanded from macro '__ATTR_WO'
-> >           .store  =3D _name##_store,                                   =
-     \
-> >                     ^~~~~~~~~~~~~
-> >   <scratch space>:30:1: note: expanded from here
-> >   rescan_store
-> >   ^~~~~~~~~~~~
-> >   1 error generated.
-> >=20
-> > caused by commit 75cff725d956 ("driver core: bus: mark the struct
-> > bus_type for sysfs callbacks as constant") in the driver-core tree
-> > interacting with commit 2959ab247061 ("cdx: add the cdx bus driver") in
-> > the char-misc tree. The following diff fixes it for me, could it be
-> > applied to the merge of the char-misc tree (if I am reading the order of
-> > your merges correctly)?
-> >=20
-> > If there is a better or more appropriate way to report this, please let
-> > me know.
-> >=20
-> > Cheers,
-> > Nathan
-> >=20
-> > diff --git a/drivers/cdx/cdx.c b/drivers/cdx/cdx.c
-> > index 67c32cb2c006..38511fd36325 100644
-> > --- a/drivers/cdx/cdx.c
-> > +++ b/drivers/cdx/cdx.c
-> > @@ -363,7 +363,7 @@ static struct attribute *cdx_dev_attrs[] =3D {
-> >  };
-> >  ATTRIBUTE_GROUPS(cdx_dev);
-> > =20
-> > -static ssize_t rescan_store(struct bus_type *bus,
-> > +static ssize_t rescan_store(const struct bus_type *bus,
-> >  			    const char *buf, size_t count)
-> >  {
-> >  	struct cdx_controller *cdx; =20
->=20
->=20
-> A patch was already sent for this:
-> 	https://lore.kernel.org/r/20230403140416.28183-1-nipun.gupta@amd.com
+> I think you can just revert the following three lima commits when merge:
+> * 4a66f3da99dc ("drm/lima: add show_fdinfo for drm usage stats")
+> * 87767de835ed ("drm/lima: allocate unique id per drm_file")
+> * bccafec957a5 ("drm/lima: add usage counting method to ctx_mgr")
 
-I will apply that to the chat-misc tree merge from today.
+OK, I have done that from today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/t1Iy2OJH1p5M2l_wF3K7gWE
+--Sig_/.Jf/o1jzUlq4sM1feIx+gKn
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQrWMIACgkQAVBC80lX
-0GzjxAgAiaKsnm1hcxS5FDhw4tg18TgFTO4lNGGIiYxYW2lRTcgRW3/KawdsH9S6
-zNaBTcVV06FVnMZW4oMc6I0aTSvwUCvbkfpNQYoDLpv4TEnjGOWRbLxhZE078MYx
-LLnkm/nJJE+zAZJPX4ec2KKzkbKxNVmwOsZ62EJeLAXreaB0z1aeG4fW8/gyEzOM
-b7EnX8v4bsxSrvRsC2EHTKSswMympAJdkEQOKNOtdNUI8rF7/h7Ewb+m096MFo8B
-m/jqaVrEl7gKs+eJTAlH05pRwsnQSvZ09lO49qmOLsZHnaboWHIzj02gSddTumzY
-3wmipIm+eaCqEkrBagRpABsw5z+Fkg==
-=2Awa
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQreeYACgkQAVBC80lX
+0Gztwwf/ayUr24dwPGpBwuOZNuHc+gqzczYFs/UNV0yGedqRxRR3wJKAh5BlSvMJ
+tZIpDIglihMPeJzvh2voTXagFeRKO/rrvXgjSz+hqe61OmTYj7N+NbydUNNzbhZR
+0ouapqxmeeL8+WW6d7EQF88C0ERPuNaOPoivGU5bxuzwZP5nfNq2ZLkrMSiNTWOF
+g4eZ/fJP0uHFg8Aj6uR/GMaD7MCve5qXAT10f7IN7hWeRdeP9AiI8tD5UF/HoMus
++bZzF3zzTOsYn8YOIXoVkWawD/VjfjX/6TALsgclq1HDSaMgv9tLN+MxWp/jLplw
+r4SZoPkaQf0J3f4xZ+NddlaVdsPz5w==
+=AUB1
 -----END PGP SIGNATURE-----
 
---Sig_/t1Iy2OJH1p5M2l_wF3K7gWE--
+--Sig_/.Jf/o1jzUlq4sM1feIx+gKn--

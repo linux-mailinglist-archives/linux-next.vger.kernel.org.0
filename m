@@ -2,99 +2,95 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A424E6D8AAF
-	for <lists+linux-next@lfdr.de>; Thu,  6 Apr 2023 00:36:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 832C36D8AD3
+	for <lists+linux-next@lfdr.de>; Thu,  6 Apr 2023 00:59:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229514AbjDEWga (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 5 Apr 2023 18:36:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34740 "EHLO
+        id S231574AbjDEW72 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 5 Apr 2023 18:59:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229590AbjDEWg3 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 5 Apr 2023 18:36:29 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB02CBA;
-        Wed,  5 Apr 2023 15:36:25 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        with ESMTP id S231406AbjDEW71 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 5 Apr 2023 18:59:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E21E82681;
+        Wed,  5 Apr 2023 15:59:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PsKH8663kz4x1N;
-        Thu,  6 Apr 2023 08:36:20 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1680734181;
-        bh=kchzhiTNfDkeFdUBWqlrk86s+qL8CAqBJRXd7j5JM/Y=;
-        h=Date:From:To:Cc:Subject:From;
-        b=lHT9MV5r/eDZVYIApFFUNSZUnggLNrE2CC80v4GRpl6yI8O4onviz9ypqzGPyVdYj
-         608DMDNra9H2aj1z/aX4QVA5IpaYa7OrHJC5ws/i/+YKk2OtFczN0RXoFtkqd2b5sU
-         B8Nm+MD5FInuqMjQn2KGXTbR5uwxZSeasSixabwxJkkZ7KBIFbQCq/FmMU/mkkxzqV
-         Vu85xFG7HfAq0ptvYjHBuA7NhNFk54RSnhk5ITkY07L2iIojtEbB3S8wHdP6T9qlSK
-         eEkAmwZ+eIemTuCoD/3bHeoT/gq4104rIf9lXhLir45jgVJIfgFgle7Yb6wyOvkJ1B
-         FR5lzz8ExTs5A==
-Date:   Thu, 6 Apr 2023 08:36:19 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 71F7E6413B;
+        Wed,  5 Apr 2023 22:59:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8F0FC433D2;
+        Wed,  5 Apr 2023 22:59:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680735564;
+        bh=Ye1zE1pfeCNslE1DbHpdJQQZ3qQUU7wDAn8jX7EwPvI=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=cUzqGtmnfdKOw6ti5CfBJN2L0VUyGVraaH9vavCsAsESExMrM+4W8+y6Ae+bRK82u
+         +DNb4mAsMeQbEyqenluQ32RNw+CjvjikiIlbe6ekE5pJQvsqTF8pwgUlRJgUuz+t15
+         nRNX+IWyghRDIRj3lQ7VB/QWRwY6jo/CFAAkJGryc+gtDY3JeV9Vh7IL79THvNSlf6
+         zJfwnnv/n2Z/Fn9/8J7HAx3TYGKfC2djP1Oj6tA8Mt+XbdnSXAFUlU/q5h4G8Nqb65
+         QNXCIAbysqcc5BfkeVp5TcRSsF3zFf5r9xF4morDJLuWFVfmSYcehm7gTRgvTV8jNY
+         YeG/0+BmD9/Zg==
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id 627A515404B4; Wed,  5 Apr 2023 15:59:24 -0700 (PDT)
+Date:   Wed, 5 Apr 2023 15:59:24 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
 Cc:     Ziwei Dai <ziwei.dai@unisoc.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the rcu tree
-Message-ID: <20230406083619.65dee33a@canb.auug.org.au>
+Subject: Re: linux-next: Fixes tag needs some work in the rcu tree
+Message-ID: <66b7fceb-0a9d-42c1-987f-1ac6c857d987@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <20230406083619.65dee33a@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ff+NGDCp+vSVwV89XzoV=yL";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230406083619.65dee33a@canb.auug.org.au>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/ff+NGDCp+vSVwV89XzoV=yL
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Thu, Apr 06, 2023 at 08:36:19AM +1000, Stephen Rothwell wrote:
+> Hi all,
+> 
+> In commit
+> 
+>   acdc79917d65 ("rcu/kvfree: Avoid freeing new kfree_rcu() memory after old grace period")
+> 
+> Fixes tag
+> 
+>   Fixes: 0392bebebf26 ("rcu/kvfree: Avoid freeing new kfree_rcu() memory after old grace period")
+> 
+> has these problem(s):
+> 
+>   - Subject does not match target commit subject
+>     Just use
+> 	git log -1 --format='Fixes: %h ("%s")'
+> 
+> Maybe you meant:
+> 
+> Fixes: 0392bebebf26 ("rcu: Add multiple in-flight batches of kfree_rcu() work")
 
-Hi all,
+Hello, Stephen,
 
-In commit
+There is currently some debate as to exactly which commit(s) introduced
+the bug, which will hopefully come to a conclusion before tomorrow's
+-next.  If they do not, I will use your correction as a placeholder.
 
-  acdc79917d65 ("rcu/kvfree: Avoid freeing new kfree_rcu() memory after old=
- grace period")
+Just for completeness, the current other two candidates (which appear
+quite plausible to me) are these:
 
-Fixes tag
+Fixes: 34c881745549 ("rcu: Support kfree_bulk() interface in kfree_rcu()")
+Fixes: 5f3c8d620447 ("rcu/tree: Maintain separate array for vmalloc ptrs")
 
-  Fixes: 0392bebebf26 ("rcu/kvfree: Avoid freeing new kfree_rcu() memory af=
-ter old grace period")
+Ziwei Dai, what are your thoughts on this?  This is from a mainline
+perspective, my guess being that your investigation involved some other
+Linux-kernel tree.
 
-has these problem(s):
-
-  - Subject does not match target commit subject
-    Just use
-	git log -1 --format=3D'Fixes: %h ("%s")'
-
-Maybe you meant:
-
-Fixes: 0392bebebf26 ("rcu: Add multiple in-flight batches of kfree_rcu() wo=
-rk")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/ff+NGDCp+vSVwV89XzoV=yL
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQt9+MACgkQAVBC80lX
-0Gwh8Af7BDl+3OJJaUzP7xRY1sKO9EiHDKzsKcmrgkRJPxzMm8D5tYjuzkPGoA06
-CMrlLqEF158raMQKai7l5Wt9LDm+Ts1xkhJo8PfQ/sYZ1Fu7vG0JzuN8FUNWnJzb
-BsTrG1q2RPDGW8c+JlML4vi8fA3ZyFl3x/vb7As1aJMKWHp7HCTfVFaBYzWCUkEQ
-4PhTJMemGfm7UdQcCtsxEE3cQPOA/HS+vvD1L3cCBwQsAwpLqJ5ceGn7GIR209xq
-aGjPhCrikDn8uUUUiB8Imz0jBfc9TR/GTKhYamsx4AsJLJ7tPu3B+z02yeA3ZNQW
-LnJpQPtCPvaFLy7grV3QvaoV3PPUuA==
-=spye
------END PGP SIGNATURE-----
-
---Sig_/ff+NGDCp+vSVwV89XzoV=yL--
+							Thanx, Paul

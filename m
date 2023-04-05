@@ -2,102 +2,118 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADCB96D7130
-	for <lists+linux-next@lfdr.de>; Wed,  5 Apr 2023 02:19:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 739176D713F
+	for <lists+linux-next@lfdr.de>; Wed,  5 Apr 2023 02:28:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229973AbjDEATl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 4 Apr 2023 20:19:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40242 "EHLO
+        id S235981AbjDEA2p (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 4 Apr 2023 20:28:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229748AbjDEATk (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 4 Apr 2023 20:19:40 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D7743AA5;
-        Tue,  4 Apr 2023 17:19:39 -0700 (PDT)
+        with ESMTP id S235905AbjDEA2n (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 4 Apr 2023 20:28:43 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B3D844A2;
+        Tue,  4 Apr 2023 17:28:42 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Prlcm2Ck5z4xD8;
-        Wed,  5 Apr 2023 10:19:36 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Prlq820FBz4x1f;
+        Wed,  5 Apr 2023 10:28:35 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1680653978;
-        bh=MjvnDkWNROQyVRvp4d+Byk81ixfEEgNbeMjAevrOlnU=;
-        h=Date:From:To:Cc:Subject:From;
-        b=cp8ln7RQuY7qRRKkhOKCiCzHeYjZs3FcWwchhdIAb3s8/7oNQVZp7s8JOFu2URg43
-         cOI9LQchALdxkvczgi8s9waPdAmdF1Qw7hInCtQBodKGQ5PAtHhMwF06FKzyLPQpTt
-         9cLvwSjgvPHLNwo0ZiRYOBOJsCWlI0jMog1Oy4p+p3WQahDNN6X413xWLG7lMSVfRp
-         nBsy5dH7J0hRgdPvwWdvoj2bmtfXO8aNQwirVZ33gJ94f58y/TzKbX4Qs90z/pAn0d
-         EXKtmn5I4MySOfL7WPupGxYnAZe40djS2nrsfOs2VXIqukQMu3ZAqpGl626MMSUmpX
-         MqVZF/jxgEyqg==
-Date:   Wed, 5 Apr 2023 10:19:34 +1000
+        s=201702; t=1680654516;
+        bh=IK+wQSWATW2SBQfuxCqPJzZRVCiDm2H3nNB7sONCNag=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Wp0zf63NQrpV1Z6NZnxx5g+DM2DA4rybDANyh9w4iM4nKvMUdd8wOna+c8wpahbCb
+         r2IiBmt6z5RHnEgFlOoWwOr/SsdQPFllUnCoBUkDQTsrsHH94scpjPFpGpksrILvze
+         pOc8Enmwi0PKIHHiFttRssXB34XUpghKJNdyD2oldeRJ6gUrPFG/NJLps886w26BiE
+         ypX4pQdd/0T+RBbwt5BLc+Rhd2xzsisnG5wsvbPKoptA41DNaYzp0jgzx17stg3Yvr
+         8QxP0WokJ6inKYM1G7h10y56NLsjR49dc9YEZqNckc7hD/LP1HizDvpr0WGGg9saQl
+         z6umbq3AdIPmQ==
+Date:   Wed, 5 Apr 2023 10:28:34 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     ARM <linux-arm-kernel@lists.infradead.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+To:     Mike Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     "Garmin.Chang" <Garmin.Chang@mediatek.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>
-Subject: linux-next: manual merge of the arm-soc tree with the mm tree
-Message-ID: <20230405101934.4d744471@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the clk tree
+Message-ID: <20230405102834.2ad44472@canb.auug.org.au>
+In-Reply-To: <20230403095939.423806fa@canb.auug.org.au>
+References: <20230403095939.423806fa@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/6in8z/ln.8/k+Bik8FLetx+";
+Content-Type: multipart/signed; boundary="Sig_/dun5jGAOw/Lz_slIS91M_q_";
  protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/6in8z/ln.8/k+Bik8FLetx+
+--Sig_/dun5jGAOw/Lz_slIS91M_q_
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the arm-soc tree got a conflict in:
+On Mon, 3 Apr 2023 09:59:39 +1000 Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
+>
+> After merging the clk tree, today's linux-next build (x86_64 allmodconfig)
+> failed like this:
+>=20
+> In file included from include/linux/device/driver.h:21,
+>                  from include/linux/device.h:32,
+>                  from include/linux/platform_device.h:13,
+>                  from drivers/clk/mediatek/clk-mt8188-wpe.c:9:
+> drivers/clk/mediatek/clk-mt8188-wpe.c:91:31: error: 'clk_mt8188_vpp1_id_t=
+able' undeclared here (not in a function)
+>    91 | MODULE_DEVICE_TABLE(platform, clk_mt8188_vpp1_id_table);
+>       |                               ^~~~~~~~~~~~~~~~~~~~~~~~
+> include/linux/module.h:243:15: note: in definition of macro 'MODULE_DEVIC=
+E_TABLE'
+>   243 | extern typeof(name) __mod_##type##__##name##_device_table        =
+       \
+>       |               ^~~~
+> include/linux/module.h:243:21: error: '__mod_platform__clk_mt8188_vpp1_id=
+_table_device_table' aliased to undefined symbol 'clk_mt8188_vpp1_id_table'
+>   243 | extern typeof(name) __mod_##type##__##name##_device_table        =
+       \
+>       |                     ^~~~~~
+> drivers/clk/mediatek/clk-mt8188-wpe.c:91:1: note: in expansion of macro '=
+MODULE_DEVICE_TABLE'
+>    91 | MODULE_DEVICE_TABLE(platform, clk_mt8188_vpp1_id_table);
+>       | ^~~~~~~~~~~~~~~~~~~
+>=20
+> Caused by commit
+>=20
+>   f42b9e9a43e3 ("clk: mediatek: Add MT8188 wpesys clock support")
+>=20
+> I have used the clk tree from next-20230331 for today.
 
-  arch/arm/configs/oxnas_v6_defconfig
-
-between commit:
-
-  78f42d6994c1 ("mm, treewide: redefine MAX_ORDER sanely")
-
-from the mm tree and commit:
-
-  fc746270c2a5 ("ARM: configs: remove oxnas_v6_defconfig")
-
-from the arm-soc tree.
-
-I fixed it up (I removed the file) and can carry the fix as
-necessary. This is now fixed as far as linux-next is concerned, but any
-non trivial conflicts should be mentioned to your upstream maintainer
-when your tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
+I am still getting this failure.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/6in8z/ln.8/k+Bik8FLetx+
+--Sig_/dun5jGAOw/Lz_slIS91M_q_
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQsvpYACgkQAVBC80lX
-0GyL3Af+Np5fREMmVQyqTjeTx12WHkio5r4QDlXXkPxU+xyOBzfPTGfIhoz9YUdq
-NaHiAgTFzz08/8PHADcDrPFPpyuBvzSRZVR4zm0cu/YxuXX9E5CnNw9/8gyMtkYe
-uJAt2Da9QaEq2qI/S2qF6s7nRdvDoEP+lBiG2KguaIktDsbJwNSCFqS5seujonGd
-KCiGUTXFMCi2OEQph27jHlrAtqRJHU1YojMSjoO9IcRopw8z/7H56/zvIan4mU1m
-kGlwl9DkHcuOuOWrfdeftUX4U82yd5H9VOgwWiSKjn59myzUJ7ZGy8KsJTHbLm3W
-iaYokzh/lXAlkRIhy40JnnqrL8mFIQ==
-=iqfv
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQswLIACgkQAVBC80lX
+0GyipQf/WGMqwZz29ywsCdO0OsVyg01gHFGsViQlO+4TaDV9wP23TVGSPKYBo90T
+BtoaznguPn6iWZge0JULraLddDhITtnuEDD00yyOfN9GLf0aN0oQMt9M7IJf/Les
+Pv+K2IsizSynRRssci3N4jKwjDMuBDuAxSHHUdAetBvCbcsRVyRe7LpVsxOzGXBC
+4/05XQ5eIJW7zEZquRfDCuOHUHokM/9uVZMKE01nOJOeazMrwc0ZU9YSDufTcxtY
+Ir+wOK+dQSrP0vX0lA8qKLol8/mmQ2oUgvSke4gska7vx6ViqQaywgWthLJTttsw
+YBLQO4XZZmf8elZ1zcm5AadoGmmTng==
+=lHoL
 -----END PGP SIGNATURE-----
 
---Sig_/6in8z/ln.8/k+Bik8FLetx+--
+--Sig_/dun5jGAOw/Lz_slIS91M_q_--

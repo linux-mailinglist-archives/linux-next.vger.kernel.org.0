@@ -2,64 +2,64 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7679B6D8FB0
-	for <lists+linux-next@lfdr.de>; Thu,  6 Apr 2023 08:47:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D20756D9024
+	for <lists+linux-next@lfdr.de>; Thu,  6 Apr 2023 09:07:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234651AbjDFGr1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 6 Apr 2023 02:47:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54028 "EHLO
+        id S235900AbjDFHH3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 6 Apr 2023 03:07:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232252AbjDFGr0 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 6 Apr 2023 02:47:26 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 900756581
-        for <linux-next@vger.kernel.org>; Wed,  5 Apr 2023 23:47:22 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id fy10-20020a17090b020a00b0023b4bcf0727so39770090pjb.0
-        for <linux-next@vger.kernel.org>; Wed, 05 Apr 2023 23:47:22 -0700 (PDT)
+        with ESMTP id S236087AbjDFHHN (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 6 Apr 2023 03:07:13 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B6F8AD27
+        for <linux-next@vger.kernel.org>; Thu,  6 Apr 2023 00:06:22 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id ix20so36736460plb.3
+        for <linux-next@vger.kernel.org>; Thu, 06 Apr 2023 00:06:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112; t=1680763642; x=1683355642;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112; t=1680764767; x=1683356767;
         h=from:to:subject:content-transfer-encoding:mime-version:date
          :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=wPw49m1uDUNsGmIDKgiIxFM2rhfAPyXHMBAetJxkPnU=;
-        b=awDYZXd4urJKsPzuBDkvYphkL4qVmAW/OhCD0kBx/4sSSQOofV+93I5pkd4whX/XBc
-         BHVBzTS1WDf1Ku3Kc6LRifX/cVdy3Z3+9yD4H9X++XUMfg6V6XFwvZ3hzaaiTrxba7lc
-         gwLR6EBzSxm71vmuECuYibklHznFeDSQ8CaSNx/ffum5n9cryW9T/EaH9H6qdIWY+1VL
-         e3J6VU1XHxlvTwLJpp5gX1uLuZy0fKa+Ou39u0q4hdRcIFPVi/gqZUUHabLgAD0+mX6B
-         u6egSyZcpQT8XuadGE4ytf/A1LLtV+mDn13fSr2OoiyZP/gSIIhnW6Ca48mPeQ4IM9uU
-         6SEA==
+        bh=SRBiiQ83uAA6U4ZwdEPB+Oy8PnHMn7vlnUJxQkMxdxE=;
+        b=fNmq1un7+TUzOdbbxNQG9tXgIZzAvw+sxcOs/b1mJJX4h2DacYhi7WMWuBuqf5olla
+         xYuyGuPhlF/PW2u2wgGmLjFca8hbx5iM0iuMR5SkkgjlaiWNiyQyZxOrqtajA/SN/xSs
+         CM9KAAZiBsrFpYhlL36ljosDV62ym/HaBibM1HT4I1xOnAzC6Alqov6m7+3/ZuA2wLKC
+         KLlzDL5I4IDYJp4ubOaytuwTy4tAAUKkS1+fOwa2ppLYzWjjGXKgjp9Una+mlB6zYL+o
+         AE8z4rvAHJSLz1aZpZBgG0YLN3GkHmV+hDt+KMMCuo5ihfpe1mvQRm6/iNvq9mv13G+Y
+         D3Lg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680763642; x=1683355642;
+        d=1e100.net; s=20210112; t=1680764767; x=1683356767;
         h=from:to:subject:content-transfer-encoding:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=wPw49m1uDUNsGmIDKgiIxFM2rhfAPyXHMBAetJxkPnU=;
-        b=XJxRq/HaLfEXfUcx1ViDEceonIare1+ZXMMRtMn+EaJvAaRYDG2Jj1+Qiyo/pVpvNO
-         JsirFvR8KMQEUx435iBlMo7zPIa55ta5zdD5mYyl7w8gDHcPiQHZQDRb9EINkPzHZDl5
-         oDv93rby76HqgqhK1EB4PluUjruJkhcw0dOmFxmVSy0gkIZGinIcJifXwibSOnYBj63W
-         oAA/nI7xb/9XMsqp9t+dmcYZPxjWaYtYuT9MK1lmF2EQQteyRy0lsrktzD/r13HT0dcQ
-         JglpswLbsPkODPMBL4yYXQvO0SQSabRBZoRInVVHpjijaBUkJVERR0RLYJgq4FxB62+u
-         EpsQ==
-X-Gm-Message-State: AAQBX9dvg/DpIHvtzeZjnswhDnOuJTcq1/y8fQw2crxJ3i6QmmXPI0LN
-        ETB2c+U0GTC3HfMoVPoIwgvb1OLx2QJg1t/U8IH/rw==
-X-Google-Smtp-Source: AKy350alMgL+zHHzA/PUSADR6Tq99wZC3kqtW7UO5Sgeax0gsEQ/5eJhJ57QEy5Q2XnkCBd9iqRg4Q==
-X-Received: by 2002:a17:902:eccd:b0:1a1:b528:9bea with SMTP id a13-20020a170902eccd00b001a1b5289beamr10870671plh.50.1680763640944;
-        Wed, 05 Apr 2023 23:47:20 -0700 (PDT)
+        bh=SRBiiQ83uAA6U4ZwdEPB+Oy8PnHMn7vlnUJxQkMxdxE=;
+        b=psvNokpYZrYscgKgz0McvH9A9Rq0QfTNJOml4BAkYy81ILZKnlElr+9MCPiYOq0yWd
+         1QmrOn0z0GyqAR4a1azNz0+rgqjrLaEyq16qiJC09c+N+c+nW0L9ioxh9P2WiorqQ/8M
+         1ie38EZ7I+8Vt7D7DwralG1v/YbVtpqIT8pV3BvS7hYVpY/njl8HYw/a9Xt/VYKNjUKm
+         3eKBS88fvxMxXYZUoOx7zThVe5XbA9AS5UdRKtul0CuEkMU49eFzVH0Jfee5ILlTpRMD
+         FFU1FtE2ht5kY9xS8wUrfZA1D0W+gS1Cm/cRQWEr7MhzVLYxs+iC3l8JYSesg8YRbrAL
+         YFBg==
+X-Gm-Message-State: AAQBX9cJ8R/t9xkwZubxiKjRe3vvwJm+z2VUsrvs8xWjS3pD0Sa1fGwc
+        cHS1uhY//4zAYffxValYPGky1ZRASRlnchIGEcv1Sg==
+X-Google-Smtp-Source: AKy350aAj8UpEnXkfYiIEu/h3mLmob1TjkZ1Rr/WDir/exuiBl3yxgT7o90O5sExOB8Gqqig+tBBYQ==
+X-Received: by 2002:a17:902:d4c7:b0:19e:6760:305b with SMTP id o7-20020a170902d4c700b0019e6760305bmr10879249plg.47.1680764766212;
+        Thu, 06 Apr 2023 00:06:06 -0700 (PDT)
 Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id u20-20020a170902a61400b0019a7ef5e9a8sm636342plq.82.2023.04.05.23.47.20
+        by smtp.gmail.com with ESMTPSA id a18-20020a170902b59200b0019f1264c7d7sm673718pls.103.2023.04.06.00.06.05
         for <linux-next@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Apr 2023 23:47:20 -0700 (PDT)
-Message-ID: <642e6af8.170a0220.d5e33.140a@mx.google.com>
-Date:   Wed, 05 Apr 2023 23:47:20 -0700 (PDT)
+        Thu, 06 Apr 2023 00:06:05 -0700 (PDT)
+Message-ID: <642e6f5d.170a0220.533b7.1567@mx.google.com>
+Date:   Thu, 06 Apr 2023 00:06:05 -0700 (PDT)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: master
+X-Kernelci-Branch: pending-fixes
 X-Kernelci-Tree: next
 X-Kernelci-Report-Type: build
-X-Kernelci-Kernel: next-20230406
-Subject: next/master build: 205 builds: 4 failed, 201 passed, 7 errors,
- 39 warnings (next-20230406)
+X-Kernelci-Kernel: v6.3-rc5-284-g1beddc8728ad
+Subject: next/pending-fixes build: 181 builds: 4 failed, 177 passed, 7 errors,
+ 12 warnings (v6.3-rc5-284-g1beddc8728ad)
 To:     linux-next@vger.kernel.org
 From:   "kernelci.org bot" <bot@kernelci.org>
 X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -71,16 +71,16 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master build: 205 builds: 4 failed, 201 passed, 7 errors, 39 warnings =
-(next-20230406)
+next/pending-fixes build: 181 builds: 4 failed, 177 passed, 7 errors, 12 wa=
+rnings (v6.3-rc5-284-g1beddc8728ad)
 
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20230406/
+Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
+rnel/v6.3-rc5-284-g1beddc8728ad/
 
 Tree: next
-Branch: master
-Git Describe: next-20230406
-Git Commit: e134c93f788fb93fd6a3ec3af9af850a2048c7e6
+Branch: pending-fixes
+Git Describe: v6.3-rc5-284-g1beddc8728ad
+Git Commit: 1beddc8728adc4cebe4f26de448b6c93d09e4ab9
 Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
 Built: 8 unique architectures
 
@@ -125,15 +125,6 @@ sparc:
     tinyconfig (gcc-10): 1 warning
 
 x86_64:
-    allnoconfig (gcc-10): 3 warnings
-    x86_64_defconfig (gcc-10): 3 warnings
-    x86_64_defconfig+amdgpu (gcc-10): 3 warnings
-    x86_64_defconfig+crypto (gcc-10): 3 warnings
-    x86_64_defconfig+ima (gcc-10): 3 warnings
-    x86_64_defconfig+kselftest (rustc-1.62): 3 warnings
-    x86_64_defconfig+x86-chromebook (gcc-10): 3 warnings
-    x86_64_defconfig+x86-chromebook+amdgpu (gcc-10): 3 warnings
-    x86_64_defconfig+x86_kvm_guest (gcc-10): 3 warnings
 
 Errors summary:
 
@@ -150,28 +141,8 @@ Warnings summary:
 
     10   <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
 -Wcpp]
-    7    vmlinux.o: warning: objtool: iovec_from_user+0xd4: call to copy_co=
-mpat_iovec_from_user.part.0() with UACCESS enabled
-    7    vmlinux.o: warning: objtool: __import_iovec+0x1ba: call to copy_co=
-mpat_iovec_from_user.part.0() with UACCESS enabled
-    6    vmlinux.o: warning: objtool: .altinstr_replacement+0x1c10: redunda=
-nt UACCESS disable
     2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
 tion failed, symbol will not be versioned.
-    1    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x3e: relocation to=
- !ENDBR: .text+0x140996
-    1    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x28: relocation to=
- !ENDBR: .text+0x140b0b
-    1    vmlinux.o: warning: objtool: lkdtm_UNSET_SMEP+0xcc: relocation to =
-!ENDBR: native_write_cr4+0x4
-    1    vmlinux.o: warning: objtool: .altinstr_replacement+0x1c24: redunda=
-nt UACCESS disable
-    1    lib/iov_iter.o: warning: objtool: iovec_from_user.part.0+0xbd: cal=
-l to copy_compat_iovec_from_user.part.0() with UACCESS enabled
-    1    lib/iov_iter.o: warning: objtool: __import_iovec+0x1d8: call to co=
-py_compat_iovec_from_user.part.0() with UACCESS enabled
-    1    lib/iov_iter.o: warning: objtool: .altinstr_replacement+0x0: redun=
-dant UACCESS disable
 
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
@@ -202,11 +173,6 @@ mismatches
 
 ---------------------------------------------------------------------------=
 -----
-allmodconfig (arm, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
 allmodconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
 n mismatches
 
@@ -220,26 +186,8 @@ Warnings:
 
 ---------------------------------------------------------------------------=
 -----
-allnoconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sectio=
-n mismatches
-
-Warnings:
-    lib/iov_iter.o: warning: objtool: .altinstr_replacement+0x0: redundant =
-UACCESS disable
-    lib/iov_iter.o: warning: objtool: iovec_from_user.part.0+0xbd: call to =
-copy_compat_iovec_from_user.part.0() with UACCESS enabled
-    lib/iov_iter.o: warning: objtool: __import_iovec+0x1d8: call to copy_co=
-mpat_iovec_from_user.part.0() with UACCESS enabled
-
----------------------------------------------------------------------------=
------
 allnoconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
 mismatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (i386, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -248,8 +196,8 @@ ismatches
 
 ---------------------------------------------------------------------------=
 -----
-allnoconfig (x86_64, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
+allnoconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -265,11 +213,6 @@ n mismatches
 -----
 aspeed_g4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
 ection mismatches
-
----------------------------------------------------------------------------=
------
-aspeed_g5_defconfig (arm, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -363,74 +306,6 @@ ion mismatches
 
 ---------------------------------------------------------------------------=
 -----
-cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config (arm64, clang-13=
-) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+arm64-chromebook=
- (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatch=
-es
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-mediatek.flavour.config+arm64-chromeb=
-ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
-tches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-qualcomm.flavour.config+arm64-chromeb=
-ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
-tches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-rockchip64.flavour.config+arm64-chrom=
-ebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mis=
-matches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (arm, clang-13) =
-=E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (arm, clang-1=
-3) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromeos-amd-stoneyridge.flavour.config+x86-chr=
-omebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
-mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromeos-intel-denverton.flavour.config+x86-chr=
-omebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
-mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromeos-intel-pineview.flavour.config+x86-chro=
-mebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config (x86_64, clang=
--13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config+x86-chromebook=
- (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatc=
-hes
-
----------------------------------------------------------------------------=
------
 cu1000-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
  section mismatches
 
@@ -471,23 +346,8 @@ ismatches
 
 ---------------------------------------------------------------------------=
 -----
-defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_ARM64_16K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
-rs, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
-rs, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, clang-17) =E2=80=94 PASS, 0 er=
-rors, 0 warnings, 0 section mismatches
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -506,8 +366,23 @@ ings, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
-defconfig+arm64-chromebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 wa=
-rnings, 0 section mismatches
+defconfig+arm64-chromebook+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+arm64-chromebook+videodec (arm64, gcc-10) =E2=80=94 PASS, 0 error=
+s, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+crypto (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+debug (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -516,8 +391,13 @@ tion mismatches
 
 ---------------------------------------------------------------------------=
 -----
-defconfig+debug (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
+defconfig+ima (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -606,11 +486,6 @@ n mismatches
 -----
 i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
 on mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -806,18 +681,8 @@ ction mismatches
 
 ---------------------------------------------------------------------------=
 -----
-multi_v5_defconfig (arm, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
 multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
 ction mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -841,8 +706,18 @@ multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy (arm, gcc-10) =E2=80=94 PASS, 0=
 
 ---------------------------------------------------------------------------=
 -----
+multi_v7_defconfig+crypto (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
 multi_v7_defconfig+debug (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
 , 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+ima (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -886,18 +761,8 @@ nommu_k210_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
 
 ---------------------------------------------------------------------------=
 -----
-nommu_k210_defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
 nommu_k210_sdcard_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
 nings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-nommu_k210_sdcard_defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 w=
-arnings, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -923,6 +788,11 @@ ction mismatches
 -----
 orion5x_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
 tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+oxnas_v6_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -997,11 +867,6 @@ on mismatches
 -----
 rt305x_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
 tion mismatches
-
----------------------------------------------------------------------------=
------
-rv32_defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -1125,6 +990,11 @@ on mismatches
 
 ---------------------------------------------------------------------------=
 -----
+tinyconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
 tinyconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
 smatches
 
@@ -1135,11 +1005,6 @@ ismatches
 
 Warnings:
     <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-tinyconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -1193,52 +1058,18 @@ tion mismatches
 
 ---------------------------------------------------------------------------=
 -----
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 s=
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
 ection mismatches
 
-Warnings:
-    vmlinux.o: warning: objtool: .altinstr_replacement+0x1c10: redundant UA=
-CCESS disable
-    vmlinux.o: warning: objtool: iovec_from_user+0xd4: call to copy_compat_=
-iovec_from_user.part.0() with UACCESS enabled
-    vmlinux.o: warning: objtool: __import_iovec+0x1ba: call to copy_compat_=
-iovec_from_user.part.0() with UACCESS enabled
-
 ---------------------------------------------------------------------------=
 -----
-x86_64_defconfig (x86_64, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, rustc-1.62) =E2=80=94 PASS, 0 errors, 0 warnings,=
- 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+amdgpu (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnin=
+x86_64_defconfig+amdgpu (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
 gs, 0 section mismatches
 
-Warnings:
-    vmlinux.o: warning: objtool: .altinstr_replacement+0x1c10: redundant UA=
-CCESS disable
-    vmlinux.o: warning: objtool: iovec_from_user+0xd4: call to copy_compat_=
-iovec_from_user.part.0() with UACCESS enabled
-    vmlinux.o: warning: objtool: __import_iovec+0x1ba: call to copy_compat_=
-iovec_from_user.part.0() with UACCESS enabled
-
 ---------------------------------------------------------------------------=
 -----
-x86_64_defconfig+crypto (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnin=
+x86_64_defconfig+crypto (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
 gs, 0 section mismatches
-
-Warnings:
-    vmlinux.o: warning: objtool: .altinstr_replacement+0x1c24: redundant UA=
-CCESS disable
-    vmlinux.o: warning: objtool: iovec_from_user+0xd4: call to copy_compat_=
-iovec_from_user.part.0() with UACCESS enabled
-    vmlinux.o: warning: objtool: __import_iovec+0x1ba: call to copy_compat_=
-iovec_from_user.part.0() with UACCESS enabled
 
 ---------------------------------------------------------------------------=
 -----
@@ -1247,16 +1078,8 @@ s, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
-x86_64_defconfig+ima (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings,=
+x86_64_defconfig+ima (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
  0 section mismatches
-
-Warnings:
-    vmlinux.o: warning: objtool: .altinstr_replacement+0x1c10: redundant UA=
-CCESS disable
-    vmlinux.o: warning: objtool: iovec_from_user+0xd4: call to copy_compat_=
-iovec_from_user.part.0() with UACCESS enabled
-    vmlinux.o: warning: objtool: __import_iovec+0x1ba: call to copy_compat_=
-iovec_from_user.part.0() with UACCESS enabled
 
 ---------------------------------------------------------------------------=
 -----
@@ -1265,57 +1088,13 @@ nings, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
-x86_64_defconfig+kselftest (x86_64, rustc-1.62) =E2=80=94 PASS, 0 errors, 3=
- warnings, 0 section mismatches
-
-Warnings:
-    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x28: relocation to !END=
-BR: .text+0x140b0b
-    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x3e: relocation to !END=
-BR: .text+0x140996
-    vmlinux.o: warning: objtool: lkdtm_UNSET_SMEP+0xcc: relocation to !ENDB=
-R: native_write_cr4+0x4
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+rust (x86_64, rustc-1.62) =E2=80=94 PASS, 0 errors, 0 warn=
-ings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+rust-samples (x86_64, rustc-1.62) =E2=80=94 PASS, 0 errors=
-, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
 x86_64_defconfig+x86-chromebook (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, =
-3 warnings, 0 section mismatches
-
-Warnings:
-    vmlinux.o: warning: objtool: .altinstr_replacement+0x1c10: redundant UA=
-CCESS disable
-    vmlinux.o: warning: objtool: iovec_from_user+0xd4: call to copy_compat_=
-iovec_from_user.part.0() with UACCESS enabled
-    vmlinux.o: warning: objtool: __import_iovec+0x1ba: call to copy_compat_=
-iovec_from_user.part.0() with UACCESS enabled
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86-chromebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors=
-, 0 warnings, 0 section mismatches
+0 warnings, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
 x86_64_defconfig+x86-chromebook+amdgpu (x86_64, gcc-10) =E2=80=94 PASS, 0 e=
-rrors, 3 warnings, 0 section mismatches
-
-Warnings:
-    vmlinux.o: warning: objtool: .altinstr_replacement+0x1c10: redundant UA=
-CCESS disable
-    vmlinux.o: warning: objtool: iovec_from_user+0xd4: call to copy_compat_=
-iovec_from_user.part.0() with UACCESS enabled
-    vmlinux.o: warning: objtool: __import_iovec+0x1ba: call to copy_compat_=
-iovec_from_user.part.0() with UACCESS enabled
+rrors, 0 warnings, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -1324,16 +1103,8 @@ x86_64_defconfig+x86-chromebook+kselftest (x86_64, gcc-10) =E2=80=94 PASS, =
 
 ---------------------------------------------------------------------------=
 -----
-x86_64_defconfig+x86_kvm_guest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 3=
+x86_64_defconfig+x86_kvm_guest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0=
  warnings, 0 section mismatches
-
-Warnings:
-    vmlinux.o: warning: objtool: .altinstr_replacement+0x1c10: redundant UA=
-CCESS disable
-    vmlinux.o: warning: objtool: iovec_from_user+0xd4: call to copy_compat_=
-iovec_from_user.part.0() with UACCESS enabled
-    vmlinux.o: warning: objtool: __import_iovec+0x1ba: call to copy_compat_=
-iovec_from_user.part.0() with UACCESS enabled
 
 ---
 For more info write to <info@kernelci.org>

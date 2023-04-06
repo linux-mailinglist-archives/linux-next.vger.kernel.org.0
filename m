@@ -2,135 +2,148 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35B776D8D21
-	for <lists+linux-next@lfdr.de>; Thu,  6 Apr 2023 04:01:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8740A6D8DDB
+	for <lists+linux-next@lfdr.de>; Thu,  6 Apr 2023 05:07:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233061AbjDFCBD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 5 Apr 2023 22:01:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33184 "EHLO
+        id S234863AbjDFDHJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 5 Apr 2023 23:07:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbjDFCBC (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 5 Apr 2023 22:01:02 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E38B49CA;
-        Wed,  5 Apr 2023 19:01:00 -0700 (PDT)
+        with ESMTP id S235393AbjDFDG0 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 5 Apr 2023 23:06:26 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA5BBAD04;
+        Wed,  5 Apr 2023 20:06:11 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PsPqG3J9sz4xDt;
-        Thu,  6 Apr 2023 12:00:58 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PsRGP20nxz4wgv;
+        Thu,  6 Apr 2023 13:06:04 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1680746458;
-        bh=607S+2cLm7jn5sIpFzj5mU4PWCdG+/tkOtlmiB072Bk=;
+        s=201702; t=1680750365;
+        bh=+7JnYdXl4iRYhR/fNbCL6DbEPldREXhma/t+L8lv3Js=;
         h=Date:From:To:Cc:Subject:From;
-        b=mqlDValoONH2hHkdpU6TIBefJscNKb8g+3vesYG1EhHdXdSe32sOC8RXoDKmWOZhR
-         4NODFygIOb3tzp0oHoT5qfxFqHC37Ximj985n19fPsVRiEBuslRN214kY6gD5kwFxa
-         tPvYF12LDu2xrALw1o4q+8tx/cDhi3QUO9KdtIelzY+YEy59Bo6Lb1G1haDb/TNr6l
-         928r3FxWxKgs2Q4L26cogEvkC005f2xsmAMsXLIKogdsC8c+dsSq8d8JHZRgY9XqrA
-         Lj51E8NcHKcVGL8+3O2CdGTZTNFQSLaRTheeCyWXK1+6BY2ROAPdT+otrO6cXr5+Gg
-         VWdvj9h4JfK7Q==
-Date:   Thu, 6 Apr 2023 12:00:55 +1000
+        b=nx9WwZzDcwf8f02O4B1Eo+3/kc7fR4+ptzZdOyJ0xWtJ2BN1fMxGw/Oq14JTz6CaE
+         L8Q7Etru1Qc+P+W6khw3YznWVtBDi0bppM8Bct2Hzl1BjBkhKJhNzHDTHpcm5t+kpD
+         qRUSW9YHeah0KwYMJaYdSj9WJJBiiSya6raaBfjKzFRgNQ6qkjfj/mVzZEI8k/fL/p
+         gxwttRbW7wq+tw5Oy2jR9SPLVS+dLpnvNTnQVlZ/+B7oiaQ60s6OYQueQg+9+78mPm
+         5+Y7pKPewP4FUIRXc/ND8Pv9RYjAtkPxOUqzvU3/eTgyvXceujVFlrXQ13FD6uMtMC
+         LldLzWDgaMU+Q==
+Date:   Thu, 6 Apr 2023 13:06:03 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Lee Jones <lee@kernel.org>, Mark Brown <broonie@kernel.org>
-Cc:     William Breathitt Gray <william.gray@linaro.org>,
-        Aidan MacDonald <aidanmacdonald.0x0@gmail.com>,
+To:     Christoffer Dall <cdall@cs.columbia.edu>,
+        Marc Zyngier <maz@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     KVM <kvm@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the mfd tree
-Message-ID: <20230406120055.11fcfe5b@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Thomas Huth <thuth@redhat.com>
+Subject: linux-next: manual merge of the kvm-arm tree with the kvm tree
+Message-ID: <20230406130603.273997ca@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/mvKyDBugPa/ArnB/8ZWRUbo";
+Content-Type: multipart/signed; boundary="Sig_/Z+Kjzg/rPvU7tRqN1R3suNi";
  protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/mvKyDBugPa/ArnB/8ZWRUbo
+--Sig_/Z+Kjzg/rPvU7tRqN1R3suNi
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the mfd tree, today's linux-next build (x86_64 allmodconfig)
-failed like this:
+Today's linux-next merge of the kvm-arm tree got a conflict in:
 
-drivers/mfd/qcom-pm8008.c:135:35: error: initialization of 'int (*)(unsigne=
-d int **, unsigned int,  const struct regmap_irq *, int,  void *)' from inc=
-ompatible pointer type 'int (*)(unsigned int **, unsigned int,  const struc=
-t regmap_irq *, int)' [-Werror=3Dincompatible-pointer-types]
-  135 |         .set_type_config        =3D pm8008_set_type_config,
-      |                                   ^~~~~~~~~~~~~~~~~~~~~~
-drivers/mfd/qcom-pm8008.c:135:35: note: (near initialization for 'pm8008_ir=
-q_chip.set_type_config')
+  arch/arm64/kvm/arm.c
 
-Caused by commit
+between commit:
 
-  72a8a08b0c62 ("mfd: qcom-pm8008: Convert irq chip to config regs")
+  d8708b80fa0e ("KVM: Change return type of kvm_arch_vm_ioctl() to "int"")
 
-interacting with commit
+from the kvm tree and commit:
 
-  7697c64b9e49 ("regmap: Pass irq_drv_data as a parameter for set_type_conf=
-ig()")
+  e0fc6b21616d ("KVM: arm64: Add vm fd device attribute accessors")
 
-from the regmap tree.
+from the kvm-arm tree.
 
-I have applied the following merge fix patch:
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Thu, 6 Apr 2023 11:37:44 +1000
-Subject: [PATCH] fixup for "mfd: qcom-pm8008: Convert irq chip to config re=
-gs"
-
-interacting with "regmap: Pass irq_drv_data as a parameter for set_type_con=
-fig()"
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- drivers/mfd/qcom-pm8008.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/mfd/qcom-pm8008.c b/drivers/mfd/qcom-pm8008.c
-index a33fbc42ac8e..e60c838a78c1 100644
---- a/drivers/mfd/qcom-pm8008.c
-+++ b/drivers/mfd/qcom-pm8008.c
-@@ -85,7 +85,8 @@ static unsigned int pm8008_get_irq_reg(struct regmap_irq_=
-chip_data *data,
- }
-=20
- static int pm8008_set_type_config(unsigned int **buf, unsigned int type,
--				  const struct regmap_irq *irq_data, int idx)
-+				  const struct regmap_irq *irq_data, int idx,
-+				  void *irq_drv_data)
- {
- 	switch (type) {
- 	case IRQ_TYPE_EDGE_FALLING:
---=20
-2.39.2
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/mvKyDBugPa/ArnB/8ZWRUbo
+diff --cc arch/arm64/kvm/arm.c
+index aaa752be3776,4ec888fdd4f7..000000000000
+--- a/arch/arm64/kvm/arm.c
++++ b/arch/arm64/kvm/arm.c
+@@@ -220,7 -234,7 +234,8 @@@ int kvm_vm_ioctl_check_extension(struc
+  	case KVM_CAP_VCPU_ATTRIBUTES:
+  	case KVM_CAP_PTP_KVM:
+  	case KVM_CAP_ARM_SYSTEM_SUSPEND:
+ +	case KVM_CAP_IRQFD_RESAMPLE:
++ 	case KVM_CAP_COUNTER_OFFSET:
+  		r =3D 1;
+  		break;
+  	case KVM_CAP_SET_GUEST_DEBUG2:
+@@@ -1440,7 -1475,28 +1476,27 @@@ static int kvm_vm_ioctl_set_device_addr
+  	}
+  }
+ =20
++ static int kvm_vm_has_attr(struct kvm *kvm, struct kvm_device_attr *attr)
++ {
++ 	switch (attr->group) {
++ 	case KVM_ARM_VM_SMCCC_CTRL:
++ 		return kvm_vm_smccc_has_attr(kvm, attr);
++ 	default:
++ 		return -ENXIO;
++ 	}
++ }
++=20
++ static int kvm_vm_set_attr(struct kvm *kvm, struct kvm_device_attr *attr)
++ {
++ 	switch (attr->group) {
++ 	case KVM_ARM_VM_SMCCC_CTRL:
++ 		return kvm_vm_smccc_set_attr(kvm, attr);
++ 	default:
++ 		return -ENXIO;
++ 	}
++ }
++=20
+ -long kvm_arch_vm_ioctl(struct file *filp,
+ -		       unsigned int ioctl, unsigned long arg)
+ +int kvm_arch_vm_ioctl(struct file *filp, unsigned int ioctl, unsigned lon=
+g arg)
+  {
+  	struct kvm *kvm =3D filp->private_data;
+  	void __user *argp =3D (void __user *)arg;
+
+--Sig_/Z+Kjzg/rPvU7tRqN1R3suNi
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQuJ9cACgkQAVBC80lX
-0GxjxAf/Vc1lKpnpAQaX8Tfo8qUzyWqESkMVIzryq16rPMpQFBSGcCJhaOtn6YHg
-cvClXHZ/eICToNzt/tzcyjda2zg/xxPDWChpjzck9czst9m33EfM0NfOHR0Bvvhb
-kFLoZH/qFfYfVEjLc0V7iVSwv5W2/tsYfzQvxKI9Kzw3A7Oq2MyO38+e9qMyi/cy
-zDbsV/4wiBmPeRAVP4Yjgqpz+SlsRXWueKLj/EymZUxYJ9c+yE1pDxDirkeefuHS
-YXGVTtj/gJEfmyOoszY59JXAbwMp6A0XSpOJWGkpWQgmLmt7oVpW+CxjJn1y8/0N
-klYtMkR47enCKyvVJkSoOPzAxA0PIg==
-=dupP
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQuNxsACgkQAVBC80lX
+0Gxkkgf8CkKLR8AuSGIbWV+bE1n+NeVjsa6k0ugcz8f5hzGsf9aqX42s6meXooKk
+Ih2hWUUwi/4ilmGEqMk2IM8ZkYGbHAgsH2GrtzSo2M28shgQUfIO/qLt9D2PZrsh
+y0tg0i6i47iELIASqj8KjWXpnLiq9evWuKDxVHUMMfUXdF5AWvEmOG4qK/wXERNy
+n/G/f7jYpdqF09sUEigKIw6KhP1fu3GIOS30ymr/+Efgp0PJ4Tnb+NVCVSRIdPNB
+qzxkNul6FPVpL9AFaswPny/SwIWV2d6KKhvCzE87RWULlifMrnR5d6qan1SNbpPJ
+yP8BQdwO89+qqwRYihiin8skrbyVdw==
+=gLJS
 -----END PGP SIGNATURE-----
 
---Sig_/mvKyDBugPa/ArnB/8ZWRUbo--
+--Sig_/Z+Kjzg/rPvU7tRqN1R3suNi--

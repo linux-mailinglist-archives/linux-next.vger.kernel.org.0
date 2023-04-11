@@ -2,55 +2,55 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26ED66DE17A
-	for <lists+linux-next@lfdr.de>; Tue, 11 Apr 2023 18:52:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B600C6DE18F
+	for <lists+linux-next@lfdr.de>; Tue, 11 Apr 2023 18:53:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229603AbjDKQwr (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 11 Apr 2023 12:52:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60170 "EHLO
+        id S230348AbjDKQxm (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 11 Apr 2023 12:53:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbjDKQwq (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 11 Apr 2023 12:52:46 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D10F1B0;
-        Tue, 11 Apr 2023 09:52:45 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id g5so11636510wrb.5;
-        Tue, 11 Apr 2023 09:52:45 -0700 (PDT)
+        with ESMTP id S230240AbjDKQxZ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 11 Apr 2023 12:53:25 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50E5455AE;
+        Tue, 11 Apr 2023 09:53:24 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id j1so12256208wrb.0;
+        Tue, 11 Apr 2023 09:53:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1681231964;
+        d=gmail.com; s=20210112; t=1681232003;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=yno0rJMndR+enK3b81d20RG38u8liw59TjI488nehac=;
-        b=i/3lQnnZ17L+DsEQhfaH4b4jjLyrWRFShN0LLb+du2S60/TprcKYD5XPqaHJI/mgMO
-         lbXZNVDt3Uf1Gt6C7NhB18qcPjAgLAL3SMh4Ga2tZwfoRoHij76TJlAy5KvR1cK3rrbl
-         iUdzwzRQLU9J826+eXTbquEkZUONP1+9FkB48Mhx3KC35O0RT56D/g539KZs2BxrHzZc
-         +OSrq8tbN1NEBxHfN9AEOvU7IiTFU2AmEg/h8HMPag7apEJJiwXjpo/VeDVQ95Wsp8tu
-         rayYhMyFjDtxuhMitmpgl4Czbo+Qho/MRTgurCdIJ85mD5BzTy1iLJ9hi16Po9ck2nQl
-         6dNA==
+        bh=cqH7wKCunfUiuqasfAeXmHcMyjFK4ZmMnPdmKKyPhSs=;
+        b=Sto7PC17h7hjlHE8aTCm/iwT8VNstBiPTLFlB7wdFEc2PWJbQP2zooUmso0CFEljeM
+         N8EG/K0bVQXF2CjR6M4prrQmEALL4v+CGgS0LICcUiZe3zq8UHET+5fh+BsaIltiJWMp
+         Iq/K/a2EQSmYzKzpC1/zioK3aix++OrSGzRVBNBZhiyP6orXdZLVns18VYRI8+no0BD7
+         dOPmiVJweiA6FrI1ZAr4tn1dWelVQ7eKGbgZrxGtjf33cZR40AEEfvcAGRjTmxmuF8PF
+         T+Wah9HhOFZtnrH7fRGbdetLv/HzqfqUz2GVZnYEXwa0i1p6fnwts/IKpI7Kyw9ltmNs
+         SnfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681231964;
+        d=1e100.net; s=20210112; t=1681232003;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yno0rJMndR+enK3b81d20RG38u8liw59TjI488nehac=;
-        b=wtn4YtzO7iPcVT2gR0XyjQyPUuyPaPhAWErbwZaVFgAdf4Cu5FRo1tzzKZv9inFZrW
-         sXQUZUTyld5EUIypneuouS2uejEXupOIcpARGgDxLy2UJtiKldgH5monMCGkBHysctcU
-         E/BeQ3eHCo9+0UnrirNTz3mskwLXfVtTIFMVdnr7BW2UIMb77w20DbB53Twz/nzg1WD4
-         StU7Siip7JTpkUjoyGKxuGCwnT8nLrYtoJTY8RaRtZYZc+H6yki1MiWi6/OOimn4nz8d
-         A3I26yTT0+2JorMpBaf/AhxEqbIKH9HtHWNVUwGaoZFkN8MFuK6kwowTaUVzL+EmiD/l
-         QLeQ==
-X-Gm-Message-State: AAQBX9dxBRLOCqF61pQ3Qgm1JlmshX11VIFKftO5LZeQDqLxSMu2Kswy
-        kcZFTM6zyp0tDLehA5wy5Ko=
-X-Google-Smtp-Source: AKy350Y83in06DHv9Kz3jykTffzwn7ytZ6Pf0mQqj59zypBgAwJTy9x3DX+WfppTYrEImeN7Cb2lFg==
-X-Received: by 2002:a05:6000:104c:b0:2ef:930a:cb27 with SMTP id c12-20020a056000104c00b002ef930acb27mr9803947wrx.2.1681231963885;
-        Tue, 11 Apr 2023 09:52:43 -0700 (PDT)
+        bh=cqH7wKCunfUiuqasfAeXmHcMyjFK4ZmMnPdmKKyPhSs=;
+        b=51/D7pQZ83WJPxzQzNNnwHFGXm2OC1MXJA3vLon81hB4CW5myk4KIq/CZsRwM2t2n4
+         LsNI54HaAOXGlQ9VLohX74ZCNXTipEWcNuVIuUBdsqpJQ4JTBbmjMJpXJUs9msNsuh8p
+         Ca8qlWSiRRPeO6JRGEl7QW/KT9ibLX86R8gBerkEVHpnXJUI5JYeXgA8ESxgdozNVpjW
+         fTx9BcQuhExmaWorOflOxtA8vTPkKV8rr2GMf9W8c7UlSNDYLRz5MeMXuLKrOiaJhqGG
+         PFB4clZa1CvtEgG21B47V2iHycOqKSESYXV+8EG3WI2HqhGiJvVqlSLxMyq2QCtP/vl/
+         EIZA==
+X-Gm-Message-State: AAQBX9c5Or5yzMgcdyxfDhxM/tDjp3ugYFHZE1L0eJy1ktdRTz6Lb6j0
+        0hvyf5ukY/JN17g7SHm5AiM=
+X-Google-Smtp-Source: AKy350bhBbxkafNLcd1dFNwPNeIL04wjQJtDV2hZGi6h7vo/pgPYxtzzT3Dv1AP7pLfqZBRp8rnNGA==
+X-Received: by 2002:adf:f288:0:b0:2cf:2dcc:3421 with SMTP id k8-20020adff288000000b002cf2dcc3421mr9034790wro.5.1681232002613;
+        Tue, 11 Apr 2023 09:53:22 -0700 (PDT)
 Received: from [192.168.0.32] ([37.222.243.26])
-        by smtp.gmail.com with ESMTPSA id l13-20020adff48d000000b002d45575643esm14888239wro.43.2023.04.11.09.52.42
+        by smtp.gmail.com with ESMTPSA id c18-20020a056000105200b002db1b66ea8fsm14919281wrx.57.2023.04.11.09.53.21
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Apr 2023 09:52:42 -0700 (PDT)
-Message-ID: <731aadc6-eed1-411b-cf4b-f97ffebae83c@gmail.com>
-Date:   Tue, 11 Apr 2023 18:52:42 +0200
+        Tue, 11 Apr 2023 09:53:21 -0700 (PDT)
+Message-ID: <a31ae980-a61b-f058-2841-2f23ba90e8ab@gmail.com>
+Date:   Tue, 11 Apr 2023 18:53:20 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.1
@@ -61,10 +61,10 @@ Cc:     AngeloGioacchino Del Regno
         <angelogioacchino.delregno@collabora.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20230403175220.5b946b60@canb.auug.org.au>
- <20230411092412.5a9e20e5@canb.auug.org.au>
+References: <20230403181552.607a8b64@canb.auug.org.au>
+ <20230411092522.6380fa88@canb.auug.org.au>
 From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20230411092412.5a9e20e5@canb.auug.org.au>
+In-Reply-To: <20230411092522.6380fa88@canb.auug.org.au>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -79,30 +79,41 @@ X-Mailing-List: linux-next@vger.kernel.org
 
 
 
-On 11/04/2023 01:24, Stephen Rothwell wrote:
+On 11/04/2023 01:25, Stephen Rothwell wrote:
 > Hi all,
 > 
-> On Mon, 3 Apr 2023 17:52:20 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> On Mon, 3 Apr 2023 18:15:52 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 >>
 >> After merging the mediatek tree, today's linux-next build (arm64
 >> defconfig) failed like this:
 >>
->> Error: arch/arm64/boot/dts/mediatek/mt6795.dtsi:647.21-22 syntax error
->> FATAL ERROR: Unable to parse input tree
+>> aarch64-linux-gnu-ld: Unexpected GOT/PLT entries detected!
+>> aarch64-linux-gnu-ld: Unexpected run-time procedure linkages detected!
+>> aarch64-linux-gnu-ld: drivers/soc/mediatek/mtk-mmsys.o: in function `mtk_mmsys_update_bits':
+>> drivers/soc/mediatek/mtk-mmsys.c:147: undefined reference to `cmdq_pkt_write_mask'
+>> aarch64-linux-gnu-ld: drivers/soc/mediatek/mtk-mmsys.o: in function `mtk_mmsys_probe':
+>> drivers/soc/mediatek/mtk-mmsys.c:386: undefined reference to `cmdq_dev_get_client_reg'
+>> aarch64-linux-gnu-ld: drivers/soc/mediatek/mtk-mutex.o: in function `mtk_mutex_enable_by_cmdq':
+>> drivers/soc/mediatek/mtk-mutex.c:883: undefined reference to `cmdq_pkt_write'
+>> aarch64-linux-gnu-ld: drivers/soc/mediatek/mtk-mutex.o: in function `mtk_mutex_probe':
+>> drivers/soc/mediatek/mtk-mutex.c:1023: undefined reference to `cmdq_dev_get_client_reg'
 >>
->> Maybe caused by commit
+>> Caused by commit
 >>
->>    a7c7f1fe2fde ("arm64: dts: mediatek: mt6795: Add MMSYS node for multimedia clocks")
+>>    b34884b4c878 ("soc: mediatek: Cleanup ifdefs for IS_REACHABLE(CONFIG_MTK_CMDQ)")
 >>
->> but I don't know how.
+>> I have used the mediatek tree from next-20230331 for today.
 >>
->> I have reverted that commit (and the following 2) for today.
+>> There were also the following warnings:
+>>
+>> arch/arm64/boot/dts/mediatek/mt6795-sony-xperia-m5.dts:104.21-109.4: Warning (unit_address_format): /soc/i2c@11010000/accelerometer@0x10: unit name should not have leading "0x"
+>> arch/arm64/boot/dts/mediatek/mt6795-sony-xperia-m5.dts:111.20-114.4: Warning (unit_address_format): /soc/i2c@11010000/magnetometer@0x12: unit name should not have leading "0x"
+>> arch/arm64/boot/dts/mediatek/mt6795-sony-xperia-m5.dts:104.21-109.4: Warning (i2c_bus_reg): /soc/i2c@11010000/accelerometer@0x10: I2C bus unit address format error, expected "10"
+>> arch/arm64/boot/dts/mediatek/mt6795-sony-xperia-m5.dts:111.20-114.4: Warning (i2c_bus_reg): /soc/i2c@11010000/magnetometer@0x12: I2C bus unit address format error, expected "12"
 > 
 > Ping?
 > 
 
-I dropped the corresponding commits and resubmitted. Sorry for the delay, I was 
-on holidays and without a computer...
+Fix from Angelo applied. Sorry for the delay.
 
-Regards,
 Matthias

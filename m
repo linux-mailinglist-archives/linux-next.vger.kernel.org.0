@@ -2,188 +2,202 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7DBB6DDF61
-	for <lists+linux-next@lfdr.de>; Tue, 11 Apr 2023 17:17:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22B2A6DDFA0
+	for <lists+linux-next@lfdr.de>; Tue, 11 Apr 2023 17:27:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231317AbjDKPRS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 11 Apr 2023 11:17:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51406 "EHLO
+        id S229635AbjDKP1c (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 11 Apr 2023 11:27:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231355AbjDKPRF (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 11 Apr 2023 11:17:05 -0400
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E73A5FFB;
-        Tue, 11 Apr 2023 08:16:32 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.west.internal (Postfix) with ESMTP id EDFCC320029B;
-        Tue, 11 Apr 2023 11:13:50 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Tue, 11 Apr 2023 11:13:52 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1681226030; x=1681312430; bh=AA
-        0MaJimcwNeJcPgKAoWqZxmdOXtBaxs17Z5PKlfdXE=; b=Rk+OHcMZD68dIIgyXJ
-        b6/Fzs8Ppkw/v+ybMtbRyx/5c8gfReul4kc5Xtebcuj3U8i9GUNTlcWCWV+0HkF2
-        TFV9FybmFLht3VUfVqz3ahJzbfg0MePD0SR1MCeNGrf3h3jlctpIArs0mjQehplJ
-        IHjw7Ox8s1phQIxfWrlifzG4v6qdzUUJL9/Lx+T+079w7enUTbKCPKSksy4HLa6m
-        m27HHaB5OI7HRPZxLbFOCPPsa8zaSNI1hU6aQUiikI38M5cDbZWSDovzE6BIU09A
-        xUJCY4hEmOpwAi3UGbAxMArL4P5Kkki+//X2YVUonAUYQ0XoS99U0WvrJQJWq/pI
-        H8aw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1681226030; x=1681312430; bh=AA0MaJimcwNeJ
-        cPgKAoWqZxmdOXtBaxs17Z5PKlfdXE=; b=daUmgFHp4e2eXr+3Z5LL9eTfPocST
-        Q1Js6Xd5gwv1y/6H75G37B3oPXW15sSe96hzusFEr9fYqUrlVNEC9bxOEj+I7H7x
-        GaI5Pw7DAsdG66HdwwPO/Fhmt1/frLGzQX8gMzE3SVVvS8fGiiUdksY28sWmOxe5
-        csjnk5RdI1J9a0Ci0rCFZXS9OPpjwnHfie7GQaatEW9Mhh+RGC8FYhIGh/bzrlEO
-        ZemEmTtuawjB8+8gVfT0nHAvGPnmVKEB1N3yf9qUr0sZ6WTqE3lqqsYqZ3DvGt4V
-        trAOOrMV+zhVWEbsN2SMNsH17Lcr7gT2STdByvYI22feRlN32Wb/Cqvvw==
-X-ME-Sender: <xms:Lnk1ZMZxWECqOmvxTQnljXsbqCxz0sCoopaRDj-QEkSCTVqKA4FIZA>
-    <xme:Lnk1ZHZxXrr2SMiNZbEecqENMMhlVW1d0dLVcTqT6yL0jUttR_rGgGGyEGOpOJd_a
-    qG-O7vwTU1Nnw>
-X-ME-Received: <xmr:Lnk1ZG-rThg_vgMCOVtefWOdXeZHP5bhzEX8VDYNcHcTJI5G4KoGBhJNkpBAOixKNgBuYkz2EfkK6HxOKvQ2ZsQipvNE0lMGi_PaXA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdekgedgkeeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
-    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepheegvd
-    evvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefhgfehkeetnecuvehluhhs
-    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
-    hhrdgtohhm
-X-ME-Proxy: <xmx:Lnk1ZGokvJjOSygsYDhIvsujfRasqXPnKnVj7mGZ5qNkLDWDjEMDoA>
-    <xmx:Lnk1ZHqBzsrOb0YqwMZjldIxnaJZJg7-vBMF-5_06XP18QENXMZsFA>
-    <xmx:Lnk1ZERZn4tfWKLznfq0ZOlRK88upnBMDuyvbH9W6xmVMrNPR5vx9A>
-    <xmx:Lnk1ZNYXE0RSB8xyd4DNoRlhVbViyj_4_yAWPzoRPq3NhLkaMEA6FA>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 11 Apr 2023 11:13:49 -0400 (EDT)
-Date:   Tue, 11 Apr 2023 17:13:47 +0200
-From:   Greg KH <greg@kroah.com>
-To:     Jeffrey Hugo <quic_jhugo@quicinc.com>
-Cc:     Oded Gabbay <ogabbay@kernel.org>,
+        with ESMTP id S229648AbjDKP1b (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 11 Apr 2023 11:27:31 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 565FC5BA9;
+        Tue, 11 Apr 2023 08:27:05 -0700 (PDT)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33BFDBpC016282;
+        Tue, 11 Apr 2023 15:26:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=u4BG45uX+t6d+PhWOzuwZc2KIA6UpZ2/Lbu2IfmJJuk=;
+ b=HX75zuM+fRW2MLu3lx38j+78GR4sQX+CWik2LwMKDUQRl+O6xt7B0XVQ92Sq2c3gok1r
+ +zJ5kq3DhvsYHmrHlsnlR1N2/vG2htm7pS5EMsDO943hrObW+4yCayx83waKA94Bp+T3
+ ToWl05PkslaiM0AGw9Oz47myjvSl8v5tr6/nPLsy9KOJtfbnF2ZpIItyTUseeQIOeYAj
+ pOo5W/RTzRGWe0LrGseNDVwGa9jerxpFqIv4ogRA/PnOcNBBKUxQvRgac1oA4/7RPtn9
+ Anufm/OYdQXDg4pjUzgGcxZMwpzxJgCJy58anJJY9RTJklhwSpTVKb+U6vOU2YNJsB8u 1Q== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pvq4djc28-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Apr 2023 15:26:32 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33BFQVvC029369
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Apr 2023 15:26:31 GMT
+Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 11 Apr
+ 2023 08:26:30 -0700
+Message-ID: <04155e87-16f7-9916-6aa8-b4842ef92b83@quicinc.com>
+Date:   Tue, 11 Apr 2023 09:26:29 -0600
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: linux-next: build failure after merge of the driver-core tree
+Content-Language: en-US
+To:     Greg KH <greg@kroah.com>
+CC:     Oded Gabbay <ogabbay@kernel.org>,
         Stephen Rothwell <sfr@canb.auug.org.au>,
         Dave Airlie <airlied@redhat.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         DRI <dri-devel@lists.freedesktop.org>,
         Pranjal Ramajor Asha Kanojiya <quic_pkanojiy@quicinc.com>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        "Linux Next Mailing List" <linux-next@vger.kernel.org>,
         Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>
-Subject: Re: linux-next: build failure after merge of the driver-core tree
-Message-ID: <2023041131-boxy-excavator-1183@gregkh>
 References: <20230411143812.11a4b00d@canb.auug.org.au>
- <ZDUuiB+E1tIJ95LY@phenom.ffwll.local>
- <2023041123-tractor-quake-c44d@gregkh>
+ <ZDUuiB+E1tIJ95LY@phenom.ffwll.local> <2023041123-tractor-quake-c44d@gregkh>
  <ZDV2Nvs57Orx47tj@phenom.ffwll.local>
  <1094266f-d845-9fa4-9f44-85de8352c04f@quicinc.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1094266f-d845-9fa4-9f44-85de8352c04f@quicinc.com>
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+ <2023041131-boxy-excavator-1183@gregkh>
+From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
+In-Reply-To: <2023041131-boxy-excavator-1183@gregkh>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 4z3jtjtH_--Gl6Z_JUdMhBL-anqBBjhA
+X-Proofpoint-GUID: 4z3jtjtH_--Gl6Z_JUdMhBL-anqBBjhA
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-11_10,2023-04-11_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
+ priorityscore=1501 impostorscore=0 mlxlogscore=999 adultscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 phishscore=0 spamscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304110141
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Apr 11, 2023 at 09:08:39AM -0600, Jeffrey Hugo wrote:
-> On 4/11/2023 9:01 AM, Daniel Vetter wrote:
-> > On Tue, Apr 11, 2023 at 12:40:28PM +0200, Greg KH wrote:
-> > > On Tue, Apr 11, 2023 at 11:55:20AM +0200, Daniel Vetter wrote:
-> > > > On Tue, Apr 11, 2023 at 02:38:12PM +1000, Stephen Rothwell wrote:
-> > > > > Hi all,
-> > > > > 
-> > > > > After merging the driver-core tree, today's linux-next build (x86_64
-> > > > > allmodconfig) failed like this:
-> > > > > 
-> > > > > In file included from include/linux/linkage.h:7,
-> > > > >                   from include/linux/kernel.h:17,
-> > > > >                   from drivers/accel/qaic/mhi_qaic_ctrl.c:4:
-> > > > > drivers/accel/qaic/mhi_qaic_ctrl.c: In function 'mhi_qaic_ctrl_init':
-> > > > > include/linux/export.h:27:22: error: passing argument 1 of 'class_create' from incompatible pointer type [-Werror=incompatible-pointer-types]
-> > > > >     27 | #define THIS_MODULE (&__this_module)
-> > > > >        |                     ~^~~~~~~~~~~~~~~
-> > > > >        |                      |
-> > > > >        |                      struct module *
-> > > > > drivers/accel/qaic/mhi_qaic_ctrl.c:544:38: note: in expansion of macro 'THIS_MODULE'
-> > > > >    544 |         mqc_dev_class = class_create(THIS_MODULE, MHI_QAIC_CTRL_DRIVER_NAME);
-> > > > >        |                                      ^~~~~~~~~~~
-> > > > > In file included from include/linux/device.h:31,
-> > > > >                   from include/linux/mhi.h:9,
-> > > > >                   from drivers/accel/qaic/mhi_qaic_ctrl.c:5:
-> > > > > include/linux/device/class.h:229:54: note: expected 'const char *' but argument is of type 'struct module *'
-> > > > >    229 | struct class * __must_check class_create(const char *name);
-> > > > >        |                                          ~~~~~~~~~~~~^~~~
-> > > > > drivers/accel/qaic/mhi_qaic_ctrl.c:544:25: error: too many arguments to function 'class_create'
-> > > > >    544 |         mqc_dev_class = class_create(THIS_MODULE, MHI_QAIC_CTRL_DRIVER_NAME);
-> > > > >        |                         ^~~~~~~~~~~~
-> > > > > include/linux/device/class.h:229:29: note: declared here
-> > > > >    229 | struct class * __must_check class_create(const char *name);
-> > > > >        |                             ^~~~~~~~~~~~
-> > > > > 
-> > > > > Caused by commit
-> > > > > 
-> > > > >    1aaba11da9aa ("driver core: class: remove module * from class_create()")
-> > > > > 
-> > > > > interacting with commit
-> > > > > 
-> > > > >    566fc96198b4 ("accel/qaic: Add mhi_qaic_cntl")
-> > > > > 
-> > > > > from the drm tree.
-> > > > > 
-> > > > > I have applied the following merge fix patch for today.
-> > > > > 
-> > > > > From: Stephen Rothwell <sfr@canb.auug.org.au>
-> > > > > Date: Tue, 11 Apr 2023 14:16:57 +1000
-> > > > > Subject: [PATCH] fixup for "driver core: class: remove module * from class_create()"
-> > > > > 
-> > > > > interacting with "accel/qaic: Add mhi_qaic_cntl"
-> > > > > 
-> > > > > Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> > > > 
-> > > > Thanks for the fixup. Since Dave is out I've made a note about this in my
-> > > > handover mail so it won't get lost in the drm-next merge window pull. I
-> > > > don't think we need any other coordination than mention it in each pull to
-> > > > Linus, topic tree seems overkill for this. Plus there's no way I can
-> > > > untangle the drm tree anyway :-).
-> > > 
-> > > Want me to submit a patch for the drm tree that moves this to use
-> > > class_register() instead, which will make the merge/build issue go away
-> > > for you?  That's my long-term goal here anyway, so converting this new
-> > > code to this api today would be something I have to do eventually :)
-> > 
-> > We kinda closed drm-next for feature work mostly already (just pulling
-> > stuff in from subtrees), so won't really help for this merge window.
-> > 
-> > For everything else I think this is up to Oded, I had no idea qaic needed
-> > it's entire own dev class and I don't want to dig into this for the risk I
-> > might freak out :-)
-> > 
-> > Adding Oded.
-> > 
-> > Cheers, Daniel
+On 4/11/2023 9:13 AM, Greg KH wrote:
+> On Tue, Apr 11, 2023 at 09:08:39AM -0600, Jeffrey Hugo wrote:
+>> On 4/11/2023 9:01 AM, Daniel Vetter wrote:
+>>> On Tue, Apr 11, 2023 at 12:40:28PM +0200, Greg KH wrote:
+>>>> On Tue, Apr 11, 2023 at 11:55:20AM +0200, Daniel Vetter wrote:
+>>>>> On Tue, Apr 11, 2023 at 02:38:12PM +1000, Stephen Rothwell wrote:
+>>>>>> Hi all,
+>>>>>>
+>>>>>> After merging the driver-core tree, today's linux-next build (x86_64
+>>>>>> allmodconfig) failed like this:
+>>>>>>
+>>>>>> In file included from include/linux/linkage.h:7,
+>>>>>>                    from include/linux/kernel.h:17,
+>>>>>>                    from drivers/accel/qaic/mhi_qaic_ctrl.c:4:
+>>>>>> drivers/accel/qaic/mhi_qaic_ctrl.c: In function 'mhi_qaic_ctrl_init':
+>>>>>> include/linux/export.h:27:22: error: passing argument 1 of 'class_create' from incompatible pointer type [-Werror=incompatible-pointer-types]
+>>>>>>      27 | #define THIS_MODULE (&__this_module)
+>>>>>>         |                     ~^~~~~~~~~~~~~~~
+>>>>>>         |                      |
+>>>>>>         |                      struct module *
+>>>>>> drivers/accel/qaic/mhi_qaic_ctrl.c:544:38: note: in expansion of macro 'THIS_MODULE'
+>>>>>>     544 |         mqc_dev_class = class_create(THIS_MODULE, MHI_QAIC_CTRL_DRIVER_NAME);
+>>>>>>         |                                      ^~~~~~~~~~~
+>>>>>> In file included from include/linux/device.h:31,
+>>>>>>                    from include/linux/mhi.h:9,
+>>>>>>                    from drivers/accel/qaic/mhi_qaic_ctrl.c:5:
+>>>>>> include/linux/device/class.h:229:54: note: expected 'const char *' but argument is of type 'struct module *'
+>>>>>>     229 | struct class * __must_check class_create(const char *name);
+>>>>>>         |                                          ~~~~~~~~~~~~^~~~
+>>>>>> drivers/accel/qaic/mhi_qaic_ctrl.c:544:25: error: too many arguments to function 'class_create'
+>>>>>>     544 |         mqc_dev_class = class_create(THIS_MODULE, MHI_QAIC_CTRL_DRIVER_NAME);
+>>>>>>         |                         ^~~~~~~~~~~~
+>>>>>> include/linux/device/class.h:229:29: note: declared here
+>>>>>>     229 | struct class * __must_check class_create(const char *name);
+>>>>>>         |                             ^~~~~~~~~~~~
+>>>>>>
+>>>>>> Caused by commit
+>>>>>>
+>>>>>>     1aaba11da9aa ("driver core: class: remove module * from class_create()")
+>>>>>>
+>>>>>> interacting with commit
+>>>>>>
+>>>>>>     566fc96198b4 ("accel/qaic: Add mhi_qaic_cntl")
+>>>>>>
+>>>>>> from the drm tree.
+>>>>>>
+>>>>>> I have applied the following merge fix patch for today.
+>>>>>>
+>>>>>> From: Stephen Rothwell <sfr@canb.auug.org.au>
+>>>>>> Date: Tue, 11 Apr 2023 14:16:57 +1000
+>>>>>> Subject: [PATCH] fixup for "driver core: class: remove module * from class_create()"
+>>>>>>
+>>>>>> interacting with "accel/qaic: Add mhi_qaic_cntl"
+>>>>>>
+>>>>>> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+>>>>>
+>>>>> Thanks for the fixup. Since Dave is out I've made a note about this in my
+>>>>> handover mail so it won't get lost in the drm-next merge window pull. I
+>>>>> don't think we need any other coordination than mention it in each pull to
+>>>>> Linus, topic tree seems overkill for this. Plus there's no way I can
+>>>>> untangle the drm tree anyway :-).
+>>>>
+>>>> Want me to submit a patch for the drm tree that moves this to use
+>>>> class_register() instead, which will make the merge/build issue go away
+>>>> for you?  That's my long-term goal here anyway, so converting this new
+>>>> code to this api today would be something I have to do eventually :)
+>>>
+>>> We kinda closed drm-next for feature work mostly already (just pulling
+>>> stuff in from subtrees), so won't really help for this merge window.
+>>>
+>>> For everything else I think this is up to Oded, I had no idea qaic needed
+>>> it's entire own dev class and I don't want to dig into this for the risk I
+>>> might freak out :-)
+>>>
+>>> Adding Oded.
+>>>
+>>> Cheers, Daniel
+>>
+>> Sorry for the mess.
+>>
+>> I made a note to update to class_register() once my drm-misc access is
+>> sorted out.  Looks like we'll address the conflict in the merge window, and
+>> catch the update to the new API in the following release.
 > 
-> Sorry for the mess.
+> Wait, I think the large question is, "why does this need a separate
+> class"?  Why are you not using the accel char device and class?  That is
+> what everything under accel/ should be using, otherwise why put it in
+> there?
 > 
-> I made a note to update to class_register() once my drm-misc access is
-> sorted out.  Looks like we'll address the conflict in the merge window, and
-> catch the update to the new API in the following release.
+> And what exactly are you using that class for?  Just device nodes?  If
+> so, how many?
+> 
+> thanks,
+> 
+> greg k-h
 
-Wait, I think the large question is, "why does this need a separate
-class"?  Why are you not using the accel char device and class?  That is
-what everything under accel/ should be using, otherwise why put it in
-there?
 
-And what exactly are you using that class for?  Just device nodes?  If
-so, how many?
+Remember MHI_UCI that then evolved into the WWAN subsystem?  I pointed 
+out at the time that AIC100/QAIC would need the same functionality. 
+You/Jakub told myself/Mani/Loic that a combined implementation is not 
+acceptable, and every area needs to implement their own version of MHI_UCI.
 
-thanks,
+We took the WWAN subsystem and simplified it to meet our needs.
 
-greg k-h
+The functionality is QAIC specific, so wedging it into the Accel node 
+seems to be a poor fit as it would subject Habana and iVPU to the same.
+
+We need (eventually) 128 device nodes.  We have systems with 32 QAIC 
+devices, and each QAIC device uses 4 device nodes (32 * 4 = 128).  WWAN 
+subsystem would be similar.  Looks like each 5G modem is 6 nodes per 
+device, so if you had 22 5G modems on a system, you'd have 132 device 
+nodes.  I'm not aware of any such system, but it could exist.
+
+-Jeff

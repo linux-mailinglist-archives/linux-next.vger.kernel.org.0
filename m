@@ -2,159 +2,166 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80B506DDBC6
-	for <lists+linux-next@lfdr.de>; Tue, 11 Apr 2023 15:11:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEEEE6DDEB8
+	for <lists+linux-next@lfdr.de>; Tue, 11 Apr 2023 17:01:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229955AbjDKNLu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 11 Apr 2023 09:11:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48052 "EHLO
+        id S229989AbjDKPBZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 11 Apr 2023 11:01:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229982AbjDKNLt (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 11 Apr 2023 09:11:49 -0400
-Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F6A430F6
-        for <linux-next@vger.kernel.org>; Tue, 11 Apr 2023 06:11:48 -0700 (PDT)
-Received: by mail-vs1-xe31.google.com with SMTP id z13so7466803vss.1
-        for <linux-next@vger.kernel.org>; Tue, 11 Apr 2023 06:11:48 -0700 (PDT)
+        with ESMTP id S230296AbjDKPBW (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 11 Apr 2023 11:01:22 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E84F84C38
+        for <linux-next@vger.kernel.org>; Tue, 11 Apr 2023 08:01:14 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id ffacd0b85a97d-2efbab477a6so113769f8f.1
+        for <linux-next@vger.kernel.org>; Tue, 11 Apr 2023 08:01:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112; t=1681218707;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GonC8IX0js+OVi94Wk4G2xkTnBOQ98tF+JQsSsp/P+Q=;
-        b=xcJRS2UHnJF4qMLv4zXTiL1wmsA2j57YKkXofoZoG/nncFZ9Dc1hTwLN9PxOK66kSn
-         mz5KoPN9Le33iDewCg+LcdfbSvEsXPwZX+o6OB81EpOzNNkDtFiXuemIctsk56gBvpCC
-         wDInekSq7XXxuRAZSFDN+SVTjC0FN04Oh7DdCusqwKQ8b4Fga6xT4XzMEc0v9bldQ9Ez
-         dAgN26c61YqIQFVmFY94LfFbXWjGBpZmtDSFpAPxfM5ShpqBMCeOaneCk3slWVYcWVcA
-         pTI/4tv2eM4KsYmeCwLjBPhsy9AF78MmkekST/L15qszuiH85CAGdjRrRpkonzJhc9h+
-         hwXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681218707;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=ffwll.ch; s=google; t=1681225273; x=1683817273;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=GonC8IX0js+OVi94Wk4G2xkTnBOQ98tF+JQsSsp/P+Q=;
-        b=X0G1rPy4nfjBR/5FjMmlRVHdm6LxOazS7N4wDmicpGh4MGHhXLQgr1r4irz/lA91ez
-         vzjHiH72zMVybzrt0NvMmqTJ4192Ckr6pbr32v9SjZVLTV8AY6Ab+7UD2Y7v+qJ+smoK
-         xR1ae3bSBwKJZ+uReazgMjgJEmb0fGsMPCSZB7/iS4TYTVY7mIcoGDcqU58h488FRAgn
-         tr09J6kiX2IrX1ewwBT9XNAm+8GSEr1R8BglKnCxf+Sp1yXBy4RGasIplXh0enQZ4IDC
-         H8CRm1Hy933ASkW0lDZ1gc3YeRb56wcUALg+rnY6fO26Pg/S0w1uUNTiFJnGVskF3UL7
-         NQPA==
-X-Gm-Message-State: AAQBX9dlo6qKcodnH8yN9GSlXyFqSqTXF8UqBAs+1qPM8tXxaRq6R5ho
-        zitzzmfBNklvy3t4jOlTj2cq0ZM7C9+oGnveeo2gzg==
-X-Google-Smtp-Source: AKy350YbgCCHeeQll+PtCuIJBiGVDqYrDGK7d5MCr7dW/WF0/1JpvIxP/7GIUb8Prhz1Fy5k/YBRj+Zy3NIQvBwzyTk=
-X-Received: by 2002:a67:ca81:0:b0:426:7730:1b89 with SMTP id
- a1-20020a67ca81000000b0042677301b89mr1904738vsl.0.1681218707036; Tue, 11 Apr
- 2023 06:11:47 -0700 (PDT)
+        bh=p5X6MAk0ycdyWUIs+bI10cqIdEaTFo7OsdLJazRF6W4=;
+        b=I5dJGkU+8/zCsX059XnDP41lbfObXsEprjlJwOEdjXnaMwmF/xe4879vsPOSYbvLeN
+         GjOI4IuIHRrfsIYOhkeGkS1pTC10qm94MV82STUC5efmZvozDMMfs/NXdg2W1JSjXn8L
+         HJj7rUW7GOULQiR9TtLDhNb0/nN8O4XhvIqN8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681225273; x=1683817273;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=p5X6MAk0ycdyWUIs+bI10cqIdEaTFo7OsdLJazRF6W4=;
+        b=HJ8cBt80rWL040zN9Ec3psqfVbLidgLwbyKKZcc9P4OuJY+ukqm9AfXdGtnr6ZmWL8
+         4VKGNxwtTCGtVwECDNomtxUUiRz90Jt9acThDx9dMCglMDUG5katNDGG5pd7z/5eXMF2
+         mo3O0dnBuqTaC3WVy7y5u+cGzXo0q4Zykr8QluXX83hEStcd5XrhFUQKpLp71AtyYguc
+         CAWqsrnZl4nmD3wO0/jPB9ruO9HOyna5M5kKVU0yh4UwNpIpY0BAlcRotcGYtAB4Vcgj
+         Ha4+BgGhmGt9Si6rfoYDBPa5YFM+OZXaNQkPFURpL2dwODHrFwxW2LT2rdC85xVLIamS
+         VZJw==
+X-Gm-Message-State: AAQBX9cw8UkTVFh8D0m8SciHewwlB8cMgmwZZ/077aGMIiTdXu5Xm5IS
+        HrpcxIeng1UU9+F00zRcfQYk7Q==
+X-Google-Smtp-Source: AKy350Y2w1T0rz4N/FvRZIpzEHOepBmJZn8uoGYoxs2MFy7RDHglu0yv8BxU4chJkRQTTJGEfaLenA==
+X-Received: by 2002:a05:600c:3ca3:b0:3eb:2e2a:be95 with SMTP id bg35-20020a05600c3ca300b003eb2e2abe95mr8317833wmb.2.1681225273221;
+        Tue, 11 Apr 2023 08:01:13 -0700 (PDT)
+Received: from phenom.ffwll.local (212-51-149-33.fiber7.init7.net. [212.51.149.33])
+        by smtp.gmail.com with ESMTPSA id u14-20020a05600c00ce00b003ed243222adsm17186003wmm.42.2023.04.11.08.01.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Apr 2023 08:01:12 -0700 (PDT)
+Date:   Tue, 11 Apr 2023 17:01:10 +0200
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Greg KH <greg@kroah.com>, Oded Gabbay <ogabbay@kernel.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Dave Airlie <airlied@redhat.com>,
+        Jeffrey Hugo <quic_jhugo@quicinc.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Pranjal Ramajor Asha Kanojiya <quic_pkanojiy@quicinc.com>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
+        Oded Gabbay <ogabbay@kernel.org>
+Subject: Re: linux-next: build failure after merge of the driver-core tree
+Message-ID: <ZDV2Nvs57Orx47tj@phenom.ffwll.local>
+Mail-Followup-To: Greg KH <greg@kroah.com>,
+        Oded Gabbay <ogabbay@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Dave Airlie <airlied@redhat.com>,
+        Jeffrey Hugo <quic_jhugo@quicinc.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Pranjal Ramajor Asha Kanojiya <quic_pkanojiy@quicinc.com>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>
+References: <20230411143812.11a4b00d@canb.auug.org.au>
+ <ZDUuiB+E1tIJ95LY@phenom.ffwll.local>
+ <2023041123-tractor-quake-c44d@gregkh>
 MIME-Version: 1.0
-References: <CA+G9fYv94gx8+-JMzbmQaue3q3y6QdBmsGUCdD-26X5XavL3Ag@mail.gmail.com>
- <ZAocZRZh4FQRH3lc@smile.fi.intel.com> <CA+G9fYsOttth+k3Ki8LK_ZiayvXa0bAg-DmQAaFHZeEyR=6Lrw@mail.gmail.com>
- <CACRpkdbUYWcFiRh+Y=MOekv2RjSP4sB2t5tVrSsz54Eez6wmVg@mail.gmail.com>
-In-Reply-To: <CACRpkdbUYWcFiRh+Y=MOekv2RjSP4sB2t5tVrSsz54Eez6wmVg@mail.gmail.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Tue, 11 Apr 2023 15:11:36 +0200
-Message-ID: <CAMRc=MeivPz2nOjgFwYscZQpbuXnt=z5JAVMB4uzahQJgKjdKg@mail.gmail.com>
-Subject: Re: selftests: gpio: crash on arm64
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, linux-mm <linux-mm@kvack.org>,
-        Arnd Bergmann <arnd@arndb.de>, Shuah Khan <shuah@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Pengfei Xu <pengfei.xu@intel.com>, yi1.lai@intel.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2023041123-tractor-quake-c44d@gregkh>
+X-Operating-System: Linux phenom 6.1.0-7-amd64
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Apr 11, 2023 at 10:57=E2=80=AFAM Linus Walleij <linus.walleij@linar=
-o.org> wrote:
->
-> On Mon, Apr 10, 2023 at 11:16=E2=80=AFAM Naresh Kamboju
-> <naresh.kamboju@linaro.org> wrote:
-> (...)
-> > Anders performed bisection on this problem.
-> > The bisection have been poing to this commit log,
-> >   first bad commit: [24c94060fc9b4e0f19e6e018869db46db21d6bc7]
-> >     gpiolib: ensure that fwnode is properly set
->
-> I don't think this is the real issue.
->
-> (...)
-> > # 2.  Module load error tests
-> > # 2.1 gpio overflow
-> (...)
-> > [   88.900984] Freed in software_node_release+0xdc/0x108 age=3D34 cpu=
-=3D1 pid=3D683
-> > [   88.907899]  __kmem_cache_free+0x2a4/0x2e0
-> > [   88.912024]  kfree+0xc0/0x1a0
-> > [   88.915015]  software_node_release+0xdc/0x108
-> > [   88.919402]  kobject_put+0xb0/0x220
-> > [   88.922919]  software_node_notify_remove+0x98/0xe8
-> > [   88.927741]  device_del+0x184/0x380
-> > [   88.931259]  platform_device_del.part.0+0x24/0xa8
-> > [   88.935995]  platform_device_unregister+0x30/0x50
->
-> I think the refcount is wrong on the fwnode.
->
-> The chip is allocated with devm_gpiochip_add_data() which will not call
-> gpiochip_remove() until all references are removed by calling
-> devm_gpio_chip_release().
->
-> Add a pr_info() devm_gpio_chip_release() in drivers/gpio/gpiolib-devres.c
-> and see if the callback is even called. I think this could be the
-> problem: if that isn't cleaned up, there will be dangling references.
->
-> diff --git a/drivers/gpio/gpiolib-devres.c b/drivers/gpio/gpiolib-devres.=
-c
-> index fe9ce6b19f15..30a0622210d7 100644
-> --- a/drivers/gpio/gpiolib-devres.c
-> +++ b/drivers/gpio/gpiolib-devres.c
-> @@ -394,6 +394,7 @@ static void devm_gpio_chip_release(void *data)
->  {
->         struct gpio_chip *gc =3D data;
->
-> +       pr_info("GPIOCHIP %s WAS REMOVED BY DEVRES\n", gc->label);
->         gpiochip_remove(gc);
->  }
->
-> If this isn't working we need to figure out what is holding a reference t=
-o
-> the gpiochip.
->
-> I don't know how the references to the gpiochip fwnode is supposed to
-> drop to zero though? I didn't work with mockup much ...
->
-> What I could think of is that maybe the mockup driver need a .shutdown()
-> callback to forcibly call gpiochip_remove(), and in that case it should
-> be wrapped in a non-existining devm_gpiochip_remove() since devres
-> is used to register it.
->
-> Bartosz will know better though! I am pretty sure he has this working
-> flawlessly so the tests must be doing something weird which is leaving
-> references around.
->
-> Yours,
-> Linus Walleij
+On Tue, Apr 11, 2023 at 12:40:28PM +0200, Greg KH wrote:
+> On Tue, Apr 11, 2023 at 11:55:20AM +0200, Daniel Vetter wrote:
+> > On Tue, Apr 11, 2023 at 02:38:12PM +1000, Stephen Rothwell wrote:
+> > > Hi all,
+> > > 
+> > > After merging the driver-core tree, today's linux-next build (x86_64
+> > > allmodconfig) failed like this:
+> > > 
+> > > In file included from include/linux/linkage.h:7,
+> > >                  from include/linux/kernel.h:17,
+> > >                  from drivers/accel/qaic/mhi_qaic_ctrl.c:4:
+> > > drivers/accel/qaic/mhi_qaic_ctrl.c: In function 'mhi_qaic_ctrl_init':
+> > > include/linux/export.h:27:22: error: passing argument 1 of 'class_create' from incompatible pointer type [-Werror=incompatible-pointer-types]
+> > >    27 | #define THIS_MODULE (&__this_module)
+> > >       |                     ~^~~~~~~~~~~~~~~
+> > >       |                      |
+> > >       |                      struct module *
+> > > drivers/accel/qaic/mhi_qaic_ctrl.c:544:38: note: in expansion of macro 'THIS_MODULE'
+> > >   544 |         mqc_dev_class = class_create(THIS_MODULE, MHI_QAIC_CTRL_DRIVER_NAME);
+> > >       |                                      ^~~~~~~~~~~
+> > > In file included from include/linux/device.h:31,
+> > >                  from include/linux/mhi.h:9,
+> > >                  from drivers/accel/qaic/mhi_qaic_ctrl.c:5:
+> > > include/linux/device/class.h:229:54: note: expected 'const char *' but argument is of type 'struct module *'
+> > >   229 | struct class * __must_check class_create(const char *name);
+> > >       |                                          ~~~~~~~~~~~~^~~~
+> > > drivers/accel/qaic/mhi_qaic_ctrl.c:544:25: error: too many arguments to function 'class_create'
+> > >   544 |         mqc_dev_class = class_create(THIS_MODULE, MHI_QAIC_CTRL_DRIVER_NAME);
+> > >       |                         ^~~~~~~~~~~~
+> > > include/linux/device/class.h:229:29: note: declared here
+> > >   229 | struct class * __must_check class_create(const char *name);
+> > >       |                             ^~~~~~~~~~~~
+> > > 
+> > > Caused by commit
+> > > 
+> > >   1aaba11da9aa ("driver core: class: remove module * from class_create()")
+> > > 
+> > > interacting with commit
+> > > 
+> > >   566fc96198b4 ("accel/qaic: Add mhi_qaic_cntl")
+> > > 
+> > > from the drm tree.
+> > > 
+> > > I have applied the following merge fix patch for today.
+> > > 
+> > > From: Stephen Rothwell <sfr@canb.auug.org.au>
+> > > Date: Tue, 11 Apr 2023 14:16:57 +1000
+> > > Subject: [PATCH] fixup for "driver core: class: remove module * from class_create()"
+> > > 
+> > > interacting with "accel/qaic: Add mhi_qaic_cntl"
+> > > 
+> > > Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> > 
+> > Thanks for the fixup. Since Dave is out I've made a note about this in my
+> > handover mail so it won't get lost in the drm-next merge window pull. I
+> > don't think we need any other coordination than mention it in each pull to
+> > Linus, topic tree seems overkill for this. Plus there's no way I can
+> > untangle the drm tree anyway :-).
+> 
+> Want me to submit a patch for the drm tree that moves this to use
+> class_register() instead, which will make the merge/build issue go away
+> for you?  That's my long-term goal here anyway, so converting this new
+> code to this api today would be something I have to do eventually :)
 
-Interestingly I'm not seeing this neither with gpio-sim selftests nor
-with any of the libgpiod tests which suggests it's the gpio-mockup
-module that's doing something wrong (or very right in which case it
-uncovers some otherwise hidden bug). Anyway, I'll try to spend some
-time on it and figure it out, although I'd like to be done with
-gpio-mockup altogether already.
+We kinda closed drm-next for feature work mostly already (just pulling
+stuff in from subtrees), so won't really help for this merge window.
 
-Bart
+For everything else I think this is up to Oded, I had no idea qaic needed
+it's entire own dev class and I don't want to dig into this for the risk I
+might freak out :-)
+
+Adding Oded.
+
+Cheers, Daniel
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch

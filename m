@@ -2,72 +2,83 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49D2D6DE721
-	for <lists+linux-next@lfdr.de>; Wed, 12 Apr 2023 00:18:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 761F56DE746
+	for <lists+linux-next@lfdr.de>; Wed, 12 Apr 2023 00:30:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229452AbjDKWSo (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 11 Apr 2023 18:18:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35528 "EHLO
+        id S229459AbjDKW37 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 11 Apr 2023 18:29:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229621AbjDKWSn (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 11 Apr 2023 18:18:43 -0400
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAEF7468A;
-        Tue, 11 Apr 2023 15:18:37 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S229458AbjDKW36 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 11 Apr 2023 18:29:58 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A16C46B3;
+        Tue, 11 Apr 2023 15:29:56 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 96B0C5BF;
-        Tue, 11 Apr 2023 22:18:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 96B0C5BF
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1681251517; bh=pWHfpVwOwf5n3ID70f/fj5Lxx0kk9E1xO6NqssJ6gKw=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=SqO/XtR390LrIWR23vpBVf/esRFsFA+woe8EHAEfH65ZfOOhYoVRug3Q/dJ3DiXE6
-         2qqwCB/0FDL1CXudJxKnGAvN+5Jvc/LMYbDl6B1sUF0B8NzYlPsSdKNYKWtTXfqYKh
-         QBIKmYhI30LwIpjIAgIdrwpdPs/TApJCPJ3YLQfJCSur8NBtj9uoUBToN6gXBd7NSQ
-         D1mIQ0HwL5MLqTIYYBrWS4gYd9Li3iHTDf8gka2SgIj5R1drdXMhBd7Lsw+vgnfogD
-         ttTaQcQTqNwDYZWSaZ6YUFwCErTBhqq+apuHUzbpiRw1uygsfEp3MPApNlltnSvqx0
-         +tMWK+dgU9/PQ==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        "Michael S. Tsirkin" <mst@redhat.com>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Px0ry5jjzz4xFd;
+        Wed, 12 Apr 2023 08:29:54 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1681252194;
+        bh=f/bZfbo+Z9vAxuPDGAcCUT7CZdGBFDB4HU3XSZ43QBE=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Kt8VTP24mvpphZtK57LI5/CR4eLdHo5hu3Zj3T+dW/rm8l7GOwCFUP1SW2Z7YK+ek
+         vIPE2FoN/zclMUBv46edqnQnL4EN+G0QzlDbDS5AgyGN2SJn9F1ila2ibEhWikZKH8
+         efQ/SOPR6SySjEPZPDgQWmDT8mIgn+grdZlZCwdA5aPCfNwVgnGBqtieP1sKWQT5io
+         lnnw/0gkQWarUWDPRKZ/8qM83+THdFu2iZjnie3GI9WXiHrB3xErmJekxpupbpHtTt
+         vRM+yvXrlhrYbWU13mCeCVZVg4/N9Vu/c1DJGvQvcpnmKB0AZKOu6LcNposP4heh45
+         PgplyVm0NTLRA==
+Date:   Wed, 12 Apr 2023 08:29:53 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Gao Xiang <xiang@kernel.org>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patch in the vhost tree
-In-Reply-To: <20230411151953.182c6a92@canb.auug.org.au>
-References: <20230411151953.182c6a92@canb.auug.org.au>
-Date:   Tue, 11 Apr 2023 16:18:36 -0600
-Message-ID: <871qkqawqr.fsf@meer.lwn.net>
+Subject: linux-next: Signed-off-by missing for commit in the erofs tree
+Message-ID: <20230412082953.64ac8828@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/9Mp.FFw54e8Q=kxDMqC5=YZ";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Stephen Rothwell <sfr@canb.auug.org.au> writes:
+--Sig_/9Mp.FFw54e8Q=kxDMqC5=YZ
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> Hi all,
->
-> The following commit is also in the jc_docs tree as a different commit
-> (but the same patch):
->
->   3a9421482150 ("dma-api-howto: typo fix")
->
-> This is commit
->
->   2ca956cf8834 ("dma-api-howto: typo fix")
->
-> in the jc_docs tree.
+Hi all,
 
-Michael, I'm a bit confused by this one...you sent it to me, but
-evidently didn't want me to take it?  I can certainly drop it...
+Commit
 
-Thanks,
+  95ff51070f35 ("erofs: handle long xattr name prefixes properly")
 
-jon
+is missing a Signed-off-by from its committer.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/9Mp.FFw54e8Q=kxDMqC5=YZ
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQ132IACgkQAVBC80lX
+0GzS3Qf/RtLV3WOgunHHsabCLHVu1SlfsnGNpHB2PdDcLdf+quejmfkn7PFF6Kuu
+jets+OIuBHtSyj7KTHceLlN/W/bt9IX2xjZ2YwViwLbKDeG+t6xZqTycHgZi3yab
+JlsK87EdhuEKq3HGNmShKIeUGilky3IatKJJ65uWGM9TUX8+xB9wpQq+pa6uCafx
+uvLGx92JoZdooTUnsb9RIx/576g0rU+yD7j3jqyeOgYYoWeCSyly+QCF0rXe6v0V
+6N3QSheaWEoruMldMVhwTMvFDoq511s+GNcwvwAZxvUxo8ZQu2NrQZT2n99M/XtT
+UXAzHpxA7s7YC/KMk6zEPxxpUTRZAA==
+=fLJU
+-----END PGP SIGNATURE-----
+
+--Sig_/9Mp.FFw54e8Q=kxDMqC5=YZ--

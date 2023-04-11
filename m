@@ -2,45 +2,44 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45A3E6DD16D
-	for <lists+linux-next@lfdr.de>; Tue, 11 Apr 2023 07:16:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AF236DD17B
+	for <lists+linux-next@lfdr.de>; Tue, 11 Apr 2023 07:20:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229663AbjDKFQW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 11 Apr 2023 01:16:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36428 "EHLO
+        id S229964AbjDKFUB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 11 Apr 2023 01:20:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjDKFQW (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 11 Apr 2023 01:16:22 -0400
+        with ESMTP id S229688AbjDKFT6 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 11 Apr 2023 01:19:58 -0400
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ECA71BF0;
-        Mon, 10 Apr 2023 22:16:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADD0DE7C;
+        Mon, 10 Apr 2023 22:19:57 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PwYwH1Czwz4x1f;
-        Tue, 11 Apr 2023 15:16:14 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PwZ0W5fkwz4x1f;
+        Tue, 11 Apr 2023 15:19:55 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1681190175;
-        bh=Cj6AlODVw/y9CAPgFZFNxLsOj4Q5JjCiGG7y0ObD7RY=;
+        s=201702; t=1681190395;
+        bh=eNF8KHa+IYB0+oxeJ8kq3ER55cfynXxeSbdsH/LH3VQ=;
         h=Date:From:To:Cc:Subject:From;
-        b=kOLNOQSeME/7V+RIlpFmIZb3+lYxzcOSEPJRjLZyXaF76aC3FOlp6ZzKyPLY7+oAo
-         X4Wr1j/jxSDQtDDyhumrRVR0AeWlOXP/1Z309ULi3iFkDbCuQ/F714zD3PVZ2HOU8M
-         xE9JaYShbiqub6KyDtb6QmfFt7OQesYPe6Mme7Sg/67EZBI7nisbca+d0yscFP24Yi
-         wDcavap5olAdhsutR+RVVu8HMHTYDj5MxDum6EjRSbw52Hui2CmKsrG8ZVpK8phkui
-         XlJ+tJkEfJ4OIIK7PvZ9Svw3OyEjvNSpYoG7b1ytDg0UWoB9qgotCVgeDGQYaa3v4b
-         klW6ZV+1MJiRg==
-Date:   Tue, 11 Apr 2023 15:16:13 +1000
+        b=VNBBx+MOMnEw2dUk+21WcFZDoKDlGR+ic9bqSfPW1OZI2si1WROE0kbByI7KWa/lr
+         cgDZjAbQ++OYxZrT+RTnz61lJ049N4MIbNWrvV8cuZwjkWXAls9AjQtSOJR3LejCKq
+         m92ncToaTIZNmR7iH21zo0ns10SqX5jftEkt4bm2aYY5acESDj1ajSDi5obbDhrQga
+         YuA4IbLxGcsuJqLuTOvOpzl7Ne9dYrSCX6UC6WleDbxiVTpxCkv5MTKn1pys1PEnMf
+         Ot9ZrBfuQLR46/10zpZklk/1vhHj5K2KPtjh8ZMYSprbZN/HA02j3lrrdmbTNZyicM
+         7hqgIvbhSKpjQ==
+Date:   Tue, 11 Apr 2023 15:19:53 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Takahiro Itazuri <itazur@amazon.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patch in the jc_docs tree
-Message-ID: <20230411151613.20bfd5ea@canb.auug.org.au>
+Subject: linux-next: duplicate patch in the vhost tree
+Message-ID: <20230411151953.182c6a92@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/X3+9zEG6xzvVIO8uQurvFtt";
+Content-Type: multipart/signed; boundary="Sig_/mLRRBjyF9muSVhiS9AmwSrO";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
@@ -51,41 +50,41 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/X3+9zEG6xzvVIO8uQurvFtt
+--Sig_/mLRRBjyF9muSVhiS9AmwSrO
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-The following commit is also in Linus Torvalds' tree as a different commit
+The following commit is also in the jc_docs tree as a different commit
 (but the same patch):
 
-  5562030968d7 ("docs: kvm: x86: Fix broken field list")
+  3a9421482150 ("dma-api-howto: typo fix")
 
 This is commit
 
-  fb5015bc8b73 ("docs: kvm: x86: Fix broken field list")
+  2ca956cf8834 ("dma-api-howto: typo fix")
 
-in Linus' tree.
+in the jc_docs tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/X3+9zEG6xzvVIO8uQurvFtt
+--Sig_/mLRRBjyF9muSVhiS9AmwSrO
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQ07R4ACgkQAVBC80lX
-0Gy/Cwf/R+s/dAsFsXWaUT7LjaagdTqCEEhr8HttHdpYN7OEypoUA56Izx30C1lc
-9QKB1KeV8D8g/IHn5KCbbhanckH+ChbhafvldsrifrLcC0jJomM+OVzBkm3lfCAp
-5J0qmjQWOJsupo3qmSaMa/EUSiJBlhnsb+zm4fwtoWxXkA2tX/Vihs8xhdmIvgm0
-Lab3strjk9YruPhDa7p2+ktLZbMuSKgqhVpkyJqNBolyUIeYsZl13aBR5JeUKihB
-2RMcIKid28IaLofvdXdRsoaYSL8LeVUN0w3ANoJcei/2ZSQ4Zvu98E56845B+GmK
-xeilp6Q/U8P/xRlb07PYDhDnaGn+QQ==
-=Af2l
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQ07fkACgkQAVBC80lX
+0GztZwgApRkx4coiujkj4ksw9PtDG5onTwPUn8mPsf6ZxA3kfj/E/FyUyMEJk/6Y
+8o0PkdmXuUqs0oV09UXt8tp5KaAZAmxjCtbYF1LX2ngxif8GxRRzGS1mT1EW/9/x
+99Z6AL7//Y8grNbR5Voa7u48NMTGoxRebfNODGqSUK6D5VoKigmw8Nxl2bmLIfbQ
+cvgKnUYCor/sq25JLO/M+CPIHJDy3Vf5ZWIc6qF9CEKXCkzgZZ7A+FQO0IJhOTaw
+l4aoiWO63Mr1kMDeD04yQv/Uw1uJJCmHajTuIHBKTd6fW/dFdY4CTSJ0YCqlwaRI
+re1lBzfI/4ASeqLWIcQp6+0MdOufTg==
+=DqTc
 -----END PGP SIGNATURE-----
 
---Sig_/X3+9zEG6xzvVIO8uQurvFtt--
+--Sig_/mLRRBjyF9muSVhiS9AmwSrO--

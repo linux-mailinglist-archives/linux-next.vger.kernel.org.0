@@ -2,82 +2,170 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B6A16DD72F
-	for <lists+linux-next@lfdr.de>; Tue, 11 Apr 2023 11:51:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48BE36DD740
+	for <lists+linux-next@lfdr.de>; Tue, 11 Apr 2023 11:55:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229578AbjDKJup (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 11 Apr 2023 05:50:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43888 "EHLO
+        id S229493AbjDKJz2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 11 Apr 2023 05:55:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230082AbjDKJu0 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 11 Apr 2023 05:50:26 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97FA226A6;
-        Tue, 11 Apr 2023 02:50:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681206625; x=1712742625;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=JrVteDFyeT/P8hd4qs4Q0KWR23l+rPhB5Jf5eKrKS6c=;
-  b=HjgfBTTpxnvqFCmY4iW/uBen+ZE9ZELtSLfFyXlj4bXU3Xa1LfVOWfm4
-   SceXHSsMgkk5ri1cyOzwxZ0OIJ+TXTO5O3kmvvE+PQ400/yMCWxHpuM//
-   Q/XE6ALoG6eC8fqFoJztfgO3AUIVpgXuNz6fMgmIdcFAKUcJf5w6bKOGy
-   Rpm5pupizNf93ZqpzCzy3SkxHzSphGeLX000o5V3U9Qld1nPEzxK+1t8W
-   yZh4kPIkJUFKSpyyLh/+fMGKkB41VDgoPYgO3tvruyfqyNFlrZCre/OOP
-   K0XRpDk5W7PGEQzPb/+41B8tpPfP3stNI7JlKX/R8vMCCQA/QadzDO1vY
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="327676608"
-X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
-   d="scan'208";a="327676608"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 02:49:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="1018312507"
-X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
-   d="scan'208";a="1018312507"
-Received: from faerberc-mobl2.ger.corp.intel.com (HELO intel.com) ([10.252.55.254])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 02:49:26 -0700
-Date:   Tue, 11 Apr 2023 11:48:58 +0200
-From:   Andi Shyti <andi.shyti@linux.intel.com>
+        with ESMTP id S229484AbjDKJz1 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 11 Apr 2023 05:55:27 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8472810FE
+        for <linux-next@vger.kernel.org>; Tue, 11 Apr 2023 02:55:24 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id ffacd0b85a97d-2ef70620b9dso594273f8f.1
+        for <linux-next@vger.kernel.org>; Tue, 11 Apr 2023 02:55:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google; t=1681206923;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qjwT/tg0Il9N/eZxuQXGAWsNmLhCbQOBOXoq9lsOf/U=;
+        b=LhR2tDt6FPotjaySQ6Sf6tz9AG58+vuUcuM1yAZgHkm1xiEQJEHBRofim1m6IDozXv
+         VI57GGn+P7smvIJg1ibAhWImNuu+0ChlA3+Q/1cNs3y/ZP+RcJBoiDNuZfGklAtqnP9v
+         JkVBhuPRD66yy7XkwBawBfXNfPQUiNNhIMddg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681206923;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qjwT/tg0Il9N/eZxuQXGAWsNmLhCbQOBOXoq9lsOf/U=;
+        b=7CLFewed7vh6N1rufjPe2T8Bi2CqdBpCngsw5q8SeKsZVtr1HXdXyeS4orXiTblMU+
+         Fs2kGZ5Wj1jqJ/hPwtvPGzGNQjpa/JZZIsWA5Ud6SrNBRkB0Uh9PIuTxrsWbIscV5rOJ
+         V3XrQ33ZQOEt9eSo+M7UzVydRfGheDqbuDlpWkm7xT4Cxc4KKdyPeJH63/BORSxzRw/9
+         uoHfssQfq9a8ybOhoTa3dC7fOe69U2tu48oiahJOrmu88OKqjjZeaX4KeJY8dbjvzLAQ
+         jaVV6v/B4DyJ/TdE9QuBPUm/q3TwHN+Iey33xwWk0GIcf3hOdlZEfCohFfGLenzbolae
+         sg3Q==
+X-Gm-Message-State: AAQBX9eGpFxJxt5CZc+ZzLFd11xTehC0KC2UXHi49MV2CaJhIKjzVd3z
+        IQSM4HAWV73lpLUvkqRSAjd9pQ==
+X-Google-Smtp-Source: AKy350ZXTk4qisD5Dt7crpTUypd1u94LzlFsvk6oecu9nShltuKwhWFouDQ/FBGSmrfdK/RUJbOObw==
+X-Received: by 2002:a05:600c:1991:b0:3f0:80fe:25be with SMTP id t17-20020a05600c199100b003f080fe25bemr6991447wmq.3.1681206923005;
+        Tue, 11 Apr 2023 02:55:23 -0700 (PDT)
+Received: from phenom.ffwll.local (212-51-149-33.fiber7.init7.net. [212.51.149.33])
+        by smtp.gmail.com with ESMTPSA id iv11-20020a05600c548b00b003ed29189777sm20723241wmb.47.2023.04.11.02.55.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Apr 2023 02:55:22 -0700 (PDT)
+Date:   Tue, 11 Apr 2023 11:55:20 +0200
+From:   Daniel Vetter <daniel@ffwll.ch>
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Dave Airlie <airlied@redhat.com>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Andi Shyti <andi.shyti@linux.intel.com>,
+Cc:     Greg KH <greg@kroah.com>, Dave Airlie <airlied@redhat.com>,
+        Jeffrey Hugo <quic_jhugo@quicinc.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the drm tree
-Message-ID: <ZDUtCi1GFMDO9Z5L@ashyti-mobl2.lan>
-References: <20230411160236.28845f80@canb.auug.org.au>
+        DRI <dri-devel@lists.freedesktop.org>,
+        Pranjal Ramajor Asha Kanojiya <quic_pkanojiy@quicinc.com>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>
+Subject: Re: linux-next: build failure after merge of the driver-core tree
+Message-ID: <ZDUuiB+E1tIJ95LY@phenom.ffwll.local>
+Mail-Followup-To: Stephen Rothwell <sfr@canb.auug.org.au>,
+        Greg KH <greg@kroah.com>, Dave Airlie <airlied@redhat.com>,
+        Jeffrey Hugo <quic_jhugo@quicinc.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Pranjal Ramajor Asha Kanojiya <quic_pkanojiy@quicinc.com>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>
+References: <20230411143812.11a4b00d@canb.auug.org.au>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230411160236.28845f80@canb.auug.org.au>
-X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230411143812.11a4b00d@canb.auug.org.au>
+X-Operating-System: Linux phenom 6.1.0-7-amd64 
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Stephen,
-
-On Tue, Apr 11, 2023 at 04:02:36PM +1000, Stephen Rothwell wrote:
+On Tue, Apr 11, 2023 at 02:38:12PM +1000, Stephen Rothwell wrote:
 > Hi all,
 > 
-> After merging the drm tree, today's linux-next build (htmldocs)
-> produced this warning:
+> After merging the driver-core tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
 > 
-> drivers/gpu/drm/i915/gt/uc/intel_guc.h:274: warning: Function parameter or member 'dbgfs_node' not described in 'intel_guc'
+> In file included from include/linux/linkage.h:7,
+>                  from include/linux/kernel.h:17,
+>                  from drivers/accel/qaic/mhi_qaic_ctrl.c:4:
+> drivers/accel/qaic/mhi_qaic_ctrl.c: In function 'mhi_qaic_ctrl_init':
+> include/linux/export.h:27:22: error: passing argument 1 of 'class_create' from incompatible pointer type [-Werror=incompatible-pointer-types]
+>    27 | #define THIS_MODULE (&__this_module)
+>       |                     ~^~~~~~~~~~~~~~~
+>       |                      |
+>       |                      struct module *
+> drivers/accel/qaic/mhi_qaic_ctrl.c:544:38: note: in expansion of macro 'THIS_MODULE'
+>   544 |         mqc_dev_class = class_create(THIS_MODULE, MHI_QAIC_CTRL_DRIVER_NAME);
+>       |                                      ^~~~~~~~~~~
+> In file included from include/linux/device.h:31,
+>                  from include/linux/mhi.h:9,
+>                  from drivers/accel/qaic/mhi_qaic_ctrl.c:5:
+> include/linux/device/class.h:229:54: note: expected 'const char *' but argument is of type 'struct module *'
+>   229 | struct class * __must_check class_create(const char *name);
+>       |                                          ~~~~~~~~~~~~^~~~
+> drivers/accel/qaic/mhi_qaic_ctrl.c:544:25: error: too many arguments to function 'class_create'
+>   544 |         mqc_dev_class = class_create(THIS_MODULE, MHI_QAIC_CTRL_DRIVER_NAME);
+>       |                         ^~~~~~~~~~~~
+> include/linux/device/class.h:229:29: note: declared here
+>   229 | struct class * __must_check class_create(const char *name);
+>       |                             ^~~~~~~~~~~~
 > 
-> Introduced by commit
+> Caused by commit
 > 
->   70b5ffb393f3 ("drm/i915/gt: Create per-gt debugfs files")
+>   1aaba11da9aa ("driver core: class: remove module * from class_create()")
+> 
+> interacting with commit
+> 
+>   566fc96198b4 ("accel/qaic: Add mhi_qaic_cntl")
+> 
+> from the drm tree.
+> 
+> I have applied the following merge fix patch for today.
+> 
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Tue, 11 Apr 2023 14:16:57 +1000
+> Subject: [PATCH] fixup for "driver core: class: remove module * from class_create()"
+> 
+> interacting with "accel/qaic: Add mhi_qaic_cntl"
+> 
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
 
-that's mine to take... will fix it!
+Thanks for the fixup. Since Dave is out I've made a note about this in my
+handover mail so it won't get lost in the drm-next merge window pull. I
+don't think we need any other coordination than mention it in each pull to
+Linus, topic tree seems overkill for this. Plus there's no way I can
+untangle the drm tree anyway :-).
+-Daniel
 
-Thanks!
+> ---
+>  drivers/accel/qaic/mhi_qaic_ctrl.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/accel/qaic/mhi_qaic_ctrl.c b/drivers/accel/qaic/mhi_qaic_ctrl.c
+> index 0c7e571f1f12..96db1580c72d 100644
+> --- a/drivers/accel/qaic/mhi_qaic_ctrl.c
+> +++ b/drivers/accel/qaic/mhi_qaic_ctrl.c
+> @@ -541,7 +541,7 @@ int mhi_qaic_ctrl_init(void)
+>  		return ret;
+>  
+>  	mqc_dev_major = ret;
+> -	mqc_dev_class = class_create(THIS_MODULE, MHI_QAIC_CTRL_DRIVER_NAME);
+> +	mqc_dev_class = class_create(MHI_QAIC_CTRL_DRIVER_NAME);
+>  	if (IS_ERR(mqc_dev_class)) {
+>  		ret = PTR_ERR(mqc_dev_class);
+>  		goto unregister_chrdev;
+> -- 
+> 2.39.2
+> 
+> -- 
+> Cheers,
+> Stephen Rothwell
 
-Andi
+
+
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch

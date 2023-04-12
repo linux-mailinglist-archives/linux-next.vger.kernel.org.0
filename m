@@ -2,85 +2,67 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DBBE6DF7E2
-	for <lists+linux-next@lfdr.de>; Wed, 12 Apr 2023 16:01:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BEF56DF7F8
+	for <lists+linux-next@lfdr.de>; Wed, 12 Apr 2023 16:06:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229548AbjDLOBS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 12 Apr 2023 10:01:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34040 "EHLO
+        id S230367AbjDLOGD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 12 Apr 2023 10:06:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229799AbjDLOBR (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 12 Apr 2023 10:01:17 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A8265BBC;
-        Wed, 12 Apr 2023 07:01:15 -0700 (PDT)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33CBpQua006625;
-        Wed, 12 Apr 2023 14:00:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=Kx0xEj5ibby/4YuMZ3PzpN3/KHRATd6Xy9DE1Qil7Eg=;
- b=pWvt5t4AolRa+kNa+YAy8QoAx8BEVTRWGjhXobGpXKn/5pRELhoDoIGG+JS8sqew1giZ
- 1v5UaHzPFZ7ZyE0gMHd3wRvXDPttwEtl4P6DcXN8Tv0xcXIQXOAn8YYVZ0I24dKvbZCv
- l3ewPyy3FR+5UjJz9nOilLPxFbKtc4562d2tZM7pVvuSL33240tnjMNSPE8addpDv7Mi
- bzAMWx/+o79rsOLGu+nPwyuH3JwPJfabn25FnPSyHqe/X4kmgGO0l4F2f0Ig4sZJOzul
- Jh2jAAzw8gt4FkfXeW4vArFEnfXDxC3A/66Fjdr7y3nekDD1ne7r5r9yc7wwar3/9vNW cA== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pwqnq0xjy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Apr 2023 14:00:35 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33CE0YPW022752
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Apr 2023 14:00:34 GMT
-Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 12 Apr
- 2023 07:00:33 -0700
-Message-ID: <4e81bfdc-c20a-9e54-7d1f-40bd9f91c758@quicinc.com>
-Date:   Wed, 12 Apr 2023 08:00:33 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
+        with ESMTP id S229994AbjDLOGC (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 12 Apr 2023 10:06:02 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 154201738;
+        Wed, 12 Apr 2023 07:05:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681308348; x=1712844348;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=hN0Jiq8CDxzQKhPLeSv0y2X2Dz6dEPHF/ZbEy1MipLo=;
+  b=oDqQsSxL20fa55HGdmCw1AZZf4WBF/cBcYy66JA137HrgojIfkGuOC4/
+   YgbLVoakHJkgB5w59KsTIMHeLQ0ZF5VakkG0hmyAH/ZPWIXp1QlMRVdKf
+   iEey+GnYDi0TDreLnwcJKKOjXkP4a7MLu3WKZgj29Z9qlcmueVLTgJYyJ
+   moSnQHQ25BHXyZ8xIGPa/SUMSh53LecnrKAUWZFvQmM5NlF33G+Kz6OMP
+   VFpnwG+x18FH/oDRepJW3C6wFDLvpze9zsXqlTQNIHyt95v/WqNrO7252
+   B2ku6MQatbsk03iFkGxB297VqXP/DElSvwTWZXX52Zpy/c1kNk8Sk26mD
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="346581252"
+X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
+   d="scan'208";a="346581252"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 07:05:47 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="812998229"
+X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
+   d="scan'208";a="812998229"
+Received: from joe-255.igk.intel.com (HELO localhost) ([10.91.220.57])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 07:05:44 -0700
+Date:   Wed, 12 Apr 2023 16:05:42 +0200
+From:   Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
+To:     Jeffrey Hugo <quic_jhugo@quicinc.com>
+Cc:     daniel@ffwll.ch, sfr@canb.auug.org.au, mani@kernel.org,
+        greg@kroah.com, ogabbay@kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, quic_pkanojiy@quicinc.com,
+        linux-next@vger.kernel.org, jacek.lawrynowicz@linux.intel.com,
+        airlied@redhat.com
 Subject: Re: [PATCH] Revert "accel/qaic: Add mhi_qaic_cntl"
-Content-Language: en-US
-To:     <daniel@ffwll.ch>
-CC:     <sfr@canb.auug.org.au>, <greg@kroah.com>, <ogabbay@kernel.org>,
-        <jacek.lawrynowicz@linux.intel.com>, <quic_pkanojiy@quicinc.com>,
-        <mani@kernel.org>, <airlied@redhat.com>,
-        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
-        <linux-next@vger.kernel.org>
+Message-ID: <20230412140542.GA3141290@linux.intel.com>
 References: <1681307864-3782-1-git-send-email-quic_jhugo@quicinc.com>
-From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 In-Reply-To: <1681307864-3782-1-git-send-email-quic_jhugo@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: xD7agUj8X9ud9rybRARwnD0uaoLZloVG
-X-Proofpoint-GUID: xD7agUj8X9ud9rybRARwnD0uaoLZloVG
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-12_05,2023-04-12_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- impostorscore=0 suspectscore=0 bulkscore=0 priorityscore=1501 mlxscore=0
- phishscore=0 clxscore=1015 spamscore=0 adultscore=0 mlxlogscore=962
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304120123
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 4/12/2023 7:57 AM, Jeffrey Hugo wrote:
+On Wed, Apr 12, 2023 at 07:57:44AM -0600, Jeffrey Hugo wrote:
 > This reverts commit 566fc96198b4bb07ca6806386956669881225271.
 > 
 > This exposes a userspace API that is still under debate.  Revert the
@@ -90,13 +72,4 @@ On 4/12/2023 7:57 AM, Jeffrey Hugo wrote:
 > Suggested-by: Daniel Vetter <daniel@ffwll.ch>
 > Signed-off-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
 > Reviewed-by: Pranjal Ramajor Asha Kanojiya <quic_pkanojiy@quicinc.com>
-> ---
-
-Daniel,
-
-Assuming you find this acceptable, would you please merge it?
-
-Sorry, but I'm still working through an internal process for my drm-misc 
-commit access.  I anticipate having that resolved prior to future changes.
-
--Jeff
+Reviewed-by: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>

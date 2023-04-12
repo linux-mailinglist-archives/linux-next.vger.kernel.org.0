@@ -2,74 +2,120 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEC926DFC7F
-	for <lists+linux-next@lfdr.de>; Wed, 12 Apr 2023 19:16:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE5E26DFD1F
+	for <lists+linux-next@lfdr.de>; Wed, 12 Apr 2023 19:57:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231233AbjDLRQK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 12 Apr 2023 13:16:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54542 "EHLO
+        id S229634AbjDLR5b (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 12 Apr 2023 13:57:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230224AbjDLRQF (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 12 Apr 2023 13:16:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A67C15B8E;
-        Wed, 12 Apr 2023 10:15:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B68A462F86;
-        Wed, 12 Apr 2023 17:15:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2207C433EF;
-        Wed, 12 Apr 2023 17:15:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1681319746;
-        bh=oKOri/ehZiXX08bBjOLOZYRdoc7KFhaFvEnpEKAJHus=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=k/0dHUSKvnOPjKvKuBH6Rc2HvoQLTlAOsGi4qVfXRFJn7OOxVUSilzlMmawk5deoQ
-         GrNECiSzpuIKtbclFrAJtjO6A2hiE4NKpkQcR1dmAYNnrSLpgynH6FhlcktqZp3Hbn
-         RD+1nSbNPtxy6/ZCy+Ayy94es/wsVYZc3QkpvXUE=
-Date:   Wed, 12 Apr 2023 19:15:43 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Jeffrey Hugo <quic_jhugo@quicinc.com>
-Cc:     daniel@ffwll.ch, sfr@canb.auug.org.au, ogabbay@kernel.org,
-        jacek.lawrynowicz@linux.intel.com, quic_pkanojiy@quicinc.com,
-        mani@kernel.org, airlied@redhat.com,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-next@vger.kernel.org
-Subject: Re: [PATCH] Revert "accel/qaic: Add mhi_qaic_cntl"
-Message-ID: <2023041201-underwear-consumer-1eb8@gregkh>
-References: <1681307864-3782-1-git-send-email-quic_jhugo@quicinc.com>
+        with ESMTP id S229833AbjDLR53 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 12 Apr 2023 13:57:29 -0400
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB14D2697
+        for <linux-next@vger.kernel.org>; Wed, 12 Apr 2023 10:57:28 -0700 (PDT)
+Received: by mail-il1-x129.google.com with SMTP id e9e14a558f8ab-328f708b6a4so203195ab.0
+        for <linux-next@vger.kernel.org>; Wed, 12 Apr 2023 10:57:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1681322248; x=1683914248;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=M+JfcQnfDefc+Psf+afOHei8O95xNSiyrdp/ELOZ4PA=;
+        b=3kbYTETYXAQSV9vY1gYz7myUGQ+D6nAuLpuWyAOUsSijyxQ5cMmBGmv7qogj7bwbv7
+         EghnWaGG6xKu+HG7xnuo+oALMNCzz9xxKQ/lPP+MNklgmgUyku8FwUWDGC6wzD5jVRCJ
+         KHGZhl8LCvheb5pJPL04bCvI07ECn0PLLcb2PB9LK72BdAqmoL77fY6JeLmoRXYU2NZF
+         p4lzYeBirSpT9Z8MPo04RL3EI1TmTACJQsnJDCEPJWM+WsOHly00C6PlN+ezknHc9Xpw
+         sn+0XgJE6/HETR7nyqKpufhq3qCz9kN1P9p1lpWXaFd1cIW3sIL+R6CMnEZ7VeDkYTm8
+         niUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681322248; x=1683914248;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=M+JfcQnfDefc+Psf+afOHei8O95xNSiyrdp/ELOZ4PA=;
+        b=KxJQlvcNnP/9fyUfApx09APwXeva7wneNRPAi34lPWLWoi5iNDS2VZJHY4U8fwNSvt
+         6Bf5E1uqTJAXxkJVMUjGdLiVcOHVXT/L7ElsXu0I/3807OI40S3+JOgpKhAku+2YI0zz
+         o0NziMJ+40EX9kDWS4uwPn0K3OE/CTdGDq76R5Hs9G5kK7xZbWuq1n0Oq4fSd2bXak7e
+         jfC+qsnsW9XGAJItQNsL248xRlB1iwp5FAE3ZlRtpXsElu0DskUHKo89yuNbzj2FWCw1
+         7YZCniHmEuJ6cWwL5fpueC4AsS0ZFfVDTKpXG7BnWH5ZfM2E79dWJ31bowyDCJY8NDqF
+         IEpg==
+X-Gm-Message-State: AAQBX9cyI99emMh/3LcREr1hZJNdKw6p61qRJv1sJX+enRo8Ut5bTsIP
+        U1hfk9Asct75W+QlgPCngTJZewrZAKtkTQuTGlc=
+X-Google-Smtp-Source: AKy350Z5TOBnvkzsZq1FgaqrsbzisLEdIqlkr3eMx0gI3S0ZnzGoWTBZwMbT2Bo2IEmx3gb+uKeD0Q==
+X-Received: by 2002:a05:6e02:964:b0:319:5431:5d5b with SMTP id q4-20020a056e02096400b0031954315d5bmr1671496ilt.1.1681322248227;
+        Wed, 12 Apr 2023 10:57:28 -0700 (PDT)
+Received: from [192.168.1.94] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id h11-20020a056638338b00b00408df9534c9sm4913369jav.130.2023.04.12.10.57.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Apr 2023 10:57:27 -0700 (PDT)
+Message-ID: <a70e8da4-167a-3730-be5f-01429b1f1df4@kernel.dk>
+Date:   Wed, 12 Apr 2023 11:57:27 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1681307864-3782-1-git-send-email-quic_jhugo@quicinc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: linux-next: build warnings after merge of the block tree
+Content-Language: en-US
+To:     Josh Poimboeuf <jpoimboe@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20230327162630.wmxpycxhllt4clpt@treble>
+ <20230328104719.65133586@canb.auug.org.au>
+ <20230412073416.73a8ea1a@canb.auug.org.au>
+ <20230411215518.u2fgi7napfcwyuce@treble>
+ <4959d0b8-96fe-7fe5-8b36-7e0a266d1d17@kernel.dk>
+ <20230412001400.yraku5fwsjdchxvk@treble>
+ <20230412114400.GB628377@hirez.programming.kicks-ass.net>
+ <20230412162517.gji52t34zlvcu5bh@treble>
+ <6527c6fa-8908-1d8d-2f9e-bb7636a27874@kernel.dk>
+ <c4d8e079-91bd-62e8-7725-b03802398c83@kernel.dk>
+ <20230412165652.umuiemo7ifnhr2nz@treble>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20230412165652.umuiemo7ifnhr2nz@treble>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Apr 12, 2023 at 07:57:44AM -0600, Jeffrey Hugo wrote:
-> This reverts commit 566fc96198b4bb07ca6806386956669881225271.
+On 4/12/23 10:56?AM, Josh Poimboeuf wrote:
+> On Wed, Apr 12, 2023 at 10:44:11AM -0600, Jens Axboe wrote:
+>> On 4/12/23 10:35?AM, Jens Axboe wrote:
+>>> On 4/12/23 10:25?AM, Josh Poimboeuf wrote:
+>>>> On Wed, Apr 12, 2023 at 01:44:00PM +0200, Peter Zijlstra wrote:
+>>>>> On Tue, Apr 11, 2023 at 05:14:00PM -0700, Josh Poimboeuf wrote:
+>>>>>
+>>>>>> Peter, what do you think, should we make track uaccess state across
+>>>>>> function boundaries?
+>>>>>
+>>>>> So IIRC the goal was to explicitly dis-allow that. You want minimal code
+>>>>> executed with STAC and hence disallow calling stuff.
+>>>>
+>>>> I guess I was wondering if we could make an exception for calls to
+>>>> static IPA-optimized functions, so we wouldn't have to scramble to "fix"
+>>>> compiler optimizations.
+>>>>
+>>>> But for now, yeah let's just keep it simple.
+>>>>
+>>>> Jens, can you confirm this works?  I added __noclone instead of removing
+>>>> static.
+>>>
+>>> Yep, works for me.
+>>
+>> Want me to slap that patch on top of the branch that has the commit
+>> that causes it?
 > 
-> This exposes a userspace API that is still under debate.  Revert the
-> change before the uAPI gets exposed to avoid making a mistake.  QAIC is
-> otherwise still functional.
-> 
-> Suggested-by: Daniel Vetter <daniel@ffwll.ch>
-> Signed-off-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
-> Reviewed-by: Pranjal Ramajor Asha Kanojiya <quic_pkanojiy@quicinc.com>
+> Yes, please.  Thanks!
 
-Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Done!
 
-And can you cc: me when you resubmit this?  It's not really correct in a
-number of places and can be made simpler if you really want to have your
-own class and device major.
+-- 
+Jens Axboe
 
-thanks,
-
-greg k-h

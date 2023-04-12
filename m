@@ -2,120 +2,102 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE5E26DFD1F
-	for <lists+linux-next@lfdr.de>; Wed, 12 Apr 2023 19:57:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 217FE6E0252
+	for <lists+linux-next@lfdr.de>; Thu, 13 Apr 2023 01:11:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229634AbjDLR5b (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 12 Apr 2023 13:57:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55600 "EHLO
+        id S229819AbjDLXLa (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 12 Apr 2023 19:11:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229833AbjDLR53 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 12 Apr 2023 13:57:29 -0400
-Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB14D2697
-        for <linux-next@vger.kernel.org>; Wed, 12 Apr 2023 10:57:28 -0700 (PDT)
-Received: by mail-il1-x129.google.com with SMTP id e9e14a558f8ab-328f708b6a4so203195ab.0
-        for <linux-next@vger.kernel.org>; Wed, 12 Apr 2023 10:57:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1681322248; x=1683914248;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=M+JfcQnfDefc+Psf+afOHei8O95xNSiyrdp/ELOZ4PA=;
-        b=3kbYTETYXAQSV9vY1gYz7myUGQ+D6nAuLpuWyAOUsSijyxQ5cMmBGmv7qogj7bwbv7
-         EghnWaGG6xKu+HG7xnuo+oALMNCzz9xxKQ/lPP+MNklgmgUyku8FwUWDGC6wzD5jVRCJ
-         KHGZhl8LCvheb5pJPL04bCvI07ECn0PLLcb2PB9LK72BdAqmoL77fY6JeLmoRXYU2NZF
-         p4lzYeBirSpT9Z8MPo04RL3EI1TmTACJQsnJDCEPJWM+WsOHly00C6PlN+ezknHc9Xpw
-         sn+0XgJE6/HETR7nyqKpufhq3qCz9kN1P9p1lpWXaFd1cIW3sIL+R6CMnEZ7VeDkYTm8
-         niUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681322248; x=1683914248;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=M+JfcQnfDefc+Psf+afOHei8O95xNSiyrdp/ELOZ4PA=;
-        b=KxJQlvcNnP/9fyUfApx09APwXeva7wneNRPAi34lPWLWoi5iNDS2VZJHY4U8fwNSvt
-         6Bf5E1uqTJAXxkJVMUjGdLiVcOHVXT/L7ElsXu0I/3807OI40S3+JOgpKhAku+2YI0zz
-         o0NziMJ+40EX9kDWS4uwPn0K3OE/CTdGDq76R5Hs9G5kK7xZbWuq1n0Oq4fSd2bXak7e
-         jfC+qsnsW9XGAJItQNsL248xRlB1iwp5FAE3ZlRtpXsElu0DskUHKo89yuNbzj2FWCw1
-         7YZCniHmEuJ6cWwL5fpueC4AsS0ZFfVDTKpXG7BnWH5ZfM2E79dWJ31bowyDCJY8NDqF
-         IEpg==
-X-Gm-Message-State: AAQBX9cyI99emMh/3LcREr1hZJNdKw6p61qRJv1sJX+enRo8Ut5bTsIP
-        U1hfk9Asct75W+QlgPCngTJZewrZAKtkTQuTGlc=
-X-Google-Smtp-Source: AKy350Z5TOBnvkzsZq1FgaqrsbzisLEdIqlkr3eMx0gI3S0ZnzGoWTBZwMbT2Bo2IEmx3gb+uKeD0Q==
-X-Received: by 2002:a05:6e02:964:b0:319:5431:5d5b with SMTP id q4-20020a056e02096400b0031954315d5bmr1671496ilt.1.1681322248227;
-        Wed, 12 Apr 2023 10:57:28 -0700 (PDT)
-Received: from [192.168.1.94] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id h11-20020a056638338b00b00408df9534c9sm4913369jav.130.2023.04.12.10.57.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Apr 2023 10:57:27 -0700 (PDT)
-Message-ID: <a70e8da4-167a-3730-be5f-01429b1f1df4@kernel.dk>
-Date:   Wed, 12 Apr 2023 11:57:27 -0600
+        with ESMTP id S229498AbjDLXLa (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 12 Apr 2023 19:11:30 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2199A10CE;
+        Wed, 12 Apr 2023 16:11:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Cc:Content-ID:Content-Description;
+        bh=Nxv7nWXdf7av7cxyh9xS1LvUe4PBtCtEiU6h+boNPdY=; b=bOZTS1tYJKP+HpSO1b8EOjH2lk
+        EUxPl6IxufomX1XkdO7/s1fCgWR55A6/E7eg8tC2XiBkiWfgZCSz/EXOwfZ8oC3TH4SEcoA1uK3K5
+        OqgkYfDxTTMKGLlajk3aH2qK6MvDvVllvqokJa908ckga+tS8PK9qM2kM1Hv7JmQWEBvtbk1UR32u
+        CW6LmFHfPUf9s+5KwYicSyXyYp8dWMXQMtfsYRhMQD4BI3HnE37d0u8J6/HkYCwPX5AgdvaihE1as
+        RUnQ44l8Zwh3IaxkBJvf4AZwCHGBk/QQqYc4ovpCzIo/mVW3MDyEC6cE6Sh8sN7XF6lDS8xKfH2hn
+        03sKu/Gw==;
+Received: from [2601:1c2:980:9ec0::2764]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pmjcc-004bcN-18;
+        Wed, 12 Apr 2023 23:11:26 +0000
+Message-ID: <c718a490-028d-2682-9ad7-8256d16504bf@infradead.org>
+Date:   Wed, 12 Apr 2023 16:11:25 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: linux-next: build warnings after merge of the block tree
+Subject: Re: [PATCH v2] usb: gadget: add doc to struct usb_composite_dev
 Content-Language: en-US
-To:     Josh Poimboeuf <jpoimboe@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
+To:     =?UTF-8?B?SsOzIMOBZ2lsYSBCaXRzY2g=?= <jgilab@gmail.com>,
+        Greg KH <greg@kroah.com>,
         Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20230327162630.wmxpycxhllt4clpt@treble>
- <20230328104719.65133586@canb.auug.org.au>
- <20230412073416.73a8ea1a@canb.auug.org.au>
- <20230411215518.u2fgi7napfcwyuce@treble>
- <4959d0b8-96fe-7fe5-8b36-7e0a266d1d17@kernel.dk>
- <20230412001400.yraku5fwsjdchxvk@treble>
- <20230412114400.GB628377@hirez.programming.kicks-ass.net>
- <20230412162517.gji52t34zlvcu5bh@treble>
- <6527c6fa-8908-1d8d-2f9e-bb7636a27874@kernel.dk>
- <c4d8e079-91bd-62e8-7725-b03802398c83@kernel.dk>
- <20230412165652.umuiemo7ifnhr2nz@treble>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20230412165652.umuiemo7ifnhr2nz@treble>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        linux-usb@vger.kernel.org
+References: <Y95MRZZz3yC5lETB@jo-einhundert>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <Y95MRZZz3yC5lETB@jo-einhundert>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 4/12/23 10:56?AM, Josh Poimboeuf wrote:
-> On Wed, Apr 12, 2023 at 10:44:11AM -0600, Jens Axboe wrote:
->> On 4/12/23 10:35?AM, Jens Axboe wrote:
->>> On 4/12/23 10:25?AM, Josh Poimboeuf wrote:
->>>> On Wed, Apr 12, 2023 at 01:44:00PM +0200, Peter Zijlstra wrote:
->>>>> On Tue, Apr 11, 2023 at 05:14:00PM -0700, Josh Poimboeuf wrote:
->>>>>
->>>>>> Peter, what do you think, should we make track uaccess state across
->>>>>> function boundaries?
->>>>>
->>>>> So IIRC the goal was to explicitly dis-allow that. You want minimal code
->>>>> executed with STAC and hence disallow calling stuff.
->>>>
->>>> I guess I was wondering if we could make an exception for calls to
->>>> static IPA-optimized functions, so we wouldn't have to scramble to "fix"
->>>> compiler optimizations.
->>>>
->>>> But for now, yeah let's just keep it simple.
->>>>
->>>> Jens, can you confirm this works?  I added __noclone instead of removing
->>>> static.
->>>
->>> Yep, works for me.
->>
->> Want me to slap that patch on top of the branch that has the commit
->> that causes it?
+Hi,
+
+On 2/4/23 04:15, Jó Ágila Bitsch wrote:
+> Added documentation to new struct members for WebUSB:
+> * bcd_webusb_version
+> * b_webusb_vendor_code
+> * landing_page
+> * use_webusb
+> to avoid warnings in the build of htmldocs
 > 
-> Yes, please.  Thanks!
+> Fixes: 93c473948c58 ("usb: gadget: add WebUSB landing page support")
+> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> Signed-off-by: Jó Ágila Bitsch <jgilab@gmail.com>
+> ---
+> V0 -> V1: added Reported-By and Fixes Tags
+> V1 -> V2: fixed Reported-by tag (capitalization of "-by" was wrong)
+>           also post to linux-usb
+> 
+>  include/linux/usb/composite.h | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/include/linux/usb/composite.h b/include/linux/usb/composite.h
+> index 91d22c3ed458..7ef8cea67f50 100644
+> --- a/include/linux/usb/composite.h
+> +++ b/include/linux/usb/composite.h
+> @@ -432,6 +432,10 @@ static inline struct usb_composite_driver *to_cdriver(
+>   * @qw_sign: qwSignature part of the OS string
+>   * @b_vendor_code: bMS_VendorCode part of the OS string
+>   * @use_os_string: false by default, interested gadgets set it
+> + * @bcd_webusb_version: 0x0100 by default, WebUSB specification version
+> + * @b_webusb_vendor_code: 0x0 by default, vendor code for WebUSB
+> + * @landing_page: empty by default, landing page to announce in WebUSB
+> + * @use_webusb:: false by default, interested gadgets set it
 
-Done!
+Please drop one ':' above so that kernel-doc does not complain:
 
+include/linux/usb/composite.h:523: warning: Function parameter or member 'use_webusb' not described in 'usb_composite_dev'
+
+>   * @os_desc_config: the configuration to be used with OS descriptors
+>   * @setup_pending: true when setup request is queued but not completed
+>   * @os_desc_pending: true when os_desc request is queued but not completed
+
+Thanks.
 -- 
-Jens Axboe
-
+~Randy

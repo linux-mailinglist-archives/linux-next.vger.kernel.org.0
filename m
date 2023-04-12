@@ -2,88 +2,91 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA3F96DEAA2
-	for <lists+linux-next@lfdr.de>; Wed, 12 Apr 2023 06:36:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6907D6DEAAB
+	for <lists+linux-next@lfdr.de>; Wed, 12 Apr 2023 06:42:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229656AbjDLEgy (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 12 Apr 2023 00:36:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55484 "EHLO
+        id S229508AbjDLEmB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 12 Apr 2023 00:42:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229624AbjDLEgx (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 12 Apr 2023 00:36:53 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83582E66;
-        Tue, 11 Apr 2023 21:36:52 -0700 (PDT)
+        with ESMTP id S229492AbjDLEmB (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 12 Apr 2023 00:42:01 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 924112D50;
+        Tue, 11 Apr 2023 21:41:56 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Px90L3sk5z4xFd;
-        Wed, 12 Apr 2023 14:36:50 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Px96B5wYCz4xDH;
+        Wed, 12 Apr 2023 14:41:54 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1681274210;
-        bh=u4zLyPSYAyQl1gxPF0FmJzJ4o1NZ3iG53BFE4dd06+0=;
+        s=201702; t=1681274515;
+        bh=WOpYuRsAmoJ1ACqu6zUqXraoZTYHhLr7sNyyBFq5vsw=;
         h=Date:From:To:Cc:Subject:From;
-        b=mMXa+QZnh0Z3N4jE5FqaJDwmc2Jat8QLrb58uPO4UkDEMK4lw22pshBd2+pMnThEZ
-         /bbTFGomEIGetkLvPSH5zcQms52qemx9tD/zeDoC9C48PqabWMWDywEMXwZ6XLxXR5
-         9rD7nu0oEM69K9nULHieRXEwUVtTyZBPY4NyG1dHS20hYgr14ftr/U48rJD63DkF1J
-         VrguTeDc+HiEiAPntY2U1eY/Bi462LSXweFWFjHi6G3Fr+++eV3oDeftxMQuB4UFPt
-         t4hyQh5+TU8yCfCCC/PpdnMnf/EVl3Ac97oou3xTIWRN6ZJIUn0uI+6xPXOHPIrhwS
-         bzYMTVOj1aJ2A==
-Date:   Wed, 12 Apr 2023 14:36:48 +1000
+        b=JRXzrsp8hOCd/VpGxs88eDJf08zahFmUEElad83SGyzXfie22iJhiTh0yBff7Kst+
+         0+lfmKUSE6B0Y3+qDL2NUOqr7sINvxUUVThTA5picgsm+k48ZUjXKo+WCl4MwACjrD
+         x7y3S8wj+mTyVWgFKwcWQgOCJvzBQk9fyZGq80du8abHJpo+r2nMPtTyXBhEUtPkXE
+         9BRBFLHX+HAYE14kYnY2Ft3bUQluwj/mdcO4eC54XsCCGH8PrKxQ9OtyvbGXG5jN+m
+         v4VBc1yum/Z6mFhMeAkhKzOv7bc2FkElP2C6+8Yb2Vb0avH6RG+HDst6BvmNC5B/ZP
+         brnRVGso/MB2A==
+Date:   Wed, 12 Apr 2023 14:41:53 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
 To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     Alvin Lee <Alvin.Lee2@amd.com>,
+Cc:     Alex Deucher <alexander.deucher@amd.com>,
+        Alvin Lee <Alvin.Lee2@amd.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the amdgpu tree
-Message-ID: <20230412143648.0e13fb50@canb.auug.org.au>
+Subject: linux-next: build warnings after merge of the amdgpu tree
+Message-ID: <20230412144153.4cb2c40b@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/KMN0PynQyzz0Q0f8LWekEBU";
+Content-Type: multipart/signed; boundary="Sig_/6nqvJVZKqYTObGCewEJ9BxY";
  protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/KMN0PynQyzz0Q0f8LWekEBU
+--Sig_/6nqvJVZKqYTObGCewEJ9BxY
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
 After merging the amdgpu tree, today's linux-next build (htmldocs)
-produced this warning:
+produced these warnings:
 
 drivers/gpu/drm/amd/display/dc/dc.h:882: warning: Function parameter or mem=
-ber 'disable_boot_optimizations' not described in 'dc_debug_options'
+ber 'fpo_vactive_margin_us' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:882: warning: Function parameter or mem=
+ber 'disable_fpo_vactive' not described in 'dc_debug_options'
 
 Introduced by commit
 
-  d170e938f01f ("drm/amd/display: On clock init, maintain DISPCLK freq")
+  0289e0ed1b9a ("drm/amd/display: Add FPO + VActive support")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/KMN0PynQyzz0Q0f8LWekEBU
+--Sig_/6nqvJVZKqYTObGCewEJ9BxY
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQ2NWAACgkQAVBC80lX
-0GxTuAgAn/OVcKJIEf7NdoQ1bDSA5ZWVT5mThLuGc2LqpSycqrW3hFbNd5173ifE
-in0JgViVKVSRf5rf1gb/sJ0r3J7Z3q8ZZADlWsQCDlrZYdpwwDxCayOCNv36hJOI
-ms/PcFfhW5y78+OtFbMr7qK/tY1/HXGJf1rtBx3Q/Jg9R/VTtOk2FH48aiRZAAd5
-stqSSFOcstTPb4W7Idg3fXQucjAnIACDAsGilzTbLMjBrIaWNnJygAnYmTMse8A4
-uN6sPFKO9T/QT+HE023auhalVaPhosVGprNtrrAiDLTT/bNqZflVCvmO9SMrBA4n
-Mig+eRmpWTseab5uUZzcjfnWIXTsUg==
-=AqvO
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQ2NpIACgkQAVBC80lX
+0GxyxQf/RSTv9apYAJ368+IYkwZaXnRiqVICinuXQDH2zuJ6EVXw1MLQtHCgirtv
+uH7T2k01jV7DeCVpVvoD58FvENH6rObIceglZJBsDiaGZ9v6D6OIH+U0t0v1TKo9
+qLI2o3LmvBbL5DSRpLUikfW0ZzTkL1wm7+xVK7X2Zt1fbPDm3v+dxI9enzOw/QQv
+jHRUNczpZQ/ozE5zvmncoYJmcsfGKAMFqkp/0rMBM/WV02Q+WKAJBwsBahKtF5Ec
+vruA0YlGT2ZTylPlsmDJ0R/QuqQARW5zPpm8UyeyqXVx/ojVLC4u25aJpfxK7kPo
+amUATNU1I5BPt6fkuUCzTFX8L39l+Q==
+=8NYv
 -----END PGP SIGNATURE-----
 
---Sig_/KMN0PynQyzz0Q0f8LWekEBU--
+--Sig_/6nqvJVZKqYTObGCewEJ9BxY--

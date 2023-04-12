@@ -2,76 +2,116 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B59196DE901
-	for <lists+linux-next@lfdr.de>; Wed, 12 Apr 2023 03:36:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 212D46DE910
+	for <lists+linux-next@lfdr.de>; Wed, 12 Apr 2023 03:48:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229498AbjDLBgo (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 11 Apr 2023 21:36:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48790 "EHLO
+        id S229593AbjDLBsG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 11 Apr 2023 21:48:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbjDLBgo (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 11 Apr 2023 21:36:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2CD840FB;
-        Tue, 11 Apr 2023 18:36:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5DC3C6258E;
-        Wed, 12 Apr 2023 01:36:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBA09C433D2;
-        Wed, 12 Apr 2023 01:36:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681263402;
-        bh=hSiZ8aa9oBm0phs5wcakiPja02QuQvZtXKOyCGBRUuM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Wx2MgFeLhGwcKDRT5s9VkUKtmtRzufPoV/x0zumGk3pRNh5t+4asIZsoVEhlSUVnj
-         hH8BaNL7yxeU2lPAyMOokhNr3JJq42NVoDsQxQRYqocWLnS3ABm0zPqllz7NWGo+m0
-         EQvJ/b3KPADNuCFRVYh+NxrlU4CuI9X3cb68WAh2cCgQgAq8pjbo2wY9lRX5FPiU6i
-         rOKQetHX/qX1C/u0oskxroBmEpYUIfgA9GFkeKO7ceOOH0L07+qAO11GpoNEUpZWKj
-         lRtYI6xZyu2WI2FRncdJ4IXOs/izFkHs+aPWxrPMtPYZONA/3wlUF4aMp4veaB4Bdu
-         3V1eN1p/q/TqA==
-Received: by mail-ej1-f44.google.com with SMTP id j17so15329033ejs.5;
-        Tue, 11 Apr 2023 18:36:42 -0700 (PDT)
-X-Gm-Message-State: AAQBX9ca0Kiq43wcpki8kePdR2cDtFGLq/QjXbrY0g/IgTQEENsyrARR
-        oepEkFiZx9b0ez6k5HYat1QHYTaNAiu8jd3C1mc=
-X-Google-Smtp-Source: AKy350bfAWR/ZRYMtJP92OTQLgG3LvrYvF1QxL3h4BK9QlDcZowG3gUqT1D4txtlajhHAnW7Xt8ozP7m8WZ+9XparZo=
-X-Received: by 2002:a17:907:2147:b0:94a:597f:30ee with SMTP id
- rk7-20020a170907214700b0094a597f30eemr4863056ejb.15.1681263400987; Tue, 11
- Apr 2023 18:36:40 -0700 (PDT)
+        with ESMTP id S229490AbjDLBsF (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 11 Apr 2023 21:48:05 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79E6F213A
+        for <linux-next@vger.kernel.org>; Tue, 11 Apr 2023 18:48:04 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id 98e67ed59e1d1-246cadb31dbso190294a91.1
+        for <linux-next@vger.kernel.org>; Tue, 11 Apr 2023 18:48:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1681264084;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0yWF1eWVK1XRJ0wlfD6gNpBEubetmQIbvAPgg/hmyQ4=;
+        b=53zGCczZaVVS8dZxr3b/ObSB7o2kf0oybagnqHAOV1Qi1GZ3SSz8gFlpQIIiiaZtNI
+         lCCaYrUpMj1zgLwxUshNRwhYj/1Ds1AcYZ2wbhrAgG1e315i6Wqwi81LFt0Z0kBhIEmx
+         dL8iYxgt8meY6brUj5BpXqEiLyNIcR8xrRa11wW5fOpzKxjhFOwa81HmF5psR4MvnTR1
+         fcubPNXs9d6Em7/w1BSEguYfSB4uA3fy5Qi1nAQykj8vYgH4pekfxxMJ/JOHIHv+6p/4
+         ZmtmDTBtb232VCKq+UdFsv6aFf2p6rna9yGt7Ghv1EvOTIyLfMJTHWs0v00b9W31YTLR
+         y7wQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681264084;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0yWF1eWVK1XRJ0wlfD6gNpBEubetmQIbvAPgg/hmyQ4=;
+        b=oYWI2lvF3LNZFqcoE2XzT+QMFZUEdnjPZh8v1kEElIRYq3B5oIUk31Pjvn1Sgpggk7
+         t7p1UJy1V7VjZH5CO5Z8EWtjyhWwblQauIC2BvE+OK5TvQHg/7Yiy6/Q1CwBREZVeivv
+         /0hbJwz05XebImbjNlKoT1HHdl9Mz2bls1NOZhhLKpDB8DOKTC1Vz4uVMPthe43hC70+
+         PP6it5x4Kh4uQ7l83FPCsE1EfNYyO3jZz8Qxi5gFF8qv7hjKOdevyqOkrVbWnloxCHZ1
+         7LbAZJ0FtVkZzrsRUsPii8Sg/TRhb8LU8HyWiQQbEOq4YBDRPs5oml0IG6yGqI8iq9/F
+         esUg==
+X-Gm-Message-State: AAQBX9dnwm+aTbAc7FcSyPPRg51P3leh0jxq/luUU05tTI6dvWOOV4k/
+        p+iuTolhb6g2ahmBpTbpgBFwqytc05+NrY7YBrI=
+X-Google-Smtp-Source: AKy350Y/tKoJWV/JM+tWlV5jFK/lM6/YsbQGgs1x/DFTqONMenp4iMWSuK+gcLKDLOwAYipyjGyaIA==
+X-Received: by 2002:a17:902:ec8b:b0:1a6:5682:af48 with SMTP id x11-20020a170902ec8b00b001a65682af48mr693635plg.0.1681264083894;
+        Tue, 11 Apr 2023 18:48:03 -0700 (PDT)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id j3-20020a170902690300b001a19f2f81a3sm4398633plk.175.2023.04.11.18.48.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Apr 2023 18:48:03 -0700 (PDT)
+Message-ID: <46684c34-b790-dced-afc1-03cf0f5ad911@kernel.dk>
+Date:   Tue, 11 Apr 2023 19:48:02 -0600
 MIME-Version: 1.0
-References: <20230411072741.3ac89dfb@canb.auug.org.au>
-In-Reply-To: <20230411072741.3ac89dfb@canb.auug.org.au>
-From:   Shawn Guo <shawnguo@kernel.org>
-Date:   Wed, 12 Apr 2023 09:36:29 +0800
-X-Gmail-Original-Message-ID: <CAJBJ56JP7QcNnJDEaSohMMD81NnS-88WDiDZtwkuXNSZPATpKQ@mail.gmail.com>
-Message-ID: <CAJBJ56JP7QcNnJDEaSohMMD81NnS-88WDiDZtwkuXNSZPATpKQ@mail.gmail.com>
-Subject: Re: linux-next: Signed-off-by missing for commit in the imx-mxs tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: linux-next: build warnings after merge of the block tree
+Content-Language: en-US
+To:     Josh Poimboeuf <jpoimboe@kernel.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230327120017.6bb826d7@canb.auug.org.au>
+ <20230327162630.wmxpycxhllt4clpt@treble>
+ <20230328104719.65133586@canb.auug.org.au>
+ <20230412073416.73a8ea1a@canb.auug.org.au>
+ <20230411215518.u2fgi7napfcwyuce@treble>
+ <4959d0b8-96fe-7fe5-8b36-7e0a266d1d17@kernel.dk>
+ <20230412001400.yraku5fwsjdchxvk@treble>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20230412001400.yraku5fwsjdchxvk@treble>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Apr 11, 2023 at 5:27=E2=80=AFAM Stephen Rothwell <sfr@canb.auug.org=
-.au> wrote:
->
-> Hi all,
->
-> Commit
->
->   3a6f4dc2c8cf ("dt-bindings: vendor-prefixes: add chargebyte")
->
-> is missing a Signed-off-by from its committer.
+On 4/11/23 6:14?PM, Josh Poimboeuf wrote:
+> On Tue, Apr 11, 2023 at 04:39:39PM -0600, Jens Axboe wrote:
+>>>>>>> lib/iov_iter.o: warning: objtool: .altinstr_replacement+0x0: redundant UACCESS d
+>>>>>>> isable
+>>>>>>> lib/iov_iter.o: warning: objtool: iovec_from_user.part.0+0xc7: call to copy_comp
+>>>>>>> at_iovec_from_user.part.0() with UACCESS enabled
+>>>>>>> lib/iov_iter.o: warning: objtool: __import_iovec+0x21d: call to copy_compat_iovec_from_user.part.0() with UACCESS enabled
+>>>>>>>
+>>>>>>> Presumably introduced by commit
+>>>>>>>
+>>>>>>>   6376ce56feb6 ("iov_iter: import single vector iovecs as ITER_UBUF")    
+>>
+>> lib/iov_iter.o attached, gzip'ed. NOTE: if you disable either of the
+>> copy_compat_iovec_from_user() as per diff below (commented out), then
+>> it doesn't complain. Is there some bug where it thinks we'll hit both?
+>> That should not be possible.
+> 
+> Yeah, the problem is an inter-procedural compiler optimization which
+> moves the user_access_begin() out of copy_compat_iovec_from_user() and
+> into its callers.
 
-Fixed, thanks for reporting!
+Ah, I see.
 
-Shawn
+> Which is fine, but objtool doesn't like it as it expects the uaccess
+> enable to not cross function boundaries.
+> 
+> Do the warnings go away if you make copy_compat_iovec_from_user()
+> non-static?
+
+Yep, if I kill the static, it stops complaining.
+
+-- 
+Jens Axboe
+

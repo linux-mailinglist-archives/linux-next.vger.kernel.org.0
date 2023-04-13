@@ -2,224 +2,129 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 293FC6E1604
-	for <lists+linux-next@lfdr.de>; Thu, 13 Apr 2023 22:41:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1F1E6E1784
+	for <lists+linux-next@lfdr.de>; Fri, 14 Apr 2023 00:35:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229667AbjDMUlX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 13 Apr 2023 16:41:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36940 "EHLO
+        id S229493AbjDMWfi (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 13 Apr 2023 18:35:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbjDMUlW (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 13 Apr 2023 16:41:22 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4E937ED6
-        for <linux-next@vger.kernel.org>; Thu, 13 Apr 2023 13:41:21 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-63b4a64c72bso208893b3a.0
-        for <linux-next@vger.kernel.org>; Thu, 13 Apr 2023 13:41:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1681418481; x=1684010481;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=JpD/idY75JCUonc1mCHRsxaPMz+Dua0TbOwZfoFGyKc=;
-        b=Hx8Nm0yfKRcdlKMFdpf775xgaaRBL/Y2OyU9uEjNagnj8tHchA5y3uBSiB3UgAC8/i
-         LCPE2C4vJWqMLAit2L2CmAeoq+ZViHhraNDBXuaM/kEjbwBliy6J79iD/ReqD+P066Sq
-         rv/yJKSAYKB7LP7pPCmwvxd5ATxw8snJrRaRmQRCimyI5VjjYKIyxxqgbcmdwCt6/Vz0
-         mQ1MPPBKiw1Hn1rO+ZuhokupYBGZ4PsbcynmkAuCNim0AOkD+YuxVDa26ENIcZAKMDBq
-         dd3SXBNp6qDs14osMKg3x2llZRI+YNgCN3oeaIMrorFmceazI6QCcgvPcQXDkFtC0M5C
-         JdJA==
+        with ESMTP id S229601AbjDMWfh (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 13 Apr 2023 18:35:37 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CD09AD10
+        for <linux-next@vger.kernel.org>; Thu, 13 Apr 2023 15:34:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681425220;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kj3FArPvDua1fzACXV/qcxXxJ2Rz3bhS2RrVgGGgTfY=;
+        b=NDElARQ7Ebn0pznZOGyYIeTp2aJ/K3f7dM4uK2x9lk0Fh1lvtH/0bz5fYmyPJGor74GKzd
+        5ttyQlFOSOj8FeZFHXEvm4JiETVBeNlOLdkRXlrcVSthALjDsd+6H6GDn9MHTpiKvQox9d
+        P0Elj5RNwkJJr9vz5Jf5nODsA2JIsOs=
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com
+ [209.85.166.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-258-DKSmPCCKO32yvA9FBu-t5Q-1; Thu, 13 Apr 2023 18:33:39 -0400
+X-MC-Unique: DKSmPCCKO32yvA9FBu-t5Q-1
+Received: by mail-il1-f200.google.com with SMTP id e9e14a558f8ab-32a931732b7so1226715ab.2
+        for <linux-next@vger.kernel.org>; Thu, 13 Apr 2023 15:33:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681418481; x=1684010481;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JpD/idY75JCUonc1mCHRsxaPMz+Dua0TbOwZfoFGyKc=;
-        b=efW3XxbkOxKvj+FYGCNsiQ3xP9Mph8Nz8PhksrgJsVRXmKE2TswaZHPcfFnGg4aZa7
-         IAtfGtdyIRfh49NXd2mCfCAHHjlA704hK24Pw7ffYttAdRxrI+zDji0KxU3vawRfw+Ll
-         QbpB4lL+c05IbdRfVMiGtxHBcMfOvp2IZhqpWtowqOo5oBX8/CBDiIAkLYdTuwKdhBYG
-         SvpuCTGsXYIbdSvnLOi90Qis51ZjZO5uHzEsBsVpbmVKgCzZSvcMJY0dN6DANT6MzhTe
-         YOuuOS0PHI59PITvlxT6DVQgiYUUN4oyepzahVxiqd3kAXfpCc+s3eZkdMFCb2q/7SRL
-         SdXg==
-X-Gm-Message-State: AAQBX9fxfKaTFdA7MdJsclsaeL1iqKZYjdOPsv4bT7XkW42Jv2ADJgj9
-        E1MpRh2XlVu/EZmcDT1ATSSWNRUuqRstj6QSgGp5Sbe7
-X-Google-Smtp-Source: AKy350bING9vrdkoO7aQ/KK5F4NRbJRhlUpUMos39c0afipNlf/i8uh7CLB+qsRwmZdhn/EIGTHskQ==
-X-Received: by 2002:a05:6a00:1587:b0:635:cfa6:ee5d with SMTP id u7-20020a056a00158700b00635cfa6ee5dmr5758114pfk.7.1681418481036;
-        Thu, 13 Apr 2023 13:41:21 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id y26-20020aa7855a000000b005ded4825201sm1778861pfn.112.2023.04.13.13.41.20
-        for <linux-next@vger.kernel.org>
+        d=1e100.net; s=20221208; t=1681425218; x=1684017218;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kj3FArPvDua1fzACXV/qcxXxJ2Rz3bhS2RrVgGGgTfY=;
+        b=VsBXadPKRzJHsElBHBRyjImeoQD+mRLhi+PXbJUjVbtZPlQ7ABOM+5x+NPuauurU2Q
+         RvprRe/pejFru6zS7u90cXg91+vv9HqGSQiwhQI7QnpTwxPqRqYM7I7oxsuZ368i7zi0
+         Ak0RNHE6FL/VZQTT8eKSJew8SXH/ndotS1QdAy52irVegvyKmd/5jQOWAzIWusaOPEHZ
+         yWQ3BZUeAfmpinQnkjEgu6wg8/2f5MT++PRDSehk+IVGlj8lW3Mpte2Hw2Gsd8s+Kl26
+         uYIv1oddV7g0odKZe7pw+5r+VNybEZbcgy9kghtXldHRu/zmq45OoN+b/cps4foNmCKD
+         qLyA==
+X-Gm-Message-State: AAQBX9epxAE6qOn5+h920/vMc0wpz1LoMmjOLcJdO9rkC2VVQDoVyZ/V
+        fo5YaE85uMpzEXt3IZ2XIJ0f3Tfikk3j46M+FIkNkpffqP7WUbXMImnqqsJrAptY+j2I4lTm0Gu
+        QLyXbaTX25vMTu4Kk0GKBczblbQwPjQ==
+X-Received: by 2002:a05:6e02:110:b0:316:dcfd:1b6e with SMTP id t16-20020a056e02011000b00316dcfd1b6emr2356912ilm.30.1681425218493;
+        Thu, 13 Apr 2023 15:33:38 -0700 (PDT)
+X-Google-Smtp-Source: AKy350aW54nFomY+2phshGuCm1AzmqhZrTVLEIz9kKnWdncxODMmpUU/yCYW3ZAvdT4Kl7Fv16a+IQ==
+X-Received: by 2002:a05:6e02:110:b0:316:dcfd:1b6e with SMTP id t16-20020a056e02011000b00316dcfd1b6emr2356903ilm.30.1681425218185;
+        Thu, 13 Apr 2023 15:33:38 -0700 (PDT)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id c20-20020a023f54000000b0040bcac59412sm775980jaf.150.2023.04.13.15.33.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Apr 2023 13:41:20 -0700 (PDT)
-Message-ID: <643868f0.a70a0220.c4b14.4049@mx.google.com>
-Date:   Thu, 13 Apr 2023 13:41:20 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 13 Apr 2023 15:33:37 -0700 (PDT)
+Date:   Thu, 13 Apr 2023 16:33:36 -0600
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Yi Liu <yi.l.liu@intel.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the vfio tree
+Message-ID: <20230413163336.7ce6ecec.alex.williamson@redhat.com>
+In-Reply-To: <20230412143229.0c379a7f@canb.auug.org.au>
+References: <20230412143229.0c379a7f@canb.auug.org.au>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: master
-X-Kernelci-Tree: next
-X-Kernelci-Kernel: next-20230413
-X-Kernelci-Report-Type: build
-Subject: next/master build: 13 builds: 3 failed, 10 passed, 3 errors,
- 3 warnings (next-20230413)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master build: 13 builds: 3 failed, 10 passed, 3 errors, 3 warnings (ne=
-xt-20230413)
+On Wed, 12 Apr 2023 14:32:29 +1000
+Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20230413/
+> Hi all,
+> 
+> After merging the vfio tree, today's linux-next build (htmldocs) produced
+> this warning:
+> 
+> Documentation/virt/kvm/devices/vfio.rst:45: WARNING: Literal block expected; none found.
+> 
+> Introduced by commit
+> 
+>   25e1b301a946 ("docs: kvm: vfio: Suggest KVM_DEV_VFIO_GROUP_ADD vs VFIO_GROUP_GET_DEVICE_FD ordering")
+> 
 
-Tree: next
-Branch: master
-Git Describe: next-20230413
-Git Commit: e3342532ecd39bbd9c2ab5b9001cec1589bc37e9
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Built: 3 unique architectures
+Thanks, Stephen!
 
-Build Failures Detected:
+Hi Yi,
 
-arm64:
-    cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config: (clang-13) =
-FAIL
-    cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+arm64-chrome=
-book: (clang-13) FAIL
-    cros://chromeos-5.10/arm64/chromiumos-mediatek.flavour.config+arm64-chr=
-omebook: (clang-13) FAIL
+Clearly this comes from:
 
-Errors and Warnings Detected:
+diff --git a/Documentation/virt/kvm/devices/vfio.rst b/Documentation/virt/kvm/devices/vfio.rst
+index 2d20dc561069..79b6811bb4f3 100644
+--- a/Documentation/virt/kvm/devices/vfio.rst
++++ b/Documentation/virt/kvm/devices/vfio.rst
+@@ -39,3 +39,10 @@ KVM_DEV_VFIO_GROUP attributes:
+        - @groupfd is a file descriptor for a VFIO group;
+        - @tablefd is a file descriptor for a TCE table allocated via
+          KVM_CREATE_SPAPR_TCE.
++
++::
++
++The GROUP_ADD operation above should be invoked prior to accessing the
++device file descriptor via VFIO_GROUP_GET_DEVICE_FD in order to support
++drivers which require a kvm pointer to be set in their .open_device()
++callback.
 
-arm64:
-    cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config (clang-13): =
-1 error, 1 warning
-    cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+arm64-chrome=
-book (clang-13): 1 error, 1 warning
-    cros://chromeos-5.10/arm64/chromiumos-mediatek.flavour.config+arm64-chr=
-omebook (clang-13): 1 error, 1 warning
+Were you looking for this paragraph to be formatted like an
+implementation note in a similar way to a block quote, for example:
 
-arm:
+https://docs.kernel.org/process/2.Process.html#getting-started-with-kernel-development
 
-x86_64:
+We need tabs preceding each line to get that effect.
 
-Errors summary:
+If there's no objection, I'll just fix the original commit with that
+change given how little is currently in my next branch.  Thanks,
 
-    3    drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:298:6: error: variable =
-'ret' is uninitialized when used here [-Werror,-Wuninitialized]
+Alex
 
-Warnings summary:
-
-    3    drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:216:12: note: initializ=
-e the variable 'ret' to silence this warning
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config (arm64, clang-13=
-) =E2=80=94 FAIL, 1 error, 1 warning, 0 section mismatches
-
-Errors:
-    drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:298:6: error: variable 'ret'=
- is uninitialized when used here [-Werror,-Wuninitialized]
-
-Warnings:
-    drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:216:12: note: initialize the=
- variable 'ret' to silence this warning
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+arm64-chromebook=
- (arm64, clang-13) =E2=80=94 FAIL, 1 error, 1 warning, 0 section mismatches
-
-Errors:
-    drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:298:6: error: variable 'ret'=
- is uninitialized when used here [-Werror,-Wuninitialized]
-
-Warnings:
-    drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:216:12: note: initialize the=
- variable 'ret' to silence this warning
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-mediatek.flavour.config+arm64-chromeb=
-ook (arm64, clang-13) =E2=80=94 FAIL, 1 error, 1 warning, 0 section mismatc=
-hes
-
-Errors:
-    drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:298:6: error: variable 'ret'=
- is uninitialized when used here [-Werror,-Wuninitialized]
-
-Warnings:
-    drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:216:12: note: initialize the=
- variable 'ret' to silence this warning
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-qualcomm.flavour.config+arm64-chromeb=
-ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
-tches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-rockchip64.flavour.config+arm64-chrom=
-ebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mis=
-matches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (arm, clang-13) =
-=E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (arm, clang-1=
-3) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromeos-amd-stoneyridge.flavour.config+x86-chr=
-omebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
-mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromeos-intel-denverton.flavour.config+x86-chr=
-omebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
-mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromeos-intel-pineview.flavour.config+x86-chro=
-mebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config (x86_64, clang=
--13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config+x86-chromebook=
- (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatc=
-hes
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86-chromebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors=
-, 0 warnings, 0 section mismatches
-
----
-For more info write to <info@kernelci.org>

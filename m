@@ -2,121 +2,104 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1491B6E124C
-	for <lists+linux-next@lfdr.de>; Thu, 13 Apr 2023 18:31:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D333B6E141D
+	for <lists+linux-next@lfdr.de>; Thu, 13 Apr 2023 20:26:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229935AbjDMQbB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 13 Apr 2023 12:31:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38506 "EHLO
+        id S229597AbjDMS0E (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 13 Apr 2023 14:26:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229772AbjDMQbA (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 13 Apr 2023 12:31:00 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56A8DAD09
-        for <linux-next@vger.kernel.org>; Thu, 13 Apr 2023 09:30:54 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id q5so8915029wmo.4
-        for <linux-next@vger.kernel.org>; Thu, 13 Apr 2023 09:30:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google; t=1681403452; x=1683995452;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=u0mDNWduF+pD0M3p/ZiM9mGoNceJzLF1dhOFZMxDI6Q=;
-        b=Eu76UtDGzq5jN5Gr+fDTg2a0vH+f1Q7/2/hkPjCpJyDGLBgRdWwKLk97WEPjGn0+Wp
-         4F9LImild6ICXVLfeHTTM87zMY9eoSqbKkXOugQs30xhI1q/MZeSUzcKCDa/jVVY7wL4
-         2jtWDroXSfEYT+mpPXQeEo2uCo6lnHfW+fLOI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681403452; x=1683995452;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=u0mDNWduF+pD0M3p/ZiM9mGoNceJzLF1dhOFZMxDI6Q=;
-        b=MvNfaoyWL+4STQoOrs25OOJZaRNSRGLYCfNFntDZpdktyUBsVZU5/olwUNsAKVzhv1
-         /IR19N4kK9gXWZ3tHaP9KBFaW+HtHjZP1cIca/nhbL2UkLyDqn3sLuEnRygXOyKCjEys
-         1T53O79JDVqQ5UxQRpFHq8Y2a6s7iRrox+qnYiSzMQaIbgEHJc87UPoIMRsjADWCqhs7
-         p74n6HFWivmZDznIuFGQKtwYzQqQvV9iZPo+CsPPmiuUUt1ptpsb9yNM8opif4ZFabyp
-         Sald5AVfORFRwhjY+5g1OdDQsIYkn7Umgn4Fny4sr1crMx9Kl+fBNCH00sTbQXiv5dKq
-         Vc4Q==
-X-Gm-Message-State: AAQBX9eeEGrTfHhMQqUM2T/Q2aWk9f+O9J//0ipmt4A3i0XPWkd/WewO
-        SLUV8cHDKnSr0lBGU3m4rN1zmA==
-X-Google-Smtp-Source: AKy350Yl7Q4Uwkj91CN8S9loLio+5p511yXKikW09QVx8lhRN7MjowqEoSWYsLFUc0oeWgl2cPe/pg==
-X-Received: by 2002:a05:600c:2195:b0:3f0:a11f:26f7 with SMTP id e21-20020a05600c219500b003f0a11f26f7mr2299729wme.32.1681403452384;
-        Thu, 13 Apr 2023 09:30:52 -0700 (PDT)
-Received: from che-box ([85.88.143.70])
-        by smtp.gmail.com with ESMTPSA id c8-20020a05600c0a4800b003ee5fa61f45sm5968303wmq.3.2023.04.13.09.30.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Apr 2023 09:30:51 -0700 (PDT)
-Date:   Thu, 13 Apr 2023 18:31:47 +0200
-From:   Christian Ehrig <cehrig@cloudflare.com>
-To:     broonie@kernel.org
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        Gavin Li <gavinl@nvidia.com>, Jakub Kicinski <kuba@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the bpf-next tree with the net-next
- tree
-Message-ID: <20230413163147.GA25768@cloudflare.com>
-References: <20230413161235.4093777-1-broonie@kernel.org>
+        with ESMTP id S230131AbjDMSZ4 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 13 Apr 2023 14:25:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFC928A72;
+        Thu, 13 Apr 2023 11:25:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4CB9F640B2;
+        Thu, 13 Apr 2023 18:25:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2D13C433D2;
+        Thu, 13 Apr 2023 18:25:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681410347;
+        bh=ph4fXRi6oIbh9htiRmu0dWbvynpY2d1z+QyDZwciXss=;
+        h=From:To:Cc:Subject:Date:From;
+        b=i5+EPN3B4p5MqpnrUYB+6gE4+GIUrMuEFvxg/jCUNQ2cuyVxSWhZ1RAjXYyzR9JE7
+         UwEFjdEX/meCCnK+yI8ZeTwPYyeTpvfksn+OwS/rKCDN/p6jeKroPk3E/oTA7tpnsN
+         +GjHqO5wNHXfIfxKekIiUQStLUgQxWBboAaLtB6GgbI9o4PDe6iFMeNChYXaZ5mUfQ
+         4D4lF6rAIi/qx6NdC0GGSFPTxQ+OHBXJOrlyMeYXlv8QeRKlOBTBFd47ORg/LY0xAI
+         kWLmowVSWV9cJCYL3qwOYNi2/8mFXvTuYr6MeIMhP83lxccEJQRPj3I58wI5znk4RF
+         kSdVCPIGz6++Q==
+From:   broonie@kernel.org
+To:     Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: Tree for Apr 13
+Date:   Thu, 13 Apr 2023 19:25:42 +0100
+Message-Id: <20230413182542.1133335-1-broonie@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230413161235.4093777-1-broonie@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        LOCALPART_IN_SUBJECT,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Apr 13, 2023 at 05:12:35PM +0100, broonie@kernel.org wrote:
-> Hi all,
-> 
-> Today's linux-next merge of the bpf-next tree got a conflict in:
-> 
->   include/net/ip_tunnels.h
-> 
-> between commit:
-> 
->   bc9d003dc48c3 ("ip_tunnel: Preserve pointer const in ip_tunnel_info_opts")
-> 
-> from the net-next tree and commit:
-> 
->   ac931d4cdec3d ("ipip,ip_tunnel,sit: Add FOU support for externally controlled ipip devices")
-> 
-> from the bpf-next tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
-> 
-> diff --cc include/net/ip_tunnels.h
-> index 255b32a90850a,7912f53caae0b..0000000000000
-> --- a/include/net/ip_tunnels.h
-> +++ b/include/net/ip_tunnels.h
-> @@@ -66,15 -73,9 +73,16 @@@ struct ip_tunnel_encap 
->   #define IP_TUNNEL_OPTS_MAX					\
->   	GENMASK((sizeof_field(struct ip_tunnel_info,		\
->   			      options_len) * BITS_PER_BYTE) - 1, 0)
->  +
->  +#define ip_tunnel_info_opts(info)				\
->  +	_Generic(info,						\
->  +		 const struct ip_tunnel_info * : ((const void *)((info) + 1)),\
->  +		 struct ip_tunnel_info * : ((void *)((info) + 1))\
->  +	)
->  +
->   struct ip_tunnel_info {
->   	struct ip_tunnel_key	key;
-> + 	struct ip_tunnel_encap	encap;
->   #ifdef CONFIG_DST_CACHE
->   	struct dst_cache	dst_cache;
->   #endif
+Hi all,
 
-This looks good to me. Thanks much.
+Changes since 20230411:
+
+The sh tree gained a conflict with the mm-unstable tree.
+
+The erofs tree gained a conflict with the vfs-idmapping tree.
+
+The ext4 tree gained multiple conflicts with the mm-stable tree.
+
+The net-next tree gained a conflict with the origin tree.
+
+The bpf-next tree gained a conflict with the net-net tree.
+
+Non-merge commits (relative to Linus' tree): 10382
+ 11028 files changed, 580165 insertions(+), 249563 deletions(-)
+
+----------------------------------------------------------------------------
+
+I have created today's linux-next tree at
+git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+(patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
+are tracking the linux-next tree using git, you should not use "git pull"
+to do so as that will try to merge the new linux-next release with the
+old one.  You should use "git fetch" and checkout or reset to the new
+master.
+
+You can see which trees have been included by looking in the Next/Trees
+file in the source.  There is also the merge.log file in the Next
+directory.  Between each merge, the tree was built with a ppc64_defconfig
+for powerpc, an allmodconfig for x86_64, a multi_v7_defconfig for arm
+and a native build of tools/perf. After the final fixups (if any), I do
+an x86_64 modules_install followed by builds for x86_64 allnoconfig,
+powerpc allnoconfig (32 and 64 bit), ppc44x_defconfig, allyesconfig
+and pseries_le_defconfig and i386, arm64, s390, sparc and sparc64
+defconfig and htmldocs. And finally, a simple boot test of the powerpc
+pseries_le_defconfig kernel in qemu (with and without kvm enabled).
+
+Below is a summary of the state of the merge.
+
+I am currently merging 357 trees (counting Linus' and 102 trees of bug
+fix patches pending for the current merge release).
+
+Stats about the size of the tree over time can be seen at
+http://neuling.org/linux-next-size.html .
+
+Status of my local build tests will be at
+http://kisskb.ellerman.id.au/linux-next .  If maintainers want to give
+advice about cross compilers/configs that work, we are always open to add
+more builds.
+
+Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
+Gortmaker for triage and bug fixes.

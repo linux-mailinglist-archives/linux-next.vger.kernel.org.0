@@ -2,35 +2,35 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D375E6E1060
-	for <lists+linux-next@lfdr.de>; Thu, 13 Apr 2023 16:50:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15B046E1067
+	for <lists+linux-next@lfdr.de>; Thu, 13 Apr 2023 16:52:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229888AbjDMOun (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 13 Apr 2023 10:50:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46738 "EHLO
+        id S229945AbjDMOwq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 13 Apr 2023 10:52:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230445AbjDMOun (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 13 Apr 2023 10:50:43 -0400
+        with ESMTP id S229930AbjDMOwq (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 13 Apr 2023 10:52:46 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC0C9138;
-        Thu, 13 Apr 2023 07:50:37 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72E5099;
+        Thu, 13 Apr 2023 07:52:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7B09B63F31;
-        Thu, 13 Apr 2023 14:50:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82361C433EF;
-        Thu, 13 Apr 2023 14:50:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 111E360F3C;
+        Thu, 13 Apr 2023 14:52:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19746C433EF;
+        Thu, 13 Apr 2023 14:52:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681397436;
-        bh=Zp14WLpMOyA9wKkZ+ALcUNnm0KONCzHc0Ay7MkAege4=;
+        s=k20201202; t=1681397563;
+        bh=C5RPtjfJHy3vGZq9VS1zqyK+5+lTi0Wy962NJzcAZ/0=;
         h=From:To:Cc:Subject:Date:From;
-        b=SxjdRtsfCmBAnK84WP9KAe9BuoRsikWYtsQHP/JiUNI7cLaVVNGstVzMyKkBkr1i0
-         Vb2GY28J3Xvjcoy296o3DiFQ0cRBPRpxbH59bRxiqwH7LxGDlpuwU07UwCd697Cipd
-         W5ZxWX2HAX9KK608ZXgtiRWAuz8VMbg/nN5aZzA122jht7Tv0qwWlaPcBbHMDZtJ9Z
-         JXPTAkZBQwvOeSH0CAZ/AhbbBEXAXUBRgmXgmap5vXLtimKzkwcH3X8aYvdlW1vuoP
-         kEA0hppSdkIs8GJALVbD/r3I2UYOtAmDuAPOtBFuFgFwNQsGUiawA+Nvr90aYTEUkp
-         93If4Vb6b1elA==
+        b=eJmdsAqbh7wdm4KJcGA080EFTOb5vqr9PCSwPsSGPeCkq0dQLygobv4vPCRRb7HRc
+         Sv07AS+bhTrL6M/NV0qxMDmr6Jk9w2wLd/QZTWlyRcDKVv8LkmfP1xyGVWvHwzPUuW
+         e/Bbz3yj+DXK7M9gnVVZc/ARFLSCmaALj5VvSFC6fuHw5suYGss2a8IU6Vi7SAPXp6
+         B3hfNjBbyLzco3/xBDL59CzXk287uUBpuXjD8vKw7H1udoGp6FA9hXOvI/BqT8/FZv
+         DELjX6k3RBcSmE0ODW9pHgtBpXYhze//Y1JvtgC1bO44Pw2jzgMU7bUxoxL/pmP9m0
+         4+w7wTW1RVbeA==
 From:   broonie@kernel.org
 To:     Theodore Ts'o <tytso@mit.edu>
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
@@ -39,8 +39,8 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Matthew Wilcox <willy@infradead.org>
 Subject: linux-next: manual merge of the ext4 tree with the mm-stable tree
-Date:   Thu, 13 Apr 2023 15:50:31 +0100
-Message-Id: <20230413145031.3526017-1-broonie@kernel.org>
+Date:   Thu, 13 Apr 2023 15:52:39 +0100
+Message-Id: <20230413145239.3529907-1-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -57,11 +57,11 @@ Hi all,
 
 Today's linux-next merge of the ext4 tree got a conflict in:
 
-  fs/nfs/file.c
+  include/linux/pagemap.h
 
 between commit:
 
-  66dabbb65d673 ("mm: return an ERR_PTR from __filemap_get_folio")
+  263e721e3ba1f ("mm: make mapping_get_entry available outside of filemap.c")
 
 from the mm-stable tree and commit:
 
@@ -76,21 +76,22 @@ is submitted for merging.  You may also want to consider cooperating
 with the maintainer of the conflicting tree to minimise any particularly
 complex conflicts.
 
-diff --cc fs/nfs/file.c
-index 1d03406e6c039,2474cbc30712a..0000000000000
---- a/fs/nfs/file.c
-+++ b/fs/nfs/file.c
-@@@ -335,9 -326,10 +326,10 @@@ static int nfs_write_begin(struct file 
-  		file, mapping->host->i_ino, len, (long long) pos);
+
+diff --cc include/linux/pagemap.h
+index fdcd595d22944,51b75b89730ed..0000000000000
+--- a/include/linux/pagemap.h
++++ b/include/linux/pagemap.h
+@@@ -504,9 -504,11 +504,11 @@@ pgoff_t page_cache_prev_miss(struct add
+  #define FGP_NOFS		0x00000010
+  #define FGP_NOWAIT		0x00000020
+  #define FGP_FOR_MMAP		0x00000040
+ -#define FGP_ENTRY		0x00000080
+ -#define FGP_STABLE		0x00000100
+ +#define FGP_STABLE		0x00000080
   
-  start:
-- 	folio = nfs_folio_grab_cache_write_begin(mapping, pos >> PAGE_SHIFT);
-+ 	folio = __filemap_get_folio(mapping, pos >> PAGE_SHIFT, FGP_WRITEBEGIN,
-+ 				    mapping_gfp_mask(mapping));
- -	if (!folio)
- -		return -ENOMEM;
- +	if (IS_ERR(folio))
- +		return PTR_ERR(folio);
-  	*pagep = &folio->page;
-  
-  	ret = nfs_flush_incompatible(file, folio);
++ #define FGP_WRITEBEGIN		(FGP_LOCK | FGP_WRITE | FGP_CREAT | FGP_STABLE)
++ 
+ +void *filemap_get_entry(struct address_space *mapping, pgoff_t index);
+  struct folio *__filemap_get_folio(struct address_space *mapping, pgoff_t index,
+  		int fgp_flags, gfp_t gfp);
+  struct page *pagecache_get_page(struct address_space *mapping, pgoff_t index,

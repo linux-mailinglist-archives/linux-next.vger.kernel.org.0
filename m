@@ -2,45 +2,45 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23E3A6E1053
-	for <lists+linux-next@lfdr.de>; Thu, 13 Apr 2023 16:47:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D375E6E1060
+	for <lists+linux-next@lfdr.de>; Thu, 13 Apr 2023 16:50:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230360AbjDMOr1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 13 Apr 2023 10:47:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42134 "EHLO
+        id S229888AbjDMOun (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 13 Apr 2023 10:50:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231472AbjDMOrN (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 13 Apr 2023 10:47:13 -0400
+        with ESMTP id S230445AbjDMOun (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 13 Apr 2023 10:50:43 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECB8DA250;
-        Thu, 13 Apr 2023 07:46:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC0C9138;
+        Thu, 13 Apr 2023 07:50:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7E2A663F36;
-        Thu, 13 Apr 2023 14:46:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BFF2C433EF;
-        Thu, 13 Apr 2023 14:46:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7B09B63F31;
+        Thu, 13 Apr 2023 14:50:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82361C433EF;
+        Thu, 13 Apr 2023 14:50:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681397215;
-        bh=sD6MHcpYAz7We+U724CzFeQCJalgnzUEbBogL3Or51A=;
+        s=k20201202; t=1681397436;
+        bh=Zp14WLpMOyA9wKkZ+ALcUNnm0KONCzHc0Ay7MkAege4=;
         h=From:To:Cc:Subject:Date:From;
-        b=qbujdr7GRVbl7JYDHkho8At2w1sMdCSmby2FLYLenTm3vmBtZa0pKGB2gEydEPDFj
-         zPkB2O/jWsyHjr5yEUT9kFNucxu7XyPI30O2ldm6wi+0V5YdBElATYIn7xO1b3Kc+z
-         fJXgIYYLqbEAiwrwrECmu2mMI+88Q8GtzYwjp3UCitt4/0ctqJTvctNoMqhlIqvZlV
-         hwecA3q+uNfhKqx4GRH3fSpc2UwUi47qspGtIjixej8GrFlS7bln3RrF/BgBHZvT0u
-         rIMzzFE9O7fgx9AE1YGYpp4XmRLKiOin2qZTCDnTFXqaLbwN7N8RH7NtHZT6fTse8d
-         FRzHbW1fZRTtA==
+        b=SxjdRtsfCmBAnK84WP9KAe9BuoRsikWYtsQHP/JiUNI7cLaVVNGstVzMyKkBkr1i0
+         Vb2GY28J3Xvjcoy296o3DiFQ0cRBPRpxbH59bRxiqwH7LxGDlpuwU07UwCd697Cipd
+         W5ZxWX2HAX9KK608ZXgtiRWAuz8VMbg/nN5aZzA122jht7Tv0qwWlaPcBbHMDZtJ9Z
+         JXPTAkZBQwvOeSH0CAZ/AhbbBEXAXUBRgmXgmap5vXLtimKzkwcH3X8aYvdlW1vuoP
+         kEA0hppSdkIs8GJALVbD/r3I2UYOtAmDuAPOtBFuFgFwNQsGUiawA+Nvr90aYTEUkp
+         93If4Vb6b1elA==
 From:   broonie@kernel.org
-To:     Gao Xiang <xiang@kernel.org>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Gao Xiang <hsiangkao@linux.alibaba.com>,
-        Jingbo Xu <jefflexu@linux.alibaba.com>,
+To:     Theodore Ts'o <tytso@mit.edu>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Christoph Hellwig <hch@lst.de>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the erofs tree with the vfs-idmapping tree
-Date:   Thu, 13 Apr 2023 15:46:51 +0100
-Message-Id: <20230413144651.3519980-1-broonie@kernel.org>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Matthew Wilcox <willy@infradead.org>
+Subject: linux-next: manual merge of the ext4 tree with the mm-stable tree
+Date:   Thu, 13 Apr 2023 15:50:31 +0100
+Message-Id: <20230413145031.3526017-1-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -55,19 +55,19 @@ X-Mailing-List: linux-next@vger.kernel.org
 
 Hi all,
 
-Today's linux-next merge of the erofs tree got a conflict in:
+Today's linux-next merge of the ext4 tree got a conflict in:
 
-  fs/erofs/xattr.c
+  fs/nfs/file.c
 
 between commit:
 
-  a5488f29835c0 ("fs: simplify ->listxattr() implementation")
+  66dabbb65d673 ("mm: return an ERR_PTR from __filemap_get_folio")
 
-from the vfs-idmapping tree and commit:
+from the mm-stable tree and commit:
 
-  303f50cf89b24 ("erofs: handle long xattr name prefixes properly")
+  e999a5c5a19cf ("fs: Add FGP_WRITEBEGIN")
 
-from the erofs tree.
+from the ext4 tree.
 
 I fixed it up (see below) and can carry the fix as necessary. This
 is now fixed as far as linux-next is concerned, but any non trivial
@@ -76,40 +76,21 @@ is submitted for merging.  You may also want to consider cooperating
 with the maintainer of the conflicting tree to minimise any particularly
 complex conflicts.
 
-diff --cc fs/erofs/xattr.c
-index 015462763bdd5,a04724c816e5f..0000000000000
---- a/fs/erofs/xattr.c
-+++ b/fs/erofs/xattr.c
-@@@ -483,12 -517,28 +513,26 @@@ static int xattr_entrylist(struct xattr
-  {
-  	struct listxattr_iter *it =
-  		container_of(_it, struct listxattr_iter, it);
-- 	unsigned int prefix_len;
-- 	const char *prefix;
-+ 	unsigned int base_index = entry->e_name_index;
-+ 	unsigned int prefix_len, infix_len = 0;
-+ 	const char *prefix, *infix = NULL;
-+ 	const struct xattr_handler *h;
-+ 
-+ 	if (entry->e_name_index & EROFS_XATTR_LONG_PREFIX) {
-+ 		struct erofs_sb_info *sbi = EROFS_SB(_it->sb);
-+ 		struct erofs_xattr_prefix_item *pf = sbi->xattr_prefixes +
-+ 			(entry->e_name_index & EROFS_XATTR_LONG_PREFIX_MASK);
-+ 
-+ 		if (pf >= sbi->xattr_prefixes + sbi->xattr_prefix_count)
-+ 			return 1;
-+ 		infix = pf->prefix->infix;
-+ 		infix_len = pf->infix_len;
-+ 		base_index = pf->prefix->base_index;
-+ 	}
+diff --cc fs/nfs/file.c
+index 1d03406e6c039,2474cbc30712a..0000000000000
+--- a/fs/nfs/file.c
++++ b/fs/nfs/file.c
+@@@ -335,9 -326,10 +326,10 @@@ static int nfs_write_begin(struct file 
+  		file, mapping->host->i_ino, len, (long long) pos);
   
-- 	prefix = erofs_xattr_prefix(entry->e_name_index, it->dentry);
-- 	if (!prefix)
-+ 	h = erofs_xattr_handler(base_index);
-+ 	if (!h || (h->list && !h->list(it->dentry)))
-  		return 1;
- -
- -	prefix = xattr_prefix(h);
-  	prefix_len = strlen(prefix);
+  start:
+- 	folio = nfs_folio_grab_cache_write_begin(mapping, pos >> PAGE_SHIFT);
++ 	folio = __filemap_get_folio(mapping, pos >> PAGE_SHIFT, FGP_WRITEBEGIN,
++ 				    mapping_gfp_mask(mapping));
+ -	if (!folio)
+ -		return -ENOMEM;
+ +	if (IS_ERR(folio))
+ +		return PTR_ERR(folio);
+  	*pagep = &folio->page;
   
-  	if (!it->buffer) {
+  	ret = nfs_flush_incompatible(file, folio);

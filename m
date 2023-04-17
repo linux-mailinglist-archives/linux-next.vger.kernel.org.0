@@ -2,91 +2,89 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F8256E478A
-	for <lists+linux-next@lfdr.de>; Mon, 17 Apr 2023 14:22:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 036726E47B6
+	for <lists+linux-next@lfdr.de>; Mon, 17 Apr 2023 14:29:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230195AbjDQMWO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 17 Apr 2023 08:22:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41156 "EHLO
+        id S230428AbjDQM30 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 17 Apr 2023 08:29:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231163AbjDQMVu (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 17 Apr 2023 08:21:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4593D9746;
-        Mon, 17 Apr 2023 05:21:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S230434AbjDQM3V (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 17 Apr 2023 08:29:21 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DF88A7
+        for <linux-next@vger.kernel.org>; Mon, 17 Apr 2023 05:28:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681734492;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mDlfmVq9VmEcdC5lvxXNSUHWf1poZr9mHB1Wi1RcM08=;
+        b=E8wdFHocHI4PyKprDVYBgxAEjbejn2YgGy4Cug/OOwHGXz/f/2y3DZp4j7YkYWWUw4yRYN
+        VTuBnMaotyToX8RGDUEwLhHW6IQx9p5HDvuSDY63WnSenD+yv296DQ4O3NzFIhkqEkHDEm
+        YgQ01PBzvwQxYLNb/GAb3Pe6f3Nlf0E=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-609-BV0gRXcbP_CV48a3S1UCkA-1; Mon, 17 Apr 2023 08:28:07 -0400
+X-MC-Unique: BV0gRXcbP_CV48a3S1UCkA-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8429D62343;
-        Mon, 17 Apr 2023 12:21:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D856C433EF;
-        Mon, 17 Apr 2023 12:21:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681734067;
-        bh=v6GeTyqbTX2Q85J3eve/ZjdwGEtZ70QLU5PDsHNjMNM=;
-        h=From:To:Cc:Subject:Date:From;
-        b=bJYof9iTHwmCBFCQvVtPDNrilh2yIbNrxB1SSz9ksP+sOCFflxdtqGSXbA51mX8hm
-         oFeLbNee+xgqt6XD+4NvzhuW/kHMzmUqZGBvCWB311Ajk/fP3ovWe3ObsAiZfTFbJP
-         z/Vy3nqSYw9Lggn8lK9Qc5IH/o2HjcBnGGI1G303oBs5cn+HD+YvGFbupyqGiZj/Vc
-         53zSnWiZpTH26bwIriIrE+YGE/d5afCfELzMp+c/ZBkAAw4DpMQ1Cah7k8dlv5vpHJ
-         UsfptrPMHl/rcXA0/abFh1TzksFBizZfagPPWnJG3/n3+4p5Dl6gu27XuCAllvkwWj
-         3TmXkSJ49zw7Q==
-From:   broonie@kernel.org
-To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 08373855310;
+        Mon, 17 Apr 2023 12:28:07 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.42.28.67])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 632FF51FF;
+        Mon, 17 Apr 2023 12:28:05 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <e8bc6158-86b2-18e5-efea-c165e2a3f196@kernel.dk>
+References: <e8bc6158-86b2-18e5-efea-c165e2a3f196@kernel.dk> <20230413182542.1133335-1-broonie@kernel.org> <0c6b661c-f7ff-cf12-b7f0-00b6b2f1317b@amd.com> <3c4b9025-2667-ca8c-7427-502068b8168e@amd.com>
+To:     Ayush Jain <ayush.jain3@amd.com>
+Cc:     dhowells@redhat.com, Jens Axboe <axboe@kernel.dk>,
+        broonie@kernel.org,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Peter Xu <peterx@redhat.com>,
-        Randy Dunlap <rdunlap@infradead.org>
-Subject: linux-next: manual merge of the sh tree with the mm-unstable tree
-Date:   Mon, 17 Apr 2023 13:20:55 +0100
-Message-Id: <20230417122056.244444-1-broonie@kernel.org>
-X-Mailer: git-send-email 2.30.2
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Santosh.Shukla@amd.com, Kalpana.Shetty@amd.com,
+        Narasimhan V <Narasimhan.V@amd.com>, sfr@canb.auug.org.au
+Subject: Re: linux-next: Tree for Apr 13
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date:   Mon, 17 Apr 2023 13:28:04 +0100
+Message-ID: <1488010.1681734484@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi all,
+Jens Axboe <axboe@kernel.dk> wrote:
 
-Today's linux-next merge of the sh tree got a conflict in:
+> On 4/14/23 1:25=E2=80=AFAM, Ayush Jain wrote:
+> ...
+> > -If we create a filesystem on the raw disk -- Test completes with a Pass
+> >=20
+> > -If there is no Filesystem on the raw disk(loop, nvme) -- Test hangs wi=
+th the provided trace
 
-  tools/testing/selftests/mm/Makefile
+fio is running directly on a block device?
 
-between commit:
+Also, does Hugh's patch by any chance fix it?
 
-  aaf87fd8703a5 ("selftests/mm: use TEST_GEN_PROGS where proper")
+	https://lore.kernel.org/linux-block/2d5fa5e3-dac5-6973-74e5-eeedf36a42b@go=
+ogle.com/
 
-from the mm-unstable tree and commit:
+(I'd guess probably not as it fixes shmem).
 
-  644a9cf0d2a83 ("sh: remove sh5/sh64 last fragments")
+David
 
-from the sh tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
-diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
-index a913397c6b3c5..3ad614d359e44 100644
---- a/tools/testing/selftests/mm/Makefile
-+++ b/tools/testing/selftests/mm/Makefile
-@@ -93,7 +93,7 @@ endif
- 
- endif
- 
--ifneq (,$(filter $(MACHINE),arm64 ia64 mips64 parisc64 ppc64 riscv64 s390x sh64 sparc64 x86_64))
-+ifneq (,$(filter $(MACHINE),arm64 ia64 mips64 parisc64 ppc64 riscv64 s390x sparc64 x86_64))
- TEST_GEN_PROGS += va_high_addr_switch
- TEST_GEN_PROGS += virtual_address_range
- TEST_GEN_PROGS += write_to_hugetlbfs

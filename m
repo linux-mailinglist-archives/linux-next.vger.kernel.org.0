@@ -2,104 +2,69 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1D766E4F9C
-	for <lists+linux-next@lfdr.de>; Mon, 17 Apr 2023 19:48:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 706A76E58B8
+	for <lists+linux-next@lfdr.de>; Tue, 18 Apr 2023 07:44:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231154AbjDQRsk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 17 Apr 2023 13:48:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44400 "EHLO
+        id S229980AbjDRFn6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 18 Apr 2023 01:43:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbjDQRsj (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 17 Apr 2023 13:48:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E415F59C8;
-        Mon, 17 Apr 2023 10:48:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 812CD623C9;
-        Mon, 17 Apr 2023 17:48:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04B29C433D2;
-        Mon, 17 Apr 2023 17:48:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681753716;
-        bh=89s4jIuMXAhIUTAJDlYbcbPQ9HBWG9slfoztr8C81Jg=;
-        h=From:To:Cc:Subject:Date:From;
-        b=GM8OrTjBLQ5euREIO0XOxN+XgHYNGwY+eEINd8cdohxNl9v3YOuuLiIfl0YaP6yR9
-         uSXpT7NhMXncsnWtbetUyJwNmvUiJhpZu5B6W83b9ln7XSUchsQSu3J4S4SOf2AJ5z
-         3Efxpcyt8RyEHMcaUJ+J33Obvu6dY01LtgJFQ6jwn0NDwKhzx7HDRh8Jdj05WgzVLL
-         0e51Te/09UvR24QOVyf6cINOcZgeAgFR+xEn7zKPXdOZmGZ4BSrpQqWSRXIsIA1TZN
-         5qcok8DJwnfLONVXIkn8wOzLbE8um9bJ1qf4xb4cWBht6o0T/or3ijf1gAigajhPYK
-         +exoAs2fQEf1A==
-From:   broonie@kernel.org
-To:     Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: Tree for Apr 17
-Date:   Mon, 17 Apr 2023 18:48:32 +0100
-Message-Id: <20230417174832.1060254-1-broonie@kernel.org>
-X-Mailer: git-send-email 2.30.2
+        with ESMTP id S229454AbjDRFn5 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 18 Apr 2023 01:43:57 -0400
+X-Greylist: delayed 11861 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 17 Apr 2023 22:43:56 PDT
+Received: from mail.peterfykh.hu (mail.peterfykh.hu [84.206.67.96])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1604F423B;
+        Mon, 17 Apr 2023 22:43:56 -0700 (PDT)
+Received: from mail.peterfykh.hu (localhost [127.0.0.1])
+        by mail.peterfykh.hu (Postfix) with ESMTP id 84E041177;
+        Tue, 18 Apr 2023 01:57:45 +0200 (CEST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        LOCALPART_IN_SUBJECT,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Tue, 18 Apr 2023 01:57:45 +0200
+From:   MK <sebeszet@peterfykh.hu>
+To:     undisclosed-recipients:;
+Subject: Hello sunshine, how are you?
+Reply-To: marion.K08@bahnhof.se
+Mail-Reply-To: marion.K08@bahnhof.se
+Message-ID: <73f25765f6b58f5dbcf3a26ec7364a17@peterfykh.hu>
+X-Sender: sebeszet@peterfykh.hu
+User-Agent: Roundcube Webmail/1.2.3
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=peterfykh.hu; s=mail; t=1681775879; bh=EK7FNzGPLm9pid/gmdFBrbarvHS9H0a48U7GgrEq6Uo=; h=MIME-Version:Content-Type:Content-Transfer-Encoding:Date:From:To:Subject:Reply-To:Message-ID; b=uC7WHjqTrFAg10SLXW8+MXT+Qur7exwfyWB2mmR6YGDcxtzadBldDX1N3UpRP30aojbveWRGeFTlU2peS9vUANH7zbFMs4qoDnNMBQzuzQsfWh5lww1DY8W5QfGUmuBFMeNVgffcdOjeQAMphdEqLaKEZ7SaH5Ij5Ylepqp/rYo=
+X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi all,
+I am sorry to bother you and intrude your privacy. I am single,
+  lonely and in need of a caring, loving and romantic companion.
 
-Changes since 20230414:
+I am a secret admirer and would like to explore the opportunity to
+learn more about each other. I know it is strange to contact you
+this way and I hope you can forgive me. I am a shy person and
+this is the only way I know I could get your attention. I just want
+to know what you think and my intention is not to offend you.
+I hope we can be friends if that is what you want, although I wish
+to be more than just a friend. I know you have a few questions to
+ask and I hope I can satisfy some of your curiosity with a few
+answers.
 
-The sh tree gained a conflict against the mm-unstable tree.
+I believe in the saying that 'to the world you are just one person,
+but to someone special you are the world'. All I want is love,
+romantic care and attention from a special companion which I am
+hoping would be you.
 
-The pci tree gained a conflict with Linus' tree.
+I hope this message will be the beginning of a long term
+communication between us, simply send a reply to this message, it
+will make me happy.
 
-The bluetooth tree gained a conflict with Linus' tree.
 
-The drm-next tree gained a conflict against the drm-intel-fixes tree.
+Hugs and kisses,
 
-The driver-core conflict gained a conflict with the iommu tree.
-
-Non-merge commits (relative to Linus' tree): 11516
- 11898 files changed, 781881 insertions(+), 407199 deletions(-)
-
-----------------------------------------------------------------------------
-
-I have created today's linux-next tree at
-git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-(patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
-are tracking the linux-next tree using git, you should not use "git pull"
-to do so as that will try to merge the new linux-next release with the
-old one.  You should use "git fetch" and checkout or reset to the new
-master.
-
-You can see which trees have been included by looking in the Next/Trees
-file in the source.  There is also the merge.log file in the Next
-directory.  Between each merge, the tree was built with a ppc64_defconfig
-for powerpc, an allmodconfig for x86_64, a multi_v7_defconfig for arm
-and a native build of tools/perf. After the final fixups (if any), I do
-an x86_64 modules_install followed by builds for x86_64 allnoconfig,
-powerpc allnoconfig (32 and 64 bit), ppc44x_defconfig, allyesconfig
-and pseries_le_defconfig and i386, arm64, s390, sparc and sparc64
-defconfig and htmldocs. And finally, a simple boot test of the powerpc
-pseries_le_defconfig kernel in qemu (with and without kvm enabled).
-
-Below is a summary of the state of the merge.
-
-I am currently merging 357 trees (counting Linus' and 102 trees of bug
-fix patches pending for the current merge release).
-
-Stats about the size of the tree over time can be seen at
-http://neuling.org/linux-next-size.html .
-
-Status of my local build tests will be at
-http://kisskb.ellerman.id.au/linux-next .  If maintainers want to give
-advice about cross compilers/configs that work, we are always open to add
-more builds.
-
-Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
-Gortmaker for triage and bug fixes.
+Marion.

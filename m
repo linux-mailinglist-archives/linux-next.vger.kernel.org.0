@@ -2,46 +2,47 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8E396E4BAF
-	for <lists+linux-next@lfdr.de>; Mon, 17 Apr 2023 16:39:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1D436E4D11
+	for <lists+linux-next@lfdr.de>; Mon, 17 Apr 2023 17:24:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229863AbjDQOjx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 17 Apr 2023 10:39:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35282 "EHLO
+        id S231367AbjDQPYi (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 17 Apr 2023 11:24:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230049AbjDQOjn (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 17 Apr 2023 10:39:43 -0400
+        with ESMTP id S231176AbjDQPYZ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 17 Apr 2023 11:24:25 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EB4D86BE;
-        Mon, 17 Apr 2023 07:39:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3228410262;
+        Mon, 17 Apr 2023 08:23:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7FE856262D;
-        Mon, 17 Apr 2023 14:39:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B522C433D2;
-        Mon, 17 Apr 2023 14:39:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BC86F61FF1;
+        Mon, 17 Apr 2023 15:22:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68587C433D2;
+        Mon, 17 Apr 2023 15:22:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681742367;
-        bh=LTTln81pU3tbmAEDXucfOA7gxmfn0aHgrBX7aTXJ72k=;
+        s=k20201202; t=1681744954;
+        bh=2iS+hQ1LA78BC7w3OziP9UD8SgJ+yICD0rVzKV1MhnY=;
         h=From:To:Cc:Subject:Date:From;
-        b=KWw03S2bX6ty62CMEBwRHiWNsa7WKHIf2dy9Mw+vo8zKfKnII4QYxPRTdNZn3OSys
-         o7KvJ6G+0sKRoqv1OG3hbzQ5yz4YrG0QQ1CrYw0bazhg0hnHvQPrkAxeNUkelhlPQz
-         XCcWPDMN1/xh/s4dqbenWCvuvFAOkULifUJciYX0CJEzwQyvobwSLkD2Gt4974OwWv
-         K5XNhOs2zzPePJyeY9WsB6xSKGEXzOjd/OH2Yr6MM82vhuiexQHEIZblE9MQ8QeQHK
-         zvfhqQlLpQQVqJX5J7RriLijAFzrq1bCmKp35/9x41Fq0JUtyfVBeL7Z0Y7pgewKt4
-         ZYLZZIUWAkbYQ==
+        b=Msv80enbQmM8W8qql8Ux3d4etvStWQMH7w3mE9jcMweBs//4DN5if+coNy+LhAL8/
+         9m0afJjlrAjH2gkoliKZ9Q2G2JuDFTVeCdKaiEH7aCXlQsPk5k2t2KDoUWGJzJwbaG
+         pKLuQg/TDQIQR3O0KFEq5u2Qe5R/ol+rNPMPHon2TA3shbw78RNqMv3h2QM16rpWUA
+         Qsn7oPcSP/mZljKzs7nvdl66SNEwUpAGcQVXp/lCutbFrn5zUBiGh4HBDW/513Bcvm
+         moCwo1bOWV7eCioZEM7Sz+WMhgsyNsMszEHtmNfGtxy4Y5H4JCQ7frkdKGVecesl6R
+         Z1SE8Fxg2zTwQ==
 From:   broonie@kernel.org
-To:     Dave Airlie <airlied@redhat.com>,
-        DRI <dri-devel@lists.freedesktop.org>
-Cc:     Jani Nikula <jani.nikula@intel.com>,
+To:     Joerg Roedel <joro@8bytes.org>
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Joerg Roedel <jroedel@suse.de>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
-        <ville.syrjala@linux.intel.com>
-Subject: linux-next: manual merge of the drm tree with the drm-intel-fixes tree
-Date:   Mon, 17 Apr 2023 15:39:23 +0100
-Message-Id: <20230417143923.2136597-1-broonie@kernel.org>
+        Rob Herring <robh@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Yong Wu <yong.wu@mediatek.com>
+Subject: linux-next: manual merge of the iommu tree with the v4l-dvb-next tree
+Date:   Mon, 17 Apr 2023 16:22:27 +0100
+Message-Id: <20230417152227.2603080-1-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -57,19 +58,22 @@ X-Mailing-List: linux-next@vger.kernel.org
 
 Hi all,
 
-Today's linux-next merge of the drm tree got a conflict in:
+Today's linux-next merge of the iommu tree got conflicts in:
 
-  drivers/gpu/drm/i915/display/intel_dp_aux.c
+  drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c
+  drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
+  drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c
 
 between commit:
 
-  e1c71f8f91804 ("drm/i915: Fix fast wake AUX sync len")
+  0f4afd529224a ("media: Use of_property_present() for testing DT property presence")
 
-from the drm-intel-fixes tree and commit:
+from the v4l-dvb-next tree and commits:
 
-  605f7c7313334 ("drm/i915: Fix fast wake AUX sync len")
+  aa0ee7b4d5221 ("media: mediatek: vcodec: Remove the setting for dma_mask")
+  7d35584d9c6d2 ("media: mtk-jpegdec: Remove the setting for dma_mask")
 
-from the drm tree.
+from the iommu tree.
 
 I fixed it up (see below) and can carry the fix as necessary. This
 is now fixed as far as linux-next is concerned, but any non trivial
@@ -78,7 +82,15 @@ is submitted for merging.  You may also want to consider cooperating
 with the maintainer of the conflicting tree to minimise any particularly
 complex conflicts.
 
-diff --cc drivers/gpu/drm/i915/display/intel_dp_aux.c
-index 30c98810e28bb,705915d505652..0000000000000
---- a/drivers/gpu/drm/i915/display/intel_dp_aux.c
-+++ b/drivers/gpu/drm/i915/display/intel_dp_aux.c
+diff --cc drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
+index 6c7c5f3648df8,9b96d24363119..0000000000000
+--- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
++++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
+diff --cc drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c
+index 9ba5dc5df648d,11583405cf618..0000000000000
+--- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c
++++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c
+diff --cc drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c
+index 755f567b9e54f,50e5571608cdf..0000000000000
+--- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c
++++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c

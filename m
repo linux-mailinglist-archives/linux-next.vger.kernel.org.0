@@ -2,94 +2,81 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46ED66E4AE9
-	for <lists+linux-next@lfdr.de>; Mon, 17 Apr 2023 16:08:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B2086E4B98
+	for <lists+linux-next@lfdr.de>; Mon, 17 Apr 2023 16:36:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229971AbjDQOIm (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 17 Apr 2023 10:08:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60574 "EHLO
+        id S229551AbjDQOgc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 17 Apr 2023 10:36:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230285AbjDQOI0 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 17 Apr 2023 10:08:26 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44B6172B4
-        for <linux-next@vger.kernel.org>; Mon, 17 Apr 2023 07:07:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681740414;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=x3k70U2wqMYkVPZDRioWTe3Rvp0nYCtXWyD8EZYgUNA=;
-        b=ZYqL7VlhGGUXxJS2LWsKceuOu+a5v8d+F9KVe0FERQec/MzAyuJObdoiYSUbKQLB0qXrEz
-        5pkbEk8Bm6pcvKsPboyig9eFf84k4vD+82EbgddbAcvVf+DD2AKSvTVjKlBwZOM+8KbbBk
-        lSoX7XXVL+nOmsGXgYWJpRXF430lkds=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-121-mlfIU9LYMH6A2Uv9mJgbMw-1; Mon, 17 Apr 2023 10:06:50 -0400
-X-MC-Unique: mlfIU9LYMH6A2Uv9mJgbMw-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        with ESMTP id S229573AbjDQOgb (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 17 Apr 2023 10:36:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E4D1E8;
+        Mon, 17 Apr 2023 07:36:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 64CCD8828C1;
-        Mon, 17 Apr 2023 14:06:49 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.42.28.67])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 022D5492B0D;
-        Mon, 17 Apr 2023 14:06:47 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <1551344.1681739138@warthog.procyon.org.uk>
-References: <1551344.1681739138@warthog.procyon.org.uk> <e8bc6158-86b2-18e5-efea-c165e2a3f196@kernel.dk> <20230413182542.1133335-1-broonie@kernel.org> <0c6b661c-f7ff-cf12-b7f0-00b6b2f1317b@amd.com> <3c4b9025-2667-ca8c-7427-502068b8168e@amd.com>
-Cc:     dhowells@redhat.com, Jens Axboe <axboe@kernel.dk>,
-        Ayush Jain <ayush.jain3@amd.com>, broonie@kernel.org,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DC2D862603;
+        Mon, 17 Apr 2023 14:36:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11CCFC433D2;
+        Mon, 17 Apr 2023 14:36:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681742184;
+        bh=TJvJT+LSQXiURhDyuoQ3DL12SWV4O4BRIOvlEFEf2K4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=L/I7s1WWi0EtlddLnCpSrOcdzC2/gyRjEFEHhikUmXtYD/yamH1Uc7qhimNw4CoyZ
+         1WJyokHwaqp50Y9ZLKFA7/iFJFxr9Yrjgn0aoAmi95/YGRKQie/OT799bd/fvHeQTa
+         FJjEHPpJD3/3mTOfC+/JOJ0rU9a1FgCc/G2yZaPpDOJmRhUGIpBRkEug5OG3ptLXLr
+         g+8M8QRzZ9zOMDqRuC/3HXOmOIEgUitf34T8Z4lzm/G6sZ9iHs6O9JYCQAfJ/Xs2uR
+         4wrwevW+ppjnLqnqZ+NWc+ZavrMAJmvzdNxILBM+3DzV0NWHRpw1z+bPZaXhSvJeOv
+         womyFuPRUTiKw==
+From:   broonie@kernel.org
+To:     Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Santosh.Shukla@amd.com, Kalpana.Shetty@amd.com,
-        Narasimhan V <Narasimhan.V@amd.com>, sfr@canb.auug.org.au
-Subject: Re: linux-next: Tree for Apr 13
+        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
+Subject: linux-next: manual merge of the bluetooth tree with the origin tree
+Date:   Mon, 17 Apr 2023 15:36:18 +0100
+Message-Id: <20230417143618.2091407-1-broonie@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <1558439.1681740407.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Mon, 17 Apr 2023 15:06:47 +0100
-Message-ID: <1558440.1681740407@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MISSING_HEADERS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-David Howells <dhowells@redhat.com> wrote:
+Hi all,
 
-> The problem might be summed up by the following snippet:
-> =
+Today's linux-next merge of the bluetooth tree got a conflict in:
 
-> 	openat(AT_FDCWD, "/dev/loop0", O_RDONLY) =3D 3
-> 	newfstatat(3, "", {st_mode=3DS_IFBLK|0660, st_rdev=3Dmakedev(0x7, 0), .=
-..}, AT_EMPTY_PATH) =3D 0
-> 	splice(3, NULL, 1, NULL, 1048576, 0)    =3D 0
+  net/bluetooth/hci_conn.c
 
-Ah.  In filemap_splice_read():
+between commit:
 
-	do {
-		cond_resched();
+  5dc7d23e167e2 ("Bluetooth: hci_conn: Fix possible UAF")
 
-		if (*ppos >=3D i_size_read(file_inode(in)))
-			break;
+from the origin tree and commit:
 
-but i_size_read(file_inode(in)) for a blockdev returns 0, it would seem.  =
-What
-should I use instead?
+  0623067085473 ("Bluetooth: hci_conn: Fix possible UAF")
 
-David
+from the bluetooth tree.
 
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+diff --cc net/bluetooth/hci_conn.c
+index 8455ba141ee61,640b951bf40a1..0000000000000
+--- a/net/bluetooth/hci_conn.c
++++ b/net/bluetooth/hci_conn.c

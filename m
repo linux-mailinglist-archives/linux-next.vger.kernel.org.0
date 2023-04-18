@@ -2,64 +2,64 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D674D6E6D0B
-	for <lists+linux-next@lfdr.de>; Tue, 18 Apr 2023 21:46:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC3E56E6F7C
+	for <lists+linux-next@lfdr.de>; Wed, 19 Apr 2023 00:40:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232492AbjDRTqK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 18 Apr 2023 15:46:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49548 "EHLO
+        id S231830AbjDRWk2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 18 Apr 2023 18:40:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231174AbjDRTqK (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 18 Apr 2023 15:46:10 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB5DF55B5
-        for <linux-next@vger.kernel.org>; Tue, 18 Apr 2023 12:46:06 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-63b51fd2972so2103061b3a.3
-        for <linux-next@vger.kernel.org>; Tue, 18 Apr 2023 12:46:06 -0700 (PDT)
+        with ESMTP id S232743AbjDRWk0 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 18 Apr 2023 18:40:26 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFA1C9011
+        for <linux-next@vger.kernel.org>; Tue, 18 Apr 2023 15:40:07 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-63b5c830d5eso2167137b3a.2
+        for <linux-next@vger.kernel.org>; Tue, 18 Apr 2023 15:40:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1681847166; x=1684439166;
+        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1681857607; x=1684449607;
         h=from:to:subject:content-transfer-encoding:mime-version:date
          :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=TJkLLNKV68vzGj/amwvnxTHlB6Hldgcye5X+mCPWvCM=;
-        b=fEm3Y0We8CE5U9Nx4dCuRmY0h+EebzLposBy9B7IO1St8ZUGcOjYEOGjPiyCX/SUKs
-         M/4zwx3IuU7YiqeoAEWgjPr8YFBfaGgKLRG8K6U5FhtxFPIwT84toyAk2SZyCuV6gZd5
-         1fyiFrK+j9rE9E5kVU/ySC6760o6iF0u207ROqqINWUCNlNtGhHqEMakfXw7jqwSZiSM
-         DscKmGUoSdySiPCKVNzT8/1eNiZ7vcj/Dnwzk8OG45gTvJ1jdZLjQTPYJTEU9/PDm/8d
-         NhHCcsam9OIJRfjKWgGU/R4lvOseTHKqdeBxd4i2zWIKyZJYyOOPiyTn1ekRi9aYaYya
-         9WyQ==
+        bh=SeULOP0Zv5j87X5RDZDqIn57trEmuknm9ZJ9hiA5ltA=;
+        b=wk+q9Av460B9EPhh2BkqFqYfwz7ZtJq9Xk1Zym7Tke6womfWl+iBTmP0AR/bbgoEDC
+         KM038fxps6XuqyLVxEmqiaeo1WjGgu1weCYM/8u1S5rS9Li1YB8REDKo/hyWfjJV2mnS
+         fz/uPGalUkIBjC7XoZtJ8My3SszQgckLMtmfWx8CVuy07vSDxAWiy9QJVwpXLShDBAy0
+         VODYg3fEKfzJIAzh6NtPxDMYVQZyJVC5nlDwEhoGbL/RNqwTeV8B2LV5x4GKACBJU+Lh
+         gBcTQ76p4DfOigVuR1OOhyaIPc01giu9CMTSXASEaRW74pzecwTFhAYgg6VU/kgKtU5B
+         aN7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681847166; x=1684439166;
+        d=1e100.net; s=20221208; t=1681857607; x=1684449607;
         h=from:to:subject:content-transfer-encoding:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=TJkLLNKV68vzGj/amwvnxTHlB6Hldgcye5X+mCPWvCM=;
-        b=ZrIFXIChldyQ5R/RH5sDdOc23OrirAADq92l5J1tJXKfTk9j/cC7WSi0sh8N+OHuLZ
-         k3VttprXbdaDmgWwNSn8SjA5Z7LL6r5Wgthftj5v6lbTt6/6p9d2SFul10KeI8Gz2Gsq
-         iDRrPWWIBgyRi2m4g54v/arUlG/aM9YyIREp3PI5YQJWFASvWBf85VCvl0WFpeK4UXKH
-         UUhM6PpjEzSwhbd0YgB+NSxoGgVqJzNg5kwXcDJiiVdn5YIb6/VAx8kPzZlPh51q8pfr
-         qDBRRcF67lxJZRSOekdRttzkMJBx8jaJUpz2MRVzSHLorYJuGkiaJZe0QlRQ01wFX3co
-         ANOA==
-X-Gm-Message-State: AAQBX9d9Cv3E6B8eMLMEPGAIaMueWuZnyT9SnKnMhOtxPHG/uq4O+h6Y
-        UxKQfwJuU8iazKEdjiFy14RvL5BETqDOqLBo3iLntxKg
-X-Google-Smtp-Source: AKy350bPefXvtcttx7dWKBENGPvaViEP881lFVGA0lx3XBWwXs0Kp9EwT41n5JsKqgE/MgA3+8HTlw==
-X-Received: by 2002:a05:6a00:21d5:b0:638:7c22:6fd with SMTP id t21-20020a056a0021d500b006387c2206fdmr860094pfj.1.1681847165058;
-        Tue, 18 Apr 2023 12:46:05 -0700 (PDT)
+        bh=SeULOP0Zv5j87X5RDZDqIn57trEmuknm9ZJ9hiA5ltA=;
+        b=I5e9py/JokZQ8w/WGH0dYra6sNwlm2l7hJsDyUsRqZkcjQ/7WkJMIyWCOGJJS9aBSf
+         KtOXSmyX8wX+v7mmfpM9Lovs6gz+pp2n9tdMW1kc7ufWfASDFkvtR2pQrNiSYWTOYqvE
+         K+UDclUJwXabZoPgkSUVfbhB5guUYqnhQ68N+Btl6g4zuLMGKXey3g+XzOx7csPcasC2
+         n+mIeP5mYJCHdQ0Km+SQIO95MCK82MtG+YpBdcts4UMXLpDIkTht5DUl9lVqFk0qoU9j
+         mt5lNM1+6GK4CUzCHfkPjOmurf+Sbhum5El+302qLYxO7UcUDyyod+A84vMqNVSp3hyp
+         715Q==
+X-Gm-Message-State: AAQBX9caXFUOCAYatnmVezG/26ASUp3Xkz4P6b1b1SjEfGN6x17sJfii
+        1TAcFvcjxt1g7SsbYY2nDN+nzuC1iXZ7dghCe32tkUU+
+X-Google-Smtp-Source: AKy350Yzvw/2tZsMjZUc8oce3M7X6A8qR94Q1GtsGKJb8IiDlS76+2/ZQmg1Qo9oJVR5GSVnWdZ+NA==
+X-Received: by 2002:a17:903:294c:b0:1a6:7a19:331b with SMTP id li12-20020a170903294c00b001a67a19331bmr2967576plb.5.1681857606267;
+        Tue, 18 Apr 2023 15:40:06 -0700 (PDT)
 Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id e18-20020a62aa12000000b0063d37a45829sm801659pff.63.2023.04.18.12.46.04
+        by smtp.gmail.com with ESMTPSA id jh7-20020a170903328700b001a2b4c79f34sm10130933plb.252.2023.04.18.15.40.05
         for <linux-next@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Apr 2023 12:46:04 -0700 (PDT)
-Message-ID: <643ef37c.620a0220.65f36.22a6@mx.google.com>
-Date:   Tue, 18 Apr 2023 12:46:04 -0700 (PDT)
+        Tue, 18 Apr 2023 15:40:05 -0700 (PDT)
+Message-ID: <643f1c45.170a0220.4df6c.7b0f@mx.google.com>
+Date:   Tue, 18 Apr 2023 15:40:05 -0700 (PDT)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: pending-fixes
+X-Kernelci-Branch: master
 X-Kernelci-Tree: next
-X-Kernelci-Kernel: v6.3-rc7-147-g6ba2ee0e9acd
+X-Kernelci-Kernel: next-20230418
 X-Kernelci-Report-Type: build
-Subject: next/pending-fixes build: 178 builds: 3 failed, 175 passed, 6 errors,
- 12 warnings (v6.3-rc7-147-g6ba2ee0e9acd)
+Subject: next/master build: 211 builds: 14 failed, 197 passed, 20 errors,
+ 32 warnings (next-20230418)
 To:     linux-next@vger.kernel.org
 From:   "kernelci.org bot" <bot@kernelci.org>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -72,38 +72,75 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes build: 178 builds: 3 failed, 175 passed, 6 errors, 12 wa=
-rnings (v6.3-rc7-147-g6ba2ee0e9acd)
+next/master build: 211 builds: 14 failed, 197 passed, 20 errors, 32 warning=
+s (next-20230418)
 
-Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
-rnel/v6.3-rc7-147-g6ba2ee0e9acd/
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20230418/
 
 Tree: next
-Branch: pending-fixes
-Git Describe: v6.3-rc7-147-g6ba2ee0e9acd
-Git Commit: 6ba2ee0e9acdcdbb3fc8f031f4d9c5769442d13e
+Branch: master
+Git Describe: next-20230418
+Git Commit: 67d5d9f013d6c3829383c08162939cabff14fccc
 Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
 Built: 8 unique architectures
 
 Build Failures Detected:
 
+arc:
+    haps_hs_smp_defconfig+kselftest: (gcc-10) FAIL
+
+arm64:
+    cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config: (clang-13) =
+FAIL
+    cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+arm64-chrome=
+book: (clang-13) FAIL
+    cros://chromeos-5.10/arm64/chromiumos-mediatek.flavour.config+arm64-chr=
+omebook: (clang-13) FAIL
+    allmodconfig: (clang-17) FAIL
+
 arm:
+    allmodconfig: (clang-17) FAIL
     rpc_defconfig: (gcc-10) FAIL
+
+i386:
+    allmodconfig: (clang-17) FAIL
 
 mips:
     32r2el_defconfig+debug: (gcc-10) FAIL
+    32r2el_defconfig+kselftest: (gcc-10) FAIL
     decstation_64_defconfig: (gcc-10) FAIL
+
+x86_64:
+    cros://chromeos-5.10/x86_64/chromeos-amd-stoneyridge.flavour.config+x86=
+-chromebook: (clang-13) FAIL
+    cros://chromeos-5.10/x86_64/chromeos-intel-pineview.flavour.config+x86-=
+chromebook: (clang-13) FAIL
+    allmodconfig: (clang-17) FAIL
 
 Errors and Warnings Detected:
 
 arc:
+    haps_hs_smp_defconfig+kselftest (gcc-10): 1 error
 
 arm64:
+    allmodconfig (clang-17): 2 errors, 1 warning
+    cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config (clang-13): =
+1 error, 1 warning
+    cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+arm64-chrome=
+book (clang-13): 1 error, 1 warning
+    cros://chromeos-5.10/arm64/chromiumos-mediatek.flavour.config+arm64-chr=
+omebook (clang-13): 1 error, 1 warning
+    defconfig (clang-17): 3 warnings
+    defconfig+CONFIG_ARM64_64K_PAGES=3Dy (clang-17): 3 warnings
+    defconfig+arm64-chromebook (clang-13): 3 warnings
 
 arm:
+    allmodconfig (clang-17): 2 errors, 1 warning
     rpc_defconfig (gcc-10): 2 errors
 
 i386:
+    allmodconfig (clang-17): 2 errors, 1 warning
 
 mips:
     fuloong2e_defconfig (gcc-10): 1 error
@@ -122,11 +159,23 @@ sparc:
     tinyconfig (gcc-10): 1 warning
 
 x86_64:
+    allmodconfig (clang-17): 2 errors, 2 warnings
+    cros://chromeos-5.10/x86_64/chromeos-amd-stoneyridge.flavour.config+x86=
+-chromebook (clang-13): 1 error
+    cros://chromeos-5.10/x86_64/chromeos-intel-pineview.flavour.config+x86-=
+chromebook (clang-13): 1 error
+    x86_64_defconfig+kselftest (rustc-1.62): 3 warnings
 
 Errors summary:
 
+    7    drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:298:6: error: variable =
+'ret' is uninitialized when used here [-Werror,-Wuninitialized]
+    6    sound/soc/codecs/nau8825.c:2826:31: error: overlapping comparisons=
+ always evaluate to false [-Werror,-Wtautological-overlap-compare]
     4    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=
 =80=98-mhard-float=E2=80=99
+    1    net/bpfilter/main.c:3:10: fatal error: sys/uio.h: No such file or =
+directory
     1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=
 =3D0x'
     1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=
@@ -134,10 +183,23 @@ Errors summary:
 
 Warnings summary:
 
+    10   drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:216:12: note: initializ=
+e the variable 'ret' to silence this warning
     10   <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
 -Wcpp]
+    3    drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:298:6: warning: variabl=
+e 'ret' is uninitialized when used here [-Wuninitialized]
+    3    1 warning generated.
     2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
 tion failed, symbol will not be versioned.
+    1    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x3e: relocation to=
+ !ENDBR: relocate_range+0x76
+    1    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x28: relocation to=
+ !ENDBR: relocate_range+0x1eb
+    1    vmlinux.o: warning: objtool: lkdtm_UNSET_SMEP+0xcc: relocation to =
+!ENDBR: native_write_cr4+0x4
+    1    fs/reiserfs/reiserfs.o: warning: objtool: balance_leaf+0x7683: sta=
+ck state mismatch: cfa1=3D4+360 cfa2=3D4+352
 
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
@@ -158,13 +220,55 @@ tion mismatches
 
 ---------------------------------------------------------------------------=
 -----
-32r2el_defconfig+kselftest (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warni=
+32r2el_defconfig+kselftest (mips, gcc-10) =E2=80=94 FAIL, 0 errors, 0 warni=
 ngs, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
-allmodconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
-mismatches
+allmodconfig (x86_64, clang-17) =E2=80=94 FAIL, 2 errors, 2 warnings, 0 sec=
+tion mismatches
+
+Errors:
+    drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:298:6: error: variable 'ret'=
+ is uninitialized when used here [-Werror,-Wuninitialized]
+    sound/soc/codecs/nau8825.c:2826:31: error: overlapping comparisons alwa=
+ys evaluate to false [-Werror,-Wtautological-overlap-compare]
+
+Warnings:
+    drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:216:12: note: initialize the=
+ variable 'ret' to silence this warning
+    fs/reiserfs/reiserfs.o: warning: objtool: balance_leaf+0x7683: stack st=
+ate mismatch: cfa1=3D4+360 cfa2=3D4+352
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm, clang-17) =E2=80=94 FAIL, 2 errors, 1 warning, 0 section=
+ mismatches
+
+Errors:
+    drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:298:6: error: variable 'ret'=
+ is uninitialized when used here [-Werror,-Wuninitialized]
+    sound/soc/codecs/nau8825.c:2826:31: error: overlapping comparisons alwa=
+ys evaluate to false [-Werror,-Wtautological-overlap-compare]
+
+Warnings:
+    drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:216:12: note: initialize the=
+ variable 'ret' to silence this warning
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm64, clang-17) =E2=80=94 FAIL, 2 errors, 1 warning, 0 secti=
+on mismatches
+
+Errors:
+    drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:298:6: error: variable 'ret'=
+ is uninitialized when used here [-Werror,-Wuninitialized]
+    sound/soc/codecs/nau8825.c:2826:31: error: overlapping comparisons alwa=
+ys evaluate to false [-Werror,-Wtautological-overlap-compare]
+
+Warnings:
+    drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:216:12: note: initialize the=
+ variable 'ret' to silence this warning
 
 ---------------------------------------------------------------------------=
 -----
@@ -173,8 +277,38 @@ n mismatches
 
 ---------------------------------------------------------------------------=
 -----
+allmodconfig (i386, clang-17) =E2=80=94 FAIL, 2 errors, 1 warning, 0 sectio=
+n mismatches
+
+Errors:
+    drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:298:6: error: variable 'ret'=
+ is uninitialized when used here [-Werror,-Wuninitialized]
+    sound/soc/codecs/nau8825.c:2826:31: error: overlapping comparisons alwa=
+ys evaluate to false [-Werror,-Wtautological-overlap-compare]
+
+Warnings:
+    drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:216:12: note: initialize the=
+ variable 'ret' to silence this warning
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
 allnoconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
 mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -186,13 +320,8 @@ Warnings:
 
 ---------------------------------------------------------------------------=
 -----
-allnoconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+allnoconfig (i386, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
 n mismatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -213,6 +342,11 @@ ection mismatches
 -----
 aspeed_g5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
 ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -301,6 +435,105 @@ ion mismatches
 
 ---------------------------------------------------------------------------=
 -----
+cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config (arm64, clang-13=
+) =E2=80=94 FAIL, 1 error, 1 warning, 0 section mismatches
+
+Errors:
+    drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:298:6: error: variable 'ret'=
+ is uninitialized when used here [-Werror,-Wuninitialized]
+
+Warnings:
+    drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:216:12: note: initialize the=
+ variable 'ret' to silence this warning
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+arm64-chromebook=
+ (arm64, clang-13) =E2=80=94 FAIL, 1 error, 1 warning, 0 section mismatches
+
+Errors:
+    drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:298:6: error: variable 'ret'=
+ is uninitialized when used here [-Werror,-Wuninitialized]
+
+Warnings:
+    drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:216:12: note: initialize the=
+ variable 'ret' to silence this warning
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-mediatek.flavour.config+arm64-chromeb=
+ook (arm64, clang-13) =E2=80=94 FAIL, 1 error, 1 warning, 0 section mismatc=
+hes
+
+Errors:
+    drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:298:6: error: variable 'ret'=
+ is uninitialized when used here [-Werror,-Wuninitialized]
+
+Warnings:
+    drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:216:12: note: initialize the=
+ variable 'ret' to silence this warning
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-qualcomm.flavour.config+arm64-chromeb=
+ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
+tches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-rockchip64.flavour.config+arm64-chrom=
+ebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mis=
+matches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (arm, clang-13) =
+=E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (arm, clang-1=
+3) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromeos-amd-stoneyridge.flavour.config+x86-chr=
+omebook (x86_64, clang-13) =E2=80=94 FAIL, 1 error, 0 warnings, 0 section m=
+ismatches
+
+Errors:
+    sound/soc/codecs/nau8825.c:2826:31: error: overlapping comparisons alwa=
+ys evaluate to false [-Werror,-Wtautological-overlap-compare]
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromeos-intel-denverton.flavour.config+x86-chr=
+omebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromeos-intel-pineview.flavour.config+x86-chro=
+mebook (x86_64, clang-13) =E2=80=94 FAIL, 1 error, 0 warnings, 0 section mi=
+smatches
+
+Errors:
+    sound/soc/codecs/nau8825.c:2826:31: error: overlapping comparisons alwa=
+ys evaluate to false [-Werror,-Wtautological-overlap-compare]
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config (x86_64, clang=
+-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config+x86-chromebook=
+ (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatc=
+hes
+
+---------------------------------------------------------------------------=
+-----
 cu1000-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
  section mismatches
 
@@ -341,6 +574,45 @@ ismatches
 
 ---------------------------------------------------------------------------=
 -----
+defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, clang-17) =E2=80=94 PASS, 0 errors, 3 warnings, 0 section=
+ mismatches
+
+Warnings:
+    drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:298:6: warning: variable 're=
+t' is uninitialized when used here [-Wuninitialized]
+    drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:216:12: note: initialize the=
+ variable 'ret' to silence this warning
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_16K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, clang-17) =E2=80=94 PASS, 0 er=
+rors, 3 warnings, 0 section mismatches
+
+Warnings:
+    drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:298:6: warning: variable 're=
+t' is uninitialized when used here [-Wuninitialized]
+    drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:216:12: note: initialize the=
+ variable 'ret' to silence this warning
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
 defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
 s, 0 warnings, 0 section mismatches
 
@@ -348,6 +620,18 @@ s, 0 warnings, 0 section mismatches
 -----
 defconfig+CONFIG_RANDOMIZE_BASE=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
 s, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+arm64-chromebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 3 wa=
+rnings, 0 section mismatches
+
+Warnings:
+    drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:298:6: warning: variable 're=
+t' is uninitialized when used here [-Wuninitialized]
+    drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:216:12: note: initialize the=
+ variable 'ret' to silence this warning
+    1 warning generated.
 
 ---------------------------------------------------------------------------=
 -----
@@ -366,12 +650,12 @@ ction mismatches
 
 ---------------------------------------------------------------------------=
 -----
-defconfig+debug (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+defconfig+debug (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
 tion mismatches
 
 ---------------------------------------------------------------------------=
 -----
-defconfig+debug (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+defconfig+debug (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
 tion mismatches
 
 ---------------------------------------------------------------------------=
@@ -381,12 +665,12 @@ on mismatches
 
 ---------------------------------------------------------------------------=
 -----
-defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+defconfig+kselftest (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
  section mismatches
 
 ---------------------------------------------------------------------------=
 -----
-defconfig+kselftest (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
  section mismatches
 
 ---------------------------------------------------------------------------=
@@ -450,6 +734,15 @@ ngs, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
+haps_hs_smp_defconfig+kselftest (arc, gcc-10) =E2=80=94 FAIL, 1 error, 0 wa=
+rnings, 0 section mismatches
+
+Errors:
+    net/bpfilter/main.c:3:10: fatal error: sys/uio.h: No such file or direc=
+tory
+
+---------------------------------------------------------------------------=
+-----
 hisi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
 n mismatches
 
@@ -462,6 +755,11 @@ n mismatches
 -----
 i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
 on mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -657,6 +955,16 @@ ction mismatches
 
 ---------------------------------------------------------------------------=
 -----
+multi_v5_defconfig (arm, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
 multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
 ction mismatches
 
@@ -682,23 +990,8 @@ multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy (arm, gcc-10) =E2=80=94 PASS, 0=
 
 ---------------------------------------------------------------------------=
 -----
-multi_v7_defconfig+crypto (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
-s, 0 section mismatches
-
----------------------------------------------------------------------------=
------
 multi_v7_defconfig+debug (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
 , 0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+ima (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
-0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
-ings, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -737,6 +1030,16 @@ nommu_k210_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
 
 ---------------------------------------------------------------------------=
 -----
+nommu_k210_defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_sdcard_defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 w=
+arnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
 nommu_k210_sdcard_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
 nings, 0 section mismatches
 
@@ -764,11 +1067,6 @@ ction mismatches
 -----
 orion5x_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
 tion mismatches
-
----------------------------------------------------------------------------=
------
-oxnas_v6_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -848,6 +1146,11 @@ tion mismatches
 -----
 rv32_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
 ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rv32_defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -966,11 +1269,6 @@ on mismatches
 
 ---------------------------------------------------------------------------=
 -----
-tinyconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
-
----------------------------------------------------------------------------=
------
 tinyconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section m=
 ismatches
 
@@ -986,6 +1284,11 @@ tinyconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
 -----
 tinyconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
 ismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -1039,6 +1342,16 @@ ection mismatches
 
 ---------------------------------------------------------------------------=
 -----
+x86_64_defconfig (x86_64, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, rustc-1.62) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
 x86_64_defconfig+amdgpu (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
 gs, 0 section mismatches
 
@@ -1064,8 +1377,36 @@ nings, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
+x86_64_defconfig+kselftest (x86_64, rustc-1.62) =E2=80=94 PASS, 0 errors, 3=
+ warnings, 0 section mismatches
+
+Warnings:
+    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x28: relocation to !END=
+BR: relocate_range+0x1eb
+    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x3e: relocation to !END=
+BR: relocate_range+0x76
+    vmlinux.o: warning: objtool: lkdtm_UNSET_SMEP+0xcc: relocation to !ENDB=
+R: native_write_cr4+0x4
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+rust (x86_64, rustc-1.62) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+rust-samples (x86_64, rustc-1.62) =E2=80=94 PASS, 0 errors=
+, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
 x86_64_defconfig+x86-chromebook (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, =
 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors=
+, 0 warnings, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----

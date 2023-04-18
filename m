@@ -2,58 +2,56 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 762126E6C14
-	for <lists+linux-next@lfdr.de>; Tue, 18 Apr 2023 20:29:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7829B6E6C22
+	for <lists+linux-next@lfdr.de>; Tue, 18 Apr 2023 20:34:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232081AbjDRS3n (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 18 Apr 2023 14:29:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56590 "EHLO
+        id S232697AbjDRSew (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 18 Apr 2023 14:34:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230290AbjDRS3m (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 18 Apr 2023 14:29:42 -0400
+        with ESMTP id S232693AbjDRSev (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 18 Apr 2023 14:34:51 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11A9B9007;
-        Tue, 18 Apr 2023 11:29:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE0505FD2;
+        Tue, 18 Apr 2023 11:34:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A368D637F3;
-        Tue, 18 Apr 2023 18:29:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A74FC433D2;
-        Tue, 18 Apr 2023 18:29:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 882CF637F5;
+        Tue, 18 Apr 2023 18:34:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 074A4C433EF;
+        Tue, 18 Apr 2023 18:34:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681842581;
-        bh=8EF/b6rFEqY18fb5qJviLJjMaViEY5I0RMFUi25++jY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=N6Ua9lozDUX+VtIi5y1RT1zzlKZd5EN9A+VUZna09GR6kyCpeZOJ7PxApwwBCdlLq
-         YJmVFOjM7+dx2foTIuJm+Ymm+jln1k+s7SnRHzRrqW4JDNLGjgyI4NCMTHt34N7Ug1
-         A66IY3AY3mwEWc1l55FV7O2pbDamDBO4Xi+aAxB2sn+eJeWJYtThYJWzbRjqUdQ1SS
-         NCLj6PkUPPTyla8S/0j1jyUJtYIgKxfGFbWkdzUtt/j/ludJE1VTvo8pcNZowd0YST
-         mM9nge6LlHx6LvWqVgkcuyTnWio2jd0V7d2CwkkpJqqnJi5ek7qEenrbFop2tOQL6Q
-         bEjRAMUpdK1Yg==
-Date:   Tue, 18 Apr 2023 11:29:38 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Dave Airlie <airlied@redhat.com>,
+        s=k20201202; t=1681842890;
+        bh=SeVwh5A9aJ9SlglUnJ0cjP75eIubcOPUJMDYzYkuyBo=;
+        h=Date:From:To:Subject:References:In-Reply-To:From;
+        b=aGfvXLlNQ5Yj8NvglyGbv8AVjndyFeloF3Y/mP0BEptNYBuO1xYHSF4XR/yEwVSdT
+         0f4MlVcHXMDRK7MBCfqU6ZPuUPNqtk8kR0I6f18LavmMIxoESRnIeYaVtv0RfL94am
+         kCEfOC41J6MK71yGTzyjj3OAcRJukqOn3eh7pxtKrwSbULrb65sIQpTth5F0EFK3is
+         U+fc7cBNAButisaGA63tg7D1FLmH6OS9YAiCmtsq/6REaCLMZKRWJqf19r7dhi9qTB
+         0i7Spx/CZTOW3ON9wEzcZVWC41MhzTpvydld3MRNokbUQRkTcExlnaXfgS7N9FvRfz
+         lkqLCYGEhmmww==
+Date:   Tue, 18 Apr 2023 19:34:44 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Intel Graphics <intel-gfx@lists.freedesktop.org>,
         DRI <dri-devel@lists.freedesktop.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        PowerPC <linuxppc-dev@lists.ozlabs.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Harry Wentland <harry.wentland@amd.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the drm tree with the powerpc tree
-Message-ID: <20230418182938.GA2066635@dev-arch.thelio-3990X>
-References: <20230412112213.59365041@canb.auug.org.au>
- <20230413184725.GA3183133@dev-arch.thelio-3990X>
- <2d69ba0a-b12f-4bd1-83c5-d7c01ceec4e8@sirena.org.uk>
- <20230418182145.GA1392657@dev-arch.thelio-3990X>
- <57051c9d-aba4-4c47-bdaf-f7230dbab69a@sirena.org.uk>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>
+Subject: Re: linux-next: manual merge of the drm-misc tree with the mm-stable
+ tree
+Message-ID: <8c90b4db-3075-4275-bea8-01f501b00885@sirena.org.uk>
+References: <20230414125913.851920-1-broonie@kernel.org>
+ <ZDuqut+8BKjMXblJ@phenom.ffwll.local>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Dl9k+y2vnho49Hoq"
 Content-Disposition: inline
-In-Reply-To: <57051c9d-aba4-4c47-bdaf-f7230dbab69a@sirena.org.uk>
+In-Reply-To: <ZDuqut+8BKjMXblJ@phenom.ffwll.local>
+X-Cookie: Just to have it is enough.
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -64,25 +62,32 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Apr 18, 2023 at 07:25:00PM +0100, Mark Brown wrote:
-> On Tue, Apr 18, 2023 at 11:21:45AM -0700, Nathan Chancellor wrote:
-> > On Fri, Apr 14, 2023 at 05:55:10PM +0100, Mark Brown wrote:
-> 
-> > > Done.
-> 
-> > Thanks a lot, sorry for not saying it sooner! It looks like this
-> > regressed in next-20230417 and next-20230418 though.
-> 
-> Someone sent a mail saying they thought they'd fixed the DRM tree - is
-> that not the case?
 
-Does not seem like it:
+--Dl9k+y2vnho49Hoq
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-$ git show -s --format='%h ("%s")'
-67d5d9f013d6 ("Add linux-next specific files for 20230418")
+On Sun, Apr 16, 2023 at 09:58:50AM +0200, Daniel Vetter wrote:
 
-$ git grep DRM_AMD_DC_DCN
-drivers/gpu/drm/amd/display/Kconfig:    select DRM_AMD_DC_DCN if (X86 || (PPC64 && ALTIVEC) || (ARM64 && KERNEL_MODE_NEON && !CC_IS_CLANG))
+> Note there was a ppc compile fail, which is why we pushed the ttm revert.
+> That /should/ be fixed now, but would be good if you can confirm?
 
-Cheers,
-Nathan
+According to Nathan (CCed) there's still issues with the interaction
+with the PowerPC tree.
+
+--Dl9k+y2vnho49Hoq
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQ+4sMACgkQJNaLcl1U
+h9DGMQf+LkWF7rgQeUihBV3DSNnLDVzuJWjMjb+nORsV1I4ys/Y5fN1hpEOwj0yS
+J6a+Xdu8F+CMZEjbUv4U91LShNZPOLRYAJpVxSW5TEpzx4/uE4/jhbGJlvt84vwN
+XRzfmUNgbQBmdUnDtsZ1RVVwgR7A1E+b3UeTPs4lqvsZxga6B/cixLMb+xxGaIRF
+6AWMfRT4HPCGCBy2I4T0qAHyTx0EG1ABonZ5hMHDmvNjzLhix+mC0lgUAeaVwUli
+VHhOqNVDPbuq/R9KPleCY3nWoW1b7AEsG7pobLuEvhiUjzNZMVz7e/5sziGOAR47
+Ptgj2bQduqikgcMGLCI+jpthiyxhkA==
+=oIM3
+-----END PGP SIGNATURE-----
+
+--Dl9k+y2vnho49Hoq--

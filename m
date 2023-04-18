@@ -2,69 +2,135 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 706A76E58B8
-	for <lists+linux-next@lfdr.de>; Tue, 18 Apr 2023 07:44:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FB656E5959
+	for <lists+linux-next@lfdr.de>; Tue, 18 Apr 2023 08:22:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229980AbjDRFn6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 18 Apr 2023 01:43:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38158 "EHLO
+        id S230311AbjDRGWk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 18 Apr 2023 02:22:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbjDRFn5 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 18 Apr 2023 01:43:57 -0400
-X-Greylist: delayed 11861 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 17 Apr 2023 22:43:56 PDT
-Received: from mail.peterfykh.hu (mail.peterfykh.hu [84.206.67.96])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1604F423B;
-        Mon, 17 Apr 2023 22:43:56 -0700 (PDT)
-Received: from mail.peterfykh.hu (localhost [127.0.0.1])
-        by mail.peterfykh.hu (Postfix) with ESMTP id 84E041177;
-        Tue, 18 Apr 2023 01:57:45 +0200 (CEST)
+        with ESMTP id S230493AbjDRGWS (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 18 Apr 2023 02:22:18 -0400
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD8E96E93;
+        Mon, 17 Apr 2023 23:21:52 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id 71F05320095A;
+        Tue, 18 Apr 2023 02:21:46 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Tue, 18 Apr 2023 02:21:47 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1681798906; x=1681885306; bh=YT
+        A83JB8NZJ0cEtw5geG3dWiLcQH0r4iV18W0+fd9HQ=; b=7j8LPbe6kwjAN3vbit
+        veOsBwtLXEmetjTSRB3ZRSy6acPEpMIAyWSKzvA9BsNBBrUlxxJsJe2u79dY6ZLU
+        QAosfOdJHlIsy9twndZFnOUdzocQ88055EP6+F0i1T48JmT+8Wv/KhEsEsxW+vUm
+        lOgGAyC3wyrh+GB2iNLzcr8CCUMUs33JcqUidcJk+ded6nQa2eMXpkoW86SztTh4
+        UTiebyOXtcyP8P78MZS8mpcVyKO5GLx4OawBpX7nZs7W9WiIN77A1Jc2k6aQ80zX
+        i/PDp1MpoElyPEii3yRb8Z6gdI4nha3ljSElGkUHH3iWq4WWos8nEyV5X2U6lLIx
+        5C/Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1681798906; x=1681885306; bh=YTA83JB8NZJ0c
+        Etw5geG3dWiLcQH0r4iV18W0+fd9HQ=; b=ev5PtLbM9gGh8iCgRRNgHueYAxEEQ
+        tS5uwEmqncZ1rsQp8h4JGI7wC6g8lFK4OBwpMqbjO/op8jZWGk5sLlC3F88zA0Bh
+        8dCCmX7AAySYnRXBWt5DXCDbkbreNjXZdSoH1MVFwV3Ifgvig0QEmMO30Enlc2oA
+        SMJ+FVnL2L0CuZjQsNavPkfqS0YeF4hN+Fv3Fh3XqnUyYAJwoaY5l1PSrQJeFy87
+        YP/Nem4aGSYge7MD4Zkemhvp4DEJK95dt8IoQ/3JCacVic1LLg3dA2GOVYLFVBD9
+        aiptO2l+B2F+tjt/PNGVtKJVu1l0+KTXdZBPCqM1bMxJuOr2161Iis9WQ==
+X-ME-Sender: <xms:-TY-ZKtLnRfxm0QdulcXmHBNdx3Z_NnccWv6ZQNrVotdkqofParMGQ>
+    <xme:-TY-ZPf1jrOENeWoqPQ2tB9X0Jz3r00WenkjkCu0e1YYXI_hA_KyCTkVNK72b5SyZ
+    4VW66Rn2T1eyw>
+X-ME-Received: <xmr:-TY-ZFz87s3y-k0OKUp79XL5gw3FS9WVp1-5GbeVWjllcHVNnPLlXsS30A6FXshTR9tfTBDqi6fXrNDbS8BBilKaeb6Vrd_1yYnuGw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeljedguddtlecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgv
+    ghcumffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeehge
+    dvvedvleejuefgtdduudfhkeeltdeihfevjeekjeeuhfdtueefhffgheekteenucevlhhu
+    shhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhroh
+    grhhdrtghomh
+X-ME-Proxy: <xmx:-TY-ZFOHLxedCocud62sRdy39vG3TP_uGtQXUwFfxZJtIGqJWyVXBQ>
+    <xmx:-TY-ZK_0mInvjfmi4TkDyGyMIpe2UjGUhagSOxdyfkdmAAUicHUd5w>
+    <xmx:-TY-ZNUEMNatTmS_ZHDubcAh1kO1weHyldo5UFgsjQUl4OtDJicV1g>
+    <xmx:-jY-ZL0QcjH5gd0HkypDCImFyboIJm9alm-WxqNdVxbySJOFoZK4lg>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 18 Apr 2023 02:21:44 -0400 (EDT)
+Date:   Tue, 18 Apr 2023 08:21:41 +0200
+From:   Greg KH <greg@kroah.com>
+To:     broonie@kernel.org
+Cc:     Jason Gunthorpe <jgg@nvidia.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Joerg Roedel <jroedel@suse.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the driver-core tree with the iommu
+ tree
+Message-ID: <ZD429c4kpvU0AF9v@kroah.com>
+References: <20230417160920.3387706-1-broonie@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Tue, 18 Apr 2023 01:57:45 +0200
-From:   MK <sebeszet@peterfykh.hu>
-To:     undisclosed-recipients:;
-Subject: Hello sunshine, how are you?
-Reply-To: marion.K08@bahnhof.se
-Mail-Reply-To: marion.K08@bahnhof.se
-Message-ID: <73f25765f6b58f5dbcf3a26ec7364a17@peterfykh.hu>
-X-Sender: sebeszet@peterfykh.hu
-User-Agent: Roundcube Webmail/1.2.3
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=peterfykh.hu; s=mail; t=1681775879; bh=EK7FNzGPLm9pid/gmdFBrbarvHS9H0a48U7GgrEq6Uo=; h=MIME-Version:Content-Type:Content-Transfer-Encoding:Date:From:To:Subject:Reply-To:Message-ID; b=uC7WHjqTrFAg10SLXW8+MXT+Qur7exwfyWB2mmR6YGDcxtzadBldDX1N3UpRP30aojbveWRGeFTlU2peS9vUANH7zbFMs4qoDnNMBQzuzQsfWh5lww1DY8W5QfGUmuBFMeNVgffcdOjeQAMphdEqLaKEZ7SaH5Ij5Ylepqp/rYo=
-X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230417160920.3387706-1-broonie@kernel.org>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-I am sorry to bother you and intrude your privacy. I am single,
-  lonely and in need of a caring, loving and romantic companion.
+On Mon, Apr 17, 2023 at 05:09:20PM +0100, broonie@kernel.org wrote:
+> Hi all,
+> 
+> Today's linux-next merge of the driver-core tree got a conflict in:
+> 
+>   include/linux/iommu.h
+> 
+> between commit:
+> 
+>   f7f9c054a227a ("iommu: Remove iommu_group_get_by_id()")
+> 
+> from the iommu tree and commit:
+> 
+>   b18d0a0f92a8f ("iommu: make the pointer to struct bus_type constant")
+> 
+> from the driver-core tree.
+> 
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+> 
+> diff --cc include/linux/iommu.h
+> index ad238d6e4677b,0fd4e6734d5b2..0000000000000
+> --- a/include/linux/iommu.h
+> +++ b/include/linux/iommu.h
+> @@@ -455,11 -455,12 +455,11 @@@ static inline const struct iommu_ops *d
+>   	return dev->iommu->iommu_dev->ops;
+>   }
+>   
+> - extern int bus_iommu_probe(struct bus_type *bus);
+> - extern bool iommu_present(struct bus_type *bus);
+> + extern int bus_iommu_probe(const struct bus_type *bus);
+> + extern bool iommu_present(const struct bus_type *bus);
+>   extern bool device_iommu_capable(struct device *dev, enum iommu_cap cap);
+>   extern bool iommu_group_has_isolated_msi(struct iommu_group *group);
+> - extern struct iommu_domain *iommu_domain_alloc(struct bus_type *bus);
+> + extern struct iommu_domain *iommu_domain_alloc(const struct bus_type *bus);
+>  -extern struct iommu_group *iommu_group_get_by_id(int id);
+>   extern void iommu_domain_free(struct iommu_domain *domain);
+>   extern int iommu_attach_device(struct iommu_domain *domain,
+>   			       struct device *dev);
 
-I am a secret admirer and would like to explore the opportunity to
-learn more about each other. I know it is strange to contact you
-this way and I hope you can forgive me. I am a shy person and
-this is the only way I know I could get your attention. I just want
-to know what you think and my intention is not to offend you.
-I hope we can be friends if that is what you want, although I wish
-to be more than just a friend. I know you have a few questions to
-ask and I hope I can satisfy some of your curiosity with a few
-answers.
+Merge looks good to me, thanks!
 
-I believe in the saying that 'to the world you are just one person,
-but to someone special you are the world'. All I want is love,
-romantic care and attention from a special companion which I am
-hoping would be you.
-
-I hope this message will be the beginning of a long term
-communication between us, simply send a reply to this message, it
-will make me happy.
-
-
-Hugs and kisses,
-
-Marion.
+greg k-h

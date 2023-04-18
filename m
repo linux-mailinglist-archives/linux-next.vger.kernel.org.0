@@ -2,100 +2,86 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 362556E6B5D
-	for <lists+linux-next@lfdr.de>; Tue, 18 Apr 2023 19:48:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A7896E6C01
+	for <lists+linux-next@lfdr.de>; Tue, 18 Apr 2023 20:21:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231769AbjDRRsP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 18 Apr 2023 13:48:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57192 "EHLO
+        id S232641AbjDRSVv (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 18 Apr 2023 14:21:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232081AbjDRRsL (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 18 Apr 2023 13:48:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54F73D31E;
-        Tue, 18 Apr 2023 10:48:07 -0700 (PDT)
+        with ESMTP id S232642AbjDRSVu (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 18 Apr 2023 14:21:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0ACDB464;
+        Tue, 18 Apr 2023 11:21:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D2E0263788;
-        Tue, 18 Apr 2023 17:48:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B1A7C43443;
-        Tue, 18 Apr 2023 17:48:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5889F637DB;
+        Tue, 18 Apr 2023 18:21:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27916C433D2;
+        Tue, 18 Apr 2023 18:21:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681840086;
-        bh=lfhqBR0oM0A06ndB+wOoCWZ5NaBQxpdkDt3qBkaXjYo=;
-        h=From:To:Cc:Subject:Date:From;
-        b=SmZDHLo8rU4Cq5GSG6XqfA9SKCj65hXhCUVsTOkim4wjeKXGpmiQ5Hq77/ozIKVKZ
-         vDKKbeunl9hk6shjkRY9ao5Ux+e3gc1kbdDmagfbwVUeE++OAbbeZmK+EnvRmrrQpr
-         tjZvHqRdMCiwcFtMABx2t3o5Y/J/mnJZ65K8cTkOQpEoQ63/LRuim4CC9j7JV9ns5e
-         mCYggOTf4xWKPnF62rQ3/NIHk4JSyjRPgJr7EqambqGCn8pFfeOyEYQAg+nlF7yqfu
-         YRpZkVwQWtoTdZKAQICr3zQfTDom3wGMb2vJJutLK16fN0UNNwoUJQTgvUJhO8/tnD
-         9itXTqvTjzSHA==
-From:   broonie@kernel.org
-To:     Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: Tree for Apr 18
-Date:   Tue, 18 Apr 2023 18:48:01 +0100
-Message-Id: <20230418174801.118409-1-broonie@kernel.org>
-X-Mailer: git-send-email 2.30.2
+        s=k20201202; t=1681842107;
+        bh=fMVjHMGHdpVVTqAnb5vzPaJx9vDQalTucSaWG0SBO9I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=eC6qMqdwtVcKihRXLrTBp7pb5nBEwR95sbutowsfBcTGq858TqLYX+G81H6OmVhFJ
+         eGeF16z1nV5TlFf7Z0ihVovLmnRU+LfNcLkrjupfE1fAZKExjS4yUbfBkHE09mBZmb
+         1Qt4BosAvscnQPLKsdH8+4Jjb//CEwDv8zpx4gbFYHUGJC02Olo1roUwR0+7NvzSXv
+         uSeqtwk0OY4ViKcMfZbDPQblFwA7AWWOu2bULXCBcDZ5p0evafPCFI7BC5BHEZPgHQ
+         qLCITRmBmR1CobAeAUCKMZ4fEVPesa1yanHa/FB4YzXYThssgcHDGK6PxDUqG2xVxQ
+         rYfYc9dKgkKCg==
+Date:   Tue, 18 Apr 2023 11:21:45 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Dave Airlie <airlied@redhat.com>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        PowerPC <linuxppc-dev@lists.ozlabs.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the drm tree with the powerpc tree
+Message-ID: <20230418182145.GA1392657@dev-arch.thelio-3990X>
+References: <20230412112213.59365041@canb.auug.org.au>
+ <20230413184725.GA3183133@dev-arch.thelio-3990X>
+ <2d69ba0a-b12f-4bd1-83c5-d7c01ceec4e8@sirena.org.uk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        LOCALPART_IN_SUBJECT,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2d69ba0a-b12f-4bd1-83c5-d7c01ceec4e8@sirena.org.uk>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi all,
+On Fri, Apr 14, 2023 at 05:55:10PM +0100, Mark Brown wrote:
+> On Thu, Apr 13, 2023 at 11:47:25AM -0700, Nathan Chancellor wrote:
+> > On Wed, Apr 12, 2023 at 11:22:13AM +1000, Stephen Rothwell wrote:
+> 
+> >  	select SND_HDA_COMPONENT if SND_HDA_CORE
+> >  	# !CC_IS_CLANG: https://github.com/ClangBuiltLinux/linux/issues/1752
+> > -	select DRM_AMD_DC_DCN if (X86 || (PPC64 && ALTIVEC) || (ARM64 && KERNEL_MODE_NEON && !CC_IS_CLANG))
+> > +	select DRM_AMD_DC_FP if (X86 || (PPC64 && ALTIVEC) || (ARM64 && KERNEL_MODE_NEON && !CC_IS_CLANG))
+> >  	help
+> >  	  Choose this option if you want to use the new display engine
+> >  	  support for AMDGPU. This adds required support for Vega and
+> 
+> > Please consider resolving this in a future -next update, I was rather
+> > surprised that my AMD test machine's graphical output was not working
+> > until I noticed the configuration difference :)
+> 
+> Done.
 
-Changes since 20230417:
+Thanks a lot, sorry for not saying it sooner! It looks like this
+regressed in next-20230417 and next-20230418 though.
 
-The tip tree gained a conflict against the s390 tree.
-
-The hyperv-next tree gained two build failures, I used the 20230417
-version instead.
-
-Non-merge commits (relative to Linus' tree): 11679
- 11983 files changed, 785814 insertions(+), 408093 deletions(-)
-
-----------------------------------------------------------------------------
-
-I have created today's linux-next tree at
-git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-(patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
-are tracking the linux-next tree using git, you should not use "git pull"
-to do so as that will try to merge the new linux-next release with the
-old one.  You should use "git fetch" and checkout or reset to the new
-master.
-
-You can see which trees have been included by looking in the Next/Trees
-file in the source.  There is also the merge.log file in the Next
-directory.  Between each merge, the tree was built with a ppc64_defconfig
-for powerpc, an allmodconfig for x86_64, a multi_v7_defconfig for arm
-and a native build of tools/perf. After the final fixups (if any), I do
-an x86_64 modules_install followed by builds for x86_64 allnoconfig,
-powerpc allnoconfig (32 and 64 bit), ppc44x_defconfig, allyesconfig
-and pseries_le_defconfig and i386, arm64, s390, sparc and sparc64
-defconfig and htmldocs. And finally, a simple boot test of the powerpc
-pseries_le_defconfig kernel in qemu (with and without kvm enabled).
-
-Below is a summary of the state of the merge.
-
-I am currently merging 357 trees (counting Linus' and 102 trees of bug
-fix patches pending for the current merge release).
-
-Stats about the size of the tree over time can be seen at
-http://neuling.org/linux-next-size.html .
-
-Status of my local build tests will be at
-http://kisskb.ellerman.id.au/linux-next .  If maintainers want to give
-advice about cross compilers/configs that work, we are always open to add
-more builds.
-
-Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
-Gortmaker for triage and bug fixes.
+Cheers,
+Nathan

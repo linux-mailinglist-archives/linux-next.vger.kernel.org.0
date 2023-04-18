@@ -2,113 +2,155 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 839356E5A28
-	for <lists+linux-next@lfdr.de>; Tue, 18 Apr 2023 09:14:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB8516E5CA6
+	for <lists+linux-next@lfdr.de>; Tue, 18 Apr 2023 10:55:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229958AbjDRHOZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 18 Apr 2023 03:14:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33110 "EHLO
+        id S231177AbjDRIz4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 18 Apr 2023 04:55:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229862AbjDRHOZ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 18 Apr 2023 03:14:25 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0718A1BF6;
-        Tue, 18 Apr 2023 00:14:23 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 9D4525C01DB;
-        Tue, 18 Apr 2023 03:14:21 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Tue, 18 Apr 2023 03:14:21 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1681802061; x=1681888461; bh=tj
-        9be7nNUCMHRkvOqJq/0xDQKxsyBGkqr8T+b7+cjOA=; b=Lzyr/c34Vx91sSTvim
-        bORybuSDuXjV96/N6Eiesi0z4yUXcXsNNYQNBtRY1WjQGmZsLcwqgMeE12+y+jMg
-        gqBdZjougKKo6HEpVQDpiLpSGP2uEf7/8XuI/sKp2fSWtbDUX7NdZovXM9Gy5Ooa
-        so0GHf0LWQEVVooYFCUdCJJgyzgqpp9mEJdeZPH11nkUw5H18RuyxnRL9STf+GZ+
-        Wq5Iz+CClTC7jCHIZX2+lMuJAxK5nEscMYiAy6DHXxZHXVIzJH0o1Sy55oK72Y3P
-        iyc26O85LYnEDXAHAPK3aYJyhH5WpkGdXJpDYbXDRKdQhQfqy9fPASefJnC5YkC2
-        Jz1w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1681802061; x=1681888461; bh=tj9be7nNUCMHR
-        kvOqJq/0xDQKxsyBGkqr8T+b7+cjOA=; b=L3gJ5JR+CO4VfxZlak4hRQftJuABy
-        IR6KOPdly7hU6QqI6Ecn8CKmws6TzEByjuvOawGBcn1b7Ruzb7x2SSeaUknuYrw0
-        vCGGAJiOjA3ZhmZRZF4Pj7vLzZRtXGIhGE3gsFSl4IGDSYTg5L7gwE0txz/rMAeC
-        O0XeWEFICdw8WgQCGhpWFn9dMVyM5gr7DiaSdOOaayL2ITMR/wDI6xm3TMGFJJ6P
-        KYjMSF9+f7JuDf5zscPI4g2vl4sUJxbaODzwb9DzwdWqyQuc+b13VTTt3mTXkAUH
-        JikjJIjmiZhNBOjWOaNFYwXrIyJoX+awKBxZqmu+M5jst7UG3ioZzzJcw==
-X-ME-Sender: <xms:TEM-ZMiCP6zIgcOMbTX3uasIWAIyVtjdwtFI-RRJ4u7jW8L6ysZRJQ>
-    <xme:TEM-ZFB74K4-z0ZnrRQziCJtmn_LoBsLNSBncYFyFFZ5K9OvAxWT0qSPvj9e2pwiU
-    5PGFW-j_T23LTiYn54>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeljedguddulecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeevhfffledtgeehfeffhfdtgedvheejtdfgkeeuvefgudffteettdekkeeu
-    feehudenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:TEM-ZEG5fikazDRGC6ggVe0f8Ex1Pj6Ha6jDDqVnINInLj9Zzygn2Q>
-    <xmx:TEM-ZNSyNPAmV8qcucisoKSZVZc47lJepoIg4mcdnqbp8A_1aafOtQ>
-    <xmx:TEM-ZJxgzo5B7wf28A_HbR2t8BHjqvhNPzzNIKwzuNzb1kLFFjMMAA>
-    <xmx:TUM-ZIx5n_o6sZxe4fdaHVxBvax6V6Ps2grbUatmmVXQYb9jhEzEgw>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id B2F84B60086; Tue, 18 Apr 2023 03:14:20 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-372-g43825cb665-fm-20230411.003-g43825cb6
-Mime-Version: 1.0
-Message-Id: <ae159daf-28cb-4d48-9ae8-2f2d1dd5970b@app.fastmail.com>
-In-Reply-To: <CA+G9fYv70wipaANT2Yau4xjfVHx1muyV-Eae8F8atoAV4cJHxw@mail.gmail.com>
-References: <CA+G9fYv70wipaANT2Yau4xjfVHx1muyV-Eae8F8atoAV4cJHxw@mail.gmail.com>
-Date:   Tue, 18 Apr 2023 09:13:50 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Naresh Kamboju" <naresh.kamboju@linaro.org>,
-        linux-next <linux-next@vger.kernel.org>,
-        "Linux ARM" <linux-arm-kernel@lists.infradead.org>,
-        "open list" <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org, linux-mm <linux-mm@kvack.org>
-Cc:     "Andrew Morton" <akpm@linux-foundation.org>,
-        "Stephen Rothwell" <sfr@canb.auug.org.au>,
-        "Ard Biesheuvel" <ardb@kernel.org>,
-        "Anders Roxell" <anders.roxell@linaro.org>
-Subject: Re: next: armv7: kernel BUG at mm/slub.c:4240! - PC is at
- __kmem_cache_create+0x580/0x588
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        with ESMTP id S229887AbjDRIzz (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 18 Apr 2023 04:55:55 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DBD3729D;
+        Tue, 18 Apr 2023 01:55:48 -0700 (PDT)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33I7P2ME013943;
+        Tue, 18 Apr 2023 08:55:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=U6WUPreyjcO4opuyIz4xH9p+gbFh6AifVWqgRrcvYOc=;
+ b=ghKEhwZXC3CIeMGSfNuSKQRyy7i4FEuTzs16Kn2JWGg/RhDz5liOPCe8q+C0eof3OBcg
+ FREw5KpRvR2gUVPiegL8muJFOhI5vyRLUVdlY2XjL+WyNREJCkRKgFOblJ4JXx4BpCjH
+ 9nAXH1gXeRFiKGsMpV9oWaHMgWswOeC2h8TR8GPpqoJLOWPZTC1gYt3TzcunJvap51Od
+ MOwXeZewhq6AswKf+r9gBiuK2E10BAgsgu5DitJ0pmnTl9GKXm9iSIXvKGyZh4VPbhH6
+ MDGuo4bTW+Dxzbc2A5+8d2n/3udjfMepNSiB2EGrSqDFhjOkpalD2SZvVJpUIsz1aWHi nA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3q1psxaj09-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 18 Apr 2023 08:55:27 +0000
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 33I8d1oc026435;
+        Tue, 18 Apr 2023 08:55:27 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3q1psxahy3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 18 Apr 2023 08:55:27 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 33I6YjC3004335;
+        Tue, 18 Apr 2023 08:55:24 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3pyk6fhvww-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 18 Apr 2023 08:55:24 +0000
+Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
+        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 33I8tLRi13435536
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 18 Apr 2023 08:55:21 GMT
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2C81020043;
+        Tue, 18 Apr 2023 08:55:21 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 013E120040;
+        Tue, 18 Apr 2023 08:55:21 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 18 Apr 2023 08:55:20 +0000 (GMT)
+From:   Thomas Richter <tmricht@linux.ibm.com>
+To:     broonie@kernel.org, hca@linux.ibm.com, sfr@canb.auug.org.au,
+        liam.howlett@oracle.com, acme@redhat.com, ast@kernel.org,
+        bpf@vger.kernel.org, linux-next@vger.kernel.org,
+        quentin@isovalent.com
+Cc:     Thomas Richter <tmricht@linux.ibm.com>
+Subject: [PATCH] bpftool: fix broken compile on s390 for linux-next repository
+Date:   Tue, 18 Apr 2023 10:55:16 +0200
+Message-Id: <20230418085516.1104514-1-tmricht@linux.ibm.com>
+X-Mailer: git-send-email 2.37.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: b9aBxCBUHP3EKtS2jXtQ1nL2sd7Un27v
+X-Proofpoint-ORIG-GUID: 1DXDd7M9cNp-HQKMKlLpykQ8NjnGXVlL
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-18_04,2023-04-17_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
+ lowpriorityscore=0 malwarescore=0 bulkscore=0 phishscore=0 impostorscore=0
+ adultscore=0 mlxscore=0 priorityscore=1501 clxscore=1011 spamscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304180074
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Apr 18, 2023, at 08:51, Naresh Kamboju wrote:
+Commit 9fd496848b1c ("bpftool: Support inline annotations when dumping the CFG of a program")
+breaks the build of the perf tool on s390 in the linux-next repository.
+Here is the make output:
 
-> <0>[    0.000000]  __kmem_cache_create from create_boot_cache+0x9c/0xc4
-> <0>[    0.000000]  create_boot_cache from kmem_cache_init+0x8c/0x150
-> <0>[    0.000000]  kmem_cache_init from mm_core_init+0x34/0x44
-> <0>[    0.000000]  mm_core_init from start_kernel+0x18c/0x3b4
-> <0>[    0.000000]  start_kernel from 0x0
-> <0>[    0.000000] Code: e3100801 1affff5b eaffff62 e7f001f2 (e7f001f2)
-> <4>[    0.000000] ---[ end trace 0000000000000000 ]---
-> <0>[    0.000000] Kernel panic - not syncing: Attempted to kill the idle task!
-> <0>[    0.000000] ---[ end Kernel panic - not syncing: Attempted to
-> kill the idle task! ]---
->
+make -C tools/perf
+....
+btf_dumper.c: In function 'dotlabel_puts':
+DEBUG: btf_dumper.c:838:25: error: '__fallthrough' undeclared \
+		(first use in this function); did you mean 'fallthrough'?
+DEBUG:   838 |                         __fallthrough;
+DEBUG:       |                         ^~~~~~~~~~~~~
+DEBUG:       |                         fallthrough
+DEBUG: btf_dumper.c:838:25: note: each undeclared identifier is reported \
+		only once for each function it appears in
+DEBUG: btf_dumper.c:837:25: warning: this statement may fall through \
+                [-Wimplicit-fallthrough=]
+DEBUG:   837 |                         putchar('\\');
+DEBUG:       |                         ^~~~~~~~~~~~~
+DEBUG: btf_dumper.c:839:17: note: here
+DEBUG:   839 |                 default:
+DEBUG:       |                 ^~~~~~~
+DEBUG: make[3]: *** [Makefile:247: /builddir/build/BUILD/kernel-6.2.fc37/\
+		        linux-6.2/tools/perf/util/bpf_skel/ \
+		        .tmp/bootstrap/btf_dumper.o] Error 1
 
-Sorry about this regression. Andrew picked up my follow-up fix today,
-should work again tomorrow:
+The compile fails because symbol __fallthrough unknown, but symbol
+fallthrough is known and works fine.
 
-https://lore.kernel.org/all/20230417185525.1420-1-sj@kernel.org/T/#u
-https://lore.kernel.org/all/20230418013829.5957EC433D2@smtp.kernel.org/
+Fix this and replace __fallthrough by fallthrough.
 
-     Arnd
+With this change, the compile works.
+
+Output after:
+
+ # make -C tools/perf
+ ....
+ CC      util/bpf-filter.o
+ CC      util/bpf-filter-flex.o
+ LD      util/perf-in.o
+ LD      perf-in.o
+ LINK    perf
+ make: Leaving directory '/root/mirror-linux-next/tools/perf'
+ #
+
+Fixes: 9fd496848b1c ("bpftool: Support inline annotations when dumping the CFG of a program")
+Signed-off-by: Thomas Richter <tmricht@linux.ibm.com>
+---
+ tools/bpf/bpftool/btf_dumper.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/bpf/bpftool/btf_dumper.c b/tools/bpf/bpftool/btf_dumper.c
+index 6c5e0e82da22..1b7f69714604 100644
+--- a/tools/bpf/bpftool/btf_dumper.c
++++ b/tools/bpf/bpftool/btf_dumper.c
+@@ -835,7 +835,7 @@ static void dotlabel_puts(const char *s)
+ 		case '|':
+ 		case ' ':
+ 			putchar('\\');
+-			__fallthrough;
++			fallthrough;
+ 		default:
+ 			putchar(*s);
+ 		}
+-- 
+2.39.2
+

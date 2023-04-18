@@ -2,64 +2,64 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF1D96E60B4
-	for <lists+linux-next@lfdr.de>; Tue, 18 Apr 2023 14:09:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF4B76E63F2
+	for <lists+linux-next@lfdr.de>; Tue, 18 Apr 2023 14:44:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231195AbjDRMJD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 18 Apr 2023 08:09:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42250 "EHLO
+        id S231947AbjDRMow (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 18 Apr 2023 08:44:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230123AbjDRMIh (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 18 Apr 2023 08:08:37 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEAC4B763
-        for <linux-next@vger.kernel.org>; Tue, 18 Apr 2023 05:07:02 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-63b5312bd4fso9693387b3a.0
-        for <linux-next@vger.kernel.org>; Tue, 18 Apr 2023 05:07:02 -0700 (PDT)
+        with ESMTP id S231466AbjDRMos (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 18 Apr 2023 08:44:48 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6781F19A6
+        for <linux-next@vger.kernel.org>; Tue, 18 Apr 2023 05:44:44 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id 41be03b00d2f7-51efefe7814so826154a12.3
+        for <linux-next@vger.kernel.org>; Tue, 18 Apr 2023 05:44:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1681819622; x=1684411622;
+        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1681821883; x=1684413883;
         h=from:to:subject:content-transfer-encoding:mime-version:date
          :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=p2Ncxe9dqdeB6v9W/JYXxYlVuRs7EWB9k8/Pseebw0w=;
-        b=4phvKKy22UsJJGmJgqlHcV9BoGjlrB7+2rOTPhn3kyD9Sggdkui5E0uFrbgWDyENQB
-         lRmzrvZZI+eLQ4Ws5UPSHq7NgxGqJh+mo25n3L5MxVTvMhoL2li0q2U0X4l0vtrhEpqD
-         3eKBitPCApJxgwMd8RJm4ivHFfFaEpooNyoh+k/dwQvicwS1YHYrGwJ/d5APItQIWB1e
-         uQjuXwRaxIy+32HRkwIz02cOjwIjn9B398sbFzGULabq/UCLmdRxQORnvrwnLfIfyNbB
-         /Q8mYe1CfNH/b/rKG6/DnHQtACoQpfFeYKyzhw18suV7i2LOlOCKFH147yR4xibvQCgb
-         PUZg==
+        bh=JrCekHpzGIGX2FFvRUDX+lh2PYV27Y3f6D7Rn+Nm4Ao=;
+        b=ao2iZqfyZPjLI/1PRQ1IP5HbFx1SjMOdsxd1lGppjtGk8ItqwiFlFraT94L32SDmnP
+         cWpsmCeWkjh1Fev6p90O3SuPimAg98hoGRUOHmbJ+ITe9/yYAGgu28MX+Y5VHGc4rTRr
+         nBoM1EOwfyOL4yTpAGxWvTv6DtT0WVX4IGM9UI8VnGxPDRUqokcMFZLZE3WQ2eyJIRQQ
+         iZIf0LT8dzFSUBneWOMLpTuRPQAxeQSRPdgFe4tG7pwg1tPFHze9bWKa3QhSpijrMGbo
+         HNQicXLaOCQoJDMMYsPK1cgi063gkUq295kd2CkoObJhql1P1zQ9uzwkyZxfZo/sj/eY
+         5Chw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681819622; x=1684411622;
+        d=1e100.net; s=20221208; t=1681821883; x=1684413883;
         h=from:to:subject:content-transfer-encoding:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=p2Ncxe9dqdeB6v9W/JYXxYlVuRs7EWB9k8/Pseebw0w=;
-        b=RqQgQhDNYCMIrVP9ficPrROGkjoH06DodPrcinAID5M9SvsH06gPxDu9YypqDzmn28
-         8fOXz9ZFJQyfq72DtNHz6QBG+mIzzoT0aZrv/8bX7T0v0ViwdTlIIsCsQXEtXuK/2I8E
-         b+l+pBr1lPFCv6GrMyeOJQo+2Z7f7ePn6Mwm8ztnm/rXY6IwNpdD4O7g/SU6gzxu8sv1
-         tZcWhpqAmEutV518p5q2WTx+ncBhQ997kB+1SB7CXTpeiSy9G1vVL937WiWuTCDxKtsh
-         axXBJqwooiZHln/L7wXE7B5FD0I0elhNW+aqhVDTJVNDLeLcnmQTnzbgU1ZS4XgChKWb
-         W+aQ==
-X-Gm-Message-State: AAQBX9fXUPkateWxdQfnxNOyEQG2Vt9pgClKMyVrkW6YtUQ2OTH6WCBO
-        m2cTNZAhypt3Z99EXtP/l8lLsVpMr8Met11AaQRZc9xz
-X-Google-Smtp-Source: AKy350aaBRERG4RAPzhJOQTgbveAt8ge45IAG1fQxGo+pyiv5SGHNnGA9VR4uQXsRgdw2zfRNKFjqw==
-X-Received: by 2002:a17:903:22cc:b0:1a6:3737:750c with SMTP id y12-20020a17090322cc00b001a63737750cmr2081299plg.21.1681819621242;
-        Tue, 18 Apr 2023 05:07:01 -0700 (PDT)
+        bh=JrCekHpzGIGX2FFvRUDX+lh2PYV27Y3f6D7Rn+Nm4Ao=;
+        b=DVjIUr1S/LKaSKjlSDzHq3Fi+HVLlQV1Mumi6bB953g2CXbrCi6rX0eG9uf60i0/0Q
+         LlK25mE2lCCZKuXN9BGDbQtwxjcvHKXRoMnBd8bLgD4tUVOMb8Yw9pwh+H4EnIhmSYzs
+         oj/r8uQLtWjVkLp6LthhNXF2nRI6IcCbV7S3TjfwuPOg42AgATwSGcsIa6HUwTS0ppOs
+         +MEyADXAiLOD6OQiqsiSrnEK/KArjl3Dr1GJ69Blt14LVYDhVNk9kSZCveERp8KTDkUn
+         Ok7TQFz8oDTcOED41bQTyPM1F39pYEwZO++lbH3/RntszJ4Or4+oiyivXIU6CXi49tPk
+         6mJw==
+X-Gm-Message-State: AAQBX9cSVPqc1/6yKpclE2XBfhFiDf91YBOvSUy0DE4xaPoDD1yIYIeS
+        4b/fMvydDqlrNDHLyyqvh8DdfSBpZ0YS2AcS7RYre6r7
+X-Google-Smtp-Source: AKy350bCl3FlNduZkBUdeZZ1Am3MRe3hifpBL/0FKBNM0YJRWa0J5hbdlY4bIGdyb71nwPtK6kyttA==
+X-Received: by 2002:a17:902:7290:b0:1a6:8ed5:428a with SMTP id d16-20020a170902729000b001a68ed5428amr1689567pll.22.1681821882872;
+        Tue, 18 Apr 2023 05:44:42 -0700 (PDT)
 Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id jn12-20020a170903050c00b001a6b42fd5fbsm5962457plb.183.2023.04.18.05.07.00
+        by smtp.gmail.com with ESMTPSA id w3-20020a170902a70300b001a1faeac240sm9470728plq.186.2023.04.18.05.44.42
         for <linux-next@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Apr 2023 05:07:00 -0700 (PDT)
-Message-ID: <643e87e4.170a0220.ae03a.b442@mx.google.com>
-Date:   Tue, 18 Apr 2023 05:07:00 -0700 (PDT)
+        Tue, 18 Apr 2023 05:44:42 -0700 (PDT)
+Message-ID: <643e90ba.170a0220.9ae4b.3f28@mx.google.com>
+Date:   Tue, 18 Apr 2023 05:44:42 -0700 (PDT)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: pending-fixes
+X-Kernelci-Branch: master
 X-Kernelci-Tree: next
-X-Kernelci-Kernel: v6.3-rc7-140-g88d3973741d7
+X-Kernelci-Kernel: next-20230417
 X-Kernelci-Report-Type: build
-Subject: next/pending-fixes build: 178 builds: 4 failed, 174 passed, 7 errors,
- 10 warnings (v6.3-rc7-140-g88d3973741d7)
+Subject: next/master build: 182 builds: 14 failed, 168 passed, 37 errors,
+ 28 warnings (next-20230417)
 To:     linux-next@vger.kernel.org
 From:   "kernelci.org bot" <bot@kernelci.org>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -72,16 +72,16 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes build: 178 builds: 4 failed, 174 passed, 7 errors, 10 wa=
-rnings (v6.3-rc7-140-g88d3973741d7)
+next/master build: 182 builds: 14 failed, 168 passed, 37 errors, 28 warning=
+s (next-20230417)
 
-Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
-rnel/v6.3-rc7-140-g88d3973741d7/
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20230417/
 
 Tree: next
-Branch: pending-fixes
-Git Describe: v6.3-rc7-140-g88d3973741d7
-Git Commit: 88d3973741d77fefd8dec0ee678c9a09269c3006
+Branch: master
+Git Describe: next-20230417
+Git Commit: 4aa1da8d99724f6c0b762b58a71cee7c5e2e109b
 Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
 Built: 8 unique architectures
 
@@ -90,12 +90,33 @@ Build Failures Detected:
 arc:
     haps_hs_smp_defconfig+kselftest: (gcc-10) FAIL
 
+arm64:
+    cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config: (clang-13) =
+FAIL
+    cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+arm64-chrome=
+book: (clang-13) FAIL
+    cros://chromeos-5.10/arm64/chromiumos-mediatek.flavour.config+arm64-chr=
+omebook: (clang-13) FAIL
+    allmodconfig: (clang-17) FAIL
+
 arm:
+    allmodconfig: (clang-17) FAIL
+    allmodconfig: (gcc-10) FAIL
     rpc_defconfig: (gcc-10) FAIL
+
+i386:
+    allmodconfig: (clang-17) FAIL
 
 mips:
     32r2el_defconfig+debug: (gcc-10) FAIL
     decstation_64_defconfig: (gcc-10) FAIL
+
+x86_64:
+    cros://chromeos-5.10/x86_64/chromeos-amd-stoneyridge.flavour.config+x86=
+-chromebook: (clang-13) FAIL
+    cros://chromeos-5.10/x86_64/chromeos-intel-pineview.flavour.config+x86-=
+chromebook: (clang-13) FAIL
+    allmodconfig: (clang-17) FAIL
 
 Errors and Warnings Detected:
 
@@ -103,11 +124,24 @@ arc:
     haps_hs_smp_defconfig+kselftest (gcc-10): 1 error
 
 arm64:
+    allmodconfig (clang-17): 1 error, 1 warning
+    cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config (clang-13): =
+1 error, 1 warning
+    cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+arm64-chrome=
+book (clang-13): 1 error, 1 warning
+    cros://chromeos-5.10/arm64/chromiumos-mediatek.flavour.config+arm64-chr=
+omebook (clang-13): 1 error, 1 warning
+    defconfig (clang-17): 3 warnings
+    defconfig+CONFIG_ARM64_64K_PAGES=3Dy (clang-17): 3 warnings
+    defconfig+arm64-chromebook (clang-13): 3 warnings
 
 arm:
+    allmodconfig (gcc-10): 7 errors, 1 warning
+    allmodconfig (clang-17): 8 errors, 1 warning
     rpc_defconfig (gcc-10): 2 errors
 
 i386:
+    allmodconfig (clang-17): 8 errors, 1 warning
 
 mips:
     fuloong2e_defconfig (gcc-10): 1 error
@@ -121,17 +155,71 @@ sparc:
     allnoconfig (gcc-10): 1 warning
     sparc32_defconfig (gcc-10): 2 warnings
     sparc64_defconfig (gcc-10): 4 warnings
-    sparc64_defconfig+kselftest (gcc-10): 2 warnings
+    sparc64_defconfig+debug (gcc-10): 2 warnings
     tinyconfig (gcc-10): 1 warning
 
 x86_64:
+    allmodconfig (clang-17): 1 error, 1 warning
+    cros://chromeos-5.10/x86_64/chromeos-amd-stoneyridge.flavour.config+x86=
+-chromebook (clang-13): 1 error
+    cros://chromeos-5.10/x86_64/chromeos-intel-pineview.flavour.config+x86-=
+chromebook (clang-13): 1 error
+    x86_64_defconfig+kselftest (rustc-1.62): 1 warning
 
 Errors summary:
 
+    4    kernel/module/stats.c:307:34: error: variable 'len' is uninitializ=
+ed when used here [-Werror,-Wuninitialized]
     4    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=
 =80=98-mhard-float=E2=80=99
+    3    drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:298:6: error: variable =
+'ret' is uninitialized when used here [-Werror,-Wuninitialized]
+    2    sound/soc/codecs/nau8825.c:2826:31: error: overlapping comparisons=
+ always evaluate to false [-Werror,-Wtautological-overlap-compare]
+    2    kernel/module/stats.c:390:20: error: incompatible pointer types pa=
+ssing 'atomic_long_t *' (aka 'atomic_t *') to parameter of type 'const atom=
+ic64_t *' [-Werror,-Wincompatible-pointer-types]
+    2    kernel/module/stats.c:296:29: error: incompatible pointer types pa=
+ssing 'atomic_long_t *' (aka 'atomic_t *') to parameter of type 'const atom=
+ic64_t *' [-Werror,-Wincompatible-pointer-types]
+    2    kernel/module/stats.c:295:34: error: incompatible pointer types pa=
+ssing 'atomic_long_t *' (aka 'atomic_t *') to parameter of type 'const atom=
+ic64_t *' [-Werror,-Wincompatible-pointer-types]
+    2    kernel/module/stats.c:294:36: error: incompatible pointer types pa=
+ssing 'atomic_long_t *' (aka 'atomic_t *') to parameter of type 'const atom=
+ic64_t *' [-Werror,-Wincompatible-pointer-types]
+    2    kernel/module/stats.c:293:31: error: incompatible pointer types pa=
+ssing 'atomic_long_t *' (aka 'atomic_t *') to parameter of type 'const atom=
+ic64_t *' [-Werror,-Wincompatible-pointer-types]
+    2    kernel/module/stats.c:292:28: error: incompatible pointer types pa=
+ssing 'atomic_long_t *' (aka 'atomic_t *') to parameter of type 'const atom=
+ic64_t *' [-Werror,-Wincompatible-pointer-types]
+    2    kernel/module/stats.c:291:29: error: incompatible pointer types pa=
+ssing 'atomic_long_t *' (aka 'atomic_t *') to parameter of type 'const atom=
+ic64_t *' [-Werror,-Wincompatible-pointer-types]
     1    net/bpfilter/main.c:3:10: fatal error: sys/uio.h: No such file or =
 directory
+    1    kernel/module/stats.c:390:20: error: passing argument 1 of =E2=80=
+=98atomic64_read=E2=80=99 from incompatible pointer type [-Werror=3Dincompa=
+tible-pointer-types]
+    1    kernel/module/stats.c:296:29: error: passing argument 1 of =E2=80=
+=98atomic64_read=E2=80=99 from incompatible pointer type [-Werror=3Dincompa=
+tible-pointer-types]
+    1    kernel/module/stats.c:295:34: error: passing argument 1 of =E2=80=
+=98atomic64_read=E2=80=99 from incompatible pointer type [-Werror=3Dincompa=
+tible-pointer-types]
+    1    kernel/module/stats.c:294:36: error: passing argument 1 of =E2=80=
+=98atomic64_read=E2=80=99 from incompatible pointer type [-Werror=3Dincompa=
+tible-pointer-types]
+    1    kernel/module/stats.c:293:31: error: passing argument 1 of =E2=80=
+=98atomic64_read=E2=80=99 from incompatible pointer type [-Werror=3Dincompa=
+tible-pointer-types]
+    1    kernel/module/stats.c:292:28: error: passing argument 1 of =E2=80=
+=98atomic64_read=E2=80=99 from incompatible pointer type [-Werror=3Dincompa=
+tible-pointer-types]
+    1    kernel/module/stats.c:291:29: error: passing argument 1 of =E2=80=
+=98atomic64_read=E2=80=99 from incompatible pointer type [-Werror=3Dincompa=
+tible-pointer-types]
     1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=
 =3D0x'
     1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=
@@ -141,8 +229,18 @@ Warnings summary:
 
     8    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
 -Wcpp]
+    6    drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:216:12: note: initializ=
+e the variable 'ret' to silence this warning
+    4    kernel/module/stats.c:279:18: note: initialize the variable 'len' =
+to silence this warning
+    3    drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:298:6: warning: variabl=
+e 'ret' is uninitialized when used here [-Wuninitialized]
+    3    1 warning generated.
     2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
 tion failed, symbol will not be versioned.
+    1    vmlinux.o: warning: objtool: lkdtm_UNSET_SMEP+0xcc: relocation to =
+!ENDBR: native_write_cr4+0x4
+    1    cc1: all warnings being treated as errors
 
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
@@ -163,23 +261,128 @@ tion mismatches
 
 ---------------------------------------------------------------------------=
 -----
-32r2el_defconfig+kselftest (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warni=
-ngs, 0 section mismatches
+allmodconfig (arm, gcc-10) =E2=80=94 FAIL, 7 errors, 1 warning, 0 section m=
+ismatches
+
+Errors:
+    kernel/module/stats.c:291:29: error: passing argument 1 of =E2=80=98ato=
+mic64_read=E2=80=99 from incompatible pointer type [-Werror=3Dincompatible-=
+pointer-types]
+    kernel/module/stats.c:292:28: error: passing argument 1 of =E2=80=98ato=
+mic64_read=E2=80=99 from incompatible pointer type [-Werror=3Dincompatible-=
+pointer-types]
+    kernel/module/stats.c:293:31: error: passing argument 1 of =E2=80=98ato=
+mic64_read=E2=80=99 from incompatible pointer type [-Werror=3Dincompatible-=
+pointer-types]
+    kernel/module/stats.c:294:36: error: passing argument 1 of =E2=80=98ato=
+mic64_read=E2=80=99 from incompatible pointer type [-Werror=3Dincompatible-=
+pointer-types]
+    kernel/module/stats.c:295:34: error: passing argument 1 of =E2=80=98ato=
+mic64_read=E2=80=99 from incompatible pointer type [-Werror=3Dincompatible-=
+pointer-types]
+    kernel/module/stats.c:296:29: error: passing argument 1 of =E2=80=98ato=
+mic64_read=E2=80=99 from incompatible pointer type [-Werror=3Dincompatible-=
+pointer-types]
+    kernel/module/stats.c:390:20: error: passing argument 1 of =E2=80=98ato=
+mic64_read=E2=80=99 from incompatible pointer type [-Werror=3Dincompatible-=
+pointer-types]
+
+Warnings:
+    cc1: all warnings being treated as errors
 
 ---------------------------------------------------------------------------=
 -----
-allmodconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
-mismatches
-
----------------------------------------------------------------------------=
------
-allmodconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+allmodconfig (arm64, clang-17) =E2=80=94 FAIL, 1 error, 1 warning, 0 sectio=
 n mismatches
 
+Errors:
+    kernel/module/stats.c:307:34: error: variable 'len' is uninitialized wh=
+en used here [-Werror,-Wuninitialized]
+
+Warnings:
+    kernel/module/stats.c:279:18: note: initialize the variable 'len' to si=
+lence this warning
+
 ---------------------------------------------------------------------------=
 -----
-allnoconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
-mismatches
+allmodconfig (arm, clang-17) =E2=80=94 FAIL, 8 errors, 1 warning, 0 section=
+ mismatches
+
+Errors:
+    kernel/module/stats.c:291:29: error: incompatible pointer types passing=
+ 'atomic_long_t *' (aka 'atomic_t *') to parameter of type 'const atomic64_=
+t *' [-Werror,-Wincompatible-pointer-types]
+    kernel/module/stats.c:292:28: error: incompatible pointer types passing=
+ 'atomic_long_t *' (aka 'atomic_t *') to parameter of type 'const atomic64_=
+t *' [-Werror,-Wincompatible-pointer-types]
+    kernel/module/stats.c:293:31: error: incompatible pointer types passing=
+ 'atomic_long_t *' (aka 'atomic_t *') to parameter of type 'const atomic64_=
+t *' [-Werror,-Wincompatible-pointer-types]
+    kernel/module/stats.c:294:36: error: incompatible pointer types passing=
+ 'atomic_long_t *' (aka 'atomic_t *') to parameter of type 'const atomic64_=
+t *' [-Werror,-Wincompatible-pointer-types]
+    kernel/module/stats.c:295:34: error: incompatible pointer types passing=
+ 'atomic_long_t *' (aka 'atomic_t *') to parameter of type 'const atomic64_=
+t *' [-Werror,-Wincompatible-pointer-types]
+    kernel/module/stats.c:296:29: error: incompatible pointer types passing=
+ 'atomic_long_t *' (aka 'atomic_t *') to parameter of type 'const atomic64_=
+t *' [-Werror,-Wincompatible-pointer-types]
+    kernel/module/stats.c:390:20: error: incompatible pointer types passing=
+ 'atomic_long_t *' (aka 'atomic_t *') to parameter of type 'const atomic64_=
+t *' [-Werror,-Wincompatible-pointer-types]
+    kernel/module/stats.c:307:34: error: variable 'len' is uninitialized wh=
+en used here [-Werror,-Wuninitialized]
+
+Warnings:
+    kernel/module/stats.c:279:18: note: initialize the variable 'len' to si=
+lence this warning
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (i386, clang-17) =E2=80=94 FAIL, 8 errors, 1 warning, 0 sectio=
+n mismatches
+
+Errors:
+    kernel/module/stats.c:291:29: error: incompatible pointer types passing=
+ 'atomic_long_t *' (aka 'atomic_t *') to parameter of type 'const atomic64_=
+t *' [-Werror,-Wincompatible-pointer-types]
+    kernel/module/stats.c:292:28: error: incompatible pointer types passing=
+ 'atomic_long_t *' (aka 'atomic_t *') to parameter of type 'const atomic64_=
+t *' [-Werror,-Wincompatible-pointer-types]
+    kernel/module/stats.c:293:31: error: incompatible pointer types passing=
+ 'atomic_long_t *' (aka 'atomic_t *') to parameter of type 'const atomic64_=
+t *' [-Werror,-Wincompatible-pointer-types]
+    kernel/module/stats.c:294:36: error: incompatible pointer types passing=
+ 'atomic_long_t *' (aka 'atomic_t *') to parameter of type 'const atomic64_=
+t *' [-Werror,-Wincompatible-pointer-types]
+    kernel/module/stats.c:295:34: error: incompatible pointer types passing=
+ 'atomic_long_t *' (aka 'atomic_t *') to parameter of type 'const atomic64_=
+t *' [-Werror,-Wincompatible-pointer-types]
+    kernel/module/stats.c:296:29: error: incompatible pointer types passing=
+ 'atomic_long_t *' (aka 'atomic_t *') to parameter of type 'const atomic64_=
+t *' [-Werror,-Wincompatible-pointer-types]
+    kernel/module/stats.c:390:20: error: incompatible pointer types passing=
+ 'atomic_long_t *' (aka 'atomic_t *') to parameter of type 'const atomic64_=
+t *' [-Werror,-Wincompatible-pointer-types]
+    kernel/module/stats.c:307:34: error: variable 'len' is uninitialized wh=
+en used here [-Werror,-Wuninitialized]
+
+Warnings:
+    kernel/module/stats.c:279:18: note: initialize the variable 'len' to si=
+lence this warning
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (x86_64, clang-17) =E2=80=94 FAIL, 1 error, 1 warning, 0 secti=
+on mismatches
+
+Errors:
+    kernel/module/stats.c:307:34: error: variable 'len' is uninitialized wh=
+en used here [-Werror,-Wuninitialized]
+
+Warnings:
+    kernel/module/stats.c:279:18: note: initialize the variable 'len' to si=
+lence this warning
 
 ---------------------------------------------------------------------------=
 -----
@@ -188,8 +391,18 @@ ismatches
 
 ---------------------------------------------------------------------------=
 -----
-allnoconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+allnoconfig (i386, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
 n mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -198,6 +411,11 @@ mismatches
 
 Warnings:
     <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -213,6 +431,11 @@ n mismatches
 -----
 aspeed_g4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
 ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -281,11 +504,6 @@ ection mismatches
 
 ---------------------------------------------------------------------------=
 -----
-bmips_stb_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
 cavium_octeon_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
 , 0 section mismatches
 
@@ -306,17 +524,100 @@ ion mismatches
 
 ---------------------------------------------------------------------------=
 -----
+cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config (arm64, clang-13=
+) =E2=80=94 FAIL, 1 error, 1 warning, 0 section mismatches
+
+Errors:
+    drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:298:6: error: variable 'ret'=
+ is uninitialized when used here [-Werror,-Wuninitialized]
+
+Warnings:
+    drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:216:12: note: initialize the=
+ variable 'ret' to silence this warning
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+arm64-chromebook=
+ (arm64, clang-13) =E2=80=94 FAIL, 1 error, 1 warning, 0 section mismatches
+
+Errors:
+    drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:298:6: error: variable 'ret'=
+ is uninitialized when used here [-Werror,-Wuninitialized]
+
+Warnings:
+    drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:216:12: note: initialize the=
+ variable 'ret' to silence this warning
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-mediatek.flavour.config+arm64-chromeb=
+ook (arm64, clang-13) =E2=80=94 FAIL, 1 error, 1 warning, 0 section mismatc=
+hes
+
+Errors:
+    drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:298:6: error: variable 'ret'=
+ is uninitialized when used here [-Werror,-Wuninitialized]
+
+Warnings:
+    drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:216:12: note: initialize the=
+ variable 'ret' to silence this warning
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-qualcomm.flavour.config+arm64-chromeb=
+ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
+tches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-rockchip64.flavour.config+arm64-chrom=
+ebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mis=
+matches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (arm, clang-13) =
+=E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (arm, clang-1=
+3) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromeos-amd-stoneyridge.flavour.config+x86-chr=
+omebook (x86_64, clang-13) =E2=80=94 FAIL, 1 error, 0 warnings, 0 section m=
+ismatches
+
+Errors:
+    sound/soc/codecs/nau8825.c:2826:31: error: overlapping comparisons alwa=
+ys evaluate to false [-Werror,-Wtautological-overlap-compare]
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromeos-intel-denverton.flavour.config+x86-chr=
+omebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromeos-intel-pineview.flavour.config+x86-chro=
+mebook (x86_64, clang-13) =E2=80=94 FAIL, 1 error, 0 warnings, 0 section mi=
+smatches
+
+Errors:
+    sound/soc/codecs/nau8825.c:2826:31: error: overlapping comparisons alwa=
+ys evaluate to false [-Werror,-Wtautological-overlap-compare]
+
+---------------------------------------------------------------------------=
+-----
 cu1000-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
  section mismatches
 
 ---------------------------------------------------------------------------=
 -----
 cu1830-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-davinci_all_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
  section mismatches
 
 ---------------------------------------------------------------------------=
@@ -341,13 +642,37 @@ s, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
+defconfig (arm64, clang-17) =E2=80=94 PASS, 0 errors, 3 warnings, 0 section=
+ mismatches
+
+Warnings:
+    drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:298:6: warning: variable 're=
+t' is uninitialized when used here [-Wuninitialized]
+    drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:216:12: note: initialize the=
+ variable 'ret' to silence this warning
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
 defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
 ismatches
 
 ---------------------------------------------------------------------------=
 -----
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
+defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, clang-17) =E2=80=94 PASS, 0 er=
+rors, 3 warnings, 0 section mismatches
+
+Warnings:
+    drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:298:6: warning: variable 're=
+t' is uninitialized when used here [-Wuninitialized]
+    drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:216:12: note: initialize the=
+ variable 'ret' to silence this warning
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -356,8 +681,15 @@ s, 0 warnings, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
-defconfig+CONFIG_RANDOMIZE_BASE=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
-s, 0 warnings, 0 section mismatches
+defconfig+arm64-chromebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 3 wa=
+rnings, 0 section mismatches
+
+Warnings:
+    drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:298:6: warning: variable 're=
+t' is uninitialized when used here [-Wuninitialized]
+    drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:216:12: note: initialize the=
+ variable 'ret' to silence this warning
+    1 warning generated.
 
 ---------------------------------------------------------------------------=
 -----
@@ -366,43 +698,13 @@ ings, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
-defconfig+arm64-chromebook+videodec (arm64, gcc-10) =E2=80=94 PASS, 0 error=
-s, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+crypto (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
 defconfig+debug (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
 tion mismatches
 
 ---------------------------------------------------------------------------=
 -----
-defconfig+debug (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+ima (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
 defconfig+kselftest (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
  section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+videodec (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -676,43 +978,13 @@ ction mismatches
 
 ---------------------------------------------------------------------------=
 -----
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
 multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm, gcc-10) =E2=80=94 PASS, =
 0 errors, 0 warnings, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
-multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (arm, gcc-10) =E2=80=
-=94 PASS, 0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
 multi_v7_defconfig+CONFIG_SMP=3Dn (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0=
  warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy (arm, gcc-10) =E2=80=94 PASS, 0=
- errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+crypto (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
-s, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+ima (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
-0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
-ings, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -746,6 +1018,11 @@ tion mismatches
 
 ---------------------------------------------------------------------------=
 -----
+nommu_k210_defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
 nommu_k210_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
 0 section mismatches
 
@@ -753,6 +1030,11 @@ nommu_k210_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
 -----
 nommu_k210_sdcard_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
 nings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_sdcard_defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 w=
+arnings, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -778,11 +1060,6 @@ ction mismatches
 -----
 orion5x_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
 tion mismatches
-
----------------------------------------------------------------------------=
------
-oxnas_v6_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -927,8 +1204,8 @@ failed, symbol will not be versioned.
 
 ---------------------------------------------------------------------------=
 -----
-sparc64_defconfig+kselftest (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 2 war=
-nings, 0 section mismatches
+sparc64_defconfig+debug (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 2 warning=
+s, 0 section mismatches
 
 Warnings:
     <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
@@ -971,13 +1248,8 @@ on mismatches
 
 ---------------------------------------------------------------------------=
 -----
-tinyconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
-
----------------------------------------------------------------------------=
------
-tinyconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
+tinyconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -989,8 +1261,13 @@ Warnings:
 
 ---------------------------------------------------------------------------=
 -----
-tinyconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
+tinyconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -1039,11 +1316,6 @@ tion mismatches
 
 ---------------------------------------------------------------------------=
 -----
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
 x86_64_defconfig+amdgpu (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
 gs, 0 section mismatches
 
@@ -1064,8 +1336,22 @@ x86_64_defconfig+ima (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
 
 ---------------------------------------------------------------------------=
 -----
-x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
-nings, 0 section mismatches
+x86_64_defconfig+kselftest (x86_64, rustc-1.62) =E2=80=94 PASS, 0 errors, 1=
+ warning, 0 section mismatches
+
+Warnings:
+    vmlinux.o: warning: objtool: lkdtm_UNSET_SMEP+0xcc: relocation to !ENDB=
+R: native_write_cr4+0x4
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+rust (x86_64, rustc-1.62) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors=
+, 0 warnings, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -1076,11 +1362,6 @@ x86_64_defconfig+x86-chromebook (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, =
 -----
 x86_64_defconfig+x86-chromebook+amdgpu (x86_64, gcc-10) =E2=80=94 PASS, 0 e=
 rrors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86-chromebook+kselftest (x86_64, gcc-10) =E2=80=94 PASS, =
-0 errors, 0 warnings, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----

@@ -2,54 +2,48 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF2BD6E7C09
-	for <lists+linux-next@lfdr.de>; Wed, 19 Apr 2023 16:14:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADFA56E7D01
+	for <lists+linux-next@lfdr.de>; Wed, 19 Apr 2023 16:40:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232646AbjDSOO2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 19 Apr 2023 10:14:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39492 "EHLO
+        id S233358AbjDSOkN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 19 Apr 2023 10:40:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232666AbjDSOOO (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 19 Apr 2023 10:14:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB4631791D;
-        Wed, 19 Apr 2023 07:13:23 -0700 (PDT)
+        with ESMTP id S233370AbjDSOkH (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 19 Apr 2023 10:40:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A1DA448F;
+        Wed, 19 Apr 2023 07:39:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 41AF060C12;
-        Wed, 19 Apr 2023 14:13:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10608C433D2;
-        Wed, 19 Apr 2023 14:13:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D3916636B2;
+        Wed, 19 Apr 2023 14:39:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CA39C433EF;
+        Wed, 19 Apr 2023 14:39:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681913602;
-        bh=+p00QP5/h9exgjfULX2JyvDzcIbvbzctcsjVv6xlmMc=;
+        s=k20201202; t=1681915197;
+        bh=A+KTO1CpnowqeS9xSSmESo3/GmHQhE1tcZVW5UKDGIk=;
         h=From:To:Cc:Subject:Date:From;
-        b=IDY7onV1awLB/okgBqSnektZLne3XQ4x/E4ZrV3XasMFc2g9d5izJ8sT+LAiTDv1/
-         +3QW7++ST1o7gNglup2lP5uG22naWQOuGmLqshOVVMGtkSdDRVyq72DcJX8+PlOoDk
-         GZ5SakFMlZPYugu47gi7OLPjG3JkD398W1ysmGXd03xWdiBYKNeowKhu2xo/ISSmyC
-         oYIEVVZV+xDnfqAQYn3KGFcwThuMf/8uVTyKxeJpoNd6vcuEpJp5jjgkEewNwyz+N+
-         wBUhMfB/5CZJkb1zO4LkuW7MRhEKlGh/10MpoRiLXrUGLEoGxhxFdYDq5zjBd3WMXO
-         fatyMHXbsHkgQ==
+        b=adKKWfSRBITSE5x1nqQyJjRcjTGLk6cMvnU9VryUF1J0hXRQ1f++ljGg2aFNE67H6
+         3FI5hJaxb0Y49qFeZizMhY6Y5xu0be2XBH53YTrw7qHofI7JRJ3ZQ0vCJ5U/cGU2rL
+         Bep8vBZWLM5/rLUEVqVdr9hOfRZnd/GHd6R8RH7HupIR3OOrk0NBM1N+nSF8YzEs6p
+         HdydVSemXVGqdApyq6kXLPPxqGDs2NzoJq6NQn7njC6gc286qp2bwxrByJZol5AfF/
+         wvToWp+y9Wxzt2MPOIMUdiMmDvpFs6y8Ta/DtojTEyM4PXEiUPaep6uHRWuYXPaKRW
+         w57nNwWJAqT/g==
 From:   broonie@kernel.org
-To:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Conor Dooley <conor.dooley@microchip.com>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Hal Feng <hal.feng@starfivetech.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Samin Guo <samin.guo@starfivetech.com>,
-        Yanhong Wang <yanhong.wang@starfivetech.com>
-Subject: linux-next: manual merge of the net-next tree with the clk tree
-Date:   Wed, 19 Apr 2023 15:13:14 +0100
-Message-Id: <20230419141314.76640-1-broonie@kernel.org>
+        Ming Lei <ming.lei@redhat.com>
+Subject: linux-next: manual merge of the block tree with the origin tree
+Date:   Wed, 19 Apr 2023 15:39:53 +0100
+Message-Id: <20230419143953.88507-1-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,19 +54,19 @@ X-Mailing-List: linux-next@vger.kernel.org
 
 Hi all,
 
-Today's linux-next merge of the net-next tree got a conflict in:
+Today's linux-next merge of the block tree got a conflict in:
 
-  MAINTAINERS
+  drivers/block/ublk_drv.c
 
 between commit:
 
-  63a30e1f44d5e ("MAINTAINERS: generalise StarFive clk/reset entries")
+  8c68ae3b22fa6 ("ublk: read any SQE values upfront")
 
-from the clk tree and commit:
+from the origin tree and commit:
 
-  b76eaf7d7ede3 ("dt-bindings: net: Add support StarFive dwmac")
+  2d786e66c9662 ("block: ublk: switch to ioctl command encoding")
 
-from the net-next tree.
+from the block tree.
 
 I fixed it up (see below) and can carry the fix as necessary. This
 is now fixed as far as linux-next is concerned, but any non trivial
@@ -81,28 +75,33 @@ is submitted for merging.  You may also want to consider cooperating
 with the maintainer of the conflicting tree to minimise any particularly
 complex conflicts.
 
-diff --cc MAINTAINERS
-index 8c77a6a3f2c56,4fc57dfd5fd0a..0000000000000
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@@ -19911,6 -19928,20 +19937,13 @@@ M:	Emil Renner Berthing <kernel@esmil.d
-  S:	Maintained
-  F:	arch/riscv/boot/dts/starfive/
+diff --cc drivers/block/ublk_drv.c
+index 604c1a13c76ef,f554ebf735804..0000000000000
+--- a/drivers/block/ublk_drv.c
++++ b/drivers/block/ublk_drv.c
+@@@ -1261,10 -1259,22 +1259,23 @@@ static void ublk_handle_need_get_data(s
+  	ublk_queue_cmd(ubq, req);
+  }
   
-+ STARFIVE DWMAC GLUE LAYER
-+ M:	Emil Renner Berthing <kernel@esmil.dk>
-+ M:	Samin Guo <samin.guo@starfivetech.com>
-+ S:	Maintained
-+ F:	Documentation/devicetree/bindings/net/starfive,jh7110-dwmac.yaml
-+ F:	drivers/net/ethernet/stmicro/stmmac/dwmac-starfive.c
++ static inline int ublk_check_cmd_op(u32 cmd_op)
++ {
++ 	u32 ioc_type = _IOC_TYPE(cmd_op);
 + 
- -STARFIVE JH7100 CLOCK DRIVERS
- -M:	Emil Renner Berthing <kernel@esmil.dk>
- -S:	Maintained
- -F:	Documentation/devicetree/bindings/clock/starfive,jh7100-*.yaml
- -F:	drivers/clk/starfive/clk-starfive-jh7100*
- -F:	include/dt-bindings/clock/starfive-jh7100*.h
- -
-  STARFIVE JH7110 MMC/SD/SDIO DRIVER
-  M:	William Qiu <william.qiu@starfivetech.com>
-  S:	Supported
++ 	if (IS_ENABLED(CONFIG_BLKDEV_UBLK_LEGACY_OPCODES) && ioc_type != 'u')
++ 		return -EOPNOTSUPP;
++ 
++ 	if (ioc_type != 'u' && ioc_type != 0)
++ 		return -EOPNOTSUPP;
++ 
++ 	return 0;
++ }
++ 
+ -static int ublk_ch_uring_cmd(struct io_uring_cmd *cmd, unsigned int issue_flags)
+ +static int __ublk_ch_uring_cmd(struct io_uring_cmd *cmd,
+ +			       unsigned int issue_flags,
+ +			       struct ublksrv_io_cmd *ub_cmd)
+  {
+ -	struct ublksrv_io_cmd *ub_cmd = (struct ublksrv_io_cmd *)cmd->cmd;
+  	struct ublk_device *ub = cmd->file->private_data;
+  	struct ublk_queue *ubq;
+  	struct ublk_io *io;

@@ -2,128 +2,131 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 564B66E7FB0
-	for <lists+linux-next@lfdr.de>; Wed, 19 Apr 2023 18:32:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71B036E8128
+	for <lists+linux-next@lfdr.de>; Wed, 19 Apr 2023 20:22:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233601AbjDSQcd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 19 Apr 2023 12:32:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41736 "EHLO
+        id S231201AbjDSSWC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 19 Apr 2023 14:22:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233366AbjDSQcb (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 19 Apr 2023 12:32:31 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE5853C06
-        for <linux-next@vger.kernel.org>; Wed, 19 Apr 2023 09:32:23 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-94ea38c90ccso93216266b.1
-        for <linux-next@vger.kernel.org>; Wed, 19 Apr 2023 09:32:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google; t=1681921942; x=1684513942;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vjXbDQrMTlMveGgpzjaxOqJ4MX3Zc3PuAQFculrIp90=;
-        b=Bzjp+BeQnrAKzIJWTEfUAa+W3pdspTEwqQF0Pa3tbP0lt3pW+mEMdyjsxr7XKzQxxM
-         mIrFsanjX96nzba8usxtgUNN+uUHN5AaScdGV3qyXuEIojvImSDkRl/zXstTSqiLG9qS
-         2jZ2SMzLHM11Ly9g09B0B0ONvetjkk3kMyy5Y=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681921942; x=1684513942;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vjXbDQrMTlMveGgpzjaxOqJ4MX3Zc3PuAQFculrIp90=;
-        b=TCHOJId67QRWMT11rPmxOJfYxWggZGd6EmK5UAOwpKnNKfM/8bp1NMNMdtVYD9k/BA
-         fie+B1CJEULSU91QEZkLEwgEoqWxhEnS8vdZn7fEZJtUzj7uXlMdCjl++LUBiVKY33/i
-         PhlZBT0C2Y4EJM7z1rWhuoKkXk40zXywBIztTCSf97ceYwvukJ4/YZUPYUcqCpfALDTs
-         QnHIJRzltJJK7X0rPRqncYGiHpGS5d1Fy7u2qcbFd8t7qgaB3EnWcOGkCaJqsukmWM9b
-         k3ufH8GVly0BM0sD0/w2B9nJMEn2UbQU3NxcKg/YGT0HX/9eam+Tos8lTfRXIalX9IlB
-         cpTQ==
-X-Gm-Message-State: AAQBX9e5yb59B4j0bo4vwMTuhJWDI5CpQp5KDLaZJwwPXVnVwHFqrRRv
-        7sEawURgBz1l+93X0tJQz0Dp7w==
-X-Google-Smtp-Source: AKy350aENGpODhst1P2SnjiQJvzhoC9GSkVgTOh9e3yM/mzLGea3xasoYck5TN1My/5JEkEvmKDOSQ==
-X-Received: by 2002:a17:906:5d:b0:94e:d688:fc92 with SMTP id 29-20020a170906005d00b0094ed688fc92mr16825594ejg.0.1681921942431;
-        Wed, 19 Apr 2023 09:32:22 -0700 (PDT)
-Received: from phenom.ffwll.local (212-51-149-33.fiber7.init7.net. [212.51.149.33])
-        by smtp.gmail.com with ESMTPSA id t16-20020a170906269000b00932ba722482sm9754722ejc.149.2023.04.19.09.32.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Apr 2023 09:32:22 -0700 (PDT)
-Date:   Wed, 19 Apr 2023 18:32:20 +0200
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Daniel Vetter <daniel@ffwll.ch>, Mark Brown <broonie@kernel.org>,
-        Dave Airlie <airlied@gmail.com>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        with ESMTP id S231482AbjDSSWC (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 19 Apr 2023 14:22:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F7B983F6;
+        Wed, 19 Apr 2023 11:21:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 180566417A;
+        Wed, 19 Apr 2023 18:21:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D79A1C433D2;
+        Wed, 19 Apr 2023 18:21:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681928509;
+        bh=uXSdIo80daIsIj3rcz4D58UVn7dC1eLHNlCvy7csydk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=QGhMALOjpQjkIlfYbhy254oioZ4ITd59f35AIwY11yMJcj6rQCI0fpuAk9F8ZGaWU
+         +RcJYqF191I/sPZswjuCx0cf2IEBkzZMiHPI4sv87LO82N6gEcPoEZwaqEvQo4SQMn
+         oWZ5zsieRgZakR2lwsGtG2/Q31lNKYNpnrYilRM5JdHDXaC0MQYWM8jvs5blATZv7R
+         zvvVqISjTcF7yntQidLVON4Yg6RCaSgv62LUaXS/Xd/JqB+tl72WnLcy+BL+EZqLVA
+         XwrKRLmRudmwujTCKFtMdONQKJxd41+bnYpBSKmjLQaJxMhbPo7JUWcXL0zjRGhsZO
+         30asrtav1XADw==
+From:   broonie@kernel.org
+To:     David Hildenbrand <david@redhat.com>,
         "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Mike Rapoport <rppt@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Mel Gorman <mgorman@techsingularity.net>,
+        Peter Xu <peterx@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the drm-misc tree with the mm-stable
- tree
-Message-ID: <ZEAXlEeYrqvVejJj@phenom.ffwll.local>
-Mail-Followup-To: Nathan Chancellor <nathan@kernel.org>,
-        Mark Brown <broonie@kernel.org>, Dave Airlie <airlied@gmail.com>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20230414125913.851920-1-broonie@kernel.org>
- <ZDuqut+8BKjMXblJ@phenom.ffwll.local>
- <8c90b4db-3075-4275-bea8-01f501b00885@sirena.org.uk>
- <ZEAVxeIEOny81EGY@phenom.ffwll.local>
- <20230419163011.GA1865368@dev-arch.thelio-3990X>
+Subject: linux-next: Build failure after merge of the tip tree
+Date:   Wed, 19 Apr 2023 19:21:36 +0100
+Message-Id: <20230419182136.112974-1-broonie@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230419163011.GA1865368@dev-arch.thelio-3990X>
-X-Operating-System: Linux phenom 6.1.0-7-amd64 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Apr 19, 2023 at 09:30:11AM -0700, Nathan Chancellor wrote:
-> On Wed, Apr 19, 2023 at 06:24:37PM +0200, Daniel Vetter wrote:
-> > On Tue, Apr 18, 2023 at 07:34:44PM +0100, Mark Brown wrote:
-> > > On Sun, Apr 16, 2023 at 09:58:50AM +0200, Daniel Vetter wrote:
-> > > 
-> > > > Note there was a ppc compile fail, which is why we pushed the ttm revert.
-> > > > That /should/ be fixed now, but would be good if you can confirm?
-> > > 
-> > > According to Nathan (CCed) there's still issues with the interaction
-> > > with the PowerPC tree.
-> > 
-> > So this revert was supposed to fix this: 56e51681246e ("drm/ttm: revert
-> > "Reduce the number of used allocation orders for TTM pages"")
-> > 
-> > If there's anything left then I need to chase that asap since the merge
-> > window will open soon.
-> 
-> I think we are talking about two different issues here. My issue is not
-> a compilation failure, it is an incorrect merge resolution that is
-> happening in -next because of two independent changes in the drm and
-> powerpc tree, the thread below should have more information.
-> 
-> https://lore.kernel.org/20230413184725.GA3183133@dev-arch.thelio-3990X/
-> 
-> I do not think this is something that either tree can solve
-> independently of each other, -next has to resolve the conflict correctly
-> (which is what I point out in the message above) and a note of it should
-> be passed along to Linus so it can be resolved correctly in mainline
-> when the time comes.
+Hi all,
 
-Ah yes that's a different one. I think we have a note about this one
-already, but I'll double-check with Dave Airlie.
--Daniel
+After merging the rcu tree, today's linux-next build (arm64 defconfig)
+failed like this:
+
+/tmp/next/build/mm/migrate.c: In function 'remove_migration_pte':
+/tmp/next/build/mm/migrate.c:222:31: error: too few arguments to function 'pte_mkwrite'
+  222 |                         pte = pte_mkwrite(pte);
+      |                               ^~~~~~~~~~~
+In file included from /tmp/next/build/include/linux/pgtable.h:6,
+                 from /tmp/next/build/include/linux/mm.h:29,
+                 from /tmp/next/build/include/linux/migrate.h:5,
+                 from /tmp/next/build/mm/migrate.c:16:
+/tmp/next/build/arch/arm64/include/asm/pgtable.h:190:21: note: declared here
+  190 | static inline pte_t pte_mkwrite(pte_t pte, struct vm_area_struct *vma)
+      |                     ^~~~~~~~~~~
+
+Caused by commit
+
+  717f95b494ac36 ("mm: don't check VMA write permissions if the PTE/PMD indicates write permissions")
+
+from the mm tree interacting with
+
+  74fd30bd28e4c7 ("mm: Make pte_mkwrite() take a VMA")
+
+from the tip tree.  I've applied the fixup below
+
+diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+index 1cc86d0a669e8..c3cc20c1b26cb 100644
+--- a/mm/huge_memory.c
++++ b/mm/huge_memory.c
+@@ -2235,7 +2235,7 @@ static void __split_huge_pmd_locked(struct vm_area_struct *vma, pmd_t *pmd,
+ 		} else {
+ 			entry = mk_pte(page + i, READ_ONCE(vma->vm_page_prot));
+ 			if (write)
+-				entry = pte_mkwrite(entry);
++				entry = pte_mkwrite(entry, vma);
+ 			if (anon_exclusive)
+ 				SetPageAnonExclusive(page + i);
+ 			if (!young)
+@@ -3272,7 +3272,7 @@ void remove_migration_pmd(struct page_vma_mapped_walk *pvmw, struct page *new)
+ 	if (pmd_swp_soft_dirty(*pvmw->pmd))
+ 		pmde = pmd_mksoft_dirty(pmde);
+ 	if (is_writable_migration_entry(entry))
+-		pmde = pmd_mkwrite(pmde);
++		pmde = pmd_mkwrite(pmde, vma);
+ 	if (pmd_swp_uffd_wp(*pvmw->pmd))
+ 		pmde = pmd_mkuffd_wp(pmde);
+ 	if (!is_migration_entry_young(entry))
+diff --git a/mm/migrate.c b/mm/migrate.c
+index 01cac26a31279..8b46b722f1a44 100644
+--- a/mm/migrate.c
++++ b/mm/migrate.c
+@@ -219,7 +219,7 @@ static bool remove_migration_pte(struct folio *folio,
+ 		if (folio_test_dirty(folio) && is_migration_entry_dirty(entry))
+ 			pte = pte_mkdirty(pte);
+ 		if (is_writable_migration_entry(entry))
+-			pte = pte_mkwrite(pte);
++			pte = pte_mkwrite(pte, vma);
+ 		else if (pte_swp_uffd_wp(*pvmw.pte))
+ 			pte = pte_mkuffd_wp(pte);
+ 
 -- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+2.30.2
+

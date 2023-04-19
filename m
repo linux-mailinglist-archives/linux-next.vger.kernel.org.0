@@ -2,79 +2,107 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26DAC6E7A89
-	for <lists+linux-next@lfdr.de>; Wed, 19 Apr 2023 15:22:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF2BD6E7C09
+	for <lists+linux-next@lfdr.de>; Wed, 19 Apr 2023 16:14:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232594AbjDSNWQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 19 Apr 2023 09:22:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58310 "EHLO
+        id S232646AbjDSOO2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 19 Apr 2023 10:14:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233108AbjDSNWI (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 19 Apr 2023 09:22:08 -0400
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D54FD146E4;
-        Wed, 19 Apr 2023 06:22:05 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        with ESMTP id S232666AbjDSOOO (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 19 Apr 2023 10:14:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB4631791D;
+        Wed, 19 Apr 2023 07:13:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 9308D49B;
-        Wed, 19 Apr 2023 13:22:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 9308D49B
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1681910524; bh=0YAeHqcAGKFFwl537VM1/ZYo97kzIezojAETvuLrjxY=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=UQVukszqGFqFNk95ux1EedlIXN8MuCVbj+wr2FUNA3R5EZJ6OGQihVknAtGXt1S65
-         McGtXn7++lAnkPdiPtwilFT0GyXMDT2dtWpSxjHH0ynZl7fJPF3lTa/XHqiYBWgAAl
-         ruu2FBIbNtyzcTyiSciJf59cILYn4jDLj/8bAIQomR9quoRoPxIm0gLwgCgIze9wmp
-         w7yJpqnoktH5fLc2OJ2TRNFzxnXgkOeTzIFcHVy9DHNbrIZiPPkGSZsLBq/y6wTyfl
-         yeTV8Xfca5Og0b/YuUVD7Ju2Cevf7t5LOluOu9yXf463WDtJ9YXRglcXenFU+4QFFE
-         Yku5unaSSjI+w==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        Linux Documentation <linux-doc@vger.kernel.org>,
-        Linux x86 <x86@kernel.org>,
-        Linux Architectures <linux-arch@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Rapoport <rppt@kernel.org>
-Subject: Re: Semantic conflict between x86 doc cleanup and CET shadow stack doc
-In-Reply-To: <ZD+1XVjMvm8EvCzN@debian.me>
-References: <ZD+1XVjMvm8EvCzN@debian.me>
-Date:   Wed, 19 Apr 2023 07:22:03 -0600
-Message-ID: <87mt34atxg.fsf@meer.lwn.net>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 41AF060C12;
+        Wed, 19 Apr 2023 14:13:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10608C433D2;
+        Wed, 19 Apr 2023 14:13:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681913602;
+        bh=+p00QP5/h9exgjfULX2JyvDzcIbvbzctcsjVv6xlmMc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=IDY7onV1awLB/okgBqSnektZLne3XQ4x/E4ZrV3XasMFc2g9d5izJ8sT+LAiTDv1/
+         +3QW7++ST1o7gNglup2lP5uG22naWQOuGmLqshOVVMGtkSdDRVyq72DcJX8+PlOoDk
+         GZ5SakFMlZPYugu47gi7OLPjG3JkD398W1ysmGXd03xWdiBYKNeowKhu2xo/ISSmyC
+         oYIEVVZV+xDnfqAQYn3KGFcwThuMf/8uVTyKxeJpoNd6vcuEpJp5jjgkEewNwyz+N+
+         wBUhMfB/5CZJkb1zO4LkuW7MRhEKlGh/10MpoRiLXrUGLEoGxhxFdYDq5zjBd3WMXO
+         fatyMHXbsHkgQ==
+From:   broonie@kernel.org
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Conor Dooley <conor.dooley@microchip.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Hal Feng <hal.feng@starfivetech.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Samin Guo <samin.guo@starfivetech.com>,
+        Yanhong Wang <yanhong.wang@starfivetech.com>
+Subject: linux-next: manual merge of the net-next tree with the clk tree
+Date:   Wed, 19 Apr 2023 15:13:14 +0100
+Message-Id: <20230419141314.76640-1-broonie@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Bagas Sanjaya <bagasdotme@gmail.com> writes:
+Hi all,
 
-> Hi,
->
-> I see semantic conflict on next-20230418 between commit ff61f0791ce969 ("docs:
-> move x86 documentation into Documentation/arch/") and 54759b257eadb0
-> ("Documentation/x86: Add CET shadow stack description"), which isn't noticed
-> when both jc_docs and tip trees were merged. The conflict triggers Sphinx table
-> of contents warnings:
->
-> Documentation/arch/x86/index.rst:7: WARNING: toctree contains reference to nonexisting document 'arch/x86/shstk'
-> Documentation/x86/shstk.rst: WARNING: document isn't included in any toctree
->
-> The fixup for the next merge window (when Linus pull both trees) should be
-> moving also CET shadow stack doc to Documentation/arch/x86/ (in line with
-> ff61f0791ce969).
+Today's linux-next merge of the net-next tree got a conflict in:
 
-https://lore.kernel.org/lkml/20230331142016.0a6f8f6b%40canb.auug.org.au/
+  MAINTAINERS
 
-jon
+between commit:
+
+  63a30e1f44d5e ("MAINTAINERS: generalise StarFive clk/reset entries")
+
+from the clk tree and commit:
+
+  b76eaf7d7ede3 ("dt-bindings: net: Add support StarFive dwmac")
+
+from the net-next tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+diff --cc MAINTAINERS
+index 8c77a6a3f2c56,4fc57dfd5fd0a..0000000000000
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@@ -19911,6 -19928,20 +19937,13 @@@ M:	Emil Renner Berthing <kernel@esmil.d
+  S:	Maintained
+  F:	arch/riscv/boot/dts/starfive/
+  
++ STARFIVE DWMAC GLUE LAYER
++ M:	Emil Renner Berthing <kernel@esmil.dk>
++ M:	Samin Guo <samin.guo@starfivetech.com>
++ S:	Maintained
++ F:	Documentation/devicetree/bindings/net/starfive,jh7110-dwmac.yaml
++ F:	drivers/net/ethernet/stmicro/stmmac/dwmac-starfive.c
++ 
+ -STARFIVE JH7100 CLOCK DRIVERS
+ -M:	Emil Renner Berthing <kernel@esmil.dk>
+ -S:	Maintained
+ -F:	Documentation/devicetree/bindings/clock/starfive,jh7100-*.yaml
+ -F:	drivers/clk/starfive/clk-starfive-jh7100*
+ -F:	include/dt-bindings/clock/starfive-jh7100*.h
+ -
+  STARFIVE JH7110 MMC/SD/SDIO DRIVER
+  M:	William Qiu <william.qiu@starfivetech.com>
+  S:	Supported

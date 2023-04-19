@@ -2,149 +2,108 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EC6C6E7D72
-	for <lists+linux-next@lfdr.de>; Wed, 19 Apr 2023 16:51:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 020246E7F83
+	for <lists+linux-next@lfdr.de>; Wed, 19 Apr 2023 18:24:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233477AbjDSOvL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 19 Apr 2023 10:51:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50612 "EHLO
+        id S231877AbjDSQYn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 19 Apr 2023 12:24:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233464AbjDSOvJ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 19 Apr 2023 10:51:09 -0400
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74DED3C0D;
-        Wed, 19 Apr 2023 07:51:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:To:Subject:Sender:
-        Reply-To:Cc:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-        bh=XxVD0hipqgth9ZJ1nyMDcD+GdG+KZvFQJbCVZuqDCbk=; b=RLUa4rew4gW8VMttcSSzHFOXI2
-        6BJLaD7o1tNNQ2LqmU0sRK1NJ2et0GGUVAXM+O2q7U83WPMphEUIZy0V94y6O9Cd48dO+5YLsvNAU
-        RhB0Jv8gdZRT9t1DMpeNYasiieJ7o2PwI4w3bvR8GuaoirxMOwU5hOeRUI9lJN4mHT8zAgUvztaNz
-        BPTXvMej8ZarsfTkXlHJGkapQk+gLTnYUwzWUs1RuorT1XkC/c42UUgyucz2E8eZ5oWhAbHxleuFB
-        fPnA1VZPfORv9+4tnP7Jk1oLSU0GRH9GAo9vjWnza8LkNMvxY0ooxxFyPKW0xnP7ZQ4LauO9MZcS+
-        UuPbG4hA==;
-Received: from sslproxy01.your-server.de ([78.46.139.224])
-        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1pp98v-0005CQ-SP; Wed, 19 Apr 2023 16:50:45 +0200
-Received: from [85.1.206.226] (helo=linux.home)
-        by sslproxy01.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1pp98v-000HS5-Gk; Wed, 19 Apr 2023 16:50:45 +0200
-Subject: Re: [PATCH] bpftool: fix broken compile on s390 for linux-next
- repository
-To:     Thomas Richter <tmricht@linux.ibm.com>, broonie@kernel.org,
-        hca@linux.ibm.com, sfr@canb.auug.org.au, liam.howlett@oracle.com,
-        acme@redhat.com, ast@kernel.org, bpf@vger.kernel.org,
-        linux-next@vger.kernel.org, quentin@isovalent.com
-References: <20230418085516.1104514-1-tmricht@linux.ibm.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <233a0b88-6857-0a1d-3609-6a74fa50c28c@iogearbox.net>
-Date:   Wed, 19 Apr 2023 16:50:45 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        with ESMTP id S231190AbjDSQYn (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 19 Apr 2023 12:24:43 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EACF22718
+        for <linux-next@vger.kernel.org>; Wed, 19 Apr 2023 09:24:41 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-94f161ee14fso73245266b.0
+        for <linux-next@vger.kernel.org>; Wed, 19 Apr 2023 09:24:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google; t=1681921480; x=1684513480;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=h7K6w5OJikldhmL61pOlJnxVZUu5lcwwyjI/qw2nrEo=;
+        b=LaTBy49SBwoj4h+oT2GlGpoG1ho4XJx59PLABgeoGZbb55L3JUnyITzH/tFRPmCWF0
+         kvH3KOzJ9K63ateEneekFbTU883T5/jyYUikhOREIArW5o9vhGDMXkfqtOAEjLuk6JX4
+         FMoaBRBM6Gitpy4VKbUwrJ3bzmUlte6CZRibo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681921480; x=1684513480;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=h7K6w5OJikldhmL61pOlJnxVZUu5lcwwyjI/qw2nrEo=;
+        b=kW0O6yevdgHKPzOJ2xfAWBb2i5No47+mTh3C8v8/3GYarEcSpS96OEePlOT34mENAo
+         QuLsrlMv3JqlpkS7D1dns0w+BkbBynIJb1oz6O0y5cY6iJdW09zz8wNEPRqRYUKZGEnv
+         3+p964yvr9TB/afym5OB3CDxVEmB+qS47h0E/dMEvx/UzBtFV4/qCK27Y6YXZioYqpoU
+         ZeJGhbPmpP5QH/+7F9nuIexXwypT+kJES+oIqHR/gUm2otqz3B/8E+uOKpbYbAJtF7/s
+         zyBU2BpExHIoP1d2JV6KQHy+KANlisvoCxNgYcIP4RpX2jOtC5jsIfxlr885aZwf3bUw
+         5V9A==
+X-Gm-Message-State: AAQBX9eXrtcgSMPuVfO5IGs4giOCTugyjyXGkQW935CEnMWMjV/urzgF
+        piilBJY+CV/k2MDPhvJb6mBxrg==
+X-Google-Smtp-Source: AKy350bL0zGlce4TfTMYhL1LQuXzF7N1ZDTAjWo9P3ioMSAVLzb74mKMm7PgVSCTxsUSN/WDSq+9MQ==
+X-Received: by 2002:a17:906:86:b0:94f:4ec3:f0e7 with SMTP id 6-20020a170906008600b0094f4ec3f0e7mr12463889ejc.2.1681921480400;
+        Wed, 19 Apr 2023 09:24:40 -0700 (PDT)
+Received: from phenom.ffwll.local (212-51-149-33.fiber7.init7.net. [212.51.149.33])
+        by smtp.gmail.com with ESMTPSA id qm5-20020a170907674500b0094e3ddcf153sm9387130ejc.115.2023.04.19.09.24.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Apr 2023 09:24:39 -0700 (PDT)
+Date:   Wed, 19 Apr 2023 18:24:37 +0200
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Mark Brown <broonie@kernel.org>, Dave Airlie <airlied@gmail.com>
+Cc:     Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>
+Subject: Re: linux-next: manual merge of the drm-misc tree with the mm-stable
+ tree
+Message-ID: <ZEAVxeIEOny81EGY@phenom.ffwll.local>
+Mail-Followup-To: Mark Brown <broonie@kernel.org>,
+        Dave Airlie <airlied@gmail.com>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>
+References: <20230414125913.851920-1-broonie@kernel.org>
+ <ZDuqut+8BKjMXblJ@phenom.ffwll.local>
+ <8c90b4db-3075-4275-bea8-01f501b00885@sirena.org.uk>
 MIME-Version: 1.0
-In-Reply-To: <20230418085516.1104514-1-tmricht@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.8/26880/Wed Apr 19 09:22:57 2023)
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8c90b4db-3075-4275-bea8-01f501b00885@sirena.org.uk>
+X-Operating-System: Linux phenom 6.1.0-7-amd64 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 4/18/23 10:55 AM, Thomas Richter wrote:
-> Commit 9fd496848b1c ("bpftool: Support inline annotations when dumping the CFG of a program")
-> breaks the build of the perf tool on s390 in the linux-next repository.
-> Here is the make output:
+On Tue, Apr 18, 2023 at 07:34:44PM +0100, Mark Brown wrote:
+> On Sun, Apr 16, 2023 at 09:58:50AM +0200, Daniel Vetter wrote:
 > 
-> make -C tools/perf
-> ....
-> btf_dumper.c: In function 'dotlabel_puts':
-> DEBUG: btf_dumper.c:838:25: error: '__fallthrough' undeclared \
-> 		(first use in this function); did you mean 'fallthrough'?
-> DEBUG:   838 |                         __fallthrough;
-> DEBUG:       |                         ^~~~~~~~~~~~~
-> DEBUG:       |                         fallthrough
-> DEBUG: btf_dumper.c:838:25: note: each undeclared identifier is reported \
-> 		only once for each function it appears in
-> DEBUG: btf_dumper.c:837:25: warning: this statement may fall through \
->                  [-Wimplicit-fallthrough=]
-> DEBUG:   837 |                         putchar('\\');
-> DEBUG:       |                         ^~~~~~~~~~~~~
-> DEBUG: btf_dumper.c:839:17: note: here
-> DEBUG:   839 |                 default:
-> DEBUG:       |                 ^~~~~~~
-> DEBUG: make[3]: *** [Makefile:247: /builddir/build/BUILD/kernel-6.2.fc37/\
-> 		        linux-6.2/tools/perf/util/bpf_skel/ \
-> 		        .tmp/bootstrap/btf_dumper.o] Error 1
+> > Note there was a ppc compile fail, which is why we pushed the ttm revert.
+> > That /should/ be fixed now, but would be good if you can confirm?
 > 
-> The compile fails because symbol __fallthrough unknown, but symbol
-> fallthrough is known and works fine.
-> 
-> Fix this and replace __fallthrough by fallthrough.
-> 
-> With this change, the compile works.
-> 
-> Output after:
-> 
->   # make -C tools/perf
->   ....
->   CC      util/bpf-filter.o
->   CC      util/bpf-filter-flex.o
->   LD      util/perf-in.o
->   LD      perf-in.o
->   LINK    perf
->   make: Leaving directory '/root/mirror-linux-next/tools/perf'
->   #
-> 
-> Fixes: 9fd496848b1c ("bpftool: Support inline annotations when dumping the CFG of a program")
-> Signed-off-by: Thomas Richter <tmricht@linux.ibm.com>
-> ---
->   tools/bpf/bpftool/btf_dumper.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/bpf/bpftool/btf_dumper.c b/tools/bpf/bpftool/btf_dumper.c
-> index 6c5e0e82da22..1b7f69714604 100644
-> --- a/tools/bpf/bpftool/btf_dumper.c
-> +++ b/tools/bpf/bpftool/btf_dumper.c
-> @@ -835,7 +835,7 @@ static void dotlabel_puts(const char *s)
->   		case '|':
->   		case ' ':
->   			putchar('\\');
-> -			__fallthrough;
-> +			fallthrough;
+> According to Nathan (CCed) there's still issues with the interaction
+> with the PowerPC tree.
 
-The problem is however for current bpf-next, where this change breaks CI:
+So this revert was supposed to fix this: 56e51681246e ("drm/ttm: revert
+"Reduce the number of used allocation orders for TTM pages"")
 
-https://github.com/kernel-patches/bpf/actions/runs/4737651765/jobs/8410684531
-
-   [...]
-     CC      /tmp/work/bpf/bpf/tools/testing/selftests/bpf/tools/build/bpftool/feature.o
-     CC      /tmp/work/bpf/bpf/tools/testing/selftests/bpf/tools/build/bpftool/disasm.o
-   btf_dumper.c:838:4: error: use of undeclared identifier 'fallthrough'
-                           fallthrough;
-                           ^
-   1 error generated.
-   [...]
-
-I would suggest as a clean path that'll work for both to just change from
-fallthrough; into /* fallthrough */ as done in objtool, then we can also
-work around BPF CI issue and merge this change in time.
-
->   		default:
->   			putchar(*s);
->   		}
-> 
-
+If there's anything left then I need to chase that asap since the merge
+window will open soon.
+-Daniel
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch

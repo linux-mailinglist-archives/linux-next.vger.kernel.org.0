@@ -2,126 +2,137 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84E336E9429
-	for <lists+linux-next@lfdr.de>; Thu, 20 Apr 2023 14:22:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEF846E94C0
+	for <lists+linux-next@lfdr.de>; Thu, 20 Apr 2023 14:41:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234827AbjDTMWW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 20 Apr 2023 08:22:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45072 "EHLO
+        id S230450AbjDTMla (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 20 Apr 2023 08:41:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234329AbjDTMWV (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 20 Apr 2023 08:22:21 -0400
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7364A1BF4;
-        Thu, 20 Apr 2023 05:22:20 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id D55065C01A9;
-        Thu, 20 Apr 2023 08:22:19 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Thu, 20 Apr 2023 08:22:19 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1681993339; x=1682079739; bh=sZ
-        ONUP6h+SJJnBCxfgbuzzXtSUZFZ3CJUwyCTkmq7Xg=; b=UXWrJ2EEvSiy24KMbi
-        fOpjxO35+cBmgDE7F6QvpjvJAcc23bJlf2c6pqZRu5zeqK/HhqTkzQ+AbklUI5r1
-        vV4RktufQbcODh2x1HBkLgxMMrQGKIKQAw8/PMXttqcziirs1IJenx5RmmTFrAMl
-        /8Y45X2c1rk1vHeLI0bgaxK/bHqFaL6fTf6EA6BNC1vlPOcyrNaRpdCfYl4AUcLb
-        uXhKGvOFaUZyhA57UzjmEoBCxxyncuaERsVmjWAbCYJjm6hDOaWQjNb2cK3Nnk6a
-        pZIAguRdayXwLnrrMIf8uZasj/QpiZ0pMq2GgHa8ap55jaPF4G0DAXX1tX/z7wO2
-        QKXA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1681993339; x=1682079739; bh=sZONUP6h+SJJn
-        BCxfgbuzzXtSUZFZ3CJUwyCTkmq7Xg=; b=Hf7YZCJ1hzUf+3hn6Y3OxxyMZgL8i
-        PN/hgEMQ5V0XaWicdiNtSvmHWbgNanzjnZ+YZ5arE5hBWFFYPyGfSVFckEA3wa0U
-        y7U6nsAR5/qkpd6sZFRm1CIy1ubMvDFjqQWsbA3AJVbBpB8Y0EFIrTJtH1UAhhMB
-        kOMfeDIlbqXzEzGjZxVd8/xuJ9X13FEjEHB8dj84RQ6GL+IY5Zfd6O1oRgAnNYRX
-        uSA/bjY0JIjxLpWqg4Pk13mLPaK5OX0NXk3YfsaGKetfAhBTeEY8fTxgQucu17rt
-        xejm00Egbcf/Ymh/+Jj1/ngFyhUpbyU0E9FoLcz3HBDBbJPRmWWaiyYHQ==
-X-ME-Sender: <xms:ey5BZI7NI8R3UM7swGYU65cfll0oLLl7jJkR3kQPgqZSjCKfqgDT4g>
-    <xme:ey5BZJ41ypjuCPWmB-_ULfXWacdRdJfku9BgPPhlIC7U76U5Lu0Cu77YjPm9YEh4E
-    dd-9LrkRSzT6-bHDqs>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfedtvddghedtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepvefhffeltdegheeffffhtdegvdehjedtgfekueevgfduffettedtkeekueef
-    hedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
-    dunecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:ey5BZHcgTSP7afLL2Ly7HJa4kgBCh5FOot5NhfcpWOpNEaavFDFsJA>
-    <xmx:ey5BZNIombeMEXIsHXza8yedFKUPJgDUrLZp30tcja3zOvsg158BXA>
-    <xmx:ey5BZMLRvsDvBxiF3PAoHk_uIaZscCP7T6FX8JZoVJ5JqBzfN2LA0g>
-    <xmx:ey5BZKwd9vOyIog2uaUSb4za4BGatTv8tQEB_Re3wJ6lH5JCurK72g>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 06C07B60086; Thu, 20 Apr 2023 08:22:18 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-372-g43825cb665-fm-20230411.003-g43825cb6
-Mime-Version: 1.0
-Message-Id: <747af785-963b-45e5-9d7b-d361951ea3fc@app.fastmail.com>
-In-Reply-To: <CA+G9fYsdMioe4+DEgeh38aTeaY3YaN_s_c0GFjPHhuPWfxyetA@mail.gmail.com>
-References: <CA+G9fYsdMioe4+DEgeh38aTeaY3YaN_s_c0GFjPHhuPWfxyetA@mail.gmail.com>
-Date:   Thu, 20 Apr 2023 14:21:58 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Naresh Kamboju" <naresh.kamboju@linaro.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-next <linux-next@vger.kernel.org>,
-        "open list" <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>
-Cc:     "Rob Herring" <robh@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        "Michael Ellerman" <mpe@ellerman.id.au>,
-        "Nicholas Piggin" <npiggin@gmail.com>,
-        "Christophe Leroy" <christophe.leroy@csgroup.eu>,
-        "Andrew Donnellan" <ajd@linux.ibm.com>,
-        "Anders Roxell" <anders.roxell@linaro.org>
-Subject: Re: next: powerpc: gpio_mdio.c:(.text+0x13c): undefined reference to
- `__of_mdiobus_register'
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        with ESMTP id S230291AbjDTMl0 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 20 Apr 2023 08:41:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECD7D5BA3;
+        Thu, 20 Apr 2023 05:40:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 87B016492A;
+        Thu, 20 Apr 2023 12:40:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76537C433D2;
+        Thu, 20 Apr 2023 12:40:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681994455;
+        bh=jYk7Zd9ctQtmoQ9oVpNoBw40AOamcXM7JQPw3Wg6BqA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=kyTv2Hp4EPxCfJmhEgrX3y9dPJoiFV38Ms7OHMzP8zShPevpZAgjUEZLvWlEZBrz3
+         70QIWTOuWjfiH/bZZuqDvnff7eDIoh7kwk5Ty5a/Hz08qZJiz0TlkOGjmNCMYacToh
+         DaA2Qx1vuFmHzHJFf/iPYcZSY49e5GqRUwP30WQI21frEy016+78eJS3f2dhdkyNc+
+         S2DPCcLA6wKQHLslYGqgNg0aKf7qsyS+pzCZMC+LuONzrh8be0lzVNuRoM90HzyDSD
+         /K8AlqcoQr+on4PNNwhq/GvUK8iqTtcoSQtC/vbelOFcGGNmQAoQRhtJJCporWVjpK
+         nfePBVcjY1Ijw==
+From:   broonie@kernel.org
+To:     Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <paul@pwsan.com>
+Cc:     Alexandre Ghiti <alexghiti@rivosinc.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Palmer Dabbelt <palmer@rivosinc.com>
+Subject: linux-next: manual merge of the risc-v tree with the risc-v-fixes tree
+Date:   Thu, 20 Apr 2023 13:40:48 +0100
+Message-Id: <20230420124048.65232-1-broonie@kernel.org>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Apr 20, 2023, at 12:57, Naresh Kamboju wrote:
-> Following build failures noticed on Linux next-20230419 for powerpc.
->
-> Regressions found on powerpc:
->  - build/gcc-8-defconfig
->  - build/clang-16-defconfig
->  - build/gcc-12-defconfig
->  - build/clang-nightly-defconfig
->
->
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
->
-> Build log:
-> --------
-> powerpc64le-linux-gnu-ld: arch/powerpc/platforms/pasemi/gpio_mdio.o:
-> in function `gpio_mdio_probe':
-> gpio_mdio.c:(.text+0x13c): undefined reference to `__of_mdiobus_register'
-> powerpc64le-linux-gnu-ld: drivers/net/phy/phy_device.o: in function `phy_probe':
-> phy_device.c:(.text+0x56ac): undefined reference to
-> `devm_led_classdev_register_ext'
-> powerpc64le-linux-gnu-ld: drivers/net/ethernet/pasemi/pasemi_mac.o: in
-> function `pasemi_mac_open':
-> pasemi_mac.c:(.text+0x19ac): undefined reference to `of_phy_connect'
-> make[2]: *** [scripts/Makefile.vmlinux:35: vmlinux] Error 1
+Hi all,
 
-Same bug as the other one:
+Today's linux-next merge of the risc-v tree got a conflict in:
 
-https://lore.kernel.org/all/20230420084624.3005701-1-arnd@kernel.org/
+  arch/riscv/mm/init.c
 
-      Arnd
+between commit:
+
+  ef69d2559fe91 ("riscv: Move early dtb mapping into the fixmap region")
+
+from the risc-v-fixes tree and commits:
+
+  8589e346bbb67 ("riscv: Move the linear mapping creation in its own function")
+  3335068f87217 ("riscv: Use PUD/P4D/PGD pages for the linear mapping")
+
+from the risc-v tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+diff --cc arch/riscv/mm/init.c
+index 0f14f4a8d179a,7bd66795165da..0000000000000
+--- a/arch/riscv/mm/init.c
++++ b/arch/riscv/mm/init.c
+@@@ -1070,26 -1112,36 +1092,47 @@@ asmlinkage void __init setup_vm(uintptr
+  	pt_ops_set_fixmap();
+  }
+  
+- static void __init setup_vm_final(void)
++ static void __init create_linear_mapping_range(phys_addr_t start,
++ 					       phys_addr_t end)
+  {
++ 	phys_addr_t pa;
+  	uintptr_t va, map_size;
+- 	phys_addr_t pa, start, end;
+- 	u64 i;
+  
+- 	/* Setup swapper PGD for fixmap */
+ +#if !defined(CONFIG_64BIT)
+ +	/*
+ +	 * In 32-bit, the device tree lies in a pgd entry, so it must be copied
+ +	 * directly in swapper_pg_dir in addition to the pgd entry that points
+ +	 * to fixmap_pte.
+ +	 */
+ +	unsigned long idx = pgd_index(__fix_to_virt(FIX_FDT));
+ +
+ +	set_pgd(&swapper_pg_dir[idx], early_pg_dir[idx]);
+ +#endif
+- 	create_pgd_mapping(swapper_pg_dir, FIXADDR_START,
+- 			   __pa_symbol(fixmap_pgd_next),
+- 			   PGDIR_SIZE, PAGE_TABLE);
+++
++ 	for (pa = start; pa < end; pa += map_size) {
++ 		va = (uintptr_t)__va(pa);
++ 		map_size = best_map_size(pa, end - pa);
++ 
++ 		create_pgd_mapping(swapper_pg_dir, va, pa, map_size,
++ 				   pgprot_from_va(va));
++ 	}
++ }
++ 
++ static void __init create_linear_mapping_page_table(void)
++ {
++ 	phys_addr_t start, end;
++ 	u64 i;
++ 
++ #ifdef CONFIG_STRICT_KERNEL_RWX
++ 	phys_addr_t ktext_start = __pa_symbol(_start);
++ 	phys_addr_t ktext_size = __init_data_begin - _start;
++ 	phys_addr_t krodata_start = __pa_symbol(__start_rodata);
++ 	phys_addr_t krodata_size = _data - __start_rodata;
++ 
++ 	/* Isolate kernel text and rodata so they don't get mapped with a PUD */
++ 	memblock_mark_nomap(ktext_start,  ktext_size);
++ 	memblock_mark_nomap(krodata_start, krodata_size);
++ #endif
+  
+  	/* Map all memory banks in the linear mapping */
+  	for_each_mem_range(i, &start, &end) {

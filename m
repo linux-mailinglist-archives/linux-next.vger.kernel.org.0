@@ -2,70 +2,66 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27E4B6E9160
-	for <lists+linux-next@lfdr.de>; Thu, 20 Apr 2023 13:01:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 309BB6E916D
+	for <lists+linux-next@lfdr.de>; Thu, 20 Apr 2023 13:03:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235256AbjDTLBL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 20 Apr 2023 07:01:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47856 "EHLO
+        id S235248AbjDTLD2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 20 Apr 2023 07:03:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235254AbjDTLAw (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 20 Apr 2023 07:00:52 -0400
-Received: from mail-ua1-x929.google.com (mail-ua1-x929.google.com [IPv6:2607:f8b0:4864:20::929])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20B9F8A71
-        for <linux-next@vger.kernel.org>; Thu, 20 Apr 2023 03:58:29 -0700 (PDT)
-Received: by mail-ua1-x929.google.com with SMTP id w19so1856841uad.7
-        for <linux-next@vger.kernel.org>; Thu, 20 Apr 2023 03:58:28 -0700 (PDT)
+        with ESMTP id S235276AbjDTLDP (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 20 Apr 2023 07:03:15 -0400
+Received: from mail-ua1-x930.google.com (mail-ua1-x930.google.com [IPv6:2607:f8b0:4864:20::930])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23CBA30F5
+        for <linux-next@vger.kernel.org>; Thu, 20 Apr 2023 04:01:45 -0700 (PDT)
+Received: by mail-ua1-x930.google.com with SMTP id l17so1954233uak.0
+        for <linux-next@vger.kernel.org>; Thu, 20 Apr 2023 04:01:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681988287; x=1684580287;
+        d=linaro.org; s=google; t=1681988483; x=1684580483;
         h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=OlkpqVPsMGBCHCwPiGXeltlqZgDhFYvIj0YwaJwjXcY=;
-        b=SV6NOe5HXGojj8j858toAmnSCAUSPE+WaKKDGb4VN2CvbQQri0Qft/DJ2/u6BcgzIJ
-         FP9KTi9YL+RDIsLWGjjdaTD+mwNxmS81RD6Kv75eL8QiZqvJ5D/5HnBNXxAXTWpzmD5c
-         ByPMIyHMuAyJ2PH12t3+7r60A68vWdORNBRVkrNLSL1KjQ+L2dlt8PJyFucLhPNQ8EWe
-         tL49nbKGktraXetVBfH1pqPCuS3fH/RauI+qN7JXAzO9XPUTml6aFgFtHD3g0hwqhatJ
-         dvV4v0hO76lzr9KdIbk6DYwHAn2C52Ms8rtGrYA0V4HoCzc5ZL4rLxX9rgRVERyISyUq
-         /CKg==
+        bh=9/krmrwSEL+NhwRErVEyJ99NsFitd2cJDfkllHsD/uM=;
+        b=snFz9FcgJNGFQnSpVoFHu1+dHtbiF64/WO8BtxY/LR2Hrw/c+dITS3cGbHrCA8w0mp
+         aaY9QiLMN9eLID591qSC5AXl3zJ533ZDXnhmNJ8xHiKh2GDuuqG8pCGoi3Nc0nYtyxjT
+         jmNANCKY87CY6wuZA1sJgeUGQt3vLRObLyKxjo9ZJ0e1SibwRqsWOjpcEySFvPd92MBk
+         2WKsPGMGruUM86PM+CxOFyBt+OOJ6tEOGvTNDZsYZhdHMPLPAD2ueuSvYqOYLq7XIUHn
+         s4t5uE0LsVAAgz4bjwRzq4ReBpEGWUQYAGrtBOakq+i1VJxxQpTSt0CfJR+itdvu9sZ4
+         yG7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681988287; x=1684580287;
+        d=1e100.net; s=20221208; t=1681988483; x=1684580483;
         h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=OlkpqVPsMGBCHCwPiGXeltlqZgDhFYvIj0YwaJwjXcY=;
-        b=bUREwBDYJWZnIaPp/QoQGDisLPF0H2+k6+6ZQZxzPFLwFG/WDRHVitzwezxdVX84ka
-         ScmIPslk8/sdLiYxQb6Oo91qgCLkVq7XGVF1yD0cl6M2pm//NngdYClo7oeJAvDKDIgz
-         zGdtK2Mvbp0vKbckYIb0P+2VYvN2XJ5yyImsjuw3+ertBRStZCO40tBDo6R69qFzTp2d
-         pB9oS0nP6WvTpmauaoU8DIWSeHgXHj2EmVlWTmheToV+T/OmLyVwK/lV2k8BdAIQmEB+
-         31bITJRgOIYDdhYG7YICc8ZQyS88/UUzt3RbuftxU2jN0p5E0xI4vVc1BuS55aK9JSFk
-         7FvA==
-X-Gm-Message-State: AAQBX9cEAT5Gmkn78ZHjMHcj28WuIEzc31BN+PJszPBlpmQG9GWzLpoK
-        8VIMvJ6I8JVvuCmkWLfRa/G146eNzW8jGNqOLxC6xQ==
-X-Google-Smtp-Source: AKy350b7fx0YW1+BNZLLBmYhRSGLKi7LfzgDknAEsvAl3PAP80GeDmOlnQyMN2RGFNnwI0N5D1wvi1oRdNQ/BUlwORQ=
-X-Received: by 2002:a1f:4114:0:b0:443:e263:2dff with SMTP id
- o20-20020a1f4114000000b00443e2632dffmr377711vka.7.1681988287392; Thu, 20 Apr
- 2023 03:58:07 -0700 (PDT)
+        bh=9/krmrwSEL+NhwRErVEyJ99NsFitd2cJDfkllHsD/uM=;
+        b=Ji2Gm8Zs/W7Xl8UYkoGVGeWS44Fwvr7IyrlK+Aq4ULDKgYy6d5Pgd5BQxcTzMgA7Ut
+         QjfhGVfANCrm7NYwfKdBjkIYTIK6/Ss6cqz6pBLISqKy7hOvEdzKFESEhaRvSwYkHG2j
+         kYgCVaX5VvHeh1NE5MBs/osdc4KPLNlgxATnYN4okrDhC/mpI7irXB38FVGvSNySO6uE
+         1LdxqiXeOChiaf/YtTCP+cMQcaVE0cqkL6Kl6t0jhUPHerR7d5P3ahl9M8uGPX11LWeZ
+         FzQ/HlfUdhqPRY5OAiSJTAf8aDbRlXRsc2YjJcDMN85ddMZA1/qZgD0Bm6bYBdvMaj3s
+         EwXQ==
+X-Gm-Message-State: AAQBX9fDesLp0iwtb2FXUMcwy1Jjs8Ru7bryKLSoeRMsLOmTAXF8Hbn7
+        /J0SWRLt6Iya/ZlvUtvutESxOrvj12Si1wZEphtMX860UA2YNQRjYJs=
+X-Google-Smtp-Source: AKy350aynQMU4rqBVkT/HvHFUt9abSuGDscTBinD7vNfgD4VGkzFrpIlTakGszMHxO00jZ3rmdvHBbAoYTW5MPyHV8w=
+X-Received: by 2002:a1f:5fc5:0:b0:43f:f4a3:7385 with SMTP id
+ t188-20020a1f5fc5000000b0043ff4a37385mr498327vkb.7.1681988483260; Thu, 20 Apr
+ 2023 04:01:23 -0700 (PDT)
 MIME-Version: 1.0
 From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 20 Apr 2023 16:27:56 +0530
-Message-ID: <CA+G9fYsdMioe4+DEgeh38aTeaY3YaN_s_c0GFjPHhuPWfxyetA@mail.gmail.com>
-Subject: next: powerpc: gpio_mdio.c:(.text+0x13c): undefined reference to `__of_mdiobus_register'
-To:     linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>
-Cc:     Rob Herring <robh@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        ajd@linux.ibm.com, Arnd Bergmann <arnd@arndb.de>,
+Date:   Thu, 20 Apr 2023 16:31:12 +0530
+Message-ID: <CA+G9fYt+4e57Gdy6cix=LeNK6XqWoui8du=mZWu=cf8vPYocKw@mail.gmail.com>
+Subject: next: mips: ERROR: modpost: Section mismatches detected.
+To:     linux-mips@vger.kernel.org, llvm@lists.linux.dev,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        =?UTF-8?Q?Phil_Mathieu=2DDaud=C3=A9?= <philmd@linaro.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Arnd Bergmann <arnd@arndb.de>,
         Anders Roxell <anders.roxell@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,46 +69,46 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Following build failures noticed on Linux next-20230419 for powerpc.
+Following build failures noticed on Linux next-20230419 for mips.
 
-Regressions found on powerpc:
- - build/gcc-8-defconfig
- - build/clang-16-defconfig
- - build/gcc-12-defconfig
- - build/clang-nightly-defconfig
+Regressions found on mips:
+ - build/clang-nightly-allnoconfig
+ - build/clang-16-allnoconfig
+ - build/clang-16-tinyconfig
+ - build/clang-nightly-tinyconfig
 
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+arch/mips/kernel/genex.S:520:2: warning: macro defined with named
+parameters which are not used in macro body, possible positional
+parameter found in body which will have no effect
+ .macro __BUILD_verbose nexception
+ ^
+WARNING: modpost: vmlinux.o: section mismatch in reference: check_bugs
+(section: .text) -> check_bugs32 (section: .init.text)
+ERROR: modpost: Section mismatches detected.
+Set CONFIG_SECTION_MISMATCH_WARN_ONLY=y to allow them.
+make[2]: *** [scripts/Makefile.modpost:136: vmlinux.symvers] Error 1
+make[2]: *** Deleting file 'vmlinux.symvers'
+make[2]: Target '__modpost' not remade because of errors.
+make[1]: *** [Makefile:1978: modpost] Error 2
 
-Build log:
---------
-powerpc64le-linux-gnu-ld: arch/powerpc/platforms/pasemi/gpio_mdio.o:
-in function `gpio_mdio_probe':
-gpio_mdio.c:(.text+0x13c): undefined reference to `__of_mdiobus_register'
-powerpc64le-linux-gnu-ld: drivers/net/phy/phy_device.o: in function `phy_probe':
-phy_device.c:(.text+0x56ac): undefined reference to
-`devm_led_classdev_register_ext'
-powerpc64le-linux-gnu-ld: drivers/net/ethernet/pasemi/pasemi_mac.o: in
-function `pasemi_mac_open':
-pasemi_mac.c:(.text+0x19ac): undefined reference to `of_phy_connect'
-make[2]: *** [scripts/Makefile.vmlinux:35: vmlinux] Error 1
 
 Build details:
 ---------
-https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230419/testrun/16369015/suite/build/test/gcc-12-defconfig/details/
-https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230419/testrun/16369015/suite/build/test/gcc-12-defconfig/log
+ - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230419/testrun/16367253/suite/build/test/clang-16-tinyconfig/details/
+ - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230419/testrun/16367253/suite/build/test/clang-16-tinyconfig/log
 
 
 Steps to reproduce:
-------------
+----------
 # To install tuxmake on your system globally:
 # sudo pip3 install -U tuxmake
 #
 # See https://docs.tuxmake.org/ for complete documentation.
 # Original tuxmake command with fragments listed below.
 
-tuxmake --runtime podman --target-arch powerpc --toolchain gcc-12
---kconfig defconfig
+tuxmake --runtime podman --target-arch mips --toolchain clang-16
+--kconfig tinyconfig LLVM=1 LLVM_IAS=1
 
 
 --

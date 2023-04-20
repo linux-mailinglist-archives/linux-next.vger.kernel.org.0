@@ -2,62 +2,114 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF12D6E8C22
-	for <lists+linux-next@lfdr.de>; Thu, 20 Apr 2023 10:06:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF11F6E8E42
+	for <lists+linux-next@lfdr.de>; Thu, 20 Apr 2023 11:37:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233949AbjDTIG3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 20 Apr 2023 04:06:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41056 "EHLO
+        id S234549AbjDTJhS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 20 Apr 2023 05:37:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234033AbjDTIG2 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 20 Apr 2023 04:06:28 -0400
-Received: from mail.craftsplex.pl (mail.craftsplex.pl [162.19.155.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E223330EE
-        for <linux-next@vger.kernel.org>; Thu, 20 Apr 2023 01:06:20 -0700 (PDT)
-Received: by mail.craftsplex.pl (Postfix, from userid 1002)
-        id 45EF62413F; Thu, 20 Apr 2023 08:06:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=craftsplex.pl;
-        s=mail; t=1681977979;
-        bh=PcMncQpBfIZCnTOfZJY5G1G+gaLn4c9QPfFvoXrE4rA=;
-        h=Date:From:To:Subject:From;
-        b=qfdxt8g3sW46NmLyRxNloaVS6Uyo7tsObdBXtUyZql5e6MwB+3OfYbCx+3ksvaPYk
-         0Mc6OelXTbhJm60VCdCfA6pHxlvlAGAP8hPkq3vW51bMZBtUSlyZaBDOjAsj4l69OG
-         p6iu0+4LuoFEMTAaDZJe90nFXLJxZfbHPjE0URyvYO7obgyb+9l0Gj+tn2czX2hSgA
-         I3Q5r4Q+6+RaxjUfoJp6Adgwe+SSLddSO1ivzf3DFRgn3V955Qxa4NNTtKwiWMxKsv
-         k/Od1f/8wFer+Tpnxv4ZdSXXvydUOy/iBTVoZ3EpzfLeRL6Psy+Suu2s0ErKc4eyO6
-         1i3j/2WgfwN7Q==
-Received: by mail.craftsplex.pl for <linux-next@vger.kernel.org>; Thu, 20 Apr 2023 08:05:42 GMT
-Message-ID: <20230420064500-0.1.5o.q9rv.0.2ax536abpa@craftsplex.pl>
-Date:   Thu, 20 Apr 2023 08:05:42 GMT
-From:   "Kamil Tralewski" <kamil.tralewski@craftsplex.pl>
-To:     <linux-next@vger.kernel.org>
-Subject: =?UTF-8?Q?S=C5=82owa_kluczowe_do_wypozycjonowania?=
-X-Mailer: mail.craftsplex.pl
+        with ESMTP id S234406AbjDTJgm (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 20 Apr 2023 05:36:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EEC34C01;
+        Thu, 20 Apr 2023 02:36:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0667F6097C;
+        Thu, 20 Apr 2023 09:36:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFCDCC433D2;
+        Thu, 20 Apr 2023 09:36:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681983380;
+        bh=9yTTALXrhDWYKygBa8EeTRuKSMceh1+79v9wec5T14o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ajxHbB/KrslK5/nnLpLato1TyihZEAgQpvvMpxqib6MMAJ3Yh0E7l7lhumRbIfYgV
+         oXwMWjuNvYi3l3Xkyfuf8L8S4JUIVNViCMVcpNnmEj5s54t/D+pGz03I/uuhwhlPbe
+         w0mDDwdcRu9PL16grKZoxoQqtOjSZu9iIiP/wNlSX+coS66ffGa2WtflXvWArCz0Iq
+         G2pU6aj7P8IxJjqJDEwnGhg80m2uOi+t3/bidJ2bUM9y5UVehpzn+rDuNmrwg69VoU
+         nB9BmD/csjW3RNWG/2qn104xbqIJomwsN6X6X7tw340hytXXR8ygRQjv3AaD9lo6Tf
+         +fBa0k43LhR9w==
+Date:   Thu, 20 Apr 2023 11:36:15 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Gao Xiang <xiang@kernel.org>,
+        Gao Xiang <hsiangkao@linux.alibaba.com>,
+        Jingbo Xu <jefflexu@linux.alibaba.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the erofs tree with the
+ vfs-idmapping tree
+Message-ID: <20230420-umfragen-sandige-68c01f9ace00@brauner>
+References: <20230413144651.3519980-1-broonie@kernel.org>
+ <4f9fdec2-cc2a-4bc7-9ddc-87809395f493@sirena.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <4f9fdec2-cc2a-4bc7-9ddc-87809395f493@sirena.org.uk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Dzie=C5=84 dobry,
+On Thu, Apr 13, 2023 at 04:49:27PM +0100, Mark Brown wrote:
+> On Thu, Apr 13, 2023 at 03:46:51PM +0100, broonie@kernel.org wrote:
+> 
+> > I fixed it up (see below) and can carry the fix as necessary. This
+> > is now fixed as far as linux-next is concerned, but any non trivial
+> > conflicts should be mentioned to your upstream maintainer when your tree
+> > is submitted for merging.  You may also want to consider cooperating
+> > with the maintainer of the conflicting tree to minimise any particularly
+> > complex conflicts.
+> 
+> No, that's wrong.  This:
 
-zapozna=C5=82em si=C4=99 z Pa=C5=84stwa ofert=C4=85 i z przyjemno=C5=9Bci=
-=C4=85 przyznaj=C4=99, =C5=BCe przyci=C4=85ga uwag=C4=99 i zach=C4=99ca d=
-o dalszych rozm=C3=B3w.=20
+Yes, that fixup looks correct, thank you! 
 
-Pomy=C5=9Bla=C5=82em, =C5=BCe mo=C5=BCe m=C3=B3g=C5=82bym mie=C4=87 sw=C3=
-=B3j wk=C5=82ad w Pa=C5=84stwa rozw=C3=B3j i pom=C3=B3c dotrze=C4=87 z t=C4=
-=85 ofert=C4=85 do wi=C4=99kszego grona odbiorc=C3=B3w. Pozycjonuj=C4=99 =
-strony www, dzi=C4=99ki czemu generuj=C4=85 =C5=9Bwietny ruch w sieci.
+> 
+> diff --cc fs/erofs/xattr.c
+> index 015462763bdd5,a04724c816e5f..0000000000000
+> --- a/fs/erofs/xattr.c
+> +++ b/fs/erofs/xattr.c
+> @@@ -483,12 -517,28 +513,25 @@@ static int xattr_entrylist(struct xattr
+>   {
+>   	struct listxattr_iter *it =
+>   		container_of(_it, struct listxattr_iter, it);
+> - 	unsigned int prefix_len;
+> - 	const char *prefix;
+> + 	unsigned int base_index = entry->e_name_index;
+> + 	unsigned int prefix_len, infix_len = 0;
+> + 	const char *prefix, *infix = NULL;
+>  -	const struct xattr_handler *h;
+> + 
+> + 	if (entry->e_name_index & EROFS_XATTR_LONG_PREFIX) {
+> + 		struct erofs_sb_info *sbi = EROFS_SB(_it->sb);
+> + 		struct erofs_xattr_prefix_item *pf = sbi->xattr_prefixes +
+> + 			(entry->e_name_index & EROFS_XATTR_LONG_PREFIX_MASK);
+> + 
+> + 		if (pf >= sbi->xattr_prefixes + sbi->xattr_prefix_count)
+> + 			return 1;
+> + 		infix = pf->prefix->infix;
+> + 		infix_len = pf->infix_len;
+> + 		base_index = pf->prefix->base_index;
+> + 	}
+>   
+> - 	prefix = erofs_xattr_prefix(entry->e_name_index, it->dentry);
+>  -	h = erofs_xattr_handler(base_index);
+>  -	if (!h || (h->list && !h->list(it->dentry)))
+> ++	prefix = erofs_xattr_prefix(base_index, it->dentry);
+>  +	if (!prefix)
+>   		return 1;
+>  -
+>  -	prefix = xattr_prefix(h);
+>   	prefix_len = strlen(prefix);
+>   
+>   	if (!it->buffer) {
 
-Mo=C5=BCemy porozmawia=C4=87 w najbli=C5=BCszym czasie?
 
-Pozdrawiam
-Kamil Tralewski

@@ -2,96 +2,62 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2397F6E8910
-	for <lists+linux-next@lfdr.de>; Thu, 20 Apr 2023 06:22:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF12D6E8C22
+	for <lists+linux-next@lfdr.de>; Thu, 20 Apr 2023 10:06:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231213AbjDTEWA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 20 Apr 2023 00:22:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50904 "EHLO
+        id S233949AbjDTIG3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 20 Apr 2023 04:06:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230102AbjDTEWA (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 20 Apr 2023 00:22:00 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 018362D4C;
-        Wed, 19 Apr 2023 21:21:57 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id d9443c01a7336-1a66911f5faso6382155ad.0;
-        Wed, 19 Apr 2023 21:21:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681964517; x=1684556517;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=U8/f0BqrN3fbOh9nFqGySKf3YgZn5uXubEX6E6rTisE=;
-        b=O4/gcXpyzQKh8KK1KxMFoppJ2K3Na6/K0myKKH2izfyrXf1ZW4NEG0UerBett+T+qJ
-         GOiagxnkqcxd2foosvnWzNrHN8mZ56L0OtSaPHwy3+Kmvgd4WPY3iBj9b8lrczp44vO2
-         hlyuX4b952suPUrM/rFZpK+6NvhglbsLbRN2EYfUi7lisox6nSPuZTwMJXa1G5lcbU+y
-         RlSJeY9IdhxbsYCwYeNI751K/sOdbsZT5RZAdOZzgOW9668dMU5fOzkP8OrESyzC2osp
-         LXp/dogbaFV22Nee/vKdaVvh5NnJF85yZBKt88+y1fXDYfVqkq7gZsNDmqmQZX18d4+5
-         4Rlg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681964517; x=1684556517;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=U8/f0BqrN3fbOh9nFqGySKf3YgZn5uXubEX6E6rTisE=;
-        b=OR1SPeahekKJSUweanfREmy6ls1eGXHBoxab4+mnMhyVUlqn7RIM6+7Xx60fE2TyHj
-         kAgjwbaiRCJVqEVeORmx5Y4htsRWfgbbCJ9tSsaiUwAxNP22mzkH5wlJLNr9ah2zXe2L
-         fIGf+LzyGXLNdufASG0sBUSExqBx2PGa15EPc0hBbxuPgKtwzR209P7R/og0F6zcTOQv
-         HJzmRUNaaxul9jgQV4aI/I3Af4EMZ9GSB7RcPyq5OcNZo2A1glVNPnqxvTmTWEjjfFGG
-         6OWeqUyHrpgsCWHJOr0FPXqr5/uYL08aKroYfktXENPgjKiRUPH9UakqaFkcmBioKl5X
-         VhMg==
-X-Gm-Message-State: AAQBX9cW0g6Rb/SjJCndzPaAqEi8yAZQOr9Uw7GOxHY3cRbb0JKKwVQc
-        zmXneOZm1xq4bJRt0+N0Ft0=
-X-Google-Smtp-Source: AKy350Zp2PCGi3/SwlJA+xWhwsGyKosdq4R6FG4kxjtw7Rw6J/eKGAkqwdaHeb3JDZ6gUruEyilM2A==
-X-Received: by 2002:a17:902:f683:b0:1a8:17db:e252 with SMTP id l3-20020a170902f68300b001a817dbe252mr174219plg.34.1681964517386;
-        Wed, 19 Apr 2023 21:21:57 -0700 (PDT)
-Received: from [192.168.43.80] (subs03-180-214-233-9.three.co.id. [180.214.233.9])
-        by smtp.gmail.com with ESMTPSA id iz12-20020a170902ef8c00b001a212a93295sm226115plb.189.2023.04.19.21.21.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Apr 2023 21:21:56 -0700 (PDT)
-Message-ID: <16276cc1-2214-ef84-d5d8-d0c1a9681a0d@gmail.com>
-Date:   Thu, 20 Apr 2023 11:21:50 +0700
+        with ESMTP id S234033AbjDTIG2 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 20 Apr 2023 04:06:28 -0400
+Received: from mail.craftsplex.pl (mail.craftsplex.pl [162.19.155.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E223330EE
+        for <linux-next@vger.kernel.org>; Thu, 20 Apr 2023 01:06:20 -0700 (PDT)
+Received: by mail.craftsplex.pl (Postfix, from userid 1002)
+        id 45EF62413F; Thu, 20 Apr 2023 08:06:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=craftsplex.pl;
+        s=mail; t=1681977979;
+        bh=PcMncQpBfIZCnTOfZJY5G1G+gaLn4c9QPfFvoXrE4rA=;
+        h=Date:From:To:Subject:From;
+        b=qfdxt8g3sW46NmLyRxNloaVS6Uyo7tsObdBXtUyZql5e6MwB+3OfYbCx+3ksvaPYk
+         0Mc6OelXTbhJm60VCdCfA6pHxlvlAGAP8hPkq3vW51bMZBtUSlyZaBDOjAsj4l69OG
+         p6iu0+4LuoFEMTAaDZJe90nFXLJxZfbHPjE0URyvYO7obgyb+9l0Gj+tn2czX2hSgA
+         I3Q5r4Q+6+RaxjUfoJp6Adgwe+SSLddSO1ivzf3DFRgn3V955Qxa4NNTtKwiWMxKsv
+         k/Od1f/8wFer+Tpnxv4ZdSXXvydUOy/iBTVoZ3EpzfLeRL6Psy+Suu2s0ErKc4eyO6
+         1i3j/2WgfwN7Q==
+Received: by mail.craftsplex.pl for <linux-next@vger.kernel.org>; Thu, 20 Apr 2023 08:05:42 GMT
+Message-ID: <20230420064500-0.1.5o.q9rv.0.2ax536abpa@craftsplex.pl>
+Date:   Thu, 20 Apr 2023 08:05:42 GMT
+From:   "Kamil Tralewski" <kamil.tralewski@craftsplex.pl>
+To:     <linux-next@vger.kernel.org>
+Subject: =?UTF-8?Q?S=C5=82owa_kluczowe_do_wypozycjonowania?=
+X-Mailer: mail.craftsplex.pl
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: Semantic conflict between x86 doc cleanup and CET shadow stack
- doc
-Content-Language: en-US
-To:     Jonathan Corbet <corbet@lwn.net>,
-        Linux Documentation <linux-doc@vger.kernel.org>,
-        Linux x86 <x86@kernel.org>,
-        Linux Architectures <linux-arch@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Mark Brown <broonie@kernel.org>
-References: <ZD+1XVjMvm8EvCzN@debian.me> <87mt34atxg.fsf@meer.lwn.net>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <87mt34atxg.fsf@meer.lwn.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 4/19/23 20:22, Jonathan Corbet wrote:
-> https://lore.kernel.org/lkml/20230331142016.0a6f8f6b%40canb.auug.org.au/
-> 
+Dzie=C5=84 dobry,
 
-Thanks for the pointer 😌.
+zapozna=C5=82em si=C4=99 z Pa=C5=84stwa ofert=C4=85 i z przyjemno=C5=9Bci=
+=C4=85 przyznaj=C4=99, =C5=BCe przyci=C4=85ga uwag=C4=99 i zach=C4=99ca d=
+o dalszych rozm=C3=B3w.=20
 
-But I wonder why bronnie doesn't do this fixup...
+Pomy=C5=9Bla=C5=82em, =C5=BCe mo=C5=BCe m=C3=B3g=C5=82bym mie=C4=87 sw=C3=
+=B3j wk=C5=82ad w Pa=C5=84stwa rozw=C3=B3j i pom=C3=B3c dotrze=C4=87 z t=C4=
+=85 ofert=C4=85 do wi=C4=99kszego grona odbiorc=C3=B3w. Pozycjonuj=C4=99 =
+strony www, dzi=C4=99ki czemu generuj=C4=85 =C5=9Bwietny ruch w sieci.
 
--- 
-An old man doll... just what I always wanted! - Clara
+Mo=C5=BCemy porozmawia=C4=87 w najbli=C5=BCszym czasie?
 
+Pozdrawiam
+Kamil Tralewski

@@ -2,96 +2,97 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1CCF6ED1DD
-	for <lists+linux-next@lfdr.de>; Mon, 24 Apr 2023 18:00:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DBD56ED3CC
+	for <lists+linux-next@lfdr.de>; Mon, 24 Apr 2023 19:42:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231600AbjDXQAU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 24 Apr 2023 12:00:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58888 "EHLO
+        id S231784AbjDXRmU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 24 Apr 2023 13:42:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229906AbjDXQAT (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 24 Apr 2023 12:00:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A16F59DF;
-        Mon, 24 Apr 2023 09:00:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B4B3A61F17;
-        Mon, 24 Apr 2023 16:00:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3249C433D2;
-        Mon, 24 Apr 2023 16:00:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682352017;
-        bh=eyM5xnNO+nA5FQvYcdJGX09nRfAQhTUpzCH0JksIXSk=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Z/I2bsoJa5DZu+grD8Kh6Glcbxnas9Osj2YpRaimqkveMhjdl8lo+zN3QNMUt3lJB
-         1iXYkkD28QLkzp30cfYP0UxjTAGl8WA8042QaqAC4ZCOaVPxE94J+BH5910qZXpams
-         Gm/2uRvPF1OAkh93iDEVihKg4iKISISMTKTUUyItxxoCvoUotTuEDYgADl0MhfbXkv
-         ZphaVnAlpwbFnVJF+G7OIsL1+tb1+lA3oTwwmMvlfxGYw4FRuC0wV2gFu5lod+W8dH
-         fW5qVXvewhIbO5rr9yrMbgSRyeEDyg8CHkaVCQPnSf+xE6VmLBVcCOBweWPTIcMeH2
-         hhpYSTfBay0TA==
-From:   broonie@kernel.org
-To:     Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: Tree for Apr 24
-Date:   Mon, 24 Apr 2023 17:00:10 +0100
-Message-Id: <20230424160010.134527-1-broonie@kernel.org>
-X-Mailer: git-send-email 2.30.2
+        with ESMTP id S231748AbjDXRmS (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 24 Apr 2023 13:42:18 -0400
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9016F83ED;
+        Mon, 24 Apr 2023 10:42:17 -0700 (PDT)
+Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-246f856d751so3417171a91.0;
+        Mon, 24 Apr 2023 10:42:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682358137; x=1684950137;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Z7Xt9uEIH90evzQPe7fSyIGgVAJj2Yh/Pr2NGEckxCM=;
+        b=WGC2P1dM2wRGtyJkUl+dWdKVmZ2iUiYJd8iw3xygoELLlKGQFZmPY6iuJ8AP8uEiBz
+         upjSaef5UU8CwcO0GI+VLvfqQsl6Pl1ziMu8W5dEBLaOAMMLjwpSOxMr2A3O9dpjHlUl
+         odiyevsKlGEBbRTZol0C8Bw53OOOwZ+FX3XZLWarSDidQ4FNwW5iLXdp9pbpPluJZfhM
+         arNHcrxFKK/XPXJbJrXUONK6ksqIJ0OhrFvUT5M0p85sAEpqSBsBsjDscEc4pFau6eSu
+         pj7sYCBUdOqr+so7j8WpMM/3K3Nv7at4FdsuJ39+6IJADJ+T0YGSijYB+A+aAl43cZn2
+         GJxw==
+X-Gm-Message-State: AAQBX9fID7ifcb75vNF+EOLdm47AeES9kQeCP9lJrbx6ZiFYpIBj8zKv
+        JpSaY/R1PQ5VszM9ztRTAv8=
+X-Google-Smtp-Source: AKy350Z7R6wHgAEU8CddrgRNHJKpqJqvlfxQ/bj77Rl50unombtqBT40M4SAkwqZjBLJh4fcdXGrBA==
+X-Received: by 2002:a17:90b:1d09:b0:246:b60a:290b with SMTP id on9-20020a17090b1d0900b00246b60a290bmr14395359pjb.21.1682358136879;
+        Mon, 24 Apr 2023 10:42:16 -0700 (PDT)
+Received: from liuwe-devbox-debian-v2 ([20.69.120.36])
+        by smtp.gmail.com with ESMTPSA id u5-20020a17090ae00500b002467717fa60sm6855043pjy.16.2023.04.24.10.42.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Apr 2023 10:42:16 -0700 (PDT)
+Date:   Mon, 24 Apr 2023 17:42:14 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     broonie@kernel.org
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Long Li <longli@microsoft.com>, Wei Liu <wei.liu@kernel.org>
+Subject: Re: linux-next: manual merge of the sysctl tree with the hyperv tree
+Message-ID: <ZEa/dj2URSx8HPG4@liuwe-devbox-debian-v2>
+References: <20230424154742.131094-1-broonie@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        LOCALPART_IN_SUBJECT,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230424154742.131094-1-broonie@kernel.org>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi all,
+On Mon, Apr 24, 2023 at 04:47:42PM +0100, broonie@kernel.org wrote:
+> Hi all,
+> 
+> Today's linux-next merge of the sysctl tree got a conflict in:
+> 
+>   drivers/hv/vmbus_drv.c
+> 
+> between commit:
+> 
+>   9c318a1d9b500 ("Drivers: hv: move panic report code from vmbus to hv early init code")
+> 
+> from the hyperv tree and commit:
+> 
+>   525f23fe58b59 ("hv: simplify sysctl registration")
+> 
+> from the sysctl tree.
+> 
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+> 
+> diff --cc drivers/hv/vmbus_drv.c
+> index 1c65a6dfb9fae,229353f1e9c29..0000000000000
+> --- a/drivers/hv/vmbus_drv.c
+> +++ b/drivers/hv/vmbus_drv.c
 
-Changes since 20230421:
+Although this empty diff looks strange but it is indeed the correct
+resolution, since Long's patch made the same changes as 525f23fe58b59.
 
-The sysctl tree gained a conflict against the hyperv tree.
-
-Non-merge commits (relative to Linus' tree): 12691
- 12842 files changed, 833677 insertions(+), 433726 deletions(-)
-
-----------------------------------------------------------------------------
-
-I have created today's linux-next tree at
-git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-(patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
-are tracking the linux-next tree using git, you should not use "git pull"
-to do so as that will try to merge the new linux-next release with the
-old one.  You should use "git fetch" and checkout or reset to the new
-master.
-
-You can see which trees have been included by looking in the Next/Trees
-file in the source.  There is also the merge.log file in the Next
-directory.  Between each merge, the tree was built with a ppc64_defconfig
-for powerpc, an allmodconfig for x86_64, a multi_v7_defconfig for arm
-and a native build of tools/perf. After the final fixups (if any), I do
-an x86_64 modules_install followed by builds for x86_64 allnoconfig,
-powerpc allnoconfig (32 and 64 bit), ppc44x_defconfig, allyesconfig
-and pseries_le_defconfig and i386, arm64, s390, sparc and sparc64
-defconfig and htmldocs. And finally, a simple boot test of the powerpc
-pseries_le_defconfig kernel in qemu (with and without kvm enabled).
-
-Below is a summary of the state of the merge.
-
-I am currently merging 358 trees (counting Linus' and 102 trees of bug
-fix patches pending for the current merge release).
-
-Stats about the size of the tree over time can be seen at
-http://neuling.org/linux-next-size.html .
-
-Status of my local build tests will be at
-http://kisskb.ellerman.id.au/linux-next .  If maintainers want to give
-advice about cross compilers/configs that work, we are always open to add
-more builds.
-
-Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
-Gortmaker for triage and bug fixes.
+Thanks,
+Wei.

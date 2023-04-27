@@ -2,42 +2,47 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 927526F0637
-	for <lists+linux-next@lfdr.de>; Thu, 27 Apr 2023 14:55:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 740B06F06CE
+	for <lists+linux-next@lfdr.de>; Thu, 27 Apr 2023 15:43:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243572AbjD0MzN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 27 Apr 2023 08:55:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60160 "EHLO
+        id S242993AbjD0NnV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 27 Apr 2023 09:43:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243276AbjD0MzM (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 27 Apr 2023 08:55:12 -0400
+        with ESMTP id S232885AbjD0NnU (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 27 Apr 2023 09:43:20 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBACB1B0;
-        Thu, 27 Apr 2023 05:55:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D07F19AC;
+        Thu, 27 Apr 2023 06:43:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 48B5B60EB9;
-        Thu, 27 Apr 2023 12:55:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C08FDC433EF;
-        Thu, 27 Apr 2023 12:55:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CA9B861444;
+        Thu, 27 Apr 2023 13:43:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 634C4C433EF;
+        Thu, 27 Apr 2023 13:43:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682600110;
-        bh=LmgvIly1Ne0ymmEh9oLGXj6eLOHzFWRvAJDW2clDJQY=;
+        s=k20201202; t=1682602998;
+        bh=mP3zZ2WOxYXRJhsA5VsEIgXN9HuZoulQG9PKo94GzvU=;
         h=From:To:Cc:Subject:Date:From;
-        b=V1zHbNj2K5hWRCeoWJkPp5n7d2oqbdjFQ9QWvOD2YfuqjxDo9l8hspNPZSKE1KNcu
-         5hiX/iQvNQzk8q8nFvZrdOb7GVu74MsVQEG7np0Q6w9JgWbNVXUAyQPj1SOKqH/BwW
-         nkCgGV29k0VVwwpRV+2Td5Y903CW3UdL3433Xmh10Jm6B0XANDV8xPsaBv4ASn/O7X
-         8WdnGb2hgBcHd7drNTYb1d5se+NS1pB1bDTT5WbIWCP/J+QFNW6LN5TzZXTOn+3cjB
-         mHvCulRGN5N9jlTOacWTJBR+OoNoOUdoG1lLU5FKKqzMXSw4PBFe4Lr8ZmlXuvMHgG
-         1kjiwfhHtlOHA==
+        b=C48jjRFdCt14kncc2Y42SttpbJ+fBR0xmzaHIp2kx3SdP8ngjnbKSYeK8FTqnKXH6
+         EP3+PIseLFytsRd3+EqOjmtpheHYZE74k6DsGiNI4xp6MO7UIVhWmF36UJgijaz+He
+         r85VEWDAKJLmIZS516+EzwH0XYDmpvH5pLpraMJTEuFsrJd0OAtbgmq9YBROYTEZ0K
+         wfxW1h8BZD/T+nZSijnGLlR6XaPk2nX/yGE3dC0aJvkJ4WBcJkiLGz2TyatT3mV5Sw
+         QuWb4cBJoz035bWOO/WKyJdgNM2R4sn9bwI/5RXcAboXyxWJcRhXJV3SOYVM94phYa
+         2avdy3pCHOBXA==
 From:   broonie@kernel.org
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     David Sterba <dsterba@suse.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the tpmdd tree
-Date:   Thu, 27 Apr 2023 13:55:06 +0100
-Message-Id: <20230427125506.43348-1-broonie@kernel.org>
+Subject: linux-next: manual merge of the tip tree with the origin tree
+Date:   Thu, 27 Apr 2023 14:43:13 +0100
+Message-Id: <20230427134313.45596-1-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -53,45 +58,30 @@ X-Mailing-List: linux-next@vger.kernel.org
 
 Hi all,
 
-After merging the tpmdd tree, today's linux-next build (arm64 defconfig
-and others) failed like this:
+Today's linux-next merge of the tip tree got a conflict in:
 
-In file included from /tmp/next/build/include/linux/tpm_eventlog.h:6,
-                 from /tmp/next/build/drivers/char/tpm/tpm-chip.c:24:
-/tmp/next/build/include/linux/tpm.h:285:9: error: redeclaration of enumerator 'TPM_CHIP_FLAG_FIRMWARE_UPGRADE'
-  285 |         TPM_CHIP_FLAG_FIRMWARE_UPGRADE          = BIT(7),
-      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/tmp/next/build/include/linux/tpm.h:284:9: note: previous definition of 'TPM_CHIP_FLAG_FIRMWARE_UPGRADE' with type 'int'
-  284 |         TPM_CHIP_FLAG_FIRMWARE_UPGRADE          = BIT(7),
-      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/tmp/next/build/include/linux/tpm.h:286:9: error: redeclaration of enumerator 'TPM_CHIP_FLAG_FIRMWARE_UPGRADE'
-  286 |         TPM_CHIP_FLAG_FIRMWARE_UPGRADE          = BIT(7),
-      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/tmp/next/build/include/linux/tpm.h:285:9: note: previous definition of 'TPM_CHIP_FLAG_FIRMWARE_UPGRADE' with type 'int'
-  285 |         TPM_CHIP_FLAG_FIRMWARE_UPGRADE          = BIT(7),
-      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-make[5]: *** [/tmp/next/build/scripts/Makefile.build:252: drivers/char/tpm/tpm-chip.o] Error 1
-make[4]: *** [/tmp/next/build/scripts/Makefile.build:494: drivers/char/tpm] Error 2
-make[3]: *** [/tmp/next/build/scripts/Makefile.build:494: drivers/char] Error 2
-make[3]: *** Waiting for unfinished jobs....
-In file included from /tmp/next/build/include/keys/trusted-type.h:12,
-                 from /tmp/next/build/crypto/af_alg.c:26:
-/tmp/next/build/include/linux/tpm.h:285:9: error: redeclaration of enumerator 'TPM_CHIP_FLAG_FIRMWARE_UPGRADE'
-  285 |         TPM_CHIP_FLAG_FIRMWARE_UPGRADE          = BIT(7),
-      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/tmp/next/build/include/linux/tpm.h:284:9: note: previous definition of 'TPM_CHIP_FLAG_FIRMWARE_UPGRADE' with type 'int'
-  284 |         TPM_CHIP_FLAG_FIRMWARE_UPGRADE          = BIT(7),
-      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/tmp/next/build/include/linux/tpm.h:286:9: error: redeclaration of enumerator 'TPM_CHIP_FLAG_FIRMWARE_UPGRADE'
-  286 |         TPM_CHIP_FLAG_FIRMWARE_UPGRADE          = BIT(7),
-      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/tmp/next/build/include/linux/tpm.h:285:9: note: previous definition of 'TPM_CHIP_FLAG_FIRMWARE_UPGRADE' with type 'int'
-  285 |         TPM_CHIP_FLAG_FIRMWARE_UPGRADE          = BIT(7),
-      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-make[3]: *** [/tmp/next/build/scripts/Makefile.build:252: crypto/af_alg.o] Error 1
+  tools/objtool/check.c
 
-Caused by commit
+between commit:
 
-  e2f14081c6839 ("tpm: Re-enable TPM chip boostrapping non-tpm_tis TPM drivers")
+  f372463124df5 ("btrfs: mark btrfs_assertfail() __noreturn")
 
-I will use the tree from yesterday instead.
+from the origin tree and commits:
+
+  071c44e427815 ("sched/idle: Mark arch_cpu_idle_dead() __noreturn")
+  09c5ae30d0075 ("btrfs: Mark btrfs_assertfail() __noreturn")
+  9ea7e6b62c2bd ("init: Mark [arch_call_]rest_init() __noreturn")
+
+from the tip tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+diff --cc tools/objtool/check.c
+index 931cdb7dba190,5b600bbf2389b..0000000000000
+--- a/tools/objtool/check.c
++++ b/tools/objtool/check.c

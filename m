@@ -2,101 +2,102 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB8F06F6D69
-	for <lists+linux-next@lfdr.de>; Thu,  4 May 2023 16:00:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B6406F6D98
+	for <lists+linux-next@lfdr.de>; Thu,  4 May 2023 16:17:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231218AbjEDOAv (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 4 May 2023 10:00:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47444 "EHLO
+        id S231179AbjEDORB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 4 May 2023 10:17:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230380AbjEDOAu (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 4 May 2023 10:00:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6D521982;
-        Thu,  4 May 2023 07:00:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5948160BDC;
-        Thu,  4 May 2023 14:00:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48628C4339B;
-        Thu,  4 May 2023 14:00:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683208847;
-        bh=+i4zLKz/bY77nPFISagMtcEHYXbSlZ5uAgfTAWb8wZ4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=PqkG2DbVTQV0GB0ACRJAFWICW/D3Y1FdBZrbPHaPkeY1adbagVGtkcQkEGsehlZuO
-         JZnRh6b3hQMHyV6MHYevoL+hAx+lWVFGbBX05LXF6HSGDSyKQaQGYcIcwb4Z6v+9jJ
-         UU6HXoKZyIMzUyjz4KLL2+69+W0OJimzoAfESoxbXJbiACylLNvRCHLJ9wAHVfltT0
-         AvPYX8iy9Wmya4eTC3g9N8bQYYRlz7GoLzW63nOGfPYPhGLMnUu8sQBWoYC6/dHgv1
-         +H68SvCvowHbK1oVEwFU2xSqqvd8DqKZ+8s8cWj8aszTfI3Pk8vVJGmo0qp0cm1niK
-         EdDt0RBEc+eiw==
-From:   Mark Brown <broonie@kernel.org>
-To:     Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: Tree for May 4
-Date:   Thu,  4 May 2023 23:00:40 +0900
-Message-Id: <20230504140040.190691-1-broonie@kernel.org>
-X-Mailer: git-send-email 2.39.2
+        with ESMTP id S231159AbjEDORA (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 4 May 2023 10:17:00 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF7A38A5F;
+        Thu,  4 May 2023 07:16:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683209820; x=1714745820;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=alLqm8q+Z/k28CAHkPUs4IcILNokb3SjUsDt/XZB/l0=;
+  b=PWbqabxNx8avC3GDPWupOt1LokkIcPg6XPT2Tft1m666f89QZer4TpH3
+   zyfssYYSO5iTcc5Tx1QugOL7EAilGqGTedyhimmqcmRP3i7esWonY8UHk
+   QeiNvIH1crC9qgUa8EXe2RjJI0f5x1BZFqX6Yt438kzUXFmCHH8XIFl8b
+   cWxi8IfOqHDCZt0ZY6AT+NFEMIUfoOHrNzgHvd6TNcAvSCZR7XfT/x1ZJ
+   jiQELDzbV5OeHEFeaOTywlzwSQ75GjbG+t5cNQiUhExXQ1D6MpsXuazsP
+   Wo7MyMftc8tcSGGF++NtRynjMWaOFtUqRcGahCMEwR66JvFXQrwpUH9b9
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10700"; a="435251285"
+X-IronPort-AV: E=Sophos;i="5.99,249,1677571200"; 
+   d="scan'208";a="435251285"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2023 07:16:39 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10700"; a="841181502"
+X-IronPort-AV: E=Sophos;i="5.99,249,1677571200"; 
+   d="scan'208";a="841181502"
+Received: from khaunx-mobl.ger.corp.intel.com (HELO [10.251.217.147]) ([10.251.217.147])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2023 07:16:34 -0700
+Message-ID: <d0ae6716-c87f-f03d-7b66-ea899eaa7258@intel.com>
+Date:   Thu, 4 May 2023 07:16:30 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        LOCALPART_IN_SUBJECT,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: linux-next: manual merge of the tip tree with the origin tree
+Content-Language: en-US
+To:     Mark Brown <broonie@finisterre.sirena.org.uk>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Nhat Pham <nphamcs@gmail.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>
+References: <20230504131824.182744-1-broonie@finisterre.sirena.org.uk>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20230504131824.182744-1-broonie@finisterre.sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi all,
+On 5/4/23 06:18, Mark Brown wrote:
+> diff --cc arch/x86/entry/syscalls/syscall_64.tbl
+> index 227538b0ce801,f65c671ce3b14..0000000000000
+> --- a/arch/x86/entry/syscalls/syscall_64.tbl
+> +++ b/arch/x86/entry/syscalls/syscall_64.tbl
+> @@@ -372,7 -372,7 +372,8 @@@
+>   448	common	process_mrelease	sys_process_mrelease
+>   449	common	futex_waitv		sys_futex_waitv
+>   450	common	set_mempolicy_home_node	sys_set_mempolicy_home_node
+>  -451	64	map_shadow_stack	sys_map_shadow_stack
+>  +451	common	cachestat		sys_cachestat
+> ++452	64	map_shadow_stack	sys_map_shadow_stack
 
-Changes since 20230428:
+Hi Mark,
 
-The tip tree gained a conflict with the origin tree.
+This will break the shadow stack selftest:
 
-The tip tree gained a conflict with the mm tree.
+	tools/testing/selftests/x86/test_shadow_stack.c
 
-The pinctrl tree gained a conflict with the origin tree.
+since it has:
 
-Non-merge commits (relative to Linus' tree): 1201
- 1446 files changed, 187560 insertions(+), 156238 deletions(-)
+	#define __NR_map_shadow_stack  451
 
-----------------------------------------------------------------------------
+This also missed bumping:
 
-I have created today's linux-next tree at
-git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-(patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
-are tracking the linux-next tree using git, you should not use "git pull"
-to do so as that will try to merge the new linux-next release with the
-old one.  You should use "git fetch" and checkout or reset to the new
-master.
+	#define __NR_syscalls 452
 
-You can see which trees have been included by looking in the Next/Trees
-file in the source.  There is also the merge.log file in the Next
-directory.  Between each merge, the tree was built with a ppc64_defconfig
-for powerpc, an allmodconfig for x86_64, a multi_v7_defconfig for arm
-and a native build of tools/perf. After the final fixups (if any), I do
-an x86_64 modules_install followed by builds for x86_64 allnoconfig,
-powerpc allnoconfig (32 and 64 bit), ppc44x_defconfig, allyesconfig
-and pseries_le_defconfig and i386, arm64, s390, sparc and sparc64
-defconfig and htmldocs. And finally, a simple boot test of the powerpc
-pseries_le_defconfig kernel in qemu (with and without kvm enabled).
+in include/uapi/asm-generic/unistd.h.
 
-Below is a summary of the state of the merge.
 
-I am currently merging 358 trees (counting Linus' and 102 trees of bug
-fix patches pending for the current merge release).
-
-Stats about the size of the tree over time can be seen at
-http://neuling.org/linux-next-size.html .
-
-Status of my local build tests will be at
-http://kisskb.ellerman.id.au/linux-next .  If maintainers want to give
-advice about cross compilers/configs that work, we are always open to add
-more builds.
-
-Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
-Gortmaker for triage and bug fixes.

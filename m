@@ -2,101 +2,85 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90E8E6F3B2A
-	for <lists+linux-next@lfdr.de>; Tue,  2 May 2023 02:03:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB1CD6F6CD3
+	for <lists+linux-next@lfdr.de>; Thu,  4 May 2023 15:18:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231915AbjEBADX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 1 May 2023 20:03:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33224 "EHLO
+        id S230436AbjEDNSr (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 4 May 2023 09:18:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjEBADX (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 1 May 2023 20:03:23 -0400
+        with ESMTP id S231149AbjEDNSq (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 4 May 2023 09:18:46 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2FD310DC;
-        Mon,  1 May 2023 17:03:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15B077DA7;
+        Thu,  4 May 2023 06:18:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4EC8961A41;
-        Tue,  2 May 2023 00:03:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51826C4339B;
-        Tue,  2 May 2023 00:03:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682985798;
-        bh=QdYH6yIwZfoQtaUWs7MtYiqjg+6MKHcLUlPFwj1Siv0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LNIPH8AfrY/ocfOdCc+f5fpO3T4YPJlBMvafDl8nz8m/qzaIu7XwQK9fPV+6uFUdc
-         ryJg8cu5/R0jaldHmbdYXfhN1c8lLxAfKT8f25bg/79u1Sq5DPuX7+0UC0eAwAyhGC
-         uwPQdLcU+whb26yWcxV8qDzAG92MAte6IsAqV5NmNVBBfKOzklUTLNYqqGQIk0nNSJ
-         5k/GjXi9bZm0mnrBS3sF+FdDkgvn6yAh5jXP1IsJmPYmiq7X15YuZjOeriVxcpqwqx
-         Jcf08KaieJydz5K/kxDoJvWYqmp03kli5QKI8pQgm0yJyTDuflPh5EdYBDlco7c2/L
-         3vEu7ltL1W9SA==
-Date:   Tue, 2 May 2023 09:03:15 +0900
-From:   Mark Brown <broonie@kernel.org>
-To:     Dipen Patel <dipenp@nvidia.com>
-Cc:     linux-next@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: Missing signoffs in the hte tree
-Message-ID: <ZFBTQ+dAHp3g7FXN@finisterre.sirena.org.uk>
-References: <143a3e5b-ddc9-4ce1-88ea-9e4d80761cc1@sirena.org.uk>
- <14a6bbb9-aca7-750c-e004-2b11abf05926@nvidia.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5C7396341A;
+        Thu,  4 May 2023 13:18:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51E81C4339B;
+        Thu,  4 May 2023 13:18:27 +0000 (UTC)
+From:   Mark Brown <broonie@finisterre.sirena.org.uk>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Nhat Pham <nphamcs@gmail.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>
+Subject: linux-next: manual merge of the tip tree with the origin tree
+Date:   Thu,  4 May 2023 22:18:24 +0900
+Message-Id: <20230504131824.182744-1-broonie@finisterre.sirena.org.uk>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="2O/ays0to2035xr5"
-Content-Disposition: inline
-In-Reply-To: <14a6bbb9-aca7-750c-e004-2b11abf05926@nvidia.com>
-X-Cookie: Avoid contact with eyes.
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_ADSP_NXDOMAIN,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+Hi all,
 
---2O/ays0to2035xr5
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Today's linux-next merge of the tip tree got a conflict in:
 
-On Mon, May 01, 2023 at 12:40:16PM -0700, Dipen Patel wrote:
-> On 4/24/23 5:07 AM, Mark Brown wrote:
+  arch/x86/entry/syscalls/syscall_64.tbl
 
-> >   1af0f6b5060cf ("hte: tegra-194: Use proper includes")
-> >   3798a6e3b6a89 ("hte: Use device_match_of_node()")
-> >   981501927e482 ("hte: tegra-194: Fix off by one in tegra_hte_map_to_line_id()")
-> >   58e1189d075a4 ("hte: tegra: fix 'struct of_device_id' build error")
-> >   499c35fe9bf2e ("hte: Use of_property_present() for testing DT property presence")
+between commit:
 
-> > in the hte tree for today are missing a Signed-off-by from their
-> > committers.
+  5c289a59b1d08 ("cachestat: implement cachestat syscall")
 
-> Shouldn't Acked-by tag from me (maintainer of the HTE tree) enough? I mean it does imply signed-off-by, right?
+from the origin tree and commit:
 
-No, not at all - the signoff has specific meaning with regard to the
-developer certificate of origin [1] - whoever applies the commit needs
-to supply a signoff to say that they're asserting that the DCO is being
-followed.  This is separate to review (though if a maintainer is
-applying a patch that's generally at least as good as an ack so no need
-for anything else).
+  a9d48cbbcc40b ("x86/shstk: Introduce map_shadow_stack syscall")
 
-[1] https://developercertificate.org/
+from the tip tree.
 
---2O/ays0to2035xr5
-Content-Type: application/pgp-signature; name="signature.asc"
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRQU0IACgkQJNaLcl1U
-h9DJFwf/eiCZqXA0qN4BDRtDbWnsHBjf5bOhyi1aBQTWrIcpwWtzC8/n4WIbZFMB
-cK3oGILyIRcwT9yXD2FtSGVo+W5hd+X23yDxmF3QPO70SUpP0Ao26wE/GOIy9DpS
-hrSEqPsCm1KvjvPOwuNKJVJeL6vBSV2OePGp22sNW28Auk5xMflz7Ssr6LZJOV31
-pMkkjXS9pmeC35KKvtV7k6upywuNCCAMlGEGTvDL7BQF/23lHSY6n2A/L4jiRuEu
-iVA9frLCxraTRcFRhmOYTJ8wDhDS/2hi5DtPzKJ2HlKHaqgA5rThS6msWuUZuxTQ
-YZeTeuzCaQUPSzt8opeRigwIsfMvcw==
-=9fkH
------END PGP SIGNATURE-----
-
---2O/ays0to2035xr5--
+diff --cc arch/x86/entry/syscalls/syscall_64.tbl
+index 227538b0ce801,f65c671ce3b14..0000000000000
+--- a/arch/x86/entry/syscalls/syscall_64.tbl
++++ b/arch/x86/entry/syscalls/syscall_64.tbl
+@@@ -372,7 -372,7 +372,8 @@@
+  448	common	process_mrelease	sys_process_mrelease
+  449	common	futex_waitv		sys_futex_waitv
+  450	common	set_mempolicy_home_node	sys_set_mempolicy_home_node
+ -451	64	map_shadow_stack	sys_map_shadow_stack
+ +451	common	cachestat		sys_cachestat
+++452	64	map_shadow_stack	sys_map_shadow_stack
+  
+  #
+  # Due to a historical design error, certain syscalls are numbered differently

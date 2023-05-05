@@ -2,48 +2,44 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11CCE6F83F4
-	for <lists+linux-next@lfdr.de>; Fri,  5 May 2023 15:26:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D19E6F847E
+	for <lists+linux-next@lfdr.de>; Fri,  5 May 2023 16:05:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232170AbjEEN0y (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 5 May 2023 09:26:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51242 "EHLO
+        id S232107AbjEEOFr (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 5 May 2023 10:05:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229904AbjEEN0x (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 5 May 2023 09:26:53 -0400
+        with ESMTP id S232695AbjEEOFr (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 5 May 2023 10:05:47 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BC6C2075E;
-        Fri,  5 May 2023 06:26:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 639B614E5D;
+        Fri,  5 May 2023 07:05:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BF1E063E2B;
-        Fri,  5 May 2023 13:26:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAD2FC433EF;
-        Fri,  5 May 2023 13:26:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 09C3D6120E;
+        Fri,  5 May 2023 14:05:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06870C433EF;
+        Fri,  5 May 2023 14:05:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683293177;
-        bh=ID6tW6Ir95UnY+CJe/xBNPDkriFuLBjLVGBTGdMHAHA=;
+        s=k20201202; t=1683295545;
+        bh=C2geJvBn21IBblTJ0IEJ0Dfm+DUTWnIev4wKTeoTUdM=;
         h=From:To:Cc:Subject:Date:From;
-        b=KtfAnawU1C9rk+poKY/7dK9D4kU21XPGcTzi2oI6K8aZvUvXDBcocyY5/uTR4s0NP
-         DNvceo27gyliZM6a2DYfRmCFwvGYUrJ1dW0tySXjQOG+nt6dMtaz4afVnNZgypVkSU
-         enh7LCCunBHhJ496LMVtB+J62qcyUMOSSqrszUuuyFu8/kEI+jROyu2NqhXnFvAbyZ
-         9urnbKfQ0UpyPLgHAEu88j3cYoAQ6JdxICWMjfez03hJCXa1jgehx4hVKBAfQL7C7d
-         QEk1Iqs857FdswUusQjoHKrJF8XQxlng+YAqbHZGX8JkdCx98+WL/q+LYxXpTKYdWE
-         FaswtRqUN9VRQ==
+        b=ij29A2hgwGSdgvcBBZwr7aCJLne6Qx520GWrjgyoYtasTyRBe1z9EVXqF4F8Kgboq
+         9LcNfshqPnyDH3mvXc+U0O6jHF4Gi3vBtu8ddZPLNTTPP9UpoAAwASP0Q2qLLQAgCo
+         tf1PPgacXyFZPj1u0wAZ6au31CKe3XRhxS0qsAaAy4DXGzrhJxAtn25zWeaXioDWeX
+         Eg7Tpga5FC11GeUx1CIqeuU3JjwjV5eM0OjNMrIxxqlc0pWDAvnBbdCdxPElZasRI4
+         Gye2ip21A+pBstCs7WoV5jzhvjC/7B7tnhVjOI5ve6UFpwPtyWR/ZlRYWmqFo9n+On
+         r8ErfpClE1kNA==
 From:   Mark Brown <broonie@kernel.org>
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     Alex Deucher <alexander.deucher@amd.com>,
-        Alvin Lee <Alvin.Lee2@amd.com>,
-        Aurabindo Pillai <aurabindo.pillai@amd.com>,
-        Jasdeep Dhillon <jasdeep.dhillon@amd.com>,
-        Josip Pavic <Josip.Pavic@amd.com>,
+To:     "Michael S . Tsirkin" <mst@redhat.com>
+Cc:     "David S . Miller" <davem@davemloft.net>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
-Subject: linux-next: manual merge of the amdgpu tree with the drm-next tree
-Date:   Fri,  5 May 2023 22:26:13 +0900
-Message-Id: <20230505132613.215401-1-broonie@kernel.org>
+        Wenliang Wang <wangwenliang.1995@bytedance.com>
+Subject: linux-next: manual merge of the vhost tree with the net tree
+Date:   Fri,  5 May 2023 23:05:41 +0900
+Message-Id: <20230505140541.220392-1-broonie@kernel.org>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -59,27 +55,19 @@ X-Mailing-List: linux-next@vger.kernel.org
 
 Hi all,
 
-Today's linux-next merge of the amdgpu tree got conflicts in:
+Today's linux-next merge of the vhost tree got a conflict in:
 
-  drivers/gpu/drm/amd/display/dc/dcn31/dcn31_hwseq.c
-  drivers/gpu/drm/amd/display/dc/dcn32/dcn32_hwseq.c
-  drivers/gpu/drm/amd/display/dc/dml/dcn32/dcn32_fpu.c
-  drivers/gpu/drm/amd/display/dc/dml/dcn32/dcn32_fpu.h
+  drivers/net/virtio_net.c
 
-between commits:
+between commit:
 
-  822b84ecfc646 ("drm/amd/display: Add missing WA and MCLK validation")
-  f11aee97b13ea ("drm/amd/display: copy dmub caps to dc on dcn31")
-  3caab67db1f69 ("drm/amd/display: Isolate remaining FPU code in DCN32")
+  f8bb510439456 ("virtio_net: suppress cpu stall when free_unused_bufs")
 
-from the drm-next tree and commits:
+from the net and Linus' tree and commit:
 
-  e0a77e09c707c ("drm/amd/display: Add missing WA and MCLK validation")
-  4f63b7a59926e ("drm/amd/display: Add FAMS capability to DCN31")
-  b058e3999021e ("drm/amd/display: Enable SubVP on PSR panels if single stream")
-  1938bcdc4b530 ("drm/amd/display: Query GECC enable for SubVP disable")
+  bc31caabba78f ("virtio_net: suppress cpu stall when free_unused_bufs")
 
-from the amdgpu tree.
+from the vhost tree.
 
 I fixed it up (see below) and can carry the fix as necessary. This
 is now fixed as far as linux-next is concerned, but any non trivial
@@ -88,19 +76,7 @@ is submitted for merging.  You may also want to consider cooperating
 with the maintainer of the conflicting tree to minimise any particularly
 complex conflicts.
 
-diff --cc drivers/gpu/drm/amd/display/dc/dcn31/dcn31_hwseq.c
-index 62ce36c75c4d2,55494730e5008..0000000000000
---- a/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_hwseq.c
-+++ b/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_hwseq.c
-diff --cc drivers/gpu/drm/amd/display/dc/dcn32/dcn32_hwseq.c
-index 1f5ee5cde6e1c,4950eaa4406b2..0000000000000
---- a/drivers/gpu/drm/amd/display/dc/dcn32/dcn32_hwseq.c
-+++ b/drivers/gpu/drm/amd/display/dc/dcn32/dcn32_hwseq.c
-diff --cc drivers/gpu/drm/amd/display/dc/dml/dcn32/dcn32_fpu.c
-index 47beb4ea779d3,826059d5b3675..0000000000000
---- a/drivers/gpu/drm/amd/display/dc/dml/dcn32/dcn32_fpu.c
-+++ b/drivers/gpu/drm/amd/display/dc/dml/dcn32/dcn32_fpu.c
-diff --cc drivers/gpu/drm/amd/display/dc/dml/dcn32/dcn32_fpu.h
-index dcf512cd30721,a4206b71d650a..0000000000000
---- a/drivers/gpu/drm/amd/display/dc/dml/dcn32/dcn32_fpu.h
-+++ b/drivers/gpu/drm/amd/display/dc/dml/dcn32/dcn32_fpu.h
+diff --cc drivers/net/virtio_net.c
+index a12ae26db0e22,cdb1654e5a435..0000000000000
+--- a/drivers/net/virtio_net.c
++++ b/drivers/net/virtio_net.c

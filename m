@@ -2,78 +2,98 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 341856F9112
-	for <lists+linux-next@lfdr.de>; Sat,  6 May 2023 12:03:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47AD16F9D1A
+	for <lists+linux-next@lfdr.de>; Mon,  8 May 2023 02:53:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231450AbjEFKDL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 6 May 2023 06:03:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33214 "EHLO
+        id S231706AbjEHAx4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 7 May 2023 20:53:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230000AbjEFKDK (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sat, 6 May 2023 06:03:10 -0400
-X-Greylist: delayed 1397 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 06 May 2023 03:03:06 PDT
-Received: from mail.quimbiotec.gob.ve (mail.quimbiotec.gob.ve [201.249.143.238])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BA1ECE7;
-        Sat,  6 May 2023 03:03:06 -0700 (PDT)
-Received: from localhost (mail.quimbiotec.gob.ve [127.0.0.1])
-        by mail.quimbiotec.gob.ve (Postfix) with ESMTP id 26AC61203B39;
-        Sat,  6 May 2023 05:34:10 -0400 (-04)
-Received: from mail.quimbiotec.gob.ve ([127.0.0.1])
-        by localhost (mail.quimbiotec.gob.ve [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id q5jzUeE8fCV4; Sat,  6 May 2023 05:34:09 -0400 (-04)
-Received: from localhost (mail.quimbiotec.gob.ve [127.0.0.1])
-        by mail.quimbiotec.gob.ve (Postfix) with ESMTP id 826ED1203B1A;
-        Sat,  6 May 2023 05:34:09 -0400 (-04)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.quimbiotec.gob.ve 826ED1203B1A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quimbiotec.gob.ve;
-        s=695D21C2-253C-11ED-BDFF-C79B274D8774; t=1683365649;
-        bh=RRRnP4RIsEwCVthsZM6x7wu40KXcDhaHAXW+GEcnQQQ=;
-        h=MIME-Version:To:From:Date:Message-Id;
-        b=zKn5adZqn5/9inNxOi3NZadd4dOrMRijbWpoS7lb/rF/2uazd3ZZKXu+pXKf2vpKF
-         /9CwIFGC8pBhmtM27gs4wEuaGVXQ42ns1jOjQNl6p9wJYYPZT2TbX61KLzQ4eKeJ/q
-         dBx9FL8NPtgKb5cbBDSnnb7e07nBmbgXnGz/sWklUN7FBvSb/i3lI/V7YXKm9CVdys
-         vh8HjYle4p97kVhCGH3GpzvHmPErdkxLOF7L4kg+b5iKF2CkvoRaCA0k0FjHonsuUM
-         Hl+v3hP5FI29rUtmhM51aLu3ZxzlNihjeoJZAXWzyY9ph1qoIjFno76m49EX0mzow3
-         n4Q+Axd3nCkAw==
-X-Virus-Scanned: amavisd-new at quimbiotec.gob.ve
-Received: from mail.quimbiotec.gob.ve ([127.0.0.1])
-        by localhost (mail.quimbiotec.gob.ve [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id T5eA_0TvaulF; Sat,  6 May 2023 05:34:09 -0400 (-04)
-Received: from [192.168.8.101] (unknown [154.120.79.87])
-        by mail.quimbiotec.gob.ve (Postfix) with ESMTPA id 4C106120335A;
-        Sat,  6 May 2023 05:33:51 -0400 (-04)
-Content-Type: text/plain; charset="iso-8859-1"
+        with ESMTP id S229577AbjEHAxz (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 7 May 2023 20:53:55 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E01F86BF;
+        Sun,  7 May 2023 17:53:53 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QF2q05z8sz4x44;
+        Mon,  8 May 2023 10:53:48 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1683507228;
+        bh=L1k7OwBjx0C3uEGz4kyCR89Cq5ffm4eC2cL6nh2rydk=;
+        h=Date:From:To:Cc:Subject:From;
+        b=UuR4SBAy7/scCBW21Vuzn3YpgDif+WZkA/pxmuRgV2UdMSS2mmJKPtO8nOsuXqjV+
+         3tZunsl9cOCqD4ecnp790I7NhYwblThJGDJSTV8oT/M1obQyQCBbMV9vrOl9SySf6P
+         DTY0b1ycOt+tGubsywcrtmB+Paenr0lkC/ajmRrwhf8jXzyTE6rRw3DQgWXaXtIaVt
+         6MaSZgGVOeRTM5byKW/YchuHzl6Y3TVqESvvSnYopITpyOhUu23OpJUHhxzaA07ZC5
+         PgW9fpzWdxQ25gkYmTZzNIPs6w60O1KOwIFG8dAayzwsHHrh++36kkTvH3QaUKgHqE
+         eiggR1hPflqrg==
+Date:   Mon, 8 May 2023 10:53:46 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patches in the perf tree
+Message-ID: <20230508105346.24d4dc39@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: FOR YOU:(ACTION REQUESTED)
-To:     Recipients <sdeboer@quimbiotec.gob.ve>
-From:   "Scarlet De Boer" <sdeboer@quimbiotec.gob.ve>
-Date:   Sat, 06 May 2023 02:33:32 -0700
-Reply-To: captainthomaz.1@gmail.com
-Message-Id: <20230506093352.4C106120335A@mail.quimbiotec.gob.ve>
-X-WatchGuard-Spam-ID: RefID Error [Failed to get a SPAM score (1)]
-X-WatchGuard-Spam-Score: 0, clean; 0, no virus
-X-WatchGuard-Mail-Client-IP: 127.0.0.1
-X-WatchGuard-Mail-From: sdeboer@quimbiotec.gob.ve
-X-WatchGuard-Mail-Recipients: linux-next@vger.kernel.org;linux-s390@vger.kernel.org
-X-Spam-Status: No, score=3.8 required=5.0 tests=BAYES_50,DKIM_INVALID,
-        DKIM_SIGNED,FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_MSPIKE_BL,RCVD_IN_MSPIKE_H2,RCVD_IN_MSPIKE_ZBI,SPF_HELO_NONE,
-        SPF_NONE,SUBJ_ALL_CAPS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: ***
+Content-Type: multipart/signed; boundary="Sig_/cuvbzRnl6Jqr2JJyQ3GexLV";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Dear ,
+--Sig_/cuvbzRnl6Jqr2JJyQ3GexLV
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Can I have your attention?I seek your attention for possible partnership th=
-at works, you won't spend money to this project. Reply and and my boss (tho=
-mas Graig) will contact for update.
+Hi all,
 
-Scarlet De Boer
-PA, Thomas Graig
+The following commits are also in Linus Torvalds' tree as different
+commits (but the same patches):
+
+  1f30bd499605 ("perf symbols: Fix return incorrect build_id size in elf_re=
+ad_build_id()")
+  419bd54a3875 ("perf list: Fix memory leaks in print_tracepoint_events()")
+  4692917156b2 ("perf script: Print raw ip instead of binary offset for cal=
+lchain")
+  494fc963a281 ("perf lock contention: Fix struct rq lock access")
+  4e05971903f0 ("perf unwind: Suppress massive unsupported target platform =
+errors")
+  5d27a645f609 ("perf tracepoint: Fix memory leak in is_valid_tracepoint()")
+  7e5fd3db2371 ("perf lock contention: Rework offset calculation with BPF C=
+O-RE")
+  aec1164e09cc ("perf script: Add new parameter in kfree_skb tracepoint to =
+the python scripts using it")
+  db483eee8670 ("perf build: Fix unescaped # in perf build-test")
+  e7767ec67a10 ("perf cs-etm: Add fix for coresight trace for any range of =
+CPUs")
+  e7cac3fd8ca6 ("perf list: Modify the warning message about scandirat(3)")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/cuvbzRnl6Jqr2JJyQ3GexLV
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmRYSBoACgkQAVBC80lX
+0GzS0wgAhoO6nWWyThmweWEThcjdzI9gIczDSALkGipmuIBeOwusQmUzgQ+uVx9V
+dQgQuifxCL+PLuvNa6XqXtxepFQS114uRzMDjua1GSpyBtRDRqq62wT0R1DpWJhK
+PrTeUX7UD7PvFluSXEIEZm0t5sfC9OOvZy4/Bn2Ki0CelfTh2Pq9gBAgwS2u1+9n
+S2IlH5c1F0ZjQdz7NPo6XAdstx4Zrm/pys6GXNyo1b8tMSPqDN6PCwWIejJZb5TU
+0E4QsxCVazbech4vWAcp/IUifzzN0HJQaNt1+qmEEF+GusTW9KbmH1J7IifBq6Jp
+C3wx6d3xMbtfLEpCnuL5VsJHM7bzDA==
+=S2MJ
+-----END PGP SIGNATURE-----
+
+--Sig_/cuvbzRnl6Jqr2JJyQ3GexLV--

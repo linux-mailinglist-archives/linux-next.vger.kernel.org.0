@@ -2,99 +2,90 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 891A86FBA03
-	for <lists+linux-next@lfdr.de>; Mon,  8 May 2023 23:38:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D246E6FBB2A
+	for <lists+linux-next@lfdr.de>; Tue,  9 May 2023 00:51:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234178AbjEHViA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 8 May 2023 17:38:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47712 "EHLO
+        id S229705AbjEHWvV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 8 May 2023 18:51:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234277AbjEHVhp (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 8 May 2023 17:37:45 -0400
-Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 749F4A5C9;
-        Mon,  8 May 2023 14:37:10 -0700 (PDT)
-Received: by mail-qv1-xf34.google.com with SMTP id 6a1803df08f44-61b40562054so25451346d6.2;
-        Mon, 08 May 2023 14:37:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683581812; x=1686173812;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7JoKtYCVmfcJ2x1PIoAFAsChG5ditRfgwslrman0ALA=;
-        b=lx69Viab1Lmo0Ftk62sb4Qz+moXVY618C/g1yTk7sV14vWJlbCqZuzxrsC0iLDldB3
-         ODMM/H/Zl+xd4KiOktJlegLR14+L9SzVKkbIfqq4Oc9T7D/oZtU2IQGpm/4ScdHY0w+l
-         gkaV0xfXIiLOxaahD/OpRCU0rffYXCHHLM0DZd7T+dBXj7M4xwtqjwEE0bqzgpLbxxLl
-         JFUuzz2VepVqkeGRoDo7Zx6Df6LQptmlhmuqUXgV5UDNmhcsYUjYd8M8Ptd05QnFopfh
-         KWfPRRUFhzkoboPngOPye04grF5tWqagTT5j2YtKCyAZAPqjJg5ozK3voQ//PU1Jp/H8
-         C9qg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683581812; x=1686173812;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7JoKtYCVmfcJ2x1PIoAFAsChG5ditRfgwslrman0ALA=;
-        b=dL7OUf1hIxdLGmocJOveW+VuCHn/bJ5TWpBHrFIHeCOo/2XQ/hJmwZd6osg44Ru1hr
-         d0Z458i5KKpSJdQK+qBgcTGCYtblhMCtDnRG53laYYdaa9Juq+YMp30qdK8rnt3x4fJq
-         BFyZeMiVQhI0Wd+oKJM0RBhavT2DpyHhocYS4c99RwS/rHjgVfycXbGY8a5oYXf4c9yg
-         XTV7jA3zNkyGTyQl1U1FVO4gKr4dYc0kjJukloYMsyZQIH+uQf1dWvG6w6EDGysFs6Sx
-         GffBdZ20A33kpD+MoP5vrCwO1QxRO7O3n/1uNianzXmyso36wcC/CHDiWSYpzg2sKEi9
-         kEYw==
-X-Gm-Message-State: AC+VfDxa+JqR12AQUciq6lgmhu5ut+D4+kYXh+ztacQwZ9xSLvk0+Djp
-        lkJvMmn5uG5y08JJZd2Y9/2rvo3sf1XmETNVNTreqZM1n7F6jQ==
-X-Google-Smtp-Source: ACHHUZ77wpBdr1+25Zbh4JN7LtfOWhY8PJbp6BjxSEm3XOH8+DwnoddTK1EXyWe62ef6/48+Q/0h3jbyd2KTmvuEjEA=
-X-Received: by 2002:a05:6214:5193:b0:5ef:7d5c:a76c with SMTP id
- kl19-20020a056214519300b005ef7d5ca76cmr17335372qvb.14.1683581812455; Mon, 08
- May 2023 14:36:52 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230508111953.40f1e57f@canb.auug.org.au>
-In-Reply-To: <20230508111953.40f1e57f@canb.auug.org.au>
-From:   Nhat Pham <nphamcs@gmail.com>
-Date:   Mon, 8 May 2023 14:36:41 -0700
-Message-ID: <CAKEwX=MobJWsWZx-3aU0cUBwUnPKDcXzaSAu1vaDntFLGVWNqw@mail.gmail.com>
-Subject: Re: linux-next: build warning after merge of the mm tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        with ESMTP id S229621AbjEHWvT (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 8 May 2023 18:51:19 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 183467ED7;
+        Mon,  8 May 2023 15:51:16 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QFc314YVTz4x44;
+        Tue,  9 May 2023 08:51:09 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1683586270;
+        bh=GoA8n/e4DUi0nPKQIp2gJNGRtdRebfHKoah7CCT7Oi4=;
+        h=Date:From:To:Cc:Subject:From;
+        b=R0Xkl56J4pzjofMhQ1+s40533GhS0yqoY38r+u0jYN/ZWeYI6oFnjkxB9m3bvoha3
+         ZV30mQOS+CvQQlijIgdeVor3uIQDsT2QHKY8T7Wdj7ZxUnq0BrtIlzQGA0Pd/NO5vP
+         zecf/+9BVqli9Yp0vSRu5wQcPs82/apuzO+cFpfEUOY4CgJWo5jGSyOjB42ujTqKxD
+         e+L3eJ0TQeEhBtfWOlKCTNduASRf81Q9c9e2UYyJiEQ4dpmry0YX8MAivrr0sAq5T1
+         mTcIjLviJh1KQJRhZbwJaN5oNBVJJJSygeYgFZyJacnvhDlKvho7tKTbTk562fVzwY
+         /xisWppSWLaCA==
+Date:   Tue, 9 May 2023 06:33:25 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Arnd Bergmann <arnd@arndb.de>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: linux-next: duplicate patches in the v4l-dvb-fixes tree
+Message-ID: <20230509063325.0e746f55@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/Yr7RK1g3BR35S8ylzrQrpyO";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Sun, May 7, 2023 at 6:19=E2=80=AFPM Stephen Rothwell <sfr@canb.auug.org.=
-au> wrote:
->
-> Hi all,
->
-> After merging the mm tree, today's linux-next build (powerpc
-> ppc64_defconfig) produced this warning:
->
-> <stdin>:1567:2: warning: #warning syscall cachestat not implemented [-Wcp=
-p]
->
-> Introduced by commit
->
->   c36ee88cc47d ("cachestat: implement cachestat syscall")
->
-> --
-> Cheers,
-> Stephen Rothwell
+--Sig_/Yr7RK1g3BR35S8ylzrQrpyO
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Hi Stephen,
+Hi all,
 
-Thanks for the report!
-We're having a discussion on this in the following thread:
+The following commits are also in Linus Torvalds' tree as different
+commits (but the same patches):
 
-https://lore.kernel.org/lkml/CAMuHMdWUtb_A-uhXrBg6kC9L2zbC_q3m8oCZoq80ZSJvk=
-6mUAA@mail.gmail.com/
+  4ab0bfe3badf ("media: nxp: imx8-isi: fix buiding on 32-bit")
 
-Best,
-Nhat
+This is commit
+
+  ba0ad6ed89fd ("media: nxp: imx8-isi: fix buiding on 32-bit")
+
+in Linus' tree.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/Yr7RK1g3BR35S8ylzrQrpyO
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmRZXJYACgkQAVBC80lX
+0GybTwf9H+hAcp2mlPu8GQSd/d4yUExGA948SudeQ8IGeWyqw3kwZFmCscxxgFvB
+NZkxGKGn7BxSRMSCYxELNbktrsv1OO9Fpla3GxqCUUM2CcxiCZ5bIP1XQ9fMRGWo
+duV9phKYuhZU23Vz+pa9aSFH0xgWdMFqnysuJhjKeDcqtp1uMV+kRm/KT+ksA6Zz
+2OAL7yiq9tT/IVCbPf6B1bJF0an4w373idTZyNbRoR6g3Hy9NMH1sWGmgpZe2q3q
+gDaVhGypr9YKzXEtNeb1YgUQbNZ5FRrht4GTdhGBgP9mebCkxCevSAQ89kytNsTi
+u7nwgMkLne7WyAfxHibcb/gHqIJ3Iw==
+=qtK+
+-----END PGP SIGNATURE-----
+
+--Sig_/Yr7RK1g3BR35S8ylzrQrpyO--

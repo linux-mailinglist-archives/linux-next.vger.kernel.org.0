@@ -2,51 +2,67 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 532B96FC02B
-	for <lists+linux-next@lfdr.de>; Tue,  9 May 2023 09:09:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 806796FC3ED
+	for <lists+linux-next@lfdr.de>; Tue,  9 May 2023 12:32:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230024AbjEIHJy (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 9 May 2023 03:09:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40302 "EHLO
+        id S235250AbjEIKcf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 9 May 2023 06:32:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234729AbjEIHJx (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 9 May 2023 03:09:53 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9086BBB;
-        Tue,  9 May 2023 00:09:50 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QFq6N3JvFz4x3d;
-        Tue,  9 May 2023 17:09:47 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1683616189;
-        bh=c8H4G/Dv234HYjr+KJ10w7TX5wPsTcnHJLfz2R+M/U4=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=IybDFoZYRCA04a+HfRdbR5lqAQfh2/gLTIZuGwqb1gG1NN/C/GU+vQq7V0pdxysgy
-         85ewwIr+8dZ4wfuYcfyzEH2jKNqTOir08D6PlYg3NfZ+ptA1Ti+vz01L3uA0ioOMOv
-         4ve7RrFfqbB2GvW+JqZoZa4N4VA+wvwErCbVuNQ1vvH+V7/Xy7gmuRx4q37j2KcmWM
-         pLAKpjbChoEiG1Hpaon4ZKRKna8gEtV5q0JeW50u8XhmlwDnw+/VlXLggCS/aExLYW
-         N9+b4UcGRm0HePsomadDMDMmvO58JMK7toMhdJ7+XFbh6fbSoSPU+HM9uUmvJSXAW9
-         1o9F5FIQ7miWQ==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        PowerPC <linuxppc-dev@lists.ozlabs.org>,
-        Tejun Heo <tj@kernel.org>
-Cc:     James Bottomley <James.Bottomley@HansenPartnership.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: boot warning
-In-Reply-To: <20230509122440.418068cb@canb.auug.org.au>
-References: <20230509122440.418068cb@canb.auug.org.au>
-Date:   Tue, 09 May 2023 17:09:43 +1000
-Message-ID: <87mt2ex9oo.fsf@mail.lhotse>
+        with ESMTP id S235292AbjEIKcc (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 9 May 2023 06:32:32 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55731D07A
+        for <linux-next@vger.kernel.org>; Tue,  9 May 2023 03:32:16 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-643995a47f7so5621311b3a.1
+        for <linux-next@vger.kernel.org>; Tue, 09 May 2023 03:32:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1683628335; x=1686220335;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=1XglPZ5pOVRZRTZ0go697K5mhMtChLSjWmVtV6u/7ZY=;
+        b=Xi/PvqCerHg7iW6OmEX0xCaXMyELhjfpnaTLORyy2RqMmX94+pxzF+ApqrkXY3q7ro
+         8wsc6zJAU/ZVCDptyBzf+aHZQy3DfaXDnhZT+iIbUlxnSL6lo4GpPCx3PUnvRo8BXLUb
+         L54nPkh3iIXBshaF53qN5gubaF2BZpqEllVqkVUtD18p/NcyLuq05lijLKFEKFeEzo12
+         lUdtiYCTRt8dFTLHIqo7sOTzsyaOxZ0O365Ka5TF2TNVpkWfzBGB/Yc8sDPKi+gLREgi
+         N2poBUklJQwzHRGs0SnGKEFnCdFJC4fUPGVPdDZy0NO/MwtUvExjllVwskEYByzz0DMU
+         DRkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683628335; x=1686220335;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1XglPZ5pOVRZRTZ0go697K5mhMtChLSjWmVtV6u/7ZY=;
+        b=NSXQuDUJNg2rN9C0P4KlOFyrPZo7Duly3+luWuK9nmS0y6R3IZLmsFz3MUfq+CjNZq
+         75QhNagMpbUOmPauc5S7+DY6H7LTx6vt3pwAH+1+DgN4OkKKs+fJrFQ4bLoXApSia/Dq
+         sOmzILkzDoQVf7PwS/IqK928LP+aR42H1O0Uin0ijPP4N9RgN8aB4GKPJkDg7S5jBUK+
+         eIu7Vog8w0BmB+F4jbE9EPXtcXiAA16Z7dGzcU6DFgbb6O1BduBRINvR9BywTwEka/Rc
+         G8lujGOrBFKVCZkUvi9/8fi6dDZ43ekFPs8RxAS3AcKHCBvS3q4EiGbt4OJ7EjgyJ4sO
+         /GMw==
+X-Gm-Message-State: AC+VfDyp6YzIsC8DlE4wEzU5uyMat1WsBsyP8NojNx2WEddtciNdzR1H
+        uVvUeEvHmcELcbSDKSs2fUx/VQkZPyCtUb8thmVOBg==
+X-Google-Smtp-Source: ACHHUZ6xEMTDY/c/6AfRrTDxodtFqGFGaT8ZMBwwo4uJoDQsOkIcu2RVOC9rB63FeIwIHjj0Ej+EiA==
+X-Received: by 2002:a05:6a00:a15:b0:647:5409:5d0b with SMTP id p21-20020a056a000a1500b0064754095d0bmr1008704pfh.19.1683628334849;
+        Tue, 09 May 2023 03:32:14 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id d9-20020aa78689000000b0062de9ef6915sm1407890pfo.216.2023.05.09.03.32.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 May 2023 03:32:14 -0700 (PDT)
+Message-ID: <645a212e.a70a0220.49059.3426@mx.google.com>
+Date:   Tue, 09 May 2023 03:32:14 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: master
+X-Kernelci-Tree: next
+X-Kernelci-Kernel: next-20230509
+X-Kernelci-Report-Type: test
+Subject: next/master baseline: 112 runs, 50 regressions (next-20230509)
+To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+        kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -55,84 +71,1153 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Stephen Rothwell <sfr@canb.auug.org.au> writes:
-> Hi all,
->
-> Today's qemu test boot (powerpc pseries_le_defconfig) produced this
-> warning:
->
-> [    2.048588][    T1] ipr: IBM Power RAID SCSI Device Driver version: 2.6.4 (March 14, 2017)
-> [    2.051560][    T1] ------------[ cut here ]------------
-> [    2.052297][    T1] WARNING: CPU: 0 PID: 1 at kernel/workqueue.c:5925 workqueue_sysfs_register+0x20/0x1f0
+next/master baseline: 112 runs, 50 regressions (next-20230509)
 
-Caused by 59709bb84c22 scsi: Use alloc_ordered_workqueue() to create ordered workqueues.
+Regressions Summary
+-------------------
 
-cheers
+platform                     | arch   | lab           | compiler | defconfi=
+g                    | regressions
+-----------------------------+--------+---------------+----------+---------=
+---------------------+------------
+mt8183-kukui-...uniper-sku16 | arm64  | lab-collabora | clang-13 | cros://c=
+hrome...4-chromebook | 1          =
 
-> [    2.053294][    T1] Modules linked in:
-> [    2.053678][    T1] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 6.4.0-rc1-01511-g91b79de175e1 #1
-> [    2.053899][    T1] Hardware name: IBM pSeries (emulated by qemu) POWER8 (raw) 0x4d0200 0xf000004 of:SLOF,HEAD pSeries
-> [    2.054099][    T1] NIP:  c000000000181d40 LR: c000000000182164 CTR: c0000000001b71e0
-> [    2.054171][    T1] REGS: c0000000047632c0 TRAP: 0700   Not tainted  (6.4.0-rc1-01511-g91b79de175e1)
-> [    2.054279][    T1] MSR:  8000000002029033 <SF,VEC,EE,ME,IR,DR,RI,LE>  CR: 48000284  XER: 00000000
-> [    2.054608][    T1] CFAR: c000000000182160 IRQMASK: 0 
-> [    2.054608][    T1] GPR00: c000000000182164 c000000004763560 c000000001558c00 c000000004d18600 
-> [    2.054608][    T1] GPR04: 0000000000000000 0000000000000000 c0000000028eccd8 0000000000000000 
-> [    2.054608][    T1] GPR08: 0000000000000000 0000000000080000 0000000000000000 0000000048000288 
-> [    2.054608][    T1] GPR12: 0000000000000000 c000000002ad0000 c000000000013788 0000000000000000 
-> [    2.054608][    T1] GPR16: 0000000000000000 0000000000000000 0000000000000000 0000000000000000 
-> [    2.054608][    T1] GPR20: 0000000000000000 0000000000000000 0000000000000000 0000000000000000 
-> [    2.054608][    T1] GPR24: 0000000000000000 c000000004d186b8 c000000004d18610 c000000004d18620 
-> [    2.054608][    T1] GPR28: 0000000000000000 c00000000299b310 0000000000000000 c000000004d18600 
-> [    2.055488][    T1] NIP [c000000000181d40] workqueue_sysfs_register+0x20/0x1f0
-> [    2.055564][    T1] LR [c000000000182164] alloc_workqueue+0x254/0x584
-> [    2.055858][    T1] Call Trace:
-> [    2.055989][    T1] [c000000004763560] [c0000000047635f0] 0xc0000000047635f0 (unreliable)
-> [    2.056509][    T1] [c0000000047635f0] [c0000000001823a8] alloc_workqueue+0x498/0x584
-> [    2.056605][    T1] [c0000000047636a0] [c000000000ba016c] scsi_host_alloc+0x2fc/0x500
-> [    2.056678][    T1] [c000000004763730] [c000000000bdf7ec] ibmvscsi_probe+0x6c/0xaf8
-> [    2.056746][    T1] [c000000004763820] [c000000000105d4c] vio_bus_probe+0x9c/0x4a0
-> [    2.056816][    T1] [c0000000047638e0] [c000000000b1c274] really_probe+0x104/0x410
-> [    2.056885][    T1] [c000000004763970] [c000000000b1c630] __driver_probe_device+0xb0/0x1e0
-> [    2.056956][    T1] [c0000000047639f0] [c000000000b1c7b4] driver_probe_device+0x54/0x130
-> [    2.057025][    T1] [c000000004763a30] [c000000000b1cac8] __driver_attach+0xd8/0x200
-> [    2.057092][    T1] [c000000004763a70] [c000000000b18cd4] bus_for_each_dev+0xb4/0x140
-> [    2.057158][    T1] [c000000004763ad0] [c000000000b1b824] driver_attach+0x34/0x50
-> [    2.057226][    T1] [c000000004763af0] [c000000000b1ac1c] bus_add_driver+0x13c/0x2d0
-> [    2.057292][    T1] [c000000004763b80] [c000000000b1e3c4] driver_register+0xa4/0x1b0
-> [    2.057360][    T1] [c000000004763bf0] [c000000000108054] __vio_register_driver+0x74/0x9c
-> [    2.057428][    T1] [c000000004763c10] [c000000002063690] ibmvscsi_module_init+0x98/0xd4
-> [    2.057500][    T1] [c000000004763c40] [c0000000000131a0] do_one_initcall+0x80/0x320
-> [    2.057583][    T1] [c000000004763d20] [c0000000020049b4] kernel_init_freeable+0x304/0x3ac
-> [    2.057657][    T1] [c000000004763df0] [c0000000000137b0] kernel_init+0x30/0x1a0
-> [    2.057723][    T1] [c000000004763e50] [c00000000000debc] ret_from_kernel_user_thread+0x14/0x1c
-> [    2.057807][    T1] --- interrupt: 0 at 0x0
-> [    2.057858][    T1] NIP:  0000000000000000 LR: 0000000000000000 CTR: 0000000000000000
-> [    2.057909][    T1] REGS: c000000004763e80 TRAP: 0000   Not tainted  (6.4.0-rc1-01511-g91b79de175e1)
-> [    2.057964][    T1] MSR:  0000000000000000 <>  CR: 00000000  XER: 00000000
-> [    2.058031][    T1] CFAR: 0000000000000000 IRQMASK: 0 
-> [    2.058031][    T1] GPR00: 0000000000000000 0000000000000000 0000000000000000 0000000000000000 
-> [    2.058031][    T1] GPR04: 0000000000000000 0000000000000000 0000000000000000 0000000000000000 
-> [    2.058031][    T1] GPR08: 0000000000000000 0000000000000000 0000000000000000 0000000000000000 
-> [    2.058031][    T1] GPR12: 0000000000000000 0000000000000000 0000000000000000 0000000000000000 
-> [    2.058031][    T1] GPR16: 0000000000000000 0000000000000000 0000000000000000 0000000000000000 
-> [    2.058031][    T1] GPR20: 0000000000000000 0000000000000000 0000000000000000 0000000000000000 
-> [    2.058031][    T1] GPR24: 0000000000000000 0000000000000000 0000000000000000 0000000000000000 
-> [    2.058031][    T1] GPR28: 0000000000000000 0000000000000000 0000000000000000 0000000000000000 
-> [    2.058682][    T1] NIP [0000000000000000] 0x0
-> [    2.058728][    T1] LR [0000000000000000] 0x0
-> [    2.058782][    T1] --- interrupt: 0
-> [    2.058965][    T1] Code: 60000000 60000000 60000000 60420000 3c4c013d 38426ee0 7c0802a6 60000000 fb61ffd8 f821ff71 81230100 55290318 <0b090000> 3d22fff0 7c0802a6 fb810070 
-> [    2.059420][    T1] ---[ end trace 0000000000000000 ]---
-> [    2.065968][   T46] scsi_tmf_0 (46) used greatest stack depth: 15200 bytes left
-> [    2.067252][    T1] scsi host0: failed to create tmf workq
-> [    2.092458][   T45] scsi_eh_0 (45) used greatest stack depth: 14240 bytes left
-> [    2.092852][    T1] ibmvscsi 71000003: couldn't allocate host data
-> [    2.093005][    T1] ibmvscsi: probe of 71000003 failed with error -1
->
->
-> I have no idea what has caused this.
->
-> -- 
-> Cheers,
-> Stephen Rothwell
+mt8183-kukui-...uniper-sku16 | arm64  | lab-collabora | clang-13 | cros://c=
+hrome...4-chromebook | 1          =
+
+mt8183-kukui-...uniper-sku16 | arm64  | lab-collabora | clang-13 | defconfi=
+g+arm64-chromebook   | 1          =
+
+mt8192-asurada-spherion-r0   | arm64  | lab-collabora | clang-13 | cros://c=
+hrome...4-chromebook | 31         =
+
+mt8192-asurada-spherion-r0   | arm64  | lab-collabora | clang-13 | cros://c=
+hrome...4-chromebook | 1          =
+
+mt8192-asurada-spherion-r0   | arm64  | lab-collabora | clang-13 | defconfi=
+g+arm64-chromebook   | 1          =
+
+qemu_x86_64                  | x86_64 | lab-baylibre  | clang-13 | x86_64_d=
+efcon...6-chromebook | 1          =
+
+qemu_x86_64                  | x86_64 | lab-broonie   | clang-13 | x86_64_d=
+efcon...6-chromebook | 1          =
+
+qemu_x86_64                  | x86_64 | lab-collabora | clang-13 | x86_64_d=
+efcon...6-chromebook | 1          =
+
+qemu_x86_64-uefi             | x86_64 | lab-baylibre  | clang-13 | x86_64_d=
+efcon...6-chromebook | 1          =
+
+qemu_x86_64-uefi             | x86_64 | lab-broonie   | clang-13 | x86_64_d=
+efcon...6-chromebook | 1          =
+
+qemu_x86_64-uefi             | x86_64 | lab-collabora | clang-13 | x86_64_d=
+efcon...6-chromebook | 1          =
+
+qemu_x86_64-uefi-mixed       | x86_64 | lab-baylibre  | clang-13 | x86_64_d=
+efcon...6-chromebook | 1          =
+
+qemu_x86_64-uefi-mixed       | x86_64 | lab-broonie   | clang-13 | x86_64_d=
+efcon...6-chromebook | 1          =
+
+qemu_x86_64-uefi-mixed       | x86_64 | lab-collabora | clang-13 | x86_64_d=
+efcon...6-chromebook | 1          =
+
+rk3288-rock2-square          | arm    | lab-collabora | clang-13 | cros://c=
+hrome...avour.config | 1          =
+
+rk3288-rock2-square          | arm    | lab-collabora | clang-13 | cros://c=
+hrome...avour.config | 1          =
+
+rk3399-gru-kevin             | arm64  | lab-collabora | clang-13 | cros://c=
+hrome...4-chromebook | 1          =
+
+rk3399-gru-kevin             | arm64  | lab-collabora | clang-13 | defconfi=
+g+arm64-chromebook   | 2          =
+
+
+  Details:  https://kernelci.org/test/job/next/branch/master/kernel/next-20=
+230509/plan/baseline/
+
+  Test:     baseline
+  Tree:     next
+  Branch:   master
+  Describe: next-20230509
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+  SHA:      47cba14ce6fc4f314bd814d07269d0c8de1e4ae6 =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform                     | arch   | lab           | compiler | defconfi=
+g                    | regressions
+-----------------------------+--------+---------------+----------+---------=
+---------------------+------------
+mt8183-kukui-...uniper-sku16 | arm64  | lab-collabora | clang-13 | cros://c=
+hrome...4-chromebook | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6459ee05d8f5c176412e860f
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+a=
+rm64-chromebook
+  Compiler:    clang-13 (Debian clang version 13.0.1-6~deb11u1)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230509/arm6=
+4/cros---chromeos-5.10-arm64-chromiumos-arm64.flavour.config+arm64-chromebo=
+ok/clang-13/lab-collabora/baseline-mt8183-kukui-jacuzzi-juniper-sku16.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230509/arm6=
+4/cros---chromeos-5.10-arm64-chromiumos-arm64.flavour.config+arm64-chromebo=
+ok/clang-13/lab-collabora/baseline-mt8183-kukui-jacuzzi-juniper-sku16.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230421.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6459ee05d8f5c176412e8=
+610
+        failing since 101 days (last pass: next-20230120, first fail: next-=
+20230127) =
+
+ =
+
+
+
+platform                     | arch   | lab           | compiler | defconfi=
+g                    | regressions
+-----------------------------+--------+---------------+----------+---------=
+---------------------+------------
+mt8183-kukui-...uniper-sku16 | arm64  | lab-collabora | clang-13 | cros://c=
+hrome...4-chromebook | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6459f0e54c629d12d22e863b
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: cros://chromeos-5.10/arm64/chromiumos-mediatek.flavour.confi=
+g+arm64-chromebook
+  Compiler:    clang-13 (Debian clang version 13.0.1-6~deb11u1)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230509/arm6=
+4/cros---chromeos-5.10-arm64-chromiumos-mediatek.flavour.config+arm64-chrom=
+ebook/clang-13/lab-collabora/baseline-mt8183-kukui-jacuzzi-juniper-sku16.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230509/arm6=
+4/cros---chromeos-5.10-arm64-chromiumos-mediatek.flavour.config+arm64-chrom=
+ebook/clang-13/lab-collabora/baseline-mt8183-kukui-jacuzzi-juniper-sku16.ht=
+ml
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230421.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6459f0e54c629d12d22e8=
+63c
+        failing since 104 days (last pass: next-20230123, first fail: next-=
+20230124) =
+
+ =
+
+
+
+platform                     | arch   | lab           | compiler | defconfi=
+g                    | regressions
+-----------------------------+--------+---------------+----------+---------=
+---------------------+------------
+mt8183-kukui-...uniper-sku16 | arm64  | lab-collabora | clang-13 | defconfi=
+g+arm64-chromebook   | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6459eec3d7d22509972e868b
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+arm64-chromebook
+  Compiler:    clang-13 (Debian clang version 13.0.1-6~deb11u1)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230509/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-collabora/baseline-mt8183-kukui-j=
+acuzzi-juniper-sku16.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230509/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-collabora/baseline-mt8183-kukui-j=
+acuzzi-juniper-sku16.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230421.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6459eec3d7d22509972e8=
+68c
+        failing since 20 days (last pass: next-20230404, first fail: next-2=
+0230417) =
+
+ =
+
+
+
+platform                     | arch   | lab           | compiler | defconfi=
+g                    | regressions
+-----------------------------+--------+---------------+----------+---------=
+---------------------+------------
+mt8192-asurada-spherion-r0   | arm64  | lab-collabora | clang-13 | cros://c=
+hrome...4-chromebook | 31         =
+
+
+  Details:     https://kernelci.org/test/plan/id/6459ed2ffd236b9ae82e85f2
+
+  Results:     140 PASS, 45 FAIL, 0 SKIP
+  Full config: cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+a=
+rm64-chromebook
+  Compiler:    clang-13 (Debian clang version 13.0.1-6~deb11u1)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230509/arm6=
+4/cros---chromeos-5.10-arm64-chromiumos-arm64.flavour.config+arm64-chromebo=
+ok/clang-13/lab-collabora/baseline-mt8192-asurada-spherion-r0.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230509/arm6=
+4/cros---chromeos-5.10-arm64-chromiumos-arm64.flavour.config+arm64-chromebo=
+ok/clang-13/lab-collabora/baseline-mt8192-asurada-spherion-r0.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230421.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.mtk-smi-larb16-probed: https://kernelci.org/test/case/i=
+d/6459ed2ffd236b9ae82e85f5
+        failing since 3 days (last pass: next-20230411, first fail: next-20=
+230505)
+
+    2023-05-09T06:49:34.181609  /lava-10251640/1/../bin/lava-test-case
+
+    2023-05-09T06:49:34.188396  <8>[   18.713055] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dmtk-smi-larb16-probed RESULT=3Dfail>
+   =
+
+
+  * baseline.bootrr.mtk-smi-larb4-probed: https://kernelci.org/test/case/id=
+/6459ed2ffd236b9ae82e85f6
+        failing since 3 days (last pass: next-20230411, first fail: next-20=
+230505)
+
+    2023-05-09T06:49:33.157841  /lava-10251640/1/../bin/lava-test-case
+
+    2023-05-09T06:49:33.163741  <8>[   17.689515] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dmtk-smi-larb4-probed RESULT=3Dfail>
+   =
+
+
+  * baseline.bootrr.mtk-smi-larb1-probed: https://kernelci.org/test/case/id=
+/6459ed2ffd236b9ae82e85f7
+        failing since 3 days (last pass: next-20230411, first fail: next-20=
+230505)
+
+    2023-05-09T06:49:32.133478  /lava-10251640/1/../bin/lava-test-case
+
+    2023-05-09T06:49:32.140628  <8>[   16.665539] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dmtk-smi-larb1-probed RESULT=3Dfail>
+   =
+
+
+  * baseline.bootrr.mtk-smi-larb20-probed: https://kernelci.org/test/case/i=
+d/6459ed2ffd236b9ae82e85f8
+        failing since 3 days (last pass: next-20230411, first fail: next-20=
+230505)
+
+    2023-05-09T06:49:31.110071  /lava-10251640/1/../bin/lava-test-case
+
+    2023-05-09T06:49:31.116272  <8>[   15.642179] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dmtk-smi-larb20-probed RESULT=3Dfail>
+   =
+
+
+  * baseline.bootrr.mtk-smi-larb14-probed: https://kernelci.org/test/case/i=
+d/6459ed2ffd236b9ae82e85f9
+        failing since 3 days (last pass: next-20230411, first fail: next-20=
+230505)
+
+    2023-05-09T06:49:29.574300  <4>[   14.097415] rt5682 1-001a: Using defa=
+ult DAI clk names: rt5682-dai-wclk, rt5682-dai-bclk
+
+    2023-05-09T06:49:29.580429  <6>[   14.097606] platform 1b00f000.larb: d=
+eferred probe pending
+
+    2023-05-09T06:49:29.587226  <6>[   14.111535] platform 1b10f000.larb: d=
+eferred probe pending
+
+    2023-05-09T06:49:29.590824  <6>[   14.111539] platform 1f002000.larb: d=
+eferred probe pending
+
+    2023-05-09T06:49:29.597088  <6>[   14.117292] platform 11210000.syscon:=
+mt8192-afe-pcm: deferred probe pending
+
+    2023-05-09T06:49:29.603909  <6>[   14.130250] platform sound: deferred =
+probe pending
+
+    2023-05-09T06:49:29.610628  <6>[   14.135302] platform 10006000.syscon:=
+power-controller: deferred probe pending
+
+    2023-05-09T06:49:29.616855  <6>[   14.142695] platform 14001000.mutex: =
+deferred probe pending
+
+    2023-05-09T06:49:29.623798  <6>[   14.148527] platform 1401d000.m4u: de=
+ferred probe pending
+
+    2023-05-09T06:49:29.630592  <6>[   14.154183] platform regulator-1v8-dp=
+brdg: deferred probe pending
+ =
+
+    ... (31 line(s) more)  =
+
+
+  * baseline.bootrr.mtk-smi-larb5-probed: https://kernelci.org/test/case/id=
+/6459ed2ffd236b9ae82e85fa
+        failing since 3 days (last pass: next-20230411, first fail: next-20=
+230505)
+
+    2023-05-09T06:49:29.066596  /lava-10251640/1/../bin/lava-test-case
+
+    2023-05-09T06:49:29.072429  <8>[   13.597267] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dmtk-smi-larb5-probed RESULT=3Dfail>
+   =
+
+
+  * baseline.bootrr.mtk-smi-larb0-probed: https://kernelci.org/test/case/id=
+/6459ed2ffd236b9ae82e85fb
+        failing since 3 days (last pass: next-20230411, first fail: next-20=
+230505)
+
+    2023-05-09T06:49:28.042695  /lava-10251640/1/../bin/lava-test-case
+
+    2023-05-09T06:49:28.049100  <8>[   12.573697] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dmtk-smi-larb0-probed RESULT=3Dfail>
+   =
+
+
+  * baseline.bootrr.mtk-smi-common-probed: https://kernelci.org/test/case/i=
+d/6459ed2ffd236b9ae82e85fd
+        failing since 3 days (last pass: next-20230411, first fail: next-20=
+230505)
+
+    2023-05-09T06:49:27.002103  /lava-10251640/1/../bin/lava-test-case
+
+    2023-05-09T06:49:27.008582  <8>[   11.533472] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dmtk-smi-common-probed RESULT=3Dfail>
+   =
+
+
+  * baseline.bootrr.mtk-smi-larb2-probed: https://kernelci.org/test/case/id=
+/6459ed2ffd236b9ae82e860b
+        failing since 3 days (last pass: next-20230411, first fail: next-20=
+230505)
+
+    2023-05-09T06:49:39.296937  /lava-10251640/1/../bin/lava-test-case
+
+    2023-05-09T06:49:39.303153  <8>[   23.829273] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dmtk-smi-larb2-probed RESULT=3Dfail>
+   =
+
+
+  * baseline.bootrr.mtk-smi-larb17-probed: https://kernelci.org/test/case/i=
+d/6459ed2ffd236b9ae82e860c
+        failing since 3 days (last pass: next-20230411, first fail: next-20=
+230505)
+
+    2023-05-09T06:49:38.274340  /lava-10251640/1/../bin/lava-test-case
+
+    2023-05-09T06:49:38.280525  <8>[   22.806157] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dmtk-smi-larb17-probed RESULT=3Dfail>
+   =
+
+
+  * baseline.bootrr.mtk-smi-larb7-probed: https://kernelci.org/test/case/id=
+/6459ed2ffd236b9ae82e860d
+        failing since 3 days (last pass: next-20230411, first fail: next-20=
+230505)
+
+    2023-05-09T06:49:37.250295  /lava-10251640/1/../bin/lava-test-case
+
+    2023-05-09T06:49:37.257171  <8>[   21.782502] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dmtk-smi-larb7-probed RESULT=3Dfail>
+   =
+
+
+  * baseline.bootrr.mtk-smi-larb9-probed: https://kernelci.org/test/case/id=
+/6459ed2ffd236b9ae82e860e
+        failing since 3 days (last pass: next-20230411, first fail: next-20=
+230505)
+
+    2023-05-09T06:49:36.227831  /lava-10251640/1/../bin/lava-test-case
+
+    2023-05-09T06:49:36.234451  <8>[   20.759685] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dmtk-smi-larb9-probed RESULT=3Dfail>
+   =
+
+
+  * baseline.bootrr.mtk-smi-larb19-probed: https://kernelci.org/test/case/i=
+d/6459ed2ffd236b9ae82e860f
+        failing since 3 days (last pass: next-20230411, first fail: next-20=
+230505)
+
+    2023-05-09T06:49:35.204866  /lava-10251640/1/../bin/lava-test-case
+
+    2023-05-09T06:49:35.210937  <8>[   19.736837] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dmtk-smi-larb19-probed RESULT=3Dfail>
+   =
+
+
+  * baseline.bootrr.mtk-power-controller-probed: https://kernelci.org/test/=
+case/id/6459ed2ffd236b9ae82e8617
+        failing since 3 days (last pass: next-20230411, first fail: next-20=
+230505)
+
+    2023-05-09T06:49:23.579427  /lava-10251640/1/../bin/lava-test-case
+
+    2023-05-09T06:49:23.586080  <8>[    8.110805] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dmtk-power-controller-probed RESULT=3Dfail>
+   =
+
+
+  * baseline.bootrr.mt8192-audio-probed: https://kernelci.org/test/case/id/=
+6459ed2ffd236b9ae82e8652
+        failing since 3 days (last pass: next-20230411, first fail: next-20=
+230505)
+
+    2023-05-09T06:50:06.021144  /lava-10251640/1/../bin/lava-test-case
+
+    2023-05-09T06:50:06.027945  <8>[   50.557129] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dmt8192-audio-probed RESULT=3Dfail>
+   =
+
+
+  * baseline.bootrr.mtk-vcodec-enc-probed: https://kernelci.org/test/case/i=
+d/6459ed2ffd236b9ae82e865a
+        failing since 3 days (last pass: next-20230411, first fail: next-20=
+230505)
+
+    2023-05-09T06:50:01.843498  /lava-10251640/1/../bin/lava-test-case
+
+    2023-05-09T06:50:01.849848  <8>[   46.378288] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dmtk-vcodec-enc-probed RESULT=3Dfail>
+   =
+
+
+  * baseline.bootrr.mediatek-disp-ccorr-probed: https://kernelci.org/test/c=
+ase/id/6459ed2ffd236b9ae82e8672
+        failing since 3 days (last pass: next-20230411, first fail: next-20=
+230505)
+
+    2023-05-09T06:49:55.285957  /lava-10251640/1/../bin/lava-test-case
+   =
+
+
+  * baseline.bootrr.mediatek-disp-aal-probed: https://kernelci.org/test/cas=
+e/id/6459ed2ffd236b9ae82e8674
+        failing since 3 days (last pass: next-20230411, first fail: next-20=
+230505)
+
+    2023-05-09T06:49:54.244815  /lava-10251640/1/../bin/lava-test-case
+
+    2023-05-09T06:49:54.251738  <8>[   38.779275] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dmediatek-disp-aal-probed RESULT=3Dfail>
+   =
+
+
+  * baseline.bootrr.mediatek-disp-rdma4-probed: https://kernelci.org/test/c=
+ase/id/6459ed2ffd236b9ae82e8676
+        failing since 3 days (last pass: next-20230411, first fail: next-20=
+230505)
+
+    2023-05-09T06:49:53.203571  /lava-10251640/1/../bin/lava-test-case
+
+    2023-05-09T06:49:53.210408  <8>[   37.737767] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dmediatek-disp-rdma4-probed RESULT=3Dfail>
+   =
+
+
+  * baseline.bootrr.mediatek-disp-rdma0-probed: https://kernelci.org/test/c=
+ase/id/6459ed2ffd236b9ae82e8677
+        failing since 3 days (last pass: next-20230411, first fail: next-20=
+230505)
+
+    2023-05-09T06:49:52.181460  /lava-10251640/1/../bin/lava-test-case
+
+    2023-05-09T06:49:52.187602  <8>[   36.714724] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dmediatek-disp-rdma0-probed RESULT=3Dfail>
+   =
+
+
+  * baseline.bootrr.mediatek-disp-ovl2l2-probed: https://kernelci.org/test/=
+case/id/6459ed2ffd236b9ae82e8679
+        failing since 3 days (last pass: next-20230411, first fail: next-20=
+230505)
+
+    2023-05-09T06:49:51.139929  /lava-10251640/1/../bin/lava-test-case
+   =
+
+
+  * baseline.bootrr.mediatek-disp-gamma-probed: https://kernelci.org/test/c=
+ase/id/6459ed2ffd236b9ae82e867d
+        failing since 3 days (last pass: next-20230411, first fail: next-20=
+230505)
+
+    2023-05-09T06:49:57.369299  /lava-10251640/1/../bin/lava-test-case
+
+    2023-05-09T06:49:57.375879  <8>[   41.903559] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dmediatek-disp-gamma-probed RESULT=3Dfail>
+   =
+
+
+  * baseline.bootrr.mediatek-disp-color-probed: https://kernelci.org/test/c=
+ase/id/6459ed2ffd236b9ae82e867f
+        failing since 3 days (last pass: next-20230411, first fail: next-20=
+230505)
+
+    2023-05-09T06:49:56.328160  /lava-10251640/1/../bin/lava-test-case
+   =
+
+
+  * baseline.bootrr.mediatek-disp-ovl2l0-probed: https://kernelci.org/test/=
+case/id/6459ed2ffd236b9ae82e8680
+        failing since 3 days (last pass: next-20230411, first fail: next-20=
+230505)
+
+    2023-05-09T06:49:50.115239  /lava-10251640/1/../bin/lava-test-case
+
+    2023-05-09T06:49:50.121730  <8>[   34.648325] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dmediatek-disp-ovl2l0-probed RESULT=3Dfail>
+   =
+
+
+  * baseline.bootrr.mediatek-disp-ovl0-probed: https://kernelci.org/test/ca=
+se/id/6459ed2ffd236b9ae82e8681
+        failing since 3 days (last pass: next-20230411, first fail: next-20=
+230505)
+
+    2023-05-09T06:49:48.078939  <8>[   32.601761] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dmediatek-disp-ovl-driver-present RESULT=3Dpass>
+
+    2023-05-09T06:49:49.092186  /lava-10251640/1/../bin/lava-test-case
+
+    2023-05-09T06:49:49.098701  <8>[   33.625841] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dmediatek-disp-ovl0-probed RESULT=3Dfail>
+   =
+
+
+  * baseline.bootrr.mediatek-mutex-probed: https://kernelci.org/test/case/i=
+d/6459ed2ffd236b9ae82e8683
+        failing since 3 days (last pass: next-20230411, first fail: next-20=
+230505)
+
+    2023-05-09T06:49:47.470672  <6>[   32.002258] Vgpu: disabling
+
+    2023-05-09T06:49:47.481943  <6>[   32.010112] pp3300_dpbrdg: disabling
+
+    2023-05-09T06:49:47.484813  <6>[   32.013999] pp3300_mipibrdg: disabling
+
+    2023-05-09T06:49:48.050982  /lava-10251640/1/../bin/lava-test-case
+
+    2023-05-09T06:49:48.057189  <8>[   32.583854] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dmediatek-mutex-probed RESULT=3Dfail>
+   =
+
+
+  * baseline.bootrr.mtk-dsi-probed: https://kernelci.org/test/case/id/6459e=
+d2ffd236b9ae82e868e
+        failing since 3 days (last pass: next-20230411, first fail: next-20=
+230505)
+
+    2023-05-09T06:49:44.837108  /lava-10251640/1/../bin/lava-test-case
+
+    2023-05-09T06:49:44.843743  <8>[   29.370442] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dmtk-dsi-probed RESULT=3Dfail>
+   =
+
+
+  * baseline.bootrr.mtk-iommu-probed: https://kernelci.org/test/case/id/645=
+9ed2ffd236b9ae82e86a5
+        failing since 3 days (last pass: next-20230411, first fail: next-20=
+230505)
+
+    2023-05-09T06:49:43.405994  /lava-10251640/1/../bin/lava-test-case
+
+    2023-05-09T06:49:43.412706  <8>[   27.938578] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dmtk-iommu-probed RESULT=3Dfail>
+   =
+
+
+  * baseline.bootrr.mtk-smi-larb18-probed: https://kernelci.org/test/case/i=
+d/6459ed2ffd236b9ae82e86a7
+        failing since 3 days (last pass: next-20230411, first fail: next-20=
+230505)
+
+    2023-05-09T06:49:42.366515  /lava-10251640/1/../bin/lava-test-case
+
+    2023-05-09T06:49:42.372748  <8>[   26.899179] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dmtk-smi-larb18-probed RESULT=3Dfail>
+   =
+
+
+  * baseline.bootrr.mtk-smi-larb13-probed: https://kernelci.org/test/case/i=
+d/6459ed2ffd236b9ae82e86a8
+        failing since 3 days (last pass: next-20230411, first fail: next-20=
+230505)
+
+    2023-05-09T06:49:41.343668  /lava-10251640/1/../bin/lava-test-case
+
+    2023-05-09T06:49:41.350504  <8>[   25.876612] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dmtk-smi-larb13-probed RESULT=3Dfail>
+   =
+
+
+  * baseline.bootrr.mtk-smi-larb11-probed: https://kernelci.org/test/case/i=
+d/6459ed2ffd236b9ae82e86a9
+        failing since 3 days (last pass: next-20230411, first fail: next-20=
+230505)
+
+    2023-05-09T06:49:40.320425  /lava-10251640/1/../bin/lava-test-case
+
+    2023-05-09T06:49:40.327132  <8>[   24.852960] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dmtk-smi-larb11-probed RESULT=3Dfail>
+   =
+
+ =
+
+
+
+platform                     | arch   | lab           | compiler | defconfi=
+g                    | regressions
+-----------------------------+--------+---------------+----------+---------=
+---------------------+------------
+mt8192-asurada-spherion-r0   | arm64  | lab-collabora | clang-13 | cros://c=
+hrome...4-chromebook | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6459f05bc59d6507582e869a
+
+  Results:     178 PASS, 7 FAIL, 0 SKIP
+  Full config: cros://chromeos-5.10/arm64/chromiumos-mediatek.flavour.confi=
+g+arm64-chromebook
+  Compiler:    clang-13 (Debian clang version 13.0.1-6~deb11u1)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230509/arm6=
+4/cros---chromeos-5.10-arm64-chromiumos-mediatek.flavour.config+arm64-chrom=
+ebook/clang-13/lab-collabora/baseline-mt8192-asurada-spherion-r0.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230509/arm6=
+4/cros---chromeos-5.10-arm64-chromiumos-mediatek.flavour.config+arm64-chrom=
+ebook/clang-13/lab-collabora/baseline-mt8192-asurada-spherion-r0.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230421.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.clk-mt8192-apmixedsys-probed: https://kernelci.org/test=
+/case/id/6459f05bc59d6507582e874a
+        failing since 48 days (last pass: next-20230316, first fail: next-2=
+0230321)
+
+    2023-05-09T07:03:17.020107  /lava-10252001/1/../bin/lava-test-case
+
+    2023-05-09T07:03:17.026468  <8>[    6.121381] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dclk-mt8192-apmixedsys-probed RESULT=3Dfail>
+   =
+
+ =
+
+
+
+platform                     | arch   | lab           | compiler | defconfi=
+g                    | regressions
+-----------------------------+--------+---------------+----------+---------=
+---------------------+------------
+mt8192-asurada-spherion-r0   | arm64  | lab-collabora | clang-13 | defconfi=
+g+arm64-chromebook   | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6459eeabc01cfda3602e85f9
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+arm64-chromebook
+  Compiler:    clang-13 (Debian clang version 13.0.1-6~deb11u1)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230509/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-collabora/baseline-mt8192-asurada=
+-spherion-r0.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230509/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-collabora/baseline-mt8192-asurada=
+-spherion-r0.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230421.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6459eeabc01cfda3602e8=
+5fa
+        failing since 20 days (last pass: next-20230404, first fail: next-2=
+0230417) =
+
+ =
+
+
+
+platform                     | arch   | lab           | compiler | defconfi=
+g                    | regressions
+-----------------------------+--------+---------------+----------+---------=
+---------------------+------------
+qemu_x86_64                  | x86_64 | lab-baylibre  | clang-13 | x86_64_d=
+efcon...6-chromebook | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6459eeb9955668185d2e85e8
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: x86_64_defconfig+x86-chromebook
+  Compiler:    clang-13 (Debian clang version 13.0.1-6~deb11u1)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230509/x86_=
+64/x86_64_defconfig+x86-chromebook/clang-13/lab-baylibre/baseline-qemu_x86_=
+64.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230509/x86_=
+64/x86_64_defconfig+x86-chromebook/clang-13/lab-baylibre/baseline-qemu_x86_=
+64.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230421.0/x86/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6459eeb9955668185d2e8=
+5e9
+        new failure (last pass: next-20230508) =
+
+ =
+
+
+
+platform                     | arch   | lab           | compiler | defconfi=
+g                    | regressions
+-----------------------------+--------+---------------+----------+---------=
+---------------------+------------
+qemu_x86_64                  | x86_64 | lab-broonie   | clang-13 | x86_64_d=
+efcon...6-chromebook | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6459eef9476a15f1292e85ee
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: x86_64_defconfig+x86-chromebook
+  Compiler:    clang-13 (Debian clang version 13.0.1-6~deb11u1)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230509/x86_=
+64/x86_64_defconfig+x86-chromebook/clang-13/lab-broonie/baseline-qemu_x86_6=
+4.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230509/x86_=
+64/x86_64_defconfig+x86-chromebook/clang-13/lab-broonie/baseline-qemu_x86_6=
+4.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230421.0/x86/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6459eef9476a15f1292e8=
+5ef
+        new failure (last pass: next-20230508) =
+
+ =
+
+
+
+platform                     | arch   | lab           | compiler | defconfi=
+g                    | regressions
+-----------------------------+--------+---------------+----------+---------=
+---------------------+------------
+qemu_x86_64                  | x86_64 | lab-collabora | clang-13 | x86_64_d=
+efcon...6-chromebook | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6459eeacf91656c07a2e8634
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: x86_64_defconfig+x86-chromebook
+  Compiler:    clang-13 (Debian clang version 13.0.1-6~deb11u1)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230509/x86_=
+64/x86_64_defconfig+x86-chromebook/clang-13/lab-collabora/baseline-qemu_x86=
+_64.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230509/x86_=
+64/x86_64_defconfig+x86-chromebook/clang-13/lab-collabora/baseline-qemu_x86=
+_64.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230421.0/x86/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6459eeacf91656c07a2e8=
+635
+        new failure (last pass: next-20230508) =
+
+ =
+
+
+
+platform                     | arch   | lab           | compiler | defconfi=
+g                    | regressions
+-----------------------------+--------+---------------+----------+---------=
+---------------------+------------
+qemu_x86_64-uefi             | x86_64 | lab-baylibre  | clang-13 | x86_64_d=
+efcon...6-chromebook | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6459eebd10280b39272e862b
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: x86_64_defconfig+x86-chromebook
+  Compiler:    clang-13 (Debian clang version 13.0.1-6~deb11u1)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230509/x86_=
+64/x86_64_defconfig+x86-chromebook/clang-13/lab-baylibre/baseline-qemu_x86_=
+64-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230509/x86_=
+64/x86_64_defconfig+x86-chromebook/clang-13/lab-baylibre/baseline-qemu_x86_=
+64-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230421.0/x86/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6459eebd10280b39272e8=
+62c
+        new failure (last pass: next-20230508) =
+
+ =
+
+
+
+platform                     | arch   | lab           | compiler | defconfi=
+g                    | regressions
+-----------------------------+--------+---------------+----------+---------=
+---------------------+------------
+qemu_x86_64-uefi             | x86_64 | lab-broonie   | clang-13 | x86_64_d=
+efcon...6-chromebook | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6459ef0f476a15f1292e860b
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: x86_64_defconfig+x86-chromebook
+  Compiler:    clang-13 (Debian clang version 13.0.1-6~deb11u1)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230509/x86_=
+64/x86_64_defconfig+x86-chromebook/clang-13/lab-broonie/baseline-qemu_x86_6=
+4-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230509/x86_=
+64/x86_64_defconfig+x86-chromebook/clang-13/lab-broonie/baseline-qemu_x86_6=
+4-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230421.0/x86/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6459ef0f476a15f1292e8=
+60c
+        new failure (last pass: next-20230508) =
+
+ =
+
+
+
+platform                     | arch   | lab           | compiler | defconfi=
+g                    | regressions
+-----------------------------+--------+---------------+----------+---------=
+---------------------+------------
+qemu_x86_64-uefi             | x86_64 | lab-collabora | clang-13 | x86_64_d=
+efcon...6-chromebook | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6459eed4882f11b0142e8710
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: x86_64_defconfig+x86-chromebook
+  Compiler:    clang-13 (Debian clang version 13.0.1-6~deb11u1)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230509/x86_=
+64/x86_64_defconfig+x86-chromebook/clang-13/lab-collabora/baseline-qemu_x86=
+_64-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230509/x86_=
+64/x86_64_defconfig+x86-chromebook/clang-13/lab-collabora/baseline-qemu_x86=
+_64-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230421.0/x86/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6459eed4882f11b0142e8=
+711
+        new failure (last pass: next-20230508) =
+
+ =
+
+
+
+platform                     | arch   | lab           | compiler | defconfi=
+g                    | regressions
+-----------------------------+--------+---------------+----------+---------=
+---------------------+------------
+qemu_x86_64-uefi-mixed       | x86_64 | lab-baylibre  | clang-13 | x86_64_d=
+efcon...6-chromebook | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6459eebc10280b39272e8628
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: x86_64_defconfig+x86-chromebook
+  Compiler:    clang-13 (Debian clang version 13.0.1-6~deb11u1)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230509/x86_=
+64/x86_64_defconfig+x86-chromebook/clang-13/lab-baylibre/baseline-qemu_x86_=
+64-uefi-mixed.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230509/x86_=
+64/x86_64_defconfig+x86-chromebook/clang-13/lab-baylibre/baseline-qemu_x86_=
+64-uefi-mixed.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230421.0/x86/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6459eebc10280b39272e8=
+629
+        new failure (last pass: next-20230508) =
+
+ =
+
+
+
+platform                     | arch   | lab           | compiler | defconfi=
+g                    | regressions
+-----------------------------+--------+---------------+----------+---------=
+---------------------+------------
+qemu_x86_64-uefi-mixed       | x86_64 | lab-broonie   | clang-13 | x86_64_d=
+efcon...6-chromebook | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6459ef0da9efca7f302e85e6
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: x86_64_defconfig+x86-chromebook
+  Compiler:    clang-13 (Debian clang version 13.0.1-6~deb11u1)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230509/x86_=
+64/x86_64_defconfig+x86-chromebook/clang-13/lab-broonie/baseline-qemu_x86_6=
+4-uefi-mixed.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230509/x86_=
+64/x86_64_defconfig+x86-chromebook/clang-13/lab-broonie/baseline-qemu_x86_6=
+4-uefi-mixed.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230421.0/x86/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6459ef0da9efca7f302e8=
+5e7
+        new failure (last pass: next-20230508) =
+
+ =
+
+
+
+platform                     | arch   | lab           | compiler | defconfi=
+g                    | regressions
+-----------------------------+--------+---------------+----------+---------=
+---------------------+------------
+qemu_x86_64-uefi-mixed       | x86_64 | lab-collabora | clang-13 | x86_64_d=
+efcon...6-chromebook | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6459eec7882f11b0142e8684
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: x86_64_defconfig+x86-chromebook
+  Compiler:    clang-13 (Debian clang version 13.0.1-6~deb11u1)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230509/x86_=
+64/x86_64_defconfig+x86-chromebook/clang-13/lab-collabora/baseline-qemu_x86=
+_64-uefi-mixed.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230509/x86_=
+64/x86_64_defconfig+x86-chromebook/clang-13/lab-collabora/baseline-qemu_x86=
+_64-uefi-mixed.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230421.0/x86/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6459eec7882f11b0142e8=
+685
+        new failure (last pass: next-20230508) =
+
+ =
+
+
+
+platform                     | arch   | lab           | compiler | defconfi=
+g                    | regressions
+-----------------------------+--------+---------------+----------+---------=
+---------------------+------------
+rk3288-rock2-square          | arm    | lab-collabora | clang-13 | cros://c=
+hrome...avour.config | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6459efe0d635a6f1b52e8665
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: cros://chromeos-5.10/armel/chromiumos-arm.flavour.config
+  Compiler:    clang-13 (Debian clang version 13.0.1-6~deb11u1)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230509/arm/=
+cros---chromeos-5.10-armel-chromiumos-arm.flavour.config/clang-13/lab-colla=
+bora/baseline-rk3288-rock2-square.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230509/arm/=
+cros---chromeos-5.10-armel-chromiumos-arm.flavour.config/clang-13/lab-colla=
+bora/baseline-rk3288-rock2-square.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230421.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6459efe0d635a6f1b52e8=
+666
+        failing since 27 days (last pass: next-20230406, first fail: next-2=
+0230411) =
+
+ =
+
+
+
+platform                     | arch   | lab           | compiler | defconfi=
+g                    | regressions
+-----------------------------+--------+---------------+----------+---------=
+---------------------+------------
+rk3288-rock2-square          | arm    | lab-collabora | clang-13 | cros://c=
+hrome...avour.config | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6459ee78654880c1e32e8649
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config
+  Compiler:    clang-13 (Debian clang version 13.0.1-6~deb11u1)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230509/arm/=
+cros---chromeos-5.10-armel-chromiumos-rockchip.flavour.config/clang-13/lab-=
+collabora/baseline-rk3288-rock2-square.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230509/arm/=
+cros---chromeos-5.10-armel-chromiumos-rockchip.flavour.config/clang-13/lab-=
+collabora/baseline-rk3288-rock2-square.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230421.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6459ee78654880c1e32e8=
+64a
+        failing since 27 days (last pass: next-20230406, first fail: next-2=
+0230411) =
+
+ =
+
+
+
+platform                     | arch   | lab           | compiler | defconfi=
+g                    | regressions
+-----------------------------+--------+---------------+----------+---------=
+---------------------+------------
+rk3399-gru-kevin             | arm64  | lab-collabora | clang-13 | cros://c=
+hrome...4-chromebook | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6459ed83beb765fd722e85e7
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: cros://chromeos-5.10/arm64/chromiumos-rockchip64.flavour.con=
+fig+arm64-chromebook
+  Compiler:    clang-13 (Debian clang version 13.0.1-6~deb11u1)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230509/arm6=
+4/cros---chromeos-5.10-arm64-chromiumos-rockchip64.flavour.config+arm64-chr=
+omebook/clang-13/lab-collabora/baseline-rk3399-gru-kevin.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230509/arm6=
+4/cros---chromeos-5.10-arm64-chromiumos-rockchip64.flavour.config+arm64-chr=
+omebook/clang-13/lab-collabora/baseline-rk3399-gru-kevin.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230421.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6459ed83beb765fd722e8=
+5e8
+        failing since 27 days (last pass: next-20230406, first fail: next-2=
+0230411) =
+
+ =
+
+
+
+platform                     | arch   | lab           | compiler | defconfi=
+g                    | regressions
+-----------------------------+--------+---------------+----------+---------=
+---------------------+------------
+rk3399-gru-kevin             | arm64  | lab-collabora | clang-13 | defconfi=
+g+arm64-chromebook   | 2          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6459edfb8d03aa64ca2e8661
+
+  Results:     84 PASS, 2 FAIL, 1 SKIP
+  Full config: defconfig+arm64-chromebook
+  Compiler:    clang-13 (Debian clang version 13.0.1-6~deb11u1)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230509/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-collabora/baseline-rk3399-gru-kev=
+in.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230509/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-collabora/baseline-rk3399-gru-kev=
+in.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230421.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.dmesg.emerg: https://kernelci.org/test/case/id/6459edfb8d03aa6=
+4ca2e86b8
+        failing since 20 days (last pass: next-20230404, first fail: next-2=
+0230417)
+        2 lines
+
+    2023-05-09T06:53:25.069351  fo:
+
+    2023-05-09T06:53:25.074131  kern  :alert :   ESR =3D 0x0000000096000006
+
+    2023-05-09T06:53:25.081237  kern  :alert :   EC =3D 0x25: DABT (current=
+ EL), IL =3D 32 bits
+
+    2023-05-09T06:53:25.084960  kern  :alert :   SET =3D 0, FnV =3D 0
+
+    2023-05-09T06:53:25.088419  kern  :alert :   EA =3D 0, S1PTW =3D 0
+
+    2023-05-09T06:53:25.094119  kern  :alert :   FSC =3D 0x06: level 2 tran=
+slation fault
+
+    2023-05-09T06:53:25.097012  kern  :alert : Data abort info:
+
+    2023-05-09T06:53:25.101329  kern  :alert :   ISV =3D 0, ISS =3D 0x00000=
+006
+
+    2023-05-09T06:53:25.104214  kern  :alert :   CM =3D 0, WnR =3D 0
+
+    2023-05-09T06:53:25.117785  kern  :alert : user pgtable: 4k pages<8>[  =
+ 19.318443] <LAVA_SIGNAL_TESTCASE TEST_CASE_ID=3Demerg RESULT=3Dfail UNITS=
+=3Dlines MEASUREMENT=3D2>
+   =
+
+
+  * baseline.dmesg.alert: https://kernelci.org/test/case/id/6459edfb8d03aa6=
+4ca2e86b9
+        failing since 20 days (last pass: next-20230404, first fail: next-2=
+0230417)
+        12 lines
+
+    2023-05-09T06:53:25.017902  <8>[   19.221760] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dcrit RESULT=3Dpass UNITS=3Dlines MEASUREMENT=3D0>
+
+    2023-05-09T06:53:25.057099  kern  :alert : Unable to handle kernel NULL=
+ pointer dereference at virtual address 0000000000000008
+
+    2023-05-09T06:53:25.068641  kern  :alert : Mem abort in<8>[   19.267786=
+] <LAVA_SIGNAL_TESTCASE TEST_CASE_ID=3Dalert RESULT=3Dfail UNITS=3Dlines ME=
+ASUREMENT=3D12>
+   =
+
+ =20

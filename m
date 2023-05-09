@@ -2,99 +2,114 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A6756FCA4C
-	for <lists+linux-next@lfdr.de>; Tue,  9 May 2023 17:33:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB46E6FD305
+	for <lists+linux-next@lfdr.de>; Wed, 10 May 2023 01:23:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235777AbjEIPdH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 9 May 2023 11:33:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49942 "EHLO
+        id S229549AbjEIXXZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 9 May 2023 19:23:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235541AbjEIPdG (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 9 May 2023 11:33:06 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C877318D;
-        Tue,  9 May 2023 08:33:05 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-643b7b8f8ceso2558964b3a.1;
-        Tue, 09 May 2023 08:33:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683646385; x=1686238385;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=i7WJkpzGGE6V0xVNeJVOJY0t5blLhcdTlZlbB7BS+gc=;
-        b=FMLxTBr+wd5rAK2nIKeykMToZJkUULXyulEWPfS6JYiK1UgR5o2h3w26z+Yp5/E1dr
-         bDqh6NUr1VibilmFjm0izLQlHS7O3u2QFaPLG8TDdue+dxViTl4cFiDPcodggspN4syC
-         0Jm5BWCsqs8t8xiPv8URVb3gGxjyDJE1h8qhQgkRNUUk5CFvN/6jMHeYjjnf+R5yfbCy
-         v1/v7D3FsFSTef9YGbO+6gzivSoPl9Osoj5hd77kSs5lZbAUkusRsi+f3KewpSPOUIWl
-         54LKKqInJG5+r4xX4y4CRd2skQp449TLmyTxz3UyHCpou2UndeaOOtJ1PVDJuQ/b9ImG
-         H1wg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683646385; x=1686238385;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=i7WJkpzGGE6V0xVNeJVOJY0t5blLhcdTlZlbB7BS+gc=;
-        b=gMg7NPmwWztfcJT5aTYC/En783mitl9xnA42u8zj8M89aBTfeC67yZfs8vFIeHEI3P
-         6RkOfFO7Vc6x+2a5SDaIaCObYgZbG+09FNEu5yFPrgHQlvf5XurH9GnZL1VmvA3TVgP+
-         NFXi8YUJAGNq/EvtxGxCUjssAEQdPuc7jK74/Si/WY9O6lnQflT9A94JhJ3n5TvTyA8C
-         pHQj6PueklhNSba3n/mkOK7+61PiaGYlqydC6bKhkSujRF+UJHfUtmgy4otnS6lml6ab
-         1RwpuofActfmN+ZnetaquFy8PqgZ1v+7c0dtAYZ9fndgx90SdMIyQsWHB8IBCPpQ8R3O
-         /lNg==
-X-Gm-Message-State: AC+VfDxJqGX/escsP68235p2l+hF7vBaQ7W4M5GVed2L/Z/1qibrbrZu
-        XIOUK5feX8R7nl+3rEFJT9k=
-X-Google-Smtp-Source: ACHHUZ74rXgHLVMBYI8vEBAiCwf0n8BlFeTay98rF3Y8zTkmdIFPU6Z4y3sKE+ysJMc+3elFYvlBmA==
-X-Received: by 2002:a05:6a00:9a7:b0:638:7c22:6fd with SMTP id u39-20020a056a0009a700b006387c2206fdmr21606404pfg.1.1683646384720;
-        Tue, 09 May 2023 08:33:04 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id p24-20020a62ab18000000b0063b5776b073sm1908446pff.117.2023.05.09.08.33.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 May 2023 08:33:04 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Tue, 9 May 2023 05:33:02 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        PowerPC <linuxppc-dev@lists.ozlabs.org>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: boot warning
-Message-ID: <ZFpnroBw-tJnyDbF@slm.duckdns.org>
-References: <20230509122440.418068cb@canb.auug.org.au>
- <87mt2ex9oo.fsf@mail.lhotse>
+        with ESMTP id S229536AbjEIXXZ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 9 May 2023 19:23:25 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2810C35BB
+        for <linux-next@vger.kernel.org>; Tue,  9 May 2023 16:23:20 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QGDjb2QRwz4x1f;
+        Wed, 10 May 2023 09:23:15 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1683674595;
+        bh=xbby5uusjwbjeGGXW9OgZS3THpudxTGDS/4cVjvbpHE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=nU0nu+09G5jhG9/jHSdLfRwsIUD6WpWcLs6fTbrpbZNX1+zlNxkS5xzqQOZcAv8bC
+         ixHTLjcvePYbvgZT6VlMRPCd0zyiPsqVxWfJHl9dTzc+rtFjl7mxWU0yras+8M01h2
+         t4QX62MCR/bjV34bs9jTGjhRwMQNgWZ4EyMygr97PuXfUHUhTNb/o7klQGsx3/UhUe
+         meaXHOmD9n97D2b4AeNfEV6r8QN89xEshncxTm0IfogsJckKI8eO/iZuTh80QrKxBW
+         q9ziSJIxGIj7Y3OutMv2SkeZIPZv2sEAY7U3eanZmb1gk+ofpegOajtGgA+Clzzo06
+         E+2n5YnUoJ6uA==
+Date:   Wed, 10 May 2023 09:23:13 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: Include in next: krzk/linux-w1
+Message-ID: <20230510092313.16693e4c@canb.auug.org.au>
+In-Reply-To: <07db634b-ebc6-666f-eb2e-6bc9c6008040@linaro.org>
+References: <07db634b-ebc6-666f-eb2e-6bc9c6008040@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87mt2ex9oo.fsf@mail.lhotse>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/6EjUfTQvdFqVuCc9IUVDh6m";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, May 09, 2023 at 05:09:43PM +1000, Michael Ellerman wrote:
-> Stephen Rothwell <sfr@canb.auug.org.au> writes:
-> > Hi all,
-> >
-> > Today's qemu test boot (powerpc pseries_le_defconfig) produced this
-> > warning:
-> >
-> > [    2.048588][    T1] ipr: IBM Power RAID SCSI Device Driver version: 2.6.4 (March 14, 2017)
-> > [    2.051560][    T1] ------------[ cut here ]------------
-> > [    2.052297][    T1] WARNING: CPU: 0 PID: 1 at kernel/workqueue.c:5925 workqueue_sysfs_register+0x20/0x1f0
-> 
-> Caused by 59709bb84c22 scsi: Use alloc_ordered_workqueue() to create ordered workqueues.
+--Sig_/6EjUfTQvdFqVuCc9IUVDh6m
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-The patch is already dropped. It was applied only for a short window
-yesterday. Should be okay now.
+Hi Krzysztof,
 
-Thanks.
+On Mon, 24 Apr 2023 16:40:00 +0200 Krzysztof Kozlowski <krzysztof.kozlowski=
+@linaro.org> wrote:
+>
+> Please kindly include in the linux-next my new tree:
+> https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-w1.git
+>=20
+> branch: for-next
+> branch for pending-fixes: fixes
+>=20
+> Repo will be collecting patches for W1 subsystem which recently I took ov=
+er:
+> https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git/comm=
+it/?h=3Dchar-misc-next&id=3D6f36ff32809aeaa7276d5f663d7adf9298a8bf5c
+>=20
+> The patches in the tree will be sent to Greg KH.
 
--- 
-tejun
+Added from today.
+
+Thanks for adding your subsystem tree as a participant of linux-next.  As
+you may know, this is not a judgement of your code.  The purpose of
+linux-next is for integration testing and to lower the impact of
+conflicts between subsystems in the next merge window.=20
+
+You will need to ensure that the patches/commits in your tree/series have
+been:
+     * submitted under GPL v2 (or later) and include the Contributor's
+        Signed-off-by,
+     * posted to the relevant mailing list,
+     * reviewed by you (or another maintainer of your subsystem tree),
+     * successfully unit tested, and=20
+     * destined for the current or next Linux merge window.
+
+Basically, this should be just what you would send to Linus (or ask him
+to fetch).  It is allowed to be rebased if you deem it necessary.
+
+--=20
+Cheers,
+Stephen Rothwell=20
+sfr@canb.auug.org.au
+
+--Sig_/6EjUfTQvdFqVuCc9IUVDh6m
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmRa1eEACgkQAVBC80lX
+0GxvmAf/YMYFSYkglfBEQhVJ3G4S0VgpDzzc1zNvL0AhuSJp/AKd2nIbJfFnhTx9
+nbMWhIu2xrdwQh9qXADEGToD8bQmWmBubwOAqVjtvZFMNCyzjAtgLLiLZUvoUC9V
+M7RcFAGiUXd8YWzkYYzoXiDidxn4vaqMJuna5DmJK8zCMc2rTHhaK/00ZyMoO9NC
+g4FpVc6bAizK0/QF/ze7a07XdH8W6Gbh7dXZun6uHWDVyNxBByvzKiJ1+hnOELjI
+9bQuUZx+HcJ0G6leCvpetjxVZiYrMIPCZNG3CRJgUSktqwNXqpB4BxAlXBPVFhC0
+SJSIxMYPhLurKGZOa6N/IczvF+aWww==
+=Nf4p
+-----END PGP SIGNATURE-----
+
+--Sig_/6EjUfTQvdFqVuCc9IUVDh6m--

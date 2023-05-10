@@ -2,46 +2,44 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCB8A6FE7D3
-	for <lists+linux-next@lfdr.de>; Thu, 11 May 2023 01:00:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59B3F6FE7E5
+	for <lists+linux-next@lfdr.de>; Thu, 11 May 2023 01:05:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236718AbjEJXAt (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 10 May 2023 19:00:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58462 "EHLO
+        id S236811AbjEJXFC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 10 May 2023 19:05:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236708AbjEJXAs (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 10 May 2023 19:00:48 -0400
+        with ESMTP id S236801AbjEJXFB (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 10 May 2023 19:05:01 -0400
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D578E64;
-        Wed, 10 May 2023 16:00:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4333065AA;
+        Wed, 10 May 2023 16:04:46 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QGr8x67C8z4x1f;
-        Thu, 11 May 2023 09:00:33 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QGrFm3QXbz4x3g;
+        Thu, 11 May 2023 09:04:44 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1683759634;
-        bh=QzCFn1h29G/bL/3Cx7X3b+tfyK5M2OFZLl+RPDBwflI=;
+        s=201702; t=1683759885;
+        bh=tTpG+ABzn2ZUqISn9XxbfeodhS9FYuzOIfhGYTqJVc8=;
         h=Date:From:To:Cc:Subject:From;
-        b=Z0rVdoAWq9UibTNPKD71/nJ3Q+IjOlb/cwFNhD2m5xHJAVVDqGG82opnrC0fmP28r
-         7+WZTAvclUWeE0x6sLnUX5dgUuad1gOtQl86hkMRcIWx+JAI7weC6gutqrNoA5CPCj
-         wgERIQF8n9G8puNEDkYC2K2TCjvA5Uo9mhDJCux4C0glhcY3AslZ0GFDStdi8fFZgn
-         nRAyRTldg5x0Bi7WVDLQ+SdJWCrNtA7C4xNDqmsJzUX4Vyq0ll43t7BjqagvYfc9kX
-         JGBXHms5DCPRJsAvL97UgY/yopOQ08zPG2j42uGe6yswUUvwdOMPw7S40r3m0vDIV7
-         1sJgt7+Xm/9Jg==
-Date:   Thu, 11 May 2023 09:00:10 +1000
+        b=KidURmCfHk3g93+VCNjrXg1pyeKO8TbkfxPITrpChw6RqXoxp+Mw0AA4bcmtr3vIO
+         kzuEyWCWztMe/Gm1YAj//CRKsAa45WUPX3UWp5l9xydWeWO7/tK2t7GfROTsQtoOpg
+         jsnfeLRU89ES4wmLXAYGY/I/lzV5B28LraBohqiSJvNVnPX3mv6BrBiLb9mbORJR92
+         gNyxUqkLeGSX19F9IVFz44XLNJY7aXyTlEJxo1UYgJSUo+NO6YS7Y433SbP2RlUkYw
+         V55H7y4FaXmbuR9+okOYxcYnj4ZM8466FniLu+HD149ym3mALGdX7Jw0Cy49NJEWiH
+         5OoeCxMIscpvw==
+Date:   Thu, 11 May 2023 09:04:43 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        Mark Brown <broonie@kernel.org>,
+To:     Lee Jones <lee@kernel.org>
+Cc:     Andreas Kemnade <andreas@kemnade.info>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patch in the rcu tree
-Message-ID: <20230511090010.2916e9d7@canb.auug.org.au>
+Subject: linux-next: duplicate patch in the leds-lj tree
+Message-ID: <20230511090443.359b120b@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/cWMP8pMeBl8/GQPDZfDGahB";
+Content-Type: multipart/signed; boundary="Sig_/hARB360zHctH=7F=L4ssbde";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
@@ -52,41 +50,43 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/cWMP8pMeBl8/GQPDZfDGahB
+--Sig_/hARB360zHctH=7F=L4ssbde
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-The following commit is also in the kselftest-fixes tree as a different
+The following commit is also in Linus Torvalds' tree as a `different
 commit (but the same patch):
 
-  6d9ed63d8bc3 ("tools/nolibc: Fix build of stdio.h due to header ordering")
+  fea27b037127 ("leds: bd2606mvv: Driver for the Rohm 6 Channel i2c LED dri=
+ver")
 
 This is commit
 
-  d7eafa64a158 ("tools/nolibc: Fix build of stdio.h due to header ordering")
+  8325642d2757 ("leds: bd2606mvv: Driver for the Rohm 6 Channel i2c LED dri=
+ver")
 
-in the kselftest-fixes tree.
+in Linus' tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/cWMP8pMeBl8/GQPDZfDGahB
+--Sig_/hARB360zHctH=7F=L4ssbde
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmRcIfsACgkQAVBC80lX
-0GxtVggAl58IIBbzXmmlw5jkg8O6jGeWQLan9BcXuw4YzxDGovpw4ghpKS61/lnB
-WnyVn0UJfkWfuih0bhgH5Y0L1mkVjDxsuBLHLEl8m5cWHZYRMgPH2OH9Jw3bqPDV
-TAGjnI7Be4m3Ez0L6KzWfuNYLdcrXi4zR1QuU7ZS90OA+7mvxO77Rx0dGN6apo46
-lDW/2lnLfT0GKO7Xm4xdCLnkbwm/L7NVqCkaF1FrwnKpQhu7vcg8nWL4yB7yDfUI
-ZOvwBoS0xdSjwjXkTX2sW738KL1xT3KbmVVI7utYGG18o/WJXlNxKlHAXng1tXuq
-Jr8Oq2WuXitV9Ks/kIY9I0bo31XhQw==
-=dS1F
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmRcIwsACgkQAVBC80lX
+0GxLTQf/UzW/BVSiljzyguuX9tYXP/Iu5dz/QuI/E/pwDuDzuirV8Bm6ly1+pFWd
+jCXEG9NV3ROyclEo3KoJQWLYmyj/Lh0VffigaXPxBXElG2GCZATqEGmVL9e81+xz
+/xFf5y5lolNm/LhlgOt5jQ0p0TC2fzCDOWcsGNJFoa0P3BNFAhc6cvEpwcWF0U7z
+48SSEHVN2hxMskoibmnC8cWUk96HhLHiZdkHYksWAf8nK9g/FRiIzILlPOws03wn
+mSVm1hDaoUJix/XbUSgUM+L/10HtYpP4C/eA5eUwWohMRjt9+AB1/jdgwmBCm8lu
+WqxbO4iubs1lDrC0HP5jUr3LQHcvkg==
+=S+yO
 -----END PGP SIGNATURE-----
 
---Sig_/cWMP8pMeBl8/GQPDZfDGahB--
+--Sig_/hARB360zHctH=7F=L4ssbde--

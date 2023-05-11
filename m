@@ -2,91 +2,93 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59B3F6FE7E5
-	for <lists+linux-next@lfdr.de>; Thu, 11 May 2023 01:05:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACFB96FE90C
+	for <lists+linux-next@lfdr.de>; Thu, 11 May 2023 03:08:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236811AbjEJXFC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 10 May 2023 19:05:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34914 "EHLO
+        id S236619AbjEKBIA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 10 May 2023 21:08:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236801AbjEJXFB (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 10 May 2023 19:05:01 -0400
+        with ESMTP id S236569AbjEKBH7 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 10 May 2023 21:07:59 -0400
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4333065AA;
-        Wed, 10 May 2023 16:04:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38C1335A6;
+        Wed, 10 May 2023 18:07:54 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QGrFm3QXbz4x3g;
-        Thu, 11 May 2023 09:04:44 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QGtzr2gb8z4x41;
+        Thu, 11 May 2023 11:07:51 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1683759885;
-        bh=tTpG+ABzn2ZUqISn9XxbfeodhS9FYuzOIfhGYTqJVc8=;
-        h=Date:From:To:Cc:Subject:From;
-        b=KidURmCfHk3g93+VCNjrXg1pyeKO8TbkfxPITrpChw6RqXoxp+Mw0AA4bcmtr3vIO
-         kzuEyWCWztMe/Gm1YAj//CRKsAa45WUPX3UWp5l9xydWeWO7/tK2t7GfROTsQtoOpg
-         jsnfeLRU89ES4wmLXAYGY/I/lzV5B28LraBohqiSJvNVnPX3mv6BrBiLb9mbORJR92
-         gNyxUqkLeGSX19F9IVFz44XLNJY7aXyTlEJxo1UYgJSUo+NO6YS7Y433SbP2RlUkYw
-         V55H7y4FaXmbuR9+okOYxcYnj4ZM8466FniLu+HD149ym3mALGdX7Jw0Cy49NJEWiH
-         5OoeCxMIscpvw==
-Date:   Thu, 11 May 2023 09:04:43 +1000
+        s=201702; t=1683767272;
+        bh=XZSZUAZVLj2+UzRacgu3j7yyCTBTrxNnC4byOTcfx0o=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=t1ooUHYsdcB+LhPqR7Ug9oT/QFkaKAZlk7iODnk/EM6CggoUdkTvplyYKWUOd8E2U
+         ESLTA6sQgNCX+vzIiMIBQp2zGTuwUKUqW9E2WYOyQ68AjbDoIhlfnTZ7dIKmBSNjwz
+         pa1ER/u0xqv5M4S2WuaWIcWEcpUY9rS9pIxwYdd2rWjnV4tHKI9iVteZhtX/D18H+n
+         /SEEh7TD/ORjf1hWvWTj6QE8H03jQ7XJQ8In2PxCeM36828bTaeQq6aWjwAKRUiTjN
+         uj5gzR1EVP8SVYw8Od6ROGd33vx+D9jh33jVFi4TOsP201Wf7CQYu8HPO9HAEcRx5s
+         lnd5vRQOku91A==
+Date:   Thu, 11 May 2023 11:07:50 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Lee Jones <lee@kernel.org>
-Cc:     Andreas Kemnade <andreas@kemnade.info>,
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Christian Brauner <christian@brauner.io>,
+        Seth Forshee <sforshee@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patch in the leds-lj tree
-Message-ID: <20230511090443.359b120b@canb.auug.org.au>
+Subject: Re: linux-next: manual merge of the block tree with the
+ vfs-idmapping tree
+Message-ID: <20230511110750.76a33556@canb.auug.org.au>
+In-Reply-To: <b5c0b1b9-9896-2637-458b-ca1003ba7d74@kernel.dk>
+References: <20230510105543.165f102b@canb.auug.org.au>
+        <b5c0b1b9-9896-2637-458b-ca1003ba7d74@kernel.dk>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/hARB360zHctH=7F=L4ssbde";
+Content-Type: multipart/signed; boundary="Sig_/zp6IJU1/hKF4ilVOf8xCEZ0";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/hARB360zHctH=7F=L4ssbde
+--Sig_/zp6IJU1/hKF4ilVOf8xCEZ0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Hi Jens,
 
-The following commit is also in Linus Torvalds' tree as a `different
-commit (but the same patch):
+On Wed, 10 May 2023 06:48:39 -0600 Jens Axboe <axboe@kernel.dk> wrote:
+>
+> Yes, since Linus didn't like the original approach, it was redone
+> and that particular patch was originally forgotten and then redone
+> without the 'nonblock' variable. So you should just ignore the
+> old version, and Christian should just drop that branch from his
+> for-next tree as it's dead.
 
-  fea27b037127 ("leds: bd2606mvv: Driver for the Rohm 6 Channel i2c LED dri=
-ver")
-
-This is commit
-
-  8325642d2757 ("leds: bd2606mvv: Driver for the Rohm 6 Channel i2c LED dri=
-ver")
-
-in Linus' tree.
+That appears to have been done now, thanks.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/hARB360zHctH=7F=L4ssbde
+--Sig_/zp6IJU1/hKF4ilVOf8xCEZ0
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmRcIwsACgkQAVBC80lX
-0GxLTQf/UzW/BVSiljzyguuX9tYXP/Iu5dz/QuI/E/pwDuDzuirV8Bm6ly1+pFWd
-jCXEG9NV3ROyclEo3KoJQWLYmyj/Lh0VffigaXPxBXElG2GCZATqEGmVL9e81+xz
-/xFf5y5lolNm/LhlgOt5jQ0p0TC2fzCDOWcsGNJFoa0P3BNFAhc6cvEpwcWF0U7z
-48SSEHVN2hxMskoibmnC8cWUk96HhLHiZdkHYksWAf8nK9g/FRiIzILlPOws03wn
-mSVm1hDaoUJix/XbUSgUM+L/10HtYpP4C/eA5eUwWohMRjt9+AB1/jdgwmBCm8lu
-WqxbO4iubs1lDrC0HP5jUr3LQHcvkg==
-=S+yO
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmRcP+cACgkQAVBC80lX
+0Gy3Kwf+K4TyZ3emIIjnNaQ4YcxjGKGUkUqZx9rUwUaghOF1di44YpcUoqXOJMl2
+OUHbvrrJ4lFq+dn/1EgrrC6D2JkaQo6ukW5Qy1hb6KLXRshtXLdmDlL1JoVXgHMR
+Gtl7RwXLDODiQMjDwZg5/DX+2rIkSpo71fV8EDn9TOzAH/6PgKn7SjYFrHjNJi6q
++MRL4dknOujdwrvuee4/yewEJKp01h5Px/OgZuZFHhmT2i/nK+96xx6hlAmDHXxZ
+nM8+5D57peLheum2PReS6SVegMeoSsoz7dCAW1r5qmLDo0JC6jDsfPgybhwvfbi1
+pf7HQve14XEaAKXE/1ZBZZs/UcFVxA==
+=BgHY
 -----END PGP SIGNATURE-----
 
---Sig_/hARB360zHctH=7F=L4ssbde--
+--Sig_/zp6IJU1/hKF4ilVOf8xCEZ0--

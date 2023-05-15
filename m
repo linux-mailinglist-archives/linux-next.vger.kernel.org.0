@@ -2,96 +2,108 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 559B2702BB9
-	for <lists+linux-next@lfdr.de>; Mon, 15 May 2023 13:43:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BA08703DBA
+	for <lists+linux-next@lfdr.de>; Mon, 15 May 2023 21:28:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241534AbjEOLnj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 15 May 2023 07:43:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45050 "EHLO
+        id S244405AbjEOT2h (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 15 May 2023 15:28:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240335AbjEOLlg (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 15 May 2023 07:41:36 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C008271E;
-        Mon, 15 May 2023 04:36:31 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QKclF6Qt6z4x5d;
-        Mon, 15 May 2023 21:36:25 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1684150586;
-        bh=QFbdw2qc13oq3/vRpBrSRQL7kCJSMc8q2j1r+/HoGaE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=PZ08KYCzTSuWT8yi8qGueGAE2qXrFdLyGF63+npyfdDvxnepFC7UnkaG01KhPmU9B
-         Pj27HZD7+8jaac2TtlWBiC9qAMcEt/B080hzmgGF2qsL9abT5S4rEvfWAbEvA9RLNy
-         c5J9Nm+4qckLkoIvqDvDuhpp85PzdrFQMMP9E+CjO3uqkHNoxHcmkcSY/CaoxQXH9a
-         uU+2xOLT5A9TgQUFnwErTYAGIUAX4QXFzxizgTUJD01ZmrCFJFoByxOMueQVx7TJp3
-         HZExiBuzezrXXHAqpGVdj76nBSTTocgxc6h4Tbe6uYsRUfElTD4i3t/q0v4d+UMAHv
-         s6zzSdQQtYfkQ==
-Date:   Mon, 15 May 2023 21:36:15 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Roger Quadros <rogerq@kernel.org>
-Cc:     Greg KH <greg@kroah.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krishna Kurapati <quic_kriskura@quicinc.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the usb tree with the usb.current
- tree
-Message-ID: <20230515213615.779669de@canb.auug.org.au>
-In-Reply-To: <5082d743-54b1-7b4c-432c-dfdce1bb772a@kernel.org>
-References: <20230515123524.74e7bda3@canb.auug.org.au>
-        <5082d743-54b1-7b4c-432c-dfdce1bb772a@kernel.org>
+        with ESMTP id S245097AbjEOT2g (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 15 May 2023 15:28:36 -0400
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69BC415268
+        for <linux-next@vger.kernel.org>; Mon, 15 May 2023 12:28:25 -0700 (PDT)
+Received: by mail-io1-xd2a.google.com with SMTP id ca18e2360f4ac-76c56d0e265so46093639f.0
+        for <linux-next@vger.kernel.org>; Mon, 15 May 2023 12:28:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1684178904; x=1686770904;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=lve7AMCKBIRfrjlxTp6FW8i8QEFQiCuhMHIDwhiIss8=;
+        b=RF+zVb0BamcWpTMev05W2IxnT2uUFnYaRkZtDbxP75tzhFQvg5j57Eo5NSAhgD6Dvl
+         TMPlpM6Ep8MOJ/u4+nBauqltl2HcPYrERCkVZ+/gB6ey0VquOtr+CoDmsckUn2OWCf4w
+         6gr35WY1uHzU1wIrgkPVCK0JOIQ044rlhbqGI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684178904; x=1686770904;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lve7AMCKBIRfrjlxTp6FW8i8QEFQiCuhMHIDwhiIss8=;
+        b=X4PYI7U8TgyGJwAUplmwz9M3LT7m9AWRA/O9m7p33vDwF59rdtdCIYzlmgQMucb3aF
+         th4WX68mfcaZfW0q9+GGC3+Yao6bsLvuP0+r19ymh36UClg9LTpWmXQ0QpfnO5mc/oqo
+         TGdiHT1g5li4lsRf31dzlvH3nx8oXF9XBgyB4FDs2qGMSNEZqcM1APptYYdBJt9awNYe
+         Qc0AEJRnoRICq6PV78EAmxd8cGvLdTggJih4ecf8/v0VUTi3GT5GU6spJFgI97+2OccZ
+         Gws44r1BlGliJeSujIRkRdHYwh2D59SBNGQ14hPFBNFCs0C6LSPs36ji5rXvLynigI+8
+         OFaA==
+X-Gm-Message-State: AC+VfDzFRG0JwynOfKcxYd5MaTqXd8Yy4vTenXb8Oj9snJYZMlDFDey6
+        c+m9bXsSLD3Oxlo8tvfwfwqJqw==
+X-Google-Smtp-Source: ACHHUZ4EDk8UcoxaPM0Gds09yHQNeM7fz29F3jhwT2XU2B2prmwPcovmsI+NsdcV8iVvKomYUzrWaQ==
+X-Received: by 2002:a92:a010:0:b0:32f:1232:f5d5 with SMTP id e16-20020a92a010000000b0032f1232f5d5mr392211ili.2.1684178904661;
+        Mon, 15 May 2023 12:28:24 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id v13-20020a92c6cd000000b003358e4653c6sm4441930ilm.36.2023.05.15.12.28.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 15 May 2023 12:28:24 -0700 (PDT)
+Message-ID: <96c6fdf7-e589-ca56-9314-1d437b8082ac@linuxfoundation.org>
+Date:   Mon, 15 May 2023 13:28:23 -0600
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/6=f.8R0W+PPDGPI5BZF7PsR";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: linux-next: duplicate patch in the rcu tree
+Content-Language: en-US
+To:     paulmck@kernel.org, Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Shuah Khan <shuah@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20230511090010.2916e9d7@canb.auug.org.au>
+ <59c2fd36-6920-47d8-a79c-9ff3fcf7c7ae@paulmck-laptop>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <59c2fd36-6920-47d8-a79c-9ff3fcf7c7ae@paulmck-laptop>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/6=f.8R0W+PPDGPI5BZF7PsR
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 5/11/23 10:52, Paul E. McKenney wrote:
+> On Thu, May 11, 2023 at 09:00:10AM +1000, Stephen Rothwell wrote:
+>> Hi all,
+>>
+>> The following commit is also in the kselftest-fixes tree as a different
+>> commit (but the same patch):
+>>
+>>    6d9ed63d8bc3 ("tools/nolibc: Fix build of stdio.h due to header ordering")
+>>
+>> This is commit
+>>
+>>    d7eafa64a158 ("tools/nolibc: Fix build of stdio.h due to header ordering")
+>>
+>> in the kselftest-fixes tree.
+> 
+> I can currently cleanly remove this commit from the rest of the nolibc
+> commits in -rcu.
+> 
+> However, I might need to re-introduce it in some way or another, for
+> example, if there are dependencies on it by future nolibc patches.
+> (I expect another batch in a few days.)
+> 
+> So how would you like to proceed?
+> 
 
-Hi Roger,
+Paul,
 
-On Mon, 15 May 2023 14:01:08 +0300 Roger Quadros <rogerq@kernel.org> wrote:
->
-> >  +	dwc3_core_soft_reset(dwc); =20
->=20
-> Please drop above call to dwc3_core_soft_reset().
->=20
-> > ++	ret =3D dwc3_core_soft_reset(dwc);
-> > ++	if (ret)
-> > ++		return ret;
+I can drop this from linux-kselftest fixes if that is the easier path.
+Just let me know.
 
-Thanks, fixed for tomorrow.
+thanks,
+-- Shuah
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/6=f.8R0W+PPDGPI5BZF7PsR
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmRiGS8ACgkQAVBC80lX
-0Gxhegf/QBFLrGjbqgCAb9wXawjKoGCZgXkhkTwS/ivxenT79wnZKH4O7CsBXg/5
-yfAUoBJ3R1FBuB9BhYBW0faZ1J1M6knazuTOzy1341MFShPx4cXdS9/pOl7AL5pF
-wxAzZJ2f3f4UV5rxvWq6jjPFhGHHZuy+xBRO0+iSV+njcX0VQ/WK0BhoHXvkwyQu
-L2zHWo26p+wgijHWRfynTElGYs7MuZf9UjrXK2x8MRWY+fcWVvO5AQVOV4UU8sd+
-WCvX/RNwJklSMaJaUge6Y7v41Z0bzRkOzDJ7wFTnfW6EFIGhfAxde7unSoppQcT7
-USYZrxUb8vL/F4F1ROzSEUyAyA4bxA==
-=iOko
------END PGP SIGNATURE-----
-
---Sig_/6=f.8R0W+PPDGPI5BZF7PsR--

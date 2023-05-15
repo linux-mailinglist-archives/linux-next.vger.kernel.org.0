@@ -2,57 +2,57 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 853317021BC
-	for <lists+linux-next@lfdr.de>; Mon, 15 May 2023 04:35:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 840A07021D8
+	for <lists+linux-next@lfdr.de>; Mon, 15 May 2023 04:50:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229648AbjEOCfc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 14 May 2023 22:35:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43070 "EHLO
+        id S230123AbjEOCud (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 14 May 2023 22:50:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230281AbjEOCfb (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 14 May 2023 22:35:31 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C1431BB;
-        Sun, 14 May 2023 19:35:29 -0700 (PDT)
+        with ESMTP id S229672AbjEOCuc (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 14 May 2023 22:50:32 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6FCAE74;
+        Sun, 14 May 2023 19:50:30 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QKNl349svz4x1N;
-        Mon, 15 May 2023 12:35:27 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QKP4J1gpVz4x1d;
+        Mon, 15 May 2023 12:50:24 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1684118127;
-        bh=2u50IuYuFGQsWZ4R/Mr+7FE6MAZhgBZcHZaJvakXl4Q=;
+        s=201702; t=1684119025;
+        bh=Jz3MRruVh3dU8KYalnJKGQ+MfSLuH1GZs3aqzlbyhH8=;
         h=Date:From:To:Cc:Subject:From;
-        b=UTqdV03E2pSxoCshskhNSlE2HtOLIZyCpqhR7+SCHqztkH9ce6RkwKzQ2XzIhdl8G
-         ZbvI2ehEIDjWMPoh8OZMA5GxqnOwS3Ojj02VXyHcSMiA+UvnVOSARKWlsVPNJvZ30x
-         KGYXAq6bmxgtbB3J5xkiVfP0/5JhQE/QouHabHN0MyHfotJ6jK6jDw+16tRt9lWmrv
-         jZG+6dfjpjyDdqfu4KGbF0l5esNMVqRG73eiZfkz2QJtZv4mAQ26+LQ3KgPYSXbEJk
-         uOzwDS4JHPALrb88dOA5d0REw4DQWYh0O+U2WZhEswz/3fOFISCnnBSuX9QAVKNWZv
-         diJZzYxHFgwYA==
-Date:   Mon, 15 May 2023 12:35:24 +1000
+        b=VFhhz0/MplnugKprTFl0M+sY83K9KoOEcl94S0A+kKBG+a3jdZqONiCwECbkqLkPA
+         Kt3scp3KkwnCFn3v7BCJeSWoJCkLSo07k/NjciMRBfEAll87HoeBbOYxyvjmvH+p2v
+         RISdpxlX5obiQXslcOIom89mPkeBKRr5KojGgBb6N9el2ue2gLk3dC3hx+QxJeJvqF
+         wJ9a8qLpWuOFNE7NidpQlB4CW5wINamiT+jr8R6Ue9DnJfohXvfOmbh4Q2gnjl08kY
+         cg/wZK8BxNq3hCkMs/JmULxQ6sN6K/3jULEXcupy7eKnK1qWw/gjrzS4tfAxrLvx+s
+         t2Z3d3Cii5WiA==
+Date:   Mon, 15 May 2023 12:50:23 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
 To:     Greg KH <greg@kroah.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+Cc:     Francesco Dolcini <francesco.dolcini@toradex.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Krishna Kurapati <quic_kriskura@quicinc.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Roger Quadros <rogerq@kernel.org>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
 Subject: linux-next: manual merge of the usb tree with the usb.current tree
-Message-ID: <20230515123524.74e7bda3@canb.auug.org.au>
+Message-ID: <20230515125023.639f3ca3@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/X4OBLMXhdWLp_/7nqeqQWoZ";
+Content-Type: multipart/signed; boundary="Sig_/NmrO53x+Us/b4UG.ATib=YK";
  protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/X4OBLMXhdWLp_/7nqeqQWoZ
+--Sig_/NmrO53x+Us/b4UG.ATib=YK
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
@@ -60,17 +60,17 @@ Hi all,
 
 Today's linux-next merge of the usb tree got a conflict in:
 
-  drivers/usb/dwc3/gadget.c
+  drivers/usb/gadget/udc/core.c
 
 between commit:
 
-  c8540870af4c ("usb: dwc3: gadget: Improve dwc3_gadget_suspend() and dwc3_=
-gadget_resume()")
+  f22e9b67f19c ("Revert "usb: gadget: udc: core: Invoke usb_gadget_connect =
+only when started"")
 
 from the usb.current tree and commit:
 
-  813f44d57e19 ("usb: dwc3: gadget: Bail out in pullup if soft reset timeou=
-t happens")
+  d34f9bafa78d ("usb: gadget: udc: Handle gadget_connect failure during bin=
+d operation")
 
 from the usb tree.
 
@@ -85,52 +85,86 @@ particularly complex conflicts.
 Cheers,
 Stephen Rothwell
 
-diff --cc drivers/usb/dwc3/gadget.c
-index d831f5acf7b5,5965796bc5d5..000000000000
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@@ -2700,21 -2699,6 +2700,26 @@@ static int dwc3_gadget_soft_disconnect(
-  	return ret;
+diff --cc drivers/usb/gadget/udc/core.c
+index 52e6d2e84e35,69041cca5d24..000000000000
+--- a/drivers/usb/gadget/udc/core.c
++++ b/drivers/usb/gadget/udc/core.c
+@@@ -1078,12 -1121,17 +1078,16 @@@ EXPORT_SYMBOL_GPL(usb_gadget_set_state)
+ =20
+  /* ----------------------------------------------------------------------=
+--- */
+ =20
+- static void usb_udc_connect_control(struct usb_udc *udc)
+ -/* Acquire connect_lock before calling this function. */
+ -static int usb_udc_connect_control_locked(struct usb_udc *udc) __must_hol=
+d(&udc->connect_lock)
+++static int usb_udc_connect_control(struct usb_udc *udc)
+  {
++ 	int ret;
++=20
+ -	if (udc->vbus && udc->started)
+ -		ret =3D usb_gadget_connect_locked(udc->gadget);
+ +	if (udc->vbus)
+- 		usb_gadget_connect(udc->gadget);
+++		ret =3D usb_gadget_connect(udc->gadget);
+  	else
+- 		usb_gadget_disconnect(udc->gadget);
+ -		ret =3D usb_gadget_disconnect_locked(udc->gadget);
+++		ret =3D usb_gadget_disconnect(udc->gadget);
++=20
++ 	return ret;
   }
  =20
- +static int dwc3_gadget_soft_connect(struct dwc3 *dwc)
- +{
-++	int	ret;
-++
- +	/*
- +	 * In the Synopsys DWC_usb31 1.90a programming guide section
- +	 * 4.1.9, it specifies that for a reconnect after a
- +	 * device-initiated disconnect requires a core soft reset
- +	 * (DCTL.CSftRst) before enabling the run/stop bit.
- +	 */
- +	dwc3_core_soft_reset(dwc);
-++	ret =3D dwc3_core_soft_reset(dwc);
-++	if (ret)
-++		return ret;
- +
- +	dwc3_event_buffers_setup(dwc);
- +	__dwc3_gadget_start(dwc);
- +	return dwc3_gadget_run_stop(dwc, true);
- +}
- +
-  static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
-  {
-  	struct dwc3		*dwc =3D gadget_to_dwc(g);
+  /**
+@@@ -1523,15 -1580,28 +1527,23 @@@ static int gadget_bind_driver(struct de
+  	if (ret)
+  		goto err_bind;
+ =20
+ -	mutex_lock(&udc->connect_lock);
+ -	ret =3D usb_gadget_udc_start_locked(udc);
+ -	if (ret) {
+ -		mutex_unlock(&udc->connect_lock);
+ +	ret =3D usb_gadget_udc_start(udc);
+ +	if (ret)
+  		goto err_start;
+ -	}
+  	usb_gadget_enable_async_callbacks(udc);
+- 	usb_udc_connect_control(udc);
+ -	ret =3D usb_udc_connect_control_locked(udc);
+++	ret =3D usb_udc_connect_control(udc);
++ 	if (ret)
++ 		goto err_connect_control;
+ =20
+ -	mutex_unlock(&udc->connect_lock);
+ -
+  	kobject_uevent(&udc->dev.kobj, KOBJ_CHANGE);
+  	return 0;
+ =20
++  err_connect_control:
++ 	usb_gadget_disable_async_callbacks(udc);
++ 	if (gadget->irq)
++ 		synchronize_irq(gadget->irq);
+ -	usb_gadget_udc_stop_locked(udc);
+++	usb_gadget_udc_stop(udc);
++=20
+   err_start:
+  	driver->unbind(udc->gadget);
+ =20
 
---Sig_/X4OBLMXhdWLp_/7nqeqQWoZ
+--Sig_/NmrO53x+Us/b4UG.ATib=YK
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmRhmmwACgkQAVBC80lX
-0Gw4Jwf+PAfCqjjWkX1KLNnY0k4raSlKkT5c2VdCEZXaE5w+zAf8vhal9XNl4m1v
-7tz2RiqWkWiw/4r4Q4k6NkXB85r4Am0wWsI+xEQ6LXHs+ZnI8IO1NsMloVPgo6HP
-RZZmKV7blAJrxNa5dGBhXSzKj5USLEnK4ZvbatEjRvZc+E9KXjBJTPuXSjBP4HyX
-ic25IZ8jhhtmJdqZ+V2841ll7qc2v3w6AurhPv6CctmEPq6AuSRe1eIx4OL6xc/J
-6cHNpxJvHXLL1ad2/l/5DbiGal4Ag7ccBAbw0jgt2WU8KRT2PqJcszg7q4Vx+VPw
-TrMz+EHNQRPpunHjDF9dsKgcDwHkwQ==
-=RzRF
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmRhne8ACgkQAVBC80lX
+0GwsRAf/dgKysVLWm6VlBzJoMt53MdsTCm99u4j1AyoLylnOGJgo5EZ2cGmeK4Pv
+VlcUXIIkMOZBezsF4H561deiA+wJzsXRr/XOFOWv6l0UYMBjWfftvD5qugkI2mQ4
+WDpdCEZ0y6k3Xgx+iO703rktRo8bPm1aPMFXmG/6yGceUcEPtPSXCRg76J90nMZb
+Q59gv4nDIjAZwFhAmOBWZ+sAos1r3SNK3kL2Pdtxfh9d3vFopglxv8DjxW7PN6UZ
+ZFcZvU8tuVgFlsWQW0P0l1GXyUhdAMInsYhwr52kpT5rhT/jLT3pintuEAk5tUZ8
+XQPJbvyl2lWpBKTzxNptPcpvrWH9fw==
+=dBXS
 -----END PGP SIGNATURE-----
 
---Sig_/X4OBLMXhdWLp_/7nqeqQWoZ--
+--Sig_/NmrO53x+Us/b4UG.ATib=YK--

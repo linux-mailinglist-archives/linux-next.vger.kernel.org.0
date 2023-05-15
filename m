@@ -2,125 +2,96 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF5C5702AFD
-	for <lists+linux-next@lfdr.de>; Mon, 15 May 2023 13:01:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 559B2702BB9
+	for <lists+linux-next@lfdr.de>; Mon, 15 May 2023 13:43:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230225AbjEOLBO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 15 May 2023 07:01:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46886 "EHLO
+        id S241534AbjEOLnj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 15 May 2023 07:43:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229963AbjEOLBO (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 15 May 2023 07:01:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 668E5BC;
-        Mon, 15 May 2023 04:01:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S240335AbjEOLlg (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 15 May 2023 07:41:36 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C008271E;
+        Mon, 15 May 2023 04:36:31 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F3AA862273;
-        Mon, 15 May 2023 11:01:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07ABCC433EF;
-        Mon, 15 May 2023 11:01:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684148472;
-        bh=UTbvYUhLcNZvirRlxEQga14BRUkmwMsNPRm1uplVRsE=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=P34Jw2sTEWyH43s0Ac/gRJpFjocUKaGbC38G8e9eh7/5zlB6Gud0RgsCKs+1uDlG9
-         oEMRokPgUwFGHwHRY7PO9vtulftH8dYrKOgL9T0eh7I96Up4hd8ebQhtix4lZyhTgX
-         pOdq5UkNU4p00x47cKk3F3bE17JmDCS7fgo1bzGJGLIPF2MhCSsQfiS8SkIT/g11Ld
-         x63W57dXqMMxve+cvfznWOhYMtWDZjcMEDQiRg7CRtExUdFGZCi202BeduWkbZRW6O
-         r40arJPKGWvJJHZLGiO1bQscDGc1HVkM1BR5UzMoxdK3tMHXPFg1dFLU0ghzGqY0oP
-         /Ndkg7PMfC0QQ==
-Message-ID: <5082d743-54b1-7b4c-432c-dfdce1bb772a@kernel.org>
-Date:   Mon, 15 May 2023 14:01:08 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: linux-next: manual merge of the usb tree with the usb.current
- tree
-Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>, Greg KH <greg@kroah.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QKclF6Qt6z4x5d;
+        Mon, 15 May 2023 21:36:25 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1684150586;
+        bh=QFbdw2qc13oq3/vRpBrSRQL7kCJSMc8q2j1r+/HoGaE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=PZ08KYCzTSuWT8yi8qGueGAE2qXrFdLyGF63+npyfdDvxnepFC7UnkaG01KhPmU9B
+         Pj27HZD7+8jaac2TtlWBiC9qAMcEt/B080hzmgGF2qsL9abT5S4rEvfWAbEvA9RLNy
+         c5J9Nm+4qckLkoIvqDvDuhpp85PzdrFQMMP9E+CjO3uqkHNoxHcmkcSY/CaoxQXH9a
+         uU+2xOLT5A9TgQUFnwErTYAGIUAX4QXFzxizgTUJD01ZmrCFJFoByxOMueQVx7TJp3
+         HZExiBuzezrXXHAqpGVdj76nBSTTocgxc6h4Tbe6uYsRUfElTD4i3t/q0v4d+UMAHv
+         s6zzSdQQtYfkQ==
+Date:   Mon, 15 May 2023 21:36:15 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Roger Quadros <rogerq@kernel.org>
+Cc:     Greg KH <greg@kroah.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Krishna Kurapati <quic_kriskura@quicinc.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the usb tree with the usb.current
+ tree
+Message-ID: <20230515213615.779669de@canb.auug.org.au>
+In-Reply-To: <5082d743-54b1-7b4c-432c-dfdce1bb772a@kernel.org>
 References: <20230515123524.74e7bda3@canb.auug.org.au>
-From:   Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <20230515123524.74e7bda3@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        <5082d743-54b1-7b4c-432c-dfdce1bb772a@kernel.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/6=f.8R0W+PPDGPI5BZF7PsR";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Stephen,
+--Sig_/6=f.8R0W+PPDGPI5BZF7PsR
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On 15/05/2023 05:35, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Today's linux-next merge of the usb tree got a conflict in:
-> 
->   drivers/usb/dwc3/gadget.c
-> 
-> between commit:
-> 
->   c8540870af4c ("usb: dwc3: gadget: Improve dwc3_gadget_suspend() and dwc3_gadget_resume()")
-> 
-> from the usb.current tree and commit:
-> 
->   813f44d57e19 ("usb: dwc3: gadget: Bail out in pullup if soft reset timeout happens")
-> 
-> from the usb tree.
-> 
-> I fixed it up (I think - see below) and can carry the fix as
-> necessary. This is now fixed as far as linux-next is concerned, but any
-> non trivial conflicts should be mentioned to your upstream maintainer
-> when your tree is submitted for merging.  You may also want to consider
-> cooperating with the maintainer of the conflicting tree to minimise any
-> particularly complex conflicts.
-> 
+Hi Roger,
 
-> diff --cc drivers/usb/dwc3/gadget.c
-> index d831f5acf7b5,5965796bc5d5..000000000000
-> --- a/drivers/usb/dwc3/gadget.c
-> +++ b/drivers/usb/dwc3/gadget.c
-> @@@ -2700,21 -2699,6 +2700,26 @@@ static int dwc3_gadget_soft_disconnect(
->   	return ret;
->   }
->   
->  +static int dwc3_gadget_soft_connect(struct dwc3 *dwc)
->  +{
-> ++	int	ret;
-> ++
->  +	/*
->  +	 * In the Synopsys DWC_usb31 1.90a programming guide section
->  +	 * 4.1.9, it specifies that for a reconnect after a
->  +	 * device-initiated disconnect requires a core soft reset
->  +	 * (DCTL.CSftRst) before enabling the run/stop bit.
->  +	 */
->  +	dwc3_core_soft_reset(dwc);
+On Mon, 15 May 2023 14:01:08 +0300 Roger Quadros <rogerq@kernel.org> wrote:
+>
+> >  +	dwc3_core_soft_reset(dwc); =20
+>=20
+> Please drop above call to dwc3_core_soft_reset().
+>=20
+> > ++	ret =3D dwc3_core_soft_reset(dwc);
+> > ++	if (ret)
+> > ++		return ret;
 
-Please drop above call to dwc3_core_soft_reset().
+Thanks, fixed for tomorrow.
 
-> ++	ret = dwc3_core_soft_reset(dwc);
-> ++	if (ret)
-> ++		return ret;
->  +
->  +	dwc3_event_buffers_setup(dwc);
->  +	__dwc3_gadget_start(dwc);
->  +	return dwc3_gadget_run_stop(dwc, true);
->  +}
->  +
->   static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
->   {
->   	struct dwc3		*dwc = gadget_to_dwc(g);
+--=20
+Cheers,
+Stephen Rothwell
 
--- 
-cheers,
--roger
+--Sig_/6=f.8R0W+PPDGPI5BZF7PsR
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmRiGS8ACgkQAVBC80lX
+0Gxhegf/QBFLrGjbqgCAb9wXawjKoGCZgXkhkTwS/ivxenT79wnZKH4O7CsBXg/5
+yfAUoBJ3R1FBuB9BhYBW0faZ1J1M6knazuTOzy1341MFShPx4cXdS9/pOl7AL5pF
+wxAzZJ2f3f4UV5rxvWq6jjPFhGHHZuy+xBRO0+iSV+njcX0VQ/WK0BhoHXvkwyQu
+L2zHWo26p+wgijHWRfynTElGYs7MuZf9UjrXK2x8MRWY+fcWVvO5AQVOV4UU8sd+
+WCvX/RNwJklSMaJaUge6Y7v41Z0bzRkOzDJ7wFTnfW6EFIGhfAxde7unSoppQcT7
+USYZrxUb8vL/F4F1ROzSEUyAyA4bxA==
+=iOko
+-----END PGP SIGNATURE-----
+
+--Sig_/6=f.8R0W+PPDGPI5BZF7PsR--

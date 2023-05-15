@@ -2,169 +2,115 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 840A07021D8
-	for <lists+linux-next@lfdr.de>; Mon, 15 May 2023 04:50:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A61970229A
+	for <lists+linux-next@lfdr.de>; Mon, 15 May 2023 05:50:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230123AbjEOCud (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 14 May 2023 22:50:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49944 "EHLO
+        id S238405AbjEODul (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 14 May 2023 23:50:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229672AbjEOCuc (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 14 May 2023 22:50:32 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6FCAE74;
-        Sun, 14 May 2023 19:50:30 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QKP4J1gpVz4x1d;
-        Mon, 15 May 2023 12:50:24 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1684119025;
-        bh=Jz3MRruVh3dU8KYalnJKGQ+MfSLuH1GZs3aqzlbyhH8=;
-        h=Date:From:To:Cc:Subject:From;
-        b=VFhhz0/MplnugKprTFl0M+sY83K9KoOEcl94S0A+kKBG+a3jdZqONiCwECbkqLkPA
-         Kt3scp3KkwnCFn3v7BCJeSWoJCkLSo07k/NjciMRBfEAll87HoeBbOYxyvjmvH+p2v
-         RISdpxlX5obiQXslcOIom89mPkeBKRr5KojGgBb6N9el2ue2gLk3dC3hx+QxJeJvqF
-         wJ9a8qLpWuOFNE7NidpQlB4CW5wINamiT+jr8R6Ue9DnJfohXvfOmbh4Q2gnjl08kY
-         cg/wZK8BxNq3hCkMs/JmULxQ6sN6K/3jULEXcupy7eKnK1qWw/gjrzS4tfAxrLvx+s
-         t2Z3d3Cii5WiA==
-Date:   Mon, 15 May 2023 12:50:23 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Greg KH <greg@kroah.com>
-Cc:     Francesco Dolcini <francesco.dolcini@toradex.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krishna Kurapati <quic_kriskura@quicinc.com>,
+        with ESMTP id S235181AbjEODuj (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 14 May 2023 23:50:39 -0400
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C953211B;
+        Sun, 14 May 2023 20:50:37 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id 141A6320091B;
+        Sun, 14 May 2023 23:50:36 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Sun, 14 May 2023 23:50:36 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1684122635; x=1684209035; bh=cD
+        iTADJk9/eFkCuGM818u4eT+ONxEvgZ3Tzb5liRKbE=; b=kv2bGbhrc5ZerLhKT2
+        /0JSelCFVqeFyb2LkNIpFcn5adqAXXRVja7uLiH6MAM/o1jTlEiC7CJX6FmQK0yS
+        baFtwVMOK3zjpUWa+zESTdqs4EcS1Rq2fgYhf0xca24nWtEaMkegv6EibJbyMjL3
+        Fkdpc87UimLBXDeZpbVug5gB2HJstVL+Qyi2/u3mIUd/mVCRcKntTb7BAhiWB9gy
+        zwI2bgZkaaclza+SMgRvv49fxnBNe9DvKIjH7bMXzyoxFr7MbTrwVhLC8/z/5keE
+        wZAU6ZeErS0TpOiGh3CI2yqLy9t3DiP99I2nDlp82CgCpho9iKZGyWGnTQWWU79d
+        h0tA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1684122635; x=1684209035; bh=cDiTADJk9/eFk
+        CuGM818u4eT+ONxEvgZ3Tzb5liRKbE=; b=qWgF4nfvcJpQrp5HRU/worKL9nyrk
+        66QgMf8nI31YJn+Wd0qrc0Fi/mReZnQelH/GZ/ObTXTiBfyGS/Eucb/p+h1eO+5h
+        HeN8X6udQpR9A4C6IlBR+Rv+9lNlaBTj+HBEHVZ1siHvBqeB1kvl+rtzn959dmhF
+        rH7Im0CAZYVcHRcshidQKQFVM9jb8de6EPAPfVdnxNcBOe4eF4j4SBWZrb8DOij5
+        D8mIlrAiGAwO/rPabtPIAgoRciqbS4iJ2n8pdnNHqDisHEZIQ0NiNy618h7dPz75
+        BJ5ryWS4cn46ldP/I0ysU1fH2TCyroytGdQu41HoYTXF41pF/d+MoKo3g==
+X-ME-Sender: <xms:C6xhZGlhNdcyd75LGto4ZhZFe6VvOc36ViLBFZsZ4wxdi4yGzh9glQ>
+    <xme:C6xhZN3rALobzQHqbdBdskiKlFvf4F9sDcCWijchHjqrPEABRq_ci8sYme6ZTeC0B
+    0Jve7hm6W79cg>
+X-ME-Received: <xmr:C6xhZEpTaRNHXqw-IA0HM-XDBRScI67QBZ5vnl8g9Sua47cSpMsL1VFRnMf2ijyL6nGq_3iCvYr6l64m5mr4-Lwn4ZFKsHT5KhK_cw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeehiedgjeegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
+    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepheegvd
+    evvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefhgfehkeetnecuvehluhhs
+    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
+    hhrdgtohhm
+X-ME-Proxy: <xmx:C6xhZKleyB3uvRBxxLPIE-UukFsOYkvbeazJC-9BJsqmHd3MeV8zMw>
+    <xmx:C6xhZE3oa8E-SBDmd5P8oXhHV-pgCVLCPRC6Yo4eeGipKT5yczpdig>
+    <xmx:C6xhZBuzibvIRVoUwYujX-Bc98SIJf_1nc60Dv-yXAP5gYYnExwE6A>
+    <xmx:C6xhZFKim3UmeJ4AoKdvopk6g9dTIedreN2cPIvtmrCc4pRf5EIkfw>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
+ 14 May 2023 23:50:34 -0400 (EDT)
+Date:   Mon, 15 May 2023 05:50:31 +0200
+From:   Greg KH <greg@kroah.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Krishna Kurapati <quic_kriskura@quicinc.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the usb tree with the usb.current tree
-Message-ID: <20230515125023.639f3ca3@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Roger Quadros <rogerq@kernel.org>
+Subject: Re: linux-next: manual merge of the usb tree with the usb.current
+ tree
+Message-ID: <2023051509-confess-rinse-6fa5@gregkh>
+References: <20230515123524.74e7bda3@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/NmrO53x+Us/b4UG.ATib=YK";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230515123524.74e7bda3@canb.auug.org.au>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/NmrO53x+Us/b4UG.ATib=YK
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Mon, May 15, 2023 at 12:35:24PM +1000, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Today's linux-next merge of the usb tree got a conflict in:
+> 
+>   drivers/usb/dwc3/gadget.c
+> 
+> between commit:
+> 
+>   c8540870af4c ("usb: dwc3: gadget: Improve dwc3_gadget_suspend() and dwc3_gadget_resume()")
+> 
+> from the usb.current tree and commit:
+> 
+>   813f44d57e19 ("usb: dwc3: gadget: Bail out in pullup if soft reset timeout happens")
+> 
+> from the usb tree.
+> 
+> I fixed it up (I think - see below) and can carry the fix as
+> necessary. This is now fixed as far as linux-next is concerned, but any
+> non trivial conflicts should be mentioned to your upstream maintainer
+> when your tree is submitted for merging.  You may also want to consider
+> cooperating with the maintainer of the conflicting tree to minimise any
+> particularly complex conflicts.
 
-Hi all,
+Thanks for the 2 merge fixups, I'll apply them to my tree when the usb
+fixes get merged by Linus.
 
-Today's linux-next merge of the usb tree got a conflict in:
-
-  drivers/usb/gadget/udc/core.c
-
-between commit:
-
-  f22e9b67f19c ("Revert "usb: gadget: udc: core: Invoke usb_gadget_connect =
-only when started"")
-
-from the usb.current tree and commit:
-
-  d34f9bafa78d ("usb: gadget: udc: Handle gadget_connect failure during bin=
-d operation")
-
-from the usb tree.
-
-I fixed it up (I think - see below) and can carry the fix as
-necessary. This is now fixed as far as linux-next is concerned, but any
-non trivial conflicts should be mentioned to your upstream maintainer
-when your tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc drivers/usb/gadget/udc/core.c
-index 52e6d2e84e35,69041cca5d24..000000000000
---- a/drivers/usb/gadget/udc/core.c
-+++ b/drivers/usb/gadget/udc/core.c
-@@@ -1078,12 -1121,17 +1078,16 @@@ EXPORT_SYMBOL_GPL(usb_gadget_set_state)
- =20
-  /* ----------------------------------------------------------------------=
---- */
- =20
-- static void usb_udc_connect_control(struct usb_udc *udc)
- -/* Acquire connect_lock before calling this function. */
- -static int usb_udc_connect_control_locked(struct usb_udc *udc) __must_hol=
-d(&udc->connect_lock)
-++static int usb_udc_connect_control(struct usb_udc *udc)
-  {
-+ 	int ret;
-+=20
- -	if (udc->vbus && udc->started)
- -		ret =3D usb_gadget_connect_locked(udc->gadget);
- +	if (udc->vbus)
-- 		usb_gadget_connect(udc->gadget);
-++		ret =3D usb_gadget_connect(udc->gadget);
-  	else
-- 		usb_gadget_disconnect(udc->gadget);
- -		ret =3D usb_gadget_disconnect_locked(udc->gadget);
-++		ret =3D usb_gadget_disconnect(udc->gadget);
-+=20
-+ 	return ret;
-  }
- =20
-  /**
-@@@ -1523,15 -1580,28 +1527,23 @@@ static int gadget_bind_driver(struct de
-  	if (ret)
-  		goto err_bind;
- =20
- -	mutex_lock(&udc->connect_lock);
- -	ret =3D usb_gadget_udc_start_locked(udc);
- -	if (ret) {
- -		mutex_unlock(&udc->connect_lock);
- +	ret =3D usb_gadget_udc_start(udc);
- +	if (ret)
-  		goto err_start;
- -	}
-  	usb_gadget_enable_async_callbacks(udc);
-- 	usb_udc_connect_control(udc);
- -	ret =3D usb_udc_connect_control_locked(udc);
-++	ret =3D usb_udc_connect_control(udc);
-+ 	if (ret)
-+ 		goto err_connect_control;
- =20
- -	mutex_unlock(&udc->connect_lock);
- -
-  	kobject_uevent(&udc->dev.kobj, KOBJ_CHANGE);
-  	return 0;
- =20
-+  err_connect_control:
-+ 	usb_gadget_disable_async_callbacks(udc);
-+ 	if (gadget->irq)
-+ 		synchronize_irq(gadget->irq);
- -	usb_gadget_udc_stop_locked(udc);
-++	usb_gadget_udc_stop(udc);
-+=20
-   err_start:
-  	driver->unbind(udc->gadget);
- =20
-
---Sig_/NmrO53x+Us/b4UG.ATib=YK
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmRhne8ACgkQAVBC80lX
-0GwsRAf/dgKysVLWm6VlBzJoMt53MdsTCm99u4j1AyoLylnOGJgo5EZ2cGmeK4Pv
-VlcUXIIkMOZBezsF4H561deiA+wJzsXRr/XOFOWv6l0UYMBjWfftvD5qugkI2mQ4
-WDpdCEZ0y6k3Xgx+iO703rktRo8bPm1aPMFXmG/6yGceUcEPtPSXCRg76J90nMZb
-Q59gv4nDIjAZwFhAmOBWZ+sAos1r3SNK3kL2Pdtxfh9d3vFopglxv8DjxW7PN6UZ
-ZFcZvU8tuVgFlsWQW0P0l1GXyUhdAMInsYhwr52kpT5rhT/jLT3pintuEAk5tUZ8
-XQPJbvyl2lWpBKTzxNptPcpvrWH9fw==
-=dBXS
------END PGP SIGNATURE-----
-
---Sig_/NmrO53x+Us/b4UG.ATib=YK--
+greg k-h

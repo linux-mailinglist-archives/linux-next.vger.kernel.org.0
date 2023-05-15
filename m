@@ -2,116 +2,88 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E899702342
-	for <lists+linux-next@lfdr.de>; Mon, 15 May 2023 07:23:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 100D4702375
+	for <lists+linux-next@lfdr.de>; Mon, 15 May 2023 07:48:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233666AbjEOFXM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 15 May 2023 01:23:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47590 "EHLO
+        id S229635AbjEOFr6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 15 May 2023 01:47:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231651AbjEOFXL (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 15 May 2023 01:23:11 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 910FFE71;
-        Sun, 14 May 2023 22:23:08 -0700 (PDT)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34F4sCgD017139;
-        Mon, 15 May 2023 05:22:45 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=v1aBA1r1KRoRkDwqUWcWRENzZbw5Wq+4ydwI2IwC4lk=;
- b=AR/F/hTbnFAR9wAoH8imtgF/+ER4U9tmuEKoDSKc/psr1OI2ba/I3ffcsMZHdPan+TwQ
- LftAc+m7bdJrn7FzcFISTQWpwdJAl1/T+gjpphmK8iq0dw6f9KNz1TjSfsCgIsFiSW4u
- xNWuChLWt/c3AhosoLmhSAteTrE85u5armcsHKgibL9PlUBoS6VWY1w9AuK7SH4nRwMX
- Ysc/2wBVPyHuGq8J/H0uoufbrTsxh9QR2zDj0hVHYX9d6Ffacd49uy49nXQJNgjY2Un7
- NpKD95apnEDTpiCGz79gTcgAeOlCSPjmBXZe1jr4xAuq/6H43jbnRJLhOGI2U9aYC92w 9g== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qj1jf2trv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 15 May 2023 05:22:44 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34F5MhLs012504
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 15 May 2023 05:22:43 GMT
-Received: from [10.216.55.129] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Sun, 14 May
- 2023 22:22:41 -0700
-Message-ID: <0869e59b-cf6b-c8f2-580b-f07fcd55ee36@quicinc.com>
-Date:   Mon, 15 May 2023 10:52:38 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: linux-next: manual merge of the usb tree with the usb.current
- tree
-Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>, Greg KH <greg@kroah.com>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        with ESMTP id S229436AbjEOFr4 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 15 May 2023 01:47:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F304C19BB;
+        Sun, 14 May 2023 22:47:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 856C160FD2;
+        Mon, 15 May 2023 05:47:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5F72C433D2;
+        Mon, 15 May 2023 05:47:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684129674;
+        bh=0ywVD0h0HAaEfDZLu6C6HFAK9ShsZX/dTJGTGShPoIk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=LQLjcsL+6+3NWKZ1Xd7l2d2G4WK5AX4sbC2gsrmytvYp1MJdPvamuNKKPNLPTWl68
+         7v75eokacePFbT4tl/fPvfn/M0+YMT39sRwbj6kx1kkUmGu3c6JLicQ5zAnW0tTGX0
+         RrCDPgjy5H4rdaO1wa2iLRfbTBZl/dsRww79jP3V3nE6bpVFJdtfz26MvKWGUBJX2E
+         nTY9UNFecaxiUj8ceIHhi1sLkVs8vmwTJNL9uPh+mFpHXhEwZ7B/t2h5720mkFYDmr
+         zuX3Uu/7t2mFslV2BdcHr6CmH9bTSPmfCfYAZxKTWP+7VqHkHe6TRZAZqBmei+LAtp
+         QrGKD3ABRQhLA==
+Received: from mchehab by mail.kernel.org with local (Exim 4.96)
+        (envelope-from <mchehab@kernel.org>)
+        id 1pyR3n-003HqO-1o;
+        Mon, 15 May 2023 06:47:51 +0100
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Linux Media Mailing list <linux-media@vger.kernel.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Athanasios Oikonomou <athoik@gmail.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Roger Quadros <rogerq@kernel.org>
-References: <20230515123524.74e7bda3@canb.auug.org.au>
-From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-In-Reply-To: <20230515123524.74e7bda3@canb.auug.org.au>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: GhiN2ma17ExoQcQr9x2unevTKBkrFDfF
-X-Proofpoint-ORIG-GUID: GhiN2ma17ExoQcQr9x2unevTKBkrFDfF
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-15_02,2023-05-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
- priorityscore=1501 clxscore=1011 impostorscore=0 suspectscore=0
- malwarescore=0 spamscore=0 lowpriorityscore=0 mlxscore=0 mlxlogscore=999
- phishscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305150046
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Subject: [PATCH] docs: uapi: media: ignore new DVB-S2X FEC values
+Date:   Mon, 15 May 2023 06:47:37 +0100
+Message-Id: <20230515054737.783558-1-mchehab@kernel.org>
+X-Mailer: git-send-email 2.40.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+Some new FEC values was added to support DVB-S2X. They're properly
+documented, but its addition adds some extra warnings to htmldocs
+build. So, add them to the ignore list.
 
+Fixes: 1825788e2a96 ("media: dvb: add missing DVB-S2X FEC parameter values")
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+---
+ Documentation/userspace-api/media/frontend.h.rst.exceptions | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-On 5/15/2023 8:05 AM, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Today's linux-next merge of the usb tree got a conflict in:
-> 
->    drivers/usb/dwc3/gadget.c
-> 
-> between commit:
-> 
->    c8540870af4c ("usb: dwc3: gadget: Improve dwc3_gadget_suspend() and dwc3_gadget_resume()")
-> 
-> from the usb.current tree and commit:
-> 
->    813f44d57e19 ("usb: dwc3: gadget: Bail out in pullup if soft reset timeout happens")
-> 
-> from the usb tree.
-> 
-> I fixed it up (I think - see below) and can carry the fix as
-> necessary. This is now fixed as far as linux-next is concerned, but any
-> non trivial conflicts should be mentioned to your upstream maintainer
-> when your tree is submitted for merging.  You may also want to consider
-> cooperating with the maintainer of the conflicting tree to minimise any
-> particularly complex conflicts.
-> 
+diff --git a/Documentation/userspace-api/media/frontend.h.rst.exceptions b/Documentation/userspace-api/media/frontend.h.rst.exceptions
+index 8b73fee11a79..dcaf5740de7e 100644
+--- a/Documentation/userspace-api/media/frontend.h.rst.exceptions
++++ b/Documentation/userspace-api/media/frontend.h.rst.exceptions
+@@ -142,6 +142,10 @@ ignore symbol FEC_26_45
+ ignore symbol FEC_28_45
+ ignore symbol FEC_32_45
+ ignore symbol FEC_77_90
++ignore symbol FEC_11_45
++ignore symbol FEC_4_15
++ignore symbol FEC_14_45
++ignore symbol FEC_7_15
+ 
+ ignore symbol TRANSMISSION_MODE_AUTO
+ ignore symbol TRANSMISSION_MODE_1K
+-- 
+2.40.1
 
-Hi Stephen,
-
-  I think the core soft reset has been called two times in the patch 
-present in this mail. Anything on my end I can do to help.
-
-Regards,
-Krishna,

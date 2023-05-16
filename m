@@ -2,75 +2,81 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 397FE70417B
-	for <lists+linux-next@lfdr.de>; Tue, 16 May 2023 01:43:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16277704252
+	for <lists+linux-next@lfdr.de>; Tue, 16 May 2023 02:34:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243061AbjEOXnG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 15 May 2023 19:43:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38696 "EHLO
+        id S245192AbjEPAeV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 15 May 2023 20:34:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240909AbjEOXnD (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 15 May 2023 19:43:03 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2E6B83C2;
-        Mon, 15 May 2023 16:42:59 -0700 (PDT)
+        with ESMTP id S231416AbjEPAeU (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 15 May 2023 20:34:20 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC9E883E2;
+        Mon, 15 May 2023 17:34:17 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QKwsX54Htz4x3x;
-        Tue, 16 May 2023 09:42:56 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QKy0l0Rgnz4x1f;
+        Tue, 16 May 2023 10:34:15 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1684194177;
-        bh=OrgdnrGF4v8mN+2U0+5f2NWgObxDsfRt21qDJiLrFeI=;
+        s=201702; t=1684197256;
+        bh=jJKZfJCxepyKL6BZvZjgIYbio3EXugpuplEPBrwz7/Y=;
         h=Date:From:To:Cc:Subject:From;
-        b=r5hCXrc6q2jBi8zEztQkisBbd/8qQczT6Upx7kVEvGdbUoMlEmvL9yRZQRkHWlJMU
-         E8OkWyrgW4w3TbINrB01LgUVayOgyDMWwvvsiZAh1RNJjXCdiY1EK2JY5jh/+Y9IAh
-         rvuE463jWeK5a4H/o9R2rwoiayP7QdaA/5rk2Z6sZs4JIzbOhQrcRZM3ReDNQ0PXlz
-         NgLQf2Nvl/0Q3c4S9Jk1wdhcydLqTLzDjPB/bg3H2oCwZUzvXSOeS/RZo/9C0bFl3F
-         5tsL3kSL6HzTKvpF2j77gcfxj1C/jJpJOoOsKkxNkXmtgEoy1sGpoM6hAM1Bi78Xmn
-         dAWCpLVZOgwAQ==
-Date:   Tue, 16 May 2023 09:42:54 +1000
+        b=WWO0CnVk0k6VJayG5o4Sv3TbIU/5ZXEQQzJSavQX2T7EmQlR3lcDOy0ymGMIp918O
+         wc1oK56AvvO4UHxn5e4SrQaT1tDy7Lo2DmhLigXzt5tPfMWgBsAi2WLcl8i6OPz9gX
+         74iFmCpmQVi0wWI5nI/+vjTEbV9iFErdh030Uj5Y1BmwelK45jz5KYS3KAsDOpBnVw
+         HTyJMWaM/iE7lDhdbd6rVRlQdqET9ZMPzhAz1o9hlCSI/dNslZL6OiHsYSZvtqd6/R
+         8z2Ar/7T0eyjHMFLModSI7+st1BjQFtnC0kNP5n67eORsEtPoio219A8nL2eQothrT
+         HtVaPJDgTVhPQ==
+Date:   Tue, 16 May 2023 10:34:13 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>
-Cc:     Networking <netdev@vger.kernel.org>,
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+Cc:     Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Ian Rogers <irogers@google.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Shenwei Wang <shenwei.wang@nxp.com>
-Subject: linux-next: manual merge of the net-next tree with the net tree
-Message-ID: <20230516094254.0dce3596@canb.auug.org.au>
+        Ravi Bangoria <ravi.bangoria@amd.com>
+Subject: linux-next: manual merge of the tip tree with the perf tree
+Message-ID: <20230516103413.21e34bb6@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/xReCTcQmM/+3dpFGl4YLIjz";
+Content-Type: multipart/signed; boundary="Sig_/9XmPjZAkgv_9cK5=I92F2ve";
  protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/xReCTcQmM/+3dpFGl4YLIjz
+--Sig_/9XmPjZAkgv_9cK5=I92F2ve
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the net-next tree got a conflict in:
+Today's linux-next merge of the tip tree got conflicts in:
 
-  drivers/net/ethernet/freescale/fec_main.c
+  tools/perf/arch/x86/include/arch-tests.h
+  tools/perf/arch/x86/tests/arch-tests.c
 
 between commit:
 
-  6ead9c98cafc ("net: fec: remove the xdp_return_frame when lack of tx BDs")
+  ae4aa00a1a93 ("perf test: Move x86 hybrid tests to arch/x86")
 
-from the net tree and commit:
+from the perf tree and commit:
 
-  144470c88c5d ("net: fec: using the standard return codes when xdp xmit er=
-rors")
+  78075d947534 ("perf test: Add selftest to test IBS invocation via core pm=
+u events")
 
-from the net-next tree.
+from the tip tree.
 
 I fixed it up (see below) and can carry the fix as necessary. This
 is now fixed as far as linux-next is concerned, but any non trivial
@@ -83,35 +89,63 @@ complex conflicts.
 Cheers,
 Stephen Rothwell
 
-diff --cc drivers/net/ethernet/freescale/fec_main.c
-index 577d94821b3e,cd215ab20ff9..000000000000
---- a/drivers/net/ethernet/freescale/fec_main.c
-+++ b/drivers/net/ethernet/freescale/fec_main.c
-@@@ -3798,7 -3798,8 +3798,7 @@@ static int fec_enet_txq_xmit_frame(stru
-  	entries_free =3D fec_enet_get_free_txdesc_num(txq);
-  	if (entries_free < MAX_SKB_FRAGS + 1) {
-  		netdev_err(fep->netdev, "NOT enough BD for SG!\n");
-- 		return NETDEV_TX_BUSY;
- -		xdp_return_frame(frame);
-+ 		return -EBUSY;
-  	}
+diff --cc tools/perf/arch/x86/include/arch-tests.h
+index 33d39c1d3e64,93d3b8877baa..000000000000
+--- a/tools/perf/arch/x86/include/arch-tests.h
++++ b/tools/perf/arch/x86/include/arch-tests.h
+@@@ -11,7 -11,7 +11,8 @@@ int test__intel_pt_pkt_decoder(struct t
+  int test__intel_pt_hybrid_compat(struct test_suite *test, int subtest);
+  int test__bp_modify(struct test_suite *test, int subtest);
+  int test__x86_sample_parsing(struct test_suite *test, int subtest);
+ +int test__hybrid(struct test_suite *test, int subtest);
++ int test__amd_ibs_via_core_pmu(struct test_suite *test, int subtest);
  =20
-  	/* Fill in a Tx ring entry */
+  extern struct test_suite *arch_tests[];
+ =20
+diff --cc tools/perf/arch/x86/tests/arch-tests.c
+index 147ad0638bbb,b5c85ab8d92e..000000000000
+--- a/tools/perf/arch/x86/tests/arch-tests.c
++++ b/tools/perf/arch/x86/tests/arch-tests.c
+@@@ -22,15 -22,7 +22,16 @@@ struct test_suite suite__intel_pt =3D=20
+  DEFINE_SUITE("x86 bp modify", bp_modify);
+  #endif
+  DEFINE_SUITE("x86 Sample parsing", x86_sample_parsing);
+ +static struct test_case hybrid_tests[] =3D {
+ +	TEST_CASE_REASON("x86 hybrid event parsing", hybrid, "not hybrid"),
+ +	{ .name =3D NULL, }
+ +};
+ +
+ +struct test_suite suite__hybrid =3D {
+ +	.desc =3D "x86 hybrid",
+ +	.test_cases =3D hybrid_tests,
+ +};
++ DEFINE_SUITE("AMD IBS via core pmu", amd_ibs_via_core_pmu);
+ =20
+  struct test_suite *arch_tests[] =3D {
+  #ifdef HAVE_DWARF_UNWIND_SUPPORT
+@@@ -44,6 -36,6 +45,7 @@@
+  	&suite__bp_modify,
+  #endif
+  	&suite__x86_sample_parsing,
+ +	&suite__hybrid,
++ 	&suite__amd_ibs_via_core_pmu,
+  	NULL,
+  };
 
---Sig_/xReCTcQmM/+3dpFGl4YLIjz
+--Sig_/9XmPjZAkgv_9cK5=I92F2ve
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmRiw34ACgkQAVBC80lX
-0GxE3Qf/dQRSICKa/aXKnAipj0c64fKGFp4Mw3WVFWpEc2lYd8a60D5xp486j5Bl
-ue91l7iejsnqZLZDj+5X8OYLtRYEpI5IEIFRcTaz1S0N2AYUB+huX4+3hMDWksEv
-TaE9sx8fdsGjUEzKc78o7RRlRllx8pMRMRvWc+iGQyDNyXQyOdESZlDGzH0slQ7G
-nMuU3jb31dXPA2hwdMzMit/yY2UqBIoMcw9G4qsiIqbtVKWk6sKPDioYs6mOf15j
-2ZQSioN9KHYEmC6V/IKooZTFCso8zUX6tzu698dt1rRdHrcQuVAe2dRjIvWU0UGF
-5equ57YPVGV2nrSFjpHkgGItvNrSAQ==
-=+yrr
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmRiz4UACgkQAVBC80lX
+0Gx9uQf9HAgAsNAks3QIleoDP1VicNEYP+pSm+QqukYQm/DfRe55vkNrJ/x1I2Zm
+l5NQuX+UsSzhekf4kdwujDBm4aNwPpU6zotWLdsyFkF9hMq4K5UeKKxF4/ku2nIp
+iHS/q0qsC6IkqmTQIrM2zs1NPegDSul32omImwYi5BAIv+3et4t5NzxMgIsSXr88
+7AZT79qw5Pg0tLgpyyC0h5HMyN0chMCrWqRo1Mp7bxv+QeJRyAz38CyJNd+Asjpv
+Fe2nWp32fzmySckGjEPQzzzm1l58Gk0dG0WEaF+va4NTx6IUiKTedWfWgN4HZe0i
+trQuj24XqSnFbuobyoZBNIp5CWpqsw==
+=iGU2
 -----END PGP SIGNATURE-----
 
---Sig_/xReCTcQmM/+3dpFGl4YLIjz--
+--Sig_/9XmPjZAkgv_9cK5=I92F2ve--

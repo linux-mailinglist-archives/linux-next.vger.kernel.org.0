@@ -2,46 +2,57 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93F75704512
-	for <lists+linux-next@lfdr.de>; Tue, 16 May 2023 08:18:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2706704D9F
+	for <lists+linux-next@lfdr.de>; Tue, 16 May 2023 14:19:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229957AbjEPGS4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 16 May 2023 02:18:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37550 "EHLO
+        id S232445AbjEPMTK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 16 May 2023 08:19:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbjEPGS4 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 16 May 2023 02:18:56 -0400
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9383B2D42;
-        Mon, 15 May 2023 23:18:53 -0700 (PDT)
-Received: (Authenticated sender: alex@ghiti.fr)
-        by mail.gandi.net (Postfix) with ESMTPSA id 0FBEDE0005;
-        Tue, 16 May 2023 06:18:47 +0000 (UTC)
-Message-ID: <5d894e71-25ad-8ba0-f632-2eec6e017f46@ghiti.fr>
-Date:   Tue, 16 May 2023 08:18:47 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: linux-next: Tree for May 15 (several RV64 build errors)
-To:     Randy Dunlap <rdunlap@infradead.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
+        with ESMTP id S231549AbjEPMTI (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 16 May 2023 08:19:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2E48469A;
+        Tue, 16 May 2023 05:19:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7D74962C99;
+        Tue, 16 May 2023 12:19:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBB7AC433EF;
+        Tue, 16 May 2023 12:19:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684239546;
+        bh=qTDoRfAIkC7F67wJ34T9NmziMuy/wyiI6h84xY8LLLA=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=YnmKFetmXE68lvhKqZYxQr0mmRanS5kNpmHqwEgW6KulSemp0Fm3G9koPueGMMh2q
+         lNCoWje2nU8eJBphSsrOjB3PyxOBYE/wYtur5+N8oveP1gBhVrdiTyWoc5sGJ896HZ
+         SYvT0WnrU2KI+gi7/wiIonnZmY4FQzL0+aCYDWQf4tcFt/PNH4/n22xk4yrw47UIOT
+         nJ71wIcHLafpglSs/sYPg4Y/qtJsYFPZUivWe97MiVPSIs0uQ08d/dGHP+4TeemfnM
+         wGvqUF7+sH6hU+muyVpElTxa0mwAjsTMT943VwJNcApu/d7lP58qYqHR98v05pllpO
+         LbzTQwYEmh/IA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 8432FCE1432; Tue, 16 May 2023 05:19:06 -0700 (PDT)
+Date:   Tue, 16 May 2023 05:19:06 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Shuah Khan <shuah@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Conor Dooley <conor@kernel.org>
-References: <20230515141235.0777c631@canb.auug.org.au>
- <54244db6-ff69-4cf8-894c-c3dd2f12df9c@infradead.org>
-Content-Language: en-US
-From:   Alexandre Ghiti <alex@ghiti.fr>
-In-Reply-To: <54244db6-ff69-4cf8-894c-c3dd2f12df9c@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Subject: Re: linux-next: duplicate patch in the rcu tree
+Message-ID: <62cabd2d-124f-4bc3-8eb8-36773c10b4f2@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <20230511090010.2916e9d7@canb.auug.org.au>
+ <59c2fd36-6920-47d8-a79c-9ff3fcf7c7ae@paulmck-laptop>
+ <96c6fdf7-e589-ca56-9314-1d437b8082ac@linuxfoundation.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <96c6fdf7-e589-ca56-9314-1d437b8082ac@linuxfoundation.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,58 +60,37 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 5/16/23 04:45, Randy Dunlap wrote:
->
-> On 5/14/23 21:12, Stephen Rothwell wrote:
->> Hi all,
->>
->> Changes since 20230512:
->>
-> ../arch/riscv/mm/init.c: In function 'create_fdt_early_page_table':
-> ../arch/riscv/mm/init.c:925:19: warning: unused variable 'pa' [-Wunused-variable]
->    925 |         uintptr_t pa = dtb_pa & ~(PMD_SIZE - 1);
->        |                   ^~
+On Mon, May 15, 2023 at 01:28:23PM -0600, Shuah Khan wrote:
+> On 5/11/23 10:52, Paul E. McKenney wrote:
+> > On Thu, May 11, 2023 at 09:00:10AM +1000, Stephen Rothwell wrote:
+> > > Hi all,
+> > > 
+> > > The following commit is also in the kselftest-fixes tree as a different
+> > > commit (but the same patch):
+> > > 
+> > >    6d9ed63d8bc3 ("tools/nolibc: Fix build of stdio.h due to header ordering")
+> > > 
+> > > This is commit
+> > > 
+> > >    d7eafa64a158 ("tools/nolibc: Fix build of stdio.h due to header ordering")
+> > > 
+> > > in the kselftest-fixes tree.
+> > 
+> > I can currently cleanly remove this commit from the rest of the nolibc
+> > commits in -rcu.
+> > 
+> > However, I might need to re-introduce it in some way or another, for
+> > example, if there are dependencies on it by future nolibc patches.
+> > (I expect another batch in a few days.)
+> > 
+> > So how would you like to proceed?
+> 
+> Paul,
+> 
+> I can drop this from linux-kselftest fixes if that is the easier path.
+> Just let me know.
 
+That would work better for me, less need to keep track of different
+commits in different trees.  So could you please drop this one?
 
-This one slipped through, I'm adding !BUILTIN_DTB to our internal CI, 
-I'll send a fix today.
-
-
->
-> /opt/crosstool/gcc-12.2.0-nolibc/riscv64-linux/bin/riscv64-linux-ld: section .data LMA [000000000041a000,00000000075bffd7] overlaps section .text LMA [00000000000f09d4,00000000033562ab]
-> /opt/crosstool/gcc-12.2.0-nolibc/riscv64-linux/bin/riscv64-linux-ld: section .init.pi.text LMA [00000000033562ac,0000000003359137] overlaps section .data LMA [000000000041a000,00000000075bffd7]
-
-
-I'll check this one too which seems to be related to kernel/pi introduction.
-
-
->
-> /opt/crosstool/gcc-12.2.0-nolibc/riscv64-linux/bin/riscv64-linux-ld: drivers/iommu/io-pgtable-arm.o: in function `.L227':
-> io-pgtable-arm.c:(.init.text+0x444): undefined reference to `alloc_io_pgtable_ops'
-> /opt/crosstool/gcc-12.2.0-nolibc/riscv64-linux/bin/riscv64-linux-ld: drivers/iommu/io-pgtable-arm.o: in function `.L0 ':
-> io-pgtable-arm.c:(.init.text+0xc4c): undefined reference to `free_io_pgtable_ops'
-> /opt/crosstool/gcc-12.2.0-nolibc/riscv64-linux/bin/riscv64-linux-ld: drivers/iommu/ipmmu-vmsa.o: in function `.L690':
-> ipmmu-vmsa.c:(.text+0x2260): undefined reference to `free_io_pgtable_ops'
-> /opt/crosstool/gcc-12.2.0-nolibc/riscv64-linux/bin/riscv64-linux-ld: drivers/iommu/ipmmu-vmsa.o: in function `.L1309':
-> ipmmu-vmsa.c:(.text+0x3f24): undefined reference to `alloc_io_pgtable_ops'
-
-
-Ok, those ones too....
-
-
-Thanks for the report,
-
-
-Alex
-
-
->
->
-> Full randconfig file is attached.
->
->
->
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+							Thanx, Paul

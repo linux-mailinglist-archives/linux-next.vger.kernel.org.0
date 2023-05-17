@@ -2,279 +2,369 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 737D7706C3B
-	for <lists+linux-next@lfdr.de>; Wed, 17 May 2023 17:09:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA739706C87
+	for <lists+linux-next@lfdr.de>; Wed, 17 May 2023 17:21:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230301AbjEQPJJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 17 May 2023 11:09:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38014 "EHLO
+        id S229529AbjEQPVv (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 17 May 2023 11:21:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229988AbjEQPJH (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 17 May 2023 11:09:07 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA0998A4C
-        for <linux-next@vger.kernel.org>; Wed, 17 May 2023 08:08:38 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-30636edb493so97126f8f.1
-        for <linux-next@vger.kernel.org>; Wed, 17 May 2023 08:08:38 -0700 (PDT)
+        with ESMTP id S231687AbjEQPVu (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 17 May 2023 11:21:50 -0400
+Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC7DA1FEB
+        for <linux-next@vger.kernel.org>; Wed, 17 May 2023 08:21:47 -0700 (PDT)
+Received: by mail-vs1-xe35.google.com with SMTP id ada2fe7eead31-4360fd5b8daso259557137.0
+        for <linux-next@vger.kernel.org>; Wed, 17 May 2023 08:21:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684336099; x=1686928099;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=+JjSYdtG2EYbhgl3W9Z4sL1bQQEtMVmhKqEqC/AduCo=;
-        b=e56FF/cP746ZZHhOr8xJup1GjD+pmXzaBRsfVX5AX1w7yI3WCnRq4e0mMlBVve1jx5
-         1c1EVvCcZnvbxA1qFXULADgUWz7C2mU9+QRMagTimu8qcDlkqLCbR9MrMQMsChocvDNA
-         +dqyfMV7GI6SkC9ZFFaknX4/WT6C37GGp5mbr2jNbSroUBuQsjpsHNwfTnsPo8CiRRYr
-         KUlXiQTOeVOjfxQrJRcdIvVG9nQDox+ggF3IE3ZsJJI28HVdLn8E+fKz8KhSJ3BeBziV
-         tYSk2Vy6fupt2hRI4m/EvNj84uZ4/DjuajdUuKeqvGTHiwu7CPsPOWkL7hV2i4rbl8lS
-         CUHA==
+        d=linaro.org; s=google; t=1684336907; x=1686928907;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=h2F0qp3GQzVUQvM8YH57toDxvVA2BRCfFsNcdNXrXtw=;
+        b=YexNOPiS361oJYdHDa2EVX+L6PPS7zy9I2Aij56v8Nou7XFXjPFPlKgAez4WU2P6BS
+         Vg9Md69qdDN93QACAA0nBTcTCgLy/BZ8bM/msUyLm11YxXNxhW3cnTPEjT931ff1rQYn
+         8MFOfJDE8GXLVVDb8T1S4/VOZnvG/dHwPwi4ls5zGTECPoL0aBpZQ+3gEvBA6VwOHuVC
+         NlbD8wKOwbHYA+arI4sTrkjN1eikTjDlsP5EBXZ1yuHnGVAC6mbhdPJW/UDEkrflpZ1D
+         D1Laf3QmjfIsXooQ4D7ZTys4KgfaJp23ZfKwFk3KrASnhIKnnF8LC6UYBkNwnUnB8RNT
+         zFEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684336099; x=1686928099;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+JjSYdtG2EYbhgl3W9Z4sL1bQQEtMVmhKqEqC/AduCo=;
-        b=gf6w7/XQjhK1AQzFQ0bfn3VUMoTZ3LAmsech0nYf3eMMk59vFbNMZjwweykdK9pPhh
-         HD6e0GHnnqmT+tpQZcqz0Rtr51L8SujS+Rjcy1L9XjGNtPn/JlEnnmq6r45gRKaAgr5H
-         dNdnlsk2GHwzRUO6H2Rx9obw95vu7v9di1xZ3WIWEyjQXW6VqGMYtEAYhvAPFW6FbJhv
-         wEsdch/56hqAsVU2HTZWYDLNdGSk7vZd2kAQojLPPn7htk9UQ5cjddpTxSVwIxYAAKOw
-         PzjzMJDamewDUj8RL39N96S5KXz5byaDlnfy/t/b5781NNnZWQYoywHcDQUIQ9E/0A3s
-         ktWQ==
-X-Gm-Message-State: AC+VfDxwEo60I8ZxCjWRlGCQ1dfavg1mqJjxoUb6qn2jcBSNOnrzvFv/
-        lOZDZTSIP4Y9E20wiYDk3l9C0A==
-X-Google-Smtp-Source: ACHHUZ5NEOYsUCmUojYedI/sjZ+jmm3UJJ7uGK1T1t2wN1itwkO0Gv7qCC2f0mNk75s/OIg9c810Mw==
-X-Received: by 2002:adf:ffc7:0:b0:307:d04a:60d8 with SMTP id x7-20020adfffc7000000b00307d04a60d8mr1231689wrs.0.1684336099525;
-        Wed, 17 May 2023 08:08:19 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id e17-20020adfe7d1000000b00300aee6c9cesm3142028wrn.20.2023.05.17.08.08.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 May 2023 08:08:17 -0700 (PDT)
-Date:   Wed, 17 May 2023 18:08:14 +0300
-From:   Dan Carpenter <dan.carpenter@linaro.org>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Chuck Lever <chuck.lever@oracle.com>
-Cc:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-mm <linux-mm@kvack.org>,
-        lkft-triage@lists.linaro.org, Al Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>, frederic@kernel.org,
+        d=1e100.net; s=20221208; t=1684336907; x=1686928907;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=h2F0qp3GQzVUQvM8YH57toDxvVA2BRCfFsNcdNXrXtw=;
+        b=Qeu2eaBKuSXoP64HLfGp0jOcovuU7GkTs+UXmVebqfpNabVSY9zEv20W4Kybxn3Kue
+         u1bi6IyKow3RXAl5UoIYqx4hZKAyHb5j4H3SXdTmzcq9KUz331Bw9Yhy7OWvySRcnMZM
+         HOTWDUhqAWMxyudNKkx6AQXwtRdvevdNbKvfziulGsnWKRH6xOVnkD5iP3OmFi+H84CM
+         BuJQAH9LwC8OW5bSsBkS3tq3KpU8BBYKhCYBV8RCg+XDDVY2ZHlNsOLlrFUqhhp4fJND
+         /4554NNAUpUfNgrF4sK2IDantastCB7xt/J2mTTvZy+mLOOOuT9Mftmmxm/4gnv6Ka+j
+         /IIA==
+X-Gm-Message-State: AC+VfDw4jvsMl9NMnSdgVlTg4YYveowTD7ploXo0nPvlQupMZSQ6rHvw
+        y3/z2Ykp6E7fQONkyPYbGkaMbD/RiNiYmNuWSiDVgLVbmn8UuJy4ViF3DQ==
+X-Google-Smtp-Source: ACHHUZ6zTW5kf/CqPiIL9u6ffXz5+1XZ3PD8WU+uUsMBgLfe1JqsIWMNf0NlMG3QX9m1OKPnT8ljF/xr6+AePAKpKck=
+X-Received: by 2002:a67:f84f:0:b0:435:fed0:e3be with SMTP id
+ b15-20020a67f84f000000b00435fed0e3bemr13775623vsp.22.1684336906733; Wed, 17
+ May 2023 08:21:46 -0700 (PDT)
+MIME-Version: 1.0
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 17 May 2023 20:51:35 +0530
+Message-ID: <CA+G9fYvhPgoP57ip1cW5TaWJfkbkHA2SZqd5fFoTJ7rDGA138w@mail.gmail.com>
+Subject: next: i386-boot: clang-nightly: failed - intermittently - BUG: unable
+ to handle page fault for address: 000024c0
+To:     open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        x86@vger.kernel.org, lkft-triage@lists.linaro.org
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Dan Carpenter <dan.carpenter@linaro.org>,
         Arnd Bergmann <arnd@arndb.de>,
         Anders Roxell <anders.roxell@linaro.org>
-Subject: Re: next: qemu-arm64: kernel BUG at fs/inode.c:1763!
-Message-ID: <20680bb5-71c0-4945-a058-05f43bbd03f4@kili.mountain>
-References: <CA+G9fYszs5wPp+TWJeVZsdRjnBTXTa8i3YY3qV9SHbB1+R2+4Q@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+G9fYszs5wPp+TWJeVZsdRjnBTXTa8i3YY3qV9SHbB1+R2+4Q@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-The fs/inode.c:1763 bug is more stuff from net/handshake testing, so
-lets add Chuck to the CC list.
+Linux next-20230517 build with clang nightly for i386 boot fails intermittently.
+  - i386: boot/clang-nightly-lkftconfig - failed
 
-regards,
-dan carpenter
+Please find detailed log here,
 
-On Wed, May 17, 2023 at 06:39:57PM +0530, Naresh Kamboju wrote:
-> Following kernel crash noticed while booting qemu-arm64 kunit builds on
-> Linux next version 6.4.0-rc2-next-20230517.
-> 
-> WARNING: CPU: 1 PID: 1436 at mm/page_alloc.c:4781 __alloc_pages
-> kernel BUG at fs/inode.c:1763!
-> WARNING: CPU: 0 PID: 0 at kernel/context_tracking.c:128
-> ct_kernel_exit.constprop.0+0xe0/0xe8
-> 
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> 
-> Detailed Crash log:
-> =========
-> <4>[  800.148388] ------------[ cut here ]------------
-> <4>[  800.150072] WARNING: CPU: 1 PID: 1436 at mm/page_alloc.c:4781
-> __alloc_pages+0x998/0x13e8
-> <4>[  800.151978] Modules linked in:
-> <4>[  800.153337] CPU: 1 PID: 1436 Comm: kunit_try_catch Tainted: G
-> B            N 6.4.0-rc2-next-20230517 #1
-> <4>[  800.154662] Hardware name: linux,dummy-virt (DT)
-> <4>[  800.155921] pstate: 22400005 (nzCv daif +PAN -UAO +TCO -DIT
-> -SSBS BTYPE=--)
-> <4>[  800.157079] pc : __alloc_pages+0x998/0x13e8
-> <4>[  800.158148] lr : __kmalloc_large_node+0xc0/0x1b8
-> <4>[  800.159238] sp : ffff80000b5e7aa0
-> <4>[  800.160154] x29: ffff80000b5e7aa0 x28: 0000000000000000 x27:
-> 0000000000000000
-> <4>[  800.161762] x26: ffff0000c4509f00 x25: ffff800008087a98 x24:
-> ffffd0168ffa8460
-> <4>[  800.163283] x23: 1ffff000016bcf74 x22: 0000000000040dc0 x21:
-> 0000000000000000
-> <4>[  800.164813] x20: 0000000000000015 x19: 0000000000000000 x18:
-> 000000000000000b
-> <4>[  800.166307] x17: 00000000bd2c963e x16: 00000000a2b18575 x15:
-> 0000000033b8949b
-> <4>[  800.167831] x14: 000000006d0ad0a4 x13: 00000000e32f85f5 x12:
-> ffff7000016bcfa1
-> <4>[  800.169363] x11: 1ffff000016bcfa0 x10: ffff7000016bcfa0 x9 :
-> 000000000000f204
-> <4>[  800.170928] x8 : 00000000f2000000 x7 : 00000000f2f2f2f2 x6 :
-> 00000000f3f3f3f3
-> <4>[  800.172467] x5 : 0000000000040dc0 x4 : ffff0000c614e900 x3 :
-> 0000000000000000
-> <4>[  800.173976] x2 : 0000000000000000 x1 : 0000000000000001 x0 :
-> ffffd01696633000
-> <4>[  800.175603] Call trace:
-> <4>[  800.176314]  __alloc_pages+0x998/0x13e8
-> <4>[  800.177355]  __kmalloc_large_node+0xc0/0x1b8
-> <4>[  800.178401]  __kmalloc+0x158/0x1c0
-> <4>[  800.179350]  handshake_req_alloc+0x70/0xb8
-> <4>[  800.180510]  handshake_req_alloc_case+0xa4/0x188
-> <4>[  800.181598]  kunit_try_run_case+0x88/0x120
-> <4>[  800.182614]  kunit_generic_run_threadfn_adapter+0x38/0x60
-> <4>[  800.183809]  kthread+0x194/0x1b0
-> <4>[  800.184813]  ret_from_fork+0x10/0x20
-> <4>[  800.185873] ---[ end trace 0000000000000000 ]---
-> <6>[  800.202972]         ok 6 handshake_req_alloc excessive privsize
-> <6>[  800.217425]         ok 7 handshake_req_alloc all good
-> <6>[  800.219182]     # req_alloc API fuzzing: pass:7 fail:0 skip:0 total:7
-> <6>[  800.222082]     ok 1 req_alloc API fuzzing
-> <6>[  800.243148]     ok 2 req_submit NULL req arg
-> <6>[  800.260195]     ok 3 req_submit NULL sock arg
-> <6>[  800.274397]     ok 4 req_submit NULL sock->file
-> <6>[  800.294631]     ok 5 req_lookup works
-> <6>[  800.310289]     ok 6 req_submit max pending
-> <6>[  800.326669]     ok 7 req_submit multiple
-> <6>[  800.342645]     ok 8 req_cancel before accept
-> <4>[  800.359161] ------------[ cut here ]------------
-> <2>[  800.360659] kernel BUG at fs/inode.c:1763!
-> <0>[  800.362464] Internal error: Oops - BUG: 00000000f2000800 [#1] PREEMPT SMP
-> <4>[  800.364079] Modules linked in:
-> <4>[  800.364978] CPU: 0 PID: 9 Comm: kworker/0:1 Tainted: G    B   W
->       N 6.4.0-rc2-next-20230517 #1
-> <4>[  800.366607] Hardware name: linux,dummy-virt (DT)
-> <4>[  800.368282] Workqueue: events delayed_fput
-> <4>[  800.369511] pstate: 62400005 (nZCv daif +PAN -UAO +TCO -DIT
-> -SSBS BTYPE=--)
-> <4>[  800.370861] pc : iput+0x2c4/0x328
-> <4>[  800.371839] lr : iput+0x3c/0x328
-> <4>[  800.372882] sp : ffff800008107b50
-> <6>[  800.375744]     ok 9 req_cancel after accept
-> <4>[  800.376704] x29: ffff800008107b50 x28: ffffd016924f7400 x27:
-> ffff0000c08d4da0
-> <4>[  800.379288] x26: ffff0000c042f918 x25: ffff0000cc273918 x24:
-> ffff0000cc273900
-> <4>[  800.381160] x23: 0000000000000000 x22: ffff0000c042f9b8 x21:
-> ffffd016924f7b40
-> <4>[  800.383408] x20: ffff0000c042f880 x19: ffff0000c042f880 x18:
-> 000000000000000b
-> <4>[  800.385535] x17: ffffd0168fb6f094 x16: ffffd0168fb6ee10 x15:
-> ffffd0168fb6ebd4
-> <4>[  800.387985] x14: ffffd0168f7d5de8 x13: ffffd0168f617f98 x12:
-> ffff700001020f53
-> <4>[  800.389672] x11: 1ffff00001020f52 x10: ffff700001020f52 x9 :
-> ffffd0168fb67384
-> <4>[  800.392442] x8 : ffff800008107a98 x7 : 0000000000000000 x6 :
-> 0000000000000008
-> <4>[  800.395053] x5 : ffff800008107a58 x4 : 0000000000000001 x3 :
-> dfff800000000000
-> <4>[  800.397652] x2 : 0000000000000007 x1 : ffff0000c042f918 x0 :
-> 0000000000000060
-> <4>[  800.400110] Call trace:
-> <4>[  800.401352]  iput+0x2c4/0x328
-> <4>[  800.402741]  dentry_unlink_inode+0x12c/0x240
-> <4>[  800.404519]  __dentry_kill+0x16c/0x2b0
-> <4>[  800.406047]  dput+0x24c/0x438
-> <4>[  800.407331]  __fput+0x140/0x3b0
-> <4>[  800.409152]  delayed_fput+0x64/0x80
-> <4>[  800.410708]  process_one_work+0x3cc/0x7d0
-> <4>[  800.413032]  worker_thread+0xa4/0x6a0
-> <4>[  800.415041]  kthread+0x194/0x1b0
-> <6>[  800.416283]     ok 10 req_cancel after done
-> <4>[  800.416205]  ret_from_fork+0x10/0x20
-> <0>[  800.419090] Code: 17ffffc4 97fffb54 17ffffd4 d65f03c0 (d4210000)
-> <4>[  800.421577] ---[ end trace 0000000000000000 ]---
-> <6>[  800.424335] note: kworker/0:1[9] exited with irqs disabled
-> <6>[  800.428252] note: kworker/0:1[9] exited with preempt_count 1
-> <4>[  800.435635] ------------[ cut here ]------------
-> <4>[  800.436529] WARNING: CPU: 0 PID: 0 at
-> kernel/context_tracking.c:128 ct_kernel_exit.constprop.0+0xe0/0xe8
-> <4>[  800.439070] Modules linked in:
-> <4>[  800.440326] CPU: 0 PID: 0 Comm: swapper/0 Tainted: G    B D W
->     N 6.4.0-rc2-next-20230517 #1
-> <4>[  800.442196] Hardware name: linux,dummy-virt (DT)
-> <4>[  800.443408] pstate: 224003c5 (nzCv DAIF +PAN -UAO +TCO -DIT
-> -SSBS BTYPE=--)
-> <4>[  800.445031] pc : ct_kernel_exit.constprop.0+0xe0/0xe8
-> <4>[  800.446629] lr : ct_kernel_exit.constprop.0+0x20/0xe8
-> <4>[  800.448263] sp : ffffd01694ed7cd0
-> <4>[  800.449375] x29: ffffd01694ed7cd0 x28: 00000000437e90ac x27:
-> 0000000000000000
-> <4>[  800.451354] x26: ffffd01694ef1e40 x25: 0000000000000000 x24:
-> 0000000000000000
-> <4>[  800.453397] x23: ffffd01694ee2ba0 x22: 1ffffa02d29dafb4 x21:
-> 0000000000000000
-> <4>[  800.455573] x20: ffffd01692f29c20 x19: ffff0000da667c20 x18:
-> 000000000000000b
-> <4>[  800.457649] x17: 000000000055a8d0 x16: 000000006cbc159c x15:
-> ffffd0168fb6865c
-> <4>[  800.459662] x14: ffffd0168fb680ec x13: ffffd0168fb3b03c x12:
-> ffff7a02d29daf81
-> <4>[  800.461787] x11: 1ffffa02d29daf80 x10: ffff7a02d29daf80 x9 :
-> dfff800000000000
-> <4>[  800.463827] x8 : ffffd01694ed7c08 x7 : 0000000000000000 x6 :
-> 0000000000000008
-> <4>[  800.465864] x5 : ffffd01694ed7bc8 x4 : 0000000000000001 x3 :
-> dfff800000000000
-> <4>[  800.467860] x2 : 4000000000000002 x1 : 4000000000000000 x0 :
-> ffff2fea4773e000
-> <4>[  800.469981] Call trace:
-> <4>[  800.470946]  ct_kernel_exit.constprop.0+0xe0/0xe8
-> <4>[  800.472535]  ct_idle_enter+0x10/0x20
-> <4>[  800.473923]  default_idle_call+0x58/0x90
-> <4>[  800.475213]  do_idle+0x304/0x388
-> <4>[  800.476492]  cpu_startup_entry+0x2c/0x40
-> <4>[  800.477885]  rest_init+0x120/0x128
-> <4>[  800.478830]  arch_call_rest_init+0x1c/0x28
-> <4>[  800.479961]  start_kernel+0x2f8/0x3c0
-> <4>[  800.482015]  __primary_switched+0xc0/0xd0
-> <4>[  800.483086] ---[ end trace 0000000000000000 ]---
-> <6>[  800.487780]     ok 11 req_destroy works
-> <6>[  800.488283] # Handshake API tests: pass:11 fail:0 skip:0 total:11
-> <6>[  800.491161] # Totals: pass:17 fail:0 skip:0 total:17
-> <6>[  800.495059] ok 75 Handshake API tests
-> <6>[  800.514129] uart-pl011 9000000.pl011: no DMA platform data
-> 
-> links,
->  - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230517/testrun/17029810/suite/boot/test/gcc-12-lkftconfig-kunit/log
->  - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230517/testrun/17029810/suite/boot/test/gcc-12-lkftconfig-kunit/history/
->  - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230517/testrun/17029810/suite/boot/tests/
-> 
-> Steps to reproduce:
-> =================
-> # To install tuxrun on your system globally:
-> # sudo pip3 install -U tuxrun==0.42.0
-> #
-> # See https://tuxrun.org/ for complete documentation.
-> 
-> tuxrun   \
->  --runtime podman   \
->  --device qemu-arm64   \
->  --kernel https://storage.tuxsuite.com/public/linaro/lkft/builds/2PtylM1zfMZo4vZUtwFtBJhJRvx/Image.gz
->   \
->  --modules https://storage.tuxsuite.com/public/linaro/lkft/builds/2PtylM1zfMZo4vZUtwFtBJhJRvx/modules.tar.xz
->   \
->  --rootfs https://storage.tuxsuite.com/public/linaro/lkft/oebuilds/2PeQhlPkvTmtoQVO1F0CQ7lAsm5/images/juno/lkft-tux-image-juno-20230511150149.rootfs.ext4.gz
->   \
->  --parameters SKIPFILE=skipfile-lkft.yaml   \
->  --image docker.io/lavasoftware/lava-dispatcher:2023.01.0020.gc1598238f   \
->  --tests kunit   \
->  --timeouts boot=30
-> 
-> --
-> Linaro LKFT
-> https://lkft.linaro.org
+boot log:
+=====
+[    0.000000] Linux version 6.4.0-rc2-next-20230517 (tuxmake@tuxmake)
+(Debian clang version 17.0.0
+(++20230507093322+728b8a139804-1~exp1~20230507093335.652), Debian LLD
+17.0.0) #1 SMP PREEMPT_DYNAMIC @1684291209
+<6>[    0.000000] x86/fpu: x87 FPU will use FXSAVE
+<6>[    0.000000] signal: max sigframe size: 1440
+<6>[    0.000000] BIOS-provided physical RAM map:
+<6>[    0.000000] BIOS-e820: [mem 0x0000000000000000-0x000000000009fbff] usable
+<6>[    0.000000] BIOS-e820: [mem
+0x000000000009fc00-0x000000000009ffff] reserved
+<6>[    0.000000] BIOS-e820: [mem
+0x00000000000f0000-0x00000000000fffff] reserved
+<6>[    0.000000] BIOS-e820: [mem 0x0000000000100000-0x000000007ffdefff] usable
+<6>[    0.000000] BIOS-e820: [mem
+0x000000007ffdf000-0x000000007fffffff] reserved
+<6>[    0.000000] BIOS-e820: [mem
+0x00000000b0000000-0x00000000bfffffff] reserved
+<6>[    0.000000] BIOS-e820: [mem
+0x00000000fed1c000-0x00000000fed1ffff] reserved
+<6>[    0.000000] BIOS-e820: [mem
+0x00000000fffc0000-0x00000000ffffffff] reserved
+<6>[    0.000000] BIOS-e820: [mem 0x0000000100000000-0x000000017fffffff] usable
+<5>[    0.000000] random: crng init done
+<5>[    0.000000] Notice: NX (Execute Disable) protection cannot be
+enabled: non-PAE kernel!
+<7>[    0.000000] e820: update [mem 0x00cfce20-0x00cfce2f] usable ==> usable
+<7>[    0.000000] e820: update [mem 0x00cfce20-0x00cfce2f] usable ==> usable
+<6>[    0.000000] extended physical RAM map:
+<6>[    0.000000] reserve setup_data: [mem
+0x0000000000000000-0x000000000009fbff] usable
+<6>[    0.000000] reserve setup_data: [mem
+0x000000000009fc00-0x000000000009ffff] reserved
+<6>[    0.000000] reserve setup_data: [mem
+0x00000000000f0000-0x00000000000fffff] reserved
+<6>[    0.000000] reserve setup_data: [mem
+0x0000000000100000-0x0000000000cfce1f] usable
+<6>[    0.000000] reserve setup_data: [mem
+0x0000000000cfce20-0x0000000000cfce2f] usable
+<6>[    0.000000] reserve setup_data: [mem
+0x0000000000cfce30-0x000000007ffdefff] usable
+<6>[    0.000000] reserve setup_data: [mem
+0x000000007ffdf000-0x000000007fffffff] reserved
+<6>[    0.000000] reserve setup_data: [mem
+0x00000000b0000000-0x00000000bfffffff] reserved
+<6>[    0.000000] reserve setup_data: [mem
+0x00000000fed1c000-0x00000000fed1ffff] reserved
+<6>[    0.000000] reserve setup_data: [mem
+0x00000000fffc0000-0x00000000ffffffff] reserved
+<6>[    0.000000] reserve setup_data: [mem
+0x0000000100000000-0x000000017fffffff] usable
+<6>[    0.000000] SMBIOS 2.8 present.
+<6>[    0.000000] DMI: QEMU Standard PC (Q35 + ICH9, 2009), BIOS
+1.14.0-2 04/01/2014
+<6>[    0.000000] tsc: Fast TSC calibration using PIT
+<6>[    0.000000] tsc: Detected 3000.002 MHz processor
+<7>[    0.009140] e820: update [mem 0x00000000-0x00000fff] usable ==> reserved
+<7>[    0.009369] e820: remove [mem 0x000a0000-0x000fffff] usable
+<6>[    0.009688] last_pfn = 0x7ffdf max_arch_pfn = 0x100000
+<6>[    0.010313] x86/PAT: PAT not supported by the CPU.
+<6>[    0.010476] x86/PAT: Configuration [0-7]: WB  WT  UC- UC  WB  WT  UC- UC
+<6>[    0.028035] found SMP MP-table at [mem 0x000f5ce0-0x000f5cef]
+<7>[    0.029050] initial memory mapped: [mem 0x00000000-0x18ffffff]
+<6>[    0.032814] ACPI: Early table checksum verification disabled
+<6>[    0.033316] ACPI: RSDP 0x00000000000F5B10 000014 (v00 BOCHS )
+<6>[    0.033820] ACPI: RSDT 0x000000007FFE2319 000038 (v01 BOCHS
+BXPC     00000001 BXPC 00000001)
+<6>[    0.034477] ACPI: FACP 0x000000007FFE2109 0000F4 (v03 BOCHS
+BXPC     00000001 BXPC 00000001)
+<6>[    0.035093] ACPI: DSDT 0x000000007FFE0040 0020C9 (v01 BOCHS
+BXPC     00000001 BXPC 00000001)
+<6>[    0.035191] ACPI: FACS 0x000000007FFE0000 000040
+<6>[    0.035258] ACPI: APIC 0x000000007FFE21FD 000080 (v01 BOCHS
+BXPC     00000001 BXPC 00000001)
+<6>[    0.035306] ACPI: HPET 0x000000007FFE227D 000038 (v01 BOCHS
+BXPC     00000001 BXPC 00000001)
+<6>[    0.035336] ACPI: MCFG 0x000000007FFE22B5 00003C (v01 BOCHS
+BXPC     00000001 BXPC 00000001)
+<6>[    0.035365] ACPI: WAET 0x000000007FFE22F1 000028 (v01 BOCHS
+BXPC     00000001 BXPC 00000001)
+<6>[    0.035470] ACPI: Reserving FACP table memory at [mem
+0x7ffe2109-0x7ffe21fc]
+<6>[    0.035522] ACPI: Reserving DSDT table memory at [mem
+0x7ffe0040-0x7ffe2108]
+<6>[    0.035533] ACPI: Reserving FACS table memory at [mem
+0x7ffe0000-0x7ffe003f]
+<6>[    0.035542] ACPI: Reserving APIC table memory at [mem
+0x7ffe21fd-0x7ffe227c]
+<6>[    0.035550] ACPI: Reserving HPET table memory at [mem
+0x7ffe227d-0x7ffe22b4]
+<6>[    0.035558] ACPI: Reserving MCFG table memory at [mem
+0x7ffe22b5-0x7ffe22f0]
+<6>[    0.035566] ACPI: Reserving WAET table memory at [mem
+0x7ffe22f1-0x7ffe2318]
+<5>[    0.036775] 1167MB HIGHMEM available.
+<5>[    0.036823] 879MB LOWMEM available.
+<6>[    0.036848]   mapped low ram: 0 - 36ffe000
+<6>[    0.036864]   low ram: 0 - 36ffe000
+<6>[    0.037465] Zone ranges:
+<6>[    0.037490]   DMA      [mem 0x0000000000001000-0x0000000000ffffff]
+<6>[    0.037576]   Normal   [mem 0x0000000001000000-0x0000000036ffdfff]
+<6>[    0.037591]   HighMem  [mem 0x0000000036ffe000-0x000000007ffdefff]
+<6>[    0.037610] Movable zone start for each node
+<6>[    0.037625] Early memory node ranges
+<6>[    0.037668]   node   0: [mem 0x0000000000001000-0x000000000009efff]
+<6>[    0.037741]   node   0: [mem 0x0000000000100000-0x000000007ffdefff]
+<6>[    0.037912] Initmem setup node 0 [mem
+0x0000000000001000-0x000000007ffdefff]
+<6>[    0.039699] On node 0, zone DMA: 1 pages in unavailable ranges
+<6>[    0.040493] On node 0, zone DMA: 97 pages in unavailable ranges
+<6>[    0.068623] Using APIC driver default
+<6>[    0.069096] ACPI: PM-Timer IO Port: 0x608
+<6>[    0.069764] ACPI: LAPIC_NMI (acpi_id[0xff] dfl dfl lint[0x1])
+<6>[    0.070159] IOAPIC[0]: apic_id 0, version 32, address 0xfec00000, GSI 0-23
+<6>[    0.070278] ACPI: INT_SRC_OVR (bus 0 bus_irq 0 global_irq 2 dfl dfl)
+<6>[    0.070576] ACPI: INT_SRC_OVR (bus 0 bus_irq 5 global_irq 5 high level)
+<6>[    0.070611] ACPI: INT_SRC_OVR (bus 0 bus_irq 9 global_irq 9 high level)
+<6>[    0.070722] ACPI: INT_SRC_OVR (bus 0 bus_irq 10 global_irq 10 high level)
+<6>[    0.070735] ACPI: INT_SRC_OVR (bus 0 bus_irq 11 global_irq 11 high level)
+<6>[    0.070968] ACPI: Using ACPI (MADT) for SMP configuration information
+<6>[    0.071240] smpboot: Allowing 2 CPUs, 0 hotplug CPUs
+<6>[    0.072248] PM: hibernation: Registered nosave memory: [mem
+0x00000000-0x00000fff]
+<6>[    0.072334] PM: hibernation: Registered nosave memory: [mem
+0x0009f000-0x0009ffff]
+<6>[    0.072384] PM: hibernation: Registered nosave memory: [mem
+0x000a0000-0x000effff]
+<6>[    0.072394] PM: hibernation: Registered nosave memory: [mem
+0x000f0000-0x000fffff]
+<6>[    0.072405] PM: hibernation: Registered nosave memory: [mem
+0x00cfc000-0x00cfcfff]
+<6>[    0.072417] PM: hibernation: Registered nosave memory: [mem
+0x00cfc000-0x00cfcfff]
+<6>[    0.072636] [mem 0xc0000000-0xfed1bfff] available for PCI devices
+<6>[    0.072683] Booting paravirtualized kernel on bare hardware
+<6>[    0.073201] clocksource: refined-jiffies: mask: 0xffffffff
+max_cycles: 0xffffffff, max_idle_ns: 1910969940391419 ns
+<6>[    0.073674] setup_percpu: NR_CPUS:8 nr_cpumask_bits:2
+nr_cpu_ids:2 nr_node_ids:1
+<6>[    0.075154] percpu: Embedded 31 pages/cpu s96372 r0 d30604 u126976
+<7>[    0.075652] pcpu-alloc: s96372 r0 d30604 u126976 alloc=31*4096
+<7>[    0.075742] pcpu-alloc: [0] 0 [0] 1
+<5>[    0.077147] Kernel command line: console=ttyS0,115200 rootwait
+root=/dev/sda debug verbose console_msg_format=syslog earlycon
+<5>[    0.078730] Unknown kernel command line parameters \"verbose\",
+will be passed to user space.
+<6>[    0.080340] Dentry cache hash table entries: 131072 (order: 7,
+524288 bytes, linear)
+<6>[    0.081003] Inode-cache hash table entries: 65536 (order: 6,
+262144 bytes, linear)
+<6>[    0.082840] Built 1 zonelists, mobility grouping on.  Total pages: 521957
+<6>[    0.088082] mem auto-init: stack:all(zero), heap alloc:off, heap free:off
+<6>[    0.088308] Initializing HighMem for node 0 (00036ffe:0007ffdf)
+<6>[    0.454727] Initializing Movable for node 0 (00000000:00000000)
+<6>[    0.459790] Checking if this processor honours the WP bit even
+in supervisor mode...Ok.
+<6>[    0.460945] Memory: 2046372K/2096628K available (15688K kernel
+code, 2173K rwdata, 5772K rodata, 996K init, 780K bss, 50256K
+reserved, 0K cma-reserved, 1195908K highmem)
+<6>[    0.466051] SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=2, Nodes=1
+<6>[    0.468048] ftrace: allocating 54241 entries in 106 pages
+<6>[    0.511020] ftrace: allocated 106 pages with 4 groups
+<6>[    0.514727] trace event string verifier disabled
+<6>[    0.519501] Dynamic Preempt: voluntary
+<6>[    0.522734] rcu: Preemptible hierarchical RCU implementation.
+<6>[    0.522756] rcu: RCU event tracing is enabled.
+<6>[    0.522785] rcu: RCU restricting CPUs from NR_CPUS=8 to nr_cpu_ids=2.
+<6>[    0.522916] Trampoline variant of Tasks RCU enabled.
+<6>[    0.522927] Rude variant of Tasks RCU enabled.
+<6>[    0.523017] rcu: RCU calculated value of scheduler-enlistment
+delay is 100 jiffies.
+<6>[    0.523045] rcu: Adjusting geometry for rcu_fanout_leaf=16, nr_cpu_ids=2
+<6>[    0.538503] NR_IRQS: 2304, nr_irqs: 440, preallocated irqs: 16
+<6>[    0.543029] rcu: srcu_init: Setting srcu_struct sizes based on contention.
+<6>[    0.546346] kfence: initialized - using 2097152 bytes for 255
+objects at 0x(ptrval)-0x(ptrval)
+<6>[    0.551378] Console: colour VGA+ 80x25
+<6>[    0.553103] printk: console [ttyS0] enabled
+<6>[    0.626471] ACPI: Core revision 20230331
+<6>[    0.637882] APIC: Switch to symmetric I/O mode setup
+<6>[    0.638348] Enabling APIC mode:  Flat.  Using 1 I/O APICs
+<6>[    0.644118] ..TIMER: vector=0x30 apic1=0 pin1=2 apic2=-1 pin2=-1
+<6>[    0.650790] clocksource: tsc-early: mask: 0xffffffffffffffff
+max_cycles: 0x2b3e46fa93c, max_idle_ns: 440795237232 ns
+<6>[    0.652683] Calibrating delay loop (skipped), value calculated
+using timer frequency.. 6000.00 BogoMIPS (lpj=3000002)
+<6>[    0.654599] pid_max: default: 32768 minimum: 301
+<6>[    0.656733] LSM: initializing lsm=capability,selinux,integrity
+<6>[    0.657713] SELinux:  Initializing.
+<6>[    0.660732] Mount-cache hash table entries: 2048 (order: 1, 8192
+bytes, linear)
+<6>[    0.661233] Mountpoint-cache hash table entries: 2048 (order: 1,
+8192 bytes, linear)
+<6>[    0.682197] Last level iTLB entries: 4KB 0, 2MB 0, 4MB 0
+<6>[    0.682458] Last level dTLB entries: 4KB 0, 2MB 0, 4MB 0, 1GB 0
+<6>[    0.682670] Spectre V1 : Mitigation: usercopy/swapgs barriers
+and __user pointer sanitization
+<6>[    0.684632] Spectre V2 : Mitigation: Retpolines
+<6>[    0.684930] Spectre V2 : Spectre v2 / SpectreRSB mitigation:
+Filling RSB on context switch
+<6>[    0.685539] Spectre V2 : Spectre v2 / SpectreRSB : Filling RSB on VMEXIT
+<4>[    0.686934] L1TF: Kernel not compiled for PAE. No mitigation for L1TF
+<6>[    0.688097] MDS: Vulnerable: Clear CPU buffers attempted, no microcode
+<6>[    0.688548] MMIO Stale Data: Unknown: No mitigations
+<0>[    0.692458] __common_interrupt: 0.79 No irq handler for vector
+<0>[    0.692458] __common_interrupt: 0.160 No irq handler for vector
+<1>[    0.692458] BUG: unable to handle page fault for address: 000024c0
+<1>[    0.692458] #PF: user read access in kernel mode
+<1>[    0.692458] #PF: error_code(0x0004) - not-present page
+<6>[    0.692458] *pde = 00000000
+<4>[    0.692458] Oops: 0004 [#1] PREEMPT SMP
+<4>[    0.692458] CPU: 0 PID: 0 Comm: swapper/0 Not tainted
+6.4.0-rc2-next-20230517 #1
+<4>[    0.692458] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009),
+BIOS 1.14.0-2 04/01/2014
+<4>[    0.692458] EIP: 0x60
+<4>[    0.692458] Code: Unable to access opcode bytes at 0x36.
+<4>[    0.692458] EAX: 00000060 EBX: 00000000 ECX: b51e0945 EDX: 006afcf0
+<4>[    0.692458] ESI: 00000060 EDI: 00000020 EBP: d86f7c04 ESP: d86f7ce0
+<4>[    0.692458] DS: 0000 ES: 0000 FS: 0000 GS: 0000 SS: 7c8c EFLAGS: 00324b92
+<4>[    0.692458] CR0: 80050033 CR2: 000024c0 CR3: 18a49000 CR4: 000006d0
+<4>[    0.692458] Call Trace:
+<4>[    0.692458]  ? vscnprintf+0x12/0x30
+<4>[    0.692458]  ? prb_read_valid+0x31/0x50
+<4>[    0.692458]  ? console_unlock+0x94/0xc0
+<4>[    0.692458]  ? vprintk_emit+0xf4/0x230
+<4>[    0.692458]  ? vprintk_emit+0xf4/0x230
+<4>[    0.692458]  ? vprintk_default+0x15/0x20
+<4>[    0.692458]  ? __is_insn_slot_addr+0x41/0x50
+<4>[    0.692458]  ? kernel_text_address+0x7c/0x90
+<4>[    0.692458]  ? __kernel_text_address+0x10/0x40
+<4>[    0.692458]  ? show_trace_log_lvl.17+0x1f5/0x2f0
+<4>[    0.692458]  ? __die_body+0x54/0x90
+<4>[    0.692458]  ? __die+0x70/0x80
+<4>[    0.692458]  ? page_fault_oops+0x2d3/0x310
+<4>[    0.692458]  ? kernelmode_fixup_or_oops+0xa5/0xc0
+<4>[    0.692458]  ? __bad_area_nosemaphore+0x59/0x1d0
+<4>[    0.692458]  ? bad_area_nosemaphore+0x12/0x20
+<4>[    0.692458]  ? do_user_addr_fault+0x156/0x400
+<4>[    0.692458]  ? irqentry_enter+0x32/0x38
+<4>[    0.692458]  ? trace_hardirqs_off_finish+0x2c/0x70
+<4>[    0.692458]  ? exc_page_fault+0x50/0x154
+<4>[    0.692458]  ? pvclock_clocksource_read_nowd+0xdc/0xdc
+<4>[    0.692458]  ? handle_exception+0x133/0x133
+<4>[    0.692458]  ? pvclock_clocksource_read_nowd+0xdc/0xdc
+<4>[    0.692458] Modules linked in:
+<4>[    0.692458] CR2: 00000000000024c0
+<4>[    0.692458] ---[ end trace 0000000000000000 ]---
+<4>[    0.692458] EIP: 0x60
+<4>[    0.692458] Code: Unable to access opcode bytes at 0x36.
+<4>[    0.692458] EAX: 00000060 EBX: 00000000 ECX: b51e0945 EDX: 006afcf0
+<4>[    0.692458] ESI: 00000060 EDI: 00000020 EBP: d86f7c04 ESP: d86f7ce0
+<4>[    0.692458] DS: 0000 ES: 0000 FS: 0000 GS: 0000 SS: 7c8c EFLAGS: 00324b92
+<4>[    0.692458] CR0: 80050033 CR2: 000024c0 CR3: 18a49000 CR4: 000006d0
+<0>[    0.692458] Kernel panic - not syncing: Attempted to kill the idle task!
+<0>[    0.692458] ---[ end Kernel panic - not syncing: Attempted to
+kill the idle task! ]---
+poweroff
+
+
+logs:
+===
+ - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230517/testrun/17029757/suite/boot/test/clang-nightly-lkftconfig/log
+ - https://tuxapi.tuxsuite.com/v1/groups/linaro/projects/lkft/tests/2PtyoY5qEJrKsuIBPRVSIGK02m3
+
+
+Steps to reproduce intermittently,
+=============
+# To install tuxrun on your system globally:
+# sudo pip3 install -U tuxrun==0.42.0
+#
+# See https://tuxrun.org/ for complete documentation.
+
+tuxrun   \
+ --runtime podman   \
+ --device qemu-i386   \
+ --kernel https://storage.tuxsuite.com/public/linaro/lkft/builds/2PtylXBvODt99O8r9YKOEwj0fQc/bzImage
+  \
+ --modules https://storage.tuxsuite.com/public/linaro/lkft/builds/2PtylXBvODt99O8r9YKOEwj0fQc/modules.tar.xz
+  \
+ --rootfs https://storage.tuxsuite.com/public/linaro/lkft/oebuilds/2PeQhkn36JqPowQBZge0AFhBav6/images/intel-core2-32/lkft-tux-image-intel-core2-32-20230511145016.rootfs.ext4.gz
+  \
+ --parameters SKIPFILE=skipfile-lkft.yaml   \
+ --parameters SHARD_NUMBER=10   \
+ --parameters SHARD_INDEX=2   \
+ --image docker.io/lavasoftware/lava-dispatcher:2023.01.0020.gc1598238f   \
+ --tests ltp-syscalls   \
+ --timeouts boot=15 ltp-syscalls=50
+
+--
+Linaro LKFT
+https://lkft.linaro.org

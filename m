@@ -2,125 +2,109 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91ACA706161
-	for <lists+linux-next@lfdr.de>; Wed, 17 May 2023 09:40:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1AE57062B5
+	for <lists+linux-next@lfdr.de>; Wed, 17 May 2023 10:25:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230029AbjEQHkG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 17 May 2023 03:40:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36922 "EHLO
+        id S229538AbjEQIZP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 17 May 2023 04:25:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230027AbjEQHkF (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 17 May 2023 03:40:05 -0400
-Received: from mail-il1-f205.google.com (mail-il1-f205.google.com [209.85.166.205])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BF471A7
-        for <linux-next@vger.kernel.org>; Wed, 17 May 2023 00:40:04 -0700 (PDT)
-Received: by mail-il1-f205.google.com with SMTP id e9e14a558f8ab-3383a678225so1972565ab.3
-        for <linux-next@vger.kernel.org>; Wed, 17 May 2023 00:40:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684309203; x=1686901203;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=69VsXeyPuZfUkl/0X2g0yMrT/XXVKTEkT0F6vVJIoGg=;
-        b=PzHkVo8jgjIF9WHFGpkEYX6yPwO0ZM3YuAGZgepl6IyTPq0hUEcqNl80sRPD2yrbJL
-         z73KJfUJdbtKFeQLwPl9WtpU1TjSGJ/6enR4reuS0SETDfg+2D7WlmEjhPrrFltzcLYb
-         /y/rLYbR5+A327cq8gaeVRxGslcxDMzx3w6CIolOUo6/A+fLLdZPAjWXss36ihoh1637
-         DYuP08C2RcPUMwTObYoMCpS/0vtUAVxb/77B7xzb9bQx+OJaaqKIZKyRyi7XH/PCnmmQ
-         99nDjDK9RgwMh0XpQpv9ccHzGSpeH0rGT7SrJNEISXbaR6MFS5YQth5SSidT8d1j8DwX
-         pn+w==
-X-Gm-Message-State: AC+VfDx1vYhCoDnEmlM9r/NvPWyy7+0LMHWDk/dSH9o4kqkhxG1T1AuE
-        0uTccQNl4KT75k55TFYc/gTtW5k41m5Wa3b6AoUkj/H/5Wov
-X-Google-Smtp-Source: ACHHUZ7uskBz3KEz7qbkJs6uORi9CJzYHEMEhlHZvYV40zrittXllcU++Vbq85REdlNAiZ3qfDXLBq0MwFp2Cbd2vn6N40ahhpHN
+        with ESMTP id S229530AbjEQIZO (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 17 May 2023 04:25:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99369358B;
+        Wed, 17 May 2023 01:25:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 36D7861B57;
+        Wed, 17 May 2023 08:25:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08BBCC433D2;
+        Wed, 17 May 2023 08:25:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684311912;
+        bh=Q2eq2HRQkG8z30GmpDc7eSZoIAm9vdn5MKezqNcrPxE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BEIPpLrVK0QUCJ22xeGkEZa6tG+vSNkfHcm2hRsRaYnUwraeYRiDVOsDhVhWLA3CE
+         b2TOJUcfSaKQ11HxcVwMUGzPgiwMM+J+qCZmjVPtl03GQAFzM51+9qJtENB4UeywhC
+         fCNous0bjVY8XGp4E14GznqwvnR6kfMY0fHL9WtZcHk+cj/gy+O8nX5G7KeAC9ZQwV
+         mtM+T2R4XOKRaEetrt2s1OaNfnKxSW/+565Vxkg9Fsj0wzYAxQ4w4fYmU2/8MIe41q
+         oZJpOHx0WgmWcIlsh4xP6i3JiH+L3q/17tQSQz9ZI9Zxd4+xeShpb2XiLTlRLJfHWx
+         64Io7tQibioYA==
+Date:   Wed, 17 May 2023 10:25:08 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     syzbot <syzbot+ac3b41786a2d0565b6d5@syzkaller.appspotmail.com>,
+        Kees Cook <keescook@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        sfr@canb.auug.org.au, syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] [kernel?] linux-next test error: UBSAN:
+ array-index-out-of-bounds in alloc_pid
+Message-ID: <20230517-bushaltestelle-super-e223978c1ba6@brauner>
+References: <000000000000c6de2a05fbdecbbb@google.com>
 MIME-Version: 1.0
-X-Received: by 2002:a92:dd07:0:b0:331:57f3:6af3 with SMTP id
- n7-20020a92dd07000000b0033157f36af3mr1019476ilm.1.1684309203665; Wed, 17 May
- 2023 00:40:03 -0700 (PDT)
-Date:   Wed, 17 May 2023 00:40:03 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000c6de2a05fbdecbbb@google.com>
-Subject: [syzbot] [kernel?] linux-next test error: UBSAN: array-index-out-of-bounds
- in alloc_pid
-From:   syzbot <syzbot+ac3b41786a2d0565b6d5@syzkaller.appspotmail.com>
-To:     brauner@kernel.org, linux-kernel@vger.kernel.org,
-        linux-next@vger.kernel.org, sfr@canb.auug.org.au,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <000000000000c6de2a05fbdecbbb@google.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hello,
+On Wed, May 17, 2023 at 12:40:03AM -0700, syzbot wrote:
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    065efa589871 Add linux-next specific files for 20230517
+> git tree:       linux-next
+> console output: https://syzkaller.appspot.com/x/log.txt?x=17f27bb2280000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=821eeb02ef201bcc
+> dashboard link: https://syzkaller.appspot.com/bug?extid=ac3b41786a2d0565b6d5
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> 
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/dbbd691e9e5a/disk-065efa58.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/e5b9541c3979/vmlinux-065efa58.xz
+> kernel image: https://storage.googleapis.com/syzbot-assets/44cf3f3aaabb/bzImage-065efa58.xz
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+ac3b41786a2d0565b6d5@syzkaller.appspotmail.com
+> 
+> ================================================================================
+> UBSAN: array-index-out-of-bounds in kernel/pid.c:244:15
 
-syzbot found the following issue on:
+Only way I see this happening is if the logic in
+kernel/pid_namespace.c:create_pid_cachep() which sets the object size
+for the struct pid allocation of this pid namespace based on
+parent_pid_namespace->level + 1 is broken. The way this works is:
 
-HEAD commit:    065efa589871 Add linux-next specific files for 20230517
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=17f27bb2280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=821eeb02ef201bcc
-dashboard link: https://syzkaller.appspot.com/bug?extid=ac3b41786a2d0565b6d5
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+    struct pid
+    {
+            [snip]
+            struct upid numbers[1];
+    };
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/dbbd691e9e5a/disk-065efa58.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/e5b9541c3979/vmlinux-065efa58.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/44cf3f3aaabb/bzImage-065efa58.xz
+    create_pid_namespace()
+    {
+            unsigned int level = parent_pid_ns->level + 1;
+            ns->pid_cachep = create_pid_cachep(level);
+    }
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+ac3b41786a2d0565b6d5@syzkaller.appspotmail.com
+and then during fork:
 
-================================================================================
-UBSAN: array-index-out-of-bounds in kernel/pid.c:244:15
-index 1 is out of range for type 'upid [1]'
-CPU: 1 PID: 5002 Comm: syz-executor.0 Not tainted 6.4.0-rc2-next-20230517-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/28/2023
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x136/0x150 lib/dump_stack.c:106
- ubsan_epilogue lib/ubsan.c:217 [inline]
- __ubsan_handle_out_of_bounds+0xd5/0x140 lib/ubsan.c:348
- alloc_pid+0xbe5/0xdd0 kernel/pid.c:244
- copy_process+0x45da/0x7660 kernel/fork.c:2522
- kernel_clone+0xeb/0x890 kernel/fork.c:2914
- __do_sys_clone+0xba/0x100 kernel/fork.c:3057
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f23be089e9b
-Code: ed 0f 85 60 01 00 00 64 4c 8b 0c 25 10 00 00 00 45 31 c0 4d 8d 91 d0 02 00 00 31 d2 31 f6 bf 11 00 20 01 b8 38 00 00 00 0f 05 <48> 3d 00 f0 ff ff 0f 87 89 00 00 00 41 89 c5 85 c0 0f 85 90 00 00
-RSP: 002b:00007ffe5c64b680 EFLAGS: 00000246 ORIG_RAX: 0000000000000038
-RAX: ffffffffffffffda RBX: 00007ffe5c64bcd8 RCX: 00007f23be089e9b
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000001200011
-RBP: 0000000000000000 R08: 0000000000000000 R09: 0000555557393400
-R10: 00005555573936d0 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffe5c64b770 R14: 00007f23be1ac9d8 R15: 000000000000000c
- </TASK>
-================================================================================
+    alloc_pid()
+    {
+            pid = kmem_cache_alloc(ns->pid_cachep, GFP_KERNEL);
+    }
 
+So effectively, the wrong level must've been set in
+create_pid_namespace() so that the flexible array allocation is too
+small.
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+I don't have time to debug this tbh. Ccing Kees maybe there's some
+flexible array stuff going on I'm unaware of.

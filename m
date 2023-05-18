@@ -2,119 +2,85 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3155E707D09
-	for <lists+linux-next@lfdr.de>; Thu, 18 May 2023 11:37:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5403C708B58
+	for <lists+linux-next@lfdr.de>; Fri, 19 May 2023 00:15:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230171AbjERJhg (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 18 May 2023 05:37:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57464 "EHLO
+        id S229522AbjERWPT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 18 May 2023 18:15:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229963AbjERJhf (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 18 May 2023 05:37:35 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D79691732
-        for <linux-next@vger.kernel.org>; Thu, 18 May 2023 02:37:34 -0700 (PDT)
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1pza4Y-0007aE-Tw; Thu, 18 May 2023 11:37:22 +0200
-Received: from pengutronix.de (unknown [172.20.34.65])
+        with ESMTP id S229579AbjERWPS (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 18 May 2023 18:15:18 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D258121;
+        Thu, 18 May 2023 15:15:16 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 46D281C7B4B;
-        Thu, 18 May 2023 09:37:20 +0000 (UTC)
-Date:   Thu, 18 May 2023 11:37:19 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Dario Binacchi <dario.binacchi@amarulasolutions.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>,
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QMkms5f31z4whk;
+        Fri, 19 May 2023 08:15:08 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1684448110;
+        bh=JF26jiMZvmHyIjw6Qtc9tIKeL2esaj8G8bzCC1cRzpU=;
+        h=Date:From:To:Cc:Subject:From;
+        b=tA1vehgefZfIm2TrR9Sg+LTT5xvBv0FxX1fODfT+OqVHt3p9+orpa14Vg2O7vzmPH
+         e9uyC9cqC6qI4149gwC1H4WgGXI4AbAqr2PbSnu7tuAoVdI0tbT2dQzJ979vSnWTSm
+         ZZREbTVUcxCp87AWZFgfBVDcOe6Hd5Ptp6u3j+ajQYwH2v2t7wqPCXVSKgMAARCi+v
+         m0TVFXgIndQLD5RQaDqAQGGW/qiBIC3lWWWaUc8krkPopNlS/5rVaeSaDbXnl1eJZi
+         baYHSC0avlZy2dc18deesQJeMGV6ZgP4SoNKXMDx6F4GdqPizQa5FTex7evmM/+olg
+         87AU7QsXGjYzQ==
+Date:   Fri, 19 May 2023 08:14:56 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Corey Minyard <cminyard@mvista.com>
+Cc:     Zhen Ni <zhen.ni@easystack.cn>, Corey Minyard <minyard@acm.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the net tree
-Message-ID: <20230518-frying-duller-be47c537367b-mkl@pengutronix.de>
-References: <20230518090634.6ec6b1e1@canb.auug.org.au>
- <20230517214200.33398f82@kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the ipmi tree
+Message-ID: <20230519081456.0dcb82fd@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="7qwbkht7sr25n5ca"
-Content-Disposition: inline
-In-Reply-To: <20230517214200.33398f82@kernel.org>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-next@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/IkkOGqHNB5N=_3l.XMUP60Z";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-
---7qwbkht7sr25n5ca
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+--Sig_/IkkOGqHNB5N=_3l.XMUP60Z
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-On 17.05.2023 21:42:00, Jakub Kicinski wrote:
-> On Thu, 18 May 2023 09:06:34 +1000 Stephen Rothwell wrote:
-> > Hi all,
-> >=20
-> > After merging the net tree, today's linux-next build (arm
-> > multi_v7_defconfig) failed like this:
-> >=20
-> > Error: arch/arm/boot/dts/stm32f746.dtsi:265.20-21 syntax error
-> > FATAL ERROR: Unable to parse input tree
-> > make[2]: *** [scripts/Makefile.lib:419: arch/arm/boot/dts/stm32f746-dis=
-co.dtb] Error 1
-> > Error: arch/arm/boot/dts/stm32f746.dtsi:265.20-21 syntax error
-> > FATAL ERROR: Unable to parse input tree
-> > make[2]: *** [scripts/Makefile.lib:419: arch/arm/boot/dts/stm32f769-dis=
-co.dtb] Error 1
-> > Error: arch/arm/boot/dts/stm32f746.dtsi:265.20-21 syntax error
-> > FATAL ERROR: Unable to parse input tree
-> >=20
-> > Caused by commit
-> >=20
-> >   0920ccdf41e3 ("ARM: dts: stm32: add CAN support on stm32f746")
-> >=20
-> > I have used the net tree from next-20230517 for today.
->=20
-> Dario, Marc, can we get an immediate fix for this?
+Hi all,
 
-Here you go:
+Commit
 
-| https://lore.kernel.org/all/20230518073241.1110453-1-mkl@pengutronix.de
+  7ab1f268ced2 ("ipmi_watchdog: Fix read syscall not responding to signals =
+during sleep")
 
-regards,
-Marc
+is missing a Signed-off-by from its author.
 
 --=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+Cheers,
+Stephen Rothwell
 
---7qwbkht7sr25n5ca
-Content-Type: application/pgp-signature; name="signature.asc"
+--Sig_/IkkOGqHNB5N=_3l.XMUP60Z
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmRl8c0ACgkQvlAcSiqK
-BOjNmQf+L2tpBHUm5pRCkEwVeAfaCydTw1pYWkB6SPzQKGO1ejkbuajs6uEr4YK1
-Krn+MgMCscrbENxL5x02/WMzX6x3xBKMyLqadtr7w7gbRjzKEX8pSLXOuDGvPIee
-xeF7kF8h/QMcfBVI13/KlIJu83Kz24nPAEqqfr3lhF3+8zui5+wntQGC1cGRIKVI
-O+y0GwkH4fD3nrQ/4Vwu2j1Is70Zsrd3DGnCy9QBlcAuwV+ZSdQPukKVv162odLL
-d61P59blCBZ5WoF+zZ2vrcjvJY5GyVsBJWx6UlWlW2X7/sflQ9ecA+BUyuHulXLg
-JUnuY0Q7XiXRYBikd7FA6f0VwwL4GQ==
-=t0LY
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmRmo2AACgkQAVBC80lX
+0GwqRQf9HERCpkKh4aytp/u2Bi5xvSOL/6u7S01kuhPpMTEiwBwMdHxnIMx+A2VR
+UuNp/nPIiRrdhdVzcQXtt6NGy70s7Y1Q5GAgllR3k3Lr/2ESoIsPcgfWjdVqDmT7
+vuLUCgwlpdPUcUs+q0DEoXPUJSoxx58bk3+UGXvQeJyg0EFST9UFb5N3YsfuWKcr
+4GyBlXtzIrRzRt3Nlv5o2dGG70UZ3/66UM8akljq472gy7LkuzbYAIfxd8nscKN6
+2qt54toxBRqOexehGVjyEfi4GU6E/mAgypCCW/QnZjXxPUAWSwo1WPiLK/ERF/gT
+iUZwTmQp1BA2C9LKzh5fBzGbm4SYqw==
+=McK/
 -----END PGP SIGNATURE-----
 
---7qwbkht7sr25n5ca--
+--Sig_/IkkOGqHNB5N=_3l.XMUP60Z--

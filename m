@@ -2,80 +2,123 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66123708DAF
-	for <lists+linux-next@lfdr.de>; Fri, 19 May 2023 04:12:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FB08708DF9
+	for <lists+linux-next@lfdr.de>; Fri, 19 May 2023 04:43:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230274AbjESCM5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 18 May 2023 22:12:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43508 "EHLO
+        id S229732AbjESCnW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 18 May 2023 22:43:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbjESCM4 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 18 May 2023 22:12:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E040DF;
-        Thu, 18 May 2023 19:12:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S229485AbjESCnW (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 18 May 2023 22:43:22 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D562DE4E;
+        Thu, 18 May 2023 19:43:19 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 37508652C5;
-        Fri, 19 May 2023 02:12:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97C48C433D2;
-        Fri, 19 May 2023 02:12:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684462374;
-        bh=LomNzVv+RM63A9mGOo7tAYZ/L2kgQitvKBAYCtUl7xI=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=AbGS3xCZvv8KAH+CsGwQI915B9gXH9B5O4qTVyIjm9M24uO+jsBCrnayBdfnTG+IR
-         KilFKvMAs6vNJllt69xwnvdPyJrBZ6a2X13WUm82mn2QCQ/aFdbuCSK+iUkiC7LHUm
-         QzKUcmjLMCTjR7nsCYcFNBgqZf+tlhOCg9ugNB/qr3EKgeum8PxMZBUsyKtIqUbhzx
-         MiAO4za382yrB0n0+ULf25pDfjC7YuTALMGFoi6BjOXyJNBcr9Xqw3zIvRoPshWZGb
-         Ol5qSwHtROUr3D1sA6eCHwH+1HbW5H8EB80eJyRp90nK3qUpHJxH2rDFt26aKDeOpE
-         LoakJW7ynp3Jw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 78A95CE0CC0; Thu, 18 May 2023 19:12:52 -0700 (PDT)
-Date:   Thu, 18 May 2023 19:12:52 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QMrk94FJgz4x5W;
+        Fri, 19 May 2023 12:43:13 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1684464194;
+        bh=HQJgsxcpsIzvlNbIB3CBeC83J899N6mzuWzgWnrhbo4=;
+        h=Date:From:To:Cc:Subject:From;
+        b=usUJXKy/ANjDyCXw2lF9rIWXJClVftXduoCZCqf5zxKwHS6e3Qp4slUymALHe4rrG
+         BGUFn6Yix4GLvj9sOGgJM8a3YvIFSfRwRGZezr7BWoR+F8qUXG5VrXRgpknho555m/
+         Olx6vIeJQSWHNhABviOk1sI7Bw7bfSKzJ7OH9WszwAMVehDF9xfMyAlGAVffAiNxoD
+         OaJjwazB1YAnSJLJbQlmDwohfqje7HAsOhHntlZ/GdlxrEK/1Ae4C9inqLSHQesYHl
+         ml0M3YDoX6AU9Y2d7oTBEhupbh5qII/NA7H4kRCt0Dk1FpceSjr7nSoBEb88UxEdrR
+         St8bbZ1JxfVqQ==
+Date:   Fri, 19 May 2023 12:43:11 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the rcu tree
-Message-ID: <cc4ab028-cad3-413b-8360-ea34f6914ec7@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <20230519105950.2d021e86@canb.auug.org.au>
+Subject: linux-next: build failure after merge of the mm tree
+Message-ID: <20230519124311.5167221c@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230519105950.2d021e86@canb.auug.org.au>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/HJvJD5iUf.t/+JT85er6x1g";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, May 19, 2023 at 10:59:50AM +1000, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the rcu tree, today's linux-next build (x86_64 allmodconfig)
-> failed like this:
-> 
-> kernel/rcu/rcuscale.c:340:27: error: 'get_rcu_tasks_trace_gp_kthread' undeclared here (not in a function); did you mean 'show_rcu_tasks_trace_gp_kthread'?
->   340 |         .rso_gp_kthread = get_rcu_tasks_trace_gp_kthread,
->       |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->       |                           show_rcu_tasks_trace_gp_kthread
-> 
-> Caused by commit
-> 
->   9bb839a83e1b ("rcuscale: Measure grace-period kthread CPU time")
-> 
-> CONFIG_RCU_SCALE_TEST=m
-> 
-> I have used the rcu tree from next-20230518 for today.
+--Sig_/HJvJD5iUf.t/+JT85er6x1g
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Huh.  Modules and #ifdefs trip me up again.  Will fix, and thank you
-for catching it!
+Hi all,
 
-							Thanx, Paul
+After merging the mm tree, today's linux-next build (sparc64 defconfig)
+failed like this:
+
+arch/sparc/kernel/setup_64.c: In function 'start_early_boot':
+arch/sparc/kernel/setup_64.c:382:9: error: implicit declaration of function=
+ 'time_init_early'; did you mean 'inode_init_early'? [-Werror=3Dimplicit-fu=
+nction-declaration]
+  382 |         time_init_early();
+      |         ^~~~~~~~~~~~~~~
+      |         inode_init_early
+
+Presumably caused by commit
+
+  c16caa9110dd ("init: consolidate prototypes in linux/init.h")
+
+I applied this partial revert:
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Fri, 19 May 2023 12:35:26 +1000
+Subject: [PATCH] fix up for "init: consolidate prototypes in linux/init.h"
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ arch/sparc/kernel/kernel.h | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/arch/sparc/kernel/kernel.h b/arch/sparc/kernel/kernel.h
+index 970ef8dec86e..15da3c0597a5 100644
+--- a/arch/sparc/kernel/kernel.h
++++ b/arch/sparc/kernel/kernel.h
+@@ -62,6 +62,9 @@ asmlinkage void do_rt_sigreturn32(struct pt_regs *regs);
+ void do_signal32(struct pt_regs * regs);
+ asmlinkage int do_sys32_sigstack(u32 u_ssptr, u32 u_ossptr, unsigned long =
+sp);
+=20
++/* time_64.c */
++void __init time_init_early(void);
++
+ /* compat_audit.c */
+ extern unsigned int sparc32_dir_class[];
+ extern unsigned int sparc32_chattr_class[];
+--=20
+2.39.2
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/HJvJD5iUf.t/+JT85er6x1g
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmRm4j8ACgkQAVBC80lX
+0Gwb4ggAoRLsiCfdXE731SmuLatz/ueG4ndkaLEAiqnVZoJ5SVOIckDEWhAo4WUV
+V4bfKv8kk05AdGA7zXLNZuj/eGf/kMVRsW+EtMRNKUjWnO6PIU4HFGpHgNQDdoFx
+evg/M+binZmsP27/clJ/xkk+Tk65OXmJVm9rqVPAH9AwkCREWAkcy1LzkoMRHDr9
+CLltLo4CZfQB0IWkb5L+VdYdh5wS6rYVyFa12CdF1K1C1hDZn6rsd0qokqVbRMbH
+ppij/OPVYgKhWUItk9ocovrC23OlG9oJz4SOAOy72LYlIE/yxPuvOrk9+chBOhuH
+E6o9Bl1XR6d222Kno7XuSFBNMLuAUQ==
+=p+eC
+-----END PGP SIGNATURE-----
+
+--Sig_/HJvJD5iUf.t/+JT85er6x1g--

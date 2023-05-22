@@ -2,147 +2,121 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91C5A70C3B4
-	for <lists+linux-next@lfdr.de>; Mon, 22 May 2023 18:47:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3F7570C50D
+	for <lists+linux-next@lfdr.de>; Mon, 22 May 2023 20:20:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231776AbjEVQr2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 22 May 2023 12:47:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49920 "EHLO
+        id S229874AbjEVSUn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 22 May 2023 14:20:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231537AbjEVQr0 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 22 May 2023 12:47:26 -0400
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E21ACE9
-        for <linux-next@vger.kernel.org>; Mon, 22 May 2023 09:47:25 -0700 (PDT)
-Received: by mail-qk1-x732.google.com with SMTP id af79cd13be357-75affb4d0f9so100608585a.2
-        for <linux-next@vger.kernel.org>; Mon, 22 May 2023 09:47:25 -0700 (PDT)
+        with ESMTP id S229600AbjEVSUm (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 22 May 2023 14:20:42 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D338AF;
+        Mon, 22 May 2023 11:20:41 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-64d5f65a2f7so1244819b3a.1;
+        Mon, 22 May 2023 11:20:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684774045; x=1687366045;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RtYZcbQKacTkkwOnNbr0k7FvVbVL4fzfTWwOXkqVav4=;
-        b=DmcJi/OcG35j8NGwwuXsQr3VopobdJqXFO0zhgiKpZ9nx+yyMBmR1ZR2MKnPQmt/jt
-         y5E19p81y/cmOUbQizusn5nlIzG59cql6X/zy3xzjYBje52Y1g3iUZW2ZYYW3+WtNXDZ
-         PrrxKi0bNM7kF9RQVTMnjZhTWb+91sj25c+Qwc3u4kIA7SoVNq4O0+bhUjaZElcLdUW5
-         z/nJexHU62dZ4vEz6PspVFHKvP247ivyMTffdVisJEBmlITsUGsy007nBK2cxALN27ia
-         PuGkWJ3q9w+2QDuisPKOw+g9VfuwhKYUyrJlNLd+XeBqqKxo4+fk64qU50JqYw4zsjzb
-         ffOw==
+        d=gmail.com; s=20221208; t=1684779640; x=1687371640;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XnNGFZ0Re+VRM8UtKCafqqilhh7RIrL5HAPnivOKzbI=;
+        b=NzXyvxl+eSVn+61YhwsdEeeNs478YJ8xN7PSMdxpV/6VzBVVkU5kVSD7zG8Fx3GUnk
+         Z/S4gARmV2kF5gle3UQBkay0WkXphb/SEIJLZGfdhADHFZrv0H9PKv7g3ANWTgJMV2fC
+         AoYExvL/IbYRXK9A57srnMouw5q+tRoI8Wy8kQXbwQvXbNyaZ6w6FSaguMNkNR5KYKSn
+         lOY6/pTuZI8CepbFHsrDCCCM/+agpMkLpPx/3V410dUCYzaXywb7lJf0VtbyKS3aiv1f
+         TtezOHLHlOM/l8thVbZ+r6frmx49L4kplWhlcqckI9Zv3+WkpB1z9eXaJFgF3qKVXbQq
+         GZGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684774045; x=1687366045;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1684779640; x=1687371640;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=RtYZcbQKacTkkwOnNbr0k7FvVbVL4fzfTWwOXkqVav4=;
-        b=E3Wfjol1yAwpbLtSgCSym9LJ4kVl3fb72fkieVS88nLHLo9n88tN/qC9S6jFKIGwI+
-         iE9UCsHFjPJh3KkfSk7uWrTgnuRPBhdbJ7kynmaDsv4W8y8H3rbXH3v0D1td7UWiimhY
-         yClvcYrYUCMLd818GniDW8sLqZO3z3YINXKjFIEHEYO6QGwm6JqLCs02rmaTACW9t19p
-         uQKeejATz6NtiYzEJBi1tUN2qtarj/0Y1r3ElQHeaMmLeWscyRUiAECo5MqgNnCiuG7z
-         j/9Y+eV04C+U9sP2FH9kLwN9c5XxlsH4y/c3z3Y679sG8e7jMv8AOQfZtGylXeZ8t2ky
-         /bfg==
-X-Gm-Message-State: AC+VfDyoKfxRNN9y1omnwTkJuaWDCVQ4Zquna2psNsCDQ8TGsNF91EjR
-        ny1uemCkDw4gioegWgkgXNOVZFeHrxddCFViZMzZgbO3VWBd0T4gOygKdw==
-X-Google-Smtp-Source: ACHHUZ6W5buVDy/kIOeIyMoEFAvmSJ/P7EkykMBmkr+MDoVlESJiSwTnjP7ULqt2dw5RubCBiuQorIcPzsV0ggE+Fsk=
-X-Received: by 2002:a05:620a:b96:b0:75b:23a0:e7c9 with SMTP id
- k22-20020a05620a0b9600b0075b23a0e7c9mr1336547qkh.42.1684774044909; Mon, 22
- May 2023 09:47:24 -0700 (PDT)
+        bh=XnNGFZ0Re+VRM8UtKCafqqilhh7RIrL5HAPnivOKzbI=;
+        b=fIivPwJP4PwT2F5RqhA5zknsv/qH0QtDeYuju3ep5nMrolBnzPdz1t60dF8dX1kCIh
+         2rt8qztb3KiGX5sbUQ8FLj8s2OaiRXsNL0OXvasRNS9fvu9SMBYOhEI6ewUu+Nj3dFM1
+         QX5KcKsyVxmKUBvB7/H2BWrZGCSVrNqSCnEHlbvMgIj78Oe3BhBbmZVlHKC0h6HMV3nh
+         Si8s3zLRWDnMLX+CfQSFKjirmX1koc+vMfhNs9KstvMvBUsP4qQvt7y6SEb6HfGXp6ff
+         FjFJ3LboElqNvOn03jf3MP+IUevRDG3bbrIzDWv29jRm7nV8MWrAkujXA7xOnlfvVq1I
+         HfnA==
+X-Gm-Message-State: AC+VfDyOOC5RegLCTXr4Dg39sSuQLoZWphHgdhi7fA3xonj4pfC19tGb
+        f6L7yAQ2SCzzwWZlpCcP56c=
+X-Google-Smtp-Source: ACHHUZ5nvxuqc3Qq3LnGN+5GzCCr7OSBADk3L3tCN0e3vaf0VPR0/EU0cWZoEqwUS/0dHhFUDYP3mQ==
+X-Received: by 2002:a05:6a00:140b:b0:63d:3339:e967 with SMTP id l11-20020a056a00140b00b0063d3339e967mr14978767pfu.19.1684779640307;
+        Mon, 22 May 2023 11:20:40 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::5:39c])
+        by smtp.gmail.com with ESMTPSA id 10-20020a63060a000000b00502fd70b0bdsm4721026pgg.52.2023.05.22.11.20.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 May 2023 11:20:39 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 22 May 2023 08:20:38 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Z qiang <qiang.zhang1211@gmail.com>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        lkft-triage@lists.linaro.org,
+        clang-built-linux <llvm@lists.linux.dev>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Dan Carpenter <dan.carpenter@linaro.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Anders Roxell <anders.roxell@linaro.org>
+Subject: Re: next: WARNING: CPU: 0 PID: 63 at kernel/workqueue.c:1999
+ worker_enter_idle+0xb2/0xc0
+Message-ID: <ZGuydp0KToLf55vY@slm.duckdns.org>
+References: <CA+G9fYud2YH1c9Hxekd-pi8VsD4HmA4v9g-mr-vRPqaRQd2F5w@mail.gmail.com>
+ <CALm+0cXew-QX9gkHkL7majJuENP1C_WLVG=pQ_6RGZ1UgQ79Eg@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230522171557.32027acf@canb.auug.org.au> <ZGuYeDA9jDlxzfZN@google.com>
- <CADnq5_OoGDVWX5UwV_hQQBfPorBuE2jJymMA-hW+Y3+7ni0f5g@mail.gmail.com>
-In-Reply-To: <CADnq5_OoGDVWX5UwV_hQQBfPorBuE2jJymMA-hW+Y3+7ni0f5g@mail.gmail.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Mon, 22 May 2023 09:47:14 -0700
-Message-ID: <CAKwvOdk6cO9L2Km+gBFNGkhdnODMAnizwA-PctJ=FcKTu=XFxw@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the amdgpu tree
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     Alex Deucher <alexander.deucher@amd.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Harish Kasiviswanathan <Harish.Kasiviswanathan@amd.com>,
-        Rajneesh Bhardwaj <rajneesh.bhardwaj@amd.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>, llvm@lists.linux.dev,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CALm+0cXew-QX9gkHkL7majJuENP1C_WLVG=pQ_6RGZ1UgQ79Eg@mail.gmail.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, May 22, 2023 at 9:36=E2=80=AFAM Alex Deucher <alexdeucher@gmail.com=
-> wrote:
->
-> On Mon, May 22, 2023 at 12:29=E2=80=AFPM Nick Desaulniers
-> <ndesaulniers@google.com> wrote:
-> >
-> > On Mon, May 22, 2023 at 05:15:57PM +1000, Stephen Rothwell wrote:
-> > > Hi all,
-> > >
-> > > After merging the amdgpu tree, today's linux-next build (arm allmodco=
-nfig
-> > > clang-17) failed like this:
-> > >
-> > > drivers/gpu/drm/amd/amdgpu/amdgpu_gart.c:146:54: error: format specif=
-ies type 'unsigned long long' but the argument has type 'dma_addr_t' (aka '=
-unsigned int') [-Werror,-Wformat]
-> > >
-> > > Caused by commit
-> > >
-> > >   d020a29b6b58 ("drm/amdgpu: Allocate GART table in RAM for AMD APU")
-> > >
-> > > Reported by the kernelci.org bot.
-> >
-> > Alex,
-> > This is the third report of linux-next being broken for clang due to th=
-e
-> > AMDGPU tree.
-> > 1. https://lore.kernel.org/lkml/20230522171557.32027acf@canb.auug.org.a=
-u/
-> > 2. https://lore.kernel.org/lkml/20230522171145.38a8bd4d@canb.auug.org.a=
-u/
-> > 3. https://lore.kernel.org/lkml/20230522170031.5fb87a64@canb.auug.org.a=
-u/
-> >
-> > Our CI is red as a result.
-> > https://github.com/ClangBuiltLinux/continuous-integration2/actions/runs=
-/5045716034/jobs/9053211936
-> >
-> > When will AMD start testing their kernels with Clang?
->
-> We have clang as part of our CI system and have had it for a while.
-> I'm not sure why it didn't catch these.  Our CI clang builds are
-> currently passing.
+Hello,
 
-Can you verify that the driver configs are enabled for those builds?
+On Mon, May 22, 2023 at 09:24:09PM +0800, Z qiang wrote:
+> diff --git a/kernel/workqueue.c b/kernel/workqueue.c
+> index 9c5c1cfa478f..f8d739fef311 100644
+> --- a/kernel/workqueue.c
+> +++ b/kernel/workqueue.c
+> @@ -1060,10 +1060,9 @@ void wq_worker_running(struct task_struct *task)
+>          * and leave with an unexpected pool->nr_running == 1 on the newly
+> unbound
+>          * pool. Protect against such race.
+>          */
+> -       preempt_disable();
+> +       local_irq_disable();
+>         if (!(worker->flags & WORKER_NOT_RUNNING))
+>                 worker->pool->nr_running++;
+> -       preempt_enable();
+> 
+>         /*
+>          * CPU intensive auto-detection cares about how long a work item
+> hogged
+> @@ -1072,6 +1071,7 @@ void wq_worker_running(struct task_struct *task)
+>         worker->current_at = worker->task->se.sum_exec_runtime;
+> 
+>         worker->sleeping = 0;
+> +       local_irq_enable();
+>  }
 
-Looking through my CI reports, it looks like allmodconfig/allyesconfig
-is red from this tree for ARCH=3Dx86_64 and ARCH=3Darm64.
-Examples:
-x86_64: https://github.com/ClangBuiltLinux/continuous-integration2/actions/=
-runs/5045594636/jobs/9052932014
-arm64: https://github.com/ClangBuiltLinux/continuous-integration2/actions/r=
-uns/5045594636/jobs/9052930995
+Ah, yeah, this is correct. Now we're modifying nr_running from timer tick
+too, so if don't block irq, the timer tick can ruin the not-irq-protected
+read-write-modify nr_running update from wq_worker_running(). Naresh, can
+you please confirm the fix?
 
->
-> Alex
->
-> >
-> > >
-> > > --
-> > > Cheers,
-> > > Stephen Rothwell
-> >
-> > Thanks for reporting these, Stephen.
+Thanks.
 
-
-
---=20
-Thanks,
-~Nick Desaulniers
+-- 
+tejun

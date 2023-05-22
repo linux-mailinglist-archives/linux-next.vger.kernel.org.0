@@ -2,165 +2,126 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 233C870C603
-	for <lists+linux-next@lfdr.de>; Mon, 22 May 2023 21:14:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59FED70CC04
+	for <lists+linux-next@lfdr.de>; Mon, 22 May 2023 23:12:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233861AbjEVTOX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 22 May 2023 15:14:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37314 "EHLO
+        id S229803AbjEVVMN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 22 May 2023 17:12:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234025AbjEVTOT (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 22 May 2023 15:14:19 -0400
-Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4621130;
-        Mon, 22 May 2023 12:14:14 -0700 (PDT)
-Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-19a156dd5d2so2746458fac.0;
-        Mon, 22 May 2023 12:14:14 -0700 (PDT)
+        with ESMTP id S229505AbjEVVMK (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 22 May 2023 17:12:10 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0597A9C;
+        Mon, 22 May 2023 14:12:10 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id 41be03b00d2f7-517c840f181so3539719a12.3;
+        Mon, 22 May 2023 14:12:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684782854; x=1687374854;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Gtw5or+8nSyicZi6zB4ROPQrdOxYpGpQ5eXf7PnG2K0=;
-        b=Ek5f+EZOk0ZXAsviiLf9uGuNDhdyn1ldpY0pMdmxrCJnqkiGOQw6l0DffCXOxzLkI8
-         wwqCut6JPwX8ASS7JViNF2SAFuHtIAOH+rsGtQpt+3cMW5EkS/Qq2qsu5V0jfeIxeVIE
-         m7X5K0JfBSk4J1j+bD8UJJEcBQYMYcsrA8qWepJSL/ZkFjw1zVMDrRB0SlZoNlVFyrR7
-         BRpzVfWIxeLhMIcYc5ZSg4NDTek2MUUZPaIfuPWhLNgYcsVuGmlQq8wq3CU31nCelge9
-         blz+ryXOqeBLkQ0UblmqKzzL+GoyV4JSMM21ZIdqFSlBJXPrpJN0QSkF5IyXUIsts5/O
-         BXNg==
+        d=gmail.com; s=20221208; t=1684789929; x=1687381929;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+XNhMRDIcd5RhQtvp0YIKYqZLNH6+pbXq+kWmpBSynM=;
+        b=k1K1HyzvnqnBe8r2Rpb2ATAXebNjQ+9Bj004eYb67TIX3qkCYFzgQYrfbfof/qs3fV
+         E3bOOixQ4DIcMdIMfzpQ4RfAjXDQoDqAOGWrbfUxf2/ZNc+KM0OYHZ9lU2A+SK8usHdg
+         dc/ZvHPzmHRsXxUFogSaI7+kAzu1XXJiiGb5QhVJAxWHDSGYx4O/aRabFYIT9yYBpg0S
+         oDgmbR7SKYkH53aRuo/PUAuGIz7l4rya+8MXmoqmBJbDcvBs40ChsEt9FeVe2iBICoBa
+         Dvl/vll4zbsfzri82BmGt63uVS0Ge5oAnStn/7nZqW4C8ZRrmMwWkd/j5S4GA/kkWEc7
+         iHgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684782854; x=1687374854;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1684789929; x=1687381929;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Gtw5or+8nSyicZi6zB4ROPQrdOxYpGpQ5eXf7PnG2K0=;
-        b=iUbeMfxGdsWtqgkdiEl7lZ/9AE6+cJDSgDSg/H5lT13JQlCSxPNuEh7DNA1DGyA7h5
-         jHJzxhYTtdi873JFj1B7YFg8piVD2AE9+lKZfhrRTajmLgJ0eAkWLBPsyla1qu3DXMBp
-         W0kLdUIoCKJbu/+H+GBEAq2gzWaVuh16Y8jwC01CK4shApJhl0CY4//eiEPahItD3Qys
-         rfSP6FlS99GhG5Rf/tG0Yow4D2KCQ56tqfppNTXfEW4oWqwS42sKtqjcFJZGLrWOWME2
-         5e5ftqT4mwXldSew5yfKZvHLX0173UxsB9HMCJKdO1OZ1bpYe69I9WNTlg27JzWMaBbR
-         eHcw==
-X-Gm-Message-State: AC+VfDyZ+ERQzDHelvLinu2lY2G5eDaNt2RvgWjFweTUp/uDiijXvFUs
-        UbahiKSjNpcKWmpoxNh4a09t9ks1zvBg85Ndhp7KxdYvM7c=
-X-Google-Smtp-Source: ACHHUZ4DliWk73qV9hbw7g8v/vutLIyFl/MjZRXca6tk/MtOMVtGtCXbo/b/JKQwQqYVnNXbGdQDg4IymHy1fY+GM6g=
-X-Received: by 2002:a05:6870:a3c3:b0:19a:1f5e:7404 with SMTP id
- h3-20020a056870a3c300b0019a1f5e7404mr6611290oak.7.1684782853898; Mon, 22 May
- 2023 12:14:13 -0700 (PDT)
+        bh=+XNhMRDIcd5RhQtvp0YIKYqZLNH6+pbXq+kWmpBSynM=;
+        b=LrPKcO6TZT8ziB/0SSh8hFN//5qdAqtfgE+lDarjwKro80W1dTtEjBNEwIHYF9t+Bw
+         ktGUdGXY78AUjMeRoBhZoMBPWQfZg5Q1rXcrjEZi4nwo2nya7O8WtkBFxy7IZHAoAV6e
+         PWpfhBH/hgwj6WcxFe8/R4zTskGhOh4hL3jlM7/7ANDi/NkzBhdX35NvBk6ezr5peMGb
+         IYXGnVJGrBwFoBksOAqPZCTAlWOvcubELFkd7Wd05qbjGCfR8HSMTj/LG2BPkS1s8fM2
+         q9dI3gSKwXGclveKTE8HucGYvX3Zgwt3fWojLuDOOHFWpxiJ/f9t/EQR2LItqN9T/fje
+         AYiA==
+X-Gm-Message-State: AC+VfDwvr0So5/DyW8CAgSUTPDYibwAVUD7cQMOWqTACLUFZwS4+IJ9P
+        iN5DR1ZGjKTVkLercSGq5Gg=
+X-Google-Smtp-Source: ACHHUZ60CLOp7DtHkbt5u0VTx8QiCC05myGgdTMUzzuhOr29K4CA9z9bUTYJaQhqyLyPqXt0bMuqYA==
+X-Received: by 2002:a05:6a20:7295:b0:103:ef39:a832 with SMTP id o21-20020a056a20729500b00103ef39a832mr12188478pzk.23.1684789929229;
+        Mon, 22 May 2023 14:12:09 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::5:39c])
+        by smtp.gmail.com with ESMTPSA id lt11-20020a17090b354b00b0024df400a9e6sm4556611pjb.37.2023.05.22.14.12.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 May 2023 14:12:08 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 22 May 2023 11:12:07 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Z qiang <qiang.zhang1211@gmail.com>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        lkft-triage@lists.linaro.org,
+        clang-built-linux <llvm@lists.linux.dev>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Dan Carpenter <dan.carpenter@linaro.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Anders Roxell <anders.roxell@linaro.org>
+Subject: Re: next: WARNING: CPU: 0 PID: 63 at kernel/workqueue.c:1999
+ worker_enter_idle+0xb2/0xc0
+Message-ID: <ZGvap5qi0OKAOfqX@slm.duckdns.org>
+References: <CA+G9fYud2YH1c9Hxekd-pi8VsD4HmA4v9g-mr-vRPqaRQd2F5w@mail.gmail.com>
+ <CALm+0cXew-QX9gkHkL7majJuENP1C_WLVG=pQ_6RGZ1UgQ79Eg@mail.gmail.com>
+ <ZGuydp0KToLf55vY@slm.duckdns.org>
 MIME-Version: 1.0
-References: <20230522171557.32027acf@canb.auug.org.au> <ZGuYeDA9jDlxzfZN@google.com>
- <CADnq5_OoGDVWX5UwV_hQQBfPorBuE2jJymMA-hW+Y3+7ni0f5g@mail.gmail.com> <CAKwvOdk6cO9L2Km+gBFNGkhdnODMAnizwA-PctJ=FcKTu=XFxw@mail.gmail.com>
-In-Reply-To: <CAKwvOdk6cO9L2Km+gBFNGkhdnODMAnizwA-PctJ=FcKTu=XFxw@mail.gmail.com>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Mon, 22 May 2023 15:14:02 -0400
-Message-ID: <CADnq5_OPERQR1_3uCU-h7rQ-kxfhrZDfCR_Z4fw06ajOqTF2VA@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the amdgpu tree
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Alex Deucher <alexander.deucher@amd.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Harish Kasiviswanathan <Harish.Kasiviswanathan@amd.com>,
-        Rajneesh Bhardwaj <rajneesh.bhardwaj@amd.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>, llvm@lists.linux.dev,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZGuydp0KToLf55vY@slm.duckdns.org>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, May 22, 2023 at 12:47=E2=80=AFPM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
->
-> On Mon, May 22, 2023 at 9:36=E2=80=AFAM Alex Deucher <alexdeucher@gmail.c=
-om> wrote:
-> >
-> > On Mon, May 22, 2023 at 12:29=E2=80=AFPM Nick Desaulniers
-> > <ndesaulniers@google.com> wrote:
-> > >
-> > > On Mon, May 22, 2023 at 05:15:57PM +1000, Stephen Rothwell wrote:
-> > > > Hi all,
-> > > >
-> > > > After merging the amdgpu tree, today's linux-next build (arm allmod=
-config
-> > > > clang-17) failed like this:
-> > > >
-> > > > drivers/gpu/drm/amd/amdgpu/amdgpu_gart.c:146:54: error: format spec=
-ifies type 'unsigned long long' but the argument has type 'dma_addr_t' (aka=
- 'unsigned int') [-Werror,-Wformat]
-> > > >
-> > > > Caused by commit
-> > > >
-> > > >   d020a29b6b58 ("drm/amdgpu: Allocate GART table in RAM for AMD APU=
-")
-> > > >
-> > > > Reported by the kernelci.org bot.
-> > >
-> > > Alex,
-> > > This is the third report of linux-next being broken for clang due to =
-the
-> > > AMDGPU tree.
-> > > 1. https://lore.kernel.org/lkml/20230522171557.32027acf@canb.auug.org=
-.au/
-> > > 2. https://lore.kernel.org/lkml/20230522171145.38a8bd4d@canb.auug.org=
-.au/
-> > > 3. https://lore.kernel.org/lkml/20230522170031.5fb87a64@canb.auug.org=
-.au/
-> > >
-> > > Our CI is red as a result.
-> > > https://github.com/ClangBuiltLinux/continuous-integration2/actions/ru=
-ns/5045716034/jobs/9053211936
-> > >
-> > > When will AMD start testing their kernels with Clang?
-> >
-> > We have clang as part of our CI system and have had it for a while.
-> > I'm not sure why it didn't catch these.  Our CI clang builds are
-> > currently passing.
->
-> Can you verify that the driver configs are enabled for those builds?
+On Mon, May 22, 2023 at 08:20:38AM -1000, Tejun Heo wrote:
+> Hello,
+> 
+> On Mon, May 22, 2023 at 09:24:09PM +0800, Z qiang wrote:
+> > diff --git a/kernel/workqueue.c b/kernel/workqueue.c
+> > index 9c5c1cfa478f..f8d739fef311 100644
+> > --- a/kernel/workqueue.c
+> > +++ b/kernel/workqueue.c
+> > @@ -1060,10 +1060,9 @@ void wq_worker_running(struct task_struct *task)
+> >          * and leave with an unexpected pool->nr_running == 1 on the newly
+> > unbound
+> >          * pool. Protect against such race.
+> >          */
+> > -       preempt_disable();
+> > +       local_irq_disable();
+> >         if (!(worker->flags & WORKER_NOT_RUNNING))
+> >                 worker->pool->nr_running++;
+> > -       preempt_enable();
+> > 
+> >         /*
+> >          * CPU intensive auto-detection cares about how long a work item
+> > hogged
+> > @@ -1072,6 +1071,7 @@ void wq_worker_running(struct task_struct *task)
+> >         worker->current_at = worker->task->se.sum_exec_runtime;
+> > 
+> >         worker->sleeping = 0;
+> > +       local_irq_enable();
+> >  }
+> 
+> Ah, yeah, this is correct. Now we're modifying nr_running from timer tick
+> too, so if don't block irq, the timer tick can ruin the not-irq-protected
+> read-write-modify nr_running update from wq_worker_running(). Naresh, can
+> you please confirm the fix?
 
-They are definitely enabled.  It's the whole point of the builds.
+Z qiang, while waiting for Naresh's test result, can you send the fix as a
+proper signed-off-patch?
 
->
-> Looking through my CI reports, it looks like allmodconfig/allyesconfig
-> is red from this tree for ARCH=3Dx86_64 and ARCH=3Darm64.
-> Examples:
-> x86_64: https://github.com/ClangBuiltLinux/continuous-integration2/action=
-s/runs/5045594636/jobs/9052932014
-> arm64: https://github.com/ClangBuiltLinux/continuous-integration2/actions=
-/runs/5045594636/jobs/9052930995
+Thanks.
 
-I looked into this quickly and I think in this particular case, it's
-the result of a manual merge last week where the fixes from the
-fallout didn't end up getting mirrored to my drm-next tree, and I
-don't think CONFIG_WERROR is set in the config.  IIRC, we had a lot of
-problems with that config option and older compilers when it was added
-and I think we ultimately turned it off at the time.  We should
-revisit that.  I'll talk to the CI team tomorrow.
-
-Alex
-
-
->
-> >
-> > Alex
-> >
-> > >
-> > > >
-> > > > --
-> > > > Cheers,
-> > > > Stephen Rothwell
-> > >
-> > > Thanks for reporting these, Stephen.
->
->
->
-> --
-> Thanks,
-> ~Nick Desaulniers
+-- 
+tejun

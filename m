@@ -2,92 +2,139 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 874CF70AADE
-	for <lists+linux-next@lfdr.de>; Sat, 20 May 2023 22:14:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18AF370B29C
+	for <lists+linux-next@lfdr.de>; Mon, 22 May 2023 02:53:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229737AbjETUO1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 20 May 2023 16:14:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44472 "EHLO
+        id S229688AbjEVAxM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 21 May 2023 20:53:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjETUO0 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sat, 20 May 2023 16:14:26 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83563B4;
-        Sat, 20 May 2023 13:14:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=rAjK21HT0yGQHVwdBbcwL8lnwKlZbXLAtHhGRoIXZT0=; b=iby/FLQg4Sk2HMC7oHCnOftYnx
-        AUkAsZi9F5wkd3qX1XKCmuyutW/Cg1HrC/18CJMlGb3+AOXoUIjI2pf3zgC/hTiIFbX2XtIxwY1n7
-        UuwNQl4acFdr+RwFOorbxXtrWCbSJj+Cs4eOwCznvdbtwXp2Gs8CYwc8rn0Tr04jheSIjl9vP9gM7
-        UNhKIseM4cGWjNq9v3gT06fRkB3ran50UgnyGohN2tUJB3GAkkf3FAL3XJhuRiNrtA3jSnQUC/6Zz
-        GTC7JS6gF7Sx8JqLvzWJ+yL+tEVsfEb2u6rhEfnY6PhKHlC4uV7t/4paS2bJnoDZA0/bsDxH+wojJ
-        tYW9vqcg==;
-Received: from [2601:1c2:980:9ec0::2764]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1q0Sy8-002ClH-1A;
-        Sat, 20 May 2023 20:14:24 +0000
-Message-ID: <3aa448c4-6400-6dfe-d5c3-72fa04dbb2d5@infradead.org>
-Date:   Sat, 20 May 2023 13:14:23 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: linux-next: Tree for May 19 (drivers/interconnect/icc-clk.o)
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        with ESMTP id S229481AbjEVAxK (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 21 May 2023 20:53:10 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 623A6DB;
+        Sun, 21 May 2023 17:53:05 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QPf7b1gR0z4x1N;
+        Mon, 22 May 2023 10:52:59 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1684716779;
+        bh=IFZYqtHvmYjXWyTUb3u5yrGNdgE9k+C2KpTXNadRRfc=;
+        h=Date:From:To:Cc:Subject:From;
+        b=WvIsa8rX4BVKDXM9ObGvkekHGa2tqVL2CluTAGqKnXYKXkeTX91DQrhWd4UFkBpAP
+         50A9cLjMa+Hk7X+eYPDTkn+0t2321Iy8JAu+dpHXT8O6b2qHvBqihN/RuG0gwehaJV
+         knTX7ksD20z/VchTeOibNpJNdqZQoFWZHEc50c/9conRFP3DFGpiNIZd/GCSbSNTk9
+         NHx6/bXYSU6u5uTnwXZsZIYBsiTL1tvlF/866+UXrNktK0VBy0R4jBGhqcALNc7aNa
+         s4w/rlNRboa8RyM1TllUCXKScAxUxxQsi95gW3iIiKHrb5l0lHGJFj8xgOfbGSPEh7
+         +PFNQ0cxb8mhQ==
+Date:   Mon, 22 May 2023 10:52:57 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Herbert Xu <herbert@gondor.apana.org.au>,
+        Linux Crypto List <linux-crypto@vger.kernel.org>
+Cc:     Huan Feng <huan.feng@starfivetech.com>,
+        Jia Jie Ho <jiajie.ho@starfivetech.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-References: <20230519130753.3a9d3d65@canb.auug.org.au>
- <aa3c7839-82b4-608a-0fd8-62beca5f075e@infradead.org>
- <ae1f454c-6023-0e51-f5cc-4f5d84580c55@infradead.org>
- <CAA8EJpom8JnhquM8R0mXK6CVia=7o45hDbFG6rRLCF=_CmFq1w@mail.gmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <CAA8EJpom8JnhquM8R0mXK6CVia=7o45hDbFG6rRLCF=_CmFq1w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the crypto tree
+Message-ID: <20230522105257.562cb1ec@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/rH6GA9i8=s+/RlhPx=6EfaR";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+--Sig_/rH6GA9i8=s+/RlhPx=6EfaR
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
 
-On 5/20/23 13:13, Dmitry Baryshkov wrote:
-> Hi,
-> 
-> On Sat, 20 May 2023 at 23:12, Randy Dunlap <rdunlap@infradead.org> wrote:
->>
->>
->>
->> On 5/20/23 12:51, Randy Dunlap wrote:
->>>
->>>
->>> On 5/18/23 20:07, Stephen Rothwell wrote:
->>>> Hi all,
->>>>
->>>> Changes since 20230518:
->>>>
->>>
->>> ERROR: modpost: missing MODULE_LICENSE() in drivers/interconnect/icc-clk.o
->>
->>
->> I'll send a patch since there are other build errors too.
-> 
-> The patch was posted yesterday:
-> 
-> https://lore.kernel.org/linux-arm-msm/20230519230122.3958816-1-dmitry.baryshkov@linaro.org/T/#u
-> 
+After merging the crypto tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-Thanks!
+drivers/tty/serial/amba-pl011.c: In function 'pl011_sgbuf_init':
+drivers/tty/serial/amba-pl011.c:379:30: error: implicit declaration of func=
+tion 'phys_to_page'; did you mean 'pfn_to_page'? [-Werror=3Dimplicit-functi=
+on-declaration]
+  379 |         sg_set_page(&sg->sg, phys_to_page(dma_addr),
+      |                              ^~~~~~~~~~~~
+      |                              pfn_to_page
+drivers/tty/serial/amba-pl011.c:379:30: error: passing argument 2 of 'sg_se=
+t_page' makes pointer from integer without a cast [-Werror=3Dint-conversion]
+  379 |         sg_set_page(&sg->sg, phys_to_page(dma_addr),
+      |                              ^~~~~~~~~~~~~~~~~~~~~~
+      |                              |
+      |                              int
+In file included from include/linux/kfifo.h:42,
+                 from include/linux/tty_port.h:5,
+                 from include/linux/tty.h:12,
+                 from drivers/tty/serial/amba-pl011.c:25:
+include/linux/scatterlist.h:136:69: note: expected 'struct page *' but argu=
+ment is of type 'int'
+  136 | static inline void sg_set_page(struct scatterlist *sg, struct page =
+*page,
+      |                                                        ~~~~~~~~~~~~=
+~^~~~
 
--- 
-~Randy
+Caused by commit
+
+  42ef0e944b01 ("crypto: starfive - Add crypto engine support")
+
+I applied the following patch for today.
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Mon, 22 May 2023 10:47:38 +1000
+Subject: [PATCH] fixup for "crypto: starfive - Add crypto engine support"
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ drivers/crypto/starfive/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/crypto/starfive/Kconfig b/drivers/crypto/starfive/Kcon=
+fig
+index be58d1473523..8795b2fddb4e 100644
+--- a/drivers/crypto/starfive/Kconfig
++++ b/drivers/crypto/starfive/Kconfig
+@@ -4,7 +4,7 @@
+=20
+ config CRYPTO_DEV_JH7110
+ 	tristate "StarFive JH7110 cryptographic engine driver"
+-	depends on SOC_STARFIVE || COMPILE_TEST
++	depends on SOC_STARFIVE
+ 	select CRYPTO_ENGINE
+ 	select CRYPTO_HMAC
+ 	select CRYPTO_SHA256
+--=20
+2.39.2
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/rH6GA9i8=s+/RlhPx=6EfaR
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmRqvOkACgkQAVBC80lX
+0Gx6eQf+NZo9fwOYsYiw+dWPKkZRU4o0Cgg3d9nGr18sc+SloIcXvcYJB48NC1WC
+AQ0A8jaDK9JFLv/uD1RxjI2xLrzbyLhS0HWJqQLy384u2xpqK14+S7cirUZfOlyk
+21OTxm36Br5hIjqsVd5d+c6Q5ORDFmJDeE++P53ag+j3NJRiVyR29JNt4nb2pOSc
+bpk2POpyuU4V2/Jzhv5k4Gx5JUdpg7ltXj6t2PNXnK1FUIcPFBUmmVOJ8zcRBqGO
+a7hRmuAt/UVFo1ZInyOtYfnziVrMw0ZxNWvUufFICBnislQMjQMH8MOwRYAU7LiV
+/1HLeBnae2jG9DHGnv2QpT2MWwb7lg==
+=jHMw
+-----END PGP SIGNATURE-----
+
+--Sig_/rH6GA9i8=s+/RlhPx=6EfaR--

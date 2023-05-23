@@ -2,147 +2,80 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B0E470CFD8
-	for <lists+linux-next@lfdr.de>; Tue, 23 May 2023 02:52:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F14170D137
+	for <lists+linux-next@lfdr.de>; Tue, 23 May 2023 04:28:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235200AbjEWAwX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 22 May 2023 20:52:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53012 "EHLO
+        id S232134AbjEWC2w (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 22 May 2023 22:28:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235208AbjEWAv5 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 22 May 2023 20:51:57 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B1071702;
-        Mon, 22 May 2023 17:45:20 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QQFt63zXKz4x48;
-        Tue, 23 May 2023 10:43:26 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1684802607;
-        bh=wR7JFpABtkHvbbbYe13yOqB8fGX0TUQ0Yg/dvCpATgQ=;
-        h=Date:From:To:Cc:Subject:From;
-        b=aiVkLfrqtzR/YRF1FRXNPa5R0Wo+GriJRGMXbmjmcDt4w8A8idVfKqd2K2hL4Ufn0
-         GtazcmuCp0h5Kq12941imoEtNR2zvBO7VE0xuOxUfI+6KJhcJueSWCCcC/zMk4sd5V
-         fcJy5xl/IIMLeEE1uKUxz5v7Sxnl0gpipGAIYznJsuvNaQfbsDX7HuUeNWJIIIkq0m
-         ify3NYx7rOR1wzdIR7UeCoEbdj00ebmPaJsMWaR/yw6BogXIAOvVU7ZKJCRki7fakb
-         w22uOVC8LM+Nm236sidFl7vfUCcNITaCvNaCAiYmQqnUFUhMKSWRLuHkq7exBHesF8
-         Eo/f67ksSTPjA==
-Date:   Tue, 23 May 2023 10:43:24 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>
-Cc:     Artur Weber <aweber.kernel@gmail.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>
-Subject: linux-next: manual merge of the drm-misc tree with Linus' tree
-Message-ID: <20230523104324.602c426a@canb.auug.org.au>
+        with ESMTP id S229505AbjEWC2v (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 22 May 2023 22:28:51 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9682BE9;
+        Mon, 22 May 2023 19:28:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=S3haG+nzDseaoT60qOdpqQoWlYhd6ZwWcmpaVQIMgC8=; b=bMuDm7L5/DxR5q7Li34YZZ4fi/
+        Bu2v3NVL2fEqKYUq0wqGlAs1n+zSf45nZDNme0d20/pNmWvqDSdSP/h/9VTcdIqjbtHV2sO8xGUW4
+        y0B6EqvVKOcW+AgO8TtB3ISsi3J//pFiEIPe02Exrm4DwKV+/g28RIALL2Ku9cqvWWNWnNtEBf379
+        DGMA7tnkcE4j5tv4qtJeH5CrYpgNHvGan1mFgpKj84QaVyf64mqe8DQHXnP+phaP8RzxS1SxeMEbt
+        MXLrid9WQp0QZVo37I7Uow188Vj/q9AaHRFbu1Kthsb2l6ipLqdIKtDVD8zVH/NHRio95ZtJFAkHS
+        fy2ncl7w==;
+Received: from [2601:1c2:980:9ec0::2764]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1q1HlW-008gdF-1O;
+        Tue, 23 May 2023 02:28:46 +0000
+Message-ID: <9f32e509-95b1-6a5a-aba2-664af4af37a8@infradead.org>
+Date:   Mon, 22 May 2023 19:28:45 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/VanIubOJiW/o7W59wYZSUZ=";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: linux-next: Tree for May 15 (several RV64 build errors)
+Content-Language: en-US
+To:     Alexandre Ghiti <alex@ghiti.fr>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Conor Dooley <conor@kernel.org>
+References: <20230515141235.0777c631@canb.auug.org.au>
+ <54244db6-ff69-4cf8-894c-c3dd2f12df9c@infradead.org>
+ <5d894e71-25ad-8ba0-f632-2eec6e017f46@ghiti.fr>
+ <ee3bc2ce-5ebe-927e-5b6d-0b9490ef3875@ghiti.fr>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <ee3bc2ce-5ebe-927e-5b6d-0b9490ef3875@ghiti.fr>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/VanIubOJiW/o7W59wYZSUZ=
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Hi,
 
-Hi all,
+On 5/19/23 03:42, Alexandre Ghiti wrote:
+>>> /opt/crosstool/gcc-12.2.0-nolibc/riscv64-linux/bin/riscv64-linux-ld: section .data LMA [000000000041a000,00000000075bffd7] overlaps section .text LMA [00000000000f09d4,00000000033562ab]
+>>> /opt/crosstool/gcc-12.2.0-nolibc/riscv64-linux/bin/riscv64-linux-ld: section .init.pi.text LMA [00000000033562ac,0000000003359137] overlaps section .data LMA [000000000041a000,00000000075bffd7]
+>>
+>>
+>> I'll check this one too which seems to be related to kernel/pi introduction.
+> 
+> 
+> Thanks to Bjorn: this is caused by XIP_KERNEL, which is known to have limited size, hence the overlap, so no fix for this one. Is there a way to exclude this config from randconfig?
 
-Today's linux-next merge of the drm-misc tree got a conflict in:
+Does this mean exclude XIP_KERNEL or something else from randconfigs?
 
-  MAINTAINERS
-
-between commit:
-
-  80e62bc8487b ("MAINTAINERS: re-sort all entries and fields")
-
-from Linus' tree and commit:
-
-  0dd53308f74f ("MAINTAINERS: Add entry for Samsung S6D7AA0 LCD panel contr=
-oller driver")
-
-from the drm-misc tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc MAINTAINERS
-index 8e18bbafa740,7cc2bfa4af6f..000000000000
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@@ -6700,6 -6663,35 +6700,12 @@@ S:	Maintaine
-  F:	Documentation/devicetree/bindings/display/panel/samsung,s6d27a1.yaml
-  F:	drivers/gpu/drm/panel/panel-samsung-s6d27a1.c
- =20
-+ DRM DRIVER FOR SAMSUNG S6D7AA0 PANELS
-+ M:	Artur Weber <aweber.kernel@gmail.com>
-+ S:	Maintained
-+ F:	Documentation/devicetree/bindings/display/panel/samsung,s6d7aa0.yaml
-+ F:	drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c
-+=20
- -DRM DRIVER FOR SITRONIX ST7703 PANELS
- -M:	Guido G=C3=BCnther <agx@sigxcpu.org>
- -R:	Purism Kernel Team <kernel@puri.sm>
- -R:	Ondrej Jirman <megous@megous.com>
- -S:	Maintained
- -F:	Documentation/devicetree/bindings/display/panel/rocktech,jh057n00900.y=
-aml
- -F:	drivers/gpu/drm/panel/panel-sitronix-st7703.c
- -
- -DRM DRIVER FOR FIRMWARE FRAMEBUFFERS
- -M:	Thomas Zimmermann <tzimmermann@suse.de>
- -M:	Javier Martinez Canillas <javierm@redhat.com>
- -L:	dri-devel@lists.freedesktop.org
- -S:	Maintained
- -T:	git git://anongit.freedesktop.org/drm/drm-misc
- -F:	drivers/gpu/drm/drm_aperture.c
- -F:	drivers/gpu/drm/tiny/ofdrm.c
- -F:	drivers/gpu/drm/tiny/simpledrm.c
- -F:	drivers/video/aperture.c
- -F:	drivers/video/nomodeset.c
- -F:	include/drm/drm_aperture.h
- -F:	include/linux/aperture.h
- -F:	include/video/nomodeset.h
- -
-  DRM DRIVER FOR SITRONIX ST7586 PANELS
-  M:	David Lechner <david@lechnology.com>
-  S:	Maintained
-
---Sig_/VanIubOJiW/o7W59wYZSUZ=
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmRsDCwACgkQAVBC80lX
-0GxlHwgAoqNefHg17EErrEPKdWYkBzpCztwGe7VJBOBwNT43gcHifK71DiEv10dL
-E0xKvMv3324zlcv6kCaj4dDuPUoQ7KoPVdD7zNNfKepJuFyXNVh1JGbX6fJnkRza
-R32DacwEkHG+ol+yK/2hJA8JjtY/Yz6JghiZBkRiAFj9bOjomDLTUiSz1Kkk+yLG
-mGUvy7o2KFsMISj40q/y5hAW9cyAg2riv7bUvD+Kdk6+HCIm4n2C08Gad1GheEJ4
-MWYFs6P8frtxZpMfmVh7YtuH3ZjPcOU6H0vipIvZWfqVbQ5wJqAJOIwS+SwaVbzJ
-XIv2eodeuJoZgZ5TEz2IIFQS0mpC0Q==
-=HmDe
------END PGP SIGNATURE-----
-
---Sig_/VanIubOJiW/o7W59wYZSUZ=--
+thanks.
+-- 
+~Randy

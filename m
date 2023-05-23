@@ -2,97 +2,138 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5D6A70D413
-	for <lists+linux-next@lfdr.de>; Tue, 23 May 2023 08:38:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9490470D463
+	for <lists+linux-next@lfdr.de>; Tue, 23 May 2023 08:57:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232755AbjEWGiU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 23 May 2023 02:38:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38982 "EHLO
+        id S232240AbjEWG5G (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 23 May 2023 02:57:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229606AbjEWGiU (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 23 May 2023 02:38:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CEA1119;
-        Mon, 22 May 2023 23:38:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0986662173;
-        Tue, 23 May 2023 06:38:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF449C4339B;
-        Tue, 23 May 2023 06:38:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684823898;
-        bh=RQN6DnPAkpIIPJFpuYK/5KbWPqfsotMI4hEIyiXVqNA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=blbM+QbZDBmJi43qCrEwuSymFbY1PKe0FUNhaI9igDkUtfMOKf2pbsmLLtNNBkR4m
-         Maq1Cq84ZlgC3J7TRxQxZjqEYwpFjMac1QrSuRvy5a+dB+OOYylIljesMDSQ2dtyo7
-         /FPPNFrz8RZcJ6nfmGmfcYDrbTU0vKvSu2purLAEmk1DDE7QgA3SCTShUdRY6mdWTx
-         Ca3HovYmcd5UmqXhoESvTOtudRrURLPe/2aw9szc+Lbvxn33FaBKuIEpd6Xogg3zjm
-         W+UIguzQsaPQgao4yVq8PvKYH2nFRMfMQKb0A2cJan1m4Xn5j2IPC08QkqCVlDqpkO
-         Dl8yjZb0lSpzw==
-Message-ID: <c7e0574e-bfb2-fee7-2467-5f9cd8d335f5@kernel.org>
-Date:   Tue, 23 May 2023 15:38:16 +0900
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: linux-next: build warning after merge of the scsi-mkp tree
-Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     Niklas Cassel <niklas.cassel@wdc.com>,
+        with ESMTP id S232057AbjEWG5E (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 23 May 2023 02:57:04 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0B04118;
+        Mon, 22 May 2023 23:57:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1684825023; x=1716361023;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=IjxX5aifWvPwKx2G+wm0DbABvPy6iGFiIpFGJlbl0Q8=;
+  b=jI5jIzMilpIoXQRdrTmG88PgPd15bN9Bvpyeirl/PIylHbYxzAP81Uhg
+   ZXlpwo23mrnAM1OF/odJ8R1GHXWHXc81Bti2bL8LRmje+zg1wWnJUek0y
+   0N7MvFucaNhH2I+YDtBKD6DRfdDUXqeQ1Nh5h51FvOuZrTEbZwzhnsmbQ
+   dvKbko+zfoppP7yXgo7Th6gNPsxMpbYy+y5iuHcdmKYoHYHZAsW4P0bPQ
+   1FNWZhW6ULU8/t+36kFV1cpGhI9U+xCoJ0XhPvkNCeyyfXz04UbWXk0vr
+   gmPLA8TN8cmzUMk913LpkwkIpO15xz1+0O2+Wc5jMs4EnkdJO2yW0VTIj
+   Q==;
+X-IronPort-AV: E=Sophos;i="6.00,185,1681196400"; 
+   d="asc'?scan'208";a="153439954"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 22 May 2023 23:57:02 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Mon, 22 May 2023 23:57:02 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Mon, 22 May 2023 23:57:01 -0700
+Date:   Tue, 23 May 2023 07:56:39 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+CC:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Crypto List <linux-crypto@vger.kernel.org>,
+        Huan Feng <huan.feng@starfivetech.com>,
+        Jia Jie Ho <jiajie.ho@starfivetech.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20230523133833.64560bf3@canb.auug.org.au>
-From:   Damien Le Moal <dlemoal@kernel.org>
-Organization: Western Digital Research
-In-Reply-To: <20230523133833.64560bf3@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] crypto: starfive - Depend on AMBA_PL08X instead of
+ selecting it
+Message-ID: <20230523-pelvis-unwritten-bedc9c75d899@wendy>
+References: <20230522105257.562cb1ec@canb.auug.org.au>
+ <ZGr6aB9uJVnyfJQ9@gondor.apana.org.au>
+ <20230523103637.20175fbc@canb.auug.org.au>
+ <ZGwmAp5RPqAjVMCg@gondor.apana.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="mwnFscTKPB7TisQY"
+Content-Disposition: inline
+In-Reply-To: <ZGwmAp5RPqAjVMCg@gondor.apana.org.au>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 5/23/23 12:38, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the scsi-mkp tree, today's linux-next build (htmldocs)
-> produced this warning:
-> 
-> drivers/ata/libata-scsi.c:3864: warning: Function parameter or member 'spg' not described in 'ata_mselect_control'
-> 
-> Introduced by commit
-> 
->   df60f9c64576 ("scsi: ata: libata: Add ATA feature control sub-page translation")
-> 
+--mwnFscTKPB7TisQY
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Martin,
+On Tue, May 23, 2023 at 10:33:38AM +0800, Herbert Xu wrote:
+> On Tue, May 23, 2023 at 10:36:37AM +1000, Stephen Rothwell wrote:
+> >=20
+> > That did not fix it :-(
+>=20
+> OK, this patch should fix it:
+>=20
+> ---8<---
+> A platform option like AMBA should never be selected by a driver.
+> Use a dependency instead.
 
-This is missing:
+Randy submitted a patch to change the driver to not conflict with
+the arch symbols:
+https://lore.kernel.org/all/20230523000606.9405-1-rdunlap@infradead.org/
 
-diff --git a/drivers/ata/libata-scsi.c b/drivers/ata/libata-scsi.c
-index 69fc0d2c2123..c676b1e9b6c9 100644
---- a/drivers/ata/libata-scsi.c
-+++ b/drivers/ata/libata-scsi.c
-@@ -3850,6 +3850,7 @@ static unsigned int ata_mselect_control_ata_feature(struct
-ata_queued_cmd *qc,
- /**
-  *     ata_mselect_control - Simulate MODE SELECT for control page
-  *     @qc: Storage for translated ATA taskfile
-+ *     @spg: sub-page of the control page
-  *     @buf: input buffer
-  *     @len: number of valid bytes in the input buffer
-  *     @fp: out parameter for the failed field on error
+The corresponding change here makes sense to me,
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 
-Do you want me to send a fix patch or can you fold this in ?
+@StarFive folks, you will need to go and submit a patch for
+arch/riscv/Kconfig.socs that selects ARM_AMBA for your platform.
 
--- 
-Damien Le Moal
-Western Digital Research
+> Also remove the depenency on DMADEVICES because the driver builds
+> just fine without it.  Instead add a dependency on HAS_DMA for dma
+> mapping support.
+>=20
+> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> Reported-by: Conor Dooley <conor.dooley@microchip.com>=20
+> Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+>=20
+> diff --git a/drivers/crypto/starfive/Kconfig b/drivers/crypto/starfive/Kc=
+onfig
+> index 908c162ba79a..59002abcc0ad 100644
+> --- a/drivers/crypto/starfive/Kconfig
+> +++ b/drivers/crypto/starfive/Kconfig
+> @@ -4,14 +4,13 @@
+> =20
+>  config CRYPTO_DEV_JH7110
+>  	tristate "StarFive JH7110 cryptographic engine driver"
+> -	depends on (SOC_STARFIVE || COMPILE_TEST) && DMADEVICES
+> +	depends on SOC_STARFIVE || AMBA_PL08X || COMPILE_TEST
 
+While we are changing everything, would you mind doing s/SOC/ARCH/ here?
+I didn't notice that while the series was being reviewed. Otherwise,
+I'll send you a patch for it.
+
+Cheers,
+Conor.
+
+--mwnFscTKPB7TisQY
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZGxjpwAKCRB4tDGHoIJi
+0jkjAQDhW8PL2V0KE7gy+aM8zfT9d7+sVE4zWp5d14k/Y9TMuQEAjrCesmDDqk1M
+S+L8TVRjan4Zjd6DWos/qA629ZRVkwc=
+=A/b4
+-----END PGP SIGNATURE-----
+
+--mwnFscTKPB7TisQY--

@@ -2,45 +2,44 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5385B70D272
-	for <lists+linux-next@lfdr.de>; Tue, 23 May 2023 05:38:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4825A70D29C
+	for <lists+linux-next@lfdr.de>; Tue, 23 May 2023 05:57:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231932AbjEWDim (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 22 May 2023 23:38:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45098 "EHLO
+        id S232262AbjEWD5r (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 22 May 2023 23:57:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbjEWDil (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 22 May 2023 23:38:41 -0400
+        with ESMTP id S229587AbjEWD5q (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 22 May 2023 23:57:46 -0400
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCE7390;
-        Mon, 22 May 2023 20:38:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6574193;
+        Mon, 22 May 2023 20:57:44 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QQKmD3kczz4x49;
-        Tue, 23 May 2023 13:38:36 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QQLBF6qBMz4x46;
+        Tue, 23 May 2023 13:57:41 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1684813117;
-        bh=wYTvdtFL5j3SZYY4mECa+gjC9UYT7rwBnC8XI814UWU=;
+        s=201702; t=1684814262;
+        bh=OAB3v8zSIQ9J1f31msYxvJJ0TGrUimNxS5kJRAb27cs=;
         h=Date:From:To:Cc:Subject:From;
-        b=bGAt+Y6IWlB73gVyg+yTvZ5JJaGwREXcAuK2GMhV4QXKf75n244c56hTS7CycnJVV
-         Xv2tCu7CyNdydI2rju/pG7n25aebpNS/zY+ydk+XROzmaMidBywlhZfAK5CCbRiWGJ
-         67AwmQsjK8/epA5FoDGZADHc2gHNvnwuGtHB63uQ9S3bZQgpx5U0WyW0FrfTTzsw1p
-         fJZJgKwgQavfRUwFSBthq6fUPcXv5KlhubOEdLnPr1uZJsi94P+XgjDZZMCTAUCo9N
-         wiVsPwQsPi+9R3k0uhxMEMSsVnMve03yKRjx+BHIb9w8JDDD9vuA/PCmBjCGR5O+2W
-         qG5mDg35W2x8Q==
-Date:   Tue, 23 May 2023 13:38:33 +1000
+        b=SeGFic6OpRrIcHU5LkfzWdqUQAFF5ejcO0iXVCqna/OuBHubISD5d9/xgJjCJ5++R
+         IjzCQ6O6Xxaf/BuGaKmU3ch4vWo5yJFcppAk9PND5o+MOb+43KIAuMe4Kyu34F5ACA
+         G1FRqIu0+xwbrwlAnAoxXkub/a+3lqnmvELLKOA+D6Vq5xtR8QZ4l11AVuMdxvPoUB
+         c8fxqL+5dVJtOb/LTJ7urrmhy6LJYvpRM2AbU3w6QpvpkxFX6qft0lb2YyacwAMGT0
+         fy5s9XCojavQeaveb1tIMZpJAuzcrnm83i8MVUJvEph9NwJu9oY9b0HSyEZPmcP79f
+         3hYK5SVfBMFYw==
+Date:   Tue, 23 May 2023 13:57:39 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     Damien Le Moal <dlemoal@kernel.org>,
-        Niklas Cassel <niklas.cassel@wdc.com>,
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Joel Granados <j.granados@samsung.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the scsi-mkp tree
-Message-ID: <20230523133833.64560bf3@canb.auug.org.au>
+Subject: linux-next: bott test warning
+Message-ID: <20230523135739.73068c68@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/bfTixNXUNneq2CUZdg+=RJc";
+Content-Type: multipart/signed; boundary="Sig_/e04NEmNrpspEQeDhUfjkXsY";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
@@ -52,41 +51,55 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/bfTixNXUNneq2CUZdg+=RJc
+--Sig_/e04NEmNrpspEQeDhUfjkXsY
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the scsi-mkp tree, today's linux-next build (htmldocs)
-produced this warning:
+Today's linux-next boot test (powerpc pseries_le_defconfig) produced
+this warning:
 
-drivers/ata/libata-scsi.c:3864: warning: Function parameter or member 'spg'=
- not described in 'ata_mselect_control'
+sysctl table check failed: kernel/usermodehelper Not a file
+sysctl table check failed: kernel/usermodehelper No proc_handler
+sysctl table check failed: kernel/usermodehelper bogus .mode 0555
+sysctl table check failed: kernel/keys Not a file
+sysctl table check failed: kernel/keys No proc_handler
+sysctl table check failed: kernel/keys bogus .mode 0555
+CPU: 0 PID: 0 Comm: swapper/0 Not tainted 6.4.0-rc3-04222-g1999c5d1802e #1
+Hardware name: IBM pSeries (emulated by qemu) POWER8 (raw) 0x4d0200 0xf0000=
+04 of:SLOF,HEAD pSeries
+Call Trace:
+[c0000000028bfd40] [c00000000113ea2c] dump_stack_lvl+0x70/0xa0 (unreliable)
+[c0000000028bfd70] [c0000000006166f0] __register_sysctl_table+0x7f0/0x9e0
+[c0000000028bfe50] [c00000000204e650] __register_sysctl_init+0x40/0x78
+[c0000000028bfec0] [c00000000202d660] sysctl_init_bases+0x40/0xb4
+[c0000000028bfef0] [c00000000204e6dc] proc_sys_init+0x54/0x68
+[c0000000028bff10] [c00000000204dff4] proc_root_init+0xb8/0xdc
+[c0000000028bff30] [c0000000020045d8] start_kernel+0x7f8/0x834
+[c0000000028bffe0] [c00000000000e998] start_here_common+0x1c/0x20
+failed when register_sysctl kern_table to kernel
 
-Introduced by commit
-
-  df60f9c64576 ("scsi: ata: libata: Add ATA feature control sub-page transl=
-ation")
+I am not sure exactly which commit caused this.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/bfTixNXUNneq2CUZdg+=RJc
+--Sig_/e04NEmNrpspEQeDhUfjkXsY
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmRsNTkACgkQAVBC80lX
-0GyO/ggAocLS77HWx2vBVyH30j7xeXZKl2b5OkVQwP6V+mTgxIKFw7CPTOmdbUIY
-Nx92BpqhfvaUu++TLh5KXoFzeaMAebaSraFoDarLwh9jOc6iiDt3d6V1G/7GCQQa
-w0q7QifAH5g1Tgh+jtsfKrnPsvhKZM7ZIhZMTHUHmamZ4ZNSx4h0wIZQm7zGaOl3
-fkCVuAoKZjrj7/r/14+lcq4GFzlFnEYLAx/XxJeQKBRvpOe2ay+kXPqSgzcgdBxB
-oEt8QOv4yrr6GxE7ufeIpmJixkIcyHa6gO/xL1zFxN7LYEQtSsQ0XIkhp5p3Xb9z
-POLjB+JThAV6vsHn6/d5OdTxd/+tFA==
-=zDp7
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmRsObMACgkQAVBC80lX
+0GwElQf+Nb3E+O9PyecI4GgNVdg7CF7sgFf2RnRfKkUaUrvh4Q83ykGUrleeVw3I
+/NA1ReKQ+4huwCdKSX6eYz4pwvov2TVJ+HWGNd+SZ8vQCTweDwRgHAVG1QgBthSi
+7ukERGADyp2mX8eXprJ9Zsdpm2pC/e01tI4rvCd5h904VMXBPqiQ4xvrpAHSafVZ
+Q5o/ksee+uikMNalhe7MEf7jsIrpkAAECEJ2VIS7iH/aoEiY7LPGpAdRH2rdnebq
+BfKIK/huy2eamSuJnAP8l2Ey4fNChcvAn37CoDo2GwOsl4q390JGBXYsKFFxrryP
++msw6GNN8ZvRKfywj/Z5lQXMneBZQQ==
+=PxBl
 -----END PGP SIGNATURE-----
 
---Sig_/bfTixNXUNneq2CUZdg+=RJc--
+--Sig_/e04NEmNrpspEQeDhUfjkXsY--

@@ -2,80 +2,91 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F14170D137
-	for <lists+linux-next@lfdr.de>; Tue, 23 May 2023 04:28:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E83470D14B
+	for <lists+linux-next@lfdr.de>; Tue, 23 May 2023 04:33:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232134AbjEWC2w (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 22 May 2023 22:28:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45264 "EHLO
+        id S234652AbjEWCd4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 22 May 2023 22:33:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbjEWC2v (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 22 May 2023 22:28:51 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9682BE9;
-        Mon, 22 May 2023 19:28:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=S3haG+nzDseaoT60qOdpqQoWlYhd6ZwWcmpaVQIMgC8=; b=bMuDm7L5/DxR5q7Li34YZZ4fi/
-        Bu2v3NVL2fEqKYUq0wqGlAs1n+zSf45nZDNme0d20/pNmWvqDSdSP/h/9VTcdIqjbtHV2sO8xGUW4
-        y0B6EqvVKOcW+AgO8TtB3ISsi3J//pFiEIPe02Exrm4DwKV+/g28RIALL2Ku9cqvWWNWnNtEBf379
-        DGMA7tnkcE4j5tv4qtJeH5CrYpgNHvGan1mFgpKj84QaVyf64mqe8DQHXnP+phaP8RzxS1SxeMEbt
-        MXLrid9WQp0QZVo37I7Uow188Vj/q9AaHRFbu1Kthsb2l6ipLqdIKtDVD8zVH/NHRio95ZtJFAkHS
-        fy2ncl7w==;
-Received: from [2601:1c2:980:9ec0::2764]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1q1HlW-008gdF-1O;
-        Tue, 23 May 2023 02:28:46 +0000
-Message-ID: <9f32e509-95b1-6a5a-aba2-664af4af37a8@infradead.org>
-Date:   Mon, 22 May 2023 19:28:45 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: linux-next: Tree for May 15 (several RV64 build errors)
-Content-Language: en-US
-To:     Alexandre Ghiti <alex@ghiti.fr>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
+        with ESMTP id S232034AbjEWCdz (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 22 May 2023 22:33:55 -0400
+Received: from 167-179-156-38.a7b39c.syd.nbn.aussiebb.net (167-179-156-38.a7b39c.syd.nbn.aussiebb.net [167.179.156.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72BFF185;
+        Mon, 22 May 2023 19:33:51 -0700 (PDT)
+Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
+        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
+        id 1q1HqE-00C99V-IG; Tue, 23 May 2023 10:33:39 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Tue, 23 May 2023 10:33:38 +0800
+Date:   Tue, 23 May 2023 10:33:38 +0800
+From:   Herbert Xu <herbert@gondor.apana.org.au>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Conor Dooley <conor.dooley@microchip.com>
+Cc:     Linux Crypto List <linux-crypto@vger.kernel.org>,
+        Huan Feng <huan.feng@starfivetech.com>,
+        Jia Jie Ho <jiajie.ho@starfivetech.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Conor Dooley <conor@kernel.org>
-References: <20230515141235.0777c631@canb.auug.org.au>
- <54244db6-ff69-4cf8-894c-c3dd2f12df9c@infradead.org>
- <5d894e71-25ad-8ba0-f632-2eec6e017f46@ghiti.fr>
- <ee3bc2ce-5ebe-927e-5b6d-0b9490ef3875@ghiti.fr>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <ee3bc2ce-5ebe-927e-5b6d-0b9490ef3875@ghiti.fr>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: [PATCH] crypto: starfive - Depend on AMBA_PL08X instead of selecting
+ it
+Message-ID: <ZGwmAp5RPqAjVMCg@gondor.apana.org.au>
+References: <20230522105257.562cb1ec@canb.auug.org.au>
+ <ZGr6aB9uJVnyfJQ9@gondor.apana.org.au>
+ <20230523103637.20175fbc@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230523103637.20175fbc@canb.auug.org.au>
+X-Spam-Status: No, score=2.7 required=5.0 tests=BAYES_00,HELO_DYNAMIC_IPADDR2,
+        RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,TVD_RCVD_IP,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi,
-
-On 5/19/23 03:42, Alexandre Ghiti wrote:
->>> /opt/crosstool/gcc-12.2.0-nolibc/riscv64-linux/bin/riscv64-linux-ld: section .data LMA [000000000041a000,00000000075bffd7] overlaps section .text LMA [00000000000f09d4,00000000033562ab]
->>> /opt/crosstool/gcc-12.2.0-nolibc/riscv64-linux/bin/riscv64-linux-ld: section .init.pi.text LMA [00000000033562ac,0000000003359137] overlaps section .data LMA [000000000041a000,00000000075bffd7]
->>
->>
->> I'll check this one too which seems to be related to kernel/pi introduction.
+On Tue, May 23, 2023 at 10:36:37AM +1000, Stephen Rothwell wrote:
 > 
-> 
-> Thanks to Bjorn: this is caused by XIP_KERNEL, which is known to have limited size, hence the overlap, so no fix for this one. Is there a way to exclude this config from randconfig?
+> That did not fix it :-(
 
-Does this mean exclude XIP_KERNEL or something else from randconfigs?
+OK, this patch should fix it:
 
-thanks.
+---8<---
+A platform option like AMBA should never be selected by a driver.
+Use a dependency instead.
+
+Also remove the depenency on DMADEVICES because the driver builds
+just fine without it.  Instead add a dependency on HAS_DMA for dma
+mapping support.
+
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Reported-by: Conor Dooley <conor.dooley@microchip.com> 
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+
+diff --git a/drivers/crypto/starfive/Kconfig b/drivers/crypto/starfive/Kconfig
+index 908c162ba79a..59002abcc0ad 100644
+--- a/drivers/crypto/starfive/Kconfig
++++ b/drivers/crypto/starfive/Kconfig
+@@ -4,14 +4,13 @@
+ 
+ config CRYPTO_DEV_JH7110
+ 	tristate "StarFive JH7110 cryptographic engine driver"
+-	depends on (SOC_STARFIVE || COMPILE_TEST) && DMADEVICES
++	depends on SOC_STARFIVE || AMBA_PL08X || COMPILE_TEST
++	depends on HAS_DMA
+ 	select CRYPTO_ENGINE
+ 	select CRYPTO_HMAC
+ 	select CRYPTO_SHA256
+ 	select CRYPTO_SHA512
+ 	select CRYPTO_SM3_GENERIC
+-	select ARM_AMBA
+-	select AMBA_PL08X
+ 	help
+ 	  Support for StarFive JH7110 crypto hardware acceleration engine.
+ 	  This module provides acceleration for public key algo,
 -- 
-~Randy
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt

@@ -2,74 +2,85 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD58B70DD2C
-	for <lists+linux-next@lfdr.de>; Tue, 23 May 2023 15:07:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C3BE70E8A0
+	for <lists+linux-next@lfdr.de>; Wed, 24 May 2023 00:10:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232796AbjEWNHs (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 23 May 2023 09:07:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44932 "EHLO
+        id S238821AbjEWWJ7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 23 May 2023 18:09:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230283AbjEWNHs (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 23 May 2023 09:07:48 -0400
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::223])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A760DB;
-        Tue, 23 May 2023 06:07:46 -0700 (PDT)
-Received: (Authenticated sender: alex@ghiti.fr)
-        by mail.gandi.net (Postfix) with ESMTPSA id EB96F6000A;
-        Tue, 23 May 2023 13:07:40 +0000 (UTC)
-Message-ID: <c59f9f1f-278c-ac5e-88cd-85b8485f59e3@ghiti.fr>
-Date:   Tue, 23 May 2023 15:07:40 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: linux-next: Tree for May 15 (several RV64 build errors)
-Content-Language: en-US
-To:     Randy Dunlap <rdunlap@infradead.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
+        with ESMTP id S238794AbjEWWJx (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 23 May 2023 18:09:53 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 154F383;
+        Tue, 23 May 2023 15:09:51 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QQpQL0vjQz4wj7;
+        Wed, 24 May 2023 08:09:45 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1684879786;
+        bh=iIDoBcVHb/UZ+/Rak8F0hbc2VDnQPKsPhR9nbEg5jnI=;
+        h=Date:From:To:Cc:Subject:From;
+        b=nnp3Oh3Ex9T0iHbC+71OsYN52qk0NbIMZlVtGKwcmlDDFxgmOeyi9Jmy/xf4Q3WhK
+         fYRxq6SxWIGMNjoC7uLdu7opYMq7Gymcceo788rFs1Lg+VzO29DqiKtDrvksbPVYPX
+         5JOTFPWEP9plSZ/Sr2d2RRmJVt3//Y5AwDzB+Vbbvj+wMx3UZZVHdRm9fp8F4p5OaV
+         f3x+pstSLxOJsFZx+Uraq8P0eAQU2KFM5xBazecbLjHUHpXyHkOVNGrMeHbKIHLT25
+         6MPH6utA9eYFAXThcdqlpgeyoBChgSqbOl5H5FjA1UcOcgZWn6nXG3E4cqNUXYh4+t
+         6m/WwsYtGaAwA==
+Date:   Wed, 24 May 2023 08:09:33 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Manuel Lauss <manuel.lauss@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Conor Dooley <conor@kernel.org>
-References: <20230515141235.0777c631@canb.auug.org.au>
- <54244db6-ff69-4cf8-894c-c3dd2f12df9c@infradead.org>
- <5d894e71-25ad-8ba0-f632-2eec6e017f46@ghiti.fr>
- <ee3bc2ce-5ebe-927e-5b6d-0b9490ef3875@ghiti.fr>
- <9f32e509-95b1-6a5a-aba2-664af4af37a8@infradead.org>
-From:   Alexandre Ghiti <alex@ghiti.fr>
-In-Reply-To: <9f32e509-95b1-6a5a-aba2-664af4af37a8@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: linux-next: Signed-off-by missing for commit in the mips-fixes tree
+Message-ID: <20230524080933.5ed64c2e@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/RDW_oI9pS9cyWTl58Sp9R9d";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+--Sig_/RDW_oI9pS9cyWTl58Sp9R9d
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On 23/05/2023 04:28, Randy Dunlap wrote:
-> Hi,
->
-> On 5/19/23 03:42, Alexandre Ghiti wrote:
->>>> /opt/crosstool/gcc-12.2.0-nolibc/riscv64-linux/bin/riscv64-linux-ld: section .data LMA [000000000041a000,00000000075bffd7] overlaps section .text LMA [00000000000f09d4,00000000033562ab]
->>>> /opt/crosstool/gcc-12.2.0-nolibc/riscv64-linux/bin/riscv64-linux-ld: section .init.pi.text LMA [00000000033562ac,0000000003359137] overlaps section .data LMA [000000000041a000,00000000075bffd7]
->>>
->>> I'll check this one too which seems to be related to kernel/pi introduction.
->>
->> Thanks to Bjorn: this is caused by XIP_KERNEL, which is known to have limited size, hence the overlap, so no fix for this one. Is there a way to exclude this config from randconfig?
-> Does this mean exclude XIP_KERNEL or something else from randconfigs?
+Hi all,
 
+Commit
 
-I meant excluding XIP_KERNEL from randconfigs: it has very strict 
-constraints regarding what can/can't be enabled then it needs human 
-intervention to make sure the error above does not happen. So I would 
-not bother testing this in randconfigs if possible.
+  2d645604f69f ("MIPS: Alchemy: fix dbdma2")
 
+is missing a Signed-off-by from its author.
 
->
-> thanks.
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/RDW_oI9pS9cyWTl58Sp9R9d
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmRtOZ4ACgkQAVBC80lX
+0Gx21ggAiv4DuI/CtKgi+6DhahoP+hSzCBbfO0Fm4zhBtbeA3XmbphM4hUI7/xpb
+o8EglF9yalMYuKIdC8odsuu70pUcZXBXU3TFfQYskpqazWzR6S9IjQfJnAYE91p0
+4ErEzgEeE+cse/KH5nw84aBxF8IUi42D6CaoC5GiuufeRuctZy2gRNgHeyPpKpPR
+UxsIhKCP1WVeo581RSvyjKfjANqKTXxrNMHOeiI7ydIm8UI9i53+CbYjY6pNko+L
+s25A/zukW4WzkfeQx21LyRpfMQM7klJLivmUMlJGimXUsWVr0mqId5Uch/QdSG4y
+Iw1XYXs03DK9KuGG03RMjiVKgkbjaw==
+=QS4z
+-----END PGP SIGNATURE-----
+
+--Sig_/RDW_oI9pS9cyWTl58Sp9R9d--

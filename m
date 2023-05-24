@@ -2,98 +2,103 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04EFE70EA5D
-	for <lists+linux-next@lfdr.de>; Wed, 24 May 2023 02:40:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD8B470EACA
+	for <lists+linux-next@lfdr.de>; Wed, 24 May 2023 03:29:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234094AbjEXAk2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 23 May 2023 20:40:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47050 "EHLO
+        id S238724AbjEXB3h (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 23 May 2023 21:29:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233196AbjEXAk1 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 23 May 2023 20:40:27 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E6A3B5;
-        Tue, 23 May 2023 17:40:22 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1ae3f6e5d70so2888575ad.1;
-        Tue, 23 May 2023 17:40:22 -0700 (PDT)
+        with ESMTP id S231317AbjEXB3g (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 23 May 2023 21:29:36 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1557FDA
+        for <linux-next@vger.kernel.org>; Tue, 23 May 2023 18:29:35 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-64d5b4c400fso249952b3a.1
+        for <linux-next@vger.kernel.org>; Tue, 23 May 2023 18:29:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684888822; x=1687480822;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=trKRfcDGr+UR7gkMuKtDFEQjYswjXvkOJhL1MG6567A=;
-        b=qbStn/Ad8soPmKFUZjYOVfiADRK+isUmhGEo769hNj+Dqm8xD56T2etNtAQ/y9jbem
-         agqGTIPCNeiOajArZN68eYjtyDnkRGpQFg0Qa1McQ3VxImqIAFXhzvKGx50cHtzQSmEg
-         LcRkGrfZyLOKeLCq+KlvS6g15e9tkO0L5ifVSui/IfPQ4A5U8C+HuKmjsNfd3GAPk/JX
-         FgDpG8TSjrlkmsnIbisL4F9aGmAyskIbIzrNRgNFB9ux3QbLw8bn1Qkd7o3ZrktQI/gS
-         m540qP0deIyN5Qm4aQAX3aFXd749pNF4MdxsfbhfmEKoZ6dHijN7txCCrKJrjJHsLjrD
-         6Wcg==
+        d=dabbelt-com.20221208.gappssmtp.com; s=20221208; t=1684891774; x=1687483774;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Ovs5IDEUt1HNCdjzOE1h75uJJvQKIJ+i/NKnFH6yQjY=;
+        b=gNIWrdMP8NyKVYUYP4pw0tVp1AEQl8s0FnZM6sfdnLouw7sRoSspjvwNjZFP213FA8
+         deD89aXfjMPjsShZh+v0ww8X7Kvbf8/0SoncN2PA5tLW85kBf5yhGhZuVX0JAUN7t5dH
+         iNO89PkFhHBvc0a21z+sAUUCOQTUOGbZuQ4eYebIAryWP7W2pU8ZvY1YYg5Frgh7nx5S
+         6ueyxSE6jO/9LZtwgx/7XkKq6QvdSSXAr5uFrgY1fXeEcWsTAtcxXRIkjI4n4BsMUB2e
+         wYAdrV3pSCbqKEF7/bKXqonOK0Yhep7nTgpW6AjKsh9vpyMTJiKW9YfAY3wJSnAtPgff
+         CRTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684888822; x=1687480822;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20221208; t=1684891774; x=1687483774;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=trKRfcDGr+UR7gkMuKtDFEQjYswjXvkOJhL1MG6567A=;
-        b=gtiYkhqIx1kbNNhjFAr2GHpLXMTj6EiGzWcXuHSbCrFOBok76b/QFFN0/eqk3iYCHd
-         1xFtMc8meYK+qCC5wizuFrqaYC+kWK40lzwGl7zZYFFyGmYfXjEYSEmGRzdEo7na5f7H
-         cUsJhaWRRjSCg6/dbtlPvz2d6nTMUvrfQvHEIbSvrxjUPEjPJBxsVcmS4837pxwplBTj
-         rS+EamRgbXBYgletc3Sv+miwxlJWen68ycyfNrC8eDNQDo2K4CjchdQm+qg1LQnvIyPs
-         xu0IqKeV1ZDAFwrfwRwKxPaG5kaXX0Ne7s4AyrcUBZL/plUmBh9Iu2zeVcUDW6CfxqzT
-         VziA==
-X-Gm-Message-State: AC+VfDyRgFegJhlOhU62hNFBAqtEKjOyz5Sr+ywFr60Um+l20px/zaeO
-        jKTsLDbfq3d8DEsArqa2J5cr7DFxcno=
-X-Google-Smtp-Source: ACHHUZ6j5X8hlybPIWuAdXe98KhefGgHvJ6LKOuRtwDc8JPZhQ1R0Er2bFqzqiqh3/K5fo3AwxGdOA==
-X-Received: by 2002:a17:902:e5c8:b0:1aa:e425:2527 with SMTP id u8-20020a170902e5c800b001aae4252527mr16412547plf.21.1684888821819;
-        Tue, 23 May 2023 17:40:21 -0700 (PDT)
-Received: from google.com ([2620:15c:9d:2:3913:9c00:6a9e:2c95])
-        by smtp.gmail.com with ESMTPSA id m10-20020a170902db0a00b001add653dba2sm7371327plx.108.2023.05.23.17.40.20
+        bh=Ovs5IDEUt1HNCdjzOE1h75uJJvQKIJ+i/NKnFH6yQjY=;
+        b=Vr23o/RXiDtkcGgZNDWaUuUcIqf7lN5uMt0p5UAGGP1Xy76bIHKC/ZOR0rnjyiGpfq
+         ufzrTniUJ0C3Hmhoo3GPza2DurlFBs0sU6FsS1j123V9yxZBUORi4Pzw+Jmt5SeZKTdV
+         ovZ2iSxsXO/EQ8vIpw6NhYPtBmseIGt4f0sgswalCn4Bmt6bUV9VLghFR/FITy1S96i+
+         swAgnGEEXVRo8au3UZl5D89rE7/pAwSrdXKdrXLY8cA/DJvDYHcwARMefi7X+tCT1Ljv
+         Dqgt1gkr9G2FCggwVRSnN4MbyQLxp7DQbP+4z/dnQ/UHP4zZwvO7eA2CgXSuBdVvEOzC
+         rClQ==
+X-Gm-Message-State: AC+VfDyYLzkCnlDl2tHwnT3f7V4cv7DXPkTbB7n9vvEo2O1qbghYoftA
+        Ic4dCPug4M+anXZM9IN1zvwiDg==
+X-Google-Smtp-Source: ACHHUZ5LGknBqn9oBQPkYn8OEkWZnDWjHIE4aCSA3ijt5LvQi/WrEj3XBhXeAob+CdbOOeFVA+G8sA==
+X-Received: by 2002:a05:6a00:1486:b0:63b:64f7:45a0 with SMTP id v6-20020a056a00148600b0063b64f745a0mr1158431pfu.12.1684891774395;
+        Tue, 23 May 2023 18:29:34 -0700 (PDT)
+Received: from localhost ([50.221.140.188])
+        by smtp.gmail.com with ESMTPSA id l19-20020a635713000000b00530621e5ee4sm6663669pgb.9.2023.05.23.18.29.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 May 2023 17:40:20 -0700 (PDT)
-Date:   Tue, 23 May 2023 17:40:18 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Ismael Ferreras Morezuelas <swyterzone@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Fixes tag needs some work in the input-current tree
-Message-ID: <ZG1c8l8uprzkcjBP@google.com>
-References: <20230524081200.1badf8cb@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230524081200.1badf8cb@canb.auug.org.au>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 23 May 2023 18:29:33 -0700 (PDT)
+Date:   Tue, 23 May 2023 18:29:33 -0700 (PDT)
+X-Google-Original-Date: Tue, 23 May 2023 18:29:08 PDT (-0700)
+Subject:     Re: linux-next: Tree for May 15 (several RV64 build errors)
+In-Reply-To: <e2279988-03b4-9670-6f1c-c360c478b38e@infradead.org>
+CC:     alex@ghiti.fr, Stephen Rothwell <sfr@canb.auug.org.au>,
+        linux-next@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
+        Conor Dooley <conor@kernel.org>
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     rdunlap@infradead.org
+Message-ID: <mhng-e172207d-d67d-46ab-ab95-85f0a854ace2@palmer-ri-x1c9a>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, May 24, 2023 at 08:12:00AM +1000, Stephen Rothwell wrote:
-> Hi all,
-> 
-> In commit
-> 
->   feee70f45686 ("Input: xpad - delete a Razer DeathAdder mouse VID/PID entry")
-> 
-> Fixes tag
-> 
->   Fixes: f554f619b70 ("Input: xpad - sync device IDs with xboxdrv")
-> 
-> has these problem(s):
-> 
->   - SHA1 should be at least 12 digits long
->     This can be fixed for the future by setting core.abbrev to 12 (or
->     more) or (for git v2.11 or later) just making sure it is not set
->     (or set to "auto").
+On Tue, 23 May 2023 17:22:20 PDT (-0700), rdunlap@infradead.org wrote:
+>
+>
+> On 5/23/23 06:07, Alexandre Ghiti wrote:
+>>
+>> On 23/05/2023 04:28, Randy Dunlap wrote:
+>>> Hi,
+>>>
+>>> On 5/19/23 03:42, Alexandre Ghiti wrote:
+>>>>>> /opt/crosstool/gcc-12.2.0-nolibc/riscv64-linux/bin/riscv64-linux-ld: section .data LMA [000000000041a000,00000000075bffd7] overlaps section .text LMA [00000000000f09d4,00000000033562ab]
+>>>>>> /opt/crosstool/gcc-12.2.0-nolibc/riscv64-linux/bin/riscv64-linux-ld: section .init.pi.text LMA [00000000033562ac,0000000003359137] overlaps section .data LMA [000000000041a000,00000000075bffd7]
+>>>>>
+>>>>> I'll check this one too which seems to be related to kernel/pi introduction.
+>>>>
+>>>> Thanks to Bjorn: this is caused by XIP_KERNEL, which is known to have limited size, hence the overlap, so no fix for this one. Is there a way to exclude this config from randconfig?
+>>> Does this mean exclude XIP_KERNEL or something else from randconfigs?
+>>
+>>
+>> I meant excluding XIP_KERNEL from randconfigs: it has very strict constraints regarding what can/can't be enabled then it needs human intervention to make sure the error above does not happen. So I would not bother testing this in randconfigs if possible.
+>
+> I can exclude it from my randconfig builds, but I don't know of a way to exclude it from randconfig builds in general (i.e., for everyone).
 
-Oops. Oh, well. I do not rewind my for-linus branch unless in extreme
-circumstances, so it will have to stay this way. The tag still resolves
-to the right commit, so not much harm done.
+Arnd had suggested a trick related to menus that would result in 
+randconfig never enabling some config.  It'd suggested for 
+CONFIG_NONPORTABLE, but we didn't use it because it'd reduce randconfig 
+coverage.
 
-Thanks.
-
--- 
-Dmitry
+Maybe we should add a CONFIG_VERYSPECIAL of some sort and hide things 
+like XIP behind it (maybe M-mode too)?

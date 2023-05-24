@@ -2,137 +2,99 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5C7570EC30
-	for <lists+linux-next@lfdr.de>; Wed, 24 May 2023 05:55:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C33170ED42
+	for <lists+linux-next@lfdr.de>; Wed, 24 May 2023 07:45:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239377AbjEXDzE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 23 May 2023 23:55:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57922 "EHLO
+        id S239379AbjEXFpG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 24 May 2023 01:45:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239426AbjEXDyz (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 23 May 2023 23:54:55 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5775BA3;
-        Tue, 23 May 2023 20:54:54 -0700 (PDT)
+        with ESMTP id S239488AbjEXFpF (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 24 May 2023 01:45:05 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 456D213E;
+        Tue, 23 May 2023 22:45:03 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QQy4T29Thz4wgv;
-        Wed, 24 May 2023 13:54:49 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QR0Wc4rDSz4x3x;
+        Wed, 24 May 2023 15:45:00 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1684900489;
-        bh=ufTOQCYWmvctW2t/bzpFVthG9T5Pea4rH56eruBKQ00=;
+        s=201702; t=1684907101;
+        bh=f/I3/vdedLsXjJMBa5rvDPJjW/XaG4l9x0WeCUQ8xnc=;
         h=Date:From:To:Cc:Subject:From;
-        b=IcVxGVE5CFjQAm1DQoE6IH1FWhQ3b6d9di7S9937VSk+qHFpWYrGVeXerri/1Jwal
-         6zi34qW55zo0HhKKAqBbCugNQJT3jq90ox407trt4f8LvbsEk3Ljm7JySvqhrL2AOt
-         bFqLP+Bxx6lzRu0uYUC2Nb8BqHaASqx5IXCAxz1ILFOHD0ZYYhXHMtRqyM1MkXv0Rw
-         vEENRkSYHHd0/uy84+5rikRH14RhvWWMMwW7nyNtGYZSApDItyVSVRhHYdtO1OkyVG
-         mWrbfm+gApnk9q1CgY91wkqKJHCCBEEBCN5ZLkjLvgQy2edL4iQmRsP5xLsJ9cXo1t
-         hZOcEct6zU7PQ==
-Date:   Wed, 24 May 2023 13:54:48 +1000
+        b=LHazJkIR0mYp7cwMQWHa5XR0THC7X2J1C9fVb6mRyhu4OBFxND7ZQslu/UNRhn1mc
+         Cq3asJ0a9YwtdeTd9+VH+bGn8dWpM2NYc5xLUBw0U2PtHgYZC0ro6+ZUQmYHTrcCck
+         VzxopJnCbVg+1R7o3+9P5C4Wd3hYKHzoVvXtqzLYPyW+XYD+T9MribWIFpeAR/mLaZ
+         M86EBZSZhx1NYYDBSHgzMw+BSzkslTJVkj0oWj3l/oReFEqaFH6cOu4qkMHpwwoGDr
+         YpM7u2rrwtj0D/q1IEp0wBf3R4LGD8v562S2aW2rLGownULrZfgKLCN4MDh1+aU+r6
+         XQYHUWJ25TFtw==
+Date:   Wed, 24 May 2023 15:44:59 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Takashi Iwai <tiwai@suse.de>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the sound tree
-Message-ID: <20230524135448.3ecad334@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        PowerPC <linuxppc-dev@lists.ozlabs.org>
+Subject: linux-next: boot failure after merge of the tip tree
+Message-ID: <20230524154459.48cda184@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/44FVtg0J.sp7ab2C_gAtk7/";
+Content-Type: multipart/signed; boundary="Sig_//tEoMQJMHAPUW9maNvLvEo/";
  protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/44FVtg0J.sp7ab2C_gAtk7/
+--Sig_//tEoMQJMHAPUW9maNvLvEo/
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the sound tree, today's linux-next build (powerpc
-allyesconfig) failed like this:
+After merging the tip tree, today's linux-next build (powerpc
+pseries_le_defconfig) failed to boot like this:
 
-In file included from sound/core/seq/seq_ump_convert.c:11:
-include/sound/ump_msg.h:196:13: error: duplicate member 'reserved'
-  196 |         u32 reserved:8;
-      |             ^~~~~~~~
-include/sound/ump_msg.h:197:13: error: duplicate member 'program'
-  197 |         u32 program:8;
-      |             ^~~~~~~
-include/sound/ump_msg.h:198:13: error: duplicate member 'channel'
-  198 |         u32 channel:4;
-      |             ^~~~~~~
-include/sound/ump_msg.h:199:13: error: duplicate member 'status'
-  199 |         u32 status:4;
-      |             ^~~~~~
-include/sound/ump_msg.h:200:13: error: duplicate member 'group'
-  200 |         u32 group:4;
-      |             ^~~~~
-include/sound/ump_msg.h:201:13: error: duplicate member 'type'
-  201 |         u32 type:4;
-      |             ^~~~
+ Built 1 zonelists, mobility grouping on.  Total pages: 32736
+ Policy zone: Normal
+ mem auto-init: stack:all(zero), heap alloc:off, heap free:off
+ Memory: 2027392K/2097152K available (17984K kernel code, 3328K rwdata, 147=
+84K rodata, 6080K init, 1671K bss, 69760K reserved, 0K cma-reserved)
 
-Caused by commit
+*crickets*
 
-  0b5288f5fe63 ("ALSA: ump: Add legacy raw MIDI support")
+Bisected to commit
 
-I have applied the following fix patch for today.
+  f4ab23558310 ("slub: Replace cmpxchg_double()")
 
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Wed, 24 May 2023 13:39:38 +1000
-Subject: [PATCH] fix up for "ALSA: ump: Add legacy raw MIDI support"
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- include/sound/ump_msg.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/include/sound/ump_msg.h b/include/sound/ump_msg.h
-index c76c39944a5f..a594ef951b54 100644
---- a/include/sound/ump_msg.h
-+++ b/include/sound/ump_msg.h
-@@ -192,13 +192,13 @@ struct snd_ump_midi1_msg_program {
- 	u32 program:8;
- 	u32 reserved:8;
- #else
--#endif
- 	u32 reserved:8;
- 	u32 program:8;
- 	u32 channel:4;
- 	u32 status:4;
- 	u32 group:4;
- 	u32 type:4;
-+#endif
- } __packed;
-=20
- /* MIDI 1.0 Channel Pressure (32bit) */
---=20
-2.39.2
+I have reverted that commit (and the following one) for today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/44FVtg0J.sp7ab2C_gAtk7/
+--Sig_//tEoMQJMHAPUW9maNvLvEo/
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmRtiogACgkQAVBC80lX
-0GxkYwf/Zm8mQHXgVpOoGhCVzXRhonzQ6Cur4H/yDuP7dD2Ldc6ewsm2IrlDGQuD
-GM4dyj8PUj260ffJZt/f/DrywKkowIcwm4ytDXmMRNzFOORTvdj/cMiSILT22dlO
-6xTy5ZFHbW3NtiK8ew0dru3BauwQN2ahzTdCVJjjuXfvLK/rbGB+bZGx0CL0B1Q5
-Ca82a5zSL/sBNt4yot1PCj9sECQUrZTrL4IPZYHUMy2tCMtAOMeotH8rW1kvMsbO
-Z2O1LsWLRbHjMfFC6ojSGIbvLlHpbxe1+9U7CwlVf6zlHbaZuR22As4tpoveBIJI
-LmEc4m3y5o7aPzJ6B5oRPsBq9eYyog==
-=BQcw
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmRtpFsACgkQAVBC80lX
+0GwVDAgAlL5vAXSXgHZv3lw2Zu0vvMEbO3IR//QNs9XHsQULb4rYnoVBbEQ3vZds
+z3Gm0yaTMgz7LjjSllEUKHw2FBNzHq4yfnwUVf/6tV5IxqQOQMD4JfKs9y54TTIX
+WK3A1q4YwcW9ORDo4Yn3tl6ETu8sYKnpOdoehx7jodsFUv55RE+z14zTx4sy1Eex
+g85vnkegD8CAHEt28tZYwyuu8nErMzYrNRd3wfHogtLtZPwx+5/pr8zY1CQvn+XV
+xZDIqnBNPweCNgVreFLp64XZD+RG5Q2vRbhn8KnscCid3yCULfm7ouMOXOuCuAa7
+GeKrtrG3epuZqLwlmmfegN4cZkStwQ==
+=l2Q4
 -----END PGP SIGNATURE-----
 
---Sig_/44FVtg0J.sp7ab2C_gAtk7/--
+--Sig_//tEoMQJMHAPUW9maNvLvEo/--

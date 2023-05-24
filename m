@@ -2,100 +2,88 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A7E670EA01
-	for <lists+linux-next@lfdr.de>; Wed, 24 May 2023 02:06:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08BE570EA30
+	for <lists+linux-next@lfdr.de>; Wed, 24 May 2023 02:22:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238938AbjEXAGk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 23 May 2023 20:06:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35718 "EHLO
+        id S230323AbjEXAWa (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 23 May 2023 20:22:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238937AbjEXAGi (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 23 May 2023 20:06:38 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EF35135;
-        Tue, 23 May 2023 17:06:36 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QQs160gylz4x2k;
-        Wed, 24 May 2023 10:06:34 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1684886794;
-        bh=DDaWs+DOiKeOYB2EZ302nVs8682iKofQYavZstdYi9k=;
-        h=Date:From:To:Cc:Subject:From;
-        b=EZgJujH/dqxahAoxt1xfWOt+Q/2OvhdvutFf6DSt2ndH0dgMY47tryDJ6t0RcaZSE
-         911Fskfe6ES26QCje5Vks5m16aifxuepUSjjAxARlx5z0rb1bY92ClMQvr5rJ9bgvk
-         QAtV2kmtE5R93IxiVZl5Vbbr3RawkP++V04DBli+1N1jOqK94Sf8KsYURby+X2z9Ja
-         AN074ujMAKuOV9d+2b5yjy0J6UzBJarGuKO7sGtHNX4yB8BUEnrMJVM8I1LJxrUL44
-         eONeiv99BlrnaavI/FHP4sbjtLEeLBUhm/+C0LIYM/IMUmCLAyrfshoJYTAt3jmFxY
-         FKPgPYeJ1N0aw==
-Date:   Wed, 24 May 2023 10:06:33 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Christian Brauner <brauner@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Danila Chernetsov <listdansp@mail.ru>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the vfs-brauner tree with the mm tree
-Message-ID: <20230524100633.0d2148b5@canb.auug.org.au>
+        with ESMTP id S238477AbjEXAWa (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 23 May 2023 20:22:30 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CCB3B5;
+        Tue, 23 May 2023 17:22:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=2t51EpPSkSfdV7Or5z92c4Otgu+QY2DAdl7GPBfnDHM=; b=UEQPNOXxLqLc/MxXbymjcWHTql
+        R8upb9r74csrDh8xLSIbC7nqBZAwlKxSUVJok4dr7kSSUpGkDGaByL+oN9g91cTuccmxc8GNM/xdi
+        zS5odL7nRZ4/KOuc/HonLwKxiM9t7Fz9D9d8ocU8wqg51pbloZ6fjyzBgI5lJbGxBDMPzw4NuvnUz
+        qHIwp/WgL2r32sCih7Z/rrK7iO+uCPvWw6vKCHrGHj8zEs6rl8ncA2TENvtF7yNw1jaIdqEvq4DmF
+        HjJ3NXrmX4YeDpYk/+aW78oIXQD2fJW9j9BzvJ3wl+E97xc8xyq94rmxCbIq+IESOI6Ni2I6eOoDj
+        4uxEhadg==;
+Received: from [2601:1c2:980:9ec0::2764]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1q1cGl-00Btme-1j;
+        Wed, 24 May 2023 00:22:23 +0000
+Message-ID: <e2279988-03b4-9670-6f1c-c360c478b38e@infradead.org>
+Date:   Tue, 23 May 2023 17:22:20 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/UK.RlxxSvAaRLATgs2SD+ZO";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: linux-next: Tree for May 15 (several RV64 build errors)
+Content-Language: en-US
+To:     Alexandre Ghiti <alex@ghiti.fr>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Conor Dooley <conor@kernel.org>
+References: <20230515141235.0777c631@canb.auug.org.au>
+ <54244db6-ff69-4cf8-894c-c3dd2f12df9c@infradead.org>
+ <5d894e71-25ad-8ba0-f632-2eec6e017f46@ghiti.fr>
+ <ee3bc2ce-5ebe-927e-5b6d-0b9490ef3875@ghiti.fr>
+ <9f32e509-95b1-6a5a-aba2-664af4af37a8@infradead.org>
+ <c59f9f1f-278c-ac5e-88cd-85b8485f59e3@ghiti.fr>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <c59f9f1f-278c-ac5e-88cd-85b8485f59e3@ghiti.fr>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/UK.RlxxSvAaRLATgs2SD+ZO
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
 
-Today's linux-next merge of the vfs-brauner tree got a conflict in:
+On 5/23/23 06:07, Alexandre Ghiti wrote:
+> 
+> On 23/05/2023 04:28, Randy Dunlap wrote:
+>> Hi,
+>>
+>> On 5/19/23 03:42, Alexandre Ghiti wrote:
+>>>>> /opt/crosstool/gcc-12.2.0-nolibc/riscv64-linux/bin/riscv64-linux-ld: section .data LMA [000000000041a000,00000000075bffd7] overlaps section .text LMA [00000000000f09d4,00000000033562ab]
+>>>>> /opt/crosstool/gcc-12.2.0-nolibc/riscv64-linux/bin/riscv64-linux-ld: section .init.pi.text LMA [00000000033562ac,0000000003359137] overlaps section .data LMA [000000000041a000,00000000075bffd7]
+>>>>
+>>>> I'll check this one too which seems to be related to kernel/pi introduction.
+>>>
+>>> Thanks to Bjorn: this is caused by XIP_KERNEL, which is known to have limited size, hence the overlap, so no fix for this one. Is there a way to exclude this config from randconfig?
+>> Does this mean exclude XIP_KERNEL or something else from randconfigs?
+> 
+> 
+> I meant excluding XIP_KERNEL from randconfigs: it has very strict constraints regarding what can/can't be enabled then it needs human intervention to make sure the error above does not happen. So I would not bother testing this in randconfigs if possible.
 
-  fs/ntfs/mft.c
+I can exclude it from my randconfig builds, but I don't know of a way to exclude it from randconfig builds in general (i.e., for everyone).
 
-between commit:
-
-  e7c5ef2adfdf ("ntfs: do not dereference a null ctx on error")
-
-from the mm tree and commit:
-
-  ee3b4556cee8 ("ntfs: do not dereference a null ctx on error")
-
-from the vfs-brauner tree.
-
-I fixed it up (the latter seems to be a newer version, so I just used
-that) and can carry the fix as necessary. This is now fixed as far as
-linux-next is concerned, but any non trivial conflicts should be mentioned
-to your upstream maintainer when your tree is submitted for merging.
-You may also want to consider cooperating with the maintainer of the
-conflicting tree to minimise any particularly complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/UK.RlxxSvAaRLATgs2SD+ZO
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmRtVQkACgkQAVBC80lX
-0Gyp0Qf+Juu6VaxfPnG73d9TU2VLJ0r0LT1Tr5p2Ne5FLKJ/66CmCfNb8V9IXKcb
-xF1FIJ7lbmBTntKpRwuptDNIyh31bwGI04vHhEp3YJv6/AjT6sp0ayfrOB0aoLNB
-HYJNFN1HMhoOoAPYS/WxwUtOLr77xXh4b8E6Ek3bFQH/1pvkGf1gkjL/c/I9zuLf
-o/hmo54nGZ9qd3Pc8Ydkkp7tNxrWVIxuY6CRAMEnybydRnbXa3OWzt31KnARR8Kv
-OrnDM7uAeWp0zND6od2cf2wn/zevQg6D5p664IyVToUuZXknF2MP6yLy9oknT0F8
-IVYsMZtCYa9+iQqWbJO1pUnGqklUIg==
-=kOwa
------END PGP SIGNATURE-----
-
---Sig_/UK.RlxxSvAaRLATgs2SD+ZO--
+-- 
+~Randy

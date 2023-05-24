@@ -2,64 +2,64 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ADD070EFB7
-	for <lists+linux-next@lfdr.de>; Wed, 24 May 2023 09:43:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D10B70F01B
+	for <lists+linux-next@lfdr.de>; Wed, 24 May 2023 10:03:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240053AbjEXHnj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 24 May 2023 03:43:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43340 "EHLO
+        id S239537AbjEXID4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 24 May 2023 04:03:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240063AbjEXHnh (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 24 May 2023 03:43:37 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA43E8F
-        for <linux-next@vger.kernel.org>; Wed, 24 May 2023 00:43:12 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id d9443c01a7336-1ae85b71141so5977185ad.0
-        for <linux-next@vger.kernel.org>; Wed, 24 May 2023 00:43:12 -0700 (PDT)
+        with ESMTP id S233725AbjEXIDz (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 24 May 2023 04:03:55 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BBD091
+        for <linux-next@vger.kernel.org>; Wed, 24 May 2023 01:03:51 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id 41be03b00d2f7-53469299319so475576a12.3
+        for <linux-next@vger.kernel.org>; Wed, 24 May 2023 01:03:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1684914192; x=1687506192;
+        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1684915430; x=1687507430;
         h=from:to:subject:content-transfer-encoding:mime-version:date
          :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=aMARz7XuyxRhfZNan0CParN3PCHIuHGtEs7LczGmoOA=;
-        b=CD5xxsCEG/2VmgFTJYsr3vVfhVeLjbdqE75Ja8eELj5HLZqDlpXzUBUoXxNQLevmFq
-         Hq8OaUmn/3YUOxuQkDzFLFRjlFOQ1YTsYmpI4MaMNz3BlgrARGYW0b91pUYHLadfMiLw
-         5nQFeWA/YnUgHR/otuYnEAM3XGy3IECtu8yWarqdKLy5uTz7TLSkCszj+dVtU1bkX/9H
-         xjcYzPXIBQfl4deEXHiYZEFxUQbeUBOYCRYS+qmH+RN/Mh67b2i5OpJ8kZGIkHC4nGTE
-         dvIOx79sEOHV7nlbWsx2UK68flDpQdtU1ijA5ApcHC/GJ6DdSq5jhR8NlBZU3BUuAhQz
-         3h6A==
+        bh=jAwpAYDD14JqwbdzxOORr5/NF8In/fP5Mu2+/Vj8A6w=;
+        b=rhSuxrMYZ7wMRC4Vz579D9HlXsERmdTvdRqQEWzhs9QQ6QBQMDktJ7krgyFRoJTqnl
+         o4+q0bVAN4Yr8XY6c5++3mFmxt6Psa6m5hU1iXsCUULNJdOw4cpGcp0FmVyfZ4UP0kb4
+         H+n8qwCiNKBXWc67jLw+hLvz1umJb1L5y0VvxE8wuwYexbFl/+lb9zMkPeejBLDtKem8
+         jrr+YpMwP0GDdR6uOypD9Bw9KkvXJhVxVOJqBbDww9Tmnp9qeas2VHHzHATHcYWjTnGt
+         nwAAphQMFsNimFWKot23nfz9iaxNC0w5x7bz7KGMscFQPvhKXDBC6tG95M/M0+joSUCm
+         Ga1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684914192; x=1687506192;
+        d=1e100.net; s=20221208; t=1684915430; x=1687507430;
         h=from:to:subject:content-transfer-encoding:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=aMARz7XuyxRhfZNan0CParN3PCHIuHGtEs7LczGmoOA=;
-        b=Poalq8iaG2UXAPtKRNiGU7uq31b9qoOxeH2X31iwVvl1cWHauf/ignzKb3nkNqGQ2L
-         wALa7X1xOceFgYqexnsfgFHFTatnYNXgPi9of6c3kE2nWmBUBplw4GsKxtc2cdgBElOy
-         8e3t5xeOilhTqGWS9e5uRxTmAER81lG7odj/6bpt50mXjlr4ATDCTE/A7FxnAK8EC3WA
-         /bXEamGhOn5+46qzbvUgVxBTjZtsEYa1MjcLQHK682BTMGmRogQnT+1JcmLUJnbV76kG
-         TIpcFZktPRfcpg9EI3q3XuedBgtZC5VPJ34sxWhsQVyqdF1BSRNRUNTClmXRq2R2gtj1
-         lMhg==
-X-Gm-Message-State: AC+VfDzDiutpE+B91hEcVEGRnXb2a4QIFc0Gtrbryh9tuW+L5VlJMrGG
-        Licfs4YClHoi3N6bB/yKnmciwGmObo0sVV3QdymXWg==
-X-Google-Smtp-Source: ACHHUZ4UUsyvB7IlvmsZ2Z3dzLFHFjjolrmqvxiv+KKFFez6B1pFB1Yf1alyVEUOMYX8rGeTvjgfww==
-X-Received: by 2002:a17:902:ab5c:b0:1ad:cb4b:1d50 with SMTP id ij28-20020a170902ab5c00b001adcb4b1d50mr15983834plb.43.1684914190798;
-        Wed, 24 May 2023 00:43:10 -0700 (PDT)
+        bh=jAwpAYDD14JqwbdzxOORr5/NF8In/fP5Mu2+/Vj8A6w=;
+        b=KL16rWozPZmdSougLUkK+1XaxnWKZxsSpTn+10hWlDs0/AhU1BAvCHYlO1zUe4rgTR
+         pLpRsUTwVGZn9WujN93A3bO6ESybc2FI9LAJ50Rx9tCZQnPTPz/k6RXeIPZ9LQ+Fk6ZB
+         9XWO523Tq0cJJC5N+KRR+q8vg1ow/jvn1hkYOvmuqyJHbz8bblDE1aeMoDMV1lV1A6Iq
+         hwkNQZu3J+LpKsgTiTx3DlsteGuO3hYFYsFaa14FzLkktgsfbkXn8QrZF+C1wlW4Nsz5
+         RP6urFnpRWawC8vEoNUHRz0d6DSzt3AP7YnsZJKvFdQBkSDRBWb6KBwSlI2tmQ1eIxyk
+         L2Xw==
+X-Gm-Message-State: AC+VfDyEkXzAXP8vQRyuDZpxrxNqYJX/F7MgCXMuAEc3QjLwKcnCIe+p
+        1rdqyWNe4mn6k7z23rrgFpMjvglQKWhLrlzgPkLPEg==
+X-Google-Smtp-Source: ACHHUZ7SWgyigFuEcGEmah6K0+1svW+Q7CzpnbL9wKzPi1Bf28zYfRLPJrWuOtEZwh59thWGE3JTfw==
+X-Received: by 2002:a05:6a20:1602:b0:105:4206:7062 with SMTP id l2-20020a056a20160200b0010542067062mr19236722pzj.42.1684915429523;
+        Wed, 24 May 2023 01:03:49 -0700 (PDT)
 Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id h7-20020a170902f7c700b001a19196af48sm8058719plw.64.2023.05.24.00.43.09
+        by smtp.gmail.com with ESMTPSA id k1-20020a6568c1000000b0051b71e8f633sm6361999pgt.92.2023.05.24.01.03.48
         for <linux-next@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 May 2023 00:43:10 -0700 (PDT)
-Message-ID: <646dc00e.170a0220.73bcd.e712@mx.google.com>
-Date:   Wed, 24 May 2023 00:43:10 -0700 (PDT)
+        Wed, 24 May 2023 01:03:48 -0700 (PDT)
+Message-ID: <646dc4e4.650a0220.10b66.b370@mx.google.com>
+Date:   Wed, 24 May 2023 01:03:48 -0700 (PDT)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: master
+X-Kernelci-Branch: pending-fixes
 X-Kernelci-Tree: next
-X-Kernelci-Kernel: next-20230524
+X-Kernelci-Kernel: v6.4-rc3-295-g562100f4b12e
 X-Kernelci-Report-Type: build
-Subject: next/master build: 193 builds: 11 failed, 182 passed, 63 errors,
- 41 warnings (next-20230524)
+Subject: next/pending-fixes build: 174 builds: 3 failed, 171 passed, 7 errors,
+ 42 warnings (v6.4-rc3-295-g562100f4b12e)
 To:     linux-next@vger.kernel.org
 From:   "kernelci.org bot" <bot@kernelci.org>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -71,16 +71,16 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master build: 193 builds: 11 failed, 182 passed, 63 errors, 41 warning=
-s (next-20230524)
+next/pending-fixes build: 174 builds: 3 failed, 171 passed, 7 errors, 42 wa=
+rnings (v6.4-rc3-295-g562100f4b12e)
 
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20230524/
+Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
+rnel/v6.4-rc3-295-g562100f4b12e/
 
 Tree: next
-Branch: master
-Git Describe: next-20230524
-Git Commit: cf09e328589a2ed7f6c8d90f2edb697fb4f8a96b
+Branch: pending-fixes
+Git Describe: v6.4-rc3-295-g562100f4b12e
+Git Commit: 562100f4b12e4fc354b08e9518675f724f9e690f
 Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
 Built: 8 unique architectures
 
@@ -89,26 +89,11 @@ Build Failures Detected:
 arc:
     haps_hs_smp_defconfig+kselftest: (gcc-10) FAIL
 
-arm64:
-    defconfig+CONFIG_ARM64_64K_PAGES=3Dy: (clang-17) FAIL
-    defconfig+CONFIG_ARM64_16K_PAGES=3Dy: (gcc-10) FAIL
-
 arm:
-    allmodconfig: (clang-17) FAIL
     rpc_defconfig: (gcc-10) FAIL
-
-i386:
-    allmodconfig: (clang-17) FAIL
-    i386_defconfig: (clang-17) FAIL
 
 mips:
     decstation_64_defconfig: (gcc-10) FAIL
-
-x86_64:
-    cros://chromeos-5.10/x86_64/chromeos-amd-stoneyridge.flavour.config+x86=
--chromebook: (clang-13) FAIL
-    allmodconfig: (clang-17) FAIL
-    x86_64_defconfig: (clang-17) FAIL
 
 Errors and Warnings Detected:
 
@@ -116,16 +101,11 @@ arc:
     haps_hs_smp_defconfig+kselftest (gcc-10): 1 error
 
 arm64:
-    defconfig+CONFIG_ARM64_16K_PAGES=3Dy (gcc-10): 1 error
-    defconfig+CONFIG_ARM64_64K_PAGES=3Dy (clang-17): 1 error
 
 arm:
-    allmodconfig (clang-17): 17 errors
     rpc_defconfig (gcc-10): 2 errors
 
 i386:
-    allmodconfig (clang-17): 16 errors
-    i386_defconfig (clang-17): 1 error
 
 mips:
     fuloong2e_defconfig (gcc-10): 1 error
@@ -140,14 +120,11 @@ sparc:
     sparc32_defconfig (gcc-10): 2 warnings
     sparc64_defconfig (gcc-10): 4 warnings
     sparc64_defconfig+debug (gcc-10): 2 warnings
+    sparc64_defconfig+kselftest (gcc-10): 2 warnings
     tinyconfig (gcc-10): 1 warning
 
 x86_64:
-    allmodconfig (clang-17): 18 errors, 1 warning
     allnoconfig (gcc-10): 3 warnings
-    cros://chromeos-5.10/x86_64/chromeos-amd-stoneyridge.flavour.config+x86=
--chromebook (clang-13): 1 error
-    x86_64_defconfig (clang-17): 1 error
     x86_64_defconfig (gcc-10): 3 warnings
     x86_64_defconfig+amdgpu (gcc-10): 3 warnings
     x86_64_defconfig+crypto (gcc-10): 3 warnings
@@ -162,91 +139,32 @@ Errors summary:
 
     4    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=
 =80=98-mhard-float=E2=80=99
-    3    drivers/scsi/aacraid/commsup.c:1786:15: error: array index 3 is pa=
-st the end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), ca=
-st to '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
-    3    drivers/scsi/aacraid/commsup.c:1785:15: error: array index 2 is pa=
-st the end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), ca=
-st to '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
-    3    drivers/scsi/aacraid/commsup.c:1784:15: error: array index 1 is pa=
-st the end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), ca=
-st to '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
-    3    drivers/scsi/aacraid/commsup.c:1347:18: error: array index 4 is pa=
-st the end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), ca=
-st to '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
-    3    drivers/scsi/aacraid/commsup.c:1346:18: error: array index 6 is pa=
-st the end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), ca=
-st to '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
-    3    drivers/scsi/aacraid/commsup.c:1345:18: error: array index 1 is pa=
-st the end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), ca=
-st to '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
-    3    drivers/scsi/aacraid/commsup.c:1330:19: error: array index 4 is pa=
-st the end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), ca=
-st to '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
-    3    drivers/scsi/aacraid/commsup.c:1329:50: error: array index 5 is pa=
-st the end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), ca=
-st to '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
-    3    drivers/scsi/aacraid/commsup.c:1329:19: error: array index 6 is pa=
-st the end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), ca=
-st to '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
-    3    drivers/scsi/aacraid/commsup.c:1328:18: error: array index 1 is pa=
-st the end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), ca=
-st to '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
-    3    drivers/scsi/aacraid/commsup.c:1288:21: error: array index 3 is pa=
-st the end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), ca=
-st to '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
-    3    drivers/scsi/aacraid/commsup.c:1166:17: error: array index 1 is pa=
-st the end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), ca=
-st to '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
-    3    drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c:443:14: error: initi=
-alizer element is not a compile-time constant
-    3    drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c:415:14: error: initi=
-alizer element is not a compile-time constant
-    3    drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c:312:14: error: initi=
-alizer element is not a compile-time constant
-    3    drivers/gpu/drm/i915/display/intel_display.c:6012:3: error: unanno=
-tated fall-through between switch labels [-Werror,-Wimplicit-fallthrough]
-    3    drivers/gpu/drm/amd/amdgpu/mmhub_v1_8.c:704:23: error: variable 'm=
-mhub_v1_8_mmea_err_status_reg' is not needed and will not be emitted [-Werr=
-or,-Wunneeded-internal-declaration]
-    2    drivers/scsi/aacraid/commsup.c:1286:20: error: array index 3 is pa=
-st the end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), ca=
-st to '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
     1    net/bpfilter/main.c:3:10: fatal error: sys/uio.h: No such file or =
 directory
-    1    mm/huge_memory.c:470:2: error: call to '__compiletime_assert_471' =
-declared with 'error' attribute: BUILD_BUG_ON failed: (((16 - 3) * (4 - (2)=
-) + 3)-16) > 10
     1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=
 =3D0x'
     1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=
 =3D0x'
-    1    20: error: array index 3 is past the end of the array (that has ty=
-pe 'u8[1]' (aka 'unsigned char[1]'), cast to '__le32 *' (aka 'unsigned int =
-*')) [-Werror,-Warray-bounds]
-    1    ./../include/linux/compiler_types.h:397:38: error: call to =E2=80=
-=98__compiletime_assert_471=E2=80=99 declared with attribute error: BUILD_B=
-UG_ON failed: (((14 - 3) * (4 - (2)) + 3)-14) > 10
 
 Warnings summary:
 
+    10   <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
     9    vmlinux.o: warning: objtool: iovec_from_user+0x88: call to copy_io=
 vec_from_user.part.0() with UACCESS enabled
     8    vmlinux.o: warning: objtool: __import_iovec+0x147: call to copy_io=
 vec_from_user.part.0() with UACCESS enabled
-    8    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
--Wcpp]
-    6    vmlinux.o: warning: objtool: .altinstr_replacement+0x18c7: redunda=
+    6    vmlinux.o: warning: objtool: .altinstr_replacement+0x17a8: redunda=
 nt UACCESS disable
     2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
 tion failed, symbol will not be versioned.
     1    vmlinux.o: warning: objtool: __import_iovec+0x342: call to copy_io=
 vec_from_user.part.0() with UACCESS enabled
-    1    vmlinux.o: warning: objtool: .altinstr_replacement+0x1ea8: redunda=
+    1    vmlinux.o: warning: objtool: .altinstr_replacement+0x1d1b: redunda=
 nt UACCESS disable
-    1    vmlinux.o: warning: objtool: .altinstr_replacement+0x1a71: redunda=
+    1    vmlinux.o: warning: objtool: .altinstr_replacement+0x195c: redunda=
 nt UACCESS disable
-    1    vmlinux.o: warning: objtool: .altinstr_replacement+0x18db: redunda=
+    1    vmlinux.o: warning: objtool: .altinstr_replacement+0x17b2: redunda=
 nt UACCESS disable
     1    lib/iov_iter.o: warning: objtool: iovec_from_user+0x80: call to co=
 py_iovec_from_user.part.0() with UACCESS enabled
@@ -254,8 +172,6 @@ py_iovec_from_user.part.0() with UACCESS enabled
 py_iovec_from_user.part.0() with UACCESS enabled
     1    lib/iov_iter.o: warning: objtool: .altinstr_replacement+0x1f: redu=
 ndant UACCESS disable
-    1    fs/reiserfs/reiserfs.o: warning: objtool: balance_leaf+0x7747: sta=
-ck state mismatch: cfa1=3D4+368 cfa2=3D4+360
 
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
@@ -281,171 +197,8 @@ ngs, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
-allmodconfig (i386, clang-17) =E2=80=94 FAIL, 16 errors, 0 warnings, 0 sect=
-ion mismatches
-
-Errors:
-    drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c:312:14: error: initialize=
-r element is not a compile-time constant
-    drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c:415:14: error: initialize=
-r element is not a compile-time constant
-    drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c:443:14: error: initialize=
-r element is not a compile-time constant
-    drivers/scsi/aacraid/commsup.c:1166:17: error: array index 1 is past th=
-e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
- '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
-    20: error: array index 3 is past the end of the array (that has type 'u=
-8[1]' (aka 'unsigned char[1]'), cast to '__le32 *' (aka 'unsigned int *')) =
-[-Werror,-Warray-bounds]
-    drivers/scsi/aacraid/commsup.c:1288:21: error: array index 3 is past th=
-e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
- '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
-    drivers/scsi/aacraid/commsup.c:1328:18: error: array index 1 is past th=
-e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
- '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
-    drivers/scsi/aacraid/commsup.c:1329:19: error: array index 6 is past th=
-e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
- '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
-    drivers/scsi/aacraid/commsup.c:1329:50: error: array index 5 is past th=
-e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
- '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
-    drivers/scsi/aacraid/commsup.c:1330:19: error: array index 4 is past th=
-e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
- '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
-    drivers/scsi/aacraid/commsup.c:1345:18: error: array index 1 is past th=
-e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
- '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
-    drivers/scsi/aacraid/commsup.c:1346:18: error: array index 6 is past th=
-e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
- '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
-    drivers/scsi/aacraid/commsup.c:1347:18: error: array index 4 is past th=
-e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
- '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
-    drivers/scsi/aacraid/commsup.c:1784:15: error: array index 1 is past th=
-e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
- '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
-    drivers/scsi/aacraid/commsup.c:1785:15: error: array index 2 is past th=
-e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
- '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
-    drivers/scsi/aacraid/commsup.c:1786:15: error: array index 3 is past th=
-e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
- '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
-
----------------------------------------------------------------------------=
------
-allmodconfig (arm, clang-17) =E2=80=94 FAIL, 17 errors, 0 warnings, 0 secti=
-on mismatches
-
-Errors:
-    drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c:312:14: error: initialize=
-r element is not a compile-time constant
-    drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c:415:14: error: initialize=
-r element is not a compile-time constant
-    drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c:443:14: error: initialize=
-r element is not a compile-time constant
-    drivers/scsi/aacraid/commsup.c:1166:17: error: array index 1 is past th=
-e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
- '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
-    drivers/scsi/aacraid/commsup.c:1286:20: error: array index 3 is past th=
-e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
- '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
-    drivers/scsi/aacraid/commsup.c:1288:21: error: array index 3 is past th=
-e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
- '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
-    drivers/scsi/aacraid/commsup.c:1328:18: error: array index 1 is past th=
-e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
- '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
-    drivers/scsi/aacraid/commsup.c:1329:19: error: array index 6 is past th=
-e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
- '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
-    drivers/scsi/aacraid/commsup.c:1329:50: error: array index 5 is past th=
-e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
- '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
-    drivers/scsi/aacraid/commsup.c:1330:19: error: array index 4 is past th=
-e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
- '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
-    drivers/scsi/aacraid/commsup.c:1345:18: error: array index 1 is past th=
-e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
- '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
-    drivers/scsi/aacraid/commsup.c:1346:18: error: array index 6 is past th=
-e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
- '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
-    drivers/scsi/aacraid/commsup.c:1347:18: error: array index 4 is past th=
-e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
- '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
-    drivers/scsi/aacraid/commsup.c:1784:15: error: array index 1 is past th=
-e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
- '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
-    drivers/scsi/aacraid/commsup.c:1785:15: error: array index 2 is past th=
-e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
- '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
-    drivers/scsi/aacraid/commsup.c:1786:15: error: array index 3 is past th=
-e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
- '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
-    drivers/gpu/drm/amd/amdgpu/mmhub_v1_8.c:704:23: error: variable 'mmhub_=
-v1_8_mmea_err_status_reg' is not needed and will not be emitted [-Werror,-W=
-unneeded-internal-declaration]
-
----------------------------------------------------------------------------=
------
-allmodconfig (x86_64, clang-17) =E2=80=94 FAIL, 18 errors, 1 warning, 0 sec=
-tion mismatches
-
-Errors:
-    drivers/scsi/aacraid/commsup.c:1166:17: error: array index 1 is past th=
-e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
- '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
-    drivers/scsi/aacraid/commsup.c:1286:20: error: array index 3 is past th=
-e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
- '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
-    drivers/scsi/aacraid/commsup.c:1288:21: error: array index 3 is past th=
-e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
- '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
-    drivers/scsi/aacraid/commsup.c:1328:18: error: array index 1 is past th=
-e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
- '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
-    drivers/scsi/aacraid/commsup.c:1329:19: error: array index 6 is past th=
-e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
- '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
-    drivers/scsi/aacraid/commsup.c:1329:50: error: array index 5 is past th=
-e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
- '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
-    drivers/scsi/aacraid/commsup.c:1330:19: error: array index 4 is past th=
-e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
- '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
-    drivers/scsi/aacraid/commsup.c:1345:18: error: array index 1 is past th=
-e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
- '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
-    drivers/scsi/aacraid/commsup.c:1346:18: error: array index 6 is past th=
-e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
- '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
-    drivers/scsi/aacraid/commsup.c:1347:18: error: array index 4 is past th=
-e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
- '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
-    drivers/scsi/aacraid/commsup.c:1784:15: error: array index 1 is past th=
-e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
- '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
-    drivers/scsi/aacraid/commsup.c:1785:15: error: array index 2 is past th=
-e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
- '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
-    drivers/scsi/aacraid/commsup.c:1786:15: error: array index 3 is past th=
-e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
- '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
-    drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c:312:14: error: initialize=
-r element is not a compile-time constant
-    drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c:415:14: error: initialize=
-r element is not a compile-time constant
-    drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c:443:14: error: initialize=
-r element is not a compile-time constant
-    drivers/gpu/drm/amd/amdgpu/mmhub_v1_8.c:704:23: error: variable 'mmhub_=
-v1_8_mmea_err_status_reg' is not needed and will not be emitted [-Werror,-W=
-unneeded-internal-declaration]
-    drivers/gpu/drm/i915/display/intel_display.c:6012:3: error: unannotated=
- fall-through between switch labels [-Werror,-Wimplicit-fallthrough]
-
-Warnings:
-    fs/reiserfs/reiserfs.o: warning: objtool: balance_leaf+0x7747: stack st=
-ate mismatch: cfa1=3D4+368 cfa2=3D4+360
+allmodconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -454,26 +207,13 @@ n mismatches
 
 ---------------------------------------------------------------------------=
 -----
-allmodconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+allnoconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
 mismatches
 
 ---------------------------------------------------------------------------=
 -----
 allnoconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
 ismatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (i386, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
-mismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
 
 ---------------------------------------------------------------------------=
 -----
@@ -490,13 +230,11 @@ vec_from_user.part.0() with UACCESS enabled
 
 ---------------------------------------------------------------------------=
 -----
-allnoconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+allnoconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
 mismatches
 
----------------------------------------------------------------------------=
------
-allnoconfig (x86_64, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
 
 ---------------------------------------------------------------------------=
 -----
@@ -517,11 +255,6 @@ ection mismatches
 -----
 aspeed_g5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
 ection mismatches
-
----------------------------------------------------------------------------=
------
-aspeed_g5_defconfig (arm, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -610,45 +343,6 @@ ion mismatches
 
 ---------------------------------------------------------------------------=
 -----
-cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+arm64-chromebook=
- (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatch=
-es
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-mediatek.flavour.config+arm64-chromeb=
-ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
-tches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (arm, clang-13) =
-=E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (arm, clang-1=
-3) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromeos-amd-stoneyridge.flavour.config+x86-chr=
-omebook (x86_64, clang-13) =E2=80=94 FAIL, 1 error, 0 warnings, 0 section m=
-ismatches
-
-Errors:
-    drivers/gpu/drm/amd/amdgpu/mmhub_v1_8.c:704:23: error: variable 'mmhub_=
-v1_8_mmea_err_status_reg' is not needed and will not be emitted [-Werror,-W=
-unneeded-internal-declaration]
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config+x86-chromebook=
- (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatc=
-hes
-
----------------------------------------------------------------------------=
------
 cu1000-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
  section mismatches
 
@@ -684,43 +378,8 @@ s, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
-defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
----------------------------------------------------------------------------=
------
 defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
 ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_ARM64_16K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 FAIL, 1 erro=
-r, 0 warnings, 0 section mismatches
-
-Errors:
-    ./../include/linux/compiler_types.h:397:38: error: call to =E2=80=98__c=
-ompiletime_assert_471=E2=80=99 declared with attribute error: BUILD_BUG_ON =
-failed: (((14 - 3) * (4 - (2)) + 3)-14) > 10
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, clang-17) =E2=80=94 FAIL, 1 er=
-ror, 0 warnings, 0 section mismatches
-
-Errors:
-    mm/huge_memory.c:470:2: error: call to '__compiletime_assert_471' decla=
-red with 'error' attribute: BUILD_BUG_ON failed: (((16 - 3) * (4 - (2)) + 3=
-)-16) > 10
 
 ---------------------------------------------------------------------------=
 -----
@@ -734,8 +393,13 @@ s, 0 warnings, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
-defconfig+crypto (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
+defconfig+arm64-chromebook+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+arm64-chromebook+videodec (arm64, gcc-10) =E2=80=94 PASS, 0 error=
+s, 0 warnings, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -744,13 +408,18 @@ tion mismatches
 
 ---------------------------------------------------------------------------=
 -----
-defconfig+ima (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
+defconfig+debug (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
 
 ---------------------------------------------------------------------------=
 -----
 defconfig+kselftest (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
  section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+videodec (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -824,15 +493,6 @@ n mismatches
 -----
 hsdk_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
 n mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, clang-17) =E2=80=94 FAIL, 1 error, 0 warnings, 0 sect=
-ion mismatches
-
-Errors:
-    drivers/gpu/drm/i915/display/intel_display.c:6012:3: error: unannotated=
- fall-through between switch labels [-Werror,-Wimplicit-fallthrough]
 
 ---------------------------------------------------------------------------=
 -----
@@ -1028,11 +688,6 @@ ection mismatches
 
 ---------------------------------------------------------------------------=
 -----
-multi_v5_defconfig (arm, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
 multi_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
 ction mismatches
 
@@ -1040,11 +695,6 @@ ction mismatches
 -----
 multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
 ction mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -1068,8 +718,23 @@ multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy (arm, gcc-10) =E2=80=94 PASS, 0=
 
 ---------------------------------------------------------------------------=
 -----
+multi_v7_defconfig+crypto (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
 multi_v7_defconfig+debug (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
 , 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+ima (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -1103,11 +768,6 @@ tion mismatches
 
 ---------------------------------------------------------------------------=
 -----
-nommu_k210_defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
 nommu_k210_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
 0 section mismatches
 
@@ -1115,11 +775,6 @@ nommu_k210_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
 -----
 nommu_k210_sdcard_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
 nings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-nommu_k210_sdcard_defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 w=
-arnings, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -1227,11 +882,6 @@ ion mismatches
 
 ---------------------------------------------------------------------------=
 -----
-rv32_defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
 s3c6400_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
 tion mismatches
 
@@ -1303,6 +953,15 @@ Warnings:
 
 ---------------------------------------------------------------------------=
 -----
+sparc64_defconfig+kselftest (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 2 war=
+nings, 0 section mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
 spear13xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
 ection mismatches
 
@@ -1343,16 +1002,16 @@ smatches
 
 ---------------------------------------------------------------------------=
 -----
-tinyconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
----------------------------------------------------------------------------=
------
 tinyconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section m=
 ismatches
 
 Warnings:
     <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -1406,20 +1065,11 @@ tion mismatches
 
 ---------------------------------------------------------------------------=
 -----
-x86_64_defconfig (x86_64, clang-17) =E2=80=94 FAIL, 1 error, 0 warnings, 0 =
-section mismatches
-
-Errors:
-    drivers/gpu/drm/i915/display/intel_display.c:6012:3: error: unannotated=
- fall-through between switch labels [-Werror,-Wimplicit-fallthrough]
-
----------------------------------------------------------------------------=
------
 x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 s=
 ection mismatches
 
 Warnings:
-    vmlinux.o: warning: objtool: .altinstr_replacement+0x18c7: redundant UA=
+    vmlinux.o: warning: objtool: .altinstr_replacement+0x17a8: redundant UA=
 CCESS disable
     vmlinux.o: warning: objtool: iovec_from_user+0x88: call to copy_iovec_f=
 rom_user.part.0() with UACCESS enabled
@@ -1432,7 +1082,7 @@ x86_64_defconfig+amdgpu (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnin=
 gs, 0 section mismatches
 
 Warnings:
-    vmlinux.o: warning: objtool: .altinstr_replacement+0x18c7: redundant UA=
+    vmlinux.o: warning: objtool: .altinstr_replacement+0x17a8: redundant UA=
 CCESS disable
     vmlinux.o: warning: objtool: iovec_from_user+0x88: call to copy_iovec_f=
 rom_user.part.0() with UACCESS enabled
@@ -1445,7 +1095,7 @@ x86_64_defconfig+crypto (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnin=
 gs, 0 section mismatches
 
 Warnings:
-    vmlinux.o: warning: objtool: .altinstr_replacement+0x18db: redundant UA=
+    vmlinux.o: warning: objtool: .altinstr_replacement+0x17b2: redundant UA=
 CCESS disable
     vmlinux.o: warning: objtool: iovec_from_user+0x88: call to copy_iovec_f=
 rom_user.part.0() with UACCESS enabled
@@ -1458,7 +1108,7 @@ x86_64_defconfig+debug (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 3 warning=
 s, 0 section mismatches
 
 Warnings:
-    vmlinux.o: warning: objtool: .altinstr_replacement+0x1a71: redundant UA=
+    vmlinux.o: warning: objtool: .altinstr_replacement+0x195c: redundant UA=
 CCESS disable
     vmlinux.o: warning: objtool: iovec_from_user+0x88: call to copy_iovec_f=
 rom_user.part.0() with UACCESS enabled
@@ -1471,7 +1121,7 @@ x86_64_defconfig+ima (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings,=
  0 section mismatches
 
 Warnings:
-    vmlinux.o: warning: objtool: .altinstr_replacement+0x18c7: redundant UA=
+    vmlinux.o: warning: objtool: .altinstr_replacement+0x17a8: redundant UA=
 CCESS disable
     vmlinux.o: warning: objtool: iovec_from_user+0x88: call to copy_iovec_f=
 rom_user.part.0() with UACCESS enabled
@@ -1484,7 +1134,7 @@ x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 3 war=
 nings, 0 section mismatches
 
 Warnings:
-    vmlinux.o: warning: objtool: .altinstr_replacement+0x1ea8: redundant UA=
+    vmlinux.o: warning: objtool: .altinstr_replacement+0x1d1b: redundant UA=
 CCESS disable
     vmlinux.o: warning: objtool: iovec_from_user+0x88: call to copy_iovec_f=
 rom_user.part.0() with UACCESS enabled
@@ -1497,7 +1147,7 @@ x86_64_defconfig+x86-chromebook (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, =
 3 warnings, 0 section mismatches
 
 Warnings:
-    vmlinux.o: warning: objtool: .altinstr_replacement+0x18c7: redundant UA=
+    vmlinux.o: warning: objtool: .altinstr_replacement+0x17a8: redundant UA=
 CCESS disable
     vmlinux.o: warning: objtool: iovec_from_user+0x88: call to copy_iovec_f=
 rom_user.part.0() with UACCESS enabled
@@ -1506,16 +1156,11 @@ rom_user.part.0() with UACCESS enabled
 
 ---------------------------------------------------------------------------=
 -----
-x86_64_defconfig+x86-chromebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors=
-, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
 x86_64_defconfig+x86-chromebook+amdgpu (x86_64, gcc-10) =E2=80=94 PASS, 0 e=
 rrors, 3 warnings, 0 section mismatches
 
 Warnings:
-    vmlinux.o: warning: objtool: .altinstr_replacement+0x18c7: redundant UA=
+    vmlinux.o: warning: objtool: .altinstr_replacement+0x17a8: redundant UA=
 CCESS disable
     vmlinux.o: warning: objtool: iovec_from_user+0x88: call to copy_iovec_f=
 rom_user.part.0() with UACCESS enabled
@@ -1528,7 +1173,7 @@ x86_64_defconfig+x86_kvm_guest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 3=
  warnings, 0 section mismatches
 
 Warnings:
-    vmlinux.o: warning: objtool: .altinstr_replacement+0x18c7: redundant UA=
+    vmlinux.o: warning: objtool: .altinstr_replacement+0x17a8: redundant UA=
 CCESS disable
     vmlinux.o: warning: objtool: iovec_from_user+0x88: call to copy_iovec_f=
 rom_user.part.0() with UACCESS enabled

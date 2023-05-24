@@ -2,136 +2,91 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4987D70F721
-	for <lists+linux-next@lfdr.de>; Wed, 24 May 2023 15:02:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D07B70FAA1
+	for <lists+linux-next@lfdr.de>; Wed, 24 May 2023 17:42:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235277AbjEXNCN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 24 May 2023 09:02:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42530 "EHLO
+        id S237199AbjEXPmu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 24 May 2023 11:42:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235017AbjEXNB7 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 24 May 2023 09:01:59 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3BCDE5D;
-        Wed, 24 May 2023 06:01:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=Gs6521OAO55Ps5HZd1+Z4biYP4c4WIEJ9jEhOQwydU0=; b=nO3w9Q7Mr3fqYdBaXMcymquAWx
-        qTQ02SlNsSE+F751/qcyvNknrxZX86mO2fC/2CUosdGtplMnnVxemmNl6u3Uig9rlZOSI1/0hpeGH
-        PengW+/XcNaqjEoDkqIuIJGN9ZUoEWTx9bfemcwrq7NWs98z3TR2OsevWYIW1d47hwhWoIbWFJMN4
-        1eHm4vr89Qcp33EJHItWjxVT5OLJSEguR5yeIq+6wAEJoctOvVKDZOWPO/ZJMJwrA/vkvdI8Kq7m1
-        cYliOmotZ/UWVU7qMNwN6wBwnDZXbs/hWCv44UcihXEc7JlvtduuJu69NAD/8+D+FxZd4GcOgQ0cL
-        l+dbnS+g==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1q1o71-00BDYy-GX; Wed, 24 May 2023 13:01:07 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 151AA3002C5;
-        Wed, 24 May 2023 15:01:05 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id E7DBC20A99318; Wed, 24 May 2023 15:01:04 +0200 (CEST)
-Date:   Wed, 24 May 2023 15:01:04 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>, x86@vger.kernel.org,
-        Borislav Petkov <bp@alien8.de>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        lkft-triage@lists.linaro.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Dan Carpenter <dan.carpenter@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        clang-built-linux <llvm@lists.linux.dev>
-Subject: Re: next: i386-boot: clang-nightly: failed - intermittently - BUG:
- unable to handle page fault for address: 000024c0
-Message-ID: <20230524130104.GR83892@hirez.programming.kicks-ass.net>
-References: <CA+G9fYvhPgoP57ip1cW5TaWJfkbkHA2SZqd5fFoTJ7rDGA138w@mail.gmail.com>
- <CAKwvOdkABkajMqBS=xcHxXUTQGXbTN3tj1GcPqpGgGkmAGLkDA@mail.gmail.com>
+        with ESMTP id S237472AbjEXPm2 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 24 May 2023 11:42:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D12210C2
+        for <linux-next@vger.kernel.org>; Wed, 24 May 2023 08:41:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F40D6348F
+        for <linux-next@vger.kernel.org>; Wed, 24 May 2023 15:39:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45569C433D2;
+        Wed, 24 May 2023 15:39:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684942760;
+        bh=BpCAurSKPwob11gneAgJ8P2mOu9iuo4b658ZEi08zv8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NGWYVZq2A9TMs7NNmp6g9pD/Y0Xd+SJzWwkYWMZHq+GIqf6WokGzg/+ZlC3OPJ5j2
+         0vYBHuouJDtNWXPNfD/6UHFk2aaVUTWd5opuyjsrXcyxnIEB2wazErIwXwBsy4Fk2j
+         fKRBk02FTaOed5Or5jpd0Nm8T+X1W3Etu3jZmSi0c7y73kc2zIucDDdtNctfoLz158
+         AEooe/2s9Fw2MWbogFANbQKK3j1xhm2TPQE1QQxH9obQwncAKQLS7HLWQg0UkvQkdi
+         NyUG5PjiHe3VVd/XVVdn7LGdhjijXq5aHP3Ja+VQyaC0TKfCF3rwklkbCIHWO+2nth
+         5jndca+onEC1g==
+Date:   Wed, 24 May 2023 08:39:18 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        clang-built-linux <llvm@lists.linux.dev>,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        lkft-triage@lists.linaro.org, Arnd Bergmann <arnd@arndb.de>,
+        arun.r.murthy@intel.com, Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>
+Subject: Re: next: clang: x86_64: /intel_display.c:6012:3: error: unannotated
+ fall-through between switch labels [-Werror,-Wimplicit-fallthrough]
+Message-ID: <20230524153918.GA869320@dev-arch.thelio-3990X>
+References: <CA+G9fYv68V3ewK0Qj-syQj7qX-hQr0H1MFL=QFNuDoE_J2Zu-g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAKwvOdkABkajMqBS=xcHxXUTQGXbTN3tj1GcPqpGgGkmAGLkDA@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <CA+G9fYv68V3ewK0Qj-syQj7qX-hQr0H1MFL=QFNuDoE_J2Zu-g@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, May 17, 2023 at 11:11:51AM -0700, Nick Desaulniers wrote:
-> On Wed, May 17, 2023 at 8:21 AM Naresh Kamboju
-> <naresh.kamboju@linaro.org> wrote:
-> >
-> > Linux next-20230517 build with clang nightly for i386 boot fails intermittently.
-> 
-> Keyword: intermittently. That will make tracking this down fun.
-> 
-> Our CI also hit a boot failure on tip/master with the same splat:
-> https://github.com/ClangBuiltLinux/continuous-integration2/actions/runs/4998374271/jobs/8957285746
-> Though the CI pulled down a SHA
-> 0932447780e1f9a43bf68ef7fe3d9b41b46d58fc
-> which looks weird on
-> https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?id=0932447780e1f9a43bf68ef7fe3d9b41b46d58fc
-> >> Notice: this object is not reachable from any branch.
+Hi Naresh,
 
-Github isn't willing to show me content unless I log in or somesuch
-nonsense.
-
-> That this failed in -next and -tip in the same way makes me wonder if
-> something affecting this is coming in via -tip? Maybe the splat looks
-> familiar to x86 folks?
+On Wed, May 24, 2023 at 12:32:24PM +0530, Naresh Kamboju wrote:
+> Linux next-20230523 and next-20230524 the x86_64 and i386 builds failed
+> with clang.
 > 
-> I haven't been able to reproduce locally when my machine is relatively
-> load-less.  If I do a kernel build in the background, I was able to
-> get QEMU to hang, but without any splat. That was using tip/master @
-> f81d8f759e7f.
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 > 
-> Naresh, when you say "intermittent" do you have any data on the
-> relative frequency of this boot failure? (Also, please make sure to
-> use llvm@lists.linux.dev in the future; we moved mailing lists years
-> ago).
+> make --silent --keep-going \
+>   --jobs=8 O=/home/tuxbuild/.cache/tuxmake/builds/1/build ARCH=x86_64 \
+>   SRCARCH=x86 CROSS_COMPILE=x86_64-linux-gnu- \
+>   'HOSTCC=sccache clang' 'CC=sccache clang' \
+>    LLVM=1 LLVM_IAS=1
 > 
-> Looks like our CI report linked above has an additional splat though
-> via apply_alternatives and optimize_nops.
-> 
-> >> [ 0.166742] Code: Unable to access opcode bytes at 0x36.
-> 
-> Peter, that smells like perhaps either:
-> commit b6c881b248ef ("x86/alternative: Complicate optimize_nops() some more")
-> commit 6c480f222128 ("x86/alternative: Rewrite optimize_nops() some")
+> drivers/gpu/drm/i915/display/intel_display.c:6012:3: error:
+> unannotated fall-through between switch labels
+> [-Werror,-Wimplicit-fallthrough]
+>                 case I915_FORMAT_MOD_X_TILED:
+>                 ^
+> drivers/gpu/drm/i915/display/intel_display.c:6012:3: note: insert
+> 'break;' to avoid fall-through
+>                 case I915_FORMAT_MOD_X_TILED:
+>                 ^
+>                 break;
+> 1 error generated.
 
-So I did find me a 'funny' there, but nothing that explains boot fail.
+Thanks for the report, I have sent
+https://lore.kernel.org/20230524-intel_async_flip_check_hw-implicit-fallthrough-v1-1-83de89e376a1@kernel.org/
+for this.
 
-It would think that 'PAUSE' is a 2 byte NOP and replace it with NOP2;
-which is not quite the same thing. The below seems to cure that.
-
-Let me continue poking at things...
-
-diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
-index 93aa95afd005..bb0a7b03e52f 100644
---- a/arch/x86/kernel/alternative.c
-+++ b/arch/x86/kernel/alternative.c
-@@ -159,9 +160,12 @@ void text_poke_early(void *addr, const void *opcode, size_t len);
-  */
- static bool insn_is_nop(struct insn *insn)
- {
--	if (insn->opcode.bytes[0] == 0x90)
-+	/* Anything NOP, but not REP NOP. */
-+	if (insn->opcode.bytes[0] == 0x90 &&
-+	    (!insn->prefixes.nbytes || insn->prefixes.bytes[0] != 0xF3))
- 		return true;
- 
-+	/* NOPL */
- 	if (insn->opcode.bytes[0] == 0x0F && insn->opcode.bytes[1] == 0x1F)
- 		return true;
- 
+Cheers,
+Nathan

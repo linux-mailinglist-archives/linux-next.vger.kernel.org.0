@@ -2,61 +2,68 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08BE570EA30
-	for <lists+linux-next@lfdr.de>; Wed, 24 May 2023 02:22:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04EFE70EA5D
+	for <lists+linux-next@lfdr.de>; Wed, 24 May 2023 02:40:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230323AbjEXAWa (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 23 May 2023 20:22:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42318 "EHLO
+        id S234094AbjEXAk2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 23 May 2023 20:40:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238477AbjEXAWa (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 23 May 2023 20:22:30 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CCB3B5;
-        Tue, 23 May 2023 17:22:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=2t51EpPSkSfdV7Or5z92c4Otgu+QY2DAdl7GPBfnDHM=; b=UEQPNOXxLqLc/MxXbymjcWHTql
-        R8upb9r74csrDh8xLSIbC7nqBZAwlKxSUVJok4dr7kSSUpGkDGaByL+oN9g91cTuccmxc8GNM/xdi
-        zS5odL7nRZ4/KOuc/HonLwKxiM9t7Fz9D9d8ocU8wqg51pbloZ6fjyzBgI5lJbGxBDMPzw4NuvnUz
-        qHIwp/WgL2r32sCih7Z/rrK7iO+uCPvWw6vKCHrGHj8zEs6rl8ncA2TENvtF7yNw1jaIdqEvq4DmF
-        HjJ3NXrmX4YeDpYk/+aW78oIXQD2fJW9j9BzvJ3wl+E97xc8xyq94rmxCbIq+IESOI6Ni2I6eOoDj
-        4uxEhadg==;
-Received: from [2601:1c2:980:9ec0::2764]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1q1cGl-00Btme-1j;
-        Wed, 24 May 2023 00:22:23 +0000
-Message-ID: <e2279988-03b4-9670-6f1c-c360c478b38e@infradead.org>
-Date:   Tue, 23 May 2023 17:22:20 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: linux-next: Tree for May 15 (several RV64 build errors)
-Content-Language: en-US
-To:     Alexandre Ghiti <alex@ghiti.fr>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
+        with ESMTP id S233196AbjEXAk1 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 23 May 2023 20:40:27 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E6A3B5;
+        Tue, 23 May 2023 17:40:22 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1ae3f6e5d70so2888575ad.1;
+        Tue, 23 May 2023 17:40:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684888822; x=1687480822;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=trKRfcDGr+UR7gkMuKtDFEQjYswjXvkOJhL1MG6567A=;
+        b=qbStn/Ad8soPmKFUZjYOVfiADRK+isUmhGEo769hNj+Dqm8xD56T2etNtAQ/y9jbem
+         agqGTIPCNeiOajArZN68eYjtyDnkRGpQFg0Qa1McQ3VxImqIAFXhzvKGx50cHtzQSmEg
+         LcRkGrfZyLOKeLCq+KlvS6g15e9tkO0L5ifVSui/IfPQ4A5U8C+HuKmjsNfd3GAPk/JX
+         FgDpG8TSjrlkmsnIbisL4F9aGmAyskIbIzrNRgNFB9ux3QbLw8bn1Qkd7o3ZrktQI/gS
+         m540qP0deIyN5Qm4aQAX3aFXd749pNF4MdxsfbhfmEKoZ6dHijN7txCCrKJrjJHsLjrD
+         6Wcg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684888822; x=1687480822;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=trKRfcDGr+UR7gkMuKtDFEQjYswjXvkOJhL1MG6567A=;
+        b=gtiYkhqIx1kbNNhjFAr2GHpLXMTj6EiGzWcXuHSbCrFOBok76b/QFFN0/eqk3iYCHd
+         1xFtMc8meYK+qCC5wizuFrqaYC+kWK40lzwGl7zZYFFyGmYfXjEYSEmGRzdEo7na5f7H
+         cUsJhaWRRjSCg6/dbtlPvz2d6nTMUvrfQvHEIbSvrxjUPEjPJBxsVcmS4837pxwplBTj
+         rS+EamRgbXBYgletc3Sv+miwxlJWen68ycyfNrC8eDNQDo2K4CjchdQm+qg1LQnvIyPs
+         xu0IqKeV1ZDAFwrfwRwKxPaG5kaXX0Ne7s4AyrcUBZL/plUmBh9Iu2zeVcUDW6CfxqzT
+         VziA==
+X-Gm-Message-State: AC+VfDyRgFegJhlOhU62hNFBAqtEKjOyz5Sr+ywFr60Um+l20px/zaeO
+        jKTsLDbfq3d8DEsArqa2J5cr7DFxcno=
+X-Google-Smtp-Source: ACHHUZ6j5X8hlybPIWuAdXe98KhefGgHvJ6LKOuRtwDc8JPZhQ1R0Er2bFqzqiqh3/K5fo3AwxGdOA==
+X-Received: by 2002:a17:902:e5c8:b0:1aa:e425:2527 with SMTP id u8-20020a170902e5c800b001aae4252527mr16412547plf.21.1684888821819;
+        Tue, 23 May 2023 17:40:21 -0700 (PDT)
+Received: from google.com ([2620:15c:9d:2:3913:9c00:6a9e:2c95])
+        by smtp.gmail.com with ESMTPSA id m10-20020a170902db0a00b001add653dba2sm7371327plx.108.2023.05.23.17.40.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 May 2023 17:40:20 -0700 (PDT)
+Date:   Tue, 23 May 2023 17:40:18 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Ismael Ferreras Morezuelas <swyterzone@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Conor Dooley <conor@kernel.org>
-References: <20230515141235.0777c631@canb.auug.org.au>
- <54244db6-ff69-4cf8-894c-c3dd2f12df9c@infradead.org>
- <5d894e71-25ad-8ba0-f632-2eec6e017f46@ghiti.fr>
- <ee3bc2ce-5ebe-927e-5b6d-0b9490ef3875@ghiti.fr>
- <9f32e509-95b1-6a5a-aba2-664af4af37a8@infradead.org>
- <c59f9f1f-278c-ac5e-88cd-85b8485f59e3@ghiti.fr>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <c59f9f1f-278c-ac5e-88cd-85b8485f59e3@ghiti.fr>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Subject: Re: linux-next: Fixes tag needs some work in the input-current tree
+Message-ID: <ZG1c8l8uprzkcjBP@google.com>
+References: <20230524081200.1badf8cb@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230524081200.1badf8cb@canb.auug.org.au>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,26 +71,29 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-
-
-On 5/23/23 06:07, Alexandre Ghiti wrote:
+On Wed, May 24, 2023 at 08:12:00AM +1000, Stephen Rothwell wrote:
+> Hi all,
 > 
-> On 23/05/2023 04:28, Randy Dunlap wrote:
->> Hi,
->>
->> On 5/19/23 03:42, Alexandre Ghiti wrote:
->>>>> /opt/crosstool/gcc-12.2.0-nolibc/riscv64-linux/bin/riscv64-linux-ld: section .data LMA [000000000041a000,00000000075bffd7] overlaps section .text LMA [00000000000f09d4,00000000033562ab]
->>>>> /opt/crosstool/gcc-12.2.0-nolibc/riscv64-linux/bin/riscv64-linux-ld: section .init.pi.text LMA [00000000033562ac,0000000003359137] overlaps section .data LMA [000000000041a000,00000000075bffd7]
->>>>
->>>> I'll check this one too which seems to be related to kernel/pi introduction.
->>>
->>> Thanks to Bjorn: this is caused by XIP_KERNEL, which is known to have limited size, hence the overlap, so no fix for this one. Is there a way to exclude this config from randconfig?
->> Does this mean exclude XIP_KERNEL or something else from randconfigs?
+> In commit
 > 
+>   feee70f45686 ("Input: xpad - delete a Razer DeathAdder mouse VID/PID entry")
 > 
-> I meant excluding XIP_KERNEL from randconfigs: it has very strict constraints regarding what can/can't be enabled then it needs human intervention to make sure the error above does not happen. So I would not bother testing this in randconfigs if possible.
+> Fixes tag
+> 
+>   Fixes: f554f619b70 ("Input: xpad - sync device IDs with xboxdrv")
+> 
+> has these problem(s):
+> 
+>   - SHA1 should be at least 12 digits long
+>     This can be fixed for the future by setting core.abbrev to 12 (or
+>     more) or (for git v2.11 or later) just making sure it is not set
+>     (or set to "auto").
 
-I can exclude it from my randconfig builds, but I don't know of a way to exclude it from randconfig builds in general (i.e., for everyone).
+Oops. Oh, well. I do not rewind my for-linus branch unless in extreme
+circumstances, so it will have to stay this way. The tag still resolves
+to the right commit, so not much harm done.
+
+Thanks.
 
 -- 
-~Randy
+Dmitry

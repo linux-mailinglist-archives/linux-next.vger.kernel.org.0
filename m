@@ -2,66 +2,67 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2048A710C49
-	for <lists+linux-next@lfdr.de>; Thu, 25 May 2023 14:45:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E326710C63
+	for <lists+linux-next@lfdr.de>; Thu, 25 May 2023 14:50:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231895AbjEYMpp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 25 May 2023 08:45:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34656 "EHLO
+        id S232045AbjEYMus (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 25 May 2023 08:50:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239813AbjEYMpb (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 25 May 2023 08:45:31 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 649E49B;
-        Thu, 25 May 2023 05:45:30 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id 3f1490d57ef6-b9daef8681fso421114276.1;
-        Thu, 25 May 2023 05:45:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685018729; x=1687610729;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=n2EgvRCmk8HZRlkVe8tT7FrQyjXG54U7wK2DUs1qcNc=;
-        b=b23Z3Orjg0Q3D4S0JZ9BrlYAhLoBpRnvT6ryr0cpcHviF9l3HreHLzfDNqRkM5RAe9
-         +ObZge3mEjxjUXGOdGLuHLDhRlN1HntNmWZFEUaUGCG3lY7qsif3d52s0T0DUOB/knk/
-         oMQ87f1+uypP5JgksMGV7HbkLankLBrsS3Dk52r9VBwCMwgeeF198gvTIK6GMGuEIOEf
-         rIXQkeEbiwuR4/g1ATr22+X2W10YGbV2TMOVLC9XHNT8syg1JhjrFbT3QWfHHzriRMW/
-         cxF+dUyuG4rDIS+EQTrFTtT8MqqVKuGhq/DP4QkxWwf7zFMltlpDmEHSpdMIdOJXSGqb
-         YNVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685018729; x=1687610729;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=n2EgvRCmk8HZRlkVe8tT7FrQyjXG54U7wK2DUs1qcNc=;
-        b=IQ8G9FVufwviavsRaFdKqNpKeNT0LsIRiUTmfdNkF4e/N2MKTP0GZe1g93lVT5Tjh0
-         hOG4q+7eD/mV02ZmGLCdM4X3p//8gVOx13MsIhLNTHjVG7w82MN5oT7+jn+XqVsqLPWv
-         7+ieZ0SfG+/mnh43B2DqrYAIdF1V1RMhNoR5bPpAxEGHT7SKusl05jQH4SuhWvSbLldI
-         MgczbFRWomQAwzZvnYQkv5tjZbW5LG90Rckat8kpjMYtn3t9mEt7ad/GxGvxId959oh5
-         pFrgnzgnkqJ8EFVRjvDWW2ITfKUOzymBymcKQ2fkYOCLDg3xD/Dr2hl2vfbXMYAlyA8Y
-         Uy3Q==
-X-Gm-Message-State: AC+VfDxqEbs8RLfff9sf9ZxPZ4W8o5wj7oUcKKO4Ltgocxfi3EaXtwUC
-        chxbrNZOmhLGsTgVKuNrr19BdY7/j8XZTcL7321NIqiXYSc=
-X-Google-Smtp-Source: ACHHUZ6q+zm+eX5tov55de23ywRnl2eTWPeT6sRnqICONAy/ywfn/3+IVWHMnoT5yYdrmtVEFkmAyyfdZd9LLFjS5T4=
-X-Received: by 2002:a0d:cc81:0:b0:561:b783:fb76 with SMTP id
- o123-20020a0dcc81000000b00561b783fb76mr20669529ywd.51.1685018729593; Thu, 25
- May 2023 05:45:29 -0700 (PDT)
+        with ESMTP id S230464AbjEYMur (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 25 May 2023 08:50:47 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0423812F;
+        Thu, 25 May 2023 05:50:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1685019046; x=1716555046;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=gnIghBiDVeI92f1OSI9YGrzltj/g25Nt66G/3GQMoc4=;
+  b=vYwovre1ftkpFRKK2ZZBnGvToyg8r7ZW6e7TCosV6ERHgbL8brt2LTu4
+   dhWRcLqGdA9ctjBo+ZxHJ1Qx9cYM8bHAyUtJH6hjZCdO6DgSUXI19m7bF
+   ORCcU9SdvVX9vXxVQbmUmSUNdPCSvLSk9zhxSl6OscmhOuz5U5Ym55pJU
+   r3X2DEm4xekOdwxZ9Z7zRHDkscM9SFsN5f7zXdRvZHixnuDV9P3vjHzGh
+   iYocbt4u+RKOgBShv2OyuNTPD65gm/4fLI9bBAPlGM2o+q4nxDuQbUFS6
+   UjMpsPN7thqgAC7aiDyw+S1o6Bv0a3HtZ1Ydx1znBgttyEasGNCQ7qLH0
+   A==;
+X-IronPort-AV: E=Sophos;i="6.00,191,1681196400"; 
+   d="asc'?scan'208";a="215444870"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 25 May 2023 05:50:45 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 25 May 2023 05:50:44 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Thu, 25 May 2023 05:50:42 -0700
+Date:   Thu, 25 May 2023 13:50:19 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Palmer Dabbelt <palmer@dabbelt.com>
+CC:     Conor Dooley <conor@kernel.org>, <rdunlap@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>, <alex@ghiti.fr>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        <linux-next@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        <aou@eecs.berkeley.edu>, <linux-riscv@lists.infradead.org>,
+        <vitaly.wool@konsulko.com>
+Subject: Re: linux-next: Tree for May 15 (several RV64 build errors)
+Message-ID: <20230525-scoff-eldest-57ec643005dc@wendy>
+References: <20230524-scalping-number-63ec10c1f7bf@spud>
+ <mhng-29a35d51-8791-449e-96f6-a7faf77f3f36@palmer-ri-x1c9a>
 MIME-Version: 1.0
-References: <CADJHv_ujo+QUE7f420t4XACGw4RvVpckKSJcJ_9_Z0b2gdmr+g@mail.gmail.com>
- <20230525120402.GA6281@lst.de>
-In-Reply-To: <20230525120402.GA6281@lst.de>
-From:   Murphy Zhou <jencce.kernel@gmail.com>
-Date:   Thu, 25 May 2023 20:45:18 +0800
-Message-ID: <CADJHv_u7pV_g5DeNBjQKPXv4tfSg6Rc9FXjKD5F+ioHX6jrVdg@mail.gmail.com>
-Subject: Re: your mail
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Linux-Next <linux-next@vger.kernel.org>,
-        linux-xfs <linux-xfs@vger.kernel.org>, akpm@linux-foundation.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="GA19nHWYt1Z7wyOt"
+Content-Disposition: inline
+In-Reply-To: <mhng-29a35d51-8791-449e-96f6-a7faf77f3f36@palmer-ri-x1c9a>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,26 +70,49 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, May 25, 2023 at 8:04=E2=80=AFPM Christoph Hellwig <hch@lst.de> wrot=
-e:
->
-> On Thu, May 25, 2023 at 08:01:22PM +0800, Murphy Zhou wrote:
-> > Hi Christoph,
-> >
-> > The linux-next tree, since the next-20230522 tag, LTP/writev07[1]
-> > starts to fail on xfs, not on other fs. It was pass on the previous
-> > tag next-20230519.
-> >
-> > After those 2 commits reverted on the top of 0522 tree, it passed.
-> >
-> >     iomap: update ki_pos in iomap_file_buffered_write
-> >     iomap: assign current->backing_dev_info in iomap_file_buffered_writ=
-e
-> >
-> > (the second one was reverted because the first one depends on it)
->
-> Yes, they are known broken.  There has been a v2 on the list already,
-> which still has issues for fuse, so there will be a v3.
+--GA19nHWYt1Z7wyOt
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Great! Thank you.
->
+On Wed, May 24, 2023 at 04:11:05PM -0700, Palmer Dabbelt wrote:
+> On Wed, 24 May 2023 15:49:41 PDT (-0700), Conor Dooley wrote:
+> > On Wed, May 24, 2023 at 03:41:15PM -0700, Randy Dunlap wrote:
+
+> > > XIP_KERNEL already has "depends on !COMPILE_TEST", since April of 202=
+1.
+> >=20
+> > Half of me wants to say just remove XIP_KERNEL entirely. Or make it
+> > depend on BROKEN, since noone seems to actually test it and I don't
+> > think we even know if it works right now?
+>=20
+> Ya, let's do it.  If it's broken and nobody has said anything but
+> randconfig, then probably nobody's using it.  Let's mark it as broken or
+> deprecated or whatever and then see if anyone complains.
+
+Apart from being able to generate kernels that are broken (IOW this
+randconfig), when we changed the dtb back to being in the fix, we
+removed some special case XIP_KERNEL stuff (that's commit f1581626071c
+("riscv: Do not set initial_boot_params to the linear address of the
+dtb")) where Alex didn't know for sure whether it was safe to do.
+
+
+Vexriscv (which is Myrtle I think) & Vitaly Wool both have an interest
+in it. I dunno Myrtle's email, but I've CCed Vitaly. Maybe someone can
+at least test the thing :)
+
+Cheers,
+Conor.
+
+--GA19nHWYt1Z7wyOt
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZG9ZiwAKCRB4tDGHoIJi
+0uTYAQD75o4X0KcjEEibuYRBtbJxLrzul579rcG5gj7RbbR/WQEAyRAKttZ1DLiQ
+bjZFN8t3FSiE3wAGS14B7QIwTxW+mgE=
+=b8Nx
+-----END PGP SIGNATURE-----
+
+--GA19nHWYt1Z7wyOt--

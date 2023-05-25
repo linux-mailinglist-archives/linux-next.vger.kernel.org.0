@@ -2,91 +2,117 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C54D710D77
-	for <lists+linux-next@lfdr.de>; Thu, 25 May 2023 15:42:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBC16711128
+	for <lists+linux-next@lfdr.de>; Thu, 25 May 2023 18:41:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241225AbjEYNmN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 25 May 2023 09:42:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58830 "EHLO
+        id S233816AbjEYQl2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 25 May 2023 12:41:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241222AbjEYNmM (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 25 May 2023 09:42:12 -0400
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0E7C191
-        for <linux-next@vger.kernel.org>; Thu, 25 May 2023 06:42:10 -0700 (PDT)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-55db055b412so8192077b3.0
-        for <linux-next@vger.kernel.org>; Thu, 25 May 2023 06:42:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685022130; x=1687614130;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rnG6Y0IkjRC+xsIGYgvUWotRP5vSWqfQin1m7Vqzl+Q=;
-        b=A0gGlkaoUyC51HiKT+sCwopfPgRLO/zbYFHsZREc34UN5l0U50VA2C7WbPqQdRNmiw
-         dR+UZ8Ar2aT5oRBt+f1Xqy4YU/brDH4AGJrRfcEzQUI6Hf1hBjxupWv9xzQ50XCZfV1d
-         F+91EwWiCl+OtRywLSvbmMXJMLe3C+wmPz98ed65lTI+1ISXBDQ9707JhewqqrS+P8RE
-         0P0ceE4d0A/u4GjmH2VgTs1J/+TvHQ7pi78MO3dENtkWAe1GKtX0oAfXw3eBZC27dBwu
-         PQhKTGaaY2rhgatuNqBRJam5kp6fNt9jBKPBA1vgnrAtEKvjJ8XZ2HTrUqLE2CbEl9M0
-         ajnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685022130; x=1687614130;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rnG6Y0IkjRC+xsIGYgvUWotRP5vSWqfQin1m7Vqzl+Q=;
-        b=Y0MHr7qO9xtcywHxSyQJjhwJb2zf80l3nE5SwC+UADRGhAgkKgx1fvPE9VUFa2DoqE
-         NTpR/TQnCvcUcn+IFVvmvpqX9UsU992Atcaa/cOhPtNPSkNnyKcMZxrpAeshgv53DTmU
-         F/lwFshiA/m2OM+e7yBsDYu7lqF+jZlbEfIY/taQ2v9pUhELsqBc/BVV/gtSNYtN8Elo
-         gE7HUpwxxpt6cBpzhJwcIRqx14JBscPfDELeLvrymV3eDXHYFCQboVnkyX67GvHUCp/Q
-         JznqWLwwLQ4OnneCNYu3mDkCmjygeBHTcNS5PDVhZ5Xb6L4nBAPwdDrXa2M3gK3fOjlI
-         jI/g==
-X-Gm-Message-State: AC+VfDw8GfdIJNCr9RSyBGwWntlZAm/ZCgE3ExBFbXXQ9Q0aAj7d/8yi
-        49oVsb0F+bZ+7Pk5+ge/+U/KF9EYGWYvTK8+1/CbjA==
-X-Google-Smtp-Source: ACHHUZ6BTIEaLVAcq9ramx4EpoO0jRq+5+ZKW8MlnCM75osqLzXGJ6qlJNZHHoFN2nqQOfZeKTBa4Upd84pA3+wFQ/s=
-X-Received: by 2002:a81:a1c6:0:b0:561:89f1:6bb with SMTP id
- y189-20020a81a1c6000000b0056189f106bbmr3129173ywg.6.1685022130027; Thu, 25
- May 2023 06:42:10 -0700 (PDT)
-MIME-Version: 1.0
+        with ESMTP id S233274AbjEYQl2 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 25 May 2023 12:41:28 -0400
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AA4A97;
+        Thu, 25 May 2023 09:41:26 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id B3152320091A;
+        Thu, 25 May 2023 12:41:25 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Thu, 25 May 2023 12:41:26 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm3; t=
+        1685032885; x=1685119285; bh=Rb6sOXU+wJaOoqht5Pzr74z+sqHL7zh/zzB
+        TEW0T9PM=; b=xNB2En33usxQ0DXIFHajxHMW8fPE+2WB1XwDS0owgT7zl7cRT7N
+        5ocm9J2NBQEhvBYoNIJ1km9ioVvx2xIqyAhCQ6QoUD/uQwpqCP1+30iCHF8UcBKZ
+        AP769gF7yN0X316nrEnbq5sRcjgqUNMFXLwFA7WruiW8v13/T+p+Z17eYa23leMS
+        mgfc0/fDcdI3wQSYf0VDDVnbscisxut8LzQ86Q4EMfhkoLygT1s7t7FQg1w0zgM9
+        E+v1dOaQ/5maBbUQj/DhILhZVk/NuP//Verc39YdAETMSenfs8C65kLeI3g0LSu5
+        KjtqAq5d1GNX2jvYOUkkphQ3af5rO2pyUCw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+        1685032885; x=1685119285; bh=Rb6sOXU+wJaOoqht5Pzr74z+sqHL7zh/zzB
+        TEW0T9PM=; b=YXjCkkMxU02kQE4IYm0d0n08AsSYyGk/dw0DW+R6LRoeKOB/V53
+        rBQZzLCshydXNEzHkCLQtnzueKrkgbiWNC6hOvgTPVTbxnb3roN7v+wEpYAgixar
+        HfSh6+UZ3fX+LgmWlMSK4trzneY9nz6J/tfykdLlS9lmCHp58qeDDQB0VR4xV+WD
+        PUEmDHbg8ixe3K8B1Ra74540IAlADl1wTGrt9Y8pmgqnmEjZubd57EED4cjXedjM
+        dpKMHNdLaXjrV/UR/KQFaorgiPe+SKUzhpM6vLZGEfxg0EhXerM3CwJX6AQyqG3h
+        w25xR8poPnUDeeNT6jfQPV15uGADWhfF4tw==
+X-ME-Sender: <xms:tI9vZLVbKw5rIIzjD7CRI3ykq8Ktp81t2eqenFoJ9EsLxsK-FO3pHg>
+    <xme:tI9vZDnGrMUJ5x9tx8vHuqKeZHdeFEolXUdS91i5rPpgzHwGxQsaz16wowGsnz_Nj
+    lOdhTLnkeTvmpGa_uo>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeejjedguddtfecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedf
+    tehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrf
+    grthhtvghrnhepgeefjeehvdelvdffieejieejiedvvdfhleeivdelveehjeelteegudek
+    tdfgjeevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    eprghrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:tI9vZHb0k4ZFVOiBd5UDa1oVRLNhyPOju9pM8Yni3drcctwjCv_lmQ>
+    <xmx:tI9vZGWGTDB-N-ocKhOK2D5AiPVI_gYSApI4GUC82jagpUmJYV4qpg>
+    <xmx:tI9vZFm7swgByX-XykfO-0id1cd7sqYMMUFKekPdqZIB6GvgtZFkuQ>
+    <xmx:tY9vZKx6L9hWAaYEmdi9Zw-e330srY8DpP5U1U3qCXYvKlxIV39hQQ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 02493B60086; Thu, 25 May 2023 12:41:23 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-441-ga3ab13cd6d-fm-20230517.001-ga3ab13cd
+Mime-Version: 1.0
+Message-Id: <1b757588-66cc-4946-a9fb-a2a88c5c54cf@app.fastmail.com>
+In-Reply-To: <CACRpkdYUPmaBWDwH_ARHp-bFtpML3aShd_mKBBq+ndQATGEJjQ@mail.gmail.com>
 References: <20230525092202.78a1fb01@canb.auug.org.au>
-In-Reply-To: <20230525092202.78a1fb01@canb.auug.org.au>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 25 May 2023 15:41:58 +0200
-Message-ID: <CACRpkdYUPmaBWDwH_ARHp-bFtpML3aShd_mKBBq+ndQATGEJjQ@mail.gmail.com>
+ <CACRpkdYUPmaBWDwH_ARHp-bFtpML3aShd_mKBBq+ndQATGEJjQ@mail.gmail.com>
+Date:   Thu, 25 May 2023 18:41:03 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Linus Walleij" <linus.walleij@linaro.org>,
+        "Stephen Rothwell" <sfr@canb.auug.org.au>
+Cc:     "Will Deacon" <will@kernel.org>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        linux-next <linux-next@vger.kernel.org>
 Subject: Re: linux-next: duplicate patches in the asm-generic tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Will Deacon <will@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain;charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, May 25, 2023 at 1:22=E2=80=AFAM Stephen Rothwell <sfr@canb.auug.org=
-.au> wrote:
+On Thu, May 25, 2023, at 15:41, Linus Walleij wrote:
+> On Thu, May 25, 2023 at 1:22=E2=80=AFAM Stephen Rothwell <sfr@canb.auu=
+g.org.au> wrote:
+>
+>> The following commits are also in Linus Torvalds' tree as different
+>> commits (but the same patches):
+>>
+>>   b1e7601203a8 ("arm64: vdso: Pass (void *) to virt_to_page()")
+>>
+>> This is commit
+>>
+>>   b0abde80620f ("arm64: vdso: Pass (void *) to virt_to_page()")
+>>
+>> in Linus' tree.
+>
+> Aha Catalin ACKed it and Will picked it up, perhaps Arnd can drop it f=
+rom
+> his tree, albeit it is not a disaster, I am surprised this was the
+> biggest fallout
+> we've seen of those patches.
 
-> The following commits are also in Linus Torvalds' tree as different
-> commits (but the same patches):
->
->   b1e7601203a8 ("arm64: vdso: Pass (void *) to virt_to_page()")
->
-> This is commit
->
->   b0abde80620f ("arm64: vdso: Pass (void *) to virt_to_page()")
->
-> in Linus' tree.
+I can't easily drop it without undoing the merge from your branch.
 
-Aha Catalin ACKed it and Will picked it up, perhaps Arnd can drop it from
-his tree, albeit it is not a disaster, I am surprised this was the
-biggest fallout
-we've seen of those patches.
+Maybe you can just rebase your branch on top of -rc2 and send
+a new pull request. That should automatically drop the duplicate
+patch.
 
-Yours,
-Linus Walleij
+    Arnd

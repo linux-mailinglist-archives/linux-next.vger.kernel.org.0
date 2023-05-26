@@ -2,92 +2,119 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CDBA71214E
-	for <lists+linux-next@lfdr.de>; Fri, 26 May 2023 09:42:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EAFF7122AA
+	for <lists+linux-next@lfdr.de>; Fri, 26 May 2023 10:51:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242276AbjEZHmH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 26 May 2023 03:42:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38978 "EHLO
+        id S242802AbjEZIvA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 26 May 2023 04:51:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236934AbjEZHmG (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 26 May 2023 03:42:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C546B6;
-        Fri, 26 May 2023 00:42:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1DB7763F38;
-        Fri, 26 May 2023 07:42:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B414C433EF;
-        Fri, 26 May 2023 07:42:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685086924;
-        bh=CGmOzSnToxEh6t7Vd3qUTrp6JrJzLGRbWucQIhkrDL8=;
-        h=Date:Subject:To:References:From:In-Reply-To:From;
-        b=ZhdEgCsQ+tY/Sauzqi/d9RfxFM0MM60I/mzfPYrhlMTCG1E9gdn2dz673uQ7yrBzm
-         BdZRNjd7RtpjBERFAVLi7NCEPEL3IcL1Br2tCXmsk5R2PPM10wCJ0NZxi8JJTo3n/o
-         SDtVJ2prsrbE75UtWNF04q0WfO9zvRV4S5UAHl/wPtlH+CdGlkCsv8yxQCnkAjSyqm
-         c1fP4OcYewPYdc47Bfmi5xqY0k4ON8pugMkWrldJjYAbQz9JnPyDZl3Y38wB6SQ8wX
-         WE+79MqdkyvLVGPJpj2YJ7bEnFM+WvqovN0NH06M4C8vWJeB2DCa19Z+dpyAoa3DEc
-         AOMvTYRiBKUVg==
-Message-ID: <97ffe91e-bb31-cceb-fb7e-8f7a2252734f@kernel.org>
-Date:   Fri, 26 May 2023 16:42:02 +0900
+        with ESMTP id S242749AbjEZIu7 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 26 May 2023 04:50:59 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09F84135;
+        Fri, 26 May 2023 01:50:58 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-510b4e488e4so759542a12.3;
+        Fri, 26 May 2023 01:50:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685091056; x=1687683056;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=EUvWLoLJ7ecOqnvXeIvpdjcIeOwM/KgQz5/8pA9G8eQ=;
+        b=n84NiyNjWL1xHP6179rB/rjlflDf5X2HBFQ63nbtEgqvmk9lOoFy98AwhuuOGcGLLZ
+         sRC0lvwHR8T9j1pFRXiRzeIW7cJCYhJZUvJaYfEw7/ugrQzqpBIKVjvmZq2KsOAIbteM
+         QSD/sC+dRhzssEexVYJLwthLIZIMQlgKerWfGQIXgVsmMgL+CFd//j+mdPSTMylWg/mN
+         Z5SyA7v208OHyaDuH2s3qmioliEg5QOLjHPFbD154gszPG7OBzh4X0kccRieqw+uf/VF
+         XapyyMNJWhFSON2li3VQjCVZAlLiDtmKktG3bJbh0e+81e1YPcnOB65bU4pYFbDnq+ED
+         FN9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685091056; x=1687683056;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EUvWLoLJ7ecOqnvXeIvpdjcIeOwM/KgQz5/8pA9G8eQ=;
+        b=WPm+JRA9n/pY0RefVd8eXAHXZsiL08MfEKW34WUzAhAIp0kGDIseVeZB3X0foHrnLk
+         F2OjAtwnJRUobVqHckvLPvjedar2recsk7DAqvmXwYI2SzOtYwiGC2bGDrijZwbwMaED
+         ZEmmft4AclV//DJes4pat04pmeQsK5pVsFXOj58CwvihHDcmOoL3/Lh7YO1XrcbtLRIN
+         u12TUcs08xOTBWiguxshCo+R9wLwwcSHDAqlPG5gKbqpOqEF2bFRDEukLVpLsYP5z4mx
+         lTKHby9HcXHig/buGUZoZAYPVmCoreYW+ry5shHwYr7qskiazqrhCfljsBzt4X/Ph8Ju
+         s9aA==
+X-Gm-Message-State: AC+VfDxnLDKL/1klitX+TPs+itzQAJdMMgufnV6vphyOUYbFvo+/5srn
+        NeSteESRlv8Otn997FcXyOo=
+X-Google-Smtp-Source: ACHHUZ5vLWV4BA5GbUd7uTb6R3TNt35h/LrNw5FK47z6XTA7FhoAMdRuoTd1JbFzYtOHZbAJyUOY9A==
+X-Received: by 2002:a17:907:7e81:b0:959:6fb2:1c3b with SMTP id qb1-20020a1709077e8100b009596fb21c3bmr1366954ejc.39.1685091055982;
+        Fri, 26 May 2023 01:50:55 -0700 (PDT)
+Received: from gmail.com (1F2EF43E.nat.pool.telekom.hu. [31.46.244.62])
+        by smtp.gmail.com with ESMTPSA id e14-20020a50ec8e000000b00509d1c6dcefsm1347783edr.13.2023.05.26.01.50.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 May 2023 01:50:55 -0700 (PDT)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Fri, 26 May 2023 10:50:50 +0200
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        PowerPC <linuxppc-dev@lists.ozlabs.org>
+Subject: Re: linux-next: boot failure after merge of the tip tree
+Message-ID: <ZHBy6hkfQze53pOS@gmail.com>
+References: <20230524154459.48cda184@canb.auug.org.au>
+ <20230524093454.GI4253@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: ioprio_set can take 8 as the PROCESS CLASS_BE ioprio value
-Content-Language: en-US
-To:     Murphy Zhou <jencce.kernel@gmail.com>, linux-block@vger.kernel.org,
-        Linux-Next <linux-next@vger.kernel.org>
-References: <CADJHv_sedgbfxvZkKHjC6quKvxR+E54noFCVF93MvhyK6bwRoA@mail.gmail.com>
-From:   Damien Le Moal <dlemoal@kernel.org>
-Organization: Western Digital Research
-In-Reply-To: <CADJHv_sedgbfxvZkKHjC6quKvxR+E54noFCVF93MvhyK6bwRoA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230524093454.GI4253@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 5/26/23 16:27, Murphy Zhou wrote:
-> Hi Damien,
-> 
-> Since these commits:
-> 
->   scsi: block: Introduce ioprio hints
->   scsi: block: ioprio: Clean up interface definition
-> 
-> go into linux-next tree, ioprio_set can take the value of 8
-> as the PROCESS CLASS_BE ioprio parameter, returning
-> success but actually it is setting to 0 due to the mask roundup.
-> 
-> The LTP test case ioprio_set03[1] covers this boundary value
-> testing, which starts to fail since then.
-> 
-> This does not look as expected. Could you help to take a look?
 
-Before the patches, the ioprio level of 8 could indeed be set, but that was
-actually totally meaningless since the kernel components that use the priority
-level all are limited to the range [0..7]. And why the level value 8 could be
-seen, the effective level would have been 0. So at least, with the changes, we
-are not lying to the user...
+* Peter Zijlstra <peterz@infradead.org> wrote:
 
-I am not sure what this ioprio_set03 test is trying to check.
-
+> On Wed, May 24, 2023 at 03:44:59PM +1000, Stephen Rothwell wrote:
+> > Hi all,
+> > 
+> > After merging the tip tree, today's linux-next build (powerpc
+> > pseries_le_defconfig) failed to boot like this:
+> > 
+> >  Built 1 zonelists, mobility grouping on.  Total pages: 32736
+> >  Policy zone: Normal
+> >  mem auto-init: stack:all(zero), heap alloc:off, heap free:off
+> >  Memory: 2027392K/2097152K available (17984K kernel code, 3328K rwdata, 14784K rodata, 6080K init, 1671K bss, 69760K reserved, 0K cma-reserved)
+> > 
+> > *crickets*
+> > 
+> > Bisected to commit
+> > 
+> >   f4ab23558310 ("slub: Replace cmpxchg_double()")
+> > 
+> > I have reverted that commit (and the following one) for today.
 > 
-> Thanks,
-> Murphy
+> Sorry about that; turns out I forgot to test the case where cmpxchg128
+> wasn't available.
 > 
-> [1] https://github.com/linux-test-project/ltp/blob/master/testcases/kernel/syscalls/ioprio/ioprio_set03.c
+> Please see:
+> 
+>   https://lkml.kernel.org/r/20230524093246.GP83892@hirez.programming.kicks-ass.net
+> 
+> As stated there, I'm going to zap tip/locking/core for a few days and
+> let this fixed version run through the robots again before re-instating
+> it.
 
--- 
-Damien Le Moal
-Western Digital Research
+Note to -next, this should now be resolved in the tip:auto-latest branch.
 
+Thanks,
+
+	Ingo

@@ -2,59 +2,53 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 433BB7120EF
-	for <lists+linux-next@lfdr.de>; Fri, 26 May 2023 09:28:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CDBA71214E
+	for <lists+linux-next@lfdr.de>; Fri, 26 May 2023 09:42:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229790AbjEZH2Q (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 26 May 2023 03:28:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59078 "EHLO
+        id S242276AbjEZHmH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 26 May 2023 03:42:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236862AbjEZH2P (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 26 May 2023 03:28:15 -0400
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3859AE41;
-        Fri, 26 May 2023 00:28:01 -0700 (PDT)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-55db055b412so21384077b3.0;
-        Fri, 26 May 2023 00:28:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685086080; x=1687678080;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=2plEDbI3vkoMsRT5+764kLb9XDgxtH9eFEV6HjsgfWw=;
-        b=o51PS8nnGEEJG5PLVAfYXTb00/179VJM7iBDqOIHdSlXt0TDQCtRN9+wCGjTaufU2+
-         pZfA1QfEv1QdYm8tTZ8qk8KyA7H/of/brRToTess6UfBDEuclOQ4f92qCB+/aPKiNuTS
-         pfnD0eFtfucfxVGvf1FYdBtVpET/D7URlw5iPgPqPBr357gkrosUHuNu5rBUdD0yXvW/
-         TyBe5L8PuFybrumrwiM56JhcfK/zVqmF520HNVIlc1SVDmYEYjdZOFJ6EFBYl/VxeWOB
-         z6dq8zN69ckc5KjFtcpi85g4pys1JdzZ7Fhsz6K5Ca1gwIdU2JRtnmusR7fBHL0hwMXo
-         c9Qw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685086080; x=1687678080;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2plEDbI3vkoMsRT5+764kLb9XDgxtH9eFEV6HjsgfWw=;
-        b=JNnFcYvmB+/iMlr3CfGCiTFAPsHEQLchjcMmSVwZallsf26Wm2vI3aGPJE8Sga6B6j
-         F/PmM5EtArYzaGxsktohm4YENO2XoZ/NyCAsGOiUumZFUdo92//LJooCy7GWnT8rhGqv
-         fTH2OLiyAVh1oO8BPJoqQz5pU8aMXfFXyPgnJ2ySL9A0FP3Uk+nZwsj2E3jpwm3paulI
-         97cSAa1uDyp7yKSlivve3mVi22NruuDkXeUxZsl7iPrfkf1wkepXsP4SAm9lFtq7zciW
-         Qby6E/rgNmx+IEKb+idmFeCmv6H/pV4MUPj3yMXFU8rclskVImoyPSwbrBkK1lLx2rIj
-         mpxw==
-X-Gm-Message-State: AC+VfDzQ90pjpF5AOUzDVrrEQwTUxMc0CgYQKh4LuAnADSTbPk6k5/ZR
-        FPC89FG6qQlhnpTooDUVlYreAOb+LKMBCfkzsniEf/QDU0K3lw==
-X-Google-Smtp-Source: ACHHUZ4n/oNX51z9bZ/362uqmSNt11smJr5LsdBAPXc9+Y+JkilYaWcZI+BOZNiN8IfuwR6GR0R++WsVTqB13SMB8jI=
-X-Received: by 2002:a81:a14a:0:b0:564:c747:64f4 with SMTP id
- y71-20020a81a14a000000b00564c74764f4mr824579ywg.11.1685086080110; Fri, 26 May
- 2023 00:28:00 -0700 (PDT)
+        with ESMTP id S236934AbjEZHmG (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 26 May 2023 03:42:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C546B6;
+        Fri, 26 May 2023 00:42:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1DB7763F38;
+        Fri, 26 May 2023 07:42:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B414C433EF;
+        Fri, 26 May 2023 07:42:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685086924;
+        bh=CGmOzSnToxEh6t7Vd3qUTrp6JrJzLGRbWucQIhkrDL8=;
+        h=Date:Subject:To:References:From:In-Reply-To:From;
+        b=ZhdEgCsQ+tY/Sauzqi/d9RfxFM0MM60I/mzfPYrhlMTCG1E9gdn2dz673uQ7yrBzm
+         BdZRNjd7RtpjBERFAVLi7NCEPEL3IcL1Br2tCXmsk5R2PPM10wCJ0NZxi8JJTo3n/o
+         SDtVJ2prsrbE75UtWNF04q0WfO9zvRV4S5UAHl/wPtlH+CdGlkCsv8yxQCnkAjSyqm
+         c1fP4OcYewPYdc47Bfmi5xqY0k4ON8pugMkWrldJjYAbQz9JnPyDZl3Y38wB6SQ8wX
+         WE+79MqdkyvLVGPJpj2YJ7bEnFM+WvqovN0NH06M4C8vWJeB2DCa19Z+dpyAoa3DEc
+         AOMvTYRiBKUVg==
+Message-ID: <97ffe91e-bb31-cceb-fb7e-8f7a2252734f@kernel.org>
+Date:   Fri, 26 May 2023 16:42:02 +0900
 MIME-Version: 1.0
-From:   Murphy Zhou <jencce.kernel@gmail.com>
-Date:   Fri, 26 May 2023 15:27:48 +0800
-Message-ID: <CADJHv_sedgbfxvZkKHjC6quKvxR+E54noFCVF93MvhyK6bwRoA@mail.gmail.com>
-Subject: ioprio_set can take 8 as the PROCESS CLASS_BE ioprio value
-To:     Damien Le Moal <dlemoal@kernel.org>, linux-block@vger.kernel.org,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: ioprio_set can take 8 as the PROCESS CLASS_BE ioprio value
+Content-Language: en-US
+To:     Murphy Zhou <jencce.kernel@gmail.com>, linux-block@vger.kernel.org,
         Linux-Next <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <CADJHv_sedgbfxvZkKHjC6quKvxR+E54noFCVF93MvhyK6bwRoA@mail.gmail.com>
+From:   Damien Le Moal <dlemoal@kernel.org>
+Organization: Western Digital Research
+In-Reply-To: <CADJHv_sedgbfxvZkKHjC6quKvxR+E54noFCVF93MvhyK6bwRoA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,23 +56,38 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Damien,
+On 5/26/23 16:27, Murphy Zhou wrote:
+> Hi Damien,
+> 
+> Since these commits:
+> 
+>   scsi: block: Introduce ioprio hints
+>   scsi: block: ioprio: Clean up interface definition
+> 
+> go into linux-next tree, ioprio_set can take the value of 8
+> as the PROCESS CLASS_BE ioprio parameter, returning
+> success but actually it is setting to 0 due to the mask roundup.
+> 
+> The LTP test case ioprio_set03[1] covers this boundary value
+> testing, which starts to fail since then.
+> 
+> This does not look as expected. Could you help to take a look?
 
-Since these commits:
+Before the patches, the ioprio level of 8 could indeed be set, but that was
+actually totally meaningless since the kernel components that use the priority
+level all are limited to the range [0..7]. And why the level value 8 could be
+seen, the effective level would have been 0. So at least, with the changes, we
+are not lying to the user...
 
-  scsi: block: Introduce ioprio hints
-  scsi: block: ioprio: Clean up interface definition
+I am not sure what this ioprio_set03 test is trying to check.
 
-go into linux-next tree, ioprio_set can take the value of 8
-as the PROCESS CLASS_BE ioprio parameter, returning
-success but actually it is setting to 0 due to the mask roundup.
+> 
+> Thanks,
+> Murphy
+> 
+> [1] https://github.com/linux-test-project/ltp/blob/master/testcases/kernel/syscalls/ioprio/ioprio_set03.c
 
-The LTP test case ioprio_set03[1] covers this boundary value
-testing, which starts to fail since then.
+-- 
+Damien Le Moal
+Western Digital Research
 
-This does not look as expected. Could you help to take a look?
-
-Thanks,
-Murphy
-
-[1] https://github.com/linux-test-project/ltp/blob/master/testcases/kernel/syscalls/ioprio/ioprio_set03.c

@@ -2,130 +2,157 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDB9F7130C7
-	for <lists+linux-next@lfdr.de>; Sat, 27 May 2023 02:03:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CB49713A14
+	for <lists+linux-next@lfdr.de>; Sun, 28 May 2023 16:28:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229755AbjE0ADB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 26 May 2023 20:03:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40436 "EHLO
+        id S229481AbjE1O2P (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 28 May 2023 10:28:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbjE0ADA (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 26 May 2023 20:03:00 -0400
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 224BCF7;
-        Fri, 26 May 2023 17:02:59 -0700 (PDT)
-Received: by mail-yb1-xb29.google.com with SMTP id 3f1490d57ef6-ba81deea9c2so1185398276.2;
-        Fri, 26 May 2023 17:02:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685145778; x=1687737778;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZCYb9wPXyJ/3oXy1yCdw5B+8RtjUO1MjS0Wu3M21DUQ=;
-        b=oKcCgQRfKxioZHus4cbkMTbZ0h2JZqWlc5YdRqFRYDbvqayLB5EF5Tp4im5/hgr7YK
-         UAPF/fYyuKkUm5yK/hCBXBbFRjVribyXG0TcdQW7R9dJ2BdrdGx228CIiWAVIn71HcUc
-         wGBMAQbDJuwQ8nE5vnfi07/m9hPih//8/ZigxnOUMSqrZUlshcJ2UsGvfFUqVJqun4I6
-         QzxxXSv5v/NyEba4v5SnfzT9p/3pTc3wuDy5IEOfVqtD4YySPM5i9/h5iM+s1jerpWQu
-         M4EWBecQSlrGayDzuxvxeLXtZfidvTqKfPMttLaUEK8UkYZmBimWcooGKkDNNVWXDZqQ
-         9+2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685145778; x=1687737778;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZCYb9wPXyJ/3oXy1yCdw5B+8RtjUO1MjS0Wu3M21DUQ=;
-        b=Z9Fk4PLK1Bw/YwJ9SYH3VQuq9clJDH2fZozO0RysfIGu7R0e8YY+SLXvuF9Z7Iv6SJ
-         YR2y499MX0RTvBkkwEMLsH0S1/eb3QpZk+GLebOzNRgF0ez3keGsC7GddYO6HENcektC
-         O0BmkeNmiXC2p9Qm4zIFMJ7WNCrpPVLxsw301EwYqV4l5bBHVgN1Fti17Fn6OlIs9ClE
-         m3EM4aSG7dTRQQSSqZmIpci9uxCmHdW35ZnH2ibhlaqrjWnmIXLwpzADK9ktNKw8+zUG
-         jPBBlBFhP8petVMGsPr76JdZLyHfwqglp+2X40zanrppkBO4iXC4GDKFv0JcBfec79OR
-         /aow==
-X-Gm-Message-State: AC+VfDz82fctn1fQ+ysPCbRRCJSAFm79yrELtDzgXlWVGA7//SpkhbJ/
-        Su3/2Lauy0CFFkmJwbmH4eJx808foOMYsZvgPcWps7GKfbz5BQ==
-X-Google-Smtp-Source: ACHHUZ55mKb9FFBN8YKKanHY3XxUX0onBjkJ9eiAieIHAx6sU+QTlxS2t3UFIeX1TssjgdbVoCVu2TbtbTX0tVRVf40=
-X-Received: by 2002:a0d:d9d2:0:b0:561:e9f0:924a with SMTP id
- b201-20020a0dd9d2000000b00561e9f0924amr4006086ywe.28.1685145778280; Fri, 26
- May 2023 17:02:58 -0700 (PDT)
+        with ESMTP id S229445AbjE1O2N (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 28 May 2023 10:28:13 -0400
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 090BFB8;
+        Sun, 28 May 2023 07:28:08 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 0EE50320024A;
+        Sun, 28 May 2023 10:28:05 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute6.internal (MEProxy); Sun, 28 May 2023 10:28:06 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1685284085; x=1685370485; bh=bO
+        uIPzG12g4gcSOpXVBNfgdgSQC3jGZB6+tVXF5BZVk=; b=f1Jky7Op27OksrZFCD
+        vQ0Al/TDdm+YKHS5v3n3kLZh7e/6Y87v4DgW6bvtGdJyHABVQHecKn7jxNRjj7PT
+        X1fxDRwOeNDz7j6JPQck322kbHsEfvvXaOEx5YZz/22+c08NECltzZHKXQqx1DJ4
+        af/e97FlhKYIWRkxo84uGrW4bAS/lhNVtwDTf68eQDJpdgFU47oD1b+GtEbBCbpa
+        pJ4LJtaCvwZJAKhZAp2xMmeJM4ucHbEsU6kQfFvdDClgdRtoi2B/sykUBPzINZns
+        wpsjBFzzS64JF2PuhYxDOc5bViaI1hTJVY47BrwebDbupCm7szM1GOuaPSbLRowT
+        6Jmw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1685284085; x=1685370485; bh=bOuIPzG12g4gc
+        SOpXVBNfgdgSQC3jGZB6+tVXF5BZVk=; b=zIWxzHLpDyEPbkPWrVuL5DdLo1j/U
+        FJoe26iyhouOJpAd3lHEs0HqycHZpG1Ow5Gd3ananFchXW5tJztMKIK3yT40c+YN
+        P7tfqSmRGTzUnCu1ArV3VVW2HybRvjMwvP7zg+i2raUbowG2lyoYZRkN5F9Ss4gB
+        lX2erYqTvYRD5hBjOgf2VeNL0lV4irto6cJkGhsOKVY30ZBdliR+9SYuLYojcmpw
+        KYMPhfBkkzjq3w0N5zzDn/EkjpLLMS6sqDRrZU6lJo+bQY1bJ9wnqsC8hxWCb1H3
+        HRG6WNJ3cDQtRDfA5y87gDFEpePPbF3vgN2IBcUnpqwcrUHuQ42qhOf7g==
+X-ME-Sender: <xms:9WRzZIf2nflnW_626wl-lP4HnPnwDk8B9xcTDbYcgDM4D46DO-gsPA>
+    <xme:9WRzZKNdKdIJ9wGKxpoZ3JEG7MXiN4fO3IMzwEeq6P2EI6lhl2XgZtI0IPZ5u07Mu
+    K3iAutrdpQNwg>
+X-ME-Received: <xmr:9WRzZJioYUmClCDHxHXq_OvW3818hR1BYfVt7aRiXKrctvH3E1HCAfDfrI7l>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeekfedgjeejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
+    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepheegvd
+    evvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefhgfehkeetnecuvehluhhs
+    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
+    hhrdgtohhm
+X-ME-Proxy: <xmx:9WRzZN_EEH0qKpInUKLeGkNvHVeJPuBPPJJjN8x0y73Po6Oe4aEx8w>
+    <xmx:9WRzZEvx22ymQP87oirK2HZhtmZVSwzYk7LuCWFgw1-_5Fbu50z7rA>
+    <xmx:9WRzZEG7efAqjL8Ifp2qg_QT2T11FY0yInoPH31HwJGGZ7bQ6oAuwg>
+    <xmx:9WRzZCDnqwEU5R7aIeh0jv1Nt2Iq8WbNiYos8kEUQSEkmpzPqFP0vA>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
+ 28 May 2023 10:28:04 -0400 (EDT)
+Date:   Sun, 28 May 2023 15:28:03 +0100
+From:   Greg KH <greg@kroah.com>
+To:     Roger Quadros <rogerq@kernel.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Krishna Kurapati <quic_kriskura@quicinc.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the usb tree with the usb.current
+ tree
+Message-ID: <2023052846-surfer-spore-e873@gregkh>
+References: <20230515123524.74e7bda3@canb.auug.org.au>
+ <5082d743-54b1-7b4c-432c-dfdce1bb772a@kernel.org>
 MIME-Version: 1.0
-References: <CADJHv_sedgbfxvZkKHjC6quKvxR+E54noFCVF93MvhyK6bwRoA@mail.gmail.com>
- <97ffe91e-bb31-cceb-fb7e-8f7a2252734f@kernel.org>
-In-Reply-To: <97ffe91e-bb31-cceb-fb7e-8f7a2252734f@kernel.org>
-From:   Murphy Zhou <jencce.kernel@gmail.com>
-Date:   Sat, 27 May 2023 08:02:47 +0800
-Message-ID: <CADJHv_uXXVdog0GsFCTd+eouVAuX_wT9NRKJeUUqfZNvz34b0w@mail.gmail.com>
-Subject: Re: ioprio_set can take 8 as the PROCESS CLASS_BE ioprio value
-To:     Damien Le Moal <dlemoal@kernel.org>
-Cc:     linux-block@vger.kernel.org,
-        Linux-Next <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5082d743-54b1-7b4c-432c-dfdce1bb772a@kernel.org>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, May 26, 2023 at 3:42=E2=80=AFPM Damien Le Moal <dlemoal@kernel.org>=
- wrote:
->
-> On 5/26/23 16:27, Murphy Zhou wrote:
-> > Hi Damien,
-> >
-> > Since these commits:
-> >
-> >   scsi: block: Introduce ioprio hints
-> >   scsi: block: ioprio: Clean up interface definition
-> >
-> > go into linux-next tree, ioprio_set can take the value of 8
-> > as the PROCESS CLASS_BE ioprio parameter, returning
-> > success but actually it is setting to 0 due to the mask roundup.
-> >
-> > The LTP test case ioprio_set03[1] covers this boundary value
-> > testing, which starts to fail since then.
-> >
-> > This does not look as expected. Could you help to take a look?
->
-> Before the patches, the ioprio level of 8 could indeed be set, but that w=
-as
+On Mon, May 15, 2023 at 02:01:08PM +0300, Roger Quadros wrote:
+> Hi Stephen,
+> 
+> On 15/05/2023 05:35, Stephen Rothwell wrote:
+> > Hi all,
+> > 
+> > Today's linux-next merge of the usb tree got a conflict in:
+> > 
+> >   drivers/usb/dwc3/gadget.c
+> > 
+> > between commit:
+> > 
+> >   c8540870af4c ("usb: dwc3: gadget: Improve dwc3_gadget_suspend() and dwc3_gadget_resume()")
+> > 
+> > from the usb.current tree and commit:
+> > 
+> >   813f44d57e19 ("usb: dwc3: gadget: Bail out in pullup if soft reset timeout happens")
+> > 
+> > from the usb tree.
+> > 
+> > I fixed it up (I think - see below) and can carry the fix as
+> > necessary. This is now fixed as far as linux-next is concerned, but any
+> > non trivial conflicts should be mentioned to your upstream maintainer
+> > when your tree is submitted for merging.  You may also want to consider
+> > cooperating with the maintainer of the conflicting tree to minimise any
+> > particularly complex conflicts.
+> > 
+> 
+> > diff --cc drivers/usb/dwc3/gadget.c
+> > index d831f5acf7b5,5965796bc5d5..000000000000
+> > --- a/drivers/usb/dwc3/gadget.c
+> > +++ b/drivers/usb/dwc3/gadget.c
+> > @@@ -2700,21 -2699,6 +2700,26 @@@ static int dwc3_gadget_soft_disconnect(
+> >   	return ret;
+> >   }
+> >   
+> >  +static int dwc3_gadget_soft_connect(struct dwc3 *dwc)
+> >  +{
+> > ++	int	ret;
+> > ++
+> >  +	/*
+> >  +	 * In the Synopsys DWC_usb31 1.90a programming guide section
+> >  +	 * 4.1.9, it specifies that for a reconnect after a
+> >  +	 * device-initiated disconnect requires a core soft reset
+> >  +	 * (DCTL.CSftRst) before enabling the run/stop bit.
+> >  +	 */
+> >  +	dwc3_core_soft_reset(dwc);
+> 
+> Please drop above call to dwc3_core_soft_reset().
+> 
+> > ++	ret = dwc3_core_soft_reset(dwc);
+> > ++	if (ret)
+> > ++		return ret;
+> >  +
+> >  +	dwc3_event_buffers_setup(dwc);
+> >  +	__dwc3_gadget_start(dwc);
+> >  +	return dwc3_gadget_run_stop(dwc, true);
+> >  +}
+> >  +
+> >   static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
+> >   {
+> >   	struct dwc3		*dwc = gadget_to_dwc(g);
+> 
 
-Before the patches, it can't be set to 8 because the check in
-ioprio_check_cap refused it.
-   >=3D IOPRIO_NR_LEVELS
-Before the patches, the value can be greater than 8, so it takes effect.
-After the patches, the value is limited to [0..7], this check always passes=
-.
+Can you verify I got this right in my usb-next branch now?
 
-> actually totally meaningless since the kernel components that use the pri=
-ority
-> level all are limited to the range [0..7]. And why the level value 8 coul=
-d be
-> seen, the effective level would have been 0. So at least, with the change=
-s, we
-> are not lying to the user...
->
-> I am not sure what this ioprio_set03 test is trying to check.
+thanks,
 
-I guess it is trying to make sure boundary values do not cause uncertaining=
-.
-The test case can be updated according to intended kernel changes. So does
-other user space applications that may depend on this, or there is none of
-them to worry about.
-
-Thanks,
-Murphy
->
-> >
-> > Thanks,
-> > Murphy
-> >
-> > [1] https://github.com/linux-test-project/ltp/blob/master/testcases/ker=
-nel/syscalls/ioprio/ioprio_set03.c
->
-> --
-> Damien Le Moal
-> Western Digital Research
->
+greg k-h

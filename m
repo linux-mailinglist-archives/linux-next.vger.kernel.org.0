@@ -2,170 +2,90 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81F05713A76
-	for <lists+linux-next@lfdr.de>; Sun, 28 May 2023 18:07:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73307713A9E
+	for <lists+linux-next@lfdr.de>; Sun, 28 May 2023 18:40:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229612AbjE1QHM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 28 May 2023 12:07:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49690 "EHLO
+        id S229453AbjE1Qki (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 28 May 2023 12:40:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbjE1QHL (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 28 May 2023 12:07:11 -0400
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4664EB9;
-        Sun, 28 May 2023 09:07:10 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 8515F3200564;
-        Sun, 28 May 2023 12:07:06 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Sun, 28 May 2023 12:07:07 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1685290026; x=1685376426; bh=3U
-        4mYHfz/R9tY91h8fKoPaz8ksrmh2SRnSoLZa0qe3A=; b=r7MVG1xw3NnLv6kxfo
-        I+kjH4tTgmYYqL/icGvMTi6Xg+0/nZgmXZn0i4Cryv94ltvZqwmRlN0V8kqQgzYE
-        S8085h0PALFu1xu5wjv871FfG/ZSKSG4BDpizWuqO4Bchgxs8o3BuUvSYZnLprwK
-        HVZVlV/TCNm1cbZRzsaT8h/WVScher5E5qUNBifgTA5inbEv+v63vKFQnU2Ev9gH
-        iMZlPkPZaKadHdxrLlPjh99L8BCZEl5qhojTaXKVu3PtV/RDaqv9f2ESAmCQqj7S
-        7wbwYhMiIi+au+InrUmBQGuDlaCrAnM+zU6CYkh9sfPnxYP5Hy3qLEJ1yX+svNa5
-        nagg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1685290026; x=1685376426; bh=3U4mYHfz/R9tY
-        91h8fKoPaz8ksrmh2SRnSoLZa0qe3A=; b=mNxsXAlTiNoIeWRGaKyQBV4JNjNbx
-        ntYPDg7VJEjFi1CZQ+MXOr8EH2LV9JaVP996qUTSY2MZyFnQQKiXY/yLkQPlmkVi
-        hEXN0RAZLmO65OZEWKeKlqzK4lJ7SK4jAeJIB4y27OenglO70iQmOgFWtxJ+7zuU
-        GVRgVHjUn+veXmItqrYBKTWK3OBLLqoshi3kH2gFVYOerDnMgAELz9RNVD1RB0B6
-        Rr/C62B/78SgTQ+XDCEY0NrsINKElXzD+6ud5rY0leabygKqMD+G4avTdtmPV12s
-        b+zTMAbLHd9UlNrl2jPjZoe8pV9SfGIfOPC+vjV60HixDVsDF3JmZmhSQ==
-X-ME-Sender: <xms:KXxzZEl2ipkmXaYBeIxPfEBK0vUeoHOGDxdObJDgUd7x7JZy5nqz6Q>
-    <xme:KXxzZD0PfGdnDPcBRJtiL1n9M6NEqCnuHX4Ql5Jz1wLBqkqETJu70TQXaHEau-c2H
-    rcdYggg40wbTw>
-X-ME-Received: <xmr:KXxzZCqjH28oVptQ__Rvot8pzDO5zV79SJ7JL5mNWVHat43S_dWAhzw8Lozc>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeekfedgleekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
-    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepheegvd
-    evvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefhgfehkeetnecuvehluhhs
-    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
-    hhrdgtohhm
-X-ME-Proxy: <xmx:KXxzZAmhq9iMivWFvzU6FZBlNPSrDdbfrRfsZHUURAs-QCrjF68xhw>
-    <xmx:KXxzZC1rUfLFVBFm-GJHMcMl4dvHtYUMm821kjiaMikWdJOunEeF5Q>
-    <xmx:KXxzZHusV6dRlwPNlDO1HXZra8WEjxNL1kYpHWhyCjOulLhuFoAqjw>
-    <xmx:KnxzZLsiTSonMFSOj1uwjdbXp69BNOBlAgm3hDJpgz0Zkq-ac25M-Q>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 28 May 2023 12:07:04 -0400 (EDT)
-Date:   Sun, 28 May 2023 17:07:03 +0100
-From:   Greg KH <greg@kroah.com>
-To:     Roger Quadros <rogerq@kernel.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Krishna Kurapati <quic_kriskura@quicinc.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        with ESMTP id S229451AbjE1Qkh (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 28 May 2023 12:40:37 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BEBAA7;
+        Sun, 28 May 2023 09:40:35 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-3f6e13940daso26838725e9.0;
+        Sun, 28 May 2023 09:40:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685292034; x=1687884034;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eLa47+Q3W2OzgpecH5Xnum+73EwRiKQp+CKkhWwm3IY=;
+        b=GJkOU3y3qiwRwnS/9jGZN9BIVn7uG4LZCp/MOPkMjb/n+xYI+QrfSeAZyj663Skkxg
+         t/mhhjruGA+p0ZC+gnGtmkGloQjjKhD2Wo3lpVEegbC5Yg133Ib8cxDBZPZgU46wyXXM
+         c///XBgvBruxUxtXw85KLtr8QJBkj8lCH1Dlk1E8JlfkA7GVi0pwee1gB8qfxjC/x2lm
+         IAQwlazZuYnGekmUKHRbw+vQNItgUZDrA6QUGTIoQx5fsLwVALjTCg39XnIXuLIymR4Y
+         Gsd+hjVcbEHJyvhZTX/R86Og3uJwM3Nok3rpJPbybie9CY098JJvaK/4xlaRxinn+/JD
+         ZjQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685292034; x=1687884034;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=eLa47+Q3W2OzgpecH5Xnum+73EwRiKQp+CKkhWwm3IY=;
+        b=cEP8A7PWNF7sfNbms9hN/MMPMGzPesLJ5CahCdCQXj0Iym9M19Ei9fpVV5Bw9X8NV8
+         cpkYvbA9mzMafVapZK8BTb3YTIZTsf0w/GA9Z/WHwwKxPZyiBJgzBWuUOHnrumd/nKYv
+         x8lZ6QRbAHRwoTFAtyUQRQ5yINUIiY+QGYiHIhvlQaIjJRUMDmrEH87oCGzNDtcHF2VI
+         1SSVyBtn5cAVzxOnnmFdnJLIgqq1oKzTO1okx1riA1le2+cVToUvgY5eWMMdV4TC9CxK
+         0vFSz4IVec8WgBd3XdSKnfsxezxwa7bimTqYQUa4pNnEsFG+8wY0Kwm2U/rPoNtq13OL
+         f7ug==
+X-Gm-Message-State: AC+VfDz/El1q8Ba8M4NKkQbhYiPyk/MeJJsUwjJZejz2gzuxqTAmwPt0
+        35RatbdWYjSXSJKz3JdRTkiPrRNY1YCz/g==
+X-Google-Smtp-Source: ACHHUZ7mRyrdzgqfUt22WPn1ATcdeLzjoh+SvsixN8BgTtvUiWMITbemlvIavvz5pgcffUuoXTXd7g==
+X-Received: by 2002:a1c:7515:0:b0:3f7:5d:49ff with SMTP id o21-20020a1c7515000000b003f7005d49ffmr1807888wmc.1.1685292033854;
+        Sun, 28 May 2023 09:40:33 -0700 (PDT)
+Received: from solport.. (203.red-83-43-24.dynamicip.rima-tde.net. [83.43.24.203])
+        by smtp.gmail.com with ESMTPSA id k15-20020a05600c0b4f00b003f611b2aedesm11583969wmr.38.2023.05.28.09.40.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 28 May 2023 09:40:33 -0700 (PDT)
+From:   =?UTF-8?q?Joan=20Bruguera=20Mic=C3=B3?= <joanbrugueram@gmail.com>
+To:     Thorsten Leemhuis <linux@leemhuis.info>
+Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-crypto@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Subject: Re: linux-next: manual merge of the usb tree with the usb.current
- tree
-Message-ID: <2023052843-marina-scarecrow-1454@gregkh>
-References: <20230515123524.74e7bda3@canb.auug.org.au>
- <5082d743-54b1-7b4c-432c-dfdce1bb772a@kernel.org>
- <2023052846-surfer-spore-e873@gregkh>
- <f604f836-7858-6140-4ec1-9ba95cba6991@kernel.org>
+        Kees Cook <keescook@chromium.org>
+Subject: Re: build error while building arch/x86/purgatory/sha256.o: invalid 'asm': operand is not a condition code [...]
+Date:   Sun, 28 May 2023 16:40:31 +0000
+Message-Id: <20230528164031.266590-1-joanbrugueram@gmail.com>
+X-Mailer: git-send-email 2.40.1
+In-Reply-To: <175578ec-9dec-7a9c-8d3a-43f24ff86b92@leemhuis.info>
+References: <175578ec-9dec-7a9c-8d3a-43f24ff86b92@leemhuis.info>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f604f836-7858-6140-4ec1-9ba95cba6991@kernel.org>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Sun, May 28, 2023 at 06:48:12PM +0300, Roger Quadros wrote:
-> Hi Greg,
-> 
-> On 28/05/2023 17:28, Greg KH wrote:
-> > On Mon, May 15, 2023 at 02:01:08PM +0300, Roger Quadros wrote:
-> >> Hi Stephen,
-> >>
-> >> On 15/05/2023 05:35, Stephen Rothwell wrote:
-> >>> Hi all,
-> >>>
-> >>> Today's linux-next merge of the usb tree got a conflict in:
-> >>>
-> >>>   drivers/usb/dwc3/gadget.c
-> >>>
-> >>> between commit:
-> >>>
-> >>>   c8540870af4c ("usb: dwc3: gadget: Improve dwc3_gadget_suspend() and dwc3_gadget_resume()")
-> >>>
-> >>> from the usb.current tree and commit:
-> >>>
-> >>>   813f44d57e19 ("usb: dwc3: gadget: Bail out in pullup if soft reset timeout happens")
-> >>>
-> >>> from the usb tree.
-> >>>
-> >>> I fixed it up (I think - see below) and can carry the fix as
-> >>> necessary. This is now fixed as far as linux-next is concerned, but any
-> >>> non trivial conflicts should be mentioned to your upstream maintainer
-> >>> when your tree is submitted for merging.  You may also want to consider
-> >>> cooperating with the maintainer of the conflicting tree to minimise any
-> >>> particularly complex conflicts.
-> >>>
-> >>
-> >>> diff --cc drivers/usb/dwc3/gadget.c
-> >>> index d831f5acf7b5,5965796bc5d5..000000000000
-> >>> --- a/drivers/usb/dwc3/gadget.c
-> >>> +++ b/drivers/usb/dwc3/gadget.c
-> >>> @@@ -2700,21 -2699,6 +2700,26 @@@ static int dwc3_gadget_soft_disconnect(
-> >>>   	return ret;
-> >>>   }
-> >>>   
-> >>>  +static int dwc3_gadget_soft_connect(struct dwc3 *dwc)
-> >>>  +{
-> >>> ++	int	ret;
-> >>> ++
-> >>>  +	/*
-> >>>  +	 * In the Synopsys DWC_usb31 1.90a programming guide section
-> >>>  +	 * 4.1.9, it specifies that for a reconnect after a
-> >>>  +	 * device-initiated disconnect requires a core soft reset
-> >>>  +	 * (DCTL.CSftRst) before enabling the run/stop bit.
-> >>>  +	 */
-> >>>  +	dwc3_core_soft_reset(dwc);
-> >>
-> >> Please drop above call to dwc3_core_soft_reset().
-> >>
-> >>> ++	ret = dwc3_core_soft_reset(dwc);
-> >>> ++	if (ret)
-> >>> ++		return ret;
-> >>>  +
-> >>>  +	dwc3_event_buffers_setup(dwc);
-> >>>  +	__dwc3_gadget_start(dwc);
-> >>>  +	return dwc3_gadget_run_stop(dwc, true);
-> >>>  +}
-> >>>  +
-> >>>   static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
-> >>>   {
-> >>>   	struct dwc3		*dwc = gadget_to_dwc(g);
-> >>
-> > 
-> > Can you verify I got this right in my usb-next branch now?
-> 
-> No, the end result is not correct.
-> 
-> Please apply the below patch to fix it. Thanks.
+I can also reproduce the problem with Arch's linux-next-git, see config:
+https://aur.archlinux.org/cgit/aur.git/tree/config?h=linux-next-git&id=f9a384e1c582321651fb613782ebc5a581146af0
 
-Many thanks, I got that totally wrong :(
+I've bisected it to df8fc4e934c1 ("kbuild: Enable -fstrict-flex-arrays=3"),
+which explains why it only happens on GCC13.
 
-Now fixed up with your commit.
+The problematic expansion that causes the error seems to be this fragment
+from `_BUG_FLAGS` in `arch/x86/include/asm/bug.h`:
+    asm(".long %c0 - .\n": : "i" (__FILE__));
 
-greg k-h
+Along with the fact that this file is built with `-mcmodel=large`
+(see `PURGATORY_CFLAGS` in `arch/x86/purgatory/Makefile`).
+
+Regards,
+- Joan

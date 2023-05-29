@@ -2,228 +2,239 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EC727143CD
-	for <lists+linux-next@lfdr.de>; Mon, 29 May 2023 07:46:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DCE77148AC
+	for <lists+linux-next@lfdr.de>; Mon, 29 May 2023 13:37:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229628AbjE2Fq2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 29 May 2023 01:46:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38810 "EHLO
+        id S229604AbjE2Lh2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 29 May 2023 07:37:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbjE2Fq1 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 29 May 2023 01:46:27 -0400
+        with ESMTP id S231355AbjE2Lh0 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 29 May 2023 07:37:26 -0400
 Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 748F3A7;
-        Sun, 28 May 2023 22:46:25 -0700 (PDT)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-565f1145dc8so11766067b3.1;
-        Sun, 28 May 2023 22:46:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 320E291
+        for <linux-next@vger.kernel.org>; Mon, 29 May 2023 04:36:50 -0700 (PDT)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-5689335d2b6so7109157b3.3
+        for <linux-next@vger.kernel.org>; Mon, 29 May 2023 04:36:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685339184; x=1687931184;
+        d=linaro.org; s=google; t=1685360193; x=1687952193;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=+YLEagnxzE9GTcNZMhK2eJZ7SiaI8A3xk1StBEvqodI=;
-        b=fhHkHmM0mfAnEXycX1vgPUiWywzgR3NXGbaI84gslHJl5P3trWPZCzCzaiemfcLdSs
-         2uYvx8mwgNVLAKDSo6LgoEGwnPamECfTZy1RvTxE6X454yxKRte8hjZqaB52h4ItvW/d
-         DlNokGGojYzsBJPrq2R5PIS+5bFR4tilf6a7UT6iIWiY5TMYZTVANySIwZRyrn/TMDWl
-         jZSkrVp56LYRTZF0u5QBU6KWxhn4pX4545mB2p+41FnuZKGWXz3sqXM0JwYEOJLnGqsT
-         L9jagbY4vZrFA1YFNxNxnknJsiMbWAI5Y5sG4AVnl185Y2kZcOgTRaP2CA0oomu/75av
-         q95g==
+        bh=DoI6RIFWmkR6RsayaSDeG9vrwq5HEAIBN0C4cFCwmxU=;
+        b=rEvkuSjagh9iStLeoPvMpwrJz6x+mwxkc3FpFtZ14yz9AfLohDuGAdKgPuNi+orFLy
+         iMuVrVuh4aEacsaKdJCrite5vzML30WMEEK3K/kcJq068Ld+ZGMPUw94PkN4452ammoS
+         9WJm7D6I4QwvrAUBS3Q+JQA16HvdnzpKSSsWqFomgiGQvfXMrUtW4iwdsJBvW+Sr3JQd
+         bFoUJxPPB2KmA1lS3GTmYMFUvt821ViolHiPsfKGK3qS/I+a5lX7hL2PiHADEMrQfd8C
+         3nlj/UOltHiJNNk2NelGZsSpCLgzCwU1G5r4lbtdoAaCropNQJFj2qWtVOiZvsOYgRX/
+         Lu3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685339184; x=1687931184;
+        d=1e100.net; s=20221208; t=1685360193; x=1687952193;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=+YLEagnxzE9GTcNZMhK2eJZ7SiaI8A3xk1StBEvqodI=;
-        b=UzCb9MU8ZzE/myxFM95JXFjqbSP4EiWtZH2I25b9OCiAQZesGkHI1KwhxRLvH7XdMd
-         7e0roAKjqgZBVRZoFeT/HC8PwNLJ7vWdfK98O5MPqgqO3+/dN0eLZQ0oaqeL7GpiHUuS
-         MS3FH82fttQ7+d/cOWC33dB0N98PZwfLO8NROZBEuKMCPrCWsvuHb8nz8ADaZpyQzfUW
-         0Md5un+Unt6kQy7OUPqGOG6/FbSSPTF5X1NJl7VUS6noVN1EXYr3UYMzrGI78DZrn9aW
-         MbZ4S+qdFfTEX8rPL6x96GkU/7vO9CuCq2lQJisiEvBEOKdUOnqc4LYkE7ao+owyuTIm
-         O70g==
-X-Gm-Message-State: AC+VfDysbNSU2Gh4jcxVz/bOVo/qv0MgnaoPqk65RBzUeGXHbp280rJK
-        Wx/yWYBRouiiRV8/OseCGP4vDPE4tWv46ekJs0k=
-X-Google-Smtp-Source: ACHHUZ6qaisIkmkhg+8YNoVpXj9q/h3IUIcgtvDnz8xfQw0BByfEyjerz4NmpwxCcJ6TKOBkVS+C1ZnF1cjPeSON/KE=
-X-Received: by 2002:a0d:dd03:0:b0:561:b24f:2ccb with SMTP id
- g3-20020a0ddd03000000b00561b24f2ccbmr11346267ywe.25.1685339184606; Sun, 28
- May 2023 22:46:24 -0700 (PDT)
+        bh=DoI6RIFWmkR6RsayaSDeG9vrwq5HEAIBN0C4cFCwmxU=;
+        b=Vd8S8IyZcyeqBDwYbjbIwMsDsOtBvm4RyZQdvwAG33YpizwLKytqdR0wfgaImNz+4a
+         zVfYDvl8HR7CW6QjbgX55q5PTB96NVF4MokybggKIczoW3V98uRDx8NXdZg0X6GSikFF
+         MnT7eeXRAKBGdhe8FBHoLBlO76NccbNxZXAVJiT5qKXDmEIc3wBWmzNiX92ONFR3L+ad
+         SxwzNBlvoxJqhpPb0LfJ+j3T0+2nw+XBpn8ng+P31muEoNhEEKW+wMdnb7X0Zaoq0LvH
+         8PP9FBfcuJsXVvtxZHrDZt4Dpw7Eq8/98m9xaHTVCD2KUyHW3yI7ad31yXZHn+9okLN5
+         9ouA==
+X-Gm-Message-State: AC+VfDx2DdsJSZSCt7C36HB/uoDpvhnU0Bvx5LP1/f2QnN8TYOIgzGrY
+        xQuiO3tUI1pmYoG2i45lqsRgkEV0t/cu5H59L4ie4h7GaAVWUVe4+Ak=
+X-Google-Smtp-Source: ACHHUZ6+jh4+tbU+SfGMG2BuCtmCkY5Bzh3D6KZgIeRmr32Ju8T5V3ocy30tZfeRJ/1Xq7Gpj/PLhSebiPoTiPBzDzc=
+X-Received: by 2002:a0d:d6cb:0:b0:561:d18c:f3fb with SMTP id
+ y194-20020a0dd6cb000000b00561d18cf3fbmr12632914ywd.9.1685360193206; Mon, 29
+ May 2023 04:36:33 -0700 (PDT)
 MIME-Version: 1.0
-References: <CADJHv_sedgbfxvZkKHjC6quKvxR+E54noFCVF93MvhyK6bwRoA@mail.gmail.com>
- <97ffe91e-bb31-cceb-fb7e-8f7a2252734f@kernel.org> <CADJHv_uXXVdog0GsFCTd+eouVAuX_wT9NRKJeUUqfZNvz34b0w@mail.gmail.com>
- <036846b9-c757-450b-2612-6a649b901888@kernel.org>
-In-Reply-To: <036846b9-c757-450b-2612-6a649b901888@kernel.org>
-From:   Murphy Zhou <jencce.kernel@gmail.com>
-Date:   Mon, 29 May 2023 13:46:13 +0800
-Message-ID: <CADJHv_vUgoYuuSjqp1OsmRogZ7QRkWydo9s4joEnjdcdUkEvFA@mail.gmail.com>
-Subject: Re: ioprio_set can take 8 as the PROCESS CLASS_BE ioprio value
-To:     Damien Le Moal <dlemoal@kernel.org>
-Cc:     linux-block@vger.kernel.org,
-        Linux-Next <linux-next@vger.kernel.org>,
-        Jens Axboe <axboe@kernel.dk>, Jan Kara <jack@suse.cz>
+References: <20230525092202.78a1fb01@canb.auug.org.au> <CACRpkdYUPmaBWDwH_ARHp-bFtpML3aShd_mKBBq+ndQATGEJjQ@mail.gmail.com>
+ <1b757588-66cc-4946-a9fb-a2a88c5c54cf@app.fastmail.com>
+In-Reply-To: <1b757588-66cc-4946-a9fb-a2a88c5c54cf@app.fastmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 29 May 2023 13:36:22 +0200
+Message-ID: <CACRpkdYneu+c0d5jGgZqEHqyoAbcx6UbkQYHXsNeFvGnehp6SQ@mail.gmail.com>
+Subject: Re: linux-next: duplicate patches in the asm-generic tree
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Will Deacon <will@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-next <linux-next@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, May 29, 2023 at 10:28=E2=80=AFAM Damien Le Moal <dlemoal@kernel.org=
-> wrote:
->
-> +Jens
->
-> and also +Jan as he did some work on ioprio previously.
->
-> On 5/27/23 09:02, Murphy Zhou wrote:
-> > On Fri, May 26, 2023 at 3:42=E2=80=AFPM Damien Le Moal <dlemoal@kernel.=
-org> wrote:
-> >>
-> >> On 5/26/23 16:27, Murphy Zhou wrote:
-> >>> Hi Damien,
-> >>>
-> >>> Since these commits:
-> >>>
-> >>>   scsi: block: Introduce ioprio hints
-> >>>   scsi: block: ioprio: Clean up interface definition
-> >>>
-> >>> go into linux-next tree, ioprio_set can take the value of 8
-> >>> as the PROCESS CLASS_BE ioprio parameter, returning
-> >>> success but actually it is setting to 0 due to the mask roundup.
-> >>>
-> >>> The LTP test case ioprio_set03[1] covers this boundary value
-> >>> testing, which starts to fail since then.
-> >>>
-> >>> This does not look as expected. Could you help to take a look?
-> >>
-> >> Before the patches, the ioprio level of 8 could indeed be set, but tha=
-t was
-> >
-> > Before the patches, it can't be set to 8 because the check in
-> > ioprio_check_cap refused it.
-> >    >=3D IOPRIO_NR_LEVELS
-> > Before the patches, the value can be greater than 8, so it takes effect=
-.
-> > After the patches, the value is limited to [0..7], this check always pa=
-sses.
-> >
-> >> actually totally meaningless since the kernel components that use the =
-priority
-> >> level all are limited to the range [0..7]. And why the level value 8 c=
-ould be
-> >> seen, the effective level would have been 0. So at least, with the cha=
-nges, we
-> >> are not lying to the user...
-> >>
-> >> I am not sure what this ioprio_set03 test is trying to check.
-> >
-> > I guess it is trying to make sure boundary values do not cause uncertai=
-ning.
-> > The test case can be updated according to intended kernel changes. So d=
-oes
-> > other user space applications that may depend on this, or there is none=
- of
-> > them to worry about.
->
-> The checks before the patch was using IOPRIO_PRIO_DATA() to get the
-> level value, and that macro was doing a mask with IOPRIO_PRIO_MASK (1 <<
-> 13). So if the application was doing:
->
-> IOPRIO_PRIO_VALUE(IOPRIO_CLASS_BE, 8192 + 1)
->
-> then the ioprio value would end up being the same as:
->
-> IOPRIO_PRIO_VALUE(IOPRIO_CLASS_BE, 0)
->
-> which is a valid ioprio value. So ioprio_check_cap() would not detect
-> that case either. The fact that class and level are combined into a
-> single value essentially prevents us to be exhaustive with the checks in
-> ioprio_check_cap().
->
-> I am not sure if this is worth fixing. as no matter what we do, the
-> above problem remains: we cannot catch all bad cases and end up with a
-> valid value which will prevent the user from seeing an error and
-> catching his/hers invalid use of the ioprio values...
+On Thu, May 25, 2023 at 6:41=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> wrote=
+:
 
-Agree.  We can't prevent that. Please go ahead with any solution that
-makes sense to you.
+> > Aha Catalin ACKed it and Will picked it up, perhaps Arnd can drop it fr=
+om
+> > his tree, albeit it is not a disaster, I am surprised this was the
+> > biggest fallout
+> > we've seen of those patches.
+>
+> I can't easily drop it without undoing the merge from your branch.
 
-Thanks,
-Murphy
->
-> We could do something like shown below, but I am not sure if it is worth
-> it as their are no guarantees that the user is actually using the
-> definitions in include/uapi/linux/ioprio.h
-> (/usr/include/linux/iorprio.h). E.g. see fio code which redefines the
-> values and macros locally.
->
-> diff --git a/include/uapi/linux/ioprio.h b/include/uapi/linux/ioprio.h
-> index 607c7617b9d2..c09cfbee9117 100644
-> --- a/include/uapi/linux/ioprio.h
-> +++ b/include/uapi/linux/ioprio.h
-> @@ -6,15 +6,13 @@
->   * Gives us 8 prio classes with 13-bits of data for each class
->   */
->  #define IOPRIO_CLASS_SHIFT     13
-> -#define IOPRIO_CLASS_MASK      0x07
-> +#define IOPRIO_NR_CLASSES      8
-> +#define IOPRIO_CLASS_MASK      (IOPRIO_NR_CLASSES - 1)
->  #define IOPRIO_PRIO_MASK       ((1UL << IOPRIO_CLASS_SHIFT) - 1)
->
->  #define IOPRIO_PRIO_CLASS(ioprio)      \
->         (((ioprio) >> IOPRIO_CLASS_SHIFT) & IOPRIO_CLASS_MASK)
->  #define IOPRIO_PRIO_DATA(ioprio)       ((ioprio) & IOPRIO_PRIO_MASK)
-> -#define IOPRIO_PRIO_VALUE(class, data) \
-> -       ((((class) & IOPRIO_CLASS_MASK) << IOPRIO_CLASS_SHIFT) | \
-> -        ((data) & IOPRIO_PRIO_MASK))
->
->  /*
->   * These are the io priority classes as implemented by the BFQ and
-> mq-deadline
-> @@ -73,15 +71,6 @@ enum {
->  #define IOPRIO_PRIO_HINT(ioprio)       \
->         (((ioprio) >> IOPRIO_HINT_SHIFT) & IOPRIO_HINT_MASK)
->
-> -/*
-> - * Alternate macro for IOPRIO_PRIO_VALUE() to define an IO priority with
-> - * a class, level and hint.
-> - */
-> -#define IOPRIO_PRIO_VALUE_HINT(class, level, hint)              \
-> -       ((((class) & IOPRIO_CLASS_MASK) << IOPRIO_CLASS_SHIFT) | \
-> -        (((hint) & IOPRIO_HINT_MASK) << IOPRIO_HINT_SHIFT) |    \
-> -        ((level) & IOPRIO_LEVEL_MASK))
-> -
->  /*
->   * IO hints.
->   */
-> @@ -107,4 +96,22 @@ enum {
->         IOPRIO_HINT_DEV_DURATION_LIMIT_7 =3D 7,
->  };
->
-> +/*
-> + * Return an I/O priority value based on a class, a level and hints.
-> + */
-> +static inline u16 ioprio_value(int class, int level, int hint)
-> +{
-> +       if (class < 0 || class >=3D IOPRIO_NR_CLASSES ||
-> +           level < 0 || level >=3D IOPRIO_NR_LEVELS ||
-> +           hint < 0 || hint >=3D IOPRIO_NR_HINTS)
-> +               return USHRT_MAX;
-> +       return (class << IOPRIO_CLASS_SHIFT) |
-> +              (hint << IOPRIO_HINT_SHIFT) | level;
-> +}
-> +
-> +#define IOPRIO_PRIO_VALUE(class, level)                        \
-> +       ioprio_value(class, level, IOPRIO_HINT_NONE)
-> +#define IOPRIO_PRIO_VALUE_HINT(class, level, hint)     \
-> +       ioprio_value(class, level, hint)
-> +
->  #endif /* _UAPI_LINUX_IOPRIO_H */
->
-> --
-> Damien Le Moal
-> Western Digital Research
->
+Ah yeah they we loose all the nice tag messages and such.
+
+> Maybe you can just rebase your branch on top of -rc2 and send
+> a new pull request. That should automatically drop the duplicate
+> patch.
+
+It was even  -rc3 actually. But yeah, that was simple enough :)
+
+I hope the netdev people don't randomly apply the xen/netback
+patch, I told them not to.
+
+Below is an v6.4-rc3-based pull:
+
+The following changes since commit 44c026a73be8038f03dbdeef028b642880cf1511=
+:
+
+  Linux 6.4-rc3 (2023-05-21 14:05:48 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git
+tags/virt-to-pfn-for-arch-v6.5-2
+
+for you to fetch changes up to ef7d0f5d03b9e65c9daa8dfe8b405b10566055eb:
+
+  m68k/mm: Make pfn accessors static inlines (2023-05-29 11:27:08 +0200)
+
+----------------------------------------------------------------
+This is an attempt to harden the typing on virt_to_pfn()
+and pfn_to_virt().
+
+Making virt_to_pfn() a static inline taking a strongly typed
+(const void *) makes the contract of a passing a pointer of that
+type to the function explicit and exposes any misuse of the
+macro virt_to_pfn() acting polymorphic and accepting many types
+such as (void *), (unitptr_t) or (unsigned long) as arguments
+without warnings.
+
+For symmetry, we do the same with pfn_to_virt().
+
+The problem with this inconsistent typing was pointed out by
+Russell King:
+https://lore.kernel.org/linux-arm-kernel/YoJDKJXc0MJ2QZTb@shell.armlinux.or=
+g.uk/
+
+And confirmed by Andrew Morton:
+https://lore.kernel.org/linux-mm/20220701160004.2ffff4e5ab59a55499f4c736@li=
+nux-foundation.org/
+
+So the recognition of the problem is widespread.
+
+These platforms have been chosen as initial conversion targets:
+
+- ARM
+- ARM64/Aarch64
+- asm-generic (including for example x86)
+- m68k
+
+The idea is that if this goes in, it will block further misuse
+of the function signatures due to the large compile coverage,
+and then I can go in and fix the remaining architectures on a
+one-by-one basis.
+
+Some of the patches have been circulated before but were not
+picked up by subsystem maintainers, so now the arch tree is
+target for this series.
+
+It has passed zeroday builds after a lot of iterations in my
+personal tree, but there could be some randconfig outliers.
+New added or deeply hidden problems appear all the time so
+some minor fallout can be expected.
+
+----------------------------------------------------------------
+Linus Walleij (12):
+      fs/proc/kcore.c: Pass a pointer to virt_addr_valid()
+      m68k: Pass a pointer to virt_to_pfn() virt_to_page()
+      ARC: init: Pass a pointer to virt_to_pfn() in init
+      riscv: mm: init: Pass a pointer to virt_to_page()
+      cifs: Pass a pointer to virt_to_page()
+      cifs: Pass a pointer to virt_to_page() in cifsglob
+      netfs: Pass a pointer to virt_to_page()
+      xen/netback: Pass (void *) to virt_to_page()
+      asm-generic/page.h: Make pfn accessors static inlines
+      ARM: mm: Make virt_to_pfn() a static inline
+      arm64: memory: Make virt_to_pfn() a static inline
+      m68k/mm: Make pfn accessors static inlines
+
+ arch/arc/mm/init.c                   |  2 +-
+ arch/arm/common/sharpsl_param.c      |  2 +-
+ arch/arm/include/asm/delay.h         |  2 +-
+ arch/arm/include/asm/io.h            |  2 +-
+ arch/arm/include/asm/memory.h        | 17 ++++++++++++-----
+ arch/arm/include/asm/page.h          |  4 ++--
+ arch/arm/include/asm/pgtable.h       |  2 +-
+ arch/arm/include/asm/proc-fns.h      |  2 --
+ arch/arm/include/asm/sparsemem.h     |  2 +-
+ arch/arm/include/asm/uaccess-asm.h   |  2 +-
+ arch/arm/include/asm/uaccess.h       |  2 +-
+ arch/arm/kernel/asm-offsets.c        |  2 +-
+ arch/arm/kernel/entry-armv.S         |  2 +-
+ arch/arm/kernel/entry-common.S       |  2 +-
+ arch/arm/kernel/entry-v7m.S          |  2 +-
+ arch/arm/kernel/head-nommu.S         |  3 +--
+ arch/arm/kernel/head.S               |  2 +-
+ arch/arm/kernel/hibernate.c          |  2 +-
+ arch/arm/kernel/suspend.c            |  2 +-
+ arch/arm/kernel/tcm.c                |  2 +-
+ arch/arm/kernel/vmlinux-xip.lds.S    |  3 +--
+ arch/arm/kernel/vmlinux.lds.S        |  3 +--
+ arch/arm/mach-berlin/platsmp.c       |  2 +-
+ arch/arm/mach-keystone/keystone.c    |  2 +-
+ arch/arm/mach-omap2/sleep33xx.S      |  2 +-
+ arch/arm/mach-omap2/sleep43xx.S      |  2 +-
+ arch/arm/mach-omap2/sleep44xx.S      |  2 +-
+ arch/arm/mach-pxa/gumstix.c          |  2 +-
+ arch/arm/mach-rockchip/sleep.S       |  2 +-
+ arch/arm/mach-sa1100/pm.c            |  2 +-
+ arch/arm/mach-shmobile/headsmp-scu.S |  2 +-
+ arch/arm/mach-shmobile/headsmp.S     |  2 +-
+ arch/arm/mach-socfpga/headsmp.S      |  2 +-
+ arch/arm/mach-spear/spear.h          |  2 +-
+ arch/arm/mm/cache-fa.S               |  1 -
+ arch/arm/mm/cache-v4wb.S             |  1 -
+ arch/arm/mm/dma-mapping.c            |  2 +-
+ arch/arm/mm/dump.c                   |  2 +-
+ arch/arm/mm/init.c                   |  2 +-
+ arch/arm/mm/kasan_init.c             |  1 -
+ arch/arm/mm/mmu.c                    |  2 +-
+ arch/arm/mm/physaddr.c               |  2 +-
+ arch/arm/mm/pmsa-v8.c                |  2 +-
+ arch/arm/mm/proc-v7.S                |  2 +-
+ arch/arm/mm/proc-v7m.S               |  2 +-
+ arch/arm/mm/pv-fixup-asm.S           |  2 +-
+ arch/arm64/include/asm/memory.h      |  9 ++++++++-
+ arch/m68k/include/asm/mcf_pgtable.h  |  3 +--
+ arch/m68k/include/asm/page_mm.h      | 11 +++++++++--
+ arch/m68k/include/asm/page_no.h      | 11 +++++++++--
+ arch/m68k/include/asm/sun3_pgtable.h |  4 ++--
+ arch/m68k/mm/mcfmmu.c                |  3 ++-
+ arch/m68k/mm/motorola.c              |  4 ++--
+ arch/m68k/mm/sun3mmu.c               |  2 +-
+ arch/m68k/sun3/dvma.c                |  2 +-
+ arch/m68k/sun3x/dvma.c               |  2 +-
+ arch/riscv/mm/init.c                 |  4 ++--
+ drivers/memory/ti-emif-sram-pm.S     |  2 +-
+ drivers/net/xen-netback/netback.c    |  2 +-
+ fs/cifs/cifsglob.h                   |  2 +-
+ fs/cifs/smbdirect.c                  |  2 +-
+ fs/netfs/iterator.c                  |  2 +-
+ fs/proc/kcore.c                      |  2 +-
+ include/asm-generic/page.h           | 12 ++++++++++--
+ 64 files changed, 108 insertions(+), 80 deletions(-)
+
+
+Yours,
+Linus Walleij

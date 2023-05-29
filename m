@@ -2,45 +2,44 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74C2C71511D
-	for <lists+linux-next@lfdr.de>; Mon, 29 May 2023 23:49:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A0A2715126
+	for <lists+linux-next@lfdr.de>; Mon, 29 May 2023 23:59:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229591AbjE2Vtx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 29 May 2023 17:49:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35402 "EHLO
+        id S229745AbjE2V7c (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 29 May 2023 17:59:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjE2Vtw (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 29 May 2023 17:49:52 -0400
+        with ESMTP id S229552AbjE2V7b (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 29 May 2023 17:59:31 -0400
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D56F6C1;
-        Mon, 29 May 2023 14:49:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25547C1;
+        Mon, 29 May 2023 14:59:30 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QVThT65bcz4whk;
-        Tue, 30 May 2023 07:49:45 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QVTvh5vzTz4x3k;
+        Tue, 30 May 2023 07:59:28 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1685396986;
-        bh=M+yVj+vLQfNG4ud8zB4xhuy4EkeoZBz0Mfxes0Tz530=;
+        s=201702; t=1685397568;
+        bh=u/rC09ODihTPtpnM7cGR/asxyCQgZiFQxd1bE49F7q0=;
         h=Date:From:To:Cc:Subject:From;
-        b=PPgH3cfvnLHtyjNYkeM9ChDF8cZTzOnzE3sgb3S/fLifC74pKujI1Y32DdrIO9i/g
-         64jj9n68JWDLBKFrYTyO9huVtiKDicLBdr+pu8RGJ4svWXu0h+H2a/KNj0k4W4ECWC
-         aSMXLjP+XxKxi28kqgc0Bg7LE+FI/Kl189n6P3ieQxEOa/eWraKgqZtLOKH+KwXba1
-         4DrqUGH4rpms1RMcYwUqBTNfdwrckyu5Fhdx1mqEmP9PeOvUDxsyffhjf7NOQyTSkj
-         JcuNJIvygrgIAjfR5xkPjZxfF0bpIJ90P78/UYakX2flQeXh4MmmYfXUao4U7Uqr0W
-         HEGi0IQyh280Q==
-Date:   Tue, 30 May 2023 07:49:43 +1000
+        b=q+Ix1G9rVQ4bA5PLtGZSsW04b35xvJ7QaQSpLl8/8wTO5G1SICWtI1n8bpBFC3ieC
+         X453fDrRc9SB4W7/pGNuw30HplZ8HFUnFikhosCSUiZ6fQsRAopgIcPK8V6FnCvFBG
+         ia9isb55hcvkWRda65lFnnQ+Jc84XyeZT5KrtyBhB6Pb+T5+GCECBUM/OF5/WnZU6f
+         AwEtH7ZEDkmHAN0Tl71UObzd6QzWkfq2StF3QbgOnPjyEbyceu967zXOUbuzO68qSQ
+         V1IAXgNywCwLrRDivg7PIuq0wbOFQTdUfnl7Xk7yh+204ttMSuDFqw6Xc83LbTmVXc
+         zliUPg9s9JVdw==
+Date:   Tue, 30 May 2023 07:59:26 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andy Gross <agross@kernel.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the qcom tree
-Message-ID: <20230530074943.5b196424@canb.auug.org.au>
+Subject: linux-next: duplicate patches in the bluetooth tree
+Message-ID: <20230530075926.6477f0cc@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/MVHY6JUTwfHcGA/a91X/tyy";
+Content-Type: multipart/signed; boundary="Sig_/prPfBAIWGEAV3=5tz3w.Gt.";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -51,48 +50,55 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/MVHY6JUTwfHcGA/a91X/tyy
+--Sig_/prPfBAIWGEAV3=5tz3w.Gt.
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-In commit
+The following commits are also in Linus Torvalds' tree as different
+commits (but the same patches):
 
-  8b9ca2f3ea45 ("ARM: dts: qcom-apq8060: Fix regulator node names")
+  78c8f6e2d7d7 ("Bluetooth: btnxpuart: Fix compiler warnings")
+  e6e576ec4e72 ("Bluetooth: Unlink CISes when LE disconnects in hci_conn_de=
+l")
+  29f883dcbfd0 ("Bluetooth: Fix UAF in hci_conn_hash_flush again")
+  38e9b45310de ("Bluetooth: Refcnt drop must be placed last in hci_conn_unl=
+ink")
+  3214238e9dc7 ("Bluetooth: Fix potential double free caused by hci_conn_un=
+link")
 
-Fixes tag
+These are commits
 
-  Fixes: 04715461abf7 ("ARM: dts: qcom-msm8660: align RPM regulators node n=
-ame with bindings")
+  6ce5169e05aa ("Bluetooth: btnxpuart: Fix compiler warnings")
+  a2904d282553 ("Bluetooth: Unlink CISes when LE disconnects in hci_conn_de=
+l")
+  a2ac591cb4d8 ("Bluetooth: Fix UAF in hci_conn_hash_flush again")
+  2910431ab0e5 ("Bluetooth: Refcnt drop must be placed last in hci_conn_unl=
+ink")
+  ca1fd42e7dbf ("Bluetooth: Fix potential double free caused by hci_conn_un=
+link")
 
-has these problem(s):
-
-  - Target SHA1 does not exist
-
-Maybe you meant
-
-Fixes: 85055a1eecc1 ("ARM: dts: qcom-msm8660: align RPM regulators node nam=
-e with bindings")
+in Linus' tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/MVHY6JUTwfHcGA/a91X/tyy
+--Sig_/prPfBAIWGEAV3=5tz3w.Gt.
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmR1HfgACgkQAVBC80lX
-0GwphggAljxaWaVve4L0ZNePxtepnw/nvwKK/zg3uFZn+cekNuc8CcWtH2KYgNEx
-JmY3lOxM2McPlJ67pK7pWlsizKt1RV/T8Cva4qcCcy/23luqVzHG5Dy1/XcdKevh
-yuxtbsgv+8yRHGJuLf0klUepXxL4xjd176oAhoxtVVptRiAbDbjSazVeLH/g2RZY
-CNccbU0At/LpfqgbhSrFs/zvEE4ysRvLA6faZv30/E5PQWrPUQveC4NltJXE+NPE
-ztZFPVcoMCKV9Jua+Bd7N1nzPDGORMCD20fFB8Re77Kzl0rj6MoW5iAyEx8QyhVi
-zXvQmg7mm68kZT7aNDGnS+k2UNeAiw==
-=ji6r
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmR1ID4ACgkQAVBC80lX
+0Gzq2Qf8CJxfVtjjMnUzn2lEG9qMjkJjASh3qwcysdypvc29BBqoYofv2jjaRJ2u
+htgWl21Y4pkSadUT+ELO9AAnaFedOkUScnZTrsNlPf6UVZ25auVOrdOnVf10UEa9
+788h85o+A8qqHRM6pzZc4eF2KIiq4bcl8Pz/k3B+mA1v5a/j98CN6jTpkrWjH88P
+iSQlzscfH0rdF2FZEYQfaPErAFgATY1SIn0ysdJzFj0E4HGGuXqJ0bgIRJjxgLkq
+eJDchoCy7a52Sr2JeytRcyXSaNYPmLHpFm2T8838j/6OVNftYGfcHZazP81SnKun
++Vtg/KINPee9eBKEbXZA/YwJMf9ZXA==
+=Rbvk
 -----END PGP SIGNATURE-----
 
---Sig_/MVHY6JUTwfHcGA/a91X/tyy--
+--Sig_/prPfBAIWGEAV3=5tz3w.Gt.--

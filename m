@@ -2,59 +2,61 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A04D715A46
-	for <lists+linux-next@lfdr.de>; Tue, 30 May 2023 11:35:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECA29715AA5
+	for <lists+linux-next@lfdr.de>; Tue, 30 May 2023 11:50:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230046AbjE3JfQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 30 May 2023 05:35:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49476 "EHLO
+        id S231206AbjE3JuP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 30 May 2023 05:50:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229920AbjE3JfO (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 30 May 2023 05:35:14 -0400
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6519ECD
-        for <linux-next@vger.kernel.org>; Tue, 30 May 2023 02:35:12 -0700 (PDT)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-561c1436c75so61502937b3.1
-        for <linux-next@vger.kernel.org>; Tue, 30 May 2023 02:35:12 -0700 (PDT)
+        with ESMTP id S231229AbjE3JuK (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 30 May 2023 05:50:10 -0400
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64C279C
+        for <linux-next@vger.kernel.org>; Tue, 30 May 2023 02:50:09 -0700 (PDT)
+Received: by mail-yb1-xb2f.google.com with SMTP id 3f1490d57ef6-bad05c6b389so5980018276.2
+        for <linux-next@vger.kernel.org>; Tue, 30 May 2023 02:50:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685439311; x=1688031311;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=wAtnkiymSsa0zjCECnvHixXJojMj1jUcew0fzmvrOXU=;
-        b=Kgdbf1D3AS2i8/69a2WN1A9HFNChWxhW9DJy4I3yt+TJywPcrOPT/rUFRMzq27H1Fa
-         7fpF5mFu74z+x4JXDOYEp9SluYLyyFxgEB113Dj7V6E0QooNYBdTZS+MZDZbOiwbF83O
-         jwfwi5oA/x4qZg3LPyhBlLJL1bp0tjQ9Otxmnu1yU/b9irTedz2vln4a3Tu6yVpmP8UC
-         54QJZm0HWXSYL1o4uFwLixywh3Y/j1L7gyXnkm6yjF2upjhfW9s0Px9VMU5V6CSSk5rA
-         qaN3adxai+EwVXou4OPRZNfr0Yb7140d13ByZjffnwN/vHKLsYeim/axeU6JHUcymO90
-         N9Ew==
+        d=linaro.org; s=google; t=1685440208; x=1688032208;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mY8EOyPk9m+Ti4ct23oUFQXpV/JvMzGqMlfNe1g256c=;
+        b=GaJVIlA+adxAdqMq+T5cdDZpReTWNDrvP5cvfBA8pPtz91rKqLRqUqQKlOlCgNrMvm
+         U8sKwnIiyu5SETXQHS3UC5iTfqhjFN/BVUoSclrF9NhMUyukD/JgywZZyUbcwuS4MC2E
+         /A127qQQ3i24P2x8I4+FLPjAzRrKKSi8w+Veuqgli9VNCrM0VlvuoTnI27fK9JDkl4QN
+         gDlI/NYcuJ1K1btyiU9CjMhncg5RXig87/iZxcAwbDTlxv920ZbpP19c3AzedMDjJpNT
+         sXlL0xw4/UCq5er3uaXPGnsJxKI3CWwOPUe8j4Lt9+f3u5ZQMhUfSxiDiO577JV3YO4t
+         Vqow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685439311; x=1688031311;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wAtnkiymSsa0zjCECnvHixXJojMj1jUcew0fzmvrOXU=;
-        b=l+lDJBsXiJg3O5vHWTDglujnHp8Bo7G0QupYqCePIdQsE7UY2+qDJJ8JQuPMfsIt9u
-         dGJuX9V+NMI0EeC7QNy8ED7HcvvLbI23szkJm3r/pwkLx+/YJ76KSjFmTEuHA6OlGXb/
-         aFhxug1NigHVSg+xmjZVrz1gQXOWiHrUnEnl5fRN2PqTomLtG4CT66+INrmArS0KtMj4
-         Sl5PQmJcaitfMa26+DGzxr2vkOtgfc/TGwEt4Y6zYmTAsdm69QcygP6/TiLWvnMJcANS
-         DiLkEHF/SdrA8GCsazC683J0Lq2uzbCXIZKSTZUHaXXbVpR/Qt4kxjxgRNdee0l+0H4M
-         vGGQ==
-X-Gm-Message-State: AC+VfDz7fG068jwcd8HTgGPx9+qa0Fxap9GGgEwPWpA/KP9EYbqcj3HC
-        cpdNt/fPWBUV8To44LvQbtKm0yDz81vnX7+/mlTvUY7YsU4WF+hy
-X-Google-Smtp-Source: ACHHUZ531amOVqZSHwCwc5OgdxvJRmaVfSbMntD1FYwcgW3ZzgP84h2rZAtCviYMoQBVTNqu9y6ZYo4WRxCP+G+yg2U=
-X-Received: by 2002:a81:5d89:0:b0:561:179b:1276 with SMTP id
- r131-20020a815d89000000b00561179b1276mr1572669ywb.26.1685439311423; Tue, 30
- May 2023 02:35:11 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1685440208; x=1688032208;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mY8EOyPk9m+Ti4ct23oUFQXpV/JvMzGqMlfNe1g256c=;
+        b=ET2bnK1boxlHkJ1kfbmCnH2nnDCujrTTx8Ggzn5uAH80nt6nw2VRUVmqFRKK/un9ID
+         RnvqrZ6to1aAeR4fT5v0fdD2gkeoJ7OFoABanL8Tzy/MVz7dR4bMT5b/h8BvIKC5JjpG
+         d5+7D/uqv/x05louOI2bgFRwmnOhOzjd8GTx/c74Lt/d5mrVzCFY+58Ps+KYmMJknbKC
+         +laYxbMXmML91iyxvtRvtoxrx5qY0XRmqsAz9ovA/miDH3sEVXONbefee+WqNyE1KOYo
+         KP2qcQL06QQBRQ3Q3fVXdc0sbhTnLTWnAMP1IqqePL2hvv2BvCBXYLRlyHbqez2fsEGI
+         hQHg==
+X-Gm-Message-State: AC+VfDzGo82qNB81CGBusvYCZw/GzCppmLXFfS/9ntk7zXzLBuR6VcbB
+        Q+vuBqYj8qT2xjQaAy32f4lbTo59CzCwIOcxtuGBrw==
+X-Google-Smtp-Source: ACHHUZ6YbgVeepX0NXhKYfOQl1mZjMr+b/ldYK1S0FACduOM4Cp7h1OMahvVMANhpqE3tmkfBDhU24Fs4VgMR8DGr+k=
+X-Received: by 2002:a81:4993:0:b0:561:e7bb:1b27 with SMTP id
+ w141-20020a814993000000b00561e7bb1b27mr1478937ywa.52.1685440208547; Tue, 30
+ May 2023 02:50:08 -0700 (PDT)
 MIME-Version: 1.0
 References: <20230530141914.672a8e59@canb.auug.org.au> <e6217d79-0e80-4478-a8f9-c52ce0f65377@app.fastmail.com>
-In-Reply-To: <e6217d79-0e80-4478-a8f9-c52ce0f65377@app.fastmail.com>
-From:   Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Date:   Tue, 30 May 2023 11:35:00 +0200
-Message-ID: <CACMJSes3La5Gt7xUuhc-wUbobrTyK4zzBxup1HT7aLvj58+Kag@mail.gmail.com>
+ <CACMJSes3La5Gt7xUuhc-wUbobrTyK4zzBxup1HT7aLvj58+Kag@mail.gmail.com>
+In-Reply-To: <CACMJSes3La5Gt7xUuhc-wUbobrTyK4zzBxup1HT7aLvj58+Kag@mail.gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 30 May 2023 11:49:57 +0200
+Message-ID: <CACRpkdadRJdXTWdteKjjq-jxskNhH9sP8xdRTX8wbYV8YC55sA@mail.gmail.com>
 Subject: Re: linux-next: manual merge of the gpio-brgl tree with the arm-soc tree
-To:     Arnd Bergmann <arnd@arndb.de>,
-        Linus Walleij <linus.walleij@linaro.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+To:     Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
         Bartosz Golaszewski <brgl@bgdev.pl>,
         Olof Johansson <olof@lixom.net>,
         ARM <linux-arm-kernel@lists.infradead.org>,
@@ -62,52 +64,63 @@ Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-next <linux-next@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, 30 May 2023 at 11:29, Arnd Bergmann <arnd@arndb.de> wrote:
+On Tue, May 30, 2023 at 11:35=E2=80=AFAM Bartosz Golaszewski
+<bartosz.golaszewski@linaro.org> wrote:
+> On Tue, 30 May 2023 at 11:29, Arnd Bergmann <arnd@arndb.de> wrote:
+> >
+> > On Tue, May 30, 2023, at 06:19, Stephen Rothwell wrote:
+> > > Hi all,
+> > >
+> > > Today's linux-next merge of the gpio-brgl tree got a conflict in:
+> > >
+> > >   drivers/gpio/gpio-twl4030.c
+> > >
+> > > between commit:
+> > >
+> > >   d5f4fa60d63a ("ARM/gpio: Push OMAP2 quirk down into TWL4030 driver"=
+)
+> > >
+> > > from the arm-soc tree and commit:
+> > >
+> > >   fbc8ab2ccd85 ("gpio: twl4030: Use devm_gpiochip_add_data() to
+> > > simplify remove path")
+> > >
+> > > from the gpio-brgl tree.
+> > >
+> > > I fixed it up (see below) and can carry the fix as necessary. This
+> > > is now fixed as far as linux-next is concerned, but any non trivial
+> > > conflicts should be mentioned to your upstream maintainer when your t=
+ree
+> > > is submitted for merging.  You may also want to consider cooperating
+> > > with the maintainer of the conflicting tree to minimise any particula=
+rly
+> > > complex conflicts.
+> >
+> > Maybe Bartosz wants to merge Linus' gpio-omap-descriptors-v6.5 series
+> > into the gpio/for-next branch as well? It touches both the
+> > arch/arm/mach-omap and a lot of the drivers using the gpios, so we
+> > could treat this as a shared immutable branch.
+> >
+> >     Arnd
 >
-> On Tue, May 30, 2023, at 06:19, Stephen Rothwell wrote:
-> > Hi all,
-> >
-> > Today's linux-next merge of the gpio-brgl tree got a conflict in:
-> >
-> >   drivers/gpio/gpio-twl4030.c
-> >
-> > between commit:
-> >
-> >   d5f4fa60d63a ("ARM/gpio: Push OMAP2 quirk down into TWL4030 driver")
-> >
-> > from the arm-soc tree and commit:
-> >
-> >   fbc8ab2ccd85 ("gpio: twl4030: Use devm_gpiochip_add_data() to
-> > simplify remove path")
-> >
-> > from the gpio-brgl tree.
-> >
-> > I fixed it up (see below) and can carry the fix as necessary. This
-> > is now fixed as far as linux-next is concerned, but any non trivial
-> > conflicts should be mentioned to your upstream maintainer when your tree
-> > is submitted for merging.  You may also want to consider cooperating
-> > with the maintainer of the conflicting tree to minimise any particularly
-> > complex conflicts.
+> I was about to ask for an immutable tag. :)
 >
-> Maybe Bartosz wants to merge Linus' gpio-omap-descriptors-v6.5 series
-> into the gpio/for-next branch as well? It touches both the
-> arch/arm/mach-omap and a lot of the drivers using the gpios, so we
-> could treat this as a shared immutable branch.
->
->     Arnd
+> Linus, is this the right tag to pull from your tree?
 
-I was about to ask for an immutable tag. :)
+Yups go ahead, it's totally immutable!
 
-Linus, is this the right tag to pull from your tree?
+Sorry for not thinking about it before.
 
-Bart
+Yours,
+Linus Walleij

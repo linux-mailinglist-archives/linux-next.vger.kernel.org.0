@@ -2,93 +2,118 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87D0471547B
-	for <lists+linux-next@lfdr.de>; Tue, 30 May 2023 06:23:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED0E8715481
+	for <lists+linux-next@lfdr.de>; Tue, 30 May 2023 06:32:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229569AbjE3EXu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 30 May 2023 00:23:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57158 "EHLO
+        id S230003AbjE3EcW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 30 May 2023 00:32:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230021AbjE3EXn (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 30 May 2023 00:23:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D6D0E4;
-        Mon, 29 May 2023 21:23:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S229838AbjE3EcV (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 30 May 2023 00:32:21 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0162BE4;
+        Mon, 29 May 2023 21:32:19 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B057F619B9;
-        Tue, 30 May 2023 04:23:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03344C433D2;
-        Tue, 30 May 2023 04:23:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685420621;
-        bh=GqutkF5MXsruCTwXr5ie/PdJ0e98ztYdsBZec7CiqHU=;
-        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-        b=rCXiIQImQZ3BZIQhrr/E5IEfYFqR5NxJfeOT8IxJgsA+pjekgz9LJuZkeCVCGeM1o
-         SdiNRcgHSFViZtDOoOp4lJiLBxkZaRyg9eedKnkE5zF4t7nq0vG1GE8K2a9hU7HARh
-         wR+TqyQyiQLKTvCq3q/fg0j8AuijHn4MSeSlft9aICNsks8yuNeLNE0hya0l3lHhm/
-         bo8AqCJ2d13Ic3b4cvBQWr/FMKUlKYc397oCWMI3cNXjg3p2vKbCNXebQajn9AK5Hi
-         VnyQtA2EUlI3PrqJW1we6wf/D9OUydQ7bsH9jJJyqkThZZOeScps2umkRJULhM4Z5W
-         97OLLRGPTH80g==
-Date:   Mon, 29 May 2023 21:23:39 -0700
-From:   Kees Cook <kees@kernel.org>
-To:     =?ISO-8859-1?Q?Joan_Bruguera_Mic=F3?= <joanbrugueram@gmail.com>,
-        Thorsten Leemhuis <linux@leemhuis.info>
-CC:     Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-crypto@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QVfcy0Q97z4x46;
+        Tue, 30 May 2023 14:32:18 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1685421138;
+        bh=U8n9Hde3DsbVeXiazBuQ1xk7QSZyvg9RTkdEpTMUxzc=;
+        h=Date:From:To:Cc:Subject:From;
+        b=KhxG2/lu2ZYmaTaJApux+GzhYtZ4KdSpq/UwExYHeG43xweeYGftLEhUfKJjMKkJp
+         T+gC8iydc+wqBmxtlb/ikNIAtD7FWtlR5zVXwkUmRbCLWbb+Hvk4GO2GujXPzqfn7i
+         RL8gZaO/VrcJ6eeGj1mkHPaW2beTuU9xXfJq+uVsRuvT7kGWNSVqGWbfU2DfHbFKGl
+         0/LQDsGWXBT5ks75B5tbRPG67YKzDaWxHxWphSlbbsQOFfDW6cjAH3uoimts6+YStB
+         b4a7wKbuoqzVUYMWve9JXyv0ILM3wfeCLJajqFTaMO3oRebXYKE3Jq1SIWfQKRJLt/
+         fSzLnLskVs+gQ==
+Date:   Tue, 30 May 2023 14:32:17 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>
-Subject: =?US-ASCII?Q?Re=3A_build_error_while_building_arch/x86/purgatory/sha256?= =?US-ASCII?Q?=2Eo=3A_invalid_=27asm=27=3A_operand_i?= =?US-ASCII?Q?s_not_a_condition_code_=5B=2E=2E=2E=5D?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <20230528164031.266590-1-joanbrugueram@gmail.com>
-References: <175578ec-9dec-7a9c-8d3a-43f24ff86b92@leemhuis.info> <20230528164031.266590-1-joanbrugueram@gmail.com>
-Message-ID: <EE2A76DE-973F-4FCD-AEC8-C24D9FFCC3F1@kernel.org>
+        Masahisa Kojima <masahisa.kojima@linaro.org>
+Subject: linux-next: manual merge of the efi tree with the efi-fixes tree
+Message-ID: <20230530143217.49ae8cbf@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/Zta=SjlqHVMyuVoNmM/m3i1";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On May 28, 2023 9:40:31 AM PDT, "Joan Bruguera Mic=C3=B3" <joanbrugueram@gm=
-ail=2Ecom> wrote:
->I can also reproduce the problem with Arch's linux-next-git, see config:
->https://aur=2Earchlinux=2Eorg/cgit/aur=2Egit/tree/config?h=3Dlinux-next-g=
-it&id=3Df9a384e1c582321651fb613782ebc5a581146af0
->
->I've bisected it to df8fc4e934c1 ("kbuild: Enable -fstrict-flex-arrays=3D=
-3"),
->which explains why it only happens on GCC13=2E
->
->The problematic expansion that causes the error seems to be this fragment
->from `_BUG_FLAGS` in `arch/x86/include/asm/bug=2Eh`:
->    asm("=2Elong %c0 - =2E\n": : "i" (__FILE__));
->
->Along with the fact that this file is built with `-mcmodel=3Dlarge`
->(see `PURGATORY_CFLAGS` in `arch/x86/purgatory/Makefile`)=2E
+--Sig_/Zta=SjlqHVMyuVoNmM/m3i1
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I haven't reproduced this yet, but the error implies that the asm input "i=
-"mmediate value of the __FILE__ string address cannot be used with the asm =
-template format "%c0" (a constant value)=2E
+Hi all,
 
-https://gcc=2Egnu=2Eorg/onlinedocs/gcc/Extended-Asm=2Ehtml#Generic-Operand=
--Modifiers
+Today's linux-next merge of the efi tree got a conflict in:
 
-I cannot fathom why struct flex array logic would change that=2E=2E=2E
+  include/linux/efi.h
 
-I'll take a closer look in the morning=2E
+between commit:
 
--Kees
+  fd936fd8ac10 ("efi: fix missing prototype warnings")
 
+from the efi-fixes tree and commit:
+
+  5b6e3aa08c62 ("efi: expose efivar generic ops register function")
+
+from the efi tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
-Kees Cook
+Cheers,
+Stephen Rothwell
+
+diff --cc include/linux/efi.h
+index 571d1a6e1b74,657f7e203374..000000000000
+--- a/include/linux/efi.h
++++ b/include/linux/efi.h
+@@@ -1338,6 -1350,7 +1350,9 @@@ bool efi_config_table_is_usable(const e
+  	return xen_efi_config_table_is_usable(guid, table);
+  }
+ =20
+ +umode_t efi_attr_is_visible(struct kobject *kobj, struct attribute *attr,=
+ int n);
+ +
++ void efivars_generic_ops_register(void);
++ void efivars_generic_ops_unregister(void);
++=20
+  #endif /* _LINUX_EFI_H */
+
+--Sig_/Zta=SjlqHVMyuVoNmM/m3i1
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmR1fFEACgkQAVBC80lX
+0GxI0Af9FM1vbjoQ0dm4uairsYi5SbcHlOV8+L0sybP1V9Iq6tlyGnrm/xdBpQtq
+g4CDShQZo/+TOr+VKRSwkQiq8LeoBbctUiciE/tYHSjKCQVFz2iTIYYCQrnPo5XX
+zOHuyLDWOUEISua+DXI/xqHV6TdiMni0yuTZdpBdgyc+4cDo8ineKssRhEeYs7zY
+pl8hHZgYI9MtROhTHls7u+zhDTkJtfyq+PR6eXqgUf6wAvq+BgcrkY+PJyNT2xKl
+4YlaGGEHKVT4uLcDza9aISVicaL4hcICKzCaavKAGZujMYDTfp9KAIxRtm+0ydrG
+lX9jiNaAsKMV37LAjop/icoRar7I3w==
+=65db
+-----END PGP SIGNATURE-----
+
+--Sig_/Zta=SjlqHVMyuVoNmM/m3i1--

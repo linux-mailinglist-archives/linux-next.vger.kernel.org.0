@@ -2,86 +2,81 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8639716524
-	for <lists+linux-next@lfdr.de>; Tue, 30 May 2023 16:52:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 973F271719F
+	for <lists+linux-next@lfdr.de>; Wed, 31 May 2023 01:25:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230367AbjE3Ows (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 30 May 2023 10:52:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60466 "EHLO
+        id S233003AbjE3XZF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 30 May 2023 19:25:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231232AbjE3Owo (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 30 May 2023 10:52:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 866F99D;
-        Tue, 30 May 2023 07:52:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S233996AbjE3XZD (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 30 May 2023 19:25:03 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A6BCEC;
+        Tue, 30 May 2023 16:24:56 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0879562F71;
-        Tue, 30 May 2023 14:52:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0811C491FD;
-        Tue, 30 May 2023 14:52:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685458362;
-        bh=lrGvDMEg7tRfc8Rot9o9QuAmWL8TRRNHnQdJdjzRMgA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WTNaMYXmzsTeL6EDs0zHzAJK5Mi3J6iQU5zP6C2CXI7v4g75+jdW+A+Qlr3A+NI+x
-         sDccb2AEViFilCdPyLapitGVRBRfFZU76Q3OK7YUI+FmiR2BVRduYIeU/cV10/Ts0V
-         jA/hFQGOIMNNC1GSFiTyolBxImCMRlefMMtgq5UQiee0+rLqawXejFnrFnczs1p/P0
-         clLfQBs7iuGXZpObYbZ9BH8frlR64gJ/LAOr1nKFYiWGGRl9AkGamhMwPqsvN4b9v2
-         VGmdDfm5w2qlt0DSguNta0Qs+L6o72BfXT90u0IZruB0x1QHdB5U6MFpzuMDKIcohS
-         Dmwof2lgs3kyw==
-Date:   Tue, 30 May 2023 07:56:25 -0700
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Andy Gross <agross@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QW7ll6v4fz4x1R;
+        Wed, 31 May 2023 09:24:51 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1685489092;
+        bh=G3t0B5Xt3E6x9AiR3KqrcH9MzzUZUTOm26CJDc2R/64=;
+        h=Date:From:To:Cc:Subject:From;
+        b=o83jLI6ct/f7+QnMImOw3dUAHGtNgsnL4mqA5UsqH7eDR3K87js+i9VPLHQ++fXXP
+         dy2ltCAjhhZMKlSWxF0Zmz3FKxdlT1RNBGZViyXhmgSWuXQ3ktE3uaSFins0QSfHob
+         ZfjqgUOylglZmzEiAxLT5DCja5pu9TmlLwju0NbWeOVzKy0u7HTuD1b1oBbvpVklwl
+         9oWmp12xDaRtGkXHOj+CoC6n9KTK8d3j5ws/Imw2zZ0F2Zfke/6ulcurVSF0tbV3qG
+         jLO+11jCAtfpwvy+3Q1PHJExeBDKMFL6d6SVNpNZIxM1SVZTiJeqwy0Hx36tFUioi4
+         mAn/0oZQS6NVQ==
+Date:   Wed, 31 May 2023 09:24:48 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Fixes tag needs some work in the qcom tree
-Message-ID: <20230530145625.2znyjfd2bujfii5l@ripper>
-References: <20230530074943.5b196424@canb.auug.org.au>
+Subject: linux-next: bad rebase of the tpmdd tree
+Message-ID: <20230531092448.5fa4d718@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230530074943.5b196424@canb.auug.org.au>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/5F.2VQqhhKRc7O_thQ0K_tj";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, May 30, 2023 at 07:49:43AM +1000, Stephen Rothwell wrote:
-> Hi all,
-> 
-> In commit
-> 
->   8b9ca2f3ea45 ("ARM: dts: qcom-apq8060: Fix regulator node names")
-> 
-> Fixes tag
-> 
->   Fixes: 04715461abf7 ("ARM: dts: qcom-msm8660: align RPM regulators node name with bindings")
-> 
-> has these problem(s):
-> 
->   - Target SHA1 does not exist
-> 
-> Maybe you meant
-> 
-> Fixes: 85055a1eecc1 ("ARM: dts: qcom-msm8660: align RPM regulators node name with bindings")
-> 
+--Sig_/5F.2VQqhhKRc7O_thQ0K_tj
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thank you Stephen, the tag has now been corrected.
+Hi all,
 
-Regards,
-Bjorn
+The tpmdd tree has been rebased onto Linus' tree, but has included some
+of the patches from Linus' tree as new commits :-(
 
-> -- 
-> Cheers,
-> Stephen Rothwell
+--=20
+Cheers,
+Stephen Rothwell
 
+--Sig_/5F.2VQqhhKRc7O_thQ0K_tj
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmR2hcAACgkQAVBC80lX
+0Gz+jAf9HTHqybtUAYNhVNpkEk8D6wDNWDpm72mtiXVgwgqvNSy/wwaDlV1GyhnR
+HG7K6RsidKnRwFgL2/QUjR1uBb9yt2zHcrvWS7alhNn/SJUat1pt0p9P1RBVWuy7
+6qjmNoVoQg2kQ0WFu+2IRUffcKr+aQ+GzCByIoKSXJDUnPaBhrNybbJmVT8oBlaf
+PWZ3eSBzeuZ2DBciNNEdSOUPzZi3beX5Y/rsMmDOx7iKTqeNTeSsR/XHFBjv3pU4
+sKVl4IKGgz2NZv1nPzZjr9/oA0fsSkpzP0o7tOe61MlNyP7GkHeqxecvWsrFGCMv
+/Mg517Sll7UCO2gQCiYRmH93fTEzng==
+=NlWh
+-----END PGP SIGNATURE-----
+
+--Sig_/5F.2VQqhhKRc7O_thQ0K_tj--

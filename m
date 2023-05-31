@@ -2,93 +2,90 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A14AE71818F
-	for <lists+linux-next@lfdr.de>; Wed, 31 May 2023 15:25:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9E1B7177FF
+	for <lists+linux-next@lfdr.de>; Wed, 31 May 2023 09:23:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232598AbjEaNZr (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 31 May 2023 09:25:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45868 "EHLO
+        id S234681AbjEaHXn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 31 May 2023 03:23:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233178AbjEaNZm (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 31 May 2023 09:25:42 -0400
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3BEB128
-        for <linux-next@vger.kernel.org>; Wed, 31 May 2023 06:25:41 -0700 (PDT)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-5689335d2b6so37230907b3.3
-        for <linux-next@vger.kernel.org>; Wed, 31 May 2023 06:25:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685539541; x=1688131541;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fB0ipJPMm2rGF8sYHVKFVeFZVg6tsQPk0Fbm/0GB+ZA=;
-        b=OkIXsSIro8PmB3eVXXVblwo0+IvNv61W9g6ZXtPUKjyd3szYBvVs95tejOdWTIg+Q2
-         huu77at3xyWmSGt9hiw8WVtZ4n1UG3Sc2XVGP11LLELVEWLSDLVaplelASHjeZonGyd4
-         pm+1i0nMVJwP5h/vGuh7E7IDXavRNq15fBplPH+0aQzP6JSo0IxycriPCpQplWXdun0N
-         j2mfAzsRdaYAc3vz30lSKvv7fNx1/syMyUk2ipJfEzFNOoNxxxMFaw9e/kQv3KP/LlvQ
-         TT8mDVW/4TnfsquOJzfyXcY/YpSDOfoY2BO3/ECbEsXL3xoVPEcYxLsDGPH3KKzMAbyK
-         B9IQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685539541; x=1688131541;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fB0ipJPMm2rGF8sYHVKFVeFZVg6tsQPk0Fbm/0GB+ZA=;
-        b=czKyizKtxXm+H6T7aNDCikWUaCVBxXFF/OVVWIsNvbR3qWvqtxtsXpMyOH6/+puyrc
-         qFfMnIFxpOYasZ/UajzkD5zplFaOT/H2Ih45c1L7BMOSWQg/p39TEFrTzJv61ItVavOq
-         g/eJHw1EuDswziLIZDmVzg+DAHd59PdUxLcqQbXmc4d5biOct5RG1fdSmCh/7dGdASG9
-         UdOQZFpwGIDQ9b0FilWi3Sr8ydQ+wnX74omovpihgQiBDlkBFhd3bYC+YdTy0zj9D1gD
-         oJOKiwa60KBNYyY9rkp07RyidEDrdX9TduSxORYwzlMYO0rv+3yGZChYbgT4Pz7gZz74
-         7gow==
-X-Gm-Message-State: AC+VfDz7CiY9j+faRe5Y5jGJsF1f4qgHdTJn1jezxt+mpLRwqsa2KVPY
-        wDTGys99HckDO8hDVEPfYIaCTVadtolpJj4LfbLkWg==
-X-Google-Smtp-Source: ACHHUZ5clsb5efhsDOL+wVqLr3HCnTlOhux7PAZi5smqMgqncIBI3VSw8E5cfc8meoA9/m/QT7vxpZnbaVgSVSRGBLk=
-X-Received: by 2002:a81:df12:0:b0:565:4eee:a4d4 with SMTP id
- c18-20020a81df12000000b005654eeea4d4mr5693650ywn.10.1685539540818; Wed, 31
- May 2023 06:25:40 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230530074943.5b196424@canb.auug.org.au> <20230530145625.2znyjfd2bujfii5l@ripper>
-In-Reply-To: <20230530145625.2znyjfd2bujfii5l@ripper>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 31 May 2023 15:25:29 +0200
-Message-ID: <CACRpkdZZS+UConPEyuiWxJNoC36Y+udbE0ZXnk4jRgNQ3FtF1w@mail.gmail.com>
-Subject: Re: linux-next: Fixes tag needs some work in the qcom tree
-To:     Bjorn Andersson <andersson@kernel.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Andy Gross <agross@kernel.org>,
+        with ESMTP id S234528AbjEaHXS (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 31 May 2023 03:23:18 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 900F9E52;
+        Wed, 31 May 2023 00:23:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685517787; x=1717053787;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=RQamFbPHk7jhRFeasP//s4TdVJOiGc/kNVR3XMXPQf0=;
+  b=LFJrLKtM+SpQH3JpBgW7sCK1kIQwFUzh5qiTe5G6/IlvDh7otVJmtmsS
+   ktu66KOdKNlz7gtpCGyq2f7hvjo9E4UEECmqQ1swEYBTouFbUHfGVQfkP
+   ACq1hY3n+TC05kJBmgcyJrq8B7ftPrVoZ7I9vb4giQbsa4eyCA5F6X5/Y
+   RGkxft4O+GfKMgFVF4mrIIVdJLSCV2o5dY9qWM22AC79YJ7lSbycfvd3m
+   4x2vYNZM3C6WAkCFxVIZY141bzUN0eNE6Qks5JM+UTVyylz4oeydnymaz
+   931Zj15IKvGCo2bjA+2+auFiVJ049FBfhP+rV3Iu0GoJqdg1QSGprD7WA
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="334781366"
+X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
+   d="scan'208";a="334781366"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2023 00:23:06 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="739837831"
+X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
+   d="scan'208";a="739837831"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by orsmga001.jf.intel.com with ESMTP; 31 May 2023 00:23:04 -0700
+Date:   Wed, 31 May 2023 23:22:38 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+        Greg KH <greg@kroah.com>, Arnd Bergmann <arnd@arndb.de>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: linux-next: duplicate patches in the fpga-fixes tree
+Message-ID: <ZHdmPm1F56QGrKME@yilunxu-OptiPlex-7050>
+References: <20230531101925.39360756@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230531101925.39360756@canb.auug.org.au>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, May 30, 2023 at 4:53=E2=80=AFPM Bjorn Andersson <andersson@kernel.o=
-rg> wrote:
+On 2023-05-31 at 10:19:25 +1000, Stephen Rothwell wrote:
+> Hi all,
+> 
+> The following commits are also in the char-misc.current tree as different
+> commits (but the same patches):
+> 
+>   d8bdc50012fe ("dt-bindings: fpga: replace Ivan Bornyakov maintainership")
+>   feeb9c9219bd ("MAINTAINERS: update Microchip MPF FPGA reviewers")
 
-> >   Fixes: 04715461abf7 ("ARM: dts: qcom-msm8660: align RPM regulators no=
-de name with bindings")
-> >
-> > has these problem(s):
-> >
-> >   - Target SHA1 does not exist
-> >
-> > Maybe you meant
-> >
-> > Fixes: 85055a1eecc1 ("ARM: dts: qcom-msm8660: align RPM regulators node=
- name with bindings")
-> >
->
-> Thank you Stephen, the tag has now been corrected.
+I'll remove them in FPGA tree as they are already accepted by char-misc
 
-Sorry for messing this up, thanks for fixing!
+Thanks,
+Yilun
 
-Yours,
-Linus Walleij
+> 
+> These are commits
+> 
+>   9da6225bc737 ("dt-bindings: fpga: replace Ivan Bornyakov maintainership")
+>   929f4e7c06ca ("MAINTAINERS: update Microchip MPF FPGA reviewers")
+> 
+> in the char-misc.current tree.
+> 
+> -- 
+> Cheers,
+> Stephen Rothwell
+
+

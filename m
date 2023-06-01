@@ -2,72 +2,47 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53F2E71A225
-	for <lists+linux-next@lfdr.de>; Thu,  1 Jun 2023 17:15:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4578571F66A
+	for <lists+linux-next@lfdr.de>; Fri,  2 Jun 2023 01:12:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233640AbjFAPPX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 1 Jun 2023 11:15:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55102 "EHLO
+        id S231232AbjFAXM4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 1 Jun 2023 19:12:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233520AbjFAPPW (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 1 Jun 2023 11:15:22 -0400
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E7F5B3
-        for <linux-next@vger.kernel.org>; Thu,  1 Jun 2023 08:15:21 -0700 (PDT)
-Received: by mail-il1-x131.google.com with SMTP id e9e14a558f8ab-33d0c740498so411105ab.0
-        for <linux-next@vger.kernel.org>; Thu, 01 Jun 2023 08:15:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1685632521; x=1688224521;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=o+F3XMekuXHuWIgCSsQ++NIeXO+URcOh8EvMjy2nv14=;
-        b=doSleAE9iQ/fpG1saj/46RDsYLT1lJm+nUEQsc0hOBi+JduFCGX96cOElqbWWtLJF4
-         otk+cVw4cPewhN61uTgHXhQ1aIa4zlsFklZ41SKrLAeCn2hYw4OkhYIZxFjYyPN3BmZL
-         awbRRWPTT2o0041A9dZq2lnUA6vVwNL/muHUvut5+YwI+K7PbOeVAqUGmL/+IhXzhNmT
-         ZLHEpBB2gMuTXIG542iAz5cyOSEebnKuIhZ4OntHaLZdaeNUhbVUQniG7iHVdRN1q3/f
-         bmXELU8QSBhq8dtaUJCuMVD0UCxVP4rDRSwBOmtJLuKLwLWNshaLztUOWIW1m3CB92eP
-         h8ww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685632521; x=1688224521;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=o+F3XMekuXHuWIgCSsQ++NIeXO+URcOh8EvMjy2nv14=;
-        b=gY+3mAgWKrvYeEwcyzLKta26vQnpHc+jS2DQYTv+vZKBFvjTHzdNGe17qowMxillmp
-         5w4eMSdEtrvH4QjwvWJVLmYymOUEJifCACU57AUxFA/N+RSnKgtkWu9B4FAkIkQlWrdQ
-         DOH8di58nPY6KWQquAPRBTWVTXdwxhsTj2t8vTek4zOe+cLKk0T6Y6ZgQFATJ35d+6G3
-         rt3QhA5XmPZDGk09svFO6BMp8K2nvKdG1nxQC/CEAxSMU305zU9GXGDF/0Oa88jDBY5a
-         zMgITtbjXG9d9Up2BDmBOMoutCh3a01oazjUs0S5FFqvyVou6Nq66DWriemhgMqMlnlT
-         TuKQ==
-X-Gm-Message-State: AC+VfDwmrJijy4DUsxmLpIMOX0rDmjSXRMPcKr8+BhnuSWxT6eACA3Jl
-        +9MzbZulQ2nJ7VzbFgSTgYxIn1nTtYkZ+Ro7Mfk=
-X-Google-Smtp-Source: ACHHUZ4aDwWmm0SZGc5Yo3Cxv+brXsxD3GkC3hDRE0VQJCew9TUC5FzFyjCzBbRrX2pALjky/Pryvw==
-X-Received: by 2002:a92:3652:0:b0:33b:1b5d:9723 with SMTP id d18-20020a923652000000b0033b1b5d9723mr3255265ilf.3.1685632520982;
-        Thu, 01 Jun 2023 08:15:20 -0700 (PDT)
-Received: from [192.168.1.94] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id h17-20020a92d091000000b0033079f435f7sm3862149ilh.65.2023.06.01.08.14.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Jun 2023 08:14:30 -0700 (PDT)
-Message-ID: <416030d0-f8f1-23b0-875c-ad75880aca4f@kernel.dk>
-Date:   Thu, 1 Jun 2023 09:14:09 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: linux-next: build failure after merge of the block tree
-Content-Language: en-US
-To:     Johannes Thumshirn <Johannes.Thumshirn@wdc.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
+        with ESMTP id S229866AbjFAXMz (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 1 Jun 2023 19:12:55 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FB17194;
+        Thu,  1 Jun 2023 16:12:53 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QXMNw1gWTz4wgv;
+        Fri,  2 Jun 2023 09:12:48 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1685661168;
+        bh=vriIntrz7IhgdfHCVAuxCHQOwtyTOMp6zaQPJ+GsNBE=;
+        h=Date:From:To:Cc:Subject:From;
+        b=VF8Sqtm2QBgABkkAx8SEI9BROv5eWelj9sDQDIxF7lpyRUvsY6JXAOUh42Y2iGWdt
+         UwreBxL9q+M40wg3IUXv1sz8xbi+ggS97pZskRx9WiMthy3Rn3X2C62ijYbzpSdMGy
+         gwWXV+rhIx9WgU78p9ztuzFNkfKn9KqlayAUW/j6Jk9iiSIvPQ6BkUB8LNiU1uHhc7
+         jpD8EOgU7QFYvkK7vC7xQcEgKZ/FJLtPGQ7sV2AGLhyCl4gEkSjjCcCN92Kok8PEPf
+         cfGEyT4trTMqtVwgM2P1D93dadSi1ZRj/KVwixHYMU00S48lDgIkJWZe95JZpM/wlS
+         6L6EG1OzSATjg==
+Date:   Fri, 2 Jun 2023 09:12:45 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <paul@pwsan.com>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20230601105006.199a32ee@canb.auug.org.au>
- <012599f4-61cf-47df-0fda-4294d8573b83@wdc.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <012599f4-61cf-47df-0fda-4294d8573b83@wdc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Alexandre Ghiti <alexghiti@rivosinc.com>
+Subject: linux-next: Fixes tag needs some work in the risc-v-fixes tree
+Message-ID: <20230602091245.30a4d4b4@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/d2AiQ0_F86gjY7pA.UwcW3m";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,57 +50,58 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 6/1/23 2:27 AM, Johannes Thumshirn wrote:
-> On 01.06.23 02:50, Stephen Rothwell wrote:
->> Hi all,
->>
->> After merging the block tree, today's linux-next build (x86_64
->> allmodconfig) failed like this:
->>
->> In file included from include/linux/slab.h:15,
->>                  from drivers/md/raid1.c:26:
->> drivers/md/raid1.c: In function 'alloc_behind_master_bio':
->> include/linux/gfp.h:320:36: error: passing argument 1 of 'free_pages' makes integer from pointer without a cast [-Werror=int-conversion]
->>   320 | #define free_page(addr) free_pages((addr), 0)
->>       |                                    ^~~~~~
->>       |                                    |
->>       |                                    struct page *
->> drivers/md/raid1.c:1151:25: note: in expansion of macro 'free_page'
->>  1151 |                         free_page(page);
->>       |                         ^~~~~~~~~
->> include/linux/gfp.h:303:38: note: expected 'long unsigned int' but argument is of type 'struct page *'
->>   303 | extern void free_pages(unsigned long addr, unsigned int order);
->>       |                        ~~~~~~~~~~~~~~^~~~
->>
->> Caused by commit
->>
->>   6473bc325644 ("md: check for failure when adding pages in alloc_behind_master_bio")
->>
->> I have used the block tree from next-20230531 for today.
->>
-> 
-> This obviously has to be:
-> diff --git a/drivers/md/raid1.c b/drivers/md/raid1.c
-> index ff89839455ec..3570da63969b 100644
-> --- a/drivers/md/raid1.c
-> +++ b/drivers/md/raid1.c
-> @@ -1148,7 +1148,7 @@ static void alloc_behind_master_bio(struct r1bio *r1_bio,
->                         goto free_pages;
->  
->                 if (!bio_add_page(behind_bio, page, len, 0)) {
-> -                       free_page(page);
-> +                       put_page(page);
->                         goto free_pages;
->                 }
->  
-> 
-> But I wonder why I dint see it in my allmodconfig build. 
-> 
-> Jens can you fold that in or do you want me to update the patch?
+--Sig_/d2AiQ0_F86gjY7pA.UwcW3m
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Done
+Hi all,
 
--- 
-Jens Axboe
+In commit
 
+  073b51fedd87 ("riscv: Implement missing huge_ptep_get")
 
+Fixes tag
+
+  Fixes: f2aeb0118ddd ("riscv: mm: support Svnapot in hugetlb page")
+
+has these problem(s):
+
+  - Target SHA1 does not exist
+
+In commit
+
+  3e1989a048ec ("riscv: Fix huge_ptep_set_wrprotect when PTE is a NAPOT")
+
+Fixes tag
+
+  Fixes: f2aeb0118ddd ("riscv: mm: support Svnapot in hugetlb page")
+
+has these problem(s):
+
+  - Target SHA1 does not exist
+
+Maybe you meant
+
+Fixes: 82a1a1f3bfb6 ("riscv: mm: support Svnapot in hugetlb page")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/d2AiQ0_F86gjY7pA.UwcW3m
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmR5Je0ACgkQAVBC80lX
+0Gyi0gf/duMpCJ29cGQEDqOaqL172Y50ccNNDFkcwODLqn5QlXU5zycPqNyI1jRP
+g7HBAXtAtdM5IjoYnmzs83h1Ce+t0tK2P4oqyMn67L19D7eKhMNWbK+zrBgbMJQA
+zEx1QvbqQAG0E3xePiYKOKJBO32AN+TtXOKHfifIqNRnnG7whCf0a7TTvVwQf/hp
+6IdYy0AcOMy/ilNKa04XLL9gmqKc2WhpyPkBIu6gFRbM1jvu9I8HEk3Uzt8CG3RV
+1XhPD9oHzvAAOqjKFYY1aAuu46J3Iginla53kfcnIzDaSvOJ6ZxeE5pkjmqgjAeG
+AK/MGgvtCkcyeBcE3Jay6g1le1stMw==
+=Fzah
+-----END PGP SIGNATURE-----
+
+--Sig_/d2AiQ0_F86gjY7pA.UwcW3m--

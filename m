@@ -2,52 +2,65 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 525BE722F50
-	for <lists+linux-next@lfdr.de>; Mon,  5 Jun 2023 21:09:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA3087231B5
+	for <lists+linux-next@lfdr.de>; Mon,  5 Jun 2023 22:48:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235161AbjFETJN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 5 Jun 2023 15:09:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35834 "EHLO
+        id S232120AbjFEUsN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 5 Jun 2023 16:48:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234979AbjFETI5 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 5 Jun 2023 15:08:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ADB394;
-        Mon,  5 Jun 2023 12:08:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 07E2A6238B;
-        Mon,  5 Jun 2023 19:08:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05AC3C4339C;
-        Mon,  5 Jun 2023 19:08:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685992129;
-        bh=Qw+to85OoCLshupPqJ27MnZgzCn+2/X1107uEHTDG9Y=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=SR8ebpABbJXP23RODVcuLIJCH7UhvcUrraG62O3x/XahHPrlGS1RDLsSoy5uBwfta
-         yUYV1lQaXx5hI1JZSaSEMjrtrpy7OlpPG+ZkrndhwxRllSsbiRmc+uokg0Wwr1w2Dt
-         InTViu++XdhrRtzmAJFtMQTAaHZ3J9/ro8y9BYgsMPqyiyvcD6nUjG15wsf7dXHltD
-         KkrzdnWkNd9TEXy45UlBIPXroSx/ucFhESX3e5qCg/6bIzkSHbhaKGHe/AaIwi/0OQ
-         KSJTdvowDAgXpfRPYm24DKber7k6PgBAYPbGS2DC9k82tqdf+E3qPhe8szlef1Nw01
-         z4Qoe+EfxbHDQ==
-Message-ID: <31f976e94ab3df02daf53fa99ca6faa33a62706a.camel@kernel.org>
-Subject: Re: linux-next: bad rebase of the tpmdd tree
-From:   Jarkko Sakkinen <jarkko@kernel.org>
+        with ESMTP id S231638AbjFEUsM (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 5 Jun 2023 16:48:12 -0400
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0797A7
+        for <linux-next@vger.kernel.org>; Mon,  5 Jun 2023 13:48:09 -0700 (PDT)
+Received: by mail-oi1-x22f.google.com with SMTP id 5614622812f47-39a50fcc719so3671277b6e.2
+        for <linux-next@vger.kernel.org>; Mon, 05 Jun 2023 13:48:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1685998089; x=1688590089;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Xq0Z29Z9v8/HSNmJhVPOkRPbdlFtvw8P4NfsBjKIwMw=;
+        b=SaFSxoMQ/rkujiKlOyPhZhi30DCr/bk27mjXT9rRuyVTZ+P0CUDWWD+M0jYy+L2Iwx
+         GnPjs47eTXkdrHqSirBrjjFaG8tWgV6QDRDyAI80QUOtjVg9A+ARRjD2E9Dt/t2VzcNW
+         IaMXooEevPNFvlUtPdv/RG3Xi68lA+HkKC4LA49iZXqP6r7+gn0XJIDxpW4eGw8mBKc0
+         oP3fx8QK+H39B/aIqZOftgDrmQvh+W5xTqpUi0UmneEXFICpPb9FWW2Tn0NIDZj356iW
+         dp2g1I4bhuSTPvv+WDGAnUxPfn3KZfk6ZmIq5hf6HZcV6pu4N2IUSQH+Ck7stZe397td
+         msJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685998089; x=1688590089;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Xq0Z29Z9v8/HSNmJhVPOkRPbdlFtvw8P4NfsBjKIwMw=;
+        b=f8ndDNHy+SB8OkFP4uxIE6+jjYMCgyKXdJA4dIPJfzaGFddQOc/x2UotVIMb+2RE8F
+         qEa31vFOmbaVaw7O62xrOR7PbWZTTmfvibrXCqDnXQ/n+Cf3Xz31UIqieZhGGWyt6ANK
+         S14Ht+asRyhvLlrHcKVpjPSD7zT9ur7pTZrqZydFL3lKTHeyb7BQLK9PzG/C9Cc/SPA2
+         cygbS+CkdFGURMwQGoHTlvqMPCkaEU0D63STy7Atj4uwcJr4J4A18B26pAfnLCo9s2Eb
+         2rd/m8bS/ih1GnSK9DDDNnQoEyg2ivHcShW4AEBqzptg5IPuMtqeNrDYOIhTnOG5HVtr
+         57SQ==
+X-Gm-Message-State: AC+VfDx3abl9z1wjYraFE7X6F6WsteY/mlNxTOGvGlgvSo7T6msvn5lQ
+        WZaOzzlDATqKsDJvNEcyWRClaFbcV3mJkCSNYazq
+X-Google-Smtp-Source: ACHHUZ4KRquTklGYJ+yGnfXpLFaSLvSszhN9j23ISvReW6UYnVuP35zxeaDwTA3kPqmxNXWzrllEIehQ4gm89lV5KTY=
+X-Received: by 2002:a05:6808:911:b0:39a:ca93:53dc with SMTP id
+ w17-20020a056808091100b0039aca9353dcmr2537982oih.24.1685998088905; Mon, 05
+ Jun 2023 13:48:08 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230605105207.7d02fa3b@canb.auug.org.au>
+In-Reply-To: <20230605105207.7d02fa3b@canb.auug.org.au>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Mon, 5 Jun 2023 16:47:58 -0400
+Message-ID: <CAHC9VhSj1KbidMU4is6Y3dyvJbFCZ-woxKbPGAYmJYZFPnYxvA@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the selinux tree with Linus' tree
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Date:   Mon, 05 Jun 2023 22:08:46 +0300
-In-Reply-To: <e050f28406061440edcd96921effff7fe01532f0.camel@kernel.org>
-References: <20230531092448.5fa4d718@canb.auug.org.au>
-         <e050f28406061440edcd96921effff7fe01532f0.camel@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.1-0ubuntu1 
-MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,31 +68,37 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, 2023-06-05 at 22:07 +0300, Jarkko Sakkinen wrote:
-> On Wed, 2023-05-31 at 09:24 +1000, Stephen Rothwell wrote:
-> > Hi all,
-> >=20
-> > The tpmdd tree has been rebased onto Linus' tree, but has included some
-> > of the patches from Linus' tree as new commits :-(
->=20
-> Hi, I'm sorry for late response.
->=20
-> I fixed the issue:
->=20
-> git log --oneline upstream/master..origin/next
-> 57094c1699ab (HEAD -> next, origin/next) integrity: Remove EXPERIMENTAL f=
-rom Kconfig
-> 14d723483fb7 integrity: Enforce digitalSignature usage in the ima and evm=
- keyrings
-> 538b04b8c136 KEYS: DigitalSignature link restriction
-> 90bfba7a9e1d KEYS: Replace all non-returning strlcpy with strscpy
-> 405def5af246 security: keys: perform capable check only on privileged ope=
-rations
-> f28ac094fb2d tpm_tis_spi: Release chip select when flow control fails
-> 9c7b610c7299 tpm: tpm_tis: Disable interrupts *only* for AEON UPX-i11
-> 1f603c8055ab tpm: tpm_vtpm_proxy: fix a race condition in /dev/vtpmx crea=
-tion
+On Sun, Jun 4, 2023 at 8:52=E2=80=AFPM Stephen Rothwell <sfr@canb.auug.org.=
+au> wrote:
+>
+> Hi all,
+>
+> Today's linux-next merge of the selinux tree got a conflict in:
+>
+>   security/selinux/Makefile
+>
+> between commit:
+>
+>   42c4e97e06a8 ("selinux: don't use make's grouped targets feature yet")
+>
+> from Linus' tree and commits:
+>
+>   6f933aa7dfd0 ("selinux: more Makefile tweaks")
+>   ec4a491d180b ("selinux: fix Makefile for versions of make < v4.3")
+>
+> from the selinux tree.
+>
+> I fixed it up (I just used the latter version) and can carry the fix as
+> necessary. This is now fixed as far as linux-next is concerned, but any
+> non trivial conflicts should be mentioned to your upstream maintainer
+> when your tree is submitted for merging.  You may also want to consider
+> cooperating with the maintainer of the conflicting tree to minimise any
+> particularly complex conflicts.
 
-[except 1f603c8055ab dropped from above]
+Hi Stephen,
 
-BR, Jarkko
+I had to do pretty much the same thing, and yes, simply taking the
+code in the last patch is the right thing to do.
+
+--=20
+paul-moore.com

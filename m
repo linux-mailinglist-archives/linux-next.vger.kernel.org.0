@@ -2,50 +2,54 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92E9A721AFF
-	for <lists+linux-next@lfdr.de>; Mon,  5 Jun 2023 01:12:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41EB6721B22
+	for <lists+linux-next@lfdr.de>; Mon,  5 Jun 2023 02:08:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231271AbjFDXMJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 4 Jun 2023 19:12:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50490 "EHLO
+        id S230070AbjFEAI2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 4 Jun 2023 20:08:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjFDXMJ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 4 Jun 2023 19:12:09 -0400
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0946A9;
-        Sun,  4 Jun 2023 16:12:07 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
+        with ESMTP id S229886AbjFEAI1 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 4 Jun 2023 20:08:27 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D6CBCA;
+        Sun,  4 Jun 2023 17:08:25 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id DB19942450;
-        Sun,  4 Jun 2023 23:12:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
-        t=1685920325; bh=WEWALjOupcqnv3sqrNFWKhE/C8Uto/AQ6DaPQbUMHL0=;
-        h=Date:From:To:CC:Subject:In-Reply-To:References;
-        b=skCcmN69kviM9RpO8lvcObEdj6jg4uAdBC1y7rKUxJhiBw1gGZ+IWStGRzl5E8N7k
-         b+5QDz/6VtZ0V1yI0xwRYYAq6NG3rmoXh87skqKpkLOL3FM8XYjjdJ5KyFh+Mqhgrh
-         Q+FcT7dNj3UzTpkp2wUGFsYvG9TMWNolPpeAe1539H8B31eiTl9950mqw/Xic+bcrI
-         b6psjKG/We3fy9yrBW7iN3w5VsuUcWhB+xjUm21h8fT4dvYtCwow2xEsiy/IwLhAwP
-         a6K45rdCuP39fqcLXaN3o8HjIIUgyEXZBG5fV9jGfCR5KDgTVLCnhUwQDtQlSgHGrb
-         i9FTHHN2cbedA==
-Date:   Mon, 05 Jun 2023 08:11:55 +0900
-From:   "Hector Martin \"marcan\"" <marcan@marcan.st>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the asahi-soc tree
-User-Agent: K-9 Mail for Android
-In-Reply-To: <20230605085816.4f54bb43@canb.auug.org.au>
-References: <20230605085816.4f54bb43@canb.auug.org.au>
-Message-ID: <E17AC653-8534-4189-ACDF-F6CCD1C1D9F0@marcan.st>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QZDTZ5MLPz4x3x;
+        Mon,  5 Jun 2023 10:08:18 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1685923699;
+        bh=pOuSQOaAtbYZsqBRiDrrigcw5i1OYkXIadN59Arc/E0=;
+        h=Date:From:To:Cc:Subject:From;
+        b=CwEbPaMySvPrNOJMWKcrPQ2k2yRRLUopa4U+AObiivGk8UZY3mxuwRhdvUKEAG68D
+         55ECZO3XcxU3XRa0iqCtNqAGH4FDhwOxuQ8sWov2L8EO8rTusoUNwUjvsyRrOAR7lv
+         PJx6e2mNnG8kWAzQTdR6ancCX3B6ttHoL6TDddGg57hw+jpWqq9XmvBEEzkmHai2e8
+         +XnZ6WarUIzwOcJcggjg3uQGC080HfwPooynDp8txv7NelD9MyERQsdWB5y8Q685JK
+         SPKRTkvOIxyHUUioNHZ2mYtFNG3Arb5ff/XOXhknoMoB9BnZlWdufpHZ2mHifyjtZa
+         Dp21JstSvMDJA==
+Date:   Mon, 5 Jun 2023 10:08:16 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Akihiro Suda <akihiro.suda.cz@hco.ntt.co.jp>,
+        Akihiro Suda <suda.gitsendemail@gmail.com>,
+        David Morley <morleyd@google.com>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Neal Cardwell <ncardwell@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Yuchung Cheng <ycheng@google.com>
+Subject: linux-next: manual merge of the net-next tree with the net tree
+Message-ID: <20230605100816.08d41a7b@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+Content-Type: multipart/signed; boundary="Sig_/u3D+RwDlPWSFsvlRdb6GZfK";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,43 +57,70 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi!
+--Sig_/u3D+RwDlPWSFsvlRdb6GZfK
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks, looks like a missing include=2E I'll fix it up when I get home in =
-a bit=2E Sorry for the noise!
+Hi all,
 
-(And apologies for top-posting, I'm on mobile right now)
+Today's linux-next merge of the net-next tree got a conflict in:
 
-On June 5, 2023 7:58:16 AM GMT+09:00, Stephen Rothwell <sfr@canb=2Eauug=2E=
-org=2Eau> wrote:
->Hi all,
->
->After merging the asahi-soc tree, today's linux-next build (x86_64
->allmodconfig) failed like this:
->
->In file included from include/linux/io=2Eh:13,
->                 from drivers/soc/apple/mailbox=2Ec:22:
->drivers/soc/apple/mailbox=2Ec: In function 'apple_mbox_send':
->drivers/soc/apple/mailbox=2Ec:151:24: error: implicit declaration of func=
-tion 'FIELD_PREP' [-Werror=3Dimplicit-function-declaration]
->  151 |         writeq_relaxed(FIELD_PREP(APPLE_MBOX_MSG1_MSG, msg=2Emsg1=
-),
->      |                        ^~~~~~~~~~
->arch/x86/include/asm/io=2Eh:103:42: note: in definition of macro 'writeq_=
-relaxed'
->  103 | #define writeq_relaxed(v, a)    __writeq(v, a)
->      |                                          ^
->drivers/soc/apple/mailbox=2Ec: In function 'apple_mbox_poll_locked':
->drivers/soc/apple/mailbox=2Ec:188:28: error: implicit declaration of func=
-tion 'FIELD_GET' [-Werror=3Dimplicit-function-declaration]
->  188 |                 msg=2Emsg1 =3D FIELD_GET(
->      |                            ^~~~~~~~~
->
->Caused by commit
->
->  0d1f3f7f8486 ("soc: apple: mailbox: Add ASC/M3 mailbox driver")
->
->I have used the asshi-soc tree from next-20230602 for today=2E
->
+  net/ipv4/sysctl_net_ipv4.c
 
-- Hector
+between commit:
+
+  e209fee4118f ("net/ipv4: ping_group_range: allow GID from 2147483648 to 4=
+294967294")
+
+from the net tree and commit:
+
+  ccce324dabfe ("tcp: make the first N SYN RTO backoffs linear")
+
+from the net-next tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc net/ipv4/sysctl_net_ipv4.c
+index 88dfe51e68f3,6ae3345a3bdf..000000000000
+--- a/net/ipv4/sysctl_net_ipv4.c
++++ b/net/ipv4/sysctl_net_ipv4.c
+@@@ -34,8 -34,9 +34,9 @@@ static int ip_ttl_min =3D 1
+  static int ip_ttl_max =3D 255;
+  static int tcp_syn_retries_min =3D 1;
+  static int tcp_syn_retries_max =3D MAX_TCP_SYNCNT;
++ static int tcp_syn_linear_timeouts_max =3D MAX_TCP_SYNCNT;
+ -static int ip_ping_group_range_min[] =3D { 0, 0 };
+ -static int ip_ping_group_range_max[] =3D { GID_T_MAX, GID_T_MAX };
+ +static unsigned long ip_ping_group_range_min[] =3D { 0, 0 };
+ +static unsigned long ip_ping_group_range_max[] =3D { GID_T_MAX, GID_T_MAX=
+ };
+  static u32 u32_max_div_HZ =3D UINT_MAX / HZ;
+  static int one_day_secs =3D 24 * 3600;
+  static u32 fib_multipath_hash_fields_all_mask __maybe_unused =3D
+
+--Sig_/u3D+RwDlPWSFsvlRdb6GZfK
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmR9J3AACgkQAVBC80lX
+0Gw4KAf/WUlZ1HiMtDpseIqqq8A4ZUoXPy7QxK8guXuvpKEBN7LIV8ZXr7vwVeOQ
+oQBEXwg18mLRT8L5KBVRrcg0GZXSgLkN/ZPcROcMiB9imC56Ag3j9H21zlLEpL29
+LEGDlfneaNTnJdSx3aBKsg6Wne7BTh9EQED/7a0IHAOOIfYLRT8Mf7ic6Y7Dl8p0
+Xl8j9O8bBvP+IB2dw/wOiTlECY+IIlQQyEr+zJKLjjFYV7Sw402J/IFhf+iihHhd
+BSlETxgZZyknOuN6PSUfAgXigaVKDi/LKuAXft37RTPRl6bdAgNpEmhWEMx17aJ3
+l8k0Kl+LEwpObX54frPxvZwuD94oZA==
+=HRyB
+-----END PGP SIGNATURE-----
+
+--Sig_/u3D+RwDlPWSFsvlRdb6GZfK--

@@ -2,103 +2,90 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0B82721B6A
-	for <lists+linux-next@lfdr.de>; Mon,  5 Jun 2023 03:22:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 132BB721BEA
+	for <lists+linux-next@lfdr.de>; Mon,  5 Jun 2023 04:25:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232158AbjFEBWK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 4 Jun 2023 21:22:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40172 "EHLO
+        id S232521AbjFECY5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 4 Jun 2023 22:24:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230193AbjFEBWJ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 4 Jun 2023 21:22:09 -0400
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69624BC;
-        Sun,  4 Jun 2023 18:22:05 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
+        with ESMTP id S231263AbjFECY4 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 4 Jun 2023 22:24:56 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1503B8;
+        Sun,  4 Jun 2023 19:24:52 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 896FF42450;
-        Mon,  5 Jun 2023 01:22:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
-        t=1685928122; bh=6z/0S9faUaZ6zgRpxpD/gzAmGLCL2N5TsJeJv9RS2l8=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To;
-        b=KFq/P4B5tUrlQxvEizSZXMBcTuLu+y5/lBnfDQZT1XLK6pMGS5bo5YMZqmfBN9MfM
-         QvCbMMGUGFhdg0hnhDHEILYO7LoJDLP1Qkqqa2xA1Ht88GLv0mKHw8EpwbolIxeEAC
-         jtNzblqxtAS8yoBbO4iBRzvr1Blq9DZ3l/urdnonQ7qd0lWjMgOXi7MiXqsAfjQk+R
-         qRCzOfdd6R6lm2yRiTmlRRvibPUnrzptgYwI5XIquYVGu5lAUwNqMa7ILtkfsQhuCh
-         LhSAoNH2QMpRtzeFMaiw+d6wIiuL4jZUv3OEDOD2PeHFqm7jZZz7hEWKrlloc/QZvD
-         qzblQAwFzhjDw==
-Message-ID: <69ea054d-9e3a-6a84-a38b-796f6f152961@marcan.st>
-Date:   Mon, 5 Jun 2023 10:21:58 +0900
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QZHW24M78z4x3x;
+        Mon,  5 Jun 2023 12:24:46 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1685931886;
+        bh=vraVzjO8XzelUv/TE8cn2qJyRAPqQPidsYXGlf6d6nM=;
+        h=Date:From:To:Cc:Subject:From;
+        b=CDfFqS7IXmm+fq/e/hhyEJPZnkFueXAuGgUpmCpkU9C5dCHnhy0Zw7YVhpwHzDTGG
+         HjefcdiDass6lEqENVCNFd95VkdawqustnyFKmXamuIZRoWK+PRdePDLmL97vZKWUW
+         J8+zIuP2m58minmfcZ4KLMrRNWVWmTrglWUu1fOv/5zPm9bWbKkVntDToLDpEWShLo
+         aId6wI9khOg7tjJnpC8PrXCDjv82oJdicfvcIgVFirYOVVHwgFDbuxXOw0dXihUPy4
+         3SnHAZ599fJ9X519fFHcxx75mtnjsA9lT9hHI502s6pT0e81y86JQQVsLP9sVOzp8U
+         qXKB2W+sLNmVA==
+Date:   Mon, 5 Jun 2023 12:24:44 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     Linux Crypto List <linux-crypto@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patch in the vhost tree
+Message-ID: <20230605122444.1dfb2abd@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: linux-next: build failure after merge of the asahi-soc tree
-Content-Language: en-US
-From:   Hector Martin <marcan@marcan.st>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Asahi Linux <asahi@lists.linux.dev>
-References: <20230605085816.4f54bb43@canb.auug.org.au>
- <E17AC653-8534-4189-ACDF-F6CCD1C1D9F0@marcan.st>
-In-Reply-To: <E17AC653-8534-4189-ACDF-F6CCD1C1D9F0@marcan.st>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/ieONAuZ+PDROpMwUBwA23Tp";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 05/06/2023 08.11, Hector Martin "marcan" wrote:
-> Hi!
-> 
-> Thanks, looks like a missing include. I'll fix it up when I get home in a bit. Sorry for the noise!
-> 
-> (And apologies for top-posting, I'm on mobile right now)
-> 
+--Sig_/ieONAuZ+PDROpMwUBwA23Tp
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Should be fixed now, thanks again!
+Hi all,
 
-TIL that allmodconfig includes COMPILE_TEST. Makes sense though. I don't
-build test for x86 often, and I think on arm64 we get bitfield.h pulled
-in via common headers, so this isn't the first time I've missed this one...
+The following commit is also in the crypto tree as a different commit
+(but the same patch):
 
-> On June 5, 2023 7:58:16 AM GMT+09:00, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->> Hi all,
->>
->> After merging the asahi-soc tree, today's linux-next build (x86_64
->> allmodconfig) failed like this:
->>
->> In file included from include/linux/io.h:13,
->>                 from drivers/soc/apple/mailbox.c:22:
->> drivers/soc/apple/mailbox.c: In function 'apple_mbox_send':
->> drivers/soc/apple/mailbox.c:151:24: error: implicit declaration of function 'FIELD_PREP' [-Werror=implicit-function-declaration]
->>  151 |         writeq_relaxed(FIELD_PREP(APPLE_MBOX_MSG1_MSG, msg.msg1),
->>      |                        ^~~~~~~~~~
->> arch/x86/include/asm/io.h:103:42: note: in definition of macro 'writeq_relaxed'
->>  103 | #define writeq_relaxed(v, a)    __writeq(v, a)
->>      |                                          ^
->> drivers/soc/apple/mailbox.c: In function 'apple_mbox_poll_locked':
->> drivers/soc/apple/mailbox.c:188:28: error: implicit declaration of function 'FIELD_GET' [-Werror=implicit-function-declaration]
->>  188 |                 msg.msg1 = FIELD_GET(
->>      |                            ^~~~~~~~~
->>
->> Caused by commit
->>
->>  0d1f3f7f8486 ("soc: apple: mailbox: Add ASC/M3 mailbox driver")
->>
->> I have used the asshi-soc tree from next-20230602 for today.
->>
-> 
-> - Hector
+  cfc232b3ec9e ("hwrng: virtio - Fix race on data_avail and actual data")
 
-- Hector
+This is commit
 
+  ac52578d6e8d ("hwrng: virtio - Fix race on data_avail and actual data")
+
+in the crypto tree.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/ieONAuZ+PDROpMwUBwA23Tp
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmR9R2wACgkQAVBC80lX
+0GyaFgf7BPLV0/0wLXtN9ofKupS4CUkQEbw6cLstI+eN9jjE0N5DSa9lNorNi4oV
+NqglEC6MJHnIdMo2LLF0ttHPzxxTWVYM4S9sL+7RIUMv79qNRgLaWQ7SKg7+sj4R
+eMKuwdcji5eCep1Z84ZzFVY/Zpxhg7xBsxWwIu9EWZW4efYczecI22KInCP0CpiB
+Yp1ov5qiM0b5X4gCghRTAACSFW1KuGzGkqjxQUYA1j5u15Ypn8554yX6ApawshFW
+cYidRdrTQGdmiX8BMIVlz942VyXKk9/uU1yPS/ity6duAiWONcWFZbcdjgJbXLog
+cDzhTz4dfqRP7ej6Ty0mgSjH0+Dt3Q==
+=0IaX
+-----END PGP SIGNATURE-----
+
+--Sig_/ieONAuZ+PDROpMwUBwA23Tp--

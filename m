@@ -2,123 +2,133 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 493B6723F8C
-	for <lists+linux-next@lfdr.de>; Tue,  6 Jun 2023 12:32:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E02CA723FAD
+	for <lists+linux-next@lfdr.de>; Tue,  6 Jun 2023 12:35:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235356AbjFFKcn convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-next@lfdr.de>); Tue, 6 Jun 2023 06:32:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53610 "EHLO
+        id S232210AbjFFKfa (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 6 Jun 2023 06:35:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236727AbjFFKcT (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 6 Jun 2023 06:32:19 -0400
-Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8368B10C6;
-        Tue,  6 Jun 2023 03:32:15 -0700 (PDT)
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-565e6beb7aaso75470907b3.2;
-        Tue, 06 Jun 2023 03:32:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686047534; x=1688639534;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fJBagGQruk41RMozweoSMnqFuyRsRNH9Kz3lbWgCrDg=;
-        b=ZS4n6g8Xn9pk4nj/555htUTZOSc3WAhyKl7lZxoWnNUCmiV5fgcCNC/PhotXbPf7gl
-         7iGyMFv0NimGObo93vTrWfDJg4BNoGG+wE4Rm1UXTlRcH8sAHQxv2FrF8aVZoUgB2Vpi
-         MvyZOtu04sl2xHpwjpKLmYiFwt4m6A8w5oTvInlNow73LPrHN9jnjelFVyTjZam0kogB
-         5C5kzjKpoEUzhc+DS20k/VpFI+JG6WGtMAf7e1t6Ez6ca4Hbb1K32w9aoucDCCtx1Bjd
-         HivJvd3mhkb07hftmu5NXp8MwdksBcxykdE07iuwlEBAZeh5si/zBLXvh+roetEohXzZ
-         pWNQ==
-X-Gm-Message-State: AC+VfDw8uO7qVNwTCLMg+fWwp27Aambqkq4WBEsVImKPQqx15B/sK/iw
-        KfyS5LE5frSELhMhr90g596dAY8AFNbVvw==
-X-Google-Smtp-Source: ACHHUZ4q5szX1RObq5yPUhreT12sVZhtZW/dFFxSSS4CPkePjU0Br+flDkjfHEu5G/vYpBo3/iyuXA==
-X-Received: by 2002:a0d:e6d4:0:b0:565:e87f:a78f with SMTP id p203-20020a0de6d4000000b00565e87fa78fmr1872057ywe.25.1686047534573;
-        Tue, 06 Jun 2023 03:32:14 -0700 (PDT)
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com. [209.85.128.171])
-        by smtp.gmail.com with ESMTPSA id h66-20020a0dde45000000b0055d7f00d4f7sm3927127ywe.22.2023.06.06.03.32.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Jun 2023 03:32:12 -0700 (PDT)
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-568ba7abc11so75529947b3.3;
-        Tue, 06 Jun 2023 03:32:11 -0700 (PDT)
-X-Received: by 2002:a0d:df91:0:b0:55a:3560:8ee0 with SMTP id
- i139-20020a0ddf91000000b0055a35608ee0mr1959649ywe.20.1686047531077; Tue, 06
- Jun 2023 03:32:11 -0700 (PDT)
-MIME-Version: 1.0
+        with ESMTP id S237319AbjFFKfT (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 6 Jun 2023 06:35:19 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 403A7E8;
+        Tue,  6 Jun 2023 03:35:05 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id A4ADA5C0195;
+        Tue,  6 Jun 2023 06:35:04 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Tue, 06 Jun 2023 06:35:04 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
+        1686047704; x=1686134104; bh=IJQmq65vo/TbxYcHIKSUTBkPubJ2sYVBmz1
+        OpSutP+s=; b=tCzQEzAjGZmWxxg0Ys+hL5Ofm4CPVdUeLjDckZFymKghC6s96mw
+        gMZl3xgVf8H37np+jaeqlCqbYevDJiRbGY2Y/QQ3IWuFNAlXeGCZdi08Vcfcc0Ig
+        diYEzw+rSM+Dzk3BSpaMiv5GE0Fdz8jHigsmr2UdmhCzl01x59DJi5TjtiytNiF3
+        UmOcaqRaB/zgz8hccLy+dYgfs9m6tLz0fEqLkFzvZBkzQhcG0X2aUR4HFOcN7nKA
+        zoPHmevhyLm+ezVo8xuA7PC1C+GcKT3KKVImStNZyAK6BwbbCg9o0lkHOmE54UP5
+        wHIx6YkhU6aW08qloWot58nqZUIXbHvKWpg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+        1686047704; x=1686134104; bh=IJQmq65vo/TbxYcHIKSUTBkPubJ2sYVBmz1
+        OpSutP+s=; b=E+EsLFO/5IILXucgn/rmLn2SynkIfpG6UlhSY0K+d6ngVmYtFVs
+        Z93C/0xl1wEd9cJuq/V7RM1yR871b8XT72xa8VF5BfojzjVwVY9SI3T6z56OzxcX
+        UmlQD5SeAHvx+UVVQtlDHz9DSferigh6Cd3G8ySCrXy/vq/+MHIlBcOXrgplqddG
+        T8v5++J4OnGDCHmBw9BALl2hV0SAJ89NvPz84hYO5OhJIFHy3AfNkeCIc04HqDTL
+        FeCp5OAAqigWhxJ15dRDmgGU7/ABUqyW+WRY4MG5+0HcnE+W6ib6GXrjkuRc+W7e
+        GKi0U8F0krbMsqOy99KcTeyEHnTYONae/dw==
+X-ME-Sender: <xms:2At_ZFQXGlpaLXRb-FKKTAqrc0pulFP8udxzt88XqjyQ8K0UFsM3jQ>
+    <xme:2At_ZOyCd28aXyALQC3PVPO6o0PaGmP23JkWndPkNur32dASExOlo_ffc07G7id5B
+    hmtzMPp-va_RxleymQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedtuddgfedtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeegfeejhedvledvffeijeeijeeivddvhfeliedvleevheejleetgedukedt
+    gfejveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:2At_ZK0ecybGQW_MNqaqlU7GoWujfE7ptyRpbrOeIJ0DHP3iTunStA>
+    <xmx:2At_ZNDp8l6mOdR2eQLeedsNGAnqjJSZUE06SxrIINLmHvtQiG-hsw>
+    <xmx:2At_ZOgxgtPbSIXKXmeDmjXO9ttv-P5WyjQ83itGHa1fyUDSDJl8Vw>
+    <xmx:2At_ZJWZ6PzikjwmYUrIDoA3aSGEwuKMI9vaMequyXHCoawrETVi-Q>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 675B9B60086; Tue,  6 Jun 2023 06:35:04 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-447-ge2460e13b3-fm-20230525.001-ge2460e13
+Mime-Version: 1.0
+Message-Id: <34b7bbab-a301-42ad-a2cc-3b68ee1475b7@app.fastmail.com>
+In-Reply-To: <CAMuHMdWKL3UHzkEq3qOChMsgOsr+9uj215x55xLzbOUJWwQVzg@mail.gmail.com>
 References: <CA+G9fYv0a-XxXfG6bNuPZGT=fzjtEfRGEYwk3n6M1WhEHUPo9g@mail.gmail.com>
  <CA+G9fYueN0xti1SDtYVZstPt104sUj06GfOzyqDNrd3s3xXBkA@mail.gmail.com>
  <CAMuHMdX7hqipiMCF9uxpU+_RbLmzyHeo-D0tCE_Hx8eTqQ7Pig@mail.gmail.com>
- <11bd37e9-c62e-46ba-9456-8e3b353df28f@app.fastmail.com> <CAMuHMdUH2Grrv6842YWXHDmd+O3iHdwqTVjYf8f1nbVRzGA+6w@mail.gmail.com>
+ <11bd37e9-c62e-46ba-9456-8e3b353df28f@app.fastmail.com>
+ <CAMuHMdUH2Grrv6842YWXHDmd+O3iHdwqTVjYf8f1nbVRzGA+6w@mail.gmail.com>
  <8db9886f-e24f-44ee-8f8a-880dc3e4bf75@app.fastmail.com>
-In-Reply-To: <8db9886f-e24f-44ee-8f8a-880dc3e4bf75@app.fastmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 6 Jun 2023 12:31:59 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWKL3UHzkEq3qOChMsgOsr+9uj215x55xLzbOUJWwQVzg@mail.gmail.com>
-Message-ID: <CAMuHMdWKL3UHzkEq3qOChMsgOsr+9uj215x55xLzbOUJWwQVzg@mail.gmail.com>
-Subject: Re: arm: shmobile_defconfig: ld.lld: error: undefined symbol: lynx_pcs_destroy
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        open list <linux-kernel@vger.kernel.org>,
+ <CAMuHMdWKL3UHzkEq3qOChMsgOsr+9uj215x55xLzbOUJWwQVzg@mail.gmail.com>
+Date:   Tue, 06 Jun 2023 12:34:43 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Geert Uytterhoeven" <geert@linux-m68k.org>
+Cc:     "Naresh Kamboju" <naresh.kamboju@linaro.org>,
+        "open list" <linux-kernel@vger.kernel.org>,
         linux-next <linux-next@vger.kernel.org>,
         lkft-triage@lists.linaro.org,
         clang-built-linux <llvm@lists.linux.dev>,
         Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "Linux ARM" <linux-arm-kernel@lists.infradead.org>,
         Netdev <netdev@vger.kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
+        "Nathan Chancellor" <nathan@kernel.org>,
+        "Nick Desaulniers" <ndesaulniers@google.com>,
+        "Anders Roxell" <anders.roxell@linaro.org>,
+        "Geert Uytterhoeven" <geert+renesas@glider.be>,
         "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        "Eric Dumazet" <edumazet@google.com>,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        "Paolo Abeni" <pabeni@redhat.com>,
+        "Maxime Coquelin" <mcoquelin.stm32@gmail.com>,
         maxime.chevallier@bootlin.com,
-        Simon Horman <simon.horman@corigine.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        "Simon Horman" <simon.horman@corigine.com>
+Subject: Re: arm: shmobile_defconfig: ld.lld: error: undefined symbol: lynx_pcs_destroy
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Arnd,
-
-On Tue, Jun 6, 2023 at 12:21 PM Arnd Bergmann <arnd@arndb.de> wrote:
-> On Tue, Jun 6, 2023, at 11:28, Geert Uytterhoeven wrote:
-> > On Tue, Jun 6, 2023 at 11:16 AM Arnd Bergmann <arnd@arndb.de> wrote:
-> >> On Tue, Jun 6, 2023, at 11:01, Geert Uytterhoeven wrote:
-> >>
-> >> This won't work when PCS_LYNX is a loadable module and
-> >> STMMAC is built-in. I think we should just select PCS_LYNX
-> >
-> > Oops, you're right, forgot about that case.
-> > What about using IS_REACHABLE() instead?
-> > No, that won't work either, as DWMAC_SOCFPGA can be modular,
-> > with STMMAC builtin.
+On Tue, Jun 6, 2023, at 12:31, Geert Uytterhoeven wrote:
+> On Tue, Jun 6, 2023 at 12:21=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> =
+wrote:
+>> On Tue, Jun 6, 2023, at 11:28, Geert Uytterhoeven wrote:
+>> > On Tue, Jun 6, 2023 at 11:16=E2=80=AFAM Arnd Bergmann <arnd@arndb.d=
+e> wrote:
+>> >> On Tue, Jun 6, 2023, at 11:01, Geert Uytterhoeven wrote:
+>> >>
+>> >> This won't work when PCS_LYNX is a loadable module and
+>> >> STMMAC is built-in. I think we should just select PCS_LYNX
+>> >
+>> > Oops, you're right, forgot about that case.
+>> > What about using IS_REACHABLE() instead?
+>> > No, that won't work either, as DWMAC_SOCFPGA can be modular,
+>> > with STMMAC builtin.
+>>
+>> It would work because of the 'select PCS_LYNX' below DWMAC_SOCFPGA,
 >
-> It would work because of the 'select PCS_LYNX' below DWMAC_SOCFPGA,
+> That was my first thought, but it won't work, as DWMAC_SOCFPGA=3Dm
+> causes PCS_LYNX=3Dm, while main STMMAC can still be builtin.
 
-That was my first thought, but it won't work, as DWMAC_SOCFPGA=m
-causes PCS_LYNX=m, while main STMMAC can still be builtin.
+Right, got it now.
 
-> but I think that's too fragile and would easily break when another
-> dwmac front-end starts using PCS_LYNX without have the same select
-> statement. I think we should always avoid IS_REACHABLE().
-
-;-)
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+     Arnd

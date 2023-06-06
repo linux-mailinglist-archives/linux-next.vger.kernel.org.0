@@ -2,44 +2,44 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3547A723593
-	for <lists+linux-next@lfdr.de>; Tue,  6 Jun 2023 05:02:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C04E27235FF
+	for <lists+linux-next@lfdr.de>; Tue,  6 Jun 2023 06:01:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233153AbjFFDCs (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 5 Jun 2023 23:02:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36030 "EHLO
+        id S229544AbjFFEBL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 6 Jun 2023 00:01:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230215AbjFFDCr (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 5 Jun 2023 23:02:47 -0400
+        with ESMTP id S229532AbjFFEBK (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 6 Jun 2023 00:01:10 -0400
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74109109;
-        Mon,  5 Jun 2023 20:02:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AC5012D;
+        Mon,  5 Jun 2023 21:01:05 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QZwJG2kyNz4x1N;
-        Tue,  6 Jun 2023 13:02:38 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QZxbf2GMFz4x1N;
+        Tue,  6 Jun 2023 14:01:01 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1686020559;
-        bh=9WP8Vb8OpZiakpRCpZvxyIWKdfQuuSxSiDxaW9Kul2g=;
+        s=201702; t=1686024063;
+        bh=+W5S8yQ4Igf3B9WcTMEsVIvZatCAq6RteP00gqMa7po=;
         h=Date:From:To:Cc:Subject:From;
-        b=lKGw+YBO3GS77JdqJswjEnRawx7wAtJFqbaywD3WNf9U5zatjyvm0HwBhflT0+QZN
-         NPqiRTca/dU4Ka9iGmCOTh++09hES4ZyIsKrEGhlaatmbk9fJsPFrAhAk3/KVIlODa
-         3VpPIdgZqNQ1xDLw8Ts45Bo6N3j1h8g7FBH8GgnDNEaQ72aScdkNAG9TTFdqMQCapX
-         C2jwFyTLjAu71R7xb453QkgSBpvwa9qPk/VWy7UX7Brhm481RWBHdPsCIqqWv11Vp8
-         mfCCvRExly/LaGbUq1hfJXDZ3GemosiWXfxcdG1jBAfbS3OzpZ2YQKOatwLw0LoAFe
-         8lS6+qNSlFpKQ==
-Date:   Tue, 6 Jun 2023 13:02:36 +1000
+        b=Lsx3f+DE1tRl7k06VywJStm5kTlUvu7TKUbRnRW38oAzkZSqV4/CPzYFkVG/waiq8
+         uzSJ66VXuDo0tzcQPhJjlM25w55UwFLVa2XHwOx0kwGRnHYs6vPT3SkN/IBJZWi/sh
+         8/rXa9eCDtRJgLK/e3LuNDV6Tby9+cOu9NKnzPtvIwQ9NCfI53/CBOpiw6Mvu75zcm
+         aZgtbFwJTeVlu6mgzdPXxQbAfPpfxE/HPsDduh6OPhzaf95dx8BJO9A1OfMlH7JwUr
+         maZfL1cvqRak+IouoYhm2vgJQ2e/4k6DYDgAUc1moo/1uJNDZtWyrl5nwM83u7feec
+         gp5D2Ty8qaRCw==
+Date:   Tue, 6 Jun 2023 14:00:59 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
-Cc:     Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Christoph Hellwig <hch@lst.de>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the landlock tree
-Message-ID: <20230606130236.4d339a46@canb.auug.org.au>
+Subject: linux-next: build warning after merge of the block tree
+Message-ID: <20230606140059.61caed8b@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/cnkiTwGsSkP/ekDl/_0L5p/";
+Content-Type: multipart/signed; boundary="Sig_/9BH_dDnaiZar.C.1LUifcOO";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
@@ -51,89 +51,40 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/cnkiTwGsSkP/ekDl/_0L5p/
+--Sig_/9BH_dDnaiZar.C.1LUifcOO
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the landlock tree, today's linux-next build (powerpc
-ppc64_defconfig) failed like this:
+After merging the block tree, today's linux-next build (htmldocs)
+produced this warning:
 
-security/landlock/net.c:165:51: error: expected '=3D', ',', ';', 'asm' or '=
-__attribute__' before '__lsm_ro_after_init'
-  165 | static struct security_hook_list landlock_hooks[] __lsm_ro_after_in=
-it =3D {
-      |                                                   ^~~~~~~~~~~~~~~~~=
-~~
-security/landlock/net.c: In function 'landlock_add_net_hooks':
-security/landlock/net.c:172:28: error: 'landlock_hooks' undeclared (first u=
-se in this function)
-  172 |         security_add_hooks(landlock_hooks, ARRAY_SIZE(landlock_hook=
-s),
-      |                            ^~~~~~~~~~~~~~
-security/landlock/net.c:172:28: note: each undeclared identifier is reporte=
-d only once for each function it appears in
-In file included from include/linux/container_of.h:5,
-                 from include/linux/kernel.h:21,
-                 from include/linux/uio.h:8,
-                 from include/linux/socket.h:8,
-                 from include/uapi/linux/in.h:25,
-                 from include/linux/in.h:19,
-                 from security/landlock/net.c:9:
-include/linux/build_bug.h:16:51: error: bit-field '<anonymous>' width not a=
-n integer constant
-   16 | #define BUILD_BUG_ON_ZERO(e) ((int)(sizeof(struct { int:(-!!(e)); }=
-)))
-      |                                                   ^
-include/linux/compiler.h:231:33: note: in expansion of macro 'BUILD_BUG_ON_=
-ZERO'
-  231 | #define __must_be_array(a)      BUILD_BUG_ON_ZERO(__same_type((a), =
-&(a)[0]))
-      |                                 ^~~~~~~~~~~~~~~~~
-include/linux/kernel.h:56:59: note: in expansion of macro '__must_be_array'
-   56 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be=
-_array(arr))
-      |                                                           ^~~~~~~~~=
-~~~~~~
-security/landlock/net.c:172:44: note: in expansion of macro 'ARRAY_SIZE'
-  172 |         security_add_hooks(landlock_hooks, ARRAY_SIZE(landlock_hook=
-s),
-      |                                            ^~~~~~~~~~
-security/landlock/net.c: At top level:
-security/landlock/net.c:157:12: warning: 'hook_socket_connect' defined but =
-not used [-Wunused-function]
-  157 | static int hook_socket_connect(struct socket *const sock,
-      |            ^~~~~~~~~~~~~~~~~~~
-security/landlock/net.c:150:12: warning: 'hook_socket_bind' defined but not=
- used [-Wunused-function]
-  150 | static int hook_socket_bind(struct socket *const sock,
-      |            ^~~~~~~~~~~~~~~~
+block/bdev.c:863: warning: Function parameter or member 'hops' not describe=
+d in 'blkdev_get_by_path'
 
-Caused by commit
+Introduced by commit
 
-  6d0bfdb25ce6 ("landlock: Add network rules and TCP hooks support")
-
-I have use the landlock tree from next-20230605 for today.
+  0718afd47f70 ("block: introduce holder ops")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/cnkiTwGsSkP/ekDl/_0L5p/
+--Sig_/9BH_dDnaiZar.C.1LUifcOO
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmR+ocwACgkQAVBC80lX
-0Gw9YQf8CxDElM6AUs8o/MYQ7D8eE0+oTbWm5FgZDzNgfPDf+s4Q/IDf4tfMUKe6
-Y1mgp9q4C20ErUjMM7BQhZUPsJ0WPJKIYn6UIBwROBA0TH2vf8Hycyro3AkCp5XP
-90Np5BRgR/oDEZTzaCITjEB4c+gka1rKdfTxNrXUKRlrovQSMZpI4eKT6r8tccXF
-rSKiSpkkq3rRg5uYKyEqJ045mlqRGS5m62YKLLjRQ0Pu+sNDA1SEEIFjC92BD1c7
-rhYhwIvB2lU8COdV+QfMqOITdN/C11D884G6kimFaqRwEBMrRsETySCbhTNRzWuQ
-p8sP2Nxa+PcIUMu4w2glceUUkPHIgg==
-=7t/t
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmR+r3sACgkQAVBC80lX
+0Gw4LAf8DMXjuh+fw0ybsV7LksYwoqzjw2Zvmf0DuXMy7168Ml86JUYXwRXxfStJ
+H0Ol+/KA/ZpK1dmWc4jDLg+tnlImwSZHmcpWnzt19earx6myZVMMVRJJ3qNoEAGI
+g2U61nAKKLGrjo8T/F2io2j+XBzv/b00tGYHEax9o+hofsMajl+g6r+Xlpmc/4cU
+Zx+5DM64BtPkUWSdCoMJzrjOGhUauZXfkamRp1wIY88LRGYgWo6jYaG5YzkgBQ9u
+8OTjvngCAK5Jch2Qv1aN8h5nZtGiwlYHQuj2SXPXbwF4yZMHPOhC+It0XItW6fu6
+49Oa6+ncFjFTkJhOfSBthBdNxShmVw==
+=yUdr
 -----END PGP SIGNATURE-----
 
---Sig_/cnkiTwGsSkP/ekDl/_0L5p/--
+--Sig_/9BH_dDnaiZar.C.1LUifcOO--

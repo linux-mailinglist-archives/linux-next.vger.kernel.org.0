@@ -2,143 +2,71 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 178C8723DB3
-	for <lists+linux-next@lfdr.de>; Tue,  6 Jun 2023 11:35:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1B50723D86
+	for <lists+linux-next@lfdr.de>; Tue,  6 Jun 2023 11:32:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235988AbjFFJfe convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-next@lfdr.de>); Tue, 6 Jun 2023 05:35:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45274 "EHLO
+        id S235703AbjFFJcV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 6 Jun 2023 05:32:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237733AbjFFJf1 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 6 Jun 2023 05:35:27 -0400
-Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com [209.85.161.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2C7CE6B;
-        Tue,  6 Jun 2023 02:35:26 -0700 (PDT)
-Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-558cf19575dso1490483eaf.3;
-        Tue, 06 Jun 2023 02:35:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686044126; x=1688636126;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/ZvMEy864MwTP2VbOIQdW/FR/SOtiCNc16GfTX7zCXs=;
-        b=DL3It4Ca5xJL/vrKrqFBS9qmXsmu3UKzAg1VS+THcByn5cqRrkqYYoRy7Cx563ryEF
-         +jQ8LwKnGZug6cXlyR9SDaHb2Lh+h0CWc9y/8gNGOmZyAXo1v1Y7JohAKdmu0NkIo1Mb
-         aecOs4cvMhjA5j5jQIIam/rlVdRLCoaNYlS/goZjkHTaSILCJd8p2RsG1mn9tY504Ibn
-         KVb+rzaSVZzPQavhuOoGaw/rcnAoOPKQMYMx1B6iez2mTBUb0XAY9SSBC9PPrlJXudUS
-         KsDh8rUXLN2UxwzfhA4Av4lDw/bC5sQozlUJFUHwOaE4fvm6sz2CGhwxhNRhxdODEkSf
-         0k4A==
-X-Gm-Message-State: AC+VfDwP0Whb3napDvq0mUv1kUApSnDUoDg0JZJe6C8GtoNLFgzTd1jf
-        4puVAT1yrGXLkR90d6VEvoA8am9aMjL3jw==
-X-Google-Smtp-Source: ACHHUZ74uwk7tLOm3rALLOfpRcP3tLWD/D7I3Nks2fgxWfU5uoiBSZm7WX8ZjKo+uHkFWxJyeu3ILA==
-X-Received: by 2002:a4a:a688:0:b0:558:b5b2:72fe with SMTP id f8-20020a4aa688000000b00558b5b272femr1155642oom.2.1686044125525;
-        Tue, 06 Jun 2023 02:35:25 -0700 (PDT)
-Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com. [209.85.210.47])
-        by smtp.gmail.com with ESMTPSA id j15-20020a9d7f0f000000b006a43519523fsm4207977otq.1.2023.06.06.02.35.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Jun 2023 02:35:25 -0700 (PDT)
-Received: by mail-ot1-f47.google.com with SMTP id 46e09a7af769-6b16cbe4fb6so1808314a34.1;
-        Tue, 06 Jun 2023 02:35:25 -0700 (PDT)
-X-Received: by 2002:a0d:cb47:0:b0:565:c96b:f526 with SMTP id
- n68-20020a0dcb47000000b00565c96bf526mr1400799ywd.19.1686043729823; Tue, 06
- Jun 2023 02:28:49 -0700 (PDT)
+        with ESMTP id S236198AbjFFJcQ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 6 Jun 2023 05:32:16 -0400
+Received: from 167-179-156-38.a7b39c.syd.nbn.aussiebb.net (167-179-156-38.a7b39c.syd.nbn.aussiebb.net [167.179.156.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F6231719;
+        Tue,  6 Jun 2023 02:31:53 -0700 (PDT)
+Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
+        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
+        id 1q6T29-00HHnh-Kz; Tue, 06 Jun 2023 17:31:22 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Tue, 06 Jun 2023 17:31:21 +0800
+Date:   Tue, 6 Jun 2023 17:31:21 +0800
+From:   Herbert Xu <herbert@gondor.apana.org.au>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Linux Crypto List <linux-crypto@vger.kernel.org>,
+        Huan Feng <huan.feng@starfivetech.com>,
+        Jia Jie Ho <jiajie.ho@starfivetech.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: [PATCH] crypto: starfive - Depend on AMBA_PL08X instead of
+ selecting it
+Message-ID: <ZH786WIea+k3S/jW@gondor.apana.org.au>
+References: <20230522105257.562cb1ec@canb.auug.org.au>
+ <ZGr6aB9uJVnyfJQ9@gondor.apana.org.au>
+ <20230523103637.20175fbc@canb.auug.org.au>
+ <ZGwmAp5RPqAjVMCg@gondor.apana.org.au>
+ <CAMuHMdU5pBh8bk21Xrzk0Ocs7cAF+QTLn60uKOHa1z=TB6Lcuw@mail.gmail.com>
 MIME-Version: 1.0
-References: <CA+G9fYv0a-XxXfG6bNuPZGT=fzjtEfRGEYwk3n6M1WhEHUPo9g@mail.gmail.com>
- <CA+G9fYueN0xti1SDtYVZstPt104sUj06GfOzyqDNrd3s3xXBkA@mail.gmail.com>
- <CAMuHMdX7hqipiMCF9uxpU+_RbLmzyHeo-D0tCE_Hx8eTqQ7Pig@mail.gmail.com> <11bd37e9-c62e-46ba-9456-8e3b353df28f@app.fastmail.com>
-In-Reply-To: <11bd37e9-c62e-46ba-9456-8e3b353df28f@app.fastmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 6 Jun 2023 11:28:38 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUH2Grrv6842YWXHDmd+O3iHdwqTVjYf8f1nbVRzGA+6w@mail.gmail.com>
-Message-ID: <CAMuHMdUH2Grrv6842YWXHDmd+O3iHdwqTVjYf8f1nbVRzGA+6w@mail.gmail.com>
-Subject: Re: arm: shmobile_defconfig: ld.lld: error: undefined symbol: lynx_pcs_destroy
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-next <linux-next@vger.kernel.org>,
-        lkft-triage@lists.linaro.org,
-        clang-built-linux <llvm@lists.linux.dev>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Netdev <netdev@vger.kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        maxime.chevallier@bootlin.com,
-        Simon Horman <simon.horman@corigine.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdU5pBh8bk21Xrzk0Ocs7cAF+QTLn60uKOHa1z=TB6Lcuw@mail.gmail.com>
+X-Spam-Status: No, score=2.7 required=5.0 tests=BAYES_00,HELO_DYNAMIC_IPADDR2,
+        PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,TVD_RCVD_IP,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
         version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Arnd,
-
-On Tue, Jun 6, 2023 at 11:16 AM Arnd Bergmann <arnd@arndb.de> wrote:
-> On Tue, Jun 6, 2023, at 11:01, Geert Uytterhoeven wrote:
-> > On Tue, Jun 6, 2023 at 10:53 AM Naresh Kamboju
-> > <naresh.kamboju@linaro.org> wrote:
-> >> On Tue, 6 Jun 2023 at 14:17, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
-> >> > Following build regressions found while building arm shmobile_defconfig on
-> >> > Linux next-20230606.
-> >> >
-> >> > Regressions found on arm:
-> >> >
-> >> >  - build/clang-16-shmobile_defconfig
-> >> >  - build/gcc-8-shmobile_defconfig
-> >> >  - build/gcc-12-shmobile_defconfig
-> >> >  - build/clang-nightly-shmobile_defconfig
-> >>
-> >> And mips defconfig builds failed.
-> >> Regressions found on mips:
-> >>
-> >>   - build/clang-16-defconfig
-> >>   - build/gcc-12-defconfig
-> >>   - build/gcc-8-defconfig
-> >>   - build/clang-nightly-defconfig
-> >
-> > Please give my fix a try:
-> > https://lore.kernel.org/linux-renesas-soc/7b36ac43778b41831debd5c30b5b37d268512195.1686039915.git.geert+renesas@glider.be
+On Tue, Jun 06, 2023 at 11:12:05AM +0200, Geert Uytterhoeven wrote:
 >
-> This won't work when PCS_LYNX is a loadable module and
-> STMMAC is built-in. I think we should just select PCS_LYNX
+> > ---8<---
+> > A platform option like AMBA should never be selected by a driver.
+> > Use a dependency instead.
+> 
+> FTR:
+> 
+> arch/arm/mach-s3c/Kconfig.s3c64xx=config S3C64XX_PL080
+> arch/arm/mach-s3c/Kconfig.s3c64xx-      def_bool DMADEVICES
+> arch/arm/mach-s3c/Kconfig.s3c64xx:      select AMBA_PL08X
 
-Oops, you're right, forgot about that case.
-What about using IS_REACHABLE() instead?
-No, that won't work either, as DWMAC_SOCFPGA can be modular,
-with STMMAC builtin.
+Well that isn't a driver I think so it might be OK?
 
-> unconditionally from stmmac even if no front-end driver
-> using it is enabled.
->
-> I tried to come up with a way to move the dependency into
-> the altera specific front-end, but couldn't find an obvious
-> or simple way to do this.
->
-> Having a proper abstraction for PCS drivers instead of
-> directly calling into exported driver symbols might help
-> here, but that would add complexity elsewhere.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
+Cheers,
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt

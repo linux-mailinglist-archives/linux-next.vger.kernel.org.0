@@ -2,132 +2,150 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD1B4723CA7
-	for <lists+linux-next@lfdr.de>; Tue,  6 Jun 2023 11:12:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C493723CC7
+	for <lists+linux-next@lfdr.de>; Tue,  6 Jun 2023 11:16:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232580AbjFFJMc convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-next@lfdr.de>); Tue, 6 Jun 2023 05:12:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54524 "EHLO
+        id S229626AbjFFJQJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 6 Jun 2023 05:16:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232299AbjFFJMT (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 6 Jun 2023 05:12:19 -0400
-Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73210109;
-        Tue,  6 Jun 2023 02:12:18 -0700 (PDT)
-Received: by mail-yb1-f180.google.com with SMTP id 3f1490d57ef6-bb131cd7c4aso5079199276.1;
-        Tue, 06 Jun 2023 02:12:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686042737; x=1688634737;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7+0vZf4sZHrRYSSyyJCG/B7w9fRCzQCnK8geH62rIys=;
-        b=FwImVrDiSVBQANbLm0hAHYnopHqJPxh/wCwjSp46Zegptd3UEkCuKmKbteP1tewvcY
-         eYz2aRioiNMSyxB4NOva6p0hOLi97yrhNj+sjpGeCdSV03A/Xh+Fp4UxrobTHaj/87NG
-         BwKbYG4ne2fBq1jr5WEI1/vjxxOm1m2XMjS4/llhB9lpx2Lgmwey3mnH8Z2ZVh1gAacX
-         G4NrggEKJ8ZtEUstUmqkImf8B6pl1eE2fB0vjK+OU8DmzOr/O49lVsEKwEcLfpHp8lMV
-         ll3LdDxKLnHcBcc2wo7ZntErQhkAoiu7ol+fIgBwTOqQjc6PreoHLOptk5++/vtw2mYh
-         21WQ==
-X-Gm-Message-State: AC+VfDzKUziE5Exdc2nkNKkfXl4UpyuOTNofMT3zTXb9W8U9KbmkWPVO
-        X2YlsHLPa77sgt6sf37XlVtm/i6FDyV3Eg==
-X-Google-Smtp-Source: ACHHUZ61EyzKVwKqO5mKTUirCtO75LMH+ISg8RCloqSTgVBNfwranCtzBi25B2ADNPv4MB/Nz+aNMw==
-X-Received: by 2002:a81:8686:0:b0:565:d517:e714 with SMTP id w128-20020a818686000000b00565d517e714mr1318567ywf.25.1686042737377;
-        Tue, 06 Jun 2023 02:12:17 -0700 (PDT)
-Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com. [209.85.128.182])
-        by smtp.gmail.com with ESMTPSA id t205-20020a8183d6000000b0055a416529bbsm3893447ywf.24.2023.06.06.02.12.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Jun 2023 02:12:17 -0700 (PDT)
-Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-565aa2cc428so53258617b3.1;
-        Tue, 06 Jun 2023 02:12:17 -0700 (PDT)
-X-Received: by 2002:a81:4e0f:0:b0:55a:6f26:4fbf with SMTP id
- c15-20020a814e0f000000b0055a6f264fbfmr1179758ywb.35.1686042736916; Tue, 06
- Jun 2023 02:12:16 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230522105257.562cb1ec@canb.auug.org.au> <ZGr6aB9uJVnyfJQ9@gondor.apana.org.au>
- <20230523103637.20175fbc@canb.auug.org.au> <ZGwmAp5RPqAjVMCg@gondor.apana.org.au>
-In-Reply-To: <ZGwmAp5RPqAjVMCg@gondor.apana.org.au>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 6 Jun 2023 11:12:05 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdU5pBh8bk21Xrzk0Ocs7cAF+QTLn60uKOHa1z=TB6Lcuw@mail.gmail.com>
-Message-ID: <CAMuHMdU5pBh8bk21Xrzk0Ocs7cAF+QTLn60uKOHa1z=TB6Lcuw@mail.gmail.com>
-Subject: Re: [PATCH] crypto: starfive - Depend on AMBA_PL08X instead of
- selecting it
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Linux Crypto List <linux-crypto@vger.kernel.org>,
-        Huan Feng <huan.feng@starfivetech.com>,
-        Jia Jie Ho <jiajie.ho@starfivetech.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        with ESMTP id S229451AbjFFJQI (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 6 Jun 2023 05:16:08 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1383BE55;
+        Tue,  6 Jun 2023 02:16:03 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 2EA875C00D6;
+        Tue,  6 Jun 2023 05:16:03 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Tue, 06 Jun 2023 05:16:03 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
+        1686042963; x=1686129363; bh=jUtfdkZ/azepFvSYCIZ/2GxgimiuSucyPTh
+        w7nBP7F4=; b=LCmLbZWfkuLfRl1mPHTB2HMg4Zk5tS4Hc2oGueG6TXIuQaYzuxj
+        zBDWqMRe8e7wXjjyatIF/7u6NioHOS24/EACjLdE6VMGYmybgAlz8rKql6ZF+AL4
+        9oLlKIi/fsMWbTqduw0CXeXAapOEguGzt5Ac4eczmiGbBsXkkuJYmIS+bqfeUU5g
+        A9qWh5kapCDkvRa+hVn4hVnif676moVzUT2DJTw1qhLNeT5qxzLcriqX9jIzS5Ja
+        ZMEEmwZEM9hKXuVGduS9L7BlTQVKgnh7ZPhu5bdRuCSb0TJokWG1+bLwkPGg+aiz
+        i+ND/ce1G/GHiUh0XPqIZXucI6wdPwjqRZw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+        1686042963; x=1686129363; bh=jUtfdkZ/azepFvSYCIZ/2GxgimiuSucyPTh
+        w7nBP7F4=; b=OVvU1rB/IUV1V+Tir3aGFvlYRfACHozlpZBVLOvWe+gwqDjzcLF
+        VG3tFZ3Fu9+yjP2GsLZotGkDzeUy4VkD5plA4HjFECn3HuLP9yY7rB2kvtEOP0YP
+        jzrghR32c00umejZjSHcLbrIAHlLKtH0lKewuVG7MJjCZ3ASAeCJyfCzksbaRU6J
+        /xhwzSr3UlPMiRbiRZgtoPu1jqFLqn9JWyFAKUIQLVdVifHn+h0ajt3WCQFxEaf1
+        pDE0Gw/eUKDhJP8oGWCUUP1S/xEsrZVQ6qGbQPtwWCQIL1GfsVDYSf2tC2Ncka/8
+        orubpGGHHVF2kPusJpJgXzO0XbZjeh9deng==
+X-ME-Sender: <xms:Uvl-ZAoExjB4Tw5ycehQJoFfp5DYQ0suSSA434qzcD6j8J5M0BiYVw>
+    <xme:Uvl-ZGrQHlmQFaa7PjhvB4jBdLATrgN31FX8PaVAiyBMHgQrprmOs81VQnGB46WqM
+    P5AXRfdqCYhCDr6nNM>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedtuddgudegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpefgkeeuleegieeghfduudeltdekfeffjeeuleehleefudettddtgfevueef
+    feeigeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
+    eptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:Uvl-ZFNRdqYjvHzma7kszNb8noYVzTvB6WsvhG9Se2ZmV5PZLQ6SAw>
+    <xmx:Uvl-ZH6e2GQwKUg-3XFd7uF48imD6xAt4HVJKXyhGPfYClTXvYf8Ow>
+    <xmx:Uvl-ZP5zDCsoBN3_bkFjtIoDKGugKaMWKlQj-Znm6gkqQPR_DgjgsQ>
+    <xmx:U_l-ZIPtCu9ftgUOo6o8pir-Uft3tWJcQSibYy1Gci7O3ra0Q5OBag>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id B690AB60086; Tue,  6 Jun 2023 05:16:02 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-447-ge2460e13b3-fm-20230525.001-ge2460e13
+Mime-Version: 1.0
+Message-Id: <11bd37e9-c62e-46ba-9456-8e3b353df28f@app.fastmail.com>
+In-Reply-To: <CAMuHMdX7hqipiMCF9uxpU+_RbLmzyHeo-D0tCE_Hx8eTqQ7Pig@mail.gmail.com>
+References: <CA+G9fYv0a-XxXfG6bNuPZGT=fzjtEfRGEYwk3n6M1WhEHUPo9g@mail.gmail.com>
+ <CA+G9fYueN0xti1SDtYVZstPt104sUj06GfOzyqDNrd3s3xXBkA@mail.gmail.com>
+ <CAMuHMdX7hqipiMCF9uxpU+_RbLmzyHeo-D0tCE_Hx8eTqQ7Pig@mail.gmail.com>
+Date:   Tue, 06 Jun 2023 11:15:42 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Geert Uytterhoeven" <geert@linux-m68k.org>,
+        "Naresh Kamboju" <naresh.kamboju@linaro.org>
+Cc:     "open list" <linux-kernel@vger.kernel.org>,
+        linux-next <linux-next@vger.kernel.org>,
+        lkft-triage@lists.linaro.org,
+        clang-built-linux <llvm@lists.linux.dev>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "Linux ARM" <linux-arm-kernel@lists.infradead.org>,
+        Netdev <netdev@vger.kernel.org>,
+        "Nathan Chancellor" <nathan@kernel.org>,
+        "Nick Desaulniers" <ndesaulniers@google.com>,
+        "Anders Roxell" <anders.roxell@linaro.org>,
+        "Geert Uytterhoeven" <geert+renesas@glider.be>,
+        "David S . Miller" <davem@davemloft.net>,
+        "Eric Dumazet" <edumazet@google.com>,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        "Paolo Abeni" <pabeni@redhat.com>,
+        "Maxime Coquelin" <mcoquelin.stm32@gmail.com>,
+        maxime.chevallier@bootlin.com,
+        "Simon Horman" <simon.horman@corigine.com>
+Subject: Re: arm: shmobile_defconfig: ld.lld: error: undefined symbol: lynx_pcs_destroy
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Herbert,
-
-On Tue, May 23, 2023 at 4:40 AM Herbert Xu <herbert@gondor.apana.org.au> wrote:
-> On Tue, May 23, 2023 at 10:36:37AM +1000, Stephen Rothwell wrote:
-> > That did not fix it :-(
+On Tue, Jun 6, 2023, at 11:01, Geert Uytterhoeven wrote:
+> Hi Naresh,
 >
-> OK, this patch should fix it:
+> On Tue, Jun 6, 2023 at 10:53=E2=80=AFAM Naresh Kamboju
+> <naresh.kamboju@linaro.org> wrote:
+>> On Tue, 6 Jun 2023 at 14:17, Naresh Kamboju <naresh.kamboju@linaro.or=
+g> wrote:
+>> > Following build regressions found while building arm shmobile_defco=
+nfig on
+>> > Linux next-20230606.
+>> >
+>> > Regressions found on arm:
+>> >
+>> >  - build/clang-16-shmobile_defconfig
+>> >  - build/gcc-8-shmobile_defconfig
+>> >  - build/gcc-12-shmobile_defconfig
+>> >  - build/clang-nightly-shmobile_defconfig
+>>
+>> And mips defconfig builds failed.
+>> Regressions found on mips:
+>>
+>>   - build/clang-16-defconfig
+>>   - build/gcc-12-defconfig
+>>   - build/gcc-8-defconfig
+>>   - build/clang-nightly-defconfig
 >
-> ---8<---
-> A platform option like AMBA should never be selected by a driver.
-> Use a dependency instead.
-
-FTR:
-
-arch/arm/mach-s3c/Kconfig.s3c64xx=config S3C64XX_PL080
-arch/arm/mach-s3c/Kconfig.s3c64xx-      def_bool DMADEVICES
-arch/arm/mach-s3c/Kconfig.s3c64xx:      select AMBA_PL08X
-
+> Please give my fix a try:
+> https://lore.kernel.org/linux-renesas-soc/7b36ac43778b41831debd5c30b5b=
+37d268512195.1686039915.git.geert+renesas@glider.be
 >
-> Also remove the depenency on DMADEVICES because the driver builds
-> just fine without it.  Instead add a dependency on HAS_DMA for dma
-> mapping support.
->
-> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> Reported-by: Conor Dooley <conor.dooley@microchip.com>
-> Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
->
-> diff --git a/drivers/crypto/starfive/Kconfig b/drivers/crypto/starfive/Kconfig
-> index 908c162ba79a..59002abcc0ad 100644
-> --- a/drivers/crypto/starfive/Kconfig
-> +++ b/drivers/crypto/starfive/Kconfig
-> @@ -4,14 +4,13 @@
->
->  config CRYPTO_DEV_JH7110
->         tristate "StarFive JH7110 cryptographic engine driver"
-> -       depends on (SOC_STARFIVE || COMPILE_TEST) && DMADEVICES
-> +       depends on SOC_STARFIVE || AMBA_PL08X || COMPILE_TEST
-> +       depends on HAS_DMA
->         select CRYPTO_ENGINE
->         select CRYPTO_HMAC
->         select CRYPTO_SHA256
->         select CRYPTO_SHA512
->         select CRYPTO_SM3_GENERIC
-> -       select ARM_AMBA
-> -       select AMBA_PL08X
->         help
->           Support for StarFive JH7110 crypto hardware acceleration engine.
->           This module provides acceleration for public key algo,
 
-Gr{oetje,eeting}s,
+This won't work when PCS_LYNX is a loadable module and
+STMMAC is built-in. I think we should just select PCS_LYNX
+unconditionally from stmmac even if no front-end driver
+using it is enabled.
 
-                        Geert
+I tried to come up with a way to move the dependency into
+the altera specific front-end, but couldn't find an obvious
+or simple way to do this.
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Having a proper abstraction for PCS drivers instead of
+directly calling into exported driver symbols might help
+here, but that would add complexity elsewhere.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+     Arnd

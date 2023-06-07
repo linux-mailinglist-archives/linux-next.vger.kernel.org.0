@@ -2,91 +2,140 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5374F7252F3
-	for <lists+linux-next@lfdr.de>; Wed,  7 Jun 2023 06:41:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 334477253A1
+	for <lists+linux-next@lfdr.de>; Wed,  7 Jun 2023 07:43:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232951AbjFGEl0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 7 Jun 2023 00:41:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51782 "EHLO
+        id S231956AbjFGFnC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 7 Jun 2023 01:43:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232821AbjFGElZ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 7 Jun 2023 00:41:25 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CBA583;
-        Tue,  6 Jun 2023 21:41:24 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QbZRj3jLBz4x3g;
-        Wed,  7 Jun 2023 14:41:20 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1686112882;
-        bh=L5fDwdous2yWpaw5MIUpaxze8IZTU/Z/NG8MZPHw1RI=;
-        h=Date:From:To:Cc:Subject:From;
-        b=feYEmHISrGBoaNyMuD25v4JVD+gYWVp1m00iWWdG3Ge9XccBdT8dhiGx6OE/C3OBW
-         hbLe15i3jNx0mSstebvNCK8RE0cKbU2yVE7GyGy5Utc+gMNFYhnzUk+dWXERhaA7J/
-         VGw/jrHEevqhlx3XvDCS6BnExR94hKShHb9Yp729P8ES9r7cz31KXt3Rmcaxc0lpWJ
-         FoZWiHLxsCd4EGqkg17TiNINWLutBFP27AF8FxxgK1bJtyW+WqiAODu79i9p+6H0cr
-         L3fbRXSuccRJhESbnzBiMlER7Qv0F8Q+Hx1n03sNrhP8IsWjfPB2zwZrHGs+yCsKUT
-         9Sw6t+CcOQ0eg==
-Date:   Wed, 7 Jun 2023 14:41:20 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Dan Williams <dan.j.williams@intel.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
+        with ESMTP id S234963AbjFGFmy (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 7 Jun 2023 01:42:54 -0400
+X-Greylist: delayed 510 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 06 Jun 2023 22:42:33 PDT
+Received: from out-25.mta1.migadu.com (out-25.mta1.migadu.com [95.215.58.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B68DF1FCF
+        for <linux-next@vger.kernel.org>; Tue,  6 Jun 2023 22:42:33 -0700 (PDT)
+Date:   Wed, 7 Jun 2023 05:33:53 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1686116037;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=OKbA0mls5g+nAhVBAv/6T7uMneQtU0Cj+96AOZemPpU=;
+        b=GkkVkEOoVgEvLdZTvT58H5xMEOeZW/DtyDe0QWxpx3uAzaoAwrst9aEEfYCHH3Mn2M0q+E
+        NmJIQTy2a3LYs/PxixXfJaRxphU0zv7LL4E8vo8r9RTY9eHlo3gsocg3jAOm9+0GyYUEq7
+        gNQY1Vl0ko5UpM9+UeQAelbYd0oYbGo=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Oliver Upton <oliver.upton@linux.dev>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Christoffer Dall <cdall@cs.columbia.edu>,
+        Marc Zyngier <maz@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
+        Kristina Martsenko <kristina.martsenko@arm.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patch in the pm tree
-Message-ID: <20230607144120.01ce4655@canb.auug.org.au>
+Subject: Re: linux-next: manual merge of the kvm-arm tree with the arm64 tree
+Message-ID: <ZIAWwXp4IQUIlCzq@linux.dev>
+References: <20230606114927.227a66a5@canb.auug.org.au>
+ <20230607110521.442280f9@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/i9DfzRcBIBgqRY7qAwEW.rU";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230607110521.442280f9@canb.auug.org.au>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/i9DfzRcBIBgqRY7qAwEW.rU
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Wed, Jun 07, 2023 at 11:05:21AM +1000, Stephen Rothwell wrote:
+> Hi all,
+> 
+> On Tue, 6 Jun 2023 11:49:27 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> >
+> > Today's linux-next merge of the kvm-arm tree got a conflict in:
+> > 
+> >   arch/arm64/kernel/cpufeature.c
+> > 
+> > between commits:
+> > 
+> >   b7564127ffcb ("arm64: mops: detect and enable FEAT_MOPS")
+> >   c1fa32c8f189 ("arm64: cpufeature: add TCR2 cpucap")
+> >   b5a8e35236ee ("arm64: cpufeature: add Permission Indirection Extension cpucap")
+> > 
+> > from the arm64 tree and commit:
+> > 
+> >   c876c3f182a5 ("KVM: arm64: Relax trapping of CTR_EL0 when FEAT_EVT is available")
+> > 
+> > from the kvm-arm tree.
+> > 
+> > I fixed it up (see below) and can carry the fix as necessary. This
+> > is now fixed as far as linux-next is concerned, but any non trivial
+> > conflicts should be mentioned to your upstream maintainer when your tree
+> > is submitted for merging.  You may also want to consider cooperating
+> > with the maintainer of the conflicting tree to minimise any particularly
+> > complex conflicts.
+> 
+> Commit b5a8e35236ee changed a bit, so the new resolution is below.
 
-Hi all,
+LGTM, thanks Stephen.
 
-The following commit is also in nvdimm-fixes tree as a different commit
-(but the same patch):
+Catalin, I'm  only planning on dragging in the MOPS branch as needed
+due to some more involved conflicts that'll arise from KVM ID register
+changes. Otherwise the resolution seems trivial enough and doesn't need
+to be explicitly dealt with. Still learning the ropes, so all ears if
+anyone disagrees :)
 
-  8f0e8597a7fa ("ACPI: NFIT: Add declaration in a local header")
+> diff --cc arch/arm64/kernel/cpufeature.c
+> index c3bdb14bb4bd,4a2ab3f366de..000000000000
+> --- a/arch/arm64/kernel/cpufeature.c
+> +++ b/arch/arm64/kernel/cpufeature.c
+> @@@ -2662,27 -2641,17 +2662,38 @@@ static const struct arm64_cpu_capabilit
+>   		.cpu_enable = cpu_enable_dit,
+>   		ARM64_CPUID_FIELDS(ID_AA64PFR0_EL1, DIT, IMP)
+>   	},
+>  +	{
+>  +		.desc = "Memory Copy and Memory Set instructions",
+>  +		.capability = ARM64_HAS_MOPS,
+>  +		.type = ARM64_CPUCAP_SYSTEM_FEATURE,
+>  +		.matches = has_cpuid_feature,
+>  +		.cpu_enable = cpu_enable_mops,
+>  +		ARM64_CPUID_FIELDS(ID_AA64ISAR2_EL1, MOPS, IMP)
+>  +	},
+>  +	{
+>  +		.capability = ARM64_HAS_TCR2,
+>  +		.type = ARM64_CPUCAP_SYSTEM_FEATURE,
+>  +		.matches = has_cpuid_feature,
+>  +		ARM64_CPUID_FIELDS(ID_AA64MMFR3_EL1, TCRX, IMP)
+>  +	},
+>  +	{
+>  +		.desc = "Stage-1 Permission Indirection Extension (S1PIE)",
+>  +		.capability = ARM64_HAS_S1PIE,
+>  +		.type = ARM64_CPUCAP_BOOT_CPU_FEATURE,
+>  +		.matches = has_cpuid_feature,
+>  +		ARM64_CPUID_FIELDS(ID_AA64MMFR3_EL1, S1PIE, IMP)
+>  +	},
+> + 	{
+> + 		.desc = "Enhanced Virtualization Traps",
+> + 		.capability = ARM64_HAS_EVT,
+> + 		.type = ARM64_CPUCAP_SYSTEM_FEATURE,
+> + 		.sys_reg = SYS_ID_AA64MMFR2_EL1,
+> + 		.sign = FTR_UNSIGNED,
+> + 		.field_pos = ID_AA64MMFR2_EL1_EVT_SHIFT,
+> + 		.field_width = 4,
+> + 		.min_field_value = ID_AA64MMFR2_EL1_EVT_IMP,
+> + 		.matches = has_cpuid_feature,
+> + 	},
+>   	{},
+>   };
+>   
 
-This is commit
-
-  40d3f4a65a07 ("acpi: nfit: add declaration in a local header")
-
-in the nvdimm-fixes tree.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/i9DfzRcBIBgqRY7qAwEW.rU
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSACnAACgkQAVBC80lX
-0GyY+Qf/YOIVQHsPtedkGjXR21JxRBsg0CJvr+Zz8PpWpWjX4zdoRjox42HvuhyS
-RaiENxcbD8l6gGWN110BQ+wRyn9UnIkmJaBXDPWHLRLPrjj1DdpmbxdGVE8S+gQv
-NPzOvJobdqlLw0sDSUuw2rGaUKHkRb3J7yVvix9a8DsvS6E/uYYmI3X3d+LdGUrY
-5Gsq4opc4lHDg3PUpgBTovmK6xkeb0zamBXoXacVjfvRs93uWA5ZF2ytcWilc7dw
-ejDcjLYAaHxoOPrdrsp0KhRmX0QDHIzNu2p5d2Dh3WZYn2wT9hUhT+xki7evJzmc
-wPAxwAJ2F+ZeTH11yh98HesWdMhpmg==
-=7Cht
------END PGP SIGNATURE-----
-
---Sig_/i9DfzRcBIBgqRY7qAwEW.rU--
+-- 
+Thanks,
+Oliver

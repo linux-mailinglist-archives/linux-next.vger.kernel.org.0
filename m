@@ -2,89 +2,95 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1AAD725468
-	for <lists+linux-next@lfdr.de>; Wed,  7 Jun 2023 08:37:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4423172583E
+	for <lists+linux-next@lfdr.de>; Wed,  7 Jun 2023 10:45:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231634AbjFGGhz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 7 Jun 2023 02:37:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58624 "EHLO
+        id S238677AbjFGIps (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 7 Jun 2023 04:45:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231470AbjFGGhy (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 7 Jun 2023 02:37:54 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A94EF10C3;
-        Tue,  6 Jun 2023 23:37:50 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        with ESMTP id S238728AbjFGIpr (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 7 Jun 2023 04:45:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FCD8170E;
+        Wed,  7 Jun 2023 01:45:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Qbd2217Skz4wgv;
-        Wed,  7 Jun 2023 16:37:46 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1686119866;
-        bh=ZUyUX8hoKxQ8IX9AXzCttqc3N8++oeZ0LmZx0MumW2U=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Un4yUpwr+iCyQ6ok48X7cyIf1apwF5FQrXyKxpNa3WWk71GbQhEcl1fPYc75SLfVz
-         rEqwqFYBASxu6O7frEZgpRpHTDn2gccMamasx6C5BJjnueJ+un4udn6xmLFix6mEyw
-         qUmmhTslKImRU8KvU/YEbxF2Wlq16RblFR3EGj2zCZw77btBrH3oyF9b6ZylUQi6Ud
-         yo0cA3zvzC1WbBFkxuwnImDSDA2FQGzIJsO52QIkt54Gbl5AnhM6phKCa4TG+w1yMr
-         nqqw2nmc1WXxw5y3bWoyJN36j2cLpPwN/y7zjC8iig7SQuiZ1n5oYOmfs+RV1nLoIf
-         zl2XadPG3zgmw==
-Date:   Wed, 7 Jun 2023 16:37:43 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>, Lee Jones <lee@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 09D8D614F8;
+        Wed,  7 Jun 2023 08:45:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB5AFC433EF;
+        Wed,  7 Jun 2023 08:45:43 +0000 (UTC)
+Date:   Wed, 7 Jun 2023 09:45:40 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Oliver Upton <oliver.upton@linux.dev>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Christoffer Dall <cdall@cs.columbia.edu>,
+        Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>,
+        Joey Gouly <joey.gouly@arm.com>,
+        Kristina Martsenko <kristina.martsenko@arm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patch in the regulator tree
-Message-ID: <20230607163743.1c266a7f@canb.auug.org.au>
+Subject: Re: linux-next: manual merge of the kvm-arm tree with the arm64 tree
+Message-ID: <ZIBDtHHrXg1kDpM3@arm.com>
+References: <20230606114927.227a66a5@canb.auug.org.au>
+ <20230607110521.442280f9@canb.auug.org.au>
+ <ZIAWwXp4IQUIlCzq@linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/NwpFl.U/DxkQYj43Onpc6y7";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZIAWwXp4IQUIlCzq@linux.dev>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/NwpFl.U/DxkQYj43Onpc6y7
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Wed, Jun 07, 2023 at 05:33:53AM +0000, Oliver Upton wrote:
+> On Wed, Jun 07, 2023 at 11:05:21AM +1000, Stephen Rothwell wrote:
+> > On Tue, 6 Jun 2023 11:49:27 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> > > Today's linux-next merge of the kvm-arm tree got a conflict in:
+> > > 
+> > >   arch/arm64/kernel/cpufeature.c
+> > > 
+> > > between commits:
+> > > 
+> > >   b7564127ffcb ("arm64: mops: detect and enable FEAT_MOPS")
+> > >   c1fa32c8f189 ("arm64: cpufeature: add TCR2 cpucap")
+> > >   b5a8e35236ee ("arm64: cpufeature: add Permission Indirection Extension cpucap")
+> > > 
+> > > from the arm64 tree and commit:
+> > > 
+> > >   c876c3f182a5 ("KVM: arm64: Relax trapping of CTR_EL0 when FEAT_EVT is available")
+> > > 
+> > > from the kvm-arm tree.
+> > > 
+> > > I fixed it up (see below) and can carry the fix as necessary. This
+> > > is now fixed as far as linux-next is concerned, but any non trivial
+> > > conflicts should be mentioned to your upstream maintainer when your tree
+> > > is submitted for merging.  You may also want to consider cooperating
+> > > with the maintainer of the conflicting tree to minimise any particularly
+> > > complex conflicts.
+> > 
+> > Commit b5a8e35236ee changed a bit, so the new resolution is below.
 
-Hi all,
+Thanks Stephen. I regenerated the arm64 for-next/feat_s1pie branch since
+the old one was not archived on lore. While doing that, there were some
+minor fixups.
 
-The following commit is also in the mfd tree as a different commit
-(but the same patch):
+> Catalin, I'm  only planning on dragging in the MOPS branch as needed
+> due to some more involved conflicts that'll arise from KVM ID register
+> changes. Otherwise the resolution seems trivial enough and doesn't need
+> to be explicitly dealt with. Still learning the ropes, so all ears if
+> anyone disagrees :)
 
-  75c8cb2f4cb2 ("mfd: axp20x: Add support for AXP313a PMIC")
+If there are trivial conflicts, we usually leave them in (Linus doesn't
+mind). For anything non-obvious, feel free to pull the relevant branches
+from the arm64 tree into the KVM one. I don't plan to rebase any of them
+now.
 
-This is commit
-
-  2f518d914bd3 ("mfd: axp20x: Add support for AXP313a PMIC")
-
-in the mfd tree.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/NwpFl.U/DxkQYj43Onpc6y7
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSAJbcACgkQAVBC80lX
-0Gyw9Qf6A7JQ69EEBiR9Ax4KnS3R1EBScgUvsapC2AEK8KVqe9uz7/dtDvuOZHBS
-gcjt+GQayoqNheC1OJ6RALq1YytEBCVlWUDMZkW2pLe00e0j9s3LHdTe+JDlVoKy
-h6auM0kuZUejetR8aUVCmb7xiY2lBYsruROQsXo+YMaijFma3qqX900krsNRsvJR
-NapwkWJruhfsosOVbFLbLitW3M7DsKVpUnS7JGLMfQ/9OGEBm7v35UDBY0bHzKXm
-LolcHmmOuy/thkS8CHwr0zVjLcykb1VBYyzNhmwlLjm0esLPWa1qFXWP5vlkykv+
-YFpAIPASOEPcP6476t/eaw1dn/sTRA==
-=WtgY
------END PGP SIGNATURE-----
-
---Sig_/NwpFl.U/DxkQYj43Onpc6y7--
+-- 
+Catalin

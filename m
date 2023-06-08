@@ -2,103 +2,83 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC1B3727ABA
-	for <lists+linux-next@lfdr.de>; Thu,  8 Jun 2023 11:03:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6796372803F
+	for <lists+linux-next@lfdr.de>; Thu,  8 Jun 2023 14:42:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235485AbjFHJDt (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 8 Jun 2023 05:03:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52524 "EHLO
+        id S234678AbjFHMmh (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 8 Jun 2023 08:42:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235124AbjFHJDs (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 8 Jun 2023 05:03:48 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14C179E
-        for <linux-next@vger.kernel.org>; Thu,  8 Jun 2023 02:03:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686214980;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UYiTEDV9xbat0CXOjHRUSDYApWdsY3/wGaCOCwJ5h8Q=;
-        b=EtHxH87sGVGNIkIfN48gmDLUq4TtKd9kzm9V6pelr4lRQyMwB5s7tOuD3i4rm6vDDxb+ZH
-        4EnZ826tIC2t9D4LxnonLvyGNSxAPbpOuPOxz43ZnwVUI514Hc+VmX1sSJUdxg29AWQZkX
-        v0fr3uASLhPzzqksUSsz8xQIzK92iRc=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-617-Z-EtiBqeMG-WFF5iFovYzQ-1; Thu, 08 Jun 2023 05:02:50 -0400
-X-MC-Unique: Z-EtiBqeMG-WFF5iFovYzQ-1
-Received: by mail-ed1-f72.google.com with SMTP id 4fb4d7f45d1cf-50daa85e940so437275a12.0
-        for <linux-next@vger.kernel.org>; Thu, 08 Jun 2023 02:02:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686214969; x=1688806969;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UYiTEDV9xbat0CXOjHRUSDYApWdsY3/wGaCOCwJ5h8Q=;
-        b=YoPnt83ns2XiU2KkizBl7EA5o+noEaTjg6r2adFp9pisOkeCB3QWSQq2DWK+zPUzeK
-         SyelHpLfJot4CRdov3FSgoNKLc2j5vJw5PXpIs5FtwTbhAYYGYtJKajtpGCZJIe+0jno
-         XFfYzzXBDgce6eGqFW3goLOTJkU27QchTLc1cEse0rTK0LRYApVsnmLiI25iAOUa5rky
-         Savk1TfBEzFdf4keB0d37LfSjp4NSynqSe0EQtnN57wvGjeLgi3/18Tjt6yH7WPmJUbr
-         nxX33zOuxU9STxS6BelHPNGXBE/6pjpzCZ4K7k8syOMoPdyqaB4LfwqVgHnkHzEC6AYZ
-         9aNg==
-X-Gm-Message-State: AC+VfDxxqrJO5Y4PWNoq4v81OJpZXLCNKfKaUR03v9aMMlhm9NVPUdM/
-        umBj0ahpBu7STncXQJGdNdqKJLLUllwxitRpptP/xsYyVR/DQeItbKN1jqXWMxTHDp06oEd6Sqj
-        EQZBAHcOSETAsZqMwOg+wTA==
-X-Received: by 2002:aa7:c909:0:b0:514:9284:2380 with SMTP id b9-20020aa7c909000000b0051492842380mr5525704edt.19.1686214969506;
-        Thu, 08 Jun 2023 02:02:49 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ583v3xnIpRXAoxcmeL7kTs6T18URZvEhmi8VeLKDuR82Z/L6n/+DSS2gBcfwqiyNxy0k0ozg==
-X-Received: by 2002:aa7:c909:0:b0:514:9284:2380 with SMTP id b9-20020aa7c909000000b0051492842380mr5525693edt.19.1686214969270;
-        Thu, 08 Jun 2023 02:02:49 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id y13-20020a056402134d00b005106975c7a1sm301873edw.23.2023.06.08.02.02.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Jun 2023 02:02:48 -0700 (PDT)
-Message-ID: <e3f417ab-9072-11c1-9e2c-406b7aa6cf4a@redhat.com>
-Date:   Thu, 8 Jun 2023 11:02:47 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: linux-next: Signed-off-by missing for commit in the drivers-x86
- tree
-Content-Language: en-US, nl
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Mark Gross <markgross@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        with ESMTP id S235381AbjFHMmg (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 8 Jun 2023 08:42:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EC2226B1;
+        Thu,  8 Jun 2023 05:42:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BFCB064D18;
+        Thu,  8 Jun 2023 12:42:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00B55C433EF;
+        Thu,  8 Jun 2023 12:42:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686228155;
+        bh=gkgTenx1i0qZQfBHISvhcjd7PbwsAhLxgVxAEZgDex4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RkXXKrm1XcyA+fru3aRSaR0ZC0bPFdrljVEPzk24dF5/PqK7v3QC98rCjUfmfDMLY
+         2NTJvIFsP7zGV32+zPdbglP2CT6FlTT3smAoLMFWMZQuj+teia/g4yrmLcd0RbCabk
+         TNPAvRxpuYs/AeG/GHpkUxqK0e5qq0EheUIS4QN7+5OKabqXKBnhExD1M5Xb5/Zoyi
+         if3EMb6Sd70Ai67OGxfov/+DNozrKnGcSd7n70E6oQyVKHN3yu9Cyj1tXIdC6Uj9oe
+         I4khjD8bjFJZEKHNevztQCYiNebZJTqWdgPMJbp5GGKVxIu6nNU/ohpesLX5HrLKS0
+         TzxFM8kIWCaCA==
+Date:   Thu, 8 Jun 2023 13:42:30 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20230608091527.3b26a533@canb.auug.org.au>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20230608091527.3b26a533@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Subject: Re: linux-next: duplicate patch in the regulator tree
+Message-ID: <20230608124230.GH1930705@google.com>
+References: <20230607163743.1c266a7f@canb.auug.org.au>
+ <38913e8e-4578-4c4f-a6cd-6f6e628957af@sirena.org.uk>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <38913e8e-4578-4c4f-a6cd-6f6e628957af@sirena.org.uk>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Stephen,
+On Wed, 07 Jun 2023, Mark Brown wrote:
 
-On 6/8/23 01:15, Stephen Rothwell wrote:
-> Hi all,
+> On Wed, Jun 07, 2023 at 04:37:43PM +1000, Stephen Rothwell wrote:
+> > Hi all,
+> > 
+> > The following commit is also in the mfd tree as a different commit
+> > (but the same patch):
+> > 
+> >   75c8cb2f4cb2 ("mfd: axp20x: Add support for AXP313a PMIC")
+> > 
+> > This is commit
+> > 
+> >   2f518d914bd3 ("mfd: axp20x: Add support for AXP313a PMIC")
+> > 
+> > in the mfd tree.
 > 
-> Commit
-> 
->   15f8e38c6c1e ("platform/x86: int3472: Evaluate device's _DSM method to control imaging clock")
-> 
-> is missing a Signed-off-by from its committer.
+> Hrm, that was a tag I pulled from Lee rather than something I applied -
+> not sure what's going on there.
 
-My bad, sorry. This is fixed now.
+Mea culpa.  I hadn't rebased onto my own tag.
 
-Regards,
+Should be fixed in the next -next cut.
 
-Hans
-
-
-
-
+-- 
+Lee Jones [李琼斯]

@@ -2,87 +2,134 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B94772733E
-	for <lists+linux-next@lfdr.de>; Thu,  8 Jun 2023 01:43:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74B757273BE
+	for <lists+linux-next@lfdr.de>; Thu,  8 Jun 2023 02:31:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232178AbjFGXnV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 7 Jun 2023 19:43:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49912 "EHLO
+        id S230479AbjFHAbi (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 7 Jun 2023 20:31:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229659AbjFGXnU (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 7 Jun 2023 19:43:20 -0400
+        with ESMTP id S229659AbjFHAbh (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 7 Jun 2023 20:31:37 -0400
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 820022115;
-        Wed,  7 Jun 2023 16:43:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 609632128;
+        Wed,  7 Jun 2023 17:31:35 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Qc3nJ2qDQz4x3g;
-        Thu,  8 Jun 2023 09:43:16 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Qc4rw0QHQz4wgv;
+        Thu,  8 Jun 2023 10:31:27 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1686181396;
-        bh=SMUEbHWeYQz9dIEex2FUYLwlIvtuoZphg4ADR9BPAyg=;
+        s=201702; t=1686184288;
+        bh=8F60OUp8CBqwzKFBb/J0sj2amxP/qg9IkT2KgaJBCzU=;
         h=Date:From:To:Cc:Subject:From;
-        b=OKh6OLYxBdQHfRJCEo5QvmjBIlTwLs/pNmryyYeeah1Y82vZEtQ3Oa/zn99CmVXf0
-         l45Enkrq9wXEmGQM4Kp+nXEMqh6nExiqyvs86PHvhODLDQ3l/37k65WZjM5Yr923/l
-         pVxzfXLYjcrsiDsO/ZPOBF2ricSKT2xNzyC55KidKaShtWeLRogPW0wzOMLw2Y3ZsI
-         5LAFGcBQxuHkcu1LXkfsbcII+BT/9Q1Ca29b2joyR0TpgpDDbUu7Pgic//hsevvAga
-         HZ/2a+p024HJAm3kVQBPNgbM539tlw/5c8N93qdS8v5QEpEBwugc8FQ4J1N529f9ki
-         3uyLsIl//nhyA==
-Date:   Thu, 8 Jun 2023 09:43:15 +1000
+        b=C3PWvFiiyycWravL3+GM6DwHS5Ln6nUX1FN8GqvXB9i/H+AlZX2OtNWS0xpxem7Df
+         at/w2As1RARwqgY/s5+aAlXcrIlHk1IsKqT7huEe7/mwnb0v2eUtL4BNSlEyXs7M0F
+         XJT1fB1m6gCUQhcqlR9s8WO21VLC/aRZsISIFWFFNjNLsUeiqGbePxVyZACB1NUe5g
+         rDtVhCQW1W7j06IQvogFMcd+EFYxmadIpJ+tQNBV2beM3OyuD3A/DEMR3NcNTLrj4j
+         ulALn2z2nPi1+eSSOeRZ3HI9d/Kq0uL56q24XLZMCWASWJpFE/WWV4gJKw8HQoPB7f
+         rA3gHcvka+gYQ==
+Date:   Thu, 8 Jun 2023 10:31:26 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the slab tree
-Message-ID: <20230608094315.386e44cd@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>
+Subject: linux-next: manual merge of the net-next tree with the net tree
+Message-ID: <20230608103126.24c01d43@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/AY3m4nXAs_is4wEcvrSYUU/";
+Content-Type: multipart/signed; boundary="Sig_/i77_LI4b+/m/9CssqV4/xF0";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/AY3m4nXAs_is4wEcvrSYUU/
+--Sig_/i77_LI4b+/m/9CssqV4/xF0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Commits
+Today's linux-next merge of the net-next tree got a conflict in:
 
-  373c9fd4ba4e ("mm/slab: break up RCU readers on SLAB_TYPESAFE_BY_RCU exam=
-ple code")
-  f25140926cb5 ("mm/slab: add a missing semicolon on SLAB_TYPESAFE_BY_RCU e=
-xample code")
+  net/sched/sch_taprio.c
 
-are missing a Signed-off-by from their committer.
+between commit:
+
+  d636fc5dd692 ("net: sched: add rcu annotations around qdisc->qdisc_sleepi=
+ng")
+
+from the net tree and commit:
+
+  dced11ef84fb ("net/sched: taprio: don't overwrite "sch" variable in tapri=
+o_dump_class_stats()")
+
+from the net-next tree.
+
+I fixed it up (I think - see below) and can carry the fix as necessary.
+This is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/AY3m4nXAs_is4wEcvrSYUU/
+diff --cc net/sched/sch_taprio.c
+index dd7dea2f6e83,3c4c2c334878..000000000000
+--- a/net/sched/sch_taprio.c
++++ b/net/sched/sch_taprio.c
+@@@ -2388,12 -2456,19 +2456,19 @@@ static int taprio_dump_class_stats(stru
+  	__acquires(d->lock)
+  {
+  	struct netdev_queue *dev_queue =3D taprio_queue_get(sch, cl);
+ -	struct Qdisc *child =3D dev_queue->qdisc_sleeping;
+++	struct Qdisc *child =3D rtnl_dereference(dev_queue->qdisc_sleeping);
++ 	struct tc_taprio_qopt_offload offload =3D {
++ 		.cmd =3D TAPRIO_CMD_TC_STATS,
++ 		.tc_stats =3D {
++ 			.tc =3D cl - 1,
++ 		},
++ 	};
+ =20
+- 	sch =3D rtnl_dereference(dev_queue->qdisc_sleeping);
+- 	if (gnet_stats_copy_basic(d, NULL, &sch->bstats, true) < 0 ||
+- 	    qdisc_qstats_copy(d, sch) < 0)
++ 	if (gnet_stats_copy_basic(d, NULL, &child->bstats, true) < 0 ||
++ 	    qdisc_qstats_copy(d, child) < 0)
+  		return -1;
+- 	return 0;
++=20
++ 	return taprio_dump_xstats(sch, d, &offload, &offload.tc_stats.stats);
+  }
+ =20
+  static void taprio_walk(struct Qdisc *sch, struct qdisc_walker *arg)
+
+--Sig_/i77_LI4b+/m/9CssqV4/xF0
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSBFhMACgkQAVBC80lX
-0Gxr+Af+MDBGTA1bHemGnRCXBrH5zBCB9cvDYzeM4JZVucwpHSWas3E322s4eR/o
-5R06SNcKZAttOgAk/lU/lt0Q7p+FuTnzJE96OXKwuzgjHYOeGmVNsCeYvacr4/kz
-z+zwsYA8CgSwceBEi/IYwrJhH7OX1NEiM0ZNFgtZM9rcBCodkUqkaDAtKJoLfbI+
-aUvEgBlVmiaTAU6+g29lI+qLdzW2EqVR/UxOOD+cKOOdIBIibYmzoEDXudD8DLsZ
-Ti+zf/QY9sKyYAxC0wSbz4HWQhvI76yoot/Kv90FCMGKmBAQKke8OP3tBbAE+guH
-Dl1ve9XSykposPl3IYYnOAabNIuXnQ==
-=er2u
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSBIV4ACgkQAVBC80lX
+0GwVFAf/XLPsL36oXBv44Wvz0NiQLHfTxc56wDkckBsszqcNDhcdZSKyOeCFNuuc
+P+gh0r0FePNRG/64aruMI+3N6aipPa1dyvX5kOqPZKajS0RzCVoPBsXtxODZ8hFa
+9VEzpVM55mpaP/ZswJ3ukqC+55klF6e0bhGNGv/lenNi7ooteUYxHqK3wWVST6XO
+0/SK+c1HzG5r/7iwZ3gpc4YdW6oSV0ZyNj+nH0neaqtmt4C+S8s1EoPZhA99e4R7
+KumiFxIZTb+HPINdwOpQ07/g8EVjjaf+THgl9RbrU+8JbAR+ACoTk+xrlzRe5P7l
+iT0MnmQTDladDjQpDRIeTQcNqpnhgw==
+=Dg6F
 -----END PGP SIGNATURE-----
 
---Sig_/AY3m4nXAs_is4wEcvrSYUU/--
+--Sig_/i77_LI4b+/m/9CssqV4/xF0--

@@ -2,59 +2,64 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F15F1727A06
-	for <lists+linux-next@lfdr.de>; Thu,  8 Jun 2023 10:33:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06ABD727A1E
+	for <lists+linux-next@lfdr.de>; Thu,  8 Jun 2023 10:39:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230106AbjFHIde (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 8 Jun 2023 04:33:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37886 "EHLO
+        id S233887AbjFHIjX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 8 Jun 2023 04:39:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232272AbjFHIdd (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 8 Jun 2023 04:33:33 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E77C626B2;
-        Thu,  8 Jun 2023 01:33:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=OQw4LAzesIERDw/tpoXXpYhapTxz4emCfmHUIqoyXmc=; b=VUz7MHYyg/m98/jyhEwR0jwBGs
-        k1c3pabfEohSaawm81RVv+cQKRq8jZaORuyZZbyPLAj4uR46aOQ7pwGGNfEEr/+UEnmNS+datSjmb
-        XMgtAFI8ULYEQ9C72GIctLMCcEQX8JZ3Hv9gXNzT3JeJgNUjtU+BbBgXkVz3hqV3vdQqRFCojbWhZ
-        GT44ueppZVlqYp81oh7p6CWzEUok9tPB5NQ82Co8j7kkJOMY8nDNm45gk90ZOObUU/puvVUazjOW4
-        x8cAWeNgxwqaxoUem5FQtANrzm/mlJPcvPGjsKhby4DIZadHvz2tQHyBBjF5/lbs1FbJmaOfGYzZv
-        kfoIKOxA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1q7B55-00FGiQ-I7; Thu, 08 Jun 2023 08:33:19 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+        with ESMTP id S233839AbjFHIjW (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 8 Jun 2023 04:39:22 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D23F926B8;
+        Thu,  8 Jun 2023 01:39:20 -0700 (PDT)
+Received: from [192.168.10.48] (unknown [119.152.150.198])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 37F04300274;
-        Thu,  8 Jun 2023 10:33:18 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 2124820D72192; Thu,  8 Jun 2023 10:33:18 +0200 (CEST)
-Date:   Thu, 8 Jun 2023 10:33:18 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     "Jain, Ayush" <ayush.jain3@amd.com>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        sfr@canb.auug.org.au, rcu@vger.kernel.org,
-        Wyes Karny <wyes.karny@amd.com>, linux-kernel@vger.kernel.org,
-        void@manifault.com
-Subject: Re: Null pointer dereference during rcutorture test on linux-next
- from next-20230602
-Message-ID: <20230608083318.GG998233@hirez.programming.kicks-ass.net>
-References: <b8311fdc-2e71-f74f-159e-db7a86f27b9a@amd.com>
- <ff0dd6b8-884e-4bcb-b7d9-72a5a8940f0d@paulmck-laptop>
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1F54F6605733;
+        Thu,  8 Jun 2023 09:39:15 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1686213559;
+        bh=PRBO+SGpGVNVyEZwkfuIfWdn28x8QrprhmLGoj83lEI=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=knWIgt8GxFoafW6fQ7Gl2m9yA19hEzmpTCohAkDxUxO3y4WLgFJok0+mq5Vj5hpkT
+         Zz2M5hRNHViLxADau0oS5yIiFUtDREYVj+w6KTHJMWyPw6sB2KG4c0gWpi+551QzWU
+         /fh5Zlgpkak976cefjfBisBG84cXboeSJtp32WppNWYfBBRMy7irzJsZfb521evnl4
+         5655kYkjZBu2Mh9X2GhtxItA8AsB6QLA9uoMqjkaxT44XKsLvXqZd8U2qUflTw7nQo
+         vbh7hEzc1vjwnccGviigLcrl0aczTRwpKqBTYGckmZqzf3hREvD7SrjWr9KejJpitc
+         g7mZOGyHDvM4w==
+Message-ID: <11b94ce7-d7e3-1935-307b-5a0a0f32739f@collabora.com>
+Date:   Thu, 8 Jun 2023 13:39:11 +0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ff0dd6b8-884e-4bcb-b7d9-72a5a8940f0d@paulmck-laptop>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        John Hubbard <jhubbard@nvidia.com>,
+        David Hildenbrand <david@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>, Peter Xu <peterx@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Anders Roxell <anders.roxell@linaro.org>
+Subject: Re: selftests: -e error: missing kernel header files. Please run this
+ and try again
+Content-Language: en-US
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, lkft-triage@lists.linaro.org
+References: <CA+G9fYueMV2gFF0sYR4Lf3btcEoxMpOy0_YvpjvS26WFZ2pcBA@mail.gmail.com>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <CA+G9fYueMV2gFF0sYR4Lf3btcEoxMpOy0_YvpjvS26WFZ2pcBA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,66 +67,53 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Jun 07, 2023 at 12:24:12PM -0700, Paul E. McKenney wrote:
-> On Wed, Jun 07, 2023 at 04:48:19PM +0530, Jain, Ayush wrote:
-> > Hello All,
-> > 
-> > Observed null pointer dereference during rcutorture test on linux-next tree
-> > from next-20230602.
-> > 
-> > Commit ID: commit bc708bbd8260ee4eb3428b0109f5f3be661fae46 (HEAD, tag: next-20230602)
-> > 
-> > Here I am attaching log trace
-> > 
-> > [12133.344278] rcu-torture: rcu_torture_read_exit: Start of test
-> > [12133.344282] rcu-torture: rcu_torture_read_exit: Start of episode
-> > [12138.350637] rcu-torture: rcu_torture_read_exit: End of episode
-> > [12143.419412] smpboot: CPU 1 is now offline
-> > [12143.427996] BUG: kernel NULL pointer dereference, address: 0000000000000128
-> > [12143.435777] #PF: supervisor read access in kernel mode
-> > [12143.441517] #PF: error_code(0x0000) - not-present page
-> > [12143.447256] PGD 0 P4D 0
-> > [12143.450087] Oops: 0000 [#1] PREEMPT SMP NOPTI
-> > [12143.454955] CPU: 68 PID: 978653 Comm: rcu_torture_rea Kdump: loaded Not tainted 6.4.0-rc5-next-20230606-1686061107994 #1
-> > [12143.467095] Hardware name: AMD Corporation Speedway/Speedway, BIOS RSW1009C 07/27/2018
-> > [12143.475934] RIP: 0010:__bitmap_and+0x18/0x70
-> > [12143.480713] Code: 00 00 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 f3 0f 1e fa 41 89 cb 49 89 f9 41 c1 eb 06 74 51 45 89 da 31 c0 45 31 c0 <48> 8b 3c c6 48 23 3c c2 49 89 3c c1 48 83 c0 01 49 09 f8 49 39 c2
-> > [12143.501675] RSP: 0018:ffffa3a90db70d90 EFLAGS: 00010046
-> > [12143.507510] RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000080
-> > [12143.515468] RDX: ffff8a1ec17a1d68 RSI: 0000000000000128 RDI: ffff8a1e800429c0
-> > [12143.523425] RBP: ffff8a1ec17a1980 R08: 0000000000000000 R09: ffff8a1e800429c0
-> > [12143.531385] R10: 0000000000000002 R11: 0000000000000002 R12: ffff8a1e800429c0
-> > [12143.539352] R13: 0000000000000000 R14: 0000000000032580 R15: 0000000000000000
-> > [12143.547320] FS:  0000000000000000(0000) GS:ffff8a2dbf100000(0000) knlGS:0000000000000000
-> > [12143.556354] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > [12143.562770] CR2: 0000000000000128 CR3: 0000003089e50000 CR4: 00000000003506e0
-> > [12143.570729] Call Trace:
-> > [12143.573463]  <IRQ>
-> > [12143.575714]  ? __die+0x24/0x70
-> > [12143.579130]  ? page_fault_oops+0x82/0x150
-> > [12143.583615]  ? exc_page_fault+0x69/0x150
-> > [12143.588001]  ? asm_exc_page_fault+0x26/0x30
-> > [12143.592678]  ? __bitmap_and+0x18/0x70
-> > [12143.596768]  select_idle_cpu+0x84/0x3d0
-> > [12143.601059]  select_idle_sibling+0x1b7/0x500
-> > [12143.605831]  select_task_rq_fair+0x1b2/0x2e0
-> > [12143.610603]  select_task_rq+0x7a/0xc0
-> > [12143.614696]  try_to_wake_up+0xe8/0x550
-> > [12143.618885]  ? update_process_times+0x83/0x90
-> > [12143.623747]  ? __pfx_hrtimer_wakeup+0x10/0x10
-> > [12143.628615]  hrtimer_wakeup+0x22/0x30
-> > [12143.632706]  __hrtimer_run_queues+0x112/0x2b0
-> > [12143.637574]  hrtimer_interrupt+0x100/0x240
-> > [12143.642152]  __sysvec_apic_timer_interrupt+0x63/0x130
-> > [12143.647796]  sysvec_apic_timer_interrupt+0x71/0x90
-> > [12143.653149]  </IRQ>
-> > [12143.655493]  <TASK>
-> > [12143.657834]  asm_sysvec_apic_timer_interrupt+0x1a/0x20
+On 6/8/23 1:21 PM, Naresh Kamboju wrote:
+> The make kselftest-install failed on Linux next 20230608.
+> 
+> make --silent --keep-going --jobs=8
+> O=/home/tuxbuild/.cache/tuxmake/builds/1/build
+> INSTALL_PATH=/home/tuxbuild/.cache/tuxmake/builds/1/build/kselftest_install
+> ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- 'HOSTCC=sccache clang'
+> 'CC=sccache clang' LLVM=1 LLVM_IAS=1 kselftest-install
+Around 6-8 months ago, selftests used to build kernel headers from the
+source tree automatically and were using those to build all applications.
+But this behavior got changed where user need to build header manually
+first before building kselftest because auto header build was in-consistent
+in some cases.
 
-I'm thikning this is because of ("sched/fair: Multi-LLC
-select_idle_sibling()") which I've already dropped from tip/sched/core
-(and should hopefully also dissapear from -next if it hasn't already).
+So from several months people, who were unaware of this are building
+kselftests with installed kernel headers in their distro. This was creating
+failure for some newer tests for people. They didn't know that selftests
+are supposed to build with kernel headers from source instead from locally
+installed headers in distro. So a patch has been introduced which spits
+error if kernel headers aren't built already:
+https://lore.kernel.org/all/20230606071637.267103-12-jhubbard@nvidia.com
 
-Also see:
+To fix things for your case, please build kernel headers by `make headers
+...` and then build kselftests. The error is trying to say the same thing.
 
-  https://lkml.kernel.org/r/20230605175636.GA4253@hirez.programming.kicks-ass.net
+> 
+> make[3]: Entering directory '/builds/linux/tools/testing/selftests/alsa'
+> 
+> -e error: missing kernel header files.
+> Please run this and try again:
+> 
+>     cd /builds/linux/tools/testing/selftests/../../..
+>     make headers
+> 
+> make[3]: Leaving directory '/builds/linux/tools/testing/selftests/alsa'
+> make[3]: *** [../lib.mk:77: kernel_header_files] Error 1
+> 
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> 
+> Links,
+> ===
+> https://storage.tuxsuite.com/public/linaro/lkft/builds/2QsWmEgSFF9iwodTUrWsdopV4Qp/
+> 
+> --
+> Linaro LKFT
+> https://lkft.linaro.org
+
+-- 
+BR,
+Muhammad Usama Anjum

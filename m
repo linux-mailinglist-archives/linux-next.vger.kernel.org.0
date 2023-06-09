@@ -2,50 +2,48 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DC2E728D3B
-	for <lists+linux-next@lfdr.de>; Fri,  9 Jun 2023 03:43:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F7C0728D98
+	for <lists+linux-next@lfdr.de>; Fri,  9 Jun 2023 04:09:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237913AbjFIBno (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 8 Jun 2023 21:43:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49662 "EHLO
+        id S238293AbjFICJF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 8 Jun 2023 22:09:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237849AbjFIBno (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 8 Jun 2023 21:43:44 -0400
+        with ESMTP id S238182AbjFICJE (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 8 Jun 2023 22:09:04 -0400
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31AB5132;
-        Thu,  8 Jun 2023 18:43:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0B6530FF;
+        Thu,  8 Jun 2023 19:08:32 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QckPm36dHz4x3g;
-        Fri,  9 Jun 2023 11:43:39 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QckyF6vPLz4x4H;
+        Fri,  9 Jun 2023 12:08:21 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1686275021;
-        bh=IbAM1ZFJjS09oYvaFYfvvboSiciLydFb4Nc3bZhIAs8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=IPqTD60B4KtEHz93DGPNa+xb2HN74yJNZTzrNfB+G+i5p8Vtq2JAmq2Wx5A38xQnm
-         Cp35LTU1+dJpwlOUJoX7ofP8Hq23qIr2y+zIthWLD4mEGPnwTBB+EUD4bzr7JSPKmI
-         Itv/eyYeqZmLFKRdI9lXVJerropmCXKpfx3qrCzRejB20yJ1t5q5vfYyJ/iH2Yh+eA
-         omXKvvEYwXGjBLlPtuTghMJn89JtkTsKnjauarTpGiI5c76htNBeOOp1qn8oqKm76q
-         nh0ArH0zXjMNJm9hmEA8aSs7v1T9Vv1kB2w2z+aqLLACzaPo622JzSv5g837UpcTUh
-         UrmA6xphhZDfw==
-Date:   Fri, 9 Jun 2023 11:43:38 +1000
+        s=201702; t=1686276503;
+        bh=NIszPXRk3qHLJzPQeo2lhi/iY+O826ijY8OrUUoadcM=;
+        h=Date:From:To:Cc:Subject:From;
+        b=dXWhVUKisOD0UgPf9rdcOn8WHCbknA+UrjTfveGyLpqobrDYMMebdUqxHvnVMkt8z
+         7jZm4gQnedhACeGmC6GU8TotPXl+iMNqEEEkWI7HSj9y/Fzq0tWs2tssxU78f9/sZ3
+         TEFqPUV1nXSje0JLeeheGlS6NM6GgnkpE6dT8s4Xni7/hLBSzild+VQuwUevv1k7c3
+         M93rpNFb5R7QlJESzKxFEaXgfSPv6HmezYL5EMVg69iTGqMJV74wH+Vde4944oAuML
+         6BTfzf5cD7XrU3lTQOilmEXaRHP0CgCf3x7jdyS+Rc9hzPfwFnodHRugZMCjwUL23R
+         kQxIRk2p1gF1w==
+Date:   Fri, 9 Jun 2023 12:08:19 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>, Arnd Bergmann <arnd@arndb.de>
-Cc:     Networking <netdev@vger.kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     David Sterba <dsterba@suse.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Subject: Re: linux-next: manual merge of the net-next tree with the
- asm-generic tree
-Message-ID: <20230609114338.72c7da7a@canb.auug.org.au>
-In-Reply-To: <20230609104037.56648990@canb.auug.org.au>
-References: <20230609104037.56648990@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the tip tree with the btrfs tree
+Message-ID: <20230609120819.7e8e18c7@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/id79zsS.mfjh/UScvatQX_=";
+Content-Type: multipart/signed; boundary="Sig_/zpveZ/ZE0wm6.npdQCRGTqj";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
@@ -57,50 +55,83 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/id79zsS.mfjh/UScvatQX_=
+--Sig_/zpveZ/ZE0wm6.npdQCRGTqj
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Fri, 9 Jun 2023 10:40:37 +1000 Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
->
-> Today's linux-next merge of the net-next tree got a conflict in:
->=20
->   fs/netfs/iterator.c
->=20
-> between commit:
->=20
->   ee5971613da3 ("netfs: Pass a pointer to virt_to_page()")
->=20
-> from the asm-generic tree and commit:
->=20
->   f5f82cd18732 ("Move netfs_extract_iter_to_sg() to lib/scatterlist.c")
->=20
-> from the net-next tree.
->=20
-> I fixed it up (I used the file from the former and applied the patch
-                                          ^^^^^^ latter
+FIXME: Add owner of second tree to To:
+       Add author(s)/SOB of conflicting commits.
+
+Today's linux-next merge of the tip tree got a conflict in:
+
+  tools/objtool/check.c
+
+between commit:
+
+  7e786ec9bdaa ("btrfs: print assertion failure report and stack trace from=
+ the same line")
+
+from the btrfs tree and commit:
+
+  6245ce4ab670 ("objtool: Move noreturn function list to separate file")
+
+from the tip tree.
+
+I fixed it up (I used the letter version of this file and applied the
+following patch) and can carry the fix as necessary. This is now fixed
+as far as linux-next is concerned, but any non trivial conflicts should
+be mentioned to your upstream maintainer when your tree is submitted for
+merging.  You may also want to consider cooperating with the maintainer
+of the conflicting tree to minimise any particularly complex conflicts.
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Fri, 9 Jun 2023 12:02:56 +1000
+Subject: [PATCH] fix up for "objtool: Move noreturn function list to separa=
+te file"
+
+interacting with "btrfs: print assertion failure report and stack trace fro=
+m the same line"
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ tools/objtool/noreturns.h | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/tools/objtool/noreturns.h b/tools/objtool/noreturns.h
+index 1514e84d5cc4..e45c7cb1d5bc 100644
+--- a/tools/objtool/noreturns.h
++++ b/tools/objtool/noreturns.h
+@@ -14,7 +14,6 @@ NORETURN(__stack_chk_fail)
+ NORETURN(__ubsan_handle_builtin_unreachable)
+ NORETURN(arch_call_rest_init)
+ NORETURN(arch_cpu_idle_dead)
+-NORETURN(btrfs_assertfail)
+ NORETURN(cpu_bringup_and_idle)
+ NORETURN(cpu_startup_entry)
+ NORETURN(do_exit)
+--=20
+2.39.2
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/id79zsS.mfjh/UScvatQX_=
+--Sig_/zpveZ/ZE0wm6.npdQCRGTqj
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSCg8sACgkQAVBC80lX
-0Gxj4wf/UcJL8Mz5lNAnEhzKXymGzYWRMn6kHEkKgO6lqzkYiPOW5P1ySQKhTGxE
-xjSGa+mCA5WNsYN/ItHC5YPb8XGr4CosBppaWlgmHw9NApr6Ql5p4JXORM2uE+jA
-wt9eHrMItC37p0iSX9mLvT5E+wFgOU77sAukAO5FcqXgiqVHmHxu7E5MmW7xWw8A
-hlFvYMAwNwiXm4Np6DZMR5jGYcr3DD06lmvn4cxcaCpzNCpqz/8BQmiziXTA0xzz
-nd+95elFTBp7FbtuHZai31qMYc09nqThy38MAoKBQ/9tGfoblt0N/3pz1LinGoVY
-D5LgsF6OfkJY8ySIhEt25c2vTiNvbg==
-=npVF
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSCiZQACgkQAVBC80lX
+0GzX6wf+J9jaDksE/RmMBlhlBJraY2G9hrH8rduby5abUkw+gkDSccyEaGG21MGZ
+PRdTlaf/PfctPD72z3dcRnj8eFqjiC0gPgLxLD0Sr/pJL8lo70hi+qbLjQ2agq83
+Q9TFkJoCJlZJRbMzDtmQ4y6oYiEYARJYcFVxrVcZXECVnqGuNu++pgixJOYTWuah
+XSd3P6+CUzeMOzBm7In6iyqqU1oouGzuYmTW1dElJuBN+gs0iK4Lm5gyvTQDEL6Y
+kpLA9AhLS9p1ykQOZMPLATz9zZYwxfsvbOo96XnGjN4oxnK7zsJyOjNCzZASxzII
+gghjfcYLqE3dAoizyJMRqH2rNR3EtQ==
+=cdVE
 -----END PGP SIGNATURE-----
 
---Sig_/id79zsS.mfjh/UScvatQX_=--
+--Sig_/zpveZ/ZE0wm6.npdQCRGTqj--

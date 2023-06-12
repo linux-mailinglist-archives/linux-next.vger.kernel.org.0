@@ -2,106 +2,94 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C5F172B892
-	for <lists+linux-next@lfdr.de>; Mon, 12 Jun 2023 09:24:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E11AD72D4A6
+	for <lists+linux-next@lfdr.de>; Tue, 13 Jun 2023 00:45:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233109AbjFLHX7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 12 Jun 2023 03:23:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42580 "EHLO
+        id S230095AbjFLWpk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 12 Jun 2023 18:45:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231983AbjFLHX5 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 12 Jun 2023 03:23:57 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CFBD1BCC;
-        Mon, 12 Jun 2023 00:18:57 -0700 (PDT)
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35C6pRXn022968;
-        Mon, 12 Jun 2023 06:59:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=K3D1Sz4WKpAet6+SohT1HO2ZPLd63LAEGwR41ci7owQ=;
- b=hiQOK8rtOxwteTG2TFSZJT2oMJHVl6UcLEVjuDk/heq1ndUcDOXvVSJ0pNeDnUMuIV2e
- 294XxaTD+B9svORAUnW99zsxtRvWQG8sEPApMFSpK/nRDAjF7qHSqhz5F7FUrt8NZd0A
- j//guqw1xA5UWXeWVUfvMkJOQb82pilY/RDXaijNS5z64fDLuMzFD7KKnuIQI/S7NDO8
- 3EHYEKuGCimMY7b0Kp7aaUwRXkOS+hJ2EyzvoAKKZYUpxwTeuaiJiHA4EYwdojAadtVx
- Xxg2RXRZo9OruaJQYfQQcSI+WbJ2MHI37hKkAUgW0+5SkyAzv9AqY+4jB9iepfgyJchT 5w== 
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3r5xfb054r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 12 Jun 2023 06:59:31 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 35C5PDtZ002065;
-        Mon, 12 Jun 2023 06:59:29 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-        by ppma05fra.de.ibm.com (PPS) with ESMTPS id 3r4gt4rxth-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 12 Jun 2023 06:59:28 +0000
-Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
-        by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 35C6xOD057868726
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 12 Jun 2023 06:59:25 GMT
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DE1EA20040;
-        Mon, 12 Jun 2023 06:59:24 +0000 (GMT)
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6F60E2004B;
-        Mon, 12 Jun 2023 06:59:24 +0000 (GMT)
-Received: from [9.171.42.131] (unknown [9.171.42.131])
-        by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Mon, 12 Jun 2023 06:59:24 +0000 (GMT)
-Message-ID: <23bbc436-f5f5-0d77-900b-81aa57e8f3ee@linux.ibm.com>
-Date:   Mon, 12 Jun 2023 08:59:24 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.1
-Subject: Re: linux-next: Tree for Jun 9 (drivers/s390/char/uvdevice.o)
-To:     Randy Dunlap <rdunlap@infradead.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
+        with ESMTP id S235766AbjFLWpj (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 12 Jun 2023 18:45:39 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1FAC11B;
+        Mon, 12 Jun 2023 15:45:37 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Qg6GN1T8Mz4xFn;
+        Tue, 13 Jun 2023 08:45:31 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1686609932;
+        bh=Q9gUMGKZiF/GmkEjStXgBf+odj1jwLyhIMrBLGi7+QY=;
+        h=Date:From:To:Cc:Subject:From;
+        b=GEUMAPwAVftsI046YzsO00i3BMHHe6YkXSZrmwD1IxdWI9o0mBTpzRauo0tDluetr
+         UgIv5w+iZrAwE4jRN/7XFsuMpo0tCp98bOR+iHF/s69LtltmwPfQNARPBBCHszStJe
+         XwP3CAT00qeAgvxXRaMzf3Lny8XtdIwxObj7n1I/T8PLuYzGEyPIati2rPy+wQWCkb
+         866qoYC7AmCAcdwG5lAhMI3cHg2zJ+g6Ge1sOvpUgVBuwhH5HUYlnwZt3pMfXV8ZO8
+         Mrj2XkF0pu5QowT1TjZ84T9Bn3UKC+hOqyHsL1C8T4SbjaSefsmRipM8jJwTT7nwAG
+         bCHcIN2KUUHIw==
+Date:   Tue, 13 Jun 2023 08:45:29 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>
+Cc:     Max Tottenham <mtottenh@akamai.com>,
+        Networking <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Steffen Eiden <seiden@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        linux-s390@vger.kernel.org
-References: <20230609140618.532c4bcc@canb.auug.org.au>
- <8db150f5-0a37-5ee2-c221-9cf150420fc2@infradead.org>
-Content-Language: en-US
-From:   Janosch Frank <frankja@linux.ibm.com>
-In-Reply-To: <8db150f5-0a37-5ee2-c221-9cf150420fc2@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: Bf7kRgOBcDe8b13SkfWfIwRWFEllUIpX
-X-Proofpoint-ORIG-GUID: Bf7kRgOBcDe8b13SkfWfIwRWFEllUIpX
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-12_04,2023-06-09_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
- priorityscore=1501 suspectscore=0 lowpriorityscore=0 adultscore=0
- mlxlogscore=999 impostorscore=0 spamscore=0 bulkscore=0 clxscore=1011
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306120057
+Subject: linux-next: Fixes tag needs some work in the net tree
+Message-ID: <20230613084529.6b655b51@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/n1tbFaLxDzRBxDKlwFO.cVA";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 6/10/23 05:48, Randy Dunlap wrote:
-> 
-> 
-> On 6/8/23 21:06, Stephen Rothwell wrote:
->> Hi all,
->>
->> Changes since 20230608:
->>
-> 
-> s390-linux-ld: drivers/s390/char/uvdevice.o: in function `cpu_feature_match_S390_CPU_FEATURE_UV_init':
-> uvdevice.c:(.init.text+0xe0): undefined reference to `uv_info'
-> 
-> 
-> 
-> # CONFIG_PROTECTED_VIRTUALIZATION_GUEST is not set
-> 
-> Also, KVM is not set, so PGSTE is not set.
-> 
+--Sig_/n1tbFaLxDzRBxDKlwFO.cVA
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks for the report, we'll fix that up
+Hi all,
+
+In commit
+
+  6c02568fd1ae ("net/sched: act_pedit: Parse L3 Header for L4 offset")
+
+Fixes tag
+
+  Fixes: 71d0ed7079df ("net/act_pedit: Support using offset relative to
+
+has these problem(s):
+
+  - Subject has leading but no trailing parentheses
+  - Subject has leading but no trailing quotes
+
+Please do not split Fixes tags over more than one line.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/n1tbFaLxDzRBxDKlwFO.cVA
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSHoAkACgkQAVBC80lX
+0GxyeAf+IT+eLTPi5kMIrzQI/aDkDPe/OCoGjVzZsSEUa5gYrvz64LjGzsBqJscY
+HQifo/jv3qw7uOeLq29VxE87yOYjEKRJvrYZcyOvbvwnCFl5ykcx9Xo6QgMVDSJD
+QHNbfNibkiWYQfQGAIwvVph2Cl7stm4UogRxyhIU4OcKoPVCXUzEuow0UNJk2jch
+Bx0bXTqh9mapawtn4kw4B8ndMSyEt+ZGHp5kcpa/jl87tfw0mgZLtEsC4E3sjf2a
+ZRtLC7Aqrgs7kdeqoN5hp4rnwidgrOQDQeNCNTr4uzuTxWWt8iZNMMNHP0WEz2ux
+i2iQLK0dE30L8xCVCGzFryTppGwf4A==
+=pHEh
+-----END PGP SIGNATURE-----
+
+--Sig_/n1tbFaLxDzRBxDKlwFO.cVA--

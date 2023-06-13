@@ -2,93 +2,134 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9D6D72D9FD
-	for <lists+linux-next@lfdr.de>; Tue, 13 Jun 2023 08:38:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5163D72DA12
+	for <lists+linux-next@lfdr.de>; Tue, 13 Jun 2023 08:46:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239872AbjFMGi0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 13 Jun 2023 02:38:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38636 "EHLO
+        id S233925AbjFMGqq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 13 Jun 2023 02:46:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239848AbjFMGiZ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 13 Jun 2023 02:38:25 -0400
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B095D1AD
-        for <linux-next@vger.kernel.org>; Mon, 12 Jun 2023 23:38:24 -0700 (PDT)
-Received: by mail-yb1-xb2d.google.com with SMTP id 3f1490d57ef6-bcc29cdcdc9so1659791276.0
-        for <linux-next@vger.kernel.org>; Mon, 12 Jun 2023 23:38:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686638304; x=1689230304;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ExFAj+YgJRdRcaCWeS0swTQHLCbPFVpzMAWP4t/hdrY=;
-        b=XD9BVgoHBc61quB8SKkRdCfvYhK8MJcPLnNCWAYsPU5WIzK2/2TTwZyP9udjVpgYA/
-         FsBDlIdaKIGc9oEnIq09TT8rnC6bpo5pqJs+ZSiMUirX6nFtj6YNKbwaUwSllrxtZToR
-         E7ket0iUDu6T5Dh2dp6hIRY7ouWrv7yWe1HnwsgoFZbhSX+nCKzj94TDPSOPuW32iLSC
-         QISB2MjGvLPxMZdIHPVXmqJ8Pz2tEnpD/KwNvtBCS1DjsyZbgufM5m6ORyzzVhtc/Ext
-         LZ0xxaGcDpXGLzTuzdt3+AljxbgH2C8W9HBiNzDdcGrvHyUp5I7yGkDHSMEIZ047ciPH
-         +LjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686638304; x=1689230304;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ExFAj+YgJRdRcaCWeS0swTQHLCbPFVpzMAWP4t/hdrY=;
-        b=WhOUCJdC6T2jUSok8ZITyNg2ASiRLJmKenH6jL7U88IVirJxgbiwwWb56bcaYlbjHX
-         X/kmVD4sxwJme+aOr09J6sgJWFlnT+SAeysOr3FEclKKL64GIX534FU9jmDUls74tAL3
-         JSzifrsFNYhq2f6BGdo69oUGzMrE3AHjETFcRCrnyeuMLOIc3x75rTqHp56qQ9QjxWUL
-         ia9pKaWdaT7Ll1jRp3qZ5B5lx7OyhKEwJ3tdvlfvIPPsRTS+WU9swtoBg+vIHL8RkmW6
-         5vgx9j1A12GZeYQUH+pTTd4LjLdrykbr+xaQ7y+fhaxfkfShGSl+qWuEvI+nQWKbkQWr
-         T+HQ==
-X-Gm-Message-State: AC+VfDw4caRcOapiaWDnwAmg35M9IydziyzcnTgbaX4i5M39kiQzltm9
-        Z39hA67TRtAd2Df1zDI0zoZvqz42V1cU5ImIy/ngeKoXzIREWmWD8x8=
-X-Google-Smtp-Source: ACHHUZ4QzMJOoKPnaIGmwIbagx01FpWCVjHkLLUN+4G5m0jH7BZUYj/pTq7XAyCGG7FQm15egVvbVCTXizmRW8ney74=
-X-Received: by 2002:a25:26c8:0:b0:bd0:78cd:99dc with SMTP id
- m191-20020a2526c8000000b00bd078cd99dcmr846694ybm.37.1686638303955; Mon, 12
- Jun 2023 23:38:23 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230613104329.025f9e4b@canb.auug.org.au>
-In-Reply-To: <20230613104329.025f9e4b@canb.auug.org.au>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 13 Jun 2023 08:38:13 +0200
-Message-ID: <CACRpkdZZX_iiN-XTG1ORqr2mpiOsJvLTOr3Lxertq9jgb=H03w@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the arm-soc tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        ARM <linux-arm-kernel@lists.infradead.org>,
+        with ESMTP id S232045AbjFMGqp (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 13 Jun 2023 02:46:45 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E21310D5;
+        Mon, 12 Jun 2023 23:46:43 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QgJxX6GNQz4x42;
+        Tue, 13 Jun 2023 16:46:40 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1686638801;
+        bh=8+PuIQDjHvRIypCywmblAWQTn4D9Of06vgaNnepsJJA=;
+        h=Date:From:To:Cc:Subject:From;
+        b=sR1JwL08YgKFOrkD3jJJ+tlhf1w+z/Yu1nADYNVlQa3fQFf/X2O/n8QOOHd1p3vdE
+         P27zymrcGVmuyu76O3ajiAGPogKr1c8Ug60pxyiqSRlsSaOgQBVKiz2vA965VhsL7Z
+         xF4D5B47cI2Mx9dBiidOu/xCh2APQTZeCPcto+yiLalZyl0ZJqgMyiJzbZqZTDphHL
+         bWV4dMOls7DMxWwPMK3d3rOlWoS/ZE3kFkQlzUw/4v8j9vqIljOO5rZ0XOC36/y/RS
+         a5VoAyR1URMIpuXlrZH7GX6zkDNpyzJeEdDFFue9Nzas355hz2FAbHgaN8Tt+qZFmj
+         lAjqUdkXgtIZQ==
+Date:   Tue, 13 Jun 2023 16:46:39 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: linux-next: build failure after merge of the net-next tree
+Message-ID: <20230613164639.164b2991@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/Tw_E9OZMaCE5DbSiGMgrfQ=";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Jun 13, 2023 at 2:43=E2=80=AFAM Stephen Rothwell <sfr@canb.auug.org=
-.au> wrote:
+--Sig_/Tw_E9OZMaCE5DbSiGMgrfQ=
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> After merging the arm-soc tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
->
-> drivers/input/touchscreen/ads7846.c: In function 'ads7846_get_props':
-> drivers/input/touchscreen/ads7846.c:1126:24: error: cast from pointer to =
-integer of different size [-Werror=3Dpointer-to-int-cast]
->  1126 |         pdata->model =3D (u32)device_get_match_data(dev);
->       |                        ^
-> cc1: all warnings being treated as errors
+Hi all,
 
-There is already a patch, I'm sure it's on its way in:
-https://lore.kernel.org/linux-input/20230609202722.3634721-1-arnd@kernel.or=
-g/
+After merging the net-next tree, today's linux-next build (sparc64
+defconfig) failed like this:
 
-Arnd can you apply this patch to the SoC tree where the cause
-(by me) is? It's on top of the OMAP GPIO cleanups.
+drivers/net/ethernet/sun/sunvnet_common.c: In function 'vnet_handle_offload=
+s':
+drivers/net/ethernet/sun/sunvnet_common.c:1277:16: error: implicit declarat=
+ion of function 'skb_gso_segment'; did you mean 'skb_gso_reset'? [-Werror=
+=3Dimplicit-function-declaration]
+ 1277 |         segs =3D skb_gso_segment(skb, dev->features & ~NETIF_F_TSO);
+      |                ^~~~~~~~~~~~~~~
+      |                skb_gso_reset
+drivers/net/ethernet/sun/sunvnet_common.c:1277:14: warning: assignment to '=
+struct sk_buff *' from 'int' makes pointer from integer without a cast [-Wi=
+nt-conversion]
+ 1277 |         segs =3D skb_gso_segment(skb, dev->features & ~NETIF_F_TSO);
+      |              ^
 
-Yours,
-Linus Walleij
+Caused by commit
+
+  d457a0e329b0 ("net: move gso declarations and functions to their own file=
+s")
+
+I have applied the following patch for today.
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Tue, 13 Jun 2023 16:38:10 +1000
+Subject: [PATCH] Fix a sparc64 use of the gso functions
+
+This was missed when they were moved.
+
+Fixes: d457a0e329b0 ("net: move gso declarations and functions to their own=
+ files")
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ drivers/net/ethernet/sun/sunvnet_common.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/net/ethernet/sun/sunvnet_common.c b/drivers/net/ethern=
+et/sun/sunvnet_common.c
+index a6211b95ed17..3525d5c0d694 100644
+--- a/drivers/net/ethernet/sun/sunvnet_common.c
++++ b/drivers/net/ethernet/sun/sunvnet_common.c
+@@ -25,6 +25,7 @@
+ #endif
+=20
+ #include <net/ip.h>
++#include <net/gso.h>
+ #include <net/icmp.h>
+ #include <net/route.h>
+=20
+--=20
+2.39.2
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/Tw_E9OZMaCE5DbSiGMgrfQ=
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSIEM8ACgkQAVBC80lX
+0Gw5VQf7BoFtLqlYCcZ1EcmSB6rSgKpa+rwDE0zWUy0pmlqre9HG5FjOpqlRzPqV
+wcM+ljVgC3cbAYnk/Bf7rkTmmGj888ur/de3Gig7Fu1Onp8iMu0ZJ7uAe7RdLvbb
+ai1E2PfD90TAEIYQtrmc6ep3QZRejQMO2J2DfKlOuc4OY4PRdFJxyBXXhnZKl7b5
+8YizNNcYANGOSjZqTJZL9bimOSHg5Pfb/QTrVTt+Z3A6Rb/tBSfAVOqcfd6xDYOQ
+G+SnMqhK2AomOv6MW/UbSiVQ9dHkTG2jUkDCWvqWUpbdpX+8UCUxMcycNRUlwSsQ
+J5MDRriuuXjOEQAWtv1B7V+SopvYVg==
+=xo73
+-----END PGP SIGNATURE-----
+
+--Sig_/Tw_E9OZMaCE5DbSiGMgrfQ=--

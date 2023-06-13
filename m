@@ -2,45 +2,44 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F44E72E64E
-	for <lists+linux-next@lfdr.de>; Tue, 13 Jun 2023 16:52:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0677272E77E
+	for <lists+linux-next@lfdr.de>; Tue, 13 Jun 2023 17:41:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242664AbjFMOvg (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 13 Jun 2023 10:51:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59604 "EHLO
+        id S241022AbjFMPk0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 13 Jun 2023 11:40:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241000AbjFMOvf (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 13 Jun 2023 10:51:35 -0400
+        with ESMTP id S243034AbjFMPkE (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 13 Jun 2023 11:40:04 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A5911BC6;
-        Tue, 13 Jun 2023 07:51:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7553819B6;
+        Tue, 13 Jun 2023 08:39:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
         Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
         Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=3pC1z5Kz0Os/ZjccBXRn1lob4yWiIrBMeB5JFUKr/kE=; b=WWZHUBK4cidU54WmGLYdDUo0Y+
-        MFGc18fOBwTQYF+FOTQbBf8F5SBBUOwQZrvBOcveEiVR7C3Tll2TE17jkwSjcO3rt/87YkKimNjsK
-        RX1ilywD0AdgLFxMwF2iNwnimGob0rZVB9M55Hcn92G7hPus3PqBSNcyB0d9EGNfe99q8p/KeT2jQ
-        MxKI8Wn9tmHj+TgWxJ+5oIx3IEXxZYwgpc/Flwj7HKPmj4YBhAtiVPR7v/iWcRH719/0Y171XaAzI
-        mDfFJCJ28e1lp6EyWqONRstmKwPtkbW8kCrr70pPOTPhIBIf1OblJzMQGEdNhdwCSEFBXIFAjXNlb
-        FC567GXw==;
+        bh=2SJDWDPhp0gjXKO83sRx30AxnfsPbJ+TkvDdczAUaQw=; b=Oquei1SzdLbi2O5mcqwSutVp2j
+        gjN0clYhJNLxNP6AUsoZfSQtRr1hEpOv/RK5AU+U+LwsD+zx1Ykma7KlsLiETRk5wYp0q05GObM7K
+        zN0N4Qk0K6fQ2A64kU6kmuwix/HCvS0Mw6NI7IzDpfJi0EWQbQvVUoblLjxd8pI2m/qtzvpcoeSjr
+        BbvKT6bKeNstFkpRO2F3J0/dadfEUPIQPlpt1b/KRbrwqjM2km/VUpNg53kpfJYXJMh6/0JHepwLv
+        LR7fBTwOLpL/5wdeey+YxaFINMO3bzbUWV+K9mizYcJUmMatXdROJ04ca+6VhyiXHLtcw2QLr2S74
+        VwwLHNrw==;
 Received: from [2601:1c2:980:9ec0::2764]
         by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1q95MZ-008OKe-0t;
-        Tue, 13 Jun 2023 14:51:15 +0000
-Message-ID: <1ef14551-e85b-b5ad-bbe8-091180745417@infradead.org>
-Date:   Tue, 13 Jun 2023 07:51:14 -0700
+        id 1q967U-008V3j-2b;
+        Tue, 13 Jun 2023 15:39:44 +0000
+Message-ID: <89adc1ac-25a0-6eb6-4cc9-ab6cc8d49730@infradead.org>
+Date:   Tue, 13 Jun 2023 08:39:44 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.2
-Subject: Re: linux-next: Tree for Jun 13 (drivers/block/swim3.c)
+Subject: Re: linux-next: Tree for Jun 13 (drivers/gpu/drm/i915/display/)
 Content-Language: en-US
 To:     Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        linux-block <linux-block@vger.kernel.org>,
-        Jens Axboe <axboe@kernel.dk>
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        intel-gfx@lists.freedesktop.org
 References: <20230613165903.5cc10e58@canb.auug.org.au>
 From:   Randy Dunlap <rdunlap@infradead.org>
 In-Reply-To: <20230613165903.5cc10e58@canb.auug.org.au>
@@ -64,13 +63,17 @@ On 6/12/23 23:59, Stephen Rothwell wrote:
 > Changes since 20230609:
 > 
 
-../drivers/block/swim3.c: In function 'floppy_ioctl':
-../drivers/block/swim3.c:919:15: error: too many arguments to function 'floppy_locked_ioctl'
-  919 |         ret = floppy_locked_ioctl(bdev, mode, cmd, param);
-      |               ^~~~~~~~~~~~~~~~~~~
-../drivers/block/swim3.c:885:12: note: declared here
-  885 | static int floppy_locked_ioctl(struct block_device *bdev,
-      |            ^~~~~~~~~~~~~~~~~~~
+In file included from <command-line>:
+./../drivers/gpu/drm/i915/display/intel_display_power.h:255:70: error: 'struct seq_file' declared inside parameter list will not be visible outside of this definition or declaration [-Werror]
+  255 | void intel_display_power_debug(struct drm_i915_private *i915, struct seq_file *m);
+      |                                                                      ^~~~~~~~
+cc1: all warnings being treated as errors
+In file included from ./../drivers/gpu/drm/i915/display/intel_display_power_well.h:10,
+                 from <command-line>:
+./../drivers/gpu/drm/i915/display/intel_display_power.h:255:70: error: 'struct seq_file' declared inside parameter list will not be visible outside of this definition or declaration [-Werror]
+  255 | void intel_display_power_debug(struct drm_i915_private *i915, struct seq_file *m);
+      |                                                                      ^~~~~~~~
+cc1: all warnings being treated as errors
 
 
 -- 

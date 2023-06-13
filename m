@@ -2,46 +2,45 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 550DD72D9C8
-	for <lists+linux-next@lfdr.de>; Tue, 13 Jun 2023 08:22:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5735372D9CE
+	for <lists+linux-next@lfdr.de>; Tue, 13 Jun 2023 08:23:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239851AbjFMGVe (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 13 Jun 2023 02:21:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33528 "EHLO
+        id S233136AbjFMGXr (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 13 Jun 2023 02:23:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240278AbjFMGVY (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 13 Jun 2023 02:21:24 -0400
+        with ESMTP id S233225AbjFMGXr (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 13 Jun 2023 02:23:47 -0400
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 985D3E47;
-        Mon, 12 Jun 2023 23:21:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B17A1AD;
+        Mon, 12 Jun 2023 23:23:46 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QgJNJ3Ywbz4x3y;
-        Tue, 13 Jun 2023 16:21:20 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QgJR51YLrz4x4G;
+        Tue, 13 Jun 2023 16:23:45 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1686637281;
-        bh=09oLrHGEmpgpyTpLPSc4jHEwyd/VNs8IHZbmFF1qxD0=;
+        s=201702; t=1686637425;
+        bh=BiFeAYc5B5PTQLF690yIlkUI+6JQtYgU6kOZVyj07jY=;
         h=Date:From:To:Cc:Subject:From;
-        b=p257LeXXti8Ytj43puEZXiR0jOqqbg0HzOPzCYhgkkV3Umbssxt9OYv6TIyHfy8sP
-         rlbDjbti7oFaeDP7lv5IZugyvCsDKiwrYRo6CWzoFiM/cJkmyfhUL0efoXJHC53Q+5
-         WtRuofXTdsvB/FRX8aWjwmKEUx8empsTq6wNg7DoQJ2iqeMoI2vcdiUS5gvDGJnxM7
-         DdKqGhm//56jaI/4d++oZ0aHn8qJAgO0YWF7IAyM4Ff835NO2FxseN6yiE7Vp5p0HZ
-         AhobZSuNsaYkLYCcPG9cqWFtmzTe658dKg9ncvgD992nkIkg16w2V5BF49DXsqkLGv
-         FyE6vTLL9DLxA==
-Date:   Tue, 13 Jun 2023 16:21:19 +1000
+        b=UmCy34gxXw38DxHerDhSB+m5plOagCsqYnlvgZFw34u2GXiFLtFaa1rwPGN/jnjfq
+         tPsLs4+CMHFCpaItDF9d9FnZTFJWS2KWZlVqPHhVWVZtHL0D7ghakc7gjiEuxk/RG2
+         TJR3dB6is49AiHtgk9/fQSSroR15++Mz4itpuv0sPPeQ813gvNEETN49YD237K2MXR
+         rAudesynprWiQ1qboLpQGK7G7iy9riyoZEaM+YlLdPaCfUDjcdAu6iO5fmHgvvJ5Dp
+         LV8zVxzEg+sdLQKWjfY0c6ipbftnK17kH8x6n8sZ8NVx5GFJ0I8Pz2QDkN5Et/KqJI
+         ucqB3uWJJ6FGQ==
+Date:   Tue, 13 Jun 2023 16:23:44 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     Baoquan He <bhe@redhat.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        PowerPC <linuxppc-dev@lists.ozlabs.org>
-Subject: linux-next: build failure after merge of the mm tree
-Message-ID: <20230613162119.4a7a7d3c@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build warning after merge of the arm64 tree
+Message-ID: <20230613162344.1dcb6ac0@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/IxEZ4RJthVOEGv9b4i2lpKw";
+Content-Type: multipart/signed; boundary="Sig_/V_kAW3EaT=R2bU0Ptd2TH8x";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
@@ -52,98 +51,41 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/IxEZ4RJthVOEGv9b4i2lpKw
+--Sig_/V_kAW3EaT=R2bU0Ptd2TH8x
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the mm tree, today's linux-next build (powerpc
-ppc44x_defconfig) failed like this:
+After merging the arm64 tree, today's linux-next build (htmldocs)
+produced this warning:
 
-In file included from arch/powerpc/include/asm/page.h:247,
-                 from arch/powerpc/include/asm/thread_info.h:13,
-                 from include/linux/thread_info.h:60,
-                 from include/asm-generic/preempt.h:5,
-                 from ./arch/powerpc/include/generated/asm/preempt.h:1,
-                 from include/linux/preempt.h:78,
-                 from include/linux/spinlock.h:56,
-                 from include/linux/ipc.h:5,
-                 from include/uapi/linux/sem.h:5,
-                 from include/linux/sem.h:5,
-                 from include/linux/compat.h:14,
-                 from arch/powerpc/kernel/asm-offsets.c:12:
-arch/powerpc/include/asm/page_32.h:16: warning: "ARCH_DMA_MINALIGN" redefin=
-ed
-   16 | #define ARCH_DMA_MINALIGN       L1_CACHE_BYTES
-      |=20
-In file included from include/linux/time.h:5,
-                 from include/linux/compat.h:10:
-include/linux/cache.h:104: note: this is the location of the previous defin=
-ition
-  104 | #define ARCH_DMA_MINALIGN __alignof__(unsigned long long)
-      |=20
+Documentation/arm64/kdump.rst: WARNING: document isn't included in any toct=
+ree
 
-(lots of theses)
+Introduced by commit
 
-Caused by commit
-
-  cc7335787e73 ("mm/slab: decouple ARCH_KMALLOC_MINALIGN from ARCH_DMA_MINA=
-LIGN")
-
-I have applied the following hack for today - we need something better.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Tue, 13 Jun 2023 16:07:16 +1000
-Subject: [PATCH] fix up for "mm/slab: decouple ARCH_KMALLOC_MINALIGN from A=
-RCH_DMA_MINALIGN"
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- arch/powerpc/include/asm/cache.h | 9 +++++++++
- 1 file changed, 9 insertions(+)
-
-diff --git a/arch/powerpc/include/asm/cache.h b/arch/powerpc/include/asm/ca=
-che.h
-index ae0a68a838e8..e9be1396dfd1 100644
---- a/arch/powerpc/include/asm/cache.h
-+++ b/arch/powerpc/include/asm/cache.h
-@@ -142,5 +142,14 @@ static inline void iccci(void *addr)
- }
-=20
- #endif /* !__ASSEMBLY__ */
-+
-+#ifndef __powerpc64__
-+#ifdef CONFIG_NOT_COHERENT_CACHE
-+#ifndef ARCH_DMA_MINALIGN
-+#define ARCH_DMA_MINALIGN	L1_CACHE_BYTES
-+#endif
-+#endif
-+#endif
-+
- #endif /* __KERNEL__ */
- #endif /* _ASM_POWERPC_CACHE_H */
---=20
-2.39.2
+  03dc0e05407f ("Documentation: add kdump.rst to present crashkernel reserv=
+ation on arm64")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/IxEZ4RJthVOEGv9b4i2lpKw
+--Sig_/V_kAW3EaT=R2bU0Ptd2TH8x
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSICt8ACgkQAVBC80lX
-0Gyh2gf/VSu16R9zpGg+AreGcHAXLfhTsn75srJGOYEEWqZPPHTW9DZUzOz1IavK
-bf4fb8hYVMrLMHrDMJyLENSBxgTdflaDLrifPRkZymuWhkIwRChFPz7na1i8LY93
-xo1yrKyYQqH1OEz5lJ3Kd3aXqIRH5dnnpT7Y1LxpmSPVPE+rQvg7PStaokJhgpeX
-o6Lv3dnNFwCPtse2bB1EugDaZL+tm9Jj7c8srAT/qtJHjtT6U9NvOnAhWDdB9S+B
-Xn7SxZBTA2W0ehVqHFdQtYiXoQONYiG8ILx3MIvGzwKN1YoO2XgsmC70uuVCUzUO
-s6MVpN2Bz305ZseGeBP1mzdz2YPl6w==
-=p8mM
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSIC3AACgkQAVBC80lX
+0GwTiwgAkKuk+h0a3okaEwDztqV+24yVdfomXJIHaizmgEvXMib4i2NAhkvuykQ0
+xUuwTHc/6smpZnRCnMRkZGZhpaTthcU7mC5FXehhiAiPRY1PF9Yp4M9vLtMaQXQj
+ZV1v6pRnGFEDqEw7UvbxhqJ5F/m1nuSpWZwuEZ4JE1dAKyegqh5FJReKPlLbG6y8
+FSMjzl33jsOsrFZOL0CUQ31GCK6nzrUn/vGOR0WDCMzBzgwtchBjLaaQk4JRDlMH
+6mRMbx8G7ghCdhGxWQtzcxHgWJ19EEPYuU/gRdvFve8DCFjYNFZVMHJdKajxXsXP
+XyaiccaZ6cTYAOefsPuhvy2+yIGYEQ==
+=ymEL
 -----END PGP SIGNATURE-----
 
---Sig_/IxEZ4RJthVOEGv9b4i2lpKw--
+--Sig_/V_kAW3EaT=R2bU0Ptd2TH8x--

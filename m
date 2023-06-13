@@ -2,56 +2,58 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C386C72D783
-	for <lists+linux-next@lfdr.de>; Tue, 13 Jun 2023 04:54:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D607C72D78B
+	for <lists+linux-next@lfdr.de>; Tue, 13 Jun 2023 04:59:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232995AbjFMCyk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 12 Jun 2023 22:54:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49456 "EHLO
+        id S233356AbjFMC75 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 12 Jun 2023 22:59:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232586AbjFMCyj (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 12 Jun 2023 22:54:39 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AF921989;
-        Mon, 12 Jun 2023 19:54:12 -0700 (PDT)
+        with ESMTP id S239059AbjFMC7u (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 12 Jun 2023 22:59:50 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3663EE;
+        Mon, 12 Jun 2023 19:59:46 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QgCnG1WfPz4x4F;
-        Tue, 13 Jun 2023 12:54:09 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QgCvd3zkHz4xG5;
+        Tue, 13 Jun 2023 12:59:41 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1686624851;
-        bh=2iT5jXCclrnY2bEFfafzVRtJej6mnikqPMzQSHmL+Nk=;
+        s=201702; t=1686625182;
+        bh=es8zQWhr2UGYmQ6I4rN+kdE5kkY9Q5v0gYGCqZI4080=;
         h=Date:From:To:Cc:Subject:From;
-        b=ERBA2vZl3YN9L8feZVlb5MvIGKYCMG+vCM+7QKQ1NfnOOc6rtW3olZYHGMxmjyzHa
-         Oj9dB64G10Uo+CKTaON6eiqLeNLL5zcYM7vxpGRCt8aJVtoAgPXsJ/auPgrFgW84iG
-         cksBe56NfUp8ZtJnz/YJyRrjGGZi6BPZawITGyTMAy7Iys2G8PJFILtOhvu4+Kin6Z
-         hfLm+cX7I0HsgC/q/nuo3GS4ku8fvZqJ6WeezEcndBfNR9298VljRcFcdSuCkCXPY1
-         FHbRin62HUuuocRlns6WioPvYNZn7Vp8/ztOttucgR7VW+3bKliHn6oMgbiM7U7FM1
-         vISXKc1gfvtGw==
-Date:   Tue, 13 Jun 2023 12:54:08 +1000
+        b=ZyzXmLisrTXpCxMLiYV2gGmnAskKtigmW/92PYRGks0p94daheLgF3b9J3I9R+qGb
+         q6D+gRBc+T9Ah3WijlA3YwNv1Mq38F9jFx2ywlQokVlr48GoWlyXKLXwtH/+s+yTOU
+         t2cu56objMdEPqAnzHOmeny4NtndGoDD+5tiVWZrYW6sDdWOGuxn4kF7e2/sFb8M4Q
+         ZXIcXYL4ACgd9wRmhirlZmeevYdLhjQWoFsX8y08TLWxEGXS8PsW09s6lpRQ2sHrJ4
+         Rt5LluMyXfqoSfXuhFtIPpj+3AYlc5Y1Yu/rfjKze8y0lOI7wgYBb78nRThchLGIz7
+         qgSnJ0T62REyg==
+Date:   Tue, 13 Jun 2023 12:59:39 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jens Axboe <axboe@kernel.dk>, Theodore Ts'o <tytso@mit.edu>
-Cc:     Christoph Hellwig <hch@lst.de>,
+To:     Jens Axboe <axboe@kernel.dk>, David Miller <davem@davemloft.net>
+Cc:     David Howells <dhowells@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Networking <netdev@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Zhihao Cheng <chengzhihao1@huawei.com>
-Subject: linux-next: manual merge of the block tree with the ext4 tree
-Message-ID: <20230613125408.7321db60@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the block tree with the net-next tree
+Message-ID: <20230613125939.595e50b8@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/_=Ej.ZgdWV78tnMAPIC7EDu";
+Content-Type: multipart/signed; boundary="Sig_/mCx3ToNKpO6AWjiAYHFUjEf";
  protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/_=Ej.ZgdWV78tnMAPIC7EDu
+--Sig_/mCx3ToNKpO6AWjiAYHFUjEf
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
@@ -59,16 +61,16 @@ Hi all,
 
 Today's linux-next merge of the block tree got a conflict in:
 
-  fs/ext4/super.c
+  fs/splice.c
 
 between commit:
 
-  63bc068f0d1a ("ext4: Fix reusing stale buffer heads from last failed moun=
-ting")
+  2bfc66850952 ("splice, net: Add a splice_eof op to file-ops and socket-op=
+s")
 
-from the ext4 tree and commit:
+from the net-next tree and commit:
 
-  2736e8eeb0cc ("block: use the holder as indication for exclusive opens")
+  6a3f30b8bdb2 ("splice: Make do_splice_to() generic and export it")
 
 from the block tree.
 
@@ -83,40 +85,82 @@ complex conflicts.
 Cheers,
 Stephen Rothwell
 
-diff --cc fs/ext4/super.c
-index b3819e70093e,94a7b56ed876..000000000000
---- a/fs/ext4/super.c
-+++ b/fs/ext4/super.c
-@@@ -1128,13 -1133,7 +1133,13 @@@ static void ext4_blkdev_remove(struct e
-  	struct block_device *bdev;
-  	bdev =3D sbi->s_journal_bdev;
-  	if (bdev) {
- +		/*
- +		 * Invalidate the journal device's buffers.  We don't want them
- +		 * floating about in memory - the physical journal device may
- +		 * hotswapped, and it breaks the `ro-after' testing code.
- +		 */
- +		invalidate_bdev(bdev);
-- 		ext4_blkdev_put(bdev);
-+ 		blkdev_put(bdev, sbi->s_es);
-  		sbi->s_journal_bdev =3D NULL;
-  	}
+diff --cc fs/splice.c
+index 67ddaac1f5c5,2420ead610a7..000000000000
+--- a/fs/splice.c
++++ b/fs/splice.c
+@@@ -969,23 -841,24 +937,35 @@@ static long do_splice_from(struct pipe_
+  	return out->f_op->splice_write(pipe, out, ppos, len, flags);
   }
+ =20
+ +/*
+ + * Indicate to the caller that there was a premature EOF when reading fro=
+m the
+ + * source and the caller didn't indicate they would be sending more data =
+after
+ + * this.
+ + */
+ +static void do_splice_eof(struct splice_desc *sd)
+ +{
+ +	if (sd->splice_eof)
+ +		sd->splice_eof(sd);
+ +}
+ +
+- /*
+-  * Attempt to initiate a splice from a file to a pipe.
++ /**
++  * vfs_splice_read - Read data from a file and splice it into a pipe
++  * @in:		File to splice from
++  * @ppos:	Input file offset
++  * @pipe:	Pipe to splice to
++  * @len:	Number of bytes to splice
++  * @flags:	Splice modifier flags (SPLICE_F_*)
++  *
++  * Splice the requested amount of data from the input file to the pipe.  =
+This
++  * is synchronous as the caller must hold the pipe lock across the entire
++  * operation.
++  *
++  * If successful, it returns the amount of data spliced, 0 if it hit the =
+EOF or
++  * a hole and a negative error code otherwise.
+   */
+- static long do_splice_to(struct file *in, loff_t *ppos,
+- 			 struct pipe_inode_info *pipe, size_t len,
+- 			 unsigned int flags)
++ long vfs_splice_read(struct file *in, loff_t *ppos,
++ 		     struct pipe_inode_info *pipe, size_t len,
++ 		     unsigned int flags)
+  {
+  	unsigned int p_space;
+  	int ret;
+@@@ -1081,9 -959,9 +1070,9 @@@ ssize_t splice_direct_to_actor(struct f
+  		size_t read_len;
+  		loff_t pos =3D sd->pos, prev_pos =3D pos;
+ =20
+- 		ret =3D do_splice_to(in, &pos, pipe, len, flags);
++ 		ret =3D vfs_splice_read(in, &pos, pipe, len, flags);
+  		if (unlikely(ret <=3D 0))
+ -			goto out_release;
+ +			goto read_failure;
+ =20
+  		read_len =3D ret;
+  		sd->total_len =3D read_len;
 
---Sig_/_=Ej.ZgdWV78tnMAPIC7EDu
+--Sig_/mCx3ToNKpO6AWjiAYHFUjEf
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSH2lAACgkQAVBC80lX
-0Gy0CggAhTJbE9J247FPiYJ4oEwG+bHBlvwjXQ5N088PRLGfowHUcPugDXppDt6K
-uVjYCJd+len9EjcUO1DlOrfhZur6PN4ZVmgoIDtpCmoV1sTgfVATUUsSZpqmbVsB
-l239G5vcm+Uj3mtxYskK8KaeSlqG3AZtlcRcJDsGGcFjja8drmOOSVeidwY8PESU
-zuxWlfrX+jJM6Bhw0DhcQGJ1tg8Z1/osWgCCe+O7F+dEBdIY/8K+V5EZ0/YCrsnu
-EjtbXnDrl8ZkM+X42bUHCExQC2lkKgSWZBab/amZkZLlODJEk1rhlsSihMuefORt
-2jInGDxPHy7/0SKnBAvEzWtXPCAbkg==
-=F3+1
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSH25wACgkQAVBC80lX
+0Gzaqgf+OENpEocAaIWONgxRVA5awJBquhhvSjVNP7OTfeJtPdzuVTf/zMYIe8rd
++aGRnBzgDBPtyjmcjO9FQyqZBt4LidHm4q0FBgGRFCNSA9g6J2j2qXjIDXfqKeS9
+Kl3C3r+JthUj4N+DUgOTI+3ch2fEEkJxCtZAY/k3+IHVF5YjekJGXBnqKybTrN0n
+7PuqgEWlj5GWt6SavJTrXJ9Yu3htPFJ4lYtbh0iLRU6uRU4PpGzxYHeXRDe2B8LF
+spGvcHNesKLh1TlGTvdSjeICF7lItxOSS9+7XwlNA0uiosiaY9EQb7LhG4BPOSX0
+O0Dsss29wIjjEA+63i7EK/876fI8IQ==
+=8zyQ
 -----END PGP SIGNATURE-----
 
---Sig_/_=Ej.ZgdWV78tnMAPIC7EDu--
+--Sig_/mCx3ToNKpO6AWjiAYHFUjEf--

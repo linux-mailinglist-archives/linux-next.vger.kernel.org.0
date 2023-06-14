@@ -2,97 +2,98 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9017772FF4B
-	for <lists+linux-next@lfdr.de>; Wed, 14 Jun 2023 15:01:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F02E730112
+	for <lists+linux-next@lfdr.de>; Wed, 14 Jun 2023 16:01:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236501AbjFNNBw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 14 Jun 2023 09:01:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55734 "EHLO
+        id S245316AbjFNOB0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 14 Jun 2023 10:01:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244287AbjFNNBq (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 14 Jun 2023 09:01:46 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD53213E;
-        Wed, 14 Jun 2023 06:01:41 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Qh5Cg1581z4wgC;
-        Wed, 14 Jun 2023 23:01:34 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1686747696;
-        bh=8/vsSK2j6rJJIuEb9Y1ZcU2L+LeOGAravlsY6bql24A=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=RUDKBtp4MGNDMoB7/NhY3y+U137U8yDYroaibQOC7R0hmWm6sggfM3+1/ns/lWDYw
-         hVWfduZap1CwD+I5ArO24Co/sxxcJmZKuF5+V15kKb7aWH24iMvRDcudtjH6A4jR39
-         xYI6fb6R6oWSSfWe5RgQeWNaIrJ2kAyNmG+Yiz6YloOqeUCJSkj3H7chxQ7ooJolcS
-         iLQv4S6M4XQ9ZmzMq8XlONhRB/z884aDb2o1ImMxNlrmP4a3NH0vx1g+Wp3m8moPRY
-         yNiF6clPtXceg095GxIUFqSjFIWs246ubFsmC5xIx8QkyE9J66A1yUYvG7ExTbg4hG
-         vuYLEsSSMflAg==
-Date:   Wed, 14 Jun 2023 23:01:33 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Matthieu Baerts <matthieu.baerts@tessares.net>
-Cc:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
+        with ESMTP id S245264AbjFNOBZ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 14 Jun 2023 10:01:25 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E14219A;
+        Wed, 14 Jun 2023 07:01:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=cUPWTRyD6KgConRvc/LzTbU+jQN8JxfjvL3UpIyXkeM=; b=NodLVcgJ1NXwF37xa71v0LeCgL
+        QwCltgPLEdPtIhwT7ovBuinlI+NjgDmuppsqrL5ZJwh4EknK7qM8znLme5kOfiJHpoji+aiYT9iDZ
+        NdcrHcz0BNtrRJ679hKdInCKU7PuPxkrVRWrdIUFBLmyxf9+3CnyMTouyRP2493eMqUeiP410+G+2
+        /uFLTDI/Re80AMP9x20SHyQSeCAG3vW9mBib778IK9QDFs2WVH1rAaIhflvWk6XMrbR6eIkY9Qkcd
+        2IpaYW3w+oiKk7IBCM86K20Xo6Fj2kE0BX7RKUU73k2GjBI4Y6tYPm5mGDC/rLZ2lxLfz+V8VkOTG
+        aqu6HM8w==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1q9R3p-00BqmJ-08;
+        Wed, 14 Jun 2023 14:01:21 +0000
+Date:   Wed, 14 Jun 2023 07:01:20 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     "Jain, Ayush" <Ayush.Jain3@amd.com>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        "sfr@canb.auug.org.au" <sfr@canb.auug.org.au>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Mat Martineau <martineau@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Subject: Re: linux-next: manual merge of the net-next tree with the net tree
-Message-ID: <20230614230133.1a238390@canb.auug.org.au>
-In-Reply-To: <c473ffea-49c3-1c9c-b35c-cd3978369d0f@tessares.net>
-References: <20230614111752.74207e28@canb.auug.org.au>
-        <c473ffea-49c3-1c9c-b35c-cd3978369d0f@tessares.net>
+        "Karny, Wyes" <Wyes.Karny@amd.com>, Jens Axboe <axboe@kernel.dk>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "V, Narasimhan" <Narasimhan.V@amd.com>,
+        "Shetty, Kalpana" <Kalpana.Shetty@amd.com>,
+        "Shukla, Santosh" <Santosh.Shukla@amd.com>
+Subject: Re: Kernel null pointer dereference on stopping raid device
+Message-ID: <ZInIMLlMby2aNNr1@infradead.org>
+References: <e78344ad-8d57-91d8-0bfb-724c740c7c72@amd.com>
+ <3c4911c4-d3d7-a93e-5f14-e97384ae4f21@amd.com>
+ <ZIlqvsZ6nMv2OT2u@infradead.org>
+ <IA1PR12MB61375A452083D65B5FB815DBBA5AA@IA1PR12MB6137.namprd12.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/pMwCcmNtf_L0mjZnCMzY/BF";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <IA1PR12MB61375A452083D65B5FB815DBBA5AA@IA1PR12MB6137.namprd12.prod.outlook.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/pMwCcmNtf_L0mjZnCMzY/BF
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Wed, Jun 14, 2023 at 09:54:07AM +0000, Jain, Ayush wrote:
+> Patch applied cleanly on next-20230614 and resolved the issue.
+> 
+> Reported-by: Ayush Jain <ayush.jain3@amd.com>
+> Tested-by: Ayush Jain <ayush.jain3@amd.com>
 
-Hi Matthieu,
+That was just a quick hack to verify the problem.  I think this is
+the proper fix, can you try it as well?
 
-On Wed, 14 Jun 2023 10:51:16 +0200 Matthieu Baerts <matthieu.baerts@tessare=
-s.net> wrote:
->
-> Thank you for the conflicts resolution. If I'm not mistaken, it looks
-> good except the last chunk where the new call to chk_rm_tx_nr() should
-> go inside the 'if' statement. So instead of this bit you have on your sid=
-e:
-
-Thanks for checking this.  I will amend my resolution in linux-next
-from tomorrow.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/pMwCcmNtf_L0mjZnCMzY/BF
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSJui0ACgkQAVBC80lX
-0GwfEwf/VKXs/ioQ6540MKL131+ZC2deLg3R/5dA226gX/vmIRpmtksGhepbYKCC
-3w+RAdFJC2nyWOhOV6vRrwkvygr057HuXkBobCRnxZsoJHubelRFv3nrjWiIHnNv
-eUtQcQKo7DqV+T8u0WfuQzIXz3h8yTMd7JnV+FFZV6hasU7LYEbsexxAQ8o4mvWA
-hrAV3OuehfTmW/ssrV44OfdDrtuheEIiYAbpcnI6K/5zZeWqLl5BJZgqkFp8AEwj
-mivkMUk0P2uubA5cqZzyleuFShlFsK5IMd5mqAxTknsNVIcuTLxi+ck1oPgCkbhX
-AA4VJtgqcOv5BftsPUm95gMAqF2m4A==
-=gUNb
------END PGP SIGNATURE-----
-
---Sig_/pMwCcmNtf_L0mjZnCMzY/BF--
+diff --git a/drivers/md/md.c b/drivers/md/md.c
+index ca0de7ddd9434d..da523e80a4e990 100644
+--- a/drivers/md/md.c
++++ b/drivers/md/md.c
+@@ -2467,10 +2467,12 @@ static void export_rdev(struct md_rdev *rdev, struct mddev *mddev)
+ 
+ static void md_kick_rdev_from_array(struct md_rdev *rdev)
+ {
+-	bd_unlink_disk_holder(rdev->bdev, rdev->mddev->gendisk);
++	struct mddev *mddev = rdev->mddev;
++
++	bd_unlink_disk_holder(rdev->bdev, mddev->gendisk);
+ 	list_del_rcu(&rdev->same_set);
+ 	pr_debug("md: unbind<%pg>\n", rdev->bdev);
+-	mddev_destroy_serial_pool(rdev->mddev, rdev, false);
++	mddev_destroy_serial_pool(mddev, rdev, false);
+ 	rdev->mddev = NULL;
+ 	sysfs_remove_link(&rdev->kobj, "block");
+ 	sysfs_put(rdev->sysfs_state);
+@@ -2488,7 +2490,7 @@ static void md_kick_rdev_from_array(struct md_rdev *rdev)
+ 	INIT_WORK(&rdev->del_work, rdev_delayed_delete);
+ 	kobject_get(&rdev->kobj);
+ 	queue_work(md_rdev_misc_wq, &rdev->del_work);
+-	export_rdev(rdev, rdev->mddev);
++	export_rdev(rdev, mddev);
+ }
+ 
+ static void export_array(struct mddev *mddev)

@@ -2,103 +2,87 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 301D2731059
-	for <lists+linux-next@lfdr.de>; Thu, 15 Jun 2023 09:17:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACAC673111D
+	for <lists+linux-next@lfdr.de>; Thu, 15 Jun 2023 09:45:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244827AbjFOHRX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 15 Jun 2023 03:17:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40258 "EHLO
+        id S234950AbjFOHpU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 15 Jun 2023 03:45:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243727AbjFOHQU (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 15 Jun 2023 03:16:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7155DE69;
-        Thu, 15 Jun 2023 00:14:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BFB3961239;
-        Thu, 15 Jun 2023 07:14:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BB0EC433C0;
-        Thu, 15 Jun 2023 07:14:14 +0000 (UTC)
-Date:   Thu, 15 Jun 2023 08:14:11 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
+        with ESMTP id S230107AbjFOHpT (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 15 Jun 2023 03:45:19 -0400
+X-Greylist: delayed 400 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 15 Jun 2023 00:45:18 PDT
+Received: from out-12.mta0.migadu.com (out-12.mta0.migadu.com [IPv6:2001:41d0:1004:224b::c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF829C7
+        for <linux-next@vger.kernel.org>; Thu, 15 Jun 2023 00:45:18 -0700 (PDT)
+Date:   Thu, 15 Jun 2023 07:37:23 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1686814647;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=QHM5nN9Xo/TDGK3QI1A/B419EOZFjB7CwMKF8sVz5Io=;
+        b=EW+OB1AR41NMhUT9apUn/Hs+/3gYPuHJdKfJ1UTfvCkeO6CSS57FZLXImHsqJn+3RkLTES
+        CrtbbpOUInO7I+9CBX/yAta8NQCGmckm5bf4gct5cNJ6d5MkuJt2rkL6+i0cNsUx9xBSH3
+        mC2J5m5vA9A9qYwbzFtVRe8z4sRE5O8=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Oliver Upton <oliver.upton@linux.dev>
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
 Cc:     Christoffer Dall <cdall@cs.columbia.edu>,
-        Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>,
-        Joey Gouly <joey.gouly@arm.com>,
-        Kristina Martsenko <kristina.martsenko@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>
+        Mark Rutland <mark.rutland@arm.com>
 Subject: Re: linux-next: manual merge of the kvm-arm tree with the arm64 tree
-Message-ID: <ZIq6Q/TyZZZrJP2e@arm.com>
-References: <20230615122201.75e36abd@canb.auug.org.au>
+Message-ID: <ZIq/s8p10EGI9fqu@linux.dev>
+References: <20230615124558.2cea58b3@canb.auug.org.au>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230615122201.75e36abd@canb.auug.org.au>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230615124558.2cea58b3@canb.auug.org.au>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Jun 15, 2023 at 12:22:01PM +1000, Stephen Rothwell wrote:
-> diff --cc arch/arm64/kernel/cpufeature.c
-> index 6ea7f23b1287,f6e3598760f1..000000000000
-> --- a/arch/arm64/kernel/cpufeature.c
-> +++ b/arch/arm64/kernel/cpufeature.c
-> @@@ -2662,27 -2656,23 +2677,44 @@@ static const struct arm64_cpu_capabilit
->   		.cpu_enable = cpu_enable_dit,
->   		ARM64_CPUID_FIELDS(ID_AA64PFR0_EL1, DIT, IMP)
->   	},
->  +	{
->  +		.desc = "Memory Copy and Memory Set instructions",
->  +		.capability = ARM64_HAS_MOPS,
->  +		.type = ARM64_CPUCAP_SYSTEM_FEATURE,
->  +		.matches = has_cpuid_feature,
->  +		.cpu_enable = cpu_enable_mops,
->  +		ARM64_CPUID_FIELDS(ID_AA64ISAR2_EL1, MOPS, IMP)
->  +	},
->  +	{
->  +		.capability = ARM64_HAS_TCR2,
->  +		.type = ARM64_CPUCAP_SYSTEM_FEATURE,
->  +		.matches = has_cpuid_feature,
->  +		ARM64_CPUID_FIELDS(ID_AA64MMFR3_EL1, TCRX, IMP)
->  +	},
->  +	{
->  +		.desc = "Stage-1 Permission Indirection Extension (S1PIE)",
->  +		.capability = ARM64_HAS_S1PIE,
->  +		.type = ARM64_CPUCAP_BOOT_CPU_FEATURE,
->  +		.matches = has_cpuid_feature,
->  +		ARM64_CPUID_FIELDS(ID_AA64MMFR3_EL1, S1PIE, IMP)
->  +	},
-> + 	{
-> + 		.desc = "Enhanced Virtualization Traps",
-> + 		.capability = ARM64_HAS_EVT,
-> + 		.type = ARM64_CPUCAP_SYSTEM_FEATURE,
-> + 		.sys_reg = SYS_ID_AA64MMFR2_EL1,
-> + 		.sign = FTR_UNSIGNED,
-> + 		.field_pos = ID_AA64MMFR2_EL1_EVT_SHIFT,
-> + 		.field_width = 4,
-> + 		.min_field_value = ID_AA64MMFR2_EL1_EVT_IMP,
-> + 		.matches = has_cpuid_feature,
-> + 	},
-> + 	{
-> + 		.desc = "VHE for hypervisor only",
-> + 		.capability = ARM64_KVM_HVHE,
-> + 		.type = ARM64_CPUCAP_SYSTEM_FEATURE,
-> + 		.matches = hvhe_possible,
-> + 	},
->   	{},
->   };
+On Thu, Jun 15, 2023 at 12:45:58PM +1000, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Today's linux-next merge of the kvm-arm tree got a conflict in:
+> 
+>   arch/arm64/kernel/kaslr.c
+> 
+> between commit:
+> 
+>   6e13b6b923b3 ("arm64: kaslr: split kaslr/module initialization")
+>   e46b7103aef3 ("arm64: module: move module randomization to module.c")
+> 
+> from the arm64 tree and commit:
+> 
+>   0ddc312b7c73 ("arm64: Turn kaslr_feature_override into a generic SW feature override")
+> 
+> from the kvm-arm tree.
+> 
+> I fixed it up (see below) and can carry the fix as necessary. This is
+> now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your
+> tree is submitted for merging.  You may also want to consider
+> cooperating with the maintainer of the conflicting tree to minimise any
+> particularly complex conflicts.
 
-This looks fine. Thanks Stephen.
+Diff LGTM, thanks Stephen.
+
+Catalin, I'd like to resolve this in the kvmarm tree and merge
+for-next/module-alloc. You alright with that?
 
 -- 
-Catalin
+Thanks,
+Oliver

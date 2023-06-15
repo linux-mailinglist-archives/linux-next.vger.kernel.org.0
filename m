@@ -2,49 +2,47 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BAD47322C3
-	for <lists+linux-next@lfdr.de>; Fri, 16 Jun 2023 00:31:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A4C57322CE
+	for <lists+linux-next@lfdr.de>; Fri, 16 Jun 2023 00:32:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232031AbjFOWbD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 15 Jun 2023 18:31:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33308 "EHLO
+        id S230094AbjFOWcl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 15 Jun 2023 18:32:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230522AbjFOWbB (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 15 Jun 2023 18:31:01 -0400
+        with ESMTP id S239126AbjFOWck (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 15 Jun 2023 18:32:40 -0400
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A40D1FD4;
-        Thu, 15 Jun 2023 15:30:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A719C26AA;
+        Thu, 15 Jun 2023 15:32:39 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Qhxp35sPpz4wjD;
-        Fri, 16 Jun 2023 08:30:51 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Qhxr61kfBz4wgH;
+        Fri, 16 Jun 2023 08:32:37 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1686868252;
-        bh=ueCWAMDvwOyDbW7uXq2ByaTQQcg7zZajxDowPF71drk=;
+        s=201702; t=1686868358;
+        bh=PyGdkQQgOyuur05vxE/y15aWSMSbUioQwfHotMchTm0=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=kqwB6eJXu3saeKNgTPpum8C3qUWyIykeiA4B7Ivi4FdA2gjZKCuPwERzfLJgfaEys
-         stcNJNDsK9CeGXtS0h8pD31g2eAVHpcmOcLmPx6DKoR2rCJtaoVFZ+XrFEPidHJX86
-         wH1L7jVqX7ujJgAY5EGPHpC5OOU6owNdRdu9QRdA75L7l1peWH7TpdCILRGmzQMlFU
-         HbYrdTntUl9fqkJMUXKiRt20uchN5xpLIYf1IiTJ3yniDejY1oXHlKspaoyVJYHXR+
-         sTf24ybvQ/gLuCIaV7fDIQQcglk5Ppyhgv2gvyhaRXyh0ry13vUyIwTGwKVSJ0nS5q
-         qh4sucWZbc2Pg==
-Date:   Fri, 16 Jun 2023 08:30:33 +1000
+        b=CYWFw+w8kq8bafP5A/KXbG6yYur1gNNvurG2o1gepVzVe0kZgnRruvgwQNQyDQby7
+         ZFPC4X6nHNN1N9klfT4TlKDksfD8dkkdtfJjfKN/KytCQIHgWngXRohYg+fPyPLr7C
+         i3OsWMbVja97AUsJbVFyaPaH8JHsi1ggGzo+KD4i8iWjy7ueIEX62V/YNfzkZBomT3
+         g7Q5h+Oq5+xcnMFSx638imay0W5R2MhbjPMuok5SuGcBPJ1S4YgFM1Q15QlzX8vFm+
+         idPcL0T7QOzah1ECbv55h7xzsSxVp7VSIJJhS1cjlFwvQLPHs5yA35jMM5FyhuZTL+
+         E65KyL7+Z9+AA==
+Date:   Fri, 16 Jun 2023 08:32:37 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+To:     Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>
+Cc:     Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Simon Horman <simon.horman@corigine.com>
-Subject: Re: linux-next: build failure after merge of the net-next tree
-Message-ID: <20230616083033.748f2def@canb.auug.org.au>
-In-Reply-To: <20230613164639.164b2991@canb.auug.org.au>
-References: <20230613164639.164b2991@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the bluetooth tree
+Message-ID: <20230616083237.421dff9d@canb.auug.org.au>
+In-Reply-To: <20230613130258.73be7f1b@canb.auug.org.au>
+References: <20230613130258.73be7f1b@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Z9AlY.W8SK3_1+irWRBzsR7";
+Content-Type: multipart/signed; boundary="Sig_/nDN/whgu0AeyjQxDgfTG9sb";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -55,87 +53,46 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/Z9AlY.W8SK3_1+irWRBzsR7
+--Sig_/nDN/whgu0AeyjQxDgfTG9sb
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Tue, 13 Jun 2023 16:46:39 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+On Tue, 13 Jun 2023 13:02:58 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
 wrote:
 >
-> After merging the net-next tree, today's linux-next build (sparc64
-> defconfig) failed like this:
+ After merging the bluetooth tree, today's linux-next build (arm
+> multi_v7_defconfig) failed like this:
 >=20
-> drivers/net/ethernet/sun/sunvnet_common.c: In function 'vnet_handle_offlo=
-ads':
-> drivers/net/ethernet/sun/sunvnet_common.c:1277:16: error: implicit declar=
-ation of function 'skb_gso_segment'; did you mean 'skb_gso_reset'? [-Werror=
-=3Dimplicit-function-declaration]
->  1277 |         segs =3D skb_gso_segment(skb, dev->features & ~NETIF_F_TS=
-O);
->       |                ^~~~~~~~~~~~~~~
->       |                skb_gso_reset
-> drivers/net/ethernet/sun/sunvnet_common.c:1277:14: warning: assignment to=
- 'struct sk_buff *' from 'int' makes pointer from integer without a cast [-=
-Wint-conversion]
->  1277 |         segs =3D skb_gso_segment(skb, dev->features & ~NETIF_F_TS=
-O);
->       |              ^
+> ERROR: modpost: "pidfd_prepare" [net/bluetooth/bluetooth.ko] undefined!
 >=20
 > Caused by commit
 >=20
->   d457a0e329b0 ("net: move gso declarations and functions to their own fi=
-les")
+>   817efd3cad74 ("Bluetooth: hci_sock: Forward credentials to monitor")
 >=20
-> I have applied the following patch for today.
->=20
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Tue, 13 Jun 2023 16:38:10 +1000
-> Subject: [PATCH] Fix a sparc64 use of the gso functions
->=20
-> This was missed when they were moved.
->=20
-> Fixes: d457a0e329b0 ("net: move gso declarations and functions to their o=
-wn files")
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> ---
->  drivers/net/ethernet/sun/sunvnet_common.c | 1 +
->  1 file changed, 1 insertion(+)
->=20
-> diff --git a/drivers/net/ethernet/sun/sunvnet_common.c b/drivers/net/ethe=
-rnet/sun/sunvnet_common.c
-> index a6211b95ed17..3525d5c0d694 100644
-> --- a/drivers/net/ethernet/sun/sunvnet_common.c
-> +++ b/drivers/net/ethernet/sun/sunvnet_common.c
-> @@ -25,6 +25,7 @@
->  #endif
-> =20
->  #include <net/ip.h>
-> +#include <net/gso.h>
->  #include <net/icmp.h>
->  #include <net/route.h>
-> =20
+> I have reverted that commit for today.
 
-I am still applying that patch to the net-next tree merge.
+I am still reverting that commit.
+
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/Z9AlY.W8SK3_1+irWRBzsR7
+--Sig_/nDN/whgu0AeyjQxDgfTG9sb
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSLkQkACgkQAVBC80lX
-0Gz8cwf/cJV2+T+zzPzWXRjPvHb88fVcdoDJa5Sxdpfa7XWOoa2nm/XfRlNS1bEV
-C/0eVhQ7K45f9Lt6U1xbzlIaqH6KeQcfd+waRz4l38x2sSKz+U3B6vXEaqCy+2HU
-rKCifxxrtd6uNlKxB0AZZdkfJVDM8s5GWWL8wQBZSR5U1SMQ4TD8BVOmDwJd8Fx3
-K1WB3bksf6dEBGr89cx2NAhJmjc73DdwzPMfraM4Tn9dcmfaJcDD2j1u/fRDHrYp
-oYW7jrakdxV/B7iurOUDZVKpXR8h76D89ebxfv9qb3SFWDUUFftoE6T6eYrLv4Ad
-9BM0soKEknVg2JnjejflPVEC8H3Tkg==
-=tTtV
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSLkYUACgkQAVBC80lX
+0Gxn3Af9HPtt3ser5f06P84uXkApAwAgQuqMeeFM/yJRa+stausCNZ60mqp654cB
+EjVfsUIzw3yetGNY13R4R9NbU52qCp6tbp/iNGMioBG4veeIAdXMYvsqjoOdM2uD
+QiELvmC+CaVPFz6GjQ9Xjkt4llvzMe+xtzAP4mqEzSdJ/gdXg6UsKY/0jorINOJf
+7ktbvsN2gmyEth+g0hBb22hFPcHF27qV+VOAIcn0dD7jTLd2metnEGj8C3ZgoRci
+eI24zU2aXtQb6neiVl3ODhkjnnrnvjj+IxrDR+a7bsd0XgkGFj/YUa9+kCCJCX7J
+MYml3G72pgZSShbzkPf1e66+wyr4QQ==
+=MpNV
 -----END PGP SIGNATURE-----
 
---Sig_/Z9AlY.W8SK3_1+irWRBzsR7--
+--Sig_/nDN/whgu0AeyjQxDgfTG9sb--

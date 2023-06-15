@@ -2,113 +2,103 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB27A730FB2
-	for <lists+linux-next@lfdr.de>; Thu, 15 Jun 2023 08:50:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 301D2731059
+	for <lists+linux-next@lfdr.de>; Thu, 15 Jun 2023 09:17:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238099AbjFOGuT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 15 Jun 2023 02:50:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56174 "EHLO
+        id S244827AbjFOHRX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 15 Jun 2023 03:17:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244452AbjFOGtu (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 15 Jun 2023 02:49:50 -0400
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A87DB4204;
-        Wed, 14 Jun 2023 23:48:40 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id 9BC5332009F9;
-        Thu, 15 Jun 2023 02:48:36 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Thu, 15 Jun 2023 02:48:37 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1686811716; x=1686898116; bh=g5
-        P+F4WPLTq7am0FNx519f1VIiU+iFLrOmjrcmEUm4I=; b=RkgUcIOo/uA+ucHijs
-        qM4QhihSHunjSQcUtJJJydJp4PLK9B4kJSIiBGWek5wfDN2E7agy7nM3zKiZo/Bz
-        IAR4k7hNPkRx2BdzoXYIIPN9UfELVEEz+o0HzJnsh6JMp3dNYkOKIPiu4qj4HmkX
-        b5d2khQTE2ZDeExBAqq34SGaX58g3ukxZ4mOxVFGvewqhB/BA1N4OUxCm1r9Q94+
-        z54EWKLzKoCtFQ8CIzejSBprgz8exqqh3gDWY9ANVb/6MPj8hsmv76vy2w144+Fm
-        b6ftRDxre4gAvd16mb2KB7xXGRhevYHOuklNgLOR7WNY2tv/ADNGf92ICbgXth8J
-        t9+Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1686811716; x=1686898116; bh=g5P+F4WPLTq7a
-        m0FNx519f1VIiU+iFLrOmjrcmEUm4I=; b=MuKWzWmGUFIANSxXmFYmiou9CTwqF
-        vfYC2/koCrWBLsKc4K3hZ5//GNDHJEg52yHcXd4ghWSSpKxSxMNB8zm9bmO++Q1C
-        XQzTEePNtpgiOejESrlTETjTmtYql7UT1Sw4BYH0Fje/eD+C5wFUgG0tFyOwJ9dp
-        K3xCr2RJivlfUVDTc2oRBXkKb3yNHxUxOUfcxGzOXeLHXK4UrasBtTwGxt0aNXEx
-        KqxYtNnINbTp264Az92ahkiDSpncFabMw/7b4silKJuGxkrvjNpcUYWuchEdHTHB
-        fDdDl3N7743U+l96N3f+eaSVz+L69dmAgpgjwjfQMwVPrbnXRRr7p08bw==
-X-ME-Sender: <xms:Q7SKZPMuJkaLI5Y-d_7mvY3ZzbbT0FEEuwPtSl9JgPhGt90x94zHoA>
-    <xme:Q7SKZJ9ranbNFjcNVZvpMXW4u7abOOtP1EQzXRtepgXWYeyfqXKGk-BUgG63fy4zW
-    WASrb0up6auYA>
-X-ME-Received: <xmr:Q7SKZOQE9ReEJtOd-OoSfyoPUFoTbM-JU9ReynN6CFl8Ury6NsxONCz2J3cFmGSNozI5gnITGm79BBVoCdtio4b4udtjtLrn1iN16Q>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedvuddguddufecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
-    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepveeuhe
-    ejgfffgfeivddukedvkedtleelleeghfeljeeiueeggeevueduudekvdetnecuvehluhhs
-    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
-    hhrdgtohhm
-X-ME-Proxy: <xmx:Q7SKZDtZy9RwnYqJ6T_bmizwe9qh0chtn2uRUdgRZNt_PwGI4lIpXg>
-    <xmx:Q7SKZHfEZ_UvK2jZnrv2cQL2JtQ2TcqBBL03d45TEcN8KKa9PSmWXw>
-    <xmx:Q7SKZP0sTIgJrm0zmLF01qxhRURTYDq3T1kUCu69KCJ9StPEfTI-OA>
-    <xmx:RLSKZGzuPu5zcOujzhQb_WzvIRwUOQ75OUrjQLumlUPYutoQc5dV8w>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 15 Jun 2023 02:48:35 -0400 (EDT)
-Date:   Thu, 15 Jun 2023 08:48:32 +0200
-From:   Greg KH <greg@kroah.com>
-To:     Wolfram Sang <wsa@the-dreams.de>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Mario Limonciello <mario.limonciello@amd.com>,
+        with ESMTP id S243727AbjFOHQU (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 15 Jun 2023 03:16:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7155DE69;
+        Thu, 15 Jun 2023 00:14:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BFB3961239;
+        Thu, 15 Jun 2023 07:14:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BB0EC433C0;
+        Thu, 15 Jun 2023 07:14:14 +0000 (UTC)
+Date:   Thu, 15 Jun 2023 08:14:11 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Christoffer Dall <cdall@cs.columbia.edu>,
+        Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>,
+        Joey Gouly <joey.gouly@arm.com>,
+        Kristina Martsenko <kristina.martsenko@arm.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patch in the usb tree
-Message-ID: <2023061513-savings-legwarmer-17eb@gregkh>
-References: <20230615151958.46746fe8@canb.auug.org.au>
- <ZIqy0mLPipq2p/N8@ninjato>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>
+Subject: Re: linux-next: manual merge of the kvm-arm tree with the arm64 tree
+Message-ID: <ZIq6Q/TyZZZrJP2e@arm.com>
+References: <20230615122201.75e36abd@canb.auug.org.au>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZIqy0mLPipq2p/N8@ninjato>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230615122201.75e36abd@canb.auug.org.au>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Jun 15, 2023 at 08:42:26AM +0200, Wolfram Sang wrote:
-> Hi,
-> 
-> > The following commit is also in the i2c tree as a different commit
-> > (but the same patch):
-> 
-> thank you for the pointer!
-> 
-> > 
-> >   7b7efc925042 ("usb: typec: ucsi: Mark dGPUs as DEVICE scope")
-> > 
-> > This is commit
-> > 
-> >   a7fbfd44c020 ("usb: typec: ucsi: Mark dGPUs as DEVICE scope")
-> > 
-> > in the ic2 tree.
-> 
-> Oh, sorry, I didn't get a mail that it was already applied to the
-> usb-tree. Maybe I accidently erased it. What is the procedure now? I
-> guess I revert the version in the i2c tree?
+On Thu, Jun 15, 2023 at 12:22:01PM +1000, Stephen Rothwell wrote:
+> diff --cc arch/arm64/kernel/cpufeature.c
+> index 6ea7f23b1287,f6e3598760f1..000000000000
+> --- a/arch/arm64/kernel/cpufeature.c
+> +++ b/arch/arm64/kernel/cpufeature.c
+> @@@ -2662,27 -2656,23 +2677,44 @@@ static const struct arm64_cpu_capabilit
+>   		.cpu_enable = cpu_enable_dit,
+>   		ARM64_CPUID_FIELDS(ID_AA64PFR0_EL1, DIT, IMP)
+>   	},
+>  +	{
+>  +		.desc = "Memory Copy and Memory Set instructions",
+>  +		.capability = ARM64_HAS_MOPS,
+>  +		.type = ARM64_CPUCAP_SYSTEM_FEATURE,
+>  +		.matches = has_cpuid_feature,
+>  +		.cpu_enable = cpu_enable_mops,
+>  +		ARM64_CPUID_FIELDS(ID_AA64ISAR2_EL1, MOPS, IMP)
+>  +	},
+>  +	{
+>  +		.capability = ARM64_HAS_TCR2,
+>  +		.type = ARM64_CPUCAP_SYSTEM_FEATURE,
+>  +		.matches = has_cpuid_feature,
+>  +		ARM64_CPUID_FIELDS(ID_AA64MMFR3_EL1, TCRX, IMP)
+>  +	},
+>  +	{
+>  +		.desc = "Stage-1 Permission Indirection Extension (S1PIE)",
+>  +		.capability = ARM64_HAS_S1PIE,
+>  +		.type = ARM64_CPUCAP_BOOT_CPU_FEATURE,
+>  +		.matches = has_cpuid_feature,
+>  +		ARM64_CPUID_FIELDS(ID_AA64MMFR3_EL1, S1PIE, IMP)
+>  +	},
+> + 	{
+> + 		.desc = "Enhanced Virtualization Traps",
+> + 		.capability = ARM64_HAS_EVT,
+> + 		.type = ARM64_CPUCAP_SYSTEM_FEATURE,
+> + 		.sys_reg = SYS_ID_AA64MMFR2_EL1,
+> + 		.sign = FTR_UNSIGNED,
+> + 		.field_pos = ID_AA64MMFR2_EL1_EVT_SHIFT,
+> + 		.field_width = 4,
+> + 		.min_field_value = ID_AA64MMFR2_EL1_EVT_IMP,
+> + 		.matches = has_cpuid_feature,
+> + 	},
+> + 	{
+> + 		.desc = "VHE for hypervisor only",
+> + 		.capability = ARM64_KVM_HVHE,
+> + 		.type = ARM64_CPUCAP_SYSTEM_FEATURE,
+> + 		.matches = hvhe_possible,
+> + 	},
+>   	{},
+>   };
 
-We can leave both, merges should be simple.
+This looks fine. Thanks Stephen.
 
-thanks,
-
-greg k-h
+-- 
+Catalin

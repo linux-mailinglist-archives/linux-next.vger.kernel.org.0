@@ -2,43 +2,82 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D309E731003
-	for <lists+linux-next@lfdr.de>; Thu, 15 Jun 2023 09:00:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB27A730FB2
+	for <lists+linux-next@lfdr.de>; Thu, 15 Jun 2023 08:50:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244216AbjFOHAs (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 15 Jun 2023 03:00:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33438 "EHLO
+        id S238099AbjFOGuT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 15 Jun 2023 02:50:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244203AbjFOHAr (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 15 Jun 2023 03:00:47 -0400
-X-Greylist: delayed 599 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 15 Jun 2023 00:00:45 PDT
-Received: from pokefinder.org (pokefinder.org [135.181.139.117])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1BAC818D;
-        Thu, 15 Jun 2023 00:00:45 -0700 (PDT)
-Received: from localhost (120-123-142-46.pool.kielnet.net [46.142.123.120])
-        by pokefinder.org (Postfix) with ESMTPSA id 92B2BA407D9;
-        Thu, 15 Jun 2023 08:42:26 +0200 (CEST)
-Date:   Thu, 15 Jun 2023 08:42:26 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Greg KH <greg@kroah.com>,
+        with ESMTP id S244452AbjFOGtu (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 15 Jun 2023 02:49:50 -0400
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A87DB4204;
+        Wed, 14 Jun 2023 23:48:40 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id 9BC5332009F9;
+        Thu, 15 Jun 2023 02:48:36 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Thu, 15 Jun 2023 02:48:37 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1686811716; x=1686898116; bh=g5
+        P+F4WPLTq7am0FNx519f1VIiU+iFLrOmjrcmEUm4I=; b=RkgUcIOo/uA+ucHijs
+        qM4QhihSHunjSQcUtJJJydJp4PLK9B4kJSIiBGWek5wfDN2E7agy7nM3zKiZo/Bz
+        IAR4k7hNPkRx2BdzoXYIIPN9UfELVEEz+o0HzJnsh6JMp3dNYkOKIPiu4qj4HmkX
+        b5d2khQTE2ZDeExBAqq34SGaX58g3ukxZ4mOxVFGvewqhB/BA1N4OUxCm1r9Q94+
+        z54EWKLzKoCtFQ8CIzejSBprgz8exqqh3gDWY9ANVb/6MPj8hsmv76vy2w144+Fm
+        b6ftRDxre4gAvd16mb2KB7xXGRhevYHOuklNgLOR7WNY2tv/ADNGf92ICbgXth8J
+        t9+Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1686811716; x=1686898116; bh=g5P+F4WPLTq7a
+        m0FNx519f1VIiU+iFLrOmjrcmEUm4I=; b=MuKWzWmGUFIANSxXmFYmiou9CTwqF
+        vfYC2/koCrWBLsKc4K3hZ5//GNDHJEg52yHcXd4ghWSSpKxSxMNB8zm9bmO++Q1C
+        XQzTEePNtpgiOejESrlTETjTmtYql7UT1Sw4BYH0Fje/eD+C5wFUgG0tFyOwJ9dp
+        K3xCr2RJivlfUVDTc2oRBXkKb3yNHxUxOUfcxGzOXeLHXK4UrasBtTwGxt0aNXEx
+        KqxYtNnINbTp264Az92ahkiDSpncFabMw/7b4silKJuGxkrvjNpcUYWuchEdHTHB
+        fDdDl3N7743U+l96N3f+eaSVz+L69dmAgpgjwjfQMwVPrbnXRRr7p08bw==
+X-ME-Sender: <xms:Q7SKZPMuJkaLI5Y-d_7mvY3ZzbbT0FEEuwPtSl9JgPhGt90x94zHoA>
+    <xme:Q7SKZJ9ranbNFjcNVZvpMXW4u7abOOtP1EQzXRtepgXWYeyfqXKGk-BUgG63fy4zW
+    WASrb0up6auYA>
+X-ME-Received: <xmr:Q7SKZOQE9ReEJtOd-OoSfyoPUFoTbM-JU9ReynN6CFl8Ury6NsxONCz2J3cFmGSNozI5gnITGm79BBVoCdtio4b4udtjtLrn1iN16Q>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedvuddguddufecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
+    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepveeuhe
+    ejgfffgfeivddukedvkedtleelleeghfeljeeiueeggeevueduudekvdetnecuvehluhhs
+    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
+    hhrdgtohhm
+X-ME-Proxy: <xmx:Q7SKZDtZy9RwnYqJ6T_bmizwe9qh0chtn2uRUdgRZNt_PwGI4lIpXg>
+    <xmx:Q7SKZHfEZ_UvK2jZnrv2cQL2JtQ2TcqBBL03d45TEcN8KKa9PSmWXw>
+    <xmx:Q7SKZP0sTIgJrm0zmLF01qxhRURTYDq3T1kUCu69KCJ9StPEfTI-OA>
+    <xmx:RLSKZGzuPu5zcOujzhQb_WzvIRwUOQ75OUrjQLumlUPYutoQc5dV8w>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 15 Jun 2023 02:48:35 -0400 (EDT)
+Date:   Thu, 15 Jun 2023 08:48:32 +0200
+From:   Greg KH <greg@kroah.com>
+To:     Wolfram Sang <wsa@the-dreams.de>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
         Mario Limonciello <mario.limonciello@amd.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
 Subject: Re: linux-next: duplicate patch in the usb tree
-Message-ID: <ZIqy0mLPipq2p/N8@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa@the-dreams.de>,
-        Stephen Rothwell <sfr@canb.auug.org.au>, Greg KH <greg@kroah.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
+Message-ID: <2023061513-savings-legwarmer-17eb@gregkh>
 References: <20230615151958.46746fe8@canb.auug.org.au>
+ <ZIqy0mLPipq2p/N8@ninjato>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="XAanWRaf47t3F/aG"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230615151958.46746fe8@canb.auug.org.au>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+In-Reply-To: <ZIqy0mLPipq2p/N8@ninjato>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -47,55 +86,29 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+On Thu, Jun 15, 2023 at 08:42:26AM +0200, Wolfram Sang wrote:
+> Hi,
+> 
+> > The following commit is also in the i2c tree as a different commit
+> > (but the same patch):
+> 
+> thank you for the pointer!
+> 
+> > 
+> >   7b7efc925042 ("usb: typec: ucsi: Mark dGPUs as DEVICE scope")
+> > 
+> > This is commit
+> > 
+> >   a7fbfd44c020 ("usb: typec: ucsi: Mark dGPUs as DEVICE scope")
+> > 
+> > in the ic2 tree.
+> 
+> Oh, sorry, I didn't get a mail that it was already applied to the
+> usb-tree. Maybe I accidently erased it. What is the procedure now? I
+> guess I revert the version in the i2c tree?
 
---XAanWRaf47t3F/aG
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+We can leave both, merges should be simple.
 
-Hi,
+thanks,
 
-> The following commit is also in the i2c tree as a different commit
-> (but the same patch):
-
-thank you for the pointer!
-
->=20
->   7b7efc925042 ("usb: typec: ucsi: Mark dGPUs as DEVICE scope")
->=20
-> This is commit
->=20
->   a7fbfd44c020 ("usb: typec: ucsi: Mark dGPUs as DEVICE scope")
->=20
-> in the ic2 tree.
-
-Oh, sorry, I didn't get a mail that it was already applied to the
-usb-tree. Maybe I accidently erased it. What is the procedure now? I
-guess I revert the version in the i2c tree?
-
-All the best,
-
-   Wolfram
-
-
---XAanWRaf47t3F/aG
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmSKstEACgkQFA3kzBSg
-KbZaBg/+IXkvqVhVAQJ/koIVjSg8MI/sPly7KInY++YwLdA+gDvyqTR0h6zza2YN
-bQWtiVCLxH5gEcA6UmIZ0qPvrf/oDs66rDlSJUzDXCaaCoj8BUOSZ0o0J/COX8yq
-icEnyxW6Xr2K3/oFgPuyblaklCtkQMwOLi8XwNCCniV4zj2i2fTx5cCjST1Zqmgz
-XoRzeLQZdxpIliGqoDf60ZccKe69IxAbcxN7+JnTtSP5gwkFuc95EgwgChGd3fWi
-hA5uNgIYHxr1vNaUyxFT15LUBm9k+R805rX3amC9ekJKekplYJMTY9CrwXqQGTCV
-OKyIx3u3FdqpmfB1NTx3ZtxM8tj0YAhB19KMjaa1KjF/u6T6jZ8tKXVAni6foWU7
-1oDt0ZJrYfUb0Yy3lhrzZPbDz6oTb+KfhT/3Gtjyf6dkO45WARKLfQJLWSf9qE8C
-0b6WJ/8l0tbCLSy1cT1aKoWYAo4e0n2Lvsv6Or117gCHxdzmkxpAWRX4Mg4skpxN
-kt/6nEziJf+/zEim1FCQchQM2/JpT4c0gAF3IUPCSwN4gR/3crN8xOT6nRJVtkL+
-Zczu1ov3x7ifrvDpWyymHIFinpvqHpb9PgPgBsZA7ClYr8LcQKvzF2P11zXaqVcq
-Yn5Jjq/9ub6NqFmLDXDLYXZp8Sg23aVQNXdliNS2oTfyHEBrt1w=
-=MfZ1
------END PGP SIGNATURE-----
-
---XAanWRaf47t3F/aG--
+greg k-h

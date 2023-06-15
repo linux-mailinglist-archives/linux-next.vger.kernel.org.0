@@ -2,78 +2,57 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E26A731CB9
-	for <lists+linux-next@lfdr.de>; Thu, 15 Jun 2023 17:31:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27201731D3F
+	for <lists+linux-next@lfdr.de>; Thu, 15 Jun 2023 18:00:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345021AbjFOPbZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 15 Jun 2023 11:31:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58818 "EHLO
+        id S241973AbjFOQAW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 15 Jun 2023 12:00:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345197AbjFOPbM (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 15 Jun 2023 11:31:12 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09AE3271E
-        for <linux-next@vger.kernel.org>; Thu, 15 Jun 2023 08:30:53 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id ffacd0b85a97d-30c4c1fd511so7541637f8f.1
-        for <linux-next@vger.kernel.org>; Thu, 15 Jun 2023 08:30:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares.net; s=google; t=1686843051; x=1689435051;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=SyGMF8+HtCyfqjkf2xIkvXLskCg/yArd1BF3qc60+kw=;
-        b=zgv0INE8Z2tpPOlMo7VO2DZ6OVKRxYKr2xH4H3oc41nqbMqPStrL3xPv7tGYXs3rto
-         t5NrHtjD2EC4UxnZgJfomD2LZQtaDh7L8Hhmk5woFZD9MNd1x3yI/NQzZcBMlK5hhV62
-         3N9dI0I8iuv2U69EAhXo8YYduk1ZfqhEQFscXHOk9o5sLlr1yi9kHJiWDnxQgzNXVdvF
-         wBNZe9AMS5v9lPTt2sSIvz4PFOdENKviwVCJb9e4yslTalrE/04WfGrEaPCKwLzbt3c0
-         bmvqLjoB9xWhyj9FTmVlHzxj/zK/7SmGQCVWjDNjBmvE2g/uVd6wL/1oyJFnbtFfAiJd
-         M5JA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686843051; x=1689435051;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SyGMF8+HtCyfqjkf2xIkvXLskCg/yArd1BF3qc60+kw=;
-        b=R1OO/gToS+6VJECxrUTy4kDaQmyrqnM+JZg+Ltj0bZjvZsJll2zdxueOE57+/07DuZ
-         zamFVVtZmMteXvPSlb7LJThIImLWW1ZM5R0FylLAaJIueZP6wboMUl1L15WypHCZZv8/
-         Wz3eu9T56ylC4SfkfY1KsrnUNVCvx17wbnJ/SibX+jtadxg4qDXmbpmzcDGFkeWLv0+x
-         EbOsrmMH6zAXKulomPvZ6Fn44aFIJX5k6lXuBoIiXoNUkSXdIEliHRbcYUl760DIpeNu
-         h5mG+ym7/l+vWslYi+f6LvkPVu0K1H3+cdV4JbY0zouJIcCXGpHEXLjVi3CF3ITrQbXY
-         4/+g==
-X-Gm-Message-State: AC+VfDwFkI9XKPMirzO4gRapLvnoVShYv5N+VGnsf0fxjiT882M3p7xQ
-        Q3sJgR1/wyQulZbA+9OaXK1W7g==
-X-Google-Smtp-Source: ACHHUZ6ISyzehiFWYn6cl4rypJE5rlQnvkY5cKgTooLnDoXIIUL/pXCC6YO6Gubc2pA/v0/wEckMKw==
-X-Received: by 2002:a5d:42c7:0:b0:30f:ca58:cb10 with SMTP id t7-20020a5d42c7000000b0030fca58cb10mr7356789wrr.22.1686843051177;
-        Thu, 15 Jun 2023 08:30:51 -0700 (PDT)
-Received: from [10.124.6.73] ([195.181.172.155])
-        by smtp.gmail.com with ESMTPSA id b14-20020a056000054e00b0030c2e3c7fb3sm21102095wrf.101.2023.06.15.08.30.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Jun 2023 08:30:50 -0700 (PDT)
-Message-ID: <964937b8-a7a1-71ad-5e12-8d4a854504a1@tessares.net>
-Date:   Thu, 15 Jun 2023 17:30:49 +0200
+        with ESMTP id S241316AbjFOQAV (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 15 Jun 2023 12:00:21 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47A1F295B;
+        Thu, 15 Jun 2023 09:00:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=UrGANt7scBrisMpPSlfWbqcoa3cbh52COIYVdt4D2VY=; b=0QxAoBynm1SLoxxSI3Gclka5Vu
+        xUULIUSel2hEg2rLJ8O9BZaZHyrMxKQ4yYY3EdEF0sTzbZX4au+/KlFVLNOHc4Kwt+VY+yBCsexlJ
+        Es2+5cYctqb0heDwLAQOeW7ojHu52MJPhPFIH/XyxuIR/11WfXaeusqkohM1i9yBydIyIKjsC14tl
+        oRChPCxLXAAcvbchHQEuz9TI6BHX0crznjLQKOPyMHsfq247yt2Po1gdxDJXp2J5y7Er6f1yJ3WpJ
+        VEx43/do3B9eGlelwjIqPk1bDMRE8jIKvSSIJ748RNKabhQhDUsKMKMhJngRq17yPgthx/ySdfX0B
+        o5dl9luQ==;
+Received: from [2601:1c2:980:9ec0::2764]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1q9pOL-00FMVx-3A;
+        Thu, 15 Jun 2023 16:00:10 +0000
+Message-ID: <e2b46606-7ebc-c9a4-4f9a-873c0e71da5e@infradead.org>
+Date:   Thu, 15 Jun 2023 09:00:08 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: linux-next: manual merge of the net-next tree with the net tree
-Content-Language: en-GB
-To:     Jakub Kicinski <kuba@kernel.org>
+ Thunderbird/102.11.2
+Subject: Re: linux-next: Tree for Jun 2 (arch/powerpc/kernel/iommu.c)
+Content-Language: en-US
+To:     Timothy Pearson <tpearson@raptorengineering.com>,
+        Michael Ellerman <mpe@ellerman.id.au>
 Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Mat Martineau <martineau@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-References: <20230614111752.74207e28@canb.auug.org.au>
- <c473ffea-49c3-1c9c-b35c-cd3978369d0f@tessares.net>
- <20230614104133.55c93a32@kernel.org>
-From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-In-Reply-To: <20230614104133.55c93a32@kernel.org>
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Alexey Kardashevskiy <aik@ozlabs.ru>
+References: <20230602140143.0af52cee@canb.auug.org.au>
+ <2d188c87-ef34-3812-7330-a985f756d959@infradead.org>
+ <87h6rogjok.fsf@mail.lhotse>
+ <586983120.3136676.1685851048873.JavaMail.zimbra@raptorengineeringinc.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <586983120.3136676.1685851048873.JavaMail.zimbra@raptorengineeringinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,33 +60,66 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Jakub,
+Hi Timothy,
 
-On 14/06/2023 19:41, Jakub Kicinski wrote:
-> On Wed, 14 Jun 2023 10:51:16 +0200 Matthieu Baerts wrote:
->> I added a note about the conflicts on the cover-letter:
->>
->> https://lore.kernel.org/netdev/20230609-upstream-net-20230610-mptcp-selftests-support-old-kernels-part-3-v1-0-2896fe2ee8a3@tessares.net/
->>
->> Maybe it was not a good place? I didn't know where to put it as there
->> were multiple patches that were conflicting with each others even if the
->> major conflicts were between 47867f0a7e83 ("selftests: mptcp: join: skip
->> check if MIB counter not supported") and 0639fa230a21 ("selftests:
->> mptcp: add explicit check for new mibs"). I guess next time I should add
->> a comment referring to the cover-letter in the patches creating conflicts.
+On 6/3/23 20:57, Timothy Pearson wrote:
 > 
-> Hm, yeah, I think the cover letter may not be the best way.
-> Looks like Stephen didn't use it, anyway, and it confused patchwork.
-> No better idea where to put it tho :(
 > 
-> Maybe a link to a git rerere resolution uploaded somewhere we can wget
-> from easily?
+> ----- Original Message -----
+>> From: "Michael Ellerman" <mpe@ellerman.id.au>
+>> To: "Randy Dunlap" <rdunlap@infradead.org>, "Stephen Rothwell" <sfr@canb.auug.org.au>, "Linux Next Mailing List"
+>> <linux-next@vger.kernel.org>
+>> Cc: "linux-kernel" <linux-kernel@vger.kernel.org>, "linuxppc-dev" <linuxppc-dev@lists.ozlabs.org>, "Alexey
+>> Kardashevskiy" <aik@ozlabs.ru>, "Timothy Pearson" <tpearson@raptorengineering.com>
+>> Sent: Saturday, June 3, 2023 7:22:51 PM
+>> Subject: Re: linux-next: Tree for Jun 2 (arch/powerpc/kernel/iommu.c)
+> 
+>> Randy Dunlap <rdunlap@infradead.org> writes:
+>>> On 6/1/23 21:01, Stephen Rothwell wrote:
+>>>> Hi all,
+>>>>
+>>>> Changes since 20230601:
+>>>>
+>>>
+>>> On powerpc64, a randconfig failed with:
+>>>
+>>> In file included from ../include/linux/list.h:5,
+>>>                  from ../include/linux/preempt.h:11,
+>>>                  from ../include/linux/spinlock.h:56,
+>>>                  from ../include/linux/mmzone.h:8,
+>>>                  from ../include/linux/gfp.h:7,
+>>>                  from ../include/linux/slab.h:15,
+>>>                  from ../arch/powerpc/kernel/iommu.c:15:
+>>> ../arch/powerpc/kernel/iommu.c: In function
+>>> 'spapr_tce_setup_phb_iommus_initcall':
+>>> ../arch/powerpc/kernel/iommu.c:1391:36: error: 'hose_list' undeclared (first use
+>>> in this function); did you mean 'zonelist'?
+>>>  1391 |         list_for_each_entry(hose, &hose_list, list_node) {
+>>>       |                                    ^~~~~~~~~
+>> ...
+>>
+>> hose_list is in pci-common.c which is built when PCI=y.
+>>
+>> PSERIES and POWERNV force PCI=y.
+>>
+>> But this config has neither:
+>>
+>> # CONFIG_PPC_POWERNV is not set
+>> # CONFIG_PPC_PSERIES is not set
+>> CONFIG_HAVE_PCI=y
+>> # CONFIG_PCI is not set
+>> # CONFIG_COMMON_CLK_RS9_PCIE is not set
+>>
+>>
+>> Probably the spapr_tce code should be wrapped in an #ifdef that is only
+>> enabled when POWERNV || PSERIES is enabled.
+>>
+>> cheers
+> 
+> Sounds reasonable, I was going to look into this further over the weekend.  I can put together a patch for Monday if that works?
 
-Good idea, I didn't think about git rerere! I will try to remember about
-that next time :)
+Did you prepare a patch for this? I am still seeing this build error.
 
-Cheers,
-Matt
+thanks.
 -- 
-Tessares | Belgium | Hybrid Access Solutions
-www.tessares.net
+~Randy

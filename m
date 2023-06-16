@@ -2,89 +2,123 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9E3473239B
-	for <lists+linux-next@lfdr.de>; Fri, 16 Jun 2023 01:28:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAFE173243C
+	for <lists+linux-next@lfdr.de>; Fri, 16 Jun 2023 02:25:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230000AbjFOX2Q (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 15 Jun 2023 19:28:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51730 "EHLO
+        id S229486AbjFPAZe (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 15 Jun 2023 20:25:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231841AbjFOX2P (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 15 Jun 2023 19:28:15 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF14A359F;
-        Thu, 15 Jun 2023 16:27:54 -0700 (PDT)
+        with ESMTP id S229453AbjFPAZd (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 15 Jun 2023 20:25:33 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AD56294A;
+        Thu, 15 Jun 2023 17:25:32 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Qhz3q4Pj2z4wjG;
-        Fri, 16 Jun 2023 09:27:51 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Qj0LF5ThSz4wgm;
+        Fri, 16 Jun 2023 10:25:25 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1686871673;
-        bh=MG6iU+m/dTJRRmntf6pbcRuvIpqIn5ipHqp1iCVi2tM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=qGjAnQtyEhKdht9o9QqMd5PvcmiN2+xxwLJVrNjNjl8ET9VImh1uGKKshvEJlMnjC
-         k6KL2kok4HxFmtGjHlEbdeVgrcp+8T7sCyTSfMFz2Q4ZaRSwJCunSeQDkxJZRIcsF1
-         PwvIBcmsPr7hv28XSymB//UnBraRkOzD1jwax0mS536taUlL6rGkw9Y3VOyALQDYdn
-         emoASw5pR/sdpxQ8Nsf08IO/3FImJu5MmNy5ZEo7g3FnG7+9EKYTocvtiCcsLihqQ7
-         xDSIK2yE/9Ekxn1bBbOJ8EDLqPplnDdGQW0SUoLvRhb3bz7i5KOrGXgFHRfRRvUg3V
-         lHXb/YarGUXLg==
-Date:   Fri, 16 Jun 2023 09:27:50 +1000
+        s=201702; t=1686875126;
+        bh=+/o2wJdvhNn8owmtxm/tIRC6tn+RcQNcjmwiB22+zVg=;
+        h=Date:From:To:Cc:Subject:From;
+        b=m1jw6Z0h3IRyqMc4AM9INTrWVvilJbZK4KTxwahHwOULPV5tax6BHXYxwKu78J8Se
+         Hwr3/DE2MYMHWgNdb1SR6Q5Hp9ZRlMHEpCCWHsOWYqKJOkWmybh/0Y/CzQ4V2qrR4X
+         1NJQ0xHphPCZzvtxPL3iAva0zXFKQludkO1QaXAr4reKAWpbP++zIfdcHnWIBVuKGs
+         yX0ufvFCNCMZ7Aid6ReCaRB8XsLbOaxbS8nxQdgyOnrsYPrretS9bB13u3rkNlatf1
+         9ZphMKn5k+sAK4UcgTMcIbOivCNizgWNFsJs4MqakOljHTwl32lIWoIdV2TxjXsO9Z
+         34lXwig7Qb7pg==
+Date:   Fri, 16 Jun 2023 10:25:24 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Von Dentz, Luiz" <luiz.von.dentz@intel.com>
-Cc:     Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
+To:     Jaegeuk Kim <jaegeuk@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Christoph Hellwig <hch@lst.de>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Linux Next Mailing List" <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the bluetooth tree
-Message-ID: <20230616092750.3d00fd7a@canb.auug.org.au>
-In-Reply-To: <PH0PR11MB5126F2B2E020774AF8D91299D35BA@PH0PR11MB5126.namprd11.prod.outlook.com>
-References: <PH0PR11MB5126F2B2E020774AF8D91299D35BA@PH0PR11MB5126.namprd11.prod.outlook.com>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Lu Hongfei <luhongfei@vivo.com>, Yangtao Li <frank.li@vivo.com>
+Subject: linux-next: manual merge of the f2fs tree with the mm tree
+Message-ID: <20230616102524.73bb5efb@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/kr.oGh/At6HymqKuhS0Gj90";
+Content-Type: multipart/signed; boundary="Sig_/1K8=XFi3JGtX_ErmP+2iZxH";
  protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/kr.oGh/At6HymqKuhS0Gj90
+--Sig_/1K8=XFi3JGtX_ErmP+2iZxH
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Luiz,
+Hi all,
 
-On Thu, 15 Jun 2023 23:06:59 +0000 "Von Dentz, Luiz" <luiz.von.dentz@intel.=
-com> wrote:
->
-> Im on bussiness trip this week thus the delay, will be back next week
-> so I hope this can wait until then.
+Today's linux-next merge of the f2fs tree got a conflict in:
 
-No worries, just checking that it wasn't forgotten.
+  fs/f2fs/file.c
+
+between commit:
+
+  0d625446d0a4 ("backing_dev: remove current->backing_dev_info")
+
+from the mm tree and commit:
+
+  d61812691182 ("f2fs: enable nowait async buffered writes")
+
+from the f2fs tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/kr.oGh/At6HymqKuhS0Gj90
+diff --cc fs/f2fs/file.c
+index 7134fe8bd008,41e7c2b80f31..000000000000
+--- a/fs/f2fs/file.c
++++ b/fs/f2fs/file.c
+@@@ -4514,12 -4535,12 +4535,9 @@@ static ssize_t f2fs_buffered_write_iter
+  	struct inode *inode =3D file_inode(file);
+  	ssize_t ret;
+ =20
+- 	if (iocb->ki_flags & IOCB_NOWAIT)
+- 		return -EOPNOTSUPP;
+-=20
+ -	current->backing_dev_info =3D inode_to_bdi(inode);
+  	ret =3D generic_perform_write(iocb, from);
+ -	current->backing_dev_info =3D NULL;
+ =20
+  	if (ret > 0) {
+ -		iocb->ki_pos +=3D ret;
+  		f2fs_update_iostat(F2FS_I_SB(inode), inode,
+  						APP_BUFFERED_IO, ret);
+  	}
+
+--Sig_/1K8=XFi3JGtX_ErmP+2iZxH
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSLnnYACgkQAVBC80lX
-0GzUlgf/WNwtoth7cjdbOhbEzGBCAajHiAVRuIqjCShz+zc31sei87DTo+iRV99R
-5aESBRSEIwClft38OjiWWDO+7SE3+WGh3Qf6lJEwhBgl1LbVLPEojSEmRFJosl+P
-rBVc0nCTLKPyeTINRcvLMwKx7hLJ1tAWsYBmEnh4SxpcY4AiXWmhmbkcIvmOUI75
-Gvv3FzKg1VFOnfmuTvm6xsDMPA6zT1A8kvirkZyUATUZby/TqIa8wW6kkFksjB3v
-xlpoS0oEPEzeWSt0fXJYxpvKNU73yaao0kLGB11RMhu101tztmVShYY2Onv28ZE/
-Q/i4SF0cXg/chz6fPsALM7cSJzlNrg==
-=0xQt
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSLq/UACgkQAVBC80lX
+0GwVMwgAnd5ImyDarc6jxM1+o+593CR9ganMycSCvedlLU2ar4g7p+0wk4gNj09G
+CFXVGJAyxVecB+0Vf/k62XSgH4aqTo7C0nbOJWUwDDFCkSDJAuiBMIBKEPhaj6ue
+Z5sJsmxElShlKmHeiS0MXPDijtw/qX/LXotXY0Zp7viyD0+GHVb3kDQh2WvNoKcm
+M3849td1zC8fLZpcdEOA8dHz7J+5YIS01ANtoYShrAChPEr+Zu17KFMRTeQ/R6m1
+Y4PXieRoJgyhLQxrOLQwaPIviCRPo3BHsFNs9WFw6du7mkEff1m5rSzgczJG2J0d
+RYeNIcIMQGfLypbqzbrg1+Xl3du95g==
+=9ED2
 -----END PGP SIGNATURE-----
 
---Sig_/kr.oGh/At6HymqKuhS0Gj90--
+--Sig_/1K8=XFi3JGtX_ErmP+2iZxH--

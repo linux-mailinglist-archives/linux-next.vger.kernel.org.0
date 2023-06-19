@@ -2,50 +2,55 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E979735E72
-	for <lists+linux-next@lfdr.de>; Mon, 19 Jun 2023 22:25:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8731A735EA2
+	for <lists+linux-next@lfdr.de>; Mon, 19 Jun 2023 22:43:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229783AbjFSUZn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 19 Jun 2023 16:25:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35410 "EHLO
+        id S229664AbjFSUnW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 19 Jun 2023 16:43:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229757AbjFSUZm (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 19 Jun 2023 16:25:42 -0400
+        with ESMTP id S229472AbjFSUnV (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 19 Jun 2023 16:43:21 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03294FE;
-        Mon, 19 Jun 2023 13:25:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FCCA128;
+        Mon, 19 Jun 2023 13:43:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8BBF460EF6;
-        Mon, 19 Jun 2023 20:25:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE0D4C433C8;
-        Mon, 19 Jun 2023 20:25:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1687206338;
-        bh=WAYvKIcP5JGcLoFhs+xJByJUau+tOkVoHGTkkvrP4JU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=0wXaJbOrGQB8I5NagWd0d0bwZnuFr0sqwVgcuephvPeNk8PiIDJ6lAJRWIJ30F2eA
-         Ma2AXZUP278LGHlvO8gKasSqhaH7kP3JiqAIWDa1SUowswj56q4jxDUJ3pm1vlsewf
-         J9RBAQoe+JoYDiibsRs/mGswTn58y/6Z0sad7Ttw=
-Date:   Mon, 19 Jun 2023 13:25:37 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 98A2C60EF8;
+        Mon, 19 Jun 2023 20:43:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0282C433C0;
+        Mon, 19 Jun 2023 20:43:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687207396;
+        bh=0Um0HsgUBK5KbSF7mk/Cw2z163gOV5GsbOdaUkWRdas=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BDtgplCEFY5wppuORRrvbiclJcHFU7fkmU5rL+28u1onKj8YCXj9yrrqBzQzUVr/a
+         KL9Cy5qS3V+P00+LYYDWYYi0SZKyBZImKvnt9kCyXuPeAWv0xmmQBeuNkaWN/zLCTu
+         cLwEU/LXmu9MpB5u2cKIe38B05ufpZfNLpmaJYsWu+E+GA6uyApz6rV8koa2PjqtfE
+         YZ9BLb9FQ89JnQkAjR50rmrmMbQhBAv9+mpvXRZmSoycKEmYzcBglGbni19QTHRQ4M
+         VXHL3A2k4udHeT1S5nupxkCF8jnYnJPH1/yaa7tJdbwznUxlbseeOztCfbl0DN2TxQ
+         n1YySABlEejlw==
+Date:   Mon, 19 Jun 2023 21:43:11 +0100
+From:   Will Deacon <will@kernel.org>
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        catalin.marinas@arm.com
 Subject: Re: linux-next: manual merge of the mm tree with Linus' tree
-Message-Id: <20230619132537.d3ae1873ad90e9fed47437d6@linux-foundation.org>
-In-Reply-To: <20230619092355.133c5cdb@canb.auug.org.au>
+Message-ID: <20230619204309.GA13937@willie-the-truck>
 References: <20230619092355.133c5cdb@canb.auug.org.au>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230619092355.133c5cdb@canb.auug.org.au>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -54,10 +59,9 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, 19 Jun 2023 09:23:55 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+Hi Stephen,
 
-> Hi all,
-> 
+On Mon, Jun 19, 2023 at 09:23:55AM +1000, Stephen Rothwell wrote:
 > Today's linux-next merge of the mm tree got a conflict in:
 > 
 >   mm/mmap.c
@@ -80,28 +84,131 @@ On Mon, 19 Jun 2023 09:23:55 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote
 > cooperating with the maintainer of the conflicting tree to minimise any
 > particularly complex conflicts.
 > 
+> -- 
+> Cheers,
+> Stephen Rothwell
+> 
+> diff --cc mm/mmap.c
+> index 98cda6f72605,474a0d856622..000000000000
+> --- a/mm/mmap.c
+> +++ b/mm/mmap.c
+> @@@ -2398,15 -2409,27 +2396,29 @@@ do_vmi_align_munmap(struct vma_iterato
+>   			if (error)
+>   				goto end_split_failed;
+>   		}
+>  -		mas_set(&mas_detach, count);
+>  -		error = munmap_sidetree(next, &mas_detach);
+>  -		if (error)
+>  -			goto munmap_sidetree_failed;
+>  +		vma_start_write(next);
+> - 		mas_set_range(&mas_detach, next->vm_start, next->vm_end - 1);
+>  +		if (mas_store_gfp(&mas_detach, next, GFP_KERNEL))
+>  +			goto munmap_gather_failed;
+>  +		vma_mark_detached(next, true);
+>  +		if (next->vm_flags & VM_LOCKED)
+>  +			locked_vm += vma_pages(next);
+>   
+>   		count++;
+> + 		if (unlikely(uf)) {
+> + 			/*
+> + 			 * If userfaultfd_unmap_prep returns an error the vmas
+> + 			 * will remain split, but userland will get a
+> + 			 * highly unexpected error anyway. This is no
+> + 			 * different than the case where the first of the two
+> + 			 * __split_vma fails, but we don't undo the first
+> + 			 * split, despite we could. This is unlikely enough
+> + 			 * failure that it's not worth optimizing it for.
+> + 			 */
+> + 			error = userfaultfd_unmap_prep(next, start, end, uf);
+> + 
+> + 			if (error)
+> + 				goto userfaultfd_error;
+> + 		}
+>   #ifdef CONFIG_DEBUG_VM_MAPLE_TREE
+>   		BUG_ON(next->vm_start < start);
+>   		BUG_ON(next->vm_start > end);
+> @@@ -2454,14 -2455,18 +2444,20 @@@
+>   		BUG_ON(count != test_count);
+>   	}
+>   #endif
+> - 	/* Point of no return */
+>  +	error = -ENOMEM;
+> - 	vma_iter_set(vmi, start);
+> + 	while (vma_iter_addr(vmi) > start)
+> + 		vma_iter_prev_range(vmi);
+> + 
+>   	if (vma_iter_clear_gfp(vmi, start, end, GFP_KERNEL))
+>  -		return -ENOMEM;
+>  +		goto clear_tree_failed;
+>   
+>  +	mm->locked_vm -= locked_vm;
+>   	mm->map_count -= count;
+> + 	prev = vma_iter_prev_range(vmi);
+> + 	next = vma_next(vmi);
+> + 	if (next)
+> + 		vma_iter_prev_range(vmi);
+> + 
+>   	/*
+>   	 * Do not downgrade mmap_lock if we are next to VM_GROWSDOWN or
+>   	 * VM_GROWSUP VMA. Such VMAs can change their size under
 
-Thanks, Stephen.
+This resolution seems to be causing horrible problems on arm64 with 16k
+pages. I see things like the crash below, but the two branches being merged
+are fine on their own.
 
-We'll push the series "Reduce preallocations for maple tree" into the
-next -rc cycle, so this issue should go away.
+Will
 
-These:
+--->8
 
-maple_tree-add-benchmarking-for-mas_for_each.patch
-maple_tree-add-benchmarking-for-mas_prev.patch
-mm-move-unmap_vmas-declaration-to-internal-header.patch
-mm-change-do_vmi_align_munmap-side-tree-index.patch
-mm-remove-prev-check-from-do_vmi_align_munmap.patch
-maple_tree-introduce-__mas_set_range.patch
-mm-remove-re-walk-from-mmap_region.patch
-maple_tree-adjust-node-allocation-on-mas_rebalance.patch
-maple_tree-re-introduce-entry-to-mas_preallocate-arguments.patch
-mm-use-vma_iter_clear_gfp-in-nommu.patch
-mm-set-up-vma-iterator-for-vma_iter_prealloc-calls.patch
-maple_tree-move-mas_wr_end_piv-below-mas_wr_extend_null.patch
-maple_tree-update-mas_preallocate-testing.patch
-maple_tree-refine-mas_preallocate-node-calculations.patch
-maple_tree-reduce-resets-during-store-setup.patch
-mm-mmap-change-vma-iteration-order-in-do_vmi_align_munmap.patch
+[ 1353.914809] BUG: Bad rss-counter state mm:fffffff001065580 type:MM_ANONPAGES val:4
+[ 1354.145486] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
+[ 1354.146465] Mem abort info:
+[ 1354.146894]   ESR = 0x0000000096000006
+[ 1354.148049]   EC = 0x25: DABT (current EL), IL = 32 bits
+[ 1354.148754]   SET = 0, FnV = 0
+[ 1354.149030]   EA = 0, S1PTW = 0
+[ 1354.149429]   FSC = 0x06: level 2 translation fault
+[ 1354.149948] Data abort info:
+[ 1354.150278]   ISV = 0, ISS = 0x00000006, ISS2 = 0x00000000
+[ 1354.150822]   CM = 0, WnR = 0, TnD = 0, TagAccess = 0
+[ 1354.151725]   GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0
+[ 1354.152293] user pgtable: 16k pages, 36-bit VAs, pgdp=0000000045928000
+[ 1354.152882] [0000000000000000] pgd=0000000000000000, p4d=0000000000000000, pud=0000000000000000, pmd=0000000000000000
+[ 1354.155005] Internal error: Oops: 0000000096000006 [#1] PREEMPT SMP
+[ 1354.156871] Modules linked in:
+[ 1354.158072] CPU: 3 PID: 289 Comm: (sd-pam) Not tainted 6.4.0-rc7-next-20230619 #1
+[ 1354.160463] Hardware name: QEMU QEMU Virtual Machine, BIOS 0.0.0 02/06/2015
+[ 1354.161566] pstate: 63400009 (nZCv daif +PAN -UAO +TCO +DIT -SSBS BTYPE=--)
+[ 1354.162179] pc : __rb_erase_color+0xb8/0x24c
+[ 1354.164370] lr : vma_interval_tree_remove+0x2b4/0x2c8
+[ 1354.165267] sp : fffffff880b13940
+[ 1354.165648] x29: fffffff880b13940 x28: fffffff001b81c30 x27: 0000000000000001
+[ 1354.166570] x26: fffffff001b81760 x25: 0000000f9c000000 x24: ffffffffffffffff
+[ 1354.167722] x23: fffffff880b13a98 x22: 0000000000000000 x21: fffffff002d57068
+[ 1354.168422] x20: fffffff00450fc10 x19: fffffffe1c02f098 x18: fffffff000705f41
+[ 1354.170661] x17: fffffff001947600 x16: 0000000000000003 x15: 0000000000000001
+[ 1354.171717] x14: fffffffe1d7de5d8 x13: fffffff00450fc18 x12: 0000000000000000
+[ 1354.172636] x11: 000000000000000a x10: 000000000000000a x9 : 000000000000000a
+[ 1354.173118] x8 : 0000000000000000 x7 : 0000000000000000 x6 : 0000000000000000
+[ 1354.173555] x5 : 00000000810000dd x4 : fffffffff004ede0 x3 : 00000000810000dd
+[ 1354.174061] x2 : fffffffe1c02f098 x1 : fffffff002d57068 x0 : fffffff00450fc10
+[ 1354.174684] Call trace:
+[ 1354.175325]  __rb_erase_color+0xb8/0x24c
+[ 1354.176114]  vma_interval_tree_remove+0x2b4/0x2c8
+[ 1354.176558]  unlink_file_vma+0x54/0x94
+[ 1354.176822]  free_pgtables+0xe4/0x1ac
+[ 1354.177181]  exit_mmap+0x164/0x288
+[ 1354.177473]  __mmput+0x40/0x140
+[ 1354.177667]  mmput+0x28/0x60
+[ 1354.177977]  exit_mm+0x94/0xd4
+[ 1354.178362]  do_exit+0x238/0x83c
+[ 1354.179301]  do_group_exit+0x70/0x98
+[ 1354.179773]  get_signal+0x67c/0x708
+[ 1354.180092]  do_notify_resume+0x150/0x1350
+[ 1354.180597]  el0_interrupt+0x80/0x150
+[ 1354.181068]  __el0_irq_handler_common+0x18/0x24
+[ 1354.181438]  el0t_64_irq_handler+0x10/0x1c
+[ 1354.181788]  el0t_64_irq+0x190/0x194
+[ 1354.182908] Code: 394002e8 37000428 1400002c f9400a96 (394002c8) 
+[ 1354.184629] ---[ end trace 0000000000000000 ]---
 

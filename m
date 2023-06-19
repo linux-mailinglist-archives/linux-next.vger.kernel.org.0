@@ -2,85 +2,93 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E4F1735FDC
-	for <lists+linux-next@lfdr.de>; Tue, 20 Jun 2023 00:30:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B430735FE6
+	for <lists+linux-next@lfdr.de>; Tue, 20 Jun 2023 00:34:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229647AbjFSWaZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 19 Jun 2023 18:30:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35870 "EHLO
+        id S229593AbjFSWek (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 19 Jun 2023 18:34:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbjFSWaY (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 19 Jun 2023 18:30:24 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D22EF103;
-        Mon, 19 Jun 2023 15:30:21 -0700 (PDT)
+        with ESMTP id S229462AbjFSWej (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 19 Jun 2023 18:34:39 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F5AAE53;
+        Mon, 19 Jun 2023 15:34:38 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QlPbX6kKhz4x0B;
-        Tue, 20 Jun 2023 08:30:16 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QlPhW3vGxz4wgq;
+        Tue, 20 Jun 2023 08:34:34 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1687213817;
-        bh=aBWwy2x7olbw2nW5TixUQE6rSECSSxfcU1WrXGDwUT0=;
+        s=201702; t=1687214075;
+        bh=pTjKQ2C9I7ZmwoDMbVuHDYYyzG2ICG3OkCyb656W3Lo=;
         h=Date:From:To:Cc:Subject:From;
-        b=AIktUrZnKzaEV+HrXP8dRJzsUvJ7FK6BbfAXpmL6DU/rJwSTkB8sKWA0x/kb/zSts
-         yB3NfgN1NJqABOHHChEnMCoRfsLnJT8VMwgtOv+g+ZtDnRYzEtmQ6Ywa36HGd+dpsp
-         x5FIim+kzUUYPnUiGbPiSIDs6vhVZ5ZQ7NlZf6KGFSQ+hBYJh2KWnVGDO9s5MuZnOp
-         05Sagrf5BKyGDgG63qtu+lW1aXlPsDB+QrRJY3+SdNCArZ0pEVJavePjqR1f91ULOx
-         DE6i6ykqzKzxSLqWuzm+Ewwd9UGVe5u5Kpl/0qoVz8xc+5GjjroCJ43THJCww/vnBX
-         O7OC7huwbPUNw==
-Date:   Tue, 20 Jun 2023 08:30:05 +1000
+        b=FIpIDACKpFfOe0EhCazWGCJWS/y0Lqc6UGj//AIK1R0GW5GNLukkYxznu20tp1lDd
+         Y9y7uuBcq6Fp2jtncyt9V3DtDw+qvbD+fVynpJqTKGMyzSoDVcv2zApLPqdSUtWLqp
+         JQ3Sx7OPv1sO1TAh4ILRHPZMsNas5jZiiViJ3v90AKVrDqiUsB0fzE/nPTvDCJ2B8B
+         GjqyYiK10MhyYoJUuuDdX0l0oV0Fzip+myczWnRCasOA2u07HH5EebCNFMel8NxEfN
+         65rzcS4LXxG5qKHeJW/JbVrsGf/Prb/cR7MXpNqXA/dvtAphAfygyYxdj8iSVAGTBQ
+         eA0HyEtrlroGg==
+Date:   Tue, 20 Jun 2023 08:34:32 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Steve French <smfrench@gmail.com>
-Cc:     CIFS <linux-cifs@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     Corey Minyard <cminyard@mvista.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the cifs tree
-Message-ID: <20230620083005.5660d209@canb.auug.org.au>
+Subject: linux-next: Fixes tag needs some work in the ipmi tree
+Message-ID: <20230620083432.24e9a1e0@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/U=+PeBoPrc9uHX4qYBn..O2";
+Content-Type: multipart/signed; boundary="Sig_/uYXQLfrN75V5mOCPjcR7=sS";
  protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/U=+PeBoPrc9uHX4qYBn..O2
+--Sig_/uYXQLfrN75V5mOCPjcR7=sS
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Commit
+In commit
 
-  a1fc457f016e ("SMB3: Do not send lease break acknowledgment if all file h=
-andles have been closed")
+  1d5244190c46 ("ipmi:ssif: Fix a memory leak when scanning for an adapter")
 
-is missing a Signed-off-by from its committer.
+Fixes tag
+
+  Fixes: c4436c9149c ("ipmi_ssif: avoid registering duplicate ssif interfac=
+e")
+
+has these problem(s):
+
+  - SHA1 should be at least 12 digits long
+    This can be fixed for the future by setting core.abbrev to 12 (or
+    more) or (for git v2.11 or later) just making sure it is not set
+    (or set to "auto").
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/U=+PeBoPrc9uHX4qYBn..O2
+--Sig_/uYXQLfrN75V5mOCPjcR7=sS
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSQ1u0ACgkQAVBC80lX
-0GyzaAf+Jcd9nnBZv2IPjsdlOYToyrbU/U6Uam7Aq8+635qvgMkmyyL+bgARW3Rl
-kkmUTlKUk7vw/v5iCZQyKBB9Wt+UaIsWgq2QdYhRyMonSlGsKWpEBfs5DSAyBrc8
-N/1L4QkiHC+RMvAtQLYJt4Xdy6d4/V8R+po9jDtMMi0yx3K7yLTuPuJwPjrqhBPp
-Pa7Fra1o/VAqQMul4e5+BVbnh6zu94IxBnzw33O7Ny9n8kKGQ0tfAP2pYCb+P1xm
-POdiJJlY3IxvVC3DvjK+Sk1qdHAd/vV93dU2tnaUK5eAyX00U1lUz5EgBFv+1ms5
-JcaTKuvSFNZEsVaB/CLuqImgoi4LTA==
-=zESE
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSQ1/gACgkQAVBC80lX
+0Gxa6gf/QSsaO9hEFjW5+N1VGv2spMvyyzqNoSOKR5uWkyiLmSkFBNAEMVmnEiDc
+GaT2/lR/TRqN2BTpqyTb5VMVExVShWGw4iCdj6T0ELulV/UNbBsR0bNy/gtEodYU
+o4WzB0hGsUxqk+GANm1M5hw8HERRy8//1fPmJAHT+PWDK1eoHj8xVho88FNJQN3T
+zPMjV/jfimUoXmS5o5qA2pXfAIRbcV7fMP/XNNTGyTbHdLq4QK/ZGR6PUezgKCX2
++PLMkkloniKeDvH2NCTnxd7ygehuwSIYwNXebr7m29kkLtBNGuQfLokREJzIr3/S
+4hPfNnygKExqSgEbGDGpDwp0E1TiHQ==
+=fMPA
 -----END PGP SIGNATURE-----
 
---Sig_/U=+PeBoPrc9uHX4qYBn..O2--
+--Sig_/uYXQLfrN75V5mOCPjcR7=sS--

@@ -2,70 +2,85 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F224F735F4E
-	for <lists+linux-next@lfdr.de>; Mon, 19 Jun 2023 23:39:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E4F1735FDC
+	for <lists+linux-next@lfdr.de>; Tue, 20 Jun 2023 00:30:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229520AbjFSVjr (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 19 Jun 2023 17:39:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53956 "EHLO
+        id S229647AbjFSWaZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 19 Jun 2023 18:30:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbjFSVjq (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 19 Jun 2023 17:39:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EF151AC;
-        Mon, 19 Jun 2023 14:39:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        with ESMTP id S229462AbjFSWaY (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 19 Jun 2023 18:30:24 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D22EF103;
+        Mon, 19 Jun 2023 15:30:21 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B723760EFB;
-        Mon, 19 Jun 2023 21:39:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFE6AC433C8;
-        Mon, 19 Jun 2023 21:39:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1687210785;
-        bh=LmVkQX/PSgud5C5kaFd8Qi9HycDPJy7pU+bGS1katlc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Mlg4an2EPq/y60fm8q9ztbq7AQ6sDIaeGahpxiwBcr6i3CkcqiIjF3YlDbvXVC1lS
-         pxuHV/BIMzgVdwklNyQhrtNRzmghjYPtxCU17osbQYiZJ9QNvhFQhXIs5v8fmCLwlB
-         xbWoPLvRsYSdlCMBfHsMs14TAqiEtlnSsUhuz0tk=
-Date:   Mon, 19 Jun 2023 14:39:44 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Will Deacon <will@kernel.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QlPbX6kKhz4x0B;
+        Tue, 20 Jun 2023 08:30:16 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1687213817;
+        bh=aBWwy2x7olbw2nW5TixUQE6rSECSSxfcU1WrXGDwUT0=;
+        h=Date:From:To:Cc:Subject:From;
+        b=AIktUrZnKzaEV+HrXP8dRJzsUvJ7FK6BbfAXpmL6DU/rJwSTkB8sKWA0x/kb/zSts
+         yB3NfgN1NJqABOHHChEnMCoRfsLnJT8VMwgtOv+g+ZtDnRYzEtmQ6Ywa36HGd+dpsp
+         x5FIim+kzUUYPnUiGbPiSIDs6vhVZ5ZQ7NlZf6KGFSQ+hBYJh2KWnVGDO9s5MuZnOp
+         05Sagrf5BKyGDgG63qtu+lW1aXlPsDB+QrRJY3+SdNCArZ0pEVJavePjqR1f91ULOx
+         DE6i6ykqzKzxSLqWuzm+Ewwd9UGVe5u5Kpl/0qoVz8xc+5GjjroCJ43THJCww/vnBX
+         O7OC7huwbPUNw==
+Date:   Tue, 20 Jun 2023 08:30:05 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Steve French <smfrench@gmail.com>
+Cc:     CIFS <linux-cifs@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        catalin.marinas@arm.com
-Subject: Re: linux-next: manual merge of the mm tree with Linus' tree
-Message-Id: <20230619143944.fb445cb3f28bb839942ed4ae@linux-foundation.org>
-In-Reply-To: <20230619204309.GA13937@willie-the-truck>
-References: <20230619092355.133c5cdb@canb.auug.org.au>
-        <20230619204309.GA13937@willie-the-truck>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the cifs tree
+Message-ID: <20230620083005.5660d209@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/U=+PeBoPrc9uHX4qYBn..O2";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, 19 Jun 2023 21:43:11 +0100 Will Deacon <will@kernel.org> wrote:
+--Sig_/U=+PeBoPrc9uHX4qYBn..O2
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> >   	/*
-> >   	 * Do not downgrade mmap_lock if we are next to VM_GROWSDOWN or
-> >   	 * VM_GROWSUP VMA. Such VMAs can change their size under
-> 
-> This resolution seems to be causing horrible problems on arm64 with 16k
-> pages. I see things like the crash below, but the two branches being merged
-> are fine on their own.
+Hi all,
 
-I've dropped the mm.git side of this conflict so next -next should
-be better.
+Commit
+
+  a1fc457f016e ("SMB3: Do not send lease break acknowledgment if all file h=
+andles have been closed")
+
+is missing a Signed-off-by from its committer.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/U=+PeBoPrc9uHX4qYBn..O2
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSQ1u0ACgkQAVBC80lX
+0GyzaAf+Jcd9nnBZv2IPjsdlOYToyrbU/U6Uam7Aq8+635qvgMkmyyL+bgARW3Rl
+kkmUTlKUk7vw/v5iCZQyKBB9Wt+UaIsWgq2QdYhRyMonSlGsKWpEBfs5DSAyBrc8
+N/1L4QkiHC+RMvAtQLYJt4Xdy6d4/V8R+po9jDtMMi0yx3K7yLTuPuJwPjrqhBPp
+Pa7Fra1o/VAqQMul4e5+BVbnh6zu94IxBnzw33O7Ny9n8kKGQ0tfAP2pYCb+P1xm
+POdiJJlY3IxvVC3DvjK+Sk1qdHAd/vV93dU2tnaUK5eAyX00U1lUz5EgBFv+1ms5
+JcaTKuvSFNZEsVaB/CLuqImgoi4LTA==
+=zESE
+-----END PGP SIGNATURE-----
+
+--Sig_/U=+PeBoPrc9uHX4qYBn..O2--

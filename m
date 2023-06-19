@@ -2,93 +2,95 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B430735FE6
-	for <lists+linux-next@lfdr.de>; Tue, 20 Jun 2023 00:34:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60F4B73600F
+	for <lists+linux-next@lfdr.de>; Tue, 20 Jun 2023 01:18:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229593AbjFSWek (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 19 Jun 2023 18:34:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37022 "EHLO
+        id S229538AbjFSXSO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 19 Jun 2023 19:18:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbjFSWej (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 19 Jun 2023 18:34:39 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F5AAE53;
-        Mon, 19 Jun 2023 15:34:38 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QlPhW3vGxz4wgq;
-        Tue, 20 Jun 2023 08:34:34 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1687214075;
-        bh=pTjKQ2C9I7ZmwoDMbVuHDYYyzG2ICG3OkCyb656W3Lo=;
-        h=Date:From:To:Cc:Subject:From;
-        b=FIpIDACKpFfOe0EhCazWGCJWS/y0Lqc6UGj//AIK1R0GW5GNLukkYxznu20tp1lDd
-         Y9y7uuBcq6Fp2jtncyt9V3DtDw+qvbD+fVynpJqTKGMyzSoDVcv2zApLPqdSUtWLqp
-         JQ3Sx7OPv1sO1TAh4ILRHPZMsNas5jZiiViJ3v90AKVrDqiUsB0fzE/nPTvDCJ2B8B
-         GjqyYiK10MhyYoJUuuDdX0l0oV0Fzip+myczWnRCasOA2u07HH5EebCNFMel8NxEfN
-         65rzcS4LXxG5qKHeJW/JbVrsGf/Prb/cR7MXpNqXA/dvtAphAfygyYxdj8iSVAGTBQ
-         eA0HyEtrlroGg==
-Date:   Tue, 20 Jun 2023 08:34:32 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Corey Minyard <cminyard@mvista.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the ipmi tree
-Message-ID: <20230620083432.24e9a1e0@canb.auug.org.au>
+        with ESMTP id S229448AbjFSXSN (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 19 Jun 2023 19:18:13 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A81D6F9;
+        Mon, 19 Jun 2023 16:18:10 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2b45bc83f26so53415171fa.0;
+        Mon, 19 Jun 2023 16:18:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687216689; x=1689808689;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5mekOaT6pTNlMip7QzXX14X+Vd/c6EeWkfjPSdnkJdI=;
+        b=cBH2PYcc0OfvE+2Xx4e+aeq/Uc0XGQd8NgfRYAwalf16FZ4rz+BhtRHxmFCp6GScAd
+         laewfcNh/0tJF/qBK08Acx1PrK3gqpSJGwkYnf6z3687VXQfYm8tVOYEUikP74Bxj4L+
+         RJjxZii/SWvHsZjMSosSBK1pKbW4du5kj3yb47B0oKcRx83SPRM/Q/TdMiYL5IjPEQHo
+         61S0hC4MoekTMBJ4QlK4gfMTYDtufFlUcW3UYRE7mAyOr0Arm1vFjYstRAOTMsgjZVMQ
+         vbizpB76V2b3JOZL9Z00AF4IcNiqxjPzPvfOcbsAeidis8/xsQTwtA8FF4wj1jK/Lf7O
+         pmFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687216689; x=1689808689;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5mekOaT6pTNlMip7QzXX14X+Vd/c6EeWkfjPSdnkJdI=;
+        b=NgBXPF2rWeDDtV56iFm6/WbqBkH3HFtAdQkaujaNWLAoLGr0nIK7oQKTVfmeazgjc7
+         yWvZBLRkfCDT8c1Qt3EuXm38ITC3vzHZY49AxGJdablM2uThskPVOVUOdyqM4ql9K4y4
+         /PT8vBWDjdIaI2exKJAh+TAI6+o/g9xe+zN1ZYpN2wjF/Q038sBlgW1zaXb5BEJA9vhx
+         VIE5FY9wO6thkpTtthbH1heUsPVydgtT1sVrj/fqIl7ftQLvjlpN6ue+gOPTD6fZ4AKQ
+         AOjugwY8H7G5TfxdxtJ33YCH+AkWRkS54/UMU1zBuKzRxJHgne0lBFGTA229N/mxSAiE
+         5B/A==
+X-Gm-Message-State: AC+VfDxHUTRAXH/Tw7lW1uaVdQ0xXND7ka8EsAokZwm+yPtUsvp2BXhB
+        F72dewUyrcFyA6U5rEj4XjNhd0UvmOB9qXESowc=
+X-Google-Smtp-Source: ACHHUZ7EXzw6HOWw+uagO/6lmUztHkWmTwH6KA+qSPMZKyLdzUGohJIrBiNTRziYJvQlA5266MP/YVp/MRF9fg8sFrs=
+X-Received: by 2002:a2e:9e58:0:b0:2ac:78d5:fd60 with SMTP id
+ g24-20020a2e9e58000000b002ac78d5fd60mr6773953ljk.9.1687216688617; Mon, 19 Jun
+ 2023 16:18:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/uYXQLfrN75V5mOCPjcR7=sS";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230620083005.5660d209@canb.auug.org.au>
+In-Reply-To: <20230620083005.5660d209@canb.auug.org.au>
+From:   Steve French <smfrench@gmail.com>
+Date:   Mon, 19 Jun 2023 18:17:57 -0500
+Message-ID: <CAH2r5msDxud4GWx28vUM1Xe=8Z9DMKHWSK3oZm+O17q3LV+N7Q@mail.gmail.com>
+Subject: Re: linux-next: Signed-off-by missing for commit in the cifs tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     CIFS <linux-cifs@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Bharath S M <bharathsm@microsoft.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/uYXQLfrN75V5mOCPjcR7=sS
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Fixed
 
-Hi all,
+On Mon, Jun 19, 2023 at 5:30=E2=80=AFPM Stephen Rothwell <sfr@canb.auug.org=
+.au> wrote:
+>
+> Hi all,
+>
+> Commit
+>
+>   a1fc457f016e ("SMB3: Do not send lease break acknowledgment if all file=
+ handles have been closed")
+>
+> is missing a Signed-off-by from its committer.
+>
+> --
+> Cheers,
+> Stephen Rothwell
 
-In commit
 
-  1d5244190c46 ("ipmi:ssif: Fix a memory leak when scanning for an adapter")
-
-Fixes tag
-
-  Fixes: c4436c9149c ("ipmi_ssif: avoid registering duplicate ssif interfac=
-e")
-
-has these problem(s):
-
-  - SHA1 should be at least 12 digits long
-    This can be fixed for the future by setting core.abbrev to 12 (or
-    more) or (for git v2.11 or later) just making sure it is not set
-    (or set to "auto").
 
 --=20
-Cheers,
-Stephen Rothwell
+Thanks,
 
---Sig_/uYXQLfrN75V5mOCPjcR7=sS
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSQ1/gACgkQAVBC80lX
-0Gxa6gf/QSsaO9hEFjW5+N1VGv2spMvyyzqNoSOKR5uWkyiLmSkFBNAEMVmnEiDc
-GaT2/lR/TRqN2BTpqyTb5VMVExVShWGw4iCdj6T0ELulV/UNbBsR0bNy/gtEodYU
-o4WzB0hGsUxqk+GANm1M5hw8HERRy8//1fPmJAHT+PWDK1eoHj8xVho88FNJQN3T
-zPMjV/jfimUoXmS5o5qA2pXfAIRbcV7fMP/XNNTGyTbHdLq4QK/ZGR6PUezgKCX2
-+PLMkkloniKeDvH2NCTnxd7ygehuwSIYwNXebr7m29kkLtBNGuQfLokREJzIr3/S
-4hPfNnygKExqSgEbGDGpDwp0E1TiHQ==
-=fMPA
------END PGP SIGNATURE-----
-
---Sig_/uYXQLfrN75V5mOCPjcR7=sS--
+Steve

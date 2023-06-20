@@ -2,53 +2,58 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E09AC736712
-	for <lists+linux-next@lfdr.de>; Tue, 20 Jun 2023 11:11:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53CAB736815
+	for <lists+linux-next@lfdr.de>; Tue, 20 Jun 2023 11:43:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229966AbjFTJLB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 20 Jun 2023 05:11:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35624 "EHLO
+        id S230457AbjFTJnW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 20 Jun 2023 05:43:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230131AbjFTJLA (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 20 Jun 2023 05:11:00 -0400
-Received: from smtp-8faf.mail.infomaniak.ch (smtp-8faf.mail.infomaniak.ch [IPv6:2001:1600:3:17::8faf])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 001E4118
-        for <linux-next@vger.kernel.org>; Tue, 20 Jun 2023 02:10:57 -0700 (PDT)
-Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4Qlgpl2Ck1zMqG2G;
-        Tue, 20 Jun 2023 09:10:55 +0000 (UTC)
-Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4Qlgph54TmzMs39m;
-        Tue, 20 Jun 2023 11:10:52 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-        s=20191114; t=1687252255;
-        bh=9QOzYcU1hRHf8r89BJZ0gc9MnlN0gaNwkaFO67Nk67o=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Hsq8IWdFGzXJceYf0owNoUq/doKeR+ZcBQTqCH6P0dfRDvSk1x42GPBT16zJmB+26
-         jXLOdRhzqoFWIVWxL5YUDwQSPBuAHkqguQOlXfwlNc5hNSylxkxz1xBdTmwYN86adW
-         wdjVf8oOMwT6scYIE/1jRJ2Ap1DQN6AhXsiLp+zo=
-Message-ID: <b57481af-5824-72f7-d20f-cfd78fcde519@digikod.net>
-Date:   Tue, 20 Jun 2023 11:10:51 +0200
-MIME-Version: 1.0
-User-Agent: 
-Subject: Re: linux-next: manual merge of the landlock tree with the tip tree
-Content-Language: en-US
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Richard Weinberger <richard@nod.at>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        with ESMTP id S229595AbjFTJnV (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 20 Jun 2023 05:43:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01629F4;
+        Tue, 20 Jun 2023 02:43:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8FFD9610A4;
+        Tue, 20 Jun 2023 09:43:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9221CC433C0;
+        Tue, 20 Jun 2023 09:43:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687254200;
+        bh=6oeF6a+qDZQKIjfNYqErcjrR99tDz0LU1eFA0vcSj2o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DntMnlmr05Q4Af/qskNpRrqTRUVPpvU/rCT1orGUnSxUsRcfEE5YfV02/SYqU0EJD
+         9IPqbg060++JbTdnszcYiO18a1cbgTj6VTKdKBCOGR8liUs3c8OWUnkj5ZfDWRRNSs
+         OONacyHuGhZmKsFjpzKaKP02AiZsW3uPtXWS6uXbF71ZCmsqP2CxpaPQJ8DC7rnDFv
+         HqAz3mzM3ebEu9orrpVxyZFwRLj69mrdVQwscfdsG8tb00q1uwIE672GmvXl3Ad2oY
+         3cqhgFJThMG7Sx66K4h1rPgBseFRTRck/SeWFADVt0ASZR77uHdAcgwNEcioTNIu2B
+         Dz570pfG4JWag==
+Date:   Tue, 20 Jun 2023 10:43:14 +0100
+From:   Will Deacon <will@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>
-References: <20230620135536.1f820a48@canb.auug.org.au>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-In-Reply-To: <20230620135536.1f820a48@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Infomaniak-Routing: alpha
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        catalin.marinas@arm.com
+Subject: Re: linux-next: manual merge of the mm tree with Linus' tree
+Message-ID: <20230620094314.GA14607@willie-the-truck>
+References: <20230619092355.133c5cdb@canb.auug.org.au>
+ <20230619204309.GA13937@willie-the-truck>
+ <20230619143944.fb445cb3f28bb839942ed4ae@linux-foundation.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230619143944.fb445cb3f28bb839942ed4ae@linux-foundation.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,42 +61,38 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Thomas,
+On Mon, Jun 19, 2023 at 02:39:44PM -0700, Andrew Morton wrote:
+> On Mon, 19 Jun 2023 21:43:11 +0100 Will Deacon <will@kernel.org> wrote:
+> 
+> > >   	/*
+> > >   	 * Do not downgrade mmap_lock if we are next to VM_GROWSDOWN or
+> > >   	 * VM_GROWSUP VMA. Such VMAs can change their size under
+> > 
+> > This resolution seems to be causing horrible problems on arm64 with 16k
+> > pages. I see things like the crash below, but the two branches being merged
+> > are fine on their own.
+> 
+> I've dropped the mm.git side of this conflict so next -next should
+> be better.
 
-There is a (trivial) merge conflict because one of your commits adds 
-ARCH_HAS_CPU_FINALIZE_INIT and one of mine removes ARCH_EPHEMERAL_INODES 
-in arch/um/Kconfig.
+Thanks, Andrew. next-20230620 is still broken, so I came up with the diff
+below in the meantime which seems to resolve the crashes. I don't pretend
+to understand the VMA iterator stuff well enough though, so I may have
+missed something else.
 
-I don't plan to add more commits to my tree until the merge window and 
-I'd like to send a PR to Linus as soon as it is open. Would that be OK 
-with you to let Linus deal with this trivial conflict or do you prefer 
-one of us to rebase on the other's tree?
+Will
 
-Regards,
-  Mickaël
+--->8
 
-
-On 20/06/2023 05:55, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Today's linux-next merge of the landlock tree got a conflict in:
-> 
->    arch/um/Kconfig
-> 
-> between commit:
-> 
->    9349b5cd0908 ("um/cpu: Switch to arch_cpu_finalize_init()")
-> 
-> from the tip tree and commit:
-> 
->    74ce793bcbde ("hostfs: Fix ephemeral inodes")
-> 
-> from the landlock tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
-> 
+diff --git a/mm/mmap.c b/mm/mmap.c
+index 9a93b054148a..4c82e9b36fb3 100644
+--- a/mm/mmap.c
++++ b/mm/mmap.c
+@@ -2396,6 +2396,7 @@ do_vmi_align_munmap(struct vma_iterator *vmi, struct vm_area_struct *vma,
+                        if (error)
+                                goto end_split_failed;
+                }
++               mas_set(&mas_detach, count);
+                vma_start_write(next);
+                if (mas_store_gfp(&mas_detach, next, GFP_KERNEL))
+                        goto munmap_gather_failed;

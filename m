@@ -2,83 +2,73 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7454B737793
-	for <lists+linux-next@lfdr.de>; Wed, 21 Jun 2023 00:44:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C07EC7377E3
+	for <lists+linux-next@lfdr.de>; Wed, 21 Jun 2023 01:12:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229729AbjFTWoT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 20 Jun 2023 18:44:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46842 "EHLO
+        id S229602AbjFTXM4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 20 Jun 2023 19:12:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229854AbjFTWoS (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 20 Jun 2023 18:44:18 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 839A410F1;
-        Tue, 20 Jun 2023 15:44:14 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        with ESMTP id S229544AbjFTXMz (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 20 Jun 2023 19:12:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D57DBE4D;
+        Tue, 20 Jun 2023 16:12:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Qm1s60M7Vz4wjD;
-        Wed, 21 Jun 2023 08:44:09 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1687301050;
-        bh=8MLzFgiZMqNPwZbnm6qtkPaARcc8RTEAjJoFn1BS6XA=;
-        h=Date:From:To:Cc:Subject:From;
-        b=mfc2DHqUh+oraUKnfuTT2N8G012QEWJIuSWOYT8Qc5pw4ymJw+rHtmHI2kx4JDBWJ
-         PoCBQMoSOY4S5lstsNk/DZDHMwsulyXFem7kg0UFoSzbeu6gQ/u4QjkwlHNwEZDj14
-         7LrsV2NSjT732K/A7/skMxxy6iubtokFJxsPK4L/tavMA/HJ3fPg0u9TNra/aEmYek
-         b/AOicd5liSfy71EB8QgNBA2h9+8n/4XbHv4yFv+fMTfPPRaQ2B9d+aS1SrDdlJtis
-         mfp/rVPaXFZUMJfQCgsUF7xTATIUf2XVtEJ8qHRN+jxw6loXHyYUrJ6clVxAYJjfc8
-         9azTZ7oRJcGqQ==
-Date:   Wed, 21 Jun 2023 08:43:55 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Huacai Chen <chenhuacai@loongson.cn>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6B01161355;
+        Tue, 20 Jun 2023 23:12:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA044C433C0;
+        Tue, 20 Jun 2023 23:12:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687302773;
+        bh=/5bo5g8W/lm+VG0x/hbqsgLrUWsHXxhUqcF2voXbXaU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ecuBldW1MvxlzxJCGJu7MuN+UooZhW2XgN/sTn8vil32wpc2DSVeX1y5MQ+XlMOtE
+         20bi7GSxt3neVcORbjudncSX91n3XQ5IQvoBRxry6j4J5vqh9e0orakpxAPgZA+0ik
+         +xVgd2D8AQiXpl8NWb+ZFjkV8PuW7IRwQYZgGd/vJCHGiN2P/o+eJqmwG09bdBjuMV
+         AJju+DAOliwcjI1+dGhCSToLHa/LqNJE1jjeFj0KYs1YkaHtiWQ/9C6ARTMLg+8OOn
+         rZSES3KnxefFtkUu47U7Bs7csUdVpIbA2sr3sZxrB/fxpiSnvEhl2Yjs/5kPM2/yOh
+         +Nje54+2iBFBQ==
+Date:   Tue, 20 Jun 2023 16:12:52 -0700
+From:   Saeed Mahameed <saeed@kernel.org>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
+        Shay Drory <shayd@nvidia.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the loongarch tree
-Message-ID: <20230621084355.13df7a8c@canb.auug.org.au>
+Subject: Re: linux-next: build warnings after merge of the net-next tree
+Message-ID: <ZJIydCHR5dB3PoKO@x130>
+References: <20230613163114.1ad2f38d@canb.auug.org.au>
+ <20230620091547.43aae17e@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Bjceb8tXi_taZ5FJgBXOb56";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20230620091547.43aae17e@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/Bjceb8tXi_taZ5FJgBXOb56
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 20 Jun 09:15, Jakub Kicinski wrote:
+>On Tue, 13 Jun 2023 16:31:14 +1000 Stephen Rothwell wrote:
+>> Documentation/networking/device_drivers/ethernet/mellanox/mlx5/switchdev.rst:57: ERROR: Unexpected indentation.
+>> Documentation/networking/device_drivers/ethernet/mellanox/mlx5/switchdev.rst:61: ERROR: Unexpected indentation.
+>
+>Hi Saeed, what's the ETA on the fix for this?
+>
+Hi, I will provide a fix by tomorrow.
 
-Hi all,
+Thanks.
 
-Commit
 
-  c976fff79c12 ("LoongArch: Add kernel address sanitizer support")
-
-is missing a Signed-off-by from its committer.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/Bjceb8tXi_taZ5FJgBXOb56
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSSK6sACgkQAVBC80lX
-0GxNnQf+PbzXUogN5w6L739TuZ39mxy4mUmeMadufhTNEAcxpjsuMPI/3Gi32fuA
-/f4PB9CrMxssgEPw5nX4Zp5Y1etvVIp0I+hcsnbKipIjhNYQApRQuATBx48K4wCg
-NJDDxgiwANjYwKKNh+6dUR//1uLfYZQBigxUqwBm3YTbvy9D6Rd5UehVC88u1GnY
-eO+Akk3vY9//fgShwnvg38Q+QClJ2alLBaZDVbrhF/vm2Fmk35JdsNaqdS9LHDxJ
-rKVKlRwp+ff/TFsgevqmmt3DmK7qM4T6csjdZxHvCLiRyv6lEeQsGTR6w3/VQSnJ
-T1eaECwICeNig3QCf+oO+jss/kDGNQ==
-=gJbK
------END PGP SIGNATURE-----
-
---Sig_/Bjceb8tXi_taZ5FJgBXOb56--

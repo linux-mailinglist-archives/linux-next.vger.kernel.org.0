@@ -2,79 +2,76 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0087D73619F
-	for <lists+linux-next@lfdr.de>; Tue, 20 Jun 2023 04:45:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46079736261
+	for <lists+linux-next@lfdr.de>; Tue, 20 Jun 2023 05:55:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229944AbjFTCpn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 19 Jun 2023 22:45:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42952 "EHLO
+        id S230291AbjFTDzn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 19 Jun 2023 23:55:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229690AbjFTCpn (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 19 Jun 2023 22:45:43 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CBF310C1;
-        Mon, 19 Jun 2023 19:45:41 -0700 (PDT)
+        with ESMTP id S230285AbjFTDzm (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 19 Jun 2023 23:55:42 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED1B019A;
+        Mon, 19 Jun 2023 20:55:40 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QlWG70ZxGz4wgn;
-        Tue, 20 Jun 2023 12:45:34 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QlXpy6HHFz4x09;
+        Tue, 20 Jun 2023 13:55:38 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1687229136;
-        bh=WyVTCXi2M4ockHdssmMw4QkwO3NRemhqMisvdiRWy6A=;
+        s=201702; t=1687233339;
+        bh=H0D72pDX88zY6XJY90Z9rgzpbpZsOV6cMUGsZheQV0w=;
         h=Date:From:To:Cc:Subject:From;
-        b=RHnFnrXGv6jrHeCCYLLT7QmdNfBxDnfxOYsAC6v5NgNlHws2YBp+BCYC8kakwhknh
-         qcD2IhTtmgtr+NUFGk/7MW79WyTi/ChfPqq1MHfvAqH9grZdrbFXnih4oioc17m3C3
-         6FHSALF7xkJn76BUZjXY58JCnyoBb6w7is0HZdbF6roQdgEpVU1+F0ZpzDjdgYdWB6
-         uQykGa75o8FL8UZcMYOuDpM/uGFiWC5poqIz3ESVvtogPuCra01C6QrNKTPyFK3YXW
-         MOIw6aA4vAnmtg+HN8XIMKadiD8OhfgPxcjWuyjZnYt2oJtUdBxLX5zE08qgn5XitJ
-         MzvxnJNcsmruw==
-Date:   Tue, 20 Jun 2023 12:45:33 +1000
+        b=MZ/JQ0j6kXnn3OjM33VEcgppIkvCzddZZPBRtvdLbN9benaiKWBoqRs5PZl9KxFlF
+         lhEX+bO11KbA6lVFvhvayvqehh7NLVVewc5Zolj/jB9I8IIyJHhVfYyd8++Xgw8S1u
+         cnmGosMgEPOsZwsSburVIVqQxjS/SgPgYuqGw9tKmqq45JNwR9UY2KNXqm/8FbZT27
+         O5PSTo0upNXXNc27huWimwInopsHidi9BcamIeWAVVHSYWzgZUt7hiyMXJVNlvHxCa
+         L0EZmIn9am5S3g7mzzh61FBQDqi5NHRE/v8j63Hm2T2wwVtZ5GvD5ZYpPjYjRCtSfo
+         o8dNC/TvL1bjQ==
+Date:   Tue, 20 Jun 2023 13:55:36 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Anup Patel <anup@brainfault.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul@pwsan.com>
-Cc:     Andy Chiu <andy.chiu@sifive.com>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Vincent Chen <vincent.chen@sifive.com>
-Subject: linux-next: manual merge of the kvm-riscv tree with the risc-v tree
-Message-ID: <20230620124533.45c18fee@canb.auug.org.au>
+To:     =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the landlock tree with the tip tree
+Message-ID: <20230620135536.1f820a48@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/PjyC9NhbwDykvFby/Tjgm_O";
+Content-Type: multipart/signed; boundary="Sig_/rVzvofnNsXH6DkvE.1SuJkO";
  protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/PjyC9NhbwDykvFby/Tjgm_O
+--Sig_/rVzvofnNsXH6DkvE.1SuJkO
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the kvm-riscv tree got a conflict in:
+Today's linux-next merge of the landlock tree got a conflict in:
 
-  arch/riscv/include/uapi/asm/kvm.h
+  arch/um/Kconfig
 
 between commit:
 
-  bf78f1ea6e51 ("riscv: kvm: Add V extension to KVM ISA")
+  9349b5cd0908 ("um/cpu: Switch to arch_cpu_finalize_init()")
 
-from the risc-v tree and commit:
+from the tip tree and commit:
 
-  3177011788ee ("RISC-V: KVM: Allow Svnapot extension for Guest/VM")
+  74ce793bcbde ("hostfs: Fix ephemeral inodes")
 
-from the kvm-riscv tree.
+from the landlock tree.
 
 I fixed it up (see below) and can carry the fix as necessary. This
 is now fixed as far as linux-next is concerned, but any non trivial
@@ -87,121 +84,34 @@ complex conflicts.
 Cheers,
 Stephen Rothwell
 
-diff --cc arch/riscv/include/uapi/asm/kvm.h
-index 855c047e86d4,a1ca18408bbd..000000000000
---- a/arch/riscv/include/uapi/asm/kvm.h
-+++ b/arch/riscv/include/uapi/asm/kvm.h
-@@@ -121,7 -122,7 +122,8 @@@ enum KVM_RISCV_ISA_EXT_ID=20
-  	KVM_RISCV_ISA_EXT_ZICBOZ,
-  	KVM_RISCV_ISA_EXT_ZBB,
-  	KVM_RISCV_ISA_EXT_SSAIA,
- +	KVM_RISCV_ISA_EXT_V,
-+ 	KVM_RISCV_ISA_EXT_SVNAPOT,
-  	KVM_RISCV_ISA_EXT_MAX,
-  };
- =20
-@@@ -204,13 -205,77 +206,84 @@@ enum KVM_RISCV_SBI_EXT_ID=20
-  #define KVM_REG_RISCV_SBI_MULTI_REG_LAST	\
-  		KVM_REG_RISCV_SBI_MULTI_REG(KVM_RISCV_SBI_EXT_MAX - 1)
- =20
- +/* V extension registers are mapped as type 9 */
- +#define KVM_REG_RISCV_VECTOR		(0x09 << KVM_REG_RISCV_TYPE_SHIFT)
- +#define KVM_REG_RISCV_VECTOR_CSR_REG(name)	\
- +		(offsetof(struct __riscv_v_ext_state, name) / sizeof(unsigned long))
- +#define KVM_REG_RISCV_VECTOR_REG(n)	\
- +		((n) + sizeof(struct __riscv_v_ext_state) / sizeof(unsigned long))
- +
-+ /* Device Control API: RISC-V AIA */
-+ #define KVM_DEV_RISCV_APLIC_ALIGN		0x1000
-+ #define KVM_DEV_RISCV_APLIC_SIZE		0x4000
-+ #define KVM_DEV_RISCV_APLIC_MAX_HARTS		0x4000
-+ #define KVM_DEV_RISCV_IMSIC_ALIGN		0x1000
-+ #define KVM_DEV_RISCV_IMSIC_SIZE		0x1000
-+=20
-+ #define KVM_DEV_RISCV_AIA_GRP_CONFIG		0
-+ #define KVM_DEV_RISCV_AIA_CONFIG_MODE		0
-+ #define KVM_DEV_RISCV_AIA_CONFIG_IDS		1
-+ #define KVM_DEV_RISCV_AIA_CONFIG_SRCS		2
-+ #define KVM_DEV_RISCV_AIA_CONFIG_GROUP_BITS	3
-+ #define KVM_DEV_RISCV_AIA_CONFIG_GROUP_SHIFT	4
-+ #define KVM_DEV_RISCV_AIA_CONFIG_HART_BITS	5
-+ #define KVM_DEV_RISCV_AIA_CONFIG_GUEST_BITS	6
-+=20
-+ /*
-+  * Modes of RISC-V AIA device:
-+  * 1) EMUL (aka Emulation): Trap-n-emulate IMSIC
-+  * 2) HWACCEL (aka HW Acceleration): Virtualize IMSIC using IMSIC guest f=
-iles
-+  * 3) AUTO (aka Automatic): Virtualize IMSIC using IMSIC guest files when=
-ever
-+  *    available otherwise fallback to trap-n-emulation
-+  */
-+ #define KVM_DEV_RISCV_AIA_MODE_EMUL		0
-+ #define KVM_DEV_RISCV_AIA_MODE_HWACCEL		1
-+ #define KVM_DEV_RISCV_AIA_MODE_AUTO		2
-+=20
-+ #define KVM_DEV_RISCV_AIA_IDS_MIN		63
-+ #define KVM_DEV_RISCV_AIA_IDS_MAX		2048
-+ #define KVM_DEV_RISCV_AIA_SRCS_MAX		1024
-+ #define KVM_DEV_RISCV_AIA_GROUP_BITS_MAX	8
-+ #define KVM_DEV_RISCV_AIA_GROUP_SHIFT_MIN	24
-+ #define KVM_DEV_RISCV_AIA_GROUP_SHIFT_MAX	56
-+ #define KVM_DEV_RISCV_AIA_HART_BITS_MAX		16
-+ #define KVM_DEV_RISCV_AIA_GUEST_BITS_MAX	8
-+=20
-+ #define KVM_DEV_RISCV_AIA_GRP_ADDR		1
-+ #define KVM_DEV_RISCV_AIA_ADDR_APLIC		0
-+ #define KVM_DEV_RISCV_AIA_ADDR_IMSIC(__vcpu)	(1 + (__vcpu))
-+ #define KVM_DEV_RISCV_AIA_ADDR_MAX		\
-+ 		(1 + KVM_DEV_RISCV_APLIC_MAX_HARTS)
-+=20
-+ #define KVM_DEV_RISCV_AIA_GRP_CTRL		2
-+ #define KVM_DEV_RISCV_AIA_CTRL_INIT		0
-+=20
-+ /*
-+  * The device attribute type contains the memory mapped offset of the
-+  * APLIC register (range 0x0000-0x3FFF) and it must be 4-byte aligned.
-+  */
-+ #define KVM_DEV_RISCV_AIA_GRP_APLIC		3
-+=20
-+ /*
-+  * The lower 12-bits of the device attribute type contains the iselect
-+  * value of the IMSIC register (range 0x70-0xFF) whereas the higher order
-+  * bits contains the VCPU id.
-+  */
-+ #define KVM_DEV_RISCV_AIA_GRP_IMSIC		4
-+ #define KVM_DEV_RISCV_AIA_IMSIC_ISEL_BITS	12
-+ #define KVM_DEV_RISCV_AIA_IMSIC_ISEL_MASK	\
-+ 		((1U << KVM_DEV_RISCV_AIA_IMSIC_ISEL_BITS) - 1)
-+ #define KVM_DEV_RISCV_AIA_IMSIC_MKATTR(__vcpu, __isel)	\
-+ 		(((__vcpu) << KVM_DEV_RISCV_AIA_IMSIC_ISEL_BITS) | \
-+ 		 ((__isel) & KVM_DEV_RISCV_AIA_IMSIC_ISEL_MASK))
-+ #define KVM_DEV_RISCV_AIA_IMSIC_GET_ISEL(__attr)	\
-+ 		((__attr) & KVM_DEV_RISCV_AIA_IMSIC_ISEL_MASK)
-+ #define KVM_DEV_RISCV_AIA_IMSIC_GET_VCPU(__attr)	\
-+ 		((__attr) >> KVM_DEV_RISCV_AIA_IMSIC_ISEL_BITS)
-+=20
-+ /* One single KVM irqchip, ie. the AIA */
-+ #define KVM_NR_IRQCHIPS			1
-+=20
-  #endif
- =20
-  #endif /* __LINUX_KVM_RISCV_H */
+diff --cc arch/um/Kconfig
+index 887cfb636c26,4057d5267c6a..000000000000
+--- a/arch/um/Kconfig
++++ b/arch/um/Kconfig
+@@@ -5,8 -5,6 +5,7 @@@ menu "UML-specific options
+  config UML
+  	bool
+  	default y
+- 	select ARCH_EPHEMERAL_INODES
+ +	select ARCH_HAS_CPU_FINALIZE_INIT
+  	select ARCH_HAS_FORTIFY_SOURCE
+  	select ARCH_HAS_GCOV_PROFILE_ALL
+  	select ARCH_HAS_KCOV
 
---Sig_/PjyC9NhbwDykvFby/Tjgm_O
+--Sig_/rVzvofnNsXH6DkvE.1SuJkO
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSREs0ACgkQAVBC80lX
-0GxfBAf/SsCxNDBA9KNLA6Qn9rIoC1x2Ai23E5rORkX07RTcer9V21RQj0Whd2TS
-EovPsWVipIVuCIUzDCr74caogm1zgdaXQbuATDuthq4D3jTN63jiA77p3flqQ9FE
-z0CgJdLq+bVXOXOgcsDvWpXGrr0j+CB3vwgKlCC8qjCSTmRn0crC+X1oRccww9xl
-9fYphLOPhjGBTKJzXut9N3uZfT+DfBa0wePzcQaY+aHNM8+Y3Wb1rfDFRw3V4duW
-dvrXtBnxzMKyuDQ6REYF/1/IBoMOCtnBTHEMQqiQ7nL3p3fBW3B9/L+SU0NbF0xb
-JMhOgl6LFEbbuxRdcGAGOOpqlypBPQ==
-=LLTa
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSRIzgACgkQAVBC80lX
+0GzSKAf/cYoafs/G3UmkOMMPzX/p88kJVqsttnjtYGoHCGuM2DTjNGjy3vsQ17dp
+EVzsH/ZWmkuHXVoEdBmFGjCpkd1gwEycyJZYxuKZK+9sP/U1pPILstJZvzj8+A2+
+f4DVOE2FUWh0ni7vE2MeD/Kv/wcmYMhzaRkhyiyOW+tnPEpul7k6Ma3TLaeYL9HS
+e6JLhw+ZHUD0KGADxCzIX3bzfsUGnoFcm65NPapg4FrOKaP7H2dL92JslrEe8pkI
+2AXPZPpLoxIBh5hSarO7If/EZY5/SGi+3tWGkM6S9LElntHqRJoskZLz0kBZ97t/
+VYpHNK67qJomV/LzDSWK6VIw4vchnw==
+=kuWi
 -----END PGP SIGNATURE-----
 
---Sig_/PjyC9NhbwDykvFby/Tjgm_O--
+--Sig_/rVzvofnNsXH6DkvE.1SuJkO--

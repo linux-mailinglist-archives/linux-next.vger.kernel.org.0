@@ -2,102 +2,137 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 936F9736022
-	for <lists+linux-next@lfdr.de>; Tue, 20 Jun 2023 01:29:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38755736132
+	for <lists+linux-next@lfdr.de>; Tue, 20 Jun 2023 03:38:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229886AbjFSX3q (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 19 Jun 2023 19:29:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46978 "EHLO
+        id S229519AbjFTBiH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 19 Jun 2023 21:38:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229562AbjFSX3p (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 19 Jun 2023 19:29:45 -0400
+        with ESMTP id S229462AbjFTBiH (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 19 Jun 2023 21:38:07 -0400
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60D23E60;
-        Mon, 19 Jun 2023 16:29:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13592119;
+        Mon, 19 Jun 2023 18:38:04 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QlQw55Yr6z4x1R;
-        Tue, 20 Jun 2023 09:29:41 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QlTmC05Myz4wgk;
+        Tue, 20 Jun 2023 11:38:02 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1687217381;
-        bh=jhOVKnEaZMKjBhqSPop9rv8my2xjIJo0FpFGz7SVjzI=;
+        s=201702; t=1687225083;
+        bh=4KyqwkMLpA8d4g7V9+oDFKaAaBX3iSBt4eegpKSuZXc=;
         h=Date:From:To:Cc:Subject:From;
-        b=hHWzihn8uzpZ6QnKUnzsup620Vb0uPJHv1yuSTCR7k2bMHos6mOb7vl+8h/0wTCU/
-         zIe5t+3jK783KLh4N/FO7efoaHR//YzhyNN2B1l7KLJZbtk2MlziCSnC36iQCiiHEd
-         NE0b34WT6+1TE4QWDzqVUeN/XOdUx59UuFoLNaQHENzQKwjNYLVbvnRrsnxjr6JFTR
-         z+sL9OPkw56Zw4YzEKSZ3lII1tbLOuw+SbCXlSorrDWiKCMvtSROd1YQfKxMhVCKwe
-         N1tFYLV3OAfaE0SJaM4JB9HI8k9LAF6LMZTG9RtfUjva/EnjDWvRhWhKNFoc2pYNnW
-         lpQCveDgiih0A==
-Date:   Tue, 20 Jun 2023 09:29:40 +1000
+        b=GLc/ZVkjdiPtAfg9Sl/qnh5Jeljw+7FUTI67co5wH1IzQfuxbjbxQvjpyZ6kz4peY
+         pMuubEErgtBz9msOEFk1t98HcDOMTs+vqgeU89tny+jJKBSr869F4tPioGuR7s0fly
+         l6ewdWkcNekUB11ZCAhIUfvjywI7JL5SFdoyHx0wohw0trl8RKbalTdB3Sz9YYrDkQ
+         C8Lm3Y67c5qjW1sEmoi59KQ57ZqDUUxa7haG16sfl4QE1MwPHgI5+U9A0HxzIkjm86
+         UJU5H0o8onxPSUhMgdZFJXwPsP8PE5pm77YwmAAx8NyOWxbS6+8+F9czVGeXOGiR9J
+         TZQGaqbjt61gg==
+Date:   Tue, 20 Jun 2023 11:38:00 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     David Howells <dhowells@redhat.com>,
+To:     Helge Deller <deller@gmx.de>, Dave Airlie <airlied@redhat.com>
+Cc:     DRI <dri-devel@lists.freedesktop.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
-Subject: linux-next: manual merge of the mm-hotfixes tree with Linus' tree
-Message-ID: <20230620092940.3597ace2@canb.auug.org.au>
+        Thomas Zimmermann <tzimmermann@suse.de>
+Subject: linux-next: manual merge of the fbdev tree with the drm tree
+Message-ID: <20230620113800.5e76a964@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/I+YfrT7_wMEEU0v0N8q3VEq";
+Content-Type: multipart/signed; boundary="Sig_/qYumKycpnKA=iqL9zaIm9aI";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/I+YfrT7_wMEEU0v0N8q3VEq
+--Sig_/qYumKycpnKA=iqL9zaIm9aI
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the mm-hotfixes tree got a conflict in:
+Today's linux-next merge of the fbdev tree got a conflict in:
 
-  fs/afs/write.c
+  drivers/video/fbdev/hitfb.c
 
-between commits:
+between commit:
 
-  a2b6f2ab3e14 ("afs: Fix dangling folio ref counts in writeback")
-  819da022dd00 ("afs: Fix waiting for writeback then skipping folio")
+  bb47f218fd01 ("fbdev/hitfb: Cast I/O offset to address")
 
-from Linus' tree and commits:
+from the drm tree and commit:
 
-  4f243fa208e8 ("afs: fix dangling folio ref counts in writeback")
-  c548e38a7cc3 ("afs: fix waiting for writeback then skipping folio")
+  dadeeffbe525 ("fbdev: hitfb: Use NULL for pointers")
 
-from the mm-hotfixes tree.
+from the fbdev tree.
 
-I fixed it up (I used the version from Linus' tree) and can carry the
-fix as necessary. This is now fixed as far as linux-next is concerned,
-but any non trivial conflicts should be mentioned to your upstream
-maintainer when your tree is submitted for merging.  You may also want
-to consider cooperating with the maintainer of the conflicting tree to
-minimise any particularly complex conflicts.
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/I+YfrT7_wMEEU0v0N8q3VEq
+diff --cc drivers/video/fbdev/hitfb.c
+index 7737923b7a0a,5f544a177033..000000000000
+--- a/drivers/video/fbdev/hitfb.c
++++ b/drivers/video/fbdev/hitfb.c
+@@@ -444,10 -428,10 +444,10 @@@ static int hitfb_suspend(struct device=20
+  {
+  	u16 v;
+ =20
+- 	hitfb_blank(1,0);
++ 	hitfb_blank(1, NULL);
+ -	v =3D fb_readw(HD64461_STBCR);
+ +	v =3D hitfb_readw(HD64461_STBCR);
+  	v |=3D HD64461_STBCR_SLCKE_IST;
+ -	fb_writew(v, HD64461_STBCR);
+ +	hitfb_writew(v, HD64461_STBCR);
+ =20
+  	return 0;
+  }
+@@@ -456,13 -440,13 +456,13 @@@ static int hitfb_resume(struct device *
+  {
+  	u16 v;
+ =20
+ -	v =3D fb_readw(HD64461_STBCR);
+ +	v =3D hitfb_readw(HD64461_STBCR);
+  	v &=3D ~HD64461_STBCR_SLCKE_OST;
+  	msleep(100);
+ -	v =3D fb_readw(HD64461_STBCR);
+ +	v =3D hitfb_readw(HD64461_STBCR);
+  	v &=3D ~HD64461_STBCR_SLCKE_IST;
+ -	fb_writew(v, HD64461_STBCR);
+ +	hitfb_writew(v, HD64461_STBCR);
+- 	hitfb_blank(0,0);
++ 	hitfb_blank(0, NULL);
+ =20
+  	return 0;
+  }
+
+--Sig_/qYumKycpnKA=iqL9zaIm9aI
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSQ5OQACgkQAVBC80lX
-0Gys1Af/fqLgPnhsAaN+TlmHLbrHXQkbgXKiluCYcUO4GDgKsc7KAzs7f1J+kg3a
-kuLuppsP5/swB6XbjI5SxCduWRVmFsEDQqEGc8+kgZ9gTPRB8g6jdu4TbO+Pgqgo
-mhB+b9A3v/UAItAT4WzLdXE8zGVXqO3NyS3sv8s4p0076wB6xxJZYBfXGyZYw6Dj
-7cywcnisbOkgdT8EGnVJiMqbqGWEAEjqjEMuS3nkEwRltw/UTTzdPVw679hSy5+A
-8jwjX6XAVht8LdHHojU/DC9r4zVqVGsPiVV54OaCVOW1jajSKUeOIeUbQXROQCTO
-/B8JnJSk1uatMb1D75Zg/igdtMAC7g==
-=ba9P
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSRAvgACgkQAVBC80lX
+0GySsQf7BWsuWkG09mM1yj5GkzofDWLSNeehyg1YSbzCLtQPlroldzHeApLNNGbX
+2LWoXyXwYhemgA5PYN6uqIg9qzSmsrmYa0T/+6vNZt6rBKgiS4dhVZoppyUQAfcz
+m6bMdCXnKzUR+4xXz8HR1SIE3S8gvY7wyM2d7shahdgHbmqmLZsLmbroacIhjjaN
+PHSa7Eaa2yRl2nSaewY3IwgXOCKpqXY2pccw8o366PiauUDvcCb/H5sYprZJQcYT
+PKDET2QryaEx4mGfqaws1hF8xfoFny52iEENuMMsCov2RhfZe8Hb6BOi6iBXEQMl
+AWXlZ+WuePmORLxZzO/fC+K2Ate1KQ==
+=et4K
 -----END PGP SIGNATURE-----
 
---Sig_/I+YfrT7_wMEEU0v0N8q3VEq--
+--Sig_/qYumKycpnKA=iqL9zaIm9aI--

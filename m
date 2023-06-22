@@ -2,45 +2,47 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23AE2739413
-	for <lists+linux-next@lfdr.de>; Thu, 22 Jun 2023 02:48:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F571739441
+	for <lists+linux-next@lfdr.de>; Thu, 22 Jun 2023 03:07:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229870AbjFVAsQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 21 Jun 2023 20:48:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35016 "EHLO
+        id S229437AbjFVBHh (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 21 Jun 2023 21:07:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229651AbjFVAsP (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 21 Jun 2023 20:48:15 -0400
+        with ESMTP id S229773AbjFVBHg (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 21 Jun 2023 21:07:36 -0400
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25B591713;
-        Wed, 21 Jun 2023 17:48:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 930121BD0;
+        Wed, 21 Jun 2023 18:07:31 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QmhYl09ndz4wjF;
-        Thu, 22 Jun 2023 10:48:10 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Qmj006lHfz4wjC;
+        Thu, 22 Jun 2023 11:07:28 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1687394891;
-        bh=/A+a6b6wStZD7DVXioWHEOlHI+OVMhNuuqsmWOvTMkU=;
+        s=201702; t=1687396049;
+        bh=xnSlDCHINRgmWWVH6FSnQvnrZU8JOYL4EuyxhU13V1U=;
         h=Date:From:To:Cc:Subject:From;
-        b=nJj2qsaIWFocn/2ylDPR6pYaDWaMyM2rp924XQlg5xkXYbtQKWODkHhSa85EuvrUL
-         jc+7TuDJdCvl5Zo8aPoN/md2lV7s6i+6IrjJ8I0Z5c03NLPgJXhBkvCI/QJJBVVheM
-         GmsWHQWip0v9aGXWorDU6olgHZcFbPT6UI6L7RFxww5r5hZOeI4VY2jptmSRkhxlhs
-         uTEuynUO3vSrvpDJFB+AGtvazbbJutC2HKLso6kRnv1vCfVKPjokAJNaWC8OPqNUhz
-         4qQ1cC27V3I0l6TBandxFdJBEqTmEpmomlZNb/djprRxO7MZk0p7b2rYW6CMhDOh7q
-         iaL56Hqj5ILIQ==
-Date:   Thu, 22 Jun 2023 10:48:10 +1000
+        b=uftdvst2DSnI8Kwcle+jwBtet4oK4GUrPRBItlyb833QCwmu2uvpQ3hM8CyKW10rC
+         egR5A5USHM7IaKUyR56cSk1KHC6lyPMVqMafv3qJ3II3ywtB/rWUlaUsWeuPOXhMJq
+         2/3QCJ8HFDjX5Zw2DUl4Xa6wdGVP2oOQcUbiJJOxiVt61zxtqPVPgtJzMj/UAfJ5ug
+         62suHEiMjeWcYmv7t4ACcdaj7YlPvxxrqXQMnqrYNGwK5vn0al9/VLQfSWTmlQ5MNF
+         2qitAD5okI67gVxP5jl8Y2oI1tSFZu5+oFcNEtdksNa23gwFA1HMfEfSNM60zh1eYl
+         7gDyu3jDw7RRg==
+Date:   Thu, 22 Jun 2023 11:07:25 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        ARM <linux-arm-kernel@lists.infradead.org>
-Cc:     Rob Herring <robh@kernel.org>,
+To:     Jonathan Corbet <corbet@lwn.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     Baoquan He <bhe@redhat.com>,
+        Chaitanya S Prakash <chaitanyas.prakash@arm.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the arm-soc tree
-Message-ID: <20230622104810.30055fb1@canb.auug.org.au>
+Subject: linux-next: manual merge of the jc_docs tree with the arm64 tree
+Message-ID: <20230622110725.4a1e791d@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/W7HhDb3.GYqYJDa/LPzIQi=";
+Content-Type: multipart/signed; boundary="Sig_/7MaPVWb81F0pRdkzGOFmuGJ";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
@@ -51,38 +53,55 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/W7HhDb3.GYqYJDa/LPzIQi=
+--Sig_/7MaPVWb81F0pRdkzGOFmuGJ
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the arm-soc tree, today's linux-next build (arm
-multi_v7_defconfig) produced this warning:
+Today's linux-next merge of the jc_docs tree got conflicts in:
 
-arch/arm/boot/dts/marvell/armada-390-db.dts:84.10-106.4: Warning (spi_bus_r=
-eg): /soc/spi@10680/flash@1: SPI bus unit address format error, expected "0"
+  Documentation/arm64/kdump.rst
+  Documentation/arm64/ptdump.rst
 
-I am not sure why this has only shown up now.
+between commits:
+
+  03dc0e05407f ("Documentation: add kdump.rst to present crashkernel reserv=
+ation on arm64")
+  a0238ada560f ("Documentation/arm64: Add ptdump documentation")
+
+from the arm64 tree and commit:
+
+  e4624435f38b ("docs: arm64: Move arm64 documentation under Documentation/=
+arch/")
+
+from the jc_docs tree.
+
+I fixed it up (I added the files in the new directory) and can carry the
+fix as necessary. This is now fixed as far as linux-next is concerned,
+but any non trivial conflicts should be mentioned to your upstream
+maintainer when your tree is submitted for merging.  You may also want
+to consider cooperating with the maintainer of the conflicting tree to
+minimise any particularly complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/W7HhDb3.GYqYJDa/LPzIQi=
+--Sig_/7MaPVWb81F0pRdkzGOFmuGJ
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSTmkoACgkQAVBC80lX
-0GzfzQgAoGzIEoGYv3ciWAnqWhNQlwPfzPJxGZbKtlty6aJ0D7W39OsOuBdmVqzY
-H/AX6/oINOBRvR9ZIQEgtAz3bciM8gyOoe4Es/7VyDSfTLTwiiPNp85rpSf8XFPv
-aOLIVHYZeafPT80B9qhk52QTWr3ZDt7CuIsu1ONIwg8mH7qAvs4wWUhYtITFYYIt
-MXf9EwoKLYJxk1pB6L3y1kZdWpUqawge8JB6SnSuFceuw6wvAtPiOXDH3gAYIxoW
-PzKgbdLw6/rkFPVtG5zvDvTCqKJDUKXKR8YjiRczOcDV66JLvF/uY+FyScvwO06G
-LEEGBGL9WjW79BkbXRF6vdY9F5bcLw==
-=8ik5
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSTns0ACgkQAVBC80lX
+0Gx9lwf+LO5/V/37RjSEc7Lvp9qUO2sVgiEQVe8RPGRtQkUIYvu7udb3Su1HM3Kq
+eNUAmDll5Exx4HJyOVzQLClLGhuvSG9CXMH1p5xql0IaTmNj25LZrvvm+xXNS3zP
+KHq7DfhvuTNRKnRahbroEN7BMFjPeo4WPIxSLKQGRNUG64PXmKinXoeCD0EnVOPx
+F6pPBDcG0WSnfT+pemfInicS2NLSLbfg9vbVuz/vo8KE58+oXDW7ve0geOd028lD
+pqWVjalGbvzAdqllbVaKswAOnJEW/YwJccNlevPULZGlCKS5ou4Utj2zEJGsNR4U
+ID4xGrHVJbbdqWon5+H4u2Y+A/JAQg==
+=0Nu/
 -----END PGP SIGNATURE-----
 
---Sig_/W7HhDb3.GYqYJDa/LPzIQi=--
+--Sig_/7MaPVWb81F0pRdkzGOFmuGJ--

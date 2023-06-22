@@ -2,62 +2,61 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 108D87395BE
-	for <lists+linux-next@lfdr.de>; Thu, 22 Jun 2023 05:11:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C51C7395C3
+	for <lists+linux-next@lfdr.de>; Thu, 22 Jun 2023 05:16:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229984AbjFVDL0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 21 Jun 2023 23:11:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48078 "EHLO
+        id S229521AbjFVDQP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 21 Jun 2023 23:16:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229960AbjFVDLY (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 21 Jun 2023 23:11:24 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 403B11BDC;
-        Wed, 21 Jun 2023 20:11:21 -0700 (PDT)
+        with ESMTP id S229453AbjFVDQO (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 21 Jun 2023 23:16:14 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 792681BCD;
+        Wed, 21 Jun 2023 20:16:13 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Qmlkm2pTDz4x0L;
-        Thu, 22 Jun 2023 13:11:12 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QmlrV3Bvhz4x04;
+        Thu, 22 Jun 2023 13:16:10 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1687403476;
-        bh=7Qm8l7c2nuE9U4jZ8AyN30XctT4g7MtPQ1Sf7C9ve9Y=;
+        s=201702; t=1687403771;
+        bh=4QeuJyJpgKxrumCndMNF5jV1ekgOSpVmwiEy6ir+L9E=;
         h=Date:From:To:Cc:Subject:From;
-        b=D9gPMYmnssPsDCwCYe8tHi2mwCRsU9uFAiz7kH5AFIUgCmE8uRQ3nh9AQQXlgE5FT
-         RNZuEPNxQ7/e9kfudGQEjPrgq0QXtgcEbLUge+vX9x+m6PhNVTyKZ8DUyQEvuqA52l
-         witBkMDaXINPriAGT0GlHlPdLLVowl+1apDnTUbM4cXv2UKEM7E8VMXwl8x1N4vTjA
-         +cn8jzQM+QiicXgR86JFScai59P2h3IYvZ2DDMoYaVdNEGRo+LuGxCRgvp5mexzGnx
-         8+D9f1suLf2OYlBlyIK4dJqRt0OfgDn0cdLBlgzEEwalP+mYNdXYYnB+r33ca/7+dc
-         E57GRqdws0+yQ==
-Date:   Thu, 22 Jun 2023 13:11:08 +1000
+        b=n6oT5gEFqAzzNMFXU5Nyt70Ti849dZTQMBIw44SHAX/czW4z58UZ2bymX5XqfQmKc
+         8xGuJgNxNWy78HXBm8XG1jLvLScfaZGHv7lErd6mqmQ8lQ/CulSCo+5LfvN0+YdtUz
+         hWTiZyb0342G3tGsfGpTbwNSNZvgLbIedg3c/1l3T31ZITQPWhy/34M4NcwsTkNvfF
+         sdD/+Wyf7IiEpLbgqNR5kxQoN0Rpyr0/WNxdT8dHqmU3htIqPSVUYq6iqKClh4JYVx
+         G7bT91excTVynonbC1yajIJtZhWTDqMYfQ+PMg80xSJ1Hr3TZcUzi0+RgQvtIHRS93
+         T16iw+282y5dA==
+Date:   Thu, 22 Jun 2023 13:16:09 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
 To:     Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>,
         "H. Peter Anvin" <hpa@zytor.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Christian Brauner <brauner@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>
-Subject: linux-next: manual merge of the tip tree with the vfs-brauner tree
-Message-ID: <20230622131108.19059f3c@canb.auug.org.au>
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Ryan Roberts <ryan.roberts@arm.com>
+Subject: linux-next: manual merge of the tip tree with the mm-stable tree
+Message-ID: <20230622131609.3fdf314d@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/G3lxhFHOTDr_0Ur8G.CHSPo";
+Content-Type: multipart/signed; boundary="Sig_/dPngXCYV1Had5_29rk5pHpH";
  protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/G3lxhFHOTDr_0Ur8G.CHSPo
+--Sig_/dPngXCYV1Had5_29rk5pHpH
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
@@ -65,15 +64,15 @@ Hi all,
 
 Today's linux-next merge of the tip tree got a conflict in:
 
-  include/linux/proc_fs.h
+  mm/migrate.c
 
 between commit:
 
-  ef104443bffa ("procfs: consolidate arch_report_meminfo declaration")
+  c33c794828f2 ("mm: ptep_get() conversion")
 
-from the vfs-brauner tree and commit:
+from the mm-stable tree and commit:
 
-  eec387cbf905 ("x86: Expose thread features in /proc/$PID/status")
+  23a219c1860b ("mm: Make pte_mkwrite() take a VMA")
 
 from the tip tree.
 
@@ -88,37 +87,36 @@ complex conflicts.
 Cheers,
 Stephen Rothwell
 
-diff --cc include/linux/proc_fs.h
-index 253f2676d93a,80ff8e533cbd..000000000000
---- a/include/linux/proc_fs.h
-+++ b/include/linux/proc_fs.h
-@@@ -158,8 -158,8 +158,10 @@@ int proc_pid_arch_status(struct seq_fil
-  			struct pid *pid, struct task_struct *task);
-  #endif /* CONFIG_PROC_PID_ARCH_STATUS */
+diff --cc mm/migrate.c
+index 6f4066425d47,8b46b722f1a4..000000000000
+--- a/mm/migrate.c
++++ b/mm/migrate.c
+@@@ -220,8 -219,8 +220,8 @@@ static bool remove_migration_pte(struc
+  		if (folio_test_dirty(folio) && is_migration_entry_dirty(entry))
+  			pte =3D pte_mkdirty(pte);
+  		if (is_writable_migration_entry(entry))
+- 			pte =3D pte_mkwrite(pte);
++ 			pte =3D pte_mkwrite(pte, vma);
+ -		else if (pte_swp_uffd_wp(*pvmw.pte))
+ +		else if (pte_swp_uffd_wp(old_pte))
+  			pte =3D pte_mkuffd_wp(pte);
  =20
- +void arch_report_meminfo(struct seq_file *m);
- +
-+ void arch_proc_pid_thread_features(struct seq_file *m, struct task_struct=
- *task);
-+=20
-  #else /* CONFIG_PROC_FS */
- =20
-  static inline void proc_root_init(void)
+  		if (folio_test_anon(folio) && !is_readable_migration_entry(entry))
 
---Sig_/G3lxhFHOTDr_0Ur8G.CHSPo
+--Sig_/dPngXCYV1Had5_29rk5pHpH
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSTu8wACgkQAVBC80lX
-0GwOygf/Trk7vPJzVHgp1QiAu6AgiMyXHYKqbOtJG8fsW2hZUuERfHd+grbbyzff
-jnO5Y3SajH7oFrcOD8TqYdH6wD4TdYriw8XA9nuFPKWj2+6aQzPiUbP3ku8kPivP
-tVyLX6ntGxkzI2bJYNzeHkw6bBk62vfd6R+PG07yy2osndehAVhW4IKL3lQd8bZk
-IF3Y+mHAovakKKObByPMkyHAVvorDZScdt/SWGwHh0/D/g/QDTzSMQJdmI7SWkU0
-xzMaaOQwHG4UyAzdN6CioG761CrQGz38M/Ohvr4HWyoeXPv2jBxduRqnUUFKN0pc
-ALfQnu2v6q8lpPtmYCNbl6G2chojBQ==
-=jGD9
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSTvPkACgkQAVBC80lX
+0Gx9+Af+L6Kvxcj/+tF5s2Z4bVylxonNrdsWnz1wAfY1sGIR2iTQXswKrTAh3iiW
+CEuqmgJuiDN7kjFboNBB+QaFrrjdCe9jcCXOCuuVB9UhX91LNgJ+fIMkNkT+YOtt
+YrL/8l9kyzPFh2LGdG2N0We1auK7nkrvAPSOLQxApjD+gEcw72UsWYMMjujGdOg/
+qjIKwekmskBzshBUpqooohHV/3u6W2Wwcw733QurWH7fhr/sAeeeZ1mppkf3bpw/
+8lQtNHmxIrfW8AVCH0ZsiYai7EoTnxh27CLPBNCJ7U3WvkEWUqzgtkeizA6+sJ0S
+7ukeYp7Ssphfha+ZcL2HULsRuZu3sA==
+=Tq32
 -----END PGP SIGNATURE-----
 
---Sig_/G3lxhFHOTDr_0Ur8G.CHSPo--
+--Sig_/dPngXCYV1Had5_29rk5pHpH--

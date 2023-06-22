@@ -2,48 +2,45 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39E467393B8
-	for <lists+linux-next@lfdr.de>; Thu, 22 Jun 2023 02:26:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23AE2739413
+	for <lists+linux-next@lfdr.de>; Thu, 22 Jun 2023 02:48:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229684AbjFVA0p (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 21 Jun 2023 20:26:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58306 "EHLO
+        id S229870AbjFVAsQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 21 Jun 2023 20:48:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbjFVA0o (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 21 Jun 2023 20:26:44 -0400
+        with ESMTP id S229651AbjFVAsP (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 21 Jun 2023 20:48:15 -0400
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F7E2A1;
-        Wed, 21 Jun 2023 17:26:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25B591713;
+        Wed, 21 Jun 2023 17:48:13 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Qmh4m6KjLz4wjC;
-        Thu, 22 Jun 2023 10:26:32 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QmhYl09ndz4wjF;
+        Thu, 22 Jun 2023 10:48:10 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1687393593;
-        bh=19SFAqyiGHIjSeaYz7gu4pZOvtfALbexMUSRYuNdHw4=;
+        s=201702; t=1687394891;
+        bh=/A+a6b6wStZD7DVXioWHEOlHI+OVMhNuuqsmWOvTMkU=;
         h=Date:From:To:Cc:Subject:From;
-        b=K2NPfU0uhfr4a623V49I9xDEFiNVzXEBZtWb2yE4khz5sixZ1qjbpqCfu6mCmGG6k
-         Ovt7SbKc2rFxzqCeZ1Wa/a0zPIleyHzpDRydr0pxbat3bOON2mx8If449AhECiVwVW
-         YhLBlSnhxFLTMtdrGlzzJPOcaTC9o0pGSvUNaQGxuw9esqGuwZNihZRs0WDVMFlK7K
-         +pRts073PhQfLZVCs+T5AcBMQLxNbvV7rTgzGCEGR3TGRoALOERJKf739flpYmVvEo
-         g9BPMtAEisCrjRbaLYUt4wA9jyfbs3BzNJ7zH7q5J72TRa5Idox/6YPsWV61oZYLUP
-         Cgu1DztPm7NFA==
-Date:   Thu, 22 Jun 2023 10:26:30 +1000
+        b=nJj2qsaIWFocn/2ylDPR6pYaDWaMyM2rp924XQlg5xkXYbtQKWODkHhSa85EuvrUL
+         jc+7TuDJdCvl5Zo8aPoN/md2lV7s6i+6IrjJ8I0Z5c03NLPgJXhBkvCI/QJJBVVheM
+         GmsWHQWip0v9aGXWorDU6olgHZcFbPT6UI6L7RFxww5r5hZOeI4VY2jptmSRkhxlhs
+         uTEuynUO3vSrvpDJFB+AGtvazbbJutC2HKLso6kRnv1vCfVKPjokAJNaWC8OPqNUhz
+         4qQ1cC27V3I0l6TBandxFdJBEqTmEpmomlZNb/djprRxO7MZk0p7b2rYW6CMhDOh7q
+         iaL56Hqj5ILIQ==
+Date:   Thu, 22 Jun 2023 10:48:10 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Kevin Hilman <khilman@baylibre.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>
-Cc:     ARM <linux-arm-kernel@lists.infradead.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
+To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        ARM <linux-arm-kernel@lists.infradead.org>
+Cc:     Rob Herring <robh@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Rob Herring <robh@kernel.org>
-Subject: linux-next: manual merge of the amlogic tree with the arm-soc tree
-Message-ID: <20230622102630.263ae2b8@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build warning after merge of the arm-soc tree
+Message-ID: <20230622104810.30055fb1@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/7kMeHOL46Wi1SEsNy3paLl4";
+Content-Type: multipart/signed; boundary="Sig_/W7HhDb3.GYqYJDa/LPzIQi=";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
@@ -54,67 +51,38 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/7kMeHOL46Wi1SEsNy3paLl4
+--Sig_/W7HhDb3.GYqYJDa/LPzIQi=
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the amlogic tree got a conflict in:
+After merging the arm-soc tree, today's linux-next build (arm
+multi_v7_defconfig) produced this warning:
 
-  MAINTAINERS
+arch/arm/boot/dts/marvell/armada-390-db.dts:84.10-106.4: Warning (spi_bus_r=
+eg): /soc/spi@10680/flash@1: SPI bus unit address format error, expected "0"
 
-between commit:
-
-  724ba6751532 ("ARM: dts: Move .dts files to vendor sub-directories")
-
-from the arm-soc tree and commit:
-
-  9e70e49474bb ("MAINTAINERS: add PHY-related files to Amlogic SoC file lis=
-t")
-
-from the amlogic tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+I am not sure why this has only shown up now.
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc MAINTAINERS
-index 7ad2bf6ac1af,9f769aa65936..000000000000
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@@ -1912,7 -1915,8 +1912,8 @@@ L:	linux-arm-kernel@lists.infradead.or
-  L:	linux-amlogic@lists.infradead.org
-  S:	Maintained
-  W:	http://linux-meson.com/
-+ F:	Documentation/devicetree/bindings/phy/amlogic*
- -F:	arch/arm/boot/dts/meson*
- +F:	arch/arm/boot/dts/amlogic/
-  F:	arch/arm/mach-meson/
-  F:	arch/arm64/boot/dts/amlogic/
-  F:	drivers/mmc/host/meson*
-
---Sig_/7kMeHOL46Wi1SEsNy3paLl4
+--Sig_/W7HhDb3.GYqYJDa/LPzIQi=
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSTlTcACgkQAVBC80lX
-0GyURQgAl+Qbm7E2ysNSAIEmaeEJdqI4S7xHT6lY6Pjx2TqE4o22DDM+QYta5Q2g
-A6rjVOHGVNn3aBDExOobs/ZdilyTkGCMd4kny2MJmMpFLTl2cKAgTo6AWV8OB01e
-VeeOrP7MfQNeQgZVSQU4NSRG1P7XxujQWhjHdXJ5nabG9oZrUphbtUHBr+853MET
-Io6tmj5lJHcXUtkT56RbD/xQ15HtUH2Dbzt9FBzBg/NM1OEPtgDzud0+wDwDhPjX
-cx+ERt6xgT1CUOOMwYSKI7Q4Th4xLAJB5ICeaYMmrsz7V2gsiRJWapUmVQvk3NJL
-pIo+0+RCh4wpQ1Kfew9WtE9oleVYxg==
-=ZJRc
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSTmkoACgkQAVBC80lX
+0GzfzQgAoGzIEoGYv3ciWAnqWhNQlwPfzPJxGZbKtlty6aJ0D7W39OsOuBdmVqzY
+H/AX6/oINOBRvR9ZIQEgtAz3bciM8gyOoe4Es/7VyDSfTLTwiiPNp85rpSf8XFPv
+aOLIVHYZeafPT80B9qhk52QTWr3ZDt7CuIsu1ONIwg8mH7qAvs4wWUhYtITFYYIt
+MXf9EwoKLYJxk1pB6L3y1kZdWpUqawge8JB6SnSuFceuw6wvAtPiOXDH3gAYIxoW
+PzKgbdLw6/rkFPVtG5zvDvTCqKJDUKXKR8YjiRczOcDV66JLvF/uY+FyScvwO06G
+LEEGBGL9WjW79BkbXRF6vdY9F5bcLw==
+=8ik5
 -----END PGP SIGNATURE-----
 
---Sig_/7kMeHOL46Wi1SEsNy3paLl4--
+--Sig_/W7HhDb3.GYqYJDa/LPzIQi=--

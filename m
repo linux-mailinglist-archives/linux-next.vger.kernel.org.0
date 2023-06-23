@@ -2,48 +2,45 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 082BA73B2C7
-	for <lists+linux-next@lfdr.de>; Fri, 23 Jun 2023 10:37:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3A6573B2C9
+	for <lists+linux-next@lfdr.de>; Fri, 23 Jun 2023 10:38:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231266AbjFWIhD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 23 Jun 2023 04:37:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36274 "EHLO
+        id S231132AbjFWIiA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 23 Jun 2023 04:38:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjFWIhC (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 23 Jun 2023 04:37:02 -0400
+        with ESMTP id S229451AbjFWIh6 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 23 Jun 2023 04:37:58 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C877EC6;
-        Fri, 23 Jun 2023 01:37:01 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 108B0E6E;
+        Fri, 23 Jun 2023 01:37:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 439D56199F;
-        Fri, 23 Jun 2023 08:37:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75531C433C0;
-        Fri, 23 Jun 2023 08:36:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9B97C6199F;
+        Fri, 23 Jun 2023 08:37:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83CD2C433C0;
+        Fri, 23 Jun 2023 08:37:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687509420;
-        bh=j/8yv1geRksB8yZCizmbt8vPeQ+X4F73RDWW++AWaNM=;
+        s=k20201202; t=1687509477;
+        bh=vKyNB9XCmvnVAC+Zld9VuDInRjVAii58xA1Uoye9BmI=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Tbj2m3xc3q9jG/MqbkmqV4WQcrvZFpSelN0FtHFJT3sfODMB3ZesiJoOOn5Z6J+wV
-         +k61rwBiPS6dQOvkNsOO6mpkw3ANRuP1ypaNpmHI/IlW364Lgz0beImthz4i4XYOwH
-         7fU0eFJCd/PF0JhvFVJUqDUG3ko2qq/ExZQGPaKFMIdMw19QrAH7R15G1FcBz5t9fb
-         rh/hlNF/vGqhGu4s2sS0VjpEOPaS8GDiS9ToMzJSvoVcObLAcaRnY/nCWY8EFljD78
-         vk4LLUblBZ6sFD8PRFWyQVFhsq3jun05pp2Qt/IkQqC3sWcKobdaxgHmDPjlCi88Yi
-         NkaVhQRMLwZmg==
-Date:   Fri, 23 Jun 2023 17:36:57 +0900
+        b=tEOtl79Gg4tFbUt8p1nm6vuMS4G/R75ixw5Sl184xe2J/uuSPd+HaTJbpc9A7VpjG
+         MUEvClQr4vtAIeJDAPKB2r3/Qa/Zgr+lQlWFwSDcR0G2eWsbbxc2ELUxj6Hjdfkv1a
+         ZJuwAEluLcGaYQdm8oAtyx2VFDvwtreHXEtYdCpO3xclWi2t1rWC06I2pUFoGbhUYY
+         qHQqZJTPZeCAhMXXcUsShcrBLV0uH39yUrj3ur/XTI2zTMENqFs88nXBXLX9gNr6+g
+         ShVjz4diccKTbROzSm7d4yhxHA3lEr0jFvgbof9W8Jo0awPzviZhIRFfL5cF3r8M5E
+         p1A/M28P/KNog==
+Date:   Fri, 23 Jun 2023 17:37:53 +0900
 From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Signed-off-by missing for commit in the ftrace tree
-Message-Id: <20230623173657.44901820f684668d5b38da26@kernel.org>
-In-Reply-To: <20230622184840.1dd4e945@gandalf.local.home>
-References: <20230623083456.1aa36194@canb.auug.org.au>
-        <20230622184840.1dd4e945@gandalf.local.home>
+To:     Donglin Peng <pengdonglin@sangfor.com.cn>
+Cc:     rostedt@goodmis.org, sfr@canb.auug.org.au,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
+Subject: Re: [PATCH] tracing: fix warnings when building htmldocs
+Message-Id: <20230623173753.83e69284d2752f57c91abf4e@kernel.org>
+In-Reply-To: <20230623071728.25688-1-pengdonglin@sangfor.com.cn>
+References: <20230623071728.25688-1-pengdonglin@sangfor.com.cn>
 X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -58,29 +55,59 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, 22 Jun 2023 18:48:40 -0400
-Steven Rostedt <rostedt@goodmis.org> wrote:
+On Fri, 23 Jun 2023 15:17:28 +0800
+Donglin Peng <pengdonglin@sangfor.com.cn> wrote:
 
-> On Fri, 23 Jun 2023 08:35:50 +1000
-> Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> When building htmldocs, the following warnings appear:
 > 
-> > Hi all,
-> > 
-> > Commits
-> > 
-> >   e46ad59233cf ("selftests/ftrace: Add new test case which checks for optimized probes")
-> >   bd2cdc432190 ("selftests/ftrace: Add new test case which adds multiple consecutive probes in a function")
-> > 
-> > are missing a Signed-off-by from their committer.
-> > 
+> Documentation/trace/ftrace.rst:2797: WARNING: Literal block expected; none found.
+> Documentation/trace/ftrace.rst:2816: WARNING: Literal block expected; none found.
 > 
-> Masami, can you rebase and fix those commits?
+> So fix it.
+> 
+> Signed-off-by: Donglin Peng <pengdonglin@sangfor.com.cn>
 
-Oops, yes. 
-Thanks!
+Looks good to me.
 
+Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+
+Also,
+
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Link: https://lore.kernel.org/all/20230623143517.19ffc6c0@canb.auug.org.au/
+Fixes: 21c094d3f8a6 ("tracing: Add documentation for funcgraph-retval and funcgraph-retval-hex")
+
+Thank you,
+
+> ---
+>  Documentation/trace/ftrace.rst | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> -- Steve
+> diff --git a/Documentation/trace/ftrace.rst b/Documentation/trace/ftrace.rst
+> index df2d3e57a83f..172f35c7308f 100644
+> --- a/Documentation/trace/ftrace.rst
+> +++ b/Documentation/trace/ftrace.rst
+> @@ -2786,7 +2786,7 @@ option, and these limitations will be eliminated in the future:
+>    especially when larger types are truncated, whether explicitly or implicitly.
+>    Here are some specific cases to illustrate this point:
+>  
+> -  **Case One**::
+> +  **Case One**:
+>  
+>    The function narrow_to_u8 is defined as follows::
+>  
+> @@ -2805,7 +2805,7 @@ option, and these limitations will be eliminated in the future:
+>    If you pass 0x123456789abcdef to this function and want to narrow it,
+>    it may be recorded as 0x123456789abcdef instead of 0xef.
+>  
+> -  **Case Two**::
+> +  **Case Two**:
+>  
+>    The function error_if_not_4g_aligned is defined as follows::
+>  
+> -- 
+> 2.40.1
+> 
 
 
 -- 

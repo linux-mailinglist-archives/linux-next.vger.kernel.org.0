@@ -2,82 +2,125 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D654F73B125
-	for <lists+linux-next@lfdr.de>; Fri, 23 Jun 2023 09:17:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6170073B2C3
+	for <lists+linux-next@lfdr.de>; Fri, 23 Jun 2023 10:34:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230009AbjFWHRz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 23 Jun 2023 03:17:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54200 "EHLO
+        id S231544AbjFWIeR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 23 Jun 2023 04:34:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjFWHRz (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 23 Jun 2023 03:17:55 -0400
-Received: from mail-m11873.qiye.163.com (mail-m11873.qiye.163.com [115.236.118.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BFB2C6;
-        Fri, 23 Jun 2023 00:17:53 -0700 (PDT)
-Received: from localhost.localdomain.localdomain (unknown [113.87.232.96])
-        by mail-m11873.qiye.163.com (Hmail) with ESMTPA id 13D87900455;
-        Fri, 23 Jun 2023 15:17:32 +0800 (CST)
-From:   Donglin Peng <pengdonglin@sangfor.com.cn>
-To:     mhiramat@kernel.org, rostedt@goodmis.org, sfr@canb.auug.org.au
-Cc:     linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
-        Donglin Peng <pengdonglin@sangfor.com.cn>
-Subject: [PATCH] tracing: fix warnings when building htmldocs
-Date:   Fri, 23 Jun 2023 15:17:28 +0800
-Message-ID: <20230623071728.25688-1-pengdonglin@sangfor.com.cn>
-X-Mailer: git-send-email 2.41.0
+        with ESMTP id S231415AbjFWIeQ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 23 Jun 2023 04:34:16 -0400
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3220C1B4
+        for <linux-next@vger.kernel.org>; Fri, 23 Jun 2023 01:34:15 -0700 (PDT)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-1aa25c5cf0eso100901fac.1
+        for <linux-next@vger.kernel.org>; Fri, 23 Jun 2023 01:34:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mihalicyn.com; s=mihalicyn; t=1687509254; x=1690101254;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1VfOZYjnomSo9q5VHX9+kAIXo4GkGFH/FUUb3pBSdsU=;
+        b=QgS3X3DJxQOMrYcPrem/L90gdzSv0D+X18F1VXWDDbj0pPuz8zWDgQOXgpBM0pEfJA
+         38G4+FCtksFQY6W6yU+IVxn7UI5ciB7IM+T+MRWKNzwSwkjPRpx4qYmuJqw1H1grQSja
+         RVnTahp0J86+aokgbuYRoAM3FEkbmLUX4AdqM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687509254; x=1690101254;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1VfOZYjnomSo9q5VHX9+kAIXo4GkGFH/FUUb3pBSdsU=;
+        b=QnbmexrmWLcws1k17PhJ5hA5EZD451Klti466Zd03jlmsxJzKHZ+qa0vZHLCUZhe54
+         XXrgmqVe7Rts8kb5NIe3wn4r88voMKr6bP7ez9KPXeotEPBq4NvjBzOGiUOgBqjSdag2
+         iip5Gs8h47h/K32f3TXRDGVg6SqeQYFpbw/Ttu2Mx+YQKCq2ltt/wPyUKTNVmrLk0VkM
+         HNMLjrByUoJZ2+wxCo/rgoCb0EAELCmFeh5i9YYR7THJUdPyO7AC9zG2BuaKgS4JF4lk
+         G616JY4coad935UOqJjzQC04OKOJkCO1PgRn47HV5mgxzfZJ37+HF8XLffz3wHwDd3e6
+         sX3Q==
+X-Gm-Message-State: AC+VfDz07EM9JBjHSFRuAKJqJWrAXVAbpIpucMnzuy+4VwWj3Bq2VYA+
+        2l5E3YvGnaumnX/UIHuf0yX2CFtGR/ah2lTSAHWYAQ==
+X-Google-Smtp-Source: ACHHUZ7pTQsCjJlNSxOxtdDHphBEB4kzpuKwgH56v5UWf7ORubiHvZUo7Pf5b61u/B44T9klEfwdi3FHB7xe6l9AdU8=
+X-Received: by 2002:aca:f002:0:b0:39c:8009:60af with SMTP id
+ o2-20020acaf002000000b0039c800960afmr15684908oih.3.1687509254434; Fri, 23 Jun
+ 2023 01:34:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-        tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVlCTUwfVkkdQkgaT0tIGUxMTVUTARMWGhIXJBQOD1
-        lXWRgSC1lBWUpKSFVDTFVJSElVQk1ZV1kWGg8SFR0UWUFZT0tIVUpKS0hKQ1VKS0tVS1kG
-X-HM-Tid: 0a88e71d87e12eafkusn13d87900455
-X-HM-MType: 1
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6MRA6HSo4FT1IDAIuOCwUAUwe
-        QjFPC0xVSlVKTUNMTktPTU5JTENMVTMWGhIXVQseFRwfFBUcFxIVOwgaFRwdFAlVGBQWVRgVRVlX
-        WRILWUFZSkpIVUNMVUlISVVCTVlXWQgBWUFJSkpNNwY+
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <PH0PR11MB51262F07CD4739BDCB920483D322A@PH0PR11MB5126.namprd11.prod.outlook.com>
+In-Reply-To: <PH0PR11MB51262F07CD4739BDCB920483D322A@PH0PR11MB5126.namprd11.prod.outlook.com>
+From:   Alexander Mikhalitsyn <alexander@mihalicyn.com>
+Date:   Fri, 23 Jun 2023 10:34:03 +0200
+Message-ID: <CAJqdLrpFcga4n7wxBhsFqPQiN8PKFVr6U10fKcJ9W7AcZn+o6Q@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the bluetooth tree
+To:     "Von Dentz, Luiz" <luiz.von.dentz@intel.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Christian Brauner <brauner@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-When building htmldocs, the following warnings appear:
+On Fri, Jun 23, 2023 at 12:28=E2=80=AFAM Von Dentz, Luiz
+<luiz.von.dentz@intel.com> wrote:
+>
+> Hi Stephen, Alexander,
 
-Documentation/trace/ftrace.rst:2797: WARNING: Literal block expected; none found.
-Documentation/trace/ftrace.rst:2816: WARNING: Literal block expected; none found.
+Dear friends,
 
-So fix it.
+>
+> Looks like we have a similar problem as to:
+>
+> https://lore.kernel.org/lkml/20230524081933.44dc8bea@kernel.org/
+>
+> That said for unix socket it was decided to not allow it to be build as m=
+odule, which is something I don't think we are willing to do for bluetooth,=
+ so we have to find a way to get around pidfd_prepare, which seems to be ca=
+lled due to the use of scm_recv (it is also used by netlink btw).
 
-Signed-off-by: Donglin Peng <pengdonglin@sangfor.com.cn>
----
- Documentation/trace/ftrace.rst | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Ugh, yep. That's bad and we can't workaround it like we did for unix socket=
+s.
 
-diff --git a/Documentation/trace/ftrace.rst b/Documentation/trace/ftrace.rst
-index df2d3e57a83f..172f35c7308f 100644
---- a/Documentation/trace/ftrace.rst
-+++ b/Documentation/trace/ftrace.rst
-@@ -2786,7 +2786,7 @@ option, and these limitations will be eliminated in the future:
-   especially when larger types are truncated, whether explicitly or implicitly.
-   Here are some specific cases to illustrate this point:
- 
--  **Case One**::
-+  **Case One**:
- 
-   The function narrow_to_u8 is defined as follows::
- 
-@@ -2805,7 +2805,7 @@ option, and these limitations will be eliminated in the future:
-   If you pass 0x123456789abcdef to this function and want to narrow it,
-   it may be recorded as 0x123456789abcdef instead of 0xef.
- 
--  **Case Two**::
-+  **Case Two**:
- 
-   The function error_if_not_4g_aligned is defined as follows::
- 
--- 
-2.40.1
+Originally, Christian had objections against exporting the
+pidfd_prepare function [1]
 
+[1] https://lore.kernel.org/all/20230523-flechten-ortsschild-e5724ecc4ed0@b=
+rauner/
+
++cc Christian
+
+Kind regards,
+Alex
+
+>
+>
+> ________________________________ From: Stephen Rothwell
+> Sent: Monday, June 12, 2023 8:02 PM
+> To: Marcel Holtmann; Johan Hedberg
+> Cc: Von Dentz, Luiz; Linux Kernel Mailing List; Linux Next Mailing List
+> Subject: linux-next: build failure after merge of the bluetooth tree
+>
+> Hi all,
+>
+> After merging the bluetooth tree, today's linux-next build (arm
+> multi_v7_defconfig) failed like this:
+>
+> ERROR: modpost: "pidfd_prepare" [net/bluetooth/bluetooth.ko] undefined!
+>
+> Caused by commit
+>
+>   817efd3cad74 ("Bluetooth: hci_sock: Forward credentials to monitor")
+>
+> I have reverted that commit for today.
+>
+> --
+> Cheers,
+> Stephen Rothwell

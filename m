@@ -2,118 +2,138 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3482473AE82
-	for <lists+linux-next@lfdr.de>; Fri, 23 Jun 2023 04:22:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC2AA73AEE5
+	for <lists+linux-next@lfdr.de>; Fri, 23 Jun 2023 05:04:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230180AbjFWCWu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 22 Jun 2023 22:22:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44304 "EHLO
+        id S230308AbjFWDEy (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 22 Jun 2023 23:04:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229871AbjFWCWu (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 22 Jun 2023 22:22:50 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2CBF1BCA;
-        Thu, 22 Jun 2023 19:22:48 -0700 (PDT)
+        with ESMTP id S230235AbjFWDEx (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 22 Jun 2023 23:04:53 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2646C2135;
+        Thu, 22 Jun 2023 20:04:49 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QnLcL02xTz4x0L;
-        Fri, 23 Jun 2023 12:22:41 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QnMXs5dMSz4wjB;
+        Fri, 23 Jun 2023 13:04:45 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1687486964;
-        bh=TCCFMEXH3LH5PAQ+wFvijb678E4tpW9KTYyHVKC9U20=;
+        s=201702; t=1687489487;
+        bh=r2ZwcIFT4HlwJjAj+VisO/XGPwfJvpYrACK4BtmNfhY=;
         h=Date:From:To:Cc:Subject:From;
-        b=Hlg9OpxzQWUETfnm9O4rXdyMcR7T4wRgbcqSlrtofEDlq9pEGF3fLT7DmlTxKo/Vx
-         /XOU5TqPmyDWlGjtou6Ildqxh0HYB/uX82TQwk5SQfDYOCxJYZnFVnl1EDneAj8djw
-         nI16KYIbkmyrhtRoQO/pg0l8c5X1/uDoW9mKI9xlkSPeqrnnvQRVRIF7qaFE1jToBf
-         pv1Il+AkKXiMmjhH74qcnW3FWf/55Z1S6YfIbVKMd3ZzgcYhJfUHxyqBuHLRIrvK9U
-         Hq6LIY1fXvQdgbsi/kyDWTy9pCrMGvA/BpB5r+F2DO71VaH8yzKlo+4VinfXwnpz29
-         KbwMjg7BhFlFw==
-Date:   Fri, 23 Jun 2023 12:20:37 +1000
+        b=TJd1L/eQg1XgkXP9LOYB6VQ2T1YqBm0OuFJM0pc/r4TCOFy4DClv7TmUylR4Af+GR
+         xjxKvyYZ6dtjKZolUQhLZtwGLJQanHtHBq8WDW+o8upCyX6P7bO/jv+ZpzkWRWbRVm
+         aCg1IDamyE+dD7/4oe7ufWjPmQ2BdthmYLBf8MTihF4QANBdR7AjV+66ghIHJbVH4T
+         Zb3TjwLNfM7WJtEwva4NANAeWTAw4NL7iwlYHPdgrWy3wc4RiOaxkNQ+UVi/iwQpgS
+         JYMVT8delOY3IjxF9hyYeqrUA36kVXJYKRnXElqibS/RjT1/G4x1YkM+t8Tx5q2r8e
+         UOXjU9KfzyqIA==
+Date:   Fri, 23 Jun 2023 13:04:43 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Sean Christopherson <seanjc@google.com>,
-        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>
-Cc:     ARM <linux-arm-kernel@lists.infradead.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
+To:     "Michael S. Tsirkin" <mst@redhat.com>,
+        David Miller <davem@davemloft.net>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        Networking <netdev@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the kvm-x86 tree with the arm-soc tree
-Message-ID: <20230623122037.16eb8bec@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+Subject: linux-next: manual merge of the vhost tree with the net-next tree
+Message-ID: <20230623130443.6c9a481e@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/j_I.t+bRIB0/0J=TouOZEKb";
+Content-Type: multipart/signed; boundary="Sig_/Sq/s683MbuDhTPbsFIgzDlo";
  protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/j_I.t+bRIB0/0J=TouOZEKb
+--Sig_/Sq/s683MbuDhTPbsFIgzDlo
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the kvm-x86 tree got a conflict in:
+Today's linux-next merge of the vhost tree got a conflict in:
 
-  Documentation/process/maintainer-handbooks.rst
+  drivers/net/virtio_net.c
 
 between commit:
 
-  425d827ef91e ("Documentation/process: add soc maintainer handbook")
+  80f50f918c6e ("virtio_net: separate the logic of freeing the rest mergeab=
+le buf")
 
-from the arm-soc tree and commit:
+from the net-next tree and commit:
 
-  63e2f55cabed ("Documentation/process: Add a maintainer handbook for KVM x=
-86")
+  21081476b808 ("virtio_net: support dma premapped")
 
-from the kvm-x86 tree.
+from the vhost tree.
 
-I fixed it up (and sorted the entries - see below) and can carry the
-fix as necessary. This is now fixed as far as linux-next is concerned,
-but any non trivial conflicts should be mentioned to your upstream
-maintainer when your tree is submitted for merging.  You may also want
-to consider cooperating with the maintainer of the conflicting tree to
-minimise any particularly complex conflicts.
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc Documentation/process/maintainer-handbooks.rst
-index fe24cb665fb7,d12cbbe2b7df..000000000000
---- a/Documentation/process/maintainer-handbooks.rst
-+++ b/Documentation/process/maintainer-handbooks.rst
-@@@ -15,6 -15,6 +15,7 @@@ Contents
-     :numbered:
-     :maxdepth: 2
+diff --cc drivers/net/virtio_net.c
+index 0db14f6b87d3,d67b36fdba0d..000000000000
+--- a/drivers/net/virtio_net.c
++++ b/drivers/net/virtio_net.c
+@@@ -1128,28 -1136,6 +1233,28 @@@ err
+  	return NULL;
+  }
  =20
- -   maintainer-tip
- -   maintainer-netdev
-+    maintainer-kvm-x86
- +   maintainer-netdev
- +   maintainer-soc
- +   maintainer-tip
+ +static void mergeable_buf_free(struct receive_queue *rq, int num_buf,
+ +			       struct net_device *dev,
+ +			       struct virtnet_rq_stats *stats)
+ +{
+ +	struct page *page;
+ +	void *buf;
+ +	int len;
+ +
+ +	while (num_buf-- > 1) {
+- 		buf =3D virtqueue_get_buf(rq->vq, &len);
+++		buf =3D virtnet_rq_get_buf(rq, &len, NULL);
+ +		if (unlikely(!buf)) {
+ +			pr_debug("%s: rx error: %d buffers missing\n",
+ +				 dev->name, num_buf);
+ +			dev->stats.rx_length_errors++;
+ +			break;
+ +		}
+ +		stats->bytes +=3D len;
+ +		page =3D virt_to_head_page(buf);
+ +		put_page(page);
+ +	}
+ +}
+ +
+  /* Why not use xdp_build_skb_from_frame() ?
+   * XDP core assumes that xdp frags are PAGE_SIZE in length, while in
+   * virtio-net there are 2 points that do not match its requirements:
 
---Sig_/j_I.t+bRIB0/0J=TouOZEKb
+--Sig_/Sq/s683MbuDhTPbsFIgzDlo
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSVAXUACgkQAVBC80lX
-0Gx9Awf+LMYa/6C8gqfIdqZvbe74wj4jd0topCoNlmDQvHMBiYEr2Az78O4a9Okf
-eBG5JnCPdsCfe1U8PezWHSNA/Sg45XLWt1/TJfHZLVU5c4uaKV3Mrcu79fLDgSdN
-IVrvEYbNZVdHr/of2xBtTkl+VueqTqbYR8HXOFOXijh5Fk0exm+0vMgvCOnDlhz0
-j/hAyET47aBfqe6JOCdnKd2QR6uclz1OseHL/yRJtFQYoLpgMAxPkEuFIBC0PfwI
-wTyI+7x4WOxYyVMI0fojYE1XNbN+qtuLJrqql1g01z6k5ybgjn4LV47e0GmwKsKE
-r3/e+B9C26SxOOPlbm/OR1yCmUTKAw==
-=1WrR
+iQEyBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSVC8sACgkQAVBC80lX
+0GxbWAf2I4Ddy8m9IViYJOw9ulRJ1xTRB4eS69zxg4ddrmyNDuXd7RovOT6PyTbe
+u+CZBM60EPl8RgBoXBRUG0iq/GOSaemiizccOLMH8OVcz7/GSwUeZJbboFQjHEgV
+HWUv6gIkQePtsIh8SQPl8ouuKGiXYeIJlC7UHyAeuQX1IAaHq9yohOJVIPpuwiaB
+mExe34icoqh4unAr3EmAvZ64cfy+sfZy7mh5XgfpSGdCkSsDdBhn+ITJMJJZKKvO
+kcQcBAx3ii547fJ5QQxKG/FQabIwi+jK3KanXVnnXWe3DejCvF92TxkxdO8ApdBW
+Q1cGn7j3wP9e6zzf9bJi8YTZTLzp
+=SIiz
 -----END PGP SIGNATURE-----
 
---Sig_/j_I.t+bRIB0/0J=TouOZEKb--
+--Sig_/Sq/s683MbuDhTPbsFIgzDlo--

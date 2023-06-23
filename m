@@ -2,47 +2,45 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC2AA73AEE5
-	for <lists+linux-next@lfdr.de>; Fri, 23 Jun 2023 05:04:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AA6E73AF6C
+	for <lists+linux-next@lfdr.de>; Fri, 23 Jun 2023 06:30:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230308AbjFWDEy (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 22 Jun 2023 23:04:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55118 "EHLO
+        id S230050AbjFWEaY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 23 Jun 2023 00:30:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230235AbjFWDEx (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 22 Jun 2023 23:04:53 -0400
+        with ESMTP id S229477AbjFWEaX (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 23 Jun 2023 00:30:23 -0400
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2646C2135;
-        Thu, 22 Jun 2023 20:04:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 592972126;
+        Thu, 22 Jun 2023 21:30:20 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QnMXs5dMSz4wjB;
-        Fri, 23 Jun 2023 13:04:45 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QnPRZ4hpGz4wj9;
+        Fri, 23 Jun 2023 14:30:18 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1687489487;
-        bh=r2ZwcIFT4HlwJjAj+VisO/XGPwfJvpYrACK4BtmNfhY=;
+        s=201702; t=1687494619;
+        bh=HLzyUWe2JdTNFgsbOVFqKpagFNhTmjAHxqDf7II5T4I=;
         h=Date:From:To:Cc:Subject:From;
-        b=TJd1L/eQg1XgkXP9LOYB6VQ2T1YqBm0OuFJM0pc/r4TCOFy4DClv7TmUylR4Af+GR
-         xjxKvyYZ6dtjKZolUQhLZtwGLJQanHtHBq8WDW+o8upCyX6P7bO/jv+ZpzkWRWbRVm
-         aCg1IDamyE+dD7/4oe7ufWjPmQ2BdthmYLBf8MTihF4QANBdR7AjV+66ghIHJbVH4T
-         Zb3TjwLNfM7WJtEwva4NANAeWTAw4NL7iwlYHPdgrWy3wc4RiOaxkNQ+UVi/iwQpgS
-         JYMVT8delOY3IjxF9hyYeqrUA36kVXJYKRnXElqibS/RjT1/G4x1YkM+t8Tx5q2r8e
-         UOXjU9KfzyqIA==
-Date:   Fri, 23 Jun 2023 13:04:43 +1000
+        b=L57MqkawvTsztT6t1CeX2hsBVT21KqHEoLXcQDmZeobmJW4S8HX7SPI2QDWIxOCP8
+         HG1yUlSdC9RPiYCh6mP6tN3xrwEY0mKx0UHDwRmqG6ppqBnp3x2QudOk9SLN7iyTHv
+         AW7jio0wTwZVX6v3Zxy5UdoM/2+QzxoYp0utlliOaTUgI7dOVMvc/R3CCSmEHyhMar
+         UIBzWR2W6z9UtmNWfuKBJU2p5WQEKnjD7CwA7I+l8QCrSk1Znbz9QiusWw3jxC3HK9
+         Yyzwr3F8/vDoGSNvLAIVEBDwMwZV/aAmMIIQ6W7GfgwP2c0LgApcnqsSXRFexVoho3
+         w8lh1T3gM6Lzg==
+Date:   Fri, 23 Jun 2023 14:30:11 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Michael S. Tsirkin" <mst@redhat.com>,
-        David Miller <davem@davemloft.net>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        Networking <netdev@vger.kernel.org>,
+To:     Alasdair G Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>
+Cc:     Demi Marie Obenour <demi@invisiblethingslab.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Subject: linux-next: manual merge of the vhost tree with the net-next tree
-Message-ID: <20230623130443.6c9a481e@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the device-mapper tree
+Message-ID: <20230623143011.7deba53c@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Sq/s683MbuDhTPbsFIgzDlo";
+Content-Type: multipart/signed; boundary="Sig_/LwocnfiZv+HSDnECGx87lz+";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
@@ -53,87 +51,102 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/Sq/s683MbuDhTPbsFIgzDlo
+--Sig_/LwocnfiZv+HSDnECGx87lz+
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the vhost tree got a conflict in:
+After merging the device-mapper tree, today's linux-next build (i386
+defconfig) failed like this:
 
-  drivers/net/virtio_net.c
+In file included from include/linux/kernel.h:30,
+                 from arch/x86/include/asm/percpu.h:27,
+                 from arch/x86/include/asm/current.h:10,
+                 from include/linux/sched.h:12,
+                 from include/linux/kthread.h:6,
+                 from drivers/md/dm-core.h:13,
+                 from drivers/md/dm-ioctl.c:9:
+drivers/md/dm-ioctl.c: In function 'next_target':
+include/linux/kern_levels.h:5:25: error: format '%lu' expects argument of t=
+ype 'long unsigned int', but argument 3 has type 'unsigned int' [-Werror=3D=
+format=3D]
+    5 | #define KERN_SOH        "\001"          /* ASCII Start Of Header */
+      |                         ^~~~~~
+include/linux/printk.h:427:25: note: in definition of macro 'printk_index_w=
+rap'
+  427 |                 _p_func(_fmt, ##__VA_ARGS__);                      =
+     \
+      |                         ^~~~
+include/linux/printk.h:498:9: note: in expansion of macro 'printk'
+  498 |         printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
+      |         ^~~~~~
+include/linux/kern_levels.h:11:25: note: in expansion of macro 'KERN_SOH'
+   11 | #define KERN_ERR        KERN_SOH "3"    /* error conditions */
+      |                         ^~~~~~~~
+include/linux/printk.h:498:16: note: in expansion of macro 'KERN_ERR'
+  498 |         printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
+      |                ^~~~~~~~
+include/linux/device-mapper.h:626:25: note: in expansion of macro 'pr_err'
+  626 | #define DMERR(fmt, ...) pr_err(DM_FMT(fmt), ##__VA_ARGS__)
+      |                         ^~~~~~
+drivers/md/dm-ioctl.c:1421:17: note: in expansion of macro 'DMERR'
+ 1421 |                 DMERR("Next dm_target_spec (offset %u) is not %lu-b=
+yte aligned",
+      |                 ^~~~~
+cc1: all warnings being treated as errors
 
-between commit:
+Caused by commit
 
-  80f50f918c6e ("virtio_net: separate the logic of freeing the rest mergeab=
-le buf")
+  5df1daff2cc6 ("dm ioctl: Check dm_target_spec is sufficiently aligned")
 
-from the net-next tree and commit:
+I have applied the following patch for today:
 
-  21081476b808 ("virtio_net: support dma premapped")
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Fri, 23 Jun 2023 14:24:29 +1000
+Subject: [PATCH] fix up for "dm ioctl: Check dm_target_spec is sufficiently=
+ aligned"
 
-from the vhost tree.
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ drivers/md/dm-ioctl.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+diff --git a/drivers/md/dm-ioctl.c b/drivers/md/dm-ioctl.c
+index 5f0b641538d8..8b480d7825fe 100644
+--- a/drivers/md/dm-ioctl.c
++++ b/drivers/md/dm-ioctl.c
+@@ -1418,7 +1418,7 @@ static int next_target(struct dm_target_spec *last, u=
+int32_t next, const char *e
+ 	}
+=20
+ 	if (next % __alignof__(struct dm_target_spec)) {
+-		DMERR("Next dm_target_spec (offset %u) is not %lu-byte aligned",
++		DMERR("Next dm_target_spec (offset %u) is not %zu-byte aligned",
+ 		      next, __alignof__(struct dm_target_spec));
+ 		return -EINVAL;
+ 	}
+--=20
+2.39.2
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc drivers/net/virtio_net.c
-index 0db14f6b87d3,d67b36fdba0d..000000000000
---- a/drivers/net/virtio_net.c
-+++ b/drivers/net/virtio_net.c
-@@@ -1128,28 -1136,6 +1233,28 @@@ err
-  	return NULL;
-  }
- =20
- +static void mergeable_buf_free(struct receive_queue *rq, int num_buf,
- +			       struct net_device *dev,
- +			       struct virtnet_rq_stats *stats)
- +{
- +	struct page *page;
- +	void *buf;
- +	int len;
- +
- +	while (num_buf-- > 1) {
-- 		buf =3D virtqueue_get_buf(rq->vq, &len);
-++		buf =3D virtnet_rq_get_buf(rq, &len, NULL);
- +		if (unlikely(!buf)) {
- +			pr_debug("%s: rx error: %d buffers missing\n",
- +				 dev->name, num_buf);
- +			dev->stats.rx_length_errors++;
- +			break;
- +		}
- +		stats->bytes +=3D len;
- +		page =3D virt_to_head_page(buf);
- +		put_page(page);
- +	}
- +}
- +
-  /* Why not use xdp_build_skb_from_frame() ?
-   * XDP core assumes that xdp frags are PAGE_SIZE in length, while in
-   * virtio-net there are 2 points that do not match its requirements:
-
---Sig_/Sq/s683MbuDhTPbsFIgzDlo
+--Sig_/LwocnfiZv+HSDnECGx87lz+
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEyBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSVC8sACgkQAVBC80lX
-0GxbWAf2I4Ddy8m9IViYJOw9ulRJ1xTRB4eS69zxg4ddrmyNDuXd7RovOT6PyTbe
-u+CZBM60EPl8RgBoXBRUG0iq/GOSaemiizccOLMH8OVcz7/GSwUeZJbboFQjHEgV
-HWUv6gIkQePtsIh8SQPl8ouuKGiXYeIJlC7UHyAeuQX1IAaHq9yohOJVIPpuwiaB
-mExe34icoqh4unAr3EmAvZ64cfy+sfZy7mh5XgfpSGdCkSsDdBhn+ITJMJJZKKvO
-kcQcBAx3ii547fJ5QQxKG/FQabIwi+jK3KanXVnnXWe3DejCvF92TxkxdO8ApdBW
-Q1cGn7j3wP9e6zzf9bJi8YTZTLzp
-=SIiz
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSVH9MACgkQAVBC80lX
+0GxLbgf/fKBB8K/ebmMUX37B2d0fLs8mbW0dAqDaNMg+VMjo1xq0990KQYLfusnn
+PKCuzwSQwxcvdHicYjGna+nKANhkW0WiajDPYT5AZ8fpRTdZeAP7TpFw51bbDUT5
+e+kiFzbT5glGA8stfbRtfJfz8p9PNuQDfWR0XBLAToHI1ris9tjmGStfa62iUy5e
+HSrmhPsWX5+7vTtKA9W5jVuAfmfihMRZFZLqPwM1tb8uRHbyS6cQnUwq7X9ZcWkk
+uL1gwTJ6uXydGNWERmsuqgzFGbWkhMoRAgSbx5mTovfCUSsvjlHGY9YX1FisAa6E
+JoqjEFh5zP7se/mpHXyDkPH4FzERcQ==
+=Iov+
 -----END PGP SIGNATURE-----
 
---Sig_/Sq/s683MbuDhTPbsFIgzDlo--
+--Sig_/LwocnfiZv+HSDnECGx87lz+--

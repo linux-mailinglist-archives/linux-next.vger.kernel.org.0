@@ -2,50 +2,63 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9320C73E112
-	for <lists+linux-next@lfdr.de>; Mon, 26 Jun 2023 15:52:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2951173E135
+	for <lists+linux-next@lfdr.de>; Mon, 26 Jun 2023 15:56:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230114AbjFZNwa (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 26 Jun 2023 09:52:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49348 "EHLO
+        id S230224AbjFZN42 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 26 Jun 2023 09:56:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229649AbjFZNw1 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 26 Jun 2023 09:52:27 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4297E7A
-        for <linux-next@vger.kernel.org>; Mon, 26 Jun 2023 06:51:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687787499;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=tK/iiYQUluNE0Uml8JHqAJ8sgWk+hiwneX6EQmjmmc8=;
-        b=I0HZdWA49HJQ5N8S5G15wPGYdx/jykKbC9qzMTmCVlpDZAtCmm5Sd66dGkfJ+xeNbwIao2
-        LVtLvqmHtjBsgY9p6i5hXPJk/52aOUWJyIxFW4T9pDsjDKAHfXGWGfZp2QqAylkMhhfAwj
-        kO+QSeCtfYyzbqGDGa19GLrkrx0DC5A=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-438-wGqdrhGLPYGKkT2K6gg_og-1; Mon, 26 Jun 2023 09:51:32 -0400
-X-MC-Unique: wGqdrhGLPYGKkT2K6gg_og-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E171429AB41D;
-        Mon, 26 Jun 2023 13:50:59 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.42.28.4])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 5984240C2070;
-        Mon, 26 Jun 2023 13:50:57 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <5791ec06-7174-9ae5-4fe4-6969ed110165@tessares.net>
-References: <5791ec06-7174-9ae5-4fe4-6969ed110165@tessares.net> <3065880.1687785614@warthog.procyon.org.uk>
-To:     Matthieu Baerts <matthieu.baerts@tessares.net>
-Cc:     dhowells@redhat.com, netdev@vger.kernel.org,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        with ESMTP id S230200AbjFZN4V (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 26 Jun 2023 09:56:21 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F117A10EA
+        for <linux-next@vger.kernel.org>; Mon, 26 Jun 2023 06:56:14 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3fb10fd9ad3so5473725e9.0
+        for <linux-next@vger.kernel.org>; Mon, 26 Jun 2023 06:56:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tessares.net; s=google; t=1687787773; x=1690379773;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FvwNRNrF8mI3P6llYM5gd3K4KnP8OJjmIVJOWMH6Qwk=;
+        b=udTCrsmRCn5UUJQwqNUZMWZGz0xksESGqOF3Q0FF4x2DROSdW0N27AXj4wxaYq7CIk
+         UMKkgKy0SW7FIudsGAGzQvOIQgsKGjBAkI9KjgoMBtyldJkSU82QOO2d2X1ERca36FKz
+         atL0SafhyuOcgOwf86/SmJDu9dy/NtvGrLJMUViOmiBSuL9HSzw1YpiFKZRp4BlvmJyO
+         c6kxkXVG50R2xhXYHTvhUoZ9c3rMC6uFPgLMq/llDL+T7I4mt9WfM1qZy+qKHLGOtq9+
+         YZnTrUOauH81tdJ536nibfiQTns/LrMVykgtuwv1aRO/iELPkvMcQ0gm5678QcXH3iq2
+         Onrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687787773; x=1690379773;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FvwNRNrF8mI3P6llYM5gd3K4KnP8OJjmIVJOWMH6Qwk=;
+        b=ETFdShEd0EUap8rxawb0+zyBmfUahmONDpcj67dWK9DUngGhCMIcTtfEMQwmBOnINP
+         HWLVyqx3HUsfz/mtTk+J0BsfBF/W30FD70XMqOyhnr4ZWVJ/cf5OCVGIE8vRVSAd5u/7
+         0MMiBNznXZZQzNyPOpJd36396kDq3zjMI6ZjShLEPboVBwOFmhXmjOTaPpb18CVAMHEe
+         swOPIpNXfSJBNI7vS8yKrTPDeiVDf7q1OmoEIQtD8eaRfUjQgkegmKuu6tJmfMFSI7VB
+         qTqZvqC5K6Rd+EjfsIlRbqxLNLqoIHaguBfJnP9rDD1N70wZzwBz8yMvbPoXxc2XlF5m
+         ix0g==
+X-Gm-Message-State: AC+VfDys/gVrXfQnSsAoKxl3Nx6WzW2X1Zl/AQuuMtQUQnXOr6fCUY/q
+        CE8zpL2Mhykrcmu0aUH6L9iL8w==
+X-Google-Smtp-Source: ACHHUZ77dDFzSYL/4C41Q5EjhUboMu666xiajF8k2wkBMpzw4Zj+zteK2QyE8a3CbzCPcE6wR0A3uA==
+X-Received: by 2002:a7b:ca55:0:b0:3fa:7515:544 with SMTP id m21-20020a7bca55000000b003fa75150544mr9208279wml.34.1687787773275;
+        Mon, 26 Jun 2023 06:56:13 -0700 (PDT)
+Received: from [10.44.2.5] ([81.246.10.41])
+        by smtp.gmail.com with ESMTPSA id c21-20020a7bc855000000b003f8fac0ad4bsm7735241wml.17.2023.06.26.06.56.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 26 Jun 2023 06:56:12 -0700 (PDT)
+Message-ID: <2cb3b411-9010-a44b-ebee-1914e7fd7b9c@tessares.net>
+Date:   Mon, 26 Jun 2023 15:56:12 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH net-next] tools: Fix MSG_SPLICE_PAGES build error in trace
+ tools
+Content-Language: en-GB
+To:     David Howells <dhowells@redhat.com>
+Cc:     netdev@vger.kernel.org, Arnaldo Carvalho de Melo <acme@redhat.com>,
         David Miller <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
@@ -62,33 +75,42 @@ Cc:     dhowells@redhat.com, netdev@vger.kernel.org,
         Adrian Hunter <adrian.hunter@intel.com>,
         linux-perf-users@vger.kernel.org, bpf@vger.kernel.org,
         linux-next@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next] tools: Fix MSG_SPLICE_PAGES build error in trace tools
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <3067875.1687787456.1@warthog.procyon.org.uk>
-Date:   Mon, 26 Jun 2023 14:50:56 +0100
-Message-ID: <3067876.1687787456@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <5791ec06-7174-9ae5-4fe4-6969ed110165@tessares.net>
+ <3065880.1687785614@warthog.procyon.org.uk>
+ <3067876.1687787456@warthog.procyon.org.uk>
+From:   Matthieu Baerts <matthieu.baerts@tessares.net>
+In-Reply-To: <3067876.1687787456@warthog.procyon.org.uk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Matthieu Baerts <matthieu.baerts@tessares.net> wrote:
+On 26/06/2023 15:50, David Howells wrote:
+> Matthieu Baerts <matthieu.baerts@tessares.net> wrote:
+> 
+>> So another issue. When checking the differences between the two files, I
+>> see there are still also other modifications to import, e.g. it looks
+>> like you also added MSG_INTERNAL_SENDMSG_FLAGS macro in socket.h. Do you
+>> plan to fix that too?
+> 
+> That's just a list of other flags that we need to prevent userspace passing
+> in - it's not a flag in its own right.
 
-> So another issue. When checking the differences between the two files, I
-> see there are still also other modifications to import, e.g. it looks
-> like you also added MSG_INTERNAL_SENDMSG_FLAGS macro in socket.h. Do you
-> plan to fix that too?
+I agree. This file is not even used by C files, only by scripts parsing
+it if I'm not mistaken.
 
-That's just a list of other flags that we need to prevent userspace passing
-in - it's not a flag in its own right.
+But if there are differences with include/linux/socket.h, the warning I
+mentioned will be visible when compiling Perf.
 
-David
-
+Cheers,
+Matt
+-- 
+Tessares | Belgium | Hybrid Access Solutions
+www.tessares.net

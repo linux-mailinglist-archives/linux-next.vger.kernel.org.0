@@ -2,64 +2,56 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B39D73ECEB
-	for <lists+linux-next@lfdr.de>; Mon, 26 Jun 2023 23:31:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B06473ECFC
+	for <lists+linux-next@lfdr.de>; Mon, 26 Jun 2023 23:42:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229690AbjFZVby convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-next@lfdr.de>); Mon, 26 Jun 2023 17:31:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33916 "EHLO
+        id S229454AbjFZVmO convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-next@lfdr.de>); Mon, 26 Jun 2023 17:42:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbjFZVby (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 26 Jun 2023 17:31:54 -0400
-Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49E1FC2;
-        Mon, 26 Jun 2023 14:31:52 -0700 (PDT)
-Received: by mail-yb1-f172.google.com with SMTP id 3f1490d57ef6-be3e2d172cbso2381908276.3;
-        Mon, 26 Jun 2023 14:31:52 -0700 (PDT)
+        with ESMTP id S229653AbjFZVmK (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 26 Jun 2023 17:42:10 -0400
+Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D18B9116;
+        Mon, 26 Jun 2023 14:42:08 -0700 (PDT)
+Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-c1061f0c282so3139655276.1;
+        Mon, 26 Jun 2023 14:42:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687815111; x=1690407111;
+        d=1e100.net; s=20221208; t=1687815728; x=1690407728;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=6S40Y266AiNifvKcLR/GFxkOqHbXnpeu04o5P2LTCRk=;
-        b=A3GIGx7uWFJZNxuFfcg7x/A1+Gacucc3zBL7nI73PFMf94gvFHjJDN5WORY/DPxOKD
-         jnljaTxbddBtKXzt6f6GlG2+tZHODJn8tsDpebvlLAHE4mR/tGFaXOiHCIeVBDgFgfK4
-         vzAFEL210FWGNVZDNCLpQqU9c9TRpiOida/vttO8jlLvipu/DuRSngsHRygqfCpJAw+q
-         UfV8xqbf+GfvGAj9/WTwQNCFUQ9NBy8aPiJbMC2xqTbtry2cuuUt2DPhJnoSa2626caL
-         ml/fkZQpHfml0PD7rV7Bchlw2XRgMLG7rV0kPhUk8MLq4uHlDF+X7EqGvg8ORN3dvmP7
-         SUFw==
-X-Gm-Message-State: AC+VfDxeM+hcgsQ4OyCnNU81qa4oBBkGMXvZITC4v2FjBPYlMbtNed9h
-        7t2eBJPuNyeZkSeOwHPMyY7hUM5ALSQsx0QVW/4=
-X-Google-Smtp-Source: ACHHUZ44O5zRZn83lWSiAcf86BBHZ9JUkrCLaTbinBhIwiNQwI1gNJAX3DZDo7ZJJjM3mSSA8dYoRXUx/M/Tu6y7zcM=
-X-Received: by 2002:a25:ae4b:0:b0:bac:f8ae:384b with SMTP id
- g11-20020a25ae4b000000b00bacf8ae384bmr17012487ybe.5.1687815111347; Mon, 26
- Jun 2023 14:31:51 -0700 (PDT)
+        bh=PdOZq17J4e8rhRHEPHZEQm6bDkdkz7IHg5SEQcMgbCQ=;
+        b=F/b0SRZckjDKkvhaGSIhXhtsmldaTZK9N0PVYK93/BjD/cGU6NgbqJZl6RVOvM3TUr
+         nDMBtoGrbPtASj1/0YV6hG9bUokVOGSd7B0JUp6oGTO6YcAWfNeEQyPXdaqJQHvAp12z
+         zLDHTBDsjVjk/14auXqlXR8S4/Qnce3iqLXK4FhtvchMaazzS1Q9VLw1Me7NI+ZItq9g
+         h8fzfzWuXFJGGhZmaj0fys/TCxIB78YCCDCn0jx4QyhKUb5jPw3LdBLq8vd5DTwAyMw2
+         TQ+eSu7beo6xjQrNd23FkbG0rjO2/mHRoGMmMfmloSDA6I6I3uA5tXMranEdcianErSJ
+         QrPg==
+X-Gm-Message-State: AC+VfDxU9+3SEU+UKZRepeX/orClvqUCjipTSLBgSBu6/Z1ixYbKJ+/2
+        uncTpZj0FyvKnLPhK4IVndoy6kCsDCrK6KE7xh4=
+X-Google-Smtp-Source: ACHHUZ5CkfRZSowJvGxhTfstgoOjpf3ifxVAikedwaDuYiNmONQ0mpos1E8HAwSJWwM95G4rJri2ZGhGZ4XA6cDa/Xk=
+X-Received: by 2002:a25:2d02:0:b0:bcc:a4a6:bf34 with SMTP id
+ t2-20020a252d02000000b00bcca4a6bf34mr25830890ybt.37.1687815727899; Mon, 26
+ Jun 2023 14:42:07 -0700 (PDT)
 MIME-Version: 1.0
-References: <5791ec06-7174-9ae5-4fe4-6969ed110165@tessares.net>
- <3065880.1687785614@warthog.procyon.org.uk> <3067876.1687787456@warthog.procyon.org.uk>
- <2cb3b411-9010-a44b-ebee-1914e7fd7b9c@tessares.net>
-In-Reply-To: <2cb3b411-9010-a44b-ebee-1914e7fd7b9c@tessares.net>
+References: <2947430.1687765706@warthog.procyon.org.uk> <20230626090239.899672-1-matthieu.baerts@tessares.net>
+ <20230626142734.0fa4fa68@kernel.org>
+In-Reply-To: <20230626142734.0fa4fa68@kernel.org>
 From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Mon, 26 Jun 2023 14:31:39 -0700
-Message-ID: <CAM9d7ch_mWUQGW8G221bZmCPn3wB2mjZm=ZdmhDkczhich9xZA@mail.gmail.com>
-Subject: Re: [PATCH net-next] tools: Fix MSG_SPLICE_PAGES build error in trace tools
-To:     Matthieu Baerts <matthieu.baerts@tessares.net>
-Cc:     David Howells <dhowells@redhat.com>, netdev@vger.kernel.org,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        David Miller <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Matthew Wilcox <willy@infradead.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-perf-users@vger.kernel.org, bpf@vger.kernel.org,
-        linux-next@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Mon, 26 Jun 2023 14:41:56 -0700
+Message-ID: <CAM9d7che_3z=NgT9OkrNmAQigY3Bo8nv16TVH6fgx8pn76xUbg@mail.gmail.com>
+Subject: Re: [PATCH net-next] perf trace: fix MSG_SPLICE_PAGES build error
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Matthieu Baerts <matthieu.baerts@tessares.net>,
+        dhowells@redhat.com, acme@kernel.org, adrian.hunter@intel.com,
+        alexander.shishkin@linux.intel.com, bpf@vger.kernel.org,
+        davem@davemloft.net, irogers@google.com, jolsa@kernel.org,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, mark.rutland@arm.com,
+        mingo@redhat.com, netdev@vger.kernel.org, peterz@infradead.org,
+        sfr@canb.auug.org.au
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
@@ -74,79 +66,58 @@ X-Mailing-List: linux-next@vger.kernel.org
 
 Hello,
 
-Sorry I missed the conversation and the original change.
-
-On Mon, Jun 26, 2023 at 6:56 AM Matthieu Baerts
-<matthieu.baerts@tessares.net> wrote:
+On Mon, Jun 26, 2023 at 2:27 PM Jakub Kicinski <kuba@kernel.org> wrote:
 >
-> On 26/06/2023 15:50, David Howells wrote:
-> > Matthieu Baerts <matthieu.baerts@tessares.net> wrote:
+> On Mon, 26 Jun 2023 11:02:39 +0200 Matthieu Baerts wrote:
+> > Our MPTCP CI and Stephen got this error:
 > >
-> >> So another issue. When checking the differences between the two files, I
-> >> see there are still also other modifications to import, e.g. it looks
-> >> like you also added MSG_INTERNAL_SENDMSG_FLAGS macro in socket.h. Do you
-> >> plan to fix that too?
+> >     In file included from builtin-trace.c:907:
+> >     trace/beauty/msg_flags.c: In function 'syscall_arg__scnprintf_msg_flags':
+> >     trace/beauty/msg_flags.c:28:21: error: 'MSG_SPLICE_PAGES' undeclared (first use in this function)
+> >        28 |         if (flags & MSG_##n) {           |                     ^~~~
+> >     trace/beauty/msg_flags.c:50:9: note: in expansion of macro 'P_MSG_FLAG'
+> >        50 |         P_MSG_FLAG(SPLICE_PAGES);
+> >           |         ^~~~~~~~~~
+> >     trace/beauty/msg_flags.c:28:21: note: each undeclared identifier is reported only once for each function it appears in
+> >        28 |         if (flags & MSG_##n) {           |                     ^~~~
+> >     trace/beauty/msg_flags.c:50:9: note: in expansion of macro 'P_MSG_FLAG'
+> >        50 |         P_MSG_FLAG(SPLICE_PAGES);
+> >           |         ^~~~~~~~~~
 > >
-> > That's just a list of other flags that we need to prevent userspace passing
-> > in - it's not a flag in its own right.
+> > The fix is similar to what was done with MSG_FASTOPEN: the new macro is
+> > defined if it is not defined in the system headers.
+> >
+> > Fixes: b848b26c6672 ("net: Kill MSG_SENDPAGE_NOTLAST")
+> > Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> > Closes: https://lore.kernel.org/r/20230626112847.2ef3d422@canb.auug.org.au/
+> > Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+> > ---
+> >
+> > Notes:
+> >     @David: I solved it like that in MPTCP tree. Does it work for you too?
+> >
+> >     I guess tools/perf/trace/beauty/include/linux/socket.h file still needs
+> >     to be updated, not just to add MSG_SPLICE_PAGES but also other
+> >     modifications done in this file. Maybe best to sync with Arnaldo because
+> >     he might do it soon during the coming merge window I guess.
+> >
+> > Cc: David Howells <dhowells@redhat.com>
+> > Cc: Arnaldo Carvalho de Melo <acme@redhat.com>
 >
-> I agree. This file is not even used by C files, only by scripts parsing
-> it if I'm not mistaken.
->
-> But if there are differences with include/linux/socket.h, the warning I
-> mentioned will be visible when compiling Perf.
+> Hi Arnaldo, are you okay with us taking this into the networking tree?
+> Or do you prefer to sync the header after everything lands in Linus's
+> tree?
 
-Right, we want to keep the headers files in the tools in sync with
-the kernel ones.  And they are used to generate some tables.
-Full explanation from Arnaldo below.
+Arnaldo is on vacation now, and I'm taking care of the patches
+on behalf of him.
 
-So I'm ok for the msg_flags.c changes, but please refrain from
-changing the header directly.  We will update it later.
+As it's introduced in the networking tree, it should be fine to
+carry the fix together.  I'll sync the header later.
 
-With that,
-  Acked-by: Namhyung Kim <namhyung@kernel.org>
+But in general you don't need to change the copy of the tools
+headers together.  It also needs to support old & new kernels
+so different care should be taken.  Please separate tooling
+changes and let us handle them.
 
-Also I wonder if the tool needs to keep the original flag
-(SENDPAGE_NOTLAST) for the older kernels.
-
-
-In Arnaldo's explanation:
-
-There used to be no copies, with tools/ code using kernel headers
-directly. From time to time tools/perf/ broke due to legitimate kernel
-hacking. At some point Linus complained about such direct usage. Then we
-adopted the current model.
-
-The way these headers are used in perf are not restricted to just
-including them to compile something.
-
-They are sometimes used in scripts that convert defines into string
-tables, etc, so some change may break one of these scripts, or new MSRs
-may use some different #define pattern, etc.
-
-E.g.:
-
-  $ ls -1 tools/perf/trace/beauty/*.sh | head -5
-  tools/perf/trace/beauty/arch_errno_names.sh
-  tools/perf/trace/beauty/drm_ioctl.sh
-  tools/perf/trace/beauty/fadvise.sh
-  tools/perf/trace/beauty/fsconfig.sh
-  tools/perf/trace/beauty/fsmount.sh
-  $
-  $ tools/perf/trace/beauty/fadvise.sh
-  static const char *fadvise_advices[] = {
-        [0] = "NORMAL",
-        [1] = "RANDOM",
-        [2] = "SEQUENTIAL",
-        [3] = "WILLNEED",
-        [4] = "DONTNEED",
-        [5] = "NOREUSE",
-  };
-  $
-
-The tools/perf/check-headers.sh script, part of the tools/ build
-process, points out changes in the original files.
-
-So its important not to touch the copies in tools/ when doing changes in
-the original kernel headers, that will be done later, when
-check-headers.sh inform about the change to the perf tools hackers.
+Thanks,
+Namhyung

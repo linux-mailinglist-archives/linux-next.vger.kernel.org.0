@@ -2,67 +2,76 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E5AD73E016
-	for <lists+linux-next@lfdr.de>; Mon, 26 Jun 2023 15:05:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0662573E07C
+	for <lists+linux-next@lfdr.de>; Mon, 26 Jun 2023 15:21:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229526AbjFZNFE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 26 Jun 2023 09:05:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54590 "EHLO
+        id S230005AbjFZNVN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 26 Jun 2023 09:21:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjFZNFD (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 26 Jun 2023 09:05:03 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E533598
-        for <linux-next@vger.kernel.org>; Mon, 26 Jun 2023 06:05:02 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id d9443c01a7336-1b8054180acso7805605ad.1
-        for <linux-next@vger.kernel.org>; Mon, 26 Jun 2023 06:05:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1687784702; x=1690376702;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=xM9MdZJmPrU4xkfmnkAc9XWK3TSC9o9T5NVSlmQmdtY=;
-        b=LRphT6MMsOlOg2vxOIBywR1NUbNj/A88GcEilS7xPcEWv6Ej+7SE6xRxS0yW4e6xVJ
-         xqSTvsN6UasEFO2HoIndoptmv3HLQ107pnUIyZpR5LyW+SmDaf/GL2uacYB4JRia1kaH
-         rFv2m4xGo3PCPuDnUxoB719GLEl2LRbkEEZoY0uNw9Nt84P1sOv8qEWNT2FJ7/xojOH+
-         UpmYYUZ8kOPFcfl9ul5/s4R6eyNW0oaTL9/7IpWjQ8e7iEYajjwE+CmYRP2TtXJ1z/xJ
-         WL6/LkmbJe5xHqb/vfmcLwyjQ6Mdh4puk7Ww6PyiWa4YSIpuWUsj0tJAcOhMTt5Vq/PA
-         Sexg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687784702; x=1690376702;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xM9MdZJmPrU4xkfmnkAc9XWK3TSC9o9T5NVSlmQmdtY=;
-        b=T2iIgT7k/jZflDrjH9fGJ+NKmvtVny18i2oOSSVfnOJl9uriySJphk/ouJGZ0SnMUC
-         uPn540W1NNxBV8J3nqJwFsH0ENZO+sFuj/cWo5kvy7oxwnS8UkFfNg7M884k80yUd2fO
-         WYmVwIZkiUGGdw/TlqYhgA19whrH562rcc7ujpCmTsuahJweO8ZAeEhG6xyQURwZT1yM
-         JWIj2wC9x0eTETTWilbAX+/Yq4AC8IRByBGeirTpLTwZBYPbry9cWMekpW7MQAcH/iqN
-         hQvWPCXagY+Z/GqY0OyoZDPZwzoPRHNTitAcpz+RiBPCcJkFd4AfKh0uWzEi+zfen5EI
-         xogg==
-X-Gm-Message-State: AC+VfDwJg9WLwI/0FDYuLf5+xvuFZZE9Gd7FJnKBLrPAtFY5VibgAq6V
-        e8Qdf0md+xJB8G7o9QJVd7moWmsR20Kh6mGZIFNjyQ==
-X-Google-Smtp-Source: ACHHUZ6Mkpvww8CQA0Xq2flEA6OCzlfMhOx2aiRgOcInAmwU1p74WPDf+yqR/zSnwNLt9rq3qzH7OQ==
-X-Received: by 2002:a17:902:c10c:b0:1b5:4709:fa0e with SMTP id 12-20020a170902c10c00b001b54709fa0emr7046747pli.10.1687784701570;
-        Mon, 26 Jun 2023 06:05:01 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id jc10-20020a17090325ca00b00199203a4fa3sm3710216plb.203.2023.06.26.06.04.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Jun 2023 06:05:00 -0700 (PDT)
-Message-ID: <64998cfc.170a0220.1a9fa.5b72@mx.google.com>
-Date:   Mon, 26 Jun 2023 06:05:00 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S229939AbjFZNVM (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 26 Jun 2023 09:21:12 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B6521AC
+        for <linux-next@vger.kernel.org>; Mon, 26 Jun 2023 06:20:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687785622;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=p/Z1KtTHNDEz/UvhK/uC5AXS1uWtp7gEorowOqjT+2k=;
+        b=HlqHyZSuLOfLUnj11cWrTO5hMEOmeHo+x2zxMniqQ2Ho4PDv37JSMuWoZ5SfZSvMXjhCA4
+        7rJmheuMzLOGCZgtWATFuu1Mz3Wzb/6ZT1IH3Mnv7F0lkMqs43j4wao2nRPTezCnimJhzP
+        MA2Xl23OCct+qVwAF9CTHrVDFPK/J6s=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-654-CPSOP-6FMqeapgcO3dkupw-1; Mon, 26 Jun 2023 09:20:19 -0400
+X-MC-Unique: CPSOP-6FMqeapgcO3dkupw-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E48B2858EED;
+        Mon, 26 Jun 2023 13:20:17 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.42.28.4])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 3B361C478C6;
+        Mon, 26 Jun 2023 13:20:15 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+To:     netdev@vger.kernel.org
+cc:     dhowells@redhat.com,
+        Matthieu Baerts <matthieu.baerts@tessares.net>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        David Miller <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Matthew Wilcox <willy@infradead.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org, bpf@vger.kernel.org,
+        linux-next@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH net-next] tools: Fix MSG_SPLICE_PAGES build error in trace tools
 MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <3065879.1687785614.1@warthog.procyon.org.uk>
 Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: master
-X-Kernelci-Tree: next
-X-Kernelci-Report-Type: test
-X-Kernelci-Kernel: next-20230626
-Subject: next/master baseline: 98 runs, 2 regressions (next-20230626)
-To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
-        kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+Date:   Mon, 26 Jun 2023 14:20:14 +0100
+Message-ID: <3065880.1687785614@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,122 +79,84 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master baseline: 98 runs, 2 regressions (next-20230626)
+The following error is being seen the perf tools because they have their
+own copies of a lot of kernel headers:
 
-Regressions Summary
--------------------
+In file included from builtin-trace.c:907:
+trace/beauty/msg_flags.c: In function 'syscall_arg__scnprintf_msg_flags':
+trace/beauty/msg_flags.c:28:21: error: 'MSG_SPLICE_PAGES' undeclared (firs=
+t use in this function)
+   28 |         if (flags & MSG_##n) { \
+      |                     ^~~~
+trace/beauty/msg_flags.c:50:9: note: in expansion of macro 'P_MSG_FLAG'
+   50 |         P_MSG_FLAG(SPLICE_PAGES);
+      |         ^~~~~~~~~~
+trace/beauty/msg_flags.c:28:21: note: each undeclared identifier is report=
+ed only once for each function it appears in
+   28 |         if (flags & MSG_##n) { \
+      |                     ^~~~
+trace/beauty/msg_flags.c:50:9: note: in expansion of macro 'P_MSG_FLAG'
+   50 |         P_MSG_FLAG(SPLICE_PAGES);
+      |         ^~~~~~~~~~
 
-platform                   | arch  | lab           | compiler | defconfig  =
-                  | regressions
----------------------------+-------+---------------+----------+------------=
-------------------+------------
-mt8192-asurada-spherion-r0 | arm64 | lab-collabora | clang-13 | cros://chro=
-me...4-chromebook | 1          =
+Fix this by (1) adding MSG_SPLICE_PAGES to
+tools/perf/trace/beauty/include/linux/socket.h - which looks like it ought
+to work, but doesn't, and (2) defining it conditionally in the file on
+which the error occurs (suggested by Matthieu Baerts - this is also done
+for some other flags).
 
-rk3328-rock64              | arm64 | lab-baylibre  | clang-13 | cros://chro=
-me...avour.config | 1          =
+Fixes: b848b26c6672 ("net: Kill MSG_SENDPAGE_NOTLAST")
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Link: https://lore.kernel.org/r/20230626112847.2ef3d422@canb.auug.org.au/
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: Matthieu Baerts <matthieu.baerts@tessares.net>
+cc: Arnaldo Carvalho de Melo <acme@redhat.com>
+cc: "David S. Miller" <davem@davemloft.net>
+cc: Eric Dumazet <edumazet@google.com>
+cc: Jakub Kicinski <kuba@kernel.org>
+cc: Paolo Abeni <pabeni@redhat.com>
+cc: Jens Axboe <axboe@kernel.dk>
+cc: Matthew Wilcox <willy@infradead.org>
+cc: bpf@vger.kernel.org
+cc: dccp@vger.kernel.org
+cc: linux-crypto@vger.kernel.org
+cc: mptcp@lists.linux.dev
+cc: netdev@vger.kernel.org
+cc: tipc-discussion@lists.sourceforge.net
+cc: virtualization@lists.linux-foundation.org
+---
+ include/linux/socket.h |    1 +
+ msg_flags.c            |    3 +++
+ 2 files changed, 4 insertions(+)
 
-
-  Details:  https://kernelci.org/test/job/next/branch/master/kernel/next-20=
-230626/plan/baseline/
-
-  Test:     baseline
-  Tree:     next
-  Branch:   master
-  Describe: next-20230626
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      60e7c4a25da68cd826719b685babbd23e73b85b0 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform                   | arch  | lab           | compiler | defconfig  =
-                  | regressions
----------------------------+-------+---------------+----------+------------=
-------------------+------------
-mt8192-asurada-spherion-r0 | arm64 | lab-collabora | clang-13 | cros://chro=
-me...4-chromebook | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6499598da4bcf20b8130614e
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+a=
-rm64-chromebook
-  Compiler:    clang-13 (Debian clang version 13.0.1-6~deb11u1)
-  Plain log:   https://storage.kernelci.org//next/master/next-20230626/arm6=
-4/cros---chromeos-5.10-arm64-chromiumos-arm64.flavour.config+arm64-chromebo=
-ok/clang-13/lab-collabora/baseline-mt8192-asurada-spherion-r0.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20230626/arm6=
-4/cros---chromeos-5.10-arm64-chromiumos-arm64.flavour.config+arm64-chromebo=
-ok/clang-13/lab-collabora/baseline-mt8192-asurada-spherion-r0.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230609.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6499598da4bcf20b81306=
-14f
-        failing since 3 days (last pass: next-20230622, first fail: next-20=
-230623) =
-
+diff --git a/tools/perf/trace/beauty/include/linux/socket.h b/tools/perf/t=
+race/beauty/include/linux/socket.h
+index 3bef212a24d7..77cb707a566a 100644
+--- a/tools/perf/trace/beauty/include/linux/socket.h
++++ b/tools/perf/trace/beauty/include/linux/socket.h
+@@ -326,6 +326,7 @@ struct ucred {
+ 					  */
  =
 
+ #define MSG_ZEROCOPY	0x4000000	/* Use user data in kernel path */
++#define MSG_SPLICE_PAGES 0x8000000	/* Splice the pages from the iterator =
+in sendmsg() */
+ #define MSG_FASTOPEN	0x20000000	/* Send data in TCP SYN */
+ #define MSG_CMSG_CLOEXEC 0x40000000	/* Set close_on_exec for file
+ 					   descriptor received through
+diff --git a/tools/perf/trace/beauty/msg_flags.c b/tools/perf/trace/beauty=
+/msg_flags.c
+index 5cdebd7ece7e..aa9934020232 100644
+--- a/tools/perf/trace/beauty/msg_flags.c
++++ b/tools/perf/trace/beauty/msg_flags.c
+@@ -8,6 +8,9 @@
+ #ifndef MSG_WAITFORONE
+ #define MSG_WAITFORONE		   0x10000
+ #endif
++#ifndef MSG_SPLICE_PAGES
++#define MSG_SPLICE_PAGES	0x8000000
++#endif
+ #ifndef MSG_FASTOPEN
+ #define MSG_FASTOPEN		0x20000000
+ #endif
 
-
-platform                   | arch  | lab           | compiler | defconfig  =
-                  | regressions
----------------------------+-------+---------------+----------+------------=
-------------------+------------
-rk3328-rock64              | arm64 | lab-baylibre  | clang-13 | cros://chro=
-me...avour.config | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/64995824ad3249ca5a30614a
-
-  Results:     5 PASS, 1 FAIL, 1 SKIP
-  Full config: cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config
-  Compiler:    clang-13 (Debian clang version 13.0.1-6~deb11u1)
-  Plain log:   https://storage.kernelci.org//next/master/next-20230626/arm6=
-4/cros---chromeos-5.10-arm64-chromiumos-arm64.flavour.config/clang-13/lab-b=
-aylibre/baseline-rk3328-rock64.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20230626/arm6=
-4/cros---chromeos-5.10-arm64-chromiumos-arm64.flavour.config/clang-13/lab-b=
-aylibre/baseline-rk3328-rock64.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230609.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/64995824ad3249ca5a306151
-        failing since 17 days (last pass: next-20221012, first fail: next-2=
-0230609)
-
-    2023-06-26T09:19:20.921675  [    5.105631] <LAVA_SIGNAL_ENDRUN 0_dmesg =
-3693426_1.5.2.4.1>
-    2023-06-26T09:19:21.026607  =
-
-    2023-06-26T09:19:21.128610  / # #export SHELL=3D/bin/sh
-    2023-06-26T09:19:21.129225  =
-
-    2023-06-26T09:19:21.230744  / # export SHELL=3D/bin/sh. /lava-3693426/e=
-nvironment
-    2023-06-26T09:19:21.231535  =
-
-    2023-06-26T09:19:21.333480  / # . /lava-3693426/environment/lava-369342=
-6/bin/lava-test-runner /lava-3693426/1
-    2023-06-26T09:19:21.334146  =
-
-    2023-06-26T09:19:21.337704  / # /lava-3693426/bin/lava-test-runner /lav=
-a-3693426/1
-    2023-06-26T09:19:21.396931  + export 'TESTRUN_ID=3D1_bootrr' =
-
-    ... (21 line(s) more)  =
-
- =20

@@ -2,96 +2,93 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D5B873EE7F
-	for <lists+linux-next@lfdr.de>; Tue, 27 Jun 2023 00:12:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 220B573EEBA
+	for <lists+linux-next@lfdr.de>; Tue, 27 Jun 2023 00:42:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232418AbjFZWMq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 26 Jun 2023 18:12:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60762 "EHLO
+        id S229456AbjFZWm0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 26 Jun 2023 18:42:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232117AbjFZWLp (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 26 Jun 2023 18:11:45 -0400
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A23413C01
-        for <linux-next@vger.kernel.org>; Mon, 26 Jun 2023 15:09:17 -0700 (PDT)
-Received: by mail-io1-xd29.google.com with SMTP id ca18e2360f4ac-780c89d1998so27363339f.1
-        for <linux-next@vger.kernel.org>; Mon, 26 Jun 2023 15:09:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mihalicyn.com; s=mihalicyn; t=1687817357; x=1690409357;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HiwiTeO0hr1PD9S+vz5AtB7BcqLvaT+ZaM8jtmKD4RY=;
-        b=NwUYucFHT+Snld+GJgyfUmyRp8YOEuNOPdIlYI5H9iZhvM31atP+/Y3y/qBM5OBCk8
-         UITY+G283kryksb+oX8RBjKkkV6fEOVRb62ryo5vDU9Dc9YRx0faKC5lPd83GQXxeul0
-         KnsjMZCucFejmXzCxQFOmnA0kF4NS9mikaGB0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687817357; x=1690409357;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HiwiTeO0hr1PD9S+vz5AtB7BcqLvaT+ZaM8jtmKD4RY=;
-        b=U2oGt6BL5xcm0nT86UjQ3Y6+zqPsqu5fH1KGW7LTmkbukliswtDFIcQGYflQbE9DgR
-         j2rxzWkx58Kwrj+XtKdXgNIWctZHPomnIJ6qZiZNxGLxHfimLRCwpPnRNHAAYgaiMIKj
-         jRA8/hnkGY8IXvX30MEPJIuOQo1ezzFMv5zRv6NSgq6jmH1oHoqA9rH2jTLKTrKXNHtT
-         Z5gxXrYNkNWZ65T9k9p8QKEHiFlfZCAOTZmJNIvTAAwtRmo+xwYzzPCiFJ5nQcNxDeaY
-         eex5NU+TKRSHzw2Twk2+eS6Wu878DXkCZ4ti24Kcbca5eMR2lR6EQtTxV6oJQLfhLVZV
-         ZMmw==
-X-Gm-Message-State: AC+VfDwsuoEd14orwmYQNx9OpweH2D3VBsDd8cZBdgIWUIppePlhzVrQ
-        sBcvA1bHRfOPh8ORYFPsNx3inNsYtqWTnUCUguiRmZwXqoY+aN9/N/5YDw==
-X-Google-Smtp-Source: ACHHUZ7DPHOhUWBiR0q8f4ZDW4SMovurMCYfkQGtATlStuiBLPCzkUOcb3wtsoPzB48aVMaB5YQ+OWIOJfdgJWVk1oA=
-X-Received: by 2002:a05:6602:1690:b0:780:c6bb:ad8d with SMTP id
- s16-20020a056602169000b00780c6bbad8dmr427212iow.0.1687817357007; Mon, 26 Jun
- 2023 15:09:17 -0700 (PDT)
-MIME-Version: 1.0
-References: <PH0PR11MB51262F07CD4739BDCB920483D322A@PH0PR11MB5126.namprd11.prod.outlook.com>
- <CAJqdLrpFcga4n7wxBhsFqPQiN8PKFVr6U10fKcJ9W7AcZn+o6Q@mail.gmail.com>
- <CAJqdLrrVfQx4fWJjpf0Nz7AdiNshdFi7xgXis_iO1jgU0YeGXw@mail.gmail.com>
- <20230623-baldigen-eisstadion-38bd00a856fb@brauner> <CAJqdLrocJkzTFUeESTHwOAHpGcK7Tqx54XsdT-0g8Fm2=_xcnA@mail.gmail.com>
- <20230623080908.6961509d@kernel.org>
-In-Reply-To: <20230623080908.6961509d@kernel.org>
-From:   Alexander Mikhalitsyn <alexander@mihalicyn.com>
-Date:   Tue, 27 Jun 2023 00:09:05 +0200
-Message-ID: <CAJqdLrrweEv3CSqMbhd8OuhvQGCkoSn-rEowYRR9ffzHwqAkbg@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the bluetooth tree
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        "Von Dentz, Luiz" <luiz.von.dentz@intel.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
+        with ESMTP id S229851AbjFZWmZ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 26 Jun 2023 18:42:25 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DFC711D;
+        Mon, 26 Jun 2023 15:42:22 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QqjX81hgtz4wZy;
+        Tue, 27 Jun 2023 08:42:14 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1687819336;
+        bh=r1sHB9ADqHDtSLadKtB/kb5CNRefRFQiD6mixd4qz08=;
+        h=Date:From:To:Cc:Subject:From;
+        b=n5nZuUYagptH+CKEYCj450QBlSkL0de8tgU3LzyP4esO7T/ASIxWriPQSB+o0ftnV
+         U6uX50tRn14k/74kz7RNqYwmm8Ga/Sk+2pooq1IIj9n2sH2LNNBaEboyrSrq+KA9X0
+         t7FyhPGHA6b09FMKj+T9MeP0DlMHZvLyEaJwa9g5MdtBG7YyULcv+SVsffzpLMpVCG
+         6O5D1iWtW/agSm/wkL5J/jX5ipU+usfqS/Clr5VPZKP6IHE96yo/v4kHQPJ+mo5Pat
+         UslnMDKnJHoW3BfLT3BlYruBefnm5+yRjE9xrlUv4Yg4qrLnKZNsQiKlk9k49WTjNA
+         H90RUXuHltPPw==
+Date:   Tue, 27 Jun 2023 08:42:00 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Dan Williams <dan.j.williams@intel.com>
+Cc:     Davidlohr Bueso <dave@stgolabs.net>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: linux-next: Fixes tag needs some work in the cxl tree
+Message-ID: <20230627084200.4fe0a4f0@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/lXua+zS6ZfZJ/QDBxZKpWZV";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Jun 23, 2023 at 5:09=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> wr=
-ote:
->
-> On Fri, 23 Jun 2023 14:28:06 +0200 Alexander Mikhalitsyn wrote:
-> > > Seems fine to me.
-> >
-> > Thanks, Christian!
-> >
-> > Let's wait for Jakub's comment then :) Then I'll prepare and send a pat=
-ch.
->
->  =F0=9F=91=8D=EF=B8=8F sounds good to me as well
+--Sig_/lXua+zS6ZfZJ/QDBxZKpWZV
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Dear colleagues,
+Hi all,
 
-I've sent a patch
-https://lore.kernel.org/netdev/20230626215951.563715-1-aleksandr.mikhalitsy=
-n@canonical.com
+In commit
 
-Kind regards,
-Alex
+  8ea9c33d48f2 ("cxl/mbox: Allow for IRQ_NONE case in the isr")
+
+Fixes tag
+
+  Fixes: ccadf1310fb (cxl/mbox: Add background cmd handling machinery)
+
+has these problem(s):
+
+  - SHA1 should be at least 12 digits long
+    This can be fixed for the future by setting core.abbrev to 12 (or
+    more) or (for git v2.11 or later) just making sure it is not set
+    (or set to "auto").
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/lXua+zS6ZfZJ/QDBxZKpWZV
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSaFDgACgkQAVBC80lX
+0Gy4zQgAhgNl09KNd2UtYexTy0J4uFG5Iq5QqwEt1iIA+kUVs4j0rJj91pSFsJ7U
+THmtMjs9ySPpB5ui5UzLbL5MdxOPrR3kM8bRYY7PTDP/CG7bQlZkz1KWY3Z9SJLN
+utZ9hC/sRp/rc5BbjHOygMUS41YFS4uOazK08iayNSOUQ2aZN7rz3A2jdHIn/ADR
+NCueuqQGLGiBG1cWq79RiKw1sM/9Gjp3kejEXlObJh6mHgmCO5gFaN3tkH3V9Nab
+gMYWfSa2DVi488oUnLahLmYVYmd8mpQ8Si8dYU/xbVi2OOVhymyiwAISMhwbXUSX
+2DsOvjdj0bH1OPEAcQR4PHX8CkNV8w==
+=OGzp
+-----END PGP SIGNATURE-----
+
+--Sig_/lXua+zS6ZfZJ/QDBxZKpWZV--

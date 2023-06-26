@@ -2,101 +2,96 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF01873D6D0
-	for <lists+linux-next@lfdr.de>; Mon, 26 Jun 2023 06:11:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E8BB73D6DF
+	for <lists+linux-next@lfdr.de>; Mon, 26 Jun 2023 06:25:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229635AbjFZELN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 26 Jun 2023 00:11:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39090 "EHLO
+        id S229833AbjFZEZx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 26 Jun 2023 00:25:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229621AbjFZELM (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 26 Jun 2023 00:11:12 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC0BDD1;
-        Sun, 25 Jun 2023 21:11:07 -0700 (PDT)
+        with ESMTP id S229612AbjFZEZv (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 26 Jun 2023 00:25:51 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95C5610B;
+        Sun, 25 Jun 2023 21:25:49 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QqDt12dsbz4wZv;
-        Mon, 26 Jun 2023 14:11:05 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QqFBp3B5gz4wZy;
+        Mon, 26 Jun 2023 14:25:38 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1687752666;
-        bh=DgXWd7rCTm7X5hwjHdCWcplbDtrDixFpRuzbvTCxIHg=;
+        s=201702; t=1687753538;
+        bh=g7b7ddot+g0kPi7NOWnnZg8cPvLdFiOfuEfMf9P7BwY=;
         h=Date:From:To:Cc:Subject:From;
-        b=O1X061WiyF5H5DMrCAX7s8u0cjmch8JyTS3f5BlRe7raAMnXd1vTQs6Y515h/aJGZ
-         85epaHPYcFQYA0rt3Uy1yG8SwHlWOLDURnyQiDyKXfHGDty9adMAifcIDJDtoEWXlR
-         xaFwnj7ODaLrwQ5RjrBOv7HW4tsDrVLJkxodhp7DS9IVhIFyT78+cLQvf5yr3f7JLv
-         hReS1JMjSUE36OhawcWzeKhe62RrHQko5A4VTIz0I66+l71mIslh1hijhKONTRB974
-         vGe1zVB7D7QTQcilPg6HVcacS4a44rIOnbh1F+t7ppZBV4CTtNhKljYWtXDq6GZjas
-         6BQWQxuu3BGUQ==
-Date:   Mon, 26 Jun 2023 14:11:03 +1000
+        b=o3G6t36fi9QSX1N9bGABlL2uqcGIMkw0PervgnLC8zlN9RWW3JDoBRN8RWvZ7WX6V
+         8i2NkbxNGXPs9Bt3KbXa8IQO6JlyrieU/jU8YuxhuyRk29pXshr1W9hEyEdTJZqKnH
+         7sM7J4ob5H2EGTNTa2fnucT63TgBzEnkSXHSDeiS927j0QpaHvEhdZn4FSZngeMRrC
+         SyY2XA1GsdCc0Y0AH7yfy3M8k9e1biEVcPjOJwrUtdl4QwmpH7Xk/Q4KGC9dyDRomM
+         yfG02aZgse1btx7JSjd59LVaJeQYz8O/G6hZreG2MoGKqtQ3g3llsL4c5cjZKfLZZe
+         y6W2XA3+H1u3Q==
+Date:   Mon, 26 Jun 2023 14:25:37 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
+To:     Greg KH <greg@kroah.com>, Arnd Bergmann <arnd@arndb.de>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ivan Orlov <ivan.orlov0322@gmail.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the workqueues tree with Linus' tree
-Message-ID: <20230626141103.4ad0eac9@canb.auug.org.au>
+Subject: linux-next: build failure after merge of the char-misc tree
+Message-ID: <20230626142537.755ec782@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Vrxg0VrsNjU5t/ZTOs2ePkW";
+Content-Type: multipart/signed; boundary="Sig_/g6vuXyYpDAxs1a9lIB4BfRs";
  protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/Vrxg0VrsNjU5t/ZTOs2ePkW
+--Sig_/g6vuXyYpDAxs1a9lIB4BfRs
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the workqueues tree got a conflict in:
+After merging the char-misc tree, today's linux-next build (powerpc
+ppc64_defconfig) failed like this:
 
-  include/linux/workqueue.h
+drivers/char/bsr.c: In function 'bsr_init':
+drivers/char/bsr.c:301:13: error: 'err' undeclared (first use in this funct=
+ion)
+  301 |         if (err)
+      |             ^~~
+drivers/char/bsr.c:301:13: note: each undeclared identifier is reported onl=
+y once for each function it appears in
 
-between commit:
+Caused by commit
 
-  afa4bb778e48 ("workqueue: clean up WORK_* constant types, clarify masking=
-")
+  e55ce9fd3d8f ("bsr: make bsr_class a static const structure")
 
-from Linus' tree and commit:
-
-  525ff9c29657 ("workqueue: fix enum type for gcc-13")
-
-from the workqueues tree.
-
-I fixed it up (I just used the former version) and can carry the fix as
-necessary. This is now fixed as far as linux-next is concerned, but any
-non trivial conflicts should be mentioned to your upstream maintainer
-when your tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
+I have reverted that commit for today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/Vrxg0VrsNjU5t/ZTOs2ePkW
+--Sig_/g6vuXyYpDAxs1a9lIB4BfRs
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSZD9cACgkQAVBC80lX
-0GwAIgf/c7X2O9Zck5wnRuUlrcWI1u0bGDBq8U4sJLz8PhjiVgF2s+swn2ete+o0
-nxt7kA9PnEvz6PooKQyjQ1i9aFqRiW4NojS3ii7qCiQ5sHgBu7S8XMLw9dlhN6Xy
-5aq7UEqgjWcwTeVxj+cEouFhnnh0uDAKJITYOAEMBNun8RzflEOQ6HxGA4d8AeY5
-wQVyzaj6LIBmkct3X7mPwOtavJ6M1VvXUypD5CSN15kufsVzzGRD72jyDkKCX5x/
-XEQDJsTOZUr4ytyKIeRfVyRh/I6uEo8VlxY4HpiaxDE7V6lYFbhN9IiUPrbDL9as
-GfbYU6NFP8329xQ8NZ7SXwp88Ie+Dg==
-=l6AI
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSZE0EACgkQAVBC80lX
+0GyNIAf/TBpRXH6Q8XxR7YxAQx12fWgd4FGw3/gHnzrCWbO96uqBTkF4bBiBCnsU
+1PTNtC+ISL5VJh1qb7WxQILmTwFr9yQi+eUTOPk2u8eNN38kk0rzMB4DeTZpIC66
+l6Ln4vr88NPREGmbP3pS4WN4ULES4UH9QDCnWwPZxL0iSi0747vpgiDz05cyDkC8
+LBN9CUU7+a0zzSI7e3XyzbCCVD8iIAB3RgQRaEAlpN9xGTFmaXK+LXmjymQjO8L9
+7h31sOn6MJAIPDYBmegcovPCcH29bWlckfCWdj0h9apqbB0fwSjaMFK0YbgGuy8a
+lDW6d72fapJQj6gZXTjnphaC5pLBgQ==
+=MgKH
 -----END PGP SIGNATURE-----
 
---Sig_/Vrxg0VrsNjU5t/ZTOs2ePkW--
+--Sig_/g6vuXyYpDAxs1a9lIB4BfRs--

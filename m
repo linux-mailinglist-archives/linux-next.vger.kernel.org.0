@@ -2,89 +2,58 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2951173E135
-	for <lists+linux-next@lfdr.de>; Mon, 26 Jun 2023 15:56:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A89273ECDB
+	for <lists+linux-next@lfdr.de>; Mon, 26 Jun 2023 23:27:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230224AbjFZN42 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 26 Jun 2023 09:56:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51542 "EHLO
+        id S229562AbjFZV1k (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 26 Jun 2023 17:27:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230200AbjFZN4V (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 26 Jun 2023 09:56:21 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F117A10EA
-        for <linux-next@vger.kernel.org>; Mon, 26 Jun 2023 06:56:14 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3fb10fd9ad3so5473725e9.0
-        for <linux-next@vger.kernel.org>; Mon, 26 Jun 2023 06:56:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares.net; s=google; t=1687787773; x=1690379773;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=FvwNRNrF8mI3P6llYM5gd3K4KnP8OJjmIVJOWMH6Qwk=;
-        b=udTCrsmRCn5UUJQwqNUZMWZGz0xksESGqOF3Q0FF4x2DROSdW0N27AXj4wxaYq7CIk
-         UMKkgKy0SW7FIudsGAGzQvOIQgsKGjBAkI9KjgoMBtyldJkSU82QOO2d2X1ERca36FKz
-         atL0SafhyuOcgOwf86/SmJDu9dy/NtvGrLJMUViOmiBSuL9HSzw1YpiFKZRp4BlvmJyO
-         c6kxkXVG50R2xhXYHTvhUoZ9c3rMC6uFPgLMq/llDL+T7I4mt9WfM1qZy+qKHLGOtq9+
-         YZnTrUOauH81tdJ536nibfiQTns/LrMVykgtuwv1aRO/iELPkvMcQ0gm5678QcXH3iq2
-         Onrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687787773; x=1690379773;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FvwNRNrF8mI3P6llYM5gd3K4KnP8OJjmIVJOWMH6Qwk=;
-        b=ETFdShEd0EUap8rxawb0+zyBmfUahmONDpcj67dWK9DUngGhCMIcTtfEMQwmBOnINP
-         HWLVyqx3HUsfz/mtTk+J0BsfBF/W30FD70XMqOyhnr4ZWVJ/cf5OCVGIE8vRVSAd5u/7
-         0MMiBNznXZZQzNyPOpJd36396kDq3zjMI6ZjShLEPboVBwOFmhXmjOTaPpb18CVAMHEe
-         swOPIpNXfSJBNI7vS8yKrTPDeiVDf7q1OmoEIQtD8eaRfUjQgkegmKuu6tJmfMFSI7VB
-         qTqZvqC5K6Rd+EjfsIlRbqxLNLqoIHaguBfJnP9rDD1N70wZzwBz8yMvbPoXxc2XlF5m
-         ix0g==
-X-Gm-Message-State: AC+VfDys/gVrXfQnSsAoKxl3Nx6WzW2X1Zl/AQuuMtQUQnXOr6fCUY/q
-        CE8zpL2Mhykrcmu0aUH6L9iL8w==
-X-Google-Smtp-Source: ACHHUZ77dDFzSYL/4C41Q5EjhUboMu666xiajF8k2wkBMpzw4Zj+zteK2QyE8a3CbzCPcE6wR0A3uA==
-X-Received: by 2002:a7b:ca55:0:b0:3fa:7515:544 with SMTP id m21-20020a7bca55000000b003fa75150544mr9208279wml.34.1687787773275;
-        Mon, 26 Jun 2023 06:56:13 -0700 (PDT)
-Received: from [10.44.2.5] ([81.246.10.41])
-        by smtp.gmail.com with ESMTPSA id c21-20020a7bc855000000b003f8fac0ad4bsm7735241wml.17.2023.06.26.06.56.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Jun 2023 06:56:12 -0700 (PDT)
-Message-ID: <2cb3b411-9010-a44b-ebee-1914e7fd7b9c@tessares.net>
-Date:   Mon, 26 Jun 2023 15:56:12 +0200
+        with ESMTP id S230383AbjFZV1j (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 26 Jun 2023 17:27:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56A1D1702;
+        Mon, 26 Jun 2023 14:27:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9DAE160EB2;
+        Mon, 26 Jun 2023 21:27:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57EAFC433C0;
+        Mon, 26 Jun 2023 21:27:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687814856;
+        bh=cD+DlgssDHp9bWUfoAqdwHPtpJlWEj+4Ut4kvVblUg0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ljNIZ97KtuHOBzk+gfTMQAonQtKrXqmArEvp6gf6th8U9snAirn5HZDr1pg39P5AM
+         38gQsvUyYJlV3jRaJ6kdS4HMZqqEbbjpqCwKDqWHdOiJQ00c6CDF3KnUyl1a+uCfIT
+         +xjUvT7wagBbCIUxOr1Ysw1TFcb4kRMdstAYOVJmeh1c2aJ1ajmTMXLray5ohrZA1k
+         TGJKSOFKLXOkfZHHSsu2DT8/xHwyfZDfAaRIj4k7jAwNPPrkoK47wsuRy8FgpA5QG0
+         MiMilxWpzVqMxN+muUL8m1ErVMR7jUvIEziUej63OU+jBJM+NfvkJEhv2s1qez5gY8
+         SzPCGc2kupEtQ==
+Date:   Mon, 26 Jun 2023 14:27:34 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@redhat.com>
+Cc:     Matthieu Baerts <matthieu.baerts@tessares.net>,
+        dhowells@redhat.com, acme@kernel.org, adrian.hunter@intel.com,
+        alexander.shishkin@linux.intel.com, bpf@vger.kernel.org,
+        davem@davemloft.net, irogers@google.com, jolsa@kernel.org,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, mark.rutland@arm.com,
+        mingo@redhat.com, namhyung@kernel.org, netdev@vger.kernel.org,
+        peterz@infradead.org, sfr@canb.auug.org.au
+Subject: Re: [PATCH net-next] perf trace: fix MSG_SPLICE_PAGES build error
+Message-ID: <20230626142734.0fa4fa68@kernel.org>
+In-Reply-To: <20230626090239.899672-1-matthieu.baerts@tessares.net>
+References: <2947430.1687765706@warthog.procyon.org.uk>
+        <20230626090239.899672-1-matthieu.baerts@tessares.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH net-next] tools: Fix MSG_SPLICE_PAGES build error in trace
- tools
-Content-Language: en-GB
-To:     David Howells <dhowells@redhat.com>
-Cc:     netdev@vger.kernel.org, Arnaldo Carvalho de Melo <acme@redhat.com>,
-        David Miller <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Matthew Wilcox <willy@infradead.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-perf-users@vger.kernel.org, bpf@vger.kernel.org,
-        linux-next@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <5791ec06-7174-9ae5-4fe4-6969ed110165@tessares.net>
- <3065880.1687785614@warthog.procyon.org.uk>
- <3067876.1687787456@warthog.procyon.org.uk>
-From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-In-Reply-To: <3067876.1687787456@warthog.procyon.org.uk>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,25 +61,42 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 26/06/2023 15:50, David Howells wrote:
-> Matthieu Baerts <matthieu.baerts@tessares.net> wrote:
+On Mon, 26 Jun 2023 11:02:39 +0200 Matthieu Baerts wrote:
+> Our MPTCP CI and Stephen got this error:
 > 
->> So another issue. When checking the differences between the two files, I
->> see there are still also other modifications to import, e.g. it looks
->> like you also added MSG_INTERNAL_SENDMSG_FLAGS macro in socket.h. Do you
->> plan to fix that too?
+>     In file included from builtin-trace.c:907:
+>     trace/beauty/msg_flags.c: In function 'syscall_arg__scnprintf_msg_flags':
+>     trace/beauty/msg_flags.c:28:21: error: 'MSG_SPLICE_PAGES' undeclared (first use in this function)
+>        28 |         if (flags & MSG_##n) {           |                     ^~~~
+>     trace/beauty/msg_flags.c:50:9: note: in expansion of macro 'P_MSG_FLAG'
+>        50 |         P_MSG_FLAG(SPLICE_PAGES);
+>           |         ^~~~~~~~~~
+>     trace/beauty/msg_flags.c:28:21: note: each undeclared identifier is reported only once for each function it appears in
+>        28 |         if (flags & MSG_##n) {           |                     ^~~~
+>     trace/beauty/msg_flags.c:50:9: note: in expansion of macro 'P_MSG_FLAG'
+>        50 |         P_MSG_FLAG(SPLICE_PAGES);
+>           |         ^~~~~~~~~~
 > 
-> That's just a list of other flags that we need to prevent userspace passing
-> in - it's not a flag in its own right.
+> The fix is similar to what was done with MSG_FASTOPEN: the new macro is
+> defined if it is not defined in the system headers.
+> 
+> Fixes: b848b26c6672 ("net: Kill MSG_SENDPAGE_NOTLAST")
+> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> Closes: https://lore.kernel.org/r/20230626112847.2ef3d422@canb.auug.org.au/
+> Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+> ---
+> 
+> Notes:
+>     @David: I solved it like that in MPTCP tree. Does it work for you too?
+> 
+>     I guess tools/perf/trace/beauty/include/linux/socket.h file still needs
+>     to be updated, not just to add MSG_SPLICE_PAGES but also other
+>     modifications done in this file. Maybe best to sync with Arnaldo because
+>     he might do it soon during the coming merge window I guess.
+> 
+> Cc: David Howells <dhowells@redhat.com>
+> Cc: Arnaldo Carvalho de Melo <acme@redhat.com>
 
-I agree. This file is not even used by C files, only by scripts parsing
-it if I'm not mistaken.
-
-But if there are differences with include/linux/socket.h, the warning I
-mentioned will be visible when compiling Perf.
-
-Cheers,
-Matt
--- 
-Tessares | Belgium | Hybrid Access Solutions
-www.tessares.net
+Hi Arnaldo, are you okay with us taking this into the networking tree?
+Or do you prefer to sync the header after everything lands in Linus's
+tree?

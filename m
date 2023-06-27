@@ -2,58 +2,56 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40EFB74025D
-	for <lists+linux-next@lfdr.de>; Tue, 27 Jun 2023 19:40:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C946B7406E2
+	for <lists+linux-next@lfdr.de>; Wed, 28 Jun 2023 01:38:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229676AbjF0RkV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 27 Jun 2023 13:40:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57156 "EHLO
+        id S229680AbjF0XiR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 27 Jun 2023 19:38:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230195AbjF0RkU (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 27 Jun 2023 13:40:20 -0400
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E6BC213F;
-        Tue, 27 Jun 2023 10:40:19 -0700 (PDT)
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-98e2865e2f2so79793066b.0;
-        Tue, 27 Jun 2023 10:40:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687887618; x=1690479618;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bf+1l/vTcyq2/vOLeqcdP9HdilBl9gX1Dtm45t9QQxU=;
-        b=iamWs/K/Y2D8/+xFabrLd9y/UbzFjUcwbrdIhmTFweeXQWn/3Qe+VaD0Bj/oX3885G
-         k9NTvotpS/DqvMX+pelMahGlWhzmTxUEKEgsd1ETiyB2CC+KqpsxxWAB5DddZgb0/936
-         uZ1eUa4+QO+hkHdVObBs5kGLVLERGElrfXz7lAN8ffnxoH9UF8f4HDRgALTHkUsR20yn
-         qaluF1ZC1WlYABjY1iFsYUfzTR6mouoS+qKJE2l2KhWOb06tdMabLSGqH2+oOwTLBvyL
-         Jcs576CEWjEGairnmhyJ7bYru9+KRB/IiVVUbtHBgm4OEanavph4+A5im0KHiWGiz49X
-         3ebg==
-X-Gm-Message-State: AC+VfDx7vnjLfcCVWDbj8ZCjPW2hq+B3Ix2ywAepXxow/FthdYn13cbD
-        j94D6Ol9/8cDTYh2eBbAQzMNvlmWCWwQA9i+kVq6lPKX
-X-Google-Smtp-Source: ACHHUZ4e1ahlo4xk8HkxLywEhnZicsAyZiPa/om6ahQsq1UfNdHRfDvZXT3/rmMcmg+WJWzFPBf/fmsyC2QjuNNTKEY=
-X-Received: by 2002:a17:906:73cd:b0:992:387:44d1 with SMTP id
- n13-20020a17090673cd00b00992038744d1mr2198007ejl.7.1687887617769; Tue, 27 Jun
- 2023 10:40:17 -0700 (PDT)
+        with ESMTP id S229454AbjF0XiP (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 27 Jun 2023 19:38:15 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2C3E1BE6;
+        Tue, 27 Jun 2023 16:38:12 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QrLk60Qt1z4wb4;
+        Wed, 28 Jun 2023 09:38:05 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1687909087;
+        bh=XoWxl7Am9taH1CIp0jQQrHNuR55WL3+yoPckVzeaPms=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=T7+fcx3BaEP+til7rwPErs97ymRqcKxLcdK7KonzLlFxRoKU5lxfbONUi+etP3k6Z
+         zbAJtTrwpMVDUEaoRoIdmwJpxFw1RN8GgdvejrpbFfEUA7lbqVKbqZRqwt2X4A37/C
+         hCD11lOKhE/TUQyyNcl1m6NE0BbeLQ/exT6NTd6d5k2TPKEVFKCZjYkpmInHXQdaBa
+         OFJZxORPEVFZNazYIANuIDKGyDvYAAL0NgQTqJzN1MorzJqEuM771hwGaACaLj3uEU
+         Zr/J+sBBsPqnBTqBtuH1adZuBIm3COzOj+RGx6gB2m6RFLCHAkG4e7H6HyVxm/6kEu
+         9uVAwnV5e0ACA==
+Date:   Wed, 28 Jun 2023 09:37:44 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     "Arnd Bergmann" <arnd@arndb.de>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Netdev <netdev@vger.kernel.org>,
+        "David Howells" <dhowells@redhat.com>,
+        "Linus Walleij" <linus.walleij@linaro.org>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        linux-next <linux-next@vger.kernel.org>,
+        "Paolo Abeni" <pabeni@redhat.com>, Jakub Kicinski <kuba@kernel.org>
+Subject: Re: linux-next: manual merge of the net-next tree with the
+ asm-generic tree
+Message-ID: <20230628093744.3c5d2df5@canb.auug.org.au>
+In-Reply-To: <7f77f31e-90ff-44ad-9646-9876f11eed13@app.fastmail.com>
+References: <20230609104037.56648990@canb.auug.org.au>
+        <7f77f31e-90ff-44ad-9646-9876f11eed13@app.fastmail.com>
 MIME-Version: 1.0
-References: <20230627170827.60f9f749@canb.auug.org.au> <f6b0cc15-276c-0058-b201-865556bff31f@infradead.org>
-In-Reply-To: <f6b0cc15-276c-0058-b201-865556bff31f@infradead.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 27 Jun 2023 19:40:06 +0200
-Message-ID: <CAJZ5v0g8ZC6w2H0Ki_2gDJ-vwfHqTOrx+e91jpt+qLMrTTwiaA@mail.gmail.com>
-Subject: Re: linux-next: Tree for Jun 27 (idle: intel_idle)
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Arjan van de Ven <arjan@linux.intel.com>
-Content-Type: multipart/mixed; boundary="000000000000e0d87b05ff1ff5e0"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+Content-Type: multipart/signed; boundary="Sig_/2.kN=8z/0uAbZl9XFZvkv1Q";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,53 +59,89 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---000000000000e0d87b05ff1ff5e0
-Content-Type: text/plain; charset="UTF-8"
+--Sig_/2.kN=8z/0uAbZl9XFZvkv1Q
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jun 27, 2023 at 6:02=E2=80=AFPM Randy Dunlap <rdunlap@infradead.org=
-> wrote:
->
->
->
-> On 6/27/23 00:08, Stephen Rothwell wrote:
-> > Hi all,
-> >
-> > Please do *not* add any v5.6 related stuff to you linux-next included
-> > branches until after v5.5-rc1 has been released.
-> >
-> > Changes since 20230626:
-> >
->
-> on i386:
->
-> WARNING: modpost: vmlinux: section mismatch in reference: matchup_vm_stat=
-e_with_baremetal+0x51 (section: .text) -> intel_idle_max_cstate_reached (se=
-ction: .init.text)
-> WARNING: modpost: vmlinux: section mismatch in reference: matchup_vm_stat=
-e_with_baremetal+0x62 (section: .text) -> cpuidle_state_table (section: .in=
-it.data)
-> WARNING: modpost: vmlinux: section mismatch in reference: matchup_vm_stat=
-e_with_baremetal+0x79 (section: .text) -> icpu (section: .init.data)
+Hi Arnd,
 
-The attached patch should address this.
+On Fri, 09 Jun 2023 08:31:19 +0200 "Arnd Bergmann" <arnd@arndb.de> wrote:
+>
+> On Fri, Jun 9, 2023, at 02:40, Stephen Rothwell wrote:
+> >
+> > Today's linux-next merge of the net-next tree got a conflict in:
+> >
+> >   fs/netfs/iterator.c
+> >
+> > between commit:
+> >
+> >   ee5971613da3 ("netfs: Pass a pointer to virt_to_page()")
+> >
+> > from the asm-generic tree and commit:
+> >
+> >   f5f82cd18732 ("Move netfs_extract_iter_to_sg() to lib/scatterlist.c")
+> >
+> > from the net-next tree.
+> >
+> > I fixed it up (I used the file from the former and applied the patch
+> > below) and can carry the fix as necessary. This is now fixed as far as
+> > linux-next is concerned, but any non trivial conflicts should be mentio=
+ned
+> > to your upstream maintainer when your tree is submitted for merging.
+> > You may also want to consider cooperating with the maintainer of the
+> > conflicting tree to minimise any particularly complex conflicts.
+> >
+> > From: Stephen Rothwell <sfr@canb.auug.org.au>
+> > Date: Fri, 9 Jun 2023 10:35:56 +1000
+> > Subject: [PATCH] fix up for "Move netfs_extract_iter_to_sg() to=20
+> > lib/scatterlist.c"
+> >
+> > interacting with "netfs: Pass a pointer to virt_to_page()"
+> >
+> > Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> > ---
+> >  lib/scatterlist.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/lib/scatterlist.c b/lib/scatterlist.c
+> > index e97d7060329e..e86231a44c3d 100644
+> > --- a/lib/scatterlist.c
+> > +++ b/lib/scatterlist.c
+> > @@ -1237,7 +1237,7 @@ static ssize_t extract_kvec_to_sg(struct iov_iter=
+ *iter,
+> >  			if (is_vmalloc_or_module_addr((void *)kaddr))
+> >  				page =3D vmalloc_to_page((void *)kaddr);
+> >  			else
+> > -				page =3D virt_to_page(kaddr);
+> > +				page =3D virt_to_page((void *)kaddr);
+> >=20
+> >  			sg_set_page(sg, page, len, off);
+> >  			sgtable->nents++; =20
+>=20
+> The fix is correct, but I think this should just get applied
+> in net-next directly, on top of the f5f82cd18732 commit, it
+> will have no effect there but avoid the conflict.
 
---000000000000e0d87b05ff1ff5e0
-Content-Type: text/x-patch; charset="US-ASCII"; name="intel_idle-section-fix.patch"
-Content-Disposition: attachment; filename="intel_idle-section-fix.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_ljekobpk0>
-X-Attachment-Id: f_ljekobpk0
+This did not happen, so Linus needs to be notified of this merge fix.
 
-LS0tCiBkcml2ZXJzL2lkbGUvaW50ZWxfaWRsZS5jIHwgICAgMiArLQogMSBmaWxlIGNoYW5nZWQs
-IDEgaW5zZXJ0aW9uKCspLCAxIGRlbGV0aW9uKC0pCgpJbmRleDogbGludXgtcG0vZHJpdmVycy9p
-ZGxlL2ludGVsX2lkbGUuYwo9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09Ci0tLSBsaW51eC1wbS5vcmlnL2RyaXZlcnMvaWRs
-ZS9pbnRlbF9pZGxlLmMKKysrIGxpbnV4LXBtL2RyaXZlcnMvaWRsZS9pbnRlbF9pZGxlLmMKQEAg
-LTIxNDcsNyArMjE0Nyw3IEBAIHN0YXRpYyB2b2lkIF9faW5pdCBpbnRlbF9pZGxlX2NwdWlkbGVf
-ZGUKICAqIEFsbCBvdXIgc2hvcnQgaWRsZSBzdGF0ZXMgYXJlIGRvbWluYXRlZCBieSB2bWV4aXQv
-dm1lbnRlciBsYXRlbmNpZXMsCiAgKiBub3QgdGhlIHVuZGVybHlpbmcgaGFyZHdhcmUgbGF0ZW5j
-aWVzIHNvIHdlIGtlZXAgb3VyIHZhbHVlcyBmb3IgdGhlc2UuCiAgKi8KLXN0YXRpYyB2b2lkIG1h
-dGNodXBfdm1fc3RhdGVfd2l0aF9iYXJlbWV0YWwodm9pZCkKK3N0YXRpYyB2b2lkIF9faW5pdCBt
-YXRjaHVwX3ZtX3N0YXRlX3dpdGhfYmFyZW1ldGFsKHZvaWQpCiB7CiAJaW50IGNzdGF0ZTsKIAo=
---000000000000e0d87b05ff1ff5e0--
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/2.kN=8z/0uAbZl9XFZvkv1Q
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSbcsgACgkQAVBC80lX
+0GyHTQf+IEtDljYhLnCISPmNvvKUfxxpFT+5PuRwCAbfSxONmf1XU/j1+tIyWaSp
+rUUjNuOSXI3HGBwjIvSUXSsuW4CnImBEI2P23Q9FZ8F2O/y3oVZaQXcizR0pvdsq
+Jr4HGX9DXwy6zrrlTtskBDLEfZheNIsbL/9HaHcYSnDUZwcugD9bvTCB+CYfCOGA
+FDyiGxMxaxd6Q+icgCL40I+moNEcXfkcVLZ840Mp3kFqfOxbRP3/TPLxZGv+BYop
+/IqOqhfFpDoC+pl9XCqIsxzpQSuvR6YqluAE2AjlGUEdy7Haa+dW2Nll+et662r9
+Oye/iG5ojr394DtsssqmTA67NYkt/A==
+=/qEy
+-----END PGP SIGNATURE-----
+
+--Sig_/2.kN=8z/0uAbZl9XFZvkv1Q--

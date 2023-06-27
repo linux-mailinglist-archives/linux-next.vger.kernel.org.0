@@ -2,93 +2,127 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 220B573EEBA
-	for <lists+linux-next@lfdr.de>; Tue, 27 Jun 2023 00:42:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0778973EFC9
+	for <lists+linux-next@lfdr.de>; Tue, 27 Jun 2023 02:39:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229456AbjFZWm0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 26 Jun 2023 18:42:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44006 "EHLO
+        id S229853AbjF0AjJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 26 Jun 2023 20:39:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229851AbjFZWmZ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 26 Jun 2023 18:42:25 -0400
+        with ESMTP id S229841AbjF0AjI (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 26 Jun 2023 20:39:08 -0400
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DFC711D;
-        Mon, 26 Jun 2023 15:42:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA89C171A;
+        Mon, 26 Jun 2023 17:39:06 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QqjX81hgtz4wZy;
-        Tue, 27 Jun 2023 08:42:14 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Qqm6s6Rxsz4wqW;
+        Tue, 27 Jun 2023 10:39:01 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1687819336;
-        bh=r1sHB9ADqHDtSLadKtB/kb5CNRefRFQiD6mixd4qz08=;
+        s=201702; t=1687826342;
+        bh=VBT+hkINubzn7ViFqxIo6R9gSORoTGH+ce7ZiG8bKuQ=;
         h=Date:From:To:Cc:Subject:From;
-        b=n5nZuUYagptH+CKEYCj450QBlSkL0de8tgU3LzyP4esO7T/ASIxWriPQSB+o0ftnV
-         U6uX50tRn14k/74kz7RNqYwmm8Ga/Sk+2pooq1IIj9n2sH2LNNBaEboyrSrq+KA9X0
-         t7FyhPGHA6b09FMKj+T9MeP0DlMHZvLyEaJwa9g5MdtBG7YyULcv+SVsffzpLMpVCG
-         6O5D1iWtW/agSm/wkL5J/jX5ipU+usfqS/Clr5VPZKP6IHE96yo/v4kHQPJ+mo5Pat
-         UslnMDKnJHoW3BfLT3BlYruBefnm5+yRjE9xrlUv4Yg4qrLnKZNsQiKlk9k49WTjNA
-         H90RUXuHltPPw==
-Date:   Tue, 27 Jun 2023 08:42:00 +1000
+        b=RtevIlJxP+0j//DHKYgpQ3xpWkHD2EW2KTUSSFmgp0/2cPdasfm0t2t75O2tH9FGT
+         sAbw+G6J9McV/wQe0987xdbhumcYnIrFVFQBTeAK6p4L7oLP8VNgadxcp2Hu8eRgh9
+         k865VQokUQ2qeAPyYmODxlQ7GEj08F4/6GLutn0IKAIuiw0c30S1nBe8yNRcoS6Ylc
+         L/lJw0nC0xY7LpwK+nMahTOpnM2MiXHZKabEb9StG9kbAQ5goA6YAtDU1ck/EtlkpF
+         IiOubNLFSIVILoF1s/ziHKqpkVwiFLeHh1pJ/84Dk2VRwkjgZC3qruQyA4C0I1aiT8
+         H5O0+4T65ld7w==
+Date:   Tue, 27 Jun 2023 10:39:00 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Dan Williams <dan.j.williams@intel.com>
-Cc:     Davidlohr Bueso <dave@stgolabs.net>,
+To:     Theodore Ts'o <tytso@mit.edu>
+Cc:     Chao Yu <chao@kernel.org>, Christoph Hellwig <hch@lst.de>,
+        Jens Axboe <axboe@kernel.dk>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the cxl tree
-Message-ID: <20230627084200.4fe0a4f0@canb.auug.org.au>
+Subject: linux-next: manual merge of the ext4 tree with Linus' tree
+Message-ID: <20230627103900.04fa564f@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/lXua+zS6ZfZJ/QDBxZKpWZV";
+Content-Type: multipart/signed; boundary="Sig_/HBQEYr8Ix=16y6_LUWeJbGf";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/lXua+zS6ZfZJ/QDBxZKpWZV
+--Sig_/HBQEYr8Ix=16y6_LUWeJbGf
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-In commit
+Today's linux-next merge of the ext4 tree got a conflict in:
 
-  8ea9c33d48f2 ("cxl/mbox: Allow for IRQ_NONE case in the isr")
+  fs/ext4/ioctl.c
 
-Fixes tag
+between commit:
 
-  Fixes: ccadf1310fb (cxl/mbox: Add background cmd handling machinery)
+  97524b454bc5 ("ext4: split ext4_shutdown")
 
-has these problem(s):
+from Linus' tree and commit:
 
-  - SHA1 should be at least 12 digits long
-    This can be fixed for the future by setting core.abbrev to 12 (or
-    more) or (for git v2.11 or later) just making sure it is not set
-    (or set to "auto").
+  c4d13222afd8 ("ext4: fix to check return value of freeze_bdev() in ext4_s=
+hutdown()")
+
+from the ext4 tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/lXua+zS6ZfZJ/QDBxZKpWZV
+diff --cc fs/ext4/ioctl.c
+index 961284cc9b65,55be1b8a6360..000000000000
+--- a/fs/ext4/ioctl.c
++++ b/fs/ext4/ioctl.c
+@@@ -793,10 -793,18 +793,11 @@@ static int ext4_ioctl_setproject(struc
+  }
+  #endif
+ =20
+ -static int ext4_shutdown(struct super_block *sb, unsigned long arg)
+ +int ext4_force_shutdown(struct super_block *sb, u32 flags)
+  {
+  	struct ext4_sb_info *sbi =3D EXT4_SB(sb);
+ -	__u32 flags;
++ 	int ret;
+ =20
+ -	if (!capable(CAP_SYS_ADMIN))
+ -		return -EPERM;
+ -
+ -	if (get_user(flags, (__u32 __user *)arg))
+ -		return -EFAULT;
+ -
+  	if (flags > EXT4_GOING_FLAGS_NOLOGFLUSH)
+  		return -EINVAL;
+ =20
+
+--Sig_/HBQEYr8Ix=16y6_LUWeJbGf
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSaFDgACgkQAVBC80lX
-0Gy4zQgAhgNl09KNd2UtYexTy0J4uFG5Iq5QqwEt1iIA+kUVs4j0rJj91pSFsJ7U
-THmtMjs9ySPpB5ui5UzLbL5MdxOPrR3kM8bRYY7PTDP/CG7bQlZkz1KWY3Z9SJLN
-utZ9hC/sRp/rc5BbjHOygMUS41YFS4uOazK08iayNSOUQ2aZN7rz3A2jdHIn/ADR
-NCueuqQGLGiBG1cWq79RiKw1sM/9Gjp3kejEXlObJh6mHgmCO5gFaN3tkH3V9Nab
-gMYWfSa2DVi488oUnLahLmYVYmd8mpQ8Si8dYU/xbVi2OOVhymyiwAISMhwbXUSX
-2DsOvjdj0bH1OPEAcQR4PHX8CkNV8w==
-=OGzp
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSaL6QACgkQAVBC80lX
+0GwIFgf/UokoeB3Jb0j4QTLFAD53lLaMkyad8c+daW5gbsV7BHAcjnYpDXE4nvAj
+rn7agDHmoF4k3oMY10R0Gz2qdzZOhZV9g2i4l7TJn59ZQdp6vabORBk3pW/tIXoD
+/dqaSsODw9TumRXgpews0X7S3qjmcVOa0G/N49ribZyi5+dEu3GppOrMarIVC3f/
+/ScAyMTRl59LbqeZBU5iCJe+1rjttE6NF+1W0J4t+7EDYC+D28uvdrpV49llhASh
+xgHz8YkCVhf9Vwjr91iejcZWVbfUkbGkdlH7VnIDCJVLf8EKt5mzKuAgraNbF6KA
+rNvUAQt9fTJ2+1qybDbTobSbHW5nCA==
+=sukt
 -----END PGP SIGNATURE-----
 
---Sig_/lXua+zS6ZfZJ/QDBxZKpWZV--
+--Sig_/HBQEYr8Ix=16y6_LUWeJbGf--

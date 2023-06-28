@@ -2,146 +2,107 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C946B7406E2
-	for <lists+linux-next@lfdr.de>; Wed, 28 Jun 2023 01:38:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E44F74072A
+	for <lists+linux-next@lfdr.de>; Wed, 28 Jun 2023 02:23:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229680AbjF0XiR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 27 Jun 2023 19:38:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46250 "EHLO
+        id S230265AbjF1AW6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 27 Jun 2023 20:22:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbjF0XiP (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 27 Jun 2023 19:38:15 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2C3E1BE6;
-        Tue, 27 Jun 2023 16:38:12 -0700 (PDT)
+        with ESMTP id S229861AbjF1AW5 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 27 Jun 2023 20:22:57 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C915726BC;
+        Tue, 27 Jun 2023 17:22:54 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QrLk60Qt1z4wb4;
-        Wed, 28 Jun 2023 09:38:05 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QrMjk3GYZz4wZy;
+        Wed, 28 Jun 2023 10:22:49 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1687909087;
-        bh=XoWxl7Am9taH1CIp0jQQrHNuR55WL3+yoPckVzeaPms=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=T7+fcx3BaEP+til7rwPErs97ymRqcKxLcdK7KonzLlFxRoKU5lxfbONUi+etP3k6Z
-         zbAJtTrwpMVDUEaoRoIdmwJpxFw1RN8GgdvejrpbFfEUA7lbqVKbqZRqwt2X4A37/C
-         hCD11lOKhE/TUQyyNcl1m6NE0BbeLQ/exT6NTd6d5k2TPKEVFKCZjYkpmInHXQdaBa
-         OFJZxORPEVFZNazYIANuIDKGyDvYAAL0NgQTqJzN1MorzJqEuM771hwGaACaLj3uEU
-         Zr/J+sBBsPqnBTqBtuH1adZuBIm3COzOj+RGx6gB2m6RFLCHAkG4e7H6HyVxm/6kEu
-         9uVAwnV5e0ACA==
-Date:   Wed, 28 Jun 2023 09:37:44 +1000
+        s=201702; t=1687911770;
+        bh=d9qp0w1IEjACU0PufpTb5hr6JpBscppsya9LwwgZR0I=;
+        h=Date:From:To:Cc:Subject:From;
+        b=UZ6woTnSQ68Y+EeWLNxpSR8+PiEUmSC2NSJArhBF1mEzlJB6Qnn0DL4SZnHpLfUdV
+         DbQTEzLg1Z46PUyHF2pS/Sn2IK9A0pEYn4GzW/tygrkqVomYFF65nmIE1pvEt8W85Y
+         Kx+UFm4kreRXmiF2HDUXnSrLSKKHGdNfx3+gG6P3psW5UUVABhTBSgNwNfqKWW1BzL
+         ze8irWrodkcE0nLfrIPAViEVl3Potu09pW6fdISM2Oa+4x1zzELEnjALb6n0GCEjN/
+         lcmIXQagxKN3Xthj8EAfj5WILwDJmuTsfoZImkq0idBAc1KWok9zz1HB/SI95SVxlx
+         1D5Ia9P2ej7vQ==
+Date:   Wed, 28 Jun 2023 10:22:48 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Arnd Bergmann" <arnd@arndb.de>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Netdev <netdev@vger.kernel.org>,
-        "David Howells" <dhowells@redhat.com>,
-        "Linus Walleij" <linus.walleij@linaro.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        linux-next <linux-next@vger.kernel.org>,
-        "Paolo Abeni" <pabeni@redhat.com>, Jakub Kicinski <kuba@kernel.org>
-Subject: Re: linux-next: manual merge of the net-next tree with the
- asm-generic tree
-Message-ID: <20230628093744.3c5d2df5@canb.auug.org.au>
-In-Reply-To: <7f77f31e-90ff-44ad-9646-9876f11eed13@app.fastmail.com>
-References: <20230609104037.56648990@canb.auug.org.au>
-        <7f77f31e-90ff-44ad-9646-9876f11eed13@app.fastmail.com>
+To:     Helge Deller <deller@gmx.de>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the parisc-hd tree with the
+ mm-nonmm-stable tree
+Message-ID: <20230628102248.742b79e1@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/2.kN=8z/0uAbZl9XFZvkv1Q";
+Content-Type: multipart/signed; boundary="Sig_/IuO7Y0SK43M6.niNEyTxPa5";
  protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/2.kN=8z/0uAbZl9XFZvkv1Q
+--Sig_/IuO7Y0SK43M6.niNEyTxPa5
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Arnd,
+Hi all,
 
-On Fri, 09 Jun 2023 08:31:19 +0200 "Arnd Bergmann" <arnd@arndb.de> wrote:
->
-> On Fri, Jun 9, 2023, at 02:40, Stephen Rothwell wrote:
-> >
-> > Today's linux-next merge of the net-next tree got a conflict in:
-> >
-> >   fs/netfs/iterator.c
-> >
-> > between commit:
-> >
-> >   ee5971613da3 ("netfs: Pass a pointer to virt_to_page()")
-> >
-> > from the asm-generic tree and commit:
-> >
-> >   f5f82cd18732 ("Move netfs_extract_iter_to_sg() to lib/scatterlist.c")
-> >
-> > from the net-next tree.
-> >
-> > I fixed it up (I used the file from the former and applied the patch
-> > below) and can carry the fix as necessary. This is now fixed as far as
-> > linux-next is concerned, but any non trivial conflicts should be mentio=
-ned
-> > to your upstream maintainer when your tree is submitted for merging.
-> > You may also want to consider cooperating with the maintainer of the
-> > conflicting tree to minimise any particularly complex conflicts.
-> >
-> > From: Stephen Rothwell <sfr@canb.auug.org.au>
-> > Date: Fri, 9 Jun 2023 10:35:56 +1000
-> > Subject: [PATCH] fix up for "Move netfs_extract_iter_to_sg() to=20
-> > lib/scatterlist.c"
-> >
-> > interacting with "netfs: Pass a pointer to virt_to_page()"
-> >
-> > Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> > ---
-> >  lib/scatterlist.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/lib/scatterlist.c b/lib/scatterlist.c
-> > index e97d7060329e..e86231a44c3d 100644
-> > --- a/lib/scatterlist.c
-> > +++ b/lib/scatterlist.c
-> > @@ -1237,7 +1237,7 @@ static ssize_t extract_kvec_to_sg(struct iov_iter=
- *iter,
-> >  			if (is_vmalloc_or_module_addr((void *)kaddr))
-> >  				page =3D vmalloc_to_page((void *)kaddr);
-> >  			else
-> > -				page =3D virt_to_page(kaddr);
-> > +				page =3D virt_to_page((void *)kaddr);
-> >=20
-> >  			sg_set_page(sg, page, len, off);
-> >  			sgtable->nents++; =20
->=20
-> The fix is correct, but I think this should just get applied
-> in net-next directly, on top of the f5f82cd18732 commit, it
-> will have no effect there but avoid the conflict.
+Today's linux-next merge of the parisc-hd tree got a conflict in:
 
-This did not happen, so Linus needs to be notified of this merge fix.
+  arch/parisc/kernel/smp.c
+
+between commit:
+
+  ad1a48301f65 ("init: consolidate prototypes in linux/init.h")
+
+from the mm-nonmm-stable tree and commit:
+
+  57d303096f1c ("parisc: Fix prototype warnings for time related functions")
+
+from the parisc-hd tree.
+
+I fixed it up (the latter also removes the line removed by the former)
+and can carry the fix as necessary. This is now fixed as far as linux-next
+is concerned, but any non trivial conflicts should be mentioned to your
+upstream maintainer when your tree is submitted for merging.  You may
+also want to consider cooperating with the maintainer of the conflicting
+tree to minimise any particularly complex conflicts.
+
+Not that the latter also adds a declaration of init_IRQ() to
+arch/parisc/include/asm/processor.h which will not be needed after
+merging with the mm-nonmm-stable tree (but is harmless, so I have left
+it there for now).
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/2.kN=8z/0uAbZl9XFZvkv1Q
+--Sig_/IuO7Y0SK43M6.niNEyTxPa5
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSbcsgACgkQAVBC80lX
-0GyHTQf+IEtDljYhLnCISPmNvvKUfxxpFT+5PuRwCAbfSxONmf1XU/j1+tIyWaSp
-rUUjNuOSXI3HGBwjIvSUXSsuW4CnImBEI2P23Q9FZ8F2O/y3oVZaQXcizR0pvdsq
-Jr4HGX9DXwy6zrrlTtskBDLEfZheNIsbL/9HaHcYSnDUZwcugD9bvTCB+CYfCOGA
-FDyiGxMxaxd6Q+icgCL40I+moNEcXfkcVLZ840Mp3kFqfOxbRP3/TPLxZGv+BYop
-/IqOqhfFpDoC+pl9XCqIsxzpQSuvR6YqluAE2AjlGUEdy7Haa+dW2Nll+et662r9
-Oye/iG5ojr394DtsssqmTA67NYkt/A==
-=/qEy
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSbfVgACgkQAVBC80lX
+0GzvvggAgKaN6cbQNB4fpteIWhjXWOggYF1vigsQ7RTSi9a3EMMuLBA5qveqey06
+gnVRbOW82upgbdwOubHUOOcKwwQhCE7+xOGkOu1c426DPYuL9RESHDarxyfYkaDH
+bSbdp8m28bkXl6WE4tidKrOMZ1qvRqsVakqdpdUnn6N6MnskNt4c2wDD7g/W1URe
+d0LEAt+c2UctnZJKxq0N/zIAY/KM8SrcMm90xP5mf0owKnmmFqWZ/a+mUXznvuar
+WIf/7q8VB3st94nr/wulHVlFCh2jwMidOVgTr1jpS9/ayJ9+cNUFlV63vf1jqa00
+WsAT7crEvc62DuTyibNiw0Djp98dZw==
+=lDyx
 -----END PGP SIGNATURE-----
 
---Sig_/2.kN=8z/0uAbZl9XFZvkv1Q--
+--Sig_/IuO7Y0SK43M6.niNEyTxPa5--

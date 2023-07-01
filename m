@@ -2,88 +2,91 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19AF7744575
-	for <lists+linux-next@lfdr.de>; Sat,  1 Jul 2023 02:09:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F6727447D4
+	for <lists+linux-next@lfdr.de>; Sat,  1 Jul 2023 09:58:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229501AbjGAAJo (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 30 Jun 2023 20:09:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50678 "EHLO
+        id S229490AbjGAH5w (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sat, 1 Jul 2023 03:57:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjGAAJm (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 30 Jun 2023 20:09:42 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 035783C29;
-        Fri, 30 Jun 2023 17:09:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=frNBpN5Ah3HHFVhq8vAbyVzkXEJ+bYa1e3oBl0nbpV8=; b=Rjm4s0jhP5lIXdHShrT46FIvjH
-        s2XBFAkiha/owQok0aH8tLh8hgGUOr6FpmeOEEtxxvpHpFvaEfrHONpnjcI9vpplPd64Cf5H5Jnly
-        4pdxaQpQTy8MXt+ogOlpSXZkegcNUv+HXs4Ix/a5X9Pu3omWw1WGIdGAkFbqxg2UDb4g0iYwh7k6C
-        wldq9b6brR27zlSiUe9hQCOoSmRuiSWlVpPHBb2Pvajybllk1QuHStiVcnp3X9gX7nwEe5I5rJ9xJ
-        KYOmumRWUZpcwL8Dgm9k0+NdcC2kPeOBI5jfItR6ohMpUAr+Z7BFADgVLaWrGCjUMLgkaKleeX8IO
-        c1XJm8SQ==;
-Received: from [2601:1c2:980:9ec0::2764]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qFOBH-004oqX-18;
-        Sat, 01 Jul 2023 00:09:39 +0000
-Message-ID: <2e729756-4468-9e3a-2664-9b1b4b4ca060@infradead.org>
-Date:   Fri, 30 Jun 2023 17:09:38 -0700
+        with ESMTP id S229480AbjGAH5w (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sat, 1 Jul 2023 03:57:52 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F7591B0
+        for <linux-next@vger.kernel.org>; Sat,  1 Jul 2023 00:57:48 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-98e109525d6so476496166b.0
+        for <linux-next@vger.kernel.org>; Sat, 01 Jul 2023 00:57:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688198266; x=1690790266;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=LSATOF2fTrmY3TIuw1xjHyriagcvCRWohOX207a4PI4=;
+        b=f5Rv4atvrar8yzuX6A8VW5RZulYnynQd7+ZxQir7NyoB5OEYKuSM57tAPfOU00wd0p
+         nyhS5l0WmfbtEoVvhTSy1eXn/SrQl3OqiuAHLLhXJX5pw6UmZsKD+QjV1TsvV7MqyOhC
+         nzDGSWugig8YdJ4wlB2GkccWFi2Y1njJsDDsIPTZOtR3327vNslyYrrqSf3sNcQbZDbV
+         phiJYGrOIFsoq7YMChkYN0NJQFJVzORR3b8VhZXsYI7Em1DWCbFL6m+gfkj3Ak/Tg6fw
+         NC+XrsjwesKJVSnPzNfGLtRWiscQZHXeCKsjzNU9PuumoPdwUZp1/uGN0VfFmhjV0jz/
+         PecA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688198266; x=1690790266;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=LSATOF2fTrmY3TIuw1xjHyriagcvCRWohOX207a4PI4=;
+        b=hW1JijK6uMBchYdnPlgMuD+N/8Yj2kX3F284rsHwPHoWdH+5klbnuiETJBkCovGSEN
+         wykLJfML9MKRQ9J+azP2nkjTgkMn9TiEIwG5KHx1SyzlBnvspcxpc2POH1WtUs9p2oWR
+         dMhUj1McIiyXRhMOyrOrKf2n9fj7zuuLTA7AtDFAeovFQC/SZiufhMn+wc/kELJmgQD9
+         s5yRNtD3fNrQ2rlwjnvekkf8qDuGcsCQTUXAogyDZfye0AzQo/A/G22eCUtRvgTTkEi3
+         fklA2pa8i7z5UKbwtZiwzpT8kn6A70HekOX8Hv/Oxh5XGraYOlP5Ej788lsRz/Pd92W9
+         hcDg==
+X-Gm-Message-State: AC+VfDwamS/wc4xXha1Zh2WY+zaf5XtC/sky/YFpbm80dpoJWTbNMUd6
+        Bmva4bUKmurvOw3omDXDxzkHZ8Od5OtW7Y0Jj98PVz/z
+X-Google-Smtp-Source: ACHHUZ4GtDj39uaeZgdFa7jGf1AdFfLXejtN2gl9WRjG2SEF3Xgxlq7VC/eG/qHA/Jxt/5eCLBvwZA==
+X-Received: by 2002:a17:907:6d86:b0:98d:4b97:acc8 with SMTP id sb6-20020a1709076d8600b0098d4b97acc8mr9773005ejc.25.1688198266343;
+        Sat, 01 Jul 2023 00:57:46 -0700 (PDT)
+Received: from [192.168.10.214] ([217.169.179.6])
+        by smtp.gmail.com with ESMTPSA id rp25-20020a170906d97900b0098e17ea781csm8178529ejb.94.2023.07.01.00.57.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 01 Jul 2023 00:57:45 -0700 (PDT)
+Message-ID: <c40964a7-1895-0174-d114-beede91cffbb@linaro.org>
+Date:   Sat, 1 Jul 2023 09:57:44 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: linux-next: Tree for Jun 30 (drivers/bluetooth/btmtk.c)
-Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: duplicate patch in the samsung-krzk tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        Jing Cai <jing.cai@mediatek.com>,
-        Chris Lu <chris.lu@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>
-References: <20230630131756.6dee658e@canb.auug.org.au>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20230630131756.6dee658e@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20230630084649.5d4e6f1c@canb.auug.org.au>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230630084649.5d4e6f1c@canb.auug.org.au>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-
-
-On 6/29/23 20:17, Stephen Rothwell wrote:
+On 30/06/2023 00:46, Stephen Rothwell wrote:
 > Hi all,
 > 
-> Please do *not* add any v6.6 related stuff to your linux-next included
-> branches until after v6.5-rc1 has been released.
+> The following commit is also in Linus Torvalds' tree as a different commit
+> (but the same patch):
 > 
-> This release is broken for 32 bit sparc builds.
-> 
-> Changes since 20230629:
-> 
+>   858fd147234d ("arm64: dts: exynos: Remove clock from Exynos850 pmu_system_controller")
 
-When CONFIG_DEV_COREDUMP is not set,
-gcc 12.2.0 (crosstools from kernel.org) complains:
+Thanks, it is kind of expected and won't make it twice to Linus' tree. I
+should have dropped it when it was merged by my upstream maintainer.
 
-../drivers/bluetooth/btmtk.c: In function 'btmtk_process_coredump':
-../drivers/bluetooth/btmtk.c:386:44: error: 'struct hci_dev' has no member named 'dump'
-  386 |                 schedule_delayed_work(&hdev->dump.dump_timeout,
-      |                  
+Dropped now.
 
-I see this on arm64, ppc64, riscv32, i386, x86_64
+Best regards,
+Krzysztof
 
-
-PS: please add a MAINTAINERS entry for btmtk.c.
-
--- 
-~Randy

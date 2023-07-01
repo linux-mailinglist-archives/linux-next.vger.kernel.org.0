@@ -2,156 +2,68 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D687B744809
-	for <lists+linux-next@lfdr.de>; Sat,  1 Jul 2023 10:29:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A514744ABD
+	for <lists+linux-next@lfdr.de>; Sat,  1 Jul 2023 19:43:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229773AbjGAI3L (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 1 Jul 2023 04:29:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40904 "EHLO
+        id S229582AbjGARnJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sat, 1 Jul 2023 13:43:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230039AbjGAI3H (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sat, 1 Jul 2023 04:29:07 -0400
-Received: from mail-pf1-f205.google.com (mail-pf1-f205.google.com [209.85.210.205])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4EB1187
-        for <linux-next@vger.kernel.org>; Sat,  1 Jul 2023 01:29:04 -0700 (PDT)
-Received: by mail-pf1-f205.google.com with SMTP id d2e1a72fcca58-666eb721e75so2401187b3a.1
-        for <linux-next@vger.kernel.org>; Sat, 01 Jul 2023 01:29:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688200144; x=1690792144;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=n2zqYb3bq8vh5YXOrKy7ljeLQ1ET7GZzXQL1D1Y4ntc=;
-        b=izTTrkeQS4qAi1I/He4wZIqv+k2IeNRP9/lQREavo4tyasGd8gC4X8ohQCvGin2PRG
-         nNSER+xyzqppB12eAq7FW/dPnFfvWH/+RL+HT68I53Y6SamrPRRUZjQ8tejucnAKGRX0
-         K4EA2yRaueCiiBbP55EOp2KJct72o5ff23RFOcoAiK24Gvqe8bIQgfFEf+0+1jPftKo7
-         6RRPMMgvo6SBHrNK+e3vB8rplirTszP2YV2TTz7BBv0Fq82dpiCg55fVfJ808VRKdERn
-         VWEqdxd7gE1HqDplzk/3JpZVX8Q/H7NGgC5jv8O0UjNMRT37GWC11gymqx02xQWgwVec
-         HcjA==
-X-Gm-Message-State: ABy/qLYRQgbt+byBrcNOuzfG5xNZ5dGTD5ZvGiRYhHS89FlO7ZBTk75j
-        9b2lNV2CYzgtS9JDTtS1L96/kcwJZlA9IvepwZiD6qJ8rV5K
-X-Google-Smtp-Source: APBJJlEIG7PNckSWA6x/kUL5CB00BHdQH9ZpAXCgvsszVECyZeBmCQ7RgS6PSJivQ9zKimvXJWEVjs6qsNhnyhjSQe/fUl+q0dPT
-MIME-Version: 1.0
-X-Received: by 2002:a05:6a00:c94:b0:682:140c:2459 with SMTP id
- a20-20020a056a000c9400b00682140c2459mr6500910pfv.0.1688200144092; Sat, 01 Jul
- 2023 01:29:04 -0700 (PDT)
-Date:   Sat, 01 Jul 2023 01:29:03 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000e6068305ff68b9c5@google.com>
-Subject: [syzbot] [kernel?] linux-next boot error: BUG: sleeping function
- called from invalid context in cpu_bugs_smt_update
-From:   syzbot <syzbot+bdc9ec9be68959140dbf@syzkaller.appspotmail.com>
-To:     linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        with ESMTP id S229446AbjGARnI (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sat, 1 Jul 2023 13:43:08 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC6A3199B;
+        Sat,  1 Jul 2023 10:43:07 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1688233385;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=sTc+p5TPNbnfHEv9COkbIVI1YjEbATBZ2hQ/9gaXcsU=;
+        b=paxbWpL/BumjogKNBpNKo0i6PS57u4P3FxexcBJCxQF1nmZcr9qjkL7JSSU+Pqbf+SMlzy
+        UBvGHqoT5nxPhhq1tcf2Ouck+MzVHed6aU95oHXzCl8KUsYJKWW6TdIdeLgjzytNrV5Mtd
+        eSKURe5jz+4RlqWX6/9ZcHgmUMF34YWiMNKGJ2jeCQPhGKaU8szw7/W2zFTdO7OhTNXXGQ
+        yzBp0mDP+9Yh6+rXpuXDAZhAGd1zkYcCac2Sx1XK0E2XqcuMmVOn1DyhjVv+l7kCdIUy2j
+        wdhr/FqF/Hsw1tELtsAKege7xXkj0LpoKO5zL6bdq8skIRI6uohEr4fTiYFUQA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1688233385;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=sTc+p5TPNbnfHEv9COkbIVI1YjEbATBZ2hQ/9gaXcsU=;
+        b=qeKHk0YDrdZCfdK4KaV5pk5U37VrCWD3e9/Xu1RX1NAcUvbf5cXXpRXxQ8VPlM8hp+jceD
+        ehuN/tKTwPs1LHDQ==
+To:     syzbot <syzbot+bdc9ec9be68959140dbf@syzkaller.appspotmail.com>,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
         peterz@infradead.org, sfr@canb.auug.org.au,
-        syzkaller-bugs@googlegroups.com, tglx@linutronix.de
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+        syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] [kernel?] linux-next boot error: BUG: sleeping
+ function called from invalid context in cpu_bugs_smt_update
+In-Reply-To: <000000000000e6068305ff68b9c5@google.com>
+References: <000000000000e6068305ff68b9c5@google.com>
+Date:   Sat, 01 Jul 2023 19:43:04 +0200
+Message-ID: <87edlry1cn.ffs@tglx>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hello,
+On Sat, Jul 01 2023 at 01:29, syzbot wrote:
+> syzbot found the following issue on:
+>
+> HEAD commit:    53cdf865f90b Add linux-next specific files for 20230627
+> git tree:       linux-next
+> console output: https://syzkaller.appspot.com/x/log.txt?x=12a6f567280000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=83c17849d18e7a86
+> dashboard link: https://syzkaller.appspot.com/bug?extid=bdc9ec9be68959140dbf
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-syzbot found the following issue on:
-
-HEAD commit:    53cdf865f90b Add linux-next specific files for 20230627
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=12a6f567280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=83c17849d18e7a86
-dashboard link: https://syzkaller.appspot.com/bug?extid=bdc9ec9be68959140dbf
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/cba2655c9221/disk-53cdf865.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/1ef013cfe943/vmlinux-53cdf865.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/f533d84244ee/bzImage-53cdf865.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+bdc9ec9be68959140dbf@syzkaller.appspotmail.com
-
-smpboot: CPU0: Intel(R) Xeon(R) CPU @ 2.20GHz (family: 0x6, model: 0x4f, stepping: 0x0)
-RCU Tasks: Setting shift to 1 and lim to 1 rcu_task_cb_adjust=1.
-RCU Tasks Trace: Setting shift to 1 and lim to 1 rcu_task_cb_adjust=1.
-Running RCU-tasks wait API self tests
-Performance Events: unsupported p6 CPU model 79 no PMU driver, software events only.
-signal: max sigframe size: 1776
-rcu: Hierarchical SRCU implementation.
-rcu: 	Max phase no-delay instances is 1000.
-NMI watchdog: Perf NMI watchdog permanently disabled
-smp: Bringing up secondary CPUs ...
-smpboot: x86: Booting SMP configuration:
-.... node  #0, CPUs:      #1
-BUG: sleeping function called from invalid context at kernel/locking/mutex.c:580
-in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 1, name: swapper/0
-preempt_count: 1, expected: 0
-RCU nest depth: 0, expected: 0
-1 lock held by swapper/0/1:
- #0: ffffffff8c849728 (cpu_add_remove_lock){+.+.}-{3:3}, at: cpu_maps_update_begin kernel/cpu.c:469 [inline]
- #0: ffffffff8c849728 (cpu_add_remove_lock){+.+.}-{3:3}, at: cpu_up kernel/cpu.c:1696 [inline]
- #0: ffffffff8c849728 (cpu_add_remove_lock){+.+.}-{3:3}, at: cpu_up+0xbc/0x200 kernel/cpu.c:1679
-Preemption disabled at:
-[<ffffffff81363069>] wakeup_secondary_cpu_via_init arch/x86/kernel/smpboot.c:888 [inline]
-[<ffffffff81363069>] do_boot_cpu arch/x86/kernel/smpboot.c:1087 [inline]
-[<ffffffff81363069>] native_kick_ap+0x969/0x1030 arch/x86/kernel/smpboot.c:1124
-CPU: 0 PID: 1 Comm: swapper/0 Not tainted 6.4.0-next-20230627-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x136/0x150 lib/dump_stack.c:106
- __might_resched+0x358/0x580 kernel/sched/core.c:10189
- __mutex_lock_common kernel/locking/mutex.c:580 [inline]
- __mutex_lock+0x9f/0x1350 kernel/locking/mutex.c:747
- cpu_bugs_smt_update+0x1b/0x440 arch/x86/kernel/cpu/bugs.c:1633
- arch_smt_update+0x9/0x10 arch/x86/kernel/cpu/common.c:2326
- _cpu_up+0x3d0/0x940 kernel/cpu.c:1674
- cpu_up kernel/cpu.c:1707 [inline]
- cpu_up+0xfe/0x200 kernel/cpu.c:1679
- cpuhp_bringup_mask+0xdc/0x210 kernel/cpu.c:1773
- cpuhp_bringup_cpus_parallel kernel/cpu.c:1837 [inline]
- bringup_nonboot_cpus+0x15f/0x1a0 kernel/cpu.c:1848
- smp_init+0x32/0x150 kernel/smp.c:969
- kernel_init_freeable+0x425/0xba0 init/main.c:1540
- kernel_init+0x1e/0x2c0 init/main.c:1437
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
- </TASK>
-BUG: scheduling while atomic: swapper/0/1/0x00000002
-3 locks held by swapper/0/1:
- #0: ffffffff8c849728 (cpu_add_remove_lock){+.+.}-{3:3}, at: cpu_maps_update_begin kernel/cpu.c:469 [inline]
- #0: ffffffff8c849728 (cpu_add_remove_lock){+.+.}-{3:3}, at: cpu_up kernel/cpu.c:1696 [inline]
- #0: ffffffff8c849728 (cpu_add_remove_lock){+.+.}-{3:3}, at: cpu_up+0xbc/0x200 kernel/cpu.c:1679
- #1: ffffffff8c849670 (cpu_hotplug_lock){++++}-{0:0}, at: cpus_write_lock kernel/cpu.c:507 [inline]
- #1: ffffffff8c849670 (cpu_hotplug_lock){++++}-{0:0}, at: _cpu_up+0x66/0x940 kernel/cpu.c:1619
- #2: ffffffff8c9970a8 (sparse_irq_lock){+.+.}-{3:3}, at: cpuhp_bringup_ap+0x65/0x340 kernel/cpu.c:798
-Modules linked in:
-Preemption disabled at:
-[<ffffffff81363069>] wakeup_secondary_cpu_via_init arch/x86/kernel/smpboot.c:888 [inline]
-[<ffffffff81363069>] do_boot_cpu arch/x86/kernel/smpboot.c:1087 [inline]
-[<ffffffff81363069>] native_kick_ap+0x969/0x1030 arch/x86/kernel/smpboot.c:1124
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+That was a temporary hickup in next.

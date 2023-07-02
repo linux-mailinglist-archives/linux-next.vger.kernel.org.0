@@ -2,50 +2,45 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89D8F745301
-	for <lists+linux-next@lfdr.de>; Mon,  3 Jul 2023 00:51:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9F99745314
+	for <lists+linux-next@lfdr.de>; Mon,  3 Jul 2023 01:42:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229516AbjGBWvk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 2 Jul 2023 18:51:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57574 "EHLO
+        id S229504AbjGBXm4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 2 Jul 2023 19:42:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbjGBWvk (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 2 Jul 2023 18:51:40 -0400
+        with ESMTP id S229445AbjGBXmz (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 2 Jul 2023 19:42:55 -0400
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50D771B9;
-        Sun,  2 Jul 2023 15:51:37 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86AD7E45;
+        Sun,  2 Jul 2023 16:42:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1688338290;
-        bh=WSJme8ZWta8Gi20WTLMeQeOFtIcN8v/y7McLFtsWzYo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=dgWYxM11/oWrjZ4AFJppjxCoHDO3+mSlQpArX9oSI+an8Zn0E9ihZ0Kb0x3pjwqIi
-         3TvFsYgWdDkppe+a+bjU7jzEPEZN7rJkk9teBqByyBWqHh1YyQrXpsvljKnGmUXwmv
-         k5ziFrsLS60hGWAZnf1/ranW8xWDIGFMb0c41jD0Uj4diTkcvnEDkRNh11xLwT+3hK
-         dOW6DCQDuvhVesX1cD2ZladHPPCWyt/zF+IxxEctCHdMEyqC7ZlgQmUcMa00y3OAKN
-         9WRVXDkrysN+0/E31m5g83rSZOgZtQBAwguyk1MYOosHgWZuaqn1RuUznMrhOs4IK6
-         3HfWHQCFU49lQ==
+        s=201702; t=1688341371;
+        bh=cT82u9M2a2EePk1o1W+cQtyYlEl7DZ7cY6auLzp8BiU=;
+        h=Date:From:To:Cc:Subject:From;
+        b=jnXtAPEuwhBteymoLB59+e+j2CMGi77ohfih17QgdpqxKcoI0tudIR8ZwxFt/bDCH
+         B/HPNV1+p+NiwlNZGTzLEoTP3AJTO9G5NWux5zV/5ik1aMk2zjnByLxR+nZi7Uw6z/
+         x89Hx26FRfBQ4FspE92jd5P392kkS8sdeHcMKs9zb556TYSYzu7LFuCs14fEZ0vZIu
+         anBkBlc/+0vE+/+1mnxG/PVJ8YvB/P7pjWwgrFoLV1wX2/8mUDhAyAZmHVVSWH4lnJ
+         yji2MSVqJJoogHw2VFBX5zRzYHxqgdJAe8i/RqqgABQWbaXb8MTjW7djVOtqPvGsqo
+         XrHqnoNoDjXyw==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QvPS24zCqz4wZw;
-        Mon,  3 Jul 2023 08:51:30 +1000 (AEST)
-Date:   Mon, 3 Jul 2023 08:51:28 +1000
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QvQbH39rmz4wqX;
+        Mon,  3 Jul 2023 09:42:51 +1000 (AEST)
+Date:   Mon, 3 Jul 2023 09:42:50 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Rob Herring <robherring2@gmail.com>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Frank Rowand <frowand.list@gmail.com>,
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: [PATCH] of: fix htmldocs build warnings
-Message-ID: <20230703085128.3d8cbf0e@canb.auug.org.au>
-In-Reply-To: <c5db0099-a7fd-8f1c-16ad-8388d3cf6a05@infradead.org>
-References: <20230220163638.04e9d0c4@canb.auug.org.au>
-        <20230310113258.463f836c@canb.auug.org.au>
-        <20230322180032.1badd132@canb.auug.org.au>
-        <c5db0099-a7fd-8f1c-16ad-8388d3cf6a05@infradead.org>
+Subject: linux-next: manual merge of the pidfd tree with Linus' tree
+Message-ID: <20230703094250.40be7092@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/i4G9G7rZmlV77xksRQz4Qfn";
+Content-Type: multipart/signed; boundary="Sig_/op6S6dTDrhgksTysqlmt/.f";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
@@ -56,89 +51,53 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/i4G9G7rZmlV77xksRQz4Qfn
+--Sig_/op6S6dTDrhgksTysqlmt/.f
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Rob,
+Hi all,
 
-On Wed, 22 Mar 2023 11:50:53 -0700 Randy Dunlap <rdunlap@infradead.org> wro=
-te:
->
-> On 3/22/23 00:00, Stephen Rothwell wrote:
-> > Fix these htmldoc build warnings:
-> >=20
-> > include/linux/of.h:115: warning: cannot understand function prototype: =
-'const struct kobj_type of_node_ktype; '
-> > include/linux/of.h:118: warning: Excess function parameter 'phandle_nam=
-e' description in 'of_node_init'
-> >=20
-> > Reported by: Stephen Rothwell <sfr@canb.auug.org.au>
-> > Reported by: Randy Dunlap <rdunlap@infradead.org>
-> > Fixes: 39459ce717b8 ("of: dynamic: add lifecycle docbook info to node c=
-reation functions")
-> > Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au> =20
->=20
->=20
-> Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
->=20
-> Thanks.
->=20
-> > ---
-> >  include/linux/of.h | 7 +++----
-> >  1 file changed, 3 insertions(+), 4 deletions(-)
-> >=20
-> > Replaces "[PATCH] of: fix htmldocs build warning" and additionally
-> > fixes the new warning about phandle that Randy reported.
-> >=20
-> > diff --git a/include/linux/of.h b/include/linux/of.h
-> > index 9b7a99499ef3..d55dab9ad728 100644
-> > --- a/include/linux/of.h
-> > +++ b/include/linux/of.h
-> > @@ -100,10 +100,12 @@ struct of_reconfig_data {
-> >  	struct property		*old_prop;
-> >  };
-> > =20
-> > +extern const struct kobj_type of_node_ktype;
-> > +extern const struct fwnode_operations of_fwnode_ops;
-> > +
-> >  /**
-> >   * of_node_init - initialize a devicetree node
-> >   * @node: Pointer to device node that has been created by kzalloc()
-> > - * @phandle_name: Name of property holding a phandle value
-> >   *
-> >   * On return the device_node refcount is set to one.  Use of_node_put()
-> >   * on @node when done to free the memory allocated for it.  If the node
-> > @@ -111,9 +113,6 @@ struct of_reconfig_data {
-> >   * whether to free the memory will be done by node->release(), which is
-> >   * of_node_release().
-> >   */
-> > -/* initialize a node */
-> > -extern const struct kobj_type of_node_ktype;
-> > -extern const struct fwnode_operations of_fwnode_ops;
-> >  static inline void of_node_init(struct device_node *node)
-> >  {
-> >  #if defined(CONFIG_OF_KOBJ) =20
+Today's linux-next merge of the pidfd tree got conflicts in:
 
-I am still getting the above warnings :-(
+  kernel/pid.c
+  kernel/pid_namespace.c
+
+between commits:
+
+  b69f0aeb0689 ("pid: Replace struct pid 1-element array with flex-array")
+  dd546618ba70 ("pid: use struct_size_t() helper")
+
+from Linus' tree and commit:
+
+  757777eef55b ("pid: Replace struct pid 1-element array with flex-array")
+
+from the pidfd tree.
+
+I fixed it up (I used the former version) and can carry the fix as
+necessary. This is now fixed as far as linux-next is concerned, but any
+non trivial conflicts should be mentioned to your upstream maintainer
+when your tree is submitted for merging.  You may also want to consider
+cooperating with the maintainer of the conflicting tree to minimise any
+particularly complex conflicts.
+
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/i4G9G7rZmlV77xksRQz4Qfn
+--Sig_/op6S6dTDrhgksTysqlmt/.f
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSh/3AACgkQAVBC80lX
-0GwIpwf/aA4H4y8LTmzjdHcwtCNvdjPt77alVANDyuqLgIE6PsFWnhWsYfFxeuLL
-WsbRtG75xhzwLUF629Ltmsjqm9V+cxwSrzSZ5009PLPMqMsie619wCf1dcAzopL+
-UkyKbxD9VaSo5G8jHltvu+HrVh4BHuQfwrFSETkDkKTS20y/Gsd34X0bh8TFeXak
-2ZmMAn2W4t0/UpJqKTDy1syZeJ7b/yvVEQ2nHhhzsMsEucOGPTZ8xerS5JaxAu5N
-OwAj9UAJWSGjdHcQyZlPc9weIOH3YMPAULzW3XYBLaBM+lElC/RpzMO8uAac6MED
-ziGAHPNi5FRxYdmJDPadjMS627AZtg==
-=0ORD
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSiC3oACgkQAVBC80lX
+0GxDUAgAnlfnyc/gO4w6PQj4KqsscdByned2Sm/xQ1/rpUqNSGlp5KFIXLNeqFdt
+3pKNonWPSWSorVLOAozqHSXpd/szawmizGqleZ8LLeYKy3MOxZ8CbDZ81J3RJ051
+VTcASdzRIJUkBz8yycaMaJ9xNwpdCMt8KX+OHMG+HNKwQzpw9qDL+Z+G0CyVugrC
+yqg+aHxIJy+x4j4pDi3EMc7rNFpKKacxlusD7od5802YuSbcqw41CAmavVvjnQgU
+WEUPS90a8pM69vy6Wy/20nPGQmLZWBiukTWn4F2PXIEH1lVLZZm6DOuCzTOXTbAn
+DUL/u97T/hSQrA2HnicD+k79Htlheg==
+=NmWj
 -----END PGP SIGNATURE-----
 
---Sig_/i4G9G7rZmlV77xksRQz4Qfn--
+--Sig_/op6S6dTDrhgksTysqlmt/.f--

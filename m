@@ -2,64 +2,64 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E335745436
-	for <lists+linux-next@lfdr.de>; Mon,  3 Jul 2023 05:37:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D7A974546E
+	for <lists+linux-next@lfdr.de>; Mon,  3 Jul 2023 06:13:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229516AbjGCDhU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 2 Jul 2023 23:37:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33950 "EHLO
+        id S229657AbjGCENU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 3 Jul 2023 00:13:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjGCDhT (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 2 Jul 2023 23:37:19 -0400
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA0E012A
-        for <linux-next@vger.kernel.org>; Sun,  2 Jul 2023 20:37:15 -0700 (PDT)
-Received: by mail-oi1-x235.google.com with SMTP id 5614622812f47-3a38953c928so1761522b6e.1
-        for <linux-next@vger.kernel.org>; Sun, 02 Jul 2023 20:37:15 -0700 (PDT)
+        with ESMTP id S229867AbjGCENJ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 3 Jul 2023 00:13:09 -0400
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98EA0E51
+        for <linux-next@vger.kernel.org>; Sun,  2 Jul 2023 21:12:48 -0700 (PDT)
+Received: by mail-oi1-x232.google.com with SMTP id 5614622812f47-3909756b8b1so2024602b6e.1
+        for <linux-next@vger.kernel.org>; Sun, 02 Jul 2023 21:12:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1688355434; x=1690947434;
+        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1688357567; x=1690949567;
         h=from:to:subject:content-transfer-encoding:mime-version:date
          :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=Nyjoa7Gmi7H/nLfm8ChkxnYj052yClwOBN1bhbiFDc8=;
-        b=OzvDSQ+fHkeL9fwbtYZYMxgepZeyXyHtnxr8gKFwq/Owxzn5aXCwxh8iGdFzbamW2T
-         BwyMOU4MEIFMZXxK8hFYMNdwSLnmCjI6rF31GVrUDzpLUQCg7lGcfvPR8hIlIHD/lyli
-         65mo/cUJ0cNP0vBC2L7TfzWlI10q/OoTpzi5BjjuUcb+bRzzWPKyxVprPnRHN7cDsZA5
-         Y3Mi5yRXT44QClsEI26mrvZrWhedxTzi2Kuv7o/vnn4gYqwD3b6pU1GfX5Pznw1u8Eus
-         GxzDsqzNgVv5wxyIBMGDRSnsyJx/BSvk3g1TsUDkW1VhAO++55lgFUUoZx1XWAp0eqIA
-         Sp/w==
+        bh=rdwZzLPDvt17Z8YwU54RB+huE1JNj73yLcP2tkMxx3Q=;
+        b=2OpxcXwzBmGwmB8Mi8YPASmTIfnVEC9yNJW0n54UN2OZdH+HOiMnD8EG3tmQp/z1nq
+         7jWEM56xhaNp6eIOFgDwIWHK5dwEvrDZAK+iP4y4VV02hjKJnRkFIUxwtJ2DMIg0bofX
+         I70wirrdoVVLvjXeI8KZwYWzdkeVYfRthJRzUHEehQYgv92+QRZ4N1xdi+TeTd4GQ0R4
+         1BfpUGsz4pxlPzWmqLXP0RqdSV2OM0Qkpg4LPB13Jvpbo/+/rMHecnsxQsr683e8YYxk
+         U878Va6lcI69EfFFYwxwQ1st0NQ1gS+pIHvGgvsedF6ua/g2FTOz/M0OlYHgAd7zuFRy
+         qW9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688355434; x=1690947434;
+        d=1e100.net; s=20221208; t=1688357567; x=1690949567;
         h=from:to:subject:content-transfer-encoding:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Nyjoa7Gmi7H/nLfm8ChkxnYj052yClwOBN1bhbiFDc8=;
-        b=KKu8nA51vzVe8M4LlT1EX/4jjVtvugqhIBWESicVkRZBHDjQQq32Kbi85zNjQU7Qyi
-         Fwp61yNJB2TTvSZjPqfQvzkQJQudKCBdGo7B5odbcF1Og+W45OcZOkhKeSy6X04rl3KM
-         NdbXKsj35f3GRCF44yAgfvubcondNsxI2dHL4Cspbh78q2ZMrFCODIkVieKzP/FnxchB
-         X2eL8ZDZVm1Bej9PZl5uSaNpWpWGSW1Dim0Fv/PVRxpIYxTmPOHuCVwIw8xTsyjLsB56
-         Zwp0WUbm23lEjqdZzAT5qS4j7y/sK+e1UiUgAnAXxd6SsgXJ3FNgPhcpx3KiaWY38qag
-         2Znw==
-X-Gm-Message-State: AC+VfDw6Jekv8ERV+Cg5WR0OOx/1wa9XvwM7DfYRXeZQP/Nia+rIz/qi
-        jTT1bfKYiInpVOir5oA1cUZYUTiRB8zH1vkqrF59HASt
-X-Google-Smtp-Source: ACHHUZ4Mnq176aiX6jYPKw8ycOUqXcZP7aMtrBWCbYtJimpaensrqj0TFOll+K993kNLtVsuEMKIzg==
-X-Received: by 2002:a05:6808:128f:b0:39c:59e2:dd79 with SMTP id a15-20020a056808128f00b0039c59e2dd79mr11742715oiw.36.1688355433993;
-        Sun, 02 Jul 2023 20:37:13 -0700 (PDT)
+        bh=rdwZzLPDvt17Z8YwU54RB+huE1JNj73yLcP2tkMxx3Q=;
+        b=fzyyZ6JPyaCjCLyJBtaQO8gxdGph7gZfK0trWZzabtfekDnJgFZnkMCtqeYIIOe6d9
+         XlUMuwadwEYK4H2Bd1QGKsIRuyfm1cpUkA0hAdATANwr+390Yd77ch9lNb+dkiZAAZ9+
+         v38sUTr42XCc7WwNs8+6yS642bP6bT4rjuaiMOnSRBx/pjh2ofa+hn+CqKYa3LBpgsQp
+         G2XIneR+321fjrNn4L9JMM84bVAQTzrPeYj7g9vw1LsDpc4mL1qDqTRwpGBP/cEbSk9u
+         I/Q+OaPuWr3RE0FRUSy88ImUN6Jo/tWQ2BG+zWg183s0xsUNxwkRUGlucjrp36aUdsy3
+         lupQ==
+X-Gm-Message-State: AC+VfDzqEfMp5UKI56XnV7dNghgUUFfGXlv31UqRZ8XZYJU4HSEnx6O+
+        8QPc0GbB8MztjjuMXn2xvSyEXNPG5/Bm0eepzM2FeY6q
+X-Google-Smtp-Source: ACHHUZ6QuVAPr0YkAV60m3gusWzrhu6MPBkADJ+mrLXeatYTz6fouZ0ZZqJoNxsnlVJ6JjL/dHiOYg==
+X-Received: by 2002:a05:6808:13c9:b0:39b:dab1:4b32 with SMTP id d9-20020a05680813c900b0039bdab14b32mr8375955oiw.0.1688357566566;
+        Sun, 02 Jul 2023 21:12:46 -0700 (PDT)
 Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id q68-20020a17090a1b4a00b002635341a7e8sm6792715pjq.3.2023.07.02.20.37.13
+        by smtp.gmail.com with ESMTPSA id i12-20020a17090aee8c00b00263418c81c5sm7645448pjz.46.2023.07.02.21.12.45
         for <linux-next@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Jul 2023 20:37:13 -0700 (PDT)
-Message-ID: <64a24269.170a0220.49606.415d@mx.google.com>
-Date:   Sun, 02 Jul 2023 20:37:13 -0700 (PDT)
+        Sun, 02 Jul 2023 21:12:45 -0700 (PDT)
+Message-ID: <64a24abd.170a0220.975b2.e8cd@mx.google.com>
+Date:   Sun, 02 Jul 2023 21:12:45 -0700 (PDT)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v6.4-10301-g9e106c7d604e
+X-Kernelci-Kernel: next-20230703
 X-Kernelci-Tree: next
 X-Kernelci-Report-Type: build
-X-Kernelci-Branch: pending-fixes
-Subject: next/pending-fixes build: 172 builds: 3 failed, 169 passed, 6 errors,
- 42 warnings (v6.4-10301-g9e106c7d604e)
+X-Kernelci-Branch: master
+Subject: next/master build: 191 builds: 6 failed, 185 passed, 46 errors,
+ 47 warnings (next-20230703)
 To:     linux-next@vger.kernel.org
 From:   "kernelci.org bot" <bot@kernelci.org>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -71,16 +71,16 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes build: 172 builds: 3 failed, 169 passed, 6 errors, 42 wa=
-rnings (v6.4-10301-g9e106c7d604e)
+next/master build: 191 builds: 6 failed, 185 passed, 46 errors, 47 warnings=
+ (next-20230703)
 
-Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
-rnel/v6.4-10301-g9e106c7d604e/
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20230703/
 
 Tree: next
-Branch: pending-fixes
-Git Describe: v6.4-10301-g9e106c7d604e
-Git Commit: 9e106c7d604e1ca5e520b6c36c3e27f6837d31fd
+Branch: master
+Git Describe: next-20230703
+Git Commit: 296d53d8f84ce50ffaee7d575487058c8d437335
 Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
 Built: 8 unique architectures
 
@@ -89,11 +89,18 @@ Build Failures Detected:
 arc:
     haps_hs_smp_defconfig+kselftest: (gcc-10) FAIL
 
+arm64:
+    allmodconfig: (clang-17) FAIL
+
 arm:
+    allmodconfig: (clang-17) FAIL
     rpc_defconfig: (gcc-10) FAIL
 
 mips:
     decstation_64_defconfig: (gcc-10) FAIL
+
+x86_64:
+    allmodconfig: (clang-17) FAIL
 
 Errors and Warnings Detected:
 
@@ -101,8 +108,10 @@ arc:
     haps_hs_smp_defconfig+kselftest (gcc-10): 1 error
 
 arm64:
+    allmodconfig (clang-17): 13 errors
 
 arm:
+    allmodconfig (clang-17): 13 errors
     rpc_defconfig (gcc-10): 2 errors
 
 i386:
@@ -110,6 +119,7 @@ i386:
 mips:
     fuloong2e_defconfig (gcc-10): 1 error
     lemote2f_defconfig (gcc-10): 1 error
+    loongson2k_defconfig (gcc-10): 1 error
     loongson3_defconfig (gcc-10): 1 error
 
 riscv:
@@ -123,6 +133,7 @@ sparc:
     tinyconfig (gcc-10): 1 warning
 
 x86_64:
+    allmodconfig (clang-17): 13 errors, 2 warnings
     allnoconfig (gcc-10): 3 warnings
     x86_64_defconfig (gcc-10): 3 warnings
     x86_64_defconfig+amdgpu (gcc-10): 3 warnings
@@ -132,12 +143,52 @@ x86_64:
     x86_64_defconfig+kselftest (gcc-10): 3 warnings
     x86_64_defconfig+x86-chromebook (gcc-10): 3 warnings
     x86_64_defconfig+x86-chromebook+amdgpu (gcc-10): 3 warnings
+    x86_64_defconfig+x86-chromebook+kselftest (gcc-10): 3 warnings
     x86_64_defconfig+x86_kvm_guest (gcc-10): 3 warnings
 
 Errors summary:
 
-    3    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=
+    4    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=
 =80=98-mhard-float=E2=80=99
+    3    drivers/scsi/aacraid/commsup.c:1790:15: error: array index 3 is pa=
+st the end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), ca=
+st to '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    3    drivers/scsi/aacraid/commsup.c:1789:15: error: array index 2 is pa=
+st the end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), ca=
+st to '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    3    drivers/scsi/aacraid/commsup.c:1788:15: error: array index 1 is pa=
+st the end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), ca=
+st to '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    3    drivers/scsi/aacraid/commsup.c:1351:18: error: array index 4 is pa=
+st the end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), ca=
+st to '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    3    drivers/scsi/aacraid/commsup.c:1350:18: error: array index 6 is pa=
+st the end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), ca=
+st to '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    3    drivers/scsi/aacraid/commsup.c:1349:18: error: array index 1 is pa=
+st the end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), ca=
+st to '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    3    drivers/scsi/aacraid/commsup.c:1334:19: error: array index 4 is pa=
+st the end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), ca=
+st to '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    3    drivers/scsi/aacraid/commsup.c:1333:50: error: array index 5 is pa=
+st the end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), ca=
+st to '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    3    drivers/scsi/aacraid/commsup.c:1333:19: error: array index 6 is pa=
+st the end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), ca=
+st to '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    3    drivers/scsi/aacraid/commsup.c:1332:18: error: array index 1 is pa=
+st the end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), ca=
+st to '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    3    drivers/scsi/aacraid/commsup.c:1292:21: error: array index 3 is pa=
+st the end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), ca=
+st to '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    3    drivers/scsi/aacraid/commsup.c:1290:20: error: array index 3 is pa=
+st the end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), ca=
+st to '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    3    drivers/scsi/aacraid/commsup.c:1170:17: error: array index 1 is pa=
+st the end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), ca=
+st to '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
     1    net/bpfilter/main.c:3:10: fatal error: sys/uio.h: No such file or =
 directory
     1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=
@@ -147,23 +198,23 @@ directory
 
 Warnings summary:
 
+    10   vmlinux.o: warning: objtool: iovec_from_user+0x88: call to copy_io=
+vec_from_user.part.0() with UACCESS enabled
     10   <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
 -Wcpp]
-    9    vmlinux.o: warning: objtool: iovec_from_user+0x88: call to copy_io=
+    9    vmlinux.o: warning: objtool: __import_iovec+0x147: call to copy_io=
 vec_from_user.part.0() with UACCESS enabled
-    8    vmlinux.o: warning: objtool: __import_iovec+0x147: call to copy_io=
-vec_from_user.part.0() with UACCESS enabled
-    6    vmlinux.o: warning: objtool: .altinstr_replacement+0x178b: redunda=
+    4    vmlinux.o: warning: objtool: .altinstr_replacement+0x17e5: redunda=
+nt UACCESS disable
+    3    vmlinux.o: warning: objtool: .altinstr_replacement+0x17ef: redunda=
+nt UACCESS disable
+    2    vmlinux.o: warning: objtool: .altinstr_replacement+0x1ddc: redunda=
 nt UACCESS disable
     2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
 tion failed, symbol will not be versioned.
     1    vmlinux.o: warning: objtool: __import_iovec+0x342: call to copy_io=
 vec_from_user.part.0() with UACCESS enabled
-    1    vmlinux.o: warning: objtool: .altinstr_replacement+0x1d1e: redunda=
-nt UACCESS disable
-    1    vmlinux.o: warning: objtool: .altinstr_replacement+0x193c: redunda=
-nt UACCESS disable
-    1    vmlinux.o: warning: objtool: .altinstr_replacement+0x1795: redunda=
+    1    vmlinux.o: warning: objtool: .altinstr_replacement+0x19aa: redunda=
 nt UACCESS disable
     1    lib/iov_iter.o: warning: objtool: iovec_from_user+0x80: call to co=
 py_iovec_from_user.part.0() with UACCESS enabled
@@ -171,6 +222,10 @@ py_iovec_from_user.part.0() with UACCESS enabled
 py_iovec_from_user.part.0() with UACCESS enabled
     1    lib/iov_iter.o: warning: objtool: .altinstr_replacement+0x1f: redu=
 ndant UACCESS disable
+    1    fs/reiserfs/reiserfs.o: warning: objtool: balance_leaf+0x7738: sta=
+ck state mismatch: cfa1=3D4+376 cfa2=3D4+368
+    1    drivers/misc/lkdtm/lkdtm.o: warning: objtool: bad call to elf_init=
+_reloc_text_sym() for data symbol .rodata
 
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
@@ -196,13 +251,165 @@ ngs, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
-allmodconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
+allmodconfig (x86_64, clang-17) =E2=80=94 FAIL, 13 errors, 2 warnings, 0 se=
+ction mismatches
+
+Errors:
+    drivers/scsi/aacraid/commsup.c:1170:17: error: array index 1 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1290:20: error: array index 3 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1292:21: error: array index 3 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1332:18: error: array index 1 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1333:19: error: array index 6 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1333:50: error: array index 5 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1334:19: error: array index 4 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1349:18: error: array index 1 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1350:18: error: array index 6 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1351:18: error: array index 4 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1788:15: error: array index 1 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1789:15: error: array index 2 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1790:15: error: array index 3 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+
+Warnings:
+    fs/reiserfs/reiserfs.o: warning: objtool: balance_leaf+0x7738: stack st=
+ate mismatch: cfa1=3D4+376 cfa2=3D4+368
+    drivers/misc/lkdtm/lkdtm.o: warning: objtool: bad call to elf_init_relo=
+c_text_sym() for data symbol .rodata
 
 ---------------------------------------------------------------------------=
 -----
-allnoconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+allmodconfig (arm64, clang-17) =E2=80=94 FAIL, 13 errors, 0 warnings, 0 sec=
+tion mismatches
+
+Errors:
+    drivers/scsi/aacraid/commsup.c:1170:17: error: array index 1 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1290:20: error: array index 3 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1292:21: error: array index 3 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1332:18: error: array index 1 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1333:19: error: array index 6 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1333:50: error: array index 5 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1334:19: error: array index 4 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1349:18: error: array index 1 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1350:18: error: array index 6 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1351:18: error: array index 4 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1788:15: error: array index 1 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1789:15: error: array index 2 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1790:15: error: array index 3 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm, clang-17) =E2=80=94 FAIL, 13 errors, 0 warnings, 0 secti=
+on mismatches
+
+Errors:
+    drivers/scsi/aacraid/commsup.c:1170:17: error: array index 1 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1290:20: error: array index 3 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1292:21: error: array index 3 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1332:18: error: array index 1 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1333:19: error: array index 6 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1333:50: error: array index 5 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1334:19: error: array index 4 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1349:18: error: array index 1 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1350:18: error: array index 6 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1351:18: error: array index 4 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1788:15: error: array index 1 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1789:15: error: array index 2 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1790:15: error: array index 3 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
 mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
+mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
 
 ---------------------------------------------------------------------------=
 -----
@@ -219,16 +426,18 @@ vec_from_user.part.0() with UACCESS enabled
 
 ---------------------------------------------------------------------------=
 -----
-allnoconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
-mismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+allnoconfig (x86_64, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
 
 ---------------------------------------------------------------------------=
 -----
-allnoconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
+allnoconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -249,6 +458,11 @@ ection mismatches
 -----
 aspeed_g5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
 ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -372,6 +586,11 @@ s, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
+defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
 defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
 ismatches
 
@@ -382,6 +601,21 @@ ismatches
 
 ---------------------------------------------------------------------------=
 -----
+defconfig+CONFIG_ARM64_16K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, clang-17) =E2=80=94 PASS, 0 er=
+rors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
 defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
 s, 0 warnings, 0 section mismatches
 
@@ -389,6 +623,11 @@ s, 0 warnings, 0 section mismatches
 -----
 defconfig+CONFIG_RANDOMIZE_BASE=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
 s, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+arm64-chromebook+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -495,6 +734,11 @@ n mismatches
 
 ---------------------------------------------------------------------------=
 -----
+i386_defconfig (i386, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
 i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
 on mismatches
 
@@ -586,6 +830,15 @@ loongson1b_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
 -----
 loongson1c_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
  section mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson2k_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 =
+section mismatches
+
+Errors:
+    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
+=98-mhard-float=E2=80=99
 
 ---------------------------------------------------------------------------=
 -----
@@ -683,8 +936,18 @@ ction mismatches
 
 ---------------------------------------------------------------------------=
 -----
+multi_v5_defconfig (arm, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
 multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
 ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -708,18 +971,13 @@ multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy (arm, gcc-10) =E2=80=94 PASS, 0=
 
 ---------------------------------------------------------------------------=
 -----
-multi_v7_defconfig+crypto (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
-s, 0 section mismatches
-
----------------------------------------------------------------------------=
------
 multi_v7_defconfig+debug (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
 , 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
-multi_v7_defconfig+ima (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
-0 section mismatches
+multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -753,8 +1011,18 @@ tion mismatches
 
 ---------------------------------------------------------------------------=
 -----
+nommu_k210_defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
 nommu_k210_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_sdcard_defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 w=
+arnings, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -864,6 +1132,11 @@ tion mismatches
 -----
 rv32_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
 ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rv32_defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -982,8 +1255,11 @@ on mismatches
 
 ---------------------------------------------------------------------------=
 -----
-tinyconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
+tinyconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section m=
+ismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
 
 ---------------------------------------------------------------------------=
 -----
@@ -992,11 +1268,8 @@ tinyconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
 
 ---------------------------------------------------------------------------=
 -----
-tinyconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section m=
-ismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+tinyconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -1050,11 +1323,16 @@ tion mismatches
 
 ---------------------------------------------------------------------------=
 -----
+x86_64_defconfig (x86_64, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
 x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 s=
 ection mismatches
 
 Warnings:
-    vmlinux.o: warning: objtool: .altinstr_replacement+0x178b: redundant UA=
+    vmlinux.o: warning: objtool: .altinstr_replacement+0x17e5: redundant UA=
 CCESS disable
     vmlinux.o: warning: objtool: iovec_from_user+0x88: call to copy_iovec_f=
 rom_user.part.0() with UACCESS enabled
@@ -1067,7 +1345,7 @@ x86_64_defconfig+amdgpu (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnin=
 gs, 0 section mismatches
 
 Warnings:
-    vmlinux.o: warning: objtool: .altinstr_replacement+0x178b: redundant UA=
+    vmlinux.o: warning: objtool: .altinstr_replacement+0x17ef: redundant UA=
 CCESS disable
     vmlinux.o: warning: objtool: iovec_from_user+0x88: call to copy_iovec_f=
 rom_user.part.0() with UACCESS enabled
@@ -1080,7 +1358,7 @@ x86_64_defconfig+crypto (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnin=
 gs, 0 section mismatches
 
 Warnings:
-    vmlinux.o: warning: objtool: .altinstr_replacement+0x1795: redundant UA=
+    vmlinux.o: warning: objtool: .altinstr_replacement+0x17ef: redundant UA=
 CCESS disable
     vmlinux.o: warning: objtool: iovec_from_user+0x88: call to copy_iovec_f=
 rom_user.part.0() with UACCESS enabled
@@ -1093,7 +1371,7 @@ x86_64_defconfig+debug (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 3 warning=
 s, 0 section mismatches
 
 Warnings:
-    vmlinux.o: warning: objtool: .altinstr_replacement+0x193c: redundant UA=
+    vmlinux.o: warning: objtool: .altinstr_replacement+0x19aa: redundant UA=
 CCESS disable
     vmlinux.o: warning: objtool: iovec_from_user+0x88: call to copy_iovec_f=
 rom_user.part.0() with UACCESS enabled
@@ -1106,7 +1384,7 @@ x86_64_defconfig+ima (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings,=
  0 section mismatches
 
 Warnings:
-    vmlinux.o: warning: objtool: .altinstr_replacement+0x178b: redundant UA=
+    vmlinux.o: warning: objtool: .altinstr_replacement+0x17e5: redundant UA=
 CCESS disable
     vmlinux.o: warning: objtool: iovec_from_user+0x88: call to copy_iovec_f=
 rom_user.part.0() with UACCESS enabled
@@ -1119,7 +1397,7 @@ x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 3 war=
 nings, 0 section mismatches
 
 Warnings:
-    vmlinux.o: warning: objtool: .altinstr_replacement+0x1d1e: redundant UA=
+    vmlinux.o: warning: objtool: .altinstr_replacement+0x1ddc: redundant UA=
 CCESS disable
     vmlinux.o: warning: objtool: iovec_from_user+0x88: call to copy_iovec_f=
 rom_user.part.0() with UACCESS enabled
@@ -1132,7 +1410,7 @@ x86_64_defconfig+x86-chromebook (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, =
 3 warnings, 0 section mismatches
 
 Warnings:
-    vmlinux.o: warning: objtool: .altinstr_replacement+0x178b: redundant UA=
+    vmlinux.o: warning: objtool: .altinstr_replacement+0x17e5: redundant UA=
 CCESS disable
     vmlinux.o: warning: objtool: iovec_from_user+0x88: call to copy_iovec_f=
 rom_user.part.0() with UACCESS enabled
@@ -1145,7 +1423,20 @@ x86_64_defconfig+x86-chromebook+amdgpu (x86_64, gcc-10) =E2=80=94 PASS, 0 e=
 rrors, 3 warnings, 0 section mismatches
 
 Warnings:
-    vmlinux.o: warning: objtool: .altinstr_replacement+0x178b: redundant UA=
+    vmlinux.o: warning: objtool: .altinstr_replacement+0x17ef: redundant UA=
+CCESS disable
+    vmlinux.o: warning: objtool: iovec_from_user+0x88: call to copy_iovec_f=
+rom_user.part.0() with UACCESS enabled
+    vmlinux.o: warning: objtool: __import_iovec+0x147: call to copy_iovec_f=
+rom_user.part.0() with UACCESS enabled
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook+kselftest (x86_64, gcc-10) =E2=80=94 PASS, =
+0 errors, 3 warnings, 0 section mismatches
+
+Warnings:
+    vmlinux.o: warning: objtool: .altinstr_replacement+0x1ddc: redundant UA=
 CCESS disable
     vmlinux.o: warning: objtool: iovec_from_user+0x88: call to copy_iovec_f=
 rom_user.part.0() with UACCESS enabled
@@ -1158,7 +1449,7 @@ x86_64_defconfig+x86_kvm_guest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 3=
  warnings, 0 section mismatches
 
 Warnings:
-    vmlinux.o: warning: objtool: .altinstr_replacement+0x178b: redundant UA=
+    vmlinux.o: warning: objtool: .altinstr_replacement+0x17e5: redundant UA=
 CCESS disable
     vmlinux.o: warning: objtool: iovec_from_user+0x88: call to copy_iovec_f=
 rom_user.part.0() with UACCESS enabled

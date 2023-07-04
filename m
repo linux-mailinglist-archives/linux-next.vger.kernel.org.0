@@ -2,96 +2,156 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0DC074679B
-	for <lists+linux-next@lfdr.de>; Tue,  4 Jul 2023 04:33:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C33A7467FB
+	for <lists+linux-next@lfdr.de>; Tue,  4 Jul 2023 05:38:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230349AbjGDCdI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 3 Jul 2023 22:33:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36278 "EHLO
+        id S229504AbjGDDit (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 3 Jul 2023 23:38:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230338AbjGDCdI (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 3 Jul 2023 22:33:08 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91D32188
-        for <linux-next@vger.kernel.org>; Mon,  3 Jul 2023 19:33:05 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-51d9850ef09so5992029a12.0
-        for <linux-next@vger.kernel.org>; Mon, 03 Jul 2023 19:33:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1688437984; x=1691029984;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=/g1LFilyMjEN9oSdO7pcWGB8N30CmWPCGMG/F57Fefc=;
-        b=CnVtgNS4d61RLiNc3sXv5mZ8PARA66gZpujXoYc/JBbAVbl8szlbIDpV4gxwYBy+5B
-         wCyYaYMTjuks8xGYJQ2J4/2o2thG5c6tpsb7w7HntXgS3rbcxejj5befe8chZv6lCuEf
-         62e1NucG4+uFSzm1epsQ5fwE0x0lzDztpX/oI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688437984; x=1691029984;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/g1LFilyMjEN9oSdO7pcWGB8N30CmWPCGMG/F57Fefc=;
-        b=V3DiuD+t4Ldwtu0yBK0IfrSExmQ49i574ORYu0KNSJGbbEimK3R0pPLM+5hZIE/+Om
-         8x/M0AFjE0dgONvX2W/s7NbNj+l2FIWfKMyftnOfAfoXKam+6+1f7J282AyzSCsXryVi
-         y8Pnlm1M/uTd+wF5ErA8wzKW3lUi1+uh3Z/A/JcerZgTYLgyEgnGApz8xYso+jgLzN0p
-         RcXcP3HEYH2fW7UkwKTaJrf1GDn/uZqdUSMZwG8BPG4cwLZ7W5JqZ6CUlTgNOXcgeUi1
-         BLjuZwW7R1KxshFCpyE03uYDpbBrExESYlArFXYXqlhF6CkVmbXcNikM5SbBRDaiwfcS
-         IWpw==
-X-Gm-Message-State: ABy/qLZiYSQjGY0FLv9ArAD4U9E8eHF2qqWQiWDAE3FnIJAuArlTUkaD
-        Yzdzqx0O5geeMH1wLGVFanNx6hr9pItqo8CZg72M64cL
-X-Google-Smtp-Source: APBJJlGkD54WYO+0UY2uTw5jRoPHEHryaC1BEekYiwUziKwf3eU3uxALqnzB/FwSwW51sjgN9DyGxA==
-X-Received: by 2002:aa7:da56:0:b0:51d:df5e:5674 with SMTP id w22-20020aa7da56000000b0051ddf5e5674mr8941968eds.1.1688437983954;
-        Mon, 03 Jul 2023 19:33:03 -0700 (PDT)
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com. [209.85.208.46])
-        by smtp.gmail.com with ESMTPSA id p18-20020aa7d312000000b0051a2d2f82fdsm11375862edq.6.2023.07.03.19.33.03
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Jul 2023 19:33:03 -0700 (PDT)
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-51d80d81d6eso6008754a12.1
-        for <linux-next@vger.kernel.org>; Mon, 03 Jul 2023 19:33:03 -0700 (PDT)
-X-Received: by 2002:aa7:d589:0:b0:515:3103:631e with SMTP id
- r9-20020aa7d589000000b005153103631emr8871457edq.25.1688437982971; Mon, 03 Jul
- 2023 19:33:02 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230704122342.4a1e2945@canb.auug.org.au>
-In-Reply-To: <20230704122342.4a1e2945@canb.auug.org.au>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 3 Jul 2023 19:32:46 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjo5PRUU++ApafaBLr2ojK-R-D_vvQ65fnhXO3Lu7xpgw@mail.gmail.com>
-Message-ID: <CAHk-=wjo5PRUU++ApafaBLr2ojK-R-D_vvQ65fnhXO3Lu7xpgw@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the mm tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        with ESMTP id S229450AbjGDDis (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 3 Jul 2023 23:38:48 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64674183;
+        Mon,  3 Jul 2023 20:38:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1688441919;
+        bh=lxtstFtduQSfV/bVjp8AFcGu3gmrBrtzQMLVUjriNDw=;
+        h=Date:From:To:Cc:Subject:From;
+        b=cbflC2s4L9L5EfSdJuBC7Fxbaazr0DE/7kIzOaOB8Ug8DI6HMkLS7WyQdHMV7Drf6
+         YJUdGuYnyjxoWf/4/4uCrin6JPF6dEhhw7AAtDzuUP+D/nNOwMc+v7a+f1UpDqZ7kG
+         0nNcXXY10Odm9PLx8cgC78g10sSO58ef4dN6aYXKyxCYS3dkL4s7EUn6K7VtpRk/pv
+         F2z45A6ebBs8YajKCk0CP+qHoQzBJI01Rip/iLOww0xxKdz/b/bnzFc5iZ/tw1cGKx
+         8DaNgpSYHlR1f5Gmg4mzwP2jtF6Z9zxNebeFgk5ERoYB2WNq3DZuwSevxhtJ1KslFr
+         0kkpiCI/RqaYw==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Qw7mv3tpDz4wZw;
+        Tue,  4 Jul 2023 13:38:39 +1000 (AEST)
+Date:   Tue, 4 Jul 2023 13:38:37 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Subject: linux-next: boot failure after merge of the mm tree
+Message-ID: <20230704133837.23ba9e49@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/hKY9hptkzjpmOW3tPSym29u";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, 3 Jul 2023 at 19:23, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> After merging the origin tree, today's linux-next build (arm64 defconfig)
-> failed like this:
->
-> arch/arm64/mm/fault.c: In function 'do_page_fault':
+--Sig_/hKY9hptkzjpmOW3tPSym29u
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Yup, SeongJae Park sent me the same report, and it just made it to
-top-of-tree as commit 24be4d0b46bb ("arch/arm64/mm/fault: Fix
-undeclared variable error in do_page_fault()")
+Hi all,
 
-This was actually an architecture I test myself, but I think UP ends
-up turning off CONFIG_PER_VMA_LOCK.
+After merging the mm tree, today's linux-next qemu boot test (powerpc
+pseries_le_defconfig) failed like this:
 
-I do wonder how much point there is to have a non-SMP build of
-architectures like x86-64 and arm64 at all...
+ Run /init as init process
+ BUG: Kernel NULL pointer dereference on read at 0x00000008
+ Faulting instruction address: 0xc000000000468ed0
+ Oops: Kernel access of bad area, sig: 11 [#1]
+ LE PAGE_SIZE=3D64K MMU=3DHash SMP NR_CPUS=3D2048 NUMA pSeries
+ Modules linked in:
+ CPU: 0 PID: 1 Comm: init Not tainted 6.4.0-13165-g408ff5108632 #2
+ Hardware name: IBM pSeries (emulated by qemu) POWER8 (raw) 0x4d0200 0xf000=
+004 of:SLOF,HEAD pSeries
+ NIP:  c000000000468ed0 LR: c000000000468410 CTR: 0000000000000000
+ REGS: c00000000479b960 TRAP: 0300   Not tainted  (6.4.0-13165-g408ff510863=
+2)
+ MSR:  8000000000009033 <SF,EE,ME,IR,DR,RI,LE>  CR: 24024800  XER: 00000000
+ CFAR: c00000000000db4c DAR: 0000000000000008 DSISR: 40000000 IRQMASK: 0=20
+ GPR00: c000000000468410 c00000000479bc00 c000000001568f00 c0000000041a6180=
+=20
+ GPR04: 000000007fff8785 c00000000479bbe0 c00000000479bc98 0000000000000000=
+=20
+ GPR08: ff7fffffffffefbf c00000000153cb10 c000000000432860 0000000000002000=
+=20
+ GPR12: c00000000445fb08 c000000002b00000 0000000000000000 0000000000000000=
+=20
+ GPR16: 0000000000000000 0000000000000000 0000000000000000 0000000000000000=
+=20
+ GPR20: 0000000000000000 0000000000000000 c0000000029901a0 c00000000692d000=
+=20
+ GPR24: c0000000029901a8 0000000000000075 0000000000000000 c0000000029901b0=
+=20
+ GPR28: 0000000000000354 c00000000693fcf0 c00000000693fcf0 0000000000000000=
+=20
+ NIP [c000000000468ed0] __handle_mm_fault+0xeb0/0x18a0
+ LR [c000000000468410] __handle_mm_fault+0x3f0/0x18a0
+ Call Trace:
+ [c00000000479bc00] [c000000000468410] __handle_mm_fault+0x3f0/0x18a0 (unre=
+liable)
+ [c00000000479bd00] [c000000000469970] handle_mm_fault+0xb0/0x350
+ [c00000000479bd50] [c0000000000894b4] ___do_page_fault+0x214/0x920
+ [c00000000479bdf0] [c000000000089c70] hash__do_page_fault+0x30/0xc0
+ [c00000000479be20] [c0000000000930a4] do_hash_fault+0x1d4/0x330
+ [c00000000479be50] [c00000000000904c] instruction_access_common_virt+0x20c=
+/0x210
+ --- interrupt: 400 at 0x7fff878510a0
+ NIP:  00007fff878510a0 LR: 0000000000000000 CTR: 0000000000000000
+ REGS: c00000000479be80 TRAP: 0400   Not tainted  (6.4.0-13165-g408ff510863=
+2)
+ MSR:  800000004000d033 <SF,EE,PR,ME,IR,DR,RI,LE>  CR: 00000000  XER: 00000=
+000
+ CFAR: c00000000000d7bc IRQMASK: 0=20
+ GPR00: 0000000000000000 00007fffeb1b47a0 0000000000000000 0000000000000000=
+=20
+ GPR04: 0000000000000000 0000000000000000 0000000000000000 0000000000000000=
+=20
+ GPR08: 0000000000000000 0000000000000000 0000000000000000 0000000000000000=
+=20
+ GPR12: 00007fff878510a0 0000000000000000 0000000000000000 0000000000000000=
+=20
+ GPR16: 0000000000000000 0000000000000000 0000000000000000 0000000000000000=
+=20
+ GPR20: 0000000000000000 0000000000000000 0000000000000000 0000000000000000=
+=20
+ GPR24: 0000000000000000 0000000000000000 0000000000000000 0000000000000000=
+=20
+ GPR28: 0000000000000000 0000000000000000 0000000000000000 0000000000000000=
+=20
+ NIP [00007fff878510a0] 0x7fff878510a0
+ LR [0000000000000000] 0x0
+ --- interrupt: 400
+ Code: 73e90973 4082060c 38610038 4bffe5dd 7c7fe378 73e90d73 408205ec 38610=
+038 4bff7ad9 7fff1b78 4bfff728 eb410088 <e95a0008> 71480001 4082078c e92900=
+38=20
+ ---[ end trace 0000000000000000 ]---
 
-But I guess people still run them in qemu.
+I don't know what caused this, but reverting the mm tree fixed the
+failure.  So I have done that for today.
 
-             Linus
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/hKY9hptkzjpmOW3tPSym29u
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSjlD4ACgkQAVBC80lX
+0Gz8JQgAm7TSMchN48+LgSHwMRZ5R+78XYh/6ch8Z4qff4IawrCijY7pheXNG5zR
+diFYPUGIrWtdXaKfSTiwi8VYQhwquEJaLpnKCPRMdMSwIgbc/uGuJi1tcYPoaYqT
+9+TSll4dkrX8E/HDF+LScB5AUWw93ihuNbo6FPyJSNHxtHawnSArkU+f82+jKdXy
+6V+qzOGhUNIe4Awm6F0s0bIfvfn1GYIIlpf64OCEvMGyEmSKwCLUyLxH28/fSTu+
+0L6lAN143/bOSyrRMUSwayF83x7bXsx9kvjF64F+U6w/1uemGTFfxvMtnN1SNNkx
+rPbkm1m3jpyOF1/HgKUjYDgv/Fa7ng==
+=lPNx
+-----END PGP SIGNATURE-----
+
+--Sig_/hKY9hptkzjpmOW3tPSym29u--

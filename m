@@ -2,65 +2,65 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FA1A747BFE
-	for <lists+linux-next@lfdr.de>; Wed,  5 Jul 2023 06:10:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87122747C18
+	for <lists+linux-next@lfdr.de>; Wed,  5 Jul 2023 06:41:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229532AbjGEEKf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 5 Jul 2023 00:10:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41878 "EHLO
+        id S229576AbjGEEle (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 5 Jul 2023 00:41:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbjGEEKe (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 5 Jul 2023 00:10:34 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D264C10F5
-        for <linux-next@vger.kernel.org>; Tue,  4 Jul 2023 21:10:30 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-6682909acadso2903522b3a.3
-        for <linux-next@vger.kernel.org>; Tue, 04 Jul 2023 21:10:30 -0700 (PDT)
+        with ESMTP id S229563AbjGEEld (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 5 Jul 2023 00:41:33 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 201A710F5
+        for <linux-next@vger.kernel.org>; Tue,  4 Jul 2023 21:41:30 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id 41be03b00d2f7-5577900c06bso4859829a12.2
+        for <linux-next@vger.kernel.org>; Tue, 04 Jul 2023 21:41:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1688530230; x=1691122230;
+        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1688532089; x=1691124089;
         h=from:to:subject:content-transfer-encoding:mime-version:date
          :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=o2XL/edwp5tPBn/N9j9oJg1eqbp/khf1MTOHPKQ3cYI=;
-        b=t/3L3BUxxtdT8IVCHZv3GCgfhCoPkCExSmxgVZDm7uEYwjpon2Q9hf6tAsvNpHYd99
-         e6aJrTmfVabFOS1XdQ2+q+eQrksVKBq2Hdfoh1mRIvaoyC2XuNwFc4QQKMWs8RXac10h
-         nI0SgdsHAtwsbzQshfrxkDeggfGP0p5fCphWmEPJEbvofBzf6RlDi6mKXNtvoxMafyr0
-         YycRzQauLe8xGakGGOICSq1NZSufvlFhJHhoerXBiquS4xZdTowRit2YuvHLtZRNmXVb
-         00fJcMbss5uQNY05AlwzJ0s4dQbdKY/Gqd9mRzgUR86vJXd5q/3kRmeomtMshcI+9uhv
-         Ap9g==
+        bh=AmRiaLffe9YUXhGNiOw28wf49CfTmQstIn++K2MStig=;
+        b=A9Mu+WGgogySpGlkA0/ntTc6ibpmcgsvALQtQ7STKxBzgLx1H738JCpNJGCCFEDsVP
+         Ov7+i+5J8PfXZH1pUDI4lgm2K2m0Ni1v9kVVR5rQsbOFBuYjnU/PwM0odWQowyn/WrIS
+         6G1As9IQhxGfhM0i596Rn3wItGl1I1aXxfBUK//AIXoxijCTcdXNm3fxomxRfe/jzFyJ
+         At47HmjUqo/NDg9nASLzKF9Cxwa1QZQLl9WsfBAAmhdjcEcoxQV8FwUa//a0c1s8nmCo
+         n60rWWbjDP/cmQHUDceP5fVQaauDwqEttYaO7Ajwe3v8VIhZmFA1L3Ole18Lm+ZFIFE0
+         pdEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688530230; x=1691122230;
+        d=1e100.net; s=20221208; t=1688532089; x=1691124089;
         h=from:to:subject:content-transfer-encoding:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=o2XL/edwp5tPBn/N9j9oJg1eqbp/khf1MTOHPKQ3cYI=;
-        b=GHYKaLcAs3DKENiCQgk7iJqEVWqr6dN1v6ZcZ2bJSKAOXE8/yzdTUKFf5j2aUSfFQi
-         FKcK1nFxl/3sE6VXVapI2eOW7/+Ry0vyWAfUtnS4E4PiK/QKrODmdxThWvWCPxfxFuy6
-         SvEnuqWhhPD1VX3Mw662hiu9O1N/lYTdvRaLBq/lwbLyDlTI4eAJgEydyf2onyXEdXbw
-         s5sZCIAQWQW2yC3s553GqVcbyyhNlgbsgE4cwiPZU0vxMr5fJ1hgTpe/V6R4Iu2/EVF0
-         KThhkoE/X7kvo3mEA57DIZmPaHf+3xmcd9r8SEuBnd6l2keQvsE5P2aJRF4uIkGcQg0/
-         RyCg==
-X-Gm-Message-State: ABy/qLYNF08Bb/H5xBp0wUdBBXD224ivztBpYVLYSNDTEowRUwI9sraE
-        8swxfBqey15+aQkhc7X2QgbhD/Ou9H8iRhMavox/jQ==
-X-Google-Smtp-Source: APBJJlG+QO7Wsdek8aiVROA6m8mTjeFn/QWBooK/gT7cfAaHIQkaZweB0LOEKgqj2+rCAyzpQoRlrw==
-X-Received: by 2002:a05:6a00:b92:b0:668:7e84:32e6 with SMTP id g18-20020a056a000b9200b006687e8432e6mr14437235pfj.29.1688530229444;
-        Tue, 04 Jul 2023 21:10:29 -0700 (PDT)
+        bh=AmRiaLffe9YUXhGNiOw28wf49CfTmQstIn++K2MStig=;
+        b=grvHqXaIAaU/cC5H16ooOjwEKa10OP3JvQXamDVsAzhe0qQJQ6GxfTrr1pCKDoB5TF
+         21KtSFw0n2sI4FQDaoKiTtMHbbLanNZ3Jx2y6Lhg4E+3VjmJOHZDtXQSJZQ8bPzIqAGn
+         lfV5nVkzs6Su8+JKhNGTF1EaGeliH7QXnzN2ZgPbl+hLOQ0oigGMFzoShu/6Yfo0sVh2
+         SSGScQDjyCffS5rsS8UMYvFIHr+36OvTi+SvNZ3fRKG9+AIJhYTIrU4SJu+yvO7id8cK
+         cyPxFZ6OwjqLOKOaJ4xjqU1hcscxXAH55gBhfebH8PpU3DQU2CnH1HqAkH3kgyD23hg3
+         7utg==
+X-Gm-Message-State: ABy/qLZujTDilvPK8F1DnKkS4o/wJaVhS7w571owNQR8Ev6WYJWDE1Z7
+        sAA4mWFKVhPHZrF9kHK12/5NgR/j6OA+6A41UpqEeg==
+X-Google-Smtp-Source: APBJJlFy6bAUKCtK5Y0hnB5Zze7k6HlbH0bjVcvnZNBZua2THMmmxkZq63+3j5Kz4jDVjbyZZxQ7Sw==
+X-Received: by 2002:a17:902:f7c9:b0:1b8:b288:626e with SMTP id h9-20020a170902f7c900b001b8b288626emr327501plw.35.1688532087983;
+        Tue, 04 Jul 2023 21:41:27 -0700 (PDT)
 Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id s19-20020aa78d53000000b00673e652985bsm9422229pfe.118.2023.07.04.21.10.28
+        by smtp.gmail.com with ESMTPSA id o1-20020a170902bcc100b001b042c0939fsm17856514pls.99.2023.07.04.21.41.27
+        for <linux-next@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jul 2023 21:10:28 -0700 (PDT)
-Message-ID: <64a4ed34.a70a0220.53268.2dcc@mx.google.com>
-Date:   Tue, 04 Jul 2023 21:10:28 -0700 (PDT)
+        Tue, 04 Jul 2023 21:41:27 -0700 (PDT)
+Message-ID: <64a4f477.170a0220.6d8bd.29c8@mx.google.com>
+Date:   Tue, 04 Jul 2023 21:41:27 -0700 (PDT)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v6.4-11652-gcd77f0c9fecc
+X-Kernelci-Kernel: next-20230705
 X-Kernelci-Tree: next
-X-Kernelci-Report-Type: test
-X-Kernelci-Branch: pending-fixes
-Subject: next/pending-fixes baseline: 224 runs,
- 18 regressions (v6.4-11652-gcd77f0c9fecc)
-To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
-        kernelci-results@groups.io
+X-Kernelci-Report-Type: build
+X-Kernelci-Branch: master
+Subject: next/master build: 188 builds: 8 failed, 180 passed, 57 errors,
+ 41 warnings (next-20230705)
+To:     linux-next@vger.kernel.org
 From:   "kernelci.org bot" <bot@kernelci.org>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
@@ -72,1109 +72,1399 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes baseline: 224 runs, 18 regressions (v6.4-11652-gcd77f0c9=
-fecc)
-
-Regressions Summary
--------------------
-
-platform                     | arch   | lab           | compiler | defconfi=
-g                    | regressions
------------------------------+--------+---------------+----------+---------=
----------------------+------------
-acer-chromebox-cxi4-puff     | x86_64 | lab-collabora | gcc-10   | x86_64_d=
-efcon...6-chromebook | 1          =
-
-acer-chromebox-cxi4-puff     | x86_64 | lab-collabora | gcc-10   | x86_64_d=
-efcon...ebook+amdgpu | 1          =
-
-asus-C436FA-Flip-hatch       | x86_64 | lab-collabora | gcc-10   | x86_64_d=
-efcon...6-chromebook | 1          =
-
-asus-C436FA-Flip-hatch       | x86_64 | lab-collabora | gcc-10   | x86_64_d=
-efcon...ebook+amdgpu | 1          =
-
-asus-CM1400CXA-dalboz        | x86_64 | lab-collabora | gcc-10   | x86_64_d=
-efcon...6-chromebook | 1          =
-
-asus-CM1400CXA-dalboz        | x86_64 | lab-collabora | gcc-10   | x86_64_d=
-efcon...ebook+amdgpu | 1          =
-
-asus-cx9400-volteer          | x86_64 | lab-collabora | gcc-10   | x86_64_d=
-efcon...6-chromebook | 1          =
-
-asus-cx9400-volteer          | x86_64 | lab-collabora | gcc-10   | x86_64_d=
-efcon...ebook+amdgpu | 1          =
-
-hp-x360-12b-c...4020-octopus | x86_64 | lab-collabora | gcc-10   | x86_64_d=
-efcon...6-chromebook | 1          =
-
-hp-x360-12b-c...4020-octopus | x86_64 | lab-collabora | gcc-10   | x86_64_d=
-efcon...ebook+amdgpu | 1          =
-
-hp-x360-14-G1-sona           | x86_64 | lab-collabora | gcc-10   | x86_64_d=
-efcon...6-chromebook | 1          =
-
-hp-x360-14-G1-sona           | x86_64 | lab-collabora | gcc-10   | x86_64_d=
-efcon...ebook+amdgpu | 1          =
-
-hp-x360-14a-cb0001xx-zork    | x86_64 | lab-collabora | gcc-10   | x86_64_d=
-efcon...6-chromebook | 1          =
-
-hp-x360-14a-cb0001xx-zork    | x86_64 | lab-collabora | gcc-10   | x86_64_d=
-efcon...ebook+amdgpu | 1          =
-
-lenovo-TPad-C13-Yoga-zork    | x86_64 | lab-collabora | gcc-10   | x86_64_d=
-efcon...6-chromebook | 1          =
-
-lenovo-TPad-C13-Yoga-zork    | x86_64 | lab-collabora | gcc-10   | x86_64_d=
-efcon...ebook+amdgpu | 1          =
-
-mt8192-asurada-spherion-r0   | arm64  | lab-collabora | gcc-10   | defconfi=
-g+arm64-chromebook   | 1          =
-
-qemu_mips-malta              | mips   | lab-collabora | gcc-10   | malta_de=
-fconfig              | 1          =
-
-
-  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
-v6.4-11652-gcd77f0c9fecc/plan/baseline/
-
-  Test:     baseline
-  Tree:     next
-  Branch:   pending-fixes
-  Describe: v6.4-11652-gcd77f0c9fecc
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      cd77f0c9fecc8717adef3366486b599481457e0e =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform                     | arch   | lab           | compiler | defconfi=
-g                    | regressions
------------------------------+--------+---------------+----------+---------=
----------------------+------------
-acer-chromebox-cxi4-puff     | x86_64 | lab-collabora | gcc-10   | x86_64_d=
-efcon...6-chromebook | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/64a4b62ba96b79d616bb2ab3
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig+x86-chromebook
-  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.4-11652-=
-gcd77f0c9fecc/x86_64/x86_64_defconfig+x86-chromebook/gcc-10/lab-collabora/b=
-aseline-acer-chromebox-cxi4-puff.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.4-11652-=
-gcd77f0c9fecc/x86_64/x86_64_defconfig+x86-chromebook/gcc-10/lab-collabora/b=
-aseline-acer-chromebox-cxi4-puff.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/64a4b62ba96b79d616bb2=
-ab4
-        new failure (last pass: v6.4-11141-g4556f2dbce0d) =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler | defconfi=
-g                    | regressions
------------------------------+--------+---------------+----------+---------=
----------------------+------------
-acer-chromebox-cxi4-puff     | x86_64 | lab-collabora | gcc-10   | x86_64_d=
-efcon...ebook+amdgpu | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/64a4b9b9c6adf750b5bb2a87
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig+x86-chromebook+amdgpu
-  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.4-11652-=
-gcd77f0c9fecc/x86_64/x86_64_defconfig+x86-chromebook+amdgpu/gcc-10/lab-coll=
-abora/baseline-acer-chromebox-cxi4-puff.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.4-11652-=
-gcd77f0c9fecc/x86_64/x86_64_defconfig+x86-chromebook+amdgpu/gcc-10/lab-coll=
-abora/baseline-acer-chromebox-cxi4-puff.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/64a4b9b9c6adf750b5bb2=
-a88
-        new failure (last pass: v6.4-11141-g4556f2dbce0d) =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler | defconfi=
-g                    | regressions
------------------------------+--------+---------------+----------+---------=
----------------------+------------
-asus-C436FA-Flip-hatch       | x86_64 | lab-collabora | gcc-10   | x86_64_d=
-efcon...6-chromebook | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/64a4b6ea511b38bb61bb2a80
-
-  Results:     6 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig+x86-chromebook
-  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.4-11652-=
-gcd77f0c9fecc/x86_64/x86_64_defconfig+x86-chromebook/gcc-10/lab-collabora/b=
-aseline-asus-C436FA-Flip-hatch.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.4-11652-=
-gcd77f0c9fecc/x86_64/x86_64_defconfig+x86-chromebook/gcc-10/lab-collabora/b=
-aseline-asus-C436FA-Flip-hatch.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/64a4b6ea511b38bb61bb2a85
-        failing since 98 days (last pass: v6.3-rc3-370-g8269040171a02, firs=
-t fail: v6.3-rc4-214-g39ee5bf6e049)
-
-    2023-07-05T00:18:34.473608  + set +x
-
-    2023-07-05T00:18:34.480501  <8>[    7.970960] <LAVA_SIGNAL_ENDRUN 0_dme=
-sg 11013426_1.4.2.3.1>
-
-    2023-07-05T00:18:34.582425  =
-
-
-    2023-07-05T00:18:34.683057  / # #export SHELL=3D/bin/sh
-
-    2023-07-05T00:18:34.683300  =
-
-
-    2023-07-05T00:18:34.783879  / # export SHELL=3D/bin/sh. /lava-11013426/=
-environment
-
-    2023-07-05T00:18:34.784122  =
-
-
-    2023-07-05T00:18:34.884704  / # . /lava-11013426/environment/lava-11013=
-426/bin/lava-test-runner /lava-11013426/1
-
-    2023-07-05T00:18:34.885197  =
-
-
-    2023-07-05T00:18:34.891181  / # /lava-11013426/bin/lava-test-runner /la=
-va-11013426/1
- =
-
-    ... (12 line(s) more)  =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler | defconfi=
-g                    | regressions
------------------------------+--------+---------------+----------+---------=
----------------------+------------
-asus-C436FA-Flip-hatch       | x86_64 | lab-collabora | gcc-10   | x86_64_d=
-efcon...ebook+amdgpu | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/64a4b9ed977dc81767bb2a76
-
-  Results:     6 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig+x86-chromebook+amdgpu
-  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.4-11652-=
-gcd77f0c9fecc/x86_64/x86_64_defconfig+x86-chromebook+amdgpu/gcc-10/lab-coll=
-abora/baseline-asus-C436FA-Flip-hatch.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.4-11652-=
-gcd77f0c9fecc/x86_64/x86_64_defconfig+x86-chromebook+amdgpu/gcc-10/lab-coll=
-abora/baseline-asus-C436FA-Flip-hatch.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/64a4b9ed977dc81767bb2a7b
-        failing since 98 days (last pass: v6.3-rc3-550-g902f54bbd6c7, first=
- fail: v6.3-rc4-214-g39ee5bf6e049)
-
-    2023-07-05T00:31:24.992197  <8>[    9.956923] <LAVA_SIGNAL_ENDRUN 0_dme=
-sg 11013695_1.4.2.3.1>
-
-    2023-07-05T00:31:24.995622  + set +x
-
-    2023-07-05T00:31:25.096997  #
-
-    2023-07-05T00:31:25.097357  =
-
-
-    2023-07-05T00:31:25.198050  / # #export SHELL=3D/bin/sh
-
-    2023-07-05T00:31:25.198281  =
-
-
-    2023-07-05T00:31:25.298779  / # export SHELL=3D/bin/sh. /lava-11013695/=
-environment
-
-    2023-07-05T00:31:25.298978  =
-
-
-    2023-07-05T00:31:25.399450  / # . /lava-11013695/environment/lava-11013=
-695/bin/lava-test-runner /lava-11013695/1
-
-    2023-07-05T00:31:25.399792  =
-
- =
-
-    ... (13 line(s) more)  =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler | defconfi=
-g                    | regressions
------------------------------+--------+---------------+----------+---------=
----------------------+------------
-asus-CM1400CXA-dalboz        | x86_64 | lab-collabora | gcc-10   | x86_64_d=
-efcon...6-chromebook | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/64a4b5e24a4fb0cc1cbb2ab4
-
-  Results:     6 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig+x86-chromebook
-  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.4-11652-=
-gcd77f0c9fecc/x86_64/x86_64_defconfig+x86-chromebook/gcc-10/lab-collabora/b=
-aseline-asus-CM1400CXA-dalboz.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.4-11652-=
-gcd77f0c9fecc/x86_64/x86_64_defconfig+x86-chromebook/gcc-10/lab-collabora/b=
-aseline-asus-CM1400CXA-dalboz.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/64a4b5e24a4fb0cc1cbb2ab9
-        failing since 98 days (last pass: v6.3-rc3-370-g8269040171a02, firs=
-t fail: v6.3-rc4-214-g39ee5bf6e049)
-
-    2023-07-05T00:14:08.435396  + set<8>[   12.086007] <LAVA_SIGNAL_ENDRUN =
-0_dmesg 11013423_1.4.2.3.1>
-
-    2023-07-05T00:14:08.435489   +x
-
-    2023-07-05T00:14:08.539732  / # #
-
-    2023-07-05T00:14:08.640341  export SHELL=3D/bin/sh
-
-    2023-07-05T00:14:08.640529  #
-
-    2023-07-05T00:14:08.741021  / # export SHELL=3D/bin/sh. /lava-11013423/=
-environment
-
-    2023-07-05T00:14:08.741243  =
-
-
-    2023-07-05T00:14:08.841797  / # . /lava-11013423/environment/lava-11013=
-423/bin/lava-test-runner /lava-11013423/1
-
-    2023-07-05T00:14:08.842070  =
-
-
-    2023-07-05T00:14:08.846712  / # /lava-11013423/bin/lava-test-runner /la=
-va-11013423/1
- =
-
-    ... (12 line(s) more)  =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler | defconfi=
-g                    | regressions
------------------------------+--------+---------------+----------+---------=
----------------------+------------
-asus-CM1400CXA-dalboz        | x86_64 | lab-collabora | gcc-10   | x86_64_d=
-efcon...ebook+amdgpu | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/64a4b982f3e2b7b610bb2a9e
-
-  Results:     6 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig+x86-chromebook+amdgpu
-  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.4-11652-=
-gcd77f0c9fecc/x86_64/x86_64_defconfig+x86-chromebook+amdgpu/gcc-10/lab-coll=
-abora/baseline-asus-CM1400CXA-dalboz.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.4-11652-=
-gcd77f0c9fecc/x86_64/x86_64_defconfig+x86-chromebook+amdgpu/gcc-10/lab-coll=
-abora/baseline-asus-CM1400CXA-dalboz.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/64a4b982f3e2b7b610bb2aa3
-        failing since 98 days (last pass: v6.3-rc3-550-g902f54bbd6c7, first=
- fail: v6.3-rc4-214-g39ee5bf6e049)
-
-    2023-07-05T00:29:35.521648  + set<8>[   11.398273] <LAVA_SIGNAL_ENDRUN =
-0_dmesg 11013674_1.4.2.3.1>
-
-    2023-07-05T00:29:35.521749   +x
-
-    2023-07-05T00:29:35.626193  / # #
-
-    2023-07-05T00:29:35.727028  export SHELL=3D/bin/sh
-
-    2023-07-05T00:29:35.727704  #
-
-    2023-07-05T00:29:35.829040  / # export SHELL=3D/bin/sh. /lava-11013674/=
-environment
-
-    2023-07-05T00:29:35.829726  =
-
-
-    2023-07-05T00:29:35.931187  / # . /lava-11013674/environment/lava-11013=
-674/bin/lava-test-runner /lava-11013674/1
-
-    2023-07-05T00:29:35.932248  =
-
-
-    2023-07-05T00:29:35.937236  / # /lava-11013674/bin/lava-test-runner /la=
-va-11013674/1
- =
-
-    ... (12 line(s) more)  =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler | defconfi=
-g                    | regressions
------------------------------+--------+---------------+----------+---------=
----------------------+------------
-asus-cx9400-volteer          | x86_64 | lab-collabora | gcc-10   | x86_64_d=
-efcon...6-chromebook | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/64a4b5e6ab02103a7dbb2a81
-
-  Results:     6 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig+x86-chromebook
-  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.4-11652-=
-gcd77f0c9fecc/x86_64/x86_64_defconfig+x86-chromebook/gcc-10/lab-collabora/b=
-aseline-asus-cx9400-volteer.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.4-11652-=
-gcd77f0c9fecc/x86_64/x86_64_defconfig+x86-chromebook/gcc-10/lab-collabora/b=
-aseline-asus-cx9400-volteer.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/64a4b5e7ab02103a7dbb2a86
-        failing since 98 days (last pass: v6.3-rc3-370-g8269040171a02, firs=
-t fail: v6.3-rc4-214-g39ee5bf6e049)
-
-    2023-07-05T00:14:11.740468  <8>[   10.766622] <LAVA_SIGNAL_ENDRUN 0_dme=
-sg 11013414_1.4.2.3.1>
-
-    2023-07-05T00:14:11.743757  + set +x
-
-    2023-07-05T00:14:11.845215  =
-
-
-    2023-07-05T00:14:11.945793  / # #export SHELL=3D/bin/sh
-
-    2023-07-05T00:14:11.946070  =
-
-
-    2023-07-05T00:14:12.046651  / # export SHELL=3D/bin/sh. /lava-11013414/=
-environment
-
-    2023-07-05T00:14:12.046866  =
-
-
-    2023-07-05T00:14:12.147403  / # . /lava-11013414/environment/lava-11013=
-414/bin/lava-test-runner /lava-11013414/1
-
-    2023-07-05T00:14:12.147741  =
-
-
-    2023-07-05T00:14:12.152635  / # /lava-11013414/bin/lava-test-runner /la=
-va-11013414/1
- =
-
-    ... (12 line(s) more)  =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler | defconfi=
-g                    | regressions
------------------------------+--------+---------------+----------+---------=
----------------------+------------
-asus-cx9400-volteer          | x86_64 | lab-collabora | gcc-10   | x86_64_d=
-efcon...ebook+amdgpu | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/64a4b9d0c6adf750b5bb2a9c
-
-  Results:     6 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig+x86-chromebook+amdgpu
-  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.4-11652-=
-gcd77f0c9fecc/x86_64/x86_64_defconfig+x86-chromebook+amdgpu/gcc-10/lab-coll=
-abora/baseline-asus-cx9400-volteer.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.4-11652-=
-gcd77f0c9fecc/x86_64/x86_64_defconfig+x86-chromebook+amdgpu/gcc-10/lab-coll=
-abora/baseline-asus-cx9400-volteer.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/64a4b9d0c6adf750b5bb2aa1
-        failing since 98 days (last pass: v6.3-rc3-550-g902f54bbd6c7, first=
- fail: v6.3-rc4-214-g39ee5bf6e049)
-
-    2023-07-05T00:30:51.620013  <8>[   11.279236] <LAVA_SIGNAL_ENDRUN 0_dme=
-sg 11013704_1.4.2.3.1>
-
-    2023-07-05T00:30:51.622876  + set +x
-
-    2023-07-05T00:30:51.724681  =
-
-
-    2023-07-05T00:30:51.825391  / # #export SHELL=3D/bin/sh
-
-    2023-07-05T00:30:51.825574  =
-
-
-    2023-07-05T00:30:51.926202  / # export SHELL=3D/bin/sh. /lava-11013704/=
-environment
-
-    2023-07-05T00:30:51.927110  =
-
-
-    2023-07-05T00:30:52.029062  / # . /lava-11013704/environment/lava-11013=
-704/bin/lava-test-runner /lava-11013704/1
-
-    2023-07-05T00:30:52.030334  =
-
-
-    2023-07-05T00:30:52.035343  / # /lava-11013704/bin/lava-test-runner /la=
-va-11013704/1
- =
-
-    ... (12 line(s) more)  =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler | defconfi=
-g                    | regressions
------------------------------+--------+---------------+----------+---------=
----------------------+------------
-hp-x360-12b-c...4020-octopus | x86_64 | lab-collabora | gcc-10   | x86_64_d=
-efcon...6-chromebook | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/64a4b70fe5161acfdfbb2a9a
-
-  Results:     6 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig+x86-chromebook
-  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.4-11652-=
-gcd77f0c9fecc/x86_64/x86_64_defconfig+x86-chromebook/gcc-10/lab-collabora/b=
-aseline-hp-x360-12b-ca0010nr-n4020-octopus.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.4-11652-=
-gcd77f0c9fecc/x86_64/x86_64_defconfig+x86-chromebook/gcc-10/lab-collabora/b=
-aseline-hp-x360-12b-ca0010nr-n4020-octopus.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/64a4b70fe5161acfdfbb2a9f
-        failing since 98 days (last pass: v6.3-rc3-370-g8269040171a02, firs=
-t fail: v6.3-rc4-214-g39ee5bf6e049)
-
-    2023-07-05T00:19:13.392480  + set +x
-
-    2023-07-05T00:19:13.399245  <8>[   11.201126] <LAVA_SIGNAL_ENDRUN 0_dme=
-sg 11013469_1.4.2.3.1>
-
-    2023-07-05T00:19:13.503747  / # #
-
-    2023-07-05T00:19:13.604390  export SHELL=3D/bin/sh
-
-    2023-07-05T00:19:13.604580  #
-
-    2023-07-05T00:19:13.705123  / # export SHELL=3D/bin/sh. /lava-11013469/=
-environment
-
-    2023-07-05T00:19:13.705323  =
-
-
-    2023-07-05T00:19:13.805828  / # . /lava-11013469/environment/lava-11013=
-469/bin/lava-test-runner /lava-11013469/1
-
-    2023-07-05T00:19:13.806103  =
-
-
-    2023-07-05T00:19:13.810785  / # /lava-11013469/bin/lava-test-runner /la=
-va-11013469/1
- =
-
-    ... (12 line(s) more)  =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler | defconfi=
-g                    | regressions
------------------------------+--------+---------------+----------+---------=
----------------------+------------
-hp-x360-12b-c...4020-octopus | x86_64 | lab-collabora | gcc-10   | x86_64_d=
-efcon...ebook+amdgpu | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/64a4bbbb820ca9dda9bb2a91
-
-  Results:     6 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig+x86-chromebook+amdgpu
-  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.4-11652-=
-gcd77f0c9fecc/x86_64/x86_64_defconfig+x86-chromebook+amdgpu/gcc-10/lab-coll=
-abora/baseline-hp-x360-12b-ca0010nr-n4020-octopus.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.4-11652-=
-gcd77f0c9fecc/x86_64/x86_64_defconfig+x86-chromebook+amdgpu/gcc-10/lab-coll=
-abora/baseline-hp-x360-12b-ca0010nr-n4020-octopus.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/64a4bbbb820ca9dda9bb2a96
-        failing since 98 days (last pass: v6.3-rc3-550-g902f54bbd6c7, first=
- fail: v6.3-rc4-214-g39ee5bf6e049)
-
-    2023-07-05T00:39:16.133106  + set +x
-
-    2023-07-05T00:39:16.139709  <8>[   11.037985] <LAVA_SIGNAL_ENDRUN 0_dme=
-sg 11013708_1.4.2.3.1>
-
-    2023-07-05T00:39:16.244357  / # #
-
-    2023-07-05T00:39:16.344925  export SHELL=3D/bin/sh
-
-    2023-07-05T00:39:16.345100  #
-
-    2023-07-05T00:39:16.445586  / # export SHELL=3D/bin/sh. /lava-11013708/=
-environment
-
-    2023-07-05T00:39:16.445761  =
-
-
-    2023-07-05T00:39:16.546285  / # . /lava-11013708/environment/lava-11013=
-708/bin/lava-test-runner /lava-11013708/1
-
-    2023-07-05T00:39:16.546572  =
-
-
-    2023-07-05T00:39:16.551188  / # /lava-11013708/bin/lava-test-runner /la=
-va-11013708/1
- =
-
-    ... (12 line(s) more)  =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler | defconfi=
-g                    | regressions
------------------------------+--------+---------------+----------+---------=
----------------------+------------
-hp-x360-14-G1-sona           | x86_64 | lab-collabora | gcc-10   | x86_64_d=
-efcon...6-chromebook | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/64a4b6871a8e269445bb2b0f
-
-  Results:     6 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig+x86-chromebook
-  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.4-11652-=
-gcd77f0c9fecc/x86_64/x86_64_defconfig+x86-chromebook/gcc-10/lab-collabora/b=
-aseline-hp-x360-14-G1-sona.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.4-11652-=
-gcd77f0c9fecc/x86_64/x86_64_defconfig+x86-chromebook/gcc-10/lab-collabora/b=
-aseline-hp-x360-14-G1-sona.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/64a4b6871a8e269445bb2b14
-        failing since 98 days (last pass: v6.3-rc3-370-g8269040171a02, firs=
-t fail: v6.3-rc4-214-g39ee5bf6e049)
-
-    2023-07-05T00:16:53.014081  <8>[   10.485961] <LAVA_SIGNAL_ENDRUN 0_dme=
-sg 11013494_1.4.2.3.1>
-
-    2023-07-05T00:16:53.017210  + set +x
-
-    2023-07-05T00:16:53.124764  / # #
-
-    2023-07-05T00:16:53.226779  export SHELL=3D/bin/sh
-
-    2023-07-05T00:16:53.227485  #
-
-    2023-07-05T00:16:53.328774  / # export SHELL=3D/bin/sh. /lava-11013494/=
-environment
-
-    2023-07-05T00:16:53.329530  =
-
-
-    2023-07-05T00:16:53.431209  / # . /lava-11013494/environment/lava-11013=
-494/bin/lava-test-runner /lava-11013494/1
-
-    2023-07-05T00:16:53.432547  =
-
-
-    2023-07-05T00:16:53.438222  / # /lava-11013494/bin/lava-test-runner /la=
-va-11013494/1
- =
-
-    ... (12 line(s) more)  =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler | defconfi=
-g                    | regressions
------------------------------+--------+---------------+----------+---------=
----------------------+------------
-hp-x360-14-G1-sona           | x86_64 | lab-collabora | gcc-10   | x86_64_d=
-efcon...ebook+amdgpu | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/64a4ba5dce27663dfcbb2bac
-
-  Results:     6 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig+x86-chromebook+amdgpu
-  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.4-11652-=
-gcd77f0c9fecc/x86_64/x86_64_defconfig+x86-chromebook+amdgpu/gcc-10/lab-coll=
-abora/baseline-hp-x360-14-G1-sona.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.4-11652-=
-gcd77f0c9fecc/x86_64/x86_64_defconfig+x86-chromebook+amdgpu/gcc-10/lab-coll=
-abora/baseline-hp-x360-14-G1-sona.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/64a4ba5dce27663dfcbb2bb1
-        failing since 98 days (last pass: v6.3-rc3-550-g902f54bbd6c7, first=
- fail: v6.3-rc4-214-g39ee5bf6e049)
-
-    2023-07-05T00:33:48.896396  + set +x
-
-    2023-07-05T00:33:48.902508  <8>[   10.921624] <LAVA_SIGNAL_ENDRUN 0_dme=
-sg 11013659_1.4.2.3.1>
-
-    2023-07-05T00:33:49.006537  / # #
-
-    2023-07-05T00:33:49.107692  export SHELL=3D/bin/sh
-
-    2023-07-05T00:33:49.108385  #
-
-    2023-07-05T00:33:49.209731  / # export SHELL=3D/bin/sh. /lava-11013659/=
-environment
-
-    2023-07-05T00:33:49.209911  =
-
-
-    2023-07-05T00:33:49.310413  / # . /lava-11013659/environment/lava-11013=
-659/bin/lava-test-runner /lava-11013659/1
-
-    2023-07-05T00:33:49.310650  =
-
-
-    2023-07-05T00:33:49.315690  / # /lava-11013659/bin/lava-test-runner /la=
-va-11013659/1
- =
-
-    ... (12 line(s) more)  =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler | defconfi=
-g                    | regressions
------------------------------+--------+---------------+----------+---------=
----------------------+------------
-hp-x360-14a-cb0001xx-zork    | x86_64 | lab-collabora | gcc-10   | x86_64_d=
-efcon...6-chromebook | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/64a4b5e2ab02103a7dbb2a76
-
-  Results:     6 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig+x86-chromebook
-  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.4-11652-=
-gcd77f0c9fecc/x86_64/x86_64_defconfig+x86-chromebook/gcc-10/lab-collabora/b=
-aseline-hp-x360-14a-cb0001xx-zork.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.4-11652-=
-gcd77f0c9fecc/x86_64/x86_64_defconfig+x86-chromebook/gcc-10/lab-collabora/b=
-aseline-hp-x360-14a-cb0001xx-zork.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/64a4b5e2ab02103a7dbb2a7b
-        failing since 98 days (last pass: v6.3-rc3-370-g8269040171a02, firs=
-t fail: v6.3-rc4-214-g39ee5bf6e049)
-
-    2023-07-05T00:14:09.736870  + set<8>[   11.543234] <LAVA_SIGNAL_ENDRUN =
-0_dmesg 11013427_1.4.2.3.1>
-
-    2023-07-05T00:14:09.737403   +x
-
-    2023-07-05T00:14:09.844676  / # #
-
-    2023-07-05T00:14:09.946846  export SHELL=3D/bin/sh
-
-    2023-07-05T00:14:09.947533  #
-
-    2023-07-05T00:14:10.049051  / # export SHELL=3D/bin/sh. /lava-11013427/=
-environment
-
-    2023-07-05T00:14:10.049870  =
-
-
-    2023-07-05T00:14:10.151427  / # . /lava-11013427/environment/lava-11013=
-427/bin/lava-test-runner /lava-11013427/1
-
-    2023-07-05T00:14:10.152565  =
-
-
-    2023-07-05T00:14:10.157544  / # /lava-11013427/bin/lava-test-runner /la=
-va-11013427/1
- =
-
-    ... (12 line(s) more)  =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler | defconfi=
-g                    | regressions
------------------------------+--------+---------------+----------+---------=
----------------------+------------
-hp-x360-14a-cb0001xx-zork    | x86_64 | lab-collabora | gcc-10   | x86_64_d=
-efcon...ebook+amdgpu | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/64a4b9909f35bcfd1dbb2acd
-
-  Results:     6 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig+x86-chromebook+amdgpu
-  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.4-11652-=
-gcd77f0c9fecc/x86_64/x86_64_defconfig+x86-chromebook+amdgpu/gcc-10/lab-coll=
-abora/baseline-hp-x360-14a-cb0001xx-zork.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.4-11652-=
-gcd77f0c9fecc/x86_64/x86_64_defconfig+x86-chromebook+amdgpu/gcc-10/lab-coll=
-abora/baseline-hp-x360-14a-cb0001xx-zork.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/64a4b9909f35bcfd1dbb2ad2
-        failing since 98 days (last pass: v6.3-rc3-550-g902f54bbd6c7, first=
- fail: v6.3-rc4-214-g39ee5bf6e049)
-
-    2023-07-05T00:29:43.115580  + set<8>[   10.897852] <LAVA_SIGNAL_ENDRUN =
-0_dmesg 11013689_1.4.2.3.1>
-
-    2023-07-05T00:29:43.115697   +x
-
-    2023-07-05T00:29:43.219658  / # #
-
-    2023-07-05T00:29:43.320296  export SHELL=3D/bin/sh
-
-    2023-07-05T00:29:43.320524  #
-
-    2023-07-05T00:29:43.421084  / # export SHELL=3D/bin/sh. /lava-11013689/=
-environment
-
-    2023-07-05T00:29:43.421321  =
-
-
-    2023-07-05T00:29:43.521870  / # . /lava-11013689/environment/lava-11013=
-689/bin/lava-test-runner /lava-11013689/1
-
-    2023-07-05T00:29:43.522199  =
-
-
-    2023-07-05T00:29:43.526751  / # /lava-11013689/bin/lava-test-runner /la=
-va-11013689/1
- =
-
-    ... (12 line(s) more)  =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler | defconfi=
-g                    | regressions
------------------------------+--------+---------------+----------+---------=
----------------------+------------
-lenovo-TPad-C13-Yoga-zork    | x86_64 | lab-collabora | gcc-10   | x86_64_d=
-efcon...6-chromebook | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/64a4b5cb46fa2bf23cbb2aa5
-
-  Results:     6 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig+x86-chromebook
-  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.4-11652-=
-gcd77f0c9fecc/x86_64/x86_64_defconfig+x86-chromebook/gcc-10/lab-collabora/b=
-aseline-lenovo-TPad-C13-Yoga-zork.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.4-11652-=
-gcd77f0c9fecc/x86_64/x86_64_defconfig+x86-chromebook/gcc-10/lab-collabora/b=
-aseline-lenovo-TPad-C13-Yoga-zork.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/64a4b5cb46fa2bf23cbb2aaa
-        failing since 98 days (last pass: v6.3-rc3-370-g8269040171a02, firs=
-t fail: v6.3-rc4-214-g39ee5bf6e049)
-
-    2023-07-05T00:13:59.286370  + set +x<8>[   11.701991] <LAVA_SIGNAL_ENDR=
-UN 0_dmesg 11013418_1.4.2.3.1>
-
-    2023-07-05T00:13:59.286462  =
-
-
-    2023-07-05T00:13:59.390897  / # #
-
-    2023-07-05T00:13:59.491549  export SHELL=3D/bin/sh
-
-    2023-07-05T00:13:59.491747  #
-
-    2023-07-05T00:13:59.592250  / # export SHELL=3D/bin/sh. /lava-11013418/=
-environment
-
-    2023-07-05T00:13:59.592497  =
-
-
-    2023-07-05T00:13:59.693058  / # . /lava-11013418/environment/lava-11013=
-418/bin/lava-test-runner /lava-11013418/1
-
-    2023-07-05T00:13:59.693367  =
-
-
-    2023-07-05T00:13:59.698343  / # /lava-11013418/bin/lava-test-runner /la=
-va-11013418/1
- =
-
-    ... (12 line(s) more)  =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler | defconfi=
-g                    | regressions
------------------------------+--------+---------------+----------+---------=
----------------------+------------
-lenovo-TPad-C13-Yoga-zork    | x86_64 | lab-collabora | gcc-10   | x86_64_d=
-efcon...ebook+amdgpu | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/64a4b98f9f35bcfd1dbb2ac2
-
-  Results:     6 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig+x86-chromebook+amdgpu
-  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.4-11652-=
-gcd77f0c9fecc/x86_64/x86_64_defconfig+x86-chromebook+amdgpu/gcc-10/lab-coll=
-abora/baseline-lenovo-TPad-C13-Yoga-zork.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.4-11652-=
-gcd77f0c9fecc/x86_64/x86_64_defconfig+x86-chromebook+amdgpu/gcc-10/lab-coll=
-abora/baseline-lenovo-TPad-C13-Yoga-zork.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/64a4b98f9f35bcfd1dbb2ac7
-        failing since 98 days (last pass: v6.3-rc3-550-g902f54bbd6c7, first=
- fail: v6.3-rc4-214-g39ee5bf6e049)
-
-    2023-07-05T00:29:54.605181  + set +x<8>[   11.496695] <LAVA_SIGNAL_ENDR=
-UN 0_dmesg 11013716_1.4.2.3.1>
-
-    2023-07-05T00:29:54.605765  =
-
-
-    2023-07-05T00:29:54.714161  / # #
-
-    2023-07-05T00:29:54.816651  export SHELL=3D/bin/sh
-
-    2023-07-05T00:29:54.817357  #
-
-    2023-07-05T00:29:54.918618  / # export SHELL=3D/bin/sh. /lava-11013716/=
-environment
-
-    2023-07-05T00:29:54.919278  =
-
-
-    2023-07-05T00:29:55.020567  / # . /lava-11013716/environment/lava-11013=
-716/bin/lava-test-runner /lava-11013716/1
-
-    2023-07-05T00:29:55.021103  =
-
-
-    2023-07-05T00:29:55.025373  / # /lava-11013716/bin/lava-test-runner /la=
-va-11013716/1
- =
-
-    ... (13 line(s) more)  =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler | defconfi=
-g                    | regressions
------------------------------+--------+---------------+----------+---------=
----------------------+------------
-mt8192-asurada-spherion-r0   | arm64  | lab-collabora | gcc-10   | defconfi=
-g+arm64-chromebook   | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/64a4b555b0fba5e7f9bb2bc9
-
-  Results:     182 PASS, 5 FAIL, 0 SKIP
-  Full config: defconfig+arm64-chromebook
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.4-11652-=
-gcd77f0c9fecc/arm64/defconfig+arm64-chromebook/gcc-10/lab-collabora/baselin=
-e-mt8192-asurada-spherion-r0.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.4-11652-=
-gcd77f0c9fecc/arm64/defconfig+arm64-chromebook/gcc-10/lab-collabora/baselin=
-e-mt8192-asurada-spherion-r0.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.panel-simple-dp-aux-probed: https://kernelci.org/test/c=
-ase/id/64a4b555b0fba5e7f9bb2c10
-        failing since 0 day (last pass: v6.4-8718-g6b8b1f7dba504, first fai=
-l: v6.4-11141-g4556f2dbce0d)
-
-    2023-07-05T00:11:48.434342  /lava-11013342/1/../bin/lava-test-case
-
-    2023-07-05T00:11:48.444233  <8>[   24.100405] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Dpanel-simple-dp-aux-probed RESULT=3Dfail>
-   =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler | defconfi=
-g                    | regressions
------------------------------+--------+---------------+----------+---------=
----------------------+------------
-qemu_mips-malta              | mips   | lab-collabora | gcc-10   | malta_de=
-fconfig              | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/64a4b40eced0b25bb3bb2a83
-
-  Results:     4 PASS, 1 FAIL, 2 SKIP
-  Full config: malta_defconfig
-  Compiler:    gcc-10 (mips-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.4-11652-=
-gcd77f0c9fecc/mips/malta_defconfig/gcc-10/lab-collabora/baseline-qemu_mips-=
-malta.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.4-11652-=
-gcd77f0c9fecc/mips/malta_defconfig/gcc-10/lab-collabora/baseline-qemu_mips-=
-malta.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/mipsel/rootfs.cpio.gz =
-
-
-
-  * baseline.dmesg.alert: https://kernelci.org/test/case/id/64a4b40eced0b25=
-bb3bb2a8b
-        new failure (last pass: v6.4-11141-g4556f2dbce0d)
-        1 lines
-
-    2023-07-05T00:06:14.617714  kern  :alert : CPU 0 Unable to handle kerne=
-l paging request at virtual address 3972735c, epc =3D=3D 801ffaa8, ra =3D=
-=3D 802022d0
-    2023-07-05T00:06:14.617940  =
-
-
-    2023-07-05T00:06:14.647700  <8><LAVA_SIGNAL_TESTCASE TEST_CASE_ID=3Dale=
-rt RESULT=3Dfail UNITS=3Dlines MEASUREMENT=3D1>
-    2023-07-05T00:06:14.647920  =
-
-   =
-
- =20
+next/master build: 188 builds: 8 failed, 180 passed, 57 errors, 41 warnings=
+ (next-20230705)
+
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20230705/
+
+Tree: next
+Branch: master
+Git Describe: next-20230705
+Git Commit: e1f6a8eaf1c271a0158114a03e3605f4fba059ad
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Built: 8 unique architectures
+
+Build Failures Detected:
+
+arc:
+    haps_hs_smp_defconfig+kselftest: (gcc-10) FAIL
+
+arm64:
+    allmodconfig: (clang-17) FAIL
+
+arm:
+    allmodconfig: (clang-17) FAIL
+    rpc_defconfig: (gcc-10) FAIL
+
+i386:
+    allmodconfig: (clang-17) FAIL
+
+mips:
+    decstation_64_defconfig: (gcc-10) FAIL
+    malta_kvm_defconfig: (gcc-10) FAIL
+
+x86_64:
+    allmodconfig: (clang-17) FAIL
+
+Errors and Warnings Detected:
+
+arc:
+    haps_hs_smp_defconfig+kselftest (gcc-10): 1 error
+
+arm64:
+    allmodconfig (clang-17): 13 errors
+
+arm:
+    allmodconfig (clang-17): 13 errors
+    rpc_defconfig (gcc-10): 2 errors
+
+i386:
+    allmodconfig (clang-17): 13 errors
+
+mips:
+    malta_kvm_defconfig (gcc-10): 2 errors
+
+riscv:
+
+sparc:
+    allnoconfig (gcc-10): 1 warning
+    sparc32_defconfig (gcc-10): 2 warnings
+    sparc64_defconfig (gcc-10): 4 warnings
+    sparc64_defconfig+debug (gcc-10): 2 warnings
+    sparc64_defconfig+kselftest (gcc-10): 2 warnings
+    tinyconfig (gcc-10): 1 warning
+
+x86_64:
+    allmodconfig (clang-17): 13 errors, 2 warnings
+    allnoconfig (gcc-10): 3 warnings
+    x86_64_defconfig (gcc-10): 3 warnings
+    x86_64_defconfig+amdgpu (gcc-10): 3 warnings
+    x86_64_defconfig+crypto (gcc-10): 3 warnings
+    x86_64_defconfig+debug (gcc-10): 3 warnings
+    x86_64_defconfig+ima (gcc-10): 3 warnings
+    x86_64_defconfig+kselftest (gcc-10): 3 warnings
+    x86_64_defconfig+x86-chromebook+amdgpu (gcc-10): 3 warnings
+    x86_64_defconfig+x86-chromebook+kselftest (gcc-10): 3 warnings
+
+Errors summary:
+
+    4    drivers/scsi/aacraid/commsup.c:1790:15: error: array index 3 is pa=
+st the end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), ca=
+st to '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    4    drivers/scsi/aacraid/commsup.c:1789:15: error: array index 2 is pa=
+st the end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), ca=
+st to '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    4    drivers/scsi/aacraid/commsup.c:1788:15: error: array index 1 is pa=
+st the end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), ca=
+st to '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    4    drivers/scsi/aacraid/commsup.c:1351:18: error: array index 4 is pa=
+st the end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), ca=
+st to '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    4    drivers/scsi/aacraid/commsup.c:1350:18: error: array index 6 is pa=
+st the end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), ca=
+st to '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    4    drivers/scsi/aacraid/commsup.c:1349:18: error: array index 1 is pa=
+st the end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), ca=
+st to '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    4    drivers/scsi/aacraid/commsup.c:1334:19: error: array index 4 is pa=
+st the end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), ca=
+st to '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    4    drivers/scsi/aacraid/commsup.c:1333:50: error: array index 5 is pa=
+st the end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), ca=
+st to '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    4    drivers/scsi/aacraid/commsup.c:1333:19: error: array index 6 is pa=
+st the end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), ca=
+st to '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    4    drivers/scsi/aacraid/commsup.c:1332:18: error: array index 1 is pa=
+st the end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), ca=
+st to '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    4    drivers/scsi/aacraid/commsup.c:1292:21: error: array index 3 is pa=
+st the end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), ca=
+st to '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    4    drivers/scsi/aacraid/commsup.c:1290:20: error: array index 3 is pa=
+st the end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), ca=
+st to '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    4    drivers/scsi/aacraid/commsup.c:1170:17: error: array index 1 is pa=
+st the end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), ca=
+st to '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    1    net/bpfilter/main.c:3:10: fatal error: sys/uio.h: No such file or =
+directory
+    1    arch/mips/kvm/stats.c:59:22: error: invalid type argument of =E2=
+=80=98->=E2=80=99 (have =E2=80=98struct mips_coproc=E2=80=99)
+    1    arch/mips/kvm/stats.c:57:23: error: invalid type argument of =E2=
+=80=98->=E2=80=99 (have =E2=80=98struct mips_coproc=E2=80=99)
+    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=
+=3D0x'
+    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=
+=3D0x'
+
+Warnings summary:
+
+    10   <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+    8    vmlinux.o: warning: objtool: iovec_from_user+0x88: call to copy_io=
+vec_from_user.part.0() with UACCESS enabled
+    7    vmlinux.o: warning: objtool: __import_iovec+0x147: call to copy_io=
+vec_from_user.part.0() with UACCESS enabled
+    3    vmlinux.o: warning: objtool: .altinstr_replacement+0x17ef: redunda=
+nt UACCESS disable
+    2    vmlinux.o: warning: objtool: .altinstr_replacement+0x1ddc: redunda=
+nt UACCESS disable
+    2    vmlinux.o: warning: objtool: .altinstr_replacement+0x17e5: redunda=
+nt UACCESS disable
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    1    vmlinux.o: warning: objtool: __import_iovec+0x342: call to copy_io=
+vec_from_user.part.0() with UACCESS enabled
+    1    vmlinux.o: warning: objtool: .altinstr_replacement+0x19aa: redunda=
+nt UACCESS disable
+    1    lib/iov_iter.o: warning: objtool: iovec_from_user+0x80: call to co=
+py_iovec_from_user.part.0() with UACCESS enabled
+    1    lib/iov_iter.o: warning: objtool: __import_iovec+0x13b: call to co=
+py_iovec_from_user.part.0() with UACCESS enabled
+    1    lib/iov_iter.o: warning: objtool: .altinstr_replacement+0x1f: redu=
+ndant UACCESS disable
+    1    fs/reiserfs/reiserfs.o: warning: objtool: balance_leaf+0x7714: sta=
+ck state mismatch: cfa1=3D4+376 cfa2=3D4+368
+    1    drivers/misc/lkdtm/lkdtm.o: warning: objtool: bad call to elf_init=
+_reloc_text_sym() for data symbol .rodata
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig+debug (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig+kselftest (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warni=
+ngs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm, clang-17) =E2=80=94 FAIL, 13 errors, 0 warnings, 0 secti=
+on mismatches
+
+Errors:
+    drivers/scsi/aacraid/commsup.c:1170:17: error: array index 1 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1290:20: error: array index 3 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1292:21: error: array index 3 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1332:18: error: array index 1 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1333:19: error: array index 6 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1333:50: error: array index 5 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1334:19: error: array index 4 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1349:18: error: array index 1 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1350:18: error: array index 6 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1351:18: error: array index 4 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1788:15: error: array index 1 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1789:15: error: array index 2 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1790:15: error: array index 3 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm64, clang-17) =E2=80=94 FAIL, 13 errors, 0 warnings, 0 sec=
+tion mismatches
+
+Errors:
+    drivers/scsi/aacraid/commsup.c:1170:17: error: array index 1 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1290:20: error: array index 3 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1292:21: error: array index 3 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1332:18: error: array index 1 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1333:19: error: array index 6 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1333:50: error: array index 5 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1334:19: error: array index 4 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1349:18: error: array index 1 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1350:18: error: array index 6 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1351:18: error: array index 4 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1788:15: error: array index 1 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1789:15: error: array index 2 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1790:15: error: array index 3 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (i386, clang-17) =E2=80=94 FAIL, 13 errors, 0 warnings, 0 sect=
+ion mismatches
+
+Errors:
+    drivers/scsi/aacraid/commsup.c:1170:17: error: array index 1 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1290:20: error: array index 3 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1292:21: error: array index 3 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1332:18: error: array index 1 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1333:19: error: array index 6 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1333:50: error: array index 5 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1334:19: error: array index 4 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1349:18: error: array index 1 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1350:18: error: array index 6 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1351:18: error: array index 4 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1788:15: error: array index 1 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1789:15: error: array index 2 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1790:15: error: array index 3 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (x86_64, clang-17) =E2=80=94 FAIL, 13 errors, 2 warnings, 0 se=
+ction mismatches
+
+Errors:
+    drivers/scsi/aacraid/commsup.c:1170:17: error: array index 1 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1290:20: error: array index 3 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1292:21: error: array index 3 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1332:18: error: array index 1 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1333:19: error: array index 6 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1333:50: error: array index 5 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1334:19: error: array index 4 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1349:18: error: array index 1 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1350:18: error: array index 6 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1351:18: error: array index 4 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1788:15: error: array index 1 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1789:15: error: array index 2 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+    drivers/scsi/aacraid/commsup.c:1790:15: error: array index 3 is past th=
+e end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to=
+ '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+
+Warnings:
+    fs/reiserfs/reiserfs.o: warning: objtool: balance_leaf+0x7714: stack st=
+ate mismatch: cfa1=3D4+376 cfa2=3D4+368
+    drivers/misc/lkdtm/lkdtm.o: warning: objtool: bad call to elf_init_relo=
+c_text_sym() for data symbol .rodata
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sectio=
+n mismatches
+
+Warnings:
+    lib/iov_iter.o: warning: objtool: .altinstr_replacement+0x1f: redundant=
+ UACCESS disable
+    lib/iov_iter.o: warning: objtool: iovec_from_user+0x80: call to copy_io=
+vec_from_user.part.0() with UACCESS enabled
+    lib/iov_iter.o: warning: objtool: __import_iovec+0x13b: call to copy_io=
+vec_from_user.part.0() with UACCESS enabled
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
+mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+am200epdkit_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+ar7_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+assabet_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+at91_dt_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ath25_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ath79_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+axm55xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+axs103_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+axs103_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm2835_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm47xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm63xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+bigsur_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bmips_be_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+bmips_stb_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cavium_octeon_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+ci20_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config (arm64, clang-13=
+) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+arm64-chromebook=
+ (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatch=
+es
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-mediatek.flavour.config+arm64-chromeb=
+ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
+tches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-qualcomm.flavour.config+arm64-chromeb=
+ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
+tches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-rockchip64.flavour.config+arm64-chrom=
+ebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mis=
+matches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (arm, clang-13) =
+=E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (arm, clang-1=
+3) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromeos-intel-denverton.flavour.config+x86-chr=
+omebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromeos-intel-pineview.flavour.config+x86-chro=
+mebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config (x86_64, clang=
+-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config+x86-chromebook=
+ (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatc=
+hes
+
+---------------------------------------------------------------------------=
+-----
+cu1000-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cu1830-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+davinci_all_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+db1xxx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+decstation_64_defconfig (mips, gcc-10) =E2=80=94 FAIL, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+decstation_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+decstation_r4k_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
+s, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_RANDOMIZE_BASE=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
+s, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+arm64-chromebook+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+crypto (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+debug (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+ima (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+videodec (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+exynos_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+fuloong2e_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+gcw0_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+gemini_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+gpr_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+h3600_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig+debug (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warni=
+ngs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig+kselftest (arc, gcc-10) =E2=80=94 FAIL, 1 error, 0 wa=
+rnings, 0 section mismatches
+
+Errors:
+    net/bpfilter/main.c:3:10: fatal error: sys/uio.h: No such file or direc=
+tory
+
+---------------------------------------------------------------------------=
+-----
+hisi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+hsdk_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+imx_v4_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+imx_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+imxrt_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+integrator_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip22_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip27_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip28_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+jazz_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+jornada720_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+keystone_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+lemote2f_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson1b_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson2k_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson3_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+lpc18xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+lpc32xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_kvm_defconfig (mips, gcc-10) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 =
+section mismatches
+
+Errors:
+    arch/mips/kvm/stats.c:57:23: error: invalid type argument of =E2=80=98-=
+>=E2=80=99 (have =E2=80=98struct mips_coproc=E2=80=99)
+    arch/mips/kvm/stats.c:59:22: error: invalid type argument of =E2=80=98-=
+>=E2=80=99 (have =E2=80=98struct mips_coproc=E2=80=99)
+
+---------------------------------------------------------------------------=
+-----
+malta_qemu_32r6_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
+gs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaaprp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltasmvp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltasmvp_eva_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaup_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaup_xpa_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+milbeaut_m10v_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+mmp2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+moxart_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+mps2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+mtx1_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v4t_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm, gcc-10) =E2=80=94 PASS, =
+0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (arm, gcc-10) =E2=80=
+=94 PASS, 0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_SMP=3Dn (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0=
+ warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+debug (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+mvebu_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+mvebu_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+mxs_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+netwinder_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+nhk8815_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_sdcard_defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 w=
+arnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_sdcard_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+omap2plus_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+omega2p_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+orion5x_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pic32mzda_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa910_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+qcom_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+qi_lb60_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+rb532_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rbtx49xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+realview_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+rm200_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rpc_defconfig (arm, gcc-10) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 section=
+ mismatches
+
+Errors:
+    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=3D0x'
+    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=3D0x'
+
+---------------------------------------------------------------------------=
+-----
+rs90_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+rt305x_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rv32_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rv32_defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+s3c6400_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+sama5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+sama7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+sb1250_swarm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+shmobile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+socfpga_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+sp7021_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc32_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig+debug (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 2 warning=
+s, 0 section mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig+kselftest (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 2 war=
+nings, 0 section mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+spear13xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+spear3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+spear6xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+spitz_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+stm32_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+sunxi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+tegra_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section m=
+ismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+u8500_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+versatile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+vexpress_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+vf610m4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+vt8500_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+wpcm450_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    vmlinux.o: warning: objtool: .altinstr_replacement+0x17e5: redundant UA=
+CCESS disable
+    vmlinux.o: warning: objtool: iovec_from_user+0x88: call to copy_iovec_f=
+rom_user.part.0() with UACCESS enabled
+    vmlinux.o: warning: objtool: __import_iovec+0x147: call to copy_iovec_f=
+rom_user.part.0() with UACCESS enabled
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+amdgpu (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnin=
+gs, 0 section mismatches
+
+Warnings:
+    vmlinux.o: warning: objtool: .altinstr_replacement+0x17ef: redundant UA=
+CCESS disable
+    vmlinux.o: warning: objtool: iovec_from_user+0x88: call to copy_iovec_f=
+rom_user.part.0() with UACCESS enabled
+    vmlinux.o: warning: objtool: __import_iovec+0x147: call to copy_iovec_f=
+rom_user.part.0() with UACCESS enabled
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+crypto (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnin=
+gs, 0 section mismatches
+
+Warnings:
+    vmlinux.o: warning: objtool: .altinstr_replacement+0x17ef: redundant UA=
+CCESS disable
+    vmlinux.o: warning: objtool: iovec_from_user+0x88: call to copy_iovec_f=
+rom_user.part.0() with UACCESS enabled
+    vmlinux.o: warning: objtool: __import_iovec+0x147: call to copy_iovec_f=
+rom_user.part.0() with UACCESS enabled
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+debug (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 3 warning=
+s, 0 section mismatches
+
+Warnings:
+    vmlinux.o: warning: objtool: .altinstr_replacement+0x19aa: redundant UA=
+CCESS disable
+    vmlinux.o: warning: objtool: iovec_from_user+0x88: call to copy_iovec_f=
+rom_user.part.0() with UACCESS enabled
+    vmlinux.o: warning: objtool: __import_iovec+0x342: call to copy_iovec_f=
+rom_user.part.0() with UACCESS enabled
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+ima (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings,=
+ 0 section mismatches
+
+Warnings:
+    vmlinux.o: warning: objtool: .altinstr_replacement+0x17e5: redundant UA=
+CCESS disable
+    vmlinux.o: warning: objtool: iovec_from_user+0x88: call to copy_iovec_f=
+rom_user.part.0() with UACCESS enabled
+    vmlinux.o: warning: objtool: __import_iovec+0x147: call to copy_iovec_f=
+rom_user.part.0() with UACCESS enabled
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 3 war=
+nings, 0 section mismatches
+
+Warnings:
+    vmlinux.o: warning: objtool: .altinstr_replacement+0x1ddc: redundant UA=
+CCESS disable
+    vmlinux.o: warning: objtool: iovec_from_user+0x88: call to copy_iovec_f=
+rom_user.part.0() with UACCESS enabled
+    vmlinux.o: warning: objtool: __import_iovec+0x147: call to copy_iovec_f=
+rom_user.part.0() with UACCESS enabled
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors=
+, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook+amdgpu (x86_64, gcc-10) =E2=80=94 PASS, 0 e=
+rrors, 3 warnings, 0 section mismatches
+
+Warnings:
+    vmlinux.o: warning: objtool: .altinstr_replacement+0x17ef: redundant UA=
+CCESS disable
+    vmlinux.o: warning: objtool: iovec_from_user+0x88: call to copy_iovec_f=
+rom_user.part.0() with UACCESS enabled
+    vmlinux.o: warning: objtool: __import_iovec+0x147: call to copy_iovec_f=
+rom_user.part.0() with UACCESS enabled
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook+kselftest (x86_64, gcc-10) =E2=80=94 PASS, =
+0 errors, 3 warnings, 0 section mismatches
+
+Warnings:
+    vmlinux.o: warning: objtool: .altinstr_replacement+0x1ddc: redundant UA=
+CCESS disable
+    vmlinux.o: warning: objtool: iovec_from_user+0x88: call to copy_iovec_f=
+rom_user.part.0() with UACCESS enabled
+    vmlinux.o: warning: objtool: __import_iovec+0x147: call to copy_iovec_f=
+rom_user.part.0() with UACCESS enabled
+
+---
+For more info write to <info@kernelci.org>

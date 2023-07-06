@@ -2,48 +2,53 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B242D74A7A0
-	for <lists+linux-next@lfdr.de>; Fri,  7 Jul 2023 01:26:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B83BF74A7B5
+	for <lists+linux-next@lfdr.de>; Fri,  7 Jul 2023 01:29:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232055AbjGFX0d (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 6 Jul 2023 19:26:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38308 "EHLO
+        id S231147AbjGFX3a (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 6 Jul 2023 19:29:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231366AbjGFX02 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 6 Jul 2023 19:26:28 -0400
+        with ESMTP id S229552AbjGFX33 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 6 Jul 2023 19:29:29 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F3B31BD2;
-        Thu,  6 Jul 2023 16:26:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B5FAB9;
+        Thu,  6 Jul 2023 16:29:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
         Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
         Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=bDdj2ImLWq3orRh5mZ0i6CkrMO5thDbEKJP5vNXEszQ=; b=XOsOwJYXZVQ33w6XPomj04Renh
-        yQFciK3I0zE9Zpzkq3abJrhB3iswgOvCHPxvjEYm27D9reaX9t91tKrcQRzF3ZEIg3mauARWtTTAq
-        mkDRH/+DHf7c/IQjBIpMU4PFnWC9fZf/Mk4YhC1PQFDfKPMfiEuFAFgfkEk5RJRjPiB+/vzjoackT
-        XUOGbqWSIFLQ12Va6M8GH4/uO7EvdbsNRrkafyM8Gy0Ocy6f6sDkMdBgAAnpJEndbyuC8i6sdMtKm
-        oesPnV5GC8cZptTn4JM6aXCMsystUzju5zYlp/j7FmgU2bYHuhRANZ4BtXwvBvgDrM42R/4mR1FSe
-        7OmlOTMw==;
+        bh=f9sZIfUgYTr1DblItYc9uUM3d2fixVGsi3Vy+MfgJ/g=; b=hufHYw9k12YtMfcjZHguIfXDWh
+        D9cWiHR5YXNFBYQ2P+Brw1tgKlwxfeErZiV+r59wykNfxUue0MEw8C7rKaFZn378Cqwkmz1uyYBgr
+        SvkkgKRJs0mBzLOo85lH+V8+FKkokYxxOLZEiR2B9LTZ2o3U+qtQ9eXY4/xbRZsMP2LbBKgPR0skL
+        rARH3/LCpYXU1GEcr8SiAZYAyJVwFxRzKAQDq6MHNxKBSllYdaxduBFROGQh8J6LbESLRi4ybBw92
+        HFJ9qAixDodzOITTIkUUld9ppsd/fD8Mbp9ZH/ObjlJlMzb85eBCWr6ItFyO1ssvT+erC9vg9reZZ
+        QMvn9qDw==;
 Received: from [2601:1c2:980:9ec0::2764]
         by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qHYMh-002xMC-1W;
-        Thu, 06 Jul 2023 23:26:23 +0000
-Message-ID: <d785aec5-10b5-cc75-904c-cafdc194a8f0@infradead.org>
-Date:   Thu, 6 Jul 2023 16:26:22 -0700
+        id 1qHYPf-002xpz-1q;
+        Thu, 06 Jul 2023 23:29:27 +0000
+Message-ID: <e2be9c20-4e0c-7880-ba0d-11b8f2c5404c@infradead.org>
+Date:   Thu, 6 Jul 2023 16:29:26 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [PATCH virtio] pds_vdpa: protect Makefile from unconfigured
- debugfs
+Subject: Re: linux-next: Tree for Jul 4
+ (drivers/net/ethernet/microchip/lan743x_main.c)
 Content-Language: en-US
-To:     Shannon Nelson <shannon.nelson@amd.com>, jasowang@redhat.com,
-        mst@redhat.com, virtualization@lists.linux-foundation.org,
-        brett.creeley@amd.com
-Cc:     netdev@vger.kernel.org, drivers@pensando.io, sfr@canb.auug.org.au,
-        linux-next@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230706231718.54198-1-shannon.nelson@amd.com>
+To:     Simon Horman <simon.horman@corigine.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Bryan Whitehead <bryan.whitehead@microchip.com>,
+        Network Development <netdev@vger.kernel.org>,
+        UNGLinuxDriver@microchip.com,
+        Pavithra Sathyanarayanan <Pavithra.Sathyanarayanan@microchip.com>
+References: <20230704134336.4c5d1772@canb.auug.org.au>
+ <725bf1c5-b252-7d19-7582-a6809716c7d6@infradead.org>
+ <ZKc2DLIroSNi4tgs@corigine.com>
 From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20230706231718.54198-1-shannon.nelson@amd.com>
+In-Reply-To: <ZKc2DLIroSNi4tgs@corigine.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -56,39 +61,60 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+Hi Simon,
 
-
-On 7/6/23 16:17, Shannon Nelson wrote:
-> debugfs.h protects itself from an undefined DEBUG_FS, so it is
-> not necessary to check it in the driver code or the Makefile.
-> The driver code had been updated for this, but the Makefile had
-> missed the update.
+On 7/6/23 14:45, Simon Horman wrote:
+> + Pavithra Sathyanarayanan
 > 
-> Link: https://lore.kernel.org/linux-next/fec68c3c-8249-7af4-5390-0495386a76f9@infradead.org/
-> Fixes: a16291b5bcbb ("pds_vdpa: Add new vDPA driver for AMD/Pensando DSC")
-> Signed-off-by: Shannon Nelson <shannon.nelson@amd.com>
+> On Tue, Jul 04, 2023 at 03:25:31AM -0700, Randy Dunlap wrote:
+>>
+>>
+>> On 7/3/23 20:43, Stephen Rothwell wrote:
+>>> Hi all,
+>>>
+>>> Please do *not* add any v6.6 related stuff to your linux-next included
+>>> branches until after v6.5-rc1 has been released.
+>>>
+>>> Changes since 20230703:
+>>>
+>>
+>> on s390:
+>>
+>> s390-linux-ld: drivers/net/ethernet/microchip/lan743x_main.o: in function `lan743x_phy_open':
+>> drivers/net/ethernet/microchip/lan743x_main.c:1514: undefined reference to `fixed_phy_register'
+>>
+>>
+>> Full randconfig file is attached.
+> 
+> Thanks for the config.
+> 
+> I bisected this problem and it appears to be introduced by:
+> 
+> 624864fbff92 ("net: lan743x: add fixed phy support for LAN7431 device")
+> 
+> I wonder if the following change in dependencies is an appropriate fix for
+> this problem.
+
+Yes, that change fixes the build error. Thanks.
 
 Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
 Tested-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
 
-Thanks.
-
-> ---
->  drivers/vdpa/pds/Makefile | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
 > 
-> diff --git a/drivers/vdpa/pds/Makefile b/drivers/vdpa/pds/Makefile
-> index 2e22418e3ab3..c2d314d4614d 100644
-> --- a/drivers/vdpa/pds/Makefile
-> +++ b/drivers/vdpa/pds/Makefile
-> @@ -5,6 +5,5 @@ obj-$(CONFIG_PDS_VDPA) := pds_vdpa.o
->  
->  pds_vdpa-y := aux_drv.o \
->  	      cmds.o \
-> +	      debugfs.o \
->  	      vdpa_dev.o
-> -
-> -pds_vdpa-$(CONFIG_DEBUG_FS) += debugfs.o
+> diff --git a/drivers/net/ethernet/microchip/Kconfig b/drivers/net/ethernet/microchip/Kconfig
+> index 24c994baad13..329e374b9539 100644
+> --- a/drivers/net/ethernet/microchip/Kconfig
+> +++ b/drivers/net/ethernet/microchip/Kconfig
+> @@ -46,7 +46,7 @@ config LAN743X
+>         tristate "LAN743x support"
+>         depends on PCI
+>         depends on PTP_1588_CLOCK_OPTIONAL
+> -       select PHYLIB
+> +       select FIXED_PHY
+>         select CRC16
+>         select CRC32
+>         help
+> 
 
 -- 
 ~Randy

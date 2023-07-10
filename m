@@ -2,116 +2,109 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E60174E0E6
-	for <lists+linux-next@lfdr.de>; Tue, 11 Jul 2023 00:15:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09F5E74E19E
+	for <lists+linux-next@lfdr.de>; Tue, 11 Jul 2023 01:00:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230119AbjGJWPq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 10 Jul 2023 18:15:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52806 "EHLO
+        id S229938AbjGJXAO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 10 Jul 2023 19:00:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjGJWPq (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 10 Jul 2023 18:15:46 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C66C5186;
-        Mon, 10 Jul 2023 15:15:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=/20lzeATL6XNAUoXPVIsEpJavXLnPumR9witgHW8cpI=; b=fl5lXArkWvd6LHDrrNuNKxgwQb
-        cEvuKAVfS0v3Zirc55kkO3ZYEQ7b1k+ZTPzCapO4nXOPD3mvttpGdwsYKrkGCWfN54MCWH2FO1sYZ
-        qU+629htHGyC96MTgoa2Wro/QYDjqvLXLcwjF22QojArphXNPSvKWaarc1T9YhGHXUxZpKH0EgLX/
-        lVua1VNyPMQY5tMXgXItt0lGw+XcZHqwRNLLllyMpKjrMRTQSRi89uhHIdZ+tx6MYv9GdAEyAgQYA
-        WjUZA67W4ERd6ukmgn3IyFKwZoOMrJUzJEInDBRXSPEA8wiLHkhB2uN1PDy7GfF8/eBLU3wRHMNKq
-        kHbhUSzw==;
-Received: from [2601:1c2:980:9ec0::2764]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qIzA5-00Cpu8-2O;
-        Mon, 10 Jul 2023 22:15:19 +0000
-Message-ID: <5311ed1b-ab09-6e9c-4ca6-061fe0201de6@infradead.org>
-Date:   Mon, 10 Jul 2023 15:15:17 -0700
+        with ESMTP id S229569AbjGJXAN (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 10 Jul 2023 19:00:13 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8B8DE5;
+        Mon, 10 Jul 2023 16:00:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1689030004;
+        bh=rrskI+q7R9a0pNB+HSclMU73QhH+3YqzYp6kWphE1ik=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=JnKoUUWzsgMaZ6pcHdm56iUmTEtOTjOd+FKt7RnzF7fdbYpO+y2zipsSPlw30ARRi
+         UcgIdpWxQh9cB5w2Mnsg2KUzZBCbxOgytTuSSxcE61Q099wSDaVuhEm+8bZ0E/OaR0
+         FbcQdTzp0jyQYxjH8eKlQ0fn/jdpU9Sn1NZyh5xDg73fJdWJJaNzLtuH+aR+i3Yz0i
+         QZo4p46O5DeL+WgS9Q5BP8HPcxgLSf69a7qzXPx+YkBk2wXGRztTKAKCbCMS6FhDbp
+         IUBXCZGBGaFKS4swVUYn5ZokvYMwxviZAmFMZzLITPSlhE0Uk3eZK59BGjix6aghFK
+         W+aCqtcnK5eMg==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4R0KGB2fDpz4wbP;
+        Tue, 11 Jul 2023 09:00:02 +1000 (AEST)
+Date:   Tue, 11 Jul 2023 08:59:49 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Gabriel Krisman Bertazi <krisman@suse.de>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        David Howells <dhowells@redhat.com>,
+        Gabriel Krisman Bertazi <krisman@collabora.com>,
+        Leo Li <leoyang.li@nxp.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Vineet Gupta <vgupta@kernel.org>,
+        NetFilter <netfilter-devel@vger.kernel.org>
+Subject: Re: linux-next: branches to be removed
+Message-ID: <20230711085949.609305ef@canb.auug.org.au>
+In-Reply-To: <87wmz7rej3.fsf@suse.de>
+References: <20230710172602.05d32c03@canb.auug.org.au>
+        <87wmz7rej3.fsf@suse.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: linux-next: Tree for Jul 10
- (arch/s390/kernel/machine_kexec_file.c)
-Content-Language: en-US
-To:     Eric DeVolder <eric.devolder@oracle.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20230710113814.4a4916cf@canb.auug.org.au>
- <9536c8ca-a0f2-c4be-d705-2ac1054ebf7d@infradead.org>
- <8a848504-6e4c-ba7a-4777-3175c1fdc6d7@oracle.com>
- <903448cf-b333-cb75-87e2-4bee8d1d915e@oracle.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <903448cf-b333-cb75-87e2-4bee8d1d915e@oracle.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/Tin3KwabZpDiyIGKKbVOCwG";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+--Sig_/Tin3KwabZpDiyIGKKbVOCwG
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi Gabriel,
 
-On 7/10/23 14:27, Eric DeVolder wrote:
-> 
-> 
-> On 7/10/23 15:23, Eric DeVolder wrote:
->>
->>
->> On 7/10/23 15:11, Randy Dunlap wrote:
->>>
->>>
->>> On 7/9/23 18:38, Stephen Rothwell wrote:
->>>> Hi all,
->>>>
->>>> Changes since 20230707:
->>>>
->>>
->>> on s390:
->>>
->>> ../arch/s390/kernel/machine_kexec_file.c: In function 's390_verify_sig':
->>> ../arch/s390/kernel/machine_kexec_file.c:69:15: error: implicit declaration of function 'verify_pkcs7_signature' [-Werror=implicit-function-declaration]
->>>     69 |         ret = verify_pkcs7_signature(kernel, kernel_len,
->>>        |               ^~~~~~~~~~~~~~~~~~~~~~
->>> cc1: some warnings being treated as errors
->>>
->>>
->>> Full randconfig file is attached.
->>>
->>
->> Randy,
->> Thanks for this. This appears to be randconfig testing against linux-next.
->> As of right now, linux-next does not contain the v5 that I posted friday.
->> The v5 posted friday was picked up by Andrew and over the weekend no fails
->> discovered, and the series currently sits in mm-everything branch. So hopefully
->> it will appear soon in linux-next!
->>
->> Let me know if I misunderstand the situation.
->> Thanks!
->> eric
-> 
-> Well the root cause is a missing SYSTEM_DATA_VERIFICATION. This was discussed
-> through MODULE_SIG_FORMAT thread. I don't think v5 changed anything with
-> respect to this issue, so it will likely reveal itself again.
-> 
-> Since it was agreed to drop MODULE_SIG_FORMAT, and my attempt to select
-> SYSTEM_DATA_VERIFICATION results in same circular dependency as with
-> MODULE_SIG_FORMAT, I'm unsure how to proceed.
-> 
-> The arch/s390/Kconfig S390 option has a 'select KEXEC' (but not KEXEC_FILE),
-> maybe we consider adding a 'select SYSTEM_DATA_VERIFICATION' as well?
+On Mon, 10 Jul 2023 11:07:28 -0400 Gabriel Krisman Bertazi <krisman@suse.de=
+> wrote:
+>
+> Stephen Rothwell <sfr@canb.auug.org.au> writes:
+>=20
+> > unicode			2022-04-28 18:19:09 -0400
+> >   git://git.kernel.org/pub/scm/linux/kernel/git/krisman/unicode.git    =
+   for-next
+> >
+> > These branches are all empty except the last which just contains a
+> > commit that is the same patch of a commit in Linus' tree. =20
+>=20
+> Please, keep it.  It is not a busy area for development, but we I'm
+> looking into a unicode version update soon that will go through
+> this tree.
 
-Sure, since some other configs select it also.
-And as long as it doesn't cause a circular dependency problem.
+I have added it back.  You might consider rebasing it onto v6.5-rc1 and
+I think you will find that its only commit will disappear.
 
-thanks.
--- 
-~Randy
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/Tin3KwabZpDiyIGKKbVOCwG
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSsjWUACgkQAVBC80lX
+0Gyypwf/awP9ZYx0yIhigLEMkjiUinM3v5ZG9Q5lTIamXfL2qrWE7BlI38C6Gjl/
+dX/gfR/aCBIBQOB+eTmtX2fhTJhe0SlhPJHzIdwDToPGzkCBoCS62pP3zSEKZYLO
+NkehE1xdGYmtjiKUd4Zvx3yTvYIkAnnE9D1t7MmWj2C0EsQmmetNYzUvE0RtGdG7
+Ak5DFBVO7q50ifgH9wLbpUSHtcSJHYdxpF30SQBjKBUDjCXip5ET62v3ZUhovFrN
+pyl3gckjS1PyXjVrsAL2olIsU1HzlRKnZYFfBTDNJv/cvzbooxteHK2eVXzxKEKJ
+yTYr6O7qpU8s29aqnlLg+umu7+Btdw==
+=Zyb6
+-----END PGP SIGNATURE-----
+
+--Sig_/Tin3KwabZpDiyIGKKbVOCwG--

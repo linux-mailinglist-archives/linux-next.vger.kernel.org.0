@@ -2,120 +2,94 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F034074D774
-	for <lists+linux-next@lfdr.de>; Mon, 10 Jul 2023 15:24:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08D1F74D98C
+	for <lists+linux-next@lfdr.de>; Mon, 10 Jul 2023 17:07:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231659AbjGJNYx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 10 Jul 2023 09:24:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37572 "EHLO
+        id S233489AbjGJPHd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 10 Jul 2023 11:07:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230219AbjGJNYw (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 10 Jul 2023 09:24:52 -0400
-Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE82DD7;
-        Mon, 10 Jul 2023 06:24:46 -0700 (PDT)
-Received: by mail-ot1-x32c.google.com with SMTP id 46e09a7af769-6b867acbf6dso3309489a34.0;
-        Mon, 10 Jul 2023 06:24:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688995486; x=1691587486;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ez1T/Q5iWSzUDGh47qmMHdqY+oaUaEYSNPMGMd9EKWw=;
-        b=sUqVZGffbok0LO+PHa3nbFV2uPQRcnt8uZ1PsyHI4hVoLuBLvSdBzL41JvlQQBe0km
-         5myyTQgquFl/OZt2fsbsQI0bUgp/e2UxgmHW9bNETONsbwrjVC1aE7K3gLI9fRiql2VR
-         2+z1MeHQ+nIgnHc6tPxsyWMpls49G5NruJApUWhtK6namhOKvUx1fmR2u/QUg9cb6qIh
-         lJrZM9A409zEl3FnjdVgCUwmeUKb4378468nuw1oUskaY5cebmjYAFeBKWwuRexv3qoy
-         WHcM1MjfsrFkTUND3cS6PAbU+t4R5MvKIc3YdQegmHXdZxWkgMi4MWx+q4CJtEm4PfVo
-         o1EQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688995486; x=1691587486;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ez1T/Q5iWSzUDGh47qmMHdqY+oaUaEYSNPMGMd9EKWw=;
-        b=IPQAQfpc7RZF7msdw6sOHnhdq+dzJkOmbvkOu2/pFYsBRNTvcvPYRpWepqmF2khynn
-         Q9IOanouQkD5jt95+LNCgzC0HrGbieR1ctmGxkt28YSUrCDp5OcIeebZrxB9HW1AXQn/
-         UjlFKDLYDuYEAn8q0bJlcg2w3hQfwWHgaOozNfEHQ4TtIx8uxFvXSXyXahKOf/OsmvnO
-         /kNbKRcYNgj9cdqbRZtTUjGL2JgItTPBXeuTti4vViFaP8gWdI6NayqRlxR02U8+Y92p
-         4u6MYpHmWXnqz4O3h6O1gskPBY2ECJL8SKOuh6Hm5vkXtvGjK9Vvm/cNMO+b1GeIcU5S
-         4Hzw==
-X-Gm-Message-State: ABy/qLZ0ymyWLOEUSaxNbkRQc4RtQD0mIW67i9QZhDq0s6W4p4Z+gChw
-        I64C0SToTWLNLJz3SkwaSbgOcwpsmniBe3IUDzo=
-X-Google-Smtp-Source: APBJJlHPr/+DiaHfauIV3i/AMamxwO40eaZsNOvHXXeTFxAmchFipX8ers4a+nwCgyawizGzwTUMDHk3IASARU3LfLo=
-X-Received: by 2002:a05:6808:1587:b0:39f:f42c:863 with SMTP id
- t7-20020a056808158700b0039ff42c0863mr8683535oiw.6.1688995486137; Mon, 10 Jul
- 2023 06:24:46 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230710082534.762599c8@canb.auug.org.au> <54adffa8-b500-e1b4-7274-9a5354be8cfe@amd.com>
-In-Reply-To: <54adffa8-b500-e1b4-7274-9a5354be8cfe@amd.com>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Mon, 10 Jul 2023 09:24:35 -0400
-Message-ID: <CADnq5_PvEKum2Wdmei7Zk8kBe_6NWzv2Oaqg7juPFriPOtRWgg@mail.gmail.com>
-Subject: Re: linux-next: Signed-off-by missing for commit in the amdgpu tree
-To:     Aurabindo Pillai <aurabindo.pillai@amd.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Wesley Chalmers <Wesley.Chalmers@amd.com>,
+        with ESMTP id S230448AbjGJPHc (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 10 Jul 2023 11:07:32 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78F45D7;
+        Mon, 10 Jul 2023 08:07:31 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 3299C2000E;
+        Mon, 10 Jul 2023 15:07:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1689001650; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=x7KXAFrQvuPr49rnyKVo0FOaAIy4o+Fv6v+KDOhj24M=;
+        b=tVfZba1W3Y5eJu1lFnDi0pQ/3W7y65Pp899BjQim4yzG5gLKTaSrHDlEPL6TXKl/6jKTOK
+        jioUvh9thGJShyLSIJEPX+7p7XVkmh2DiZDtbGuMiLrp1wJPcsh5O43kreeBlwK2lsh5pi
+        AQ5pUzjZFDgPszmNNLeNv/cGzaGj4fM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1689001650;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=x7KXAFrQvuPr49rnyKVo0FOaAIy4o+Fv6v+KDOhj24M=;
+        b=UHH1aZiyHlZRWstBrfxYXxrjtQog6vE+pD9yz3WbT+w/pD5aKqMYqCk0mIDDVNayRyDbLg
+        DmqryRsf1EnyNvBw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id ECC1913A05;
+        Mon, 10 Jul 2023 15:07:29 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id VHz1M7EerGQlWAAAMHmgww
+        (envelope-from <krisman@suse.de>); Mon, 10 Jul 2023 15:07:29 +0000
+From:   Gabriel Krisman Bertazi <krisman@suse.de>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        David Howells <dhowells@redhat.com>,
+        Gabriel Krisman Bertazi <krisman@collabora.com>,
+        Leo Li <leoyang.li@nxp.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Vineet Gupta <vgupta@kernel.org>,
+        NetFilter <netfilter-devel@vger.kernel.org>
+Subject: Re: linux-next: branches to be removed
+References: <20230710172602.05d32c03@canb.auug.org.au>
+Date:   Mon, 10 Jul 2023 11:07:28 -0400
+In-Reply-To: <20230710172602.05d32c03@canb.auug.org.au> (Stephen Rothwell's
+        message of "Mon, 10 Jul 2023 17:26:02 +1000")
+Message-ID: <87wmz7rej3.fsf@suse.de>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Jul 10, 2023 at 9:21=E2=80=AFAM Aurabindo Pillai
-<aurabindo.pillai@amd.com> wrote:
->
->
->
-> On 7/9/2023 6:25 PM, Stephen Rothwell wrote:
-> > Hi all,
-> >
-> > Commit
-> >
-> >    aeddb7d13ad3 ("drm/amd/display: Block optimize on consecutive FAMS e=
-nables")
-> >
-> > is missing a Signed-off-by from its author.
-> >
->
-> Hi Stephen,
->
-> Not sure how the tags went missing, but here is the full commit
-> (a7d8d8bcbd9af8d4aa1580bffd418af78384040f) information from
-> amd-staging-drm-next:
->
->
->      drm/amd/display: Block optimize on consecutive FAMS enables
->
->      [WHY]
->      It is possible to commit state multiple times in rapid succession wi=
-th
->      FAMS enabled; if each of these commits were to set optimized_require=
-d,
->      then the user may see latency.
->
->      [HOW]
->      fw_based_mclk_switching is currently not used in dc->clk_mgr; use it
->      to track whether the current state has FAMS enabled;
->      if it has, then do not disable FAMS in prepare_bandwidth, and do
-> not set
->      optimized_required.
->
->      Reviewed-by: Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
->      Signed-off-by: Wesley Chalmers <Wesley.Chalmers@amd.com>
->      Tested-by: Daniel Wheeler <daniel.wheeler@amd.com>
->      Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
->      Acked-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
->
+Stephen Rothwell <sfr@canb.auug.org.au> writes:
 
-I've fixed it up in my tree.
+> unicode			2022-04-28 18:19:09 -0400
+>   git://git.kernel.org/pub/scm/linux/kernel/git/krisman/unicode.git       for-next
+>
+> These branches are all empty except the last which just contains a
+> commit that is the same patch of a commit in Linus' tree.
 
-Alex
+Please, keep it.  It is not a busy area for development, but we I'm
+looking into a unicode version update soon that will go through
+this tree.
+
+-- 
+Gabriel Krisman Bertazi

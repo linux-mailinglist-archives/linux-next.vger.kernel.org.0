@@ -2,71 +2,48 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 748B974E36A
-	for <lists+linux-next@lfdr.de>; Tue, 11 Jul 2023 03:23:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D5D374E3DF
+	for <lists+linux-next@lfdr.de>; Tue, 11 Jul 2023 04:06:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229583AbjGKBXd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 10 Jul 2023 21:23:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35864 "EHLO
+        id S229936AbjGKCG4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 10 Jul 2023 22:06:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230363AbjGKBXc (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 10 Jul 2023 21:23:32 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 142C510C2;
-        Mon, 10 Jul 2023 18:23:02 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-666e6ecb52dso2823004b3a.2;
-        Mon, 10 Jul 2023 18:23:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689038532; x=1691630532;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=OVuNwbfMW1iG37Ru6hotAgBrvCT0w/byW9moxs6+ZvY=;
-        b=ZzgjiS/4Uu7mSWQFarbFQStCYoJTiqoJk4qzWPwi59coAxl7nKaxdOBdyIwFTva2MK
-         5L+Z1q9Uf4XJ0OwYZPu/WCkW1a2f+PW/THPVg5QwuI+K/s/AKEK/LQkwRMkK5b4SaTzy
-         JzMq1OQccwYj8gHbStU+gvFeg7R4mSJ61/Ppy+dJaO0vNfx8B92iRzJJnsGHk/h6fFrQ
-         Ef1nXoaBXxKy/3JP/BY7sOT5SyvF10FSZGuOY8FmSgudxNGlmPQPeWT7DPixcIO35O0K
-         TZUB7v/zqqhWV4dYysAnGQna5Cxj71WRvk1TG3kMlbOdVW72IZvxrOGSJuPhgA9tEA6y
-         naMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689038532; x=1691630532;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OVuNwbfMW1iG37Ru6hotAgBrvCT0w/byW9moxs6+ZvY=;
-        b=JKd/k9VPq4wdQkSPDr+Z2hTIqMoQGUbjigCegq5Cdzyaskpck2v6lFxQ5wXNaSZ7lu
-         2GAxiY3PzPrC8/3E8d7NODI07sN7ZBDW/hQuc9VTivhBWZybLpPy88kUaXNdthyYaBBa
-         wx6WbclOHH3YxpLmsjS+DcqdM6G4tbIMZKO2pikjMtDudWwbiGQgKthQB01AgnCQpVEt
-         H1mmwF5r/bH62cwLG7fCsDVwPwFB4fVD8SwlNroy3kDFb3MN89+DPsS1kxrTQ5/t7A9K
-         j5KmXlb/kpCGQvP8xbaHOBN/9ZhyOAfyFOJiI+5YG3V6QMDAmZF5RjTlKrmx18H0lJ7a
-         hHmQ==
-X-Gm-Message-State: ABy/qLbKBYVJq2Bm6/6MjmRui6c4cwovvSuvAlLtIIymDXw6ItIFm2nP
-        iQV3LKDiKP30JH4r8hIXGAk=
-X-Google-Smtp-Source: APBJJlF9v6rG7b6+m5yt+Dy6aR4JFSm1uGlbD9cqpVC3G7xVAefgPRJvPR5XCd1jK2rk2gg8o7mecg==
-X-Received: by 2002:a05:6a20:7489:b0:126:78b0:993a with SMTP id p9-20020a056a20748900b0012678b0993amr13453586pzd.29.1689038531792;
-        Mon, 10 Jul 2023 18:22:11 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::5:e2fe])
-        by smtp.gmail.com with ESMTPSA id p8-20020a1709026b8800b001b8649e52f8sm495107plk.254.2023.07.10.18.22.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jul 2023 18:22:11 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 10 Jul 2023 15:22:10 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Miaohe Lin <linmiaohe@huawei.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
+        with ESMTP id S229635AbjGKCG4 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 10 Jul 2023 22:06:56 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B84290;
+        Mon, 10 Jul 2023 19:06:55 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4R0PP80QK5z1FDgN;
+        Tue, 11 Jul 2023 10:06:20 +0800 (CST)
+Received: from [10.174.151.185] (10.174.151.185) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Tue, 11 Jul 2023 10:06:52 +0800
 Subject: Re: linux-next: build warning after merge of the cgroup tree
-Message-ID: <ZKyuwkDWB85Zs9R0@slm.duckdns.org>
+To:     Tejun Heo <tj@kernel.org>, Stephen Rothwell <sfr@canb.auug.org.au>
+CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
 References: <20230711111509.1045f32e@canb.auug.org.au>
+ <ZKyuwkDWB85Zs9R0@slm.duckdns.org>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <9031f42f-6ff3-3e60-049b-fc1917915da9@huawei.com>
+Date:   Tue, 11 Jul 2023 10:06:52 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230711111509.1045f32e@canb.auug.org.au>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+In-Reply-To: <ZKyuwkDWB85Zs9R0@slm.duckdns.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.151.185]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,24 +51,25 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Jul 11, 2023 at 11:15:09AM +1000, Stephen Rothwell wrote:
-> Hi all,
+On 2023/7/11 9:22, Tejun Heo wrote:
+> On Tue, Jul 11, 2023 at 11:15:09AM +1000, Stephen Rothwell wrote:
+>> Hi all,
+>>
+>> After merging the cgroup tree, today's linux-next build (arm
+>> multi_v7_defconfig) produced this warning:
+>>
+>> kernel/cgroup/cgroup.c:503:36: warning: 'cgroup_tryget_css' defined but not used [-Wunused-function]
+>>   503 | static struct cgroup_subsys_state *cgroup_tryget_css(struct cgroup *cgrp,
+>>       |                                    ^~~~~~~~~~~~~~~~~
+>>
+>> Introduced by commit
+>>
+>>   1299eb2b0ad5 ("cgroup: minor cleanup for cgroup_extra_stat_show()")
 > 
-> After merging the cgroup tree, today's linux-next build (arm
-> multi_v7_defconfig) produced this warning:
-> 
-> kernel/cgroup/cgroup.c:503:36: warning: 'cgroup_tryget_css' defined but not used [-Wunused-function]
->   503 | static struct cgroup_subsys_state *cgroup_tryget_css(struct cgroup *cgrp,
->       |                                    ^~~~~~~~~~~~~~~~~
-> 
-> Introduced by commit
-> 
->   1299eb2b0ad5 ("cgroup: minor cleanup for cgroup_extra_stat_show()")
+> Miaohe, can you send a patch to either add __maybe_unused to
+> cgroup_tryget_css() or also put it inside CONFIG_CGROUP_SCHED?
 
-Miaohe, can you send a patch to either add __maybe_unused to
-cgroup_tryget_css() or also put it inside CONFIG_CGROUP_SCHED?
+Will do. Sorry for my mistake.
 
 Thanks.
 
--- 
-tejun

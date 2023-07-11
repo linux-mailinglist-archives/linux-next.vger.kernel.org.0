@@ -2,61 +2,52 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B96C74EF2B
-	for <lists+linux-next@lfdr.de>; Tue, 11 Jul 2023 14:41:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F4F974F65E
+	for <lists+linux-next@lfdr.de>; Tue, 11 Jul 2023 19:03:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230124AbjGKMlY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 11 Jul 2023 08:41:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46028 "EHLO
+        id S229770AbjGKRDu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 11 Jul 2023 13:03:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229983AbjGKMlX (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 11 Jul 2023 08:41:23 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41098B0;
-        Tue, 11 Jul 2023 05:41:21 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        with ESMTP id S229476AbjGKRDu (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 11 Jul 2023 13:03:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 250F7A1;
+        Tue, 11 Jul 2023 10:03:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id EB7BC225C3;
-        Tue, 11 Jul 2023 12:41:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1689079279; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=pTTkzVVPTdBTTX1F+dGFkKgrQMAgN0MI9e62axP2ESk=;
-        b=TtsgEo0ggMHrj25ng3aYrEMQybqPBakEUTcdctxqd21tyemkFpLLiFszDVNNwYswiP0Z3W
-        WTE3DBlSulUwv5f1yRZQRQssAqNmJM41hmoUO6ss68XCuXMjbY4QqR92QFgBXmdwU6/ahH
-        QIZQqNJCjg3zP8EzEyrGjl+Vv4zmGvY=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C98341391C;
-        Tue, 11 Jul 2023 12:41:19 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id baRbMO9NrWT3QAAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Tue, 11 Jul 2023 12:41:19 +0000
-Date:   Tue, 11 Jul 2023 14:41:18 +0200
-From:   Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Tejun Heo <tj@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9722B61586;
+        Tue, 11 Jul 2023 17:03:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7053C433C8;
+        Tue, 11 Jul 2023 17:03:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1689095028;
+        bh=IuTnRVfM3GCRl98ZCURTBKbe5HFdb5gU5z+pPw1L5iY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=DNDuzUdk8Gp2a15XMRq+/gKgStsudFf+tMAoJSVTeaIDtXjp/sT9kmvRiAv4FlU5g
+         UWgUD/+vs3922HARV1pJvZqj6vfPWV97IHYTrTnXBEZijd7DOBhxLXDqACkH63pkfz
+         jKf6auFwrAEan6nyq4KhaVclOHwH5Md8tP9ega9I=
+Date:   Tue, 11 Jul 2023 10:03:46 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Michal =?ISO-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>, Tejun Heo <tj@kernel.org>,
         Domenico Cerasuolo <cerasuolodomenico@gmail.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
 Subject: Re: linux-next: manual merge of the cgroup tree with the mm tree
-Message-ID: <xn7nv52qio4aq2ioquuglnfoe6hn2l7newjf53enyxxthy6opd@ztktowlsjub3>
+Message-Id: <20230711100346.0805ead2e7e65be56ce2911c@linux-foundation.org>
+In-Reply-To: <xn7nv52qio4aq2ioquuglnfoe6hn2l7newjf53enyxxthy6opd@ztktowlsjub3>
 References: <20230711110734.7009339b@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="624tujepdzi6sdtb"
-Content-Disposition: inline
-In-Reply-To: <20230711110734.7009339b@canb.auug.org.au>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        <xn7nv52qio4aq2ioquuglnfoe6hn2l7newjf53enyxxthy6opd@ztktowlsjub3>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,32 +55,17 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+On Tue, 11 Jul 2023 14:41:18 +0200 Michal Koutn=FD <mkoutny@suse.com> wrote:
 
---624tujepdzi6sdtb
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+> Hello.
+>=20
+> On Tue, Jul 11, 2023 at 11:07:34AM +1000, Stephen Rothwell <sfr@canb.auug=
+.org.au> wrote:
+> > You may also want to consider cooperating with the maintainer of the
+> > conflicting tree to minimise any particularly complex conflicts.
+>=20
+> Would alphabetical sorting of entries be helpful? (Lower conflict
+> probability than the single end for appending.)
 
-Hello.
-
-On Tue, Jul 11, 2023 at 11:07:34AM +1000, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> You may also want to consider cooperating with the maintainer of the
-> conflicting tree to minimise any particularly complex conflicts.
-
-Would alphabetical sorting of entries be helpful? (Lower conflict
-probability than the single end for appending.)
-
-Thanks,
-Michal
-
---624tujepdzi6sdtb
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQQpEWyjXuwGT2dDBqAGvrMr/1gcjgUCZK1N7AAKCRAGvrMr/1gc
-jlFLAP47B14jQYzwELF9vZsjK1/SuujT3qR3i4tFcnp++ipnfwEA3YlUsUVOpDCE
-XGJK/eTUn8ReFUylhASijiS7lmmohAU=
-=HX7y
------END PGP SIGNATURE-----
-
---624tujepdzi6sdtb--
+I think so.  People tend to put new entries at the end of lists, which
+is the ideal way to cause patch collisions :(

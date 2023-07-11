@@ -2,72 +2,49 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D27A74F9F9
-	for <lists+linux-next@lfdr.de>; Tue, 11 Jul 2023 23:46:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F351474FAF6
+	for <lists+linux-next@lfdr.de>; Wed, 12 Jul 2023 00:35:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229937AbjGKVqd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 11 Jul 2023 17:46:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43432 "EHLO
+        id S229937AbjGKWfK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 11 Jul 2023 18:35:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229766AbjGKVqc (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 11 Jul 2023 17:46:32 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2516C10C7;
-        Tue, 11 Jul 2023 14:46:31 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-668704a5b5bso5513880b3a.0;
-        Tue, 11 Jul 2023 14:46:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689111990; x=1691703990;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kyzlh81U6Ju2jWhDiLjgeqy7+sksvV31PzhzVl8MBhQ=;
-        b=aPy0SNz9dz6HANDuditq55E3EjWQCri+A9re2o5i05xDNLrJFWA3izghbC7A0uVoJX
-         QXALQHOutvp97mrZej0leDFB9kp4fGa85LoQzCdj+tc3cLv8A4jq4qxl8mtrGA4KRm1I
-         kZPJXtt6NQJLOZ+QnPOuM4vJLWnGnmOMb6SyFhJ+htPUt3j7eGUQAiCWFv/6KBkW3zqJ
-         TSuapNB3+JMMaZ32q/jC9za6PUB4IoZEonxcNSv0qFTuFGXVfGDQGXDQjK/lapCVElIf
-         NZN2Y0E5H6oI5UHwpiITD7sDl1DcXH9Ei8bQ2+2j3rs5OlXpTtdihDw6hMW1tCJ0l0KT
-         00rQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689111990; x=1691703990;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kyzlh81U6Ju2jWhDiLjgeqy7+sksvV31PzhzVl8MBhQ=;
-        b=K+ysjPGEPhA+EDLn+z8pOcLTIdGDPwBxHw9SR8OlzKMDtFfRrcZ5NAfAPzdsQVYFXK
-         4NFtZEfBlmMOLdAiM7NdBlkGqcXT0tYVbp+6/t5TqSWP2qQ0tKQSUmVJ4JA5A+PnrN/j
-         +rxDjREc27UoyC8QK7L8VKoEiwTAiGjdRL0x4xOp1IRXrqD9N0vs6Qwgbb3s0YjboMXA
-         fcTU6i+Ha0tj4tSyys9Vsv5qywRnUhCHRt+ZVDqozB9ASTlQfle8O+TFozNtLZ78ouyO
-         NzyejtiGWmLWRMQIwh/OD2CAVlYYzauPqtoUSeIp9nHNmIq2tKumlJYqkk94T2vzXDHW
-         CL2w==
-X-Gm-Message-State: ABy/qLaVUfbGZ30AQ8GnHWOdEdb7211axm/SIhJrvIt1bk66ugw0wWme
-        47/wHr+9t+qgnXsYuh3Pbhg=
-X-Google-Smtp-Source: APBJJlFG4Jo/7savB2RiSA2npOJ/H7omJxLgnggtODSMG6vmeyq4mrXDj1WvnrDRCkWkBjeLA0iWcg==
-X-Received: by 2002:a05:6a00:1704:b0:682:2fea:39f0 with SMTP id h4-20020a056a00170400b006822fea39f0mr19836512pfc.5.1689111990437;
-        Tue, 11 Jul 2023 14:46:30 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::5:9374])
-        by smtp.gmail.com with ESMTPSA id e26-20020a62aa1a000000b0065438394fa4sm2223493pff.90.2023.07.11.14.46.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jul 2023 14:46:30 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Tue, 11 Jul 2023 11:46:28 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     hannes@cmpxchg.org, sfr@canb.auug.org.au, lizefan.x@bytedance.com,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-next@vger.kernel.org
-Subject: Re: [PATCH] cgroup: put cgroup_tryget_css() inside
- CONFIG_CGROUP_SCHED
-Message-ID: <ZK3NtKHk_w7XoAVZ@slm.duckdns.org>
-References: <20230711023820.3854596-1-linmiaohe@huawei.com>
+        with ESMTP id S229931AbjGKWfK (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 11 Jul 2023 18:35:10 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C94A21A3;
+        Tue, 11 Jul 2023 15:35:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1689114903;
+        bh=NeXn+ybZp/Kp0tyVls+58Athw9u+en3RKeIIRyLD3R0=;
+        h=Date:From:To:Cc:Subject:From;
+        b=FI+L2Z6V/Vmew4kop28pVWVXfwpOaaW/fWvyZuTolHoy6t30ilMlxaeMInTspSUzw
+         ehEdtlQjbkYUkcOC/oRsgNWA/Ns6lFvqwpxwHlCOstAeAAPdYhj5E6wjtc1z5Zd3Bp
+         y2kmEkbrx7m6Re3Q4570IhbQ6ATerSGX9kUtfuiyQkslyjCw/+sbp+ciL0Nh0xD2qA
+         a/sduFpofzOa2ijgTHR+HTjcpTYfoa3slaG3vmhKmGXtHvhpNS9qCcu0+0FygY2N2x
+         Xd43wTD8Uf3vcaiOFZDu2Y8iP7DUY4vUBoun5nbBs8kyw5VMGiB4okRBgmbd5ch0lI
+         fJ3KJqydwv4Jg==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4R0wfv40qcz4wy7;
+        Wed, 12 Jul 2023 08:35:02 +1000 (AEST)
+Date:   Wed, 12 Jul 2023 08:35:01 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Saket Dumbre <saket.dumbre@intel.com>,
+        Bob Moore <robert.moore@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the pm tree
+Message-ID: <20230712083501.60b2968b@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230711023820.3854596-1-linmiaohe@huawei.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+Content-Type: multipart/signed; boundary="Sig_/+2zh/w.H886DPBX=O1Sfdp3";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,16 +52,36 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Jul 11, 2023 at 10:38:20AM +0800, Miaohe Lin wrote:
-> Put cgroup_tryget_css() inside CONFIG_CGROUP_SCHED to fix the warning
-> of 'cgroup_tryget_css' defined but not used [-Wunused-function] when
-> CONFIG_CGROUP_SCHED is disabled.
-> 
-> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+--Sig_/+2zh/w.H886DPBX=O1Sfdp3
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Applied to cgroup/for-6.6.
+Hi all,
 
-Thanks.
+Commit
 
--- 
-tejun
+  ed9aa118e4e1 ("ACPICA: Add support for _DSC as per ACPI 6.5")
+
+is missing a Signed-off-by from its author.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/+2zh/w.H886DPBX=O1Sfdp3
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSt2RUACgkQAVBC80lX
+0GxBugf/XgDSh5QIP+Hv8Su6cNHnhlQp+z47MMzfJdE6qZ/KHIPrY/IVkoCya2FS
+NSiV12hyvEBFqny0QqTJDGKHXH3pdzTrLmVtX8Q54Zfn6//BWFjduoEtN3J/Ss2Y
+XXeTMrAV3LnI5YQUFT0kJlaGR/08/taUvAsVzWHQPJ5J5Oai1Ub22dSAtGkIS5Qz
+hC4jn9Dm9ww/Iwp5TQ7me8z3EsczSCMHlTbqADLFjBRpwLhc1EgMUvWiNqFdAT/u
+Vpg8TRDPULsRNCiNhTANkEylMinwEKxitbHRe8AyidtgXjlm3K0robOIkAq2wGUI
+81S2xbo/IsSLrG2NzoaD7GgOyzVfMg==
+=r2pi
+-----END PGP SIGNATURE-----
+
+--Sig_/+2zh/w.H886DPBX=O1Sfdp3--

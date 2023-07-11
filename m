@@ -2,55 +2,71 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9053674E35E
-	for <lists+linux-next@lfdr.de>; Tue, 11 Jul 2023 03:19:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 748B974E36A
+	for <lists+linux-next@lfdr.de>; Tue, 11 Jul 2023 03:23:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231690AbjGKBTu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 10 Jul 2023 21:19:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57222 "EHLO
+        id S229583AbjGKBXd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 10 Jul 2023 21:23:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231573AbjGKBTd (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 10 Jul 2023 21:19:33 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ADE819AA;
-        Mon, 10 Jul 2023 18:18:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1689038230;
-        bh=r7uxpV11jSeaVAgCvED5AOMsk39lPtkrYKKKN2qj+sU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=qo/Sk9UVTtUHtbn95isa8UXMOGAn2rgMaTlT0B1Od1S/VbKlFKaMcySkc4By/8KKd
-         AvzrIFcgwntIslAmfI6+DyyhY36qjgYDRvOCC7giGQ2+rBkb4nPDHTiM7rbYfuM7Dy
-         KQzz8nI77qvayxTu+Sx+uLorNvXP9z5PJKc6m/+8NRxy8tUO8SO4PUVuz+lRPt4f34
-         vRc5GqnFYRZKLGw0+qwSi0GUAwc2f58QQNJNy4pH9zwyJo6shdGfxbBj+rv5Z3z8Mn
-         v4ibkb3Wzp4W42pgFgV+IqZrO2ruaNqeOJt4VidSRBYHCPK4rWS01mMFRBz41EWvVP
-         uzwMYBz4JdGrQ==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4R0NJP1mZrz4wyF;
-        Tue, 11 Jul 2023 11:17:09 +1000 (AEST)
-Date:   Tue, 11 Jul 2023 11:17:07 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Dave Airlie <airlied@redhat.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc:     Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+        with ESMTP id S230363AbjGKBXc (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 10 Jul 2023 21:23:32 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 142C510C2;
+        Mon, 10 Jul 2023 18:23:02 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-666e6ecb52dso2823004b3a.2;
+        Mon, 10 Jul 2023 18:23:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1689038532; x=1691630532;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OVuNwbfMW1iG37Ru6hotAgBrvCT0w/byW9moxs6+ZvY=;
+        b=ZzgjiS/4Uu7mSWQFarbFQStCYoJTiqoJk4qzWPwi59coAxl7nKaxdOBdyIwFTva2MK
+         5L+Z1q9Uf4XJ0OwYZPu/WCkW1a2f+PW/THPVg5QwuI+K/s/AKEK/LQkwRMkK5b4SaTzy
+         JzMq1OQccwYj8gHbStU+gvFeg7R4mSJ61/Ppy+dJaO0vNfx8B92iRzJJnsGHk/h6fFrQ
+         Ef1nXoaBXxKy/3JP/BY7sOT5SyvF10FSZGuOY8FmSgudxNGlmPQPeWT7DPixcIO35O0K
+         TZUB7v/zqqhWV4dYysAnGQna5Cxj71WRvk1TG3kMlbOdVW72IZvxrOGSJuPhgA9tEA6y
+         naMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689038532; x=1691630532;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OVuNwbfMW1iG37Ru6hotAgBrvCT0w/byW9moxs6+ZvY=;
+        b=JKd/k9VPq4wdQkSPDr+Z2hTIqMoQGUbjigCegq5Cdzyaskpck2v6lFxQ5wXNaSZ7lu
+         2GAxiY3PzPrC8/3E8d7NODI07sN7ZBDW/hQuc9VTivhBWZybLpPy88kUaXNdthyYaBBa
+         wx6WbclOHH3YxpLmsjS+DcqdM6G4tbIMZKO2pikjMtDudWwbiGQgKthQB01AgnCQpVEt
+         H1mmwF5r/bH62cwLG7fCsDVwPwFB4fVD8SwlNroy3kDFb3MN89+DPsS1kxrTQ5/t7A9K
+         j5KmXlb/kpCGQvP8xbaHOBN/9ZhyOAfyFOJiI+5YG3V6QMDAmZF5RjTlKrmx18H0lJ7a
+         hHmQ==
+X-Gm-Message-State: ABy/qLbKBYVJq2Bm6/6MjmRui6c4cwovvSuvAlLtIIymDXw6ItIFm2nP
+        iQV3LKDiKP30JH4r8hIXGAk=
+X-Google-Smtp-Source: APBJJlF9v6rG7b6+m5yt+Dy6aR4JFSm1uGlbD9cqpVC3G7xVAefgPRJvPR5XCd1jK2rk2gg8o7mecg==
+X-Received: by 2002:a05:6a20:7489:b0:126:78b0:993a with SMTP id p9-20020a056a20748900b0012678b0993amr13453586pzd.29.1689038531792;
+        Mon, 10 Jul 2023 18:22:11 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::5:e2fe])
+        by smtp.gmail.com with ESMTPSA id p8-20020a1709026b8800b001b8649e52f8sm495107plk.254.2023.07.10.18.22.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Jul 2023 18:22:11 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 10 Jul 2023 15:22:10 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Miaohe Lin <linmiaohe@huawei.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the drm tree with the
- drm-misc-fixes tree
-Message-ID: <20230711111707.05d2c8b2@canb.auug.org.au>
-In-Reply-To: <20230627115432.6179f0ea@canb.auug.org.au>
-References: <20230627115432.6179f0ea@canb.auug.org.au>
+Subject: Re: linux-next: build warning after merge of the cgroup tree
+Message-ID: <ZKyuwkDWB85Zs9R0@slm.duckdns.org>
+References: <20230711111509.1045f32e@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/tT8FL3fDMyck2qEDkk/.e/a";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230711111509.1045f32e@canb.auug.org.au>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,86 +74,24 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/tT8FL3fDMyck2qEDkk/.e/a
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, Jul 11, 2023 at 11:15:09AM +1000, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the cgroup tree, today's linux-next build (arm
+> multi_v7_defconfig) produced this warning:
+> 
+> kernel/cgroup/cgroup.c:503:36: warning: 'cgroup_tryget_css' defined but not used [-Wunused-function]
+>   503 | static struct cgroup_subsys_state *cgroup_tryget_css(struct cgroup *cgrp,
+>       |                                    ^~~~~~~~~~~~~~~~~
+> 
+> Introduced by commit
+> 
+>   1299eb2b0ad5 ("cgroup: minor cleanup for cgroup_extra_stat_show()")
 
-Hi all,
+Miaohe, can you send a patch to either add __maybe_unused to
+cgroup_tryget_css() or also put it inside CONFIG_CGROUP_SCHED?
 
-On Tue, 27 Jun 2023 11:54:32 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->=20
-> Today's linux-next merge of the drm tree got a conflict in:
->=20
->   include/drm/gpu_scheduler.h
->=20
-> between commit:
->=20
->   db8b4968a8d0 ("drm/sched: Call drm_sched_fence_set_parent() from drm_sc=
-hed_fence_scheduled()")
->=20
-> from the drm-misc-fixes tree and commit:
->=20
->   539f9ee4b52a ("drm/scheduler: properly forward fence errors")
->=20
-> from the drm tree.
->=20
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
->=20
-> diff --cc include/drm/gpu_scheduler.h
-> index b29e347b10a9,e95b4837e5a3..000000000000
-> --- a/include/drm/gpu_scheduler.h
-> +++ b/include/drm/gpu_scheduler.h
-> @@@ -581,16 -581,18 +581,17 @@@ void drm_sched_entity_push_job(struct d
->   void drm_sched_entity_set_priority(struct drm_sched_entity *entity,
->   				   enum drm_sched_priority priority);
->   bool drm_sched_entity_is_ready(struct drm_sched_entity *entity);
-> + int drm_sched_entity_error(struct drm_sched_entity *entity);
->  =20
->  -void drm_sched_fence_set_parent(struct drm_sched_fence *s_fence,
->  -				struct dma_fence *fence);
->   struct drm_sched_fence *drm_sched_fence_alloc(
->   	struct drm_sched_entity *s_entity, void *owner);
->   void drm_sched_fence_init(struct drm_sched_fence *fence,
->   			  struct drm_sched_entity *entity);
->   void drm_sched_fence_free(struct drm_sched_fence *fence);
->  =20
->  -void drm_sched_fence_scheduled(struct drm_sched_fence *fence);
->  +void drm_sched_fence_scheduled(struct drm_sched_fence *fence,
->  +			       struct dma_fence *parent);
-> - void drm_sched_fence_finished(struct drm_sched_fence *fence);
-> + void drm_sched_fence_finished(struct drm_sched_fence *fence, int result=
-);
->  =20
->   unsigned long drm_sched_suspend_timeout(struct drm_gpu_scheduler *sched=
-);
->   void drm_sched_resume_timeout(struct drm_gpu_scheduler *sched,
+Thanks.
 
-This is now a conflict between the drm-misc-fixes tree and Linus' tree.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/tT8FL3fDMyck2qEDkk/.e/a
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSsrZMACgkQAVBC80lX
-0GxRkQf/UPcZ8xn0EtVhBVzVXfoMc/wQYaQHwDbf3VARrURbheu3OSQ9kIbgaqvV
-c717MNShUqkfN/44Ctqrhd37h1nNQguNz6R+fcuhVBbCdAnlgKqNo1p6QkrC1W3n
-gGMlFohwDBvRnBw+yqqdXuhQP6HiBTShoRgHFH2G2xBFkbKhLjYxUB+eOJyocBSJ
-xwkuy/tf620xa8Wv9FXrcYHx9mpOjjrl1Gcjx0mF/KRQL+6NP7o8unYsXJ24lA4o
-nhldhr6wk37VowB9VBgROkGRlvh5//ptJ7cEHNLDUU58mK5H+R/DNqmv2zvmYo0c
-rr+FkKgNH1lQUPcufbdCstcEjkqITw==
-=MRSk
------END PGP SIGNATURE-----
-
---Sig_/tT8FL3fDMyck2qEDkk/.e/a--
+-- 
+tejun

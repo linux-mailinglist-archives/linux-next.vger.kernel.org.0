@@ -2,53 +2,50 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C54474E2D6
-	for <lists+linux-next@lfdr.de>; Tue, 11 Jul 2023 02:55:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F15174E2E8
+	for <lists+linux-next@lfdr.de>; Tue, 11 Jul 2023 03:01:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229668AbjGKAzw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 10 Jul 2023 20:55:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46390 "EHLO
+        id S230257AbjGKBBL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 10 Jul 2023 21:01:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230063AbjGKAzv (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 10 Jul 2023 20:55:51 -0400
+        with ESMTP id S229655AbjGKBBK (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 10 Jul 2023 21:01:10 -0400
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AEB9A0;
-        Mon, 10 Jul 2023 17:55:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96E53CE;
+        Mon, 10 Jul 2023 18:01:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1689036943;
-        bh=H2odAZEC3iFOjj/wHrtG44sMYC7pyrZZzT+lRFSPmvI=;
+        s=201702; t=1689037267;
+        bh=B4DwB8zOKuSyVO8uxq9Dy+tWno5pkUGZDOX2npkrOD0=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=UAC9KLdbqMsjVhik77jNP5q+dyfue9EdJJS7U/mdqUtCI8xPFK6YR8MuhtP+k0zEV
-         xIiT+to2xYFDfMdZiBtBGd4UZ66IYpm6q0mQtwEOW5wfg+UyCPm+oNIWH4G5dgwII6
-         2+RQcPvOy7qDaFg6n6PF2ajCnYmLNZqtYEs62l8IXQkOIz6UCCoX4ENiiglPRhpHYI
-         HKjyflBLP5IW/Kd8QpkZORNzNZPflx0CWlkIA+utfWFN0OougwPlxGKmQxu0573tDp
-         umY9cGg/TCcZ7Rjl1Y7lQJPUwE59bJEIrpgp163lU4d4NsioY9Kk+jYeA5OU7EmAW6
-         PlLOfURL+EnEw==
+        b=FqgRuQwsI8m5TJWRKxGQU19rmC2knnq0gj7qmZEsQwbK+Fje37fEzCqEcAyjKJDji
+         rKninmF78dATO6nX5GwjJJI6iimcmp0EXe808LB/JOt3Krcle4+1MWAhxHVth0VDeW
+         BTPBecpJkPr5av6LNy8D32qp8NtDzjr0T9ojG6JaBXfvUWELqRyM8xBxBL2N812/YI
+         SNOZKn2SMKF+Xpa7iSXee9xKHt2QMOjRGMrKDM8iM+lc0UykkWst6RZdL9RDzUgZPC
+         dkBi501Qvi4pU4KW3b89L0oILpMbL6F/jTg22kpPIoMJJwM2EFuvPyqNcIQjQ8wQSR
+         h3AwpOEL5wm7g==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4R0Mqc6DVvz4wxN;
-        Tue, 11 Jul 2023 10:55:40 +1000 (AEST)
-Date:   Tue, 11 Jul 2023 10:55:38 +1000
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4R0Mxt43rfz4whq;
+        Tue, 11 Jul 2023 11:01:06 +1000 (AEST)
+Date:   Tue, 11 Jul 2023 11:01:05 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+To:     "Michael S. Tsirkin" <mst@redhat.com>,
+        David Miller <davem@davemloft.net>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        Networking <netdev@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Ryan Roberts <ryan.roberts@arm.com>
-Subject: Re: linux-next: manual merge of the tip tree with the mm-stable
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+Subject: Re: linux-next: manual merge of the vhost tree with the net-next
  tree
-Message-ID: <20230711105538.2e941593@canb.auug.org.au>
-In-Reply-To: <20230622131609.3fdf314d@canb.auug.org.au>
-References: <20230622131609.3fdf314d@canb.auug.org.au>
+Message-ID: <20230711110105.467f896d@canb.auug.org.au>
+In-Reply-To: <20230623130443.6c9a481e@canb.auug.org.au>
+References: <20230623130443.6c9a481e@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/bBa/Hh7hroM.Z8bJmHCgiEF";
+Content-Type: multipart/signed; boundary="Sig_/vYM/I6ZyNfC9j0yYpl4QqtM";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
@@ -60,28 +57,33 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/bBa/Hh7hroM.Z8bJmHCgiEF
+--Sig_/vYM/I6ZyNfC9j0yYpl4QqtM
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Thu, 22 Jun 2023 13:16:09 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+On Fri, 23 Jun 2023 13:04:43 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
 wrote:
 >
-> Today's linux-next merge of the tip tree got a conflict in:
+> Today's linux-next merge of the vhost tree got a conflict in:
 >=20
->   mm/migrate.c
+>   drivers/net/virtio_net.c
 >=20
 > between commit:
 >=20
->   c33c794828f2 ("mm: ptep_get() conversion")
+>   80f50f918c6e ("virtio_net: separate the logic of freeing the rest merge=
+able buf")
 >=20
-> from the mm-stable tree and commit:
+> from the net-next tree and commit:
 >=20
->   23a219c1860b ("mm: Make pte_mkwrite() take a VMA")
->=20
-> from the tip tree.
+>   21081476b808 ("virtio_net: support dma premapped")
+
+This is now commit
+
+  c8dc5b9adff9 ("virtio_net: support dma premapped")
+
+> from the vhost tree.
 >=20
 > I fixed it up (see below) and can carry the fix as necessary. This
 > is now fixed as far as linux-next is concerned, but any non trivial
@@ -90,42 +92,61 @@ wrote:
 > with the maintainer of the conflicting tree to minimise any particularly
 > complex conflicts.
 >=20
-> diff --cc mm/migrate.c
-> index 6f4066425d47,8b46b722f1a4..000000000000
-> --- a/mm/migrate.c
-> +++ b/mm/migrate.c
-> @@@ -220,8 -219,8 +220,8 @@@ static bool remove_migration_pte(struc
->   		if (folio_test_dirty(folio) && is_migration_entry_dirty(entry))
->   			pte =3D pte_mkdirty(pte);
->   		if (is_writable_migration_entry(entry))
-> - 			pte =3D pte_mkwrite(pte);
-> + 			pte =3D pte_mkwrite(pte, vma);
->  -		else if (pte_swp_uffd_wp(*pvmw.pte))
->  +		else if (pte_swp_uffd_wp(old_pte))
->   			pte =3D pte_mkuffd_wp(pte);
+> diff --cc drivers/net/virtio_net.c
+> index 0db14f6b87d3,d67b36fdba0d..000000000000
+> --- a/drivers/net/virtio_net.c
+> +++ b/drivers/net/virtio_net.c
+> @@@ -1128,28 -1136,6 +1233,28 @@@ err
+>   	return NULL;
+>   }
 >  =20
->   		if (folio_test_anon(folio) && !is_readable_migration_entry(entry))
+>  +static void mergeable_buf_free(struct receive_queue *rq, int num_buf,
+>  +			       struct net_device *dev,
+>  +			       struct virtnet_rq_stats *stats)
+>  +{
+>  +	struct page *page;
+>  +	void *buf;
+>  +	int len;
+>  +
+>  +	while (num_buf-- > 1) {
+> - 		buf =3D virtqueue_get_buf(rq->vq, &len);
+> ++		buf =3D virtnet_rq_get_buf(rq, &len, NULL);
+>  +		if (unlikely(!buf)) {
+>  +			pr_debug("%s: rx error: %d buffers missing\n",
+>  +				 dev->name, num_buf);
+>  +			dev->stats.rx_length_errors++;
+>  +			break;
+>  +		}
+>  +		stats->bytes +=3D len;
+>  +		page =3D virt_to_head_page(buf);
+>  +		put_page(page);
+>  +	}
+>  +}
+>  +
+>   /* Why not use xdp_build_skb_from_frame() ?
+>    * XDP core assumes that xdp frags are PAGE_SIZE in length, while in
+>    * virtio-net there are 2 points that do not match its requirements:
 
-This is now a conflict between the tip tree and Linus' tree.
+This is now a conflict between the vhost tree and Linus' tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/bBa/Hh7hroM.Z8bJmHCgiEF
+--Sig_/vYM/I6ZyNfC9j0yYpl4QqtM
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSsqIoACgkQAVBC80lX
-0GzPZgf8CUpuNV/f7OrZlANxJmbZARnQ0fyoVgNxVARKNEu6zH+huXt4fuhcZKft
-rsGI/wMExltAt/ldr++EDzVJ76H7FD0bjft2uFCJfVQRSpV2RD1lnaESpPjJrECh
-91UffgfQWbF4ZimHWGxqFCBwAggjLrb/720655G3JDsNDWPo0KQVrJDS5vyEBjnh
-uFlSXrFudSgkG9rG3qWw1+VIcXcEhthdM8ykb3PIkXE8Ck+kjfCyNj2hth3J9jOK
-EjLEp9eWhOkcfRWhUPm6DGdu2PPkD+lZH3GR9ZLGBibltijABdhZnFL8V4Z4cW7r
-OZj6b6SNcvRd7A9tSGQFmr6+om5Ckw==
-=ePuI
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSsqdEACgkQAVBC80lX
+0GyZPwf/cFvPmsfrNh9BzsRVjwY6977gPEoHeWXeTWzEamrXxH9+UOS3MTsf1NN5
+uBJb1Rm0aRlrsfShLxBK4T5R72fjuRIGlr1W5xesLn69O4uRnMcPpCB4FfZRFU8A
+5rywlnAQVJjt/AgQkjOKhaxzC52h9msxHAvNNwqtYRp6o3ysLumE2WcPoIX8AtCZ
+I50pnZ94DJIwS+APgaNL7q/yNZl7UezYcXbhmHQqg02Tgp4sYfoE0lkFo6jGXkjW
+u9whwIXx+uctvAUzQUFpxijZmUrD9U19X9h245jZJRu+T/oh7jJDDPEVyoZd8ihE
+R5SgjBc7rFEFuIJHnlLVcOkovYZFaA==
+=uY7L
 -----END PGP SIGNATURE-----
 
---Sig_/bBa/Hh7hroM.Z8bJmHCgiEF--
+--Sig_/vYM/I6ZyNfC9j0yYpl4QqtM--

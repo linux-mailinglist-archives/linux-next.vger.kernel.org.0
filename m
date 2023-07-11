@@ -2,68 +2,56 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45BF374E2B6
-	for <lists+linux-next@lfdr.de>; Tue, 11 Jul 2023 02:43:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C54474E2D6
+	for <lists+linux-next@lfdr.de>; Tue, 11 Jul 2023 02:55:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230187AbjGKAnk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 10 Jul 2023 20:43:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41184 "EHLO
+        id S229668AbjGKAzw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 10 Jul 2023 20:55:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229585AbjGKAnj (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 10 Jul 2023 20:43:39 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB1CFA0
-        for <linux-next@vger.kernel.org>; Mon, 10 Jul 2023 17:43:38 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id 41be03b00d2f7-55ba5fae2e6so3772055a12.0
-        for <linux-next@vger.kernel.org>; Mon, 10 Jul 2023 17:43:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1689036218; x=1691628218;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=q2VAu5GA/YY/umUNVqOBIKpbaCNgpXgN80bzLqIEsUk=;
-        b=Hyh8usO90XpJni/2k8CZjrzmbJL8swkOKvWvfHlT++SpA2nvi+trUb6iM0ywaKRyCk
-         zzl9BOqVuX7kJ0Q1WOG3IW+v3//Hee0NEme1ylxyPdWJJDaipbbXjVEUEFO0RvmTwv+A
-         El5QjPuLuMRk4HnsuA4Acv6f0BgDc8bBlWsoG1puueWqms82UQjaWY0AhSloDH9ZnMfP
-         kqUaXFTxJ3atFez9828L1OU2pEawWPXXUWEPXEXL5ZOemwgVrvfEfXo/79Y5q9ItY8AN
-         sYch1qqFRykYf7ORhzJOGEC06Xxv8MeNI/+sVdE4tUEjfxXpj+Jha3mf/uuw4UVvzyCC
-         PTHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689036218; x=1691628218;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=q2VAu5GA/YY/umUNVqOBIKpbaCNgpXgN80bzLqIEsUk=;
-        b=FsjyUcfl5Fyv13epnp0cgjUnJFMb7s+c+wkMfHQ7v7wlqWhlzM3LZOR3+QFEZbIMXZ
-         TistBnfSQdcQtn00HBrjWtGmw75j5XP3QSCPP0NEM1PS2PnMnxBDJCDhoYnQ3mJsToXP
-         td7GAk41XV1kN0SJR+z6AtbbbIVoiE8GPQYO1SIOhMXmHlITAYr9mhcyguR3Gyeo9QIB
-         oY0LFZi9DYzrDt0hnbBAAgLj8GJguv6zcTPmjElu3PQIz1VST0Exe6huokEjMLbBiPa3
-         sHkBpTzAFtVa4ExnLSdvbPxJDq4zV/I048XURdUfhkWAEZPdd8Z2mC2vb0ma+wVOhwO9
-         vDtA==
-X-Gm-Message-State: ABy/qLaYN/SWfbkbCo9tCbl5jO6ETTDk/z+pSypCNlubBg6JZHmmtv1O
-        57ecPXZc0bf1Yw8h/rKwvDcYZxKhTpocdJY0FFLBDg==
-X-Google-Smtp-Source: APBJJlGLSJ59tTABb7kbey8SdRrVqw1USrTuX9/+wvyn8wyWU83duOl9Qe0FAGNQwAEHbweOks8UFw==
-X-Received: by 2002:a05:6a20:a11a:b0:11f:c1a1:8c with SMTP id q26-20020a056a20a11a00b0011fc1a1008cmr18420734pzk.54.1689036217788;
-        Mon, 10 Jul 2023 17:43:37 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id p1-20020aa78601000000b00668652b020bsm373903pfn.105.2023.07.10.17.43.36
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jul 2023 17:43:37 -0700 (PDT)
-Message-ID: <64aca5b9.a70a0220.ac5e4.1917@mx.google.com>
-Date:   Mon, 10 Jul 2023 17:43:37 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S230063AbjGKAzv (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 10 Jul 2023 20:55:51 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AEB9A0;
+        Mon, 10 Jul 2023 17:55:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1689036943;
+        bh=H2odAZEC3iFOjj/wHrtG44sMYC7pyrZZzT+lRFSPmvI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=UAC9KLdbqMsjVhik77jNP5q+dyfue9EdJJS7U/mdqUtCI8xPFK6YR8MuhtP+k0zEV
+         xIiT+to2xYFDfMdZiBtBGd4UZ66IYpm6q0mQtwEOW5wfg+UyCPm+oNIWH4G5dgwII6
+         2+RQcPvOy7qDaFg6n6PF2ajCnYmLNZqtYEs62l8IXQkOIz6UCCoX4ENiiglPRhpHYI
+         HKjyflBLP5IW/Kd8QpkZORNzNZPflx0CWlkIA+utfWFN0OougwPlxGKmQxu0573tDp
+         umY9cGg/TCcZ7Rjl1Y7lQJPUwE59bJEIrpgp163lU4d4NsioY9Kk+jYeA5OU7EmAW6
+         PlLOfURL+EnEw==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4R0Mqc6DVvz4wxN;
+        Tue, 11 Jul 2023 10:55:40 +1000 (AEST)
+Date:   Tue, 11 Jul 2023 10:55:38 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Ryan Roberts <ryan.roberts@arm.com>
+Subject: Re: linux-next: manual merge of the tip tree with the mm-stable
+ tree
+Message-ID: <20230711105538.2e941593@canb.auug.org.au>
+In-Reply-To: <20230622131609.3fdf314d@canb.auug.org.au>
+References: <20230622131609.3fdf314d@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v6.5-rc1-172-g920076ec8e23
-X-Kernelci-Tree: next
-X-Kernelci-Report-Type: build
-X-Kernelci-Branch: pending-fixes
-Subject: next/pending-fixes build: 5 builds: 0 failed, 5 passed,
- 4 warnings (v6.5-rc1-172-g920076ec8e23)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,
+Content-Type: multipart/signed; boundary="Sig_/bBa/Hh7hroM.Z8bJmHCgiEF";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,79 +60,72 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes build: 5 builds: 0 failed, 5 passed, 4 warnings (v6.5-rc=
-1-172-g920076ec8e23)
+--Sig_/bBa/Hh7hroM.Z8bJmHCgiEF
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
-rnel/v6.5-rc1-172-g920076ec8e23/
+Hi all,
 
-Tree: next
-Branch: pending-fixes
-Git Describe: v6.5-rc1-172-g920076ec8e23
-Git Commit: 920076ec8e23cfc65583baab127a8cb151bb908e
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Built: 5 unique architectures
+On Thu, 22 Jun 2023 13:16:09 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> Today's linux-next merge of the tip tree got a conflict in:
+>=20
+>   mm/migrate.c
+>=20
+> between commit:
+>=20
+>   c33c794828f2 ("mm: ptep_get() conversion")
+>=20
+> from the mm-stable tree and commit:
+>=20
+>   23a219c1860b ("mm: Make pte_mkwrite() take a VMA")
+>=20
+> from the tip tree.
+>=20
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+>=20
+> diff --cc mm/migrate.c
+> index 6f4066425d47,8b46b722f1a4..000000000000
+> --- a/mm/migrate.c
+> +++ b/mm/migrate.c
+> @@@ -220,8 -219,8 +220,8 @@@ static bool remove_migration_pte(struc
+>   		if (folio_test_dirty(folio) && is_migration_entry_dirty(entry))
+>   			pte =3D pte_mkdirty(pte);
+>   		if (is_writable_migration_entry(entry))
+> - 			pte =3D pte_mkwrite(pte);
+> + 			pte =3D pte_mkwrite(pte, vma);
+>  -		else if (pte_swp_uffd_wp(*pvmw.pte))
+>  +		else if (pte_swp_uffd_wp(old_pte))
+>   			pte =3D pte_mkuffd_wp(pte);
+>  =20
+>   		if (folio_test_anon(folio) && !is_readable_migration_entry(entry))
 
-Warnings Detected:
+This is now a conflict between the tip tree and Linus' tree.
 
-arc:
+--=20
+Cheers,
+Stephen Rothwell
 
-i386:
+--Sig_/bBa/Hh7hroM.Z8bJmHCgiEF
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-mips:
+-----BEGIN PGP SIGNATURE-----
 
-riscv:
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSsqIoACgkQAVBC80lX
+0GzPZgf8CUpuNV/f7OrZlANxJmbZARnQ0fyoVgNxVARKNEu6zH+huXt4fuhcZKft
+rsGI/wMExltAt/ldr++EDzVJ76H7FD0bjft2uFCJfVQRSpV2RD1lnaESpPjJrECh
+91UffgfQWbF4ZimHWGxqFCBwAggjLrb/720655G3JDsNDWPo0KQVrJDS5vyEBjnh
+uFlSXrFudSgkG9rG3qWw1+VIcXcEhthdM8ykb3PIkXE8Ck+kjfCyNj2hth3J9jOK
+EjLEp9eWhOkcfRWhUPm6DGdu2PPkD+lZH3GR9ZLGBibltijABdhZnFL8V4Z4cW7r
+OZj6b6SNcvRd7A9tSGQFmr6+om5Ckw==
+=ePuI
+-----END PGP SIGNATURE-----
 
-sparc:
-    sparc64_defconfig (gcc-10): 4 warnings
-
-
-Warnings summary:
-
-    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
-tion failed, symbol will not be versioned.
-    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
--Wcpp]
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-
----
-For more info write to <info@kernelci.org>
+--Sig_/bBa/Hh7hroM.Z8bJmHCgiEF--

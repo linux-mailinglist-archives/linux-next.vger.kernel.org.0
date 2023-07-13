@@ -2,93 +2,97 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76504752A9D
-	for <lists+linux-next@lfdr.de>; Thu, 13 Jul 2023 20:58:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05E34752D17
+	for <lists+linux-next@lfdr.de>; Fri, 14 Jul 2023 00:38:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230456AbjGMS6P (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 13 Jul 2023 14:58:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51362 "EHLO
+        id S229953AbjGMWif (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 13 Jul 2023 18:38:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230328AbjGMS6O (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 13 Jul 2023 14:58:14 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6BC52710;
-        Thu, 13 Jul 2023 11:58:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=0z5EzOwGbQbebqElaiAJrpnzehONedhO55mzOn/vq8Q=; b=eNbc7UPXXi9ObuXrxVvC8/KD2d
-        EkMMFHewXrvVisiYvd5+H8YDdjl/x6rccLYO56fGCiYqQtD8oVy2IyOymS4RPL6TcXuuIOQiV+WZf
-        DSG+SoINJTYA10bE8hSoSAoWevm2rZ75zwi8p6Mz3d1dyvozUUtf/BcdMHqplKvHWOPTD3aPbrjTq
-        d+ZazugfoOqOXrSI/OZivJqWmioHvFmBrO50GzfavG0OW5I6DZRo9QM+XEvUMII9FVTPTjC616JEF
-        SUaeFCIGoIjYQjLv9lr4h9oJC02Q8BOOtBtVg9Hv+10gyJ1u53n6nSzM/O6QxxMJapes8jGTWcIUE
-        YPrE4qrQ==;
-Received: from [2601:1c2:980:9ec0::2764]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qK1Vy-004BmK-1g;
-        Thu, 13 Jul 2023 18:58:10 +0000
-Message-ID: <7622fbbf-1c2e-e137-38d3-aea66f3c88b2@infradead.org>
-Date:   Thu, 13 Jul 2023 11:58:09 -0700
+        with ESMTP id S229715AbjGMWie (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 13 Jul 2023 18:38:34 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74728193;
+        Thu, 13 Jul 2023 15:38:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1689287906;
+        bh=k4XnIjK6ebSg25IbLY00UEGSy0HK0hpFaLKBgGTASgM=;
+        h=Date:From:To:Cc:Subject:From;
+        b=ABg3rhbosuWojfqdeoJjZY8FGkzCcnexZK7Ba7ggPSUk36aDAT3UfAci8XmkAzf2S
+         8ntOaGaTNfw2Qlgtnj7Wy3pbkRrzEmNOt7ORAUTjMA5/9V9F7FeFuxrL/ofcM7Zx+3
+         lzJgwWywzICXhgL8QSzZebbDhScMM5A8/stacduYbZII68MqbDX7STunQf+RrhNzfF
+         sRzNS3xDJB+X3JYD4m4CJPeqmopbvJtHFImr9Jo9KXWgQEOpXQ24MKFM9ZJZ1gV9t/
+         /drk/xS2N8BGceW3TFpW+15BgRANdQ2y+/6+fvsvYr4DuH8SiDwYaq2D2OsVFtePg+
+         P5P2GGap635Dw==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4R28dt1Ddgz4wZw;
+        Fri, 14 Jul 2023 08:38:26 +1000 (AEST)
+Date:   Fri, 14 Jul 2023 08:38:25 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the v4l-dvb-fixes tree
+Message-ID: <20230714083645.4e587f71@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v1 1/1] Documentation: core-api: Drop :export: for
- int_log.h
-Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-References: <20230713165320.14199-1-andriy.shevchenko@linux.intel.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20230713165320.14199-1-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/fCKO2jLwqjLHmn.sDCkD3kx";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+--Sig_/fCKO2jLwqjLHmn.sDCkD3kx
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
 
-On 7/13/23 09:53, Andy Shevchenko wrote:
-> The :export: keyword makes sense only for C-files, where EXPORT_SYMBOL()
-> might appear. Otherwise kernel-doc may not produce anything out of this
-> file.
-> 
-> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> Fixes: f97fa3dcb2db ("lib/math: Move dvb_math.c into lib/math/int_log.c")
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+In commit
 
-Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
+  b0b43354c345 ("media: tc358746: Address compiler warnings")
 
-Thanks.
+Fixes tag
 
-> ---
->  Documentation/core-api/kernel-api.rst | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/Documentation/core-api/kernel-api.rst b/Documentation/core-api/kernel-api.rst
-> index a526fbe06f86..ae92a2571388 100644
-> --- a/Documentation/core-api/kernel-api.rst
-> +++ b/Documentation/core-api/kernel-api.rst
-> @@ -166,7 +166,6 @@ Integer log and power Functions
->  -------------------------------
->  
->  .. kernel-doc:: include/linux/int_log.h
-> -   :export:
->  
->  .. kernel-doc:: lib/math/int_pow.c
->     :export:
+  Fixes: 80a21da3605 ("media: tc358746: add Toshiba TC358746 Parallel to CS=
+I-2 bridge driver")
 
--- 
-~Randy
+has these problem(s):
+
+  - SHA1 should be at least 12 digits long
+    This can be fixed for the future by setting core.abbrev to 12 (or
+    more) or (for git v2.11 or later) just making sure it is not set
+    (or set to "auto").
+
+Also, please keep all the commit message tags together at the end of
+the commit message.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/fCKO2jLwqjLHmn.sDCkD3kx
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSwfOEACgkQAVBC80lX
+0GxZtgf/ZBmJAhX0ZcLFZUvcbnA+XtNE/kcMEAK5Ht31YZ1KlH963VWz4PNeBPIK
+sxWYSvxOJMP3EA9I88YEX1dITBT5VXeqOuLpK/BYYW26mvHln2/R4Hwtoej7UY4d
+V2pyh0vBQWXx75bED0C6R+G5nbytDJ5H904E7CFaKGX2cMUsbWVCLXbyRgZNBdqi
+1ocrbk4r0YyhU3ped1bWwxlTUtXjrwMkAEUHE0Wuqbkmx1jin+pmt0RDXmHhNPkH
+IgQYizWUtWjmgBrhw0Iv06Xyk2MLga0RHFdDYeV6Y6NrvVLAQFn1A7cRxA0w+0nV
+VGvF6T1qStwjL2W2GoleoMXSWMGqHg==
+=ZDdO
+-----END PGP SIGNATURE-----
+
+--Sig_/fCKO2jLwqjLHmn.sDCkD3kx--

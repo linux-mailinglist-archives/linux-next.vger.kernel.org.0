@@ -2,47 +2,47 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05E34752D17
-	for <lists+linux-next@lfdr.de>; Fri, 14 Jul 2023 00:38:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E0CB752D29
+	for <lists+linux-next@lfdr.de>; Fri, 14 Jul 2023 00:43:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229953AbjGMWif (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 13 Jul 2023 18:38:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36680 "EHLO
+        id S232847AbjGMWnm (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 13 Jul 2023 18:43:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229715AbjGMWie (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 13 Jul 2023 18:38:34 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74728193;
-        Thu, 13 Jul 2023 15:38:32 -0700 (PDT)
+        with ESMTP id S231465AbjGMWnl (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 13 Jul 2023 18:43:41 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D10A271C;
+        Thu, 13 Jul 2023 15:43:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1689287906;
-        bh=k4XnIjK6ebSg25IbLY00UEGSy0HK0hpFaLKBgGTASgM=;
+        s=201702; t=1689288216;
+        bh=YKPzlX2R8COAP5RMUzg5J3q6eRSaE2mc3OEvn7rvUCA=;
         h=Date:From:To:Cc:Subject:From;
-        b=ABg3rhbosuWojfqdeoJjZY8FGkzCcnexZK7Ba7ggPSUk36aDAT3UfAci8XmkAzf2S
-         8ntOaGaTNfw2Qlgtnj7Wy3pbkRrzEmNOt7ORAUTjMA5/9V9F7FeFuxrL/ofcM7Zx+3
-         lzJgwWywzICXhgL8QSzZebbDhScMM5A8/stacduYbZII68MqbDX7STunQf+RrhNzfF
-         sRzNS3xDJB+X3JYD4m4CJPeqmopbvJtHFImr9Jo9KXWgQEOpXQ24MKFM9ZJZ1gV9t/
-         /drk/xS2N8BGceW3TFpW+15BgRANdQ2y+/6+fvsvYr4DuH8SiDwYaq2D2OsVFtePg+
-         P5P2GGap635Dw==
+        b=PBJLRIkF14YM+I9b4OYBQEBlwG0+zKWhJRCJaJ5N7+CzXBSLRMsg5N2ulGTIwwpmc
+         fiAKw8s4PZY71hQ626fBBMmWAYiHK/09txc+QS0bZxbHycAOLvRlgaF8tnd8mQGknw
+         tR2weKXPgwGqakFGFveambM/LYQW1v2ts29vO677DkQsjQ8Huceqgji6+9bkkLBhuq
+         rtwukV89d1x9uZPMiOox5rLsyKnmc5uZzBcD2SO+nvIElGz/+JYXLIqOZXv6+cVZM1
+         NlZHCgSMAwSwaFLe8ibIpjxqOO0lYtnu6JgHIiSiyieIVChSfvia2wmu8K99PjTGsD
+         TG3aW2YiFQZEA==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4R28dt1Ddgz4wZw;
-        Fri, 14 Jul 2023 08:38:26 +1000 (AEST)
-Date:   Fri, 14 Jul 2023 08:38:25 +1000
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4R28lr3tCxz4wqX;
+        Fri, 14 Jul 2023 08:43:36 +1000 (AEST)
+Date:   Fri, 14 Jul 2023 08:43:34 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+To:     Theodore Ts'o <tytso@mit.edu>
+Cc:     Ojaswin Mujoo <ojaswin@linux.ibm.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the v4l-dvb-fixes tree
-Message-ID: <20230714083645.4e587f71@canb.auug.org.au>
+Subject: linux-next: Fixes tag needs some work in the ext4 tree
+Message-ID: <20230714084334.23413801@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/fCKO2jLwqjLHmn.sDCkD3kx";
+Content-Type: multipart/signed; boundary="Sig_/F=foJ6nyxGPbLcbBWhhZnQL";
  protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,7 +50,7 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/fCKO2jLwqjLHmn.sDCkD3kx
+--Sig_/F=foJ6nyxGPbLcbBWhhZnQL
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
@@ -58,12 +58,12 @@ Hi all,
 
 In commit
 
-  b0b43354c345 ("media: tc358746: Address compiler warnings")
+  7c79210b15ef ("ext4: fix off by one issue in ext4_mb_choose_next_group_be=
+st_avail()")
 
 Fixes tag
 
-  Fixes: 80a21da3605 ("media: tc358746: add Toshiba TC358746 Parallel to CS=
-I-2 bridge driver")
+  Fixes: 331122aa930 ("ext4: Add allocation criteria 1.5 (CR1_5)")
 
 has these problem(s):
 
@@ -72,27 +72,24 @@ has these problem(s):
     more) or (for git v2.11 or later) just making sure it is not set
     (or set to "auto").
 
-Also, please keep all the commit message tags together at the end of
-the commit message.
-
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/fCKO2jLwqjLHmn.sDCkD3kx
+--Sig_/F=foJ6nyxGPbLcbBWhhZnQL
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSwfOEACgkQAVBC80lX
-0GxZtgf/ZBmJAhX0ZcLFZUvcbnA+XtNE/kcMEAK5Ht31YZ1KlH963VWz4PNeBPIK
-sxWYSvxOJMP3EA9I88YEX1dITBT5VXeqOuLpK/BYYW26mvHln2/R4Hwtoej7UY4d
-V2pyh0vBQWXx75bED0C6R+G5nbytDJ5H904E7CFaKGX2cMUsbWVCLXbyRgZNBdqi
-1ocrbk4r0YyhU3ped1bWwxlTUtXjrwMkAEUHE0Wuqbkmx1jin+pmt0RDXmHhNPkH
-IgQYizWUtWjmgBrhw0Iv06Xyk2MLga0RHFdDYeV6Y6NrvVLAQFn1A7cRxA0w+0nV
-VGvF6T1qStwjL2W2GoleoMXSWMGqHg==
-=ZDdO
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSwfhYACgkQAVBC80lX
+0GyQhgf/QZ3DBK6l3cdQxuOt9Nvo7uPGC9G+eVAAj3BPsL6fEwPBAhDr4jH3hKjy
+V79jizut1rXENPI31PH85WKI5eGH0yTdf+XNJmsxUqOWeVsaMiSWqqfWR7BW5Q0Q
+7TiEx3numSLEq6rS5+FKo+sNgvHsj8LI8pIAOHZffGfr8Atl8uYRfIJwSbN/QyPV
+jOu6vsQM7F6Oe5lV/fWGJ+9E8bBg0O5iAKXiR3tD48PJtS4+YXOfTEl8c68/QFxK
+U1iuJJEiSLTaiDfYyFMOparDJjVWbCO7W94mHytPOJ0sgl8ReYSS/dlfKZeVmTuf
+SaIkULe0HUo/3Q71Ow8OTEujOjo0ww==
+=rs4/
 -----END PGP SIGNATURE-----
 
---Sig_/fCKO2jLwqjLHmn.sDCkD3kx--
+--Sig_/F=foJ6nyxGPbLcbBWhhZnQL--

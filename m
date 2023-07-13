@@ -2,95 +2,138 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 503607517CE
-	for <lists+linux-next@lfdr.de>; Thu, 13 Jul 2023 07:03:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAD247518A0
+	for <lists+linux-next@lfdr.de>; Thu, 13 Jul 2023 08:10:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233911AbjGMFDA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 13 Jul 2023 01:03:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48570 "EHLO
+        id S230463AbjGMGKs (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 13 Jul 2023 02:10:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233854AbjGMFC7 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 13 Jul 2023 01:02:59 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88DA6198A
-        for <linux-next@vger.kernel.org>; Wed, 12 Jul 2023 22:02:58 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-668709767b1so187409b3a.2
-        for <linux-next@vger.kernel.org>; Wed, 12 Jul 2023 22:02:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689224577; x=1691816577;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=zmNRJ1DhhnpsNLZvHCU4oBTJzYSiuqq67vhMQEJqAGk=;
-        b=FSat0dWd9nFI3BYX7PS5L4Ae6ndXJo5ilm08eo0j6QiVl6suiLWt9O2WpWJrmoUM+4
-         6+RhUp6KBx067jkhzLhojOcCzT3oXo7W4softROP7hjZmm5S5u72/LFxKqYMxSow8HLM
-         V4SJY4xf2bfEnVyKAWriEwvENDvWRNLYnWEnSG+7wziv1yy/E5PT8LUsS3fuR1kU6/gL
-         kxunvNEDEf1mZSLO4Fst/gX87/8hheD/xk9GCC7kF3qxTdiXooEEueK+t7Fa2tLbFjCJ
-         o2qSXJaAx48ZKbCv9cdA1Y3FKf9bnjTFxd1swjCjV9bUurGTW0o9WVdkzlEm85qFvWn2
-         sCVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689224578; x=1691816578;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zmNRJ1DhhnpsNLZvHCU4oBTJzYSiuqq67vhMQEJqAGk=;
-        b=TyHGdG5Hugh53XdFWDIk0ZdawSZK/W2S3qHkUjjMImkiDjMq9fIKv+cZvyqk8lk97X
-         Gsp/bwwjQHHl3nVKjPQBKVDpLw+WBM7DrZN/TbTGs8sAQv7pg9MlXMifpm1IJrSsa5up
-         OR9cgEDhvGlM8px+ra5mNwIr2Vp7A0jx8RxvHGmzz3LhZuZg7GpG0sk0shuHhmkZ2+7K
-         Z03V+5iErPjfPZykILtc/+lq303Bkb7ZOA0ni78YCyTTktxN3Nm2NV9pX76F9lbZxe45
-         sxQKF1dv5OjYGFDVDGZIUFgBEGpyC4i+Algr/X8SRBft8n+BqFGlxiURxgItIpZHuXoE
-         3Zdw==
-X-Gm-Message-State: ABy/qLZEJrf/NEb2yOvbbg/dEeMX7FZQF97D6l0qYnm+EjDCR1F5YglY
-        a2XWnbqZbDcDTbb6eWpD1uHpnk+LyDKCXdPOLw==
-X-Google-Smtp-Source: APBJJlE/YSQ1fGKxgw5Djc2nrADRvVNea6O9A00b/3toWdXISb2e7TQXf9rlBmJeV5tD7ldIg6d5nw==
-X-Received: by 2002:a05:6a20:394f:b0:12f:952:11ee with SMTP id r15-20020a056a20394f00b0012f095211eemr173448pzg.43.1689224577534;
-        Wed, 12 Jul 2023 22:02:57 -0700 (PDT)
-Received: from thinkpad ([117.207.27.112])
-        by smtp.gmail.com with ESMTPSA id c23-20020a170902cb1700b001b9bebbc621sm4847537ply.136.2023.07.12.22.02.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jul 2023 22:02:56 -0700 (PDT)
-Date:   Thu, 13 Jul 2023 10:32:48 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Signed-off-by missing for commit in the mhi tree
-Message-ID: <20230713050248.GA3047@thinkpad>
-References: <20230713081411.43792927@canb.auug.org.au>
+        with ESMTP id S230238AbjGMGKr (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 13 Jul 2023 02:10:47 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F04B1BC6;
+        Wed, 12 Jul 2023 23:10:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1689228641;
+        bh=nJFfRdlNtRWuw5Mn/XIpKrk8YzXtuTCuIDKzUFJVOI0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ES2gcs5ZOrz4O1PwvC8aJl3rMhJS58EBsNwluxcvXstSChwz6TMkVF/DyNjAadhIo
+         sX+nsD2p1cC42LNU7MWhjCYeW8kTMH1wgSRhgTpOmaz/amA+os8Q23eY/MUC9910mk
+         RdDwAIBS0DT1KeFOhTD0uvoJvHIDc5awmP6E5wT00wYLMUfrNIOSv5R0HZZVq8d9M+
+         JhEO+jOp52u01Q9g7EFBeDm0IGjQL/hxZcTX33E6Lza4r2l0TADP6ZvUBGnmdXEbNN
+         t4CMVVFhdNCyu1hO6dnhDoRAiUrV9RYVs9lJ5zwQfGYD2O5ghTh76VWoSfGaPqX2AI
+         rOs3cLn4nlt6Q==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4R1kk865zMz4wZw;
+        Thu, 13 Jul 2023 16:10:40 +1000 (AEST)
+Date:   Thu, 13 Jul 2023 16:10:38 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Rob Herring <robherring2@gmail.com>
+Cc:     Frank Rowand <frowand.list@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Randy Dunlap <rdunlap@infradead.org>
+Subject: Re: [PATCH] of: fix htmldocs build warnings
+Message-ID: <20230713161038.382b5e14@canb.auug.org.au>
+In-Reply-To: <20230322180032.1badd132@canb.auug.org.au>
+References: <20230220163638.04e9d0c4@canb.auug.org.au>
+        <20230310113258.463f836c@canb.auug.org.au>
+        <20230322180032.1badd132@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230713081411.43792927@canb.auug.org.au>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/nSp=zVsy1Oi_nsL+KUslpqT";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Jul 13, 2023 at 08:14:11AM +1000, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Commit
-> 
->   8623c0a70ef6 ("bus: mhi: host: use vmalloc_array and vcalloc")
-> 
-> is missing a Signed-off-by from its committer.
-> 
+--Sig_/nSp=zVsy1Oi_nsL+KUslpqT
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Doh! Fixed it now.
+Hi Rob,
 
-- Mani
+On Wed, 22 Mar 2023 18:00:32 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> Fix these htmldoc build warnings:
+>=20
+> include/linux/of.h:115: warning: cannot understand function prototype: 'c=
+onst struct kobj_type of_node_ktype; '
+> include/linux/of.h:118: warning: Excess function parameter 'phandle_name'=
+ description in 'of_node_init'
+>=20
+> Reported by: Stephen Rothwell <sfr@canb.auug.org.au>
+> Reported by: Randy Dunlap <rdunlap@infradead.org>
+> Fixes: 39459ce717b8 ("of: dynamic: add lifecycle docbook info to node cre=
+ation functions")
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> ---
+>  include/linux/of.h | 7 +++----
+>  1 file changed, 3 insertions(+), 4 deletions(-)
+>=20
+> Replaces "[PATCH] of: fix htmldocs build warning" and additionally
+> fixes the new warning about phandle that Randy reported.
+>=20
+> diff --git a/include/linux/of.h b/include/linux/of.h
+> index 9b7a99499ef3..d55dab9ad728 100644
+> --- a/include/linux/of.h
+> +++ b/include/linux/of.h
+> @@ -100,10 +100,12 @@ struct of_reconfig_data {
+>  	struct property		*old_prop;
+>  };
+> =20
+> +extern const struct kobj_type of_node_ktype;
+> +extern const struct fwnode_operations of_fwnode_ops;
+> +
+>  /**
+>   * of_node_init - initialize a devicetree node
+>   * @node: Pointer to device node that has been created by kzalloc()
+> - * @phandle_name: Name of property holding a phandle value
+>   *
+>   * On return the device_node refcount is set to one.  Use of_node_put()
+>   * on @node when done to free the memory allocated for it.  If the node
+> @@ -111,9 +113,6 @@ struct of_reconfig_data {
+>   * whether to free the memory will be done by node->release(), which is
+>   * of_node_release().
+>   */
+> -/* initialize a node */
+> -extern const struct kobj_type of_node_ktype;
+> -extern const struct fwnode_operations of_fwnode_ops;
+>  static inline void of_node_init(struct device_node *node)
+>  {
+>  #if defined(CONFIG_OF_KOBJ)
+> --=20
+> 2.39.2
 
-> -- 
-> Cheers,
-> Stephen Rothwell
+Any chance if this patch being applied?
 
+--=20
+Cheers,
+Stephen Rothwell
 
+--Sig_/nSp=zVsy1Oi_nsL+KUslpqT
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
--- 
-மணிவண்ணன் சதாசிவம்
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSvlV4ACgkQAVBC80lX
+0Gy4ZQf/c24EkHWBvudYW8Q2yM4QxG17J87Ui/lIDc86WEyfHr/LmvFyX8Ltba0r
+88HLIalV+X3VYpilSjy82V7YPxikZP8mFtQ3fgcy4HnIVkXFYzV4vCfYl8KwCSld
+WtoZvFkctYeceHEVl4TmDMGyKvmZqvQ6DYrIJt09L+RwIf53V/Sp0+lJvZH7thFi
+rFwNy9d4ypTjrRcEng0gQykE9/JxntbRABiGWTmNTn91MsZ6tu241SXPu20ewzIm
+yyivVdIpymp13Y091FWiwgunsKyTh95he3alzCuUp8PH/e38brSemwYDOqkW8t3e
+8Rs/1bZE9RLYigreKoLlJljo9w03CA==
+=WbOq
+-----END PGP SIGNATURE-----
+
+--Sig_/nSp=zVsy1Oi_nsL+KUslpqT--

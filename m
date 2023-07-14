@@ -2,79 +2,98 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4C5875320E
-	for <lists+linux-next@lfdr.de>; Fri, 14 Jul 2023 08:35:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B2A4753507
+	for <lists+linux-next@lfdr.de>; Fri, 14 Jul 2023 10:31:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235106AbjGNGfC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 14 Jul 2023 02:35:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56638 "EHLO
+        id S234967AbjGNIbe (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 14 Jul 2023 04:31:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234979AbjGNGen (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 14 Jul 2023 02:34:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 223A330CB;
-        Thu, 13 Jul 2023 23:34:29 -0700 (PDT)
+        with ESMTP id S229492AbjGNIbc (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 14 Jul 2023 04:31:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BD8B1BF9;
+        Fri, 14 Jul 2023 01:31:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AFBEC61BCB;
-        Fri, 14 Jul 2023 06:34:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 850B7C433C7;
-        Fri, 14 Jul 2023 06:34:27 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 31C4961BCB;
+        Fri, 14 Jul 2023 08:31:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4534DC433C7;
+        Fri, 14 Jul 2023 08:31:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689316468;
-        bh=HNJGtyERKCH6z390Vn8aBkVMvYPcPPbKhPvGu9bfFK8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JCvAFtfwpLhQTo/ArRDGEGIczn6mJb7aZ0BAEROVm7uShe5izEUnkJTZ7VGcuZn3V
-         JfbbZVBqRioE2UHapJceIc4oyzBEK2Rp6bLtuhD/4+MW7JmyenqnFElKBqnzHG6nW2
-         pxGdKYd+vr6xARpd2tUE3iUvW66fP6tJpSwnxtwM8apzBlD8GZqXEqLrB9sSKwTUxw
-         Vie0cy0omyRhu+N5lJzz22+nPKQLe/e/o7nkf3GTGPYnavpWdIBDN8hS4cJTzsVf0O
-         0t4hjr3c1cRKQXU2jdpMA7mF1oxkpPFOm4DW15Av2FNSQujmv/ymXVkOZmicAToiLk
-         Rh1Br/SKFWjpA==
-Date:   Fri, 14 Jul 2023 12:04:23 +0530
-From:   Vinod Koul <vkoul@kernel.org>
+        s=k20201202; t=1689323489;
+        bh=mOp/R3MA1WgB2aSIsMXA6AzT7d3U2Y9fSh5X+yprt9k=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=OPrbxERWT526fi8A956vfRZeMSg4HyOJB8lpCxd/1njffucGHJ20Z8afB77WMuuyQ
+         16I8HYyZtW8WC7xXceKt00QYOgOqbYWngfeYnxFrRkMAYgoGr1vdZH1d6ps790E9SS
+         c7dmelsU0nkoYiQvsHSlvFEGqsY4j0152aMmx+uvf+wVpvOwxe4Lo+Mstqm1jGMUJ0
+         KQPpCdduzvYLtnLvCII8CWL2azGXmc/2C8Lz/mQHF4FMM494YKqi2ioULdQS4gqjqB
+         LzEaGMiQdNC8XXruKwksfJ7SwCgA3HOOhXEWWKep6Ugx/0h6N1W6uBOQotGNLbRSY5
+         WYPY67pXmuGqQ==
+Date:   Fri, 14 Jul 2023 17:31:26 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Dan Carpenter <dan.carpenter@linaro.org>,
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Akanksha J N <akanksha@linux.ibm.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Fixes tag needs some work in the soundwire-fixes tree
-Message-ID: <ZLDsb6VK7q6VkuHn@matsya>
-References: <20230713075901.758e1b65@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230713075901.758e1b65@canb.auug.org.au>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Shuah Khan <shuah@kernel.org>
+Subject: Re: linux-next: duplicate patches in the ftrace tree
+Message-Id: <20230714173126.37313c540cc998f5653a6848@kernel.org>
+In-Reply-To: <20230714145404.115c7be1@canb.auug.org.au>
+References: <20230714145404.115c7be1@canb.auug.org.au>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 13-07-23, 07:59, Stephen Rothwell wrote:
+Thanks for the caution!
+
+On Fri, 14 Jul 2023 14:54:04 +1000
+Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+
 > Hi all,
 > 
-> In commit
+> The following commits are also in Linus Torvalds' tree as different
+> commits (but the same patches):
 > 
->   bfb4da9c536e ("soundwire: amd: Fix a check for errors in probe()")
-> 
-> Fixes tag
-> 
->   Fixes: a673a8dfc214 ("soundwire: amd: Add support for AMD Manager driver")
-> 
-> has these problem(s):
-> 
->   - Target SHA1 does not exist
-> 
-> Maybe you meant
-> 
-> Fixes: d8f48fbdfd9a ("soundwire: amd: Add support for AMD Manager driver")
+>   e46ad59233cf ("selftests/ftrace: Add new test case which checks for optimized probes")
+>   bd2cdc432190 ("selftests/ftrace: Add new test case which adds multiple consecutive probes in a function")
 
-I have fixed it up, thanks for the report
+These are only in next-20230714.
+
+> 
+> These are commits
+> 
+>   5985329c7073 ("selftests/ftrace: Add new test case which checks for optimized probes")
+>   cf9071dd46e7 ("selftests/ftrace: Add new test case which adds multiple consecutive probes in a function")
+
+I confirmed the latter pair was pushed by my probes-v6.5.
+So the latter one should be kept.
+
+Ah, sorry, I missed to update probes/for-next. That caused this issue.
+Let me update the probes/for-next branch.
+
+Thank you,
+
+> 
+> in Linus' tree.
+> 
+> -- 
+> Cheers,
+> Stephen Rothwell
+
 
 -- 
-~Vinod
+Masami Hiramatsu (Google) <mhiramat@kernel.org>

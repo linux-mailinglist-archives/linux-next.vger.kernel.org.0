@@ -2,88 +2,109 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECE757542D1
-	for <lists+linux-next@lfdr.de>; Fri, 14 Jul 2023 20:50:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43FFF7543EC
+	for <lists+linux-next@lfdr.de>; Fri, 14 Jul 2023 22:46:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236388AbjGNSua convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-next@lfdr.de>); Fri, 14 Jul 2023 14:50:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54312 "EHLO
+        id S235901AbjGNUqM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 14 Jul 2023 16:46:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236091AbjGNSu3 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 14 Jul 2023 14:50:29 -0400
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 865F22D6B;
-        Fri, 14 Jul 2023 11:50:28 -0700 (PDT)
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-98273ae42d0so66269466b.0;
-        Fri, 14 Jul 2023 11:50:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689360627; x=1691952627;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=adQmepUMEILo4i9YF6QGGhgy8BgLhz/J2d2M4gDP5H0=;
-        b=Wa2KNQWkzjGRfhd+bH171bIF5pH4w/k+zzwqqSLZQ0dYv5Ktb8iIFtiBBTLNZSkoRc
-         DNZKnzlladKQQwjjcS/7tnle1GDejlqCWmo/x8zr6GEwwn161KNtou5K+GWxP6kKBjbf
-         MAW835FrbUhlqmhOgiuNTs6MUZkeudMZveDisG/NLutriOmuUJYy4qB654mAg5l05KwE
-         HZu+jbk6LU/vTigPIwWhdk0V/FIbjRQ3gyItU7HZmXfmqIjAEfDmMDNEpES3B1hON8Ic
-         2ml+TKtUyITiBe4PgHZOSA509hgcvuEKmRWbkSUsfR6Q0sQCgBV0Qxu1uTql+bUitPOw
-         oALw==
-X-Gm-Message-State: ABy/qLZNuleYq67THuHJCeaPlapNRC1zoqV/kTlPely1SP69mp1FjkXy
-        qvzLf/2B4IQbfApCgqw/0Bvh0qS4PSEWtZ3eoNOAD0pY
-X-Google-Smtp-Source: APBJJlG+fOXTah1oUMq+Er4XcRfzAi8ABmvH8xenkIVLFs3e2oUYV7T4xQkMcf8QXZqk9t9h6g2wv0AitEG8JwET4PM=
-X-Received: by 2002:a17:906:778e:b0:988:3171:df06 with SMTP id
- s14-20020a170906778e00b009883171df06mr62199ejm.2.1689360626755; Fri, 14 Jul
- 2023 11:50:26 -0700 (PDT)
+        with ESMTP id S229915AbjGNUqL (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 14 Jul 2023 16:46:11 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87794E74;
+        Fri, 14 Jul 2023 13:46:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:References:Cc:To:From:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=le4ybvADpoYVkHD+wIYkLE44RuLGjbiyDDb/dPUwbJ8=; b=IeSTTdmTC0OYlvGidk/UM7TNvs
+        g/ksr0YT5pvH452fhQsbd4LNcth/0gyQ4q2L3ZOd/+O1udHExOkymIG0IlCv5a1Amp0T6opzoRZo2
+        y2yDDoVdYxrd0LPEIRc2MmTFf7wKtwdn6LVtWWNn1VRgodu/IYWKZZQDzqa3F1+yaKhlMi/t/c6xZ
+        qa1SkD2pQxszgtX2hyX1oreUOyYAAn85eczfppFx72acjt+3DZKZc3EtV0Vaxa0zitS/Di5xt1Xw0
+        kUB1X9ap4dAcRx6qdOyFsrYdIwngMLAnKQt6gpsOcIxBLqjIqkuAcHyo33h6BXPBG3yBEhC0eMcjr
+        e+hkVbYg==;
+Received: from [2601:1c2:980:9ec0::2764]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qKPfz-007DXO-2O;
+        Fri, 14 Jul 2023 20:46:07 +0000
+Message-ID: <72cdbfa2-28f0-19e9-8601-d9611da9410e@infradead.org>
+Date:   Fri, 14 Jul 2023 13:46:06 -0700
 MIME-Version: 1.0
-References: <20230714110051.4575ffbe@canb.auug.org.au> <71f62e49-3f2f-a8bf-2347-061902d39f7e@intel.com>
-In-Reply-To: <71f62e49-3f2f-a8bf-2347-061902d39f7e@intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 14 Jul 2023 20:50:15 +0200
-Message-ID: <CAJZ5v0iLuGSHkJjhhtxveD-0N0rp+vOg=Qwz5DvdqhXHghetJw@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the pm tree
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: linux-next: Tree for Jul 13 (drivers/video/fbdev/ps3fb.c)
+Content-Language: en-US
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Helge Deller <deller@gmx.de>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        linux-fbdev@vger.kernel.org,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
+References: <20230713123710.5d7d81e4@canb.auug.org.au>
+ <ccc63065-2976-88ef-1211-731330bf2866@infradead.org>
+In-Reply-To: <ccc63065-2976-88ef-1211-731330bf2866@infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Jul 14, 2023 at 8:20 PM Wysocki, Rafael J
-<rafael.j.wysocki@intel.com> wrote:
->
-> Daniel,
->
-> On 7/14/2023 3:00 AM, Stephen Rothwell wrote:
-> > Hi all,
-> >
-> > After merging the pm tree, today's linux-next build (x86_64
-> > allmodconfig) failed like this:
-> >
-> > In file included from drivers/thermal/tegra/soctherm.c:36:
-> > drivers/thermal/tegra/../thermal_core.h:18:2: error: #warning This header can only be included by the thermal core code [-Werror-cpp]
-> >     18 | #warning This header can only be included by the thermal core code
-> >        |  ^~~~~~~
-> >
-> > Introduced by commit
-> >
-> >    bc1bb350b534 ("thermal/core: Hardening the self-encapsulation")
->
-> I'll drop this patch.  I think that the rest of the series doesn't
-> really depend on it.
+Thomas,
 
-The second patch in the series does depend on it, so I had to drop
-them both.  Please fix and resend.
+On 7/13/23 09:11, Randy Dunlap wrote:
+> 
+> 
+> On 7/12/23 19:37, Stephen Rothwell wrote:
+>> Hi all,
+>>
 
-Thanks!
+I still see this build error on linux-next  20230714.
+
+>> Changes since 20230712:
+>>
+> 
+> on ppc64:
+> 
+> In file included from ../include/linux/device.h:15,
+>                  from ../arch/powerpc/include/asm/io.h:22,
+>                  from ../include/linux/io.h:13,
+>                  from ../include/linux/irq.h:20,
+>                  from ../arch/powerpc/include/asm/hardirq.h:6,
+>                  from ../include/linux/hardirq.h:11,
+>                  from ../include/linux/interrupt.h:11,
+>                  from ../drivers/video/fbdev/ps3fb.c:25:
+> ../drivers/video/fbdev/ps3fb.c: In function 'ps3fb_probe':
+> ../drivers/video/fbdev/ps3fb.c:1172:40: error: 'struct fb_info' has no member named 'dev'
+>  1172 |                  dev_driver_string(info->dev), dev_name(info->dev),
+>       |                                        ^~
+> ../include/linux/dev_printk.h:110:37: note: in definition of macro 'dev_printk_index_wrap'
+>   110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+>       |                                     ^~~~~~~~~~~
+> ../drivers/video/fbdev/ps3fb.c:1171:9: note: in expansion of macro 'dev_info'
+>  1171 |         dev_info(info->device, "%s %s, using %u KiB of video memory\n",
+>       |         ^~~~~~~~
+> ../drivers/video/fbdev/ps3fb.c:1172:61: error: 'struct fb_info' has no member named 'dev'
+>  1172 |                  dev_driver_string(info->dev), dev_name(info->dev),
+>       |                                                             ^~
+> ../include/linux/dev_printk.h:110:37: note: in definition of macro 'dev_printk_index_wrap'
+>   110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+>       |                                     ^~~~~~~~~~~
+> ../drivers/video/fbdev/ps3fb.c:1171:9: note: in expansion of macro 'dev_info'
+>  1171 |         dev_info(info->device, "%s %s, using %u KiB of video memory\n",
+>       |         ^~~~~~~~
+> 
+> 
+> Full randconfig file is attached.
+
+-- 
+~Randy

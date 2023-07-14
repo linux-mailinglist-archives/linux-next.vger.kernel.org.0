@@ -2,44 +2,48 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E0CB752D29
-	for <lists+linux-next@lfdr.de>; Fri, 14 Jul 2023 00:43:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EC9E752E1B
+	for <lists+linux-next@lfdr.de>; Fri, 14 Jul 2023 02:02:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232847AbjGMWnm (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 13 Jul 2023 18:43:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38284 "EHLO
+        id S231254AbjGNACP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 13 Jul 2023 20:02:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231465AbjGMWnl (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 13 Jul 2023 18:43:41 -0400
+        with ESMTP id S229976AbjGNACO (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 13 Jul 2023 20:02:14 -0400
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D10A271C;
-        Thu, 13 Jul 2023 15:43:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 530D526B5;
+        Thu, 13 Jul 2023 17:02:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1689288216;
-        bh=YKPzlX2R8COAP5RMUzg5J3q6eRSaE2mc3OEvn7rvUCA=;
+        s=201702; t=1689292927;
+        bh=URHyxa1dMA7/Qw7JnFbPE53OJDOdmKw1KXbuFMFCY9g=;
         h=Date:From:To:Cc:Subject:From;
-        b=PBJLRIkF14YM+I9b4OYBQEBlwG0+zKWhJRCJaJ5N7+CzXBSLRMsg5N2ulGTIwwpmc
-         fiAKw8s4PZY71hQ626fBBMmWAYiHK/09txc+QS0bZxbHycAOLvRlgaF8tnd8mQGknw
-         tR2weKXPgwGqakFGFveambM/LYQW1v2ts29vO677DkQsjQ8Huceqgji6+9bkkLBhuq
-         rtwukV89d1x9uZPMiOox5rLsyKnmc5uZzBcD2SO+nvIElGz/+JYXLIqOZXv6+cVZM1
-         NlZHCgSMAwSwaFLe8ibIpjxqOO0lYtnu6JgHIiSiyieIVChSfvia2wmu8K99PjTGsD
-         TG3aW2YiFQZEA==
+        b=Q8e19YGXirL8mmrQkucNwKDswj+9I4hbnZdTGOkyz0zdV3bfUPbLh6ERXpVVvEglw
+         qMlaLFLxhFQM3ZZnj5UBnRX04irNfcZ3rorZShYWAxpXrR3eT4qZ9xM/aT63kRMsfF
+         VwjbJbedvbDKGmw0cISq9BtqXpipMRYpR20OK3OhbxyHIpHMev6ZgypS4GlozQNHmW
+         Zsjj4OxWJj31urjE+ul75YQ2VsihjeE7khLs7QaMjH16Xr6TRdaCPda76dGjBhP73O
+         ssTvLqD9HuBwqcidXoZdNar7DCOh446WOpUBjhQKx/Bi3MzxkUS7jYMDzPMSdIB/GZ
+         dZn5P8mO3G6HA==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4R28lr3tCxz4wqX;
-        Fri, 14 Jul 2023 08:43:36 +1000 (AEST)
-Date:   Fri, 14 Jul 2023 08:43:34 +1000
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4R2BVR1dm1z4wqZ;
+        Fri, 14 Jul 2023 10:02:07 +1000 (AEST)
+Date:   Fri, 14 Jul 2023 10:02:05 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Theodore Ts'o <tytso@mit.edu>
-Cc:     Ojaswin Mujoo <ojaswin@linux.ibm.com>,
+To:     Christian Brauner <brauner@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Carlos Maiolino <cem@kernel.org>,
+        Carlos Maiolino <cmaiolino@redhat.com>,
+        Chuck Lever <chuck.lever@oracle.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the ext4 tree
-Message-ID: <20230714084334.23413801@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Lukas Czerner <lczerner@redhat.com>
+Subject: linux-next: manual merge of the vfs-brauner tree with the mm tree
+Message-ID: <20230714100205.35b99670@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/F=foJ6nyxGPbLcbBWhhZnQL";
+Content-Type: multipart/signed; boundary="Sig_/s3va2hQ=MJzQAXQ6E2ARP=t";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
@@ -50,46 +54,67 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/F=foJ6nyxGPbLcbBWhhZnQL
+--Sig_/s3va2hQ=MJzQAXQ6E2ARP=t
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-In commit
+Today's linux-next merge of the vfs-brauner tree got a conflict in:
 
-  7c79210b15ef ("ext4: fix off by one issue in ext4_mb_choose_next_group_be=
-st_avail()")
+  include/linux/shmem_fs.h
 
-Fixes tag
+between commit:
 
-  Fixes: 331122aa930 ("ext4: Add allocation criteria 1.5 (CR1_5)")
+  1a93dd24f1be ("shmem: quota support")
 
-has these problem(s):
+from the mm tree and commit:
 
-  - SHA1 should be at least 12 digits long
-    This can be fixed for the future by setting core.abbrev to 12 (or
-    more) or (for git v2.11 or later) just making sure it is not set
-    (or set to "auto").
+  ad9717ca487a ("shmem: stable directory offsets")
+
+from the vfs-brauner tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/F=foJ6nyxGPbLcbBWhhZnQL
+diff --cc include/linux/shmem_fs.h
+index c0058f3bba70,a5454a80ab30..000000000000
+--- a/include/linux/shmem_fs.h
++++ b/include/linux/shmem_fs.h
+@@@ -31,9 -27,7 +31,10 @@@ struct shmem_inode_info=20
+  	atomic_t		stop_eviction;	/* hold when working on inode */
+  	struct timespec64	i_crtime;	/* file creation time */
+  	unsigned int		fsflags;	/* flags for FS_IOC_[SG]ETFLAGS */
+ +#ifdef CONFIG_TMPFS_QUOTA
+ +	struct dquot		*i_dquot[MAXQUOTAS];
+ +#endif
++ 	struct offset_ctx	dir_offsets;	/* stable entry offsets */
+  	struct inode		vfs_inode;
+  };
+ =20
+
+--Sig_/s3va2hQ=MJzQAXQ6E2ARP=t
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSwfhYACgkQAVBC80lX
-0GyQhgf/QZ3DBK6l3cdQxuOt9Nvo7uPGC9G+eVAAj3BPsL6fEwPBAhDr4jH3hKjy
-V79jizut1rXENPI31PH85WKI5eGH0yTdf+XNJmsxUqOWeVsaMiSWqqfWR7BW5Q0Q
-7TiEx3numSLEq6rS5+FKo+sNgvHsj8LI8pIAOHZffGfr8Atl8uYRfIJwSbN/QyPV
-jOu6vsQM7F6Oe5lV/fWGJ+9E8bBg0O5iAKXiR3tD48PJtS4+YXOfTEl8c68/QFxK
-U1iuJJEiSLTaiDfYyFMOparDJjVWbCO7W94mHytPOJ0sgl8ReYSS/dlfKZeVmTuf
-SaIkULe0HUo/3Q71Ow8OTEujOjo0ww==
-=rs4/
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSwkH0ACgkQAVBC80lX
+0GzDmAgAmEKcMLkzmU2Njc1u6mqPQ16MG6xBQb+F2F/x73dbrIsn5Ys7DAEJj0hH
+OeEX3P7SUvmsKq20c/KAYc4+FTSOQmy4S70Ycb9H3EC7mjyjaw9qjFGY5UTzFE1A
+fU0ktHKwBYr22xeFL/lueuNDz0P6q4Og3GzbXv+klgX4tdC3cNm154ZAh37iRVxk
+uqazOFk2Q2gxJNPnRZBswrh1AqgSbpA4vN9n6S3TtwuSvq+FQMsmaDAll1VHddzJ
+XhChSFZdzH3Z9fIVjNF2FssEFuNxQ/mEGvRdu05157DQnvHp5WVdM69CjMCLz6vV
+/0wq+FiNLj6lbTL8UC7awVnE83Sljw==
+=XDiy
 -----END PGP SIGNATURE-----
 
---Sig_/F=foJ6nyxGPbLcbBWhhZnQL--
+--Sig_/s3va2hQ=MJzQAXQ6E2ARP=t--

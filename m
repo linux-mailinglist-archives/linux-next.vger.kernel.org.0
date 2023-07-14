@@ -2,101 +2,79 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43AE47531B6
-	for <lists+linux-next@lfdr.de>; Fri, 14 Jul 2023 08:04:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4C5875320E
+	for <lists+linux-next@lfdr.de>; Fri, 14 Jul 2023 08:35:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235046AbjGNGE3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 14 Jul 2023 02:04:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46252 "EHLO
+        id S235106AbjGNGfC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 14 Jul 2023 02:35:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234851AbjGNGE0 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 14 Jul 2023 02:04:26 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43EE9271F;
-        Thu, 13 Jul 2023 23:04:25 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id 38308e7fff4ca-2b8392076c9so9956771fa.1;
-        Thu, 13 Jul 2023 23:04:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689314663; x=1691906663;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gjmA4vOTkGwFP6byVeuNX5GJuZ4Uxjvbd1dybkUi9gI=;
-        b=gPhvisrPuH0rQjgD5Hi9MFnrsv910eO34eUc1RGHcccB844nvWd9hml7pRuR4djqUU
-         cG8EI/0uXHzF7oSZ3I0YZ9PNlXVXi9kTLPaSVVr4cqC6EpouWqnYfMLMKdTPiMrbhpws
-         zm8W9vljDAm+eVQF41e+vjsPJb8p2YBW9Vy8kM7V0ISRzb4imcwL/S+VTSk8LwTa/105
-         SGaCs4aHpTIXbgw00XXKhhdzSVEhfTrY+LAetqiCDF8LhZNnHmIMq9xDcca7fEejLE+g
-         M0Hwx+8zPik68+9+YPJMQk3O1ZDOEV+FJ9glwThDS+6IEwiBx048z2+bYRbF7cp74ZNX
-         9GTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689314663; x=1691906663;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gjmA4vOTkGwFP6byVeuNX5GJuZ4Uxjvbd1dybkUi9gI=;
-        b=OzUiesCbLh0aNbMa2S578LzP2NB0IOTQKYbmDYoDYYAij/kCpBpBHKNyUaVhvirSY7
-         wuj8Z7DiAyWn/E0EaJf3+qTT7yTOy8HG7ZOElNBpYS3q+Jl0BaU8WsxrU1NmRKsOUdha
-         COfv/MDI8mTly8illbiLM3lJmLuqdtfrmxBcvjReK/aD5ct4xZXjdeyPSQbqMvnbSm8b
-         r8I5dqSyHGD/D+y7J9NDWmNfbcnpfNNzByp7DbOD9o1blFR83sDtkeobOgG3Lpn7YR3+
-         mfmLrDS1SbCZ1HzYdzEbebzCgcpTLHFDm4ACjVTvCPUGIUe6OUPxoB/2bxtZ1L07aBBF
-         ig8w==
-X-Gm-Message-State: ABy/qLYP8cmzWaQ/Wx5Hy7KSMeWAveWIQjtV7UKiZIT8t7Ji6Eeuez8T
-        7hIivsvf6to/midq01TbC/W3h6TaKJtf4EYXYwsnm1DJ
-X-Google-Smtp-Source: APBJJlEyzFmZTxDSLZlKXTyqY5UP1cP5IIpdqO6/ly8Nf2PhalxOwEhK/FxafwqY0Azgc1rBday0xBVHfmmMuvLx1L8=
-X-Received: by 2002:a2e:9b8b:0:b0:2b7:3b73:2589 with SMTP id
- z11-20020a2e9b8b000000b002b73b732589mr3103159lji.32.1689314663201; Thu, 13
- Jul 2023 23:04:23 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230714144330.3c0a4074@canb.auug.org.au> <6f655ef5-b236-4683-92b0-da8b19e79eca@paulmck-laptop>
-In-Reply-To: <6f655ef5-b236-4683-92b0-da8b19e79eca@paulmck-laptop>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Thu, 13 Jul 2023 23:04:11 -0700
-Message-ID: <CAADnVQLF0BP-_Fjxi1S-0Shus38vAVdNbB2JHsBd6_RudYWF0A@mail.gmail.com>
-Subject: Re: linux-next: duplicate patch in the rcu tree
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Networking <netdev@vger.kernel.org>,
+        with ESMTP id S234979AbjGNGen (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 14 Jul 2023 02:34:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 223A330CB;
+        Thu, 13 Jul 2023 23:34:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AFBEC61BCB;
+        Fri, 14 Jul 2023 06:34:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 850B7C433C7;
+        Fri, 14 Jul 2023 06:34:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689316468;
+        bh=HNJGtyERKCH6z390Vn8aBkVMvYPcPPbKhPvGu9bfFK8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JCvAFtfwpLhQTo/ArRDGEGIczn6mJb7aZ0BAEROVm7uShe5izEUnkJTZ7VGcuZn3V
+         JfbbZVBqRioE2UHapJceIc4oyzBEK2Rp6bLtuhD/4+MW7JmyenqnFElKBqnzHG6nW2
+         pxGdKYd+vr6xARpd2tUE3iUvW66fP6tJpSwnxtwM8apzBlD8GZqXEqLrB9sSKwTUxw
+         Vie0cy0omyRhu+N5lJzz22+nPKQLe/e/o7nkf3GTGPYnavpWdIBDN8hS4cJTzsVf0O
+         0t4hjr3c1cRKQXU2jdpMA7mF1oxkpPFOm4DW15Av2FNSQujmv/ymXVkOZmicAToiLk
+         Rh1Br/SKFWjpA==
+Date:   Fri, 14 Jul 2023 12:04:23 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Dan Carpenter <dan.carpenter@linaro.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: linux-next: Fixes tag needs some work in the soundwire-fixes tree
+Message-ID: <ZLDsb6VK7q6VkuHn@matsya>
+References: <20230713075901.758e1b65@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230713075901.758e1b65@canb.auug.org.au>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Jul 13, 2023 at 9:50=E2=80=AFPM Paul E. McKenney <paulmck@kernel.or=
-g> wrote:
->
-> On Fri, Jul 14, 2023 at 02:43:30PM +1000, Stephen Rothwell wrote:
-> > Hi all,
-> >
-> > The following commit is also in net-next tree as a different commit
-> > (but the same patch):
-> >
-> >   a2b38823280d ("rcu: Export rcu_request_urgent_qs_task()")
-> >
-> > This is commit
-> >
-> >   43a89baecfe2 ("rcu: Export rcu_request_urgent_qs_task()")
-> >
-> > in the net-next tree.
->
-> The net-next tree needs it for BPF, correct?
+On 13-07-23, 07:59, Stephen Rothwell wrote:
+> Hi all,
+> 
+> In commit
+> 
+>   bfb4da9c536e ("soundwire: amd: Fix a check for errors in probe()")
+> 
+> Fixes tag
+> 
+>   Fixes: a673a8dfc214 ("soundwire: amd: Add support for AMD Manager driver")
+> 
+> has these problem(s):
+> 
+>   - Target SHA1 does not exist
+> 
+> Maybe you meant
+> 
+> Fixes: d8f48fbdfd9a ("soundwire: amd: Add support for AMD Manager driver")
 
-yes.
+I have fixed it up, thanks for the report
 
-> So if you guys intend to
-> push it to mainline, I will be happy to drop if from -rcu.
-
-That's the intent. Please drop it from -rcu.
-Thank you!
+-- 
+~Vinod

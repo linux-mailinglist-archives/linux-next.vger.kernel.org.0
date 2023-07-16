@@ -2,109 +2,120 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43FFF7543EC
-	for <lists+linux-next@lfdr.de>; Fri, 14 Jul 2023 22:46:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A29D975576B
+	for <lists+linux-next@lfdr.de>; Sun, 16 Jul 2023 23:37:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235901AbjGNUqM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 14 Jul 2023 16:46:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37942 "EHLO
+        id S229903AbjGPVhM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 16 Jul 2023 17:37:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229915AbjGNUqL (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 14 Jul 2023 16:46:11 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87794E74;
-        Fri, 14 Jul 2023 13:46:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:References:Cc:To:From:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=le4ybvADpoYVkHD+wIYkLE44RuLGjbiyDDb/dPUwbJ8=; b=IeSTTdmTC0OYlvGidk/UM7TNvs
-        g/ksr0YT5pvH452fhQsbd4LNcth/0gyQ4q2L3ZOd/+O1udHExOkymIG0IlCv5a1Amp0T6opzoRZo2
-        y2yDDoVdYxrd0LPEIRc2MmTFf7wKtwdn6LVtWWNn1VRgodu/IYWKZZQDzqa3F1+yaKhlMi/t/c6xZ
-        qa1SkD2pQxszgtX2hyX1oreUOyYAAn85eczfppFx72acjt+3DZKZc3EtV0Vaxa0zitS/Di5xt1Xw0
-        kUB1X9ap4dAcRx6qdOyFsrYdIwngMLAnKQt6gpsOcIxBLqjIqkuAcHyo33h6BXPBG3yBEhC0eMcjr
-        e+hkVbYg==;
-Received: from [2601:1c2:980:9ec0::2764]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qKPfz-007DXO-2O;
-        Fri, 14 Jul 2023 20:46:07 +0000
-Message-ID: <72cdbfa2-28f0-19e9-8601-d9611da9410e@infradead.org>
-Date:   Fri, 14 Jul 2023 13:46:06 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: linux-next: Tree for Jul 13 (drivers/video/fbdev/ps3fb.c)
-Content-Language: en-US
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        with ESMTP id S229589AbjGPVhL (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 16 Jul 2023 17:37:11 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D8AE183;
+        Sun, 16 Jul 2023 14:37:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1689543423;
+        bh=Oe/lGVhL5jiQrrH6YQDQoe+kmJJNafVcIbFFM2tttoM=;
+        h=Date:From:To:Cc:Subject:From;
+        b=UuK+YUMl3xXB5psMCKcYjVwvftC1ZmAaGoEyQGEUUMYWRcgym1mwufHAgqXmEXW8H
+         lG/1WVLmK+6hA/F3Bxy6KIs0EoKj5U4kbPbyS9KArfhGwfQQc6GfK9jnB12x240sGP
+         SSS9kVhzLEJzjUjgv8a1zCBEBZiHtrlwiNBRf/q7Rn/SEHC5PrO6mSzY23Ps4H5GZA
+         t9/9F0/nEI9Ks2u2NjMPB8VtPKVL6JAHgXsiiWVIj1SvXYe6gBKtAOgtu5/Ti8aGhr
+         rnq0zIiLgArzg8o+r7XogNZgLL7Fj0vYGkHk0CTfdcSna2IhJ1wQUpmnggBurAvy/u
+         T7TWL5ZABpYOg==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4R3z7f6DYZz4wZp;
+        Mon, 17 Jul 2023 07:37:02 +1000 (AEST)
+Date:   Mon, 17 Jul 2023 07:36:49 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Doug Ledford <dledford@redhat.com>,
+        Jason Gunthorpe <jgg@mellanox.com>
+Cc:     Shiraz Saleem <shiraz.saleem@intel.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Helge Deller <deller@gmx.de>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        linux-fbdev@vger.kernel.org,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
-References: <20230713123710.5d7d81e4@canb.auug.org.au>
- <ccc63065-2976-88ef-1211-731330bf2866@infradead.org>
-In-Reply-To: <ccc63065-2976-88ef-1211-731330bf2866@infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Subject: linux-next: Fixes tags need some work in the rdma-fixes tree
+Message-ID: <20230717073649.5fc71a09@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/U5CsUi/Y7T0xSiWHzE=C2s9";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Thomas,
+--Sig_/U5CsUi/Y7T0xSiWHzE=C2s9
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On 7/13/23 09:11, Randy Dunlap wrote:
-> 
-> 
-> On 7/12/23 19:37, Stephen Rothwell wrote:
->> Hi all,
->>
+Hi all,
 
-I still see this build error on linux-next  20230714.
+In commit
 
->> Changes since 20230712:
->>
-> 
-> on ppc64:
-> 
-> In file included from ../include/linux/device.h:15,
->                  from ../arch/powerpc/include/asm/io.h:22,
->                  from ../include/linux/io.h:13,
->                  from ../include/linux/irq.h:20,
->                  from ../arch/powerpc/include/asm/hardirq.h:6,
->                  from ../include/linux/hardirq.h:11,
->                  from ../include/linux/interrupt.h:11,
->                  from ../drivers/video/fbdev/ps3fb.c:25:
-> ../drivers/video/fbdev/ps3fb.c: In function 'ps3fb_probe':
-> ../drivers/video/fbdev/ps3fb.c:1172:40: error: 'struct fb_info' has no member named 'dev'
->  1172 |                  dev_driver_string(info->dev), dev_name(info->dev),
->       |                                        ^~
-> ../include/linux/dev_printk.h:110:37: note: in definition of macro 'dev_printk_index_wrap'
->   110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
->       |                                     ^~~~~~~~~~~
-> ../drivers/video/fbdev/ps3fb.c:1171:9: note: in expansion of macro 'dev_info'
->  1171 |         dev_info(info->device, "%s %s, using %u KiB of video memory\n",
->       |         ^~~~~~~~
-> ../drivers/video/fbdev/ps3fb.c:1172:61: error: 'struct fb_info' has no member named 'dev'
->  1172 |                  dev_driver_string(info->dev), dev_name(info->dev),
->       |                                                             ^~
-> ../include/linux/dev_printk.h:110:37: note: in definition of macro 'dev_printk_index_wrap'
->   110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
->       |                                     ^~~~~~~~~~~
-> ../drivers/video/fbdev/ps3fb.c:1171:9: note: in expansion of macro 'dev_info'
->  1171 |         dev_info(info->device, "%s %s, using %u KiB of video memory\n",
->       |         ^~~~~~~~
-> 
-> 
-> Full randconfig file is attached.
+  e77ac83ee5fd ("RDMA/irdma: Fix data race on CQP request done")
 
--- 
-~Randy
+Fixes tag
+
+  Fixes: 915cc7ac0f8 ("RDMA/irdma: Add miscellaneous utility definitions")
+
+has these problem(s):
+
+  - SHA1 should be at least 12 digits long
+
+In commit
+
+  df56ce725d7c ("RDMA/irdma: Fix data race on CQP completion stats")
+
+Fixes tag
+
+  Fixes: 915cc7ac0f8 ("RDMA/irdma: Add miscellaneous utility definitions")
+
+has these problem(s):
+
+  - SHA1 should be at least 12 digits long
+
+In commit
+
+  13120f2d08fd ("RDMA/irdma: Add missing read barriers")
+
+Fixes tag
+
+  Fixes: 3f49d684256 ("RDMA/irdma: Implement HW Admin Queue OPs")
+
+has these problem(s):
+
+  - SHA1 should be at least 12 digits long
+
+This can be fixed for the future by setting core.abbrev to 12 (or
+more) or (for git v2.11 or later) just making sure it is not set
+(or set to "auto").
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/U5CsUi/Y7T0xSiWHzE=C2s9
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmS0YvEACgkQAVBC80lX
+0Gyx/Af/dK5rhLfmrrTgzGa8lzs6fmBmcaUqzxyPmr9nfOKdm+lSYMhJIG6aJrW9
+VBZA3BKQrA8xK3b0mjcFaT73E3xynwlRhulso4o0wDTL0A5MwyhONI0I4m6OHtPC
+rsNLbfN3ARhT0RbRHF1fZzR02pDpUhcPWmz+8/VOb/Mnhm5Nl51HLnC+F5zsoRT+
+65/CEsBzYgtpa3Ze/Gno86jKbFGPzr+yhETIJcNunypTE6jfVD25Usx1QvtHCKef
+clZOW8t0NXeYcfDZfgs6jL6k/OKA4NBShYwLod3UUTBO6ugBNOevpcbTE5E1R2zL
+NKUh0V3kOe/PDKeMqSWaM6zQ3tn+mg==
+=vclb
+-----END PGP SIGNATURE-----
+
+--Sig_/U5CsUi/Y7T0xSiWHzE=C2s9--

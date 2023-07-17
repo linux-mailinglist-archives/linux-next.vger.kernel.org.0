@@ -2,98 +2,77 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2121755CBC
-	for <lists+linux-next@lfdr.de>; Mon, 17 Jul 2023 09:23:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47F537563A7
+	for <lists+linux-next@lfdr.de>; Mon, 17 Jul 2023 15:01:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229808AbjGQHXR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 17 Jul 2023 03:23:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34936 "EHLO
+        id S229724AbjGQNBA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 17 Jul 2023 09:01:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230190AbjGQHXP (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 17 Jul 2023 03:23:15 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5572310D7;
-        Mon, 17 Jul 2023 00:23:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689578594; x=1721114594;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=XfiGMmXYe+HdZA7eduej8t7HZf3otdWWMTmNFs8E/Fw=;
-  b=hm/ViwUzuDcTT+H2GBgxC3wZ4VOjxJ9CZt4M5KkxCeRI1nBJOEUX5g0U
-   EypKiJVZ+IEyLlvJUvzTq6wL6z114PS9fuzCbv3v6GePQFbM7PHB8RVIa
-   yH4kMSF0oPM+z4lhJRDeJCX/LY3HhULCyAyw7Wwcxe2ZlIRaZ6HT/7uk3
-   ph+RuK5aXT8LlCsME3uUcvWJLED9pRvfHghIKOxvTxUOM44SbawXBYgNw
-   HLG8cxbCkZg1Di/h5+BqUbcgaq9wLSC3kyKDTuHWs/u6xcti+UKZD4pCY
-   jXSOTT7YSQz6ZNTDb/qwaqrtHXbuOiTd2AuBANfDeGvyafdtLgqBK1bDN
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10773"; a="345456337"
-X-IronPort-AV: E=Sophos;i="6.01,211,1684825200"; 
-   d="scan'208";a="345456337"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2023 00:23:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10773"; a="758299676"
-X-IronPort-AV: E=Sophos;i="6.01,211,1684825200"; 
-   d="scan'208";a="758299676"
-Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2023 00:23:12 -0700
-Received: from kekkonen.localdomain (localhost [127.0.0.1])
-        by kekkonen.fi.intel.com (Postfix) with SMTP id ABFC411F913;
-        Mon, 17 Jul 2023 10:23:09 +0300 (EEST)
-Date:   Mon, 17 Jul 2023 07:23:09 +0000
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+        with ESMTP id S229823AbjGQNA7 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 17 Jul 2023 09:00:59 -0400
+Received: from smtp-fw-52005.amazon.com (smtp-fw-52005.amazon.com [52.119.213.156])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9CAAE47;
+        Mon, 17 Jul 2023 06:00:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1689598833; x=1721134833;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=V2IvuJXOfmhoPksJdsTV2u6WeOptT8UYUa+NgoJE45M=;
+  b=t2cwfzSrRvelu9EQ+le8JKPKDKumIXfw24lsrkNo+zQO3Qy+qXdVMvr4
+   eEmfHfqhw6ffDZL/hBhHoKGw2jxxJN+42XOfGve30Dtndw+NIQ9MIkyFZ
+   FeXhi3umyjOtDaqnBhL5jbUIpjkHWkzVtx/IgHngzOUKU+d826WODrZIL
+   Q=;
+X-IronPort-AV: E=Sophos;i="6.01,211,1684800000"; 
+   d="scan'208";a="593338174"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-iad-1a-m6i4x-93c3b254.us-east-1.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-52005.iad7.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2023 13:00:31 +0000
+Received: from EX19MTAUWC002.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
+        by email-inbound-relay-iad-1a-m6i4x-93c3b254.us-east-1.amazon.com (Postfix) with ESMTPS id 4FDFFE0E21;
+        Mon, 17 Jul 2023 13:00:30 +0000 (UTC)
+Received: from EX19MTAUWC001.ant.amazon.com (10.250.64.174) by
+ EX19MTAUWC002.ant.amazon.com (10.250.64.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.30; Mon, 17 Jul 2023 13:00:29 +0000
+Received: from dev-dsk-mngyadam-1c-a2602c62.eu-west-1.amazon.com (10.15.1.225)
+ by mail-relay.amazon.com (10.250.64.145) with Microsoft SMTP Server id
+ 15.2.1118.30 via Frontend Transport; Mon, 17 Jul 2023 13:00:29 +0000
+Received: by dev-dsk-mngyadam-1c-a2602c62.eu-west-1.amazon.com (Postfix, from userid 23907357)
+        id 341BE200A; Mon, 17 Jul 2023 13:00:29 +0000 (UTC)
+From:   Mahmoud Adam <mngyadam@amazon.com>
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+CC:     Herbert Xu <herbert@gondor.apana.org.au>,
+        Linux Crypto List <linux-crypto@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Fixes tag needs some work in the v4l-dvb-fixes tree
-Message-ID: <ZLTsXUFZy4Iggk5u@kekkonen.localdomain>
-References: <20230714083645.4e587f71@canb.auug.org.au>
+Subject: Re: linux-next: Signed-off-by missing for commit in the crypto tree
+References: <20230717075545.28f93630@canb.auug.org.au>
+Date:   Mon, 17 Jul 2023 13:00:29 +0000
+In-Reply-To: <20230717075545.28f93630@canb.auug.org.au> (Stephen Rothwell's
+        message of "Mon, 17 Jul 2023 07:55:45 +1000")
+Message-ID: <lrkyqmszuitg2.fsf@dev-dsk-mngyadam-1c-a2602c62.eu-west-1.amazon.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230714083645.4e587f71@canb.auug.org.au>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-hi Stephen,
+Stephen Rothwell <sfr@canb.auug.org.au> writes:
 
-On Fri, Jul 14, 2023 at 08:38:25AM +1000, Stephen Rothwell wrote:
 > Hi all,
-> 
-> In commit
-> 
->   b0b43354c345 ("media: tc358746: Address compiler warnings")
-> 
-> Fixes tag
-> 
->   Fixes: 80a21da3605 ("media: tc358746: add Toshiba TC358746 Parallel to CSI-2 bridge driver")
-> 
-> has these problem(s):
-> 
->   - SHA1 should be at least 12 digits long
->     This can be fixed for the future by setting core.abbrev to 12 (or
->     more) or (for git v2.11 or later) just making sure it is not set
->     (or set to "auto").
-> 
-> Also, please keep all the commit message tags together at the end of
-> the commit message.
+>
+> Commit
+>
+>   a0459d277b1b ("KEYS: use kfree_sensitive with key")
+>
+> is missing a Signed-off-by from its author.
 
-Apologies for this, I guess I've removed one character too many from the
-hash.
-
-I'll switch to a script (or alias) to do this. It'd be, though, helpful if
-git could do this on its own.
-
--- 
-Kind regards,
-
-Sakari Ailus
+Sorry for that, sent Patch v4 with the correction

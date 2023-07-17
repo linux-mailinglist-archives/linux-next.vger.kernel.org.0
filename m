@@ -2,77 +2,74 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47F537563A7
-	for <lists+linux-next@lfdr.de>; Mon, 17 Jul 2023 15:01:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8389975654C
+	for <lists+linux-next@lfdr.de>; Mon, 17 Jul 2023 15:42:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229724AbjGQNBA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 17 Jul 2023 09:01:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42798 "EHLO
+        id S231310AbjGQNmp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 17 Jul 2023 09:42:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229823AbjGQNA7 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 17 Jul 2023 09:00:59 -0400
-Received: from smtp-fw-52005.amazon.com (smtp-fw-52005.amazon.com [52.119.213.156])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9CAAE47;
-        Mon, 17 Jul 2023 06:00:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1689598833; x=1721134833;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=V2IvuJXOfmhoPksJdsTV2u6WeOptT8UYUa+NgoJE45M=;
-  b=t2cwfzSrRvelu9EQ+le8JKPKDKumIXfw24lsrkNo+zQO3Qy+qXdVMvr4
-   eEmfHfqhw6ffDZL/hBhHoKGw2jxxJN+42XOfGve30Dtndw+NIQ9MIkyFZ
-   FeXhi3umyjOtDaqnBhL5jbUIpjkHWkzVtx/IgHngzOUKU+d826WODrZIL
-   Q=;
-X-IronPort-AV: E=Sophos;i="6.01,211,1684800000"; 
-   d="scan'208";a="593338174"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-iad-1a-m6i4x-93c3b254.us-east-1.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-52005.iad7.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2023 13:00:31 +0000
-Received: from EX19MTAUWC002.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
-        by email-inbound-relay-iad-1a-m6i4x-93c3b254.us-east-1.amazon.com (Postfix) with ESMTPS id 4FDFFE0E21;
-        Mon, 17 Jul 2023 13:00:30 +0000 (UTC)
-Received: from EX19MTAUWC001.ant.amazon.com (10.250.64.174) by
- EX19MTAUWC002.ant.amazon.com (10.250.64.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.30; Mon, 17 Jul 2023 13:00:29 +0000
-Received: from dev-dsk-mngyadam-1c-a2602c62.eu-west-1.amazon.com (10.15.1.225)
- by mail-relay.amazon.com (10.250.64.145) with Microsoft SMTP Server id
- 15.2.1118.30 via Frontend Transport; Mon, 17 Jul 2023 13:00:29 +0000
-Received: by dev-dsk-mngyadam-1c-a2602c62.eu-west-1.amazon.com (Postfix, from userid 23907357)
-        id 341BE200A; Mon, 17 Jul 2023 13:00:29 +0000 (UTC)
-From:   Mahmoud Adam <mngyadam@amazon.com>
+        with ESMTP id S231352AbjGQNmo (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 17 Jul 2023 09:42:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3779A8F;
+        Mon, 17 Jul 2023 06:42:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BC48561068;
+        Mon, 17 Jul 2023 13:42:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FC48C433C8;
+        Mon, 17 Jul 2023 13:42:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689601358;
+        bh=IgXIQ0Pw02DZabIOlqO75heDWJNQl7wgVNHtLz4NMpg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=kRwPpV6mbEioO44vyy50u59pDhc3ldVkROYA1afWDTiS+PlliaBjhzhkDo7yqgKCq
+         jw2skSsBmSVvU3PytFSAv/KvCIVgnf/Ad8hwejh6WJB2jkMtX7aFkgIeKq7WmvMWud
+         WqzhRMAtVL3mrr+dTiEkmgolw1ij0F05bgEean12lJ6BKqMSHxQLfNGvfaQ7OKFfgv
+         gltblcTz84KQ9teY3ObxO2S+a6I+TitheM7U0UI9zFfyaJvJ3sStfi1cuw0wbEZO+6
+         u9/7UZOJCfH7BgYb8TaTOsfK64Cx6sK/MJHRghNXWkNGFEzi5ocUmn5uCiHJNB9zg7
+         XTkzVxRVC4+HQ==
+Date:   Mon, 17 Jul 2023 15:42:32 +0200
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
-CC:     Herbert Xu <herbert@gondor.apana.org.au>,
-        Linux Crypto List <linux-crypto@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Signed-off-by missing for commit in the crypto tree
-References: <20230717075545.28f93630@canb.auug.org.au>
-Date:   Mon, 17 Jul 2023 13:00:29 +0000
-In-Reply-To: <20230717075545.28f93630@canb.auug.org.au> (Stephen Rothwell's
-        message of "Mon, 17 Jul 2023 07:55:45 +1000")
-Message-ID: <lrkyqmszuitg2.fsf@dev-dsk-mngyadam-1c-a2602c62.eu-west-1.amazon.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+Subject: Re: linux-next: error while fetching the v4l-dvb-fixes tree
+Message-ID: <20230717154232.433f1055@coco.lan>
+In-Reply-To: <20230717142248.281e3668@canb.auug.org.au>
+References: <20230717142248.281e3668@canb.auug.org.au>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Stephen Rothwell <sfr@canb.auug.org.au> writes:
+Hi Stephen,
+
+Em Mon, 17 Jul 2023 14:22:48 +1000
+Stephen Rothwell <sfr@canb.auug.org.au> escreveu:
 
 > Hi all,
->
-> Commit
->
->   a0459d277b1b ("KEYS: use kfree_sensitive with key")
->
-> is missing a Signed-off-by from its author.
+> 
+> Fetching the v4l-dvb-fixes tree produces this error:
+> 
+> fatal: couldn't find remote ref refs/heads/fixes
 
-Sorry for that, sent Patch v4 with the correction
+Could you please update the repository? We're now using a separate
+repository for it:
+
+	https://git.linuxtv.org/media_stage.git/ fixes
+
+Regards,
+Mauro

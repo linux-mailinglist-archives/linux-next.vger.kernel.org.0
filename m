@@ -2,97 +2,90 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2AE5756879
-	for <lists+linux-next@lfdr.de>; Mon, 17 Jul 2023 17:58:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC8D8756FB5
+	for <lists+linux-next@lfdr.de>; Tue, 18 Jul 2023 00:21:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231358AbjGQP6k (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 17 Jul 2023 11:58:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51562 "EHLO
+        id S229786AbjGQWVM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 17 Jul 2023 18:21:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229731AbjGQP6k (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 17 Jul 2023 11:58:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65F8CD8;
-        Mon, 17 Jul 2023 08:58:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        with ESMTP id S229539AbjGQWVL (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 17 Jul 2023 18:21:11 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5C89A4;
+        Mon, 17 Jul 2023 15:21:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1689632466;
+        bh=oixTEa0/RFq3XNBZUrt9im4EHZJFVcJ45g9yV2/nenM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=KFTBY4RW/XoY7DahfbS/EGSOQWr10wtWjDBCgktRnWf0wImzpbGFnY+w+AHm/N8TI
+         xvkfUWLMK97JKPuLjlOkMBCOmPD/zG6yIFY3Kuc+GdgCnw1kAIOdNmPEItaqPmvjG/
+         938A4Mq3j0HPT6YvRFmI1Cc/Whdep3tooYhjA84GrfWzko6D8ammF4Y7VskzvtfWz0
+         u2JtgX2mjvOhzvxUoCB8VulhxSa/giVYh6b0AAKs+rGOaZKAcDZ5AfUlSALc7q2Xhb
+         vqnU7/cQvXhlXkMf+rrlcgt0JqNcwA1aOZvp9gSq8dEJK4glm2mUhoc3w+ekexJfFP
+         AVyiEI8cHItGw==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 03C1960F12;
-        Mon, 17 Jul 2023 15:58:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51822C433C9;
-        Mon, 17 Jul 2023 15:58:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689609518;
-        bh=oxc0wIrykUcV4lXikRU9sbRAnt1ysqKy15IEX0mqF/Y=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=UbNh4IekhjGWhrn4gvGQf61ZiY2gkxSLo98gAjJ8w8sUTRcyESEZx9fCfW2mEmhCX
-         xb4x3PcxoUlV9iCYsVm/iCyndzYMMx6YSBgKISeXi+Yt64qwvIJGBGto4Ia+5NXAc1
-         +T7DbHWA3ndowqUH0jq5xFTg+6P3HgCLsTELsB/37XY4SQT5JZ8wNubjT6bXYxzqxo
-         CG+24S8iRFy7Hw3TZ3dnIsGdsOnu4/FpK4JPmtTzchaD19cPMZO0y14lD7nxI2g3ZA
-         hN2tRFYVGNMY1v8YiQ2CuEMrO5We3Pnf2nCTgcaD9Go5+PtRGIKuUzLMtOemRVR0VD
-         KKdg6Hua/kt+Q==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4R4c420yXcz4wZw;
+        Tue, 18 Jul 2023 08:21:06 +1000 (AEST)
+Date:   Tue, 18 Jul 2023 08:21:04 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Fixes tag needs some work in the v4l-dvb-fixes tree
-References: <20230714083645.4e587f71@canb.auug.org.au>
-        <ZLTsXUFZy4Iggk5u@kekkonen.localdomain>
-Date:   Mon, 17 Jul 2023 18:58:28 +0300
-In-Reply-To: <ZLTsXUFZy4Iggk5u@kekkonen.localdomain> (Sakari Ailus's message
-        of "Mon, 17 Jul 2023 07:23:09 +0000")
-Message-ID: <87jzuy34yj.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+Subject: Re: linux-next: error while fetching the v4l-dvb-fixes tree
+Message-ID: <20230718081939.6c9b4c2e@canb.auug.org.au>
+In-Reply-To: <20230717154232.433f1055@coco.lan>
+References: <20230717142248.281e3668@canb.auug.org.au>
+        <20230717154232.433f1055@coco.lan>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/rWIsBg.9mSkPank2DnLl8+P";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Sakari Ailus <sakari.ailus@linux.intel.com> writes:
+--Sig_/rWIsBg.9mSkPank2DnLl8+P
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> On Fri, Jul 14, 2023 at 08:38:25AM +1000, Stephen Rothwell wrote:
->> Hi all,
->> 
->> In commit
->> 
->>   b0b43354c345 ("media: tc358746: Address compiler warnings")
->> 
->> Fixes tag
->> 
->>   Fixes: 80a21da3605 ("media: tc358746: add Toshiba TC358746 Parallel to CSI-2 bridge driver")
->> 
->> has these problem(s):
->> 
->>   - SHA1 should be at least 12 digits long
->>     This can be fixed for the future by setting core.abbrev to 12 (or
->>     more) or (for git v2.11 or later) just making sure it is not set
->>     (or set to "auto").
->> 
->> Also, please keep all the commit message tags together at the end of
->> the commit message.
+Hi Mauro,
+
+On Mon, 17 Jul 2023 15:42:32 +0200 Mauro Carvalho Chehab <mchehab@kernel.or=
+g> wrote:
 >
-> Apologies for this, I guess I've removed one character too many from the
-> hash.
->
-> I'll switch to a script (or alias) to do this. It'd be, though, helpful if
-> git could do this on its own.
+>> Could you please update the repository? We're now using a separate
+> repository for it:
+>=20
+> 	https://git.linuxtv.org/media_stage.git/ fixes
 
-Are you asking for git to create the Fixes tag? The documentation has
-has a tip using --pretty=fixes which is quite handy:
+Done.
 
-https://docs.kernel.org/process/submitting-patches.html#describe-your-changes
+--=20
+Cheers,
+Stephen Rothwell
 
--- 
-https://patchwork.kernel.org/project/linux-wireless/list/
+--Sig_/rWIsBg.9mSkPank2DnLl8+P
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmS1vtAACgkQAVBC80lX
+0Gz9Xwf/V+olveJAJ++BS21VxH7uKUloqJ1tnqkRpwbuL9x5l2LJxjlpLxGnzSSY
+NZcLQpHv+bZaUmVBUhrM7YLTpqAzxAwUgHwpJkdrQdMQZuhxcJZKJbhmOlxcfG36
+WwrmOWBTR5HCVA1L1vdYEjMpdPjW4QJ3YNku1irMd/Hqv4SzMiRSHkqxGWhR8WGO
+ivNzqZ7Klx+BylIOEgTA9Rv7cBPXnePJMg5YZaJbfsIz8WbpRAvVc1ql+K0I4HFP
+KX1MVp7TlWwt6fgdyFk2bFHPDsWKBIetjMzuktB41bzy3kr3SPvV5tg9Ci7nUgsT
+E0x4ZMS5vZyugC1zHfvjfTOyqEaPbQ==
+=iRYJ
+-----END PGP SIGNATURE-----
+
+--Sig_/rWIsBg.9mSkPank2DnLl8+P--

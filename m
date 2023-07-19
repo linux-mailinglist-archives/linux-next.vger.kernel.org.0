@@ -2,76 +2,83 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D59B7595E5
-	for <lists+linux-next@lfdr.de>; Wed, 19 Jul 2023 14:49:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73C3A75A157
+	for <lists+linux-next@lfdr.de>; Thu, 20 Jul 2023 00:06:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229987AbjGSMtG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 19 Jul 2023 08:49:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59906 "EHLO
+        id S230311AbjGSWGu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 19 Jul 2023 18:06:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230364AbjGSMs7 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 19 Jul 2023 08:48:59 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83D1B1996;
-        Wed, 19 Jul 2023 05:48:50 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1qM6bn-0004pH-9s; Wed, 19 Jul 2023 14:48:47 +0200
-Message-ID: <3252775c-099f-4bbe-c663-122634d5fc2f@leemhuis.info>
-Date:   Wed, 19 Jul 2023 14:48:46 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: linux-next: Tree for Jul 13 (drivers/video/fbdev/ps3fb.c)
-Content-Language: en-US, de-DE
-To:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>
+        with ESMTP id S230205AbjGSWGu (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 19 Jul 2023 18:06:50 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A40D71FF9;
+        Wed, 19 Jul 2023 15:06:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1689804361;
+        bh=nRlwQIXljXHxNboC/DqNsDqEcGyiqwqlsLzbZfPQsiA=;
+        h=Date:From:To:Cc:Subject:From;
+        b=d/Ii54PQl0jBjRBplBs9DIviT95A5TnnKSuFex/5LfS61/XGXC9KoU3Ujs6NBDHwO
+         x9OBJCquqKlKirMZYyz1yXnOYMSIZPPPtcc9FnDC4v3GQVK1n1pUxCeVxcDab9VsYS
+         xFjaoq0eUFYJfsiiYLLmOlyUspNkYub3UEje+ap26VFRO0H2GVBYmYsgGqXFlFZwfO
+         F+FBL0Azp/N0ShE1JqjeUwooHIU1aAYvVQj7Fi/bfZ9WL16GipEc92x1QbrpfcUWO0
+         hxhqbmnD0/AkiCeZcitH5b+rNHiqq47QTjdSb1Tpalz/6Us4H1nljwg2ryF/R4fmT1
+         KVT16ubsw0aGw==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4R5qdj4j55z4wxR;
+        Thu, 20 Jul 2023 08:06:01 +1000 (AEST)
+Date:   Thu, 20 Jul 2023 08:06:00 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Shawn Guo <shawnguo@kernel.org>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Helge Deller <deller@gmx.de>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        linux-fbdev@vger.kernel.org,
-        Linux PowerPC <linuxppc-dev@lists.ozlabs.org>,
-        Linux Regressions <regressions@lists.linux.dev>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20230713123710.5d7d81e4@canb.auug.org.au>
- <ccc63065-2976-88ef-1211-731330bf2866@infradead.org>
- <ZLYHtVuS7AElXcCb@debian.me>
- <f5e6258b-ba76-001b-4942-588f4cbb0aa7@leemhuis.info>
- <5983cf9d-dc1e-75bd-3624-770951661245@gmail.com>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-In-Reply-To: <5983cf9d-dc1e-75bd-3624-770951661245@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1689770930;d3687a3f;
-X-HE-SMSGID: 1qM6bn-0004pH-9s
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: linux-next: Signed-off-by missing for commit in the imx-mxs tree
+Message-ID: <20230720080600.6a678664@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/J6wkWa.LnR_NXK0M2UHib4V";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 19.07.23 14:36, Bagas Sanjaya wrote:
-> On 7/18/23 17:06, Thorsten Leemhuis wrote:
->> I'm missing something here:
->>
->> * What makes you think this is caused by bdb616479eff419? I didn't see
->> anything in the thread that claims this, but I might be missing something
->> * related: if I understand Randy right, this is only happening in -next;
->> so why is bdb616479eff419 the culprit, which is also in mainline since
->> End of June?
-> 
-> Actually drivers/video/fbdev/ps3bf.c only had two non-merge commits during
-> previous cycle: 25ec15abb06194 and bdb616479eff419. The former was simply
-> adding .owner field in ps3fb_ops (hence trivial), so I inferred that the
-> culprit was likely the latter (due to it was being authored by Thomas).
+--Sig_/J6wkWa.LnR_NXK0M2UHib4V
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-As you can see from Michael's reply this was misguided, as it was an
-external change that broke the driver. This happens all the time, such
-inferring thus is not possible at all.
+Hi all,
 
-Ciao, Thorsten
+Commit
+
+  912133986ebb ("ARM: dts: nxp: add missing space before {")
+
+is missing a Signed-off-by from its committer.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/J6wkWa.LnR_NXK0M2UHib4V
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmS4XkgACgkQAVBC80lX
+0GynUggAhYhx/T7eE4PY1x5fTYqT9T2jZDiXoNclla/lbh7rTSQlVKuQyZmb1t6s
+OmFfPvXF7geLH7dPrCuWDVlqXxrmAiVqrokPkCmmkkPILqjJ90yXahPnHqqyQ7WC
+85qFh14A3R3OFf4nyRGLfTDDMIkhd7PMdvo1j9ap9WxA4h26Ld2S0DqTQuSyF8hW
+t/VBFcFaT81IZvcBb2bmS7RLVl4urArgSMYjsGK8D7VQQjoUBVrXs53pg9qhZGla
+4Szc7/f0qkpzQZDBBENTNcV9Hn2cBC4IWeoPEOQQUkW+b1YGWJDD8JsIulkCSsl9
+i0B85uDGpN4/9sV74GfLdBBmmPOizA==
+=Dzc5
+-----END PGP SIGNATURE-----
+
+--Sig_/J6wkWa.LnR_NXK0M2UHib4V--

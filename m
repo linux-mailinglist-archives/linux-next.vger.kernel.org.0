@@ -2,46 +2,68 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E02E1758A79
-	for <lists+linux-next@lfdr.de>; Wed, 19 Jul 2023 02:56:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63695758BA2
+	for <lists+linux-next@lfdr.de>; Wed, 19 Jul 2023 04:57:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229721AbjGSA4K (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 18 Jul 2023 20:56:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52944 "EHLO
+        id S229461AbjGSC5p (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 18 Jul 2023 22:57:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229639AbjGSA4J (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 18 Jul 2023 20:56:09 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E65071FFE;
-        Tue, 18 Jul 2023 17:55:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1689728076;
-        bh=hTchEKX6cnJkYCHL4oAppGBgjyw3HhGMPHv7Zn0VTik=;
-        h=Date:From:To:Cc:Subject:From;
-        b=uT9Dl0z22yuk1/ozsIFsUWy4kSAqAINbPwZs5sRGYtwfxW0pm/9XnGLe69d/PEkvh
-         Fp6sjzSkvU9rC9GiOIW8aGY305NJKCNTNR8sJ+2Tou45SuPADXPLgv4fIK29ZSCIkU
-         QV2jL4UqxsfejEp1mGDisZCdhPttQvXYMJjqlBcONQKYyLN+ZakBC1iKj2LMfxPopF
-         f+PNm7Ug6aMzzwUH7HYAnILnWbcJLm7+rtAqjpUnMIj6Fsm80RwWDboS2jSMy7K1cw
-         aLjBttfIG5hXu+3XrJXtPAMY+s0lqxJxf6cleiYzFVIwdWn9UdP1S5pRznYVtgHFqe
-         JEbFVVA9BuEoQ==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4R5HQh0NWxz4wjG;
-        Wed, 19 Jul 2023 10:54:35 +1000 (AEST)
-Date:   Wed, 19 Jul 2023 10:28:13 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Sterba <dsterba@suse.cz>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patches in the btrfs tree
-Message-ID: <20230719102813.12e24eb4@canb.auug.org.au>
+        with ESMTP id S230102AbjGSC5o (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 18 Jul 2023 22:57:44 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D5451FCB
+        for <linux-next@vger.kernel.org>; Tue, 18 Jul 2023 19:57:24 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id d9443c01a7336-1bb1baf55f5so38267515ad.0
+        for <linux-next@vger.kernel.org>; Tue, 18 Jul 2023 19:57:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1689735443; x=1692327443;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=L/wNO0JHLOKnjLavXuC0HYBdop1o8WLP1inynVywQhU=;
+        b=g5z9oyUx3H2Y5vZRD0PvLPVinehNySTOgdIVzGRdGgrb3mzPYX697+psLISeVoQ16S
+         zQh3XT16Zs/BdoVDJOtqgbFbXrPKyHSPPA0D6zu/uXBrFgQEjpPSxWQ3k/bc9nQRvao6
+         dW7tJ7Q2vOibLxRsC1RJw6tHYF7RfEJ+8bXt10/VtTRS5TgS/pCZwFgwHLR3h9nj/CeW
+         OjvAMEKXcVzsp0dWqyGNLd9VlhnO338Ccy+sGJX5FQiFIKMNDtnkkDwVxmoL2bkeBYY1
+         WJrZzVbjadiCk3G7Dy2oXd9nTOIsiAEQhD4t53AmPF9NFGhO3bGUGrQCgP/dG+G04BNt
+         O5Gg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689735443; x=1692327443;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=L/wNO0JHLOKnjLavXuC0HYBdop1o8WLP1inynVywQhU=;
+        b=HgWmTTce3l8BkQO8+nsIJSTx2Ff1nPQHoxhVzRkKsO8TptFMqsHvLjstIdjoU8jbTq
+         B57hnkmnqIMCVET4/1jDxlxhW+GKai/ZTl1HL+xybx09HCcaUE8nlhF9TR+NwT/Ldq8g
+         Ee92wTDv2E/n0Ez+Ew/DVO9TidC+qXXBA1p6GRFH9GdJS6ZCgAk2/ZKjB0Bj4o4TRvds
+         575d+ItdV5f7ZgYwxVYkr4+uxu7h2y/aDG3LDhkNIvalAGdOwIxhyS/HjyFPKhtvKDM3
+         UpxEri7UYYxTWZFHUHOlXDSALhjuTIuST9eNIZhQRgPA8ze5RgJDOflH9zD0tBF3YpGm
+         PukQ==
+X-Gm-Message-State: ABy/qLYQpgDMYcnTqhZQ3qdnit0zNSAqyvYNp7soQPvA2W93d0tKdVxd
+        yHgSzIJUyrM/bLxKUtf16n+65T0xb6kLxFdLfnIAGQ==
+X-Google-Smtp-Source: APBJJlEU/e3U7iD1Unao+grjCYF89wkWgeqwYlD3d0xX02bLNMHzgCk/+KOfRaW2OGPEIj7kyFUCMw==
+X-Received: by 2002:a17:902:a409:b0:1b9:be2e:2b40 with SMTP id p9-20020a170902a40900b001b9be2e2b40mr14277657plq.50.1689735443240;
+        Tue, 18 Jul 2023 19:57:23 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id h14-20020a170902f7ce00b001b8b07bc600sm2606861plw.186.2023.07.18.19.57.22
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Jul 2023 19:57:22 -0700 (PDT)
+Message-ID: <64b75112.170a0220.9d2f8.6b82@mx.google.com>
+Date:   Tue, 18 Jul 2023 19:57:22 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/O/W8eXJmUO3GjyG3BVBBNrA";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Tree: next
+X-Kernelci-Branch: pending-fixes
+X-Kernelci-Kernel: v6.5-rc2-295-ge510699ebeee
+X-Kernelci-Report-Type: build
+Subject: next/pending-fixes build: 5 builds: 0 failed, 5 passed,
+ 4 warnings (v6.5-rc2-295-ge510699ebeee)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -50,49 +72,86 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/O/W8eXJmUO3GjyG3BVBBNrA
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+next/pending-fixes build: 5 builds: 0 failed, 5 passed, 4 warnings (v6.5-rc=
+2-295-ge510699ebeee)
 
-Hi all,
+Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
+rnel/v6.5-rc2-295-ge510699ebeee/
 
-The following commits are also in the btrfs-fixes tree as different
-commits (but the same patches):
+Tree: next
+Branch: pending-fixes
+Git Describe: v6.5-rc2-295-ge510699ebeee
+Git Commit: e510699ebeeec48ffefbe3ef86a96a35a6fe69c3
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Built: 5 unique architectures
 
-  13c2fe254dea ("btrfs: fix ordered extent split error handling in btrfs_di=
-o_submit_io")
-  31dabcf9cdca ("btrfs: set_page_extent_mapped after read_folio in btrfs_co=
-nt_expand")
-  5597efed9886 ("btrfs: fix iput() on error pointer after error during orph=
-an cleanup")
-  8e5955e7a539 ("btrfs: zoned: fix memory leak after finding block group wi=
-th super blocks")
-  9a976a7a78a2 ("btrfs: use irq safe locking when running and adding delaye=
-d iputs")
-  ce23502dff23 ("btrfs: fix warning when putting transaction with qgroups e=
-nabled after abort")
-  dfcfcaf6d1fa ("btrfs: raid56: always verify the P/Q contents for scrub")
-  e6d11b4a5648 ("btrfs: fix double iput() on inode after an error during or=
-phan cleanup")
+Warnings Detected:
 
---=20
-Cheers,
-Stephen Rothwell
+arc:
 
---Sig_/O/W8eXJmUO3GjyG3BVBBNrA
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+arm64:
 
------BEGIN PGP SIGNATURE-----
+arm:
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmS3Lh0ACgkQAVBC80lX
-0GyCqwf+L8W+qqq9KGRnnjMlfTnM6GyXaftsB2JTGDu0pD07tPNjfa3ZUjMGd4uT
-+lABeByTExXsCF1SjY2wPktFNlnCGnikKklRYwCCZPyROawyO0f+z9q/rT5b1tuk
-Ge22Kp7SmZfmGnWLmbB0CNGfW+c4q59JOtUjJZJX8PTL3BCBwHtjMDKXm70bKNcD
-9quSlp3bZEJG1/4TBVWaivEv39PZ0PrSdz10qD0E6LN6lJTBO+vNOhEulOx9kutx
-XI/taz1T8nApj03AuRUs6DVCDeyh+5DIeJzFJW8/gWCAGrl+4FcWGS8ZklYBO0tq
-FSSLK+qvQD8j2KDvJ19c9Hu8EVs2Qw==
-=M7DR
------END PGP SIGNATURE-----
+i386:
 
---Sig_/O/W8eXJmUO3GjyG3BVBBNrA--
+mips:
+
+sparc:
+    sparc64_defconfig (gcc-10): 4 warnings
+
+
+Warnings summary:
+
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---
+For more info write to <info@kernelci.org>

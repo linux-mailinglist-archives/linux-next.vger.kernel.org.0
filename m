@@ -2,39 +2,37 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C20CE75BB26
-	for <lists+linux-next@lfdr.de>; Fri, 21 Jul 2023 01:28:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17AD175BB2B
+	for <lists+linux-next@lfdr.de>; Fri, 21 Jul 2023 01:30:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229569AbjGTX2b (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 20 Jul 2023 19:28:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40346 "EHLO
+        id S229671AbjGTXa5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 20 Jul 2023 19:30:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbjGTX17 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 20 Jul 2023 19:27:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53DCAE42;
-        Thu, 20 Jul 2023 16:27:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E422D61CB5;
-        Thu, 20 Jul 2023 23:27:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDE63C433C9;
-        Thu, 20 Jul 2023 23:27:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689895677;
-        bh=F/lLf6VoBWh6m+upBr0z/vTAwH2Fc7QsSDH7ZudA/xY=;
+        with ESMTP id S229552AbjGTXa4 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 20 Jul 2023 19:30:56 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC29726A9;
+        Thu, 20 Jul 2023 16:30:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1689895852;
+        bh=+v2+do6U5ksOR7odVMBUhH1HfNawzbW3pAra8B5rRsc=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=i2+QknZDMwRO3chfdCYhK1wlWzoPWWih6w72El36t7v8Z9I/q0n6Nq+dTw669e6hT
-         K8dcTerAng0UPlEs6H5YpPAk964lhUzVPNtVkxZQuhPOuYjBsxSmWCC91v+Ge8ZX4i
-         FTEDDFLks3n09elZ+GB1gzo3d3dWICekuHrtewPbcyhuQSdXmsGpEXKT1u29YLUcFK
-         w8oI7+uBFFdnBFSQUKQLFbHdOokNkCsiKfHaSb3pvdHvSVzhbSo9/z6IJ7J33nhmZQ
-         Z7iaHwI5wEik/M2so7YYgcXuP7dvpLotpm98c6jQc0NPvb6miADIeMaW5U73r6Xjw6
-         /6XnkInEw3kEw==
-Date:   Thu, 20 Jul 2023 16:27:56 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
+        b=k5xAzMvwRFvZTDjeNDdkuREceFzP+eUOmNmFnVH9wenakxbCh3bbBKABx3N6zScUA
+         kNcdtq45h/sFXtMiwTJfr7R3SYs6efIhVxI+M/s3oTY7iUVD595nvFs/ryJukyGDG+
+         5aKYtX3PmepBdyZVujBXzof3jGVjPAPVouOcvALMHWLA6XXoLUfzpY97kUxWMske5u
+         WHX6fllsGVw32sf6F2mNidi3uI/BqTDkBDvEPFceOdfYWEXdHFUAs+JTKzgr49OtOw
+         Tj7hIgfq4wAmet/1oqayK4sLkFZ3wDEJbl00CfN92ElXx1ESa+r4gAtUYR9iu4nyKX
+         RAiSjFnZCdL3Q==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4R6TT62p2Zz4wqW;
+        Fri, 21 Jul 2023 09:30:50 +1000 (AEST)
+Date:   Fri, 21 Jul 2023 09:30:42 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Jakub Kicinski <kuba@kernel.org>
 Cc:     "Von Dentz, Luiz" <luiz.von.dentz@intel.com>,
         Marcel Holtmann <marcel@holtmann.org>,
         Johan Hedberg <johan.hedberg@gmail.com>,
@@ -46,8 +44,8 @@ Cc:     "Von Dentz, Luiz" <luiz.von.dentz@intel.com>,
         "Alexander Mikhalitsyn" <alexander@mihalicyn.com>,
         Kuniyuki Iwashima <kuniyu@amazon.com>
 Subject: Re: linux-next: build failure after merge of the bluetooth tree
-Message-ID: <20230720162756.08f2c66b@kernel.org>
-In-Reply-To: <20230721081258.35591df7@canb.auug.org.au>
+Message-ID: <20230721093042.2167fd0e@canb.auug.org.au>
+In-Reply-To: <20230720162756.08f2c66b@kernel.org>
 References: <PH0PR11MB51269B6805230AB8ED209B14D332A@PH0PR11MB5126.namprd11.prod.outlook.com>
         <20230720105042.64ea23f9@canb.auug.org.au>
         <20230719182439.7af84ccd@kernel.org>
@@ -56,12 +54,12 @@ References: <PH0PR11MB51269B6805230AB8ED209B14D332A@PH0PR11MB5126.namprd11.prod.
         <20230719202435.636dcc3a@kernel.org>
         <20230720081430.1874b868@kernel.org>
         <20230721081258.35591df7@canb.auug.org.au>
+        <20230720162756.08f2c66b@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: multipart/signed; boundary="Sig_/8zlJnZnvk4cyoEfeCKgEi.7";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,18 +67,51 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, 21 Jul 2023 08:12:58 +1000 Stephen Rothwell wrote:
-> > I kicked it off and forgot about it.
-> > allmodconfig on 352ce39a8bbaec04 (next-20230719) builds just fine :S  
-> 
-> Of course it does, as commit
-> 
-> 817efd3cad74 ("Bluetooth: hci_sock: Forward credentials to monitor")
-> 
-> is reverted in linux-next.  The question is "Does the bluetooth tree
-> build?" or "Does the net-next tree build *if* you merge the bluetooth
-> tree into it?"
+--Sig_/8zlJnZnvk4cyoEfeCKgEi.7
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Sorry for being slow, yes. I just did a test build with net-next and
-bluetooth-next combined and allmodconfig is okay, so you should be good
-to drop the revert. Fingers crossed.
+Hi Jakub,
+
+On Thu, 20 Jul 2023 16:27:56 -0700 Jakub Kicinski <kuba@kernel.org> wrote:
+>
+> On Fri, 21 Jul 2023 08:12:58 +1000 Stephen Rothwell wrote:
+> > > I kicked it off and forgot about it.
+> > > allmodconfig on 352ce39a8bbaec04 (next-20230719) builds just fine :S =
+  =20
+> >=20
+> > Of course it does, as commit
+> >=20
+> > 817efd3cad74 ("Bluetooth: hci_sock: Forward credentials to monitor")
+> >=20
+> > is reverted in linux-next.  The question is "Does the bluetooth tree
+> > build?" or "Does the net-next tree build *if* you merge the bluetooth
+> > tree into it?" =20
+>=20
+> Sorry for being slow, yes. I just did a test build with net-next and
+> bluetooth-next combined and allmodconfig is okay, so you should be good
+> to drop the revert. Fingers crossed.
+
+Excellent, thanks.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/8zlJnZnvk4cyoEfeCKgEi.7
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmS5w6IACgkQAVBC80lX
+0Gwm2Qf8CpXopcW+vJ3Ur80q5fytmGPoBHaL0ovqYN58G007cSN6CK1++4gGle5S
+ODHe8+J93at9lrgXLTZSEtYEq4Cb6j0+ZlVfATnGwH+pKJndq6G24ApDJZ6WsuK2
+m8cUVc/WJDZ7SbMgYVQG7wMORgUcFfrWDnXpiS3ws2MCgQs69CGUEhE4TtecnaVX
+IrB7532P0g9+OQlN7pvM6dc96ysFHZqXw1k1fJGZMtbCXuCkjWK+WbPuFeh+KfPI
+oVg74E9zJufTMoArF6UX47IZlMNacBfSsY7Q9FQ02LftN5deWqId8/0KGzFh5elI
+G2NXPGCXjTMM5DcIcgd3tAwTgpucYg==
+=Bha+
+-----END PGP SIGNATURE-----
+
+--Sig_/8zlJnZnvk4cyoEfeCKgEi.7--

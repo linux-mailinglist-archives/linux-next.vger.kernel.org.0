@@ -2,125 +2,138 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C1C875A3A1
-	for <lists+linux-next@lfdr.de>; Thu, 20 Jul 2023 02:47:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 142D075A3A6
+	for <lists+linux-next@lfdr.de>; Thu, 20 Jul 2023 02:50:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229774AbjGTAr5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 19 Jul 2023 20:47:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60264 "EHLO
+        id S229576AbjGTAuy (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 19 Jul 2023 20:50:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229828AbjGTAr4 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 19 Jul 2023 20:47:56 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BA831BF7;
-        Wed, 19 Jul 2023 17:47:55 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id 38308e7fff4ca-2b6f0508f54so2810921fa.3;
-        Wed, 19 Jul 2023 17:47:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689814074; x=1690418874;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RMC9ISeR+VkWGAWEa1cNLcI3IOnmieq6epgbCGmm3AE=;
-        b=a/OZqojo+/mRCY2PtQ1iv2PKZSj4yez4mdkwV9xl4MUcey2sSNCDLlMdPK3a2o9DrH
-         xg8Rf8tDdo5dThWKz4REi1YYf6WQniffqkHTRfq6RU5UieX2r9akqn82rZM1BuYBfukY
-         lfc2kIZlhBvSMrs7w+uyOd73wv7rv1zFO5ubvlBCeKDA7zmufcfH1Hxfvj/eGcjTZ1zD
-         PycPlOu96qMAh3oOwqvH0awsmqbS7dIs6ihtEv+FQBJRr7UuLdl8PHVbhhcGE7dx62Bs
-         AMUTYIZHqVKn9BJ4FDdkfh/pk/H1sHO6kEeqBd5ADy1/sGutKHcaE4kXT55b0mQf5Hk2
-         7ySA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689814074; x=1690418874;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RMC9ISeR+VkWGAWEa1cNLcI3IOnmieq6epgbCGmm3AE=;
-        b=PJbtlpuvrfivNcRQF3lOvkXlI/LJ8bOCXh58QIIqTmiMXTC6DWylmiIHAQRZXy+EfL
-         zPwgVlZ0678gGTLdoaniIbLQ2rvj5jbzvG9urug9Gxk73OtrTqmepbuAJrt5p9ZjQCpT
-         rAQbS66+oSI4qShmSRUNeBj6qimjykirKxGMUGNObB8vwdK2Lj9INbL76JqL1JrHmZIZ
-         L9GDNUAXsctU0AAqOji7zVrn9SiNaAvippPKpKGawNPXwDBSwQEDm5QYUp1fBJCytkb/
-         SQ+pJlkjPOo6gdxpWbCHIR/V2XMiZIJ2R1oA+UaU/tlr87uYPQrkCI5wZ4Pc8YqL6psy
-         p7TA==
-X-Gm-Message-State: ABy/qLbFzxr+yzKMKkta7iDaTeEueYeIHknShZomyIkbLRCCq2OzOXpo
-        KX2nL3YrAQELiipGt4MUOTfrluwNgI23Yv9Ansc=
-X-Google-Smtp-Source: APBJJlF/ndQHml697HrEn7Jjm/aiS76PxmyYplon1r3d25EKCUraEN7zi8GNSiXFox6i5kb+glZYhwIQi2uSSq2eJmg=
-X-Received: by 2002:a2e:8742:0:b0:2b6:9f95:46d3 with SMTP id
- q2-20020a2e8742000000b002b69f9546d3mr761208ljj.9.1689814073489; Wed, 19 Jul
- 2023 17:47:53 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230720103540.0436273d@canb.auug.org.au>
-In-Reply-To: <20230720103540.0436273d@canb.auug.org.au>
-From:   Steve French <smfrench@gmail.com>
-Date:   Wed, 19 Jul 2023 19:47:42 -0500
-Message-ID: <CAH2r5mugNKYBNXm7AuPFL=V=77Qkm3q6TtXCj-B0kugmpL0aYQ@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the cifs tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     CIFS <linux-cifs@vger.kernel.org>,
-        Winston Wen <wentao@uniontech.com>,
+        with ESMTP id S229463AbjGTAux (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 19 Jul 2023 20:50:53 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DE761BF7;
+        Wed, 19 Jul 2023 17:50:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1689814245;
+        bh=+FJGw/a2wwYQth4TQeBq+2ary9gPssFvgCsr9GTPDSY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=iMg5IsOnCZ03VEOMi1JjkdaRKSIjw8AqHkSpW2KYgqanZynC8Ulh6wetTOBguNbEf
+         MYK9Np46gHHJg2d7n/Attik3Ym6hkVi5Qo594wI8HeW9ve3KLDOvgPVLiYuHFydT3n
+         uNY4vBZNlMVT1bkkKHuYx5oek4FRASsFw9GvxBGxzLilxH4nGMcE1pCJg0Kc2qf+ra
+         k9+tFaXk1FOb3kNzyFJKb6H/aavO9/YR7f9Tj+DAVe79FW35uLz1tgikXzaFCTDm1f
+         nXDHXLLMu2Ak7pL/nUPP0epL+9HsfDagUj7Z15sZeI2N4tzVENhZqa8QOhDHYxMlbN
+         OAvV2tOCh6xnA==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4R5vHm1t01z4wxR;
+        Thu, 20 Jul 2023 10:50:43 +1000 (AEST)
+Date:   Thu, 20 Jul 2023 10:50:42 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     "Von Dentz, Luiz" <luiz.von.dentz@intel.com>
+Cc:     Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        linux-modules@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        "Linux Next Mailing List" <linux-next@vger.kernel.org>,
+        David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Networking <netdev@vger.kernel.org>,
+        Alexander Mikhalitsyn <alexander@mihalicyn.com>
+Subject: Re: linux-next: build failure after merge of the bluetooth tree
+Message-ID: <20230720105042.64ea23f9@canb.auug.org.au>
+In-Reply-To: <PH0PR11MB51269B6805230AB8ED209B14D332A@PH0PR11MB5126.namprd11.prod.outlook.com>
+References: <PH0PR11MB51269B6805230AB8ED209B14D332A@PH0PR11MB5126.namprd11.prod.outlook.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/L2uyadlyg/Sa+tHsujj4rwR";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Winston had an updated version of the patch - just replaced it with
-his updated one which does a cast to (char *)
+--Sig_/L2uyadlyg/Sa+tHsujj4rwR
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-          ses->local_nls =3D load_nls((char *)ctx->local_nls->charset);
+Hi all,
 
-But as he noted in an earlier email thread:
-> Perhaps I should make a change to load_nls() to take a const char *
-> instead of char *? If this make sense, I'll do it soon.
-
-which is probably cleaner
-
-On Wed, Jul 19, 2023 at 7:35=E2=80=AFPM Stephen Rothwell <sfr@canb.auug.org=
-.au> wrote:
+On Sat, 8 Jul 2023 00:17:15 +0000 "Von Dentz, Luiz" <luiz.von.dentz@intel.c=
+om> wrote:
 >
+> There was a patch sent to net-next that was supposed to fix this:
+>=20
+> [PATCH v1 net-next 2/2] net: scm: introduce and use scm_recv_unix helper
+>=20
+> I am waiting for it to be merged.
+>=20
+>=20
+> ________________________________
+> From: Stephen Rothwell
+> Sent: Thursday, July 6, 2023 4:41 PM
+> To: Marcel Holtmann; Johan Hedberg
+> Cc: Von Dentz, Luiz; Linux Kernel Mailing List; Linux Next Mailing List
+> Subject: Re: linux-next: build failure after merge of the bluetooth tree
+>=20
 > Hi all,
->
-> After merging the cifs tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
->
-> fs/smb/client/connect.c: In function 'cifs_get_smb_ses':
-> fs/smb/client/connect.c:2293:49: error: passing argument 1 of 'load_nls' =
-discards 'const' qualifier from pointer target type [-Werror=3Ddiscarded-qu=
-alifiers]
->  2293 |         ses->local_nls =3D load_nls(ctx->local_nls->charset);
->       |                                   ~~~~~~~~~~~~~~^~~~~~~~~
-> In file included from fs/smb/client/cifsproto.h:10,
->                  from fs/smb/client/connect.c:37:
-> include/linux/nls.h:50:35: note: expected 'char *' but argument is of typ=
-e 'const char *'
->    50 | extern struct nls_table *load_nls(char *);
->       |                                   ^~~~~~
->
-> Caused by commit
->
->   46055407cd4a ("cifs: fix charset issue in reconnection")
->
-> I have used the cifs tree from next-20230719 for today.
->
-> It looks as though the parameter to load_nls could be made const safely
-> as it is just passed to try_then_request_module() passes it to
-> __request_module() which just passes it to vsnprintf() to construct the
-> module name.  There does not appear to be any maintainer for fs/nls ...
-> --
-> Cheers,
-> Stephen Rothwell
+>=20
+> On Fri, 16 Jun 2023 08:32:37 +1000 Stephen Rothwell <sfr@canb.auug.org.au=
+> wrote:
+> >
+> > On Tue, 13 Jun 2023 13:02:58 +1000 Stephen Rothwell <sfr@canb.auug.org.=
+au> wrote: =20
+> > > =20
+> >  After merging the bluetooth tree, today's linux-next build (arm =20
+> > > multi_v7_defconfig) failed like this:
+> > >
+> > > ERROR: modpost: "pidfd_prepare" [net/bluetooth/bluetooth.ko] undefine=
+d!
+> > >
+> > > Caused by commit
+> > >
+> > >   817efd3cad74 ("Bluetooth: hci_sock: Forward credentials to monitor")
+> > >
+> > > I have reverted that commit for today. =20
+> >
+> > I am still reverting that commit. =20
+>=20
+> Ditto
 
+This is getting a bit ridiculous ... a build failure reported over a
+month ago with a fix
+(https://lore.kernel.org/netdev/20230626215951.563715-1-aleksandr.mikhalits=
+yn@canonical.com)
+posted 3 weeks ago, has not yet been fixed :-(
 
+What is stopping that fix (with the appropriate followup) being added
+to the bluetooth tree?  Or just the fix being added to the net-next tree?
 
+Yes, I know that the time period includes the merge window, but it has
+been more that a week since then.
 --=20
-Thanks,
+Cheers,
+Stephen Rothwell
 
-Steve
+--Sig_/L2uyadlyg/Sa+tHsujj4rwR
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmS4hOIACgkQAVBC80lX
+0Gzz8Qf/dNoWUCwBnpzL1kVRbKtoaMqjen04toUg7vU1wKXCRw1+o2WObDVGRMaz
+I+MYJCBNEepUV93nnua7jeTKYqv3Oh30yhLT92KkRSpppCVojQ1kl0BreBeUHXIn
+Ib0ZScIDZ1FWesTbm9+R39013kbECOTVffGuvfOfNgeJ3TGFwyz8WdERB5WWTGN+
+zVrXtpBiAtP+1jw9pygplyaJFiJ852W6zLP/pMC8/FwwHLcDSTozigkLfU80lNpE
+biRRcjpJMafx33CVVegpA77zly5k9yrYYY2AklQe/TDchIMUEBuiuUflUWaBC6XE
+eYPFl1Q0mIinw8DHkgsMVlODO97chw==
+=BBmM
+-----END PGP SIGNATURE-----
+
+--Sig_/L2uyadlyg/Sa+tHsujj4rwR--

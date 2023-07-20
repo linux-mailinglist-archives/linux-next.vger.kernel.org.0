@@ -2,53 +2,60 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50D3475A3B6
-	for <lists+linux-next@lfdr.de>; Thu, 20 Jul 2023 03:00:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C45275A3DF
+	for <lists+linux-next@lfdr.de>; Thu, 20 Jul 2023 03:24:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229471AbjGTBA1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 19 Jul 2023 21:00:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34978 "EHLO
+        id S229701AbjGTBYo (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 19 Jul 2023 21:24:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjGTBA0 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 19 Jul 2023 21:00:26 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A029692;
-        Wed, 19 Jul 2023 18:00:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1689814824;
-        bh=LfUF9ZhH9pFwsiMhXc+/2cqBqLy7keH0umsg+6P4TXo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=T1Bu1+OvHepCre2l6Kv6kJ9sQaSAGxMsnPqeatADFAnWkScuEMXJoz6L+arMgNj4U
-         R20erCgI1MQ8dTMKL18WuMy37GmWpSFFcDQy0SdhM8hiP2MivEpwaNhgTLq9Xdam+c
-         0Y+k+I2owNnjrYtAg3ucbM9KTcRfZ40oFT7iB5WuF/Ldsl7e1szfbTJfkbq4rNruJ4
-         e7o3XKye3H2Issf7OZja1+MtR2u0quguR+Cr/9hW7IasSE4/neVA0WwgBxzwoDETE4
-         bXl24vYvfF6qQQa3AJ19qk3iDoEWKxc2CEIZqsTake2LzEnhPHBQzGnPzz/8BTwecJ
-         SS9O71NljDTjg==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        with ESMTP id S229525AbjGTBYn (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 19 Jul 2023 21:24:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88B1A2101;
+        Wed, 19 Jul 2023 18:24:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4R5vVv6dLmz4wZn;
-        Thu, 20 Jul 2023 11:00:23 +1000 (AEST)
-Date:   Thu, 20 Jul 2023 11:00:21 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Steve French <smfrench@gmail.com>
-Cc:     CIFS <linux-cifs@vger.kernel.org>,
-        Winston Wen <wentao@uniontech.com>,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0FBF961862;
+        Thu, 20 Jul 2023 01:24:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA41BC433C7;
+        Thu, 20 Jul 2023 01:24:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689816281;
+        bh=wO09obrXhA42IrXPHgzvPAi/kdWTqRkdn+YMTWPwnrA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=BVHyTbl4nOmOsVP2DCrgfluLcPrbYUS8oBUlD1YPJIOVbCHhsHRYbB7m7oLq3lSHC
+         4MSrIm9LW6TPIu+Kf57ymU5mG5sSH/mC1YIqjjjRg0ZJdbC4E/jSiV21/jMTL7zECx
+         ihpcVsMuf7Age5tb5jAGIntTzuw94jAThuRLczu86K66gSH3CCukp/eXW8CSV0IXZh
+         R/HTkCb7jXz9NukJFvNijvqHCITycrHmSk7KmH19c+TrFg/w4ghXVjb/fk2SwEkuv7
+         0IX+sxsFdoqaIhDpKMPEdzIDeBabFXAd3kW6S40AxbkXgDjC/f5RruUb2En9FAONGm
+         BcYwyHgqna9IA==
+Date:   Wed, 19 Jul 2023 18:24:39 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     "Von Dentz, Luiz" <luiz.von.dentz@intel.com>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        linux-modules@vger.kernel.org
-Subject: Re: linux-next: build failure after merge of the cifs tree
-Message-ID: <20230720110021.3f2f9457@canb.auug.org.au>
-In-Reply-To: <CAH2r5mugNKYBNXm7AuPFL=V=77Qkm3q6TtXCj-B0kugmpL0aYQ@mail.gmail.com>
-References: <20230720103540.0436273d@canb.auug.org.au>
-        <CAH2r5mugNKYBNXm7AuPFL=V=77Qkm3q6TtXCj-B0kugmpL0aYQ@mail.gmail.com>
+        "Linux Next Mailing List" <linux-next@vger.kernel.org>,
+        David Miller <davem@davemloft.net>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Networking <netdev@vger.kernel.org>,
+        Alexander Mikhalitsyn <alexander@mihalicyn.com>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>
+Subject: Re: linux-next: build failure after merge of the bluetooth tree
+Message-ID: <20230719182439.7af84ccd@kernel.org>
+In-Reply-To: <20230720105042.64ea23f9@canb.auug.org.au>
+References: <PH0PR11MB51269B6805230AB8ED209B14D332A@PH0PR11MB5126.namprd11.prod.outlook.com>
+        <20230720105042.64ea23f9@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/FIrPqV5zDJ.FH04/BPP=TU=";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,45 +63,66 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/FIrPqV5zDJ.FH04/BPP=TU=
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Thu, 20 Jul 2023 10:50:42 +1000 Stephen Rothwell wrote:
+> Hi all,
+> 
+> On Sat, 8 Jul 2023 00:17:15 +0000 "Von Dentz, Luiz" <luiz.von.dentz@intel.com> wrote:
+> >
+> > There was a patch sent to net-next that was supposed to fix this:
+> > 
+> > [PATCH v1 net-next 2/2] net: scm: introduce and use scm_recv_unix helper
+> > 
+> > I am waiting for it to be merged.
+> > 
+> > 
+> > ________________________________
+> > From: Stephen Rothwell
+> > Sent: Thursday, July 6, 2023 4:41 PM
+> > To: Marcel Holtmann; Johan Hedberg
+> > Cc: Von Dentz, Luiz; Linux Kernel Mailing List; Linux Next Mailing List
+> > Subject: Re: linux-next: build failure after merge of the bluetooth tree
+> > 
+> > Hi all,
+> > 
+> > On Fri, 16 Jun 2023 08:32:37 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:  
+> > >
+> > > On Tue, 13 Jun 2023 13:02:58 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:    
+> > > >    
+> > >  After merging the bluetooth tree, today's linux-next build (arm    
+> > > > multi_v7_defconfig) failed like this:
+> > > >
+> > > > ERROR: modpost: "pidfd_prepare" [net/bluetooth/bluetooth.ko] undefined!
+> > > >
+> > > > Caused by commit
+> > > >
+> > > >   817efd3cad74 ("Bluetooth: hci_sock: Forward credentials to monitor")
+> > > >
+> > > > I have reverted that commit for today.    
+> > >
+> > > I am still reverting that commit.    
+> > 
+> > Ditto  
+> 
+> This is getting a bit ridiculous ... a build failure reported over a
+> month ago with a fix
+> (https://lore.kernel.org/netdev/20230626215951.563715-1-aleksandr.mikhalitsyn@canonical.com)
+> posted 3 weeks ago, has not yet been fixed :-(
+> 
+> What is stopping that fix (with the appropriate followup) being added
+> to the bluetooth tree?  Or just the fix being added to the net-next tree?
+> 
+> Yes, I know that the time period includes the merge window, but it has
+> been more that a week since then.
 
-Hi all,
+Something weird. We did merge it, there was a sort-of-v2-called-v1:
 
-On Wed, 19 Jul 2023 19:47:42 -0500 Steve French <smfrench@gmail.com> wrote:
->
-> Winston had an updated version of the patch - just replaced it with
-> his updated one which does a cast to (char *)
->=20
->           ses->local_nls =3D load_nls((char *)ctx->local_nls->charset);
->=20
-> But as he noted in an earlier email thread:
-> > Perhaps I should make a change to load_nls() to take a const char *
-> > instead of char *? If this make sense, I'll do it soon. =20
->=20
-> which is probably cleaner
+https://lore.kernel.org/all/20230627174314.67688-1-kuniyu@amazon.com/
 
-s/probably/definitely/  ;-)
+Merged as https://git.kernel.org/netdev/net-next/c/a9c49cc2f5b5
 
---=20
-Cheers,
-Stephen Rothwell
+Dunno how it's supposed to fix this particular issue, tho, on a closer
+look, as it still calls:
 
---Sig_/FIrPqV5zDJ.FH04/BPP=TU=
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+  scm_recv_unix() -> scm_pidfd_recv() -> pidfd_prepare()
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmS4hyYACgkQAVBC80lX
-0GxH8gf/Tx5aW0j6Mj4Q3aumRfNgl8nFIUfWng73joDDPna1bV9ck4lD2PaTbcgQ
-FhK9et4v/hkYfhjcmqern74/rlueEjpMa6+k1cf5Zrl8fzsWv8CirTJ7FfcPDJJP
-GjYf+jEyG6+V63RcOu97DriNKQ4CsIHto3LPvtygG2JCUqJWQ1YvetpiLo91iQFa
-CDweL6LLEteaUdwctceikPv9vNxcpo3+gR9pMjtxCu/VlIHviyduZ/mHEUZF1X7h
-Jwj3O+ikbpNZ5r4mxdruWp5C/0OXmSog1Yk04iZjOWzRFzb4jCBBgCFcsQKq6u0A
-TWL7fn9eL3QgP2vMPXxh2765MK/6wA==
-=oC+X
------END PGP SIGNATURE-----
-
---Sig_/FIrPqV5zDJ.FH04/BPP=TU=--
+:S

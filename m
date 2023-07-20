@@ -2,91 +2,93 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDD3775A403
-	for <lists+linux-next@lfdr.de>; Thu, 20 Jul 2023 03:34:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8991975A435
+	for <lists+linux-next@lfdr.de>; Thu, 20 Jul 2023 04:00:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229903AbjGTBeC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 19 Jul 2023 21:34:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46026 "EHLO
+        id S229451AbjGTCAi (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 19 Jul 2023 22:00:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229762AbjGTBeB (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 19 Jul 2023 21:34:01 -0400
-Received: from smtpbg154.qq.com (smtpbg154.qq.com [15.184.224.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14DCF2699;
-        Wed, 19 Jul 2023 18:33:44 -0700 (PDT)
-X-QQ-mid: bizesmtp69t1689816815thvqecog
-Received: from winn-pc ( [113.57.152.160])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Thu, 20 Jul 2023 09:33:34 +0800 (CST)
-X-QQ-SSF: 01400000000000F0H000000A0000000
-X-QQ-FEAT: ed3fCvOSdPtok9dqNbjZOUiBz3j5AlKdThUzqIrSzdkBL8VMn7X8/7SOjvGQD
-        1S0+Nn5RRbWySoa+AcUfAxlDEU67uYFBuLAChaaGsCVxgx7LQsGFzCSMHoB/efhqTdHPYrQ
-        P5xb06vUxcIiSeO3GDxz5XLGTknwFiD0kkmGnS2Aa1Grg0BgKYxJ3JGtf6i9eCTK3NiV0dR
-        TaacX/Dr8ZwtkxbUdNfx9R46anPlxWlAFsBpuvvMezWt0uMtYkUtHzVs/1XvA2hFa0ojmqs
-        zOEu9OJZ08rflGDk4J8BWR9beiot36Rx7y58Z90NRhfUyxYsAlGXKdsceVU7myrqsY4jw1e
-        wWR6gZLhtwvSmgNfZY1RieOpsPb+WucPSnmnl5VZH8G0ZdnqD1A8DEAumlcVqqBvt1Tzved
-X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 3347760861191863388
-Date:   Thu, 20 Jul 2023 09:33:34 +0800
-From:   Winston Wen <wentao@uniontech.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Steve French <smfrench@gmail.com>,
-        CIFS <linux-cifs@vger.kernel.org>,
+        with ESMTP id S229709AbjGTCAh (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 19 Jul 2023 22:00:37 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF1382123;
+        Wed, 19 Jul 2023 19:00:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1689818428;
+        bh=f0tiyHG5LkPEEi4G2iZHxPMbGPIeVi4G8CsSBrw9ILE=;
+        h=Date:From:To:Cc:Subject:From;
+        b=nwmgCoeIiW4YASgXzb/NOeHKJ8tCdjLjVVyetB7v916+FYmIPoAhTNbFvyHrtFGzW
+         ti+MTqD4EAJnt7lW1swQp6vSe4qW+/Ngb9JqqyQHlJ/ceyDvtqxmp+7ZIpUkNb0qqk
+         TjcDx+I1uBaSegVh6jrt58LQ6W0I4b6RDp9jgnLfb3J/LlBlXs+JFre9VQ1uaaf+xu
+         EuyWCPgSEfdDHJy+7s5kUHB8ly1ciO06CKEtVo/xerTaCNFyhTrMkkNdGTlKjKhvsR
+         JJANvgDAqsCX+87rojywpPu/mzCAEb1nwm0bB8gFp0FhXfqX2Br443srfsRCZnr2MQ
+         Ga2wkFLRTPxxQ==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4R5wrD4f5Tz4wZt;
+        Thu, 20 Jul 2023 12:00:28 +1000 (AEST)
+Date:   Thu, 20 Jul 2023 12:00:26 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Mike Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Baoquan He <bhe@redhat.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        linux-modules@vger.kernel.org
-Subject: Re: linux-next: build failure after merge of the cifs tree
-Message-ID: <C27A47B8189477B4+20230720093334.2682929e@winn-pc>
-In-Reply-To: <20230720110021.3f2f9457@canb.auug.org.au>
-References: <20230720103540.0436273d@canb.auug.org.au>
-        <CAH2r5mugNKYBNXm7AuPFL=V=77Qkm3q6TtXCj-B0kugmpL0aYQ@mail.gmail.com>
-        <20230720110021.3f2f9457@canb.auug.org.au>
-Organization: Uniontech
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patch in the clk tree
+Message-ID: <20230720120026.544ab3f5@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:uniontech.com:qybglogicsvrgz:qybglogicsvrgz6a-1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/Z2BCFkOxO=T5DXWLZaoT0AB";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, 20 Jul 2023 11:00:21 +1000
-Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+--Sig_/Z2BCFkOxO=T5DXWLZaoT0AB
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> Hi all,
-> 
-> On Wed, 19 Jul 2023 19:47:42 -0500 Steve French <smfrench@gmail.com>
-> wrote:
-> >
-> > Winston had an updated version of the patch - just replaced it with
-> > his updated one which does a cast to (char *)
-> > 
-> >           ses->local_nls = load_nls((char
-> > *)ctx->local_nls->charset);
-> > 
-> > But as he noted in an earlier email thread:
-> > > Perhaps I should make a change to load_nls() to take a const char
-> > > * instead of char *? If this make sense, I'll do it soon.  
-> > 
-> > which is probably cleaner
-> 
-> s/probably/definitely/  ;-)
-> 
+Hi all,
 
-haha yes!
+The following commit is also in the mm tree tree as a different commit
+(but the same patch):
 
-I'll make a small patch for this in the next cycle.
+  e7dd44f4f316 ("clk: fixed-mmio: make COMMON_CLK_FIXED_MMIO depend on HAS_=
+IOMEM")
 
--- 
-Thanks,
-Winston
+This is commit
 
+  a53259d47b6f ("clk: fixed-mmio: make COMMON_CLK_FIXED_MMIO depend on HAS_=
+IOMEM")
+
+in the mm tree.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/Z2BCFkOxO=T5DXWLZaoT0AB
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEyBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmS4lToACgkQAVBC80lX
+0GxqdQf4ifvyyLtyJtAo+Nl1t8hiyfK68Wmus9xnqs6Tb7MNniowzSO/K/lEuSI8
+q+jUISJqAEX1RjJWo3IYaldAWn/6OlQ9Ty1QrBjACrDcyDGTS00jjfHQeEwLV8hh
+hcI8/yWEFf38smrD3NeZNyRpVoy/MIO6SBPJJag0dGCbi1/20CmYu9N51fI3xDSN
+N1T8WSYK83JzvWSFuvaaZJR6uo34yUBqw6l1+fOTU/Tawif54+CQa8x05L6wipX0
+YkNJmfaLugkuLmgIBPbXiGOTY/53+UqyWjdrw+Za1X/JzgHkDfn/AD7Mjslv37+H
+mXagYq2JV20Omg0KtkKgOgWtnJgW
+=w0M+
+-----END PGP SIGNATURE-----
+
+--Sig_/Z2BCFkOxO=T5DXWLZaoT0AB--

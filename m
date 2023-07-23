@@ -2,45 +2,44 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4256C75E597
-	for <lists+linux-next@lfdr.de>; Mon, 24 Jul 2023 00:37:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65ED275E5A1
+	for <lists+linux-next@lfdr.de>; Mon, 24 Jul 2023 00:44:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229544AbjGWWhJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 23 Jul 2023 18:37:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55874 "EHLO
+        id S229545AbjGWWok (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 23 Jul 2023 18:44:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjGWWhI (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 23 Jul 2023 18:37:08 -0400
+        with ESMTP id S229493AbjGWWok (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 23 Jul 2023 18:44:40 -0400
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3794F1B0;
-        Sun, 23 Jul 2023 15:37:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 390AE1AA;
+        Sun, 23 Jul 2023 15:44:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1690151825;
-        bh=LxW6JJ6AtaorYpCXyS2NzoLc0u4P3By4MVniWy6RjsM=;
+        s=201702; t=1690152277;
+        bh=FFJbRmWPuFn+hHeXw5R3llNT9JS3TxX+Z3Uz0Aa1ehE=;
         h=Date:From:To:Cc:Subject:From;
-        b=HCtX4+qEOZJ3f+2EJqfRdiWE3e26kIoZm5IQxoWmLoNYrj2Bz8cPNvTFmEeatzygN
-         ibgJUI8QmDahETT2muZAx+ISaza5k8YDFUWlwpXv00F/r3ns27KjVZDQzcr8mOAhb2
-         Uv0Yz8OQ+1v9MPsq9xsoNAzM91BT4AJkxObag3XztqYHlG8LLGEv8Z764HynlHrNMn
-         eS1nSf2gl5dKQp/IBvi3EUriuSzvBPwgelHoOoH2FXRAgoY7jm1mkouWryXIwpYpPL
-         2AGvODwUezU6yr+pmIphd/osLWvdy0O3/7rtFRuiIqsQqbRf9TGw07e2togL6+WBfr
-         ceU0u3kV/xwjQ==
+        b=GhtUV9N9pUteSBkU2oRhZ82icl/XWFvt+j82XnRqwOAcr1ZH9WO4Yo7R0Q616pmhE
+         oF2xCXOuAQbrEvZ9NkwbcCNeb0rqXAJbbTHn5CFaWesQFQl8wXgcJHeSN1bjW81ZFe
+         wNgm358325hB6d/ePa8m4j4la+IDo8Z2hsA0cHYbfvZCE7tYCMtNzYhuQUYWZhPuAv
+         lk99lrw9+oJjl+TB/4Mh6G6L+fNmF9jl2pjXQn5vufcPG8uHppsb9BBNbKWpxkcn9d
+         0wyxj0jNlCoHEvWdako0eT5Wh2HlL/YCqs7aaH72cWl78EoPYvso3DnGAZMH0e81uZ
+         nn1CvDE1QDLKw==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4R8J7h6LD3z4wZn;
-        Mon, 24 Jul 2023 08:37:04 +1000 (AEST)
-Date:   Mon, 24 Jul 2023 08:37:03 +1000
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4R8JJP2DvGz4wyC;
+        Mon, 24 Jul 2023 08:44:37 +1000 (AEST)
+Date:   Mon, 24 Jul 2023 08:44:36 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Herbert Xu <herbert@gondor.apana.org.au>,
-        Linux Crypto List <linux-crypto@vger.kernel.org>
-Cc:     Weili Qian <qianweili@huawei.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the crypto tree
-Message-ID: <20230724083703.5d995fb4@canb.auug.org.au>
+Subject: linux-next: duplicate patches in the bluetooth tree
+Message-ID: <20230724084436.0ebf8cee@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/d1vHiiYsJxy71g3tmV1270v";
+Content-Type: multipart/signed; boundary="Sig_/Onjev0jTMukVx.TVM9PB=du";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
@@ -51,48 +50,47 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/d1vHiiYsJxy71g3tmV1270v
+--Sig_/Onjev0jTMukVx.TVM9PB=du
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-In commit
+The following commits are also in Linus Torvalds' tree as different
+commits (but the same patches):
 
-  5cd4ed98cfb7 ("crypto: hisilicon/qm - flush all work before driver remove=
-d")
-
-Fixes tag
-
-  Fixes: ("crypto: hisilicon/qm - enable PF and VFs communication")
-
-has these problem(s):
-
-  - No SHA1 recognised
-
-Maybe you meant
-
-Fixes: e3ac4d20e936 ("crypto: hisilicon/qm - enable PF and VFs communicatio=
-n")
+  1097b9b5a14b ("Bluetooth: hci_event: call disconnect callback before dele=
+ting conn")
+  1a43e2538e5a ("Bluetooth: ISO: fix iso_conn related locking and validity =
+issues")
+  2a9bc19e9d39 ("Bluetooth: use RCU for hci_conn_params and iterate safely =
+in hci_sync")
+  45018a3caf9b ("Bluetooth: coredump: fix building with coredump disabled")
+  5beaf842b507 ("Bluetooth: SCO: fix sco_conn related locking and validity =
+issues")
+  64068b2b948a ("Bluetooth: MGMT: Use correct address for memcpy()")
+  752a4a227d35 ("Bluetooth: btusb: Fix bluetooth on Intel Macbook 2014")
+  7728d4d43b78 ("Bluetooth: hci_sync: Avoid use-after-free in dbg for hci_r=
+emove_adv_monitor()")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/d1vHiiYsJxy71g3tmV1270v
+--Sig_/Onjev0jTMukVx.TVM9PB=du
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmS9q48ACgkQAVBC80lX
-0Gwrtgf9FhOKwL0Q0OrSI5uoroI2Y0FXt8g0dKfYBdItKQ2/KZTDfjng8NR9bX7g
-g+HfGUJ9HaeAqoF0pqMbeldVqZ1N2ta64y1LcUnfB6ChxInJg9g1KwI3xs5R97Fy
-BRHW8XF2pnYnkiZU1A2IYkQzErtW2wjbNN+8et7ajbMJbDhginZEN6hiOWc6DDb7
-Y9X4Ha5eqpGyjfNjQJ12U503A53bpDF7Lo+FeggTKf3Kq0Z23EmqJHqJ33sjvRjR
-FPfY1ARsMT4UWLbg3+Pb3BXHl3cP4YK81kcWjGOEOX+m4BSSXtwXjIcsxv7iJMxc
-2ujLJfIVrvbOlZulEa32jYn0JAFm5Q==
-=ytar
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmS9rVQACgkQAVBC80lX
+0GzuZggApFWUB4/v7gPrmnlA8tLtQ53PtRBv20gSH59Ml7t6PVON6/XDDLYat8QX
+znAtyyOFXxFQlu8o74t25AACBmkDEQInlcUXa6qWwe9VetmqXmC8xLy66AA84uEA
+88AgzETsuCSRz87jpxfOvxyRNSn8d6sklJBQuFVrgDODdNnuqyL1VvSwS0BQ0Vuo
+udYu3s0srIztbjsRmYJUtTYa5CHMfG30sj7KSTTllwO0aivYuHzQOA031XzOSyBI
+HJW9fgj5x4iZdXSPERMgxk30xSlqQ7oLeiCwGZzP/cMv9mXePAhxf5nREd19PgZt
+8S3NpBkY4tszSg6j7A/a+6LI/HO8rQ==
+=vQNY
 -----END PGP SIGNATURE-----
 
---Sig_/d1vHiiYsJxy71g3tmV1270v--
+--Sig_/Onjev0jTMukVx.TVM9PB=du--

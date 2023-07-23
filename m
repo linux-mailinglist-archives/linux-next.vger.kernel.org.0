@@ -2,90 +2,99 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD3BC75E5B0
-	for <lists+linux-next@lfdr.de>; Mon, 24 Jul 2023 01:03:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E6D075E5BB
+	for <lists+linux-next@lfdr.de>; Mon, 24 Jul 2023 01:20:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229499AbjGWXDa (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 23 Jul 2023 19:03:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60874 "EHLO
+        id S229895AbjGWXUJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 23 Jul 2023 19:20:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229651AbjGWXD3 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 23 Jul 2023 19:03:29 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14F08E5C;
-        Sun, 23 Jul 2023 16:03:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1690153407;
-        bh=vKk+zQjfeVHdrQhTyb8CNok8oPqG+yP/ASG9POArvxs=;
-        h=Date:From:To:Cc:Subject:From;
-        b=rXdVGqyPHy7OukkRWRXLDXcDT3CAAbRUUKXifHcJn/ujREhLG1P89+xo8TJUBUI38
-         JxuA1oa/nK3e1+TgEUavK4pK1zP/QBTOw6UJrzBJ+DIDEuZt3nZy70AGZRWEepWr7K
-         OB0TiZ75jglXBSS4SdtFA6ddp8rgMQcm8qZ8fbS7l7y6hVd+TwS4JHi51W3/0Di4KA
-         GpyFoGnr6Kbeg8d94jPf7eGNWd7AAYX+a9xptOK0Rgrahvg3Ng2HRIAZJBjztov6Zc
-         Ix0hFZLRDwbD49ycmXCq5Ls6pDy2QG9RDNz5afdhuIhec47XT7MHE4duRf3eWTWJz2
-         vTSm9g7gPZLWA==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        with ESMTP id S229898AbjGWXUH (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 23 Jul 2023 19:20:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 558A4E78;
+        Sun, 23 Jul 2023 16:20:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4R8Jk75Cv5z4wy1;
-        Mon, 24 Jul 2023 09:03:27 +1000 (AEST)
-Date:   Mon, 24 Jul 2023 09:03:26 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Alexey Dobriyan <adobriyan@gmail.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AE03260E9C;
+        Sun, 23 Jul 2023 23:20:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 197BFC433C7;
+        Sun, 23 Jul 2023 23:20:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1690154403;
+        bh=g8SzQXFzpEBeTHxOxGlzKqVUPbZUuS6W4t99oZqHAxA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OViqbWr5eRhdTDonKw3okEYaqpSzDRH78ixWzUh65LtIZ8WwvcOIYNhWbaZ01bS1Z
+         xoOLXbRPSMcGQUzfi2EaKs+nPrm0QN2wmnZXs7BGvAY/d+zhEJuKBBiP5vJE6wGMBY
+         pZcpGJd+NREdjqOeCI/OlgdryqLwC/LSdbH4v42cVETAlAwhnd1H33hI8ewvakDjW3
+         /57GkMzVET9oJsAwIc6BqBUX6A/0Y8o//hYf5bEpb1dS3fxovIKge1h60fWjEahkgU
+         AfjD9tuVze7nsiJZl9pXcfn9GMjigqSdsdAAKs7pBAtsHJGi1dfjkm8QPCUHbOR1bd
+         wmxt+PmrKJYCw==
+Date:   Mon, 24 Jul 2023 00:19:59 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Conor Dooley <Conor.Dooley@microchip.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patch in the mm tree
-Message-ID: <20230724090326.72e61015@canb.auug.org.au>
+Subject: Re: linux-next: Fixes tag needs some work in the riscv-dt tree
+Message-ID: <20230724-enclosure-imprint-e502e7414ce6@spud>
+References: <20230724084817.0ed6cbf4@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/7dqyzp9CXjG.3lFeIoEqTvW";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="RKXUebwcOE38mN55"
+Content-Disposition: inline
+In-Reply-To: <20230724084817.0ed6cbf4@canb.auug.org.au>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/7dqyzp9CXjG.3lFeIoEqTvW
-Content-Type: text/plain; charset=US-ASCII
+
+--RKXUebwcOE38mN55
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+On Mon, Jul 24, 2023 at 08:48:17AM +1000, Stephen Rothwell wrote:
 
-The following commit is also in Linus Torvalds' tree as a different commit
-(but the same patch):
+> In commit
+>=20
+>   8e421af310dc ("riscv: dts: starfive: remove undocumented phy properties=
+")
+>=20
+> Fixes tag
+>=20
+>   Fixes: b15a73c358d1 ("riscv: dts: starfive: visionfive2: Add configurat=
+ion of gmac and phy")
+>=20
+> has these problem(s):
+>=20
+>   - Subject does not match target commit subject
+>=20
+> Thus
+>=20
+> Fixes: b15a73c358d1 ("riscv: dts: starfive: visionfive 2: Add configurati=
+on of gmac and phy")
 
-  5ad6c1f83fb9 ("kbuild: flatten KBUILD_CFLAGS")
+Hopefully the commit will go away entirely when I get sent a real fix
+for b15a73c358d1, but Fixes: tag duly fixed nonetheless. Thanks.
 
-This is commit
-
-  0817d2599cfe ("kbuild: flatten KBUILD_CFLAGS")
-
-in Lunus' tree.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/7dqyzp9CXjG.3lFeIoEqTvW
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+--RKXUebwcOE38mN55
+Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmS9sb4ACgkQAVBC80lX
-0GyALQf/YFMFFXobXndxXYJ8PRvkx+JN3zByw/VWDv9SMVt6QzLo+12teQx7rX/D
-hRAhKpokasjqaATJfGRjdepN7FnuwkKkOWlbDlA6KxVZxq12wiYGM1IlUm34P9HH
-lxQV4L58e7oIZ9QDgK2ZX7xxABCb1JGm0/7DlbtDn8zOGdhmLO8vyP8VgGkcNZaR
-kcJ4mMcFH7k+Nu0h9Yr2hBSKQKH9PPDqQ1PLieTz5/CDj+1exsaNvwz4cnyTaLRJ
-1qxy/AuVAnnsUywdVaT2+8cLEgiWjZK7EBkzif5yX/A49BAN6gmJbiAzGnDG6OpO
-0x9T43FW00TSRk/U59sCkPXw5M+1PQ==
-=2x4h
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZL21nwAKCRB4tDGHoIJi
+0ur6AP9VNtdU7MLD+wO9g1rB+u1gC7K16cpoPz81B2E1abNyhAEAtLbRsylC+8Hr
+1S4axwhPniUJiYpXcfygGoTgZ6v4tgU=
+=stOX
 -----END PGP SIGNATURE-----
 
---Sig_/7dqyzp9CXjG.3lFeIoEqTvW--
+--RKXUebwcOE38mN55--

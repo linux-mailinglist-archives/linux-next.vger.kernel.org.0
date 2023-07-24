@@ -2,49 +2,45 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A94A760342
-	for <lists+linux-next@lfdr.de>; Tue, 25 Jul 2023 01:42:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 542DB760350
+	for <lists+linux-next@lfdr.de>; Tue, 25 Jul 2023 01:50:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229522AbjGXXm1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 24 Jul 2023 19:42:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45204 "EHLO
+        id S229437AbjGXXux (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 24 Jul 2023 19:50:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbjGXXm0 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 24 Jul 2023 19:42:26 -0400
+        with ESMTP id S229568AbjGXXuw (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 24 Jul 2023 19:50:52 -0400
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3590310FD;
-        Mon, 24 Jul 2023 16:42:21 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02B861712;
+        Mon, 24 Jul 2023 16:50:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1690242140;
-        bh=swmpqi3zCu/7F+USpB91FA6B65YdCzV3Tq109TNTAXY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=F1oTrIfgRHYL2codGh1w2vQ+k7tOXE/XPJZfQoaRABtazGVZLkfrthOjW46tXSJBI
-         3mNjd/H6e18xAcAbxxduSRJ/zaJVBv2zE7x3eqd0f2AwedRipX3mdhgWzm05KNlZGx
-         NSRLJt/p+M6HskfyWZHUGcEPZqT+KTVcm9/e0fgPgmiGNiLoNRPS8PWBzZjyM0tAl/
-         MT8lWcXOGoJaareCJ9qCW7Zf5sAd7xakpqhp26wjbCmEO6MW/+oSrcX54AHzY3p8WB
-         lbAJ7BjJ5Wc/90K3lac/ij+/aMw94EsLQBuLV7xJ8eB72kSGVu8gpRNoIYccChjuk6
-         SGlszJlkbjWjA==
+        s=201702; t=1690242649;
+        bh=ewqqy/E3varcIRH9ZMMDvwqrstLYQS6pqj/BI3HcUSo=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Fhk73u1yfHrJT/X6cAXX/8yJs7ApC1geIoNL4veZUIzcaKUMxmd/ZcSDwlndPc/YI
+         NZJUCdqE0KQpT+Mvi7sLwtnJxieHsm6oasoH2Z+mDitbT5QGIGldTLZcXZFAy0MWzv
+         wTYeu01nJEKciG9azKPVeVLJMZD3SjbiaByfsMFtXdLDejlGcxFNPJch9pEgTv1SHH
+         +nrutyDA+44wBYOmlijYPEnZ12SNQ9LwJMcIls6EnUGl2MEoKXze/IuUODdxJREGnB
+         eRQ1ZPmTsFHf7MFxew/vc2vEGJ/hsGlzvqO2Cp50eylEhBJJin71BUN8eCT9krGYN9
+         pOU9B9lQkKIJg==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4R8xXX06LKz4wy4;
-        Tue, 25 Jul 2023 09:42:19 +1000 (AEST)
-Date:   Tue, 25 Jul 2023 09:42:19 +1000
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4R8xkK3LN9z4wbP;
+        Tue, 25 Jul 2023 09:50:49 +1000 (AEST)
+Date:   Tue, 25 Jul 2023 09:50:48 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     linux-next@vger.kernel.org,
-        "Paul E. McKenney" <paulmck@kernel.org>, Willy Tarreau <w@1wt.eu>,
-        thomas@t-8ch.de, linux-kernel@vger.kernel.org,
-        shuah <shuah@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: Request for linux-kselftest nolibc branch Inclusion in
- linux-next
-Message-ID: <20230725094219.7c1790fa@canb.auug.org.au>
-In-Reply-To: <4a007283-be03-907a-094f-6651a44e631f@linuxfoundation.org>
-References: <4a007283-be03-907a-094f-6651a44e631f@linuxfoundation.org>
+To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        ARM <linux-arm-kernel@lists.infradead.org>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the arm-soc tree
+Message-ID: <20230725095048.0a5ae656@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/M_+rX/v4Tb4g1.wahoMq+Tt";
+Content-Type: multipart/signed; boundary="Sig_/olOUUSWx8F2ZAWjT8pz3Hyb";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -55,70 +51,42 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/M_+rX/v4Tb4g1.wahoMq+Tt
-Content-Type: text/plain; charset=UTF-8
+--Sig_/olOUUSWx8F2ZAWjT8pz3Hyb
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Shuah,
+Hi all,
 
-On Mon, 24 Jul 2023 16:22:16 -0600 Shuah Khan <skhan@linuxfoundation.org> w=
-rote:
->
-> Please include the following linux-kselftest nolibc branch for linux-next
-> coverage. This will be based on Linus's tree.
->=20
-> I will be using this branch to send nolibc pull requests to Linus.
->=20
-> URL for the branch:
-> https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git=
-/log/?h=3Dnolibc
->=20
-> Primary Contacts:
-> Shuah Khan - shuah@kernel.org or Shuah Khan <skhan@linuxfoundation.org>
->=20
-> Please cc:
-> Willy Tarreau <w@1wt.eu>
-> Thomas Wei=C3=9Fschuh <thomas@t-8ch.de>
-> Paul E. McKenney <paulmck@kernel.org>
+After merging the arm-soc tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-Added from today.
+x86_64-linux-gnu-ld: vmlinux.o: in function `owl_sps_set_power':
+owl-sps.c:(.text+0x16e259d): undefined reference to `owl_sps_set_pg'
 
-Thanks for adding your subsystem tree as a participant of linux-next.  As
-you may know, this is not a judgement of your code.  The purpose of
-linux-next is for integration testing and to lower the impact of
-conflicts between subsystems in the next merge window.=20
+Caused by commit
 
-You will need to ensure that the patches/commits in your tree/series have
-been:
-     * submitted under GPL v2 (or later) and include the Contributor's
-        Signed-off-by,
-     * posted to the relevant mailing list,
-     * reviewed by you (or another maintainer of your subsystem tree),
-     * successfully unit tested, and=20
-     * destined for the current or next Linux merge window.
+  930c9005ed9f ("soc: actions: Move power-domain driver to the genpd dir")
 
-Basically, this should be just what you would send to Linus (or ask him
-to fetch).  It is allowed to be rebased if you deem it necessary.
+I have used the arm-soc tree from next-20230724 for today.
 
 --=20
 Cheers,
-Stephen Rothwell=20
-sfr@canb.auug.org.au
+Stephen Rothwell
 
---Sig_/M_+rX/v4Tb4g1.wahoMq+Tt
+--Sig_/olOUUSWx8F2ZAWjT8pz3Hyb
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmS/DFsACgkQAVBC80lX
-0Gy9ZAf+P4CJi8z4pfX7bDqhTGuhy1fJD3rA6h8uRCNvUV6G++sWGjPW2AHl1c4+
-AYC+o8SNSQz45PSBLRl207D+rR94o2H9oy6l1aZR49toC4/OgtJmlrox7PVEpQq+
-1K+a0g0Ep8pFGMOWtGHsLdDiiFI8rKdRdE/j9OF3Hw4/DsiWdpvqpC0S3PoP7/f8
-N9G3igvAzdCRWcXCjyT0sedbVGlaa/P2WpLZ/RtqsbAUajaV9y6BgueuGpxVaZ0R
-xqvK7FzDX6r765Bfid9/qhsJmM+PkgmBBl9gG4aG6toIBxNyJNWXO4tR+71vtQ/L
-c31+EnRvF9wNED1cFzfZRHukaX9Fsg==
-=8BBq
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmS/DlgACgkQAVBC80lX
+0GxM6wf/WAJ0l/ANlRZN6iNwWdv8I7g+B9qGTt5yxQEZ1TnsGMr6mTrCU0l9/zkF
+zEa/ndyshhJSVKJkmVxvNCrXqT7G62rBZPRKqlXIrtIVUoTcEyQi2x+p/aiQSoUP
+JSX3gGDePvxwLqk9kzpDGeQ98Z+KpHM5dGnsjARvRZoyqPc3Qd9mL+y+aJyCmu15
+/lE94GI7wcjLKkfkscKDKyAHCZEnZY33GGKiSLvSicPRB5bj3wa0dixxx5TWF5QG
+b8TWRas2swUIkkfkyU+8SU774dHl38K8q85crFLx0Li5otPjNOaog1newR09OIEq
+RvJSsm+HQrCEFhcwhKItjWsTRrbLuw==
+=5KwZ
 -----END PGP SIGNATURE-----
 
---Sig_/M_+rX/v4Tb4g1.wahoMq+Tt--
+--Sig_/olOUUSWx8F2ZAWjT8pz3Hyb--

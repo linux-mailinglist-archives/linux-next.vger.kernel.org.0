@@ -2,56 +2,43 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 523D475F8C9
-	for <lists+linux-next@lfdr.de>; Mon, 24 Jul 2023 15:48:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BF6475FA90
+	for <lists+linux-next@lfdr.de>; Mon, 24 Jul 2023 17:18:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231331AbjGXNrm (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 24 Jul 2023 09:47:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49610 "EHLO
+        id S230505AbjGXPSz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 24 Jul 2023 11:18:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231315AbjGXNrL (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 24 Jul 2023 09:47:11 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34EA61FE1;
-        Mon, 24 Jul 2023 06:45:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690206301; x=1721742301;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=rY2/R9GFp/Je8rfy5KAQqpLAzPjjeEx7LgTpj02B9e8=;
-  b=N0P+3d/x2OkZtzms2qiSIdMF3G0Pl4BoCicrc67gIKwltndVQ0tzh3Jc
-   xr9S4QD8cbF5LdWOeF7838D6Cc92OmwTJoPinndY4+EE+ljPxL6d87Yju
-   XGrYWnjoxaFOU2xN/ivz5Q1YUiOZOe9p3GjCoZ8DrJmLh5nMYssrp3QCD
-   ncZARnSDuY9gM4ItoKdq9QZNyPU4YODec44OngaqWPkyEtiKHGsthFdmr
-   Ps3nHDdf3WpojxX/pzHw6/r4B5Zg1PG9nwqzB8LjyEj0DG1pdX4VSOxae
-   ebUHoSwVMC7uNSWj/Y93yzD+K4PRKZ/PbtfK2KFlxn248ClsXjaMoQqo3
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10781"; a="367467742"
-X-IronPort-AV: E=Sophos;i="6.01,228,1684825200"; 
-   d="scan'208";a="367467742"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2023 06:45:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10781"; a="719682886"
-X-IronPort-AV: E=Sophos;i="6.01,228,1684825200"; 
-   d="scan'208";a="719682886"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga007.jf.intel.com with ESMTP; 24 Jul 2023 06:44:58 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1qNvrs-00FRjQ-2O;
-        Mon, 24 Jul 2023 16:44:56 +0300
-Date:   Mon, 24 Jul 2023 16:44:56 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Mark Brown <broonie@kernel.org>, Jonathan Corbet <corbet@lwn.net>
+        with ESMTP id S230426AbjGXPSr (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 24 Jul 2023 11:18:47 -0400
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1328E42
+        for <linux-next@vger.kernel.org>; Mon, 24 Jul 2023 08:18:46 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id 6897D7DA;
+        Mon, 24 Jul 2023 15:18:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 6897D7DA
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1690211924; bh=xZw/H+LWeED7vti6M1J3qcQxd7Om4IJ0vRJRFLOH1vQ=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=bU2UQDwpcdRJhpYxPFt0Wmzaxd7SCooKgCnpi6JtbEyNxRrc4utYR2XkeK2APeZoD
+         c6qV2hrfaodOkquynb7gFzcu6LzwqlqXsvyxn4+dAPTxzTRN4yZdxp0X4hEoGSaAgu
+         ZqIiGGM9Q2sRlcgsyQcvMSj8oiMQShP5ihug6ZFOz7KLO390hVUZeTXMavDEgOA+TZ
+         ayKtd0JmDvbLIFshISAoIm/3jXywArpR4DHLCRMYj8Ie8Xg6FaQySI2mILVcOmhHO2
+         ++5mVt8z5egrXZ1QaNuiWfz8MTiHJx8Lctn2rR8tgVayO5r5kKYAKTeC+TbMRRv6KC
+         IVxvh3X9fAveg==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>
 Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
         Liam Girdwood <lgirdwood@gmail.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Randy Dunlap <rdunlap@infradead.org>
 Subject: Re: linux-next: build warning after merge of the sound-asoc tree
-Message-ID: <ZL6AWGiabBGyU3Dq@smile.fi.intel.com>
+In-Reply-To: <ZL6AWGiabBGyU3Dq@smile.fi.intel.com>
 References: <20230713121627.17990c86@canb.auug.org.au>
  <ZK/ruOD4QFPQ3Q5q@smile.fi.intel.com>
  <ZK/w5LFanElxZazG@smile.fi.intel.com>
@@ -61,46 +48,54 @@ References: <20230713121627.17990c86@canb.auug.org.au>
  <cbff36d5-cde7-43bd-b0d5-ede8950fd885@sirena.org.uk>
  <ZL53HkIWuE4byo+R@smile.fi.intel.com>
  <43862e72-eeb2-4670-8cd6-0e334044583d@sirena.org.uk>
+ <ZL6AWGiabBGyU3Dq@smile.fi.intel.com>
+Date:   Mon, 24 Jul 2023 09:18:43 -0600
+Message-ID: <87zg3lbang.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <43862e72-eeb2-4670-8cd6-0e334044583d@sirena.org.uk>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-+Cc: Jon
+Andy Shevchenko <andriy.shevchenko@linux.intel.com> writes:
 
-On Mon, Jul 24, 2023 at 02:11:00PM +0100, Mark Brown wrote:
-> On Mon, Jul 24, 2023 at 04:05:34PM +0300, Andy Shevchenko wrote:
-> > On Mon, Jul 24, 2023 at 01:36:53PM +0100, Mark Brown wrote:
-> 
-> > > Jon's usually fairly responsive, perhaps there's something worrying
-> > > there,
-> 
-> > Hmm... maybe my understanding of the :export: is wrong? Or what do you suggest?
-> 
-> I have no idea what any of that is doing.  I'm hoping Jon does.
+> +Cc: Jon
+>
+> On Mon, Jul 24, 2023 at 02:11:00PM +0100, Mark Brown wrote:
+>> On Mon, Jul 24, 2023 at 04:05:34PM +0300, Andy Shevchenko wrote:
+>> > On Mon, Jul 24, 2023 at 01:36:53PM +0100, Mark Brown wrote:
+>> 
+>> > > Jon's usually fairly responsive, perhaps there's something worrying
+>> > > there,
+>> 
+>> > Hmm... maybe my understanding of the :export: is wrong? Or what do you suggest?
+>> 
+>> I have no idea what any of that is doing.  I'm hoping Jon does.
+>
+> Okay, so far we are waiting for his reply...
 
-Okay, so far we are waiting for his reply...
+Sorry, it took me a bit to reconstruct why I hadn't applied this .. the
+simple fact is that it doesn't apply to docs-next.
+include/linux/int_log.h doesn't exist in mainline, so the kernel-doc
+directive to include from it doesn't either.  All of that is introduced
+in linux-next ... so the fix really needs to take the same path that the
+rest of the changes did.
 
-> > > though I do note you only sent it a bit more than a week ago.
-> 
-> > I fully aware of that and you can see that this reply has been induced by
-> > the ping from Stephen.
-> 
-> Sure, but that means that it's possible he's just not got round to it
-> yet rather than that there's a problem.
+I guess I'd just assumed that was going to happen and didn't reply,
+apologies for that.
 
--- 
-With Best Regards,
-Andy Shevchenko
+Feel free to add:
 
+Acked-by: Jonathan Corbet <corbet@lwn.net>
 
+if you feel so inclined.
+
+Thanks,
+
+jon

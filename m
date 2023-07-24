@@ -2,50 +2,47 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83D8F75E62D
-	for <lists+linux-next@lfdr.de>; Mon, 24 Jul 2023 03:15:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 081CD75E9C0
+	for <lists+linux-next@lfdr.de>; Mon, 24 Jul 2023 04:31:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229998AbjGXBP4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 23 Jul 2023 21:15:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45978 "EHLO
+        id S230177AbjGXCbL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 23 Jul 2023 22:31:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229973AbjGXBPu (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 23 Jul 2023 21:15:50 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80B80E6D;
-        Sun, 23 Jul 2023 18:15:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1690161281;
-        bh=HktgO5vl0G8C9YUbjPBosi8STA1pHpsO3kbIOf94AMA=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Gb7iizTfYzIsg+YV8piLq5lx3+Aj0JWfU5wPWsm5f6QafFEEIV2TwusDe1FZ7nl9r
-         dGlRvRFMdfLcdCyL0TCCtiqL4ir3z4NUHFV0+xLlSnldDQxRMobRGLK3q9ebNyIiqz
-         bEIX08yvklTOBE91zRmq0+LO/zn2txkNu2Z2CoDtzXJ/6yLhalNc/BllMNPWBK6/7w
-         ji/uDSqnYkT3yvD5T+8Wwp/4sw/rymm/9xSw0RgsOyC1lRov1gTFD72DQP+UH/P3uh
-         R0+ws3EFp+tSGtDr59Ni/O5A4T17Pg69oYwkpO9dKC9HoPwA0JLbstGmApOP2ctLEC
-         I6tE7FqjjtSPA==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4R8MdY1Plyz4wyZ;
-        Mon, 24 Jul 2023 11:14:41 +1000 (AEST)
-Date:   Mon, 24 Jul 2023 11:14:39 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     Alex Deucher <alexander.deucher@amd.com>,
-        Azeem Shaikh <azeemshaikh38@gmail.com>,
-        Kees Cook <keescook@chromium.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Mario Limonciello <mario.limonciello@amd.com>
-Subject: linux-next: manual merge of the amdgpu tree with Linus' tree
-Message-ID: <20230724111439.572dc274@canb.auug.org.au>
+        with ESMTP id S229994AbjGXCbK (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 23 Jul 2023 22:31:10 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F50DDD;
+        Sun, 23 Jul 2023 19:30:53 -0700 (PDT)
+Received: from kwepemm600009.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4R8NVx5r9dz1GDXd;
+        Mon, 24 Jul 2023 09:54:01 +0800 (CST)
+Received: from [10.67.101.184] (10.67.101.184) by
+ kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Mon, 24 Jul 2023 09:54:50 +0800
+Subject: Re: linux-next: Fixes tag needs some work in the crypto tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Linux Crypto List <linux-crypto@vger.kernel.org>
+References: <20230724083703.5d995fb4@canb.auug.org.au>
+CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+From:   Weili Qian <qianweili@huawei.com>
+Message-ID: <8693972c-fa58-ba0f-9342-decb2f992215@huawei.com>
+Date:   Mon, 24 Jul 2023 09:54:41 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
+ Thunderbird/45.7.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/sH0=iM1FqtxAIdANAVmW=Ms";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
+In-Reply-To: <20230724083703.5d995fb4@canb.auug.org.au>
+Content-Type: text/plain; charset="windows-1252"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.101.184]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemm600009.china.huawei.com (7.193.23.164)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,53 +50,31 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/sH0=iM1FqtxAIdANAVmW=Ms
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Sorry, my fault. I'll double check this in future submissions.
+The correct tag is
+Fixes: e3ac4d20e936 ("crypto: hisilicon/qm - enable PF and VFs communication")
 
-Hi all,
+@Herbert, Is there any way to modify it?
 
-Today's linux-next merge of the amdgpu tree got a conflict in:
+Regards,
+Weili
 
-  drivers/gpu/drm/amd/amdgpu/atom.c
-
-between commit:
-
-  992b8fe106ab ("drm/radeon: Replace all non-returning strlcpy with strscpy=
-")
-
-from Linus' tree and commit:
-
-  adf64e214280 ("drm/amd: Avoid reading the VBIOS part number twice")
-
-from the amdgpu tree.
-
-I fixed it up (the latter removed the line updates by the former, so I
-just used the latter) and can carry the fix as necessary. This is now
-fixed as far as linux-next is concerned, but any non trivial conflicts
-should be mentioned to your upstream maintainer when your tree is
-submitted for merging.  You may also want to consider cooperating with
-the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/sH0=iM1FqtxAIdANAVmW=Ms
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmS90H8ACgkQAVBC80lX
-0GxM1wf/XLdl4hKitJtv2dj6XaBUCAGjV3XA3nimtUShbdu6EUsci2mCIBVIPmiJ
-pGViVk11DRbVp9ozTv9KRaukjWODu3CBfyQAzqDtK/9CBv1LXuwMAVirAznkaJ+s
-qHEbqUUYdlbm0Vmz3dLe73ZVhD8efsZqlroLC7EXPGNUPBEoSu0BXhr6qF9lVxeS
-vkVl+v39J9YSk6jA2+T0uuv1nPKDAsN7GLZ+6O48/+oXoL7OFN8N3jui0TyAzJqe
-lDeXfjIBRH4J+lR7OAHKBc45sVfE7kBO7yuFz0mAkUs9c1N+m1zJ+pq4N0tBwjBH
-qww2btwR7mgoKSV5qwLGEyIWT+Gsvg==
-=qYcI
------END PGP SIGNATURE-----
-
---Sig_/sH0=iM1FqtxAIdANAVmW=Ms--
+On 2023/7/24 6:37, Stephen Rothwell wrote:
+> Hi all,
+> 
+> In commit
+> 
+>   5cd4ed98cfb7 ("crypto: hisilicon/qm - flush all work before driver removed")
+> 
+> Fixes tag
+> 
+>   Fixes: ("crypto: hisilicon/qm - enable PF and VFs communication")
+> 
+> has these problem(s):
+> 
+>   - No SHA1 recognised
+> 
+> Maybe you meant
+> 
+> Fixes: e3ac4d20e936 ("crypto: hisilicon/qm - enable PF and VFs communication")
+> 

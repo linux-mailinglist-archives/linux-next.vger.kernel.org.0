@@ -2,100 +2,119 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24A48760262
-	for <lists+linux-next@lfdr.de>; Tue, 25 Jul 2023 00:33:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1B91760328
+	for <lists+linux-next@lfdr.de>; Tue, 25 Jul 2023 01:31:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230078AbjGXWdG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 24 Jul 2023 18:33:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55602 "EHLO
+        id S230298AbjGXXbW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 24 Jul 2023 19:31:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231527AbjGXWdE (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 24 Jul 2023 18:33:04 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E559F1FDE;
-        Mon, 24 Jul 2023 15:32:37 -0700 (PDT)
+        with ESMTP id S229459AbjGXXbV (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 24 Jul 2023 19:31:21 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB9ED10F0;
+        Mon, 24 Jul 2023 16:31:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1690237933;
-        bh=/uQWPdsrbd4Z+j1MCnssxq28ZvspIDVceEVZS8EdwwM=;
+        s=201702; t=1690241474;
+        bh=rUL962e/sq0yjskMcWvQ79vbePqOGQRbrHppxbF7p0A=;
         h=Date:From:To:Cc:Subject:From;
-        b=BRhO56K0nT5M1W/hJN0IUNumEQw0NyvrcISfOelCN0n3D1Xs+oAZbbppAJobHVbBb
-         3poRzbi4XNnHRhrN/FR6nkE42ZD4U7D4pXqtYKEC66RLpg2WUqlBtT0Z06sGCjJp7O
-         dBWwHKfg6NWBWLx8/qDXBZot4gT3g8UQMBJ8Uzo3rCN63y6Ri3K1MwLiJc3q1ERc1F
-         L03Cr7cesTqfDBAbS+k9YI1HecWaJ7pDf/V7eug12CTBsuQEzdGwE1RF6KOZDk4S9H
-         R6+lUjFtc4lykgkG6J3JawDxBay+qEuRJmmUQFgRpYP8LhpdsgNLTMO9m0DngOSaID
-         tKIjWHWXM5ZEQ==
+        b=StrA6aO7PYmq8dEi9fVpzKjd1B9x3Lo5cSdRkqIPGQOwkDt8ce9hS3jy8zr6SxI+j
+         4SHxeRKDH2xZ/DNXP9mS2GAqbB4uJKWXxQrAhkCw2QO8QFqHlpPAjSE+5GcEXEyWSg
+         JcvM9//Ueqss/l/pPfHDLn91msrIur0BqE45DR6mWWAqGmD9VC2H0kQBRnThG7uUI/
+         K+eJV4i40MDKJPW4xvUlgCa2ehsweioSZGLtHLfCSEwU11WyYA4erSud41W30Y4V/u
+         bIFzP23Fz5I5KvdlpD3U1odHpVm70nQifTt0WfFFR4BGvaWAbTGf7fy4N11bPWqELU
+         16gLZ6LZnBTLg==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4R8vzd5r8zz4wy6;
-        Tue, 25 Jul 2023 08:32:13 +1000 (AEST)
-Date:   Tue, 25 Jul 2023 08:32:12 +1000
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4R8xHj0BYvz4wZw;
+        Tue, 25 Jul 2023 09:31:12 +1000 (AEST)
+Date:   Tue, 25 Jul 2023 09:31:10 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the devicetree tree
-Message-ID: <20230725083212.0f59e6ac@canb.auug.org.au>
+To:     Hector Martin <marcan@marcan.st>, Olof Johansson <olof@lixom.net>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Subject: linux-next: manual merge of the asahi-soc tree with the arm-soc
+ tree
+Message-ID: <20230725093110.285eb858@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/59TN87Tlncky3yWLHtFlQ.c";
+Content-Type: multipart/signed; boundary="Sig_/aKZPabUw3Yk/quRw_hIncWV";
  protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/59TN87Tlncky3yWLHtFlQ.c
+--Sig_/aKZPabUw3Yk/quRw_hIncWV
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-In commit
+Today's linux-next merge of the asahi-soc tree got a conflict in:
 
-  120e4bb6ca34 ("of: fix htmldocs build warnings")
+  drivers/soc/apple/Makefile
 
-Fixes tag
+between commit:
 
-  Fixes: 39459ce717b8 ("of: dynamic: add lifecycle docbook info to node cre=
-ation functions")
+  869b9dd3339a ("soc: apple: Move power-domain driver to the genpd dir")
 
-has these problem(s):
+from the arm-soc tree and commits:
 
-  - Target SHA1 does not exist
+  6fca0adc61cf ("soc: apple: mailbox: Add ASC/M3 mailbox driver")
+  eaf935fa48ec ("soc: apple: mailbox: Rename config symbol to APPLE_MAILBOX=
+")
 
-Maybe you meant
+from the asahi-soc tree.
 
-Fixes: d9194e009efe ("of: dynamic: add lifecycle docbook info to node creat=
-ion functions")
-
-I assume somthing has been rebased along the way :-(
-
-Also, please keep all the commit message tags together at the end of
-the commit message.
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/59TN87Tlncky3yWLHtFlQ.c
+diff --cc drivers/soc/apple/Makefile
+index b241e6a65e5b,20feee6f3943..000000000000
+--- a/drivers/soc/apple/Makefile
++++ b/drivers/soc/apple/Makefile
+@@@ -1,4 -1,9 +1,7 @@@
+  # SPDX-License-Identifier: GPL-2.0-only
+ -obj-$(CONFIG_APPLE_PMGR_PWRSTATE)	+=3D apple-pmgr-pwrstate.o
+ -
++ obj-$(CONFIG_APPLE_MAILBOX) +=3D apple-mailbox.o
++ apple-mailbox-y =3D mailbox.o
++=20
+  obj-$(CONFIG_APPLE_RTKIT) +=3D apple-rtkit.o
+  apple-rtkit-y =3D rtkit.o rtkit-crashlog.o
+ =20
+
+--Sig_/aKZPabUw3Yk/quRw_hIncWV
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmS+++wACgkQAVBC80lX
-0GwyBAf+IYVJJx49xnlvtzLiHi2NGlnNnau95itc9ekyTjrtXC37jotajTmVX72+
-lYoAXwbYxQKtokCd/l282RpnFFh7Rb1y8p7HpsRpfDfcAWaL7FMGiLL8/HJgwdku
-R/ePHYTAaKL13YZJ78InSlZw5GeAE3DDqOy0SPt6XIspcVufkSwg7tQfVptBLMjW
-sGoz5XW9u2sFDcG5NPD7SozMnR07mjmfqJTYmWps6fiUmDk2I8kPehn6U0lnEQTe
-ghJhfLGfmq/vST43MeyPi7iOvuxMrSZhwTugVVo2H256W6VYL3T9ArJ4nMGPb3qr
-kbRqmO6HH5eFlwRmjCD0bbqlC64woA==
-=Xb9R
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmS/Cb4ACgkQAVBC80lX
+0Gz6DwgAmKYg8IRz4CNEXlo3WdMloXpKt65ayB0GHrGxe9ElRGSuuDEvIc/6CUIH
+HwbgrjlX24M/Jlid++BXTGe5En+LKwsilZpgX5sgSWyiWy6mTJKiRe5nPmO2LjR3
+gStcDdtC9op5nVpsgbH1ssK2VqaLoTTbNEsof4mUGEF5U8Ys8DQdLUQ6Qx3zMMOE
+GFElXHNOoIzAoUCZxVTwqYG70bG0/C+ACpVOej5wpd02BASR+912+c+WCa9HDbue
+2J/lec6XVXriaDCatqUw88syz1pGBItixCV6PLF3wBcajya6N5LsaissZvxfno9c
+7BrZaBbmrhN8Q6S5pymcbWU4PTihxQ==
+=eePt
 -----END PGP SIGNATURE-----
 
---Sig_/59TN87Tlncky3yWLHtFlQ.c--
+--Sig_/aKZPabUw3Yk/quRw_hIncWV--

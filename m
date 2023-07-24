@@ -2,190 +2,123 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24CC176033D
-	for <lists+linux-next@lfdr.de>; Tue, 25 Jul 2023 01:40:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A94A760342
+	for <lists+linux-next@lfdr.de>; Tue, 25 Jul 2023 01:42:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229898AbjGXXkU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 24 Jul 2023 19:40:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44348 "EHLO
+        id S229522AbjGXXm1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 24 Jul 2023 19:42:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbjGXXkT (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 24 Jul 2023 19:40:19 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 229951700;
-        Mon, 24 Jul 2023 16:40:18 -0700 (PDT)
+        with ESMTP id S229479AbjGXXm0 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 24 Jul 2023 19:42:26 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3590310FD;
+        Mon, 24 Jul 2023 16:42:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1690242016;
-        bh=6TF4rTDCnEeLmpa+s/bHmP4F9sA3NfG4Z+Y5NgPOx6o=;
-        h=Date:From:To:Cc:Subject:From;
-        b=mmFjBMv1NncnWp1P3bsXTwpPKa2LTG+OKU1jOxXBRW8yPQwZHpVFi8VYRJu6s4ZM4
-         QPfq/KrLFX7gsYtQAhquY3cFPMk+BDZLIdWDB5bHUhLHsrdDnmL3AAfHFByqaVadWR
-         iOnuAAQeqrR8u5J4d0TJDlD4qcwG8jKsVJ09w9gO/6qHjmardwp7P83CLl8U+8HSv0
-         dAagsQeprGqg/Ww+huEN3clrX0nztdUJncSxM4zrliQ2CWc9Mz2HI7GI3Gok8LGE+h
-         LT3iKzZkn29xGunrS+Q2BZ8XaBQ2HQrCAQfD/NDIexK3xOIbh1Y5CWcZmmaTyqlNqK
-         9jUjQ8Su9hGtQ==
+        s=201702; t=1690242140;
+        bh=swmpqi3zCu/7F+USpB91FA6B65YdCzV3Tq109TNTAXY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=F1oTrIfgRHYL2codGh1w2vQ+k7tOXE/XPJZfQoaRABtazGVZLkfrthOjW46tXSJBI
+         3mNjd/H6e18xAcAbxxduSRJ/zaJVBv2zE7x3eqd0f2AwedRipX3mdhgWzm05KNlZGx
+         NSRLJt/p+M6HskfyWZHUGcEPZqT+KTVcm9/e0fgPgmiGNiLoNRPS8PWBzZjyM0tAl/
+         MT8lWcXOGoJaareCJ9qCW7Zf5sAd7xakpqhp26wjbCmEO6MW/+oSrcX54AHzY3p8WB
+         lbAJ7BjJ5Wc/90K3lac/ij+/aMw94EsLQBuLV7xJ8eB72kSGVu8gpRNoIYccChjuk6
+         SGlszJlkbjWjA==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4R8xV74Z3Gz4wZw;
-        Tue, 25 Jul 2023 09:40:15 +1000 (AEST)
-Date:   Tue, 25 Jul 2023 09:40:13 +1000
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4R8xXX06LKz4wy4;
+        Tue, 25 Jul 2023 09:42:19 +1000 (AEST)
+Date:   Tue, 25 Jul 2023 09:42:19 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Anastasia Eskova <anastasia.eskova@ibm.com>,
-        Costa Shulyupin <costa.shul@redhat.com>,
-        Eric DeVolder <eric.devolder@oracle.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the s390 tree with the mm tree
-Message-ID: <20230725094013.2dfb0168@canb.auug.org.au>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     linux-next@vger.kernel.org,
+        "Paul E. McKenney" <paulmck@kernel.org>, Willy Tarreau <w@1wt.eu>,
+        thomas@t-8ch.de, linux-kernel@vger.kernel.org,
+        shuah <shuah@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: Request for linux-kselftest nolibc branch Inclusion in
+ linux-next
+Message-ID: <20230725094219.7c1790fa@canb.auug.org.au>
+In-Reply-To: <4a007283-be03-907a-094f-6651a44e631f@linuxfoundation.org>
+References: <4a007283-be03-907a-094f-6651a44e631f@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/B8tY7A9iU/ozSC9TTOSK89E";
+Content-Type: multipart/signed; boundary="Sig_/M_+rX/v4Tb4g1.wahoMq+Tt";
  protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/B8tY7A9iU/ozSC9TTOSK89E
-Content-Type: text/plain; charset=US-ASCII
+--Sig_/M_+rX/v4Tb4g1.wahoMq+Tt
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Hi Shuah,
 
-Today's linux-next merge of the s390 tree got a conflict in:
+On Mon, 24 Jul 2023 16:22:16 -0600 Shuah Khan <skhan@linuxfoundation.org> w=
+rote:
+>
+> Please include the following linux-kselftest nolibc branch for linux-next
+> coverage. This will be based on Linus's tree.
+>=20
+> I will be using this branch to send nolibc pull requests to Linus.
+>=20
+> URL for the branch:
+> https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git=
+/log/?h=3Dnolibc
+>=20
+> Primary Contacts:
+> Shuah Khan - shuah@kernel.org or Shuah Khan <skhan@linuxfoundation.org>
+>=20
+> Please cc:
+> Willy Tarreau <w@1wt.eu>
+> Thomas Wei=C3=9Fschuh <thomas@t-8ch.de>
+> Paul E. McKenney <paulmck@kernel.org>
 
-  arch/s390/Kconfig
+Added from today.
 
-between commit:
+Thanks for adding your subsystem tree as a participant of linux-next.  As
+you may know, this is not a judgement of your code.  The purpose of
+linux-next is for integration testing and to lower the impact of
+conflicts between subsystems in the next merge window.=20
 
-  b2d2d291f588 ("s390/kexec: refactor for kernel/Kconfig.kexec")
+You will need to ensure that the patches/commits in your tree/series have
+been:
+     * submitted under GPL v2 (or later) and include the Contributor's
+        Signed-off-by,
+     * posted to the relevant mailing list,
+     * reviewed by you (or another maintainer of your subsystem tree),
+     * successfully unit tested, and=20
+     * destined for the current or next Linux merge window.
 
-from the mm tree and commits:
-
-  8cf57d7217c3 ("s390: add support for user-defined certificates")
-  37002bc6b603 ("docs: move s390 under arch")
-
-from the s390 tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+Basically, this should be just what you would send to Linus (or ask him
+to fetch).  It is allowed to be rebased if you deem it necessary.
 
 --=20
 Cheers,
-Stephen Rothwell
+Stephen Rothwell=20
+sfr@canb.auug.org.au
 
-diff --cc arch/s390/Kconfig
-index 736548e4163e,d9d50a7a2016..000000000000
---- a/arch/s390/Kconfig
-+++ b/arch/s390/Kconfig
-@@@ -246,28 -245,6 +247,28 @@@ config PGTABLE_LEVEL
- =20
-  source "kernel/livepatch/Kconfig"
- =20
- +config ARCH_DEFAULT_KEXEC
- +	def_bool y
- +
- +config ARCH_SUPPORTS_KEXEC
- +	def_bool y
- +
- +config ARCH_SUPPORTS_KEXEC_FILE
- +	def_bool CRYPTO && CRYPTO_SHA256 && CRYPTO_SHA256_S390
- +
- +config ARCH_SUPPORTS_KEXEC_SIG
- +	def_bool MODULE_SIG_FORMAT
- +
- +config ARCH_SUPPORTS_KEXEC_PURGATORY
- +	def_bool KEXEC_FILE
- +
- +config ARCH_SUPPORTS_CRASH_DUMP
- +	def_bool y
- +	help
-- 	  Refer to <file:Documentation/s390/zfcpdump.rst> for more details on th=
-is.
-++	  Refer to <file:Documentation/arch/s390/zfcpdump.rst> for more details =
-on this.
- +	  This option also enables s390 zfcpdump.
-- 	  See also <file:Documentation/s390/zfcpdump.rst>
-++	  See also <file:Documentation/arch/s390/zfcpdump.rst>
- +
-  menu "Processor type and features"
- =20
-  config HAVE_MARCH_Z10_FEATURES
-@@@ -506,6 -483,46 +507,16 @@@ config SCHED_TOPOLOG
- =20
-  source "kernel/Kconfig.hz"
- =20
- -config KEXEC
- -	def_bool y
- -	select KEXEC_CORE
- -
- -config KEXEC_FILE
- -	bool "kexec file based system call"
- -	select KEXEC_CORE
- -	depends on CRYPTO
- -	depends on CRYPTO_SHA256
- -	depends on CRYPTO_SHA256_S390
- -	help
- -	  Enable the kexec file based system call. In contrast to the normal
- -	  kexec system call this system call takes file descriptors for the
- -	  kernel and initramfs as arguments.
- -
- -config ARCH_HAS_KEXEC_PURGATORY
- -	def_bool y
- -	depends on KEXEC_FILE
- -
- -config KEXEC_SIG
- -	bool "Verify kernel signature during kexec_file_load() syscall"
- -	depends on KEXEC_FILE && MODULE_SIG_FORMAT
- -	help
- -	  This option makes kernel signature verification mandatory for
- -	  the kexec_file_load() syscall.
- -
- -	  In addition to that option, you need to enable signature
- -	  verification for the corresponding kernel image type being
- -	  loaded in order for this to work.
- -
-+ config CERT_STORE
-+ 	bool "Get user certificates via DIAG320"
-+ 	depends on KEYS
-+ 	help
-+ 	  Enable this option if you want to access user-provided secure boot
-+ 	  certificates via DIAG 0x320.
-+=20
-+ 	  These certificates will be made available via the keyring named
-+ 	  'cert_store'.
-+=20
-  config KERNEL_NOBP
-  	def_bool n
-  	prompt "Enable modified branch prediction for the kernel by default"
-
---Sig_/B8tY7A9iU/ozSC9TTOSK89E
+--Sig_/M_+rX/v4Tb4g1.wahoMq+Tt
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmS/C94ACgkQAVBC80lX
-0GzKTwf+O430WpSO8cWrvBRBn79P4xascKyk+fMYw3JRbQBGHHa4uhP4Q/JllMgi
-TeveP0AocecBKJ1zIT7Ua/HMQcBhi3ExdP2xDAdcyElijGzrSwXvylAfSvcQN3Oe
-nM17Pd2IfeXJJBpuw+bOTgvMUZRz/XmIyDHZZ9yL+LL+GCLTr6bieItTXplXqZcc
-lmGETpX9JLfi5jzfLEWQVeN0BXdOJNTTtO2UupCSU4UgH+p3TgzCZowWOOzAHShB
-5vOILxMOZ2AFsKogxZi+jHNvkE7v6/1rUG3uNXFKAAI/at2KIaKz8OsuJd3zHSF0
-oAJajbqV0XLtCFr4KAZB291SkQs0Nw==
-=ZgbY
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmS/DFsACgkQAVBC80lX
+0Gy9ZAf+P4CJi8z4pfX7bDqhTGuhy1fJD3rA6h8uRCNvUV6G++sWGjPW2AHl1c4+
+AYC+o8SNSQz45PSBLRl207D+rR94o2H9oy6l1aZR49toC4/OgtJmlrox7PVEpQq+
+1K+a0g0Ep8pFGMOWtGHsLdDiiFI8rKdRdE/j9OF3Hw4/DsiWdpvqpC0S3PoP7/f8
+N9G3igvAzdCRWcXCjyT0sedbVGlaa/P2WpLZ/RtqsbAUajaV9y6BgueuGpxVaZ0R
+xqvK7FzDX6r765Bfid9/qhsJmM+PkgmBBl9gG4aG6toIBxNyJNWXO4tR+71vtQ/L
+c31+EnRvF9wNED1cFzfZRHukaX9Fsg==
+=8BBq
 -----END PGP SIGNATURE-----
 
---Sig_/B8tY7A9iU/ozSC9TTOSK89E--
+--Sig_/M_+rX/v4Tb4g1.wahoMq+Tt--

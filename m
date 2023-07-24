@@ -2,70 +2,104 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90BA675E5C1
-	for <lists+linux-next@lfdr.de>; Mon, 24 Jul 2023 01:47:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83D8F75E62D
+	for <lists+linux-next@lfdr.de>; Mon, 24 Jul 2023 03:15:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229544AbjGWXra (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 23 Jul 2023 19:47:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36154 "EHLO
+        id S229998AbjGXBP4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 23 Jul 2023 21:15:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbjGWXr3 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 23 Jul 2023 19:47:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F26CE61;
-        Sun, 23 Jul 2023 16:47:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        with ESMTP id S229973AbjGXBPu (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 23 Jul 2023 21:15:50 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80B80E6D;
+        Sun, 23 Jul 2023 18:15:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1690161281;
+        bh=HktgO5vl0G8C9YUbjPBosi8STA1pHpsO3kbIOf94AMA=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Gb7iizTfYzIsg+YV8piLq5lx3+Aj0JWfU5wPWsm5f6QafFEEIV2TwusDe1FZ7nl9r
+         dGlRvRFMdfLcdCyL0TCCtiqL4ir3z4NUHFV0+xLlSnldDQxRMobRGLK3q9ebNyIiqz
+         bEIX08yvklTOBE91zRmq0+LO/zn2txkNu2Z2CoDtzXJ/6yLhalNc/BllMNPWBK6/7w
+         ji/uDSqnYkT3yvD5T+8Wwp/4sw/rymm/9xSw0RgsOyC1lRov1gTFD72DQP+UH/P3uh
+         R0+ws3EFp+tSGtDr59Ni/O5A4T17Pg69oYwkpO9dKC9HoPwA0JLbstGmApOP2ctLEC
+         I6tE7FqjjtSPA==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AAEDB60EEA;
-        Sun, 23 Jul 2023 23:47:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6BA4C433C8;
-        Sun, 23 Jul 2023 23:47:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690156048;
-        bh=NLXIE/01ttoXz5b+BLWNfveZhjvzyf28j458rQY1fi4=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=pyRTB8SE9TtEsdd9+XjtvZZNWw80/QW6s9uRRehWVTwzK+a9ufiHqAbeQ5HBR1acD
-         y3ZEU9wIV9c68W+k1FVcM7bPscou3KlENSXtHOqALUVZPUQ2+tr4i+xvcGuGivTC2c
-         nqxbVu41M/I7HV1S5YWvXSmRovHTRjb8X7cRf3yVyBAB64m0KSBj56eYmDSb1fJHTU
-         4OwAg5ppThhLppUpxFUnl8pwWn6HN5iWN/RqtXR1mI3AirNwRpS9hHA8L2H3L1q6zS
-         LqVtf+ty/eH34A5rlfq6TtNdOyyGjOwKJO/r2YjTZSuRzQ3G+IdWmnDyVdyTmFdjju
-         T/fVanGmPkv9A==
-Message-ID: <448fd63412c1810abb72cee5e75b1fba56b1811e.camel@kernel.org>
-Subject: Re: linux-next: Signed-off-by missing for commit in the file-locks
- tree
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Date:   Sun, 23 Jul 2023 19:47:26 -0400
-In-Reply-To: <20230724084557.7ad2f3b4@canb.auug.org.au>
-References: <20230724084557.7ad2f3b4@canb.auug.org.au>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4R8MdY1Plyz4wyZ;
+        Mon, 24 Jul 2023 11:14:41 +1000 (AEST)
+Date:   Mon, 24 Jul 2023 11:14:39 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Alex Deucher <alexdeucher@gmail.com>
+Cc:     Alex Deucher <alexander.deucher@amd.com>,
+        Azeem Shaikh <azeemshaikh38@gmail.com>,
+        Kees Cook <keescook@chromium.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Mario Limonciello <mario.limonciello@amd.com>
+Subject: linux-next: manual merge of the amdgpu tree with Linus' tree
+Message-ID: <20230724111439.572dc274@canb.auug.org.au>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/sH0=iM1FqtxAIdANAVmW=Ms";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, 2023-07-24 at 08:45 +1000, Stephen Rothwell wrote:
-> Hi all,
->=20
-> Commit
->=20
->   f9d742d5b7e8 ("fs/locks: Fix typo")
->=20
-> is missing a Signed-off-by from its committer.
->=20
+--Sig_/sH0=iM1FqtxAIdANAVmW=Ms
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks. That should be fixed now.
+Hi all,
+
+Today's linux-next merge of the amdgpu tree got a conflict in:
+
+  drivers/gpu/drm/amd/amdgpu/atom.c
+
+between commit:
+
+  992b8fe106ab ("drm/radeon: Replace all non-returning strlcpy with strscpy=
+")
+
+from Linus' tree and commit:
+
+  adf64e214280 ("drm/amd: Avoid reading the VBIOS part number twice")
+
+from the amdgpu tree.
+
+I fixed it up (the latter removed the line updates by the former, so I
+just used the latter) and can carry the fix as necessary. This is now
+fixed as far as linux-next is concerned, but any non trivial conflicts
+should be mentioned to your upstream maintainer when your tree is
+submitted for merging.  You may also want to consider cooperating with
+the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
 --=20
-Jeff Layton <jlayton@kernel.org>
+Cheers,
+Stephen Rothwell
+
+--Sig_/sH0=iM1FqtxAIdANAVmW=Ms
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmS90H8ACgkQAVBC80lX
+0GxM1wf/XLdl4hKitJtv2dj6XaBUCAGjV3XA3nimtUShbdu6EUsci2mCIBVIPmiJ
+pGViVk11DRbVp9ozTv9KRaukjWODu3CBfyQAzqDtK/9CBv1LXuwMAVirAznkaJ+s
+qHEbqUUYdlbm0Vmz3dLe73ZVhD8efsZqlroLC7EXPGNUPBEoSu0BXhr6qF9lVxeS
+vkVl+v39J9YSk6jA2+T0uuv1nPKDAsN7GLZ+6O48/+oXoL7OFN8N3jui0TyAzJqe
+lDeXfjIBRH4J+lR7OAHKBc45sVfE7kBO7yuFz0mAkUs9c1N+m1zJ+pq4N0tBwjBH
+qww2btwR7mgoKSV5qwLGEyIWT+Gsvg==
+=qYcI
+-----END PGP SIGNATURE-----
+
+--Sig_/sH0=iM1FqtxAIdANAVmW=Ms--

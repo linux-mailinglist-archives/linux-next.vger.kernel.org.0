@@ -2,51 +2,51 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07B5575EA48
-	for <lists+linux-next@lfdr.de>; Mon, 24 Jul 2023 05:55:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1F2F75EA4C
+	for <lists+linux-next@lfdr.de>; Mon, 24 Jul 2023 05:59:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229560AbjGXDzU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 23 Jul 2023 23:55:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45326 "EHLO
+        id S230095AbjGXD7E (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 23 Jul 2023 23:59:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbjGXDzT (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 23 Jul 2023 23:55:19 -0400
+        with ESMTP id S229504AbjGXD7D (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 23 Jul 2023 23:59:03 -0400
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85AC7D7;
-        Sun, 23 Jul 2023 20:55:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1501CB0;
+        Sun, 23 Jul 2023 20:59:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1690170916;
-        bh=1O9veABFuWEkzULx1hz8w11nCNSgdrxGO+rHILRsC0w=;
+        s=201702; t=1690171140;
+        bh=W86ZLaZwdyVATmon5YX5XAipgk3WHeaX4q7xnup33HI=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=EOgqsgJNXyat/NFshfTdGBEP3OtXREIhy+InJyW25sZANRaKdpy92hnyxNw2J3s2u
-         /o9bMq56fjUr4wB/eaoAgQUX6lfdWI+MEj/Df5RwvizWW0a5Tlc7soiev+GmcNPvbm
-         0XNbsldgJpqCbUlQaODJiBSBZFzuW72jpAGy2mA2DxTqdlbLt8oLOs6QKUHC3+F7xw
-         l9Q2zr13OJaSX80gDM3EQ9dRw4d7AD7nF4ZO4gh0zLLQE9AtSNYsd+AMazumoobuxJ
-         1BQGNWI53SvPcVOyvgFFbKnm7aWSCGlupWmnitZ0WLIArAOiIJVVeekxwbQ+hUrw2H
-         ZKHxq9JFwkHpg==
+        b=CPQUhClFQlcV96NnwkLIOsv82b5N9aXFKX6q4G0zsEB0wc347Rc2LdJYXwhp68xbU
+         3y7bx5oVelPIu7cWmuEtaFxiHWE9kO1c1slsxp+9TPPilfA0gKkggswZhovOjV4sbf
+         T1VM8aCQ9yq08NZBLds1cG/NelSkYJk22Ea1klTJtr6kaICVaoZPCqCNd6OX89qI9l
+         XA0HfP3hPWla6GJFntvp1N3mo9cpLU47iLrFDwYoK+frwRuwwk8KWpCBi815ahJVgb
+         1xweK6Prqo/bKPjU029h7Mpn3i3eQLkN0u69+0qNpnEniZb0WSZtt95KuKA2qm5QKI
+         gKvUIsmR+x42A==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4R8RBq6PyCz4wy1;
-        Mon, 24 Jul 2023 13:55:15 +1000 (AEST)
-Date:   Mon, 24 Jul 2023 13:55:13 +1000
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4R8RH83R9Zz4wxx;
+        Mon, 24 Jul 2023 13:58:59 +1000 (AEST)
+Date:   Mon, 24 Jul 2023 13:58:58 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Rob Herring <robherring2@gmail.com>
-Cc:     Frank Rowand <frowand.list@gmail.com>,
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH] of: fix htmldocs build warnings
-Message-ID: <20230724135513.3773f184@canb.auug.org.au>
-In-Reply-To: <20230713161038.382b5e14@canb.auug.org.au>
-References: <20230220163638.04e9d0c4@canb.auug.org.au>
-        <20230310113258.463f836c@canb.auug.org.au>
-        <20230322180032.1badd132@canb.auug.org.au>
-        <20230713161038.382b5e14@canb.auug.org.au>
+        Randy Dunlap <rdunlap@infradead.org>
+Subject: Re: linux-next: build warning after merge of the sound-asoc tree
+Message-ID: <20230724135858.3c1abb01@canb.auug.org.au>
+In-Reply-To: <ZLES/6iNcmR7H+f7@smile.fi.intel.com>
+References: <20230713121627.17990c86@canb.auug.org.au>
+        <ZK/ruOD4QFPQ3Q5q@smile.fi.intel.com>
+        <ZK/w5LFanElxZazG@smile.fi.intel.com>
+        <ZLES/6iNcmR7H+f7@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/1a4j_oBF+fVe6xjvNiDxNmv";
+Content-Type: multipart/signed; boundary="Sig_/rI=3qm6trKPaAueSFxtHepy";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -57,92 +57,63 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/1a4j_oBF+fVe6xjvNiDxNmv
+--Sig_/rI=3qm6trKPaAueSFxtHepy
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Hi Aall,
 
-On Thu, 13 Jul 2023 16:10:38 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
+On Fri, 14 Jul 2023 12:18:55 +0300 Andy Shevchenko <andriy.shevchenko@linux=
+.intel.com> wrote:
 >
-> On Wed, 22 Mar 2023 18:00:32 +1100 Stephen Rothwell <sfr@canb.auug.org.au=
-> wrote:
-> >
-> > Fix these htmldoc build warnings:
+> On Thu, Jul 13, 2023 at 03:41:09PM +0300, Andy Shevchenko wrote:
+> > On Thu, Jul 13, 2023 at 03:19:04PM +0300, Andy Shevchenko wrote: =20
+> > > On Thu, Jul 13, 2023 at 12:16:27PM +1000, Stephen Rothwell wrote: =20
+> > > >=20
+> > > > After merging the sound-asoc tree, today's linux-next build (htmldo=
+cs)
+> > > > produced this warning:
+> > > >=20
+> > > > include/linux/int_log.h:1: warning: no structured comments found
+> > > >=20
+> > > > Introduced by commit
+> > > >=20
+> > > >   f97fa3dcb2db ("lib/math: Move dvb_math.c into lib/math/int_log.c"=
+) =20
+> > >=20
+> > > Can you elaborate a bit, please?
+> > >=20
+> > > Seems to me to be a false positive, or unveils a bug somewhere else. =
+=20
 > >=20
-> > include/linux/of.h:115: warning: cannot understand function prototype: =
-'const struct kobj_type of_node_ktype; '
-> > include/linux/of.h:118: warning: Excess function parameter 'phandle_nam=
-e' description in 'of_node_init'
+> > Ah, now I understand. There is a header file that has descriptions but
+> > EXPORT_SYMBOL. We have to drop keyword export from the index.
 > >=20
-> > Reported by: Stephen Rothwell <sfr@canb.auug.org.au>
-> > Reported by: Randy Dunlap <rdunlap@infradead.org>
-> > Fixes: 39459ce717b8 ("of: dynamic: add lifecycle docbook info to node c=
-reation functions")
-> > Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> > ---
-> >  include/linux/of.h | 7 +++----
-> >  1 file changed, 3 insertions(+), 4 deletions(-)
-> >=20
-> > Replaces "[PATCH] of: fix htmldocs build warning" and additionally
-> > fixes the new warning about phandle that Randy reported.
-> >=20
-> > diff --git a/include/linux/of.h b/include/linux/of.h
-> > index 9b7a99499ef3..d55dab9ad728 100644
-> > --- a/include/linux/of.h
-> > +++ b/include/linux/of.h
-> > @@ -100,10 +100,12 @@ struct of_reconfig_data {
-> >  	struct property		*old_prop;
-> >  };
-> > =20
-> > +extern const struct kobj_type of_node_ktype;
-> > +extern const struct fwnode_operations of_fwnode_ops;
-> > +
-> >  /**
-> >   * of_node_init - initialize a devicetree node
-> >   * @node: Pointer to device node that has been created by kzalloc()
-> > - * @phandle_name: Name of property holding a phandle value
-> >   *
-> >   * On return the device_node refcount is set to one.  Use of_node_put()
-> >   * on @node when done to free the memory allocated for it.  If the node
-> > @@ -111,9 +113,6 @@ struct of_reconfig_data {
-> >   * whether to free the memory will be done by node->release(), which is
-> >   * of_node_release().
-> >   */
-> > -/* initialize a node */
-> > -extern const struct kobj_type of_node_ktype;
-> > -extern const struct fwnode_operations of_fwnode_ops;
-> >  static inline void of_node_init(struct device_node *node)
-> >  {
-> >  #if defined(CONFIG_OF_KOBJ)
-> > --=20
-> > 2.39.2 =20
+> > Thank you for the report, I'll cook the patch ASAP. =20
 >=20
-> Any chance if this patch being applied?
+> The 20230713165320.14199-1-andriy.shevchenko@linux.intel.com had been sen=
+t.
 
-Is there something wrong with the patch?
+But not yet applied by anyone :-(
 
-P.S. Rob, should I use your kernel.org address as your linux-next
-contact?
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/1a4j_oBF+fVe6xjvNiDxNmv
+--Sig_/rI=3qm6trKPaAueSFxtHepy
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmS99iIACgkQAVBC80lX
-0GwUjgf/ZLyWdLI8NGli3RmCOslcvCkMO1wrOinImDrfrn5yZnstdgdBmNUObUTD
-4Xghp0pi6sbYyn4WVBuf3JKL4XrPMt8rJ47O4Nid8PcKfbsONDgIhRlbWBNHRHM5
-PGvNuMMSr9/M4qNFCFDe2D1XLa5HouiTOGVNw+sR0fBkOBu7UHawNmC1PrBn+zcv
-voCgjQbL9J1Czmpresx8q8H/Oz+apSVSv5xpOb3REFsmvt2Xih3xal00iinS9o53
-ZbmMkDyUUjt9O85XM8LXTCJhL3j39c5NDCW0Bz+eh+VugL0T+24Ky+JnzoPKTx5V
-gyy6QSd0ED+tYp5jfWJzZNpTC4swwg==
-=R8n4
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmS99wMACgkQAVBC80lX
+0GxhaQf/fOfnO3y4pBpJLf6Zk9CE6jSKZjECrLlYfCn5OhxysagIUQ+N49gmcqda
+aCcoXBBIUhbGq3VLQqa7IOdl0g+tYL3gzi2ga8sV6bFhEX2awhVAO9I5Ra96HsQO
+A46MoQapPi+cuaSMeG4Hvjt4iddAhgpaJ1u6ER6hbK9olebocYJiLr4W+o54ZFCt
+tQ63qz145MO+fUjpc0EeRKLnaLX9bEPVl1rMWZckef59qnwuK/hzIlfE7XU4OZEG
+ckbh0cPVZQzSYWkFh6gY815zuZKVEGEJ4IC3qLN0eQSAym2LW4zHPhnfZ+u9iBiH
+jq4pwihM+VYe0VlDKlnxzdUyfJ1Oyg==
+=ZOi3
 -----END PGP SIGNATURE-----
 
---Sig_/1a4j_oBF+fVe6xjvNiDxNmv--
+--Sig_/rI=3qm6trKPaAueSFxtHepy--

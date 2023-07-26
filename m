@@ -2,47 +2,47 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3256762B93
-	for <lists+linux-next@lfdr.de>; Wed, 26 Jul 2023 08:37:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87C4E762BF1
+	for <lists+linux-next@lfdr.de>; Wed, 26 Jul 2023 08:51:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229554AbjGZGhQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 26 Jul 2023 02:37:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54964 "EHLO
+        id S229568AbjGZGvn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 26 Jul 2023 02:51:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231886AbjGZGhO (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 26 Jul 2023 02:37:14 -0400
+        with ESMTP id S229522AbjGZGvm (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 26 Jul 2023 02:51:42 -0400
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 032832113;
-        Tue, 25 Jul 2023 23:37:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 302811990;
+        Tue, 25 Jul 2023 23:51:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1690353427;
-        bh=WC42Jc1mJ8UlGXI9HmCs7ztjCqsAjOjp2m88mWCoWO4=;
+        s=201702; t=1690354299;
+        bh=CUeLls7WOsjmZP9qyjq2DPHqSWyd21lUGxXgzDhxtdA=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=P+VatdpECOeurkE3yIPU2cQScPGroWkNnFpN4tTWy6gh9VtFjzr07JtA6fvr0ErWR
-         +ruNeE7o02cP3vD8S4QSnv80iizQGOwzLFmsA5KfrunHl2QoEwoAVeccFHXZ15pLuJ
-         +fkgpgea4jZt6TcwxnEzJi0ZMbmrzv1cjedGzHLkXEMmnIE/7rFiEa1xW/0jp6n2xC
-         rw+TV/lIne8Ox1FaQExRmmSZZp/E15tvs4JshSEouyU6EKV0asWhUNK1sCEc7YltWz
-         sWByYq6PRyLQ/HUpZqH66aPW3SdjW7YgeoYMXJ2VytfoJBjzaSBZlra5/oP03KHMjJ
-         +WcIygtRoHYGQ==
+        b=uKzkhMbVzoPHoWeL3oE+AGunVEOJpLLT7yRPEZj6FULvzHVgsU6e8hoc7IKZ43n7a
+         XKIWitTf76nHHINLAY3uqQEJfKN0VwKSGKJGC44mQPe78Zy3PWjbR1o3q0HqGqkY2E
+         GjQtX6QZp1XVGrnS3MIamn80us8jMJV9sZSID/YBNTmyyCJhIqyoXFG8UpkyAo/C3O
+         QARAmhXtmqclQEuq2L2A9UgBS2bI0RujJiKn7vzcX4xFKrYZK8zPIsmqjvbzjveZzv
+         eXVmTV0L17UIMziCs5qaJFxmYeUT9uITxbpKytWC9OJB3T0j0cOe5pLCpo4gbBoFg9
+         VfZEFyrC1ItpQ==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4R9khg1ZMdz4wy4;
-        Wed, 26 Jul 2023 16:37:07 +1000 (AEST)
-Date:   Wed, 26 Jul 2023 16:37:05 +1000
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4R9l1R2Vspz4wjG;
+        Wed, 26 Jul 2023 16:51:39 +1000 (AEST)
+Date:   Wed, 26 Jul 2023 16:51:37 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the rcu tree
-Message-ID: <20230726163705.3ade6aa6@canb.auug.org.au>
-In-Reply-To: <adba817d-a02b-49fb-bf3d-a22779303764@paulmck-laptop>
-References: <20230726123230.525202b4@canb.auug.org.au>
-        <1c8c257e-55e3-4de9-b2c8-1421c11df664@paulmck-laptop>
-        <adba817d-a02b-49fb-bf3d-a22779303764@paulmck-laptop>
+Subject: Re: linux-next: build failure after merge of the mm tree
+Message-ID: <20230726165137.49b17052@canb.auug.org.au>
+In-Reply-To: <87zg3jw8km.fsf@linux.ibm.com>
+References: <20230726145356.5e42830f@canb.auug.org.au>
+        <87zg3jw8km.fsf@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/8uVI3W=y2xElus3Vmk7tzQv";
+Content-Type: multipart/signed; boundary="Sig_/GzwxIJZ+QWoVLtUro6OlHGt";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,
@@ -54,93 +54,59 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/8uVI3W=y2xElus3Vmk7tzQv
+--Sig_/GzwxIJZ+QWoVLtUro6OlHGt
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Paul,
+Hi Aneesh,
 
-On Tue, 25 Jul 2023 20:48:13 -0700 "Paul E. McKenney" <paulmck@kernel.org> =
-wrote:
+On Wed, 26 Jul 2023 10:52:33 +0530 "Aneesh Kumar K.V" <aneesh.kumar@linux.i=
+bm.com> wrote:
 >
-> Does the following incremental diff (to be squashed into the original) he=
-lp?
+> Thanks for the report. Can you add the below diff. We should look at
+> ppc64 not including radix headers if CONFIG_PPC_RADIX_MMU is disabled.
+> But for now we can keep the below diff?
 >=20
-> 							Thanx, Paul
->=20
-> ------------------------------------------------------------------------
->=20
-> diff --git a/init/main.c b/init/main.c
-> index c946ab87783a..981170da0b1c 100644
-> --- a/init/main.c
-> +++ b/init/main.c
-> @@ -135,7 +135,7 @@ EXPORT_SYMBOL(system_state);
->  void (*__initdata late_time_init)(void);
+> diff --git a/arch/powerpc/include/asm/book3s/64/radix.h b/arch/powerpc/in=
+clude/asm/book3s/64/radix.h
+> index 3195f268ed7f..357e23a403d3 100644
+> --- a/arch/powerpc/include/asm/book3s/64/radix.h
+> +++ b/arch/powerpc/include/asm/book3s/64/radix.h
+> @@ -364,8 +364,10 @@ int radix__remove_section_mapping(unsigned long star=
+t, unsigned long end);
 > =20
->  /* Untouched command line saved by arch-specific code. */
-> -char __initdata boot_command_line[COMMAND_LINE_SIZE];
-> +char boot_command_line[COMMAND_LINE_SIZE] __ro_after_init;
->  /* Untouched saved command line (eg. for /proc) */
->  char *saved_command_line __ro_after_init;
->  unsigned int saved_command_line_len __ro_after_init;
+>  void radix__kernel_map_pages(struct page *page, int numpages, int enable=
+);
+> =20
+> +#ifdef CONFIG_ARCH_WANT_OPTIMIZE_DAX_VMEMMAP
+>  #define vmemmap_can_optimize vmemmap_can_optimize
+>  bool vmemmap_can_optimize(struct vmem_altmap *altmap, struct dev_pagemap=
+ *pgmap);
+> +#endif
+> =20
+>  #define vmemmap_populate_compound_pages vmemmap_populate_compound_pages
+>  int __meminit vmemmap_populate_compound_pages(unsigned long start_pfn,
 
-I needed the following (only tested x86_64 allmodconfig build):
-
-diff --git a/include/linux/init.h b/include/linux/init.h
-index 9a5973324072..e3ce68988e1b 100644
---- a/include/linux/init.h
-+++ b/include/linux/init.h
-@@ -112,6 +112,9 @@
- #define __REFCONST       .section       ".ref.rodata", "a"
-=20
- #ifndef __ASSEMBLY__
-+
-+#include <linux/cache.h>
-+
- /*
-  * Used for initialization calls..
-  */
-@@ -143,7 +146,7 @@ struct file_system_type;
-=20
- /* Defined in init/main.c */
- extern int do_one_initcall(initcall_t fn);
--extern char __initdata boot_command_line[];
-+extern char boot_command_line[] __ro_after_init;
- extern char *saved_command_line;
- extern unsigned int saved_command_line_len;
- extern unsigned int reset_devices;
-diff --git a/init/main.c b/init/main.c
-index c946ab87783a..981170da0b1c 100644
---- a/init/main.c
-+++ b/init/main.c
-@@ -135,7 +135,7 @@ EXPORT_SYMBOL(system_state);
- void (*__initdata late_time_init)(void);
-=20
- /* Untouched command line saved by arch-specific code. */
--char __initdata boot_command_line[COMMAND_LINE_SIZE];
-+char boot_command_line[COMMAND_LINE_SIZE] __ro_after_init;
- /* Untouched saved command line (eg. for /proc) */
- char *saved_command_line __ro_after_init;
- unsigned int saved_command_line_len __ro_after_init;
+That fixes the powerpc64 allnoconfig build for me
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/8uVI3W=y2xElus3Vmk7tzQv
+--Sig_/GzwxIJZ+QWoVLtUro6OlHGt
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmTAvxEACgkQAVBC80lX
-0GzAhAf+MyI1kFZ7Cl/K/6n76b+E8QLOnpVL+mOvDBbyy1OgKEmQjjzUXovp9MdY
-EWp9wRZPGBrWZb52fDqoXEnEEDNFWrr5/TAokDUlMWiCVSdcbks13OxnIEhHGJ9u
-DeX8jGV/29fgWCI3Olkjo+5P7fLI2E4cA1hLVbdo5smj7Ev3q3VCDDTMfPwJpwm1
-dwXNE5nRwBveXNBsNwmgEBuZ16nemStSk6xpqTFGdQFx2xuq1MoJSgVA2QAJ2lv8
-f9xRVr/GyojszHXK2EFi1q6D9wGwGL0chp4TE6OhFfEa7N/eNZwzeBOeFwYvvcLL
-4Gfbbg+QowbV0QY2rZDEpO6srt74jA==
-=gnio
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmTAwnkACgkQAVBC80lX
+0GzFIgf/YKo1V7FRGFPIkWmBx/XCCEwRYCsb5lWIDgfn2NtKIMnaXAD1D3AH/NaA
+1p6la2Euqb3jUeW838FmqIIkHpHSqoEgRoxCN+19++dFjG/+u3GiaxIyL1c0MNdu
++jyOhSDT8uCmHHt1hj6J3eSJfybsaDtsQCYpMHfZa5sJiTyLT9pWSZriTfP/p31P
+q3AK9rkRkb7hBjR6tixk048a9HbJBAPtBMN5D1kmxL2VNZCCWlzvxTE+5c0D8c+Z
+KXCHyXIvBphMEQlhaPQWf/a6ddOZqAxKCymS/Is5O4zn2qGDfskBUDLOnCIb44lg
+mN1iqZbXCO4ncNA76dSTxKS35WgyDg==
+=3iJm
 -----END PGP SIGNATURE-----
 
---Sig_/8uVI3W=y2xElus3Vmk7tzQv--
+--Sig_/GzwxIJZ+QWoVLtUro6OlHGt--

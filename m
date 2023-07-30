@@ -2,87 +2,67 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05E857688F9
-	for <lists+linux-next@lfdr.de>; Mon, 31 Jul 2023 00:00:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B5FC76891B
+	for <lists+linux-next@lfdr.de>; Mon, 31 Jul 2023 00:29:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229521AbjG3WAf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 30 Jul 2023 18:00:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49702 "EHLO
+        id S229774AbjG3W3a (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 30 Jul 2023 18:29:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjG3WAe (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 30 Jul 2023 18:00:34 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 231EAE5C;
-        Sun, 30 Jul 2023 15:00:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1690754428;
-        bh=qs2xpOwdfcfN5m9kr2KRvg6IYCtu//ATnwWa9gYV0VI=;
-        h=Date:From:To:Cc:Subject:From;
-        b=cmI/ADAzfHzOrMvFgFZkAsmT0vrRZITfPvAl1ATSqz7sNmMZQ9MzxbPcPzdqsuRJT
-         Z9XNm8R0hBlVvjufKbgr/b4ACU2FTD3WixZTjS5N0Mkoo0W3Iv5M6gMGDIlOPF23FF
-         Q+uO1/i1IAM2Zc/dgVuN4k0QyksVx3UJbLKoyel96d75FYuO0l1cx9+p8mvj/YNcCu
-         oll2tQgwIffgwqxZCiXogMrsNIKF3VTdUUMZQTdDFl6nsLY2lXYcUtDd6P+B5wzFfU
-         JjCOD3KhGd7nPmQZBzefo4UDREuJfOkqcLgfVRVc1gs9OXzqnpDz/HW5+HH3aaVMOv
-         11yh5s6wxiHvw==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        with ESMTP id S229725AbjG3W33 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 30 Jul 2023 18:29:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFB4010E0
+        for <linux-next@vger.kernel.org>; Sun, 30 Jul 2023 15:29:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4RDb0D6CJ1z4wy0;
-        Mon, 31 Jul 2023 08:00:28 +1000 (AEST)
-Date:   Mon, 31 Jul 2023 08:00:28 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the v4l-dvb-next
- tree
-Message-ID: <20230731080028.2bf92e8d@canb.auug.org.au>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6E82460DD8
+        for <linux-next@vger.kernel.org>; Sun, 30 Jul 2023 22:29:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67902C433C8;
+        Sun, 30 Jul 2023 22:29:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1690756164;
+        bh=g1Ue+PjEC5hU2YfHHq9UbtGmqTEpcUCt/DTSnqZnzg0=;
+        h=Date:From:To:Cc:Subject:From;
+        b=e67DhUF9IO8j+NcUKuB8hX99P1ABgU5hmGC6V9Hqr/rvLdf/KW46S2g+pzuW/FjRS
+         DZOZ3vOMzZJ/PM//DCnPkyEr6YA6+PzZ8goWiEkEZw02fvY83LDm5MwWWqta6QF+oT
+         JnNhGmTjEu04pcnLe4Y0gA8IlayuPEIBuHC1LA1GA6sqPAqegP16iSnHhlU5ictPiX
+         bZn8uqRG3jhZu9bsyqzDZxRe80XeEqaZZ4mvcVclZ5mCGvzFS21+JVgFoqyUNF5hYm
+         vlD9JYD+Fr8LDOcUwoA11nVjV+ixB65Oz2tIjPBGn+vio7iyR8P/H4fpze2wZcQ6/r
+         gz/a2xY0xL3Qg==
+Date:   Mon, 31 Jul 2023 00:29:21 +0200
+From:   Andi Shyti <andi.shyti@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Wolfram Sang <wsa@kernel.org>,
+        linux-next <linux-next@vger.kernel.org>
+Subject: Request for i2c inclusion in linux-next
+Message-ID: <20230730222921.637gy5xbtfekmite@intel.intel>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Kl_tuxUUTW/.hEiO9VfebBl";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/Kl_tuxUUTW/.hEiO9VfebBl
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Stephen,
 
-Hi all,
+could you please include in the linux-next i2c related branches
+from my repository:
 
-Commit
+https://kernel.googlesource.com/pub/scm/linux/kernel/git/andi.shyti/linux.git
 
-  93136dfd9566 ("media: ipu3-cio2: allow ipu_bridge to be a module again")
+the following branches:
 
-is missing a Signed-off-by from its author.
+for next:	i2c/andi-for-next
+fixes:		i2c/andi-for-current
 
-The author metadata in the commit is bady corrupted:
-  Arnd BergmannArnd Bergmann <arnd@arndb.dearnd@kernel.org>
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/Kl_tuxUUTW/.hEiO9VfebBl
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmTG3XwACgkQAVBC80lX
-0GwuqQf8CDEIxMLIyRMAzpg76R11cQIlA+q6UYZEDe3jUwD90D3Tw6I77vfrJvRA
-Kb2SPX/RgOjU2I+0pRZRdcUHbOzzmJq+qiNGhomwVu8Iv5BkznNd9hfwnYTjhRVb
-3QueHlAKFkOUlAltpAbx7PtP8Rase8yWqjY8EjLKXhUAq9tkAjNfpe3yP5ukqpwg
-x5ySFa7UMTfHU8t7KzahqNEsxsV/We+84WxZV7nXfRPmY4x06cO9/ei5bWmGUGyc
-ZCDdPW6fmcQEO7wJP5ZTGWpZzthd1PYduqS0X+Cq34LxOBmpMUVLatsRElSSx3v6
-jzfLf74sC5crZuA+WgRs9fpmyWvR3g==
-=I+mo
------END PGP SIGNATURE-----
-
---Sig_/Kl_tuxUUTW/.hEiO9VfebBl--
+Thank you,
+Andi

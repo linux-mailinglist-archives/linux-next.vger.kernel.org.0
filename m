@@ -2,105 +2,108 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A413A767FB3
-	for <lists+linux-next@lfdr.de>; Sat, 29 Jul 2023 15:49:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8385A76888A
+	for <lists+linux-next@lfdr.de>; Sun, 30 Jul 2023 23:52:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230269AbjG2NtX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 29 Jul 2023 09:49:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44024 "EHLO
+        id S229728AbjG3VwV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 30 Jul 2023 17:52:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229920AbjG2NtW (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sat, 29 Jul 2023 09:49:22 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AE5D3C34;
-        Sat, 29 Jul 2023 06:48:52 -0700 (PDT)
-Received: from pps.filterd (m0353727.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36TDbIiM031112;
-        Sat, 29 Jul 2023 13:48:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : content-type : in-reply-to :
- mime-version; s=pp1; bh=s3Dpt9/Akir8D+wN5eg5h6OEnmWtXo2JnD1s7kZNIDo=;
- b=kfia2HBuXRTqNAeCbXqTPzwMDNPLChvsTp/8vNBovFEZYuqVK5wkkPfTIii7ObaqHbOB
- GP0qvSzWuZ4l/Vtb+TUHRRnXly35dYEMDH/ODZh/k/e3HiTLPljsnLD42myxinJlQ1zl
- BqTBB9BkKEkMQDFHPjY+yOkqCAnazvOxINM8T5RP0PPJenIXnzpZxl+fEBhdsYmy4Kd1
- fbe6Oc/tnj1xum3r/gUqXFYxmobWitEoDoxQgRBzVM2abaiJ3DZanVssNlkOATPD/3zF
- oar8YkvpCfR8x7G/+DZ75M7q7b7/eEHd/TTnXc2MNKCd3CV5g8WKFdLnAZM0TLQh2k2b kQ== 
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3s53jgra16-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 29 Jul 2023 13:48:37 +0000
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-        by ppma23.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 36TDKceK003714;
-        Sat, 29 Jul 2023 13:48:36 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-        by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3s0txkxd15-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 29 Jul 2023 13:48:36 +0000
-Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
-        by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 36TDmWLd18088494
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 29 Jul 2023 13:48:33 GMT
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D974A20043;
-        Sat, 29 Jul 2023 13:48:32 +0000 (GMT)
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6C6C820040;
-        Sat, 29 Jul 2023 13:48:32 +0000 (GMT)
-Received: from osiris (unknown [9.171.58.8])
-        by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-        Sat, 29 Jul 2023 13:48:32 +0000 (GMT)
-Date:   Sat, 29 Jul 2023 15:48:31 +0200
-From:   Heiko Carstens <hca@linux.ibm.com>
-To:     Sven Schnelle <svens@linux.ibm.com>
-Cc:     Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-next@vger.kernel.org,
-        Anastasia Eskova <anastasia.eskova@ibm.com>,
-        Randy Dunlap <rdunlap@infradead.org>
-Subject: Re: [PATCH] s390/certstore: select CRYPTO_LIB_SHA256
-Message-ID: <20230729134831.6882-C-hca@linux.ibm.com>
-References: <20230728100430.1567328-1-svens@linux.ibm.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230728100430.1567328-1-svens@linux.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: UeuQTJleGIw3rYxRX31Q9iqglf85hkLg
-X-Proofpoint-ORIG-GUID: UeuQTJleGIw3rYxRX31Q9iqglf85hkLg
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        with ESMTP id S229471AbjG3VwU (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 30 Jul 2023 17:52:20 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52B411B5;
+        Sun, 30 Jul 2023 14:52:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1690753932;
+        bh=he+8kSSLCJXfnS7OdYG7KIKqWIsbeGV43XmV9+7hHbo=;
+        h=Date:From:To:Cc:Subject:From;
+        b=RaXknVD8aR7NPSzsLMiBrZWPdNjqTbzNZ47WngSQTavCMYdhwrzGiW30d01+g2/WN
+         HDVWBLaHiWIqp6PEy5D4l6tQDSPyrzBwyXlEbUhy9Lpkn0g5IoFgLCscUGoRiK3urF
+         ltxQQl/+6MaWN06Dj7UrNbBUiP63dUqHMSQ8wOhoYzJJ323DOdp/FiawlOfpus/4+M
+         WvxLXGdEuw1wzBQrKoCINu/mvrA9aPdjWAfPGXOxJMpvvFtjX8RkA4/Q1W8GNn/D26
+         XafH/mSOXG1KMWKHg2zS4AAefscCpQ6vcU+GoRD5g6PahWM3dbaemsw+sz4xWgSmE4
+         wwLStCDK3UZ5w==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4RDZph1BYCz4wbv;
+        Mon, 31 Jul 2023 07:52:11 +1000 (AEST)
+Date:   Mon, 31 Jul 2023 07:51:55 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Huacai Chen <chenhuacai@loongson.cn>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patches in the loongarch tree
+Message-ID: <20230731075155.739e5a2c@canb.auug.org.au>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-27_10,2023-07-26_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
- priorityscore=1501 lowpriorityscore=0 mlxscore=0 bulkscore=0 adultscore=0
- mlxlogscore=910 clxscore=1011 impostorscore=0 phishscore=0 suspectscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2306200000 definitions=main-2307290126
+Content-Type: multipart/signed; boundary="Sig_/nSaWvEUqIFW.wjLZ8O8G+Ri";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Jul 28, 2023 at 12:04:30PM +0200, Sven Schnelle wrote:
-> A build failure was reported when sha256() is not present:
-> 
-> gcc-13.1.0-nolibc/s390-linux/bin/s390-linux-ld: arch/s390/kernel/cert_store.o: in function `check_certificate_hash':
-> arch/s390/kernel/cert_store.c:267: undefined reference to `sha256'
-> 
-> Therefore make CONFIG_CERT_STORE select CRYPTO_LIB_SHA256.
-> 
-> Fixes: 8cf57d7217c3 ("s390: add support for user-defined certificates")
-> Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> Closes: https://lore.kernel.org/all/8ecb57fb-4560-bdfc-9e55-63e3b0937132@infradead.org/
-> Signed-off-by: Sven Schnelle <svens@linux.ibm.com>
-> ---
->  arch/s390/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
+--Sig_/nSaWvEUqIFW.wjLZ8O8G+Ri
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Applied, thanks!
+Hi all,
+
+The following commits are also in Linus Torvalds' tree as different
+commits (but the same patches):
+
+  bdc86a68be08 ("LoongArch: Cleanup __builtin_constant_p() checking for cpu=
+_has_*")
+  a9b000c11611 ("LoongArch: BPF: Fix check condition to call lu32id in move=
+_imm()")
+  27a4ebe0b5ed ("LoongArch: BPF: Enable bpf_probe_read{, str}() on LoongArc=
+h")
+  1bdb8a673df0 ("LoongArch: Fix return value underflow in exception path")
+  afd22cada106 ("LoongArch: Fix CMDLINE_EXTEND and CMDLINE_BOOTLOADER handl=
+ing")
+  d4a1397e5d61 ("LoongArch: Fix module relocation error with binutils 2.41")
+  4d57f619c06b ("LoongArch: Only fiddle with CHECKFLAGS if `need-compiler'")
+
+These are commits
+
+  1e74ae32805b ("LoongArch: Cleanup __builtin_constant_p() checking for cpu=
+_has_*")
+  4eece7e6de94 ("LoongArch: BPF: Fix check condition to call lu32id in move=
+_imm()")
+  de0e30bee86d ("LoongArch: BPF: Enable bpf_probe_read{, str}() on LoongArc=
+h")
+  e66d511fc922 ("LoongArch: Fix return value underflow in exception path")
+  83da30d73b86 ("LoongArch: Fix CMDLINE_EXTEND and CMDLINE_BOOTLOADER handl=
+ing")
+  03c53eb90c0c ("LoongArch: Fix module relocation error with binutils 2.41")
+  54c2c9df083f ("LoongArch: Only fiddle with CHECKFLAGS if `need-compiler'")
+
+in Linus' tree.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/nSaWvEUqIFW.wjLZ8O8G+Ri
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmTG23wACgkQAVBC80lX
+0Gz0tggAoFCCWF0X5aLTX/7/jou2nDakjFMFHy9myobZs5zikJuInUEJWK3FpF7J
+gOW45zZjQkY0vvJ394/ZywdMGsE7sQNJuoFUZGyVm90FHQNWHtUHqryJysSQTtJC
+zTPsFakj2cSWDvzgS1FHF9mxTQEFonnIGSnqyoQ6xTpNoHKnHvZfEIx4D+8JqMGy
+hptt3U7w3HRWkTfq7PeWEiMbee365Vb8lWltz1GWVBCDcDhqjLnlq+tEfFUNBm8I
+wA7r2LgRX2+ugFq6TgROYxXmjiSkyvhii5aYK6qE0UFV29SpNxf1X1QXlmOPfAno
+qSIPFc2SgQFpAe64/YxEJNO+FMyxmA==
+=j9lb
+-----END PGP SIGNATURE-----
+
+--Sig_/nSaWvEUqIFW.wjLZ8O8G+Ri--

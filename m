@@ -2,175 +2,170 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0B6F769667
-	for <lists+linux-next@lfdr.de>; Mon, 31 Jul 2023 14:33:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ABED7698EF
+	for <lists+linux-next@lfdr.de>; Mon, 31 Jul 2023 16:06:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232212AbjGaMdy (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 31 Jul 2023 08:33:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55214 "EHLO
+        id S233118AbjGaOGf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 31 Jul 2023 10:06:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232690AbjGaMdw (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 31 Jul 2023 08:33:52 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C833810F5;
-        Mon, 31 Jul 2023 05:33:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de;
- s=s31663417; t=1690806806; x=1691411606; i=deller@gmx.de;
- bh=0RFDEXXQMPxJBQdMJHQn7D5WifSZ6l/L2WktkbceJyc=;
- h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
- b=FXGk9moCw8qFnPcjSFfxssf06xB2w7SYR8UPNCKWRnYLOjxtepPLWJ1onxRzFeHeQOp+ApT
- ZdloVKFW6BctrAcKl3boCKaltVrEg05FJAMEGZ9JTRoL0XmvakhrDTGWCRLZ9VgU6WFYNq58p
- XD9GBC+8XPT8TYdHxvt7RwLju0T5qsERFCshKCzQRM6LlWTpxxc7mTOTNBDYrfNMIEJ5K3E0Z
- ik9Ny4gE5yarWwE6H8XWYfTgNnmSL9Mrx2s/jbx18XXJVsoQwvRFnELhp1kcBZmU9r1UbB6tH
- mOmKsf0fgrLd5uQX4G3HwID0IGuDIBuCM9bj4YfLNihfjlHTEz7Q==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.20.60] ([94.134.159.238]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MIwzA-1qAYrk2CD4-00KTWj; Mon, 31
- Jul 2023 14:33:26 +0200
-Message-ID: <6bd9ed23-5a79-879a-c9c1-0b3952fea0ad@gmx.de>
-Date:   Mon, 31 Jul 2023 14:33:24 +0200
+        with ESMTP id S231629AbjGaOGW (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 31 Jul 2023 10:06:22 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C3B330EF;
+        Mon, 31 Jul 2023 07:01:41 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 23D3D1F854;
+        Mon, 31 Jul 2023 14:01:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1690812100; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=b4Ospd9tdJ/9LVp9GV33x9w2ee0DMxOY/R8DWILwyoQ=;
+        b=izT7z9kjtwxOBd9ghqMUp1UFv1IzvxxuGghUc5FGEFkHNFKlE5V//FQpLnrmQJp7FlPSJp
+        Xuv4Ke6C1VYJnbjifSu0kjIbNHReHlmW4psqMnLlfrx0so82ocMYQELlVseeW7BXqVyatk
+        Sd41VkUZqY6vCaNeqNz7XCn6Yx6s3oU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1690812100;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=b4Ospd9tdJ/9LVp9GV33x9w2ee0DMxOY/R8DWILwyoQ=;
+        b=9dhqslck7oayWZRDdaD/VpUlVPqR61Ngeng4Mcn2EZ7M7Oi2f75cwTVe/DkwsGLS7lWFfO
+        IxxsbHMZt8eUFnDQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E978C1322C;
+        Mon, 31 Jul 2023 14:01:39 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id p8sAOMO+x2QSSgAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Mon, 31 Jul 2023 14:01:39 +0000
+Message-ID: <13748adb-1e0f-d492-d2ca-66f2c6be33d0@suse.de>
+Date:   Mon, 31 Jul 2023 16:01:39 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
+ Thunderbird/102.13.1
 Subject: Re: linux-next: Tree for Jul 13 (drivers/video/fbdev/ps3fb.c)
 Content-Language: en-US
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
+To:     Randy Dunlap <rdunlap@infradead.org>,
         Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
+        Helge Deller <deller@gmx.de>,
         Javier Martinez Canillas <javierm@redhat.com>,
         linux-fbdev@vger.kernel.org,
-        Linux PowerPC <linuxppc-dev@lists.ozlabs.org>,
-        Linux Regressions <regressions@lists.linux.dev>,
-        Geoff Levand <geoff@infradead.org>
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
 References: <20230713123710.5d7d81e4@canb.auug.org.au>
  <ccc63065-2976-88ef-1211-731330bf2866@infradead.org>
- <ZLYHtVuS7AElXcCb@debian.me> <874jm1jv9m.fsf@mail.lhotse>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <874jm1jv9m.fsf@mail.lhotse>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:8JThjdBtX8FirEM7utDHiybc3BR1zxxlm3GKmGCUcmNv/w83edb
- otg9E/DNNBHl1ybbl0Dnt+KCqms2wgX2uWiHMlT0XaX/WaGBw57s9qbkwU/xJo/Gyaoilt9
- gfufL2w5I0drReRuUihbe4SuRPqukFP3MBOROScj4gMd13Q82B0WnIwBLjSOo4oRLNxgELH
- JvwRQszd9U8IqhRCFWcIQ==
-UI-OutboundReport: notjunk:1;M01:P0:17kHrss4C9E=;k7E/NjF47QPlMvlKSJpOftE6ES3
- eRQdZ5sMAmvlfdbcYe0RUVBfrF0dShKRZCnn9H325/YHm74NPQuf17UrPeY7bd0yrllcgkrwA
- W8Fu5/qiLBPE7P/fqNXtQNBtJZfU5K9Eo3ruUmxYHFlPx4IhSqmta6zUKWDdsVXqIhQSBYj7L
- QoQiOQdeyq7ABC0dfN7w8IIzRIMENta3BEMvBhjeicsAB9vdx8TbKEMvNi3EcEzSE/C1dTpC7
- Eyn8AisbqGP5x8PXb5AVNVkrrt6RBvbm3tmlBxeBT1o6vGJWFYavZGlPpu7oMmDzCqqgIHnM/
- Q1QdDEIXOalxLp13B6FYQ6dELenoh2DXSczYRV6evYF3sjSgCNRiRRcyaGWAkSZ9eYqw/mm2V
- faG+rsElF3AdGmX9vieh74jpKAzPcuRBSijhFLckSxCRm/SnV7JB1a3IcY3b/QklKV+oWorBC
- 43MRn3g7Gzkk0NtHPy9xf0iC+Ew/Ruyv/7aqJO0KsThjaEWoDt1zCsLr4IffMKFmI+AoysWpp
- uVAiQ832jrE4OgQS/wGWUvVCa3CgfY57XPXtvTPW7xUk0mvC/DYBoCfOYmOT7+SpKRIFah+N4
- rTgnIEBFuUXRrWgzS+31fxKaOVYRzKbXPOl3eXuVJecTSqYpGa9jv4lx37drxct3TKnkIQglU
- vYUjs9KwjoRfHXJwSgwKQPIntjdX9vBfRjpN4Qg3rk12K3dAbsOhBZNa0f4Wp60Fo4Qc7XOgD
- XKvQHZ2ldvjTXpTSbtwuqnjVCZsKVXxJmuh3x+i6XX4Skiw0Sp49xXhSDp0HchERv8Ftz5UwC
- u3yEtA0CmMr/VZd+6tfVMn6GoI8ddFaVNmSt698nqcQsSamUb8d9Y4r09HJywn9gAQmTnQjzn
- T1E2abpkKs/FAGBH1dYSC+7PmmHxNjgHDF08P/xKNEoMPn+MsLkLLUODHvYs0pCwQPgE4nKRz
- 8hULd2moGa4LLOVU4AhIfK4Nugg=
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <ccc63065-2976-88ef-1211-731330bf2866@infradead.org>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------yn6IudZAIQmkHUvoB83qGyX8"
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 7/18/23 13:48, Michael Ellerman wrote:
-> Bagas Sanjaya <bagasdotme@gmail.com> writes:
->> On Thu, Jul 13, 2023 at 09:11:10AM -0700, Randy Dunlap wrote:
->>> on ppc64:
->>>
->>> In file included from ../include/linux/device.h:15,
->>>                   from ../arch/powerpc/include/asm/io.h:22,
->>>                   from ../include/linux/io.h:13,
->>>                   from ../include/linux/irq.h:20,
->>>                   from ../arch/powerpc/include/asm/hardirq.h:6,
->>>                   from ../include/linux/hardirq.h:11,
->>>                   from ../include/linux/interrupt.h:11,
->>>                   from ../drivers/video/fbdev/ps3fb.c:25:
->>> ../drivers/video/fbdev/ps3fb.c: In function 'ps3fb_probe':
->>> ../drivers/video/fbdev/ps3fb.c:1172:40: error: 'struct fb_info' has no=
- member named 'dev'
->>>   1172 |                  dev_driver_string(info->dev), dev_name(info-=
->dev),
->>>        |                                        ^~
->>> ../include/linux/dev_printk.h:110:37: note: in definition of macro 'de=
-v_printk_index_wrap'
->>>    110 |                 _p_func(dev, fmt, ##__VA_ARGS__);            =
-           \
->>>        |                                     ^~~~~~~~~~~
->>> ../drivers/video/fbdev/ps3fb.c:1171:9: note: in expansion of macro 'de=
-v_info'
->>>   1171 |         dev_info(info->device, "%s %s, using %u KiB of video =
-memory\n",
->>>        |         ^~~~~~~~
->>> ../drivers/video/fbdev/ps3fb.c:1172:61: error: 'struct fb_info' has no=
- member named 'dev'
->>>   1172 |                  dev_driver_string(info->dev), dev_name(info-=
->dev),
->>>        |                                                             ^=
-~
->>> ../include/linux/dev_printk.h:110:37: note: in definition of macro 'de=
-v_printk_index_wrap'
->>>    110 |                 _p_func(dev, fmt, ##__VA_ARGS__);            =
-           \
->>>        |                                     ^~~~~~~~~~~
->>> ../drivers/video/fbdev/ps3fb.c:1171:9: note: in expansion of macro 'de=
-v_info'
->>>   1171 |         dev_info(info->device, "%s %s, using %u KiB of video =
-memory\n",
->>>        |         ^~~~~~~~
->>>
->>>
->>
->> Hmm, there is no response from Thomas yet. I guess we should go with
->> reverting bdb616479eff419, right? Regardless, I'm adding this build reg=
-ression
->> to regzbot so that parties involved are aware of it:
->>
->> #regzbot ^introduced: bdb616479eff419
->> #regzbot title: build regression in PS3 framebuffer
->
-> Does regzbot track issues in linux-next?
->
-> They're not really regressions because they're not in a release yet.
->
-> Anyway I don't see where bdb616479eff419 comes from.
->
-> The issue was introduced by:
->
->    701d2054fa31 fbdev: Make support for userspace interfaces configurabl=
-e
->
-> The driver seems to only use info->dev in that one dev_info() line,
-> which seems purely cosmetic, so I think it could just be removed, eg:
->
-> diff --git a/drivers/video/fbdev/ps3fb.c b/drivers/video/fbdev/ps3fb.c
-> index d4abcf8aff75..a304a39d712b 100644
-> --- a/drivers/video/fbdev/ps3fb.c
-> +++ b/drivers/video/fbdev/ps3fb.c
-> @@ -1168,8 +1168,7 @@ static int ps3fb_probe(struct ps3_system_bus_devic=
-e *dev)
->
->   	ps3_system_bus_set_drvdata(dev, info);
->
-> -	dev_info(info->device, "%s %s, using %u KiB of video memory\n",
-> -		 dev_driver_string(info->dev), dev_name(info->dev),
-> +	dev_info(info->device, "using %u KiB of video memory\n",
->   		 info->fix.smem_len >> 10);
->
->   	task =3D kthread_run(ps3fbd, info, DEVICE_NAME);
->
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------yn6IudZAIQmkHUvoB83qGyX8
+Content-Type: multipart/mixed; boundary="------------lFs1kHQPQJKWrh5RcffCHU8U";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Randy Dunlap <rdunlap@infradead.org>,
+ Stephen Rothwell <sfr@canb.auug.org.au>,
+ Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Helge Deller <deller@gmx.de>, Javier Martinez Canillas <javierm@redhat.com>,
+ linux-fbdev@vger.kernel.org, linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
+Message-ID: <13748adb-1e0f-d492-d2ca-66f2c6be33d0@suse.de>
+Subject: Re: linux-next: Tree for Jul 13 (drivers/video/fbdev/ps3fb.c)
+References: <20230713123710.5d7d81e4@canb.auug.org.au>
+ <ccc63065-2976-88ef-1211-731330bf2866@infradead.org>
+In-Reply-To: <ccc63065-2976-88ef-1211-731330bf2866@infradead.org>
 
-Can you please resend this as proper patch to fbdev and/or drm-misc mailin=
-g lists?
-As it is, it never showed up for me in patchwork...
+--------------lFs1kHQPQJKWrh5RcffCHU8U
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-Helge
+SGksDQoNCkFtIDEzLjA3LjIzIHVtIDE4OjExIHNjaHJpZWIgUmFuZHkgRHVubGFwOg0KPiAN
+Cj4gDQo+IE9uIDcvMTIvMjMgMTk6MzcsIFN0ZXBoZW4gUm90aHdlbGwgd3JvdGU6DQo+PiBI
+aSBhbGwsDQoNCnNvcnJ5LCBJJ3ZlIGJlZW4gQUZLIGZvciBhIGJpdC4gSSdsbCBzZW5kIGEg
+Zml4IHNvb24uDQoNCkJlc3QgcmVnYXJkcw0KVGhvbWFzDQoNCj4+DQo+PiBDaGFuZ2VzIHNp
+bmNlIDIwMjMwNzEyOg0KPj4NCj4gDQo+IG9uIHBwYzY0Og0KPiANCj4gSW4gZmlsZSBpbmNs
+dWRlZCBmcm9tIC4uL2luY2x1ZGUvbGludXgvZGV2aWNlLmg6MTUsDQo+ICAgICAgICAgICAg
+ICAgICAgIGZyb20gLi4vYXJjaC9wb3dlcnBjL2luY2x1ZGUvYXNtL2lvLmg6MjIsDQo+ICAg
+ICAgICAgICAgICAgICAgIGZyb20gLi4vaW5jbHVkZS9saW51eC9pby5oOjEzLA0KPiAgICAg
+ICAgICAgICAgICAgICBmcm9tIC4uL2luY2x1ZGUvbGludXgvaXJxLmg6MjAsDQo+ICAgICAg
+ICAgICAgICAgICAgIGZyb20gLi4vYXJjaC9wb3dlcnBjL2luY2x1ZGUvYXNtL2hhcmRpcnEu
+aDo2LA0KPiAgICAgICAgICAgICAgICAgICBmcm9tIC4uL2luY2x1ZGUvbGludXgvaGFyZGly
+cS5oOjExLA0KPiAgICAgICAgICAgICAgICAgICBmcm9tIC4uL2luY2x1ZGUvbGludXgvaW50
+ZXJydXB0Lmg6MTEsDQo+ICAgICAgICAgICAgICAgICAgIGZyb20gLi4vZHJpdmVycy92aWRl
+by9mYmRldi9wczNmYi5jOjI1Og0KPiAuLi9kcml2ZXJzL3ZpZGVvL2ZiZGV2L3BzM2ZiLmM6
+IEluIGZ1bmN0aW9uICdwczNmYl9wcm9iZSc6DQo+IC4uL2RyaXZlcnMvdmlkZW8vZmJkZXYv
+cHMzZmIuYzoxMTcyOjQwOiBlcnJvcjogJ3N0cnVjdCBmYl9pbmZvJyBoYXMgbm8gbWVtYmVy
+IG5hbWVkICdkZXYnDQo+ICAgMTE3MiB8ICAgICAgICAgICAgICAgICAgZGV2X2RyaXZlcl9z
+dHJpbmcoaW5mby0+ZGV2KSwgZGV2X25hbWUoaW5mby0+ZGV2KSwNCj4gICAgICAgIHwgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXn4NCj4gLi4vaW5jbHVkZS9s
+aW51eC9kZXZfcHJpbnRrLmg6MTEwOjM3OiBub3RlOiBpbiBkZWZpbml0aW9uIG9mIG1hY3Jv
+ICdkZXZfcHJpbnRrX2luZGV4X3dyYXAnDQo+ICAgIDExMCB8ICAgICAgICAgICAgICAgICBf
+cF9mdW5jKGRldiwgZm10LCAjI19fVkFfQVJHU19fKTsgICAgICAgICAgICAgICAgICAgICAg
+IFwNCj4gICAgICAgIHwgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXn5+
+fn5+fn5+fn4NCj4gLi4vZHJpdmVycy92aWRlby9mYmRldi9wczNmYi5jOjExNzE6OTogbm90
+ZTogaW4gZXhwYW5zaW9uIG9mIG1hY3JvICdkZXZfaW5mbycNCj4gICAxMTcxIHwgICAgICAg
+ICBkZXZfaW5mbyhpbmZvLT5kZXZpY2UsICIlcyAlcywgdXNpbmcgJXUgS2lCIG9mIHZpZGVv
+IG1lbW9yeVxuIiwNCj4gICAgICAgIHwgICAgICAgICBefn5+fn5+fg0KPiAuLi9kcml2ZXJz
+L3ZpZGVvL2ZiZGV2L3BzM2ZiLmM6MTE3Mjo2MTogZXJyb3I6ICdzdHJ1Y3QgZmJfaW5mbycg
+aGFzIG5vIG1lbWJlciBuYW1lZCAnZGV2Jw0KPiAgIDExNzIgfCAgICAgICAgICAgICAgICAg
+IGRldl9kcml2ZXJfc3RyaW5nKGluZm8tPmRldiksIGRldl9uYW1lKGluZm8tPmRldiksDQo+
+ICAgICAgICB8ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgIF5+DQo+IC4uL2luY2x1ZGUvbGludXgvZGV2X3ByaW50ay5oOjEx
+MDozNzogbm90ZTogaW4gZGVmaW5pdGlvbiBvZiBtYWNybyAnZGV2X3ByaW50a19pbmRleF93
+cmFwJw0KPiAgICAxMTAgfCAgICAgICAgICAgICAgICAgX3BfZnVuYyhkZXYsIGZtdCwgIyNf
+X1ZBX0FSR1NfXyk7ICAgICAgICAgICAgICAgICAgICAgICBcDQo+ICAgICAgICB8ICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIF5+fn5+fn5+fn5+DQo+IC4uL2RyaXZl
+cnMvdmlkZW8vZmJkZXYvcHMzZmIuYzoxMTcxOjk6IG5vdGU6IGluIGV4cGFuc2lvbiBvZiBt
+YWNybyAnZGV2X2luZm8nDQo+ICAgMTE3MSB8ICAgICAgICAgZGV2X2luZm8oaW5mby0+ZGV2
+aWNlLCAiJXMgJXMsIHVzaW5nICV1IEtpQiBvZiB2aWRlbyBtZW1vcnlcbiIsDQo+ICAgICAg
+ICB8ICAgICAgICAgXn5+fn5+fn4NCj4gDQo+IA0KPiBGdWxsIHJhbmRjb25maWcgZmlsZSBp
+cyBhdHRhY2hlZC4NCg0KLS0gDQpUaG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVy
+IERldmVsb3Blcg0KU1VTRSBTb2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJIDQpGcmFu
+a2Vuc3RyYXNzZSAxNDYsIDkwNDYxIE51ZXJuYmVyZywgR2VybWFueQ0KR0Y6IEl2byBUb3Rl
+diwgQW5kcmV3IE15ZXJzLCBBbmRyZXcgTWNEb25hbGQsIEJvdWRpZW4gTW9lcm1hbg0KSFJC
+IDM2ODA5IChBRyBOdWVybmJlcmcpDQo=
+
+--------------lFs1kHQPQJKWrh5RcffCHU8U--
+
+--------------yn6IudZAIQmkHUvoB83qGyX8
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmTHvsMFAwAAAAAACgkQlh/E3EQov+CV
+ABAAlQIWYmZpcCipgTuWePaqwW4zZGtdDJz9h/7Kr7WHaJiyGLrreCarEryqWKawzv/JoT4MzMLH
++N6RLDF+bLE1BPQ4ZFvAGzAcCF0ygR+AuzQEWn10/a8CUWY6/s7sCVinKWA71BuJdgkvSa2rbBl5
+xHqFjLPSAAF1tmV0qctbWXgPGFq+DbNAbje5PbLU2lxmbigEQ59DSVhOiMH0oS4Opyxw//R5zzEe
+jHDnL1hraznsJJlY9Rb+i2OYu5XP9Huat8jvzRH6TR7TnzOboGd+rMcULq5Ohoibb5uIceZ/7D/c
+4Z/bI9LHv2Q6Y01n48JmOb0vO/tf1o8VxdvpfJT+MOBpaBsKSMCoDKVm+aYLe/G1xFcOlOPs+ivR
+Hdfy9qcq80JXMdb5hDdi21UzQNz9VNnlm3irVK4PNgU15s19p1XlyxYni1EkxAkcvhviFvUUzvYX
+kAv5nqXLPcTJebQUKvZnmHpTVhlgXNVR5Ap9gt451JoA9MLSGMqfXqSGKMjLEgaYqPkgLc8WYr3u
+7SrQPwb3QfV779hi9fYPFVRPFlWqyZCfxMtn0IDqDUJKIH/Knb8nlHZzWmjTr6aeCZEWgsGYpQHf
+ATIL24aQDi0YZmR8OM+qIQkw2IL4/63cb+ctVmH63rcD2OG1IGelNxFAFyo+3k+6j2qizt5ksZJG
+nrU=
+=h8pD
+-----END PGP SIGNATURE-----
+
+--------------yn6IudZAIQmkHUvoB83qGyX8--

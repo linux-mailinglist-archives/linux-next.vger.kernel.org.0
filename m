@@ -2,109 +2,94 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27BC876A3E4
-	for <lists+linux-next@lfdr.de>; Tue,  1 Aug 2023 00:06:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 085BF76A42E
+	for <lists+linux-next@lfdr.de>; Tue,  1 Aug 2023 00:29:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231653AbjGaWGF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 31 Jul 2023 18:06:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39652 "EHLO
+        id S229622AbjGaW3W (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 31 Jul 2023 18:29:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231770AbjGaWGE (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 31 Jul 2023 18:06:04 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14FDE1723
-        for <linux-next@vger.kernel.org>; Mon, 31 Jul 2023 15:06:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1690841156;
-        bh=VB9pSLR/7opwBbim72x7iPGBjBXBksJEmipQkiHBTtE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Wi7smSTUPnx0s51ABE9ZIGEc8+fAeJvAhTyaLhr0UYy5aSv9cARj2tmINHV4clXfN
-         zOv8zm13kV/4tUH5JxTIFVFwINufx6fspeLQE6OVR3Vcfp2qUPJI2yd/RbqW8rxmeu
-         eOciSLG9Z6oNcbpZeZ7xb1RmZsIYvUYlvji0m3r1A1+VhLG5CeMBdWjmRQuIskMz+d
-         cRm21p2T0YoJPl1QHfQLvK7OC0gb+mnTzCzyFKEN/Y7L7CWzaesCIdphiKWSstGRaC
-         rwQxiiAasBqi5xWY/VRJWFA+mcgGfD4emv1lGeS/2d54sAoMYM0pEHYbG9IddmzAXO
-         BqgyOdzuVmM3g==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4RFC444Vhqz4wZx;
-        Tue,  1 Aug 2023 08:05:56 +1000 (AEST)
-Date:   Tue, 1 Aug 2023 08:05:41 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andi Shyti <andi.shyti@kernel.org>
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        linux-next <linux-next@vger.kernel.org>
-Subject: Re: Request for i2c inclusion in linux-next
-Message-ID: <20230801080541.6f351e4c@canb.auug.org.au>
-In-Reply-To: <20230731110403.pxo34g6kodur4ble@intel.intel>
-References: <20230730222921.637gy5xbtfekmite@intel.intel>
-        <3a347eac-383b-f43b-afdc-039436427a66@kernel.org>
-        <20230731110403.pxo34g6kodur4ble@intel.intel>
+        with ESMTP id S231839AbjGaW3T (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 31 Jul 2023 18:29:19 -0400
+Received: from mgamail.intel.com (unknown [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A9861BE7;
+        Mon, 31 Jul 2023 15:29:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1690842556; x=1722378556;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=leP0Lsh2oZjINqhY07RoUkoTTGnDfpaMDoYbYdZ1TC0=;
+  b=dOqXYIrn68zMbv6xlzE1HvRD/Wl+DVlO16UIm2nmss9bqFQAv8JdeN9i
+   vka7z1KtRajis4IhdERbZG7s9HWKeRgL54Pl6HiOZcEPmuUphRCTFy77S
+   kpNKfxGURD8wxLpuN+0/UcJ+UurG/SLI5dbXSbgqLMFfWzaNRIxpuemfl
+   dx9MEuRD7qvhQ+AEonNxNXdHcwEAXV2+0sju1f+O90E0hMcIz4Pcy3/vl
+   b/7UG2hY7UOg68T8hnPXOIoj4n6BvKWBkT1oK3gsyVK4yDUcyvcMb8Y0X
+   NxMBr3zjzB/yguiR10Za0xh+hotDAG3Pq06hbpwGEE3x9STxLlM7VhHJf
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10788"; a="368045388"
+X-IronPort-AV: E=Sophos;i="6.01,245,1684825200"; 
+   d="scan'208";a="368045388"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2023 15:29:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.01,202,1684825200"; 
+   d="scan'208";a="871828031"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2023 15:29:15 -0700
+Received: from kekkonen.localdomain (localhost [127.0.0.1])
+        by kekkonen.fi.intel.com (Postfix) with SMTP id D315111F9B6;
+        Tue,  1 Aug 2023 01:29:10 +0300 (EEST)
+Date:   Mon, 31 Jul 2023 22:29:10 +0000
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: Fixes tag needs some work in the v4l-dvb-next tree
+Message-ID: <ZMg1tmx5bvFPsWgm@kekkonen.localdomain>
+References: <20230731075552.52fbe351@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/mbgHqKlz0+dJ3vZ2dIPfA_z";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230731075552.52fbe351@canb.auug.org.au>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/mbgHqKlz0+dJ3vZ2dIPfA_z
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Stephen,
 
-Hi Andi,
+On Mon, Jul 31, 2023 at 07:55:52AM +1000, Stephen Rothwell wrote:
+> Hi all,
+> 
+> In commit
+> 
+>   7581c293584f ("media: adv748x: Return to endpoint matching")
+> 
+> Fixes tag
+> 
+>   Fixes: ("media: v4l: async: Simplify async sub-device fwnode matching")
+> 
+> has these problem(s):
+> 
+>   - No SHA1 recognised
+> 
+> Maybe you meant
+> 
+> Fixes: 1029939b3782 ("media: v4l: async: Simplify async sub-device fwnode matching")
 
-On Mon, 31 Jul 2023 13:04:03 +0200 Andi Shyti <andi.shyti@kernel.org> wrote:
->
-> On Mon, Jul 31, 2023 at 12:29:51PM +0200, Krzysztof Kozlowski wrote:
-> > On 31/07/2023 00:29, Andi Shyti wrote: =20
-> > > Hi Stephen,
-> > >=20
-> > > could you please include in the linux-next i2c related branches
-> > > from my repository:
-> > >=20
-> > > https://kernel.googlesource.com/pub/scm/linux/kernel/git/andi.shyti/l=
-inux.git
-> > >=20
-> > > the following branches:
-> > >=20
-> > > for next:	i2c/andi-for-next
-> > > fixes:		i2c/andi-for-current =20
-> >=20
-> > Andi, why you do not use kernel.org repo? I think it is preferred. =20
->=20
-> uuhh... yes... I did a blind copy/paste of the link and did not
-> realise that this was from googlesource... Stephen, can you
-> please take it from:
->=20
-> https://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git
+That would work for me, yes.
 
-Done.
+The patch that broke adv748x driver had no stable commit ID at the time the
+fix was merged.
 
---=20
-Cheers,
-Stephen Rothwell
+-- 
+Kind regards,
 
---Sig_/mbgHqKlz0+dJ3vZ2dIPfA_z
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmTIMDUACgkQAVBC80lX
-0Gzjrwf+Mro1pPvZukdlNF5YlR2naDLuDfLuXZtZgDx3K2TwspeZd3FtO8nrzOMf
-X/YAzQ0BK2qBery3u1nz/yMWDC0IYnBSKv7H+oRiw55ixrdveVE//J658J+Sc/7N
-eYUU6QRkfgo3WRDqef8BBlemQeCERrBtBM9RNPGRI/7bWHZ+pI72rE5zb0+8RGuP
-svUUz1OWKueNOoTpj8SM25YOaJV++ttW8MuQiYtuKDsChT5GatNOA5UZxbizBKQ6
-I2O+8XaCfriLblw01GD8LlOPK/1526af34nvWjryjQv2ZGadfzSyPE4Bif3u4VBA
-CryM+0Mv44R63SZqMssKqg8GI4FFeg==
-=hk+g
------END PGP SIGNATURE-----
-
---Sig_/mbgHqKlz0+dJ3vZ2dIPfA_z--
+Sakari Ailus

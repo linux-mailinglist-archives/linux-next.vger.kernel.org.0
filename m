@@ -2,83 +2,113 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8470769421
-	for <lists+linux-next@lfdr.de>; Mon, 31 Jul 2023 13:04:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 248FA769548
+	for <lists+linux-next@lfdr.de>; Mon, 31 Jul 2023 13:54:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231240AbjGaLEJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 31 Jul 2023 07:04:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52550 "EHLO
+        id S231136AbjGaLyC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 31 Jul 2023 07:54:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231187AbjGaLEI (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 31 Jul 2023 07:04:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DB6E1B8
-        for <linux-next@vger.kernel.org>; Mon, 31 Jul 2023 04:04:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 03A526103B
-        for <linux-next@vger.kernel.org>; Mon, 31 Jul 2023 11:04:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC4B1C433C8;
-        Mon, 31 Jul 2023 11:04:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690801446;
-        bh=bq/9bxp9g83neuBrTpckpWopN8v9/8L27zi4sKnBAjQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kXPbakGgW3jFFQdvszvhoBIDd6EN36qABMDfoHdMINdquMhDsXBJ+6thPtjQwIVpT
-         QUDEDE+sQVXFm8desc+KA/F4Y5eHD41G0fL5V5zE02fCPGKIgNaI9FNCPfva91N4Y2
-         u/g6VhIaAB65ZdZ4QmYfuhRwC8k8wKYenFWNf7hEwxunC1fKZthzPZG+aJrxtNUnE/
-         MuP4BLuP8Z2oslY4gD6GWLrWOyeXS8M/vQvjHYhKMoehUUtUqQqLK+2QKfzsFxcykx
-         KeweFil/P+hzxBVf0v3KDA1y3M45PplwKxtnZXb1nmKsKWoCv1UFe6wZ4q2aTnmczA
-         oxlhXcmroD/lw==
-Date:   Mon, 31 Jul 2023 13:04:03 +0200
-From:   Andi Shyti <andi.shyti@kernel.org>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Wolfram Sang <wsa@kernel.org>,
-        linux-next <linux-next@vger.kernel.org>
-Subject: Re: Request for i2c inclusion in linux-next
-Message-ID: <20230731110403.pxo34g6kodur4ble@intel.intel>
-References: <20230730222921.637gy5xbtfekmite@intel.intel>
- <3a347eac-383b-f43b-afdc-039436427a66@kernel.org>
+        with ESMTP id S230400AbjGaLyB (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 31 Jul 2023 07:54:01 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3332119F;
+        Mon, 31 Jul 2023 04:54:00 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1qQRTH-0004qB-Gx; Mon, 31 Jul 2023 13:53:55 +0200
+Message-ID: <edb7c56e-92d2-317e-b11b-caaabd33161b@leemhuis.info>
+Date:   Mon, 31 Jul 2023 13:53:54 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3a347eac-383b-f43b-afdc-039436427a66@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla Thunderbird
+Subject: Re: linux-next: Tree for Jul 13 (drivers/video/fbdev/ps3fb.c)
+Content-Language: en-US, de-DE
+To:     Randy Dunlap <rd.dunlab@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Helge Deller <deller@gmx.de>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        linux-fbdev@vger.kernel.org,
+        Linux PowerPC <linuxppc-dev@lists.ozlabs.org>,
+        Linux Regressions <regressions@lists.linux.dev>,
+        Geoff Levand <geoff@infradead.org>
+References: <20230713123710.5d7d81e4@canb.auug.org.au>
+ <ccc63065-2976-88ef-1211-731330bf2866@infradead.org>
+ <ZLYHtVuS7AElXcCb@debian.me> <874jm1jv9m.fsf@mail.lhotse>
+ <d9616a67-23e8-118f-dc0a-7ed4afd4bffd@gmail.com>
+From:   "Linux regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+In-Reply-To: <d9616a67-23e8-118f-dc0a-7ed4afd4bffd@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1690804440;66623b8a;
+X-HE-SMSGID: 1qQRTH-0004qB-Gx
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Jul 31, 2023 at 12:29:51PM +0200, Krzysztof Kozlowski wrote:
-> On 31/07/2023 00:29, Andi Shyti wrote:
-> > Hi Stephen,
-> > 
-> > could you please include in the linux-next i2c related branches
-> > from my repository:
-> > 
-> > https://kernel.googlesource.com/pub/scm/linux/kernel/git/andi.shyti/linux.git
-> > 
-> > the following branches:
-> > 
-> > for next:	i2c/andi-for-next
-> > fixes:		i2c/andi-for-current
+On 18.07.23 18:15, Randy Dunlap wrote:
+> On 7/18/23 04:48, Michael Ellerman wrote:
+>> Bagas Sanjaya <bagasdotme@gmail.com> writes:
+>>> On Thu, Jul 13, 2023 at 09:11:10AM -0700, Randy Dunlap wrote:
+>>>> on ppc64:
+>>>>
+>>>> In file included from ../include/linux/device.h:15,
+>>>>                  from ../arch/powerpc/include/asm/io.h:22,
+>>>>                  from ../include/linux/io.h:13,
+>>>>                  from ../include/linux/irq.h:20,
+>>>>                  from ../arch/powerpc/include/asm/hardirq.h:6,
+>>>>                  from ../include/linux/hardirq.h:11,
+>>>>                  from ../include/linux/interrupt.h:11,
+>>>>                  from ../drivers/video/fbdev/ps3fb.c:25:
+>>>> ../drivers/video/fbdev/ps3fb.c: In function 'ps3fb_probe':
+>>>> ../drivers/video/fbdev/ps3fb.c:1172:40: error: 'struct fb_info' has no member named 'dev'
+> [...]
+>>
+>> Does regzbot track issues in linux-next?
+
+Seems your patch didn't make any progress, at least I can't see it in
+-next. Is there a reason why, or did I miss anything?
+
+And yes, sure, I'm aware that it's -next and a driver that people might
+not enable regularly. But I noticed it and thought "quickly bring it up,
+might be good to fix this rather sooner than later before other people
+run into it (and who knows, maybe it'll switch a light in some CI system
+from red to green as well)"
+
+Ciao, Thorsten
+
+>> The driver seems to only use info->dev in that one dev_info() line,
+>> which seems purely cosmetic, so I think it could just be removed, eg:
+>>
+>> diff --git a/drivers/video/fbdev/ps3fb.c b/drivers/video/fbdev/ps3fb.c
+>> index d4abcf8aff75..a304a39d712b 100644
+>> --- a/drivers/video/fbdev/ps3fb.c
+>> +++ b/drivers/video/fbdev/ps3fb.c
+>> @@ -1168,8 +1168,7 @@ static int ps3fb_probe(struct ps3_system_bus_device *dev)
+>>  
+>>  	ps3_system_bus_set_drvdata(dev, info);
+>>  
+>> -	dev_info(info->device, "%s %s, using %u KiB of video memory\n",
+>> -		 dev_driver_string(info->dev), dev_name(info->dev),
+>> +	dev_info(info->device, "using %u KiB of video memory\n",
+>>  		 info->fix.smem_len >> 10);
+>>  
+>>  	task = kthread_run(ps3fbd, info, DEVICE_NAME);
 > 
-> Andi, why you do not use kernel.org repo? I think it is preferred.
-
-uuhh... yes... I did a blind copy/paste of the link and did not
-realise that this was from googlesource... Stephen, can you
-please take it from:
-
-https://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git
-
-Thanks a lot, Krzysztof for checking on this!
-
-Thank you and sorry for the confusion!
-Andi
+> 
+> Tested-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
+> 
+> Thanks.
+> 

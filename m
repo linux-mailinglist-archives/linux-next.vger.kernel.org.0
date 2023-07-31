@@ -2,94 +2,128 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 085BF76A42E
-	for <lists+linux-next@lfdr.de>; Tue,  1 Aug 2023 00:29:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A6B076A4C8
+	for <lists+linux-next@lfdr.de>; Tue,  1 Aug 2023 01:22:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229622AbjGaW3W (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 31 Jul 2023 18:29:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48386 "EHLO
+        id S229568AbjGaXWf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 31 Jul 2023 19:22:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231839AbjGaW3T (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 31 Jul 2023 18:29:19 -0400
-Received: from mgamail.intel.com (unknown [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A9861BE7;
-        Mon, 31 Jul 2023 15:29:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690842556; x=1722378556;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=leP0Lsh2oZjINqhY07RoUkoTTGnDfpaMDoYbYdZ1TC0=;
-  b=dOqXYIrn68zMbv6xlzE1HvRD/Wl+DVlO16UIm2nmss9bqFQAv8JdeN9i
-   vka7z1KtRajis4IhdERbZG7s9HWKeRgL54Pl6HiOZcEPmuUphRCTFy77S
-   kpNKfxGURD8wxLpuN+0/UcJ+UurG/SLI5dbXSbgqLMFfWzaNRIxpuemfl
-   dx9MEuRD7qvhQ+AEonNxNXdHcwEAXV2+0sju1f+O90E0hMcIz4Pcy3/vl
-   b/7UG2hY7UOg68T8hnPXOIoj4n6BvKWBkT1oK3gsyVK4yDUcyvcMb8Y0X
-   NxMBr3zjzB/yguiR10Za0xh+hotDAG3Pq06hbpwGEE3x9STxLlM7VhHJf
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10788"; a="368045388"
-X-IronPort-AV: E=Sophos;i="6.01,245,1684825200"; 
-   d="scan'208";a="368045388"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2023 15:29:15 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.01,202,1684825200"; 
-   d="scan'208";a="871828031"
-Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2023 15:29:15 -0700
-Received: from kekkonen.localdomain (localhost [127.0.0.1])
-        by kekkonen.fi.intel.com (Postfix) with SMTP id D315111F9B6;
-        Tue,  1 Aug 2023 01:29:10 +0300 (EEST)
-Date:   Mon, 31 Jul 2023 22:29:10 +0000
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Fixes tag needs some work in the v4l-dvb-next tree
-Message-ID: <ZMg1tmx5bvFPsWgm@kekkonen.localdomain>
-References: <20230731075552.52fbe351@canb.auug.org.au>
+        with ESMTP id S230407AbjGaXWc (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 31 Jul 2023 19:22:32 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 491E81725;
+        Mon, 31 Jul 2023 16:22:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=0VwbE9w1enjcPt7/IUT5th5f1ZIeAHMgI/cQbU9ZQ2A=; b=W1MEZXbMSYUAoRpiX2J1gLUs6J
+        QNI3LZBl83MsiVfSkFwwVlVnz2w0CjvDmoqTdQ8gv+SYMSY2r0HtouhhUB5uUd+LbZmAPgaiaUlmS
+        qdipmFFr0Fl+4bPXWd4UhqXWIVGZCOf3ciB+VlGAJfo5GzvNp3rD3yDx66pCe1iWS42hN31arU9sa
+        IiveAdR1+sND6wubHmrrJpaPk4dF3Dr3DfIv01LVVDOX/64l05bpRsU+oOai73TB5NyG9wjVzoLyD
+        Z2lRPFbkS7szaMiGpw9aktwsF7+uOWMEn0cLp1cv6Jb49B1tHCwiPsSAfrVHqSNiea89JcJ+8JHFI
+        ZoPiTwJw==;
+Received: from [2601:1c2:980:9ec0::2764]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qQcDK-00HZ0e-1R;
+        Mon, 31 Jul 2023 23:22:10 +0000
+Message-ID: <fb977502-ec9b-c847-6b9c-049bd226f4b1@infradead.org>
+Date:   Mon, 31 Jul 2023 16:22:09 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230731075552.52fbe351@canb.auug.org.au>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH] fbdev/ps3fb: Build without kernel device
+Content-Language: en-US
+To:     Thomas Zimmermann <tzimmermann@suse.de>, deller@gmx.de,
+        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        sam@ravnborg.org, javierm@redhat.com, bagasdotme@gmail.com,
+        rd.dunlab@gmail.com, regressions@leemhuis.info,
+        sfr@canb.auug.org.au
+Cc:     linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, regressions@lists.linux.dev,
+        linux-next@vger.kernel.org, dri-devel@lists.freedesktop.org
+References: <20230731175535.11345-1-tzimmermann@suse.de>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20230731175535.11345-1-tzimmermann@suse.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Stephen,
 
-On Mon, Jul 31, 2023 at 07:55:52AM +1000, Stephen Rothwell wrote:
-> Hi all,
-> 
-> In commit
-> 
->   7581c293584f ("media: adv748x: Return to endpoint matching")
-> 
-> Fixes tag
-> 
->   Fixes: ("media: v4l: async: Simplify async sub-device fwnode matching")
-> 
-> has these problem(s):
-> 
->   - No SHA1 recognised
-> 
-> Maybe you meant
-> 
-> Fixes: 1029939b3782 ("media: v4l: async: Simplify async sub-device fwnode matching")
 
-That would work for me, yes.
+On 7/31/23 10:55, Thomas Zimmermann wrote:
+> Use fb_info() to print status message at the end of the probe function,
+> which avoids decoding the devices. fb_info() works with or without an
+> fbdev kernel device. Fixes the following error:
+> 
+> ../drivers/video/fbdev/ps3fb.c: In function 'ps3fb_probe':
+> ../drivers/video/fbdev/ps3fb.c:1172:40: error: 'struct fb_info' has no member named 'dev'
+>  1172 |                  dev_driver_string(info->dev), dev_name(info->dev),
+>       |                                        ^~
+> ../include/linux/dev_printk.h:110:37: note: in definition of macro 'dev_printk_index_wrap'
+>   110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+>       |                                     ^~~~~~~~~~~
+> ../drivers/video/fbdev/ps3fb.c:1171:9: note: in expansion of macro 'dev_info'
+>  1171 |         dev_info(info->device, "%s %s, using %u KiB of video memory\n",
+>       |         ^~~~~~~~
+> ../drivers/video/fbdev/ps3fb.c:1172:61: error: 'struct fb_info' has no member named 'dev'
+>  1172 |                  dev_driver_string(info->dev), dev_name(info->dev),
+>       |                                                             ^~
+> ../include/linux/dev_printk.h:110:37: note: in definition of macro 'dev_printk_index_wrap'
+>   110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+>       |                                     ^~~~~~~~~~~
+> ../drivers/video/fbdev/ps3fb.c:1171:9: note: in expansion of macro 'dev_info'
+>  1171 |         dev_info(info->device, "%s %s, using %u KiB of video memory\n",
+>       |         ^~~~~~~~
+> 
+> Reported-by: Randy Dunlap <rdunlap@infradead.org>
+> Closes: https://lore.kernel.org/lkml/ccc63065-2976-88ef-1211-731330bf2866@infradead.org/
+> Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
+> Fixes: 701d2054fa31 ("fbdev: Make support for userspace interfaces configurable")
+> Cc: Michael Ellerman <mpe@ellerman.id.au>
+> Cc: Sam Ravnborg <sam@ravnborg.org>
+> Cc: Helge Deller <deller@gmx.de>
+> Cc: Javier Martinez Canillas <javierm@redhat.com>
+> Cc: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Bagas Sanjaya <bagasdotme@gmail.com>
+> Cc: Thorsten Leemhuis <regressions@leemhuis.info>
+> Cc: dri-devel@lists.freedesktop.org
+> Cc: linux-fbdev@vger.kernel.org
+> Cc: linuxppc-dev@lists.ozlabs.org
 
-The patch that broke adv748x driver had no stable commit ID at the time the
-fix was merged.
+Acked-by: Randy Dunlap <rdunlap@infradead.org>
+Tested-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
+
+Thanks.
+
+> ---
+>  drivers/video/fbdev/ps3fb.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+> 
+> diff --git a/drivers/video/fbdev/ps3fb.c b/drivers/video/fbdev/ps3fb.c
+> index 5aedc30c5f7e..64d291d6b153 100644
+> --- a/drivers/video/fbdev/ps3fb.c
+> +++ b/drivers/video/fbdev/ps3fb.c
+> @@ -1168,9 +1168,7 @@ static int ps3fb_probe(struct ps3_system_bus_device *dev)
+>  
+>  	ps3_system_bus_set_drvdata(dev, info);
+>  
+> -	dev_info(info->device, "%s %s, using %u KiB of video memory\n",
+> -		 dev_driver_string(info->dev), dev_name(info->dev),
+> -		 info->fix.smem_len >> 10);
+> +	fb_info(info, "using %u KiB of video memory\n", info->fix.smem_len >> 10);
+>  
+>  	task = kthread_run(ps3fbd, info, DEVICE_NAME);
+>  	if (IS_ERR(task)) {
 
 -- 
-Kind regards,
-
-Sakari Ailus
+~Randy

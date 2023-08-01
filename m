@@ -2,129 +2,99 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 698EA76A682
-	for <lists+linux-next@lfdr.de>; Tue,  1 Aug 2023 03:42:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1615676A6DA
+	for <lists+linux-next@lfdr.de>; Tue,  1 Aug 2023 04:16:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229993AbjHABmr (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 31 Jul 2023 21:42:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42512 "EHLO
+        id S229481AbjHACQG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 31 Jul 2023 22:16:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230518AbjHABmr (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 31 Jul 2023 21:42:47 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A24DF1BF1;
-        Mon, 31 Jul 2023 18:42:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1690854137;
-        bh=R0PEe73zlfYAKebLRzhdfAzKrKATJClV0PH4WjYF9+Y=;
-        h=Date:From:To:Cc:Subject:From;
-        b=JoH0sr+YSK8u4uQc94xxJYtL0S7C1R0vkckil6rOa2KHb7cYTnbAFpzwKU5spHrER
-         kaqMVgKdhEzIySPt9FF7MnspVVSf/hCU342ZLO8t1oX0Wj/sf/t59WcNULrkv9h7Yi
-         ETuvuOOsmSOcYCfqrMUZG2jbGogMwOuBvozjZ5+bja1QE72zYeJy1GTC1dN3acqBGR
-         s1EM4fPyMtiA2JgPAkQQzcuMVGwMveU0/lK2DKCLux/GVnfKTs3LdawYtW/HtP21Kf
-         Rrlcv853z3Szq0Cr/Ratnhxr4UaLJRw5/7AWBv2J4uvvx0neH2q9njEiBsr4Y4rRQA
-         E9sXHH38Rs8mw==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4RFHsg6VQwz4wZw;
-        Tue,  1 Aug 2023 11:42:15 +1000 (AEST)
-Date:   Tue, 1 Aug 2023 11:42:14 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Paul Moore <paul@paul-moore.com>,
-        David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Networking <netdev@vger.kernel.org>,
-        Guillaume Nault <gnault@redhat.com>,
-        Khadija Kamran <kamrankhadijadj@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the security tree with the net-next
- tree
-Message-ID: <20230801114214.2e169762@canb.auug.org.au>
+        with ESMTP id S229437AbjHACQF (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 31 Jul 2023 22:16:05 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E195E5C;
+        Mon, 31 Jul 2023 19:16:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=k/FrXh/THAB5ueNYpFa+DtWLKwB8v/g7kBddjVkmREY=; b=ho7cwcSoealjW606BJo530kKgt
+        XEUNVH8f1Jjy9VMmO6MzmygNyaxNtutK6gEGLuMfO7nLQK74IxEHYRcufBlmo+K2nJG2545xsctRM
+        OGduqz8m1jy/KSBORvjKB51ymqOlBQe5YrU3IzbMzH57HR3HpQJ5u5sxhiS48iQpVOzRMKPrl4ArT
+        RlA3TdLkYZAxQp2pavftZoRXgVfYC5oOMpZ1jgUkfY/SXw3CuME54IT3XZtJl0It2+4j6QhvSPmhJ
+        Vt9erlupCLsJdrFSVnuOAz4jvtcXgD8J5ieclD6269b7DwiW9AUhbYK2c/gC/pDyI99gG47VeLKFT
+        xHLiHY7w==;
+Received: from [2601:1c2:980:9ec0::2764]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qQevc-000BnJ-0B;
+        Tue, 01 Aug 2023 02:16:04 +0000
+Message-ID: <57c5ba80-bc87-e76a-98f1-5f8043711b0a@infradead.org>
+Date:   Mon, 31 Jul 2023 19:16:03 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/SlBZ/wYr8B1uaHmZK/xISTS";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH] s390/certstore: select CRYPTO_LIB_SHA256
+Content-Language: en-US
+To:     Sven Schnelle <svens@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-next@vger.kernel.org,
+        Anastasia Eskova <anastasia.eskova@ibm.com>
+References: <20230728100430.1567328-1-svens@linux.ibm.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20230728100430.1567328-1-svens@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/SlBZ/wYr8B1uaHmZK/xISTS
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
 
-Today's linux-next merge of the security tree got a conflict in:
+On 7/28/23 03:04, Sven Schnelle wrote:
+> A build failure was reported when sha256() is not present:
+> 
+> gcc-13.1.0-nolibc/s390-linux/bin/s390-linux-ld: arch/s390/kernel/cert_store.o: in function `check_certificate_hash':
+> arch/s390/kernel/cert_store.c:267: undefined reference to `sha256'
+> 
+> Therefore make CONFIG_CERT_STORE select CRYPTO_LIB_SHA256.
+> 
+> Fixes: 8cf57d7217c3 ("s390: add support for user-defined certificates")
+> Reported-by: Randy Dunlap <rdunlap@infradead.org>
+> Closes: https://lore.kernel.org/all/8ecb57fb-4560-bdfc-9e55-63e3b0937132@infradead.org/
+> Signed-off-by: Sven Schnelle <svens@linux.ibm.com>
 
-  security/security.c
+Sorry for the delay.
 
-between commit:
+Tested-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
+Acked-by: Randy Dunlap <rdunlap@infradead.org>
 
-  5b52ad34f948 ("security: Constify sk in the sk_getsecid hook.")
+Thanks.
 
-from the net-next tree and commit:
+> ---
+>  arch/s390/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/arch/s390/Kconfig b/arch/s390/Kconfig
+> index d9d50a7a2016..18bf754e1fad 100644
+> --- a/arch/s390/Kconfig
+> +++ b/arch/s390/Kconfig
+> @@ -516,6 +516,7 @@ config KEXEC_SIG
+>  config CERT_STORE
+>  	bool "Get user certificates via DIAG320"
+>  	depends on KEYS
+> +	select CRYPTO_LIB_SHA256
+>  	help
+>  	  Enable this option if you want to access user-provided secure boot
+>  	  certificates via DIAG 0x320.
 
-  bd1f5934e460 ("lsm: add comment block for security_sk_classify_flow LSM h=
-ook")
-
-from the security tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc security/security.c
-index 2dfc7b9f6ed9,9177fd0968bd..000000000000
---- a/security/security.c
-+++ b/security/security.c
-@@@ -4396,7 -4421,14 +4421,14 @@@ void security_sk_clone(const struct soc
-  }
-  EXPORT_SYMBOL(security_sk_clone);
- =20
-+ /**
-+  * security_sk_classify_flow() - Set a flow's secid based on socket
-+  * @sk: original socket
-+  * @flic: target flow
-+  *
-+  * Set the target flow's secid to socket's secid.
-+  */
- -void security_sk_classify_flow(struct sock *sk, struct flowi_common *flic)
- +void security_sk_classify_flow(const struct sock *sk, struct flowi_common=
- *flic)
-  {
-  	call_void_hook(sk_getsecid, sk, &flic->flowic_secid);
-  }
-
---Sig_/SlBZ/wYr8B1uaHmZK/xISTS
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmTIYvYACgkQAVBC80lX
-0GxibAf/V0a39pcCXf9IcteRyqNunHpmz4gxlVi7pAUrGkNWZ5HSGOZqW6YzjcUG
-021K7vdkI907fOtYQ78FpckhEykLY2Ibi0iwUezNmd39ycPniL3QTxWzOk6p4N/I
-S5CaQfh9Xib03TWFhoNcMOvHY37RpLMXKbii8Njv8M4DwlwVVtrR1fxmFFoezYlO
-ehGSZRjaEPLDDLze+hxAZi5XRvwdWYW77GuRwSbqw/letpC3r+0jbe6lP0jVGB3F
-BS39zrSDb50l4nN8W6KkIhVSBUckBqgbJlx16VY67aJwov+yTjGqQJCAmgC/Yh7u
-RG0MlqdcCrw+aMtIGZi9Sx6XFmzXeg==
-=LR5K
------END PGP SIGNATURE-----
-
---Sig_/SlBZ/wYr8B1uaHmZK/xISTS--
+-- 
+~Randy

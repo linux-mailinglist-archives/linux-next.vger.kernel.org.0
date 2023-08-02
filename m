@@ -2,71 +2,72 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7170676D07A
-	for <lists+linux-next@lfdr.de>; Wed,  2 Aug 2023 16:48:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9A5E76D08F
+	for <lists+linux-next@lfdr.de>; Wed,  2 Aug 2023 16:49:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233568AbjHBOsF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 2 Aug 2023 10:48:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45322 "EHLO
+        id S234498AbjHBOto (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 2 Aug 2023 10:49:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234542AbjHBOsC (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 2 Aug 2023 10:48:02 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D0C11982
-        for <linux-next@vger.kernel.org>; Wed,  2 Aug 2023 07:48:00 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1bbd2761f1bso58111345ad.2
-        for <linux-next@vger.kernel.org>; Wed, 02 Aug 2023 07:48:00 -0700 (PDT)
+        with ESMTP id S234511AbjHBOtg (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 2 Aug 2023 10:49:36 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCEC4210A
+        for <linux-next@vger.kernel.org>; Wed,  2 Aug 2023 07:49:33 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-99c1d03e124so411783866b.2
+        for <linux-next@vger.kernel.org>; Wed, 02 Aug 2023 07:49:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1690987680; x=1691592480;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=chromium.org; s=google; t=1690987771; x=1691592571;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=VppVRXoXQvKZJkFtuRWaz8mbgEZARAeuezBGRcJyOiM=;
-        b=hFYWlhmljE/klwppV++NKW84d/Eesf+FCOvycpSLv1wwCQpDOYdQA/icP3xC4HHRIF
-         7Rvw1vD7plGgiNUFEdgMDG9B+49Prm8n3Uf6scoED+cjMOwuZHCogoPVhnADisSPHX3p
-         HBDr52caGrX81FAcSeufVdwOc1PdpTXeZz/FI=
+        bh=aKHkYl6IMr8QnTnvT30Nci/brg8p0pHZBfK3BKGZxuI=;
+        b=Pq+bTdD5N+DD8rAc1KC2k90a8XMV7LkhjQxc3v2pKh8PnyU7kWBUdsFCQYpNZVV6EC
+         hzVPKhAtO4Dpsdb/K/SlkDd+P9SNEHV3MuzO6agsVMjk+NVzIYXSPtfWY+zU55J+LMFw
+         U4vErh2k/QNPBEBRDrUuqt7etJP9KBld9i0PU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690987680; x=1691592480;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1690987771; x=1691592571;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=VppVRXoXQvKZJkFtuRWaz8mbgEZARAeuezBGRcJyOiM=;
-        b=SVoJhYHZ0DJ0q8LmtpOLPlJrrvv0hnzp6vt+MZcEVgNt7g+FSMgVofTYd4V7QPjiDc
-         TKLFg4DLVxrYevq5rMXG89CKhiLKj5H5RyxcNgDVdr3m+kYtCuRdDAo33ikR6wp0ol2R
-         WpZ3DOiu4sEpeepJYsyUfrFN9G+JgYe8PKM1W6WYyiqbHz81R8xmvI1zSJWlo7kYzlox
-         RKXNuCyBtoDrG5zc9+9PpVVoImwGiXSWIVRBH+63NC0qPX+6M6lGiO967qos4qca9ful
-         KjrQDT2K+EFfhUjiLZa9kfcc/gyuYAAKcS6MXYHhWw7pyXwlSO+fbZTHtnZK2YY2YKFg
-         lP3Q==
-X-Gm-Message-State: ABy/qLYNl0DXiV08HhvxNjw2XB6okMw30P8IBgDuTwLFKMsSHFC+pPBn
-        aes800sXr/IyJdhbMvTG3atN8Q==
-X-Google-Smtp-Source: APBJJlEnKVmSw5s+REAmb9vIHaq2YjWuJwo5aDKSmHQblkNG/fsPSQTcTnzDbOCmKARtJsRK9TdsIg==
-X-Received: by 2002:a17:902:ec82:b0:1bb:9c45:130f with SMTP id x2-20020a170902ec8200b001bb9c45130fmr19124197plg.69.1690987680161;
-        Wed, 02 Aug 2023 07:48:00 -0700 (PDT)
-Received: from tictac2.mtv.corp.google.com ([2620:15c:9d:2:6fae:ec4e:7f84:d593])
-        by smtp.gmail.com with ESMTPSA id b21-20020a170902d31500b001b89891bfc4sm12524139plc.199.2023.08.02.07.47.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Aug 2023 07:47:59 -0700 (PDT)
-From:   Douglas Anderson <dianders@chromium.org>
-To:     dri-devel@lists.freedesktop.org, Maxime Ripard <mripard@kernel.org>
-Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] drm/panel: Fix todo indentation for panel prepared/enabled cleanup
-Date:   Wed,  2 Aug 2023 07:47:28 -0700
-Message-ID: <20230802074727.2.Iaeb7b0f7951aee6b8c090364bbc87b1ae198a857@changeid>
-X-Mailer: git-send-email 2.41.0.585.gd2178a4bd4-goog
-In-Reply-To: <20230802074727.1.I4036706ad5e7f45e80d41b777164258e52079cd8@changeid>
-References: <20230802074727.1.I4036706ad5e7f45e80d41b777164258e52079cd8@changeid>
+        bh=aKHkYl6IMr8QnTnvT30Nci/brg8p0pHZBfK3BKGZxuI=;
+        b=kLbCLGkaM8UbWkjVT2zKGiNwH7zU2X9CRlDedGsw4iAG1htuHxWnZh+b/+SAqgH18C
+         Hnjw5Gf7yQBotmlb7KiHhNNepRr/mE4shh/yhAwK6WjpXLjflI2uQpmED+42VfsRA4oZ
+         VOeY9iIW9blcE7N6Vby2ccTdzb0s8Q74qbLb+TguFKamAcQZvRkEywyemeD0/g4TPVoc
+         Zf2VBtv8XYtKavj9cxIolyv2HiHd9T3RJe4dpc0tMq1kK40Zm7QsI/M6F0gAocYe+f+n
+         XOPxWxABLvgX16SItIF2/ZTDDL7ULJaL2EzSOmcUkN4BesL+vsnN9S8SHDU98g9kDcwA
+         EdDA==
+X-Gm-Message-State: ABy/qLYQ5/NdTE/PFtkq2+b//W/VH12BpCqrj1v8CdYclsft32FBpZpZ
+        1rk6x3s1KfVE6HFFOqoPa9d3GlJVjE2mpKyyTMOhU7iT
+X-Google-Smtp-Source: APBJJlGUpV/g4X7rK/rSPbxXarvaZDkdZ/DJNzSjAzxrapsg5EJNIbB3mT75MzDdNsY1VI/nFw/ggQ==
+X-Received: by 2002:a17:907:2bdc:b0:992:d013:1132 with SMTP id gv28-20020a1709072bdc00b00992d0131132mr5284618ejc.1.1690987771126;
+        Wed, 02 Aug 2023 07:49:31 -0700 (PDT)
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com. [209.85.208.54])
+        by smtp.gmail.com with ESMTPSA id a21-20020a17090682d500b0099bd8c1f67esm9246000ejy.109.2023.08.02.07.49.30
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Aug 2023 07:49:30 -0700 (PDT)
+Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-5229e0603edso11012a12.1
+        for <linux-next@vger.kernel.org>; Wed, 02 Aug 2023 07:49:30 -0700 (PDT)
+X-Received: by 2002:a50:9f84:0:b0:521:f642:7183 with SMTP id
+ c4-20020a509f84000000b00521f6427183mr415975edf.1.1690987770404; Wed, 02 Aug
+ 2023 07:49:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20230802141724.0edce253@canb.auug.org.au>
+In-Reply-To: <20230802141724.0edce253@canb.auug.org.au>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Wed, 2 Aug 2023 07:49:18 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=V4RmorrEu9oGrW+ovBXn+nC_APVhH-M+mHHXYoYLYRPQ@mail.gmail.com>
+Message-ID: <CAD=FV=V4RmorrEu9oGrW+ovBXn+nC_APVhH-M+mHHXYoYLYRPQ@mail.gmail.com>
+Subject: Re: linux-next: build warning after merge of the drm-misc tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
@@ -77,37 +78,28 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-In commit d2aacaf07395 ("drm/panel: Check for already prepared/enabled
-in drm_panel") the formatting for a code block was not quite
-right. This caused an error when building htmldocs:
+Hi,
 
-  Documentation/gpu/todo.rst:469: ERROR: Unexpected indentation.
+On Tue, Aug 1, 2023 at 9:17=E2=80=AFPM Stephen Rothwell <sfr@canb.auug.org.=
+au> wrote:
+>
+> Hi all,
+>
+> After merging the drm-misc tree, today's linux-next build (htmldocs)
+> produced this warning:
+>
+> Documentation/gpu/todo.rst:469: ERROR: Unexpected indentation.
+>
+> Introduced by commit
+>
+>   d2aacaf07395 ("drm/panel: Check for already prepared/enabled in drm_pan=
+el")
 
-Fix the error by using the proper syntax for a code block.
+Thanks for the report. I've posted:
 
-Fixes: d2aacaf07395 ("drm/panel: Check for already prepared/enabled in drm_panel")
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Closes: https://lore.kernel.org/r/20230802141724.0edce253@canb.auug.org.au
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
----
+https://lore.kernel.org/all/20230802074727.2.Iaeb7b0f7951aee6b8c090364bbc87=
+b1ae198a857@changeid/
 
- Documentation/gpu/todo.rst | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+To fix this one.
 
-diff --git a/Documentation/gpu/todo.rst b/Documentation/gpu/todo.rst
-index aa0052f9b93b..139980487ccf 100644
---- a/Documentation/gpu/todo.rst
-+++ b/Documentation/gpu/todo.rst
-@@ -465,7 +465,8 @@ Clean up checks for already prepared/enabled in panels
- 
- In a whole pile of panel drivers, we have code to make the
- prepare/unprepare/enable/disable callbacks behave as no-ops if they've already
--been called. To get some idea of the duplicated code, try:
-+been called. To get some idea of the duplicated code, try::
-+
-   git grep 'if.*>prepared' -- drivers/gpu/drm/panel
-   git grep 'if.*>enabled' -- drivers/gpu/drm/panel
- 
--- 
-2.41.0.585.gd2178a4bd4-goog
-
+-Doug

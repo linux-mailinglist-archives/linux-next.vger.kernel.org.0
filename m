@@ -2,49 +2,50 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7BB276D078
-	for <lists+linux-next@lfdr.de>; Wed,  2 Aug 2023 16:48:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7170676D07A
+	for <lists+linux-next@lfdr.de>; Wed,  2 Aug 2023 16:48:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234429AbjHBOsE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 2 Aug 2023 10:48:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45314 "EHLO
+        id S233568AbjHBOsF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 2 Aug 2023 10:48:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234509AbjHBOsB (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 2 Aug 2023 10:48:01 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9F28E0
-        for <linux-next@vger.kernel.org>; Wed,  2 Aug 2023 07:47:58 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1bbf3da0ea9so32676805ad.2
-        for <linux-next@vger.kernel.org>; Wed, 02 Aug 2023 07:47:58 -0700 (PDT)
+        with ESMTP id S234542AbjHBOsC (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 2 Aug 2023 10:48:02 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D0C11982
+        for <linux-next@vger.kernel.org>; Wed,  2 Aug 2023 07:48:00 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1bbd2761f1bso58111345ad.2
+        for <linux-next@vger.kernel.org>; Wed, 02 Aug 2023 07:48:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1690987678; x=1691592478;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=34jvrY9iaBvcRp6RfXdi/NZwehC55dKloV135LCo6Q4=;
-        b=ApOIy6Oof+Qo/7c+FEtdZW+BbrbkSOoTTUlpREhL52s9a/El38htUsBtKsr3weJLV2
-         +dXMUNVFK2+BE/xrnKRHAvNi9FIBpWXkaWXaTtXCl42zHmAoBHaN6lSMr9nZMOEIOlD5
-         3y/xyRf8LbatSRznjLxKSft9jkvkndOkzb/hc=
+        d=chromium.org; s=google; t=1690987680; x=1691592480;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VppVRXoXQvKZJkFtuRWaz8mbgEZARAeuezBGRcJyOiM=;
+        b=hFYWlhmljE/klwppV++NKW84d/Eesf+FCOvycpSLv1wwCQpDOYdQA/icP3xC4HHRIF
+         7Rvw1vD7plGgiNUFEdgMDG9B+49Prm8n3Uf6scoED+cjMOwuZHCogoPVhnADisSPHX3p
+         HBDr52caGrX81FAcSeufVdwOc1PdpTXeZz/FI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690987678; x=1691592478;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=34jvrY9iaBvcRp6RfXdi/NZwehC55dKloV135LCo6Q4=;
-        b=Dr6bR9sbccJnsiJxlVDoGn+QmZb4UpsJnenmWOFnDnLCpvN5DK5z1axmJ2rbAKUmeQ
-         Gq2inmiIcOfOb/BLhtWgI54ZFqE70EcJWt3X4re1qQjMOlTprjFFJDYIuwQg+CBFlQ/r
-         t0oVC30QsTT0GgJ8k1MDtAWcjXNXFdayrGqY0a709QlxLciH6MSGdCvcuOgkFuWEpbsn
-         xZrvhKlGukyn35cduyLJoJOhnosrEsiAbRU7oS51HRy77k6PW4iAKm93yYu5jZVr+8Ph
-         uhr0TGJmDX+xwnONUaKTvpkGtk9903mkjeMrBwOBS+iQxjg2f2ZqbMDE6Niop6KNoteP
-         braw==
-X-Gm-Message-State: ABy/qLYRPhjLh3vf0MhcGemHvyyVNu1SyPhYTDbFwoucvtMM34O0AFOr
-        1iIly7aRT89YfROWfLPpVSWGwA==
-X-Google-Smtp-Source: APBJJlFPjUDZubqVQL75MLrA9AfOwS26wqtyyCObOSfWkCHMjUe1pBsewbKiHvHWQOXGvHbT0dlkoQ==
-X-Received: by 2002:a17:902:ed8c:b0:1b8:28f6:20e6 with SMTP id e12-20020a170902ed8c00b001b828f620e6mr13850468plj.34.1690987678407;
-        Wed, 02 Aug 2023 07:47:58 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1690987680; x=1691592480;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VppVRXoXQvKZJkFtuRWaz8mbgEZARAeuezBGRcJyOiM=;
+        b=SVoJhYHZ0DJ0q8LmtpOLPlJrrvv0hnzp6vt+MZcEVgNt7g+FSMgVofTYd4V7QPjiDc
+         TKLFg4DLVxrYevq5rMXG89CKhiLKj5H5RyxcNgDVdr3m+kYtCuRdDAo33ikR6wp0ol2R
+         WpZ3DOiu4sEpeepJYsyUfrFN9G+JgYe8PKM1W6WYyiqbHz81R8xmvI1zSJWlo7kYzlox
+         RKXNuCyBtoDrG5zc9+9PpVVoImwGiXSWIVRBH+63NC0qPX+6M6lGiO967qos4qca9ful
+         KjrQDT2K+EFfhUjiLZa9kfcc/gyuYAAKcS6MXYHhWw7pyXwlSO+fbZTHtnZK2YY2YKFg
+         lP3Q==
+X-Gm-Message-State: ABy/qLYNl0DXiV08HhvxNjw2XB6okMw30P8IBgDuTwLFKMsSHFC+pPBn
+        aes800sXr/IyJdhbMvTG3atN8Q==
+X-Google-Smtp-Source: APBJJlEnKVmSw5s+REAmb9vIHaq2YjWuJwo5aDKSmHQblkNG/fsPSQTcTnzDbOCmKARtJsRK9TdsIg==
+X-Received: by 2002:a17:902:ec82:b0:1bb:9c45:130f with SMTP id x2-20020a170902ec8200b001bb9c45130fmr19124197plg.69.1690987680161;
+        Wed, 02 Aug 2023 07:48:00 -0700 (PDT)
 Received: from tictac2.mtv.corp.google.com ([2620:15c:9d:2:6fae:ec4e:7f84:d593])
-        by smtp.gmail.com with ESMTPSA id b21-20020a170902d31500b001b89891bfc4sm12524139plc.199.2023.08.02.07.47.57
+        by smtp.gmail.com with ESMTPSA id b21-20020a170902d31500b001b89891bfc4sm12524139plc.199.2023.08.02.07.47.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Aug 2023 07:47:57 -0700 (PDT)
+        Wed, 02 Aug 2023 07:47:59 -0700 (PDT)
 From:   Douglas Anderson <dianders@chromium.org>
 To:     dri-devel@lists.freedesktop.org, Maxime Ripard <mripard@kernel.org>
 Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
@@ -54,57 +55,59 @@ Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
         Douglas Anderson <dianders@chromium.org>,
         Daniel Vetter <daniel@ffwll.ch>,
         David Airlie <airlied@gmail.com>,
+        Jonathan Corbet <corbet@lwn.net>,
         Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
         Thomas Zimmermann <tzimmermann@suse.de>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 1/2] drm/panel: Fix kernel-doc typo for `follower_lock`
-Date:   Wed,  2 Aug 2023 07:47:27 -0700
-Message-ID: <20230802074727.1.I4036706ad5e7f45e80d41b777164258e52079cd8@changeid>
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 2/2] drm/panel: Fix todo indentation for panel prepared/enabled cleanup
+Date:   Wed,  2 Aug 2023 07:47:28 -0700
+Message-ID: <20230802074727.2.Iaeb7b0f7951aee6b8c090364bbc87b1ae198a857@changeid>
 X-Mailer: git-send-email 2.41.0.585.gd2178a4bd4-goog
+In-Reply-To: <20230802074727.1.I4036706ad5e7f45e80d41b777164258e52079cd8@changeid>
+References: <20230802074727.1.I4036706ad5e7f45e80d41b777164258e52079cd8@changeid>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-In the kernel doc for the `follower_lock` member of `struct drm_panel`
-there was a typo where it was called `followers_lock`. This resulted
-in a warning when making "htmldocs":
+In commit d2aacaf07395 ("drm/panel: Check for already prepared/enabled
+in drm_panel") the formatting for a code block was not quite
+right. This caused an error when building htmldocs:
 
-  ./include/drm/drm_panel.h:270: warning:
-  Function parameter or member 'follower_lock' not described in 'drm_panel'
+  Documentation/gpu/todo.rst:469: ERROR: Unexpected indentation.
 
-Fix the typo.
+Fix the error by using the proper syntax for a code block.
 
-Fixes: de0874165b83 ("drm/panel: Add a way for other devices to follow panel state")
+Fixes: d2aacaf07395 ("drm/panel: Check for already prepared/enabled in drm_panel")
 Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Closes: https://lore.kernel.org/r/20230802142136.0f67b762@canb.auug.org.au
+Closes: https://lore.kernel.org/r/20230802141724.0edce253@canb.auug.org.au
 Signed-off-by: Douglas Anderson <dianders@chromium.org>
 ---
 
- include/drm/drm_panel.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Documentation/gpu/todo.rst | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/include/drm/drm_panel.h b/include/drm/drm_panel.h
-index d6c73f79c131..10015891b056 100644
---- a/include/drm/drm_panel.h
-+++ b/include/drm/drm_panel.h
-@@ -238,7 +238,7 @@ struct drm_panel {
- 	struct list_head followers;
+diff --git a/Documentation/gpu/todo.rst b/Documentation/gpu/todo.rst
+index aa0052f9b93b..139980487ccf 100644
+--- a/Documentation/gpu/todo.rst
++++ b/Documentation/gpu/todo.rst
+@@ -465,7 +465,8 @@ Clean up checks for already prepared/enabled in panels
  
- 	/**
--	 * @followers_lock:
-+	 * @follower_lock:
- 	 *
- 	 * Lock for followers list.
- 	 */
+ In a whole pile of panel drivers, we have code to make the
+ prepare/unprepare/enable/disable callbacks behave as no-ops if they've already
+-been called. To get some idea of the duplicated code, try:
++been called. To get some idea of the duplicated code, try::
++
+   git grep 'if.*>prepared' -- drivers/gpu/drm/panel
+   git grep 'if.*>enabled' -- drivers/gpu/drm/panel
+ 
 -- 
 2.41.0.585.gd2178a4bd4-goog
 

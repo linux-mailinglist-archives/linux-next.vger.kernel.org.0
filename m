@@ -2,105 +2,109 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF3B276D099
-	for <lists+linux-next@lfdr.de>; Wed,  2 Aug 2023 16:50:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECB9D76D345
+	for <lists+linux-next@lfdr.de>; Wed,  2 Aug 2023 18:05:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234492AbjHBOuO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 2 Aug 2023 10:50:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47220 "EHLO
+        id S235352AbjHBQFl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 2 Aug 2023 12:05:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234471AbjHBOuN (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 2 Aug 2023 10:50:13 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFB4FE43
-        for <linux-next@vger.kernel.org>; Wed,  2 Aug 2023 07:50:11 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-99bf3f59905so805596566b.3
-        for <linux-next@vger.kernel.org>; Wed, 02 Aug 2023 07:50:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1690987809; x=1691592609;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lCYYmzNqtzxNv8UbxN3uv60kE4E3C48+cD2+0APdVk8=;
-        b=lRZYtjDheibM8ACJPzTInMwsWUg3Pql6i36ylhajcCXvOPRnTi7Xpy9LN3kQEnsLrA
-         erqEyS6qmPtsc358kXKc6rkECfMjmWZMalO9kJNBbE9VgagwO6DDiLiXIVIgdJ57tOoF
-         9W4JQPq40N5B5fypy47M5oI8OWgWBwqbr0xDk=
+        with ESMTP id S234918AbjHBQFj (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 2 Aug 2023 12:05:39 -0400
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C835D1981;
+        Wed,  2 Aug 2023 09:05:36 -0700 (PDT)
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-686f25d045cso4864525b3a.0;
+        Wed, 02 Aug 2023 09:05:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690987809; x=1691592609;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lCYYmzNqtzxNv8UbxN3uv60kE4E3C48+cD2+0APdVk8=;
-        b=Si202g3JzaA6u4kul3bmkFbbg8+jwbcLPFQLVtKj0CVy5O8AGPaUJ5ft85i/mVwPoo
-         vmr4ZiiQyRS25I6KNjLYkuAvU1/11GGmc5yDdmElxFLqTWtjaXBbASQ/exXDNzr7Q9fp
-         rA+qysX6cLdsiStft1KiU8WsWxWSPG1VJfBzoAG2mOL+OoO5u0kkv4HfZPBMxKkLpjW2
-         AM40I2CZtJpYQeFXgJ8MAKHiYTgixx+lh4xymI5h02m4J2HV9PnBptg9PP/uH3D+mZzb
-         y6b1LBASKfgsWf+V6spJ/sIfolPFR7CzYr3YbCpRQ0fq46FcKAt17PmSKGvzSpsMMloi
-         B39w==
-X-Gm-Message-State: ABy/qLZWioWMvRpZW22GVLn4e9hwji6VVQqj81P8vwJhtCDFZyUB9DCx
-        M+Cccysv4blt1K+L+vMviNJ1E6TcrqjlO+2uc6nyDY4n
-X-Google-Smtp-Source: APBJJlGmMWCSjK69Gfs16aD4r6cG8GQ+jgBW2My9qUy81KR6yanadXofBbjz59uoUyCa3BiSvjXucw==
-X-Received: by 2002:a17:907:2ce7:b0:98d:76f8:217b with SMTP id hz7-20020a1709072ce700b0098d76f8217bmr5181486ejc.73.1690987808803;
-        Wed, 02 Aug 2023 07:50:08 -0700 (PDT)
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com. [209.85.208.46])
-        by smtp.gmail.com with ESMTPSA id v5-20020a170906564500b00992e4d8cc89sm9263509ejr.57.2023.08.02.07.50.08
-        for <linux-next@vger.kernel.org>
+        d=1e100.net; s=20221208; t=1690992336; x=1691597136;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yWj15UxHmZD5nZuBhxkMl7v2Hf4ieTX3L892qlXB1t4=;
+        b=ddQYMItI8UPfFdJ63UalkA3lciStrqzXd7CYd7YpuKeDK0UQMCLzNZ1Cb61uidgW01
+         Am2zLEYe8SeppEpJS5OqV0bKZAfAEYVe+0fChnPk82Ew9tZWoCE4ta3qvVauTQYtGrj3
+         Rafo8zDliWfI4MWXlMYtvIVgLa7grddgOnPfOTW+c0rqiSn4CcdajP7EpJ6S/ri+6230
+         GIhXGT/2hR5scH9naER3AA31KiB9ZhJi3k+70BgMKuTQpNT/Lir6tLVgdhnteq0JiIlH
+         6+WRW9SJjiSnYxEHfvMaZ5a2wLNvOup/n78aHXw9/aF3akPcuXSDQxEHXo4Fa0x9hDSj
+         Iz0Q==
+X-Gm-Message-State: ABy/qLZ/EDDHl68GrCagVZvv1WpPWadkwzkZkiV2cKziigANIOGOo304
+        /FFHsxbu9FKn8BfmkQUh5gU=
+X-Google-Smtp-Source: APBJJlG3njKPepOv5TPc0XcrYTTQwaKTmp42F3pA4a3GWx2tWisoDpDqiXFsXyCWr6MDwST5/pWR+A==
+X-Received: by 2002:a17:903:495:b0:1b7:f99f:63c9 with SMTP id jj21-20020a170903049500b001b7f99f63c9mr12816170plb.67.1690992335948;
+        Wed, 02 Aug 2023 09:05:35 -0700 (PDT)
+Received: from ?IPV6:2620:15c:211:201:3b5d:5926:23cf:5139? ([2620:15c:211:201:3b5d:5926:23cf:5139])
+        by smtp.gmail.com with ESMTPSA id o14-20020a170902d4ce00b001bb0eebd90asm12588851plg.245.2023.08.02.09.05.34
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Aug 2023 07:50:08 -0700 (PDT)
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-5223910acf2so14245a12.0
-        for <linux-next@vger.kernel.org>; Wed, 02 Aug 2023 07:50:08 -0700 (PDT)
-X-Received: by 2002:a50:d70e:0:b0:522:203b:c348 with SMTP id
- t14-20020a50d70e000000b00522203bc348mr412547edi.5.1690987807863; Wed, 02 Aug
- 2023 07:50:07 -0700 (PDT)
+        Wed, 02 Aug 2023 09:05:35 -0700 (PDT)
+Message-ID: <70b8adef-02ac-4557-97d3-cbf8537edfb2@acm.org>
+Date:   Wed, 2 Aug 2023 09:05:33 -0700
 MIME-Version: 1.0
-References: <20230802142136.0f67b762@canb.auug.org.au>
-In-Reply-To: <20230802142136.0f67b762@canb.auug.org.au>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Wed, 2 Aug 2023 07:49:55 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=XEbpuMb4FvDkVkkX+Btig4eFnNrp5LWs+rQJ9Sy3wg4w@mail.gmail.com>
-Message-ID: <CAD=FV=XEbpuMb4FvDkVkkX+Btig4eFnNrp5LWs+rQJ9Sy3wg4w@mail.gmail.com>
-Subject: Re: linux-next: build warning after merge of the drm-misc tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v2 11/12] scsi: ufs: Simplify transfer request header
+ initialization
+Content-Language: en-US
+To:     "Kumar, Udit" <u-kumar1@ti.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc:     linux-scsi@vger.kernel.org, Avri Altman <avri.altman@wdc.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        "Bao D . Nguyen" <quic_nguyenb@quicinc.com>,
+        Eric Biggers <ebiggers@google.com>,
+        Bean Huo <beanhuo@micron.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Stanley Chu <stanley.chu@mediatek.com>,
+        Can Guo <quic_cang@quicinc.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Asutosh Das <quic_asutoshd@quicinc.com>,
+        Po-Wen Kao <powen.kao@mediatek.com>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        Arthur Simchaev <Arthur.Simchaev@wdc.com>,
+        Kiwoong Kim <kwmad.kim@samsung.com>,
+        Nishanth Menon <nm@ti.com>, d-gole@ti.com,
+        linux-next@vger.kernel.org
+References: <20230727194457.3152309-1-bvanassche@acm.org>
+ <20230727194457.3152309-12-bvanassche@acm.org>
+ <97281aba-a78c-7f75-fc15-af43e4df4907@ti.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <97281aba-a78c-7f75-fc15-af43e4df4907@ti.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi,
+On 8/2/23 04:25, Kumar, Udit wrote:
+> While building next-20230801 for ARM64 architecture,
+> 
+> this patch is giving compilation error
+> 
+> In function ‘ufshcd_check_header_layout’,
+>      inlined from ‘ufshcd_core_init’ at drivers/ufs/core/ufshcd.c:10629:2:
+> ././include/linux/compiler_types.h:397:38: error: call to 
+> ‘__compiletime_assert_554’ declared with attribute error: BUILD_BUG_ON 
+> failed: ((u8 *)&(struct request_desc_header){ .enable_crypto = 1})[2] != 
+> 0x80
+>    397 |  _compiletime_assert(condition, msg, __compiletime_assert_, 
+> __COUNTER__)
+> 
+> 
+> compiler information
+> 
+> wget 
+> https://developer.arm.com/-/media/Files/downloads/gnu-a/9.2-2019.12/binrel/gcc-arm-9.2-2019.12-x86_64-aarch64-none-linux-gnu.tar.xz
 
-On Tue, Aug 1, 2023 at 9:21=E2=80=AFPM Stephen Rothwell <sfr@canb.auug.org.=
-au> wrote:
->
-> Hi all,
->
-> After merging the drm-misc tree, today's linux-next build (htmldocs)
-> produced this warning:
->
-> include/drm/drm_panel.h:270: warning: Function parameter or member 'follo=
-wer_lock' not described in 'drm_panel'
->
-> Introduced by commit
->
->   de0874165b83 ("drm/panel: Add a way for other devices to follow panel s=
-tate")
+Does this patch help: 
+https://lore.kernel.org/linux-scsi/20230801232204.1481902-1-bvanassche@acm.org/?
 
-Thanks for the report. I've posted:
+Thanks,
 
-https://lore.kernel.org/all/20230802074727.1.I4036706ad5e7f45e80d41b7771642=
-58e52079cd8@changeid/
+Bart.
 
-To fix this one.
-
--Doug

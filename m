@@ -2,50 +2,68 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FF1D76C155
-	for <lists+linux-next@lfdr.de>; Wed,  2 Aug 2023 02:06:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C11176C1D2
+	for <lists+linux-next@lfdr.de>; Wed,  2 Aug 2023 03:02:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229929AbjHBAGW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 1 Aug 2023 20:06:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42376 "EHLO
+        id S229761AbjHBBCV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 1 Aug 2023 21:02:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbjHBAGV (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 1 Aug 2023 20:06:21 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B8061BF0;
-        Tue,  1 Aug 2023 17:06:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1690934779;
-        bh=H43OmrJAOPMO04ydQakhKGsbl9v6+fR2jL3IHuXpCYU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=mLmwxij51hVvN5ipun0/4mebBNutaRQuEmgmQmjSbWpCKXygC9SwA/ZzOCr7AHYsH
-         uIhCiZi17hVI6g7/LIrLPdlEd+T5f7EcBx61ptzCLUNkz40TqZtuVfeX91cZ+X5TNw
-         WNtzZLwFhEsXfVbqyteGnekA8KbIyXrn9QOFeEH8kFcz7K/JEk6iPnu36B5gY5VDA/
-         fNyhZ1CestQfAHUiU7MFMdfjviyJt6n589VCCQ2Fy03zFyZH3F1AzYo7gJvNxHMFmT
-         mJCtIuxK4salGqMtbypiDsSYzzUsfY9FOCFVdh4/vHr7j9ddWCCX3/bBCifeKpd9dH
-         0ObYowEuxz61w==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4RFshV6Xbcz4yGN;
-        Wed,  2 Aug 2023 10:06:18 +1000 (AEST)
-Date:   Wed, 2 Aug 2023 10:06:18 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Joel Stanley <joel@jms.id.au>
-Cc:     Eddie James <eajames@linux.ibm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the aspeed tree
-Message-ID: <20230802100618.3cbf4712@canb.auug.org.au>
-In-Reply-To: <20230720104019.11dee2b2@canb.auug.org.au>
-References: <20230711095101.6277674b@canb.auug.org.au>
-        <20230720104019.11dee2b2@canb.auug.org.au>
+        with ESMTP id S229606AbjHBBCU (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 1 Aug 2023 21:02:20 -0400
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19EEA1BD3
+        for <linux-next@vger.kernel.org>; Tue,  1 Aug 2023 18:02:19 -0700 (PDT)
+Received: by mail-oi1-x232.google.com with SMTP id 5614622812f47-3a6f87b2993so3464705b6e.3
+        for <linux-next@vger.kernel.org>; Tue, 01 Aug 2023 18:02:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1690938138; x=1691542938;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=0YGSifztvO/jii+qrgg6AFv3a55D6R0s2R/KRBm3WOI=;
+        b=wyC+w/YSz8JjtibrEPFTvtsD14qm9JEm/7Bwj6kBAArq3PFRV+n0CI2ahIWnBceGnS
+         9uuKrrHFLBs1bG3iwYITSq7HtBzcGpBscbMlzQ47ATUKTKo+SA7hJ3bgN+yZS9iYix9V
+         GeWYSlJtVrOyY47Tvfns48PcaeKguNpkmjmRlGT7ZYegQ5FTcE1Xm0S54WYMrpBTMbz3
+         zDWjS/T2jyFURe5OImw3e6wuYRcqdLtVqhg116wDI/JOkfTDhdkEoioeiiv3uDVzHj96
+         MKMvJfV7Oj3zoCcuSafhdo5ycgcaFrHco0t5Bt4i3+/NH5ycTiSRvoq16UOt1d02I/oT
+         m/Pw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690938138; x=1691542938;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0YGSifztvO/jii+qrgg6AFv3a55D6R0s2R/KRBm3WOI=;
+        b=a2wotIic+R6cUMDIozPSljtottjsI8CXce5ch8yhG/gCOxCjqKVCASaZjXKd5pdM4q
+         1jH4F1h35Pr1WV5vChk4ZH7tLkZ/Yrw5TwEOVtpo3/WPqodL6cL1RA7pSzq7vrXV7I+L
+         NPYtAQQiw3En1bkP6kdBaJl+nPXYb80T5BdEPeMx0bELSDc++37EyttO+mwlC9S7Qd+h
+         fphY+WiDWgFMLSzxGckbTxnoxO0pGdT1qYx59BeFYFL7wVae0gTsBw31IQfg5O3NpdxM
+         Wb7q8ZqiPhMAsWIRaZozbmNZTNu7LBGME5eQ3cE+eCNVbX8FpuDsCX/4ifQeCVPziXFL
+         Vi2A==
+X-Gm-Message-State: ABy/qLbHqeOu68MEMlJRXfgT2w4QZkGiF2pKVRwNwDbm98s6e8OvyPM3
+        m0qCTlA+JMtyqHMdNFf8uvR0ZmEumIQjWpgpxfRc4A==
+X-Google-Smtp-Source: APBJJlGRhkEZ0PJoJgd+s3jW/zENfbULqyjN/emtogHQZSCs9yOesJC8Tnyx/ReMogNSXpcosRFc6w==
+X-Received: by 2002:a05:6808:1a92:b0:3a7:4802:c34 with SMTP id bm18-20020a0568081a9200b003a748020c34mr4360681oib.50.1690938137559;
+        Tue, 01 Aug 2023 18:02:17 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id g4-20020a63ad04000000b00563e1ef0491sm10438129pgf.8.2023.08.01.18.02.16
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Aug 2023 18:02:16 -0700 (PDT)
+Message-ID: <64c9ab18.630a0220.d2165.4431@mx.google.com>
+Date:   Tue, 01 Aug 2023 18:02:16 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/oG0atfuduz6qtjNS7g2Ipq4";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Tree: next
+X-Kernelci-Branch: pending-fixes
+X-Kernelci-Kernel: v6.5-rc4-271-g34fbf9d4c5844
+X-Kernelci-Report-Type: build
+Subject: next/pending-fixes build: 8 builds: 0 failed, 8 passed,
+ 4 warnings (v6.5-rc4-271-g34fbf9d4c5844)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -54,121 +72,100 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/oG0atfuduz6qtjNS7g2Ipq4
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+next/pending-fixes build: 8 builds: 0 failed, 8 passed, 4 warnings (v6.5-rc=
+4-271-g34fbf9d4c5844)
 
-Hi all,
+Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
+rnel/v6.5-rc4-271-g34fbf9d4c5844/
 
-On Thu, 20 Jul 2023 10:40:19 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> On Tue, 11 Jul 2023 09:51:01 +1000 Stephen Rothwell <sfr@canb.auug.org.au=
-> wrote:
-> >
-> > After merging the aspeed tree, today's linux-next build (arm
-> > multi_v7_defconfig) produced this warning:
-> >=20
-> > arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dts:238.6-19: Warning (=
-reg_format): /ahb/apb/fsi@1e79b000/cfam@0,0/i2c@1800/i2c-bus@a/eeprom@50:re=
-g: property has invalid length (4 bytes) (#address-cells =3D=3D 2, #size-ce=
-lls =3D=3D 1)
-> > arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dts:247.6-19: Warning (=
-reg_format): /ahb/apb/fsi@1e79b000/cfam@0,0/i2c@1800/i2c-bus@b/eeprom@50:re=
-g: property has invalid length (4 bytes) (#address-cells =3D=3D 2, #size-ce=
-lls =3D=3D 1)
-> > arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dts:256.6-19: Warning (=
-reg_format): /ahb/apb/fsi@1e79b000/cfam@0,0/i2c@1800/i2c-bus@c/eeprom@50:re=
-g: property has invalid length (4 bytes) (#address-cells =3D=3D 2, #size-ce=
-lls =3D=3D 1)
-> > arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dts:265.6-19: Warning (=
-reg_format): /ahb/apb/fsi@1e79b000/cfam@0,0/i2c@1800/i2c-bus@d/eeprom@50:re=
-g: property has invalid length (4 bytes) (#address-cells =3D=3D 2, #size-ce=
-lls =3D=3D 1)
-> > arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dtb: Warning (pci_devic=
-e_reg): Failed prerequisite 'reg_format'
-> > arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dtb: Warning (pci_devic=
-e_bus_num): Failed prerequisite 'reg_format'
-> > arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dts:233.27-240.6: Warni=
-ng (i2c_bus_bridge): /ahb/apb/fsi@1e79b000/cfam@0,0/i2c@1800/i2c-bus@a: inc=
-orrect #address-cells for I2C bus
-> > arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dts:233.27-240.6: Warni=
-ng (i2c_bus_bridge): /ahb/apb/fsi@1e79b000/cfam@0,0/i2c@1800/i2c-bus@a: inc=
-orrect #size-cells for I2C bus
-> > arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dts:242.27-249.6: Warni=
-ng (i2c_bus_bridge): /ahb/apb/fsi@1e79b000/cfam@0,0/i2c@1800/i2c-bus@b: inc=
-orrect #address-cells for I2C bus
-> > arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dts:242.27-249.6: Warni=
-ng (i2c_bus_bridge): /ahb/apb/fsi@1e79b000/cfam@0,0/i2c@1800/i2c-bus@b: inc=
-orrect #size-cells for I2C bus
-> > arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dts:251.27-258.6: Warni=
-ng (i2c_bus_bridge): /ahb/apb/fsi@1e79b000/cfam@0,0/i2c@1800/i2c-bus@c: inc=
-orrect #address-cells for I2C bus
-> > arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dts:251.27-258.6: Warni=
-ng (i2c_bus_bridge): /ahb/apb/fsi@1e79b000/cfam@0,0/i2c@1800/i2c-bus@c: inc=
-orrect #size-cells for I2C bus
-> > arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dts:260.27-267.6: Warni=
-ng (i2c_bus_bridge): /ahb/apb/fsi@1e79b000/cfam@0,0/i2c@1800/i2c-bus@d: inc=
-orrect #address-cells for I2C bus
-> > arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dts:260.27-267.6: Warni=
-ng (i2c_bus_bridge): /ahb/apb/fsi@1e79b000/cfam@0,0/i2c@1800/i2c-bus@d: inc=
-orrect #size-cells for I2C bus
-> > arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dtb: Warning (i2c_bus_r=
-eg): Failed prerequisite 'reg_format'
-> > arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dtb: Warning (i2c_bus_r=
-eg): Failed prerequisite 'i2c_bus_bridge'
-> > arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dtb: Warning (spi_bus_r=
-eg): Failed prerequisite 'reg_format'
-> > arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dts:236.15-239.7: Warni=
-ng (avoid_default_addr_size): /ahb/apb/fsi@1e79b000/cfam@0,0/i2c@1800/i2c-b=
-us@a/eeprom@50: Relying on default #address-cells value
-> > arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dts:236.15-239.7: Warni=
-ng (avoid_default_addr_size): /ahb/apb/fsi@1e79b000/cfam@0,0/i2c@1800/i2c-b=
-us@a/eeprom@50: Relying on default #size-cells value
-> > arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dts:245.15-248.7: Warni=
-ng (avoid_default_addr_size): /ahb/apb/fsi@1e79b000/cfam@0,0/i2c@1800/i2c-b=
-us@b/eeprom@50: Relying on default #address-cells value
-> > arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dts:245.15-248.7: Warni=
-ng (avoid_default_addr_size): /ahb/apb/fsi@1e79b000/cfam@0,0/i2c@1800/i2c-b=
-us@b/eeprom@50: Relying on default #size-cells value
-> > arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dts:254.15-257.7: Warni=
-ng (avoid_default_addr_size): /ahb/apb/fsi@1e79b000/cfam@0,0/i2c@1800/i2c-b=
-us@c/eeprom@50: Relying on default #address-cells value
-> > arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dts:254.15-257.7: Warni=
-ng (avoid_default_addr_size): /ahb/apb/fsi@1e79b000/cfam@0,0/i2c@1800/i2c-b=
-us@c/eeprom@50: Relying on default #size-cells value
-> > arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dts:263.15-266.7: Warni=
-ng (avoid_default_addr_size): /ahb/apb/fsi@1e79b000/cfam@0,0/i2c@1800/i2c-b=
-us@d/eeprom@50: Relying on default #address-cells value
-> > arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dts:263.15-266.7: Warni=
-ng (avoid_default_addr_size): /ahb/apb/fsi@1e79b000/cfam@0,0/i2c@1800/i2c-b=
-us@d/eeprom@50: Relying on default #size-cells value
-> >=20
-> > Presumably introduced by commit
-> >=20
-> >   267c95dc9f80 ("ARM: dts: aspeed: bonnell: Add DIMM SPD") =20
->=20
-> I am still getting those warnings.
+Tree: next
+Branch: pending-fixes
+Git Describe: v6.5-rc4-271-g34fbf9d4c5844
+Git Commit: 34fbf9d4c584469c2b06b8a434f20ecbe63221ba
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Built: 8 unique architectures
 
-Any progress with this?
---=20
-Cheers,
-Stephen Rothwell
+Warnings Detected:
 
---Sig_/oG0atfuduz6qtjNS7g2Ipq4
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+arc:
 
------BEGIN PGP SIGNATURE-----
+arm64:
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmTJnfoACgkQAVBC80lX
-0GwXIgf7BIJgL0OrbH75jyyt2AcjiMW8v3Ey6A0pwPDPagIgR0bNVSsB96CQql7P
-pIWKzX6m2OMEKcqmEGgg+lYeAGP9oWDkxTjwpFCRCAInKou6QuSqh1m41W5K+xbA
-8Pjzt9aUgQxPvMlpEJ/fy73RwbXBNFG0UxHkTVO+92vhkAv3D7w/dJEUxPxtT7na
-wSpdz3m5g/36JBLvhNMcancqFjDWOYKEIWqJopnJCDVJlhTDl3o70XHSpJhhlsb8
-EhSPNef2ie/kLeHkZhfaQyKsHQX0mtanSaMm1Eo3Vq/Y05ZEyiDMqscC0kd7JyXV
-Z4rERa9ri28rg7hEV7mu7WZA9exe2Q==
-=c37Q
------END PGP SIGNATURE-----
+arm:
 
---Sig_/oG0atfuduz6qtjNS7g2Ipq4--
+i386:
+
+mips:
+
+riscv:
+
+sparc:
+    sparc64_defconfig (gcc-10): 4 warnings
+
+x86_64:
+
+
+Warnings summary:
+
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---
+For more info write to <info@kernelci.org>

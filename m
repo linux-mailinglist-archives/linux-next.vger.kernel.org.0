@@ -2,56 +2,48 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECB9D76D345
-	for <lists+linux-next@lfdr.de>; Wed,  2 Aug 2023 18:05:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 786D376D3EE
+	for <lists+linux-next@lfdr.de>; Wed,  2 Aug 2023 18:44:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235352AbjHBQFl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 2 Aug 2023 12:05:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52074 "EHLO
+        id S229930AbjHBQov (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 2 Aug 2023 12:44:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234918AbjHBQFj (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 2 Aug 2023 12:05:39 -0400
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C835D1981;
-        Wed,  2 Aug 2023 09:05:36 -0700 (PDT)
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-686f25d045cso4864525b3a.0;
-        Wed, 02 Aug 2023 09:05:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690992336; x=1691597136;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yWj15UxHmZD5nZuBhxkMl7v2Hf4ieTX3L892qlXB1t4=;
-        b=ddQYMItI8UPfFdJ63UalkA3lciStrqzXd7CYd7YpuKeDK0UQMCLzNZ1Cb61uidgW01
-         Am2zLEYe8SeppEpJS5OqV0bKZAfAEYVe+0fChnPk82Ew9tZWoCE4ta3qvVauTQYtGrj3
-         Rafo8zDliWfI4MWXlMYtvIVgLa7grddgOnPfOTW+c0rqiSn4CcdajP7EpJ6S/ri+6230
-         GIhXGT/2hR5scH9naER3AA31KiB9ZhJi3k+70BgMKuTQpNT/Lir6tLVgdhnteq0JiIlH
-         6+WRW9SJjiSnYxEHfvMaZ5a2wLNvOup/n78aHXw9/aF3akPcuXSDQxEHXo4Fa0x9hDSj
-         Iz0Q==
-X-Gm-Message-State: ABy/qLZ/EDDHl68GrCagVZvv1WpPWadkwzkZkiV2cKziigANIOGOo304
-        /FFHsxbu9FKn8BfmkQUh5gU=
-X-Google-Smtp-Source: APBJJlG3njKPepOv5TPc0XcrYTTQwaKTmp42F3pA4a3GWx2tWisoDpDqiXFsXyCWr6MDwST5/pWR+A==
-X-Received: by 2002:a17:903:495:b0:1b7:f99f:63c9 with SMTP id jj21-20020a170903049500b001b7f99f63c9mr12816170plb.67.1690992335948;
-        Wed, 02 Aug 2023 09:05:35 -0700 (PDT)
-Received: from ?IPV6:2620:15c:211:201:3b5d:5926:23cf:5139? ([2620:15c:211:201:3b5d:5926:23cf:5139])
-        by smtp.gmail.com with ESMTPSA id o14-20020a170902d4ce00b001bb0eebd90asm12588851plg.245.2023.08.02.09.05.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Aug 2023 09:05:35 -0700 (PDT)
-Message-ID: <70b8adef-02ac-4557-97d3-cbf8537edfb2@acm.org>
-Date:   Wed, 2 Aug 2023 09:05:33 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v2 11/12] scsi: ufs: Simplify transfer request header
- initialization
-Content-Language: en-US
-To:     "Kumar, Udit" <u-kumar1@ti.com>,
+        with ESMTP id S229923AbjHBQot (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 2 Aug 2023 12:44:49 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F126188;
+        Wed,  2 Aug 2023 09:44:47 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 372GiBEi038861;
+        Wed, 2 Aug 2023 11:44:11 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1690994651;
+        bh=3kBRAYwRwhay7rJWjkHBR9qDTkgWytjud1XNRDdBkkE=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To;
+        b=AANTIcvtzvN4tVq8rUWCAnNh4OIilgtTEcF260TGrzJiWqr7dqTbhwhAMqUEQ2wlV
+         1tg2cI9xWlk+H6qPXCODWufFRHN9fPsMzSVGQCIyPKbr9/HOcaA5asOq6z59/1ov7p
+         4Ni2WfkC0DZN+W+In9V8LqGhuwRoUJW/gFkQZJXM=
+Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 372GiB2G030742
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 2 Aug 2023 11:44:11 -0500
+Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 2
+ Aug 2023 11:44:11 -0500
+Received: from DLEE107.ent.ti.com ([fe80::1c91:43d:d71:d7b6]) by
+ DLEE107.ent.ti.com ([fe80::1c91:43d:d71:d7b6%17]) with mapi id
+ 15.01.2507.023; Wed, 2 Aug 2023 11:44:11 -0500
+From:   "Kumar, Udit" <u-kumar1@ti.com>
+To:     Bart Van Assche <bvanassche@acm.org>,
         "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc:     linux-scsi@vger.kernel.org, Avri Altman <avri.altman@wdc.com>,
+CC:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        Avri Altman <avri.altman@wdc.com>,
         Adrian Hunter <adrian.hunter@intel.com>,
         "Bao D . Nguyen" <quic_nguyenb@quicinc.com>,
         Eric Biggers <ebiggers@google.com>,
-        Bean Huo <beanhuo@micron.com>,
+        "Bean Huo" <beanhuo@micron.com>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
         Stanley Chu <stanley.chu@mediatek.com>,
         Can Guo <quic_cang@quicinc.com>,
@@ -61,50 +53,56 @@ Cc:     linux-scsi@vger.kernel.org, Avri Altman <avri.altman@wdc.com>,
         Yang Li <yang.lee@linux.alibaba.com>,
         Arthur Simchaev <Arthur.Simchaev@wdc.com>,
         Kiwoong Kim <kwmad.kim@samsung.com>,
-        Nishanth Menon <nm@ti.com>, d-gole@ti.com,
-        linux-next@vger.kernel.org
+        "Menon, Nishanth" <nm@ti.com>, "Gole, Dhruva" <d-gole@ti.com>,
+        "linux-next@vger.kernel.org" <linux-next@vger.kernel.org>
+Subject: RE: [PATCH v2 11/12] scsi: ufs: Simplify transfer request header
+ initialization
+Thread-Topic: [PATCH v2 11/12] scsi: ufs: Simplify transfer request header
+ initialization
+Thread-Index: AQHZxTP5AHJX9Bb+D0a3TK13N+V7x6/Xf76A//+2k0A=
+Date:   Wed, 2 Aug 2023 16:44:11 +0000
+Message-ID: <96e0abb37d364da3b9d04c0c2f3378f6@ti.com>
 References: <20230727194457.3152309-1-bvanassche@acm.org>
  <20230727194457.3152309-12-bvanassche@acm.org>
  <97281aba-a78c-7f75-fc15-af43e4df4907@ti.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <97281aba-a78c-7f75-fc15-af43e4df4907@ti.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+ <70b8adef-02ac-4557-97d3-cbf8537edfb2@acm.org>
+In-Reply-To: <70b8adef-02ac-4557-97d3-cbf8537edfb2@acm.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.249.141.75]
+x-exclaimer-md-config: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 8/2/23 04:25, Kumar, Udit wrote:
-> While building next-20230801 for ARM64 architecture,
-> 
-> this patch is giving compilation error
-> 
-> In function ‘ufshcd_check_header_layout’,
->      inlined from ‘ufshcd_core_init’ at drivers/ufs/core/ufshcd.c:10629:2:
-> ././include/linux/compiler_types.h:397:38: error: call to 
-> ‘__compiletime_assert_554’ declared with attribute error: BUILD_BUG_ON 
-> failed: ((u8 *)&(struct request_desc_header){ .enable_crypto = 1})[2] != 
-> 0x80
->    397 |  _compiletime_assert(condition, msg, __compiletime_assert_, 
-> __COUNTER__)
-> 
-> 
-> compiler information
-> 
-> wget 
-> https://developer.arm.com/-/media/Files/downloads/gnu-a/9.2-2019.12/binrel/gcc-arm-9.2-2019.12-x86_64-aarch64-none-linux-gnu.tar.xz
-
-Does this patch help: 
-https://lore.kernel.org/linux-scsi/20230801232204.1481902-1-bvanassche@acm.org/?
-
-Thanks,
-
-Bart.
-
+VGhhbmtzIEJhcnQNCg0KPg0KPk9uIDgvMi8yMyAwNDoyNSwgS3VtYXIsIFVkaXQgd3JvdGU6DQo+
+PiBXaGlsZSBidWlsZGluZyBuZXh0LTIwMjMwODAxIGZvciBBUk02NCBhcmNoaXRlY3R1cmUsDQo+
+Pg0KPj4gdGhpcyBwYXRjaCBpcyBnaXZpbmcgY29tcGlsYXRpb24gZXJyb3INCj4+DQo+PiBJbiBm
+dW5jdGlvbiDigJh1ZnNoY2RfY2hlY2tfaGVhZGVyX2xheW91dOKAmSwNCj4+ICDCoMKgwqAgaW5s
+aW5lZCBmcm9tIOKAmHVmc2hjZF9jb3JlX2luaXTigJkgYXQgZHJpdmVycy91ZnMvY29yZS91ZnNo
+Y2QuYzoxMDYyOToyOg0KPj4gLi8uL2luY2x1ZGUvbGludXgvY29tcGlsZXJfdHlwZXMuaDozOTc6
+Mzg6IGVycm9yOiBjYWxsIHRvDQo+PiDigJhfX2NvbXBpbGV0aW1lX2Fzc2VydF81NTTigJkgZGVj
+bGFyZWQgd2l0aCBhdHRyaWJ1dGUgZXJyb3I6IEJVSUxEX0JVR19PTg0KPj4gZmFpbGVkOiAoKHU4
+ICopJihzdHJ1Y3QgcmVxdWVzdF9kZXNjX2hlYWRlcil7IC5lbmFibGVfY3J5cHRvID0gMX0pWzJd
+DQo+PiAhPQ0KPj4gMHg4MA0KPj4gIMKgIDM5NyB8wqAgX2NvbXBpbGV0aW1lX2Fzc2VydChjb25k
+aXRpb24sIG1zZywgX19jb21waWxldGltZV9hc3NlcnRfLA0KPj4gX19DT1VOVEVSX18pDQo+Pg0K
+Pj4NCj4+IGNvbXBpbGVyIGluZm9ybWF0aW9uDQo+Pg0KPj4gd2dldA0KPj4gaHR0cHM6Ly9kZXZl
+bG9wZXIuYXJtLmNvbS8tL21lZGlhL0ZpbGVzL2Rvd25sb2Fkcy9nbnUtYS85LjItMjAxOS4xMi9i
+aQ0KPj4gbnJlbC9nY2MtYXJtLTkuMi0yMDE5LjEyLXg4Nl82NC1hYXJjaDY0LW5vbmUtbGludXgt
+Z251LnRhci54eg0KPg0KPkRvZXMgdGhpcyBwYXRjaCBoZWxwOg0KPmh0dHBzOi8vbG9yZS5rZXJu
+ZWwub3JnL2xpbnV4LXNjc2kvMjAyMzA4MDEyMzIyMDQuMTQ4MTkwMi0xLQ0KPmJ2YW5hc3NjaGVA
+YWNtLm9yZy8/DQoNClllcyAsIGJ1aWxkIHdvcmtzIGZvciBtZSB3aXRoIHRoaXMgcGF0Y2guDQpZ
+b3UganVzdCBza2lwcGVkIGJhc2VkIHVwb24gY29tcGlsZXIgdmVyc2lvbiAgYnV0IA0Kd2hhdCBh
+Ym91dCBjaGVja3MgeW91IHdhbnQgdG8gZG8gaW4gdGhpcyBmdW5jdGlvbi4gDQoNCg0KPlRoYW5r
+cywNCj4NCj5CYXJ0Lg0KDQo=

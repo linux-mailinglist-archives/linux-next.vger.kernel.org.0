@@ -2,122 +2,104 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62AC576E2CF
-	for <lists+linux-next@lfdr.de>; Thu,  3 Aug 2023 10:19:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69FE876E2FB
+	for <lists+linux-next@lfdr.de>; Thu,  3 Aug 2023 10:27:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234493AbjHCITi (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 3 Aug 2023 04:19:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46238 "EHLO
+        id S234565AbjHCI1Q (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 3 Aug 2023 04:27:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234498AbjHCITJ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 3 Aug 2023 04:19:09 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A3B655AF
-        for <linux-next@vger.kernel.org>; Thu,  3 Aug 2023 01:14:16 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-3fe2d218eedso7017985e9.0
-        for <linux-next@vger.kernel.org>; Thu, 03 Aug 2023 01:14:16 -0700 (PDT)
+        with ESMTP id S231823AbjHCI0y (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 3 Aug 2023 04:26:54 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECB1555BC
+        for <linux-next@vger.kernel.org>; Thu,  3 Aug 2023 01:23:18 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3fbea147034so7004255e9.0
+        for <linux-next@vger.kernel.org>; Thu, 03 Aug 2023 01:23:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1691050455; x=1691655255;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=NqGaWIotnKqKyzVdO4mnhnn37JZzzgHfkaj/9pvpDBI=;
-        b=ZOwjQWAn7JHFjvwUzCCaWOHFoV4nYBigZDxL/pA53A8MmqPc98WhkWB8eKdDp1OZKb
-         HcoFU2/1PWdxhxf+VIgg2OJV9ovta9q+8rV+34rPjs9nhrkvlLexUxH10+8ZX1gzINTS
-         byYzHarpU0kESe4wPMGatxISUIFO32Frcj5qZyW7dRIBfh43sh6FGUBDLmyoTPsta8Mr
-         kRlmIaqzy7oAGbektaYUDXMUxVcMwIWzb1ZzLQG24QNflszZ+HfXkK4XRTqw+yFDd5/v
-         PgB7ztMdy3NqlvBPEzvM1hqR9n8BBqDU8Hx2Sxfj70ZlMOd5IOZ1pzsyjI+fghEzQYze
-         9Gdw==
+        d=linaro.org; s=google; t=1691050997; x=1691655797;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QJMrHXaDI2jXZZ4fTi2siSIHXafUBuzV5Qg1y6pooWA=;
+        b=y+v/u9a7vIxXIW2+GWqMqxQYR1oinKq8Lgt/a4XqTLYX6clqRNeDzKwBT6e7peNEyH
+         LqH+n6XD1UBTjbps2wOdvzFSFDpnjJ4dhUxDgYbJtOu+GXL+6X7K14MO10V3BCHRHNgq
+         baM5dcDL+xrVgho+xCSJR6iMbS2TvnOYCAkq9gY2i1FoTGnYB4auJy/+NLku08cGj+dA
+         ddjxnRCD6A9uci2aiT12WIBl8CubNbkHoFJ9p0nodGL4Wt7lDgUytiSwWLJLkhNRJ6xJ
+         qM4kHGsJ4bBOuqF1i0tEA8rgXih1OEXoqeeV3bNSACQcaxWTyFmi3dDG7h2R/K9Ce6fi
+         kTNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691050455; x=1691655255;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NqGaWIotnKqKyzVdO4mnhnn37JZzzgHfkaj/9pvpDBI=;
-        b=h+x8B/HEVvjtkDu51PWreu7p0QuEVk/pY9HyQqzVH0No2OWhfoiDsQP1G+a1buw1Zm
-         9qOXM1bJvy8J8F1m93oyhhGj5KQxVL+Md+JJ00u00i7vcOHb/2EOsdROy935h4L2xqVT
-         21ni70pqiMBbjutek6lGsOaSSpoidgg+nz+ngZmknfZlUMeuAN27g2//E28uxPEVhu0P
-         5mDzh+pDhGjxa+Wv240PGP+mT+wy7Q2TW86zar8Y2UwrqyD5CU5R0ZwCTYNRQB8ZKqpV
-         JuhrrG6wTnSqzHRDaq/2nIEFlz6AMOW62PcSZI40bpcZIIuTHr2yq9+j+nkxAKsaZC3V
-         Kb4Q==
-X-Gm-Message-State: ABy/qLZMEGJCPhBOiuMJtsyowUsynIXHWZLv4Pyu3CJsXo1DSwf/XuxQ
-        XMHYJsiLrulD6+RGxfdQvCj7dg==
-X-Google-Smtp-Source: APBJJlHG7TGw7P8HEiLdxgaTyrTJbdQEUF5FJHRQOuTIptudXZcmxU7cKeKFDJfovphAgYX5+VJ/wA==
-X-Received: by 2002:a05:600c:2a54:b0:3fa:934c:8350 with SMTP id x20-20020a05600c2a5400b003fa934c8350mr6677648wme.27.1691050454645;
-        Thu, 03 Aug 2023 01:14:14 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:8656:583:d034:d966? ([2a01:e0a:982:cbb0:8656:583:d034:d966])
-        by smtp.gmail.com with ESMTPSA id u3-20020a7bcb03000000b003fbb06af219sm3567818wmj.32.2023.08.03.01.14.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Aug 2023 01:14:14 -0700 (PDT)
-Message-ID: <7e8202d9-3207-bb22-d69d-b2c80eca2a02@linaro.org>
-Date:   Thu, 3 Aug 2023 10:14:13 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
+        d=1e100.net; s=20221208; t=1691050997; x=1691655797;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QJMrHXaDI2jXZZ4fTi2siSIHXafUBuzV5Qg1y6pooWA=;
+        b=jnjJPuPMBsfVbt3dXAoEC51zLkX2q6W30iTpEKOsaJlVLJm+cLFALkydtyL+gyqAnp
+         l2pQzsRFGss2MbY04SV+Mh7xKKsI8/c/WzmfakDzWUgATLGjoK7FQjhz0lHc6ZNYStKc
+         BjKyxPHNXEDh9jSabKJIOHy9BN8NFgJKHets3k4YNFhbY/BRmOvHvPvDkDmusyJTFkwL
+         k0eGI9LACYkhRzB0atHfVXWt3pNkekjzb4vzBhhq9nQhEmX4QaX/WE5MsOpA5zv9QHQf
+         Bf5qnLr8XDj+bGU77xhErUoGugPC/jv6tInRD08bUkjvoRZYiGA0zaU+hHuPEMRrGGb3
+         68ow==
+X-Gm-Message-State: ABy/qLZ6/bvkxaLYPCiFNTZQXQxpKzCq6xx16eYSgnga9g+58ptoSPu0
+        oz4QqY/5QvEqkeWzMrgETNi8rQ==
+X-Google-Smtp-Source: APBJJlFMwEOpdx47TLNsl1lN03YDYUVk04bqgSbetYihaLvp4UQmnUd9EUCO/APSD+4OITuhnwpEhA==
+X-Received: by 2002:a05:600c:40c:b0:3f9:70f:8b99 with SMTP id q12-20020a05600c040c00b003f9070f8b99mr6716325wmb.7.1691050997459;
+        Thu, 03 Aug 2023 01:23:17 -0700 (PDT)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
+        by smtp.gmail.com with ESMTPSA id k1-20020a05600c0b4100b003fe11148055sm3539994wmr.27.2023.08.03.01.23.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Aug 2023 01:23:17 -0700 (PDT)
 From:   Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH 2/2] drm/panel: Fix todo indentation for panel
- prepared/enabled cleanup
-Content-Language: en-US
-To:     Douglas Anderson <dianders@chromium.org>,
-        dri-devel@lists.freedesktop.org, Maxime Ripard <mripard@kernel.org>
+To:     dri-devel@lists.freedesktop.org,
+        Maxime Ripard <mripard@kernel.org>,
+        Douglas Anderson <dianders@chromium.org>
 Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
         Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Daniel Vetter <daniel@ffwll.ch>,
         David Airlie <airlied@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>,
         Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
         Thomas Zimmermann <tzimmermann@suse.de>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20230802074727.1.I4036706ad5e7f45e80d41b777164258e52079cd8@changeid>
 References: <20230802074727.1.I4036706ad5e7f45e80d41b777164258e52079cd8@changeid>
- <20230802074727.2.Iaeb7b0f7951aee6b8c090364bbc87b1ae198a857@changeid>
-Organization: Linaro Developer Services
-In-Reply-To: <20230802074727.2.Iaeb7b0f7951aee6b8c090364bbc87b1ae198a857@changeid>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Subject: Re: [PATCH 1/2] drm/panel: Fix kernel-doc typo for `follower_lock`
+Message-Id: <169105099663.2484653.2634988255195420764.b4-ty@linaro.org>
+Date:   Thu, 03 Aug 2023 10:23:16 +0200
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Mailer: b4 0.12.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 02/08/2023 16:47, Douglas Anderson wrote:
-> In commit d2aacaf07395 ("drm/panel: Check for already prepared/enabled
-> in drm_panel") the formatting for a code block was not quite
-> right. This caused an error when building htmldocs:
-> 
->    Documentation/gpu/todo.rst:469: ERROR: Unexpected indentation.
-> 
-> Fix the error by using the proper syntax for a code block.
-> 
-> Fixes: d2aacaf07395 ("drm/panel: Check for already prepared/enabled in drm_panel")
-> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> Closes: https://lore.kernel.org/r/20230802141724.0edce253@canb.auug.org.au
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> ---
-> 
->   Documentation/gpu/todo.rst | 3 ++-
->   1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/gpu/todo.rst b/Documentation/gpu/todo.rst
-> index aa0052f9b93b..139980487ccf 100644
-> --- a/Documentation/gpu/todo.rst
-> +++ b/Documentation/gpu/todo.rst
-> @@ -465,7 +465,8 @@ Clean up checks for already prepared/enabled in panels
->   
->   In a whole pile of panel drivers, we have code to make the
->   prepare/unprepare/enable/disable callbacks behave as no-ops if they've already
-> -been called. To get some idea of the duplicated code, try:
-> +been called. To get some idea of the duplicated code, try::
-> +
->     git grep 'if.*>prepared' -- drivers/gpu/drm/panel
->     git grep 'if.*>enabled' -- drivers/gpu/drm/panel
->   
+Hi,
 
-Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
+On Wed, 02 Aug 2023 07:47:27 -0700, Douglas Anderson wrote:
+> In the kernel doc for the `follower_lock` member of `struct drm_panel`
+> there was a typo where it was called `followers_lock`. This resulted
+> in a warning when making "htmldocs":
+> 
+>   ./include/drm/drm_panel.h:270: warning:
+>   Function parameter or member 'follower_lock' not described in 'drm_panel'
+> 
+> [...]
+
+Thanks, Applied to https://anongit.freedesktop.org/git/drm/drm-misc.git (drm-misc-next)
+
+[1/2] drm/panel: Fix kernel-doc typo for `follower_lock`
+      https://cgit.freedesktop.org/drm/drm-misc/commit/?id=c0571b20fca4acebd4cb5fcfd07ca4654e9d63dd
+[2/2] drm/panel: Fix todo indentation for panel prepared/enabled cleanup
+      https://cgit.freedesktop.org/drm/drm-misc/commit/?id=1ab2ddc4afdd84632c24b23dbe67eb4ca423dcc5
+
+-- 
+Neil
+

@@ -2,36 +2,37 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C87876E00A
-	for <lists+linux-next@lfdr.de>; Thu,  3 Aug 2023 08:07:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 712A676E007
+	for <lists+linux-next@lfdr.de>; Thu,  3 Aug 2023 08:07:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232774AbjHCGH0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 3 Aug 2023 02:07:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36514 "EHLO
+        id S232664AbjHCGHT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 3 Aug 2023 02:07:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232682AbjHCGHS (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 3 Aug 2023 02:07:18 -0400
-Received: from smtpbguseast1.qq.com (smtpbguseast1.qq.com [54.204.34.129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CED230DB
-        for <linux-next@vger.kernel.org>; Wed,  2 Aug 2023 23:07:13 -0700 (PDT)
-X-QQ-mid: bizesmtp65t1691042745tpdiic3r
+        with ESMTP id S232546AbjHCGHQ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 3 Aug 2023 02:07:16 -0400
+Received: from smtpbgbr2.qq.com (smtpbgbr2.qq.com [54.207.22.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B45DE6F
+        for <linux-next@vger.kernel.org>; Wed,  2 Aug 2023 23:07:09 -0700 (PDT)
+X-QQ-mid: bizesmtp83t1691042759tew5pqdl
 Received: from localhost ( [202.85.220.39])
         by bizesmtp.qq.com (ESMTP) with SMTP id 0
-        for <linux-next@vger.kernel.org>; Thu, 03 Aug 2023 14:05:44 +0800 (CST)
+        for <linux-next@vger.kernel.org>; Thu, 03 Aug 2023 14:05:57 +0800 (CST)
 X-QQ-SSF: 01400000000000109000000A0000000
-X-QQ-FEAT: +ynUkgUhZJkR1+2Xpbw3pVKBU7f6sUMuy+nz0BXiw7c2S9qUPuJm+HPU0uoeH
-        cVJaXSo5jeRUvnXqziSaRI1RazXAaUYWm0mxjfV/Ueu5Pj5IIXC9FE21e/iyXcPSDwXQY9H
-        sdi6fUZJX9xfsZLgfv8e8Ftm1sI8BCuDbXKmj/6py6RUY4WMcBqxLHQirBgQbNm8jOZxIfS
-        MMbCRTtYTOh+9v7UxpyQrydXWDWzYiMLaNL2rd2Kd2KAi0ZGL5keXGJSNAmw3o6197Neb/p
-        zRj6dknYsoxnjd1SYseyhzV+pr+yVIhocT9k0qrS31D8JQXIQ0rsphswFokozjz5VRLxNyB
-        Wm9VmvKsjAGrIBTw4n29M0qqmvdc+Y0+Lg8pi8e1HLpv+Fuq1M=
+X-QQ-FEAT: zW5H9jc4KG7JDYRdPw3v3MnEdsjgxyOiEN9mNGDk+LdtZgpaxGuv9GcbJNvVP
+        JzAnYjtmj0VhS/Quagf9Uw0qZ7L7LkTJeasB4fGsbhQVMMiLjRhF1rcTx8f1up9SQRFMGgC
+        /itTKRWNrUKuoG0nuOABFcXwG0DvGmVCf7ksIkx2AGIw1dvjmN+Zp0e/WD5dCGdGCdKE7mb
+        P+NI4gnIRGMRsyMYTUiFQeLkizIAN6mrwR/MPdt4zCMMFz8BSrGXrF1ZLgMjTXnb6KblxcA
+        grT71w51Xw3Pb1QoecbW9NbtNaFzdYsxGffScsWDDwn28Qk6GwDHjojWKfPVA4ApI6pR91T
+        XM753qZZvKJHsJJ0xLDdjZbdoWfBefFfep/omc6I+WwUie5GxyboPXZc6ZfHv0xbuaN0JRv
 X-QQ-GoodBg: 2
-X-BIZMAIL-ID: 8927637587683148526
-Date:   Thu, 3 Aug 2023 14:05:44 +0800
+X-BIZMAIL-ID: 6270210211280154834
+Date:   Thu, 3 Aug 2023 14:05:57 +0800
 From:   GuokaiXu <xuguokai@ucas.com.cn>
 To:     linux-next@vger.kernel.org
-Subject: [PATCH 1/2] include/linux/mtd:Fixed spelling errors in comments
-Message-ID: <4F79DF19D95CDB4F+20230803060544.GA6638@xgk8823>
+Subject: [PATCH 2/2] tools/testing/selftests:Fixed spelling errors in
+ comments 
+Message-ID: <803778AC500E556D+20230803060557.GA6671@xgk8823>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -47,29 +48,57 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-From 56ec0a45e1a20011ae5fa9987f621e1022e2f3bb Mon Sep 17 00:00:00 2001
+From 844784381c30373524346d342003952aeec73a16 Mon Sep 17 00:00:00 2001
 From: GuokaiXu <xuguokai@ucas.com.cn>
-Date: Thu, 3 Aug 2023 13:24:48 +0800
-Subject: [PATCH 1/2] Fix the spelling errors in comments
+Date: Thu, 3 Aug 2023 13:26:59 +0800
+Subject: [PATCH 2/2] Fixed some spelling errors in comments.
 
 Signed-off-by: GuokaiXu <xuguokai@ucas.com.cn>
 ---
- include/linux/mtd/pfow.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/arm64/pauth/pac.c              | 2 +-
+ tools/testing/selftests/bpf/progs/test_subprogs.c      | 2 +-
+ tools/testing/selftests/sync/sync_stress_parallelism.c | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/include/linux/mtd/pfow.h b/include/linux/mtd/pfow.h
-index 146413d4bdb7..d6cf66fc623e 100644
---- a/include/linux/mtd/pfow.h
-+++ b/include/linux/mtd/pfow.h
-@@ -90,7 +90,7 @@
- 					* 11-attempt to program invalid half
- 					* with 0x41 command */
- #define DSR_AOS			(1<<12) /* RC; 1- AO related failure */
--#define DSR_AVAILABLE		(1<<15) /* R; Device availbility
-+#define DSR_AVAILABLE		(1<<15) /* R; Device availability
- 					* 1 - Device available
- 					* 0 - not available */
+diff --git a/tools/testing/selftests/arm64/pauth/pac.c b/tools/testing/selftests/arm64/pauth/pac.c
+index b743daa772f5..b236d181feef 100644
+--- a/tools/testing/selftests/arm64/pauth/pac.c
++++ b/tools/testing/selftests/arm64/pauth/pac.c
+@@ -289,7 +289,7 @@ TEST(single_thread_different_keys)
  
+ /*
+  * fork() does not change keys. Only exec() does so call a worker program.
+- * Its only job is to sign a value and report back the resutls
++ * Its only job is to sign a value and report back the results
+  */
+ TEST(exec_changed_keys)
+ {
+diff --git a/tools/testing/selftests/bpf/progs/test_subprogs.c b/tools/testing/selftests/bpf/progs/test_subprogs.c
+index a8d602d7c88a..ad68697c3c91 100644
+--- a/tools/testing/selftests/bpf/progs/test_subprogs.c
++++ b/tools/testing/selftests/bpf/progs/test_subprogs.c
+@@ -39,7 +39,7 @@ static __noinline int sub4(int w)
+ 	return w + sub3(5) + sub1(6);
+ }
+ 
+-/* sub5() is an identitify function, just to test weirder functions layout and
++/* sub5() is an identify function, just to test weirder functions layout and
+  * call patterns
+  */
+ static __noinline int sub5(int v)
+diff --git a/tools/testing/selftests/sync/sync_stress_parallelism.c b/tools/testing/selftests/sync/sync_stress_parallelism.c
+index e6c9be671dfc..6ce56ca204c4 100644
+--- a/tools/testing/selftests/sync/sync_stress_parallelism.c
++++ b/tools/testing/selftests/sync/sync_stress_parallelism.c
+@@ -87,7 +87,7 @@ int test_stress_two_threads_shared_timeline(void)
+ 
+ 	/*
+ 	 * Use a single timeline to synchronize two threads
+-	 * hammmering on the same counter.
++	 * hammering on the same counter.
+ 	 */
+ 
+ 	pthread_create(&a, NULL, (void *(*)(void *))
 -- 
 2.25.1
 

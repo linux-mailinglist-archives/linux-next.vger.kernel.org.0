@@ -2,114 +2,86 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09CCF76EB7E
-	for <lists+linux-next@lfdr.de>; Thu,  3 Aug 2023 16:01:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE70A76F4EC
+	for <lists+linux-next@lfdr.de>; Thu,  3 Aug 2023 23:57:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236545AbjHCOBG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 3 Aug 2023 10:01:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47324 "EHLO
+        id S231597AbjHCV5x (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 3 Aug 2023 17:57:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236095AbjHCOAo (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 3 Aug 2023 10:00:44 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BE4C19B9
-        for <linux-next@vger.kernel.org>; Thu,  3 Aug 2023 07:00:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Cc:Content-ID:Content-Description;
-        bh=2Xpi4ZqmCeynJ4lcqdp3xxoe3kaM0oHZG/+3MATVEuo=; b=fUTHou9jpSW0dU4FeppQbhZP13
-        VsAtFBKYtLFshJ1pdalwyF8SHCRH/ZmZ28ITHWhVgq7jStO155jmLkyZM93PoLqBTrcY+Gz4IK9pF
-        JyVUwvb2mADvoiyc56LkY+qzPPC/TJydJcVazM5VBaLR6sdaxDxS/O8ETunlP11RSnYczQvcw+sCj
-        GB2voenNkLbVZYbzqvaqPkrca1Ay2+8rXxWvCYDcUi/T2Jg71qsfHrCaZMreZwmXmgRq/xK1zSept
-        73GCs/f+FWA3zNsgdxi28HRZb9ECPfGzCzja8XGwbEWJFminQHDisIurGGSD5qlubViMJFTRPo9bU
-        tDj9c23Q==;
-Received: from [2601:1c2:980:9ec0::2764]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qRYsH-009LkC-2Y;
-        Thu, 03 Aug 2023 14:00:22 +0000
-Message-ID: <f8262c02-ba63-040b-17e4-d0cb202ce7f5@infradead.org>
-Date:   Thu, 3 Aug 2023 07:00:18 -0700
+        with ESMTP id S231127AbjHCV5w (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 3 Aug 2023 17:57:52 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C8CB3C22;
+        Thu,  3 Aug 2023 14:57:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1691099846;
+        bh=7HsyJ0n10cggudZoIG8F8WD+t+K7Nk0rtPPD9QZ2L4A=;
+        h=Date:From:To:Cc:Subject:From;
+        b=O91dQp9uAcZEm3OZaJwAcAbgbMH1WblU5mWBaue7kNoCqtWVE9H7x4RpILW0QDVmm
+         bd9VymNWXPYyTnW0sSSm/M1Ti4CGCVbY5E+w+ttyGJHYOOUD5X7zJ/F/VbMF39T8MN
+         2/92WJoo6lOtBaGxhov7SDeeXUiyQ2G5O8FWCYX9PvXdsCaizdmX7+CqCxecUICF64
+         4RMrZJMmd2EuFv/97CORi44d7xygRLvvIGeG2XsIr1IDpcYlTSjG0fNaQ77DFB5yDQ
+         u+lw/fi1UZGRcKp92MZ5Rvu7nYzblhsQEpPP5Gof8MSOsyniVFVqyWxD+SRPMqjKAI
+         FHqd3S68ie9zw==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4RH2ks6SXMz4wb8;
+        Fri,  4 Aug 2023 07:57:25 +1000 (AEST)
+Date:   Fri, 4 Aug 2023 07:57:14 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the risc-v-fixes
+ tree
+Message-ID: <20230804075714.7033c7e4@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH 2/2] tools/testing/selftests:Fixed spelling errors in
- comments
-Content-Language: en-US
-To:     GuokaiXu <xuguokai@ucas.com.cn>, linux-next@vger.kernel.org
-References: <803778AC500E556D+20230803060557.GA6671@xgk8823>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <803778AC500E556D+20230803060557.GA6671@xgk8823>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/5yQGLWpBZtfGvmHz5bMwCEp";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+--Sig_/5yQGLWpBZtfGvmHz5bMwCEp
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
 
-On 8/2/23 23:05, GuokaiXu wrote:
-> From 844784381c30373524346d342003952aeec73a16 Mon Sep 17 00:00:00 2001
-> From: GuokaiXu <xuguokai@ucas.com.cn>
-> Date: Thu, 3 Aug 2023 13:26:59 +0800
-> Subject: [PATCH 2/2] Fixed some spelling errors in comments.
-> 
-> Signed-off-by: GuokaiXu <xuguokai@ucas.com.cn>
-> ---
->  tools/testing/selftests/arm64/pauth/pac.c              | 2 +-
->  tools/testing/selftests/bpf/progs/test_subprogs.c      | 2 +-
->  tools/testing/selftests/sync/sync_stress_parallelism.c | 2 +-
->  3 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/arm64/pauth/pac.c b/tools/testing/selftests/arm64/pauth/pac.c
-> index b743daa772f5..b236d181feef 100644
-> --- a/tools/testing/selftests/arm64/pauth/pac.c
-> +++ b/tools/testing/selftests/arm64/pauth/pac.c
-> @@ -289,7 +289,7 @@ TEST(single_thread_different_keys)
->  
->  /*
->   * fork() does not change keys. Only exec() does so call a worker program.
-> - * Its only job is to sign a value and report back the resutls
-> + * Its only job is to sign a value and report back the results
->   */
->  TEST(exec_changed_keys)
->  {
-> diff --git a/tools/testing/selftests/bpf/progs/test_subprogs.c b/tools/testing/selftests/bpf/progs/test_subprogs.c
-> index a8d602d7c88a..ad68697c3c91 100644
-> --- a/tools/testing/selftests/bpf/progs/test_subprogs.c
-> +++ b/tools/testing/selftests/bpf/progs/test_subprogs.c
-> @@ -39,7 +39,7 @@ static __noinline int sub4(int w)
->  	return w + sub3(5) + sub1(6);
->  }
->  
-> -/* sub5() is an identitify function, just to test weirder functions layout and
-> +/* sub5() is an identify function, just to test weirder functions layout and
+Commits
 
-                   identity
-maybe. I think. maybe.
+  0ccd2e803745 ("riscv/kexec: load initrd high in available memory")
+  1be0b05b3a80 ("riscv/kexec: handle R_RISCV_CALL_PLT relocation type")
 
->   * call patterns
->   */
->  static __noinline int sub5(int v)
-> diff --git a/tools/testing/selftests/sync/sync_stress_parallelism.c b/tools/testing/selftests/sync/sync_stress_parallelism.c
-> index e6c9be671dfc..6ce56ca204c4 100644
-> --- a/tools/testing/selftests/sync/sync_stress_parallelism.c
-> +++ b/tools/testing/selftests/sync/sync_stress_parallelism.c
-> @@ -87,7 +87,7 @@ int test_stress_two_threads_shared_timeline(void)
->  
->  	/*
->  	 * Use a single timeline to synchronize two threads
-> -	 * hammmering on the same counter.
-> +	 * hammering on the same counter.
->  	 */
->  
->  	pthread_create(&a, NULL, (void *(*)(void *))
+are missing a Signed-off-by from their committer.
 
--- 
-~Randy
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/5yQGLWpBZtfGvmHz5bMwCEp
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmTMIroACgkQAVBC80lX
+0GwtcAf9EWxsZ3V8aIKZz6iuEfns3xMbm9JtTsEgiokCGek0kRJyCVAnP/fNLxRI
+YOiVelA/pD+4j7pOseAZKAc3hJsqCQDGwW5DqtJuuPdcVsBV0g8pYqfbUXIYBoHV
+BpuFJsznS1eLAjfG7L4JbT7PT5tcs8/hgj7tbji3TBA7jKb3TU4LqQ9z9B4Lkw3y
+k2vdNoKKDCt1XzHuX1EWeav5L2EIVaI5OLcPMAV5hKvlV3jX8mywzrJK8ffwhxoD
+gRHmGqZcz9MC7zMROXdp1k0zS2dbLDOWKOnjGn3HMvOUg+0aQlf5FFf1WLyU9vqw
++Gk+hXcKk3k2W5I+GAD1hAM73rxHsQ==
+=MRjY
+-----END PGP SIGNATURE-----
+
+--Sig_/5yQGLWpBZtfGvmHz5bMwCEp--

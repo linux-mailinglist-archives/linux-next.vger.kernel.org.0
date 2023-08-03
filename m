@@ -2,61 +2,64 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8604976E772
-	for <lists+linux-next@lfdr.de>; Thu,  3 Aug 2023 13:55:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ED9776E857
+	for <lists+linux-next@lfdr.de>; Thu,  3 Aug 2023 14:35:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231460AbjHCLzL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 3 Aug 2023 07:55:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49370 "EHLO
+        id S234842AbjHCMfI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 3 Aug 2023 08:35:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjHCLzK (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 3 Aug 2023 07:55:10 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6453273B
-        for <linux-next@vger.kernel.org>; Thu,  3 Aug 2023 04:55:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1691063709; x=1722599709;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ORCQm6hO1yy9hUEf5xvh8qAG/1JUjzRIMrApHVK0xLM=;
-  b=YEHlkS1+vyzLyD37IrXzoMdK8b0dyxQ8c5Puj59LiM4PiXCgujFJ69Tx
-   KU/fTOivFf92vXyW2xoNBUGFklnMFJuLWKL6G45sfS7WNz9GwtnjGpYWA
-   5pskGYJeUBLaMfO3EswSFIaDSbdBL5ocQPb0a09Msia385zCnrbKr1B4u
-   4rKcbGJN5sYn24AzoN0noyuV1gv4+RHOa+8ZZ6HqggRgee26DoUci12BU
-   93/ki9a5T4cOwvqVtz5l5cGMyplD2TLT7GUCnWKvbjDn+9RNB/AyZPoXD
-   dQfTR2Pp2rFnzWsmAlA7BEyxEij5DWUVNsk3P4qPWBhL6n2E7E5D9IzOB
-   Q==;
-X-IronPort-AV: E=Sophos;i="6.01,252,1684825200"; 
-   d="asc'?scan'208";a="239571143"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 03 Aug 2023 04:55:08 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
- chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 3 Aug 2023 04:55:08 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Thu, 3 Aug 2023 04:55:07 -0700
-Date:   Thu, 3 Aug 2023 12:54:31 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     "Aithal, Srikanth" <sraithal@amd.com>
-CC:     <linux-next@vger.kernel.org>
-Subject: Re: next-20230803: boot hang with serial console enabled
-Message-ID: <20230803-resisting-crayon-fb965e542698@wendy>
-References: <e0dbf903-b122-4e81-0568-a27e1daa0fb4@amd.com>
+        with ESMTP id S230079AbjHCMfF (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 3 Aug 2023 08:35:05 -0400
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58A893594
+        for <linux-next@vger.kernel.org>; Thu,  3 Aug 2023 05:35:04 -0700 (PDT)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-583fe10bb3cso10036147b3.2
+        for <linux-next@vger.kernel.org>; Thu, 03 Aug 2023 05:35:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1691066103; x=1691670903;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=uP/jKoz3Vq3oW08eo+q5fcY5zoQdMMEoKncOlPNggLQ=;
+        b=Ra3TJ/pkeiD7p+QcyEftin0Si/oOornFouMbh93+ep8PE08dBuWmqZe19x8/7P2odm
+         jaECWvgkEpaU17BbgQNMUgxEsaMCASWSnZd4Szyd8SE0tkRtSVRmhsc0BPhrpyf9tZzw
+         LaFSYDDA2CxXK0IBNkGIQSiitumh6yvxIw9PNOzhS6JvEFp8IehMBHOO/qiGp2caK3nf
+         e2x+9xx7aHw4ONBVDmmiLbmVX91W+nqRHLbfaEar5WdzW2RCewFbBSCYnK0s9AMHDLXf
+         zNfRDbVxHLGSSKCIq1veHFgnqGx0wz47229rw8UGDAs4EZc4hl3Mtvn/9Ddfxb51AegS
+         C10A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691066103; x=1691670903;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uP/jKoz3Vq3oW08eo+q5fcY5zoQdMMEoKncOlPNggLQ=;
+        b=R0qsugqx66Ps7VcpuDg9p1xSoPAy9sqSuq1wRVhZHXNmAVDTBVpOTYwHqZ87Qz/i35
+         m3OWrJfyPYq2lkcchuJLw1fhhCIRl7IS/0szkta/6/I4XQm0SDe6ptUynzWkKx06//sf
+         Nk9aTRtWiZaOGkTtrt8FwgXxM81SznQTYoRlBmeDji4JdzX0h8bNxXa099P/enbALIAY
+         blVZR4iMQW1ip5nWb0Rd7QnmGEDGOjwC3RGLk7NA7VUeeNHpJ4Le93u/7LFkKrvDmZ9X
+         7Fb9J0j4XSPDkL7uO4hbm176kG58hH02QxllZnJY27g/P6J3eMronGa2rcqwui04TsxC
+         JYHg==
+X-Gm-Message-State: ABy/qLa99Un5Y9Skn2EEg8EcueUBWiS0zlFPYm23nAQOPlrnpC7P+7dx
+        xFZwYfT39WbT22TBDkvUgUA/t9PmQsIkP5YX2gf8RTf7IxUwwaH+icg=
+X-Google-Smtp-Source: APBJJlEdy5ScnSZ2Umnr9ihUIRZLoMmfGq9QPaqtmqdFeuiXX/baC6nwNAZh/bJFnF+CAzPz8pEuuJ+69hh9yHAAqBQ=
+X-Received: by 2002:a25:db88:0:b0:d06:79a2:ad59 with SMTP id
+ g130-20020a25db88000000b00d0679a2ad59mr21035312ybf.3.1691066103482; Thu, 03
+ Aug 2023 05:35:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="EAEAvetKjuS2FDdF"
-Content-Disposition: inline
-In-Reply-To: <e0dbf903-b122-4e81-0568-a27e1daa0fb4@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20230803081942.79524e1e@canb.auug.org.au>
+In-Reply-To: <20230803081942.79524e1e@canb.auug.org.au>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Thu, 3 Aug 2023 15:34:52 +0300
+Message-ID: <CAA8EJpoMm2Px2gff7VzcxkRphTtr1mrEkG9fE7KiSDGNcRV2uA@mail.gmail.com>
+Subject: Re: linux-next: Fixes tag needs some work in the drm-msm-lumag tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Jonathan Marek <jonathan@marek.ca>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,70 +67,29 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---EAEAvetKjuS2FDdF
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi Stephen, colleagues,
 
-On Thu, Aug 03, 2023 at 04:43:30PM +0530, Aithal, Srikanth wrote:
-> Hello all,
->=20
-> linux-next build 20230802 onwards seeing host hang issue when booting with
-> serial console enabled.
+On Thu, 3 Aug 2023 at 01:19, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> In commit
+>
+>   08bfcdc2c358 ("drm/msm/dpu: increase memtype count to 16 for sm8550")
+>
+> Fixes tag
+>
+>   Fixes: efcd0107 ("drm/msm/dpu: add support for SM8550")
+>
+> has these problem(s):
+>
+>   - SHA1 should be at least 12 digits long
+>     This can be fixed for the future by setting core.abbrev to 12 (or
+>     more) or (for git v2.11 or later) just making sure it is not set
+>     (or set to "auto").
 
-Should be fixed by
-https://lore.kernel.org/all/20230803071034.25571-1-tony@atomide.com/
-which Greg seems to have picked up.
+I have fixed the commit, it should be fine now.
 
->=20
->=20
->=20
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> Recreation steps
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> 1. Enable serial console by appending following parameters in grub:
->=20
-> GRUB_CMDLINE_LINUX append with "console=3DttyS0,115200n8 earlyprintk"
-> GRUB_TERMINAL_OUTPUT=3D"console serial"
-> Update grub.
->=20
-> 2. Then try to boot into next-20230802/next-20230803
->=20
->=20
-> Below is the error seeing when the host kernel boots and then host hangs.
->=20
-> Memory KASLR using RDRAND RDTSC...
-> Poking KASLR using RDRAND RDTSC...
-> [    0.004421] __common_interrupt: 96.55 No irq handler for vector
-> [    2.552117] pstore: zlib_inflate() failed, ret =3D -5!
-> [    2.564770] pstore: zlib_inflate() failed, ret =3D -5!
-> [    2.577606] pstore: zlib_inflate() failed, ret =3D -5!
-> [    2.590765] pstore: zlib_inflate() failed, ret =3D -5!
-> [    2.606677] pstore: zlib_inflate() failed, ret =3D -5!
-> [    2.635828] pstore: zlib_inflate() failed, ret =3D -5!
-> [    2.650669] pstore: zlib_inflate() failed, ret =3D -5!
-> [    2.666176] pstore: zlib_inflate() failed, ret =3D -5!
-> [    2.682027] pstore: zlib_inflate() failed, ret =3D -5!
-> [    2.714415] pstore: zlib_inflate() failed, ret =3D -5!
-> [    2.737626] pstore: zlib_inflate() failed, ret =3D -5!
-> [    2.768368] pstore: zlib_inflate() failed, ret =3D -5!
-> [    2.802555] pstore: zlib_inflate() failed, ret =3D -5!
-> [    2.828769] pstore: zlib_inflate() failed, ret =3D -5!
-> [    2.849776] pstore: zlib_inflate() failed, ret =3D -5!
-> [    2.870973] pstore: zlib_inflate() failed, ret =3D -5!
-> [    2.893790] pstore: zlib_inflate() failed, ret =3D -5!
-> [    2.913867] pstore: zlib_inflate() failed, ret =3D -5!
->=20
-
---EAEAvetKjuS2FDdF
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZMuVdwAKCRB4tDGHoIJi
-0iGPAPsELC8h6q21i7rO8amYYTHWAwC8x0sWlqj0Q0n3ZFRPYQEA/MGIZmrs+gTo
-rw9UvOOT/kug/vd29SrdcJE2ZxF5oAg=
-=rusj
------END PGP SIGNATURE-----
-
---EAEAvetKjuS2FDdF--
+-- 
+With best wishes
+Dmitry

@@ -2,128 +2,103 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D04276DB75
-	for <lists+linux-next@lfdr.de>; Thu,  3 Aug 2023 01:23:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79B2D76DBE8
+	for <lists+linux-next@lfdr.de>; Thu,  3 Aug 2023 02:03:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231192AbjHBXXH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 2 Aug 2023 19:23:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34208 "EHLO
+        id S232682AbjHCADP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 2 Aug 2023 20:03:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232080AbjHBXWy (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 2 Aug 2023 19:22:54 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E24B1D9;
-        Wed,  2 Aug 2023 16:22:49 -0700 (PDT)
+        with ESMTP id S232736AbjHCADN (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 2 Aug 2023 20:03:13 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04008173F;
+        Wed,  2 Aug 2023 17:03:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1691018568;
-        bh=s+wJuNHRcXYhlpADMo06g8Fz7nrpZ9yYMbSWWaXuWCE=;
+        s=201702; t=1691020985;
+        bh=QxrpbN3/Snnkjiy3iazBNul/w92ghQ+lKXNFJqYRcKs=;
         h=Date:From:To:Cc:Subject:From;
-        b=UrTM6UqB+P6V1xZ1F8md9RIfXE9XHfMDu6QPbvIDFa5COXX3gn5poDUGQjbXmBM6n
-         7nsRyZwr+uXys7tPJ31OhLfc/CV5eywFmZOk28zFkGGv0TFG3jMgWVklPIXusW00Kl
-         NiAU/SQQ6aDhCrQD2hVtECB6oBFSX1Cco7Za6eMXqB5uo8p4s4k1JBsLEPm7DRnfD2
-         8h0TcN2bUHfpsWMxxn2WW5het+QE08R7QGTK/kveRnr/Zq9e04OYutWamhkQHn7uKo
-         /HCe/QPyjwcN3FX2dezfkM/JRg8Z3V8CeFqrhJWPXdVvx7rtipBFUm233SO2LTrGmP
-         4FoyGN3RohRVA==
+        b=fvPq0biolsG0Vv1X+2NbPXoDIqvZ62I0wyn1sg7W8dlwOqWpJoipSgF5CCP3ncUco
+         hZKBaXTApiV1Zi1pLE62cPl5FC0zILJgtVsNe8+LI6Mtk0Vox5dhlHBI7YajGOX471
+         Pr+67ADOLKI9pm9hV2G53PhUrdhoNp1KLx5aOqFidpCNzIR0XFbkp/11nF+plaHGcf
+         k633RPo+IOPz8eEDEN/HxuBcDQbCjzqb1XwCn/A19CZtGq296QMVp2S7Vvhwrs+TrH
+         z71v/ozPD7qhynG/Lkotlz/FiLLW0ZuYK+WJAzfNasBtNvnKPrcqFmpd/+8jnrxGg+
+         1GEqZGiekAF4g==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4RGSgr1CK1z4wZJ;
-        Thu,  3 Aug 2023 09:22:47 +1000 (AEST)
-Date:   Thu, 3 Aug 2023 09:22:45 +1000
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4RGTZJ2Bm6z4wZs;
+        Thu,  3 Aug 2023 10:03:04 +1000 (AEST)
+Date:   Thu, 3 Aug 2023 10:03:03 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Peng Fan <peng.fan@nxp.com>, Udit Kumar <u-kumar1@ti.com>
-Subject: linux-next: manual merge of the ti tree with the imx-mxs tree
-Message-ID: <20230803092245.4c0fc299@canb.auug.org.au>
+To:     Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>
+Cc:     Christoph Hellwig <hch@lst.de>, Carlos Maiolino <cem@kernel.org>,
+        Carlos Maiolino <cmaiolino@redhat.com>,
+        Lukas Czerner <lczerner@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the vfs-brauner tree
+Message-ID: <20230803100303.1cd82ae8@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Tu2vuV8DJFVY+E_42AY.OxX";
+Content-Type: multipart/signed; boundary="Sig_/uKyRE=Dgovp=TN2ewDQe07D";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/Tu2vuV8DJFVY+E_42AY.OxX
+--Sig_/uKyRE=Dgovp=TN2ewDQe07D
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the ti tree got a conflict in:
+After merging the vfs-brauner tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-  arch/arm64/configs/defconfig
+mm/shmem.c: In function 'shmem_enable_quotas':
+mm/shmem.c:284:23: error: implicit declaration of function 'dquot_load_quot=
+a_sb'; did you mean 'dquot_load_quota_inode'? [-Werror=3Dimplicit-function-=
+declaration]
+  284 |                 err =3D dquot_load_quota_sb(sb, type, QFMT_SHMEM,
+      |                       ^~~~~~~~~~~~~~~~~~~
+      |                       dquot_load_quota_inode
 
-between commit:
+Caused by commit
 
-  b940e6846cf7 ("arm64: defconfig: select IMX_REMOTEPROC and RPMSG_VIRTIO")
+  220a17f613eb ("shmem: quota support")
 
-from the imx-mxs tree and commit:
+interacting with commit
 
-  8127ab5fbaee ("arm64: defconfig: Enable various configs for TI K3 platfor=
-ms")
+  9543f84c067d ("quota: mark dquot_load_quota_sb static")
 
-from the ti tree.
+from the ext3 tree.
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+I have reverted the ext3 tree patch for today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc arch/arm64/configs/defconfig
-index 03fce1752521,700d5571f12b..000000000000
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@@ -938,8 -929,8 +943,9 @@@ CONFIG_SND_SOC_GTM601=3D
-  CONFIG_SND_SOC_MSM8916_WCD_ANALOG=3Dm
-  CONFIG_SND_SOC_MSM8916_WCD_DIGITAL=3Dm
-  CONFIG_SND_SOC_PCM3168A_I2C=3Dm
- +CONFIG_SND_SOC_RK817=3Dm
-  CONFIG_SND_SOC_RT5640=3Dm
-+ CONFIG_SND_SOC_J721E_EVM=3Dm
-  CONFIG_SND_SOC_RT5659=3Dm
-  CONFIG_SND_SOC_SIMPLE_AMPLIFIER=3Dm
-  CONFIG_SND_SOC_SIMPLE_MUX=3Dm
-@@@ -1255,7 -1246,8 +1265,9 @@@ CONFIG_ARM_SMMU_V3=3D
-  CONFIG_MTK_IOMMU=3Dy
-  CONFIG_QCOM_IOMMU=3Dy
-  CONFIG_REMOTEPROC=3Dy
- +CONFIG_IMX_REMOTEPROC=3Dy
-+ CONFIG_TI_K3_R5_REMOTEPROC=3Dm
-+ CONFIG_TI_K3_DSP_REMOTEPROC=3Dm
-  CONFIG_MTK_SCP=3Dm
-  CONFIG_QCOM_Q6V5_ADSP=3Dm
-  CONFIG_QCOM_Q6V5_MSS=3Dm
-
---Sig_/Tu2vuV8DJFVY+E_42AY.OxX
+--Sig_/uKyRE=Dgovp=TN2ewDQe07D
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmTK5UYACgkQAVBC80lX
-0GzoRQgAiRfAOFYqze+KUqtVAAosm4u/4U9fFVu076q+jeJ/eegrdPjhjq9Y3l4J
-rjBlslqu+YSiMIH69RrllOOxkpbUZnYOo7ddBZZUpXpICxqZ/I16+m7fM+fWsyjW
-9N6uyTgnamLdKUFrl4SRzernmBRuAJOcdHrPvqJPXdz8bLbA5CEsCkwCiHG8YVe+
-CFflxp98B4ujagcCMnUiCyksQIFLRCralVfnrdve9yyqF9RyFpBlLq/sIPSgl1EK
-LbJpw04L60WeJO8SH+fDxx1YHvsY0RSrLxAKA3PAL+RFyt/fw/3ze5m1AnOvmeuy
-ty5R1lB6DFNYjxexO29rmCWEKjKYMQ==
-=kU2V
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmTK7rcACgkQAVBC80lX
+0Gx3nwf7BHfBjKYnwMCOFxSCXzU/rD4YdplzD/IfHJVm8EeGz7ztQ2j/jJUSYRha
+k8Ywjf3Xi7XPGccERxqPDznd515XCeJQc8oN7Gc8gSiGHmyeYeugRMd9LIlmwtb7
+7hYvaXznOs8iVWDdVgrJwTuMB4iGAjt3f/6n/Q1r9eUfYtRvvjsLHAtrddVH883c
+JWmqhX95C7w/L1JLWoaUR02rV3d4Wqah4xOQOztxyK07ZTRcmGmI2XRySrRcbbP1
+Wpouxj5/K5Hl7VXl+lgoDDo8j1x2hfbmNsvlPT7hTmX/vLsDfMbta8R6i6rOBs+I
+5q0vjCsZoSFifTc2IsbR8OZNCiFbOQ==
+=bcUt
 -----END PGP SIGNATURE-----
 
---Sig_/Tu2vuV8DJFVY+E_42AY.OxX--
+--Sig_/uKyRE=Dgovp=TN2ewDQe07D--

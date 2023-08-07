@@ -2,109 +2,104 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93ED5771C81
-	for <lists+linux-next@lfdr.de>; Mon,  7 Aug 2023 10:42:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D249771C94
+	for <lists+linux-next@lfdr.de>; Mon,  7 Aug 2023 10:50:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229926AbjHGImZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 7 Aug 2023 04:42:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35512 "EHLO
+        id S231128AbjHGIuk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 7 Aug 2023 04:50:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231140AbjHGImU (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 7 Aug 2023 04:42:20 -0400
-Received: from mail-ua1-x92c.google.com (mail-ua1-x92c.google.com [IPv6:2607:f8b0:4864:20::92c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9C3F1735
-        for <linux-next@vger.kernel.org>; Mon,  7 Aug 2023 01:42:15 -0700 (PDT)
-Received: by mail-ua1-x92c.google.com with SMTP id a1e0cc1a2514c-78caeb69125so1576903241.3
-        for <linux-next@vger.kernel.org>; Mon, 07 Aug 2023 01:42:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1691397735; x=1692002535;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=egVUMnfkRE9YRrGbcJnSDyhsV2A9haD4We8Vn8KKt2M=;
-        b=EISyKeZtDR6GxhxHDmcLx55R8wAgFz2f35jVcidRgpyzxUwmxVLyppNOPg87NjeZU0
-         xvyTBQLAanlRp0VEN/ao94sxtFhIKhE9l+pK3LD+8JUzUB5B4rACIHKzhgyoNx1U59Di
-         I3j3UFhWWWeSYjD6qhjHW9rN/o1V724pL+NtZ+zUmj58SDbl3zyTm0W8JkHU0OqIi3i2
-         ZjPBRQTzT4es5ow+7kG6SmhFVn9sVhHtzlG6K6hxeOlwb2opKJAbzHzlUbtyhsM4cEUG
-         BfN2aNkb0VfEtZb4Fbml3tHV2U95OJy02RKCVtfdosPRrW2oezLQzQljm1+G14v7Z4X3
-         Oz9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691397735; x=1692002535;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=egVUMnfkRE9YRrGbcJnSDyhsV2A9haD4We8Vn8KKt2M=;
-        b=K2Ruy+ICw6IXAe2lPIOo97g2AkwSRbYh0wtxiDn+yHSZaoHMr+OiIyl95n8qikL96x
-         teMvhyiOeMRDVX8FJMGYaKrlaybwVkP8ZjCbOnKyYXPLv181X/E4ybIxTjwYCsnGIp+O
-         tLiZUYKJSrpmLhWIeN+evCsmJNzqux08I/atiLwe/6JskZwST5fSPfYSOydyU4hFOkiv
-         Kkz++/9IlbRYfJV53xaJAFkF3MsYxo8/twWKU/NWHgbUqYUy9uef+a2YINXPgPiBSjcS
-         IXMo260supgBdEUFLC20FIV7n5Osx/Lac/ydGFu6bZ8PjbC4ppwpV5idLFiLzQp49WIf
-         GA5Q==
-X-Gm-Message-State: AOJu0YwOPB/nKzl0yl0JKMK8VXfjdh5b0+/WS/exyu/aFgnkG2r+t4I/
-        IRb3ceVFYN0CL9H4syiB+IZuR9LEEp5uYmPcy1dp1v9uhGicvochivk=
-X-Google-Smtp-Source: AGHT+IF59YMRDSz7OaYEyouN2C9YcjHGWQT19vyf4Es9QnuGEqGn/HcblPEikMZNTR9ZILKOvpCXLS9SAky+7cLWY/I=
-X-Received: by 2002:a67:eb51:0:b0:444:3f96:ff70 with SMTP id
- x17-20020a67eb51000000b004443f96ff70mr4120479vso.33.1691397734834; Mon, 07
- Aug 2023 01:42:14 -0700 (PDT)
-MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Mon, 7 Aug 2023 14:12:03 +0530
-Message-ID: <CA+G9fYsnoxm82ik3YNs_qUdZkxkNmVrknhC+ezqSKrEx6WxJ7g@mail.gmail.com>
-Subject: next: arm: kernel/watchdog.c:521:36: error: too many arguments to
- function call, expected 0, have 1
-To:     open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        with ESMTP id S230515AbjHGIuj (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 7 Aug 2023 04:50:39 -0400
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDC9F172C;
+        Mon,  7 Aug 2023 01:50:34 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id C466C3200488;
+        Mon,  7 Aug 2023 04:50:31 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Mon, 07 Aug 2023 04:50:32 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1691398231; x=1691484631; bh=YL
+        Ri9Jr7Tv7drpzqdM4IzTgfdOzKrx7MwYuIVl7RZW4=; b=hPjxxQkNp7FpX8Qgl8
+        JBv9U/y7m4x++q5jrNgWqs9Szm6XSiVECZ9L5dLp1YBp7KG4VfTVvwVbqdqNgH/W
+        RwxPmO5FnAu/BGUpqs0BjUVmwwvP3GH0hKQ/PXxzDiRoSIa+ts3bSLJR9QPIuAIy
+        E+9uBhUWn0CkdefMuyyF2VxLnNttUaDngPTi6eI2/ScN+2WyCtn306d7bEcc0DnR
+        57ByeRsIAEU19Y/hFakR5eMDixp/x82dsZo6EpbfW+h2cmRw63voqOnTTNuRj11H
+        P/+tgWn8fK0X80sIXm/Rs8KoUwxF+WmPVnHTZkDOEDCHgOtaZQeS2kk4ZgHi0cow
+        Q6iQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1691398231; x=1691484631; bh=YLRi9Jr7Tv7dr
+        pzqdM4IzTgfdOzKrx7MwYuIVl7RZW4=; b=RsaJegANv0MVF6WXY6U0k2E5sh+do
+        IQBI9p90JE0Iu200MgXepOQnP5uKV113/Jx8ygsAfWBLeVFSm4WNTEeRHj3kbGkE
+        ftNQKs9BNQ4XV5xFvpcDLTko3BZ6L/HxwJgq2IJXu9ZGcmoViXCeyZuSjFDBK67z
+        W6SrvIKtcgqlcuKmO9XmSsz/Tfj1rH1SBCJOGvkuZ1ieh2Si8t9y1yCObBn4zSgu
+        WexUBqYG5q3m4XfUVXLazACqMrz0+AshNBE8LgwKVEvC6HnxBxboKyIiGseKpHUm
+        feFIOtd6ojQQ2LoYwS1mZ+Fg88uqx5YChmDKAw+yZP8sP8WBqphaN7G7Q==
+X-ME-Sender: <xms:VrDQZI3hYFMpZ4OeKwGQJ3ghr_GE6cKYXVJUYMFda2ytR9i6OvbhSA>
+    <xme:VrDQZDHT1gYje4VHpB1mUiyrYT-tEfN8tz-9q4d3bVRI6FpVDjMdEcBF0w78K71qB
+    NmQda5y1oJeS5sWnO8>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrledtgddtiecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
+    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
+    hnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:VrDQZA5KwhHBpfE5z8MPfPtMagLuEomZp3P_lpmZA88ou4E9QfpNTA>
+    <xmx:VrDQZB2IDcwNKItRqh3_l9cWHIQrn-0Ptg9shErYR60XlpHzuak9mg>
+    <xmx:VrDQZLHGDOdN-fq3lY-vxyv11MFTF6AMD77Ma30UbYy1AzH5uekQYw>
+    <xmx:V7DQZK2Lz25uHRYtv74YU2tA-YBSCczwXUPjWnGtxjM9y9nA1aNoZw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id D6936B60089; Mon,  7 Aug 2023 04:50:30 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-624-g7714e4406d-fm-20230801.001-g7714e440
+Mime-Version: 1.0
+Message-Id: <407bac4d-eb57-4984-ac45-aad6b7d72762@app.fastmail.com>
+In-Reply-To: <CA+G9fYsnoxm82ik3YNs_qUdZkxkNmVrknhC+ezqSKrEx6WxJ7g@mail.gmail.com>
+References: <CA+G9fYsnoxm82ik3YNs_qUdZkxkNmVrknhC+ezqSKrEx6WxJ7g@mail.gmail.com>
+Date:   Mon, 07 Aug 2023 10:50:10 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Naresh Kamboju" <naresh.kamboju@linaro.org>,
+        "open list" <linux-kernel@vger.kernel.org>,
+        linux-next <linux-next@vger.kernel.org>,
         lkft-triage@lists.linaro.org
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Lecopzer Chen <lecopzer.chen@mediatek.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Pingfan Liu <kernelfans@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
+Cc:     "Anders Roxell" <anders.roxell@linaro.org>,
+        "Michal Hocko" <mhocko@suse.com>,
+        "Lecopzer Chen" <lecopzer.chen@mediatek.com>,
+        "Petr Mladek" <pmladek@suse.com>,
+        "Pingfan Liu" <kernelfans@gmail.com>,
+        "Andrew Morton" <akpm@linux-foundation.org>
+Subject: Re: next: arm: kernel/watchdog.c:521:36: error: too many arguments to function
+ call, expected 0, have 1
+Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-[ resending in plain text mode. sorry ]
+On Mon, Aug 7, 2023, at 10:42, Naresh Kamboju wrote:
+> [ resending in plain text mode. sorry ]
+>
+> While building arm mxs_defconfig with gcc-12 and clang-16 on
+> Linux next-20230807 tag the following build regression was found.
+>
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+>
 
-While building arm mxs_defconfig with gcc-12 and clang-16 on
-Linux next-20230807 tag the following build regression was found.
+I sent a patch when I saw this today, and Andrew already had
+the same fix.
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-Build log:
---------
-kernel/watchdog.c:521:36: error: too many arguments to function call,
-expected 0, have 1
-                        trigger_allbutcpu_cpu_backtrace(smp_processor_id());
-                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^~~~~~~~~~~~~~~~~~
-include/linux/smp.h:271:29: note: expanded from macro 'smp_processor_id'
-# define smp_processor_id() __smp_processor_id()
-                            ^~~~~~~~~~~~~~~~~~~~
-include/linux/smp.h:264:31: note: expanded from macro '__smp_processor_id'
-#define __smp_processor_id(x) raw_smp_processor_id(x)
-                              ^~~~~~~~~~~~~~~~~~~~~~~
-include/linux/smp.h:198:34: note: expanded from macro 'raw_smp_processor_id'
-#define raw_smp_processor_id()                  0
-                                                ^
-include/linux/nmi.h:193:20: note: 'trigger_allbutcpu_cpu_backtrace'
-declared here
-static inline bool trigger_allbutcpu_cpu_backtrace(void)
-                   ^
-1 error generated.
-make[4]: *** [scripts/Makefile.build:243: kernel/watchdog.o] Error 1
-
-
-
-Links:
- -  https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230807/testrun/18858575/suite/build/test/clang-16-mxs_defconfig/log
- - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230807/testrun/18858575/suite/build/test/clang-16-mxs_defconfig/history/
-
---
-Linaro LKFT
-https://lkft.linaro.org
+     Arnd

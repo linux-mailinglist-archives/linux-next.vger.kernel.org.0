@@ -2,104 +2,85 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D249771C94
-	for <lists+linux-next@lfdr.de>; Mon,  7 Aug 2023 10:50:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DA1E771D41
+	for <lists+linux-next@lfdr.de>; Mon,  7 Aug 2023 11:39:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231128AbjHGIuk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 7 Aug 2023 04:50:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38722 "EHLO
+        id S230357AbjHGJjk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 7 Aug 2023 05:39:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230515AbjHGIuj (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 7 Aug 2023 04:50:39 -0400
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDC9F172C;
-        Mon,  7 Aug 2023 01:50:34 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id C466C3200488;
-        Mon,  7 Aug 2023 04:50:31 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Mon, 07 Aug 2023 04:50:32 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1691398231; x=1691484631; bh=YL
-        Ri9Jr7Tv7drpzqdM4IzTgfdOzKrx7MwYuIVl7RZW4=; b=hPjxxQkNp7FpX8Qgl8
-        JBv9U/y7m4x++q5jrNgWqs9Szm6XSiVECZ9L5dLp1YBp7KG4VfTVvwVbqdqNgH/W
-        RwxPmO5FnAu/BGUpqs0BjUVmwwvP3GH0hKQ/PXxzDiRoSIa+ts3bSLJR9QPIuAIy
-        E+9uBhUWn0CkdefMuyyF2VxLnNttUaDngPTi6eI2/ScN+2WyCtn306d7bEcc0DnR
-        57ByeRsIAEU19Y/hFakR5eMDixp/x82dsZo6EpbfW+h2cmRw63voqOnTTNuRj11H
-        P/+tgWn8fK0X80sIXm/Rs8KoUwxF+WmPVnHTZkDOEDCHgOtaZQeS2kk4ZgHi0cow
-        Q6iQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1691398231; x=1691484631; bh=YLRi9Jr7Tv7dr
-        pzqdM4IzTgfdOzKrx7MwYuIVl7RZW4=; b=RsaJegANv0MVF6WXY6U0k2E5sh+do
-        IQBI9p90JE0Iu200MgXepOQnP5uKV113/Jx8ygsAfWBLeVFSm4WNTEeRHj3kbGkE
-        ftNQKs9BNQ4XV5xFvpcDLTko3BZ6L/HxwJgq2IJXu9ZGcmoViXCeyZuSjFDBK67z
-        W6SrvIKtcgqlcuKmO9XmSsz/Tfj1rH1SBCJOGvkuZ1ieh2Si8t9y1yCObBn4zSgu
-        WexUBqYG5q3m4XfUVXLazACqMrz0+AshNBE8LgwKVEvC6HnxBxboKyIiGseKpHUm
-        feFIOtd6ojQQ2LoYwS1mZ+Fg88uqx5YChmDKAw+yZP8sP8WBqphaN7G7Q==
-X-ME-Sender: <xms:VrDQZI3hYFMpZ4OeKwGQJ3ghr_GE6cKYXVJUYMFda2ytR9i6OvbhSA>
-    <xme:VrDQZDHT1gYje4VHpB1mUiyrYT-tEfN8tz-9q4d3bVRI6FpVDjMdEcBF0w78K71qB
-    NmQda5y1oJeS5sWnO8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrledtgddtiecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
-    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
-    hnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:VrDQZA5KwhHBpfE5z8MPfPtMagLuEomZp3P_lpmZA88ou4E9QfpNTA>
-    <xmx:VrDQZB2IDcwNKItRqh3_l9cWHIQrn-0Ptg9shErYR60XlpHzuak9mg>
-    <xmx:VrDQZLHGDOdN-fq3lY-vxyv11MFTF6AMD77Ma30UbYy1AzH5uekQYw>
-    <xmx:V7DQZK2Lz25uHRYtv74YU2tA-YBSCczwXUPjWnGtxjM9y9nA1aNoZw>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id D6936B60089; Mon,  7 Aug 2023 04:50:30 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-624-g7714e4406d-fm-20230801.001-g7714e440
-Mime-Version: 1.0
-Message-Id: <407bac4d-eb57-4984-ac45-aad6b7d72762@app.fastmail.com>
-In-Reply-To: <CA+G9fYsnoxm82ik3YNs_qUdZkxkNmVrknhC+ezqSKrEx6WxJ7g@mail.gmail.com>
-References: <CA+G9fYsnoxm82ik3YNs_qUdZkxkNmVrknhC+ezqSKrEx6WxJ7g@mail.gmail.com>
-Date:   Mon, 07 Aug 2023 10:50:10 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Naresh Kamboju" <naresh.kamboju@linaro.org>,
-        "open list" <linux-kernel@vger.kernel.org>,
-        linux-next <linux-next@vger.kernel.org>,
-        lkft-triage@lists.linaro.org
-Cc:     "Anders Roxell" <anders.roxell@linaro.org>,
-        "Michal Hocko" <mhocko@suse.com>,
-        "Lecopzer Chen" <lecopzer.chen@mediatek.com>,
-        "Petr Mladek" <pmladek@suse.com>,
-        "Pingfan Liu" <kernelfans@gmail.com>,
-        "Andrew Morton" <akpm@linux-foundation.org>
-Subject: Re: next: arm: kernel/watchdog.c:521:36: error: too many arguments to function
- call, expected 0, have 1
-Content-Type: text/plain
+        with ESMTP id S229640AbjHGJji (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 7 Aug 2023 05:39:38 -0400
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1329E10C1;
+        Mon,  7 Aug 2023 02:39:38 -0700 (PDT)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-5768a7e3adbso76980467b3.0;
+        Mon, 07 Aug 2023 02:39:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1691401177; x=1692005977;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KANoAi4KJxWNG4lfh8UFbdoVDzynEqjJ4XX3JtIISDA=;
+        b=FStAdle3A+eN6EDU2RoWhI0wC+xZ6DjAHAhBdp6qx+EamI7CD+12o60qRr5NLZfPVN
+         g2KnTCcxDgR0SAjJp8/Uzt7YLoGwwIMbwPT9yZ62XdZTR/dppwPjXaRQqFUM7gofjbRJ
+         pdJgQJRRc/+7ekahK8FRCaTVqJXwcC+i2HVK3KWiZ9opSZp+A5H7Wf50oZAcDm2Bi+F5
+         WvZC4tp+7yJfBVG6spVYy+eV9u0luxvpaXbKPPuoai1aFvCNi+bUq86z1FcZFqvJZAEm
+         Hp6ByQcpFTPPFC5r1lilYs3ym/UuyBo/QBtvQmVXPAXSm1niMGzDiBoD6W/6emcXfNs5
+         Rn6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691401177; x=1692005977;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KANoAi4KJxWNG4lfh8UFbdoVDzynEqjJ4XX3JtIISDA=;
+        b=YpihfOLx/fWPj3GlONICLSP0BMFvLnQDn9OrBURiFER2Vt1lnzCz+IlPALIl+61KXp
+         WJ2w4oihHIoGPrakcxkWSZkvPgiZTmjaHHR8/K7vfQRYBf+NfmKUw1NqUxEl4iYXxYek
+         PQp7dAJlsjb3o6B0gjN9EBtipoE73BQf1jnYKT7j9CFXT17ZpsQMMuh5voZKYDbBW8I7
+         407vVtDGsOR0wQya/FELYIJJUyu0h62QsEen3byms5F3bAiUrSqm5ZAHbxr3+0cABl32
+         WCiW3G/WDrcJ8C17/ARxVv9yHqJaAae56cBYbLmKQp7BwxNN2nulwgy5CejY21bgdOL7
+         9fiA==
+X-Gm-Message-State: AOJu0YwrE0NCg7dkG0RMHakJqJDdqtdTGR8im0WLbNwiQrWn1W09gwaX
+        fE3LK6U//eif1wccTa1Gzkv4oKCxi92tkhVwB2hiezJ2
+X-Google-Smtp-Source: AGHT+IE1VZFpJpCa0mdDRCG8L2APBzvJPVO5xHPetYuXQyjt6XOOI3itXxnOADZw2UopJTBtnw92Ooo/pOZToPwLEU0=
+X-Received: by 2002:a05:6902:4e6:b0:d48:7988:15e0 with SMTP id
+ w6-20020a05690204e600b00d48798815e0mr6296024ybs.6.1691401177260; Mon, 07 Aug
+ 2023 02:39:37 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230807091302.6370fc50@canb.auug.org.au>
+In-Reply-To: <20230807091302.6370fc50@canb.auug.org.au>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Mon, 7 Aug 2023 11:39:26 +0200
+Message-ID: <CANiq72nspJn=YGkMH-hC56ynBc+d6mHdUOQtcui6_UntJNAb1Q@mail.gmail.com>
+Subject: Re: linux-next: duplicate patch in the rust tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Aug 7, 2023, at 10:42, Naresh Kamboju wrote:
-> [ resending in plain text mode. sorry ]
->
-> While building arm mxs_defconfig with gcc-12 and clang-16 on
-> Linux next-20230807 tag the following build regression was found.
->
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
->
+Hi Stephen,
 
-I sent a patch when I saw this today, and Andrew already had
-the same fix.
+On Mon, Aug 7, 2023 at 1:13=E2=80=AFAM Stephen Rothwell <sfr@canb.auug.org.=
+au> wrote:
+>
+> The following commit is also in Linus Torvalds' tree as a different commi=
+t
+> (but the same patch):
 
-     Arnd
+Thanks! I should have pushed the reword to `rust-next` too, sorry.
+
+It is gone now.
+
+Cheers,
+Miguel

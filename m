@@ -2,203 +2,162 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 786997736C6
-	for <lists+linux-next@lfdr.de>; Tue,  8 Aug 2023 04:35:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE8F07741FF
+	for <lists+linux-next@lfdr.de>; Tue,  8 Aug 2023 19:32:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229760AbjHHCfT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 7 Aug 2023 22:35:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54026 "EHLO
+        id S231537AbjHHRcL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 8 Aug 2023 13:32:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbjHHCfS (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 7 Aug 2023 22:35:18 -0400
-Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADFC2135;
-        Mon,  7 Aug 2023 19:35:17 -0700 (PDT)
-Received: by mail-qv1-xf35.google.com with SMTP id 6a1803df08f44-63d0d38ff97so23295326d6.1;
-        Mon, 07 Aug 2023 19:35:17 -0700 (PDT)
+        with ESMTP id S234758AbjHHRb1 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 8 Aug 2023 13:31:27 -0400
+Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC6BA7ECC
+        for <linux-next@vger.kernel.org>; Tue,  8 Aug 2023 09:13:37 -0700 (PDT)
+Received: by mail-vs1-xe36.google.com with SMTP id ada2fe7eead31-44756c21105so3806214137.1
+        for <linux-next@vger.kernel.org>; Tue, 08 Aug 2023 09:13:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1691462117; x=1692066917;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=l09UiqmB32dH8CnL4PK01BLznGpgMmgVlMI1USmN8Rg=;
-        b=c9QI2THwc6V0wze9ZFpZCtzey7oEy+avYyiO1ZSj+rxT5UZVrJ6yjmOHxyxilXffNT
-         mDwElTYQX0wq5aGhCS4dk68BpQB02GaB6zYN8Lmu1rsyit1Y5PzRQRA6Utdhp0swbavg
-         pDtF5xMcKDLLKLO7Q/2uS4bi/zm/e0yOyLYUjA88Ai41ddn/vqKnbO5tvFTGbmFIn7VX
-         SaOZgtipltZLLJUXH+pGcXodWoCqzIkk/igia3GtqM1oxA6sauPtbVVLqsdcjyWhx2RP
-         wRMKhj8fzkQQfxU/maTJzqElQJM1pS6JybYLFB+QcBw2RbDBItZiJPLhg8Bgd4+KuveG
-         wTkw==
+        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1691511179; x=1692115979;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=aG4Be33mMpkCNVMZIxmyY7s+TDhQZJdB16xMZkEWkTo=;
+        b=gV3hjKGXrcBjSsbJkZZRKvr1DNkhK4aX1+ejZQ4OdDlbUbF6Hbt96g7WCNcwSj1xGF
+         aSiXiJ17goiH0nkVSlVzBjslgVv6LGAMiY48MYhwuKusHxEcCY+jWHxO4PQ5Ochcdqku
+         X3oJSmClDsby+8xFlcItwqBZ/L2BjkUcBhrtn5jEtSiGXLjmxWpMJ4dYuMhujrxX++tD
+         R2jPAkQs483hhmLb8MyVDXY0wzBrGxM+Q+gYCEf3gMLn85M3J910G0RKPUB94nfVKtQ6
+         dqw99ogBUFZ2LA1O+aBTecBqmhSHXhU9iRwxtwPrLlG6z89oblKrf0VbqpVR2cj1Nsny
+         k5aw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691462117; x=1692066917;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=l09UiqmB32dH8CnL4PK01BLznGpgMmgVlMI1USmN8Rg=;
-        b=L7fOYsdF1wLYlRchCG5tn20ezc+ImPhluoNh+wwHMkkccFQEO176TlX29o+ydd7cei
-         55zs7oTKfWefYAmUpiQSBmJtG8oNXrRhVeX5aNF4GypY1c2/YSXwfJadSQ/tqdHbHoia
-         F7ekyHOLwhEiXplKZBnrQFw6LBFS5f+f5Nk6FL/EQ/NDCnzP+fn7usdweO/cZGtoWR4B
-         sKQbOI/TE8CehVTHxK3MVkfL8UTIsfSLBiXfO7nlH/dOx9SUzOXeupyibNY9k4JXDf8f
-         aUR/I7TFjQQZHE32czE2esnoYhvxG95Fc2y/NpMIc0Jfyr8lneoTtaE+AXvlOKytfBls
-         n1wQ==
-X-Gm-Message-State: AOJu0YwycIK2rr9ccwr8Q3ycGjr7W4poYKXVNDtkJHnQauUnXSVoGiAR
-        hqWBNDhG8EtWTXEGD5PgD0T02BwqOtVD8lTp0oY=
-X-Google-Smtp-Source: AGHT+IFDMtGJ80F0xqjZy6+OH+jLD7M4yo1YVM8luHYwGA+W36SwN22ALuxgICMveRdgK+WgS0Rc+/jP4c2v//7fyj8=
-X-Received: by 2002:a0c:9d49:0:b0:635:ec47:bfb3 with SMTP id
- n9-20020a0c9d49000000b00635ec47bfb3mr11647255qvf.0.1691462116794; Mon, 07 Aug
- 2023 19:35:16 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1691511179; x=1692115979;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=aG4Be33mMpkCNVMZIxmyY7s+TDhQZJdB16xMZkEWkTo=;
+        b=bNF/YvTBqc85+EpJ2NsZQRbOnxS0KaKUgIQJcBbGDoK5O5HyZLQyZKVWRF3O65pLub
+         Q0LQn/zPpskzorKWFNBwMnlzFT2nXh0zstRRNC/3L+THhjcQw/KDVyQ/aSPxC3jcj80Y
+         LupOYgNDpZEl+CnYgrWfAPxobM9sV3jYX+qFD2BNjBYBmR7vnoPWTAoThjXTl+O2tSAJ
+         dgFIhmHMNVlkBm0N4Drf2ibTxBrZHCz+88fByjwToOCUkBtXKeowbJkcaHouDWiP/bFW
+         0Q2YpP81m79SumjVtvnOnwHYJDbYVmvKuadnF2vsRTKGSKnC+fyNrQrXA+WpTUaPTtz+
+         TedQ==
+X-Gm-Message-State: AOJu0YwJ2e+b+hTWDX5LgV/JhxiybV5TB1tnfZC9zR4ZSVAgFsZ+3xah
+        FcBv+XII95ClbD+lZ56wRWGLyXum7DiHc1SPFARKbQ==
+X-Google-Smtp-Source: AGHT+IGXr+ecrP0PrAa4f0FHTqVAqjzc1Kfl2OhdXiW+qgy9D9zG8xzQLfaSRetOvkzrpEMKddfvnw==
+X-Received: by 2002:a17:902:c945:b0:1bc:3908:14d with SMTP id i5-20020a170902c94500b001bc3908014dmr11852007pla.2.1691468392215;
+        Mon, 07 Aug 2023 21:19:52 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id p8-20020a170902a40800b001b8b73da7b1sm7757656plq.227.2023.08.07.21.19.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Aug 2023 21:19:50 -0700 (PDT)
+Message-ID: <64d1c266.170a0220.aed27.e2eb@mx.google.com>
+Date:   Mon, 07 Aug 2023 21:19:50 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20230807142238.50616687@canb.auug.org.au> <ZNB3PXgIBvJhiEu1@liuwe-devbox-debian-v2>
-In-Reply-To: <ZNB3PXgIBvJhiEu1@liuwe-devbox-debian-v2>
-From:   Dexuan-Linux Cui <dexuan.linux@gmail.com>
-Date:   Mon, 7 Aug 2023 19:35:05 -0700
-Message-ID: <CAA42JLZbiXOukBNup8DyrBNivwvezvFdWiZ0CVJf03mSo0F8PA@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the hyperv tree
-To:     Wei Liu <wei.liu@kernel.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Dexuan Cui <decui@microsoft.com>, Tianyu.Lan@microsoft.com
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Kernelci-Report-Type: test
+X-Kernelci-Kernel: v6.5-rc5-223-g453869586392
+X-Kernelci-Tree: next
+X-Kernelci-Branch: pending-fixes
+Subject: next/pending-fixes baseline: 61 runs,
+ 2 regressions (v6.5-rc5-223-g453869586392)
+To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+        kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
+        DKIM_SIGNED,DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Sun, Aug 6, 2023 at 10:39=E2=80=AFPM Wei Liu <wei.liu@kernel.org> wrote:
->
-> On Mon, Aug 07, 2023 at 02:22:38PM +1000, Stephen Rothwell wrote:
-> > Hi all,
-> >
-> > After merging the hyperv tree, today's linux-next build (x86_64
-> > allmodconfig) failed like this:
-> >
-> > drivers/pci/controller/pci-hyperv.o: warning: objtool: .altinstr_replac=
-ement+0x0: weirdly overlapping alternative! 11 !=3D 6
-> > drivers/hv/hv_balloon.o: warning: objtool: .altinstr_replacement+0x0: w=
-eirdly overlapping alternative! 11 !=3D 6
-> > drivers/hv/hv_vmbus.o: warning: objtool: .altinstr_replacement+0x3: wei=
-rdly overlapping alternative! 10 !=3D 5
-> > vmlinux.o: warning: objtool: .altinstr_replacement+0x633: weirdly overl=
-apping alternative! 11 !=3D 6
-> > incomplete ORC unwind tables in file: vmlinux
-> > Failed to sort kernel tables
-> >
-> > I have no idea what caused this.
+next/pending-fixes baseline: 61 runs, 2 regressions (v6.5-rc5-223-g45386958=
+6392)
 
-Hi Stephen,
-My kernel source was checked out from the Hyper-V tree's hyperv-next
-branch last Friday, which had Tianyu's 8 patches.
+Regressions Summary
+-------------------
 
-I'm able to repro the same build failure in a Ubuntu 22.04 VM with
-gcc (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4:
+platform           | arch  | lab         | compiler | defconfig | regressio=
+ns
+-------------------+-------+-------------+----------+-----------+----------=
+--
+kontron-pitx-imx8m | arm64 | lab-kontron | gcc-10   | defconfig | 2        =
+  =
 
-I run the below commands:
-make mrproper
-make allmodconfig
-make -j128
-make -j128
 
-...
-  LD [M]  net/qrtr/qrtr-tun.ko
-  LD [M]  net/qrtr/qrtr-mhi.ko
-  LD [M]  virt/lib/irqbypass.ko
-  LD [M]  arch/x86/video/fbdev.ko
-make: *** [Makefile:234: __sub-make] Error 2
+  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
+v6.5-rc5-223-g453869586392/plan/baseline/
 
-make -j128
-  DESCEND objtool
-  INSTALL libsubcmd_headers
-  CALL    scripts/checksyscalls.sh
-  CHK     kernel/kheaders_data.tar.xz
-  UPD     include/generated/utsversion.h
-  CC      init/version-timestamp.o
-  LD      .tmp_vmlinux.kallsyms1
-  NM      .tmp_vmlinux.kallsyms1.syms
-  KSYMS   .tmp_vmlinux.kallsyms1.S
-  AS      .tmp_vmlinux.kallsyms1.S
-  LD      .tmp_vmlinux.kallsyms2
-  NM      .tmp_vmlinux.kallsyms2.syms
-  KSYMS   .tmp_vmlinux.kallsyms2.S
-  AS      .tmp_vmlinux.kallsyms2.S
-  LD      vmlinux
-  NM      System.map
-  SORTTAB vmlinux
-incomplete ORC unwind tables in file: vmlinux
-Failed to sort kernel tables
-make[2]: *** [scripts/Makefile.vmlinux:36: vmlinux] Error 1
-make[2]: *** Deleting file 'vmlinux'
-make[1]: *** [/opt/linux-next/Makefile:1250: vmlinux] Error 2
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:234: __sub-make] Error 2
+  Test:     baseline
+  Tree:     next
+  Branch:   pending-fixes
+  Describe: v6.5-rc5-223-g453869586392
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+  SHA:      453869586392a5c4f570ba90c557219a65fff41a =
 
-If I revert Tianyu's patches by "git diff v6.5-rc4 | patch -Rp1",
-the build can succeed.
 
-If I apply the the patches, I get the same failure:
 
-drivers/hv/hv_balloon.o: warning: objtool: .altinstr_replacement+0x0:
-weirdly overlapping alternative! 11 !=3D 6
-...
-drivers/pci/controller/pci-hyperv.o: warning: objtool:
-.altinstr_replacement+0x0: weirdly overlapping alternative! 11 !=3D 6
-...
-drivers/hv/hv_vmbus.o: warning: objtool: .altinstr_replacement+0x3:
-weirdly overlapping alternative! 10 !=3D 5
-...
-  AR      built-in.a
-  AR      vmlinux.a
-  LD      vmlinux.o
-vmlinux.o: warning: objtool: .altinstr_replacement+0x633: weirdly
-overlapping alternative! 11 !=3D 6
-  OBJCOPY modules.builtin.modinfo
-  GEN     modules.builtin
-  GEN     .vmlinux.objs
-  MODPOST Module.symvers
-  CC      .vmlinux.export.o
-  UPD     include/generated/utsversion.h
-  CC      init/version-timestamp.o
-  LD      .tmp_vmlinux.kallsyms1
-  NM      .tmp_vmlinux.kallsyms1.syms
-  KSYMS   .tmp_vmlinux.kallsyms1.S
-  AS      .tmp_vmlinux.kallsyms1.S
-  LD      .tmp_vmlinux.kallsyms2
-  NM      .tmp_vmlinux.kallsyms2.syms
-  KSYMS   .tmp_vmlinux.kallsyms2.S
-  AS      .tmp_vmlinux.kallsyms2.S
-  LD      vmlinux
-  NM      System.map
-  SORTTAB vmlinux
-incomplete ORC unwind tables in file: vmlinux
-Failed to sort kernel tables
-make[2]: *** [scripts/Makefile.vmlinux:36: vmlinux] Error 1
-make[2]: *** Deleting file 'vmlinux'
-make[1]: *** [/opt/linux-next/Makefile:1250: vmlinux] Error 2
-make[1]: *** Waiting for unfinished jobs....
-...
-make: *** [Makefile:234: __sub-make] Error 2
+Test Regressions
+---------------- =
 
-It turns out that I already made a fix
-https://github.com/dcui/linux/commit/c4db45f6256248435b2a303b264ecbb41320c4=
-1d
-which can fix the build failure and fix a crash issue (see
-https://lwn.net/ml/linux-kernel/SA1PR21MB1335A21D5D037FE88D9CF820BF0EA@SA1P=
-R21MB1335.namprd21.prod.outlook.com/
-)
 
-Thanks,
-Dexuan
 
-> /me scratches head.
->
-> > I have used the hyperv tree from next-20230804 for today.
->
-> I've reverted that series from my tree. Thanks for the heads up.
->
-> Thanks,
-> Wei.
+platform           | arch  | lab         | compiler | defconfig | regressio=
+ns
+-------------------+-------+-------------+----------+-----------+----------=
+--
+kontron-pitx-imx8m | arm64 | lab-kontron | gcc-10   | defconfig | 2        =
+  =
+
+
+  Details:     https://kernelci.org/test/plan/id/64d1917095eada8fb435b42d
+
+  Results:     51 PASS, 2 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.5-rc5-22=
+3-g453869586392/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-pitx-im=
+x8m.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.5-rc5-22=
+3-g453869586392/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-pitx-im=
+x8m.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/64d1917095eada8fb435b430
+        new failure (last pass: v6.5-rc5-186-g6c8c4ff08090a)
+
+    2023-08-08T00:50:30.786335  / # #
+    2023-08-08T00:50:30.888578  export SHELL=3D/bin/sh
+    2023-08-08T00:50:30.889320  #
+    2023-08-08T00:50:30.990694  / # export SHELL=3D/bin/sh. /lava-373942/en=
+vironment
+    2023-08-08T00:50:30.991056  =
+
+    2023-08-08T00:50:31.091731  / # . /lava-373942/environment/lava-373942/=
+bin/lava-test-runner /lava-373942/1
+    2023-08-08T00:50:31.092184  =
+
+    2023-08-08T00:50:31.096998  / # /lava-373942/bin/lava-test-runner /lava=
+-373942/1
+    2023-08-08T00:50:31.162860  + export 'TESTRUN_ID=3D1_bootrr'
+    2023-08-08T00:50:31.163001  + cd /lava-373942/1/tests/1_bootrr =
+
+    ... (10 line(s) more)  =
+
+
+  * baseline.bootrr.dwc3-usb1-probed: https://kernelci.org/test/case/id/64d=
+1917095eada8fb435b440
+        new failure (last pass: v6.5-rc5-186-g6c8c4ff08090a)
+
+    2023-08-08T00:50:33.562403  /lava-373942/1/../bin/lava-test-case
+    2023-08-08T00:50:33.562830  <8>[   18.280734] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Ddwc3-usb1-probed RESULT=3Dfail>
+    2023-08-08T00:50:33.563110  /lava-373942/1/../bin/lava-test-case   =
+
+ =20

@@ -2,107 +2,104 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B063773FBC
-	for <lists+linux-next@lfdr.de>; Tue,  8 Aug 2023 18:52:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CBD5774245
+	for <lists+linux-next@lfdr.de>; Tue,  8 Aug 2023 19:39:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229798AbjHHQw0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 8 Aug 2023 12:52:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47486 "EHLO
+        id S234770AbjHHRjT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 8 Aug 2023 13:39:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230300AbjHHQvL (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 8 Aug 2023 12:51:11 -0400
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF4664B8D4
-        for <linux-next@vger.kernel.org>; Tue,  8 Aug 2023 08:57:54 -0700 (PDT)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-5768a7e3adbso98035087b3.0
-        for <linux-next@vger.kernel.org>; Tue, 08 Aug 2023 08:57:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1691510255; x=1692115055;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=y6sSetytOmUwyBC8vzBUgi7mxtEE0jfVhWzzVyZzcSg=;
-        b=Ct3zPH6LaPEBmRtOY1FLMh4cZ/vtNXYKzICstcrMflGtW70Y3PFBJH5KIpW2Y2b1Am
-         nJmKYoLaU7UkML0QdpGR3wSASPo8K4fiaSm1psqth9O8mVN9KLKzyXN9cp35g+T3GgIl
-         iwwuwvJ9jnAlVCN9ZE9/jCo6K9+4J1FqjmIAH2GxFu4/vde58GNkm2VI0W/L4eIDqR8Y
-         I5O/KESsr6YHPhNhdi4Y7niUaS94LTIlex0GpekpmmfEubHohp89vh2THtXzY6sF4CHJ
-         G8Dp4tbioxGOPIk/xquVmfbZzcz32vhkTNDJyZ4FgFLRgxvQuAZgmb6BsXI34pcZdNYB
-         veuw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691510255; x=1692115055;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=y6sSetytOmUwyBC8vzBUgi7mxtEE0jfVhWzzVyZzcSg=;
-        b=jpGbzjWcRHKLU6O6UmwJ+cUKBO98CQdNLqDFeVAlFxis5uanMeEm7HnZEZOA4089XP
-         G7kIlx7ea95ePLaSk9efcjY3fLLhgPK6ejvTzVa8b5mQKrHW+NhxsyhpsnkPLmog005N
-         D7IiQRAKUc7VxZ2drhulN3If/6gC3MC/2Wjzq3NN7JPvRYGL3zn9EW2vNztB8016504m
-         RrI48DjID7KS5d02R/pAjALBfdlVRkBcMTBJevQ6f2NeFIexWE8Wj9E4xpUo7yl7iSai
-         YHstzbmXjkP4RvasFRx/VQInkQbeT0m+ZjvX+taZTYZImCXZHEsgswibwNnf9o40SjUA
-         nJsw==
-X-Gm-Message-State: AOJu0YxE3TGFnm5x8LYzPQHa9CogZIK0/I5UhpxvrIbwq8VjMvTJEnSC
-        jEjCr6EPDT8zyi0vlJx71LsQQwqee+w+IQunYuFWV6yl4PJgQuc8OGo=
-X-Google-Smtp-Source: AGHT+IHtywQ8e8sdcBJ4nEsVchvTc5SRUSLKPPN/CcX+znemohbI6SJix20yoRk10mpcbIo22CBF5AHYdgr0wG7ZGcU=
-X-Received: by 2002:a05:6102:11f8:b0:43f:3426:9e35 with SMTP id
- e24-20020a05610211f800b0043f34269e35mr3147137vsg.12.1691478715881; Tue, 08
- Aug 2023 00:11:55 -0700 (PDT)
+        with ESMTP id S233354AbjHHRip (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 8 Aug 2023 13:38:45 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F22961195A;
+        Tue,  8 Aug 2023 09:17:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1691481373;
+        bh=okc1bHJRjvmsHv8sh2mNg8kwKuXa47ayMSGEUB6jnqc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=REL6224q0qV7HWdfF6abIJ6hhcwLw8kt68mfSyk1XTzvtncAT7Gisdm1lHeJnCSCC
+         nyzCgTUTkQYlPLhAIRLNIVw4YwqVwd8DnVSzaQd0FgRU32rxZ+Ocuz2mWGYt7aTLam
+         il/SIgIVla+xYBYelZK4x43HsWUOLixyl7HBbrudYmw8IRRJj+TjZaj/2wDolvtGEK
+         jyATFlWc3kLfVy/mgfHr91SC5sTRpmmSBjgSMVQygzSCo0CW2HEUPi0LAVmYQy9b36
+         8ngBF6CvisRPJRwE72b3zxQVb6GyI9AH0dLmG17vsW3/nme7y1jKgcfZRI2VvawWkq
+         jeQoXhCXzW97g==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4RKlqw6FcVz4wbv;
+        Tue,  8 Aug 2023 17:56:12 +1000 (AEST)
+Date:   Tue, 8 Aug 2023 17:56:00 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>
+Cc:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: Signed-off-by missing for commit in the iio tree
+Message-ID: <20230808175600.145ecf97@canb.auug.org.au>
+In-Reply-To: <f7a20a95-48fa-edc0-9724-bfb4484c155a@gmail.com>
+References: <20230808083925.7109a675@canb.auug.org.au>
+        <f7a20a95-48fa-edc0-9724-bfb4484c155a@gmail.com>
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 8 Aug 2023 12:41:44 +0530
-Message-ID: <CA+G9fYspyEdT9wmVpL04J-p0CwqA+_v_L4H+ihY9VYqpCMmQ1Q@mail.gmail.com>
-Subject: next: mips: cavium_octeon_defconfig: gcc-8 - dwc3-octeon.c:502:8:
- include/linux/compiler_types.h:397:38: error: call to '__compiletime_assert_335'
- declared with attribute error: FIELD_PREP: value too large for the field _compiletime_assert
-To:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        linux-usb@vger.kernel.org, linux-mips@vger.kernel.org,
-        lkft-triage@lists.linaro.org
-Cc:     Ladislav Michl <ladis@linux-mips.org>, Thinh.Nguyen@synopsys.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/1dJkSKdaUgS2DlXXEws0e=X";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-[My two cents]
+--Sig_/1dJkSKdaUgS2DlXXEws0e=X
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-While building Linux next-20230808 mips cavium_octeon_defconfig with gcc-8
-failed with below warnings and errors.
+Hi Matti,
 
-Build log:
-----------
+On Tue, 8 Aug 2023 09:26:08 +0300 Matti Vaittinen <mazziesaccount@gmail.com=
+> wrote:
+>
+> Thanks Stephen!
+>=20
+> On 8/8/23 01:39, Stephen Rothwell wrote:
+> > Hi all,
+> >=20
+> > Commits
+> >=20
+> >    a00cf70f16c9 ("iio: light: bd27008: Support BD27010 RGB")
+> >    16a9947646f7 ("iio: light: bu27008: add chip info")
+> >    ae8c47c51e5c ("dt-bindings: iio: ROHM BU27010 RGBC + flickering sens=
+or")
+> >=20
+> > are missing a Signed-off-by from their committer.
+> >  =20
+>=20
+> I am 99% sure I had SoB tags added in patches. Seems like they have been =
+lost in the action.
 
-In function 'dwc3_octeon_setup.isra.4',
-    inlined from 'dwc3_octeon_probe' at drivers/usb/dwc3/dwc3-octeon.c:502:8:
-include/linux/compiler_types.h:397:38: error: call to
-'__compiletime_assert_335' declared with attribute error: FIELD_PREP:
-value too large for the field
-  _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-                                      ^
-include/linux/compiler_types.h:378:4: note: in definition of macro
-'__compiletime_assert'
-    prefix ## suffix();    \
-    ^~~~~~
+The missing SOB is from the committer not the author.
 
-  Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+--=20
+Cheers,
+Stephen Rothwell
 
-Links:
------
- - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230808/testrun/18882876/suite/build/test/gcc-8-cavium_octeon_defconfig/log
- - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230808/testrun/18882876/suite/build/test/gcc-8-cavium_octeon_defconfig/history/
+--Sig_/1dJkSKdaUgS2DlXXEws0e=X
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-Steps to reproduce:
-------------
-  tuxmake --runtime podman --target-arch mips --toolchain gcc-8
---kconfig cavium_octeon_defconfig
-   - https://storage.tuxsuite.com/public/linaro/lkft/builds/2TgoAZwerJ28UWHyqfQUiaYYhrl/tuxmake_reproducer.sh
+-----BEGIN PGP SIGNATURE-----
 
---
-Linaro LKFT
-https://lkft.linaro.org
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmTR9RAACgkQAVBC80lX
+0GwiZwf+K+LTEteRRWwhgKpwsXcEKINsk2BZluaTUVkkzn9+QdbvDMuwURwKGkMk
+dVnJi81LVP6eSPbcVmu+m6S92nXEO1OToZGVxvM3NO7+wA8YLiz7NupWSFUYxK4i
+vjjFXI1+2TXiqbEdiOSmXz9szo0syfChAu10FrNrX4vbqyqPwmvvc4jM8YkUIwD3
+2AcPMm/o31vxarOAenQrULtZlsmQn6rKb7F5el5D1Q/m+pJ20fTCBwrGB6AVodgb
+3T98eAzy5rG4wdhuY/i2JEMQs5NOeAVAwpSJbeqglMT769W/eMzWkii6FARG0//J
+gLVgvH2tRGHh4uy82kBFZe4CyZQb6A==
+=TWRp
+-----END PGP SIGNATURE-----
+
+--Sig_/1dJkSKdaUgS2DlXXEws0e=X--

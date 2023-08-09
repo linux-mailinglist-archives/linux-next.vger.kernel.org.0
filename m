@@ -2,132 +2,169 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13B0A775174
-	for <lists+linux-next@lfdr.de>; Wed,  9 Aug 2023 05:40:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2938E7751A7
+	for <lists+linux-next@lfdr.de>; Wed,  9 Aug 2023 05:49:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229666AbjHIDk4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 8 Aug 2023 23:40:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54448 "EHLO
+        id S229539AbjHIDtV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 8 Aug 2023 23:49:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbjHIDk4 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 8 Aug 2023 23:40:56 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18F97C9;
-        Tue,  8 Aug 2023 20:40:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1691552453;
-        bh=eYzYCpPfk9mGCdjkiffMCkKG4XvwoVeUP6ZVEPKf4pU=;
-        h=Date:From:To:Cc:Subject:From;
-        b=oJyc+gp61EwOaT9IK+bZVCQEQ6FpEaTKOav5LJIpwHeI9db80+whzUSJrwlzvIQFv
-         p5/UjrZLzo8NsCU0iDH8lKKDmeOZGAWNpTZBTUwNiFMISTFNKQwfhS7I2VOXjXS9D/
-         wnCbxCin/AcF6GAwF6C4F2nwQ8ciNzwaYj+VlcAkzaaiI9w/Q+uO4ULTE161YoY2uM
-         UaubInqub69xFoOQxEGVAh5oHju63X07mFvZLywVMfPPT1sGACFxNdpaUPCrNrffLO
-         3sSkazErw9EQ5PasuidJg/CcwUHzfzb3ZAWJVSE/AZyFuf3WjeM/wORRQy7q0xOiFw
-         EMbdxx//pMZMw==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4RLG6s1SYBz4wy5;
-        Wed,  9 Aug 2023 13:40:53 +1000 (AEST)
-Date:   Wed, 9 Aug 2023 13:40:51 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Greg KH <greg@kroah.com>, David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Networking <netdev@vger.kernel.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the tty tree with the net-next tree
-Message-ID: <20230809134051.1167e40d@canb.auug.org.au>
+        with ESMTP id S229501AbjHIDtU (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 8 Aug 2023 23:49:20 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 549B7E5E
+        for <linux-next@vger.kernel.org>; Tue,  8 Aug 2023 20:49:20 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-686f090310dso6297935b3a.0
+        for <linux-next@vger.kernel.org>; Tue, 08 Aug 2023 20:49:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1691552959; x=1692157759;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=UOKC4u196Tw3POFJ6bIpvPeaZ8Nm0Wak2K6ex2GCylA=;
+        b=KIyQZZx0+IhvhwxTHsF6GK8F1FHBwyTRIn/CuLR0oJDg5t5rRnfyFdGgejIt0vxBVY
+         pBh1IsLO7my/OWA38vpmu4G6Z1yKrpiHs2LDhCrNPyWNkkcSNNABVrlEWe6onoWy7SuE
+         3SzRt+0njyfp5+0Brb4nPjDfQTaFedDzIPcDhJmQCKmrFCwWD1Mmx0H1vzRN7Ej/uYZi
+         JDuEm5J0CAYBnROZQBDm9x0v8ykIfM1DzKhoEyM9Z3Lsw5dopcpozulHh2KkZFYJNN2s
+         lS8lVg8vELR5grlVup5yM+/uQ6xVj/TN5gkF0UBtIZjAh/Kl75czpwzfEyhY6NkI8A18
+         X1bw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691552959; x=1692157759;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UOKC4u196Tw3POFJ6bIpvPeaZ8Nm0Wak2K6ex2GCylA=;
+        b=dnpXRZEhct9mVEZowcDDiW6b2lPaZkeq5R262bJVE3fp5W8yb1UUtdrf66QCNPjz9T
+         MjE4sKjMZfTx8x/X9MsAmsumu+kuSn3nm4wNUAXWIwm/PXsq2H1p7jSFrzvDbUw6MBAS
+         MvW2A1UVbUJ+LCtDiuIOqWo3LJQQ47RznGd9r4T9y9Shs0hGSashl3Tr5rVxUQHDs29c
+         pvXsCAj++gNF7TCzLpic4j4w8UsjxHXLonh6ymkyXEW8XshS4xWZ4PE6myQBGeYS5BeM
+         Y/o2yzi8eiIBKDQEOZNaQcspae57Rb5wsJ8Kf9UETnLXaMtmdiVsnXsm1oIsFcVyjjte
+         Gpyg==
+X-Gm-Message-State: AOJu0YwEPKG/+y4ZfZ2PlTG+sObfXxwMDsA9MyuBhjwXYHL+lTtKpu6x
+        96J7omsy2NyfgfepX0Ac8k1SQN+y36dABn9fXjVSFg==
+X-Google-Smtp-Source: AGHT+IHYX3e/Z0Vw7m55Poq0eO1Brcz53596KZs8i3FHHmU63eQX3c7ksWQPwo/EUFzhnKHJbU/K6Q==
+X-Received: by 2002:a05:6a20:12c3:b0:130:11e4:d693 with SMTP id v3-20020a056a2012c300b0013011e4d693mr1806963pzg.53.1691552959286;
+        Tue, 08 Aug 2023 20:49:19 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id 4-20020aa79144000000b00660d80087a8sm8846633pfi.187.2023.08.08.20.49.17
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Aug 2023 20:49:17 -0700 (PDT)
+Message-ID: <64d30cbd.a70a0220.3e6c3.1722@mx.google.com>
+Date:   Tue, 08 Aug 2023 20:49:17 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/YnfJMTaw1Wq4YKH1vQazNkL";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: v6.5-rc5-275-g2f2141a263ce
+X-Kernelci-Tree: next
+X-Kernelci-Branch: pending-fixes
+Subject: next/pending-fixes build: 8 builds: 0 failed, 8 passed,
+ 4 warnings (v6.5-rc5-275-g2f2141a263ce)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/YnfJMTaw1Wq4YKH1vQazNkL
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+next/pending-fixes build: 8 builds: 0 failed, 8 passed, 4 warnings (v6.5-rc=
+5-275-g2f2141a263ce)
 
-Hi all,
+Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
+rnel/v6.5-rc5-275-g2f2141a263ce/
 
-Today's linux-next merge of the tty tree got conflicts in:
+Tree: next
+Branch: pending-fixes
+Git Describe: v6.5-rc5-275-g2f2141a263ce
+Git Commit: 2f2141a263cea22c235fbd6cffad596d457a3754
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Built: 8 unique architectures
 
-  arch/powerpc/platforms/8xx/mpc885ads_setup.c
-  arch/powerpc/platforms/8xx/tqm8xx_setup.c
+Warnings Detected:
 
-between commit:
+arc:
 
-  33deffc9f19f ("net: fs_enet: Don't include fs_enet_pd.h when not needed")
+arm64:
 
-from the net-next tree and commit:
+arm:
 
-  a833b201d908 ("serial: cpm_uart: Don't include fs_uart_pd.h when not need=
-ed")
+i386:
 
-from the tty tree.
+mips:
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+riscv:
 
---=20
-Cheers,
-Stephen Rothwell
+sparc:
+    sparc64_defconfig (gcc-10): 4 warnings
 
-diff --cc arch/powerpc/platforms/8xx/mpc885ads_setup.c
-index c7c4f082b838,6ecc7fa2a816..000000000000
---- a/arch/powerpc/platforms/8xx/mpc885ads_setup.c
-+++ b/arch/powerpc/platforms/8xx/mpc885ads_setup.c
-@@@ -21,7 -21,7 +21,6 @@@
-  #include <linux/device.h>
-  #include <linux/delay.h>
- =20
-- #include <linux/fs_uart_pd.h>
- -#include <linux/fs_enet_pd.h>
-  #include <linux/fsl_devices.h>
-  #include <linux/mii.h>
-  #include <linux/of_address.h>
-diff --cc arch/powerpc/platforms/8xx/tqm8xx_setup.c
-index 6e56be852b2c,a451f5003abd..000000000000
---- a/arch/powerpc/platforms/8xx/tqm8xx_setup.c
-+++ b/arch/powerpc/platforms/8xx/tqm8xx_setup.c
-@@@ -24,7 -24,7 +24,6 @@@
-  #include <linux/device.h>
-  #include <linux/delay.h>
- =20
-- #include <linux/fs_uart_pd.h>
- -#include <linux/fs_enet_pd.h>
-  #include <linux/fsl_devices.h>
-  #include <linux/mii.h>
-  #include <linux/of_fdt.h>
+x86_64:
 
---Sig_/YnfJMTaw1Wq4YKH1vQazNkL
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
 
------BEGIN PGP SIGNATURE-----
+Warnings summary:
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmTTCsMACgkQAVBC80lX
-0Gw5kwf/fAYuAin5HUdRUsmN/54+YLUDrHA3e6zW085taWz284bK9CbKSKYPNvyv
-HfgTtkWHm7nqznKTOilzJqMb68BmN0bSntTvhNtEVZ2IIbnqwOy1aGYztyCoHjk9
-1mfs5+cInfS35QC9P7rycXSFx5RoTEFlgfhAT10B+J31zIu5riqDuF+4QP1ZGoo3
-GkOfMw9n9CuZhbNnNM/RzejPuHZHw+6EOlr85RrpRDNm2NxZQs53vN4R6S3SbUcD
-VppR6tXDPH64e6uUiu9ZpU03yWajLPbZp4oVJ7IX/v2hm6kNrVDAOEEMFtFjQ5W2
-LlKwc9DuI3RKHYAeuYbN1b0CfFtw4g==
-=+N59
------END PGP SIGNATURE-----
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
 
---Sig_/YnfJMTaw1Wq4YKH1vQazNkL--
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---
+For more info write to <info@kernelci.org>

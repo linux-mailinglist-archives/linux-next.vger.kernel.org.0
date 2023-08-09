@@ -2,48 +2,44 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47720774FE1
-	for <lists+linux-next@lfdr.de>; Wed,  9 Aug 2023 02:36:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27C09775006
+	for <lists+linux-next@lfdr.de>; Wed,  9 Aug 2023 03:03:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229759AbjHIAgh (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 8 Aug 2023 20:36:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59962 "EHLO
+        id S229498AbjHIBDj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 8 Aug 2023 21:03:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229651AbjHIAgg (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 8 Aug 2023 20:36:36 -0400
+        with ESMTP id S229463AbjHIBDj (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 8 Aug 2023 21:03:39 -0400
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA97B1995;
-        Tue,  8 Aug 2023 17:36:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 403D9FB;
+        Tue,  8 Aug 2023 18:03:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1691541393;
-        bh=6ettLlgLL+lNbJJyfC10IQ5aBlfsZGk/KbPDEESsreM=;
+        s=201702; t=1691543017;
+        bh=Y16kprpEo00MEaWjNLS2gHaHCAM9o2k8HgEOxN1xh/c=;
         h=Date:From:To:Cc:Subject:From;
-        b=okMGYQ047vUFeZphNjsDnfTDdQUDUptnl5PBICJ4BFtXkqXkCqHNwKgt5JiypgmHT
-         ilmye8lyqRdWZD7UNCAJy4prVtZp7Anj6GY4HErR4r1XAjYNMx9lEz1167gn/6BQBI
-         KYyYHCvXnJezfmx1FNHjw39PWkHEBs1d6LXySXnOxSJ8XJJ3d351cAi7qwXlnNy3qs
-         aiTj6qt9kqnzHN9kexD90SoEk/gczV40srC0QS80a4quUWjM99EPeF7yjxqqE2Gx5a
-         iEQ7VScmNvA2W+b4cCWU/LYdZE10hUKvClhsDmYOfZNEJaTjB8L0gT34f0Vt+LNyC7
-         F2LZoJo3Kc7NQ==
+        b=dqKimCA8yokk4TbYyRrBpsodT7q2zEU9jso/N0R085o8U6p9UXITnGKlmfGg9wOzh
+         FGuRnOQH7eMzGV+lRRo7bjQbIOs1qse6rBgUzDV/Ziq0/BTOVR0KqNSsuMLAfdlGvb
+         pE7Tdf0cH6XeePkUX9e/oYu3bLMJvpdyVGpE8irU+SR7oHT3tXbgGEBD76oHhLfX87
+         y/lYovKYeTpChUGX45OKTEOI8NMtzNLFbwg3yymlel8jqAEYClNrXaDSlv2k/ebXdG
+         ZMplR+1led/7sxOBMAMILx51nTHUgdfbcm9NjXPAb9mKj3XM9CKTajD/G+HXTX483V
+         1g8GyrkOVERYg==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4RLB272Y6sz4wxR;
-        Wed,  9 Aug 2023 10:36:30 +1000 (AEST)
-Date:   Wed, 9 Aug 2023 10:36:26 +1000
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4RLBdN2XyZz4wqX;
+        Wed,  9 Aug 2023 11:03:35 +1000 (AEST)
+Date:   Wed, 9 Aug 2023 11:03:34 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Helge Deller <deller@gmx.de>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc:     Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Fabio Estevam <festevam@denx.de>,
+To:     Jens Axboe <axboe@kernel.dk>, Chuck Lever <chuck.lever@oracle.com>
+Cc:     Chengming Zhou <zhouchengming@bytedance.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Subject: linux-next: manual merge of the fbdev tree with the drm-misc tree
-Message-ID: <20230809103626.782dd87d@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the block tree with the nfsd tree
+Message-ID: <20230809110334.63b7c566@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/uUTjO8dq1.Wer9rHpScu0yz";
+Content-Type: multipart/signed; boundary="Sig_/jBABNubXVx_rOnM0DH/5UmW";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,
@@ -54,52 +50,53 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/uUTjO8dq1.Wer9rHpScu0yz
+--Sig_/jBABNubXVx_rOnM0DH/5UmW
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the fbdev tree got a conflict in:
+Today's linux-next merge of the block tree got a conflict in:
 
-  drivers/video/fbdev/Kconfig
+  block/blk-flush.c
 
 between commit:
 
-  8c47895b70a2 ("fbdev/mx3fb: Use fbdev I/O helpers")
+  bed5a600c6b0 ("block: Revert 615939a2ae73")
 
-from the drm-misc tree and commit:
+from the nfsd tree and commits:
 
-  87ac8777d424 ("fbdev: mx3fb: Remove the driver")
+  28b241237470 ("blk-flush: fix rq->flush.seq for post-flush requests")
+  b175c86739d3 ("blk-flush: count inflight flush_data requests")
 
-from the fbdev tree.
+from the block tree.
 
-I fixed it up (the latter removed the lines modified by the former,
-so I just used the latter) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+I fixed it up (I used the former, though I wonder if 28b241237470 fixes
+what the revert is trying to work around) and can carry the fix as
+necessary. This is now fixed as far as linux-next is concerned, but any
+non trivial conflicts should be mentioned to your upstream maintainer
+when your tree is submitted for merging.  You may also want to consider
+cooperating with the maintainer of the conflicting tree to minimise any
+particularly complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/uUTjO8dq1.Wer9rHpScu0yz
+--Sig_/jBABNubXVx_rOnM0DH/5UmW
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmTS34sACgkQAVBC80lX
-0GzqZwf9G9a0aUJYQDBMvEb2vlFiUPD+t6Zy9Cpfrhpvuu36cFqeVgWcFzT+MQd1
-Zh2uVYaJ/TTEmJSJiaFH1W0j6QSzNmjTN9mm+HMPtipdG887FO4uwGGJQ0MrQ0Ob
-FqPL7NV9xkkqQisXzAgLUkhgGDnU8rbA2qbwHx3hjbptRiOf25lDLVxb7UmqzcTc
-T6Gm+sm3HB8yCS94G83Wn2r9NCiwZYkFvXeUXTK2aggIHoHFzh2bWH72yKjnubc7
-5PgF7rPPOMwgkeTGngB9D8A1cM9rEkIP5uliqgSTSE1e0CGxYWlscUk9ZB2Dq3cw
-EBLTOf61NvBrKOCjWadD7P7+E713qA==
-=mfCY
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmTS5eYACgkQAVBC80lX
+0Gx0mQf+IbSq2UQwNmusD+Hs+m2WQO1qtnfEBLLDFnytqO1vK12mTsFwlUVoQRZz
+BGnLdBrKQSFwCeTFo1UGdOBnAu+47mHB6sref7/LHZB6cuEiVf2qlajocCgWU6cS
+7LezpqLn6JrGMn7nKI7GtdgjSkr9fRqqrgkTPNWREIpGosOUZUsuzlpV7AomAjXM
+qnilHK+17zKxTI86XyYCoO0Gug163WpJTt6FQxurt+LCahUk6at+/5a8kXwxOHGg
+0G4bgYsRAxRfAIhbGUtgut+dI1ORpp+Vv4YwKI8YwnYHpYmtgh7W6xSBOubcGrv3
+rm4ypFDYvLXEwa/v9GK1K9Bizc6bNg==
+=nJqu
 -----END PGP SIGNATURE-----
 
---Sig_/uUTjO8dq1.Wer9rHpScu0yz--
+--Sig_/jBABNubXVx_rOnM0DH/5UmW--

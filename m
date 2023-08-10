@@ -2,179 +2,81 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1691778122
-	for <lists+linux-next@lfdr.de>; Thu, 10 Aug 2023 21:15:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B51D67783BF
+	for <lists+linux-next@lfdr.de>; Fri, 11 Aug 2023 00:46:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236289AbjHJTPa (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 10 Aug 2023 15:15:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59038 "EHLO
+        id S229459AbjHJWqA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 10 Aug 2023 18:46:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232997AbjHJTP3 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 10 Aug 2023 15:15:29 -0400
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F8DF2702;
-        Thu, 10 Aug 2023 12:15:28 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 723B63200945;
-        Thu, 10 Aug 2023 15:15:26 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Thu, 10 Aug 2023 15:15:28 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1691694925; x=1691781325; bh=cD
-        RJ70tlUw1f5vvydGZnly44JvjoIjvlKIEtTxRqzOA=; b=BfIaANBPx1NIJxHUY8
-        7ivOvwDz9pUturVj8bM/Xs6IgBKscXsONpFc3V/Uznsieh33xb8FD23DUZ1fV2OT
-        ClwE5f/0TK0qFDpZGFAstr1dnPDg5APnNidEQoEmK5OBty6TOwndwMepEV4wzs8R
-        AdNRtcKedt6eDTjYG77XDEe4bwMwHg/bOYVmRSKsGUiPih/fxA2vgZQTk+4/2H7i
-        yCBYznxPMWsTIsr/BQcLiTuGcpQvTo32mkYNLPa9UAyiBzQptlHtA9zaWmkIHAET
-        ahFv6nMirNlzUR6BbyaRKQ/BhJNZ+wYjlnQtJTt5aEDroonEcJ0y/K7PzmuJFerA
-        Fv8w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1691694925; x=1691781325; bh=cDRJ70tlUw1f5
-        vvydGZnly44JvjoIjvlKIEtTxRqzOA=; b=mcGZj3izxVPRaqh0Ac5Zt1zo1A3p7
-        DFYh+1Td5wiN5QF/FcBRZxpITogPc+djwFaQmwPS0liywPzGo3wu7Gip5n9apMt/
-        WbgAAs6S61KHm+NUzJB4eSfsik1As8ldtUrI/RzE3Qcu6+VaSiuhCCMZ7ndh3f57
-        Z06R6SZCk2+VA9V4wvCWOjA2h1x0BQ+XWyc8vHXUvXtMMRMXmMNbv0RrmGoDn7+A
-        RE5PzFtRGKFebpUvYAzX1l9Hmb/Sf6f/8OrhAGxwZ+K/gfuxkFspqSqiMjhFK8Ih
-        BVVN60rtfYCdMRErxAjk+/6PR5jX+Cy5sJmRfIoHV3gSt3szZfxf8h3lg==
-X-ME-Sender: <xms:TDfVZGcugxX9xNg19w5Sfg0LFsRvY9eBdBAAKew_kEeL1t3SM8Fh2g>
-    <xme:TDfVZANodWVi8uy3GkcLwywk1g5cQ8ngsu7fhFynla5RTgOowzMIASVjBPthCdi-M
-    zAgj7Ed_7F12SJlyQg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrleeigddufeefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:TDfVZHhTlCJjXsjt4mV5IwwTSQkSXIx51Ep_onALlgl_9douam3AGA>
-    <xmx:TDfVZD_GqEP9GsA7_w5YWfEQS_C3_k74IYvLABNf8vmhGAlxA1CjKg>
-    <xmx:TDfVZCvHUBGcawkJEGm_3LM7FD3_w15jn0bry64MHmO9CdP3t5yhTw>
-    <xmx:TTfVZKRmJx1wrrxznIrw6Fr3FPPXoM_qgP0qPxTQwnBRb6omP7_z-Q>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 99A05B60089; Thu, 10 Aug 2023 15:15:24 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-624-g7714e4406d-fm-20230801.001-g7714e440
+        with ESMTP id S229718AbjHJWqA (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 10 Aug 2023 18:46:00 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C26E42D40
+        for <linux-next@vger.kernel.org>; Thu, 10 Aug 2023 15:45:59 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-5843fed1e88so17912527b3.0
+        for <linux-next@vger.kernel.org>; Thu, 10 Aug 2023 15:45:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1691707559; x=1692312359;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=H4ULGci66U2bXOQOw2/WG/HzrEX/K4iTLMow73bqLrI=;
+        b=AAjBT0o5auDHY2sPvkLbXrS5P+a748N7MXxIlZ4Kj06hg67kx3n3G0JhdWXDbk0cvO
+         5CYM97j4+6fi/V8QERHYoktT1EkGxPbsBv7TVWqLQ3RBZsRvCSD8vjFy98rsborhEqeg
+         qxMjYs25DTG4ecnpfsE4+s1ZEEaqpT0XX9QEHRs7oICPXMv5JJb5ARtZkKUrMxDyPRbZ
+         GFJnxSQ3SZ9RltlVq6wSgM0HukJiuF2ulB+M/VrMFjp9JLeeN0UeYZ1RUP5zRFOuRJwI
+         vsEjb1ZIt6vTN3lzyBO30xzSfahiilsRINhuFYYRWjbZFG6W1w4qNR4OfwyxOM5iDl3n
+         TAgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691707559; x=1692312359;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=H4ULGci66U2bXOQOw2/WG/HzrEX/K4iTLMow73bqLrI=;
+        b=ZiNUm1PffSfV2Xe4TCeYJo5bL1/GFVD36UGc4IXDqX8/p3uU2JLuKhF73BkPkJ2bPP
+         SxDQQIOs1xOH3YngF+ce+d/ezPNaX5gcfC7m98w1d+arpnO2NT3cA97vTLN379E8Xydx
+         ic+D+DzxOYWL+ZHYD1umT/oAFpKdwlp5/g9Q1lIFUzmoSeOxu4q2TsUU063nlvAtEECP
+         vGBdAMB0OKjtPlhSdWTR0DP5nlTfgB5XqP3xAwQhPsNGL0pddcz+2O3NQKzg7mKH25Qt
+         UgUX/N8DBMKykgdsVe2+VIRijI03ia8RNojf/gWlk9/5eEtrnijPXpjeGDYtRLqv8hiL
+         QegA==
+X-Gm-Message-State: AOJu0YxqnWLTHpg+63Z1MZ5FS3Qvq/RUalIbYMIIEc2z9aw4dkATAtDC
+        GT8er40wLLKQVTwwgIURK3UMdf8Yuo0=
+X-Google-Smtp-Source: AGHT+IF2KQFLhJci/blcOPeyU0KNDK+T3UeogeP2CoDEVfwDeku2bwRWUSUvQVGD0J3LCrLiu28Up1cCYM8=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a25:25c1:0:b0:d07:cb52:a3cf with SMTP id
+ l184-20020a2525c1000000b00d07cb52a3cfmr1686ybl.5.1691707559060; Thu, 10 Aug
+ 2023 15:45:59 -0700 (PDT)
+Date:   Thu, 10 Aug 2023 15:45:57 -0700
+In-Reply-To: <de474347-122d-54cd-eabf-9dcc95ab9eae@amd.com>
 Mime-Version: 1.0
-Message-Id: <9f295a4d-5657-4e4d-8740-eb9a56cee97d@app.fastmail.com>
-In-Reply-To: <5bc9d25c-d546-fe94-05cc-41bd5bbbaf67@gmx.de>
-References: <20230810141947.1236730-1-arnd@kernel.org>
- <20230810141947.1236730-17-arnd@kernel.org>
- <e0c2f7b1-b137-fbd3-aa28-808498eb8e3f@csgroup.eu>
- <a6222c7f-f903-4de5-821a-f90da8ad1dc9@app.fastmail.com>
- <5bc9d25c-d546-fe94-05cc-41bd5bbbaf67@gmx.de>
-Date:   Thu, 10 Aug 2023 21:15:04 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Helge Deller" <deller@gmx.de>,
-        "Christophe Leroy" <christophe.leroy@csgroup.eu>,
-        "Arnd Bergmann" <arnd@kernel.org>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Cc:     "Matt Turner" <mattst88@gmail.com>,
-        "Vineet Gupta" <vgupta@kernel.org>,
-        "Russell King" <linux@armlinux.org.uk>,
-        "Catalin Marinas" <catalin.marinas@arm.com>,
-        "Will Deacon" <will@kernel.org>, guoren <guoren@kernel.org>,
-        "Brian Cain" <bcain@quicinc.com>,
-        "Huacai Chen" <chenhuacai@kernel.org>,
-        "WANG Xuerui" <kernel@xen0n.name>,
-        "Geert Uytterhoeven" <geert@linux-m68k.org>,
-        "Michal Simek" <monstr@monstr.eu>,
-        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
-        "Dinh Nguyen" <dinguyen@kernel.org>,
-        "Jonas Bonn" <jonas@southpole.se>,
-        "Stafford Horne" <shorne@gmail.com>,
-        "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
-        "Michael Ellerman" <mpe@ellerman.id.au>,
-        "Palmer Dabbelt" <palmer@dabbelt.com>,
-        "Heiko Carstens" <hca@linux.ibm.com>,
-        "John Paul Adrian Glaubitz" <glaubitz@physik.fu-berlin.de>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "Borislav Petkov" <bp@alien8.de>,
-        "Nathan Chancellor" <nathan@kernel.org>,
-        "Nick Desaulniers" <ndesaulniers@google.com>,
-        "Guenter Roeck" <linux@roeck-us.net>,
-        "Stephen Rothwell" <sfr@canb.auug.org.au>,
-        linux-next <linux-next@vger.kernel.org>,
-        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
-        "linux-snps-arc@lists.infradead.org" 
-        <linux-snps-arc@lists.infradead.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
-        "linux-hexagon@vger.kernel.org" <linux-hexagon@vger.kernel.org>,
-        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
-        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
-        "linux-m68k@lists.linux-m68k.org" <linux-m68k@lists.linux-m68k.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-openrisc@vger.kernel.org" <linux-openrisc@vger.kernel.org>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        "Richard Henderson" <richard.henderson@linaro.org>,
-        "Ivan Kokshaysky" <ink@jurassic.park.msu.ru>,
-        "Stefan Kristiansson" <stefan.kristiansson@saunalahti.fi>,
-        "Yoshinori Sato" <ysato@users.sourceforge.jp>,
-        "Rich Felker" <dalias@libc.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        "Chris Zankel" <chris@zankel.net>,
-        "Max Filippov" <jcmvbkbc@gmail.com>,
-        "Christian Brauner" <brauner@kernel.org>,
-        "Paul Walmsley" <paul.walmsley@sifive.com>,
-        "Albert Ou" <aou@eecs.berkeley.edu>,
-        "Youling Tang" <tangyouling@loongson.cn>,
-        "Tiezhu Yang" <yangtiezhu@loongson.cn>,
-        "Masahiro Yamada" <masahiroy@kernel.org>,
-        "Randy Dunlap" <rdunlap@infradead.org>,
-        "Masami Hiramatsu" <mhiramat@kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        "Miguel Ojeda" <ojeda@kernel.org>,
-        "Zhen Lei" <thunder.leizhen@huawei.com>,
-        "Xin Li" <xin3.li@intel.com>, "Nhat Pham" <nphamcs@gmail.com>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        =?UTF-8?Q?Marc_Aur=C3=A8le_La_France?= <tsi@tuyoix.net>,
-        "Johannes Weiner" <hannes@cmpxchg.org>,
-        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
-        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>
-Subject: Re: [PATCH 16/17] [RFC] arch: turn -Wmissing-prototypes off conditionally
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <de474347-122d-54cd-eabf-9dcc95ab9eae@amd.com>
+Message-ID: <ZNVopRMWRfBjahB9@google.com>
+Subject: Re: next-20230809: kvm unittest fail: emulator
+From:   Sean Christopherson <seanjc@google.com>
+To:     Srikanth Aithal <sraithal@amd.com>
+Cc:     kvm@vger.kernel.org, linux-next@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Aug 10, 2023, at 17:59, Helge Deller wrote:
-> On 8/10/23 17:21, Arnd Bergmann wrote:
->> On Thu, Aug 10, 2023, at 16:59, Christophe Leroy wrote:
->>
->> I did send other fixes for microblaze and parisc specific drivers,
->> and I could also send patches for the two defconfig warnings if
->> the maintainers are happy with fixing those but leaving allmodconfig
->> to still warn, but I feel that it's easier for them to just
->> do the last fixes themselves and then remove my hack again.
->>
->> I'll wait for Michal and Helge on these.
->
-> Arnd, I like your patch!
-> For parisc I've done quite some work during the last few weeks to
-> get such warnings sqeezed out, so please drop the hunk for parisc from
-> your patch. My plan is to become warning-free before 6.5-final.
->
-> This last one:
->      arch/parisc/lib/ucmpdi2.c:12:5: error: no previous prototype for 
-> '__ucmpdi2' [-Werror=missing-prototypes]
-> I'll take care in the parisc for-next tree.
+On Thu, Aug 10, 2023, Srikanth Aithal wrote:
+> Hello,
+> 
+> On linux-next 20230809 build kvm emulator unittest failed.
+> 
+> ===================
+> Recreation steps:
+> ===================
+> 
+> 1. git clone https://gitlab.com/kvm-unit-tests/kvm-unit-tests.git
+> 2. export QEMU=<location of QEMU binary> I used v8.0.2
+> 3. cd kvm-unit-tests/;./configure;make standalone;tests/emulator
 
-Sounds good to me, thanks!
-
-     Arnd
+What hardware are you running on?  I've tested on a variety of hardware, Intel
+and AMD, and haven't observed any problems.

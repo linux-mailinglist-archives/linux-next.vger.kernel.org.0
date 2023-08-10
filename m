@@ -2,166 +2,102 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF41C77732E
-	for <lists+linux-next@lfdr.de>; Thu, 10 Aug 2023 10:41:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8495E77738F
+	for <lists+linux-next@lfdr.de>; Thu, 10 Aug 2023 11:00:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231978AbjHJIlz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 10 Aug 2023 04:41:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36810 "EHLO
+        id S232030AbjHJJAG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 10 Aug 2023 05:00:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231169AbjHJIly (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 10 Aug 2023 04:41:54 -0400
-Received: from mail-vk1-xa31.google.com (mail-vk1-xa31.google.com [IPv6:2607:f8b0:4864:20::a31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADD96DC
-        for <linux-next@vger.kernel.org>; Thu, 10 Aug 2023 01:41:53 -0700 (PDT)
-Received: by mail-vk1-xa31.google.com with SMTP id 71dfb90a1353d-48719854eb9so293097e0c.0
-        for <linux-next@vger.kernel.org>; Thu, 10 Aug 2023 01:41:53 -0700 (PDT)
+        with ESMTP id S231510AbjHJJAF (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 10 Aug 2023 05:00:05 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8FC42129
+        for <linux-next@vger.kernel.org>; Thu, 10 Aug 2023 02:00:04 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-3fe4ad22eb0so5635395e9.3
+        for <linux-next@vger.kernel.org>; Thu, 10 Aug 2023 02:00:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1691656913; x=1692261713;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=BIQvytKlPHV61L4Nl1TShTCcBaBoBzuMm/JZ+epP++U=;
-        b=fWueKhKZp/KlvAjBql5/gcufDl2eUlY/f98Ahh/jmMf9VG1DzkfEubma08Qf4MOU7h
-         aSZwv7axEYR4OdkFtDP62/PStXtmje8dMFM5UGb7LcfvKs3Nh9CgSXXsCBr7e0zyeEBv
-         bRAMVsckeIlS3Kg5m9XeBGJG1kLCYalN606LCd+FhajQ4DMAxUd05U3VHbxxhw7YKlsx
-         fYUgNdn3ptlS9XVU6BqPW8Sn7U/JA5kp/lDbk8U/WNtJVJVDyKmVwh0WhA/Yklrhlfk6
-         0tYVjt3D+KmTzC1O3EbbmWbOaHbYLfn6hF6UUeRgNC7ul/JNhrVeCg3Kur2LiwNXCcn9
-         seJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691656913; x=1692261713;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+        d=linaro.org; s=google; t=1691658003; x=1692262803;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=BIQvytKlPHV61L4Nl1TShTCcBaBoBzuMm/JZ+epP++U=;
-        b=gaCq6cQCQXr/tXTOvh/XPSFoX0dSA4YclEcKZrMiICyI7XzZsOeqyix4VmGu+3hd+8
-         o33fBcTLFu+kXPV76ux/eCfLzd6WXuyk1+4+MiVv1mpl0JrsZOg1NKNwcrdeynAXeWfn
-         6kfizk+YXSrCksxuklq9Kz2GAin/1emGyAStaHnfotuzpjMsrKw09G7NG06YJeVfAqFP
-         g7PqCs4IXXu50a2ipLJ3Zl+0P6WFachOR8VUwvQbac+c+zwBxGkr4Cjm3EnS1K3MtiKM
-         uzaHkKMJusiXAyiY+erJ9QcHKtZlPR64yRpy8+FoMkHOVwgp6AfSAqd78pUU4UaVNKV3
-         YppQ==
-X-Gm-Message-State: AOJu0YxCsie6lj9bRRJBfyuCwyKCZMHMX+9N9PhpHRgENynW1vPX9FtY
-        xhcq82yLFJqZNBee/+Sjj3VMMKUbIrUE347pHvjkCw==
-X-Google-Smtp-Source: AGHT+IE6xFgpOmRru++MINEnnoF5fh8e0YFDyWoZ5seECl++8hTyx/CXJypK5KyWrfhmRiDyC8pkNhRum5XwhhnE11U=
-X-Received: by 2002:a67:fada:0:b0:447:68a0:a121 with SMTP id
- g26-20020a67fada000000b0044768a0a121mr982100vsq.2.1691656912738; Thu, 10 Aug
- 2023 01:41:52 -0700 (PDT)
+        bh=apCyx7BnprLlNUtpxgI6ODrkhYEMJ4RAFB4yHFVMfI8=;
+        b=cVdtENVBqkmVo7mhcn41Hs7v9W+1r6WC7SKAUkK0sQjOBgAlM5naVYjUnDsgRMHb3t
+         pRcnknchJZPisfwVakNwZMq/8AM6/k/Dh4BZ11VqCChCGyd0qsE6QGuHdqSABiT0LWXi
+         tic1V7TPvGGCaY60KFWEIV92flCtDx12JgAhDkzXhKpcqmgYg35/3tamRu2vHH0MRunb
+         EV6vaPBzZHfS6Iaja7ODtkfaTKVSivYRruBPKRBPUfZdOkWPSGaRNMD1Rs+znZpXY7MT
+         GynzjIzfF8pIJsWOJV6AzdIORG3VO/0W5VHnXAHRebmHY9ERkBjST2ODEtUcsM+tf+KL
+         HoCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691658003; x=1692262803;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=apCyx7BnprLlNUtpxgI6ODrkhYEMJ4RAFB4yHFVMfI8=;
+        b=O1WxKko0HyUTqgb+xav6H9hVtUt/rvs4yliKECZebnZmympWQgja1O6Bb9g/xq4BBJ
+         vpqTu5KGhicJbSpjbLV6IEdPF6OgnMhqqSdQvhN2tQAyXq+ZH8vkfBTp01CL5/6yHt6e
+         NJpIVo4B0DDUmj5cYTGMO2Fh0BvNPM0TbezjFOca//xm0eSXCk913x1L/kvEhRTu/s4e
+         LHevvr1dhmEMFjEVlExz5NiFg/Y5FZNXf4UVNDmlOYJmdYJWt60jUHGY35BPKMVup9oZ
+         jTlU+MP3GhRmPO/n5jufUInCmrD95maXbn8hcBXrDRofHE26JlXvdZOMtyTirbFYsyg7
+         8wyA==
+X-Gm-Message-State: AOJu0YyzwMtf7YWrGmipiHXRyE+q6wSyRiTzuZsuR2BfyT1wm6lDwzzO
+        OzmpdUujQ59LO6EQF8EIqR2zFA==
+X-Google-Smtp-Source: AGHT+IG6duMflYRBl5CQeCt/dV9xwJXDPQRP/d6NWugTgoVZOj3U5miGLp2jSFREeeNioqcKY7SORg==
+X-Received: by 2002:a1c:7518:0:b0:3fe:687a:abad with SMTP id o24-20020a1c7518000000b003fe687aabadmr1323005wmc.20.1691658003225;
+        Thu, 10 Aug 2023 02:00:03 -0700 (PDT)
+Received: from [192.168.69.115] ([176.176.158.65])
+        by smtp.gmail.com with ESMTPSA id n24-20020a7bcbd8000000b003fbb0c01d4bsm1466098wmi.16.2023.08.10.02.00.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Aug 2023 02:00:02 -0700 (PDT)
+Message-ID: <ef8cff61-d61e-120d-fd69-8612c64b4139@linaro.org>
+Date:   Thu, 10 Aug 2023 11:00:00 +0200
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 10 Aug 2023 14:11:41 +0530
-Message-ID: <CA+G9fYtQGmwYHYf5suRMyCzQmKmQ1kx31gxGJ-7CT-NTLrxYoA@mail.gmail.com>
-Subject: drivers/gpu/drm/nouveau/nouveau_exec.c:114:4: error: cannot jump from
- this indirect goto statement to one of its possible targets
-To:     clang-built-linux <llvm@lists.linux.dev>,
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.13.0
+Subject: Re: [PATCH] usb: dwc3: dwc3-octeon: Verify clock divider
+Content-Language: en-US
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
         Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        linux-usb@vger.kernel.org, linux-mips@vger.kernel.org,
         lkft-triage@lists.linaro.org
-Cc:     Dave Airlie <airlied@redhat.com>,
-        Danilo Krummrich <dakr@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Cc:     Thinh.Nguyen@synopsys.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+References: <ZNIM7tlBNdHFzXZG@lenoch>
+From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
+In-Reply-To: <ZNIM7tlBNdHFzXZG@lenoch>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Following clang-17 build failures noticed on Linux next-20230810
+On 8/8/23 11:37, Ladislav Michl wrote:
+> From: Ladislav Michl <ladis@linux-mips.org>
+> 
+> Although valid USB clock divider will be calculated for all valid
+> Octeon core frequencies, make code formally correct limiting
+> divider not to be greater that 7 so it fits into H_CLKDIV_SEL
+> field.
+> 
+> Signed-off-by: Ladislav Michl <ladis@linux-mips.org>
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> Closes: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230808/testrun/18882876/suite/build/test/gcc-8-cavium_octeon_defconfig/log
+> ---
+>   Greg, if you want to resent whole serie, just drop me a note.
+>   Otherwise, this patch is meant to be applied on to of it.
+>   Thank you.
+> 
+>   drivers/usb/dwc3/dwc3-octeon.c | 8 ++++++--
+>   1 file changed, 6 insertions(+), 2 deletions(-)
 
-Build log:
--------
-make --silent --keep-going --jobs=8
-O=/home/tuxbuild/.cache/tuxmake/builds/1/build ARCH=arm64
-CROSS_COMPILE=aarch64-linux-gnu- 'HOSTCC=sccache clang' 'CC=sccache
-clang' LLVM=1 LLVM_IAS=1
-drivers/video/backlight/lp855x_bl.c:252:11: warning: variable 'ret' is
-used uninitialized whenever 'if' condition is false
-[-Wsometimes-uninitialized]
-  252 |         else if (lp->mode == REGISTER_BASED)
-      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/video/backlight/lp855x_bl.c:256:9: note: uninitialized use occurs here
-  256 |         return ret;
-      |                ^~~
-drivers/video/backlight/lp855x_bl.c:252:7: note: remove the 'if' if
-its condition is always true
-  252 |         else if (lp->mode == REGISTER_BASED)
-      |              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  253 |                 ret = lp855x_write_byte(lp, lp->cfg->reg_brightness,
-drivers/video/backlight/lp855x_bl.c:244:9: note: initialize the
-variable 'ret' to silence this warning
-  244 |         int ret;
-      |                ^
-      |                 = 0
-1 warning generated.
-fs/btrfs/extent_io.c:232:16: warning: variable 'pages_processed' set
-but not used [-Wunused-but-set-variable]
-  232 |         unsigned long pages_processed = 0;
-      |                       ^
-1 warning generated.
-drivers/gpu/drm/nouveau/nouveau_exec.c:114:4: error: cannot jump from
-this indirect goto statement to one of its possible targets
-  114 |                         drm_exec_retry_on_contention(exec);
-      |                         ^
-include/drm/drm_exec.h:96:4: note: expanded from macro
-'drm_exec_retry_on_contention'
-   96 |                         goto *__drm_exec_retry_ptr;             \
-      |                         ^
-drivers/gpu/drm/nouveau/nouveau_exec.c:106:2: note: possible target of
-indirect goto statement
-  106 |         drm_exec_until_all_locked(exec) {
-      |         ^
-include/drm/drm_exec.h:79:33: note: expanded from macro
-'drm_exec_until_all_locked'
-   79 |                 __label__ __drm_exec_retry;                     \
-      |                                                                 ^
-drivers/gpu/drm/nouveau/nouveau_exec.c:106:2: note: jump enters a
-statement expression
-include/drm/drm_exec.h:78:35: note: expanded from macro
-'drm_exec_until_all_locked'
-   78 |         for (void *__drm_exec_retry_ptr; ({                     \
-      |                                          ^
-1 error generated.
-make[7]: *** [scripts/Makefile.build:243:
-drivers/gpu/drm/nouveau/nouveau_exec.o] Error 1
-drivers/gpu/drm/nouveau/nouveau_uvmm.c:1305:5: error: cannot jump from
-this indirect goto statement to one of its possible targets
- 1305 |                                 drm_exec_retry_on_contention(exec);
-      |                                 ^
-include/drm/drm_exec.h:96:4: note: expanded from macro
-'drm_exec_retry_on_contention'
-   96 |                         goto *__drm_exec_retry_ptr;             \
-      |                         ^
-drivers/gpu/drm/nouveau/nouveau_uvmm.c:1291:2: note: possible target
-of indirect goto statement
- 1291 |         drm_exec_until_all_locked(exec) {
-      |         ^
-include/drm/drm_exec.h:79:33: note: expanded from macro
-'drm_exec_until_all_locked'
-   79 |                 __label__ __drm_exec_retry;                     \
-      |                                                                 ^
-drivers/gpu/drm/nouveau/nouveau_uvmm.c:1291:2: note: jump enters a
-statement expression
-include/drm/drm_exec.h:78:35: note: expanded from macro
-'drm_exec_until_all_locked'
-   78 |         for (void *__drm_exec_retry_ptr; ({                     \
-      |                                          ^
-1 error generated.
-make[7]: *** [scripts/Makefile.build:243:
-drivers/gpu/drm/nouveau/nouveau_uvmm.o] Error 1
+Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
 
-
-  Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-Links:
- - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230809/testrun/18940123/suite/build/test/clang-17-lkftconfig/log
- - https://storage.tuxsuite.com/public/linaro/lkft/builds/2TjhxEjDSquzvxYvC8eD8VWx9dV/
-
-Steps to reproduce:
-   tuxmake --runtime podman --target-arch arm64 --toolchain clang-17
---kconfig https://storage.tuxsuite.com/public/linaro/lkft/builds/2TjhxEjDSquzvxYvC8eD8VWx9dV/config
-LLVM=1 LLVM_IAS=1
-   https://storage.tuxsuite.com/public/linaro/lkft/builds/2TjhxEjDSquzvxYvC8eD8VWx9dV/tuxmake_reproducer.sh
-
-
---
-Linaro LKFT
-https://lkft.linaro.org

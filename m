@@ -2,44 +2,44 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 356D977C3B5
-	for <lists+linux-next@lfdr.de>; Tue, 15 Aug 2023 00:58:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FE6577C3BB
+	for <lists+linux-next@lfdr.de>; Tue, 15 Aug 2023 01:02:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231874AbjHNW6O (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 14 Aug 2023 18:58:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50052 "EHLO
+        id S230104AbjHNXBc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 14 Aug 2023 19:01:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231691AbjHNW5o (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 14 Aug 2023 18:57:44 -0400
+        with ESMTP id S232078AbjHNXBD (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 14 Aug 2023 19:01:03 -0400
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FF69127;
-        Mon, 14 Aug 2023 15:57:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C5E6E5F;
+        Mon, 14 Aug 2023 16:01:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1692053862;
-        bh=14INDazTUYUFWzV9WtQoTUDyMCvY1+63nIUTqw2FnSw=;
+        s=201702; t=1692054061;
+        bh=D32KTbuuxpTgwqZGodKa+ZldmafF21L6DlezEmSQ8ac=;
         h=Date:From:To:Cc:Subject:From;
-        b=Nuxq3F+iYB4FxAy48OYBhJnP/k78ytutmpTadkp4xGSFhOPlJSdDhKSbw0ylNpISY
-         0mv51DSIdNcpaLPoI43MpKKCvpGX68pdi9SKGdvJZ8SAdhvfUqrhli/wML2sPrc9dt
-         ZHN1zTuvYOrTHitAUym3p0Hp52hqxuHSH7an0vBwzbg6yuKvpB8AIXUiy9FRVW4Jpz
-         GEU1cOlnaEJlCZG7OoReWVMqOyu3pGe+RTnrBalIiFK+zP8lWLbs0dmIUqZrwqNVmr
-         EOXgtm2R3iyKBmZRwscJghzpCm+bzvkTg+N90ww4kG4jnhfnT0NCHweYy966V4SFh5
-         YUQTQZkKNuvMg==
+        b=nezdmNU5fBlTtHufK1aF6WhbhJ38u17herU3nbK0hZAR2YatU/FAGw7+qHHqD/tZ9
+         vmTpm4Ej8RM2b1YrM/TUIjIxIBklyPm+f61jwEzNnQtwZ9PSIVR3KFny6Q7ZTgJa4T
+         k94vdwt73Ro7ORLTWwfPJmEC2ZIY+JD9U/hWw94EQR5KeGPh4uMeWva3gwqUf7zT1A
+         nSQArrbuHaJYA8j+QlflbQsl6Dk5tglfrmytokI/8DqVz7RIu9TTJ6t25Ursn7Kgef
+         IaBwgPN1BFPcsfbA1E91le6ximlv9jxXhH5OyaEZJK1KzqPSHFCF/pKDwIQCddf5nc
+         LNUFe8gKYq/+A==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4RPqYL2Kc2z4wxQ;
-        Tue, 15 Aug 2023 08:57:42 +1000 (AEST)
-Date:   Tue, 15 Aug 2023 08:57:41 +1000
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4RPqd82Z6jz4wZt;
+        Tue, 15 Aug 2023 09:01:00 +1000 (AEST)
+Date:   Tue, 15 Aug 2023 09:00:59 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     David Howells <dhowells@redhat.com>,
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the vfs-brauner tree
-Message-ID: <20230815085741.6d4ccca5@canb.auug.org.au>
+Subject: linux-next: Signed-off-by missing for commit in the v4l-dvb tree
+Message-ID: <20230815090059.4a82b7b1@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/2v/V+.+Oq5d3ZFqjJFn7xzH";
+Content-Type: multipart/signed; boundary="Sig_/Be0Dl10bpq+2JaGTUlyQJE0";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS
@@ -50,43 +50,38 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/2v/V+.+Oq5d3ZFqjJFn7xzH
+--Sig_/Be0Dl10bpq+2JaGTUlyQJE0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-In commit
+Commit
 
-  4b4fb74b1aa1 ("vfs, security: Fix automount superblock LSM init problem, =
-preventing NFS sb sharing")
+  2545a2c02ba1 ("media: ipu3-cio2: allow ipu_bridge to be a module again")
 
-Fixes tag
+is missing a Signed-off-by from its author.
 
-  Fixes: 779df6a5480f ("NFS: Ensure security label is set for root inode)
-
-has these problem(s):
-
-  - Subject has leading but no trailing quotes
+The author email in the commit metadata is "stuttered".
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/2v/V+.+Oq5d3ZFqjJFn7xzH
+--Sig_/Be0Dl10bpq+2JaGTUlyQJE0
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmTasWUACgkQAVBC80lX
-0GxcLQgAjJPO0W7U40ph8bCEql4Af0ndafRs0zrje2EFUmm+A0AyHHZruBlmS32f
-tiohvBeDalsGSdKU/lcFJJBKnUvX4V/Rcv+AZDtHwRzPc5K4rU2a2H+TFF5W479u
-hoEZmbzoqqmVZB+KjB0FH7gXWrakmvf4oH8Y5RUnV0KZLqVjvodean4To7WpD5S7
-7c9Z5rOM07KKCP+FeeA/CxrUZu4p8zBjWnSDkHHp9hezy41he/j1S2C0CG8pCztB
-semBB6NWJw+rsTIeiuwtp2b9CUVNWJRMcXDgZu5mSZ9FgYpj2q+90AovK6stI/bm
-nKyrIa/tgl0kXcFcMBp5incLUSbenQ==
-=U+fJ
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmTasisACgkQAVBC80lX
+0GyrUQf+PJup2DsZ6GEDDHROzqtA/PeBR0s/w8Jngfib55GbFRll4nldE3XyYLgP
+k8C18Zu9RqHJZHyA/i45AfnTwkEUOX0zNSo0CzE1DLkjf6APsyfdDKUcWb3F7AXA
+Ayw21AEbLvAqeSfvG4QaBYMkfMiTebzRZ16P0ql7JSWIPUJcCbYwLUEsu7JMqiPL
+A7bqJtHxCS5zU8MXIOa7QCL6GXRs19x172RUnKx832/zhC7xXjwPt2ziO+7eZSdr
+PHrnCtYRoEUogFsAutkfP+g/vB4wpTlbGgU5PFxubFyg4XSHj69SV7I3jpS8uv4m
+NzLnFvlRX/W6DQRAwelTuI8yanM+iQ==
+=mzx1
 -----END PGP SIGNATURE-----
 
---Sig_/2v/V+.+Oq5d3ZFqjJFn7xzH--
+--Sig_/Be0Dl10bpq+2JaGTUlyQJE0--

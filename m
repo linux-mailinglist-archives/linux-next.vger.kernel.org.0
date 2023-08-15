@@ -2,94 +2,103 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F98277C65D
-	for <lists+linux-next@lfdr.de>; Tue, 15 Aug 2023 05:32:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C7F877C682
+	for <lists+linux-next@lfdr.de>; Tue, 15 Aug 2023 05:54:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233864AbjHODbo (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 14 Aug 2023 23:31:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47298 "EHLO
+        id S234399AbjHODxY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 14 Aug 2023 23:53:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234081AbjHOD3K (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 14 Aug 2023 23:29:10 -0400
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48EB21BDB;
-        Mon, 14 Aug 2023 20:21:21 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4RPxPV16tXz4f3kK8;
-        Tue, 15 Aug 2023 11:21:18 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP4 (Coremail) with SMTP id gCh0CgAXp6kt79pkx7D3Ag--.65050S3;
-        Tue, 15 Aug 2023 11:21:18 +0800 (CST)
-Subject: Re: linux-next: Fixes tag needs some work in the block tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Jens Axboe <axboe@kernel.dk>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        with ESMTP id S234495AbjHODsA (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 14 Aug 2023 23:48:00 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8397D19B3;
+        Mon, 14 Aug 2023 20:33:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1692070428;
+        bh=NJLMXPZTCFqfvqsBEJy6qEpOVQlgHMGJBFaGMfADDoI=;
+        h=Date:From:To:Cc:Subject:From;
+        b=TLDevwbRmZxOw2rqzOX93B0djGLtgMHHVxjeVVxDANIE8R8PIN2CWAWNGTnA20RYC
+         QrpEJ7FnFj4dFzp/o2vU7HxwlPYOKsfpMDbtA4pd3pEWHbcYjTOza1y8gycgK1PDFC
+         NWY178MA0kCFD9a1NB2SwiLZAEMSCX0vglhLEw4peGwSVUYGKjct2+FJcFCKixGIGU
+         H4pae0jN/l3hx6IAeTLFwyNn+H91OH8kWc7NmHc6qa1B9q3w3Zp9F7koO5Qtb1I4b5
+         wqq5nzVQG7JGIekaeeiH4ttNapdSJwUL7Evye7tn0vBul5v775Nhr7uGxCKkhW/unX
+         BRZSZvjwb2PGw==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4RPxgv0960z4wb5;
+        Tue, 15 Aug 2023 13:33:45 +1000 (AEST)
+Date:   Tue, 15 Aug 2023 13:33:44 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Jens Axboe <axboe@kernel.dk>, Huacai Chen <chenhuacai@loongson.cn>
+Cc:     Huacai Chen <chenhuacai@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        "yukuai (C)" <yukuai3@huawei.com>
-References: <20230815091931.4dd2b277@canb.auug.org.au>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <8c946512-0cc4-fbc5-ca36-0e2c6d636eb2@huaweicloud.com>
-Date:   Tue, 15 Aug 2023 11:21:16 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Song Liu <song@kernel.org>, WANG Xuerui <git@xen0n.name>
+Subject: linux-next: manual merge of the block tree with the loongarch tree
+Message-ID: <20230815133344.065973e4@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <20230815091931.4dd2b277@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgAXp6kt79pkx7D3Ag--.65050S3
-X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
-        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY17kC6x804xWl14x267AKxVWUJVW8JwAF
-        c2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII
-        0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xv
-        wVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4
-        x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG
-        64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r
-        1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vI
-        Y487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI
-        0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y
-        0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxV
-        WxJVW8Jr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r4j
-        6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjxUzs
-        qWUUUUU
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/wZwGBSGFO4kMbathJvWW4Yd";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi,
+--Sig_/wZwGBSGFO4kMbathJvWW4Yd
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-在 2023/08/15 7:19, Stephen Rothwell 写道:
-> Hi all,
-> 
-> In commit
-> 
->    71070e7bd25d ("md/raid10: fix a 'conf->barrier' leakage in raid10_takeover()")
-> 
-> Fixes tag
-> 
->    Fixes: 4d27e927344a ("md: don't quiesce in mddev_suspend()")
-> 
-> has these problem(s):
-> 
->    - Target SHA1 does not exist
+Hi all,
 
-Sorry about this, the commit was picked from previous md-next branch,
-and I didn't know that it will change...
+Today's linux-next merge of the block tree got a conflict in:
 
-Is there any way that I can fix this ?
+  lib/raid6/test/Makefile
 
-Thanks,
-Kuai
+between commits:
 
-> 
-> Maybe you meant
-> 
-> Fixes: b39f35ebe86d ("md: don't quiesce in mddev_suspend()")
-> 
+  cc801d708472 ("raid6: Add LoongArch SIMD syndrome calculation")
+  810a9b654cee ("raid6: Add LoongArch SIMD recovery implementation")
 
+from the loongarch tree and commit:
+
+  02ccfde87432 ("raid6: test: only check for Altivec if building on powerpc=
+ hosts")
+
+from the block tree.
+
+I fixed it up (the changes in 02ccfde87432 are also in cc801d708472, so
+I just used the former verion) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/wZwGBSGFO4kMbathJvWW4Yd
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmTa8hgACgkQAVBC80lX
+0GzZ6gf/cF9nkkTBc/IpBPjtE7xuKh1aKcz13D6xRfD2NzQ7KDSS1dhuNTtSLStP
+x8Xlol9WLcNIpCp+0C/eOXd2+c+1zMRSNk596X4GmLrmc8wmCERlPozblCrHtdQk
+BhleUEp1qJZbSFpW/UMlsIEjEDZDMp+zXyNdjCa5f/iSY4HeywmLc33twlzTQAsd
+7/KlCpBXAMRx8TZQch5+OZImPLjAnnVFZ4v9uSjrxb8iXr87zLGvJjRUvRieo8Rc
+VPCuWfjxPs9rX7XwzpUUQDAAcmQi7lDao8n4CXs/2Pi7XB4JGmq/3eUXeywIdFAY
+Gmb4rqnAPH6KZgnJj3aoT7ysJfRbug==
+=HMnT
+-----END PGP SIGNATURE-----
+
+--Sig_/wZwGBSGFO4kMbathJvWW4Yd--

@@ -2,169 +2,72 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27DE277D080
-	for <lists+linux-next@lfdr.de>; Tue, 15 Aug 2023 19:00:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1DFE77D114
+	for <lists+linux-next@lfdr.de>; Tue, 15 Aug 2023 19:33:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238347AbjHORAL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 15 Aug 2023 13:00:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48596 "EHLO
+        id S238965AbjHORc5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 15 Aug 2023 13:32:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238620AbjHOQ7u (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 15 Aug 2023 12:59:50 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE2D11BD8
-        for <linux-next@vger.kernel.org>; Tue, 15 Aug 2023 09:59:36 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-6874a386ec7so1103635b3a.1
-        for <linux-next@vger.kernel.org>; Tue, 15 Aug 2023 09:59:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1692118776; x=1692723576;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=HVS9kw63RMKsWpJwoAhjz5K99cSSF4a/aHLwrydCoEc=;
-        b=CkVIz9nT1c3yULn4ni4wxRDarRZVM4+Xq6oytpLZI6fXFPx9O0YAK3bmZZ0DljduLP
-         q7dxDPqXsx0k+Qb0it60QhKNz8sASX+LVk9XY9MgppVgDllmdmO8qyKnIWqRsMdottgM
-         C/UiRB4ky+ivPaUsmvAE3vTahPdR2HJp9wLpyentuVoKMjYMMsCUVwq5ZzOiIHN9jUhp
-         bj/T0iZUtJEU4J2/Su62LJ0Glqv/N7HVm4Sx7ZDJXxSl1NCDTuCAm720yQT4uwcIsPYi
-         nS6IgmjqkJZQwhK3BIRXgH6TiOvZ4KpdV8qhWRRmhGCpt2c98m0EC0PdK9sFZ5YD2Yx+
-         R/cg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692118776; x=1692723576;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HVS9kw63RMKsWpJwoAhjz5K99cSSF4a/aHLwrydCoEc=;
-        b=kBWpp7QNYMy2pLmyYgtzDhCapPz6qRGIyS/289a99A5PWqQ8Aljf1TFHkv+p/j2x2A
-         E+iB6B9sBBlThNRL6bu783zbNtmpfTvGUwfmN4Z7bBAK3ICxAjqspiuu0MjIFijlzqx/
-         ZgszGgGy9VO08h05GnxQoW6iCI3tVqF5ANOvHhBcW0kLi+AAhCU4uNJNgSin68Lkswn/
-         yym5bZYp/3WX/v+O/bqyTyKE/PRHX364B4tNu0O3Wu2BOYrNZADNWXh7MVp1p8hM8uRr
-         ATuTNrbOjdZKlxCGqzkO+uYwg0p61gIFobi+XogwllcyuYsCxq3M0fr27M66LQ+c9/UL
-         rJXA==
-X-Gm-Message-State: AOJu0YwPumDrWKkD0qMF9fyPMdie/tVpH8fVD0cMjKIPPQlM3OVAcsbj
-        NpD+BEbjAzmZwVon2pki2pZuSQ==
-X-Google-Smtp-Source: AGHT+IHsKwulyAHg07o3ZI0SoxwJs7CYTDeZT+kA5hT2/QSV2M/xf6Lkn+BSlWnHDb6p43D7hvtWjQ==
-X-Received: by 2002:a05:6a00:1ca9:b0:668:834d:4bd with SMTP id y41-20020a056a001ca900b00668834d04bdmr13379804pfw.0.1692118776288;
-        Tue, 15 Aug 2023 09:59:36 -0700 (PDT)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id d5-20020a637345000000b00528da88275bsm10451824pgn.47.2023.08.15.09.59.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Aug 2023 09:59:35 -0700 (PDT)
-Message-ID: <7e4aa4d3-2d65-41b0-9ae7-a79432ca6175@kernel.dk>
-Date:   Tue, 15 Aug 2023 10:59:34 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: Fixes tag needs some work in the block tree
-Content-Language: en-US
-To:     Song Liu <song@kernel.org>
-Cc:     Yu Kuai <yukuai1@huaweicloud.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
+        with ESMTP id S238889AbjHORcZ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 15 Aug 2023 13:32:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC44D1BD7;
+        Tue, 15 Aug 2023 10:32:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 46D9964AE5;
+        Tue, 15 Aug 2023 17:32:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C917C433CD;
+        Tue, 15 Aug 2023 17:32:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1692120743;
+        bh=SkRhyPf29u94NXSe+SgrmqpQYI+LqRjgJJoSkouM+Ps=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HvZY4M7FBtrmbWm3RIal6ANh/Nmh4r/KZL9zIyxkWjqBTZFSrGvF4jgxhANIM9F45
+         ghaj88bcKERwSlq92nk7NaBIdAO3BAR2W+ucB+0lLQopkE2nsDNPkhAvX4DmmzGl1A
+         bCCt0qfsVaBNZROYglKcEMZeO5bgl/GyW3/xfaOVGWkRK6Xxvux3EwqOuFgXEYk71m
+         8rNEp35t5Vug0eNbbzaUTnr8K+TpPc24Z/UEyXcZLbGRNwpOLHXnTPNxvmYIiNYoLo
+         jDfUI5g6YUEMzynJzjAhAfCXnSJ4KnFdr4L1mrgyvRmCD77OGPbhoZQrp+9wnU9DWN
+         aWFSWEdV+ZPkQ==
+Date:   Tue, 15 Aug 2023 18:32:19 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Rob Herring <robh@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        "yukuai (C)" <yukuai3@huawei.com>
-References: <20230815091931.4dd2b277@canb.auug.org.au>
- <8c946512-0cc4-fbc5-ca36-0e2c6d636eb2@huaweicloud.com>
- <c39a3bff-01b9-4007-80ac-00ce2b11a902@kernel.dk>
- <CAPhsuW7ck4Bb8NVUdgZZJqzNCYMgT9rspKshr2Zi=8xo2cQLaw@mail.gmail.com>
- <48f834c2-b283-4b02-9407-4a0842d4ed72@kernel.dk>
- <CAPhsuW4YNWksHgTZGzX8Rj1+gU-aqQjiYueNRNHPryxOk2WXqQ@mail.gmail.com>
- <a30e4e08-7b8c-498c-b8af-82262b3ec6ff@kernel.dk>
- <CAPhsuW5AHQkf6wO_4Z6VFbTCxNN9GchW_ZPxmC1vtc23ByPc6g@mail.gmail.com>
- <d7d2aea2-66e3-4172-8c04-f71dbe66612c@kernel.dk>
- <CAPhsuW7AX-0JiycnaFHFHYWjWaGju-pXMJtrAFWYk62SkHk22w@mail.gmail.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <CAPhsuW7AX-0JiycnaFHFHYWjWaGju-pXMJtrAFWYk62SkHk22w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: unexpected file in the mfd tree
+Message-ID: <20230815173219.GF648357@google.com>
+References: <20230809081524.006da553@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230809081524.006da553@canb.auug.org.au>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 8/15/23 10:51 AM, Song Liu wrote:
-> On Wed, Aug 16, 2023 at 12:31?AM Jens Axboe <axboe@kernel.dk> wrote:
->>
->> On 8/15/23 10:26 AM, Song Liu wrote:
->>> On Wed, Aug 16, 2023 at 12:20?AM Jens Axboe <axboe@kernel.dk> wrote:
->>>>
->>>> On 8/15/23 10:17 AM, Song Liu wrote:
->>>>> On Wed, Aug 16, 2023 at 12:07?AM Jens Axboe <axboe@kernel.dk> wrote:
->>>>>>
->>>>>> On 8/15/23 9:58 AM, Song Liu wrote:
->>>>>>> On Tue, Aug 15, 2023 at 11:08?PM Jens Axboe <axboe@kernel.dk> wrote:
->>>>>>>>
->>>>>>>> On 8/14/23 9:21 PM, Yu Kuai wrote:
->>>>>>>>> Hi,
->>>>>>>>>
->>>>>>>>> ? 2023/08/15 7:19, Stephen Rothwell ??:
->>>>>>>>>> Hi all,
->>>>>>>>>>
->>>>>>>>>> In commit
->>>>>>>>>>
->>>>>>>>>>    71070e7bd25d ("md/raid10: fix a 'conf->barrier' leakage in raid10_takeover()")
->>>>>>>>>>
->>>>>>>>>> Fixes tag
->>>>>>>>>>
->>>>>>>>>>    Fixes: 4d27e927344a ("md: don't quiesce in mddev_suspend()")
->>>>>>>>>>
->>>>>>>>>> has these problem(s):
->>>>>>>>>>
->>>>>>>>>>    - Target SHA1 does not exist
->>>>>>>>>
->>>>>>>>> Sorry about this, the commit was picked from previous md-next branch,
->>>>>>>>> and I didn't know that it will change...
->>>>>>>>
->>>>>>>> It's most likely not your fault, I'm guessing Song rebased that branch
->>>>>>>> and this is why the sha changed. Song?
->>>>>>>
->>>>>>> Yeah, it is my fault. I am really sorry for this issue.
->>>>>>>
->>>>>>>>
->>>>>>>>> Is there any way that I can fix this ?
->>>>>>>>
->>>>>>>> Only way to fix this is if I rewind my branch and Song updates his
->>>>>>>> branch to not have this issue, and then sends a new pull request.
->>>>>>>
->>>>>>> Yes please. Let's fix this.
->>>>>>
->>>>>> Please send a new one, I've dropped the old one.
->>>>>
->>>>> Is this the for-6.6/block branch? I haven't seen the change yet. The top
->>>>> commit on the branch (as I see) is
->>>>>
->>>>> 306d74055754 ("ublk: Switch to memdup_user_nul() helper")
->>>>
->>>> Where are you looking? It's at:
->>>
->>> I am looking at
->>>
->>> https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git
->>>
->>> It appears to be some lag from git server?
->>
->> That's just a backup, I always pull and push from git.kernel.dk. The
->> korg one will lag about an hour, depending on when things are pushed.
->> I've never used the korg one as the canonical location.
-> 
-> Got it. I will update my git config.
-> 
-> Here is the updated PR:
-> 
-> 
-> The following changes since commit 66a6a5d0ec852eaced589da066376e69397cd71e:
-> 
->   ublk: Switch to memdup_user_nul() helper (2023-08-15 10:06:54 -0600)
-> 
-> are available in the Git repository at:
-> 
->   https://git.kernel.org/pub/scm/linux/kernel/git/song/md.git
-> tags/md-next-20230814-resend
+On Wed, 09 Aug 2023, Stephen Rothwell wrote:
 
-Pulled.
+> Hi all,
+> 
+> Commit
+> 
+>   bb60922c31d0 ("mfd: Explicitly include correct DT includes")
+> 
+> added this unexpected file:
+> 
+>   drivers/mfd/rz-mtu3.c.rej
+
+Already fixed, thanks.
 
 -- 
-Jens Axboe
-
+Lee Jones [李琼斯]

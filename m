@@ -2,160 +2,139 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8DDE77C71C
-	for <lists+linux-next@lfdr.de>; Tue, 15 Aug 2023 07:35:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 132C177C7D1
+	for <lists+linux-next@lfdr.de>; Tue, 15 Aug 2023 08:33:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234753AbjHOFeS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 15 Aug 2023 01:34:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43808 "EHLO
+        id S235035AbjHOGc3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 15 Aug 2023 02:32:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234711AbjHOFaG (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 15 Aug 2023 01:30:06 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B8D9120;
-        Mon, 14 Aug 2023 22:30:02 -0700 (PDT)
+        with ESMTP id S235134AbjHOGcN (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 15 Aug 2023 02:32:13 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AFA61BD4;
+        Mon, 14 Aug 2023 23:32:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1692077397;
-        bh=HfI/Zoi+DNonzXYoARisMx3D+4O9T300a5BpXZ5Mqlg=;
+        s=201702; t=1692081126;
+        bh=RY0OavXa8ncwwz9ubrLdQIXiXhRqIwnxT0LAgC8wYaY=;
         h=Date:From:To:Cc:Subject:From;
-        b=L6FID5/nUHg1P3TsdKZSQBvASTzjtIN/AIfhl1zpinpVlc51eXKMby0uFrANAV4yl
-         7Fp5WiHW2m4qOYJdM0JtbBvkjdsoX0R6gs+ZGopexeM1cseDgFBEiqlBjcxTmjmSHw
-         6NX57KOxp+Sv71DgH6GJoFjw7iIsoY2V/LUD2Swa7jtVnVSxcGJdkqKKYGCipa2sUm
-         HfG3hP+nnF/CGj4bX0hN9VtsjpFcOMQMURigG38S+y91Y5U000ZBnVywQ7WKz0cMTq
-         UPFGpNELcvr0MhnrzFl5kciMZwTGf91nKaUsFcgweWIBBzjaSbLjYdy3fE9+KTfawY
-         zIbzEq75C5IQQ==
+        b=sJC0DM2pk0m6uk8DCNnybQQMlC4t6I35pC56zXP9zJ5tdkBFlX1uSolJ1Rw0rXlqw
+         rN/GPhSjDJDcEiCR2dma6ithQcQDmrD4q37UF+/bNe+CTe4sL5c4NhusCIOoj8lss/
+         nzR11lsYDCEokkvxS/C/zurcfUPR44NIFgpKrNNbFAqXckkqoIwt/0BBRgOKeeIP7T
+         XUyakfvy32GlLYlWmS0jFNvQE46UpgLw21SAWexZLJb/GEsjHOs96rZx3MaEXlctnu
+         H+4u6aKPDLklZ9UWJInM1yJBw9v/ivGNlDQphy3ifZ2GcLrir5324jKnzq1pr3m9ba
+         uylptqV/vuZMA==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4RQ0Fw020jz4wZs;
-        Tue, 15 Aug 2023 15:29:55 +1000 (AEST)
-Date:   Tue, 15 Aug 2023 15:29:51 +1000
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4RQ1dd0DyRz4wbP;
+        Tue, 15 Aug 2023 16:32:04 +1000 (AEST)
+Date:   Tue, 15 Aug 2023 16:32:03 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+To:     Sean Christopherson <seanjc@google.com>,
+        Anup Patel <anup@brainfault.org>
+Cc:     Aaron Lewis <aaronlewis@google.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Haibo Xu <haibo1.xu@intel.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the tip tree
-Message-ID: <20230815152951.4516ec0a@canb.auug.org.au>
+Subject: linux-next: manual merge of the kvm-x86 tree with the kvm-riscv
+ tree
+Message-ID: <20230815163203.0501fb1d@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/UEeRqO3LgQ/SbJ//6wgJrUU";
+Content-Type: multipart/signed; boundary="Sig_/W2NakETR8hKNhKhHdAQCB5m";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/UEeRqO3LgQ/SbJ//6wgJrUU
+--Sig_/W2NakETR8hKNhKhHdAQCB5m
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the tip tree, today's linux-next build (powerpc
-ppc64_defconfig) failed like this:
+Today's linux-next merge of the kvm-x86 tree got a conflict in:
 
-In file included from arch/powerpc/include/asm/book3s/64/mmu-hash.h:20,
-                 from arch/powerpc/include/asm/book3s/64/mmu.h:32,
-                 from arch/powerpc/include/asm/mmu.h:396,
-                 from arch/powerpc/include/asm/lppaca.h:46,
-                 from arch/powerpc/include/asm/paca.h:18,
-                 from arch/powerpc/include/asm/current.h:13,
-                 from include/linux/thread_info.h:23,
-                 from include/asm-generic/preempt.h:5,
-                 from ./arch/powerpc/include/generated/asm/preempt.h:1,
-                 from include/linux/preempt.h:79,
-                 from include/linux/spinlock.h:56,
-                 from include/linux/mmzone.h:8,
-                 from include/linux/gfp.h:7,
-                 from include/linux/mm.h:7,
-                 from mm/huge_memory.c:8:
-mm/huge_memory.c: In function 'maybe_pud_mkwrite':
-arch/powerpc/include/asm/book3s/64/pgtable.h:934:41: error: too few argumen=
-ts to function 'pte_mkwrite'
-  934 | #define pud_mkwrite(pud)        pte_pud(pte_mkwrite(pud_pte(pud)))
-      |                                         ^~~~~~~~~~~
-mm/huge_memory.c:935:23: note: in expansion of macro 'pud_mkwrite'
-  935 |                 pud =3D pud_mkwrite(pud);
-      |                       ^~~~~~~~~~~
-In file included from include/linux/mm.h:29:
-include/linux/pgtable.h:593:21: note: declared here
-  593 | static inline pte_t pte_mkwrite(pte_t pte, struct vm_area_struct *v=
-ma)
-      |                     ^~~~~~~~~~~
+  tools/testing/selftests/kvm/Makefile
 
-Caused by commit
+between commits:
 
-  161e393c0f63 ("mm: Make pte_mkwrite() take a VMA")
+  17da79e009c3 ("KVM: arm64: selftests: Split get-reg-list test code")
+  477069398ed6 ("KVM: riscv: selftests: Add get-reg-list test")
 
-interacting with commit
+from the kvm-riscv tree and commit:
 
-  6440c7b067ef ("powerpc/book3s64/mm: enable transparent pud hugepage")
+  5d1d46f9d56f ("KVM: selftests: Add a selftest for guest prints and format=
+ted asserts")
 
-from the mm-stable tree.
+from the kvm-x86 tree.
 
-I have applied the following patch for today (hopefully it makes sense):
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Tue, 15 Aug 2023 15:15:23 +1000
-Subject: [PATCH] fix up for "mm: Make pte_mkwrite() take a VMA"
-
-interacting with commit
-
-  6440c7b067ef ("powerpc/book3s64/mm: enable transparent pud hugepage")
-
-from the mm-stable tree.
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- arch/powerpc/include/asm/book3s/64/pgtable.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/powerpc/include/asm/book3s/64/pgtable.h b/arch/powerpc/in=
-clude/asm/book3s/64/pgtable.h
-index 136232a89739..5c497c862d75 100644
---- a/arch/powerpc/include/asm/book3s/64/pgtable.h
-+++ b/arch/powerpc/include/asm/book3s/64/pgtable.h
-@@ -931,7 +931,7 @@ static inline pte_t *pudp_ptep(pud_t *pud)
- #define pud_mkdirty(pud)	pte_pud(pte_mkdirty(pud_pte(pud)))
- #define pud_mkclean(pud)	pte_pud(pte_mkclean(pud_pte(pud)))
- #define pud_mkyoung(pud)	pte_pud(pte_mkyoung(pud_pte(pud)))
--#define pud_mkwrite(pud)	pte_pud(pte_mkwrite(pud_pte(pud)))
-+#define pud_mkwrite(pud)	pte_pud(pte_mkwrite_novma(pud_pte(pud)))
- #define pud_write(pud)		pte_write(pud_pte(pud))
-=20
- #ifdef CONFIG_HAVE_ARCH_SOFT_DIRTY
---=20
-2.40.1
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/UEeRqO3LgQ/SbJ//6wgJrUU
+diff --cc tools/testing/selftests/kvm/Makefile
+index 8852c37fbc2d,77026907968f..000000000000
+--- a/tools/testing/selftests/kvm/Makefile
++++ b/tools/testing/selftests/kvm/Makefile
+@@@ -151,7 -154,7 +153,8 @@@ TEST_GEN_PROGS_aarch64 +=3D access_tracki
+  TEST_GEN_PROGS_aarch64 +=3D demand_paging_test
+  TEST_GEN_PROGS_aarch64 +=3D dirty_log_test
+  TEST_GEN_PROGS_aarch64 +=3D dirty_log_perf_test
+ +TEST_GEN_PROGS_aarch64 +=3D get-reg-list
++ TEST_GEN_PROGS_aarch64 +=3D guest_print_test
+  TEST_GEN_PROGS_aarch64 +=3D kvm_create_max_vcpus
+  TEST_GEN_PROGS_aarch64 +=3D kvm_page_table_test
+  TEST_GEN_PROGS_aarch64 +=3D memslot_modification_stress_test
+@@@ -166,9 -169,9 +169,10 @@@ TEST_GEN_PROGS_s390x +=3D s390x/reset
+  TEST_GEN_PROGS_s390x +=3D s390x/sync_regs_test
+  TEST_GEN_PROGS_s390x +=3D s390x/tprot
+  TEST_GEN_PROGS_s390x +=3D s390x/cmma_test
+ +TEST_GEN_PROGS_s390x +=3D s390x/debug_test
+  TEST_GEN_PROGS_s390x +=3D demand_paging_test
+  TEST_GEN_PROGS_s390x +=3D dirty_log_test
++ TEST_GEN_PROGS_s390x +=3D guest_print_test
+  TEST_GEN_PROGS_s390x +=3D kvm_create_max_vcpus
+  TEST_GEN_PROGS_s390x +=3D kvm_page_table_test
+  TEST_GEN_PROGS_s390x +=3D rseq_test
+@@@ -177,7 -180,7 +181,8 @@@ TEST_GEN_PROGS_s390x +=3D kvm_binary_stat
+ =20
+  TEST_GEN_PROGS_riscv +=3D demand_paging_test
+  TEST_GEN_PROGS_riscv +=3D dirty_log_test
+ +TEST_GEN_PROGS_riscv +=3D get-reg-list
++ TEST_GEN_PROGS_riscv +=3D guest_print_test
+  TEST_GEN_PROGS_riscv +=3D kvm_create_max_vcpus
+  TEST_GEN_PROGS_riscv +=3D kvm_page_table_test
+  TEST_GEN_PROGS_riscv +=3D set_memory_region_test
+
+--Sig_/W2NakETR8hKNhKhHdAQCB5m
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmTbDU8ACgkQAVBC80lX
-0GyxbwgAolDrn43rWYa9wFP3NZpGFpgbuH8Xz46nqLIeWSNipNVXEY+GALOMMZeF
-xATylozyBZwZ1DE6XVf6gpxxkfeQVYZV5XSsyaVYBbBAph5OaiZVZE23cgBtSuNe
-R8sGFjFlPtDSrIIppNuUGQ3p9hV3VdBzsy9wXBYr/LdnSti+oWEupo13dZHInhWZ
-ebXSFo420MkDUTNNXffxD0xFC1pMS3BYDfQcGafkEJuoivFhBYHOG9bOwtH6by2J
-YcPRYMIerG/IQN8ox4SrpAnQtVRO3DIE1n+Farf+GsWJvBp3p9uc+SfIpvvyx1No
-FdJIdnrXkisDw3sTionXP/fyIixVgA==
-=Squl
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmTbG+MACgkQAVBC80lX
+0Gy0aAf9GiHz2t3t08gWSgD7N5lFVEV7VXHgWOcdBY/zc+r1GEMVdpNdjGtaUGbB
+XsgxJ9egPUlHeRcbYqewqs7eLe13gUlS2lWHoZd7ZVdkN43Q0d8nGGcBypf/ZfnC
+Nv7AJlrFz36AmSHlzoCnDApcQd0cLj9B099o+wIBubGib8bVub1DfyGX2K+JXRJI
+86rpwZJt+KpT+eixMrwwC/C6Aiz2aeKTw0K0vqMd6eolNcj8tPdRcAZXrUARjcOv
+9PZjrVO6TdkFAeq7vqXOid3iOMMOv0wMep1/moFws9+28PwQwNaVByPwSyGdbLy/
+n0ArfZ9C7lJUHHqNSHlA/3NeTbX0rA==
+=XaAv
 -----END PGP SIGNATURE-----
 
---Sig_/UEeRqO3LgQ/SbJ//6wgJrUU--
+--Sig_/W2NakETR8hKNhKhHdAQCB5m--

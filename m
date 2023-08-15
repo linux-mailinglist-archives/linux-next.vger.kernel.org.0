@@ -2,73 +2,76 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C58F77CEB1
-	for <lists+linux-next@lfdr.de>; Tue, 15 Aug 2023 17:08:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D55077CF02
+	for <lists+linux-next@lfdr.de>; Tue, 15 Aug 2023 17:22:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237285AbjHOPIQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 15 Aug 2023 11:08:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55768 "EHLO
+        id S234259AbjHOPVj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 15 Aug 2023 11:21:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237808AbjHOPIG (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 15 Aug 2023 11:08:06 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C312EE
-        for <linux-next@vger.kernel.org>; Tue, 15 Aug 2023 08:08:05 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1bda3d0f0f1so7026835ad.0
-        for <linux-next@vger.kernel.org>; Tue, 15 Aug 2023 08:08:05 -0700 (PDT)
+        with ESMTP id S237979AbjHOPVd (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 15 Aug 2023 11:21:33 -0400
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92E8B1986;
+        Tue, 15 Aug 2023 08:21:31 -0700 (PDT)
+Received: by mail-io1-xd2a.google.com with SMTP id ca18e2360f4ac-7909307ecd1so191486339f.1;
+        Tue, 15 Aug 2023 08:21:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1692112085; x=1692716885;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=3ardLpPzsr7Tjzv/PEhX1ISfceYOB53E6DIF1b0Xw1c=;
-        b=jNIM2oyZSHeFsV5Gq9GM+l1KEzbR200w06JDFZWDa29zAbzwbhXw0BbdFYLwaJUBR1
-         GYvRy88tlJ8Pdk+wbZaj0tynSi5JocEQdUkC/iBWwQA3GXX2GuHSS2dA2dP0+yl+tCz3
-         DGrLFm/H6Tzc7CvWDiJaHYe6rmNNhbls3EhGLAuUX19XeGHQXexfEYyqgcN4ZoTmYtJo
-         RRwnzr6uAENPbmfQS0kNdCGj/p+Md8UeQU6f9mM4OvkKgT5eQQIAVwOEPMDarf6MK4At
-         AE0dL0O/VEJvu0Izd+l+uDe4YLI7gM8Qy0KWwuLbAXwe7rS9CCxDlYPcjBi1RdDToPFo
-         FSFA==
+        d=gmail.com; s=20221208; t=1692112891; x=1692717691;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pixg2IlnzljSoCqHmpHhdY9MlQvI6m+ey5bT+PamgDs=;
+        b=nKaXc9evzl/AAKvWG5961hsTtnzLDGKswb8QjPvSR8GskmEmURxK7Co6SJFNsCkCL7
+         /T4a0R9eJ1iKnfeKX3n8Qgy6sL0GHxymbfdNuKZX+8EBFd4ZzxgUJiHaaob3SBF2qlBU
+         W6fGLJuvO1L/2790w+6FUpEfz+aiyTWbqIhFGitV3Lpj+HEGlUhnW6P6Uv2oRr933Yd/
+         KB71zkXxu7Oz+JxFpduop/90hlqdGrZp3nSVFZcVrDAf4ZERsgMbo94EwdwtOiTqCpho
+         WTlmPcO8gi56pT8GsaygrDUA3vS73LCLpj+7DAl+stXqLA4CwAapm8UH0RTQvYK33LqL
+         Z44g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692112085; x=1692716885;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3ardLpPzsr7Tjzv/PEhX1ISfceYOB53E6DIF1b0Xw1c=;
-        b=F4eRK5Fl7pFPeUOfqDotUmjDIs9b6qMIndOG2gmpBlKSQnPzwhS3SHEAIb5GzklDXT
-         iRujqTaTcxTkLthyEX7luMbSHVxRDgkrkk2jw4H4UrCcF4TDEQiNPb7YmKpL3BKipkDG
-         zTwTpD2Lay+Rdc5UUOfNKCSe3cCx5kqZsuFonYFS+ZjkCl+FwcLUPEd3WPuq6oDYZRGs
-         Sy+d4acmex3Xt4Lc2+FEnoqqGL68EbEPvw9rc6pJFqFNvjeU/+wcfuQieHMVm+YiCgQO
-         3i6vEzpP/QCD9Gl/lT8Pb7QpZREhr93oLJkgjc3jwIzVCNyaqX3q4UBELRq1PqiZNO4t
-         zFBQ==
-X-Gm-Message-State: AOJu0YxFobASTJhI0Kf/BAcDZXc2BngvqZyn2NJpZP+Z9sqqqVbWjv/W
-        lKNo3v31tVnC2wubeSldc5I2vCD3pRvlNSfZCxE=
-X-Google-Smtp-Source: AGHT+IEnuBktlNYwmu21Ts876LBoTJvo25LkSGJ5bY01k3c183yzSE8VYGkQfy1CjhNK7/Fj9wKy7Q==
-X-Received: by 2002:a17:903:190:b0:1b8:35fa:cdcc with SMTP id z16-20020a170903019000b001b835facdccmr15244448plg.5.1692112084669;
-        Tue, 15 Aug 2023 08:08:04 -0700 (PDT)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id 4-20020a170902c14400b001bdeb6bdfbasm3228746plj.241.2023.08.15.08.08.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Aug 2023 08:08:03 -0700 (PDT)
-Message-ID: <c39a3bff-01b9-4007-80ac-00ce2b11a902@kernel.dk>
-Date:   Tue, 15 Aug 2023 09:08:02 -0600
+        d=1e100.net; s=20221208; t=1692112891; x=1692717691;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pixg2IlnzljSoCqHmpHhdY9MlQvI6m+ey5bT+PamgDs=;
+        b=DseyWZTTtZiR6IxRAwxpfBnaGmCiHEB+PsBt/VyX6AklKpS4Axlj5SQiwhz5KO3iNM
+         wUJsSQKThVjhl8+A6wrDw61U/v5rWnINiB+06EPvdvVQVqyWLLT0wq4bbSP4vrwU0T2M
+         DDdk8A5DCOfwUvt7BpKZ7ryMz4rPxY7iYJZ0AiL6qI+RrZb//yUpVMBekgCYdxuHR26u
+         DG8bNpPnqo7snlsjE/ZMKrSG1FJDWmmsDOgvRjjxrlbx37mYYrQF3lQYSbe6wSbBgZ1f
+         5WFZQxDPkvdaJuD7z+3ONCWUNTwkUpV7lMmVkZUxM8Yc8qMgDe/zTYQCrUjfs8BzuJqe
+         gPgw==
+X-Gm-Message-State: AOJu0YzZDMJTG00zNUWn+j3hmsg6/MSCMK44T7ne1M5D8nUED2w2n5Ux
+        VxY46qRewH+OeeRL4FH01SQ=
+X-Google-Smtp-Source: AGHT+IGdndPxxGyaB8/gIup3P1aVlZ0r3NpOO3sUBeJwAucO3w+5ZQuWsm2dXrIDqSNGp+LChEQPfw==
+X-Received: by 2002:a05:6602:3308:b0:787:8d2:f15 with SMTP id b8-20020a056602330800b0078708d20f15mr16338869ioz.8.1692112890812;
+        Tue, 15 Aug 2023 08:21:30 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id x3-20020a6bfe03000000b00785cfdd968bsm4094651ioh.5.2023.08.15.08.21.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Aug 2023 08:21:30 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 15 Aug 2023 08:21:29 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Mark Gross <markgross@kernel.org>,
+        Henning Schild <henning.schild@siemens.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: duplicate patch in the drivers-x86 tree
+Message-ID: <e4eb2acd-7ed4-43f2-af9d-116cec77fc31@roeck-us.net>
+References: <20230815165725.30a01fe9@canb.auug.org.au>
+ <20230815165856.051fb20f@canb.auug.org.au>
+ <2f9489b4-2414-9f03-4f66-9838b8ee6be0@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: Fixes tag needs some work in the block tree
-Content-Language: en-US
-To:     Yu Kuai <yukuai1@huaweicloud.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        "yukuai (C)" <yukuai3@huawei.com>,
-        "song@kernel.org" <song@kernel.org>
-References: <20230815091931.4dd2b277@canb.auug.org.au>
- <8c946512-0cc4-fbc5-ca36-0e2c6d636eb2@huaweicloud.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <8c946512-0cc4-fbc5-ca36-0e2c6d636eb2@huaweicloud.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2f9489b4-2414-9f03-4f66-9838b8ee6be0@redhat.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,35 +79,33 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 8/14/23 9:21 PM, Yu Kuai wrote:
+On Tue, Aug 15, 2023 at 09:59:45AM +0200, Hans de Goede wrote:
 > Hi,
 > 
-> ? 2023/08/15 7:19, Stephen Rothwell ??:
->> Hi all,
->>
->> In commit
->>
->>    71070e7bd25d ("md/raid10: fix a 'conf->barrier' leakage in raid10_takeover()")
->>
->> Fixes tag
->>
->>    Fixes: 4d27e927344a ("md: don't quiesce in mddev_suspend()")
->>
->> has these problem(s):
->>
->>    - Target SHA1 does not exist
+> On 8/15/23 08:58, Stephen Rothwell wrote:
+> > Hi Stephen,
+> > 
+> > On Tue, 15 Aug 2023 16:57:25 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> >>
+> >> Hi all,
+> >>
+> >> The following commit is also in the watchdog tree as a different commit
+> >> (but the same patch):
+> >>
+> >>   3fce06406c59 ("watchdog: make Siemens Simatic watchdog driver default on platform")
+> >>
+> >> This is commit
+> >>
+> >>   926df9ae133d ("watchdog: make Siemens Simatic watchdog driver default on platform")
+> > 
+> > in the watchdog tree.
 > 
-> Sorry about this, the commit was picked from previous md-next branch,
-> and I didn't know that it will change...
+> Guenter, IIRC we agreed that I would merge this one through
+> the pdx86 tree?
+> 
+I thought that applied to the rest of the series. I tagged this patch
+with Reviewed-by: which generally means for Wim to pick it up. Ultimately
+I don't really care either way. I'll drop the patch from my tree.
+Note though that this doesn't mean that Wim will pick up the drop.
 
-It's most likely not your fault, I'm guessing Song rebased that branch
-and this is why the sha changed. Song?
-
-> Is there any way that I can fix this ?
-
-Only way to fix this is if I rewind my branch and Song updates his
-branch to not have this issue, and then sends a new pull request.
-
--- 
-Jens Axboe
-
+Guenter

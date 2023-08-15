@@ -2,47 +2,46 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43A6A77C48C
-	for <lists+linux-next@lfdr.de>; Tue, 15 Aug 2023 02:38:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78BAA77C49C
+	for <lists+linux-next@lfdr.de>; Tue, 15 Aug 2023 02:46:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233317AbjHOAiD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 14 Aug 2023 20:38:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35662 "EHLO
+        id S232235AbjHOAqN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 14 Aug 2023 20:46:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233237AbjHOAh7 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 14 Aug 2023 20:37:59 -0400
+        with ESMTP id S233191AbjHOAqI (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 14 Aug 2023 20:46:08 -0400
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 416C793;
-        Mon, 14 Aug 2023 17:37:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 900A81710;
+        Mon, 14 Aug 2023 17:46:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1692059872;
-        bh=TLQVjY3kxE2Np30YiLY3zv14XDCrBIX0I1ZNA+WIP5w=;
+        s=201702; t=1692060366;
+        bh=me3eybes+zlcQcUJ/EfBqYdNpJbT4a+804ymVsF9GKA=;
         h=Date:From:To:Cc:Subject:From;
-        b=rkzMLqtHuBx6OZizRyf68NlrUy9vyA4jGebOuctXuEcHJY7h+yQKjFqmyqzVKieGK
-         pGvCGJQr/azZBlfSalTVDV6vGhKm8kBWKnuybUwd96gpliNdZHFDswtS8Dk+04jZOS
-         sKK1ORiR036NU7RVT4dPwqMBlMT6YDn/f+XJgEs6UIUtWFC5bZB0U8kywR/ZSSQsI2
-         1pcXsEdpRh71628FjBqQh6msP5U438Pxji+LXG56TodIXatsG9O8V2h8B5qCBXXzaQ
-         S/EwQotBrIzLI64DtB8nEDwV4drN7o8IaM4LD7n8jjBb3xUG4L4MPPs1M4mkTHa06F
-         vXgY/pu69oqcA==
+        b=QnnXLZEFx8Xr2fXzmoPDfZb99yTgP0gAvmhX30Rbm6yt88a1GNSWsillOcwqz6NFv
+         QI6poxt3OiFolNVt1qxP11z7LD9MQS07DEHeOTzJ23Yop0b5rpMpeytVEtGUnY7sCY
+         Qcn1EPL1+hn2BLZLyFeFAlAPVIhvx5oPqlymvIi99+UnqpqkMCWqFrQlw2Ff0KDsk9
+         mmSrIEY/FYFdgxICg3BgdcaQrkekcsnHeWePUt96vJ50DJ9CS0KunVEjD5QcKIDbB/
+         H8Vc3k1PwgL70Z5NwpUjNSWoDSvoq7M6J8FMzQZ+gm6szpuzWp8NPkmcPetgpZzUbX
+         9J+YeSuSB7Fkw==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4RPsmv1Rmxz4wxQ;
-        Tue, 15 Aug 2023 10:37:50 +1000 (AEST)
-Date:   Tue, 15 Aug 2023 10:37:50 +1000
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4RPsyP22Lnz4wb5;
+        Tue, 15 Aug 2023 10:46:05 +1000 (AEST)
+Date:   Tue, 15 Aug 2023 10:46:04 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Sudeep Holla <sudeep.holla@arm.com>,
-        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>
-Cc:     ARM <linux-arm-kernel@lists.infradead.org>,
-        Cristian Marussi <cristian.marussi@arm.com>,
+To:     Guo Ren <guoren@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Guo Ren <guoren@linux.alibaba.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Sibi Sankar <quic_sibis@quicinc.com>
-Subject: linux-next: manual merge of the scmi tree with the arm-soc tree
-Message-ID: <20230815103750.18868b76@canb.auug.org.au>
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>
+Subject: linux-next: manual merge of the csky tree with the mm tree
+Message-ID: <20230815104604.54f65293@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/BU.atDI/bh.fAiIJlX58WK9";
+Content-Type: multipart/signed; boundary="Sig_/GzS8aiehNO2LkT=uczdgajv";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED
@@ -53,82 +52,93 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/BU.atDI/bh.fAiIJlX58WK9
+--Sig_/GzS8aiehNO2LkT=uczdgajv
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the scmi tree got a conflict in:
+Today's linux-next merge of the csky tree got a conflict in:
 
-  drivers/firmware/arm_scmi/perf.c
+  arch/csky/abiv2/cacheflush.c
 
 between commit:
 
-  31c7c1397a33 ("firmware: arm_scmi: Add v3.2 perf level indexing mode supp=
-ort")
+  1222e1310d64 ("csky: implement the new page table range API")
 
-from the arm-soc tree and commit:
+from the mm tree and commit:
 
-  3453de1ec6e4 ("firmware: arm_scmi: Fixup perf power-cost/microwatt suppor=
-t")
+  1362d15ffb59 ("csky: pgtable: Invalidate stale I-cache lines in update_mm=
+u_cache")
 
-from the scmi tree.
+from the csky tree.
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+I fixed it up (I think - see below) and can carry the fix as
+necessary. This is now fixed as far as linux-next is concerned, but any
+non trivial conflicts should be mentioned to your upstream maintainer
+when your tree is submitted for merging.  You may also want to consider
+cooperating with the maintainer of the conflicting tree to minimise any
+particularly complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc drivers/firmware/arm_scmi/perf.c
-index c0cd556fbaae,b887d57aa446..000000000000
---- a/drivers/firmware/arm_scmi/perf.c
-+++ b/drivers/firmware/arm_scmi/perf.c
-@@@ -1092,20 -833,13 +1094,18 @@@ static int scmi_perf_protocol_init(cons
-  	for (domain =3D 0; domain < pinfo->num_domains; domain++) {
-  		struct perf_dom_info *dom =3D pinfo->dom_info + domain;
+diff --cc arch/csky/abiv2/cacheflush.c
+index d05a551af5d5,500eb8f69397..000000000000
+--- a/arch/csky/abiv2/cacheflush.c
++++ b/arch/csky/abiv2/cacheflush.c
+@@@ -16,23 -15,22 +16,22 @@@ void update_mmu_cache_range(struct vm_f
  =20
- -		scmi_perf_domain_attributes_get(ph, domain, dom, version);
- -		scmi_perf_describe_levels_get(ph, domain, dom);
- +		dom->id =3D domain;
- +		scmi_perf_domain_attributes_get(ph, dom, version);
- +		scmi_perf_describe_levels_get(ph, dom, version);
+  	flush_tlb_page(vma, address);
  =20
-  		if (dom->perf_fastchannels)
- -			scmi_perf_domain_init_fc(ph, domain, &dom->fc_info);
- +			scmi_perf_domain_init_fc(ph, dom->id, &dom->fc_info);
-  	}
+ -	if (!pfn_valid(pte_pfn(*pte)))
+ +	if (!pfn_valid(pfn))
+  		return;
  =20
- +	ret =3D devm_add_action_or_reset(ph->dev, scmi_perf_xa_destroy, pinfo);
- +	if (ret)
- +		return ret;
+ -	page =3D pfn_to_page(pte_pfn(*pte));
+ -	if (page =3D=3D ZERO_PAGE(0))
+ +	folio =3D page_folio(pfn_to_page(pfn));
  +
-- 	pinfo->version =3D version;
--=20
-  	return ph->set_priv(ph, pinfo);
+ +	if (test_and_set_bit(PG_dcache_clean, &folio->flags))
+  		return;
+ =20
+ -	if (test_and_set_bit(PG_dcache_clean, &page->flags))
+ -		return;
+ +	for (i =3D 0; i < folio_nr_pages(folio); i++) {
+ +		unsigned long addr =3D (unsigned long) kmap_local_folio(folio,
+ +								i * PAGE_SIZE);
+ =20
+ -	addr =3D (unsigned long) kmap_atomic(page);
+ -
+ -	icache_inv_range(address, address + PAGE_SIZE);
+ -	dcache_wb_range(addr, addr + PAGE_SIZE);
+ -
+ -	kunmap_atomic((void *) addr);
+++		icache_inv_range(address, address + PAGE_SIZE);
+ +		dcache_wb_range(addr, addr + PAGE_SIZE);
+- 		if (vma->vm_flags & VM_EXEC)
+- 			icache_inv_range(addr, addr + PAGE_SIZE);
+ +		kunmap_local((void *) addr);
+ +	}
   }
  =20
+  void flush_icache_deferred(struct mm_struct *mm)
 
---Sig_/BU.atDI/bh.fAiIJlX58WK9
+--Sig_/GzS8aiehNO2LkT=uczdgajv
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmTayN4ACgkQAVBC80lX
-0GyB3Af/bz5tOoFaw/i1eD5zkYGHEsh+wkWyQmnuk9lcP/y0B9vaXCoO9MIe+L6l
-k9Dr8FV0Glu4ou/ozufHBbYSRSDfi+Pxs2V53W9kQpl2U73ZOEnINSYnB1wOJuFy
-AQM8p0LHBpw9lo73XtvzZHFow+e2lu8KphimNet/wPLg0B5suzPSY3gYogSBkk1Y
-AWISgB8y5MpbVpQhBlcP5AOWjlszRDsZ57MM3i8cwtv8DrK+7b6HsHARp01do5PL
-cIRi96vp1xLZ1pC98RsQ7B0gt32yM6GAHoTIQCgQg7LFUAa/lZU1Li4Ayd8sESQO
-wmgdpxpMYxgdfTl6aAQcj8H15Yvlyg==
-=hpvU
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmTayswACgkQAVBC80lX
+0GxXkAf9GMiFShF9ez6ykv7Q6ku8QmQvWbaAzMsvP81f9sfUtEbqbmwwBoB2iFyr
+UsgU0hotkuy0lXCkYXzGIDCP3zTcC2/atiQMrnMPyoQwESp3JR460eFVzaw2MFrj
+2wNCdLubygnoCeLm4eGdHlc+v5YlHRIY7njZdS0C2kaaQg9nQtR+FDVfftC9DcVg
+5NBb3JE5BZaEZn26MTsFhvyQiv7dplZtnpHzdpmFPjPwh+bD4U1LIhzg19UpPeD6
+vz5pF6FA3uQX6Kr87Ax/p4BLSuIDWqWQ4vTyGDxF3GUki/983p5S948GoIPat0hO
+FAzDmkTuMaqQkt8DMjg2e33gPQWxGg==
+=GZzy
 -----END PGP SIGNATURE-----
 
---Sig_/BU.atDI/bh.fAiIJlX58WK9--
+--Sig_/GzS8aiehNO2LkT=uczdgajv--

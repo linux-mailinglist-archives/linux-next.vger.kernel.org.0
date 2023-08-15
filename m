@@ -2,136 +2,147 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A60C77C5FE
-	for <lists+linux-next@lfdr.de>; Tue, 15 Aug 2023 04:38:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D02E77C642
+	for <lists+linux-next@lfdr.de>; Tue, 15 Aug 2023 05:15:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229888AbjHOCh5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 14 Aug 2023 22:37:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53564 "EHLO
+        id S233975AbjHODOj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 14 Aug 2023 23:14:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234385AbjHOChj (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 14 Aug 2023 22:37:39 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D52B9173D;
-        Mon, 14 Aug 2023 19:37:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1692067046;
-        bh=huKMfCWmr5WH8y8VWSx6JW2chuwKekbLHr8GF8q/rg0=;
-        h=Date:From:To:Cc:Subject:From;
-        b=PPcvuPNhH8xLLx593UBSz53n1miJBYeZzga8YfNb4FZUcHrsPyv7LNn1CLNcV9WiC
-         hPTzxUnmS6BfJqSWeKyCaiSBmmWYfhbYPWnfnbtj4UMK2H0dCWFPnKkvTDRKTZYwT1
-         9JJ/TbKp2KvcRfg3gBkRwJ8GI4VTWyvdfVyRIvby9hmXgYFu/giRrnMIQilLz+yHqg
-         KFaGYeIJZDp8bU/O9jRcTOtTtHSOQdRVbLXAfDtlBIVI9zxQzZ9QCCFSIl+0w30d1D
-         SYn3eP3zU0Dnj17W9XDdD4toeOwMJ5O3LioCjeP15nMMQ5qgHJb+IkHZCDbvI9/EAb
-         uSpoJ5/uwy4LA==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        with ESMTP id S233961AbjHODN6 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 14 Aug 2023 23:13:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25E9A1987;
+        Mon, 14 Aug 2023 20:12:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4RPwQt5D2vz4wZx;
-        Tue, 15 Aug 2023 12:37:26 +1000 (AEST)
-Date:   Tue, 15 Aug 2023 12:37:25 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Leon Romanovsky <leon@kernel.org>
-Cc:     Leon Romanovsky <leonro@nvidia.com>,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B3D0C618CD;
+        Tue, 15 Aug 2023 03:12:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17FB1C433C8;
+        Tue, 15 Aug 2023 03:12:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1692069127;
+        bh=OMqKbUb5Z6H+wBW/auUjyZMEYXJpKnpvS6GlVzJnka0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=S6rt+hAuiJV63P1B4FxfZ3NkAMEZaMsUzvqMbltFVK9UvK3EVj82UoXZcMbY2Lcu/
+         vrW3u3PD5MbNGnLCKp3N5e76dPvsAOZpPZTJ54OAG2dha1MC6qHiNxFkMemOIK8Ed7
+         W2J0DELDonLghGJlSWJffW2kQDo46XYSYQAQ+Mpg2ofWH/nY6a1OrdYxs3kvSLa1bS
+         SnWI72RAmHM+/jUJ4o5OTCCWaVQzYwOjVBwQWEUOPjRYe4qYyJY2TfarZpeAFQbv9g
+         3jfJNdU9jQ3wqGrx4pe7S9O/C7XafPQ7rmMlxX7lS6gUlY6l58tkXFqLtHQLnR3sxI
+         wRB+1w9v46+1A==
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-4fe0c566788so7834064e87.0;
+        Mon, 14 Aug 2023 20:12:06 -0700 (PDT)
+X-Gm-Message-State: AOJu0YwxjX660rul9/cMV7y4SAzmutsbJgFkQH2Pqz7FfFEDtV7r+Qnx
+        zZF0eTXplOH7HImWTR8sSjUraLbmY0dz69Itu24=
+X-Google-Smtp-Source: AGHT+IHLO2l2Hzw4JAJnD4ugJfISr9EG03Lgo5HMyI2u2yjH1FtGDSdelHreBc6cS9H/iMVmKoIVS8YOxBXfylTlElU=
+X-Received: by 2002:ac2:4e04:0:b0:4fd:f7b8:555 with SMTP id
+ e4-20020ac24e04000000b004fdf7b80555mr9118198lfr.19.1692069125012; Mon, 14 Aug
+ 2023 20:12:05 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230815104604.54f65293@canb.auug.org.au>
+In-Reply-To: <20230815104604.54f65293@canb.auug.org.au>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Tue, 15 Aug 2023 11:11:52 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTRVG+yX7fktLru4U=OVKrTg73kTR5hirw1hh1P9c+MNOQ@mail.gmail.com>
+Message-ID: <CAJF2gTRVG+yX7fktLru4U=OVKrTg73kTR5hirw1hh1P9c+MNOQ@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the csky tree with the mm tree
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>
+Cc:     Guo Ren <guoren@linux.alibaba.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Patrisious Haddad <phaddad@nvidia.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Zhengchao Shao <shaozhengchao@huawei.com>
-Subject: linux-next: manual merge of the mlx5-next tree with Linus' tree
-Message-ID: <20230815123725.4ef5b7b9@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/aspgHXhiW1RW0x0i5noZGVE";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SORTED_RECIPS,SPF_HELO_PASS,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/aspgHXhiW1RW0x0i5noZGVE
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, Aug 15, 2023 at 8:46=E2=80=AFAM Stephen Rothwell <sfr@canb.auug.org=
+.au> wrote:
+>
+> Hi all,
+>
+> Today's linux-next merge of the csky tree got a conflict in:
+>
+>   arch/csky/abiv2/cacheflush.c
+>
+> between commit:
+>
+>   1222e1310d64 ("csky: implement the new page table range API")
+Could I take this patch into csky next tree to solve the conflict.
 
-Hi all,
+>
+> from the mm tree and commit:
+>
+>   1362d15ffb59 ("csky: pgtable: Invalidate stale I-cache lines in update_=
+mmu_cache")
+>
+> from the csky tree.
+>
+> I fixed it up (I think - see below) and can carry the fix as
+> necessary. This is now fixed as far as linux-next is concerned, but any
+> non trivial conflicts should be mentioned to your upstream maintainer
+> when your tree is submitted for merging.  You may also want to consider
+> cooperating with the maintainer of the conflicting tree to minimise any
+> particularly complex conflicts.
+>
+> --
+> Cheers,
+> Stephen Rothwell
+>
+> diff --cc arch/csky/abiv2/cacheflush.c
+> index d05a551af5d5,500eb8f69397..000000000000
+> --- a/arch/csky/abiv2/cacheflush.c
+> +++ b/arch/csky/abiv2/cacheflush.c
+> @@@ -16,23 -15,22 +16,22 @@@ void update_mmu_cache_range(struct vm_f
+>
+>         flush_tlb_page(vma, address);
+>
+>  -      if (!pfn_valid(pte_pfn(*pte)))
+>  +      if (!pfn_valid(pfn))
+>                 return;
+>
+>  -      page =3D pfn_to_page(pte_pfn(*pte));
+>  -      if (page =3D=3D ZERO_PAGE(0))
+>  +      folio =3D page_folio(pfn_to_page(pfn));
+>  +
+>  +      if (test_and_set_bit(PG_dcache_clean, &folio->flags))
+>                 return;
+>
+>  -      if (test_and_set_bit(PG_dcache_clean, &page->flags))
+>  -              return;
+>  +      for (i =3D 0; i < folio_nr_pages(folio); i++) {
+>  +              unsigned long addr =3D (unsigned long) kmap_local_folio(f=
+olio,
+>  +                                                              i * PAGE_=
+SIZE);
+>
+>  -      addr =3D (unsigned long) kmap_atomic(page);
+>  -
+>  -      icache_inv_range(address, address + PAGE_SIZE);
+>  -      dcache_wb_range(addr, addr + PAGE_SIZE);
+>  -
+>  -      kunmap_atomic((void *) addr);
+> ++              icache_inv_range(address, address + PAGE_SIZE);
+>  +              dcache_wb_range(addr, addr + PAGE_SIZE);
+> -               if (vma->vm_flags & VM_EXEC)
+> -                       icache_inv_range(addr, addr + PAGE_SIZE);
+>  +              kunmap_local((void *) addr);
+>  +      }
+>   }
+>
+>   void flush_icache_deferred(struct mm_struct *mm)
 
-Today's linux-next merge of the mlx5-next tree got a conflict in:
 
-  drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c
 
-between commit:
-
-  aeb660171b06 ("net/mlx5e: fix double free in macsec_fs_tx_create_crypto_t=
-able_groups")
-
-from Linus' tree and commit:
-
-  cb5ebe4896f9 ("net/mlx5e: Move MACsec flow steering operations to be used=
- as core library")
-
-from the mlx5-next tree.
-
-I fixed it up (I removed this file and added the following patch) and
-can carry the fix as necessary. This is now fixed as far as linux-next
-is concerned, but any non trivial conflicts should be mentioned to your
-upstream maintainer when your tree is submitted for merging.  You may
-also want to consider cooperating with the maintainer of the conflicting
-tree to minimise any particularly complex conflicts.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Tue, 15 Aug 2023 12:34:29 +1000
-Subject: [PATCH] fix up for "net/mlx5e: Move MACsec flow steering operation=
-s to be used as core library"
-
-interacting with commit
-
-  aeb660171b06 ("net/mlx5e: fix double free in macsec_fs_tx_create_crypto_t=
-able_groups")
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- drivers/net/ethernet/mellanox/mlx5/core/lib/macsec_fs.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/lib/macsec_fs.c b/driv=
-ers/net/ethernet/mellanox/mlx5/core/lib/macsec_fs.c
-index 2f2cb67717cd..4a078113e292 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/lib/macsec_fs.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/lib/macsec_fs.c
-@@ -278,6 +278,7 @@ static int macsec_fs_tx_create_crypto_table_groups(stru=
-ct mlx5_macsec_flow_table
-=20
- 	if (!in) {
- 		kfree(ft->g);
-+		ft->g =3D NULL;
- 		return -ENOMEM;
- 	}
-=20
 --=20
-2.40.1
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/aspgHXhiW1RW0x0i5noZGVE
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmTa5OYACgkQAVBC80lX
-0Gx1JwgAjN50iYaT5uUmOnH+7QR6KHFwsJn9/7FGS6HQnKpjleknH97SiJM/L/Gq
-xqA424YRtrNFM6dkagD5gXQV2XnxDSLbVvV+HPFIhjOZdoK5QA7IpQpNN1kC02//
-U2YcIUvbqJUQnOHO1Fc5Ftw1jVcagenLlCN3Lf9NQPmmOaIOd138bK1HE22qYdNM
-YLHSBDU6EyNPVfcS+Kb1NQdf4wuBpcP42Qlnd9O2ia9Ej4NwaOT9BxbFmT6shDUk
-U5jtYhYIzT3Md4OqFjDspHIdUvNO9LHqwuqObme7OvtYhFiEb52qT0FhGpWSaCU3
-6Yswbttw3r0NtIn3wVrd4s0yEB5E5g==
-=zvZm
------END PGP SIGNATURE-----
-
---Sig_/aspgHXhiW1RW0x0i5noZGVE--
+Best Regards
+ Guo Ren

@@ -2,64 +2,58 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4366E77C5DD
-	for <lists+linux-next@lfdr.de>; Tue, 15 Aug 2023 04:29:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A60C77C5FE
+	for <lists+linux-next@lfdr.de>; Tue, 15 Aug 2023 04:38:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234205AbjHOC2m (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 14 Aug 2023 22:28:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58392 "EHLO
+        id S229888AbjHOCh5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 14 Aug 2023 22:37:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234220AbjHOC2L (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 14 Aug 2023 22:28:11 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D94810C1;
-        Mon, 14 Aug 2023 19:28:10 -0700 (PDT)
+        with ESMTP id S234385AbjHOChj (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 14 Aug 2023 22:37:39 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D52B9173D;
+        Mon, 14 Aug 2023 19:37:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1692066488;
-        bh=yn404caKCvYzrFWgHbLiy3+pIAut/KwIxxQePdoi2Nw=;
+        s=201702; t=1692067046;
+        bh=huKMfCWmr5WH8y8VWSx6JW2chuwKekbLHr8GF8q/rg0=;
         h=Date:From:To:Cc:Subject:From;
-        b=rj9NU/KPfFwRk1RbnkAeRjSUfYDPMVCHjlZz+NI6rVBEl7il1mUNf9nRfvKXSe3D8
-         ynq5ODoCnL4v0ERdZz1vs7FZhxs7RhbeT5gr3iKAyz8r7bb5WGxe/NG0mKccwtWiRL
-         ABEgf4plKhrOiqN3kFIyuvpyb4jWr2HaGpUR9W5pMKhr82L/3Vj9XkIXKlgHKteQpG
-         eCeroH1XlBYbe/pugYBnNxRHQzUC7dggew74U9jimqBhKhKIFHYlT+FLm1SlfMgFzq
-         SJBxlNc1xyvDcUc0DCHGY6Z4zUbHoz+BSJV5mYhzd3t4p2jyFatJ14K1bybIZNNhuy
-         vSOsB8hqMe2qQ==
+        b=PPcvuPNhH8xLLx593UBSz53n1miJBYeZzga8YfNb4FZUcHrsPyv7LNn1CLNcV9WiC
+         hPTzxUnmS6BfJqSWeKyCaiSBmmWYfhbYPWnfnbtj4UMK2H0dCWFPnKkvTDRKTZYwT1
+         9JJ/TbKp2KvcRfg3gBkRwJ8GI4VTWyvdfVyRIvby9hmXgYFu/giRrnMIQilLz+yHqg
+         KFaGYeIJZDp8bU/O9jRcTOtTtHSOQdRVbLXAfDtlBIVI9zxQzZ9QCCFSIl+0w30d1D
+         SYn3eP3zU0Dnj17W9XDdD4toeOwMJ5O3LioCjeP15nMMQ5qgHJb+IkHZCDbvI9/EAb
+         uSpoJ5/uwy4LA==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4RPwD802qxz4wZx;
-        Tue, 15 Aug 2023 12:28:07 +1000 (AEST)
-Date:   Tue, 15 Aug 2023 12:28:07 +1000
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4RPwQt5D2vz4wZx;
+        Tue, 15 Aug 2023 12:37:26 +1000 (AEST)
+Date:   Tue, 15 Aug 2023 12:37:25 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Leon Romanovsky <leon@kernel.org>,
-        David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Networking <netdev@vger.kernel.org>,
-        Adham Faris <afaris@nvidia.com>,
-        Jianbo Liu <jianbol@nvidia.com>,
-        Leon Romanovsky <leonro@nvidia.com>,
+To:     Leon Romanovsky <leon@kernel.org>
+Cc:     Leon Romanovsky <leonro@nvidia.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Patrisious Haddad <phaddad@nvidia.com>,
-        Saeed Mahameed <saeedm@nvidia.com>
-Subject: linux-next: manual merge of the mlx5-next tree with the net-next
- tree
-Message-ID: <20230815122807.7dddd4a3@canb.auug.org.au>
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Zhengchao Shao <shaozhengchao@huawei.com>
+Subject: linux-next: manual merge of the mlx5-next tree with Linus' tree
+Message-ID: <20230815123725.4ef5b7b9@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/_+jTWPsYMUYkxIPJb6=edsH";
+Content-Type: multipart/signed; boundary="Sig_/aspgHXhiW1RW0x0i5noZGVE";
  protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SORTED_RECIPS,SPF_HELO_PASS,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/_+jTWPsYMUYkxIPJb6=edsH
+--Sig_/aspgHXhiW1RW0x0i5noZGVE
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
@@ -67,69 +61,77 @@ Hi all,
 
 Today's linux-next merge of the mlx5-next tree got a conflict in:
 
-  include/linux/mlx5/driver.h
+  drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c
 
-between commits:
+between commit:
 
-  c8e350e62fc5 ("net/mlx5e: Make TC and IPsec offloads mutually exclusive o=
-n a netdev")
-  1f507e80c700 ("net/mlx5: Expose NIC temperature via hardware monitoring k=
-ernel API")
+  aeb660171b06 ("net/mlx5e: fix double free in macsec_fs_tx_create_crypto_t=
+able_groups")
 
-from the net-next tree and commits:
+from Linus' tree and commit:
 
-  e26051386a94 ("net/mlx5e: Move MACsec flow steering and statistics databa=
-se from ethernet to core")
-  17c5c415b9cb ("net/mlx5: Add RoCE MACsec steering infrastructure in core")
+  cb5ebe4896f9 ("net/mlx5e: Move MACsec flow steering operations to be used=
+ as core library")
 
 from the mlx5-next tree.
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+I fixed it up (I removed this file and added the following patch) and
+can carry the fix as necessary. This is now fixed as far as linux-next
+is concerned, but any non trivial conflicts should be mentioned to your
+upstream maintainer when your tree is submitted for merging.  You may
+also want to consider cooperating with the maintainer of the conflicting
+tree to minimise any particularly complex conflicts.
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Tue, 15 Aug 2023 12:34:29 +1000
+Subject: [PATCH] fix up for "net/mlx5e: Move MACsec flow steering operation=
+s to be used as core library"
+
+interacting with commit
+
+  aeb660171b06 ("net/mlx5e: fix double free in macsec_fs_tx_create_crypto_t=
+able_groups")
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ drivers/net/ethernet/mellanox/mlx5/core/lib/macsec_fs.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/lib/macsec_fs.c b/driv=
+ers/net/ethernet/mellanox/mlx5/core/lib/macsec_fs.c
+index 2f2cb67717cd..4a078113e292 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/lib/macsec_fs.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/lib/macsec_fs.c
+@@ -278,6 +278,7 @@ static int macsec_fs_tx_create_crypto_table_groups(stru=
+ct mlx5_macsec_flow_table
+=20
+ 	if (!in) {
+ 		kfree(ft->g);
++		ft->g =3D NULL;
+ 		return -ENOMEM;
+ 	}
+=20
+--=20
+2.40.1
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc include/linux/mlx5/driver.h
-index e1c7e502a4fc,728bcd6d184c..000000000000
---- a/include/linux/mlx5/driver.h
-+++ b/include/linux/mlx5/driver.h
-@@@ -806,9 -804,12 +806,14 @@@ struct mlx5_core_dev=20
-  	struct mlx5_rsc_dump    *rsc_dump;
-  	u32                      vsc_addr;
-  	struct mlx5_hv_vhca	*hv_vhca;
- -	struct mlx5_thermal	*thermal;
- +	struct mlx5_hwmon	*hwmon;
- +	u64			num_block_tc;
- +	u64			num_block_ipsec;
-+ #ifdef CONFIG_MLX5_MACSEC
-+ 	struct mlx5_macsec_fs *macsec_fs;
-+ 	/* MACsec notifier chain to sync MACsec core and IB database */
-+ 	struct blocking_notifier_head macsec_nh;
-+ #endif
-  };
- =20
-  struct mlx5_db {
-
---Sig_/_+jTWPsYMUYkxIPJb6=edsH
+--Sig_/aspgHXhiW1RW0x0i5noZGVE
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmTa4rcACgkQAVBC80lX
-0GwJYAf9HMqfXCGysiiD9uPkWD3jZqMCASMxQDItmcjxYy0A4jCKDKzX8LQarfKT
-7uuOZRmqAlB9MYo2QjZV1MNrxHRUT8Df/hf1tdd/RdSSWo0NWuQuw6i/DVZxdyM3
-uViQFp9h/Eg4LCTkDhdlr+i9Tccdi52O6PhcRnA7F9YmKjqlBXGKJoCd5rPtKm3h
-gJdef1Hp2m+efR+Kwu2Qj337HCY2nvEldD9FA9KB5SKcJ4TFo5HcttASU4FC4M8n
-GLJn0xUiaxU6NIx7kQUvg3PTnJF/59VGGjQogE5Yfjh8xhqAqAAY/1msRAkV88Qs
-q08Pv/Mw05PyWOwpRCp8DuqNRAJZVQ==
-=eB3f
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmTa5OYACgkQAVBC80lX
+0Gx1JwgAjN50iYaT5uUmOnH+7QR6KHFwsJn9/7FGS6HQnKpjleknH97SiJM/L/Gq
+xqA424YRtrNFM6dkagD5gXQV2XnxDSLbVvV+HPFIhjOZdoK5QA7IpQpNN1kC02//
+U2YcIUvbqJUQnOHO1Fc5Ftw1jVcagenLlCN3Lf9NQPmmOaIOd138bK1HE22qYdNM
+YLHSBDU6EyNPVfcS+Kb1NQdf4wuBpcP42Qlnd9O2ia9Ej4NwaOT9BxbFmT6shDUk
+U5jtYhYIzT3Md4OqFjDspHIdUvNO9LHqwuqObme7OvtYhFiEb52qT0FhGpWSaCU3
+6Yswbttw3r0NtIn3wVrd4s0yEB5E5g==
+=zvZm
 -----END PGP SIGNATURE-----
 
---Sig_/_+jTWPsYMUYkxIPJb6=edsH--
+--Sig_/aspgHXhiW1RW0x0i5noZGVE--

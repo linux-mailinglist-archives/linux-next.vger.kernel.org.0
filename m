@@ -2,47 +2,47 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A41877C3E2
-	for <lists+linux-next@lfdr.de>; Tue, 15 Aug 2023 01:20:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2ED677C44A
+	for <lists+linux-next@lfdr.de>; Tue, 15 Aug 2023 02:05:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232221AbjHNXUC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 14 Aug 2023 19:20:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45856 "EHLO
+        id S233578AbjHOAE4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 14 Aug 2023 20:04:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230102AbjHNXTf (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 14 Aug 2023 19:19:35 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DC5610F4;
-        Mon, 14 Aug 2023 16:19:34 -0700 (PDT)
+        with ESMTP id S233730AbjHOAEw (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 14 Aug 2023 20:04:52 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7EB6172B;
+        Mon, 14 Aug 2023 17:04:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1692055173;
-        bh=+wq60YYgGWa37mOQaoEIifIbuef6529sNDX/3ujO8Ao=;
+        s=201702; t=1692057882;
+        bh=RqKH9GvNOBO88FcPOixfV/reYKdOYPGTboDEsqLP7NA=;
         h=Date:From:To:Cc:Subject:From;
-        b=LwV8hBXSQZT02KatvEayYUyn6X2+f23VS2oILph4ufQOxa2M1q5GuAfv6wR/aJ0vZ
-         q8jESw34w39KqIFxEqyLLAUv02sduCTswQjv5DUxjgTb9itquvc/Z6OPvNeprJNX8x
-         2DjXuDoSoxnhbdnB/TUj2hXRXvSf7qR8rB6/YFtGohpgh7sL/jKf8Fy2ynjNGfA1v3
-         7AZ0Dtdgz33fn9tkHeGBnGBo2H3X49KHJN1XLf1hsCv5ei/O3mYLYl9sgBONoLm2A/
-         UgaS7pQGT2oanbFUd54N/akXKm3hGdlxN5ZpMUWcxbMWH8mg7asiNuCKmj/s56fCUn
-         ESEsUiB7h6PKA==
+        b=PMN8q18wwjiEAShgQ2fwTZ3w8QpEI9iJe1okrGCK09JBw3trnA8YRefJN+NDSHcjP
+         KsvviVPCH/IvraC3Rw+S/3NWMWQ97UuxiNzMQSQI90PCCANd8OoLg9G7VoEPuUE8lO
+         L+YSMnMrP+mcgHa7GV2d0kQDymNiEQP9IPNt6ku58fEfeSwtmlPpXrZbIlfFBcvfhd
+         4sZT4BrSqMHVKanVZaMkyg58ICIZFuRBZKiz/lyrzJKzhgk1IHu0pFuKljdo5KXgPL
+         jdcmFrJEM8eyJKARbXlioa2Uimc1RI8HRMOaE0UdiKySLhN4CXn5GNWYxQmH2XNhZE
+         +rdRZc/ztu8eA==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4RPr2X41zKz4wZt;
-        Tue, 15 Aug 2023 09:19:32 +1000 (AEST)
-Date:   Tue, 15 Aug 2023 09:19:31 +1000
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4RPs2d4Mcwz4wZt;
+        Tue, 15 Aug 2023 10:04:41 +1000 (AEST)
+Date:   Tue, 15 Aug 2023 10:04:40 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Yu Kuai <yukuai3@huawei.com>,
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Baoquan He <bhe@redhat.com>, Helge Deller <deller@gmx.de>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the block tree
-Message-ID: <20230815091931.4dd2b277@canb.auug.org.au>
+Subject: linux-next: manual merge of the mm-stable tree with Linus' tree
+Message-ID: <20230815100440.7e535779@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Tb0WqOr1jF6Z+H89ZGzY9_i";
+Content-Type: multipart/signed; boundary="Sig_/P67_g6EGmJYulcQz.UlqSjI";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,47 +50,52 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/Tb0WqOr1jF6Z+H89ZGzY9_i
+--Sig_/P67_g6EGmJYulcQz.UlqSjI
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-In commit
+Today's linux-next merge of the mm-stable tree got a conflict in:
 
-  71070e7bd25d ("md/raid10: fix a 'conf->barrier' leakage in raid10_takeove=
-r()")
+  arch/parisc/mm/ioremap.c
 
-Fixes tag
+between commit:
 
-  Fixes: 4d27e927344a ("md: don't quiesce in mddev_suspend()")
+  b873bde58578 ("parisc: ioremap: Fix sparse warnings")
 
-has these problem(s):
+from Linus' tree and commit:
 
-  - Target SHA1 does not exist
+  5c28c54a8229 ("parisc: mm: convert to GENERIC_IOREMAP")
 
-Maybe you meant
+from the mm-stable tree.
 
-Fixes: b39f35ebe86d ("md: don't quiesce in mddev_suspend()")
+I fixed it up (I just used the latter as it has removed the lines
+modified by the former) and can carry the fix as necessary. This is now
+fixed as far as linux-next is concerned, but any non trivial conflicts
+should be mentioned to your upstream maintainer when your tree is
+submitted for merging.  You may also want to consider cooperating with
+the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/Tb0WqOr1jF6Z+H89ZGzY9_i
+--Sig_/P67_g6EGmJYulcQz.UlqSjI
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmTatoMACgkQAVBC80lX
-0Gx7aQf/Q9R3FPjlsji2FH1todQkCqWiPz+aLjQE0vZnegtVUtFnKM1ZllfY8BIW
-SugXyBYZfqYMS86dlCDOG4gYeVnlapUDwFjoQHKG/r8ZBTgltCluFfUgI3HDOgkT
-pni5CNzTxfiZuFBFi/lXzpAmpBV66cZ1UCiYHWxmlXZ55fhtR6Q7bTKA1BCGVEhQ
-vJFyzqHGUqcAMC09mmgvzx4jeAWWDJHaVz3235n6Qjbt5fwd/lVgQIk7DTTO7HSr
-ixfCLzL/P10Ru6sCOy3YIoPksPk4/KwT+vkJXC+RnQgYm8ThdCmcRYg0QfXtLlvA
-4u5BgHKAXYa6voShCwbQtB9AZAbMlw==
-=2xNZ
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmTawRgACgkQAVBC80lX
+0GwcJAf8CdgXqSSqXpleqRM2K7kuka0lSJm0GCC9zv2b2RVJ59hE5b7AXRO3Nn3K
+FPTNQaxJNNkGZUg3WlENPvBfjWRcuISFk9GB689ZGS1RtbnIXQ+UTofCBKKMflW3
+/vdR/UwgLpWTQezGcI+jDumGw/NkGN2hg89PJa9HaY/IU6WXAvn1SA5LljU7AMDa
+BeDFRWAw5rQhKl2mphATOufkhnnshimGtGEzZVAcZbOlFYKzeU0VJ+jrK9uVqTvA
+QD+Ejr+mpRlF08CXqIVvfKQe5VJRqC9HclxmCtdjPLySmYfAZ5Sw1uNf6MvAJP66
+QOPbKvxecRGedq7j/5dyndxcqgp4Og==
+=P15i
 -----END PGP SIGNATURE-----
 
---Sig_/Tb0WqOr1jF6Z+H89ZGzY9_i--
+--Sig_/P67_g6EGmJYulcQz.UlqSjI--

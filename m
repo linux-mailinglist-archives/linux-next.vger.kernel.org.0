@@ -2,47 +2,52 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2593077D720
-	for <lists+linux-next@lfdr.de>; Wed, 16 Aug 2023 02:39:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 468F877D7F7
+	for <lists+linux-next@lfdr.de>; Wed, 16 Aug 2023 03:58:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236141AbjHPAic (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 15 Aug 2023 20:38:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55094 "EHLO
+        id S240871AbjHPB6Q (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 15 Aug 2023 21:58:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240831AbjHPAiF (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 15 Aug 2023 20:38:05 -0400
+        with ESMTP id S241171AbjHPB5s (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 15 Aug 2023 21:57:48 -0400
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 935B5BF;
-        Tue, 15 Aug 2023 17:38:02 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A29AC2137;
+        Tue, 15 Aug 2023 18:57:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1692146277;
-        bh=rosYWlrI4t8faM1fS957HJl/UNmmlb1l7OR8EeMZW24=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Vv+64eFWO4zKY0uvcFyF0dpfMVO6vG6OVQ3u5fy4g5897tNVJlygkniN2fJzwO+fa
-         6Lf5jiWzSgNj9SGsD+UlVrN2fODZ9oN086h3MXAWQ5Dofs1uLZaRx0/ZUkQ0CqbY0q
-         ybIZD/zn5F/R/gDZz+cQ2by0Asd8CZVrOvSPJMZSK3356Ngk5wV+7Q/VKsRQHgJDg7
-         NffUoD2GHzYp8UpPZfm1rEbszm2waZYIruyroEySohwoK7yk6NrGonJ7/B+Ajo6Uw9
-         xLHMsyN3wQGLoH09KQU3ZPD42dHdqh2R3ujs+jXE+z6xQjsCt21Fte/lqSlU+feZqo
-         0e+jAc77jY9qA==
+        s=201702; t=1692151046;
+        bh=VMPnkY84RVO6NpMoKoyotthWhgdo+45obicNwcXFlrk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=qi3NAH7XvzfWYUbb7VIBKAqT7Xvdbxiv1si5fRcUHPdE6RM3JvtKGBG/mGTi71QhI
+         T8zg1EYhb9dyB1mOwV36a5ZUaKpE1diQ4XcxuTiXUZ3ixm0/8WAIEAvjx9tNE7dys0
+         IsPjgcGKiFYuNb4o69TI9Hi98Tfv74V3l51jp3TpsItwmaFdoR7Jh8sYUwtuMSlf01
+         FKqhSbeNpkfoqvP0+gxT3aCHB4jHwWwGrVpaA/Q3+Ouu0h+C3OxpMajqip+JVrYRlk
+         x0V8DVeShoZRdRH0k11Q977ZN74fqBm1D66+5n9JHrvRX3D1+1me1TAj9Oc5ZGDbmQ
+         Krlex9UgJNiRA==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4RQTkX249Bz4wxN;
-        Wed, 16 Aug 2023 10:37:55 +1000 (AEST)
-Date:   Wed, 16 Aug 2023 10:37:51 +1000
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4RQWVF5rzfz4wxm;
+        Wed, 16 Aug 2023 11:57:25 +1000 (AEST)
+Date:   Wed, 16 Aug 2023 11:57:24 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jan Kara <jack@suse.cz>
-Cc:     Georg Ottinger <g.ottinger@gmx.at>,
+To:     Dave Airlie <airlied@redhat.com>
+Cc:     Alex Deucher <alexdeucher@gmail.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Lijo Lazar <lijo.lazar@amd.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the ext3 tree
-Message-ID: <20230816103751.13f217a8@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        DRI <dri-devel@lists.freedesktop.org>
+Subject: Re: linux-next: build warning after merge of the amdgpu tree
+Message-ID: <20230816115724.2671a521@canb.auug.org.au>
+In-Reply-To: <20230815210747.6c409362@canb.auug.org.au>
+References: <20230815210747.6c409362@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/2aLrO901fVUIKWWqFTtcN/5";
+Content-Type: multipart/signed; boundary="Sig_/hLaiN2hlm7tF2C7EDsF6Q3d";
  protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,85 +55,49 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/2aLrO901fVUIKWWqFTtcN/5
+--Sig_/hLaiN2hlm7tF2C7EDsF6Q3d
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the ext3 tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+On Tue, 15 Aug 2023 21:07:47 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> After merging the amdgpu tree, today's linux-next build (htmldocs)
+> produced this warning:
+>=20
+> drivers/gpu/drm/amd/amdgpu/amdgpu_device.c:1: warning: 'product_name' not=
+ found
+> drivers/gpu/drm/amd/amdgpu/amdgpu_device.c:1: warning: 'product_name' not=
+ found
+> drivers/gpu/drm/amd/amdgpu/amdgpu_device.c:1: warning: 'serial_number' no=
+t found
+>=20
+> Introduced by commit
+>=20
+>   7957ec80ef97 ("drm/amdgpu: Add FRU sysfs nodes only if needed")
 
-In file included from include/linux/kernel.h:30,
-                 from arch/x86/include/asm/percpu.h:27,
-                 from arch/x86/include/asm/preempt.h:6,
-                 from include/linux/preempt.h:79,
-                 from include/linux/spinlock.h:56,
-                 from include/linux/wait.h:9,
-                 from include/linux/wait_bit.h:8,
-                 from include/linux/fs.h:6,
-                 from include/linux/highmem.h:5,
-                 from include/linux/bvec.h:10,
-                 from include/linux/blk_types.h:10,
-                 from include/linux/buffer_head.h:12,
-                 from fs/ext2/xattr.c:57:
-fs/ext2/xattr.c: In function 'ext2_xattr_set2':
-fs/ext2/xattr.c:748:42: error: format '%d' expects argument of type 'int', =
-but argument 2 has type 'ext2_fsblk_t' {aka 'long unsigned int'} [-Werror=
-=3Dformat=3D]
-  748 |                         ea_idebug(inode, "creating block %d", block=
-);
-      |                                          ^~~~~~~~~~~~~~~~~~~  ~~~~~
-      |                                                               |
-      |                                                               ext2_=
-fsblk_t {aka long unsigned int}
-include/linux/printk.h:427:25: note: in definition of macro 'printk_index_w=
-rap'
-  427 |                 _p_func(_fmt, ##__VA_ARGS__);                      =
-     \
-      |                         ^~~~
-include/linux/printk.h:129:17: note: in expansion of macro 'printk'
-  129 |                 printk(fmt, ##__VA_ARGS__);             \
-      |                 ^~~~~~
-fs/ext2/xattr.c:88:33: note: in expansion of macro 'no_printk'
-   88 | # define ea_idebug(inode, f...) no_printk(f)
-      |                                 ^~~~~~~~~
-fs/ext2/xattr.c:748:25: note: in expansion of macro 'ea_idebug'
-  748 |                         ea_idebug(inode, "creating block %d", block=
-);
-      |                         ^~~~~~~~~
-fs/ext2/xattr.c:748:59: note: format string is defined here
-  748 |                         ea_idebug(inode, "creating block %d", block=
-);
-      |                                                          ~^
-      |                                                           |
-      |                                                           int
-      |                                                          %ld
-
-Caused by commit
-
-  38e38567c5bd ("ext2: fix datatype of block number in ext2_xattr_set2()")
-
-I have used the ext3 tree from next-20230815 for today.
+The above commit is now in the drm tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/2aLrO901fVUIKWWqFTtcN/5
+--Sig_/hLaiN2hlm7tF2C7EDsF6Q3d
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmTcGl8ACgkQAVBC80lX
-0Gxc2gf/SvEty4U6GCMjGxljcgLN3o7dIZf6R7sYQzL2Lk7FGGFHdEkYdDUPXWfE
-cD3tSC4hKDl1QBQGbvm4cy2fU7ZtafpCg+YuQdlBpmzMtKPDsGTTnDv4ZhEZGwx1
-RtGQpVX3xcF5ApeXbpZ0ARrOvn3ixOlw9ke2+qRLsZA/S3/G7C9MnwmNMZrOOUeG
-8e4tT1IX2qbwiPZc9IFdFzqdiTLgwJ4KNOZDybtqpYTfC/jBFbt68wcfJa7TwzxX
-ip/7mcJnzX/CI8IlkHW10YOBbE0vuRcaZe6na3wRTmyX/khNaZTGpEo97cOAEwAo
-v/7vzuqD6i8eXHURYWqrnLT8rUfJmg==
-=9ZPO
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmTcLQUACgkQAVBC80lX
+0Gx4cAf/XHH+bTc/XVcVq6O0qqDdDZhcAHicG0j2VqCq0oEEqdqaUDiWy9qlF3Vk
+vbbl3bzPEQpthRxaTIenrjnpKPqZmbK3mRX+U6oncMonzm4PyxhcG8LZrythdq6z
+gTAJxcuYB+PCc0q69DrBVXn0k00SiG60WPra6W4KiZTrrn24mNI89YzO5C88m0xr
+fujY7Yaaz4dcfon155dpROtOsl8W6Klha/xKXW+c6w3JN7UuJOCQBrSgxa2ZNy0g
+Xt7fBwD6j13fe/uoW66mPIPCb1iAzWn7I3hllP8W+hbUw8OF35SlwqFwDIHxF8Tu
+fLEokVYBM+TkRH2kxzF3959JSgyFqw==
+=ts9/
 -----END PGP SIGNATURE-----
 
---Sig_/2aLrO901fVUIKWWqFTtcN/5--
+--Sig_/hLaiN2hlm7tF2C7EDsF6Q3d--

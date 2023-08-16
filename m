@@ -2,204 +2,95 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AD2477E3CB
-	for <lists+linux-next@lfdr.de>; Wed, 16 Aug 2023 16:40:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E8E277E98C
+	for <lists+linux-next@lfdr.de>; Wed, 16 Aug 2023 21:22:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343720AbjHPOjs (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 16 Aug 2023 10:39:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37234 "EHLO
+        id S1345207AbjHPTVo (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 16 Aug 2023 15:21:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343739AbjHPOjT (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 16 Aug 2023 10:39:19 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1851E2723
-        for <linux-next@vger.kernel.org>; Wed, 16 Aug 2023 07:38:50 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id 98e67ed59e1d1-26b0b4a7cccso4500254a91.1
-        for <linux-next@vger.kernel.org>; Wed, 16 Aug 2023 07:38:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20221208.gappssmtp.com; s=20221208; t=1692196728; x=1692801528;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=z7kyCuHl1t/gCCGpNTbA3hwFj/lf6SuaKvtbsxGuDBs=;
-        b=dZxL0Ptmo/RfqSZAnaNdMqEON3wvqTtz9rCCZbGwRlxrXd7njXeZ9MC0HoDMQnzbMm
-         Mbp7gkbEr8As7DndYa19Nv36eYd2hToSSCFzF826MiTxJFQPanB3TDkisU5ug1n2xO0x
-         lqvfBU8gjYGcjvzm7z1KhnYi76zAKQMvLjSkKN8VKcgO7yrfcLxnnczFGmL7s8fYvGKe
-         iupXY/7su7eB4Qp8Ot15WegMitq0aXkC7C2B4amBqtpQq9iCTqbSvz7oVYvokSqAF4SL
-         qE7Cmnt2iThlim9z5xca3mEZ27llu2nfrUpa7hwX8WY7UkN0OSfjH/LjoRTW/fMpY9+M
-         GNdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692196728; x=1692801528;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=z7kyCuHl1t/gCCGpNTbA3hwFj/lf6SuaKvtbsxGuDBs=;
-        b=bI7SKlSN2wSb2ielr/h9Xgp2ugky673quFAtCkDObvStfC13Ku9ea1JX8kc2NUtmPg
-         lCayv0QFmH204Z0NawSZgpWNkNIWzCmMX2y7A+MPwa/sN4ibPizu4XAL/FSwU5aIKCAg
-         1FmcqGgm3st9mD+U0g6EZ1j2/GfdnRSj9Sq0SPL0AijE8f8vDR+lgSSxCZhP9U8O/8HU
-         T/ZArU8rhpnjkppOAencDz3QBunCOPtZsw5oRoZED7us39XjWrjgeFyXrfxcIzM5+4ds
-         Dn9ZSrImAxs9bospXL+KVJRtfGXbRRqKz4NPodXuAN4j+v/tsYnJwG8E3AsstA22RGvK
-         mC5g==
-X-Gm-Message-State: AOJu0YySHDZ5W8BzL5eHiV7gahq76OnSx9934Jfu4IM+D9vGxYSuuRuk
-        S9FVBCDuRS410AN/CivX6TD/Bg==
-X-Google-Smtp-Source: AGHT+IG9lm23RRLom/xb7C80klG2aDXB0ZwUgcZV4fsV/hyXYHdBd19S4I3YH9SwHqrCXPj4TdemSQ==
-X-Received: by 2002:a17:90a:f982:b0:26b:4e59:57e7 with SMTP id cq2-20020a17090af98200b0026b4e5957e7mr1730234pjb.43.1692196727793;
-        Wed, 16 Aug 2023 07:38:47 -0700 (PDT)
-Received: from localhost ([135.180.227.0])
-        by smtp.gmail.com with ESMTPSA id gi23-20020a17090b111700b0025645ce761dsm13120399pjb.35.2023.08.16.07.38.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Aug 2023 07:38:47 -0700 (PDT)
-Date:   Wed, 16 Aug 2023 07:38:47 -0700 (PDT)
-X-Google-Original-Date: Wed, 16 Aug 2023 07:38:45 PDT (-0700)
-Subject:     Re: [PATCH 00/17] -Wmissing-prototype warning fixes
-In-Reply-To: <20230810141947.1236730-1-arnd@kernel.org>
-CC:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>, mattst88@gmail.com,
-        vgupta@kernel.org, linux@armlinux.org.uk,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, guoren@kernel.org,
-        bcain@quicinc.com, chenhuacai@kernel.org, kernel@xen0n.name,
-        geert@linux-m68k.org, monstr@monstr.eu, tsbogend@alpha.franken.de,
-        dinguyen@kernel.org, jonas@southpole.se,
-        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
-        James.Bottomley@HansenPartnership.com, deller@gmx.de,
-        mpe@ellerman.id.au, christophe.leroy@csgroup.eu, hca@linux.ibm.com,
-        glaubitz@physik.fu-berlin.de, x86@kernel.org, bp@alien8.de,
-        jcmvbkbc@gmail.com, axboe@kernel.dk, sudipm.mukherjee@gmail.com,
-        martin.petersen@oracle.com, richard@nod.at, bhelgaas@google.com,
-        masahiroy@kernel.org, nathan@kernel.org, ndesaulniers@google.com,
-        linux@roeck-us.net, Stephen Rothwell <sfr@canb.auug.org.au>,
-        linux-next@vger.kernel.org, linux-alpha@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-trace-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-kbuild@vger.kernel.org
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     arnd@kernel.org
-Message-ID: <mhng-ce493a2d-71e9-440f-84d0-522a4f694bbe@palmer-ri-x1c9>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        with ESMTP id S1345822AbjHPTVc (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 16 Aug 2023 15:21:32 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 566ED2712;
+        Wed, 16 Aug 2023 12:21:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=WOFR2dyMXGgZOwEoo4r/Gt4dkAbaIPtVpYgYz2QKgAs=; b=T+BrsXdRCiFOaTl9HYTjeC7onn
+        55EMZM5LqF/qaKh15MGH9e44CrEHqARQgmpTMamSyBJe3tj1CGoNNudd/uSabZNEK1j3ugm3P7lfl
+        0861tlANnwZNgkt2D3XOowEKW5KYCykbb1M8ZYQiyR4Wc3ytyW8JtnpR/S8+IfA9ZMnJzzhMzEzKl
+        yGSJDJDGw35X6l+0C8VdOmAx2puHY3bZXq6g3SGijsKVX1/UjLF+Acba6JayZSqqT5Q+AlOAklepI
+        XajZjtLEZKsl0TvrIwUcld9jtcRNvCYaV0LYS3QEAbW2H0SYne/RCOpD7cqzbdavuK21q0KfUtunO
+        GAfne/HA==;
+Received: from [2601:1c2:980:9ec0::2764]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qWM58-004sgL-1j;
+        Wed, 16 Aug 2023 19:21:26 +0000
+Message-ID: <5c8f7140-2121-2468-9b3f-aa8191b3e63c@infradead.org>
+Date:   Wed, 16 Aug 2023 12:21:25 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.14.0
+Subject: Re: [PATCH 2/2] media: ivsc: Add ACPI dependency
+Content-Language: en-US
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        linux-media@vger.kernel.org
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-next@vger.kernel.org, Wentong Wu <wentong.wu@intel.com>,
+        Zhifeng Wang <zhifeng.wang@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+References: <20230816133526.3859456-1-sakari.ailus@linux.intel.com>
+ <20230816133526.3859456-3-sakari.ailus@linux.intel.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20230816133526.3859456-3-sakari.ailus@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, 10 Aug 2023 07:19:18 PDT (-0700), arnd@kernel.org wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> Most of the patches I sent so far for the -Wmissing-prototype warnings
-> have made it into linux-next now. There are a few that I'm resending
-> now as nobody has picked them up, and then a number of fixes that I
-> found while test-building across all architectures rather than just the
-> ones I usually test.
->
-> The first 15 patches in this series should be uncontroversial, so
-> I expect that either a subsystem maintainer or Andrew Morton can
-> apply these directly.
->
-> For the last two patches, these might still need some debate about how
-> to handle them. I added a Kconfig option to turn off most of the missing
-> prototype warnings in the architectures that nobody has fixed yet,
-> see patch 16 for those. The last patch does cause some known warnings
-> and likely unknown ones for architectures other than x86 and arm,
-> so applying it now will bring new problems, but not applying it also
-> means that new warnings creep in, so I think this is mainly a question
-> of what the best timing is for having this in linux-next.
->
-> Arnd Bergmann (17):
->   [RESEND] jffs2: mark __jffs2_dbg_superblock_counts() static
->   [RESEND] irq_work: consolidate arch_irq_work_raise prototypes
->   [RESEND] ida: make 'ida_dump' static
->   pci: sysfs: move declarations to linux/pci.h
->   swim3: mark swim3_init() static
->   macintosh/ams: mark ams_init() static
->   scsi: qlogicpti: mark qlogicpti_info() static
->   microblaze: mark flush_dcache_folio() inline
->   parport: gsc: mark init function static
->   zorro: include zorro.h in names.c
->   scsi: gvp11: remove unused gvp11_setup() function
->   time: make sysfs_get_uname() function visible in header
->   stackleak: add declarations for global functions
->   kprobes: unify kprobes_exceptions_nofify() prototypes
->   arch: fix asm-offsets.c building with -Wmissing-prototypes
->   [RFC] arch: turn -Wmissing-prototypes off conditionally
->   [RFC] Makefile.extrawarn: turn on missing-prototypes again
->
->  arch/alpha/Kbuild                        |  2 ++
->  arch/alpha/include/asm/pci.h             |  3 ---
->  arch/alpha/kernel/asm-offsets.c          |  2 +-
->  arch/alpha/lib/Makefile                  |  1 +
->  arch/arc/Kbuild                          |  2 ++
->  arch/arc/include/asm/kprobes.h           |  3 ---
->  arch/arm/include/asm/irq_work.h          |  2 --
->  arch/arm/include/asm/kprobes.h           |  2 --
->  arch/arm64/include/asm/irq_work.h        |  2 --
->  arch/arm64/include/asm/kprobes.h         |  2 --
->  arch/csky/Kbuild                         |  2 ++
->  arch/csky/include/asm/irq_work.h         |  2 +-
->  arch/hexagon/Kbuild                      |  2 ++
->  arch/ia64/Kbuild                         |  2 ++
->  arch/ia64/include/asm/kprobes.h          |  2 --
->  arch/ia64/kernel/asm-offsets.c           |  2 +-
->  arch/ia64/lib/Makefile                   |  1 +
->  arch/loongarch/Kbuild                    |  2 ++
->  arch/loongarch/kernel/asm-offsets.c      | 12 ++++++++++++
->  arch/m68k/Kbuild                         |  2 ++
->  arch/m68k/lib/Makefile                   |  1 +
->  arch/microblaze/Kbuild                   |  2 ++
->  arch/microblaze/include/asm/cacheflush.h |  2 +-
->  arch/mips/Kbuild                         |  2 ++
->  arch/mips/boot/compressed/Makefile       |  3 ++-
->  arch/mips/include/asm/kprobes.h          |  2 --
->  arch/nios2/Kbuild                        |  2 ++
->  arch/nios2/lib/Makefile                  |  1 +
->  arch/openrisc/Kbuild                     |  2 ++
->  arch/parisc/Kbuild                       |  2 ++
->  arch/parisc/lib/Makefile                 |  1 +
->  arch/powerpc/include/asm/irq_work.h      |  1 -
->  arch/powerpc/include/asm/kprobes.h       |  2 --
->  arch/riscv/include/asm/irq_work.h        |  2 +-
->  arch/s390/include/asm/irq_work.h         |  2 --
->  arch/s390/include/asm/kprobes.h          |  2 --
->  arch/sh/Kbuild                           |  2 ++
->  arch/sh/boot/compressed/Makefile         |  1 +
->  arch/sh/include/asm/kprobes.h            |  2 --
->  arch/sparc/Kbuild                        |  2 ++
->  arch/sparc/include/asm/kprobes.h         |  2 --
->  arch/sparc/kernel/asm-offsets.c          | 13 ++-----------
->  arch/sparc/lib/Makefile                  |  1 +
->  arch/sparc/prom/Makefile                 |  1 +
->  arch/x86/include/asm/irq_work.h          |  1 -
->  arch/x86/include/asm/kprobes.h           |  2 --
->  arch/xtensa/Kbuild                       |  2 ++
->  arch/xtensa/boot/lib/Makefile            |  2 ++
->  drivers/block/swim3.c                    |  2 +-
->  drivers/macintosh/ams/ams-core.c         |  2 +-
->  drivers/parport/parport_gsc.c            |  2 +-
->  drivers/scsi/gvp11.c                     |  5 -----
->  drivers/scsi/qlogicpti.c                 |  2 +-
->  drivers/zorro/names.c                    |  1 +
->  fs/jffs2/debug.c                         |  2 +-
->  include/linux/irq_work.h                 |  3 +++
->  include/linux/kprobes.h                  |  4 ++++
->  include/linux/pci.h                      |  5 +++++
->  include/linux/stackleak.h                |  6 ++++++
->  init/Kconfig                             | 10 ++++++++++
->  kernel/time/tick-internal.h              |  3 ++-
->  lib/test_ida.c                           |  2 +-
->  scripts/Makefile.extrawarn               |  5 +++--
->  63 files changed, 101 insertions(+), 63 deletions(-)
 
-Acked-by: Palmer Dabbelt <palmer@rivosinc.com> # RISC-V
+
+On 8/16/23 06:35, Sakari Ailus wrote:
+> The IVSC driver only works in ACPI systems so make it depend on ACPI.
+> 
+> Compiling it elsewhere has little if any value.
+> 
+> Reported-by: Randy Dunlap <rdunlap@infradead.org>
+> Fixes: 29006e196a56 ("media: pci: intel: ivsc: Add CSI submodule")
+> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+
+Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
+Tested-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
+
+Thanks.
+
+> ---
+>  drivers/media/pci/intel/ivsc/Kconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/media/pci/intel/ivsc/Kconfig b/drivers/media/pci/intel/ivsc/Kconfig
+> index ec4ade92f583..413053175df7 100644
+> --- a/drivers/media/pci/intel/ivsc/Kconfig
+> +++ b/drivers/media/pci/intel/ivsc/Kconfig
+> @@ -3,7 +3,7 @@
+>  
+>  config INTEL_VSC
+>  	tristate "Intel Visual Sensing Controller"
+> -	depends on INTEL_MEI
+> +	depends on INTEL_MEI && ACPI
+>  	help
+>  	  This adds support for Intel Visual Sensing Controller (IVSC).
+>  
+
+-- 
+~Randy

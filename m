@@ -2,126 +2,87 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5509C77DB87
-	for <lists+linux-next@lfdr.de>; Wed, 16 Aug 2023 10:00:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E5BB77DBD7
+	for <lists+linux-next@lfdr.de>; Wed, 16 Aug 2023 10:12:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232404AbjHPIAS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 16 Aug 2023 04:00:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37080 "EHLO
+        id S242797AbjHPIME (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 16 Aug 2023 04:12:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242628AbjHPH7z (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 16 Aug 2023 03:59:55 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 750D3AB
-        for <linux-next@vger.kernel.org>; Wed, 16 Aug 2023 00:59:52 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id 38308e7fff4ca-2b9cdbf682eso93856281fa.2
-        for <linux-next@vger.kernel.org>; Wed, 16 Aug 2023 00:59:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1692172791; x=1692777591;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :references:cc:to:content-language:subject:reply-to:from:user-agent
-         :mime-version:date:message-id:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=R+trWIdlrzpqniw9b5ygOEC/+6S3W3oWFAOX3CKxYQ8=;
-        b=znZ4XxE+b16iEkyCx1xs5HCgx4VUI6h4qH4j7/7nV9Du3jSFLqNp5GrkYLSc/sC1ek
-         oWboENGFyx5ncRJIDAGTLX54E8Ilrx+ONZQoCTcyQuDZWcITrvcPtfvY17Sc8oADWdEB
-         Jw9V2xiXpb3cZuUX+MiygP6vX1OGhYdg6p35gIYtD6JQ7rzspsyGK2cUh3ae1fQlKF6A
-         mu1QDmL1uTZU9BqWpv0+7rsBOFDwYnp/npcpyizhB2Ab6erH8+E/eC2Rh6Yg+X8TFwYi
-         6HnUldC6qzdWy5NAXWYdCEeir0+nVKdkm24g9tKC1bf1fqgW6AI8HyRSErz+A7OHVQnA
-         riYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692172791; x=1692777591;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :references:cc:to:content-language:subject:reply-to:from:user-agent
-         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=R+trWIdlrzpqniw9b5ygOEC/+6S3W3oWFAOX3CKxYQ8=;
-        b=MoN6KeRYUzxiCu5tZQfNIIgGpb/DXXxPJy9rFOkLIcpO7nyw5dYVvw6uFTARTosOWN
-         arT+GYJwJbqKz3thh62DiTZ4VnD1GlvtysMReqcXhNuyuXkhhXCfM8jkeZCQ4Hupn5hK
-         rtoBDOVShwYujFH67JCcoaz9PD3Tw9GNKAD7nL8vDxBz2VvZMEoo6jfe6lzdi4N+G7zx
-         EuvdEWYZp9duwiUrb3knM66V9wsVxjDSANvWgosX7pm/1mJtQvBiBAIjlX/XGDx+dH8w
-         CFaxO8Njq2QUktAy3ay87EkmbEBfshzoFX6/12cpPgIZdI+wAxQFp7d5jS2DGxr/DtOl
-         hUoQ==
-X-Gm-Message-State: AOJu0Yy+kx4ppEpLOrjCL/7dbZK2QqIruPVmqeAa4saWvaK2v60K7tvx
-        vg7181XoT9rsKnk07TzpQQQ9Yw==
-X-Google-Smtp-Source: AGHT+IE5jRJ8LzB8iTS4v9CCGNFjalN+bplijt9ZP8QfzALe7jbesl9Ju7o3DJqqq0Szk5HlF8uScA==
-X-Received: by 2002:a2e:9085:0:b0:2b5:7a87:a85a with SMTP id l5-20020a2e9085000000b002b57a87a85amr856726ljg.13.1692172790668;
-        Wed, 16 Aug 2023 00:59:50 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:60eb:1b42:890:194? ([2a01:e0a:982:cbb0:60eb:1b42:890:194])
-        by smtp.gmail.com with ESMTPSA id g7-20020a7bc4c7000000b003fbdd5d0758sm20196401wmk.22.2023.08.16.00.59.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Aug 2023 00:59:50 -0700 (PDT)
-Message-ID: <f8c7d1f4-a8fb-4b3d-9b3a-17eb7d1561b4@linaro.org>
-Date:   Wed, 16 Aug 2023 09:59:49 +0200
+        with ESMTP id S242685AbjHPILd (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 16 Aug 2023 04:11:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83023AB;
+        Wed, 16 Aug 2023 01:11:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 177826345F;
+        Wed, 16 Aug 2023 08:11:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 552FFC433C7;
+        Wed, 16 Aug 2023 08:11:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1692173491;
+        bh=Vaj4jf6XLcsiRxLxN7vFGefZkgbs6uwB9LPt3hNn17k=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WEzohTfbauIWJLpGGasVcvpqjbQio9vmTLRIqqxc1ESh1HoWRnBgljFF9Ibuu+3Rb
+         B9TTxjHL97V6ANBb5SwwTXoQs37cqfAeAN/v2ozcDAKtNLps1bhBY86LVHunYplTNP
+         3bregalJtbOUEcDu6nxnZ4Tb8lgDTNv+6/B1cnqRD74xZcNv5Nu6TIZaq6R/xM1nC0
+         yKbBNCGAt/p1eCtvoylCpDU9SquxB542zRG3IheqIxaXDsZhZXaBGLgvyso77512fL
+         p0QBGwloTX8grMsVga6hMOU3ZwmD01an3QypD/BWiZGL11JhvhLFuBwkJU3jJF8VU3
+         hwoJVSYsbMEDA==
+Date:   Wed, 16 Aug 2023 10:11:26 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org,
+        linux-next@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        linux-s390@vger.kernel.org, Stefan Haberland <sth@linux.ibm.com>,
+        Jan Hoeppner <hoeppner@linux.ibm.com>,
+        Christoph Hellwig <hch@lst.de>
+Subject: Re: linux-next-2023-0815: s390/block/dasd: build error
+Message-ID: <20230816-substantiell-ansporn-5db2e3d0c877@brauner>
+References: <95b176a2-3670-1e89-c8f6-86b094eebc4c@infradead.org>
+ <20230816170934.71a5e306@oak.ozlabs.ibm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: linux-next: duplicate patch in the amlogic tree
-Content-Language: en-US, fr
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>
-Cc:     ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20230815113822.613b514b@canb.auug.org.au>
-Autocrypt: addr=neil.armstrong@linaro.org; keydata=
- xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
- GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
- BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
- qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
- 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
- AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
- OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
- Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
- YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
- GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
- UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
- GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
- yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
- QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
- SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
- 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
- Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
- oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
- M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
- 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
- KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
- 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
- QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
-Organization: Linaro Developer Services
-In-Reply-To: <20230815113822.613b514b@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230816170934.71a5e306@oak.ozlabs.ibm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi,
+On Wed, Aug 16, 2023 at 05:14:39PM +1000, Stephen Rothwell wrote:
+> Hi Randy,
+> 
+> On Tue, 15 Aug 2023 22:34:19 -0700 Randy Dunlap <rdunlap@infradead.org> wrote:
+> >
+> > I have spent some time on this but I don't see where the problem is.
+> > 
+> > ERROR: modpost: "bdev_mark_dead" [drivers/s390/block/dasd_mod.ko] undefined!
+> > 
+> > CONFIG_BLOCK=y, bdev.o is built and contains the missing symbol.
+> > 
+> > Full randconfig file is attached.
+> > 
+> > Hopefully I'm just overlooking something.
+> 
+> In your config, CONFIG_DASD=m which means "#ifdef CONFIG_DASD" will
+> fail since CONFIG_DASD_MODULE is defined instead ... so maybe it should
+> be "#if IS_ENABLED(CONFIG_DASD)" in block/bdev.c.  This also fails an
+> s390 allmodconfig build (obviously).
+> 
+> So this is caused by commit
+> 
+>   381f678306ce ("block: consolidate __invalidate_device and fsync_bdev")
+> 
+> from the vfs-brauner branch in linux-next.
 
-On 15/08/2023 03:38, Stephen Rothwell wrote:
-> Hi all,
-> 
-> The following commit is also in the arm-soc tree as a different commit
-> (but the same patch):
-> 
->    b18226ffd080 ("firmware: meson_sm: fix to avoid potential NULL pointer dereference")
-> 
-> This is commit
-> 
->    f2ed165619c1 ("firmware: meson_sm: fix to avoid potential NULL pointer dereference")
-> 
-> in the arm-soc tree.
-> 
-
-Sorry about that, it's now fixed in the amlogic for-next tree,
-
-Thanks,
-Neil
+Thanks for reporting this everyone. Fixed in-tree.

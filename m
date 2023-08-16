@@ -2,127 +2,112 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9020077DA69
-	for <lists+linux-next@lfdr.de>; Wed, 16 Aug 2023 08:22:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F3A777DAE0
+	for <lists+linux-next@lfdr.de>; Wed, 16 Aug 2023 09:05:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236942AbjHPGV6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 16 Aug 2023 02:21:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47680 "EHLO
+        id S242253AbjHPHEk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 16 Aug 2023 03:04:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242094AbjHPGVg (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 16 Aug 2023 02:21:36 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E14341FE6;
-        Tue, 15 Aug 2023 23:21:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1692166892;
-        bh=/iSCmK2tnYDnc36gyD4blrwQea0I/4VHBMzwnihB6dA=;
-        h=Date:From:To:Cc:Subject:From;
-        b=gC3GNo1zQWWIZhRbfOc4LpUpupSaUBcnOIIzcFg/Kcj5Z7Bugegg1AzLdpQjXvdq0
-         q8VKfXZi59Xz37Ro3GBgviDLYOg+9h6V/IzDJcDXyThhjOf/A84TVfS9zQFwuffSHm
-         v4UpEuE/lRXMBrxXJeZaCakWQKJrwqd06qkUKK3TOrJgb58+xyTTi7x3fQXiXM6gTj
-         pANV8oTlDsrAsFJu9P31+MgoRbbChn2o2d7ds3flNo18i3N0ugtnwQIHdEgAAnKhTq
-         tCy5VdL/ukOwFZ4b/19bvf/eoRjfYfoNRQ1KtDqFAmcVYwTdtIkipYhzWehyXbz0Cf
-         uefmXUWh6iovw==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4RQdLz34vjz4wb0;
-        Wed, 16 Aug 2023 16:21:31 +1000 (AEST)
-Date:   Wed, 16 Aug 2023 16:21:28 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jason Gunthorpe <jgg@nvidia.com>, Joerg Roedel <joro@8bytes.org>
-Cc:     Jason Gunthorpe <jgg@ziepe.ca>, Joerg Roedel <jroedel@suse.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Yi Liu <yi.l.liu@intel.com>
-Subject: linux-next: manual merge of the iommufd tree with the iommu tree
-Message-ID: <20230816162128.58ef5475@canb.auug.org.au>
+        with ESMTP id S242261AbjHPHEL (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 16 Aug 2023 03:04:11 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6340F1FCE;
+        Wed, 16 Aug 2023 00:04:09 -0700 (PDT)
+Received: from pps.filterd (m0353727.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 37G6wH5g018435;
+        Wed, 16 Aug 2023 07:03:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : references : date : in-reply-to : message-id : content-type :
+ mime-version; s=pp1; bh=JRiEwG7CGAIwUuGxv6cswmnrQS0AldAPoI7yGXpgWgY=;
+ b=O3aDDuYqblqU2ow4KXHkowrbrKcpbFLAIEDT7DzfJtDf7OrzA3/f1/0927eO8jdgbBg/
+ inigcHl7nc5bFh3AQMtv/3kLaqp2u414YiQJtdr/tZIZqETkRnoLq/HPO+33N7a54CL4
+ EQvWs7I9ZIbPJcRccVCBwTXeDgzoPYqoj7tlPUO+cZFWsROJvvoIdWPMKWD79hORmFVd
+ JQx324Oyy5j57ZD3DKP3MdPuMDLoa4JvxkSL2y80b0s2uSXCoYr7a+6DDSNMAn5/KWlm
+ fMPmIYKEOC+aD5RwZILE1rfksPIUKMiD+jY9r5U4s5eofcHl5CkeaV2xIoEnBrCWstNJ YQ== 
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3sgsn984kx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 16 Aug 2023 07:03:58 +0000
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+        by ppma13.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 37G40GHT013425;
+        Wed, 16 Aug 2023 07:03:58 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+        by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 3sepmjt3vy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 16 Aug 2023 07:03:57 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 37G73t6d62587154
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 16 Aug 2023 07:03:55 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id ED10E2004B;
+        Wed, 16 Aug 2023 07:03:54 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A71FD20040;
+        Wed, 16 Aug 2023 07:03:54 +0000 (GMT)
+Received: from tuxmaker.linux.ibm.com (unknown [9.152.85.9])
+        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Wed, 16 Aug 2023 07:03:54 +0000 (GMT)
+From:   Sven Schnelle <svens@linux.ibm.com>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        linux-kbuild@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        linux-s390@vger.kernel.org, Stefan Haberland <sth@linux.ibm.com>,
+        Jan Hoeppner <hoeppner@linux.ibm.com>,
+        Christoph Hellwig <hch@lst.de>
+Subject: Re: linux-next-2023-0815: s390/block/dasd: build error
+References: <95b176a2-3670-1e89-c8f6-86b094eebc4c@infradead.org>
+Date:   Wed, 16 Aug 2023 09:03:54 +0200
+In-Reply-To: <95b176a2-3670-1e89-c8f6-86b094eebc4c@infradead.org> (Randy
+        Dunlap's message of "Tue, 15 Aug 2023 22:34:19 -0700")
+Message-ID: <yt9d350jbh9h.fsf@linux.ibm.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.0.50 (gnu/linux)
+Content-Type: text/plain
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: cjURwvIYWuHXhR9BbhXBbvstXJsiOinV
+X-Proofpoint-ORIG-GUID: cjURwvIYWuHXhR9BbhXBbvstXJsiOinV
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/+qfPmgKRJ2GBp4NPXf/ebuy";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
+ definitions=2023-08-16_04,2023-08-15_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=994
+ mlxscore=0 impostorscore=0 clxscore=1011 lowpriorityscore=0 suspectscore=0
+ priorityscore=1501 bulkscore=0 spamscore=0 adultscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2306200000
+ definitions=main-2308160063
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/+qfPmgKRJ2GBp4NPXf/ebuy
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Randy Dunlap <rdunlap@infradead.org> writes:
 
-Hi all,
+> I have spent some time on this but I don't see where the problem is.
+>
+> ERROR: modpost: "bdev_mark_dead" [drivers/s390/block/dasd_mod.ko] undefined!
+>
+> CONFIG_BLOCK=y, bdev.o is built and contains the missing symbol.
+>
+> Full randconfig file is attached.
+>
+> Hopefully I'm just overlooking something.
 
-Today's linux-next merge of the iommufd tree got a conflict in:
+The EXPORT_SYMBOL_GPL is surrounded by #ifdef CONFIG_DASD, but i think
+it should be '#ifdef CONFIG_DASD_MODULE'. This was introduced by
 
-  include/linux/iommu.h
+381f678306ce ("block: consolidate __invalidate_device and fsync_bdev")
 
-between commit:
+There was already a thread about this:
 
-  2b4de976b360 ("iommu: Pass in the iommu_device to probe for in bus_iommu_=
-probe()")
+https://www.spinics.net/lists/linux-btrfs/msg138633.html
 
-from the iommu tree and commit:
-
-  c64805327b7d ("iommu: Move dev_iommu_ops() to private header")
-
-from the iommufd tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc include/linux/iommu.h
-index 411ce9b998dc,f2d6a3989713..000000000000
---- a/include/linux/iommu.h
-+++ b/include/linux/iommu.h
-@@@ -460,19 -459,7 +469,8 @@@ static inline void iommu_iotlb_gather_i
-  	};
-  }
- =20
-- static inline const struct iommu_ops *dev_iommu_ops(struct device *dev)
-- {
-- 	/*
-- 	 * Assume that valid ops must be installed if iommu_probe_device()
-- 	 * has succeeded. The device ops are essentially for internal use
-- 	 * within the IOMMU subsystem itself, so we should be able to trust
-- 	 * ourselves not to misuse the helper.
-- 	 */
-- 	return dev->iommu->iommu_dev->ops;
-- }
--=20
- -extern int bus_iommu_probe(const struct bus_type *bus);
- +extern int bus_iommu_probe(const struct bus_type *bus,
- +			   struct iommu_device *iommu);
-  extern bool iommu_present(const struct bus_type *bus);
-  extern bool device_iommu_capable(struct device *dev, enum iommu_cap cap);
-  extern bool iommu_group_has_isolated_msi(struct iommu_group *group);
-
---Sig_/+qfPmgKRJ2GBp4NPXf/ebuy
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmTcaugACgkQAVBC80lX
-0GxlcQf/dIAfWrW9jtxjgUQEvcmNC1uwLl/YnkdZ8o2nYrs/TlAVEJWVCs13x8N8
-8AJ/kBKRqeQserJif6ZGnLS/DaOGETD9fcsiOqn0y9FTTMNoCFO40p+Wo59Wro/V
-aJqrJzKhm5+w+uSjW7YmbKtRy2VSRXFXbOtXGj2ZKKGMFeFSb30UOm6npG/J8s1v
-+GL94NlP3os6NE4FEjRcvlSOuDHF49gyvxGy/Iy6rG3XzZz6Ez8m/kadMDuxoiTH
-ZGYpGhvTNXa3EvYsaqBkpZjgzIAZ0w85NQJ+Vr6wYSZlmNa2AtLO6ZNVWAgoWKEk
-Cz2VH/+beViwD4N4+3L9VxByzw2zzQ==
-=bglV
------END PGP SIGNATURE-----
-
---Sig_/+qfPmgKRJ2GBp4NPXf/ebuy--
+regards,
+Sven

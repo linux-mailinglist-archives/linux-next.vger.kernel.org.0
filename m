@@ -2,82 +2,84 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D3DB77FACC
-	for <lists+linux-next@lfdr.de>; Thu, 17 Aug 2023 17:32:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23ED777FB50
+	for <lists+linux-next@lfdr.de>; Thu, 17 Aug 2023 17:57:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351982AbjHQPb5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 17 Aug 2023 11:31:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51892 "EHLO
+        id S1346830AbjHQP4h (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 17 Aug 2023 11:56:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352312AbjHQPbe (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 17 Aug 2023 11:31:34 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEEF030DE;
-        Thu, 17 Aug 2023 08:31:31 -0700 (PDT)
-Received: from pps.filterd (m0353724.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 37HFCVbR018887;
-        Thu, 17 Aug 2023 15:31:30 GMT
+        with ESMTP id S233908AbjHQP4I (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 17 Aug 2023 11:56:08 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9D4630E9
+        for <linux-next@vger.kernel.org>; Thu, 17 Aug 2023 08:56:03 -0700 (PDT)
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 37HFsWYk005832
+        for <linux-next@vger.kernel.org>; Thu, 17 Aug 2023 15:56:03 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : to : cc : from : subject : content-type :
- content-transfer-encoding; s=pp1;
- bh=+FOHtcPvFmOF5KvQi42U5gbX8u8xux1J6u63GV172WY=;
- b=VNE7Iq9L4nti7s78yFSN49Q/pbYOEP5vJxlhdMUCaCMAxb0JV4Lght1EOH0I+1IQzlkC
- IJbpiRf0YHQ0kpS5rAwqtpc2rhNORP4ULXtGsxM2nv8rx5c7Rih+DW2cjIZy2rgN9MT3
- n0YmuhxnlNmOzwdzzISqVmw4dofcybH+XqfGBJIwzL8C9SVjrsTjCrEpfc0NYHipU/zh
- D52LGn3LyKLl7JB8lsQTD3mwp950i8XE6CrBr2AmhVQVZ0EgZ3N4JhDFQK9l7WBZUfV2
- BJ+x4At79u5FIZigTyCJNpcVglRWsWiLPCXTz8XpYHOQP2VULn7a368FXOZQm6w46Sfp oA== 
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3shp058nap-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 17 Aug 2023 15:31:30 +0000
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-        by ppma23.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 37HEUKjq007828;
-        Thu, 17 Aug 2023 15:31:29 GMT
-Received: from smtprelay03.wdc07v.mail.ibm.com ([172.16.1.70])
-        by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3senwkq0j7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 17 Aug 2023 15:31:29 +0000
+ mime-version : subject : references : to : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=E2q0PK8MKQTBXS6UAGuX5MpihmxF7Kyqvwtsk5wkw2c=;
+ b=gr3NvzXsb1HQ538p2w0vITzHCok4fMOnZFF5m4uxW+nZ42bq7Q8jHWE5fwD9Iuko0s3+
+ EVTghpuDi+QJBHfO9VTWA0ayXhvdj0Xp7KAQOSnY79rvx4RhfJOrXo6PXu5BtCk+nYAD
+ GutUQlDydkEAXEKhcsDRB/yzU2nXkBWwOhjD4MWHU1etBGJiniYVOlg8R88EnwCa46sj
+ ZO4PXzXGVb7WffVYY3RbSmvjVARfUlzZSGwzcOseGaDYSDjxks4Q985GpQ2ZTnxhGU0d
+ EBIRdSgcVRIX/oNKS5iSe5G5DfSHSj6MDdHVqBO1UO+PaFPNsXFT7ZVpC1HDWNBpLtLE gw== 
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3shpkwg112-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-next@vger.kernel.org>; Thu, 17 Aug 2023 15:56:02 +0000
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+        by ppma22.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 37HFQPWj001085
+        for <linux-next@vger.kernel.org>; Thu, 17 Aug 2023 15:56:01 GMT
+Received: from smtprelay06.wdc07v.mail.ibm.com ([172.16.1.73])
+        by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3semsyqng9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-next@vger.kernel.org>; Thu, 17 Aug 2023 15:56:01 +0000
 Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
-        by smtprelay03.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 37HFVTFk63766818
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 17 Aug 2023 15:31:29 GMT
+        by smtprelay06.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 37HFu11R2425372
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK)
+        for <linux-next@vger.kernel.org>; Thu, 17 Aug 2023 15:56:01 GMT
 Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 258615805D;
-        Thu, 17 Aug 2023 15:31:29 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 280D258067
+        for <linux-next@vger.kernel.org>; Thu, 17 Aug 2023 15:56:01 +0000 (GMT)
 Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EDE1A58057;
-        Thu, 17 Aug 2023 15:31:25 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 180B15805D
+        for <linux-next@vger.kernel.org>; Thu, 17 Aug 2023 15:55:59 +0000 (GMT)
 Received: from [9.43.5.51] (unknown [9.43.5.51])
-        by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Thu, 17 Aug 2023 15:31:25 +0000 (GMT)
-Message-ID: <4febc355-ce03-06f6-8077-c08bc9a3a1f6@linux.vnet.ibm.com>
-Date:   Thu, 17 Aug 2023 21:01:23 +0530
+        by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP
+        for <linux-next@vger.kernel.org>; Thu, 17 Aug 2023 15:55:58 +0000 (GMT)
+Message-ID: <9606dc70-ee85-04e9-2fb5-3ba14b91094a@linux.vnet.ibm.com>
+Date:   Thu, 17 Aug 2023 21:25:56 +0530
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
+Subject: Fwd: [linux-next] [Mellanox] [6.5.0-rc4-next-20230803] Kernel crash
+ while installing to upstream kernel
 Content-Language: en-US
-To:     linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
-Cc:     abdhalee@linux.vnet.ibm.com, mputtash@linux.vnet.com,
-        sachinp@linux.vnet.com
+References: <4febc355-ce03-06f6-8077-c08bc9a3a1f6@linux.vnet.ibm.com>
+To:     linux-next@vger.kernel.org
 From:   Tasmiya Nalatwad <tasmiya@linux.vnet.ibm.com>
-Subject: [linux-next] [Mellanox] [6.5.0-rc4-next-20230803] Kernel crash while
- installing to upstream kernel
+In-Reply-To: <4febc355-ce03-06f6-8077-c08bc9a3a1f6@linux.vnet.ibm.com>
+X-Forwarded-Message-Id: <4febc355-ce03-06f6-8077-c08bc9a3a1f6@linux.vnet.ibm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: x40vgtG2Q7Z0pKfoq-QtYmX1fRyqO2PB
-X-Proofpoint-ORIG-GUID: x40vgtG2Q7Z0pKfoq-QtYmX1fRyqO2PB
+X-Proofpoint-ORIG-GUID: ykeZIHcELXhFtHTLq3rOMSR_P2ycV0X6
+X-Proofpoint-GUID: ykeZIHcELXhFtHTLq3rOMSR_P2ycV0X6
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
- definitions=2023-08-17_09,2023-08-17_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 clxscore=1011
- impostorscore=0 lowpriorityscore=0 malwarescore=0 priorityscore=1501
- bulkscore=0 suspectscore=0 spamscore=0 adultscore=0 phishscore=0
- mlxlogscore=527 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2306200000 definitions=main-2308170134
+ definitions=2023-08-17_10,2023-08-17_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=583
+ impostorscore=0 spamscore=0 adultscore=0 phishscore=0 bulkscore=0
+ lowpriorityscore=0 priorityscore=1501 suspectscore=0 clxscore=1015
+ mlxscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2306200000 definitions=main-2308170139
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -85,6 +87,7 @@ List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
 Greetings,
+
 
 [linux-next] [Mellanox] [6.5.0-rc4-next-20230803] Kernel crash while
 installing to upstream kernel
@@ -174,6 +177,11 @@ system_call_common+0x160/0x2e4
 419e01f8 2fa90000 419e01f0 813f0028 e95f00b8 38c80001 7cfe4a14
 <7d3e482a> 78e50022 54fdc03e 54a4c03e
 [  216.663249] ---[ end trace 0000000000000000 ]---
+
+-- 
+Regards,
+Tasmiya Nalatwad
+IBM Linux Technology Center
 
 -- 
 Regards,

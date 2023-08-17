@@ -2,45 +2,44 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E9CC78014A
-	for <lists+linux-next@lfdr.de>; Fri, 18 Aug 2023 00:51:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58E49780151
+	for <lists+linux-next@lfdr.de>; Fri, 18 Aug 2023 00:55:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355840AbjHQWuv (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 17 Aug 2023 18:50:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48074 "EHLO
+        id S1355895AbjHQWy4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 17 Aug 2023 18:54:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355959AbjHQWus (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 17 Aug 2023 18:50:48 -0400
+        with ESMTP id S1355885AbjHQWy0 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 17 Aug 2023 18:54:26 -0400
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEF3A2722;
-        Thu, 17 Aug 2023 15:50:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB62A2112;
+        Thu, 17 Aug 2023 15:54:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1692312639;
-        bh=N0MG68vr3j3WzHFy4o59tufO8cRLEKLfPQJtpPpK5co=;
+        s=201702; t=1692312864;
+        bh=tt7bxUQu7eRBhfRaoSW30I/9KutvJGo07/6n+OPETbM=;
         h=Date:From:To:Cc:Subject:From;
-        b=S8quNuPoKbXL/qyFp3Ec1QbG8wxOG12Bfq31wIpNtmKDKlo3P7R3QZe0To6j6ytNN
-         OeiVWYIVlmfZBw9C0UPJmot8jIG4U3vyvgIvESAkgQ+GLmV6kmo2A7IejfNLynqwHg
-         UqhZg9IbfJN3MrYcEln/CYU1Qaaojmjq2wYF2sbkD4PXhFAb+RgMjuN4KNhWvxlNX2
-         QcbelYTN91tTbkNTQEXSFvNWeiuzcn+dqQfLtxOFOLd38dGOTNxh3WPD6EHIpKL5Qv
-         D7A1q+rkhMmDqFOaqnVww/37x1B5z7fjFyUK16HDTybSdTTH3l+PL/cBv3lSA7YHRe
-         EQRLCIFPK0m4g==
+        b=Z4TTQe6yha1GS33oHkAVJcTPBmSt5ENylB5QNVNs3Vy1Qer1Z2uvv3BBz7aAg0yZB
+         AAHSpjOT28ZH9zSgcRkggjoA6iLjrDIx9435ZRJ9pnutdtW30kQgpW1iM6HzpYMaxO
+         jvaVFWCkI/YmKyzNkShWR8bvND2gsi7TXQYHtGYGAqHDz+sqfKNT/Vpoom/b0+NjDE
+         01Per4rmLUk/yt78oatiugyea6I3ZutDfQEivxIxWXJiCrTg4ivLGPKDPrAaflzjNJ
+         IjkdIfEn2YGXBgHJbxJ4ctcFyNCKaMmKSGQj+UUHeDKaWSRq4BuTU+4VvqRYG5JYHp
+         oych2OPYH2Ymw==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4RRgFp5vfLz4wxy;
-        Fri, 18 Aug 2023 08:50:38 +1000 (AEST)
-Date:   Fri, 18 Aug 2023 08:50:38 +1000
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4RRgL838VSz4wxy;
+        Fri, 18 Aug 2023 08:54:24 +1000 (AEST)
+Date:   Fri, 18 Aug 2023 08:54:23 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Steven Whitehouse <swhiteho@redhat.com>,
-        Bob Peterson <rpeterso@redhat.com>
-Cc:     Andreas Gruenbacher <agruenba@redhat.com>,
+To:     Chuck Lever <chuck.lever@oracle.com>
+Cc:     Jeff Layton <jlayton@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the gfs2 tree
-Message-ID: <20230818085038.31d7be4f@canb.auug.org.au>
+Subject: linux-next: duplicate patch in the nfsd tree
+Message-ID: <20230818085423.436d3b72@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/EaatebsaUIKeM3U+QPPPQ4i";
+Content-Type: multipart/signed; boundary="Sig_/xaPeJiI=oQ602Q6H1JBzsaj";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
@@ -51,36 +50,43 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/EaatebsaUIKeM3U+QPPPQ4i
+--Sig_/xaPeJiI=oQ602Q6H1JBzsaj
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Commit
+The following commit is also in Linus Torvalds' tree as a different commit
+(but the same patch):
 
-  584e70f20bd0 ("gfs2: prevent gfs2_logd from spinning")
+  7f55e3c57a81 ("sunrpc: set the bv_offset of first bvec in svc_tcp_sendmsg=
+")
 
-is missing a Signed-off-by from its committer.
+This is commit
+
+  c96e2a695e00 ("sunrpc: set the bv_offset of first bvec in svc_tcp_sendmsg=
+")
+
+in Linus' tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/EaatebsaUIKeM3U+QPPPQ4i
+--Sig_/xaPeJiI=oQ602Q6H1JBzsaj
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmTepD4ACgkQAVBC80lX
-0GyUkAf/VJMyppkf1m0Iz5Bb6dgZ5yLcb7GEFw6FpazUEF2dlvAoXATc5CrbJmse
-bKZzd+Wv/T9tbfYyFuP05y7EPQTNWJj948w1p7Cub4OpgU/CHTUsCJ0pnp9FA/9Z
-OhvQmSek7H+/au4zACxu5S3+LdpvQoVTZsHWfpMZKRumv4jRzPNNPGWKzkQKOLcw
-VBCExe3sTaoRIZB7b8gLUbc9c6c/5jSKKQNUu3o0XA8KUaj4qjdT9cFD/NunHGLe
-RcnawWB4DmQ9H7osKtadlBXyIZSr4e4Wo/wN/U05GNDiAgIdnVACtpXeATczgEBC
-eP1p5uGUzMPBHGOiSA+bC7+lh+s9SA==
-=mstx
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmTepR8ACgkQAVBC80lX
+0Gw6xgf+NpXr6ksUGQ+HNNuzxwYeKgDSL622gaY5DkHycsiwntxiduGlFXynM7eU
+tY3ZUflg71/piWgeEbQd89XZ0kguccMJ95Nmc4fR4LYVe80AmBMJMLjEcWC2Z0bN
+GeBmOIjfQr8tJghDfwoi0IcpscNLKYAk4mbSyS5cXDcF9F5kjV6dmBgudMJdltNM
+AIgoneF4NfEbF14A4ILjKHCZuN/1FR6ED3uWIQzbvFizG3qRsKaxBYli6wFr9fJ6
+cIuFQSoKNzM4ji9OA2Z0Ds+onMAIxdGJR3A2T28lgUaXWxBwPnlp2Bmh0uTqE43B
+Ch0ylfEEDkW2v4TueZd2SHT94H/MUw==
+=BW+3
 -----END PGP SIGNATURE-----
 
---Sig_/EaatebsaUIKeM3U+QPPPQ4i--
+--Sig_/xaPeJiI=oQ602Q6H1JBzsaj--

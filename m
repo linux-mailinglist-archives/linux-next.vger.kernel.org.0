@@ -2,122 +2,97 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DBC077FF31
-	for <lists+linux-next@lfdr.de>; Thu, 17 Aug 2023 22:42:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44556780145
+	for <lists+linux-next@lfdr.de>; Fri, 18 Aug 2023 00:48:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354878AbjHQUmG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 17 Aug 2023 16:42:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44090 "EHLO
+        id S1345209AbjHQWsG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 17 Aug 2023 18:48:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354842AbjHQUlx (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 17 Aug 2023 16:41:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DF9A2698;
-        Thu, 17 Aug 2023 13:41:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        with ESMTP id S1355943AbjHQWsB (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 17 Aug 2023 18:48:01 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A5AB30C2;
+        Thu, 17 Aug 2023 15:47:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1692312469;
+        bh=R9VZ7FAV5X5XmzIEdFxfsmmp5vvPCpFZptzo4lfKgq8=;
+        h=Date:From:To:Cc:Subject:From;
+        b=AfGXUh3zyfF7jT2O+wBStHjBgYtI8AnsdwKdho/Lssg/h92gvhEKwVj5qgdKGDtmx
+         FuemGqgjoLY/IHOnnIEx2vxSpkRC3IK/NBIrNnnZK/qZe3FgH7cUZGgTAgQUyI3JzK
+         HB1xOUtNItn5AK2H/iGA1bSC8xcXU/WjEYPuFh185rPKf52DIQo2Qf05sNLaWVsqIR
+         N49Mq79ePEBbZqbr1nyv0pdDapUqWUG3bN/THcplz9i+hRGXZa8w98nBiM788I9RHX
+         2WyzJj24ZTi0ulhk+4w70hkjxYTS530Xgh6qMQd70vcLLgJHZ3AUk9w5ac0gXj3OXU
+         MsJZOxAKmgy1Q==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C6D5363027;
-        Thu, 17 Aug 2023 20:41:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25EC1C433C8;
-        Thu, 17 Aug 2023 20:41:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1692304906;
-        bh=F3YoCa9AX5IU4zm/PWVodOypPnuwTog2jW78JrYQb94=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=G0Uz5qx3J/zGzqjH7I1+o49txj7XVckIVGcdV0ei5KJ1yN6LgrKDA7M3U1LdsjCvn
-         px5gcGL+RIQFTxnAaS0k5bjeNwF3Vkut8AtNhp8Gb3MvroAb5WPqkkbRQRu6drOf33
-         5WKg/0jC9yl7EUKqDG5FwQpZOKu2KOMVx3tgjZnRbUtYbrzKjh+POKpTL2Ke8zsde1
-         pNYXPHJinLuOkl6Jq1wm1ckU6WpSUPOZ7R2NYdbtd6wUMmyyGEOPS4bAlScPlrs1aB
-         TGrNqr+BOMnvkfxF4J3QbsfjoIwXs7bynwzVX+WZN9kzD/mBui41GNVhawERbOXmNz
-         q2UcLdU7UxWkg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id B138CCE0F13; Thu, 17 Aug 2023 13:41:45 -0700 (PDT)
-Date:   Thu, 17 Aug 2023 13:41:45 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Willy Tarreau <w@1wt.eu>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas@t-8ch.de>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Christian Brauner <brauner@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4RRgBY1mtMz4wxm;
+        Fri, 18 Aug 2023 08:47:49 +1000 (AEST)
+Date:   Fri, 18 Aug 2023 08:47:36 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+        Namhyung Kim <namhyung@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patch in the nolibc tree
-Message-ID: <01d517c4-d91b-4426-b7f2-2b1277f21d8c@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <20230817133811.0a73c624@canb.auug.org.au>
- <e0af8d82-e099-49fa-9fbd-6f6bb63b7706@t-8ch.de>
- <9cfb4fe4-162b-3f26-646b-71bed3493925@linuxfoundation.org>
- <4c037ef2-9159-4528-8ecb-8596cb2a3889@paulmck-laptop>
- <20230817193909.GA30505@1wt.eu>
+Subject: linux-next: Fixes tag needs some work in the perf tree
+Message-ID: <20230818084736.6e5fd7c4@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230817193909.GA30505@1wt.eu>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/vpQghSVsM7ysmLBmjZyZ9Zb";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Aug 17, 2023 at 09:39:09PM +0200, Willy Tarreau wrote:
-> On Thu, Aug 17, 2023 at 11:46:57AM -0700, Paul E. McKenney wrote:
-> > On Thu, Aug 17, 2023 at 12:27:46PM -0600, Shuah Khan wrote:
-> > > On 8/17/23 10:30, Thomas Weißschuh wrote:
-> > > > On 2023-08-17 13:38:11+1000, Stephen Rothwell wrote:
-> > > > > The following commit is also in the vfs-brauner tree as a different commit
-> > > > > (but the same patch):
-> > > > > 
-> > > > >    ba859b2e419c ("selftests/nolibc: drop test chmod_net")
-> > > > > 
-> > > > > This is commit
-> > > > > 
-> > > > >    49319832de90 ("selftests/nolibc: drop test chmod_net")
-> > > > > 
-> > > > > in the vfs-brauner tree.
-> > > > 
-> > > > I think we can drop the patch from the nolibc tree.
-> > > > The patch is only really necessary in combination with
-> > > > commit 18e66ae67673 ("proc: use generic setattr() for /proc/$PID/net")
-> > > > which already is and should stay in the vfs tree.
-> > > 
-> > > Thomas,
-> > > 
-> > > Do the rest of the nolibc patches build without this if we were
-> > > to drop this patch? Dorpping requires rebase and please see below.
-> > > 
-> > > Willy, Paul,
-> > > 
-> > > How do we want to handle this so we can avoid rebasing to keep
-> > > the Commit IDs the same as one ones in Willy's nolibc branch?
-> > 
-> > The usual way would be for Willy to drop the patch, rebase, and republish
-> > his branch.  You would then discard the current branch and pull the
-> > new one.
-> > 
-> > > I would recommend dropping this commit from vfs-brauner if it
-> > > doesn't cause problems.
-> > 
-> > It might be good for nolibc patches to be going through Willy's tree.
-> 
-> It would indeed be more logical as a general rule. However, here I don't
-> care as I don't see any issue caused by dropping it, I can adapt to what
-> is most convenient for most of us.
-> 
-> Let's maybe just wait a little bit for Christian to suggest what he
-> prefers then we can adapt.
-> 
-> > Or does Christian have some situation where it is necessary to make
-> > a coordinated vfs/nolibc change?
-> 
-> I don't think there's any need for coordination on this one.
+--Sig_/vpQghSVsM7ysmLBmjZyZ9Zb
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-It is always good when either option can be make to work.  ;-)
+Hi all,
 
-							Thanx, Paul
+In commit
+
+  1ce24329a46e ("perf trace: Use the augmented_raw_syscall BPF skel only fo=
+r tracing syscalls")
+
+Fixes tag
+
+  Fixes: 42963c8bedeb864b ("perf trace: Migrate BPF augmentation to use a s=
+keleton")
+
+has these problem(s):
+
+  - Target SHA1 does not exist
+
+Maybe you meant
+
+Fixes: 5e6da6be3082 ("perf trace: Migrate BPF augmentation to use a skeleto=
+n")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/vpQghSVsM7ysmLBmjZyZ9Zb
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmTeo4gACgkQAVBC80lX
+0GwNogf8DslHhBLyHDKGgtCnga0LJUPJqrtNlACP1NGkE82cGEsik4+SVbiYTlY3
+dF6ibLBbnJxC0Q6h4ktKvojn49L+wSLzUsDRSSQzPlxA+Fkmnkv2OaI0RerqLKRg
+jvZJvnFzZ/D5Ypmr+sfSM3FFB1mpdlYOdcvbhR3e2zZz30pzAbRK7L2sCAJRwolg
+tW+4Z6eQWC9oUm9YgBa+Nor4bWIcut5yQnLnbMIdbyv3aYhMsBcHV6NR6ogCreIY
+j1o2Wv7QmKMje7rsEgHJeKTrBK9P8HBlhpi3R0t9xjuuv1wtOQ+iHGedHnDnmsui
+vpHpyaB+DWBcRplEJyntwaPQyBvfEw==
+=sDPl
+-----END PGP SIGNATURE-----
+
+--Sig_/vpQghSVsM7ysmLBmjZyZ9Zb--

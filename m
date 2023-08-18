@@ -2,100 +2,110 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D674B780AC8
-	for <lists+linux-next@lfdr.de>; Fri, 18 Aug 2023 13:10:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E59AD780B15
+	for <lists+linux-next@lfdr.de>; Fri, 18 Aug 2023 13:27:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376403AbjHRLKG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 18 Aug 2023 07:10:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48150 "EHLO
+        id S1376644AbjHRL0u convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-next@lfdr.de>); Fri, 18 Aug 2023 07:26:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356757AbjHRLJw (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 18 Aug 2023 07:09:52 -0400
-Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [IPv6:2a0b:5c81:1c1::37])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A3E83590;
-        Fri, 18 Aug 2023 04:09:50 -0700 (PDT)
-Received: from hillosipuli.retiisi.eu (82-181-192-243.bb.dnainternet.fi [82.181.192.243])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sailus)
-        by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 4RRzff0T4Bz49Q76;
-        Fri, 18 Aug 2023 14:09:45 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
-        t=1692356986;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=MnlFAxwLWBfzx3j9W8KMKISf6EkPs2txFDkcxVcdvrc=;
-        b=FstD08SF6Iea03i6Edst5j6LG43BCjp5m/zC/8pWNqyFKA40HZlxEq8ff1hB3qsQ8BpJFB
-        wZj0cerysVjPf0Ri5IBiVhFidHY0CRg0J6dTKKWzOYEcyRgdeMELEai556cfz0bjZyBeB3
-        6Hi8E8loxPM0tfLwg+pZ/pk8ndQNh8LT1hSdrr9ITjuggNW95M3iOUaHAiyx22cWiuHvRP
-        RUuAs/G6Hv1Rko/DV0MKRb9cn0BAmYDPQFgrFUQCfTPV2zVSB4WOi2f/f8KCnlh2q1W9kt
-        TNoJbZ8TPx1xoY0CmtXo0kJr1EnP7b4ejUdRGL2HJuatGHc5RhWoQ9MRIj6FlA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-        s=lahtoruutu; t=1692356986;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=MnlFAxwLWBfzx3j9W8KMKISf6EkPs2txFDkcxVcdvrc=;
-        b=DmXWNDw3CY1crqxD03y4DRXN6+BCGZOiYobqVqZbNcKth4HKUnuQiSZJBD/Kf4KUCtL45L
-        YxllmZF2OudHhntOkNfqNsnG4i0M/NN2qmNqeWmquA+LEypLQfNwiIA1DDRPNh5pq1pqWy
-        rYi3qM2dFzLj0VF/qkif7foXuG66qQbzrhQwwRchx88LTsNrWuOGo35GOtnSfIc96PH2Q0
-        pWlntT7OJDIuDBSXKoyqvNdyOHOjtboyjdGUkMUcmzl0NKck1ZwKwZPzD5qPfZgaPnw9Qx
-        +SCKeZ6v5QVJGIbpWuxp8TwdoeT5sgnQaVG8GQqYlSBZz0I1b+lP+0DitjYimw==
-ARC-Authentication-Results: i=1;
-        ORIGINATING;
-        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
-ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1692356986; a=rsa-sha256;
-        cv=none;
-        b=lf3vsrriQJMQXmUjinPpSeEoN55fSdP94AC2sqgIU+misn/llgPKPCkr9rmqsOag0SwwDi
-        S8zUQhoCxE2CySyFOOt7HN8q6kyH2Ckoe0e4988OPhiHufI9rbSGDvrib0YPe7NLhk0fFk
-        KSq1LfBVS6d4t3zl4m813ubCVj46WXnzox8zbfh5LzAeAJmnwCQuErf/z3/vBsCG7qulC3
-        Ao2GDGp4drmxidQOomJknHEHvRGsHaT0Vbm3KBXO5pzAg1by4M5ekKoy4Cca0TOfFiKbyy
-        6/IJh2GN5VGfECXu340Tf7vRVrinCEDEIAc4Z50F/KwyATkf54Y7AQS4TJRFdA==
-Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id 05E1F634C93;
-        Fri, 18 Aug 2023 14:09:44 +0300 (EEST)
-Date:   Fri, 18 Aug 2023 11:09:44 +0000
-From:   Sakari Ailus <sakari.ailus@iki.fi>
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     linux-media@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        hverkuil@xs4all.nl, Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-next@vger.kernel.org, Wentong Wu <wentong.wu@intel.com>,
-        Zhifeng Wang <zhifeng.wang@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Subject: Re: [PATCH v2 1/1] media: v4l: usb: Use correct dependency for
- camera sensor drivers
-Message-ID: <ZN9ReILfgRbIAolx@valkosipuli.retiisi.eu>
-References: <20230818095149.3863285-1-sakari.ailus@linux.intel.com>
+        with ESMTP id S1376643AbjHRL0R (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 18 Aug 2023 07:26:17 -0400
+Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96BD83ABB;
+        Fri, 18 Aug 2023 04:26:16 -0700 (PDT)
+Received: by mail-yb1-f172.google.com with SMTP id 3f1490d57ef6-d63c0a6568fso800722276.0;
+        Fri, 18 Aug 2023 04:26:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692357975; x=1692962775;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KeC3ZxHNnvzMtdmJIeRJx7ZK5zVDXKI5axuQ44iEWnw=;
+        b=iNJnc7+q11XjiWZJLeRKusOHyX6srZR30fVCjfBMLMu3SxybUF1nSFzncqA9nha1Zc
+         DkK/ES3Efzzu+wkZbkXgPGEzOz6aRiLKCo79O819nf/2F2CGxwtZsvjzFqgYpt9yl/4r
+         +bVNbs6Cw8u4iByh+l4fL0kMXTd8e/dQKOomZGQOjUleVQVdyY8VslIsqPTJJ55otvQ8
+         7u9ztHHJ004Itpnbdd1xEIqH+lLAffHJ05OD02MAu7+TelLH1DKiTdhaCNr78qBN70fc
+         mJkM7rntv18ngOujLKtGb5ehpDvr5Osz1a13OCsT/DqdWJJ90Mjj32THlVNxTpeX0MZN
+         loTQ==
+X-Gm-Message-State: AOJu0YwH939vio7KiHV2xa+61IUbAWYSBADfnhXV4qgoqU+5wy3ZlpIu
+        DWIG/7anp3LnkLWjY3iBZLav0WuOSFA2R1cg
+X-Google-Smtp-Source: AGHT+IFSwSNvcdSXIbRr7YwPulfPhNV7X8KnyQdM3GMLGkr+BI5PzooAyAt7Knx7/iAd5P/VKO6eAg==
+X-Received: by 2002:a25:2d0d:0:b0:d0e:6c9b:b9f2 with SMTP id t13-20020a252d0d000000b00d0e6c9bb9f2mr2508204ybt.12.1692357975558;
+        Fri, 18 Aug 2023 04:26:15 -0700 (PDT)
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com. [209.85.219.169])
+        by smtp.gmail.com with ESMTPSA id z1-20020a25ad81000000b00c5fc63686f1sm377159ybi.16.2023.08.18.04.26.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Aug 2023 04:26:14 -0700 (PDT)
+Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-d682d2d1f0dso791226276.1;
+        Fri, 18 Aug 2023 04:26:14 -0700 (PDT)
+X-Received: by 2002:a25:8502:0:b0:d4e:3ffe:79d4 with SMTP id
+ w2-20020a258502000000b00d4e3ffe79d4mr2025862ybk.61.1692357974442; Fri, 18 Aug
+ 2023 04:26:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230818095149.3863285-1-sakari.ailus@linux.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230818160837.147b1e2e@canb.auug.org.au>
+In-Reply-To: <20230818160837.147b1e2e@canb.auug.org.au>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 18 Aug 2023 13:26:02 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWQFYZS8qACEsaZvMEuvrVY3Ag0pJBi1SE6Kkj8tTMbrg@mail.gmail.com>
+Message-ID: <CAMuHMdWQFYZS8qACEsaZvMEuvrVY3Ag0pJBi1SE6Kkj8tTMbrg@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the pinctrl-renesas tree with the
+ pinctrl tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Rob Herring <robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Aug 18, 2023 at 12:51:49PM +0300, Sakari Ailus wrote:
-> The Kconfig option that enables compiling camera sensor drivers is
-> VIDEO_CAMERA_SENSOR rather than MEDIA_CAMERA_SUPPORT as it was previously.
-> Fix this.
+Hi Stephen,
 
-Due to marvell changes it should be added:
+On Fri, Aug 18, 2023 at 8:08 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> Today's linux-next merge of the pinctrl-renesas tree got conflicts in:
+>
+>   drivers/pinctrl/renesas/pinctrl-rza2.c
+>   drivers/pinctrl/renesas/pinctrl-rzg2l.c
+>   drivers/pinctrl/renesas/pinctrl-rzv2m.c
+>
+> between commit:
+>
+>   060f03e95454 ("pinctrl: Explicitly include correct DT includes")
+>
+> from the pinctrl tree and commits:
+>
+>   848f700dabda ("pinctrl: renesas: rzg2l: Fix NULL pointer dereference in rzg2l_dt_subnode_to_map()")
+>   ca63f2ef6a16 ("pinctrl: renesas: rzv2m: Fix NULL pointer dereference in rzv2m_dt_subnode_to_map()")
+>   1eb1e00e5d99 ("pinctrl: renesas: rza2: Add lock around pinctrl_generic{{add,remove}_group,{add,remove}_function}")
+>
+> from the pinctrl-renesas tree.
+>
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
 
-Also select VIDEO_OV7670 for marvell platform drivers only if
-MEDIA_SUBDRV_AUTOSELECT and VIDEO_CAMERA_SENSOR are enabled.
+The resolution LGTM. Thanks!
 
-"usb: " should thus also be dropped from subject.
+Gr{oetje,eeting}s,
+
+                        Geert
 
 -- 
-Sakari Ailus
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

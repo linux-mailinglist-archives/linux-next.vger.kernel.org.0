@@ -2,156 +2,83 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF43D780D4B
-	for <lists+linux-next@lfdr.de>; Fri, 18 Aug 2023 16:00:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE814781290
+	for <lists+linux-next@lfdr.de>; Fri, 18 Aug 2023 20:08:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234770AbjHROAY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 18 Aug 2023 10:00:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39168 "EHLO
+        id S1379332AbjHRSH1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 18 Aug 2023 14:07:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377777AbjHRN7s (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 18 Aug 2023 09:59:48 -0400
-Received: from mail-oo1-xc33.google.com (mail-oo1-xc33.google.com [IPv6:2607:f8b0:4864:20::c33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 683144492
-        for <linux-next@vger.kernel.org>; Fri, 18 Aug 2023 06:59:26 -0700 (PDT)
-Received: by mail-oo1-xc33.google.com with SMTP id 006d021491bc7-56e9b517f85so60477eaf.0
-        for <linux-next@vger.kernel.org>; Fri, 18 Aug 2023 06:59:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1692367159; x=1692971959;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=duCRu/0LzBoxC3hG6QrfD3VEjxPFyp0C3jaFkBvDicw=;
-        b=geST65u8tHo2wtrAG1oaVQqo+p/+zOHXnO855ghHYbygcCDBUavGs3+uGqyWINGwAs
-         VJ9Eo1ACnczSNH9CgLM89hioBx0b5JQphjV/flzHkQt51x+eKC+VdOlGZu3kbb0Fx1wU
-         +QN4O4hfEMsjdT9OzIzTZRhd1kQurE53UOxLE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692367159; x=1692971959;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=duCRu/0LzBoxC3hG6QrfD3VEjxPFyp0C3jaFkBvDicw=;
-        b=J31eagZbxjdNJ4WiitbEQ0XTzqaRhmy+UG8IK1GMWbzAdndor2tTHLEVLDE56DG4wv
-         lTOJs7bDYSCbbVRWwfpDjDlYwyZfgRsqIXremXathiTE+qC3mfja1VAYjlg9eKCtfLwG
-         Ely/3BRSz83TfL/ahsqm7eVHni2CKphwUcT5aOztwHEjUTLU2Oqmlwr8LORQC13Gvp11
-         5MKzRwv33bzqUQbI7pGmX2BRX5bCvVdEKdIgzuUrrAIbyRzzjkM28Dy40icm23E0mDLV
-         416ICWzxFP0w+c+2WBHLU/cd+h9NBB7YQKYTquvP6mn6kbonGELsvxwqldxlYVC7Kb2R
-         CKsg==
-X-Gm-Message-State: AOJu0YzAdMZDDCb+8SDYphcUDQOyKlniYNbSEWMIeefEuWFvtk80XyKR
-        LT6uppzJ9jpUYCBTeZbg+42Jpw==
-X-Google-Smtp-Source: AGHT+IFdGR90xAoontA+rzv/VDZDgjORqTThJlYTJgKTIx0bZmUyoJhUd3q9RC/LS4ufhZwS9clRcg==
-X-Received: by 2002:a4a:eb1a:0:b0:560:b01a:653d with SMTP id f26-20020a4aeb1a000000b00560b01a653dmr3019525ooj.0.1692367159621;
-        Fri, 18 Aug 2023 06:59:19 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id i14-20020a4aab0e000000b005678320f1f2sm736544oon.13.2023.08.18.06.59.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Aug 2023 06:59:19 -0700 (PDT)
-Message-ID: <e08e3dd5-48b8-5da2-5d0c-7d5b70a9e9be@linuxfoundation.org>
-Date:   Fri, 18 Aug 2023 07:59:18 -0600
+        with ESMTP id S1379340AbjHRSHN (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 18 Aug 2023 14:07:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 722F02D70;
+        Fri, 18 Aug 2023 11:07:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ECD65616B0;
+        Fri, 18 Aug 2023 18:07:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EDE2C433C8;
+        Fri, 18 Aug 2023 18:07:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1692382031;
+        bh=8bazFKC2EtD5qKvG3tFrbUBhe0yoc4Mir5hc0laHKwc=;
+        h=Date:From:To:Cc:Subject:Reply-To:From;
+        b=sifg1jVnl3dmDGkgBrKYqRHMkKVTqGylITP0QwHlWSXw2wzlRGVWigvfG7Cx12xrH
+         vDleChZKhI+RG2hyqI/buzSPwfEFrUR9w+G3T10bLq1nvQWJylweqd17AAeDXcyXBX
+         tD3QJ7rfGljQvO4C6Vz0YB0EMp9qlQK+xk6ra4Q5f2nCxUs2MFtdEdkhYTmPEkvuX1
+         USYMKew1I2DQ9hbTj+n/ikHQqvJc8GDsqhuLkMz4ubKUmkk0GE2PJQw4yDLEJtuAMs
+         NMmmeDTqimRkbLYxrltx3Cw4vn7aXAJnk9wcD6oEhAg87KHmhz3+g/sP+9GXgXZWpO
+         HG1R6V2oug6yw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id CB9ABCE039C; Fri, 18 Aug 2023 11:07:10 -0700 (PDT)
+Date:   Fri, 18 Aug 2023 11:07:10 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
+Cc:     sfr@canb.auug.org.au, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com
+Subject: [BUG next-20230818] error: 'prepare_elf_headers' defined but not used
+Message-ID: <08fc20ef-854d-404a-b2f2-75941eeeccf8@paulmck-laptop>
+Reply-To: paulmck@kernel.org
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: linux-next: duplicate patch in the nolibc tree
-To:     Christian Brauner <brauner@kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Willy Tarreau <w@1wt.eu>,
-        =?UTF-8?Q?Thomas_Wei=c3=9fschuh?= <thomas@t-8ch.de>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20230817133811.0a73c624@canb.auug.org.au>
- <e0af8d82-e099-49fa-9fbd-6f6bb63b7706@t-8ch.de>
- <9cfb4fe4-162b-3f26-646b-71bed3493925@linuxfoundation.org>
- <4c037ef2-9159-4528-8ecb-8596cb2a3889@paulmck-laptop>
- <20230817193909.GA30505@1wt.eu>
- <01d517c4-d91b-4426-b7f2-2b1277f21d8c@paulmck-laptop>
- <20230818-anblicken-mitinhaber-11cd07cce0a1@brauner>
-Content-Language: en-US
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20230818-anblicken-mitinhaber-11cd07cce0a1@brauner>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 8/18/23 07:27, Christian Brauner wrote:
-> On Thu, Aug 17, 2023 at 01:41:45PM -0700, Paul E. McKenney wrote:
->> On Thu, Aug 17, 2023 at 09:39:09PM +0200, Willy Tarreau wrote:
->>> On Thu, Aug 17, 2023 at 11:46:57AM -0700, Paul E. McKenney wrote:
->>>> On Thu, Aug 17, 2023 at 12:27:46PM -0600, Shuah Khan wrote:
->>>>> On 8/17/23 10:30, Thomas Weißschuh wrote:
->>>>>> On 2023-08-17 13:38:11+1000, Stephen Rothwell wrote:
->>>>>>> The following commit is also in the vfs-brauner tree as a different commit
->>>>>>> (but the same patch):
->>>>>>>
->>>>>>>     ba859b2e419c ("selftests/nolibc: drop test chmod_net")
->>>>>>>
->>>>>>> This is commit
->>>>>>>
->>>>>>>     49319832de90 ("selftests/nolibc: drop test chmod_net")
->>>>>>>
->>>>>>> in the vfs-brauner tree.
->>>>>>
->>>>>> I think we can drop the patch from the nolibc tree.
->>>>>> The patch is only really necessary in combination with
->>>>>> commit 18e66ae67673 ("proc: use generic setattr() for /proc/$PID/net")
->>>>>> which already is and should stay in the vfs tree.
->>>>>
->>>>> Thomas,
->>>>>
->>>>> Do the rest of the nolibc patches build without this if we were
->>>>> to drop this patch? Dorpping requires rebase and please see below.
->>>>>
->>>>> Willy, Paul,
->>>>>
->>>>> How do we want to handle this so we can avoid rebasing to keep
->>>>> the Commit IDs the same as one ones in Willy's nolibc branch?
->>>>
->>>> The usual way would be for Willy to drop the patch, rebase, and republish
->>>> his branch.  You would then discard the current branch and pull the
->>>> new one.
->>>>
->>>>> I would recommend dropping this commit from vfs-brauner if it
->>>>> doesn't cause problems.
->>>>
->>>> It might be good for nolibc patches to be going through Willy's tree.
->>>
->>> It would indeed be more logical as a general rule. However, here I don't
->>> care as I don't see any issue caused by dropping it, I can adapt to what
->>> is most convenient for most of us.
->>>
->>> Let's maybe just wait a little bit for Christian to suggest what he
->>> prefers then we can adapt.
->>>
->>>> Or does Christian have some situation where it is necessary to make
->>>> a coordinated vfs/nolibc change?
->>>
->>> I don't think there's any need for coordination on this one.
->>
->> It is always good when either option can be make to work.  ;-)
-> 
-> The patch in the vfs tree will make the test fail so it makes sense to
-> have both go in together. I would normally be happy to drop it but I'm
-> rather unenthusiastic in this particular case because I replied to this
-> almost 5 weeks ago on Thursday, July 13 and since then this has been in
-> -next.
-> 
+Hello!
 
-I totally understand you being unenthusiastic. Considering summer
-vacation schedules and all, emails get missed at times.
+This morning's rcutorture testing on next-20230818 complained about
+prepare_elf_headers() being defined but unused on several rcutorture
+scenarios.  The patch below makes rcutorture happy, but might or might
+not be a proper fix.
 
-I sincerely request you to consider dropping as it is the simpler route
-for all involved.
+Thoughts?
 
-thanks,
--- Shuah
-  
+							Thanx, Paul
 
+------------------------------------------------------------------------
+
+diff --git a/arch/x86/kernel/crash.c b/arch/x86/kernel/crash.c
+index 1d0f824559fce..926c39e22387b 100644
+--- a/arch/x86/kernel/crash.c
++++ b/arch/x86/kernel/crash.c
+@@ -127,7 +127,8 @@ void native_machine_crash_shutdown(struct pt_regs *regs)
+ 	crash_save_cpu(regs, safe_smp_processor_id());
+ }
+ 
+-#if defined(CONFIG_KEXEC_FILE) || defined(CONFIG_CRASH_DUMP)
++#if (defined(CONFIG_KEXEC_FILE) || defined(CONFIG_CRASH_DUMP)) && defined(CONFIG_SMP) && defined(CONFIG_X86_LOCAL_APIC)
++
+ static int get_nr_ram_ranges_callback(struct resource *res, void *arg)
+ {
+ 	unsigned int *nr_ranges = arg;

@@ -2,44 +2,48 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF01C780440
-	for <lists+linux-next@lfdr.de>; Fri, 18 Aug 2023 05:13:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C08A780454
+	for <lists+linux-next@lfdr.de>; Fri, 18 Aug 2023 05:21:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236079AbjHRDNJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 17 Aug 2023 23:13:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54978 "EHLO
+        id S242157AbjHRDVW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 17 Aug 2023 23:21:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357536AbjHRDNA (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 17 Aug 2023 23:13:00 -0400
+        with ESMTP id S1357514AbjHRDVH (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 17 Aug 2023 23:21:07 -0400
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00EAA3A91;
-        Thu, 17 Aug 2023 20:12:57 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E53C730F5;
+        Thu, 17 Aug 2023 20:21:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1692328376;
-        bh=HPxdoWuuwg1hlgDgeHdT2jZY0Hdz6NsqEa0j6C1foxQ=;
-        h=Date:From:To:Cc:Subject:From;
-        b=oOi2jRUf+SE+QZF08hK1DXjmpnA9L/kWM3iDJC6NR673Cieq9oiu24kyqRXDazcF/
-         TD7wsvxnd+wEAH1vWqmLkKSMXV4gGbPOK6/o7BXs0MYHVUmBg4tm9ovm2OawYLnWMa
-         nsbIkFujxQFOdLWBqHqeC32Rsdjfx99aC/9kU7Jei7F6O3+Q4XmQdR303F6xQRXxHq
-         hjaWjTMwGQ049O+kZ9uLFMKbBZvTZdSotAbp1EGNcnG8E3vVkAtDrNmkWEgxmtd7xb
-         7ZrO5K/zth2MguQYoqpiiYNoB6NxuoAtGUw5DTaEDmSXVxF1KsMEoyetaaY1zNZwc1
-         P52ounNmumS0A==
+        s=201702; t=1692328864;
+        bh=Tpyx1B445b6D45UQRfR4DprDQ8S8METPX2CP3UsjIVo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=oczjNicFv859VV/m5CIKwT2XPeut792oqAVV3FZmUbvNIl3gbZDAtQF031rqsF9dR
+         8/NEfGd+qepahMnlYV6B2/FSVcfJBvrmRV3pbuHsRUMLSIJqaMHSyMovvCw0kFyzkQ
+         WP8qBjHmRHDzve67ZGrOP4/uxodn1MLlmpEgvV9mSHfe9qoG6/MHc3NoHeW3avqSh9
+         564oiowj4rqbZcmT8lWokXD8jJOm7nLT+xABwO77vXaRsLNPEPfidm9wGNDS+PLXYo
+         SkxKTMVeE4yXuYKFvBe1nHqrBmOMjXHPGpUGezZpJx0PTJrjBWQrgSpqhQVV9zDYu/
+         gRBtKUs6ZToGA==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4RRn4S3c0bz4wxm;
-        Fri, 18 Aug 2023 13:12:56 +1000 (AEST)
-Date:   Fri, 18 Aug 2023 13:12:55 +1000
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4RRnFq20GCz4wxy;
+        Fri, 18 Aug 2023 13:21:03 +1000 (AEST)
+Date:   Fri, 18 Aug 2023 13:21:02 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Takashi Iwai <tiwai@suse.de>
-Cc:     Curtis Malainey <cujomalainey@chromium.org>,
+To:     Joel Stanley <joel@jms.id.au>
+Cc:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        ARM <linux-arm-kernel@lists.infradead.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the sound tree
-Message-ID: <20230818131255.799cfc22@canb.auug.org.au>
+Subject: Re: linux-next: duplicate patches in the aspeed tree
+Message-ID: <20230818132102.11ef3fea@canb.auug.org.au>
+In-Reply-To: <CACPK8Xez-xQDEAG_JuN5VqMVBreLWO_Qhu+3Vq3EA1PiebR5hw@mail.gmail.com>
+References: <20230815114143.23e4b2ff@canb.auug.org.au>
+        <CACPK8Xez-xQDEAG_JuN5VqMVBreLWO_Qhu+3Vq3EA1PiebR5hw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/.g.vh_Q6z8Wsz9u.Wb9D.Fg";
+Content-Type: multipart/signed; boundary="Sig_/oGPZtMIRHW_+kWMk5wf8kUc";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,
@@ -50,51 +54,61 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/.g.vh_Q6z8Wsz9u.Wb9D.Fg
+--Sig_/oGPZtMIRHW_+kWMk5wf8kUc
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Hi Joel,
 
-After merging the sound tree, today's linux-next build (powerpc
-ppc64_defconfig) failed like this:
+On Fri, 18 Aug 2023 02:19:11 +0000 Joel Stanley <joel@jms.id.au> wrote:
+>
+> On Tue, 15 Aug 2023 at 01:41, Stephen Rothwell <sfr@canb.auug.org.au> wro=
+te:
+> >
+> > The following commits are also in the arm-soc-fixes tree as different
+> > commits (but the same patches):
+> >
+> >   0955e3867b54 ("soc: aspeed: socinfo: Add kfree for kstrdup")
+> >   c5835b6e7aff ("soc: aspeed: uart-routing: Use __sysfs_match_string")
+> >
+> > These are commits
+> >
+> >   6e6d847a8ce1 ("soc: aspeed: socinfo: Add kfree for kstrdup")
+> >   e4ad279ae345 ("soc: aspeed: uart-routing: Use __sysfs_match_string")
+> >
+> > in the arm-soc-fixes tree. =20
+>=20
+> This is expected as I sent the changes as patches for Arnd to merge
+> via the soc tree.
+>=20
+> What would you like to see when this happens? Should I rebase them out
+> of the aspeed tree?
 
-sound/aoa/soundbus/i2sbus/pcm.c: In function 'i2sbus_attach_codec':
-sound/aoa/soundbus/i2sbus/pcm.c:975:61: error: invalid type argument of '->=
-' (have 'struct snd_pcm_str')
-  975 |                 dev->pcm->streams[SNDRV_PCM_STREAM_PLAYBACK]->dev.p=
-arent =3D
-      |                                                             ^~
-sound/aoa/soundbus/i2sbus/pcm.c:992:60: error: invalid type argument of '->=
-' (have 'struct snd_pcm_str')
-  992 |                 dev->pcm->streams[SNDRV_PCM_STREAM_CAPTURE]->dev.pa=
-rent =3D
-      |                                                            ^~
+They are currently not causing any conflicts (that I would need to
+manually fix up), so you can just leave them it you like.
 
-Caused by commit
-
-  bc41a7228ced ("ALSA: pcm: Don't embed device")
-
-I have used the sound tree from next-20230817 for today.
-
+More generally, they could have gone into a separate branch that you
+merge and you ask Arnd to merge so that we only have one copy.  In
+particular, quite a few people have a separate "-fixes" branch for
+current release bug fixes.
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/.g.vh_Q6z8Wsz9u.Wb9D.Fg
+--Sig_/oGPZtMIRHW_+kWMk5wf8kUc
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmTe4bcACgkQAVBC80lX
-0Gz0awgAiDN+TOxRSlAW/i3mCNMu8WLcmJ5v+37ksi80lyfZJw4vJPdNm/VgsQMf
-nO5i/Xdc8Fczj/+qhahiGYvI96qy26Latp2zug/SCW7aQCvMPdUBxdb51gxh9lb+
-Flp7SY8wRTWeoOciXGD59RWKb06lkIGEE4XsdrHvh4H1x9hCjxqndLXiiRFcqMsW
-UIIu96HZ3GbSNIKhC5EAKKrWdt9cinDDyac7jYOaXTkjXA6oGu9NTst/dAIoKNQe
-nTAPlbO7nO1RyaYXB7f68g7ohAJGqTmtIczFPxjGM6m8cZWC/WcJ7PG+BhSlIgeK
-GKyRP9ruTBH3AFG24kWN6ExKrjHIkw==
-=1T4j
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmTe454ACgkQAVBC80lX
+0Gw8fgf/Un4qrcGHgCaXVQKeaGqEkg5Kr4W/CoecLVGqNAEJVcx9AsiBO66oF1Oc
+44qiL0NbuS1nd9RflqhocLKYyQwmaorcN7LhlHd77BCKlJ51I4js2b+UNmOagb4f
+B36swddNvNpRvrset+9phyoWGKfwBPXeBG9E9VwMBr1SZjFATwsh0gzeW7NUrO6x
+tlfi0K9JohIeOQRrO0ChcPNJ2okg+dPLhX3mCaIOHcJ6KdbUQ70Ygf8RUWCr7qyr
+paYhCJElOKQPzCdbqbQSA1fcxCumtN30WP7zwHQ8aFzkG7jDOfGpA/O5kVCBTH/o
+tPGAbujBBb3cuYAx/s815Z+rHXxfdw==
+=JDa1
 -----END PGP SIGNATURE-----
 
---Sig_/.g.vh_Q6z8Wsz9u.Wb9D.Fg--
+--Sig_/oGPZtMIRHW_+kWMk5wf8kUc--

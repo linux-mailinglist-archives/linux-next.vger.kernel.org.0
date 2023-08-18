@@ -2,148 +2,173 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3EB078053E
-	for <lists+linux-next@lfdr.de>; Fri, 18 Aug 2023 06:59:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8322A7805AF
+	for <lists+linux-next@lfdr.de>; Fri, 18 Aug 2023 07:33:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357906AbjHRE6l (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 18 Aug 2023 00:58:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44652 "EHLO
+        id S1354939AbjHRFdE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 18 Aug 2023 01:33:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348886AbjHRE6f (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 18 Aug 2023 00:58:35 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7304358E;
-        Thu, 17 Aug 2023 21:58:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1692334708;
-        bh=HiJA9PezM1HtffiYrXrdhi5mfPzK5Gu36qoqj3y34UQ=;
-        h=Date:From:To:Cc:Subject:From;
-        b=eCgz1PPdyt2Jld3CjkYn0XI0yuKWjdUTWTc2gTsfTgd6Os16DtPz/B/yBtHfmTLqE
-         kBJ4yRxp+hYQ4qPLyLPfHOZmeg2IAw8w3WKgd1B36jEj91ogENlyG391wwkxtbT56V
-         YCOSSZjJlEY6y/zbcB48azJrZwC/O6Ob/C3PQluLRzngn/h3pm1tmtXjvWFq8VYKT8
-         F32fYiU1OZHdaTL9yZaNEKFq59AhL8IhvaiHb/i9brBbMFLVaQTWaHWckVp9arYHEq
-         3GT5MaRtMfvD11WFvci6FDP5WKVMMpaAqlvuHvI774qZxPyyKGx3EjNVpyWIu94QBm
-         rCGG3EaDSpVvg==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4RRqQC6MLvz4wxm;
-        Fri, 18 Aug 2023 14:58:27 +1000 (AEST)
-Date:   Fri, 18 Aug 2023 14:58:26 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Greg KH <greg@kroah.com>, Michael Ellerman <mpe@ellerman.id.au>
-Cc:     PowerPC <linuxppc-dev@lists.ozlabs.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the tty tree with the powerpc tree
-Message-ID: <20230818145826.00c7ead1@canb.auug.org.au>
+        with ESMTP id S1357238AbjHRFcm (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 18 Aug 2023 01:32:42 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2066.outbound.protection.outlook.com [40.107.243.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64F94FC;
+        Thu, 17 Aug 2023 22:32:41 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DVtQeyzQjO3aRmoUKrICTcm5L6B8pA17YkaIxOoaPMuLLptvltzw6zcR6tQVMGgLkcVq2pXq5HQmUySMmIdlHvsZuRWtK9NGtyS8RvFaK5LfA2vCVso92AiGnwaAaipJPCG1lrQi5tfd83zGf7xieXPQpTMUwnBRD0lXioZFGCAX0WoYfPvsw5HNGBDrfUc5/EurN8w6u2vZmwlDhkA4K9dUmAOK7kyhhhb4MIgvLwiAWoDuj53DmQNjN9OORMn4ziJLJ5uUX1ovBvLgBt95El4rwAtei6S2G4+hCI+Pkg2LraRH7ZxmycoH9ZcDk7bUbl5TEvwrzQWRJjecYNYCVw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=7G7G7qrvWLv9jHCCHdHlvH+1VHbH4qNm4ZV5AvcS0qg=;
+ b=FzRQ1duCsq14NR/fOa3NXs7Uzd2hC11aBH4k0x20OvcV63eswyOhBiR21Gh+DGNlhPxeU8plXhecSXKi2q29E10jwv4fnPRplZhqV5HJI0cCTZpAP4lAQ8XDdjD7NAJnYMTQz+tFqmyjL5gHIaWi1yEo9/eOhX2UoDeL7hqDX5sXnyzQ8rJ6olVPJvLsmeY2/V5C+cmM8uYsOaj0zc/YO2/JndvBRIxOVm15/SklQRSHi4METlf7U5qUo8dMAYg3e3trv6RgJTQyHnTAgtPN3Y8vlcwXI/fi3j2Wd/DbsCCk/OdXLmPhSXN3Pr/V5BhvjuxFQ/ZFF6GpAObTtP9Zbw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7G7G7qrvWLv9jHCCHdHlvH+1VHbH4qNm4ZV5AvcS0qg=;
+ b=S72BXVdHVd/QsM6MHow/tB0bWX4DZt4Olv/I5qms1OYPfngZxRXyUk4+4n5wR/JlWiqnCPVTeEUrlE67Gw2+0sZwFzdkmqmjSAnlghBIiSl44FwS3PpP2ExpiJiKj7xHYu4pBAHWBKW89d/t7G4DhsOSiecQl4jQJZEA1S/AI2k=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BYAPR12MB3589.namprd12.prod.outlook.com (2603:10b6:a03:df::29)
+ by DS0PR12MB8561.namprd12.prod.outlook.com (2603:10b6:8:166::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6678.31; Fri, 18 Aug
+ 2023 05:32:39 +0000
+Received: from BYAPR12MB3589.namprd12.prod.outlook.com
+ ([fe80::3624:9885:6e0a:5d97]) by BYAPR12MB3589.namprd12.prod.outlook.com
+ ([fe80::3624:9885:6e0a:5d97%6]) with mapi id 15.20.6678.031; Fri, 18 Aug 2023
+ 05:32:39 +0000
+Message-ID: <02a565a0-9307-7620-7e53-f2630b97f0bd@amd.com>
+Date:   Fri, 18 Aug 2023 07:32:31 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: linux-next: Tree for Aug 17 (DRM_TTM KUNIT tests)
+Content-Language: en-US
+To:     Randy Dunlap <rdunlap@infradead.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Karolina Stolarek <karolina.stolarek@intel.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        Huang Rui <ray.huang@amd.com>
+References: <20230817144729.7d2b1b53@canb.auug.org.au>
+ <17065c3f-87bb-c2a9-e8f6-82fecd15b9c7@infradead.org>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <17065c3f-87bb-c2a9-e8f6-82fecd15b9c7@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR0P281CA0230.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:b2::17) To BYAPR12MB3589.namprd12.prod.outlook.com
+ (2603:10b6:a03:df::29)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/+BM+ZDeXTi+uS+L9NKgFyXK";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BYAPR12MB3589:EE_|DS0PR12MB8561:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5d176f4d-c256-4bd4-7dac-08db9fac892d
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: oU54JQSSc6gRaO/Akbwtd9+/cCxGLnP0XLvQOgCHdI5UHxk2t6FjFljJRsUlSrSqbYJYdhNHWs8OEYolra7sGYn2WvizImP62zeprPSH4HJB7JjrqzhkzrFh06+DGFf9jrNtkf0Y4Fs/GQlK5WVqYdL6wq6srsRRzWJvZOf8df49OLCA2ZqNuM3rnwPWkaJvyr6VS8Fb+uF+pmRSDOyhudnM8aUK6/aa+4RWDuErRacX1HcE7wH89iAfG4jOAKWo92zlU4qX0+5gsLG3P61ftDN7bp9+JcBTKoXFMTDQsP0dJuAoKEWehWOqviHvOjZ0x0blLRCoiqoDqWHi/W+aphfSyxv2YNEDNIYv+O7ldiS6RrDJa/KQXfMdrGHLf6J/J9eEvH27/E4cXC3ojGkZ1gj30WZWHniYPm6y87fE7Vt4p1rqzkxaCgLhNXK56R67+cjd8TJytmuyujMKHNc0bRxT04bO+iIK+zkAAqLFoyA4QhOKicTNPExkMe6e+Z1PPkl4fTz7iGLMBlZHOTv6hd6MVLetNF8olxoeUzyRdKxDVrXwJrnRF/3WEepGdMRjC/6bQ1CEDdr23UaJ0TIGyLp/a0ZaN627GDWnO9TfrrBAh3LM+z0SKzzezdu6cDt0LBvIn7MDjUdjF6Jl7VkLKg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3589.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(39860400002)(396003)(136003)(346002)(376002)(366004)(1800799009)(451199024)(186009)(6666004)(6512007)(6506007)(53546011)(6486002)(83380400001)(38100700002)(31696002)(26005)(86362001)(36756003)(2616005)(41300700001)(2906002)(316002)(66556008)(66946007)(66476007)(110136005)(54906003)(5660300002)(8676002)(8936002)(4326008)(31686004)(478600001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NmJFMHM5SjRWTUpkemtIOWpkK1dhNUpNcTJjZjdYOXpFN2J6MEhFWUEwYmF2?=
+ =?utf-8?B?NlVZdnNySlliVGY5andiT3R0UUZId3EyNEdzZmtCQ1JtZFl0MUlVOGQ3R3Mv?=
+ =?utf-8?B?eXJwN0d3RjByM1E0bCtCR3VzYTNvL1ptdk15bjg2dlBQckpDeGRxamRNRi9G?=
+ =?utf-8?B?enhmaTJSTFpVa2QzSWVZV0dyZ0hBUjVRNk1ZSzJGL2Rua25ZNVM0WjdrSklM?=
+ =?utf-8?B?Vk1hVks2L2tZUXBXbDJUMmpuSGZMc2I5RFAxVGRURUU0eXh5UDNKTFdQTlJT?=
+ =?utf-8?B?V25WMExhQ1ZvTnNTZWlZa3pDMFpHQVhtcVJ4ZGY0RmxQTlFBL2M1ZHVwSzVX?=
+ =?utf-8?B?aGZMeFQxWklPNjkxMG9zeHNSZVYwNWN0bWZvZzlMc1QvQmFVYXBieXY4bHlN?=
+ =?utf-8?B?UDh1WExaRVBLdUE2bXhmNVphMFdyb3lRblRvNGw2T09sWXNkVjk5aGx6VXZj?=
+ =?utf-8?B?Uzcrd3FDNnArZmkzYjJPaFRkMDN3NlljMnNQYjVWV01ZQmdvdkdjS2NRcmJt?=
+ =?utf-8?B?dHMzTk1zeW90YlRPeEdUWllNcEthN0UvaVRhZGxWV3lhWTNDNlNvaGdHRjFH?=
+ =?utf-8?B?aG91Y0VwejBlbFNqVEdxMzNORkJhMlY0amI4SHNnOHJDOFg1RGFFSjdrSFdH?=
+ =?utf-8?B?MEZDME5NcUNiU3BibDJpc0txYnpaRzdBSEZtWUdrTUU4VDllZmJwS3pjQ3ow?=
+ =?utf-8?B?aFJTQ0NWams2ZFpwbkovbXdJV1B2aE9NN1hrWXdKSVpkTVE4NEhWaEYyVW1z?=
+ =?utf-8?B?NzFGVUwvMU5JdzJ6bmNMcFlBNTd4a0xBL2N4VjZKMGNyakFUaGJWVkVpYTk2?=
+ =?utf-8?B?ZjNuVGxjcExpenJMYTdUNVZlYkNCZW91bHJ4VHZCN0FySVhJblFJU0ZPMmU0?=
+ =?utf-8?B?Y2xnek4wTm00V0lLR0pibzdnV0ZROExXTk9TTFk2cXJYOXh3S3lUVk9EUk81?=
+ =?utf-8?B?cG1vaUlzZjFoSHVROEtjZDZ5TTkwaUpKWHRlSE1ndWdNdTZtZitXeWh6RXI4?=
+ =?utf-8?B?dG1tS1U1MVhzZGJIWWRKdlRodHRsajJBaDQ1SWZXbEVwdXIrODJ4M0VPTCtk?=
+ =?utf-8?B?cDVVM1YvQjhaQUlpdjZmbkliN2FHZHJXRUo1NDlIcDlkTGJPLzM3RXBUN2xW?=
+ =?utf-8?B?SGNPLzMxYzhzUGcwTWxoaHdFQ1Q1L1RTTEtEL28xbjhkR1F5bDNEeEdzemxj?=
+ =?utf-8?B?WjQ4eWNRazhwSktoRWo2dG9IcFM3eEdXMVp6ZVdJUWlJZHBYaDRZa0ljUzRa?=
+ =?utf-8?B?SDVGeFJYTlkvMFNyaTBabWw3VkJnOXVzamJzR2xNcWNjZlpwa0RkM254UnBk?=
+ =?utf-8?B?VlNZV3hVRlIyQzJpMkQzSXpxbzBkU3NxVVRDWTNDOXpxb3hFQVlKbGd1OExW?=
+ =?utf-8?B?ZVlxemVDM0JjRExsNW9hU2w5RDVTZlg5Nkw5VThGNDdhT1NScjB4bkhaZFFK?=
+ =?utf-8?B?UmlYZjVwTXJxM252RDJtbk5nc0NJVVpRK1EwalNuTFprSzYxcGk3KzN6azdY?=
+ =?utf-8?B?cGJGVUg0L2QzZVlDZ3FDUTErR0ZaU1E4TTVTYi9jZTFmYnl5RUJmVEFTTFVP?=
+ =?utf-8?B?cHFoYjR5cWM0YlBpUnJnbjQxZDRKZ2RscWVDU3FjTWFrZ010VllrcmhKVXZK?=
+ =?utf-8?B?VGcrbkxXeG0zVzJCUm5SS3czODh2NW0vYUZmdFE2ckh4dzJadnNHbjJBYlRH?=
+ =?utf-8?B?aDloVzBoZDhnejhUOHNqR01sWkVMTjA2MklMN2xjRU5FVXBYN05HZkw2ekxT?=
+ =?utf-8?B?N0ZiWkVXYVRtSjJvaGd3VExjYnVGV2pzRXQvdUM3ZHI1ZXZsaWlIWDljVkti?=
+ =?utf-8?B?RWZVQ3BEbHgwTUJHTTVXUmlqcHc2MjM0aHFuL1JCN1o0c0ZaakpvaWZlQmd0?=
+ =?utf-8?B?L1VkTS9TTXBZMGx2OG5wQktFS2RmS0xWYmFMT3BSQlg2R1RXTHdkL0lIa2sr?=
+ =?utf-8?B?WFl0Q3Urb3hWMUtvTUlDZXgxblBWeUQ1Wk9hS2pZU3pTTVlyN1JmTEdpeWJw?=
+ =?utf-8?B?d0RtNFBWTGNrbUtXektJdTQzS3gxRHh3YjZmQ3c2M2c0Sk9pVzRvV3ZuVjNs?=
+ =?utf-8?B?dXZUU0hUUGgrMTJKRmlWSUI3RHIvanIxNHpwYmIra3U1dDFCdnZIL0JiczRF?=
+ =?utf-8?Q?7bSnwRul3i1lvwBkgo9v4bzON?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5d176f4d-c256-4bd4-7dac-08db9fac892d
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3589.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Aug 2023 05:32:39.1155
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: K2uNR2FrCi0yytM3r7twZcvzJjolivPipqx0esjseItMVGPn6uOK55yupPmP5Grx
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8561
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/+BM+ZDeXTi+uS+L9NKgFyXK
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Am 17.08.23 um 20:44 schrieb Randy Dunlap:
+>
+> On 8/16/23 21:47, Stephen Rothwell wrote:
+>> Hi all,
+>>
+>> Changes since 20230816:
+>>
+> on risc-v 32-bit:
+> when
+> # CONFIG_MMU is not set
 
-Hi all,
+Patch to fix this is already queued up for the next pull request.
 
-Today's linux-next merge of the tty tree got a conflict in:
+Sorry for the noise,
+Christian.
 
-  arch/powerpc/include/asm/fs_pd.h
+>
+>
+> WARNING: unmet direct dependencies detected for DRM_TTM
+>    Depends on [n]: HAS_IOMEM [=y] && DRM [=y] && MMU [=n]
+>    Selected by [y]:
+>    - DRM_TTM_KUNIT_TEST [=y] && HAS_IOMEM [=y] && DRM [=y] && KUNIT [=y]
+>
+> WARNING: unmet direct dependencies detected for DRM_TTM
+>    Depends on [n]: HAS_IOMEM [=y] && DRM [=y] && MMU [=n]
+>    Selected by [y]:
+>    - DRM_TTM_KUNIT_TEST [=y] && HAS_IOMEM [=y] && DRM [=y] && KUNIT [=y]
+>
+> WARNING: unmet direct dependencies detected for DRM_TTM
+>    Depends on [n]: HAS_IOMEM [=y] && DRM [=y] && MMU [=n]
+>    Selected by [y]:
+>    - DRM_TTM_KUNIT_TEST [=y] && HAS_IOMEM [=y] && DRM [=y] && KUNIT [=y]
+>
+> /opt/crosstool/gcc-13.1.0-nolibc/riscv32-linux/bin/riscv32-linux-ld: drivers/gpu/drm/ttm/ttm_bo_vm.o: in function `.L31':
+> ttm_bo_vm.c:(.text+0x42c): undefined reference to `vmf_insert_pfn_prot'
+> /opt/crosstool/gcc-13.1.0-nolibc/riscv32-linux/bin/riscv32-linux-ld: drivers/gpu/drm/ttm/ttm_bo_vm.o: in function `.L104':
+> ttm_bo_vm.c:(.text+0xa70): undefined reference to `vmf_insert_pfn_prot'
+>
+>
 
-between commits:
-
-  e6e077cb2aa4 ("powerpc/include: Declare mpc8xx_immr in 8xx_immap.h")
-  fecc436a97af ("powerpc/include: Remove mpc8260.h and m82xx_pci.h")
-  fbbf4280dae4 ("powerpc/8xx: Remove immr_map() and immr_unmap()")
-  7768716d2f19 ("powerpc/cpm2: Remove cpm2_map() and cpm2_unmap()")
-
-from the powerpc tree and commit:
-
-  c2d6c1b4f034 ("serial: cpm_uart: Use get_baudrate() instead of uart_baudr=
-ate()")
-
-from the tty tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
-Note that after all the above are applied, it looks like this file can
-be removed completely as nothing in the tree includes it any more.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc arch/powerpc/include/asm/fs_pd.h
-index d530f68b4eef,7b61b80f212d..000000000000
---- a/arch/powerpc/include/asm/fs_pd.h
-+++ b/arch/powerpc/include/asm/fs_pd.h
-@@@ -14,14 -14,26 +14,4 @@@
-  #include <sysdev/fsl_soc.h>
-  #include <asm/time.h>
- =20
-- static inline int uart_baudrate(void)
-- {
--         return get_baudrate();
-- }
- -#ifdef CONFIG_CPM2
- -#include <asm/cpm2.h>
---
-- static inline int uart_clock(void)
-- {
--         return ppc_proc_freq;
-- }
- -#if defined(CONFIG_8260)
- -#include <asm/mpc8260.h>
- -#endif
- -
- -#define cpm2_map(member) (&cpm2_immr->member)
- -#define cpm2_map_size(member, size) (&cpm2_immr->member)
- -#define cpm2_unmap(addr) do {} while(0)
- -#endif
- -
- -#ifdef CONFIG_PPC_8xx
- -#include <asm/8xx_immap.h>
- -
- -extern immap_t __iomem *mpc8xx_immr;
- -
- -#define immr_map(member) (&mpc8xx_immr->member)
- -#define immr_map_size(member, size) (&mpc8xx_immr->member)
- -#define immr_unmap(addr) do {} while (0)
- -#endif
---
-  #endif
-
---Sig_/+BM+ZDeXTi+uS+L9NKgFyXK
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmTe+nIACgkQAVBC80lX
-0GzCmQgAmP3nmQ0ZuhAn8IAop29hDMJ9UIpuvTIwLrXrmFIXo7tWOGa116pQxFkl
-0+kFmuWcpAjEzbupP8Xu5c5EqY6mVifAySJuqQqievs0dFnEG5lVTgYLNjwGuOKP
-/2dhd9+mJDRJkTWe0i5soJwntBy/gFIsjB2/0Ce1y9SA+qf4RZAWHUOfA4CiB4Ym
-W1XErJP6WQyd75iLxojA3T+XYMGZv/I5OMrR2/o2i+i36zfphHpZiU/mZ930gtPy
-jHq5X2H59AzBgpt5AXyLxCt2uXoqrXaBqoNg+huyOMeZEVipRcXJwI3Pb1G3AiEr
-w6HanKvuBhq802YphvwzmSGclzDHSw==
-=Y4Re
------END PGP SIGNATURE-----
-
---Sig_/+BM+ZDeXTi+uS+L9NKgFyXK--

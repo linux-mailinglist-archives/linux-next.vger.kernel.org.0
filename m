@@ -2,83 +2,110 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE814781290
-	for <lists+linux-next@lfdr.de>; Fri, 18 Aug 2023 20:08:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D913C781683
+	for <lists+linux-next@lfdr.de>; Sat, 19 Aug 2023 03:54:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379332AbjHRSH1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 18 Aug 2023 14:07:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36656 "EHLO
+        id S243154AbjHSBxu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 18 Aug 2023 21:53:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379340AbjHRSHN (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 18 Aug 2023 14:07:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 722F02D70;
-        Fri, 18 Aug 2023 11:07:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ECD65616B0;
-        Fri, 18 Aug 2023 18:07:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EDE2C433C8;
-        Fri, 18 Aug 2023 18:07:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1692382031;
-        bh=8bazFKC2EtD5qKvG3tFrbUBhe0yoc4Mir5hc0laHKwc=;
-        h=Date:From:To:Cc:Subject:Reply-To:From;
-        b=sifg1jVnl3dmDGkgBrKYqRHMkKVTqGylITP0QwHlWSXw2wzlRGVWigvfG7Cx12xrH
-         vDleChZKhI+RG2hyqI/buzSPwfEFrUR9w+G3T10bLq1nvQWJylweqd17AAeDXcyXBX
-         tD3QJ7rfGljQvO4C6Vz0YB0EMp9qlQK+xk6ra4Q5f2nCxUs2MFtdEdkhYTmPEkvuX1
-         USYMKew1I2DQ9hbTj+n/ikHQqvJc8GDsqhuLkMz4ubKUmkk0GE2PJQw4yDLEJtuAMs
-         NMmmeDTqimRkbLYxrltx3Cw4vn7aXAJnk9wcD6oEhAg87KHmhz3+g/sP+9GXgXZWpO
-         HG1R6V2oug6yw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id CB9ABCE039C; Fri, 18 Aug 2023 11:07:10 -0700 (PDT)
-Date:   Fri, 18 Aug 2023 11:07:10 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
-Cc:     sfr@canb.auug.org.au, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com
-Subject: [BUG next-20230818] error: 'prepare_elf_headers' defined but not used
-Message-ID: <08fc20ef-854d-404a-b2f2-75941eeeccf8@paulmck-laptop>
-Reply-To: paulmck@kernel.org
+        with ESMTP id S243362AbjHSBx1 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 18 Aug 2023 21:53:27 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FD332722;
+        Fri, 18 Aug 2023 18:53:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=umGobu/WEh30Unz95zedAfhIw4lti6auHb3YP7vsTTM=; b=w/Y7nb+bxzP1VLmz16BK0TOivH
+        a6B5xRQg5irisBdEooAkpst6QQORpkJSXwlksgT8qKbJ7zHcUedj0aC8RzTMfQufRodA6jRPXPqRL
+        T14QOQDDY5qtjCjIp3tQDllk+JLYDiTXek7Sna+fXwBCLDdPgvpiVvdDmWQGADfSHuJg2367mB3t4
+        fkj8r7wxIwyK+VYXiHKEMfkqCgjngYahHpZwI6eBPpwFMcDLb7F66If57uH+sZ/nZkoF207oJFSfi
+        ZCT5x01SCacEmfH3IsjLTsV5yEy3YpTnZfT1c3+oGPZuErE8lbt5fH1jJ5R6ws90MT7Q7QAUqOmMT
+        NBV6Qjyg==;
+Received: from [2601:1c2:980:9ec0::2764]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qXB9V-00AH3M-1D;
+        Sat, 19 Aug 2023 01:53:21 +0000
+Message-ID: <f5bf21f5-3ca2-ade1-16dc-44588d2663ed@infradead.org>
+Date:   Fri, 18 Aug 2023 18:53:19 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.14.0
+Subject: Re: [PATCH v2 1/1] media: v4l: usb: Use correct dependency for camera
+ sensor drivers
+Content-Language: en-US
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        linux-media@vger.kernel.org
+Cc:     hverkuil@xs4all.nl, Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-next@vger.kernel.org, Wentong Wu <wentong.wu@intel.com>,
+        Zhifeng Wang <zhifeng.wang@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+References: <20230818095149.3863285-1-sakari.ailus@linux.intel.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20230818095149.3863285-1-sakari.ailus@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hello!
+Hi Sakari,
 
-This morning's rcutorture testing on next-20230818 complained about
-prepare_elf_headers() being defined but unused on several rcutorture
-scenarios.  The patch below makes rcutorture happy, but might or might
-not be a proper fix.
+On 8/18/23 02:51, Sakari Ailus wrote:
+> The Kconfig option that enables compiling camera sensor drivers is
+> VIDEO_CAMERA_SENSOR rather than MEDIA_CAMERA_SUPPORT as it was previously.
+> Fix this.
+> 
+> Reported-by: Randy Dunlap <rdunlap@infradead.org>
+> Fixes: 7d3c7d2a2914 ("media: i2c: Add a camera sensor top level menu")
+> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> ---
+> since v1:
+> 
+> - Also include MMP camera Kconfig fix.
+> 
+>  drivers/media/platform/marvell/Kconfig | 4 ++--
+>  drivers/media/usb/em28xx/Kconfig       | 4 ++--
+>  drivers/media/usb/go7007/Kconfig       | 2 +-
+>  3 files changed, 5 insertions(+), 5 deletions(-)
+> 
 
-Thoughts?
+This v2 patch fixes a few more issues but there is still one nagging problem
+(2 versions of it, one with VIDEO_VIA_CAMERA=y and one with VIDEO_VIA_CAMERA=m):
 
-							Thanx, Paul
+(1)
+WARNING: unmet direct dependencies detected for VIDEO_OV7670
+  Depends on [n]: MEDIA_SUPPORT [=y] && VIDEO_DEV [=y] && VIDEO_CAMERA_SENSOR [=n]
+  Selected by [y]:
+  - VIDEO_VIA_CAMERA [=y] && MEDIA_SUPPORT [=y] && MEDIA_PLATFORM_SUPPORT [=y] && MEDIA_PLATFORM_DRIVERS [=y] && V4L_PLATFORM_DRIVERS [=y] && FB_VIA [=y] && VIDEO_DEV [=y]
 
-------------------------------------------------------------------------
+WARNING: unmet direct dependencies detected for VIDEO_OV7670
+  Depends on [n]: MEDIA_SUPPORT [=y] && VIDEO_DEV [=y] && VIDEO_CAMERA_SENSOR [=n]
+  Selected by [y]:
+  - VIDEO_VIA_CAMERA [=y] && MEDIA_SUPPORT [=y] && MEDIA_PLATFORM_SUPPORT [=y] && MEDIA_PLATFORM_DRIVERS [=y] && V4L_PLATFORM_DRIVERS [=y] && FB_VIA [=y] && VIDEO_DEV [=y]
 
-diff --git a/arch/x86/kernel/crash.c b/arch/x86/kernel/crash.c
-index 1d0f824559fce..926c39e22387b 100644
---- a/arch/x86/kernel/crash.c
-+++ b/arch/x86/kernel/crash.c
-@@ -127,7 +127,8 @@ void native_machine_crash_shutdown(struct pt_regs *regs)
- 	crash_save_cpu(regs, safe_smp_processor_id());
- }
- 
--#if defined(CONFIG_KEXEC_FILE) || defined(CONFIG_CRASH_DUMP)
-+#if (defined(CONFIG_KEXEC_FILE) || defined(CONFIG_CRASH_DUMP)) && defined(CONFIG_SMP) && defined(CONFIG_X86_LOCAL_APIC)
-+
- static int get_nr_ram_ranges_callback(struct resource *res, void *arg)
- {
- 	unsigned int *nr_ranges = arg;
+(2)
+WARNING: unmet direct dependencies detected for VIDEO_OV7670
+  Depends on [n]: MEDIA_SUPPORT [=y] && VIDEO_DEV [=m] && VIDEO_CAMERA_SENSOR [=n]
+  Selected by [m]:
+  - VIDEO_VIA_CAMERA [=m] && MEDIA_SUPPORT [=y] && MEDIA_PLATFORM_SUPPORT [=y] && MEDIA_PLATFORM_DRIVERS [=y] && V4L_PLATFORM_DRIVERS [=y] && FB_VIA [=m] && VIDEO_DEV [=m]
+
+WARNING: unmet direct dependencies detected for VIDEO_OV7670
+  Depends on [n]: MEDIA_SUPPORT [=y] && VIDEO_DEV [=m] && VIDEO_CAMERA_SENSOR [=n]
+  Selected by [m]:
+  - VIDEO_VIA_CAMERA [=m] && MEDIA_SUPPORT [=y] && MEDIA_PLATFORM_SUPPORT [=y] && MEDIA_PLATFORM_DRIVERS [=y] && V4L_PLATFORM_DRIVERS [=y] && FB_VIA [=m] && VIDEO_DEV [=m]
+
+Let me know if you need full randconfig files for any of these.
+Thanks.
+
+-- 
+~Randy

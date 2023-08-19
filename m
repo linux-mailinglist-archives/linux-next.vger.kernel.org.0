@@ -2,100 +2,93 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18E007819A3
-	for <lists+linux-next@lfdr.de>; Sat, 19 Aug 2023 15:07:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B261F781A5C
+	for <lists+linux-next@lfdr.de>; Sat, 19 Aug 2023 17:35:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232659AbjHSNHS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 19 Aug 2023 09:07:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45804 "EHLO
+        id S233143AbjHSPfd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sat, 19 Aug 2023 11:35:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232634AbjHSNHR (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sat, 19 Aug 2023 09:07:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C9021A2B6
-        for <linux-next@vger.kernel.org>; Sat, 19 Aug 2023 06:04:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1692450283;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=44t+slypeaFqQqg1YfQ+1N3czVzY0JoGqBhiZJtua2M=;
-        b=FDohIQftDcUX178DeOfl/RM6b16kfTqzsU9zIv/qTqNGwgzp9OhwVhJIdY4C/MCbtpq54W
-        bjFCivCOOD+9JwwAz+5CMBvN5KJXxdOAzvxm/uyTBmJATAoAosgl62HHeCQv5sosCxfTLa
-        /5ugey6sVcx1utuCVoLbfspoHJQNyiM=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-141-jSEZ7sAUNXaqrfFwWEhtYw-1; Sat, 19 Aug 2023 09:04:39 -0400
-X-MC-Unique: jSEZ7sAUNXaqrfFwWEhtYw-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B8A7C185A78F;
-        Sat, 19 Aug 2023 13:04:38 +0000 (UTC)
-Received: from localhost (unknown [10.72.112.9])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id A102D5CBFF;
-        Sat, 19 Aug 2023 13:04:36 +0000 (UTC)
-Date:   Sat, 19 Aug 2023 21:04:33 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>, eric.devolder@oracle.com
-Cc:     linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
-        sfr@canb.auug.org.au, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, sourabhjain@linux.ibm.com, hbathini@linux.ibm.com
-Subject: Re: [BUG resend next-20230818] error: 'prepare_elf_headers' defined
- but not used
-Message-ID: <ZOC94WelqfS0vsFK@MiWiFi-R3L-srv>
-References: <08fc20ef-854d-404a-b2f2-75941eeeccf8@paulmck-laptop>
- <4a991983-da2e-4fcd-965c-5b65de6700da@paulmck-laptop>
+        with ESMTP id S231128AbjHSPfd (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sat, 19 Aug 2023 11:35:33 -0400
+X-Greylist: delayed 447 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 19 Aug 2023 08:35:30 PDT
+Received: from www.linux-watchdog.org (www.linux-watchdog.org [185.87.125.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E0C5859F8;
+        Sat, 19 Aug 2023 08:35:30 -0700 (PDT)
+Received: by www.linux-watchdog.org (Postfix, from userid 500)
+        id D4FAB40A03; Sat, 19 Aug 2023 17:25:33 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 www.linux-watchdog.org D4FAB40A03
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-watchdog.org;
+        s=odk20180602; t=1692458733;
+        bh=j/MBHbRcsMX9PPuXauIuuKH6HsPvMiHxskwoP/V5mL0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=vP28gEdEyroY+t2UH9M8WP97VPa7azhYgguo/Rt0xUJ/B3cjmtF6ApCPOfzN8edhX
+         M/jPTx9xzkPoOX5mKtW4zOU47c79exwzlq1WfUEPVq8DCEY1Q03DPyICXIzGK7tKTx
+         gL49FCCWcWCwgBBL7jQMY/amDaUn9YnSyeie2d+w=
+Date:   Sat, 19 Aug 2023 17:25:33 +0200
+From:   Wim Van Sebroeck <wim@linux-watchdog.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Mark Gross <markgross@kernel.org>,
+        Henning Schild <henning.schild@siemens.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: duplicate patch in the drivers-x86 tree
+Message-ID: <20230819152533.GA18546@www.linux-watchdog.org>
+References: <20230815165725.30a01fe9@canb.auug.org.au>
+ <20230815165856.051fb20f@canb.auug.org.au>
+ <2f9489b4-2414-9f03-4f66-9838b8ee6be0@redhat.com>
+ <e4eb2acd-7ed4-43f2-af9d-116cec77fc31@roeck-us.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <4a991983-da2e-4fcd-965c-5b65de6700da@paulmck-laptop>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <e4eb2acd-7ed4-43f2-af9d-116cec77fc31@roeck-us.net>
+User-Agent: Mutt/1.5.20 (2009-12-10)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 08/18/23 at 07:28pm, Paul E. McKenney wrote:
-> Hello!
-> 
-> This morning's rcutorture testing on next-20230818 complained about
-> prepare_elf_headers() being defined but unused on several rcutorture
-> scenarios.  The patch below makes rcutorture happy, but might or might
-> not be a proper fix.
-> 
-> This is a resend adding a few more people on CC, given a possible
-> relationship to 9f1f399ca999 ("x86/crash: add x86 crash hotplug support").
-> 
-> Thoughts?
-> 
+Hi all,
 
-Thanks for reporting this, Paul.
-> 
-> ------------------------------------------------------------------------
-> 
-> diff --git a/arch/x86/kernel/crash.c b/arch/x86/kernel/crash.c
-> index 1d0f824559fce..926c39e22387b 100644
-> --- a/arch/x86/kernel/crash.c
-> +++ b/arch/x86/kernel/crash.c
-> @@ -127,7 +127,8 @@ void native_machine_crash_shutdown(struct pt_regs *regs)
->  	crash_save_cpu(regs, safe_smp_processor_id());
->  }
->  
-> -#if defined(CONFIG_KEXEC_FILE) || defined(CONFIG_CRASH_DUMP)
-> +#if (defined(CONFIG_KEXEC_FILE) || defined(CONFIG_CRASH_DUMP)) && defined(CONFIG_SMP) && defined(CONFIG_X86_LOCAL_APIC)
+> On Tue, Aug 15, 2023 at 09:59:45AM +0200, Hans de Goede wrote:
+> > Hi,
+> > 
+> > On 8/15/23 08:58, Stephen Rothwell wrote:
+> > > Hi Stephen,
+> > > 
+> > > On Tue, 15 Aug 2023 16:57:25 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> > >>
+> > >> Hi all,
+> > >>
+> > >> The following commit is also in the watchdog tree as a different commit
+> > >> (but the same patch):
+> > >>
+> > >>   3fce06406c59 ("watchdog: make Siemens Simatic watchdog driver default on platform")
+> > >>
+> > >> This is commit
+> > >>
+> > >>   926df9ae133d ("watchdog: make Siemens Simatic watchdog driver default on platform")
+> > > 
+> > > in the watchdog tree.
+> > 
+> > Guenter, IIRC we agreed that I would merge this one through
+> > the pdx86 tree?
+> > 
+> I thought that applied to the rest of the series. I tagged this patch
+> with Reviewed-by: which generally means for Wim to pick it up. Ultimately
+> I don't really care either way. I'll drop the patch from my tree.
+> Note though that this doesn't mean that Wim will pick up the drop.
 
-Hi Eric,
+Also dropped in the linux-atchdog-next tree.
 
-Now prepare_elf_headers() is needed for kexec_file_load and crash
-hotplug support of kexec_load, change it like this?
-
-#if defined(CONFIG_KEXEC_FILE) || defined(CONFIG_CRASH_HOTPLUG)
+Kind regards,
+Wim.
 

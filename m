@@ -2,119 +2,106 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B0C1781B80
-	for <lists+linux-next@lfdr.de>; Sun, 20 Aug 2023 02:14:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97543782094
+	for <lists+linux-next@lfdr.de>; Mon, 21 Aug 2023 00:16:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229509AbjHTANL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 19 Aug 2023 20:13:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34560 "EHLO
+        id S229756AbjHTWQK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 20 Aug 2023 18:16:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbjHTAM4 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sat, 19 Aug 2023 20:12:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 779F1C10F6;
-        Sat, 19 Aug 2023 14:01:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        with ESMTP id S229516AbjHTWQJ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 20 Aug 2023 18:16:09 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 158349D;
+        Sun, 20 Aug 2023 15:16:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1692569761;
+        bh=LkkEidVlE0Trgy6gpaPNS3Ht0hoYcScCdZ2n3IAi8Wk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Z6EE8NmLph9rW+Azx1Iq3uAOZi34vKM/JpE1qzsbaUKHEF6ecYzivZb+OFvremBtT
+         IVBSZLDtYsKgMUEjSw3YHQae1U6m+M0z1Jylutt9JPurJqNN9zh4PwiZ7Qyq8PI2iW
+         v+VkJWPX3cdJ9euTBwux2ZcM2azwkYQ5oN+7qoxQXCBlgBkKZkJSKj662EDNlwI2rB
+         DR0tjjKQ3MoHkcnUqlr6zbKOeaD3Bwx+DRrCxY739dEkvOTpdPLMGiLIhLpA6T7uy7
+         xiLkxZz2JDMvo6FE+bni7jZ8TxwH7DW/Y0itYXsNureb2pK4rGGKDjnvODvb1jRtVb
+         G4ArcPw3nSAsg==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0EA4F60B3E;
-        Sat, 19 Aug 2023 21:01:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68B79C433C7;
-        Sat, 19 Aug 2023 21:01:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1692478899;
-        bh=qbe2iUOiLxtyxy6qhDWT7qx6g5/yVASiIpL3Yfiwj2c=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=R7gnCySXJb28CSSROnGH4ySy4pSdI8Q+MdQM1qNMg+kBZ03fPbJjv/H1KoZXScq43
-         gVHRqlrB+BZndtfAUHkUda+JyUgDU+iuIlh7O5PcSdHdQIrO80zlGkNjF7X+mH3SI+
-         wesLInlh8hc4VZ91Jo3uEOQJxvcAdJCdd9UHa6NFAGjwdIImPINCJPA/vkd5HIii6B
-         vdu1Emvsif6hd3r2zfLTS3262erAvClM17c4XMWsYXd/kLmD3ZeXPaVQHoXzA1mMhE
-         HfPNRq8WSXLClfohEh6ovun08k9hIpAgConk8u0/IlpRGRYE9+cPwsLXKlJGFczyur
-         N02zfQCypMlmQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id CFBA0CE00C5; Sat, 19 Aug 2023 14:01:38 -0700 (PDT)
-Date:   Sat, 19 Aug 2023 14:01:38 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Baoquan He <bhe@redhat.com>
-Cc:     eric.devolder@oracle.com, linux-kernel@vger.kernel.org,
-        linux-next@vger.kernel.org, sfr@canb.auug.org.au,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        sourabhjain@linux.ibm.com, hbathini@linux.ibm.com
-Subject: Re: [BUG resend next-20230818] error: 'prepare_elf_headers' defined
- but not used
-Message-ID: <a6f29741-39e2-41fd-a253-1a0477b89a9f@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <08fc20ef-854d-404a-b2f2-75941eeeccf8@paulmck-laptop>
- <4a991983-da2e-4fcd-965c-5b65de6700da@paulmck-laptop>
- <ZOC94WelqfS0vsFK@MiWiFi-R3L-srv>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4RTVLS6fPPz4wZJ;
+        Mon, 21 Aug 2023 08:16:00 +1000 (AEST)
+Date:   Mon, 21 Aug 2023 08:15:47 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: Signed-off-by missing for commit in the
+ v4l-dvb-next tree
+Message-ID: <20230821081547.2f96b1a5@canb.auug.org.au>
+In-Reply-To: <20230815091157.64424ff1@canb.auug.org.au>
+References: <20230815091157.64424ff1@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZOC94WelqfS0vsFK@MiWiFi-R3L-srv>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/1jXLOgC0UVfObI=a48s9/DZ";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Sat, Aug 19, 2023 at 09:04:33PM +0800, Baoquan He wrote:
-> On 08/18/23 at 07:28pm, Paul E. McKenney wrote:
-> > Hello!
-> > 
-> > This morning's rcutorture testing on next-20230818 complained about
-> > prepare_elf_headers() being defined but unused on several rcutorture
-> > scenarios.  The patch below makes rcutorture happy, but might or might
-> > not be a proper fix.
-> > 
-> > This is a resend adding a few more people on CC, given a possible
-> > relationship to 9f1f399ca999 ("x86/crash: add x86 crash hotplug support").
-> > 
-> > Thoughts?
-> > 
-> 
-> Thanks for reporting this, Paul.
-> > 
-> > ------------------------------------------------------------------------
-> > 
-> > diff --git a/arch/x86/kernel/crash.c b/arch/x86/kernel/crash.c
-> > index 1d0f824559fce..926c39e22387b 100644
-> > --- a/arch/x86/kernel/crash.c
-> > +++ b/arch/x86/kernel/crash.c
-> > @@ -127,7 +127,8 @@ void native_machine_crash_shutdown(struct pt_regs *regs)
-> >  	crash_save_cpu(regs, safe_smp_processor_id());
-> >  }
-> >  
-> > -#if defined(CONFIG_KEXEC_FILE) || defined(CONFIG_CRASH_DUMP)
-> > +#if (defined(CONFIG_KEXEC_FILE) || defined(CONFIG_CRASH_DUMP)) && defined(CONFIG_SMP) && defined(CONFIG_X86_LOCAL_APIC)
-> 
-> Hi Eric,
-> 
-> Now prepare_elf_headers() is needed for kexec_file_load and crash
-> hotplug support of kexec_load, change it like this?
-> 
-> #if defined(CONFIG_KEXEC_FILE) || defined(CONFIG_CRASH_HOTPLUG)
+--Sig_/1jXLOgC0UVfObI=a48s9/DZ
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-If you mean the patch below:
+Hi all,
 
-Tested-by: Paul E. McKenney <paulmck@kernel.org>
+On Tue, 15 Aug 2023 09:11:57 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> Commits
+>=20
+>   b7ec3212a73a ("media: bttv: convert to vb2")
+>   f5f17f0cb5ab ("media: bttv: use audio defaults for winfast2000")
+>   7df8d5cffa87 ("media: bttv: refactor bttv_set_dma()")
+>   c9c0df318acd ("media: bttv: move vbi_skip/vbi_count out of buffer")
+>   0f5f12e40824 ("media: bttv: remove crop info from bttv_buffer")
+>   87df33be0548 ("media: bttv: remove tvnorm field from bttv_buffer")
+>   9764252d4bdb ("media: bttv: remove format field from bttv_buffer")
+>   04d5356512c6 ("media: bttv: move do_crop flag out of bttv_fh")
+>   faebe84ebc75 ("media: bttv: copy vbi_fmt from bttv_fh")
+>   79bbd3510ddb ("media: bttv: copy vid fmt/width/height from fh")
+>   45b6f5bf1a01 ("media: bttv: radio use v4l2_fh instead of bttv_fh")
+>   615c5450278a ("media: bttv: replace BUG with WARN_ON")
+>   d1846d72587e ("media: bttv: use video_drvdata to get bttv")
+>   33c7ae8f49e3 ("media: i2c: rdacm21: Fix uninitialized value")
+>   7c8192e8b489 ("media: coda: Remove duplicated include")
+>   54921a8f31d8 ("media: vivid: fix the racy dev->radio_tx_rds_owner")
+>=20
+> are missing a Signed-off-by from their committer.
 
-------------------------------------------------------------------------
+These are now in the v4l-dvb tree and still missing their SOBs :-(
 
-diff --git a/arch/x86/kernel/crash.c b/arch/x86/kernel/crash.c
-index 1d0f824559fc..c92d88680dbf 100644
---- a/arch/x86/kernel/crash.c
-+++ b/arch/x86/kernel/crash.c
-@@ -127,7 +127,7 @@ void native_machine_crash_shutdown(struct pt_regs *regs)
- 	crash_save_cpu(regs, safe_smp_processor_id());
- }
- 
--#if defined(CONFIG_KEXEC_FILE) || defined(CONFIG_CRASH_DUMP)
-+#if defined(CONFIG_KEXEC_FILE) || defined(CONFIG_CRASH_HOTPLUG)
- static int get_nr_ram_ranges_callback(struct resource *res, void *arg)
- {
- 	unsigned int *nr_ranges = arg;
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/1jXLOgC0UVfObI=a48s9/DZ
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmTikJMACgkQAVBC80lX
+0GxjUAf/T4HjECwybuBVzALmIEZ860WoI8Cz22PewKpIgZfavfRUpgV1OYwvy+mi
+YxR0erFsxbKWMP6sVREQ6Ruk4HP58g7Xbbo/RqwUg8jxcluhuFfCSjPwFqPXzOjm
+D4dtkWofRyVLZCcSBeDcRZ45T8siD2aRYeajkARdhjcRyL0tB7sfDETOVsUeXTL8
+NgpQi4E89Gd2Uh8KLLXhbeUzZV6P7Tv73kewIfUDiNiCTUW0iUbIDeyGLC1/zNk3
+QHYs1JjcYhlFrM8DyHjnrvdSXKCEfJ/uZDpWjPRhGmm+J8edX1dv9NjoGBgMmS72
+iARq2nQoAsV90Xo/QuHVGMuoInhTTw==
+=JUWB
+-----END PGP SIGNATURE-----
+
+--Sig_/1jXLOgC0UVfObI=a48s9/DZ--

@@ -2,35 +2,35 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFA5F7820C5
-	for <lists+linux-next@lfdr.de>; Mon, 21 Aug 2023 02:07:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40C007820ED
+	for <lists+linux-next@lfdr.de>; Mon, 21 Aug 2023 02:26:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232119AbjHUAHz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 20 Aug 2023 20:07:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47372 "EHLO
+        id S231818AbjHUA0L (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 20 Aug 2023 20:26:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232153AbjHUAHz (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 20 Aug 2023 20:07:55 -0400
+        with ESMTP id S230043AbjHUA0K (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 20 Aug 2023 20:26:10 -0400
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F04E9B;
-        Sun, 20 Aug 2023 17:07:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BE1BB9;
+        Sun, 20 Aug 2023 17:26:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1692576468;
-        bh=u8b0Y/3cE/m+rF/cr+BDg1nZiSptR7ceZIkn4pn7waU=;
-        h=Date:From:To:Cc:Subject:From;
-        b=ZcK5MqXJdfBKxa9MEL/OV+Vbwj2YxLegYoThIh0mUvLIV9dbf32ukEpnipVG5oEH7
-         8GawgCh8PrjlE9x4fXrHf1t/0rJaQJS3uKdPrDb1oSFH4ZFEyl1dPsno21xRLNWX/H
-         yu73A5mDO+LBOhbRGsDFNg+TJPlp3MHJPfFFBo1/jKvysYvG6fWVJulCRpxP97EDID
-         ELTDSEcpK1DA9/EEW6ZFRoFLy1a3Q1GWHD3hgwYV95oZMYePzu/CdxsAa1g5snAhIf
-         GscZ9p8NZr/fjt7I/eo4rXU/4jDv6uxlNHGwR/kh0+vPmt4su44QgYFqSjQu1ZbiuD
-         HXU9hHie29uAw==
+        s=201702; t=1692577562;
+        bh=tilGyKmXUXB5PsrKdXmYPuo1AvUG36XhXAx0IXZ/DJU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=HCCAr2xZ1BVfWAX1tyTLZGihRq5dA0YtSZQT3gKBmWefXjd9LoXcjBYpLzuAt13x0
+         HV7U0QgmK+h+qt9o1GSHTqw9C89VwJcPFjH03dCjJhsnFWvnyI74uOXAsJ7BDr+V/i
+         lvim59/UItrYFKlqBs5WkOCFgZ7l6K6ybF7beQC55rro3wqu7J5LX2yrDQ662HBo4V
+         Dk5UrmNBVybq02KgKxzU508eEIkTgBROduvxY2V9EzPH6OK99e0x/AKv8mcfJxOlli
+         Mb4veAlJEf6e4uR2owQNMht2M+5mzx1/baTyV/phKEICghZ/q4pvxJYYbyruOgqveK
+         lcsvMConHThhQ==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4RTXqQ5hTqz4wxy;
-        Mon, 21 Aug 2023 10:07:46 +1000 (AEST)
-Date:   Mon, 21 Aug 2023 10:07:44 +1000
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4RTYDS5Xlrz4x2G;
+        Mon, 21 Aug 2023 10:26:00 +1000 (AEST)
+Date:   Mon, 21 Aug 2023 10:25:59 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
 To:     Christian Brauner <brauner@kernel.org>,
         Theodore Ts'o <tytso@mit.edu>
@@ -38,10 +38,13 @@ Cc:     Christoph Hellwig <hch@lst.de>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Zhang Yi <yi.zhang@huawei.com>
-Subject: linux-next: manual merge of the vfs-brauner tree with the ext4 tree
-Message-ID: <20230821100744.29d369c5@canb.auug.org.au>
+Subject: Re: linux-next: manual merge of the vfs-brauner tree with the ext4
+ tree
+Message-ID: <20230821102559.35c8ef51@canb.auug.org.au>
+In-Reply-To: <20230821100744.29d369c5@canb.auug.org.au>
+References: <20230821100744.29d369c5@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/1AFDpfDqZykOfPE5juSwsAl";
+Content-Type: multipart/signed; boundary="Sig_/jXL_8qb7tHO+H+cyD.iW=Ag";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS
@@ -52,41 +55,50 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/1AFDpfDqZykOfPE5juSwsAl
+--Sig_/jXL_8qb7tHO+H+cyD.iW=Ag
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the vfs-brauner tree got a conflict in:
+I missed a bit ...
 
-  fs/ext4/super.c
+On Mon, 21 Aug 2023 10:07:44 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> Today's linux-next merge of the vfs-brauner tree got a conflict in:
+>=20
+>   fs/ext4/super.c
+>=20
+> between commit:
+>=20
+>   e89c6fc9b191 ("ext4: cleanup ext4_get_dev_journal() and ext4_get_journa=
+l()")
+>=20
+> from the ext4 tree and commits:
+>=20
+>   1489dffd51d7 ("ext4: close the external journal device in ->kill_sb")
+>   6f5fc7de9885 ("ext4: drop s_umount over opening the log device")
 
-between commit:
+Also
 
-  e89c6fc9b191 ("ext4: cleanup ext4_get_dev_journal() and ext4_get_journal(=
-)")
+  8bed1783751f ("ext4: use fs_holder_ops for the log device")
 
-from the ext4 tree and commits:
-
-  1489dffd51d7 ("ext4: close the external journal device in ->kill_sb")
-  6f5fc7de9885 ("ext4: drop s_umount over opening the log device")
-
-from the vfs-brauner tree.
-
-I fixed it up (I think - see below) and can carry the fix as
-necessary. This is now fixed as far as linux-next is concerned, but any
-non trivial conflicts should be mentioned to your upstream maintainer
-when your tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
+> from the vfs-brauner tree.
+>=20
+> I fixed it up (I think - see below) and can carry the fix as
+> necessary. This is now fixed as far as linux-next is concerned, but any
+> non trivial conflicts should be mentioned to your upstream maintainer
+> when your tree is submitted for merging.  You may also want to consider
+> cooperating with the maintainer of the conflicting tree to minimise any
+> particularly complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
 diff --cc fs/ext4/super.c
-index 1873de52c26e,73547d2334fd..000000000000
+index 1873de52c26e,73547d2334fd..34f5406c08da
 --- a/fs/ext4/super.c
 +++ b/fs/ext4/super.c
 @@@ -1096,34 -1097,26 +1097,6 @@@ void ext4_update_dynamic_rev(struct sup
@@ -153,7 +165,8 @@ index 1873de52c26e,73547d2334fd..000000000000
 + 	up_write(&sb->s_umount);
  -	bdev =3D ext4_blkdev_get(j_dev, sb);
  +	bdev =3D blkdev_get_by_dev(j_dev, BLK_OPEN_READ | BLK_OPEN_WRITE, sb,
- +				 &ext4_holder_ops);
+- 				 &ext4_holder_ops);
+++				 &fs_holder_ops);
 + 	down_write(&sb->s_umount);
  -	if (bdev =3D=3D NULL)
  -		return NULL;
@@ -167,20 +180,20 @@ index 1873de52c26e,73547d2334fd..000000000000
   	blocksize =3D sb->s_blocksize;
   	hblock =3D bdev_logical_block_size(bdev);
 
---Sig_/1AFDpfDqZykOfPE5juSwsAl
+--Sig_/jXL_8qb7tHO+H+cyD.iW=Ag
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmTiqtAACgkQAVBC80lX
-0Gzq1ggAn+KYGrCUklj+r4loERXy2Jy8n1Bt04ZzsMHJZyuhTNczLEjFis/muC9r
-/IQ8u0jdztI8fLhawWvyFUmpTxwuzMZMhFSsEz1LPYIKJcWJk4Lgq2xHwsEQ7MIH
-FOZDGcbCF+G9SFcjDG//pLqGU6Oeyh1CmGcM1Vu+aD3RaHlyWdZ+aop0JuZj1vvj
-WnTMzXWlaktvUOT5T8n4he5XaGnZdayrucJ0cKryFaS9AyMDhjMF0uwaIoGhv1Sg
-VsOE/KH8U17kdqh5iZyx60CMgDduZ3iZZxQWFoBBcs+wcqNglkb0BD2O8Alyf80+
-FHClyXN5e/pgB71/KU8CQs32XTXXsQ==
-=3x62
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmTirxcACgkQAVBC80lX
+0GzZTAgAonnQ5CkKXz6em/tTYYdDlwfraQ3yNBve0NWxC2HpZtE8aEDSfci5XgSK
+8jP18bo5PFqJjweNLP0MVrjrs7x1W/1RPKJZtEIHArH9qV0sh2WM6w0ADmEtW5/A
+QtK65uFTb/UlXiFNYtTZ5yayfPNSIbsMvkCsFKD+/PXE6q+bixH36U6ck/e/ISTL
+7WKN5m43ocRrW/hwlkziAALjWfzq1t6G3AwSWvj9ot7+Zf2UStclfoinUQP/a8yd
+0vQogRGezBNpKnvZbci1LXsYIz79xE/KBpe39IhKw+ahNRAKxIl6+l361mVXBih0
+zD/S3ir66xv/BwK9BoA7iuj2T8HNXQ==
+=WKvS
 -----END PGP SIGNATURE-----
 
---Sig_/1AFDpfDqZykOfPE5juSwsAl--
+--Sig_/jXL_8qb7tHO+H+cyD.iW=Ag--

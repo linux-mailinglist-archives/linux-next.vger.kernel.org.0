@@ -2,132 +2,110 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F4D27822EE
-	for <lists+linux-next@lfdr.de>; Mon, 21 Aug 2023 06:40:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EFB2782329
+	for <lists+linux-next@lfdr.de>; Mon, 21 Aug 2023 07:27:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232661AbjHUEkg (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 21 Aug 2023 00:40:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41360 "EHLO
+        id S233111AbjHUF11 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 21 Aug 2023 01:27:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231791AbjHUEkf (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 21 Aug 2023 00:40:35 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BA4499;
-        Sun, 20 Aug 2023 21:40:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1692592832;
-        bh=H2bmdkltZ26Ec+PUJuphMKVkQe4a/Axwlp4oH2FDr08=;
-        h=Date:From:To:Cc:Subject:From;
-        b=NuAQn9D8a2Elx8iuy9qFXbXhrFFkJt80DF6nFmcpnS0ubmpsJP7rHj0ZaSIa7cGdo
-         WmLbyHk7K0K9Z37GpnKgF38qAWGwLdheUrOcWmYiBTb5rioqsNx7/J8X8Kkrh60m+o
-         LDzQuXxMXW8UeZF7N1yf9NitHHhQ9WWmAOEIOUyAJcsf4wuJS/W4hv+LJgcOf+n6+G
-         67qPa/JEI0NiHbxUgTWJOr0tphg1T5cxQ8ys8jhVZfO677BBS1fM8gPJywLgMXgBTB
-         JnwuynH2uh2NVLKx708R1aAcKBiZoo4OFjXLa7R6gzQyiZR5+KmQ7iPt3rIkt/PaYW
-         oF4Z3whP6H9Xg==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4RTft73h01z4wxy;
-        Mon, 21 Aug 2023 14:40:31 +1000 (AEST)
-Date:   Mon, 21 Aug 2023 14:40:30 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>
-Subject: linux-next: manual merge of the coresight tree with the arm-perf,
- arm64 trees
-Message-ID: <20230821144030.52ab1357@canb.auug.org.au>
+        with ESMTP id S230196AbjHUF10 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 21 Aug 2023 01:27:26 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCF52A3;
+        Sun, 20 Aug 2023 22:27:24 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 37L3KoRn018641;
+        Mon, 21 Aug 2023 05:27:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=yjumNJXyqfOlB+UO6Ta2QA1Ouh8k+27uo0RUWIkZHRs=;
+ b=a6rwGgT0ZJ4YZB2Fb+aw8/SwiHITAgmGTSDUidKBDNqVLCfKso3jni/jd54dp75t57G5
+ TCD48RFmFTbd/XKwqqWCec//ITIa4nfm/5/YxNuYCuIux5Jm9vFBOYkmdImwivXoNUa0
+ PoQfQEJpqe8xWT4Z73QKBS4QPD9mcjJG/lI6zSquP6phvb/D39H4a/wTorchyKW0mF8E
+ ihSaT2NQeXTtA/L8VlGc8TdH6b2dt74ZlFKWwJZ60h2WJDbrFUyITCAR3FgvFzdhb60N
+ OABMGWs9isZXQ+NC4cdtVPGuPdDYK116yzWCMS2MRpncL769aqjdt0+++UL2c58a+4PW ow== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3sjpwwju7c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 21 Aug 2023 05:27:10 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 37L5R9kl024030
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 21 Aug 2023 05:27:09 GMT
+Received: from [10.214.67.128] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Sun, 20 Aug
+ 2023 22:27:07 -0700
+Message-ID: <1ce7a14b-b21e-4e6d-2773-7505c5f17c37@quicinc.com>
+Date:   Mon, 21 Aug 2023 10:57:04 +0530
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/lp8528AKDoGlE4+qFjTkdaX";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: linux-next: build failure after merge of the nvmem tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20230815202508.0523ecce@canb.auug.org.au>
+ <20230821094845.440c96b2@canb.auug.org.au>
+Content-Language: en-US
+From:   Komal Bajaj <quic_kbajaj@quicinc.com>
+In-Reply-To: <20230821094845.440c96b2@canb.auug.org.au>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: opOFfhgt4wENtkgT7SoFmd0pAz5_6hXt
+X-Proofpoint-ORIG-GUID: opOFfhgt4wENtkgT7SoFmd0pAz5_6hXt
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
+ definitions=2023-08-20_15,2023-08-18_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ phishscore=0 adultscore=0 spamscore=0 suspectscore=0 clxscore=1011
+ bulkscore=0 mlxlogscore=777 malwarescore=0 impostorscore=0
+ priorityscore=1501 mlxscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2306200000 definitions=main-2308210050
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/lp8528AKDoGlE4+qFjTkdaX
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
 
-Today's linux-next merge of the coresight tree got a conflict in:
+On 8/21/2023 5:18 AM, Stephen Rothwell wrote:
+> Hi all,
+>
+> On Tue, 15 Aug 2023 20:25:08 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>> After merging the nvmem tree, today's linux-next build (x86_64
+>> allmodconfig) failed like this:
+>>
+>> drivers/nvmem/sec-qfprom.c: In function 'sec_qfprom_probe':
+>> drivers/nvmem/sec-qfprom.c:59:13: error: unused variable 'ret' [-Werror=unused-variable]
+>>     59 |         int ret;
+>>        |             ^~~
+>> cc1: all warnings being treated as errors
+>>
+>> Caused by commit
+>>
+>>    9c7f2bce8a0e ("nvmem: sec-qfprom: Add Qualcomm secure QFPROM support")
+>>
+>> I have used the nvmem tree from next-20230809 for today.
+> Ping?
+>
 
-  drivers/hwtracing/coresight/coresight-trbe.c
+Hi Stephen,
+Had already submitted a change for this -
+https://lore.kernel.org/all/20230816130057.28717-1-quic_kbajaj@quicinc.com/
 
-between commit:
-
-  e926b8e9eb40 ("coresight: trbe: Add a representative coresight_platform_d=
-ata for TRBE")
-
-from the arm-perf, arm64 trees and commit:
-
-  39744738a67d ("coresight: trbe: Allocate platform data per device")
-
-from the coresight tree.
-
-I fixed it up (I think - see below) and can carry the fix as necessary.
-This is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc drivers/hwtracing/coresight/coresight-trbe.c
-index 9c59e2652b20,e20c1c6acc73..000000000000
---- a/drivers/hwtracing/coresight/coresight-trbe.c
-+++ b/drivers/hwtracing/coresight/coresight-trbe.c
-@@@ -1244,6 -1254,10 +1254,21 @@@ static void arm_trbe_register_coresight
-  	if (!desc.name)
-  		goto cpu_clear;
- =20
- -	desc.pdata =3D coresight_get_platform_data(dev);
-++	/*
-++	 * TRBE coresight devices do not need regular connections
-++	 * information, as the paths get built between all percpu
-++	 * source and their respective percpu sink devices. Though
-++	 * coresight_register() expect device connections via the
-++	 * platform_data, which TRBE devices do not have. As they
-++	 * are not real ACPI devices, coresight_get_platform_data()
-++	 * ends up failing. Instead let's allocate a dummy zeroed
-++	 * coresight_platform_data structure and assign that back
-++	 * into the device for that purpose.
-++	 */
-++	desc.pdata =3D devm_kzalloc(dev, sizeof(*desc.pdata), GFP_KERNEL);
-+ 	if (IS_ERR(desc.pdata))
-+ 		goto cpu_clear;
-+=20
-  	desc.type =3D CORESIGHT_DEV_TYPE_SINK;
-  	desc.subtype.sink_subtype =3D CORESIGHT_DEV_SUBTYPE_SINK_PERCPU_SYSMEM;
-  	desc.ops =3D &arm_trbe_cs_ops;
-
---Sig_/lp8528AKDoGlE4+qFjTkdaX
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmTi6r4ACgkQAVBC80lX
-0Gyu6wf9Fip2E4hzb6oqboBigMsj5ulb6dcl2r4Yjlk2lJ+wYpZbh2uT5l3FCZB4
-PAx4uY4NUP1ccHn0DDP+H/Zxpk+QpTFsFYDj4DaX55Xp0rACGvhp1pmYv5ofqnD6
-L9dS9b+tGvsTfbcdkDMe+Pnoc8XlArIgvMBtkKnUGn6neK8KERBe+FXykphctQ41
-TdHkZ4WjIhs8Y+cmMQL3DlR49312Jq4N6OKeeNLGBFqheHya9x1zsov2Q5hX2UnH
-zMveywsYXgAb7RJ9uxqrKvhcS5au8IAXKhSJk2eRwpc7Ms/q+BCLc/eKT34LpHqb
-uiXU7Tn7YrOJyVOJ7zPa0QiI+19jfQ==
-=olF6
------END PGP SIGNATURE-----
-
---Sig_/lp8528AKDoGlE4+qFjTkdaX--
+Thanks
+Komal

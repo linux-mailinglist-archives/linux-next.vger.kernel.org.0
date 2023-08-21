@@ -2,64 +2,46 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41BAA782D94
-	for <lists+linux-next@lfdr.de>; Mon, 21 Aug 2023 17:53:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6D7E782DD9
+	for <lists+linux-next@lfdr.de>; Mon, 21 Aug 2023 18:07:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236493AbjHUPxB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 21 Aug 2023 11:53:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39248 "EHLO
+        id S233784AbjHUQHw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 21 Aug 2023 12:07:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236450AbjHUPxB (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 21 Aug 2023 11:53:01 -0400
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 709DBDB
-        for <linux-next@vger.kernel.org>; Mon, 21 Aug 2023 08:52:59 -0700 (PDT)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-58ddb534848so2377937b3.0
-        for <linux-next@vger.kernel.org>; Mon, 21 Aug 2023 08:52:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1692633178; x=1693237978;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=t00Z+mQcMCai4g8+ZNlrGqkLYK+YPlBN/K0yx63dyFI=;
-        b=PYrWHbzwLWe61qr58b7yipvRI3uI7LYUq6puVeMqAUnH5aYhC2bww+9D9PNEtx4JKg
-         e9umTs6g7/TvHjJWpojiqZK/9dk5Cug2ZO0FRLruFEXwiVHqKQIrsGDKti9gc5RqneXV
-         wyBgk8EqaaeeA8yrV0v46hnt6DxEgsNioNqxw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692633178; x=1693237978;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=t00Z+mQcMCai4g8+ZNlrGqkLYK+YPlBN/K0yx63dyFI=;
-        b=ic1ALPnBaBbLi0Mle95dtgfXrR5/e74A1H8IdPouDGDvXityoUbQApmT25q5wnvkak
-         hwFbFDMj6uXhCBI3GenzvBDplwmbxBn3hhGxfh4xo51vpzTUAMEdrM9cTxa3Zt/dWbri
-         LYIq9JnGIV71ARHwBKXE583Ypc8PcBepqTkWLEqDZNOjs3z1dl6g62cOhtBVjErYLnzv
-         ZGdZRJwJmQDs9UbUjpe3ZBJwM+cMSRfQqX55C7P32l0NCVuk/xVMg7pb0+gakWlQPG7k
-         SznCMH8UUm13h1EMfR60ouZGipjRB9RUEpG26bNl/D3higPuIp8sr2jtJEdFiUMMnk14
-         L7Ww==
-X-Gm-Message-State: AOJu0YyoZI31Gadp12aAbhCYv2/58xNzSYfp5x/8LdPqzubW+F6f7bRl
-        YtjCuyOOIf0TEA9CI38m2c/DJQ==
-X-Google-Smtp-Source: AGHT+IGSnVYnQZ8xAuQ1Rtjf6i7jON/WZ8Rvcr9+R6jCfIjY49BUPcdFPAo4U1Evo/P7LWavHqVFBw==
-X-Received: by 2002:a81:4e10:0:b0:583:fc63:7e01 with SMTP id c16-20020a814e10000000b00583fc637e01mr3770247ywb.3.1692633178654;
-        Mon, 21 Aug 2023 08:52:58 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id v22-20020a814816000000b005922c29c025sm303823ywa.108.2023.08.21.08.52.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Aug 2023 08:52:58 -0700 (PDT)
-Message-ID: <6822c914-4f11-be93-ed55-56447a5838f9@linuxfoundation.org>
-Date:   Mon, 21 Aug 2023 09:52:56 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: linux-next: duplicate patch in the nolibc tree
-Content-Language: en-US
-To:     Christian Brauner <brauner@kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>, Willy Tarreau <w@1wt.eu>
-Cc:     =?UTF-8?Q?Thomas_Wei=c3=9fschuh?= <thomas@t-8ch.de>,
+        with ESMTP id S232366AbjHUQHv (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 21 Aug 2023 12:07:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0596E4;
+        Mon, 21 Aug 2023 09:07:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 358B361600;
+        Mon, 21 Aug 2023 16:07:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 092A5C433C8;
+        Mon, 21 Aug 2023 16:07:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1692634069;
+        bh=aT4SGY9IPVc6jLbbastYJsDqzEAZ1PvzDO2DXs7jaSM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fWVBrmpoMqNKCOK8IiNqO5GVVyKuIvo+ILEn3wxNpgnQQFZQ/GNM1v07rY6vcWtgY
+         fv2xG4IWUALYh/+4ziwLrsHKgmbKYFn+pdyH07kZ6ztl44/XhhldR+2umrHq7DXexg
+         ROyJzpUDbY6CfUVTNSFrB0Mzv4vRfa52w2/P0d7IJkqSAQURej4tp592juw+JRC82q
+         mUoqv9tIPYbyBzTEMKxQ9ruyRw5DyOAsg4X2fRdT0lmmJlCbOfDJRck5noLX63/oZa
+         ipzzVYNEjMu+XozRmYJxgVdniZy8MagT7CgBvKiMIOtWjHl2W8c0cdnlzzMSY3AkzZ
+         dO54B3FJL29IA==
+Date:   Mon, 21 Aug 2023 18:07:45 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>, Willy Tarreau <w@1wt.eu>,
+        Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>,
         Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: duplicate patch in the nolibc tree
+Message-ID: <20230821-raven-abreibung-cc4abe44c9f5@brauner>
 References: <20230817133811.0a73c624@canb.auug.org.au>
  <e0af8d82-e099-49fa-9fbd-6f6bb63b7706@t-8ch.de>
  <9cfb4fe4-162b-3f26-646b-71bed3493925@linuxfoundation.org>
@@ -68,98 +50,25 @@ References: <20230817133811.0a73c624@canb.auug.org.au>
  <01d517c4-d91b-4426-b7f2-2b1277f21d8c@paulmck-laptop>
  <20230818-anblicken-mitinhaber-11cd07cce0a1@brauner>
  <e08e3dd5-48b8-5da2-5d0c-7d5b70a9e9be@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <e08e3dd5-48b8-5da2-5d0c-7d5b70a9e9be@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+ <6822c914-4f11-be93-ed55-56447a5838f9@linuxfoundation.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <6822c914-4f11-be93-ed55-56447a5838f9@linuxfoundation.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 8/18/23 07:59, Shuah Khan wrote:
-> On 8/18/23 07:27, Christian Brauner wrote:
->> On Thu, Aug 17, 2023 at 01:41:45PM -0700, Paul E. McKenney wrote:
->>> On Thu, Aug 17, 2023 at 09:39:09PM +0200, Willy Tarreau wrote:
->>>> On Thu, Aug 17, 2023 at 11:46:57AM -0700, Paul E. McKenney wrote:
->>>>> On Thu, Aug 17, 2023 at 12:27:46PM -0600, Shuah Khan wrote:
->>>>>> On 8/17/23 10:30, Thomas Weißschuh wrote:
->>>>>>> On 2023-08-17 13:38:11+1000, Stephen Rothwell wrote:
->>>>>>>> The following commit is also in the vfs-brauner tree as a different commit
->>>>>>>> (but the same patch):
->>>>>>>>
->>>>>>>>     ba859b2e419c ("selftests/nolibc: drop test chmod_net")
->>>>>>>>
->>>>>>>> This is commit
->>>>>>>>
->>>>>>>>     49319832de90 ("selftests/nolibc: drop test chmod_net")
->>>>>>>>
->>>>>>>> in the vfs-brauner tree.
->>>>>>>
->>>>>>> I think we can drop the patch from the nolibc tree.
->>>>>>> The patch is only really necessary in combination with
->>>>>>> commit 18e66ae67673 ("proc: use generic setattr() for /proc/$PID/net")
->>>>>>> which already is and should stay in the vfs tree.
->>>>>>
->>>>>> Thomas,
->>>>>>
->>>>>> Do the rest of the nolibc patches build without this if we were
->>>>>> to drop this patch? Dorpping requires rebase and please see below.
->>>>>>
->>>>>> Willy, Paul,
->>>>>>
->>>>>> How do we want to handle this so we can avoid rebasing to keep
->>>>>> the Commit IDs the same as one ones in Willy's nolibc branch?
->>>>>
->>>>> The usual way would be for Willy to drop the patch, rebase, and republish
->>>>> his branch.  You would then discard the current branch and pull the
->>>>> new one.
->>>>>
->>>>>> I would recommend dropping this commit from vfs-brauner if it
->>>>>> doesn't cause problems.
->>>>>
->>>>> It might be good for nolibc patches to be going through Willy's tree.
->>>>
->>>> It would indeed be more logical as a general rule. However, here I don't
->>>> care as I don't see any issue caused by dropping it, I can adapt to what
->>>> is most convenient for most of us.
->>>>
->>>> Let's maybe just wait a little bit for Christian to suggest what he
->>>> prefers then we can adapt.
->>>>
->>>>> Or does Christian have some situation where it is necessary to make
->>>>> a coordinated vfs/nolibc change?
->>>>
->>>> I don't think there's any need for coordination on this one.
->>>
->>> It is always good when either option can be make to work.  ;-)
->>
->> The patch in the vfs tree will make the test fail so it makes sense to
->> have both go in together. I would normally be happy to drop it but I'm
->> rather unenthusiastic in this particular case because I replied to this
->> almost 5 weeks ago on Thursday, July 13 and since then this has been in
->> -next.
->>
-> 
-> I totally understand you being unenthusiastic. Considering summer
-> vacation schedules and all, emails get missed at times.
-> 
-> I sincerely request you to consider dropping as it is the simpler route
-> for all involved.
-> 
+> We will go to our plan b of having Willy drop the patch, resend the
+> pull request to me ....
 
-Christian,
+No, I didn't drop it so I appreciate it if you went with your plan.
+If I drop it now I'd be causing churn after having this sit in -next for
+over 5 weeks and I'll send a pr in the middle of this week.
 
-Please let us know if my request failed to raise your enthusiasm level.
-We will go to our plan b of having Willy drop the patch, resend the
-pull request to me ....
-
-
-thanks,
--- Shuah
-
+Thanks!

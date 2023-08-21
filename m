@@ -2,91 +2,129 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C550C78274D
-	for <lists+linux-next@lfdr.de>; Mon, 21 Aug 2023 12:44:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AE8D782796
+	for <lists+linux-next@lfdr.de>; Mon, 21 Aug 2023 13:10:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234824AbjHUKo5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 21 Aug 2023 06:44:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49238 "EHLO
+        id S230350AbjHULKd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 21 Aug 2023 07:10:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232670AbjHUKo4 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 21 Aug 2023 06:44:56 -0400
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 346E6DB
-        for <linux-next@vger.kernel.org>; Mon, 21 Aug 2023 03:44:55 -0700 (PDT)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-58419517920so34676957b3.0
-        for <linux-next@vger.kernel.org>; Mon, 21 Aug 2023 03:44:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1692614694; x=1693219494;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OtxD7adfjwKLhyH6cVNSeAqAWFExTn8fb1CoOUK3l0I=;
-        b=JToSM+gNangjXOEQfoZzHcjr0OHrQlb0WhIoiVHG9n0tKjPCmY8mum8bWOibBvh3TI
-         GoyCVojO8OqVrXgVdeijm6/QORsSRbyq3f6VhccPRDOE5pjWTe3PAggUPishPrcbwq/r
-         HHHPfDRtd79RYH1yzEExDOmNkhAj1YM2ZfDBZHzKsULIxr4+d9kY0rQxt9zCL8NydfNO
-         IY21qmCJdxGkQhC9xu4fg7kssd7JG7YzCiqkW4ct0mCDrY7DiFko7vkGabxMaH2UmIBD
-         i3k8G67dIWFjcusbeDAJEnRKJbb4jllWDMxyWWz32cuAMJx3cQpxda6rD4JUdT07ANVn
-         GRcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692614694; x=1693219494;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OtxD7adfjwKLhyH6cVNSeAqAWFExTn8fb1CoOUK3l0I=;
-        b=XcNnqqslXE11MZkDKB/XdRKaKXH3fUpH6qRINcoYowyFdt4u4YLMYSU11kpgsgpXeY
-         Xm0KVIgR+MlB90+Oxy0vCO+wcCAtojjNcMBPFyWUayQsoEWCfbf/ArKY2u3rWokdYzHF
-         8UWSJx0yhFu/P07GmJ96k7DNmm0q89A9eUPwlbnpLVZK9nBtg6xKo3U+rOpR/H7mRVwp
-         A8aS32xCyapSAArstpLl826RUQqBo2Ldg2kwSPBck6PEy6bYwI13jJ+OakChaRKGMYMe
-         s9rSoYb1q1yBF1Qo7hMN/pc0EegespRhTyw/TH0KFfXizLkPRymbgFM1ddk4H87QYQCh
-         j71w==
-X-Gm-Message-State: AOJu0Yzxk85YFFRNlp8NiYSxXMM78XL2iJ+XQWkIPSiCtLCakwxU4XbD
-        vdmalORxxjGoufzcXvcif7TJaBT5BSQnUeig3o1RSg==
-X-Google-Smtp-Source: AGHT+IE5KBdM6hLkxoWOxcMZKCWi2iIUOsdw8OimSEx+IgkUvQ1RfGdH1D1BQ8TiHyjmgXBL+gkfSnLJf0iG/Qijp5I=
-X-Received: by 2002:a25:2e01:0:b0:d04:f936:556 with SMTP id
- u1-20020a252e01000000b00d04f9360556mr5875458ybu.36.1692614694460; Mon, 21 Aug
- 2023 03:44:54 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230818160837.147b1e2e@canb.auug.org.au> <CAMuHMdWQFYZS8qACEsaZvMEuvrVY3Ag0pJBi1SE6Kkj8tTMbrg@mail.gmail.com>
-In-Reply-To: <CAMuHMdWQFYZS8qACEsaZvMEuvrVY3Ag0pJBi1SE6Kkj8tTMbrg@mail.gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 21 Aug 2023 12:44:43 +0200
-Message-ID: <CACRpkdYu5WVQPpz5GE4cqjLJS_bpi-r++FeAw7CKovqvWd0knw@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the pinctrl-renesas tree with the
- pinctrl tree
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
+        with ESMTP id S230500AbjHULKd (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 21 Aug 2023 07:10:33 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88853D9;
+        Mon, 21 Aug 2023 04:10:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1692616229; x=1724152229;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=wVfvRIGz8KWE/C39DpVlb2rJxBz2u4AmajqbhP0mkSY=;
+  b=N0dVNFcWqrr5yK4WLjShw1kwGdyoqd1jNrkJKHqujGpSOi2gjRiQWWUB
+   W/+hdx0SALs2asEstCRpMM6ptt+OUKd/+FUR5hipp0/9FVyWPTnCU631m
+   g9s4j3k9EDJVTpwgYmVjirEyd54A9at6cAkDXb/4PYsE6WRVSD1R6YGkB
+   jr48BFB73uPSWh5fWieDxt2h+juJHglzOjYAwnTiC7vGVWepXfVawJeiE
+   mQwrtfRv5FxH6H2ikIgcrEBdcC3kwMbZ+DEGnNTfbylhl5sigzgspBEdE
+   qyW+6DnlB159QnnN6nFGAwKaJ9WmpBcyktVAYc55CM/On496xc5bPpxBt
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10808"; a="404563743"
+X-IronPort-AV: E=Sophos;i="6.01,190,1684825200"; 
+   d="scan'208";a="404563743"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2023 04:10:02 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10808"; a="712746566"
+X-IronPort-AV: E=Sophos;i="6.01,190,1684825200"; 
+   d="scan'208";a="712746566"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2023 04:09:58 -0700
+Received: from kekkonen.localdomain (localhost [127.0.0.1])
+        by kekkonen.fi.intel.com (Postfix) with SMTP id D1EBE11F915;
+        Mon, 21 Aug 2023 14:09:55 +0300 (EEST)
+Date:   Mon, 21 Aug 2023 11:09:55 +0000
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-media@vger.kernel.org, hverkuil@xs4all.nl,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Rob Herring <robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        linux-next@vger.kernel.org, Wentong Wu <wentong.wu@intel.com>,
+        Zhifeng Wang <zhifeng.wang@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Subject: Re: [PATCH v2 1/1] media: v4l: usb: Use correct dependency for
+ camera sensor drivers
+Message-ID: <ZONGA3HhECT/OnUr@kekkonen.localdomain>
+References: <20230818095149.3863285-1-sakari.ailus@linux.intel.com>
+ <f5bf21f5-3ca2-ade1-16dc-44588d2663ed@infradead.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f5bf21f5-3ca2-ade1-16dc-44588d2663ed@infradead.org>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Aug 18, 2023 at 1:26=E2=80=AFPM Geert Uytterhoeven <geert@linux-m68=
-k.org> wrote:
+Hi Randy,
 
-> > I fixed it up (see below) and can carry the fix as necessary. This
-> > is now fixed as far as linux-next is concerned, but any non trivial
-> > conflicts should be mentioned to your upstream maintainer when your tre=
-e
-> > is submitted for merging.  You may also want to consider cooperating
-> > with the maintainer of the conflicting tree to minimise any particularl=
-y
-> > complex conflicts.
->
-> The resolution LGTM. Thanks!
+On Fri, Aug 18, 2023 at 06:53:19PM -0700, Randy Dunlap wrote:
+> Hi Sakari,
+> 
+> On 8/18/23 02:51, Sakari Ailus wrote:
+> > The Kconfig option that enables compiling camera sensor drivers is
+> > VIDEO_CAMERA_SENSOR rather than MEDIA_CAMERA_SUPPORT as it was previously.
+> > Fix this.
+> > 
+> > Reported-by: Randy Dunlap <rdunlap@infradead.org>
+> > Fixes: 7d3c7d2a2914 ("media: i2c: Add a camera sensor top level menu")
+> > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> > ---
+> > since v1:
+> > 
+> > - Also include MMP camera Kconfig fix.
+> > 
+> >  drivers/media/platform/marvell/Kconfig | 4 ++--
+> >  drivers/media/usb/em28xx/Kconfig       | 4 ++--
+> >  drivers/media/usb/go7007/Kconfig       | 2 +-
+> >  3 files changed, 5 insertions(+), 5 deletions(-)
+> > 
+> 
+> This v2 patch fixes a few more issues but there is still one nagging problem
+> (2 versions of it, one with VIDEO_VIA_CAMERA=y and one with VIDEO_VIA_CAMERA=m):
+> 
+> (1)
+> WARNING: unmet direct dependencies detected for VIDEO_OV7670
+>   Depends on [n]: MEDIA_SUPPORT [=y] && VIDEO_DEV [=y] && VIDEO_CAMERA_SENSOR [=n]
+>   Selected by [y]:
+>   - VIDEO_VIA_CAMERA [=y] && MEDIA_SUPPORT [=y] && MEDIA_PLATFORM_SUPPORT [=y] && MEDIA_PLATFORM_DRIVERS [=y] && V4L_PLATFORM_DRIVERS [=y] && FB_VIA [=y] && VIDEO_DEV [=y]
+> 
+> WARNING: unmet direct dependencies detected for VIDEO_OV7670
+>   Depends on [n]: MEDIA_SUPPORT [=y] && VIDEO_DEV [=y] && VIDEO_CAMERA_SENSOR [=n]
+>   Selected by [y]:
+>   - VIDEO_VIA_CAMERA [=y] && MEDIA_SUPPORT [=y] && MEDIA_PLATFORM_SUPPORT [=y] && MEDIA_PLATFORM_DRIVERS [=y] && V4L_PLATFORM_DRIVERS [=y] && FB_VIA [=y] && VIDEO_DEV [=y]
+> 
+> (2)
+> WARNING: unmet direct dependencies detected for VIDEO_OV7670
+>   Depends on [n]: MEDIA_SUPPORT [=y] && VIDEO_DEV [=m] && VIDEO_CAMERA_SENSOR [=n]
+>   Selected by [m]:
+>   - VIDEO_VIA_CAMERA [=m] && MEDIA_SUPPORT [=y] && MEDIA_PLATFORM_SUPPORT [=y] && MEDIA_PLATFORM_DRIVERS [=y] && V4L_PLATFORM_DRIVERS [=y] && FB_VIA [=m] && VIDEO_DEV [=m]
+> 
+> WARNING: unmet direct dependencies detected for VIDEO_OV7670
+>   Depends on [n]: MEDIA_SUPPORT [=y] && VIDEO_DEV [=m] && VIDEO_CAMERA_SENSOR [=n]
+>   Selected by [m]:
+>   - VIDEO_VIA_CAMERA [=m] && MEDIA_SUPPORT [=y] && MEDIA_PLATFORM_SUPPORT [=y] && MEDIA_PLATFORM_DRIVERS [=y] && V4L_PLATFORM_DRIVERS [=y] && FB_VIA [=m] && VIDEO_DEV [=m]
+> 
+> Let me know if you need full randconfig files for any of these.
+> Thanks.
 
-The conflict is local to the pinctrl tree now, Torvalds will fix this
-conflict when I send my pull request for v6.6 to him.
+Thanks. These were indeed missing from the previous patch. I'll post a fix
+to address these as well. I've grepped the Kconfigs and I couldn't find
+more --- this one didn't have MEDIA_CAMERA_SUPPORT dependency as most of
+the others did.
 
-Yours,
-Linus Walleij
+-- 
+Sakari Ailus

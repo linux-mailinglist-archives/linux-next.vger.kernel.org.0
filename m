@@ -2,109 +2,107 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03437783B8B
-	for <lists+linux-next@lfdr.de>; Tue, 22 Aug 2023 10:16:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E56A9783BF7
+	for <lists+linux-next@lfdr.de>; Tue, 22 Aug 2023 10:41:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231561AbjHVIQA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 22 Aug 2023 04:16:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40798 "EHLO
+        id S233931AbjHVIlj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 22 Aug 2023 04:41:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233732AbjHVIP7 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 22 Aug 2023 04:15:59 -0400
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 880D112C;
-        Tue, 22 Aug 2023 01:15:56 -0700 (PDT)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-58d70c441d5so47211917b3.2;
-        Tue, 22 Aug 2023 01:15:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1692692155; x=1693296955;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5pNwnJY/s7QRWPK/T/LrEvZTxwiXUWa5BGaQPgsWCSc=;
-        b=lcIuyYyQNHfbXtj6dwhiTTXXvJwy8llqpaplGcRE5EiT4a48XtRST5vjPgykhgQnNk
-         4pQ9g3ff5C/hNLh//3IlA2QUs3NJ4wmGnQt/L8ZQEW2DrSKC5+YZPo/49Z8VI/dLoo/I
-         Ut0KHJNgd9PgDUlwJd61Zfd8yndhUfMgITYTA6jUc8RQQkegu7/X6bknWzThICUb/Z/A
-         vLFD2tIolXC9+M8bHoPWlCVfROQswC5Cf/uHFMijpycTvYWVG12NlZXok+SzXEXAIzIH
-         eEP4DNHvvhzjnq774rVBAu5m5IheNDg9VZ+i0kpgt2fJSxW9pNFj1h0fe65Tfh51NR5k
-         DoEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692692156; x=1693296956;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5pNwnJY/s7QRWPK/T/LrEvZTxwiXUWa5BGaQPgsWCSc=;
-        b=SY92tvwiUr9jZ+InE1sH/WgcGVC3Fb6mua7oE2b2lBF8aMcACxl7q63d3w4GAAL3iR
-         /o1X9frWtZGJ6zPO+HJ9XfEwOCsue4apRYywn60vb3xNCDGSSQhoGa5LfNc35rsc8QJv
-         2gfMAmDQDwVRLX6qpl+B0r5QuKqhajWbIZYW0pIICcqNgjlY3nYBfqlQMKBGpyVsX/5m
-         MdD8UQU20/AfBekmNkNQhjL0VY9PoJ7KW6350cmUSGl1zEwlxrGD3xJhdkE2IT6fXMLv
-         7sXxOzaaMsgQyPzvOegQvhf51jlpyHZqNdRX4ShZ3E6Ua4XU3AS2osuwZ9s7TaYJYDCI
-         EvBw==
-X-Gm-Message-State: AOJu0Yybcjelwt/QmPxHVqfvVLpIYMvHfIwDp9U5Fz82onIUKr2lzNar
-        PYeNMydnDv0qTm1qR1va3jmeEtM4UCvmubuT3+E=
-X-Google-Smtp-Source: AGHT+IGGNDRQXmWfMrwaU6p8ijvDVDK3Dkt+pLL3D5g3zeq+suu7YJKm9+M1gLTkSar8kgUIy3OaFzYT7O0W0ShyBqw=
-X-Received: by 2002:a25:ac82:0:b0:d0f:65db:dc0e with SMTP id
- x2-20020a25ac82000000b00d0f65dbdc0emr8918287ybi.39.1692692155717; Tue, 22 Aug
- 2023 01:15:55 -0700 (PDT)
+        with ESMTP id S233930AbjHVIlh (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 22 Aug 2023 04:41:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70D3ACD4;
+        Tue, 22 Aug 2023 01:41:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0454D61063;
+        Tue, 22 Aug 2023 08:41:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44519C433CA;
+        Tue, 22 Aug 2023 08:41:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1692693694;
+        bh=6uqDbLXsR+BxTTZl03sCQ10dOl32Q0UyJCc+W3QkBgo=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=tcTMNCaiiW5RRkzHUerroX42Ufj4cLz3KnAiOTvaeL7UtEDdu71nqZ+kRbTx32Z8n
+         h5d1voe6HqEDTTBkwboPPlYd2RjR68XpuDC9IzjoK6Vu6kW+k3fvMTgOedITCDv9MG
+         ZZlgn7vE7t85cnGkaIExqBen58CMjLab8PumPtDmDeH0IxHvSq1gYFrsgvv6Ulqa73
+         u4HskZFwXARwUWqKJFDU1VOSv1VpJgJL4nBSv6DKLfcWrJwVRtyCwBFQHSIOf6XjMl
+         RT+ghv8i1IvJqlmmFmaF4+BVMkPkd+nZG55k4pRXUpgPd6tc6wgjn7V1IJNlQe+ogL
+         mEUsXvbxaljKA==
+Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-2b9b904bb04so66813721fa.1;
+        Tue, 22 Aug 2023 01:41:34 -0700 (PDT)
+X-Gm-Message-State: AOJu0YwdmCxSbRILyshimDqgPkZ+/GSVPstM3r8Vko9gTV1L0Kx34o3W
+        Jmc/A2ZYIPIKXkP1KTWgOLkh7kVZhqfJubIbrLc=
+X-Google-Smtp-Source: AGHT+IGv7WdXQUeAKBhMYMzrqj4ZYXxeY61kxBveTkYDN/4pKlWx7k41yrOqx1YrsyTL2A2CItD12Q2XFiFFoWh5VKg=
+X-Received: by 2002:a05:6512:3105:b0:4ff:745b:4f1f with SMTP id
+ n5-20020a056512310500b004ff745b4f1fmr4989198lfb.30.1692693692201; Tue, 22 Aug
+ 2023 01:41:32 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230822162333.752217fa@canb.auug.org.au>
-In-Reply-To: <20230822162333.752217fa@canb.auug.org.au>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Tue, 22 Aug 2023 10:15:44 +0200
-Message-ID: <CANiq72=DA1A5YyrWAPHEr+by_pac4R0-GemurbLWYNrSAUNSzw@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the rust tree with the kunit-next tree
+References: <20230822164859.26b0b8f6@canb.auug.org.au> <CAMj1kXGKtpGNYx6hqygya+k_gQaMTiwEZnRGk9rZ=hcbcagKXA@mail.gmail.com>
+ <20230822180805.483c10ee@canb.auug.org.au>
+In-Reply-To: <20230822180805.483c10ee@canb.auug.org.au>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Tue, 22 Aug 2023 10:41:20 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXF4eQBYiPBv2asbu+yqcCuYSmw-8_x41u=g4s1NJjb1Xg@mail.gmail.com>
+Message-ID: <CAMj1kXF4eQBYiPBv2asbu+yqcCuYSmw-8_x41u=g4s1NJjb1Xg@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the efi tree
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Benno Lossin <benno.lossin@proton.me>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Aug 22, 2023 at 8:23=E2=80=AFAM Stephen Rothwell <sfr@canb.auug.org=
-.au> wrote:
+On Tue, 22 Aug 2023 at 10:08, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 >
-> Today's linux-next merge of the rust tree got a conflict in:
+> Hi Ard,
+>
+> On Tue, 22 Aug 2023 09:32:31 +0200 Ard Biesheuvel <ardb@kernel.org> wrote:
+> >
+> > Hello Stephen,
+> >
+> > On Tue, 22 Aug 2023 at 08:49, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> > >
+> > > Hi all,
+> > >
+> > > After merging the efi tree, today's linux-next build (x86_64 allmodconfig)
+> > > failed like this:
+> > >
+> > > In file included from drivers/platform/x86/uv_sysfs.c:14:
+> > > arch/x86/include/asm/uv/bios.h:118:22: error: expected ')' before '*' token
+> > >   118 |         u64 (__efiapi *function)(enum uv_bios_cmd, ...);
+> > >       |                      ^~
+> > >       |                      )
+> > >
+> > > Caused by commit
+> > >
+> > >   73632c8c865f ("efi/runtime-wrappers: Remove duplicated macro for service returning void")
+> > >
+> >
+> > Thanks for the report.
+> >
+> > I cannot reproduce this with Debian's GCC 12.2.0 when building the
+> > efi/next tree either in isolation, or merged into yesterday's next.
+> >
+> > Could you please share the compiler version and the .config you used? Thanks.
+>
+> $ x86_64-linux-gnu-gcc --version
+> x86_64-linux-gnu-gcc (Debian 12.3.0-4) 12.3.0
+> (this is Debian's cross compiler that is ppcle64 hosted)
+>
+> and (see above) it is a x86_64 allmodconfig build.
+>
+> Maybe there is some interaction with something else in today's
+> linux-next (just released).
 
-Yeah, we expected this one when we applied an extra patch series
-yesterday. I tested the merged trees to double-check the (now tested)
-examples pass (i.e. the KUnit tree has a patch series which enables
-the testing of the examples in the documentation of Rust code).
-
-> - /// # use kernel::{macros::pin_data, pin_init};
->  -/// # use kernel::pin_init;
->  -/// # use macros::{Zeroable, pin_data};
-> ++/// # use kernel::{macros::Zeroable, pin_data, pin_init};
-
-Almost right :) It should be:
-
-    /// # use kernel::{macros::{Zeroable, pin_data}, pin_init};
-
-In case it helps for future similar conflicts, the reason is that
-there are 3 things we are "using" here:
-
-    kernel::macros::Zeroable
-    kernel::macros::pin_data
-    kernel::pin_init
-
-Instead, the current resolution would mean:
-
-    kernel::macros::Zeroable
-    kernel::pin_data
-    kernel::pin_init
-
-Thanks Stephen!
-
-Cheers,
-Miguel
+Thanks. I fixed it in the efi/next tree so things should build as
+expected the next time around.

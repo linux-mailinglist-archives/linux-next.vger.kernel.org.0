@@ -2,131 +2,131 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D10A3783862
-	for <lists+linux-next@lfdr.de>; Tue, 22 Aug 2023 05:15:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C4557838A6
+	for <lists+linux-next@lfdr.de>; Tue, 22 Aug 2023 06:00:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232365AbjHVDPt (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 21 Aug 2023 23:15:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45216 "EHLO
+        id S229606AbjHVEAs (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 22 Aug 2023 00:00:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232081AbjHVDPs (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 21 Aug 2023 23:15:48 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71903185;
-        Mon, 21 Aug 2023 20:15:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1692674144;
-        bh=Py5eH3QrPVteC/AOmqcFlGdxXXSdPEIePL9noQR/pR4=;
-        h=Date:From:To:Cc:Subject:From;
-        b=e4jmIYJOY59FfpOwg+ORmFl+aashUF7zERGLIDMRBoZokrBomITPrcLgxRDVkxgUR
-         el/9cxN7w6h4qDqlV+7JiMyt7oxHY964uJGDDKwyKYz9rzwyAK7xHdbfQd10KoOMTx
-         RsiwXN1PfenJev0QosW3U/MUkL7owpgzaHobkWNelWNSCYH1+vFQssXOneKT6aHGAv
-         Bb1w+WOQn85h27SneGn1FlV8wa9Too4a+B5SCkN3RlIBdwuEK0qW7XRWV+cdQL84BD
-         6GPIIuTJ9DAotzInn/c6JsmbY/jwr1MOqH//+2W/jv2piYBUvIyVDb36F36TAKxtgY
-         tYbuAY1DOa7iw==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        with ESMTP id S229495AbjHVEAs (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 22 Aug 2023 00:00:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3676C18D;
+        Mon, 21 Aug 2023 21:00:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4RVDxr2tzwz4wxN;
-        Tue, 22 Aug 2023 13:15:43 +1000 (AEST)
-Date:   Tue, 22 Aug 2023 13:15:41 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jens Axboe <axboe@kernel.dk>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Christian Brauner <brauner@kernel.org>
-Cc:     Christoph Hellwig <hch@lst.de>,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C5D4760C27;
+        Tue, 22 Aug 2023 04:00:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23E24C433C7;
+        Tue, 22 Aug 2023 04:00:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1692676844;
+        bh=wF7a9DTAEc49b0LtDfqEP844tiSjl8LoV4OyVI84GrI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Fc8rKzY4a6NetmVD0Ho2yK279RGwV6y2FgZFgttHBRx7f8WzmFqM8tmWigz1DznfN
+         2K44pbbAm/BlD9hp9bYFmXCa3Rhg3Xhq7MWr2jPVIjB8VyO7Zt6d5PgPVqGgFQHdyQ
+         qszgAydz84pRpkftlQ0C7Lwnv6IYTu95rJmqCJbKCzgqePq6vpoI0Z51KozWW7xcKw
+         qLjcT7UzTqVVTMNz+dJFFWnWi2Ec+p8ACc9djXjXB8+SxGeZO8D7FAaLWgYyZTWQu+
+         8zSjo4c2TLMErstWhrj7rPhOpdcOuYR+S54H2VN3pVK95MgPzS3NxmKAtvLI0jg74j
+         vZtxLgnFBuuqA==
+Date:   Mon, 21 Aug 2023 21:00:43 -0700
+From:   "Darrick J. Wong" <djwong@kernel.org>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Andrew Morton <akpm@linux-foundation.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the block tree with the djw-vfs,
- vfs-brauner trees
-Message-ID: <20230822131541.7667f165@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linuxppc-dev@lists.ozlabs.org, linux-xfs@vger.kernel.org
+Subject: Re: linux-next: build failure after merge of the mm tree
+Message-ID: <20230822040043.GB11263@frogsfrogsfrogs>
+References: <20230822095537.500047f7@canb.auug.org.au>
+ <ZOQLUMBB7amLUJLY@casper.infradead.org>
+ <20230822112217.185c3357@canb.auug.org.au>
+ <ZOQQjmxeLM920/Q/@casper.infradead.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Wqu+jNTkMDyRpR5lTakfctO";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZOQQjmxeLM920/Q/@casper.infradead.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/Wqu+jNTkMDyRpR5lTakfctO
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, Aug 22, 2023 at 02:34:06AM +0100, Matthew Wilcox wrote:
+> On Tue, Aug 22, 2023 at 11:22:17AM +1000, Stephen Rothwell wrote:
+> > Hi Matthew,
+> > 
+> > On Tue, 22 Aug 2023 02:11:44 +0100 Matthew Wilcox <willy@infradead.org> wrote:
+> > >
+> > > On Tue, Aug 22, 2023 at 09:55:37AM +1000, Stephen Rothwell wrote:
+> > > > In file included from include/trace/trace_events.h:27,
+> > > >                  from include/trace/define_trace.h:102,
+> > > >                  from fs/xfs/xfs_trace.h:4428,
+> > > >                  from fs/xfs/xfs_trace.c:45:
+> > > > include/linux/pgtable.h:8:25: error: initializer element is not constant
+> > > >     8 | #define PMD_ORDER       (PMD_SHIFT - PAGE_SHIFT)  
+> > > 
+> > > Ummm.  PowerPC doesn't have a compile-time constant PMD size?
+> > 
+> > Yeah, you are not the first (or probably the last) to be caught by that.
+> 
+> I think this will do the trick.  Any comments?
+> 
+> diff --git a/fs/xfs/xfs_trace.h b/fs/xfs/xfs_trace.h
+> index 1904eaf7a2e9..d5a4e6c2dcd1 100644
+> --- a/fs/xfs/xfs_trace.h
+> +++ b/fs/xfs/xfs_trace.h
+> @@ -796,15 +796,6 @@ DEFINE_INODE_EVENT(xfs_inode_reclaiming);
+>  DEFINE_INODE_EVENT(xfs_inode_set_need_inactive);
+>  DEFINE_INODE_EVENT(xfs_inode_inactivating);
+>  
+> -/*
+> - * ftrace's __print_symbolic requires that all enum values be wrapped in the
+> - * TRACE_DEFINE_ENUM macro so that the enum value can be encoded in the ftrace
+> - * ring buffer.  Somehow this was only worth mentioning in the ftrace sample
+> - * code.
+> - */
 
-Hi all,
+Please leave this ^^^ comment, because the need for TRACE_DEFINE_ENUM to
+make enums work in tracepoints is not at all obvious.
 
-Today's linux-next merge of the block tree got a conflict in:
+> -TRACE_DEFINE_ENUM(PMD_ORDER);
+> -TRACE_DEFINE_ENUM(PUD_ORDER);
+> -
+>  TRACE_DEFINE_ENUM(XFS_REFC_DOMAIN_SHARED);
+>  TRACE_DEFINE_ENUM(XFS_REFC_DOMAIN_COW);
+>  
+> @@ -823,13 +814,10 @@ TRACE_EVENT(xfs_filemap_fault,
+>  		__entry->order = order;
+>  		__entry->write_fault = write_fault;
+>  	),
+> -	TP_printk("dev %d:%d ino 0x%llx %s write_fault %d",
+> +	TP_printk("dev %d:%d ino 0x%llx order:%u write_fault %d",
 
-  fs/super.c
+"order %u" to match the (non dev_t) style of the rest of the xfs
+tracepoints.
 
-between commits:
+--D
 
-  0ed33598ddf3 ("super: use locking helpers")
-  5e8749141521 ("super: wait for nascent superblocks")
-  880b9577855e ("fs: distinguish between user initiated freeze and kernel i=
-nitiated freeze")
-
-from the djw-vfs, vfs-brauner trees and commit:
-
-  4a8b719f95c0 ("fs: remove emergency_thaw_bdev")
-
-from the block tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc fs/super.c
-index 5062ca612e0d,bc666e7ee1a9..000000000000
---- a/fs/super.c
-+++ b/fs/super.c
-@@@ -1196,13 -1027,14 +1196,15 @@@ void emergency_remount(void
- =20
-  static void do_thaw_all_callback(struct super_block *sb)
-  {
- -	down_write(&sb->s_umount);
- -	if (sb->s_root && sb->s_flags & SB_BORN) {
- +	bool born =3D super_lock_excl(sb);
- +
- +	if (born && sb->s_root) {
-- 		emergency_thaw_bdev(sb);
-+ 		if (IS_ENABLED(CONFIG_BLOCK))
-+ 			while (sb->s_bdev && !thaw_bdev(sb->s_bdev))
-+ 				pr_warn("Emergency Thaw on %pg\n", sb->s_bdev);
- -		thaw_super_locked(sb);
- +		thaw_super_locked(sb, FREEZE_HOLDER_USERSPACE);
-  	} else {
- -		up_write(&sb->s_umount);
- +		super_unlock_excl(sb);
-  	}
-  }
- =20
-
---Sig_/Wqu+jNTkMDyRpR5lTakfctO
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmTkKF4ACgkQAVBC80lX
-0Gx2uwf5AfM9q7tFbE3BDv8Z42VHsaqDKeD3XvZ2DT0k8yXDHrMDJqdJRY/KCX3V
-jEg36vJOZrzhe3RHuDSHlCC3Ow+M6hcSPXvcENhc7I1I30NurSccun1skkdxAxSP
-J8kcvjtVF68bm0oSq2sMD/xufwD+xQdztzZAuFu8uZfA0GkVRl9kyJ9+SS6IE8qF
-MC9e7nINjRU45I6vqmxs9K+uPb1snRkRDPOgHzxVo87W7PS04De0gD44ArT25Rl4
-IzLx1J+nUFU51QyR0MbowV955pWWKN3LN9g0rAHxvYp9f4yLHK2vMZxUJ+Mv0PYk
-9cs13zbsn2RMLv9whAKsPkNoJVXDaQ==
-=1Wsm
------END PGP SIGNATURE-----
-
---Sig_/Wqu+jNTkMDyRpR5lTakfctO--
+>  		  MAJOR(__entry->dev), MINOR(__entry->dev),
+>  		  __entry->ino,
+> -		  __print_symbolic(__entry->order,
+> -			{ 0,		"PTE" },
+> -			{ PMD_ORDER,	"PMD" },
+> -			{ PUD_ORDER,	"PUD" }),
+> +		  __entry->order,
+>  		  __entry->write_fault)
+>  )
+>  
+> 
+> 

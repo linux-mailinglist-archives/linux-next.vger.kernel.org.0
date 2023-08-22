@@ -2,59 +2,53 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E56A9783BF7
-	for <lists+linux-next@lfdr.de>; Tue, 22 Aug 2023 10:41:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ADB7783D45
+	for <lists+linux-next@lfdr.de>; Tue, 22 Aug 2023 11:46:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233931AbjHVIlj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 22 Aug 2023 04:41:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37966 "EHLO
+        id S234385AbjHVJqp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 22 Aug 2023 05:46:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233930AbjHVIlh (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 22 Aug 2023 04:41:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70D3ACD4;
-        Tue, 22 Aug 2023 01:41:35 -0700 (PDT)
+        with ESMTP id S234458AbjHVJqp (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 22 Aug 2023 05:46:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB2B41B2;
+        Tue, 22 Aug 2023 02:46:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0454D61063;
-        Tue, 22 Aug 2023 08:41:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44519C433CA;
-        Tue, 22 Aug 2023 08:41:34 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 61A2F61588;
+        Tue, 22 Aug 2023 09:46:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B507C433C8;
+        Tue, 22 Aug 2023 09:46:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1692693694;
-        bh=6uqDbLXsR+BxTTZl03sCQ10dOl32Q0UyJCc+W3QkBgo=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=tcTMNCaiiW5RRkzHUerroX42Ufj4cLz3KnAiOTvaeL7UtEDdu71nqZ+kRbTx32Z8n
-         h5d1voe6HqEDTTBkwboPPlYd2RjR68XpuDC9IzjoK6Vu6kW+k3fvMTgOedITCDv9MG
-         ZZlgn7vE7t85cnGkaIExqBen58CMjLab8PumPtDmDeH0IxHvSq1gYFrsgvv6Ulqa73
-         u4HskZFwXARwUWqKJFDU1VOSv1VpJgJL4nBSv6DKLfcWrJwVRtyCwBFQHSIOf6XjMl
-         RT+ghv8i1IvJqlmmFmaF4+BVMkPkd+nZG55k4pRXUpgPd6tc6wgjn7V1IJNlQe+ogL
-         mEUsXvbxaljKA==
-Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-2b9b904bb04so66813721fa.1;
-        Tue, 22 Aug 2023 01:41:34 -0700 (PDT)
-X-Gm-Message-State: AOJu0YwdmCxSbRILyshimDqgPkZ+/GSVPstM3r8Vko9gTV1L0Kx34o3W
-        Jmc/A2ZYIPIKXkP1KTWgOLkh7kVZhqfJubIbrLc=
-X-Google-Smtp-Source: AGHT+IGv7WdXQUeAKBhMYMzrqj4ZYXxeY61kxBveTkYDN/4pKlWx7k41yrOqx1YrsyTL2A2CItD12Q2XFiFFoWh5VKg=
-X-Received: by 2002:a05:6512:3105:b0:4ff:745b:4f1f with SMTP id
- n5-20020a056512310500b004ff745b4f1fmr4989198lfb.30.1692693692201; Tue, 22 Aug
- 2023 01:41:32 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230822164859.26b0b8f6@canb.auug.org.au> <CAMj1kXGKtpGNYx6hqygya+k_gQaMTiwEZnRGk9rZ=hcbcagKXA@mail.gmail.com>
- <20230822180805.483c10ee@canb.auug.org.au>
-In-Reply-To: <20230822180805.483c10ee@canb.auug.org.au>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Tue, 22 Aug 2023 10:41:20 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXF4eQBYiPBv2asbu+yqcCuYSmw-8_x41u=g4s1NJjb1Xg@mail.gmail.com>
-Message-ID: <CAMj1kXF4eQBYiPBv2asbu+yqcCuYSmw-8_x41u=g4s1NJjb1Xg@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the efi tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        s=k20201202; t=1692697602;
+        bh=RWLV3/09KzFOFC/mETuJ0MDPaiySDOW5Yyo2sBkF9XA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dYI7VkplKDaEvBwEfIbqhFggGq6G3HT020RL9s2tUwBGnX9lwuZQU5iH1Z5S/0eFQ
+         4nHm1fsr1WhQJ/Eu77E6aYfOe/jQ+sf6JTIfXyecF0eOdtEx7vAtqtE1TrE8yTl/Gd
+         /EtAtO2e/fY0y1b6T3PpU2bOc5P38POb4In51ZeTB4pCHWg93mUuelq9O5taTjCF8/
+         2gq5aCgngwI3E9uQmeIq9Qv+no+DCRVtiNRRZiAZBHTXESG9M/xLjhilw3e7nd0eIO
+         bTFtyQ+eXWh7lMhdJWmrgcLEzlSmNULVFqnfrkbdCBZbFIp06Y82pif7FvQDpHtGXm
+         Ptf+i08AlE5XQ==
+Date:   Tue, 22 Aug 2023 11:46:38 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     "Darrick J. Wong" <djwong@kernel.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Subject: Re: linux-next: manual merge of the vfs-brauner tree with the
+ djw-vfs tree
+Message-ID: <20230822-turnus-quert-9b11d4e30dc9@brauner>
+References: <20230822110551.6386dd5d@canb.auug.org.au>
+ <20230822025120.GA11286@frogsfrogsfrogs>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230822025120.GA11286@frogsfrogsfrogs>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,47 +56,24 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, 22 Aug 2023 at 10:08, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi Ard,
->
-> On Tue, 22 Aug 2023 09:32:31 +0200 Ard Biesheuvel <ardb@kernel.org> wrote:
-> >
-> > Hello Stephen,
-> >
-> > On Tue, 22 Aug 2023 at 08:49, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> > >
-> > > Hi all,
-> > >
-> > > After merging the efi tree, today's linux-next build (x86_64 allmodconfig)
-> > > failed like this:
-> > >
-> > > In file included from drivers/platform/x86/uv_sysfs.c:14:
-> > > arch/x86/include/asm/uv/bios.h:118:22: error: expected ')' before '*' token
-> > >   118 |         u64 (__efiapi *function)(enum uv_bios_cmd, ...);
-> > >       |                      ^~
-> > >       |                      )
-> > >
-> > > Caused by commit
-> > >
-> > >   73632c8c865f ("efi/runtime-wrappers: Remove duplicated macro for service returning void")
-> > >
-> >
-> > Thanks for the report.
-> >
-> > I cannot reproduce this with Debian's GCC 12.2.0 when building the
-> > efi/next tree either in isolation, or merged into yesterday's next.
-> >
-> > Could you please share the compiler version and the .config you used? Thanks.
->
-> $ x86_64-linux-gnu-gcc --version
-> x86_64-linux-gnu-gcc (Debian 12.3.0-4) 12.3.0
-> (this is Debian's cross compiler that is ppcle64 hosted)
->
-> and (see above) it is a x86_64 allmodconfig build.
->
-> Maybe there is some interaction with something else in today's
-> linux-next (just released).
+> Christian: I've been planning to merge the {freeze,thaw}_super @who
+> changes for 6.6; do you think more 'cooperating with the maintainer' is
+> needed, or shall I simply push my branch to Linus with a note that
+> s/down_write/super_lock_excl/ s/up_write/super_unlock_excl is needed to
+> resolve the merge the conflict?
 
-Thanks. I fixed it in the efi/next tree so things should build as
-expected the next time around.
+Hm, that's not a pleasant merge conflict given that it's locking
+changes. It would probably be fine to just bring it up the way it is but
+it looks needlessly messy/uncoordinated. I'm wonder why this isn't just
+all in vfs.super since it's core vfs infra change anyway. Maybe I just
+missed the patches if so then sorry about that.
+
+That's the two infrastructure patches in the kernel-fsfreeze
+branch/kernel-fsfreeze_2023-07-27 tag?:
+
+ad0164493b81 ("fs: distinguish between user initiated freeze and kernel initiated freeze")
+53f65fd7a3d5 ("fs: wait for partially frozen filesystemskernel-fsfreeze_2023-07-27kernel-fsfreeze")
+
+If you give me a tag with your description and just the two commits or I
+just cherry pick them and cite your description in my pr that would be
+my preferred solution. How do you feel about that?

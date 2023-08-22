@@ -2,94 +2,137 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D8CE784BBE
-	for <lists+linux-next@lfdr.de>; Tue, 22 Aug 2023 23:01:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53984784BD6
+	for <lists+linux-next@lfdr.de>; Tue, 22 Aug 2023 23:15:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229582AbjHVVBV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 22 Aug 2023 17:01:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49462 "EHLO
+        id S231154AbjHVVPD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 22 Aug 2023 17:15:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229929AbjHVVBU (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 22 Aug 2023 17:01:20 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBF681B0;
-        Tue, 22 Aug 2023 14:01:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=A8/vJDmnxqneK9l/E7LtDD+PprhiMBOzpHX1desAXDs=; b=aBdwc+wnbyM/Fbk0LQyrKzXMtO
-        6tDJZHqjzVKT0VdJP9YIltqPeMY4fECpuun6hwyMP1yi2Q3ShUFBfCgaEZEmhjhU1vZQ+mKRD6WWh
-        Qh1OBEcVDn84gf7XQQ9iwYkn94NTL2sXtPaxk9+LyNW1M81F5gHgN019Xdzz5GbB0kL2snueS6rtG
-        7/W8oWx9DdTlJmmlAZNccAfQaT+SbimsKC0M8WSGi5PM8GXnKLqmWsd0lTygMcB7RjnQbO7xmdLeZ
-        oLNduG1TEBMXPmfxLvWqQbbRjwofYF2BXbx6uZQWAD8xNUd9kGEHW06ABDwOAf4dVWs63GJDrLjuo
-        EAzE937g==;
-Received: from [2601:1c2:980:9ec0::2764]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qYYV3-00GnT7-0l;
-        Tue, 22 Aug 2023 21:01:17 +0000
-Message-ID: <1812e39f-ddbc-d655-5d04-0a13d04437ab@infradead.org>
-Date:   Tue, 22 Aug 2023 14:01:16 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Subject: Re: [PATCH 1/1] media: via: Use correct dependency for camera sensor
- drivers
-Content-Language: en-US
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        linux-media@vger.kernel.org
-Cc:     hverkuil@xs4all.nl, Stephen Rothwell <sfr@canb.auug.org.au>,
+        with ESMTP id S229821AbjHVVPC (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 22 Aug 2023 17:15:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05E56CF3;
+        Tue, 22 Aug 2023 14:14:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 80F8F634E2;
+        Tue, 22 Aug 2023 21:14:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB45AC433C7;
+        Tue, 22 Aug 2023 21:14:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1692738896;
+        bh=L1Tgc4ICYR0hdhOoCocn8nFB7tQACCiC8l6KOmZxayg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IkkkLuo3eJ659WoqN5DConOGdb3TshhjgzVCLnvD97+/gIf/1mroRTqogY8Cex7vN
+         PBpeWGIjwbrq1hLrNLS0s1WhTXxeLyISpIIUn3M510Srlgn+TZsR1SFbmRHhDHimc3
+         yqQMBmjfodULJUTK0Y6xtlFhLjZGBcK2PUGGL+iWaSpU1j/9cEMZ9f/gXRcX+uijfN
+         8OVThDyUnVelIVMondb26FOqJUNAlQksu6Y+WkBGLLcF5o5gomcLr4IRoh0KHmoaZN
+         /iaxJWQvYxY/eXnKF68DluX0W7vpEHVHnQRm52UNDO8R+1omek4YKVZ7/t+pccvgsV
+         CmXk232m0DH/A==
+Date:   Tue, 22 Aug 2023 14:14:56 -0700
+From:   "Darrick J. Wong" <djwong@kernel.org>
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-next@vger.kernel.org, Wentong Wu <wentong.wu@intel.com>,
-        Zhifeng Wang <zhifeng.wang@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-References: <20230822081034.3869843-1-sakari.ailus@linux.intel.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20230822081034.3869843-1-sakari.ailus@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the vfs-brauner tree with the
+ djw-vfs tree
+Message-ID: <20230822211456.GC11286@frogsfrogsfrogs>
+References: <20230822110551.6386dd5d@canb.auug.org.au>
+ <20230822025120.GA11286@frogsfrogsfrogs>
+ <20230822-turnus-quert-9b11d4e30dc9@brauner>
+ <20230822182604.GB11286@frogsfrogsfrogs>
+ <20230822-mitbringen-unwillig-176fd9e8873b@brauner>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230822-mitbringen-unwillig-176fd9e8873b@brauner>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-
-
-On 8/22/23 01:10, Sakari Ailus wrote:
-> The via camera controller driver selected ov7670 driver, however now that
-> driver has dependencies and may no longer be selected unconditionally.
+On Tue, Aug 22, 2023 at 10:19:00PM +0200, Christian Brauner wrote:
+> > > my preferred solution. How do you feel about that?
+> > 
+> > I'm happy to have you pull my xfs-linux tags into your vfs tree. :)
 > 
-> Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> Fixes: 7d3c7d2a2914 ("media: i2c: Add a camera sensor top level menu")
-> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-
-Acked-by: Randy Dunlap <rdunlap@infradead.org>
-Tested-by: Randy Dunlap <rdunlap@infradead.org>
-
-Thanks.
-
-> ---
->  drivers/media/platform/via/Kconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Ah, sweet. I apppreciate that. I'll mention in the pr to Linus that if
+> he wants to reject other parts of the super work that he should then
+> still simply pull the freeze stuff from you without the rest.
 > 
-> diff --git a/drivers/media/platform/via/Kconfig b/drivers/media/platform/via/Kconfig
-> index 8926eb0803b2..6e603c038248 100644
-> --- a/drivers/media/platform/via/Kconfig
-> +++ b/drivers/media/platform/via/Kconfig
-> @@ -7,7 +7,7 @@ config VIDEO_VIA_CAMERA
->  	depends on V4L_PLATFORM_DRIVERS
->  	depends on FB_VIA && VIDEO_DEV
->  	select VIDEOBUF2_DMA_SG
-> -	select VIDEO_OV7670
-> +	select VIDEO_OV7670 if VIDEO_CAMERA_SENSOR
->  	help
->  	   Driver support for the integrated camera controller in VIA
->  	   Chrome9 chipsets.  Currently only tested on OLPC xo-1.5 systems
+> > 
+> > Here's a tag with just the two vfs patches:
+> > https://git.kernel.org/pub/scm/fs/xfs/xfs-linux.git/tag/?h=vfs-6.6-merge-2
+> > 
+> > This second tag builds on that, by adding the first actual user of
+> > FREEZE_HOLDER_KERNEL:
+> > https://git.kernel.org/pub/scm/fs/xfs/xfs-linux.git/tag/?h=vfs-6.6-merge-3
+> 
+> Assuming I understood correctly I did just pull both tags and pushed
+> them out. Would you please take a look at
+> https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git/log/?h=vfs.super
+> and let me know if everything looks as expected? I'll be going afk in a
+> bit just waiting for the kernel build to finish to kick of some
+> xfstests. If you find anything I'll fix up any issues up tomorrow
+> morning.
 
--- 
-~Randy
+Hmm.  Looking at the {up,down}_write -> super_{un,}lock_excl conversion,
+I think you missed wait_for_partially_frozen:
+
+static int wait_for_partially_frozen(struct super_block *sb)
+{
+	int ret = 0;
+
+	do {
+		unsigned short old = sb->s_writers.frozen;
+
+		up_write(&sb->s_umount);
+		ret = wait_var_event_killable(&sb->s_writers.frozen,
+					       sb->s_writers.frozen != old);
+		down_write(&sb->s_umount);
+	} while (ret == 0 &&
+		 sb->s_writers.frozen != SB_UNFROZEN &&
+		 sb->s_writers.frozen != SB_FREEZE_COMPLETE);
+
+	return ret;
+}
+
+That said, freeze_super() took an s_active refcount at the top, called
+super_lock_excl (which means the sb isn't DYING and has been BORN) and
+doesn't release it before calling wait_for_partially_frozen.
+
+AFAICT, the subsequent down_write -> super_lock_excl conversions in
+freeze_super do not gain us much since I don't think the sb can get to
+SB_DYING state without s_active reaching zero, right?  According to
+"super: use higher-level helper for {freeze,thaw}", it sounds like the
+subsequent down_write calls in freeze_super were replaced for
+consistency, even though it "...isn't possible to observe a dying
+superblock".
+
+The missing conversion isn't strictly necessary, but it probably makese
+sense to do it anyway.
+
+(Aside from that, the conversion looks correct to me.)
+
+> > 
+> > There will be more for 6.7(+?) if Luis manages to get back to his
+> > auto-fsfreeze during suspend, or if Shiyang finishes the series to
+> > handle pmem media error reporting in xfs.
+> 
+> Ok, sounds good let me know/Cc me when ready/needed.
+
+Will do!
+
+--D
+
+> 
+> Thanks for all the help!

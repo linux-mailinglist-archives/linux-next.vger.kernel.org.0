@@ -2,87 +2,80 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8BA0783A30
-	for <lists+linux-next@lfdr.de>; Tue, 22 Aug 2023 08:54:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 418A8783ABE
+	for <lists+linux-next@lfdr.de>; Tue, 22 Aug 2023 09:19:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232143AbjHVGyE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 22 Aug 2023 02:54:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38534 "EHLO
+        id S233414AbjHVHTj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 22 Aug 2023 03:19:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233113AbjHVGyC (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 22 Aug 2023 02:54:02 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F38710E;
-        Mon, 21 Aug 2023 23:53:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1692687236;
-        bh=Ah62AUrzjKq+nEpeEC2KEKP4jJvhJf3LyI0rXXoFvmQ=;
-        h=Date:From:To:Cc:Subject:From;
-        b=OzwNnR5x/pk4kVsnXRGcWOY3XDdnJJWAAUoKBD6i3RWzliZugkq2rVZlA3tZuIfEr
-         G10fV524KzvBZ9xmf7Uf0G+QL9mYwzLJxslEcVqWR6Tzq/W4ZVWhFELXJt1ql6qdfG
-         ICjpB4jkUiUbYBELkto6/bBIEbUBf9xQXnOtMUMTC7rYmWGgchfrhc7BOAWbZwWuc6
-         Cf7Cqtfhyc/HW/l55natXHIyybSStrTiUHawZGdTfp/Dmr5t99mvSjYNCjvnMTYJOg
-         xP6KDVxLiQellSHITBGindAd79syGSJrNQ9vOs8a3nwvSKlsCEfAQL4p192gcJV96F
-         nOKJARykannqw==
+        with ESMTP id S233418AbjHVHT2 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 22 Aug 2023 03:19:28 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8302DCD1;
+        Tue, 22 Aug 2023 00:19:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1692688380;
+        bh=SJsxQb+2HzJMV+XlszngI2wKeDLW6PxOCQm17ZNiClI=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=fjwnGJPioT0weeWOqyAkgiI1a71lig5O/DDdgp8N8FfiXBZ4/xA5NSEPXKYR/aQaS
+         bMu5yZinGGG0hTRG+wiJPeM1c8cLc0IxXGmae2uiRShM6m4VR7tpM0YcYJRrYTslBH
+         hOFJJs3aCld4D6dEU8ZW5oCjsyntUZ1A1mFIeY62HL1QDCGnGXGDnNTJeWjKZZiJo0
+         uCmJLvG4Mr4WS2MwGzBs+sPQX+JNZl7IOcXaSAPZ9hXBtXqWiB1s2KzCwbU6Rb0KGa
+         nMLzr/3NhO8sXRhDaJM6C3FdXI9fKvkUZhnsyCiOEs1U54tt21eKaO89fIB/OkI2Q3
+         +PPiMUncW/abg==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4RVKnc3fWXz4wxR;
-        Tue, 22 Aug 2023 16:53:56 +1000 (AEST)
-Date:   Tue, 22 Aug 2023 16:53:55 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4RVLCb2MQ1z4x2n;
+        Tue, 22 Aug 2023 17:12:59 +1000 (AEST)
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Matthew Wilcox <willy@infradead.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the mm-stable tree
-Message-ID: <20230822165355.5eb8cac1@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linuxppc-dev@lists.ozlabs.org
+Subject: Re: linux-next: build failure after merge of the mm tree
+In-Reply-To: <ZOQLUMBB7amLUJLY@casper.infradead.org>
+References: <20230822095537.500047f7@canb.auug.org.au>
+ <ZOQLUMBB7amLUJLY@casper.infradead.org>
+Date:   Tue, 22 Aug 2023 17:12:55 +1000
+Message-ID: <87wmxnv9c8.fsf@mail.lhotse>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/iOukjq7rF7T1aEe16dY45In";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/iOukjq7rF7T1aEe16dY45In
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Matthew Wilcox <willy@infradead.org> writes:
+> On Tue, Aug 22, 2023 at 09:55:37AM +1000, Stephen Rothwell wrote:
+>> In file included from include/trace/trace_events.h:27,
+>>                  from include/trace/define_trace.h:102,
+>>                  from fs/xfs/xfs_trace.h:4428,
+>>                  from fs/xfs/xfs_trace.c:45:
+>> include/linux/pgtable.h:8:25: error: initializer element is not constant
+>>     8 | #define PMD_ORDER       (PMD_SHIFT - PAGE_SHIFT)
+>
+> Ummm.  PowerPC doesn't have a compile-time constant PMD size?
 
-Hi all,
+Yeah. The joys of supporting two MMUs with different supported page
+sizes in a single kernel binary.
 
-After merging the mm-stable tree, today's linux-next build (htmldocs)
-produced this warning:
+> arch/powerpc/include/asm/book3s/64/pgtable.h:#define PMD_SHIFT  (PAGE_SHIFT + PTE_INDEX_SIZE)
+> arch/powerpc/include/asm/book3s/64/pgtable.h:#define PTE_INDEX_SIZE  __pte_index_size
+>
+> That's really annoying.  I'll try to work around it.
 
-mm/hugetlb.c:1: warning: no structured comments found
+Sorry, thanks.
 
-Introduced by commit
-
-  9c5ccf2db04b ("mm: remove HUGETLB_PAGE_DTOR")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/iOukjq7rF7T1aEe16dY45In
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmTkW4MACgkQAVBC80lX
-0GwoFgf/RZq0OlnqFn312IPySBoVhGruoQq/AMGTzrKK6JgWzab5tO0qhaIU/bQq
-qe7Bm9NqEYmjrE34OwpHVy5iwhUMV6KHmxYvYIPEc8ZJSCshgdCVZSqzmdFi4NXi
-HSkZ9yz98fudu7SW1mLSQdhASidKT5Agtlg12V/DsakzAEwote7jwyEVLqlU6Tjn
-7zZF0xgeKusV2gjAvxjqIBNqvT9zEYDO4HvZvFNhMbgzKUitcHiE2G8sSxnzuznW
-0QYj5tD3UVgs3tSuLvSfYgNwJPWue+Hh48SFsY6/Dgnqiv/bSM5gm+kHK/xZXBQl
-xLxWaBcuMHZV12RmhJEoBhqS8H1xVQ==
-=Cvw9
------END PGP SIGNATURE-----
-
---Sig_/iOukjq7rF7T1aEe16dY45In--
+cheers

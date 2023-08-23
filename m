@@ -2,123 +2,103 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE3F7784FB6
-	for <lists+linux-next@lfdr.de>; Wed, 23 Aug 2023 06:46:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4E70784FC1
+	for <lists+linux-next@lfdr.de>; Wed, 23 Aug 2023 06:53:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232593AbjHWEqa (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 23 Aug 2023 00:46:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51524 "EHLO
+        id S232587AbjHWExQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 23 Aug 2023 00:53:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232588AbjHWEq3 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 23 Aug 2023 00:46:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2EE5CF1;
-        Tue, 22 Aug 2023 21:46:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        with ESMTP id S232573AbjHWExP (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 23 Aug 2023 00:53:15 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 699BBE4A;
+        Tue, 22 Aug 2023 21:53:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1692766392;
+        bh=E7PrlwfvcfbsSkpNfyrhBUILcTKGUVyXB8IxDFYJh3g=;
+        h=Date:From:To:Cc:Subject:From;
+        b=b2Oi7GxcpgEggkyGSYEXABG3C8k2YGJc8N3VC8lB0laDkdwef1IUbBhH8cwK6V5w3
+         i1VQjmxDdO5wJR4XKowo7vMqK75HrXU3TbnfR+mHK+th2H12/1onlxRHBHfCkyIodv
+         Kr/eC2IPaED9FfTQ49PFd5AnMbXVI1S0Uu8MaaYmt88Ok6vffmGQuWdlxYEGK8yglr
+         WDDs4ruk4TnRiFOEmBXcqyRVls2PVx4xu8kaP98IHP2dqFZax5NcIQM8ObetEGu6PW
+         jvlnzZKzS96wXjQSd35SVT/V6q3SMG5+Aj9Rx0Y9daR6sABxUkSIhR1tZVAiP7cQ/0
+         Usqjx7YUZJJ1A==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7BC83617C5;
-        Wed, 23 Aug 2023 04:46:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6A54C433C8;
-        Wed, 23 Aug 2023 04:46:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1692765986;
-        bh=ZAS+Zle6kFj+lIQtoOw17wUR9w24uTrKVt7ERrEduKA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=A91UIGoFcWwn3mB7g+M/Ygp+ujkP55hkUkaRZ8DbZz3dAJfSqsgj9dZz3Zr8OU4fg
-         M64muu8wqbk/JCFYbcjG40fbNVAvnWiDQYH9Ik6uja+DgLdkhRqJzCxqLzmNV5SKGC
-         lejiT+YyGMn7MI+6C1YFPlYGU8l8RqoKuczwYbPflMRrsHiHJ0tDZ3G/9L3L/ePFtc
-         kKSTHAsvpcszCR1VVkG3nzNc7/nT4k2Ncy9y56XR5V0qK/VJ7VZABk3aay/DSRtIGR
-         OOUfTz6cOOrKS3qNyGEUivQraHS8OQWQDkZ/nswNsxX2DH+rZBe6Ucmaa9Dp5bREia
-         tlPJ2kSbbPmXw==
-Date:   Tue, 22 Aug 2023 21:46:26 -0700
-From:   "Darrick J. Wong" <djwong@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     David Chinner <david@fromorbit.com>, linux-xfs@vger.kernel.org,
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4RVv3q4nvdz4wxQ;
+        Wed, 23 Aug 2023 14:53:11 +1000 (AEST)
+Date:   Wed, 23 Aug 2023 14:52:58 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Shuah Khan <shuah@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Andre Przywara <andre.przywara@arm.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the djw-vfs tree with the xfs tree
-Message-ID: <20230823044626.GG11286@frogsfrogsfrogs>
-References: <20230823093347.775f3857@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Subject: linux-next: manual merge of the kselftest tree with the mm-hotfixes
+ tree
+Message-ID: <20230823145258.6fb2b8d8@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230823093347.775f3857@canb.auug.org.au>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/55h4r/lSXpA1HGfWzqvna+L";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Aug 23, 2023 at 09:33:47AM +1000, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Today's linux-next merge of the djw-vfs tree got a conflict in:
-> 
->   fs/xfs/scrub/scrub.c
-> 
-> between commit:
-> 
->   526aab5f5790 ("xfs: implement online scrubbing of rtsummary info")
-> 
-> from the xfs tree and commit:
-> 
->   ce85a1e04645 ("xfs: stabilize fs summary counters for online fsck")
-> 
-> from the djw-vfs tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
-> 
-> -- 
-> Cheers,
-> Stephen Rothwell
-> 
-> diff --cc fs/xfs/scrub/scrub.c
-> index e92129d74462,a0fffbcd022b..000000000000
-> --- a/fs/xfs/scrub/scrub.c
-> +++ b/fs/xfs/scrub/scrub.c
-> @@@ -178,16 -178,16 +178,18 @@@ xchk_teardown
->   	}
->   	if (sc->ip) {
->   		if (sc->ilock_flags)
->  -			xfs_iunlock(sc->ip, sc->ilock_flags);
->  -		if (sc->ip != ip_in &&
->  -		    !xfs_internal_inum(sc->mp, sc->ip->i_ino))
->  -			xchk_irele(sc, sc->ip);
->  +			xchk_iunlock(sc, sc->ilock_flags);
->  +		xchk_irele(sc, sc->ip);
->   		sc->ip = NULL;
->   	}
-> - 	if (sc->sm->sm_flags & XFS_SCRUB_IFLAG_REPAIR)
-> + 	if (sc->flags & XCHK_HAVE_FREEZE_PROT) {
-> + 		sc->flags &= ~XCHK_HAVE_FREEZE_PROT;
->   		mnt_drop_write_file(sc->file);
-> + 	}
+--Sig_/55h4r/lSXpA1HGfWzqvna+L
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Yep, I changed the mnt_drop_write_file conditional to be an explicit
-flag instead of implied by the XFS_SCRUB_IFLAG_REPAIR coming from
-userspace.  You've correctly resolved both conflicts, thank you.
+Hi all,
 
-(And apologies for things being way messier than is traditional.)
+Today's linux-next merge of the kselftest tree got a conflict in:
 
---D
+  tools/testing/selftests/cachestat/test_cachestat.c
 
->  +	if (sc->xfile) {
->  +		xfile_destroy(sc->xfile);
->  +		sc->xfile = NULL;
->  +	}
->   	if (sc->buf) {
->   		if (sc->buf_cleanup)
->   			sc->buf_cleanup(sc->buf);
+between commits:
 
+  fbf31ed6e0f4 ("selftests: cachestat: test for cachestat availability")
+  8d55633e168b ("selftests: cachestat: catch failing fsync test on tmpfs")
 
+from the mm-hotfixes tree and commit:
+
+  13eb52f6293d ("selftests: cachestat: test for cachestat availability")
+
+from the kselftest tree.
+
+I fixed it up (I just used the former version of the conflicting bits)
+and can carry the fix as necessary. This is now fixed as far as linux-next
+is concerned, but any non trivial conflicts should be mentioned to your
+upstream maintainer when your tree is submitted for merging.  You may
+also want to consider cooperating with the maintainer of the conflicting
+tree to minimise any particularly complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/55h4r/lSXpA1HGfWzqvna+L
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmTlkKoACgkQAVBC80lX
+0GxZzwgAgtv0nteYhBoB1Hc+BEYfznW9x40Eef7yyOwDm7EKopeN9gvS3Z6mQVHx
+G2eSKgVClmxALXtRxJEIS6NEEuKXMlCkKtTr9QnOR01kGh7lc5BOEhgGML7m/nuc
+xm0l9auTogb5FKKwzkToO8ie2WjgqX3dRWgq8W5hEjLWIoT3CygQx6PEImxNFbLX
+bB0bpj7xTWvzxj22GUoENqDiQdS9qH3L1bQVTirL3zXg3L46GoOq42zGYO8Tl6sE
+myKhQyoJuvHUYEaLUJ41W8wNcnfhOnvxz4mkd1FeGJFUe6YHf2Ubc0KB5VaLR9x5
+wR8kPizitzpw2hypIJxyHEgpvn57ww==
+=8P/9
+-----END PGP SIGNATURE-----
+
+--Sig_/55h4r/lSXpA1HGfWzqvna+L--

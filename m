@@ -2,80 +2,86 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44EBA78679D
-	for <lists+linux-next@lfdr.de>; Thu, 24 Aug 2023 08:42:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47C207867C2
+	for <lists+linux-next@lfdr.de>; Thu, 24 Aug 2023 08:49:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240026AbjHXGly (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 24 Aug 2023 02:41:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58346 "EHLO
+        id S235450AbjHXGtY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 24 Aug 2023 02:49:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240152AbjHXGlY (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 24 Aug 2023 02:41:24 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E523B10FE;
-        Wed, 23 Aug 2023 23:41:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
-        t=1692859279; bh=rBFnYvwYPzqGHUFZqCCWa+dQfdSazS2dGEHIvTtHaDE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mtfWA+ItmlrDPOrkPnAXYlba9Jfrgm1JGh2nF5RmHuG4d/kzR9MsATZ7Qx8rC19dn
-         1+zfVVEU/Rz6ncUewS3Po1kx+roEEt3N0kiE3UyKgooI19M7t5IZdzpc8Vs+01EMkq
-         Z42CfTGJTc7hP9Pna2+pkVbbjHccT3qr8KPhPioI=
-Date:   Thu, 24 Aug 2023 08:41:18 +0200
-From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        with ESMTP id S240216AbjHXGtK (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 24 Aug 2023 02:49:10 -0400
+Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 76ABC10FE;
+        Wed, 23 Aug 2023 23:48:51 -0700 (PDT)
+Received: (from willy@localhost)
+        by mail.home.local (8.17.1/8.17.1/Submit) id 37O6mQ1d017444;
+        Thu, 24 Aug 2023 08:48:26 +0200
+Date:   Thu, 24 Aug 2023 08:48:26 +0200
+From:   Willy Tarreau <w@1wt.eu>
+To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas@t-8ch.de>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
         Shuah Khan <skhan@linuxfoundation.org>,
-        Willy Tarreau <w@1wt.eu>,
         "Paul E. McKenney" <paulmck@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Ryan Roberts <ryan.roberts@arm.com>
 Subject: Re: linux-next: manual merge of the nolibc tree with the mm-stable
  tree
-Message-ID: <28aeee7b-2de5-4f39-8eb5-3e3486eeed1b@t-8ch.de>
+Message-ID: <ZOb9OuFh/2pmkRv+@1wt.eu>
 References: <20230817133053.76d9f850@canb.auug.org.au>
+ <28aeee7b-2de5-4f39-8eb5-3e3486eeed1b@t-8ch.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20230817133053.76d9f850@canb.auug.org.au>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <28aeee7b-2de5-4f39-8eb5-3e3486eeed1b@t-8ch.de>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi everybody,
+Hi Thomas,
 
-On 2023-08-17 13:30:53+1000, Stephen Rothwell wrote:
-> Today's linux-next merge of the nolibc tree got a conflict in:
+On Thu, Aug 24, 2023 at 08:41:18AM +0200, Thomas Weißschuh wrote:
+> Hi everybody,
 > 
->   tools/include/nolibc/stdio.h
+> On 2023-08-17 13:30:53+1000, Stephen Rothwell wrote:
+> > Today's linux-next merge of the nolibc tree got a conflict in:
+> > 
+> >   tools/include/nolibc/stdio.h
+> > 
+> > between commit:
+> > 
+> >   08d959738a95 ("selftests: line buffer test program's stdout")
+> > 
+> > from the mm-stable tree and commits:
+> > 
+> >   65ff4d19f792 ("tools/nolibc/stdio: add setvbuf() to set buffering mode")
+> >   2e00a8fc4f47 ("tools/nolibc: setvbuf: avoid unused parameter warnings")
+> > 
+> > from the nolibc tree.
+> >
+> > I fixed it up (I just used the latter version of this file) and can
+> > carry the fix as necessary. This is now fixed as far as linux-next is
+> > concerned, but any non trivial conflicts should be mentioned to your
+> > upstream maintainer when your tree is submitted for merging.  You may
+> > also want to consider cooperating with the maintainer of the conflicting
+> > tree to minimise any particularly complex conflicts.
 > 
-> between commit:
+> how do we want to handle this one?
 > 
->   08d959738a95 ("selftests: line buffer test program's stdout")
-> 
-> from the mm-stable tree and commits:
-> 
->   65ff4d19f792 ("tools/nolibc/stdio: add setvbuf() to set buffering mode")
->   2e00a8fc4f47 ("tools/nolibc: setvbuf: avoid unused parameter warnings")
-> 
-> from the nolibc tree.
->
-> I fixed it up (I just used the latter version of this file) and can
-> carry the fix as necessary. This is now fixed as far as linux-next is
-> concerned, but any non trivial conflicts should be mentioned to your
-> upstream maintainer when your tree is submitted for merging.  You may
-> also want to consider cooperating with the maintainer of the conflicting
-> tree to minimise any particularly complex conflicts.
+> A small note to Linus in the PRs to him on how to resolve it seem
+> reasonable to me.
+> But I'm fairly new to the process.
 
-how do we want to handle this one?
+My understanding is that Stephen's fix is still in his tree. We may indeed
+need to add a note to Linus in the PR about this one and the other one.
 
-A small note to Linus in the PRs to him on how to resolve it seem
-reasonable to me.
-But I'm fairly new to the process.
-
-Thomas
+Cheers,
+Willy

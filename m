@@ -2,93 +2,81 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B7D4787173
-	for <lists+linux-next@lfdr.de>; Thu, 24 Aug 2023 16:25:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6795F7875A6
+	for <lists+linux-next@lfdr.de>; Thu, 24 Aug 2023 18:41:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241569AbjHXOY6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 24 Aug 2023 10:24:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52350 "EHLO
+        id S242324AbjHXQko (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 24 Aug 2023 12:40:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241624AbjHXOYh (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 24 Aug 2023 10:24:37 -0400
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 462F91BC6
-        for <linux-next@vger.kernel.org>; Thu, 24 Aug 2023 07:24:34 -0700 (PDT)
-Received: by mail-io1-xd2f.google.com with SMTP id ca18e2360f4ac-792244506f0so8203939f.0
-        for <linux-next@vger.kernel.org>; Thu, 24 Aug 2023 07:24:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1692887073; x=1693491873;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=u2rdgs0bNKtgv3WwpKskkcELp4/NYKTYeYa5R7hjORQ=;
-        b=PghVr6XpNCTC0YcDXEWmX/8Sbx4aRWMVPt5TN4TWeOJ8+ziUkKoCvl80ZP8/Eoap8v
-         H66hGolecyFr0Jkaazv0hsy4+A31lSVeHkDOOEoumEXA8eZzXGh8Tm/q/u0FMtq1fpkW
-         uokiXm+KVbjSB//5WcOzrNNjTsSf12jCjHqEQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692887073; x=1693491873;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=u2rdgs0bNKtgv3WwpKskkcELp4/NYKTYeYa5R7hjORQ=;
-        b=I0bN/wxx6Fhfm18dQsDlSgfUO3mdkYlz7YcvfRbmGcRuHnMUVcNbnMVk+/EoVxv3IY
-         2zBk+VNCd3QYArDRvXUas333jzhQb4k6+EGot38eJfFi1X+wjlFMc8o3R/4FGWdYGqKN
-         yRsxe2q7OwLpz85dclkKSwhUl7F7sR2cGioVyX0Sqe5cg0cmRLm9MSJ00sP1AG1z/FgX
-         65W7HJL505uKkm2VAWBaIRNOa5oS8Ail1FYCeaIIULhQo/RpYJ9oZ3RylP0VxSkYd+E5
-         I3xgISstmes76qRD2r1G7kU5ldXoLTOLf80u4vgA8dGTb6BX/Rvtuayksnzu2Is6Q73H
-         /LxQ==
-X-Gm-Message-State: AOJu0YwN9ryZ6cn9I64/YgkgVr8zNJd/OlguNBMsU83vBXvS82zQPjVd
-        fj1SszILclNYx3TMP5yCpo3mdg==
-X-Google-Smtp-Source: AGHT+IHo52NzvdB/s7cLnaajlVu450EcadR2gri3DooqQ9t5Se11B1M7Gtd5esFo7mhSRsx0N+sbFg==
-X-Received: by 2002:a05:6602:3706:b0:791:e6ca:363 with SMTP id bh6-20020a056602370600b00791e6ca0363mr19829661iob.1.1692887073656;
-        Thu, 24 Aug 2023 07:24:33 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id dl28-20020a056638279c00b0042b320c13aasm4550889jab.89.2023.08.24.07.24.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Aug 2023 07:24:33 -0700 (PDT)
-Message-ID: <b7105474-bec9-f08b-b623-bf350909cab5@linuxfoundation.org>
-Date:   Thu, 24 Aug 2023 08:24:32 -0600
+        with ESMTP id S242673AbjHXQkM (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 24 Aug 2023 12:40:12 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8C2D198;
+        Thu, 24 Aug 2023 09:40:06 -0700 (PDT)
+Received: from ginger.. (unknown [189.115.8.42])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: koike)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 3F9916607276;
+        Thu, 24 Aug 2023 17:40:03 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1692895205;
+        bh=J8b2QT9rrJ018sKXflFL3FjdhNbqyS9w7fXnjXrLUcM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ROoNObRj3jfoWAYldXHpGfSLSdoQL0iecq4jjC3aAMkDzvlfJf2j0KKhKC8dTCUXx
+         JVmPBX4RUoJxu7m9UWOJwaMH6iyvO1lvxAEjYRyTpodLJovyHP7L8UjICJFSQzn5OL
+         ko1+HLg9AfvzY3TfqoSsPeu9Dsuezfo5I5J0VgIQMRqY7oLkslDARqwOft+KNdMwzI
+         WD+93mbT9JraJwmKrtxoROYdj3bb7jb6QPvcvqplnYg4TVozPi9nr8zYyfo0H/4YqG
+         VVWUqSkwCHJNJEXPjDaFCc2oIAaw9AmDFz4py4LTA8WJE9bs9zgBaxm0j0M3eTyRON
+         U8mgzqBI6QLww==
+From:   Helen Koike <helen.koike@collabora.com>
+To:     dri-devel@lists.freedesktop.org
+Cc:     daniel.vetter@ffwll.ch, linux-kernel@vger.kernel.org,
+        linux-next@vger.kernel.org, airlied@gmail.com
+Subject: [PATCH] drm: ci: docs: fix build warning - add missing scape
+Date:   Thu, 24 Aug 2023 13:39:54 -0300
+Message-Id: <20230824163954.47881-1-helen.koike@collabora.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: linux-next: manual merge of the nolibc tree with the vfs-brauner
- tree
-Content-Language: en-US
-To:     Christian Brauner <brauner@kernel.org>,
-        =?UTF-8?Q?Thomas_Wei=c3=9fschuh?= <thomas@t-8ch.de>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>, Willy Tarreau <w@1wt.eu>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Zhangjin Wu <falcon@tinylab.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20230824141008.27f7270b@canb.auug.org.au>
- <3028a552-bd75-4ded-9211-62d10768d9ea@t-8ch.de>
- <20230824-moment-wehten-5a47e319ae66@brauner>
- <26bc62c7-32c7-4ef1-b8d1-77738fa98598@t-8ch.de>
- <20230824-randfigur-emittenten-de303734445c@brauner>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20230824-randfigur-emittenten-de303734445c@brauner>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 8/24/23 02:52, Christian Brauner wrote:
->> Anyways Linus should also be able to resolve the conflict for v6.6 with
->> a small hint in the PR.
-> 
-> Suprisingly, we've done this before. :)
+Fix the following warning:
 
-Right. This is how resolve these types of merge conflicts. I will add
-note to Linus about this one.
+Documentation/gpu/automated_testing.rst:55: WARNING: Inline emphasis start-string without end-string.
 
-thanks,
--- Shuah
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Signed-off-by: Helen Koike <helen.koike@collabora.com>
+
+---
+
+Patch for topic/drm-ci
+---
+ Documentation/gpu/automated_testing.rst | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Documentation/gpu/automated_testing.rst b/Documentation/gpu/automated_testing.rst
+index 1b87b802ac7f..469b6fb65c30 100644
+--- a/Documentation/gpu/automated_testing.rst
++++ b/Documentation/gpu/automated_testing.rst
+@@ -52,7 +52,7 @@ IGT_VERSION
+ drivers/gpu/drm/ci/testlist.txt
+ -------------------------------
+ 
+-IGT tests to be run on all drivers (unless mentioned in a driver's *-skips.txt
++IGT tests to be run on all drivers (unless mentioned in a driver's \*-skips.txt
+ file, see below).
+ 
+ drivers/gpu/drm/ci/${DRIVER_NAME}-${HW_REVISION}-fails.txt
+-- 
+2.34.1
+

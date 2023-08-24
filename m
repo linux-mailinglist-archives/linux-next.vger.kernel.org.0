@@ -2,73 +2,75 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADE8E787166
-	for <lists+linux-next@lfdr.de>; Thu, 24 Aug 2023 16:24:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B7D4787173
+	for <lists+linux-next@lfdr.de>; Thu, 24 Aug 2023 16:25:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240361AbjHXOYZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 24 Aug 2023 10:24:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52166 "EHLO
+        id S241569AbjHXOY6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 24 Aug 2023 10:24:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241563AbjHXOX5 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 24 Aug 2023 10:23:57 -0400
-Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 486A61BC3
-        for <linux-next@vger.kernel.org>; Thu, 24 Aug 2023 07:23:55 -0700 (PDT)
-Received: by mail-il1-x12b.google.com with SMTP id e9e14a558f8ab-34ca6863743so5322635ab.1
-        for <linux-next@vger.kernel.org>; Thu, 24 Aug 2023 07:23:55 -0700 (PDT)
+        with ESMTP id S241624AbjHXOYh (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 24 Aug 2023 10:24:37 -0400
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 462F91BC6
+        for <linux-next@vger.kernel.org>; Thu, 24 Aug 2023 07:24:34 -0700 (PDT)
+Received: by mail-io1-xd2f.google.com with SMTP id ca18e2360f4ac-792244506f0so8203939f.0
+        for <linux-next@vger.kernel.org>; Thu, 24 Aug 2023 07:24:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1692887034; x=1693491834;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=linuxfoundation.org; s=google; t=1692887073; x=1693491873;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=l6Q37NHJfSNnXNIPUrsHPxEdErq9UphzW/lTqAGq/n0=;
-        b=gOYohoJ6FrkWvto0A1/NwMQM5zfHYyGdtwHTQdwlBUywfkbW35i43wIpCTAUjGnd8d
-         D/yihkX4B7qc3t6uYfLiISNSq9TVNeQOe/lIgW271zLBHx6xPobiX01kSjjPCiBdtUob
-         NsvPgfpfIf8MuYoiHkAabh+axuzQMRVdMa/4g=
+        bh=u2rdgs0bNKtgv3WwpKskkcELp4/NYKTYeYa5R7hjORQ=;
+        b=PghVr6XpNCTC0YcDXEWmX/8Sbx4aRWMVPt5TN4TWeOJ8+ziUkKoCvl80ZP8/Eoap8v
+         H66hGolecyFr0Jkaazv0hsy4+A31lSVeHkDOOEoumEXA8eZzXGh8Tm/q/u0FMtq1fpkW
+         uokiXm+KVbjSB//5WcOzrNNjTsSf12jCjHqEQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692887034; x=1693491834;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1692887073; x=1693491873;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=l6Q37NHJfSNnXNIPUrsHPxEdErq9UphzW/lTqAGq/n0=;
-        b=cAGwvga1EV3nt/ohmtdplXkWqXTvhfZIcNfZ72p5t30/bTTY70sbvw281KMKcn21hi
-         SSTShhEM1+expGv9qhV2YI95/KKLjDXaZJUuJNyG9hSsFR4QOVSFoMiDL17uWiEQ1M+G
-         eFVqxuYsZ6tYrlY76A6SNMdVI+3Z5ZS61zsBpxVoM8aCBIvncySqT1p+xhWvNXmqtRbc
-         RVPaUVXALiQk7ehmzYo5gZeY0qX+b1LMjglQfthI9Y+oN7MDAD90amkts4FTOtUhEgfE
-         jTfqAl0Sf14XcRV9yzAdopRRDpVYCEiYQTg8nRhtoIQHvwP1EuHh0WLMc59IispeMMVA
-         moFQ==
-X-Gm-Message-State: AOJu0YwZVaSZFMQ9XtCskItx8DFIQeHoXEbjwMSS2Hvs+jbQDFe790YQ
-        v+JEXS+t7AylUeU8ckXW+2p/eQ==
-X-Google-Smtp-Source: AGHT+IEVyyH/ktlrcmopIDZEzBk6VO9cbAfc9aKy/+LaHLAeJBRH8/+/D93jvczKrxo52XAhvMGIzg==
-X-Received: by 2002:a92:c00f:0:b0:349:67b0:6045 with SMTP id q15-20020a92c00f000000b0034967b06045mr15481796ild.3.1692887034663;
-        Thu, 24 Aug 2023 07:23:54 -0700 (PDT)
+        bh=u2rdgs0bNKtgv3WwpKskkcELp4/NYKTYeYa5R7hjORQ=;
+        b=I0bN/wxx6Fhfm18dQsDlSgfUO3mdkYlz7YcvfRbmGcRuHnMUVcNbnMVk+/EoVxv3IY
+         2zBk+VNCd3QYArDRvXUas333jzhQb4k6+EGot38eJfFi1X+wjlFMc8o3R/4FGWdYGqKN
+         yRsxe2q7OwLpz85dclkKSwhUl7F7sR2cGioVyX0Sqe5cg0cmRLm9MSJ00sP1AG1z/FgX
+         65W7HJL505uKkm2VAWBaIRNOa5oS8Ail1FYCeaIIULhQo/RpYJ9oZ3RylP0VxSkYd+E5
+         I3xgISstmes76qRD2r1G7kU5ldXoLTOLf80u4vgA8dGTb6BX/Rvtuayksnzu2Is6Q73H
+         /LxQ==
+X-Gm-Message-State: AOJu0YwN9ryZ6cn9I64/YgkgVr8zNJd/OlguNBMsU83vBXvS82zQPjVd
+        fj1SszILclNYx3TMP5yCpo3mdg==
+X-Google-Smtp-Source: AGHT+IHo52NzvdB/s7cLnaajlVu450EcadR2gri3DooqQ9t5Se11B1M7Gtd5esFo7mhSRsx0N+sbFg==
+X-Received: by 2002:a05:6602:3706:b0:791:e6ca:363 with SMTP id bh6-20020a056602370600b00791e6ca0363mr19829661iob.1.1692887073656;
+        Thu, 24 Aug 2023 07:24:33 -0700 (PDT)
 Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id l3-20020a922803000000b00348cb9adb38sm4583652ilf.7.2023.08.24.07.23.53
+        by smtp.gmail.com with ESMTPSA id dl28-20020a056638279c00b0042b320c13aasm4550889jab.89.2023.08.24.07.24.33
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Aug 2023 07:23:54 -0700 (PDT)
-Message-ID: <4328e2ca-7cec-4043-6c4f-e6a8a37c1b0f@linuxfoundation.org>
-Date:   Thu, 24 Aug 2023 08:23:53 -0600
+        Thu, 24 Aug 2023 07:24:33 -0700 (PDT)
+Message-ID: <b7105474-bec9-f08b-b623-bf350909cab5@linuxfoundation.org>
+Date:   Thu, 24 Aug 2023 08:24:32 -0600
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.13.0
-Subject: Re: linux-next: manual merge of the nolibc tree with the mm-stable
+Subject: Re: linux-next: manual merge of the nolibc tree with the vfs-brauner
  tree
-To:     paulmck@kernel.org, Willy Tarreau <w@1wt.eu>
-Cc:     =?UTF-8?Q?Thomas_Wei=c3=9fschuh?= <thomas@t-8ch.de>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Andrew Morton <akpm@linux-foundation.org>,
+Content-Language: en-US
+To:     Christian Brauner <brauner@kernel.org>,
+        =?UTF-8?Q?Thomas_Wei=c3=9fschuh?= <thomas@t-8ch.de>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>, Willy Tarreau <w@1wt.eu>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Ryan Roberts <ryan.roberts@arm.com>,
+        Zhangjin Wu <falcon@tinylab.org>,
         Shuah Khan <skhan@linuxfoundation.org>
-References: <20230817133053.76d9f850@canb.auug.org.au>
- <28aeee7b-2de5-4f39-8eb5-3e3486eeed1b@t-8ch.de> <ZOb9OuFh/2pmkRv+@1wt.eu>
- <18989954-981e-46bb-a60b-973c1c58fd86@paulmck-laptop>
-Content-Language: en-US
+References: <20230824141008.27f7270b@canb.auug.org.au>
+ <3028a552-bd75-4ded-9211-62d10768d9ea@t-8ch.de>
+ <20230824-moment-wehten-5a47e319ae66@brauner>
+ <26bc62c7-32c7-4ef1-b8d1-77738fa98598@t-8ch.de>
+ <20230824-randfigur-emittenten-de303734445c@brauner>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <18989954-981e-46bb-a60b-973c1c58fd86@paulmck-laptop>
+In-Reply-To: <20230824-randfigur-emittenten-de303734445c@brauner>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -79,55 +81,14 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 8/24/23 05:45, Paul E. McKenney wrote:
-> On Thu, Aug 24, 2023 at 08:48:26AM +0200, Willy Tarreau wrote:
->> Hi Thomas,
->>
->> On Thu, Aug 24, 2023 at 08:41:18AM +0200, Thomas Weißschuh wrote:
->>> Hi everybody,
->>>
->>> On 2023-08-17 13:30:53+1000, Stephen Rothwell wrote:
->>>> Today's linux-next merge of the nolibc tree got a conflict in:
->>>>
->>>>    tools/include/nolibc/stdio.h
->>>>
->>>> between commit:
->>>>
->>>>    08d959738a95 ("selftests: line buffer test program's stdout")
->>>>
->>>> from the mm-stable tree and commits:
->>>>
->>>>    65ff4d19f792 ("tools/nolibc/stdio: add setvbuf() to set buffering mode")
->>>>    2e00a8fc4f47 ("tools/nolibc: setvbuf: avoid unused parameter warnings")
->>>>
->>>> from the nolibc tree.
->>>>
->>>> I fixed it up (I just used the latter version of this file) and can
->>>> carry the fix as necessary. This is now fixed as far as linux-next is
->>>> concerned, but any non trivial conflicts should be mentioned to your
->>>> upstream maintainer when your tree is submitted for merging.  You may
->>>> also want to consider cooperating with the maintainer of the conflicting
->>>> tree to minimise any particularly complex conflicts.
->>>
->>> how do we want to handle this one?
->>>
->>> A small note to Linus in the PRs to him on how to resolve it seem
->>> reasonable to me.
->>> But I'm fairly new to the process.
->>
->> My understanding is that Stephen's fix is still in his tree. We may indeed
->> need to add a note to Linus in the PR about this one and the other one.
+On 8/24/23 02:52, Christian Brauner wrote:
+>> Anyways Linus should also be able to resolve the conflict for v6.6 with
+>> a small hint in the PR.
 > 
-> Yes, this is the usual approach.  The note to Linus normally includes the
-> URL for Stephen's email.  I usually also do the merge myself, publish
-> a branch to it, and include the name of that branch in my pull request
-> to Linus.  Linus usually prefers to resolve the merge conflicts himself,
-> but my merge gives him something to compare against.
-> 
+> Suprisingly, we've done this before. :)
 
 Right. This is how resolve these types of merge conflicts. I will add
-note to Linus about this one and the other one with vfs.
+note to Linus about this one.
 
 thanks,
 -- Shuah
-

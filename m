@@ -2,81 +2,83 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 439C67888E4
-	for <lists+linux-next@lfdr.de>; Fri, 25 Aug 2023 15:46:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56648788D41
+	for <lists+linux-next@lfdr.de>; Fri, 25 Aug 2023 18:41:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245127AbjHYNqS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 25 Aug 2023 09:46:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47606 "EHLO
+        id S1344014AbjHYQhu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 25 Aug 2023 12:37:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245319AbjHYNqQ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 25 Aug 2023 09:46:16 -0400
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E2002689
-        for <linux-next@vger.kernel.org>; Fri, 25 Aug 2023 06:46:11 -0700 (PDT)
-Received: by mail-yb1-xb34.google.com with SMTP id 3f1490d57ef6-d66f105634eso895297276.1
-        for <linux-next@vger.kernel.org>; Fri, 25 Aug 2023 06:46:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1692971170; x=1693575970;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uoBf9yEiYNSj7LpWNz2WUTLupdyL6E9irB0nHYwcJ0Q=;
-        b=hj2qsrqISzlnPtcNvVuxksoGTMp3sBJyat9urrboVW2ESgFm3sB4EfTBbI8YzsQ52y
-         kHlGCdbsY/sfTt11BN/i0jLk7QaFnlx0NjWpxVvlG1y0luycwGyIVJceWrOC4Nk4m9lS
-         53n2FNS9oU5YcS19a9JjqXlyGFB3tCOkLxeqCJWKouTexAcsnjW8SUDL6u8WDwPZCHpO
-         l+c/RrU9x8k7fSFm5ME43x9KqIuSTdfLiN6fmlJdoot52532PDJZWQJ8bQ0cHH9G4ta+
-         zw8tfE6gpE4E79HaX4g/Rs2MH3slF5tPwiWbVFT1P3tNuZpL3+Ro62j/djTeAkEaGyi1
-         GevA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692971170; x=1693575970;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uoBf9yEiYNSj7LpWNz2WUTLupdyL6E9irB0nHYwcJ0Q=;
-        b=fAzIZAuXV/aG/VoERM8lIYil/wR01kWGFgVohmIjP5N6GZN20TjRv27mph911XXbKO
-         YiQWPIHI3kE6H0YLDFvS2nj4KHIdh3Npz0KCE9YrvM3bGU8XKtSdjZtNoTgqhuwKTVTx
-         /ougkrqW46ZSDqbGKoofr/7QMHvOh/oQnuvJ2T6d0lDoW9tRdwkA8hjVoK/cuqB+XKBQ
-         Ra0Fff3+kxRKYaEZhBjzHOgat3+8M6I4mZ7+e+L9peEyZsRFYqWOj9OD7vmYurgOBcof
-         6Lev9vDHlNgopb/2Y/EiKFgFoMWA9Ha/OVhVKOANYC05CVzVZBAP5anybdhkx6HsQpNP
-         Duyw==
-X-Gm-Message-State: AOJu0YzqkmIrLWHj5yxeDaMOhK+E+ixzxdSv3oojsSBsCi2WMdWuVryO
-        ciFMxjlzj/I3yzs7+vY6aFpuoMMWDJ9zZHDxMIIaSQOOECGBr1E7
-X-Google-Smtp-Source: AGHT+IH/VwYzbXaobNFegA4uRBSoYdkmZzOyLTtqlc1smsTkPCb3hCVybf6SyGIk+P3Z7lKcYCGDhCZifehJAa7n4EI=
-X-Received: by 2002:a25:ce03:0:b0:d72:4395:38c1 with SMTP id
- x3-20020a25ce03000000b00d72439538c1mr20201071ybe.50.1692971170404; Fri, 25
- Aug 2023 06:46:10 -0700 (PDT)
+        with ESMTP id S1344068AbjHYQhk (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 25 Aug 2023 12:37:40 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB005213D;
+        Fri, 25 Aug 2023 09:37:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=M04seJ36piv1fkVK7SFUwKnyxRGLDPUVAdGMO8Zrucs=; b=xWivv6W+ShYQBu54Hepm5ciLDy
+        0vyvxs9s/66N101Bj6RnCqzAAau0j2IZXLbVaNF/cS8rm7Qui1uhgL9RKIAjZlXfZUMBv66Oqlr+K
+        eHczw4s99QCZsn7+ucQziC5uOseRIDC56QbeQIELNLr6MJJQwdX1t19ZMho8tzIxsge4rfixY3XpT
+        ePVlEkLbnq5i6jCv5bNMH05dxirKH4pnKUVaoDD3bWwBdb0wK3Y3LEzpKM6PDljvnb+v9SxZAmHJZ
+        nHdN8P1hFJZLjAnMocOrcNbu4AjZTtrF39o1iLfbRsXRW3+4Ox5ZtQBVHzis7HmFtsP4eab3qsoow
+        vbLrgDnw==;
+Received: from [2601:1c2:980:9ec0::2764]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qZZoV-005k0E-2c;
+        Fri, 25 Aug 2023 16:37:35 +0000
+Message-ID: <5c633b8b-0d9f-9d80-da11-b6828c525ec1@infradead.org>
+Date:   Fri, 25 Aug 2023 09:37:34 -0700
 MIME-Version: 1.0
-References: <20230824083550.49539f4b@canb.auug.org.au>
-In-Reply-To: <20230824083550.49539f4b@canb.auug.org.au>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 25 Aug 2023 15:45:59 +0200
-Message-ID: <CACRpkdYM8Rji5muAnik_hEeBvzdhL9zrfbi3zDCjSLw=F7u1Uw@mail.gmail.com>
-Subject: Re: linux-next: Fixes tag needs some work in the pinctrl tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Asmaa Mnebhi <asmaa@nvidia.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.14.0
+Subject: Re: linux-next: Tree for Aug 25 (drivers/soc/loongson/loongson2_pm.c)
+Content-Language: en-US
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:LOONGARCH" <loongarch@lists.linux.dev>
+References: <20230825155204.4fcc6dcf@canb.auug.org.au>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20230825155204.4fcc6dcf@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Aug 24, 2023 at 12:35=E2=80=AFAM Stephen Rothwell <sfr@canb.auug.or=
-g.au> wrote:
 
->   - SHA1 should be at least 12 digits long
->     This can be fixed for the future by setting core.abbrev to 12 (or
->     more) or (for git v2.11 or later) just making sure it is not set
->     (or set to "auto").
 
-I fixed it. Thanks!
+On 8/24/23 22:52, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Changes since 20230824:
+> 
 
-Yours,
-Linus Walleij
+on loongarch:
+# CONFIG_INPUT is not set
+
+/opt/crosstool/gcc-13.2.0-nolibc/loongarch64-linux/bin/loongarch64-linux-ld: drivers/soc/loongson/loongson2_pm.o: in function `loongson2_power_button_init':
+/work/lnx/next/linux-next-20230825/LOONG64/../drivers/soc/loongson/loongson2_pm.c:101:(.text+0x350): undefined reference to `input_allocate_device'
+/opt/crosstool/gcc-13.2.0-nolibc/loongarch64-linux/bin/loongarch64-linux-ld: /work/lnx/next/linux-next-20230825/LOONG64/../drivers/soc/loongson/loongson2_pm.c:109:(.text+0x3dc): undefined reference to `input_set_capability'
+/opt/crosstool/gcc-13.2.0-nolibc/loongarch64-linux/bin/loongarch64-linux-ld: /work/lnx/next/linux-next-20230825/LOONG64/../drivers/soc/loongson/loongson2_pm.c:111:(.text+0x3e4): undefined reference to `input_register_device'
+/opt/crosstool/gcc-13.2.0-nolibc/loongarch64-linux/bin/loongarch64-linux-ld: /work/lnx/next/linux-next-20230825/LOONG64/../drivers/soc/loongson/loongson2_pm.c:125:(.text+0x3fc): undefined reference to `input_free_device'
+/opt/crosstool/gcc-13.2.0-nolibc/loongarch64-linux/bin/loongarch64-linux-ld: drivers/soc/loongson/loongson2_pm.o: in function `input_report_key':
+/work/lnx/next/linux-next-20230825/LOONG64/../include/linux/input.h:425:(.text+0x58c): undefined reference to `input_event'
+/opt/crosstool/gcc-13.2.0-nolibc/loongarch64-linux/bin/loongarch64-linux-ld: drivers/soc/loongson/loongson2_pm.o: in function `input_sync':
+/work/lnx/next/linux-next-20230825/LOONG64/../include/linux/input.h:450:(.text+0x5a0): undefined reference to `input_event'
+/opt/crosstool/gcc-13.2.0-nolibc/loongarch64-linux/bin/loongarch64-linux-ld: drivers/soc/loongson/loongson2_pm.o: in function `input_report_key':
+/work/lnx/next/linux-next-20230825/LOONG64/../include/linux/input.h:425:(.text+0x5b4): undefined reference to `input_event'
+/opt/crosstool/gcc-13.2.0-nolibc/loongarch64-linux/bin/loongarch64-linux-ld: drivers/soc/loongson/loongson2_pm.o: in function `input_sync':
+/work/lnx/next/linux-next-20230825/LOONG64/../include/linux/input.h:450:(.text+0x5c8): undefined reference to `input_event'
+
+
+-- 
+~Randy

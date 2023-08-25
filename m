@@ -2,200 +2,169 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C709787C11
-	for <lists+linux-next@lfdr.de>; Fri, 25 Aug 2023 01:45:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1B63787C93
+	for <lists+linux-next@lfdr.de>; Fri, 25 Aug 2023 02:37:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232223AbjHXXot (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 24 Aug 2023 19:44:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43690 "EHLO
+        id S231766AbjHYAg1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 24 Aug 2023 20:36:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234166AbjHXXok (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 24 Aug 2023 19:44:40 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0951FB;
-        Thu, 24 Aug 2023 16:44:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1692920666;
-        bh=7+BnlHzMR7wvX4+PBBLlTIQX/T67NZKboN/2H8/LH28=;
-        h=Date:From:To:Cc:Subject:From;
-        b=awxenqeTbAoXPcB2OB423Bs+jxfK8eATBq3W4vJWOloX60ByfZIRS1AHbIINDAeq6
-         uYm0/9o2I6TQGvQNsSzboNwh+odDYsZBRbSj1cuJjX2eI5oQrIb4l5M2XUSIkci5k5
-         /nwVZnaukgbwKJuLdgvcyblXk2vgBWV5lBcWKANSwSwmi43JIbWoaBNy1AVM5Y/xJc
-         5go95sp7CdFRzE5EdhW2lX9CefUpAMxK+QTuWHPlQxiCbAB/wNV3IXewG1uPynuzOH
-         mAcmt0yl5BA00f1Lu65cG9nhcML8bOQfhk39um7OVkk5F9sga8mzbCRcONsmTXdcNe
-         x3IlSoA5GU2XQ==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4RX06f1qS9z4wxN;
-        Fri, 25 Aug 2023 09:44:26 +1000 (AEST)
-Date:   Fri, 25 Aug 2023 09:44:05 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Stafford Horne <shorne@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Baoquan He <bhe@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the openrisc tree with the mm-stable
- tree
-Message-ID: <20230825094405.22d29abf@canb.auug.org.au>
+        with ESMTP id S234399AbjHYAgC (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 24 Aug 2023 20:36:02 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 866CE1BDF
+        for <linux-next@vger.kernel.org>; Thu, 24 Aug 2023 17:36:00 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-68a3e943762so395847b3a.1
+        for <linux-next@vger.kernel.org>; Thu, 24 Aug 2023 17:36:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1692923759; x=1693528559;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=2ytGe9wh6AqmAeqYVfVETHOcnL1e52eEzYFR18kd2Jk=;
+        b=GdujBrwbADYq1IAQF+eFocdix0pYYfMnJKSdZjvsuXU4EpOMeRlJ/E1kL70GZepYtA
+         A2E8gwoA4SuZohSiVEOirpWZLcrC6EApb6U1kRPUXQ2jvWr1KKzYFkw8179MefSJYEO3
+         buB4N5JbER/Tk8bRNlsyrN8UU5ofq9e/c79ssUie8fADFQWT0jpOW+4QIrC/T6EGjrXf
+         Vhs5c85GNNKgKcQHkxjwEU+d/9H1EKWA2horFaTZZteV/iKxHZlv0IUB2LDO333WdBL6
+         g/rLcVB/NIING96QSZVG5bSItIP3h1AevMxYjjEOBlGi9ulMvUc0GzBR08Iah65JGYFg
+         JIPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692923759; x=1693528559;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2ytGe9wh6AqmAeqYVfVETHOcnL1e52eEzYFR18kd2Jk=;
+        b=GlWzdoMuA21tnt5XH7FsO3xi/PqXkGDFb7gkI6C+8QI60JVrEF4y7ixzYWDPyR8DNr
+         NqPq2ubBQHacIyjkVR+mKXrIM6rLTmPAsO90kFEiWu3dg4LSi5uJZEHreNtbrXxZ5R4T
+         QDp31+LSxOz3uSIZw/TMuUUCF7pqp91ge+FiwyPkeH0Ki1W6ScFL2QgGxSrfNckbtfaF
+         4eElmrJKQCHO+hhmeFfrHRz4gfSQzSfEQssxQ+H5ozY9qb7Q6qXwHxOHYpcpr1xVapV2
+         pJa6X9L8GgPiQTOoZnIqziTBHIEQpTafRR8ycb2CxUL391p7Mjv7VGkpiYmKXrTovywL
+         TDdg==
+X-Gm-Message-State: AOJu0YxoaXDqMb/KcDDDgHz3/NblsGq0vyIY5EGWDkHOGTnW++tENP7+
+        QKvwiHifMRKgO5b7KN9Vf9+GOlaS4Q5JVi1cKso=
+X-Google-Smtp-Source: AGHT+IGsohV1Yyd0I4sTy9PLQt07bCxaWsY86MsDlpQgTcWeX5C8b3VCggGWWyr+gMnjXPDxMN2Pjg==
+X-Received: by 2002:a05:6a20:3ca7:b0:149:7a49:f7be with SMTP id b39-20020a056a203ca700b001497a49f7bemr12467958pzj.4.1692923759390;
+        Thu, 24 Aug 2023 17:35:59 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id je1-20020a170903264100b001bb99e188fcsm280827plb.194.2023.08.24.17.35.57
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Aug 2023 17:35:58 -0700 (PDT)
+Message-ID: <64e7f76e.170a0220.bf104.0c09@mx.google.com>
+Date:   Thu, 24 Aug 2023 17:35:58 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/O3QLT2sfT9q_jGzjOLpUzat";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: pending-fixes
+X-Kernelci-Tree: next
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: v6.5-rc7-207-g77d7dd335c8aa
+Subject: next/pending-fixes build: 8 builds: 0 failed, 8 passed,
+ 4 warnings (v6.5-rc7-207-g77d7dd335c8aa)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/O3QLT2sfT9q_jGzjOLpUzat
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+next/pending-fixes build: 8 builds: 0 failed, 8 passed, 4 warnings (v6.5-rc=
+7-207-g77d7dd335c8aa)
 
-Hi all,
+Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
+rnel/v6.5-rc7-207-g77d7dd335c8aa/
 
-Today's linux-next merge of the openrisc tree got a conflict in:
+Tree: next
+Branch: pending-fixes
+Git Describe: v6.5-rc7-207-g77d7dd335c8aa
+Git Commit: 77d7dd335c8aace21e366c2d267c864cfbcb59c0
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Built: 8 unique architectures
 
-  arch/openrisc/mm/ioremap.c
+Warnings Detected:
 
-between commits:
+arc:
 
-  53c98e35dcbc ("openrisc: mm: remove unneeded early ioremap code")
-  9b994429fe18 ("openrisc: mm: convert to GENERIC_IOREMAP")
+arm64:
 
-from the mm-stable tree and commit:
+arm:
 
-  c289330331eb ("openrisc: Remove kernel-doc marker from ioremap comment")
+i386:
 
-from the openrisc tree.
+mips:
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+riscv:
 
---=20
-Cheers,
-Stephen Rothwell
+sparc:
+    sparc64_defconfig (gcc-10): 4 warnings
 
-diff --cc arch/openrisc/mm/ioremap.c
-index 91c8259d4b7e,c6717f876c1c..000000000000
---- a/arch/openrisc/mm/ioremap.c
-+++ b/arch/openrisc/mm/ioremap.c
-@@@ -22,7 -22,89 +22,7 @@@
- =20
-  extern int mem_init_done;
- =20
-- /**
- -static unsigned int fixmaps_used __initdata;
- -
- -/*
- - * Remap an arbitrary physical address space into the kernel virtual
- - * address space. Needed when the kernel wants to access high addresses
- - * directly.
- - *
- - * NOTE! We need to allow non-page-aligned mappings too: we will obviously
- - * have to convert them into an offset in a page-aligned mapping, but the
- - * caller shouldn't need to know that small detail.
- - */
- -void __iomem *__ref ioremap(phys_addr_t addr, unsigned long size)
- -{
- -	phys_addr_t p;
- -	unsigned long v;
- -	unsigned long offset, last_addr;
- -	struct vm_struct *area =3D NULL;
- -
- -	/* Don't allow wraparound or zero size */
- -	last_addr =3D addr + size - 1;
- -	if (!size || last_addr < addr)
- -		return NULL;
- -
- -	/*
- -	 * Mappings have to be page-aligned
- -	 */
- -	offset =3D addr & ~PAGE_MASK;
- -	p =3D addr & PAGE_MASK;
- -	size =3D PAGE_ALIGN(last_addr + 1) - p;
- -
- -	if (likely(mem_init_done)) {
- -		area =3D get_vm_area(size, VM_IOREMAP);
- -		if (!area)
- -			return NULL;
- -		v =3D (unsigned long)area->addr;
- -	} else {
- -		if ((fixmaps_used + (size >> PAGE_SHIFT)) > FIX_N_IOREMAPS)
- -			return NULL;
- -		v =3D fix_to_virt(FIX_IOREMAP_BEGIN + fixmaps_used);
- -		fixmaps_used +=3D (size >> PAGE_SHIFT);
- -	}
- -
- -	if (ioremap_page_range(v, v + size, p,
- -			__pgprot(pgprot_val(PAGE_KERNEL) | _PAGE_CI))) {
- -		if (likely(mem_init_done))
- -			vfree(area->addr);
- -		else
- -			fixmaps_used -=3D (size >> PAGE_SHIFT);
- -		return NULL;
- -	}
- -
- -	return (void __iomem *)(offset + (char *)v);
- -}
- -EXPORT_SYMBOL(ioremap);
- -
- -void iounmap(volatile void __iomem *addr)
- -{
- -	/* If the page is from the fixmap pool then we just clear out
- -	 * the fixmap mapping.
- -	 */
- -	if (unlikely((unsigned long)addr > FIXADDR_START)) {
- -		/* This is a bit broken... we don't really know
- -		 * how big the area is so it's difficult to know
- -		 * how many fixed pages to invalidate...
- -		 * just flush tlb and hope for the best...
- -		 * consider this a FIXME
- -		 *
- -		 * Really we should be clearing out one or more page
- -		 * table entries for these virtual addresses so that
- -		 * future references cause a page fault... for now, we
- -		 * rely on two things:
- -		 *   i)  this code never gets called on known boards
- -		 *   ii) invalid accesses to the freed areas aren't made
- -		 */
- -		flush_tlb_all();
- -		return;
- -	}
- -
- -	return vfree((void *)(PAGE_MASK & (unsigned long)addr));
- -}
- -EXPORT_SYMBOL(iounmap);
- -
-+ /*
-   * OK, this one's a bit tricky... ioremap can get called before memory is
-   * initialized (early serial console does this) and will want to alloc a =
-page
-   * for its mapping.  No userspace pages will ever get allocated before me=
-mory
+x86_64:
 
---Sig_/O3QLT2sfT9q_jGzjOLpUzat
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
 
------BEGIN PGP SIGNATURE-----
+Warnings summary:
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmTn60UACgkQAVBC80lX
-0GzJoQf+LTQxt2r9GEZzU3wmpw+SOoCsUXpjBH5+V7XZjP2YaRc5ma6zPMVmBBq3
-Ly/Kr7a+FQ9YdZ2noJFlvx5HL+lUlzqoWUdWTUtCMHLubg98OfP1I8x5tAp/6dno
-MBwo6j48nF5w4HDQAKGEZ7O0Gmqo/9KGWcnRwhYRd1+k6uJtQMoAATYwn0cL57mV
-s4TjlQQJWzfhCaSXU6wanbuaX1sr9mYqImwZCeMli/D9yDgCpuBgR5GLdkFuS24c
-I2orFNTjxBwTjMcWmtl4IjlUm9mPK/mbSfQBJ7Y4XVya7Z5VCHKr+KIzN7eJwQui
-rmfEhtY2n1dw/562xoS/RAWwRov7uw==
-=reCz
------END PGP SIGNATURE-----
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
 
---Sig_/O3QLT2sfT9q_jGzjOLpUzat--
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---
+For more info write to <info@kernelci.org>

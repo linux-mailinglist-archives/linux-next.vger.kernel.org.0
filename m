@@ -2,154 +2,92 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F09607895D0
-	for <lists+linux-next@lfdr.de>; Sat, 26 Aug 2023 12:10:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21E4D789767
+	for <lists+linux-next@lfdr.de>; Sat, 26 Aug 2023 16:31:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230491AbjHZKKT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 26 Aug 2023 06:10:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47974 "EHLO
+        id S230121AbjHZOas (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sat, 26 Aug 2023 10:30:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232242AbjHZKKI (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sat, 26 Aug 2023 06:10:08 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73E7E1FC7
-        for <linux-next@vger.kernel.org>; Sat, 26 Aug 2023 03:09:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1693044561;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=dAkaA+AncOVwhdekXkUnuSCht94d3FshWqsBj1ltMo8=;
-        b=VsEnQr1G3hWbV+nNuTfJa8EZLr/EHskmhT0UiC7GlRchWzvsCPvCPTFsmveW5q8WIfcWIz
-        MexsMa14mNjabaICrTg50KUVblsfCnyC7Y711lzYhRzZFkz979THSoAq9zm0zvCYynqClJ
-        6nua8/dN6kfvWlKrP62ABxQEgbzzrM4=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-353-Zvm56RzuO8Sg_Oxd7qViag-1; Sat, 26 Aug 2023 06:09:19 -0400
-X-MC-Unique: Zvm56RzuO8Sg_Oxd7qViag-1
-Received: by mail-ed1-f72.google.com with SMTP id 4fb4d7f45d1cf-52a0f5f74d7so1479220a12.3
-        for <linux-next@vger.kernel.org>; Sat, 26 Aug 2023 03:09:19 -0700 (PDT)
+        with ESMTP id S231812AbjHZOaj (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sat, 26 Aug 2023 10:30:39 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA38C2114;
+        Sat, 26 Aug 2023 07:30:35 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id 3f1490d57ef6-d749f57cb22so1810937276.3;
+        Sat, 26 Aug 2023 07:30:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1693060235; x=1693665035;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qvh0gnFOci9F17zwv3KMgcjPQL/TOV+qDBGB8fHE2PU=;
+        b=g5r7pjTEkafPoBaT9fYE1qAEKEye3bzeP4nDKGpAyZB1eGsjI6SUbK4A6VypMt+TRs
+         VdXiil33c45m778Gtj6/TtkFe6v5XZElKp3vPJi7ExzbP3PH6tgLxw5uwHgQ6NhxkSn+
+         fOpu7XWjByfTZJn3IWs3E/CM+w3Wez3gD2ft1DrZp8Hfb657Z17A/niZb+Uf4yKqL2T/
+         yrZPlIfQgn9IGlTbnjxRd2OmabmvYoMxC6r4ezL7m6rY0VRxlkJJxda6AphuMLgabfsG
+         GOqKHNax1RD6s7NJSwJaOdRD1HZyPVFxCz5PUDYH8G/RqsscnpW26bcp5w7uX76k8JUx
+         gtpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693044558; x=1693649358;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dAkaA+AncOVwhdekXkUnuSCht94d3FshWqsBj1ltMo8=;
-        b=VK+wcwHkw1BFDsMueTjrmYZbO8FvWXVeWc3I8JkebzKOvdPDeQtXA870H9QfcCwnVV
-         thA466WAb6xxXhNszfoooFg10na/jAOj6w2w6Lmg1wqXqMaCPpIrXo429UyXeEmG5ccO
-         7G0radhqFf4xcem6Ls/2fXqBPM3a87xbDgRcXHMmi5kAOnRLNB/b+20kjSe3phv1khLI
-         KgtnnDgEMV6AbdDEA5VvgnQP1pzd0SDY3wNuvq7+A+fgFqb0gPmzBgUq3tUg0D0vrQn8
-         cxvWifQiXLysPEemX9EfOp5hDe8Efstdj32onNkIsR50q80zCgJtVce2gLX9ZKmsioqJ
-         DtCw==
-X-Gm-Message-State: AOJu0Yw+tht9pzxGOuOkX6TeW9+mklNTz+ipB/F41x/AjlQ00PnUZMYQ
-        RNwmcwMUPCrjIn4dz1yXJK6F/fCKSjhBT7kSxQ4xuTrR3IiMVevPTajfAeKuCQAUcN9nd821183
-        tpMClRDjBr8p5vE+uVTv7BQ==
-X-Received: by 2002:aa7:cd50:0:b0:525:4471:6b5d with SMTP id v16-20020aa7cd50000000b0052544716b5dmr15539026edw.19.1693044558776;
-        Sat, 26 Aug 2023 03:09:18 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGQtWqiv0wW4XL2klN5mZTWrqxxMPryC+Bn5krbgv30YaqVSV1tJrUGUUIiJAYfpVeGFnijFw==
-X-Received: by 2002:aa7:cd50:0:b0:525:4471:6b5d with SMTP id v16-20020aa7cd50000000b0052544716b5dmr15539015edw.19.1693044558491;
-        Sat, 26 Aug 2023 03:09:18 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id l5-20020a056402124500b005222c6fb512sm1990989edw.1.2023.08.26.03.09.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 26 Aug 2023 03:09:17 -0700 (PDT)
-Message-ID: <613570c6-7f5d-778c-183a-4aeb967c69d8@redhat.com>
-Date:   Sat, 26 Aug 2023 12:09:17 +0200
+        d=1e100.net; s=20221208; t=1693060235; x=1693665035;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qvh0gnFOci9F17zwv3KMgcjPQL/TOV+qDBGB8fHE2PU=;
+        b=D9/3v5zkpewW5fjJ4SIlF/vWddSENTnAJau57gRBSGgeXN1UMR+Z7FyjPaBDhsULVr
+         lGyQY7N5re6l8EIdGgEeLYXrpjJ1TRz4PafhMV6OGtqWN7DbFvM9cjNLsJ7rPhXrztSe
+         lpTln3zxWAq9fyL2HbiNUWsOJwqDs9sOIxwqwEoiARQu36S8++7sfmpLGGoXVc8iJPPh
+         /kECsrlKGrtCX+7jmC0+1BFG1RCy+FMn6WRI+ETzBu/DazWqzuN6H8PdkGEG1NhQt3wr
+         u6Hknqfu9Fh5RtFLKOfXH+ZnMnwBLLaSdraWdP+ZyvUIMU93359dvSQRcdtxLW0lu4jo
+         dZVg==
+X-Gm-Message-State: AOJu0YxucuPR1wpAnuwH1KIzn40nynVYVHqWwLBi/7PxBBrbF8Oco1/e
+        zWLX3qc3LG6SdvEUeGezvRU1W9OE01XjFYW1Q+0=
+X-Google-Smtp-Source: AGHT+IGzj2iHONz/JcssQobtfZzLUybni01Fd2V2VfTb96CB4tzuNhQ76r1ArOzGd8ZiS5vJYwCkF21YyherLbz9RlQ=
+X-Received: by 2002:a25:8211:0:b0:d29:3f14:9d96 with SMTP id
+ q17-20020a258211000000b00d293f149d96mr22348703ybk.56.1693060234919; Sat, 26
+ Aug 2023 07:30:34 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: linux-next: Tree for Aug 23 (drivers/platform/x86/amd/pmc.c)
-Content-Language: en-US, nl
-To:     Randy Dunlap <rdunlap@infradead.org>,
-        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:X86 PLATFORM DRIVERS" 
-        <platform-driver-x86@vger.kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
+References: <20230822162333.752217fa@canb.auug.org.au> <CANiq72=DA1A5YyrWAPHEr+by_pac4R0-GemurbLWYNrSAUNSzw@mail.gmail.com>
+ <20230822222036.3462aa57@canb.auug.org.au> <CANiq72nvbkYQ0bPb0aRs0jNZGgFwg8TMek4b0n3jrgxd2X4h3A@mail.gmail.com>
+ <c954b4aa-9bf7-9583-0b9d-05f33bb0a595@linuxfoundation.org> <CANiq72kwPbHDrR13EWdmWTevU4r9wJzp4exV5rS1x-tD0gh9DA@mail.gmail.com>
+In-Reply-To: <CANiq72kwPbHDrR13EWdmWTevU4r9wJzp4exV5rS1x-tD0gh9DA@mail.gmail.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Sat, 26 Aug 2023 16:30:23 +0200
+Message-ID: <CANiq72nHS6S0p+_JLWHeMTY+KS0HtcU7bXy2ijcDDoO2-E4YyQ@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the rust tree with the kunit-next tree
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Benno Lossin <benno.lossin@proton.me>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20230823161428.3af51dee@canb.auug.org.au>
- <5181685c-29d8-22a4-a2d7-682f26e2e031@infradead.org>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <5181685c-29d8-22a4-a2d7-682f26e2e031@infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi All,
+On Wed, Aug 23, 2023 at 6:29=E2=80=AFPM Miguel Ojeda
+<miguel.ojeda.sandonis@gmail.com> wrote:
+>
+> On our pull I will let Linus know about the conflict -- perhaps you
+> can point him to our PR if yours goes out later (when are you sending
+> it? I was planning to send mine tomorrow) and/or you can tell him the
 
-On 8/24/23 04:06, Randy Dunlap wrote:
-> 
-> 
-> On 8/22/23 23:14, Stephen Rothwell wrote:
->> Hi all,
->>
->> Changes since 20230822:
->>
->> New tree: drm-ci
->>
-> 
-> on x86_64:
-> # CONFIG_SUSPEND is not set
-> # CONFIG_PM is not set
-> 
-> 
-> ../drivers/platform/x86/amd/pmc.c:878:15: error: variable ‘amd_pmc_s2idle_dev_ops’ has initializer but incomplete type
->   878 | static struct acpi_s2idle_dev_ops amd_pmc_s2idle_dev_ops = {
->       |               ^~~~~~~~~~~~~~~~~~~
-> ../drivers/platform/x86/amd/pmc.c:879:10: error: ‘struct acpi_s2idle_dev_ops’ has no member named ‘prepare’
->   879 |         .prepare = amd_pmc_s2idle_prepare,
->       |          ^~~~~~~
-> ../drivers/platform/x86/amd/pmc.c:879:20: warning: excess elements in struct initializer
->   879 |         .prepare = amd_pmc_s2idle_prepare,
->       |                    ^~~~~~~~~~~~~~~~~~~~~~
-> ../drivers/platform/x86/amd/pmc.c:879:20: note: (near initialization for ‘amd_pmc_s2idle_dev_ops’)
-> ../drivers/platform/x86/amd/pmc.c:880:10: error: ‘struct acpi_s2idle_dev_ops’ has no member named ‘check’
->   880 |         .check = amd_pmc_s2idle_check,
->       |          ^~~~~
-> ../drivers/platform/x86/amd/pmc.c:880:18: warning: excess elements in struct initializer
->   880 |         .check = amd_pmc_s2idle_check,
->       |                  ^~~~~~~~~~~~~~~~~~~~
-> ../drivers/platform/x86/amd/pmc.c:880:18: note: (near initialization for ‘amd_pmc_s2idle_dev_ops’)
-> ../drivers/platform/x86/amd/pmc.c:881:10: error: ‘struct acpi_s2idle_dev_ops’ has no member named ‘restore’
->   881 |         .restore = amd_pmc_s2idle_restore,
->       |          ^~~~~~~
-> ../drivers/platform/x86/amd/pmc.c:881:20: warning: excess elements in struct initializer
->   881 |         .restore = amd_pmc_s2idle_restore,
->       |                    ^~~~~~~~~~~~~~~~~~~~~~
-> ../drivers/platform/x86/amd/pmc.c:881:20: note: (near initialization for ‘amd_pmc_s2idle_dev_ops’)
->   CC [M]  drivers/staging/iio/impedance-analyzer/ad5933.o
-> ../drivers/platform/x86/amd/pmc.c: In function ‘amd_pmc_probe’:
-> ../drivers/platform/x86/amd/pmc.c:1070:23: error: implicit declaration of function ‘acpi_register_lps0_dev’; did you mean ‘acpi_register_gsi’? [-Werror=implicit-function-declaration]
->  1070 |                 err = acpi_register_lps0_dev(&amd_pmc_s2idle_dev_ops);
->       |                       ^~~~~~~~~~~~~~~~~~~~~~
->       |                       acpi_register_gsi
->   CC [M]  drivers/staging/rts5208/rtsx_scsi.o
-> ../drivers/platform/x86/amd/pmc.c: In function ‘amd_pmc_remove’:
-> ../drivers/platform/x86/amd/pmc.c:1091:17: error: implicit declaration of function ‘acpi_unregister_lps0_dev’; did you mean ‘acpi_unregister_gsi’? [-Werror=implicit-function-declaration]
->  1091 |                 acpi_unregister_lps0_dev(&amd_pmc_s2idle_dev_ops);
->       |                 ^~~~~~~~~~~~~~~~~~~~~~~~
->       |                 acpi_unregister_gsi
-> ../drivers/platform/x86/amd/pmc.c: At top level:
-> ../drivers/platform/x86/amd/pmc.c:878:35: error: storage size of ‘amd_pmc_s2idle_dev_ops’ isn’t known
->   878 | static struct acpi_s2idle_dev_ops amd_pmc_s2idle_dev_ops = {
->       |                                   ^~~~~~~~~~~~~~~~~~~~~~
-> 
-> 
-> Full randconfig file is attached.
+Here is the link to the PR in case you decide to refer Linus to it or simil=
+ar:
 
-Shyam, can you look into fixing this please?
+    https://lore.kernel.org/rust-for-linux/20230824214024.608618-1-ojeda@ke=
+rnel.org/
 
-Regards,
+Hope that helps!
 
-Hans
-
+Cheers,
+Miguel

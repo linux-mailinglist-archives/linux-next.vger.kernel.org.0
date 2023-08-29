@@ -2,162 +2,233 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C182678BDFF
-	for <lists+linux-next@lfdr.de>; Tue, 29 Aug 2023 07:40:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D65B978BE1D
+	for <lists+linux-next@lfdr.de>; Tue, 29 Aug 2023 07:59:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232038AbjH2Fjw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 29 Aug 2023 01:39:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52086 "EHLO
+        id S230169AbjH2F64 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 29 Aug 2023 01:58:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233371AbjH2Fj1 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 29 Aug 2023 01:39:27 -0400
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2057.outbound.protection.outlook.com [40.107.102.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D89B5C3;
-        Mon, 28 Aug 2023 22:39:21 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AkMdSProa13G/L2JQ5UgCEg9NDTyPvrQTI2jvIDJaRSSb8sBQXvzrP4+fclpIba8Pnmh1cFQrbrxH47SeObEF38Cdt/Wr0aIkPWknzNo8FRRW6fjx1mo0/UxkkserUpT+JIK3fbg9uJ2D4uzcqCounj9jnJhLlNC7SlZfajOA4nBSTJFdPcdpGdy/7cVw4L9VQuw+wXeyVdLwvjIhAA3/zxwxNw7TaDy0p1EjPUOhSwZzx0+s0S5OxP/TP3yclfD/BaahDtSP+LXXKg8GtBxPYBMp+2srt4QghO3SegOuNG1VnbKN+4vbk0zuyg38MUNDAtBzd5g7KoTmOZD6tW6cg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ijFPucyABGEWRDgLUAoXVQBrjKtpk5fkhTCM4LLY2So=;
- b=ISHA+vfmckBQ5GmSuMesGECoSDmTpsxIkAZR0aITUPJEbRtdqEWc51jazuMy4Emo6SJQRMVexBX9vhqqi/tQ5iVpgsdhXT14LGIPz0eln+mxIVTySs1iNe+vqFJlImbp2Mzyx6PLiosFhZH/qRWpRs4SY+ztLnR8bR/WSKNVA3DwcH4qJqNjYzOIjcm7dKndP812u43KNhpmNKhMHHnEMmkW70ptcVHzKt+K8TCfngUA1e88fsnHrmbTPjNBEyvZcqOBOl7l397X8V8OZ6QruTLz60uy5zLZFJrFsE8g2R7oFbzpoKvBMBaq4HTmhl3Dz7IVKvDlVQ+Rd9eLY6maiw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ijFPucyABGEWRDgLUAoXVQBrjKtpk5fkhTCM4LLY2So=;
- b=INrg6KJUcLyTAaxFh6OwHPeVP7FtNjTCYlimqTOkCOdOEixbHu80lNtKvFce6vTaNuE1g5MThzz3GJNGZpLLnDOdSXNWclyjVfLozZAvHpLuJoNkFk1RtupEnkLGhSIXUfEA+EjtWvVbtvAbf+V1q3N1e2UptRjZTvEFzN9imrwRbLOcYA0eaY7xxO3QZdJ32eREtgurFiat0pUagWONLPtFAuXn3lAwnMA7HWLa/iU8ZxNRw0G/kEy3C03dbURkf/TrffeyrnnN8/tpiS7Z8IoS8ij8k4MJ9ypc7wT+B+XMhfM4X9AM3A4uIl5/pQI8ewje3KPgNPptAsBfSE/Vvw==
-Received: from BN9PR12MB5381.namprd12.prod.outlook.com (2603:10b6:408:102::24)
- by CH0PR12MB5369.namprd12.prod.outlook.com (2603:10b6:610:d4::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6699.35; Tue, 29 Aug
- 2023 05:39:18 +0000
-Received: from BN9PR12MB5381.namprd12.prod.outlook.com
- ([fe80::5fa6:31e7:e6fb:3beb]) by BN9PR12MB5381.namprd12.prod.outlook.com
- ([fe80::5fa6:31e7:e6fb:3beb%4]) with mapi id 15.20.6699.035; Tue, 29 Aug 2023
- 05:39:18 +0000
-From:   Vadim Pasternak <vadimp@nvidia.com>
-To:     Randy Dunlap <rdunlap@infradead.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
+        with ESMTP id S230103AbjH2F6h (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 29 Aug 2023 01:58:37 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91AE7109;
+        Mon, 28 Aug 2023 22:58:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1693288708;
+        bh=18HxPnJLRqLXAf/HDq0Tgm0vwcboajO3NobGWwh33YI=;
+        h=Date:From:To:Cc:Subject:From;
+        b=kJmNcz7qtycLggFnW5Vzqp2a1uZ80U9zzkYbCTnuyqLhIi0tCNsolxLmBQqjjHcCl
+         u28te1FFPyA5nXYscGW3qe8H6r0tUMrgCg7cusnuWAkxe2c479x17ZDcyjQgEx7f7I
+         X7EItS0tGTKMojiRiJ0AzJFKHnQbIp1qK1Fr9oXAqqxsieq6L7a11kpqjJBWNj338z
+         vKS3KeUY881IRxc10fYiF0M/E/U/z6MXKkkPIa7DfC3icqJyVKd8kWdnUoAzcdps0k
+         PQbeJLpCXxjDpYvs5iwVFmCGJUeNc83JNtbC/o8ZMntNoI/uvZoVA4e8FFdaH4KF5k
+         e40FVdhWu3eWw==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4RZcDN5Kk3z4wd0;
+        Tue, 29 Aug 2023 15:58:28 +1000 (AEST)
+Date:   Tue, 29 Aug 2023 15:58:24 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:X86 PLATFORM DRIVERS" 
-        <platform-driver-x86@vger.kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        PCI <linux-pci@vger.kernel.org>
-Subject: RE: linux-next: Tree for Aug 28 (drivers/platform/x86/mlx-platform.c)
-Thread-Topic: linux-next: Tree for Aug 28
- (drivers/platform/x86/mlx-platform.c)
-Thread-Index: AQHZ2e9IpU/X0JHUSUePE8AhAQPCHLAAwguQ
-Date:   Tue, 29 Aug 2023 05:39:18 +0000
-Message-ID: <BN9PR12MB5381C39F394EA2E292A057BFAFE7A@BN9PR12MB5381.namprd12.prod.outlook.com>
-References: <20230828150220.31624576@canb.auug.org.au>
- <ad664c17-9bd4-08ed-6a23-54de4a94e0a3@infradead.org>
-In-Reply-To: <ad664c17-9bd4-08ed-6a23-54de4a94e0a3@infradead.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN9PR12MB5381:EE_|CH0PR12MB5369:EE_
-x-ms-office365-filtering-correlation-id: 8b873273-fd05-4174-c1c2-08dba85249c1
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: lWUXgCV+gAJsRC9JtE8/sHzQKQhnac0FEyLmEXsiNbRoUNrsxspjemdI5wEV7h6upRMvchUG4HF8KHmIeMHI2BLrngVavwu8Jngz3NCsWAsJeoqd0gALN3uTJsfGh2NTWLjoxba/TDWFFVMjX3OTheKeMwVDJRrAJoQ+zUPoFebu6QOqxqPzNSjC1WAXWKUqEW0+6alfKM2Fy6JJ/sbbn4tjThOJeyE9Pv/2SaTdsq7vrlBvHuZbyHpRlt6w4k5+jmesp8eIGmdzphxtpz2y0C2eZzW4KQ4mDLk2ZtIk1OnuiWnibupWx/mIH6LlMxm79NmCbEvup8cJBryjGLezxiHnxAZ1di0q3He0IGQYZythUroZIEaKfKSmiUNWq/s+xHj07Bw8dHdU7XNtDAbea3zEPMJdA4yOWtz4UAoNcsBqn2TOnVLh9SBWk0egyDHvHFXV5BLNtUj+bGZRTlY79KG5fWYjaYcu2dKicG9QUHWhqZflHxaGnPYNRciA2qzGE7eDjD9OiIxO89uwgRCBmd0eZ2+Mu556RBe5XbmEPWDi+Y9wQtUA9JJmd1HUqQ0q4XFHZV6oTM5gu42KA11UFysApvYxMS94roJAfYr58WzthyZiVE9Rn5Bvmc8i7aod
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR12MB5381.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(39860400002)(136003)(346002)(366004)(396003)(376002)(1800799009)(451199024)(186009)(9686003)(38100700002)(316002)(38070700005)(41300700001)(4326008)(33656002)(2906002)(83380400001)(86362001)(52536014)(26005)(5660300002)(8676002)(55016003)(8936002)(71200400001)(6506007)(7696005)(66556008)(66476007)(66446008)(64756008)(54906003)(66946007)(53546011)(110136005)(76116006)(122000001)(478600001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?V093UlVQNFlDemlXQ0UzSlN3cGxtbVNETHRSS0Z2clJWRm9DTGRCVVRWOFRB?=
- =?utf-8?B?OVBoSlMwSTQ4N1oxUXh2dEpTY2NOclZHQWY0NUlQdmZpdThUS1NtbFN0aURW?=
- =?utf-8?B?RnpyS1cvenFYNHBNQll3cEZPVjZRRnJ1b1FpV1hIWGxtS2kwdmFhQmE0cCtJ?=
- =?utf-8?B?WXZHMnYzTEhQcjBTV1JlWGtMVEF2QXpWUjJaNGRiL29EeFZ2WUVOTVM5Q2Vj?=
- =?utf-8?B?S0JUa1pZZHRuRGN4ZGc0cTkzU0FkYzFDM3JZYzRwWW56R3F5cjhuWStsK05r?=
- =?utf-8?B?UGk4NnBWNHA4azA4bVZtbmJnRmFZN0F0eXh4NWVLUXFzQXhTNkc5TVcwMTRC?=
- =?utf-8?B?UHlyT25tL2tZWUZkSk9jNFBXZ0c0NGxIM1JQMXdOYWVVU0x2bDNSUjVmdjVG?=
- =?utf-8?B?RUVtWVBwWHJBSENnVnZBZFY0dnNvajBWRmpQbjN5ckhUZEgwTTRsWDFERnJw?=
- =?utf-8?B?NUJHandwRXNxOE41RXNaeFRacW9sUElSY1laK3VHeHE4UXBSbDNZRGtTdXky?=
- =?utf-8?B?aVJLWXJRTTJzR3JJTWhRcFYvdldQdDZlMDhGT1lwZlFYa2wxMkpHT3U4NGVR?=
- =?utf-8?B?M2hNcmtMdXUwRHhKRnZnUk9lTE1JN21zWURBQStPNXA5dk41Q1BMcitYaW0v?=
- =?utf-8?B?YkhidDVUaXNQYVRqOE1Ta2hQMWl2S2t0aUw5SHl2MU9Vb1dJVm1keGYweFRW?=
- =?utf-8?B?SkhMOWlNYkkxWUp6TXF4RlNVdHpHWHE2SVp6Y29RbUd4dXVRNjR0OG5pTUkr?=
- =?utf-8?B?anRQcFVRTGp6ajZ1YzYxVUpxMnB0bWMwenNVMUZxbEpUZm1hRzFUcGh2TUJB?=
- =?utf-8?B?SHJGTS95cTg3dEQ4U2JCQ1V5cS9Rc0ZRa09aRjQ3UWc3RVRhMVQyN1plcFYr?=
- =?utf-8?B?Z3F6dFdMOVJJZXNQOXFCbnlWV3dHYWwzLzFzQVZxMHJScmM1bnYyT1Zveis4?=
- =?utf-8?B?RGxreVM3aDJvNnU4V3AyMjVoaVFCS3BwUUNJQjRUNDdjc1BwZktLaldqTWlz?=
- =?utf-8?B?ajY2Zk84MWxHSVpSVnMyT2NJdDF6Rko5OW84eklsUmV1eDJ3MVdtMFJLVDZi?=
- =?utf-8?B?eSszNHBkY0VDVVMwUTZDU3ZYWCtKYitBLzVDMWpud1pxY3E4RkxKNUlHYlMw?=
- =?utf-8?B?NlJQL2cwZ1RHNEZVVCtmWXZlRjUzUVhlYU1OWlBuY0hXR0N0M21YdjZLVlNP?=
- =?utf-8?B?ekw3NkxuSVM1WVJObE9ZWjJjN3Q3K3FJd2grWU1aWWZDVVZ1UzRCMXFQbTJP?=
- =?utf-8?B?TmM3V0VrcEl4MFNXSGM1dk1pMUc3eGJZbHpQelJSb2FpZGd6N0VGRjNwQXRQ?=
- =?utf-8?B?NDUwbXpjaEVYOHNxOWNiN3ZObjRFNWd5bVlGcWFFWXhoVFFmdVZCK0pZcVlU?=
- =?utf-8?B?cm9idzZZK2hoQmFWTnFOTGpyU0J4ZjMxek9RRWxSR2o0ajBjSG5KOHVqNDJx?=
- =?utf-8?B?ME43RlRtMTh6TXZGTTcwellpQmZyTGhkNDAvV1ZwcElUYUhWWUdndjdIbFhY?=
- =?utf-8?B?bjVIUEFTWEpwU1U3TWpURGJrekthU0d4eTFoUi9JUnhQOUtzeVJPUllHNXdQ?=
- =?utf-8?B?bm0yQmZQcnk0V2M1VXRKV25oZVRkT2JONGoxLzVmdlBjLzVOMnlQcW9oOXc2?=
- =?utf-8?B?d2N2Z1prK0xhbFl3K0ZIOVkvRUF5OVNXUWtjZDlZSks4ZUg5aTNDclBjWUVa?=
- =?utf-8?B?QW1rMEpiSzJaM3BVbGFHb2pqNnloUW9rV1YzeHVNVTE4a3NhWHZTL0NQZnY1?=
- =?utf-8?B?bTQwUmJ4T3FDL01kT3hKSGVpa3JuYmRvL1hua2xwbTlyS0RJZzF4NWp1TEFy?=
- =?utf-8?B?akJlWmdaMDhTalQ3bnpiMFVrZjBoazBGdWhiZ3Jta0s4YkhXN2VDRE9OSzFP?=
- =?utf-8?B?R2xMODZTWm94dWpMWlFmT2xneXFnQkJPVWVIM1BiUVBaMHdnbE1IbWJtbHFH?=
- =?utf-8?B?SW9UalU1ek9CMmh5QnRyeGFkS1VCbFF4WTA0N2J3aUZ6QSt3K2l0aTFJeTdn?=
- =?utf-8?B?QWNOYnJjSUFvL2V0TGZNZnRWUGcxam5BQThwMkszSmFXejM4M25GcGJLVWkz?=
- =?utf-8?B?a3krZ2FaL0Q1ajdsc1NhVTlsVmJIVUV3NlV5SmVsM21VUjcwOXRNOGpReTND?=
- =?utf-8?Q?xydg=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Subject: linux-next: boot failure after merge of the bitmap tree
+Message-ID: <20230829155824.062e861f@canb.auug.org.au>
 MIME-Version: 1.0
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR12MB5381.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8b873273-fd05-4174-c1c2-08dba85249c1
-X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Aug 2023 05:39:18.0913
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: kY8RvgguOcrwEcv6BNyNojbxpuyY9q/vrawxvKvdANEybrjgYvqhxlzbg5uvxeIW4gQPjtNyvU9/Eudd7fpICg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5369
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/vWxVTtOxvxUWsB2n0vFTcc_";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogUmFuZHkgRHVubGFwIDxy
-ZHVubGFwQGluZnJhZGVhZC5vcmc+DQo+IFNlbnQ6IE1vbmRheSwgMjggQXVndXN0IDIwMjMgMjM6
-MzYNCj4gVG86IFN0ZXBoZW4gUm90aHdlbGwgPHNmckBjYW5iLmF1dWcub3JnLmF1PjsgTGludXgg
-TmV4dCBNYWlsaW5nIExpc3QgPGxpbnV4LQ0KPiBuZXh0QHZnZXIua2VybmVsLm9yZz4NCj4gQ2M6
-IExpbnV4IEtlcm5lbCBNYWlsaW5nIExpc3QgPGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmc+
-OyBvcGVuIGxpc3Q6WDg2DQo+IFBMQVRGT1JNIERSSVZFUlMgPHBsYXRmb3JtLWRyaXZlci14ODZA
-dmdlci5rZXJuZWwub3JnPjsgVmFkaW0gUGFzdGVybmFrDQo+IDx2YWRpbXBAbnZpZGlhLmNvbT47
-IEhhbnMgZGUgR29lZGUgPGhkZWdvZWRlQHJlZGhhdC5jb20+OyBNYXJrDQo+IEdyb3NzIDxtYXJr
-Z3Jvc3NAa2VybmVsLm9yZz47IFBDSSA8bGludXgtcGNpQHZnZXIua2VybmVsLm9yZz4NCj4gU3Vi
-amVjdDogUmU6IGxpbnV4LW5leHQ6IFRyZWUgZm9yIEF1ZyAyOCAoZHJpdmVycy9wbGF0Zm9ybS94
-ODYvbWx4LXBsYXRmb3JtLmMpDQo+IA0KPiANCj4gDQo+IE9uIDgvMjcvMjMgMjI6MDIsIFN0ZXBo
-ZW4gUm90aHdlbGwgd3JvdGU6DQo+ID4gSGkgYWxsLA0KPiA+DQo+ID4gUGxlYXNlIGRvICpub3Qq
-IGluY2x1ZGUgbWF0ZXJpYWwgZGVzdGluZWQgZm9yIHY2LjcgaW4geW91ciBsaW51eC1uZXh0DQo+
-ID4gaW5jbHVkZWQgYnJhbmNoZXMgdW50aWwgKmFmdGVyKiB2Ni42LXJjMSBoYXMgYmVlbiByZWxl
-YXNlZC4gIEFsc28sIGRvDQo+ID4gKm5vdCogcmViYXNlIHlvdSBsaW51LW5leHQgaW5jbHVkZWQg
-YnJhbmNoZXMgb250byB2Ni41Lg0KPiA+DQo+ID4gQ2hhbmdlcyBzaW5jZSAyMDIzMDgyNToNCj4g
-Pg0KPiANCj4gb24gaTM4NjoNCj4gQ09ORklHX0FDUEk9eQ0KPiBDT05GSUdfSVNBPXkNCj4gIyBD
-T05GSUdfUENJIGlzIG5vdCBzZXQNCj4gDQo+IC4uL2RyaXZlcnMvcGxhdGZvcm0veDg2L21seC1w
-bGF0Zm9ybS5jOiBJbiBmdW5jdGlvbg0KPiAnbWx4cGxhdF9wY2lfZnBnYV9kZXZpY2VfaW5pdCc6
-DQo+IC4uL2RyaXZlcnMvcGxhdGZvcm0veDg2L21seC1wbGF0Zm9ybS5jOjYyMDQ6MTU6IGVycm9y
-OiBpbXBsaWNpdCBkZWNsYXJhdGlvbiBvZg0KPiBmdW5jdGlvbiAncGNpX3JlcXVlc3RfcmVnaW9u
-JzsgZGlkIHlvdSBtZWFuICdwY2lfcmVxdWVzdF9yZWdpb25zJz8gWy0NCj4gV2Vycm9yPWltcGxp
-Y2l0LWZ1bmN0aW9uLWRlY2xhcmF0aW9uXQ0KPiAgNjIwNCB8ICAgICAgICAgZXJyID0gcGNpX3Jl
-cXVlc3RfcmVnaW9uKHBjaV9kZXYsIDAsIHJlc19uYW1lKTsNCj4gICAgICAgfCAgICAgICAgICAg
-ICAgIF5+fn5+fn5+fn5+fn5+fn5+fg0KPiAgICAgICB8ICAgICAgICAgICAgICAgcGNpX3JlcXVl
-c3RfcmVnaW9ucw0KPiANCj4gU2hvdWxkIE1MWF9QTEFURk9STSBkZXBlbmQgb24gUENJPw0KPiAN
-Cj4gb3IgZG8gd2UgbmVlZCBhIHN0dWIgZm9yIHBjaV9yZXF1ZXN0X3JlZ2lvbigpPw0KDQpUaGFu
-a3MsIFJhbmR5Lg0KDQpOZWVkIHRvIGFkZDogJ2RlcGVuZCBvbiBQQ0knLg0KDQpJIHdpbGwgc2Vu
-ZCBhIHBhdGNoLg0KDQo+IA0KPiAtLQ0KPiB+UmFuZHkNCg==
+--Sig_/vWxVTtOxvxUWsB2n0vFTcc_
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+
+Hi all,
+
+After merging the bitmap tree, today's linux-next boot test (powerpc
+pseries_le_defconfig) failed like this:
+
+Running code patching self-tests ...
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 1 at arch/powerpc/sysdev/msi_bitmap.c:260 test_of_node=
++0x234/0x280
+Modules linked in:
+CPU: 0 PID: 1 Comm: swapper/0 Not tainted 6.5.0-13305-g081ae3a78176 #1
+Hardware name: IBM pSeries (emulated by qemu) POWER8 (raw) 0x4d0200 0xf0000=
+04 of:SLOF,HEAD pSeries
+NIP:  c00000000201d6a4 LR: c00000000201d630 CTR: 0000000000000002
+REGS: c00000000478b730 TRAP: 0700   Not tainted  (6.5.0-13305-g081ae3a78176)
+MSR:  8000000002029033 <SF,VEC,EE,ME,IR,DR,RI,LE>  CR: 44000448  XER: 20000=
+000
+CFAR: c00000000201d674 IRQMASK: 0=20
+GPR00: c00000000201d630 c00000000478b9d0 c000000001588a00 0000000000000000=
+=20
+GPR04: c000000004ef6340 ff03f0f1fffeffff ffffffff0f000000 0000feff0f000000=
+=20
+GPR08: 0000000000000010 0000000000000001 0000000000000000 0000000000000000=
+=20
+GPR12: 0000000000000008 c000000002b00000 c000000000011188 0000000000000000=
+=20
+GPR16: 0000000000000000 0000000000000000 0000000000000000 0000000000000000=
+=20
+GPR20: 0000000000000000 0000000000000000 0000000000000000 0000000000000000=
+=20
+GPR24: 0000000000000000 c00000000200343c cccccccccccccccd c000000002090868=
+=20
+GPR28: 0000000000000000 c0000000020908a8 c00000000478b9f8 c00000000478bb50=
+=20
+NIP [c00000000201d6a4] test_of_node+0x234/0x280
+LR [c00000000201d630] test_of_node+0x1c0/0x280
+Call Trace:
+[c00000000478b9d0] [c00000000201d630] test_of_node+0x1c0/0x280 (unreliable)
+[c00000000478bbb0] [c00000000201d9c4] msi_bitmap_selftest+0x2d4/0x308
+[c00000000478bc50] [c000000000010bc0] do_one_initcall+0x80/0x300
+[c00000000478bd20] [c000000002004998] kernel_init_freeable+0x30c/0x3b4
+[c00000000478bdf0] [c0000000000111b0] kernel_init+0x30/0x1a0
+[c00000000478be50] [c00000000000debc] ret_from_kernel_user_thread+0x14/0x1c
+--- interrupt: 0 at 0x0
+NIP:  0000000000000000 LR: 0000000000000000 CTR: 0000000000000000
+REGS: c00000000478be80 TRAP: 0000   Not tainted  (6.5.0-13305-g081ae3a78176)
+MSR:  0000000000000000 <>  CR: 00000000  XER: 00000000
+CFAR: 0000000000000000 IRQMASK: 0=20
+GPR00: 0000000000000000 0000000000000000 0000000000000000 0000000000000000=
+=20
+GPR04: 0000000000000000 0000000000000000 0000000000000000 0000000000000000=
+=20
+GPR08: 0000000000000000 0000000000000000 0000000000000000 0000000000000000=
+=20
+GPR12: 0000000000000000 0000000000000000 0000000000000000 0000000000000000=
+=20
+GPR16: 0000000000000000 0000000000000000 0000000000000000 0000000000000000=
+=20
+GPR20: 0000000000000000 0000000000000000 0000000000000000 0000000000000000=
+=20
+GPR24: 0000000000000000 0000000000000000 0000000000000000 0000000000000000=
+=20
+GPR28: 0000000000000000 0000000000000000 0000000000000000 0000000000000000=
+=20
+NIP [0000000000000000] 0x0
+LR [0000000000000000] 0x0
+--- interrupt: 0
+Code: 40820018 7d273011 4102ffdc 4082000c 39200000 48000010 7d2903f4 7d4a51=
+10 7d295378 7d290034 5529d97e 69290001 <0b090000> 38610160 4a0a01dd e861016=
+8=20
+---[ end trace 0000000000000000 ]---
+registered taskstats version 1
+	.
+	.
+	.
+printk: console [netcon0] enabled
+netconsole: network logging started
+BUG: Unable to handle kernel data access at 0xc02a49fa823a5e63
+Faulting instruction address: 0xc0000000004ff95c
+Oops: Kernel access of bad area, sig: 11 [#1]
+LE PAGE_SIZE=3D64K MMU=3DHash SMP NR_CPUS=3D2048 NUMA pSeries
+Modules linked in:
+CPU: 0 PID: 1 Comm: swapper/0 Tainted: G        W          6.5.0-13305-g081=
+ae3a78176 #1
+Hardware name: IBM pSeries (emulated by qemu) POWER8 (raw) 0x4d0200 0xf0000=
+04 of:SLOF,HEAD pSeries
+NIP:  c0000000004ff95c LR: c0000000004ff9e8 CTR: c0000000002cdc40
+REGS: c00000000478b9a0 TRAP: 0380   Tainted: G        W           (6.5.0-13=
+305-g081ae3a78176)
+MSR:  8000000002009033 <SF,VEC,EE,ME,IR,DR,RI,LE>  CR: 24008288  XER: 00000=
+000
+CFAR: c0000000004ff7c8 IRQMASK: 0=20
+GPR00: c0000000004ff9e8 c00000000478bc40 c000000001588a00 0000000000000000=
+=20
+GPR04: 0000000000000cc0 0000000000001be2 0000000000000018 6749a6fe823a5e93=
+=20
+GPR08: 0000000000001be1 0000000000000010 000000007daa0000 0000000000002000=
+=20
+GPR12: c0000000002cdc40 c000000002b00000 c000000000011188 0000000000000000=
+=20
+GPR16: 0000000000000000 0000000000000000 0000000000000000 0000000000000000=
+=20
+GPR20: 0000000000000000 0000000000000000 c0000000041a1290 c0000000002d9080=
+=20
+GPR24: ffffffffffffffff c0000000029225a0 0000000000000018 0000000000000cc0=
+=20
+GPR28: c02a49fa823a5e53 0000000000000000 0000000000000cc0 c000000004010400=
+=20
+NIP [c0000000004ff95c] __kmem_cache_alloc_node+0x2bc/0x440
+LR [c0000000004ff9e8] __kmem_cache_alloc_node+0x348/0x440
+Call Trace:
+[c00000000478bc40] [c0000000004ff9d8] __kmem_cache_alloc_node+0x338/0x440 (=
+unreliable)
+[c00000000478bcc0] [c000000000455ce0] kmalloc_trace+0x50/0x150
+[c00000000478bd10] [c0000000002d9080] ftrace_free_mem+0x3a0/0x4e0
+[c00000000478bdf0] [c0000000000111d0] kernel_init+0x50/0x1a0
+[c00000000478be50] [c00000000000debc] ret_from_kernel_user_thread+0x14/0x1c
+--- interrupt: 0 at 0x0
+NIP:  0000000000000000 LR: 0000000000000000 CTR: 0000000000000000
+REGS: c00000000478be80 TRAP: 0000   Tainted: G        W           (6.5.0-13=
+305-g081ae3a78176)
+MSR:  0000000000000000 <>  CR: 00000000  XER: 00000000
+CFAR: 0000000000000000 IRQMASK: 0=20
+GPR00: 0000000000000000 0000000000000000 0000000000000000 0000000000000000=
+=20
+GPR04: 0000000000000000 0000000000000000 0000000000000000 0000000000000000=
+=20
+GPR08: 0000000000000000 0000000000000000 0000000000000000 0000000000000000=
+=20
+GPR12: 0000000000000000 0000000000000000 0000000000000000 0000000000000000=
+=20
+GPR16: 0000000000000000 0000000000000000 0000000000000000 0000000000000000=
+=20
+GPR20: 0000000000000000 0000000000000000 0000000000000000 0000000000000000=
+=20
+GPR24: 0000000000000000 0000000000000000 0000000000000000 0000000000000000=
+=20
+GPR28: 0000000000000000 0000000000000000 0000000000000000 0000000000000000=
+=20
+NIP [0000000000000000] 0x0
+LR [0000000000000000] 0x0
+--- interrupt: 0
+Code: 60420000 78a50020 7f83e378 38800000 4bbb9e8d 60000000 4bfffee4 600000=
+00 60420000 813f0028 e8ff00b8 38a80001 <7fdc482a> 7d3c4a14 79260022 552ac03=
+e=20
+---[ end trace 0000000000000000 ]---
+pstore: backend (nvram) writing error (-1)
+
+note: swapper/0[1] exited with irqs disabled
+Kernel panic - not syncing: Attempted to kill init! exitcode=3D0x0000000b
+
+Bisection pointed at commit
+
+  d770ef2c8299 ("bitmap: replace _reg_op(REG_OP_RELEASE) with bitmap_clear(=
+)")
+
+I have used the bitmap tree from next-20230828 for today.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/vWxVTtOxvxUWsB2n0vFTcc_
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmTtiQAACgkQAVBC80lX
+0Gz0kgf/b3Vw3BPAzBZbVOAEYh7Ka9kHy9q26O25/TIgkzaR4Ek+fScUFN+KmfJR
+QGF6/xDwPH+QnV/VrRgfb5l3D0wiUHJdUuK+nid06uWjUyvgXKqh6e0uppvGKgAg
+2+eNuZxcV+Ajy/AycbVXrmGLAeejkT8HoUyfYTRTwnlLH3YjlGfdDt9meemRbKgz
+j4BcMJ4vM0FNP/L44bLJ4fGJHeK9Q61N+wlKia51uE8ZJc/bO+T2vmcawmVBfLwN
+WmNsw1bk1DSpLlkPicTCtgyfbOu+BP/0XvgDJiQVQdGFDvz/1B3YiiAkep62S37y
+kCFvsBEoUmAU3hwPH7eU1GI8rcoUiA==
+=zcV6
+-----END PGP SIGNATURE-----
+
+--Sig_/vWxVTtOxvxUWsB2n0vFTcc_--

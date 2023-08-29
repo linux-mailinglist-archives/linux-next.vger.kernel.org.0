@@ -2,51 +2,68 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA2CB78BC2E
-	for <lists+linux-next@lfdr.de>; Tue, 29 Aug 2023 02:39:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32E0578BC6C
+	for <lists+linux-next@lfdr.de>; Tue, 29 Aug 2023 03:46:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232951AbjH2AjG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 28 Aug 2023 20:39:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37136 "EHLO
+        id S233391AbjH2Bpb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 28 Aug 2023 21:45:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234579AbjH2Aip (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 28 Aug 2023 20:38:45 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8649DF;
-        Mon, 28 Aug 2023 17:38:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=Sj0Gg4fQfJtwbUM/GeAvcxHJ84MBXNva1qgYGBjvRHM=; b=23NiSP4xygxRlsGKU1oVo9OAUy
-        fSr1KaqztJobnTseUCo5mOY/xXyFw/rh70zFIvHgOcjn4nq46y9/9uys0ZmzzKkdbLmtLp9CCFSKO
-        oooDMZ8VzsDQUG7i2SEBb3UROu0Y6QH1x03Td61XIYLgXq3mhnZ9LP1y8678lAT+a+UMEm4rFTn9o
-        taUYbuNZy0m9jAO5uVVJNELKapYuBYPEmnhk3htDiv5LKkZpBNUOlN97wBfyLq8oOlcvfnetWwk8p
-        ln1fA41NajTpY4mZmgM4jg8boYcwq9FbRq8nsOkgnPFN6mrpJpgzVvCtp/K2dXL1Egpwa8cInUkyX
-        sECF6jSg==;
-Received: from [2601:1c2:980:9ec0::2764]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qamkj-00AVaY-2G;
-        Tue, 29 Aug 2023 00:38:41 +0000
-Message-ID: <106e0bb2-1fa6-5914-67f6-269755779e61@infradead.org>
-Date:   Mon, 28 Aug 2023 17:38:41 -0700
+        with ESMTP id S234979AbjH2Bp2 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 28 Aug 2023 21:45:28 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83432184
+        for <linux-next@vger.kernel.org>; Mon, 28 Aug 2023 18:45:26 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id d9443c01a7336-1bf55a81eeaso18996825ad.0
+        for <linux-next@vger.kernel.org>; Mon, 28 Aug 2023 18:45:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1693273525; x=1693878325;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=bV00sftCwE1ijo6Uaun3IrwmwozLDi/2rOPHpMMnrTE=;
+        b=MN4lSEVntbzAy5h7+NqjlTHzUt7H25vHqJbKticxPhRokh4+tu2PO5e+3hNqqlbdHP
+         s2LlpHpN+hcK0+IB4uq/BUBBHWLGVND1SXLzLUaZVsgpTUTmdphsrtzAvXfKmiNRL7nT
+         9sCOgyt41O3bB/DEqYeJnS8xW8m7TEbMhXgKE6DD0GXupwCYCw+lCGmLwsaKjzVILavw
+         3KXgV1ZFnQxbQj8+8VDnsbEVgAzdGtdFQRnXtAie8GOmqN07LE56tH7iBg+odPsanUYV
+         ruPTeRrByOYg6Pye+kmv+GFVj2NEgF6czDgBYaO0DSNumDo/SN7+V4Pjlw+WcxFl0zB/
+         hbbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693273525; x=1693878325;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bV00sftCwE1ijo6Uaun3IrwmwozLDi/2rOPHpMMnrTE=;
+        b=ClIZKMtYq2+QhajJ2d8CJfbnw4+XbzC1CRd+l9aNTcxu39J8FIoInZ1BtTQVOrFIY5
+         Kui48YJGUyTWWFY6RjSKyqzSwOj00rLGKCvwK222mf45kL6odV4d8fBemMupx3NSzpL3
+         5ya1yz1JF1HtfYn+g4dDG8+UorLbHAl1LrA0icGZ/mBoM0PaMkSw8iOhuj0OO72A1+BE
+         VLG5fnzP+PQJ5hl0zE7Vdx5MC+uhdJbt+qMRwnslM9W08IjUlV/ocwvraWCrHFZtx4b2
+         0VOFALu7i6AUI/Y7ruJj6nSkZ36rs+BuXteLQAPMLoTXxTkD0+om+YklzcXJKiC4/ihF
+         AGCw==
+X-Gm-Message-State: AOJu0YyU7EmaSVj6Lu7dOW+r5NE57jOcqjVk/jKR5zLcUEVD5j+4QFmK
+        uV/nWQSeXh7NcA9SfKawCmYI3V8he4Q4Du5Q3h0=
+X-Google-Smtp-Source: AGHT+IGVajTI5WMPM289hpzDD+nPICsnndZdg5L23kyYHGvev1UMRuW+vDen24JoQV+ugZNfo1/ghQ==
+X-Received: by 2002:a17:902:da92:b0:1c1:fe97:bf34 with SMTP id j18-20020a170902da9200b001c1fe97bf34mr553636plx.24.1693273525560;
+        Mon, 28 Aug 2023 18:45:25 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id i12-20020a170902eb4c00b001bc35b14c99sm8044583pli.212.2023.08.28.18.45.24
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Aug 2023 18:45:24 -0700 (PDT)
+Message-ID: <64ed4db4.170a0220.c1c85.d028@mx.google.com>
+Date:   Mon, 28 Aug 2023 18:45:24 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Subject: Re: linux-next: Tree for Aug 28 (loongarch: kgdb)
-Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:LOONGARCH" <loongarch@lists.linux.dev>
-References: <20230828150220.31624576@canb.auug.org.au>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20230828150220.31624576@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: pending-fixes
+X-Kernelci-Tree: next
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: v6.5-1588-g1cf6f50b5d09
+Subject: next/pending-fixes build: 8 builds: 0 failed, 8 passed,
+ 4 warnings (v6.5-1588-g1cf6f50b5d09)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,45 +71,100 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+next/pending-fixes build: 8 builds: 0 failed, 8 passed, 4 warnings (v6.5-15=
+88-g1cf6f50b5d09)
+
+Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
+rnel/v6.5-1588-g1cf6f50b5d09/
+
+Tree: next
+Branch: pending-fixes
+Git Describe: v6.5-1588-g1cf6f50b5d09
+Git Commit: 1cf6f50b5d09a22a4984f9bd5743c857079778f5
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Built: 8 unique architectures
+
+Warnings Detected:
+
+arc:
+
+arm64:
+
+arm:
+
+i386:
+
+mips:
+
+riscv:
+
+sparc:
+    sparc64_defconfig (gcc-10): 4 warnings
+
+x86_64:
 
 
-On 8/27/23 22:02, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Please do *not* include material destined for v6.7 in your linux-next
-> included branches until *after* v6.6-rc1 has been released.  Also,
-> do *not* rebase you linu-next included branches onto v6.5.
-> 
-> Changes since 20230825:
-> 
+Warnings summary:
 
-There are many build errors when CONFIG_PERF_EVENTS => HAVE_HW_BREAKPOINT
-are not set.
-This is a reduced list of the build errors:
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
 
-../arch/loongarch/kernel/kgdb.c: In function 'hw_break_reserve_slot':
-../arch/loongarch/kernel/kgdb.c:515:21: error: implicit declaration of function 'dbg_reserve_bp_slot'; did you mean 'reserve_bp_slot'? [-Werror=implicit-function-declaration]
-  515 |                 if (dbg_reserve_bp_slot(*pevent))
-      |                     ^~~~~~~~~~~~~~~~~~~
-      |                     reserve_bp_slot
-../arch/loongarch/kernel/kgdb.c:527:17: error: implicit declaration of function 'dbg_release_bp_slot'; did you mean 'release_bp_slot'? [-Werror=implicit-function-declaration]
-  527 |                 dbg_release_bp_slot(*pevent);
-      |                 ^~~~~~~~~~~~~~~~~~~
-      |                 release_bp_slot
-../arch/loongarch/kernel/kgdb.c: In function 'kgdb_disable_hw_break':
-../arch/loongarch/kernel/kgdb.c:640:23: error: 'struct perf_event' has no member named 'attr'
-  640 |                 if (bp->attr.disabled == 1)
-      |                       ^~
-../arch/loongarch/kernel/kgdb.c: In function 'kgdb_arch_late':
-../arch/loongarch/kernel/kgdb.c:732:9: error: implicit declaration of function 'hw_breakpoint_init'; did you mean 'hw_breakpoint_slots'? [-Werror=implicit-function-declaration]
-  732 |         hw_breakpoint_init(&attr);
-      |         ^~~~~~~~~~~~~~~~~~
-      |         hw_breakpoint_slots
-../arch/loongarch/kernel/kgdb.c:752:38: error: 'struct perf_event' has no member named 'destroy'
-  752 |                         if (pevent[0]->destroy) {
-      |                                      ^~
-cc1: some warnings being treated as errors
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
 
+Detailed per-defconfig build reports:
 
--- 
-~Randy
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---
+For more info write to <info@kernelci.org>

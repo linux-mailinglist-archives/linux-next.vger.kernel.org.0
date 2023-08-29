@@ -2,115 +2,132 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 497C578CB9F
-	for <lists+linux-next@lfdr.de>; Tue, 29 Aug 2023 20:01:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08E6378D09D
+	for <lists+linux-next@lfdr.de>; Wed, 30 Aug 2023 01:29:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237967AbjH2SBI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 29 Aug 2023 14:01:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46340 "EHLO
+        id S241135AbjH2X3B (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 29 Aug 2023 19:29:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237745AbjH2SAn (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 29 Aug 2023 14:00:43 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 408DF11B;
-        Tue, 29 Aug 2023 11:00:40 -0700 (PDT)
-Received: from [IPV6:2804:431:a881:db00:51cf:cbff:7cc4:3f6d] (unknown [IPv6:2804:431:a881:db00:51cf:cbff:7cc4:3f6d])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        with ESMTP id S239198AbjH2X2e (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 29 Aug 2023 19:28:34 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAEEA11B;
+        Tue, 29 Aug 2023 16:28:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1693351706;
+        bh=MxfD5rB/5DGRsx1UFZiv+c2vCsiVC6XlMi4cYQc+DJY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=BaCv5kNx3dK43bYNeOzj6Uef42zVtb1lJodrEvVcs0sGdKSGUpXPrh+PLu94Mzea8
+         b1ak4Xru3g3jS2nCZm/lm3bCBj4KDwX8iiySRUVsnbULEtDuXtjqHumUiuF7X3j+tU
+         b39oAdffrJ9AlEA95TTw0C/Kt+6C9P246jdhqC5jPgwvZHNxfvTUnDUjrhfIUcfXkn
+         EitkyhpU3LkeMQOWrI7BfmpnEHxbWWrRSLXH9HlC8VIid0w2N8DjzX1I1p/lhTuUcq
+         IhKWsY/FIgLyt45/n5zyKn3fOd1GsEKQW94QR05zb6sHagxVKb8ratyQnCeYQvTR1f
+         7nbRrey4/yfDQ==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        (Authenticated sender: koike)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id D0D1D66071FD;
-        Tue, 29 Aug 2023 19:00:37 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1693332039;
-        bh=i73/jHaGWMu/rHjW04TeYQepCq+QBhdF1yKqAZFgAcU=;
-        h=Date:Subject:To:References:From:In-Reply-To:From;
-        b=VZZ/fE0uEra22irHH9fjGW7ATFx9yijAUBJo7Sngt8KbcC4OL/M0Xh1YwwgXZvnSM
-         ivABQuerNkyG3mnOyroepgYzmDDQaluEZ4eMWYpkX6GUgnPkrGAxsHDPcdwTW5u3jY
-         fva1DczVm+HUv0Et/9vMYdqbwhV0VC3nQ1vp/7SZ54X7qHx3vbj/Mj0P8uebn6L6lq
-         fd5tO+rG4EEaKMzekqXWgadmfG4Z79dS5cmKmYv8QWe7mbYAswVgTr1GqpMHD5o8f4
-         1vMGdN9wE6KewgDEaFhlx03moJHf5MInojeiZE5pIWdyP5CX65x1HM+q0svdRDtuoQ
-         x4HZo7SZmYNgA==
-Message-ID: <04d7610f-5057-3faa-1a11-716c29400e7e@collabora.com>
-Date:   Tue, 29 Aug 2023 15:00:32 -0300
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Rb3Ws3NT9z4wd0;
+        Wed, 30 Aug 2023 09:28:25 +1000 (AEST)
+Date:   Wed, 30 Aug 2023 09:28:14 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Michael Ellerman <mpe@ellerman.id.au>
+Cc:     David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Networking <netdev@vger.kernel.org>,
+        PowerPC <linuxppc-dev@lists.ozlabs.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the net-next tree with the powerpc
+ tree
+Message-ID: <20230830092814.71cb6911@canb.auug.org.au>
+In-Reply-To: <20230818111707.2714e8cb@canb.auug.org.au>
+References: <20230818111707.2714e8cb@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v2] drm: ci: docs: fix build warning - add missing escape
-Content-Language: en-US
-To:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-next@vger.kernel.org, airlied@gmail.com
-References: <20230824164230.48470-1-helen.koike@collabora.com>
- <ZO4xj/sHodsc8+X3@phenom.ffwll.local>
-From:   Helen Koike <helen.koike@collabora.com>
-In-Reply-To: <ZO4xj/sHodsc8+X3@phenom.ffwll.local>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/kzYIKj8Isww0Z0lB3pjBXEU";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+--Sig_/kzYIKj8Isww0Z0lB3pjBXEU
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
 
-On 29/08/2023 14:57, Daniel Vetter wrote:
-> On Thu, Aug 24, 2023 at 01:42:30PM -0300, Helen Koike wrote:
->> Fix the following warning:
->>
->> Documentation/gpu/automated_testing.rst:55: WARNING: Inline emphasis start-string without end-string.
->>
->> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
->> Signed-off-by: Helen Koike <helen.koike@collabora.com>
-> 
-> Applied this, sorry for the delay. I also rebased the tree onto latest
-> drm-next, in case there's any fixes for the current set of ci support that
-> need applying.
+On Fri, 18 Aug 2023 11:17:07 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> Today's linux-next merge of the net-next tree got a conflict in:
+>=20
+>   drivers/net/ethernet/freescale/fs_enet/fs_enet.h
+>=20
+> between commit:
+>=20
+>   60bc069c433f ("powerpc/include: Remove unneeded #include <asm/fs_pd.h>")
+>=20
+> from the powerpc tree and commit:
+>=20
+>   7a76918371fe ("net: fs_enet: Move struct fs_platform_info into fs_enet.=
+h")
+>=20
+> from the net-next tree.
+>=20
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+>=20
+> --=20
+> Cheers,
+> Stephen Rothwell
+>=20
+> diff --cc drivers/net/ethernet/freescale/fs_enet/fs_enet.h
+> index aad96cb2ab4e,d371072fff60..000000000000
+> --- a/drivers/net/ethernet/freescale/fs_enet/fs_enet.h
+> +++ b/drivers/net/ethernet/freescale/fs_enet/fs_enet.h
+> @@@ -9,8 -10,8 +10,6 @@@
+>   #include <linux/phy.h>
+>   #include <linux/dma-mapping.h>
+>  =20
+> - #include <linux/fs_enet_pd.h>
+>  -#include <asm/fs_pd.h>
+> --
+>   #ifdef CONFIG_CPM1
+>   #include <asm/cpm1.h>
+>   #endif
 
-np, thanks for picking it up.
+This is now a conflict between the powerpc tree and Linus' tree.
 
-> 
-> The other series I've seen looks like it's adding more support, I guess
-> that can be skipped for the initial stuff?
+--=20
+Cheers,
+Stephen Rothwell
 
-Yes, it enables more tests (which is good for getting more feedback from 
-people) but yeah, I guess it can be skipped for the initial thing.
+--Sig_/kzYIKj8Isww0Z0lB3pjBXEU
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-Regards,
-Helen
+-----BEGIN PGP SIGNATURE-----
 
-> -Sima
-> 
->>
->> ---
->>
->> Patch for topic/drm-ci
->>
->> V2:
->> - Fix typo s/scape/escape
->>
->> ---
->>   Documentation/gpu/automated_testing.rst | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/Documentation/gpu/automated_testing.rst b/Documentation/gpu/automated_testing.rst
->> index 1b87b802ac7f..469b6fb65c30 100644
->> --- a/Documentation/gpu/automated_testing.rst
->> +++ b/Documentation/gpu/automated_testing.rst
->> @@ -52,7 +52,7 @@ IGT_VERSION
->>   drivers/gpu/drm/ci/testlist.txt
->>   -------------------------------
->>   
->> -IGT tests to be run on all drivers (unless mentioned in a driver's *-skips.txt
->> +IGT tests to be run on all drivers (unless mentioned in a driver's \*-skips.txt
->>   file, see below).
->>   
->>   drivers/gpu/drm/ci/${DRIVER_NAME}-${HW_REVISION}-fails.txt
->> -- 
->> 2.34.1
->>
-> 
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmTufw8ACgkQAVBC80lX
+0GwGLgf/YrbEQb46AZGblOXOfqDRqvOClfY16YPJ421dwyYDswib581afeFKKuT4
+vTnIg78VaetO8fLJXBP1E9mzu9LRPLmxMfYwDrlK5fk6IHP9X5euTN8VenbZsmYi
+giGEaVKOd23q/CfZ0NRi+JhWRffPezZabAIYmo23UKw+QNaKMCsdziARRKmvT8DN
+jkqfvR8GQz7nMJjzhMZj24xiTWs478zGRhOTXUXMWxDdcNKdbg4GzZlcD8ikV8az
+GAU59J9HXcHeGPYpW4zLS2TWEFw1xF7xphIRlYJd63qRKQeiI4zyHQn+5V2wfgLm
+OptDIA4IDHhVixYrjyCleSXLrlm8UQ==
+=LI+k
+-----END PGP SIGNATURE-----
+
+--Sig_/kzYIKj8Isww0Z0lB3pjBXEU--

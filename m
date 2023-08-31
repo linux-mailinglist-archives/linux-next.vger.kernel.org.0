@@ -2,68 +2,67 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62A3F78E718
-	for <lists+linux-next@lfdr.de>; Thu, 31 Aug 2023 09:18:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD58678EAF0
+	for <lists+linux-next@lfdr.de>; Thu, 31 Aug 2023 12:47:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240154AbjHaHSA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 31 Aug 2023 03:18:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45882 "EHLO
+        id S1345258AbjHaKrp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 31 Aug 2023 06:47:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242072AbjHaHR7 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 31 Aug 2023 03:17:59 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9ED5CD6
-        for <linux-next@vger.kernel.org>; Thu, 31 Aug 2023 00:17:55 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1c09673b006so3167975ad.1
-        for <linux-next@vger.kernel.org>; Thu, 31 Aug 2023 00:17:55 -0700 (PDT)
+        with ESMTP id S1343737AbjHaKrm (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 31 Aug 2023 06:47:42 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5B25E45
+        for <linux-next@vger.kernel.org>; Thu, 31 Aug 2023 03:47:05 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1c1e780aa95so4152105ad.3
+        for <linux-next@vger.kernel.org>; Thu, 31 Aug 2023 03:47:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1693466275; x=1694071075; darn=vger.kernel.org;
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1693478816; x=1694083616; darn=vger.kernel.org;
         h=from:to:subject:content-transfer-encoding:mime-version:date
          :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=gsmVqX6+gmztlurqrrByqePU+I3GQN0s3fy6sMoqlIM=;
-        b=Kg6Gc+3lcKSCcLECE/NvhUO9cASkrZw3NXOHsWxCM3ktxKZswqh9JY16v8eorMXd/o
-         71LuXRkvaohpYM3DFKcy63QfaRnMCpwtgyflD9WM9iKcTJQkqu+HWFDvFRc0l0TxRBXS
-         5Yi3fC5O0xywjNspblK7Y4iogndWudru2jmepz1CXzJRo2vjhHzIroi3kauTmKwjbgR5
-         p0wonUnnomDz30tIz1HtwEFv4kg1SleAFm5Az81zBGFal4GDhV+8JLwQ4kBUrLH0Ss0M
-         L3+bvle98kLugvp3pEprki8hsMAH0AIr3qdcygIt5XN2sMFL1Xr5ZXZP11aLXGoeTvFW
-         kFow==
+        bh=XjZuwRcdngEuD1foXmoY4i8mSS0XD5660HT9dTduTd4=;
+        b=LmrPNNuSL3I3XUQBp6l35KMkLQISCO9oPq5Wk1hzSwhpk8oxTtgra1YFPDy/0M7L68
+         m5qRHXr60S/J1NpNBv5sgIDwRdVBO+ymwIjRW+0DFnDH6qiPPHZ0w27OuJb2P4Wy6eco
+         kTek9XjsN298T31yeh6NHa9zsWA8A4hba0EBgeCUqiz5UYoTBxFiRsNjcS7il6qQWAVQ
+         ZPEaA7i1E2LGhJdp1LeT8HJhJ9tVtOVJ0LkiLlhsJshpyKbH/11GRJVpBTJhL8V2AoSx
+         8KtVsgf/19JbunT0C3ZubJuQ1+UXbAIwcBBUjYUUKALor0d6fEc041i5Rpcm/7d6iXFG
+         1PMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693466275; x=1694071075;
+        d=1e100.net; s=20221208; t=1693478816; x=1694083616;
         h=from:to:subject:content-transfer-encoding:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=gsmVqX6+gmztlurqrrByqePU+I3GQN0s3fy6sMoqlIM=;
-        b=UB3eUEadTfvRRLrlVlm2nJXG39q4BuX8sNKUKalrhtGyhZJDdFXWVSPHI3xdtf7ztH
-         XAHXsb2k9QyxnwK1DK9izvdt80QRzRtmXMlgeTycU/ZEY/F8pck1g+6Z/e2uSISFsNg2
-         zwH6EjSfQ1oQF6Umww3BVSwOqowutHhCBJZj0zvCWKI3CJS60btN5It7ckruW9zFvCz+
-         utnYjweqEPoT2uWfZlPtw0JMIdtTxh3KRapxDWLA4lPJlok/xAQEsFtlaY9MTSCA/v5K
-         1+WhvVIwddIgf/evxSGOLYORlVXTQcn+MoJfrN7pB6Rf2FlrTV8pnDgPh1Sq7RnyaozV
-         H7wQ==
-X-Gm-Message-State: AOJu0YzgMBZrwfd+LL6UdF+WsyfsXDwjc74KUaxFCgNtJOb3Dx+rj+/5
-        2GCvRwD3SlfjbXymv/97zNi4VXgY7knVeL1T63w=
-X-Google-Smtp-Source: AGHT+IGivfjeMOheqPznFfm99yO6kfPr6suvuMLTnm6dvkzZaMVJxxma4sz6OBEbffCcfuf8fBSE4Q==
-X-Received: by 2002:a17:903:1109:b0:1bf:39d8:48f3 with SMTP id n9-20020a170903110900b001bf39d848f3mr4981062plh.16.1693466274461;
-        Thu, 31 Aug 2023 00:17:54 -0700 (PDT)
+        bh=XjZuwRcdngEuD1foXmoY4i8mSS0XD5660HT9dTduTd4=;
+        b=kkAHuQOEc1zVwkfYAaRo/huJLhxkFVO/J4FQyePIezIIeeIIaREBP/vyJbNuFo5mA+
+         5gVxdRdFX1CbjAvM/rGUaX78xfdyHS+5rbB7IMNgX3fm5cT0CAnXvFA/7O1QXtdCApjS
+         pn54JB9tNVnY9ZS8VErFcRemU+IkJQORJC23nsYmnh0FPYwDR5gzZYdFx/Y7YOoQJWql
+         ow2Ry93lDjatoc4rEosTKAPrJJ9nt/lBg55tgnUvN/fcKNiKIUVlMJOlN1CspvvmuT+9
+         rrjUWs5xvTLK/bgSVySxMIekcxkEXvjaJfqzvKID2qRPICWkRKBHT0rjO5Au3ss+r+qh
+         pbdw==
+X-Gm-Message-State: AOJu0YxFU6YdgpW1y7+UD79NkKRT6GOicwVUN1tz8Qh+6tKVpKo3druN
+        +xx+SHaTY56cWbYT+Ii4f2mIauj4FiV3cEzFL68=
+X-Google-Smtp-Source: AGHT+IHgDGZVk3C4iXKcsFUrXSPFUZEc6bn3RNaLj8bZgm29RuzKHVIuhRg4lmMPrVYB3RwQ3HYrpg==
+X-Received: by 2002:a17:903:451:b0:1c2:702:61af with SMTP id iw17-20020a170903045100b001c2070261afmr4244575plb.38.1693478816314;
+        Thu, 31 Aug 2023 03:46:56 -0700 (PDT)
 Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id j2-20020a170902da8200b001b53c8659fesm631549plx.30.2023.08.31.00.17.53
-        for <linux-next@vger.kernel.org>
+        by smtp.gmail.com with ESMTPSA id iz2-20020a170902ef8200b001bb9f104328sm993151plb.146.2023.08.31.03.46.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Aug 2023 00:17:53 -0700 (PDT)
-Message-ID: <64f03ea1.170a0220.d3dbf.11fd@mx.google.com>
-Date:   Thu, 31 Aug 2023 00:17:53 -0700 (PDT)
+        Thu, 31 Aug 2023 03:46:55 -0700 (PDT)
+Message-ID: <64f06f9f.170a0220.f15e1.1991@mx.google.com>
+Date:   Thu, 31 Aug 2023 03:46:55 -0700 (PDT)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-Kernelci-Branch: master
 X-Kernelci-Tree: next
-X-Kernelci-Report-Type: build
+X-Kernelci-Report-Type: test
 X-Kernelci-Kernel: next-20230831
-Subject: next/master build: 114 builds: 0 failed, 114 passed,
- 9 warnings (next-20230831)
-To:     linux-next@vger.kernel.org
+Subject: next/master baseline: 88 runs, 6 regressions (next-20230831)
+To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+        kernelci-results@groups.io
 From:   "kernelci.org bot" <bot@kernelci.org>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,649 +70,351 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master build: 114 builds: 0 failed, 114 passed, 9 warnings (next-20230=
-831)
+next/master baseline: 88 runs, 6 regressions (next-20230831)
 
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20230831/
+Regressions Summary
+-------------------
 
-Tree: next
-Branch: master
-Git Describe: next-20230831
-Git Commit: a47fc304d2b678db1a5d760a7d644dac9b067752
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Built: 8 unique architectures
+platform             | arch   | lab           | compiler | defconfig       =
+             | regressions
+---------------------+--------+---------------+----------+-----------------=
+-------------+------------
+acer-R721T-grunt     | x86_64 | lab-collabora | gcc-10   | x86_64_defcon...=
+6-chromebook | 1          =
 
-Warnings Detected:
+hp-11A-G6-EE-grunt   | x86_64 | lab-collabora | gcc-10   | x86_64_defcon...=
+6-chromebook | 1          =
 
-arc:
+hp-14-db0003na-grunt | x86_64 | lab-collabora | gcc-10   | x86_64_defcon...=
+6-chromebook | 1          =
 
-arm64:
+hp-x360-14-G1-sona   | x86_64 | lab-collabora | gcc-10   | x86_64_defcon...=
+6-chromebook | 1          =
 
-arm:
+imx8mp-evk           | arm64  | lab-broonie   | clang-17 | defconfig+CON...=
+_64K_PAGES=3Dy | 1          =
 
-i386:
+kontron-pitx-imx8m   | arm64  | lab-kontron   | clang-17 | defconfig+CON...=
+_64K_PAGES=3Dy | 1          =
 
-mips:
 
-riscv:
-    nommu_k210_defconfig (clang-17): 2 warnings
-    nommu_k210_sdcard_defconfig (clang-17): 2 warnings
-    rv32_defconfig (clang-17): 2 warnings
-
-sparc:
-    sparc64_defconfig+debug (gcc-10): 2 warnings
-    tinyconfig (gcc-10): 1 warning
-
-x86_64:
-
-
-Warnings summary:
-
-    3    arch/riscv/kernel/ptrace.c:123:11: warning: unused variable 'size'=
- [-Wunused-variable]
-    3    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
--Wcpp]
-    3    1 warning generated.
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig+debug (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
- 0 section mismatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
-mismatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (x86_64, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (i386, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-am200epdkit_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-ar7_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-aspeed_g4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-aspeed_g5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-assabet_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-at91_dt_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-ath25_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-axm55xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-axs103_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-bcm2835_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-bcm47xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-bcm63xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-bigsur_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-bmips_be_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-cavium_octeon_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-ci20_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-cobalt_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-collie_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-cu1000-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-cu1830-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-davinci_all_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-decstation_64_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-decstation_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-decstation_r4k_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
-s, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_ARM64_16K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
-rs, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, clang-17) =E2=80=94 PASS, 0 er=
-rors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-gcw0_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-gemini_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-gpr_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig+debug (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warni=
-ngs, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig+debug (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-imxrt_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-integrator_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-ip22_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-ip27_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-ip28_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-ip32_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-ixp4xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-jornada720_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-loongson1b_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-loongson2k_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-loongson3_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-malta_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-malta_kvm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-maltaaprp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-maltasmvp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-maltasmvp_eva_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-maltaup_xpa_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
-0 section mismatches
-
----------------------------------------------------------------------------=
------
-mmp2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-moxart_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-mps2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-multi_v4t_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-multi_v5_defconfig (arm, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (arm, gcc-10) =E2=80=
-=94 PASS, 0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+debug (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-netwinder_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-nhk8815_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-nommu_k210_defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 2 warnings=
-, 0 section mismatches
-
-Warnings:
-    arch/riscv/kernel/ptrace.c:123:11: warning: unused variable 'size' [-Wu=
-nused-variable]
-    1 warning generated.
-
----------------------------------------------------------------------------=
------
-nommu_k210_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
-0 section mismatches
-
----------------------------------------------------------------------------=
------
-nommu_k210_sdcard_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
-nings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-nommu_k210_sdcard_defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 2 w=
-arnings, 0 section mismatches
-
-Warnings:
-    arch/riscv/kernel/ptrace.c:123:11: warning: unused variable 'size' [-Wu=
-nused-variable]
-    1 warning generated.
-
----------------------------------------------------------------------------=
------
-nsimosci_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-omap2plus_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-omega2p_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-pic32mzda_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-pxa168_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-pxa3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-pxa910_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-pxa_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
----------------------------------------------------------------------------=
------
-qcom_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-qi_lb60_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-rb532_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-realview_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-rs90_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-rt305x_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-rv32_defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 2 warnings, 0 se=
-ction mismatches
-
-Warnings:
-    arch/riscv/kernel/ptrace.c:123:11: warning: unused variable 'size' [-Wu=
-nused-variable]
-    1 warning generated.
-
----------------------------------------------------------------------------=
------
-s5pv210_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-sama7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-shmobile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-socfpga_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-sp7021_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig+debug (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 2 warning=
-s, 0 section mismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-spear13xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-spear3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-spear6xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-spitz_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-stm32_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-sunxi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-tegra_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-tinyconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
----------------------------------------------------------------------------=
------
-tinyconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-tinyconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section m=
-ismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-vdk_hs38_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-vdk_hs38_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
-0 section mismatches
-
----------------------------------------------------------------------------=
------
-vexpress_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-vocore2_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-vt8500_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
-0 section mismatches
-
----------------------------------------------------------------------------=
------
-wpcm450_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+debug (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
-s, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86-chromebook (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, =
-0 warnings, 0 section mismatches
-
----
-For more info write to <info@kernelci.org>
+  Details:  https://kernelci.org/test/job/next/branch/master/kernel/next-20=
+230831/plan/baseline/
+
+  Test:     baseline
+  Tree:     next
+  Branch:   master
+  Describe: next-20230831
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+  SHA:      a47fc304d2b678db1a5d760a7d644dac9b067752 =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform             | arch   | lab           | compiler | defconfig       =
+             | regressions
+---------------------+--------+---------------+----------+-----------------=
+-------------+------------
+acer-R721T-grunt     | x86_64 | lab-collabora | gcc-10   | x86_64_defcon...=
+6-chromebook | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/64f0287e1e4e2cbc1b286d7d
+
+  Results:     18 PASS, 1 FAIL, 0 SKIP
+  Full config: x86_64_defconfig+x86-chromebook
+  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230831/x86_=
+64/x86_64_defconfig+x86-chromebook/gcc-10/lab-collabora/baseline-acer-R721T=
+-grunt.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230831/x86_=
+64/x86_64_defconfig+x86-chromebook/gcc-10/lab-collabora/baseline-acer-R721T=
+-grunt.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/x86/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/64f0287e1e4e2cbc1b286d92
+        failing since 1 day (last pass: next-20230823, first fail: next-202=
+30829)
+
+    2023-08-31T05:43:09.569289  + <8>[   11.191079] <LAVA_SIGNAL_ENDRUN 0_d=
+mesg 11388266_1.4.2.3.1>
+
+    2023-08-31T05:43:09.569368  set +x
+
+    2023-08-31T05:43:09.673672  / # #
+
+    2023-08-31T05:43:09.774272  export SHELL=3D/bin/sh
+
+    2023-08-31T05:43:09.774436  #
+
+    2023-08-31T05:43:09.874930  / # export SHELL=3D/bin/sh. /lava-11388266/=
+environment
+
+    2023-08-31T05:43:09.875119  =
+
+
+    2023-08-31T05:43:09.975660  / # . /lava-11388266/environment/lava-11388=
+266/bin/lava-test-runner /lava-11388266/1
+
+    2023-08-31T05:43:09.976016  =
+
+
+    2023-08-31T05:43:09.980568  / # /lava-11388266/bin/lava-test-runner /la=
+va-11388266/1
+ =
+
+    ... (12 line(s) more)  =
+
+ =
+
+
+
+platform             | arch   | lab           | compiler | defconfig       =
+             | regressions
+---------------------+--------+---------------+----------+-----------------=
+-------------+------------
+hp-11A-G6-EE-grunt   | x86_64 | lab-collabora | gcc-10   | x86_64_defcon...=
+6-chromebook | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/64f0287b925e8e79f1286d7a
+
+  Results:     18 PASS, 1 FAIL, 0 SKIP
+  Full config: x86_64_defconfig+x86-chromebook
+  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230831/x86_=
+64/x86_64_defconfig+x86-chromebook/gcc-10/lab-collabora/baseline-hp-11A-G6-=
+EE-grunt.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230831/x86_=
+64/x86_64_defconfig+x86-chromebook/gcc-10/lab-collabora/baseline-hp-11A-G6-=
+EE-grunt.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/x86/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/64f0287b925e8e79f1286d8f
+        failing since 1 day (last pass: next-20230823, first fail: next-202=
+30829)
+
+    2023-08-31T05:44:05.279751  + <8>[   11.132243] <LAVA_SIGNAL_ENDRUN 0_d=
+mesg 11388263_1.4.2.3.1>
+
+    2023-08-31T05:44:05.279832  set +x
+
+    2023-08-31T05:44:05.383501  / # #
+
+    2023-08-31T05:44:05.484208  export SHELL=3D/bin/sh
+
+    2023-08-31T05:44:05.484402  #
+
+    2023-08-31T05:44:05.584920  / # export SHELL=3D/bin/sh. /lava-11388263/=
+environment
+
+    2023-08-31T05:44:05.585091  =
+
+
+    2023-08-31T05:44:05.685603  / # . /lava-11388263/environment/lava-11388=
+263/bin/lava-test-runner /lava-11388263/1
+
+    2023-08-31T05:44:05.685914  =
+
+
+    2023-08-31T05:44:05.690335  / # /lava-11388263/bin/lava-test-runner /la=
+va-11388263/1
+ =
+
+    ... (12 line(s) more)  =
+
+ =
+
+
+
+platform             | arch   | lab           | compiler | defconfig       =
+             | regressions
+---------------------+--------+---------------+----------+-----------------=
+-------------+------------
+hp-14-db0003na-grunt | x86_64 | lab-collabora | gcc-10   | x86_64_defcon...=
+6-chromebook | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/64f0288e925e8e79f1286da0
+
+  Results:     18 PASS, 1 FAIL, 0 SKIP
+  Full config: x86_64_defconfig+x86-chromebook
+  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230831/x86_=
+64/x86_64_defconfig+x86-chromebook/gcc-10/lab-collabora/baseline-hp-14-db00=
+03na-grunt.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230831/x86_=
+64/x86_64_defconfig+x86-chromebook/gcc-10/lab-collabora/baseline-hp-14-db00=
+03na-grunt.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/x86/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/64f0288e925e8e79f1286db5
+        failing since 1 day (last pass: next-20230823, first fail: next-202=
+30829)
+
+    2023-08-31T05:43:34.845678  + <8>[   10.890430] <LAVA_SIGNAL_ENDRUN 0_d=
+mesg 11388269_1.4.2.3.1>
+
+    2023-08-31T05:43:34.845761  set +x
+
+    2023-08-31T05:43:34.950357  / # #
+
+    2023-08-31T05:43:35.050932  export SHELL=3D/bin/sh
+
+    2023-08-31T05:43:35.051113  #
+
+    2023-08-31T05:43:35.151601  / # export SHELL=3D/bin/sh. /lava-11388269/=
+environment
+
+    2023-08-31T05:43:35.151781  =
+
+
+    2023-08-31T05:43:35.252314  / # . /lava-11388269/environment/lava-11388=
+269/bin/lava-test-runner /lava-11388269/1
+
+    2023-08-31T05:43:35.252603  =
+
+
+    2023-08-31T05:43:35.257241  / # /lava-11388269/bin/lava-test-runner /la=
+va-11388269/1
+ =
+
+    ... (12 line(s) more)  =
+
+ =
+
+
+
+platform             | arch   | lab           | compiler | defconfig       =
+             | regressions
+---------------------+--------+---------------+----------+-----------------=
+-------------+------------
+hp-x360-14-G1-sona   | x86_64 | lab-collabora | gcc-10   | x86_64_defcon...=
+6-chromebook | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/64f029943020fbd854286d77
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: x86_64_defconfig+x86-chromebook
+  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20230831/x86_=
+64/x86_64_defconfig+x86-chromebook/gcc-10/lab-collabora/baseline-hp-x360-14=
+-G1-sona.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230831/x86_=
+64/x86_64_defconfig+x86-chromebook/gcc-10/lab-collabora/baseline-hp-x360-14=
+-G1-sona.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/x86/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/64f029943020fbd854286=
+d78
+        new failure (last pass: next-20230830) =
+
+ =
+
+
+
+platform             | arch   | lab           | compiler | defconfig       =
+             | regressions
+---------------------+--------+---------------+----------+-----------------=
+-------------+------------
+imx8mp-evk           | arm64  | lab-broonie   | clang-17 | defconfig+CON...=
+_64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/64f02f6bce593fc749286d73
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    clang-17 (Debian clang version 17.0.0 (++20230827092956+e91a=
+d6b97fcb-1~exp1~20230827093113.32))
+  Plain log:   https://storage.kernelci.org//next/master/next-20230831/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/clang-17/lab-broonie/baseline-imx8mp=
+-evk.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230831/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/clang-17/lab-broonie/baseline-imx8mp=
+-evk.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/64f02f6bce593fc749286d7c
+        failing since 15 days (last pass: next-20230807, first fail: next-2=
+0230815)
+
+    2023-08-31T06:12:39.240180  + set<8>[   29.554092] <LAVA_SIGNAL_ENDRUN =
+0_dmesg 80357_1.5.2.4.1>
+    2023-08-31T06:12:39.240803   +x
+    2023-08-31T06:12:39.349375  / # #
+    2023-08-31T06:12:40.515142  export SHELL=3D/bin/sh
+    2023-08-31T06:12:40.521175  #
+    2023-08-31T06:12:41.964662  / # export SHELL=3D/bin/sh. /lava-80357/env=
+ironment
+    2023-08-31T06:12:41.970693  =
+
+    2023-08-31T06:12:44.582743  / # . /lava-80357/environment/lava-80357/bi=
+n/lava-test-runner /lava-80357/1
+    2023-08-31T06:12:44.589514  =
+
+    2023-08-31T06:12:44.599335  / # /lava-80357/bin/lava-test-runner /lava-=
+80357/1 =
+
+    ... (12 line(s) more)  =
+
+ =
+
+
+
+platform             | arch   | lab           | compiler | defconfig       =
+             | regressions
+---------------------+--------+---------------+----------+-----------------=
+-------------+------------
+kontron-pitx-imx8m   | arm64  | lab-kontron   | clang-17 | defconfig+CON...=
+_64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/64f02f3fcf0b1f30b2286d7e
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    clang-17 (Debian clang version 17.0.0 (++20230827092956+e91a=
+d6b97fcb-1~exp1~20230827093113.32))
+  Plain log:   https://storage.kernelci.org//next/master/next-20230831/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/clang-17/lab-kontron/baseline-kontro=
+n-pitx-imx8m.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20230831/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/clang-17/lab-kontron/baseline-kontro=
+n-pitx-imx8m.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/64f02f3fcf0b1f30b2286=
+d7f
+        failing since 29 days (last pass: next-20230728, first fail: next-2=
+0230802) =
+
+ =20

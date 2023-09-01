@@ -2,109 +2,134 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09DB578F887
-	for <lists+linux-next@lfdr.de>; Fri,  1 Sep 2023 08:25:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8711C790020
+	for <lists+linux-next@lfdr.de>; Fri,  1 Sep 2023 17:46:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243918AbjIAGZC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 1 Sep 2023 02:25:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49490 "EHLO
+        id S242737AbjIAPqI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 1 Sep 2023 11:46:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233125AbjIAGZB (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 1 Sep 2023 02:25:01 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 517F810DD;
-        Thu, 31 Aug 2023 23:24:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1693549486; x=1725085486;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=QRNW0mmcEm0U5hthS099MEK7qNzHYNv/4Or5oaKKF7I=;
-  b=J27EOgqO2O8OyumegRjVqQz9g9LySxdA7ctiKQaVgSGpb54Hb72/k8cm
-   +5HskjY1LbTPqxL0e8dsErh/V4xYs47t9Y/4HxEbPJebbbYyY6TM0eUZ1
-   UQjXsrAKMwW6plHx7GW5BsbNkD6p6p2wJTqPkzfeyzMH7B+k6PHO/FpVI
-   rWwOKjbVtM3ig62I/p8tUeNLHbw2A+zQHYjiAZ47bcx6Ei50l3qCGlQBD
-   xqDFsf1xLkHSg43EwZL23WdXeh6AFXbJzjW7iT7Cr5RB8Y2c95aOPs5+Y
-   CRzlLAZMey0DF8fidlRPd1ro1WLpThxHdcOzSCrWiINZZEQ3SQi1jS1yE
-   w==;
-X-IronPort-AV: E=Sophos;i="6.02,218,1688454000"; 
-   d="asc'?scan'208";a="2393948"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 31 Aug 2023 23:24:45 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 31 Aug 2023 23:24:40 -0700
-Received: from wendy (10.10.85.11) by chn-vm-ex01.mchp-main.com (10.10.85.143)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Thu, 31 Aug 2023 23:24:38 -0700
-Date:   Fri, 1 Sep 2023 07:23:56 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Randy Dunlap <rdunlap@infradead.org>
+        with ESMTP id S237120AbjIAPqI (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 1 Sep 2023 11:46:08 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD97C10EB
+        for <linux-next@vger.kernel.org>; Fri,  1 Sep 2023 08:46:03 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1bee82fad0fso17024765ad.2
+        for <linux-next@vger.kernel.org>; Fri, 01 Sep 2023 08:46:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1693583163; x=1694187963; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1R8cu2Rdkpj6XMRvNWBpmLNwrpbIVxL/eXVOeZ+iSO0=;
+        b=nIT8WwgBju7tct3iZ1xBs58pQNAM/cl8ogtHYimg7+U7zBWqEWD+w9I/INlviAc1wB
+         viHuOvghzQdm3A5vXhwthwmNn92VchZTEcYzaA67G1E0z4ODasRr23wBzhnP1bTWeKnK
+         xsCy6S/n+wjpFvYDKn5fIRxSmK9usb2Mnq5uelHAi4B1P/PK8MM7osLxRFoAmoiQ0hwE
+         Mi6zJhMPnmsjNkYb9YlOlzNam7HJy5xmAS715vX32ldftwaq0epc0Jok37nnvzqavjW3
+         0eJmb9aAFjohEY19n7+Ffjy56p3Aq5pMJ1hoha2nKcGuxrWNkKayIvOLxfhMpLx+ddX/
+         dLbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693583163; x=1694187963;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1R8cu2Rdkpj6XMRvNWBpmLNwrpbIVxL/eXVOeZ+iSO0=;
+        b=Sq7FR0LSBVzlIfUI+jrqYOM97l6f86jCN2Xc4HPq/5duJChy8zM3Zbj3S7jTLixgTQ
+         RA/Pjbz0V6FVWcGkCzVYsCcTv+pcSzQXH+MLmbLZB5D+BLeAU6n91rpOY4X0XY+TuDri
+         c4NWjfY1DeUcQv3uKnakegIog8ERhAJuicGZyrdOmAO7GIYBewA8YFYqidaHYrsY6e02
+         sks6euTDZVBswJtDHhK+L9siuSm+4ynF4+841cYcsW9AKIng/kmt9VxlWEoBxodzZrbh
+         d2pEQyqEfmFpXnplA9FxZzRh8i2mdM5c50QjPy3uZT0TWQflnD0Q5KE2GqbFBxu6Oqee
+         K5UA==
+X-Gm-Message-State: AOJu0Yyq6t85WBhSn52I6khFYvbmGk8S3niX3bC6I/+DF+SNNzkjdnla
+        coi4jPoSBxMsAgerrx5lNN3aRA==
+X-Google-Smtp-Source: AGHT+IFBPiz/oDpMkVPJW/ecmphVC2B6/R4tEIduQRDxQo3/I5fA8c86djWpF58crQyhEknq21RGTQ==
+X-Received: by 2002:a17:902:d48e:b0:1bd:ccee:8f26 with SMTP id c14-20020a170902d48e00b001bdccee8f26mr3548219plg.15.1693583163229;
+        Fri, 01 Sep 2023 08:46:03 -0700 (PDT)
+Received: from localhost ([135.180.227.0])
+        by smtp.gmail.com with ESMTPSA id n17-20020a170902d2d100b001acae9734c0sm3119517plc.266.2023.09.01.08.46.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Sep 2023 08:46:02 -0700 (PDT)
+Date:   Fri, 01 Sep 2023 08:46:02 -0700 (PDT)
+X-Google-Original-Date: Fri, 01 Sep 2023 08:46:00 PDT (-0700)
+Subject:     Re: linux-next: manual merge of the risc-v tree with Linus' tree
+In-Reply-To: <CAKwvOd=buFcfe3Ho7EfdTPQwDF06K90onCHaeCtd=w0Y2NQm7w@mail.gmail.com>
 CC:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Conor Dooley <conor@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>
-Subject: Re: linux-next: Tree for Aug 31 (riscv: ANDES errata)
-Message-ID: <20230901-headed-unsigned-794833b7b5d5@wendy>
-References: <20230831135535.13c67178@canb.auug.org.au>
- <33a5e278-fb4b-b5db-e4f6-bb5a1e4228ef@infradead.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="pyMsjv/SDk+2OvlN"
-Content-Disposition: inline
-In-Reply-To: <33a5e278-fb4b-b5db-e4f6-bb5a1e4228ef@infradead.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Paul Walmsley <paul@pwsan.com>, alexghiti@rivosinc.com,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
+From:   Palmer Dabbelt <palmer@rivosinc.com>
+To:     ndesaulniers@google.com
+Message-ID: <mhng-9e6725d0-707e-4350-a201-301f5aeaeb07@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---pyMsjv/SDk+2OvlN
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Thu, 31 Aug 2023 10:50:15 PDT (-0700), ndesaulniers@google.com wrote:
+> On Wed, Aug 30, 2023 at 4:29 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>>
+>> Hi all,
+>>
+>> Today's linux-next merge of the risc-v tree got a conflict in:
+>>
+>>   arch/riscv/mm/kasan_init.c
+>>
+>> between commit:
+>>
+>>   d2402048bc8a ("riscv: mm: fix 2 instances of -Wmissing-variable-declarations")
+>>
+>> from Linus' tree and commit:
+>>
+>>   56e1803d9de0 ("riscv: Mark KASAN tmp* page tables variables as static")
+>>
+>> from the risc-v tree.
+>>
+>> I fixed it up (see below) and can carry the fix as necessary. This
+>> is now fixed as far as linux-next is concerned, but any non trivial
+>> conflicts should be mentioned to your upstream maintainer when your tree
+>> is submitted for merging.  You may also want to consider cooperating
+>> with the maintainer of the conflicting tree to minimise any particularly
+>> complex conflicts.
+>
+> Fix LGTM; I guess Palmer you may need to rebase that branch on mainline?
 
-On Thu, Aug 31, 2023 at 10:33:40PM -0700, Randy Dunlap wrote:
->=20
->=20
-> On 8/30/23 20:55, Stephen Rothwell wrote:
-> > Hi all,
-> >=20
-> > Please do *not* include material destined for v6.7 in your linux-next
-> > included branches until *after* v6.6-rc1 has been released.  Also,
-> > do *not* rebase you linu-next included branches onto v6.5.
-> >=20
-> > Changes since 20230830:
-> >=20
-> > The risc-v tree gained conflicts aginst Linus' tree.
-> >=20
->=20
-> On risc-v 32-bit or 64-bit, when CONFIG_MMU is not set:
+Looks like I just missed it and Linus fixed it up, sorry about that -- 
+for some reason my email hadn't been landing locally, I just fixed that 
+too ;)
 
-lkp reported this yesterday too, Prabhakar is conjuring up a fix.
-
-Thanks Randy for the report,
-Conor.
-
---pyMsjv/SDk+2OvlN
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZPGDWAAKCRB4tDGHoIJi
-0geaAP948UleALoWfE9W0GAqY18T27FIepedxZnpl8hSeGrJlgD+OoY4l9Nzo3lu
-qaYzaBi5aPCWlPxu/HoaxKR8Ypl1ugg=
-=fh9/
------END PGP SIGNATURE-----
-
---pyMsjv/SDk+2OvlN--
+>
+>>
+>> --
+>> Cheers,
+>> Stephen Rothwell
+>>
+>> diff --cc arch/riscv/mm/kasan_init.c
+>> index a01bc15dce24,435e94a5b1bb..000000000000
+>> --- a/arch/riscv/mm/kasan_init.c
+>> +++ b/arch/riscv/mm/kasan_init.c
+>> @@@ -22,9 -22,10 +22,9 @@@
+>>    * region is not and then we have to go down to the PUD level.
+>>    */
+>>
+>> - pgd_t tmp_pg_dir[PTRS_PER_PGD] __page_aligned_bss;
+>> - p4d_t tmp_p4d[PTRS_PER_P4D] __page_aligned_bss;
+>> - pud_t tmp_pud[PTRS_PER_PUD] __page_aligned_bss;
+>>  -extern pgd_t early_pg_dir[PTRS_PER_PGD];
+>> + static pgd_t tmp_pg_dir[PTRS_PER_PGD] __page_aligned_bss;
+>> + static p4d_t tmp_p4d[PTRS_PER_P4D] __page_aligned_bss;
+>> + static pud_t tmp_pud[PTRS_PER_PUD] __page_aligned_bss;
+>>
+>>   static void __init kasan_populate_pte(pmd_t *pmd, unsigned long vaddr, unsigned long end)
+>>   {
+>
+>
+>
+> -- 
+> Thanks,
+> ~Nick Desaulniers

@@ -2,68 +2,67 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8711C790020
-	for <lists+linux-next@lfdr.de>; Fri,  1 Sep 2023 17:46:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E9FC790095
+	for <lists+linux-next@lfdr.de>; Fri,  1 Sep 2023 18:15:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242737AbjIAPqI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 1 Sep 2023 11:46:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45404 "EHLO
+        id S1344851AbjIAQPB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 1 Sep 2023 12:15:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237120AbjIAPqI (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 1 Sep 2023 11:46:08 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD97C10EB
-        for <linux-next@vger.kernel.org>; Fri,  1 Sep 2023 08:46:03 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1bee82fad0fso17024765ad.2
-        for <linux-next@vger.kernel.org>; Fri, 01 Sep 2023 08:46:03 -0700 (PDT)
+        with ESMTP id S1344971AbjIAQPB (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 1 Sep 2023 12:15:01 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B40FF1702
+        for <linux-next@vger.kernel.org>; Fri,  1 Sep 2023 09:14:56 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1bdc19b782aso16098405ad.0
+        for <linux-next@vger.kernel.org>; Fri, 01 Sep 2023 09:14:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1693583163; x=1694187963; darn=vger.kernel.org;
+        d=dabbelt-com.20230601.gappssmtp.com; s=20230601; t=1693584896; x=1694189696; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:to:from:cc
          :in-reply-to:subject:date:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=1R8cu2Rdkpj6XMRvNWBpmLNwrpbIVxL/eXVOeZ+iSO0=;
-        b=nIT8WwgBju7tct3iZ1xBs58pQNAM/cl8ogtHYimg7+U7zBWqEWD+w9I/INlviAc1wB
-         viHuOvghzQdm3A5vXhwthwmNn92VchZTEcYzaA67G1E0z4ODasRr23wBzhnP1bTWeKnK
-         xsCy6S/n+wjpFvYDKn5fIRxSmK9usb2Mnq5uelHAi4B1P/PK8MM7osLxRFoAmoiQ0hwE
-         Mi6zJhMPnmsjNkYb9YlOlzNam7HJy5xmAS715vX32ldftwaq0epc0Jok37nnvzqavjW3
-         0eJmb9aAFjohEY19n7+Ffjy56p3Aq5pMJ1hoha2nKcGuxrWNkKayIvOLxfhMpLx+ddX/
-         dLbw==
+        bh=1G93qFbiZ0Pa27qlWWadHG4TtIzXjbNoLKN50FdpZHI=;
+        b=Uwtv0wFA15O7a9eeHv0PYvoRwgP7mLb51xdNrPKnwgJIf5FleAc/jfDCKiAUoi2nkl
+         5MFquBJi0bEvQjAFDtdYIOuZjlpnIxxHebMInlk+xdQBaPK5ZNCjwy8fzc6+Pv0vpzjw
+         XimkhjG89r7XlYtqECHPtcwjnArpa8NTuNNHjCgaDNMBMjBGawhaIzsJZSMLbalrGGNE
+         hSFHoRcJd+fG9QiyGKU57yr6t4wA4AQAWr+ZHqVjErPuul966d8KLlvlSnXaplHodUP7
+         iJ+45fP7lwGbwf/WCkh73w5V6SCyk03IecueISXpvYkGI39dy4ItfoncgypN59u0op7Z
+         a8ZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693583163; x=1694187963;
+        d=1e100.net; s=20221208; t=1693584896; x=1694189696;
         h=content-transfer-encoding:mime-version:message-id:to:from:cc
          :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=1R8cu2Rdkpj6XMRvNWBpmLNwrpbIVxL/eXVOeZ+iSO0=;
-        b=Sq7FR0LSBVzlIfUI+jrqYOM97l6f86jCN2Xc4HPq/5duJChy8zM3Zbj3S7jTLixgTQ
-         RA/Pjbz0V6FVWcGkCzVYsCcTv+pcSzQXH+MLmbLZB5D+BLeAU6n91rpOY4X0XY+TuDri
-         c4NWjfY1DeUcQv3uKnakegIog8ERhAJuicGZyrdOmAO7GIYBewA8YFYqidaHYrsY6e02
-         sks6euTDZVBswJtDHhK+L9siuSm+4ynF4+841cYcsW9AKIng/kmt9VxlWEoBxodzZrbh
-         d2pEQyqEfmFpXnplA9FxZzRh8i2mdM5c50QjPy3uZT0TWQflnD0Q5KE2GqbFBxu6Oqee
-         K5UA==
-X-Gm-Message-State: AOJu0Yyq6t85WBhSn52I6khFYvbmGk8S3niX3bC6I/+DF+SNNzkjdnla
-        coi4jPoSBxMsAgerrx5lNN3aRA==
-X-Google-Smtp-Source: AGHT+IFBPiz/oDpMkVPJW/ecmphVC2B6/R4tEIduQRDxQo3/I5fA8c86djWpF58crQyhEknq21RGTQ==
-X-Received: by 2002:a17:902:d48e:b0:1bd:ccee:8f26 with SMTP id c14-20020a170902d48e00b001bdccee8f26mr3548219plg.15.1693583163229;
-        Fri, 01 Sep 2023 08:46:03 -0700 (PDT)
+        bh=1G93qFbiZ0Pa27qlWWadHG4TtIzXjbNoLKN50FdpZHI=;
+        b=NbIrTUnrOVUZRVTV8VIspV9ru/b2mi4AAmxPVtLSxAdBhRIfRyXFM2NGFja8QMpZQT
+         vuZZIifm30zbLRcaNdru8iEBBkFhyoDKB+lTDCc5IdSXXWqdJ/lqTPoY1DSnATetuB1x
+         8iGXj1Gt4EDDQADng9rX8Jek5WB+daSf+ZzHXpur2fJqDPs/9xPg1AW2LVd+iaPzMrwy
+         TBBa43SyKSGBifu73kTFFutlrVQlUPzh6/bOLb6fpY9MixsDqATwvUm5p/u7S6Cl6hYd
+         Fg89XmQpWH3j0hp4hB7sP1i3Qkw+wcGbQaWLNqhxJeGs0OCeeB9CCBVtxa5tgNTRe+ts
+         NEZg==
+X-Gm-Message-State: AOJu0Yw9E4oIhg/xgbLdycuRFnZe/n8wcX3ORTiwnS5Zv3XXn97iJftQ
+        aqmZdO3Ofqt4mOs1TgWrWul3dQ==
+X-Google-Smtp-Source: AGHT+IE7oRbibb2gHXpKQsBvWgWTLAAcbjj6HDdxEQq7uFlPO01bSIbhSG3otP3Jzrv8pdG5Qv+MsA==
+X-Received: by 2002:a17:902:e54a:b0:1bb:c7bc:ceb4 with SMTP id n10-20020a170902e54a00b001bbc7bcceb4mr3855141plf.60.1693584896067;
+        Fri, 01 Sep 2023 09:14:56 -0700 (PDT)
 Received: from localhost ([135.180.227.0])
-        by smtp.gmail.com with ESMTPSA id n17-20020a170902d2d100b001acae9734c0sm3119517plc.266.2023.09.01.08.46.02
+        by smtp.gmail.com with ESMTPSA id jj10-20020a170903048a00b001b9de2b905asm3172118plb.231.2023.09.01.09.14.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Sep 2023 08:46:02 -0700 (PDT)
-Date:   Fri, 01 Sep 2023 08:46:02 -0700 (PDT)
-X-Google-Original-Date: Fri, 01 Sep 2023 08:46:00 PDT (-0700)
-Subject:     Re: linux-next: manual merge of the risc-v tree with Linus' tree
-In-Reply-To: <CAKwvOd=buFcfe3Ho7EfdTPQwDF06K90onCHaeCtd=w0Y2NQm7w@mail.gmail.com>
-CC:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Paul Walmsley <paul@pwsan.com>, alexghiti@rivosinc.com,
-        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
-From:   Palmer Dabbelt <palmer@rivosinc.com>
-To:     ndesaulniers@google.com
-Message-ID: <mhng-9e6725d0-707e-4350-a201-301f5aeaeb07@palmer-ri-x1c9>
+        Fri, 01 Sep 2023 09:14:54 -0700 (PDT)
+Date:   Fri, 01 Sep 2023 09:14:54 -0700 (PDT)
+X-Google-Original-Date: Fri, 01 Sep 2023 09:14:51 PDT (-0700)
+Subject:     Re: linux-next: Signed-off-by missing for commit in the risc-v tree
+In-Reply-To: <20230831075730.0dd941dd@canb.auug.org.au>
+CC:     Paul Walmsley <paul@pwsan.com>, linux-kernel@vger.kernel.org,
+        linux-next@vger.kernel.org
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Message-ID: <mhng-09c3d557-b385-4501-9a39-0040b03edb48@palmer-ri-x1c9>
 Mime-Version: 1.0 (MHng)
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,65 +70,43 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, 31 Aug 2023 10:50:15 PDT (-0700), ndesaulniers@google.com wrote:
-> On Wed, Aug 30, 2023 at 4:29 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->>
->> Hi all,
->>
->> Today's linux-next merge of the risc-v tree got a conflict in:
->>
->>   arch/riscv/mm/kasan_init.c
->>
->> between commit:
->>
->>   d2402048bc8a ("riscv: mm: fix 2 instances of -Wmissing-variable-declarations")
->>
->> from Linus' tree and commit:
->>
->>   56e1803d9de0 ("riscv: Mark KASAN tmp* page tables variables as static")
->>
->> from the risc-v tree.
->>
->> I fixed it up (see below) and can carry the fix as necessary. This
->> is now fixed as far as linux-next is concerned, but any non trivial
->> conflicts should be mentioned to your upstream maintainer when your tree
->> is submitted for merging.  You may also want to consider cooperating
->> with the maintainer of the conflicting tree to minimise any particularly
->> complex conflicts.
+On Wed, 30 Aug 2023 14:57:30 PDT (-0700), Stephen Rothwell wrote:
+> Hi all,
 >
-> Fix LGTM; I guess Palmer you may need to rebase that branch on mainline?
+> Commits
+>
+>   dbe46b094026 ("RISC-V: Add ptrace support for vectors")
+>   ed1a8872ff83 ("soc: renesas: Kconfig: Select the required configs for RZ/Five SoC")
+>   f508b0175578 ("cache: Add L2 cache management for Andes AX45MP RISC-V core")
+>   555dd72bc06e ("dt-bindings: cache: andestech,ax45mp-cache: Add DT binding docu  dbe46b094026 ("RISC-V: Add ptrace support for vectors")
+>   ed1a8872ff83 ("soc: renesas: Kconfig: Select the required configs for RZ/Five
+> SoC")
+>   f508b0175578 ("cache: Add L2 cache management for Andes AX45MP RISC-V core")
+>   555dd72bc06e ("dt-bindings: cache: andestech,ax45mp-cache: Add DT binding docu
+> mentation for L2 cache controller")
+>   30bc090f40f8 ("riscv: mm: dma-noncoherent: nonstandard cache operations support")
+>   f2863f30d1b0 ("riscv: errata: Add Andes alternative ports")
+>   93e0e2419b65 ("riscv: asm: vendorid_list: Add Andes Technology to the vendors list")
+>   eb76e5111881 ("riscv: dma-mapping: switch over to generic implementation")
+>   14be7c16d420 ("riscv: dma-mapping: skip invalidation before bidirectional DMA")
+>   fbfc740ced8f ("riscv: dma-mapping: only invalidate after DMA, not flush")
+>   b6e3f6e009a1 ("RISC-V: alternative: Remove feature_probe_func")
+>   b98673c5b037 ("RISC-V: Probe for unaligned access speed")
+>   26ba042414a3 ("perf: tests: Adapt mmap-basic.c for riscv")
+>   60bd50116484 ("tools: lib: perf: Implement riscv mmap support")
+>   57972127b20e ("Documentation: admin-guide: Add riscv sysctl_perf_user_access")
+>   cc4c07c89aad ("drivers: perf: Implement perf event mmap support in the SBI backend")
+>   50be34282905 ("drivers: perf: Implement perf event mmap support in the legacy backend")
+>
+> are missing a Signed-off-by from their committers.
 
-Looks like I just missed it and Linus fixed it up, sorry about that -- 
-for some reason my email hadn't been landing locally, I just fixed that 
-too ;)
+Sorry about that, I must have screwed something up merging these and 
+just found my email had been screwed up for a bit so I hadn't seen this.  
+Luckily most of them were being given some more time to bake, but I sent 
+up Alex's and Linus just merged them.  I'll try not to screw it up next 
+time...
 
->
->>
->> --
->> Cheers,
->> Stephen Rothwell
->>
->> diff --cc arch/riscv/mm/kasan_init.c
->> index a01bc15dce24,435e94a5b1bb..000000000000
->> --- a/arch/riscv/mm/kasan_init.c
->> +++ b/arch/riscv/mm/kasan_init.c
->> @@@ -22,9 -22,10 +22,9 @@@
->>    * region is not and then we have to go down to the PUD level.
->>    */
->>
->> - pgd_t tmp_pg_dir[PTRS_PER_PGD] __page_aligned_bss;
->> - p4d_t tmp_p4d[PTRS_PER_P4D] __page_aligned_bss;
->> - pud_t tmp_pud[PTRS_PER_PUD] __page_aligned_bss;
->>  -extern pgd_t early_pg_dir[PTRS_PER_PGD];
->> + static pgd_t tmp_pg_dir[PTRS_PER_PGD] __page_aligned_bss;
->> + static p4d_t tmp_p4d[PTRS_PER_P4D] __page_aligned_bss;
->> + static pud_t tmp_pud[PTRS_PER_PUD] __page_aligned_bss;
->>
->>   static void __init kasan_populate_pte(pmd_t *pmd, unsigned long vaddr, unsigned long end)
->>   {
->
->
 >
 > -- 
-> Thanks,
-> ~Nick Desaulniers
+> Cheers,
+> Stephen Rothwell

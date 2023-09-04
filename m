@@ -2,46 +2,53 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8612D791F6D
-	for <lists+linux-next@lfdr.de>; Tue,  5 Sep 2023 00:04:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D6DA791F8A
+	for <lists+linux-next@lfdr.de>; Tue,  5 Sep 2023 00:36:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239896AbjIDWEN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 4 Sep 2023 18:04:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60186 "EHLO
+        id S233690AbjIDWgd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 4 Sep 2023 18:36:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236946AbjIDWEN (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 4 Sep 2023 18:04:13 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B2C99C;
-        Mon,  4 Sep 2023 15:04:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1693865048;
-        bh=AfWZi/bPn+vKFA9pzzajo9fomcUTmGfDGp2wv3bgFkc=;
-        h=Date:From:To:Cc:Subject:From;
-        b=c94YuYza+jF+Oygx3drYDE33iKenY5+EFFc29QiFAiDZ/8lU3vVXLvz+v/lkWUnlL
-         HCyGTxRAcOYN6ZzhdB4MMR8XrIhk3kZATR5nKA+rduDjhrv3DsL6YKfT6ywZ0KEI2J
-         vHd22qEaLAuJuZsr1Jw7HhcSETgZeX1P+F/KOv7jwmnT7pDSJ+4FJYI1X2idb1J7NM
-         qEYd81ZblWfftg8dw4kf/VBiMvrwdfzyF0giY+2GN3YqJ2aM+5AhK/n4tRBy6YI2LU
-         YTKkrEDTL5jX6n+lnnKyB9gNLL+oRgJNyG2r805RZIspMDWcDa72Zinot/mMzW+xr0
-         OZF8p6ltOpytA==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        with ESMTP id S241300AbjIDWgT (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 4 Sep 2023 18:36:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05221EA;
+        Mon,  4 Sep 2023 15:36:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4RfjMr4Lx3z4wb0;
-        Tue,  5 Sep 2023 08:04:08 +1000 (AEST)
-Date:   Tue, 5 Sep 2023 08:04:06 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 983E2617A3;
+        Mon,  4 Sep 2023 22:36:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F79DC433C9;
+        Mon,  4 Sep 2023 22:36:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1693866971;
+        bh=S+H92h7zdbldeffBUDQRIOrBGcPtQovCu106jpRm97M=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=W+KtOSR5xfT0PGLaW1D3Q2Qxr5ViJItsA5nWIi93QbjyTpRjeDYqrHEvT4VDuMr9z
+         asf51ntt1nzqE0gOG3aq9WRGKARxYGqwDCxQd0fVD8cklhE8KB6spIJMAjJ5ZeRQlN
+         xbaP9kZ4Vc/2RwonoS0id9+33p5kehqiOowln0KNJDx+WBgJhq7xpcmmqubAtr5zOV
+         sQzUp3KNfwU8a7CcElF6CxzpJHxKlRaAUAkUrAB4lRSeG5rZ7Nx0KgC/XmVu8Zjzts
+         vFNuJK+DvY4mN7u7VJRta+W4puYgArmzdOY7NnlvRdA2cvf/2ZPLXPHwlDXU3amOmh
+         5NWeJrttL1PjA==
+Date:   Tue, 5 Sep 2023 07:36:05 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patches in the nvmem tree
-Message-ID: <20230905080406.08167ab9@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/eem+6F+TvS6tNY3zcaO8JWJ";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Subject: Re: linux-next: duplicate patch in the ftrace tree
+Message-Id: <20230905073605.fc7575158f3198a1a50713e0@kernel.org>
+In-Reply-To: <20230905075033.0df2b7fa@canb.auug.org.au>
+References: <20230905075033.0df2b7fa@canb.auug.org.au>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,67 +56,31 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/eem+6F+TvS6tNY3zcaO8JWJ
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, 5 Sep 2023 07:50:33 +1000
+Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 
-Hi all,
+> Hi all,
+> 
+> The following commit is also in Linus Torvalds' tree as a different commit
+> (but the same patch):
+> 
+>   bd96000ba862 ("Documentation: tracing: Update fprobe event example with BTF field")
 
-The following commits are also in Linus Torvalds' tree as different
-commits (but the same patches):
+Hmm, this is included in my topic branch. Anyway, let me rebase it on linus tree.
 
-  0401edffa338 ("dt-bindings: nvmem: Add t1023-sfp efuse support")
-  050cd7f49580 ("dt-bindings: nvmem: sec-qfprom: Add bindings for secure qf=
-prom")
-  0991afbe4b18 ("nvmem: core: Notify when a new layout is registered")
-  0a9ec38c47c1 ("nvmem: sec-qfprom: Add Qualcomm secure QFPROM support")
-  104af6a5b199 ("nvmem: core: Create all cells before adding the nvmem devi=
-ce")
-  31c8217bc34a ("dt-bindings: nvmem: fixed-cell: add compatible for MAC cel=
-ls")
-  3e0558db94db ("nvmem: Explicitly include correct DT includes")
-  431f08ed0ba5 ("nvmem: qfprom: do some cleanup")
-  4b71b2a44d7d ("dt-bindings: nvmem: Add compatible for QCM2290")
-  5f41033e4154 ("nvmem: brcm_nvram: Use devm_platform_get_and_ioremap_resou=
-rce()")
-  67f919120705 ("nvmem: lpc18xx_otp: Convert to devm_platform_ioremap_resou=
-rce()")
-  6870b4a37343 ("nvmem: sunxi_sid: Convert to devm_platform_ioremap_resourc=
-e()")
-  6c7f48ea2e66 ("nvmem: core: Return NULL when no nvmem layout is found")
-  77803ef86379 ("nvmem: stm32-romem: Use devm_platform_get_and_ioremap_reso=
-urce()")
-  8fd85ce6cfdf ("dt-bindings: nvmem: qfprom: Add compatible for MSM8226")
-  97edd4c6ba34 ("nvmem: uniphier: Use devm_platform_get_and_ioremap_resourc=
-e()")
-  9d53d595f688 ("nvmem: Kconfig: Fix typo "drive" -> "driver"")
-  ad065ae27bd1 ("nvmem: meson-mx-efuse: Convert to devm_platform_ioremap_re=
-source()")
-  b8257f61b4dd ("nvmem: core: Do not open-code existing functions")
-  c32f2186acc9 ("nvmem: u-boot-env:: Replace zero-length array with DECLARE=
-_FLEX_ARRAY() helper")
-  c8efcf7a86eb ("nvmem: add new NXP QorIQ eFuse driver")
-  e75d23cf347d ("nvmem: rockchip-efuse: Use devm_platform_get_and_ioremap_r=
-esource()")
+Thank you!
 
---=20
-Cheers,
-Stephen Rothwell
+> 
+> This is commit
+> 
+>   a2439a4c9085 ("Documentation: tracing: Update fprobe event example with BTF field")
+> 
+> in Linus' tree.
+> 
+> -- 
+> Cheers,
+> Stephen Rothwell
 
---Sig_/eem+6F+TvS6tNY3zcaO8JWJ
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmT2VFcACgkQAVBC80lX
-0GzNzQf/UHK1bH0bVbTZqOKlkihy/vrLoF3AK58kjKsHe3lxy0d8Ad2TvJJnUuZg
-TVYpYzXcg5v2Pkj9WnEomGyBXFPzwRJkMoNjJ/K6Z3A4stlaO8FCrz11kSqUdtN/
-COCtz7YQMRHEb9YtxEjStBvrU8iVmt8LFt0sOzhCLLG2gAHk1Pyet8JnkdU46YTI
-DZwnzSfql9HWRpblUrlwj5j8TitO72M4IG6uLZbaCHlugCc7I2XJDU6kbJT3q549
-ZiDufxz60Tougzq0Qs8mGmRCd8bbDLzLvpPzu47CeT6eoPoOqSwp1GxV4eEsHFER
-jkJyTACvE3lYL666P1fGhh4yGJFAzw==
-=a0i4
------END PGP SIGNATURE-----
-
---Sig_/eem+6F+TvS6tNY3zcaO8JWJ--
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>

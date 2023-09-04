@@ -2,67 +2,48 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E9FC790095
-	for <lists+linux-next@lfdr.de>; Fri,  1 Sep 2023 18:15:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF1FA791F0E
+	for <lists+linux-next@lfdr.de>; Mon,  4 Sep 2023 23:44:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344851AbjIAQPB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 1 Sep 2023 12:15:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49722 "EHLO
+        id S237757AbjIDVoF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 4 Sep 2023 17:44:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344971AbjIAQPB (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 1 Sep 2023 12:15:01 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B40FF1702
-        for <linux-next@vger.kernel.org>; Fri,  1 Sep 2023 09:14:56 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1bdc19b782aso16098405ad.0
-        for <linux-next@vger.kernel.org>; Fri, 01 Sep 2023 09:14:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20230601.gappssmtp.com; s=20230601; t=1693584896; x=1694189696; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1G93qFbiZ0Pa27qlWWadHG4TtIzXjbNoLKN50FdpZHI=;
-        b=Uwtv0wFA15O7a9eeHv0PYvoRwgP7mLb51xdNrPKnwgJIf5FleAc/jfDCKiAUoi2nkl
-         5MFquBJi0bEvQjAFDtdYIOuZjlpnIxxHebMInlk+xdQBaPK5ZNCjwy8fzc6+Pv0vpzjw
-         XimkhjG89r7XlYtqECHPtcwjnArpa8NTuNNHjCgaDNMBMjBGawhaIzsJZSMLbalrGGNE
-         hSFHoRcJd+fG9QiyGKU57yr6t4wA4AQAWr+ZHqVjErPuul966d8KLlvlSnXaplHodUP7
-         iJ+45fP7lwGbwf/WCkh73w5V6SCyk03IecueISXpvYkGI39dy4ItfoncgypN59u0op7Z
-         a8ZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693584896; x=1694189696;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1G93qFbiZ0Pa27qlWWadHG4TtIzXjbNoLKN50FdpZHI=;
-        b=NbIrTUnrOVUZRVTV8VIspV9ru/b2mi4AAmxPVtLSxAdBhRIfRyXFM2NGFja8QMpZQT
-         vuZZIifm30zbLRcaNdru8iEBBkFhyoDKB+lTDCc5IdSXXWqdJ/lqTPoY1DSnATetuB1x
-         8iGXj1Gt4EDDQADng9rX8Jek5WB+daSf+ZzHXpur2fJqDPs/9xPg1AW2LVd+iaPzMrwy
-         TBBa43SyKSGBifu73kTFFutlrVQlUPzh6/bOLb6fpY9MixsDqATwvUm5p/u7S6Cl6hYd
-         Fg89XmQpWH3j0hp4hB7sP1i3Qkw+wcGbQaWLNqhxJeGs0OCeeB9CCBVtxa5tgNTRe+ts
-         NEZg==
-X-Gm-Message-State: AOJu0Yw9E4oIhg/xgbLdycuRFnZe/n8wcX3ORTiwnS5Zv3XXn97iJftQ
-        aqmZdO3Ofqt4mOs1TgWrWul3dQ==
-X-Google-Smtp-Source: AGHT+IE7oRbibb2gHXpKQsBvWgWTLAAcbjj6HDdxEQq7uFlPO01bSIbhSG3otP3Jzrv8pdG5Qv+MsA==
-X-Received: by 2002:a17:902:e54a:b0:1bb:c7bc:ceb4 with SMTP id n10-20020a170902e54a00b001bbc7bcceb4mr3855141plf.60.1693584896067;
-        Fri, 01 Sep 2023 09:14:56 -0700 (PDT)
-Received: from localhost ([135.180.227.0])
-        by smtp.gmail.com with ESMTPSA id jj10-20020a170903048a00b001b9de2b905asm3172118plb.231.2023.09.01.09.14.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Sep 2023 09:14:54 -0700 (PDT)
-Date:   Fri, 01 Sep 2023 09:14:54 -0700 (PDT)
-X-Google-Original-Date: Fri, 01 Sep 2023 09:14:51 PDT (-0700)
-Subject:     Re: linux-next: Signed-off-by missing for commit in the risc-v tree
-In-Reply-To: <20230831075730.0dd941dd@canb.auug.org.au>
-CC:     Paul Walmsley <paul@pwsan.com>, linux-kernel@vger.kernel.org,
-        linux-next@vger.kernel.org
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Message-ID: <mhng-09c3d557-b385-4501-9a39-0040b03edb48@palmer-ri-x1c9>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        with ESMTP id S232204AbjIDVoF (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 4 Sep 2023 17:44:05 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB4A71B4;
+        Mon,  4 Sep 2023 14:44:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1693863835;
+        bh=voAoM6CYvpZr+FmVVytnP2EqVOXt41NImBFsk08U9Vc=;
+        h=Date:From:To:Cc:Subject:From;
+        b=fslWcuANGiAbSl8aD0YSOCNe7yrHR7yucJsZa8zTqKyRedNvPMtLNG8Z1/z7+bOuW
+         5vwm4pjY8B87zz6NH10HFLAQGfaOzU17BYqMWlScvxK7vwJYMuHi+/b51FATUHpEYx
+         I1aOdoEHlUP0+atxKz+ZznbcCBzPHUwE08Ndbjz25oj50wCFzXHSxrLGQWH2eRmLTV
+         zdrl8rvOVUVI6crLAhgXGLJ0F2/O49OvFtbmGSZ85l13EYt2cR4hlY0ylYncZhMzwv
+         Tq1lyPCgykJXVFDJ9pVQEtS0cs9NYYti+Gn3Ul4VwDWJNJkRu86/JL5MpaUOf+0IXx
+         Wky1QyQ1Y1wAA==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4RfhwV6rDBz4wb1;
+        Tue,  5 Sep 2023 07:43:54 +1000 (AEST)
+Date:   Tue, 5 Sep 2023 07:43:50 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+        Namhyung Kim <namhyung@kernel.org>
+Cc:     Palmer Dabbelt <palmer@rivosinc.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patches in the perf-current tree
+Message-ID: <20230905074350.6a9c81f2@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/vGfoc9ZMDsdcTIKH2i+0BJ1";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,43 +51,43 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, 30 Aug 2023 14:57:30 PDT (-0700), Stephen Rothwell wrote:
-> Hi all,
->
-> Commits
->
->   dbe46b094026 ("RISC-V: Add ptrace support for vectors")
->   ed1a8872ff83 ("soc: renesas: Kconfig: Select the required configs for RZ/Five SoC")
->   f508b0175578 ("cache: Add L2 cache management for Andes AX45MP RISC-V core")
->   555dd72bc06e ("dt-bindings: cache: andestech,ax45mp-cache: Add DT binding docu  dbe46b094026 ("RISC-V: Add ptrace support for vectors")
->   ed1a8872ff83 ("soc: renesas: Kconfig: Select the required configs for RZ/Five
-> SoC")
->   f508b0175578 ("cache: Add L2 cache management for Andes AX45MP RISC-V core")
->   555dd72bc06e ("dt-bindings: cache: andestech,ax45mp-cache: Add DT binding docu
-> mentation for L2 cache controller")
->   30bc090f40f8 ("riscv: mm: dma-noncoherent: nonstandard cache operations support")
->   f2863f30d1b0 ("riscv: errata: Add Andes alternative ports")
->   93e0e2419b65 ("riscv: asm: vendorid_list: Add Andes Technology to the vendors list")
->   eb76e5111881 ("riscv: dma-mapping: switch over to generic implementation")
->   14be7c16d420 ("riscv: dma-mapping: skip invalidation before bidirectional DMA")
->   fbfc740ced8f ("riscv: dma-mapping: only invalidate after DMA, not flush")
->   b6e3f6e009a1 ("RISC-V: alternative: Remove feature_probe_func")
->   b98673c5b037 ("RISC-V: Probe for unaligned access speed")
->   26ba042414a3 ("perf: tests: Adapt mmap-basic.c for riscv")
->   60bd50116484 ("tools: lib: perf: Implement riscv mmap support")
->   57972127b20e ("Documentation: admin-guide: Add riscv sysctl_perf_user_access")
->   cc4c07c89aad ("drivers: perf: Implement perf event mmap support in the SBI backend")
->   50be34282905 ("drivers: perf: Implement perf event mmap support in the legacy backend")
->
-> are missing a Signed-off-by from their committers.
+--Sig_/vGfoc9ZMDsdcTIKH2i+0BJ1
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Sorry about that, I must have screwed something up merging these and 
-just found my email had been screwed up for a bit so I hadn't seen this.  
-Luckily most of them were being given some more time to bake, but I sent 
-up Alex's and Linus just merged them.  I'll try not to screw it up next 
-time...
+Hi all,
 
->
-> -- 
-> Cheers,
-> Stephen Rothwell
+The following commits are also in Linus Torvalds' tree as different
+commits (but the same patches):
+
+  10da1b8ed79f ("perf tests mmap-basic: Adapt for riscv")
+  159a8bb06f7b ("libperf: Implement riscv mmap support")
+
+These are commits
+
+  26ba042414a3 ("perf: tests: Adapt mmap-basic.c for riscv")
+  60bd50116484 ("tools: lib: perf: Implement riscv mmap support")
+
+in Linus' tree.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/vGfoc9ZMDsdcTIKH2i+0BJ1
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmT2T5cACgkQAVBC80lX
+0GzXYQf8DTnpUL7XuPwxnVwlYf2lMrHsueznOpFpxt4e6V40aLeqW6bti85dhTOi
+x6oHxDypMMhCnllMwlPq70DjhG7bt2GZ3we5DbrFMlYuymGwSOuAsns/twhay+Z/
+GyU4Os2UX04CaxBORj0XE9Fc1x57cfFCgXWYqISCNz0oPVembXzqLWivs27e0Jpe
+MekaIKoY0z2R0W4VQHHMyeX4AFQwNxUBngN1Z0FFFBb2fEqsQZvLRlZORDYlBshR
+NaQOEHoLB1BLW4Zxkq1/S3afmbr5B7fz9ILM1tqRpq0+9I73i6+fjTiIAyF15PBZ
+8rY3iFSHx8lPLnvfzlF8zyaMe2yXTA==
+=LSmR
+-----END PGP SIGNATURE-----
+
+--Sig_/vGfoc9ZMDsdcTIKH2i+0BJ1--

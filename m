@@ -2,53 +2,46 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D6DA791F8A
-	for <lists+linux-next@lfdr.de>; Tue,  5 Sep 2023 00:36:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84C6C791F8F
+	for <lists+linux-next@lfdr.de>; Tue,  5 Sep 2023 00:38:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233690AbjIDWgd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 4 Sep 2023 18:36:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36992 "EHLO
+        id S238899AbjIDWir (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 4 Sep 2023 18:38:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241300AbjIDWgT (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 4 Sep 2023 18:36:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05221EA;
-        Mon,  4 Sep 2023 15:36:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        with ESMTP id S230449AbjIDWiq (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 4 Sep 2023 18:38:46 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 320769D;
+        Mon,  4 Sep 2023 15:38:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1693867121;
+        bh=VsZaKdjiLp2o8KkwlQhb7LU1MNTcWZyPAyFueTEa8Tg=;
+        h=Date:From:To:Cc:Subject:From;
+        b=bgFE0eW9582N8MjKtPAK5Vqwvu4CkfhRNFypb3Vxtc2Xxj+jvLXBF4fdXmMzpAkwT
+         aIrTsUnRJkYi6nsu2mY/BFrKk8JUHJOcsD47JQ1bFmsq25OE3dPThzkj6vwyQ4JeQX
+         aBubE7LS05SqjrDBW/9fVzIIgM9XFrWEW9gekuy0CxDS6QxvAz3SD8VjZHPxHCmz9L
+         wCb8ikVkPMlOa3GqXO0qGLD7NkTPKxFLUO6rR1K8JtNaw4Bx8ZCkjYYfMsq+OKqUIR
+         ZrRS11C+3aojhSi+D7BRnX/xyOidGQ96t3Yblqsr+7cFddJxUgCtJIxnE7VSblks2R
+         vSaGqZ0GHNJgw==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 983E2617A3;
-        Mon,  4 Sep 2023 22:36:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F79DC433C9;
-        Mon,  4 Sep 2023 22:36:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1693866971;
-        bh=S+H92h7zdbldeffBUDQRIOrBGcPtQovCu106jpRm97M=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=W+KtOSR5xfT0PGLaW1D3Q2Qxr5ViJItsA5nWIi93QbjyTpRjeDYqrHEvT4VDuMr9z
-         asf51ntt1nzqE0gOG3aq9WRGKARxYGqwDCxQd0fVD8cklhE8KB6spIJMAjJ5ZeRQlN
-         xbaP9kZ4Vc/2RwonoS0id9+33p5kehqiOowln0KNJDx+WBgJhq7xpcmmqubAtr5zOV
-         sQzUp3KNfwU8a7CcElF6CxzpJHxKlRaAUAkUrAB4lRSeG5rZ7Nx0KgC/XmVu8Zjzts
-         vFNuJK+DvY4mN7u7VJRta+W4puYgArmzdOY7NnlvRdA2cvf/2ZPLXPHwlDXU3amOmh
-         5NWeJrttL1PjA==
-Date:   Tue, 5 Sep 2023 07:36:05 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Rfk7j5mzkz4wb1;
+        Tue,  5 Sep 2023 08:38:41 +1000 (AEST)
+Date:   Tue, 5 Sep 2023 08:38:40 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patch in the ftrace tree
-Message-Id: <20230905073605.fc7575158f3198a1a50713e0@kernel.org>
-In-Reply-To: <20230905075033.0df2b7fa@canb.auug.org.au>
-References: <20230905075033.0df2b7fa@canb.auug.org.au>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Subject: linux-next: duplicate patches in the mm tree
+Message-ID: <20230905083840.3048899b@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/r3PJ2XOhMitY7dTSUd2v.9f";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,31 +49,41 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, 5 Sep 2023 07:50:33 +1000
-Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+--Sig_/r3PJ2XOhMitY7dTSUd2v.9f
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> Hi all,
-> 
-> The following commit is also in Linus Torvalds' tree as a different commit
-> (but the same patch):
-> 
->   bd96000ba862 ("Documentation: tracing: Update fprobe event example with BTF field")
+Hi all,
 
-Hmm, this is included in my topic branch. Anyway, let me rebase it on linus tree.
+The following commits are also in the mm-stable tree as different
+commits (but the same patches):
 
-Thank you!
+  b93868dbf9bc ("mm/kmemleak: move up cond_resched() call in page scanning =
+loop")
+  a9bfaccff9ea ("mm: page_alloc: remove stale CMA guard code")
+  3b92a75cc2cb ("MAINTAINERS: add rmap.h to mm entry")
+  5a0afb5af594 ("rmap: remove anon_vma_link() nommu stub")
+  44265c75a6ca ("mm/hwpoison: rename hwp_walk* to hwpoison_walk*")
+  490933119a41 ("mm: memory-failure: add PageOffline() check")
 
-> 
-> This is commit
-> 
->   a2439a4c9085 ("Documentation: tracing: Update fprobe event example with BTF field")
-> 
-> in Linus' tree.
-> 
-> -- 
-> Cheers,
-> Stephen Rothwell
+--=20
+Cheers,
+Stephen Rothwell
 
+--Sig_/r3PJ2XOhMitY7dTSUd2v.9f
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmT2XHAACgkQAVBC80lX
+0Gxt6gf/SUbLDv5aULzZyJsc0D3DEL8aAXKtVaZqqVn+PBTxmoXnTdM4xcKlrXgL
++YOf51Qp5o2mesRZW2xQdfpvg7EL44BZlUA9wjs2MjNAtw3EcnVwdX4UeWsL41MA
+sK63AukyYsARdC9x6dqeh+UA8W1XH8D2Eg+fK2fr1rTEGMr3x1wSHilGx8lQ1kCa
+jNZ81yShFXh8K/+VZBjvecnJcuu3pUpgO2Zq2oIcbr1Wfs6M8wU7LDM0N8d8qM4m
+HNpn4k8i61Nq+xfVoCQNbS8eUBq7wvp2xNo+8A5MLUlg24gZAMYia5FNdEmost/I
+s4DxZsCXWYmc2HxCkJ3VIjzevcOYdA==
+=cccH
+-----END PGP SIGNATURE-----
+
+--Sig_/r3PJ2XOhMitY7dTSUd2v.9f--

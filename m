@@ -2,83 +2,106 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86C0A792E28
-	for <lists+linux-next@lfdr.de>; Tue,  5 Sep 2023 21:00:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9995B79322F
+	for <lists+linux-next@lfdr.de>; Wed,  6 Sep 2023 00:56:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239485AbjIETAv (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 5 Sep 2023 15:00:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60588 "EHLO
+        id S235671AbjIEW4N (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 5 Sep 2023 18:56:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237143AbjIETAp (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 5 Sep 2023 15:00:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 547E6F9;
-        Tue,  5 Sep 2023 12:00:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        with ESMTP id S232047AbjIEW4M (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 5 Sep 2023 18:56:12 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86A0A109;
+        Tue,  5 Sep 2023 15:56:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1693954557;
+        bh=3XId0jONKqadAc4zqqlX4pcPTQERznsFccoeD/kMRek=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=LwH9Sss2bP0ZWbt+6rcbqyrbqao3NbGWGddiKdLcd82JrWInLPQTYpG7d5G7lmEsc
+         ELY+lIeKm97A+RJePAKolaQ/9vOzLKAhuGHDRz8ktKAiSTSAnqJYRD07/1NgOQRbU1
+         diy9e1ncHD/anxnKblQ7QKbwrh6jjEOs+NAuLdhxH8OKJML1Xi6dkm//2Uj/eOB/DA
+         D8RddInvzNl7iDIDtEQrmD7F38ZLowyZLK19tWS5OtxzFeOQRBpHZ3qKJcnT/9B/wV
+         lfIUo+8cFImKo2KuaK+6GvMMkoWnecEwlM+Q1fuBB/ciK8bXTSsIrE3axrsm6Bt8At
+         JZ/kAM/HYnkew==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2CD19B81263;
-        Tue,  5 Sep 2023 16:40:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6FC7C433C7;
-        Tue,  5 Sep 2023 16:40:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1693932038;
-        bh=C37WiDCkvf3N122KTeenfNUS30D1yxbe+PTilg5G4Bo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kNuaLg+YwHFC8m9+gJ9x09xFpcR4KYu0OMMRGsrubK/vrG6WWHmevzM1EPxV/CFJw
-         ufv2HdG+s9PC3b/bc3UP0xu+T+PUvmQHcS0GJfaXKfK1gZsaEsxJDlFuEnh2xQw5Wm
-         xcmmTBPJTgqxrPEUe881vDMxWCD3OMdab1U5M4kbhxy73Lu/Ic0nGrreCrR2h4LDR1
-         EyTKQtXK5DpTt0PGlFMmQyIzOx6ZEyjBgxdDdDpZyTPDoWRD0Ioq24+DcHZ0Fyem0W
-         rq6MRZCYtoDY8g3vLERonmIQkg09zAwcEuu59o70q57nNFc95OQDc5q8YviyEENSfu
-         ocgen5c+DOWYw==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 27CB540722; Tue,  5 Sep 2023 13:40:36 -0300 (-03)
-Date:   Tue, 5 Sep 2023 13:40:36 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4RgLT90mB3z4wZJ;
+        Wed,  6 Sep 2023 08:55:56 +1000 (AEST)
+Date:   Wed, 6 Sep 2023 08:55:43 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patches in the perf-current tree
-Message-ID: <ZPdaBAWxzUpr0cdu@kernel.org>
-References: <20230905074350.6a9c81f2@canb.auug.org.au>
+Subject: Re: linux-next: build warnings after merge of the net-next tree
+Message-ID: <20230906085543.1c19079a@canb.auug.org.au>
+In-Reply-To: <20230626162908.2f149f98@canb.auug.org.au>
+References: <20230626162908.2f149f98@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230905074350.6a9c81f2@canb.auug.org.au>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/C=JbFxGsBsPUPIzAGxJl0I/";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Em Tue, Sep 05, 2023 at 07:43:50AM +1000, Stephen Rothwell escreveu:
-> Hi all,
-> 
-> The following commits are also in Linus Torvalds' tree as different
-> commits (but the same patches):
-> 
->   10da1b8ed79f ("perf tests mmap-basic: Adapt for riscv")
->   159a8bb06f7b ("libperf: Implement riscv mmap support")
-> 
-> These are commits
-> 
->   26ba042414a3 ("perf: tests: Adapt mmap-basic.c for riscv")
->   60bd50116484 ("tools: lib: perf: Implement riscv mmap support")
-> 
-> in Linus' tree.
+--Sig_/C=JbFxGsBsPUPIzAGxJl0I/
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Yeah, I had cherry picked those perf patches at some point, I'll make a
-note when submitting to Linus.
+Hi all,
 
-Thanks for the report!
+On Mon, 26 Jun 2023 16:29:08 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> After merging the net-next tree, today's linux-next build (htmldocs)
+> produced these warnings:
+>=20
+> Documentation/networking/kapi:144: include/linux/phylink.h:110: ERROR: Un=
+expected indentation.
+> Documentation/networking/kapi:144: include/linux/phylink.h:111: WARNING: =
+Block quote ends without a blank line; unexpected unindent.
 
-- Arnaldo
+The above 2 have been fixed.
+
+> Documentation/networking/kapi:144: include/linux/phylink.h:614: WARNING: =
+Inline literal start-string without end-string.
+> Documentation/networking/kapi:144: include/linux/phylink.h:644: WARNING: =
+Inline literal start-string without end-string.
+
+These have not :-(
+
+> Introduced by commit
+>=20
+>   f99d471afa03 ("net: phylink: add PCS negotiation mode")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/C=JbFxGsBsPUPIzAGxJl0I/
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmT3se8ACgkQAVBC80lX
+0GwbWQf9FzzktAAjAwW7RkETxqWfalD0JJhygSWHrcxb1a/kHPQdXxKVoC1eQO85
+9dUKfZBnBqRK0nAgn3o/JHud4QM+dhVCy/1duFjw9MBdY3vT+AWzFv4YzQKvNaC6
+rT2Z2ctssaUZ8I9yYbXGxWBJyvSywqJGdPM41Cm87rkNk7XRjJ/FlqbIn6Fjnm3c
+isII8+dJvOZHtoC0oImi1Ki0zwU/MRkChkz6zl5WBw8dhkt8sft/5Suivc8tx1qz
+7gjHD9xkV/CiXo7uCcD9lzdPaEfQJHxF8njiN/STgJVpFgtQ2x2H4e41lDf8ELbt
+yl4tzaNDXykeMdAzQGNs4TgDK+6YFQ==
+=RkUu
+-----END PGP SIGNATURE-----
+
+--Sig_/C=JbFxGsBsPUPIzAGxJl0I/--

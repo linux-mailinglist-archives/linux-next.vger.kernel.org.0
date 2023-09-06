@@ -2,64 +2,120 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2188E7932AB
-	for <lists+linux-next@lfdr.de>; Wed,  6 Sep 2023 01:44:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6854F7932EE
+	for <lists+linux-next@lfdr.de>; Wed,  6 Sep 2023 02:39:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236640AbjIEXoM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 5 Sep 2023 19:44:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43980 "EHLO
+        id S233970AbjIFAjO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 5 Sep 2023 20:39:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231271AbjIEXoM (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 5 Sep 2023 19:44:12 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86C1D1B4;
-        Tue,  5 Sep 2023 16:44:08 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB3B5C433C7;
-        Tue,  5 Sep 2023 23:44:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1693957448;
-        bh=Iy2Smr5XT9EydF4Ow/Odp5Oq0/ZFb4pdyDqcePjHOR4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=F2fPLad9rpQsL2yHDA/o1oETOAvn9xq8oG3LdyD83KFnrrXMpylapPzdxe1AZmC3n
-         R+EdrjzWzoZvPHmTN4IF81I3mZsUrLiSvLMz5qlk5xGa2an1XsNUZRHJrkURTUsXgg
-         31RVRWdKcc5LY3iOiWw9q25vYLdZ+BoZt1uf8mp2ZHzP7yMSa7YAjWuysEoaxh62GT
-         4z0kpLNL4v/cQABh/M7SuX8jo2RwW40PWbBXPiv+PzNVzmH/Ajr/6x0oLJF0eoKFI2
-         T9wsWV6V2HsutE3biEsIKXhsZiaOFbQOVtaCW9E/DuYIaBXqco28K97z9AVELuC/2E
-         IzEfMJKX4oqaA==
-Date:   Tue, 5 Sep 2023 16:44:06 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        with ESMTP id S230386AbjIFAjO (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 5 Sep 2023 20:39:14 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1428199;
+        Tue,  5 Sep 2023 17:39:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1693960749;
+        bh=9SzOc2eVVFdZBWdYMyl/TtJTI6sHlh7Cr3aC84LwvK4=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Sonz4tiWCA2MpfFPa8ZVK2ajt+aCT02sc4BBNulOP2eMqoUhTp2ClZme8CRnsL01K
+         JSz9hsiKpULQ8pkZQnpefZdz7Q0sQVQdnR3qaEOUXoUoXn9JC/XIKSFHPCLm1xXCVY
+         JCCnfIfNrji9iEygBzq2HKeSZWTyhextbhy+PkSiM7wX7WrpcbklxV/Ert8UO/hgyn
+         L/ayNoY4q48AOM5sXYOHK9kVQcq57rWivsBcKu1KFXOthsbJCDrMnW99P9cTR1hPAC
+         CtR3N/iL4Ruc02dNPVOGE0ceZEjsXdgWoWbAwackoQcAkjqzL+5DmlPl6LoMlbbsTF
+         xOd8XFkSBMvUw==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4RgNmD66xRz4wxR;
+        Wed,  6 Sep 2023 10:39:08 +1000 (AEST)
+Date:   Wed, 6 Sep 2023 10:39:05 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Jinjie Ruan <ruanjinjie@huawei.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warnings after merge of the net-next tree
-Message-ID: <20230905164406.04ff113c@kernel.org>
-In-Reply-To: <20230906085543.1c19079a@canb.auug.org.au>
-References: <20230626162908.2f149f98@canb.auug.org.au>
-        <20230906085543.1c19079a@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Luo Jiaxing <luojiaxing@huawei.com>,
+        Xingui Yang <yangxingui@huawei.com>
+Subject: linux-next: manual merge of the scsi-mkp tree with the mm tree
+Message-ID: <20230906103905.0752736e@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/lVP_cTRtyzol0zOrfSVy7zh";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, 6 Sep 2023 08:55:43 +1000 Stephen Rothwell wrote:
-> > Documentation/networking/kapi:144: include/linux/phylink.h:614: WARNING: Inline literal start-string without end-string.
-> > Documentation/networking/kapi:144: include/linux/phylink.h:644: WARNING: Inline literal start-string without end-string.  
-> 
-> These have not :-(
+--Sig_/lVP_cTRtyzol0zOrfSVy7zh
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Fix posted. I thought it was about phylink_mode_*() but apparently 
-the warnings are always reported with line num of the first line of
-the paragraph, and the problem was actually in %PHYLINK_PCS_NEG_*.
+Hi all,
 
-Humpf.
+Today's linux-next merge of the scsi-mkp tree got a conflict in:
+
+  drivers/scsi/qla2xxx/qla_dfs.c
+
+between commit:
+
+  d16e04dc79ed ("scsi: qla2xxx: use DEFINE_SHOW_STORE_ATTRIBUTE() helper fo=
+r debugfs")
+
+from the mm tree and commit:
+
+  d0b0822e32db ("scsi: qla2xxx: Fix NULL vs IS_ERR() bug for debugfs_create=
+_dir()")
+
+from the scsi-mkp tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/scsi/qla2xxx/qla_dfs.c
+index debb14d71e8a,a7a364760b80..000000000000
+--- a/drivers/scsi/qla2xxx/qla_dfs.c
++++ b/drivers/scsi/qla2xxx/qla_dfs.c
+@@@ -662,8 -707,8 +662,8 @@@ create_nodes
+ =20
+  	if (IS_QLA27XX(ha) || IS_QLA83XX(ha) || IS_QLA28XX(ha)) {
+  		ha->tgt.dfs_naqp =3D debugfs_create_file("naqp",
+ -		    0400, ha->dfs_dir, vha, &dfs_naqp_ops);
+ +		    0400, ha->dfs_dir, vha, &qla_dfs_naqp_fops);
+- 		if (!ha->tgt.dfs_naqp) {
++ 		if (IS_ERR(ha->tgt.dfs_naqp)) {
+  			ql_log(ql_log_warn, vha, 0xd011,
+  			       "Unable to create debugFS naqp node.\n");
+  			goto out;
+
+--Sig_/lVP_cTRtyzol0zOrfSVy7zh
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmT3yikACgkQAVBC80lX
+0GxsZQgAnx6GCsy9tsJi2lH2Z+ZqfM7qfnKYNXO3NeVLmJHL9lrI18+9iWZBytFI
+5EFihmCycUETGzcq4zdc2oWhcVUhTaItnH4x8fWp59f3vQ8buvZx2UTM2mdfWMhs
+3kXUd5gmwEtVi0pbRgN6InA6nncJ5OIpGEVKw0IdJJIMMgc2+Vz1G/8bcaTHIjsW
+OxhcCqcsFg1xDvNkI7+P6sLVYRCNX02olClFJ//95jJx8ny5P709UHgU52WSdr33
+zilnOXi5pHynq0bPSpVoVt2xmyz0qRWzUPTDU2YorkWiIPKbmkMZVcBS+dW4fh7w
+OFK8iPco/1kC4yGTLK+z0MqRCfdAyQ==
+=YBQE
+-----END PGP SIGNATURE-----
+
+--Sig_/lVP_cTRtyzol0zOrfSVy7zh--

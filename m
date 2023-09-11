@@ -2,118 +2,169 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A1C679A094
-	for <lists+linux-next@lfdr.de>; Mon, 11 Sep 2023 01:00:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9487D79A115
+	for <lists+linux-next@lfdr.de>; Mon, 11 Sep 2023 03:54:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230387AbjIJXBA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 10 Sep 2023 19:01:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48176 "EHLO
+        id S232216AbjIKByd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 10 Sep 2023 21:54:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230301AbjIJXA6 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 10 Sep 2023 19:00:58 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48543184;
-        Sun, 10 Sep 2023 16:00:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1694386848;
-        bh=Hyq7T+RWt9crTM67/bCxWQy98/F2/9vTSK5CGJw8K94=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=EaeMW6MM505CcovRzqkVOGch4slYF+jSZTw3Zn3SdRvZstS4Gl8W67SjeislxR77c
-         P2/CJVOD9XcttqX9SRGXfVKyoDcsZ4FX1NI2zeu28urxDA96GegrAaIninZktJXeVA
-         xRR7qsB4ZMRhejWs0SpmoOfDhky57uSS7VSpy2wh+UjnNGJNL7V1j2QO0KQnIbEL+E
-         55+mqZWgXYYzjEaRe7kBlMf+R7ROU/V41nkV0fS6x8k9E1MPHJy/cSI8nKnITYKH3j
-         N3Z3inUn3iT0gYKeellyou+iLsEaDXQWeWYjATITNjOKtw4VIpB/ulUTuyvofaFgiO
-         2YBh2q+qS4Diw==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4RkQLS2vZ7z4x4T;
-        Mon, 11 Sep 2023 09:00:48 +1000 (AEST)
-Date:   Mon, 11 Sep 2023 09:00:46 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patches in the mediatek tree
-Message-ID: <20230911085725.6778bf3c@canb.auug.org.au>
-In-Reply-To: <20230630084457.3a483c12@canb.auug.org.au>
-References: <20230630084457.3a483c12@canb.auug.org.au>
+        with ESMTP id S229522AbjIKByd (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 10 Sep 2023 21:54:33 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8F47126
+        for <linux-next@vger.kernel.org>; Sun, 10 Sep 2023 18:54:27 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1bf5c314a57so26113235ad.1
+        for <linux-next@vger.kernel.org>; Sun, 10 Sep 2023 18:54:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1694397267; x=1695002067; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=SMkNSY3Da9Tk6gbRwiOwQN2h1Sz3YwNWmRmzsPcv6Hg=;
+        b=qq+5mNXEWuwJpppzqgsfjzuCrN7MOBfcmgIxQVDXOZULmH89Z6ZNa4EsNUM7ZvX7v1
+         7WFrSvXVtBEtM5Tt2ckHaAvSGXYqph8+kzj47Bw8IEhQhkgGlJ9mj38dpRGUe3J7AUyj
+         LUzgJckLr8L9/eDRlbtcBD57YIWFhqXUP2WnWbl710ksR8LaD8BLg+JiL1htwS4cBLHw
+         PwMqVNZtoKf9nlWyhq3eV3fumiSWZ5gQ6VB7zC599+H+tmLWrf6lutCg9+YIB/feMZs+
+         HxbZ/bHm566FbkGOePSWSkhO8NhPfhgzpYVUth1cc+kahiRl8NUbzwjeR1B/s7dwjJT0
+         ekZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694397267; x=1695002067;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SMkNSY3Da9Tk6gbRwiOwQN2h1Sz3YwNWmRmzsPcv6Hg=;
+        b=ka6TQ5tzJZpGdAKAPYZDYqH7AWg7Mzpkjy0ZQd2LMPXNRxlbwooRwpGgZN8buQZl1p
+         9WfENYOlzXzYNZghugIVxrYSvVlG9RTbkNC9stU8PQ2ghjVYj1HVNlBsM6QKCyHNUgww
+         aJztL/H0Pb4A4EmN7PA09XG7rmV/hk0Vu1GguHNGA5WXDY4aKGMviYInvD68vSbIT49P
+         U5DsDVT+gc6jHnixqWDajJB8oIoGPqGQbwjkEXIchx4PqVqNB3+4mHJG1qBe0iH/BPLo
+         blo56Rx16qv+TPwecBoGy+qsXHR71CMjV365f4p0/DBI/BTUtRaF4D1COzMeCXVnwq2N
+         YdGA==
+X-Gm-Message-State: AOJu0YykWS6XVp3vxPtnK4AWAuy0rU6Fkv3Q3DddSUzM5aSiu+1CZZ8N
+        /OvxA+NOAvUMLS0dcsK5XFTedDlJiDB4fk8TpeY=
+X-Google-Smtp-Source: AGHT+IFiHeLM/CW5e/IrL/HiP+OMpBHBwhH709ZaOg1xxNpWevZs7anvU475tnay8NQyTB3mBLDKcw==
+X-Received: by 2002:a17:902:ab1c:b0:1bb:59a0:3d34 with SMTP id ik28-20020a170902ab1c00b001bb59a03d34mr7054578plb.30.1694397266888;
+        Sun, 10 Sep 2023 18:54:26 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id x12-20020a1709028ecc00b001b8a897cd26sm5145430plo.195.2023.09.10.18.54.26
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 10 Sep 2023 18:54:26 -0700 (PDT)
+Message-ID: <64fe7352.170a0220.21385.c777@mx.google.com>
+Date:   Sun, 10 Sep 2023 18:54:26 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/YPR6DEZwpZH=d3kZw9Taj.2";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: pending-fixes
+X-Kernelci-Tree: next
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: v6.6-rc1-76-g5bf0551cf04a
+Subject: next/pending-fixes build: 8 builds: 0 failed, 8 passed,
+ 4 warnings (v6.6-rc1-76-g5bf0551cf04a)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/YPR6DEZwpZH=d3kZw9Taj.2
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+next/pending-fixes build: 8 builds: 0 failed, 8 passed, 4 warnings (v6.6-rc=
+1-76-g5bf0551cf04a)
 
-Hi all,
+Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
+rnel/v6.6-rc1-76-g5bf0551cf04a/
 
-On Fri, 30 Jun 2023 08:44:57 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->=20
-> The following commits are also in Linus Torvalds' tree as different
-> commits (but the same patches):
->=20
->   1139eb7bf5ef ("arm64: dts: mediatek: mt8186: Wire up CPU frequency/volt=
-age scaling")
->   113b5cc06f44 ("arm64: dts: mediatek: mt8173-elm: remove panel model num=
-ber in DT")
->   2cb0317922e2 ("arm64: dts: mt7986: add pwm-fan and cooling-maps to BPI-=
-R3 dts")
->   320f2af8c387 ("arm64: dts: mt7986: add thermal and efuse")
->   4a7fcb3cdf6c ("arm64: dts: mt7986: use size of reserved partition for b=
-l2")
->   58d2424d9f83 ("arm64: dts: mediatek: mt8192: Add missing dma-ranges to =
-soc node")
->   5e042912c86b ("arm64: dts: mediatek: mt8183: kukui: Add scp firmware-na=
-me")
->   7c8cf2a19228 ("arm64: dts: mediatek: mt8192: Fix CPUs capacity-dmips-mh=
-z")
->   861af546db4f ("arm64: dts: mt7986: add thermal-zones")
->   8b018984aad7 ("arm64: dts: mt8173: Power on panel regulator on boot")
->   c45c921fb524 ("arm64: dts: mt7986: increase bl2 partition on NAND of Ba=
-nanapi R3")
->   ccc2a6d8446c ("arm64: dts: mt8195: Add video decoder node")
->   d0b4508ad0b5 ("arm64: dts: mediatek: Add cpufreq nodes for MT8192")
->   e5b12f3b851f ("arm64: dts: mediatek: mt8186: Add CCI node and CCI OPP t=
-able")
->   eb5aab271611 ("arm64: dts: mediatek: mt8186: Add GPU speed bin NVMEM ce=
-lls")
->   f38ff7d3b0f1 ("arm64: dts: mediatek: mt8186: Wire up GPU voltage/freque=
-ncy scaling")
->   fd6d9a1c9819 ("arm64: dts: mt8192: Add video-codec nodes")
+Tree: next
+Branch: pending-fixes
+Git Describe: v6.6-rc1-76-g5bf0551cf04a
+Git Commit: 5bf0551cf04ace2bb811bd2419500f202c475c33
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Built: 8 unique architectures
 
-Those duplicates still exist in the mediatek tree
-(git://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git#for-n=
-ext).
+Warnings Detected:
 
---=20
-Cheers,
-Stephen Rothwell
+arc:
 
---Sig_/YPR6DEZwpZH=d3kZw9Taj.2
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+arm64:
 
------BEGIN PGP SIGNATURE-----
+arm:
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmT+Sp4ACgkQAVBC80lX
-0GwbAggAncp1X5At7HM5kpEiMF4EUy0/ykBn0+SjluEzaBJJc2uduZLdPhGFEk99
-tq3ueHtAsJdoOa2aX/q3wUT15mwwdO4IktM4i+WNGqhWPLYWK2joeDM9tKe6UhHG
-5VUgcorVA17Oi8FBIv/28KJ3FDMNPpgDLUbeqvYnZva1Ks50s3HfilnZu1bGQJ2w
-P41cugAGcHZSeqUOoYK+9lv/AEuUia6EUNFzLTJ/mFJhfwxTo4n0Hb2NitYvfuap
-f5ftNItTEZHu3je+51Li/O6fmVwUCMtv1nm9AQZ7N8aliMJzbl2Bnl6AMRrFldVt
-T/GlgFerJG6LIdoC6dL32op3jZmObA==
-=QYY9
------END PGP SIGNATURE-----
+i386:
 
---Sig_/YPR6DEZwpZH=d3kZw9Taj.2--
+mips:
+
+riscv:
+
+sparc:
+    sparc64_defconfig (gcc-10): 4 warnings
+
+x86_64:
+
+
+Warnings summary:
+
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---
+For more info write to <info@kernelci.org>

@@ -2,43 +2,43 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01B5C79A413
-	for <lists+linux-next@lfdr.de>; Mon, 11 Sep 2023 09:03:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2B2E79A421
+	for <lists+linux-next@lfdr.de>; Mon, 11 Sep 2023 09:07:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234602AbjIKHDg (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 11 Sep 2023 03:03:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58002 "EHLO
+        id S229462AbjIKHHI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 11 Sep 2023 03:07:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231233AbjIKHDg (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 11 Sep 2023 03:03:36 -0400
+        with ESMTP id S234595AbjIKHHH (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 11 Sep 2023 03:07:07 -0400
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6B9210C;
-        Mon, 11 Sep 2023 00:03:30 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B268133;
+        Mon, 11 Sep 2023 00:07:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1694415809;
-        bh=w8pPTQz388WZlp9XxM87c9+hTI+P9MO1kzNMPlzTktE=;
+        s=201702; t=1694416022;
+        bh=BD0TjRZCxPVgHSq56exNf3R6Zxic3Iob6v8BjB6wE2E=;
         h=Date:From:To:Cc:Subject:From;
-        b=YgL5vr+lZePGURMFzEKkXyE8uLXtvvHAbmGOIJvUbSvU81Ac5c53gnwPpcu8TK2UD
-         oFSAsogwwLUq/FV7pFQVVo0KA4aHOZq9P+g6W+cmRTD9Bq3zQU4rUtdJeZ2XCmzyAU
-         wjofQqwN67R8Drago76P8CxxOVyw96bvdrJk0cXaT6CXhRBCfn6Z8ei4YnvdhBLwpZ
-         jLcvY4uEy0P2mWFbfD06/sEcOcQzeGtrS5aE+d7JvBJUf9eojL06B/RNxSHqfn4wjL
-         v5ujb+waw6LthOfT/2ZbuokISdD0RK51BMU6KByvFHA30t7op2HN+EmsN0XK6TMrrm
-         02joJbMc7yDiw==
+        b=qTbX3GM6iZQmUjL7mn0Ofewy89NgHolnf4HquJ1AqaU6G2yms5es6BQdFDMN1rJcA
+         0OL8middY8W1trUVpm1JUX4yOtHRgcAWhjLKk1c4KvhVbvGcIt/XmtIiNlvUCklcRG
+         EANqqXXg1OZsGNZk3nSHF9ypVyZvyHlsS25TaDpsbON+ynQ60B7y33LVO5m3cxcuNN
+         0bYYIAkrOO8dtNJkDS5nBpUuTzUGWMyPeCw6ywvMDI0IHfqSaclWn6VXqV5E59s7R/
+         NEl10nH4eLQ0ffloUhniJmeHev1zwRXMA2Ck/LsVcgAz4eRn0j7fVEG7PCmlP7AyK9
+         U5bv060NueBUw==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Rkd3P18Jwz4xF6;
-        Mon, 11 Sep 2023 17:03:28 +1000 (AEST)
-Date:   Mon, 11 Sep 2023 17:03:26 +1000
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Rkd7V1qgFz4x5q;
+        Mon, 11 Sep 2023 17:07:02 +1000 (AEST)
+Date:   Mon, 11 Sep 2023 17:07:01 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Kent Overstreet <kent.overstreet@linux.dev>
+To:     Theodore Ts'o <tytso@mit.edu>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the bcachefs tree
-Message-ID: <20230911170326.6c6bc1f8@canb.auug.org.au>
+Subject: linux-next: Signed-off-by missing for commit in the ext4 tree
+Message-ID: <20230911170701.50afc18b@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/TDagygaubFpUmFlu/iNNn03";
+Content-Type: multipart/signed; boundary="Sig_/S0CCzKk4zmPqhEAjwqQ9h+7";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS
@@ -49,41 +49,37 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/TDagygaubFpUmFlu/iNNn03
+--Sig_/S0CCzKk4zmPqhEAjwqQ9h+7
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Thanks for fixing these all up, just one left, but it is just missing
-a '-' in Signed-off-by, so probably not worth fixing unless you are
-otherwise touching it.
+Commits
 
-Commit
+  147d4a092e9a ("jbd2: Remove page size assumptions")
+  f94cf2206b06 ("buffer: Make bh_offset() work for compound pages")
 
-  bbcb7805227d ("bcachefs: fix a possible bcachefs checksum mapping error o=
-pt-checksum enum to type-checksum enum")
-
-is missing a Signed-off-by from its author.
+are missing a Signed-off-by from their committer.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/TDagygaubFpUmFlu/iNNn03
+--Sig_/S0CCzKk4zmPqhEAjwqQ9h+7
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmT+u78ACgkQAVBC80lX
-0GwmSgf+KIQK7e3uXmzmSXCet/ppOn99DFPW1pO4h+uP7izOoGHDgMy+XycUnKhq
-lCscmK0MffEJu0NOpfagA5iiJqZ6oL8RdxXmprFc2w5qFLqMG84Jfbe7RCG8yx3h
-Ga/UDkh0tSXewIg7gDmTaHwpZlGKG7CfNuWxT6yomNXKRid7orve3tpYopiZ2GG3
-62vzJHluu/HgXtGW7kehBz/C43qKkeaHcId2HICBO628QswjyC/Xid6AbxYS38QO
-DHw1s/S5gCTY3fw8sPJP8ghCMW60pU4mWko10iM+Wcl2wXafSA1PKEOass06QE6B
-2uiMLdr+NoD0AE6NmHOjftRe/5OwUQ==
-=kN2l
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmT+vJUACgkQAVBC80lX
+0Gy4Tgf/UITI7/9WFbMZ0xx7Vh5hF7KZ5ts9Vca3oLAvD3LF9ETBgCafezjlbDD/
+Kx7n0WTR114HnONS/yF2qayAHRVC7M/VX7AUyA/ekJR1Mkefz7XBcKafEomMIMtj
+hsY3BPiTJuX3eW2f9clgY8VQQ2NMKSfW1B/ILe57d/A+mKPwGbfkbqM0Ul0deM5d
+TEisB8Wf+RtNLYFUVBOEzOo3AHPqzt76BgR8pQmQRM4XoYPqap7FVsQwXX0tenPa
+gJ4vNG2fXuW6ls8Lj2oGuwbpKnI1Sc093AcVyws9TpRQH+DGfJuBODmYgqMX2q+8
+IKVjtxB5/sEQut1HyvzYhpR6CmrkHg==
+=fRVW
 -----END PGP SIGNATURE-----
 
---Sig_/TDagygaubFpUmFlu/iNNn03--
+--Sig_/S0CCzKk4zmPqhEAjwqQ9h+7--

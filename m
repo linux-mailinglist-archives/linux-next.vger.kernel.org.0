@@ -2,45 +2,43 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C88479A172
-	for <lists+linux-next@lfdr.de>; Mon, 11 Sep 2023 04:38:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 939E879A188
+	for <lists+linux-next@lfdr.de>; Mon, 11 Sep 2023 04:54:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229631AbjIKCiw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 10 Sep 2023 22:38:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56420 "EHLO
+        id S233098AbjIKCyL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 10 Sep 2023 22:54:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232237AbjIKCiw (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 10 Sep 2023 22:38:52 -0400
+        with ESMTP id S229918AbjIKCyK (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 10 Sep 2023 22:54:10 -0400
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D0EE99;
-        Sun, 10 Sep 2023 19:38:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 872ABB0;
+        Sun, 10 Sep 2023 19:54:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1694399920;
-        bh=4qaHdtNto7Db6RwIvpc8K/z+TccFThymM9grKdrd6HA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=OPv2fzIYikgLa44AhNbkKvKfhMEcS8AVLrioTmWhw/cDzYj4pO6ddaPocruX/TAim
-         SVo7p7ShojsK01cImDvshL114nIyx7dKX/3KbBczfOhrShYTagEMxe+0RHwvnUzTwc
-         eZySuqawUKPLCmsRlXCQzLVz/NrkTTgbHlhOfjEzWKVm+y52HGAqbyio4qMIPEeQ2u
-         zIbUuhoTqxM/0JccNiy44FUI9sunmIfjQCHrkcOj1lljxCKlaHjw0I4I8RuGZMlg45
-         BKlVFVV0m2cd0Or2ChGvIM+YPwetxVQ2I48gubhE1Ihah5G4kpFiyIrq1CbVowTpNZ
-         rNbWpLyO1jeUg==
+        s=201702; t=1694400842;
+        bh=sC94OkEjNklVqKluKs/jz7fIsxI4ac629uX1SDfCOVU=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Gx/eE0fily3R6IlVjuuyKg8moyix8OGRF7QgfrHamZCopN30++GJ1adVxPxqjIQqx
+         fhfrt7X0vuPdqLL51yUqyx6l8dzTJnsIYYz3ZZYBdxIClR78+TRDyFL3ZNHixnTPP6
+         +bgK08korvJhdu8YiUiRnhIcWwVpAqN85kdfRMp03H1m8MpUqgNT+HKm/Jhv7GLT9c
+         M/EPw2Cm9Ra9fcwcLvQL+1Q873ywDOfnKbN4G0udgp49NR9pwY2qTqehz4xHuekqwV
+         jUah0V7SHiBZ5bk0sY0Bc0UF20X7HfErZAzkKTmrZgstP4AeyZDxFpaKc1I9B+G+ir
+         pUhY7sga40Mzw==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4RkW9r53Jkz4xQT;
-        Mon, 11 Sep 2023 12:38:40 +1000 (AEST)
-Date:   Mon, 11 Sep 2023 12:38:39 +1000
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4RkWWZ1hZbz4xQN;
+        Mon, 11 Sep 2023 12:54:01 +1000 (AEST)
+Date:   Mon, 11 Sep 2023 12:53:59 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+To:     Kent Overstreet <kent.overstreet@linux.dev>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: stats (Was: Linux 6.6-rc1)
-Message-ID: <20230911123839.7ab72f81@canb.auug.org.au>
-In-Reply-To: <CAHk-=wgfL1rwyvELk2VwJTtiLNpwxTFeFtStLeAQ-2rTRd34eQ@mail.gmail.com>
-References: <CAHk-=wgfL1rwyvELk2VwJTtiLNpwxTFeFtStLeAQ-2rTRd34eQ@mail.gmail.com>
+Subject: linux-next: Signed-off-by missing for commits in the bcachefs tree
+Message-ID: <20230911125359.5a61d30a@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/UgIKJd1WIRKeskxIXG2NAlB";
+Content-Type: multipart/signed; boundary="Sig_/l0xyGRw.fatHo2alzDjjMH9";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS
@@ -51,133 +49,170 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/UgIKJd1WIRKeskxIXG2NAlB
+--Sig_/l0xyGRw.fatHo2alzDjjMH9
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-As usual, the executive friendly graph is at
-http://neuling.org/linux-next-size.html :-)
+Commits
 
-(No merge commits counted, next-20230828 was the first linux-next after
-the merge window opened.)
+  6952ce94323e ("fixup bcachefs: Use for_each_btree_key_upto() more consist=
+ently")
+  465b4018393a ("fixup! bcachefs: Factor out __bch2_btree_iter_set_pos()")
+  1f882e0766c1 ("Revert "bcachefs: statfs bfree and bavail should be the sa=
+me"")
+  5afaba4ad035 ("bcachefs: fix a possible bcachefs checksum mapping error o=
+pt-checksum enum to type-checksum enum")
+  5f3aa2627fe5 ("bcachefs: Fix unitialized use of a value")
+  6547c5bd02fc ("bcachefs: Fix a deadlock")
+  2833d0e7e154 ("bcachefs: rewrote prefetch asm in gas syntax for clang com=
+patibility")
+  733ab5f20977 ("bcachefs: made changes to support clang, fixed a couple bu=
+gs")
+  407f5f4c40dc ("bcachefs: Fix bkey_method compilation on gcc 7.3.0")
 
-Commits in v6.6-rc1 (relative to v6.5):            12330
-Commits in next-20230828:                          11959
-Commits with the same SHA1:                        11436
-Commits with the same patch_id:                      227 (1)
-Commits with the same subject line:                   21 (1)
+are missing a Signed-off-by from their author(s).
 
-(1) not counting those in the lines above.
+Commits
 
-So commits in -rc1 that were in next-20230828:     11684 94%
+  594c33d7704f ("bcachefs: restart journal reclaim thread on ro->rw transit=
+ions")
+  0eb30f7f72b2 ("bcachefs: fix up wonky error handling in bch2_seek_pagecac=
+he_hole()")
+  2ef3bf79d875 ("bcachefs: Lower BCH_NAME_MAX to 512")
+  1d8bc9862a8e ("bcachefs: Optimize bch2_dirent_name_bytes")
+  09883ff4f3d2 ("bcachefs: Introduce bch2_dirent_get_name")
+  0d5cdb5d1f94 ("bcachefs: Add btree_trans* to inode_set_fn")
+  3d39f205c34a ("bcachefs: use prejournaled key updates for write buffer fl=
+ushes")
+  34dd841b4ece ("bcachefs: support btree updates of prejournaled keys")
+  5fe49b157790 ("bcachefs: fold bch2_trans_update_by_path_trace() into call=
+ers")
+  d10d7eaafac6 ("bcachefs: remove unnecessary btree_insert_key_leaf() wrapp=
+er")
+  6afdf2a943de ("bcachefs: remove duplicate code between backpointer update=
+ paths")
+  9f40289714c8 ("MAINTAINERS: add Brian Foster as a reviewer for bcachefs")
+  0808bfa932ad ("bcachefs: mark bch_inode_info and bkey_cached as reclaimab=
+le")
+  dd0b3714e925 ("bcachefs: flush journal to avoid invalid dev usage entries=
+ on recovery")
+  f3cd20387053 ("bcachefs: mark active journal devices on journal replicas =
+gc")
+  d68d3b600b69 ("bcachefs: fix NULL pointer dereference in try_alloc_bucket=
+")
+  80a232516183 ("bcachefs: don't spin in rebalance when background target i=
+s not usable")
+  5fcb4aecbe91 ("bcachefs: push rcu lock down into bch2_target_to_mask()")
+  00ad66bfff3e ("bcachefs: create internal disk_groups sysfs file")
+  f8c865fedb29 ("bcachefs: mark journal replicas before journal write submi=
+ssion")
+  a53344387468 ("bcachefs: remove unused key cache coherency flag")
+  13a2acee0696 ("bcachefs: fix accounting corruption race between reclaim a=
+nd dev add")
+  6e2c8b06a832 ("bcachefs: remove bucket_gens btree keys on device removal")
+  225d53c408b6 ("bcachefs: fix NULL bch_dev deref when checking bucket_gens=
+ keys")
+  7aa938d90b00 ("bcachefs: folio pos to bch_folio_sector index helper")
+  858569294982 ("bcachefs: use u64 for folio end pos to avoid overflows")
+  c97e3a250063 ("bcachefs: clean up post-eof folios on -ENOSPC")
+  7c833a5e794f ("bcachefs: fix truncate overflow if folio is beyond EOF")
+  54d85cf3fa2a ("bcachefs: use reservation for log messages during recovery=
+")
+  53b3581ee623 ("bcachefs: drop unnecessary journal stuck check from space =
+calculation")
+  40e5de902637 ("bcachefs: refactor journal stuck checking into standalone =
+helper")
+  c930660f32fb ("bcachefs: gracefully unwind journal res slowpath on shutdo=
+wn")
+  829dbc2bac41 ("bcachefs: more aggressive fast path write buffer key flush=
+ing")
+  5cbf9d221fc8 ("bcachefs: use dedicated workqueue for tasks holding write =
+refs")
+  71156b6a3040 ("bcachefs: remove unused bch2_trans_log_msg()")
+  d49b36394c8f ("bcachefs: don't bump key cache journal seq on nojournal co=
+mmits
+")
+  6952ce94323e ("fixup bcachefs: Use for_each_btree_key_upto() more consist=
+ently")
+  eef3450ac9a9 ("bcachefs: Reimplement repair for overlapping extents")
+  94f785f6643e ("bcachefs: Don't run triggers when repairing in __bch2_mark=
+_reflink_p()")
+  283af2eb5446 ("bcachefs: let __bch2_btree_insert() pass in flags")
+  13472af06d49 ("bcachefs: don't block reads if we're promoting")
+  a62602f023d6 ("bcachefs: handle failed data_update_init cleanup")
+  65834ad9e8a1 ("bcachefs: expose nocow_lock table in sysfs")
+  fa7afefcc3cc ("bcachefs: Fix memleak in replicas_table_update()")
+  c7a48eda7a36 ("bcachefs: fix bch2_write_extent() crc corruption.")
+  da3c7e72d195 ("bcachefs: fix security warning in pr_name_and_units")
+  b0d41643bf5e ("bcachefs: __bio_compress() fix up.")
+  c53fa9b230a7 ("bcachefs: make durability a read-write sysfs option")
+  a80d79f711e8 ("bcachefs: improve behaviour of btree_cache_scan()")
+  f6c9ef277c9f ("bcachefs: remove dead whiteout_u64s argument.")
+  0e83514260cb ("bcachefs: bch2_time_stats_to_text now indents properly")
+  6dd502323a66 ("bcachefs: lock time stats prep work.")
+  c8d1c78f006b ("bcachefs: fix __dev_available().")
+  e51d1c8634bd ("bcachefs: Rename group to label for remaining strings.")
+  6054a4fdaf82 ("bcachefs: Make bch_option compatible with Rust ffi")
+  44564b19beee ("bcachefs: Add persistent counters")
+  3c1cd27a6e8f ("bcachefs: respect superblock discard flag.")
+  465b4018393a ("fixup! bcachefs: Factor out __bch2_btree_iter_set_pos()")
+  a321016e7b8f ("bcachefs: Return -ENOKEY/EINVAL when mount decryption fail=
+s")
+  f7b56aa7634b ("bcachefs: Fix compiler warnings")
+  995de4f9d73f ("bcachefs: Add a valgrind memcheck hint")
+  b0d66ab8faa6 ("bcachefs: add progress stats to sysfs")
+  26b6350d8599 ("bcachefs: Fix 32 bit build failures")
+  1f882e0766c1 ("Revert "bcachefs: statfs bfree and bavail should be the sa=
+me"")
+  289709a07ff8 ("bcachefs: docs: add docs for bch2_trans_reset")
+  50f8f276d491 ("bcachefs: set disk state should check new_state")
+  e7e759f82298 ("bcachefs: add bcachefs xxhash support")
+  b5a92cddb3e5 ("bcachefs: Prepare checksums for more advanced algorithms")
+  f80bcfc7ced3 ("bcachefs: Enforce SYS_CAP_ADMIN within ioctls")
+  63be0991647f ("bcachefs: Fix bch2_acl_chmod() cleanup on error")
+  9de44dd81c5a ("bcachefs: statfs bfree and bavail should be the same")
+  c72074059c96 ("bcachefs: fix truncate without a size change")
+  da726a6616ff ("bcachefs: fix ifdef for x86_64 asm")
+  7c8e7b9a36aa ("bcachefs: ensure iter->should_be_locked is set")
+  a2f33554563f ("bcachefs: Fix unused variable warning when !BCACHEFS_DEBUG=
+")
+  eaf8681e232b ("bcachefs: ensure iter->should_be_locked is set")
+  5afaba4ad035 ("bcachefs: fix a possible bcachefs checksum mapping error o=
+pt-checksum enum to type-checksum enum")
+  f661a523327e ("bcachefs: mount: fix null deref with null devname")
+  5f3aa2627fe5 ("bcachefs: Fix unitialized use of a value")
+  a8c2852f2c6d ("bcachefs: do not compile acl mod on minimal config")
+  6547c5bd02fc ("bcachefs: Fix a deadlock")
+  2833d0e7e154 ("bcachefs: rewrote prefetch asm in gas syntax for clang com=
+patibility")
+  578d368a9d94 ("bcachefs: statfs resports incorrect avail blocks")
+  733ab5f20977 ("bcachefs: made changes to support clang, fixed a couple bu=
+gs")
+  2f9dc03f1555 ("locking: export contention tracepoints for bcachefs six lo=
+cks")
 
-Some breakdown of the list of extra commits (relative to next-20230828)
-in -rc1:
-
-Top ten first word of commit summary:
-
-     41 net
-     36 riscv
-     34 perf
-     31 gfs2
-     26 drm
-     18 s390
-     17 devlink
-     15 tty
-     15 dt-bindings
-     15 bpf
-
-Top ten authors:
-
-     22 rpeterso@redhat.com
-     20 robh@kernel.org
-     20 irogers@google.com
-     18 sd@queasysnail.net
-     17 alexghiti@rivosinc.com
-     15 jirislaby@kernel.org
-     15 jiri@resnulli.us
-     15 edumazet@google.com
-     13 donald.hunter@gmail.com
-     11 prabhakar.mahadev-lad.rj@bp.renesas.com
-
-Top ten commiters:
-
-     62 kuba@kernel.org
-     61 palmer@rivosinc.com
-     51 davem@davemloft.net
-     33 agruenba@redhat.com
-     32 acme@redhat.com
-     26 alexander.deucher@amd.com
-     24 daniel@iogearbox.net
-     22 robh@kernel.org
-     17 axboe@kernel.dk
-     16 gregkh@linuxfoundation.org
-
-There are also 275 commits in next-20230828 that didn't make it into
-v6.6-rc1.
-
-Top ten first word of commit summary:
-
-     39 arm64
-     38 drm
-     34 accel
-     21 x86
-     20 apparmor
-     17 nvmem
-     14 dt-bindings
-     13 soc
-     13 arm
-      8 btrfs
-
-Top ten authors:
-
-     21 jpoimboe@kernel.org
-     12 treding@nvidia.com
-     11 ttayar@habana.ai
-     11 cuigaosheng1@huawei.com
-      9 sean@geanix.com
-      8 prike.liang@amd.com
-      8 hch@lst.de
-      8 frank.li@vivo.com
-      6 lang.yu@amd.com
-      5 obitton@habana.ai
-
-Some of Andrew's patches are fixes for other patches in his tree (and
-have been merged into those).
-
-Top ten commiters:
-
-     37 alexander.deucher@amd.com
-     34 ogabbay@kernel.org
-     25 srinivas.kandagatla@linaro.org
-     21 mingo@kernel.org
-     20 john.johansen@canonical.com
-     19 matthias.bgg@gmail.com
-     18 treding@nvidia.com
-     13 akpm@linux-foundation.org
-     11 geert+renesas@glider.be
-     10 alexandre.torgue@foss.st.com
+are missing a Signed-off-by from their committer(s).
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/UgIKJd1WIRKeskxIXG2NAlB
+--Sig_/l0xyGRw.fatHo2alzDjjMH9
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmT+fa8ACgkQAVBC80lX
-0GxmZgf/SkB7P3B0POJlbcnn1G9NysQej2KNOTe0ybA0tIuWMyojexjjbE65Wscu
-Z2dCoPcrUPv9XZ13cHcxEtbBJBvuDoKIfmTacsNH+LKsShccm9C5eJy5z9nN20m3
-mHyvue8wUEzrlMYB3gF5P0kZHrstjbTw5UTqi2p2izOQLCxbdgT/W8Y7rFwqBhmt
-JPqNjG7khY8DgNPTNmPh67+3eS7YwSu7gzKdwPhXiIQ64fj93shAPzUjSFpvU2Ai
-YRXQJnQacMaEfocjYujifxarhOytr4F/1VoTcatz5tBYWurMxix3do15bxarc9Cg
-e1CUzeVRlnmWjL3BN9RCEwnhc1k/uQ==
-=alaP
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmT+gUcACgkQAVBC80lX
+0Gzdhwf+L7o+w9hwrHZ/biF73kvgPlNo+Xwis7qMyHN0CuxjNcVFeJ537bl2c1FN
+XVd7699pJlJgVbyZqTZd/U5b0cnwGLdn3dD9aWyOBOc3hB7AS6Fzx159NORAq3GJ
+nylC1RAc8Gva0BfxDb7HfP7x9CVEaQ47nfIYcGegksv6KrNRC/R2OA0svz6t7UtS
+jz4UNpHMLy8mSxehj8kqF3iPxfE7aOCOLHBEQyh1dE/yyLWd3wJ9ADtPhlIJohTf
+EwISbKKrPj8T30Pc15nCNIb9Rfh/qL9Gzseaoe2/dpvR4rXsSJvLT6gyjvQ2I1zc
+0YGbic6dI1r4YZccXWibF4n9yjeawQ==
+=HMv8
 -----END PGP SIGNATURE-----
 
---Sig_/UgIKJd1WIRKeskxIXG2NAlB--
+--Sig_/l0xyGRw.fatHo2alzDjjMH9--

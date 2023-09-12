@@ -2,115 +2,92 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18CF679D411
-	for <lists+linux-next@lfdr.de>; Tue, 12 Sep 2023 16:52:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C081C79DB94
+	for <lists+linux-next@lfdr.de>; Wed, 13 Sep 2023 00:06:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235995AbjILOwc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 12 Sep 2023 10:52:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59544 "EHLO
+        id S232416AbjILWGo (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 12 Sep 2023 18:06:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235987AbjILOwb (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 12 Sep 2023 10:52:31 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE3AD1BB;
-        Tue, 12 Sep 2023 07:52:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=/Dq/kgzmWP9Mq/RztWe10io0Pr7hKjtceCIyaERWgas=; b=qHN5HslgceiWbG/UJUBNn1pF3A
-        o22DOKTSiXFEG36QidRahZClCOxse7OpeqaJVrC2GYwMF2H/bbFg2YL1Metn9ZjT3qHyXue1uO+ro
-        e4SIeuw7M46xOs/Wib4Fx+qYptqDHQ1zVrKdYPtoNwqOz9uGfYtA+zdzzIf77Ub1uDRG5eZJQ9hbk
-        F/OBiXE4ip/BchkJcNmtZDlm1GPHU/u0Uqrh9BCFiuRZni6vi8MN61DMGrVkDsFZ3nJIElCU8Z2Es
-        bYROUD+tYwxcJeHADYyJxvyYo0WD9/VyhwlzpWcF2gsS1htfhd7Ul4o358Nqn0kIVgqvwgsCipqo4
-        0uHERL/Q==;
-Received: from [2601:1c2:980:9ec0::9fed]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qg4kY-003fWJ-1C;
-        Tue, 12 Sep 2023 14:52:22 +0000
-Message-ID: <4364d453-3560-c3c2-15b1-146f9578755b@infradead.org>
-Date:   Tue, 12 Sep 2023 07:52:21 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Subject: Re: linux-next: Tree for Sep 11
- (drivers/gpu/drm/i915/display/intel_backlight.o)
-Content-Language: en-US
-To:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
+        with ESMTP id S229651AbjILWGn (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 12 Sep 2023 18:06:43 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDEAE10D9;
+        Tue, 12 Sep 2023 15:06:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1694556395;
+        bh=7yyEVzv5R5Mek0+GIIAVeF4dyc7smVUviY+uNMqkA7Q=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Itbevz5qKXhlgJMDxGHH+Sb0cH9osCWi6Ut+jUZb3IDirD6Iq6pn8tsqAPfD3gdAP
+         mzzOJ2LX8p9sF615hO/5EroTKNsLicZ8BS4td87yIEMTtfI8+v9S3B5fxDqfR9zINm
+         vgqllGL/k6KAJWzTVYeMPyykeV8dsDdD27oKJP6WURTSi913a0nxWxw1en3aH8FM2k
+         JoK+umcvgaUZMFfiu805ohDEMcmrttZPEKz4CneYOgOWBDDPdFI6vhhqgHIsUQpFUg
+         0f14xirrgK4ymPI4vyDz9NLrDn2JLsoXNHtntprUcbx6tK+arXHsmFyLfd64jZHK17
+         l43NoT036ODkw==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Rld2z0qq9z4xNt;
+        Wed, 13 Sep 2023 08:06:35 +1000 (AEST)
+Date:   Wed, 13 Sep 2023 08:05:58 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Anna Schumaker <anna@kernel.org>,
+        Trond Myklebust <trondmy@gmail.com>,
+        NFS Mailing List <linux-nfs@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     intel-gfx@lists.freedesktop.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>
-References: <20230911121131.006d3fec@canb.auug.org.au>
- <eac933bb-eb6d-8b21-422a-b8c6255facc3@infradead.org>
- <87a5tresu8.fsf@intel.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <87a5tresu8.fsf@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Subject: linux-next: Fixes tag needs some work in the nfs-anna tree
+Message-ID: <20230913080558.2fefa873@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/8684WgscBoc6bHhpm8W4g3l";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+--Sig_/8684WgscBoc6bHhpm8W4g3l
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
 
-On 9/12/23 00:47, Jani Nikula wrote:
-> On Mon, 11 Sep 2023, Randy Dunlap <rdunlap@infradead.org> wrote:
->> On 9/10/23 19:11, Stephen Rothwell wrote:
->>> Hi all,
->>>
->>> Please do *not* include material destined for v6.7 in your linux-next
->>> included branches until *after* v6.6-rc1 has been released.  Also,
->>> do *not* rebase your linu-next included branches onto v6.5.
->>>
->>> Changes since 20230908:
->>>
->>> Non-merge commits (relative to Linus' tree): 643
->>>  614 files changed, 227990 insertions(+), 9502 deletions(-)
->>>
->>> ----------------------------------------------------------------------------
->>
->> on x86_64:
->>
->> # CONFIG_ACPI is not set
->> CONFIG_DRM_I915=y
->> CONFIG_BACKLIGHT_CLASS_DEVICE=m
->>
->> I915 selects BACKLIGHT_CLASS_DEVICE if ACPI is set.
->>
->> ld: drivers/gpu/drm/i915/display/intel_backlight.o: in function `intel_backlight_device_register':
->> intel_backlight.c:(.text+0x4988): undefined reference to `backlight_device_get_by_name'
->> ld: intel_backlight.c:(.text+0x4a1b): undefined reference to `backlight_device_register'
->> ld: drivers/gpu/drm/i915/display/intel_backlight.o: in function `intel_backlight_device_unregister':
->> intel_backlight.c:(.text+0x4b56): undefined reference to `backlight_device_unregister'
-> 
-> This comes up periodically. The fix is for i915 to depend on backlight,
-> but it's not possible to fix just i915, as it'll lead to circular deps
-> unless *all* select backlight is switched to depend on backlight.
-> 
-> I've gone through it once [1], and not keen on doing it again unless
-> there's buy-in.
-> 
-> IS_REACHABLE() is often suggested as a workaround, but I think it's just
-> plain wrong. i915=y backlight=m is not a configuration that makes
-> sense. Kernel configuration is hard enough, there's no point in allowing
-> dumb configs that just silently don't work.
-> 
+In commit
 
-Yes, IS_REACHABLE() is just fugly nonsense.
+  4788db30d973 ("NFS: Fix O_DIRECT locking issues")
 
-Thanks for the reminder of your attempt(s).
+Fixes tag
 
-> 
-> BR,
-> Jani.
-> 
-> 
-> [1] https://lore.kernel.org/r/1413580403-16225-1-git-send-email-jani.nikula@intel.com
-> 
-> 
-> 
+  Fixes: 0703dc52ef0b ("NFS: Fix error handling for O_DIRECT write scheduli=
+ng")
 
--- 
-~Randy
+has these problem(s):
+
+  - Target SHA1 does not exist
+
+Maybe you meant
+
+Fixes: 954998b60caa ("NFS: Fix error handling for O_DIRECT write scheduling=
+")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/8684WgscBoc6bHhpm8W4g3l
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmUA4MYACgkQAVBC80lX
+0GyYdggAj5O5WYzNe17kwWMEHdHAnZjz+rVvGiTIcXUcux8dAFFJUzXzwbG/4gHQ
+JhfUFKCCblQZeB7V9Z7t0SPE0NG6XFiAXU1Oc85e+596s//R3nOsag07oi2AJpGD
+ganIP9LPNtAo07JYFkHHZ5sCLl8Ov6i5JS82Ziharx4dnpQJub1kgTaG5g1DVoOB
+TlEXyGnc+j1VPzlH7T2PVHZz2XgZjbQWq4Ei6s0PkFkk6Vg4IlHHAe6JDto9Hj9C
+DBEy7oyDYozg++WXxC+tjzi+w5ByLMrYy6J5vRkXEH6S8+C3aqHp+JhnKdPxIYnz
+uHu/bqvkZLXQT0QnVTmumsvHbkEBVw==
+=Ez6H
+-----END PGP SIGNATURE-----
+
+--Sig_/8684WgscBoc6bHhpm8W4g3l--

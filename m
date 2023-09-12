@@ -2,43 +2,44 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78E9C79DBE2
-	for <lists+linux-next@lfdr.de>; Wed, 13 Sep 2023 00:28:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27A5279DC36
+	for <lists+linux-next@lfdr.de>; Wed, 13 Sep 2023 00:50:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235627AbjILW2f (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 12 Sep 2023 18:28:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60494 "EHLO
+        id S235388AbjILWu1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 12 Sep 2023 18:50:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234813AbjILW2e (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 12 Sep 2023 18:28:34 -0400
+        with ESMTP id S230162AbjILWu0 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 12 Sep 2023 18:50:26 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27EEB10C8;
-        Tue, 12 Sep 2023 15:28:31 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A210310EB;
+        Tue, 12 Sep 2023 15:50:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
         Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
         Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=8HUDCyTDk+/khqCF060Q0sN0T5AM39PQmswQmYF5Wg8=; b=t+qdWssTTp4SMLdYgRmkf82hZc
-        hx/6H4XhsW4XtOuIMimfn4J3fC+YTVlVbBuGa9P7qDqzALpsYuk094kUYgMCsh1qgp1o2rHpFADo6
-        egz7U2HGuf2kKrr8BQPaivPsgUhZyjnyZHcS4p5HZPJnXc7nHTG7Oug8T+3fAb23GSEJlcd0VrWsl
-        w39uCmCUWde1oDsCY6GBLahNckBW5MNXwhUJcDJ0GRp64TFObK9LR24KDW9hCspKQNgvLg1qRlnW/
-        I79XjeFW2vvq43KZ5rLgYHTQBpmkKK7XpZ9XdYdcBNZa5f+etpO2RvD21uWwuIr22c2jH0jr5z3UG
-        3fUQBDyw==;
+        bh=otC68GLRk8Y3xp0cO9IhUS5amOCNre8RwT/bxHW6Ex0=; b=MbKg9e1SGJkADwvQIpPZqj6qix
+        sLzUKpIkVmK5HCTWpRHDSW7GBqqeVKGlLnGYwzeDxV187IgLYF+Al9TJc+MHRrlFcpLeW5EfKutyl
+        cXE1IORrO4P0ickmwENsOlXPOpxdtmtmLhYTRcYvO2FVlJFvDVTeL7gT6+lodqo6/unM0cbTjfMtS
+        T8UBvjSYLPWmOPgSmgiVb9UqfphiOYB4nRxCJCIxRj2HFkV+SAscnf/xwVQqRp1wsDac8WXPW4HcT
+        rhtw/0RFh5vDZQzYp+Jsm1Rs4U/nE6uMBzdvc/+ojOktXZzEq6etJlYupNpW9e4OyR4xgMkMWorBZ
+        lD2yVXcg==;
 Received: from [2601:1c2:980:9ec0::9fed]
         by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qgBry-004CLH-0m;
-        Tue, 12 Sep 2023 22:28:30 +0000
-Message-ID: <8b77219e-b59e-40f1-96f1-980a0b2debcf@infradead.org>
-Date:   Tue, 12 Sep 2023 15:28:29 -0700
+        id 1qgCD7-004ENZ-2F;
+        Tue, 12 Sep 2023 22:50:21 +0000
+Message-ID: <418813e6-9efe-4f55-8d53-dc46d7a22f6d@infradead.org>
+Date:   Tue, 12 Sep 2023 15:50:20 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: Tree for Sep 12 (drivers/clk/imx/clk-imx8-acm.o)
+Subject: Re: linux-next: Tree for Sep 12
+ [drivers/pinctrl/nuvoton/pinctrl-npcm8xx.ko]
 Content-Language: en-US
 To:     Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-clk@vger.kernel.org, dl-linux-imx <linux-imx@nxp.com>,
-        Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>
+        tomer.maimon@nuvoton.com, Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org
 References: <20230912152645.0868a96a@canb.auug.org.au>
 From:   Randy Dunlap <rdunlap@infradead.org>
 In-Reply-To: <20230912152645.0868a96a@canb.auug.org.au>
@@ -67,18 +68,15 @@ On 9/11/23 22:26, Stephen Rothwell wrote:
 > 
 > ----------------------------------------------------------------------------
 
-on arm64:
-
-aarch64-linux-ld: drivers/clk/imx/clk-imx8-acm.o: in function `imx8_acm_clk_probe':
-clk-imx8-acm.c:(.text+0x3d0): undefined reference to `imx_check_clk_hws'
+on x86_64:
 
 when
-CONFIG_CLK_IMX8QXP=y
-CONFIG_MXC_CLK=m
+# CONFIG_OF is not set
 
-Should CLK_IMX8QXP select MXC_CLK?
-I'll leave that patch up to the maintainers.
+ERROR: modpost: "pinconf_generic_dt_node_to_map" [drivers/pinctrl/nuvoton/pinctrl-npcm8xx.ko] undefined!
+
 
 Reported-by: Randy Dunlap <rdunlap@infradead.org>
+
 -- 
 ~Randy

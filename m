@@ -2,82 +2,83 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E28E579DBBF
-	for <lists+linux-next@lfdr.de>; Wed, 13 Sep 2023 00:18:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78E9C79DBE2
+	for <lists+linux-next@lfdr.de>; Wed, 13 Sep 2023 00:28:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229621AbjILWTD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 12 Sep 2023 18:19:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38190 "EHLO
+        id S235627AbjILW2f (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 12 Sep 2023 18:28:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbjILWTC (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 12 Sep 2023 18:19:02 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F54710E6;
-        Tue, 12 Sep 2023 15:18:58 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-502984f5018so8729853e87.3;
-        Tue, 12 Sep 2023 15:18:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1694557137; x=1695161937; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0XSY8ZMt40+LfWzUvU2F+1fAOyiq6EBAamykygoHnjQ=;
-        b=rcK8J8PIHb7ji+/LF7w1U/jh3Y32JJnPN/K8veS9DSVhctseIpGWfbbbSAJ08sVf3/
-         ExbEUxRT1vtxQQYRgwxhIXkwnkJPwoL7PUOBXFDWTcgiZR6fH8gIiFlFMo/d6qUSF2tU
-         ETo0Dzh9NreRfbl9ART4FXNyUZsPDhxFFRNIqRrwVX0pf3MYvUGK2W8DXIrMiYCmKUug
-         hr4estHz/N84FYmWEU7fwgTN8SeIYl0Cp6zgFsWd9cN3kGbdcrzTxbP725uiQl7z2zbv
-         vOEhjcfdGa7CtqTnbKFr8HBXCW/DTRKWy/WKjYRenHxf8BrRXXCp8IGhwzlEIgHsbssa
-         K9bQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694557137; x=1695161937;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0XSY8ZMt40+LfWzUvU2F+1fAOyiq6EBAamykygoHnjQ=;
-        b=giLIyX5JSLbcsf6wmkFbrIQS+UAK/inezG7/OFUQmZeDf80efECz+XdDNJ/UIELGTt
-         3q03Pb/5m8tSd+VZH1WfSIgb9MuUfcjXtlQBsoU3jNyPmdFLbKYRp2H9YS07bmpoeUCg
-         7C3VytDZUbNluGUboW3j/mIHA65CHvCq8qzDO1IElYPnic/nrYAu9XTVsv+4LSYCwaaK
-         YdfAh4d2CLRFyurX/CIUd0O4pO41Xy+FEIo301y1vmEgctjp3U0nL7mKYf2+T7Fwd3Bl
-         gDuDFeSKb30jinNNr+INooe2enbyZuwRKLy45kuDQ/ZZ/DkAegABMiaM+maK2I3atMED
-         ui7Q==
-X-Gm-Message-State: AOJu0Yy4oslnq7QxtRU6sqJR/zA3WnFsEJ8HoxdvTxeWXFoU16hbTyQ0
-        AFkWZFIvk+HuqPpaRD0fIwYy1y55HkQ3x2I0dAY=
-X-Google-Smtp-Source: AGHT+IH1ATRVlWCPJEbWfjoxrwhYstSSqOtzKcPTYAXwwZZfbXGmszyoYb7akXifhfGbtQQ0MBQI3SlhNi2A2Y172i4=
-X-Received: by 2002:a05:6512:1091:b0:4ff:95c:e158 with SMTP id
- j17-20020a056512109100b004ff095ce158mr631125lfg.64.1694557136519; Tue, 12 Sep
- 2023 15:18:56 -0700 (PDT)
+        with ESMTP id S234813AbjILW2e (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 12 Sep 2023 18:28:34 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27EEB10C8;
+        Tue, 12 Sep 2023 15:28:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=8HUDCyTDk+/khqCF060Q0sN0T5AM39PQmswQmYF5Wg8=; b=t+qdWssTTp4SMLdYgRmkf82hZc
+        hx/6H4XhsW4XtOuIMimfn4J3fC+YTVlVbBuGa9P7qDqzALpsYuk094kUYgMCsh1qgp1o2rHpFADo6
+        egz7U2HGuf2kKrr8BQPaivPsgUhZyjnyZHcS4p5HZPJnXc7nHTG7Oug8T+3fAb23GSEJlcd0VrWsl
+        w39uCmCUWde1oDsCY6GBLahNckBW5MNXwhUJcDJ0GRp64TFObK9LR24KDW9hCspKQNgvLg1qRlnW/
+        I79XjeFW2vvq43KZ5rLgYHTQBpmkKK7XpZ9XdYdcBNZa5f+etpO2RvD21uWwuIr22c2jH0jr5z3UG
+        3fUQBDyw==;
+Received: from [2601:1c2:980:9ec0::9fed]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qgBry-004CLH-0m;
+        Tue, 12 Sep 2023 22:28:30 +0000
+Message-ID: <8b77219e-b59e-40f1-96f1-980a0b2debcf@infradead.org>
+Date:   Tue, 12 Sep 2023 15:28:29 -0700
 MIME-Version: 1.0
-References: <20230913081050.5e0862bd@canb.auug.org.au>
-In-Reply-To: <20230913081050.5e0862bd@canb.auug.org.au>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Tue, 12 Sep 2023 15:18:45 -0700
-Message-ID: <CAADnVQKt_oCgJpVv+jqi5yhO4XUb2RWzajNSsNWk4fJWD4cJ7A@mail.gmail.com>
-Subject: Re: linux-next: Signed-off-by missing for commit in the bpf tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+User-Agent: Mozilla Thunderbird
+Subject: Re: linux-next: Tree for Sep 12 (drivers/clk/imx/clk-imx8-acm.o)
+Content-Language: en-US
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-clk@vger.kernel.org, dl-linux-imx <linux-imx@nxp.com>,
+        Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>
+References: <20230912152645.0868a96a@canb.auug.org.au>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20230912152645.0868a96a@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Sep 12, 2023 at 3:10=E2=80=AFPM Stephen Rothwell <sfr@canb.auug.org=
-.au> wrote:
->
-> Hi all,
->
-> Commit
->
->   3903802bb99a ("libbpf: Add basic BTF sanity validation")
->
-> is missing a Signed-off-by from its committer.
 
-Hmm. It's pretty difficult to fix.
-We'd need to force push a bunch of commits and add a ton of
-unnecessary SOBs to commits after that one.
-Can you make a note of it somehow?
+
+On 9/11/23 22:26, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Changes since 20230911:
+> 
+> New tree: bcachefs
+> 
+> The bcachefs tree gained a semantic conflict against Linus' tree for
+> which I applied a patch.
+> 
+> The wireless-next tree gaind a conflict against the wireless tree.
+> 
+> Non-merge commits (relative to Linus' tree): 4095
+>  1552 files changed, 346893 insertions(+), 22945 deletions(-)
+> 
+> ----------------------------------------------------------------------------
+
+on arm64:
+
+aarch64-linux-ld: drivers/clk/imx/clk-imx8-acm.o: in function `imx8_acm_clk_probe':
+clk-imx8-acm.c:(.text+0x3d0): undefined reference to `imx_check_clk_hws'
+
+when
+CONFIG_CLK_IMX8QXP=y
+CONFIG_MXC_CLK=m
+
+Should CLK_IMX8QXP select MXC_CLK?
+I'll leave that patch up to the maintainers.
+
+Reported-by: Randy Dunlap <rdunlap@infradead.org>
+-- 
+~Randy

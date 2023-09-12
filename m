@@ -2,83 +2,84 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2C3A79C61E
-	for <lists+linux-next@lfdr.de>; Tue, 12 Sep 2023 07:03:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2918279C62D
+	for <lists+linux-next@lfdr.de>; Tue, 12 Sep 2023 07:10:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230223AbjILFDT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 12 Sep 2023 01:03:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53674 "EHLO
+        id S230131AbjILFKT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 12 Sep 2023 01:10:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229888AbjILFDA (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 12 Sep 2023 01:03:00 -0400
+        with ESMTP id S229798AbjILFKS (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 12 Sep 2023 01:10:18 -0400
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1053198C;
-        Mon, 11 Sep 2023 22:02:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A031D196;
+        Mon, 11 Sep 2023 22:10:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1694494957;
-        bh=X042UORL7EMfCugIAB+lsMZTtZnLrw1UoZ0/PnMHchI=;
+        s=201702; t=1694495413;
+        bh=glWOjUc0hn5q6xO6l8MkJNC9mO4fwGHMjXu78jbZalg=;
         h=Date:From:To:Cc:Subject:From;
-        b=FvqJYbfUpW4uO4ldv2ukZ1x7Qy7g4ibuxqP0lKDtNBnhN1sGXQPqoewpWDW4SaC1P
-         XVt5K0b77VLuShQY5ZFXx26ROlqie4L3e2OHVO0Fk68cD7fqJxlfPAH2LgbXO7vV+3
-         Vym0xZg80XVVwlv0maRgapN1BatdXCw46ej66OPlopgkHwADDHwFdPG+NlczUUJ7Xi
-         qBFGQU7USdu1YBELmD+o6jLmzyfcDbH+JbUBJSY87oNlL4m874sTray1hgmBIBb8pY
-         b3LRBqATc3PAOGdUq5IlHTwy4V7TRZdK5WBExyqzxo+6AjGqltlvaYS6vrtwZS3zdx
-         AoGma1OSUZFDQ==
+        b=ELesDpI7LS+HdTYlW5pb8MIqhQGiL4b+3V5YLQ2Pfn82gpYiXeXNzRd0r1VUoBB5u
+         XWiC59Uet2ux4fgyKak57Mweax2WadrT5Xz+75HFjarnPasL5IkWR65Ls1bl61SpUJ
+         4fUyQ/D3RCzzDudS+THUN1Gvn3ZGq+SAVeeVapycSEdpCJkLWGtaAOLpIoVftkVSYj
+         4ceQKaDY80gk1pCIPvnb3sq4o8HjklFKh9sO/Dy491wB1HLCOOhifxKEwFhPPyNqvo
+         Rl3KK1yloynfYbwqPcnkWdTcm5mkq9Qohm+OW0QZstoyU9qw/mtK57AP8vtd5gVtRA
+         zqIU8E9i4lufQ==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4RlBKT0T7yz4wZw;
-        Tue, 12 Sep 2023 15:02:36 +1000 (AEST)
-Date:   Tue, 12 Sep 2023 15:02:32 +1000
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4RlBVF1RTwz4wxQ;
+        Tue, 12 Sep 2023 15:10:13 +1000 (AEST)
+Date:   Tue, 12 Sep 2023 15:10:12 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Kent Overstreet <kent.overstreet@linux.dev>
-Cc:     Kent Overstreet <kent.overstreet@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     Kalle Valo <kvalo@kernel.org>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Wireless <linux-wireless@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the bcachefs tree
-Message-ID: <20230912150232.1ab82094@canb.auug.org.au>
+Subject: linux-next: build warning after merge of the wireless-next tree
+Message-ID: <20230912151012.6aceecfe@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/TONFZer5ekrW8Hy=KMdLPrK";
+Content-Type: multipart/signed; boundary="Sig_/eyUR3_H9xTxVSKZhnnAcI2R";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/TONFZer5ekrW8Hy=KMdLPrK
+--Sig_/eyUR3_H9xTxVSKZhnnAcI2R
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the bcachefs tree, today's linux-next build (htmldocs)
+After merging the wireless-next tree, today's linux-next build (htmldocs)
 produced this warning:
 
-include/linux/generic-radix-tree.h:206: warning: expecting prototype for ge=
-nradix_iter_peek(). Prototype was for genradix_iter_peek_prev() instead
+include/net/cfg80211.h:5940: warning: expecting prototype for wiphy_delayed=
+ work_flush(). Prototype was for wiphy_delayed_work_flush() instead
 
 Introduced by commit
 
-  f39d409a1584 ("lib/generic-radix-tree.c: Add peek_prev()")
+  56cfb8ce1f7f ("wifi: cfg80211: add flush functions for wiphy work")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/TONFZer5ekrW8Hy=KMdLPrK
+--Sig_/eyUR3_H9xTxVSKZhnnAcI2R
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmT/8OgACgkQAVBC80lX
-0GwaHgf/eK4bAbZM5b+xaxEKWQ39UFobEQe+YhN2li9NT+dDwY1036CrQBHcNp7T
-UeagrXhhsLz5rzE71Qcrb+G5ZcgOzD4XsiQbTrqFdUjez3n6yJGV1k4FUji1u18i
-K6khPL3VPSo8+ljpjrqQ06jQ5h9O3jz4hEeM5fzBMWBYIel8HV2//V3m9h/XYJcr
-BFxOq04Ith1N2gjThuSr5ClqgjuBfK0Ta7vAxvCg+9v4k4DGH5OAQyeQZj/ladaE
-Qh4vlZxn7bLsupdmD+mWvKMlNQvrt+mHR3+b1yiNnk0tQBbSWuCNwmo7QfP7p6lQ
-RNvKakR+v9MfVbvK6hDz+HrPlJNGPg==
-=By8d
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmT/8rQACgkQAVBC80lX
+0Gw7qwf+LwclGtSJCKkXXmgYKMQniwz1pMHtDQ3I1bkHmbJHDKfEKZbQP82qv0t4
+y/pwZkLpr0y5S16vbaLcTfH8M7Bcyw8Pv91w9KUcg9QjVnaCSdl63fWkvQSOdnq0
+qm8zuNGkXiX344pKJexSM7n/4MhRKAqE+qGDdAeYCbQNA0O6XqXCdVpkTZPXjlGA
+5mzxbyaP7DjwM5R5E+d+QO9k5neW9crivL9Nbl3s5XJmYpAm+tG3d9UgOF2FNlqy
+WgzCc3Fy4W78g4Ck1GYYBRF7CTAD9qKZv4HTAheOlYsLaSSmzD0AynlsKUBit1h2
+GVvrinmS2mLF5LC98ikentg4LLGUYw==
+=EvOi
 -----END PGP SIGNATURE-----
 
---Sig_/TONFZer5ekrW8Hy=KMdLPrK--
+--Sig_/eyUR3_H9xTxVSKZhnnAcI2R--

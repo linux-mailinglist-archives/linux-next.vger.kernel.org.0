@@ -2,84 +2,83 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C48C79C631
-	for <lists+linux-next@lfdr.de>; Tue, 12 Sep 2023 07:13:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3AC079C63A
+	for <lists+linux-next@lfdr.de>; Tue, 12 Sep 2023 07:20:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230142AbjILFNM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 12 Sep 2023 01:13:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40186 "EHLO
+        id S230486AbjILFUh (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 12 Sep 2023 01:20:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229798AbjILFNM (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 12 Sep 2023 01:13:12 -0400
+        with ESMTP id S230391AbjILFUg (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 12 Sep 2023 01:20:36 -0400
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6212BE5A;
-        Mon, 11 Sep 2023 22:13:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAB0CAA;
+        Mon, 11 Sep 2023 22:20:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1694495587;
-        bh=HfiZAz+w66EKMAZj2PZeFB26LwsjBHKhBlPSW4GHYJo=;
+        s=201702; t=1694496031;
+        bh=+xkJr+CmA7a/d2m5J6ydfZHXgjiYhoMI8QnLO2rsFJI=;
         h=Date:From:To:Cc:Subject:From;
-        b=Z7MWMTGO1utR7qSZPh+Oc/c29u0uzy66l4813nnYH35S9aDx1mc1ZdGefXzG3LtB8
-         9nQ/Hu45SqBAxhmzpHaqLeoe65AYXSUuq69m9QGq3zKbChqV2Ljh06p3xGoBitDQkB
-         aXpAHerfhw03XdYW4llkYF0e0MQRz6jvSZ6p9+KVHWSc/Lm9yRaDL/AXX2+yDys8z2
-         LrYzRlfiPuzJbmIIN2dCsXtzHqee3KZovIoK7eaTtbQaHGUmIvH74sXOUQvyXFNCFE
-         wQCS5ss1WhOSgaI25JrrKWLlihAFhYKR2S/u0/XZ9Uzp5XL0ljKr2jQqsMGITgnn7h
-         JkBTtfpnZF11w==
+        b=e/Q1xk07McO5t0AHnB13JZrKi580sHeJJbaHTuS8u9HxTeKxjM2OrXZbFVRNNahfJ
+         RyWDgdBchyaM1bXk+CNdGv3VZ+MqyhqQRn07rdkJx3B9blhrf8LLrodhb0A0Qt3lBN
+         eRn791bdJrEwQKmh1zPJJtUssYFlXWpiNjJXfJoIfKBzLWgwdXNLgKxrc828qldpMS
+         8yrf3vN5jLFLCVg0cCyVqhknlrA0vqvmwCjw+mQgRuwFK3L6Y85wT4dEZSDv+dulxK
+         QRARjSSN8VajDQZAHd1LCi5ayEkTM8PqczMR3b3mTczYyKOtDquttJrvdm/ssdobdO
+         EcQQjqT7BLexw==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4RlBYb09nJz4wxQ;
-        Tue, 12 Sep 2023 15:13:06 +1000 (AEST)
-Date:   Tue, 12 Sep 2023 15:13:06 +1000
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4RlBk72Y1mz4wbP;
+        Tue, 12 Sep 2023 15:20:31 +1000 (AEST)
+Date:   Tue, 12 Sep 2023 15:20:30 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Kalle Valo <kvalo@kernel.org>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Wireless <linux-wireless@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Andreas Gruenbacher <agruenba@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the wireless tree
-Message-ID: <20230912151306.51ee11ea@canb.auug.org.au>
+Subject: linux-next: build warning after merge of the mm tree
+Message-ID: <20230912152030.34e9ac3d@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/9w2Asq+r+R6SZqQn.btwC=z";
+Content-Type: multipart/signed; boundary="Sig_/8uLy2YzkXHC/794/6JN9_eO";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/9w2Asq+r+R6SZqQn.btwC=z
+--Sig_/8uLy2YzkXHC/794/6JN9_eO
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the wireless tree, today's linux-next build (htmldocs)
-produced this warning:
+After merging the mm tree, today's linux-next build (htmldocs) produced
+this warning:
 
-include/net/cfg80211.h:6134: warning: Function parameter or member 'cqm_rss=
-i_work' not described in 'wireless_dev'
+kernel/kthread.c:726: warning: Function parameter or member 'k' not describ=
+ed in 'kthread_stop_put'
 
 Introduced by commit
 
-  37c20b2effe9 ("wifi: cfg80211: fix cqm_config access race")
+  ae89b54018aa ("kthread: add kthread_stop_put")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/9w2Asq+r+R6SZqQn.btwC=z
+--Sig_/8uLy2YzkXHC/794/6JN9_eO
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmT/82IACgkQAVBC80lX
-0GyxRAf/YmPvXZYQ/Mg9AlKop5rNle6grhU2XhZ8l7PXZS96WcnMpd2AVXVm2E+T
-mT70/SIr8C3M0MfTaZo2OHAWXeNGw3iOktu8en5rqWHDGinCw2mdJvM3S8BfMb43
-RQwLEmOPAq3brgAtRNhzgOHdJrP268VvBjeHv+Xb53+BvQQC09c3h5FFwGB1JgFG
-pFOLwNLyvbF6wCKkTFy16ma1ntcgDVGHwwq+EvcDYdDhCHPo+rTjyzdWQX6N2INO
-UsMmGCtyT0qcDQZyC+ilqoht18Yn+yUEe9SxIXt/v2GKme5o6e4AAYGF4cqN50sZ
-wJCZ4suMsNbFRFcwTrvwwE4OwIcilA==
-=zm0O
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmT/9R4ACgkQAVBC80lX
+0Gzv5Qf+MdDVcIr9SkAhvcAPQtdcr5dojsYK4Uhdm8D9XnUf7eGBi02shnJJBaUC
+fBwZZ56rQLqTGsGEE8W4QAPJT4Il9DBsqu/wxs3/5wMj+NMqketQEpCx5NC0/vmw
+iUv9fRxCO8XoUnxwYCIJyl3rNZWBQoJr/raGVbjgFGZEMnGr5+hBxdmHaO/khJiV
+kdNBuRsmjIcQTu1LMt3XG7NjGLktZR4HqKLAjhbdmQH+xTrKQudf4o3p7scckCPa
+f4qT6Xb/G1c3teGAHnqcJhP8zPOSsLasXDDoFxfyoUIpYPwKeNiQoKN6fH+tTxeQ
+aik7ikWtrmaXCkqiOi3VS3mIFPtpHA==
+=3J/j
 -----END PGP SIGNATURE-----
 
---Sig_/9w2Asq+r+R6SZqQn.btwC=z--
+--Sig_/8uLy2YzkXHC/794/6JN9_eO--

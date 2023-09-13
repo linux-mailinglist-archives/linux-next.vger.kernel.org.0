@@ -2,92 +2,114 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44E2579F4D7
-	for <lists+linux-next@lfdr.de>; Thu, 14 Sep 2023 00:19:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 352E879F501
+	for <lists+linux-next@lfdr.de>; Thu, 14 Sep 2023 00:31:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232902AbjIMWTU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 13 Sep 2023 18:19:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48232 "EHLO
+        id S230358AbjIMWbx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 13 Sep 2023 18:31:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229743AbjIMWTT (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 13 Sep 2023 18:19:19 -0400
+        with ESMTP id S230229AbjIMWbx (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 13 Sep 2023 18:31:53 -0400
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA9E919A0;
-        Wed, 13 Sep 2023 15:19:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAE201BCB;
+        Wed, 13 Sep 2023 15:31:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1694643554;
-        bh=zLywpBXGPVjbMPp/0mEgBcEgMQCavtFgVgs4YNmeboQ=;
+        s=201702; t=1694644307;
+        bh=CyH1Zv3KH+W4MxyueDaRkKjzluybPYNgh5g+mgCPnOI=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=kxzJhbH1+28KFnuIyD0+hA0t5IgqfMR06PjSVd7E3LfFAnNu1EkaktoyihADutvG4
-         uOuXO0xDpd1GHYOTuyn0djgunqNDUiK8rlL+7xqghDxV7rWkko5VKINEJtkTMcNaNI
-         84yY3mrOnek7UV643Dy9BZ7OnT3o2twYuXbOi9jpFVH3Or4dXloUmPCQ0CJo9fhuMW
-         FK3+LvJP2pVa94TGOKyszXptJ3KAgwQfTYgVelWFOfiUfjeMqny7H3iRSQAxuNvtLL
-         OM//u3h/FKqrceui/SNciBouBnD6Rlk+iVo8ZOPPaWbFmVxfvUDMpkdVbXLfqd9+V1
-         0iBiw16UjCprg==
+        b=udFKnoGSaD6NEnnwTIzLjl3vNeGdwRbR0JG3ZRxz2lVu13jllybU6dL2dvmQgz0xv
+         fI3aRVyyWLvRVlwBDpcB8AYAfFyy1HDtvKrPMEuc/pU2oq6j6+u/BtHi0U7YoIDKpO
+         nyuuUf8v0vBsKpE1Z2wJyh5adtE7L6wBnbc5hcVMe7458OpY0GADOBEuuc405rORMA
+         Zfu2wvYd1zrTAzyuOhrDFa3OVYdnEG1+Nz7mUgHUidngd05dRTz9HrDB5gkrKaQ03k
+         ySb5uJ/qP+m0IwdqV7Y8UIvNBh3g7iHliQqLrh1Mcz1CtGUEJYJQ77N5UwRddBZt+9
+         BUJToAxoNGfnQ==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4RmFH55Zglz4wxl;
-        Thu, 14 Sep 2023 08:19:13 +1000 (AEST)
-Date:   Thu, 14 Sep 2023 08:19:12 +1000
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4RmFYb0tJbz4wxn;
+        Thu, 14 Sep 2023 08:31:47 +1000 (AEST)
+Date:   Thu, 14 Sep 2023 08:31:45 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Hou Tao <houtao@huaweicloud.com>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Yonghong Song <yonghong.song@linux.dev>,
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Qi Zheng <zhengqi.arch@bytedance.com>,
+        Kent Overstreet <kent.overstreet@linux.dev>,
+        Kent Overstreet <kent.overstreet@gmail.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>
-Subject: Re: linux-next: boot warning from the bpf-next tree
-Message-ID: <20230914081912.33b30cc8@canb.auug.org.au>
-In-Reply-To: <64f1f578-17e7-a8a8-12f2-6a1a0d98a4af@huaweicloud.com>
-References: <20230913133436.0eeec4cb@canb.auug.org.au>
-        <20230913145919.6060ae61@canb.auug.org.au>
-        <64f1f578-17e7-a8a8-12f2-6a1a0d98a4af@huaweicloud.com>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the bcachefs tree
+Message-ID: <20230914083145.17c2e7de@canb.auug.org.au>
+In-Reply-To: <20230913132330.00b3ef07f696cf9efc4d0886@linux-foundation.org>
+References: <20230912120429.7852428f@canb.auug.org.au>
+        <e639a428-0fb7-7329-ce52-e51f7951a146@bytedance.com>
+        <20230913093553.4290421e@canb.auug.org.au>
+        <ada473e9-aa2f-c6ff-b869-cf94942ddd20@bytedance.com>
+        <20230913132330.00b3ef07f696cf9efc4d0886@linux-foundation.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/orKwvZW7.iPNQ9_UONq7tER";
+Content-Type: multipart/signed; boundary="Sig_/UMIYG0d0=vFwzY14LgNDAzq";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/orKwvZW7.iPNQ9_UONq7tER
+--Sig_/UMIYG0d0=vFwzY14LgNDAzq
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Hou,
+Hi Andrew,
 
-On Wed, 13 Sep 2023 15:56:04 +0800 Hou Tao <houtao@huaweicloud.com> wrote:
+On Wed, 13 Sep 2023 13:23:30 -0700 Andrew Morton <akpm@linux-foundation.org=
+> wrote:
 >
-> Yes. The warning is due to the checking added in commit c93047255202
-> ("bpf: Ensure unit_size is matched with slab cache object size").
-> Considering that bpf-next has not merged the patch-set yet, should I
-> post a patch to bpf tree to fix it ? A fix patch is attached which can
-> fix the warning in my local setup.
+> On Wed, 13 Sep 2023 09:10:11 +0800 Qi Zheng <zhengqi.arch@bytedance.com> =
+wrote:
+>=20
+> > > From: Stephen Rothwell <sfr@canb.auug.org.au>
+> > > Date: Tue, 12 Sep 2023 11:27:22 +1000
+> > > Subject: [PATCH] bcachefs: convert to dynamically allocated shrinkers
+> > >=20
+> > > Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> > > ---
+> > >   fs/bcachefs/btree_cache.c     | 22 ++++++++++++----------
+> > >   fs/bcachefs/btree_key_cache.c | 21 ++++++++++++---------
+> > >   fs/bcachefs/btree_types.h     |  4 ++--
+> > >   fs/bcachefs/fs.c              |  2 +-
+> > >   fs/bcachefs/sysfs.c           |  2 +-
+> > >   5 files changed, 28 insertions(+), 23 deletions(-) =20
+> >=20
+> > This version looks good to me.
+> >=20
+> > Reviewed-by: Qi Zheng <zhengqi.arch@bytedance.com> =20
+>=20
+> I not longer carry a post-linux-next patch queue, so there's nothing I
+> can do with this patch.  I'll assume that either Kent or I will merge
+> it later, depending upon whose stuff goes into mainline first.
 
-I will apply your patch as a merge resolution for the bpf-next tree
-merge until something better is done.   Please make sure to let me know
-if it is not longer needed (in case it is not obvious).
+Actually the correct plan is for you and Kent to inform Linus of the
+need for this patch as part of the merge resolution when he merges the
+latter of your trees (unless you want to stabilise the shrinker changes
+into a separate branch that is never rewritten and is merged into your
+tree and the bcachefs tree).
+
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/orKwvZW7.iPNQ9_UONq7tER
+--Sig_/UMIYG0d0=vFwzY14LgNDAzq
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmUCNWAACgkQAVBC80lX
-0GwuOQf+KWBTqY7eObPbFTZBSZSSIanAEyD/PV0bdtfB9zxa74+OE5mutDSDTYEv
-6Pf72Z1PNxdZzhOdufqE/XVx7rXfy9vIp++vkE7+Uz1J21f5Ilfn7gbbsTYu6N9u
-9RG+JENpbroJtRT/LLyRerXT+q7Q5fyBcB/kL5B3CfOataLF9usI7sv/hifhPu8U
-I0CnAV3SsUVDD2gqOtI16maGXhabtHM/Hzl+vRz53oX9Z+bMcSwSJ2GGDkV7WHKi
-XYq7BjlrllIOXPxLtacWpTB/HADKoLierClCWeDXc0K1otS9ZMy7D7+UD2Db4clc
-T5u+IhRq0Y7NPQQ0DtRXVd4gLVjt9w==
-=PvI8
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmUCOFEACgkQAVBC80lX
+0Gy9zQf/ejgWzw0Rr5H/Tffk6cv/jazjqQfd6kRbJSh6yrGxyhuH+Hb7/UQxLdYT
+96ZTBPjlsE9oGEk90ukOFtYGhhebsa0D0hA7ZQpbiNIAftOPcvoCT9sTKeJ+aUo5
+wqWWJYhI5WR4VL22gMFEVN7R9pHMPKpb4YOOh3LH4bkj67gxAFvxcE27m8W5ggHU
+eWiDPWx3Z9bok8RGeLoZeZa1IbafIEwfKfDBUpUzR8wVzAvz//0spg9cByiVR+VQ
+dPA966f2GlSN8LyWj7/s+NhEwFAmGa+Rem/Zvl8ju3vb89VD/tjzjw8itIEZVqEB
+icMFgCGdN0D8Cdhe1GSQcQzhoX3zDg==
+=47h4
 -----END PGP SIGNATURE-----
 
---Sig_/orKwvZW7.iPNQ9_UONq7tER--
+--Sig_/UMIYG0d0=vFwzY14LgNDAzq--

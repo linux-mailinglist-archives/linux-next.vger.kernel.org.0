@@ -2,118 +2,87 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE53679F554
-	for <lists+linux-next@lfdr.de>; Thu, 14 Sep 2023 01:08:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A5E579F5B7
+	for <lists+linux-next@lfdr.de>; Thu, 14 Sep 2023 01:54:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233062AbjIMXIg (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 13 Sep 2023 19:08:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45764 "EHLO
+        id S230171AbjIMXyR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 13 Sep 2023 19:54:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbjIMXIg (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 13 Sep 2023 19:08:36 -0400
-X-Greylist: delayed 120 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 13 Sep 2023 16:08:32 PDT
-Received: from out-218.mta0.migadu.com (out-218.mta0.migadu.com [91.218.175.218])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FF741BCB
-        for <linux-next@vger.kernel.org>; Wed, 13 Sep 2023 16:08:32 -0700 (PDT)
-Date:   Wed, 13 Sep 2023 19:06:26 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1694646389;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=FgNozcSRo+T99nbhVepuExq9RQqMFh90J9hDwFMmt1g=;
-        b=CimjAAS4LtbTzuRiDX23AsYxBLrN9B6TMoexS+pL5EtFTySrcknh7ZWKtvNF/B5XTTpKWj
-        c7cDsllygWI/5K7TirbwDRpziTgVtoJPLoAdF+7x8NibS6lywIrnsciRGvvwb9WzgOKB/o
-        h6BFKzb3PoAogh3WTcp62CLycpzTyC4=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Kent Overstreet <kent.overstreet@linux.dev>
-To:     Josh Poimboeuf <jpoimboe@kernel.org>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: linux-next: Tree for Sep 12 (bcachefs, objtool)
-Message-ID: <20230913230626.mu764axueko6ccta@moria.home.lan>
-References: <20230912152645.0868a96a@canb.auug.org.au>
- <d60dac60-1e38-4a8c-98ad-a769ab1dfccd@infradead.org>
- <20230913210829.zkxv6qqlamymhatr@treble>
+        with ESMTP id S229894AbjIMXyQ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 13 Sep 2023 19:54:16 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0105E4B;
+        Wed, 13 Sep 2023 16:54:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1694649247;
+        bh=HeU4wwPrVEU9zsogKgnhmorT3Fd04M54kOE3V3kzWqI=;
+        h=Date:From:To:Cc:Subject:From;
+        b=UcLEkhEjunpacZgVNBolWdEAjsiTdA6a5D+8blcZmRXKNMQaQQigQIn0qszyx6qt4
+         6vf24MRcsrpH58bLo90qINZg3SQMZilxBof3JrRpnuyEebJlsaTSo+cETV4SajEMvL
+         dszBmhfhpm1x6kyebeitqyjNjIx/CtAGhT1cJ1lreasERtbMGTQGzAHtIsq6gucZR/
+         29Fn8OyqaAwnb5ZM7VOtjO9RNgSaPoG4Jj5h0m2uO25zfEQ2wo3QNkwLaQUmYRevy5
+         DCvrZ5c6Zo6XSyKvq6qCipiRUld/GAVXDD/jVvgQe4XSnHvT8Pb+qZ1U2oZxEEtoyc
+         F63ehM86zfuDg==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4RmHNb2R9Xz4wxj;
+        Thu, 14 Sep 2023 09:54:06 +1000 (AEST)
+Date:   Thu, 14 Sep 2023 09:54:05 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Sterba <dsterba@suse.cz>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patches in the btrfs tree
+Message-ID: <20230914095405.45b58b11@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230913210829.zkxv6qqlamymhatr@treble>
-X-Migadu-Flow: FLOW_OUT
+Content-Type: multipart/signed; boundary="Sig_/s5GJCna9tRdWGYhNCpjDbm9";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Sep 13, 2023 at 11:08:29PM +0200, Josh Poimboeuf wrote:
-> On Tue, Sep 12, 2023 at 04:36:55PM -0700, Randy Dunlap wrote:
-> > 
-> > 
-> > On 9/11/23 22:26, Stephen Rothwell wrote:
-> > > Hi all,
-> > > 
-> > > Changes since 20230911:
-> > > 
-> > > New tree: bcachefs
-> > > 
-> > > The bcachefs tree gained a semantic conflict against Linus' tree for
-> > > which I applied a patch.
-> > > 
-> > > The wireless-next tree gaind a conflict against the wireless tree.
-> > > 
-> > > Non-merge commits (relative to Linus' tree): 4095
-> > >  1552 files changed, 346893 insertions(+), 22945 deletions(-)
-> > > 
-> > > ----------------------------------------------------------------------------
-> > 
-> > on x86_64:
-> > 
-> > vmlinux.o: warning: objtool: bch2_dev_buckets_reserved.part.0() is missing an ELF size annotation
-> 
-> Here ya go:
-> 
-> ---8<---
-> 
-> From: Josh Poimboeuf <jpoimboe@kernel.org>
-> Subject: [PATCH] bcachefs: Remove undefined behavior in bch2_dev_buckets_reserved()
-> 
-> In general it's a good idea to avoid using bare unreachable() because it
-> introduces undefined behavior in compiled code.  In this case it even
-> confuses GCC into emitting an empty unused
-> bch2_dev_buckets_reserved.part.0() function.
-> 
-> Use BUG() instead, which is nice and defined.  While in theory it should
-> never trigger, if something were to go awry and the BCH_WATERMARK_NR
-> case were to actually hit, the failure mode is much more robust.
+--Sig_/s5GJCna9tRdWGYhNCpjDbm9
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks, want to do the other two cases too? :)
-> 
-> Fixes the following warnings:
-> 
->   vmlinux.o: warning: objtool: bch2_bucket_alloc_trans() falls through to next function bch2_reset_alloc_cursors()
->   vmlinux.o: warning: objtool: bch2_dev_buckets_reserved.part.0() is missing an ELF size annotation
-> 
-> Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
-> ---
->  fs/bcachefs/buckets.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/fs/bcachefs/buckets.h b/fs/bcachefs/buckets.h
-> index f192809f50cf..0eff05c79c65 100644
-> --- a/fs/bcachefs/buckets.h
-> +++ b/fs/bcachefs/buckets.h
-> @@ -180,7 +180,7 @@ static inline u64 bch2_dev_buckets_reserved(struct bch_dev *ca, enum bch_waterma
->  
->  	switch (watermark) {
->  	case BCH_WATERMARK_NR:
-> -		unreachable();
-> +		BUG();
->  	case BCH_WATERMARK_stripe:
->  		reserved += ca->mi.nbuckets >> 6;
->  		fallthrough;
-> -- 
-> 2.41.0
-> 
+Hi all,
+
+The following commits are also in the btrfs-fixes tree as different
+commits (but the same patches):
+
+  0a1996a411b5 ("btrfs: set last dir index to the current last index when o=
+pening dir")
+  568ff9d3df2f ("btrfs: fix race when refilling delayed refs block reserve")
+  75a1897cb7f1 ("btrfs: don't clear uptodate on write errors")
+  d257cd9f609e ("btrfs: convert btrfs_read_merkle_tree_page() to use a foli=
+o")
+  d354d8aa8b40 ("btrfs: file_remove_privs needs an exclusive lock in direct=
+ io write")
+  e6b292f9d6bb ("btrfs: refresh dir last index during a rewinddir(3) call")
+  f93cae0fa843 ("btrfs: prevent transaction block reserve underflow when st=
+arting transaction")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/s5GJCna9tRdWGYhNCpjDbm9
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmUCS50ACgkQAVBC80lX
+0GzhbwgAjzZ+Kl0IsU+DMpIOt9T/3dn3/FJZcflJ5Z23XWznZ8l0wkyHITDCrxiS
+3WU8gdexggW1G1tLxCxfRkCWT9X8tG7aroRjZnMJpNdHytPZyyElghY/97aGBIs6
+b95dKUfE68UTRNpWlzaYiCdNU8l0ibh1H9Jv57d8ahNrZKbhfcja/2YHyVvHVGl8
+5WPmpB26FBT85Eu67RYCfMa3k3kN/FPelNirnVMTNGEhCGUCCGMbqyw8bppwniyF
++XwLVC6FSpdUKN5HI3WT35GI/+ao9H/VELTkoOnb3lQs29oeVHvl6xqFBk6l2uG0
+kS1Vft6ivRcma2JJwRdfWUDnMImD3g==
+=Acln
+-----END PGP SIGNATURE-----
+
+--Sig_/s5GJCna9tRdWGYhNCpjDbm9--

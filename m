@@ -2,182 +2,141 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A22FD79E2EC
-	for <lists+linux-next@lfdr.de>; Wed, 13 Sep 2023 11:04:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 331F879E3DE
+	for <lists+linux-next@lfdr.de>; Wed, 13 Sep 2023 11:37:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239207AbjIMJEc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 13 Sep 2023 05:04:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40670 "EHLO
+        id S239284AbjIMJhH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 13 Sep 2023 05:37:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239211AbjIMJEa (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 13 Sep 2023 05:04:30 -0400
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF5DD19A0
-        for <linux-next@vger.kernel.org>; Wed, 13 Sep 2023 02:04:24 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qgLn3-0005KH-BZ; Wed, 13 Sep 2023 11:04:05 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qgLn1-005yTW-MW; Wed, 13 Sep 2023 11:04:03 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qgLn0-001Htc-UT; Wed, 13 Sep 2023 11:04:02 +0200
-Date:   Wed, 13 Sep 2023 11:04:00 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the drm-misc tree with Linus' tree
-Message-ID: <20230913090400.ujxm7zv66qe4weuj@pengutronix.de>
-References: <20230913110939.574c7ec2@canb.auug.org.au>
+        with ESMTP id S239027AbjIMJhH (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 13 Sep 2023 05:37:07 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6049B1726
+        for <linux-next@vger.kernel.org>; Wed, 13 Sep 2023 02:37:03 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id d9443c01a7336-1c3887039d4so37053895ad.1
+        for <linux-next@vger.kernel.org>; Wed, 13 Sep 2023 02:37:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1694597822; x=1695202622; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=hRkM+l5jbFH13S++8GwChH9h/EdNj8WyqePrLRAHr+Q=;
+        b=2msov1DL6xfY6e94b1bskgK9Mkc+jw9x+C6ezuytS0iMlFI4w7Z45OsPE1giRSxHoP
+         vZ0ogtodEoUO+yXQGmVeyW+AorJICyz/5wcXMVVMgqPnZdUIir/5BYcSIuByoHoiPh9X
+         +9REptrQkZgvp9bMi1BleDi54Ll385GApT5W2FV9aACfOpneIMsEmkHAEjbnIZYJj28k
+         vN4ykOKBY0d3u74wnqSD29CHQyMPNtIkjaLn3fwWZgrwtvzy9h9JzO8GJ4M4IUcsDA2u
+         QGEdaEa3i56/gO8FGUCwfckaraq0hfm/j0K0HnFKwjf/zd+sS3AIlP62ouOKzgNvWOrY
+         mcyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694597822; x=1695202622;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hRkM+l5jbFH13S++8GwChH9h/EdNj8WyqePrLRAHr+Q=;
+        b=lvb4+uDxe0ZKQcFyg7kmQ+hhL18Lbm7qwBftKuaeSnh2P/fNMlXwwFUBKD6SfbMqKq
+         S8eLN3+/NdXKb628nXAw632KvVbL4apBWmWmH+IlzxTAtykyCtPPAGEQm0Nqpgyt8czm
+         mpNJISZfy4YXMSRf10K9Yp4kzdBWPHs+ikXkZp+fFtg6RSmpzVBUN3QduO4VIvhg3WZD
+         Z212G+jNUUAndYdcfFqKb1tezcS5lrLVPb4zuEVUsE2cQFPCBNV492Ll7jikFp/0xKQ0
+         cwG6YFp2LRfwgHa9joUt6pgdPlEIk0z+yrmysrlfa69qiguyVCDP0fePHsQNzwrK+9Kd
+         3BwA==
+X-Gm-Message-State: AOJu0Ywo/xVWmNW1pYDQ5fR8ZWQWIURU08tjp6os69zxWwj7uFLDAE7V
+        N6XLYP5YatsYNHwYIH5HWKoQY+fJSmQ50uGwaI0=
+X-Google-Smtp-Source: AGHT+IEcGvQgq2v5rL0navr1pRMuyYS9W+sFU34atzB0hVaiHslNWNZ22UsqgD+gBs22qQ75jyWKAg==
+X-Received: by 2002:a17:902:c949:b0:1c3:ea60:73e2 with SMTP id i9-20020a170902c94900b001c3ea6073e2mr1367889pla.27.1694597822303;
+        Wed, 13 Sep 2023 02:37:02 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id jk22-20020a170903331600b001bf52834696sm9986446plb.207.2023.09.13.02.37.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Sep 2023 02:37:01 -0700 (PDT)
+Message-ID: <650182bd.170a0220.1d982.bfe8@mx.google.com>
+Date:   Wed, 13 Sep 2023 02:37:01 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="clcng7srrdwctgdk"
-Content-Disposition: inline
-In-Reply-To: <20230913110939.574c7ec2@canb.auug.org.au>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-next@vger.kernel.org
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: pending-fixes
+X-Kernelci-Tree: next
+X-Kernelci-Kernel: v6.6-rc1-220-g17eb7af5bc73
+X-Kernelci-Report-Type: test
+Subject: next/pending-fixes baseline: 54 runs,
+ 1 regressions (v6.6-rc1-220-g17eb7af5bc73)
+To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+        kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+next/pending-fixes baseline: 54 runs, 1 regressions (v6.6-rc1-220-g17eb7af5=
+bc73)
 
---clcng7srrdwctgdk
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Regressions Summary
+-------------------
 
-On Wed, Sep 13, 2023 at 11:09:39AM +1000, Stephen Rothwell wrote:
-> Today's linux-next merge of the drm-misc tree got a conflict in:
->=20
->   drivers/gpu/drm/mediatek/mtk_dpi.c
->=20
-> between commits:
->=20
->   47d4bb6bbcdb ("drm/mediatek: mtk_dpi: Simplify with devm_drm_bridge_add=
-()")
->   90c95c3892dd ("drm/mediatek: mtk_dpi: Switch to .remove_new() void call=
-back")
->=20
-> from Linus' tree and commit:
->=20
->   c04ca6bbb7ea ("drm/mediatek: Convert to platform remove callback return=
-ing void")
->=20
-> from the drm-misc tree.
->=20
-> I fixed it up (the latter is the same as 90c95c3892dd)
-
-That's not entirely true:
-
-uwe@taurus:~/gsrc/linux$ git show --oneline --stat 90c95c3892dd
-90c95c3892dd drm/mediatek: mtk_dpi: Switch to .remove_new() void callback
- drivers/gpu/drm/mediatek/mtk_dpi.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
-uwe@taurus:~/gsrc/linux$ git show --oneline --stat c04ca6bbb7ea
-c04ca6bbb7ea drm/mediatek: Convert to platform remove callback returning vo=
-id
- drivers/gpu/drm/mediatek/mtk_disp_aal.c   | 6 ++----
- drivers/gpu/drm/mediatek/mtk_disp_ccorr.c | 6 ++----
- drivers/gpu/drm/mediatek/mtk_disp_color.c | 6 ++----
- drivers/gpu/drm/mediatek/mtk_disp_gamma.c | 6 ++----
- drivers/gpu/drm/mediatek/mtk_disp_merge.c | 6 ++----
- drivers/gpu/drm/mediatek/mtk_disp_ovl.c   | 6 ++----
- drivers/gpu/drm/mediatek/mtk_disp_rdma.c  | 6 ++----
- drivers/gpu/drm/mediatek/mtk_dp.c         | 6 ++----
- drivers/gpu/drm/mediatek/mtk_dpi.c        | 6 ++----
- drivers/gpu/drm/mediatek/mtk_drm_drv.c    | 6 ++----
- drivers/gpu/drm/mediatek/mtk_dsi.c        | 6 ++----
- drivers/gpu/drm/mediatek/mtk_hdmi.c       | 5 ++---
- drivers/gpu/drm/mediatek/mtk_hdmi_ddc.c   | 6 ++----
- drivers/gpu/drm/mediatek/mtk_mdp_rdma.c   | 5 ++---
- 14 files changed, 28 insertions(+), 54 deletions(-)
-
-But yes, restricted to drivers/gpu/drm/mediatek/mtk_dpi.c the patches do
-the same (but have a different base, so there is some fuzz):
-
-$ diff -u <(git show c04ca6bbb7ea drivers/gpu/drm/mediatek/mtk_dpi.c ) <(gi=
-t show 90c95c3892dd)
---- /dev/fd/63	2023-09-13 10:22:37.368055450 +0200
-+++ /dev/fd/62	2023-09-13 10:22:37.372055516 +0200
-@@ -1,46 +1,36 @@
--commit c04ca6bbb7ea6ea7cba9ba8d3d4d4c767008d189
--Author: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
--Date:   Sun May 7 18:25:52 2023 +0200
-+commit 90c95c3892dde019182ceac984d4ca1f3c85844b
-+Author: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.co=
-m>
-+Date:   Wed Jul 26 10:22:43 2023 +0200
-
-[...]
-
- diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c b/drivers/gpu/drm/mediatek=
-/mtk_dpi.c
--index 28bdb1f427ff..0ef722c24150 100644
-+index e9c5a0f44537..3a140498c98a 100644
- --- a/drivers/gpu/drm/mediatek/mtk_dpi.c
- +++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
--@@ -1101,14 +1101,12 @@ static int mtk_dpi_probe(struct platform_device *p=
-dev)
-+@@ -1087,11 +1087,9 @@ static int mtk_dpi_probe(struct platform_device *pd=
-ev)
-  	return 0;
-  }
-
- -static int mtk_dpi_remove(struct platform_device *pdev)
- +static void mtk_dpi_remove(struct platform_device *pdev)
-  {
-- 	struct mtk_dpi *dpi =3D platform_get_drvdata(pdev);
--
-  	component_del(&pdev->dev, &mtk_dpi_component_ops);
-- 	drm_bridge_remove(&dpi->bridge);
- -
- -	return 0;
-  }
-
-  static const struct of_device_id mtk_dpi_of_ids[] =3D {
--@@ -1139,7 +1137,7 @@ MODULE_DEVICE_TABLE(of, mtk_dpi_of_ids);
-+@@ -1122,7 +1120,7 @@ MODULE_DEVICE_TABLE(of, mtk_dpi_of_ids);
-
-  struct platform_driver mtk_dpi_driver =3D {
-  	.probe =3D mtk_dpi_probe,
+platform   | arch  | lab         | compiler | defconfig | regressions
+-----------+-------+-------------+----------+-----------+------------
+imx8mp-evk | arm64 | lab-broonie | gcc-10   | defconfig | 1          =
 
 
-e44dd16393896b2545a6d57b2c11381fe7628aa0 looks right.
+  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
+v6.6-rc1-220-g17eb7af5bc73/plan/baseline/
 
-Best regards and thanks,
-Uwe
+  Test:     baseline
+  Tree:     next
+  Branch:   pending-fixes
+  Describe: v6.6-rc1-220-g17eb7af5bc73
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+  SHA:      17eb7af5bc736455ed1f204a72d9eef7655fae2d =
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
---clcng7srrdwctgdk
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
+Test Regressions
+---------------- =
 
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmUBev8ACgkQj4D7WH0S
-/k4qSAf+OV1nuZBGo6mnwuIyxTR3yFNLsReHPsPo/eGwdbSr8OPllw1tww+TVmBm
-rejF5b22dIqLvQri5u1qfc9vNhgU+re7zvsL2xwT6kSnfc21kShAIV7sq/qt9wui
-JDLdvtR6q2SR1C5JxUOeOB/fxEb6W2SD5SZklt4v7Kw0OAHzcAcYJisaUps8dKfS
-Pf2hhnGP6mvgM2N1uxoRo973zzWQk3RinM6vBY0l201ddUpAisyqaSDWlzK/I80J
-fVz3isnr81e8scItpDW9PuOnqjgM5kP9guGK8bAl/k/KMulTTHhVyCnuyjLcSjPU
-egLhqdY/KoxwPtK66jQXxuKAqJj08w==
-=hXQN
------END PGP SIGNATURE-----
 
---clcng7srrdwctgdk--
+
+platform   | arch  | lab         | compiler | defconfig | regressions
+-----------+-------+-------------+----------+-----------+------------
+imx8mp-evk | arm64 | lab-broonie | gcc-10   | defconfig | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/650151ae9394885c978a0a42
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.6-rc1-22=
+0-g17eb7af5bc73/arm64/defconfig/gcc-10/lab-broonie/baseline-imx8mp-evk.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.6-rc1-22=
+0-g17eb7af5bc73/arm64/defconfig/gcc-10/lab-broonie/baseline-imx8mp-evk.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/650151ae9394885c978a0a4b
+        failing since 8 days (last pass: v6.5-5353-gb22935905f9c, first fai=
+l: v6.5-12059-g16fdf769151b)
+
+    2023-09-13T06:07:20.412932  + set<8>[   28.870770] <LAVA_SIGNAL_ENDRUN =
+0_dmesg 104221_1.5.2.4.1>
+    2023-09-13T06:07:20.413333   +x
+    2023-09-13T06:07:20.522403  / # #
+    2023-09-13T06:07:21.688243  export SHELL=3D/bin/sh
+    2023-09-13T06:07:21.694532  #
+    2023-09-13T06:07:23.193676  / # export SHELL=3D/bin/sh. /lava-104221/en=
+vironment
+    2023-09-13T06:07:23.199795  =
+
+    2023-09-13T06:07:25.922804  / # . /lava-104221/environment/lava-104221/=
+bin/lava-test-runner /lava-104221/1
+    2023-09-13T06:07:25.929655  =
+
+    2023-09-13T06:07:25.932731  / # /lava-104221/bin/lava-test-runner /lava=
+-104221/1 =
+
+    ... (13 line(s) more)  =
+
+ =20

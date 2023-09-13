@@ -2,115 +2,105 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E886A79DCE2
-	for <lists+linux-next@lfdr.de>; Wed, 13 Sep 2023 01:58:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6523279DD64
+	for <lists+linux-next@lfdr.de>; Wed, 13 Sep 2023 03:10:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229597AbjILX6j (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 12 Sep 2023 19:58:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46882 "EHLO
+        id S234764AbjIMBKM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 12 Sep 2023 21:10:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229589AbjILX6i (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 12 Sep 2023 19:58:38 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA90710FE;
-        Tue, 12 Sep 2023 16:58:34 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-500a8b2b73eso10039856e87.0;
-        Tue, 12 Sep 2023 16:58:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1694563113; x=1695167913; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0zUd3C1FM/wtnOQDYKIuXXd26DTw0nV6sQuRlNb6RDU=;
-        b=PTuK0Paj3fAw3ZvDENkCy+olJ3T9K2SSYDhga2dMUSuYZ1eCEAgH7D4CyeJ5F/+NUA
-         N/Ml8s9Y2SKRMhmXa222MDOFghlbOEAfbH9DeoOgP9FxeTdYwblk0rClqR5EMHgaYs1F
-         K+yxc4BsmBd4OHwG3cY8f9+5U0C2j3qBtpDNpseWqrbESiDNHK7GzWj8UNogiyPJdmTE
-         A9AG0GcZfPYfIWfvZ5gann0+sGNZh/zk/Jw0G58JvM7GZIlNhA0QxetW3UHzpnqCxjxC
-         4G0ikqYhKkw3oUqUYnIWoZG0iVxpXNJnevtxr5O3jv5AoA8yAnz8nF5lLowXJrNUx33A
-         hYfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694563113; x=1695167913;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0zUd3C1FM/wtnOQDYKIuXXd26DTw0nV6sQuRlNb6RDU=;
-        b=jjw0k9B7W/woEX4vU3+UxScaE7W9FrkvrFBf4W7sd6pimM+S1K+SKQfu5GdcEX1WG9
-         smMUpNgHTT59AkVywGxFpbK5EafsATRU1oDP5viS51kVb0PHdP5WlNl3stRJq99dU7Qr
-         aLsGmCXK2PQXdX7cGVR75OgoUkDftC4ld3FvViudi0rYv/Pcu8q+RAbe2Pk7wquIZubN
-         yZOEOq8aH5VmByfNin6+NoiFFv+sMr63BUygp8WrM42YJAjAAA0TS5SptNxQI36Aj1ER
-         dPN4Cbe3xIpcaXsvXzAhl3magHGF7OgvLZ4uAzlgtw+eGkqz6I17m064fUDmv43EGLU5
-         SJSg==
-X-Gm-Message-State: AOJu0YwEa0PDZ04rvTu7BN9KB6lel/UKxL2t+97lCE9sT580RJmAzFyG
-        LcKdN1+BGLdNiEuOed8TcWTac2NRZzhkiDYAyzEZ4rgwUF0=
-X-Google-Smtp-Source: AGHT+IGivdEcHiKXCCZRGqJ9thmtaq4JL/TKb/8uGuccY9BfUEgV5LC6kYM+Gxvp4bMzusM+JOxwKRcnE+Pm3b//vEE=
-X-Received: by 2002:a19:ca0b:0:b0:502:d85b:5de with SMTP id
- a11-20020a19ca0b000000b00502d85b05demr584754lfg.68.1694563112699; Tue, 12 Sep
- 2023 16:58:32 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230913081050.5e0862bd@canb.auug.org.au> <CAADnVQKt_oCgJpVv+jqi5yhO4XUb2RWzajNSsNWk4fJWD4cJ7A@mail.gmail.com>
- <20230913091507.71869bba@canb.auug.org.au>
-In-Reply-To: <20230913091507.71869bba@canb.auug.org.au>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Tue, 12 Sep 2023 16:58:21 -0700
-Message-ID: <CAADnVQ+p0d3QMbAphE5D0-kfYHZ+08WG_3MN7vTePK-spUuXtA@mail.gmail.com>
-Subject: Re: linux-next: Signed-off-by missing for commit in the bpf tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
+        with ESMTP id S229553AbjIMBKK (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 12 Sep 2023 21:10:10 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47C4310E6;
+        Tue, 12 Sep 2023 18:10:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1694567403;
+        bh=Bgqmvp6Vvzr/QlZJbVXlrj7k1IFmb3uGG7LW/EaoHdM=;
+        h=Date:From:To:Cc:Subject:From;
+        b=ZkKQVRR2DriYryMHGjVtGxLWECn8xVT9Nvnbx6+agJI5dZWsMiYtgJmZdg/i6RfNK
+         7bXR8yWVs8Opqvl1PFMTEiF1bzD8dlmzx/X1hm+sb8L6C/JoUMztuOvoNPRL/tWf8m
+         XsQAYyaCSxygaASOojLtt21AemFTM1yxeDWkpl8JPskkPVmqFOpjbiOvxhSrvfvHLN
+         Vlc6REtBvgxtWB84NyoyXRNOnzY2wqyisM4pjPVhcNMAPlZz/MWM24CegtCUIlhRDW
+         QmWb5+cNSNQVjH3q4OEohV77tSUnsvnGEUUuDR5yFImh9KlmcHIMfwi6ZvCGqyfoax
+         b671Ul1Y7xuTw==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Rlj6f62ktz4x3D;
+        Wed, 13 Sep 2023 11:10:02 +1000 (AEST)
+Date:   Wed, 13 Sep 2023 11:09:39 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Javier Martinez Canillas <javierm@redhat.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
+        <u.kleine-koenig@pengutronix.de>
+Subject: linux-next: manual merge of the drm-misc tree with Linus' tree
+Message-ID: <20230913110939.574c7ec2@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/Ed9H9=+yKJKWcjudP/1OMa+";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Sep 12, 2023 at 4:15=E2=80=AFPM Stephen Rothwell <sfr@canb.auug.org=
-.au> wrote:
->
-> Hi Alexei,
->
-> On Tue, 12 Sep 2023 15:18:45 -0700 Alexei Starovoitov <alexei.starovoitov=
-@gmail.com> wrote:
-> >
-> > On Tue, Sep 12, 2023 at 3:10=E2=80=AFPM Stephen Rothwell <sfr@canb.auug=
-.org.au> wrote:
-> > >
-> > > Hi all,
-> > >
-> > > Commit
-> > >
-> > >   3903802bb99a ("libbpf: Add basic BTF sanity validation")
-> > >
-> > > is missing a Signed-off-by from its committer.
-> >
-> > Hmm. It's pretty difficult to fix.
-> > We'd need to force push a bunch of commits and add a ton of
-> > unnecessary SOBs to commits after that one.
-> > Can you make a note of it somehow?
->
-> No, I can't - git has no mechanism to do so.  However, I note that this
-> commit is signed off by one of the BPF maintainers, so maybe it can be
-> left as is and try to remember next time ;-)
+--Sig_/Ed9H9=+yKJKWcjudP/1OMa+
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Right. Daniel's SOB is there.
+Hi all,
 
-I think the sequence of events was the following.
-We don't close bpf-next during the merge window.
-Only don't push for-next branch.
-Daniel committed that patch with his SOB.
-I committed few others. Then bpf->net got merged and net-next was
-fast forwarded. So we rebased bpf-next to the latest net-next
-and I force pushed few patches without noticing that one was
-committed by Daniel. Later we added a bunch more and a week
-later when rc1 was out we pushed for-next for the first time.
-Now that 3903802bb99a ("libbpf: Add basic BTF sanity validation")
-is pretty far from the top with myself, Daniel, Martin, Andrii
-as committers after.
-So to fix that mistakes we'd need to force push all commits
-after that one and add SOBs to all of them, since git cannot
-force push preserving older committers.
-I think the best to leave it as-is.
-We'll be more careful in the future.
+Today's linux-next merge of the drm-misc tree got a conflict in:
+
+  drivers/gpu/drm/mediatek/mtk_dpi.c
+
+between commits:
+
+  47d4bb6bbcdb ("drm/mediatek: mtk_dpi: Simplify with devm_drm_bridge_add()=
+")
+  90c95c3892dd ("drm/mediatek: mtk_dpi: Switch to .remove_new() void callba=
+ck")
+
+from Linus' tree and commit:
+
+  c04ca6bbb7ea ("drm/mediatek: Convert to platform remove callback returnin=
+g void")
+
+from the drm-misc tree.
+
+I fixed it up (the latter is the same as 90c95c3892dd) and can carry the
+fix as necessary. This is now fixed as far as linux-next is concerned,
+but any non trivial conflicts should be mentioned to your upstream
+maintainer when your tree is submitted for merging.  You may also want
+to consider cooperating with the maintainer of the conflicting tree to
+minimise any particularly complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/Ed9H9=+yKJKWcjudP/1OMa+
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmUBC9MACgkQAVBC80lX
+0Gz+YQf/czaMUHm7Pn2zchw6gWWTMLOVA5z8YP5XY+9R7tyumgL77f8Dk/HX3Z3v
+8pd5sID37cNZUYraYV3hEi2FgmYRvf6zMiyy4jhqpz6VGgeD/zwRPfDuMsiaxaTp
+7QbO5d5CmzAZk3lEBCnJjOKxhapgdSggB8l3iLgWjhKGLENt7Oc2jjQf+VmeYE3o
+OyZwR04TndcYbUODmqR40l7xomTTd2jyshXKcdAtDU+wZNyQM+SP/zSq5jQTCg3b
+R649yfI0T2ZzMw2dXxRQkGDZbsa9GoPCk036EesHzQUDa0kKN3irPrJmPYq5Vgw5
+NYtZX/qmr+3kKxEyysZI4dIJpP9JFg==
+=kpxN
+-----END PGP SIGNATURE-----
+
+--Sig_/Ed9H9=+yKJKWcjudP/1OMa+--

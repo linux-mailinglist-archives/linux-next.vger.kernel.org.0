@@ -2,114 +2,92 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F5CE79F4CE
-	for <lists+linux-next@lfdr.de>; Thu, 14 Sep 2023 00:14:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44E2579F4D7
+	for <lists+linux-next@lfdr.de>; Thu, 14 Sep 2023 00:19:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232999AbjIMWOK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 13 Sep 2023 18:14:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45958 "EHLO
+        id S232902AbjIMWTU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 13 Sep 2023 18:19:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232994AbjIMWOI (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 13 Sep 2023 18:14:08 -0400
+        with ESMTP id S229743AbjIMWTT (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 13 Sep 2023 18:19:19 -0400
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79C311996;
-        Wed, 13 Sep 2023 15:14:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA9E919A0;
+        Wed, 13 Sep 2023 15:19:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1694643243;
-        bh=Yc79kZstegY2MgDJ+A93XCaJaTftTDq8DtZ/AeBZWgE=;
+        s=201702; t=1694643554;
+        bh=zLywpBXGPVjbMPp/0mEgBcEgMQCavtFgVgs4YNmeboQ=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=nqaDFJzNBxhN71nHpw2Fjuj3yUferW24HDRwvvGCglXoEjybqrVUrc6xGLT2vl8FK
-         d1wm5ypI0Kc7SJPECo5wO4IJvhcYG7p5tKrOtdiyN0BjfKmAOnfpPC4hlMSfQi/cAW
-         SBvNqG38KvDGeFnAsXQbq87QN11A2ni5zr7xMKXGQXM73Iq5QtqVWCNufbpuI/Ssjz
-         Jh0XWwbaRcOX9Acffruj0CmP5rtTwNDMsRXspVhY9UtszApSN6EualnhOcO28MsRlb
-         W/78TwgaNLJV20rX+cW5Bl4q2T35QZEMS592bszoAUycLAUoaFe+uMm2IKMrlErPFD
-         xwFqy7GcKPPRQ==
+        b=kxzJhbH1+28KFnuIyD0+hA0t5IgqfMR06PjSVd7E3LfFAnNu1EkaktoyihADutvG4
+         uOuXO0xDpd1GHYOTuyn0djgunqNDUiK8rlL+7xqghDxV7rWkko5VKINEJtkTMcNaNI
+         84yY3mrOnek7UV643Dy9BZ7OnT3o2twYuXbOi9jpFVH3Or4dXloUmPCQ0CJo9fhuMW
+         FK3+LvJP2pVa94TGOKyszXptJ3KAgwQfTYgVelWFOfiUfjeMqny7H3iRSQAxuNvtLL
+         OM//u3h/FKqrceui/SNciBouBnD6Rlk+iVo8ZOPPaWbFmVxfvUDMpkdVbXLfqd9+V1
+         0iBiw16UjCprg==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4RmF966DxFz4wxf;
-        Thu, 14 Sep 2023 08:14:02 +1000 (AEST)
-Date:   Thu, 14 Sep 2023 08:14:00 +1000
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4RmFH55Zglz4wxl;
+        Thu, 14 Sep 2023 08:19:13 +1000 (AEST)
+Date:   Thu, 14 Sep 2023 08:19:12 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Kent Overstreet <kent.overstreet@linux.dev>
-Cc:     Kent Overstreet <kent.overstreet@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
+To:     Hou Tao <houtao@huaweicloud.com>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Yonghong Song <yonghong.song@linux.dev>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the bcachefs tree
-Message-ID: <20230914081400.5d9e5b8f@canb.auug.org.au>
-In-Reply-To: <20230912120429.7852428f@canb.auug.org.au>
-References: <20230912120429.7852428f@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>
+Subject: Re: linux-next: boot warning from the bpf-next tree
+Message-ID: <20230914081912.33b30cc8@canb.auug.org.au>
+In-Reply-To: <64f1f578-17e7-a8a8-12f2-6a1a0d98a4af@huaweicloud.com>
+References: <20230913133436.0eeec4cb@canb.auug.org.au>
+        <20230913145919.6060ae61@canb.auug.org.au>
+        <64f1f578-17e7-a8a8-12f2-6a1a0d98a4af@huaweicloud.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/TJF0qsaXAVjLHvoEJXlN/8F";
+Content-Type: multipart/signed; boundary="Sig_/orKwvZW7.iPNQ9_UONq7tER";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/TJF0qsaXAVjLHvoEJXlN/8F
+--Sig_/orKwvZW7.iPNQ9_UONq7tER
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Hi Hou,
 
-On Tue, 12 Sep 2023 12:04:29 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->=20
-> After merging the bcachefs tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
->=20
-> fs/bcachefs/btree_cache.c: In function 'bch2_fs_btree_cache_exit':
-> fs/bcachefs/btree_cache.c:403:9: error: implicit declaration of function =
-'unregister_shrinker'; did you mean 'unregister_chrdev'? [-Werror=3Dimplici=
-t-function-declaration]
->   403 |         unregister_shrinker(&bc->shrink);
->       |         ^~~~~~~~~~~~~~~~~~~
->       |         unregister_chrdev
-> fs/bcachefs/btree_cache.c: In function 'bch2_fs_btree_cache_init':
-> fs/bcachefs/btree_cache.c:479:15: error: implicit declaration of function=
- 'register_shrinker'; did you mean 'register_chrdev'? [-Werror=3Dimplicit-f=
-unction-declaration]
->   479 |         ret =3D register_shrinker(&bc->shrink, "%s/btree_cache", =
-c->name);
->       |               ^~~~~~~~~~~~~~~~~
->       |               register_chrdev
-> cc1: all warnings being treated as errors
->=20
-> Caused by commits
->=20
->   5ec30115c066 ("bcachefs: Initial commit")
->=20
-> interacting with commit
->=20
->   eba045d9350d ("mm: shrinker: remove old APIs")
->=20
-> from v6.6-rc1.
+On Wed, 13 Sep 2023 15:56:04 +0800 Hou Tao <houtao@huaweicloud.com> wrote:
+>
+> Yes. The warning is due to the checking added in commit c93047255202
+> ("bpf: Ensure unit_size is matched with slab cache object size").
+> Considering that bpf-next has not merged the patch-set yet, should I
+> post a patch to bpf tree to fix it ? A fix patch is attached which can
+> fix the warning in my local setup.
 
-This latter commit is actually in the mm tree and is now commit
-
-  d3ed57149dec ("mm: shrinker: remove old APIs")
-
+I will apply your patch as a merge resolution for the bpf-next tree
+merge until something better is done.   Please make sure to let me know
+if it is not longer needed (in case it is not obvious).
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/TJF0qsaXAVjLHvoEJXlN/8F
+--Sig_/orKwvZW7.iPNQ9_UONq7tER
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmUCNCgACgkQAVBC80lX
-0Gx5WQgAjnorkenbowZRRxj7bh6wVE9bBrQqFhyKbXhx/L+Tf04wm2m2CarbrNdN
-FE0QCovckdbN9N/2jBpAd1tuTNW8g+a2IFCvwTh1IIrXUv9cUry1Pz4kkWiRXeso
-oJ0fFAHPQkCVJ8RGZdCj4zf53RtWyJkFZ7GRElmD+hsVFZdbF8DHMOuq2nnam7yn
-8cnlEX20jRQUWXb35wSBJwh/f89U3QjgTtce98QFZ9hJWnMPRv6SP8PnbxUxiXWQ
-KCe/B4fErMci4KdkJJKPyS6Hfzdi5SvrtF7lP0QZu/0pOzUtlevheWWmdYJq4Xun
-mqPJWTpcLPzhaNZf2Qs4vTgC9pDohA==
-=3jSd
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmUCNWAACgkQAVBC80lX
+0GwuOQf+KWBTqY7eObPbFTZBSZSSIanAEyD/PV0bdtfB9zxa74+OE5mutDSDTYEv
+6Pf72Z1PNxdZzhOdufqE/XVx7rXfy9vIp++vkE7+Uz1J21f5Ilfn7gbbsTYu6N9u
+9RG+JENpbroJtRT/LLyRerXT+q7Q5fyBcB/kL5B3CfOataLF9usI7sv/hifhPu8U
+I0CnAV3SsUVDD2gqOtI16maGXhabtHM/Hzl+vRz53oX9Z+bMcSwSJ2GGDkV7WHKi
+XYq7BjlrllIOXPxLtacWpTB/HADKoLierClCWeDXc0K1otS9ZMy7D7+UD2Db4clc
+T5u+IhRq0Y7NPQQ0DtRXVd4gLVjt9w==
+=PvI8
 -----END PGP SIGNATURE-----
 
---Sig_/TJF0qsaXAVjLHvoEJXlN/8F--
+--Sig_/orKwvZW7.iPNQ9_UONq7tER--

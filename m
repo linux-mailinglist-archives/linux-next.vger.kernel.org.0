@@ -2,88 +2,164 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 556BD79F8A5
-	for <lists+linux-next@lfdr.de>; Thu, 14 Sep 2023 05:07:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA6E279F969
+	for <lists+linux-next@lfdr.de>; Thu, 14 Sep 2023 06:08:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234320AbjINDHt (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 13 Sep 2023 23:07:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60142 "EHLO
+        id S234316AbjINEIw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 14 Sep 2023 00:08:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234229AbjINDHd (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 13 Sep 2023 23:07:33 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DB4B1BEA
-        for <linux-next@vger.kernel.org>; Wed, 13 Sep 2023 20:07:29 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-68fb46f38f9so455607b3a.1
-        for <linux-next@vger.kernel.org>; Wed, 13 Sep 2023 20:07:29 -0700 (PDT)
+        with ESMTP id S233796AbjINEIv (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 14 Sep 2023 00:08:51 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A1A91AB
+        for <linux-next@vger.kernel.org>; Wed, 13 Sep 2023 21:08:47 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id 41be03b00d2f7-573c62b3cd2so363072a12.3
+        for <linux-next@vger.kernel.org>; Wed, 13 Sep 2023 21:08:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1694660848; x=1695265648; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=c7eGH5APPxa0doVf3firHzp15wOgwiJS+4ttZaxDWPc=;
-        b=IxyscfjLOR4HiTW0cLXezJ3A7e67CB9DvulJffXF82e9QwuG1lwABF7deTJN6UMjnQ
-         OSsJvrnYwnGs/5vlzR8qUxQhNmNQlV5Bk890V3CT3cXeVZ8V3XGYpWMDOjzCm2/LH41n
-         1KMZ+FZzD48wfvg7vp+9h8bXPOFQTmepymsLE=
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1694664526; x=1695269326; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=9b3Ig65rHMzki5xoHWW1c3OQzrBcCge1EtLjAfbbZQc=;
+        b=YmrqMlwIjsKHBI66+L1WYqSh54p5WdOw4g7WFMcPra16HJbtHtlViNwWOiq93MqNZ6
+         iLzz6TMHIWfrVfTm5QINcbrRlQiuAzkA/H6KwLGceVs2rw/sv+2XLqT0jJ+ftClKjJLL
+         JqTMNr5iLCybLk74VT/ey6LXvkRzkirpLH4bVpS9n4QeNqEphmGWUHOhg4SIAUz2dx1k
+         1F/Nl2bHvNP/PElZqyWm0Feq/d3aHPK09CuWX0mUYnhXm1La2pmf7M2GcRqqtdrwWhnf
+         +VdacbgBIPI0gqtcBF0iYYCiWeLcv4FFSksPEPNyKWepL+Pjds08np4OJWh+OVY/Wj53
+         eWvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694660848; x=1695265648;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=c7eGH5APPxa0doVf3firHzp15wOgwiJS+4ttZaxDWPc=;
-        b=Qr3LyHmHmxVO8gM5l4EFJnTy8//6kMGICObUgf2SwbvjSr37ayxBUSqQR8LFL1AgzC
-         FR0syLNcPizV89A/yW38SLro3VD81mFgJXsLheNadFrQAyxocGl6ru2fWxjP6dTKDipW
-         1F3YQfC6j4qile0doiohwDOxn0WURqTIuh1D5WSYIq4Bs066/XFUjT0EsPp3ffuYj6CO
-         kVD5fPxJXszHwB7xxrsfxiq4bSE1pOfV6NZNGExaL8o63YOt/WUrF7ZqTPmfKzPzKXMf
-         7ZnewHSvkAdtrocOQX7Fd96Y7ISOTBHwaRYnuhq73NMtkfu3dmCfm/KhjizpmJjlS6u8
-         T7eA==
-X-Gm-Message-State: AOJu0YyfDxWYvpilHK+FzfbOGWuIoEK1EiSvldDzRdWyiqq4ZGbOXn8r
-        7GUuFStxTrNh5mOadYhmpdVplQ==
-X-Google-Smtp-Source: AGHT+IGZmBpLWFu71hGRZBTNm7bOQUcy1Hf9Acib+EXCmVhkU4RTRREIIfolyhMbhfdF6t9RFYnSjA==
-X-Received: by 2002:a05:6a00:1505:b0:68f:da2a:6370 with SMTP id q5-20020a056a00150500b0068fda2a6370mr5148176pfu.13.1694660848650;
-        Wed, 13 Sep 2023 20:07:28 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id v3-20020aa78083000000b00686dd062207sm256805pff.150.2023.09.13.20.07.27
+        d=1e100.net; s=20230601; t=1694664526; x=1695269326;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9b3Ig65rHMzki5xoHWW1c3OQzrBcCge1EtLjAfbbZQc=;
+        b=K8jB56IMflfGWQMbXaKaaQcZZjCiO8DmRtKwYYG2s1XUqOzzWDMs3XD0BdOvxZAy7Q
+         uoTBjwSVlJpcVQoi45IDICofVWvfsDtWzXpLlaqYBHxJsBsrh9S3jdYx5gaKr8k60ron
+         ulWxxgXbNde6H2Nw+0uXDjLJawlReKhJoYsiKpRQsOz7Y1b8PszDq2BxDOmBjQwwLjEg
+         +ULCLbahKzqNX1kuDrBBZ6sg2hFIaURfqlfOD3ucqqQPJi6lEJ/HX5Dut9RxJWsX+uDq
+         O4Hziq3Bj7uwpTfyoGy7bID2eN1wGbbvWjp3oz8gd6HmPLVOGBAlEFfiprrLDDN4WHQb
+         MmPQ==
+X-Gm-Message-State: AOJu0YxwoES2IpJpHgIw9PZeeZ0i6UBv519uKgrlW9Vm41tYxeqGqcXy
+        BpnEO7ztJDayUIfeKQOORTGuWI0essWmXQcl65k=
+X-Google-Smtp-Source: AGHT+IFDq70OxA0j6PMr8PFjmJXX7ODBrZXoSrRqj35UfqT8fapH9EFuIk943o6S4sqpAjEnoEGnWg==
+X-Received: by 2002:a05:6a20:3242:b0:14d:abc:73dc with SMTP id hm2-20020a056a20324200b0014d0abc73dcmr2591684pzc.32.1694664526270;
+        Wed, 13 Sep 2023 21:08:46 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id f10-20020a170902ab8a00b001bdcafcf8d3sm410884plr.69.2023.09.13.21.08.44
+        for <linux-next@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Sep 2023 20:07:27 -0700 (PDT)
-Date:   Wed, 13 Sep 2023 20:07:26 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Alexey Dobriyan <adobriyan@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the kspp tree
-Message-ID: <202309132006.3F606460@keescook>
-References: <20230914115036.78ee9e94@canb.auug.org.au>
+        Wed, 13 Sep 2023 21:08:45 -0700 (PDT)
+Message-ID: <6502874d.170a0220.e0e67.2d63@mx.google.com>
+Date:   Wed, 13 Sep 2023 21:08:45 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230914115036.78ee9e94@canb.auug.org.au>
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: pending-fixes
+X-Kernelci-Tree: next
+X-Kernelci-Kernel: v6.6-rc1-377-gbcfe98207530
+X-Kernelci-Report-Type: build
+Subject: next/pending-fixes build: 8 builds: 0 failed, 8 passed,
+ 4 warnings (v6.6-rc1-377-gbcfe98207530)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Sep 14, 2023 at 11:50:36AM +1000, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the kspp tree, today's linux-next build (powerpc
-> ppc64_defconfig) failed like this:
-> 
-> In file included from security/selinux/include/initial_sid_to_string.h:3,
->                  from scripts/selinux/genheaders/genheaders.c:19:
-> include/uapi/linux/stddef.h:59:2: error: #endif without #if
->    59 | #endif /* _UAPI_LINUX_STDDEF_H */
->       |  ^~~~~
-> 
-> Caused by commit
-> 
->   366c47121bf6 ("uapi: stddef.h: Fix header guard location")
-> 
-> I have used the kspp tree from next-20230913 for today.
+next/pending-fixes build: 8 builds: 0 failed, 8 passed, 4 warnings (v6.6-rc=
+1-377-gbcfe98207530)
 
-Agh, thanks. That's what I get for last-minute tweak. All errors are
-mine; Alexey is innocent. :)
+Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
+rnel/v6.6-rc1-377-gbcfe98207530/
 
-I'll get it fixed.
+Tree: next
+Branch: pending-fixes
+Git Describe: v6.6-rc1-377-gbcfe98207530
+Git Commit: bcfe98207530e1ea0004f4e5dbd6e7e4d9eb2471
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Built: 8 unique architectures
 
--- 
-Kees Cook
+Warnings Detected:
+
+arc:
+
+arm64:
+
+arm:
+
+i386:
+
+mips:
+
+riscv:
+
+sparc:
+    sparc64_defconfig (gcc-10): 4 warnings
+
+x86_64:
+
+
+Warnings summary:
+
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---
+For more info write to <info@kernelci.org>

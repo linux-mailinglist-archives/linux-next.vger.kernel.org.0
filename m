@@ -2,97 +2,114 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC57B7A0648
-	for <lists+linux-next@lfdr.de>; Thu, 14 Sep 2023 15:41:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4862F7A0671
+	for <lists+linux-next@lfdr.de>; Thu, 14 Sep 2023 15:51:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238868AbjINNl6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 14 Sep 2023 09:41:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59402 "EHLO
+        id S239125AbjINNvx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 14 Sep 2023 09:51:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240259AbjINNlv (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 14 Sep 2023 09:41:51 -0400
+        with ESMTP id S239107AbjINNvx (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 14 Sep 2023 09:51:53 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25D2C1AE;
-        Thu, 14 Sep 2023 06:41:47 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A938C433C7;
-        Thu, 14 Sep 2023 13:41:45 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A66461BE3;
+        Thu, 14 Sep 2023 06:51:49 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0533C433C7;
+        Thu, 14 Sep 2023 13:51:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694698906;
-        bh=FHetZaKaZn2ZR7ZQqXKrAYm/1XbjR0eweWVZ37cVWzY=;
+        s=k20201202; t=1694699509;
+        bh=hMh7eQopqrtQZLsj75qHwGwk96M3LrHj3/pLM+3yCto=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZgK0m8RltbKGbgkOn23y8NLRz0FtNFKWivm4s52sLiBCCV/1MF4BUAfZ4lcL4KzvD
-         uzQSOF0fjQsJAcDxE45TVbeWohe5J6pZeGCZjgCuiOJSeTf2GGq29CB5q1xuYb+Keq
-         6iiodhVTk0Q6/PA8//B3Olc8EIyphnqk2aKlxsGMJ+9m2a6cZ8SIdXKRiGOpXS8q55
-         2miqYY1EsS6vHg9HTsKW0bceT4Ho0mOIFLQSBktRrHtxFnkpK6bbftcWP1LnNn9DEA
-         ENO8subd6GjGeg3Fud+eGRVhDKs2pTpeQl+yl1PnRwkjdqhWbqflPNv5FF33Y5/jKW
-         hg70tvcqU0dnA==
-Date:   Thu, 14 Sep 2023 15:41:42 +0200
+        b=SSMnqBWNIGvXAmtdsuQZYI+7yZYvTNV//weL23ZrRgBOiOazVE+4nkZ7h/wj8P1t3
+         sbbSVmK4oHzDxvBCPNwEyh0ubGnxWINbTa9rACgoVHp3Z+9rKKZvcmFMXuewTyRWCR
+         lhRxPCHvNy/EGC/dj08TyHIs7cQJxLVpfsFbXRJnuxyjA1wMauYFFE0JzKVjew77bA
+         ntnSxefW4fYC8jZFTJYrbwT61KZ4R1smXLkhF4DscH/K1VpWP13h1xZeVARF5td7jJ
+         eBwC31IT8mp1fwmuRpn+VXqCBtc30VNt2Imb5j94W1KsJvqDqkRLVwC6UoTJ0qokVy
+         lKBmzY9tht2Ug==
+Date:   Thu, 14 Sep 2023 15:51:44 +0200
 From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     Kent Overstreet <kent.overstreet@linux.dev>
+To:     Kees Cook <keescook@chromium.org>
 Cc:     Randy Dunlap <rdunlap@infradead.org>,
         Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Kent Overstreet <kent.overstreet@linux.dev>,
         Peter Zijlstra <peterz@infradead.org>
 Subject: Re: linux-next: Tree for Sep 12 (bcachefs, objtool)
-Message-ID: <20230914134142.lndfpgqahgkqca5k@treble>
+Message-ID: <20230914135144.udwf3lmhh5zael5e@treble>
 References: <20230912152645.0868a96a@canb.auug.org.au>
  <d60dac60-1e38-4a8c-98ad-a769ab1dfccd@infradead.org>
  <20230913210829.zkxv6qqlamymhatr@treble>
- <20230913230626.mu764axueko6ccta@moria.home.lan>
+ <202309131758.208804F4@keescook>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230913230626.mu764axueko6ccta@moria.home.lan>
+In-Reply-To: <202309131758.208804F4@keescook>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Sep 13, 2023 at 07:06:26PM -0400, Kent Overstreet wrote:
-> On Wed, Sep 13, 2023 at 11:08:29PM +0200, Josh Poimboeuf wrote:
-> > On Tue, Sep 12, 2023 at 04:36:55PM -0700, Randy Dunlap wrote:
-> > > 
-> > > 
-> > > On 9/11/23 22:26, Stephen Rothwell wrote:
-> > > > Hi all,
-> > > > 
-> > > > Changes since 20230911:
-> > > > 
-> > > > New tree: bcachefs
-> > > > 
-> > > > The bcachefs tree gained a semantic conflict against Linus' tree for
-> > > > which I applied a patch.
-> > > > 
-> > > > The wireless-next tree gaind a conflict against the wireless tree.
-> > > > 
-> > > > Non-merge commits (relative to Linus' tree): 4095
-> > > >  1552 files changed, 346893 insertions(+), 22945 deletions(-)
-> > > > 
-> > > > ----------------------------------------------------------------------------
-> > > 
-> > > on x86_64:
-> > > 
-> > > vmlinux.o: warning: objtool: bch2_dev_buckets_reserved.part.0() is missing an ELF size annotation
-> > 
-> > Here ya go:
-> > 
-> > ---8<---
-> > 
-> > From: Josh Poimboeuf <jpoimboe@kernel.org>
-> > Subject: [PATCH] bcachefs: Remove undefined behavior in bch2_dev_buckets_reserved()
-> > 
-> > In general it's a good idea to avoid using bare unreachable() because it
-> > introduces undefined behavior in compiled code.  In this case it even
-> > confuses GCC into emitting an empty unused
-> > bch2_dev_buckets_reserved.part.0() function.
-> > 
-> > Use BUG() instead, which is nice and defined.  While in theory it should
-> > never trigger, if something were to go awry and the BCH_WATERMARK_NR
-> > case were to actually hit, the failure mode is much more robust.
+On Wed, Sep 13, 2023 at 06:01:42PM -0700, Kees Cook wrote:
+> > +++ b/fs/bcachefs/buckets.h
+> > @@ -180,7 +180,7 @@ static inline u64 bch2_dev_buckets_reserved(struct bch_dev *ca, enum bch_waterma
+> >  
+> >  	switch (watermark) {
+> >  	case BCH_WATERMARK_NR:
+> > -		unreachable();
+> > +		BUG();
 > 
-> Thanks, want to do the other two cases too? :)
+> Linus gets really upset about new BUG() usage (takes out the entire
+> system):
+> https://docs.kernel.org/process/deprecated.html#bug-and-bug-on
+> 
+> It'd be nicer to actually handle the impossible case. (WARN and return
+> 0?)
 
-Hm, which cases are you referring to?
+Sure, see below.
 
+BTW, I'm about to go off grid for 1.5 weeks, so there will be no v3
+coming from me anytime soon :-)
+
+---8<---
+
+From: Josh Poimboeuf <jpoimboe@kernel.org>
+Subject: [PATCH v2] bcachefs: Remove undefined behavior in bch2_dev_buckets_reserved()
+
+In general it's a good idea to avoid using bare unreachable() because it
+introduces undefined behavior in compiled code.  In this case it even
+confuses GCC into emitting an empty unused
+bch2_dev_buckets_reserved.part.0() function.
+
+Use WARN_ON(1) instead, which is nice and defined.  While in theory it
+should never trigger, if something were to go awry and the
+BCH_WATERMARK_NR case were to actually hit, the failure mode is more
+robust.
+
+Fixes the following warnings:
+
+  vmlinux.o: warning: objtool: bch2_bucket_alloc_trans() falls through to next function bch2_reset_alloc_cursors()
+  vmlinux.o: warning: objtool: bch2_dev_buckets_reserved.part.0() is missing an ELF size annotation
+
+Reported-by: Randy Dunlap <rdunlap@infradead.org>
+Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+---
+ fs/bcachefs/buckets.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/fs/bcachefs/buckets.h b/fs/bcachefs/buckets.h
+index f192809f50cf..211f054bf83d 100644
+--- a/fs/bcachefs/buckets.h
++++ b/fs/bcachefs/buckets.h
+@@ -180,7 +180,8 @@ static inline u64 bch2_dev_buckets_reserved(struct bch_dev *ca, enum bch_waterma
+ 
+ 	switch (watermark) {
+ 	case BCH_WATERMARK_NR:
+-		unreachable();
++		WARN_ON(1);
++		break;
+ 	case BCH_WATERMARK_stripe:
+ 		reserved += ca->mi.nbuckets >> 6;
+ 		fallthrough;
 -- 
-Josh
+2.41.0
+

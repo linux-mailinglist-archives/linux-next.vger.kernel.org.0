@@ -2,2558 +2,571 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B1537A1790
-	for <lists+linux-next@lfdr.de>; Fri, 15 Sep 2023 09:35:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 701FA7A271A
+	for <lists+linux-next@lfdr.de>; Fri, 15 Sep 2023 21:21:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232574AbjIOHfS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 15 Sep 2023 03:35:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37114 "EHLO
+        id S236447AbjIOTVG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 15 Sep 2023 15:21:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232198AbjIOHfR (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 15 Sep 2023 03:35:17 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E434BA1
-        for <linux-next@vger.kernel.org>; Fri, 15 Sep 2023 00:35:09 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-68fc9a4ebe9so1657193b3a.2
-        for <linux-next@vger.kernel.org>; Fri, 15 Sep 2023 00:35:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1694763309; x=1695368109; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=oiP1OStfsPL72m00I1jooyapay4OrCcOhv3eM7O5PbE=;
-        b=n7ydXrqpBSY6yQYdnQJaMBh0txKCuwiM1MnLR/Py+Sjbe88XbSASvlpCSsAmSNb3SL
-         dZDZ5g5pbirf/YttYpwKkkr1zZNYzZX6VkBkZPJTXv9Gijt9tJzGtWXYdWQfXnCd+5Rc
-         KyXFC1iOnnc8WVmOXZny/Cro/oKTIPXeVpIgdxz3NlI4UjJhMjbhMdf4LjfWBJFlzXR4
-         Iup6Cjrt5Ngn7F3CLBdNLGRYiw4x7wlrOjjzQ1o1mlG7r/cxoG+01ZhLd1FtuaIPer3k
-         Sw65LsSb9hNLngOCzO0kYN673BpyI6iA6MlEPS8wb9lVTxm/IVuh920BN2v7HqtXHksY
-         xB2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694763309; x=1695368109;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=oiP1OStfsPL72m00I1jooyapay4OrCcOhv3eM7O5PbE=;
-        b=F/+pcScbaFacKC8v0NGj/pRej6a3X2S7Hzd71qq9h4frprK8JBIKogawhAWbGMIq8h
-         ehd48nH47ylkAO7OPH/l9SVATmN/eNroN7JDn8r3C2UXvWQmGa3X/tH9cok/UhNNyVsa
-         DZyM7kiv6srD1OHIQ8Udj+FBkpBCeO1z70OyclhGsMcUCqXf915Jz07AnHuzcHaQjfSO
-         DYai/Neos0tDww9qx9UeBLAZkO7Okb7LrvlQzFp73Y6BKHY27ZZ1mmBaV3+CEf2+YWuo
-         ER2Md86Vw7PILBeIhJItKM+AaqX9hVStorL5KjIhkI9vo44g+W5Vo4FKg1koXC5q5dK9
-         lKnQ==
-X-Gm-Message-State: AOJu0YyYPhqbGnA8fx8oziOl38uk2nj0VrT+1RH/sqC7r0U/QEP7w04+
-        tyfNvWwGdiwAg6Dn9j0pQdFomo7O0kmt7rTV0UgmNg==
-X-Google-Smtp-Source: AGHT+IGUlMNe4qvtYNT3M8WlGYxzy9Q/sa8dy0O4OnMsD56VyKM6zyCP5NZxZi8xkvTELp0h1m3LpQ==
-X-Received: by 2002:a05:6a20:748d:b0:137:74f8:62ee with SMTP id p13-20020a056a20748d00b0013774f862eemr1207499pzd.18.1694763307669;
-        Fri, 15 Sep 2023 00:35:07 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id ix18-20020a170902f81200b001bc6536051bsm2808080plb.184.2023.09.15.00.35.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Sep 2023 00:35:07 -0700 (PDT)
-Message-ID: <6504092b.170a0220.1f647.ab3c@mx.google.com>
-Date:   Fri, 15 Sep 2023 00:35:07 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S237003AbjIOTUp (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 15 Sep 2023 15:20:45 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0D32E7E;
+        Fri, 15 Sep 2023 12:20:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:From:References:Cc:To:
+        Subject:MIME-Version:Date:Message-ID:Content-Type:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Wsxs4nhqs5yO4lyYD+8gye0e93y5cSY5osIUUdPoc0k=; b=Ql1jw2GF6VxA/Q6de+Av0of48C
+        dy0Hqc04rfvIk0LdHfwy/u5NTeEG6KeHf78AyvZsgdzwChU8c1x8egvAPVVKruTCh8Q9i/tXLEoi5
+        LfI8EOnpWeTzgS5yfthJz1t1k+2a+qsbVrpGWN6sLOOPBFJzbMv4euV0T3m5v+ZwsM0E7HNeFF3LH
+        QGQbiEw2Xf6qJafzRwtl1JdXf7tbfDbcHchF+EYWJxxytzOxh5ioKaigSbrPeK4xweApb2JlD/wdX
+        uGdBm5o0o4jo0eFyTLxo9VQuFGNAeLI8A2rSHquZWBCx7Y/rVQIxzQZtYgMdAt1hDzbVwSGX7MM3P
+        QWSmRsYw==;
+Received: from [2601:1c2:980:9ec0:e65e:37ff:febd:ee53]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qhEMl-00BFsM-0x;
+        Fri, 15 Sep 2023 19:20:35 +0000
+Content-Type: multipart/mixed; boundary="------------0oi0ASsAj9FyljsL1x1407Sa"
+Message-ID: <fb3f00ab-178c-45cf-ba39-baf61bb3f117@infradead.org>
+Date:   Fri, 15 Sep 2023 12:20:32 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: master
-X-Kernelci-Tree: next
-X-Kernelci-Kernel: next-20230915
-X-Kernelci-Report-Type: test
-Subject: next/master baseline: 232 runs, 67 regressions (next-20230915)
-To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
-        kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla Thunderbird
+Subject: Re: linux-next: Tree for Sep 15 (drivers/mfd/cs42l43.o)
+Content-Language: en-US
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        James Schulman <james.schulman@cirrus.com>,
+        David Rhodes <david.rhodes@cirrus.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+        Lee Jones <lee@kernel.org>
+References: <20230915120127.1bc03420@canb.auug.org.au>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20230915120127.1bc03420@canb.auug.org.au>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master baseline: 232 runs, 67 regressions (next-20230915)
-
-Regressions Summary
--------------------
-
-platform                     | arch   | lab           | compiler   | defcon=
-fig                    | regressions
------------------------------+--------+---------------+------------+-------=
------------------------+------------
-acer-R721T-grunt             | x86_64 | lab-collabora | gcc-10     | x86_64=
-_defcon...6-chromebook | 1          =
-
-hifive-unleashed-a00         | riscv  | lab-baylibre  | gcc-10     | defcon=
-fig+kselftest          | 1          =
-
-hp-11A-G6-EE-grunt           | x86_64 | lab-collabora | gcc-10     | x86_64=
-_defcon...6-chromebook | 1          =
-
-hp-14-db0003na-grunt         | x86_64 | lab-collabora | gcc-10     | x86_64=
-_defcon...6-chromebook | 1          =
-
-imx8mp-evk                   | arm64  | lab-broonie   | gcc-10     | defcon=
-fig+CON..._64K_PAGES=3Dy | 1          =
-
-imx8mp-evk                   | arm64  | lab-broonie   | gcc-10     | defcon=
-fig                    | 1          =
-
-imx8mp-evk                   | arm64  | lab-broonie   | gcc-10     | defcon=
-fig+videodec           | 1          =
-
-mt8183-kukui-...uniper-sku16 | arm64  | lab-collabora | gcc-10     | defcon=
-fig+arm...ook+videodec | 4          =
-
-qemu_i386                    | i386   | lab-broonie   | clang-17   | i386_d=
-efconfig               | 1          =
-
-qemu_i386                    | i386   | lab-collabora | clang-17   | i386_d=
-efconfig               | 1          =
-
-qemu_i386                    | i386   | lab-broonie   | gcc-10     | i386_d=
-efconfig+debug         | 1          =
-
-qemu_i386                    | i386   | lab-broonie   | gcc-10     | i386_d=
-efconfig               | 1          =
-
-qemu_i386                    | i386   | lab-collabora | gcc-10     | i386_d=
-efconfig               | 1          =
-
-qemu_i386                    | i386   | lab-collabora | gcc-10     | i386_d=
-efconfig+debug         | 1          =
-
-qemu_i386-uefi               | i386   | lab-broonie   | clang-17   | i386_d=
-efconfig               | 1          =
-
-qemu_i386-uefi               | i386   | lab-collabora | clang-17   | i386_d=
-efconfig               | 1          =
-
-qemu_i386-uefi               | i386   | lab-broonie   | gcc-10     | i386_d=
-efconfig               | 1          =
-
-qemu_i386-uefi               | i386   | lab-broonie   | gcc-10     | i386_d=
-efconfig+debug         | 1          =
-
-qemu_i386-uefi               | i386   | lab-collabora | gcc-10     | i386_d=
-efconfig               | 1          =
-
-qemu_i386-uefi               | i386   | lab-collabora | gcc-10     | i386_d=
-efconfig+debug         | 1          =
-
-qemu_mips-malta              | mips   | lab-broonie   | gcc-10     | malta_=
-defconfig              | 1          =
-
-qemu_mips-malta              | mips   | lab-collabora | gcc-10     | malta_=
-defconfig              | 1          =
-
-qemu_x86_64                  | x86_64 | lab-broonie   | clang-17   | x86_64=
-_defconfig             | 1          =
-
-qemu_x86_64                  | x86_64 | lab-collabora | clang-17   | x86_64=
-_defconfig             | 1          =
-
-qemu_x86_64                  | x86_64 | lab-broonie   | gcc-10     | x86_64=
-_defconfig             | 1          =
-
-qemu_x86_64                  | x86_64 | lab-broonie   | gcc-10     | x86_64=
-_defconfig+debug       | 1          =
-
-qemu_x86_64                  | x86_64 | lab-broonie   | gcc-10     | x86_64=
-_defcon...6-chromebook | 1          =
-
-qemu_x86_64                  | x86_64 | lab-collabora | gcc-10     | x86_64=
-_defconfig             | 1          =
-
-qemu_x86_64                  | x86_64 | lab-collabora | gcc-10     | x86_64=
-_defconfig+debug       | 1          =
-
-qemu_x86_64                  | x86_64 | lab-collabora | gcc-10     | x86_64=
-_defcon...6-chromebook | 1          =
-
-qemu_x86_64                  | x86_64 | lab-broonie   | rustc-1.71 | x86_64=
-_defcon...rust-samples | 1          =
-
-qemu_x86_64                  | x86_64 | lab-broonie   | rustc-1.71 | x86_64=
-_defconfig             | 1          =
-
-qemu_x86_64                  | x86_64 | lab-broonie   | rustc-1.71 | x86_64=
-_defconfig+rust        | 1          =
-
-qemu_x86_64                  | x86_64 | lab-collabora | rustc-1.71 | x86_64=
-_defcon...rust-samples | 1          =
-
-qemu_x86_64                  | x86_64 | lab-collabora | rustc-1.71 | x86_64=
-_defconfig             | 1          =
-
-qemu_x86_64                  | x86_64 | lab-collabora | rustc-1.71 | x86_64=
-_defconfig+rust        | 1          =
-
-qemu_x86_64-uefi             | x86_64 | lab-broonie   | clang-17   | x86_64=
-_defconfig             | 1          =
-
-qemu_x86_64-uefi             | x86_64 | lab-collabora | clang-17   | x86_64=
-_defconfig             | 1          =
-
-qemu_x86_64-uefi             | x86_64 | lab-broonie   | gcc-10     | x86_64=
-_defconfig             | 1          =
-
-qemu_x86_64-uefi             | x86_64 | lab-broonie   | gcc-10     | x86_64=
-_defconfig+debug       | 1          =
-
-qemu_x86_64-uefi             | x86_64 | lab-broonie   | gcc-10     | x86_64=
-_defcon...6-chromebook | 1          =
-
-qemu_x86_64-uefi             | x86_64 | lab-collabora | gcc-10     | x86_64=
-_defconfig             | 1          =
-
-qemu_x86_64-uefi             | x86_64 | lab-collabora | gcc-10     | x86_64=
-_defconfig+debug       | 1          =
-
-qemu_x86_64-uefi             | x86_64 | lab-collabora | gcc-10     | x86_64=
-_defcon...6-chromebook | 1          =
-
-qemu_x86_64-uefi             | x86_64 | lab-broonie   | rustc-1.71 | x86_64=
-_defcon...rust-samples | 1          =
-
-qemu_x86_64-uefi             | x86_64 | lab-broonie   | rustc-1.71 | x86_64=
-_defconfig             | 1          =
-
-qemu_x86_64-uefi             | x86_64 | lab-broonie   | rustc-1.71 | x86_64=
-_defconfig+rust        | 1          =
-
-qemu_x86_64-uefi             | x86_64 | lab-collabora | rustc-1.71 | x86_64=
-_defcon...rust-samples | 1          =
-
-qemu_x86_64-uefi             | x86_64 | lab-collabora | rustc-1.71 | x86_64=
-_defconfig             | 1          =
-
-qemu_x86_64-uefi             | x86_64 | lab-collabora | rustc-1.71 | x86_64=
-_defconfig+rust        | 1          =
-
-qemu_x86_64-uefi-mixed       | x86_64 | lab-broonie   | clang-17   | x86_64=
-_defconfig             | 1          =
-
-qemu_x86_64-uefi-mixed       | x86_64 | lab-collabora | clang-17   | x86_64=
-_defconfig             | 1          =
-
-qemu_x86_64-uefi-mixed       | x86_64 | lab-broonie   | gcc-10     | x86_64=
-_defconfig             | 1          =
-
-qemu_x86_64-uefi-mixed       | x86_64 | lab-broonie   | gcc-10     | x86_64=
-_defconfig+debug       | 1          =
-
-qemu_x86_64-uefi-mixed       | x86_64 | lab-broonie   | gcc-10     | x86_64=
-_defcon...6-chromebook | 1          =
-
-qemu_x86_64-uefi-mixed       | x86_64 | lab-collabora | gcc-10     | x86_64=
-_defconfig             | 1          =
-
-qemu_x86_64-uefi-mixed       | x86_64 | lab-collabora | gcc-10     | x86_64=
-_defconfig+debug       | 1          =
-
-qemu_x86_64-uefi-mixed       | x86_64 | lab-collabora | gcc-10     | x86_64=
-_defcon...6-chromebook | 1          =
-
-qemu_x86_64-uefi-mixed       | x86_64 | lab-broonie   | rustc-1.71 | x86_64=
-_defcon...rust-samples | 1          =
-
-qemu_x86_64-uefi-mixed       | x86_64 | lab-broonie   | rustc-1.71 | x86_64=
-_defconfig             | 1          =
-
-qemu_x86_64-uefi-mixed       | x86_64 | lab-broonie   | rustc-1.71 | x86_64=
-_defconfig+rust        | 1          =
-
-qemu_x86_64-uefi-mixed       | x86_64 | lab-collabora | rustc-1.71 | x86_64=
-_defcon...rust-samples | 1          =
-
-qemu_x86_64-uefi-mixed       | x86_64 | lab-collabora | rustc-1.71 | x86_64=
-_defconfig             | 1          =
-
-qemu_x86_64-uefi-mixed       | x86_64 | lab-collabora | rustc-1.71 | x86_64=
-_defconfig+rust        | 1          =
-
-
-  Details:  https://kernelci.org/test/job/next/branch/master/kernel/next-20=
-230915/plan/baseline/
-
-  Test:     baseline
-  Tree:     next
-  Branch:   master
-  Describe: next-20230915
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      dfa449a58323de195773cf928d99db4130702bf7 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform                     | arch   | lab           | compiler   | defcon=
-fig                    | regressions
------------------------------+--------+---------------+------------+-------=
------------------------+------------
-acer-R721T-grunt             | x86_64 | lab-collabora | gcc-10     | x86_64=
-_defcon...6-chromebook | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6503cfa682c790938a8a0a68
-
-  Results:     18 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig+x86-chromebook
-  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig+x86-chromebook/gcc-10/lab-collabora/baseline-acer-R721T=
--grunt.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig+x86-chromebook/gcc-10/lab-collabora/baseline-acer-R721T=
--grunt.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/6503cfa682c790938a8a0a7d
-        failing since 16 days (last pass: next-20230823, first fail: next-2=
-0230829)
-
-    2023-09-15T03:29:36.857283  + <8>[   11.313299] <LAVA_SIGNAL_ENDRUN 0_d=
-mesg 11531039_1.4.2.3.1>
-
-    2023-09-15T03:29:36.857720  set +x
-
-    2023-09-15T03:29:36.967071  / # #
-
-    2023-09-15T03:29:37.069202  export SHELL=3D/bin/sh
-
-    2023-09-15T03:29:37.069746  #
-
-    2023-09-15T03:29:37.170788  / # export SHELL=3D/bin/sh. /lava-11531039/=
-environment
-
-    2023-09-15T03:29:37.171448  =
-
-
-    2023-09-15T03:29:37.272597  / # . /lava-11531039/environment/lava-11531=
-039/bin/lava-test-runner /lava-11531039/1
-
-    2023-09-15T03:29:37.273454  =
-
-
-    2023-09-15T03:29:37.278557  / # /lava-11531039/bin/lava-test-runner /la=
-va-11531039/1
- =
-
-    ... (12 line(s) more)  =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler   | defcon=
-fig                    | regressions
------------------------------+--------+---------------+------------+-------=
------------------------+------------
-hifive-unleashed-a00         | riscv  | lab-baylibre  | gcc-10     | defcon=
-fig+kselftest          | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6503ce62ae41f978ee8a0a54
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+kselftest
-  Compiler:    gcc-10 (riscv64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20230915/risc=
-v/defconfig+kselftest/gcc-10/lab-baylibre/baseline-hifive-unleashed-a00.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20230915/risc=
-v/defconfig+kselftest/gcc-10/lab-baylibre/baseline-hifive-unleashed-a00.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/riscv/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6503ce62ae41f978ee8a0=
-a55
-        new failure (last pass: next-20230913) =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler   | defcon=
-fig                    | regressions
------------------------------+--------+---------------+------------+-------=
------------------------+------------
-hp-11A-G6-EE-grunt           | x86_64 | lab-collabora | gcc-10     | x86_64=
-_defcon...6-chromebook | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6503cf98d7e0f868038a0a47
-
-  Results:     18 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig+x86-chromebook
-  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig+x86-chromebook/gcc-10/lab-collabora/baseline-hp-11A-G6-=
-EE-grunt.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig+x86-chromebook/gcc-10/lab-collabora/baseline-hp-11A-G6-=
-EE-grunt.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/6503cf98d7e0f868038a0a5c
-        failing since 16 days (last pass: next-20230823, first fail: next-2=
-0230829)
-
-    2023-09-15T03:29:15.309002  + <8>[   11.207871] <LAVA_SIGNAL_ENDRUN 0_d=
-mesg 11531045_1.4.2.3.1>
-
-    2023-09-15T03:29:15.309118  set +x
-
-    2023-09-15T03:29:15.413408  / # #
-
-    2023-09-15T03:29:15.514105  export SHELL=3D/bin/sh
-
-    2023-09-15T03:29:15.514290  #
-
-    2023-09-15T03:29:15.614811  / # export SHELL=3D/bin/sh. /lava-11531045/=
-environment
-
-    2023-09-15T03:29:15.615024  =
-
-
-    2023-09-15T03:29:15.715557  / # . /lava-11531045/environment/lava-11531=
-045/bin/lava-test-runner /lava-11531045/1
-
-    2023-09-15T03:29:15.715845  =
-
-
-    2023-09-15T03:29:15.719931  / # /lava-11531045/bin/lava-test-runner /la=
-va-11531045/1
- =
-
-    ... (12 line(s) more)  =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler   | defcon=
-fig                    | regressions
------------------------------+--------+---------------+------------+-------=
------------------------+------------
-hp-14-db0003na-grunt         | x86_64 | lab-collabora | gcc-10     | x86_64=
-_defcon...6-chromebook | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6503cf9682c790938a8a0a43
-
-  Results:     18 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig+x86-chromebook
-  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig+x86-chromebook/gcc-10/lab-collabora/baseline-hp-14-db00=
-03na-grunt.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig+x86-chromebook/gcc-10/lab-collabora/baseline-hp-14-db00=
-03na-grunt.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/6503cf9682c790938a8a0a58
-        failing since 16 days (last pass: next-20230823, first fail: next-2=
-0230829)
-
-    2023-09-15T03:29:15.586361  + <8>[   10.697613] <LAVA_SIGNAL_ENDRUN 0_d=
-mesg 11531038_1.4.2.3.1>
-
-    2023-09-15T03:29:15.586979  set +x
-
-    2023-09-15T03:29:15.694896  / # #
-
-    2023-09-15T03:29:15.797297  export SHELL=3D/bin/sh
-
-    2023-09-15T03:29:15.798073  #
-
-    2023-09-15T03:29:15.899624  / # export SHELL=3D/bin/sh. /lava-11531038/=
-environment
-
-    2023-09-15T03:29:15.900539  =
-
-
-    2023-09-15T03:29:16.002521  / # . /lava-11531038/environment/lava-11531=
-038/bin/lava-test-runner /lava-11531038/1
-
-    2023-09-15T03:29:16.003854  =
-
-
-    2023-09-15T03:29:16.008914  / # /lava-11531038/bin/lava-test-runner /la=
-va-11531038/1
- =
-
-    ... (12 line(s) more)  =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler   | defcon=
-fig                    | regressions
------------------------------+--------+---------------+------------+-------=
------------------------+------------
-imx8mp-evk                   | arm64  | lab-broonie   | gcc-10     | defcon=
-fig+CON..._64K_PAGES=3Dy | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6503c6ecea53685a938a0a5d
-
-  Results:     5 PASS, 1 FAIL, 1 SKIP
-  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20230915/arm6=
-4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-broonie/baseline-imx8mp-e=
-vk.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20230915/arm6=
-4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-broonie/baseline-imx8mp-e=
-vk.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/6503c6ecea53685a938a0a66
-        failing since 30 days (last pass: next-20230809, first fail: next-2=
-0230815)
-
-    2023-09-15T02:52:08.328062  + set<8>[   28.558156] <LAVA_SIGNAL_ENDRUN =
-0_dmesg 108513_1.5.2.4.1>
-    2023-09-15T02:52:08.328670   +x
-    2023-09-15T02:52:08.439141  / # #
-    2023-09-15T02:52:09.605416  export SHELL=3D/bin/sh
-    2023-09-15T02:52:09.611549  #
-    2023-09-15T02:52:11.110479  / # export SHELL=3D/bin/sh. /lava-108513/en=
-vironment
-    2023-09-15T02:52:11.116635  =
-
-    2023-09-15T02:52:13.837552  / # . /lava-108513/environment/lava-108513/=
-bin/lava-test-runner /lava-108513/1
-    2023-09-15T02:52:13.844245  =
-
-    2023-09-15T02:52:13.850296  / # /lava-108513/bin/lava-test-runner /lava=
--108513/1 =
-
-    ... (12 line(s) more)  =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler   | defcon=
-fig                    | regressions
------------------------------+--------+---------------+------------+-------=
------------------------+------------
-imx8mp-evk                   | arm64  | lab-broonie   | gcc-10     | defcon=
-fig                    | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6503cffd725e9f9cba8a0b02
-
-  Results:     5 PASS, 1 FAIL, 1 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20230915/arm6=
-4/defconfig/gcc-10/lab-broonie/baseline-imx8mp-evk.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20230915/arm6=
-4/defconfig/gcc-10/lab-broonie/baseline-imx8mp-evk.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/6503cffe725e9f9cba8a0b0b
-        failing since 30 days (last pass: next-20230809, first fail: next-2=
-0230815)
-
-    2023-09-15T03:30:57.774201  + set<8>[   28.675204] <LAVA_SIGNAL_ENDRUN =
-0_dmesg 108633_1.5.2.4.1>
-    2023-09-15T03:30:57.774832   +x
-    2023-09-15T03:30:57.884926  / # #
-    2023-09-15T03:30:59.051027  export SHELL=3D/bin/sh
-    2023-09-15T03:30:59.057172  #
-    2023-09-15T03:31:00.554188  / # export SHELL=3D/bin/sh. /lava-108633/en=
-vironment
-    2023-09-15T03:31:00.560206  =
-
-    2023-09-15T03:31:03.273572  / # . /lava-108633/environment/lava-108633/=
-bin/lava-test-runner /lava-108633/1
-    2023-09-15T03:31:03.280212  =
-
-    2023-09-15T03:31:03.293274  / # /lava-108633/bin/lava-test-runner /lava=
--108633/1 =
-
-    ... (12 line(s) more)  =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler   | defcon=
-fig                    | regressions
------------------------------+--------+---------------+------------+-------=
------------------------+------------
-imx8mp-evk                   | arm64  | lab-broonie   | gcc-10     | defcon=
-fig+videodec           | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6503d5c68975d6b2b48a0ae5
-
-  Results:     5 PASS, 1 FAIL, 1 SKIP
-  Full config: defconfig+videodec
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20230915/arm6=
-4/defconfig+videodec/gcc-10/lab-broonie/baseline-imx8mp-evk.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20230915/arm6=
-4/defconfig+videodec/gcc-10/lab-broonie/baseline-imx8mp-evk.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/6503d5c68975d6b2b48a0aee
-        failing since 30 days (last pass: next-20230809, first fail: next-2=
-0230815)
-
-    2023-09-15T03:55:31.625382  + set<8>[   27.514529] <LAVA_SIGNAL_ENDRUN =
-0_dmesg 108724_1.5.2.4.1>
-    2023-09-15T03:55:31.625982   +x
-    2023-09-15T03:55:31.736501  / # #
-    2023-09-15T03:55:32.902091  export SHELL=3D/bin/sh
-    2023-09-15T03:55:32.908053  #
-    2023-09-15T03:55:34.403086  / # export SHELL=3D/bin/sh. /lava-108724/en=
-vironment
-    2023-09-15T03:55:34.408554  =
-
-    2023-09-15T03:55:37.118782  / # . /lava-108724/environment/lava-108724/=
-bin/lava-test-runner /lava-108724/1
-    2023-09-15T03:55:37.125078  =
-
-    2023-09-15T03:55:37.131498  / # /lava-108724/bin/lava-test-runner /lava=
--108724/1 =
-
-    ... (12 line(s) more)  =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler   | defcon=
-fig                    | regressions
------------------------------+--------+---------------+------------+-------=
------------------------+------------
-mt8183-kukui-...uniper-sku16 | arm64  | lab-collabora | gcc-10     | defcon=
-fig+arm...ook+videodec | 4          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6503d34d2ababa11f28a0a48
-
-  Results:     163 PASS, 9 FAIL, 0 SKIP
-  Full config: defconfig+arm64-chromebook+videodec
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20230915/arm6=
-4/defconfig+arm64-chromebook+videodec/gcc-10/lab-collabora/baseline-mt8183-=
-kukui-jacuzzi-juniper-sku16.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20230915/arm6=
-4/defconfig+arm64-chromebook+videodec/gcc-10/lab-collabora/baseline-mt8183-=
-kukui-jacuzzi-juniper-sku16.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.dmesg.emerg: https://kernelci.org/test/case/id/6503d34d2ababa1=
-1f28a0a4b
-        failing since 0 day (last pass: next-20230913, first fail: next-202=
-30914)
-        2 lines
-
-    2023-09-15T03:45:01.358837  at virtual address 0000000000000008
-
-    2023-09-15T03:45:01.362448  kern  :alert : Mem abort info:
-
-    2023-09-15T03:45:01.365469  kern  :alert :   ESR =3D 0x0000000096000006
-
-    2023-09-15T03:45:01.371882  kern  :alert :   EC =3D 0x25: DABT (current=
- EL), IL =3D 32 bits
-
-    2023-09-15T03:45:01.372601  kern  :alert :   SET =3D 0, FnV =3D 0
-
-    2023-09-15T03:45:01.382625  <8>[   17.040143] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Demerg RESULT=3Dfail UNITS=3Dlines MEASUREMENT=3D2>
-   =
-
-
-  * baseline.dmesg.alert: https://kernelci.org/test/case/id/6503d34d2ababa1=
-1f28a0a4c
-        failing since 0 day (last pass: next-20230913, first fail: next-202=
-30914)
-        13 lines
-
-    2023-09-15T03:45:01.355561  kern  :alert : Unable to handle kernel NULL=
- pointer dereference <8>[   17.012832] <LAVA_SIGNAL_TESTCASE TEST_CASE_ID=
-=3Dalert RESULT=3Dfail UNITS=3Dlines MEASUREMENT=3D13>
-   =
-
-
-  * baseline.bootrr.mtk-jpeg-probed: https://kernelci.org/test/case/id/6503=
-d34d2ababa11f28a0a83
-        failing since 0 day (last pass: next-20230913, first fail: next-202=
-30914)
-
-    2023-09-15T03:45:07.637047  <8>[   23.295520] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Dmtk-jpeg-driver-present RESULT=3Dpass>
-
-    2023-09-15T03:45:08.655568  /lava-11531238/1/../bin/lava-test-case
-
-    2023-09-15T03:45:08.666827  <8>[   24.325701] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Dmtk-jpeg-probed RESULT=3Dfail>
-   =
-
-
-  * baseline.bootrr.mtk-scp-probed: https://kernelci.org/test/case/id/6503d=
-34d2ababa11f28a0a85
-        failing since 0 day (last pass: next-20230913, first fail: next-202=
-30914)
-
-    2023-09-15T03:45:06.589061  <8>[   22.247566] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Dmtk-scp-driver-present RESULT=3Dpass>
-
-    2023-09-15T03:45:07.606044  /lava-11531238/1/../bin/lava-test-case
-   =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler   | defcon=
-fig                    | regressions
------------------------------+--------+---------------+------------+-------=
------------------------+------------
-qemu_i386                    | i386   | lab-broonie   | clang-17   | i386_d=
-efconfig               | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6503cfd6725e9f9cba8a0aad
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: i386_defconfig
-  Compiler:    clang-17 (Debian clang version 17.0.0 (++20230911073116+0176=
-e8729ea4-1~exp1~20230911073215.40))
-  Plain log:   https://storage.kernelci.org//next/master/next-20230915/i386=
-/i386_defconfig/clang-17/lab-broonie/baseline-qemu_i386.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20230915/i386=
-/i386_defconfig/clang-17/lab-broonie/baseline-qemu_i386.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6503cfd6725e9f9cba8a0=
-aae
-        failing since 1 day (last pass: next-20230912, first fail: next-202=
-30913) =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler   | defcon=
-fig                    | regressions
------------------------------+--------+---------------+------------+-------=
------------------------+------------
-qemu_i386                    | i386   | lab-collabora | clang-17   | i386_d=
-efconfig               | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6503cf96d7e0f868038a0a42
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: i386_defconfig
-  Compiler:    clang-17 (Debian clang version 17.0.0 (++20230911073116+0176=
-e8729ea4-1~exp1~20230911073215.40))
-  Plain log:   https://storage.kernelci.org//next/master/next-20230915/i386=
-/i386_defconfig/clang-17/lab-collabora/baseline-qemu_i386.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20230915/i386=
-/i386_defconfig/clang-17/lab-collabora/baseline-qemu_i386.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6503cf96d7e0f868038a0=
-a43
-        failing since 1 day (last pass: next-20230912, first fail: next-202=
-30913) =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler   | defcon=
-fig                    | regressions
------------------------------+--------+---------------+------------+-------=
------------------------+------------
-qemu_i386                    | i386   | lab-broonie   | gcc-10     | i386_d=
-efconfig+debug         | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6503c818cf4cbdd6c58a0a51
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: i386_defconfig+debug
-  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20230915/i386=
-/i386_defconfig+debug/gcc-10/lab-broonie/baseline-qemu_i386.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20230915/i386=
-/i386_defconfig+debug/gcc-10/lab-broonie/baseline-qemu_i386.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6503c818cf4cbdd6c58a0=
-a52
-        failing since 1 day (last pass: next-20230912, first fail: next-202=
-30913) =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler   | defcon=
-fig                    | regressions
------------------------------+--------+---------------+------------+-------=
------------------------+------------
-qemu_i386                    | i386   | lab-broonie   | gcc-10     | i386_d=
-efconfig               | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6503c81acf4cbdd6c58a0a56
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: i386_defconfig
-  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20230915/i386=
-/i386_defconfig/gcc-10/lab-broonie/baseline-qemu_i386.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20230915/i386=
-/i386_defconfig/gcc-10/lab-broonie/baseline-qemu_i386.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6503c81acf4cbdd6c58a0=
-a57
-        failing since 1 day (last pass: next-20230912, first fail: next-202=
-30913) =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler   | defcon=
-fig                    | regressions
------------------------------+--------+---------------+------------+-------=
------------------------+------------
-qemu_i386                    | i386   | lab-collabora | gcc-10     | i386_d=
-efconfig               | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6503c7c5b5ecda100a8a0aa7
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: i386_defconfig
-  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20230915/i386=
-/i386_defconfig/gcc-10/lab-collabora/baseline-qemu_i386.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20230915/i386=
-/i386_defconfig/gcc-10/lab-collabora/baseline-qemu_i386.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6503c7c5b5ecda100a8a0=
-aa8
-        failing since 1 day (last pass: next-20230912, first fail: next-202=
-30913) =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler   | defcon=
-fig                    | regressions
------------------------------+--------+---------------+------------+-------=
------------------------+------------
-qemu_i386                    | i386   | lab-collabora | gcc-10     | i386_d=
-efconfig+debug         | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6503c828cf4cbdd6c58a0a5c
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: i386_defconfig+debug
-  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20230915/i386=
-/i386_defconfig+debug/gcc-10/lab-collabora/baseline-qemu_i386.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20230915/i386=
-/i386_defconfig+debug/gcc-10/lab-collabora/baseline-qemu_i386.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6503c828cf4cbdd6c58a0=
-a5d
-        failing since 1 day (last pass: next-20230912, first fail: next-202=
-30913) =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler   | defcon=
-fig                    | regressions
------------------------------+--------+---------------+------------+-------=
------------------------+------------
-qemu_i386-uefi               | i386   | lab-broonie   | clang-17   | i386_d=
-efconfig               | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6503cfd5725e9f9cba8a0aaa
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: i386_defconfig
-  Compiler:    clang-17 (Debian clang version 17.0.0 (++20230911073116+0176=
-e8729ea4-1~exp1~20230911073215.40))
-  Plain log:   https://storage.kernelci.org//next/master/next-20230915/i386=
-/i386_defconfig/clang-17/lab-broonie/baseline-qemu_i386-uefi.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20230915/i386=
-/i386_defconfig/clang-17/lab-broonie/baseline-qemu_i386-uefi.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6503cfd5725e9f9cba8a0=
-aab
-        failing since 1 day (last pass: next-20230912, first fail: next-202=
-30913) =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler   | defcon=
-fig                    | regressions
------------------------------+--------+---------------+------------+-------=
------------------------+------------
-qemu_i386-uefi               | i386   | lab-collabora | clang-17   | i386_d=
-efconfig               | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6503cf953fba26d58a8a0a84
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: i386_defconfig
-  Compiler:    clang-17 (Debian clang version 17.0.0 (++20230911073116+0176=
-e8729ea4-1~exp1~20230911073215.40))
-  Plain log:   https://storage.kernelci.org//next/master/next-20230915/i386=
-/i386_defconfig/clang-17/lab-collabora/baseline-qemu_i386-uefi.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20230915/i386=
-/i386_defconfig/clang-17/lab-collabora/baseline-qemu_i386-uefi.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6503cf953fba26d58a8a0=
-a85
-        failing since 1 day (last pass: next-20230912, first fail: next-202=
-30913) =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler   | defcon=
-fig                    | regressions
------------------------------+--------+---------------+------------+-------=
------------------------+------------
-qemu_i386-uefi               | i386   | lab-broonie   | gcc-10     | i386_d=
-efconfig               | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6503c7db77d950bae68a0a42
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: i386_defconfig
-  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20230915/i386=
-/i386_defconfig/gcc-10/lab-broonie/baseline-qemu_i386-uefi.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20230915/i386=
-/i386_defconfig/gcc-10/lab-broonie/baseline-qemu_i386-uefi.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6503c7db77d950bae68a0=
-a43
-        failing since 1 day (last pass: next-20230912, first fail: next-202=
-30913) =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler   | defcon=
-fig                    | regressions
------------------------------+--------+---------------+------------+-------=
------------------------+------------
-qemu_i386-uefi               | i386   | lab-broonie   | gcc-10     | i386_d=
-efconfig+debug         | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6503c81759bcc53c9f8a0a42
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: i386_defconfig+debug
-  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20230915/i386=
-/i386_defconfig+debug/gcc-10/lab-broonie/baseline-qemu_i386-uefi.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20230915/i386=
-/i386_defconfig+debug/gcc-10/lab-broonie/baseline-qemu_i386-uefi.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6503c81759bcc53c9f8a0=
-a43
-        failing since 1 day (last pass: next-20230912, first fail: next-202=
-30913) =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler   | defcon=
-fig                    | regressions
------------------------------+--------+---------------+------------+-------=
------------------------+------------
-qemu_i386-uefi               | i386   | lab-collabora | gcc-10     | i386_d=
-efconfig               | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6503c7c41e5d7a593f8a0aa3
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: i386_defconfig
-  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20230915/i386=
-/i386_defconfig/gcc-10/lab-collabora/baseline-qemu_i386-uefi.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20230915/i386=
-/i386_defconfig/gcc-10/lab-collabora/baseline-qemu_i386-uefi.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6503c7c41e5d7a593f8a0=
-aa4
-        failing since 1 day (last pass: next-20230912, first fail: next-202=
-30913) =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler   | defcon=
-fig                    | regressions
------------------------------+--------+---------------+------------+-------=
------------------------+------------
-qemu_i386-uefi               | i386   | lab-collabora | gcc-10     | i386_d=
-efconfig+debug         | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6503c827cf4cbdd6c58a0a59
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: i386_defconfig+debug
-  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20230915/i386=
-/i386_defconfig+debug/gcc-10/lab-collabora/baseline-qemu_i386-uefi.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20230915/i386=
-/i386_defconfig+debug/gcc-10/lab-collabora/baseline-qemu_i386-uefi.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6503c827cf4cbdd6c58a0=
-a5a
-        failing since 1 day (last pass: next-20230912, first fail: next-202=
-30913) =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler   | defcon=
-fig                    | regressions
------------------------------+--------+---------------+------------+-------=
------------------------+------------
-qemu_mips-malta              | mips   | lab-broonie   | gcc-10     | malta_=
-defconfig              | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6503caaef2a497b5a68a0a46
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: malta_defconfig
-  Compiler:    gcc-10 (mips-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20230915/mips=
-/malta_defconfig/gcc-10/lab-broonie/baseline-qemu_mips-malta.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20230915/mips=
-/malta_defconfig/gcc-10/lab-broonie/baseline-qemu_mips-malta.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/mipsel/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6503caaef2a497b5a68a0=
-a47
-        failing since 1 day (last pass: next-20230912, first fail: next-202=
-30913) =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler   | defcon=
-fig                    | regressions
------------------------------+--------+---------------+------------+-------=
------------------------+------------
-qemu_mips-malta              | mips   | lab-collabora | gcc-10     | malta_=
-defconfig              | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6503ca6c1515bfa2ae8a0a44
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: malta_defconfig
-  Compiler:    gcc-10 (mips-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20230915/mips=
-/malta_defconfig/gcc-10/lab-collabora/baseline-qemu_mips-malta.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20230915/mips=
-/malta_defconfig/gcc-10/lab-collabora/baseline-qemu_mips-malta.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/mipsel/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6503ca6c1515bfa2ae8a0=
-a45
-        failing since 1 day (last pass: next-20230912, first fail: next-202=
-30913) =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler   | defcon=
-fig                    | regressions
------------------------------+--------+---------------+------------+-------=
------------------------+------------
-qemu_x86_64                  | x86_64 | lab-broonie   | clang-17   | x86_64=
-_defconfig             | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6503d2414a2129c16f8a0a44
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig
-  Compiler:    clang-17 (Debian clang version 17.0.0 (++20230911073116+0176=
-e8729ea4-1~exp1~20230911073215.40))
-  Plain log:   https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig/clang-17/lab-broonie/baseline-qemu_x86_64.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig/clang-17/lab-broonie/baseline-qemu_x86_64.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6503d2414a2129c16f8a0=
-a45
-        failing since 1 day (last pass: next-20230912, first fail: next-202=
-30913) =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler   | defcon=
-fig                    | regressions
------------------------------+--------+---------------+------------+-------=
------------------------+------------
-qemu_x86_64                  | x86_64 | lab-collabora | clang-17   | x86_64=
-_defconfig             | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6503d14d4b2fb4f6868a0a67
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig
-  Compiler:    clang-17 (Debian clang version 17.0.0 (++20230911073116+0176=
-e8729ea4-1~exp1~20230911073215.40))
-  Plain log:   https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig/clang-17/lab-collabora/baseline-qemu_x86_64.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig/clang-17/lab-collabora/baseline-qemu_x86_64.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6503d14d4b2fb4f6868a0=
-a68
-        failing since 1 day (last pass: next-20230912, first fail: next-202=
-30913) =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler   | defcon=
-fig                    | regressions
------------------------------+--------+---------------+------------+-------=
------------------------+------------
-qemu_x86_64                  | x86_64 | lab-broonie   | gcc-10     | x86_64=
-_defconfig             | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6503ccb4375f43ca018a0a63
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig
-  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig/gcc-10/lab-broonie/baseline-qemu_x86_64.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig/gcc-10/lab-broonie/baseline-qemu_x86_64.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6503ccb4375f43ca018a0=
-a64
-        failing since 1 day (last pass: next-20230912, first fail: next-202=
-30913) =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler   | defcon=
-fig                    | regressions
------------------------------+--------+---------------+------------+-------=
------------------------+------------
-qemu_x86_64                  | x86_64 | lab-broonie   | gcc-10     | x86_64=
-_defconfig+debug       | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6503ce5fe922920d708a0a4e
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig+debug
-  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig+debug/gcc-10/lab-broonie/baseline-qemu_x86_64.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig+debug/gcc-10/lab-broonie/baseline-qemu_x86_64.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6503ce5fe922920d708a0=
-a4f
-        failing since 1 day (last pass: next-20230911, first fail: next-202=
-30913) =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler   | defcon=
-fig                    | regressions
------------------------------+--------+---------------+------------+-------=
------------------------+------------
-qemu_x86_64                  | x86_64 | lab-broonie   | gcc-10     | x86_64=
-_defcon...6-chromebook | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6503d0616ae71c9e4a8a0a42
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig+x86-chromebook
-  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig+x86-chromebook/gcc-10/lab-broonie/baseline-qemu_x86_64.=
-txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig+x86-chromebook/gcc-10/lab-broonie/baseline-qemu_x86_64.=
-html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6503d0616ae71c9e4a8a0=
-a43
-        failing since 1 day (last pass: next-20230912, first fail: next-202=
-30913) =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler   | defcon=
-fig                    | regressions
------------------------------+--------+---------------+------------+-------=
------------------------+------------
-qemu_x86_64                  | x86_64 | lab-collabora | gcc-10     | x86_64=
-_defconfig             | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6503cc4e16a7706a288a0a48
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig
-  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig/gcc-10/lab-collabora/baseline-qemu_x86_64.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig/gcc-10/lab-collabora/baseline-qemu_x86_64.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6503cc4e16a7706a288a0=
-a49
-        failing since 1 day (last pass: next-20230912, first fail: next-202=
-30913) =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler   | defcon=
-fig                    | regressions
------------------------------+--------+---------------+------------+-------=
------------------------+------------
-qemu_x86_64                  | x86_64 | lab-collabora | gcc-10     | x86_64=
-_defconfig+debug       | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6503cd01b9343808048a0a4d
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig+debug
-  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig+debug/gcc-10/lab-collabora/baseline-qemu_x86_64.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig+debug/gcc-10/lab-collabora/baseline-qemu_x86_64.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6503cd01b9343808048a0=
-a4e
-        failing since 1 day (last pass: next-20230911, first fail: next-202=
-30913) =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler   | defcon=
-fig                    | regressions
------------------------------+--------+---------------+------------+-------=
------------------------+------------
-qemu_x86_64                  | x86_64 | lab-collabora | gcc-10     | x86_64=
-_defcon...6-chromebook | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6503cfbec776e119c48a0a71
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig+x86-chromebook
-  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig+x86-chromebook/gcc-10/lab-collabora/baseline-qemu_x86_6=
-4.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig+x86-chromebook/gcc-10/lab-collabora/baseline-qemu_x86_6=
-4.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6503cfbec776e119c48a0=
-a72
-        failing since 1 day (last pass: next-20230912, first fail: next-202=
-30913) =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler   | defcon=
-fig                    | regressions
------------------------------+--------+---------------+------------+-------=
------------------------+------------
-qemu_x86_64                  | x86_64 | lab-broonie   | rustc-1.71 | x86_64=
-_defcon...rust-samples | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6503cb600ea52338318a0a67
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig+rust-samples
-  Compiler:    rustc-1.71 (Debian clang version 16.0.6 (++20230710041823+7c=
-bf1a259152-1~exp1~20230710161844.102))
-  Plain log:   https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig+rust-samples/rustc-1.71/lab-broonie/baseline-qemu_x86_6=
-4.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig+rust-samples/rustc-1.71/lab-broonie/baseline-qemu_x86_6=
-4.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6503cb600ea52338318a0=
-a68
-        failing since 1 day (last pass: next-20230912, first fail: next-202=
-30913) =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler   | defcon=
-fig                    | regressions
------------------------------+--------+---------------+------------+-------=
------------------------+------------
-qemu_x86_64                  | x86_64 | lab-broonie   | rustc-1.71 | x86_64=
-_defconfig             | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6503d1c9758834b7b68a0d59
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig
-  Compiler:    rustc-1.71 (Debian clang version 16.0.6 (++20230710041823+7c=
-bf1a259152-1~exp1~20230710161844.102))
-  Plain log:   https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig/rustc-1.71/lab-broonie/baseline-qemu_x86_64.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig/rustc-1.71/lab-broonie/baseline-qemu_x86_64.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6503d1c9758834b7b68a0=
-d5a
-        failing since 1 day (last pass: next-20230911, first fail: next-202=
-30913) =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler   | defcon=
-fig                    | regressions
------------------------------+--------+---------------+------------+-------=
------------------------+------------
-qemu_x86_64                  | x86_64 | lab-broonie   | rustc-1.71 | x86_64=
-_defconfig+rust        | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6503d48731fe5656fb8a0a57
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig+rust
-  Compiler:    rustc-1.71 (Debian clang version 16.0.6 (++20230710041823+7c=
-bf1a259152-1~exp1~20230710161844.102))
-  Plain log:   https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig+rust/rustc-1.71/lab-broonie/baseline-qemu_x86_64.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig+rust/rustc-1.71/lab-broonie/baseline-qemu_x86_64.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6503d48731fe5656fb8a0=
-a58
-        failing since 0 day (last pass: next-20230912, first fail: next-202=
-30914) =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler   | defcon=
-fig                    | regressions
------------------------------+--------+---------------+------------+-------=
------------------------+------------
-qemu_x86_64                  | x86_64 | lab-collabora | rustc-1.71 | x86_64=
-_defcon...rust-samples | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6503cb0e0ea52338318a0a48
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig+rust-samples
-  Compiler:    rustc-1.71 (Debian clang version 16.0.6 (++20230710041823+7c=
-bf1a259152-1~exp1~20230710161844.102))
-  Plain log:   https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig+rust-samples/rustc-1.71/lab-collabora/baseline-qemu_x86=
-_64.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig+rust-samples/rustc-1.71/lab-collabora/baseline-qemu_x86=
-_64.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6503cb0e0ea52338318a0=
-a49
-        failing since 1 day (last pass: next-20230912, first fail: next-202=
-30913) =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler   | defcon=
-fig                    | regressions
------------------------------+--------+---------------+------------+-------=
------------------------+------------
-qemu_x86_64                  | x86_64 | lab-collabora | rustc-1.71 | x86_64=
-_defconfig             | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6503d0e9de784058898a0a61
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig
-  Compiler:    rustc-1.71 (Debian clang version 16.0.6 (++20230710041823+7c=
-bf1a259152-1~exp1~20230710161844.102))
-  Plain log:   https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig/rustc-1.71/lab-collabora/baseline-qemu_x86_64.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig/rustc-1.71/lab-collabora/baseline-qemu_x86_64.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6503d0e9de784058898a0=
-a62
-        failing since 1 day (last pass: next-20230911, first fail: next-202=
-30913) =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler   | defcon=
-fig                    | regressions
------------------------------+--------+---------------+------------+-------=
------------------------+------------
-qemu_x86_64                  | x86_64 | lab-collabora | rustc-1.71 | x86_64=
-_defconfig+rust        | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6503d4fbf68769b92a8a0a47
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig+rust
-  Compiler:    rustc-1.71 (Debian clang version 16.0.6 (++20230710041823+7c=
-bf1a259152-1~exp1~20230710161844.102))
-  Plain log:   https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig+rust/rustc-1.71/lab-collabora/baseline-qemu_x86_64.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig+rust/rustc-1.71/lab-collabora/baseline-qemu_x86_64.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6503d4fbf68769b92a8a0=
-a48
-        failing since 0 day (last pass: next-20230912, first fail: next-202=
-30914) =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler   | defcon=
-fig                    | regressions
------------------------------+--------+---------------+------------+-------=
------------------------+------------
-qemu_x86_64-uefi             | x86_64 | lab-broonie   | clang-17   | x86_64=
-_defconfig             | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6503d2b97eb21164fe8a0b39
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig
-  Compiler:    clang-17 (Debian clang version 17.0.0 (++20230911073116+0176=
-e8729ea4-1~exp1~20230911073215.40))
-  Plain log:   https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig/clang-17/lab-broonie/baseline-qemu_x86_64-uefi.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig/clang-17/lab-broonie/baseline-qemu_x86_64-uefi.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6503d2b97eb21164fe8a0=
-b3a
-        failing since 1 day (last pass: next-20230912, first fail: next-202=
-30913) =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler   | defcon=
-fig                    | regressions
------------------------------+--------+---------------+------------+-------=
------------------------+------------
-qemu_x86_64-uefi             | x86_64 | lab-collabora | clang-17   | x86_64=
-_defconfig             | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6503d14ef631c0964a8a0a44
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig
-  Compiler:    clang-17 (Debian clang version 17.0.0 (++20230911073116+0176=
-e8729ea4-1~exp1~20230911073215.40))
-  Plain log:   https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig/clang-17/lab-collabora/baseline-qemu_x86_64-uefi.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig/clang-17/lab-collabora/baseline-qemu_x86_64-uefi.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6503d14ef631c0964a8a0=
-a45
-        failing since 1 day (last pass: next-20230912, first fail: next-202=
-30913) =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler   | defcon=
-fig                    | regressions
------------------------------+--------+---------------+------------+-------=
------------------------+------------
-qemu_x86_64-uefi             | x86_64 | lab-broonie   | gcc-10     | x86_64=
-_defconfig             | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6503cc8c16a7706a288a0a8d
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig
-  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig/gcc-10/lab-broonie/baseline-qemu_x86_64-uefi.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig/gcc-10/lab-broonie/baseline-qemu_x86_64-uefi.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6503cc8c16a7706a288a0=
-a8e
-        failing since 1 day (last pass: next-20230912, first fail: next-202=
-30913) =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler   | defcon=
-fig                    | regressions
------------------------------+--------+---------------+------------+-------=
------------------------+------------
-qemu_x86_64-uefi             | x86_64 | lab-broonie   | gcc-10     | x86_64=
-_defconfig+debug       | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6503ce598cf419a30c8a0a4d
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig+debug
-  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig+debug/gcc-10/lab-broonie/baseline-qemu_x86_64-uefi.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig+debug/gcc-10/lab-broonie/baseline-qemu_x86_64-uefi.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6503ce598cf419a30c8a0=
-a4e
-        failing since 1 day (last pass: next-20230911, first fail: next-202=
-30913) =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler   | defcon=
-fig                    | regressions
------------------------------+--------+---------------+------------+-------=
------------------------+------------
-qemu_x86_64-uefi             | x86_64 | lab-broonie   | gcc-10     | x86_64=
-_defcon...6-chromebook | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6503d04d30081e092e8a0ab6
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig+x86-chromebook
-  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig+x86-chromebook/gcc-10/lab-broonie/baseline-qemu_x86_64-=
-uefi.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig+x86-chromebook/gcc-10/lab-broonie/baseline-qemu_x86_64-=
-uefi.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6503d04d30081e092e8a0=
-ab7
-        failing since 1 day (last pass: next-20230912, first fail: next-202=
-30913) =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler   | defcon=
-fig                    | regressions
------------------------------+--------+---------------+------------+-------=
------------------------+------------
-qemu_x86_64-uefi             | x86_64 | lab-collabora | gcc-10     | x86_64=
-_defconfig             | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6503cc39855b529d418a0a85
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig
-  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig/gcc-10/lab-collabora/baseline-qemu_x86_64-uefi.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig/gcc-10/lab-collabora/baseline-qemu_x86_64-uefi.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6503cc39855b529d418a0=
-a86
-        failing since 1 day (last pass: next-20230912, first fail: next-202=
-30913) =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler   | defcon=
-fig                    | regressions
------------------------------+--------+---------------+------------+-------=
------------------------+------------
-qemu_x86_64-uefi             | x86_64 | lab-collabora | gcc-10     | x86_64=
-_defconfig+debug       | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6503ccee3fc7c294eb8a0a42
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig+debug
-  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig+debug/gcc-10/lab-collabora/baseline-qemu_x86_64-uefi.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig+debug/gcc-10/lab-collabora/baseline-qemu_x86_64-uefi.ht=
-ml
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6503ccee3fc7c294eb8a0=
-a43
-        failing since 1 day (last pass: next-20230911, first fail: next-202=
-30913) =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler   | defcon=
-fig                    | regressions
------------------------------+--------+---------------+------------+-------=
------------------------+------------
-qemu_x86_64-uefi             | x86_64 | lab-collabora | gcc-10     | x86_64=
-_defcon...6-chromebook | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6503cfa98ff19fd9ed8a0a76
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig+x86-chromebook
-  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig+x86-chromebook/gcc-10/lab-collabora/baseline-qemu_x86_6=
-4-uefi.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig+x86-chromebook/gcc-10/lab-collabora/baseline-qemu_x86_6=
-4-uefi.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6503cfa98ff19fd9ed8a0=
-a77
-        failing since 1 day (last pass: next-20230912, first fail: next-202=
-30913) =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler   | defcon=
-fig                    | regressions
------------------------------+--------+---------------+------------+-------=
------------------------+------------
-qemu_x86_64-uefi             | x86_64 | lab-broonie   | rustc-1.71 | x86_64=
-_defcon...rust-samples | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6503cb4c5a0f9351ce8a0a68
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig+rust-samples
-  Compiler:    rustc-1.71 (Debian clang version 16.0.6 (++20230710041823+7c=
-bf1a259152-1~exp1~20230710161844.102))
-  Plain log:   https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig+rust-samples/rustc-1.71/lab-broonie/baseline-qemu_x86_6=
-4-uefi.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig+rust-samples/rustc-1.71/lab-broonie/baseline-qemu_x86_6=
-4-uefi.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6503cb4c5a0f9351ce8a0=
-a69
-        failing since 1 day (last pass: next-20230912, first fail: next-202=
-30913) =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler   | defcon=
-fig                    | regressions
------------------------------+--------+---------------+------------+-------=
------------------------+------------
-qemu_x86_64-uefi             | x86_64 | lab-broonie   | rustc-1.71 | x86_64=
-_defconfig             | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6503d1ca5936a9e0f98a0a42
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig
-  Compiler:    rustc-1.71 (Debian clang version 16.0.6 (++20230710041823+7c=
-bf1a259152-1~exp1~20230710161844.102))
-  Plain log:   https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig/rustc-1.71/lab-broonie/baseline-qemu_x86_64-uefi.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig/rustc-1.71/lab-broonie/baseline-qemu_x86_64-uefi.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6503d1ca5936a9e0f98a0=
-a43
-        failing since 1 day (last pass: next-20230911, first fail: next-202=
-30913) =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler   | defcon=
-fig                    | regressions
------------------------------+--------+---------------+------------+-------=
------------------------+------------
-qemu_x86_64-uefi             | x86_64 | lab-broonie   | rustc-1.71 | x86_64=
-_defconfig+rust        | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6503d48831fe5656fb8a0a5d
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig+rust
-  Compiler:    rustc-1.71 (Debian clang version 16.0.6 (++20230710041823+7c=
-bf1a259152-1~exp1~20230710161844.102))
-  Plain log:   https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig+rust/rustc-1.71/lab-broonie/baseline-qemu_x86_64-uefi.t=
-xt
-  HTML log:    https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig+rust/rustc-1.71/lab-broonie/baseline-qemu_x86_64-uefi.h=
-tml
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6503d48831fe5656fb8a0=
-a5e
-        failing since 0 day (last pass: next-20230912, first fail: next-202=
-30914) =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler   | defcon=
-fig                    | regressions
------------------------------+--------+---------------+------------+-------=
------------------------+------------
-qemu_x86_64-uefi             | x86_64 | lab-collabora | rustc-1.71 | x86_64=
-_defcon...rust-samples | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6503cad2082209f0bc8a0a4a
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig+rust-samples
-  Compiler:    rustc-1.71 (Debian clang version 16.0.6 (++20230710041823+7c=
-bf1a259152-1~exp1~20230710161844.102))
-  Plain log:   https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig+rust-samples/rustc-1.71/lab-collabora/baseline-qemu_x86=
-_64-uefi.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig+rust-samples/rustc-1.71/lab-collabora/baseline-qemu_x86=
-_64-uefi.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6503cad2082209f0bc8a0=
-a4b
-        failing since 1 day (last pass: next-20230912, first fail: next-202=
-30913) =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler   | defcon=
-fig                    | regressions
------------------------------+--------+---------------+------------+-------=
------------------------+------------
-qemu_x86_64-uefi             | x86_64 | lab-collabora | rustc-1.71 | x86_64=
-_defconfig             | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6503d0ea64bb4bf8ad8a0a42
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig
-  Compiler:    rustc-1.71 (Debian clang version 16.0.6 (++20230710041823+7c=
-bf1a259152-1~exp1~20230710161844.102))
-  Plain log:   https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig/rustc-1.71/lab-collabora/baseline-qemu_x86_64-uefi.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig/rustc-1.71/lab-collabora/baseline-qemu_x86_64-uefi.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6503d0ea64bb4bf8ad8a0=
-a43
-        failing since 1 day (last pass: next-20230911, first fail: next-202=
-30913) =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler   | defcon=
-fig                    | regressions
------------------------------+--------+---------------+------------+-------=
------------------------+------------
-qemu_x86_64-uefi             | x86_64 | lab-collabora | rustc-1.71 | x86_64=
-_defconfig+rust        | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6503d4fb8aa3081b248a0a6d
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig+rust
-  Compiler:    rustc-1.71 (Debian clang version 16.0.6 (++20230710041823+7c=
-bf1a259152-1~exp1~20230710161844.102))
-  Plain log:   https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig+rust/rustc-1.71/lab-collabora/baseline-qemu_x86_64-uefi=
-.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig+rust/rustc-1.71/lab-collabora/baseline-qemu_x86_64-uefi=
-.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6503d4fb8aa3081b248a0=
-a6e
-        failing since 0 day (last pass: next-20230912, first fail: next-202=
-30914) =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler   | defcon=
-fig                    | regressions
------------------------------+--------+---------------+------------+-------=
------------------------+------------
-qemu_x86_64-uefi-mixed       | x86_64 | lab-broonie   | clang-17   | x86_64=
-_defconfig             | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6503d2cd17c3c175318a0b35
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig
-  Compiler:    clang-17 (Debian clang version 17.0.0 (++20230911073116+0176=
-e8729ea4-1~exp1~20230911073215.40))
-  Plain log:   https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig/clang-17/lab-broonie/baseline-qemu_x86_64-uefi-mixed.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig/clang-17/lab-broonie/baseline-qemu_x86_64-uefi-mixed.ht=
-ml
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6503d2cd17c3c175318a0=
-b36
-        failing since 1 day (last pass: next-20230912, first fail: next-202=
-30913) =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler   | defcon=
-fig                    | regressions
------------------------------+--------+---------------+------------+-------=
------------------------+------------
-qemu_x86_64-uefi-mixed       | x86_64 | lab-collabora | clang-17   | x86_64=
-_defconfig             | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6503d176758834b7b68a0a4a
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig
-  Compiler:    clang-17 (Debian clang version 17.0.0 (++20230911073116+0176=
-e8729ea4-1~exp1~20230911073215.40))
-  Plain log:   https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig/clang-17/lab-collabora/baseline-qemu_x86_64-uefi-mixed.=
-txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig/clang-17/lab-collabora/baseline-qemu_x86_64-uefi-mixed.=
-html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6503d176758834b7b68a0=
-a4b
-        failing since 1 day (last pass: next-20230912, first fail: next-202=
-30913) =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler   | defcon=
-fig                    | regressions
------------------------------+--------+---------------+------------+-------=
------------------------+------------
-qemu_x86_64-uefi-mixed       | x86_64 | lab-broonie   | gcc-10     | x86_64=
-_defconfig             | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6503ccb44671ebcdec8a0a4a
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig
-  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig/gcc-10/lab-broonie/baseline-qemu_x86_64-uefi-mixed.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig/gcc-10/lab-broonie/baseline-qemu_x86_64-uefi-mixed.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6503ccb44671ebcdec8a0=
-a4b
-        failing since 1 day (last pass: next-20230912, first fail: next-202=
-30913) =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler   | defcon=
-fig                    | regressions
------------------------------+--------+---------------+------------+-------=
------------------------+------------
-qemu_x86_64-uefi-mixed       | x86_64 | lab-broonie   | gcc-10     | x86_64=
-_defconfig+debug       | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6503ce51768b8d07dc8a0a51
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig+debug
-  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig+debug/gcc-10/lab-broonie/baseline-qemu_x86_64-uefi-mixe=
-d.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig+debug/gcc-10/lab-broonie/baseline-qemu_x86_64-uefi-mixe=
-d.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6503ce51768b8d07dc8a0=
-a52
-        failing since 1 day (last pass: next-20230911, first fail: next-202=
-30913) =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler   | defcon=
-fig                    | regressions
------------------------------+--------+---------------+------------+-------=
------------------------+------------
-qemu_x86_64-uefi-mixed       | x86_64 | lab-broonie   | gcc-10     | x86_64=
-_defcon...6-chromebook | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6503d0c5de784058898a0a4a
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig+x86-chromebook
-  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig+x86-chromebook/gcc-10/lab-broonie/baseline-qemu_x86_64-=
-uefi-mixed.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig+x86-chromebook/gcc-10/lab-broonie/baseline-qemu_x86_64-=
-uefi-mixed.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6503d0c5de784058898a0=
-a4b
-        failing since 1 day (last pass: next-20230912, first fail: next-202=
-30913) =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler   | defcon=
-fig                    | regressions
------------------------------+--------+---------------+------------+-------=
------------------------+------------
-qemu_x86_64-uefi-mixed       | x86_64 | lab-collabora | gcc-10     | x86_64=
-_defconfig             | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6503cc3bf0e67e87fa8a0a4c
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig
-  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig/gcc-10/lab-collabora/baseline-qemu_x86_64-uefi-mixed.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig/gcc-10/lab-collabora/baseline-qemu_x86_64-uefi-mixed.ht=
-ml
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6503cc3bf0e67e87fa8a0=
-a4d
-        failing since 1 day (last pass: next-20230912, first fail: next-202=
-30913) =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler   | defcon=
-fig                    | regressions
------------------------------+--------+---------------+------------+-------=
------------------------+------------
-qemu_x86_64-uefi-mixed       | x86_64 | lab-collabora | gcc-10     | x86_64=
-_defconfig+debug       | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6503cced3f5a8e4eb08a0a42
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig+debug
-  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig+debug/gcc-10/lab-collabora/baseline-qemu_x86_64-uefi-mi=
-xed.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig+debug/gcc-10/lab-collabora/baseline-qemu_x86_64-uefi-mi=
-xed.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6503cced3f5a8e4eb08a0=
-a43
-        failing since 1 day (last pass: next-20230911, first fail: next-202=
-30913) =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler   | defcon=
-fig                    | regressions
------------------------------+--------+---------------+------------+-------=
------------------------+------------
-qemu_x86_64-uefi-mixed       | x86_64 | lab-collabora | gcc-10     | x86_64=
-_defcon...6-chromebook | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6503cff9af66eb62f18a0ab2
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig+x86-chromebook
-  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig+x86-chromebook/gcc-10/lab-collabora/baseline-qemu_x86_6=
-4-uefi-mixed.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig+x86-chromebook/gcc-10/lab-collabora/baseline-qemu_x86_6=
-4-uefi-mixed.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6503cff9af66eb62f18a0=
-ab3
-        failing since 1 day (last pass: next-20230912, first fail: next-202=
-30913) =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler   | defcon=
-fig                    | regressions
------------------------------+--------+---------------+------------+-------=
------------------------+------------
-qemu_x86_64-uefi-mixed       | x86_64 | lab-broonie   | rustc-1.71 | x86_64=
-_defcon...rust-samples | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6503cb4c4ff6ba4e198a0a78
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig+rust-samples
-  Compiler:    rustc-1.71 (Debian clang version 16.0.6 (++20230710041823+7c=
-bf1a259152-1~exp1~20230710161844.102))
-  Plain log:   https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig+rust-samples/rustc-1.71/lab-broonie/baseline-qemu_x86_6=
-4-uefi-mixed.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig+rust-samples/rustc-1.71/lab-broonie/baseline-qemu_x86_6=
-4-uefi-mixed.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6503cb4c4ff6ba4e198a0=
-a79
-        failing since 1 day (last pass: next-20230912, first fail: next-202=
-30913) =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler   | defcon=
-fig                    | regressions
------------------------------+--------+---------------+------------+-------=
------------------------+------------
-qemu_x86_64-uefi-mixed       | x86_64 | lab-broonie   | rustc-1.71 | x86_64=
-_defconfig             | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6503d2554a2129c16f8a0a85
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig
-  Compiler:    rustc-1.71 (Debian clang version 16.0.6 (++20230710041823+7c=
-bf1a259152-1~exp1~20230710161844.102))
-  Plain log:   https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig/rustc-1.71/lab-broonie/baseline-qemu_x86_64-uefi-mixed.=
-txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig/rustc-1.71/lab-broonie/baseline-qemu_x86_64-uefi-mixed.=
-html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6503d2554a2129c16f8a0=
-a86
-        failing since 1 day (last pass: next-20230911, first fail: next-202=
-30913) =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler   | defcon=
-fig                    | regressions
------------------------------+--------+---------------+------------+-------=
------------------------+------------
-qemu_x86_64-uefi-mixed       | x86_64 | lab-broonie   | rustc-1.71 | x86_64=
-_defconfig+rust        | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6503d48531fe5656fb8a0a51
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig+rust
-  Compiler:    rustc-1.71 (Debian clang version 16.0.6 (++20230710041823+7c=
-bf1a259152-1~exp1~20230710161844.102))
-  Plain log:   https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig+rust/rustc-1.71/lab-broonie/baseline-qemu_x86_64-uefi-m=
-ixed.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig+rust/rustc-1.71/lab-broonie/baseline-qemu_x86_64-uefi-m=
-ixed.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6503d48531fe5656fb8a0=
-a52
-        failing since 0 day (last pass: next-20230912, first fail: next-202=
-30914) =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler   | defcon=
-fig                    | regressions
------------------------------+--------+---------------+------------+-------=
------------------------+------------
-qemu_x86_64-uefi-mixed       | x86_64 | lab-collabora | rustc-1.71 | x86_64=
-_defcon...rust-samples | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6503caf84ff6ba4e198a0a4d
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig+rust-samples
-  Compiler:    rustc-1.71 (Debian clang version 16.0.6 (++20230710041823+7c=
-bf1a259152-1~exp1~20230710161844.102))
-  Plain log:   https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig+rust-samples/rustc-1.71/lab-collabora/baseline-qemu_x86=
-_64-uefi-mixed.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig+rust-samples/rustc-1.71/lab-collabora/baseline-qemu_x86=
-_64-uefi-mixed.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6503caf84ff6ba4e198a0=
-a4e
-        failing since 1 day (last pass: next-20230912, first fail: next-202=
-30913) =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler   | defcon=
-fig                    | regressions
------------------------------+--------+---------------+------------+-------=
------------------------+------------
-qemu_x86_64-uefi-mixed       | x86_64 | lab-collabora | rustc-1.71 | x86_64=
-_defconfig             | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6503d1112ad01f1dc38a0a51
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig
-  Compiler:    rustc-1.71 (Debian clang version 16.0.6 (++20230710041823+7c=
-bf1a259152-1~exp1~20230710161844.102))
-  Plain log:   https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig/rustc-1.71/lab-collabora/baseline-qemu_x86_64-uefi-mixe=
-d.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig/rustc-1.71/lab-collabora/baseline-qemu_x86_64-uefi-mixe=
-d.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6503d1112ad01f1dc38a0=
-a52
-        failing since 1 day (last pass: next-20230911, first fail: next-202=
-30913) =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler   | defcon=
-fig                    | regressions
------------------------------+--------+---------------+------------+-------=
------------------------+------------
-qemu_x86_64-uefi-mixed       | x86_64 | lab-collabora | rustc-1.71 | x86_64=
-_defconfig+rust        | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6503d4fa8aa3081b248a0a6a
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig+rust
-  Compiler:    rustc-1.71 (Debian clang version 16.0.6 (++20230710041823+7c=
-bf1a259152-1~exp1~20230710161844.102))
-  Plain log:   https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig+rust/rustc-1.71/lab-collabora/baseline-qemu_x86_64-uefi=
--mixed.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20230915/x86_=
-64/x86_64_defconfig+rust/rustc-1.71/lab-collabora/baseline-qemu_x86_64-uefi=
--mixed.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6503d4fa8aa3081b248a0=
-a6b
-        failing since 0 day (last pass: next-20230912, first fail: next-202=
-30914) =
-
- =20
+This is a multi-part message in MIME format.
+--------------0oi0ASsAj9FyljsL1x1407Sa
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+
+
+On 9/14/23 19:01, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Changes since 20230914:
+> 
+> The btrfs tree gained a conflist against the mm tree.
+> 
+> The device-mapper tree gained a build failure so I used the version
+> from next-20230914.
+> 
+> The kspp tree lost its build failure.
+> 
+> Non-merge commits (relative to Linus' tree): 5026
+>  2501 files changed, 391711 insertions(+), 34318 deletions(-)
+> 
+> ----------------------------------------------------------------------------
+> 
+
+on arm64:
+
+aarch64-linux-ld: drivers/mfd/cs42l43.o: in function `cs42l43_boot_work':
+cs42l43.c:(.text+0x19d4): undefined reference to `devm_regmap_add_irq_chip'
+
+Using GCC 13.2.0 from kernel.org crosstools.
+
+Full randconfig file is attached.
+
+-- 
+~Randy
+--------------0oi0ASsAj9FyljsL1x1407Sa
+Content-Type: application/gzip; name="arm64-cs42l43-devm-regmap-config.gz"
+Content-Disposition: attachment;
+ filename="arm64-cs42l43-devm-regmap-config.gz"
+Content-Transfer-Encoding: base64
+
+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
+ibAg4f8X717kReWHAQA=
+
+--------------0oi0ASsAj9FyljsL1x1407Sa--

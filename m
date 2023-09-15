@@ -2,102 +2,115 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D1007A1226
-	for <lists+linux-next@lfdr.de>; Fri, 15 Sep 2023 02:06:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBE457A1240
+	for <lists+linux-next@lfdr.de>; Fri, 15 Sep 2023 02:20:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230302AbjIOAGf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 14 Sep 2023 20:06:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52292 "EHLO
+        id S230286AbjIOAUs (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 14 Sep 2023 20:20:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230045AbjIOAGe (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 14 Sep 2023 20:06:34 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4361B2102;
-        Thu, 14 Sep 2023 17:06:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1694736389;
-        bh=6uepvn+0kPmSsa3u5o4/Rmc2yEylUDIxsfEFYBN6Df4=;
-        h=Date:From:To:Cc:Subject:From;
-        b=QfZzhX3mm6DjYj07CQydjvYN/+UHkDloJl+xDvtK7Qb/jd8x1f3ALiZQXeuvCczQ4
-         57pLDdA7FMeVmpA7a/HdCQB+09Nx3+6CwLmYawE6UPXjJaIQckl7cukIpTsEdD15aY
-         XsJo2XBXEw30RmJGHk4gE+XP/eJmg7zLbm6DbhuxHvL0nM0+qWsYhh2GT0BVN4HYJc
-         tHoW6dSmcdsgAVz4GIwyjV9qxAXHb1kPsGdFaAQTTx5PEubGiNitqfLnt+CXmHjI8g
-         TEBEJW6ofVo8YIzaMI+b47AuessotsR4XdfRrKgvDncU1Xa1hcC6feWfhZfVWtv03E
-         S/qGeWncw0V0A==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4RmvcN6c1Jz4wxR;
-        Fri, 15 Sep 2023 10:06:28 +1000 (AEST)
-Date:   Fri, 15 Sep 2023 10:06:28 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alasdair G Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@kernel.org>
-Cc:     Joe Thornber <ejt@redhat.com>,
+        with ESMTP id S229499AbjIOAUr (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 14 Sep 2023 20:20:47 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B7A41BDD
+        for <linux-next@vger.kernel.org>; Thu, 14 Sep 2023 17:20:43 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1bf6ea270b2so12339755ad.0
+        for <linux-next@vger.kernel.org>; Thu, 14 Sep 2023 17:20:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1694737243; x=1695342043; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ccX2gvw1qSPWr5qXb0fG86wgmS6e9ZRJiYSlfkRPwO8=;
+        b=Uvn8PwkRMklZOZnQ9lTTyCA74BdG/Yst6jcEdbA9N3J4GhQFO/YcwGRgijdk8SpV9w
+         7PnIWQNzacbp9dOmZDHrradgNEi7QUhJevAARvIqhz9LebPrqcRPUFdBLQuUNkrFEN44
+         UuMFelcpfpPgNvQfwlQzrzKOrq3G25U2x+atc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694737243; x=1695342043;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ccX2gvw1qSPWr5qXb0fG86wgmS6e9ZRJiYSlfkRPwO8=;
+        b=FXR4HIO3BrUWAki83Rb3+SHSwoIgsa6i0viImpZHKZk51XsKGT+qhfkB/40KH+O1b7
+         RCfPWfOzpQx/fEB6cX14r0Y1Xx3GkiFL40va2JvAHRBVA79iJvqJMmndYmBV2lny89bj
+         KD8WX2yhpB/9TxWGsaZfoo/9q8/CQvCI8US7ZstDR4IVvS5r0CvVAk2xoZ/QKVlGsTWW
+         kwS2gehLDgLYgIM3xlr0pZBiESY4GCt/rK+bMPvnqLwCFlog10JEDika3GWF9vW30t4O
+         f+iB2X/aECwE0hFUgN9S0OQDwgBIx1nTmYcMWluzxHhtagPIQpM5+vT6jkg0M/RicDJl
+         CpLw==
+X-Gm-Message-State: AOJu0YwsznykxrQEIF1S8TAwhl8lqTWFjJ4QpE3kxvTtHLdAXBYlnhRX
+        clID0CN8jtKUR8qdhLZD8dQwxA==
+X-Google-Smtp-Source: AGHT+IEyhji/rreG138qZ8mOF1AMGzgZA5xtnA7PJaQ/as7QJ7PYziFOpOfY6VcIzMGt6niYciwpxA==
+X-Received: by 2002:a17:902:dac1:b0:1bb:c64f:9a5e with SMTP id q1-20020a170902dac100b001bbc64f9a5emr224115plx.5.1694737243036;
+        Thu, 14 Sep 2023 17:20:43 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id h18-20020a170902eed200b001b8b45b177esm555049plb.274.2023.09.14.17.20.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Sep 2023 17:20:42 -0700 (PDT)
+Date:   Thu, 14 Sep 2023 17:20:41 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Kent Overstreet <kent.overstreet@linux.dev>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the device-mapper tree
-Message-ID: <20230915100628.6eaf7f7d@canb.auug.org.au>
+        linux-hardening@vger.kernel.org
+Subject: Re: linux-next: Tree for Sep 12 (bcachefs)
+Message-ID: <202309141708.C8B61D4D@keescook>
+References: <20230912152645.0868a96a@canb.auug.org.au>
+ <202309131803.6A3C1D05A@keescook>
+ <20230914193807.ozcmylp6n6dsqkbi@moria.home.lan>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/+fM5AV0/waNAFUI_6yrhWgD";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230914193807.ozcmylp6n6dsqkbi@moria.home.lan>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/+fM5AV0/waNAFUI_6yrhWgD
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Thu, Sep 14, 2023 at 03:38:07PM -0400, Kent Overstreet wrote:
+> On Wed, Sep 13, 2023 at 06:17:00PM -0700, Kees Cook wrote:
+> > It looks like you just want a type union for the flexible array.
+> > This can be done like this:
+> > 
+> > struct bch_sb_field_journal_seq_blacklist {
+> >         struct bch_sb_field     field;
+> > 
+> > 	union {
+> > 		DECLARE_FLEX_ARRAY(struct journal_seq_blacklist_entry, start);
+> > 		DECLARE_FLEX_ARRAY(__u64, _data);
+> > 	};
+> > };
+> 
+> Eesh, why though?
+> 
+> Honestly, I'm not a fan of the change to get rid of zero size arrays,
+> this seems to be adding a whole lot of macro layering and indirection
+> for nothing.
 
-Hi all,
+The C standard doesn't help us in that regard, that's true. But we've
+been working to get it fixed. For example, there's discussion happening
+next week at GNU Cauldron about flexible arrays in unions. It's already
+possible, so better to just fix the standard -- real world code needs it
+and uses it, as the bcachefs code illustrates. :)
 
-After merging the device-mapper tree, today's linux-next build (powerpc
-ppc64_defconfig) failed like this:
+> The only thing a zero size array could possibly be is a flexible array
+> member or a marker, why couldn't we have just kept treating zero size
+> arrays like flexible array members?
 
-drivers/md/persistent-data/dm-extent-allocator.c: In function 'dm_alloc_con=
-text_get':
-drivers/md/persistent-data/dm-extent-allocator.c:530:31: error: expected ';=
-' before '}' token
-  530 |         spin_unlock(&ea->lock)
-      |                               ^
-      |                               ;
-  531 | }
-      | ~                             =20
-drivers/md/persistent-data/dm-extent-allocator.c: In function 'dm_alloc_con=
-text_put':
-drivers/md/persistent-data/dm-extent-allocator.c:544:31: error: expected ';=
-' before '}' token
-  544 |         spin_unlock(&ea->lock)
-      |                               ^
-      |                               ;
-  545 | }
-      | ~                             =20
+Because they're ambiguous and then the compiler can't do appropriate
+bounds checking, compile-time diagnostics, etc. Maybe it's actually zero
+sized, maybe it's not. Nothing stops them from being in the middle of
+the structure so if someone accidentally tries to put members after it
+(which has happened before), we end up with bizarre corruptions, etc,
+etc. Flexible arrays are unambiguous, and that's why we committed to
+converting all the fake flex arrays. The compiler does not have to guess
+(or as has been the case: give up on) figuring out what was intended.
 
-Caused by commit
+Regardless, I'm just trying to help make sure folks that run with
+CONFIG_UBSAN_BOUNDS=y (as done in Android, Ubuntu, etc) will be able to
+use bcachefs without runtime warnings, etc. Indexing through a 0-sized
+array is going to trip the diagnostic either at runtime or when building
+with -Warray-bounds.
 
-  59d814674dd6 ("dm persistent data: Introduce extent allocator")
+-Kees
 
-I have used the device-mapper tree from next-2023-914 for today.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/+fM5AV0/waNAFUI_6yrhWgD
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmUDoAQACgkQAVBC80lX
-0Gzc5QgAnJ08z0nPQaIzcuGQjmY9Tg67j8MyyLraHzTNjZ1cdkF6oSN3QMn5TNU1
-Nh5pX0IGtVypeZ1+EVinTIG35v1U4A0XPdpcBwJY90QthYZnTZIhXGexkdn7SLG7
-8hRwAKx7Nva8x2pPrUSsuJXgSTlRSLyKqo7ItKByp3SoF5fQNdLnFA5u3RE5nlOm
-LH3sCAoql2dn4ugMFWNwjKAFJNZmEXVCOz9Bma+amxfhdEOzWFqYEvyrIi3QADVf
-PgtllkG21zdvOmo1lrnllNZ7G66fwvePAJo6yBGn1vntVwCE5mI6wIF13OJyxy9P
-yItWMm08WjUFwgRP7qx7Bu7Tq5Lu6Q==
-=tUzy
------END PGP SIGNATURE-----
-
---Sig_/+fM5AV0/waNAFUI_6yrhWgD--
+-- 
+Kees Cook

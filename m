@@ -2,109 +2,73 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C3A27A13BF
-	for <lists+linux-next@lfdr.de>; Fri, 15 Sep 2023 04:18:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A4AD7A13FC
+	for <lists+linux-next@lfdr.de>; Fri, 15 Sep 2023 04:51:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231379AbjIOCSQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 14 Sep 2023 22:18:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60372 "EHLO
+        id S231470AbjIOCvL convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-next@lfdr.de>); Thu, 14 Sep 2023 22:51:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230519AbjIOCSQ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 14 Sep 2023 22:18:16 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BEFA1FE5
-        for <linux-next@vger.kernel.org>; Thu, 14 Sep 2023 19:17:51 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id 98e67ed59e1d1-2684e225a6cso200314a91.1
-        for <linux-next@vger.kernel.org>; Thu, 14 Sep 2023 19:17:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1694744270; x=1695349070; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZoHnjqbtxyoT00zY+yvVt56U2UHEZvOnPOttiwSNwMA=;
-        b=feQAW3OcACkCvhSXxMa5ZH4HlzKs2AnF+9tWe/YJh1+mKvP2KxXoOdZcbuQW3klpFD
-         Eemuh0YpZW9jOka4X3w/BNcyXyJk6k++jf05KR/JmaV4LQKvlOdm2lIoVAP/jBZkKh7S
-         XySM/iYMDrA+vBOm9fOH2L4JKCjOU3I5PaoVwM3bi7bxpuIO51tq/rsEG5GTA+n3g4vy
-         lfhnSsp2aDYJw1EnVZDWkm3YpGrPKlqrLQ7Eh5Uh1xEBHf46nnKUT73EHopuQ6rDflkR
-         0ao1JrK+l++GxCE/Dof0O0d1LjTjEPUcME5Nw7FXlPug5OC1BB0xcAyZFyZwtIZhKPGu
-         6bmg==
+        with ESMTP id S231428AbjIOCvL (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 14 Sep 2023 22:51:11 -0400
+Received: from mail-io1-f52.google.com (mail-io1-f52.google.com [209.85.166.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7F3A269D;
+        Thu, 14 Sep 2023 19:51:06 -0700 (PDT)
+Received: by mail-io1-f52.google.com with SMTP id ca18e2360f4ac-7926b7f8636so44483439f.1;
+        Thu, 14 Sep 2023 19:51:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694744270; x=1695349070;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZoHnjqbtxyoT00zY+yvVt56U2UHEZvOnPOttiwSNwMA=;
-        b=Un5w4YL9vsEA5bdahVXSEaMkTjXEo1afRA9gf3+lk6j6IWApVtWwyACUAv599KTyj6
-         CJ8QSik9iJHNQvqwtvrxmq3UcJB934tAc7cOgrm/Q68bigz2kqwTBaC+4AzI7Th+nKAu
-         n5Eo4ytUiluwd7TVp9juz7aM9lDjI10meQnsNQjAPym1WoUCFFBYxekyzgsheGq3ZlPp
-         dFUn2mjZIeUajRdGefUD1lmxbIgCwjjOeMz4p4gVfZ6S3vS/vV30v5WI10sTEhmjH5ky
-         O1GRJaQzpVZeAUgnnrk3XZzxcEQIdQocnGaaaGfDajYsN2xmWkZgrSSYolp4kRaPU22K
-         2B+g==
-X-Gm-Message-State: AOJu0YwqDAGIavx0h0Hv2SMoBFUrBTeJgVDs5ClTe1GtpSQExTZ1sWsj
-        4loCJ+ga01y+f4Ggd4sAkMd2DA==
-X-Google-Smtp-Source: AGHT+IFlDvDvyNJEv69o8q3qvbyHShhhCcIO9L8nnAGn3WgucN4i3B33ro22aDhSlfFxOirJ8GnIag==
-X-Received: by 2002:a17:90a:7483:b0:273:e4a7:ce72 with SMTP id p3-20020a17090a748300b00273e4a7ce72mr247084pjk.3.1694744270439;
-        Thu, 14 Sep 2023 19:17:50 -0700 (PDT)
-Received: from [10.84.155.178] ([203.208.167.146])
-        by smtp.gmail.com with ESMTPSA id h29-20020a63385d000000b0057764ccdd0esm1782720pgn.49.2023.09.14.19.17.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Sep 2023 19:17:49 -0700 (PDT)
-Message-ID: <51ae860f-fc8d-fc76-d326-68308e98bf7d@bytedance.com>
-Date:   Fri, 15 Sep 2023 10:17:43 +0800
+        d=1e100.net; s=20230601; t=1694746266; x=1695351066;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SerwLE5OVRCSsMUALrCrul+Mnyrmcl1kTZ8zMma6b1o=;
+        b=FAKpv2G6HUccpr01sjH4+2qlUxPDER3poXLyVZHpo8Cwmxwm8wF98Rb/BxbM9yBHac
+         OVNezVj9W4A/w3/vCXEyrD2T3FJLELgkpvGV6MMt9F8TPPdTZ/fR1xoJQvCYmqZBMTkw
+         BHES2yVljBmzTms92gPaN4vnQCvrf5cn1aKpyJTf/ZklAvfbqWcehBR0VACAlM8o950I
+         JG7qV/NPItGu88iz8moqLZ2LW9Y1xRmstoCUEcqdZYytYXVlhNRdwnqjsqtZNyO1VRHH
+         mNr6aizBw2bx+oJHGxt4XHfE4nTRPbr2xcqyGS4uOMrczg2/iCe4Wa72QuEEw9Pf6Bqz
+         Te8w==
+X-Gm-Message-State: AOJu0YzdJTNzZvVcj/1TySkGavpH3tJ+vuHfjo3KJdHv7pP6uAiw1tYH
+        xO+BXU0m+6UuNPQ7oYPs+3+G3ZB4QxkAHMPkmQo=
+X-Google-Smtp-Source: AGHT+IEUe8v4V3sEbZQZK3qoizJ7mO2YNsUs9lirdL0XqpRAFuTBJPPN5owc9FGVgcGfqB3vgcnQBzk6VHKxqA8rkVI=
+X-Received: by 2002:a5d:9ac2:0:b0:785:d5d4:9f26 with SMTP id
+ x2-20020a5d9ac2000000b00785d5d49f26mr468980ion.9.1694746265984; Thu, 14 Sep
+ 2023 19:51:05 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.15.1
-Subject: Re: linux-next: manual merge of the btrfs tree with the mm tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     David Sterba <dsterba@suse.cz>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christoph Hellwig <hch@lst.de>,
-        David Sterba <dsterba@suse.com>,
+References: <20230915072642.74e3c00f@canb.auug.org.au>
+In-Reply-To: <20230915072642.74e3c00f@canb.auug.org.au>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Thu, 14 Sep 2023 19:50:54 -0700
+Message-ID: <CAM9d7chQmD2RRazcC+R6SgJtx8OoEEuSS6CkzCuTJAFKy0-TtA@mail.gmail.com>
+Subject: Re: linux-next: Signed-off-by missing for commit in the perf tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Veronika Molnarova <vmolnaro@redhat.com>
+Cc:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20230915091421.58207f2c@canb.auug.org.au>
- <20230915094731.076a3e98@canb.auug.org.au>
-Content-Language: en-US
-From:   Qi Zheng <zhengqi.arch@bytedance.com>
-In-Reply-To: <20230915094731.076a3e98@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Stephen,
+Hello Stephen,
 
-The diff looks good to me.
+On Thu, Sep 14, 2023 at 2:26 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> Commits
+>
+>   19d8ab40f89b ("perf test stat+shadow_stat.sh: Add threshold for rounding errors")
+>   0c4ded92280b ("perf test lock_contention.sh: Skip test if the number of CPUs is low")
+>
+> are missing a Signed-off-by from their author.
+
+Thanks for the notice.  As they're recently added, I think I can replace them
+with new commits with s-o-b from the author and force-push.
+
+Veronika, can you resend those two commits with your Sign-off?
 
 Thanks,
-Qi
-
-On 2023/9/15 07:47, Stephen Rothwell wrote:
-> Hi all,
-> 
-> [Forgot the diff ...]
-> 
-> On Fri, 15 Sep 2023 09:14:21 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->>
->> Today's linux-next merge of the btrfs tree got a conflict in:
->>
->>    fs/btrfs/super.c
->>
->> between commit:
->>
->>    c0824542e4d1 ("fs: super: dynamically allocate the s_shrink")
->>
->> from the mm tree and commit:
->>
->>    2ebed4689ba2 ("btrfs: open block devices after superblock creation")
->>
->> from the btrfs tree.
->>
->> I fixed it up (see below) and can carry the fix as necessary. This
->> is now fixed as far as linux-next is concerned, but any non trivial
->> conflicts should be mentioned to your upstream maintainer when your tree
->> is submitted for merging.  You may also want to consider cooperating
->> with the maintainer of the conflicting tree to minimise any particularly
->> complex conflicts.
-> 
+Namhyung

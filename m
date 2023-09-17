@@ -2,180 +2,94 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD4B67A33FB
-	for <lists+linux-next@lfdr.de>; Sun, 17 Sep 2023 08:30:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AD057A3E07
+	for <lists+linux-next@lfdr.de>; Sun, 17 Sep 2023 23:46:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231708AbjIQGaQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 17 Sep 2023 02:30:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46758 "EHLO
+        id S229632AbjIQVqZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 17 Sep 2023 17:46:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230136AbjIQG34 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 17 Sep 2023 02:29:56 -0400
-Received: from mail-oi1-f206.google.com (mail-oi1-f206.google.com [209.85.167.206])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9611193
-        for <linux-next@vger.kernel.org>; Sat, 16 Sep 2023 23:29:50 -0700 (PDT)
-Received: by mail-oi1-f206.google.com with SMTP id 5614622812f47-3ab7fb11711so5673253b6e.2
-        for <linux-next@vger.kernel.org>; Sat, 16 Sep 2023 23:29:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694932190; x=1695536990;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=bmQ57cZAJwGIiVLyuIMjLQ2uhn0vbFtYjeE9gu08mvc=;
-        b=cQISoQZaJwaCFlcuheERtgKm6+PcWOWUGpKUKTWSJicW/D9aiXWfCd5Y+wSjBT257P
-         1ug7CU9MkQfj1GQxXnCDjVP5WIoEvcSbZquD3sAy2jJmDd+Oxd6Xpav3ES6D0dG9y0j6
-         XI6WUJaatzIanVdyQGp1+b5W/Ka7sxacdSSX7VMGNpXLKqu1pzswuUVwCp7xQw9j8rdO
-         mvp6AeP2lSgQ5fYXVF/2ioE5VomFccebOI1QbyFzfADuES2EGKbVmpI8oN28COmkrSML
-         NeCMu7Jc7EUAMy2aQqkwMe4dO3oXWCCtIQexQoBD0zXSIvgCqP8eEdl6baIbyqt7e30T
-         ZpNw==
-X-Gm-Message-State: AOJu0Yw3Q7OlnWQ0gTFBcgZfoZLRc47QEhLnyLj5pk8UvZFw0mxboLfY
-        E1DHbpHYv8YorqRDiRwhS/LTJk8Me3Z6Vk6x/UdOYFI8dwwA
-X-Google-Smtp-Source: AGHT+IFlunnRTdOJKQsg6jqUlGHCpkuFJCFHxCbMSuuj+5l+KodzqxTAhvntRm3nktZ1RCZcG64FJwj8/EzZMVLUnh/yWPTJchy5
+        with ESMTP id S233044AbjIQVqA (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 17 Sep 2023 17:46:00 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84B06A8;
+        Sun, 17 Sep 2023 14:45:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1694987149;
+        bh=1gq+91PIFQp0CotcayyYLsT0OW67uH5VYysw0SmeuA4=;
+        h=Date:From:To:Cc:Subject:From;
+        b=rVhvkr9GckLVSo7ciMprMSh0tSFJROddeHtbkTJVMyDFkC4JN89dtTdS3TjxSK4Jl
+         vvAFPKQ0/RGu4ckjQ8061cTKzywP5SMnJa2oWhGp5Dymi/JrHNbpfI2Cd8LkLmbenR
+         +8pUkv99pRlZeFlOtFBVFi65fJ5AUmqR/JMqRBhuYpFBr4a6/jojhQht1PbUm0ljYJ
+         IKeMuw5llrQKJ3wj5C/7b98d+l6nyo07Qdey/a2+2vEWTTXY3zrRVPoxKhoTZE+HQ7
+         8NNfotWjGtRcqycNU/1DgAtprtL2AxZ41m3/6y5SUpMNMBKKOBPeC/nJDXQ/TJg27s
+         dC/RNzfR17BMw==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4RphLj1WmKz4wb1;
+        Mon, 18 Sep 2023 07:45:49 +1000 (AEST)
+Date:   Mon, 18 Sep 2023 07:45:37 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Dan Williams <dan.j.williams@intel.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the cxl-fixes tree
+Message-ID: <20230918074537.51fe95ed@canb.auug.org.au>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6808:1886:b0:3a7:b48d:eaf0 with SMTP id
- bi6-20020a056808188600b003a7b48deaf0mr2805854oib.10.1694932190273; Sat, 16
- Sep 2023 23:29:50 -0700 (PDT)
-Date:   Sat, 16 Sep 2023 23:29:50 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000001ea6ee0605882795@google.com>
-Subject: [syzbot] [dri?] linux-next boot error: WARNING: bad unlock balance in vkms_vblank_simulate
-From:   syzbot <syzbot+204dd7e9a83cb8855b63@syzkaller.appspotmail.com>
-To:     airlied@gmail.com, daniel@ffwll.ch,
-        dri-devel@lists.freedesktop.org, hamohammed.sa@gmail.com,
-        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
-        mairacanal@riseup.net, melissa.srw@gmail.com,
-        rodrigosiqueiramelo@gmail.com, sfr@canb.auug.org.au,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/OFWWOHHTu_mm37Ughuzm_7K";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hello,
+--Sig_/OFWWOHHTu_mm37Ughuzm_7K
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-syzbot found the following issue on:
+Hi all,
 
-HEAD commit:    e143016b56ec Add linux-next specific files for 20230913
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=164c5ac7a80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=76ee1517f109f01a
-dashboard link: https://syzkaller.appspot.com/bug?extid=204dd7e9a83cb8855b63
-compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
+In commit
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/845fe7fc2fee/disk-e143016b.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/d74646a84425/vmlinux-e143016b.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/bfbe2696ea96/bzImage-e143016b.xz
+  18f35dc9314d ("cxl/region: Refactor granularity select in cxl_port_setup_=
+targets()")
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+204dd7e9a83cb8855b63@syzkaller.appspotmail.com
+Fixes tag
 
+  Fixes: ("27b3f8d13830 cxl/region: Program target lists")
 
-=====================================
-WARNING: bad unlock balance detected!
-6.6.0-rc1-next-20230913-syzkaller #0 Not tainted
--------------------------------------
-swapper/0/0 is trying to release lock (&vkms_out->enabled_lock) at:
-[<ffffffff852f4539>] vkms_vblank_simulate+0x159/0x3d0 drivers/gpu/drm/vkms/vkms_crtc.c:34
-but there are no more locks to release!
+has these problem(s):
 
-other info that might help us debug this:
-no locks held by swapper/0/0.
+  - No SHA1 recognised
 
-stack backtrace:
-CPU: 0 PID: 0 Comm: swapper/0 Not tainted 6.6.0-rc1-next-20230913-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/04/2023
-Call Trace:
- <IRQ>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd9/0x1b0 lib/dump_stack.c:106
- __lock_release kernel/locking/lockdep.c:5430 [inline]
- lock_release+0x4b5/0x680 kernel/locking/lockdep.c:5773
- __mutex_unlock_slowpath+0xa3/0x640 kernel/locking/mutex.c:907
- vkms_vblank_simulate+0x159/0x3d0 drivers/gpu/drm/vkms/vkms_crtc.c:34
- __run_hrtimer kernel/time/hrtimer.c:1688 [inline]
- __hrtimer_run_queues+0x203/0xc10 kernel/time/hrtimer.c:1752
- hrtimer_interrupt+0x31b/0x800 kernel/time/hrtimer.c:1814
- local_apic_timer_interrupt arch/x86/kernel/apic/apic.c:1063 [inline]
- __sysvec_apic_timer_interrupt+0x105/0x3f0 arch/x86/kernel/apic/apic.c:1080
- sysvec_apic_timer_interrupt+0x8e/0xc0 arch/x86/kernel/apic/apic.c:1074
- </IRQ>
- <TASK>
- asm_sysvec_apic_timer_interrupt+0x1a/0x20 arch/x86/include/asm/idtentry.h:645
-RIP: 0010:native_irq_disable arch/x86/include/asm/irqflags.h:37 [inline]
-RIP: 0010:arch_local_irq_disable arch/x86/include/asm/irqflags.h:72 [inline]
-RIP: 0010:acpi_safe_halt+0x1b/0x20 drivers/acpi/processor_idle.c:113
-Code: ed c3 66 66 2e 0f 1f 84 00 00 00 00 00 66 90 65 48 8b 04 25 c0 bc 03 00 48 8b 00 a8 08 75 0c 66 90 0f 00 2d 17 b9 b2 00 fb f4 <fa> c3 0f 1f 00 0f b6 47 08 3c 01 74 0b 3c 02 74 05 8b 7f 04 eb 9f
-RSP: 0000:ffffffff8c807d70 EFLAGS: 00000246
-RAX: 0000000000004000 RBX: 0000000000000001 RCX: ffffffff8a41858e
-RDX: 0000000000000001 RSI: ffff88801368d800 RDI: ffff88801368d864
-RBP: ffff88801368d864 R08: 0000000000000001 R09: ffffed1017306dbd
-R10: ffff8880b9836deb R11: 0000000000000000 R12: ffff888017300000
-R13: ffffffff8d661d60 R14: 0000000000000000 R15: 0000000000000000
- acpi_idle_enter+0xc5/0x160 drivers/acpi/processor_idle.c:707
- cpuidle_enter_state+0x82/0x500 drivers/cpuidle/cpuidle.c:267
- cpuidle_enter+0x4e/0xa0 drivers/cpuidle/cpuidle.c:388
- cpuidle_idle_call kernel/sched/idle.c:215 [inline]
- do_idle+0x315/0x3f0 kernel/sched/idle.c:282
- cpu_startup_entry+0x18/0x20 kernel/sched/idle.c:379
- rest_init+0x16f/0x2b0 init/main.c:726
- arch_call_rest_init+0x13/0x30 init/main.c:823
- start_kernel+0x39f/0x480 init/main.c:1068
- x86_64_start_reservations+0x18/0x30 arch/x86/kernel/head64.c:556
- x86_64_start_kernel+0xb2/0xc0 arch/x86/kernel/head64.c:537
- secondary_startup_64_no_verify+0x166/0x16b
- </TASK>
-----------------
-Code disassembly (best guess):
-   0:	ed                   	in     (%dx),%eax
-   1:	c3                   	ret
-   2:	66 66 2e 0f 1f 84 00 	data16 cs nopw 0x0(%rax,%rax,1)
-   9:	00 00 00 00
-   d:	66 90                	xchg   %ax,%ax
-   f:	65 48 8b 04 25 c0 bc 	mov    %gs:0x3bcc0,%rax
-  16:	03 00
-  18:	48 8b 00             	mov    (%rax),%rax
-  1b:	a8 08                	test   $0x8,%al
-  1d:	75 0c                	jne    0x2b
-  1f:	66 90                	xchg   %ax,%ax
-  21:	0f 00 2d 17 b9 b2 00 	verw   0xb2b917(%rip)        # 0xb2b93f
-  28:	fb                   	sti
-  29:	f4                   	hlt
-* 2a:	fa                   	cli <-- trapping instruction
-  2b:	c3                   	ret
-  2c:	0f 1f 00             	nopl   (%rax)
-  2f:	0f b6 47 08          	movzbl 0x8(%rdi),%eax
-  33:	3c 01                	cmp    $0x1,%al
-  35:	74 0b                	je     0x42
-  37:	3c 02                	cmp    $0x2,%al
-  39:	74 05                	je     0x40
-  3b:	8b 7f 04             	mov    0x4(%rdi),%edi
-  3e:	eb 9f                	jmp    0xffffffdf
+It should be
 
+Fixes: 27b3f8d13830 ("cxl/region: Program target lists")
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+--=20
+Cheers,
+Stephen Rothwell
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+--Sig_/OFWWOHHTu_mm37Ughuzm_7K
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
+-----BEGIN PGP SIGNATURE-----
 
-If you want to overwrite bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmUHc4EACgkQAVBC80lX
+0GzMawgApdNMA0K5HVDWtOXztjAKEHUSD91xaPg20vs/7GVj6FBtKKso264fpIzo
+AlXOmbCRhlx1N+D9C52MQWR4n8o3OurYjRCetb61WC8US5GM+2/dUCTDRmUYbhk8
+FCr73XFn5d/JuYvHdGHLstxL2+CulpBRqaykKIjtDFokYVIpmf/KqxWcgCF+ybg7
+BCByYYVlBzzEXDaqIGThFTlaNgX4kOlYBk5XdnWAb7D1lQtSsXQk57FHTjUdyRSr
+1f/5eARQ2MWMJvWm0Wbpl6r5cMoCgyth67Otzv1PkUY6bOAFBQSYzImadrV9+6XO
+sCgpQ62BhloSqk242lr321TQO96DiQ==
+=2DzD
+-----END PGP SIGNATURE-----
 
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+--Sig_/OFWWOHHTu_mm37Ughuzm_7K--

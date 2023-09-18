@@ -2,108 +2,76 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B35087A5311
-	for <lists+linux-next@lfdr.de>; Mon, 18 Sep 2023 21:25:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C85957A5471
+	for <lists+linux-next@lfdr.de>; Mon, 18 Sep 2023 22:52:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229449AbjIRTZ4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 18 Sep 2023 15:25:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34784 "EHLO
+        id S229885AbjIRUwO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 18 Sep 2023 16:52:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjIRTZ4 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 18 Sep 2023 15:25:56 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E12FB109;
-        Mon, 18 Sep 2023 12:25:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=41KJ6LcbdZqGjDW3rkDYYviXldx9YgEr4ngYT/Z6zj4=; b=MR38MTbqx/bZqQzh8zj3D6UTgu
-        6NplLBKzC3IV7xy0h4F9CaKjb/a0rHAA+ydyKPTW5+JK5D4q4FIgXZVZKAw7dhHJFgy7W7HYYPU9n
-        XUFGxSNzRxCLNhYPCMhLR86qCq9MrAKcgW2a/MGR0eyIk0JEHQVYXK+mtlq19knHg4zIp+J+0Oi+P
-        OF05XKlx11z3cnKjGqIaczDWvGiGbeN/7rnzkcyLjpOhocpQRa11/Purm6i671xLRB8DePwyXKz0Z
-        HzqqN/Ni4OecVEt5ws5fXxaf5hSKJmyVnR23A0RJ+f+JJuic1FgXmBaUdjMIAYLBKFEs2Io+dL7Ku
-        r5OtemMw==;
-Received: from [2601:1c2:980:9ec0::9fed]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qiJsQ-00GBra-05;
-        Mon, 18 Sep 2023 19:25:46 +0000
-Message-ID: <5baf9fcb-1c53-48b3-8742-ca3c98d82ebc@infradead.org>
-Date:   Mon, 18 Sep 2023 12:25:45 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: Tree for Sep 15 (drivers/mfd/cs42l43.o)
-Content-Language: en-US
-To:     Lee Jones <lee@kernel.org>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        with ESMTP id S229981AbjIRUwN (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 18 Sep 2023 16:52:13 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 711368E;
+        Mon, 18 Sep 2023 13:52:07 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07F46C433C8;
+        Mon, 18 Sep 2023 20:52:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1695070327;
+        bh=FM/e+9HNsj6WL+QzLvyQRkXOh67nb09Zq87aiKOG1q0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pH8BCdYF/Yflrh8hB2gbeCZNc9siAwwWX8IncR/7W/YYbZOThKjjSk2Pi/6Oywguy
+         j3Ep6STTZJf8R4pKFk6e3eRtd0+e5sjd/3fFDiaLWn9z7m5D6xrBW6DObkA8AinTqr
+         pZ5A5F0FxCfrslRtZp2xTE+2jTFHTpxEtzwR5V+iUjqLyzOek2fRjP4GQ9NVKvvMdw
+         bJmry0dl4nrYdz3L9uyXwGyu+X/RhcGQpUbQo2gOs2SnG4/nauXruHJKjhIz+i7giO
+         uVsjBkom1+UtO5bMCp8AXrsVNMWrlZn0fFPNIIuwDCSe07sPepkZVWdrhvAGat6xoR
+         z5LRiZ5hD8v5g==
+Date:   Mon, 18 Sep 2023 13:52:06 -0700
+From:   "Darrick J. Wong" <djwong@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        James Schulman <james.schulman@cirrus.com>,
-        David Rhodes <david.rhodes@cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>
-References: <20230915120127.1bc03420@canb.auug.org.au>
- <fb3f00ab-178c-45cf-ba39-baf61bb3f117@infradead.org>
- <20230918144033.GQ13143@google.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20230918144033.GQ13143@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: duplicate patch in the vfs-brauner tree
+Message-ID: <20230918205206.GA348037@frogsfrogsfrogs>
+References: <20230915093953.310503ee@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230915093953.310503ee@canb.auug.org.au>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-
-
-On 9/18/23 07:40, Lee Jones wrote:
-> On Fri, 15 Sep 2023, Randy Dunlap wrote:
+On Fri, Sep 15, 2023 at 09:39:53AM +1000, Stephen Rothwell wrote:
+> Hi all,
 > 
->>
->>
->> On 9/14/23 19:01, Stephen Rothwell wrote:
->>> Hi all,
->>>
->>> Changes since 20230914:
->>>
->>> The btrfs tree gained a conflist against the mm tree.
->>>
->>> The device-mapper tree gained a build failure so I used the version
->>> from next-20230914.
->>>
->>> The kspp tree lost its build failure.
->>>
->>> Non-merge commits (relative to Linus' tree): 5026
->>>  2501 files changed, 391711 insertions(+), 34318 deletions(-)
->>>
->>> ----------------------------------------------------------------------------
->>>
->>
->> on arm64:
->>
->> aarch64-linux-ld: drivers/mfd/cs42l43.o: in function `cs42l43_boot_work':
->> cs42l43.c:(.text+0x19d4): undefined reference to `devm_regmap_add_irq_chip'
->>
->> Using GCC 13.2.0 from kernel.org crosstools.
->>
->> Full randconfig file is attached.
+> The following commit is also in the iomap tree as a different commit
+> (but the same patch):
 > 
-> Who is the intended consumer of this report?
+>   de5b0b257ee3 ("iomap: handle error conditions more gracefully in iomap_to_bh")
 > 
+> This is commit
+> 
+>   4aa8cdd5e523 ("iomap: handle error conditions more gracefully in iomap_to_bh")
+> 
+> in the iomap tree.
 
-I Cc-ed the driver maintainers and the subsystem maintainer.
-However, I missed Cc-ing the person who git blame identifies
-for this patch. (added now)
+Christian, do you want to push this to Linus instead of me?  I've a
+couple more fixes that I'm about to send out to fsdevel and could just
+roll all the iomap stuff into a single branch... but if you were about
+to this to Linus I don't mind letting that happen.
 
-> Are you planning on following up with a patch?
+--D
 
-Sure, I will do that.
+> -- 
+> Cheers,
+> Stephen Rothwell
 
-thanks.
--- 
-~Randy
+

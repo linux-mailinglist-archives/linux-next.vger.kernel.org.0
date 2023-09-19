@@ -2,87 +2,84 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BBA27A6845
-	for <lists+linux-next@lfdr.de>; Tue, 19 Sep 2023 17:43:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B3BE7A6CB9
+	for <lists+linux-next@lfdr.de>; Tue, 19 Sep 2023 23:06:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233061AbjISPnl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 19 Sep 2023 11:43:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59088 "EHLO
+        id S233312AbjISVGl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 19 Sep 2023 17:06:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232823AbjISPnk (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 19 Sep 2023 11:43:40 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FDB9C0;
-        Tue, 19 Sep 2023 08:43:35 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34702C433C7;
-        Tue, 19 Sep 2023 15:43:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1695138215;
-        bh=GcdtwIA3CujNqnqgYnHn7vxC4/E5o49bT3JihnbJ/+U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NTA8mPE3QgGvcr0+J7KxEWa3ndltLPGbrC+ljy3+7xKxnFHZK4smDOuT4+ouyOtb4
-         PcjP1YQCHtftevMi8R58eGUbio/1XEeBioLLu9TRIb0EV5aHD34kEPxNd5GqOoUw2c
-         2XsJbXM2nI/WKQRL+huyu4cbpg2DbJBeCNUZP/En4Zz4+ctHH/4pcGapwHtfeslhH6
-         6zGzSA+PYhqW4F0n9pJUPKxA4Tz1Fj00UxMghMEy+hHq0qjcNDspplF/p74f2tXE6G
-         uTj3f0PpM4xOCkGyNPu9mMsuQMqKKaH/zfx127+cihCyzW6bjyoe5OVAG/LDVZFcdx
-         /7PoUo1Scuw7w==
-Date:   Tue, 19 Sep 2023 08:43:34 -0700
-From:   "Darrick J. Wong" <djwong@kernel.org>
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Christoph Hellwig <hch@lst.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        with ESMTP id S233279AbjISVGk (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 19 Sep 2023 17:06:40 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F6E4BD;
+        Tue, 19 Sep 2023 14:06:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1695157591;
+        bh=fOGQ9e4BVoLOtSBB5w72D7gWpOxX/9p2zqJYTCgMKa8=;
+        h=Date:From:To:Cc:Subject:From;
+        b=UzOdhLNhulU/A2u7orUuPSZpJVBdgdYlrN2pZ7HzcWp3hGygvloyosQUYALfWnV0V
+         570wI/vnB16PP6XvGfNhbyY0k7KYn0mDKK9Pc6qYSQujKlpByZt3dCz7qJEu2rLtLi
+         ijnlK7WfoYNc/hHPZX5Q60+EUCEzjx+DbTYYL22qJKJgrGeV9v/3kDjV9NRtzb4toy
+         5vRVW7eE5xvI3r5ubrDk37SntRJ0/KWMIu0zvLekVtQZQLoy4A7XqNRSvBoPeV57WY
+         FLgkdyLVkSKMrYVZQvHnspt5o4Vkv+k9WkunV+ZES+xdwDKOliZapaRzcH+H3znZpF
+         aS7iFsUZ+Xw4g==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4RqvNR00tdz4xGM;
+        Wed, 20 Sep 2023 07:06:30 +1000 (AEST)
+Date:   Wed, 20 Sep 2023 07:06:18 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Steve French <smfrench@gmail.com>,
+        CIFS <linux-cifs@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patch in the vfs-brauner tree
-Message-ID: <20230919154334.GD348037@frogsfrogsfrogs>
-References: <20230915093953.310503ee@canb.auug.org.au>
- <20230918205206.GA348037@frogsfrogsfrogs>
- <20230919-zensieren-plakat-05a044361e57@brauner>
+Subject: linux-next: Signed-off-by missing for commit in the cifs tree
+Message-ID: <20230920070618.6c3d16e9@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230919-zensieren-plakat-05a044361e57@brauner>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/2sDYkqYlpE5GtM2lWcN1OCO";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Sep 19, 2023 at 02:34:01PM +0200, Christian Brauner wrote:
-> On Mon, Sep 18, 2023 at 01:52:06PM -0700, Darrick J. Wong wrote:
-> > On Fri, Sep 15, 2023 at 09:39:53AM +1000, Stephen Rothwell wrote:
-> > > Hi all,
-> > > 
-> > > The following commit is also in the iomap tree as a different commit
-> > > (but the same patch):
-> > > 
-> > >   de5b0b257ee3 ("iomap: handle error conditions more gracefully in iomap_to_bh")
-> > > 
-> > > This is commit
-> > > 
-> > >   4aa8cdd5e523 ("iomap: handle error conditions more gracefully in iomap_to_bh")
-> > > 
-> > > in the iomap tree.
-> > 
-> > Christian, do you want to push this to Linus instead of me?  I've a
-> > couple more fixes that I'm about to send out to fsdevel and could just
-> > roll all the iomap stuff into a single branch... but if you were about
-> > to this to Linus I don't mind letting that happen.
-> 
-> So I was about to send a pull request tomorrow. I thought I was supposed
-> to pick up iomap stuff. Let me know what you prefer. I can easily drop
-> this patch. :)
+--Sig_/2sDYkqYlpE5GtM2lWcN1OCO
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I'll push that patch, then.
+Hi all,
 
-In general, you can fling any non-trivial iomap patches at me, since I
-will likely want to run them through my testing cloud anyway.
+Commit
 
-(And just to be clear: I don't mind if you push things like trivial api
-cleanups that are part of another series through your main vfs tree.)
+  46b169610922 ("cifs: Fix UAF in cifs_demultiplex_thread()")
 
---D
+is missing a Signed-off-by from its committer.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/2sDYkqYlpE5GtM2lWcN1OCO
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmUKDUsACgkQAVBC80lX
+0GxKVAf/ZcCkKiP2LMC0jj4ToIcqtPcz0AV+3eoNd1hoWGqzk21AzMXbZnBqwLRt
+/JhIVTg0VfOQzhhTUivfxVofgZpGi3Vj2N/rccC/qZIeT3nCV3/+fKy1WmYd2jIS
+DqpDRexXStlOeIHOw8+NqY+OEOyZn44EEvA94sSRtVQUMjxR7SMHASfvhL8DBecT
+NJb9hA8BEn6/4SgWnCNEkwpk1sYwuhjKs6uUzxDV9JTlHjmaPMu7EgoanvBSp5r4
+OKMvo/nvZt5b8VcFTROd7PfQR+07qTNSf3HBLPAenX8FZUvjATHtpo7RO3qsOyS+
+uliGI6T1CSIERR5JCn8401whQuwEjQ==
+=GOkt
+-----END PGP SIGNATURE-----
+
+--Sig_/2sDYkqYlpE5GtM2lWcN1OCO--

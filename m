@@ -2,68 +2,68 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 866A37A9AC4
-	for <lists+linux-next@lfdr.de>; Thu, 21 Sep 2023 20:48:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6309D7A9FCB
+	for <lists+linux-next@lfdr.de>; Thu, 21 Sep 2023 22:28:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229459AbjIUSs6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 21 Sep 2023 14:48:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33170 "EHLO
+        id S231923AbjIUU1p (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 21 Sep 2023 16:27:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbjIUSs6 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 21 Sep 2023 14:48:58 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F662EE5BD
-        for <linux-next@vger.kernel.org>; Thu, 21 Sep 2023 11:48:52 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-530a6cbbb47so1607220a12.0
-        for <linux-next@vger.kernel.org>; Thu, 21 Sep 2023 11:48:52 -0700 (PDT)
+        with ESMTP id S231641AbjIUU13 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 21 Sep 2023 16:27:29 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4EF78ED67
+        for <linux-next@vger.kernel.org>; Thu, 21 Sep 2023 10:45:15 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id 2adb3069b0e04-50325ce89e9so2068929e87.0
+        for <linux-next@vger.kernel.org>; Thu, 21 Sep 2023 10:45:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1695322130; x=1695926930; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=yoJ9BAqIakkIRBck4+c6D512CvwPivJvBbrFNArEblQ=;
-        b=oxLOJRZ4wlD7I4pqxBOzhsSt9GQI1+Eernn/mbu1MpYzdgRlNIMGTrSRMnbj2o2mIl
-         U7ZxpmWTuqMdVXo1NqFObBV+sAjG456/jmhRIEB8DBEUy8VPro3KeB8T7bgFqgDNHnHL
-         iwrM/U+T00XsmLGiv5MzMFa3dmY3pi9S6UTAq5Xawqj9FwTrDX1gOsc4IT3+H5KdV+b2
-         4cH2TVrSl84zVVtxL48HQSkpzyo/5rMGdnzPxJl918Xl5AeOma5k/p7iwQCnI1GmlASc
-         d4HLIUls4BpmnODoeVidq1W6+pGQz2PiqoemzJeaqcLVb/xWKUA9eMHor2X8aKO5qqhG
-         zR/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695322130; x=1695926930;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=fairphone.com; s=fair; t=1695318314; x=1695923114; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=yoJ9BAqIakkIRBck4+c6D512CvwPivJvBbrFNArEblQ=;
-        b=E+zXCSrbGv4qKNTX+/2i0xBLQtAtIb7Oo5TmeEaprQFS2b9dEx4acdIJ7Os7kBiymm
-         vXhPejZ7NlpEkTUavUz4nZBs84WirEtjSF6GZgQkGy05awlGE2k+IBZeSRM+p9QQXCKx
-         zyd7pZKFhMZ9cLPP/ctk41mtf0vmWtrny4Wv3PXJ/qBextwgyB3cRKEBR4vW7Yff6oDz
-         xfAVeDUKUzsw1W6Fo2LXzMCraSHhse+TJkdMP5onEcK55Wu7XWYZZsQUsnQuWhbWjtXz
-         98j9Ao5XoO95EvjhUI/Njm4pdWSdeCAOmv0Kr2lzaFX0+g6zUMFM2dHKVrhz8yMTLP9I
-         Rr8g==
-X-Gm-Message-State: AOJu0YyOKaFNfuaS5vsbUzCd7iR296/zsf7bI0JwbRdNkTBfvrV6a3xS
-        +2GPuxKz0yUK21v7xUTaMaDebKelVlfe96bkPDcrLA==
-X-Google-Smtp-Source: AGHT+IG9uHccNQRNfWrPU8ZX/D7XdOZck/6xT2lynqeRJ6EkLfvPB7KBcTTCDBPgEMaA+RDkpFh+bw==
-X-Received: by 2002:a17:906:2cc:b0:99e:f3b:2f78 with SMTP id 12-20020a17090602cc00b0099e0f3b2f78mr4284625ejk.67.1695289173321;
-        Thu, 21 Sep 2023 02:39:33 -0700 (PDT)
-Received: from linaro.org ([86.120.16.169])
-        by smtp.gmail.com with ESMTPSA id s4-20020a170906168400b009ad829ed144sm751272ejd.130.2023.09.21.02.39.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Sep 2023 02:39:32 -0700 (PDT)
-Date:   Thu, 21 Sep 2023 12:39:31 +0300
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-clk@vger.kernel.org, dl-linux-imx <linux-imx@nxp.com>,
-        Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>
-Subject: Re: linux-next: Tree for Sep 12 (drivers/clk/imx/clk-imx8-acm.o)
-Message-ID: <ZQwPU23VTdkLVHDR@linaro.org>
-References: <20230912152645.0868a96a@canb.auug.org.au>
- <8b77219e-b59e-40f1-96f1-980a0b2debcf@infradead.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8b77219e-b59e-40f1-96f1-980a0b2debcf@infradead.org>
+        bh=q8eS5EsLnF+3eMR0Okk+7DiUYY6jE3GaH2tKxaZiXFU=;
+        b=gyLcsLx6ujCv6ceKUj05MxgeQjZjLWJoh4fjNfVjegSGrMaKYmO/72S3WXtKa5AdDh
+         6DRToskPXQtTbfwQd+Lz3jRHePxg0TlClpigrgMjGksZQ+cQT+JrH1fL+53refomVHkV
+         2unkZDGpTv6gj+gemf6FiEBKQVBr7M/zU8FkqV7qau7iwX+LEfJjCi+65coDzbSEFI6M
+         4fm7XCFc9uKPrJA6zQLVtaV8gM5RZDd+HPdmglvypd4fzr3v0UpNKsQkLtXzrFnhKwi+
+         /CZpCDAt7UTJz+ivywgWv6PghhUcZ39pLGTjF3z5hsRIZaKDsDyYK4jm9xA8HAtE42Dp
+         QXIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695318314; x=1695923114;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=q8eS5EsLnF+3eMR0Okk+7DiUYY6jE3GaH2tKxaZiXFU=;
+        b=Tb7EOqDvfuZYwMN0oy4hIEIu70EFlgyOdnDjzuQNheXxC+9lRW3eD7mG45/5dH1QNJ
+         cBgxByuYI8f9653vqw/iLjKFv7rSHem1Xb2tkapWVwreT5dmaDpiOthE5gsO1TYLS2O7
+         3YTvtqOGEHXZRxMVio026cyOqMMQAnLui5WTgTcgRa/HKQAsQB9VVOLfbnfSuqNXwLvE
+         IeSOKXZZsBzxQdKbCS/pyzvqwtnzm7L1bqRQ4bvPYYhn3O/xOEH4nvmM9uElrozksaeL
+         qlArgb6hHsl6jPPxeU+/YvdTdtEQddSsI81GlmZyqOfvU39cK0WTcwzofVT5A26dDLx5
+         wrdw==
+X-Gm-Message-State: AOJu0YzFjL99htYIjVCcqxpRke/TrTh7PmW6Pz6W7asFfC5sR7x95h1n
+        2Fhi/uNlg34F1mw/1otEs1K2uqJqw5o+wJu+7TvTfA==
+X-Google-Smtp-Source: AGHT+IH0xC3AnMjYLD8sk+f9VGN5MFIAOGTQLEfy1gXzGtJvdU7IH7Xk3Rmde+6cngEOiB0uUj1Zrg==
+X-Received: by 2002:a2e:86c9:0:b0:2c0:d44:6162 with SMTP id n9-20020a2e86c9000000b002c00d446162mr3655168ljj.12.1695277809976;
+        Wed, 20 Sep 2023 23:30:09 -0700 (PDT)
+Received: from localhost (144-178-202-138.static.ef-service.nl. [144.178.202.138])
+        by smtp.gmail.com with ESMTPSA id j11-20020a170906278b00b00977eec7b7e8sm555508ejc.68.2023.09.20.23.30.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Sep 2023 23:30:09 -0700 (PDT)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Thu, 21 Sep 2023 08:30:08 +0200
+Message-Id: <CVODTTU89L11.Y3SSDO2Y9A35@otso>
+Cc:     "Bjorn Andersson" <andersson@kernel.org>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        "Linux Next Mailing List" <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the qcom tree
+From:   "Luca Weiss" <luca.weiss@fairphone.com>
+To:     "Stephen Rothwell" <sfr@canb.auug.org.au>,
+        "Andy Gross" <agross@kernel.org>
+X-Mailer: aerc 0.15.2
+References: <20230921084252.3c5ab501@canb.auug.org.au>
+In-Reply-To: <20230921084252.3c5ab501@canb.auug.org.au>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
@@ -74,44 +74,46 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 23-09-12 15:28:29, Randy Dunlap wrote:
-> 
-> 
-> On 9/11/23 22:26, Stephen Rothwell wrote:
-> > Hi all,
-> > 
-> > Changes since 20230911:
-> > 
-> > New tree: bcachefs
-> > 
-> > The bcachefs tree gained a semantic conflict against Linus' tree for
-> > which I applied a patch.
-> > 
-> > The wireless-next tree gaind a conflict against the wireless tree.
-> > 
-> > Non-merge commits (relative to Linus' tree): 4095
-> >  1552 files changed, 346893 insertions(+), 22945 deletions(-)
-> > 
-> > ----------------------------------------------------------------------------
-> 
-> on arm64:
-> 
-> aarch64-linux-ld: drivers/clk/imx/clk-imx8-acm.o: in function `imx8_acm_clk_probe':
-> clk-imx8-acm.c:(.text+0x3d0): undefined reference to `imx_check_clk_hws'
-> 
-> when
-> CONFIG_CLK_IMX8QXP=y
-> CONFIG_MXC_CLK=m
-> 
-> Should CLK_IMX8QXP select MXC_CLK?
-> I'll leave that patch up to the maintainers.
-> 
-> Reported-by: Randy Dunlap <rdunlap@infradead.org>
+On Thu Sep 21, 2023 at 12:42 AM CEST, Stephen Rothwell wrote:
+> Hi all,
+>
+> After merging the qcom tree, today's linux-next build (arm
+> multi_v7_defconfig) failed like this:
+>
+> Error: scripts/dtc/include-prefixes/arm64/qcom/pm7250b.dtsi:44.10-11 synt=
+ax error
+> FATAL ERROR: Unable to parse input tree
+>
+> Caused (exposed) by commit
+>
+>   eee9602ad649 ("arm64: dts: qcom: qcm6490: Add device-tree for Fairphone=
+ 5")
 
-Thanks for reporting this.
+Hi, this should be caused by
+"arm64: dts: qcom: pm7250b: make SID configurable"
 
-Sent a patch for it:
-https://lore.kernel.org/all/20230921093647.3901752-1-abel.vesa@linaro.org/
+It seems I've missed updating one arm32 dts file, I'll send a patch for
+this shortly.
 
-> -- 
-> ~Randy
+Sorry about that.
+
+diff --git a/arch/arm/boot/dts/qcom/qcom-sdx65-mtp.dts b/arch/arm/boot/dts/=
+qcom/qcom-sdx65-mtp.dts
+index fcf1c51c5e7a..9649c859a2c3 100644
+--- a/arch/arm/boot/dts/qcom/qcom-sdx65-mtp.dts
++++ b/arch/arm/boot/dts/qcom/qcom-sdx65-mtp.dts
+@@ -4,6 +4,10 @@
+  */
+ /dts-v1/;
+=20
++/* PM7250B is configured to use SID2/3 */
++#define PM7250B_SID 2
++#define PM7250B_SID1 3
++
+ #include "qcom-sdx65.dtsi"
+ #include <dt-bindings/regulator/qcom,rpmh-regulator.h>
+ #include <arm64/qcom/pmk8350.dtsi>
+
+>
+> I have used the qcom tree from next-20230920 for today.
+

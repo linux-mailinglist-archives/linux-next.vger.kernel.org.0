@@ -2,46 +2,45 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AC887A90B0
-	for <lists+linux-next@lfdr.de>; Thu, 21 Sep 2023 03:50:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A4217A90E7
+	for <lists+linux-next@lfdr.de>; Thu, 21 Sep 2023 04:31:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229780AbjIUBuq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 20 Sep 2023 21:50:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51500 "EHLO
+        id S229473AbjIUCbc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 20 Sep 2023 22:31:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbjIUBup (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 20 Sep 2023 21:50:45 -0400
+        with ESMTP id S229445AbjIUCbc (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 20 Sep 2023 22:31:32 -0400
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16A26AF;
-        Wed, 20 Sep 2023 18:50:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C6C99E;
+        Wed, 20 Sep 2023 19:31:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1695261037;
-        bh=JLRMlSo3vMMNvqxLmYNQNMSGfT0Tg+jBoXG/REv5U0g=;
+        s=201702; t=1695263484;
+        bh=rrKsNa5C1soZq1fFRc7nMu3zzxokdr6j2JJqc0o1XEA=;
         h=Date:From:To:Cc:Subject:From;
-        b=LL3JOHa996/ClIp6UOSpQNWH3+3ARf7GX4hWYsep/8l6w2cydSW8G/qa3BtTJCY0n
-         Zd1YBiyOzKCidIKu5H4Pr/ILZFxbv2mwpK/wtE8DqMVrZvuLEfaL9Lb5VVtLx6ACEM
-         qG7FfwCwu3g8FLn6eGWr6ppH5tofg0jnTo+rRQBUxaYVDk4J1bmniqaMR3lI7W756A
-         atfXNojZWm7R6PK/cyPUxkynPpjFmCGwhk87HlQ8a9M6WBZYvLXzbWHbUcEFUTb1HS
-         inYnZMGxaVWkNXeolQLo980WybK2jiBRyvPrVM3D/PrkRgEDfx52wUuGC7GgMp+4wL
-         vIX2m6f/ZlL7A==
+        b=U8XTfYRki8mhxr87CB2+cUoKLA+/Uo2SDojiMu1ybKMR4HqqndGGIsO1BES+5XjXM
+         rX5cOzRy9uR0lHQq+u2X55ur/hmuq5OETeTG2ZAfc6bQz7ulg7VtRS4qlZRq7lU7Lu
+         IhsgzvMBcAexbxu4+Gj5paqMwQcxlQdjNauLudVDYXh9CX/YPwA7urxg9KVEb0h8BX
+         SGGy9qVLEbn6PUt9YIGb3U+jl8+X286XZ1BtccqBFpmJJ0dipDZHUPFt7PSW6nSpja
+         7R/zTYEzaK4NSQrC0dnpViW484Nt6hnMnWqQ5P9sDdcDrVq5OMnvo6xyD+2VPcRVWc
+         yujeZMzvYFisA==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Rrddm3C7jz4wy7;
-        Thu, 21 Sep 2023 11:50:36 +1000 (AEST)
-Date:   Thu, 21 Sep 2023 11:50:34 +1000
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4RrfXq72TTz4x3j;
+        Thu, 21 Sep 2023 12:31:23 +1000 (AEST)
+Date:   Thu, 21 Sep 2023 12:31:23 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Luis Chamberlain <mcgrof@kernel.org>, Arnd Bergmann <arnd@arndb.de>
-Cc:     Ard Biesheuvel <ardb@kernel.org>,
-        Joel Granados <j.granados@samsung.com>,
+To:     Alex Deucher <alexdeucher@gmail.com>
+Cc:     Alex Deucher <alexander.deucher@amd.com>,
+        Lijo Lazar <lijo.lazar@amd.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the sysctl tree with the asm-generic
- tree
-Message-ID: <20230921115034.5461f62f@canb.auug.org.au>
+Subject: linux-next: build warning after merge of the amdgpu tree
+Message-ID: <20230921123123.2362fbc1@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/abOGJuyUxkoxwYZBACpOO4O";
+Content-Type: multipart/signed; boundary="Sig_/qppQxBL+5GzDCGM6gTAfvDt";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,
@@ -52,52 +51,39 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/abOGJuyUxkoxwYZBACpOO4O
+--Sig_/qppQxBL+5GzDCGM6gTAfvDt
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the sysctl tree got a conflict in:
+After merging the amdgpu tree, today's linux-next build (htmldocs)
+produced this warning:
 
-  arch/ia64/kernel/crash.c
+drivers/gpu/drm/amd/pm/amdgpu_pm.c:988: ERROR: Unexpected indentation.
 
-between commit:
+Introduced by commit
 
-  cf8e8658100d ("arch: Remove Itanium (IA-64) architecture")
-
-from the asm-generic tree and commit:
-
-  d2f2ef357794 ("ia64: Remove now superfluous sentinel element from ctl_tab=
-le array")
-
-from the sysctl tree.
-
-I fixed it up (I removed the file) and can carry the fix as
-necessary. This is now fixed as far as linux-next is concerned, but any
-non trivial conflicts should be mentioned to your upstream maintainer
-when your tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
+  615585d09b33 ("Documentation/amdgpu: Modify pp_dpm_*clk details")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/abOGJuyUxkoxwYZBACpOO4O
+--Sig_/qppQxBL+5GzDCGM6gTAfvDt
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmULoWoACgkQAVBC80lX
-0Gx7PQf/TzOjUUFn+I6C5fLjeElNvtz83wRWweZuJplE2Skv3+mjLk5APK7sdXBI
-e1C69jKE0BbOdmn7j1FznpFCMIbNbqUlQOGmDt/1/xJx7LWtm+2sVLBXe2oFSzYP
-JaORSbAjb8MWFN1DGUAPJQu5Cz0F5Knrg5HYVWYAxjVXJIzR+iXkcR1O4tx/15k6
-DqJtzuxMOG+f4wsKJOYCr20YWIb4kUWTV3savYhQ5Fu/dds2uX/SDEuPIOPijLmM
-6g0ZnAFiT86Dhqq8CmW2VFeJFBAcQsslGXzeJ+8sWxM1fye8jpSiOH/KIVjM5RMd
-fp4yzvZK5pn6rXeaydhvfw/DNgyG9w==
-=7zyq
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmULqvsACgkQAVBC80lX
+0GyMewf/dsjYrj5+rnOGCfecPa4SHEZgWPV8X3Y0dpO/K4XAGZXdfmpJ6VXxHAur
+NC+ixuFKsbkUPBrJjii9+4c34jvsvQ6wJv6ISFtN9m7OLAlF3wXgQzWi0cXkauy6
+9UHBYGNl1v6thLBbL6n6XFBOoLzwIaMsB7D0hSNRSsL8nA+NagyusO6IQQ4/0f68
+ggQqpDIJGgmTncXPjKDakHQ7Fr3urIo7fbg3jix6y3hd1R9itvYe7TR0uY1ROTxw
+3WqGBSnxGGoNry0gRQ2w/wGmSJPZuokJDwvdv5oN4YrBBNbZ4BcAuvOdsPInPk74
+A0A2ItwoCrVLkmLBRQ5sFLIGH0rXRg==
+=Xvtd
 -----END PGP SIGNATURE-----
 
---Sig_/abOGJuyUxkoxwYZBACpOO4O--
+--Sig_/qppQxBL+5GzDCGM6gTAfvDt--

@@ -2,56 +2,46 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D278A7AA7F7
-	for <lists+linux-next@lfdr.de>; Fri, 22 Sep 2023 06:52:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 104D27AB72B
+	for <lists+linux-next@lfdr.de>; Fri, 22 Sep 2023 19:28:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229805AbjIVEwO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 22 Sep 2023 00:52:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44630 "EHLO
+        id S229532AbjIVR2l (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 22 Sep 2023 13:28:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229737AbjIVEwN (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 22 Sep 2023 00:52:13 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F3001AA;
-        Thu, 21 Sep 2023 21:52:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=jPkRHugyLd5JNXnKoygyDO0rjavXl5/MuIrj9Kx/yBo=; b=AV5rmBImlt7B6b7fh3c9eoqq0W
-        xnzaV+n1bQ0ZF9qlLfIQHmBJOn7SbOtod6+UWwxd+4AazbgE0i7easbQVx1JzqPPfyRpcb0bHhHiv
-        sPDVOZHH0TfWfhQETrXVdEAFtb2ABQSIVRTQqvn/nF2hFfZqwPpb9Ef2f+mWWJ2OY1/ngrAEk1ZYQ
-        7RYJOdGTpL3EgwmgajeENIbvxIsixvVzqb0CgSzDHEuveheGLrHpxC+Ck3agpH30IXWNoOiXoRzkj
-        7ud6JfOkgRToRnd1KyLLOpdDVnIPSWNAifI2vmacg88HuIGixEfI7YA+Y5phTnkTiFpwxdprmN4tu
-        K71S+hrQ==;
-Received: from [2601:1c2:980:9ec0::9fed]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qjY8s-007qqE-07;
-        Fri, 22 Sep 2023 04:51:50 +0000
-Message-ID: <47afe095-0dd9-47bc-a4d1-dcd66f87ac7c@infradead.org>
-Date:   Thu, 21 Sep 2023 21:51:47 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: Tree for Sep 20 (ppc32: ADB_CUDA Kconfig warning)
-Content-Language: en-US
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        tanyuan@tinylab.org
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>
-References: <20230920133714.351f83f9@canb.auug.org.au>
- <fe130d55-7b5e-4444-85ea-c3fbf4eb238d@infradead.org>
- <87il83m5k0.fsf@mail.lhotse>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <87il83m5k0.fsf@mail.lhotse>
-Content-Type: text/plain; charset=UTF-8
+        with ESMTP id S230025AbjIVR2l (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 22 Sep 2023 13:28:41 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AF8E194;
+        Fri, 22 Sep 2023 10:28:26 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA9FCC433C8;
+        Fri, 22 Sep 2023 17:28:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1695403706;
+        bh=5e+Uaa6IVXhwt1E8qsYEHDmAS2OFX3RrpBQFhfedKBc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=p2MLgonAtabExJ6WcBnB7c1yQdb18pCCLp8DgbhIOUvUNOrb3VOjLXSMlxf6K06dx
+         bct8IhcGTDWdtae5yf8MsKc04A+Xwm2J6KESzlokuiMN6vIFQ4j0kUYCJpakllHbiL
+         ogx8bae+iNaa19jzmh5zfqTAXitSrpKPIwIiAhpg=
+Date:   Fri, 22 Sep 2023 10:28:25 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     syzbot <syzbot+6ccbcd15a17f3e1cde38@syzkaller.appspotmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-next@vger.kernel.org, sfr@canb.auug.org.au,
+        syzkaller-bugs@googlegroups.com,
+        David Hildenbrand <david@redhat.com>
+Subject: Re: [syzbot] [mm?] linux-next test error: WARNING in
+ page_add_anon_rmap
+Message-Id: <20230922102825.061c67b4418190426fdc68f2@linux-foundation.org>
+In-Reply-To: <00000000000090d6a00605eb5de9@google.com>
+References: <00000000000090d6a00605eb5de9@google.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,70 +49,40 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+On Thu, 21 Sep 2023 21:51:45 -0700 syzbot <syzbot+6ccbcd15a17f3e1cde38@syzkaller.appspotmail.com> wrote:
 
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    7fc7222d9680 Add linux-next specific files for 20230918
+> git tree:       linux-next
+> console output: https://syzkaller.appspot.com/x/log.txt?x=13acae54680000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=79253779bcbe3130
+> dashboard link: https://syzkaller.appspot.com/bug?extid=6ccbcd15a17f3e1cde38
+> compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
+> 
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/82da18e596ba/disk-7fc7222d.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/4e71084ae5e0/vmlinux-7fc7222d.xz
+> kernel image: https://storage.googleapis.com/syzbot-assets/f412e76b12e4/bzImage-7fc7222d.xz
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+6ccbcd15a17f3e1cde38@syzkaller.appspotmail.com
+> 
+>  destroy_args+0x768/0x990 mm/debug_vm_pgtable.c:1028
+>  debug_vm_pgtable+0x1d79/0x3df0 mm/debug_vm_pgtable.c:1408
+>  do_one_initcall+0x11c/0x640 init/main.c:1232
+>  do_initcall_level init/main.c:1294 [inline]
+>  do_initcalls init/main.c:1310 [inline]
+>  do_basic_setup init/main.c:1329 [inline]
+>  kernel_init_freeable+0x5c2/0x8f0 init/main.c:1547
+>  kernel_init+0x1c/0x2a0 init/main.c:1437
+>  ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:147
+>  ret_from_fork_asm+0x11/0x20 arch/x86/entry/entry_64.S:304
+> ------------[ cut here ]------------
+> WARNING: CPU: 0 PID: 5053 at mm/rmap.c:1252 page_add_anon_rmap+0xc33/0x1a70 mm/rmap.c:1252
 
-On 9/21/23 17:10, Michael Ellerman wrote:
-> Randy Dunlap <rdunlap@infradead.org> writes:
->> On 9/19/23 20:37, Stephen Rothwell wrote:
->>> Hi all,
->>>
->>> Changes since 20230919:
->>>
->>> The mm tree lost its boot warning.
->>>
->>> The drm-misc tree gained a conflict against Linus' tree.
->>>
->>> Non-merge commits (relative to Linus' tree): 6006
->>>  3996 files changed, 459968 insertions(+), 111742 deletions(-)
->>>
->>> ----------------------------------------------------------------------------
->>
->> 4 out of 10 randconfigs have this warning:
->>
->> WARNING: unmet direct dependencies detected for ADB_CUDA
->>   Depends on [n]: MACINTOSH_DRIVERS [=n] && (ADB [=n] || PPC_PMAC [=y]) && !PPC_PMAC64 [=n]
->>   Selected by [y]:
->>   - PPC_PMAC [=y] && PPC_BOOK3S [=y] && CPU_BIG_ENDIAN [=y] && POWER_RESET [=y] && PPC32 [=y]
->>
->> WARNING: unmet direct dependencies detected for ADB_CUDA
->>   Depends on [n]: MACINTOSH_DRIVERS [=n] && (ADB [=n] || PPC_PMAC [=y]) && !PPC_PMAC64 [=n]
->>   Selected by [y]:
->>   - PPC_PMAC [=y] && PPC_BOOK3S [=y] && CPU_BIG_ENDIAN [=y] && POWER_RESET [=y] && PPC32 [=y]
->>
->> WARNING: unmet direct dependencies detected for ADB_CUDA
->>   Depends on [n]: MACINTOSH_DRIVERS [=n] && (ADB [=n] || PPC_PMAC [=y]) && !PPC_PMAC64 [=n]
->>   Selected by [y]:
->>   - PPC_PMAC [=y] && PPC_BOOK3S [=y] && CPU_BIG_ENDIAN [=y] && POWER_RESET [=y] && PPC32 [=y]
-> 
-> Crud. Caused by:
-> 
-> a3ef2fef198c ("powerpc/32: Add dependencies of POWER_RESET for pmac32")
-> 
-> I was suspicious of that select, I should have been *more* suspicious :)
-> 
-> I think this is a fix. The PPC32 isn't needed because ADB depends on (PPC_PMAC && PPC32).
+Thanks, this should be addressed by
+https://lkml.kernel.org/r/d8e5a093-2e22-c14b-7e64-6da280398d9f@redhat.com
 
-Yes, that fixes the problem. Thanks.
-
-Tested-by: Randy Dunlap <rdunlap@infradead.org>
-Acked-by: Randy Dunlap <rdunlap@infradead.org>
-
-> 
-> diff --git a/arch/powerpc/platforms/powermac/Kconfig b/arch/powerpc/platforms/powermac/Kconfig
-> index 8bdae0caf21e..84f101ec53a9 100644
-> --- a/arch/powerpc/platforms/powermac/Kconfig
-> +++ b/arch/powerpc/platforms/powermac/Kconfig
-> @@ -2,7 +2,7 @@
->  config PPC_PMAC
->         bool "Apple PowerMac based machines"
->         depends on PPC_BOOK3S && CPU_BIG_ENDIAN
-> -       select ADB_CUDA if POWER_RESET && PPC32
-> +       select ADB_CUDA if POWER_RESET && ADB
->         select MPIC
->         select FORCE_PCI
->         select PPC_INDIRECT_PCI if PPC32
-> 
-> cheers
-
--- 
-~Randy

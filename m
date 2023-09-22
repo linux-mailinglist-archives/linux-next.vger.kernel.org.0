@@ -2,51 +2,56 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A5A77AA7F4
-	for <lists+linux-next@lfdr.de>; Fri, 22 Sep 2023 06:51:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D278A7AA7F7
+	for <lists+linux-next@lfdr.de>; Fri, 22 Sep 2023 06:52:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229539AbjIVEvy (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 22 Sep 2023 00:51:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57868 "EHLO
+        id S229805AbjIVEwO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 22 Sep 2023 00:52:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbjIVEvx (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 22 Sep 2023 00:51:53 -0400
-Received: from mail-oi1-f205.google.com (mail-oi1-f205.google.com [209.85.167.205])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11C25195
-        for <linux-next@vger.kernel.org>; Thu, 21 Sep 2023 21:51:46 -0700 (PDT)
-Received: by mail-oi1-f205.google.com with SMTP id 5614622812f47-3ade77211a2so2500267b6e.0
-        for <linux-next@vger.kernel.org>; Thu, 21 Sep 2023 21:51:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695358305; x=1695963105;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=soFbprgcrBvp6iSkOZ0K+CA6AdLh6QbW+/lp9BNjVAo=;
-        b=pYEjiw6DxqP4BbnTrJgJnnEDgYAAhxlAyySsdJnvu/RGygqqKJYPQVjBS22IVhc1ZE
-         I1mHnhrm2DxA6fpbqpA9pgp585xiK/ix0SIEqxeQe5YmZ0AR83CRffLTIB26Qt3+HCu2
-         asNm6MJVnzKFEV+goT0Phzr3bFHH2gcq9kTDUb519q0z/fsCy6NXaF97d3uaT1T2jLti
-         5jonrHcMRYFSRox2LZcujSYKBVvgKSrUHkwR+s8x0zRy2K0yZ0gSXG9Mjrr02ordUFaJ
-         2Eo1Jf5td+uD1w+JMmrboOQO2xjhPg4TNz1/Fw2dVyGOWwaMShKpRJrmvGH6ZzrvRlpW
-         ki3Q==
-X-Gm-Message-State: AOJu0YxQnU7Z6UmHHXiP95yeNmOaZTtSJ5AYzGHCU3y3cw9lgh1np5MW
-        dSMbttPnC1VUHXNXuynBv3mYOjsCDMNLqiBYTKZRdKnPbL2E
-X-Google-Smtp-Source: AGHT+IEKseYWmn4Z0Npyyco87WBo3cXXZuePCIN+JQtv+9i91m1I3biA30GH/2jRUH1Pay2PYrsZP1dBywrvsEw2QzvHOb5fAZbF
+        with ESMTP id S229737AbjIVEwN (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 22 Sep 2023 00:52:13 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F3001AA;
+        Thu, 21 Sep 2023 21:52:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=jPkRHugyLd5JNXnKoygyDO0rjavXl5/MuIrj9Kx/yBo=; b=AV5rmBImlt7B6b7fh3c9eoqq0W
+        xnzaV+n1bQ0ZF9qlLfIQHmBJOn7SbOtod6+UWwxd+4AazbgE0i7easbQVx1JzqPPfyRpcb0bHhHiv
+        sPDVOZHH0TfWfhQETrXVdEAFtb2ABQSIVRTQqvn/nF2hFfZqwPpb9Ef2f+mWWJ2OY1/ngrAEk1ZYQ
+        7RYJOdGTpL3EgwmgajeENIbvxIsixvVzqb0CgSzDHEuveheGLrHpxC+Ck3agpH30IXWNoOiXoRzkj
+        7ud6JfOkgRToRnd1KyLLOpdDVnIPSWNAifI2vmacg88HuIGixEfI7YA+Y5phTnkTiFpwxdprmN4tu
+        K71S+hrQ==;
+Received: from [2601:1c2:980:9ec0::9fed]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qjY8s-007qqE-07;
+        Fri, 22 Sep 2023 04:51:50 +0000
+Message-ID: <47afe095-0dd9-47bc-a4d1-dcd66f87ac7c@infradead.org>
+Date:   Thu, 21 Sep 2023 21:51:47 -0700
 MIME-Version: 1.0
-X-Received: by 2002:a05:6808:1a20:b0:3ad:adea:3f11 with SMTP id
- bk32-20020a0568081a2000b003adadea3f11mr4055679oib.11.1695358305488; Thu, 21
- Sep 2023 21:51:45 -0700 (PDT)
-Date:   Thu, 21 Sep 2023 21:51:45 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000090d6a00605eb5de9@google.com>
-Subject: [syzbot] [mm?] linux-next test error: WARNING in page_add_anon_rmap
-From:   syzbot <syzbot+6ccbcd15a17f3e1cde38@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-next@vger.kernel.org,
-        sfr@canb.auug.org.au, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+User-Agent: Mozilla Thunderbird
+Subject: Re: linux-next: Tree for Sep 20 (ppc32: ADB_CUDA Kconfig warning)
+Content-Language: en-US
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        tanyuan@tinylab.org
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+References: <20230920133714.351f83f9@canb.auug.org.au>
+ <fe130d55-7b5e-4444-85ea-c3fbf4eb238d@infradead.org>
+ <87il83m5k0.fsf@mail.lhotse>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <87il83m5k0.fsf@mail.lhotse>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,102 +59,70 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hello,
-
-syzbot found the following issue on:
-
-HEAD commit:    7fc7222d9680 Add linux-next specific files for 20230918
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=13acae54680000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=79253779bcbe3130
-dashboard link: https://syzkaller.appspot.com/bug?extid=6ccbcd15a17f3e1cde38
-compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/82da18e596ba/disk-7fc7222d.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/4e71084ae5e0/vmlinux-7fc7222d.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/f412e76b12e4/bzImage-7fc7222d.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+6ccbcd15a17f3e1cde38@syzkaller.appspotmail.com
-
- destroy_args+0x768/0x990 mm/debug_vm_pgtable.c:1028
- debug_vm_pgtable+0x1d79/0x3df0 mm/debug_vm_pgtable.c:1408
- do_one_initcall+0x11c/0x640 init/main.c:1232
- do_initcall_level init/main.c:1294 [inline]
- do_initcalls init/main.c:1310 [inline]
- do_basic_setup init/main.c:1329 [inline]
- kernel_init_freeable+0x5c2/0x8f0 init/main.c:1547
- kernel_init+0x1c/0x2a0 init/main.c:1437
- ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:147
- ret_from_fork_asm+0x11/0x20 arch/x86/entry/entry_64.S:304
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 5053 at mm/rmap.c:1252 page_add_anon_rmap+0xc33/0x1a70 mm/rmap.c:1252
-Modules linked in:
-CPU: 0 PID: 5053 Comm: syz-fuzzer Not tainted 6.6.0-rc2-next-20230918-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/04/2023
-RIP: 0010:page_add_anon_rmap+0xc33/0x1a70 mm/rmap.c:1252
-Code: 48 c1 eb 11 83 e3 01 89 de e8 99 aa b8 ff 84 db 0f 84 36 fb ff ff e8 5c af b8 ff 48 c7 c6 40 89 99 8a 4c 89 e7 e8 dd 02 f7 ff <0f> 0b e9 1b fb ff ff e8 41 af b8 ff 49 89 dd 31 ff 41 81 e5 ff 0f
-RSP: 0018:ffffc900039af6b8 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000000000
-RDX: ffff88801aad3b80 RSI: ffffffff81cf4673 RDI: ffffffff8ae94460
-RBP: ffff88801d45a400 R08: 0000000000000000 R09: fffffbfff1d9d0aa
-R10: ffffffff8ece8557 R11: 0000000000000001 R12: ffffea00019e0000
-R13: 00fff800000a0078 R14: 0000000000000000 R15: ffffea0001a9b988
-FS:  000000c000bec490(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000000c00148d000 CR3: 00000000744da000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- __split_huge_pmd_locked mm/huge_memory.c:2276 [inline]
- __split_huge_pmd+0x17d5/0x31e0 mm/huge_memory.c:2320
- zap_pmd_range mm/memory.c:1550 [inline]
- zap_pud_range mm/memory.c:1600 [inline]
- zap_p4d_range mm/memory.c:1621 [inline]
- unmap_page_range+0xf13/0x2c00 mm/memory.c:1642
- unmap_single_vma+0x194/0x2b0 mm/memory.c:1688
- zap_page_range_single+0x324/0x4e0 mm/memory.c:1764
- madvise_dontneed_single_vma mm/madvise.c:822 [inline]
- madvise_dontneed_free mm/madvise.c:903 [inline]
- madvise_vma_behavior+0xbb0/0x1d00 mm/madvise.c:1042
- madvise_walk_vmas+0x1cf/0x2c0 mm/madvise.c:1267
- do_madvise+0x333/0x660 mm/madvise.c:1447
- __do_sys_madvise mm/madvise.c:1460 [inline]
- __se_sys_madvise mm/madvise.c:1458 [inline]
- __x64_sys_madvise+0xaa/0x110 mm/madvise.c:1458
- do_syscall_x64 arch/x86/entry/common.c:51 [inline]
- do_syscall_64+0x38/0xb0 arch/x86/entry/common.c:81
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x46b677
-Code: 8b 24 24 48 8b 6c 24 10 48 83 c4 18 c3 cc cc cc cc cc cc 48 8b 7c 24 08 48 8b 74 24 10 8b 54 24 18 48 c7 c0 1c 00 00 00 0f 05 <89> 44 24 20 c3 cc cc cc cc 48 8b 7c 24 08 8b 74 24 10 8b 54 24 14
-RSP: 002b:000000c000065d70 EFLAGS: 00000202 ORIG_RAX: 000000000000001c
-RAX: ffffffffffffffda RBX: 000000000016e000 RCX: 000000000046b677
-RDX: 0000000000000004 RSI: 000000000016e000 RDI: 000000c001692000
-RBP: 000000c000065db0 R08: 0000000000200000 R09: 000080c0017fffff
-R10: 0000000001134fa0 R11: 0000000000000202 R12: 0000000001134f20
-R13: 0000000000000003 R14: 000000c000007ba0 R15: 0000000001134f60
- </TASK>
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+On 9/21/23 17:10, Michael Ellerman wrote:
+> Randy Dunlap <rdunlap@infradead.org> writes:
+>> On 9/19/23 20:37, Stephen Rothwell wrote:
+>>> Hi all,
+>>>
+>>> Changes since 20230919:
+>>>
+>>> The mm tree lost its boot warning.
+>>>
+>>> The drm-misc tree gained a conflict against Linus' tree.
+>>>
+>>> Non-merge commits (relative to Linus' tree): 6006
+>>>  3996 files changed, 459968 insertions(+), 111742 deletions(-)
+>>>
+>>> ----------------------------------------------------------------------------
+>>
+>> 4 out of 10 randconfigs have this warning:
+>>
+>> WARNING: unmet direct dependencies detected for ADB_CUDA
+>>   Depends on [n]: MACINTOSH_DRIVERS [=n] && (ADB [=n] || PPC_PMAC [=y]) && !PPC_PMAC64 [=n]
+>>   Selected by [y]:
+>>   - PPC_PMAC [=y] && PPC_BOOK3S [=y] && CPU_BIG_ENDIAN [=y] && POWER_RESET [=y] && PPC32 [=y]
+>>
+>> WARNING: unmet direct dependencies detected for ADB_CUDA
+>>   Depends on [n]: MACINTOSH_DRIVERS [=n] && (ADB [=n] || PPC_PMAC [=y]) && !PPC_PMAC64 [=n]
+>>   Selected by [y]:
+>>   - PPC_PMAC [=y] && PPC_BOOK3S [=y] && CPU_BIG_ENDIAN [=y] && POWER_RESET [=y] && PPC32 [=y]
+>>
+>> WARNING: unmet direct dependencies detected for ADB_CUDA
+>>   Depends on [n]: MACINTOSH_DRIVERS [=n] && (ADB [=n] || PPC_PMAC [=y]) && !PPC_PMAC64 [=n]
+>>   Selected by [y]:
+>>   - PPC_PMAC [=y] && PPC_BOOK3S [=y] && CPU_BIG_ENDIAN [=y] && POWER_RESET [=y] && PPC32 [=y]
+> 
+> Crud. Caused by:
+> 
+> a3ef2fef198c ("powerpc/32: Add dependencies of POWER_RESET for pmac32")
+> 
+> I was suspicious of that select, I should have been *more* suspicious :)
+> 
+> I think this is a fix. The PPC32 isn't needed because ADB depends on (PPC_PMAC && PPC32).
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Yes, that fixes the problem. Thanks.
 
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
+Tested-by: Randy Dunlap <rdunlap@infradead.org>
+Acked-by: Randy Dunlap <rdunlap@infradead.org>
 
-If you want to overwrite bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
+> 
+> diff --git a/arch/powerpc/platforms/powermac/Kconfig b/arch/powerpc/platforms/powermac/Kconfig
+> index 8bdae0caf21e..84f101ec53a9 100644
+> --- a/arch/powerpc/platforms/powermac/Kconfig
+> +++ b/arch/powerpc/platforms/powermac/Kconfig
+> @@ -2,7 +2,7 @@
+>  config PPC_PMAC
+>         bool "Apple PowerMac based machines"
+>         depends on PPC_BOOK3S && CPU_BIG_ENDIAN
+> -       select ADB_CUDA if POWER_RESET && PPC32
+> +       select ADB_CUDA if POWER_RESET && ADB
+>         select MPIC
+>         select FORCE_PCI
+>         select PPC_INDIRECT_PCI if PPC32
+> 
+> cheers
 
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+-- 
+~Randy

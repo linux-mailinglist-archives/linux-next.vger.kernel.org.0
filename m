@@ -2,46 +2,45 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25BAB7ACC6F
-	for <lists+linux-next@lfdr.de>; Mon, 25 Sep 2023 00:15:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A1357ACCF5
+	for <lists+linux-next@lfdr.de>; Mon, 25 Sep 2023 01:42:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229553AbjIXWPV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 24 Sep 2023 18:15:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48654 "EHLO
+        id S229487AbjIXXmJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 24 Sep 2023 19:42:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbjIXWPV (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 24 Sep 2023 18:15:21 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAAA5FB;
-        Sun, 24 Sep 2023 15:15:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1695593711;
-        bh=/aPhWsKVnXOMpzKdoh51cLpxyDDtledOkHU+7Q5ovt8=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Fd8HbmgmCQl7rUvCY3fcexif/CJ8vEVfCWOwDeNNyx0DUtuf6MRDePUQu4rq3GKO6
-         fLrFTfj5fkB8q9upZfBhOsoOYbNk9eJ8Rju7M14mwPurJwbewODt6I/E0K66EXWkys
-         v4Qv8S3jbDZfwbjC6p9z2u4mn4yCFvZZFsZD86Otq9iCZWyyn/0w4I8X4+N4kysg+G
-         pMQFMg7XW94jzVrpFvzY56RUBv22CnO6CN65fB+0Zq4D5egjoJdRrM3tYSyxJHTmkQ
-         BWqKjr9KQoGV9AuDfoPP39AKjDZfnbWmOjEcpHuO8xdh4VKLs06w8sKQSNTIBERAnn
-         yC6jTzxm74F6A==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Rv0gM503Tz4x5k;
-        Mon, 25 Sep 2023 08:15:11 +1000 (AEST)
-Date:   Mon, 25 Sep 2023 08:15:10 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Kees Cook <keescook@chromium.org>
+        with ESMTP id S229480AbjIXXmJ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 24 Sep 2023 19:42:09 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41534DA;
+        Sun, 24 Sep 2023 16:42:03 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C93BC433C7;
+        Sun, 24 Sep 2023 23:42:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1695598922;
+        bh=9ZF3IoLRXqGI/hpsI7yQNEugIBPhe+O8QyOuSML+8nw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Fg5OGepykvga+q20Fne4dweBz0cYFIcjkDhMPdc4KzRZblBK7bdUJmMo+23HO5EyS
+         7qJSngXA2x0axtpqHRtlqkexCs40yhQRMWK32Fq6y+uOrZtbqEFABslR/ckWA3giXx
+         lYJglvDcqZPQ4O4Ll/LpwmAYyfgtkuqUCoflLC9M=
+Date:   Sun, 24 Sep 2023 16:42:01 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the execve tree
-Message-ID: <20230925081510.6dacf35e@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/vQiIO3GqLKeold9CMRM2iQz";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Ryan Roberts <ryan.roberts@arm.com>
+Subject: Re: linux-next: Signed-off-bys missing for commit in the
+ mm-hotfixes tree
+Message-Id: <20230924164201.863ad5e63a2d555f6d33254c@linux-foundation.org>
+In-Reply-To: <20230925075026.2a6b4e65@canb.auug.org.au>
+References: <20230925075026.2a6b4e65@canb.auug.org.au>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,36 +48,50 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/vQiIO3GqLKeold9CMRM2iQz
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Mon, 25 Sep 2023 07:50:26 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 
-Hi all,
+> Hi all,
+> 
+> Commit
+> 
+>   48248e468270 ("mm: hugetlb: add huge page size param to set_huge_pte_at()")
+> 
+> is missing Signed-off-bys from its author and committer.
+> 
+> It looks like the commit message has been truncated.
 
-Commit
+Ah, thanks.  The changelog has a stray ^---$:
 
-  d11362467939 ("elf, uapi: Remove struct tag 'dynamic'")
+: If CONFIG_DEBUG_VM is enabled, we do at least get a BUG(), but otherwise,
+: it will dereference a bad pointer in page_folio():
+: 
+:     static inline struct folio *hugetlb_swap_entry_to_folio(swp_entry_t entry)
+:     {
+:         VM_BUG_ON(!is_migration_entry(entry) && !is_hwpoison_entry(entry));
+: 
+:         return page_folio(pfn_to_page(swp_offset_pfn(entry)));
+:     }
+: 
+: 
+: Fix
 
-is missing a Signed-off-by from its committer.
+<chomp>
 
---=20
-Cheers,
-Stephen Rothwell
+: ---
+: 
+: The simplest fix would have been to revert the dodgy cleanup commit
+: 18f3962953e4 ("mm: hugetlb: kill set_huge_swap_pte_at()"), but since
+: things have moved on, this would have required an audit of all the new
+: set_huge_pte_at() call sites to see if they should be converted to
+: set_huge_swap_pte_at().  As per the original intent of the change, it
+: would also leave us open to future bugs when people invariably get it
+: wrong and call the wrong helper.
 
---Sig_/vQiIO3GqLKeold9CMRM2iQz
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+That's actually from the [0/n] intro, which I pasted into the [1/n]
+changelog.
 
------BEGIN PGP SIGNATURE-----
+It gets through my scripts OK
+(https://git.kernel.org/pub/scm/linux/kernel/git/akpm/25-new.git/tree/patches/mm-hugetlb-add-huge-page-size-param-to-set_huge_pte_at.patch),
+but it looks like git-quiltimport did the deed.
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmUQtO4ACgkQAVBC80lX
-0GxzWwf+K18RyNdLSqPEeLBklQI63SwGoBKheDt194KTWIbPzedbMCrW60CrsP09
-lU8AdF9tdWKTG90NCLNGzGbvicR9DrqdAToQNZ72/6dXiSDW5uqcDDbpz2BfckNU
-BL9OHwB26p5S+NdX5fC2X4+ci+NlPut6MQ4BcA1beqchQ8enLazBjNlPEP2vXlmA
-zLbdvgVOa8XKxmNCFqdz9TypIQlUQXGCGk+Q1826H0hGf3OKAZ785URAosN81gKm
-DSe7BMcLC9pBJcZdvgjK9y+oGOpXZUhLrdrO9EPSIOP/4C1dbE/ZoUSKGgSKoVEc
-/9zCsiLRJongB5KaErt4qAbB0FFOTQ==
-=4T9Q
------END PGP SIGNATURE-----
-
---Sig_/vQiIO3GqLKeold9CMRM2iQz--
+Let me add a check for that...

@@ -2,117 +2,46 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D7AE7AD98C
-	for <lists+linux-next@lfdr.de>; Mon, 25 Sep 2023 15:51:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D67717AE1BA
+	for <lists+linux-next@lfdr.de>; Tue, 26 Sep 2023 00:35:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232126AbjIYNvW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 25 Sep 2023 09:51:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50664 "EHLO
+        id S229509AbjIYWfR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 25 Sep 2023 18:35:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232128AbjIYNvT (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 25 Sep 2023 09:51:19 -0400
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A1FD19A;
-        Mon, 25 Sep 2023 06:51:11 -0700 (PDT)
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20230925135109euoutp0299c3011b0cca9e6e2e2fb86b0f57fae0~IKJKFWApT3185031850euoutp02G;
-        Mon, 25 Sep 2023 13:51:09 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20230925135109euoutp0299c3011b0cca9e6e2e2fb86b0f57fae0~IKJKFWApT3185031850euoutp02G
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1695649869;
-        bh=EPOLYQG8jgxiyRlhsiVPOJllFsGe8d/gNd6w6Dh7vp4=;
-        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-        b=B3OhQx0BklXMhq+BlKMS/3zUq6wwer/ft3FE0afTbJ1fChCR9W+0+KOQUVvULHnbg
-         i1UG4rtXYXiTzXVcsVCit+sWYkP/Xx36Dae35YwHcqP0YKA3X/IQa9ZprjAeLxCQvu
-         bpWu591/Rhz05gBAUCl42eWKr4MCqfAOIXkSGkx4=
-Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20230925135109eucas1p1af38580534e7b9527cba0bfba564c665~IKJJ4PyJH0750107501eucas1p10;
-        Mon, 25 Sep 2023 13:51:09 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges2new.samsung.com (EUCPMTA) with SMTP id DC.EC.11320.D4091156; Mon, 25
-        Sep 2023 14:51:09 +0100 (BST)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20230925135108eucas1p11c3f859adc220afa3145df0344c96b12~IKJJkBJVJ1563815638eucas1p1c;
-        Mon, 25 Sep 2023 13:51:08 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20230925135108eusmtrp2bc170023cc09e3752711d82c2b97cf02~IKJJjdRM52909529095eusmtrp2k;
-        Mon, 25 Sep 2023 13:51:08 +0000 (GMT)
-X-AuditID: cbfec7f4-993ff70000022c38-9b-6511904dcf4d
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id E1.AD.14344.C4091156; Mon, 25
-        Sep 2023 14:51:08 +0100 (BST)
-Received: from CAMSVWEXC02.scsc.local (unknown [106.1.227.72]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20230925135108eusmtip1bfde61e75be71535d0a048cedaee0001~IKJJYi0bU2516725167eusmtip13;
-        Mon, 25 Sep 2023 13:51:08 +0000 (GMT)
-Received: from localhost (106.110.32.133) by CAMSVWEXC02.scsc.local
-        (2002:6a01:e348::6a01:e348) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
-        Mon, 25 Sep 2023 14:51:08 +0100
-Date:   Mon, 25 Sep 2023 15:51:31 +0200
-From:   Joel Granados <j.granados@samsung.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-CC:     Luis Chamberlain <mcgrof@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        with ESMTP id S229481AbjIYWfR (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 25 Sep 2023 18:35:17 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8056C9C;
+        Mon, 25 Sep 2023 15:35:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1695681304;
+        bh=db0Kj0KWi2yzXIrxR7OyuKUBHapZmkNCu6E7HfARs0c=;
+        h=Date:From:To:Cc:Subject:From;
+        b=tYqZjabo+PinucRfeh96FQMmXP7A7wIrCwCfJJtEm6Y6jNpOMbem8IwnO7p4saKzC
+         rKAYdFBucytypoRh8J6eXUdj9T9ozTUnKoju95+usyfisEPQbfpELubuWLev/l3eVd
+         b8wPl/ukSOQcmQNLddK4uaNl4Z+UxmObKzGbJ/W83t3ZuSWflR4hpQpFwBzK2GdMkM
+         QmFBvrXaynNzoHg1Lq2lLRuscXVnf29j9tjB6G19TZ3HRq0nwF7vF4KNdpPNvGGDhV
+         zlQw9a+e4SMP/CUNChve7l7BdZtmZ+jrAYeWDwGI7bMNoAhKof/Ix3jbFZ8gUXeJZO
+         tC3WyLG4M+eSQ==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Rvd3r3DNhz4xPM;
+        Tue, 26 Sep 2023 08:35:04 +1000 (AEST)
+Date:   Tue, 26 Sep 2023 08:34:46 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the sysctl tree with the
- asm-generic tree
-Message-ID: <20230925135131.6nbgnahnlm2vttc4@localhost>
+Subject: linux-next: duplicate patches in the nvmem tree
+Message-ID: <20230926083446.1c3d9914@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg="pgp-sha512";
-        protocol="application/pgp-signature"; boundary="qxu3dkszgsgmsktm"
-Content-Disposition: inline
-In-Reply-To: <20230921115034.5461f62f@canb.auug.org.au>
-X-Originating-IP: [106.110.32.133]
-X-ClientProxiedBy: CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) To
-        CAMSVWEXC02.scsc.local (2002:6a01:e348::6a01:e348)
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrAKsWRmVeSWpSXmKPExsWy7djP87q+EwRTDTYf5bL4+eU9o8XfScfY
-        LS7vmsNmcXBhG6PFjQlPGS227r3K7sDm8fvXJEaPxhs32Dw2repk8/i8SS6AJYrLJiU1J7Ms
-        tUjfLoErY8naH0wFu/kr2jfcZWpgnMfbxcjJISFgIjHn+l42EFtIYAWjxPrXsRD2F0aJtj9M
-        EPZnRokrt9lg6r+82QVkcwHFlzNKfFi4EaHo12YDiMQWRomp546ygCRYBFQl7nycwQxiswno
-        SJx/cwfI5uAQEdCWOPBbAKSeWeA+UP3K6WAbhAVCJB69egs2lFfAXKKxYz0rhC0ocXLmE7CZ
-        zAIVEgevTmIBmcMsIC2x/B8HSJgTqLzl9BRmiEOVJL6+6WWFsGslTm25xQSyS0KgnVNi1/HZ
-        TBAJF4m7s3qgbGGJV8e3sEPYMhL/d86HapjMKLH/3wd2CGc1o8Syxq9QHdYSLVeesINcISHg
-        KHHrliCEySdx460gxJ18EpO2TWeGCPNKdLQJQTSqSay+94ZlAqPyLCSfzULy2SyEzyDCOhIL
-        dn9iwxDWlli28DUzhG0rsW7de5YFjOyrGMVTS4tz01OLjfJSy/WKE3OLS/PS9ZLzczcxAhPW
-        6X/Hv+xgXP7qo94hRiYOxkOMKkDNjzasvsAoxZKXn5eqJML76xlfqhBvSmJlVWpRfnxRaU5q
-        8SFGaQ4WJXFebduTyUIC6YklqdmpqQWpRTBZJg5OqQYmcyHpU3pZSypizbf8njxBWE55D/93
-        5zC38/bJhoyimyKzZrBkNLGpRAr4L2oLyWxXefI85trjoL2sERdf982+uJmjN5JFf8bFBrmY
-        S/8ClfPfnDhaX6GyYoUTz/n83JZTx4L/3eOVjwope7Xo116J5SI3Rbm1hRdv++ryvKnqyLmf
-        oa1XDmSf3uytX3T5I8PinUY/rvzwPGSgPX16wttjkSaGtRd8w7sLDEvYrE4faa4zuq6WHSEa
-        9IZb5lvJp7+dalulD9xzjSk7I8BUciB1190Xf3ckm/W3vbmxtqPXPXviUr5fc/yDsw1OuWh9
-        vMnHOuvu1a/T1zmYtV40P8N1+clvU51esaC703O9S6SUWIozEg21mIuKEwE+oMuq0wMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrAIsWRmVeSWpSXmKPExsVy+t/xu7o+EwRTDZ5eNbL4+eU9o8XfScfY
-        LS7vmsNmcXBhG6PFjQlPGS227r3K7sDm8fvXJEaPxhs32Dw2repk8/i8SS6AJUrPpii/tCRV
-        ISO/uMRWKdrQwkjP0NJCz8jEUs/Q2DzWyshUSd/OJiU1J7MstUjfLkEvY0/LOvaCnfwV/5+X
-        NjDO4e1i5OSQEDCR+PJmF1sXIxeHkMBSRoldk2awQSRkJDZ+ucoKYQtL/LnWBVX0kVHi4YRW
-        RghnC6PE4SmvwDpYBFQl7nycwQxiswnoSJx/cwfI5uAQEdCWOPBbAKSeWeA+o8SedQfB6oUF
-        QiTaDs8Ds3kFzCUaO9azQgztYpRY+nEPVEJQ4uTMJywgNrNAmcS+L41sIEOZBaQllv/jAAlz
-        AvW2nJ7CDHGpksTXN71QV9dKfP77jHECo/AsJJNmIZk0C2ESRFhL4sa/l0wYwtoSyxa+Zoaw
-        bSXWrXvPsoCRfRWjSGppcW56brGRXnFibnFpXrpecn7uJkZg9G479nPLDsaVrz7qHWJk4mA8
-        xKgC1Plow+oLjFIsefl5qUoivL+e8aUK8aYkVlalFuXHF5XmpBYfYjQFhuJEZinR5HxgWskr
-        iTc0MzA1NDGzNDC1NDNWEuf1LOhIFBJITyxJzU5NLUgtgulj4uCUamCKjF0v/G6dr+1HpVPL
-        l9xdrPA8oPJcaKOURzCHPB9/7ibXD/HLDuR9W5qactBL4gPXDIHQP3Y7a778TQt3YO4ym+8z
-        6Ynep9c9T+oeLJNrY3Vm+XW21mfOWdkbUjzF155dLJ59Q3uj5nnlvEu8kVc0T9acZY94fPd9
-        mouTYt2s5w2hHNyX3DsjtPceNmgLZTrluHid+BaXlXPLpm+++ZRfkm1H4m+R1WLJqy8W8Wco
-        zu2c/WfFeiuppluxrwp3eb4KEiu/zj7ZMXvxO1dlj+vKis9SAi0dX2TPc07Yc9f6XszzrEcd
-        jm+3ltp9TQ3u6VBlCH+ym1NL9MIL7U9t3T1BEncufbmzymT2612a5qpKLMUZiYZazEXFiQC6
-        d5u3cwMAAA==
-X-CMS-MailID: 20230925135108eucas1p11c3f859adc220afa3145df0344c96b12
-X-Msg-Generator: CA
-X-RootMTR: 20230921015042eucas1p1f8658fd99d9e7befc3926bb71d917c86
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20230921015042eucas1p1f8658fd99d9e7befc3926bb71d917c86
-References: <CGME20230921015042eucas1p1f8658fd99d9e7befc3926bb71d917c86@eucas1p1.samsung.com>
-        <20230921115034.5461f62f@canb.auug.org.au>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+Content-Type: multipart/signed; boundary="Sig_/v42/i6=4VbzPEwmiy1Bd0qP";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -120,67 +49,68 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---qxu3dkszgsgmsktm
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
+--Sig_/v42/i6=4VbzPEwmiy1Bd0qP
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Sep 21, 2023 at 11:50:34AM +1000, Stephen Rothwell wrote:
-> Hi all,
->=20
-> Today's linux-next merge of the sysctl tree got a conflict in:
->=20
->   arch/ia64/kernel/crash.c
->=20
-> between commit:
->=20
->   cf8e8658100d ("arch: Remove Itanium (IA-64) architecture")
->=20
-> from the asm-generic tree and commit:
->=20
->   d2f2ef357794 ("ia64: Remove now superfluous sentinel element from ctl_t=
-able array")
-This is part of the sysctl work to remove sentinel. I wont take any
-actio as Luis has already removed it.
+Hi all,
 
-Best
+The following commits are also in Linus Torvalds' tree as different
+commits (but the same patches):
 
->=20
-> from the sysctl tree.
->=20
-> I fixed it up (I removed the file) and can carry the fix as
-> necessary. This is now fixed as far as linux-next is concerned, but any
-> non trivial conflicts should be mentioned to your upstream maintainer
-> when your tree is submitted for merging.  You may also want to consider
-> cooperating with the maintainer of the conflicting tree to minimise any
-> particularly complex conflicts.
->=20
-> --=20
-> Cheers,
-> Stephen Rothwell
-
-
+  0991afbe4b18 ("nvmem: core: Notify when a new layout is registered")
+  b8257f61b4dd ("nvmem: core: Do not open-code existing functions")
+  6c7f48ea2e66 ("nvmem: core: Return NULL when no nvmem layout is found")
+  104af6a5b199 ("nvmem: core: Create all cells before adding the nvmem devi=
+ce")
+  c32f2186acc9 ("nvmem: u-boot-env:: Replace zero-length array with DECLARE=
+_FLEX_ARRAY() helper")
+  0a9ec38c47c1 ("nvmem: sec-qfprom: Add Qualcomm secure QFPROM support")
+  050cd7f49580 ("dt-bindings: nvmem: sec-qfprom: Add bindings for secure qf=
+prom")
+  4b71b2a44d7d ("dt-bindings: nvmem: Add compatible for QCM2290")
+  9d53d595f688 ("nvmem: Kconfig: Fix typo "drive" -> "driver"")
+  3e0558db94db ("nvmem: Explicitly include correct DT includes")
+  c8efcf7a86eb ("nvmem: add new NXP QorIQ eFuse driver")
+  0401edffa338 ("dt-bindings: nvmem: Add t1023-sfp efuse support")
+  8fd85ce6cfdf ("dt-bindings: nvmem: qfprom: Add compatible for MSM8226")
+  97edd4c6ba34 ("nvmem: uniphier: Use devm_platform_get_and_ioremap_resourc=
+e()")
+  431f08ed0ba5 ("nvmem: qfprom: do some cleanup")
+  77803ef86379 ("nvmem: stm32-romem: Use devm_platform_get_and_ioremap_reso=
+urce()")
+  e75d23cf347d ("nvmem: rockchip-efuse: Use devm_platform_get_and_ioremap_r=
+esource()")
+  ad065ae27bd1 ("nvmem: meson-mx-efuse: Convert to devm_platform_ioremap_re=
+source()")
+  67f919120705 ("nvmem: lpc18xx_otp: Convert to devm_platform_ioremap_resou=
+rce()
+")
+  5f41033e4154 ("nvmem: brcm_nvram: Use devm_platform_get_and_ioremap_resou=
+rce()")
+  6870b4a37343 ("nvmem: sunxi_sid: Convert to devm_platform_ioremap_resourc=
+e()")
+  31c8217bc34a ("dt-bindings: nvmem: fixed-cell: add compatible for MAC cel=
+ls")
 
 --=20
+Cheers,
+Stephen Rothwell
 
-Joel Granados
-
---qxu3dkszgsgmsktm
-Content-Type: application/pgp-signature; name="signature.asc"
+--Sig_/v42/i6=4VbzPEwmiy1Bd0qP
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQGzBAABCgAdFiEErkcJVyXmMSXOyyeQupfNUreWQU8FAmURkGMACgkQupfNUreW
-QU9xcwwAjJUpi9vqmuyGpjFq95neNtVUwpYtVXBHHWpMXmcQw/TJf2KKjrhqxsua
-3vvST1I2YCNPzZfT7tJsUOd5wnGJnd+0EO2lZNMwyOPgZ2oftkdUZ5963XqWb6jW
-KXW06FHpLybw2hFicj6bm2MRDL2PorxKXJBppayjhsuCGi+sRv3f6vEpDZwINp9S
-XSyz9u56jAiITD31EgzYE6oz/S/XgVuUbkVX9IgdDrq0wJBz3B4smNl9YuEaKuXL
-crkDSXQlRMvBMgYOK0vvINNJnHNwOvE8ekEHiz6gRbWSIIRUm+Q9B73dzCs/Fzkh
-pIuV1wrN5zY02hObRA9cTTwKkewOGweQBF41eC/qRfgwSQjtQi5QkgsarNuW+ro3
-bmfPjQUZESVyDuFC9HRF9o/N2dE2NBf7l6l4p/SVXD3tuwMXdDJeInSGANbMfpnb
-veOZK30PL1UTqXHttJEs71tywIFduvlTP16OhtrmAJCBggzaUWNWgkViHi69XBQg
-45GCuh1u
-=uRHJ
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmUSCwYACgkQAVBC80lX
+0GyOEAf+Kj6FuVuipf1+R3SwOQ4k/Cwr/3PsrSJye1xOLHvgb8G7S0lYlASt4CVt
+yVl62F62H7WZPOCNRJ51vMy16EHrx7LQmJ1nv3JLmfBwuHQguhNkqoBjoBt+pNPV
+k6FetO577W7Suk/dkKMW8T75pzxlU0vUhJbOUEqIr0UVI0E+4P7ZwVBLVfalA18u
+i+w5a/yAgS08lBL8tLwuWRZDXm+YwR/0srREEL0rI/OJdi0kXyWv2NlmELRLZXUE
+xm2w1losQ9C/VgGbYpSBPML9eAEN4RaLfAHQ0dEwxGRptolKGa1PWh8zUrEhA+sD
+kOJsmbAgPCEFS4NN6VgGxYXgg9reOA==
+=+emQ
 -----END PGP SIGNATURE-----
 
---qxu3dkszgsgmsktm--
+--Sig_/v42/i6=4VbzPEwmiy1Bd0qP--

@@ -2,113 +2,93 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BE9C7ACDE7
-	for <lists+linux-next@lfdr.de>; Mon, 25 Sep 2023 04:09:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6FB97ACDFD
+	for <lists+linux-next@lfdr.de>; Mon, 25 Sep 2023 04:14:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230360AbjIYCJR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 24 Sep 2023 22:09:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47172 "EHLO
+        id S231601AbjIYCOa (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 24 Sep 2023 22:14:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229810AbjIYCJR (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 24 Sep 2023 22:09:17 -0400
+        with ESMTP id S230421AbjIYCOa (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 24 Sep 2023 22:14:30 -0400
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5757FBD;
-        Sun, 24 Sep 2023 19:09:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1B2BC6;
+        Sun, 24 Sep 2023 19:14:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1695607750;
-        bh=+SCBDn0q8B6DTEvvnRcSanfG3DjyzjZiz9jofyzapQA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=MolaEwdkMhDlTfq/lY2uFKfabcxoC7tOWNqG4dzf8ZVZtlB0ZUoyiMN0MJGiNkBz9
-         st7yy6SI21x4mMV1YFQR83LTxao7LWs07kqd5ml0tuqmG5obZsmiR+E/CJNzJJKZYY
-         6jAy4C03CHgHdx6DQ4/qii1OCt/nvnHDjK6kIufIzD6gexUJC8AhvwA7pt48Cc28Zq
-         EF/RxFcwbRWhXLzsp97cH7pUXsm7cFAIp79OSwZYe52b5hOQPIX2dRjrIeYbNC1hC7
-         JuhMxyHR/uwAIDNLmdpX8PO1kLM7jG2ti5o4cCZvyvc/+Nob/gKC2yPZzXPwCc69v7
-         gwdQxSGPr2wng==
+        s=201702; t=1695608062;
+        bh=EkhDackxSfFieoGUWeVtOtGWn3+W1tDL1N3rERMkARA=;
+        h=Date:From:To:Cc:Subject:From;
+        b=mMHLk4kVK953Ezes7KGMVBGp451KsgVM3IQb6wnSU+W/2kG1Suop3nSy6ueABtlwM
+         TnpFH4kadya4Fyyl9uXhfIIzGfxefxOFRMMs+V3v3FuvMe/O4EkQt1MgHUOy3/JxJB
+         W79zIQJkmAph4rJ+GUjh6EfqiMo1LuDpCxoqkszcluT+JM4+lojR5IwjG5/UP08t8D
+         3kkH0/IGWsskVHAGwrwsnb4bucB2ag8HIF21e04r0e6pfYGar+Yo7jK1ypiKS3pcc5
+         /V/P/5NrYbjBuVUgje6HwkfLQJBkkUML5m6HrZyQqUPkFXbiU4lv71PpJKnoKtce4O
+         +1Uq5g1WmndGw==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Rv5sK03fRz4xNq;
-        Mon, 25 Sep 2023 12:09:08 +1000 (AEST)
-Date:   Mon, 25 Sep 2023 12:09:08 +1000
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Rv5zK3Zqsz4xGC;
+        Mon, 25 Sep 2023 12:14:21 +1000 (AEST)
+Date:   Mon, 25 Sep 2023 12:14:20 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jens Axboe <axboe@kernel.dk>, Arnd Bergmann <arnd@arndb.de>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Cc:     Ard Biesheuvel <ardb@kernel.org>,
+To:     Lee Jones <lee@kernel.org>, David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Networking <netdev@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the block tree with the asm-generic
- tree
-Message-ID: <20230925120908.4b15c44d@canb.auug.org.au>
-In-Reply-To: <20230925120544.7b1baece@canb.auug.org.au>
-References: <20230925120544.7b1baece@canb.auug.org.au>
+Subject: linux-next: duplicate patch in the mfd tree
+Message-ID: <20230925121420.520e91fa@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/4iDlT0te4T54MwelldPzrRR";
+Content-Type: multipart/signed; boundary="Sig_/u7varwAHQlwd/t1W6/03L.E";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/4iDlT0te4T54MwelldPzrRR
+--Sig_/u7varwAHQlwd/t1W6/03L.E
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Mon, 25 Sep 2023 12:05:44 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> Today's linux-next merge of the block tree got a conflict in:
->=20
->   arch/ia64/kernel/syscalls/syscall.tbl
->=20
-> between commit:
->=20
->   cf8e8658100d ("arch: Remove Itanium (IA-64) architecture")
->=20
-> from the asm-generic tree and commits:
->=20
->   9f6c532f59b2 ("futex: Add sys_futex_wake()")
->   cb8c4312afca ("futex: Add sys_futex_wait()")
->   0f4b5f972216 ("futex: Add sys_futex_requeue()")
->=20
-> from the block tree.
+The following commit is also in the net-next tree as different commit
+(but the same patch):
 
-These three commits are also in the tip tree.
+  d6e3854f720f ("dt-bindings: mfd: syscon: Add compatibles for Loongson-1 s=
+yscon")
 
-> I fixed it up (I just removed the file) and can carry the fix as
-> necessary. This is now fixed as far as linux-next is concerned, but any
-> non trivial conflicts should be mentioned to your upstream maintainer
-> when your tree is submitted for merging.  You may also want to consider
-> cooperating with the maintainer of the conflicting tree to minimise any
-> particularly complex conflicts.
+This is commit
+
+  7e10088bc4e4 ("dt-bindings: mfd: syscon: Add compatibles for Loongson-1 s=
+yscon")
+
+in the net-next tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/4iDlT0te4T54MwelldPzrRR
+--Sig_/u7varwAHQlwd/t1W6/03L.E
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmUQ68QACgkQAVBC80lX
-0Gyp6Qf/SOObiUMbuIWhKFwtS+J/xHobxRAjLrucovzWZl/mNLjzy1gR451WVNFH
-wl9ZNbhEprauHPuofzEIfXnFnl7Saz7Igkd4jtKa5l+Dt8dzVAdHrbKhhcheKuz2
-EcH7RmLkHEUVFEkWPL7UBGNhI9lbel+ZhA+Iuz0Qapp7ouxVb0oYT/g3pSFWjoyr
-Fgi+ubk07H0OipoodFLB+EwJkACFySplZiVm4HaNS8VHpu6zMdpRgan2g14KqCGX
-unrLRoKmRJlFO67J5QcLwHd5Go+Xlu9sro+8faD5B9SCp7+uYWlnFLL1rGdP5U71
-Is9zk5mln7BixxQ8+BiZ6I+xnWcCkQ==
-=THaW
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmUQ7PwACgkQAVBC80lX
+0GwU8gf+KxcF954ii0iKnlLfcX6hdg017KWY4btd4V1FtYfpQLpbIbMhkhPWVXEw
+juT7N9fhLVk/mbZPN+4pO10TM+9PdmX6mi1vxB77JEV4pENsMVDHLcMNyD42adXr
+Tlr+87DdlnYkXUbeIEfrs1fR2oLbnZSmsBJZY5SsPjfx9+DgUk9bzv7S/m4G08p+
+bKYCabUgVMYXu07UE+TPMczH2kpUldpA/m1epJblv4FZKLcZSeCCgVeCUsqkb/LR
+nwTfG68vHdoPgQ7Dg2/EPCMBFNSCCYxIKWs5NW57EZ78U+9at1fs5zuFzVOqv/6U
+G7FXiRDN7RxuKzCUzLScL5cf7WTyiA==
+=CuD1
 -----END PGP SIGNATURE-----
 
---Sig_/4iDlT0te4T54MwelldPzrRR--
+--Sig_/u7varwAHQlwd/t1W6/03L.E--

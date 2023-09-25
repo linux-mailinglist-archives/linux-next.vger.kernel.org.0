@@ -2,45 +2,68 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A1357ACCF5
-	for <lists+linux-next@lfdr.de>; Mon, 25 Sep 2023 01:42:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B3817ACD62
+	for <lists+linux-next@lfdr.de>; Mon, 25 Sep 2023 03:03:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229487AbjIXXmJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 24 Sep 2023 19:42:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33926 "EHLO
+        id S229766AbjIYBDF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 24 Sep 2023 21:03:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbjIXXmJ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 24 Sep 2023 19:42:09 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41534DA;
-        Sun, 24 Sep 2023 16:42:03 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C93BC433C7;
-        Sun, 24 Sep 2023 23:42:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1695598922;
-        bh=9ZF3IoLRXqGI/hpsI7yQNEugIBPhe+O8QyOuSML+8nw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Fg5OGepykvga+q20Fne4dweBz0cYFIcjkDhMPdc4KzRZblBK7bdUJmMo+23HO5EyS
-         7qJSngXA2x0axtpqHRtlqkexCs40yhQRMWK32Fq6y+uOrZtbqEFABslR/ckWA3giXx
-         lYJglvDcqZPQ4O4Ll/LpwmAYyfgtkuqUCoflLC9M=
-Date:   Sun, 24 Sep 2023 16:42:01 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Ryan Roberts <ryan.roberts@arm.com>
-Subject: Re: linux-next: Signed-off-bys missing for commit in the
- mm-hotfixes tree
-Message-Id: <20230924164201.863ad5e63a2d555f6d33254c@linux-foundation.org>
-In-Reply-To: <20230925075026.2a6b4e65@canb.auug.org.au>
-References: <20230925075026.2a6b4e65@canb.auug.org.au>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        with ESMTP id S229514AbjIYBDE (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 24 Sep 2023 21:03:04 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FE7BC4
+        for <linux-next@vger.kernel.org>; Sun, 24 Sep 2023 18:02:58 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id 41be03b00d2f7-5789ffc8ae0so3289616a12.0
+        for <linux-next@vger.kernel.org>; Sun, 24 Sep 2023 18:02:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1695603777; x=1696208577; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=BW9VpzR30VRfKEyWQAg1gQf3Dw3i3Tuzo6wqIK3MrKU=;
+        b=KYn5b0yS1Br/ORyWEEl0ES+e7NtpxKGbYME3d3OC0gywuGoZspTzV0ejQlLHYxMxQt
+         BGbIkyc/8kKEg5Cvr3aP5U9U1C/dS0PR7g4bYMTT0hBFkmK/pvDXuHdTWQQZekmtd1IM
+         wqRm+Sh2JlNMwP/fb+Py+s24Zhx8WEBVMLBFk+WUzAF8YP/98xGVGdk2ZlNDjnGF87fF
+         S45sEEN5R5jk8CfyTr3t+6zR1S+Kgw7sZDHB33nzk3I3qT8zj7E4iiWTrV5hJs6q4ap+
+         MvZKp+UEFJlBSGS1Uv82KxyDi4SCNbbYzndjScTxFpEV/7ZdZgl9zddqZOx0DXvN5xCr
+         cGcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695603777; x=1696208577;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BW9VpzR30VRfKEyWQAg1gQf3Dw3i3Tuzo6wqIK3MrKU=;
+        b=GOYxuwp0usVYUlrgC9cj5RcQUQnF3jWO9MsRKA5OLphMuaWa2Q04EX7vqahksozJBH
+         fS6DdSTKIXo8bDxjJZxb3qJ8BmacQemgbL3vAO/VJOZ+VaWcuNhc2QP9bWG9K59jaC5s
+         Cts6xBkB9NQoaDgCNFL7n82+1GK6ccXTYo41/HfMzXlA+CLZBO+uU8ByoigS6FBcqL5c
+         NQxR/3R298lsFiwKCm2isz4EuKQqn0PmoMyjjbBgST2eNKp0k+OTpwKN2O4nyJBFYYFn
+         dhd6HVCDHxKTcPG00RSRsdCy3hcQKqLyxrRhx74UP1Bl9y9NRA/hOT1VLqITv5WSidEo
+         AhcA==
+X-Gm-Message-State: AOJu0YyVd45BXg5Ux6MEfVPUwwX2QmqJIMNPtCMoZwv/QcNYzGHhIpYB
+        1vUkN2kpJayDl2cdpgY6rgwjsxHPlpWTvS2TbhGaaw==
+X-Google-Smtp-Source: AGHT+IGlNWKikKez1uFLSlZS9bay3f4j1CbBWXE7MG0Zmxf4chk5Tf2pq9zntDyvW3arG9PcBRue9g==
+X-Received: by 2002:a05:6a20:3950:b0:15e:bb88:b771 with SMTP id r16-20020a056a20395000b0015ebb88b771mr1298436pzg.37.1695603777020;
+        Sun, 24 Sep 2023 18:02:57 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id g4-20020a17090ace8400b0027498485107sm8493505pju.12.2023.09.24.18.02.56
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 24 Sep 2023 18:02:56 -0700 (PDT)
+Message-ID: <6510dc40.170a0220.edc06.37a6@mx.google.com>
+Date:   Sun, 24 Sep 2023 18:02:56 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: pending-fixes
+X-Kernelci-Tree: next
+X-Kernelci-Kernel: v6.6-rc3-217-geba2d8a9dfc5
+X-Kernelci-Report-Type: build
+Subject: next/pending-fixes build: 8 builds: 0 failed, 8 passed,
+ 4 warnings (v6.6-rc3-217-geba2d8a9dfc5)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,50 +71,100 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, 25 Sep 2023 07:50:26 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+next/pending-fixes build: 8 builds: 0 failed, 8 passed, 4 warnings (v6.6-rc=
+3-217-geba2d8a9dfc5)
 
-> Hi all,
-> 
-> Commit
-> 
->   48248e468270 ("mm: hugetlb: add huge page size param to set_huge_pte_at()")
-> 
-> is missing Signed-off-bys from its author and committer.
-> 
-> It looks like the commit message has been truncated.
+Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
+rnel/v6.6-rc3-217-geba2d8a9dfc5/
 
-Ah, thanks.  The changelog has a stray ^---$:
+Tree: next
+Branch: pending-fixes
+Git Describe: v6.6-rc3-217-geba2d8a9dfc5
+Git Commit: eba2d8a9dfc51f4f4c72ff31e43064a502807453
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Built: 8 unique architectures
 
-: If CONFIG_DEBUG_VM is enabled, we do at least get a BUG(), but otherwise,
-: it will dereference a bad pointer in page_folio():
-: 
-:     static inline struct folio *hugetlb_swap_entry_to_folio(swp_entry_t entry)
-:     {
-:         VM_BUG_ON(!is_migration_entry(entry) && !is_hwpoison_entry(entry));
-: 
-:         return page_folio(pfn_to_page(swp_offset_pfn(entry)));
-:     }
-: 
-: 
-: Fix
+Warnings Detected:
 
-<chomp>
+arc:
 
-: ---
-: 
-: The simplest fix would have been to revert the dodgy cleanup commit
-: 18f3962953e4 ("mm: hugetlb: kill set_huge_swap_pte_at()"), but since
-: things have moved on, this would have required an audit of all the new
-: set_huge_pte_at() call sites to see if they should be converted to
-: set_huge_swap_pte_at().  As per the original intent of the change, it
-: would also leave us open to future bugs when people invariably get it
-: wrong and call the wrong helper.
+arm64:
 
-That's actually from the [0/n] intro, which I pasted into the [1/n]
-changelog.
+arm:
 
-It gets through my scripts OK
-(https://git.kernel.org/pub/scm/linux/kernel/git/akpm/25-new.git/tree/patches/mm-hugetlb-add-huge-page-size-param-to-set_huge_pte_at.patch),
-but it looks like git-quiltimport did the deed.
+i386:
 
-Let me add a check for that...
+mips:
+
+riscv:
+
+sparc:
+    sparc64_defconfig (gcc-10): 4 warnings
+
+x86_64:
+
+
+Warnings summary:
+
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---
+For more info write to <info@kernelci.org>

@@ -2,47 +2,43 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9A0E7ACDA1
-	for <lists+linux-next@lfdr.de>; Mon, 25 Sep 2023 03:41:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 101827ACDB6
+	for <lists+linux-next@lfdr.de>; Mon, 25 Sep 2023 03:50:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229810AbjIYBlp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 24 Sep 2023 21:41:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49948 "EHLO
+        id S229561AbjIYBui (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 24 Sep 2023 21:50:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbjIYBlo (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 24 Sep 2023 21:41:44 -0400
+        with ESMTP id S229480AbjIYBuh (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 24 Sep 2023 21:50:37 -0400
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57903BD;
-        Sun, 24 Sep 2023 18:41:37 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9004BA;
+        Sun, 24 Sep 2023 18:50:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1695606096;
-        bh=3qefOlEg3x4dwzzWD/jkdN7oH40vPOPDnPJgAYifuiQ=;
+        s=201702; t=1695606630;
+        bh=r1RErhCOzc4Zba5XkLN3yKBLxn9U/qude/wkr/IWXfE=;
         h=Date:From:To:Cc:Subject:From;
-        b=X0l3c6dGWJPDd5HdxoQWXlpvWMdaxWBTnexLtUogMmcjGsfQ3nF8xfRByjpifZ03m
-         GSA34KCAdtya2EA2QD3qk7Z+ZTz7wD0tq/k57omodgHaAaWewoe/F7O2jmu7fgh9ny
-         9QkKXZyG0nSAoSZGHi4SbtCIZTdcBu8vwkm0b7kpQJHaqfQ9O4hDg0vfFW6hAt+Sku
-         0klREyor1Wfu2Hhr+ffOuLl8r1sXdyQf7csGsECojMVc/9mSKgDOMhaYuUDB71JLN1
-         xZPV8fAtWT+LkN7wnsW319xziwLFWI1nfh5blzWzGI0MrZFw0s3BxWivJptNMc9TUH
-         JIsl4iztQVPEA==
+        b=uoZbwByVcGgiIdJiSmLNuso8n74kLZXILuwtkMEmeldEg3hMaB+mDaBh8Gy4lqUeg
+         bpQWr6BZGf0+EBoEykRm/ABt56l5AmAkhBsMQkAU4zrbLsOXAq1EKW7i2RytI2xxEG
+         1LBS2t4wqeCdJQNFU0Gz8Ckh8IVUp9tT+pDxasvC8TMraYN/DZgP6gIUqXlGs7rwy8
+         5UJ92dhrSGcBUE3rWvsqjF3V4P6GDTqyb2bJqJmqJvmQaAQqtSQZtXAY9Z8o/vJaTC
+         BKwwGjgfZYyElOrPVBUU4wwUmOfGk5uIh3LKWTw10r0mBu2lRsISXYMB7WRx3VQ0TJ
+         tXm7KFIGruvMw==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Rv5FW5G5tz4xKl;
-        Mon, 25 Sep 2023 11:41:35 +1000 (AEST)
-Date:   Mon, 25 Sep 2023 11:41:33 +1000
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Rv5Rp3H1Dz4xM6;
+        Mon, 25 Sep 2023 11:50:30 +1000 (AEST)
+Date:   Mon, 25 Sep 2023 11:50:29 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>
-Cc:     Jeffrey Hugo <quic_jhugo@quicinc.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Pranjal Ramajor Asha Kanojiya <quic_pkanojiy@quicinc.com>
-Subject: linux-next: manual merge of the drm-misc tree with Linus' tree
-Message-ID: <20230925114133.7d891b33@canb.auug.org.au>
+To:     David Sterba <dsterba@suse.cz>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patches in the btrfs tree
+Message-ID: <20230925115029.360eda49@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/RbmAZgHc0GBl.JjN607XT0W";
+Content-Type: multipart/signed; boundary="Sig_/PVdAF2MZurao8v8Dqs8r6P6";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS
@@ -53,70 +49,47 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/RbmAZgHc0GBl.JjN607XT0W
+--Sig_/PVdAF2MZurao8v8Dqs8r6P6
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the drm-misc tree got a conflict in:
+The following commits are also in the btrfs-fixes tree as different
+commits (but the same patches):
 
-  drivers/accel/qaic/qaic_data.c
-
-between commit:
-
-  2d956177b7c9 ("accel/qaic: Fix slicing memory leak")
-
-from Linus' tree and commit:
-
-  217b812364d3 ("accel/qaic: Add QAIC_DETACH_SLICE_BO IOCTL")
-
-from the drm-misc tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+  206d0430707b ("btrfs: properly report 0 avail for very full file systems")
+  2afcde54d137 ("btrfs: log message if extent item not found when running d=
+elayed extent op")
+  43b96807089b ("btrfs: make sure to initialize start and len in find_free_=
+dev_extent")
+  bf5aa1d8054b ("btrfs: initialize start_slot in btrfs_log_prealloc_extents=
+")
+  c2243b212bee ("btrfs: return -EUCLEAN for delayed tree ref with a ref cou=
+nt not equals to 1")
+  c363b4283ef5 ("btrfs: remove redundant BUG_ON() from __btrfs_inc_extent_r=
+ef()")
+  d299419f7fb7 ("btrfs: reset destination buffer when read_extent_buffer() =
+gets invalid range")
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc drivers/accel/qaic/qaic_data.c
-index f4b06792c6f1,c90fa6a430f6..000000000000
---- a/drivers/accel/qaic/qaic_data.c
-+++ b/drivers/accel/qaic/qaic_data.c
-@@@ -1018,10 -1031,10 +1031,11 @@@ int qaic_attach_slice_bo_ioctl(struct d
-  	if (args->hdr.dir =3D=3D DMA_TO_DEVICE)
-  		dma_sync_sgtable_for_cpu(&qdev->pdev->dev, bo->sgt, args->hdr.dir);
- =20
-- 	bo->dbc =3D dbc;
-+ 	bo->sliced =3D true;
-+ 	list_add_tail(&bo->bo_list, &bo->dbc->bo_lists);
-  	srcu_read_unlock(&dbc->ch_lock, rcu_id);
-- 	drm_gem_object_put(obj);
-+ 	mutex_unlock(&bo->lock);
- +	kfree(slice_ent);
-  	srcu_read_unlock(&qdev->dev_lock, qdev_rcu_id);
-  	srcu_read_unlock(&usr->qddev_lock, usr_rcu_id);
- =20
-
---Sig_/RbmAZgHc0GBl.JjN607XT0W
+--Sig_/PVdAF2MZurao8v8Dqs8r6P6
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmUQ5U0ACgkQAVBC80lX
-0GxHdwf+LeLIjLrum0MCeoAcgOiIkJNyqnt2kIi3R2qiQ7bwXAops7rbEYgLpg4b
-RUhp/Q0Qt94yjSBvaygiQ3XJeVzm8ctUjv+WgUqCEgaIBWTVXIhlDWsOVU+OvG9m
-6/9keitbScPIXPRxaSAkvb/Ch9OrRjQGXtydEe8ZD6GESGTxJhSX/JPw7JBrzl5E
-sPWotXsJpIVebKV4YFrDuGszc2P+8vGBRZ0rWz4y7npI8FRJ7pcRnPxTQXWGodcm
-lguZntcE++V+uVvkA0I7NNQTizgv369h/6UxM0088O1IGahgOc1LRxxe78AiYoiu
-20UStKZDEtfXcu/4658GGVY+APkrGQ==
-=o1w0
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmUQ52UACgkQAVBC80lX
+0Gyhdwf+LnrTtGGND1KiiL5S8bljUdRuAAmmbu43uTIcdGr9hOIv8m2kgK/HZnx3
+VLaVg1MKsXtzWGMO/N34+14gZCKBBf+rMnKNcEykVmsWYC4PcrmXbH3+2xudjqw+
+SmLPuEd6us381k09WjxSxKZABOHili11f9DbxafhujUpNebbS6sAEW6cmCwTxIJF
+kG5ZHc4QZAukjlmfcwvz+z4FtbDNBI2xD4IXaSZnJTaLdoINwNguO5JVhomc41r0
+4+10MzS2TtBqX+LoK1v0Jqzd+o87KcQ4SC/IVt7Gix7mGuMavRqZxpMtHF6AkfYu
+BuoHtl6frcwKDpLRO92ZeO7Lx3EJEQ==
+=x8ZK
 -----END PGP SIGNATURE-----
 
---Sig_/RbmAZgHc0GBl.JjN607XT0W--
+--Sig_/PVdAF2MZurao8v8Dqs8r6P6--

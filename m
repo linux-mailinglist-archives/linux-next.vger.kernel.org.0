@@ -2,81 +2,121 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 718BE7ACD8A
-	for <lists+linux-next@lfdr.de>; Mon, 25 Sep 2023 03:18:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9A0E7ACDA1
+	for <lists+linux-next@lfdr.de>; Mon, 25 Sep 2023 03:41:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231532AbjIYBSm (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 24 Sep 2023 21:18:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59840 "EHLO
+        id S229810AbjIYBlp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 24 Sep 2023 21:41:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231504AbjIYBSl (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 24 Sep 2023 21:18:41 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED421EE
-        for <linux-next@vger.kernel.org>; Sun, 24 Sep 2023 18:18:34 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-690fe10b6a4so4907586b3a.3
-        for <linux-next@vger.kernel.org>; Sun, 24 Sep 2023 18:18:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1695604714; x=1696209514; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=9DU462jzu0KSSUhuGCGA7DV9qo0R9Jblrk/4+b+Zma0=;
-        b=S43V/sgk4uFDQ1qU+bJiP+aoGrYczLUQK8n9G80IVrvUprhG1XbFJ896rEAnRyJ5wu
-         pQrEM6WvJ/ZsHP/bWKPLQOypiA8rg6OOAG1WiblaJI1JhDzCSNaQ4jaheM6E41HH/VWS
-         sOXlNtLcMP5UDNTBjdVdIv4Bg7gfqb4Rv2+ZQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695604714; x=1696209514;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9DU462jzu0KSSUhuGCGA7DV9qo0R9Jblrk/4+b+Zma0=;
-        b=Q1zByJ2vOsMiGDM9ub6SVqrRx+ztGTm0JOH56OIGQAnUKdBTlnPX8hECZdEhEkWEJP
-         WJeGtVVmqSpeU0QG3/nonl0AhQ6XbU86Z+UlHy7ePuf+XBU+yYGQWWpksdOsmbV3f2xY
-         P8/QAySV6sAVgFQ3qPSHyIWLAXVFYllqTlwEqcor/owC93/GF+vgaFBbAq0o5eZkUdeL
-         rVfL0AGz5ObiqER5RsSPp8dyrK/SUeYW3dpiq0T2UpWOoyqefMQYMmf40z2yjxprMbCu
-         lksJydBi10JXYX45rLinlCB9APtLLw71to6GLluPd2Tklvtbb59p2UDl30Se3Zx2H1yW
-         gIbA==
-X-Gm-Message-State: AOJu0YydhgT/So6af7tN8j1DUf/42nmBLc9PGYXwz9LeNvHm0ZEUjziB
-        VR9HnvScgxxINfuRFZSehyj5r4v3dSvNlfe0qAw=
-X-Google-Smtp-Source: AGHT+IE43Znl4JMWvt1Sa+09y9ZCuxcI1ZEW+xSvOE2VOYQ6szobgNYlZM4v0M1FLtM3mFR/8AsmbQ==
-X-Received: by 2002:a05:6a20:9383:b0:15a:2c0b:6c73 with SMTP id x3-20020a056a20938300b0015a2c0b6c73mr7171586pzh.12.1695604714203;
-        Sun, 24 Sep 2023 18:18:34 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id e12-20020a170902d38c00b001c3cbedbc47sm7469161pld.6.2023.09.24.18.18.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 24 Sep 2023 18:18:33 -0700 (PDT)
-Date:   Sun, 24 Sep 2023 18:18:32 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Signed-off-by missing for commit in the execve tree
-Message-ID: <202309241818.2F77ADE18@keescook>
-References: <20230925081510.6dacf35e@canb.auug.org.au>
+        with ESMTP id S229524AbjIYBlo (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 24 Sep 2023 21:41:44 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57903BD;
+        Sun, 24 Sep 2023 18:41:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1695606096;
+        bh=3qefOlEg3x4dwzzWD/jkdN7oH40vPOPDnPJgAYifuiQ=;
+        h=Date:From:To:Cc:Subject:From;
+        b=X0l3c6dGWJPDd5HdxoQWXlpvWMdaxWBTnexLtUogMmcjGsfQ3nF8xfRByjpifZ03m
+         GSA34KCAdtya2EA2QD3qk7Z+ZTz7wD0tq/k57omodgHaAaWewoe/F7O2jmu7fgh9ny
+         9QkKXZyG0nSAoSZGHi4SbtCIZTdcBu8vwkm0b7kpQJHaqfQ9O4hDg0vfFW6hAt+Sku
+         0klREyor1Wfu2Hhr+ffOuLl8r1sXdyQf7csGsECojMVc/9mSKgDOMhaYuUDB71JLN1
+         xZPV8fAtWT+LkN7wnsW319xziwLFWI1nfh5blzWzGI0MrZFw0s3BxWivJptNMc9TUH
+         JIsl4iztQVPEA==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Rv5FW5G5tz4xKl;
+        Mon, 25 Sep 2023 11:41:35 +1000 (AEST)
+Date:   Mon, 25 Sep 2023 11:41:33 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>
+Cc:     Jeffrey Hugo <quic_jhugo@quicinc.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Pranjal Ramajor Asha Kanojiya <quic_pkanojiy@quicinc.com>
+Subject: linux-next: manual merge of the drm-misc tree with Linus' tree
+Message-ID: <20230925114133.7d891b33@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230925081510.6dacf35e@canb.auug.org.au>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/RbmAZgHc0GBl.JjN607XT0W";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Sep 25, 2023 at 08:15:10AM +1000, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Commit
-> 
->   d11362467939 ("elf, uapi: Remove struct tag 'dynamic'")
-> 
-> is missing a Signed-off-by from its committer.
+--Sig_/RbmAZgHc0GBl.JjN607XT0W
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Oops! Thanks; fixed.
+Hi all,
 
--- 
-Kees Cook
+Today's linux-next merge of the drm-misc tree got a conflict in:
+
+  drivers/accel/qaic/qaic_data.c
+
+between commit:
+
+  2d956177b7c9 ("accel/qaic: Fix slicing memory leak")
+
+from Linus' tree and commit:
+
+  217b812364d3 ("accel/qaic: Add QAIC_DETACH_SLICE_BO IOCTL")
+
+from the drm-misc tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/accel/qaic/qaic_data.c
+index f4b06792c6f1,c90fa6a430f6..000000000000
+--- a/drivers/accel/qaic/qaic_data.c
++++ b/drivers/accel/qaic/qaic_data.c
+@@@ -1018,10 -1031,10 +1031,11 @@@ int qaic_attach_slice_bo_ioctl(struct d
+  	if (args->hdr.dir =3D=3D DMA_TO_DEVICE)
+  		dma_sync_sgtable_for_cpu(&qdev->pdev->dev, bo->sgt, args->hdr.dir);
+ =20
+- 	bo->dbc =3D dbc;
++ 	bo->sliced =3D true;
++ 	list_add_tail(&bo->bo_list, &bo->dbc->bo_lists);
+  	srcu_read_unlock(&dbc->ch_lock, rcu_id);
+- 	drm_gem_object_put(obj);
++ 	mutex_unlock(&bo->lock);
+ +	kfree(slice_ent);
+  	srcu_read_unlock(&qdev->dev_lock, qdev_rcu_id);
+  	srcu_read_unlock(&usr->qddev_lock, usr_rcu_id);
+ =20
+
+--Sig_/RbmAZgHc0GBl.JjN607XT0W
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmUQ5U0ACgkQAVBC80lX
+0GxHdwf+LeLIjLrum0MCeoAcgOiIkJNyqnt2kIi3R2qiQ7bwXAops7rbEYgLpg4b
+RUhp/Q0Qt94yjSBvaygiQ3XJeVzm8ctUjv+WgUqCEgaIBWTVXIhlDWsOVU+OvG9m
+6/9keitbScPIXPRxaSAkvb/Ch9OrRjQGXtydEe8ZD6GESGTxJhSX/JPw7JBrzl5E
+sPWotXsJpIVebKV4YFrDuGszc2P+8vGBRZ0rWz4y7npI8FRJ7pcRnPxTQXWGodcm
+lguZntcE++V+uVvkA0I7NNQTizgv369h/6UxM0088O1IGahgOc1LRxxe78AiYoiu
+20UStKZDEtfXcu/4658GGVY+APkrGQ==
+=o1w0
+-----END PGP SIGNATURE-----
+
+--Sig_/RbmAZgHc0GBl.JjN607XT0W--

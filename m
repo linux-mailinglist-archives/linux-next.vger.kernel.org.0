@@ -2,46 +2,47 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6FB97ACDFD
-	for <lists+linux-next@lfdr.de>; Mon, 25 Sep 2023 04:14:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D027C7ACE9A
+	for <lists+linux-next@lfdr.de>; Mon, 25 Sep 2023 05:10:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231601AbjIYCOa (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 24 Sep 2023 22:14:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55324 "EHLO
+        id S229674AbjIYDKe (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 24 Sep 2023 23:10:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230421AbjIYCOa (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 24 Sep 2023 22:14:30 -0400
+        with ESMTP id S229846AbjIYDKd (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 24 Sep 2023 23:10:33 -0400
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1B2BC6;
-        Sun, 24 Sep 2023 19:14:23 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9D7AA4;
+        Sun, 24 Sep 2023 20:10:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1695608062;
-        bh=EkhDackxSfFieoGUWeVtOtGWn3+W1tDL1N3rERMkARA=;
+        s=201702; t=1695611424;
+        bh=EbNGHdwWsbSS+G8Yx4d/omzpYIk/5RTo9vgMOuaOGsk=;
         h=Date:From:To:Cc:Subject:From;
-        b=mMHLk4kVK953Ezes7KGMVBGp451KsgVM3IQb6wnSU+W/2kG1Suop3nSy6ueABtlwM
-         TnpFH4kadya4Fyyl9uXhfIIzGfxefxOFRMMs+V3v3FuvMe/O4EkQt1MgHUOy3/JxJB
-         W79zIQJkmAph4rJ+GUjh6EfqiMo1LuDpCxoqkszcluT+JM4+lojR5IwjG5/UP08t8D
-         3kkH0/IGWsskVHAGwrwsnb4bucB2ag8HIF21e04r0e6pfYGar+Yo7jK1ypiKS3pcc5
-         /V/P/5NrYbjBuVUgje6HwkfLQJBkkUML5m6HrZyQqUPkFXbiU4lv71PpJKnoKtce4O
-         +1Uq5g1WmndGw==
+        b=huqIWdwy29RSMhMGyq9M5/+2nDhHxt1GrppB6PllYNvPJYoVH+yegIH1dFaAxAM3x
+         jPnpmd+AXkiDoC8ZivLv8pG1gyUopN1lHkjaIJegZw16WRWy/D6+0XGj006QJl5zTy
+         sjTQuGC08qw9jrmkNkLQwiNDTJG6Y53TRqVbiDf6jJQmT/MN+iSkXJ4cPM9Jt6CdJD
+         NG6rSJz/vi43oQcXShN0l50ZHX9bA2pqLASw7b/3Nt8Qke93TVK/DSyhZWP0R+GrwO
+         cAnKwDwuxkOc2FmiaFhLYIUzQHUiRqYmSzB1E/IRKK3IpiXhRK71llCpvIQ0fH8EQJ
+         UzrUiQe4agNrg==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Rv5zK3Zqsz4xGC;
-        Mon, 25 Sep 2023 12:14:21 +1000 (AEST)
-Date:   Mon, 25 Sep 2023 12:14:20 +1000
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Rv7Cz56Kfz4xF8;
+        Mon, 25 Sep 2023 13:10:23 +1000 (AEST)
+Date:   Mon, 25 Sep 2023 13:10:22 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Lee Jones <lee@kernel.org>, David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Networking <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patch in the mfd tree
-Message-ID: <20230925121420.520e91fa@canb.auug.org.au>
+To:     Kishon Vijay Abraham I <kishon@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Nitheesh Sekar <quic_nsekar@quicinc.com>,
+        Varadarajan Narayanan <quic_varada@quicinc.com>,
+        Yang Yingliang <yangyingliang@huawei.com>
+Subject: linux-next: manual merge of the phy-next tree with the phy tree
+Message-ID: <20230925131022.24514a20@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/u7varwAHQlwd/t1W6/03L.E";
+Content-Type: multipart/signed; boundary="Sig_/0wkbNgTbgeFWE5oiS0GhEkf";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
@@ -52,43 +53,125 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/u7varwAHQlwd/t1W6/03L.E
+--Sig_/0wkbNgTbgeFWE5oiS0GhEkf
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-The following commit is also in the net-next tree as different commit
-(but the same patch):
+Today's linux-next merge of the phy-next tree got a conflict in:
 
-  d6e3854f720f ("dt-bindings: mfd: syscon: Add compatibles for Loongson-1 s=
-yscon")
+  drivers/phy/qualcomm/phy-qcom-m31.c
 
-This is commit
+between commits:
 
-  7e10088bc4e4 ("dt-bindings: mfd: syscon: Add compatibles for Loongson-1 s=
-yscon")
+  5f7cd740a6b6 ("phy: qcom: phy-qcom-m31: fix wrong pointer pass to PTR_ERR=
+()")
+  426e05ce126e ("phy: qcom: phy-qcom-m31: change m31_ipq5332_regs to static=
+")
 
-in the net-next tree.
+from the phy tree and commits:
+
+  90f7af497a78 ("phy: qcom: m31: Fix indentation issues")
+  68320e35f8cb ("phy: qcom-m31: Add compatible, phy init sequence for IPQ50=
+18")
+
+from the phy-next tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/u7varwAHQlwd/t1W6/03L.E
+diff --cc drivers/phy/qualcomm/phy-qcom-m31.c
+index 5cb7e79b99b3,d5af4dde6960..000000000000
+--- a/drivers/phy/qualcomm/phy-qcom-m31.c
++++ b/drivers/phy/qualcomm/phy-qcom-m31.c
+@@@ -82,7 -82,51 +82,51 @@@ struct m31_priv_data=20
+  	unsigned int			nregs;
+  };
+ =20
++ static const struct m31_phy_regs m31_ipq5018_regs[] =3D {
++ 	{
++ 		.off =3D USB_PHY_CFG0,
++ 		.val =3D UTMI_PHY_OVERRIDE_EN
++ 	},
++ 	{
++ 		.off =3D USB_PHY_UTMI_CTRL5,
++ 		.val =3D POR_EN,
++ 		.delay =3D 15
++ 	},
++ 	{
++ 		.off =3D USB_PHY_FSEL_SEL,
++ 		.val =3D FREQ_SEL
++ 	},
++ 	{
++ 		.off =3D USB_PHY_HS_PHY_CTRL_COMMON0,
++ 		.val =3D COMMONONN | FSEL | RETENABLEN
++ 	},
++ 	{
++ 		.off =3D USB_PHY_REFCLK_CTRL,
++ 		.val =3D CLKCORE
++ 	},
++ 	{
++ 		.off =3D USB_PHY_UTMI_CTRL5,
++ 		.val =3D POR_EN
++ 	},
++ 	{
++ 		.off =3D USB_PHY_HS_PHY_CTRL2,
++ 		.val =3D USB2_SUSPEND_N_SEL | USB2_SUSPEND_N | USB2_UTMI_CLK_EN
++ 	},
++ 	{
++ 		.off =3D USB_PHY_UTMI_CTRL5,
++ 		.val =3D 0x0
++ 	},
++ 	{
++ 		.off =3D USB_PHY_HS_PHY_CTRL2,
++ 		.val =3D USB2_SUSPEND_N | USB2_UTMI_CLK_EN
++ 	},
++ 	{
++ 		.off =3D USB_PHY_CFG0,
++ 		.val =3D 0x0
++ 	},
++ };
++=20
+ -struct m31_phy_regs m31_ipq5332_regs[] =3D {
+ +static struct m31_phy_regs m31_ipq5332_regs[] =3D {
+  	{
+  		USB_PHY_CFG0,
+  		UTMI_PHY_OVERRIDE_EN,
+@@@ -255,8 -300,8 +299,8 @@@ static int m31usb_phy_probe(struct plat
+ =20
+  	qphy->vreg =3D devm_regulator_get(dev, "vdda-phy");
+  	if (IS_ERR(qphy->vreg))
+ -		return dev_err_probe(dev, PTR_ERR(qphy->phy),
+ +		return dev_err_probe(dev, PTR_ERR(qphy->vreg),
+- 						"failed to get vreg\n");
++ 				     "failed to get vreg\n");
+ =20
+  	phy_set_drvdata(qphy->phy, qphy);
+ =20
+
+--Sig_/0wkbNgTbgeFWE5oiS0GhEkf
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmUQ7PwACgkQAVBC80lX
-0GwU8gf+KxcF954ii0iKnlLfcX6hdg017KWY4btd4V1FtYfpQLpbIbMhkhPWVXEw
-juT7N9fhLVk/mbZPN+4pO10TM+9PdmX6mi1vxB77JEV4pENsMVDHLcMNyD42adXr
-Tlr+87DdlnYkXUbeIEfrs1fR2oLbnZSmsBJZY5SsPjfx9+DgUk9bzv7S/m4G08p+
-bKYCabUgVMYXu07UE+TPMczH2kpUldpA/m1epJblv4FZKLcZSeCCgVeCUsqkb/LR
-nwTfG68vHdoPgQ7Dg2/EPCMBFNSCCYxIKWs5NW57EZ78U+9at1fs5zuFzVOqv/6U
-G7FXiRDN7RxuKzCUzLScL5cf7WTyiA==
-=CuD1
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmUQ+h4ACgkQAVBC80lX
+0Gw2YQgAnIA6YZw/L0WV/2R6KAyIftzDe0JQ8+jKvxyLpb5nG11KrAmlqGLz2bVO
+YY3s5jzaTc3cqfnkddrIZ05P4DD+Wex041iXIdWKEV2MWYvcXHue+8wLHrbQyN0+
+M9MP1KI+TWxtci+uO4YdO8pfeWyd1i6h6HMXyN27HPgXDzLGkW6tgFCQH8QZIKQo
+0l+G5acgoEQg08HvYxMyT51Ttzlf00tSo8iJxC2/p/zud87xJsmGrcsCgJoQxaUv
+0/MVcM8P5YtM3t+CmkAC986yHhr4emq8+KitGkavMfXulTR5UtmZWSFhPG77i94J
+aPli9UIdYvNcKCokJwiVZnrjI9yWMg==
+=Dt8D
 -----END PGP SIGNATURE-----
 
---Sig_/u7varwAHQlwd/t1W6/03L.E--
+--Sig_/0wkbNgTbgeFWE5oiS0GhEkf--

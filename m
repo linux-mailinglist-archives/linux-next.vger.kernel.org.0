@@ -2,111 +2,117 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A84887AE572
-	for <lists+linux-next@lfdr.de>; Tue, 26 Sep 2023 08:03:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFFEF7AE57E
+	for <lists+linux-next@lfdr.de>; Tue, 26 Sep 2023 08:07:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233707AbjIZGDX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 26 Sep 2023 02:03:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47440 "EHLO
+        id S233709AbjIZGH7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 26 Sep 2023 02:07:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233706AbjIZGDW (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 26 Sep 2023 02:03:22 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65ED5F2
-        for <linux-next@vger.kernel.org>; Mon, 25 Sep 2023 23:03:13 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-9b27bc8b65eso429688366b.0
-        for <linux-next@vger.kernel.org>; Mon, 25 Sep 2023 23:03:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1695708192; x=1696312992; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=kfs3uOds06wI8qZNBQ/jScxCDSnU/xxk06vJqhJ+EGI=;
-        b=qZSw+imohcQvmJ1PXM7fOlv2itVNdLKnqdN9KXSLGwa1yLvq/05wbtBEFhwP5R6dIl
-         hnl03nb6srZgUjoi43xP8EBZHybjEPcERNGuwZ8vg6rsG+QeUpqpOKtm7rJnX06PGLu4
-         2OovBFBkPVmR+/c7RrLTRmW16YEhzZ/PA6nV6rBwKMW0cqpjd9WD/zT2mr07BSl0iZOZ
-         E7t6BSdNema/4Ld3Vf+Dagf3shM0WCRrdglxWPt5eWhkNtKjausLnmvPWvCF3NGv/mHm
-         Gw6jcpN6d2st9LNDbgzgiKOIj/9OkXu1Glbvm2W5C51eH532FYiAZdla/t9TsbfXo+Hr
-         NaqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695708192; x=1696312992;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kfs3uOds06wI8qZNBQ/jScxCDSnU/xxk06vJqhJ+EGI=;
-        b=tEX7ToL3hfYr9ApmThSSsuutD825EwdRjbaQRvwY04iFI9Gqpcx6qAHIRTSEOyLZjA
-         XyDZA4oqEvi9EAc3juSbGSuCUT0YpKRoDW0aCSwkj7YCRquW1kcQEN5N/r9AMWmXQ2Fc
-         L0ZzEtAkA8l6pQ8Z8Fe10ED6F4/EVDPbd0d6+hMaY6Cb9Dfm+ZsPtzC9lPrd3Ozfo2BJ
-         uTrRuqF/0d6X2FLddkdLea7swzXXcE8v8nUGkikUcBs6A6WrBMJMOmiQ60K2Xh2PaEav
-         2yNwdyw9meSfRt3AK5sFzjfoqdTpX3Vg+CzCLZ/F6GI1Xox0flazXS34Pj0jGwtnmeCC
-         Bzxg==
-X-Gm-Message-State: AOJu0Yx22uDbhYAJsbgE4xKmRfWh7x31MCx6iEvuf+d642N3ig7/9OtY
-        7H+TS3FrRhzl1YHMjVAoifsAOw==
-X-Google-Smtp-Source: AGHT+IH1LOZVRXrwtuM9ma/WTZ7miGwf1wGdWJgQJ0j+GgMqXtdbzGXn2MaMy8AUj+20ZkCZ3zwM6w==
-X-Received: by 2002:a17:907:6d0a:b0:9a1:cb2c:b55c with SMTP id sa10-20020a1709076d0a00b009a1cb2cb55cmr8844670ejc.35.1695708191854;
-        Mon, 25 Sep 2023 23:03:11 -0700 (PDT)
-Received: from [192.168.86.24] ([5.133.47.210])
-        by smtp.googlemail.com with ESMTPSA id i13-20020a170906090d00b0099cbfee34e3sm7306105ejd.196.2023.09.25.23.03.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Sep 2023 23:03:10 -0700 (PDT)
-Message-ID: <fc358b53-0ca7-3600-0d27-a5849811ed2c@linaro.org>
-Date:   Tue, 26 Sep 2023 07:03:09 +0100
+        with ESMTP id S233717AbjIZGH6 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 26 Sep 2023 02:07:58 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 111F3F2;
+        Mon, 25 Sep 2023 23:07:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1695708469;
+        bh=r0sUST26JQt7+BBQMj+sRAzNzWUgjRuQCHTvv6r9HmU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=aUKkCn8wHVr+QZcSLfc55z825W6sJ711ZEcLUTeRrQqXsVGKfsR6///tehkMbgzPM
+         goAhtBZDVzuKPkQjOT296FCnXcWNa2PVjv04mD2fR50SV5WQB+6iwCzXHhzxr1Q2Af
+         jtP4pfoGh/18B0kGAqW8Y/+c56AoDShqxaAZuRN2A2Mpu3VJ57nKSgVpdKVGYHbuYL
+         3YNHCYqtkBJIbBJdIuQAUMIH0/GZ6QS5saX2VzFZIeiJuaz+VcCDK9aTdnxMD0rmDk
+         cNaeLIYalU5rCzvin48T90Lcx/fR2cjyoShhRtk+YgRChQfd82ymnv9m24FIcJJtJd
+         DSyjXtGt+0BQg==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Rvq6C3NBYz4xNh;
+        Tue, 26 Sep 2023 16:07:47 +1000 (AEST)
+Date:   Tue, 26 Sep 2023 16:07:45 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Amir Goldstein <amir73il@gmail.com>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        Alessio Balsini <balsini@android.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Miklos Szeredi <miklos@szeredi.hu>
+Subject: Re: linux-next: manual merge of the vfs-brauner tree with the
+ overlayfs tree
+Message-ID: <20230926160745.75df4606@canb.auug.org.au>
+In-Reply-To: <CAOQ4uxgs7dCUQ50J6fwW5Dtgb-sBU4WyKogbU2PEG2uooWxSCw@mail.gmail.com>
+References: <20230926102444.096ce797@canb.auug.org.au>
+        <CAOQ4uxgs7dCUQ50J6fwW5Dtgb-sBU4WyKogbU2PEG2uooWxSCw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.0
-Subject: Re: linux-next: duplicate patches in the nvmem tree
-Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20230926083446.1c3d9914@canb.auug.org.au>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <20230926083446.1c3d9914@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/fEl2H3WQbEJw4xfKZnBY6wH";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Thanks Stephen for reporting this.
+--Sig_/fEl2H3WQbEJw4xfKZnBY6wH
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Its fixed now.
+Hi Amir,
 
+On Tue, 26 Sep 2023 08:09:51 +0300 Amir Goldstein <amir73il@gmail.com> wrot=
+e:
+>
+> At this opportunity, I would like to ask you to add branch ovl-fixes
+> from ssh://gitolite.kernel.org/pub/scm/linux/kernel/git/overlayfs/vfs.git
+> to linux-next, because I will need to send some ovl fixes for 6.6 in
+> the near future.
 
---srini
-On 25/09/2023 23:34, Stephen Rothwell wrote:
-> Hi all,
-> 
-> The following commits are also in Linus Torvalds' tree as different
-> commits (but the same patches):
-> 
->    0991afbe4b18 ("nvmem: core: Notify when a new layout is registered")
->    b8257f61b4dd ("nvmem: core: Do not open-code existing functions")
->    6c7f48ea2e66 ("nvmem: core: Return NULL when no nvmem layout is found")
->    104af6a5b199 ("nvmem: core: Create all cells before adding the nvmem device")
->    c32f2186acc9 ("nvmem: u-boot-env:: Replace zero-length array with DECLARE_FLEX_ARRAY() helper")
->    0a9ec38c47c1 ("nvmem: sec-qfprom: Add Qualcomm secure QFPROM support")
->    050cd7f49580 ("dt-bindings: nvmem: sec-qfprom: Add bindings for secure qfprom")
->    4b71b2a44d7d ("dt-bindings: nvmem: Add compatible for QCM2290")
->    9d53d595f688 ("nvmem: Kconfig: Fix typo "drive" -> "driver"")
->    3e0558db94db ("nvmem: Explicitly include correct DT includes")
->    c8efcf7a86eb ("nvmem: add new NXP QorIQ eFuse driver")
->    0401edffa338 ("dt-bindings: nvmem: Add t1023-sfp efuse support")
->    8fd85ce6cfdf ("dt-bindings: nvmem: qfprom: Add compatible for MSM8226")
->    97edd4c6ba34 ("nvmem: uniphier: Use devm_platform_get_and_ioremap_resource()")
->    431f08ed0ba5 ("nvmem: qfprom: do some cleanup")
->    77803ef86379 ("nvmem: stm32-romem: Use devm_platform_get_and_ioremap_resource()")
->    e75d23cf347d ("nvmem: rockchip-efuse: Use devm_platform_get_and_ioremap_resource()")
->    ad065ae27bd1 ("nvmem: meson-mx-efuse: Convert to devm_platform_ioremap_resource()")
->    67f919120705 ("nvmem: lpc18xx_otp: Convert to devm_platform_ioremap_resource()
-> ")
->    5f41033e4154 ("nvmem: brcm_nvram: Use devm_platform_get_and_ioremap_resource()")
->    6870b4a37343 ("nvmem: sunxi_sid: Convert to devm_platform_ioremap_resource()")
->    31c8217bc34a ("dt-bindings: nvmem: fixed-cell: add compatible for MAC cells")
-> 
+Added from tomorrow.
+
+Thanks for adding your subsystem tree as a participant of linux-next.  As
+you may know, this is not a judgement of your code.  The purpose of
+linux-next is for integration testing and to lower the impact of
+conflicts between subsystems in the next merge window.=20
+
+You will need to ensure that the patches/commits in your tree/series have
+been:
+     * submitted under GPL v2 (or later) and include the Contributor's
+        Signed-off-by,
+     * posted to the relevant mailing list,
+     * reviewed by you (or another maintainer of your subsystem tree),
+     * successfully unit tested, and=20
+     * destined for the current or next Linux merge window.
+
+Basically, this should be just what you would send to Linus (or ask him
+to fetch).  It is allowed to be rebased if you deem it necessary.
+
+--=20
+Cheers,
+Stephen Rothwell=20
+sfr@canb.auug.org.au
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/fEl2H3WQbEJw4xfKZnBY6wH
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmUSdTEACgkQAVBC80lX
+0GxfQQf/dUmQVUsmmy3mnpcqkDOgdDaT7X50Lm6YHs2cghMwqMc5UkMQgS/hVeEW
+kc9Hq7DOxVUkLNgUy5ufE2KRILrFVJV0f/HpbetyrdbQQcc5jVY2IhA4HCwZFo6L
+7EK+D32FZNL0sq9MCXli1Ezl9xPGfEWzbKELLy2UpNwAJqQmU5kUgssKpXJJ9WTx
+ho1GT6D6KiegpAgDdEb4J1nEGlTqE8Q5+QIrihUjCseooLTQ5VTbgT5cTzJOsTUq
++NBdu9DpT9wVqmNAZbcTUUrsxAwhDnNij4pLXuMhfqHFhw0jLBKtf9G4jPPMpArb
+3lGzgZMiOyxPtahvbxNRdIVFaLMTiw==
+=W4dB
+-----END PGP SIGNATURE-----
+
+--Sig_/fEl2H3WQbEJw4xfKZnBY6wH--

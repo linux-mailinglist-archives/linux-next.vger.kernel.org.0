@@ -2,64 +2,48 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC26E7AF8D7
-	for <lists+linux-next@lfdr.de>; Wed, 27 Sep 2023 05:52:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 371707AF962
+	for <lists+linux-next@lfdr.de>; Wed, 27 Sep 2023 06:30:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229478AbjI0Dwk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 26 Sep 2023 23:52:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48896 "EHLO
+        id S229652AbjI0EaL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 27 Sep 2023 00:30:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjI0DwU (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 26 Sep 2023 23:52:20 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE7A9475E0;
-        Tue, 26 Sep 2023 20:52:17 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-533c5d10dc7so8574282a12.3;
-        Tue, 26 Sep 2023 20:52:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1695786736; x=1696391536; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=gbudO+4G2j3i97UP7uLWqquSHrnG0YZoAgH3/yd4IYQ=;
-        b=MO25+XY7Y+4rkcklBjDRGKCq2DnX21/jvoLTJ31MbvvNC+nyFCR+xUA1it0Gx0m0oe
-         SPL4FYo8JwAv3RAjCdgoK5q6oB/taVrdz05eRiY4ynA2jDoyKmJa7WMp9wwzHgjC0+xQ
-         352NA75Ytfbs6DY8KCe6+I5OdMWEOF5hU0AGm2DCgpLZj8KVBvB3CjJO8ZKn2qnRno1z
-         eYkljUlypQFTvKOBj11fucP0ZlOY2On9kgNWE6IlHLddel6uNkrqL3LK/m26YL50xmYu
-         YrUTYfK/h7TSsUKe4ivlUd68z/0IKGK1Z2a/9fWtOScE/JEiB8qEOhpcECYZZGXgMfoP
-         XneA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695786736; x=1696391536;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gbudO+4G2j3i97UP7uLWqquSHrnG0YZoAgH3/yd4IYQ=;
-        b=Y5Odra0XO4hNa1Hi9osGEC4A3M4BWbVZRBukSXKJa5DGdzBX/dffYKNqXi7anMR7sZ
-         kLCKkoDq3NssaU9MJZBskQRc5pHJ625zSNa4qgcs4xUpr2oIz/6NDRqGr49YZ+aZZPrc
-         pzL9tnNOqgDAIWNjoI/B7N/84vFqNXpejcmTruU3aWIfUVgLHWV+kiPqXJjBwpRJ77ta
-         EnQQ1ydovdTXzWarZrJ4BIU1Rmco3MLR3U383asBDhyFFBiW5DbTHmCQQVyxHawSbBkc
-         xT9urNMREPP1glM3U47Q+J34Lcn0ZSiL0iPf97ZaS7QWvTvb2yj3b2R6QP+i6x/GSWU5
-         VVVg==
-X-Gm-Message-State: AOJu0Yx39oDpQrIRBM3jhx2CjudbGuVvpuFCk8srByR4wXskdzmG9pjz
-        W06HAKSp8+9IfP860l/xb5mKG1qY0h9DcCz5HMrMXXrexzo=
-X-Google-Smtp-Source: AGHT+IHjLecfIjJaSS+8zDn1jdmYkVtgJJRdPD3qgAnh9MyfKbTdo/P7GLoNn6TCGPw+GhQbpuhlaIq7tmEuJoFL8zU=
-X-Received: by 2002:a17:906:e291:b0:9ae:5c99:f2e2 with SMTP id
- gg17-20020a170906e29100b009ae5c99f2e2mr548477ejb.43.1695786736037; Tue, 26
- Sep 2023 20:52:16 -0700 (PDT)
+        with ESMTP id S229571AbjI0E3O (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 27 Sep 2023 00:29:14 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B53BF769A;
+        Tue, 26 Sep 2023 19:32:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1695781966;
+        bh=Y1SdRVKhMsKiJoLM+trJuNnLP2IbtcnaCJML1/uaGMQ=;
+        h=Date:From:To:Cc:Subject:From;
+        b=TmA+12ZtmMF1Ni7lYGU1Pko5RQQTUAYLGkWDzSbonD/q9E7crtt4YVEKu08w9vK36
+         dhRXCh2HZXLAuRRTzARmHvLe57+YPza5r7bKQoIjf3Ee4WxsLAruBKraakN7wxO/fP
+         yB1wiML/q0fVUm0PvQAI4dv6z8GJ0rRbuSbzI4rRIaxDn2B9tH6e2ZxvGnRHniSMJi
+         w0h1oH2kNDss+k3JihTnvjNNTEbfwBAp7dSDThA+cynohGJuYqxCkXyMhLxxF4/LRq
+         TExK2MGYdmFTKVZOGx0DPncaog1T27YjMSx0NI6RfFBtKkHZ984ho5GJra009SdTrs
+         VnbtXcKhP3LIw==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4RwLHd4bDyz4x5k;
+        Wed, 27 Sep 2023 12:32:45 +1000 (AEST)
+Date:   Wed, 27 Sep 2023 12:32:43 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Dan Williams <dan.j.williams@intel.com>
+Cc:     Dave Jiang <dave.jiang@intel.com>, Ira Weiny <ira.weiny@intel.com>,
+        Yu Liao <liaoyu15@huawei.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patch in the nvdimm tree
+Message-ID: <20230927123243.358cda9f@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20230926105146.10808-1-dakr@redhat.com>
-In-Reply-To: <20230926105146.10808-1-dakr@redhat.com>
-From:   Dave Airlie <airlied@gmail.com>
-Date:   Wed, 27 Sep 2023 13:52:04 +1000
-Message-ID: <CAPM=9tzVbuoufoEJuZ2t4LkDh0-Gj8xHYCs3iMPcCY=Ay1Jshw@mail.gmail.com>
-Subject: Re: [PATCH] drm/gpuvm: doc: fix filename references
-To:     Danilo Krummrich <dakr@redhat.com>
-Cc:     dri-devel@lists.freedesktop.org, sfr@canb.auug.org.au,
-        daniel.vetter@ffwll.ch, linux-next@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: multipart/signed; boundary="Sig_/KUde7j0zW3MI/+1q7_vPTPM";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,79 +51,41 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, 26 Sept 2023 at 20:52, Danilo Krummrich <dakr@redhat.com> wrote:
->
-> Commit f72c2db47080 ("drm/gpuvm: rename struct drm_gpuva_manager to
-> struct drm_gpuvm") did also change the corresponding filenames which are
-> referenced from the documentation, but were not adjusted accordingly.
-> Hence, fix up those filenames.
+--Sig_/KUde7j0zW3MI/+1q7_vPTPM
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Acked-by: Dave Airlie <airlied@redhat.com>
+Hi all,
 
->
-> Fixes: f72c2db47080 ("drm/gpuvm: rename struct drm_gpuva_manager to struct drm_gpuvm")
-> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> Closes: https://lore.kernel.org/dri-devel/20230926150725.4cca5fc5@canb.auug.org.au/
-> Signed-off-by: Danilo Krummrich <dakr@redhat.com>
-> ---
->  Documentation/gpu/drm-mm.rst | 20 ++++++++++----------
->  1 file changed, 10 insertions(+), 10 deletions(-)
->
-> diff --git a/Documentation/gpu/drm-mm.rst b/Documentation/gpu/drm-mm.rst
-> index c19b34b1c0ed..602010cb6894 100644
-> --- a/Documentation/gpu/drm-mm.rst
-> +++ b/Documentation/gpu/drm-mm.rst
-> @@ -466,40 +466,40 @@ DRM MM Range Allocator Function References
->  .. kernel-doc:: drivers/gpu/drm/drm_mm.c
->     :export:
->
-> -DRM GPU VA Manager
-> -==================
-> +DRM GPUVM
-> +=========
->
->  Overview
->  --------
->
-> -.. kernel-doc:: drivers/gpu/drm/drm_gpuva_mgr.c
-> +.. kernel-doc:: drivers/gpu/drm/drm_gpuvm.c
->     :doc: Overview
->
->  Split and Merge
->  ---------------
->
-> -.. kernel-doc:: drivers/gpu/drm/drm_gpuva_mgr.c
-> +.. kernel-doc:: drivers/gpu/drm/drm_gpuvm.c
->     :doc: Split and Merge
->
->  Locking
->  -------
->
-> -.. kernel-doc:: drivers/gpu/drm/drm_gpuva_mgr.c
-> +.. kernel-doc:: drivers/gpu/drm/drm_gpuvm.c
->     :doc: Locking
->
->  Examples
->  --------
->
-> -.. kernel-doc:: drivers/gpu/drm/drm_gpuva_mgr.c
-> +.. kernel-doc:: drivers/gpu/drm/drm_gpuvm.c
->     :doc: Examples
->
-> -DRM GPU VA Manager Function References
-> ---------------------------------------
-> +DRM GPUVM Function References
-> +-----------------------------
->
-> -.. kernel-doc:: include/drm/drm_gpuva_mgr.h
-> +.. kernel-doc:: include/drm/drm_gpuvm.h
->     :internal:
->
-> -.. kernel-doc:: drivers/gpu/drm/drm_gpuva_mgr.c
-> +.. kernel-doc:: drivers/gpu/drm/drm_gpuvm.c
->     :export:
->
->  DRM Buddy Allocator
-> --
-> 2.41.0
->
+The following commit is also in the nvdimm-fixes tree as a different
+commit (but the same patch):
+
+  512747bbf0c7 ("ACPI: NFIT: Fix incorrect calculation of idt size")
+
+This is commit
+
+  33908660e814 ("ACPI: NFIT: Fix incorrect calculation of idt size")
+
+in the nvdimm-fixes tree.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/KUde7j0zW3MI/+1q7_vPTPM
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmUTlEsACgkQAVBC80lX
+0Gy1Vwf+MYk0Epa0gkI0Fvhho9Qb7xSOUYHD7DRCs/Z1yCmfsBrcPof514/9sMY2
+6k9lRiM3BXaLEakqhd3/SrqIWop+JIdpJSRWlpznZUSKA5QSg5T8+TjKrAsGFi3y
++vi2oZMFzkr//OpTdSSn4sysUZKIKHdfuk1hKNZo0nXwgFgupvKFTos+lldDwUfd
+nCgEzxfmG2D47ZN/6yWzWnYnfUNVUrUxjBWPQpOYWXmtt59MQLPl6Fdsx4T2xP3P
+7E86/MfmphOkC/ESv7arr0sOaOhA8ABB9C7IARc4SXynEc6ifd8JYOS8teg+XlJ5
+NJrG+tXKFUV7jttQyQsIOZ7JxY6dOg==
+=L0lK
+-----END PGP SIGNATURE-----
+
+--Sig_/KUde7j0zW3MI/+1q7_vPTPM--

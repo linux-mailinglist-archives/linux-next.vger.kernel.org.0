@@ -2,61 +2,108 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A58987AFDF7
-	for <lists+linux-next@lfdr.de>; Wed, 27 Sep 2023 10:15:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06BE37AFF82
+	for <lists+linux-next@lfdr.de>; Wed, 27 Sep 2023 11:10:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229959AbjI0IPA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 27 Sep 2023 04:15:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38324 "EHLO
+        id S229531AbjI0JK0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 27 Sep 2023 05:10:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230297AbjI0IOc (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 27 Sep 2023 04:14:32 -0400
-Received: from mail.commercesolutions.pl (unknown [162.19.155.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B1153C21
-        for <linux-next@vger.kernel.org>; Wed, 27 Sep 2023 01:12:33 -0700 (PDT)
-Received: by mail.commercesolutions.pl (Postfix, from userid 1002)
-        id 94B7B240D0; Wed, 27 Sep 2023 08:11:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=commercesolutions.pl;
-        s=mail; t=1695802336;
-        bh=PcMncQpBfIZCnTOfZJY5G1G+gaLn4c9QPfFvoXrE4rA=;
-        h=Date:From:To:Subject:From;
-        b=unymA59cyAhF9VlbtSVFbfiJUtexk8thIooj9a2mAT7LE+WKQfpipEoYBR6XDikr1
-         1kjMOmGaY4DyQ5FZ76UJxLQeuRkK5jwz2P+6bN4pgBIxz+Har7ybQd2q2HGXny9x5N
-         nmntB4d3n/pmeIc7CUcLmXRkZ5u+VSfaawgyGZqCdWqSIGMyAhM7U/WKqjRUc8Z3BA
-         mhAecucww/Gb2JSr5eZFfBa2/E+khWvZiwdgNruamwhepM0gnaYNLUg8IiXFD2Pp4o
-         pwWAgQtWPCxsXDKMDwjVunIdZ+Fn46rc0QcwyLEGdHKaz22zz+36Ag7SsbyhTZTpTx
-         Ty3tB9xQmDhXw==
-Received: by mail.commercesolutions.pl for <linux-next@vger.kernel.org>; Wed, 27 Sep 2023 08:11:00 GMT
-Message-ID: <20230927064500-0.1.8x.1pxr7.0.h3cl69ir5m@commercesolutions.pl>
-Date:   Wed, 27 Sep 2023 08:11:00 GMT
-From:   "Kamil Tralewski" <kamil.tralewski@commercesolutions.pl>
-To:     <linux-next@vger.kernel.org>
-Subject: =?UTF-8?Q?S=C5=82owa_kluczowe_do_wypozycjonowania?=
-X-Mailer: mail.commercesolutions.pl
+        with ESMTP id S230196AbjI0JKZ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 27 Sep 2023 05:10:25 -0400
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C3A492;
+        Wed, 27 Sep 2023 02:10:23 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 866613200A3B;
+        Wed, 27 Sep 2023 05:10:20 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Wed, 27 Sep 2023 05:10:21 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1695805820; x=1695892220; bh=jM
+        eK127ejzIDJuM4VM/wgP8FtWBmLzqzxn8NWLLkhXg=; b=os3C1FUA7o/WzrclHY
+        SRNPRe4M+YjFSbv2wF7Zp2bNOXjQHeqzjmpaNLfbxTPAAmivQCIVmlhxx5RvS3Yk
+        aJqMy+OE8GKlxhg6fMx9NsIL+TH1SMtl+3YurAaHrTcnojvvvRdojqOBLsO88QNq
+        j0pJCjt4DEi9YSYpDraRhwhZbq/SgAhqCv4gwkzDp9HtzpH3j835V+ircMWklpGE
+        Q6e9l7RuMXaT4JqJ01Wxn9vDW5jpy+cj5a6zDsG7C1b6H/Dvq7hxfdDTkjhiJe4w
+        IG9IRU6+7a8UlvNXGr9hiLNA9e6KyS63F1oTb+MGlADV/+BWyy9EE/2BrfaIrHFe
+        YmTg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1695805820; x=1695892220; bh=jMeK127ejzIDJ
+        uM4VM/wgP8FtWBmLzqzxn8NWLLkhXg=; b=gCWph6jXv9d4V4KMwnYWdqwOUxB14
+        35Tvqai2gzjHBdLdXgse+L6dv2J2PH59ObyI+xJ7rbBXQPEj2qRK4bKIHQkGo5cJ
+        jdPA0TT/zhjyOiqf8f7fx6KMM+HmWp+Y6jygcy4htinMbvABAN1HaE2CKVlv7n2x
+        f4XFtYu88qP9Qp7Zg5xs10WaCf8cGC6BAhe949FaHQlzAbqRZkN3UpIUrwwzS//x
+        Q+zEhSZ7GeMpDcUTfzWjw0IgRTi5eFlJCjD/DrtOdixUTS14E5t0q6N4fdL9dFKs
+        QLhz6lmDqwSnmiQEsHIAAaNvy/Jax9C66NIQEE9XU8kxmc2Q0iGikUpYQ==
+X-ME-Sender: <xms:e_ETZQ3ok_LBT78esrESTnI0oUlDRs-hWpGscMSM4ke6D3s2VmePDQ>
+    <xme:e_ETZbGXZ6Utp2mWbab6OhS13Ld1JyPQ72KPtnX8OO0M6HmLV4p6Mwbel1saW-G64
+    4mKMRZ6OT3E0wkeLYo>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvjedrtddvgdduvdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
+    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
+    hnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:e_ETZY708Mtm6Aee2DBJ6ggD69DITco5Rm3d26guAIo7kF_XVCeF5w>
+    <xmx:e_ETZZ0gGy17bK4UJhpqn3IA8eGuRYic4T0yXaZaneClI2e9k4UN_Q>
+    <xmx:e_ETZTG12QbPA6IZ_Vylg62d78TXGiaOjk33VuIUn_uJ01LdiqReHQ>
+    <xmx:fPETZYTXeXVTfMg9eDWancF9IDBi_irlfF7wsTE8U7bTGSJ_WmAWww>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 9052AB60089; Wed, 27 Sep 2023 05:10:19 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-957-ga1ccdb4cff-fm-20230919.001-ga1ccdb4c
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Message-Id: <46a9b2f5-ecbd-494a-8a88-ff5fc7b4fe84@app.fastmail.com>
+In-Reply-To: <20230927070444.6e32666f@canb.auug.org.au>
+References: <20230927070444.6e32666f@canb.auug.org.au>
+Date:   Wed, 27 Sep 2023 11:09:59 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Stephen Rothwell" <sfr@canb.auug.org.au>,
+        "Olof Johansson" <olof@lixom.net>,
+        ARM <linux-arm-kernel@lists.infradead.org>
+Cc:     "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        linux-next <linux-next@vger.kernel.org>
+Subject: Re: linux-next: Signed-off-by missing for commit in the arm-soc-fixes tree
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Dzie=C5=84 dobry,
+On Tue, Sep 26, 2023, at 23:04, Stephen Rothwell wrote:
+> Hi all,
+>
+> Commits
+>
+>   4e7b558e320a ("soc: loongson: loongson2_pm: Populate children syscon 
+> nodes")
+>   019d79fe6c3d ("dt-bindings: soc: loongson,ls2k-pmc: Allow 
+> syscon-reboot/syscon-poweroff as child")
+>   59598d7ba6a8 ("soc: loongson: loongson2_pm: Drop useless of_device_id 
+> compatible")
+>   8e5f17483ab4 ("dt-bindings: soc: loongson,ls2k-pmc: Use fallbacks for 
+> ls2k-pmc compatible")
+>   9a7c9c7e34ac ("soc: loongson: loongson2_pm: Add dependency for INPUT")
+>
+> are missing a Signed-off-by from their committers.
 
-zapozna=C5=82em si=C4=99 z Pa=C5=84stwa ofert=C4=85 i z przyjemno=C5=9Bci=
-=C4=85 przyznaj=C4=99, =C5=BCe przyci=C4=85ga uwag=C4=99 i zach=C4=99ca d=
-o dalszych rozm=C3=B3w.=20
+I have fixed it up by re-merging all patches in the arm/fixes
+branch that I had merged yesterday or earlier.
 
-Pomy=C5=9Bla=C5=82em, =C5=BCe mo=C5=BCe m=C3=B3g=C5=82bym mie=C4=87 sw=C3=
-=B3j wk=C5=82ad w Pa=C5=84stwa rozw=C3=B3j i pom=C3=B3c dotrze=C4=87 z t=C4=
-=85 ofert=C4=85 do wi=C4=99kszego grona odbiorc=C3=B3w. Pozycjonuj=C4=99 =
-strony www, dzi=C4=99ki czemu generuj=C4=85 =C5=9Bwietny ruch w sieci.
+Thanks for letting me know about these.
 
-Mo=C5=BCemy porozmawia=C4=87 w najbli=C5=BCszym czasie?
-
-Pozdrawiam
-Kamil Tralewski
+      Arnd

@@ -2,96 +2,144 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 424B07AF823
-	for <lists+linux-next@lfdr.de>; Wed, 27 Sep 2023 04:30:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC26E7AF8D7
+	for <lists+linux-next@lfdr.de>; Wed, 27 Sep 2023 05:52:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233470AbjI0Cat (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 26 Sep 2023 22:30:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46890 "EHLO
+        id S229478AbjI0Dwk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 26 Sep 2023 23:52:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236167AbjI0C0L (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 26 Sep 2023 22:26:11 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 108727D86;
-        Tue, 26 Sep 2023 18:53:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1695779612;
-        bh=orjyqxzMipv8kwfgovdAwTG4JPXHD7W6TbqcYQTsunQ=;
-        h=Date:From:To:Cc:Subject:From;
-        b=YmPUSOYP3wgoXi5881h1dSMMzw+mHK3pAe/w/6MdGday1aVfCw19wv40buXfofOYx
-         9+vy1PGCLn/okHy9ddfvNBxpuLG26KaPpwGuIoqASFXHzE4e/zLn8+t8ky3lNyei8j
-         dchzhM9JdqAMr4V65MexQCaNru8MSUwgEEB73EG1CTISgF6XG2tJwbhoFmoIMot3Ye
-         Yw+I5tSBq7D5dzl23TYD4oF2d1+uxcR7JWraaan3JDd8faH+NalrZy1qjqsROWuKNY
-         bJNIwAo9VMZdZDZw9WKsnvzQy1PYfpFyIdsGSpdMqgzquTQhMpjTqurVKk8kkFsl3a
-         QVXdRDfJidujw==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4RwKQM6TZrz4x3k;
-        Wed, 27 Sep 2023 11:53:31 +1000 (AEST)
-Date:   Wed, 27 Sep 2023 11:53:30 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patches in the rcu tree
-Message-ID: <20230927115330.69ef6671@canb.auug.org.au>
+        with ESMTP id S229460AbjI0DwU (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 26 Sep 2023 23:52:20 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE7A9475E0;
+        Tue, 26 Sep 2023 20:52:17 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-533c5d10dc7so8574282a12.3;
+        Tue, 26 Sep 2023 20:52:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1695786736; x=1696391536; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=gbudO+4G2j3i97UP7uLWqquSHrnG0YZoAgH3/yd4IYQ=;
+        b=MO25+XY7Y+4rkcklBjDRGKCq2DnX21/jvoLTJ31MbvvNC+nyFCR+xUA1it0Gx0m0oe
+         SPL4FYo8JwAv3RAjCdgoK5q6oB/taVrdz05eRiY4ynA2jDoyKmJa7WMp9wwzHgjC0+xQ
+         352NA75Ytfbs6DY8KCe6+I5OdMWEOF5hU0AGm2DCgpLZj8KVBvB3CjJO8ZKn2qnRno1z
+         eYkljUlypQFTvKOBj11fucP0ZlOY2On9kgNWE6IlHLddel6uNkrqL3LK/m26YL50xmYu
+         YrUTYfK/h7TSsUKe4ivlUd68z/0IKGK1Z2a/9fWtOScE/JEiB8qEOhpcECYZZGXgMfoP
+         XneA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695786736; x=1696391536;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gbudO+4G2j3i97UP7uLWqquSHrnG0YZoAgH3/yd4IYQ=;
+        b=Y5Odra0XO4hNa1Hi9osGEC4A3M4BWbVZRBukSXKJa5DGdzBX/dffYKNqXi7anMR7sZ
+         kLCKkoDq3NssaU9MJZBskQRc5pHJ625zSNa4qgcs4xUpr2oIz/6NDRqGr49YZ+aZZPrc
+         pzL9tnNOqgDAIWNjoI/B7N/84vFqNXpejcmTruU3aWIfUVgLHWV+kiPqXJjBwpRJ77ta
+         EnQQ1ydovdTXzWarZrJ4BIU1Rmco3MLR3U383asBDhyFFBiW5DbTHmCQQVyxHawSbBkc
+         xT9urNMREPP1glM3U47Q+J34Lcn0ZSiL0iPf97ZaS7QWvTvb2yj3b2R6QP+i6x/GSWU5
+         VVVg==
+X-Gm-Message-State: AOJu0Yx39oDpQrIRBM3jhx2CjudbGuVvpuFCk8srByR4wXskdzmG9pjz
+        W06HAKSp8+9IfP860l/xb5mKG1qY0h9DcCz5HMrMXXrexzo=
+X-Google-Smtp-Source: AGHT+IHjLecfIjJaSS+8zDn1jdmYkVtgJJRdPD3qgAnh9MyfKbTdo/P7GLoNn6TCGPw+GhQbpuhlaIq7tmEuJoFL8zU=
+X-Received: by 2002:a17:906:e291:b0:9ae:5c99:f2e2 with SMTP id
+ gg17-20020a170906e29100b009ae5c99f2e2mr548477ejb.43.1695786736037; Tue, 26
+ Sep 2023 20:52:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/TebrxWbqq3O=RqDJD=p.u4X";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230926105146.10808-1-dakr@redhat.com>
+In-Reply-To: <20230926105146.10808-1-dakr@redhat.com>
+From:   Dave Airlie <airlied@gmail.com>
+Date:   Wed, 27 Sep 2023 13:52:04 +1000
+Message-ID: <CAPM=9tzVbuoufoEJuZ2t4LkDh0-Gj8xHYCs3iMPcCY=Ay1Jshw@mail.gmail.com>
+Subject: Re: [PATCH] drm/gpuvm: doc: fix filename references
+To:     Danilo Krummrich <dakr@redhat.com>
+Cc:     dri-devel@lists.freedesktop.org, sfr@canb.auug.org.au,
+        daniel.vetter@ffwll.ch, linux-next@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/TebrxWbqq3O=RqDJD=p.u4X
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, 26 Sept 2023 at 20:52, Danilo Krummrich <dakr@redhat.com> wrote:
+>
+> Commit f72c2db47080 ("drm/gpuvm: rename struct drm_gpuva_manager to
+> struct drm_gpuvm") did also change the corresponding filenames which are
+> referenced from the documentation, but were not adjusted accordingly.
+> Hence, fix up those filenames.
 
-Hi all,
+Acked-by: Dave Airlie <airlied@redhat.com>
 
-The following commits are also in the ftrace tree as different commits
-(but similar patches):
-
-  8f2612479c71 ("doc: Add /proc/bootconfig to proc.rst")
-  648c895fda8d ("doc: Update /proc/cmdline documentation to include boot co=
-nfig")
-
-These are commits
-
-  5f4028880652 ("doc: Add /proc/bootconfig to proc.rst")
-  6eab72b5fea3 ("doc: Update /proc/cmdline documentation to include boot co=
-nfig")
-
-in the ftrace tree.  They are causing a conflict due to the differences.
-
-I am guessing that the commits in the ftrace tree are an older verison?
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/TebrxWbqq3O=RqDJD=p.u4X
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmUTixoACgkQAVBC80lX
-0Gw0tgf/QyFlutIlCRtEOD85fbgt2dltTBki5a0F8TBEOxFBfcq/IexM0nXc+0d/
-Mxjmaai0xc/bzgWle/LQS492ZVVcss25fV25zpbZyZLKB61zpS9UXEnVRHicqzor
-lkbZRgVXmPbz38C4IEfQS8qcuve/YnSMQh2yJeQ+qe967F7Tss06Ga9QvYCA8Pxp
-ehrjJ66ePtvySKF+38Me8gulCgVAs/Nm9UyRyyLjJIc6j0s2UjyfTgXhZpneY4k3
-PIe0iP1eTbnNVScdUuJuFHtgC6QUQfrqcIMOqeQxJ0HgPoUGGBhv5nYvhnpe+C4t
-Iz5fmthjovrYjXmWG7+5FLm4BonbeQ==
-=lOu+
------END PGP SIGNATURE-----
-
---Sig_/TebrxWbqq3O=RqDJD=p.u4X--
+>
+> Fixes: f72c2db47080 ("drm/gpuvm: rename struct drm_gpuva_manager to struct drm_gpuvm")
+> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> Closes: https://lore.kernel.org/dri-devel/20230926150725.4cca5fc5@canb.auug.org.au/
+> Signed-off-by: Danilo Krummrich <dakr@redhat.com>
+> ---
+>  Documentation/gpu/drm-mm.rst | 20 ++++++++++----------
+>  1 file changed, 10 insertions(+), 10 deletions(-)
+>
+> diff --git a/Documentation/gpu/drm-mm.rst b/Documentation/gpu/drm-mm.rst
+> index c19b34b1c0ed..602010cb6894 100644
+> --- a/Documentation/gpu/drm-mm.rst
+> +++ b/Documentation/gpu/drm-mm.rst
+> @@ -466,40 +466,40 @@ DRM MM Range Allocator Function References
+>  .. kernel-doc:: drivers/gpu/drm/drm_mm.c
+>     :export:
+>
+> -DRM GPU VA Manager
+> -==================
+> +DRM GPUVM
+> +=========
+>
+>  Overview
+>  --------
+>
+> -.. kernel-doc:: drivers/gpu/drm/drm_gpuva_mgr.c
+> +.. kernel-doc:: drivers/gpu/drm/drm_gpuvm.c
+>     :doc: Overview
+>
+>  Split and Merge
+>  ---------------
+>
+> -.. kernel-doc:: drivers/gpu/drm/drm_gpuva_mgr.c
+> +.. kernel-doc:: drivers/gpu/drm/drm_gpuvm.c
+>     :doc: Split and Merge
+>
+>  Locking
+>  -------
+>
+> -.. kernel-doc:: drivers/gpu/drm/drm_gpuva_mgr.c
+> +.. kernel-doc:: drivers/gpu/drm/drm_gpuvm.c
+>     :doc: Locking
+>
+>  Examples
+>  --------
+>
+> -.. kernel-doc:: drivers/gpu/drm/drm_gpuva_mgr.c
+> +.. kernel-doc:: drivers/gpu/drm/drm_gpuvm.c
+>     :doc: Examples
+>
+> -DRM GPU VA Manager Function References
+> ---------------------------------------
+> +DRM GPUVM Function References
+> +-----------------------------
+>
+> -.. kernel-doc:: include/drm/drm_gpuva_mgr.h
+> +.. kernel-doc:: include/drm/drm_gpuvm.h
+>     :internal:
+>
+> -.. kernel-doc:: drivers/gpu/drm/drm_gpuva_mgr.c
+> +.. kernel-doc:: drivers/gpu/drm/drm_gpuvm.c
+>     :export:
+>
+>  DRM Buddy Allocator
+> --
+> 2.41.0
+>

@@ -2,68 +2,94 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C16317B202B
-	for <lists+linux-next@lfdr.de>; Thu, 28 Sep 2023 16:52:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E479C7B27A0
+	for <lists+linux-next@lfdr.de>; Thu, 28 Sep 2023 23:42:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230270AbjI1Ows (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 28 Sep 2023 10:52:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34306 "EHLO
+        id S232049AbjI1VmQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 28 Sep 2023 17:42:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230246AbjI1Owr (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 28 Sep 2023 10:52:47 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67A4C195;
-        Thu, 28 Sep 2023 07:52:46 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2F09C433C7;
-        Thu, 28 Sep 2023 14:52:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1695912766;
-        bh=xfxV1oNP6m/aajUPxOtkXZ3kXT3HBJ0eemme2k/Aa50=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PGft4SwABcmN16PM4hnQadeZXsYwbIqYu2JCaisW2ImTwCEzK9SLvLq0BxU75iXmG
-         RbmUbQtHfR7tDoNbTFNj4FoOQ94cFi/Pb055Fto0ljOxT4F5yvBAO1JTaKDxi6gYjF
-         68lUS2EkZBnhT0H+utTJrSFg8BeGLlIbqw9iwmrnkIqwc0DUWykskbi3Uih9KcYOV5
-         blRJJLe7jIeya6l09/EnK3GOVPU9Z4N8pm9FQ6wFWFHVRHK5P4zTHm7VvV0dN8p8wf
-         cIk1GojXFZp8IoIdxLIF2sEZrJMHBUBDO40xOSKqMDrAaqFIIfgL3L10Pit9Yfwh9E
-         D1voUq8gNqXMQ==
-Date:   Thu, 28 Sep 2023 16:52:42 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Jan Kara <jack@suse.cz>,
+        with ESMTP id S230246AbjI1VmQ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 28 Sep 2023 17:42:16 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 293E819D;
+        Thu, 28 Sep 2023 14:42:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1695937328;
+        bh=7d/AAHZO5NDYV5Xp/mzgKQmg52pq5fBtsuv+HaGjUU0=;
+        h=Date:From:To:Cc:Subject:From;
+        b=gaFFl3Mx/AKahHhi8lqUpkg37QKpQVKNmnqGxkj7gFIM9IwEmF9k5TdVL7YcDeQyz
+         GMoCapZFZU4yFDrmuYwOCBKzGPdMbEmuC8smG7ciI/zi6n9tiuEiMR27BNJzPcN/ai
+         Yhf6NTJHfVezjWO+5UK89FK8pwy8Q9tci929Be/bfkyItotGxPoMQoJdYeCJ6ylJaS
+         9g7pwwfsoZO+0H4zXDB/d2mhJYShkMZTH9NqRF5aw5Uw/8ZPtYYNXlnPT0DEZ0WbOd
+         uTEP+a2/ouA+ub2YY/TnsrSRSN6WHnwHMBo1TUP/fS6Lqv78/1h7znEl8uv2rTo+sf
+         EzIBn9QnGQqGw==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4RxRlN036Dz4xPL;
+        Fri, 29 Sep 2023 07:42:07 +1000 (AEST)
+Date:   Fri, 29 Sep 2023 07:41:46 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>
+Cc:     Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the vfs-brauner tree
-Message-ID: <20230928-werbung-entbinden-fe6408fe9975@brauner>
-References: <20230928103954.78444923@canb.auug.org.au>
+Subject: linux-next: Fixes tag needs some work in the sound-asoc tree
+Message-ID: <20230929074146.329da983@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230928103954.78444923@canb.auug.org.au>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/PZVY+wS=hrUQI1xxUngES5=";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Sep 28, 2023 at 10:39:54AM +1000, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the vfs-brauner tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
-> 
-> drivers/md/md.c: In function 'md_import_device':
-> drivers/md/md.c:3635:25: error: unused variable 'holder' [-Werror=unused-variable]
->  3635 |         struct md_rdev *holder;
->       |                         ^~~~~~
-> cc1: all warnings being treated as errors
-> 
-> Caused by commit
-> 
->   15db36126ca6 ("md: Convert to bdev_open_by_dev()")
-> 
-> I have used the vfs-brauner tree from next-20230927 for today.
+--Sig_/PZVY+wS=hrUQI1xxUngES5=
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Fixed in vfs.super. Thank you!
+Hi all,
+
+In commit
+
+  6d925797304e ("sh: boards: Fix Sound Simple-Card struct name")
+
+Fixes tag
+
+  Fixes: ad484cc98f2 ("ASoC: remove asoc_xxx() compatible macro")
+
+has these problem(s):
+
+  - SHA1 should be at least 12 digits long
+    This can be fixed for the future by setting core.abbrev to 12 (or
+    more) or (for git v2.11 or later) just making sure it is not set
+    (or set to "auto").
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/PZVY+wS=hrUQI1xxUngES5=
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmUV8xoACgkQAVBC80lX
+0GyTdwf/SR92jV4DI/kfhLbP8MXPvHovlVj/sCthsxdsgNHr5qstW82wl7ug0HPT
+/SJQZfXnuozi8hF0TUb3EiwgPYqbUsVqbHwYF6+breKyfflhUjqXzMw4DMMp8luM
+CDlRUZqEqX2UD/+Owpen/KMyr9YoeALeILli/ReE6aI5ONHyG1opxbYN1ZkP6LLj
+RShnt7sZfGULBN3npPbRup9k30GSmHP2hseQ++ryx3IyoDRXPRIEogqg0NnGokkT
+yfgwBegr7knOhdOFztOaPBIKe/xFz/z9SDPRWxN3BhI64k73uuKx6TxAJXavxCo4
+bVokjVudG9Ih2Z3Wgj8FIznaiRxssA==
+=JpSV
+-----END PGP SIGNATURE-----
+
+--Sig_/PZVY+wS=hrUQI1xxUngES5=--

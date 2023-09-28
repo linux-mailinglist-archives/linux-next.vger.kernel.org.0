@@ -2,46 +2,44 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4B497B0FEC
-	for <lists+linux-next@lfdr.de>; Thu, 28 Sep 2023 02:25:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 714FC7B101A
+	for <lists+linux-next@lfdr.de>; Thu, 28 Sep 2023 02:40:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229593AbjI1AZL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 27 Sep 2023 20:25:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39708 "EHLO
+        id S229469AbjI1Aj7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 27 Sep 2023 20:39:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbjI1AZK (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 27 Sep 2023 20:25:10 -0400
+        with ESMTP id S229500AbjI1Aj7 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 27 Sep 2023 20:39:59 -0400
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1C9FBF;
-        Wed, 27 Sep 2023 17:25:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2756110A;
+        Wed, 27 Sep 2023 17:39:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1695860707;
-        bh=WNfoadDuufEuRBv0tZgBUq317Tu+fzjqQuaRCyQaqoY=;
+        s=201702; t=1695861595;
+        bh=FDGB4csrUsfR2IX+TgcOAJbRJr9AaNa4usEGCtv9UM0=;
         h=Date:From:To:Cc:Subject:From;
-        b=YSU+ECyvLmZHO74h3p72tRoPFUA8WxxG7KMqJG+/XI7u5i+2edS5umBotQHPTLlAW
-         zPymgKN85Q4+eh+s6eA8mqaiUzoGzlUmULJXqudXODxIVMxW4tt+aZMUdj8wx+g/UM
-         pURT8irwJ88xnE6goBZqAM8SCauaYCU3jjJMj+sCbIGepO70xxOVCM4dkSgJJOpoXM
-         8uArPrsRCDhTkGoKmCCTH4mzgfM1xSaJUojLSMCrFRsuUCfqNtV05wBFAzwuyBLmCb
-         Qd1RYgqbTus1/XXm9Baf1ENh0wjb5AB4ZukD5Z133MuvhwG+7bVsENKjq7sdET5Na9
-         bzma44nz2UbNw==
+        b=anEhgZaibKLYk351TCxuH2pphaLhMqCdVVHZHRWXLTDiypTe5VhNBfcSexoB63rzw
+         z1WZF3dpofsvjUzE3hQJgkPxy4GOOKpMWzGJaZT0UmRE32g0tnQ4yV3EkzP9rHKU+g
+         lc4VfI5WPWx5rjToHa8bjghwjhEFyMr0EXua80pSswpweah2mraMFGhwjcad6EHLuW
+         3e0+Kd1kLsOgzFtuh/YFJ3WyvwV2FPuTdvmMlfbWpOBsN7qypyO3nfsmLh6jaXFoHo
+         uWdd9TpN8HaUZX0ms23kAln8y0Od5rV8M3Vc9X1xmojjv0YaRSZ+38354By3KzNVRg
+         1PXyf4CEhS1FA==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4RwvPs6KFKz4x3F;
-        Thu, 28 Sep 2023 10:25:05 +1000 (AEST)
-Date:   Thu, 28 Sep 2023 10:25:04 +1000
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Rwvkz5lxRz4xQ4;
+        Thu, 28 Sep 2023 10:39:55 +1000 (AEST)
+Date:   Thu, 28 Sep 2023 10:39:54 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Christian Brauner <brauner@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
+To:     Christian Brauner <brauner@kernel.org>
 Cc:     Jan Kara <jack@suse.cz>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Qi Zheng <zhengqi.arch@bytedance.com>
-Subject: linux-next: manual merge of the vfs-brauner tree with the mm tree
-Message-ID: <20230928102504.5c751249@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the vfs-brauner tree
+Message-ID: <20230928103954.78444923@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/SMcVosCLCqUTMl3H.Dxy.HK";
+Content-Type: multipart/signed; boundary="Sig_/iMPLItn/uOFZjavHpQTX0.U";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
@@ -52,67 +50,45 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/SMcVosCLCqUTMl3H.Dxy.HK
+--Sig_/iMPLItn/uOFZjavHpQTX0.U
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the vfs-brauner tree got a conflict in:
+After merging the vfs-brauner tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-  fs/xfs/xfs_buf.c
+drivers/md/md.c: In function 'md_import_device':
+drivers/md/md.c:3635:25: error: unused variable 'holder' [-Werror=3Dunused-=
+variable]
+ 3635 |         struct md_rdev *holder;
+      |                         ^~~~~~
+cc1: all warnings being treated as errors
 
-between commit:
+Caused by commit
 
-  5c7b459f9f1d ("xfs: dynamically allocate the xfs-buf shrinker")
+  15db36126ca6 ("md: Convert to bdev_open_by_dev()")
 
-from the mm tree and commit:
-
-  176ccb99e207 ("xfs: Convert to bdev_open_by_path()")
-
-from the vfs-brauner tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
+I have used the vfs-brauner tree from next-20230927 for today.
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc fs/xfs/xfs_buf.c
-index 9e7ba04572db,003e157241da..000000000000
---- a/fs/xfs/xfs_buf.c
-+++ b/fs/xfs/xfs_buf.c
-@@@ -1943,9 -1945,7 +1943,7 @@@ voi
-  xfs_free_buftarg(
-  	struct xfs_buftarg	*btp)
-  {
-- 	struct block_device	*bdev =3D btp->bt_bdev;
--=20
- -	unregister_shrinker(&btp->bt_shrinker);
- +	shrinker_free(btp->bt_shrinker);
-  	ASSERT(percpu_counter_sum(&btp->bt_io_count) =3D=3D 0);
-  	percpu_counter_destroy(&btp->bt_io_count);
-  	list_lru_destroy(&btp->bt_lru);
-
---Sig_/SMcVosCLCqUTMl3H.Dxy.HK
+--Sig_/iMPLItn/uOFZjavHpQTX0.U
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmUUx+AACgkQAVBC80lX
-0GwEGQgAo9qwNqhpNWmvZNqJFQ13fHE2YhTPOEVqTkSle/ksWeaiz7hChiXk9iUY
-YYTKMzpBplapPKsWy6UWJ1Gely7Q5HHMmDs8ZVFUqiZ7o6daPT4uFCpcEKCo4Sgl
-rn1+Ng96iKpKwEqS1ESL/7QlYoj1ffMo+0a8dQSHc9xhKkaSkSmt6n8130gqIvOH
-uM+lDV/duHeLblRP1x5ic2XddEFKEk4M8t40dlw8F6vGplbDSS2+lahrCpV5LmRC
-2Ex/YNwjDnMl40UinvNzvdCUQV5LyWv5Ht8fVczc2A2xqSkVDHqqpjQA4wdMmkHr
-JLdTjjLAeDR2IumGut+DiGSignVo6g==
-=zbYj
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmUUy1oACgkQAVBC80lX
+0GynqwgAlHT2iw31F0AJ+pwo3223pLmmtmecLpbJbw2XHpXrD/vVs74ooT9LLC4e
+gJRliCkIhpoD1aCV2VHXI8if7Q7a8gMLfI1XRpIA42+fgyk82YW+yWXV2zX6s+Rh
+OYfvexn6jrTA1q6sG3wg67wLx+aL28K1SPEdmWI+/XfjxM5sNrnzbA3ABC9gMu3Y
+yOCI9Xn4ep3ro0FS6uOxHGN3hrKezAzWMQx1/7G3XHF9tkUKYRp0oqlat8zaGo8v
+WgvhCv+0tSole3TMejeHl4Ju/97gPen/KpcSadw8Rg8GFGtoDC6gUofwmUEw1gYK
+2js4w5K5FtIZ5GVRRXuPE4NIyMY2vg==
+=llvo
 -----END PGP SIGNATURE-----
 
---Sig_/SMcVosCLCqUTMl3H.Dxy.HK--
+--Sig_/iMPLItn/uOFZjavHpQTX0.U--

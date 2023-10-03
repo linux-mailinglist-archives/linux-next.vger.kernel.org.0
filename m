@@ -2,84 +2,47 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E7917B6BA3
-	for <lists+linux-next@lfdr.de>; Tue,  3 Oct 2023 16:31:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03B207B7443
+	for <lists+linux-next@lfdr.de>; Wed,  4 Oct 2023 00:51:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240027AbjJCObq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 3 Oct 2023 10:31:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41320 "EHLO
+        id S230421AbjJCWvT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 3 Oct 2023 18:51:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240160AbjJCObo (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 3 Oct 2023 10:31:44 -0400
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4732EE;
-        Tue,  3 Oct 2023 07:31:41 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id A76633200B2F;
-        Tue,  3 Oct 2023 10:31:40 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Tue, 03 Oct 2023 10:31:41 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1696343500; x=1696429900; bh=dM
-        XDSvzT9i1XLEOVuOSArS3v51cWnf3onHEUcNZ+RVs=; b=OgRJ2Bm8qQyKh8j44t
-        yi7YTuKzDJ4pL2MV0u5IeNs3aiGmJhLnwJrQQViciE7m3yEGHF2+T8Q4+t8Vqn8c
-        bRBqULbygN5ocOYcvkTz0prHjSbcHFEC4W1dQDcGPWrh2686aL7mD1N1szXLk67W
-        BSq7+WZ25XxUjJTuiLOkCtu56wCwcIa9LijKsIBGCJAwOdLNifAuXW67qJXTkJPI
-        OjpfiNc4mX7CWYhEp8VZB3k00lXLciCkiIXgYIQJ+ZfNtipOHlbsNvK7pL9NtJCQ
-        BiaqdmrXJzdDdzXm3XgdBSHSxNjaOhhPFK9HYPLyMAGSdRcpdgD9VdYlhwqF555s
-        j8YA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1696343500; x=1696429900; bh=dMXDSvzT9i1XL
-        EOVuOSArS3v51cWnf3onHEUcNZ+RVs=; b=FgHftRoNuPyr1DkdGzJJLF2HYgaYn
-        CNXIRMLHdTUxQwfg3jpIN0ymx/+QwBhRHgP1gd7h5OmbgYBUWjKES8BJaOoE6C51
-        N3WfSrfiNwSHxfi+OhSVr0aFmd4HtK6OiOgkWpguIbU26QcEPfSk4LNt9tzNA6OI
-        pzutsRsHJI4cgXIn/9KHiML8csOfVZg5rstMoouvhjsiecfPc2FUYm1aDaP46v5+
-        XTGX0xyer3kzOtpiAE08dLT+nfMpL1wwcsbHI5WnaA3oRJymI2F5LACFlFl+MJyy
-        r1iGR1bfjyx+LSFLCuLanUWbogvkmROpBXQggC91a3wqA272z8/DyaLsA==
-X-ME-Sender: <xms:yyUcZQOM7Pvp9gRILvcWQj0qwg19ALx5G7cVdHlZ1YcW79ksxSC-0Q>
-    <xme:yyUcZW9rPL7fy8GLvDwCo0hWkUT0DwIOU0rpksw3BEnceKXpQptGQYzn88VHoza0h
-    x4_B6y5Fi9gUUByvBQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrfeeigdejhecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
-    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
-    hnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:yyUcZXTQ84s-8rnuvIVEpvwmfxA4-3Na9MKUAK8HnqMiKuGcU-wDNg>
-    <xmx:yyUcZYtl66ss13vLO0Jit0mmQF78UtQR20MK0YRK9NGCa5UfJcjT3A>
-    <xmx:yyUcZYfi3BKR3dMknJiTln-dZs_mINKHaIX98_1yOxw0Cyr3MBVmpw>
-    <xmx:zCUcZQ5Mhz8pwB3wObSQbs0drADO3cPhmudxzd_vrnIldU_Nu80POw>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id A68E7B60089; Tue,  3 Oct 2023 10:31:39 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-958-g1b1b911df8-fm-20230927.002-g1b1b911d
+        with ESMTP id S230237AbjJCWvT (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 3 Oct 2023 18:51:19 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAABCAB;
+        Tue,  3 Oct 2023 15:51:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1696373469;
+        bh=AbHgkLw6pkAiF+hp9Xi3YUuEXjip/NWdn8JZOZ7S79A=;
+        h=Date:From:To:Cc:Subject:From;
+        b=RQVGhtncQsHbkRYyOeNG7HA1jL3oHK91Fzsr2oNx1Y31Kz+1loHVwqhFo2qnGaG44
+         JE2oO5uXtcI+A5lhntVof3XtSX1occzDuPxGo4lVh38ujhj5Z1DSRncWChQw+3IOak
+         +x5TGjWB3+o1Ayz0OY+Vj0NoQnTKTpjEQBjKdp0nHLh3Kntn3tQpSRhLwovMKL6fjs
+         1b5BZEGEVeh9j/pWq2kliCdD/RKTJVqgbAK2Y9YmB1Xx+7AeE8bZkvIsvqrt8Rj6Fw
+         k3rogAHqOpKCvmSDT6n1vpmLL/UdtZmVv0wPWhqU/voEgWwAhridMTB8I61cOpHjL+
+         D7gRgMY6wEpWA==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4S0Y2j2nZhz4xPQ;
+        Wed,  4 Oct 2023 09:51:09 +1100 (AEDT)
+Date:   Wed, 4 Oct 2023 09:50:58 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     David Laight <david.laight@aculab.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the mm tree
+Message-ID: <20231004095058.392f8c17@canb.auug.org.au>
 MIME-Version: 1.0
-Message-Id: <e076a52f-8aeb-417a-8093-362d36573f8b@app.fastmail.com>
-In-Reply-To: <50f32be6-ccbe-42b7-81bf-7509da400ba6@linaro.org>
-References: <20230929102539.42b11f3c@canb.auug.org.au>
- <50f32be6-ccbe-42b7-81bf-7509da400ba6@linaro.org>
-Date:   Tue, 03 Oct 2023 16:31:19 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
-        "Stephen Rothwell" <sfr@canb.auug.org.au>,
-        "Olof Johansson" <olof@lixom.net>
-Cc:     ARM <linux-arm-kernel@lists.infradead.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        linux-next <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patch in the samsung-krzk tree
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+Content-Type: multipart/signed; boundary="Sig_/=rjFqCZOmRnTDUB+/7gW/nM";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,29 +50,80 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Oct 3, 2023, at 08:22, Krzysztof Kozlowski wrote:
-> On 29/09/2023 02:25, Stephen Rothwell wrote:
->> Hi all,
->> 
->> The following commit is also in the arm-soc-fixes tree as a different
->> commit (but the same patch):
->> 
->>   471eed5ad217 ("arm64: defconfig: enable syscon-poweroff driver")
->> 
->> This is commit
->> 
->>   d75e870c32f6 ("arm64: defconfig: enable syscon-poweroff driver")
->> 
->> in the arm-soc-fixes tree.
->
-> Hm, I did not expect this going through arm-soc, but no problem. I
-> dropped it now from my tree.
+--Sig_/=rjFqCZOmRnTDUB+/7gW/nM
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Right, I was a little confused about why you sent the patch to
-soc@kernel.org and had to guess between applying to fixes, to
-the next branches or ignoring.
+Hi all,
 
-I should have asked you for confirmation here, but ended up
-just merging it as it seemed harmless enough either way.
+After merging the mm tree, today's linux-next build (native perf) failed
+like this:
 
-     Arnd
+In file included from tools/include/linux/bits.h:21,
+                 from tools/include/linux/bitops.h:14,
+                 from tools/include/linux/bitmap.h:6,
+                 from tools/perf/util/header.h:10,
+                 from /home/sfr/next/perf/pmu-events/pmu-events.c:3:
+tools/include/linux/find.h: In function 'find_next_bit':
+tools/include/linux/bits.h:24:17: error: implicit declaration of function '=
+__is_constexpr' [-Werror=3Dimplicit-function-declaration]
+   24 |                 __is_constexpr((l) > (h)), (l) > (h), 0)))
+      |                 ^~~~~~~~~~~~~~
+tools/include/linux/build_bug.h:16:62: note: in definition of macro 'BUILD_=
+BUG_ON_ZERO'
+   16 | #define BUILD_BUG_ON_ZERO(e) ((int)(sizeof(struct { int:(-!!(e)); }=
+)))
+      |                                                              ^
+tools/include/linux/bits.h:37:10: note: in expansion of macro 'GENMASK_INPU=
+T_CHECK'
+   37 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+      |          ^~~~~~~~~~~~~~~~~~~
+tools/include/linux/find.h:42:31: note: in expansion of macro 'GENMASK'
+   42 |                 val =3D *addr & GENMASK(size - 1, offset);
+      |                               ^~~~~~~
+tools/include/linux/bits.h:23:28: error: first argument to '__builtin_choos=
+e_expr' not a constant
+   23 |         (BUILD_BUG_ON_ZERO(__builtin_choose_expr( \
+      |                            ^~~~~~~~~~~~~~~~~~~~~
+tools/include/linux/build_bug.h:16:62: note: in definition of macro 'BUILD_=
+BUG_ON_ZERO'
+   16 | #define BUILD_BUG_ON_ZERO(e) ((int)(sizeof(struct { int:(-!!(e)); }=
+)))
+      |                                                              ^
+tools/include/linux/bits.h:37:10: note: in expansion of macro 'GENMASK_INPU=
+T_CHECK'
+   37 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+      |          ^~~~~~~~~~~~~~~~~~~
+tools/include/linux/find.h:42:31: note: in expansion of macro 'GENMASK'
+   42 |                 val =3D *addr & GENMASK(size - 1, offset);
+      |                               ^~~~~~~
+
+... and much more ...
+
+Caused by commit
+
+  5bee02eadb5d ("compiler.h: move __is_constexpr() to compiler.h")
+
+I have reverted that commit for today.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/=rjFqCZOmRnTDUB+/7gW/nM
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmUcmtIACgkQAVBC80lX
+0GwIfQf/ZcE4yCqcXlK7iSUd+e/AKBGHTndJVn0kbSt5780085FlkP0I8xbsf/Sg
+kKtzs7GoAnDvBpjq/oDBvyKvM66u3MU0XuI9ZI4qLb5fThj4xNeIZq50FzlAXy24
+HeiGl1KU6MLakWItd5TlCmfsBmtuhSZJHYBgPLCTQZoL+Rv921CN+K6vuALfrk+z
+bqpnRc5sOhllKMeIYTJ74OWxwEQUElnG8aoWTz06JcSWckqkbI8Mj3as0f/jTYJv
+fbc8zZvjJCp4P4H7yAIascSHmkH0DzYZAk3DGEG8qUPr1fW4agSF2AMSrvZledjZ
+oEpHaH+sKP4vwWxJ2bsbE75sNPcMig==
+=bz8g
+-----END PGP SIGNATURE-----
+
+--Sig_/=rjFqCZOmRnTDUB+/7gW/nM--

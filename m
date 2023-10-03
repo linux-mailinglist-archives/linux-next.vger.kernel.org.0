@@ -2,126 +2,96 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 149687B5E6D
-	for <lists+linux-next@lfdr.de>; Tue,  3 Oct 2023 03:04:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAF4C7B5E87
+	for <lists+linux-next@lfdr.de>; Tue,  3 Oct 2023 03:19:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229839AbjJCBET (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 2 Oct 2023 21:04:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43166 "EHLO
+        id S229890AbjJCBT4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 2 Oct 2023 21:19:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229837AbjJCBET (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 2 Oct 2023 21:04:19 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFB99B4;
-        Mon,  2 Oct 2023 18:04:15 -0700 (PDT)
+        with ESMTP id S238922AbjJCBT4 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 2 Oct 2023 21:19:56 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DA3FBF;
+        Mon,  2 Oct 2023 18:19:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1696295054;
-        bh=xsf9tIw5a6T3R+Pom55EWLjfIAm3f6Ai/hp/EsxCLXE=;
+        s=201702; t=1696295987;
+        bh=8FPUqQ2tGHzRi6jvQYSkQAbQgwzDG1edMbYV+4jhFQQ=;
         h=Date:From:To:Cc:Subject:From;
-        b=j8twwBzmjkuslN1x5RHY0DwyGNwM4fvJq3AYuF4KDlgktjhRwkkIBPRk9q+j6Pvi/
-         Cksp2YV93qdxDwRbOU3RIVakM6blpKd8i5szwyTYlN0Y0GbmynvnekoLmHVvPQ6ngT
-         waD/aoQXHRzx1oqV7vDzKNR6vpFGD6gOMl6vjPbXUfgY7MPdmQE+0dKd6e08nJaTDa
-         Kq7eFJDcfs7t6Q0NGEe85X7YOT+FRn9rUh34wMX41gXk3LgOrIuYJVreqD7qBtnKEL
-         om/wouqNP8Au1lRaY59ExcD2LZkPFIvgxM2Qckce7TM6tr+h1HWddxW0L/pKsvQ8Kd
-         W016rKXOW+K7g==
+        b=qU0eHRV8g20jDk45yHEWbe4WsHY1Y5I9xvqwoCa3qpUTv5dbppC4QFZlrUBGd9soC
+         Mc7z/LsLtYIyyX0zNMOM/T2Kq+cFg0D1OQ5Sm1vf1oG8WFj4fD51tRmI5z8CQVW7aZ
+         GBLSH7raB2W08fK8ZSK16mcucV8yR1HZCKrrDTBHqguR0LbooAuxGe0KfNp8KwEpYp
+         mYwGVDMFhzvmb3rDT1/NtK9Q8BKsY6CCSQWifsL2Mwk5Fv6YrbCJk+GKMAC8gv68Vt
+         oZkRPyIk8RZzquvA8IQgW2ClcYgoaV/WHzoG3uCCAtNi94+3Z2wLm1iORUAzkopoCS
+         0mH64mRMGhJNA==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4S002j1sdWz4xPf;
-        Tue,  3 Oct 2023 12:04:12 +1100 (AEDT)
-Date:   Tue, 3 Oct 2023 12:04:10 +1100
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4S00Nf5ZGyz4xPf;
+        Tue,  3 Oct 2023 12:19:46 +1100 (AEDT)
+Date:   Tue, 3 Oct 2023 12:19:45 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Joerg Roedel <joro@8bytes.org>, Arnd Bergmann <arnd@arndb.de>
-Cc:     Ard Biesheuvel <ardb@kernel.org>, Joerg Roedel <jroedel@suse.de>,
+To:     Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Networking <netdev@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Niklas Schnelle <schnelle@linux.ibm.com>
-Subject: linux-next: manual merge of the iommu tree with the asm-generic
- tree
-Message-ID: <20231003120410.3c408680@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patches in the bluetooth tree
+Message-ID: <20231003121945.3f5b6a07@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/3jZx8B.5TOmVuygG6eAZsh_";
+Content-Type: multipart/signed; boundary="Sig_/1qfh..isupAFvsP_MnhTPqJ";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/3jZx8B.5TOmVuygG6eAZsh_
+--Sig_/1qfh..isupAFvsP_MnhTPqJ
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the iommu tree got a conflict in:
+The following commits are also in the net tree as different commits
+(but the same patches):
 
-  drivers/iommu/Kconfig
-
-between commit:
-
-  cf8e8658100d ("arch: Remove Itanium (IA-64) architecture")
-
-from the asm-generic tree and commit:
-
-  c76c067e488c ("s390/pci: Use dma-iommu layer")
-
-from the iommu tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+  0ef9e5c1af4c ("Bluetooth: ISO: Fix handling of listen for unicast")
+  190b32220f99 ("Bluetooth: btusb: add shutdown function for QCA6174")
+  2eb5e4369bc4 ("Bluetooth: Avoid redundant authentication")
+  8ee19a4f17bc ("Bluetooth: hci_core: Fix build warnings")
+  9f0fcb5aa550 ("Bluetooth: Fix hci_link_tx_to RCU lock usage")
+  b78e04e5f353 ("Bluetooth: Delete unused hci_req_prepare_suspend() declara=
+tion")
+  c0c64dc267e4 ("Bluetooth: hci_codec: Fix leaking content of local_codecs")
+  da10fc7a9dc3 ("Bluetooth: hci_sync: Fix handling of HCI_QUIRK_STRICT_DUPL=
+ICATE_FILTER")
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc drivers/iommu/Kconfig
-index 7f04491ca5f0,3199fd54b462..000000000000
---- a/drivers/iommu/Kconfig
-+++ b/drivers/iommu/Kconfig
-@@@ -91,7 -91,7 +91,7 @@@ config IOMMU_DEBUGF
-  choice
-  	prompt "IOMMU default domain type"
-  	depends on IOMMU_API
-- 	default IOMMU_DEFAULT_DMA_LAZY if X86
- -	default IOMMU_DEFAULT_DMA_LAZY if X86 || IA64 || S390
-++	default IOMMU_DEFAULT_DMA_LAZY if X86 || S390
-  	default IOMMU_DEFAULT_DMA_STRICT
-  	help
-  	  Choose the type of IOMMU domain used to manage DMA API usage by
-@@@ -146,7 -146,7 +146,7 @@@ config OF_IOMM
- =20
-  # IOMMU-agnostic DMA-mapping layer
-  config IOMMU_DMA
-- 	def_bool ARM64 || X86
- -	def_bool ARM64 || IA64 || X86 || S390
-++	def_bool ARM64 || X86 || S390
-  	select DMA_OPS
-  	select IOMMU_API
-  	select IOMMU_IOVA
-
---Sig_/3jZx8B.5TOmVuygG6eAZsh_
+--Sig_/1qfh..isupAFvsP_MnhTPqJ
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmUbaIoACgkQAVBC80lX
-0Gwf+gf/fTm1ValJxmMBwATFJLZLLpSDO7uf+N2P3c6dYXckucL302QmPaSrX/5w
-DyuRSqhnL3EsxK6oMMfSS6HqinSCPjktpnIptMzcan/1WoHAQ1Nr/O1GG1LChK5d
-CkdullLHJGhaJqdnZWAkY6/7C17IayZAMJhbdZ5GsERLYlyqibgUpMUOuSbw5UAt
-MdRc9J1Pe/KheLMoB1XbDdjOVU5dIbmuj2NAKb4RjvyVqHadCvZMSKo0fzAKstZv
-wbQLA4TgUi8K6Pt+E9xoILRjXQVv1j203sEYFgO7rQOsEibrAJnSHlrksb5hArjD
-YS15B48Y6yqei1V7VR26fWyaR5OGzQ==
-=8ZmM
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmUbbDEACgkQAVBC80lX
+0GxxBQf+MOoeUJlVz+LXnquZtn5h5+KRuI3S0BcRp03KTU6ryhfZiMc9qiXFazHO
+rPvTdVca0SYpBgv8KtUMWvm8iyxH/MjXUQdDyjP7aMuLKl8gRvLxhAymokLkbFBw
+iQoslGiTNfa/n6LUw58+LogR2/4vlihM8c4wvASpk85eQUeyv708CB+ZNi7o2KuO
+7g9sB3IGFwMZPGP2jy9y2ejWWuSA4mZ8rKkuMFj+oi4Ie+z/+MaeK3ALvlFa1aOE
+9VfhcbKk4ozPVuyf/KL7AkGHP8UjRQQZCjpSD+GaguuE9knxvC5f250oH4QohOgm
+dtgjDRbInUx/bQcJWT2Ag/HdVy965g==
+=FckR
 -----END PGP SIGNATURE-----
 
---Sig_/3jZx8B.5TOmVuygG6eAZsh_--
+--Sig_/1qfh..isupAFvsP_MnhTPqJ--

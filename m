@@ -2,68 +2,53 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C09C37B5DF0
-	for <lists+linux-next@lfdr.de>; Tue,  3 Oct 2023 02:01:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCC987B5DF4
+	for <lists+linux-next@lfdr.de>; Tue,  3 Oct 2023 02:10:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229711AbjJCABx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 2 Oct 2023 20:01:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34016 "EHLO
+        id S229862AbjJCAKG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 2 Oct 2023 20:10:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237295AbjJCABw (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 2 Oct 2023 20:01:52 -0400
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90F3CD7
-        for <linux-next@vger.kernel.org>; Mon,  2 Oct 2023 17:01:48 -0700 (PDT)
-Received: by mail-il1-x12e.google.com with SMTP id e9e14a558f8ab-35135b79b6aso1197385ab.0
-        for <linux-next@vger.kernel.org>; Mon, 02 Oct 2023 17:01:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1696291307; x=1696896107; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=FpZJ4jG228HhqsgeOr649mN6f50bmsnMKekSaM2MHAg=;
-        b=XLBiljV8hQO3dZXu7Q9NDI4K04GsFa3A7PyOtWiuyI0032ckRSQOyiaXOTOxQMfkt6
-         0eyOcXl8iCwvtJ2/f2Qt90U++qo4BnmTruJu1rdbn3L+iR20v7kLUUSRa2aPYGfk1Kmn
-         CjjBpdHHCxf2xlsSGJSUGx34QV7TSUKC/lFaSpGwo2QE4XbQEcXRpLjIRIQncNVVvXxd
-         8gW9zrjKzcsKAKBKlNSheUXGO7MwKiBm88PYGSGn5hGD6+YeDllQfLJnPSp3+ZIfyFfp
-         mqxkaO8IizSCyQj+Z6tWy97Wg/3aHjCoz3G+PwcJt8aUddiGvKNHYCVRwTBGbotfYUjo
-         +t+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696291307; x=1696896107;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FpZJ4jG228HhqsgeOr649mN6f50bmsnMKekSaM2MHAg=;
-        b=W7MVGWT7kSye/bGwkSPe8Y1CCjftuYoYc9I4oyoRXPTF38ZMlRXC6dlQFNzFE2xjg/
-         AwtCdkZqHrhRIXp15pVHuxmZmFFQOukNvu/UcHBwYAOJvzuyeayeoCLrkkKjQboInmFQ
-         p5N+TECc8modHdEYPC5X0cfnnFu4uimRYJWVy8hSBiU1d2OJecciisgubrlwxhFEC4m8
-         F8kEvINNnMkI2knuK1kUSD/7NVz5HuVism1sNG8E0Wp055qRD8xf0TI71a2QJRShXvTR
-         RHT7UFH5F4wrcTRJIf3PGMKouKEz9W9dMcCJ0y/mU/DUwZRUsd7BkO0NPtKKDOYR4fmd
-         Nc+A==
-X-Gm-Message-State: AOJu0YxA1XfmivuISqns6Oc1RV1FO8Evn8sIeVPWftWrh8FRXzSI+BmV
-        gk0GlNXevKUBffY5crImJbU6SpHMEiuTKMWBd9dBSQ==
-X-Google-Smtp-Source: AGHT+IGywEUhNzUqJOuUUYdDfZf/UAgEJ/4y4oWuq1V0ZfqUoBspq3U/PGqeEuG2MvCKXIbDmt4v/w==
-X-Received: by 2002:a05:6e02:ef0:b0:34c:abcb:97e8 with SMTP id j16-20020a056e020ef000b0034cabcb97e8mr11859254ilk.24.1696291307511;
-        Mon, 02 Oct 2023 17:01:47 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id s1-20020a639e01000000b0057ab7d42a4dsm28292pgd.86.2023.10.02.17.01.45
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Oct 2023 17:01:46 -0700 (PDT)
-Message-ID: <651b59ea.630a0220.5f3d4.01de@mx.google.com>
-Date:   Mon, 02 Oct 2023 17:01:46 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S229595AbjJCAKF (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 2 Oct 2023 20:10:05 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D2A9C6;
+        Mon,  2 Oct 2023 17:10:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1696291800;
+        bh=qxtEAZde4kFbj1tXH6gOwr/ukfnaFXq940/Y/rS7DbI=;
+        h=Date:From:To:Cc:Subject:From;
+        b=BGeedbwldabh6z6QF3gwU1NWR5TdET3CLkHcmT+oCs7uyug4oskTp9CJR7aEAOuax
+         if/JQ3NmFoZG0KvXqG5adK3yB/dOxIZ98zUNP3a/LsJSXH3pKKIdEwQKCyptVku9R4
+         uhNBOz8127rhdVwxb1ElMJZBjzIf++j5W6PkIkudKQY4pwYBZfQapBID+Any83e/9u
+         L5+MkoUO+7/A6xscCUXyNFgkBJIJwd6P3UI7JMHQEI8suJhOkyjaLiz0BWOCL/6Uja
+         4MG9b+jjAjsgV/4nPXCDqTzj+WfpRS+PqAQtRHlT8kLLnRCnDPMp+HebmKp28c5RB0
+         tKsjMSVVyrgBg==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Rzyr66nM4z4x2r;
+        Tue,  3 Oct 2023 11:09:58 +1100 (AEDT)
+Date:   Tue, 3 Oct 2023 11:09:57 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Dave Airlie <airlied@redhat.com>
+Cc:     Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Matt Roper <matthew.d.roper@intel.com>
+Subject: linux-next: manual merge of the drm-intel tree with the drm tree
+Message-ID: <20231003110957.34fc9483@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Tree: next
-X-Kernelci-Kernel: v6.6-rc4-285-g5819084cf40c
-X-Kernelci-Report-Type: build
-Subject: next/pending-fixes build: 8 builds: 0 failed, 8 passed,
- 4 warnings (v6.6-rc4-285-g5819084cf40c)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: multipart/signed; boundary="Sig_/vcTvl.sbAssNW7vb1Uc0pbr";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,100 +56,106 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes build: 8 builds: 0 failed, 8 passed, 4 warnings (v6.6-rc=
-4-285-g5819084cf40c)
+--Sig_/vcTvl.sbAssNW7vb1Uc0pbr
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
-rnel/v6.6-rc4-285-g5819084cf40c/
+Hi all,
 
-Tree: next
-Branch: pending-fixes
-Git Describe: v6.6-rc4-285-g5819084cf40c
-Git Commit: 5819084cf40c51313a953b510b9d5cdc3fb064b6
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Built: 8 unique architectures
+Today's linux-next merge of the drm-intel tree got a conflict in:
 
-Warnings Detected:
+  drivers/gpu/drm/i915/i915_drv.h
 
-arc:
+between commits:
 
-arm64:
+  c9517783060a ("drm/i915/dg2: Drop Wa_16011777198")
+  5a213086a025 ("drm/i915: Eliminate IS_MTL_GRAPHICS_STEP")
+  81af8abe6513 ("drm/i915: Eliminate IS_MTL_MEDIA_STEP")
 
-arm:
+from the drm tree and commits:
 
-i386:
+  e50086f3d313 ("drm/i915/dg2: Drop pre-production display workarounds")
+  213454b3af2e ("drm/i915: Eliminate IS_MTL_DISPLAY_STEP")
 
-mips:
+from the drm-intel tree.
 
-riscv:
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
-sparc:
-    sparc64_defconfig (gcc-10): 4 warnings
+--=20
+Cheers,
+Stephen Rothwell
 
-x86_64:
+diff --cc drivers/gpu/drm/i915/i915_drv.h
+index e994bd2d69db,cc229f08dfdb..000000000000
+--- a/drivers/gpu/drm/i915/i915_drv.h
++++ b/drivers/gpu/drm/i915/i915_drv.h
+@@@ -647,21 -653,33 +649,6 @@@ IS_SUBPLATFORM(const struct drm_i915_pr
+  #define IS_XEHPSDV_GRAPHICS_STEP(__i915, since, until) \
+  	(IS_XEHPSDV(__i915) && IS_GRAPHICS_STEP(__i915, since, until))
+ =20
+- #define IS_MTL_DISPLAY_STEP(__i915, since, until) \
+ -#define IS_MTL_GRAPHICS_STEP(__i915, variant, since, until) \
+ -	(IS_SUBPLATFORM(__i915, INTEL_METEORLAKE, INTEL_SUBPLATFORM_##variant) &=
+& \
+ -	 IS_GRAPHICS_STEP(__i915, since, until))
+ -
+ -#define IS_MTL_MEDIA_STEP(__i915, since, until) \
+--	(IS_METEORLAKE(__i915) && \
+- 	 IS_DISPLAY_STEP(__i915, since, until))
+ -	 IS_MEDIA_STEP(__i915, since, until))
+--
+- #define IS_DG2_DISPLAY_STEP(__i915, since, until) \
+- 	(IS_DG2(__i915) && \
+- 	 IS_DISPLAY_STEP(__i915, since, until))
+ -/*
+ - * DG2 hardware steppings are a bit unusual.  The hardware design was for=
+ked to
+ - * create three variants (G10, G11, and G12) which each have distinct
+ - * workaround sets.  The G11 and G12 forks of the DG2 design reset the GT
+ - * stepping back to "A0" for their first iterations, even though they're =
+more
+ - * similar to a G10 B0 stepping and G10 C0 stepping respectively in terms=
+ of
+ - * functionality and workarounds.  However the display stepping does not =
+reset
+ - * in the same manner --- a specific stepping like "B0" has a consistent
+ - * meaning regardless of whether it belongs to a G10, G11, or G12 DG2.
+ - *
+ - * TLDR:  All GT workarounds and stepping-specific logic must be applied =
+in
+ - * relation to a specific subplatform (G10/G11/G12), whereas display work=
+arounds
+ - * and stepping-specific logic will be applied with a general DG2-wide st=
+epping
+ - * number.
+ - */
+ -#define IS_DG2_GRAPHICS_STEP(__i915, variant, since, until) \
+ -	(IS_SUBPLATFORM(__i915, INTEL_DG2, INTEL_SUBPLATFORM_##variant) && \
+ -	 IS_GRAPHICS_STEP(__i915, since, until))
+--
+  #define IS_PVC_BD_STEP(__i915, since, until) \
+  	(IS_PONTEVECCHIO(__i915) && \
+  	 IS_BASEDIE_STEP(__i915, since, until))
 
+--Sig_/vcTvl.sbAssNW7vb1Uc0pbr
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-Warnings summary:
+-----BEGIN PGP SIGNATURE-----
 
-    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
-tion failed, symbol will not be versioned.
-    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
--Wcpp]
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmUbW9UACgkQAVBC80lX
+0Gw26wf9HbL90IKPELoLLlVbG2JcbbZd08SCv86GTf2FIg+fvKLZSEZa4L5eyE+u
+VF2/6s177nCNBrWLbgyXu5NAJy33wOYu4xsn3lmEKeN2TxuXuaGbf956WJFqs4s6
++CbYsFEREk2lLTs7X4VhB5WwaWpHxzDd5x7prqZm26ELUS1iiSDEZh33SQRD/n/j
+Tqs10RiHUxOn4XQR3bjm0LCJS6/i59IEYJ757Vz/EzQ3TmJe8By1HDn6Cr2ccr/c
+Xwc5rLA4+m4yjgqgXBBnVq0Z85ewuFIbYmhe1+jQ3+NnLyUwRqy+mmgRZMQrgTOK
+RrxubzQynv20tGptEK6dL/H3ZiJs3w==
+=anKz
+-----END PGP SIGNATURE-----
 
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----
-For more info write to <info@kernelci.org>
+--Sig_/vcTvl.sbAssNW7vb1Uc0pbr--

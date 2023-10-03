@@ -2,66 +2,94 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA96F7B6A6C
-	for <lists+linux-next@lfdr.de>; Tue,  3 Oct 2023 15:24:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA36E7B6A81
+	for <lists+linux-next@lfdr.de>; Tue,  3 Oct 2023 15:27:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232479AbjJCNYy (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 3 Oct 2023 09:24:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57598 "EHLO
+        id S237422AbjJCN1e (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 3 Oct 2023 09:27:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232421AbjJCNYx (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 3 Oct 2023 09:24:53 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E87B4A3;
-        Tue,  3 Oct 2023 06:24:50 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDCC4C433C7;
-        Tue,  3 Oct 2023 13:24:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1696339490;
-        bh=CxIkwypfvU3z9vygcWVVY8BLzFLCggWhUa897wUjQuw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mFtKp3ziuL2SwnrsuKpC1Vb9fS1fyG4AE/0ohTmt1ckKJfoZ84PfM9GTsOwSiRqGl
-         WqKcMz5Azhe9j7okYGNJRZOqSNwUFw3dhLP5R060pk9/EIQW4cLGgMJjxwk3CAaG1H
-         E5vH0txHpuDKCQGZQzXnqyaPkPxZoZDdosc2jGDRb3XjgBcmacyWuBJNn3n2LWsM8G
-         sianjMN9J9ez3/lPf+uHTYw4fxR9YyX0Gh4qavI6no4QqwnWvwoPk+LY4RKWdDVfjy
-         Rt8o/IUiunpsZHxVREeU9/psOyva7fYrbAu5YLVYb1Ul6c7Ek8RdPU3bIwnPuKMrye
-         Z4oebvtYlhJvg==
-Date:   Tue, 3 Oct 2023 15:24:46 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        with ESMTP id S237436AbjJCN1b (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 3 Oct 2023 09:27:31 -0400
+Received: from out-206.mta1.migadu.com (out-206.mta1.migadu.com [95.215.58.206])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31B9810D4
+        for <linux-next@vger.kernel.org>; Tue,  3 Oct 2023 06:27:18 -0700 (PDT)
+Date:   Tue, 3 Oct 2023 09:27:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1696339636;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Mjv6DuwAujLXffMtSe4op7ceXjyiGwTzOh9m+cMi8Vs=;
+        b=e771mcc5uBUlgfXKpvdmXwBVHpXjNKLgMN5fgedhVWgWdr2nalKTR+mIV0ADMsTo70/CjF
+        /w7jkesimDLcpMACnxNZZynTcxvUjqJ7JElwbaOx6/KsW9JuFhB5GJweYT3W+PrjkOHlER
+        KJOlGI0tg8lEXk9+XF8/lne5ltnUhQU=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Kent Overstreet <kent.overstreet@linux.dev>
+To:     Jan Kara <jack@suse.cz>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Christian Brauner <brauner@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
 Subject: Re: linux-next: build failure after merge of the vfs-brauner tree
-Message-ID: <20231003-kalziumreich-besonderen-2f067cc50606@brauner>
-References: <20231003093005.66556fcb@canb.auug.org.au>
+Message-ID: <20231003132711.djftyh7vltljy2hh@moria.home.lan>
+References: <20230928105443.1b1ad98c@canb.auug.org.au>
+ <20231002112142.bfjj54ikijf4iwfr@quack3>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231003093005.66556fcb@canb.auug.org.au>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20231002112142.bfjj54ikijf4iwfr@quack3>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Oct 03, 2023 at 09:30:05AM +1100, Stephen Rothwell wrote:
-> Hi all,
+On Mon, Oct 02, 2023 at 01:21:42PM +0200, Jan Kara wrote:
+> Hi!
 > 
-> After merging the vfs-brauner tree, today's linux-next build (powerpc
-> ppc64_defconfig) failed like this:
+> On Thu 28-09-23 10:54:43, Stephen Rothwell wrote:
+> > After merging the vfs-brauner tree, today's linux-next build (x86_64
+> > allmodconfig) failed like this:
+> > 
+> > fs/bcachefs/super-io.c: In function 'bch2_free_super':
+> > fs/bcachefs/super-io.c:166:17: error: implicit declaration of function 'blkdev_put'; did you mean 'bdi_put'? [-Werror=implicit-function-declaration]
+> >   166 |                 blkdev_put(sb->bdev, sb->holder);
+> >       |                 ^~~~~~~~~~
+> >       |                 bdi_put
+> > fs/bcachefs/super-io.c: In function 'bch2_read_super':
+> > fs/bcachefs/super-io.c:687:20: error: implicit declaration of function 'blkdev_get_by_path'; did you mean 'bdev_open_by_path'? [-Werror=implicit-function-declaration]
+> >   687 |         sb->bdev = blkdev_get_by_path(path, sb->mode, sb->holder, &bch2_sb_handle_bdev_ops);
+> >       |                    ^~~~~~~~~~~~~~~~~~
+> >       |                    bdev_open_by_path
+> > fs/bcachefs/super-io.c:687:18: error: assignment to 'struct block_device *' from 'int' makes pointer from integer without a cast [-Werror=int-conversion]
+> >   687 |         sb->bdev = blkdev_get_by_path(path, sb->mode, sb->holder, &bch2_sb_handle_bdev_ops);
+> >       |                  ^
+> > fs/bcachefs/super-io.c:693:26: error: assignment to 'struct block_device *' from 'int' makes pointer from integer without a cast [-Werror=int-conversion]
+> >   693 |                 sb->bdev = blkdev_get_by_path(path, sb->mode, sb->holder, &bch2_sb_handle_bdev_ops);
+> >       |                          ^
+> > cc1: all warnings being treated as errors
+> > 
+> > Caused by commit
+> > 
+> >   953863a5a2ff ("block: Remove blkdev_get_by_*() functions")
+> > 
+> > interacting with commit(s) from the bcachefs tree.
+> > 
+> > I would have reverted that commit for today, except I used the old
+> > vfs-brauner tree due to another build failure.  Can we just delay this
+> > one commit until after bcachefs has been converted (and any other
+> > references that may be added are fixed)?
 > 
-> ERROR: modpost: "fget_files_rcu" [arch/powerpc/platforms/cell/spufs/spufs.ko] undefined!
-> 
-> Caused by commit
-> 
->   af66b51563ad ("file: convert to SLAB_TYPESAFE_BY_RCU")
-> 
-> I applied the following fix up patch.
+> Yeah, I guess removing the final commit is the easiest solution at this
+> point. It complicates a bit the series to disallow writing to mounted block
+> devices which bases on this - either I have to pospone that to the next
+> cycle after we convert bcachefs or I have to find a way for the old
+> blkdev_get_by_path() API and the new functionality to coexist. I'll think
+> about that.
 
-Thank you. On vacation this week (I saw Jan already informed you.) but I
-fixed this up by removing fget_files_rcu() exposure in a header
-completely.
+Jan, Christain - what do you need from me for the conversion?

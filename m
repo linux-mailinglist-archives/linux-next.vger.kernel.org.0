@@ -2,95 +2,97 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CECA7B769D
-	for <lists+linux-next@lfdr.de>; Wed,  4 Oct 2023 04:33:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DA9B7B76B5
+	for <lists+linux-next@lfdr.de>; Wed,  4 Oct 2023 04:50:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232350AbjJDCdO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 3 Oct 2023 22:33:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48146 "EHLO
+        id S241198AbjJDCuj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 3 Oct 2023 22:50:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229654AbjJDCdO (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 3 Oct 2023 22:33:14 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D239AC;
-        Tue,  3 Oct 2023 19:33:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1696386788;
-        bh=JzrQrv8Zf7NOIYh0RJOeFHtXquOahUcLeF1fcCrAuKE=;
-        h=Date:From:To:Cc:Subject:From;
-        b=IlC0iaMwApXSV/qbqkr9p9cuRUdnBsGGTE3FnGL9pIW73l/TTeOzqfNbZBqQRXmZA
-         6HkmCfgdwWRm/wG/KtfsQNY53YvP06B4aDqdT8n5RJUNIfyqe52ciYrFaoFJu+Mjek
-         nnoucE5yGqlyDj0LGSsh2NTOiqxjuRJzXEWw9D50ylkqaBSH2GNyjzFAODrbvFIiez
-         fiCqkdXlOCNvCuLSkYtf7A2s1J15p49TTr8jkwY9yHXPnz029WmbJqurCOsMjaI/7L
-         IdsfcFC6pJA5suUb/XZQt4huuo3BjOgnDT80oqSKQSvHFmjafb++9BW3wfoSgufRNq
-         DOfO8DgMBDkzg==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4S0dyq4yTbz4xQT;
-        Wed,  4 Oct 2023 13:33:07 +1100 (AEDT)
-Date:   Wed, 4 Oct 2023 13:33:06 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Jianlin Li <ljianlin99@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>,
+        with ESMTP id S241070AbjJDCuf (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 3 Oct 2023 22:50:35 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BDEFAF
+        for <linux-next@vger.kernel.org>; Tue,  3 Oct 2023 19:50:31 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1c364fb8a4cso13892735ad.1
+        for <linux-next@vger.kernel.org>; Tue, 03 Oct 2023 19:50:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1696387830; x=1696992630; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=BOKVkRIlUClvH6h3CIZ9FG68iZnhspFEEi3dJ7aEfBQ=;
+        b=W9+GdKXGbiPLPbfqZZoL6XVKh1yFhaXDa/Md5Nht2t+nYIK1Q+CwkkwooLsXIMp624
+         URJCKtT4VRXCphDcdPAaDFIRZK3MDL0ywWyrGIPWbFwA4IcsAKtTNCjLQ9TTh5Xe6Wd+
+         GZ3bEMpmf/k4r/8IAU3ZTMwWyRRYNjm1iy9hI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696387830; x=1696992630;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BOKVkRIlUClvH6h3CIZ9FG68iZnhspFEEi3dJ7aEfBQ=;
+        b=QXXosKWZPqhbBQPubU7eidkxz/+70U1Lcpzlu+Fyjd9olMUhBlZBe6m4/8Q1hd2kTg
+         yOBNZjP24ley+24d2HmN5yuUzx0dPSE+VMvQOBtXYWml1kZPMkuJxlGqyBfhOrV1oPTb
+         qTwoiM7J9z4VlR7qlSEDbd16/OKK98p95At7XNrV/kxeaDGoDhcYj92Py2BVU0rPCfFT
+         sOBGuM12zwiDVKBrrhxev1M6GtmeKjBuAM7CEvZMP6wLwCaFGlzD4zsfnLyi5OKGoa2X
+         IgkNYuF0uTQjpPHQMZnKm+sELptyVxfkODDrZotZBZDM3Zpz4aswPlYtL+JOD/JpYVxb
+         G63g==
+X-Gm-Message-State: AOJu0Yzvhr5pYN/ZXhtyvm8pDzVtNEkQXJVYt1zKYcAF3kUjUeM3Lu9N
+        v3Ft0Q3/F+ADWZ2exL8b8FLjyA==
+X-Google-Smtp-Source: AGHT+IFddbMh8XutvwSJLmRf9/pBtZw2ENY3tPF1YiGdt60Sf1BbxQalDpER/veXlhndYyU4KGa9GQ==
+X-Received: by 2002:a17:903:4284:b0:1ab:11c8:777a with SMTP id ju4-20020a170903428400b001ab11c8777amr1325242plb.13.1696387830493;
+        Tue, 03 Oct 2023 19:50:30 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id c3-20020a170902d90300b001c731b62403sm2349948plz.218.2023.10.03.19.50.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Oct 2023 19:50:29 -0700 (PDT)
+Date:   Tue, 3 Oct 2023 19:50:28 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Sebastian Ott <sebott@redhat.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patch in the tip tree
-Message-ID: <20231004133306.3285d8de@canb.auug.org.au>
+Subject: Re: linux-next: build failure after merge of the execve tree
+Message-ID: <202310031950.E698038489@keescook>
+References: <20231003133522.310bda60@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/7r=e_5vTFARqEtAR87ECHq/";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231003133522.310bda60@canb.auug.org.au>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/7r=e_5vTFARqEtAR87ECHq/
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, Oct 03, 2023 at 01:35:22PM +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the execve tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+> 
+> fs/binfmt_elf.c: In function 'load_elf_library':
+> fs/binfmt_elf.c:1323:37: error: unused variable 'len' [-Werror=unused-variable]
+>  1323 |         unsigned long elf_bss, bss, len;
+>       |                                     ^~~
+> fs/binfmt_elf.c:1323:32: error: unused variable 'bss' [-Werror=unused-variable]
+>  1323 |         unsigned long elf_bss, bss, len;
+>       |                                ^~~
+> fs/binfmt_elf.c:1323:23: error: unused variable 'elf_bss' [-Werror=unused-variable]
+>  1323 |         unsigned long elf_bss, bss, len;
+>       |                       ^~~~~~~
+> cc1: all warnings being treated as errors
+> 
+> Caused by commit
+> 
+>   f2a1e5fab9ae ("binfmt_elf: Use elf_load() for library")
+> 
+> I have used the execve tree from next-20230929 for today.
 
-Hi all,
+Whoops! Fixed now. Thanks. :)
 
-The following commit is also in the jc_docs tree as a different commit
-(but the same patch):
-
-  c53cbc54ccff ("x86/iommu/docs: Update AMD IOMMU specification document UR=
-L")
-
-This is commit
-
-  73c5f76ecbdb ("x86/iommu/docs: Update AMD IOMMU specification document UR=
-L")
-
-in the jc_docs tree.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/7r=e_5vTFARqEtAR87ECHq/
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmUczuIACgkQAVBC80lX
-0GycPggAo09fJ/GO1yCFcBwETCAYYZNdbHCeAYNpW5ybvUiHgxgnCvK9SglExbry
-+iBHN7y27QWG26zzkB8uQpfrSYfw2nPyjSw9Z5F3523TStgEyNv0L9LcWajyx0aZ
-APwQ85uoHPxCMBkt/tP8GuUBvre4XZ9GRu9jhzH+ZwiRyJnjmkdOCzcJVDBK5Eps
-sipqtTeQL0gRfoEn1lIWWWvIQGhFtkCWjWtkpFKctkLNy6oYesUe0VpaAPRGrJXG
-ilhtxOLTFMg/6d9Am3vEr9HyNaA3cNtXqScN1zc4Z28ceRQ1kiFUatyOBS0JybsP
-rX1CVBAIdU8+tudG/tQbHgiYEznb/A==
-=TJa7
------END PGP SIGNATURE-----
-
---Sig_/7r=e_5vTFARqEtAR87ECHq/--
+-- 
+Kees Cook

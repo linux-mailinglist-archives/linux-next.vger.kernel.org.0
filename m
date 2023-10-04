@@ -2,221 +2,1375 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAB517B7820
-	for <lists+linux-next@lfdr.de>; Wed,  4 Oct 2023 08:47:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E35DC7B7866
+	for <lists+linux-next@lfdr.de>; Wed,  4 Oct 2023 09:11:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241417AbjJDGrp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 4 Oct 2023 02:47:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42954 "EHLO
+        id S232647AbjJDHLv (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 4 Oct 2023 03:11:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229657AbjJDGro (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 4 Oct 2023 02:47:44 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BAA0A6;
-        Tue,  3 Oct 2023 23:47:41 -0700 (PDT)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39452s6p012071;
-        Wed, 4 Oct 2023 06:47:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=1P77PCjT/nTDPRYYRwam8BeE5hCeXlo/kuK5TzW+0Cg=;
- b=EgVosTCNd5O9Sp64rsjrYHQHRjCrrIFm0Lo+TNyappL2wnvC4RrhfZ/P28Q4j4cznzvE
- AbKAzokAOtwgEo2RO2fIhCAzZQCNck32NOSwuFLjZ14d/VnSCNYj6Wllb7CikG1+HsIS
- /NKFIc+mrL14vCpeFwgCA2aVmpnQELT9o+1la+rBFgbMGdGtelugTsCIni5wQhaUYwI8
- 0mauL//WFgqEjkDxNTAU3fEyaI88rNSogffDGGDLQrb00J4zqt1ye11CyPsr82S3AxxB
- dvgrakyXsALSbndkDboMMT58wY/qLxe1HEzYviyBV7E2KYeLWep5GthObVaLyfTCc2VT jQ== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3tgynh8c9u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 04 Oct 2023 06:47:33 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3946lWhm027804
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 4 Oct 2023 06:47:32 GMT
-Received: from [10.214.66.58] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Tue, 3 Oct
- 2023 23:47:30 -0700
-Message-ID: <e26b26ff-9e88-4455-9172-1afb520583e7@quicinc.com>
-Date:   Wed, 4 Oct 2023 12:17:27 +0530
+        with ESMTP id S232624AbjJDHLv (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 4 Oct 2023 03:11:51 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99B28AB
+        for <linux-next@vger.kernel.org>; Wed,  4 Oct 2023 00:11:45 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-694ed84c981so1380743b3a.3
+        for <linux-next@vger.kernel.org>; Wed, 04 Oct 2023 00:11:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1696403504; x=1697008304; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=QD+hfsr6DvU+m1Wg0FpAQe/H++2IvwBuCepWVewJZ9o=;
+        b=fAI1USJzXWzBHZZ1X0RG2JaTOv92VJCoBoa7A/lUIdqSAcdea3nZamjsIG9vqkt3/1
+         sOWGbExVf0BkGcbIwtVUCqoXZxk7EZiRrIkPUriZpEMHWNo/lliWxuQnZiofI1pwAB0P
+         RTY4o+RO7IdhM0t69AD0hwti2fEq6So5O1RBLDwOc5ih4osuqL258aElSnyN5o0Ghoo8
+         w7tDiOB0LAvsuttszTonmHJXawGXQe23Dw/3/CIPPNaVjhqG+8CtInc63Y1lCQn4UR6x
+         H259YJU0CaGujcOQwjaoPMO4y20KBOvWAzImLQ1bonOx4nUyjLXd8cdPwSxRmvYDK+0k
+         GS0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696403504; x=1697008304;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QD+hfsr6DvU+m1Wg0FpAQe/H++2IvwBuCepWVewJZ9o=;
+        b=dRoPwenFWz5143S81g9+YmSDrgcnObx5XCf1I+8CcC3uTja+hOGT3w3wEwuFu/Yyd7
+         dff6rS/mSaCAOhMkhE5lAkPnjVssSZEYhJ3PyWebEhgvm0XMkfPpMUFlZ+jTsrX+kjW9
+         jk2kexKTSTTnXtMR5uLdx8ZJ0piVOQelV1hBhGuO4l21f7n3NRV1hGx/ZGcK1vTaR3yP
+         55gpJy9zTy/39l81cDO6vAoRrjJygqntKzveei6IILsc16jr+rJ2ZrkAeicSqG1LkeCU
+         eD9S1vb4wQP7b74LDDRY328/LktYxsxw/pyhaNYW0y/Yldf5qaInoeo1GHmHL+IbfvTo
+         EFJQ==
+X-Gm-Message-State: AOJu0YzCQim508kje3iJixTqCeBxFogfIPvx5GYHRn5e2nHJ4GSKVu3h
+        GBpGYFEY3zEl9vbmfhEpjbdQB/On5twB377oNzYtOw==
+X-Google-Smtp-Source: AGHT+IG07w8KQ94Xi++r8mnFVmrAco24K5UNrQyXUL5XN17U/22ss8x7gfUW6QnC4yhnhT/n6awA+g==
+X-Received: by 2002:a05:6a00:244b:b0:68c:3f2:6007 with SMTP id d11-20020a056a00244b00b0068c03f26007mr1746200pfj.8.1696403503685;
+        Wed, 04 Oct 2023 00:11:43 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id l1-20020a639841000000b0057406c4306fsm2609677pgo.12.2023.10.04.00.11.41
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Oct 2023 00:11:42 -0700 (PDT)
+Message-ID: <651d102e.630a0220.e2b5a.734e@mx.google.com>
+Date:   Wed, 04 Oct 2023 00:11:42 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: build failure after merge of the usb tree
-Content-Language: en-US
-To:     Greg KH <greg@kroah.com>, Stephen Rothwell <sfr@canb.auug.org.au>
-CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20231004132247.01c3bfeb@canb.auug.org.au>
- <2023100410-concave-explore-95bf@gregkh>
-From:   Rohit Agarwal <quic_rohiagar@quicinc.com>
-In-Reply-To: <2023100410-concave-explore-95bf@gregkh>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: KVQvEfD5EUeMUfmXt63sqF8iZxc0zOkF
-X-Proofpoint-ORIG-GUID: KVQvEfD5EUeMUfmXt63sqF8iZxc0zOkF
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-10-04_01,2023-10-02_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 spamscore=0
- priorityscore=1501 impostorscore=0 malwarescore=0 mlxscore=0
- mlxlogscore=807 clxscore=1011 adultscore=0 lowpriorityscore=0 bulkscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2309180000 definitions=main-2310040047
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: master
+X-Kernelci-Tree: next
+X-Kernelci-Kernel: next-20231004
+X-Kernelci-Report-Type: build
+Subject: next/master build: 184 builds: 3 failed, 181 passed, 7 errors,
+ 79 warnings (next-20231004)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+next/master build: 184 builds: 3 failed, 181 passed, 7 errors, 79 warnings =
+(next-20231004)
 
-On 10/4/2023 12:13 PM, Greg KH wrote:
-> On Wed, Oct 04, 2023 at 01:22:47PM +1100, Stephen Rothwell wrote:
->> Hi all,
->>
->> After merging the usb tree, today's linux-next build (x86_64 allmodconfig)
->> failed like this:
->>
->> drivers/phy/qualcomm/phy-qcom-qmp-usb.c:156:43: error: 'QPHY_V6_PCS_SW_RESET' undeclared here (not in a function); did you mean 'QPHY_V2_PCS_SW_RESET'?
->>    156 |         [QPHY_SW_RESET]                 = QPHY_V6_PCS_SW_RESET,
->>        |                                           ^~~~~~~~~~~~~~~~~~~~
->>        |                                           QPHY_V2_PCS_SW_RESET
->> drivers/phy/qualcomm/phy-qcom-qmp-usb.c:157:43: error: 'QPHY_V6_PCS_START_CONTROL' undeclared here (not in a function); did you mean 'QPHY_V3_PCS_START_CONTROL'?
->>    157 |         [QPHY_START_CTRL]               = QPHY_V6_PCS_START_CONTROL,
->>        |                                           ^~~~~~~~~~~~~~~~~~~~~~~~~
->>        |                                           QPHY_V3_PCS_START_CONTROL
->> drivers/phy/qualcomm/phy-qcom-qmp-usb.c:158:43: error: 'QPHY_V6_PCS_PCS_STATUS1' undeclared here (not in a function); did you mean 'QPHY_V5_PCS_PCS_STATUS1'?
->>    158 |         [QPHY_PCS_STATUS]               = QPHY_V6_PCS_PCS_STATUS1,
->>        |                                           ^~~~~~~~~~~~~~~~~~~~~~~
->>        |                                           QPHY_V5_PCS_PCS_STATUS1
->> drivers/phy/qualcomm/phy-qcom-qmp-usb.c:159:43: error: 'QPHY_V6_PCS_POWER_DOWN_CONTROL' undeclared here (not in a function); did you mean 'QPHY_V3_PCS_POWER_DOWN_CONTROL'?
->>    159 |         [QPHY_PCS_POWER_DOWN_CONTROL]   = QPHY_V6_PCS_POWER_DOWN_CONTROL,
->>        |                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->>        |                                           QPHY_V3_PCS_POWER_DOWN_CONTROL
->> drivers/phy/qualcomm/phy-qcom-qmp-usb.c:162:43: error: 'QPHY_V6_PCS_USB3_AUTONOMOUS_MODE_CTRL' undeclared here (not in a function); did you mean 'QPHY_V5_PCS_USB3_AUTONOMOUS_MODE_CTRL'?
->>    162 |         [QPHY_PCS_AUTONOMOUS_MODE_CTRL] = QPHY_V6_PCS_USB3_AUTONOMOUS_MODE_CTRL,
->>        |                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->>        |                                           QPHY_V5_PCS_USB3_AUTONOMOUS_MODE_CTRL
->> drivers/phy/qualcomm/phy-qcom-qmp-usb.c:163:44: error: 'QPHY_V6_PCS_USB3_LFPS_RXTERM_IRQ_CLEAR' undeclared here (not in a function); did you mean 'QPHY_V5_PCS_USB3_LFPS_RXTERM_IRQ_CLEAR'?
->>    163 |         [QPHY_PCS_LFPS_RXTERM_IRQ_CLEAR] = QPHY_V6_PCS_USB3_LFPS_RXTERM_IRQ_CLEAR,
->>        |                                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->>        |                                            QPHY_V5_PCS_USB3_LFPS_RXTERM_IRQ_CLEAR
->> drivers/phy/qualcomm/phy-qcom-qmp-usb.c:991:26: error: 'QPHY_V6_PCS_LOCK_DETECT_CONFIG1' undeclared here (not in a function); did you mean 'QPHY_V4_PCS_LOCK_DETECT_CONFIG1'?
->>    991 |         QMP_PHY_INIT_CFG(QPHY_V6_PCS_LOCK_DETECT_CONFIG1, 0xc4),
->>        |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/phy/qualcomm/phy-qcom-qmp-usb.c:78:27: note: in definition of macro 'QMP_PHY_INIT_CFG'
->>     78 |                 .offset = o,            \
->>        |                           ^
->> drivers/phy/qualcomm/phy-qcom-qmp-usb.c:992:26: error: 'QPHY_V6_PCS_LOCK_DETECT_CONFIG2' undeclared here (not in a function); did you mean 'QPHY_V3_PCS_LOCK_DETECT_CONFIG2'?
->>    992 |         QMP_PHY_INIT_CFG(QPHY_V6_PCS_LOCK_DETECT_CONFIG2, 0x89),
->>        |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/phy/qualcomm/phy-qcom-qmp-usb.c:78:27: note: in definition of macro 'QMP_PHY_INIT_CFG'
->>     78 |                 .offset = o,            \
->>        |                           ^
->> drivers/phy/qualcomm/phy-qcom-qmp-usb.c:993:26: error: 'QPHY_V6_PCS_LOCK_DETECT_CONFIG3' undeclared here (not in a function); did you mean 'QPHY_V4_PCS_LOCK_DETECT_CONFIG3'?
->>    993 |         QMP_PHY_INIT_CFG(QPHY_V6_PCS_LOCK_DETECT_CONFIG3, 0x20),
->>        |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/phy/qualcomm/phy-qcom-qmp-usb.c:78:27: note: in definition of macro 'QMP_PHY_INIT_CFG'
->>     78 |                 .offset = o,            \
->>        |                           ^
->> drivers/phy/qualcomm/phy-qcom-qmp-usb.c:994:26: error: 'QPHY_V6_PCS_LOCK_DETECT_CONFIG6' undeclared here (not in a function); did you mean 'QPHY_V4_PCS_LOCK_DETECT_CONFIG6'?
->>    994 |         QMP_PHY_INIT_CFG(QPHY_V6_PCS_LOCK_DETECT_CONFIG6, 0x13),
->>        |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/phy/qualcomm/phy-qcom-qmp-usb.c:78:27: note: in definition of macro 'QMP_PHY_INIT_CFG'
->>     78 |                 .offset = o,            \
->>        |                           ^
->> drivers/phy/qualcomm/phy-qcom-qmp-usb.c:997:26: error: 'QPHY_V6_PCS_RCVR_DTCT_DLY_P1U2_L' undeclared here (not in a function); did you mean 'QPHY_V3_PCS_RCVR_DTCT_DLY_P1U2_L'?
->>    997 |         QMP_PHY_INIT_CFG(QPHY_V6_PCS_RCVR_DTCT_DLY_P1U2_L, 0xe7),
->>        |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/phy/qualcomm/phy-qcom-qmp-usb.c:78:27: note: in definition of macro 'QMP_PHY_INIT_CFG'
->>     78 |                 .offset = o,            \
->>        |                           ^
->> drivers/phy/qualcomm/phy-qcom-qmp-usb.c:998:26: error: 'QPHY_V6_PCS_RCVR_DTCT_DLY_P1U2_H' undeclared here (not in a function); did you mean 'QPHY_V3_PCS_RCVR_DTCT_DLY_P1U2_H'?
->>    998 |         QMP_PHY_INIT_CFG(QPHY_V6_PCS_RCVR_DTCT_DLY_P1U2_H, 0x03),
->>        |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/phy/qualcomm/phy-qcom-qmp-usb.c:78:27: note: in definition of macro 'QMP_PHY_INIT_CFG'
->>     78 |                 .offset = o,            \
->>        |                           ^
->> drivers/phy/qualcomm/phy-qcom-qmp-usb.c:999:26: error: 'QPHY_V6_PCS_CDR_RESET_TIME' undeclared here (not in a function); did you mean 'QPHY_V4_PCS_CDR_RESET_TIME'?
->>    999 |         QMP_PHY_INIT_CFG(QPHY_V6_PCS_CDR_RESET_TIME, 0x0a),
->>        |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/phy/qualcomm/phy-qcom-qmp-usb.c:78:27: note: in definition of macro 'QMP_PHY_INIT_CFG'
->>     78 |                 .offset = o,            \
->>        |                           ^
->> drivers/phy/qualcomm/phy-qcom-qmp-usb.c:1000:26: error: 'QPHY_V6_PCS_ALIGN_DETECT_CONFIG1' undeclared here (not in a function); did you mean 'QPHY_V5_PCS_ALIGN_DETECT_CONFIG1'?
->>   1000 |         QMP_PHY_INIT_CFG(QPHY_V6_PCS_ALIGN_DETECT_CONFIG1, 0x88),
->>        |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/phy/qualcomm/phy-qcom-qmp-usb.c:78:27: note: in definition of macro 'QMP_PHY_INIT_CFG'
->>     78 |                 .offset = o,            \
->>        |                           ^
->> drivers/phy/qualcomm/phy-qcom-qmp-usb.c:1001:26: error: 'QPHY_V6_PCS_ALIGN_DETECT_CONFIG2' undeclared here (not in a function); did you mean 'QPHY_V5_PCS_ALIGN_DETECT_CONFIG2'?
->>   1001 |         QMP_PHY_INIT_CFG(QPHY_V6_PCS_ALIGN_DETECT_CONFIG2, 0x13),
->>        |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/phy/qualcomm/phy-qcom-qmp-usb.c:78:27: note: in definition of macro 'QMP_PHY_INIT_CFG'
->>     78 |                 .offset = o,            \
->>        |                           ^
->> drivers/phy/qualcomm/phy-qcom-qmp-usb.c:1003:26: error: 'QPHY_V6_PCS_EQ_CONFIG1' undeclared here (not in a function); did you mean 'QPHY_V4_PCS_EQ_CONFIG1'?
->>   1003 |         QMP_PHY_INIT_CFG(QPHY_V6_PCS_EQ_CONFIG1, 0x4b),
->>        |                          ^~~~~~~~~~~~~~~~~~~~~~
->> drivers/phy/qualcomm/phy-qcom-qmp-usb.c:78:27: note: in definition of macro 'QMP_PHY_INIT_CFG'
->>     78 |                 .offset = o,            \
->>        |                           ^
->> drivers/phy/qualcomm/phy-qcom-qmp-usb.c:1004:26: error: 'QPHY_V6_PCS_EQ_CONFIG5' undeclared here (not in a function); did you mean 'QPHY_V4_PCS_EQ_CONFIG5'?
->>   1004 |         QMP_PHY_INIT_CFG(QPHY_V6_PCS_EQ_CONFIG5, 0x10),
->>        |                          ^~~~~~~~~~~~~~~~~~~~~~
->> drivers/phy/qualcomm/phy-qcom-qmp-usb.c:78:27: note: in definition of macro 'QMP_PHY_INIT_CFG'
->>     78 |                 .offset = o,            \
->>        |                           ^
->> drivers/phy/qualcomm/phy-qcom-qmp-usb.c:1008:26: error: 'QPHY_V6_PCS_USB3_LFPS_DET_HIGH_COUNT_VAL' undeclared here (not in a function); did you mean 'QPHY_V5_PCS_USB3_LFPS_DET_HIGH_COUNT_VAL'?
->>   1008 |         QMP_PHY_INIT_CFG(QPHY_V6_PCS_USB3_LFPS_DET_HIGH_COUNT_VAL, 0xf8),
->>        |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/phy/qualcomm/phy-qcom-qmp-usb.c:78:27: note: in definition of macro 'QMP_PHY_INIT_CFG'
->>     78 |                 .offset = o,            \
->>        |                           ^
->> drivers/phy/qualcomm/phy-qcom-qmp-usb.c:1009:26: error: 'QPHY_V6_PCS_USB3_RXEQTRAINING_DFE_TIME_S2' undeclared here (not in a function); did you mean 'QPHY_V4_PCS_USB3_RXEQTRAINING_DFE_TIME_S2'?
->>   1009 |         QMP_PHY_INIT_CFG(QPHY_V6_PCS_USB3_RXEQTRAINING_DFE_TIME_S2, 0x07),
->>        |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/phy/qualcomm/phy-qcom-qmp-usb.c:78:27: note: in definition of macro 'QMP_PHY_INIT_CFG'
->>     78 |                 .offset = o,            \
->>        |                           ^
->> drivers/phy/qualcomm/phy-qcom-qmp-usb.c:1010:26: error: 'QPHY_V6_PCS_USB3_RCVR_DTCT_DLY_U3_L' undeclared here (not in a function); did you mean 'QPHY_V4_PCS_USB3_RCVR_DTCT_DLY_U3_L'?
->>   1010 |         QMP_PHY_INIT_CFG(QPHY_V6_PCS_USB3_RCVR_DTCT_DLY_U3_L, 0x40),
->>        |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/phy/qualcomm/phy-qcom-qmp-usb.c:78:27: note: in definition of macro 'QMP_PHY_INIT_CFG'
->>     78 |                 .offset = o,            \
->>        |                           ^
->> drivers/phy/qualcomm/phy-qcom-qmp-usb.c:1011:26: error: 'QPHY_V6_PCS_USB3_RCVR_DTCT_DLY_U3_H' undeclared here (not in a function); did you mean 'QPHY_V5_PCS_USB3_RCVR_DTCT_DLY_U3_H'?
->>   1011 |         QMP_PHY_INIT_CFG(QPHY_V6_PCS_USB3_RCVR_DTCT_DLY_U3_H, 0x00),
->>        |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/phy/qualcomm/phy-qcom-qmp-usb.c:78:27: note: in definition of macro 'QMP_PHY_INIT_CFG'
->>     78 |                 .offset = o,            \
->>        |                           ^
->>
->> Caused by commit
->>
->>    685dbd1b2306 ("phy: qcom-qmp-usb: Add Qualcomm SDX75 USB3 PHY support")
->>
->> I have used the usb tree from next-20231003 for today.
-> Thanks, I've now reverted this from my tree.
-As mentioned in the cover letter of these changes, the series was 
-dependent on the other submitted series [1], [2].
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20231004/
 
-Can you also pick these series [1], [2] to resolve this build failures.
-[1] 
-https://lore.kernel.org/all/20230911203842.778411-1-dmitry.baryshkov@linaro.org/
-[2] 
-https://lore.kernel.org/linux-phy/20230824211952.1397699-1-dmitry.baryshkov@linaro.org/
+Tree: next
+Branch: master
+Git Describe: next-20231004
+Git Commit: 33b64befb1a28bca3f5a9ed9807d2f87e976c63a
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Built: 8 unique architectures
 
-Thanks,
-Rohit.
->
-> greg k-h
+Build Failures Detected:
+
+arc:
+    haps_hs_smp_defconfig+kselftest: (gcc-10) FAIL
+
+arm:
+    rpc_defconfig: (gcc-10) FAIL
+
+mips:
+    cavium_octeon_defconfig: (gcc-10) FAIL
+
+Errors and Warnings Detected:
+
+arc:
+    haps_hs_smp_defconfig+kselftest (gcc-10): 1 error
+
+arm64:
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (gcc-10): 3 warnings
+
+arm:
+    ixp4xx_defconfig (gcc-10): 3 warnings
+    multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (gcc-10): 3 warnings
+    rpc_defconfig (gcc-10): 2 errors
+
+i386:
+
+mips:
+    ath25_defconfig (gcc-10): 3 warnings
+    ath79_defconfig (gcc-10): 3 warnings
+    bcm63xx_defconfig (gcc-10): 3 warnings
+    bigsur_defconfig (gcc-10): 3 warnings
+    bmips_be_defconfig (gcc-10): 3 warnings
+    cavium_octeon_defconfig (gcc-10): 4 errors, 6 warnings
+    ip22_defconfig (gcc-10): 3 warnings
+    ip27_defconfig (gcc-10): 3 warnings
+    ip28_defconfig (gcc-10): 3 warnings
+    ip32_defconfig (gcc-10): 3 warnings
+    rbtx49xx_defconfig (gcc-10): 3 warnings
+    sb1250_swarm_defconfig (gcc-10): 3 warnings
+
+riscv:
+
+sparc:
+    allnoconfig (gcc-10): 4 warnings
+    sparc32_defconfig (gcc-10): 5 warnings
+    sparc64_defconfig (gcc-10): 7 warnings
+    sparc64_defconfig+debug (gcc-10): 5 warnings
+    sparc64_defconfig+kselftest (gcc-10): 5 warnings
+    tinyconfig (gcc-10): 4 warnings
+
+x86_64:
+    x86_64_defconfig+kselftest (rustc-1.71): 1 warning
+
+Errors summary:
+
+    1    fs/proc/task_mmu.c:2104:21: error: 'HPAGE_SIZE' undeclared (first =
+use in this function); did you mean 'PAGE_SIZE'?
+    1    drivers/staging/octeon/ethernet.c:801:8: error: variable =E2=80=98=
+imode=E2=80=99 has initializer but incomplete type
+    1    drivers/staging/octeon/ethernet.c:801:35: error: storage size of =
+=E2=80=98imode=E2=80=99 isn=E2=80=99t known
+    1    drivers/staging/octeon/ethernet.c:205:30: error: storage size of =
+=E2=80=98tx_status=E2=80=99 isn=E2=80=99t known
+    1    drivers/staging/octeon/ethernet.c:204:30: error: storage size of =
+=E2=80=98rx_status=E2=80=99 isn=E2=80=99t known
+    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=
+=3D0x'
+    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=
+=3D0x'
+
+Warnings summary:
+
+    63   scripts/mod/modpost.h:66:17: warning: passing argument 2 of =E2=80=
+=98__endian=E2=80=99 discards =E2=80=98const=E2=80=99 qualifier from pointe=
+r target type [-Wdiscarded-qualifiers]
+    10   <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    1    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x23: relocation to=
+ !ENDBR: .text+0x14b6ab
+    1    drivers/staging/octeon/ethernet.c:801:35: warning: unused variable=
+ =E2=80=98imode=E2=80=99 [-Wunused-variable]
+    1    drivers/staging/octeon/ethernet.c:205:30: warning: unused variable=
+ =E2=80=98tx_status=E2=80=99 [-Wunused-variable]
+    1    drivers/staging/octeon/ethernet.c:204:30: warning: unused variable=
+ =E2=80=98rx_status=E2=80=99 [-Wunused-variable]
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig+debug (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig+kselftest (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warni=
+ngs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 section=
+ mismatches
+
+Warnings:
+    scripts/mod/modpost.h:66:17: warning: passing argument 2 of =E2=80=98__=
+endian=E2=80=99 discards =E2=80=98const=E2=80=99 qualifier from pointer tar=
+get type [-Wdiscarded-qualifiers]
+    scripts/mod/modpost.h:66:17: warning: passing argument 2 of =E2=80=98__=
+endian=E2=80=99 discards =E2=80=98const=E2=80=99 qualifier from pointer tar=
+get type [-Wdiscarded-qualifiers]
+    scripts/mod/modpost.h:66:17: warning: passing argument 2 of =E2=80=98__=
+endian=E2=80=99 discards =E2=80=98const=E2=80=99 qualifier from pointer tar=
+get type [-Wdiscarded-qualifiers]
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+am200epdkit_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+ar7_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+assabet_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+at91_dt_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ath25_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    scripts/mod/modpost.h:66:17: warning: passing argument 2 of =E2=80=98__=
+endian=E2=80=99 discards =E2=80=98const=E2=80=99 qualifier from pointer tar=
+get type [-Wdiscarded-qualifiers]
+    scripts/mod/modpost.h:66:17: warning: passing argument 2 of =E2=80=98__=
+endian=E2=80=99 discards =E2=80=98const=E2=80=99 qualifier from pointer tar=
+get type [-Wdiscarded-qualifiers]
+    scripts/mod/modpost.h:66:17: warning: passing argument 2 of =E2=80=98__=
+endian=E2=80=99 discards =E2=80=98const=E2=80=99 qualifier from pointer tar=
+get type [-Wdiscarded-qualifiers]
+
+---------------------------------------------------------------------------=
+-----
+ath79_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    scripts/mod/modpost.h:66:17: warning: passing argument 2 of =E2=80=98__=
+endian=E2=80=99 discards =E2=80=98const=E2=80=99 qualifier from pointer tar=
+get type [-Wdiscarded-qualifiers]
+    scripts/mod/modpost.h:66:17: warning: passing argument 2 of =E2=80=98__=
+endian=E2=80=99 discards =E2=80=98const=E2=80=99 qualifier from pointer tar=
+get type [-Wdiscarded-qualifiers]
+    scripts/mod/modpost.h:66:17: warning: passing argument 2 of =E2=80=98__=
+endian=E2=80=99 discards =E2=80=98const=E2=80=99 qualifier from pointer tar=
+get type [-Wdiscarded-qualifiers]
+
+---------------------------------------------------------------------------=
+-----
+axm55xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+axs103_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+axs103_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm2835_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm47xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm63xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 se=
+ction mismatches
+
+Warnings:
+    scripts/mod/modpost.h:66:17: warning: passing argument 2 of =E2=80=98__=
+endian=E2=80=99 discards =E2=80=98const=E2=80=99 qualifier from pointer tar=
+get type [-Wdiscarded-qualifiers]
+    scripts/mod/modpost.h:66:17: warning: passing argument 2 of =E2=80=98__=
+endian=E2=80=99 discards =E2=80=98const=E2=80=99 qualifier from pointer tar=
+get type [-Wdiscarded-qualifiers]
+    scripts/mod/modpost.h:66:17: warning: passing argument 2 of =E2=80=98__=
+endian=E2=80=99 discards =E2=80=98const=E2=80=99 qualifier from pointer tar=
+get type [-Wdiscarded-qualifiers]
+
+---------------------------------------------------------------------------=
+-----
+bigsur_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    scripts/mod/modpost.h:66:17: warning: passing argument 2 of =E2=80=98__=
+endian=E2=80=99 discards =E2=80=98const=E2=80=99 qualifier from pointer tar=
+get type [-Wdiscarded-qualifiers]
+    scripts/mod/modpost.h:66:17: warning: passing argument 2 of =E2=80=98__=
+endian=E2=80=99 discards =E2=80=98const=E2=80=99 qualifier from pointer tar=
+get type [-Wdiscarded-qualifiers]
+    scripts/mod/modpost.h:66:17: warning: passing argument 2 of =E2=80=98__=
+endian=E2=80=99 discards =E2=80=98const=E2=80=99 qualifier from pointer tar=
+get type [-Wdiscarded-qualifiers]
+
+---------------------------------------------------------------------------=
+-----
+bmips_be_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    scripts/mod/modpost.h:66:17: warning: passing argument 2 of =E2=80=98__=
+endian=E2=80=99 discards =E2=80=98const=E2=80=99 qualifier from pointer tar=
+get type [-Wdiscarded-qualifiers]
+    scripts/mod/modpost.h:66:17: warning: passing argument 2 of =E2=80=98__=
+endian=E2=80=99 discards =E2=80=98const=E2=80=99 qualifier from pointer tar=
+get type [-Wdiscarded-qualifiers]
+    scripts/mod/modpost.h:66:17: warning: passing argument 2 of =E2=80=98__=
+endian=E2=80=99 discards =E2=80=98const=E2=80=99 qualifier from pointer tar=
+get type [-Wdiscarded-qualifiers]
+
+---------------------------------------------------------------------------=
+-----
+bmips_stb_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cavium_octeon_defconfig (mips, gcc-10) =E2=80=94 FAIL, 4 errors, 6 warnings=
+, 0 section mismatches
+
+Errors:
+    drivers/staging/octeon/ethernet.c:204:30: error: storage size of =E2=80=
+=98rx_status=E2=80=99 isn=E2=80=99t known
+    drivers/staging/octeon/ethernet.c:205:30: error: storage size of =E2=80=
+=98tx_status=E2=80=99 isn=E2=80=99t known
+    drivers/staging/octeon/ethernet.c:801:8: error: variable =E2=80=98imode=
+=E2=80=99 has initializer but incomplete type
+    drivers/staging/octeon/ethernet.c:801:35: error: storage size of =E2=80=
+=98imode=E2=80=99 isn=E2=80=99t known
+
+Warnings:
+    scripts/mod/modpost.h:66:17: warning: passing argument 2 of =E2=80=98__=
+endian=E2=80=99 discards =E2=80=98const=E2=80=99 qualifier from pointer tar=
+get type [-Wdiscarded-qualifiers]
+    scripts/mod/modpost.h:66:17: warning: passing argument 2 of =E2=80=98__=
+endian=E2=80=99 discards =E2=80=98const=E2=80=99 qualifier from pointer tar=
+get type [-Wdiscarded-qualifiers]
+    scripts/mod/modpost.h:66:17: warning: passing argument 2 of =E2=80=98__=
+endian=E2=80=99 discards =E2=80=98const=E2=80=99 qualifier from pointer tar=
+get type [-Wdiscarded-qualifiers]
+    drivers/staging/octeon/ethernet.c:205:30: warning: unused variable =E2=
+=80=98tx_status=E2=80=99 [-Wunused-variable]
+    drivers/staging/octeon/ethernet.c:204:30: warning: unused variable =E2=
+=80=98rx_status=E2=80=99 [-Wunused-variable]
+    drivers/staging/octeon/ethernet.c:801:35: warning: unused variable =E2=
+=80=98imode=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+ci20_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+cobalt_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+collie_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+cu1000-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cu1830-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+davinci_all_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+db1xxx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+decstation_64_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+decstation_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+decstation_r4k_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_16K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, clang-17) =E2=80=94 PASS, 0 er=
+rors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
+s, 3 warnings, 0 section mismatches
+
+Warnings:
+    scripts/mod/modpost.h:66:17: warning: passing argument 2 of =E2=80=98__=
+endian=E2=80=99 discards =E2=80=98const=E2=80=99 qualifier from pointer tar=
+get type [-Wdiscarded-qualifiers]
+    scripts/mod/modpost.h:66:17: warning: passing argument 2 of =E2=80=98__=
+endian=E2=80=99 discards =E2=80=98const=E2=80=99 qualifier from pointer tar=
+get type [-Wdiscarded-qualifiers]
+    scripts/mod/modpost.h:66:17: warning: passing argument 2 of =E2=80=98__=
+endian=E2=80=99 discards =E2=80=98const=E2=80=99 qualifier from pointer tar=
+get type [-Wdiscarded-qualifiers]
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_RANDOMIZE_BASE=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
+s, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+arm64-chromebook+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+arm64-chromebook+videodec (arm64, gcc-10) =E2=80=94 PASS, 0 error=
+s, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+debug (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+videodec (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+exynos_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+footbridge_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+fuloong2e_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+gcw0_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+gemini_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+gpr_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+h3600_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig+debug (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warni=
+ngs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig+kselftest (arc, gcc-10) =E2=80=94 FAIL, 1 error, 0 wa=
+rnings, 0 section mismatches
+
+Errors:
+    fs/proc/task_mmu.c:2104:21: error: 'HPAGE_SIZE' undeclared (first use i=
+n this function); did you mean 'PAGE_SIZE'?
+
+---------------------------------------------------------------------------=
+-----
+hisi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+hsdk_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+debug (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+imx_v4_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+imx_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+imxrt_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+integrator_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip22_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    scripts/mod/modpost.h:66:17: warning: passing argument 2 of =E2=80=98__=
+endian=E2=80=99 discards =E2=80=98const=E2=80=99 qualifier from pointer tar=
+get type [-Wdiscarded-qualifiers]
+    scripts/mod/modpost.h:66:17: warning: passing argument 2 of =E2=80=98__=
+endian=E2=80=99 discards =E2=80=98const=E2=80=99 qualifier from pointer tar=
+get type [-Wdiscarded-qualifiers]
+    scripts/mod/modpost.h:66:17: warning: passing argument 2 of =E2=80=98__=
+endian=E2=80=99 discards =E2=80=98const=E2=80=99 qualifier from pointer tar=
+get type [-Wdiscarded-qualifiers]
+
+---------------------------------------------------------------------------=
+-----
+ip27_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    scripts/mod/modpost.h:66:17: warning: passing argument 2 of =E2=80=98__=
+endian=E2=80=99 discards =E2=80=98const=E2=80=99 qualifier from pointer tar=
+get type [-Wdiscarded-qualifiers]
+    scripts/mod/modpost.h:66:17: warning: passing argument 2 of =E2=80=98__=
+endian=E2=80=99 discards =E2=80=98const=E2=80=99 qualifier from pointer tar=
+get type [-Wdiscarded-qualifiers]
+    scripts/mod/modpost.h:66:17: warning: passing argument 2 of =E2=80=98__=
+endian=E2=80=99 discards =E2=80=98const=E2=80=99 qualifier from pointer tar=
+get type [-Wdiscarded-qualifiers]
+
+---------------------------------------------------------------------------=
+-----
+ip28_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    scripts/mod/modpost.h:66:17: warning: passing argument 2 of =E2=80=98__=
+endian=E2=80=99 discards =E2=80=98const=E2=80=99 qualifier from pointer tar=
+get type [-Wdiscarded-qualifiers]
+    scripts/mod/modpost.h:66:17: warning: passing argument 2 of =E2=80=98__=
+endian=E2=80=99 discards =E2=80=98const=E2=80=99 qualifier from pointer tar=
+get type [-Wdiscarded-qualifiers]
+    scripts/mod/modpost.h:66:17: warning: passing argument 2 of =E2=80=98__=
+endian=E2=80=99 discards =E2=80=98const=E2=80=99 qualifier from pointer tar=
+get type [-Wdiscarded-qualifiers]
+
+---------------------------------------------------------------------------=
+-----
+ip32_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    scripts/mod/modpost.h:66:17: warning: passing argument 2 of =E2=80=98__=
+endian=E2=80=99 discards =E2=80=98const=E2=80=99 qualifier from pointer tar=
+get type [-Wdiscarded-qualifiers]
+    scripts/mod/modpost.h:66:17: warning: passing argument 2 of =E2=80=98__=
+endian=E2=80=99 discards =E2=80=98const=E2=80=99 qualifier from pointer tar=
+get type [-Wdiscarded-qualifiers]
+    scripts/mod/modpost.h:66:17: warning: passing argument 2 of =E2=80=98__=
+endian=E2=80=99 discards =E2=80=98const=E2=80=99 qualifier from pointer tar=
+get type [-Wdiscarded-qualifiers]
+
+---------------------------------------------------------------------------=
+-----
+ixp4xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    scripts/mod/modpost.h:66:17: warning: passing argument 2 of =E2=80=98__=
+endian=E2=80=99 discards =E2=80=98const=E2=80=99 qualifier from pointer tar=
+get type [-Wdiscarded-qualifiers]
+    scripts/mod/modpost.h:66:17: warning: passing argument 2 of =E2=80=98__=
+endian=E2=80=99 discards =E2=80=98const=E2=80=99 qualifier from pointer tar=
+get type [-Wdiscarded-qualifiers]
+    scripts/mod/modpost.h:66:17: warning: passing argument 2 of =E2=80=98__=
+endian=E2=80=99 discards =E2=80=98const=E2=80=99 qualifier from pointer tar=
+get type [-Wdiscarded-qualifiers]
+
+---------------------------------------------------------------------------=
+-----
+jazz_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+jornada720_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+lemote2f_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson1b_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson1c_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson2k_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson3_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+lpc18xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+lpc32xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_kvm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_qemu_32r6_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
+gs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaaprp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltasmvp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltasmvp_eva_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaup_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaup_xpa_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+milbeaut_m10v_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+mmp2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+moxart_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+mps2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+mtx1_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v4t_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm, gcc-10) =E2=80=94 PASS, =
+0 errors, 3 warnings, 0 section mismatches
+
+Warnings:
+    scripts/mod/modpost.h:66:17: warning: passing argument 2 of =E2=80=98__=
+endian=E2=80=99 discards =E2=80=98const=E2=80=99 qualifier from pointer tar=
+get type [-Wdiscarded-qualifiers]
+    scripts/mod/modpost.h:66:17: warning: passing argument 2 of =E2=80=98__=
+endian=E2=80=99 discards =E2=80=98const=E2=80=99 qualifier from pointer tar=
+get type [-Wdiscarded-qualifiers]
+    scripts/mod/modpost.h:66:17: warning: passing argument 2 of =E2=80=98__=
+endian=E2=80=99 discards =E2=80=98const=E2=80=99 qualifier from pointer tar=
+get type [-Wdiscarded-qualifiers]
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (arm, gcc-10) =E2=80=
+=94 PASS, 0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_SMP=3Dn (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0=
+ warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy (arm, gcc-10) =E2=80=94 PASS, 0=
+ errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+mvebu_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+mvebu_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+mxs_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+neponset_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+netwinder_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+nhk8815_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_sdcard_defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 w=
+arnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_sdcard_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+omap2plus_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+omega2p_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+orion5x_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pic32mzda_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa168_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa910_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+qcom_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+qi_lb60_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+rb532_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rbtx49xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    scripts/mod/modpost.h:66:17: warning: passing argument 2 of =E2=80=98__=
+endian=E2=80=99 discards =E2=80=98const=E2=80=99 qualifier from pointer tar=
+get type [-Wdiscarded-qualifiers]
+    scripts/mod/modpost.h:66:17: warning: passing argument 2 of =E2=80=98__=
+endian=E2=80=99 discards =E2=80=98const=E2=80=99 qualifier from pointer tar=
+get type [-Wdiscarded-qualifiers]
+    scripts/mod/modpost.h:66:17: warning: passing argument 2 of =E2=80=98__=
+endian=E2=80=99 discards =E2=80=98const=E2=80=99 qualifier from pointer tar=
+get type [-Wdiscarded-qualifiers]
+
+---------------------------------------------------------------------------=
+-----
+realview_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+rm200_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rpc_defconfig (arm, gcc-10) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 section=
+ mismatches
+
+Errors:
+    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=3D0x'
+    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=3D0x'
+
+---------------------------------------------------------------------------=
+-----
+rs90_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+rt305x_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rv32_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rv32_defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+s3c6400_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+s5pv210_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+sama5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+sama7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+sb1250_swarm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings,=
+ 0 section mismatches
+
+Warnings:
+    scripts/mod/modpost.h:66:17: warning: passing argument 2 of =E2=80=98__=
+endian=E2=80=99 discards =E2=80=98const=E2=80=99 qualifier from pointer tar=
+get type [-Wdiscarded-qualifiers]
+    scripts/mod/modpost.h:66:17: warning: passing argument 2 of =E2=80=98__=
+endian=E2=80=99 discards =E2=80=98const=E2=80=99 qualifier from pointer tar=
+get type [-Wdiscarded-qualifiers]
+    scripts/mod/modpost.h:66:17: warning: passing argument 2 of =E2=80=98__=
+endian=E2=80=99 discards =E2=80=98const=E2=80=99 qualifier from pointer tar=
+get type [-Wdiscarded-qualifiers]
+
+---------------------------------------------------------------------------=
+-----
+shmobile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+socfpga_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+sp7021_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc32_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    scripts/mod/modpost.h:66:17: warning: passing argument 2 of =E2=80=98__=
+endian=E2=80=99 discards =E2=80=98const=E2=80=99 qualifier from pointer tar=
+get type [-Wdiscarded-qualifiers]
+    scripts/mod/modpost.h:66:17: warning: passing argument 2 of =E2=80=98__=
+endian=E2=80=99 discards =E2=80=98const=E2=80=99 qualifier from pointer tar=
+get type [-Wdiscarded-qualifiers]
+    scripts/mod/modpost.h:66:17: warning: passing argument 2 of =E2=80=98__=
+endian=E2=80=99 discards =E2=80=98const=E2=80=99 qualifier from pointer tar=
+get type [-Wdiscarded-qualifiers]
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 7 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    scripts/mod/modpost.h:66:17: warning: passing argument 2 of =E2=80=98__=
+endian=E2=80=99 discards =E2=80=98const=E2=80=99 qualifier from pointer tar=
+get type [-Wdiscarded-qualifiers]
+    scripts/mod/modpost.h:66:17: warning: passing argument 2 of =E2=80=98__=
+endian=E2=80=99 discards =E2=80=98const=E2=80=99 qualifier from pointer tar=
+get type [-Wdiscarded-qualifiers]
+    scripts/mod/modpost.h:66:17: warning: passing argument 2 of =E2=80=98__=
+endian=E2=80=99 discards =E2=80=98const=E2=80=99 qualifier from pointer tar=
+get type [-Wdiscarded-qualifiers]
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig+debug (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 5 warning=
+s, 0 section mismatches
+
+Warnings:
+    scripts/mod/modpost.h:66:17: warning: passing argument 2 of =E2=80=98__=
+endian=E2=80=99 discards =E2=80=98const=E2=80=99 qualifier from pointer tar=
+get type [-Wdiscarded-qualifiers]
+    scripts/mod/modpost.h:66:17: warning: passing argument 2 of =E2=80=98__=
+endian=E2=80=99 discards =E2=80=98const=E2=80=99 qualifier from pointer tar=
+get type [-Wdiscarded-qualifiers]
+    scripts/mod/modpost.h:66:17: warning: passing argument 2 of =E2=80=98__=
+endian=E2=80=99 discards =E2=80=98const=E2=80=99 qualifier from pointer tar=
+get type [-Wdiscarded-qualifiers]
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig+kselftest (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 5 war=
+nings, 0 section mismatches
+
+Warnings:
+    scripts/mod/modpost.h:66:17: warning: passing argument 2 of =E2=80=98__=
+endian=E2=80=99 discards =E2=80=98const=E2=80=99 qualifier from pointer tar=
+get type [-Wdiscarded-qualifiers]
+    scripts/mod/modpost.h:66:17: warning: passing argument 2 of =E2=80=98__=
+endian=E2=80=99 discards =E2=80=98const=E2=80=99 qualifier from pointer tar=
+get type [-Wdiscarded-qualifiers]
+    scripts/mod/modpost.h:66:17: warning: passing argument 2 of =E2=80=98__=
+endian=E2=80=99 discards =E2=80=98const=E2=80=99 qualifier from pointer tar=
+get type [-Wdiscarded-qualifiers]
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+spear13xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+spear3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+spear6xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+spitz_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+stm32_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+sunxi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+tegra_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 section =
+mismatches
+
+Warnings:
+    scripts/mod/modpost.h:66:17: warning: passing argument 2 of =E2=80=98__=
+endian=E2=80=99 discards =E2=80=98const=E2=80=99 qualifier from pointer tar=
+get type [-Wdiscarded-qualifiers]
+    scripts/mod/modpost.h:66:17: warning: passing argument 2 of =E2=80=98__=
+endian=E2=80=99 discards =E2=80=98const=E2=80=99 qualifier from pointer tar=
+get type [-Wdiscarded-qualifiers]
+    scripts/mod/modpost.h:66:17: warning: passing argument 2 of =E2=80=98__=
+endian=E2=80=99 discards =E2=80=98const=E2=80=99 qualifier from pointer tar=
+get type [-Wdiscarded-qualifiers]
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+u8500_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+versatile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+vexpress_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+vf610m4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+vocore2_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+vt8500_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+wpcm450_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, rustc-1.71) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+debug (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, rustc-1.71) =E2=80=94 PASS, 0 errors, 1=
+ warning, 0 section mismatches
+
+Warnings:
+    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x23: relocation to !END=
+BR: .text+0x14b6ab
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+rust (x86_64, rustc-1.71) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+rust-samples (x86_64, rustc-1.71) =E2=80=94 PASS, 0 errors=
+, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, =
+0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook+kselftest (x86_64, gcc-10) =E2=80=94 PASS, =
+0 errors, 0 warnings, 0 section mismatches
+
+---
+For more info write to <info@kernelci.org>

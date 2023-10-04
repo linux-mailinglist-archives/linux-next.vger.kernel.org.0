@@ -2,49 +2,43 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0C3D7B7885
-	for <lists+linux-next@lfdr.de>; Wed,  4 Oct 2023 09:19:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D88FF7B7916
+	for <lists+linux-next@lfdr.de>; Wed,  4 Oct 2023 09:53:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232625AbjJDHTC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 4 Oct 2023 03:19:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43824 "EHLO
+        id S232797AbjJDHxu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 4 Oct 2023 03:53:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbjJDHTC (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 4 Oct 2023 03:19:02 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA97CAB;
-        Wed,  4 Oct 2023 00:18:58 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFAF7C433C8;
-        Wed,  4 Oct 2023 07:18:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1696403938;
-        bh=8bZfjHBVUvb/Wl7uG7Uwj/fc/hoDrcF4sN+aBtnDong=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XntmGuuWL5fmFoR3Lrr0s/mXf5L03xYPMppcKrdCaYlP/4jGzQBIuU8DhUUSvOAq7
-         7yAlVTTSaI0jO9lzQtX2rTKGhyIbMNvZ/16ZGPGfKVcpGC97FWLxWjkZhEtUk7pgdm
-         3L72+ewaSKd9cdYg7KPnPGtAlhTc4G+HFEgw5EA1ITKbo8L4NxidwxcHTp+jgtwtrD
-         jCIT9l3ZJdnNV68BfC75eD8vIFnShetOZTIeAbGw2+hUXuv2OS+CM7e82tRoovNGMP
-         OqXRaKbwZbj3HeVBML19fnq5pUIXKqoiiUfaPqgO8HJZ+8tkeWlP88B6G2sLUDJeMJ
-         3KGJGHdQsXJuQ==
-Date:   Wed, 4 Oct 2023 12:48:54 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Frank Li <frank.li@nxp.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: [EXT] Re: linux-next: build failure after merge of the dmaengine
- tree
-Message-ID: <ZR0R3rM1G0nOL3jM@matsya>
-References: <20230929131324.6bb84292@canb.auug.org.au>
- <ZRrrToewRnOYGOD3@matsya>
- <AM6PR04MB48382B21C39B68B933E9A38B88C5A@AM6PR04MB4838.eurprd04.prod.outlook.com>
+        with ESMTP id S232790AbjJDHxt (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 4 Oct 2023 03:53:49 -0400
+X-Greylist: delayed 471 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 04 Oct 2023 00:53:45 PDT
+Received: from mail.citycodes.pl (mail.citycodes.pl [158.255.215.195])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B549FA7
+        for <linux-next@vger.kernel.org>; Wed,  4 Oct 2023 00:53:45 -0700 (PDT)
+Received: by mail.citycodes.pl (Postfix, from userid 1001)
+        id 1DC181F695; Wed,  4 Oct 2023 09:45:47 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=citycodes.pl; s=mail;
+        t=1696405553; bh=mMhfBvhM53FtUQl1P3lyeSY5aDBQYiR8qQBy6YFQHi0=;
+        h=Date:From:To:Subject:From;
+        b=UxCMlggPC/q7f3kPYoHMyoxmdFBY24SfGwmm8ZJHRg7nzi+rD6+l8xwQ0HdkdpP/i
+         jdDgr2eg/OycVWreKT/ndmLj3cQe26XlTR2GiTsLsMJymtI7Xtq8m6BISgZGylYDod
+         C1Ltp9jQzF7gyFakpYtEgreLOKnC0Rt5GAod6Dkj2oFJSUYJGumL4ZSCVq1j2EPOfs
+         mtZWXLl6jqK6Ff75ce7fZCxl+l5denuX7wcfkjLJd2+tDtjr2Al6fJP8vLvU3nZeac
+         1xbvSKckBNjohpp2snWWu5dYR0h0X/gc8AkIf9/hiCZEwmh2zSmbXd5cddHIdVVGpn
+         H1Eu268StlwGA==
+Received: by mail.citycodes.pl for <linux-next@vger.kernel.org>; Wed,  4 Oct 2023 07:45:38 GMT
+Message-ID: <20231004084500-0.1.7v.j10m.0.8p9rqrmj72@citycodes.pl>
+Date:   Wed,  4 Oct 2023 07:45:38 GMT
+From:   "Kamil Lasek" <kamil.lasek@citycodes.pl>
+To:     <linux-next@vger.kernel.org>
+Subject: =?UTF-8?Q?Rozszerzenie_Programu_M=C3=B3j_Pr=C4=85d_5.0?=
+X-Mailer: mail.citycodes.pl
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <AM6PR04MB48382B21C39B68B933E9A38B88C5A@AM6PR04MB4838.eurprd04.prod.outlook.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,43 +46,19 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hello Frank,
+Szanowni Pa=C5=84stwo!
 
-On 02-10-23, 16:26, Frank Li wrote:
-> > On 29-09-23, 13:13, Stephen Rothwell wrote:
-> > > Hi all,
-> > >
-> > > After merging the dmaengine tree, today's linux-next build (powerpc
-> > > ppc64_defconfig) failed like this:
-> > >
-> > > ld: warning: discarding dynamic section .glink
-> > > ld: warning: discarding dynamic section .plt
-> > > ld: linkage table error against `ioread64'
-> > > ld: stubs don't match calculated size
-> > > ld: can not build stubs: bad value
-> > > ld: fs/debugfs/file.o: in function `debugfs_print_regs':
-> > > file.c:(.text+0xee8): undefined reference to `ioread64be'
-> > > ld: file.c:(.text+0xf50): undefined reference to `ioread64'
-> > >
-> > > Caused by commit
-> > >
-> > >   09289d0ad122 ("debugfs_create_regset32() support 8/16/64 bit width
-> > registers")
-> > >
-> > > I have used the dmaengine tree from next-20230928 for today.
-> > 
-> > Thanks for report, I have dropped offending commits for now.
-> 
-> Fixed patch already post at
-> https://lore.kernel.org/dmaengine/20231002145737.538934-1-Frank.Li@nxp.com/T/#u
+W ramach nowej edycji programu M=C3=B3j Pr=C4=85d mog=C4=85 otrzyma=C4=87=
+ Pa=C5=84stwo dofinansowanie na zakup i monta=C5=BC fotowoltaiki i/lub ma=
+gazynu energii. Maksymalna kwota dofinansowania wynosi 58 tys. z=C5=82.=20
 
-I am not sure of this fix, someone has to pick this. let this get fixed
-first and we can always pick back these patches.
+Jako firma wyspecjalizowana w tym zakresie zajmiemy si=C4=99 Pa=C5=84stwa=
+ wnioskiem o dofinansowanie oraz instalacj=C4=85 i serwisem dopasowanych =
+do Pa=C5=84stwa budynku paneli s=C5=82onecznych.
 
-My tree was broken meanwhile impacting others, so it was better to drop
-for now.
+B=C4=99d=C4=99 wdzi=C4=99czny za informacj=C4=99 czy s=C4=85 Pa=C5=84stwo=
+ zainteresowani.
 
-Thanks for you understanding
 
--- 
-~Vinod
+Pozdrawiam,
+Kamil Lasek

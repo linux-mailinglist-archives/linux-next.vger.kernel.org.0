@@ -2,154 +2,106 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17B4B7B81E2
-	for <lists+linux-next@lfdr.de>; Wed,  4 Oct 2023 16:12:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 087397B83DE
+	for <lists+linux-next@lfdr.de>; Wed,  4 Oct 2023 17:42:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242797AbjJDOMJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 4 Oct 2023 10:12:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33566 "EHLO
+        id S233666AbjJDPmH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 4 Oct 2023 11:42:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242792AbjJDOMH (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 4 Oct 2023 10:12:07 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B4DDAB;
-        Wed,  4 Oct 2023 07:12:03 -0700 (PDT)
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 394E8DxA011547;
-        Wed, 4 Oct 2023 14:11:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=UXZFFm9QVeNyHzZ2gPEIPfR4p7Ke3QK2THSLpRRIOns=;
- b=gx9SBmXKnMyTZj3UnRbNXjV9gBC1+X0lTtEfIGZxtkI422pjqrVyBvZ/3nUWEAiBzzGz
- hswa78QhSXp5gum64lc7vStP/S+nubdGkWNwXpvjIW3UUOyRAUZo+8IN6DZboEjQdMrZ
- 2x9A8BtY2KYKI1Kv5ppceFkzG44t0+JYMtciCJBSlOlVRgFlbvauNQ11mpo1r7Bg/n/J
- yaBEbne9ZFeWUQ6x+HXZfUI+D/SAzUDFbUto10B78OVA9mU9E2dVKyZJNCtUUna1fqym
- R6iwwF1dnSAok6acih3/lyfYE91TkDxTSsINJ0rwnHa8lbIZoJNuT2ZQzi+sLliM33Dw yg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3th9ahgfta-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 04 Oct 2023 14:11:42 +0000
-Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 394E8O89012117;
-        Wed, 4 Oct 2023 14:11:41 GMT
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3th9ahgfsw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 04 Oct 2023 14:11:41 +0000
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-        by ppma13.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 394D9QaR006749;
-        Wed, 4 Oct 2023 14:11:40 GMT
-Received: from smtprelay02.dal12v.mail.ibm.com ([172.16.1.4])
-        by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 3tf07k50eb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 04 Oct 2023 14:11:40 +0000
-Received: from smtpav06.wdc07v.mail.ibm.com (smtpav06.wdc07v.mail.ibm.com [10.39.53.233])
-        by smtprelay02.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 394EBdBs35717470
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 4 Oct 2023 14:11:40 GMT
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C190658054;
-        Wed,  4 Oct 2023 14:11:39 +0000 (GMT)
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8FEBB5804E;
-        Wed,  4 Oct 2023 14:11:31 +0000 (GMT)
-Received: from [9.171.13.11] (unknown [9.171.13.11])
-        by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Wed,  4 Oct 2023 14:11:31 +0000 (GMT)
-Message-ID: <b15b5058-b45e-0ad7-788d-9fe3e1d90440@linux.vnet.ibm.com>
-Date:   Wed, 4 Oct 2023 19:41:28 +0530
+        with ESMTP id S242939AbjJDPmH (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 4 Oct 2023 11:42:07 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97969C4;
+        Wed,  4 Oct 2023 08:42:03 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-53447d0241eso4317502a12.3;
+        Wed, 04 Oct 2023 08:42:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1696434122; x=1697038922; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OvjVzPTGCtL4oqLjVzkbN/IxKpJGIvUtgYCPF8tas/Y=;
+        b=aCDp8/DjCA1fhiF4Kxe9okno+cYJ3o7ATaG8McEbdBefziLj0n5X+aEZ5aw7FCU+wB
+         CY3M2kpuB6jcnv92f2v5qHQqWOYOhs7JlJUMMdeY8x2a++ABbsFCproMVAbzjWtrDXtB
+         Ps+wCnmhV+2PhEJvWKwLl47fDaTZSgK3aR8nKCLY5Elp4LtjbhiDLOQN3Ax/LcWLEf4g
+         Y9aHLlIKF76wolSMBI+nRKgfXiuhWsOQAjJSCgvL1fikWd1FAFre0whl+ihTN5zDiD9R
+         YOFbBdfPK4UVsTHFMBiT67R0KZh/OjSqJF5CtD84BtcThLEx7Z07KECxRrJzm29oUh/N
+         2TeQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696434122; x=1697038922;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OvjVzPTGCtL4oqLjVzkbN/IxKpJGIvUtgYCPF8tas/Y=;
+        b=SALC5b6x2zM9gLPlBcKAZjYgDGGODYo5HUw8pQejtTMbq7pkL/KPS3JyK3I9HD448R
+         lp2WPq4suYtfculq1m2XCfG59YttUNzJczOmguYHPxV0hqudEIynZpuDrq6UkjWMRooV
+         3J9U44Wmw89Jbffeld0MU3sy2GkDgi+BrEFes4IPXh6NUDv0WY0Tl3B/kVggPosWE2yz
+         mUfBnZsns2CxsD2QN0jDYS0SMvV1YkT4dC6wSrJyjFjK9FMK3pvq5AfplyQLVFc591jP
+         jTzOtiC+kbbZfJULD8P5cN1+MkWdZXn2OSiKk2J626JJXX7Ca68jHa+GG2eMSILsRWgU
+         jIGg==
+X-Gm-Message-State: AOJu0YwAYaJn156JpZJHi2l+CCEBjCe/xuhR6t+Y8AC+rlA1Tp2O++Nv
+        VdC7B2c5Q4KimMgE1em1Z7c=
+X-Google-Smtp-Source: AGHT+IGfJFMYoivdUNueBocO55E3i4Zz7heVKHr5RK9bEhFnP8nhzI0EgR5qAPSBRSDPWCwTb+ikrg==
+X-Received: by 2002:a05:6402:350:b0:534:1e2a:d966 with SMTP id r16-20020a056402035000b005341e2ad966mr2549746edw.11.1696434121765;
+        Wed, 04 Oct 2023 08:42:01 -0700 (PDT)
+Received: from gmail.com (1F2EF530.nat.pool.telekom.hu. [31.46.245.48])
+        by smtp.gmail.com with ESMTPSA id g20-20020aa7d1d4000000b00536159c6c45sm43431edp.15.2023.10.04.08.42.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Oct 2023 08:42:01 -0700 (PDT)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Wed, 4 Oct 2023 17:41:59 +0200
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Jianlin Li <ljianlin99@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: duplicate patch in the tip tree
+Message-ID: <ZR2Hx7ILfxU3q/E+@gmail.com>
+References: <20231004133306.3285d8de@canb.auug.org.au>
+ <874jj64iol.fsf@meer.lwn.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [Bisected] [commit 2ad56efa80dba89162106c06ebc00b611325e584]
- [linux-next] WARNING while booting to kernel 6.6.0-rc3-next-20230929
-Content-Language: en-US
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
-        baolu.lu@linux.intel.com, jsnitsel@redhat.com, jroedel@suse.de,
-        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
-        gregkh@linuxfoundation.org, gbatra@linux.vnet.ibm.com,
-        ruscur@russell.cc, linuxppc-dev@lists.ozlabs.org,
-        abdhalee@linux.vnet.ibm.com, mputtash@linux.vnet.com,
-        sachinp@linux.vnet.com
-References: <d06cee81-c47f-9d62-dfc6-4c77b60058db@linux.vnet.ibm.com>
- <20231004113818.GD682044@nvidia.com>
-From:   Tasmiya Nalatwad <tasmiya@linux.vnet.ibm.com>
-In-Reply-To: <20231004113818.GD682044@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: c-E1floQFZ09AiqSKDCuZTrycm-eIpFU
-X-Proofpoint-GUID: hU-kh1cx1zTvA-CrruXSRw_FAmafyHdn
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-10-04_06,2023-10-02_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 phishscore=0
- priorityscore=1501 clxscore=1015 mlxlogscore=999 bulkscore=0
- lowpriorityscore=0 malwarescore=0 mlxscore=0 adultscore=0 spamscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2309180000 definitions=main-2310040102
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <874jj64iol.fsf@meer.lwn.net>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Thanks Jason. Yes the suggested changes works and Warnings are not seen.
 
-On 10/4/23 17:08, Jason Gunthorpe wrote:
-> On Wed, Oct 04, 2023 at 04:37:10PM +0530, Tasmiya Nalatwad wrote:
->>     Greetings,
->>
->>     [linux-next] [6.6.0-rc3-next-20230929] [git bisect ->
->>     2ad56efa80dba89162106c06ebc00b611325e584]WARNING: CPU: 0 PID: 8 at
->>     arch/powerpc/kernel/[1]iommu.c:407 __iommu_free+0x1e4/0x1f0
->>     gitbisect is pointing to the below commit
->>     commit 2ad56efa80dba89162106c06ebc00b611325e584
->>         powerpc/iommu: Setup a default domain and remove set_platform_dma_ops
-> I assume this means there are still sequencing problems with power at
-> boot time. eg we turned on the dma ops in the wrong order or something
-> like that
->
-> As far as I can see the only difference here is that we do the
-> operation to claim dma ops during the iommu drive probe. We can avoid that.
->
-> Does this work for you?
->
-> diff --git a/arch/powerpc/kernel/iommu.c b/arch/powerpc/kernel/iommu.c
-> index d6ad3fde85a212..115b9031badac7 100644
-> --- a/arch/powerpc/kernel/iommu.c
-> +++ b/arch/powerpc/kernel/iommu.c
-> @@ -1280,13 +1280,19 @@ struct iommu_table_group_ops spapr_tce_table_group_ops = {
->   /*
->    * A simple iommu_ops to allow less cruft in generic VFIO code.
->    */
-> -static int spapr_tce_platform_iommu_attach_dev(struct iommu_domain *dom,
-> -					       struct device *dev)
-> +static int
-> +spapr_tce_platform_iommu_attach_dev(struct iommu_domain *platform_domain,
-> +				    struct device *dev)
->   {
-> +	struct iommu_domain *domain = iommu_get_domain_for_dev(dev);
->   	struct iommu_group *grp = iommu_group_get(dev);
->   	struct iommu_table_group *table_group;
->   	int ret = -EINVAL;
->
-> +	/* At first attach the ownership is already set */
-> +	if (!domain)
-> +		return 0;
-> +
->   	if (!grp)
->   		return -ENODEV;
->
->
--- 
-Regards,
-Tasmiya Nalatwad
-IBM Linux Technology Center
+* Jonathan Corbet <corbet@lwn.net> wrote:
 
+> Stephen Rothwell <sfr@canb.auug.org.au> writes:
+> 
+> > Hi all,
+> >
+> > The following commit is also in the jc_docs tree as a different commit
+> > (but the same patch):
+> >
+> >   c53cbc54ccff ("x86/iommu/docs: Update AMD IOMMU specification document URL")
+> >
+> > This is commit
+> >
+> >   73c5f76ecbdb ("x86/iommu/docs: Update AMD IOMMU specification document URL")
+> >
+> > in the jc_docs tree.
+> 
+> Hmm...I thought I even checked for that.  No worries, I can drop my
+> copy.
+
+I'm pretty sure it was me who added the duplicate - sorry about that!
+
+Thanks,
+
+	Ingo

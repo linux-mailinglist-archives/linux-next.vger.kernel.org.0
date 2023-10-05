@@ -2,100 +2,92 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D26E7BABBB
-	for <lists+linux-next@lfdr.de>; Thu,  5 Oct 2023 23:02:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74CC47BAE8E
+	for <lists+linux-next@lfdr.de>; Fri,  6 Oct 2023 00:03:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230505AbjJEVCI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 5 Oct 2023 17:02:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59376 "EHLO
+        id S229937AbjJEWDB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 5 Oct 2023 18:03:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbjJEVCI (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 5 Oct 2023 17:02:08 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B10D9F;
-        Thu,  5 Oct 2023 14:02:03 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3958PDUC060718;
-        Thu, 5 Oct 2023 03:25:13 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1696494313;
-        bh=aNdE9+9lpU/PBM+gU6ruz+7cnqOSZMuKGfyVQxZWM+s=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=nFK8z6rzA8/SShkqxHPZe2LtFu1pAAWYbCBeEJJerhvJHK4UutEwk9yZA5NHisvQF
-         u4kreJ9KuEc4kK3vefZ9690m/ZpeesacxZJXVvzf9CG97NUHN0xcY9yR6Iw6a0GOPR
-         OXLln4lxWgOLxM5Wjb1p6vEtusXNXUQ1mbY657Yc=
-Received: from DLEE103.ent.ti.com (dlee103.ent.ti.com [157.170.170.33])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3958PDk7129292
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 5 Oct 2023 03:25:13 -0500
-Received: from DLEE113.ent.ti.com (157.170.170.24) by DLEE103.ent.ti.com
- (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 5
- Oct 2023 03:25:13 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Thu, 5 Oct 2023 03:25:12 -0500
-Received: from [10.249.142.56] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 3958P9JS009458;
-        Thu, 5 Oct 2023 03:25:10 -0500
-Message-ID: <f70dec2a-dbdf-479c-af5b-a70db02b27b4@ti.com>
-Date:   Thu, 5 Oct 2023 13:55:06 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: build warnings after merge of the ti tree
-Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>
-CC:     Roger Quadros <rogerq@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        with ESMTP id S229537AbjJEWDA (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 5 Oct 2023 18:03:00 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0E1695;
+        Thu,  5 Oct 2023 15:02:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1696543373;
+        bh=9gVRYt6M+0BDHf+TyxYGa3vfMLe3BEc9+4rK8pNQ6PU=;
+        h=Date:From:To:Cc:Subject:From;
+        b=d2M+mCgYrHK6j/stgHwOLWvKtC/SPcizlh8eEcjdWug2V2PCmM3hq+HsMaPcYOGRs
+         saaPkhHS9qJYElzvYQ9gmwerT3yzV2ueJDZnXQid/vRvNYdG0Gh1AUHkfL8B5xPBX4
+         jBneEpwd6e5McOvhD50NWZwbyO3e3r0VR6jKwR5X4NR9oFAdlH8yfCR8YH4fuBpuEh
+         ZyeJxVCc169qk9cLNDhsPLwnswYrh8pmg1pdZgWzC3BWcqWDPAj1snBhgIHJIZh4DS
+         xq/zKQBb/6BoecZlt0AjRIIVoKmsiAD2CacJvYfx9wllVeE4I8rMR+IMr55c+MVZyS
+         0I8a4oc8nfj/g==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4S1lt52n0jz4xF5;
+        Fri,  6 Oct 2023 09:02:53 +1100 (AEDT)
+Date:   Fri, 6 Oct 2023 09:02:35 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20231005141536.77538147@canb.auug.org.au>
-From:   "Raghavendra, Vignesh" <vigneshr@ti.com>
-In-Reply-To: <20231005141536.77538147@canb.auug.org.au>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_NONE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: linux-next: duplicate patches in the bluetooth tree
+Message-ID: <20231006090116.03e9e6e6@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/m.h3XXB8uLr50WxlIvUZ1Xy";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-+ Rob and DT list
+--Sig_/m.h3XXB8uLr50WxlIvUZ1Xy
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Hi Stephen
+Hi all,
 
-On 10/5/2023 8:45 AM, Stephen Rothwell wrote:
-> Hi all,
-> 
-> [I may have missed this yesterday, sorry]
-> 
-> After merging the ti tree, today's linux-next build (arm64 defconfig)
-> produced these warnings:
-> 
-> arch/arm64/boot/dts/ti/k3-am642-evm-nand.dtso:65.8-140.3: Warning (avoid_default_addr_size): /fragment@3/__overlay__: Relying on default #address-cells value
-> arch/arm64/boot/dts/ti/k3-am642-evm-nand.dtso:65.8-140.3: Warning (avoid_default_addr_size): /fragment@3/__overlay__: Relying on default #size-cells value
-> 
-> Introduced by commit
-> 
->   45a0c06571e1 ("arm64: dts: ti: am642-evm: Add overlay for NAND expansion card")
-> 
+The following commits are also in Linus Torvalds' tree as different
+commits (but the same patches):
 
-Thanks for the report. I will drop the offending comment.
+  0ef9e5c1af4c ("Bluetooth: ISO: Fix handling of listen for unicast")
+  190b32220f99 ("Bluetooth: btusb: add shutdown function for QCA6174")
+  2eb5e4369bc4 ("Bluetooth: Avoid redundant authentication")
+  8ee19a4f17bc ("Bluetooth: hci_core: Fix build warnings")
+  9f0fcb5aa550 ("Bluetooth: Fix hci_link_tx_to RCU lock usage")
+  b78e04e5f353 ("Bluetooth: Delete unused hci_req_prepare_suspend() declara=
+tion")
+  c0c64dc267e4 ("Bluetooth: hci_codec: Fix leaking content of local_codecs")
+  da10fc7a9dc3 ("Bluetooth: hci_sync: Fix handling of HCI_QUIRK_STRICT_DUPL=
+ICATE_FILTER")
 
-Roger,
+--=20
+Cheers,
+Stephen Rothwell
 
-Sorry, this would need to be fixed in dtc or need exception from DT
-maintainers to ignore the warnings.
+--Sig_/m.h3XXB8uLr50WxlIvUZ1Xy
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-Regards
-Vignesh
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmUfMnsACgkQAVBC80lX
+0GztpQf/YVIhjAQePWXZp6SYkgoQ1zeZ8oKyYvV4oZTtgOvzBKco0qeLoSZ6fO0q
+o+ToOIjah9wb/buhGnMoWNxgVIiNKS58dvMrMnd+YKngQH5xmH4eHJkpksddMk8b
+nF4iOqcUgko2Ymc4Wm0eaqDEzPc+W4p+zWiWDgcyor0PoVZH8jh5JOUozIAlIqTx
+g/hUWTT6O9DfG87mp46RBcvdpbBGrEWe2NLCWttH8KTwpvEjSw7oynq+pBLBdD+c
+Q7Mdq2RN/Y7b75jpLnmxv6naDLOXaqdTgHsjvsyzgI4OMYs/FOH2pSndUTKG4bFY
+zpFIelgRR7fino8/hTfRSQFzcLJ8DA==
+=cEsB
+-----END PGP SIGNATURE-----
+
+--Sig_/m.h3XXB8uLr50WxlIvUZ1Xy--

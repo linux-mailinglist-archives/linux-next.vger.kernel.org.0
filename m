@@ -2,45 +2,46 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 389557B988F
-	for <lists+linux-next@lfdr.de>; Thu,  5 Oct 2023 01:09:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CCDC7B99A4
+	for <lists+linux-next@lfdr.de>; Thu,  5 Oct 2023 03:32:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239879AbjJDXJ4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 4 Oct 2023 19:09:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55930 "EHLO
+        id S233891AbjJEBcK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 4 Oct 2023 21:32:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236558AbjJDXJz (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 4 Oct 2023 19:09:55 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99261C0;
-        Wed,  4 Oct 2023 16:09:51 -0700 (PDT)
+        with ESMTP id S244140AbjJEBcK (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 4 Oct 2023 21:32:10 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B1A1CE;
+        Wed,  4 Oct 2023 18:32:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1696460986;
-        bh=mCF3g0jquxEL+pwxpJMLbfQmMd435GQolk4LT94nhT8=;
+        s=201702; t=1696469523;
+        bh=y1eMOoLeYppE5pX7hDk7NP14cMMkS/wykgND0TrNVhM=;
         h=Date:From:To:Cc:Subject:From;
-        b=nQn2tPl+5GuHnR89ZLjroihIy1eSaqjG1tSqI1FfAnH+wiYPjl8/kma2GYtsCaMUN
-         F1liNxo9BXYcr+MD3tPnzaR33yd8shuCWkzpc8zhBRa7SzhU0UwGjZkEYfXdtAfF8m
-         tDrKCohOP7HJReYR2jod54jek/yvRzVqbfJ6nVuPHU8tcm+Ayy6xCPXpj71ERxqK5j
-         SPz5o6Yww8KNetwpFhKLM8vwpFg77HRjdDnjxtzSgU+5godHB+PqsaoPqp7Ff5Mm/h
-         6iqzYQqlFSUyYP5lIB/ezlpCgki1IlDRUd1xN7Rk+A67uAxXPWzaGMt3kYiwQweEvj
-         ajgS/uzzUe4Pg==
+        b=fNuqnL7YgGFQi2wv0htaLnnNclKUKjZYjg++AlJdgWozTQJKIDFCzgDKiZc+b3U0I
+         2QhY6clQb9gSd8DFtLYz+1YXXOnMTbedIvGuBiagJj89BHkMzNf39RBrhO+WYbRxKr
+         gG7GCoP3+ywZ4nWb83aKCA4mPvqL8n2r64XUPuUWoKZGRAmmvLkWyPCjsH7oVFzjJN
+         3Hurp4ucEBher7yvx1caXbC1ph1CrP6w/vVqFiMhBaCe7pEBX21FjP9ZO5C2fstwK/
+         8uV2ZAmLxe+LNwoaI84A/aF46V2ZwjhiVHKkWvgJCgGVj0PFaqtgzbaVCqbgjeAVHO
+         ayDmJ9LXgX4Qw==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4S19Pk09rWz4xLy;
-        Thu,  5 Oct 2023 10:09:45 +1100 (AEDT)
-Date:   Thu, 5 Oct 2023 10:09:32 +1100
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4S1DYv1MHxz4xRj;
+        Thu,  5 Oct 2023 12:32:02 +1100 (AEDT)
+Date:   Thu, 5 Oct 2023 12:31:59 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Sterba <dsterba@suse.cz>
-Cc:     David Sterba <dsterba@suse.com>, Filipe Manana <fdmanana@suse.com>,
+To:     Christoffer Dall <cdall@cs.columbia.edu>,
+        Marc Zyngier <maz@kernel.org>
+Cc:     Jing Zhang <jingzhangos@google.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the btrfs tree with the btrfs-fixes
- tree
-Message-ID: <20231005100932.53c35f2c@canb.auug.org.au>
+Subject: linux-next: build failure after merge of the kvm-arm tree
+Message-ID: <20231005123159.1b7dff0f@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/H93Sqh0F6fw6Oc5b84TQeVD";
+Content-Type: multipart/signed; boundary="Sig_/ow4ufp2gWy0/6aojL0/C.Xm";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,
@@ -51,78 +52,47 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/H93Sqh0F6fw6Oc5b84TQeVD
+--Sig_/ow4ufp2gWy0/6aojL0/C.Xm
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the btrfs tree got a conflict in:
+After merging the kvm-arm tree, today's linux-next build (native perf)
+failed like this:
 
-  fs/btrfs/transaction.h
+In file included from util/../../arch/arm64/include/asm/cputype.h:201,
+                 from util/arm-spe.c:37:
+tools/arch/arm64/include/asm/sysreg.h:132:10: fatal error: asm/sysreg-defs.=
+h: No such file or directory
+  132 | #include "asm/sysreg-defs.h"
+      |          ^~~~~~~~~~~~~~~~~~~
 
-between commit:
+Caused by commit
 
-  f8d1b011ca8c ("btrfs: always print transaction aborted messages with an e=
-rror level")
+  6a4c6c6a56c1 ("KVM: arm64: selftests: Import automatic generation of sysr=
+eg defs")
 
-from the btrfs-fixes tree and commit:
-
-  5483af73c851 ("btrfs: rename errno identifiers to error")
-
-from the btrfs tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+I have used the kvm-arm tree from next-20231004 for today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc fs/btrfs/transaction.h
-index 93869cda6af9,de58776de307..000000000000
---- a/fs/btrfs/transaction.h
-+++ b/fs/btrfs/transaction.h
-@@@ -213,15 -216,15 +216,15 @@@ do {							=09
-  	if (!test_and_set_bit(BTRFS_FS_STATE_TRANS_ABORTED,	\
-  			&((trans)->fs_info->fs_state))) {	\
-  		first =3D true;					\
-- 		if (WARN(abort_should_print_stack(errno),	\
-+ 		if (WARN(abort_should_print_stack(error),	\
-  			KERN_ERR				\
-  			"BTRFS: Transaction aborted (error %d)\n",	\
-- 			(errno))) {					\
-+ 			(error))) {					\
-  			/* Stack trace printed. */			\
-  		} else {						\
- -			btrfs_debug((trans)->fs_info,			\
- -				    "Transaction aborted (error %d)", \
- +			btrfs_err((trans)->fs_info,			\
- +				  "Transaction aborted (error %d)",	\
-- 				  (errno));			\
-+ 				  (error));			\
-  		}						\
-  	}							\
-  	__btrfs_abort_transaction((trans), __func__,		\
-
---Sig_/H93Sqh0F6fw6Oc5b84TQeVD
+--Sig_/ow4ufp2gWy0/6aojL0/C.Xm
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmUd8KwACgkQAVBC80lX
-0GyY2gf/cFoHnUUaAoG++VOskX/gdqgV2nTtk5H5fQWf2uN+yfYSLCp0eofjmT5n
-wpeVYzWxvAc8h/cy9gpU1zf7fCoGKKhqHQjOXGxWqXK+odcsCG2aW7U+idEb1kxb
-YHAye6G6QVo1l8wtMtk68b/+9StY+hpBjXQ21cu5WhcBA7ZjkxOtLKDjoPAA1jj6
-KwM8RqCrDwwhu5D7ywH4vfDudMUyEZnZoOHqwwO1toOBSQrV4wvMpna7nqXL1nUg
-99TJV6bO1VrkhbAP06k/CiOV/a7v+cKFDoq0tJ0EEMJnndOCLrbtbWPuI7FsYj5h
-mAjAk1TR8a2ijCskygxZzvuDV1CH/Q==
-=uhFb
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmUeEg8ACgkQAVBC80lX
+0Gy8tQf/Q6kfCJxOrrQygnAll8STrulpSFdtxYQZQb5xOLWAsTaHIkYlQLvICO2y
+wBCB+FnBzP1JaySmACkco/G700H4FroKP/NBsxZcqWMal3qTTucwcYIt6wR2Y//6
+VhWAhFWoV8ul++ZjTE2TeiHt7yGXLS3SE2SNO7Zacv7QW6jHIWRSZxqvbYoubs6z
+JeeJfC/4dyu59ulfTJuBeVXwFGN5XLLrU4DUpUumpma92IifdQTORC8y7VwZhVPy
+Kmcwfdih2JuDRqe1hFS7PCFHqmwMJ/5M3GBxeE//SyTM1nZ8QfM7mJYmUBUHVa9y
+KyvTJrLokXb6sYdJbizRmdkpL/t7cg==
+=bXnH
 -----END PGP SIGNATURE-----
 
---Sig_/H93Sqh0F6fw6Oc5b84TQeVD--
+--Sig_/ow4ufp2gWy0/6aojL0/C.Xm--

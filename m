@@ -2,126 +2,146 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E8947BB746
-	for <lists+linux-next@lfdr.de>; Fri,  6 Oct 2023 14:03:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EB577BB87A
+	for <lists+linux-next@lfdr.de>; Fri,  6 Oct 2023 15:02:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232149AbjJFMDo (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 6 Oct 2023 08:03:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33458 "EHLO
+        id S232462AbjJFNCf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 6 Oct 2023 09:02:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232218AbjJFMDn (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 6 Oct 2023 08:03:43 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7B10F2;
-        Fri,  6 Oct 2023 05:03:19 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 106D5C433C7;
-        Fri,  6 Oct 2023 12:03:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1696593799;
-        bh=b/loAVhv+05F1dRd/uZATizDv0mFcEZF9GrpYWKet2I=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=k4fdN0Um6sRBvIDQ8qWQN6Z7nRtwmmETohf5F+jAWNT414i08GKfJlY9lcKW7oeRm
-         Jzd92qzYBWCVve/wDtOapmxVinrb8w8qLB+1x2jtqG3iQcpK2Lu3V9DzkyFVau2xfS
-         Ro6mnU1c5OKRne361tWc3l1c0LzWfYIaPEIiEYRpmqBsW/ddhZLihyX3ZTEaCD4p0d
-         pf0/DnGvjaL4g/eK42bOarsYDSF3iEczLJvILhyH64rKUNTzt2puE4kpIqyl1/GeVx
-         BpvbayD0sKiyXAKWF30ww/ngoW+ix3GhUq5l+ycsZ3DpN0z5o+FV4QuJ6IoYMRpFto
-         EBwOxJ7yWH8XA==
-Message-ID: <fde87d28-ee5d-4e02-b824-27c1cb7c1e38@kernel.org>
-Date:   Fri, 6 Oct 2023 15:03:14 +0300
+        with ESMTP id S232439AbjJFNCV (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 6 Oct 2023 09:02:21 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48196ED;
+        Fri,  6 Oct 2023 06:02:00 -0700 (PDT)
+Received: from pps.filterd (m0353727.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 396Clq1s026747;
+        Fri, 6 Oct 2023 13:00:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : content-transfer-encoding
+ : mime-version; s=pp1; bh=EzIkQvdqHkvqU8pfoi8auX9WuaFYkA4CdPiXxhdMDJM=;
+ b=aMB5YnwwdD81Fs/pqdankSbbxB248JstoF0QDgTEXcNgMPh6hDJl4ljJ/elSctI4U3cA
+ odFrSY0WBNjrfkVOIOxdU+C7KTFQrPXFanavJa4aUYjPiKprhYxZ65BfEQgK+ItWNzdH
+ HKjS20ScH6jlpvQgNT+Lbsu7D5kPzb/L94rWRLXESGsGCxlSaBRt1XqcuZ11awQene6s
+ oRMeJk7fL7oRyjZEiKtPYMWNYFJCpIHdhg8eVeKPV5DnFwXrzetDqwzb9jl+YL3rDsQa
+ nmwqGoCeNiLeCdipYkI851Q5t5LbmfDgIwf47BK+Xnzjn5refTy4+P3aEx+h0e1VRSW2 eg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3tjjj70h27-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 06 Oct 2023 13:00:06 +0000
+Received: from m0353727.ppops.net (m0353727.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 396Cm8ur027771;
+        Fri, 6 Oct 2023 12:59:25 GMT
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3tjjj70edd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 06 Oct 2023 12:59:25 +0000
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+        by ppma21.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 396CPqMk017592;
+        Fri, 6 Oct 2023 12:58:53 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+        by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3tey0pkg8n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 06 Oct 2023 12:58:53 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+        by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 396Cwm2G43254510
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 6 Oct 2023 12:58:48 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id F17F320043;
+        Fri,  6 Oct 2023 12:58:47 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A4E3D2004B;
+        Fri,  6 Oct 2023 12:58:47 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Fri,  6 Oct 2023 12:58:47 +0000 (GMT)
+From:   Gerd Bayer <gbayer@linux.ibm.com>
+To:     rdunlap@infradead.org, wenjia@linux.ibm.com
+Cc:     linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        netdev@vger.kernel.org, raspl@linux.ibm.com, sfr@canb.auug.org.au,
+        alibuda@linux.alibaba.com, wintera@linux.ibm.com,
+        guwen@linux.alibaba.com, tonylu@linux.alibaba.com,
+        jaka@linux.ibm.com
+Subject: [PATCH net] net/smc: Fix dependency of SMC on ISM
+Date:   Fri,  6 Oct 2023 14:58:47 +0200
+Message-Id: <20231006125847.1517840-1-gbayer@linux.ibm.com>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <d9a2d47d-c8bd-cf17-83e0-d9b82561a594@linux.ibm.com>
+References: <d9a2d47d-c8bd-cf17-83e0-d9b82561a594@linux.ibm.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: SG6ZWIKrpDqZYggufCdzL7By_oFzYgj7
+X-Proofpoint-GUID: wzbrlymHai5pgffCHOQI33fNRdJYEgKO
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: build warnings after merge of the ti tree
-Content-Language: en-US
-To:     Nishanth Menon <nm@ti.com>, Rob Herring <robh+dt@kernel.org>
-Cc:     "Raghavendra, Vignesh" <vigneshr@ti.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Tero Kristo <kristo@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        "Yadav, Nitin" <n-yadav@ti.com>
-References: <20231005141536.77538147@canb.auug.org.au>
- <f70dec2a-dbdf-479c-af5b-a70db02b27b4@ti.com>
- <2905cfc2-912f-4620-9455-2e91586a2839@kernel.org>
- <20231005132921.2vg6kdcr273bh7et@cabbage>
-From:   Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <20231005132921.2vg6kdcr273bh7et@cabbage>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-10-06_10,2023-10-06_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=816
+ suspectscore=0 clxscore=1011 malwarescore=0 phishscore=0 spamscore=0
+ adultscore=0 impostorscore=0 priorityscore=1501 lowpriorityscore=0
+ mlxscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2309180000 definitions=main-2310060096
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+When the SMC protocol is built into the kernel proper while ISM is
+configured to be built as module, linking the kernel fails due to
+unresolved dependencies out of net/smc/smc_ism.o to
+ism_get_smcd_ops, ism_register_client, and ism_unregister_client
+as reported via the linux-next test automation (see link).
+This however is a bug introduced a while ago.
 
+Correct the dependency list in ISM's and SMC's Kconfig to reflect the
+dependencies that are actually inverted. With this you cannot build a
+kernel with CONFIG_SMC=y and CONFIG_ISM=m. Either ISM needs to be 'y',
+too - or a 'n'. That way, SMC can still be configured on non-s390
+architectures that do not have (nor need) an ISM driver.
 
-On 05/10/2023 16:29, Nishanth Menon wrote:
-> On 16:12-20231005, Roger Quadros wrote:
->> Hi,
->>
->> On 05/10/2023 11:25, Raghavendra, Vignesh wrote:
->>> + Rob and DT list
->>>
->>> Hi Stephen
->>>
->>> On 10/5/2023 8:45 AM, Stephen Rothwell wrote:
->>>> Hi all,
->>>>
->>>> [I may have missed this yesterday, sorry]
->>>>
->>>> After merging the ti tree, today's linux-next build (arm64 defconfig)
->>>> produced these warnings:
->>>>
->>>> arch/arm64/boot/dts/ti/k3-am642-evm-nand.dtso:65.8-140.3: Warning (avoid_default_addr_size): /fragment@3/__overlay__: Relying on default #address-cells value
->>>> arch/arm64/boot/dts/ti/k3-am642-evm-nand.dtso:65.8-140.3: Warning (avoid_default_addr_size): /fragment@3/__overlay__: Relying on default #size-cells value
->>>>
->>>> Introduced by commit
->>>>
->>>>   45a0c06571e1 ("arm64: dts: ti: am642-evm: Add overlay for NAND expansion card")
->>>>
->>>
->>> Thanks for the report. I will drop the offending comment.
->>>
->>> Roger,
->>>
->>> Sorry, this would need to be fixed in dtc or need exception from DT
->>> maintainers to ignore the warnings.
->>
->> Please don't drop this patch as the issue is not with the patch but with
->> the dtc tool itself.
->>
->> As this is a DT overlay there is no way to specify address-cells/size-cells
->> of parent here. This will be resolved only after merge with base tree.
->>
->> This will be fixed in next dtc sync.
->> https://www.spinics.net/lists/devicetree-compiler/msg04036.html
->>
->> See further discussion here
->> https://lore.kernel.org/all/CAL_JsqLmv904+_2EOmsQ__y1yLDvsT+_02i85phuh0cpe7X8NQ@mail.gmail.com/
->>
-> 
-> Roger, build warnings are a strict NO,NO for kernel. Lets bring in the
-> series *after* the dtc sync is complete.
-> 
+Fixes: 89e7d2ba61b7 ("net/ism: Add new API for client registration")
 
-Hi Rob,
+Reported-by: Randy Dunlap <rdunlap@infradead.org>
+Closes: https://lore.kernel.org/linux-next/d53b5b50-d894-4df8-8969-fd39e63440ae@infradead.org/
+Co-developed-by: Wenjia Zhang <wenjia@linux.ibm.com>
+Signed-off-by: Wenjia Zhang <wenjia@linux.ibm.com>
+Signed-off-by: Gerd Bayer <gbayer@linux.ibm.com>
+---
+ drivers/s390/net/Kconfig | 2 +-
+ net/smc/Kconfig          | 1 +
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-Following commit from dtc is required to resolve this issue.
-
-afbddcd418fb ("Suppress warnings on overlay fragments")
-
-FYI. Another patch of similar nature is on its way and will also require the
-above commit to DTC.
-https://lore.kernel.org/all/20231005093739.4071934-3-n-yadav@ti.com/
-
+diff --git a/drivers/s390/net/Kconfig b/drivers/s390/net/Kconfig
+index 74760c1a163b..4902d45e929c 100644
+--- a/drivers/s390/net/Kconfig
++++ b/drivers/s390/net/Kconfig
+@@ -102,7 +102,7 @@ config CCWGROUP
+ 
+ config ISM
+ 	tristate "Support for ISM vPCI Adapter"
+-	depends on PCI && SMC
++	depends on PCI
+ 	default n
+ 	help
+ 	  Select this option if you want to use the Internal Shared Memory
+diff --git a/net/smc/Kconfig b/net/smc/Kconfig
+index 1ab3c5a2c5ad..746be3996768 100644
+--- a/net/smc/Kconfig
++++ b/net/smc/Kconfig
+@@ -2,6 +2,7 @@
+ config SMC
+ 	tristate "SMC socket protocol family"
+ 	depends on INET && INFINIBAND
++	depends on m || ISM != m
+ 	help
+ 	  SMC-R provides a "sockets over RDMA" solution making use of
+ 	  RDMA over Converged Ethernet (RoCE) technology to upgrade
 -- 
-cheers,
--roger
+2.39.2
+

@@ -2,100 +2,64 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A8A47BB973
-	for <lists+linux-next@lfdr.de>; Fri,  6 Oct 2023 15:44:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DD567BB9D5
+	for <lists+linux-next@lfdr.de>; Fri,  6 Oct 2023 15:56:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232429AbjJFNoJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 6 Oct 2023 09:44:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57438 "EHLO
+        id S232412AbjJFN4L (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 6 Oct 2023 09:56:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232433AbjJFNoI (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 6 Oct 2023 09:44:08 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8E77B6;
-        Fri,  6 Oct 2023 06:44:06 -0700 (PDT)
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 396DgJ55028499;
-        Fri, 6 Oct 2023 13:43:47 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=j/AG//P4Bx8htSBN1sllurmbbh6m4O61QdheH9XyQaA=;
- b=f8L2W4xmLnh9vrnf3oJjjE6fMCcxcy6YADrkJQxhSTb4k8ZsYQkKNPhE9X7kMyg59Me5
- V/anx27NmkmfFcuzUWp3UPqSP2GtZSZ984sC1NPxt6Pss8B0+O4viDb7EbVU7JYUTNiq
- WS3IvVf2DndRoZb+xV7exE8ocXykH9o3EjdFe21DjpkwOwdRxbEJV1KAwDGYIN8kLqP1
- T2K9S+SY8ROmhsSIWd4ADVW6dwmWCAm14WrQ0fuEb5GK9kZuKtvGTPuSZic8dZb8yXHw
- RqZXih3huY3ikXl4GUS0AMmuieNyxEl7hebQT7E0BkG+8N9ThWlstHQJmuFZHfcNW3qV lg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3tjkbur0ux-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 06 Oct 2023 13:43:46 +0000
-Received: from m0356517.ppops.net (m0356517.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 396DhkaY031843;
-        Fri, 6 Oct 2023 13:43:46 GMT
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3tjkbur0ue-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 06 Oct 2023 13:43:46 +0000
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-        by ppma23.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 396DE2OL007467;
-        Fri, 6 Oct 2023 13:43:45 GMT
-Received: from smtprelay04.wdc07v.mail.ibm.com ([172.16.1.71])
-        by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3teygmvh0d-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 06 Oct 2023 13:43:43 +0000
-Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
-        by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 396DhgjK32309528
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 6 Oct 2023 13:43:42 GMT
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7C0B45805D;
-        Fri,  6 Oct 2023 13:43:42 +0000 (GMT)
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 24F5158057;
-        Fri,  6 Oct 2023 13:43:36 +0000 (GMT)
-Received: from [9.171.83.242] (unknown [9.171.83.242])
-        by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Fri,  6 Oct 2023 13:43:35 +0000 (GMT)
-Message-ID: <357397b0-8e87-dd88-7c47-fb457cc7e830@linux.vnet.ibm.com>
-Date:   Fri, 6 Oct 2023 19:13:34 +0530
+        with ESMTP id S232389AbjJFN4K (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 6 Oct 2023 09:56:10 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4367295;
+        Fri,  6 Oct 2023 06:56:09 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E32A4C433CB;
+        Fri,  6 Oct 2023 13:56:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1696600568;
+        bh=rHD7QFG1kuyuEljxQvjPFr0ePIJUMMrr1bntIfI05Gg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=OjcW8OkikAqoEu7Ge4PRuqARoche7a6osnDj40O6zJee/ypFSFieAe9bf4aNqMC7T
+         0oVgZyqTkZkX7iOXnMvKSRZ0sN8XWj85Eu9yJQZaBTXl/VG99pIFLuzCYZDjgGFiqp
+         z2GUTG16Nio8qnO7bZUW9tjp+Qgcm9tUtmDeqIshhmh/2eArNK6aQX8r0/MYYPeGzL
+         gxnmjjjNA/SdZcfGcuO+Um0lIu7tdcIZW6SBUQG9LNfQbjBtt/oW4ntfS+QcISa0xQ
+         2LTU/rQCUTHo8RlHckKNQ2cJN18aITETMwzQ330aem7lNh6pE697Thb9rogg08u0S0
+         0+s71RsW2IzFA==
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-503056c8195so2811442e87.1;
+        Fri, 06 Oct 2023 06:56:08 -0700 (PDT)
+X-Gm-Message-State: AOJu0YwHZ5lRwGCX+r7Vg3ggoqRHe7MXALroDnsnEflaJzwaHq6k9xWz
+        oBv3nRcNQZM2gJJJYElcZI+t9tjRSrSF0uQ1gQ==
+X-Google-Smtp-Source: AGHT+IHHpu2L8oueJ5Di8HVuQHaHL4IovRt6CYy8zm2UeHKSG0tXMObD3JP+hyOmT9qvUcuWlTLhYFU2BBg6lMeKwRg=
+X-Received: by 2002:a05:6512:34c6:b0:500:9a45:63b with SMTP id
+ w6-20020a05651234c600b005009a45063bmr5713999lfr.13.1696600567071; Fri, 06 Oct
+ 2023 06:56:07 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [Bisected] [commit 2ad56efa80db] [Hotplug] WARNING while
- performing hotplug operation on 6.6-rc3-next
-Content-Language: en-US
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-block@vger.kernel.org, baolu.lu@linux.intel.com,
-        jsnitsel@redhat.com, jroedel@suse.de, joro@8bytes.org,
-        will@kernel.org, iommu@lists.linux.dev,
-        abdhalee@linux.vnet.ibm.com, mputtash@linux.vnet.com,
-        sachinp@linux.vnet.com
-References: <92db426f-4a31-9c2c-e23a-85a8d353fbae@linux.vnet.ibm.com>
- <20231006113644.GN682044@nvidia.com>
- <7ce42090-a768-ba3d-bd27-e86bc076ee57@linux.vnet.ibm.com>
- <20231006133936.GQ682044@nvidia.com>
-From:   Tasmiya Nalatwad <tasmiya@linux.vnet.ibm.com>
-In-Reply-To: <20231006133936.GQ682044@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: nLE4iNGHcLJosVYVMuO3-4ONDA7DFVRp
-X-Proofpoint-ORIG-GUID: fYOvrWE8LP4wm9SFS9pp8cLPXlA9fRkv
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-10-06_11,2023-10-06_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 bulkscore=0
- adultscore=0 lowpriorityscore=0 malwarescore=0 clxscore=1015
- priorityscore=1501 mlxscore=0 phishscore=0 impostorscore=0 mlxlogscore=977
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2309180000 definitions=main-2310060101
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H4,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <20231005141536.77538147@canb.auug.org.au> <f70dec2a-dbdf-479c-af5b-a70db02b27b4@ti.com>
+ <2905cfc2-912f-4620-9455-2e91586a2839@kernel.org> <20231005132921.2vg6kdcr273bh7et@cabbage>
+ <fde87d28-ee5d-4e02-b824-27c1cb7c1e38@kernel.org>
+In-Reply-To: <fde87d28-ee5d-4e02-b824-27c1cb7c1e38@kernel.org>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Fri, 6 Oct 2023 08:55:54 -0500
+X-Gmail-Original-Message-ID: <CAL_Jsq+NXp_d1g507G=G+_cJ1s0GrM099JMNAj2MU4Dpaw=c8g@mail.gmail.com>
+Message-ID: <CAL_Jsq+NXp_d1g507G=G+_cJ1s0GrM099JMNAj2MU4Dpaw=c8g@mail.gmail.com>
+Subject: Re: linux-next: build warnings after merge of the ti tree
+To:     Roger Quadros <rogerq@kernel.org>
+Cc:     Nishanth Menon <nm@ti.com>,
+        "Raghavendra, Vignesh" <vigneshr@ti.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Tero Kristo <kristo@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        "Yadav, Nitin" <n-yadav@ti.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -103,23 +67,85 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Thanks Jason for confirmation and the fix.
-
-On 10/6/23 19:09, Jason Gunthorpe wrote:
-> On Fri, Oct 06, 2023 at 06:50:00PM +0530, Tasmiya Nalatwad wrote:
->>     Greetings,
->>
->>     Thanks Jason.
->>
->>     The fix provided by you works. It is not giving WARNING's but i am
->>     seeing below logs. Would you please confirm on the logs.
-> I don't know anything about your environment but those logs don't
-> appear to be related to this series?
+On Fri, Oct 6, 2023 at 7:03=E2=80=AFAM Roger Quadros <rogerq@kernel.org> wr=
+ote:
 >
-> Jason
+>
+>
+> On 05/10/2023 16:29, Nishanth Menon wrote:
+> > On 16:12-20231005, Roger Quadros wrote:
+> >> Hi,
+> >>
+> >> On 05/10/2023 11:25, Raghavendra, Vignesh wrote:
+> >>> + Rob and DT list
+> >>>
+> >>> Hi Stephen
+> >>>
+> >>> On 10/5/2023 8:45 AM, Stephen Rothwell wrote:
+> >>>> Hi all,
+> >>>>
+> >>>> [I may have missed this yesterday, sorry]
+> >>>>
+> >>>> After merging the ti tree, today's linux-next build (arm64 defconfig=
+)
+> >>>> produced these warnings:
+> >>>>
+> >>>> arch/arm64/boot/dts/ti/k3-am642-evm-nand.dtso:65.8-140.3: Warning (a=
+void_default_addr_size): /fragment@3/__overlay__: Relying on default #addre=
+ss-cells value
+> >>>> arch/arm64/boot/dts/ti/k3-am642-evm-nand.dtso:65.8-140.3: Warning (a=
+void_default_addr_size): /fragment@3/__overlay__: Relying on default #size-=
+cells value
+> >>>>
+> >>>> Introduced by commit
+> >>>>
+> >>>>   45a0c06571e1 ("arm64: dts: ti: am642-evm: Add overlay for NAND exp=
+ansion card")
+> >>>>
+> >>>
+> >>> Thanks for the report. I will drop the offending comment.
+> >>>
+> >>> Roger,
+> >>>
+> >>> Sorry, this would need to be fixed in dtc or need exception from DT
+> >>> maintainers to ignore the warnings.
+> >>
+> >> Please don't drop this patch as the issue is not with the patch but wi=
+th
+> >> the dtc tool itself.
+> >>
+> >> As this is a DT overlay there is no way to specify address-cells/size-=
+cells
+> >> of parent here. This will be resolved only after merge with base tree.
+> >>
+> >> This will be fixed in next dtc sync.
+> >> https://www.spinics.net/lists/devicetree-compiler/msg04036.html
+> >>
+> >> See further discussion here
+> >> https://lore.kernel.org/all/CAL_JsqLmv904+_2EOmsQ__y1yLDvsT+_02i85phuh=
+0cpe7X8NQ@mail.gmail.com/
+> >>
+> >
+> > Roger, build warnings are a strict NO,NO for kernel. Lets bring in the
+> > series *after* the dtc sync is complete.
+> >
+>
+> Hi Rob,
+>
+> Following commit from dtc is required to resolve this issue.
+>
+> afbddcd418fb ("Suppress warnings on overlay fragments")
 
--- 
-Regards,
-Tasmiya Nalatwad
-IBM Linux Technology Center
+That is from 2018, so it's been in the kernel's dtc for a long time.
 
+I believe what you need is the patch I referenced which hasn't been
+applied upstream.
+
+> FYI. Another patch of similar nature is on its way and will also require =
+the
+> above commit to DTC.
+> https://lore.kernel.org/all/20231005093739.4071934-3-n-yadav@ti.com/
+
+You'll need to fix dtc first.
+
+Rob

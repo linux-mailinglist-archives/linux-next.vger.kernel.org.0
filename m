@@ -2,47 +2,57 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEA8F7BBABD
-	for <lists+linux-next@lfdr.de>; Fri,  6 Oct 2023 16:48:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 464EC7BBBEB
+	for <lists+linux-next@lfdr.de>; Fri,  6 Oct 2023 17:42:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232628AbjJFOs0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 6 Oct 2023 10:48:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53084 "EHLO
+        id S232387AbjJFPmG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 6 Oct 2023 11:42:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232611AbjJFOsW (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 6 Oct 2023 10:48:22 -0400
+        with ESMTP id S232502AbjJFPmG (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 6 Oct 2023 11:42:06 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0DBBCF;
-        Fri,  6 Oct 2023 07:48:20 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1391C433C8;
-        Fri,  6 Oct 2023 14:48:17 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39D3B9E;
+        Fri,  6 Oct 2023 08:42:05 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CF61C433C7;
+        Fri,  6 Oct 2023 15:42:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1696603700;
-        bh=tpz2lJHsFpXAdojf/r2F+CjbjlhID/zdHJhAMnUPoCo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Pw4cglRdfnNQIC+v8UHZFG9a8HZIFKlwmn8crhYx3+RrtDuK/Umh0/7FsERtCn7R4
-         yEaIj7ty0itLM2i1EjAWcqxRaQDxBDvKKBCk4aSis+ZYZGyJ7rirPb8+wvJcfTe2X6
-         ORJvvnuzdLyrsQnhNN/1hn19HGLs6ceD84WuebNp0U08JxkqLJeJANE51iAQfxUKxc
-         NjMyXpnXhWpL/Fpew1ALhW7OrQpKPE8ZTT9MBfOmzjIanNM2T7svMBG08yXegkygnx
-         iTMvKnL+r2rU66lKgBvyFyBLiVz1aqQZDgZx0RD/aBKRNa5ytE46xX8PqmZ2Iu0aNn
-         WkJqroi9ENOfw==
-Date:   Fri, 6 Oct 2023 16:48:15 +0200
-From:   Simon Horman <horms@kernel.org>
-To:     Gerd Bayer <gbayer@linux.ibm.com>
-Cc:     rdunlap@infradead.org, wenjia@linux.ibm.com,
-        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
-        netdev@vger.kernel.org, raspl@linux.ibm.com, sfr@canb.auug.org.au,
-        alibuda@linux.alibaba.com, wintera@linux.ibm.com,
-        guwen@linux.alibaba.com, tonylu@linux.alibaba.com,
-        jaka@linux.ibm.com
-Subject: Re: [PATCH net] net/smc: Fix dependency of SMC on ISM
-Message-ID: <ZSAeL1aLpkXVweg6@kernel.org>
-References: <d9a2d47d-c8bd-cf17-83e0-d9b82561a594@linux.ibm.com>
- <20231006125847.1517840-1-gbayer@linux.ibm.com>
+        s=k20201202; t=1696606924;
+        bh=tbHnpOTYGNIXcPamnhQXfo0iLGWFbnd+Sut1PridISA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=q+fTlW4AFWVXdVUVxU0JJ1SpniY5IUKGTvCJtdjQ584qPnp9muQwgqKjOelOIzOcI
+         vop9zPdKs7uo3bxTD5KwUf7HmNAmzG0Kb8lJRHEQLfxEsLiUW9LdXunFkxk5DL7IrL
+         Ff0FOtaKPav+LEhYajiYOCXqBU/14jzEHcMkKK9N/ep1/tsvdpHgtw36KagNttva5r
+         yJgTofHb2BYs/Sk2xGVzHbbAiZhpRg25HPGCJ2LfNTlr9Ji2z7oI3EJ6JJeAFrBtWO
+         zwIwWdab1BW486GeEcVA30KdOWSHFxcsZjvakG014uRuV40neergrHPV4DIHQ/3iPi
+         evMeT2+EqiyOQ==
+Message-ID: <4ec509f6-698d-4a58-a49b-8dbb247edb88@kernel.org>
+Date:   Fri, 6 Oct 2023 18:41:59 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231006125847.1517840-1-gbayer@linux.ibm.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: linux-next: build warnings after merge of the ti tree
+Content-Language: en-US
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     Nishanth Menon <nm@ti.com>,
+        "Raghavendra, Vignesh" <vigneshr@ti.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Tero Kristo <kristo@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        "Yadav, Nitin" <n-yadav@ti.com>
+References: <20231005141536.77538147@canb.auug.org.au>
+ <f70dec2a-dbdf-479c-af5b-a70db02b27b4@ti.com>
+ <2905cfc2-912f-4620-9455-2e91586a2839@kernel.org>
+ <20231005132921.2vg6kdcr273bh7et@cabbage>
+ <fde87d28-ee5d-4e02-b824-27c1cb7c1e38@kernel.org>
+ <CAL_Jsq+NXp_d1g507G=G+_cJ1s0GrM099JMNAj2MU4Dpaw=c8g@mail.gmail.com>
+From:   Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <CAL_Jsq+NXp_d1g507G=G+_cJ1s0GrM099JMNAj2MU4Dpaw=c8g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -52,27 +62,82 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Oct 06, 2023 at 02:58:47PM +0200, Gerd Bayer wrote:
-> When the SMC protocol is built into the kernel proper while ISM is
-> configured to be built as module, linking the kernel fails due to
-> unresolved dependencies out of net/smc/smc_ism.o to
-> ism_get_smcd_ops, ism_register_client, and ism_unregister_client
-> as reported via the linux-next test automation (see link).
-> This however is a bug introduced a while ago.
-> 
-> Correct the dependency list in ISM's and SMC's Kconfig to reflect the
-> dependencies that are actually inverted. With this you cannot build a
-> kernel with CONFIG_SMC=y and CONFIG_ISM=m. Either ISM needs to be 'y',
-> too - or a 'n'. That way, SMC can still be configured on non-s390
-> architectures that do not have (nor need) an ISM driver.
-> 
-> Fixes: 89e7d2ba61b7 ("net/ism: Add new API for client registration")
-> 
-> Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> Closes: https://lore.kernel.org/linux-next/d53b5b50-d894-4df8-8969-fd39e63440ae@infradead.org/
-> Co-developed-by: Wenjia Zhang <wenjia@linux.ibm.com>
-> Signed-off-by: Wenjia Zhang <wenjia@linux.ibm.com>
-> Signed-off-by: Gerd Bayer <gbayer@linux.ibm.com>
 
-Reviewed-by: Simon Horman <horms@kernel.org>
-Tested-by: Simon Horman <horms@kernel.org> # build-tested
+
+On 06/10/2023 16:55, Rob Herring wrote:
+> On Fri, Oct 6, 2023 at 7:03 AM Roger Quadros <rogerq@kernel.org> wrote:
+>>
+>>
+>>
+>> On 05/10/2023 16:29, Nishanth Menon wrote:
+>>> On 16:12-20231005, Roger Quadros wrote:
+>>>> Hi,
+>>>>
+>>>> On 05/10/2023 11:25, Raghavendra, Vignesh wrote:
+>>>>> + Rob and DT list
+>>>>>
+>>>>> Hi Stephen
+>>>>>
+>>>>> On 10/5/2023 8:45 AM, Stephen Rothwell wrote:
+>>>>>> Hi all,
+>>>>>>
+>>>>>> [I may have missed this yesterday, sorry]
+>>>>>>
+>>>>>> After merging the ti tree, today's linux-next build (arm64 defconfig)
+>>>>>> produced these warnings:
+>>>>>>
+>>>>>> arch/arm64/boot/dts/ti/k3-am642-evm-nand.dtso:65.8-140.3: Warning (avoid_default_addr_size): /fragment@3/__overlay__: Relying on default #address-cells value
+>>>>>> arch/arm64/boot/dts/ti/k3-am642-evm-nand.dtso:65.8-140.3: Warning (avoid_default_addr_size): /fragment@3/__overlay__: Relying on default #size-cells value
+>>>>>>
+>>>>>> Introduced by commit
+>>>>>>
+>>>>>>   45a0c06571e1 ("arm64: dts: ti: am642-evm: Add overlay for NAND expansion card")
+>>>>>>
+>>>>>
+>>>>> Thanks for the report. I will drop the offending comment.
+>>>>>
+>>>>> Roger,
+>>>>>
+>>>>> Sorry, this would need to be fixed in dtc or need exception from DT
+>>>>> maintainers to ignore the warnings.
+>>>>
+>>>> Please don't drop this patch as the issue is not with the patch but with
+>>>> the dtc tool itself.
+>>>>
+>>>> As this is a DT overlay there is no way to specify address-cells/size-cells
+>>>> of parent here. This will be resolved only after merge with base tree.
+>>>>
+>>>> This will be fixed in next dtc sync.
+>>>> https://www.spinics.net/lists/devicetree-compiler/msg04036.html
+>>>>
+>>>> See further discussion here
+>>>> https://lore.kernel.org/all/CAL_JsqLmv904+_2EOmsQ__y1yLDvsT+_02i85phuh0cpe7X8NQ@mail.gmail.com/
+>>>>
+>>>
+>>> Roger, build warnings are a strict NO,NO for kernel. Lets bring in the
+>>> series *after* the dtc sync is complete.
+>>>
+>>
+>> Hi Rob,
+>>
+>> Following commit from dtc is required to resolve this issue.
+>>
+>> afbddcd418fb ("Suppress warnings on overlay fragments")
+> 
+> That is from 2018, so it's been in the kernel's dtc for a long time.
+
+Oh, my bad. I saw your Reviewed-by tag and assumed the patch was already upstream.
+
+> 
+> I believe what you need is the patch I referenced which hasn't been
+> applied upstream.
+> 
+>> FYI. Another patch of similar nature is on its way and will also require the
+>> above commit to DTC.
+>> https://lore.kernel.org/all/20231005093739.4071934-3-n-yadav@ti.com/
+> 
+> You'll need to fix dtc first.
+
+-- 
+cheers,
+-roger

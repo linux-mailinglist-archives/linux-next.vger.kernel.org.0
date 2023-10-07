@@ -2,56 +2,49 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 527A07BC685
-	for <lists+linux-next@lfdr.de>; Sat,  7 Oct 2023 11:49:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC8F07BC6F3
+	for <lists+linux-next@lfdr.de>; Sat,  7 Oct 2023 12:57:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234177AbjJGJtJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 7 Oct 2023 05:49:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32898 "EHLO
+        id S1343819AbjJGK5D (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sat, 7 Oct 2023 06:57:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234148AbjJGJtJ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sat, 7 Oct 2023 05:49:09 -0400
+        with ESMTP id S1343782AbjJGK5C (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sat, 7 Oct 2023 06:57:02 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F499B9;
-        Sat,  7 Oct 2023 02:49:08 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEDCAC433C8;
-        Sat,  7 Oct 2023 09:49:07 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3343F93;
+        Sat,  7 Oct 2023 03:57:01 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F9ADC433C8;
+        Sat,  7 Oct 2023 10:56:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1696672147;
-        bh=5fs0qAQmil8qeHzK8rF+amcjXk7Zutaz5R48u8TzdmM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=hHd84PRDzVNBDHQPVtuh03Jyme9pRDRcy7vntd/lJdFL2fowa4yuKbLc8VZFwExOA
-         4/TZfOrE5WskzIpJHcvXFhc42HEQBIK/CN8wpR1BPBi2nMYJRrHXxRthk3RMmWdUxw
-         XJRhLyBWemaHzyYm06avj7JP30Tioj79H+SqTvfSoUZYHc4n0qf0Vzsrwvd5rM2eeq
-         Fs2mWePTEXQIdtDU+cZ1w3dmcPOPwa1ePAeJL2ohOy3t2gxx1P6n1dF6TCGWebRmb+
-         nYurUlkJQT9dsG+k+z2UfeaZ6K1h2Oo9IGwiaaZV/DOmdcUsV3A3X+E2AqXRndHMFx
-         JVQDiJW2vut0g==
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-53808d5b774so5364644a12.3;
-        Sat, 07 Oct 2023 02:49:07 -0700 (PDT)
-X-Gm-Message-State: AOJu0YzB4IxSd7fiuJ1qvITqseGjGJmWMd+GDniuVKFowkI30Q0L/su4
-        NasnLiaVrpOtxW96mn5zTcAxobiELMs5vNXdsIM=
-X-Google-Smtp-Source: AGHT+IHKWW8jP9f0mfthlCgUSVspE9l6zjhQYo0TfFni4XPCIysLb+iCqkttR7C3eV1aEYdvozDNfFXplpnTvMIAIbM=
-X-Received: by 2002:aa7:da8a:0:b0:531:9c1:8262 with SMTP id
- q10-20020aa7da8a000000b0053109c18262mr9305005eds.8.1696672146241; Sat, 07 Oct
- 2023 02:49:06 -0700 (PDT)
-MIME-Version: 1.0
-References: <20231007075303.263407-1-zhaotianrui@loongson.cn>
-In-Reply-To: <20231007075303.263407-1-zhaotianrui@loongson.cn>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Sat, 7 Oct 2023 17:48:52 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H50XxWH+YMT8LHS+sCVRyHWyHvRbL0UvW1f3cWWgpQi2g@mail.gmail.com>
-Message-ID: <CAAhV-H50XxWH+YMT8LHS+sCVRyHWyHvRbL0UvW1f3cWWgpQi2g@mail.gmail.com>
-Subject: Re: [PATCH linux-next] LoongArch: mm: Export symbol for invalid_pud_table.
-To:     Tianrui Zhao <zhaotianrui@loongson.cn>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
+        s=k20201202; t=1696676220;
+        bh=FbDCBpNcB5UA8Pkt82Ea7XaptxlhhJwPIUs8N5p1Y3w=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mPHOeOAjSgipfP1E4/ZSmHjMoLg/VK4jn8AUf5SjmhS5D/fjs07/blfVev+cunNlC
+         hEV8rDSOWcB898Ig04TXWx8V5U5mJnNuwK7iFi54crqVa1+LjCTMVHNL8el4BlwkDb
+         hd4otYl2Meusl5NrydfCzJJu1M4OpD0Z0vY8xWvBu2LAnVHb5YlNo7pJOEvO7/1kq8
+         52K98XE0Hlz7VtObYvd7EghONIef2r15mwpXKuiWYIKWFuYOs0WAE4VU6F6lWKOLjZ
+         prGsLoarVS0wyeoXYguBgdxJ5pUo37HMGuvDKcZLm0h7uBe9RA83hk2sps8SVlM3XF
+         vcRa1z2hVf+3Q==
+Date:   Sat, 7 Oct 2023 11:56:56 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list : LOONGARCH" <loongarch@lists.linux.dev>,
-        KVM list <kvm@vger.kernel.org>, maobibo@loongson.cn,
-        Paolo Bonzini <pbonzini@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>
+Subject: Re: linux-next: Tree for Oct 6 (riscv: andes)
+Message-ID: <20231007-poach-refute-b84fe5b7431a@spud>
+References: <20231006153809.2054a0f8@canb.auug.org.au>
+ <09a6b0f0-76a1-45e3-ab52-329c47393d1d@infradead.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="vJKcyeb3DdW70Crt"
+Content-Disposition: inline
+In-Reply-To: <09a6b0f0-76a1-45e3-ab52-329c47393d1d@infradead.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -62,40 +55,67 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Queued for loongarch-next (though I prepared a similar patch), thanks.
 
-Huacai
+--vJKcyeb3DdW70Crt
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Sat, Oct 7, 2023 at 3:53=E2=80=AFPM Tianrui Zhao <zhaotianrui@loongson.c=
-n> wrote:
->
-> Export symbol for invalid_pud_table, so it can be used
-> by the files in other directories.
->
-> And this can resolve the problem caused in:
-> https://lore.kernel.org/lkml/20230927030959.3629941-5-zhaotianrui@loongso=
-n.cn/
-> ERROR: modpost: "invalid_pud_table" [arch/loongarch/kvm/kvm.ko] undefined=
-!
->
-> Signed-off-by: Tianrui Zhao <zhaotianrui@loongson.cn>
-> ---
->  arch/loongarch/mm/init.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/arch/loongarch/mm/init.c b/arch/loongarch/mm/init.c
-> index f3fe8c06ba4d..ddf1330c924c 100644
-> --- a/arch/loongarch/mm/init.c
-> +++ b/arch/loongarch/mm/init.c
-> @@ -240,6 +240,7 @@ pgd_t swapper_pg_dir[_PTRS_PER_PGD] __section(".bss..=
-swapper_pg_dir");
->  pgd_t invalid_pg_dir[_PTRS_PER_PGD] __page_aligned_bss;
->  #ifndef __PAGETABLE_PUD_FOLDED
->  pud_t invalid_pud_table[PTRS_PER_PUD] __page_aligned_bss;
-> +EXPORT_SYMBOL(invalid_pud_table);
->  #endif
->  #ifndef __PAGETABLE_PMD_FOLDED
->  pmd_t invalid_pmd_table[PTRS_PER_PMD] __page_aligned_bss;
-> --
-> 2.39.1
->
+On Fri, Oct 06, 2023 at 05:28:27PM -0700, Randy Dunlap wrote:
+>=20
+>=20
+> On 10/5/23 21:38, Stephen Rothwell wrote:
+> > Hi all,
+> >=20
+> > Changes since 20231005:
+> >=20
+>=20
+> on riscv 64bit:
+>=20
+> WARNING: unmet direct dependencies detected for ERRATA_ANDES
+>   Depends on [n]: RISCV_ALTERNATIVE [=3Dn] && RISCV_SBI [=3Dy]
+>   Selected by [y]:
+>   - ARCH_R9A07G043 [=3Dy] && SOC_RENESAS [=3Dy] && RISCV [=3Dy] && NONPOR=
+TABLE [=3Dy] && RISCV_SBI [=3Dy]
+>=20
+> ../arch/riscv/errata/andes/errata.c:59:54: warning: 'struct alt_entry' de=
+clared inside parameter list will not be visible outside of this definition=
+ or declaration
+>    59 | void __init_or_module andes_errata_patch_func(struct alt_entry *b=
+egin, struct alt_entry *end,
+>       |                                                      ^~~~~~~~~
+>=20
+>=20
+> Full randconfig file is attached.
+
+Riiight. XIP_KERNEL is enabled, which means no alternatives are
+permitted, but that R9A config option selects the Andes errata, which in
+turn depends on alternatives.
+
+I suppose we could do something like (untested):
+diff --git a/drivers/soc/renesas/Kconfig b/drivers/soc/renesas/Kconfig
+index 7b74de732718..6fe85255e2ce 100644
+--- a/drivers/soc/renesas/Kconfig
++++ b/drivers/soc/renesas/Kconfig
+@@ -343,7 +343,7 @@ config ARCH_R9A07G043
+        select ARCH_RZG2L
+        select AX45MP_L2_CACHE if RISCV_DMA_NONCOHERENT
+        select DMA_GLOBAL_POOL
+-       select ERRATA_ANDES if RISCV_SBI
++       select ERRATA_ANDES if (RISCV_SBI & RISCV_ALTERNATIVE)
+        select ERRATA_ANDES_CMO if ERRATA_ANDES
+        help
+          This enables support for the Renesas RZ/Five SoC.
+
+--vJKcyeb3DdW70Crt
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZSE5eAAKCRB4tDGHoIJi
+0sYXAP4lnHnMabjCni4wbpGFk69frnCb9rSEfcZuCdPQHjzcVwD/Tu5poWLRcoxu
+oUkhKLb+7gPk3njdHxW8GTEBJQZTNQc=
+=ZG8q
+-----END PGP SIGNATURE-----
+
+--vJKcyeb3DdW70Crt--

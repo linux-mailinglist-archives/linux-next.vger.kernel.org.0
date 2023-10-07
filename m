@@ -2,33 +2,39 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC8F07BC6F3
-	for <lists+linux-next@lfdr.de>; Sat,  7 Oct 2023 12:57:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DB4A7BC8FF
+	for <lists+linux-next@lfdr.de>; Sat,  7 Oct 2023 18:06:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343819AbjJGK5D (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 7 Oct 2023 06:57:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45978 "EHLO
+        id S1344057AbjJGQGo (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sat, 7 Oct 2023 12:06:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343782AbjJGK5C (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sat, 7 Oct 2023 06:57:02 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3343F93;
-        Sat,  7 Oct 2023 03:57:01 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F9ADC433C8;
-        Sat,  7 Oct 2023 10:56:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1696676220;
-        bh=FbDCBpNcB5UA8Pkt82Ea7XaptxlhhJwPIUs8N5p1Y3w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mPHOeOAjSgipfP1E4/ZSmHjMoLg/VK4jn8AUf5SjmhS5D/fjs07/blfVev+cunNlC
-         hEV8rDSOWcB898Ig04TXWx8V5U5mJnNuwK7iFi54crqVa1+LjCTMVHNL8el4BlwkDb
-         hd4otYl2Meusl5NrydfCzJJu1M4OpD0Z0vY8xWvBu2LAnVHb5YlNo7pJOEvO7/1kq8
-         52K98XE0Hlz7VtObYvd7EghONIef2r15mwpXKuiWYIKWFuYOs0WAE4VU6F6lWKOLjZ
-         prGsLoarVS0wyeoXYguBgdxJ5pUo37HMGuvDKcZLm0h7uBe9RA83hk2sps8SVlM3XF
-         vcRa1z2hVf+3Q==
-Date:   Sat, 7 Oct 2023 11:56:56 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Randy Dunlap <rdunlap@infradead.org>
+        with ESMTP id S1343992AbjJGQGn (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sat, 7 Oct 2023 12:06:43 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98D3AC2;
+        Sat,  7 Oct 2023 09:06:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=VZ4kcoqQ9YTUKz/bWlIB+CayC4kkrmXmIfZVAUvHPtc=; b=susPAjK8QuI+p9JXVgqO2BEDVm
+        tuVi4UOdZFnphceY5wN8zgkfsN8O2klVJ3AQnsxvuzQyBmCZIJBIRMVYaRHylOmnPlpZ+80nBiv5a
+        ZI5vz3fO0rKyi7x11ukxd4z0cgSHJStiPzwFmYeqFPbgukctzT5ec8Y8oOAtSrDHPkx4ue6fk/oUZ
+        +bs0xs/KVgd+w4UcFJm0gDJJb00wCfOd5I/BeXlkv/Yc3SbN0ksBzUjCdklCw4OY8srQFM9EjNRrs
+        fU23vOWutNHO8LrrQDqcQKta8bBqxVZbf+j+aPt9Cd6MsC+tBcAFa3XJHTKQ0ocRvah88I1HuUKS1
+        DpZk2xzQ==;
+Received: from [50.53.46.231] (helo=[192.168.254.15])
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qp9p5-007iOO-00;
+        Sat, 07 Oct 2023 16:06:35 +0000
+Message-ID: <ff4bbd33-e494-4db2-93e2-59d1a866d7cf@infradead.org>
+Date:   Sat, 7 Oct 2023 09:06:33 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: linux-next: Tree for Oct 6 (riscv: andes)
+Content-Language: en-US
+To:     Conor Dooley <conor@kernel.org>
 Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
@@ -36,86 +42,72 @@ Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Albert Ou <aou@eecs.berkeley.edu>
-Subject: Re: linux-next: Tree for Oct 6 (riscv: andes)
-Message-ID: <20231007-poach-refute-b84fe5b7431a@spud>
 References: <20231006153809.2054a0f8@canb.auug.org.au>
  <09a6b0f0-76a1-45e3-ab52-329c47393d1d@infradead.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="vJKcyeb3DdW70Crt"
-Content-Disposition: inline
-In-Reply-To: <09a6b0f0-76a1-45e3-ab52-329c47393d1d@infradead.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+ <20231007-poach-refute-b84fe5b7431a@spud>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20231007-poach-refute-b84fe5b7431a@spud>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+Hi Conor,
 
---vJKcyeb3DdW70Crt
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 10/7/23 03:56, Conor Dooley wrote:
+> On Fri, Oct 06, 2023 at 05:28:27PM -0700, Randy Dunlap wrote:
+>>
+>>
+>> On 10/5/23 21:38, Stephen Rothwell wrote:
+>>> Hi all,
+>>>
+>>> Changes since 20231005:
+>>>
+>>
+>> on riscv 64bit:
+>>
+>> WARNING: unmet direct dependencies detected for ERRATA_ANDES
+>>   Depends on [n]: RISCV_ALTERNATIVE [=n] && RISCV_SBI [=y]
+>>   Selected by [y]:
+>>   - ARCH_R9A07G043 [=y] && SOC_RENESAS [=y] && RISCV [=y] && NONPORTABLE [=y] && RISCV_SBI [=y]
+>>
+>> ../arch/riscv/errata/andes/errata.c:59:54: warning: 'struct alt_entry' declared inside parameter list will not be visible outside of this definition or declaration
+>>    59 | void __init_or_module andes_errata_patch_func(struct alt_entry *begin, struct alt_entry *end,
+>>       |                                                      ^~~~~~~~~
+>>
+>>
+>> Full randconfig file is attached.
+> 
+> Riiight. XIP_KERNEL is enabled, which means no alternatives are
+> permitted, but that R9A config option selects the Andes errata, which in
+> turn depends on alternatives.
+> 
+> I suppose we could do something like (untested):
+> diff --git a/drivers/soc/renesas/Kconfig b/drivers/soc/renesas/Kconfig
+> index 7b74de732718..6fe85255e2ce 100644
+> --- a/drivers/soc/renesas/Kconfig
+> +++ b/drivers/soc/renesas/Kconfig
+> @@ -343,7 +343,7 @@ config ARCH_R9A07G043
+>         select ARCH_RZG2L
+>         select AX45MP_L2_CACHE if RISCV_DMA_NONCOHERENT
+>         select DMA_GLOBAL_POOL
+> -       select ERRATA_ANDES if RISCV_SBI
+> +       select ERRATA_ANDES if (RISCV_SBI & RISCV_ALTERNATIVE)
 
-On Fri, Oct 06, 2023 at 05:28:27PM -0700, Randy Dunlap wrote:
->=20
->=20
-> On 10/5/23 21:38, Stephen Rothwell wrote:
-> > Hi all,
-> >=20
-> > Changes since 20231005:
-> >=20
->=20
-> on riscv 64bit:
->=20
-> WARNING: unmet direct dependencies detected for ERRATA_ANDES
->   Depends on [n]: RISCV_ALTERNATIVE [=3Dn] && RISCV_SBI [=3Dy]
->   Selected by [y]:
->   - ARCH_R9A07G043 [=3Dy] && SOC_RENESAS [=3Dy] && RISCV [=3Dy] && NONPOR=
-TABLE [=3Dy] && RISCV_SBI [=3Dy]
->=20
-> ../arch/riscv/errata/andes/errata.c:59:54: warning: 'struct alt_entry' de=
-clared inside parameter list will not be visible outside of this definition=
- or declaration
->    59 | void __init_or_module andes_errata_patch_func(struct alt_entry *b=
-egin, struct alt_entry *end,
->       |                                                      ^~~~~~~~~
->=20
->=20
-> Full randconfig file is attached.
+s/&/&&/ and then this works. Thanks.
 
-Riiight. XIP_KERNEL is enabled, which means no alternatives are
-permitted, but that R9A config option selects the Andes errata, which in
-turn depends on alternatives.
+Acked-by: Randy Dunlap <rdunlap@infradead.org>
+Tested-by: Randy Dunlap <rdunlap@infradead.org>
 
-I suppose we could do something like (untested):
-diff --git a/drivers/soc/renesas/Kconfig b/drivers/soc/renesas/Kconfig
-index 7b74de732718..6fe85255e2ce 100644
---- a/drivers/soc/renesas/Kconfig
-+++ b/drivers/soc/renesas/Kconfig
-@@ -343,7 +343,7 @@ config ARCH_R9A07G043
-        select ARCH_RZG2L
-        select AX45MP_L2_CACHE if RISCV_DMA_NONCOHERENT
-        select DMA_GLOBAL_POOL
--       select ERRATA_ANDES if RISCV_SBI
-+       select ERRATA_ANDES if (RISCV_SBI & RISCV_ALTERNATIVE)
-        select ERRATA_ANDES_CMO if ERRATA_ANDES
-        help
-          This enables support for the Renesas RZ/Five SoC.
+>         select ERRATA_ANDES_CMO if ERRATA_ANDES
+>         help
+>           This enables support for the Renesas RZ/Five SoC.
 
---vJKcyeb3DdW70Crt
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZSE5eAAKCRB4tDGHoIJi
-0sYXAP4lnHnMabjCni4wbpGFk69frnCb9rSEfcZuCdPQHjzcVwD/Tu5poWLRcoxu
-oUkhKLb+7gPk3njdHxW8GTEBJQZTNQc=
-=ZG8q
------END PGP SIGNATURE-----
-
---vJKcyeb3DdW70Crt--
+-- 
+~Randy

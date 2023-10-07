@@ -2,50 +2,52 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79F587BC907
-	for <lists+linux-next@lfdr.de>; Sat,  7 Oct 2023 18:14:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4CD07BC971
+	for <lists+linux-next@lfdr.de>; Sat,  7 Oct 2023 19:32:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344044AbjJGQOl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 7 Oct 2023 12:14:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41386 "EHLO
+        id S1344050AbjJGRcx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sat, 7 Oct 2023 13:32:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343992AbjJGQOl (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sat, 7 Oct 2023 12:14:41 -0400
+        with ESMTP id S1344046AbjJGRcw (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sat, 7 Oct 2023 13:32:52 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D983AB9;
-        Sat,  7 Oct 2023 09:14:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52B16A6;
+        Sat,  7 Oct 2023 10:32:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Content-Type:In-Reply-To:References:Cc:To:From:Subject:MIME-Version:Date:
         Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=e6r4ZECyO9EqgE0zmF10A/TBUvrf32/knhNgMfcTMpc=; b=tjDTEUPwILW4Bcxjb8LgjBeOcw
-        lqC/TEiUs36rn/1SswqXLPigaxpC/u813h4qlKONpc7jdvwfKh6SycnqIFfFGIO+fj6LrmmXhxQI8
-        PI7ogAxinHUjDWsXFXLwDB0/XYNWTKC5obe16CQE9P1SYtGpVYzg00r3Hr8oEcR6SZBXPtvfczBOg
-        fOlhTu9YpPwGkn1hNMRJlkNFh9ghKubr9EoO1ot8M+QMsK6prcCevqPNmlQf+ukokrFMo/vPcIzke
-        t98teuyDXl2Rhm7Tn6q68OAxB/uLuQVPkLVpwqe7pjxvKev/YhO//vpl/Lnq/pv7uU6M9H6odijv5
-        07KQyfIQ==;
+        bh=aJVvBE4SP5c8uAtSdDAuWAVhLtX7ZDGEDfCptajDH6k=; b=wFggfl5SM9G9zYhKm7l+YGoy21
+        oqRvLUxgsvRf5bDmcQ3izmplXtWY3KQ+rSU5OYf3uN0FyrbnbgGHok1snt20q59SL5E80/9lu9fy3
+        1+hElBG2xZM0QUmg66Xjz6GthUS6gJM8a3npbi9fxUaEXk9Sw0X+cQty9L2Hqyr/VV2fT76f4Jpj7
+        XIUVecYZOwjhq/nwla/GYBYF0dl4Aqis4aZek2MQGSkvAXRVQX/x6gcp8jZYUDHlf8PbQDmtuZL40
+        3gQF5xrl01yAF1PxvDpHrLgIqxdlqEp5UwtTJea2WleKR3vSnskg7/XNUGXBuaSzWXX5F9URhTlIz
+        cQiQ3Q+Q==;
 Received: from [50.53.46.231] (helo=[192.168.254.15])
         by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qp9wq-007imV-2l;
-        Sat, 07 Oct 2023 16:14:36 +0000
-Message-ID: <9f7931dd-3c0e-4bc2-988e-1fb3549e440e@infradead.org>
-Date:   Sat, 7 Oct 2023 09:14:36 -0700
+        id 1qpBAO-007lyk-11;
+        Sat, 07 Oct 2023 17:32:40 +0000
+Message-ID: <bc92f6cb-71dd-4b15-8d83-db7579ec7fb9@infradead.org>
+Date:   Sat, 7 Oct 2023 10:32:37 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH linux-next] LoongArch: mm: Export symbol for
- invalid_pud_table.
+Subject: Re: linux-next: Tree for Sep 20 (ppc32: ADB_CUDA Kconfig warning)
 Content-Language: en-US
-To:     Tianrui Zhao <zhaotianrui@loongson.cn>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list : LOONGARCH" <loongarch@lists.linux.dev>,
-        KVM list <kvm@vger.kernel.org>, maobibo@loongson.cn,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>
-References: <20231007075303.263407-1-zhaotianrui@loongson.cn>
 From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20231007075303.263407-1-zhaotianrui@loongson.cn>
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        tanyuan@tinylab.org
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+References: <20230920133714.351f83f9@canb.auug.org.au>
+ <fe130d55-7b5e-4444-85ea-c3fbf4eb238d@infradead.org>
+ <87il83m5k0.fsf@mail.lhotse>
+ <47afe095-0dd9-47bc-a4d1-dcd66f87ac7c@infradead.org>
+In-Reply-To: <47afe095-0dd9-47bc-a4d1-dcd66f87ac7c@infradead.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -57,40 +59,79 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+Hi Michael,
 
-
-On 10/7/23 00:53, Tianrui Zhao wrote:
-> Export symbol for invalid_pud_table, so it can be used
-> by the files in other directories.
+On 9/21/23 21:51, Randy Dunlap wrote:
 > 
-> And this can resolve the problem caused in:
-> https://lore.kernel.org/lkml/20230927030959.3629941-5-zhaotianrui@loongson.cn/
-> ERROR: modpost: "invalid_pud_table" [arch/loongarch/kvm/kvm.ko] undefined!
 > 
-> Signed-off-by: Tianrui Zhao <zhaotianrui@loongson.cn>
+> On 9/21/23 17:10, Michael Ellerman wrote:
+>> Randy Dunlap <rdunlap@infradead.org> writes:
+>>> On 9/19/23 20:37, Stephen Rothwell wrote:
+>>>> Hi all,
+>>>>
+>>>> Changes since 20230919:
+>>>>
+>>>> The mm tree lost its boot warning.
+>>>>
+>>>> The drm-misc tree gained a conflict against Linus' tree.
+>>>>
+>>>> Non-merge commits (relative to Linus' tree): 6006
+>>>>  3996 files changed, 459968 insertions(+), 111742 deletions(-)
+>>>>
+>>>> ----------------------------------------------------------------------------
+>>>
+>>> 4 out of 10 randconfigs have this warning:
+>>>
+>>> WARNING: unmet direct dependencies detected for ADB_CUDA
+>>>   Depends on [n]: MACINTOSH_DRIVERS [=n] && (ADB [=n] || PPC_PMAC [=y]) && !PPC_PMAC64 [=n]
+>>>   Selected by [y]:
+>>>   - PPC_PMAC [=y] && PPC_BOOK3S [=y] && CPU_BIG_ENDIAN [=y] && POWER_RESET [=y] && PPC32 [=y]
+>>>
+>>> WARNING: unmet direct dependencies detected for ADB_CUDA
+>>>   Depends on [n]: MACINTOSH_DRIVERS [=n] && (ADB [=n] || PPC_PMAC [=y]) && !PPC_PMAC64 [=n]
+>>>   Selected by [y]:
+>>>   - PPC_PMAC [=y] && PPC_BOOK3S [=y] && CPU_BIG_ENDIAN [=y] && POWER_RESET [=y] && PPC32 [=y]
+>>>
+>>> WARNING: unmet direct dependencies detected for ADB_CUDA
+>>>   Depends on [n]: MACINTOSH_DRIVERS [=n] && (ADB [=n] || PPC_PMAC [=y]) && !PPC_PMAC64 [=n]
+>>>   Selected by [y]:
+>>>   - PPC_PMAC [=y] && PPC_BOOK3S [=y] && CPU_BIG_ENDIAN [=y] && POWER_RESET [=y] && PPC32 [=y]
+>>
+>> Crud. Caused by:
+>>
+>> a3ef2fef198c ("powerpc/32: Add dependencies of POWER_RESET for pmac32")
+>>
+>> I was suspicious of that select, I should have been *more* suspicious :)
+>>
+>> I think this is a fix. The PPC32 isn't needed because ADB depends on (PPC_PMAC && PPC32).
+> 
+> Yes, that fixes the problem. Thanks.
+> 
+> Tested-by: Randy Dunlap <rdunlap@infradead.org>
+> Acked-by: Randy Dunlap <rdunlap@infradead.org>
+> 
 
-Reported-by: Randy Dunlap <rdunlap@infradead.org>
-Acked-by: Randy Dunlap <rdunlap@infradead.org>
-Tested-by: Randy Dunlap <rdunlap@infradead.org>
+Will you be merging this fix?
 
 Thanks.
 
-> ---
->  arch/loongarch/mm/init.c | 1 +
->  1 file changed, 1 insertion(+)
+>>
+>> diff --git a/arch/powerpc/platforms/powermac/Kconfig b/arch/powerpc/platforms/powermac/Kconfig
+>> index 8bdae0caf21e..84f101ec53a9 100644
+>> --- a/arch/powerpc/platforms/powermac/Kconfig
+>> +++ b/arch/powerpc/platforms/powermac/Kconfig
+>> @@ -2,7 +2,7 @@
+>>  config PPC_PMAC
+>>         bool "Apple PowerMac based machines"
+>>         depends on PPC_BOOK3S && CPU_BIG_ENDIAN
+>> -       select ADB_CUDA if POWER_RESET && PPC32
+>> +       select ADB_CUDA if POWER_RESET && ADB
+>>         select MPIC
+>>         select FORCE_PCI
+>>         select PPC_INDIRECT_PCI if PPC32
+>>
+>> cheers
 > 
-> diff --git a/arch/loongarch/mm/init.c b/arch/loongarch/mm/init.c
-> index f3fe8c06ba4d..ddf1330c924c 100644
-> --- a/arch/loongarch/mm/init.c
-> +++ b/arch/loongarch/mm/init.c
-> @@ -240,6 +240,7 @@ pgd_t swapper_pg_dir[_PTRS_PER_PGD] __section(".bss..swapper_pg_dir");
->  pgd_t invalid_pg_dir[_PTRS_PER_PGD] __page_aligned_bss;
->  #ifndef __PAGETABLE_PUD_FOLDED
->  pud_t invalid_pud_table[PTRS_PER_PUD] __page_aligned_bss;
-> +EXPORT_SYMBOL(invalid_pud_table);
->  #endif
->  #ifndef __PAGETABLE_PMD_FOLDED
->  pmd_t invalid_pmd_table[PTRS_PER_PMD] __page_aligned_bss;
 
 -- 
 ~Randy

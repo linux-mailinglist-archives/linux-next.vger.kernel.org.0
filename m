@@ -2,51 +2,50 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DB4A7BC8FF
-	for <lists+linux-next@lfdr.de>; Sat,  7 Oct 2023 18:06:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79F587BC907
+	for <lists+linux-next@lfdr.de>; Sat,  7 Oct 2023 18:14:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344057AbjJGQGo (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 7 Oct 2023 12:06:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38478 "EHLO
+        id S1344044AbjJGQOl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sat, 7 Oct 2023 12:14:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343992AbjJGQGn (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sat, 7 Oct 2023 12:06:43 -0400
+        with ESMTP id S1343992AbjJGQOl (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sat, 7 Oct 2023 12:14:41 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98D3AC2;
-        Sat,  7 Oct 2023 09:06:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D983AB9;
+        Sat,  7 Oct 2023 09:14:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
         Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
         Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=VZ4kcoqQ9YTUKz/bWlIB+CayC4kkrmXmIfZVAUvHPtc=; b=susPAjK8QuI+p9JXVgqO2BEDVm
-        tuVi4UOdZFnphceY5wN8zgkfsN8O2klVJ3AQnsxvuzQyBmCZIJBIRMVYaRHylOmnPlpZ+80nBiv5a
-        ZI5vz3fO0rKyi7x11ukxd4z0cgSHJStiPzwFmYeqFPbgukctzT5ec8Y8oOAtSrDHPkx4ue6fk/oUZ
-        +bs0xs/KVgd+w4UcFJm0gDJJb00wCfOd5I/BeXlkv/Yc3SbN0ksBzUjCdklCw4OY8srQFM9EjNRrs
-        fU23vOWutNHO8LrrQDqcQKta8bBqxVZbf+j+aPt9Cd6MsC+tBcAFa3XJHTKQ0ocRvah88I1HuUKS1
-        DpZk2xzQ==;
+        bh=e6r4ZECyO9EqgE0zmF10A/TBUvrf32/knhNgMfcTMpc=; b=tjDTEUPwILW4Bcxjb8LgjBeOcw
+        lqC/TEiUs36rn/1SswqXLPigaxpC/u813h4qlKONpc7jdvwfKh6SycnqIFfFGIO+fj6LrmmXhxQI8
+        PI7ogAxinHUjDWsXFXLwDB0/XYNWTKC5obe16CQE9P1SYtGpVYzg00r3Hr8oEcR6SZBXPtvfczBOg
+        fOlhTu9YpPwGkn1hNMRJlkNFh9ghKubr9EoO1ot8M+QMsK6prcCevqPNmlQf+ukokrFMo/vPcIzke
+        t98teuyDXl2Rhm7Tn6q68OAxB/uLuQVPkLVpwqe7pjxvKev/YhO//vpl/Lnq/pv7uU6M9H6odijv5
+        07KQyfIQ==;
 Received: from [50.53.46.231] (helo=[192.168.254.15])
         by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qp9p5-007iOO-00;
-        Sat, 07 Oct 2023 16:06:35 +0000
-Message-ID: <ff4bbd33-e494-4db2-93e2-59d1a866d7cf@infradead.org>
-Date:   Sat, 7 Oct 2023 09:06:33 -0700
+        id 1qp9wq-007imV-2l;
+        Sat, 07 Oct 2023 16:14:36 +0000
+Message-ID: <9f7931dd-3c0e-4bc2-988e-1fb3549e440e@infradead.org>
+Date:   Sat, 7 Oct 2023 09:14:36 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: Tree for Oct 6 (riscv: andes)
+Subject: Re: [PATCH linux-next] LoongArch: mm: Export symbol for
+ invalid_pud_table.
 Content-Language: en-US
-To:     Conor Dooley <conor@kernel.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-References: <20231006153809.2054a0f8@canb.auug.org.au>
- <09a6b0f0-76a1-45e3-ab52-329c47393d1d@infradead.org>
- <20231007-poach-refute-b84fe5b7431a@spud>
+To:     Tianrui Zhao <zhaotianrui@loongson.cn>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list : LOONGARCH" <loongarch@lists.linux.dev>,
+        KVM list <kvm@vger.kernel.org>, maobibo@loongson.cn,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>
+References: <20231007075303.263407-1-zhaotianrui@loongson.cn>
 From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20231007-poach-refute-b84fe5b7431a@spud>
+In-Reply-To: <20231007075303.263407-1-zhaotianrui@loongson.cn>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -58,56 +57,40 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Conor,
 
-On 10/7/23 03:56, Conor Dooley wrote:
-> On Fri, Oct 06, 2023 at 05:28:27PM -0700, Randy Dunlap wrote:
->>
->>
->> On 10/5/23 21:38, Stephen Rothwell wrote:
->>> Hi all,
->>>
->>> Changes since 20231005:
->>>
->>
->> on riscv 64bit:
->>
->> WARNING: unmet direct dependencies detected for ERRATA_ANDES
->>   Depends on [n]: RISCV_ALTERNATIVE [=n] && RISCV_SBI [=y]
->>   Selected by [y]:
->>   - ARCH_R9A07G043 [=y] && SOC_RENESAS [=y] && RISCV [=y] && NONPORTABLE [=y] && RISCV_SBI [=y]
->>
->> ../arch/riscv/errata/andes/errata.c:59:54: warning: 'struct alt_entry' declared inside parameter list will not be visible outside of this definition or declaration
->>    59 | void __init_or_module andes_errata_patch_func(struct alt_entry *begin, struct alt_entry *end,
->>       |                                                      ^~~~~~~~~
->>
->>
->> Full randconfig file is attached.
+
+On 10/7/23 00:53, Tianrui Zhao wrote:
+> Export symbol for invalid_pud_table, so it can be used
+> by the files in other directories.
 > 
-> Riiight. XIP_KERNEL is enabled, which means no alternatives are
-> permitted, but that R9A config option selects the Andes errata, which in
-> turn depends on alternatives.
+> And this can resolve the problem caused in:
+> https://lore.kernel.org/lkml/20230927030959.3629941-5-zhaotianrui@loongson.cn/
+> ERROR: modpost: "invalid_pud_table" [arch/loongarch/kvm/kvm.ko] undefined!
 > 
-> I suppose we could do something like (untested):
-> diff --git a/drivers/soc/renesas/Kconfig b/drivers/soc/renesas/Kconfig
-> index 7b74de732718..6fe85255e2ce 100644
-> --- a/drivers/soc/renesas/Kconfig
-> +++ b/drivers/soc/renesas/Kconfig
-> @@ -343,7 +343,7 @@ config ARCH_R9A07G043
->         select ARCH_RZG2L
->         select AX45MP_L2_CACHE if RISCV_DMA_NONCOHERENT
->         select DMA_GLOBAL_POOL
-> -       select ERRATA_ANDES if RISCV_SBI
-> +       select ERRATA_ANDES if (RISCV_SBI & RISCV_ALTERNATIVE)
+> Signed-off-by: Tianrui Zhao <zhaotianrui@loongson.cn>
 
-s/&/&&/ and then this works. Thanks.
-
+Reported-by: Randy Dunlap <rdunlap@infradead.org>
 Acked-by: Randy Dunlap <rdunlap@infradead.org>
 Tested-by: Randy Dunlap <rdunlap@infradead.org>
 
->         select ERRATA_ANDES_CMO if ERRATA_ANDES
->         help
->           This enables support for the Renesas RZ/Five SoC.
+Thanks.
+
+> ---
+>  arch/loongarch/mm/init.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/arch/loongarch/mm/init.c b/arch/loongarch/mm/init.c
+> index f3fe8c06ba4d..ddf1330c924c 100644
+> --- a/arch/loongarch/mm/init.c
+> +++ b/arch/loongarch/mm/init.c
+> @@ -240,6 +240,7 @@ pgd_t swapper_pg_dir[_PTRS_PER_PGD] __section(".bss..swapper_pg_dir");
+>  pgd_t invalid_pg_dir[_PTRS_PER_PGD] __page_aligned_bss;
+>  #ifndef __PAGETABLE_PUD_FOLDED
+>  pud_t invalid_pud_table[PTRS_PER_PUD] __page_aligned_bss;
+> +EXPORT_SYMBOL(invalid_pud_table);
+>  #endif
+>  #ifndef __PAGETABLE_PMD_FOLDED
+>  pmd_t invalid_pmd_table[PTRS_PER_PMD] __page_aligned_bss;
 
 -- 
 ~Randy

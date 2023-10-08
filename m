@@ -2,136 +2,95 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4CD07BC971
-	for <lists+linux-next@lfdr.de>; Sat,  7 Oct 2023 19:32:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93D817BD03C
+	for <lists+linux-next@lfdr.de>; Sun,  8 Oct 2023 23:22:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344050AbjJGRcx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 7 Oct 2023 13:32:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59642 "EHLO
+        id S230297AbjJHVWE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 8 Oct 2023 17:22:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344046AbjJGRcw (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sat, 7 Oct 2023 13:32:52 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52B16A6;
-        Sat,  7 Oct 2023 10:32:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:References:Cc:To:From:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=aJVvBE4SP5c8uAtSdDAuWAVhLtX7ZDGEDfCptajDH6k=; b=wFggfl5SM9G9zYhKm7l+YGoy21
-        oqRvLUxgsvRf5bDmcQ3izmplXtWY3KQ+rSU5OYf3uN0FyrbnbgGHok1snt20q59SL5E80/9lu9fy3
-        1+hElBG2xZM0QUmg66Xjz6GthUS6gJM8a3npbi9fxUaEXk9Sw0X+cQty9L2Hqyr/VV2fT76f4Jpj7
-        XIUVecYZOwjhq/nwla/GYBYF0dl4Aqis4aZek2MQGSkvAXRVQX/x6gcp8jZYUDHlf8PbQDmtuZL40
-        3gQF5xrl01yAF1PxvDpHrLgIqxdlqEp5UwtTJea2WleKR3vSnskg7/XNUGXBuaSzWXX5F9URhTlIz
-        cQiQ3Q+Q==;
-Received: from [50.53.46.231] (helo=[192.168.254.15])
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qpBAO-007lyk-11;
-        Sat, 07 Oct 2023 17:32:40 +0000
-Message-ID: <bc92f6cb-71dd-4b15-8d83-db7579ec7fb9@infradead.org>
-Date:   Sat, 7 Oct 2023 10:32:37 -0700
+        with ESMTP id S230373AbjJHVWD (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 8 Oct 2023 17:22:03 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 330329D;
+        Sun,  8 Oct 2023 14:22:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1696800113;
+        bh=NIPp7qa77EEcjTVDJ+U30nCovPstS57FpHksGRlizt0=;
+        h=Date:From:To:Cc:Subject:From;
+        b=NxZdKa4PuFUSYKsl+vbRxNaj8/YKuD4C9w17YhwqPGGSGE/rh6zxEx9xkLnHKCNHL
+         3aY659djBQWoPsGShTIDON5nUumJklxFhqMdsLxcyVS2xD2q4YAVYSzJKDJwFz0Y4a
+         S9dUWjuHfBI0fmzOiup+OlxrTebWOx8OrvNs4rlCwMav4/xOIQe0pF8YziuIRmKiRO
+         3S6tenRCnBljm+i1tmOvwqVGPYEP4cF1YmCZye1j1fmFVnXQ+gdf7jpH42tYUF1FLq
+         7zKbeZC7opOmQ1vkkNfuts1b/HjFcFLJ7wfoQEdmStK+fvzT6I+kBJqiFTCmxMRiYu
+         gBmZm1eZWbCAA==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4S3ZqP1LLYz4x5K;
+        Mon,  9 Oct 2023 08:21:53 +1100 (AEDT)
+Date:   Mon, 9 Oct 2023 08:21:51 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Theodore Ts'o <tytso@mit.edu>
+Cc:     Wang Jianjian <wangjianjian0@foxmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the ext4 tree
+Message-ID: <20231009082151.70a630a2@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: Tree for Sep 20 (ppc32: ADB_CUDA Kconfig warning)
-Content-Language: en-US
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        tanyuan@tinylab.org
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>
-References: <20230920133714.351f83f9@canb.auug.org.au>
- <fe130d55-7b5e-4444-85ea-c3fbf4eb238d@infradead.org>
- <87il83m5k0.fsf@mail.lhotse>
- <47afe095-0dd9-47bc-a4d1-dcd66f87ac7c@infradead.org>
-In-Reply-To: <47afe095-0dd9-47bc-a4d1-dcd66f87ac7c@infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/LirgHqgOfDIsIyfuLba7E40";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Michael,
+--Sig_/LirgHqgOfDIsIyfuLba7E40
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On 9/21/23 21:51, Randy Dunlap wrote:
-> 
-> 
-> On 9/21/23 17:10, Michael Ellerman wrote:
->> Randy Dunlap <rdunlap@infradead.org> writes:
->>> On 9/19/23 20:37, Stephen Rothwell wrote:
->>>> Hi all,
->>>>
->>>> Changes since 20230919:
->>>>
->>>> The mm tree lost its boot warning.
->>>>
->>>> The drm-misc tree gained a conflict against Linus' tree.
->>>>
->>>> Non-merge commits (relative to Linus' tree): 6006
->>>>  3996 files changed, 459968 insertions(+), 111742 deletions(-)
->>>>
->>>> ----------------------------------------------------------------------------
->>>
->>> 4 out of 10 randconfigs have this warning:
->>>
->>> WARNING: unmet direct dependencies detected for ADB_CUDA
->>>   Depends on [n]: MACINTOSH_DRIVERS [=n] && (ADB [=n] || PPC_PMAC [=y]) && !PPC_PMAC64 [=n]
->>>   Selected by [y]:
->>>   - PPC_PMAC [=y] && PPC_BOOK3S [=y] && CPU_BIG_ENDIAN [=y] && POWER_RESET [=y] && PPC32 [=y]
->>>
->>> WARNING: unmet direct dependencies detected for ADB_CUDA
->>>   Depends on [n]: MACINTOSH_DRIVERS [=n] && (ADB [=n] || PPC_PMAC [=y]) && !PPC_PMAC64 [=n]
->>>   Selected by [y]:
->>>   - PPC_PMAC [=y] && PPC_BOOK3S [=y] && CPU_BIG_ENDIAN [=y] && POWER_RESET [=y] && PPC32 [=y]
->>>
->>> WARNING: unmet direct dependencies detected for ADB_CUDA
->>>   Depends on [n]: MACINTOSH_DRIVERS [=n] && (ADB [=n] || PPC_PMAC [=y]) && !PPC_PMAC64 [=n]
->>>   Selected by [y]:
->>>   - PPC_PMAC [=y] && PPC_BOOK3S [=y] && CPU_BIG_ENDIAN [=y] && POWER_RESET [=y] && PPC32 [=y]
->>
->> Crud. Caused by:
->>
->> a3ef2fef198c ("powerpc/32: Add dependencies of POWER_RESET for pmac32")
->>
->> I was suspicious of that select, I should have been *more* suspicious :)
->>
->> I think this is a fix. The PPC32 isn't needed because ADB depends on (PPC_PMAC && PPC32).
-> 
-> Yes, that fixes the problem. Thanks.
-> 
-> Tested-by: Randy Dunlap <rdunlap@infradead.org>
-> Acked-by: Randy Dunlap <rdunlap@infradead.org>
-> 
+Hi all,
 
-Will you be merging this fix?
+In commit
 
-Thanks.
+  ebf6cb7c6e12 ("ext4: no need to generate from free list in mballoc")
 
->>
->> diff --git a/arch/powerpc/platforms/powermac/Kconfig b/arch/powerpc/platforms/powermac/Kconfig
->> index 8bdae0caf21e..84f101ec53a9 100644
->> --- a/arch/powerpc/platforms/powermac/Kconfig
->> +++ b/arch/powerpc/platforms/powermac/Kconfig
->> @@ -2,7 +2,7 @@
->>  config PPC_PMAC
->>         bool "Apple PowerMac based machines"
->>         depends on PPC_BOOK3S && CPU_BIG_ENDIAN
->> -       select ADB_CUDA if POWER_RESET && PPC32
->> +       select ADB_CUDA if POWER_RESET && ADB
->>         select MPIC
->>         select FORCE_PCI
->>         select PPC_INDIRECT_PCI if PPC32
->>
->> cheers
-> 
+Fixes tag
 
--- 
-~Randy
+  Fixes: 7a2fcbf7f85('ext4: don't use blocks freed but not yet committed in=
+ buddy cache init')
+
+has these problem(s):
+
+  - missing space between the SHA1 and the subject
+  - SHA1 should be at least 12 digits long
+    This can be fixed for the future by setting core.abbrev to 12 (or
+    more) or (for git v2.11 or later) just making sure it is not set
+    (or set to "auto").
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/LirgHqgOfDIsIyfuLba7E40
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmUjHW8ACgkQAVBC80lX
+0GwXwgf/aw1U5tNKtPjfpvdqozLgodvYTSjPjqdgeL5J1gbGTHIKEZf3Tk12qU4M
+NxKDxDIND8vI8/DQ9eP8oLpXD7C/8beH5zxngrj9WzNvFSudC0qv82qpRsnEVzID
+3kDGbHSA88J0o11i2z858hJPajjcZ0q6kc4CxjJiAqAiWYGW3DLkKIpjeEDcXAbk
+agy+p7lru9mtniDI+FKgscF3vDtuOkw/uG0aEhB5o9rAM3hMXrnlYdyDC+QDV8Mu
+1rYewqUGjN8/GYwHum1BEB6WYWlEbhBoXYTA1XwhysHL2bLgRbO5j4J6Vn8eUHfZ
+3g6A785sCKhhmh4nW47X9aTgJPYEjA==
+=g7j8
+-----END PGP SIGNATURE-----
+
+--Sig_/LirgHqgOfDIsIyfuLba7E40--

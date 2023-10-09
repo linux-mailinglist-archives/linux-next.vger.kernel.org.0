@@ -2,142 +2,118 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 429BD7BD599
-	for <lists+linux-next@lfdr.de>; Mon,  9 Oct 2023 10:48:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FF327BD600
+	for <lists+linux-next@lfdr.de>; Mon,  9 Oct 2023 11:00:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345520AbjJIIsb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 9 Oct 2023 04:48:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47800 "EHLO
+        id S1345602AbjJIJAq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 9 Oct 2023 05:00:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345489AbjJIIsa (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 9 Oct 2023 04:48:30 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0762A3;
-        Mon,  9 Oct 2023 01:48:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=vsEYVvFd0zJLjsdD17x+dxYbHK8LYUuMJRmfVCrYGtw=; b=B2txYrQOk6U8asYJhO+g+1IPzN
-        8SSELzSqQOMyNwfIJdlnHnQMcDlRRrdfw2kZatVBOvRfbY/d/LMSRbu9wgMgq7eRIaH3Z13CT2CzA
-        Z2/c3mGlHjnujHrYfP45/88GvhlpFpD1ZS0lFv8ZwtR1q+UDRZPUxR3XoCk7ZwmB6vQr0p3XKC7fH
-        4I1kRx2bz+xplVnj2DcKATmaINoUgfg+HZTvWds9BrRLEU74q05vIEwSYrH+/DZajm97/smj+R48N
-        4ImKw2qs2ixiqFwG/jiqC8n/eS3x5WL2ZgDDVIhMR4u4G+Gn/TGd7rh/f+zcGtWqcYLUw6m0WC3wr
-        Md6BcMmg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qplvv-00Fjac-15;
-        Mon, 09 Oct 2023 08:48:13 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 6F8EE300454; Mon,  9 Oct 2023 10:48:12 +0200 (CEST)
-Date:   Mon, 9 Oct 2023 10:48:12 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Jens Axboe <axboe@kernel.dk>, Arnd Bergmann <arnd@arndb.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Sohil Mehta <sohil.mehta@intel.com>
-Subject: Re: linux-next: manual merge of the block tree with the asm-generic
- tree
-Message-ID: <20231009084812.GB14330@noisy.programming.kicks-ass.net>
-References: <20231009123118.4487a0e1@canb.auug.org.au>
+        with ESMTP id S1345584AbjJIJAp (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 9 Oct 2023 05:00:45 -0400
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 197EDBA;
+        Mon,  9 Oct 2023 02:00:43 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id CB11D3200A39;
+        Mon,  9 Oct 2023 05:00:41 -0400 (EDT)
+Received: from imap50 ([10.202.2.100])
+  by compute5.internal (MEProxy); Mon, 09 Oct 2023 05:00:42 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1696842041; x=1696928441; bh=o/
+        wzvx34TIgXR11wBM5KYdkH55zx4SvySDjKi5HnqWM=; b=baMvRfbpiizIGEKynj
+        8QKUMDhCWWf9WXAbY67udr5Lfse6o0EJBzz90WcfFdU4fPoSXQN761RMqtGkZahQ
+        GlOJFeCBVJJtH2xrZp5VPjPzItoqF2xewuDdMNMENZDS2Jm8Kh27ZPAJznLOvhu0
+        SDv4q5//k8h5Kz2gIXR5vxcw96JaygSkfU6G1sTxejIHEaKBZHrasfsh7XwJfNNa
+        1w+VF3COjk1Z54wSt8s0hw1wJp85p7wJklZdRjstLhkUA689elRyIjs6T3IU+cUE
+        YxNW1d49mj0Ov+zmUaGf6XHeQmhpAG/ZVpAN+Z6VD0RRBg85dslqcP/IrwbIa3jl
+        jGcg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1696842041; x=1696928441; bh=o/wzvx34TIgXR
+        11wBM5KYdkH55zx4SvySDjKi5HnqWM=; b=c1nEUkMF/Uxb8yYlIMwUldweLushx
+        +H39Iv6GVqx7z1WDNp9SjmI6YrG9mzLsWqH3w+YOihhG01HQySGH6a9UJBxfupC7
+        nwfqExLhbJcydnMB2lMG06OjnX5OLJl4iQcnYEFQp0NrphOTZYa/Pzx1/Sf/sc2h
+        6ogvBDNk8U/eFfsYDZo5dSrxFGcUkSnqyWdMMTjq/UxOaZdejUAaVnXUVbPoAuK7
+        jJFKy1GUmjSVDGHipy1riHl2sAxDde7WQIAPrnhYdsGAalSe/GRYwJkdq0KIO3Tb
+        oBmKUAlyvlhO4CSrMSEe3iJuTv7mip2MHPLFFVrAC33RcOkk3pE68dKAw==
+X-ME-Sender: <xms:OMEjZfCWyqIz3tyzRfv7z5jG9Cjz7BQpPov5pycFlpbkAanYU96Mlw>
+    <xme:OMEjZVgAFOH-SuF-T1fOtlxU6F-iPEUKSVhF1lc7keGZuRSIZL-bFt1C__G0iieIb
+    XP6IfA8MfiX_-NDO4Y>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrheefgddutdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
+    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
+    hnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:OMEjZamNU2YfNjlUineL7MxC3XWUVH1-dp5AGa7hRVorrkAl6mu4IA>
+    <xmx:OMEjZRyTiA0MZZgU7oGRMIHp9i6KMl49Y4RUAc2Jle2D32kN6RxH5A>
+    <xmx:OMEjZUSPZZlRE_m62m7UvN4qEl3wqXVoCWBqhT90mSGZiA1JBCgjFA>
+    <xmx:OcEjZaccwJ4H3IPTseV3QxUzB5MAyHHhT-e_dZgRtCgD6Nggb0X-qA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id ACCDB1700089; Mon,  9 Oct 2023 05:00:39 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-958-g1b1b911df8-fm-20230927.002-g1b1b911d
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20231009123118.4487a0e1@canb.auug.org.au>
+Message-Id: <cb4bb8e2-7dfe-4ca4-aa70-060f7b2f8f95@app.fastmail.com>
+In-Reply-To: <20231009084812.GB14330@noisy.programming.kicks-ass.net>
+References: <20231009123118.4487a0e1@canb.auug.org.au>
+ <20231009084812.GB14330@noisy.programming.kicks-ass.net>
+Date:   Mon, 09 Oct 2023 11:00:19 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Peter Zijlstra" <peterz@infradead.org>,
+        "Stephen Rothwell" <sfr@canb.auug.org.au>
+Cc:     "Jens Axboe" <axboe@kernel.dk>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        linux-next <linux-next@vger.kernel.org>,
+        "Sohil Mehta" <sohil.mehta@intel.com>
+Subject: Re: linux-next: manual merge of the block tree with the asm-generic tree
+Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Oct 09, 2023 at 12:31:18PM +1100, Stephen Rothwell wrote:
-> Hi all,
->=20
-> Today's linux-next merge of the block tree got conflicts in:
->=20
->   arch/alpha/kernel/syscalls/syscall.tbl
->   arch/arm/tools/syscall.tbl
->   arch/arm64/include/asm/unistd.h
->   arch/arm64/include/asm/unistd32.h
->   arch/m68k/kernel/syscalls/syscall.tbl
->   arch/microblaze/kernel/syscalls/syscall.tbl
->   arch/mips/kernel/syscalls/syscall_n32.tbl
->   arch/mips/kernel/syscalls/syscall_n64.tbl
->   arch/mips/kernel/syscalls/syscall_o32.tbl
->   arch/parisc/kernel/syscalls/syscall.tbl
->   arch/powerpc/kernel/syscalls/syscall.tbl
->   arch/s390/kernel/syscalls/syscall.tbl
->   arch/sh/kernel/syscalls/syscall.tbl
->   arch/sparc/kernel/syscalls/syscall.tbl
->   arch/x86/entry/syscalls/syscall_32.tbl
->   arch/xtensa/kernel/syscalls/syscall.tbl
->   include/uapi/asm-generic/unistd.h
->=20
-> between commits:
->=20
->   2fd0ebad27bc ("arch: Reserve map_shadow_stack() syscall number for all =
-architectures")
->=20
-> from the asm-generic tree and commits:
->=20
->   9f6c532f59b2 ("futex: Add sys_futex_wake()")
->   cb8c4312afca ("futex: Add sys_futex_wait()")
->   0f4b5f972216 ("futex: Add sys_futex_requeue()")
->=20
-> from the block tree.
+On Mon, Oct 9, 2023, at 10:48, Peter Zijlstra wrote:
+> On Mon, Oct 09, 2023 at 12:31:18PM +1100, Stephen Rothwell wrote:
+>> diff --cc arch/alpha/kernel/syscalls/syscall.tbl
+>> index 5d05ab716a74,b1865f9bb31e..000000000000
+>> --- a/arch/alpha/kernel/syscalls/syscall.tbl
+>> +++ b/arch/alpha/kernel/syscalls/syscall.tbl
+>> @@@ -492,4 -492,6 +492,7 @@@
+>>   560	common	set_mempolicy_home_node		sys_ni_syscall
+>>   561	common	cachestat			sys_cachestat
+>>   562	common	fchmodat2			sys_fchmodat2
+>>  -563	common	futex_wake			sys_futex_wake
+>>  -564	common	futex_wait			sys_futex_wait
+>>  -565	common	futex_requeue			sys_futex_requeue
+>>  +563	common	map_shadow_stack		sys_map_shadow_stack
+>> ++564	common	futex_wake			sys_futex_wake
+>> ++565	common	futex_wait			sys_futex_wait
+>> ++566	common	futex_requeue			sys_futex_requeue
+>
+> So this renumbers the (futex) stuff on Alpha, does anybody care? AFAICT
+> Alpha does not follow the unistd order and meh.
 
-fun fun fun..
+Let's not make it worse for now. All the numbers since the
+introduction of the time64 syscalls are offset by exactly 120
+on alpha, and I'd prefer to keep it that way for the moment.
 
+I still hope to eventually finish the conversion of all architectures
+to a single syscall.tbl for numbers >400, and if that happens before
+the end of alpha, a different ordering would just be extra pain.
 
-> diff --cc arch/alpha/kernel/syscalls/syscall.tbl
-> index 5d05ab716a74,b1865f9bb31e..000000000000
-> --- a/arch/alpha/kernel/syscalls/syscall.tbl
-> +++ b/arch/alpha/kernel/syscalls/syscall.tbl
-> @@@ -492,4 -492,6 +492,7 @@@
->   560	common	set_mempolicy_home_node		sys_ni_syscall
->   561	common	cachestat			sys_cachestat
->   562	common	fchmodat2			sys_fchmodat2
->  -563	common	futex_wake			sys_futex_wake
->  -564	common	futex_wait			sys_futex_wait
->  -565	common	futex_requeue			sys_futex_requeue
->  +563	common	map_shadow_stack		sys_map_shadow_stack
-> ++564	common	futex_wake			sys_futex_wake
-> ++565	common	futex_wait			sys_futex_wait
-> ++566	common	futex_requeue			sys_futex_requeue
-
-So this renumbers the (futex) stuff on Alpha, does anybody care? AFAICT
-Alpha does not follow the unistd order and meh.
-
-> diff --cc include/uapi/asm-generic/unistd.h
-> index 00df5af71ca1,d9e9cd13e577..000000000000
-> --- a/include/uapi/asm-generic/unistd.h
-> +++ b/include/uapi/asm-generic/unistd.h
-> @@@ -822,12 -822,15 +822,18 @@@ __SYSCALL(__NR_cachestat, sys_cachestat
->  =20
->   #define __NR_fchmodat2 452
->   __SYSCALL(__NR_fchmodat2, sys_fchmodat2)
-> + #define __NR_futex_wake 454
-> + __SYSCALL(__NR_futex_wake, sys_futex_wake)
-> + #define __NR_futex_wait 455
-> + __SYSCALL(__NR_futex_wait, sys_futex_wait)
-> + #define __NR_futex_requeue 456
-> + __SYSCALL(__NR_futex_requeue, sys_futex_requeue)
->  =20
->  +#define __NR_map_shadow_stack 453
->  +__SYSCALL(__NR_map_shadow_stack, sys_map_shadow_stack)
->  +
->   #undef __NR_syscalls
-> - #define __NR_syscalls 454
-> + #define __NR_syscalls 457
->  =20
->   /*
->    * 32 bit systems traditionally used different
-
-This seems to have the hunks in the wrong order, 453 should come before
-454 no?
-
+    Arnd

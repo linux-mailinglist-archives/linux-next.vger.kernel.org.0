@@ -2,83 +2,92 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E30A77BE1FE
-	for <lists+linux-next@lfdr.de>; Mon,  9 Oct 2023 16:00:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B5CF7BE23F
+	for <lists+linux-next@lfdr.de>; Mon,  9 Oct 2023 16:14:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376890AbjJIOAw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 9 Oct 2023 10:00:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37308 "EHLO
+        id S1376737AbjJIOOL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 9 Oct 2023 10:14:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376693AbjJIOAw (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 9 Oct 2023 10:00:52 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 327CD99;
-        Mon,  9 Oct 2023 07:00:51 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69F54C433C7;
-        Mon,  9 Oct 2023 14:00:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1696860050;
-        bh=8dVUagdGNC5FwwkHDRtNMhAMiOn3f8fiNVQH6CjW9lk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lDw4VxspF/aZja0dt3g0BaHJnFbxKKkpUeJguSagp5qXuIpaucUoP41n6vjvZh10U
-         EzTkmw2cZVhFN03Q1LJvyKD0Wp56nyR26OF2FPfuAipuEJfrv4VpRCTUf0u7vjb5f+
-         t4cf1tIMF4JpOuU58XjrKA3PcfmSKHz+c9Pp7pVsmgRL2TVqVQODGX8bMh85ciquDH
-         C1c85X94mrTXJcg4auQnBeH99suZ5w9GF5lukK6iyTdO2ZenEYGkTLf2YDPr11lIcg
-         Ok2Z5B+eENtNltp4gRiJUNGfmF6FJd5wJ/ieiRyXliF4TuvarT6/QcmV8CsIdl10FI
-         7j0ICfeq3+W5A==
-Date:   Mon, 9 Oct 2023 16:00:41 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Jan Kara <jack@suse.cz>
-Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
+        with ESMTP id S1376918AbjJIOOJ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 9 Oct 2023 10:14:09 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2861FC6;
+        Mon,  9 Oct 2023 07:14:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=RSouiM2W+vBJUxMiq+/JWhPC4djd1oYxUx1zEVW3V2U=; b=ObBm9ZDMCZTlkLOynSIed4YvST
+        RJ27EpXsEJVf/7PyYppMrLNYBx/YmGlvCi1bS+3oW9yH6hvHV8rDeBdgoDpLZu8eMwqDu4ThIWN5j
+        W+ZErV08wxb/u8fcyiCyrVAyC01qNe221696e+fn19ShdPJ/SWKS9kN7ewP7+RVzUy7/9/AvjKzeT
+        sSLiXrl+oddNYjx+bsz0WblP8TXSTPedKaUjeE4Yxk4yHgq/XZnDOibwyuIBw6O5w5yDKK0GjYuMZ
+        5ardlLT/5GWUjSiSta9obO2cRAf6Rds6qLT2+DhT6Tkh+Banw5mQbBZeEdUa/6AaJeT3WYFj0f3OM
+        HOtI+O3Q==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1qpr16-00GHuY-9s; Mon, 09 Oct 2023 14:13:52 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+        id DE741300454; Mon,  9 Oct 2023 16:13:51 +0200 (CEST)
+Date:   Mon, 9 Oct 2023 16:13:51 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Jens Axboe <axboe@kernel.dk>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the vfs-brauner tree
-Message-ID: <20231009-behaarten-hotel-17e3c1e7de74@brauner>
-References: <20230928105443.1b1ad98c@canb.auug.org.au>
- <20231002112142.bfjj54ikijf4iwfr@quack3>
- <20231003132711.djftyh7vltljy2hh@moria.home.lan>
- <20231004154628.kgrvqbwphkjbkne6@quack3>
+        linux-next <linux-next@vger.kernel.org>,
+        Sohil Mehta <sohil.mehta@intel.com>
+Subject: Re: linux-next: manual merge of the block tree with the asm-generic
+ tree
+Message-ID: <20231009141351.GD14330@noisy.programming.kicks-ass.net>
+References: <20231009123118.4487a0e1@canb.auug.org.au>
+ <20231009084812.GB14330@noisy.programming.kicks-ass.net>
+ <cb4bb8e2-7dfe-4ca4-aa70-060f7b2f8f95@app.fastmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231004154628.kgrvqbwphkjbkne6@quack3>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <cb4bb8e2-7dfe-4ca4-aa70-060f7b2f8f95@app.fastmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-> But the merge at this point would be somewhat difficult because you'd need
-> to pull Christian's branch into your tree to get bdev_open_by_path() in the
-> first place. And that branch already depends on some changes in the btrfs
-> tree. So to save ourselves some headaches during the merge window, I think
-> not removing the old functions until bcachefs gets merged is the easiest
-> solution.
+On Mon, Oct 09, 2023 at 11:00:19AM +0200, Arnd Bergmann wrote:
+> On Mon, Oct 9, 2023, at 10:48, Peter Zijlstra wrote:
+> > On Mon, Oct 09, 2023 at 12:31:18PM +1100, Stephen Rothwell wrote:
+> >> diff --cc arch/alpha/kernel/syscalls/syscall.tbl
+> >> index 5d05ab716a74,b1865f9bb31e..000000000000
+> >> --- a/arch/alpha/kernel/syscalls/syscall.tbl
+> >> +++ b/arch/alpha/kernel/syscalls/syscall.tbl
+> >> @@@ -492,4 -492,6 +492,7 @@@
+> >>   560	common	set_mempolicy_home_node		sys_ni_syscall
+> >>   561	common	cachestat			sys_cachestat
+> >>   562	common	fchmodat2			sys_fchmodat2
+> >>  -563	common	futex_wake			sys_futex_wake
+> >>  -564	common	futex_wait			sys_futex_wait
+> >>  -565	common	futex_requeue			sys_futex_requeue
+> >>  +563	common	map_shadow_stack		sys_map_shadow_stack
+> >> ++564	common	futex_wake			sys_futex_wake
+> >> ++565	common	futex_wait			sys_futex_wait
+> >> ++566	common	futex_requeue			sys_futex_requeue
+> >
+> > So this renumbers the (futex) stuff on Alpha, does anybody care? AFAICT
+> > Alpha does not follow the unistd order and meh.
+> 
+> Let's not make it worse for now. All the numbers since the
+> introduction of the time64 syscalls are offset by exactly 120
+> on alpha, and I'd prefer to keep it that way for the moment.
+> 
+> I still hope to eventually finish the conversion of all architectures
+> to a single syscall.tbl for numbers >400, and if that happens before
+> the end of alpha, a different ordering would just be extra pain.
 
-I dropped
+Fair enough; should we look at rebase those futex patches for this? (bit
+of a pain as that would also mean rebasing block)
 
-commit 8ea3ec0740bdea9105eb416f07eef5d031b9385a
-Author:     Jan Kara <jack@suse.cz>
-AuthorDate: Wed Sep 27 11:34:35 2023 +0200
-Commit:     Christian Brauner <brauner@kernel.org>
-CommitDate: Thu Sep 28 16:51:49 2023 +0200
-
-    block: Remove blkdev_get_by_*() functions
-
-    blkdev_get_by_*() and blkdev_put() functions are now unused. Remove
-    them.
-
-    Acked-by: Christoph Hellwig <hch@lst.de>
-    Reviewed-by: Christian Brauner <brauner@kernel.org>
-    Signed-off-by: Jan Kara <jack@suse.cz>
-    Link: https://lore.kernel.org/r/20230927093442.25915-29-jack@suse.cz
-    Signed-off-by: Christian Brauner <brauner@kernel.org>
-
-for now. You can find an archive of that branch including that commit
-under the tag vfs.super.2023-10-09
-
-Thanks!
+Or do we want to keep this fixup in the merge resolution and make sure
+Linus is aware?

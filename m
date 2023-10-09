@@ -2,44 +2,46 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C1627BEE97
-	for <lists+linux-next@lfdr.de>; Tue, 10 Oct 2023 00:56:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C01647BEF40
+	for <lists+linux-next@lfdr.de>; Tue, 10 Oct 2023 01:37:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378784AbjJIW4J (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 9 Oct 2023 18:56:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47768 "EHLO
+        id S1379023AbjJIXhz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 9 Oct 2023 19:37:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378939AbjJIW4J (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 9 Oct 2023 18:56:09 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C16459D;
-        Mon,  9 Oct 2023 15:56:07 -0700 (PDT)
+        with ESMTP id S1379014AbjJIXhy (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 9 Oct 2023 19:37:54 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91D2B9D;
+        Mon,  9 Oct 2023 16:37:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1696892163;
-        bh=lZbOeY8h0q3Stw3D5TP1TELS51wD9sHI+rTHHE3IsOE=;
+        s=201702; t=1696894665;
+        bh=ddNE5NrNAX/1w2VkhTFnyud5eL2I/kfyP4zPb62e1cc=;
         h=Date:From:To:Cc:Subject:From;
-        b=DD+wQnSWA8fpbfNKQ8T2sXTsMAE0CRShgGpOhmFJ4Y8e5r6UEzqi2yp5u6MVxsuWN
-         thMP7+gZt1oW1GiZfmXyWiNXbE54mrY7QihsOulKz8MoyUpGILGpchZ5X0rYDvKcPf
-         BX5UBtaHYH88MZrdN38lqLreTaxtmGMVUpFlMDbrAlnLxa5sfmXafi0v1LmrmFrUAa
-         3tSGhgN/3W+q1jfkw2MaAVCr0OddweUlbKdPiRaZApSoplhtJ7hfyf9CyyBrKXPAGG
-         yHanuPL7UkL3cp+V4kCK2MDrqdeWECg0EjJf8Yl133aBv7oaiYU4no7WoZrwNBF1CJ
-         Ws4YJDQg8ZiPw==
+        b=q+2gCvS4nPDQietobOycwMGzGEQxQHikrGGnmDGQr+8jCewmLCRPkDHB5XB/2CMNm
+         tUw0TKb36TjV6i6LIO8ZKZqAIXIbnr94WBNN01Qxs/556b7CKovk8Uz3KYcurqz+gD
+         Fk2+jStvwS+96KwutDpWem4IGcX/WB0WEVSf1IBHUTSkhu/8AZfpoBBCGM6eQJQf5m
+         z0Ev9QWQ74E6xkp8Pqh0xtFWmYgmNgWcnkbjsIis1b3mXSXIguJTujVsfSDXlz+HM7
+         EghEMtPzoH5eChFk35Zcyt3OusB0/hX6jWmFXphsDWtHYDbZIyifMTJvYu6xNRyO/w
+         k0MsdZelqolUw==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4S4Dsb2cMBz4xQm;
-        Tue, 10 Oct 2023 09:56:03 +1100 (AEDT)
-Date:   Tue, 10 Oct 2023 09:56:01 +1100
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4S4Fnj3LlKz4xPc;
+        Tue, 10 Oct 2023 10:37:45 +1100 (AEDT)
+Date:   Tue, 10 Oct 2023 10:37:44 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Will Deacon <will@kernel.org>
-Cc:     Ilkka Koskinen <ilkka@os.amperecomputing.com>,
+To:     Christian Brauner <brauner@kernel.org>,
+        Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+Cc:     Jeff Layton <jlayton@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the arm-perf tree
-Message-ID: <20231010095601.1443903c@canb.auug.org.au>
+Subject: linux-next: manual merge of the vfs-brauner tree with the ntfs3
+ tree
+Message-ID: <20231010103744.2e7085a6@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/LULx.hQtM29MVS1rQFZKik+";
+Content-Type: multipart/signed; boundary="Sig_/5sAmW5pUwKcL7njVm.uDAA0";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS
@@ -50,48 +52,54 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/LULx.hQtM29MVS1rQFZKik+
+--Sig_/5sAmW5pUwKcL7njVm.uDAA0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the arm-perf tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+Today's linux-next merge of the vfs-brauner tree got conflicts in:
 
-drivers/perf/arm_cspmu/ampere_cspmu.c: In function 'ampere_cspmu_set_ev_fil=
-ter':
-drivers/perf/arm_cspmu/ampere_cspmu.c:164:9: error: implicit declaration of=
- function 'writel' [-Werror=3Dimplicit-function-declaration]
-  164 |         writel(threshold, cspmu->base0 + PMAUXR0);
-      |         ^~~~~~
-cc1: all warnings being treated as errors
+  fs/ntfs3/inode.c
+  fs/ntfs3/namei.c
 
-Caused by commit
+between commits:
 
-  290a9c0e55f8 ("perf: arm_cspmu: ampere_cspmu: Add support for Ampere SoC =
-PMU")
+  3f2f09f18972 ("fs/ntfs3: Use inode_set_ctime_to_ts instead of inode_set_c=
+time")
+  f684073c09fd ("fs/ntfs3: Refactoring and comments")
 
-I have used the arm-perf tree from next-20231009 for today.
+from the ntfs3 tree and commit:
+
+  82f8d5fde753 ("ntfs3: convert to new timestamp accessors")
+
+from the vfs-brauner tree.
+
+I fixed it up (I used the latter changes) and can carry the fix as
+necessary. This is now fixed as far as linux-next is concerned, but any
+non trivial conflicts should be mentioned to your upstream maintainer
+when your tree is submitted for merging.  You may also want to consider
+cooperating with the maintainer of the conflicting tree to minimise any
+particularly complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/LULx.hQtM29MVS1rQFZKik+
+--Sig_/5sAmW5pUwKcL7njVm.uDAA0
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmUkhQEACgkQAVBC80lX
-0Gww2Af+KFRVSTri6Lj+GzcrshGD+r44dXBjnda3Rx4ITzRPT66QYuyqPYev6BJF
-BffFvWnR7ynd8F/TeITAziGjHI9xZkz6F44cW+hhoSf/HLst5RRM34PR909mNV5I
-WXeGsczTHCOmk00RBg7MHwqwlBTO5Z9RvMJzI16jzp8ZMlH8MwQDtu9RIjEl60iV
-M/kR9jBYXtJZLcO+E/UL5BJPVn3Ohsd2X8WWLiraS889aprFn/ke2caFtaxwy8bX
-49k2Jbx48GGczu7AgZHQeyNzVvPbpbcJNnG2zrkBp/SJEbZEsFeSVjgoz+zkfyIZ
-aY2rRzYVA8R2rtb52ZBofYPtExwhpw==
-=Ly/C
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmUkjsgACgkQAVBC80lX
+0Gwxxgf+P+Ww81bHgBFSgoUmiyjvbQCXd/sc/pTkAe/Yfk/wpzCq/RbDnJgId51p
+NZasMonRGaLaoWJWDJSgLL9E8HCkGO0OiSZ6mydAv/bqV89//WmPd0HHmkdteNpv
+bUEjaABeVLH97VZYl2MsGDa4aU3XfEIErcUKr9e7XRsYderHHvllA+kEHOgx281Y
+KfIUNKXlwnof9yJFWyFxlbRcux7LTuOqJPC0vq0OlEASfsR+spMX5l4rQmksz/WW
+ZiziK8zOgdb7Ft6ZOlGdNOJ+oODevZlA+WjsSiVn3sAb88v7kyEqh4e9BcQAzCD3
+uxcaY7ejMqGg4PO+D9OT1OuprceLNQ==
+=1l6h
 -----END PGP SIGNATURE-----
 
---Sig_/LULx.hQtM29MVS1rQFZKik+--
+--Sig_/5sAmW5pUwKcL7njVm.uDAA0--

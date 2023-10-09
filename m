@@ -2,97 +2,142 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EC857BD3C3
-	for <lists+linux-next@lfdr.de>; Mon,  9 Oct 2023 08:49:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 429BD7BD599
+	for <lists+linux-next@lfdr.de>; Mon,  9 Oct 2023 10:48:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234303AbjJIGt0 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-next@lfdr.de>); Mon, 9 Oct 2023 02:49:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40458 "EHLO
+        id S1345520AbjJIIsb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 9 Oct 2023 04:48:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234248AbjJIGt0 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 9 Oct 2023 02:49:26 -0400
-Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DA1AAB;
-        Sun,  8 Oct 2023 23:49:22 -0700 (PDT)
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-59f7f2b1036so50636227b3.3;
-        Sun, 08 Oct 2023 23:49:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696834161; x=1697438961;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GRUDqy2ec1uOO+SkamWEjCsINPtEX2s7XRvtWem4WwU=;
-        b=oHnEfRr34G7Bl2kQKfa0CKutvpY3C+S4r6DDk7KWrPDePhmzml8rXoDFAspdE5ie/h
-         wgFwn91053r7mTpauTfXb+8SHBgJ4531YvR8q4jKLsqqzNOsklrZRkB8XCitnSzu/H3k
-         vpKCdKeiSBvDjMiq356ArxF3yeg0g2Y52jPwNCHeBfHhAQdzGSM7x3HUd1ANAgTWrKAX
-         0MxmvFY5PApgVCwgIqb3FpbUYpLrdJS7ByYPqZGWOEB3tUM6VoFCe+zLIpI4Czm+0g+c
-         ZC6qEJbdXTdKmQV7BK3MEyxILuRpZ3fcrhXr5j1zglkzEFfyl/XaUPCqBvex5vlMfdNE
-         iRXA==
-X-Gm-Message-State: AOJu0Yzjki2lBO6f3GOLbdjIrUVncXZGgpwqWkzALsSAH2SOlfrNCq+r
-        fbTEMzqQ2fjsu4rvlw8pdNvi1BfiVMEezA==
-X-Google-Smtp-Source: AGHT+IHueosdP3+utWq4nycDQ96AORUMippNKzYPOUHS73NO93DjseBReGn7TIb96aru23WgOnIbnw==
-X-Received: by 2002:a0d:d782:0:b0:59f:4e6d:b56b with SMTP id z124-20020a0dd782000000b0059f4e6db56bmr15667728ywd.5.1696834161248;
-        Sun, 08 Oct 2023 23:49:21 -0700 (PDT)
-Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com. [209.85.128.182])
-        by smtp.gmail.com with ESMTPSA id z16-20020a81a250000000b0059b24bd4f2asm3449977ywg.57.2023.10.08.23.49.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 08 Oct 2023 23:49:21 -0700 (PDT)
-Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-59f7f2b1036so50636117b3.3;
-        Sun, 08 Oct 2023 23:49:20 -0700 (PDT)
-X-Received: by 2002:a81:4917:0:b0:5a1:d11e:b754 with SMTP id
- w23-20020a814917000000b005a1d11eb754mr15294921ywa.26.1696834160791; Sun, 08
- Oct 2023 23:49:20 -0700 (PDT)
-MIME-Version: 1.0
-References: <20231009111609.13ac1edb@canb.auug.org.au> <f0d0e8ad-8391-44f3-90e0-d2325daebb64@linux-m68k.org>
-In-Reply-To: <f0d0e8ad-8391-44f3-90e0-d2325daebb64@linux-m68k.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 9 Oct 2023 08:49:08 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVo-H+q+X8XCZrVVG3W05B53=ttQ3LUcqbJkCV0-zWTaA@mail.gmail.com>
-Message-ID: <CAMuHMdVo-H+q+X8XCZrVVG3W05B53=ttQ3LUcqbJkCV0-zWTaA@mail.gmail.com>
-Subject: Re: linux-next: duplicate patch in the m68knommu tree
-To:     Greg Ungerer <gerg@linux-m68k.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        with ESMTP id S1345489AbjJIIsa (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 9 Oct 2023 04:48:30 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0762A3;
+        Mon,  9 Oct 2023 01:48:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=vsEYVvFd0zJLjsdD17x+dxYbHK8LYUuMJRmfVCrYGtw=; b=B2txYrQOk6U8asYJhO+g+1IPzN
+        8SSELzSqQOMyNwfIJdlnHnQMcDlRRrdfw2kZatVBOvRfbY/d/LMSRbu9wgMgq7eRIaH3Z13CT2CzA
+        Z2/c3mGlHjnujHrYfP45/88GvhlpFpD1ZS0lFv8ZwtR1q+UDRZPUxR3XoCk7ZwmB6vQr0p3XKC7fH
+        4I1kRx2bz+xplVnj2DcKATmaINoUgfg+HZTvWds9BrRLEU74q05vIEwSYrH+/DZajm97/smj+R48N
+        4ImKw2qs2ixiqFwG/jiqC8n/eS3x5WL2ZgDDVIhMR4u4G+Gn/TGd7rh/f+zcGtWqcYLUw6m0WC3wr
+        Md6BcMmg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qplvv-00Fjac-15;
+        Mon, 09 Oct 2023 08:48:13 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 6F8EE300454; Mon,  9 Oct 2023 10:48:12 +0200 (CEST)
+Date:   Mon, 9 Oct 2023 10:48:12 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Jens Axboe <axboe@kernel.dk>, Arnd Bergmann <arnd@arndb.de>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Sohil Mehta <sohil.mehta@intel.com>
+Subject: Re: linux-next: manual merge of the block tree with the asm-generic
+ tree
+Message-ID: <20231009084812.GB14330@noisy.programming.kicks-ass.net>
+References: <20231009123118.4487a0e1@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20231009123118.4487a0e1@canb.auug.org.au>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Greg,
+On Mon, Oct 09, 2023 at 12:31:18PM +1100, Stephen Rothwell wrote:
+> Hi all,
+>=20
+> Today's linux-next merge of the block tree got conflicts in:
+>=20
+>   arch/alpha/kernel/syscalls/syscall.tbl
+>   arch/arm/tools/syscall.tbl
+>   arch/arm64/include/asm/unistd.h
+>   arch/arm64/include/asm/unistd32.h
+>   arch/m68k/kernel/syscalls/syscall.tbl
+>   arch/microblaze/kernel/syscalls/syscall.tbl
+>   arch/mips/kernel/syscalls/syscall_n32.tbl
+>   arch/mips/kernel/syscalls/syscall_n64.tbl
+>   arch/mips/kernel/syscalls/syscall_o32.tbl
+>   arch/parisc/kernel/syscalls/syscall.tbl
+>   arch/powerpc/kernel/syscalls/syscall.tbl
+>   arch/s390/kernel/syscalls/syscall.tbl
+>   arch/sh/kernel/syscalls/syscall.tbl
+>   arch/sparc/kernel/syscalls/syscall.tbl
+>   arch/x86/entry/syscalls/syscall_32.tbl
+>   arch/xtensa/kernel/syscalls/syscall.tbl
+>   include/uapi/asm-generic/unistd.h
+>=20
+> between commits:
+>=20
+>   2fd0ebad27bc ("arch: Reserve map_shadow_stack() syscall number for all =
+architectures")
+>=20
+> from the asm-generic tree and commits:
+>=20
+>   9f6c532f59b2 ("futex: Add sys_futex_wake()")
+>   cb8c4312afca ("futex: Add sys_futex_wait()")
+>   0f4b5f972216 ("futex: Add sys_futex_requeue()")
+>=20
+> from the block tree.
 
-On Mon, Oct 9, 2023 at 4:00 AM Greg Ungerer <gerg@linux-m68k.org> wrote:
-> On 9/10/23 10:16, Stephen Rothwell wrote:
-> > The following commit is also in the m68k tree as a different commit
-> > (but the same patch):
-> >
-> >    af580d01acc3 ("m68k: use kernel's generic libgcc functions")
-> >
-> > The is commit
-> >
-> >    a0938a8e2fb3 ("m68k: Use kernel's generic libgcc functions")
-> >
-> > in the m68k tree.
->
-> Sorry, yes, fixed now. I removed it from the m68kmnommu git tree.
+fun fun fun..
 
-Thanks, I wasn't aware you had planned to queue it in the m68knommu
-tree.  Sorry for not checking linux-next before.
 
-Gr{oetje,eeting}s,
+> diff --cc arch/alpha/kernel/syscalls/syscall.tbl
+> index 5d05ab716a74,b1865f9bb31e..000000000000
+> --- a/arch/alpha/kernel/syscalls/syscall.tbl
+> +++ b/arch/alpha/kernel/syscalls/syscall.tbl
+> @@@ -492,4 -492,6 +492,7 @@@
+>   560	common	set_mempolicy_home_node		sys_ni_syscall
+>   561	common	cachestat			sys_cachestat
+>   562	common	fchmodat2			sys_fchmodat2
+>  -563	common	futex_wake			sys_futex_wake
+>  -564	common	futex_wait			sys_futex_wait
+>  -565	common	futex_requeue			sys_futex_requeue
+>  +563	common	map_shadow_stack		sys_map_shadow_stack
+> ++564	common	futex_wake			sys_futex_wake
+> ++565	common	futex_wait			sys_futex_wait
+> ++566	common	futex_requeue			sys_futex_requeue
 
-                        Geert
+So this renumbers the (futex) stuff on Alpha, does anybody care? AFAICT
+Alpha does not follow the unistd order and meh.
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> diff --cc include/uapi/asm-generic/unistd.h
+> index 00df5af71ca1,d9e9cd13e577..000000000000
+> --- a/include/uapi/asm-generic/unistd.h
+> +++ b/include/uapi/asm-generic/unistd.h
+> @@@ -822,12 -822,15 +822,18 @@@ __SYSCALL(__NR_cachestat, sys_cachestat
+>  =20
+>   #define __NR_fchmodat2 452
+>   __SYSCALL(__NR_fchmodat2, sys_fchmodat2)
+> + #define __NR_futex_wake 454
+> + __SYSCALL(__NR_futex_wake, sys_futex_wake)
+> + #define __NR_futex_wait 455
+> + __SYSCALL(__NR_futex_wait, sys_futex_wait)
+> + #define __NR_futex_requeue 456
+> + __SYSCALL(__NR_futex_requeue, sys_futex_requeue)
+>  =20
+>  +#define __NR_map_shadow_stack 453
+>  +__SYSCALL(__NR_map_shadow_stack, sys_map_shadow_stack)
+>  +
+>   #undef __NR_syscalls
+> - #define __NR_syscalls 454
+> + #define __NR_syscalls 457
+>  =20
+>   /*
+>    * 32 bit systems traditionally used different
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+This seems to have the hunks in the wrong order, 453 should come before
+454 no?
+

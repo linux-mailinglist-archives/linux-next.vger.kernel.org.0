@@ -2,88 +2,92 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A2BF7C4158
-	for <lists+linux-next@lfdr.de>; Tue, 10 Oct 2023 22:39:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19F347C4213
+	for <lists+linux-next@lfdr.de>; Tue, 10 Oct 2023 23:11:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229598AbjJJUjQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 10 Oct 2023 16:39:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45872 "EHLO
+        id S229555AbjJJVLV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 10 Oct 2023 17:11:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjJJUjP (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 10 Oct 2023 16:39:15 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF1588E
-        for <linux-next@vger.kernel.org>; Tue, 10 Oct 2023 13:39:12 -0700 (PDT)
+        with ESMTP id S229535AbjJJVLV (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 10 Oct 2023 17:11:21 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D54F991;
+        Tue, 10 Oct 2023 14:11:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1696970348;
-        bh=Mz0vfLHTcnfl7yjEmKHj1/Q/9qSuC3ss7DGB0boufcc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=iKmVF0NbpcDgyHwDRKxkis6mjCZPjsjJZD+RucL26OBpv4SDE+yG9vwHftJUgqj3L
-         pD42mIzchqAIweUqBQYtJ03dTaKCLdH1FqKT9GAGufJAjgPNFMMTJME8ILcvj7Gn9Y
-         n2ddaiq4d+qM5l5TrMtju/HHr65LlwpkSOZ2ftlGE74hL+TAVGPXIeIn3LLPKlfXL5
-         xeUreQh/yUIqcv9HpUjIjmOYw4h+gSgZ3DUAy2hwU7+s/ZPjvpfcMMkZSYmL70LnqP
-         OUXHLqIJdax68T9oL4Xw6Up23FbyXvS6bDneKT4ucLMmsX9najuJ46qdm8ZzR5irEk
-         q6AGyvFXKnOzQ==
+        s=201702; t=1696972275;
+        bh=TOLAHcDsB9A0TSWPF5YbG778XT2SV4PsMJQ0Bw6LOzE=;
+        h=Date:From:To:Cc:Subject:From;
+        b=I1w1BJTJcUzDsMbzaid08vSxrCcqXYlgj1R5KeksGe45Z8hIRW4zgL6usm0BJzo9H
+         3VVXFoiVE0QH4aA6y/7X25OrjCT5qXwTdmtyEG6XVoWt3PALKS8ovyrddhq7KcgavV
+         CyyUV27ZOMg+gBJMv6C+KE9tSbuOcu4/RIjsuy8dA3bJOhV1qWtAroWxtnK7yrlqR6
+         FsIGwocOJQG7IvQwCcX7CqO+XsezTTaQmVV+5S6N13KlPOfqSB6yu8ZDah5/O+4z/u
+         oWzEHbUhyNKptzL3tEUjUtnkEGDRMHzkZlQlasA8xhGAoNuJKxezjPZ+S81w0K9LE7
+         HKE5sUWTaFEaQ==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4S4nn82qrpz4xQg;
-        Wed, 11 Oct 2023 07:39:08 +1100 (AEDT)
-Date:   Wed, 11 Oct 2023 07:39:07 +1100
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4S4pVC1bc7z4xPY;
+        Wed, 11 Oct 2023 08:11:14 +1100 (AEDT)
+Date:   Wed, 11 Oct 2023 08:11:14 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     Costa Shulyupin <costa.shul@redhat.com>,
-        linux-next@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>
-Subject: Re: Upcoming merge conflict docs/powerpc
-Message-ID: <20231011073907.7567ab89@canb.auug.org.au>
-In-Reply-To: <87o7h65l13.fsf@meer.lwn.net>
-References: <87o7h65l13.fsf@meer.lwn.net>
+To:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+Cc:     Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Rob Herring <robh@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patch in the iio tree
+Message-ID: <20231011081114.2f4d36e4@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/GJUi/8IWuV+aEWPY86+6u6U";
+Content-Type: multipart/signed; boundary="Sig_/xjXftEDy7HSiR_BsbbENCdr";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/GJUi/8IWuV+aEWPY86+6u6U
+--Sig_/xjXftEDy7HSiR_BsbbENCdr
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Jon,
+Hi all,
 
-On Tue, 10 Oct 2023 13:34:32 -0600 Jonathan Corbet <corbet@lwn.net> wrote:
->
-> Just a note to say that the move of the powerpc docs under
-> Documentation/arch showing up in in docs-next shortly adds a conflict
-> with the powerpc tree, which adds a new file (kvm-nested.rst) to the old
-> directory.  The fix is just to add it in the new location.
+The following commit is also in Linus Torvalds' tree as a different commit
+(but the same patch):
 
-Thanks, will do.
+  25a0741b55b1 ("dt-bindings: trivial-devices: Fix MEMSIC MXC4005 compatibl=
+e string")
+
+This is commit
+
+  19007c629c63 ("dt-bindings: trivial-devices: Fix MEMSIC MXC4005 compatibl=
+e string")
+
+in Linus' tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/GJUi/8IWuV+aEWPY86+6u6U
+--Sig_/xjXftEDy7HSiR_BsbbENCdr
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmUltmsACgkQAVBC80lX
-0GxvbwgAoAT3MPjKxLxJwQL7/8j9oRusUtA4iY3VzmpIhFaG6I1iVAjaSsxz7/ps
-whjL2Spu8ILyrP3PYWfl7Ac5EROiNLVPusnddGAJ2Z9ga0RTaoB5HoUdemRnM6Ni
-e2X8ZmK7p3EVN67hMClp4MThQjp7QfKygcP1GIgelsHwWzxRE0he2RNKt+vi0sex
-LcLXexk6/aNtzp/X5QLDm01ausgD8NzX6t5eHDyeb5U+Zk4dR/Yh1DMXdiIGpSwc
-Og5+UtEbBonFX1CctkEH82oXVlrcWobvMY8a4Z7bR3D+A9PkU9AJTPE8VXqLWAR7
-arh5YeJXzPxIx5h8qbGkywXXOz2+wg==
-=jb/P
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmUlvfIACgkQAVBC80lX
+0GxrwQf/YzVrLJzBfQiUt4HMR7Mhyia+WYYk/P+rCszFSVtTxpL3tpjjAcMuTw9e
+gJTRWFAvEyZ7JsMuXJ1+08k3211lMgQQaG3FoGwbp6UJAvRl8LCjbHJ4pOm9yIwa
+GsKaCuIEXnOMavufuf7dE/99OxfBQsy/Y6kvzGJP/wYTvCiSNjrKLeK4lr8UJYg1
+63ykZXn79ia4I0ADMrYPie/x7fLGpklxa1Y4VJOZ2rC2sdwIrQKJXU4gKCgx0+e5
+6/yqt0RDsDwf6cw4JxLW2ZnrEx0xis1Sit5e1PJQGncRuc5qJPsSBoZvc9LYz4S5
+6sU4Y8XRn7Pwmm/ffocK9EzIeQ/xpQ==
+=eY7j
 -----END PGP SIGNATURE-----
 
---Sig_/GJUi/8IWuV+aEWPY86+6u6U--
+--Sig_/xjXftEDy7HSiR_BsbbENCdr--

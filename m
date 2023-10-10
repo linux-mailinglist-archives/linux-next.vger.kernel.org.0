@@ -2,102 +2,169 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA5967BF1F3
-	for <lists+linux-next@lfdr.de>; Tue, 10 Oct 2023 06:34:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EA057BF235
+	for <lists+linux-next@lfdr.de>; Tue, 10 Oct 2023 07:30:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376812AbjJJEeE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 10 Oct 2023 00:34:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36586 "EHLO
+        id S1346584AbjJJFag (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 10 Oct 2023 01:30:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376523AbjJJEeD (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 10 Oct 2023 00:34:03 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F10559F;
-        Mon,  9 Oct 2023 21:34:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1696912439;
-        bh=b4dmO715+PkY75cuPttmUofJoX043FDKuWoDSSEaTis=;
-        h=Date:From:To:Cc:Subject:From;
-        b=pud/NdiLgAzVm/W96EGueq7lbhqtPJHL2/eE2fgengt7kUXMIR1Eovy+aIyWMUfl3
-         nfAD6iWR+BeyUmQOlzjiL6jzXtbHxxTNMIq/uM8rM4wwLaapXkjhTXYSm4bwJV5Dhn
-         75Wn+TZtdj8fDjGzbFI4Q9GT6wi5/vxhypXNJZ3MZ6uGo1816rx10x1x64IA+S69Rb
-         +Ydj1j+2GqlY3a9bCUnHHqavWrgxAxqxHraLEe8vYfpjIQd7YGG4iLgc4e7rOgOZ6U
-         g9s/S36K4lll9ADrv+aYkQbhB/G/nOyvFoXyv6LkAlyG4YRoPzVucPlwUx5nRTLGV/
-         wRssDtFohqjdA==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4S4NMS34xlz4xMC;
-        Tue, 10 Oct 2023 15:33:56 +1100 (AEDT)
-Date:   Tue, 10 Oct 2023 15:33:54 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Shuah Khan <skhan@linuxfoundation.org>, Willy Tarreau <w@1wt.eu>,
-        Thomas =?UTF-8?B?V2Vpw59zY2h1aA==?= <thomas@t-8ch.de>,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patches in the nolibc tree
-Message-ID: <20231010153354.2357ee1c@canb.auug.org.au>
+        with ESMTP id S1346354AbjJJFag (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 10 Oct 2023 01:30:36 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 376DBA3
+        for <linux-next@vger.kernel.org>; Mon,  9 Oct 2023 22:30:34 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1c434c33ec0so31860865ad.3
+        for <linux-next@vger.kernel.org>; Mon, 09 Oct 2023 22:30:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1696915833; x=1697520633; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=nxcXO73vuZ3ikQhuafSWCdB4Y+ODrq2g2KGs9dgCm1Q=;
+        b=GpL5cdnNYnzsF2qNHw9jLHpma8jC/N60X7W8FS+R9vKCDcuo2V9tvyNpJ9fQSVaBMX
+         ReAPAcLSc2/HnBik+tNaHnDQroMwr3nrfjJpMoa5yW4oHLbfTg56rrp+/XrZjGl1Nk7V
+         m3mtUYwST4Nq47LKXmIt0jndo5x7dIqhIRcSMnZ6QkCBjSZmkA5wDdG4f/puyQsYhFdy
+         s0KIfkKHmUm0XLPtvqwN45j/mg4I1WiLJD4AnIH68xWkhl+qGY3gvondgRaDRTZJkw9M
+         nURNfQnEB+fFCMNUWvlpMVx3YS2GkbvnYrGkV3YtxzOT/5hnvihZpnhID2Hh6cweKCnI
+         a67w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696915833; x=1697520633;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nxcXO73vuZ3ikQhuafSWCdB4Y+ODrq2g2KGs9dgCm1Q=;
+        b=pRcOH7pZ1QXBNuSQcFvrPlVxYnClw+dVKGGlZny+SlgvrulHSK23iHS2C4FA10qc+R
+         uh1EyhaW9PGeJ7KWGgmPT6+BG/1NXLjKselkOzXSpeCRlebyEi0sTynxQPVjzifd38/i
+         0omGPVTqZGLVM4ayxOdd/whC9D/tpqdfX0XU5Zi5v6kDXX7G/Yz/6WzsA1pJTWeARw8V
+         CMdSidPiA6ywhgAq+MXqHmIoIZDAw8HqnaidtfVA4O3gJW1//T+9RSZV/MqVaE5u7khK
+         h6Tw6WN1yU+i9A1OI9wpjLOFXHvQMVuGEF1ekD9dW9bbNAox7iBs9wpZxSzta5mpy5Yb
+         hMrg==
+X-Gm-Message-State: AOJu0YxVc6sItX8ynwZzTT0MZWmoMBxHBeUCJIJ2UXe6j5JKpERgrcO/
+        Ch2k/gQ0WzyE+ZkbD9Tsl5LwPMIpAVW3FhTMSWaLCw==
+X-Google-Smtp-Source: AGHT+IGy8USLTJq3e995cnuU4ETyTBj5oevxhQu42Or2VVeENRLqkdrzULW1wO4hlIugJDnP3OeeDQ==
+X-Received: by 2002:a17:902:6bc1:b0:1c3:6e38:3943 with SMTP id m1-20020a1709026bc100b001c36e383943mr12799892plt.56.1696915832987;
+        Mon, 09 Oct 2023 22:30:32 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id p5-20020a170902bd0500b001b9e86e05b7sm10612067pls.0.2023.10.09.22.30.32
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Oct 2023 22:30:32 -0700 (PDT)
+Message-ID: <6524e178.170a0220.8acf8.c99f@mx.google.com>
+Date:   Mon, 09 Oct 2023 22:30:32 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/fLdljhEBZ4LW/Yu/a3VVNac";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: v6.6-rc5-269-g00b249acca70
+X-Kernelci-Report-Type: build
+X-Kernelci-Branch: pending-fixes
+X-Kernelci-Tree: next
+Subject: next/pending-fixes build: 8 builds: 0 failed, 8 passed,
+ 4 warnings (v6.6-rc5-269-g00b249acca70)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/fLdljhEBZ4LW/Yu/a3VVNac
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+next/pending-fixes build: 8 builds: 0 failed, 8 passed, 4 warnings (v6.6-rc=
+5-269-g00b249acca70)
 
-Hi all,
+Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
+rnel/v6.6-rc5-269-g00b249acca70/
 
-The following commits are also in the rcu tree as different commits
-(but the same patches):
+Tree: next
+Branch: pending-fixes
+Git Describe: v6.6-rc5-269-g00b249acca70
+Git Commit: 00b249acca70baaa39f56e37f5d5ed5da9bc550f
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Built: 8 unique architectures
 
-  1b831eb43176 ("tools/nolibc: string: Remove the `_nolibc_memcpy_down()` f=
-unction")
-  3a7296c94dfa ("tools/nolibc: x86-64: Use `rep stosb` for `memset()`")
-  3f79a57865b3 ("selftests/nolibc: libc-test: avoid -Wstringop-overflow war=
-nings")
-  9e9dcee894f8 ("selftests/nolibc: use -nostdinc for nolibc-test")
-  a04fd4052251 ("tools/nolibc: add stdarg.h header")
-  ab663cc32912 ("tools/nolibc: automatically detect necessity to use pselec=
-t6")
-  bd216cb8d814 ("tools/nolibc: don't define new syscall number")
-  c6a15707d1c3 ("tools/nolibc: string: Remove the `_nolibc_memcpy_up()` fun=
-ction")
-  d09e2b033a9f ("tools/nolibc: avoid unused parameter warnings for ENOSYS f=
-allbacks")
-  d7f2a69857ce ("MAINTAINERS: nolibc: update tree location")
-  dbb6448b4263 ("selftests/nolibc: allow building i386 with multiarch compi=
-ler")
-  e6401064e32b ("tools/nolibc: x86-64: Use `rep movsb` for `memcpy()` and `=
-memmove()`")
+Warnings Detected:
 
---=20
-Cheers,
-Stephen Rothwell
+arc:
 
---Sig_/fLdljhEBZ4LW/Yu/a3VVNac
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+arm64:
 
------BEGIN PGP SIGNATURE-----
+arm:
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmUk1DMACgkQAVBC80lX
-0GxT8Qf/dFIcGfKYxHGeJDx4KTS4Dw+2toLuNxxwA7OfRnBGMaH1Tzn6cr8iLWGr
-JsVyYrQamnfrbVPmWDixYaO5Bz7zOOKbVNkCj5nL0ZBmivgwThEu7YOOVbehE9V2
-IKPVkrXNzx5d8cm9/cqFHziyDOWvDat8/FU+SThHKPd7uQZpvQ9O5kAKFxUY42Ir
-z9FggyjjQbRaS4wvuzKUdx+iIdTkg7s0wDmhTJ0uAEN8fBu/IrHEqUCt5CorHySj
-djIX6hiMPvhxsesgoBensxwfdLdCmVwz9iM8Y/YaA1I+OXR6UbSjY/2gOWEVQV1n
-QcmlcMDZnRSj+xCr27EzfkQSAy4wEw==
-=/LsU
------END PGP SIGNATURE-----
+i386:
 
---Sig_/fLdljhEBZ4LW/Yu/a3VVNac--
+mips:
+
+riscv:
+
+sparc:
+    sparc64_defconfig (gcc-10): 4 warnings
+
+x86_64:
+
+
+Warnings summary:
+
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---
+For more info write to <info@kernelci.org>

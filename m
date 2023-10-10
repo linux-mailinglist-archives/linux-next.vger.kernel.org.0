@@ -2,83 +2,73 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB38E7BF271
-	for <lists+linux-next@lfdr.de>; Tue, 10 Oct 2023 07:49:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AA457BF38E
+	for <lists+linux-next@lfdr.de>; Tue, 10 Oct 2023 08:59:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234600AbjJJFtU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 10 Oct 2023 01:49:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39016 "EHLO
+        id S1442362AbjJJG7V (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 10 Oct 2023 02:59:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233250AbjJJFtT (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 10 Oct 2023 01:49:19 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E349A9E;
-        Mon,  9 Oct 2023 22:49:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1696916955;
-        bh=t15fnIt0tpiMUPAuf8jfVDNlK1gRXinedc/IrU5VPtQ=;
-        h=Date:From:To:Cc:Subject:From;
-        b=UdmXCO9vC/x/7Ozaoz/VY4lp5nahonNtnsIjDP9Lli9/iXkTe6X/6nIGblmo1k0ZZ
-         KqXCy0iZvSj7KtT7hPTN3fwAeh3tmMY5QQ6P2j28cVxG34bGWLk4lM76fpInFA6KHK
-         JHYPqGUQySvlQDXD0YocRT8LLBZ2OJv1ZuAFIDaaLOd0n47Ap/KUjmkO69VuQblpZw
-         SgSTm0Swu2NEkI3RGc3Y3B1lRO8VCzbFkW/2QOofCzFilq2llvrx/UhNET9aL9WRF4
-         taFWXVzeskWx6fdH4HjfUPGtBvKCyryj60eOkeb6I4diOdQotD3SdRgYP4OzEpGoE1
-         OCF7Ab47srywA==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4S4Q2L6sWXz4xM4;
-        Tue, 10 Oct 2023 16:49:14 +1100 (AEDT)
-Date:   Tue, 10 Oct 2023 16:49:14 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Shawn Guo <shawnguo@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        with ESMTP id S1442377AbjJJG7U (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 10 Oct 2023 02:59:20 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCE90A7;
+        Mon,  9 Oct 2023 23:59:19 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C62A7C433C8;
+        Tue, 10 Oct 2023 06:59:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1696921159;
+        bh=skqcEev0ohcJ04D3qIt7SnuKrNsL20U4ViZeiA34x18=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qA7GZEKeXdhxkbcs+ZwG2FIUw/6MOXtsXfw2scgq/yrPNc+Am/QajWjA2FCeMCYwa
+         GTaME5PAa7PrrKGTQ6t8/L7Pjl4AgDwTwPkNIl/QSs3IIAUptDy2rGC5nknWdNfM2D
+         WGtr8aDH4XVuPkXm/9ifXDilvIfZXrl84mowXXVsC/oBw3E6oHuDdIWUrNIU2tauEp
+         5mw1z9u5f51jwqA8zKjXi5ivt2LkeIjp6+owD6zMBOqRkQNrzvqKz8tfxh14Y0kstg
+         zceiQuYyaSR1g9/1xlRZF9BJfEIs8WtLobH34g8MmkCpWQgCRpSwWvX8xpPNEe1hMY
+         Ob/TU4CLXdkQQ==
+Date:   Tue, 10 Oct 2023 12:29:15 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Rob Herring <robh@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the imx-mxs tree
-Message-ID: <20231010164914.4683ca7c@canb.auug.org.au>
+Subject: Re: linux-next: build failure after merge of the dmaengine tree
+Message-ID: <ZST2Q1khDtCtADBs@matsya>
+References: <20231010145412.4a758f9d@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/QjD4FlsDjerN=Xj1tE6mtoe";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231010145412.4a758f9d@canb.auug.org.au>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/QjD4FlsDjerN=Xj1tE6mtoe
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 10-10-23, 14:54, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the dmaengine tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+> 
+> drivers/dma/mmp_tdma.c: In function 'mmp_tdma_probe':
+> drivers/dma/mmp_tdma.c:638:36: error: unused variable 'of_id' [-Werror=unused-variable]
+>   638 |         const struct of_device_id *of_id;
+>       |                                    ^~~~~
+> cc1: all warnings being treated as errors
+> 
+> Caused by commit
+> 
+>   a67ba97dfb30 ("dmaengine: Use device_get_match_data()")
+> 
+> I have used the dmaengine tree from next-20231009 for today.
 
-Hi all,
+Thanks for the report, I have posted the fix:
+https://lore.kernel.org/dmaengine/20231010065729.29385-1-vkoul@kernel.org/
 
-Commit
-
-  c0e3c76a8be0 ("ARM: dts: vfxxx: Write dmas in a single line")
-
-is missing a Signed-off-by from its committer.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/QjD4FlsDjerN=Xj1tE6mtoe
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmUk5doACgkQAVBC80lX
-0Gz8uwf9Ey0/sphFhzzaxeVYGTHUZ/HnovtMRdj3ptuh7iUMLdnmoYRTDAp+kFI1
-j8zwLhw/ifCpm8ht4K0Uyg9Nws3+mDYnKe46KMe6wVXoRGJiceDibJ7WqA1L9GLo
-HxR58jq1/g/H1WdrY0D4UI5FVj/4VzpbPiw/0O2eTXCH9wWGjh55ZOEtd8fif5o2
-YS3DO+/AIpxN2tZO0Qi50BNVmyP77NrbYaSQFxLaVtljHtCmvzAfspKDR1asPWvY
-TXE1qLHAO7jbHEo4QNgtisqVqbQ/bNOk6VyFtjZ0sFOezC8fh5aGWooBY8gB7+Tz
-fUXdQU4c3dyfqvxP3YTCc2GsHonbtw==
-=b2FY
------END PGP SIGNATURE-----
-
---Sig_/QjD4FlsDjerN=Xj1tE6mtoe--
+-- 
+~Vinod

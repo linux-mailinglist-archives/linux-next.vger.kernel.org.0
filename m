@@ -2,46 +2,59 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AA457BF38E
-	for <lists+linux-next@lfdr.de>; Tue, 10 Oct 2023 08:59:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F8A27BF409
+	for <lists+linux-next@lfdr.de>; Tue, 10 Oct 2023 09:22:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442362AbjJJG7V (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 10 Oct 2023 02:59:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51312 "EHLO
+        id S1442464AbjJJHWw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 10 Oct 2023 03:22:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1442377AbjJJG7U (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 10 Oct 2023 02:59:20 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCE90A7;
-        Mon,  9 Oct 2023 23:59:19 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C62A7C433C8;
-        Tue, 10 Oct 2023 06:59:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1696921159;
-        bh=skqcEev0ohcJ04D3qIt7SnuKrNsL20U4ViZeiA34x18=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qA7GZEKeXdhxkbcs+ZwG2FIUw/6MOXtsXfw2scgq/yrPNc+Am/QajWjA2FCeMCYwa
-         GTaME5PAa7PrrKGTQ6t8/L7Pjl4AgDwTwPkNIl/QSs3IIAUptDy2rGC5nknWdNfM2D
-         WGtr8aDH4XVuPkXm/9ifXDilvIfZXrl84mowXXVsC/oBw3E6oHuDdIWUrNIU2tauEp
-         5mw1z9u5f51jwqA8zKjXi5ivt2LkeIjp6+owD6zMBOqRkQNrzvqKz8tfxh14Y0kstg
-         zceiQuYyaSR1g9/1xlRZF9BJfEIs8WtLobH34g8MmkCpWQgCRpSwWvX8xpPNEe1hMY
-         Ob/TU4CLXdkQQ==
-Date:   Tue, 10 Oct 2023 12:29:15 +0530
-From:   Vinod Koul <vkoul@kernel.org>
+        with ESMTP id S1442394AbjJJHWv (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 10 Oct 2023 03:22:51 -0400
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EDFA9E
+        for <linux-next@vger.kernel.org>; Tue, 10 Oct 2023 00:22:49 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qq74Y-0004Vx-Lb; Tue, 10 Oct 2023 09:22:30 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qq74W-000baT-4n; Tue, 10 Oct 2023 09:22:28 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qq74V-00CuZz-RW; Tue, 10 Oct 2023 09:22:27 +0200
+Date:   Tue, 10 Oct 2023 09:22:27 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Rob Herring <robh@kernel.org>,
+Cc:     Rob Clark <robdclark@gmail.com>, Sean Paul <seanpaul@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dave Airlie <airlied@redhat.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Javier Martinez Canillas <javierm@redhat.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the dmaengine tree
-Message-ID: <ZST2Q1khDtCtADBs@matsya>
-References: <20231010145412.4a758f9d@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Rob Clark <robdclark@chromium.org>,
+        DRI <dri-devel@lists.freedesktop.org>
+Subject: Re: linux-next: manual merge of the drm-msm tree with the mm, drm
+ trees
+Message-ID: <20231010072227.xgn3ks33t3jb34fi@pengutronix.de>
+References: <20231010123345.12bfda28@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="xkltfvwkholwnjix"
 Content-Disposition: inline
-In-Reply-To: <20231010145412.4a758f9d@canb.auug.org.au>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <20231010123345.12bfda28@canb.auug.org.au>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-next@vger.kernel.org
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,26 +62,65 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 10-10-23, 14:54, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the dmaengine tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
-> 
-> drivers/dma/mmp_tdma.c: In function 'mmp_tdma_probe':
-> drivers/dma/mmp_tdma.c:638:36: error: unused variable 'of_id' [-Werror=unused-variable]
->   638 |         const struct of_device_id *of_id;
->       |                                    ^~~~~
-> cc1: all warnings being treated as errors
-> 
-> Caused by commit
-> 
->   a67ba97dfb30 ("dmaengine: Use device_get_match_data()")
-> 
-> I have used the dmaengine tree from next-20231009 for today.
 
-Thanks for the report, I have posted the fix:
-https://lore.kernel.org/dmaengine/20231010065729.29385-1-vkoul@kernel.org/
+--xkltfvwkholwnjix
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
--- 
-~Vinod
+Hello Stephen,
+
+On Tue, Oct 10, 2023 at 12:33:45PM +1100, Stephen Rothwell wrote:
+> Today's linux-next merge of the drm-msm tree got conflicts in:
+>=20
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+>   drivers/gpu/drm/msm/disp/mdp4/mdp4_kms.c
+>   drivers/gpu/drm/msm/disp/mdp5/mdp5_kms.c
+>   drivers/gpu/drm/msm/msm_drv.c
+>=20
+> between commits:
+>=20
+>   01790d5e372f ("drm/msm: Convert to platform remove callback returning v=
+oid")
+>   cd61a76c210a ("drm/msm: dynamically allocate the drm-msm_gem shrinker")
+>=20
+> from the mm, drm trees and commits:
+>=20
+>   283add3e6405 ("drm/msm: remove shutdown callback from msm_platform_driv=
+er")
+>   506efcba3129 ("drm/msm: carve out KMS code from msm_drv.c")
+>=20
+> from the drm-msm tree.
+>=20
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+
+FTR: The conflict resolution looks right to me. Thanks!
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--xkltfvwkholwnjix
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmUk+60ACgkQj4D7WH0S
+/k7XKQf/YLUwwnZwhtvl+liyuolmjo8vXDx8jO3UyBcjIbuXoIs+/vnlS6j2AKPb
+ref+vEdgEFLZnFlT5gzW/giWqhZa7qw8s5X9XnjZe/7pkNKon+IEdmlHWDm6ZZwg
+pNbhusJHDg/M/XYh3QGBPaAWRbSE2P1S1MLbN2+mCsm1tyQx+m7v0LSg6aDP2PNB
+W/06+fbGPPu5h8eIs6eXVl0DS8584bkIArn7m5M1CHkKxMe71Oda21WU0ll2SU/k
+GSC2h5vxevBV+hIT9TdawssFs/AlRS9hN7rPhp5z8DCssRG3UIVzFm1jAR8VLPWS
+PU9RKkokfna3YsxQ7sabDmvqXFjHzQ==
+=RtTU
+-----END PGP SIGNATURE-----
+
+--xkltfvwkholwnjix--

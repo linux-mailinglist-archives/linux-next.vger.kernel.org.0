@@ -2,170 +2,119 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5B6F7C4D2C
-	for <lists+linux-next@lfdr.de>; Wed, 11 Oct 2023 10:31:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E4467C4D98
+	for <lists+linux-next@lfdr.de>; Wed, 11 Oct 2023 10:49:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230217AbjJKIbM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 11 Oct 2023 04:31:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32846 "EHLO
+        id S230371AbjJKItt (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 11 Oct 2023 04:49:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344232AbjJKIbK (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 11 Oct 2023 04:31:10 -0400
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CED259E;
-        Wed, 11 Oct 2023 01:31:04 -0700 (PDT)
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20231011083103euoutp0292639907a430301ee2dbb76d84394fde~NAGPCv5033124531245euoutp02R;
-        Wed, 11 Oct 2023 08:31:03 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20231011083103euoutp0292639907a430301ee2dbb76d84394fde~NAGPCv5033124531245euoutp02R
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1697013063;
-        bh=c23HKEnm07lR0JjSW2N2NuGqLttQ0iruGe5RY3MyjYA=;
-        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-        b=bIHFQv4DHDaMLEOTaYS6xqyAflmHaFX1SURfZ5ayiibBPqWEZbdS8B2l1O7+p/MM0
-         SE2kzGHxfUY5SQhVp2BCLwe6XPdPy5XKTKSZZpwsmRZULB8rX7mP05f0bED8Yn9sPW
-         yXYfetu9SQ3NcqKerr1nHC/MyjZlx4pwBxCS7p0c=
-Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20231011083102eucas1p16b45762026096a11812a6211e77905b2~NAGO0iLSX2913829138eucas1p1R;
-        Wed, 11 Oct 2023 08:31:02 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges3new.samsung.com (EUCPMTA) with SMTP id 78.1E.37758.64D56256; Wed, 11
-        Oct 2023 09:31:02 +0100 (BST)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20231011083102eucas1p23f187c8ac330799038a55b62c0e07686~NAGOYrXya1371313713eucas1p2q;
-        Wed, 11 Oct 2023 08:31:02 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20231011083102eusmtrp2229867fd04eddaae5839485b8674a82d~NAGOYAKyz1417414174eusmtrp2l;
-        Wed, 11 Oct 2023 08:31:02 +0000 (GMT)
-X-AuditID: cbfec7f5-7ffff7000002937e-fc-65265d460b94
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id 59.B2.25043.64D56256; Wed, 11
-        Oct 2023 09:31:02 +0100 (BST)
-Received: from CAMSVWEXC01.scsc.local (unknown [106.1.227.71]) by
-        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20231011083102eusmtip238644f210741fa49f3c4e348aa6c8dfe~NAGOHZK1S0276502765eusmtip2J;
-        Wed, 11 Oct 2023 08:31:02 +0000 (GMT)
-Received: from localhost (106.210.248.232) by CAMSVWEXC01.scsc.local
-        (2002:6a01:e347::6a01:e347) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
-        Wed, 11 Oct 2023 09:31:01 +0100
-Date:   Wed, 11 Oct 2023 10:36:12 +0200
-From:   Joel Granados <j.granados@samsung.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Luis Chamberlain <mcgrof@kernel.org>
-CC:     Jens Axboe <axboe@kernel.dk>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Linux Next Mailing List" <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patch in the sysctl tree
-Message-ID: <20231011083612.4hymwsvc43hrwm6h@localhost>
+        with ESMTP id S230437AbjJKIts (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 11 Oct 2023 04:49:48 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F38479C;
+        Wed, 11 Oct 2023 01:49:45 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1qqUuU-0008HT-9A; Wed, 11 Oct 2023 10:49:42 +0200
+Message-ID: <8f982779-d7d6-494b-affc-9ecd44b1e23a@leemhuis.info>
+Date:   Wed, 11 Oct 2023 10:49:41 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg="pgp-sha512";
-        protocol="application/pgp-signature"; boundary="stxij4fxwoknaead"
-Content-Disposition: inline
-In-Reply-To: <20231011162050.773ebb15@canb.auug.org.au>
-X-Originating-IP: [106.210.248.232]
-X-ClientProxiedBy: CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) To
-        CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347)
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrCKsWRmVeSWpSXmKPExsWy7djPc7pusWqpBhc/6FmsvtvPZnF51xw2
-        i4ML2xgtbkx4ymgxdZmexda9V9kd2Dwab9xg87h8ttRj06pONo8HuzeweHzeJBfAGsVlk5Ka
-        k1mWWqRvl8CVcePnDqaCLzwVC//mNTDO5O5i5OSQEDCRmL+im72LkYtDSGAFo8TmCx+gnC+M
-        Ems6P7BCOJ8ZJQ7NXs4M03Lwyk4miMRyRoneZ9PZQBJgVbe7VSESWxklji47xgiSYBFQlbiw
-        +DITiM0moCNx/s0dsEkiAsESJxZeBdvHLLCPUWLqzblgk4QFrCWWX+hjAbF5BcwlNs1+zAxh
-        C0qcnPkEKM4B1FAh0fXRCMKUllj+jwOkghOouv/hbRaIQ5Ulrs98wQRh10qsPXYGbJWEQD+n
-        xIedn8HGSAi4SGx8DlUvLPHq+BZ2CFtG4v/O+UwQ9ZMZJfb/+wDVvJpRYlnjV6ip1hItV55A
-        dThKbF4OYoMM5ZO48VYQJMwMZE7aNp0ZIswr0dEmBFGtJrH63huWCYzKs5A8NgvhsVkIj80C
-        m6MjsWD3JzYMYW2JZQtfM0PYthLr1r1nWcDIvopRPLW0ODc9tdg4L7Vcrzgxt7g0L10vOT93
-        EyMwcZ3+d/zrDsYVrz7qHWJk4mA8xKgC1Pxow+oLjFIsefl5qUoivI8yVVKFeFMSK6tSi/Lj
-        i0pzUosPMUpzsCiJ86qmyKcKCaQnlqRmp6YWpBbBZJk4OKUamLwrwx9tsPRaP9HUY87B95v+
-        9L/fveWeifS7hD960q/rrbIU67Z5yzxpXcVSX2G0I+jjzaK1S2fP9455v0dRY+lcr635fB7F
-        v4vWf+2e+XQu41HxH1Gz7FYIiCpH2CmV8l8MWPj6FVsM29aW564lBg7z5Fjv3DuQMEFOhG9d
-        ScXHf7G9Ox6bqNw/unCb1Bnev880846cavT+ou77eZ9/o8FccweuJlGp836NB8rqNTPFelte
-        zA3kUeJSEv3hNPHpiURvBf+Us8xrSp9dZbwxT/Tb8e/CXx9/Z7oglvBryhpfhuy8oLjH8338
-        nXL0G7wnX5weuDggz0/a7/XLiAcczp8Vlxz7f/G62i+Tf0KyKUosxRmJhlrMRcWJAB/wPGfX
-        AwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrKIsWRmVeSWpSXmKPExsVy+t/xe7pusWqpBis381usvtvPZnF51xw2
-        i4ML2xgtbkx4ymgxdZmexda9V9kd2Dwab9xg87h8ttRj06pONo8HuzeweHzeJBfAGqVnU5Rf
-        WpKqkJFfXGKrFG1oYaRnaGmhZ2RiqWdobB5rZWSqpG9nk5Kak1mWWqRvl6CX8XLVP+aCTzwV
-        u679ZGxgnM7dxcjJISFgInHwyk6mLkYuDiGBpYwSfzcdYYNIyEhs/HKVFcIWlvhzrYsNougj
-        o8SzS8/YIZytjBKvb88Aq2IRUJW4sPgyE4jNJqAjcf7NHWYQW0QgWOLEwqtgDcwC+xglzszf
-        C9YgLGAtsfxCHwuIzStgLrFp9mNmiKldjBI3nj1ghkgISpyc+QSsiFmgTGL96m1AkziAbGmJ
-        5f84QMKcQL39D2+zQJyqLHF95gsmCLtW4tX93YwTGIVnIZk0C8mkWQiTIMJaEjf+vWTCENaW
-        WLbwNTOEbSuxbt17lgWM7KsYRVJLi3PTc4uN9IoTc4tL89L1kvNzNzEC43jbsZ9bdjCufPVR
-        7xAjEwfjIUYVoM5HG1ZfYJRiycvPS1US4X2UqZIqxJuSWFmVWpQfX1Sak1p8iNEUGIwTmaVE
-        k/OBCSavJN7QzMDU0MTM0sDU0sxYSZzXs6AjUUggPbEkNTs1tSC1CKaPiYNTqoFpQ2SQtsK1
-        XekbNy/oOTht8QdhS03riKVP1U+8l/9tuGVd/sy0rLj3b3cmsnlvMZ4aFvKX78hF6wVXX01Z
-        tDNtvY2f/+Llp9NYPjha83Ye4r27IERAc91qL72EeamfdHSF2c+o8+bJdzCv+bf3hfpzdqWl
-        djJ5ccY7+gvnzf3QnaHy8nZwm09umPWUvJOn9dn3zf2jU7Mm5YKblOnN3AtbP/jGudxwrlD7
-        VlPL9cRkJYPdjv3SC3b1dV9c/4Jp+S0zi71T9W5GrkuauuuSyZ5ToY+d/s72vZhkVDo3yrux
-        e+fCIy+z7VvTTaWqZH0XtHN12B0pYUq+4b5LsejK7UuNsQwOfkcOmXyrCNvlqcSoxFKckWio
-        xVxUnAgAw6H6P3gDAAA=
-X-CMS-MailID: 20231011083102eucas1p23f187c8ac330799038a55b62c0e07686
-X-Msg-Generator: CA
-X-RootMTR: 20231011052057eucas1p2876288636c2eaaf61a36985cffb29f8e
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20231011052057eucas1p2876288636c2eaaf61a36985cffb29f8e
-References: <CGME20231011052057eucas1p2876288636c2eaaf61a36985cffb29f8e@eucas1p2.samsung.com>
-        <20231011162050.773ebb15@canb.auug.org.au>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US, de-DE
+From:   Thorsten Leemhuis <linux@leemhuis.info>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Autocrypt: addr=linux@leemhuis.info; keydata=
+ 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 n7RI
+Subject: next: Build error on arm64: `modpost: "of_find_next_cache_node"
+ [drivers/cpufreq/qcom-cpufreq-nvmem.ko] undefined!`
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1697014186;24989d11;
+X-HE-SMSGID: 1qqUuU-0008HT-9A
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---stxij4fxwoknaead
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi Dmitry, my linux-next builds for Fedora failed today with this error:
 
-On Wed, Oct 11, 2023 at 04:20:50PM +1100, Stephen Rothwell wrote:
-> Hi all,
->=20
-> The following commit is also in the block tree as a different commit
-> (but the same patch):
->=20
->   80f3c6cfab37 ("cdrom: Remove now superfluous sentinel element from ctl_=
-table array")
->=20
-> This is commit
->=20
->   114b0ff62a65 ("cdrom: Remove now superfluous sentinel element from ctl_=
-table array")
->=20
-> in the block tree.
-Is this a warning on the merge? or did it actually error out? if it is a
-wraning and one of the two was skipped, it can be safely ignored as they
-are the same. I can also remove that commit from my set and send another
-version. @luis: How do you want to handle it?
+> + /usr/bin/make -s 'HOSTCFLAGS=-O2  -fexceptions -g -grecord-gcc-switches -pipe -Wall -Werror=format-security -Wp,-U_FORTIFY_SOURCE,-D_FORTIFY_SOURCE=3 -Wp,-D_GLIBCXX_ASSERTIONS -specs=/usr/lib/rpm/redhat/redhat-hardened-cc1 -fstack-protector-strong -specs=/usr/lib/rpm/redhat/redhat-annobin-cc1  -mbranch-protection=standard -fasynchronous-unwind-tables -fstack-clash-protection   ' 'HOSTLDFLAGS=-Wl,-z,relro -Wl,--as-needed  -Wl,-z,now -specs=/usr/lib/rpm/redhat/redhat-hardened-ld -specs=/usr/lib/rpm/redhat/redhat-annobin-cc1  -Wl,--build-id=sha1 -specs=/usr/lib/rpm/redhat/redhat-package-notes ' ARCH=arm64 'KCFLAGS= ' WITH_GCOV=0 -j4 modules
+> drivers/net/ethernet/freescale/dpaa/dpaa_ethtool.c: In function 'dpaa_set_coalesce':
+> drivers/net/ethernet/freescale/dpaa/dpaa_ethtool.c:502:1: warning: the frame size of 4112 bytes is larger than 2048 bytes [-Wframe-larger-than=]
+>   502 | }
+>       | ^
+> drivers/net/ethernet/freescale/dpaa/dpaa_eth.c: In function 'dpaa_fq_setup.constprop':
+> drivers/net/ethernet/freescale/dpaa/dpaa_eth.c:1000:1: warning: the frame size of 8224 bytes is larger than 2048 bytes [-Wframe-larger-than=]
+>  1000 | }
+>       | ^
+> ERROR: modpost: "of_find_next_cache_node" [drivers/cpufreq/qcom-cpufreq-nvmem.ko] undefined!
 
---=20
+A quick search on lore found that the 0-day bot encountered a similar
+problem early July:
+https://lore.kernel.org/all/202307030626.PUPpfATh-lkp@intel.com/
 
-Joel Granados
+Back then it afaics was caused by "cpufreq: qcom-nvmem: create L2 cache
+device" which is new in todays next, which makes it a likely suspect for
+my problem. That's why I decided to write this mail. But note, I didn't
+verify if that patch really causes the trouble; hence if you think it
+might be something entirely different, let me know.
 
---stxij4fxwoknaead
-Content-Type: application/pgp-signature; name="signature.asc"
+Full build log:
+https://copr-be.cloud.fedoraproject.org/results/@kernel-vanilla/next/fedora-38-aarch64/06516038-next-next-all/builder-live.log.gz
 
------BEGIN PGP SIGNATURE-----
+I don't have the config file at hand, but it should be the following one
+processed with "make olddefconfig"
+https://www.leemhuis.info/files/misc/kernel-aarch64-fedora.config
 
-iQGzBAABCgAdFiEErkcJVyXmMSXOyyeQupfNUreWQU8FAmUmXnoACgkQupfNUreW
-QU/i5Qv+NCv8awTRSurob6g5QJqggAPPU2CdAbRRUaJ4/LyN7MsgwhJGQC+ro7UV
-Fyit7H+QWrUyjKpFORjQVn3DzXfImnLUd0DtALJRRJsDgddWJ86dfW16gQMw+BG1
-CqD+R5fkruEe+fl6AwQe8JDKSb3tV8AMm7RcpY3z5L5Cbogd38yX1CkUqUCze7fM
-l416yH1h3Wqd7KYpKWJ/Wn59jdzIiPgQvy461Z9sfbmq5cTAM7sxdK5hK19+ZDz+
-Ya0tDRDADPVevKOKdpu+l1kUQ6eGgTUnGLDWLefuLuPLr1L2+hT9clLCALqtp8CO
-4jgHhgevrA0npvn1VcEiJCEZcrDUgZsMgdRUE5cr8bYjNP1h7iT/MRawKtlHd0WC
-xfhpz5EPtnDqhsUWRIfUt17BlxIgbZE4bZBxxtU+l8qfa83I0X3SeZDlDLBK8LX3
-Gkk4zQ7YSpc8JdOgnEMhKIVLo8zffHX3RGkPkrhpI87HW0D1J7les7VjNgYQN/ed
-fuwjxIoa
-=B94G
------END PGP SIGNATURE-----
-
---stxij4fxwoknaead--
+Ciao, Thorsten

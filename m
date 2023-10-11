@@ -2,67 +2,66 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5161C7C5F3D
-	for <lists+linux-next@lfdr.de>; Wed, 11 Oct 2023 23:42:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96C677C601B
+	for <lists+linux-next@lfdr.de>; Thu, 12 Oct 2023 00:01:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233672AbjJKVmt (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 11 Oct 2023 17:42:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47328 "EHLO
+        id S233703AbjJKWBV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 11 Oct 2023 18:01:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233339AbjJKVms (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 11 Oct 2023 17:42:48 -0400
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F7DF9E
-        for <linux-next@vger.kernel.org>; Wed, 11 Oct 2023 14:42:46 -0700 (PDT)
-Received: by mail-io1-xd36.google.com with SMTP id ca18e2360f4ac-7a2874d2820so5287439f.1
-        for <linux-next@vger.kernel.org>; Wed, 11 Oct 2023 14:42:46 -0700 (PDT)
+        with ESMTP id S233582AbjJKWBU (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 11 Oct 2023 18:01:20 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 716E2BA;
+        Wed, 11 Oct 2023 15:01:17 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-53d8320f0easo616298a12.3;
+        Wed, 11 Oct 2023 15:01:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1697060566; x=1697665366; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=aAaorYPiY+kMdNHIq5KySTKeO7NTcjq7Qa68NYXDN9Q=;
-        b=NqBf/CY5Eyvdt/kLIa3f6kRVA8/bp32hFTbFxOD9aqjJwwywOLNTeqKdw6n+SzMB76
-         pj612Wf9eg14FrzsYMYScvGPvHQ1dhNinrJZOSGI2AFUH+veIo9Ip7MGxitnscGbItpV
-         68BS4ZoI4aGkmCkmzQp37Ov/AXEhX9nVfHsTTWx/W6fxg38icc0MGtjQWHXZpj0kBtf4
-         ZKP55yyLg1zT2bNKJaa/aIradhElPVt6uiHQoF0lgFHI+Z5NcZorjbn6FaTqk/o/z3TQ
-         mvD0Vv4rrjIkfxkZtM6t/eFYZ3vlN0Ju6bm8s0Mu06gZiP0MlxYSiyLu3DCFO5LNycgs
-         Mtag==
+        d=gmail.com; s=20230601; t=1697061676; x=1697666476; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=aU8zTHkK4NxAcOXX++G5NAy250/pC8Kb9DQsWsU8U40=;
+        b=bfmF/5bC/jj06bALqbAG1W6+Vo3cQ0bvh3D0rSvV4JsRCmu1nxaEVjPc2fXtWv0iI0
+         D5cTM/Ns5Sq/1JPA6kdgndVPqOSbns9XkB3wbfrrkld/i9ACbDRmxbJvI4R5oUCH+XYl
+         sR/Aj+Uhxd6lkM4Xw/PunmYOuEmRN7JgH1jrhauI90wabG3YDHhQzx/qM7SmKom8BY9Y
+         dS7YFp3zBuRmOf630HMf31nQo3oVKASpvhYZrgMuIkNcvhKqiDfeD4pCWAF8ZXofPiGA
+         ideQI/Tr+GXeBhsijnHVtFBCYtDb9w0bM6fQiK/H2dnMKT3SQtKmEOB6g5TxtIlRrlcD
+         sLEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697060566; x=1697665366;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aAaorYPiY+kMdNHIq5KySTKeO7NTcjq7Qa68NYXDN9Q=;
-        b=b2dIt/CtQjgGiKHoOqQ+y+Dx6ypjkSvg0m8l5nWXHDo+no75gxEr69D/4oGAXRrEQb
-         ij3oEkf0fhlRYUKWnDAvAugyWOM5Y3Gi0vjY37u3+OTxoy/c81U4rlnEkT80FdZTBWV8
-         hlT/bCuLtFrLVU7GmoOjYJZT/ioDZWUlgy49KYEydePL/5FS0eIb8hUM9WMQT0oo8Dq6
-         R+ZkTM7ELAOrxwOEBaYvlodE7U7YebkEUWYaw5eGgzRgeisy/rG6FOuXDiLE/S3LPXeH
-         JCThXgYAZ0mwEc5f/OjUhOsN4yqYjEJI5KSsD8G2LMrUqEEFWkMl0G5jeSQGj/pZKC7G
-         gZzA==
-X-Gm-Message-State: AOJu0YzoTY5MbstxofBN3PxeCGj+iz3YRPPDsMZqqxbvUrwok0bumPOh
-        NeOxmvLTUh2kVtyXNVy2aYbWyeJNsVK1oFR5/HdLMg==
-X-Google-Smtp-Source: AGHT+IHV47WAnU++jAQHreME1kKzpHpjX212kFUVkAUN88b6f+mH6cOyt6ZnhRyxeh+YTDsISO3k3w==
-X-Received: by 2002:a05:6602:140c:b0:79f:a8c2:290d with SMTP id t12-20020a056602140c00b0079fa8c2290dmr29516543iov.0.1697060565937;
-        Wed, 11 Oct 2023 14:42:45 -0700 (PDT)
-Received: from [192.168.1.94] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id o15-20020a6bf80f000000b0079187c8524asm3671196ioh.3.2023.10.11.14.42.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 Oct 2023 14:42:45 -0700 (PDT)
-Message-ID: <bf5ecd2d-06a7-4c51-a762-6fe3753044b6@kernel.dk>
-Date:   Wed, 11 Oct 2023 15:42:43 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: manual merge of the block tree with the asm-generic
- tree
-Content-Language: en-US
-To:     Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
+        d=1e100.net; s=20230601; t=1697061676; x=1697666476;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=aU8zTHkK4NxAcOXX++G5NAy250/pC8Kb9DQsWsU8U40=;
+        b=LfluOxH/QU9P+CaEInTkhXEDesvenhpUGd5Bg1lY0r4DTW6WEo9C8QfB15/+l2FSgm
+         9vGDUoZ3PtEX36BAJFKKXt70ArdSziRcUD5FrLO6ILIrDBeBbGAX41/hgNCv90cXpJvk
+         FEuP2+zl4qDI9u8k5fmhkBKD2R6DktXPCyLwHjLxZSIfB6sIjg34Lz2kwGKu1x7JPKQA
+         CVA8l+q2Xp28Ev8loOy7zrnLmtsO4PUhomgqzv28FJ6FVSFIrPLQbxuaM9xXgU3hw7+x
+         yz5UWO2wjyuVozaKMHunh05L+xpY8+XOEQfznD8IbqmxqYYeILkWfLk5RcQFR37T8TpW
+         IYUg==
+X-Gm-Message-State: AOJu0Ywz0DlmusSK1jOqmSJ1CAvs8SAr0oFo1xi/JDYf3lB53nxbKxJ7
+        fQSUhhA4LUTzHKDaEra27Cg=
+X-Google-Smtp-Source: AGHT+IFaePyh0Rs/o6lwENjIO5ItRfbHskJy31RDjSUG/NssW7pcb8kI7XHPcWbV0kWtFwvx7YLaxg==
+X-Received: by 2002:a05:6402:3c1:b0:533:2449:7a59 with SMTP id t1-20020a05640203c100b0053324497a59mr20378065edw.11.1697061675822;
+        Wed, 11 Oct 2023 15:01:15 -0700 (PDT)
+Received: from gmail.com (1F2EF405.nat.pool.telekom.hu. [31.46.244.5])
+        by smtp.gmail.com with ESMTPSA id eg42-20020a05640228aa00b0053daf92f0easm1805319edb.97.2023.10.11.15.01.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Oct 2023 15:01:14 -0700 (PDT)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Thu, 12 Oct 2023 00:01:13 +0200
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
         Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-next <linux-next@vger.kernel.org>,
         Sohil Mehta <sohil.mehta@intel.com>
+Subject: Re: linux-next: manual merge of the block tree with the asm-generic
+ tree
+Message-ID: <ZScbKPQur2qao5Gf@gmail.com>
 References: <20231009123118.4487a0e1@canb.auug.org.au>
  <20231009084812.GB14330@noisy.programming.kicks-ass.net>
  <cb4bb8e2-7dfe-4ca4-aa70-060f7b2f8f95@app.fastmail.com>
@@ -71,86 +70,42 @@ References: <20231009123118.4487a0e1@canb.auug.org.au>
  <66e09ad5-2dcf-4159-9c98-f37ac739a445@kernel.dk>
  <20231011175407.GG6307@noisy.programming.kicks-ass.net>
  <ZScUhud9eqKIQJjC@gmail.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <ZScUhud9eqKIQJjC@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+ <bf5ecd2d-06a7-4c51-a762-6fe3753044b6@kernel.dk>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <bf5ecd2d-06a7-4c51-a762-6fe3753044b6@kernel.dk>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 10/11/23 3:32 PM, Ingo Molnar wrote:
-> 
-> * Peter Zijlstra <peterz@infradead.org> wrote:
-> 
->> On Wed, Oct 11, 2023 at 10:21:06AM -0600, Jens Axboe wrote:
->>> On 10/9/23 8:16 AM, Jens Axboe wrote:
->>>> On 10/9/23 8:13 AM, Peter Zijlstra wrote:
->>>>> On Mon, Oct 09, 2023 at 11:00:19AM +0200, Arnd Bergmann wrote:
->>>>>> On Mon, Oct 9, 2023, at 10:48, Peter Zijlstra wrote:
->>>>>>> On Mon, Oct 09, 2023 at 12:31:18PM +1100, Stephen Rothwell wrote:
->>>>>>>> diff --cc arch/alpha/kernel/syscalls/syscall.tbl
->>>>>>>> index 5d05ab716a74,b1865f9bb31e..000000000000
->>>>>>>> --- a/arch/alpha/kernel/syscalls/syscall.tbl
->>>>>>>> +++ b/arch/alpha/kernel/syscalls/syscall.tbl
->>>>>>>> @@@ -492,4 -492,6 +492,7 @@@
->>>>>>>>   560	common	set_mempolicy_home_node		sys_ni_syscall
->>>>>>>>   561	common	cachestat			sys_cachestat
->>>>>>>>   562	common	fchmodat2			sys_fchmodat2
->>>>>>>>  -563	common	futex_wake			sys_futex_wake
->>>>>>>>  -564	common	futex_wait			sys_futex_wait
->>>>>>>>  -565	common	futex_requeue			sys_futex_requeue
->>>>>>>>  +563	common	map_shadow_stack		sys_map_shadow_stack
->>>>>>>> ++564	common	futex_wake			sys_futex_wake
->>>>>>>> ++565	common	futex_wait			sys_futex_wait
->>>>>>>> ++566	common	futex_requeue			sys_futex_requeue
->>>>>>>
->>>>>>> So this renumbers the (futex) stuff on Alpha, does anybody care? AFAICT
->>>>>>> Alpha does not follow the unistd order and meh.
->>>>>>
->>>>>> Let's not make it worse for now. All the numbers since the
->>>>>> introduction of the time64 syscalls are offset by exactly 120
->>>>>> on alpha, and I'd prefer to keep it that way for the moment.
->>>>>>
->>>>>> I still hope to eventually finish the conversion of all architectures
->>>>>> to a single syscall.tbl for numbers >400, and if that happens before
->>>>>> the end of alpha, a different ordering would just be extra pain.
->>>>>
->>>>> Fair enough; should we look at rebase those futex patches for this? (bit
->>>>> of a pain as that would also mean rebasing block)
->>>>
->>>> From my point of view, this isn't a huge problem if we do it now. The
->>>> io_uring-futex branch is a separate branch and I have nothing on top of
->>>> it, so I could easily just re-pull your updated branch and rebase my
->>>> changes on top.
->>>>
->>>>> Or do we want to keep this fixup in the merge resolution and make sure
->>>>> Linus is aware?
->>>>
->>>> If you're OK with it, I'd say let's rebase and save ourselves the
->>>> trouble at merge time.
->>>
->>> Peter, what's the verdict - do you want to rebase it, or leave it as-is?
->>
->> Ah, I looked into doing this, but tip/locking/core has since grown a
->> bunch of patches and has a merge commit -- I talked to Ingo yesterday
->> and he proposed just queueing a fix on top instead of doing a full
->> rebase.
->>
->> Ingo, that still your preferred solution?
-> 
-> Yeah, that would be the best solution IMO - it's not like there's any real 
-> prospect of someone bisecting futex2 patch-enablement commits on Alpha ... 
-> and the bisection distance isn't particularly large either in any case.
 
-OK, works for me. I'll keep my branch as-is, and just ensure it gets
-sent out after locking/core has been pulled by Linus.
+* Jens Axboe <axboe@kernel.dk> wrote:
 
--- 
-Jens Axboe
+> >>> Peter, what's the verdict - do you want to rebase it, or leave it 
+> >>> as-is?
+> >>
+> >> Ah, I looked into doing this, but tip/locking/core has since grown a 
+> >> bunch of patches and has a merge commit -- I talked to Ingo yesterday 
+> >> and he proposed just queueing a fix on top instead of doing a full 
+> >> rebase.
+> >>
+> >> Ingo, that still your preferred solution?
+> > 
+> > Yeah, that would be the best solution IMO - it's not like there's any 
+> > real prospect of someone bisecting futex2 patch-enablement commits on 
+> > Alpha ... and the bisection distance isn't particularly large either in 
+> > any case.
+> 
+> OK, works for me. I'll keep my branch as-is, and just ensure it gets sent 
+> out after locking/core has been pulled by Linus.
 
+Thank you!
+
+	Ingo

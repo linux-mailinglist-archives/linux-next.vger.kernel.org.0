@@ -2,132 +2,116 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 029EF7C5908
-	for <lists+linux-next@lfdr.de>; Wed, 11 Oct 2023 18:21:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 684587C5A91
+	for <lists+linux-next@lfdr.de>; Wed, 11 Oct 2023 19:54:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231495AbjJKQVM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 11 Oct 2023 12:21:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41648 "EHLO
+        id S232947AbjJKRye (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 11 Oct 2023 13:54:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231230AbjJKQVL (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 11 Oct 2023 12:21:11 -0400
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9497B0
-        for <linux-next@vger.kernel.org>; Wed, 11 Oct 2023 09:21:08 -0700 (PDT)
-Received: by mail-io1-xd30.google.com with SMTP id ca18e2360f4ac-7a24c86aae3so822739f.0
-        for <linux-next@vger.kernel.org>; Wed, 11 Oct 2023 09:21:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1697041268; x=1697646068; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=FrKXtW+aPi7brg8nk5i96Avsz2oZOzgad82HhvhxQxU=;
-        b=BIdP/AKEG63c5VNgDmN9HRR5KTx4hq9mLJcJZzvap0IMdku2CdU2Zl3JOT6tF2v1TK
-         SzUpUHr6deafaH5CsHBpHlnw1dGBZAd2q40jiGInjd7ZOEygGTcTgUAD24aHfmbxclf2
-         YACtO0wEGTzMKWOmC43ZmYcvGy7QBwZ7PodO2yRlRR3jFycSLQFPv0xRttiv4Rpiqs2w
-         FVaR8Yi3bWk6oxIe4fnA1q87a4aB2c/nIf3ryK+6w90Z/x5OVxbcrf9GBTdtddMWySJF
-         ylXz27rRINPdbqmz+VDYHiwkEoGWYUZafx+yVhycAIqwWh6GnvNK7W61Td6bAmCvs463
-         PYSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697041268; x=1697646068;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FrKXtW+aPi7brg8nk5i96Avsz2oZOzgad82HhvhxQxU=;
-        b=WtFI4MFDz7nO/tFPeojkxFt3ycC3BhdhEjocF0haFJcGn+ztKmri8f7hO61CFy7JDy
-         ykaSwROmTyhspkTE5+j4C+Kn7qGKLicCgLiSi7hKAJe4PpJvQ3mh87jSaP4gCM7qSg4T
-         sw0YcWWVUs/o82z9+UNCERrUsWAnSJeTHoADeYbtb2aCJ3H66k/Gl1ZyTQMBn2bqc+Q/
-         8fGDjMDD2wIvd/UC81yZO4AGsLdKx5Kfj3fF1UoROih6iqCYaruyBriiyJP7gt94HIDN
-         SA9jcpXT42ELBrHswP5hcn7FWenQn+5zdJ9B48i5lp3HHOmHXmYx5JwHK6FGlWckpDyU
-         6txA==
-X-Gm-Message-State: AOJu0YwqACHH2xu0e33pQJs43Lkp6ZPsMEUy7zpxBq9BNteZNLBzLXXI
-        d5UQMx1bu2qVqvo0KjURNKwPsA==
-X-Google-Smtp-Source: AGHT+IFYJgF1rRgEO6eqjzycDdrg81lvNGSKjHu/S3GpJAPriFjN41m2MBQL2/9+xRf/V9Lc89i47g==
-X-Received: by 2002:a92:db4f:0:b0:34e:2a69:883c with SMTP id w15-20020a92db4f000000b0034e2a69883cmr21564981ilq.1.1697041268015;
-        Wed, 11 Oct 2023 09:21:08 -0700 (PDT)
-Received: from [192.168.1.94] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id h7-20020a0566380f8700b00430209d0efesm3406997jal.59.2023.10.11.09.21.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 Oct 2023 09:21:07 -0700 (PDT)
-Message-ID: <66e09ad5-2dcf-4159-9c98-f37ac739a445@kernel.dk>
-Date:   Wed, 11 Oct 2023 10:21:06 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: manual merge of the block tree with the asm-generic
- tree
-Content-Language: en-US
-From:   Jens Axboe <axboe@kernel.dk>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        with ESMTP id S232010AbjJKRye (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 11 Oct 2023 13:54:34 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F4108F;
+        Wed, 11 Oct 2023 10:54:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=yQuflZknAaX5vJ1EZ6o+wAPQXDxUxCR33+Rnjm4NbOQ=; b=Lp2My/UPdj1AnaGq/FFwxrBhP9
+        Tq2BaHTf2WtxrbhbuRLviKE7AFBQ+fNx7q9lhDPH6RXgN+Llcb3buwyG9IeQUVypSF5dvmYus8V4v
+        iQljyxkiuLrHLuEM8KjxP/TFFjOYLiOPqaTHIG28sRNQUkAqdRroZADkiBTXd6n+bwHWPfU9swkms
+        nepJEixZrMjqAmbvwmVmap5AYkqL5VaXkueujmLbboOjt8fd7uZdfyCZlXy1Pv7JSh81c5248gP8r
+        7NE5OzO57loVEjqFkSoJfD4BNvEX+2cA/bH7he2TF6kU/MsiueJpmp/VzJXfk5t1g5vgpj1jr1gMh
+        rpoUSnFg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1qqdPL-00C8hH-Sz; Wed, 11 Oct 2023 17:54:07 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 78BDA30036C; Wed, 11 Oct 2023 19:54:07 +0200 (CEST)
+Date:   Wed, 11 Oct 2023 19:54:07 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Jens Axboe <axboe@kernel.dk>, Ingo Molnar <mingo@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-next <linux-next@vger.kernel.org>,
         Sohil Mehta <sohil.mehta@intel.com>
+Subject: Re: linux-next: manual merge of the block tree with the asm-generic
+ tree
+Message-ID: <20231011175407.GG6307@noisy.programming.kicks-ass.net>
 References: <20231009123118.4487a0e1@canb.auug.org.au>
  <20231009084812.GB14330@noisy.programming.kicks-ass.net>
  <cb4bb8e2-7dfe-4ca4-aa70-060f7b2f8f95@app.fastmail.com>
  <20231009141351.GD14330@noisy.programming.kicks-ass.net>
  <b7c57f03-4606-4190-98c5-344c49656f9c@kernel.dk>
-In-Reply-To: <b7c57f03-4606-4190-98c5-344c49656f9c@kernel.dk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+ <66e09ad5-2dcf-4159-9c98-f37ac739a445@kernel.dk>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <66e09ad5-2dcf-4159-9c98-f37ac739a445@kernel.dk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 10/9/23 8:16 AM, Jens Axboe wrote:
-> On 10/9/23 8:13 AM, Peter Zijlstra wrote:
->> On Mon, Oct 09, 2023 at 11:00:19AM +0200, Arnd Bergmann wrote:
->>> On Mon, Oct 9, 2023, at 10:48, Peter Zijlstra wrote:
->>>> On Mon, Oct 09, 2023 at 12:31:18PM +1100, Stephen Rothwell wrote:
->>>>> diff --cc arch/alpha/kernel/syscalls/syscall.tbl
->>>>> index 5d05ab716a74,b1865f9bb31e..000000000000
->>>>> --- a/arch/alpha/kernel/syscalls/syscall.tbl
->>>>> +++ b/arch/alpha/kernel/syscalls/syscall.tbl
->>>>> @@@ -492,4 -492,6 +492,7 @@@
->>>>>   560	common	set_mempolicy_home_node		sys_ni_syscall
->>>>>   561	common	cachestat			sys_cachestat
->>>>>   562	common	fchmodat2			sys_fchmodat2
->>>>>  -563	common	futex_wake			sys_futex_wake
->>>>>  -564	common	futex_wait			sys_futex_wait
->>>>>  -565	common	futex_requeue			sys_futex_requeue
->>>>>  +563	common	map_shadow_stack		sys_map_shadow_stack
->>>>> ++564	common	futex_wake			sys_futex_wake
->>>>> ++565	common	futex_wait			sys_futex_wait
->>>>> ++566	common	futex_requeue			sys_futex_requeue
->>>>
->>>> So this renumbers the (futex) stuff on Alpha, does anybody care? AFAICT
->>>> Alpha does not follow the unistd order and meh.
->>>
->>> Let's not make it worse for now. All the numbers since the
->>> introduction of the time64 syscalls are offset by exactly 120
->>> on alpha, and I'd prefer to keep it that way for the moment.
->>>
->>> I still hope to eventually finish the conversion of all architectures
->>> to a single syscall.tbl for numbers >400, and if that happens before
->>> the end of alpha, a different ordering would just be extra pain.
->>
->> Fair enough; should we look at rebase those futex patches for this? (bit
->> of a pain as that would also mean rebasing block)
+On Wed, Oct 11, 2023 at 10:21:06AM -0600, Jens Axboe wrote:
+> On 10/9/23 8:16 AM, Jens Axboe wrote:
+> > On 10/9/23 8:13 AM, Peter Zijlstra wrote:
+> >> On Mon, Oct 09, 2023 at 11:00:19AM +0200, Arnd Bergmann wrote:
+> >>> On Mon, Oct 9, 2023, at 10:48, Peter Zijlstra wrote:
+> >>>> On Mon, Oct 09, 2023 at 12:31:18PM +1100, Stephen Rothwell wrote:
+> >>>>> diff --cc arch/alpha/kernel/syscalls/syscall.tbl
+> >>>>> index 5d05ab716a74,b1865f9bb31e..000000000000
+> >>>>> --- a/arch/alpha/kernel/syscalls/syscall.tbl
+> >>>>> +++ b/arch/alpha/kernel/syscalls/syscall.tbl
+> >>>>> @@@ -492,4 -492,6 +492,7 @@@
+> >>>>>   560	common	set_mempolicy_home_node		sys_ni_syscall
+> >>>>>   561	common	cachestat			sys_cachestat
+> >>>>>   562	common	fchmodat2			sys_fchmodat2
+> >>>>>  -563	common	futex_wake			sys_futex_wake
+> >>>>>  -564	common	futex_wait			sys_futex_wait
+> >>>>>  -565	common	futex_requeue			sys_futex_requeue
+> >>>>>  +563	common	map_shadow_stack		sys_map_shadow_stack
+> >>>>> ++564	common	futex_wake			sys_futex_wake
+> >>>>> ++565	common	futex_wait			sys_futex_wait
+> >>>>> ++566	common	futex_requeue			sys_futex_requeue
+> >>>>
+> >>>> So this renumbers the (futex) stuff on Alpha, does anybody care? AFAICT
+> >>>> Alpha does not follow the unistd order and meh.
+> >>>
+> >>> Let's not make it worse for now. All the numbers since the
+> >>> introduction of the time64 syscalls are offset by exactly 120
+> >>> on alpha, and I'd prefer to keep it that way for the moment.
+> >>>
+> >>> I still hope to eventually finish the conversion of all architectures
+> >>> to a single syscall.tbl for numbers >400, and if that happens before
+> >>> the end of alpha, a different ordering would just be extra pain.
+> >>
+> >> Fair enough; should we look at rebase those futex patches for this? (bit
+> >> of a pain as that would also mean rebasing block)
+> > 
+> > From my point of view, this isn't a huge problem if we do it now. The
+> > io_uring-futex branch is a separate branch and I have nothing on top of
+> > it, so I could easily just re-pull your updated branch and rebase my
+> > changes on top.
+> > 
+> >> Or do we want to keep this fixup in the merge resolution and make sure
+> >> Linus is aware?
+> > 
+> > If you're OK with it, I'd say let's rebase and save ourselves the
+> > trouble at merge time.
 > 
-> From my point of view, this isn't a huge problem if we do it now. The
-> io_uring-futex branch is a separate branch and I have nothing on top of
-> it, so I could easily just re-pull your updated branch and rebase my
-> changes on top.
-> 
->> Or do we want to keep this fixup in the merge resolution and make sure
->> Linus is aware?
-> 
-> If you're OK with it, I'd say let's rebase and save ourselves the
-> trouble at merge time.
+> Peter, what's the verdict - do you want to rebase it, or leave it as-is?
 
-Peter, what's the verdict - do you want to rebase it, or leave it as-is?
+Ah, I looked into doing this, but tip/locking/core has since grown a
+bunch of patches and has a merge commit -- I talked to Ingo yesterday
+and he proposed just queueing a fix on top instead of doing a full
+rebase.
 
--- 
-Jens Axboe
-
+Ingo, that still your preferred solution?

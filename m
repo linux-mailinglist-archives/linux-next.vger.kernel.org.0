@@ -2,72 +2,118 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCF697C4D15
-	for <lists+linux-next@lfdr.de>; Wed, 11 Oct 2023 10:25:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5B6F7C4D2C
+	for <lists+linux-next@lfdr.de>; Wed, 11 Oct 2023 10:31:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231258AbjJKIZ5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 11 Oct 2023 04:25:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38820 "EHLO
+        id S230217AbjJKIbM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 11 Oct 2023 04:31:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234261AbjJKIZu (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 11 Oct 2023 04:25:50 -0400
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C581110
-        for <linux-next@vger.kernel.org>; Wed, 11 Oct 2023 01:25:47 -0700 (PDT)
-Received: by mail-oi1-x22e.google.com with SMTP id 5614622812f47-3ae18567f42so648763b6e.1
-        for <linux-next@vger.kernel.org>; Wed, 11 Oct 2023 01:25:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google; t=1697012746; x=1697617546; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yO8JxpsbpXZt4Cw9jM5WvyCJaL3RHL2GKTfpinDJlUk=;
-        b=j4GoVv7pjYeANe5poe4TmufuGofyhr1utGolaJgKjDlFzhjSYvqNoObMWtR+YPdZ3q
-         1O/4+eKFYyMUGlwFv5d446n9b1fMlMFGnUmorG1VmEUBVKnI1oYGZjI8INnwVf5Zlwjd
-         WYeQ19+w/b54h6UfbCIz15fgXSo926eP4Ljnw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697012746; x=1697617546;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yO8JxpsbpXZt4Cw9jM5WvyCJaL3RHL2GKTfpinDJlUk=;
-        b=FBhNGiVVs9BFT2Wwx+m3I/ZgpBwtif64h6RHoy7lXPzpaSKjjXa0lW2hfFndJ02cMJ
-         CoA92A6Iwc0SSSHFcr/bugGkIHQsyzhOk3EILTFpBKeNyIQcoGmvzXD3/fLFfLUEEODs
-         JZLpVEzkPaAWVpKatCozeuPnV8rdP9dOENHug4xRQmZLpDTTw+v3MgZNjrXD65j+L18i
-         9ISjzPrvMg9fziTPWtLu4PiMBe/fVohSbL0ODJrWT5TiRQk9dwMY0fzxP0tvdDOudk8A
-         xEydp5mmi//ZVn5RRkGgbKE0bwwqPjY64TzG2vRj0VCL6WxUuYD01xS4JFOoIoNWauiY
-         keMg==
-X-Gm-Message-State: AOJu0YyIsxb+1GW1vSpbV0gEBUbkQvcZKhnKnxfDnToaxHuZCxVk7Fwx
-        j5p8K4dg7867PQDBVcFHcZDmbHJzZMM0X9BTjFQRZg==
-X-Google-Smtp-Source: AGHT+IFk+P5ynEjLYZO6V9DFmTu1ayQUc876iRYfvt2CDyYzqu97lA1DwcyG2F5g5czqmL7QwGLEILiQ2dIo0MUMYnY=
-X-Received: by 2002:a05:6870:a448:b0:1dd:67a6:ed6e with SMTP id
- n8-20020a056870a44800b001dd67a6ed6emr22159464oal.1.1697012746543; Wed, 11 Oct
- 2023 01:25:46 -0700 (PDT)
-MIME-Version: 1.0
-References: <20231010123345.12bfda28@canb.auug.org.au> <CAJs_Fx63s+m2umccuq29pmec8S8y59WtaoQbhk4QVLJARy9P5A@mail.gmail.com>
-In-Reply-To: <CAJs_Fx63s+m2umccuq29pmec8S8y59WtaoQbhk4QVLJARy9P5A@mail.gmail.com>
-From:   Daniel Vetter <daniel@ffwll.ch>
-Date:   Wed, 11 Oct 2023 10:25:34 +0200
-Message-ID: <CAKMK7uEdm08GPCWongmF4jGrxvLS-3=_Lt4CqKmiUmn8mTU2UA@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the drm-msm tree with the mm, drm trees
-To:     Rob Clark <robdclark@chromium.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Dave Airlie <airlied@redhat.com>,
+        with ESMTP id S1344232AbjJKIbK (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 11 Oct 2023 04:31:10 -0400
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CED259E;
+        Wed, 11 Oct 2023 01:31:04 -0700 (PDT)
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20231011083103euoutp0292639907a430301ee2dbb76d84394fde~NAGPCv5033124531245euoutp02R;
+        Wed, 11 Oct 2023 08:31:03 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20231011083103euoutp0292639907a430301ee2dbb76d84394fde~NAGPCv5033124531245euoutp02R
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1697013063;
+        bh=c23HKEnm07lR0JjSW2N2NuGqLttQ0iruGe5RY3MyjYA=;
+        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+        b=bIHFQv4DHDaMLEOTaYS6xqyAflmHaFX1SURfZ5ayiibBPqWEZbdS8B2l1O7+p/MM0
+         SE2kzGHxfUY5SQhVp2BCLwe6XPdPy5XKTKSZZpwsmRZULB8rX7mP05f0bED8Yn9sPW
+         yXYfetu9SQ3NcqKerr1nHC/MyjZlx4pwBxCS7p0c=
+Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20231011083102eucas1p16b45762026096a11812a6211e77905b2~NAGO0iLSX2913829138eucas1p1R;
+        Wed, 11 Oct 2023 08:31:02 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges3new.samsung.com (EUCPMTA) with SMTP id 78.1E.37758.64D56256; Wed, 11
+        Oct 2023 09:31:02 +0100 (BST)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20231011083102eucas1p23f187c8ac330799038a55b62c0e07686~NAGOYrXya1371313713eucas1p2q;
+        Wed, 11 Oct 2023 08:31:02 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20231011083102eusmtrp2229867fd04eddaae5839485b8674a82d~NAGOYAKyz1417414174eusmtrp2l;
+        Wed, 11 Oct 2023 08:31:02 +0000 (GMT)
+X-AuditID: cbfec7f5-7ffff7000002937e-fc-65265d460b94
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id 59.B2.25043.64D56256; Wed, 11
+        Oct 2023 09:31:02 +0100 (BST)
+Received: from CAMSVWEXC01.scsc.local (unknown [106.1.227.71]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20231011083102eusmtip238644f210741fa49f3c4e348aa6c8dfe~NAGOHZK1S0276502765eusmtip2J;
+        Wed, 11 Oct 2023 08:31:02 +0000 (GMT)
+Received: from localhost (106.210.248.232) by CAMSVWEXC01.scsc.local
+        (2002:6a01:e347::6a01:e347) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
+        Wed, 11 Oct 2023 09:31:01 +0100
+Date:   Wed, 11 Oct 2023 10:36:12 +0200
+From:   Joel Granados <j.granados@samsung.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Luis Chamberlain <mcgrof@kernel.org>
+CC:     Jens Axboe <axboe@kernel.dk>,
+        Phillip Potter <phil@philpotter.co.uk>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Sean Paul <seanpaul@chromium.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        "Linux Next Mailing List" <linux-next@vger.kernel.org>
+Subject: Re: linux-next: duplicate patch in the sysctl tree
+Message-ID: <20231011083612.4hymwsvc43hrwm6h@localhost>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg="pgp-sha512";
+        protocol="application/pgp-signature"; boundary="stxij4fxwoknaead"
+Content-Disposition: inline
+In-Reply-To: <20231011162050.773ebb15@canb.auug.org.au>
+X-Originating-IP: [106.210.248.232]
+X-ClientProxiedBy: CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) To
+        CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347)
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrCKsWRmVeSWpSXmKPExsWy7djPc7pusWqpBhc/6FmsvtvPZnF51xw2
+        i4ML2xgtbkx4ymgxdZmexda9V9kd2Dwab9xg87h8ttRj06pONo8HuzeweHzeJBfAGsVlk5Ka
+        k1mWWqRvl8CVcePnDqaCLzwVC//mNTDO5O5i5OSQEDCRmL+im72LkYtDSGAFo8TmCx+gnC+M
+        Ems6P7BCOJ8ZJQ7NXs4M03Lwyk4miMRyRoneZ9PZQBJgVbe7VSESWxklji47xgiSYBFQlbiw
+        +DITiM0moCNx/s0dsEkiAsESJxZeBdvHLLCPUWLqzblgk4QFrCWWX+hjAbF5BcwlNs1+zAxh
+        C0qcnPkEKM4B1FAh0fXRCMKUllj+jwOkghOouv/hbRaIQ5Ulrs98wQRh10qsPXYGbJWEQD+n
+        xIedn8HGSAi4SGx8DlUvLPHq+BZ2CFtG4v/O+UwQ9ZMZJfb/+wDVvJpRYlnjV6ip1hItV55A
+        dThKbF4OYoMM5ZO48VYQJMwMZE7aNp0ZIswr0dEmBFGtJrH63huWCYzKs5A8NgvhsVkIj80C
+        m6MjsWD3JzYMYW2JZQtfM0PYthLr1r1nWcDIvopRPLW0ODc9tdg4L7Vcrzgxt7g0L10vOT93
+        EyMwcZ3+d/zrDsYVrz7qHWJk4mA8xKgC1Pxow+oLjFIsefl5qUoivI8yVVKFeFMSK6tSi/Lj
+        i0pzUosPMUpzsCiJ86qmyKcKCaQnlqRmp6YWpBbBZJk4OKUamLwrwx9tsPRaP9HUY87B95v+
+        9L/fveWeifS7hD960q/rrbIU67Z5yzxpXcVSX2G0I+jjzaK1S2fP9455v0dRY+lcr635fB7F
+        v4vWf+2e+XQu41HxH1Gz7FYIiCpH2CmV8l8MWPj6FVsM29aW564lBg7z5Fjv3DuQMEFOhG9d
+        ScXHf7G9Ox6bqNw/unCb1Bnev880846cavT+ou77eZ9/o8FccweuJlGp836NB8rqNTPFelte
+        zA3kUeJSEv3hNPHpiURvBf+Us8xrSp9dZbwxT/Tb8e/CXx9/Z7oglvBryhpfhuy8oLjH8338
+        nXL0G7wnX5weuDggz0/a7/XLiAcczp8Vlxz7f/G62i+Tf0KyKUosxRmJhlrMRcWJAB/wPGfX
+        AwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrKIsWRmVeSWpSXmKPExsVy+t/xe7pusWqpBis381usvtvPZnF51xw2
+        i4ML2xgtbkx4ymgxdZmexda9V9kd2Dwab9xg87h8ttRj06pONo8HuzeweHzeJBfAGqVnU5Rf
+        WpKqkJFfXGKrFG1oYaRnaGmhZ2RiqWdobB5rZWSqpG9nk5Kak1mWWqRvl6CX8XLVP+aCTzwV
+        u679ZGxgnM7dxcjJISFgInHwyk6mLkYuDiGBpYwSfzcdYYNIyEhs/HKVFcIWlvhzrYsNougj
+        o8SzS8/YIZytjBKvb88Aq2IRUJW4sPgyE4jNJqAjcf7NHWYQW0QgWOLEwqtgDcwC+xglzszf
+        C9YgLGAtsfxCHwuIzStgLrFp9mNmiKldjBI3nj1ghkgISpyc+QSsiFmgTGL96m1AkziAbGmJ
+        5f84QMKcQL39D2+zQJyqLHF95gsmCLtW4tX93YwTGIVnIZk0C8mkWQiTIMJaEjf+vWTCENaW
+        WLbwNTOEbSuxbt17lgWM7KsYRVJLi3PTc4uN9IoTc4tL89L1kvNzNzEC43jbsZ9bdjCufPVR
+        7xAjEwfjIUYVoM5HG1ZfYJRiycvPS1US4X2UqZIqxJuSWFmVWpQfX1Sak1p8iNEUGIwTmaVE
+        k/OBCSavJN7QzMDU0MTM0sDU0sxYSZzXs6AjUUggPbEkNTs1tSC1CKaPiYNTqoFpQ2SQtsK1
+        XekbNy/oOTht8QdhS03riKVP1U+8l/9tuGVd/sy0rLj3b3cmsnlvMZ4aFvKX78hF6wVXX01Z
+        tDNtvY2f/+Llp9NYPjha83Ye4r27IERAc91qL72EeamfdHSF2c+o8+bJdzCv+bf3hfpzdqWl
+        djJ5ccY7+gvnzf3QnaHy8nZwm09umPWUvJOn9dn3zf2jU7Mm5YKblOnN3AtbP/jGudxwrlD7
+        VlPL9cRkJYPdjv3SC3b1dV9c/4Jp+S0zi71T9W5GrkuauuuSyZ5ToY+d/s72vZhkVDo3yrux
+        e+fCIy+z7VvTTaWqZH0XtHN12B0pYUq+4b5LsejK7UuNsQwOfkcOmXyrCNvlqcSoxFKckWio
+        xVxUnAgAw6H6P3gDAAA=
+X-CMS-MailID: 20231011083102eucas1p23f187c8ac330799038a55b62c0e07686
+X-Msg-Generator: CA
+X-RootMTR: 20231011052057eucas1p2876288636c2eaaf61a36985cffb29f8e
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20231011052057eucas1p2876288636c2eaaf61a36985cffb29f8e
+References: <CGME20231011052057eucas1p2876288636c2eaaf61a36985cffb29f8e@eucas1p2.samsung.com>
+        <20231011162050.773ebb15@canb.auug.org.au>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,397 +121,51 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, 11 Oct 2023 at 05:38, Rob Clark <robdclark@chromium.org> wrote:
->
-> Hey Dave,
->
-> lmk how you want me to handle this to make it easier for you when I
-> send my pull request for 6.7.. I can merge drm-next to take care of
-> *that* conflict (either before I send my PR or push it somewhere where
-> you can see the resolution) but not sure about the mm conflict since
-> pulling that might get me ahead of drm-next.  Either way, Stephen's
-> resolution looks correct.
+--stxij4fxwoknaead
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-The -mm one will get resolved in the merge window by Linus (unless
-Andrew wants to do a topic branch, but I don't think that's needed).
-The drm one I think we can sort out on the next drm-msm-next pull or
-so.
--Sima
-
->
-> BR,
-> -R
->
-> On Mon, Oct 9, 2023 at 6:33=E2=80=AFPM Stephen Rothwell <sfr@canb.auug.or=
-g.au> wrote:
-> >
-> > Hi all,
-> >
-> > FIXME: Add owner of second tree to To:
-> >        Add author(s)/SOB of conflicting commits.
-> >
-> > Today's linux-next merge of the drm-msm tree got conflicts in:
-> >
-> >   drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-> >   drivers/gpu/drm/msm/disp/mdp4/mdp4_kms.c
-> >   drivers/gpu/drm/msm/disp/mdp5/mdp5_kms.c
-> >   drivers/gpu/drm/msm/msm_drv.c
-> >
-> > between commits:
-> >
-> >   01790d5e372f ("drm/msm: Convert to platform remove callback returning=
- void")
-> >   cd61a76c210a ("drm/msm: dynamically allocate the drm-msm_gem shrinker=
-")
-> >
-> > from the mm, drm trees and commits:
-> >
-> >   283add3e6405 ("drm/msm: remove shutdown callback from msm_platform_dr=
-iver")
-> >   506efcba3129 ("drm/msm: carve out KMS code from msm_drv.c")
-> >
-> > from the drm-msm tree.
-> >
-> > I fixed it up (see below) and can carry the fix as necessary. This
-> > is now fixed as far as linux-next is concerned, but any non trivial
-> > conflicts should be mentioned to your upstream maintainer when your tre=
-e
-> > is submitted for merging.  You may also want to consider cooperating
-> > with the maintainer of the conflicting tree to minimise any particularl=
-y
-> > complex conflicts.
-> >
-> > --
-> > Cheers,
-> > Stephen Rothwell
-> >
-> > diff --cc drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-> > index 82381d12414d,d14ae316796c..000000000000
-> > --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-> > +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-> > @@@ -1299,12 -1230,72 +1230,70 @@@ static int dpu_kms_init(struct drm_d=
-evi
-> >
-> >   static int dpu_dev_probe(struct platform_device *pdev)
-> >   {
-> > -       return msm_drv_probe(&pdev->dev, dpu_kms_init);
-> > +       struct device *dev =3D &pdev->dev;
-> > +       struct dpu_kms *dpu_kms;
-> > +       int irq;
-> > +       int ret =3D 0;
-> > +
-> > +       dpu_kms =3D devm_kzalloc(dev, sizeof(*dpu_kms), GFP_KERNEL);
-> > +       if (!dpu_kms)
-> > +               return -ENOMEM;
-> > +
-> > +       dpu_kms->pdev =3D pdev;
-> > +
-> > +       ret =3D devm_pm_opp_set_clkname(dev, "core");
-> > +       if (ret)
-> > +               return ret;
-> > +       /* OPP table is optional */
-> > +       ret =3D devm_pm_opp_of_add_table(dev);
-> > +       if (ret && ret !=3D -ENODEV)
-> > +               return dev_err_probe(dev, ret, "invalid OPP table in de=
-vice tree\n");
-> > +
-> > +       ret =3D devm_clk_bulk_get_all(&pdev->dev, &dpu_kms->clocks);
-> > +       if (ret < 0)
-> > +               return dev_err_probe(dev, ret, "failed to parse clocks\=
-n");
-> > +
-> > +       dpu_kms->num_clocks =3D ret;
-> > +
-> > +       irq =3D platform_get_irq(pdev, 0);
-> > +       if (irq < 0)
-> > +               return dev_err_probe(dev, irq, "failed to get irq\n");
-> > +
-> > +       dpu_kms->base.irq =3D irq;
-> > +
-> > +       dpu_kms->mmio =3D msm_ioremap(pdev, "mdp");
-> > +       if (IS_ERR(dpu_kms->mmio)) {
-> > +               ret =3D PTR_ERR(dpu_kms->mmio);
-> > +               DPU_ERROR("mdp register memory map failed: %d\n", ret);
-> > +               dpu_kms->mmio =3D NULL;
-> > +               return ret;
-> > +       }
-> > +       DRM_DEBUG("mapped dpu address space @%pK\n", dpu_kms->mmio);
-> > +
-> > +       dpu_kms->vbif[VBIF_RT] =3D msm_ioremap(pdev, "vbif");
-> > +       if (IS_ERR(dpu_kms->vbif[VBIF_RT])) {
-> > +               ret =3D PTR_ERR(dpu_kms->vbif[VBIF_RT]);
-> > +               DPU_ERROR("vbif register memory map failed: %d\n", ret)=
-;
-> > +               dpu_kms->vbif[VBIF_RT] =3D NULL;
-> > +               return ret;
-> > +       }
-> > +
-> > +       dpu_kms->vbif[VBIF_NRT] =3D msm_ioremap_quiet(pdev, "vbif_nrt")=
-;
-> > +       if (IS_ERR(dpu_kms->vbif[VBIF_NRT])) {
-> > +               dpu_kms->vbif[VBIF_NRT] =3D NULL;
-> > +               DPU_DEBUG("VBIF NRT is not defined");
-> > +       }
-> > +
-> > +       ret =3D dpu_kms_parse_data_bus_icc_path(dpu_kms);
-> > +       if (ret)
-> > +               return ret;
-> > +
-> > +       return msm_drv_probe(&pdev->dev, dpu_kms_init, &dpu_kms->base);
-> >   }
-> >
-> >  -static int dpu_dev_remove(struct platform_device *pdev)
-> >  +static void dpu_dev_remove(struct platform_device *pdev)
-> >   {
-> >         component_master_del(&pdev->dev, &msm_drm_ops);
-> >  -
-> >  -      return 0;
-> >   }
-> >
-> >   static int __maybe_unused dpu_runtime_suspend(struct device *dev)
-> > @@@ -1380,8 -1371,8 +1369,8 @@@ MODULE_DEVICE_TABLE(of, dpu_dt_match)
-> >
-> >   static struct platform_driver dpu_driver =3D {
-> >         .probe =3D dpu_dev_probe,
-> >  -      .remove =3D dpu_dev_remove,
-> >  +      .remove_new =3D dpu_dev_remove,
-> > -       .shutdown =3D msm_drv_shutdown,
-> > +       .shutdown =3D msm_kms_shutdown,
-> >         .driver =3D {
-> >                 .name =3D "msm_dpu",
-> >                 .of_match_table =3D dpu_dt_match,
-> > diff --cc drivers/gpu/drm/msm/disp/mdp4/mdp4_kms.c
-> > index e5012fa6771f,982b7689e5b6..000000000000
-> > --- a/drivers/gpu/drm/msm/disp/mdp4/mdp4_kms.c
-> > +++ b/drivers/gpu/drm/msm/disp/mdp4/mdp4_kms.c
-> > @@@ -557,12 -507,60 +507,58 @@@ static const struct dev_pm_ops mdp4_pm_
-> >
-> >   static int mdp4_probe(struct platform_device *pdev)
-> >   {
-> > -       return msm_drv_probe(&pdev->dev, mdp4_kms_init);
-> > +       struct device *dev =3D &pdev->dev;
-> > +       struct mdp4_kms *mdp4_kms;
-> > +       int irq;
-> > +
-> > +       mdp4_kms =3D devm_kzalloc(dev, sizeof(*mdp4_kms), GFP_KERNEL);
-> > +       if (!mdp4_kms)
-> > +               return dev_err_probe(dev, -ENOMEM, "failed to allocate =
-kms\n");
-> > +
-> > +       mdp4_kms->mmio =3D msm_ioremap(pdev, NULL);
-> > +       if (IS_ERR(mdp4_kms->mmio))
-> > +               return PTR_ERR(mdp4_kms->mmio);
-> > +
-> > +       irq =3D platform_get_irq(pdev, 0);
-> > +       if (irq < 0)
-> > +               return dev_err_probe(dev, irq, "failed to get irq\n");
-> > +
-> > +       mdp4_kms->base.base.irq =3D irq;
-> > +
-> > +       /* NOTE: driver for this regulator still missing upstream.. use
-> > +        * _get_exclusive() and ignore the error if it does not exist
-> > +        * (and hope that the bootloader left it on for us)
-> > +        */
-> > +       mdp4_kms->vdd =3D devm_regulator_get_exclusive(&pdev->dev, "vdd=
-");
-> > +       if (IS_ERR(mdp4_kms->vdd))
-> > +               mdp4_kms->vdd =3D NULL;
-> > +
-> > +       mdp4_kms->clk =3D devm_clk_get(&pdev->dev, "core_clk");
-> > +       if (IS_ERR(mdp4_kms->clk))
-> > +               return dev_err_probe(dev, PTR_ERR(mdp4_kms->clk), "fail=
-ed to get core_clk\n");
-> > +
-> > +       mdp4_kms->pclk =3D devm_clk_get(&pdev->dev, "iface_clk");
-> > +       if (IS_ERR(mdp4_kms->pclk))
-> > +               mdp4_kms->pclk =3D NULL;
-> > +
-> > +       mdp4_kms->axi_clk =3D devm_clk_get(&pdev->dev, "bus_clk");
-> > +       if (IS_ERR(mdp4_kms->axi_clk))
-> > +               return dev_err_probe(dev, PTR_ERR(mdp4_kms->axi_clk), "=
-failed to get axi_clk\n");
-> > +
-> > +       /*
-> > +        * This is required for revn >=3D 2. Handle errors here and let=
- the kms
-> > +        * init bail out if the clock is not provided.
-> > +        */
-> > +       mdp4_kms->lut_clk =3D devm_clk_get_optional(&pdev->dev, "lut_cl=
-k");
-> > +       if (IS_ERR(mdp4_kms->lut_clk))
-> > +               return dev_err_probe(dev, PTR_ERR(mdp4_kms->lut_clk), "=
-failed to get lut_clk\n");
-> > +
-> > +       return msm_drv_probe(&pdev->dev, mdp4_kms_init, &mdp4_kms->base=
-.base);
-> >   }
-> >
-> >  -static int mdp4_remove(struct platform_device *pdev)
-> >  +static void mdp4_remove(struct platform_device *pdev)
-> >   {
-> >         component_master_del(&pdev->dev, &msm_drm_ops);
-> >  -
-> >  -      return 0;
-> >   }
-> >
-> >   static const struct of_device_id mdp4_dt_match[] =3D {
-> > @@@ -573,8 -571,8 +569,8 @@@ MODULE_DEVICE_TABLE(of, mdp4_dt_match)
-> >
-> >   static struct platform_driver mdp4_platform_driver =3D {
-> >         .probe      =3D mdp4_probe,
-> >  -      .remove     =3D mdp4_remove,
-> >  +      .remove_new =3D mdp4_remove,
-> > -       .shutdown   =3D msm_drv_shutdown,
-> > +       .shutdown   =3D msm_kms_shutdown,
-> >         .driver     =3D {
-> >                 .name   =3D "mdp4",
-> >                 .of_match_table =3D mdp4_dt_match,
-> > diff --cc drivers/gpu/drm/msm/disp/mdp5/mdp5_kms.c
-> > index 8a7b44376bc6,a28fbcd09684..000000000000
-> > --- a/drivers/gpu/drm/msm/disp/mdp5/mdp5_kms.c
-> > +++ b/drivers/gpu/drm/msm/disp/mdp5/mdp5_kms.c
-> > @@@ -939,10 -894,43 +894,43 @@@ static int mdp5_dev_probe(struct platfo
-> >         if (ret)
-> >                 return ret;
-> >
-> > -       return msm_drv_probe(&pdev->dev, mdp5_kms_init);
-> > +       mdp5_kms->pdev =3D pdev;
-> > +
-> > +       spin_lock_init(&mdp5_kms->resource_lock);
-> > +
-> > +       mdp5_kms->mmio =3D msm_ioremap(pdev, "mdp_phys");
-> > +       if (IS_ERR(mdp5_kms->mmio))
-> > +               return PTR_ERR(mdp5_kms->mmio);
-> > +
-> > +       /* mandatory clocks: */
-> > +       ret =3D get_clk(pdev, &mdp5_kms->axi_clk, "bus", true);
-> > +       if (ret)
-> > +               return ret;
-> > +       ret =3D get_clk(pdev, &mdp5_kms->ahb_clk, "iface", true);
-> > +       if (ret)
-> > +               return ret;
-> > +       ret =3D get_clk(pdev, &mdp5_kms->core_clk, "core", true);
-> > +       if (ret)
-> > +               return ret;
-> > +       ret =3D get_clk(pdev, &mdp5_kms->vsync_clk, "vsync", true);
-> > +       if (ret)
-> > +               return ret;
-> > +
-> > +       /* optional clocks: */
-> > +       get_clk(pdev, &mdp5_kms->lut_clk, "lut", false);
-> > +       get_clk(pdev, &mdp5_kms->tbu_clk, "tbu", false);
-> > +       get_clk(pdev, &mdp5_kms->tbu_rt_clk, "tbu_rt", false);
-> > +
-> > +       irq =3D platform_get_irq(pdev, 0);
-> > +       if (irq < 0)
-> > +               return dev_err_probe(&pdev->dev, irq, "failed to get ir=
-q\n");
-> > +
-> > +       mdp5_kms->base.base.irq =3D irq;
-> > +
-> > +       return msm_drv_probe(&pdev->dev, mdp5_kms_init, &mdp5_kms->base=
-.base);
-> >   }
-> >
-> >  -static int mdp5_dev_remove(struct platform_device *pdev)
-> >  +static void mdp5_dev_remove(struct platform_device *pdev)
-> >   {
-> >         DBG("");
-> >         component_master_del(&pdev->dev, &msm_drm_ops);
-> > @@@ -986,8 -975,8 +974,8 @@@ MODULE_DEVICE_TABLE(of, mdp5_dt_match)
-> >
-> >   static struct platform_driver mdp5_driver =3D {
-> >         .probe =3D mdp5_dev_probe,
-> >  -      .remove =3D mdp5_dev_remove,
-> >  +      .remove_new =3D mdp5_dev_remove,
-> > -       .shutdown =3D msm_drv_shutdown,
-> > +       .shutdown =3D msm_kms_shutdown,
-> >         .driver =3D {
-> >                 .name =3D "msm_mdp",
-> >                 .of_match_table =3D mdp5_dt_match,
-> > diff --cc drivers/gpu/drm/msm/msm_drv.c
-> > index 05fe32c3a4b4,401e9ef86074..000000000000
-> > --- a/drivers/gpu/drm/msm/msm_drv.c
-> > +++ b/drivers/gpu/drm/msm/msm_drv.c
-> > @@@ -457,23 -264,12 +264,14 @@@ static int msm_drm_init(struct device *
-> >         if (ret)
-> >                 goto err_deinit_vram;
-> >
-> > -       /* the fw fb could be anywhere in memory */
-> > -       ret =3D drm_aperture_remove_framebuffers(drv);
-> > -       if (ret)
-> > -               goto err_msm_uninit;
-> > -
-> >  -      msm_gem_shrinker_init(ddev);
-> >  +      ret =3D msm_gem_shrinker_init(ddev);
-> >  +      if (ret)
-> >  +              goto err_msm_uninit;
-> >
-> >         if (priv->kms_init) {
-> > -               ret =3D priv->kms_init(ddev);
-> > -               if (ret) {
-> > -                       DRM_DEV_ERROR(dev, "failed to load kms\n");
-> > -                       priv->kms =3D NULL;
-> > +               ret =3D msm_drm_kms_init(dev, drv);
-> > +               if (ret)
-> >                         goto err_msm_uninit;
-> > -               }
-> > -               kms =3D priv->kms;
-> >         } else {
-> >                 /* valid only for the dummy headless case, where of_nod=
-e=3DNULL */
-> >                 WARN_ON(dev->of_node);
-> > @@@ -1277,37 -971,21 +973,19 @@@ int msm_drv_probe(struct device *maste=
-r
-> >
-> >   static int msm_pdev_probe(struct platform_device *pdev)
-> >   {
-> > -       return msm_drv_probe(&pdev->dev, NULL);
-> > +       return msm_drv_probe(&pdev->dev, NULL, NULL);
-> >   }
-> >
-> >  -static int msm_pdev_remove(struct platform_device *pdev)
-> >  +static void msm_pdev_remove(struct platform_device *pdev)
-> >   {
-> >         component_master_del(&pdev->dev, &msm_drm_ops);
-> >  -
-> >  -      return 0;
-> >   }
-> >
-> > - void msm_drv_shutdown(struct platform_device *pdev)
-> > - {
-> > -       struct msm_drm_private *priv =3D platform_get_drvdata(pdev);
-> > -       struct drm_device *drm =3D priv ? priv->dev : NULL;
-> > -
-> > -       /*
-> > -        * Shutdown the hw if we're far enough along where things might=
- be on.
-> > -        * If we run this too early, we'll end up panicking in any vari=
-ety of
-> > -        * places. Since we don't register the drm device until late in
-> > -        * msm_drm_init, drm_dev->registered is used as an indicator th=
-at the
-> > -        * shutdown will be successful.
-> > -        */
-> > -       if (drm && drm->registered && priv->kms)
-> > -               drm_atomic_helper_shutdown(drm);
-> > - }
-> > -
-> >   static struct platform_driver msm_platform_driver =3D {
-> >         .probe      =3D msm_pdev_probe,
-> >  -      .remove     =3D msm_pdev_remove,
-> >  +      .remove_new =3D msm_pdev_remove,
-> > -       .shutdown   =3D msm_drv_shutdown,
-> >         .driver     =3D {
-> >                 .name   =3D "msm",
-> > -               .pm     =3D &msm_pm_ops,
-> >         },
-> >   };
-> >
-
-
+On Wed, Oct 11, 2023 at 04:20:50PM +1100, Stephen Rothwell wrote:
+> Hi all,
+>=20
+> The following commit is also in the block tree as a different commit
+> (but the same patch):
+>=20
+>   80f3c6cfab37 ("cdrom: Remove now superfluous sentinel element from ctl_=
+table array")
+>=20
+> This is commit
+>=20
+>   114b0ff62a65 ("cdrom: Remove now superfluous sentinel element from ctl_=
+table array")
+>=20
+> in the block tree.
+Is this a warning on the merge? or did it actually error out? if it is a
+wraning and one of the two was skipped, it can be safely ignored as they
+are the same. I can also remove that commit from my set and send another
+version. @luis: How do you want to handle it?
 
 --=20
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+
+Joel Granados
+
+--stxij4fxwoknaead
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQGzBAABCgAdFiEErkcJVyXmMSXOyyeQupfNUreWQU8FAmUmXnoACgkQupfNUreW
+QU/i5Qv+NCv8awTRSurob6g5QJqggAPPU2CdAbRRUaJ4/LyN7MsgwhJGQC+ro7UV
+Fyit7H+QWrUyjKpFORjQVn3DzXfImnLUd0DtALJRRJsDgddWJ86dfW16gQMw+BG1
+CqD+R5fkruEe+fl6AwQe8JDKSb3tV8AMm7RcpY3z5L5Cbogd38yX1CkUqUCze7fM
+l416yH1h3Wqd7KYpKWJ/Wn59jdzIiPgQvy461Z9sfbmq5cTAM7sxdK5hK19+ZDz+
+Ya0tDRDADPVevKOKdpu+l1kUQ6eGgTUnGLDWLefuLuPLr1L2+hT9clLCALqtp8CO
+4jgHhgevrA0npvn1VcEiJCEZcrDUgZsMgdRUE5cr8bYjNP1h7iT/MRawKtlHd0WC
+xfhpz5EPtnDqhsUWRIfUt17BlxIgbZE4bZBxxtU+l8qfa83I0X3SeZDlDLBK8LX3
+Gkk4zQ7YSpc8JdOgnEMhKIVLo8zffHX3RGkPkrhpI87HW0D1J7les7VjNgYQN/ed
+fuwjxIoa
+=B94G
+-----END PGP SIGNATURE-----
+
+--stxij4fxwoknaead--

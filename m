@@ -2,90 +2,90 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D96457C7962
-	for <lists+linux-next@lfdr.de>; Fri, 13 Oct 2023 00:18:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E9857C79EA
+	for <lists+linux-next@lfdr.de>; Fri, 13 Oct 2023 00:44:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1443009AbjJLWSo (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 12 Oct 2023 18:18:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48202 "EHLO
+        id S1442438AbjJLWoc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 12 Oct 2023 18:44:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1443008AbjJLWSm (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 12 Oct 2023 18:18:42 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14687DE;
-        Thu, 12 Oct 2023 15:18:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1697149113;
-        bh=hKiRwglK7a6PIKIQCMGEa0tPqTrX3Rt73NFqJr4X/S0=;
-        h=Date:From:To:Cc:Subject:From;
-        b=BwHJ0nvZesRHaaV++2YWJP0Hhb31JJsJbpsCev57iLj7ebXJzDgyOy9DaWkQ07D8U
-         Qk+RxdT88dg0ieNg8NX/Jheq7BHPB5QKlTSTTJNF1aEn1sUXcYSecVzq+mDNlqM7e3
-         cgfHt1eMfHmlHFrubGqK1+XYc+8j6N79N0vpCGVySNJwD7AJlpJxV+nuOBAPz7uF4x
-         M4Gla2K/nwytQlmX5kripiRTrITA44DVGjwWbt3BnSwy5Pou05ivfyIDWRK5fUagGF
-         fTyT5yJ4pOYCd2S6P6uibhCsso27fqmgmqNzfGBbznJrYEMB5Gs/9/w8iF4pKkJ+Ko
-         5DgyfqR6HnRpw==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4S63tx039wz4xVM;
-        Fri, 13 Oct 2023 09:18:31 +1100 (AEDT)
-Date:   Fri, 13 Oct 2023 09:18:31 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Linus Walleij <linus.walleij@linaro.org>
+        with ESMTP id S1442914AbjJLWob (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 12 Oct 2023 18:44:31 -0400
+Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B979CC9
+        for <linux-next@vger.kernel.org>; Thu, 12 Oct 2023 15:44:29 -0700 (PDT)
+Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-5a2536adaf3so20200117b3.2
+        for <linux-next@vger.kernel.org>; Thu, 12 Oct 2023 15:44:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1697150669; x=1697755469; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ThC9OBSQAxx9CbrpHWBQ0zkJROVRC61V38/nSgp5HoM=;
+        b=b4G7xYBcuAkydWP3BszZyI+okskeDTUYbtU+UJfHytPXM5YFGoED5frmauZsuzBDIc
+         IVZM2bhe8DLMF/k4K6pr9ss1D8T1AFKrNt1cO2Qt8zMtNkD4n+pmecR/7/sWsvhlTQoE
+         6vnrUJvlKCs2jPiiiLoX+EevPtbcO9wQb0rUSCxSqqOOBhjJBoIAf3yjPoU3BYlafskM
+         JcRR4O1WCqUq7r7WD+uP5RMJIUf5rrgGyyBZYdLr2dhzPlw2SJu7I+etnrwcN1Zy289u
+         r06caP8tf3NVzsuFFytWqkCoRMRrGP101mlwVzqZUsRqYq472Z6pCVV1vinorI1zxqsi
+         OJtg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697150669; x=1697755469;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ThC9OBSQAxx9CbrpHWBQ0zkJROVRC61V38/nSgp5HoM=;
+        b=ppwbs6gB8WdF/QqSgxlW/VXCIadSaOrmjlnyj6n1GujmbF3EaMTsAtmhhC4SJR1hWH
+         xd43noWgOQTT01L9e69dhG63fCo6S7aLeRXVjCaZy+H772Xothc/WmNjKrAjAkI0B44j
+         UjMSSLK+tMAfXR1IPDWxeOmANGtcdQT+f3EPcEhguL1auTSxetPDvAu+kwQlAoYT5kRE
+         AJyEQhq1rkUnxceW7Uc+umSpWgQUOMYijkbrTNOcB8xD7+rEeHh6Z33FSLLtisURqDQd
+         75pmFAclmpH5xAWoTpfXsYAj6+7td4TNeidfz6zBoslU+WYNviG7aDYDNdBW86VlZO6T
+         4d0A==
+X-Gm-Message-State: AOJu0YzBdyfAZK/H8PelceCxirxToyh4X2Xw9IYqVD+Ph7t96g9AqnVB
+        sFIu4M9OMJ7Q+rbRdSDvF3jpQm67YdAojSJIuoEOoQ==
+X-Google-Smtp-Source: AGHT+IH28qIQJWQrhAr6utmKMWPnLFiLOt7veOPWa1C8KhQ+A8TdpwSWV8WYcTU4eXA5QFl9kVqoXypx2BgQKOmpMqA=
+X-Received: by 2002:a05:690c:f0e:b0:5a8:1d0e:ca6 with SMTP id
+ dc14-20020a05690c0f0e00b005a81d0e0ca6mr133714ywb.32.1697150668972; Thu, 12
+ Oct 2023 15:44:28 -0700 (PDT)
+MIME-Version: 1.0
+References: <20231013091831.60a032c2@canb.auug.org.au>
+In-Reply-To: <20231013091831.60a032c2@canb.auug.org.au>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 13 Oct 2023 00:44:17 +0200
+Message-ID: <CACRpkdaEVUfFg-O53NBiyWPsjx0VZVMKK7o2ikUMSCy0_AJUGQ@mail.gmail.com>
+Subject: Re: linux-next: duplicate patch in the pinctrl tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
 Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
         Ralph Siemsen <ralph.siemsen@linaro.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patch in the pinctrl tree
-Message-ID: <20231013091831.60a032c2@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/2NysfGV5an=jBmk7qZOLhC=";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/2NysfGV5an=jBmk7qZOLhC=
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Fri, Oct 13, 2023 at 12:18=E2=80=AFAM Stephen Rothwell <sfr@canb.auug.or=
+g.au> wrote:
 
-Hi all,
+> The following commit is also in Linus Torvalds' tree as a different commi=
+t
+> (but the same patch):
+>
+>   73394a1b2194 ("pinctrl: renesas: rzn1: Enable missing PINMUX")
+>
+> This is commit
+>
+>   f055ff23c331 ("pinctrl: renesas: rzn1: Enable missing PINMUX")
+>
+> in Linus' tree.
 
-The following commit is also in Linus Torvalds' tree as a different commit
-(but the same patch):
+I had to fix up the commit message, sorry, I'll rebuild my branch for -next=
+.
 
-  73394a1b2194 ("pinctrl: renesas: rzn1: Enable missing PINMUX")
-
-This is commit
-
-  f055ff23c331 ("pinctrl: renesas: rzn1: Enable missing PINMUX")
-
-in Linus' tree.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/2NysfGV5an=jBmk7qZOLhC=
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmUocLcACgkQAVBC80lX
-0GxGgQf/ZVzAsk+SuK4KsB2TE+ky8tjqop2WchGyUNQklitkb5T+i55z2oicJ5x0
-La5YMCyeC7qi1n/4OB1CAeH3btdj6OBiOgat1XbWa32TjQHZ/5N1AqlTagaPYCTB
-5EjFhWCtOAc7u9NE9DfmfHCMkVlydjRvL9O/gS/T6LUdU/QgODBiYbAn+AZXoBw7
-FjBDkiOb/DDNGfNmVcRWh7/yU25KMqYRvehuI7lRABdO4N6tJMkdFXbdEXVhFr8E
-hHYDHge8FUHWx0YFRdMMzrp7SnLLAbwZ7PPYO3B4m+yuDMLLvfZzjJ1bA4Spx1bN
-buHJXZqSXOfWEii75MPlB1u+OjQ1QQ==
-=tfGU
------END PGP SIGNATURE-----
-
---Sig_/2NysfGV5an=jBmk7qZOLhC=--
+Yours,
+Linus Walleij

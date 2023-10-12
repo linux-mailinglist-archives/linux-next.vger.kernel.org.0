@@ -2,45 +2,45 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EE447C6C62
-	for <lists+linux-next@lfdr.de>; Thu, 12 Oct 2023 13:32:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 482AE7C6E1C
+	for <lists+linux-next@lfdr.de>; Thu, 12 Oct 2023 14:30:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347184AbjJLLcE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 12 Oct 2023 07:32:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58108 "EHLO
+        id S233818AbjJLMaS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 12 Oct 2023 08:30:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347200AbjJLLcD (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 12 Oct 2023 07:32:03 -0400
+        with ESMTP id S233496AbjJLMaR (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 12 Oct 2023 08:30:17 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D3AF94;
-        Thu, 12 Oct 2023 04:31:52 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C491CC433C7;
-        Thu, 12 Oct 2023 11:31:50 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D5A8B7;
+        Thu, 12 Oct 2023 05:30:16 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 705E7C433C7;
+        Thu, 12 Oct 2023 12:30:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1697110311;
-        bh=JT88/pQMAEEHyd2DZ85PSl0cJFk5DkcNpVpfgfRhK5g=;
+        s=k20201202; t=1697113816;
+        bh=yVocBoSmcdTl7F76wuVD4cWB0m01bOLi77HrEVQQ42s=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RPhkM87d2z0iM6l84Fp9uQg/4dFOH+ZVrQaPHqsy+3yesC9q0THnSjqT4bWtFDprJ
-         02JhZlyYH5tWQeRy1CBw55ONaaDX20/F3HdOMdsGQirtkzPdSM/SvZkhwKu8wCfii0
-         WCHbjjUuu6kmmcQfYylqg54GJDofdT3pRvOoMmBexHVg0yDQn77xdpqwHj/5vf4Trh
-         NuG3EP68Im1CGo902RlysA09rU3mYC+AuNLT1QAKjVwbpRJdn86Et7YGbyzWNW6isA
-         64jHXVWKVOb6RNhhR5bXFWt9UBpzdS/o9dDSXVmNVPzGdXrO3L/Y34e0mpYNRL+yXL
-         zpVlIxa/bdGxA==
-Date:   Thu, 12 Oct 2023 12:31:46 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Ilkka Koskinen <ilkka@os.amperecomputing.com>
+        b=JGIAjR1TNCCcb2qQDVGzA/52tDUcLwv/Fe26Tj9aZzjqVV9PX6gxVj5Xfez0Jk3RO
+         sP15dGuTaLi8w05SzF63UzS7KFbgvNyzNeFZ8RHEAFlEM48pBxeP1OcIUWj19B4tFp
+         ZntFuMEP4h9P62XqNL+Pf2LmJDdbxOJ67Erya3Z5KItu9QOuzaFP6OIMXr7ePp8B2Y
+         gBkERdjIGO8GtiTktRA1gIgk4kvdZoanZqzXHWuukqH6UPeZ8hjA6MLLUENP+Wr4qN
+         CNyAH1WPlVXnDgSRloK0bo97ycINo6/K15AvLD5bsTldRKMVvMb53nKKjqxecrHpad
+         k9f7/SucMDqZA==
+Date:   Thu, 12 Oct 2023 18:00:11 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Rob Herring <robh@kernel.org>
 Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the arm-perf tree
-Message-ID: <20231012113145.GA11708@willie-the-truck>
-References: <20231011172250.5a6498e5@canb.auug.org.au>
- <e8ca559b-421e-c326-f33-6edc8bfade@os.amperecomputing.com>
+Subject: Re: linux-next: build failure after merge of the dmaengine tree
+Message-ID: <ZSfm0wDCFD9cewrS@matsya>
+References: <20231010145412.4a758f9d@canb.auug.org.au>
+ <CAL_JsqJkEutiwWdNe336pWbcLsHK9tNxHNYVOAACt_ncaBdBXQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <e8ca559b-421e-c326-f33-6edc8bfade@os.amperecomputing.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAL_JsqJkEutiwWdNe336pWbcLsHK9tNxHNYVOAACt_ncaBdBXQ@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -51,34 +51,30 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Oct 12, 2023 at 01:19:41AM -0700, Ilkka Koskinen wrote:
-> 
-> On Wed, 11 Oct 2023, Stephen Rothwell wrote:
+On 11-10-23, 08:41, Rob Herring wrote:
+> On Mon, Oct 9, 2023 at 10:54 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> >
 > > Hi all,
-> > 
-> > After merging the arm-perf tree, today's linux-next build (htmldocs)
-> > produced this warning:
-> > 
-> > Documentation/admin-guide/perf/ampere_cspmu.rst: WARNING: document isn't included in any toctree
-> > 
-> > Introduced by commit
-> > 
-> >  53a810ad3c5c ("perf: arm_cspmu: ampere_cspmu: Add support for Ampere SoC PMU")
+> >
+> > After merging the dmaengine tree, today's linux-next build (x86_64
+> > allmodconfig) failed like this:
+> >
+> > drivers/dma/mmp_tdma.c: In function 'mmp_tdma_probe':
+> > drivers/dma/mmp_tdma.c:638:36: error: unused variable 'of_id' [-Werror=unused-variable]
+> >   638 |         const struct of_device_id *of_id;
+> >       |                                    ^~~~~
+> > cc1: all warnings being treated as errors
+> >
+> > Caused by commit
+> >
+> >   a67ba97dfb30 ("dmaengine: Use device_get_match_data()")
 > 
-> Thanks Stephen for catching another bug!
-> 
-> 
-> 
-> Will, it seems that I had made another stupid bug in the same patch. This
-> time I hadn't added the ampere cspmu document to perf toctree. I submitted a
-> fix for it:
-> 
-> 	https://lore.kernel.org/all/20231012074103.3772114-1-ilkka@os.amperecomputing.com/
-> 
-> 
-> Could you apply the patch or merge it with the ampere cspmu patch, whichever
-> you prefer?
+> FWIW, my patch has the above line removed. Seems it got dropped when applying.
 
-Cheers, I'll pick that up today.
+Looks like it got missed while applying the patch. The patch had a
+conflict so I had to manually apply this one...
 
-Will
+Sorry to have missed that
+
+-- 
+~Vinod

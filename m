@@ -2,142 +2,179 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D68FA7C6840
-	for <lists+linux-next@lfdr.de>; Thu, 12 Oct 2023 10:54:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FE137C6A8C
+	for <lists+linux-next@lfdr.de>; Thu, 12 Oct 2023 12:09:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235381AbjJLIUT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 12 Oct 2023 04:20:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41228 "EHLO
+        id S1343761AbjJLKJV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 12 Oct 2023 06:09:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235369AbjJLIUS (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 12 Oct 2023 04:20:18 -0400
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2132.outbound.protection.outlook.com [40.107.96.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16C58A9;
-        Thu, 12 Oct 2023 01:20:16 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ntgHUcVhdRY7VPd6V+IPJyLgDp4/Mo7gs1tp1n89iLXoDVRPe7Dk+7yl+y63nC2+IrStUfwKAn/rNDKapwVipaPUvdBJZUaTT18fV3fvNv0fE+EcomOxpCjZedMwEhslst9YLLxCM+rwhQ1jnfeBfUcO4FsR22r7YDrcYKPBgSd0httqaEZ1HsHnHzRKrkMOpoiDupYSsYQnq2aC4x2MlhYq3ibAFkwap1WjJ5RzNpYGytZu/7kTQvhfyzwrEhGgayqilSSXI6RjFnbuk4yToqUaoQlCG20+gph8fsku5xyFbP55bVkEi7FNqRkrmfvLCp1JPVMks3QKMyjFcDQHrg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=V4QNzJBn9YsnomYCrAZYehKHh95XDodptEUOu57WJkw=;
- b=Fkbc3dwJxK/LH0dHQl8Ng2nO3Fx+xSrS8dYByjvxpTT4dChyBX4hsFu0gMW9OzmbHCeGTgOowq+1707wFC7TxyE6+EQhwgaxTW+V+wBB41IFDk+d5oq/RzL3LLcLzleThxEVInLKZAi6c994yYMCe6Obh9uCDtmEiG3xiactJCv2lZCqkpXRnvHPQgIAEsdR/3OoL4KlWQtKhxc306yJVdB7EovcPhgrX7aRn/N7rFaIrANnqKGHZa6J+jEsQdj0h84idh57eGzfN/WLyqVQYhDKwIPvVbQTM6i4DrhIqYH9Z4B5ueKufA6TsSmz+37hRFo3lAlcZWgpqCfi2EZWzQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
- header.from=os.amperecomputing.com; dkim=pass
- header.d=os.amperecomputing.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=os.amperecomputing.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=V4QNzJBn9YsnomYCrAZYehKHh95XDodptEUOu57WJkw=;
- b=RHi6xDOmlgVa9r+ic2i1ojIPN+dbPMCIUFd8hJ7ypXSrR7yca1hRo3dHYkFzHsiuuI1iwUE8GlkocFOAWYRWbbdnVwqyxum/yD1TJ3NlJNK1zi+6NrBhpvyR3apWfzxfvjcHfC0xSeyDICTW7AgfRL/sgpkFGhZmjLQrInbV0s4=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
-Received: from DM5PR0102MB3590.prod.exchangelabs.com (2603:10b6:4:a4::25) by
- BN0PR01MB6893.prod.exchangelabs.com (2603:10b6:408:166::5) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6863.45; Thu, 12 Oct 2023 08:20:12 +0000
-Received: from DM5PR0102MB3590.prod.exchangelabs.com
- ([fe80::f7a2:1a96:ba3f:d70f]) by DM5PR0102MB3590.prod.exchangelabs.com
- ([fe80::f7a2:1a96:ba3f:d70f%4]) with mapi id 15.20.6863.040; Thu, 12 Oct 2023
- 08:20:12 +0000
-Date:   Thu, 12 Oct 2023 01:19:41 -0700 (PDT)
-From:   Ilkka Koskinen <ilkka@os.amperecomputing.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Will Deacon <will@kernel.org>
-cc:     Ilkka Koskinen <ilkka@os.amperecomputing.com>,
+        with ESMTP id S1377780AbjJLKJT (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 12 Oct 2023 06:09:19 -0400
+Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DC6FBB;
+        Thu, 12 Oct 2023 03:09:12 -0700 (PDT)
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20231012100909euoutp016ea11b911d2c6c5671ae630727e1725c~NVFL7ZROb2714027140euoutp01R;
+        Thu, 12 Oct 2023 10:09:09 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20231012100909euoutp016ea11b911d2c6c5671ae630727e1725c~NVFL7ZROb2714027140euoutp01R
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1697105350;
+        bh=6v49dC8AAIWBFHKCsEEGE1cKwiObfLEvGAhTZjQDX/c=;
+        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+        b=tsFjf1iHOSDy5Immeay1gLcQ1HcV6w2+YtSOp2xtiahDMItX7vu0nGYxTdliVu5Cd
+         I1t0qvFt4Tb9i/EjqJObloZa6IrfWLu3ZiHW6fVlAZUF5cqhxmjesQMOwEWjiOXmR7
+         ElUblAyhQdHrkESCM66zBF37Z1oswNAjx0go0VVo=
+Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20231012100909eucas1p16b0b4761acdd2396e35dd717348315c0~NVFLox5Pv0300803008eucas1p1E;
+        Thu, 12 Oct 2023 10:09:09 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges3new.samsung.com (EUCPMTA) with SMTP id D3.C3.37758.5C5C7256; Thu, 12
+        Oct 2023 11:09:09 +0100 (BST)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20231012100909eucas1p25d5d7cf1c43c0f3d2c0c41554f7d3e50~NVFLPQ6ID2320123201eucas1p2E;
+        Thu, 12 Oct 2023 10:09:09 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20231012100909eusmtrp2badf23b4b09bab372a513a3b36759f61~NVFLOvEui0846208462eusmtrp2D;
+        Thu, 12 Oct 2023 10:09:09 +0000 (GMT)
+X-AuditID: cbfec7f5-7ffff7000002937e-ad-6527c5c5d311
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id 2F.4E.25043.5C5C7256; Thu, 12
+        Oct 2023 11:09:09 +0100 (BST)
+Received: from CAMSVWEXC01.scsc.local (unknown [106.1.227.71]) by
+        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20231012100909eusmtip17cdbbf5f0abdb191d88aa29aa2e454c1~NVFLEMxNA0573605736eusmtip1T;
+        Thu, 12 Oct 2023 10:09:09 +0000 (GMT)
+Received: from localhost (106.110.32.133) by CAMSVWEXC01.scsc.local
+        (2002:6a01:e347::6a01:e347) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
+        Thu, 12 Oct 2023 11:09:08 +0100
+Date:   Thu, 12 Oct 2023 12:09:07 +0200
+From:   Joel Granados <j.granados@samsung.com>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+CC:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Jens Axboe <axboe@kernel.dk>,
+        Phillip Potter <phil@philpotter.co.uk>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the arm-perf tree
-In-Reply-To: <20231011172250.5a6498e5@canb.auug.org.au>
-Message-ID: <e8ca559b-421e-c326-f33-6edc8bfade@os.amperecomputing.com>
-References: <20231011172250.5a6498e5@canb.auug.org.au>
-Content-Type: text/plain; charset=US-ASCII; format=flowed
-X-ClientProxiedBy: CH0PR13CA0029.namprd13.prod.outlook.com
- (2603:10b6:610:b1::34) To DM5PR0102MB3590.prod.exchangelabs.com
- (2603:10b6:4:a4::25)
+Subject: Re: linux-next: duplicate patch in the sysctl tree
+Message-ID: <20231012100907.52wjhbcputj2dsrf@localhost>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM5PR0102MB3590:EE_|BN0PR01MB6893:EE_
-X-MS-Office365-Filtering-Correlation-Id: e9a1455d-59fd-4699-0f6d-08dbcafc0e06
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: AIx6r040e06e5xi2Fb3ChQUehT3No6DUPwjfmxE4IozW2dGRMsxE7ne/HlSakuCUPX9evcl+BbgTR5WbpMVKreBaEJ3NaDtrXuFsrX+4seOg6zLzB0TuBRr0MUD2aohNHBdcCbGssSRRYwOTWKz++4NykQHebAykE8aRiIgMIYMgpOUJIiRBCPFBtnyQE+n0qr6nIZ0lrw5xvz6bI5qouzrrhSHqUs9BndwyTu+9AlpJluTFUsuOuAx1/5WodljmWiPYuYswkmxVXyW+gom/NbJn+BG31X1syUiLhFIxSQyWrTY8hcDzMd9K1Tu99y2xg76KzSH5ho21y/O7d4Zig0D5o7p5IfeA3d+4eu6SYEKIuExvkk5xQsQfZyU8QMFPvV6IpuAPBZUcdyPYQEzo0Haz6JPkMBSTrDfefiWPqiByCEPzHogwSAcynSw+nVEfy4UTgHp0fBtjV2G/c2YjZNXZMtNLbT7her900r8qMcWteX+6MCvhqvMCGEHq6zUsb7SRVKp8LXLc36muJ9KnIDMrHaE/dm6nUn3ktzET8kwiHMdGTRn2qIIEfLn+SQXhG+ICDD+Uzf0BKuPCyGbtXZSSvK/z7+PZGsMqVtQs2Aw=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR0102MB3590.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230031)(39850400004)(376002)(366004)(396003)(136003)(346002)(230922051799003)(451199024)(186009)(64100799003)(1800799009)(2616005)(6666004)(6512007)(52116002)(38350700002)(38100700002)(86362001)(26005)(83380400001)(6506007)(66476007)(110136005)(54906003)(316002)(66556008)(66946007)(2906002)(4744005)(8676002)(8936002)(4326008)(5660300002)(41300700001)(966005)(6486002)(478600001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?34rnN9v39QHp/pED5lv1fDTnWcxQaMbKWBWJjMNbBO2+8JLhr3AicjXQs6Qd?=
- =?us-ascii?Q?9MiHQZGgXoMpSHJpD3GX2PAHgBJjQZnw58sFNg48WWU/C1/PwyYaKNHynTZw?=
- =?us-ascii?Q?57mi9gcOXmVYw5/6eA8sbJuynTPZ7S+1LsKV3tjmAw8cslwdW9+dvsBq0YYo?=
- =?us-ascii?Q?ofl3HeGb8aFApz15uKxhWlUjJlDLv97mrYwuCq+IcyH+9mgWwHOX/2wHq6vv?=
- =?us-ascii?Q?DxSmFyHHXJ6QUNP3bwjkACOS6Dipe00WjNp+hpdAsAiH3RK8YZDLTX+gpnvD?=
- =?us-ascii?Q?L2icbNRgg9fDj7mFbqw77raZlIVLtqqzpx7EXzIwNCi3Uw1EhvZvROvJDl1N?=
- =?us-ascii?Q?qC/grAoUpoTgebFfm8pVugzpyGea1zo1bYseuVxiIFszZC+VQ24vMYdp190c?=
- =?us-ascii?Q?3hWJJvDTSdDnJt3Ju7c2s/fyCHoq6ajZH1faglrES7N4o2UtDeE6WQFe2hup?=
- =?us-ascii?Q?axcpasKw5jPxZ27rn+hMIw6RcmvHfH9LM8hsXXWf82238bvjsbfMHL7sC0hu?=
- =?us-ascii?Q?ClOaoFhRGEs/WBPyyZk5GsX8k8ah54Ebo+UqDFnrwfCBgRQJwNvBeQEkLRL3?=
- =?us-ascii?Q?4hcNV4GgctIJByhl4ahw8yVDWfzMuYFvkAxg/yEAU1yy5CNRUPKjcBN5DS9k?=
- =?us-ascii?Q?8St30z1oxPhuLW6bY8WXCNOMgKmKLMLmsubm7pfdtgzKa9CEpayME9Xho8zn?=
- =?us-ascii?Q?HUvN/6sYMu34+mK9jMfbsz2yu91gbbbBZHKJfq33UAJ7ow7FoNUSUBgzSLkd?=
- =?us-ascii?Q?Xu+u6Lnx5lhKi279FK7HbsFZT0Y0sCU5k4l6Nt8xWvdY8stm7eBE6iJwjIce?=
- =?us-ascii?Q?CrfaymDaODr4+RrjqpTojd2OfwTiAULkqtSE+BLLVWCdYz+7YGfizDk3gOO3?=
- =?us-ascii?Q?uLvzNKocYR88dlow6L+FqO8A+mGZv7ZE1GrrOofByKSmrBWpEo3iVGmPfoCv?=
- =?us-ascii?Q?dglkl+oTQsOM6c/5/Tr67kjw5IvrIRYwIPohZBNmo/OJv+GlxIxENo0ba0Lh?=
- =?us-ascii?Q?tbUZl+q4y9LatQ9zGr+w6t35ndlIyFL+VdYhLB7YNoKpAsGQiVv9cmCCX54H?=
- =?us-ascii?Q?kojvkj/iI8YNPHTtbfeToFf17ldydaDZUsk+5ey77dwyjlu/u6G6ZghS3VmV?=
- =?us-ascii?Q?Fy2JulzPyHskMgM/DdbWDxw7hpN6KKLlLtfH017Fi7xclzEA06XJu1m1nM6n?=
- =?us-ascii?Q?locrH9/dJyfJp+8XpmdeaXGpwP+iwlGUEj+Ja9YjxtI+bj8Kh1bSlwARdQhN?=
- =?us-ascii?Q?p2tLYXbePf9SGh2Q+31q2i0A/MoxlM/+eIJpjX5aXYwZncA3Emfuhj7WOglb?=
- =?us-ascii?Q?/uh7DCDnWECNUvDUUMIDjx0eOhKhgmsDxXB24HC6Rfk/c5uE9RcltGEZ7EhN?=
- =?us-ascii?Q?N0YBNVT8ChecmfPViLmNuHjlN+LVb1n9zaPipUqS3dJGLFY7V/PN4G5dVOyz?=
- =?us-ascii?Q?gRamys0aGJQjrIQRFr/sWewFiZJx/r0+Thns4J+q5kRH2frQZyyOKs6pn06j?=
- =?us-ascii?Q?F6Ty32B8kNfM9PSMr9y4AoBdl5lLgCqSCOe+l76i+GB6G5TiupY1DbwS8Gfj?=
- =?us-ascii?Q?r/ZOznL9P3+ELwmWX98HXLCB/BmN8nzqJgWCf1eiSnpzF/5JTuHQ1s/8uQkM?=
- =?us-ascii?Q?VW8M3vWmRclxwXCJEA0uPoo=3D?=
-X-OriginatorOrg: os.amperecomputing.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e9a1455d-59fd-4699-0f6d-08dbcafc0e06
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR0102MB3590.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Oct 2023 08:20:12.0451
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: j5O2vyrXud5B6ywTfFPAeOX5m/KVzRG4UtZ8VLmvgt9l+u2hKSjEx4WAvEfHdDdldks0ymd04QKO+gBww4y8tgoR/QAWIhGVK1jQXEXmiaS6osCkFwDGbywq0U+nEPOf
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN0PR01MB6893
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg="pgp-sha512";
+        protocol="application/pgp-signature"; boundary="izdyxgdhjaaezjvi"
+Content-Disposition: inline
+In-Reply-To: <ZSb0oRABk03KOTKU@bombadil.infradead.org>
+X-Originating-IP: [106.110.32.133]
+X-ClientProxiedBy: CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) To
+        CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347)
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrKKsWRmVeSWpSXmKPExsWy7djP87pHj6qnGvSvVbFYfbefzeLyrjls
+        FgcXtjFa3JjwlNFi6jI9i617r7I7sHk03rjB5nH5bKnHplWdbB4Pdm9g8fi8SS6ANYrLJiU1
+        J7MstUjfLoEro+PuYbaCyfwVLd92MTcwPuHpYuTkkBAwkfhxbyp7FyMXh5DACkaJtmPbmCCc
+        L4wSDxY3sUE4nxklViz4wNjFyAHWMuuWHUR8OVB8wx2EojOTtjKDzBUS2MIosfqQKojNIqAq
+        saa/mxHEZhPQkTj/5g5YjYiAhsS+Cb1MIDazwHNGieY1hiC2sIC1xPILfSwgNq+AucSS/cuh
+        bEGJkzOfsEDUV0ic7b/OBnIQs4C0xPJ/HCBhTgEziS0NLxkhXlOS+PqmlxXCrpVYe+wM2JsS
+        Av2cErsaH0I94yLxbGYFRI2wxKvjW9ghbBmJ/zvnM0HUT2aU2P/vA1TzakaJZY1fmSCqrCVa
+        rjyB6nCU2LwcxAYZyidx460gxJ18EpO2TWeGCPNKdLQJQVSrSay+94ZlAqPyLCSfzULy2SyE
+        zyDCOhILdn/CFNaWWLbwNTOEbSuxbt17lgWM7KsYxVNLi3PTU4uN81LL9YoTc4tL89L1kvNz
+        NzECU9fpf8e/7mBc8eqj3iFGJg7GQ4wqQM2PNqy+wCjFkpefl6okwvsoUyVViDclsbIqtSg/
+        vqg0J7X4EKM0B4uSOK9qinyqkEB6YklqdmpqQWoRTJaJg1Oqgan3w5pK9oeS7iueCM0R+iWj
+        9f+TePOBn6+mcMY2GTw8svJs+uHrWatepa8KnHvjapPZK4Z/z8z7fFmXrNS2knPdGy+o+FN+
+        AdPLw5oH/zS4Hdw/38yrrKlzq9aPrmNJOzS6bW21azcyvw4SmCXEPflny8FDc04LzFn1buPG
+        cIGYBWJ/vbacYDpVkaWndEPrldALuQsH5z+6lKl/S61Gge+5bPgxRhnl+LWTogwUJ5TWzbmS
+        /vpDvueZRQ8e/Ct4dkzHtdJsR87lsyYLSj0M7vYrt2zll/90MPg2q2GEacKpZe06Qj/fbLh9
+        941x7ZcP35bHpBSVZQTLuU5dO3cK0zmnyKnTNO8tFMl1tvM684FZiaU4I9FQi7moOBEAry0T
+        pNgDAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrAIsWRmVeSWpSXmKPExsVy+t/xu7pHj6qnGvxYxmmx+m4/m8XlXXPY
+        LA4ubGO0uDHhKaPF1GV6Flv3XmV3YPNovHGDzePy2VKPTas62Twe7N7A4vF5k1wAa5SeTVF+
+        aUmqQkZ+cYmtUrShhZGeoaWFnpGJpZ6hsXmslZGpkr6dTUpqTmZZapG+XYJeRldrJ2vBRP6K
+        Dz/WsjcwPuLpYuTgkBAwkZh1y66LkYtDSGApo8TmXd1MXYycQHEZiY1frrJC2MISf651sUEU
+        fWSUmPrgDAuEs4VR4vXqeWwgVSwCqhJr+rsZQWw2AR2J82/uMIPYIgIaEvsm9IJNZRZ4zijR
+        vMYQxBYWsJZYfqGPBcTmFTCXWLJ/OZgtJPCEUeLQmmKIuKDEyZlPWEAuZRYok/i00QvClJZY
+        /o8DpIJTwExiS8NLRog7lSS+vumFurlW4tX93YwTGIVnIRk0C2HQLIRBs8BO05K48e8lE4aw
+        tsSyha+ZIWxbiXXr3rMsYGRfxSiSWlqcm55bbKRXnJhbXJqXrpecn7uJERi924793LKDceWr
+        j3qHGJk4GA8xqgB1Ptqw+gKjFEtefl6qkgjvo0yVVCHelMTKqtSi/Pii0pzU4kOMpsAgnMgs
+        JZqcD0wreSXxhmYGpoYmZpYGppZmxkrivJ4FHYlCAumJJanZqakFqUUwfUwcnFINTBo2/JcF
+        N3A/4OTS53Sf2Fq8Nu6m/qcdHz/+9FNvCp55wUCZqf3X0llR6/cE/nTdo7u72mJ5qbpiRF2f
+        guB9lyPs856da9vxbMWt2V9F+A57H5i0aPJWu7z6n3mcBcnVHLu2G3b9rVsn/bP0lN+VEze/
+        yd44cNtYsqI4hbH68uybkZYKTcv+fjgV0jvptWP+7yP8PwqCshN2+6z7KnqSvV//ycazdUaL
+        fskJq/9mZlY3W27xfOJGx+KD81ZbOz/Zq/LZwytaa9lftomVAgnP42LOR98LUQuO8C1cEP1d
+        RlOxysRMRds/ZF1QhKnR0ia5s+5hYo2GOp/4+ab9Oen9QMlVz/X60cWr5Patu+h1VomlOCPR
+        UIu5qDgRAOLF2bZzAwAA
+X-CMS-MailID: 20231012100909eucas1p25d5d7cf1c43c0f3d2c0c41554f7d3e50
+X-Msg-Generator: CA
+X-RootMTR: 20231011052057eucas1p2876288636c2eaaf61a36985cffb29f8e
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20231011052057eucas1p2876288636c2eaaf61a36985cffb29f8e
+References: <CGME20231011052057eucas1p2876288636c2eaaf61a36985cffb29f8e@eucas1p2.samsung.com>
+        <20231011162050.773ebb15@canb.auug.org.au>
+        <20231011083612.4hymwsvc43hrwm6h@localhost>
+        <ZSb0oRABk03KOTKU@bombadil.infradead.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+--izdyxgdhjaaezjvi
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, 11 Oct 2023, Stephen Rothwell wrote:
-> Hi all,
->
-> After merging the arm-perf tree, today's linux-next build (htmldocs)
-> produced this warning:
->
-> Documentation/admin-guide/perf/ampere_cspmu.rst: WARNING: document isn't included in any toctree
->
-> Introduced by commit
->
->  53a810ad3c5c ("perf: arm_cspmu: ampere_cspmu: Add support for Ampere SoC PMU")
+On Wed, Oct 11, 2023 at 12:16:49PM -0700, Luis Chamberlain wrote:
+> On Wed, Oct 11, 2023 at 10:36:12AM +0200, Joel Granados wrote:
+> > On Wed, Oct 11, 2023 at 04:20:50PM +1100, Stephen Rothwell wrote:
+> > > Hi all,
+> > >=20
+> > > The following commit is also in the block tree as a different commit
+> > > (but the same patch):
+> > >=20
+> > >   80f3c6cfab37 ("cdrom: Remove now superfluous sentinel element from =
+ctl_table array")
+> > >=20
+> > > This is commit
+> > >=20
+> > >   114b0ff62a65 ("cdrom: Remove now superfluous sentinel element from =
+ctl_table array")
+> > >=20
+> > > in the block tree.
+> > Is this a warning on the merge? or did it actually error out? if it is a
+> > wraning and one of the two was skipped, it can be safely ignored as they
+> > are the same. I can also remove that commit from my set and send another
+> > version. @luis: How do you want to handle it?
+>=20
+> I just removed the cdrom patch from my tree.
+perfect thx.
 
-Thanks Stephen for catching another bug!
+>=20
+>   Luis
 
+--=20
 
+Joel Granados
 
-Will, it seems that I had made another stupid bug in the same patch. This 
-time I hadn't added the ampere cspmu document to perf toctree. I submitted 
-a fix for it:
+--izdyxgdhjaaezjvi
+Content-Type: application/pgp-signature; name="signature.asc"
 
- 	https://lore.kernel.org/all/20231012074103.3772114-1-ilkka@os.amperecomputing.com/
+-----BEGIN PGP SIGNATURE-----
 
+iQGzBAABCgAdFiEErkcJVyXmMSXOyyeQupfNUreWQU8FAmUnxcIACgkQupfNUreW
+QU+RQwv/QtEtkcnVUMKCVkebiR8vY1GdSf7Kkrwlv0v21L37qyjiL5rF1pxfNCa4
+QFGTprUmfiuHJxmRdGKKx/n+a3iE7nvUsniS4Lmwllba3rbJf0yX2nU9HSYhs9dp
+nLIofsu9JEKPCqQeIF5Ihsg+7ApE3P3EaFwr2R+ouKx93v3aOOqYcIlbtftm4jGk
+6SX2hxUUpPFrlpimVOALuJ5RAgi6thtb6GWt8UjXwuXzFYN1h4atx48W3dZ8eyhi
+mC1P+px8i+dpyarX/9B5+etivk0hexD8eC5AZCQaKTfXK5s4J4S0sTe7VnyuSGnB
+KixlB7BWEkD+TDVGJNE2NA0UAu+gDfTPE9a4i7YxeRC2veFaoK8D9SAT/JWloM4t
+HwCXnS0AwpDJ3RYzq+v4AEIC1OTdXlF/6NLYgL1JrDaRFmRE4tRVwSVIbOi2n6Kc
+QGbVJMoMbDhqB1wBuKAdCOGoiH0aMWkwDCEjU1Yv6zYNIgFpc1YVqbclGapuBJS+
+jE3Vx7tn
+=FRB1
+-----END PGP SIGNATURE-----
 
-Could you apply the patch or merge it with the ampere cspmu patch, 
-whichever you prefer?
-
-Cheers, Ilkka
+--izdyxgdhjaaezjvi--

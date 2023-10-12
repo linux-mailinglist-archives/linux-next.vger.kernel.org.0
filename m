@@ -2,90 +2,93 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E9857C79EA
-	for <lists+linux-next@lfdr.de>; Fri, 13 Oct 2023 00:44:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A453B7C7A95
+	for <lists+linux-next@lfdr.de>; Fri, 13 Oct 2023 01:48:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442438AbjJLWoc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 12 Oct 2023 18:44:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55780 "EHLO
+        id S233417AbjJLXs2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 12 Oct 2023 19:48:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1442914AbjJLWob (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 12 Oct 2023 18:44:31 -0400
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B979CC9
-        for <linux-next@vger.kernel.org>; Thu, 12 Oct 2023 15:44:29 -0700 (PDT)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-5a2536adaf3so20200117b3.2
-        for <linux-next@vger.kernel.org>; Thu, 12 Oct 2023 15:44:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1697150669; x=1697755469; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ThC9OBSQAxx9CbrpHWBQ0zkJROVRC61V38/nSgp5HoM=;
-        b=b4G7xYBcuAkydWP3BszZyI+okskeDTUYbtU+UJfHytPXM5YFGoED5frmauZsuzBDIc
-         IVZM2bhe8DLMF/k4K6pr9ss1D8T1AFKrNt1cO2Qt8zMtNkD4n+pmecR/7/sWsvhlTQoE
-         6vnrUJvlKCs2jPiiiLoX+EevPtbcO9wQb0rUSCxSqqOOBhjJBoIAf3yjPoU3BYlafskM
-         JcRR4O1WCqUq7r7WD+uP5RMJIUf5rrgGyyBZYdLr2dhzPlw2SJu7I+etnrwcN1Zy289u
-         r06caP8tf3NVzsuFFytWqkCoRMRrGP101mlwVzqZUsRqYq472Z6pCVV1vinorI1zxqsi
-         OJtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697150669; x=1697755469;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ThC9OBSQAxx9CbrpHWBQ0zkJROVRC61V38/nSgp5HoM=;
-        b=ppwbs6gB8WdF/QqSgxlW/VXCIadSaOrmjlnyj6n1GujmbF3EaMTsAtmhhC4SJR1hWH
-         xd43noWgOQTT01L9e69dhG63fCo6S7aLeRXVjCaZy+H772Xothc/WmNjKrAjAkI0B44j
-         UjMSSLK+tMAfXR1IPDWxeOmANGtcdQT+f3EPcEhguL1auTSxetPDvAu+kwQlAoYT5kRE
-         AJyEQhq1rkUnxceW7Uc+umSpWgQUOMYijkbrTNOcB8xD7+rEeHh6Z33FSLLtisURqDQd
-         75pmFAclmpH5xAWoTpfXsYAj6+7td4TNeidfz6zBoslU+WYNviG7aDYDNdBW86VlZO6T
-         4d0A==
-X-Gm-Message-State: AOJu0YzBdyfAZK/H8PelceCxirxToyh4X2Xw9IYqVD+Ph7t96g9AqnVB
-        sFIu4M9OMJ7Q+rbRdSDvF3jpQm67YdAojSJIuoEOoQ==
-X-Google-Smtp-Source: AGHT+IH28qIQJWQrhAr6utmKMWPnLFiLOt7veOPWa1C8KhQ+A8TdpwSWV8WYcTU4eXA5QFl9kVqoXypx2BgQKOmpMqA=
-X-Received: by 2002:a05:690c:f0e:b0:5a8:1d0e:ca6 with SMTP id
- dc14-20020a05690c0f0e00b005a81d0e0ca6mr133714ywb.32.1697150668972; Thu, 12
- Oct 2023 15:44:28 -0700 (PDT)
-MIME-Version: 1.0
-References: <20231013091831.60a032c2@canb.auug.org.au>
-In-Reply-To: <20231013091831.60a032c2@canb.auug.org.au>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 13 Oct 2023 00:44:17 +0200
-Message-ID: <CACRpkdaEVUfFg-O53NBiyWPsjx0VZVMKK7o2ikUMSCy0_AJUGQ@mail.gmail.com>
-Subject: Re: linux-next: duplicate patch in the pinctrl tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Ralph Siemsen <ralph.siemsen@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        with ESMTP id S229511AbjJLXs1 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 12 Oct 2023 19:48:27 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23C41C0;
+        Thu, 12 Oct 2023 16:48:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1697154498;
+        bh=OBqYhC4FTqQwvIwKBzMFWi+ThPwP9AJoU0p3mh9y3Es=;
+        h=Date:From:To:Cc:Subject:From;
+        b=ZvZHMbSX040P4yTXbxAi3X7GxDHhT/EE5jLSb8ryUtHosiwUWBi3QTgWh+mDXnvq6
+         AFWYvZetsBzfwyCJ9FYLretj77hU+pVQ0cohmHouJ8qyi7OzS5v5HpdZuCuIG3cWtQ
+         Xvkv0qvxoOM4GVBppe3tsn34iKXS1BXWFAm0jdQfcECrIJw+jXP8i1tjS05mgluIVd
+         1YC0xcoup02J3HTXa75rZPX9bB+jw6I6IxSbCOYXTbRpYH1A2WEcchUb8z5g1eIvu+
+         HBOa6KKco9iN9bl5fISfv7AZTlIVY+KGSQdG+L8V80miQFD+c0H2MTnUh/JKYoPPhm
+         lrBU86+VLqIEw==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4S65tT4C8Kz4xGM;
+        Fri, 13 Oct 2023 10:48:17 +1100 (AEDT)
+Date:   Fri, 13 Oct 2023 10:48:16 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Christian Brauner <brauner@kernel.org>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Amir Goldstein <amir73il@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Subject: linux-next: duplicate patches in the vfs-brauner tree
+Message-ID: <20231013104816.103ea713@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/8FnIL7ZQf2y0vPQy12AhsQu";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Oct 13, 2023 at 12:18=E2=80=AFAM Stephen Rothwell <sfr@canb.auug.or=
-g.au> wrote:
+--Sig_/8FnIL7ZQf2y0vPQy12AhsQu
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> The following commit is also in Linus Torvalds' tree as a different commi=
-t
-> (but the same patch):
->
->   73394a1b2194 ("pinctrl: renesas: rzn1: Enable missing PINMUX")
->
-> This is commit
->
->   f055ff23c331 ("pinctrl: renesas: rzn1: Enable missing PINMUX")
->
-> in Linus' tree.
+Hi all,
 
-I had to fix up the commit message, sorry, I'll rebuild my branch for -next=
-.
+The following commits are also in the overlayfs tree as different commits
+(but the same patches):
 
-Yours,
-Linus Walleij
+  149f455798a6 ("smb: move cifs_xattr_handlers to .rodata")
+  295d3c441226 ("net: move sockfs_xattr_handlers to .rodata")
+  2f5028604f08 ("shmem: move shmem_xattr_handlers to .rodata")
+  375aa21d36ee ("xfs: move xfs_xattr_handlers to .rodata")
+  3d649a4a832e ("overlayfs: move xattr tables to .rodata")
+  c08a831c74f0 ("squashfs: move squashfs_xattr_handlers to .rodata")
+  c25308c326db ("ubifs: move ubifs_xattr_handlers to .rodata")
+
+Looks like the overlatfs tree has merged a previous verion of a topic
+branch from the vfs-brauner tree.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/8FnIL7ZQf2y0vPQy12AhsQu
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmUohcAACgkQAVBC80lX
+0Gya+wf9Foqou4O0hwjmxHqwfeXhalPnuIamQTu6rZb2lUSQNnSv8ng8UAdpGoh5
+T602jcD+theUdB9wIF9wfwPVva5ss7c0EYUrEmXLpQg9tTwB17wbN769ZbcFfWLf
+5c0ml8bEslZN/yAvzz5AK5+S/e4YiyfA2OM3ECatPM1VRHK0uoQ/mZO4D18T7L1i
+CbVQS7uUjnlCiJ6we4GGFDFR8EaoU9TquDkxdr5jlI+4Jke8mFpX0nwvUSwQnhau
+I12Ffrb7KvNsHSt0sFCjsLAFnyShiW8GJstc8JqGyNiQdlRRjj6N1AIr/8MjUxek
+j/01a9ITJm5VRYqXPgsMoQ06HdAAWA==
+=Q/nq
+-----END PGP SIGNATURE-----
+
+--Sig_/8FnIL7ZQf2y0vPQy12AhsQu--

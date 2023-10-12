@@ -2,52 +2,53 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F34877C60F5
-	for <lists+linux-next@lfdr.de>; Thu, 12 Oct 2023 01:15:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BDC37C61DD
+	for <lists+linux-next@lfdr.de>; Thu, 12 Oct 2023 02:37:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233803AbjJKXPR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 11 Oct 2023 19:15:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38516 "EHLO
+        id S233951AbjJLAhb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 11 Oct 2023 20:37:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233834AbjJKXPQ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 11 Oct 2023 19:15:16 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 970B6AF;
-        Wed, 11 Oct 2023 16:15:14 -0700 (PDT)
+        with ESMTP id S233886AbjJLAha (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 11 Oct 2023 20:37:30 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 833F698;
+        Wed, 11 Oct 2023 17:37:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1697066113;
-        bh=Qf1p2gVy4rqI/LsmbKaNjjPoD1EJg71MiJ3nDq8hLn4=;
+        s=201702; t=1697071043;
+        bh=d0eWK5n2+GWr3yid0IrdcGPcamDTbmkULf2jKU9FMh4=;
         h=Date:From:To:Cc:Subject:From;
-        b=oN084AUlbbXslRvm0WWW2JUyVkSaZRiFxYgiHG4tYgSNAuez+ngdfO+kEPEBtfR1c
-         UlR7FUEK5rWZPzteTsy1poOrjgrbV09GZSsW3e6iEmgQZLXtGxT0zUwD3FjisC0b6y
-         JFmc76NI/AFsqQr015nOXI8pgTVQC6KktuL0Z4SsaUwdNnEwWFJt9c8AjqwtiNngBM
-         ZDl0hMvom7H6KLuiB8fpEQYT13zIr2wELV5sovMzJr1LPHJXWHlMsAOnSM5bkoy8kE
-         xO5eiiK2//ykgVHoAcavgCqL5BHm2f9a/7nL3D3Ns162A1H3aHwwK/vRBAv3BzSSCK
-         ORnCX9BT4Fvvw==
+        b=J7MKxLij/7k8M7iY9b6lnoDEYzdYn6acQA2nURqomPEU62BxrerraaAHhMuhLWHJJ
+         QDUnvexRjR/MWFe89JHnFbKsWuaOp030cDQ4DMkUVnvxQMob+z+BHCXyFL2tPOR3JV
+         5i2loRNYD1e0u6czG01uM0bnkaEehAr2HqgQ5VmH8rIM3ep2qJ1mcskWX4gh3PHEgy
+         07kdcXWhn9acQbMOCpw3i2a5ALnhr0zMxpD4pqIQVrUsRbWREfDgI6XlaoO4wG+gN+
+         G7IFnufOWJacFiws7WQ8dJd9/t+77gFsYhoJ7cLXNhVUtQVfInKbcgUsLdmwaNgpfj
+         yrMF2WXuKlAHA==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4S5TBl3TY2z4xVW;
-        Thu, 12 Oct 2023 10:15:11 +1100 (AEDT)
-Date:   Thu, 12 Oct 2023 10:14:34 +1100
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4S5W1Y66qDz4xWb;
+        Thu, 12 Oct 2023 11:37:21 +1100 (AEDT)
+Date:   Thu, 12 Oct 2023 11:37:21 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Shawn Guo <shawnguo@kernel.org>,
-        David Miller <davem@davemloft.net>,
+To:     David Miller <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Networking <netdev@vger.kernel.org>, Frank Li <Frank.Li@nxp.com>,
-        Haibo Chen <haibo.chen@nxp.com>,
+        Paolo Abeni <pabeni@redhat.com>, Kalle Valo <kvalo@kernel.org>,
+        Johannes Berg <johannes@sipsolutions.net>
+Cc:     Networking <netdev@vger.kernel.org>,
+        Wireless <linux-wireless@vger.kernel.org>,
+        Johannes Berg <johannes.berg@intel.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: linux-next: manual merge of the imx-mxs tree with the net tree
-Message-ID: <20231012101434.1e5e7340@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the net-next tree with the wireless
+ tree
+Message-ID: <20231012113648.46eea5ec@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/juvbrqhB/Wpp.Nl2Y1l2rIr";
+Content-Type: multipart/signed; boundary="Sig_/wof5tWYoXT/+z+takc=pVNJ";
  protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,105 +56,54 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/juvbrqhB/Wpp.Nl2Y1l2rIr
+--Sig_/wof5tWYoXT/+z+takc=pVNJ
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the imx-mxs tree got a conflict in:
+Today's linux-next merge of the net-next tree got a conflict in:
 
-  arch/arm64/boot/dts/freescale/imx93.dtsi
+  net/mac80211/key.c
 
 between commit:
 
-  23ed2be5404d ("arm64: dts: imx93: add the Flex-CAN stop mode by GPR")
+  02e0e426a2fb ("wifi: mac80211: fix error path key leak")
 
-from the net tree and commit:
+from the wireless tree and commits:
 
-  d34d2aa594d0 ("arm64: dts: imx93: add edma1 and edma2")
+  2a8b665e6bcc ("wifi: mac80211: remove key_mtx")
+  7d6904bf26b9 ("Merge wireless into wireless-next")
 
-from the imx-mxs tree.
+from the net-next tree.
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+I fixed it up (I just used the latter, there may be more needed) and
+can carry the fix as necessary. This is now fixed as far as linux-next
+is concerned, but any non trivial conflicts should be mentioned to your
+upstream maintainer when your tree is submitted for merging.  You may
+also want to consider cooperating with the maintainer of the
+conflicting tree to minimise any particularly complex conflicts.
+
+
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc arch/arm64/boot/dts/freescale/imx93.dtsi
-index dcf6e4846ac9,4a0d604fd0db..000000000000
---- a/arch/arm64/boot/dts/freescale/imx93.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx93.dtsi
-@@@ -185,7 -185,47 +185,47 @@@
-  			#size-cells =3D <1>;
-  			ranges;
- =20
-+ 			edma1: dma-controller@44000000 {
-+ 				compatible =3D "fsl,imx93-edma3";
-+ 				reg =3D <0x44000000 0x200000>;
-+ 				#dma-cells =3D <3>;
-+ 				dma-channels =3D <31>;
-+ 				interrupts =3D <GIC_SPI 95 IRQ_TYPE_LEVEL_HIGH>,  //  0: Reserved
-+ 					     <GIC_SPI 96 IRQ_TYPE_LEVEL_HIGH>,  //  1: CANFD1
-+ 					     <GIC_SPI 97 IRQ_TYPE_LEVEL_HIGH>,  //  2: Reserved
-+ 					     <GIC_SPI 98 IRQ_TYPE_LEVEL_HIGH>,  //  3: GPIO1 CH0
-+ 					     <GIC_SPI 99 IRQ_TYPE_LEVEL_HIGH>,  //  4: GPIO1 CH1
-+ 					     <GIC_SPI 100 IRQ_TYPE_LEVEL_HIGH>, //  5: I3C1 TO Bus
-+ 					     <GIC_SPI 101 IRQ_TYPE_LEVEL_HIGH>, //  6: I3C1 From Bus
-+ 					     <GIC_SPI 102 IRQ_TYPE_LEVEL_HIGH>, //  7: LPI2C1 M TX
-+ 					     <GIC_SPI 103 IRQ_TYPE_LEVEL_HIGH>, //  8: LPI2C1 S TX
-+ 					     <GIC_SPI 104 IRQ_TYPE_LEVEL_HIGH>, //  9: LPI2C2 M RX
-+ 					     <GIC_SPI 105 IRQ_TYPE_LEVEL_HIGH>, // 10: LPI2C2 S RX
-+ 					     <GIC_SPI 106 IRQ_TYPE_LEVEL_HIGH>, // 11: LPSPI1 TX
-+ 					     <GIC_SPI 107 IRQ_TYPE_LEVEL_HIGH>, // 12: LPSPI1 RX
-+ 					     <GIC_SPI 108 IRQ_TYPE_LEVEL_HIGH>, // 13: LPSPI2 TX
-+ 					     <GIC_SPI 109 IRQ_TYPE_LEVEL_HIGH>, // 14: LPSPI2 RX
-+ 					     <GIC_SPI 110 IRQ_TYPE_LEVEL_HIGH>, // 15: LPTMR1
-+ 					     <GIC_SPI 111 IRQ_TYPE_LEVEL_HIGH>, // 16: LPUART1 TX
-+ 					     <GIC_SPI 112 IRQ_TYPE_LEVEL_HIGH>, // 17: LPUART1 RX
-+ 					     <GIC_SPI 113 IRQ_TYPE_LEVEL_HIGH>, // 18: LPUART2 TX
-+ 					     <GIC_SPI 114 IRQ_TYPE_LEVEL_HIGH>, // 19: LPUART2 RX
-+ 					     <GIC_SPI 115 IRQ_TYPE_LEVEL_HIGH>, // 20: S400
-+ 					     <GIC_SPI 116 IRQ_TYPE_LEVEL_HIGH>, // 21: SAI TX
-+ 					     <GIC_SPI 117 IRQ_TYPE_LEVEL_HIGH>, // 22: SAI RX
-+ 					     <GIC_SPI 118 IRQ_TYPE_LEVEL_HIGH>, // 23: TPM1 CH0/CH2
-+ 					     <GIC_SPI 119 IRQ_TYPE_LEVEL_HIGH>, // 24: TPM1 CH1/CH3
-+ 					     <GIC_SPI 120 IRQ_TYPE_LEVEL_HIGH>, // 25: TPM1 Overflow
-+ 					     <GIC_SPI 121 IRQ_TYPE_LEVEL_HIGH>, // 26: TMP2 CH0/CH2
-+ 					     <GIC_SPI 122 IRQ_TYPE_LEVEL_HIGH>, // 27: TMP2 CH1/CH3
-+ 					     <GIC_SPI 123 IRQ_TYPE_LEVEL_HIGH>, // 28: TMP2 Overflow
-+ 					     <GIC_SPI 124 IRQ_TYPE_LEVEL_HIGH>, // 29: PDM
-+ 					     <GIC_SPI 125 IRQ_TYPE_LEVEL_HIGH>; // 30: ADC1
-+ 				clocks =3D <&clk IMX93_CLK_EDMA1_GATE>;
-+ 				clock-names =3D "dma";
-+ 			};
-+=20
- -			anomix_ns_gpr: syscon@44210000 {
- +			aonmix_ns_gpr: syscon@44210000 {
-  				compatible =3D "fsl,imx93-aonmix-ns-syscfg", "syscon";
-  				reg =3D <0x44210000 0x1000>;
-  			};
-
---Sig_/juvbrqhB/Wpp.Nl2Y1l2rIr
+--Sig_/wof5tWYoXT/+z+takc=pVNJ
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmUnLFoACgkQAVBC80lX
-0GzwcAf9Hc6mLVpZ5I6YpGr7lYl3q+ZPuE1SvNHRdHt75L0DiFhgP/OKDKrCUlPu
-plsasHbFQvvW5bSxgQHRgLqigMO5kee9ay0tz/WZgBbTkOCUt2eWanclpnuu5ta/
-ZjNBcN9XmVyaPEh/H1g6MNM5U62pHqvPp5W9zxUFDv1wqaADLOSrgDpZU2KW0MjW
-qrMfxXxWFqMwNb3NF7V4b59E6nZvUWsM8+Mz7P8B3ZIiPrcUYS89ZAYwOMHQS8ib
-i3q5ymRgfoJ7VFqh+bOOGU6VzOWErvG6ehFQm8Na/zMTQPn1XMTezmmnZcBjlHt0
-oBXYeJkXI8tGWAQ8KwEzJhEJRCw83w==
-=fLdv
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmUnP8EACgkQAVBC80lX
+0GzuVgf/XJeoQF5D8JpWF3YB37FVbdZm3PvJJr0N5LKTsYcwwOhaBIms38+UcD5S
+TntSRx3UiVlPC4walmHH74a+d5is2W46BMSWSgkne58MLJ2Js/qEs1k6EnTzSwN/
+XW/bjrpjD0cTivwGTLssG/Zz+QmAkplL0xpgnkrQ4y1+JCoEAOXqejpJpENXloPP
+ZI9qOqb6hB6FEoyq5BS1PmvKqzBGCl9DB/WtYOFjP7iAIYTpHMlM8iUo7kUq2DxX
+WUI16HxCIa/d1Xbz+UWD0/VcIPAp/mRTU0oMjzyhx+ascJPtqdd9v0KR5mydh64I
++FLQ2eGwYxXjr191YzYb2VFij29aJg==
+=bNpy
 -----END PGP SIGNATURE-----
 
---Sig_/juvbrqhB/Wpp.Nl2Y1l2rIr--
+--Sig_/wof5tWYoXT/+z+takc=pVNJ--

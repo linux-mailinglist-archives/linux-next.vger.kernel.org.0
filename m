@@ -2,270 +2,101 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3964E7C7DA2
-	for <lists+linux-next@lfdr.de>; Fri, 13 Oct 2023 08:24:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 808A77C7DB7
+	for <lists+linux-next@lfdr.de>; Fri, 13 Oct 2023 08:32:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229735AbjJMGX6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 13 Oct 2023 02:23:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52630 "EHLO
+        id S229733AbjJMGc4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 13 Oct 2023 02:32:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjJMGX5 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 13 Oct 2023 02:23:57 -0400
-Received: from mail-oi1-f205.google.com (mail-oi1-f205.google.com [209.85.167.205])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDEC7BC
-        for <linux-next@vger.kernel.org>; Thu, 12 Oct 2023 23:23:49 -0700 (PDT)
-Received: by mail-oi1-f205.google.com with SMTP id 5614622812f47-3af6a12b2a8so2905587b6e.1
-        for <linux-next@vger.kernel.org>; Thu, 12 Oct 2023 23:23:49 -0700 (PDT)
+        with ESMTP id S229726AbjJMGcz (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 13 Oct 2023 02:32:55 -0400
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B066BC;
+        Thu, 12 Oct 2023 23:32:53 -0700 (PDT)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-5a7bbcc099fso22348017b3.3;
+        Thu, 12 Oct 2023 23:32:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1697178773; x=1697783573; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0RJx+LWOJYRgtiiPj5S3Xyml9/R6gBT1DY9mfhgdDwo=;
+        b=RSoumDkk8tTc4EuOk3PPUSYKx0urof8l8z/KBNOemWLK4MezgGnJvF4kjtjd2nlnSG
+         JIkkybsL1UV9ekETCzVrsG4y/mstY6/yyWZRslq7WbZw/t2FOr209pEidBFPREUD3wRc
+         DFs2GylpEO+4KE5lw2IX1Zl5HqfjXGXMxpj96jsu47RpMLNyc7pKBsAkanWabgFaYXKy
+         xdN0A+L2MhxYcDbkU9GZnfj/keoF1jhSUtuDjsF5h/glaJ9QaK0UZcrQvWKyy4HX29VV
+         Rup6DUhH7vljPANaX9wuZkwHhiCdg9zB16The+qUDsqD+WnHtcLMcf0auJgXU00mWL1/
+         i1Ig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697178229; x=1697783029;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Ehp3s3wmDK8jWuZJe23c3aGn8VEvCoZ9nLJEqHmk/rs=;
-        b=iEOl8fvx4Jl0MQom5r3aRcT9v3I5ddRpCtTzKWhIGJmZE0KNRM28RRgF87jpgwO/tw
-         7ro86iWIdX8ib7fQlxTYK5sUTMDPXPN5vHQoaxjaPdX+KfhdgfrFTS6/UO2H8/yBZEwY
-         sEVeZZRvz81hxCCndZ7vqSlBRmIIkDWBbfc9iaeQBE7irsyudbdMni8EXYJenwSaGgNx
-         qOt4tnvbQCssRVyHwP9DtEEKoDVN8GRrXjNPjoXiGvIeJKw2nuqqKoLn5TnUkmfrvjKH
-         NloF3WCqdM46ne+icmuqEe0M+YPCuNy0jpo30iLHcnMYnucc8Ks2iiOTn+2cUgyT8bnS
-         MtIA==
-X-Gm-Message-State: AOJu0YwQzKPbnAsjsTRPyd3npfqdwLXjfvOkcxgMTjj0NSQb3y5k+fOT
-        a0xRH8bAQdVkwoIvdITfDOmemauhkoM/Sq6SODCPRR9bmKZ9
-X-Google-Smtp-Source: AGHT+IHg2nZgrO+niXj572zpjY4FsLb35hqbQeEWxyv1D+nHtPrnDMpcmyFEQtM51ivs/JlvEtZqxFXj2aZ4UCKFt26l9WwUTfl2
+        d=1e100.net; s=20230601; t=1697178773; x=1697783573;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0RJx+LWOJYRgtiiPj5S3Xyml9/R6gBT1DY9mfhgdDwo=;
+        b=LMIOTMQcnQQGNVO0kE8xnqwyn558csyAHYjmhXeAP9J7JzD5FAGiFUkj54ro/T4QAo
+         lOQn4FZu0qKEcnaE5Cl05PYrf4eL1jlYjz8zUz3+18GlQ8EKEXVuibwkFunaHOu3WvOk
+         6jXIi02FEgK52td3Z9zoOlVe2AUgOyo41T/hNImFmQS7v6yr4qIULQ4cFRdVOTGhz5AI
+         zUCKULM5hERTFUJANOzt/R7BRzwkm6jYxAVQWxMnkRlYFtEagI15TJywadR/rVguwZ2R
+         Q6aaOMHw0AT9l56jt1D9oMX+NfVNRJ9XSYXeBtHkX95csuKB4y+YuA9RnKhT8mXj2v+4
+         2OhQ==
+X-Gm-Message-State: AOJu0Yz3tFQe5Rz2WW7xZl50Zir16f/gIhNm2qfd99r61R8LVhwyBF5A
+        uGJ5YNfQ03zq7X4c8eTsLeBDigWeUYbxaxNwcBI=
+X-Google-Smtp-Source: AGHT+IGF92G3YigKuGj2W+653tQ+Bu93m6kiyQTDevgMl7ESWHN9rYENlMDMFgCHm0CX+jx9IH0ob3ovbi+GS59qhnE=
+X-Received: by 2002:a05:690c:f8d:b0:5a7:ec51:9218 with SMTP id
+ df13-20020a05690c0f8d00b005a7ec519218mr6854844ywb.25.1697178772730; Thu, 12
+ Oct 2023 23:32:52 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6808:1916:b0:3ae:2024:837d with SMTP id
- bf22-20020a056808191600b003ae2024837dmr13896975oib.8.1697178229025; Thu, 12
- Oct 2023 23:23:49 -0700 (PDT)
-Date:   Thu, 12 Oct 2023 23:23:48 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000007634c1060793197c@google.com>
-Subject: [syzbot] [usb?] linux-next boot error: KASAN: slab-out-of-bounds
- Write in vhci_setup
-From:   syzbot <syzbot+6867a9777f4b8dc4e256@syzkaller.appspotmail.com>
-To:     gregkh@linuxfoundation.org, i@zenithal.me,
-        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
-        linux-usb@vger.kernel.org, sfr@canb.auug.org.au, shuah@kernel.org,
-        syzkaller-bugs@googlegroups.com, valentina.manea.m@gmail.com
+References: <20231013104816.103ea713@canb.auug.org.au>
+In-Reply-To: <20231013104816.103ea713@canb.auug.org.au>
+From:   Amir Goldstein <amir73il@gmail.com>
+Date:   Fri, 13 Oct 2023 09:32:41 +0300
+Message-ID: <CAOQ4uxjazEO_f7HPzUpK3FpZXC4j=GXFfBpgNU9zsanVzp=Kzg@mail.gmail.com>
+Subject: Re: linux-next: duplicate patches in the vfs-brauner tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hello,
+On Fri, Oct 13, 2023 at 2:48=E2=80=AFAM Stephen Rothwell <sfr@canb.auug.org=
+.au> wrote:
+>
+> Hi all,
+>
+> The following commits are also in the overlayfs tree as different commits
+> (but the same patches):
+>
+>   149f455798a6 ("smb: move cifs_xattr_handlers to .rodata")
+>   295d3c441226 ("net: move sockfs_xattr_handlers to .rodata")
+>   2f5028604f08 ("shmem: move shmem_xattr_handlers to .rodata")
+>   375aa21d36ee ("xfs: move xfs_xattr_handlers to .rodata")
+>   3d649a4a832e ("overlayfs: move xattr tables to .rodata")
+>   c08a831c74f0 ("squashfs: move squashfs_xattr_handlers to .rodata")
+>   c25308c326db ("ubifs: move ubifs_xattr_handlers to .rodata")
+>
+> Looks like the overlatfs tree has merged a previous verion of a topic
+> branch from the vfs-brauner tree.
 
-syzbot found the following issue on:
+Yeh, sorry my bad.
+Christian told me that vfs.xattr branch was stable, but I did not notice
+that I had merged a day old version.
+Fixed now.
 
-HEAD commit:    f9a6bea13184 Add linux-next specific files for 20231012
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=1534d829680000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=9e549f76cbaa1b13
-dashboard link: https://syzkaller.appspot.com/bug?extid=6867a9777f4b8dc4e256
-compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
+BTW, Christian, feel free to fast forward the stable vfs.xattr branch to
+a640d888953c const_structs.checkpatch: add xattr_handler
+it won't be a problem for me.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/db1637d9c577/disk-f9a6bea1.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/16c1010b94c4/vmlinux-f9a6bea1.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/f804f5e468c9/bzImage-f9a6bea1.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+6867a9777f4b8dc4e256@syzkaller.appspotmail.com
-
-usb usb4: New USB device strings: Mfr=3, Product=2, SerialNumber=1
-usb usb4: Product: Dummy host controller
-usb usb4: Manufacturer: Linux 6.6.0-rc5-next-20231012-syzkaller dummy_hcd
-usb usb4: SerialNumber: dummy_hcd.3
-hub 4-0:1.0: USB hub found
-hub 4-0:1.0: 1 port detected
-dummy_hcd dummy_hcd.4: USB Host+Gadget Emulator, driver 02 May 2005
-dummy_hcd dummy_hcd.4: Dummy host controller
-dummy_hcd dummy_hcd.4: new USB bus registered, assigned bus number 5
-usb usb5: New USB device found, idVendor=1d6b, idProduct=0002, bcdDevice= 6.06
-usb usb5: New USB device strings: Mfr=3, Product=2, SerialNumber=1
-usb usb5: Product: Dummy host controller
-usb usb5: Manufacturer: Linux 6.6.0-rc5-next-20231012-syzkaller dummy_hcd
-usb usb5: SerialNumber: dummy_hcd.4
-hub 5-0:1.0: USB hub found
-hub 5-0:1.0: 1 port detected
-dummy_hcd dummy_hcd.5: USB Host+Gadget Emulator, driver 02 May 2005
-dummy_hcd dummy_hcd.5: Dummy host controller
-dummy_hcd dummy_hcd.5: new USB bus registered, assigned bus number 6
-usb usb6: New USB device found, idVendor=1d6b, idProduct=0002, bcdDevice= 6.06
-usb usb6: New USB device strings: Mfr=3, Product=2, SerialNumber=1
-usb usb6: Product: Dummy host controller
-usb usb6: Manufacturer: Linux 6.6.0-rc5-next-20231012-syzkaller dummy_hcd
-usb usb6: SerialNumber: dummy_hcd.5
-hub 6-0:1.0: USB hub found
-hub 6-0:1.0: 1 port detected
-dummy_hcd dummy_hcd.6: USB Host+Gadget Emulator, driver 02 May 2005
-dummy_hcd dummy_hcd.6: Dummy host controller
-dummy_hcd dummy_hcd.6: new USB bus registered, assigned bus number 7
-usb usb7: New USB device found, idVendor=1d6b, idProduct=0002, bcdDevice= 6.06
-usb usb7: New USB device strings: Mfr=3, Product=2, SerialNumber=1
-usb usb7: Product: Dummy host controller
-usb usb7: Manufacturer: Linux 6.6.0-rc5-next-20231012-syzkaller dummy_hcd
-usb usb7: SerialNumber: dummy_hcd.6
-hub 7-0:1.0: USB hub found
-hub 7-0:1.0: 1 port detected
-dummy_hcd dummy_hcd.7: USB Host+Gadget Emulator, driver 02 May 2005
-dummy_hcd dummy_hcd.7: Dummy host controller
-dummy_hcd dummy_hcd.7: new USB bus registered, assigned bus number 8
-usb usb8: New USB device found, idVendor=1d6b, idProduct=0002, bcdDevice= 6.06
-usb usb8: New USB device strings: Mfr=3, Product=2, SerialNumber=1
-usb usb8: Product: Dummy host controller
-usb usb8: Manufacturer: Linux 6.6.0-rc5-next-20231012-syzkaller dummy_hcd
-usb usb8: SerialNumber: dummy_hcd.7
-hub 8-0:1.0: USB hub found
-hub 8-0:1.0: 1 port detected
-gadgetfs: USB Gadget filesystem, version 24 Aug 2004
-vhci_hcd vhci_hcd.0: USB/IP Virtual Host Controller
-vhci_hcd vhci_hcd.0: new USB bus registered, assigned bus number 9
-==================================================================
-BUG: KASAN: slab-out-of-bounds in vhci_setup+0x2d3/0x340 drivers/usb/usbip/vhci_hcd.c:1145
-Write of size 8 at addr ffff8881417e15c0 by task swapper/0/1
-
-CPU: 0 PID: 1 Comm: swapper/0 Not tainted 6.6.0-rc5-next-20231012-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/06/2023
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd9/0x1b0 lib/dump_stack.c:106
- print_address_description mm/kasan/report.c:364 [inline]
- print_report+0xc4/0x620 mm/kasan/report.c:475
- kasan_report+0xda/0x110 mm/kasan/report.c:588
- vhci_setup+0x2d3/0x340 drivers/usb/usbip/vhci_hcd.c:1145
- usb_add_hcd+0x5bc/0x1770 drivers/usb/core/hcd.c:2911
- vhci_hcd_probe+0x12c/0x460 drivers/usb/usbip/vhci_hcd.c:1363
- platform_probe+0xff/0x1e0 drivers/base/platform.c:1404
- call_driver_probe drivers/base/dd.c:579 [inline]
- really_probe+0x234/0xc90 drivers/base/dd.c:658
- __driver_probe_device+0x1de/0x4b0 drivers/base/dd.c:800
- driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:830
- __device_attach_driver+0x1d4/0x300 drivers/base/dd.c:958
- bus_for_each_drv+0x157/0x1d0 drivers/base/bus.c:457
- __device_attach+0x1e8/0x4b0 drivers/base/dd.c:1030
- bus_probe_device+0x17c/0x1c0 drivers/base/bus.c:532
- device_add+0x117e/0x1aa0 drivers/base/core.c:3625
- platform_device_add+0x316/0x810 drivers/base/platform.c:716
- platform_device_register_full+0x3ec/0x550 drivers/base/platform.c:844
- vhci_hcd_init+0x1ad/0x360 drivers/usb/usbip/vhci_hcd.c:1532
- do_one_initcall+0x128/0x670 init/main.c:1232
- do_initcall_level init/main.c:1294 [inline]
- do_initcalls init/main.c:1310 [inline]
- do_basic_setup init/main.c:1329 [inline]
- kernel_init_freeable+0x5c2/0x900 init/main.c:1547
- kernel_init+0x1c/0x2a0 init/main.c:1437
- ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:147
- ret_from_fork_asm+0x11/0x20 arch/x86/entry/entry_64.S:291
- </TASK>
-
-Allocated by task 1:
- kasan_save_stack+0x33/0x50 mm/kasan/common.c:45
- kasan_set_track+0x25/0x30 mm/kasan/common.c:52
- ____kasan_kmalloc mm/kasan/common.c:374 [inline]
- __kasan_kmalloc+0xa2/0xb0 mm/kasan/common.c:383
- kasan_kmalloc include/linux/kasan.h:198 [inline]
- __do_kmalloc_node mm/slab_common.c:1007 [inline]
- __kmalloc_node_track_caller+0x65/0x130 mm/slab_common.c:1027
- kvasprintf+0xbd/0x150 lib/kasprintf.c:25
- kvasprintf_const+0x66/0x190 lib/kasprintf.c:49
- kobject_set_name_vargs+0x5a/0x130 lib/kobject.c:272
- dev_set_name+0xc8/0x100 drivers/base/core.c:3428
- usb_alloc_dev+0xb45/0xdb0 drivers/usb/core/usb.c:696
- usb_add_hcd+0x3a9/0x1770 drivers/usb/core/hcd.c:2856
- vhci_hcd_probe+0x12c/0x460 drivers/usb/usbip/vhci_hcd.c:1363
- platform_probe+0xff/0x1e0 drivers/base/platform.c:1404
- call_driver_probe drivers/base/dd.c:579 [inline]
- really_probe+0x234/0xc90 drivers/base/dd.c:658
- __driver_probe_device+0x1de/0x4b0 drivers/base/dd.c:800
- driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:830
- __device_attach_driver+0x1d4/0x300 drivers/base/dd.c:958
- bus_for_each_drv+0x157/0x1d0 drivers/base/bus.c:457
- __device_attach+0x1e8/0x4b0 drivers/base/dd.c:1030
- bus_probe_device+0x17c/0x1c0 drivers/base/bus.c:532
- device_add+0x117e/0x1aa0 drivers/base/core.c:3625
- platform_device_add+0x316/0x810 drivers/base/platform.c:716
- platform_device_register_full+0x3ec/0x550 drivers/base/platform.c:844
- vhci_hcd_init+0x1ad/0x360 drivers/usb/usbip/vhci_hcd.c:1532
- do_one_initcall+0x128/0x670 init/main.c:1232
- do_initcall_level init/main.c:1294 [inline]
- do_initcalls init/main.c:1310 [inline]
- do_basic_setup init/main.c:1329 [inline]
- kernel_init_freeable+0x5c2/0x900 init/main.c:1547
- kernel_init+0x1c/0x2a0 init/main.c:1437
- ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:147
- ret_from_fork_asm+0x11/0x20 arch/x86/entry/entry_64.S:291
-
-The buggy address belongs to the object at ffff8881417e15a0
- which belongs to the cache kmalloc-8 of size 8
-The buggy address is located 27 bytes to the right of
- allocated 5-byte region [ffff8881417e15a0, ffff8881417e15a5)
-
-The buggy address belongs to the physical page:
-page:ffffea000505f840 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x1417e1
-flags: 0x57ff00000000800(slab|node=1|zone=2|lastcpupid=0x7ff)
-page_type: 0xffffffff()
-raw: 057ff00000000800 ffff888012c41280 dead000000000122 0000000000000000
-raw: 0000000000000000 0000000080660066 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 0, migratetype Unmovable, gfp_mask 0x12cc0(GFP_KERNEL|__GFP_NOWARN|__GFP_NORETRY), pid 1, tgid 1 (swapper/0), ts 10541560946, free_ts 0
- set_page_owner include/linux/page_owner.h:31 [inline]
- post_alloc_hook+0x2cf/0x340 mm/page_alloc.c:1540
- prep_new_page mm/page_alloc.c:1547 [inline]
- get_page_from_freelist+0x98f/0x32a0 mm/page_alloc.c:3339
- __alloc_pages+0x1d0/0x4c0 mm/page_alloc.c:4595
- alloc_pages_mpol+0x258/0x5f0 mm/mempolicy.c:2133
- alloc_slab_page mm/slub.c:1870 [inline]
- allocate_slab+0x251/0x380 mm/slub.c:2017
- new_slab mm/slub.c:2070 [inline]
- ___slab_alloc+0x8c7/0x1580 mm/slub.c:3223
- __slab_alloc.constprop.0+0x56/0xa0 mm/slub.c:3322
- __slab_alloc_node mm/slub.c:3375 [inline]
- slab_alloc_node mm/slub.c:3468 [inline]
- __kmem_cache_alloc_node+0x131/0x310 mm/slub.c:3517
- __do_kmalloc_node mm/slab_common.c:1006 [inline]
- __kmalloc_node_track_caller+0x54/0x130 mm/slab_common.c:1027
- kstrdup+0x3c/0x70 mm/util.c:62
- kstrdup_const+0x5f/0x70 mm/util.c:85
- kvasprintf_const+0x10b/0x190 lib/kasprintf.c:48
- kobject_set_name_vargs+0x5a/0x130 lib/kobject.c:272
- dev_set_name+0xc8/0x100 drivers/base/core.c:3428
- netdev_register_kobject+0xc1/0x3f0 net/core/net-sysfs.c:2031
- register_netdevice+0xbcb/0x1490 net/core/dev.c:10162
-page_owner free stack trace missing
-
-Memory state around the buggy address:
- ffff8881417e1480: fc 00 fc fc fc fc 00 fc fc fc fc 00 fc fc fc fc
- ffff8881417e1500: 06 fc fc fc fc 05 fc fc fc fc 05 fc fc fc fc 00
->ffff8881417e1580: fc fc fc fc 05 fc fc fc fc fc fc fc fc fc fc fc
-                                           ^
- ffff8881417e1600: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
- ffff8881417e1680: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-==================================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want to overwrite bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+Thanks,
+Amir.

@@ -2,195 +2,105 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 559BF7C7E42
-	for <lists+linux-next@lfdr.de>; Fri, 13 Oct 2023 08:57:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CF137C7E64
+	for <lists+linux-next@lfdr.de>; Fri, 13 Oct 2023 09:10:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229787AbjJMG5i (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 13 Oct 2023 02:57:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33238 "EHLO
+        id S229692AbjJMHKc convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-next@lfdr.de>); Fri, 13 Oct 2023 03:10:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229741AbjJMG5i (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 13 Oct 2023 02:57:38 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1901AB7;
-        Thu, 12 Oct 2023 23:57:36 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id C19AA210DD;
-        Fri, 13 Oct 2023 06:57:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1697180254; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-        bh=rrDa9a7AVtxQJVEoyeqYJjwc23rjqHNO4K3Aj/8eCL4=;
-        b=IyOlKK7oDhKn7KcQNweYGqvIw+vbs39k/qytaALlxamfcwglytV24TvVTF2phi4vKZzurN
-        NL/mv4X6oBt3m5c39WJV5UCjYWIfZ3JDDe2Rhf7jU68U4uvTxs7mxamX9LX28g2yp7x0sD
-        xHYAYYsykl6iOxvEIHv3zgNUmJ6NMp4=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1697180254;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-        bh=rrDa9a7AVtxQJVEoyeqYJjwc23rjqHNO4K3Aj/8eCL4=;
-        b=EUKJpQ52rEng0s3KY+UnpirV8Qtqajz8qYX+zCoC1ve3eFRsEUCsLW8RS2ml9nHAtkhUkC
-        y5k5QtjfqqNU+6Dw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 89C731358F;
-        Fri, 13 Oct 2023 06:57:34 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id IIjjHl7qKGULRgAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Fri, 13 Oct 2023 06:57:34 +0000
-Message-ID: <0de116ae-fccb-4c76-8648-2e01c7f980c7@suse.de>
-Date:   Fri, 13 Oct 2023 08:57:34 +0200
+        with ESMTP id S229744AbjJMHKb (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 13 Oct 2023 03:10:31 -0400
+Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C081D91;
+        Fri, 13 Oct 2023 00:10:25 -0700 (PDT)
+Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-d9ac45092e7so1695938276.2;
+        Fri, 13 Oct 2023 00:10:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697181025; x=1697785825;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=IECtGtWqm2geyWEIJWEaKKW27eGFZt3c1gYt5Pcu7+g=;
+        b=hj4wqEW9UyKIY/eZuEzzCtZFp2CO9bGM8SHg2bFSCUOXAn8WjrbWizXySANe0PXMEs
+         wtasg15GSAAGEwNSj3ShCBsdqHqdOUZDhAMOE2a+cn3LPNiAQePsMme6rkhBoNQFnwHF
+         Fqm0XbYjbFC2wmaZaOuagUOTWOvNBKGRLS4nHhZnn2v6GzJDiJdbYcjMxuzY5ynGIkp1
+         4xVyWJecPt5+qgCpi7UelTromrMD3O8HyfjK4jAYZFAcvDUbH0VGQhPoVLPfPFnMeyFv
+         CG1hIxDh+93I7t26khOMmMEV8R/Zh/XdNvHS5ethtAxduBeICWMTW0hawCAY2TxL+zng
+         JBfw==
+X-Gm-Message-State: AOJu0YzC2rxxuWwFPX/SsG4Da7ESX1jOOO88yQ66SkwlBtZIanjtg1as
+        5owELifFFHPrr5E3OiYsb9CkcVEMVMDh0Q==
+X-Google-Smtp-Source: AGHT+IGgvOA+dW4mOb57bwV0iOmPb7ViZlSQF4dIcl/lGRK8VWWVqEjDHMpYPObc4Rq79QEOkwAaCw==
+X-Received: by 2002:a5b:143:0:b0:d81:65a9:ac6d with SMTP id c3-20020a5b0143000000b00d8165a9ac6dmr26081406ybp.37.1697181024769;
+        Fri, 13 Oct 2023 00:10:24 -0700 (PDT)
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com. [209.85.128.173])
+        by smtp.gmail.com with ESMTPSA id x22-20020a25ac96000000b00d7e96c6eaf5sm342599ybi.46.2023.10.13.00.10.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 13 Oct 2023 00:10:24 -0700 (PDT)
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-5a7c93507d5so20897447b3.2;
+        Fri, 13 Oct 2023 00:10:24 -0700 (PDT)
+X-Received: by 2002:a81:72c5:0:b0:59f:4bc3:3e9 with SMTP id
+ n188-20020a8172c5000000b0059f4bc303e9mr26137098ywc.46.1697181024276; Fri, 13
+ Oct 2023 00:10:24 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: manual merge of the drm-misc tree with the
- asm-generic tree
-Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20231013114602.4cea19d1@canb.auug.org.au>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-Autocrypt: addr=tzimmermann@suse.de; keydata=
- xsBNBFs50uABCADEHPidWt974CaxBVbrIBwqcq/WURinJ3+2WlIrKWspiP83vfZKaXhFYsdg
- XH47fDVbPPj+d6tQrw5lPQCyqjwrCPYnq3WlIBnGPJ4/jreTL6V+qfKRDlGLWFjZcsrPJGE0
- BeB5BbqP5erN1qylK9i3gPoQjXGhpBpQYwRrEyQyjuvk+Ev0K1Jc5tVDeJAuau3TGNgah4Yc
- hdHm3bkPjz9EErV85RwvImQ1dptvx6s7xzwXTgGAsaYZsL8WCwDaTuqFa1d1jjlaxg6+tZsB
- 9GluwvIhSezPgnEmimZDkGnZRRSFiGP8yjqTjjWuf0bSj5rUnTGiyLyRZRNGcXmu6hjlABEB
- AAHNJ1Rob21hcyBaaW1tZXJtYW5uIDx0emltbWVybWFubkBzdXNlLmRlPsLAjgQTAQgAOAIb
- AwULCQgHAgYVCgkICwIEFgIDAQIeAQIXgBYhBHIX+6yM6c9jRKFo5WgNwR1TC3ojBQJftODH
- AAoJEGgNwR1TC3ojx1wH/0hKGWugiqDgLNXLRD/4TfHBEKmxIrmfu9Z5t7vwUKfwhFL6hqvo
- lXPJJKQpQ2z8+X2vZm/slsLn7J1yjrOsoJhKABDi+3QWWSGkaGwRJAdPVVyJMfJRNNNIKwVb
- U6B1BkX2XDKDGffF4TxlOpSQzdtNI/9gleOoUA8+jy8knnDYzjBNOZqLG2FuTdicBXblz0Mf
- vg41gd9kCwYXDnD91rJU8tzylXv03E75NCaTxTM+FBXPmsAVYQ4GYhhgFt8S2UWMoaaABLDe
- 7l5FdnLdDEcbmd8uLU2CaG4W2cLrUaI4jz2XbkcPQkqTQ3EB67hYkjiEE6Zy3ggOitiQGcqp
- j//OwE0EWznS4AEIAMYmP4M/V+T5RY5at/g7rUdNsLhWv1APYrh9RQefODYHrNRHUE9eosYb
- T6XMryR9hT8XlGOYRwKWwiQBoWSDiTMo/Xi29jUnn4BXfI2px2DTXwc22LKtLAgTRjP+qbU6
- 3Y0xnQN29UGDbYgyyK51DW3H0If2a3JNsheAAK+Xc9baj0LGIc8T9uiEWHBnCH+RdhgATnWW
- GKdDegUR5BkDfDg5O/FISymJBHx2Dyoklv5g4BzkgqTqwmaYzsl8UxZKvbaxq0zbehDda8lv
- hFXodNFMAgTLJlLuDYOGLK2AwbrS3Sp0AEbkpdJBb44qVlGm5bApZouHeJ/+n+7r12+lqdsA
- EQEAAcLAdgQYAQgAIAIbDBYhBHIX+6yM6c9jRKFo5WgNwR1TC3ojBQJftOH6AAoJEGgNwR1T
- C3ojVSkIALpAPkIJPQoURPb1VWjh34l0HlglmYHvZszJWTXYwavHR8+k6Baa6H7ufXNQtThR
- yIxJrQLW6rV5lm7TjhffEhxVCn37+cg0zZ3j7zIsSS0rx/aMwi6VhFJA5hfn3T0TtrijKP4A
- SAQO9xD1Zk9/61JWk8OysuIh7MXkl0fxbRKWE93XeQBhIJHQfnc+YBLprdnxR446Sh8Wn/2D
- Ya8cavuWf2zrB6cZurs048xe0UbSW5AOSo4V9M0jzYI4nZqTmPxYyXbm30Kvmz0rYVRaitYJ
- 4kyYYMhuULvrJDMjZRvaNe52tkKAvMevcGdt38H4KSVXAylqyQOW5zvPc4/sq9c=
-In-Reply-To: <20231013114602.4cea19d1@canb.auug.org.au>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------Jj4M8tvJgL4lMCz8VmHJKfaM"
-Authentication-Results: smtp-out1.suse.de;
-        none
-X-Spam-Level: 
-X-Spam-Score: -12.00
-X-Spamd-Result: default: False [-12.00 / 50.00];
-         ARC_NA(0.00)[];
-         RCVD_VIA_SMTP_AUTH(0.00)[];
-         XM_UA_NO_VERSION(0.01)[];
-         FROM_HAS_DN(0.00)[];
-         TO_MATCH_ENVRCPT_ALL(0.00)[];
-         BAYES_HAM(-2.91)[99.62%];
-         MIME_GOOD(-0.20)[multipart/signed,multipart/mixed,text/plain];
-         HAS_ATTACHMENT(0.00)[];
-         REPLY(-4.00)[];
-         MIME_BASE64_TEXT_BOGUS(1.00)[];
-         NEURAL_HAM_LONG(-3.00)[-1.000];
-         DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-         TO_DN_ALL(0.00)[];
-         MIME_BASE64_TEXT(0.10)[];
-         RCPT_COUNT_SEVEN(0.00)[8];
-         NEURAL_HAM_SHORT(-1.00)[-1.000];
-         SIGNED_PGP(-2.00)[];
-         FROM_EQ_ENVFROM(0.00)[];
-         MIME_TRACE(0.00)[0:+,1:+,2:+,3:~];
-         RCVD_COUNT_TWO(0.00)[2];
-         RCVD_TLS_ALL(0.00)[];
-         MID_RHS_MATCH_FROM(0.00)[]
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20231013091831.60a032c2@canb.auug.org.au> <CACRpkdaEVUfFg-O53NBiyWPsjx0VZVMKK7o2ikUMSCy0_AJUGQ@mail.gmail.com>
+In-Reply-To: <CACRpkdaEVUfFg-O53NBiyWPsjx0VZVMKK7o2ikUMSCy0_AJUGQ@mail.gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 13 Oct 2023 09:10:11 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdX3LXZiRRAHSb1FU6nrgtPnyewbUwp7R9Rw2zbxziYz7w@mail.gmail.com>
+Message-ID: <CAMuHMdX3LXZiRRAHSb1FU6nrgtPnyewbUwp7R9Rw2zbxziYz7w@mail.gmail.com>
+Subject: Re: linux-next: duplicate patch in the pinctrl tree
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Ralph Siemsen <ralph.siemsen@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------Jj4M8tvJgL4lMCz8VmHJKfaM
-Content-Type: multipart/mixed; boundary="------------MNAZkslsIWrk6OO6dNrfId7Q";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Stephen Rothwell <sfr@canb.auug.org.au>,
- Daniel Vetter <daniel.vetter@ffwll.ch>,
- Intel Graphics <intel-gfx@lists.freedesktop.org>,
- DRI <dri-devel@lists.freedesktop.org>, Arnd Bergmann <arnd@arndb.de>
-Cc: Linux Next Mailing List <linux-next@vger.kernel.org>,
- Ard Biesheuvel <ardb@kernel.org>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Message-ID: <0de116ae-fccb-4c76-8648-2e01c7f980c7@suse.de>
-Subject: Re: linux-next: manual merge of the drm-misc tree with the
- asm-generic tree
-References: <20231013114602.4cea19d1@canb.auug.org.au>
-In-Reply-To: <20231013114602.4cea19d1@canb.auug.org.au>
+Hi Linus,
 
---------------MNAZkslsIWrk6OO6dNrfId7Q
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+On Fri, Oct 13, 2023 at 12:44 AM Linus Walleij <linus.walleij@linaro.org> wrote:
+> On Fri, Oct 13, 2023 at 12:18 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> > The following commit is also in Linus Torvalds' tree as a different commit
+> > (but the same patch):
+> >
+> >   73394a1b2194 ("pinctrl: renesas: rzn1: Enable missing PINMUX")
+> >
+> > This is commit
+> >
+> >   f055ff23c331 ("pinctrl: renesas: rzn1: Enable missing PINMUX")
+> >
+> > in Linus' tree.
+>
+> I had to fix up the commit message, sorry,
 
-DQpBbSAxMy4xMC4yMyB1bSAwMjo0NiBzY2hyaWViIFN0ZXBoZW4gUm90aHdlbGw6DQo+IEhp
-IGFsbCwNCj4gDQo+IFRvZGF5J3MgbGludXgtbmV4dCBtZXJnZSBvZiB0aGUgZHJtLW1pc2Mg
-dHJlZSBnb3QgYSBjb25mbGljdCBpbjoNCj4gDQo+ICAgIGFyY2gvaWE2NC9pbmNsdWRlL2Fz
-bS9mYi5oDQo+IA0KPiBiZXR3ZWVuIGNvbW1pdDoNCj4gDQo+ICAgIGNmOGU4NjU4MTAwZCAo
-ImFyY2g6IFJlbW92ZSBJdGFuaXVtIChJQS02NCkgYXJjaGl0ZWN0dXJlIikNCj4gDQo+IGZy
-b20gdGhlIGFzbS1nZW5lcmljIHRyZWUgYW5kIGNvbW1pdDoNCj4gDQo+ICAgIDA1MmRkZjdi
-ODZkMiAoImZiZGV2OiBSZXBsYWNlIGZiX3BncHJvdGVjdCgpIHdpdGggcGdwcm90X2ZyYW1l
-YnVmZmVyKCkiKQ0KPiANCj4gZnJvbSB0aGUgZHJtLW1pc2MgdHJlZS4NCj4gDQo+IEkgZml4
-ZWQgaXQgdXAgKEkganVzdCByZW1vdmVkIHRoZSBmaWxlKSBhbmQgY2FuIGNhcnJ5IHRoZSBm
-aXggYXMNCg0KVGhhbmtzLg0KDQo+IG5lY2Vzc2FyeS4gVGhpcyBpcyBub3cgZml4ZWQgYXMg
-ZmFyIGFzIGxpbnV4LW5leHQgaXMgY29uY2VybmVkLCBidXQgYW55DQo+IG5vbiB0cml2aWFs
-IGNvbmZsaWN0cyBzaG91bGQgYmUgbWVudGlvbmVkIHRvIHlvdXIgdXBzdHJlYW0gbWFpbnRh
-aW5lcg0KPiB3aGVuIHlvdXIgdHJlZSBpcyBzdWJtaXR0ZWQgZm9yIG1lcmdpbmcuICBZb3Ug
-bWF5IGFsc28gd2FudCB0byBjb25zaWRlcg0KPiBjb29wZXJhdGluZyB3aXRoIHRoZSBtYWlu
-dGFpbmVyIG9mIHRoZSBjb25mbGljdGluZyB0cmVlIHRvIG1pbmltaXNlIGFueQ0KPiBwYXJ0
-aWN1bGFybHkgY29tcGxleCBjb25mbGljdHMuDQo+IA0KDQotLSANClRob21hcyBaaW1tZXJt
-YW5uDQpHcmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVyDQpTVVNFIFNvZnR3YXJlIFNvbHV0aW9u
-cyBHZXJtYW55IEdtYkgNCkZyYW5rZW5zdHJhc3NlIDE0NiwgOTA0NjEgTnVlcm5iZXJnLCBH
-ZXJtYW55DQpHRjogSXZvIFRvdGV2LCBBbmRyZXcgTXllcnMsIEFuZHJldyBNY0RvbmFsZCwg
-Qm91ZGllbiBNb2VybWFuDQpIUkIgMzY4MDkgKEFHIE51ZXJuYmVyZykNCg==
+The only difference is your added SoB?
 
---------------MNAZkslsIWrk6OO6dNrfId7Q--
+> I'll rebuild my branch for -next.
 
---------------Jj4M8tvJgL4lMCz8VmHJKfaM
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature.asc"
+I'm afraid that won't help, as the original one (from
+renesas-pinctrl-fixes-for-v6.6) is also part of
+renesas-pinctrl-for-v6.7, which I'm gonna send you a PR for later today.
 
------BEGIN PGP SIGNATURE-----
+I guess we'll just have to live with it?
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmUo6l4FAwAAAAAACgkQlh/E3EQov+AS
-LRAAkxbHhK8TjDFMp856xrwGzIl1tHo//U4jej2LzxbwHgnpf+xagld/1jvxSzgpr1GDnXtzJKEA
-v3YtY9eAIuuJypN+CjQ/ddG2mnojabe7cTpNSPWQ6UFkSLMnmtdg5wZ7gI9xUCeQ3JXckZvYiEeD
-5Hzlw2RQWl6XuHB/TpTLt6j0q3Fbrf45PBj4BzmWjlbhjsz5m9nAQQFpNyQpVA6p5GUxqVeJKy7B
-dLZ7sXYNhLoV+gW4HWSpkA/Ipxlgy8rOsdqk5WHGD/HGibBoOX1D8YIixyIHH+DXPgCtkvexaf2t
-9yyMn3ucld32ADNDm//zLj+nxPwc+WgERG/LleSDcHQTZ/TiqigAh9TK1TSSvCSvBzAqvX7MGGLa
-RJ9kWZ5Z/7oa76ySRCEJZj2Krl34zCgThTGRtrMuLGYBLKDXGbFv9mWYtx1h/S2buh5u+JhVHyUX
-9tAqhMa8SUk7bBzAUIQlB4inDemK2ZOqIj1F3uas1yUbCLeMFtdw67ernrCRjT7SJQjZ6Il0N4K6
-6ke9vykQfLem8sTmZdNCHINA3tinLeASg2kflEt9xhYOTV27L/J3LVS7pfE59GF+Vkf7zvy5WDZL
-sy0Kh8TOWHSK/H2e7N+ERF6Thw8HSWYjHKid5EXHIAkMolsFXsg5tZt8o4iw7+Rqp2QCx/Ww2qYF
-NUI=
-=vB2k
------END PGP SIGNATURE-----
+Gr{oetje,eeting}s,
 
---------------Jj4M8tvJgL4lMCz8VmHJKfaM--
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

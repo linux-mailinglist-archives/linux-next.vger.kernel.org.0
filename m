@@ -2,105 +2,114 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A8F07C8BEB
-	for <lists+linux-next@lfdr.de>; Fri, 13 Oct 2023 19:03:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9D1A7C9C5A
+	for <lists+linux-next@lfdr.de>; Mon, 16 Oct 2023 00:15:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229683AbjJMRDd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 13 Oct 2023 13:03:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49408 "EHLO
+        id S229889AbjJOWPi (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 15 Oct 2023 18:15:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229743AbjJMRDd (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 13 Oct 2023 13:03:33 -0400
-X-Greylist: delayed 526 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 13 Oct 2023 10:03:31 PDT
-Received: from out-198.mta1.migadu.com (out-198.mta1.migadu.com [95.215.58.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D801AB7
-        for <linux-next@vger.kernel.org>; Fri, 13 Oct 2023 10:03:31 -0700 (PDT)
-Message-ID: <58ed787f-a3b1-58d3-74a5-3a6e8c4c970a@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1697216082;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=bFYiULr6F/P0Mtox7L6PbFCpW6iv+F01a/eo96NoyTs=;
-        b=TUHuLF04Jm3hSEVbAw2g19VbmJgt632qjJxcZSSi5yKBZUiHK07SX1NECkqY+moL56vlyJ
-        cIWcNlgp5VmjTwUhVpbPpmwYpykxL1qffWPVUyB5WHxqsNlahLMoF4tn5w+3bz1eoCH18Y
-        NJPxOnXWj4ER5rkSg2XIhT1ogYHo8uY=
-Date:   Fri, 13 Oct 2023 09:54:35 -0700
-MIME-Version: 1.0
-Subject: Re: linux-next: build warning after merge of the bpf-next tree
-Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Daan De Meyer <daan.j.demeyer@gmail.com>
-Cc:     bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
-        Martin KaFai Lau <martin.lau@kernel.org>,
+        with ESMTP id S229500AbjJOWPh (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 15 Oct 2023 18:15:37 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AD96AD;
+        Sun, 15 Oct 2023 15:15:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1697408130;
+        bh=REwvH9ugodppN/e6AKyeQfL7GJYvtPOiULrUJpz+qNo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=CJN6ly98KBD/UQLWQahooW4mPpc10USetiXtZs4+lDtZCsiRz3YUSfNCA0gz1ohqu
+         78moz/B5zMng7jhbbgiiqdwrPZN1oxB49zP9qiK7hbQIDFwAA277NM8GXm+008fY09
+         OUht5yT0hzbgGTLfQD5VrKqlDA3vsVO8E7ksDjLHEU0N+pZb1G+sErI0vMdX4kSPIF
+         Tu87DG8BMjM0H4sbnNGblv78tLSXakI/faaQVnf7BoyKJt2j+fVKp54sZQPP/VkfJ9
+         +ZAGpiKUPevm5gRHVtkbzZBnfPcRBnknACeRx83xHXIZKeItkRawYV8jrXkdwJpYp7
+         vaJymP0sjQ83g==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4S7vgx6hgTz4wcK;
+        Mon, 16 Oct 2023 09:15:25 +1100 (AEDT)
+Date:   Mon, 16 Oct 2023 09:15:24 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>
-References: <20231013114007.2fb09691@canb.auug.org.au>
- <20231013163034.73314060@canb.auug.org.au>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <20231013163034.73314060@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
+Subject: Re: linux-next: manual merge of the tip tree with the asm-generic
+ tree
+Message-ID: <20231016091524.1c1cb83d@canb.auug.org.au>
+In-Reply-To: <20231012134442.16f3f9f6@canb.auug.org.au>
+References: <20231012134442.16f3f9f6@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/lkygVc3XrOh=7+t/HOg/eKR";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 10/12/23 10:30 PM, Stephen Rothwell wrote:
-> Hi all,
-> 
-> On Fri, 13 Oct 2023 11:40:07 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->>
->> After merging the bpf-next tree, today's linux-next build (arm
->> multi_v7_defconfig) produced this warning:
->>
->> net/ipv4/af_inet.c: In function 'inet_getname':
->> net/ipv4/af_inet.c:791:13: warning: unused variable 'sin_addr_len' [-Wunused-variable]
->>    791 |         int sin_addr_len = sizeof(*sin);
->>        |             ^~~~~~~~~~~~
->>
->> Introduced by commit
->>
->>    fefba7d1ae19 ("bpf: Propagate modified uaddrlen from cgroup sockaddr programs")
-> 
-> This became a build failure for the i386 defconfig build, so I applied
-> the following patch:
-> 
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Fri, 13 Oct 2023 16:25:08 +1100
-> Subject: [PATCH] fix up for "bpf: Propagate modified uaddrlen from cgroup sockaddr programs"
-> 
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> ---
->   net/ipv4/af_inet.c | 2 ++
->   1 file changed, 2 insertions(+)
-> 
-> diff --git a/net/ipv4/af_inet.c b/net/ipv4/af_inet.c
-> index 7e27ad37b939..0fcab6b6cb04 100644
-> --- a/net/ipv4/af_inet.c
-> +++ b/net/ipv4/af_inet.c
-> @@ -788,7 +788,9 @@ int inet_getname(struct socket *sock, struct sockaddr *uaddr,
->   	struct sock *sk		= sock->sk;
->   	struct inet_sock *inet	= inet_sk(sk);
->   	DECLARE_SOCKADDR(struct sockaddr_in *, sin, uaddr);
-> +#ifdef CONFIG_CGROUP_BPF
->   	int sin_addr_len = sizeof(*sin);
-> +#endif
+--Sig_/lkygVc3XrOh=7+t/HOg/eKR
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks for the report and taking care of it.
+Hi all,
 
-Daan, something that was missed in ipv4 getname. It should be done similar to 
-inet6_getname() in af_inet6.c such that it "return sin_addr_len;" in this 
-function to avoid the compiler warning here in ipv4.
+On Thu, 12 Oct 2023 13:44:42 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> Today's linux-next merge of the tip tree got a conflict in:
+>=20
+>   arch/ia64/include/asm/cpu.h
+>   arch/ia64/kernel/topology.c
+>=20
+> between commit:
+>=20
+>   cf8e8658100d ("arch: Remove Itanium (IA-64) architecture")
+>=20
+> from the asm-generic tree and commit:
+>=20
+>   c4dd854f740c ("cpu-hotplug: Provide prototypes for arch CPU registratio=
+n")
+>=20
+> from the tip tree.
+>=20
+> I fixed it up (I deleted the files) and can carry the fix as
+> necessary. This is now fixed as far as linux-next is concerned, but any
+> non trivial conflicts should be mentioned to your upstream maintainer
+> when your tree is submitted for merging.  You may also want to consider
+> cooperating with the maintainer of the conflicting tree to minimise any
+> particularly complex conflicts.
 
+This is now a conflict between Linus' tree and the asm-generic tree.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/lkygVc3XrOh=7+t/HOg/eKR
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmUsZHwACgkQAVBC80lX
+0Gz8Jwf+OVt4TOXztb6+gkPNtlgOweAvRVAKi4pq0ETol1kXTRo2VPjbT0ZAM2OP
+m2iAG+HLlBU6Z0LOOv2XizamwexfRD2/mOh4VRgw//KQaPBeB5FYmXsT1UDRgbCL
+5BXvJGf0lyBoPG6TNrJ5rWmmXP03n9X8G9tzY4RuRjNf3pj/OvYCOKbJ6FarEvVM
+rS4oBWqbOrKeBupgBFJ2/Ka0qJMwyJJaIlxc9kyp5UqzWRgDnv1D7vEe828FSe/5
+P3bj1XMC3JRD3exaWA8iugVSHTInKA1YRCp+t5gP9KFfxLRCeeAJztKZpSEVr2fq
+WCtf0IoT3lOMndMHgnojCW6wSf3btg==
+=1sCY
+-----END PGP SIGNATURE-----
+
+--Sig_/lkygVc3XrOh=7+t/HOg/eKR--

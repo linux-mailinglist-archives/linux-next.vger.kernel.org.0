@@ -2,169 +2,108 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69CEC7C9C80
-	for <lists+linux-next@lfdr.de>; Mon, 16 Oct 2023 01:00:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E72D87C9CB2
+	for <lists+linux-next@lfdr.de>; Mon, 16 Oct 2023 02:18:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229748AbjJOXAQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 15 Oct 2023 19:00:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55640 "EHLO
+        id S229500AbjJPASS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 15 Oct 2023 20:18:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbjJOXAP (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 15 Oct 2023 19:00:15 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 030B5A2
-        for <linux-next@vger.kernel.org>; Sun, 15 Oct 2023 16:00:13 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-6b497c8575aso2174509b3a.1
-        for <linux-next@vger.kernel.org>; Sun, 15 Oct 2023 16:00:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1697410812; x=1698015612; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=u7zGsTSY0ii1ZCTm6WembLwpATcD2dBZ4NDn+LmVop0=;
-        b=t9aoeVXIgo7r7wjBKaGnJht5nFfpFJRzhQiIiKL1UTjDkZsQRDutoGrVWmu1Tz8sq4
-         Sz6yc2web3IaGnUiAOIRapla3RZ1zQYkYDnIdvkknwf795FvYwsxzjvR5VlOj88MDNRL
-         17lJp0KMgqDZqg7ukurOD3pGXkr3b4lCcX2vXvCVi/4ysO5E9eSHIJTiN7VUYJYXog9G
-         PB4Wnpx8BPtV3hGvFpo4a8vYyqTNvMGBFpGbd8LVP6AplR/NmCMV31Kgjgj1hNfTzqns
-         Oo4dsmVgwzGx2CtbWk9whwTuEkoe4qVF0Wt1zCGEQ/uYpNwRjFVBC+9wl1wtrU6ybLXX
-         AX1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697410812; x=1698015612;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=u7zGsTSY0ii1ZCTm6WembLwpATcD2dBZ4NDn+LmVop0=;
-        b=qy8wxcNtk/q1Of+2mmSCptZBhud5IF2hvoSvRE6yGgRIfXDAg6PSg4dlJCcSOTbLeD
-         KLR92mvafeKL37NcyO6zY9lKGA/3off04bKJEfTBAeLCCRYyKP46agc7iJIP6/MILPQm
-         6LqsfE0iLn4EIT8Gl6CpUGzaA/kNhmc2jy8eeKrKqYExJMdq8MhFXMJ6wXaZCDbVh5hb
-         YVvsKtG8n0x3gn5iHDQfrXvuhe7BCpQvQXfw69mNoXGm503DHHKSCUysGur3Fx80HMHe
-         8Qbi40lOgoB1a2WYDb5SlSul1/JXvdJaC456WO7PefG+kYh601lFjAcg8fr5ea4ZeiMs
-         AAMg==
-X-Gm-Message-State: AOJu0Yx3dPQU3DNx9kAAH2HOw+GiezYiNUthhIhovoE+/HdsiJoVZ3oQ
-        3Z4flDFGAF2LanLkIcCPtQRxfaPuu/ilheK3sjT3+Q==
-X-Google-Smtp-Source: AGHT+IHw1kKSMbuQNRMuIvG7c83Q0GNP0Kuh9DNRSSGAV8L8jz4vBT/FclcpkAtM6OuvmK2/c0HKFQ==
-X-Received: by 2002:a05:6a00:21c9:b0:68f:c7c5:a73a with SMTP id t9-20020a056a0021c900b0068fc7c5a73amr36380717pfj.16.1697410811013;
-        Sun, 15 Oct 2023 16:00:11 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id i130-20020a639d88000000b00578b8fab907sm2527483pgd.73.2023.10.15.16.00.09
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 Oct 2023 16:00:10 -0700 (PDT)
-Message-ID: <652c6efa.630a0220.592d3.61b9@mx.google.com>
-Date:   Sun, 15 Oct 2023 16:00:10 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S229459AbjJPASR (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 15 Oct 2023 20:18:17 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C87E95;
+        Sun, 15 Oct 2023 17:18:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1697415490;
+        bh=X+yjzqQ/M8r2t7sAenrVpODtLZMQgz7CZQ9WIa84mw0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Xtx20EM5E7C+DxJZesUmNzEVq2KUoxQnt9jpmsd3Nz4q9YT5BPMw0Ie6IMW7AIVF7
+         CvBmetjhd7jRaJfCv1p0ICpp1orqq9+zRFbgKKIP6bpay40x6Di5jndrDu5QcIyq4w
+         kY/bJzcCoj8hwueIAv6jVMQ7mhpxXMO3qdHx0I/WIIGE6sHu8cCslOA2zIPKeXC8EZ
+         NwqbaOqJ4FFTxF6QAjQtppCYxKHqhyqCBw/mTP3xGIG6sMlgmfkn3sVJFeLhq+etsA
+         9qSpz2XRtXWvnELAiEC4HPAMAYbPLdeMAjBNTNMkYJNhVJCjmv1P7MWoagnbHq6ZIO
+         /c3WCeRuXE3fw==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4S7yPZ0Yj9z4wcJ;
+        Mon, 16 Oct 2023 11:18:10 +1100 (AEDT)
+Date:   Mon, 16 Oct 2023 11:18:08 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Alex Deucher <alexdeucher@gmail.com>
+Cc:     Alex Deucher <alexander.deucher@amd.com>,
+        Qingqing Zhuo <Qingqing.Zhuo@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Roman Li <roman.li@amd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the amdgpu tree
+Message-ID: <20231016111808.6e5f59e7@canb.auug.org.au>
+In-Reply-To: <20231010124357.5251e100@canb.auug.org.au>
+References: <20231010124357.5251e100@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v6.6-rc6-220-ged04e49eed957
-X-Kernelci-Report-Type: build
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Tree: next
-Subject: next/pending-fixes build: 8 builds: 0 failed, 8 passed,
- 4 warnings (v6.6-rc6-220-ged04e49eed957)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/bZXCSpXsG4YUtU9oyrPX_nj";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes build: 8 builds: 0 failed, 8 passed, 4 warnings (v6.6-rc=
-6-220-ged04e49eed957)
+--Sig_/bZXCSpXsG4YUtU9oyrPX_nj
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
-rnel/v6.6-rc6-220-ged04e49eed957/
+Hi all,
 
-Tree: next
-Branch: pending-fixes
-Git Describe: v6.6-rc6-220-ged04e49eed957
-Git Commit: ed04e49eed95720c0264e0cb136569b13d87f62a
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Built: 8 unique architectures
+On Tue, 10 Oct 2023 12:43:57 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> After merging the amdgpu tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+>=20
+> drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core.c: In fun=
+ction 'dml_core_mode_support':
+> drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core.c:8229:1:=
+ error: the frame size of 2736 bytes is larger than 2048 bytes [-Werror=3Df=
+rame-larger-than=3D]
+>  8229 | } // dml_core_mode_support
+>       | ^
+> cc1: all warnings being treated as errors
+>=20
+> Caused by commit
+>=20
+>   7966f319c66d ("drm/amd/display: Introduce DML2")
+>=20
+> (or maybe something later that changed storage size).
+>=20
+> I have used the amdgpu tree from next-20231009 for today.
 
-Warnings Detected:
+I am still getting this failure.
 
-arc:
+--=20
+Cheers,
+Stephen Rothwell
 
-arm64:
+--Sig_/bZXCSpXsG4YUtU9oyrPX_nj
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-arm:
+-----BEGIN PGP SIGNATURE-----
 
-i386:
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmUsgUAACgkQAVBC80lX
+0GwK2AgAhuLmW/8R6gMNZzJHi+4BzhZy7T7JunG2/muaGvjyFxp5Kqyf9kE3Jnue
+XopZtUuVGLzQ5wMAzezO6VS/LcsVwmOpEUlFl/Q2AhRO6Sy8+PjS/rG+Yknx+lwf
+lhOKdC7e6JsQ71nF3TKBXqe6x+yIx73W9y5RX4LeADeVK6GV1R5P1fOMfTP5Fqi0
++k0FdIb/iV2Dt6kAo34kyqi5cdD0/1DTrQxSTC5fUHLJlPdLVxKD2enrrk7x4yi5
+8gG1hTSaSJyjcec5tsvb0LhIIzU/yWH3VX4N0/Bhf0aaXZwLU79T56bmP2hhsghx
+F7Gk3laUeczAHBvo2n06ZYhLUg0D/w==
+=SCv8
+-----END PGP SIGNATURE-----
 
-mips:
-
-riscv:
-
-sparc:
-    sparc64_defconfig (gcc-10): 4 warnings
-
-x86_64:
-
-
-Warnings summary:
-
-    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
-tion failed, symbol will not be versioned.
-    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
--Wcpp]
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----
-For more info write to <info@kernelci.org>
+--Sig_/bZXCSpXsG4YUtU9oyrPX_nj--

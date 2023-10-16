@@ -2,448 +2,128 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BF677CA605
-	for <lists+linux-next@lfdr.de>; Mon, 16 Oct 2023 12:49:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1648D7CA711
+	for <lists+linux-next@lfdr.de>; Mon, 16 Oct 2023 13:53:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230017AbjJPKtY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 16 Oct 2023 06:49:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44056 "EHLO
+        id S233374AbjJPLxa (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 16 Oct 2023 07:53:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229668AbjJPKtX (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 16 Oct 2023 06:49:23 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ABE383
-        for <linux-next@vger.kernel.org>; Mon, 16 Oct 2023 03:49:21 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id 41be03b00d2f7-5ac88d2cfaaso1989241a12.2
-        for <linux-next@vger.kernel.org>; Mon, 16 Oct 2023 03:49:21 -0700 (PDT)
+        with ESMTP id S233036AbjJPLxT (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 16 Oct 2023 07:53:19 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 049A3F1;
+        Mon, 16 Oct 2023 04:53:18 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-405361bb9f7so44640855e9.2;
+        Mon, 16 Oct 2023 04:53:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1697453360; x=1698058160; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=0Dw8/4pNpFEN3JOa+Zvxb6K92g2zocVRMhI2YNZEYAk=;
-        b=WSca/3sUOI6NGMo1GcTWigjtNhtsholBExRVU8qeQck0mVPKCsVlnytbD/ikMNSI9Q
-         AZ34WCNnyN2HLncSrd32lIamt3lSZW2Jw/px9YpbswrgpwHvCp6xKG82eFR6rbAuF7GJ
-         3Qm3LMzViKMHWEm5IbsfYT4+iiQlqszR3vAvKPoJVpt+N3LS61eZAOY/Ru28RD1De30y
-         v0QhKJWSy+kh2+tCgG1S1sEAF5CpnsTGVDc/UD2DOW+lHfHs/diFsNC7Z+TN7ck4Jct/
-         Cl5FGGl8srJZN1bd9Ki+wQF+hjRuB9J2nDOxfPV05vX2s6CcEFtuPSiq6bpCE/dZ8TAW
-         /z2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697453360; x=1698058160;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=gmail.com; s=20230601; t=1697457196; x=1698061996; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=0Dw8/4pNpFEN3JOa+Zvxb6K92g2zocVRMhI2YNZEYAk=;
-        b=EpDYHsDIgyhOFxW3qfbY6iQKy9DGS5gHWk6904EJgZCg454e1N8EQS+MAca91q3bGW
-         e5h6jQ0jIfdvJF8aX/rNNBcFU5yQPFGfNHleN5HNPBmP80vKotX9YGdQ8LyegSq8w6Iv
-         cqhy42T267SWY3Q+nU3kYOVXWB7RWguZQcEr1c/Ff4CLYCeQUVN9MVgvGZ3nuQ5S9DSY
-         6d1yN86qvTbbpy66MznzKLEumyE+0QTSq9TGQqr4ey80xEtvOGRNiszXsTJmqFfwpgHE
-         peOcG835oyz5iV49pLHUTUmnxJg2h9GKnrTRAYazLcZN3hOJOiQAkpDXV4bSSullDaz1
-         8Z3w==
-X-Gm-Message-State: AOJu0YyOlI2wM4UrjgfdkMgSJA6D5q4tx3sbUJL65M77DEyjoI8MQqXO
-        o4vkZ8XYs7I3AR1I0JKQcUFEEQYP3rdIP5sCQww8YA==
-X-Google-Smtp-Source: AGHT+IG4MUMF/h9/1oNmEtipAU+rAu8J850ffzgEYUpVaubyQd8zIUwWrKr9qAPjiCLeYJV3nyoP0w==
-X-Received: by 2002:a05:6a20:7f95:b0:140:3aa:e2ce with SMTP id d21-20020a056a207f9500b0014003aae2cemr44385511pzj.42.1697453360020;
-        Mon, 16 Oct 2023 03:49:20 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id a29-20020a63705d000000b0058958ea2aaesm7710984pgn.83.2023.10.16.03.49.19
+        bh=O9jKl/9AOz583fNo8bRchi+qyfwMXZwoKdGYZrb+aak=;
+        b=RBjtDYrkVCJ4aPGPqPvwBmAl87NVTHZItqSDqzBdojSAENvuiGo073wbzgN2DKGukS
+         xVtT9AxtoPifO3lHzs7C68jaKbBXTshnkYR61xvWiTWcxUp4smUPsTNyk5Ugw8cCd6pe
+         EQiBdCIQVZk4BDQKqhm7FG0g8x99TVwIBLKUEc+vLLHQZ4TzMJR1PvbDn6H+DnJ8R1YA
+         /3K7gAGmX6ImG0j9Yprhn6rulxYg5XTmH/wJS2zhfgHbU6Yaz7oyrlEOEwMiQtBdhlar
+         n6ZLXNWirTjQ03pvbKh9yjWZPcMuWa5atorh1iSzZI7zfHv4FVWYCY9i0zTvFDaOdfJw
+         gr4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697457196; x=1698061996;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=O9jKl/9AOz583fNo8bRchi+qyfwMXZwoKdGYZrb+aak=;
+        b=lvpFa0d1/yaRRY0/FaAlbX897RrpIqW7CRhz8bWN7uvLBexJSGlaNhDyv+0IrcTWzH
+         W21E+1KnzLJmfPuwCTjk8Ipg/87ZAe+14P9Cj/gsHSdxDqR5S9EtEaO75uW5C/YzoFM9
+         O4MMcginkBVz5ajS4MQIGjAx/Y1KbROU7vwk7OzuhERlhW8DXqp1E8e91ZbJzZeWHa4+
+         QF2Q5GMLEwnrQgZ7Hch8vzqN+sR5mYZBkf6L4ifypuVbRIowweF/jvuD725gAGa+j7dY
+         BRq4nakO7BNjNmqpMNzuBeFtfniHYnjNid3TXnQVsQWW4DjF78wmF2SxyDQrNA9+ScuE
+         KBGA==
+X-Gm-Message-State: AOJu0YyNd3sP7G7kv7b/6Ft4rg82g+6ZpnjPipyOZp7xaDQOjl1jYMPj
+        vBsbgDeLkLcaBwR/nzt5tGxdN1YRQzY=
+X-Google-Smtp-Source: AGHT+IE929vjAV4QvxVlJG8MoDHd9hEmZSlGpa3V3HXjC/ZC1421M8M9lfJS5RbslYUrhsQFEGzMVw==
+X-Received: by 2002:a1c:4b07:0:b0:405:3ca1:f6ba with SMTP id y7-20020a1c4b07000000b004053ca1f6bamr27526897wma.3.1697457196091;
+        Mon, 16 Oct 2023 04:53:16 -0700 (PDT)
+Received: from gmail.com (1F2EF7B2.nat.pool.telekom.hu. [31.46.247.178])
+        by smtp.gmail.com with ESMTPSA id u19-20020a05600c139300b0040651505684sm7001403wmf.29.2023.10.16.04.53.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Oct 2023 03:49:19 -0700 (PDT)
-Message-ID: <652d152f.630a0220.196a2.6a0d@mx.google.com>
-Date:   Mon, 16 Oct 2023 03:49:19 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        Mon, 16 Oct 2023 04:53:15 -0700 (PDT)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Mon, 16 Oct 2023 13:53:13 +0200
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-next <linux-next@vger.kernel.org>,
+        Sohil Mehta <sohil.mehta@intel.com>
+Subject: Re: linux-next: manual merge of the block tree with the asm-generic
+ tree
+Message-ID: <ZS0kKWsCaYHhKeHa@gmail.com>
+References: <20231009123118.4487a0e1@canb.auug.org.au>
+ <20231009084812.GB14330@noisy.programming.kicks-ass.net>
+ <cb4bb8e2-7dfe-4ca4-aa70-060f7b2f8f95@app.fastmail.com>
+ <20231009141351.GD14330@noisy.programming.kicks-ass.net>
+ <b7c57f03-4606-4190-98c5-344c49656f9c@kernel.dk>
+ <66e09ad5-2dcf-4159-9c98-f37ac739a445@kernel.dk>
+ <20231011175407.GG6307@noisy.programming.kicks-ass.net>
+ <ZScUhud9eqKIQJjC@gmail.com>
+ <bf5ecd2d-06a7-4c51-a762-6fe3753044b6@kernel.dk>
+ <ZScbKPQur2qao5Gf@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: next-20231016
-X-Kernelci-Report-Type: test
-X-Kernelci-Branch: master
-X-Kernelci-Tree: next
-Subject: next/master baseline: 257 runs, 7 regressions (next-20231016)
-To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
-        kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZScbKPQur2qao5Gf@gmail.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master baseline: 257 runs, 7 regressions (next-20231016)
 
-Regressions Summary
--------------------
-
-platform                   | arch  | lab           | compiler | defconfig  =
-                  | regressions
----------------------------+-------+---------------+----------+------------=
-------------------+------------
-imx8mn-ddr4-evk            | arm64 | lab-baylibre  | gcc-10   | defconfig+C=
-ON...OMIZE_BASE=3Dy | 1          =
-
-imx8mp-evk                 | arm64 | lab-broonie   | gcc-10   | defconfig+C=
-ON...OMIZE_BASE=3Dy | 1          =
-
-qemu_arm64-virt-gicv2-uefi | arm64 | lab-baylibre  | gcc-10   | defconfig+d=
-ebug              | 1          =
-
-qemu_arm64-virt-gicv2-uefi | arm64 | lab-collabora | gcc-10   | defconfig+d=
-ebug              | 1          =
-
-qemu_mips-malta            | mips  | lab-collabora | gcc-10   | malta_defco=
-nfig              | 1          =
-
-sun50i-h6-pine-h64         | arm64 | lab-clabbe    | gcc-10   | defconfig+C=
-ON...OMIZE_BASE=3Dy | 1          =
-
-sun50i-h6-pine-h64         | arm64 | lab-collabora | gcc-10   | defconfig+C=
-ON...OMIZE_BASE=3Dy | 1          =
-
-
-  Details:  https://kernelci.org/test/job/next/branch/master/kernel/next-20=
-231016/plan/baseline/
-
-  Test:     baseline
-  Tree:     next
-  Branch:   master
-  Describe: next-20231016
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      4d0515b235dec789578d135a5db586b25c5870cb =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform                   | arch  | lab           | compiler | defconfig  =
-                  | regressions
----------------------------+-------+---------------+----------+------------=
-------------------+------------
-imx8mn-ddr4-evk            | arm64 | lab-baylibre  | gcc-10   | defconfig+C=
-ON...OMIZE_BASE=3Dy | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/652cd9ce29df2b493defcf03
-
-  Results:     5 PASS, 1 FAIL, 1 SKIP
-  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20231016/arm6=
-4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-baylibre/baseline-imx8mn-d=
-dr4-evk.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20231016/arm6=
-4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-baylibre/baseline-imx8mn-d=
-dr4-evk.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/652cd9ce29df2b493defcf0c
-        failing since 13 days (last pass: next-20230717, first fail: next-2=
-0231003)
-
-    2023-10-16T06:35:27.680707  + set<8>[  182.162514] <LAVA_SIGNAL_ENDRUN =
-0_dmesg 3807227_1.5.2.4.1>
-    2023-10-16T06:35:27.680907   +x
-    2023-10-16T06:35:27.786177  / # #
-    2023-10-16T06:35:28.940184  export SHELL=3D/bin/sh
-    2023-10-16T06:35:28.945668  #
-    2023-10-16T06:35:30.485295  / # export SHELL=3D/bin/sh. /lava-3807227/e=
-nvironment
-    2023-10-16T06:35:30.490721  =
-
-    2023-10-16T06:35:33.298309  / # . /lava-3807227/environment/lava-380722=
-7/bin/lava-test-runner /lava-3807227/1
-    2023-10-16T06:35:33.304018  =
-
-    2023-10-16T06:35:33.304237  / # /lava-3807227/bin/lava<3>[  186.252677]=
- caam_jr 30902000.jr: 20000256: CCB: desc idx 2: RNG: Prediction resistance =
-
-    ... (13 line(s) more)  =
-
- =
-
-
-
-platform                   | arch  | lab           | compiler | defconfig  =
-                  | regressions
----------------------------+-------+---------------+----------+------------=
-------------------+------------
-imx8mp-evk                 | arm64 | lab-broonie   | gcc-10   | defconfig+C=
-ON...OMIZE_BASE=3Dy | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/652cdb0aaa3d63f623efcef6
-
-  Results:     5 PASS, 1 FAIL, 1 SKIP
-  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20231016/arm6=
-4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-broonie/baseline-imx8mp-ev=
-k.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20231016/arm6=
-4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-broonie/baseline-imx8mp-ev=
-k.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/652cdb0aaa3d63f623efceff
-        failing since 61 days (last pass: next-20230809, first fail: next-2=
-0230815)
-
-    2023-10-16T06:40:46.937451  + set<8>[  188.842275] <LAVA_SIGNAL_ENDRUN =
-0_dmesg 173438_1.5.2.4.1>
-    2023-10-16T06:40:46.937656   +x
-    2023-10-16T06:40:47.044209  / # #
-    2023-10-16T06:40:48.203771  export SHELL=3D/bin/sh
-    2023-10-16T06:40:48.209361  #
-    2023-10-16T06:40:49.700799  / # export SHELL=3D/bin/sh. /lava-173438/en=
-vironment
-    2023-10-16T06:40:49.706496  =
-
-    2023-10-16T06:40:52.416807  / # . /lava-173438/environment/lava-173438/=
-bin/lava-test-runner /lava-173438/1
-    2023-10-16T06:40:52.422671  =
-
-    2023-10-16T06:40:52.426560  / # /lava-173438/bin/lava-test-runner /lava=
--173438/1 =
-
-    ... (13 line(s) more)  =
-
- =
-
-
-
-platform                   | arch  | lab           | compiler | defconfig  =
-                  | regressions
----------------------------+-------+---------------+----------+------------=
-------------------+------------
-qemu_arm64-virt-gicv2-uefi | arm64 | lab-baylibre  | gcc-10   | defconfig+d=
-ebug              | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/652cd8a46077a768c6efcf0c
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+debug
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20231016/arm6=
-4/defconfig+debug/gcc-10/lab-baylibre/baseline-qemu_arm64-virt-gicv2-uefi.t=
-xt
-  HTML log:    https://storage.kernelci.org//next/master/next-20231016/arm6=
-4/defconfig+debug/gcc-10/lab-baylibre/baseline-qemu_arm64-virt-gicv2-uefi.h=
-tml
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/652cd8a46077a768c6efc=
-f0d
-        new failure (last pass: next-20230929) =
-
- =
-
-
-
-platform                   | arch  | lab           | compiler | defconfig  =
-                  | regressions
----------------------------+-------+---------------+----------+------------=
-------------------+------------
-qemu_arm64-virt-gicv2-uefi | arm64 | lab-collabora | gcc-10   | defconfig+d=
-ebug              | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/652cd89e6077a768c6efcf03
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+debug
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20231016/arm6=
-4/defconfig+debug/gcc-10/lab-collabora/baseline-qemu_arm64-virt-gicv2-uefi.=
-txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20231016/arm6=
-4/defconfig+debug/gcc-10/lab-collabora/baseline-qemu_arm64-virt-gicv2-uefi.=
-html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/652cd89e6077a768c6efc=
-f04
-        new failure (last pass: next-20230929) =
-
- =
-
-
-
-platform                   | arch  | lab           | compiler | defconfig  =
-                  | regressions
----------------------------+-------+---------------+----------+------------=
-------------------+------------
-qemu_mips-malta            | mips  | lab-collabora | gcc-10   | malta_defco=
-nfig              | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/652cd3d9e05891e655efcef3
-
-  Results:     4 PASS, 1 FAIL, 2 SKIP
-  Full config: malta_defconfig
-  Compiler:    gcc-10 (mips-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20231016/mips=
-/malta_defconfig/gcc-10/lab-collabora/baseline-qemu_mips-malta.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20231016/mips=
-/malta_defconfig/gcc-10/lab-collabora/baseline-qemu_mips-malta.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/mipsel/rootfs.cpio.gz =
-
-
-
-  * baseline.dmesg.alert: https://kernelci.org/test/case/id/652cd3d9e05891e=
-655efcef7
-        new failure (last pass: next-20231013)
-        1 lines
-
-    2023-10-16T06:10:13.438343  kern  :alert : CPU 0 Unable to handle kerne=
-l paging request at virtual address d3557f8c, epc =3D=3D 8020461c, ra =3D=
-=3D 80206e6c
-    2023-10-16T06:10:13.438604  =
-
-
-    2023-10-16T06:10:13.479416  <8><LAVA_SIGNAL_TESTCASE TEST_CASE_ID=3Dale=
-rt RESULT=3Dfail UNITS=3Dlines MEASUREMENT=3D1>
-    2023-10-16T06:10:13.479603  =
-
-   =
-
- =
-
-
-
-platform                   | arch  | lab           | compiler | defconfig  =
-                  | regressions
----------------------------+-------+---------------+----------+------------=
-------------------+------------
-sun50i-h6-pine-h64         | arm64 | lab-clabbe    | gcc-10   | defconfig+C=
-ON...OMIZE_BASE=3Dy | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/652cd8fccd81e6c956efcf66
-
-  Results:     5 PASS, 1 FAIL, 1 SKIP
-  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20231016/arm6=
-4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-clabbe/baseline-sun50i-h6-=
-pine-h64.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20231016/arm6=
-4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-clabbe/baseline-sun50i-h6-=
-pine-h64.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/652cd8fccd81e6c956efcf6f
-        failing since 5 days (last pass: v6.3-rc6-12018-gd3f2cd248191, firs=
-t fail: next-20231010)
-
-    2023-10-16T06:32:20.280430  / # #
-    2023-10-16T06:32:20.382689  export SHELL=3D/bin/sh
-    2023-10-16T06:32:20.383260  #
-    2023-10-16T06:32:20.484274  / # export SHELL=3D/bin/sh. /lava-438814/en=
-vironment
-    2023-10-16T06:32:20.484905  =
-
-    2023-10-16T06:32:20.585953  / # . /lava-438814/environment/lava-438814/=
-bin/lava-test-runner /lava-438814/1
-    2023-10-16T06:32:20.587021  =
-
-    2023-10-16T06:32:20.604259  / # /lava-438814/bin/lava-test-runner /lava=
--438814/1
-    2023-10-16T06:32:20.668306  + export 'TESTRUN_ID=3D1_bootrr'
-    2023-10-16T06:32:20.668997  + cd /lava-438814/<8>[   19.204863] <LAVA_S=
-IGNAL_STARTRUN 1_bootrr 438814_1.5.2.4.5> =
-
-    ... (11 line(s) more)  =
-
- =
-
-
-
-platform                   | arch  | lab           | compiler | defconfig  =
-                  | regressions
----------------------------+-------+---------------+----------+------------=
-------------------+------------
-sun50i-h6-pine-h64         | arm64 | lab-collabora | gcc-10   | defconfig+C=
-ON...OMIZE_BASE=3Dy | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/652cd8ffcd81e6c956efcf71
-
-  Results:     5 PASS, 1 FAIL, 1 SKIP
-  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20231016/arm6=
-4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-collabora/baseline-sun50i-=
-h6-pine-h64.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20231016/arm6=
-4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-collabora/baseline-sun50i-=
-h6-pine-h64.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/652cd8ffcd81e6c956efcf7a
-        failing since 5 days (last pass: v6.3-rc6-12018-gd3f2cd248191, firs=
-t fail: next-20231010)
-
-    2023-10-16T06:36:46.855971  / # #
-
-    2023-10-16T06:36:46.958027  export SHELL=3D/bin/sh
-
-    2023-10-16T06:36:46.958690  #
-
-    2023-10-16T06:36:47.060000  / # export SHELL=3D/bin/sh. /lava-11787198/=
-environment
-
-    2023-10-16T06:36:47.060707  =
-
-
-    2023-10-16T06:36:47.162143  / # . /lava-11787198/environment/lava-11787=
-198/bin/lava-test-runner /lava-11787198/1
-
-    2023-10-16T06:36:47.163213  =
-
-
-    2023-10-16T06:36:47.165531  / # /lava-11787198/bin/lava-test-runner /la=
-va-11787198/1
-
-    2023-10-16T06:36:47.245503  + export 'TESTRUN_ID=3D1_bootrr'
-
-    2023-10-16T06:36:47.246003  + cd /lava-1178719<8>[   17.149139] <LAVA_S=
-IGNAL_STARTRUN 1_bootrr 11787198_1.5.2.4.5>
- =
-
-    ... (11 line(s) more)  =
-
- =20
+* Ingo Molnar <mingo@kernel.org> wrote:
+
+> 
+> * Jens Axboe <axboe@kernel.dk> wrote:
+> 
+> > >>> Peter, what's the verdict - do you want to rebase it, or leave it 
+> > >>> as-is?
+> > >>
+> > >> Ah, I looked into doing this, but tip/locking/core has since grown a 
+> > >> bunch of patches and has a merge commit -- I talked to Ingo yesterday 
+> > >> and he proposed just queueing a fix on top instead of doing a full 
+> > >> rebase.
+> > >>
+> > >> Ingo, that still your preferred solution?
+> > > 
+> > > Yeah, that would be the best solution IMO - it's not like there's any 
+> > > real prospect of someone bisecting futex2 patch-enablement commits on 
+> > > Alpha ... and the bisection distance isn't particularly large either in 
+> > > any case.
+> > 
+> > OK, works for me. I'll keep my branch as-is, and just ensure it gets sent 
+> > out after locking/core has been pulled by Linus.
+> 
+> Thank you!
+
+Heads-up: the futex syscall numbers are now fixed on Alpha in the locking 
+tree via:
+
+  dcc134510eef ("alpha: Fix up new futex syscall numbers")
+
+This would, I presume, trigger a new conflict in -next, which should be 
+resolved in an identical fashion.
+
+Jens, feel free to send your tree to Linus in any ordering with the
+locking tree, there's no real dependency between them, and whoever
+sends last should warn Linus about the known conflict.
+
+Thanks,
+
+	Ingo

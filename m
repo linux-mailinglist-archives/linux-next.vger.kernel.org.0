@@ -2,55 +2,45 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3000C7CB4F8
-	for <lists+linux-next@lfdr.de>; Mon, 16 Oct 2023 22:59:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 736A37CB5BA
+	for <lists+linux-next@lfdr.de>; Mon, 16 Oct 2023 23:53:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232172AbjJPU7Q (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 16 Oct 2023 16:59:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50404 "EHLO
+        id S234112AbjJPVx6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 16 Oct 2023 17:53:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229666AbjJPU7P (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 16 Oct 2023 16:59:15 -0400
+        with ESMTP id S234169AbjJPVxy (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 16 Oct 2023 17:53:54 -0400
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6F9DA7;
-        Mon, 16 Oct 2023 13:59:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CC7AAB;
+        Mon, 16 Oct 2023 14:53:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1697489948;
-        bh=EUUfQmbPuoJ6VpjZzB45ptApbzJjAxXVBjL4y2UG2sw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=nI3SetMCOfOQGtg0b0JhtAdTokxCMXuW69W6WSrjYbF4ODEOMNxfTVTYy0HnXEPAz
-         KFC4khFlUNFELdSRqEUa0SX2Q/A5HOpDExC3izFzO4U+U9qESDQ6R+xeV7PGYlN6Yr
-         SELUckCnLpFeCar7/gDR+9c4kty+A+3hVBClLJDnRLeJO7S6lsXvCvU94DYU/tk0DJ
-         wp+NEUN+iN7WExtX72lTcbCDWcd8cjhO0tD7R0mMPJkNS3O7kxTm58zTxJulGFmeBr
-         /CPDOuDLfI5mk8a3zq+ZbFM0tGp9m4qH93btjTQLQS75mbIznbEu8q2ZWIn/rD5y+Y
-         jqctUeaKaa5Og==
+        s=201702; t=1697493230;
+        bh=tsPyNkr3PX7gFzExIW8NeGHfht4aXAxgEbgtciMhuto=;
+        h=Date:From:To:Cc:Subject:From;
+        b=DFbwoZYigp9x9IZ79hbaSkmNmVxCLeNaHS2Xgwn3JYLSGcF0im6vBMqmMlPb077/T
+         NyNwHz+WntfmYJKd+xV0iiGk2rKMnFh5vCrwrtUOGoBm3A2M4+lxqe/skTm3qr6D6x
+         vctXeBASHyiwxMKUdownYHIXMjy3nvHfDWbiUtFEAY9SB25T13qx9afyipAdCSWbO3
+         3JaHG5GIi1L8rbkd2VbTUq4dPhVfi3UbgRara6Jn+wn+K4u4xsjDzwP2K1+02/VVts
+         QHO05ANV6Ha9uaqUMd8lmGYjv9ZcBy7DqKWY/5AuYYMJl9+mmBlUxCplktnn3EdMnk
+         PnOhhdnSouFmA==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4S8TxS20PYz4wcM;
-        Tue, 17 Oct 2023 07:59:08 +1100 (AEDT)
-Date:   Tue, 17 Oct 2023 07:59:06 +1100
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4S8W8Y3VmGz4wcj;
+        Tue, 17 Oct 2023 08:53:49 +1100 (AEDT)
+Date:   Tue, 17 Oct 2023 08:53:46 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Rodrigo Siqueira Jordao <Rodrigo.Siqueira@amd.com>
-Cc:     Alex Deucher <alexdeucher@gmail.com>,
-        "Wentland, Harry" <Harry.Wentland@amd.com>,
-        "Lei, Jun" <jun.lei@amd.com>,
-        "Dhere, Chaitanya" <Chaitanya.Dhere@amd.com>,
-        "Zhuo, Qingqing" <qingqing.zhuo@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Roman Li <roman.li@amd.com>,
+To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        ARM <linux-arm-kernel@lists.infradead.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the amdgpu tree
-Message-ID: <20231017075906.3906b823@canb.auug.org.au>
-In-Reply-To: <111ce50e-f445-4018-8d10-c1f7908b3198@amd.com>
-References: <20231010124357.5251e100@canb.auug.org.au>
-        <cc75c480-5359-465e-adab-46b418ec5d97@amd.com>
-        <20231016113946.698ac2da@canb.auug.org.au>
-        <111ce50e-f445-4018-8d10-c1f7908b3198@amd.com>
+Subject: linux-next: Signed-off-by missing for commit in the arm-soc tree
+Message-ID: <20231017085346.22917afd@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/c..NT1IpAS8APIXEeh_d=qJ";
+Content-Type: multipart/signed; boundary="Sig_/TxQQwm0Diamqtz79knfG2Bn";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS
@@ -61,40 +51,59 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/c..NT1IpAS8APIXEeh_d=qJ
+--Sig_/TxQQwm0Diamqtz79knfG2Bn
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Rodrigo,
+Hi all,
 
-On Mon, 16 Oct 2023 08:53:05 -0600 Rodrigo Siqueira Jordao <Rodrigo.Siqueir=
-a@amd.com> wrote:
->
-> Could you try this patchset?
->=20
-> https://lore.kernel.org/amd-gfx/20231016142031.241912-1-Rodrigo.Siqueira@=
-amd.com/T/#t
+Commits
 
-I will apply that to the merge of the amdgpu tree today.
+  976868a021ee ("arm64: dts: mediatek: cherry: Configure eDP and internal d=
+isplay")
+  6b6d5f5665af ("arm64: dts: mediatek: mt6795-xperia-m5: Add DSI Display an=
+d its vregs")
+  db584927b355 ("arm64: dts: mediatek: mt6795-xperia-m5: Add display backli=
+ght support")
+  fbb02d40fba8 ("arm64: dts: mediatek: mt6795: Add support for display bloc=
+ks and DPI/DSI")
+  c09142368d5c ("arm64: dts: mediatek: Add spherion-rev4")
+  875da90acd8b ("arm64: dts: mediatek: Add hayato-rev5-sku2")
+  97e79c22494e ("arm64: dts: mediatek: Remove asurada-audio dtsi files")
+  2e34092e3618 ("dt-bindings: arm64: dts: mediatek: Add rev4 of spherion")
+  c4b58b15835a ("dt-bindings: arm64: dts: mediatek: Add rev5-sku2 of hayato=
+")
+  551dc51e0ca7 ("arm64: dts: mediatek: add iommu support for mt8365 SoC")
+  7df428bc887b ("arm64: dts: mediatek: add larb support for mt8365 SoC")
+  bcae0e82bbb0 ("arm64: dts: mediatek: add smi support for mt8365 SoC")
+  39da9a394be0 ("arm64: dts: mediatek: add power domain support for mt8365 =
+SoC")
+  56570215f1dc ("arm64: dts: mediatek: add apu support for mt8365 SoC")
+  c34fedb34b95 ("arm64: dts: mediatek: add camsys support for mt8365 SoC")
+  eb1476c654ba ("arm64: dts: mediatek: add mmsys support for mt8365 SoC")
+  142a80a9b568 ("arm64: dts: mediatek: mt8183-kukui: Add PMIC regulator sup=
+plies")
+
+are missing a Signed-off-by from their committers.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/c..NT1IpAS8APIXEeh_d=qJ
+--Sig_/TxQQwm0Diamqtz79knfG2Bn
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmUtpBoACgkQAVBC80lX
-0Gz3qgf5AcXHlqzMLrzLoo5rrfH5XcRzNam5MAZQf3xUUhDUuHMZlYbMAqAPFXI2
-rKTU2mXURXUFIt2cJ0JU0f6cFBUQDVhywhB659XnLLxgMcwfxGGfSk9IPQvfHDuM
-m+iKna7TP8xfTbXNFQsiyQx4/9Ilc1U7z14O/noSulQlyzyYXQFOtopApEaKoD7S
-bnP1uVKPtYv2amPcvllFHSoLpro8M02efxTh9T+f2+fz4ItLo5ARzu3Bckhq5+ww
-Re7PfhBj9WTqHJsQVmw0NB9G2fPUnXFm8+O2H0CPFhWuNPsgfX2E4xd+KueyP14G
-Jea1ymXtx8XPEQJ+JUoSPlIVmVJ4Hw==
-=FCiR
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmUtsOoACgkQAVBC80lX
+0GzmrAgAjBVjUOtaG9CpD4eLQzllCQISrUauC0Pxz7vQNDRKkV42xe2/5LQN+FWQ
+wL0XhDXGBS6ms1c7SNgKUI8b+1cpLTdC5+GHpaCBbjFaxnYkaPLs4XZ4Egg/3yfm
+N94SV75p5WxqrNE3AT+JBymJ39BOphlgedmFAgeB7UJa/OOi1NI9+L0wCJSeyFay
+EknyioANNtFU7sWiVDAjDWaf2cBXYJEzae9f2oeF7pxe56076FDnbyCPNd/agdy5
+ErHJqHaQrpjkLk4XpwU4y3UT2TFNlw1SsO22/HjcuSdwfG7LSbetA7Nq0Tv8XB6T
+LbWM6NmYXxIi8Yd1LjcOyG3GA/hDoQ==
+=RhTm
 -----END PGP SIGNATURE-----
 
---Sig_/c..NT1IpAS8APIXEeh_d=qJ--
+--Sig_/TxQQwm0Diamqtz79knfG2Bn--

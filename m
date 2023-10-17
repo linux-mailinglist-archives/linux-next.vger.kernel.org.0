@@ -2,145 +2,99 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80EB97CBA29
-	for <lists+linux-next@lfdr.de>; Tue, 17 Oct 2023 07:34:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FACC7CBA4F
+	for <lists+linux-next@lfdr.de>; Tue, 17 Oct 2023 07:45:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234463AbjJQFd6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 17 Oct 2023 01:33:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49418 "EHLO
+        id S230343AbjJQFpj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 17 Oct 2023 01:45:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234441AbjJQFdz (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 17 Oct 2023 01:33:55 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A98BBA2;
-        Mon, 16 Oct 2023 22:33:52 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1qsciE-0005x2-Fn; Tue, 17 Oct 2023 07:33:50 +0200
-Message-ID: <3d1355bc-d359-4ff6-aee1-fbc84437efec@leemhuis.info>
-Date:   Tue, 17 Oct 2023 07:33:49 +0200
+        with ESMTP id S234555AbjJQFpf (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 17 Oct 2023 01:45:35 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32E9B125
+        for <linux-next@vger.kernel.org>; Mon, 16 Oct 2023 22:45:24 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id ffacd0b85a97d-31fa15f4cc6so4724720f8f.2
+        for <linux-next@vger.kernel.org>; Mon, 16 Oct 2023 22:45:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1697521521; x=1698126321; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=eTPon32JpfuzRNvtltenUlD8VwAiIQ3b0g3UQ/8lPys=;
+        b=f1fx4pZYdENQElgLBsTKZ1HEubIu1kxKFKWaZ+Hzsf8Ko5j5Mp4FGlz9dg9Tz3r11/
+         IwTsL57pc8CEQQrl+m3i7Q3lsjxotIdKWkf0WroOQVJaaZ2tFcHnI0wbVUuv9Toparzr
+         Dsib1qXyTUj5SK3caxmHg6MnpTp8NXwa2V9uejns98t4f+Bw5RwjL6PbAHUwQ26NBQA8
+         SX1VrRyAUNP8yiCtQ1oaoF9yLQZhS+6IM+Ei9TgdSEMXjgMdK0ewZwOrq2yQnmmzic6s
+         aR7Zqd5kecvkwcrGNoWtMEINDcV/wIeK2sT91+zlldnhlcUxmurPGdE+XfFIf9KFboTI
+         oSRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697521521; x=1698126321;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=eTPon32JpfuzRNvtltenUlD8VwAiIQ3b0g3UQ/8lPys=;
+        b=v6HwJ7t5sy1kq2E8v25q7CRA+FRH48cK++U+i5oMfjY6VGTCv3rLihUj/m+Fn9jh9s
+         oJkb/f3f+SfQ9Qe7LE2bvh+Yhx2NG7KDOxvzOgnEF2rPyazcAEbXWqREYU0bFFZLyFAF
+         +i5Abb7WDagjan1TqWjzewYM5x70EpFW3tIXVciWuZ8RhHt5uQQNPiSFEWOuOW4Af40A
+         rDLj4CHRmIOCdv7zwPN2/BkdGGBoBU0RSfR5G/CTWzEXd6p2p2QsdYbtYWlE+kresrZ1
+         /Nw5dcse/accRcIVve4cnoqi0EeZaFi63DCJ376A23UABLJQSTa8JUWz9jHd5Zqdm+Jc
+         P2jQ==
+X-Gm-Message-State: AOJu0YwC+uCUk9YsoHmEwnmSdtDkvyGqckbdzF8FMOgbUkrBu5Ri1GXE
+        TlFlxBGaYxl9uGmXXjLppvRNXw==
+X-Google-Smtp-Source: AGHT+IHs3B7noUBTeQn7HYvMJMcEsF3Esl+YvcRhoVp01N9+CZVaf7/PFCNBrx3Rm5TotCf3NsmByA==
+X-Received: by 2002:a5d:4c8a:0:b0:32d:a335:e33d with SMTP id z10-20020a5d4c8a000000b0032da335e33dmr973868wrs.58.1697521521578;
+        Mon, 16 Oct 2023 22:45:21 -0700 (PDT)
+Received: from [192.168.86.24] ([5.133.47.210])
+        by smtp.googlemail.com with ESMTPSA id i3-20020a5d4383000000b003232380ffd7sm809226wrq.102.2023.10.16.22.45.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 Oct 2023 22:45:20 -0700 (PDT)
+Message-ID: <02ce70da-346b-6c24-b7ed-8f5b30f1c99b@linaro.org>
+Date:   Tue, 17 Oct 2023 06:45:19 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] staging: rtl8192u: Remove broken driver
-To:     Philipp Hortmann <philipp.g.hortmann@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Cc:     Arnd Bergmann <arnd@arndb.de>, Kalle Valo <kvalo@kernel.org>,
-        Larry Finger <Larry.Finger@lwfinger.net>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: linux-next: duplicate patches in the nvmem tree
+Content-Language: en-US
+To:     Stephen Rothwell <sfr@canb.auug.org.au>, Greg KH <greg@kroah.com>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20231014211051.GA29518@matrix-ESPRIMO-P710>
-Content-Language: en-US, de-DE
-From:   Thorsten Leemhuis <linux@leemhuis.info>
-Autocrypt: addr=linux@leemhuis.info; keydata=
- xsFNBFJ4AQ0BEADCz16x4kl/YGBegAsYXJMjFRi3QOr2YMmcNuu1fdsi3XnM+xMRaukWby47
- JcsZYLDKRHTQ/Lalw9L1HI3NRwK+9ayjg31wFdekgsuPbu4x5RGDIfyNpd378Upa8SUmvHik
- apCnzsxPTEE4Z2KUxBIwTvg+snEjgZ03EIQEi5cKmnlaUynNqv3xaGstx5jMCEnR2X54rH8j
- QPvo2l5/79Po58f6DhxV2RrOrOjQIQcPZ6kUqwLi6EQOi92NS9Uy6jbZcrMqPIRqJZ/tTKIR
- OLWsEjNrc3PMcve+NmORiEgLFclN8kHbPl1tLo4M5jN9xmsa0OZv3M0katqW8kC1hzR7mhz+
- Rv4MgnbkPDDO086HjQBlS6Zzo49fQB2JErs5nZ0mwkqlETu6emhxneAMcc67+ZtTeUj54K2y
- Iu8kk6ghaUAfgMqkdIzeSfhO8eURMhvwzSpsqhUs7pIj4u0TPN8OFAvxE/3adoUwMaB+/plk
- sNe9RsHHPV+7LGADZ6OzOWWftk34QLTVTcz02bGyxLNIkhY+vIJpZWX9UrfGdHSiyYThHCIy
- /dLz95b9EG+1tbCIyNynr9TjIOmtLOk7ssB3kL3XQGgmdQ+rJ3zckJUQapLKP2YfBi+8P1iP
- rKkYtbWk0u/FmCbxcBA31KqXQZoR4cd1PJ1PDCe7/DxeoYMVuwARAQABzSdUaG9yc3RlbiBM
- ZWVtaHVpcyA8bGludXhAbGVlbWh1aXMuaW5mbz7CwZQEEwEKAD4CGwMFCwkIBwMFFQoJCAsF
- FgIDAQACHgECF4AWIQSoq8a+lZZX4oPULXVytubvTFg9LQUCX31PIwUJFmtPkwAKCRBytubv
- TFg9LWsyD/4t3g4i2YVp8RoKAcOut0AZ7/uLSqlm8Jcbb+LeeuzjY9T3mQ4ZX8cybc1jRlsL
- JMYL8GD3a53/+bXCDdk2HhQKUwBJ9PUDbfWa2E/pnqeJeX6naLn1LtMJ78G9gPeG81dX5Yq+
- g/2bLXyWefpejlaefaM0GviCt00kG4R/mJJpHPKIPxPbOPY2REzWPoHXJpi7vTOA2R8HrFg/
- QJbnA25W55DzoxlRb/nGZYG4iQ+2Eplkweq3s3tN88MxzNpsxZp475RmzgcmQpUtKND7Pw+8
- zTDPmEzkHcUChMEmrhgWc2OCuAu3/ezsw7RnWV0k9Pl5AGROaDqvARUtopQ3yEDAdV6eil2z
- TvbrokZQca2808v2rYO3TtvtRMtmW/M/yyR233G/JSNos4lODkCwd16GKjERYj+sJsW4/hoZ
- RQiJQBxjnYr+p26JEvghLE1BMnTK24i88Oo8v+AngR6JBxwH7wFuEIIuLCB9Aagb+TKsf+0c
- HbQaHZj+wSY5FwgKi6psJxvMxpRpLqPsgl+awFPHARktdPtMzSa+kWMhXC4rJahBC5eEjNmP
- i23DaFWm8BE9LNjdG8Yl5hl7Zx0mwtnQas7+z6XymGuhNXCOevXVEqm1E42fptYMNiANmrpA
- OKRF+BHOreakveezlpOz8OtUhsew9b/BsAHXBCEEOuuUg87BTQRSeAENARAAzu/3satWzly6
- +Lqi5dTFS9+hKvFMtdRb/vW4o9CQsMqL2BJGoE4uXvy3cancvcyodzTXCUxbesNP779JqeHy
- s7WkF2mtLVX2lnyXSUBm/ONwasuK7KLz8qusseUssvjJPDdw8mRLAWvjcsYsZ0qgIU6kBbvY
- ckUWkbJj/0kuQCmmulRMcaQRrRYrk7ZdUOjaYmjKR+UJHljxLgeregyiXulRJxCphP5migoy
- ioa1eset8iF9fhb+YWY16X1I3TnucVCiXixzxwn3uwiVGg28n+vdfZ5lackCOj6iK4+lfzld
- z4NfIXK+8/R1wD9yOj1rr3OsjDqOaugoMxgEFOiwhQDiJlRKVaDbfmC1G5N1YfQIn90znEYc
- M7+Sp8Rc5RUgN5yfuwyicifIJQCtiWgjF8ttcIEuKg0TmGb6HQHAtGaBXKyXGQulD1CmBHIW
- zg7bGge5R66hdbq1BiMX5Qdk/o3Sr2OLCrxWhqMdreJFLzboEc0S13BCxVglnPqdv5sd7veb
- 0az5LGS6zyVTdTbuPUu4C1ZbstPbuCBwSwe3ERpvpmdIzHtIK4G9iGIR3Seo0oWOzQvkFn8m
- 2k6H2/Delz9IcHEefSe5u0GjIA18bZEt7R2k8CMZ84vpyWOchgwXK2DNXAOzq4zwV8W4TiYi
- FiIVXfSj185vCpuE7j0ugp0AEQEAAcLBfAQYAQoAJgIbDBYhBKirxr6Vllfig9QtdXK25u9M
- WD0tBQJffU8wBQkWa0+jAAoJEHK25u9MWD0tv+0P/A47x8r+hekpuF2KvPpGi3M6rFpdPfeO
- RpIGkjQWk5M+oF0YH3vtb0+92J7LKfJwv7GIy2PZO2svVnIeCOvXzEM/7G1n5zmNMYGZkSyf
- x9dnNCjNl10CmuTYud7zsd3cXDku0T+Ow5Dhnk6l4bbJSYzFEbz3B8zMZGrs9EhqNzTLTZ8S
- Mznmtkxcbb3f/o5SW9NhH60mQ23bB3bBbX1wUQAmMjaDQ/Nt5oHWHN0/6wLyF4lStBGCKN9a
- TLp6E3100BuTCUCrQf9F3kB7BC92VHvobqYmvLTCTcbxFS4JNuT+ZyV+xR5JiV+2g2HwhxWW
- uC88BtriqL4atyvtuybQT+56IiiU2gszQ+oxR/1Aq+VZHdUeC6lijFiQblqV6EjenJu+pR9A
- 7EElGPPmYdO1WQbBrmuOrFuO6wQrbo0TbUiaxYWyoM9cA7v7eFyaxgwXBSWKbo/bcAAViqLW
- ysaCIZqWxrlhHWWmJMvowVMkB92uPVkxs5IMhSxHS4c2PfZ6D5kvrs3URvIc6zyOrgIaHNzR
- 8AF4PXWPAuZu1oaG/XKwzMqN/Y/AoxWrCFZNHE27E1RrMhDgmyzIzWQTffJsVPDMQqDfLBhV
- ic3b8Yec+Kn+ExIF5IuLfHkUgIUs83kDGGbV+wM8NtlGmCXmatyavUwNCXMsuI24HPl7gV2h n7RI
-In-Reply-To: <20231014211051.GA29518@matrix-ESPRIMO-P710>
-Content-Type: text/plain; charset=UTF-8
+References: <20231017150714.41a6c640@canb.auug.org.au>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <20231017150714.41a6c640@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1697520832;6052905a;
-X-HE-SMSGID: 1qsciE-0005x2-Fn
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 14.10.23 23:10, Philipp Hortmann wrote:
-> Tests on rtl8192u hardware have shown that this driver is broken since
-> 2016. Remove broken driver. Find fix for two bugs in second link.
+Thanks Stephen,
+
+This is now fixed for both nvmem and fastrpc tree.
+
+--srini
+On 17/10/2023 05:07, Stephen Rothwell wrote:
+> Hi all,
 > 
-> Link: https://lore.kernel.org/lkml/db98d9ac-7650-4a72-8eb9-4def1f17ea0d@app.fastmail.com/
-> Link: https://lore.kernel.org/lkml/cover.1697089416.git.philipp.g.hortmann@gmail.com/
-> Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
-> ---
-> V2: Added 2x links and adapted description.
+> The following commits are also in the char-misc.current tree as different
+> commits (but the same patches):
 > 
-> Did not find any artifacts of rtl8192u in MAINTAINERS.
-> ---
->  drivers/staging/Kconfig                       |    2 -
->  drivers/staging/rtl8192u/Kconfig              |   12 -
-> [...]
-
-My daily linux-next builds for Fedora (based on Fedora rawhide config)
-failed today with this error msg:
-
-"""
-+ /usr/bin/make -s 'HOSTCFLAGS=-O2  -fexceptions -g
--grecord-gcc-switches -pipe -Wall -Werror=format-security
--Werror=implicit-function-declaration -Werror=implicit-int
--Wp,-U_FORTIFY_SOURCE,-D_FORTIFY_SOURCE=3 -Wp,-D_GLIBCXX_ASSERTIONS
--specs=/usr/lib/rpm/redhat/redhat-hardened-cc1 -fstack-protector-strong
--specs=/usr/lib/rpm/redhat/redhat-annobin-cc1  -m64 -mcpu=power8
--mtune=power8 -fasynchronous-unwind-tables -fstack-clash-protection '
-'HOSTLDFLAGS=-Wl,-z,relro -Wl,--as-needed  -Wl,-z,now
--specs=/usr/lib/rpm/redhat/redhat-hardened-ld
--specs=/usr/lib/rpm/redhat/redhat-annobin-cc1  -Wl,--build-id=sha1
--specs=/usr/lib/rpm/redhat/redhat-package-notes ' -j2 mrproper
-scripts/Makefile.clean:12: drivers/staging/rtl8192u/Makefile: No such
-file or directory
-make[5]: *** No rule to make target 'drivers/staging/rtl8192u/Makefile'.
- Stop.
-make[4]: *** [scripts/Makefile.clean:61: drivers/staging/rtl8192u] Error 2
-make[3]: *** [scripts/Makefile.clean:61: drivers/staging] Error 2
-make[3]: *** Waiting for unfinished jobs....
-make[2]: *** [scripts/Makefile.clean:61: drivers] Error 2
-make[1]: ***
-[/builddir/build/BUILD/kernel-next-20231017/linux-6.6.0-0.0.next.20231017.447.vanilla.fc40.ppc64le/Makefile:1920:
-_clean_.] Error 2
-make: *** [Makefile:236: __sub-make] Error 2
-error: Bad exit status from /var/tmp/rpm-tmp.TJDlJV (%build)
-"""
-
-Full log:
-https://copr-be.cloud.fedoraproject.org/results/@kernel-vanilla/next/fedora-rawhide-ppc64le/06536998-next-next-all/builder-live.log.gz
-
-Made me wonder if this patch left something behind; a quick grep showed
-something suspicious in drivers/staging/Makefile:
-"""
-obj-$(CONFIG_RTL8192U)		+= rtl8192u/
-"""
-
-Ciao, Thorsten
+>    d0b450caca6f ("nvmem: imx: correct nregs for i.MX6ULL")
+>    f46cfdaf5c07 ("nvmem: imx: correct nregs for i.MX6UL")
+>    e898831a6683 ("nvmem: imx: correct nregs for i.MX6SLL")
+> 
+> These are commits
+> 
+>    2382c1b04423 ("nvmem: imx: correct nregs for i.MX6ULL")
+>    7d6e10f5d254 ("nvmem: imx: correct nregs for i.MX6UL")
+>    414a98abbefd ("nvmem: imx: correct nregs for i.MX6SLL")
+> 
+> in the char-misc.current tree.
+> 

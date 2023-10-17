@@ -2,93 +2,66 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECA7E7CC01F
-	for <lists+linux-next@lfdr.de>; Tue, 17 Oct 2023 12:06:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 820787CC193
+	for <lists+linux-next@lfdr.de>; Tue, 17 Oct 2023 13:13:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234794AbjJQKGY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 17 Oct 2023 06:06:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52724 "EHLO
+        id S234422AbjJQLNH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 17 Oct 2023 07:13:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234787AbjJQKGX (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 17 Oct 2023 06:06:23 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CC4D8A2;
-        Tue, 17 Oct 2023 03:06:21 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6A82C2F4;
-        Tue, 17 Oct 2023 03:07:01 -0700 (PDT)
-Received: from [10.1.197.1] (ewhatever.cambridge.arm.com [10.1.197.1])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 825A03F762;
-        Tue, 17 Oct 2023 03:06:19 -0700 (PDT)
-Message-ID: <44b9a917-c8e1-4166-b31a-b094eb762d2d@arm.com>
-Date:   Tue, 17 Oct 2023 11:06:17 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] Documentation: ABI: coresight-tpdm: Fix Bit[3]
- description indentation
-Content-Language: en-US
-To:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        Linux CoreSight <coresight@lists.linaro.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Documentation <linux-doc@vger.kernel.org>,
+        with ESMTP id S233570AbjJQLNG (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 17 Oct 2023 07:13:06 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E9B5A2;
+        Tue, 17 Oct 2023 04:13:05 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8141CC433C8;
+        Tue, 17 Oct 2023 11:13:03 +0000 (UTC)
+Date:   Tue, 17 Oct 2023 12:13:00 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Christoffer Dall <cdall@cs.columbia.edu>,
+        Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Mike Leach <mike.leach@linaro.org>,
-        James Clark <james.clark@arm.com>,
-        Tao Zhang <quic_taozha@quicinc.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-References: <20231017095608.136277-1-bagasdotme@gmail.com>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <20231017095608.136277-1-bagasdotme@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>
+Subject: Re: linux-next: manual merge of the kvm-arm tree with the arm64 tree
+Message-ID: <ZS5sPNRe3GaOVN23@arm.com>
+References: <20231017123017.3907baac@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231017123017.3907baac@canb.auug.org.au>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 17/10/2023 10:56, Bagas Sanjaya wrote:
-> Stephen Rothwell reported htmldocs warnings when merging coresight tree:
+On Tue, Oct 17, 2023 at 12:30:17PM +1100, Stephen Rothwell wrote:
+> Today's linux-next merge of the kvm-arm tree got a conflict in:
 > 
-> Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm:48: ERROR: Unexpected indentation.
-> Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm:48: WARNING: Block quote ends without a blank line; unexpected unindent.
+>   arch/arm64/kvm/arm.c
 > 
-> Fix indentation alignment for Bit[3] list entry in dsb_mode description to
-> silence above warnings.
+> between commit:
 > 
-> Fixes: 535d80d3c10fff ("coresight-tpdm: Add node to set dsb programming mode")
-> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> Closes: https://lore.kernel.org/linux-next/20231017143324.75387a21@canb.auug.org.au/
-> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
-> ---
->   Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
+>   d8569fba1385 ("arm64: kvm: Use cpus_have_final_cap() explicitly")
 > 
-> diff --git a/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm b/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
-> index f07218e788439d..4dd49b159543b6 100644
-> --- a/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
-> +++ b/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
-> @@ -54,8 +54,8 @@ Description:
->   		Accepts the value needs to be greater than 0. What data
->   		bits do is listed below.
->   		Bit[0:1] : Test mode control bit for choosing the inputs.
-> -		Bit[3] : Set to 0 for low performance mode.
-> -				 Set to 1 for high performance mode.
-> +		Bit[3] : Set to 0 for low performance mode. Set to 1 for high
-> +		performance mode.
->   		Bit[4:8] : Select byte lane for high performance mode.
->   
->   What:		/sys/bus/coresight/devices/<tpdm-name>/dsb_edge/ctrl_idx
+> from the arm64 tree and commit:
 > 
-> base-commit: 90a7371cb08d7e542fa4f283c881973bba09f23b
+>   ef150908b6bd ("KVM: arm64: Add generic check for system-supported vCPU features")
+> 
+> from the kvm-arm tree.
+> 
+> I fixed it up (I just used the latter) and can carry the fix as
+> necessary.
 
+Thanks Stephen. The fix looks fine, removing the
+cpus_have_final_cap(ARM64_HAS_32BIT_EL1) check in
+kvm_vcpu_init_check_features().
 
-Thanks, confirmed the patch to fix the issue. I have queued this to next.
-
-   https://git.kernel.org/coresight/c/845333e5f0f3
-
-Thanks
-Suzuki
+-- 
+Catalin

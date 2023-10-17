@@ -2,48 +2,45 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADB637CB7F8
-	for <lists+linux-next@lfdr.de>; Tue, 17 Oct 2023 03:30:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46CCE7CB953
+	for <lists+linux-next@lfdr.de>; Tue, 17 Oct 2023 05:33:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232411AbjJQBaY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 16 Oct 2023 21:30:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53374 "EHLO
+        id S231856AbjJQDdb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 16 Oct 2023 23:33:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231955AbjJQBaY (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 16 Oct 2023 21:30:24 -0400
+        with ESMTP id S230343AbjJQDda (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 16 Oct 2023 23:33:30 -0400
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A1C8AB;
-        Mon, 16 Oct 2023 18:30:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EEF995;
+        Mon, 16 Oct 2023 20:33:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1697506220;
-        bh=Q2fe3Ax/XToviOfwG/USlwkvyK64Re+kcHB9byMn4Qc=;
+        s=201702; t=1697513607;
+        bh=yRCoJV2qMIFqEbhhzDz5mR7MIpIhV2mYtHd7OSPZP3c=;
         h=Date:From:To:Cc:Subject:From;
-        b=aVfXG4rvQwkg7hEYTCQ//Ce13lpfeouKTHaZYk697NX1g9qjLKQNxCi8lHUqXWg4E
-         MtykLoZAArqvmjlQ5IkYYIIIs2pB73kdrXLDnmYL2TRaQx7mR4XdOXsJQWJWIPysR0
-         bmlLsLQHEd8SklhFerwDNarRhsEs4WqVkezAKl+Jbkns4CWO9d9imgSHM4ubyONsG7
-         mv/9a0IhWJ7I+jH1BZmT6LlyE+O4peqlQgGN//ARXRn/x1icIZrYZ0yOjpzVJkwoyk
-         qDRJ0Sn6vRWPrCjLQo8S582GWdT88LoQ22+Gou89QRGduwBFYtigEneZI9EvGlo9vu
-         xwxRrRK2vShTg==
+        b=mdFY+N4ZVgHPzWQlyX9busDAuj0PlVhY1H4nZ003gaKxCgGw+K15XnFbxcik9x5Tn
+         +yyg9XDwMHLyCX7zuzgnqzdj5D8zfIR9GRVst9/Z+mPblR5qFSQGpA+TXDbLc9hLs/
+         68RDOGIR3U5nuecWvwZB/b8t7jpkxsEEs7u2OR67Iuzrv37w2l0GBSICDsfPW8sD0j
+         //m+fGrbQQ2wjNajzxKyCFtHtKvE1Yq43/577aV9WTe1Zz5ICiyyuXRdr7h+8xr/lc
+         lIUO+IsFeDM3Ue916yrYPWGIRQ8MtD8NuFwq9dtgjwBMo1PoGiBmQafxMFlNJF8ed4
+         ZIAR9Ck/XfmkQ==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4S8byM5Jw6z4wcf;
-        Tue, 17 Oct 2023 12:30:19 +1100 (AEDT)
-Date:   Tue, 17 Oct 2023 12:30:17 +1100
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4S8fhQ4Lzpz4wch;
+        Tue, 17 Oct 2023 14:33:26 +1100 (AEDT)
+Date:   Tue, 17 Oct 2023 14:33:24 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Christoffer Dall <cdall@cs.columbia.edu>,
-        Marc Zyngier <maz@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>
-Subject: linux-next: manual merge of the kvm-arm tree with the arm64 tree
-Message-ID: <20231017123017.3907baac@canb.auug.org.au>
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc:     Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Tao Zhang <quic_taozha@quicinc.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build warning after merge of the coresight tree
+Message-ID: <20231017143324.75387a21@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/50XVF6ViMpX4.y.BB1WplxR";
+Content-Type: multipart/signed; boundary="Sig_/hlAWXj6I76=5sGfcwUdaAFI";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS
@@ -54,52 +51,42 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/50XVF6ViMpX4.y.BB1WplxR
+--Sig_/hlAWXj6I76=5sGfcwUdaAFI
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the kvm-arm tree got a conflict in:
+After merging the coresight tree, today's linux-next build (htmldocs)
+produced this warning:
 
-  arch/arm64/kvm/arm.c
+Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm:48: ERROR: Unexp=
+ected indentation.
+Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm:48: WARNING: Blo=
+ck quote ends without a blank line; unexpected unindent.
 
-between commit:
+Introduced by commit
 
-  d8569fba1385 ("arm64: kvm: Use cpus_have_final_cap() explicitly")
-
-from the arm64 tree and commit:
-
-  ef150908b6bd ("KVM: arm64: Add generic check for system-supported vCPU fe=
-atures")
-
-from the kvm-arm tree.
-
-I fixed it up (I just used the latter) and can carry the fix as
-necessary. This is now fixed as far as linux-next is concerned, but any
-non trivial conflicts should be mentioned to your upstream maintainer
-when your tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
+  535d80d3c10f ("coresight-tpdm: Add node to set dsb programming mode")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/50XVF6ViMpX4.y.BB1WplxR
+--Sig_/hlAWXj6I76=5sGfcwUdaAFI
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmUt46kACgkQAVBC80lX
-0GxkHAgAhlQlvJz1zakFg+zxpviTi/spDGQRUfRn/V99p7H4qFfphq0GaW6/LBrL
-ZwBc6KeoECdVKHAIqUAqBn4A3gj4+ccqrTzKQBFx1DYiigvaYfbdiP2TkyPxVIEG
-D8Z6NWqDMs7cloluXLgKKoByQVPkmGql4/15q8Q70e0wORLl8HfgR66RI7hPOEsF
-sV2dXXBEMdQrGgnVymp1eS6seUKs+Pnj4FH7f/gs4UQYZkWhqNJnwpl5vS5onh3N
-SJmG4lSu+t6Cb3FcLWC0Escl1BJMvSWyjmZLqQDl2vPUOynQzeCbrGEFZpMMsKNv
-wDdiABlOzF2ikSVoS+33FKbM1TJBPw==
-=piPe
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmUuAIQACgkQAVBC80lX
+0GwNAQf+Od26e1yZPYGGbPN0wIyGR6p7bouebBzVJTsGML0sACW1hjp5j6BIZh7+
+brw8kDZJ0ClAX/LaCYFrpzPpOi3O3KRbWQzoiXOaJX/wNy9EShdsrqo06NYtwOka
+JF2H4Ddl8zpb0Xwy7wHyGcpQIG1coBAvo56euNSDGOny7IRF/d+32dTcJCmhMsni
+943Z096VH1Mrh2STWErGeaRcVNDGXdfJe/HyAif2Mt0vtklAF/0cDWUGihSMMgPY
+mMm8DWH0g4Ptape8yH0CJvwS/VbJbRSWwPC+/zrBTmVsMDEsInEJnqDLksdjIWTi
+Uuc1bRxr6d1d2rLvAtlFfw1Qn/971Q==
+=FKcj
 -----END PGP SIGNATURE-----
 
---Sig_/50XVF6ViMpX4.y.BB1WplxR--
+--Sig_/hlAWXj6I76=5sGfcwUdaAFI--

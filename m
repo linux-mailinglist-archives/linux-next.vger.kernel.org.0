@@ -2,44 +2,48 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE2077CB97A
-	for <lists+linux-next@lfdr.de>; Tue, 17 Oct 2023 06:00:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A87397CB97D
+	for <lists+linux-next@lfdr.de>; Tue, 17 Oct 2023 06:03:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229666AbjJQEAY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 17 Oct 2023 00:00:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41526 "EHLO
+        id S232600AbjJQEDd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 17 Oct 2023 00:03:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjJQEAX (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 17 Oct 2023 00:00:23 -0400
+        with ESMTP id S232411AbjJQEDc (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 17 Oct 2023 00:03:32 -0400
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5E8183;
-        Mon, 16 Oct 2023 21:00:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEE568E;
+        Mon, 16 Oct 2023 21:03:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1697515219;
-        bh=jGDR2Zwbs2Lpc9XLlomjkKU+2fXHEuCiylkyXFOsWU4=;
+        s=201702; t=1697515408;
+        bh=vY6L67o1M+lk+1IXG4n2Wxcfhns8Gi2hUdwEHjhfXDE=;
         h=Date:From:To:Cc:Subject:From;
-        b=plD63xHz/he7SkQqaD9ajaigBnrvXZ+AFDmPA4M4YEygijeTZAo+ITlJ3aKY1c81r
-         KzYf5vZKsLoWIGjv81Jyv0Rn8hxR5kYaa0RwvHRTCeOhuYfBGstVIVe+vKD2mX6bTp
-         fYIbGPZpz/t5MJKPyekfxHNBEpdfNAt5qapxovErMnTNqeuXUmUGqKfN7pV/74Q7gC
-         Qtyg2EekDldq48XGdp13uT73jEaEqZxtfI0Ano/+/aUYenXOqPeD7FkkuPUOBctauX
-         FFEP0i9QWGL5n7NvB0O/s0Cwxa8S8lbNPs106Lev404MKVoIsX5PpDLbgq/fk3QKSL
-         01rRlnT6alxMQ==
+        b=HEUWmfAVVSaDVQNvzHebGuTZWJdTS+5muuxnsAcoLLO6sDFTZjO9kOvJqpw1+CghN
+         M4ixMysNTiN62kalj6Rglf9xugCef3T+zUxmC0wJnZdACbFfQSFDYDVUrjKmkWZ5ku
+         IQS9bBdvugFpqEbYg/p6iEpV+Ul3Jwt17k4/2WeaqD38xbqyiSovJ+ZLouI7BfYvUR
+         me/EWZX1mB9EzSrMw486n/jA7WU37IwO2Ws8Ux4psVP5GultOaf9HUJ6f8iZFr/Hvd
+         ItR9IeRehzPu+OCNla8dJrWT/hnJU61JyitLx7ZFR1SBf/1C3dTnWy87VfgXqNQcOf
+         9NWY0TJeRY4sg==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4S8gHQ0SmZz4x1w;
-        Tue, 17 Oct 2023 15:00:18 +1100 (AEDT)
-Date:   Tue, 17 Oct 2023 15:00:17 +1100
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4S8gM26gvgz4x1w;
+        Tue, 17 Oct 2023 15:03:26 +1100 (AEDT)
+Date:   Tue, 17 Oct 2023 15:03:25 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Srini Kandagatla <srinivas.kandagatla@linaro.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Greg KH <greg@kroah.com>, Arnd Bergmann <arnd@arndb.de>
-Subject: linux-next: duplicate patches in the fastrpc tree
-Message-ID: <20231017150017.01bedf80@canb.auug.org.au>
+To:     Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Binbin Wu <binbin.wu@linux.intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patch in the kselftest tree
+Message-ID: <20231017150325.4a89ab71@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/T.EUqDcZ7D7Pmj4p4dCASHE";
+Content-Type: multipart/signed; boundary="Sig_/8z92Rr09d+q8PTb2e+IIzzo";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS
@@ -50,51 +54,41 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/T.EUqDcZ7D7Pmj4p4dCASHE
+--Sig_/8z92Rr09d+q8PTb2e+IIzzo
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-The following commits are also in the char-misc.current tree as different
-commits (but the same patches):
+The following commit is also in the tip tree as a different commit
+(but the same patch):
 
-  9fffb8240581 ("misc: fastrpc: Clean buffers on remote invocation failures=
-")
-  3f01aaeb9fd3 ("misc: fastrpc: Free DMA handles for RPC calls with no argu=
-ments")
-  c44e396924d3 ("misc: fastrpc: Reset metadata buffer to avoid incorrect fr=
-ee")
+  197964fc3274 ("selftests/x86/lam: Zero out buffer for readlink()")
 
-These are commits
+This is commit
 
-  1c8093591d1e ("misc: fastrpc: Clean buffers on remote invocation failures=
-")
-  206484303892 ("misc: fastrpc: Free DMA handles for RPC calls with no argu=
-ments")
-  1c29d80134ac ("misc: fastrpc: Reset metadata buffer to avoid incorrect fr=
-ee")
+  29060633411a ("selftests/x86/lam: Zero out buffer for readlink()")
 
-in the char-misc.current tree.
+in the tip tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/T.EUqDcZ7D7Pmj4p4dCASHE
+--Sig_/8z92Rr09d+q8PTb2e+IIzzo
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmUuBtEACgkQAVBC80lX
-0GxqpAf+PrUH0cz/ecWrVJ9h94Wsj23E/z5+p8Mx9O9VTz6MrIBetda3MFLsotfr
-RvmhtUVwPZMsLby7n7kC4ZcaUVogUeWBXd3FeqfhOKyeiSll+4QYUUMfiU5NDAi7
-/jovF9epWjhEM7f7KiZqK8E/2IBJv8yWcduurZsEzdIQ+pxD2nMzWFqGQn0uFfad
-4JRx10vyBV9IdYbr8FzCh/Zqg+xFeSbLb5nymnVjF+1/ccmBnEoW/r+9xE1CIoen
-AAB+13RP2X2qNvTz9dwz/D1ZeMdfnjhJh689/72zcUKnK8i7VWhz2N9DB70lCRbt
-mLyRkcTw80fkB+T6Tn4bY7WM7CHkMw==
-=i9/d
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmUuB40ACgkQAVBC80lX
+0GxNrgf9FC7rCi3I7v3vM0ohOEspPf+76xIlHanDQ5YBAUTSshzkwdogB54WRGi7
+n4NcOP7Xko7lEbh06eZANKNjJrtTXeAokcSILYf2WcLOW+6epV/eNIhJStQI7SoI
+m6RE5Y0LRfFfDeFm3DkeDUkVUSGSR1e6LLGmPCKSjlJycTNt2XltUM4pcj9JXlC1
+0AFqbFQwqX/amU9Aah2h8361mBIkCNVYM+LBmvWcgM0bUnsor7Kyg2hMauBMV1GP
+qHdAMLsTcvmEj+/cBssSuvdi26EXOvDR9uW36fkcvaqvkDTKSsEfu8Sn8tpEej/i
+/n9EK5OczKfMBye7XBXZ2l8vwYXYww==
+=Oelv
 -----END PGP SIGNATURE-----
 
---Sig_/T.EUqDcZ7D7Pmj4p4dCASHE--
+--Sig_/8z92Rr09d+q8PTb2e+IIzzo--

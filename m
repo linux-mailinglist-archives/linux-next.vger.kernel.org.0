@@ -2,48 +2,44 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A87397CB97D
-	for <lists+linux-next@lfdr.de>; Tue, 17 Oct 2023 06:03:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86D497CB982
+	for <lists+linux-next@lfdr.de>; Tue, 17 Oct 2023 06:07:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232600AbjJQEDd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 17 Oct 2023 00:03:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54482 "EHLO
+        id S231955AbjJQEHT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 17 Oct 2023 00:07:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232411AbjJQEDc (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 17 Oct 2023 00:03:32 -0400
+        with ESMTP id S229666AbjJQEHS (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 17 Oct 2023 00:07:18 -0400
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEE568E;
-        Mon, 16 Oct 2023 21:03:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECF2F83;
+        Mon, 16 Oct 2023 21:07:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1697515408;
-        bh=vY6L67o1M+lk+1IXG4n2Wxcfhns8Gi2hUdwEHjhfXDE=;
+        s=201702; t=1697515635;
+        bh=8yC14mMPUG4EM1Te+1TbcoTuJ/AgGXdtJL9pp/11p+8=;
         h=Date:From:To:Cc:Subject:From;
-        b=HEUWmfAVVSaDVQNvzHebGuTZWJdTS+5muuxnsAcoLLO6sDFTZjO9kOvJqpw1+CghN
-         M4ixMysNTiN62kalj6Rglf9xugCef3T+zUxmC0wJnZdACbFfQSFDYDVUrjKmkWZ5ku
-         IQS9bBdvugFpqEbYg/p6iEpV+Ul3Jwt17k4/2WeaqD38xbqyiSovJ+ZLouI7BfYvUR
-         me/EWZX1mB9EzSrMw486n/jA7WU37IwO2Ws8Ux4psVP5GultOaf9HUJ6f8iZFr/Hvd
-         ItR9IeRehzPu+OCNla8dJrWT/hnJU61JyitLx7ZFR1SBf/1C3dTnWy87VfgXqNQcOf
-         9NWY0TJeRY4sg==
+        b=o6734GUN/kRFflqdNm2t1PUL7GOJTXID/fHDg8L17nHbuNw2ou8UIiC09cymsHbPM
+         GxKIheKSROmgvsAxbWF/IXiDK8RrRqhQFBSneyxiMAoDktIO5EdKWxeM2DveCdf/lU
+         eUSnCoMrNhlR24fxOiZ22MruhvU946NDOwVkSe5Y/WP3dK6E4TJlOthv5eOlJwbXTy
+         5Mnd06X1ej4DVZ5wZb7zqOSzs0uXWs4TmgXqDAh0n7TUARWpqXWAajQMrxJ7dsyFGV
+         ozZbNq4WBbvMIxKjGeLAwqHg6fIysWNbv9WBrwrIUPJnHwL+dPI3IR93GXNyvzgZHu
+         pH2M7PUemikxQ==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4S8gM26gvgz4x1w;
-        Tue, 17 Oct 2023 15:03:26 +1100 (AEDT)
-Date:   Tue, 17 Oct 2023 15:03:25 +1100
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4S8gRR0jgBz4wxZ;
+        Tue, 17 Oct 2023 15:07:15 +1100 (AEDT)
+Date:   Tue, 17 Oct 2023 15:07:14 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Binbin Wu <binbin.wu@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Greg KH <greg@kroah.com>, Arnd Bergmann <arnd@arndb.de>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patch in the kselftest tree
-Message-ID: <20231017150325.4a89ab71@canb.auug.org.au>
+Subject: linux-next: duplicate patches in the nvmem tree
+Message-ID: <20231017150714.41a6c640@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/8z92Rr09d+q8PTb2e+IIzzo";
+Content-Type: multipart/signed; boundary="Sig_/ChICRx5d1PBQfeJ7MUaADPg";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS
@@ -54,41 +50,45 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/8z92Rr09d+q8PTb2e+IIzzo
+--Sig_/ChICRx5d1PBQfeJ7MUaADPg
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-The following commit is also in the tip tree as a different commit
-(but the same patch):
+The following commits are also in the char-misc.current tree as different
+commits (but the same patches):
 
-  197964fc3274 ("selftests/x86/lam: Zero out buffer for readlink()")
+  d0b450caca6f ("nvmem: imx: correct nregs for i.MX6ULL")
+  f46cfdaf5c07 ("nvmem: imx: correct nregs for i.MX6UL")
+  e898831a6683 ("nvmem: imx: correct nregs for i.MX6SLL")
 
-This is commit
+These are commits
 
-  29060633411a ("selftests/x86/lam: Zero out buffer for readlink()")
+  2382c1b04423 ("nvmem: imx: correct nregs for i.MX6ULL")
+  7d6e10f5d254 ("nvmem: imx: correct nregs for i.MX6UL")
+  414a98abbefd ("nvmem: imx: correct nregs for i.MX6SLL")
 
-in the tip tree.
+in the char-misc.current tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/8z92Rr09d+q8PTb2e+IIzzo
+--Sig_/ChICRx5d1PBQfeJ7MUaADPg
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmUuB40ACgkQAVBC80lX
-0GxNrgf9FC7rCi3I7v3vM0ohOEspPf+76xIlHanDQ5YBAUTSshzkwdogB54WRGi7
-n4NcOP7Xko7lEbh06eZANKNjJrtTXeAokcSILYf2WcLOW+6epV/eNIhJStQI7SoI
-m6RE5Y0LRfFfDeFm3DkeDUkVUSGSR1e6LLGmPCKSjlJycTNt2XltUM4pcj9JXlC1
-0AFqbFQwqX/amU9Aah2h8361mBIkCNVYM+LBmvWcgM0bUnsor7Kyg2hMauBMV1GP
-qHdAMLsTcvmEj+/cBssSuvdi26EXOvDR9uW36fkcvaqvkDTKSsEfu8Sn8tpEej/i
-/n9EK5OczKfMBye7XBXZ2l8vwYXYww==
-=Oelv
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmUuCHIACgkQAVBC80lX
+0GxWMgf/WYx+AKY0d/D70gB4MpH7TaVVPfP6KmL83b30G7SX+szgom2iQLF0Tjz+
+Kexv91b2XS/ZrmVTVjrl6snnJ9wzEZgJY0jKqxrddh4FLu4R5Qr6c6nlYueCk5FK
+aZZwOgmH+Zvfqx98f9SK6nEU+nMBfdM/udcuSuv+zz16hJwk5rO/EGSFz7oT8/1v
+NLiuw9aGBznxHUkx5vCcUDAk6blEDRG1HKvE0xLZmpzn8rAQA4Er/IimmlCA/uE2
+P3rYR5EHv+PxD10MnryfJObIVJe58i0EsSbzmwubf5s3MNCGkKqtgUKlxOA2gT+M
+moAoPUBM0FKAk1Rk7JTej7MAPwo6qg==
+=2znh
 -----END PGP SIGNATURE-----
 
---Sig_/8z92Rr09d+q8PTb2e+IIzzo--
+--Sig_/ChICRx5d1PBQfeJ7MUaADPg--

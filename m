@@ -2,47 +2,46 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 862887CB9C7
-	for <lists+linux-next@lfdr.de>; Tue, 17 Oct 2023 06:37:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D305D7CBA26
+	for <lists+linux-next@lfdr.de>; Tue, 17 Oct 2023 07:32:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233862AbjJQEh2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 17 Oct 2023 00:37:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57918 "EHLO
+        id S234341AbjJQFct (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 17 Oct 2023 01:32:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232701AbjJQEh1 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 17 Oct 2023 00:37:27 -0400
+        with ESMTP id S230343AbjJQFcs (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 17 Oct 2023 01:32:48 -0400
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E87883;
-        Mon, 16 Oct 2023 21:37:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFA13A4;
+        Mon, 16 Oct 2023 22:32:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1697517440;
-        bh=XuboyKcRDfv7qeC10HptIe0LloeAfZQqMj5QKhwXjzo=;
+        s=201702; t=1697520763;
+        bh=vMZfWwkElN246pFgTJdzSkVyZOT+LEHzT6mMBxK8ElA=;
         h=Date:From:To:Cc:Subject:From;
-        b=SmndHBoGXSbwhhxObOpJ1OkkRNbKnDfbO75+30JG4kJlS9Pf+nABOEeveIlTT3k8N
-         jl+5RA+swKa/V4lGvX3eqyKNDFqBTqugsOfDltqw39hUwzuw4j1gIKM15FagA6Zy7F
-         imQQ5HvFqx23/TMCpbpeAZ0Ko57Y89oSGsqjO/0r04KNCz0AhcP9cqtCwtp8EPKONE
-         e+f57c2p0kBQu00W8WCah+5jQCRo7gp/M/oZzJyC97XT+Fq2HkxxbuaAySoEe2kBFT
-         haxV07QBbeRIf5rQUcL11YBCgU4hHItiTPeXXRN6TKGwDxdN6WTvuL/98xhDM1/5Vn
-         H7uqkM1WsvYzw==
+        b=tmnyq+sCRJA8EwqUkP0jyiFgPzzbQAkA8N3EqpwvN8iDT2IioU7F8nqLuLbFr6uvY
+         IvW7b3LKt2ueh5HJ3Lk2KdZm2R2eAY5qKLUzGggQSKq71C0GXqLYwBSD/+MQyt0tfN
+         9B9Zzu1Mq1Mkrhpj6n8HcHwG+/FSPxLvXXLVRAPsGiZA5QMfmL+n4JPCi77cfE03Lc
+         yE7aJzdXPyOHE9wElYpdRagZPN8CNS9CFgi5uSeRtbgb4UFJJbaDLO9OjRvCFucVtd
+         KvBv8kv8m23lUAs6dceewazmoLbHlRxJMt5cE7xoWYEIuu/bVjtkB90jk1x643r+/N
+         6gwJeXeuxmYrw==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4S8h684PK3z4xF9;
-        Tue, 17 Oct 2023 15:37:20 +1100 (AEDT)
-Date:   Tue, 17 Oct 2023 15:37:19 +1100
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4S8jL35lqZz4wxZ;
+        Tue, 17 Oct 2023 16:32:43 +1100 (AEDT)
+Date:   Tue, 17 Oct 2023 16:32:42 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patches in the kvm-x86 tree
-Message-ID: <20231017153719.28884723@canb.auug.org.au>
+Subject: linux-next: the fetch of the tomoyo tree failed
+Message-ID: <20231017163242.62af10b3@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/gkrt8ENSZ7oKWjLjGD1spJl";
+Content-Type: multipart/signed; boundary="Sig_/.kgUHYOmDSE3ohIjAL6WlUw";
  protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,44 +49,37 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/gkrt8ENSZ7oKWjLjGD1spJl
+--Sig_/.kgUHYOmDSE3ohIjAL6WlUw
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-The following commits are also in Linus Torvalds' tree as different
-commits (but the same patches):
+It failed like this:
 
-  afb2c7e27a7f ("KVM: selftests: Force load all supported XSAVE state in st=
-ate test")
-  d7b8762ec4a3 ("KVM: selftests: Load XSAVE state into untouched vCPU durin=
-g state test")
-  ff0654c71fb6 ("KVM: selftests: Touch relevant XSAVE state in guest for st=
-ate test")
-  27526efb5cff ("KVM: x86: Constrain guest-supported xfeatures only at KVM_=
-GET_XSAVE{2}")
-  2d287ec65e79 ("x86/fpu: Allow caller to constrain xfeatures when copying =
-to uabi buffer")
+fatal: unable to access 'https://scm.osdn.net/gitroot/tomoyo/tomoyo-test1.g=
+it/': SSL certificate problem: certificate has expired
+
+and indeed it expired at 2023-10-16 23:59:59 UTC.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/gkrt8ENSZ7oKWjLjGD1spJl
+--Sig_/.kgUHYOmDSE3ohIjAL6WlUw
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmUuD38ACgkQAVBC80lX
-0Gw4/AgAhTsDsNzHolULSaZLmoToiZJiDzs9DpRQynd92y9H3+jbvMfZ+0bBd9sH
-Yv/o5XRGSL9fNkK3I70P9cBcPhOiEO8QhNA2/gnbQz+FywYBED4ul8HCRbmZIGG2
-y7wLsvmdQGKlyCoscj/a8W/mJiO+k1mOnz7TG+Uc9ig/0105szQtnJzKVHvn4Ier
-b/uG1Ih18udQrFmtViy5Qyxvp4iuqWruQYVmQ5loM0eGA/xsp04Y55fgNPkOVOO3
-0UO+NlaxhfS4K0rmR5ccHX55DPtPZCDND5GAUfZ1aR4AHY5hez5fOBc5DJ4J7GbJ
-w7pAmTRaLgUks3UREN+/zgEiyx6EaA==
-=4grS
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmUuHHoACgkQAVBC80lX
+0GzZWQf/cCIZo3VUGvwDfJG5e8ohEKpWJ4Rw9GKW2kn6zj6zt6bd3aefXhI8cWDh
+m7sZT3dqTWGTBt0157rzsfb5GoubS+RT60gO4u07Y13L2mpWyip0WKfFZ/GCLwOX
+xlS7L89mnXiP9mwhSHaG92o0vth9jtZV3zWFchdnz6E5ia2tZoQXF398bKA/elc1
+0DkRClgOGK8vySimuT+OssmcrrEiLQxngJJXXeZbNOkcAgnXC4FKSvLjESub3MCK
+NlJW6PTZ8DLZibJsiJr1eN9FXDxz3MrwolIBZfrD6TfzqrKI53udwNzfppHlISy6
+n6BgKe4Bd3e9h79UqLqN9dLhryVXIA==
+=7Fyg
 -----END PGP SIGNATURE-----
 
---Sig_/gkrt8ENSZ7oKWjLjGD1spJl--
+--Sig_/.kgUHYOmDSE3ohIjAL6WlUw--

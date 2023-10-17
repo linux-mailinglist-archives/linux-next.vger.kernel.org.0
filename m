@@ -2,130 +2,94 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A81BD7CB6DE
-	for <lists+linux-next@lfdr.de>; Tue, 17 Oct 2023 01:10:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5193A7CB73F
+	for <lists+linux-next@lfdr.de>; Tue, 17 Oct 2023 02:01:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232172AbjJPXKE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 16 Oct 2023 19:10:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34764 "EHLO
+        id S232845AbjJQAB0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 16 Oct 2023 20:01:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232096AbjJPXKE (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 16 Oct 2023 19:10:04 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D70C95;
-        Mon, 16 Oct 2023 16:10:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=2Anr2/GmGSzWfCGVwKHjuVuOk2nbIkJ1M98MBriCLDc=; b=A/wtu3H9krJKQy0XwnSN8+Ct6t
-        FiULbN6ucAcsx2f6Ry6afN9TQViPSiOzT5MI6q6+WJDfJ6BUrfOS6FxpaotnrAQsEF1//Vd6YRuy4
-        /F/MLXX/I2OJ/sj4DLrBzEhLwJqpmVZkYNhAj2GeYAy0OfB1mFjJ3fRgo8A2qmTAVuOe1DrvOL4M2
-        bx7z6zxDna5MlhPMexoNkXGYaZBjnVA/ZcFR0wx0UR4yTSbe48RslDBmvAU5OOMoyOsUsAYwyXQ0j
-        PrjluEdp5mWBD8Vsx7eKoBvO8jVTYGbOSFm7Be7wSr0HmqtYPszQtL1L58YEyi/TRAmSniFwpX/HS
-        8iU5blag==;
-Received: from [50.53.46.231] (helo=[192.168.254.15])
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qsWil-00AoSx-0a;
-        Mon, 16 Oct 2023 23:09:59 +0000
-Message-ID: <afd142a2-1fa0-46b9-8b2d-7652d41d3ab8@infradead.org>
-Date:   Mon, 16 Oct 2023 16:09:57 -0700
+        with ESMTP id S232096AbjJQABZ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 16 Oct 2023 20:01:25 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01A6792;
+        Mon, 16 Oct 2023 17:01:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1697500882;
+        bh=Mqci4ybMlTPZeaqYRmIwYUtggsalwRpyV58KmvOxUlg=;
+        h=Date:From:To:Cc:Subject:From;
+        b=kqLXsot2rzaj4+0YJqOtHA+2PHhVzjvnDDwE3vK/jYLDMrrIHLn7evUDXy+N+en5l
+         rgIDRt1uGG3zFbNAsYw/z2Vfr5dM2dFrHbC7TP86VIDsVMLwnmE9LYabceuRvVLssV
+         egUpdNg3sHSzl6nWWj6TG8nE2t5HfOJ7U6aEPSmtlum9p2nARgMcv7v8hk2wYG8QNj
+         h3QUgRMtLJWSPk03LsGKS12daBvkLvDGNQbV9hrOOk9bHz1MhWTp+0tJoAGblDQpgd
+         rlsxqV6/FSb/yhVBjbR3XlAYZ0WppEXCWMSjVbGSo66yDQDKETEgUmBblnsnoo1D+O
+         GUhX4SytCqBfQ==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4S8Yzh3FxFz4xNh;
+        Tue, 17 Oct 2023 11:01:20 +1100 (AEDT)
+Date:   Tue, 17 Oct 2023 11:01:18 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>
+Cc:     ARM <linux-arm-kernel@lists.infradead.org>,
+        Uwe =?UTF-8?B?S2xlaW5lLUs=?= =?UTF-8?B?w7ZuaWc=?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patch in the samsung-krzk tree
+Message-ID: <20231017110118.3712e78e@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net] net/smc: Fix dependency of SMC on ISM
-To:     Gerd Bayer <gbayer@linux.ibm.com>, wenjia@linux.ibm.com
-Cc:     linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
-        netdev@vger.kernel.org, raspl@linux.ibm.com, sfr@canb.auug.org.au,
-        alibuda@linux.alibaba.com, wintera@linux.ibm.com,
-        guwen@linux.alibaba.com, tonylu@linux.alibaba.com,
-        jaka@linux.ibm.com
-References: <d9a2d47d-c8bd-cf17-83e0-d9b82561a594@linux.ibm.com>
- <20231006125847.1517840-1-gbayer@linux.ibm.com>
-Content-Language: en-US
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20231006125847.1517840-1-gbayer@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/+=WKpqMhUOl+=t1.jdySmmm";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Gerd,
+--Sig_/+=WKpqMhUOl+=t1.jdySmmm
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On 10/6/23 05:58, Gerd Bayer wrote:
-> When the SMC protocol is built into the kernel proper while ISM is
-> configured to be built as module, linking the kernel fails due to
-> unresolved dependencies out of net/smc/smc_ism.o to
-> ism_get_smcd_ops, ism_register_client, and ism_unregister_client
-> as reported via the linux-next test automation (see link).
-> This however is a bug introduced a while ago.
-> 
-> Correct the dependency list in ISM's and SMC's Kconfig to reflect the
-> dependencies that are actually inverted. With this you cannot build a
-> kernel with CONFIG_SMC=y and CONFIG_ISM=m. Either ISM needs to be 'y',
-> too - or a 'n'. That way, SMC can still be configured on non-s390
-> architectures that do not have (nor need) an ISM driver.
-> 
-> Fixes: 89e7d2ba61b7 ("net/ism: Add new API for client registration")
-> 
-> Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> Closes: https://lore.kernel.org/linux-next/d53b5b50-d894-4df8-8969-fd39e63440ae@infradead.org/
-> Co-developed-by: Wenjia Zhang <wenjia@linux.ibm.com>
-> Signed-off-by: Wenjia Zhang <wenjia@linux.ibm.com>
-> Signed-off-by: Gerd Bayer <gbayer@linux.ibm.com>
+Hi all,
 
-With this patch, ISM can be build without SMC being enabled.
+The following commit is also in the arm-soc tree as a different commit
+(but the same patch):
 
-This leads to some build warnings:
+  0da7c05d232d ("soc: samsung: exynos-chipid: Convert to platform remove ca=
+llback returning void")
 
-../drivers/s390/net/ism_drv.c:572:12: warning: 'ism_get_local_gid' defined but not used [-Wunused-function]
-  572 | static u64 ism_get_local_gid(struct ism_dev *ism)
-      |            ^~~~~~~~~~~~~~~~~
-../drivers/s390/net/ism_drv.c:506:12: warning: 'ism_get_chid' defined but not used [-Wunused-function]
-  506 | static u16 ism_get_chid(struct ism_dev *ism)
-      |            ^~~~~~~~~~~~
-../drivers/s390/net/ism_drv.c:432:12: warning: 'ism_signal_ieq' defined but not used [-Wunused-function]
-  432 | static int ism_signal_ieq(struct ism_dev *ism, u64 rgid, u32 trigger_irq,
-      |            ^~~~~~~~~~~~~~
-../drivers/s390/net/ism_drv.c:292:12: warning: 'ism_query_rgid' defined but not used [-Wunused-function]
-  292 | static int ism_query_rgid(struct ism_dev *ism, u64 rgid, u32 vid_valid,
-      |            ^~~~~~~~~~~~~~
+This is commit
 
-> ---
->  drivers/s390/net/Kconfig | 2 +-
->  net/smc/Kconfig          | 1 +
->  2 files changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/s390/net/Kconfig b/drivers/s390/net/Kconfig
-> index 74760c1a163b..4902d45e929c 100644
-> --- a/drivers/s390/net/Kconfig
-> +++ b/drivers/s390/net/Kconfig
-> @@ -102,7 +102,7 @@ config CCWGROUP
->  
->  config ISM
->  	tristate "Support for ISM vPCI Adapter"
-> -	depends on PCI && SMC
-> +	depends on PCI
->  	default n
->  	help
->  	  Select this option if you want to use the Internal Shared Memory
-> diff --git a/net/smc/Kconfig b/net/smc/Kconfig
-> index 1ab3c5a2c5ad..746be3996768 100644
-> --- a/net/smc/Kconfig
-> +++ b/net/smc/Kconfig
-> @@ -2,6 +2,7 @@
->  config SMC
->  	tristate "SMC socket protocol family"
->  	depends on INET && INFINIBAND
-> +	depends on m || ISM != m
->  	help
->  	  SMC-R provides a "sockets over RDMA" solution making use of
->  	  RDMA over Converged Ethernet (RoCE) technology to upgrade
+  55fa358ca89f ("soc: samsung: exynos-chipid: Convert to platform remove ca=
+llback returning void")
 
--- 
-~Randy
+in the arm-soc tree.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/+=WKpqMhUOl+=t1.jdySmmm
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmUtzs4ACgkQAVBC80lX
+0GzVtQf/QWDHejIJjwhfIastLcs+rkfW0q2Ld0ID4Scpx+lfDTeA3sDQiGC9nTsJ
+9mAcmvwNdPHNhqe2R5TPioq58MM/OnLMZCfqpYq7gmt48ZdKLVftlId5vwOh91Ww
+SjvHQYrtLvcn97LPubpErM4Z8w7z7YA1DVE1QugEAslBOAyeBp2rna++Ir1oEp0O
+nRL7Sg/pN5z0+jR3Ns+WoAPz3+j7tjI3hsTE6d+M3aef0KB8aj/KJWS1s9tdZg7U
+CCnfX7T2vzn4Zbr32K0EahEEPTdcQkYmxKACuXgAIDUy+G+Had4ijsQsjZ7vXVHO
+Gn5Z4r/sRF1+NBAiL5cnXeGBGVIz4g==
+=/0Hw
+-----END PGP SIGNATURE-----
+
+--Sig_/+=WKpqMhUOl+=t1.jdySmmm--

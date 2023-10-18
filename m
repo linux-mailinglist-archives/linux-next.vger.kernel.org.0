@@ -2,45 +2,44 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64D6C7CD22D
-	for <lists+linux-next@lfdr.de>; Wed, 18 Oct 2023 04:13:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2829B7CD292
+	for <lists+linux-next@lfdr.de>; Wed, 18 Oct 2023 05:14:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229455AbjJRCNo (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 17 Oct 2023 22:13:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40808 "EHLO
+        id S229488AbjJRDOz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 17 Oct 2023 23:14:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbjJRCNn (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 17 Oct 2023 22:13:43 -0400
+        with ESMTP id S229615AbjJRDOx (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 17 Oct 2023 23:14:53 -0400
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EF4DF7;
-        Tue, 17 Oct 2023 19:13:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F664FF;
+        Tue, 17 Oct 2023 20:14:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1697595216;
-        bh=B3MoQ0UHZVQYnHEgV4JwPrpwPSToPMi2A+OnnFE0glE=;
+        s=201702; t=1697598888;
+        bh=QbZn2EiFiwDHvx9wHeKqwFSiKGXTr0ePiOBTZ5seWUc=;
         h=Date:From:To:Cc:Subject:From;
-        b=YtWAmdo2Gn5YTCeut34j4G6KApPR7yyZ6AeCDWJP5RsR9XNy7utQ+zfJqdSsusQ83
-         aHwM7OkINc26mCTocHn6KnQV31zj4uM6K5xTHBahxS1yGasqbx4tmGQp/CacHBu9PV
-         MVb+vtOFY0C0Awq0i6v0Xw7F8NpV/JccdV9KIFOFQARmv7PAD/z7v6sswqn4wylanY
-         0bcLYJCBPFGOOtu1f1LG8ATYn9ojvdXNdbtzdP0+YD1hfG3fYysyCD+NeVRREzMkBq
-         1kYiIp1HWyM2ltwvp4yjLOCvWl4WtL/xDlPBVtX0CG2/pNJ9Y9goodVEhooJKohkrL
-         x937QMrnS+Y+A==
+        b=SMXakDFs6fabPTwv6hB6XhmMoUHTfiPeSJobT38yAeuypa+d96n7QSxt+TXkcxABd
+         UlYW0rfSlVbdKkdFSC/Ab7NhmLkTiuIvpDvYZMjYeG45jIUjj6nRzvYvg0dDvgSO1i
+         8dpb2bsyObdnrqan/LV+TiTdoTpivtIYzKDNyA8TOs+GF7HGHkSg816ShxTMWA71mO
+         mPV3fuxtFtwam7tcPGfkIZii6hS9ShcZBa04JqtGrISORcYdosoL0FQC6lTOfOAo/C
+         QEYeqyHeZumWlnMXg8dH6/vZN1PDCLk8E76/ljs6A3SYENaM+STQ3Bkee7Nu9O66jg
+         lHDbXNR3g6CEQ==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4S9Dsr2VB7z4x1v;
-        Wed, 18 Oct 2023 13:13:36 +1100 (AEDT)
-Date:   Wed, 18 Oct 2023 13:13:34 +1100
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4S9GDS2gRXz4xG4;
+        Wed, 18 Oct 2023 14:14:48 +1100 (AEDT)
+Date:   Wed, 18 Oct 2023 14:14:46 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Greg KH <greg@kroah.com>, Rob Herring <robh@kernel.org>
-Cc:     Abdel Alkuor <abdelalkuor@geotab.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the usb tree with the devicetree tree
-Message-ID: <20231018131334.5fb47992@canb.auug.org.au>
+Subject: linux-next: duplicate patches in the bluetooth tree
+Message-ID: <20231018141446.19fa9b25@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/_Btt2PWcY33XfiDzmI/Qaaf";
+Content-Type: multipart/signed; boundary="Sig_/cACtJAbkjx0tUGxLHQ=GT23";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS
@@ -51,105 +50,50 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/_Btt2PWcY33XfiDzmI/Qaaf
+--Sig_/cACtJAbkjx0tUGxLHQ=GT23
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the usb tree got a conflict in:
+The following commits are also in the net tree as different
+commits (but the same patches):
 
-  Documentation/devicetree/bindings/usb/ti,tps6598x.yaml
-
-between commit:
-
-  47b8fb4aef95 ("dt-bindings: usb: ti,tps6598x: Disallow undefined properti=
-es")
-
-from the devicetree tree and commit:
-
-  6060d554e891 ("dt-bindings: usb: tps6598x: Add tps25750")
-
-from the usb tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+  0ebb3699b15d ("Bluetooth: vhci: Fix race when opening vhci device")
+  19cb846d0b71 ("Bluetooth: hci_event: Fix using memcmp when comparing keys=
+")
+  27eb5c50277f ("Bluetooth: hci_event: Ignore NULL link key")
+  354eeee644a0 ("Bluetooth: Fix a refcnt underflow problem for hci_conn")
+  4025ddca4aa6 ("Bluetooth: ISO: Fix invalid context error")
+  47d973dff74e ("Bluetooth: hci_sock: fix slab oob read in create_monitor_e=
+vent")
+  505fc3b0f198 ("Bluetooth: btrtl: Ignore error return for hci_devcd_regist=
+er()")
+  58250a6dc86d ("Bluetooth: Reject connection with the device which has sam=
+e BD_ADDR")
+  81a220a6c891 ("Bluetooth: hci_event: Fix coding style")
+  a86e2622de15 ("Bluetooth: avoid memcmp() out of bounds warning")
+  bbb24b6a681b ("Bluetooth: hci_sock: Correctly bounds check and pad HCI_MO=
+N_NEW_INDEX name")
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc Documentation/devicetree/bindings/usb/ti,tps6598x.yaml
-index 6ab674dea4c6,72ac534e6ed2..000000000000
---- a/Documentation/devicetree/bindings/usb/ti,tps6598x.yaml
-+++ b/Documentation/devicetree/bindings/usb/ti,tps6598x.yaml
-@@@ -32,14 -47,43 +47,46 @@@ properties
-      items:
-        - const: irq
- =20
- +  connector:
- +    $ref: /schemas/connector/usb-connector.yaml#
- +
-+   firmware-name:
-+     description: |
-+       Should contain the name of the default patch binary
-+       file located on the firmware search path which is
-+       used to switch the controller into APP mode.
-+       This is used when tps25750 doesn't have an EEPROM
-+       connected to it.
-+     maxItems: 1
-+=20
-  required:
-    - compatible
-    - reg
- =20
-+ allOf:
-+   - if:
-+       properties:
-+         compatible:
-+           contains:
-+             const: ti,tps25750
-+     then:
-+       properties:
-+         reg:
-+           maxItems: 2
-+=20
-+         connector:
-+           required:
-+             - data-role
-+=20
-+       required:
-+         - connector
-+         - reg-names
-+     else:
-+       properties:
-+         reg:
-+           maxItems: 1
-+=20
- -additionalProperties: true
- +additionalProperties: false
- =20
-  examples:
-    - |
-
---Sig_/_Btt2PWcY33XfiDzmI/Qaaf
+--Sig_/cACtJAbkjx0tUGxLHQ=GT23
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmUvP04ACgkQAVBC80lX
-0Gy/uwf/Ssb8Fy+79wjy9/RCB8k+WGDHUeQ5He+RnU1r1PkpL1QlgL5nZxh1aQyD
-MykkRmBn+ZgFZTacvrc1lNh7GzTJ8jBWtTt6NJW1jD8UQVEQojx0LYRc4xGobYwt
-rO3rJF0Mcdp00PiTWxV1C72K62QRLN8IfqpM+7ebNvBvRFCLaqqdoy5+EF/knenh
-xZEY5TMABbLm37FewRMNd7tchQGFaK6VoO5nVYFRtEXBc1HJ1lXM8ehypX9LOfd8
-40ycf5JoZg+EAOEpBe1zKhFKTFckp6VgQRRP6RuWZkKe5nackeqlFrcA9riEe1yR
-Ft+FuD/V1ZT2TAdVDdkt6iq9u9VJTQ==
-=EAfY
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmUvTaYACgkQAVBC80lX
+0GzlGQf/bL/iSjta1vSF2oQOCx5paQ+RstdJneX5vCPU3qxOCvSLepYzEkMEbpn9
+O+rwIADJ1SeO/OCVV4z2onCGL9JjKB9CJDm4I/dX/ujago5mbj/F81VMlg8Bewqb
+ukp2S8XE+hA9TZb3t6ATC41hbNHd8+9/FIQD0dWCZHtc/wcmL/O6s/0mDxf9tg3R
+CQsdm+GofwPlPwpSESX7drX/SDjaIEsqu3AGNqePGOW1zoc+7Ege/ovJjFqcfo+F
+Rcc2HkpW72C0zzw1hWm/0ywUT4a8tfhxfUGWegZuRhB2iS8RaHUQLe0nDWi0yyD8
+rzp+dukOSfs23f1RMS57/Dcuy5BsiQ==
+=Ad23
 -----END PGP SIGNATURE-----
 
---Sig_/_Btt2PWcY33XfiDzmI/Qaaf--
+--Sig_/cACtJAbkjx0tUGxLHQ=GT23--

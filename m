@@ -2,113 +2,103 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83A3E7CD5C6
-	for <lists+linux-next@lfdr.de>; Wed, 18 Oct 2023 09:56:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA06D7CD97C
+	for <lists+linux-next@lfdr.de>; Wed, 18 Oct 2023 12:44:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229897AbjJRH4o (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 18 Oct 2023 03:56:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49962 "EHLO
+        id S230414AbjJRKoO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 18 Oct 2023 06:44:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229740AbjJRH4n (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 18 Oct 2023 03:56:43 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51269BC;
-        Wed, 18 Oct 2023 00:56:42 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id F050E5C0232;
-        Wed, 18 Oct 2023 03:56:36 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Wed, 18 Oct 2023 03:56:36 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1697615796; x=1697702196; bh=sp
-        dOIfIhSm3Az2FRldIMsRlyAcMKKG6PX8Ffi8zB5Zo=; b=mcaUC2S1LZZZRq5Afj
-        3VhO3+9WNodtPFFDR18MPJPa9mb69s6cOCGKjGg38VdrlOncgomyVSIJM2AG69r5
-        0u9+Dh36m30ln1f6k7NPMHX81oEJNtIUHFlMeVkuVjtNHj/rxhcKsn6sbEtK8NxK
-        1YWT11exvIVX7WsmJRdHipO/yPf675qU2Dd8RHUrFzmXdZ03FI/Y59X6diO70Ote
-        madMa36JkZLZGxi0/iWve5YM1tKNXnBMPF3R0DnGyBWF2Ovi+eFCqT7Y0h4JnHA8
-        BO/HGH4JeYeVo3uizEXLLwka9qHMSfMohGpGYVjg3cPL/5nt8wA+XHYS/tSCIh/4
-        rz/A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1697615796; x=1697702196; bh=spdOIfIhSm3Az
-        2FRldIMsRlyAcMKKG6PX8Ffi8zB5Zo=; b=uxxc8xUDK5K9FAZ3Yh/yt4mGXT5RI
-        fN4sUBenWpGebNAOng3ztE7xNUzmp6c1W/vuARa60D8L2FFQ6JmHBafXNdbD6dgz
-        khDRyZbIVdTen6VD6YCZowl3D7iyUPLf97s1VyeUSLT4o2Pmw8zkktSZQtrfyXJj
-        C700rFHAJQGndL0p3x2IXxb4iocG+/os8LpXqotjxF7zBUPdmKLLbzXHW8lw+C7r
-        mJdSAnDd+IA/aN4tnXg/P+txqzXe5I1gKmG79+zd28eE1WzK9ddL63QvZnXVFF+v
-        UtwSVQc5UZE3H5mU3645XnZwVujH2oXDCKiROPEt+U3NproGWheA6LHeA==
-X-ME-Sender: <xms:tI8vZVeiUwJlBtOy0LwhuKABwbyIVoFslwiogmJ1c-FNpRiJx1joFA>
-    <xme:tI8vZTNloIMVRYUpfVmpbf-Z3Rlwes2-JDfG6U_BcOgsMkTkc86x2HtYwNnLZCvSv
-    pmuqPvAjywbog>
-X-ME-Received: <xmr:tI8vZehAm6LfH27ZLhQN5JpnTFnxSqL64yIAqip-ME2nG80ZmvsgUE5ULgY>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrjeefgdduvddvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
-    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepheegvd
-    evvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefhgfehkeetnecuvehluhhs
-    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
-    hhrdgtohhm
-X-ME-Proxy: <xmx:tI8vZe9-LgOitlv6mXFUJSuBmxsDS5aWv2cI5Hms212JyLZJ4eA-iA>
-    <xmx:tI8vZRuKbqP7Waqyd2XDV6rqOrsejhg6P1GHsmRM-3JRFzAkrGfIZA>
-    <xmx:tI8vZdGr7yGlkHAyqW02Q1_tibo_aZ7ukmksboMxeVguL0Yc2nwvPA>
-    <xmx:tI8vZXAzvCAmbEKdwGDSd0bmrWsZc5v-hyRKtMMGaXE7fNNdPL5t6g>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 18 Oct 2023 03:56:34 -0400 (EDT)
-Date:   Wed, 18 Oct 2023 09:56:27 +0200
-From:   Greg KH <greg@kroah.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Rob Herring <robh@kernel.org>,
-        Abdel Alkuor <abdelalkuor@geotab.com>,
+        with ESMTP id S230258AbjJRKoN (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 18 Oct 2023 06:44:13 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D98CDB0;
+        Wed, 18 Oct 2023 03:44:11 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-9c603e2354fso357846966b.1;
+        Wed, 18 Oct 2023 03:44:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1697625850; x=1698230650; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DXa0w19CJ/VQqHzFWA2tc2T/dfIr2XV9jMvebHQyLxQ=;
+        b=BnuKIIh6ghlxzQOJ2ivbbwy6FYgLFZ6IsGVK8eOojvdoWWw5dIdTs669Xztl3gnxCz
+         s8sHIZnUG3JdFScSdiUyBej+sBuhjrnPHZBHolGY3/oYciMqX+kP6iTjaP9DNf+7PN7B
+         KWtKpKi7wiZJySN+btEMiq+bk3ow8JR+KXTC0W+u4LlPKnyG+TFoO70IUGQhO+ZvHH76
+         2I5tjS3mHBTzZSa1U0HRDJpikn8vOpT9I8PbCdWUCFAfHt3k08DcOifqB0Pg2GBjCGxf
+         fCh3o/FGgsuy9cSXFeOnZOWJQhmFQzD3eGqU44wt0dGxhI2ImyQvebcrpgCTZ/rZBxjb
+         RR4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697625850; x=1698230650;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DXa0w19CJ/VQqHzFWA2tc2T/dfIr2XV9jMvebHQyLxQ=;
+        b=jNeueJ3cSu60i9Jq9y1Q0488p+YvngkSVxbNc0Hyj0qnnqL0SF+HOuAQrrKjUVq9JG
+         2LqL1pMlMKg/eM+nhH5B+ZRD87jRevPNkGTX/g18OE7tVTnmWgPmUNLSEQ5p8aSY+4Pz
+         STsIDJy2WSCYLfWzL07vULpX6Bw+0GqkyVxnfJBU5YCC8yAUMM93hU4ShzLjAq0CgILp
+         InKlnHtbj3AidxclwOUb9Hb9Qh99F1d4f/80zVlw69o8iZi8UJR6xGQ034Yz4IvPZQ2m
+         7i9r2wDDeGVDxy5ziBqxws9TdAsuRmkuuj5LheGNMZO0a152v18tQY+BR3YM1j1qrVKm
+         sHkQ==
+X-Gm-Message-State: AOJu0YyPzovbBlu2uNzAEJEZAVdV8V00Mx5QsvBhmk60xrak8Exx4gAU
+        EJuaMqeCNEUWUyNILJ0IMoI=
+X-Google-Smtp-Source: AGHT+IGNZH9jo1npqFWKU44BNx59z2V6g/+y+ovaKmNRKwCMUqZe9pS9IdFCbWX+NTMoqi14QA6khQ==
+X-Received: by 2002:a17:907:7f10:b0:9c5:7f5d:42dc with SMTP id qf16-20020a1709077f1000b009c57f5d42dcmr4012014ejc.33.1697625850273;
+        Wed, 18 Oct 2023 03:44:10 -0700 (PDT)
+Received: from gmail.com (1F2EF7B2.nat.pool.telekom.hu. [31.46.247.178])
+        by smtp.gmail.com with ESMTPSA id mc8-20020a170906eb4800b0098d2d219649sm1423791ejb.174.2023.10.18.03.44.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Oct 2023 03:44:09 -0700 (PDT)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Wed, 18 Oct 2023 12:44:07 +0200
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Binbin Wu <binbin.wu@linux.intel.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the usb tree with the devicetree tree
-Message-ID: <2023101818-recant-goldfish-44b0@gregkh>
-References: <20231018131334.5fb47992@canb.auug.org.au>
+Subject: Re: linux-next: duplicate patch in the kselftest tree
+Message-ID: <ZS+29xXwA3Nxqd1Y@gmail.com>
+References: <20231017150325.4a89ab71@canb.auug.org.au>
+ <8f07e202-fe60-4e7e-adde-e39a95f7fb22@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231018131334.5fb47992@canb.auug.org.au>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <8f07e202-fe60-4e7e-adde-e39a95f7fb22@linuxfoundation.org>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Oct 18, 2023 at 01:13:34PM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Today's linux-next merge of the usb tree got a conflict in:
-> 
->   Documentation/devicetree/bindings/usb/ti,tps6598x.yaml
-> 
-> between commit:
-> 
->   47b8fb4aef95 ("dt-bindings: usb: ti,tps6598x: Disallow undefined properties")
-> 
-> from the devicetree tree and commit:
-> 
->   6060d554e891 ("dt-bindings: usb: tps6598x: Add tps25750")
-> 
-> from the usb tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
 
-Looks good, thanks!
+* Shuah Khan <skhan@linuxfoundation.org> wrote:
 
-greg k-h
+> On 10/16/23 22:03, Stephen Rothwell wrote:
+> > Hi all,
+> > 
+> > The following commit is also in the tip tree as a different commit
+> > (but the same patch):
+> > 
+> >    197964fc3274 ("selftests/x86/lam: Zero out buffer for readlink()")
+> > 
+> > This is commit
+> > 
+> >    29060633411a ("selftests/x86/lam: Zero out buffer for readlink()")
+> > 
+> > in the tip tree.
+> > 
+> Thank you. I will go drop it from ksefltest next now.
+
+Thank you!
+
+	Ingo

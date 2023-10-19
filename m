@@ -2,78 +2,53 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 615C37CFE99
-	for <lists+linux-next@lfdr.de>; Thu, 19 Oct 2023 17:46:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7418B7CFE02
+	for <lists+linux-next@lfdr.de>; Thu, 19 Oct 2023 17:36:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346360AbjJSPq6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 19 Oct 2023 11:46:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45710 "EHLO
+        id S1346334AbjJSPgR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 19 Oct 2023 11:36:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346423AbjJSPq5 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 19 Oct 2023 11:46:57 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E91C113E
-        for <linux-next@vger.kernel.org>; Thu, 19 Oct 2023 08:46:54 -0700 (PDT)
-Received: from pps.filterd (m0353724.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39JFiYA8025128;
-        Thu, 19 Oct 2023 15:46:45 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : mime-version : content-type; s=pp1;
- bh=i04QYZheeZR2FWtEC6W80ZW9/4fsi/AEtlw+BXIT+Oc=;
- b=Gs2PbOnqC3Nj+5ksG4Wx5K1tKZpaRC1e9pvNnnAxoZLGbSkO73oF5RHnnHbsKpxXJnF4
- MTyNXSjmGoe6yIZY4rZBe9GgfiZypMqQuiM+kjDlCH6T6oLC2zsd4r2LctBfhosxvemX
- c/oROsgxy7l9WUSz3Dt6hqWeoP8b/fxCWkWQdxPfSwvpf/i1KdwhfSDLGJvAZKQGGJtV
- 8MVh6FPtOXZJ+nXjlmtcyY2OSuSvEj81nrbA/VtmPIxf615laW9Lhg6vMoxZgnON4DnD
- H0kuBf5tKEqcjyPG2eRMDma41EGJ4D9fg8Y6wMIXkK9LX+pcUdKsjXeK6ubCRG7NV+Vm nQ== 
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3tu7c108du-15
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 19 Oct 2023 15:46:44 +0000
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-        by ppma12.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 39JDXYLk027394;
-        Thu, 19 Oct 2023 15:17:36 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-        by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 3tr5asswqy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 19 Oct 2023 15:17:36 +0000
-Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
-        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 39JFHXPs21234388
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 19 Oct 2023 15:17:33 GMT
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5B1CD20043;
-        Thu, 19 Oct 2023 15:17:33 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id ED2BA20040;
-        Thu, 19 Oct 2023 15:17:32 +0000 (GMT)
-Received: from localhost (unknown [9.171.19.124])
-        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-        Thu, 19 Oct 2023 15:17:32 +0000 (GMT)
-Date:   Thu, 19 Oct 2023 17:17:31 +0200
-From:   Vasily Gorbik <gor@linux.ibm.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Joerg Roedel <jroedel@suse.de>,
-        Niklas Schnelle <schnelle@linux.ibm.com>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Upcoming merge conflict between s390 fixes and iommu trees
-Message-ID: <your-ad-here.call-01697728651-ext-4593@work.hours>
+        with ESMTP id S1346331AbjJSPgP (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 19 Oct 2023 11:36:15 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D326B182;
+        Thu, 19 Oct 2023 08:36:13 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B50DC433C8;
+        Thu, 19 Oct 2023 15:36:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1697729773;
+        bh=9q3HhsAdxkMSqIHsAAZ7hVVBLyVJc25//snPL/y8h1A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gRV3zdlwfs/mSoLE/68IWJStNeBbha5bB3aHj7BDeh+Ay/bFLM8c3MKR6Wg7n2Nbn
+         OeuM0LYwdLUxnpJqt79qMg3Ae8fx/eJQ9ABhX9FNDzj2vNYEsI97lVErXWwY15mdxC
+         NVM3xGKlZK1LcFaf2H97Sip96mxeItJ4usf3noCPSIojeYNUWPCvKCa0Wq3jPCmhKP
+         QAtzGYPzRmQ+qqtfFIpEVGJo+Di0H6hjL4Iz3+3Px8gBWBabNcYri5rQ0ccWK2XIjd
+         jEM1S7KvZB9Wpp+RefZt/J9rSY9jWYvPk70ORf4SuNvrS44leRt9W3QaidXSEuEvdg
+         oF8/D4WYVH8iw==
+Date:   Thu, 19 Oct 2023 16:36:07 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Shuah Khan <shuah@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>
+Subject: Re: linux-next: manual merge of the kselftest tree with the
+ mm-hotfixes tree
+Message-ID: <038eb23d-f74f-43c6-91e8-762e6bbc7282@sirena.org.uk>
+References: <20231019163310.6c24d6ac@canb.auug.org.au>
+ <1ee483d6-3311-42b1-a3e0-3b6073913a21@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="DTFmdvUpl3i2yoH6"
 Content-Disposition: inline
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: Kl2XJ_7CSZ2y7zldMQHOJ4Xbps58YbKm
-X-Proofpoint-GUID: Kl2XJ_7CSZ2y7zldMQHOJ4Xbps58YbKm
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-10-19_15,2023-10-19_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- adultscore=0 mlxlogscore=580 clxscore=1011 malwarescore=0
- lowpriorityscore=0 impostorscore=0 suspectscore=0 bulkscore=0 spamscore=0
- phishscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2309180000 definitions=main-2310190132
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <1ee483d6-3311-42b1-a3e0-3b6073913a21@linuxfoundation.org>
+X-Cookie: Save energy:  Drive a smaller shell.
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,21 +56,44 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Stephen,
-Hi Joerg,
 
-I've just picked up commit
-c1ae1c59c8c6 ("s390/pci: fix iommu bitmap allocation")
-into the s390 fixes branch to still make it into v6.6 (and eventually
-get into stable).
+--DTFmdvUpl3i2yoH6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-It will get conflicts in arch/s390/pci/pci_dma.c with commit
-c76c067e488c ("s390/pci: Use dma-iommu layer")
-from iommu tree, which is targeting the v6.7 merge window.
+On Thu, Oct 19, 2023 at 08:49:24AM -0600, Shuah Khan wrote:
+> On 10/18/23 23:33, Stephen Rothwell wrote:
 
-The latter commit removes arch/s390/pci/pci_dma.c, so that's
-the way to go for the conflict resolution. Joerg, I believe it's your
-decision whether you would like to mention this trivial merge conflict in
-your pull request to Linus later.
+> > I fixed it up (I used this files form the latter commit) and can carry the
+> > fix as necessary. This is now fixed as far as linux-next is concerned,
+> > but any non trivial conflicts should be mentioned to your upstream
+> > maintainer when your tree is submitted for merging.  You may also want
+> > to consider cooperating with the maintainer of the conflicting tree to
+> > minimise any particularly complex conflicts.
 
-Thank you.
+That'll drop the fix that Tiezhu did which is a good one.
+
+> I can rebase linux-kselftest next to pick up the following once it goes
+> into Linus's tree.
+
+I've got the rebase/rework locally (I did it as a new commit which isn't
+ideal but it's such a complete conflict that it felt like the best
+option).  Assuming nothing blows up in my local CI I should send it out
+later today.
+
+--DTFmdvUpl3i2yoH6
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmUxTOcACgkQJNaLcl1U
+h9Bv1gf9Hc4eaSUYZmGh/lRCxEFa56zuauD0fPTqXWL4iz6cl7ptwPxQsrMpxHWV
+dCzIXI9UesyWf7YSmHZ5VNDmX2f60ZHOwR4qJhddg6oraq9KZYr1MP1CrQ6bl87K
+mlUz4/zzFTVEHK4zNGQBeKHUkhjAtuzbmB+VfEtlApKD/6v+RidTDcQZ/OPC17/P
+tkivM1YNh4xXHzmZuA5n1vu/ICI1t0sKs76E1gL8FIf8yHlYXrzS/lstED6rmdGY
+PwxYsDlbjscwJUGYieeM+yPFKtPVZtg9gO9d6KRU9IKH8m51Xw/lXvC1fEAhqTfr
+odo+u0ickOuSriXPTgBd/uiuFFkYqg==
+=mN4r
+-----END PGP SIGNATURE-----
+
+--DTFmdvUpl3i2yoH6--

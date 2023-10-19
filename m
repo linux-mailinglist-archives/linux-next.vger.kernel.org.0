@@ -2,91 +2,90 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 552777CFEDD
-	for <lists+linux-next@lfdr.de>; Thu, 19 Oct 2023 17:58:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DC727D037A
+	for <lists+linux-next@lfdr.de>; Thu, 19 Oct 2023 23:06:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346352AbjJSP61 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 19 Oct 2023 11:58:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58574 "EHLO
+        id S232131AbjJSVGX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 19 Oct 2023 17:06:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346427AbjJSP61 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 19 Oct 2023 11:58:27 -0400
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5B7993;
-        Thu, 19 Oct 2023 08:58:25 -0700 (PDT)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-5a7c011e113so108724797b3.1;
-        Thu, 19 Oct 2023 08:58:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1697731105; x=1698335905; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=7jb7cVwz7xelM4+sJnE1FJPyDzq0ARx8q1t+hCEl6P4=;
-        b=fxdoIhCVxOmqlycuBzp05lAt82uD8dvNtqOLLX1u2d9kAj+YXeIGgc4o4fXZ0nHMPW
-         3fvloCoDl5u8VDFEK9xesdYmEtZntxEzL3xVtPA0RiMXngf6UjUEXPIZfSVOzFy5kV8y
-         5jh7elFwN8TAXnO/+fUzWv9hyTU4SmM4L+mEdnvt5ZByyCvGKQH1/FvuvoxmHFkyULrY
-         VBrDxTH9d4bY2NsLli7EMJ+CKDRzsWoE2mIuvtZkfm/ugbrlEOB7ffNjeKPTFZkvmz4H
-         5Q1ycfPRWCr4wdpQxMhN+omLAGCjZ4BeBucOD0HM0Q+dzDikrQ9GyZ2897jxpfwJoU77
-         QmFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697731105; x=1698335905;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7jb7cVwz7xelM4+sJnE1FJPyDzq0ARx8q1t+hCEl6P4=;
-        b=HM2+8RUCgn/Tvck+DajDkhWsS8DQ19trHD9iX38epSYNymt4CiCz8tluQYc1IgmPjr
-         V7MNw6PhvwbLixZHm2txEk2GrqdMjV679HrfYtS05rxlifau6+UjKxxdW3lhMb1ALXil
-         U+aBjH0jm2Br+jHG23OBRT5pYJXs4Xo1ADE1hGeg+eof9w/z9Idvn63hjfT3Rcg8jMdN
-         9HFEq7faRudJ1AdYCW2y2bMCF0pzOakfCDdrGtbdkP7EUn3TqVuXxvm/7OozZLlkDEic
-         N1uqA/f6XS7Ou7XWfUjuC9EuB8i+Sy7WT2txNzTN7u2q0HCYXBGGxASEkcuRu+eatgMs
-         IW2g==
-X-Gm-Message-State: AOJu0YwEU7uxbZuY3v29ABtFP4WBTE39lrQiALntu7SVtrqJl6vVowAm
-        sw0OKwlmmRpT824dMuawlnyVas9Rdp+d6A==
-X-Google-Smtp-Source: AGHT+IGDu+aE+ue7JW/hGbmDvvQMifgSbMmwHbCyYnoCWuWdSEcUw2tVUhh4HjszQKCnItYcP2tmPQ==
-X-Received: by 2002:a0d:e60a:0:b0:5a8:1d44:256 with SMTP id p10-20020a0de60a000000b005a81d440256mr2810943ywe.7.1697731104773;
-        Thu, 19 Oct 2023 08:58:24 -0700 (PDT)
-Received: from localhost ([2607:fb90:3e1a:8bc6:3ebc:e0b2:cf57:8294])
-        by smtp.gmail.com with ESMTPSA id t70-20020a818349000000b0059b4e981fe6sm2494749ywf.102.2023.10.19.08.58.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Oct 2023 08:58:24 -0700 (PDT)
-Date:   Thu, 19 Oct 2023 08:58:22 -0700
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Alexander Lobakin <aleksander.lobakin@intel.com>,
+        with ESMTP id S230281AbjJSVGX (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 19 Oct 2023 17:06:23 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A300DC2;
+        Thu, 19 Oct 2023 14:06:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1697749576;
+        bh=xdo63SOzzVchMGQgIKwnulHQABOQaumrm7jZgY2UPf4=;
+        h=Date:From:To:Cc:Subject:From;
+        b=QgOb9Je5hBuFKffqo/q/mqupySIWWd/JG7QQcAeNYh4wTFwCezD/Hp3Iv5yTP8CM5
+         hi0KhNdlGOFr7LbZ6/+wLEVAEcn5i6VQTGnJtGR3iyltcXSqDVfNPSCCCcAmCdCoNs
+         btuZRmuvQMpYVE1lZeOzZMsGswXM8NavZ4JS2/nhbuZ1+I5rep10FYjh5E9fuOfUdz
+         kTRYMboGdkxMEHMwbgbQfa48I40q4+KpuntWQACcR8Flpndv0/gEm9fHt/kNm9Zhix
+         liLy5Lo3eUWA3oxlA8PPH9IdmVJdHJuR95SK4Fwz7ftb7WqFRrdTTyYz1vFAu9jpdj
+         jBSrRnsfV/4pA==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4SBKyH6hqpz4xc1;
+        Fri, 20 Oct 2023 08:06:15 +1100 (AEDT)
+Date:   Fri, 20 Oct 2023 08:06:13 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the bitmap tree
-Message-ID: <ZTFSHqjkHLM5iAqH@yury-ThinkPad>
-References: <20231019170106.4159eac5@canb.auug.org.au>
+Subject: linux-next: duplicate patch in the mips tree
+Message-ID: <20231020080613.0e257e5a@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231019170106.4159eac5@canb.auug.org.au>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/5CE+p+v4adeZT5ZKC7OuFDm";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Oct 19, 2023 at 05:01:06PM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the bitmap tree, today's linux-next build (native perf)
-> failed like this:
-> 
-> In file included from /home/sfr/next/next/tools/perf/util/header.h:10,
->                  from /home/sfr/next/perf/pmu-events/pmu-events.c:3:
-> /home/sfr/next/next/tools/include/linux/bitmap.h:5:10: fatal error: linux/align.h: No such file or directory
->     5 | #include <linux/align.h>
->       |          ^~~~~~~~~~~~~~~
-> 
-> Caused by commit
-> 
->   ed46ac8199f0 ("bitmap: introduce generic optimized bitmap_size()")
-> 
-> I have used the bitmap tree from next-20231018 for today.
+--Sig_/5CE+p+v4adeZT5ZKC7OuFDm
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks, Stephen. I'll take a look and let you know when it's resolved.
+Hi all,
+
+The following commit is also in Linus Torvalds' tree as a different commit
+(but the same patch):
+
+  83767a67e7b6 ("MIPS: KVM: Fix a build warning about variable set but not =
+used")
+
+This is commit
+
+  e2145c99b53e ("KVM: MIPS: fix -Wunused-but-set-variable warning")
+
+in Linus' tree.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/5CE+p+v4adeZT5ZKC7OuFDm
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmUxmkUACgkQAVBC80lX
+0GzGgwgAjQbXzYimVR7+rtrV9aO5BvSEQxFD8GXrZiUwBm6MVE4qSX4YBiTEHeq7
+Y6Imdb+1+36N6uNnKR4ZkA4V+7phjoLbOeViF+k/MDkPQksmRb4LVGcvyKGMCbfa
+K8CRL4vugv0bDexi4UN/c2E/PSHvtt4SV7tvQCCW6yqFz3Yt7IFNzGMP1iBZ7Xj0
+pbLrug8/FrYVruOfjjWyqbf963S8Nege+8ekiylE9gOofrv4wytUMshMrEKwUfju
+IXMlpMjaivHmpttuilPo+YzZR5Zbri7QtqQbBsPQP6l+7PmzhJ3I0/qy8lZ/p2Ow
+HRwtSyfA3xf/PbIasMvwZpoqryarlw==
+=H0QQ
+-----END PGP SIGNATURE-----
+
+--Sig_/5CE+p+v4adeZT5ZKC7OuFDm--

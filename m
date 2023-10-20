@@ -2,47 +2,47 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 805D97D0626
-	for <lists+linux-next@lfdr.de>; Fri, 20 Oct 2023 03:26:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F3D47D0636
+	for <lists+linux-next@lfdr.de>; Fri, 20 Oct 2023 03:43:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346776AbjJTB0j (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 19 Oct 2023 21:26:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41112 "EHLO
+        id S1346776AbjJTBnF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 19 Oct 2023 21:43:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346768AbjJTB0i (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 19 Oct 2023 21:26:38 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 634D6112;
-        Thu, 19 Oct 2023 18:26:36 -0700 (PDT)
+        with ESMTP id S1346809AbjJTBnE (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 19 Oct 2023 21:43:04 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 431ED119;
+        Thu, 19 Oct 2023 18:43:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1697765191;
-        bh=1SA1xNxQvd8tzPgP9eFSc47dQbmQd+W12jRnSvCdfu8=;
+        s=201702; t=1697766180;
+        bh=RcONGGUP+t0yTiKTpy5L7tV29oN1Vf/lUY4ZI43AkQc=;
         h=Date:From:To:Cc:Subject:From;
-        b=gs2/Av+T+z3A25jr3LKs9Qs1F9pt+UDhxFccMzbKmtVdYaLw/aIs/Md4TgLd5NxJ/
-         dPIrc+JWnVUTIYOI/9JkPdYyFfTHiIqA/WBLMiH59+GL3pIE/afpfIjy2ETlfSqU+B
-         7fI1wAYH5b4eROG8aZzWgKEkR+PzNWyTnZayuFNnc1bTf5s4fL0sqBX5kN+2u1XLq+
-         MyxeYT1guBFxgbLW+gFLPGhiOus2EmMlqCIFWQZe/Vu6r6Qs6Yi4f6Q6OHy6STIL8Y
-         AutyFqIl1oQYBYtXsQpip0xECKNaOSQIq0FAM8xZaL7pKxV+ppErw0gQRS3M01OUkk
-         yCfaUWeVzgPUA==
+        b=LL8WP0QbE4BK9Tnt4Qnp6mPi9IYZ8kedhEiHglDyZYXnXYVBSRWRlya8AwoqvJIF+
+         13rauMxbbwrD2/Nrz0khQIE1PEEv3+ex1gmPxegiAFYpf7S8IodR51W405Ulsfh0F3
+         uQrkhSpo/SWChMbf5uQGVhos8qkudDler4oQDKzM1LFo7UJ+auiL/RkwyCUpHzB5Wm
+         QsymJd9cIo/0mA8k+0RS5fNhFbyVc8FxgOWMr77LLUkYEjtqpIws1MifLtQ06PRAVo
+         kub+w+HltR+d+xn0Euy5QHUuYaNfZoLUhwUwXDzsSKzVoogr2kElE0cU57vFLKeRnY
+         Yb1fFWnjcLHSQ==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4SBRkZ4Mtcz4xFS;
-        Fri, 20 Oct 2023 12:26:30 +1100 (AEDT)
-Date:   Fri, 20 Oct 2023 12:26:29 +1100
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4SBS5c0RDpz4wnx;
+        Fri, 20 Oct 2023 12:43:00 +1100 (AEDT)
+Date:   Fri, 20 Oct 2023 12:42:59 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
 To:     Mark Brown <broonie@kernel.org>,
         Liam Girdwood <lgirdwood@gmail.com>,
         Takashi Iwai <tiwai@suse.de>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Subject: linux-next: manual merge of the sound-asoc tree with the sound tree
-Message-ID: <20231020122629.0289fe9b@canb.auug.org.au>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the sound-asoc tree
+Message-ID: <20231020124259.7d77b077@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/SXrtF.7EoapPRK_DgYL+6VK";
+Content-Type: multipart/signed; boundary="Sig_/vp5RwhVEh75twrm4tNXaI7H";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS
@@ -53,89 +53,98 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/SXrtF.7EoapPRK_DgYL+6VK
+--Sig_/vp5RwhVEh75twrm4tNXaI7H
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the sound-asoc tree got conflicts in:
+After merging the sound-asoc tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-  sound/soc/sof/intel/hda.h
-  sound/soc/sof/sof-priv.h
+sound/soc/sof/intel/hda.c: In function 'hda_dsp_remove':
+sound/soc/sof/intel/hda.c:1384:16: error: 'return' with a value, in functio=
+n returning void [-Werror=3Dreturn-type]
+ 1384 |         return 0;
+      |                ^
+sound/soc/sof/intel/hda.c:1330:6: note: declared here
+ 1330 | void hda_dsp_remove(struct snd_sof_dev *sdev)
+      |      ^~~~~~~~~~~~~~
+sound/soc/sof/intel/hda.c: In function 'hda_dsp_remove_late':
+sound/soc/sof/intel/hda.c:1392:1: error: control reaches end of non-void fu=
+nction [-Werror=3Dreturn-type]
+ 1392 | }
+      | ^
+cc1: all warnings being treated as errors
 
-between commits:
-
-  17baaa1f950b ("ASoC: SOF: core: Add probe_early and remove_late callbacks=
-")
-  3d1a05581361 ("ASoC: SOF: Intel: Move binding to display driver outside o=
-f deferred probe")
-
-from the sound tree and commit:
+Caused by a bad automatic merge between commit
 
   e4d09de3919b ("ASoC: SOF: make .remove callback return void")
 
-from the sound-asoc tree.
+and commit
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+  3d1a05581361 ("ASoC: SOF: Intel: Move binding to display driver outside o=
+f deferred probe")
+
+from the sound tree.
+
+I have applied the follwoing merge fix patch.
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Fri, 20 Oct 2023 12:37:26 +1100
+Subject: [PATCH] fix for bad merge of "ASoC: SOF: Intel: Move binding to
+ display driver outside of deferred probe"
+
+with "ASoC: SOF: make .remove callback return void"
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ sound/soc/sof/intel/hda.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/sound/soc/sof/intel/hda.c b/sound/soc/sof/intel/hda.c
+index 2f12265c472b..8342fcf52f52 100644
+--- a/sound/soc/sof/intel/hda.c
++++ b/sound/soc/sof/intel/hda.c
+@@ -1380,8 +1380,6 @@ void hda_dsp_remove(struct snd_sof_dev *sdev)
+=20
+ 	if (!sdev->dspless_mode_selected)
+ 		iounmap(sdev->bar[HDA_DSP_BAR]);
+-
+-	return 0;
+ }
+=20
+ int hda_dsp_remove_late(struct snd_sof_dev *sdev)
+@@ -1389,6 +1387,8 @@ int hda_dsp_remove_late(struct snd_sof_dev *sdev)
+ 	iounmap(sof_to_bus(sdev)->remap_addr);
+ 	sof_hda_bus_exit(sdev);
+ 	hda_codec_i915_exit(sdev);
++
++	return 0;
+ }
+=20
+ int hda_power_down_dsp(struct snd_sof_dev *sdev)
+--=20
+2.40.1
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc sound/soc/sof/intel/hda.h
-index 8e846684279e,0ebc042c5ce1..000000000000
---- a/sound/soc/sof/intel/hda.h
-+++ b/sound/soc/sof/intel/hda.h
-@@@ -573,10 -576,8 +576,10 @@@ struct sof_intel_hda_stream=20
-  /*
-   * DSP Core services.
-   */
- +int hda_dsp_probe_early(struct snd_sof_dev *sdev);
-  int hda_dsp_probe(struct snd_sof_dev *sdev);
-- int hda_dsp_remove(struct snd_sof_dev *sdev);
-+ void hda_dsp_remove(struct snd_sof_dev *sdev);
- +int hda_dsp_remove_late(struct snd_sof_dev *sdev);
-  int hda_dsp_core_power_up(struct snd_sof_dev *sdev, unsigned int core_mas=
-k);
-  int hda_dsp_core_run(struct snd_sof_dev *sdev, unsigned int core_mask);
-  int hda_dsp_enable_core(struct snd_sof_dev *sdev, unsigned int core_mask);
-diff --cc sound/soc/sof/sof-priv.h
-index e73a92189fe1,40bca5f80428..000000000000
---- a/sound/soc/sof/sof-priv.h
-+++ b/sound/soc/sof/sof-priv.h
-@@@ -165,10 -165,8 +165,10 @@@ struct sof_firmware=20
-  struct snd_sof_dsp_ops {
- =20
-  	/* probe/remove/shutdown */
- +	int (*probe_early)(struct snd_sof_dev *sof_dev); /* optional */
-  	int (*probe)(struct snd_sof_dev *sof_dev); /* mandatory */
-- 	int (*remove)(struct snd_sof_dev *sof_dev); /* optional */
-+ 	void (*remove)(struct snd_sof_dev *sof_dev); /* optional */
- +	int (*remove_late)(struct snd_sof_dev *sof_dev); /* optional */
-  	int (*shutdown)(struct snd_sof_dev *sof_dev); /* optional */
- =20
-  	/* DSP core boot / reset */
-
---Sig_/SXrtF.7EoapPRK_DgYL+6VK
+--Sig_/vp5RwhVEh75twrm4tNXaI7H
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmUx10UACgkQAVBC80lX
-0GwE6gf+Jj3wCwLrKU5cH8pe4uSSTLms48bCOWeSBGRuQis921IKDAviW4Y2gI/z
-ZOAaw1RNVTmZFXHJTJT08Yv/wQ4PDkRT+llbz41CDaGp6SCYxthXf4ahvTZoC4xN
-W6zo/Kuqi8TQy+5+vLNe9fLtS+gk1n4/RNVIXrMAy/K+F3f4quT5POIeWS7SyU9r
-/r8O/DaMipIdhfnBYC6tDh0ZmZpYRZZezoIzxaoJ+dZcDS7djpSSISOWiz7YorCe
-rE8/RvcJFprDSH2f8LnURbA+fWSvGW4SNEB2beL01rO3ERdiTcUZbQNpvNkNM7Tj
-9k9bJwQVM639AmShpC/IhIJQGmKETA==
-=Ol3s
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmUx2yMACgkQAVBC80lX
+0GyE8Qf+KPpRGYyXxqxsyyp51ZIxJDlXBy+18P4irT6UVAVo//OKygfM7Rje8M21
+L2rgJqKRR7eqzZY9PJ06pOVjYoimLIhl4Jl8Trmbmq3ImKm3M4lZGXoIKnp9XSxH
+2XogZuYPZkYOzcQG9vbdNXq0pQWi9kdVPLZYHXG6ge9sxSiLE4FmblGcpW9A/yQq
+OpiTv1z75mCg9h52EV7F5uqY695ikiFnrozRm3LzhPHEr/U6/tbvXssnQkMqWV1f
+GaZuu4sdLbHDIE5pqCw2Kh+qDBIvqbP82/vw2Ytqy/iw3oIEwIB1yVIRBRvqBbDa
+zZIBxSvrmmM3YITpGGqLtcXzr2N2sA==
+=wz9p
 -----END PGP SIGNATURE-----
 
---Sig_/SXrtF.7EoapPRK_DgYL+6VK--
+--Sig_/vp5RwhVEh75twrm4tNXaI7H--

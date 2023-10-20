@@ -2,47 +2,54 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F3D47D0636
-	for <lists+linux-next@lfdr.de>; Fri, 20 Oct 2023 03:43:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 651827D065C
+	for <lists+linux-next@lfdr.de>; Fri, 20 Oct 2023 04:01:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346776AbjJTBnF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 19 Oct 2023 21:43:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54018 "EHLO
+        id S1346827AbjJTCBF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 19 Oct 2023 22:01:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346809AbjJTBnE (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 19 Oct 2023 21:43:04 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 431ED119;
-        Thu, 19 Oct 2023 18:43:02 -0700 (PDT)
+        with ESMTP id S1346811AbjJTCBF (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 19 Oct 2023 22:01:05 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0B3A11B;
+        Thu, 19 Oct 2023 19:01:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1697766180;
-        bh=RcONGGUP+t0yTiKTpy5L7tV29oN1Vf/lUY4ZI43AkQc=;
-        h=Date:From:To:Cc:Subject:From;
-        b=LL8WP0QbE4BK9Tnt4Qnp6mPi9IYZ8kedhEiHglDyZYXnXYVBSRWRlya8AwoqvJIF+
-         13rauMxbbwrD2/Nrz0khQIE1PEEv3+ex1gmPxegiAFYpf7S8IodR51W405Ulsfh0F3
-         uQrkhSpo/SWChMbf5uQGVhos8qkudDler4oQDKzM1LFo7UJ+auiL/RkwyCUpHzB5Wm
-         QsymJd9cIo/0mA8k+0RS5fNhFbyVc8FxgOWMr77LLUkYEjtqpIws1MifLtQ06PRAVo
-         kub+w+HltR+d+xn0Euy5QHUuYaNfZoLUhwUwXDzsSKzVoogr2kElE0cU57vFLKeRnY
-         Yb1fFWnjcLHSQ==
+        s=201702; t=1697767259;
+        bh=/TsfK7RL74sk75OV2jmi56NKjcO1swhvmxD4w4D8y+I=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=G+8KXIPpPsjw8JxMM+E8n1khnzrz3YsbQVAtoKfayMDwyc/dXl0de9IJNx4K6I4vm
+         LhYzFsvhx5ga2RxHmhxmL/K80Gp93JCtIqYXHLSCiI8hp5o+4i5gK6xOA6CzbQNJKk
+         SbHSji62lNKYgeDjWg/Vgu3lH8RTxb9cK/ppQ08Coe+S5gq90KfNFCWvlsK3KM61ls
+         UmsaM+TdG0Rb+wTDC6Fn2YiEGdFHYUs1+32sjqDCW7OtfXOgio7XajNAoPwLKzY8x0
+         4V7E4NGvZ4yMPabqXVZW/xs5NlxTj8y+RhcbSlOjEnElwk7SFBCHZ7yHHRfyB+xA5h
+         jBDg5ku7BJ8vA==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4SBS5c0RDpz4wnx;
-        Fri, 20 Oct 2023 12:43:00 +1100 (AEDT)
-Date:   Fri, 20 Oct 2023 12:42:59 +1100
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4SBSVL0dFtz4xNs;
+        Fri, 20 Oct 2023 13:00:57 +1100 (AEDT)
+Date:   Fri, 20 Oct 2023 13:00:54 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Takashi Iwai <tiwai@suse.de>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+To:     Dave Airlie <airlied@redhat.com>
+Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        RD Babiera <rdbabiera@google.com>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the sound-asoc tree
-Message-ID: <20231020124259.7d77b077@canb.auug.org.au>
+Subject: Re: linux-next: build failure after merge of the drm-misc tree
+Message-ID: <20231020130054.7bf18733@canb.auug.org.au>
+In-Reply-To: <20231012122749.45d37e52@canb.auug.org.au>
+References: <20231012122209.6f2768df@canb.auug.org.au>
+        <20231012122749.45d37e52@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/vp5RwhVEh75twrm4tNXaI7H";
+Content-Type: multipart/signed; boundary="Sig_/bRfMJxeDf2dcjzBUlx0s4+b";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS
@@ -53,98 +60,103 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/vp5RwhVEh75twrm4tNXaI7H
+--Sig_/bRfMJxeDf2dcjzBUlx0s4+b
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the sound-asoc tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+On Thu, 12 Oct 2023 12:27:49 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> On Thu, 12 Oct 2023 12:22:09 +1100 Stephen Rothwell <sfr@canb.auug.org.au=
+> wrote:
+> >
+> > After merging the drm-misc tree, today's linux-next build (x86_64
+> > allmodconfig) failed like this:
+> >=20
+> > drivers/usb/typec/altmodes/displayport.c: In function 'dp_altmode_vdm':
+> > drivers/usb/typec/altmodes/displayport.c:309:33: error: too few argumen=
+ts to function 'drm_connector_oob_hotplug_event'
+> >   309 |                                 drm_connector_oob_hotplug_event=
+(dp->connector_fwnode);
+> >       |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > In file included from drivers/usb/typec/altmodes/displayport.c:17:
+> > include/drm/drm_connector.h:1984:6: note: declared here
+> >  1984 | void drm_connector_oob_hotplug_event(struct fwnode_handle *conn=
+ector_fwnode,
+> >       |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >=20
+> > Caused by commit
+> >=20
+> >   fc93835bb0d7 ("drm: Add HPD state to drm_connector_oob_hotplug_event(=
+)")
+> >=20
+> > interacting with commit
+> >=20
+> >   89434b069e46 ("usb: typec: altmodes/displayport: Signal hpd low when =
+exiting mode")
+> >=20
+> > from the usb.current tree.
+> >=20
+> > I have applied the following merge fix patch.
+> >=20
+> > From: Stephen Rothwell <sfr@canb.auug.org.au>
+> > Date: Thu, 12 Oct 2023 12:17:31 +1100
+> > Subject: [PATCH] fix up for "drm: Add HPD state to
+> >  drm_connector_oob_hotplug_event()"
+> >=20
+> > interacting with commit
+> >=20
+> >   89434b069e46 ("usb: typec: altmodes/displayport: Signal hpd low when =
+exiting mode")
+> >=20
+> > Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> > ---
+> >  drivers/usb/typec/altmodes/displayport.c | 3 ++-
+> >  1 file changed, 2 insertions(+), 1 deletion(-)
+> >=20
+> > diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typ=
+ec/altmodes/displayport.c
+> > index ddfb5b6ace4f..eb0bf08fc97a 100644
+> > --- a/drivers/usb/typec/altmodes/displayport.c
+> > +++ b/drivers/usb/typec/altmodes/displayport.c
+> > @@ -306,7 +306,8 @@ static int dp_altmode_vdm(struct typec_altmode *alt,
+> >  			dp->data.status =3D 0;
+> >  			dp->data.conf =3D 0;
+> >  			if (dp->hpd) {
+> > -				drm_connector_oob_hotplug_event(dp->connector_fwnode);
+> > +				drm_connector_oob_hotplug_event(dp->connector_fwnode =20
+>=20
+> Pretend that there is a comma at the end of the above line :-)
+>=20
+> > +								connector_status_disconnected);
+> >  				dp->hpd =3D false;
+> >  				sysfs_notify(&dp->alt->dev.kobj, "displayport", "hpd");
+> >  			}
+> > --=20
+> > 2.40.1 =20
 
-sound/soc/sof/intel/hda.c: In function 'hda_dsp_remove':
-sound/soc/sof/intel/hda.c:1384:16: error: 'return' with a value, in functio=
-n returning void [-Werror=3Dreturn-type]
- 1384 |         return 0;
-      |                ^
-sound/soc/sof/intel/hda.c:1330:6: note: declared here
- 1330 | void hda_dsp_remove(struct snd_sof_dev *sdev)
-      |      ^~~~~~~~~~~~~~
-sound/soc/sof/intel/hda.c: In function 'hda_dsp_remove_late':
-sound/soc/sof/intel/hda.c:1392:1: error: control reaches end of non-void fu=
-nction [-Werror=3Dreturn-type]
- 1392 | }
-      | ^
-cc1: all warnings being treated as errors
-
-Caused by a bad automatic merge between commit
-
-  e4d09de3919b ("ASoC: SOF: make .remove callback return void")
-
-and commit
-
-  3d1a05581361 ("ASoC: SOF: Intel: Move binding to display driver outside o=
-f deferred probe")
-
-from the sound tree.
-
-I have applied the follwoing merge fix patch.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Fri, 20 Oct 2023 12:37:26 +1100
-Subject: [PATCH] fix for bad merge of "ASoC: SOF: Intel: Move binding to
- display driver outside of deferred probe"
-
-with "ASoC: SOF: make .remove callback return void"
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- sound/soc/sof/intel/hda.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/sound/soc/sof/intel/hda.c b/sound/soc/sof/intel/hda.c
-index 2f12265c472b..8342fcf52f52 100644
---- a/sound/soc/sof/intel/hda.c
-+++ b/sound/soc/sof/intel/hda.c
-@@ -1380,8 +1380,6 @@ void hda_dsp_remove(struct snd_sof_dev *sdev)
-=20
- 	if (!sdev->dspless_mode_selected)
- 		iounmap(sdev->bar[HDA_DSP_BAR]);
--
--	return 0;
- }
-=20
- int hda_dsp_remove_late(struct snd_sof_dev *sdev)
-@@ -1389,6 +1387,8 @@ int hda_dsp_remove_late(struct snd_sof_dev *sdev)
- 	iounmap(sof_to_bus(sdev)->remap_addr);
- 	sof_hda_bus_exit(sdev);
- 	hda_codec_i915_exit(sdev);
-+
-+	return 0;
- }
-=20
- int hda_power_down_dsp(struct snd_sof_dev *sdev)
---=20
-2.40.1
+This is now a conflict between the drm tree and Linus' tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/vp5RwhVEh75twrm4tNXaI7H
+--Sig_/bRfMJxeDf2dcjzBUlx0s4+b
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmUx2yMACgkQAVBC80lX
-0GyE8Qf+KPpRGYyXxqxsyyp51ZIxJDlXBy+18P4irT6UVAVo//OKygfM7Rje8M21
-L2rgJqKRR7eqzZY9PJ06pOVjYoimLIhl4Jl8Trmbmq3ImKm3M4lZGXoIKnp9XSxH
-2XogZuYPZkYOzcQG9vbdNXq0pQWi9kdVPLZYHXG6ge9sxSiLE4FmblGcpW9A/yQq
-OpiTv1z75mCg9h52EV7F5uqY695ikiFnrozRm3LzhPHEr/U6/tbvXssnQkMqWV1f
-GaZuu4sdLbHDIE5pqCw2Kh+qDBIvqbP82/vw2Ytqy/iw3oIEwIB1yVIRBRvqBbDa
-zZIBxSvrmmM3YITpGGqLtcXzr2N2sA==
-=wz9p
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmUx31YACgkQAVBC80lX
+0GxSOggAg+4c30k8rAnR/50mOECdA81/fTegm0fV4grZhCiNXhWNfpQkc0ekA0S/
+4FgPGCElIiWU5Kx45UefkHEnc+gPehIVstcj5jW3Bbb4kHJe3x75KHaYI08Gztq6
+0bv/DrwvKz7jZotrOStwG+sVaHkNfL7xt2cNv2Kk3V01g+lQrUSdGNNlAJvLlHRH
+ape0t+80oHbLiW0d5zq0uDfzhVKjzBqSYftu1dxqL38aX6X1ysH6A5zgqX41H6su
+QcFyxXLvOup6RuCRxMnA/OXhbMn3I/iBhjiWMvI2r0SIhHCLsFPUk3etJUQ9v0m/
+PZU7+IfwYmUnZfpHrz/rHFEKK0GlCA==
+=I9HV
 -----END PGP SIGNATURE-----
 
---Sig_/vp5RwhVEh75twrm4tNXaI7H--
+--Sig_/bRfMJxeDf2dcjzBUlx0s4+b--

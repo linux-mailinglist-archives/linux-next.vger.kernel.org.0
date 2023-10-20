@@ -2,71 +2,68 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AF957D0FB3
-	for <lists+linux-next@lfdr.de>; Fri, 20 Oct 2023 14:33:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B53BF7D1873
+	for <lists+linux-next@lfdr.de>; Fri, 20 Oct 2023 23:54:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377155AbjJTMdU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 20 Oct 2023 08:33:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43820 "EHLO
+        id S229910AbjJTVyt (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 20 Oct 2023 17:54:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377079AbjJTMdT (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 20 Oct 2023 08:33:19 -0400
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B159E93;
-        Fri, 20 Oct 2023 05:33:17 -0700 (PDT)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-5a86b6391e9so8291307b3.0;
-        Fri, 20 Oct 2023 05:33:17 -0700 (PDT)
+        with ESMTP id S229603AbjJTVys (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 20 Oct 2023 17:54:48 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18143D45
+        for <linux-next@vger.kernel.org>; Fri, 20 Oct 2023 14:54:46 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id d9443c01a7336-1c9e95aa02dso10478745ad.0
+        for <linux-next@vger.kernel.org>; Fri, 20 Oct 2023 14:54:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1697805197; x=1698409997; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=KMvYl/tRg1JdMrVfnge+eYKdiJFbxif6udcePNEzkKY=;
-        b=eG9KWzYIiZI7+LZR/9UE/QFwnfC19VY1Mx0y/XlRqa5toNHVu19q9cSTLPphhq/hIl
-         +5wmqmP9KV/Q/vOFzqCvJl2FwoC9RPIz57EKJR4xGplR9LlMADQPdppdiNy7mAWc6zjp
-         jtU15GvI7lKHy+JGrQxr0nsKD16BGZv1QDm8IoGX6NhgULsH4JzpduFQiJgiXyXd7xe3
-         Bb+YyCmdP6vQrCyZ+KGj/xqeM+4MlaGb74gNPSxB/Qi7RW7X7RFltnzebmtaye7KxwPD
-         9W2NuPVpQEnzU9HtH/KFqxAuhUawez+j522KjfA+Ey+HERJaN8aQ6CBKu08vTx6AgGzz
-         xY0Q==
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1697838885; x=1698443685; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=aRnn6QeGBDLpaUcxOYOsIOPii/Fy1pgBeWLE+fKLGSM=;
+        b=ny+F3lfE05qN7jrwOAkolQSkdrRQhdhOR8Un94xqzBHUsxZKMVeL4zEI6CaVrT0Mkj
+         rH8MUnsdW0vg/4JrWEYIe6q59qnAZCWX1o7D7e3f6kd+yesfVL5NAsJdkzZVifr/+Uww
+         bKwOX/QGLw0srkAG/+qpwvynPG4KmFC7tXH/Kuvl4bU39b5MpFKPj552n74ZqQ5h2Hla
+         +XVGWnwMkVXGhQ2v8uAtXz60vf2D6irudlHO5SEP54Ov5ygdXf8jw2waTlYMaH4AOa6O
+         MdJvagIk6AiJOomGOHkJ+WgCjoSgFEBM5kbCG5MFvk5M93kGtB1QHfpG5EAVNjJFf7L7
+         Dc7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697805197; x=1698409997;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KMvYl/tRg1JdMrVfnge+eYKdiJFbxif6udcePNEzkKY=;
-        b=SPGIETPmL8D3WleJxlejE2FVo2KrsrQe83Gfcgg7Cp3ARpakS9mRP0m/I41t8rBBl3
-         gkfHgzWLAHaapAEpH//hk0f7+6JVXC2UcZlDribDbIqZO4+fLPvYMggQuZuD9RqfcLaB
-         NmtKlod2lYCLJy7MHI4YrJITkqtt84Mx+F7HmcJCc1kZCOseEKmWXSuQZDXIbtqjdmI0
-         1xWJNSUwWcu6ovhXZukPKgsajX9U3CLSdgzZ7jsFzGIuS6AasrZOgJS/P1l3mwLXYnRe
-         Pa3HfqHvEP4fGq9+7QfYOVS+ICYifPlBRMIoG91sOZKWcf01IVQR9LCzGDZgYzHz3ckc
-         gUzg==
-X-Gm-Message-State: AOJu0YwOsp0zLIvulgQ3dsIxRdVI8SW7sDa7FtjDHkurJIyUjjSrckJW
-        rHb+dxqIarpM/jpDAMq5fCvEnFSkqKSiig==
-X-Google-Smtp-Source: AGHT+IGFC/VGdmb0heFEHGl0OHhT2G1hp9HMrDrk1QrhUgHJlHMvAOM/CPKt0O0iW7w/9VJpwwGHjA==
-X-Received: by 2002:a0d:e20a:0:b0:59b:fb69:1639 with SMTP id l10-20020a0de20a000000b0059bfb691639mr1766239ywe.32.1697805196684;
-        Fri, 20 Oct 2023 05:33:16 -0700 (PDT)
-Received: from localhost ([2607:fb90:3e1a:8bc6:bf58:5f88:bb90:604])
-        by smtp.gmail.com with ESMTPSA id d8-20020a814f08000000b005a23a62a25csm649266ywb.9.2023.10.20.05.33.15
+        d=1e100.net; s=20230601; t=1697838885; x=1698443685;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=aRnn6QeGBDLpaUcxOYOsIOPii/Fy1pgBeWLE+fKLGSM=;
+        b=UlEh+nCDjX7zw0Tc7KB6Lapl5zNm2n2R+LQQLzgVyyCEJLuzMPWgPUHIBwVn9tZ5Na
+         Nlk1Dp2rosccuXWSkMgOzjrN9CXG/hZJjfHpZRd9LJ0QFSvtwhkPa7RTs1zUoa3A6KiG
+         ygjjcmNQ+PA0eiNzTvHAso6qLTJdEZXtWREBpG6zeinXaIJGWLvjL6sZYxMiKBd41gHy
+         hJ4gWBRBSVF8nF1X1JFYLDui6epLY0bEG/hPB0pOYZ3odlwBcLGW/I/TdVDx4q0XxhSe
+         FHzCXvKaYbEATrChrlqBqEXJEbDthdvxLNfQ2Vsu+TJAA8znaWnhtgBmOtit7+4tMxPn
+         7lvw==
+X-Gm-Message-State: AOJu0Yz9LXufxtC+t4P5+BjwhjgKu72YFqFiFMswQfHA7S+UGec875up
+        jdLkogWQ1rWK3XoU29xb7iQ1VyweOdH0dckR7XR82A==
+X-Google-Smtp-Source: AGHT+IFGoWVTuWC0n44qdVMJWBmR9TkYgOzZ3VC+C0NiGQqpCoH3lSDKwGvxT478eMb/TBH751drlQ==
+X-Received: by 2002:a17:902:ea07:b0:1c9:f6df:8a88 with SMTP id s7-20020a170902ea0700b001c9f6df8a88mr10727790plg.26.1697838885071;
+        Fri, 20 Oct 2023 14:54:45 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id a8-20020a170902ecc800b001c88f77a156sm1968306plh.153.2023.10.20.14.54.44
+        for <linux-next@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Oct 2023 05:33:16 -0700 (PDT)
-Date:   Fri, 20 Oct 2023 05:33:15 -0700
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Alexander Lobakin <aleksander.lobakin@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the bitmap tree
-Message-ID: <ZTJzi6OM9w/hYL1v@yury-ThinkPad>
-References: <20231019170106.4159eac5@canb.auug.org.au>
- <ZTFSHqjkHLM5iAqH@yury-ThinkPad>
- <ZTIBESMp9qsRdVja@yury-ThinkPad>
- <20231020155113.31acd611@canb.auug.org.au>
+        Fri, 20 Oct 2023 14:54:44 -0700 (PDT)
+Message-ID: <6532f724.170a0220.7a6be.7678@mx.google.com>
+Date:   Fri, 20 Oct 2023 14:54:44 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231020155113.31acd611@canb.auug.org.au>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: v6.6-rc6-398-g08f4e7d168e5
+X-Kernelci-Report-Type: build
+X-Kernelci-Branch: pending-fixes
+X-Kernelci-Tree: next
+Subject: next/pending-fixes build: 8 builds: 0 failed, 8 passed,
+ 4 warnings (v6.6-rc6-398-g08f4e7d168e5)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,47 +71,100 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Oct 20, 2023 at 03:51:13PM +1100, Stephen Rothwell wrote:
-> Hi Yury,
-> 
-> On Thu, 19 Oct 2023 21:24:49 -0700 Yury Norov <yury.norov@gmail.com> wrote:
-> >
-> > On Thu, Oct 19, 2023 at 08:58:24AM -0700, Yury Norov wrote:
-> > > On Thu, Oct 19, 2023 at 05:01:06PM +1100, Stephen Rothwell wrote:  
-> > > > 
-> > > > After merging the bitmap tree, today's linux-next build (native perf)
-> > > > failed like this:
-> > > > 
-> > > > In file included from /home/sfr/next/next/tools/perf/util/header.h:10,
-> > > >                  from /home/sfr/next/perf/pmu-events/pmu-events.c:3:
-> > > > /home/sfr/next/next/tools/include/linux/bitmap.h:5:10: fatal error: linux/align.h: No such file or directory
-> > > >     5 | #include <linux/align.h>
-> > > >       |          ^~~~~~~~~~~~~~~
-> > > > 
-> > > > Caused by commit
-> > > > 
-> > > >   ed46ac8199f0 ("bitmap: introduce generic optimized bitmap_size()")
-> > > > 
-> > > > I have used the bitmap tree from next-20231018 for today.  
-> > > 
-> > > Thanks, Stephen. I'll take a look and let you know when it's resolved.  
-> > 
-> > So the problem is that the patch "bitmap: introduce generic optimized
-> > bitmap_size()" adds reference to the linux/align.h, which doesn't exist
-> > in tools.
-> > 
-> > I removed tools part of the patch entirely, and now tools/perf, for
-> > example, builds OK for me natively. The tree doesn't touch tools at
-> > all now, except for moving BYTES_TO_BITS() from a source file to a
-> > header, which looks safe.
-> 
-> Almost - see my other email.
-> 
-> > Can you please try the latest bitmap-for-next?
-> 
-> See above.
-> 
-> My "native" is PowerPC 64 LE.
+next/pending-fixes build: 8 builds: 0 failed, 8 passed, 4 warnings (v6.6-rc=
+6-398-g08f4e7d168e5)
 
-I tried arm64. Anyways, it's clear that the series is not ready yet.
-I'll drop it from bitmap_for_next. Sorry for this mess.
+Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
+rnel/v6.6-rc6-398-g08f4e7d168e5/
+
+Tree: next
+Branch: pending-fixes
+Git Describe: v6.6-rc6-398-g08f4e7d168e5
+Git Commit: 08f4e7d168e500762255211cd70d1f4eb162200c
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Built: 8 unique architectures
+
+Warnings Detected:
+
+arc:
+
+arm64:
+
+arm:
+
+i386:
+
+mips:
+
+riscv:
+
+sparc:
+    sparc64_defconfig (gcc-10): 4 warnings
+
+x86_64:
+
+
+Warnings summary:
+
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---
+For more info write to <info@kernelci.org>

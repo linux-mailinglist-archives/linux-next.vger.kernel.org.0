@@ -2,83 +2,71 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 047707D0C29
-	for <lists+linux-next@lfdr.de>; Fri, 20 Oct 2023 11:41:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AF957D0FB3
+	for <lists+linux-next@lfdr.de>; Fri, 20 Oct 2023 14:33:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376642AbjJTJlu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 20 Oct 2023 05:41:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43960 "EHLO
+        id S1377155AbjJTMdU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 20 Oct 2023 08:33:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376629AbjJTJlt (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 20 Oct 2023 05:41:49 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D180C2
-        for <linux-next@vger.kernel.org>; Fri, 20 Oct 2023 02:41:48 -0700 (PDT)
-Received: from pps.filterd (m0353724.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39K9TEEg031052;
-        Fri, 20 Oct 2023 09:41:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- content-transfer-encoding : in-reply-to; s=pp1;
- bh=22rj3d/7r477kH95SPEBpwogDxIQGiJ9YLNGnpcvdl0=;
- b=YqntX+dEpJq1g2Wpa53SmOKHGkzgf8xysEpmudHG3XfzgvPN5BrkldCWtV0aycamLjC4
- xx4/RPfwfsJ4a5uZ8gTdFl1YIKAbPMXeCBDOA2AOqtPMv4/UsD4yOpHYHSY0zWXljKuk
- ilVOGqkuklD4XE5B5Fr/4vYy3EKCMjHF2nVEVEFEcc/wg75tRgBQ3HmP9ZrSooVgkvGU
- DsgynDy055Kmws8q/F8LR9z4ehCoRyD9RqLvOkL64jWSfo4wbv5NrE+gGnjGjDiliCGK
- 6Gek9SlTLN7a1mwyn2XsB2K/37TaKRTXJ4a8eXporj/KvslQMazbz+NuuBtMh+Syk22Y LA== 
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3tupy68fv4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 20 Oct 2023 09:41:40 +0000
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-        by ppma11.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 39K9BJMd019377;
-        Fri, 20 Oct 2023 09:35:56 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-        by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 3tuc453n98-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 20 Oct 2023 09:35:56 +0000
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 39K9ZrCa47972754
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 20 Oct 2023 09:35:53 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8C33B2004D;
-        Fri, 20 Oct 2023 09:35:53 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D161820043;
-        Fri, 20 Oct 2023 09:35:52 +0000 (GMT)
-Received: from localhost (unknown [9.171.18.113])
-        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-        Fri, 20 Oct 2023 09:35:52 +0000 (GMT)
-Date:   Fri, 20 Oct 2023 11:35:51 +0200
-From:   Vasily Gorbik <gor@linux.ibm.com>
-To:     =?utf-8?B?SsO2cmcgUsO2ZGVs?= <jroedel@suse.de>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Niklas Schnelle <schnelle@linux.ibm.com>,
+        with ESMTP id S1377079AbjJTMdT (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 20 Oct 2023 08:33:19 -0400
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B159E93;
+        Fri, 20 Oct 2023 05:33:17 -0700 (PDT)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-5a86b6391e9so8291307b3.0;
+        Fri, 20 Oct 2023 05:33:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1697805197; x=1698409997; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=KMvYl/tRg1JdMrVfnge+eYKdiJFbxif6udcePNEzkKY=;
+        b=eG9KWzYIiZI7+LZR/9UE/QFwnfC19VY1Mx0y/XlRqa5toNHVu19q9cSTLPphhq/hIl
+         +5wmqmP9KV/Q/vOFzqCvJl2FwoC9RPIz57EKJR4xGplR9LlMADQPdppdiNy7mAWc6zjp
+         jtU15GvI7lKHy+JGrQxr0nsKD16BGZv1QDm8IoGX6NhgULsH4JzpduFQiJgiXyXd7xe3
+         Bb+YyCmdP6vQrCyZ+KGj/xqeM+4MlaGb74gNPSxB/Qi7RW7X7RFltnzebmtaye7KxwPD
+         9W2NuPVpQEnzU9HtH/KFqxAuhUawez+j522KjfA+Ey+HERJaN8aQ6CBKu08vTx6AgGzz
+         xY0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697805197; x=1698409997;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KMvYl/tRg1JdMrVfnge+eYKdiJFbxif6udcePNEzkKY=;
+        b=SPGIETPmL8D3WleJxlejE2FVo2KrsrQe83Gfcgg7Cp3ARpakS9mRP0m/I41t8rBBl3
+         gkfHgzWLAHaapAEpH//hk0f7+6JVXC2UcZlDribDbIqZO4+fLPvYMggQuZuD9RqfcLaB
+         NmtKlod2lYCLJy7MHI4YrJITkqtt84Mx+F7HmcJCc1kZCOseEKmWXSuQZDXIbtqjdmI0
+         1xWJNSUwWcu6ovhXZukPKgsajX9U3CLSdgzZ7jsFzGIuS6AasrZOgJS/P1l3mwLXYnRe
+         Pa3HfqHvEP4fGq9+7QfYOVS+ICYifPlBRMIoG91sOZKWcf01IVQR9LCzGDZgYzHz3ckc
+         gUzg==
+X-Gm-Message-State: AOJu0YwOsp0zLIvulgQ3dsIxRdVI8SW7sDa7FtjDHkurJIyUjjSrckJW
+        rHb+dxqIarpM/jpDAMq5fCvEnFSkqKSiig==
+X-Google-Smtp-Source: AGHT+IGFC/VGdmb0heFEHGl0OHhT2G1hp9HMrDrk1QrhUgHJlHMvAOM/CPKt0O0iW7w/9VJpwwGHjA==
+X-Received: by 2002:a0d:e20a:0:b0:59b:fb69:1639 with SMTP id l10-20020a0de20a000000b0059bfb691639mr1766239ywe.32.1697805196684;
+        Fri, 20 Oct 2023 05:33:16 -0700 (PDT)
+Received: from localhost ([2607:fb90:3e1a:8bc6:bf58:5f88:bb90:604])
+        by smtp.gmail.com with ESMTPSA id d8-20020a814f08000000b005a23a62a25csm649266ywb.9.2023.10.20.05.33.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Oct 2023 05:33:16 -0700 (PDT)
+Date:   Fri, 20 Oct 2023 05:33:15 -0700
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Alexander Lobakin <aleksander.lobakin@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: Upcoming merge conflict between s390 fixes and iommu trees
-Message-ID: <your-ad-here.call-01697794551-ext-4002@work.hours>
-References: <your-ad-here.call-01697728651-ext-4593@work.hours>
- <0D650B3E-5E4D-406E-B5B5-E9135B97696B@suse.de>
+Subject: Re: linux-next: build failure after merge of the bitmap tree
+Message-ID: <ZTJzi6OM9w/hYL1v@yury-ThinkPad>
+References: <20231019170106.4159eac5@canb.auug.org.au>
+ <ZTFSHqjkHLM5iAqH@yury-ThinkPad>
+ <ZTIBESMp9qsRdVja@yury-ThinkPad>
+ <20231020155113.31acd611@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <0D650B3E-5E4D-406E-B5B5-E9135B97696B@suse.de>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: Wq6hTgXvBKCXxE4lmoR5oCs2Lh_KHKM6
-X-Proofpoint-ORIG-GUID: Wq6hTgXvBKCXxE4lmoR5oCs2Lh_KHKM6
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-10-20_07,2023-10-19_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxscore=0
- mlxlogscore=658 malwarescore=0 adultscore=0 priorityscore=1501 spamscore=0
- impostorscore=0 clxscore=1015 bulkscore=0 suspectscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2310170001 definitions=main-2310200079
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <20231020155113.31acd611@canb.auug.org.au>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,14 +74,47 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Oct 20, 2023 at 10:26:29AM +0200, Jörg Rödel wrote:
-> > Am 19.10.2023 um 17:17 schrieb Vasily Gorbik <gor@linux.ibm.com>:
-> > 
-> > The latter commit removes arch/s390/pci/pci_dma.c, so that's
-> > the way to go for the conflict resolution. Joerg, I believe it's your
-> > decision whether you would like to mention this trivial merge conflict in
-> > your pull request to Linus later.
+On Fri, Oct 20, 2023 at 03:51:13PM +1100, Stephen Rothwell wrote:
+> Hi Yury,
 > 
-> Thanks for the heads-up, I will probably resolve that in my merge-commit that will be the iommu/next branch, so upstream shouldn’t notice. I guess the fix will be in rc7?
+> On Thu, 19 Oct 2023 21:24:49 -0700 Yury Norov <yury.norov@gmail.com> wrote:
+> >
+> > On Thu, Oct 19, 2023 at 08:58:24AM -0700, Yury Norov wrote:
+> > > On Thu, Oct 19, 2023 at 05:01:06PM +1100, Stephen Rothwell wrote:  
+> > > > 
+> > > > After merging the bitmap tree, today's linux-next build (native perf)
+> > > > failed like this:
+> > > > 
+> > > > In file included from /home/sfr/next/next/tools/perf/util/header.h:10,
+> > > >                  from /home/sfr/next/perf/pmu-events/pmu-events.c:3:
+> > > > /home/sfr/next/next/tools/include/linux/bitmap.h:5:10: fatal error: linux/align.h: No such file or directory
+> > > >     5 | #include <linux/align.h>
+> > > >       |          ^~~~~~~~~~~~~~~
+> > > > 
+> > > > Caused by commit
+> > > > 
+> > > >   ed46ac8199f0 ("bitmap: introduce generic optimized bitmap_size()")
+> > > > 
+> > > > I have used the bitmap tree from next-20231018 for today.  
+> > > 
+> > > Thanks, Stephen. I'll take a look and let you know when it's resolved.  
+> > 
+> > So the problem is that the patch "bitmap: introduce generic optimized
+> > bitmap_size()" adds reference to the linux/align.h, which doesn't exist
+> > in tools.
+> > 
+> > I removed tools part of the patch entirely, and now tools/perf, for
+> > example, builds OK for me natively. The tree doesn't touch tools at
+> > all now, except for moving BYTES_TO_BITS() from a source file to a
+> > header, which looks safe.
+> 
+> Almost - see my other email.
+> 
+> > Can you please try the latest bitmap-for-next?
+> 
+> See above.
+> 
+> My "native" is PowerPC 64 LE.
 
-That's the plan, I will send my pull request for rc7 tomorrow.
+I tried arm64. Anyways, it's clear that the series is not ready yet.
+I'll drop it from bitmap_for_next. Sorry for this mess.

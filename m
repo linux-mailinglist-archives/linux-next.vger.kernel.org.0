@@ -2,76 +2,50 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EB647D258C
-	for <lists+linux-next@lfdr.de>; Sun, 22 Oct 2023 20:58:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A41537D262B
+	for <lists+linux-next@lfdr.de>; Sun, 22 Oct 2023 23:58:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232330AbjJVS6g (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 22 Oct 2023 14:58:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55346 "EHLO
+        id S231444AbjJVV6s (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 22 Oct 2023 17:58:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232025AbjJVS6f (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 22 Oct 2023 14:58:35 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BE64E6;
-        Sun, 22 Oct 2023 11:58:34 -0700 (PDT)
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39MIqxiW016711;
-        Sun, 22 Oct 2023 18:58:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding;
- s=corp-2023-03-30; bh=Z5FjhE0lXP7yPcnsHyhXfQkfD/iyz239cGkuzlE7Ktg=;
- b=RmrXWFsD7KNtCttW7ojuKc78oT1JdDKrfycHCYmsfz9CpxrSkhi4jgme76+mgOaYWmpS
- J6yIwuzE2SJ/U0YNpGZCqhcoiBPx7d0akExwEd/1crswrYw6rZ0cF2obtjSB3RpYeBeI
- 0FJ9MwCYDe1vunXdlPZR+iJ6pERx6xzVcoZbvaWHSdpV6QW//Z5ivWjdD8QTEr91je0y
- GoE9uyqvRdQxfrklIKrNxqtLBuPrPmhbsMDsVRphCdN99WGRTBNak5b18CO/sWznOjCv
- MdVDWETm/jHOR1xLoZ77PQYyJ+IS1HUwKbeFfw9FbbgB7yCyAX1a2PB2QUBLjdgf71zn Jw== 
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3tv68t9tp9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sun, 22 Oct 2023 18:58:17 +0000
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 39MHe2wh034522;
-        Sun, 22 Oct 2023 18:58:16 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3tv533795r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sun, 22 Oct 2023 18:58:16 +0000
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 39MIwG0O035256;
-        Sun, 22 Oct 2023 18:58:16 GMT
-Received: from localhost.localdomain (dhcp-10-175-52-84.vpn.oracle.com [10.175.52.84])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3tv533794v-1;
-        Sun, 22 Oct 2023 18:58:15 +0000
-From:   Vegard Nossum <vegard.nossum@oracle.com>
-To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        James Clark <james.clark@arm.com>,
-        Leo Yan <leo.yan@linaro.org>, Jonathan Corbet <corbet@lwn.net>
-Cc:     coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Rob Herring <robh@kernel.org>, linux-next@vger.kernel.org,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Bagas Sanjaya <bagasdotme@gmail.com>
-Subject: [PATCH] Documentation: coresight: fix `make refcheckdocs` warning
-Date:   Sun, 22 Oct 2023 20:58:06 +0200
-Message-Id: <20231022185806.919434-1-vegard.nossum@oracle.com>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S229452AbjJVV6r (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 22 Oct 2023 17:58:47 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A5DBE6;
+        Sun, 22 Oct 2023 14:58:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1698011918;
+        bh=73X4MkhybZjXtSjGU7T1doqZkeVHs7t2vC0PB7DzO3s=;
+        h=Date:From:To:Cc:Subject:From;
+        b=f4PREoOdQm64xodCM70c5Fujzz9fvqaJrZUIYhBoqK6d+U2VoJxebd7uUy9VqBwCi
+         H+odEIjOxYJ5kn+LFtCLr4s9n51zgKBFJ2bFlqgREbG5risgqFIVVUO712NTWpv2W8
+         8yYUdMm8NmAZjdX6Cg7FYTjjqpi/mWu41NrTC/iXG8NsIYjjolYYoBvHyEJOkbGdAt
+         9+aj3isAipvWV7HbCQnoqiS/aLUINvst8YXNU5MsOVArvJr0e3sdA0Z90s6uEwYmvJ
+         ocdK0fWgJuLzdBS7+zVs5ELAycMjTN0ofT+EUL1VqwIQjeBa+Otihu2HuKTrRIeDtH
+         TOv36daUr8Ojw==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4SDBzL590zz4wdF;
+        Mon, 23 Oct 2023 08:58:38 +1100 (AEDT)
+Date:   Mon, 23 Oct 2023 08:57:48 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andy Gross <agross@kernel.org>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patch in the qcom tree
+Message-ID: <20231023085748.453e74fc@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-10-22_16,2023-10-19_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 adultscore=0 phishscore=0
- mlxlogscore=999 mlxscore=0 bulkscore=0 suspectscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2310170001
- definitions=main-2310220175
-X-Proofpoint-ORIG-GUID: zWnmiCGfJCLpShlQU7tsgurc83z9kgtE
-X-Proofpoint-GUID: zWnmiCGfJCLpShlQU7tsgurc83z9kgtE
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+Content-Type: multipart/signed; boundary="Sig_/AqviQ4Rw=LZCWa4IfM35VcD";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,48 +53,43 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-This reference uses a glob pattern to match multiple files, but the
-asterisk was escaped as \* in order to not be interpreted by sphinx
-as reStructuredText markup.
+--Sig_/AqviQ4Rw=LZCWa4IfM35VcD
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-refcheckdocs/documentation-file-ref-check doesn't know about rST syntax
-and tries to interpret the \* literally (instead of as a glob).
+Hi all,
 
-We can work around the warning by putting the Documentation reference
-inside double backticks (``..``), which allows us to not escape the
-asterisk.
+The following commit is also in Linus Torvalds' tree as a different commit
+(but the same patch):
 
-Fixes: c06475910b52 ("Documentation: coresight: Escape coresight bindings file wildcard")
-Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
-Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
-Cc: Mike Leach <mike.leach@linaro.org>
-Cc: Leo Yan <leo.yan@linaro.org>
-Cc: Jonathan Corbet <corbet@lwn.net>
-Cc: Rob Herring <robh@kernel.org>
-Cc: coresight@lists.linaro.org
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-next@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Bagas Sanjaya <bagasdotme@gmail.com>
-Signed-off-by: Vegard Nossum <vegard.nossum@oracle.com>
----
- Documentation/trace/coresight/coresight.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+  00c86efb0f78 ("arm64: dts: qcom: sm8150: extend the size of the PDC resou=
+rce")
 
-diff --git a/Documentation/trace/coresight/coresight.rst b/Documentation/trace/coresight/coresight.rst
-index 4a71ea6cb390..826e59a698da 100644
---- a/Documentation/trace/coresight/coresight.rst
-+++ b/Documentation/trace/coresight/coresight.rst
-@@ -130,7 +130,7 @@ Misc:
- Device Tree Bindings
- --------------------
- 
--See Documentation/devicetree/bindings/arm/arm,coresight-\*.yaml for details.
-+See ``Documentation/devicetree/bindings/arm/arm,coresight-*.yaml`` for details.
- 
- As of this writing drivers for ITM, STMs and CTIs are not provided but are
- expected to be added as the solution matures.
--- 
-2.34.1
+This is commit
 
+  cf5716acbfc6 ("arm64: dts: qcom: sm8150: extend the size of the PDC resou=
+rce")
+
+in Linus' tree.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/AqviQ4Rw=LZCWa4IfM35VcD
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmU1mtwACgkQAVBC80lX
+0Gw2Mwf/eBcEoxaKz8mVpmrYROjwL1mZBfitdcEd/Vh7Uig0Pg16CeY4ulyr5MNr
+I+b4dCJq6GBXdBrw6aYLAuVJsXWT4jHBpkhlJJUqVnNExTuuSVUblQNLm4HqqjEZ
+bOEEc7Kn+PI8MnebrFToOxZDmYVkdVz9+4bAkKpO6Fh2qTHmzUF2figoMABtKRat
+MVzKainaZz6QvQgL8TJLo3mELFViM4uwG3g8KijZGP6Mdyo2X02I9HSwuYrzOvix
+qorBRFmLijqbSkp3TV58jT+Ormf4YoaMstikczI2e4/fVVhLNk7Ay8zxx+/9Hzzo
+Gl4YjvID7VlMtg2ghFZjS9osuy5/Vw==
+=zIDX
+-----END PGP SIGNATURE-----
+
+--Sig_/AqviQ4Rw=LZCWa4IfM35VcD--

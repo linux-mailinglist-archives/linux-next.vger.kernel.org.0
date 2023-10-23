@@ -2,47 +2,45 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E221B7D2764
-	for <lists+linux-next@lfdr.de>; Mon, 23 Oct 2023 02:06:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C78D7D2819
+	for <lists+linux-next@lfdr.de>; Mon, 23 Oct 2023 03:42:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229574AbjJWAGN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 22 Oct 2023 20:06:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35244 "EHLO
+        id S233094AbjJWBmK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 22 Oct 2023 21:42:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbjJWAGM (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 22 Oct 2023 20:06:12 -0400
+        with ESMTP id S233032AbjJWBmK (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 22 Oct 2023 21:42:10 -0400
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DD89AC;
-        Sun, 22 Oct 2023 17:06:10 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE019F7;
+        Sun, 22 Oct 2023 18:42:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1698019558;
-        bh=KxLfW+ZtEAVbPJoTJUsnJhN3cdkO2yMH519HclBRn1k=;
+        s=201702; t=1698025322;
+        bh=RaCCh9Z/e12DEo8pm9dRiMR3hb8GPa3Gm/pRDZSRVHw=;
         h=Date:From:To:Cc:Subject:From;
-        b=lnL2qXpwJro9weM9wgM4dSn5sC3EWQmPQVsknY1tyuzuitQ3m2bGhCuegyd2O2By6
-         AQSSQ90CFFNGdezhEKOTSrWQKuss2yKmjrYz3WGSmdncegYYHl2Ih7aKbIEzxou1mz
-         0yurEI9VkeF+kbte+L4kX4jmf9iTNbDFw95rjFHlvDiMki1l6n4zpmG4S1H2vsGpFG
-         KDARiInwgLcWN6WfOO0x/LA13GIzEziAd4q1KXvQl8m0EeaFmO905grp+lhYEqxDZ9
-         +/qupYyBng+xjTTQvA0F3BU6BSuVPOvCO/DYNlP7wk6mxMANedvOQLi1FcZFeUK2d9
-         ZVCB+BJaFyS/A==
+        b=to97amS2dqEJY+ViWtVaCnJwogGRHliuG4GPsnXBw+GT/zPOUuAE8nso6QQoQKwTA
+         9BmJz+KkcafJruoMcMMH6R9y3x1ygtAtw9qhiqPHT2FICRmwlaOEWtn1iwqDdM8TWc
+         HQk3X1SYgWaAdeDV8tvJqQDst7eJWLNO4VmV1XWyMqEqziWTdale+JLIQMhVYlfNSw
+         RZlk/MApmwS3s0kf/Ir4cHbLMz6escHItFqDi6sr28UeNy3YSjJ0QYHRKOnwKSTuRX
+         dcVF19X0GUOGJJJY/KNA2DzC1zmLffiCOMi1erPhs0r77pV8sQFl/+dO683r5pDjON
+         XEUEwF2FVv6zg==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4SDFpF6qkVz4x7q;
-        Mon, 23 Oct 2023 11:05:57 +1100 (AEDT)
-Date:   Mon, 23 Oct 2023 11:05:56 +1100
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4SDHx62Vtqz4wd7;
+        Mon, 23 Oct 2023 12:42:01 +1100 (AEDT)
+Date:   Mon, 23 Oct 2023 12:42:00 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof =?UTF-8?B?V2lsY3p5xYRza2k=?= <kw@linux.com>
-Cc:     Krzysztof =?UTF-8?B?V2lsY3p5xYRza2k=?= <kwilczynski@kernel.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Hannes Reinecke <hare@suse.de>, Keith Busch <kbusch@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the pci tree
-Message-ID: <20231023110556.6f704b95@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Sagi Grimberg <sagi@grimberg.me>
+Subject: linux-next: manual merge of the block tree with Linus' tree
+Message-ID: <20231023124200.38dd410b@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/B9hnPTZ7Heo/zFk3OY83G_4";
+Content-Type: multipart/signed; boundary="Sig_/d3N4OZEb57toJpLPWdvRs6z";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
@@ -53,47 +51,70 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/B9hnPTZ7Heo/zFk3OY83G_4
+--Sig_/d3N4OZEb57toJpLPWdvRs6z
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the pci tree, today's linux-next build (x86_64 allmodconfig)
-failed like this:
+Today's linux-next merge of the block tree got a conflict in:
 
-ERROR: modpost: "dw_pcie_write_dbi2" [drivers/pci/controller/dwc/pcie-rcar-=
-gen4.ko] undefined!
+  drivers/nvme/target/tcp.c
 
-Caused by commit
+between commit:
 
-  8227bf7a81e6 ("PCI: rcar-gen4: Add R-Car Gen4 PCIe controller support for=
- host mode")
+  d920abd1e7c4 ("nvmet-tcp: Fix a possible UAF in queue intialization setup=
+")
 
-or
+from Linus' tree and commit:
 
-  d3c54d8ba855 ("PCI: rcar-gen4: Add endpoint mode support")
+  675b453e0241 ("nvmet-tcp: enable TLS handshake upcall")
 
-I have used the pci tree from next-20231020 for today.
+from the block tree.
+
+I fixed it up (I am not sure this is necessary - see below) and can
+carry the fix as necessary. This is now fixed as far as linux-next is
+concerned, but any non trivial conflicts should be mentioned to your
+upstream maintainer when your tree is submitted for merging.  You may
+also want to consider cooperating with the maintainer of the conflicting
+tree to minimise any particularly complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/B9hnPTZ7Heo/zFk3OY83G_4
+diff --cc drivers/nvme/target/tcp.c
+index 197fc2ecb164,4336fe048e43..000000000000
+--- a/drivers/nvme/target/tcp.c
++++ b/drivers/nvme/target/tcp.c
+@@@ -910,8 -932,8 +933,10 @@@ static int nvmet_tcp_handle_icreq(struc
+  	iov.iov_base =3D icresp;
+  	iov.iov_len =3D sizeof(*icresp);
+  	ret =3D kernel_sendmsg(queue->sock, &msg, &iov, 1, iov.iov_len);
+--	if (ret < 0)
+ -		goto free_crypto;
+++	if (ret < 0) {
+++		queue->state =3D NVMET_TCP_Q_FAILED;
+ +		return ret; /* queue removal will cleanup */
+++	}
+ =20
+  	queue->state =3D NVMET_TCP_Q_LIVE;
+  	nvmet_prepare_receive_pdu(queue);
+
+--Sig_/d3N4OZEb57toJpLPWdvRs6z
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmU1uOQACgkQAVBC80lX
-0GwYRAgAigrZ33bmhiyrP5YrQUdqJwHq6430sN60nGKaFZlMbq4/h9yp5SRU3x/M
-cbt+hhiuROV8JmcsiJjGnICVLFCOZcELKGMc+KwFQ1tGP9JvoLnyoKnRRj11lmse
-PaQgoIx/nknH6Ui0dz9vyHXhupvEiYDtCB4TpIHvSz758rbfSuWulMVuxALW6HAX
-bNTBMn1Z/TIsGsJkIQz2ynTl46kX/SfjaVtVPa9BoY2j7kDHHdasxhELPIiuhV8P
-28/mBhc3oioFwmukU8YvwKKLtCeRjl5rZxlEAaJhoSPrKw5zslyJK3MQ3s6HF2OQ
-e4BCxDbF81HWP5Fy89rbnpnEGcG00w==
-=encu
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmU1z2gACgkQAVBC80lX
+0GxRTgf/WmF5ULtaDAldhJ8rqRyQ0p2AYEPlNW2AEytzKESkmPZXKxQqYlD81xpU
+1U+KHAefCzwO585RFsUg72nPgMEjDU4/xA876pMN3ndEIkGlnQTZFjuF6MrtIm38
+MAJ1bi2EEYrlaZ0Zmh+0U1dz3QU5OLjL5g6KbmeYvPg8iqNp/CIM7+fmt/tfNcmp
+aSjFstLKL6OQNJn09nBfVYxCD8cmCKvjN6EyD7fA2EOF+zYrgDQ0wfJuCP5IvLz+
+8x8uKvhp1SkAsEmiXf4U9VLOJkaEuzmfdJjU/QiNUjqNeJJbaRWr1BWQo/Q9Eyo4
+1puT1eg+TjeZGRAJDSV5uj+cvx9LuA==
+=XXoe
 -----END PGP SIGNATURE-----
 
---Sig_/B9hnPTZ7Heo/zFk3OY83G_4--
+--Sig_/d3N4OZEb57toJpLPWdvRs6z--

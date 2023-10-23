@@ -2,100 +2,77 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C29927D2889
-	for <lists+linux-next@lfdr.de>; Mon, 23 Oct 2023 04:30:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C3777D291C
+	for <lists+linux-next@lfdr.de>; Mon, 23 Oct 2023 05:32:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229484AbjJWCaj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 22 Oct 2023 22:30:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57898 "EHLO
+        id S229512AbjJWDcn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 22 Oct 2023 23:32:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjJWCaj (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 22 Oct 2023 22:30:39 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12741E6;
-        Sun, 22 Oct 2023 19:30:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1698028235;
-        bh=qZJjRgkqAihMjDj50w/GfceBMY5Z5Kln43KCHKCvuKA=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Os14L4HN6ukL18xTuXR/Hc0RCMCvTXtP0vOJ8rj4h5lSbxMnOo9pexPLoYrvY2ed8
-         Bq1HPL57buvdLdWZonYHsxM+Y8oP3jO+geU98DbpzzJ8L6GqP+GwKyHbs+aRehTRh7
-         IomLOfjeyabSnZruN1WqGm6QCrpuEBF4mDQUgW37VqPhxPrLb5MGUiQOaWa62gWV+i
-         +DTpy3BD/cdXQW5s1irGGvqApoAt+wYiwkgyD7WaqblAIEh9hjjKi9uxRIEOo6161K
-         Fr9L2PVZFY4GXwSiRod0jo0sLKdwisSjoBWqmzDyZuUeXwWBqPh8tyMIs8eb2O6RqJ
-         xpbPH5LXt3w+Q==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4SDK171mk9z4x5K;
-        Mon, 23 Oct 2023 13:30:34 +1100 (AEDT)
-Date:   Mon, 23 Oct 2023 13:30:33 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        with ESMTP id S229511AbjJWDcn (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 22 Oct 2023 23:32:43 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41189188;
+        Sun, 22 Oct 2023 20:32:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Y5xX1ErYcsMd6Y6gVo+lbykAvr/Jdr2/F+4FDP026CQ=; b=lxK+3fvOqD3CtQ1DgE3+eF0hkh
+        UqX1WgsdQZN/Ixg0ThkuMf0sFkSKMFT4lfksGNP1H6i9YsdaMp/4Xm/YGimwU8pPHQwO0l4u/fsYu
+        G4RQct1hFu31rbHKO2vhlMoYe/pTELjk/4kPAChdEoDZuzHwabKpC0dXTChJmo2f22gO3QI9IREmV
+        OdcVsCxzYOaNTxGfzc/5N38hR6fqcy+RtC9fu4IpWfFztBvVpa0TG+66s2OctNQhaoOKB4k8GcWrM
+        H/7Q+2kpUbD45oGEVhXJqvKsElVpCcVzLlqhkjfs6A+6Ir94n+Ty0RazW6XRueHlvxvO1xXmD2LSk
+        etMHA3QQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1qulg0-00BRDp-9t; Mon, 23 Oct 2023 03:32:24 +0000
+Date:   Mon, 23 Oct 2023 04:32:24 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the ftrace tree
-Message-ID: <20231023133033.5d54f393@canb.auug.org.au>
+Subject: Re: linux-next: build failure after merge of the ftrace tree
+Message-ID: <ZTXpSMF8Y1ePP9ba@casper.infradead.org>
+References: <20231023133033.5d54f393@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/9jVAICtGFUlw30MeC.db.J_";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231023133033.5d54f393@canb.auug.org.au>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/9jVAICtGFUlw30MeC.db.J_
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Mon, Oct 23, 2023 at 01:30:33PM +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the ftrace tree, today's linux-next build (powerpc
+> ppc64_defconfig) failed like this:
+> 
+> arch/powerpc/kernel/setup-common.c:604:10: error: 'struct seq_buf' has no member named 'readpos'
+>   604 |         .readpos = 0,
 
-Hi all,
+This would fix it.
 
-After merging the ftrace tree, today's linux-next build (powerpc
-ppc64_defconfig) failed like this:
+diff --git a/arch/powerpc/kernel/setup-common.c b/arch/powerpc/kernel/setup-common.c
+index 2f1026fba00d..34975532e44c 100644
+--- a/arch/powerpc/kernel/setup-common.c
++++ b/arch/powerpc/kernel/setup-common.c
+@@ -601,7 +601,6 @@ struct seq_buf ppc_hw_desc __initdata = {
+ 	.buffer = ppc_hw_desc_buf,
+ 	.size = sizeof(ppc_hw_desc_buf),
+ 	.len = 0,
+-	.readpos = 0,
+ };
+ 
+ static __init void probe_machine(void)
 
-arch/powerpc/kernel/setup-common.c:604:10: error: 'struct seq_buf' has no m=
-ember named 'readpos'
-  604 |         .readpos =3D 0,
-      |          ^~~~~~~
-arch/powerpc/kernel/setup-common.c:604:20: error: excess elements in struct=
- initializer [-Werror]
-  604 |         .readpos =3D 0,
-      |                    ^
-arch/powerpc/kernel/setup-common.c:604:20: note: (near initialization for '=
-ppc_hw_desc')
-cc1: all warnings being treated as errors
 
-Caused by commit
-
-  d0ed46b60396 ("tracing: Move readpos from seq_buf to trace_seq")
-
-I have used the ftrace tree from next-20231020 for today.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/9jVAICtGFUlw30MeC.db.J_
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmU12skACgkQAVBC80lX
-0GwYjQf+IMS1mUIck6bBw+EqX9dMQDTwJd8M2Qe2DhQuawIpvuTf7cJ8FvGQuszK
-dIa9is5KFYu8iZMybf4/JecN5urzf8jAFvf51mJt1Cc+jIsxh9vCMQAG6R7nFSMb
-wnIGZYZ/dwJJghAnTw3AiEy4/wUXxYiVi9vChoXZcmsfsqrtVBUrXs5d3XMQv3dY
-gWlaIYuS9GiFsGTD1QMfcMJWouEHmGE7skiGRn26EkRKoXKPhlTqMqEikQ9ayXLH
-0i/g6Pfb+vBgaEwwMBDBA9roXhhiT/KPNpVxoqHDKK9n359FE5t6dwlNaLwV1c2G
-oWHNG1/OHQ3biSz+ufWvsK6Ge3bGVw==
-=z2K5
------END PGP SIGNATURE-----
-
---Sig_/9jVAICtGFUlw30MeC.db.J_--
+Steven, do you prefer fixup patches like this, or do you want a v3 that
+includes this?

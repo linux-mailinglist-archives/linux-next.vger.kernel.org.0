@@ -2,105 +2,113 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D88D7D2929
-	for <lists+linux-next@lfdr.de>; Mon, 23 Oct 2023 05:47:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BFC47D297E
+	for <lists+linux-next@lfdr.de>; Mon, 23 Oct 2023 06:54:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229476AbjJWDr1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 22 Oct 2023 23:47:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59628 "EHLO
+        id S229459AbjJWEyE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 23 Oct 2023 00:54:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjJWDr1 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 22 Oct 2023 23:47:27 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40C0CE9;
-        Sun, 22 Oct 2023 20:47:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1698032843;
-        bh=SziYY1ABMf8DuL5z0is9ByCbU2OtLabxluT0AfjFci8=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Oetn57SUZrJ2AW4oMKUMSKY15V6Sl8gxYfS8PDjS2T1l7+4SzuBtt+LUZHiOBlyN3
-         n2dOU5oW8Blse0X+2xT9bJrFFmjhQS6DBsIAXOXqM+0U0BjtRPsVwnaJF6YGwaIXJI
-         ppmyctlqDICZkwVGHQHs+ZNHtwKtTv/8Fo8m2YPCwG6Vu3ks8Jt+G77yvcd+mtPf0S
-         wzA/2TnB/A5U9/5MxfTtmhMApbvgt2jsTLLODcRI5Y7cpiwAKzDKu3FZy5VLnVkf3A
-         F4b27HmlpSOSKe3Ku3S41CufgluvSLQOARp/bOM17A3J1Dylcpx5CxecOvWIPGJMUc
-         dVZjt/YTHWLag==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4SDLjk2ZTFz4x23;
-        Mon, 23 Oct 2023 14:47:22 +1100 (AEDT)
-Date:   Mon, 23 Oct 2023 14:47:20 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Greg KH <greg@kroah.com>, David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Networking <netdev@vger.kernel.org>,
-        Benjamin Poirier <benjamin.poirier@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Przemek Kitszel <przemyslaw.kitszel@intel.com>
-Subject: linux-next: manual merge of the staging tree with the net-next tree
-Message-ID: <20231023144720.231873f1@canb.auug.org.au>
+        with ESMTP id S229450AbjJWEyE (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 23 Oct 2023 00:54:04 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D15AE8;
+        Sun, 22 Oct 2023 21:54:02 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id 98e67ed59e1d1-27e1eea2f0dso1244609a91.1;
+        Sun, 22 Oct 2023 21:54:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1698036842; x=1698641642; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=mFb+Ar0GcO5xQuWTfgdau5HGbQ+ui9RngdB/9LQgP9M=;
+        b=AWu1dSCXNGOz2Y52eORdEitnVD055ZirExbzla7Nrak9viSi9ybXktYegSRl8aONBV
+         TSuZwapWkHZB6ozG7gt00QxF6CZgyEPjm00jrazNkEmEjrY1tni/hfZl1AtShfSXfUHT
+         cALl6LNN4mskFcq6pA+tcBqycw7YKMUArtA3oENv2z2UStfStVXuGuK+EufO3MvsKLdd
+         UiKLdPgivrsm/LbPXIEvLujXxqIIfTKCAkQ6GDttkPw5ON5uT9Jp8cSJ556T/ZpIBKQN
+         gTIZp0KkA+PiCKtZdnwFs1G09z4VUH17E1MEKSwLd2Z+lV22F8qSr6k0szYLgXmJ8SS+
+         AUlg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698036842; x=1698641642;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mFb+Ar0GcO5xQuWTfgdau5HGbQ+ui9RngdB/9LQgP9M=;
+        b=ScRwCI/vuG00ixUpgX5EQAIoKbG8+3QHAShdwekadLueyWjDgWn7BOciB+JkVb+YMJ
+         kBFYzhluI7kW8oaT3Imo/mBR7gmPfb1mFULXTONCCXQ5c+Yz0ElMCRMyoOpiKsrvhCD/
+         2s+0BGNe4mGgPmoy4MOFsDia57lac6VYawguw/9IW0x62mmqMEooCAwDxIsoxkHFU7e9
+         Hh6h2HutBf6Pa/ol5nhitgnl4nAu56JZfeP4rhT4Ywcwi2CmJfNvVXgeCKsPDuwCwe7H
+         DhThm/XmulEwN6O9RfjYVMMC/7Ed/YeIchI3dw2UFwqYgA81v+VPTfrR7xipSgyZzeff
+         Rexw==
+X-Gm-Message-State: AOJu0Yz9iM8xmrdJNlPjAK3s8Qa8KS8FVSy94qyyLsjqBFKNVFA+25FP
+        f2xf57QWa26Na+wEmtQ/uuo=
+X-Google-Smtp-Source: AGHT+IHwFwAEKGMqvCGzNHLFpPCCWPKpfB28wRRs6BA6fMnALzkwSmlTmQomrA/+J4WTH+/GeD+b6Q==
+X-Received: by 2002:a17:90a:1918:b0:27d:2371:9f74 with SMTP id 24-20020a17090a191800b0027d23719f74mr6041245pjg.0.1698036841736;
+        Sun, 22 Oct 2023 21:54:01 -0700 (PDT)
+Received: from debian.me ([103.131.18.64])
+        by smtp.gmail.com with ESMTPSA id pw4-20020a17090b278400b0026f4bb8b2casm6798844pjb.6.2023.10.22.21.54.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 22 Oct 2023 21:54:01 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 48E76937521F; Mon, 23 Oct 2023 11:53:57 +0700 (WIB)
+Date:   Mon, 23 Oct 2023 11:53:56 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Vegard Nossum <vegard.nossum@oracle.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        James Clark <james.clark@arm.com>,
+        Leo Yan <leo.yan@linaro.org>, Jonathan Corbet <corbet@lwn.net>
+Cc:     coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Rob Herring <robh@kernel.org>, linux-next@vger.kernel.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: Re: [PATCH] Documentation: coresight: fix `make refcheckdocs` warning
+Message-ID: <ZTX8ZPY3NQE_5cGX@debian.me>
+References: <20231022185806.919434-1-vegard.nossum@oracle.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/1k0w+OwPEDYvUpmeB8AIS_y";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="evayvaUGlLi0LV8Z"
+Content-Disposition: inline
+In-Reply-To: <20231022185806.919434-1-vegard.nossum@oracle.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/1k0w+OwPEDYvUpmeB8AIS_y
-Content-Type: text/plain; charset=US-ASCII
+
+--evayvaUGlLi0LV8Z
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+On Sun, Oct 22, 2023 at 08:58:06PM +0200, Vegard Nossum wrote:
+> -See Documentation/devicetree/bindings/arm/arm,coresight-\*.yaml for deta=
+ils.
+> +See ``Documentation/devicetree/bindings/arm/arm,coresight-*.yaml`` for d=
+etails.
 
-Today's linux-next merge of the staging tree got a conflict in:
+Oh, I should have inlined that path when I fixed the original warning. Anyw=
+ay,
 
-  drivers/staging/qlge/qlge_devlink.c
-
-between commit:
-
-  3465915e9985 ("staging: qlge: devlink health: use retained error fmsg API=
-")
-
-from the net-next tree and commit:
-
-  875be090928d ("staging: qlge: Retire the driver")
-
-from the staging tree.
-
-I fixed it up (I just deleted the file) and can carry the fix as
-necessary. This is now fixed as far as linux-next is concerned, but any
-non trivial conflicts should be mentioned to your upstream maintainer
-when your tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
+Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
 
 --=20
-Cheers,
-Stephen Rothwell
+An old man doll... just what I always wanted! - Clara
 
---Sig_/1k0w+OwPEDYvUpmeB8AIS_y
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+--evayvaUGlLi0LV8Z
+Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmU17MgACgkQAVBC80lX
-0GxEkggAke6CgrGBCpIMbig3gO6i+5vRazhxfigGMdsUJIaAgTtTkmgZy3ziEUO8
-zqA/zfUhemkK4MfxzCDnJlSiCB8fM7qkuTf9u8lN3l/Bv+jqIOPySsNFyw+6z01h
-PE5ngUL9y1wLl0r2ShhJn9VH6VYeTGcgCMz0g9GlyPvjTDJ5rJkXreS34MF7FbIK
-hlPy1KFVwqok/Z1KTFDyuiaJSRTXEtTECsoz4tHOKksRDE5jB0KV1gTl4wB9uFpQ
-tbkRYzzXlYuxUSDKhENFsJ1wDky2wRZsJlFQbRjDIoimtwn4xwI3z0SNujpRACI4
-n2Qmw+PDVT65lvukobXDl50hX5WGjQ==
-=dcuf
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZTX8YAAKCRD2uYlJVVFO
+owAGAQDq0UqUHK2blzaxbHy8g9mmvLl4ouKjvmjPsvi8Kkv/igEA4WjVvIxUbT6f
+zN9AJJDKc7MN9vPOz+twls/Do2dyQwo=
+=Jd0O
 -----END PGP SIGNATURE-----
 
---Sig_/1k0w+OwPEDYvUpmeB8AIS_y--
+--evayvaUGlLi0LV8Z--

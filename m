@@ -2,93 +2,76 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5A587D4298
-	for <lists+linux-next@lfdr.de>; Tue, 24 Oct 2023 00:15:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEA737D42A7
+	for <lists+linux-next@lfdr.de>; Tue, 24 Oct 2023 00:27:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231419AbjJWWPJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 23 Oct 2023 18:15:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48172 "EHLO
+        id S229605AbjJWW1U (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 23 Oct 2023 18:27:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbjJWWPJ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 23 Oct 2023 18:15:09 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AA749B;
-        Mon, 23 Oct 2023 15:15:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1698099305;
-        bh=reWOdwCpfQGeFAfpJoJyu/w7vKLIhVwz/XO9tGu8ldE=;
-        h=Date:From:To:Cc:Subject:From;
-        b=kvq4TBmja7IQru62PJjnKA5P912vRLQt3ztYnxKtwg8GcWddMi0KleYK5HxCQRnf9
-         k+fmjTyGQo2MXtvFXAoNwB1pGf1LbodA94oa2RLp+LjEytypmo3UQNW2FsfN6zNI5r
-         Jm4wwAtqnjWpvT+DbhloBJe9uU/8jZ08NFJWQ9C/xl84bK0yhzcluf+nRFY4a+s405
-         rQudN5i5DdD5eDlKo1EF1bFCRPloubO7FL54Kij4+YC4bvFqcDE3YZsFS1kkT1Xww9
-         HJOQa2BxAcnZjWg6jAAisarXVev891Dy+MQe9id81iLaId4d1ZuauwX2yhftiLL/j4
-         y62ItXDvHhFNg==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4SDqHr5hmWz4wx5;
-        Tue, 24 Oct 2023 09:15:04 +1100 (AEDT)
-Date:   Tue, 24 Oct 2023 09:15:01 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
-        Wu Hao <hao.wu@intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Marco Pagani <marpagan@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patch in the fpga-fixes tree
-Message-ID: <20231024091501.7d58bc99@canb.auug.org.au>
+        with ESMTP id S229562AbjJWW1U (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 23 Oct 2023 18:27:20 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1B1810C;
+        Mon, 23 Oct 2023 15:27:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=VVhvRIlQqXGnJRR9+75jpe4XOyrEd50DqThibj3ReZo=; b=B28j4+UgaFzw453tRvs72NdXSl
+        I2Z0dLC5hPPnj0ywIP5zD8YYstf4UXvNhnlomEnP52ijEefej+i9InagDQXrsphVZFatJWYfCYYFd
+        htEYny0GJEj0XsOENTwyCHhAyGfzldVAyhXVR0zoHH8LN+LBTQeDpedAycF8WYj5SvASyFDXrOM6K
+        SWQbXwxJqe7ZzsBlfuWLsxP1uMlkVAfjJ8oKk8vyb5j9RaFN98HYEKToRCHwySwCtxrcfjT6qqiAJ
+        +Kjn4YhiIMaYnfi0xuqjgY+YLpQ5Mvk0d8ZBju1ztybgKLcCWNOgqJtwWSac9TPeUPZdoOl8Hi7Dv
+        4N+z7nJw==;
+Received: from [50.53.46.231] (helo=[192.168.254.15])
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qv3OG-008Mvt-0W;
+        Mon, 23 Oct 2023 22:27:16 +0000
+Message-ID: <9e56e94d-536e-435a-afb0-4738e6eddedc@infradead.org>
+Date:   Mon, 23 Oct 2023 15:27:15 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/x3gwQHw0UI+JrD8s=qG6xAC";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla Thunderbird
+Subject: Re: linux-next: Tree for Oct 23
+ (drivers/iommu/iommufd/hw_pagetable.c)
+Content-Language: en-US
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        iommu@lists.linux.dev, Jason Gunthorpe <jgg@nvidia.com>,
+        Kevin Tian <kevin.tian@intel.com>
+References: <20231023165831.30d525ad@canb.auug.org.au>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20231023165831.30d525ad@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/x3gwQHw0UI+JrD8s=qG6xAC
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
 
-The following commit is also in the char-misc.current tree as a different
-commit (but the same patch):
+On 10/22/23 22:58, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Changes since 20231020:
+> 
 
-  ee8abd6ce1da ("fpga: disable KUnit test suites when module support is ena=
-bled")
+on ppc32 or i386:
 
-This is commit
+powerpc-linux-ld: drivers/iommu/iommufd/hw_pagetable.o: in function `iommufd_check_iova_range':
+hw_pagetable.c:(.text+0x90c): undefined reference to `__udivdi3'
+powerpc-linux-ld: drivers/iommu/iommufd/hw_pagetable.o: in function `iommufd_hwpt_get_dirty_bitmap':
+hw_pagetable.c:(.text+0xa4c): undefined reference to `__udivdi3'
 
-  a3fad2e92c76 ("fpga: disable KUnit test suites when module support is ena=
-bled")
 
-in the char-misc.current tree.
+Is there already a patch for this?
+Thanks.
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/x3gwQHw0UI+JrD8s=qG6xAC
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmU28GUACgkQAVBC80lX
-0Gy0Lgf/Tpdu1UfgFG4w3QBD6L+k/eNHML2Oos+dShdkRsUKEL3oDfDYlG1dR3bA
-t2GR93u9hLKnmfYU4v7r7wdGAyROTNPlzqEkdYAaBmdhnLxtBtkNAnHtkSENJNw0
-oBcmpb3VW1NuSw2jFXpYdrVbmvVzLM+DYpb4SMdMMXs6MT2t6fATwNSau3eVYfsh
-F3ffl45NzkxGyjcefZxbXA3eoh1RFxaozxMt5C29C8RMSieq9xNCAEGLpxkTfZQ/
-1qjIptILtU7GDTmG8KhYFAggLvV64ccFxr2rK60C+rG0Bxb4DM7Ip+0HXF8tFs47
-yz9304TkbDNd6WcTSNicYmyl4Mgoig==
-=Magm
------END PGP SIGNATURE-----
-
---Sig_/x3gwQHw0UI+JrD8s=qG6xAC--
+-- 
+~Randy

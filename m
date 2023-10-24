@@ -2,59 +2,37 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CAD57D5BE1
-	for <lists+linux-next@lfdr.de>; Tue, 24 Oct 2023 21:52:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E40E17D5D6C
+	for <lists+linux-next@lfdr.de>; Tue, 24 Oct 2023 23:48:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344254AbjJXTwz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 24 Oct 2023 15:52:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43822 "EHLO
+        id S1344403AbjJXVsF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 24 Oct 2023 17:48:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344318AbjJXTwy (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 24 Oct 2023 15:52:54 -0400
-Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9992C10D3;
-        Tue, 24 Oct 2023 12:52:52 -0700 (PDT)
-Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-1ea05b3f228so3228931fac.1;
-        Tue, 24 Oct 2023 12:52:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1698177172; x=1698781972; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=j4v0Tx3LEGkdavh4vYYD99MkxxVJWO8xEM2BO5mWKw0=;
-        b=Gpi77K2lRhIiYDXvP/TemUoLJ8wLxskX4dpU/rgpxRUkc1Yeh2uf825uArq7xNgzsc
-         P1lNtQ+e+EfqbE8BN8zdEkLCIOXcCi5ztfFTKzz7n7AEz5uNY8Xc02mlVD4rYaYemk4P
-         zSqfgg4O6Ztbpjt5aKGT4mRruIsev1xZ8DY6FthHKymVuGHLpkBlFWg7Zy0zmN1igujT
-         EKIqvdShOxc4ymFZTjVSg1LmzPIuTMXoy8/m8P6fFRSKkf0EI7yKZ0gSc1xrgCY7UNv+
-         c4dcBHd4rreLkelbIwbygZEWbR7txTi9oRowwdFTX01Z0xgyEIPnLNdVJb1ftfIpY+wv
-         4+pQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698177172; x=1698781972;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=j4v0Tx3LEGkdavh4vYYD99MkxxVJWO8xEM2BO5mWKw0=;
-        b=MPtF9BcBqNl3N0eHVcxHE3c9DL8Y0XMSCxdrCn56cuZqK4pvSmB3DD5nGRmfg/N+3s
-         bIMn2FJtMlxPvvLMe3yh+i9BZ+9yzz5arF1eFESEgczCP+nFblRY+6QZ1GWRfAYeIGZI
-         +fEZU1CiZDJDoa4AzgrCpflstKSQHufUg72KtEinx3NVciUzoyNcZ9bUr3F5wgiqEPcE
-         aTzRY2tHNscp0JrLOvfCCY4rs6uQ9rl6zRW1MWL58vUCtPPrKwIiYJB0giS+ATfUO4WW
-         iSy2YDuMzR6+eNcxkdFXvAy+J0K+M4YUd+Z4HYTIOLwgVShEiQwVRDy2qKdXPIfYafFg
-         vOeA==
-X-Gm-Message-State: AOJu0Yz+qPIYf1+q2l8RFoDzySpyupZLFiR+rIRTLtYZXr8xPgq7YSb4
-        I+jUMMjys9GGf5Eijz0Y7BfLRp+ZsorscEzE2p0=
-X-Google-Smtp-Source: AGHT+IF5+l/sIaMZYDwt0jM872L+aYqrqvPjN3KGyHM9mIDlE++bIFQ2z35Msbz7vXspgGElyXY2/Rr4ZNW2sTnJAJ8=
-X-Received: by 2002:a05:6870:4c02:b0:1be:ceca:c666 with SMTP id
- pk2-20020a0568704c0200b001bececac666mr19072674oab.14.1698177171769; Tue, 24
- Oct 2023 12:52:51 -0700 (PDT)
-MIME-Version: 1.0
-References: <20231010124357.5251e100@canb.auug.org.au> <20231019120618.71424848@canb.auug.org.au>
- <20231024115903.2d73440c@canb.auug.org.au> <CADnq5_Od1cQFp=5__LexMKzXwtnmcmcAidE-XsLkL3N4oz+5sg@mail.gmail.com>
-In-Reply-To: <CADnq5_Od1cQFp=5__LexMKzXwtnmcmcAidE-XsLkL3N4oz+5sg@mail.gmail.com>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Tue, 24 Oct 2023 15:52:40 -0400
-Message-ID: <CADnq5_P1fOw4pmh56D6E8m6JvMggsMFQhtGv=xhdkUbsUhdRYQ@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the amdgpu tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
+        with ESMTP id S1344397AbjJXVsF (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 24 Oct 2023 17:48:05 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CB6EA6;
+        Tue, 24 Oct 2023 14:48:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1698184081;
+        bh=+KNL7g0g6fROyWFjUkr+boWpQuBKjpa8CR0pq/4D8zM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ZCxUosBEYc3Ms/YFf2OU6tOvfLg5nUfAgEjlslRBrH8HFsvnOX7p0RjNIbyXX5+vT
+         kLvhpB2z+xJXivQTCp/1CzLBBuTphl6IyheewahXkuCN2rMRrZzdM/w/+rfoJF/HbI
+         jUyyTgeI41MvCeTcqYty+7ILZz/AsD5DyKcOQspwfqv/bvfE8KVOJ7cFydPW33Kvgc
+         /FQNyobve+T5P+nhvvWAoCcvIR5EDLoGlqBSzb4ImlE5CVUflgsKKbQ7RsPtjiystC
+         iEZdea9SYjun90nkUk0ler8hcScISMAwy/oOkG4FSYN9D7OQ9tt+PhiSb3RSKlnW0N
+         U7GnVVMtOQW6w==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4SFQf85gM0z4wcc;
+        Wed, 25 Oct 2023 08:48:00 +1100 (AEDT)
+Date:   Wed, 25 Oct 2023 08:47:59 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Alex Deucher <alexdeucher@gmail.com>
 Cc:     Dave Airlie <airlied@redhat.com>,
         Alex Deucher <alexander.deucher@amd.com>,
         Qingqing Zhuo <Qingqing.Zhuo@amd.com>,
@@ -63,64 +41,56 @@ Cc:     Dave Airlie <airlied@redhat.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         DRI <dri-devel@lists.freedesktop.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: linux-next: build failure after merge of the amdgpu tree
+Message-ID: <20231025084759.5685dac6@canb.auug.org.au>
+In-Reply-To: <CADnq5_Od1cQFp=5__LexMKzXwtnmcmcAidE-XsLkL3N4oz+5sg@mail.gmail.com>
+References: <20231010124357.5251e100@canb.auug.org.au>
+        <20231019120618.71424848@canb.auug.org.au>
+        <20231024115903.2d73440c@canb.auug.org.au>
+        <CADnq5_Od1cQFp=5__LexMKzXwtnmcmcAidE-XsLkL3N4oz+5sg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/yyBbuB_Al3833GDe2bbEKuu";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Oct 24, 2023 at 8:57=E2=80=AFAM Alex Deucher <alexdeucher@gmail.com=
-> wrote:
->
-> On Mon, Oct 23, 2023 at 8:59=E2=80=AFPM Stephen Rothwell <sfr@canb.auug.o=
-rg.au> wrote:
-> >
-> > Hi all,
-> >
-> > On Thu, 19 Oct 2023 12:06:18 +1100 Stephen Rothwell <sfr@canb.auug.org.=
-au> wrote:
-> > >
-> > > On Tue, 10 Oct 2023 12:43:57 +1100 Stephen Rothwell <sfr@canb.auug.or=
-g.au> wrote:
-> > > >
-> > > > After merging the amdgpu tree, today's linux-next build (x86_64
-> > > > allmodconfig) failed like this:
-> > > >
-> > > > drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core.c: =
-In function 'dml_core_mode_support':
-> > > > drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core.c:8=
-229:1: error: the frame size of 2736 bytes is larger than 2048 bytes [-Werr=
-or=3Dframe-larger-than=3D]
-> > > >  8229 | } // dml_core_mode_support
-> > > >       | ^
-> > > > cc1: all warnings being treated as errors
-> > > >
-> > > > Caused by commit
-> > > >
-> > > >   7966f319c66d ("drm/amd/display: Introduce DML2")
-> > > >
-> > > > (or maybe something later that changed storage size).
-> > > >
-> > > > I have used the amdgpu tree from next-20231009 for today.
-> > >
-> > > This build failure now (presumably) exists in the drm tree.  I am sti=
-ll
-> > > applying the 2 patches from Rodrigo to my tree as a work around.
-> > >
-> > > I would have expected that this was fixed in the amdgpu tree before
-> > > Dave was asked to merge it ...
-> >
-> > Any progress here?  I am still applying the 2 patches.
+--Sig_/yyBbuB_Al3833GDe2bbEKuu
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+
+Hi Alex,
+
+On Tue, 24 Oct 2023 08:57:16 -0400 Alex Deucher <alexdeucher@gmail.com> wro=
+te:
 >
 > The two patches are in my -next tree and in the PR I sent last week.
 
-Looks like the gitlab migration over the weekend lost some history.
-I've fixed it up.
+Thanks.
 
-Alex
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/yyBbuB_Al3833GDe2bbEKuu
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmU4O48ACgkQAVBC80lX
+0GyZpQf/e3wzrXrl45ds0KDXf61j+fkFieASUD2DPn9l+KZ660gcLuc5/90qoVNF
+peUQwhGDMDyxVykOvKD0NH/kAtyZCl1kZYBlbG8SHYOenOy7V1G2k2NgSjBpGIVX
+u0XmEGi+arBcS5duyT8RhoOjQ1L9rtXXjPeBinPUCuICEORF9BaNFCKDtucLlOyB
+EBS/pv8zrwrl9OpSU/XcnFqSDsgy7YegGnIDPDhbK+9MPbvrts/TzbZ+DG5Ckd6e
+GKl/gfWS7iAJFdXwDC0AHR6ofkVh9I/0SrHJlhkfkLwAB9M+99luya+KPxCcNoUV
+XSuFYEGKPfWLlfe/Rhz5H4VFayxssA==
+=2aPf
+-----END PGP SIGNATURE-----
+
+--Sig_/yyBbuB_Al3833GDe2bbEKuu--

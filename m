@@ -2,96 +2,111 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C44C87D4D05
-	for <lists+linux-next@lfdr.de>; Tue, 24 Oct 2023 11:55:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 818497D4E7B
+	for <lists+linux-next@lfdr.de>; Tue, 24 Oct 2023 13:01:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234069AbjJXJz0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 24 Oct 2023 05:55:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37856 "EHLO
+        id S231321AbjJXLBh (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 24 Oct 2023 07:01:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233988AbjJXJzZ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 24 Oct 2023 05:55:25 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC9A0C1;
-        Tue, 24 Oct 2023 02:55:22 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13200C433C7;
-        Tue, 24 Oct 2023 09:55:20 +0000 (UTC)
-Date:   Tue, 24 Oct 2023 10:55:18 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Will Deacon <will@kernel.org>,
+        with ESMTP id S231552AbjJXLBe (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 24 Oct 2023 07:01:34 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C568410C9;
+        Tue, 24 Oct 2023 04:01:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1698145292; x=1729681292;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=85PAA1+GqsYhqFpnQoQXck2TLmZV/C60H5Ubi4po3Rw=;
+  b=AwRgj5dnohVDVzsjGaFMMX3QUrcpYU6brBLDHQFsPgOq6rZ3ukFQYd76
+   kWW7DqfAD2Mpcx7ty4zOHYnyvAU3apwJ+A1AbbRjcxhZiIf7fvxA2tlUX
+   xVML909SqnPt5sXMuJa+upyiBexIQxRG43YS+G1+r1N9bPZk8+K3ztlg/
+   1d7plWKcK/BYzsKIPe1YhF0C1vgywycBR+Ff7naL3RK+7iDpLdAEgeUXU
+   l33PwfycajpKoxI5v9aBsZfThk4wKLVpGo/KC1WegboTUeAAUnBvoBd6j
+   3YOjgQho21+rOXKSsWErng3SWoxuz5x1uTpi82cFDGvEB1ZNqvF9BjxX6
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10872"; a="377408813"
+X-IronPort-AV: E=Sophos;i="6.03,247,1694761200"; 
+   d="scan'208";a="377408813"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2023 04:01:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10872"; a="708244687"
+X-IronPort-AV: E=Sophos;i="6.03,247,1694761200"; 
+   d="scan'208";a="708244687"
+Received: from nkraljev-mobl.ger.corp.intel.com ([10.249.41.91])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2023 04:01:29 -0700
+Date:   Tue, 24 Oct 2023 14:01:26 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Bjorn Helgaas <bhelgaas@google.com>
+cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?ISO-8859-2?Q?Krzysztof_Wilczy=F1ski?= <kw@linux.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>
-Subject: Re: linux-next: build warning after merge of the arm64 tree
-Message-ID: <ZTeUhsf1xWmkJcRh@arm.com>
-References: <20231024172409.7b519868@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the pci tree
+In-Reply-To: <20231024161425.0b382725@canb.auug.org.au>
+Message-ID: <a7d53cbd-d934-f0d3-af2a-fc16f642c4b9@linux.intel.com>
+References: <20231024161425.0b382725@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231024172409.7b519868@canb.auug.org.au>
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-+ Ard
+On Tue, 24 Oct 2023, Stephen Rothwell wrote:
 
-On Tue, Oct 24, 2023 at 05:24:09PM +1100, Stephen Rothwell wrote:
-> After merging the arm64 tree, today's linux-next build (arm64 defconfig)
-> produced this warning:
+> Hi all,
 > 
-> WARNING: modpost: vmlinux: section mismatch in reference: __pi_$x+0x38 (section: .text) -> __pi_map_range (section: .init.text)
+> After merging the pci tree, today's linux-next build (arm64 defconfig)
+> failed like this:
 > 
-> I don't know what caused this.
+> In file included from <command-line>:
+> drivers/pci/controller/dwc/pcie-tegra194.c: In function 'tegra_pcie_ep_irq_thread':
+> include/linux/compiler_types.h:435:45: error: call to '__compiletime_assert_497' declared with attribute error: FIELD_PREP: value too large for the field
+>   435 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+>       |                                             ^
+> include/linux/compiler_types.h:416:25: note: in definition of macro '__compiletime_assert'
+>   416 |                         prefix ## suffix();                             \
+>       |                         ^~~~~~
+> include/linux/compiler_types.h:435:9: note: in expansion of macro '_compiletime_assert'
+>   435 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+>       |         ^~~~~~~~~~~~~~~~~~~
+> include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
+>    39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+>       |                                     ^~~~~~~~~~~~~~~~~~
+> include/linux/bitfield.h:68:17: note: in expansion of macro 'BUILD_BUG_ON_MSG'
+>    68 |                 BUILD_BUG_ON_MSG(__builtin_constant_p(_val) ?           \
+>       |                 ^~~~~~~~~~~~~~~~
+> include/linux/bitfield.h:114:17: note: in expansion of macro '__BF_FIELD_CHECK'
+>   114 |                 __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
+>       |                 ^~~~~~~~~~~~~~~~
+> drivers/pci/controller/dwc/pcie-tegra194.c:498:29: note: in expansion of macro 'FIELD_PREP'
+>   498 |                 val = 110 | FIELD_PREP(PCI_LTR_SCALE_SHIFT, 2) | LTR_MSG_REQ;
+>       |                             ^~~~~~~~~~
+> 
+> Caused by commit
+> 
+>   18ca6c2c2d0e ("PCI: dwc: Use FIELD_GET/PREP()")
+> 
+> I have reverted that commit for today.
 
-For some reason, building linux-next doesn't inline all the functions in
-the map_range.c file and we end up with some of them in different
-sections. I didn't get this when building the arm64 for-next/core
-separately.
+Thanks for providing the full error message. I already was trying to
+investigate it and reproduce the problem because LKP's report I got about 
+this failed to provide the full error message.
 
-My fix (I'll push it to the arm64 branch):
-
-diff --git a/arch/arm64/kernel/pi/map_kernel.c b/arch/arm64/kernel/pi/map_kernel.c
-index be7caf07bfa7..e07f3ece5430 100644
---- a/arch/arm64/kernel/pi/map_kernel.c
-+++ b/arch/arm64/kernel/pi/map_kernel.c
-@@ -20,17 +20,17 @@ extern const u8 __eh_frame_start[], __eh_frame_end[];
-
- extern void idmap_cpu_replace_ttbr1(void *pgdir);
-
--static void map_segment(pgd_t *pg_dir, u64 *pgd, u64 va_offset,
--			void *start, void *end, pgprot_t prot,
--			bool may_use_cont, int root_level)
-+static void __init map_segment(pgd_t *pg_dir, u64 *pgd, u64 va_offset,
-+			       void *start, void *end, pgprot_t prot,
-+			       bool may_use_cont, int root_level)
- {
- 	map_range(pgd, ((u64)start + va_offset) & ~PAGE_OFFSET,
- 		  ((u64)end + va_offset) & ~PAGE_OFFSET, (u64)start,
- 		  prot, root_level, (pte_t *)pg_dir, may_use_cont, 0);
- }
-
--static void unmap_segment(pgd_t *pg_dir, u64 va_offset, void *start,
--			  void *end, int root_level)
-+static void __init unmap_segment(pgd_t *pg_dir, u64 va_offset, void *start,
-+				 void *end, int root_level)
- {
- 	map_segment(pg_dir, NULL, va_offset, start, end, __pgprot(0),
- 		    false, root_level);
-@@ -205,7 +205,7 @@ static void __init remap_idmap_for_lpa2(void)
- 	memset(init_pg_dir, 0, (u64)init_pg_end - (u64)init_pg_dir);
- }
-
--static void map_fdt(u64 fdt)
-+static void __init map_fdt(u64 fdt)
- {
- 	static u8 ptes[INIT_IDMAP_FDT_SIZE] __initdata __aligned(PAGE_SIZE);
- 	u64 efdt = fdt + MAX_FDT_SIZE;
+It seems that the original code was more complex than it looked and the 
+patch is wrong and suboptimal on multiple counts. I'll provide a fixed 
+v2.
 
 -- 
-Catalin
+ i.
+

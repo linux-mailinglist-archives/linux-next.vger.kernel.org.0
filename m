@@ -2,118 +2,124 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AE767D5079
-	for <lists+linux-next@lfdr.de>; Tue, 24 Oct 2023 14:57:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 832367D520B
+	for <lists+linux-next@lfdr.de>; Tue, 24 Oct 2023 15:42:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234423AbjJXM5c (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 24 Oct 2023 08:57:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47872 "EHLO
+        id S234286AbjJXNmg (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 24 Oct 2023 09:42:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234396AbjJXM5b (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 24 Oct 2023 08:57:31 -0400
-Received: from mail-oo1-xc34.google.com (mail-oo1-xc34.google.com [IPv6:2607:f8b0:4864:20::c34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D495190;
-        Tue, 24 Oct 2023 05:57:28 -0700 (PDT)
-Received: by mail-oo1-xc34.google.com with SMTP id 006d021491bc7-5841bdf1b81so2420053eaf.0;
-        Tue, 24 Oct 2023 05:57:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1698152248; x=1698757048; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TnNh0LRnjCLPjE/B6+4yEhPIsqvJNOCipSkYbYzorsc=;
-        b=hwrYGc1I2+z191YbNIqk2+OCp0QK94+jh9To1HGH+Jc1Gz/wqObrf0c+BgGjQSQZjj
-         d11GnzAUsO9l2uyP+QmeXqMHeScEjRxuTCgkRMmn139vSJSpkCw8mPeH1d8WEyNMHHc4
-         BGiRfTgbPRyswMZTg55IZCv3Nzxs0N/qCvuiZQpiiUcQ7QUqB80+Ow+lyDf2rrw7A+NQ
-         o6oPlwiG5r8MQGHSNOLagzODIRgjKqYZMTX82DaZOtaKAFVhKboNFjxhDLNTUASIv0Mu
-         9P/Qaif024ag307/ZRdbzTmI2w7N1lMEyo/ZMJDO5dhK7g6b5ehb/pDBlovjmWVwaobM
-         cMJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698152248; x=1698757048;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TnNh0LRnjCLPjE/B6+4yEhPIsqvJNOCipSkYbYzorsc=;
-        b=DG8R93PliLXeJWGi58FcD+oiwiKND1BMsz4lol2OqSZuOCNdSJtUY9ACyRgGqTpx+O
-         paI8034NeMUax8WN4u9tguwN4csCuw89ATGafsWK8eey5bPsQSg0pVz2HxN4phu2SOxj
-         RNxl05lDscpCieQreH+JNpoSVltBKjtpvSpPvVAp6nLJSldzTReJIlsB6xp+UQs0H1hC
-         9EdyKxIW8P32amwdf3eHFf0iC0HAu0M/BPwSwKZVqtLCbBTrKNWpbeLZQd7BdsUprohj
-         btl/8s8mRsgsleYDjUR6RvmoeplKaHSWDydd1U1GR6d0iaZVXiXBy24gYNmybi5f8Z8U
-         552w==
-X-Gm-Message-State: AOJu0YzhSt3Yhd28rAq02UzoQ+ssfEyn2COQlwuGbqua5uM5KZCv1RP3
-        Ocqff4VHPlyg0KSO4sMHl5ehrEczlbB4ay7nV0I=
-X-Google-Smtp-Source: AGHT+IGzsmQgOu7FVSXytUl8xoOGDU4hlcS/YQUZmgz7buw+9C5uBE1jP5997/JEOCTssiaEhiIMBVKRhijVGl2jRaE=
-X-Received: by 2002:a05:6870:e2ce:b0:1e9:d8a4:551f with SMTP id
- w14-20020a056870e2ce00b001e9d8a4551fmr14638728oad.17.1698152248003; Tue, 24
- Oct 2023 05:57:28 -0700 (PDT)
+        with ESMTP id S234210AbjJXNmg (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 24 Oct 2023 09:42:36 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F1B293;
+        Tue, 24 Oct 2023 06:42:34 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD88BC433C9;
+        Tue, 24 Oct 2023 13:42:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1698154953;
+        bh=oLUw4HUETYTag/q+WgmsddbpnNeeKsiPxomQx+RAhQo=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=RnVNYQASnBUCi7hrFCOBYE/zVGD6T5aLyP0YOtluyOSHUDBMjO2GQu/0+y1MIfN0K
+         n9VVgaDU9jzdbNbLpfX7HnKPBdXM5rG8SdSWUUpYWHCqIWGYtZ7pUH1D8HveLn1GT2
+         YG94zDB63VHZiWgZiDxBKcMzX1muHDi1uhAKZY28iWx2WJ7IqNrliPV7rxjmSgFm5A
+         iLCkvGGUKLb3YjgvSQqiKD+jTKIxFMJDdx4ZeMurfFBRUzOiFfSCWoYmlgtK0rkJTP
+         tN/jgZCG5uzzA8wPz4Y+HXk4vuNGBjXVS4UARSn1QKZ7niibfBgPI7E8KV9DXTop5l
+         KCQxKWcsmOHkg==
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-507bd644a96so6624926e87.3;
+        Tue, 24 Oct 2023 06:42:33 -0700 (PDT)
+X-Gm-Message-State: AOJu0YwGPyNVrjj5iwVeR/RTFIlBujVuqNSNukX/CN/qI1e+ieB6DxGE
+        OT2kVgDPZ/1BNhMZtJPVoXkF39U5VXDjUm3P4F8=
+X-Google-Smtp-Source: AGHT+IEeBOhs0t8y/Hr0aF+QuXEThQOJnUMJRir36Ob9NXaBD+VMPSvQjk2UmmPL7QSj7rkMV8lNLpTXKIwn6NTX9jg=
+X-Received: by 2002:ac2:5333:0:b0:502:d743:9fc4 with SMTP id
+ f19-20020ac25333000000b00502d7439fc4mr8948350lfh.37.1698154951976; Tue, 24
+ Oct 2023 06:42:31 -0700 (PDT)
 MIME-Version: 1.0
-References: <20231010124357.5251e100@canb.auug.org.au> <20231019120618.71424848@canb.auug.org.au>
- <20231024115903.2d73440c@canb.auug.org.au>
-In-Reply-To: <20231024115903.2d73440c@canb.auug.org.au>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Tue, 24 Oct 2023 08:57:16 -0400
-Message-ID: <CADnq5_Od1cQFp=5__LexMKzXwtnmcmcAidE-XsLkL3N4oz+5sg@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the amdgpu tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Dave Airlie <airlied@redhat.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Qingqing Zhuo <Qingqing.Zhuo@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Roman Li <roman.li@amd.com>,
+References: <20231024172409.7b519868@canb.auug.org.au> <ZTeUhsf1xWmkJcRh@arm.com>
+In-Reply-To: <ZTeUhsf1xWmkJcRh@arm.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Tue, 24 Oct 2023 15:42:20 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXGSG0KLa0NNnMM-_zh+wEJm94b2zpHtkSeUi1hdxMYa_Q@mail.gmail.com>
+Message-ID: <CAMj1kXGSG0KLa0NNnMM-_zh+wEJm94b2zpHtkSeUi1hdxMYa_Q@mail.gmail.com>
+Subject: Re: linux-next: build warning after merge of the arm64 tree
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Will Deacon <will@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        DRI <dri-devel@lists.freedesktop.org>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Oct 23, 2023 at 8:59=E2=80=AFPM Stephen Rothwell <sfr@canb.auug.org=
-.au> wrote:
+On Tue, 24 Oct 2023 at 11:55, Catalin Marinas <catalin.marinas@arm.com> wrote:
 >
-> Hi all,
+> + Ard
 >
-> On Thu, 19 Oct 2023 12:06:18 +1100 Stephen Rothwell <sfr@canb.auug.org.au=
-> wrote:
+> On Tue, Oct 24, 2023 at 05:24:09PM +1100, Stephen Rothwell wrote:
+> > After merging the arm64 tree, today's linux-next build (arm64 defconfig)
+> > produced this warning:
 > >
-> > On Tue, 10 Oct 2023 12:43:57 +1100 Stephen Rothwell <sfr@canb.auug.org.=
-au> wrote:
-> > >
-> > > After merging the amdgpu tree, today's linux-next build (x86_64
-> > > allmodconfig) failed like this:
-> > >
-> > > drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core.c: In=
- function 'dml_core_mode_support':
-> > > drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core.c:822=
-9:1: error: the frame size of 2736 bytes is larger than 2048 bytes [-Werror=
-=3Dframe-larger-than=3D]
-> > >  8229 | } // dml_core_mode_support
-> > >       | ^
-> > > cc1: all warnings being treated as errors
-> > >
-> > > Caused by commit
-> > >
-> > >   7966f319c66d ("drm/amd/display: Introduce DML2")
-> > >
-> > > (or maybe something later that changed storage size).
-> > >
-> > > I have used the amdgpu tree from next-20231009 for today.
+> > WARNING: modpost: vmlinux: section mismatch in reference: __pi_$x+0x38 (section: .text) -> __pi_map_range (section: .init.text)
 > >
-> > This build failure now (presumably) exists in the drm tree.  I am still
-> > applying the 2 patches from Rodrigo to my tree as a work around.
-> >
-> > I would have expected that this was fixed in the amdgpu tree before
-> > Dave was asked to merge it ...
+> > I don't know what caused this.
 >
-> Any progress here?  I am still applying the 2 patches.
+> For some reason, building linux-next doesn't inline all the functions in
+> the map_range.c file and we end up with some of them in different
+> sections. I didn't get this when building the arm64 for-next/core
+> separately.
+>
 
-The two patches are in my -next tree and in the PR I sent last week.
+Strange, I never ran into this before.
 
-Alex
+I guess commit 24cc769d70d8bda055a028aa6a is implicated in this, if we
+run into more trouble like this i'll look whether we can bring that
+logic back in some way.
+
+The fix looks fine to me.
+
+
+> My fix (I'll push it to the arm64 branch):
+>
+> diff --git a/arch/arm64/kernel/pi/map_kernel.c b/arch/arm64/kernel/pi/map_kernel.c
+> index be7caf07bfa7..e07f3ece5430 100644
+> --- a/arch/arm64/kernel/pi/map_kernel.c
+> +++ b/arch/arm64/kernel/pi/map_kernel.c
+> @@ -20,17 +20,17 @@ extern const u8 __eh_frame_start[], __eh_frame_end[];
+>
+>  extern void idmap_cpu_replace_ttbr1(void *pgdir);
+>
+> -static void map_segment(pgd_t *pg_dir, u64 *pgd, u64 va_offset,
+> -                       void *start, void *end, pgprot_t prot,
+> -                       bool may_use_cont, int root_level)
+> +static void __init map_segment(pgd_t *pg_dir, u64 *pgd, u64 va_offset,
+> +                              void *start, void *end, pgprot_t prot,
+> +                              bool may_use_cont, int root_level)
+>  {
+>         map_range(pgd, ((u64)start + va_offset) & ~PAGE_OFFSET,
+>                   ((u64)end + va_offset) & ~PAGE_OFFSET, (u64)start,
+>                   prot, root_level, (pte_t *)pg_dir, may_use_cont, 0);
+>  }
+>
+> -static void unmap_segment(pgd_t *pg_dir, u64 va_offset, void *start,
+> -                         void *end, int root_level)
+> +static void __init unmap_segment(pgd_t *pg_dir, u64 va_offset, void *start,
+> +                                void *end, int root_level)
+>  {
+>         map_segment(pg_dir, NULL, va_offset, start, end, __pgprot(0),
+>                     false, root_level);
+> @@ -205,7 +205,7 @@ static void __init remap_idmap_for_lpa2(void)
+>         memset(init_pg_dir, 0, (u64)init_pg_end - (u64)init_pg_dir);
+>  }
+>
+> -static void map_fdt(u64 fdt)
+> +static void __init map_fdt(u64 fdt)
+>  {
+>         static u8 ptes[INIT_IDMAP_FDT_SIZE] __initdata __aligned(PAGE_SIZE);
+>         u64 efdt = fdt + MAX_FDT_SIZE;
+>

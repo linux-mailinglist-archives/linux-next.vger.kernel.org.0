@@ -2,120 +2,107 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D1997D4461
-	for <lists+linux-next@lfdr.de>; Tue, 24 Oct 2023 02:59:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 701EC7D4574
+	for <lists+linux-next@lfdr.de>; Tue, 24 Oct 2023 04:28:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231349AbjJXA7M (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 23 Oct 2023 20:59:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51186 "EHLO
+        id S229921AbjJXC2n (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 23 Oct 2023 22:28:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbjJXA7M (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 23 Oct 2023 20:59:12 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A3A69B;
-        Mon, 23 Oct 2023 17:59:10 -0700 (PDT)
+        with ESMTP id S229582AbjJXC2n (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 23 Oct 2023 22:28:43 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 066AECC;
+        Mon, 23 Oct 2023 19:28:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1698109145;
-        bh=SrJb4FRbLHOUMnei7Nu8AGGqkqzQ05jh1OZ/FXAVENs=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=PqNH62PtOXuWAHsEhJdkbZEUmkBbp0Q35218A1RAwytZsZZALzec9WFlPq6ovY/oK
-         UGyE1B3BihV/x82NgTDgFG7zXyf4/psXH97Hr5z2F6ajtoBV/Y6lT3DuKP1CyZoUQi
-         n3TmjTdFgZDSmQnyRF2O3N9KpjTEUjuGuIdZ3YSS5JP7pjc/4VSbruR0+bNYSdtXng
-         Hh522X98YH8W/SvRbrertwvljy6TZCml1qACpK5tYYLWNWayCV1DklEg3wAi/dDDZm
-         pI9VOMOL+9YfK+z7MYmdaz5/sUnkWYWmdqMJDM/AlSsPA7WEkWhAr61xczfzmuaLC1
-         KQyOS45nBY3zA==
+        s=201702; t=1698114518;
+        bh=h6UYMiE2f0B2VXOwQI/9psAqqxTmSQz2TxvZRF5UFFA=;
+        h=Date:From:To:Cc:Subject:From;
+        b=CA60qC8++eikNno2KjdREZQypK/H1ViQQ2NgxBBY9jrgsW87YfyWW9lw8Vr8brONT
+         fLMOhf9beLYt1b2FD1Qpkn1XiOt5SIlYjXr97piuk9hmg9b6NCfm7cRFj4xp/XRMFG
+         L+Dcrc4gN1Bl/tpUx7crtqdlWulF1AzNVc4opyLN+494RQEzaMGW1dx2I8aWpqBbsE
+         8gCbhw37N7gYJ3eYrDsqqfGNM0osXAdfiqXWVr/J4crMs8Hz/bN5sk93GnGApwsb8W
+         uRJIY891hOFIp3r6TznF2UlZqo0Pkysfj183IvtG0LRvNGYgyc8JhodOS1Ad5YM1jB
+         1Xsmx2B3rhELg==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4SDtx40Qpcz4wx6;
-        Tue, 24 Oct 2023 11:59:04 +1100 (AEDT)
-Date:   Tue, 24 Oct 2023 11:59:03 +1100
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4SDwwP2B7Tz4wcg;
+        Tue, 24 Oct 2023 13:28:36 +1100 (AEDT)
+Date:   Tue, 24 Oct 2023 13:28:35 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alex Deucher <alexdeucher@gmail.com>,
-        Dave Airlie <airlied@redhat.com>
-Cc:     Alex Deucher <alexander.deucher@amd.com>,
-        Qingqing Zhuo <Qingqing.Zhuo@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Roman Li <roman.li@amd.com>,
+To:     Christoffer Dall <cdall@cs.columbia.edu>,
+        Marc Zyngier <maz@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     Ard Biesheuvel <ardb@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        DRI <dri-devel@lists.freedesktop.org>
-Subject: Re: linux-next: build failure after merge of the amdgpu tree
-Message-ID: <20231024115903.2d73440c@canb.auug.org.au>
-In-Reply-To: <20231019120618.71424848@canb.auug.org.au>
-References: <20231010124357.5251e100@canb.auug.org.au>
-        <20231019120618.71424848@canb.auug.org.au>
+        Oliver Upton <oliver.upton@linux.dev>,
+        Vincent Donnefort <vdonnefort@google.com>
+Subject: linux-next: manual merge of the kvm-arm tree with the arm64 tree
+Message-ID: <20231024132835.3b885fb8@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/79AEwpQI285WYzkSMPrKcN3";
+Content-Type: multipart/signed; boundary="Sig_/k0SswMXsNpeYrw=DHqkGzWn";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/79AEwpQI285WYzkSMPrKcN3
+--Sig_/k0SswMXsNpeYrw=DHqkGzWn
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Thu, 19 Oct 2023 12:06:18 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> On Tue, 10 Oct 2023 12:43:57 +1100 Stephen Rothwell <sfr@canb.auug.org.au=
-> wrote:
-> >
-> > After merging the amdgpu tree, today's linux-next build (x86_64
-> > allmodconfig) failed like this:
-> >=20
-> > drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core.c: In f=
-unction 'dml_core_mode_support':
-> > drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core.c:8229:=
-1: error: the frame size of 2736 bytes is larger than 2048 bytes [-Werror=
-=3Dframe-larger-than=3D]
-> >  8229 | } // dml_core_mode_support
-> >       | ^
-> > cc1: all warnings being treated as errors
-> >=20
-> > Caused by commit
-> >=20
-> >   7966f319c66d ("drm/amd/display: Introduce DML2")
-> >=20
-> > (or maybe something later that changed storage size).
-> >=20
-> > I have used the amdgpu tree from next-20231009 for today. =20
->=20
-> This build failure now (presumably) exists in the drm tree.  I am still
-> applying the 2 patches from Rodrigo to my tree as a work around.
->=20
-> I would have expected that this was fixed in the amdgpu tree before
-> Dave was asked to merge it ...
+Today's linux-next merge of the kvm-arm tree got a conflict in:
 
-Any progress here?  I am still applying the 2 patches.
+  arch/arm64/kvm/mmu.c
+
+between commits:
+
+  0e0fb2f69c1b ("arm64: kvm: avoid CONFIG_PGTABLE_LEVELS for runtime levels=
+")
+  8d35f7bcee55 ("arm64: kvm: Limit HYP VA and host S2 range to 48 bits when=
+ LPA2 is in effect")
+
+from the arm64 tree and commit:
+
+  bf92834e6f6e ("KVM: arm64: Use folio for THP adjustment")
+
+from the kvm-arm tree.
+
+I fixed it up (the latter removed the struct updated by the former, so
+I just did that) and can carry the fix as necessary. This is now fixed
+as far as linux-next is concerned, but any non trivial conflicts should
+be mentioned to your upstream maintainer when your tree is submitted for
+merging.  You may also want to consider cooperating with the maintainer
+of the conflicting tree to minimise any particularly complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/79AEwpQI285WYzkSMPrKcN3
+--Sig_/k0SswMXsNpeYrw=DHqkGzWn
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmU3FtcACgkQAVBC80lX
-0GyMvwf9HYGEZDNMSkCZ7E2MOqDEx3Rpt+Mjf/oeNayiftKsDhTXKptwhxVT+gFp
-InSe1w3hcETCVtcCE7FLmGblQ9HCOPQmqw78w7X7JvxdOrvuMmpo3S4QykUra6OI
-kSXQf+dreUVkBLFp0gdshV78vzTlmDSEczSglxLRJlUqe/+UoyeHv8pPsvXSuS8G
-doCDtPqou6MzW7thKx5cfDiaWXHSWS6bo3u4j6Wwdb4cumctnAfrewjM2sp4gH/p
-cqeKcpU46v7M3pTV62jDuK4tr8cjsZ1gqJa6JiLC8INgx3W1NUmmF8wzT05E7ouA
-Ix+dIp8D7O/jghWcBFriXKWGo3DJPQ==
-=REfC
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmU3K9MACgkQAVBC80lX
+0GwiEgf/WjewjROZQjqQHvWX+KfblkJf99qbyAgFs76UWfg+BJDS+Gu18SMtcS+G
+m5llZmDPUbjz5/wXXOOSUTVhXLIjrKJ6WQTfcGAdLUoONWNDJem9BruE4MSnWoOX
+dGl1QRDZYI70A5OYc7QTbs0JfuUPdHJI4fpfvQ9mWt3qq0g/6QM6ozR26P2lqtgm
+0OyteFwCAWTUId0ZJuYImXKDIHbMoEV9LQwccLQ5ufcxLCbUmPuYadU70quO7E4/
+Y1mB2k5zmidla1yQPVkGnGFx0lWeO6fnS+Fe9YHbo0tG4vv8Aor/YSmWY7p52DM9
+nUH9NbLFRgGdUCQyAzxrK+WTCPl5xA==
+=u22T
 -----END PGP SIGNATURE-----
 
---Sig_/79AEwpQI285WYzkSMPrKcN3--
+--Sig_/k0SswMXsNpeYrw=DHqkGzWn--

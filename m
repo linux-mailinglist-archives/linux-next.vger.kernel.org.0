@@ -2,54 +2,99 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 832367D520B
-	for <lists+linux-next@lfdr.de>; Tue, 24 Oct 2023 15:42:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17F8E7D56AD
+	for <lists+linux-next@lfdr.de>; Tue, 24 Oct 2023 17:39:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234286AbjJXNmg (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 24 Oct 2023 09:42:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51370 "EHLO
+        id S234739AbjJXPj3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 24 Oct 2023 11:39:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234210AbjJXNmg (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 24 Oct 2023 09:42:36 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F1B293;
-        Tue, 24 Oct 2023 06:42:34 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD88BC433C9;
-        Tue, 24 Oct 2023 13:42:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1698154953;
-        bh=oLUw4HUETYTag/q+WgmsddbpnNeeKsiPxomQx+RAhQo=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=RnVNYQASnBUCi7hrFCOBYE/zVGD6T5aLyP0YOtluyOSHUDBMjO2GQu/0+y1MIfN0K
-         n9VVgaDU9jzdbNbLpfX7HnKPBdXM5rG8SdSWUUpYWHCqIWGYtZ7pUH1D8HveLn1GT2
-         YG94zDB63VHZiWgZiDxBKcMzX1muHDi1uhAKZY28iWx2WJ7IqNrliPV7rxjmSgFm5A
-         iLCkvGGUKLb3YjgvSQqiKD+jTKIxFMJDdx4ZeMurfFBRUzOiFfSCWoYmlgtK0rkJTP
-         tN/jgZCG5uzzA8wPz4Y+HXk4vuNGBjXVS4UARSn1QKZ7niibfBgPI7E8KV9DXTop5l
-         KCQxKWcsmOHkg==
-Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-507bd644a96so6624926e87.3;
-        Tue, 24 Oct 2023 06:42:33 -0700 (PDT)
-X-Gm-Message-State: AOJu0YwGPyNVrjj5iwVeR/RTFIlBujVuqNSNukX/CN/qI1e+ieB6DxGE
-        OT2kVgDPZ/1BNhMZtJPVoXkF39U5VXDjUm3P4F8=
-X-Google-Smtp-Source: AGHT+IEeBOhs0t8y/Hr0aF+QuXEThQOJnUMJRir36Ob9NXaBD+VMPSvQjk2UmmPL7QSj7rkMV8lNLpTXKIwn6NTX9jg=
-X-Received: by 2002:ac2:5333:0:b0:502:d743:9fc4 with SMTP id
- f19-20020ac25333000000b00502d7439fc4mr8948350lfh.37.1698154951976; Tue, 24
- Oct 2023 06:42:31 -0700 (PDT)
-MIME-Version: 1.0
-References: <20231024172409.7b519868@canb.auug.org.au> <ZTeUhsf1xWmkJcRh@arm.com>
-In-Reply-To: <ZTeUhsf1xWmkJcRh@arm.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Tue, 24 Oct 2023 15:42:20 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXGSG0KLa0NNnMM-_zh+wEJm94b2zpHtkSeUi1hdxMYa_Q@mail.gmail.com>
-Message-ID: <CAMj1kXGSG0KLa0NNnMM-_zh+wEJm94b2zpHtkSeUi1hdxMYa_Q@mail.gmail.com>
-Subject: Re: linux-next: build warning after merge of the arm64 tree
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Will Deacon <will@kernel.org>,
+        with ESMTP id S234736AbjJXPj2 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 24 Oct 2023 11:39:28 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23A9ABA;
+        Tue, 24 Oct 2023 08:39:25 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 5121221BB7;
+        Tue, 24 Oct 2023 15:39:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1698161963;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=pBbG7Dlg9ISSfxrYHybVBbiAglMyxfSjXMsUAVHI02E=;
+        b=jN9jmipLmILlZjDxfH52TPyHhdKRYMkSPfP8wpUC/oAcaE5NyIIJIV7c5n9b1v0GIcJXO9
+        h2nSLCnR4aMBpGuUPQpeReUt+YbK5q4Ac7+U2CSLUK6AK/jX/lYXjqgW8P9VNJ9Yw4NsjW
+        aSpmV+ez3fewk2oEDxY8kowcKh3GBYg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1698161963;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=pBbG7Dlg9ISSfxrYHybVBbiAglMyxfSjXMsUAVHI02E=;
+        b=N025Ht92MTSUqFMrLPOS9y41MimMfSUTBobHGn4J2zOtxbedRBsM82a1tzjl8fDTfpyXaM
+        nRd3J0eICq7s8YCg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1ABDD1391C;
+        Tue, 24 Oct 2023 15:39:23 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id jb+1BSvlN2VMSwAAMHmgww
+        (envelope-from <dsterba@suse.cz>); Tue, 24 Oct 2023 15:39:23 +0000
+Date:   Tue, 24 Oct 2023 17:32:29 +0200
+From:   David Sterba <dsterba@suse.cz>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     David Sterba <dsterba@suse.cz>,
+        Christian Brauner <brauner@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Subject: Re: linux-next: manual merge of the vfs-brauner tree with the btrfs
+ tree
+Message-ID: <20231024153229.GP26353@twin.jikos.cz>
+Reply-To: dsterba@suse.cz
+References: <20231009104840.1bdadc80@canb.auug.org.au>
+ <20231009-bauch-gedanken-e02e35804e03@brauner>
+ <20231011083754.45a9ed53@canb.auug.org.au>
+ <20231011092004.GE2211@suse.cz>
+ <20231012154210.GI2211@suse.cz>
+ <20231023175513.GL26353@twin.jikos.cz>
+ <20231024082543.575b3edd@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231024082543.575b3edd@canb.auug.org.au>
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+Authentication-Results: smtp-out1.suse.de;
+        none
+X-Spam-Level: 
+X-Spam-Score: -10.80
+X-Spamd-Result: default: False [-10.80 / 50.00];
+         ARC_NA(0.00)[];
+         HAS_REPLYTO(0.30)[dsterba@suse.cz];
+         RCVD_VIA_SMTP_AUTH(0.00)[];
+         FROM_HAS_DN(0.00)[];
+         TO_MATCH_ENVRCPT_ALL(0.00)[];
+         NEURAL_HAM_LONG(-3.00)[-1.000];
+         MIME_GOOD(-0.10)[text/plain];
+         REPLYTO_ADDR_EQ_FROM(0.00)[];
+         REPLY(-4.00)[];
+         RCPT_COUNT_FIVE(0.00)[5];
+         DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+         TO_DN_ALL(0.00)[];
+         NEURAL_HAM_SHORT(-1.00)[-1.000];
+         FROM_EQ_ENVFROM(0.00)[];
+         MIME_TRACE(0.00)[0:+];
+         RCVD_COUNT_TWO(0.00)[2];
+         RCVD_TLS_ALL(0.00)[];
+         BAYES_HAM(-3.00)[100.00%]
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,69 +102,39 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, 24 Oct 2023 at 11:55, Catalin Marinas <catalin.marinas@arm.com> wrote:
->
-> + Ard
->
-> On Tue, Oct 24, 2023 at 05:24:09PM +1100, Stephen Rothwell wrote:
-> > After merging the arm64 tree, today's linux-next build (arm64 defconfig)
-> > produced this warning:
+On Tue, Oct 24, 2023 at 08:25:43AM +1100, Stephen Rothwell wrote:
+> Hi David,
+> 
+> On Mon, 23 Oct 2023 19:55:13 +0200 David Sterba <dsterba@suse.cz> wrote:
 > >
-> > WARNING: modpost: vmlinux: section mismatch in reference: __pi_$x+0x38 (section: .text) -> __pi_map_range (section: .init.text)
-> >
-> > I don't know what caused this.
->
-> For some reason, building linux-next doesn't inline all the functions in
-> the map_range.c file and we end up with some of them in different
-> sections. I didn't get this when building the arm64 for-next/core
-> separately.
->
+> > I have updated my for-next branch again, sorry (top commit 1a4dc97c883a4f763cbaf50).
+> > There are some fixes I don't want to miss from the 6.7 pull request.
+> > There should be minimal change to the VFS tree conflict resolution so
+> > the diff should be reusable.
+> 
+> So, why did you not just merge in v6.6-rc7 (or better yet, the branch
+> that contains the fix(es) that Linus merged) and then apply your new
+> commits on top of that?  All the commits that were in the btrfs tree
+> have been rebased unchanged.
 
-Strange, I never ran into this before.
+I don't back merge Linus' branches nor the fixes that I send, that's
+against what I understand is the recommended practice. The development
+queue gets rebased on top of the rc, in that way it's clean and
+eventually drops patches sent independently merged to the master branch.
 
-I guess commit 24cc769d70d8bda055a028aa6a is implicated in this, if we
-run into more trouble like this i'll look whether we can bring that
-logic back in some way.
+What you suggest I don't even visualize, like keep my previous frozen
+branch on rc5, merge rc7 and then merge some other branch with the
+recent fix? Or create another one with just additional patches (there
+were like 10)? That looks as if the btrfs tree would be quite busy but
+in fact it's not, the linear series makes a lot of things easier.
+For example I add Reviewed-by, CC: stable@ or other tags, fix typos or
+fix whitespace as long as there's another sync point before the code
+freeze.
 
-The fix looks fine to me.
+My workflow has been working well but now there's a huge pile of
+conflicting VFS changes that require other trees to effectively stop
+taking new patches or require back merges from Linus.
 
-
-> My fix (I'll push it to the arm64 branch):
->
-> diff --git a/arch/arm64/kernel/pi/map_kernel.c b/arch/arm64/kernel/pi/map_kernel.c
-> index be7caf07bfa7..e07f3ece5430 100644
-> --- a/arch/arm64/kernel/pi/map_kernel.c
-> +++ b/arch/arm64/kernel/pi/map_kernel.c
-> @@ -20,17 +20,17 @@ extern const u8 __eh_frame_start[], __eh_frame_end[];
->
->  extern void idmap_cpu_replace_ttbr1(void *pgdir);
->
-> -static void map_segment(pgd_t *pg_dir, u64 *pgd, u64 va_offset,
-> -                       void *start, void *end, pgprot_t prot,
-> -                       bool may_use_cont, int root_level)
-> +static void __init map_segment(pgd_t *pg_dir, u64 *pgd, u64 va_offset,
-> +                              void *start, void *end, pgprot_t prot,
-> +                              bool may_use_cont, int root_level)
->  {
->         map_range(pgd, ((u64)start + va_offset) & ~PAGE_OFFSET,
->                   ((u64)end + va_offset) & ~PAGE_OFFSET, (u64)start,
->                   prot, root_level, (pte_t *)pg_dir, may_use_cont, 0);
->  }
->
-> -static void unmap_segment(pgd_t *pg_dir, u64 va_offset, void *start,
-> -                         void *end, int root_level)
-> +static void __init unmap_segment(pgd_t *pg_dir, u64 va_offset, void *start,
-> +                                void *end, int root_level)
->  {
->         map_segment(pg_dir, NULL, va_offset, start, end, __pgprot(0),
->                     false, root_level);
-> @@ -205,7 +205,7 @@ static void __init remap_idmap_for_lpa2(void)
->         memset(init_pg_dir, 0, (u64)init_pg_end - (u64)init_pg_dir);
->  }
->
-> -static void map_fdt(u64 fdt)
-> +static void __init map_fdt(u64 fdt)
->  {
->         static u8 ptes[INIT_IDMAP_FDT_SIZE] __initdata __aligned(PAGE_SIZE);
->         u64 efdt = fdt + MAX_FDT_SIZE;
->
+I've assumed that linux-next can deal with rebases and eventual conflict
+resolutions stay applicable in some way and that one more sync a week
+before merge window is enough time for everybody to sync.

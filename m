@@ -2,111 +2,118 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 818497D4E7B
-	for <lists+linux-next@lfdr.de>; Tue, 24 Oct 2023 13:01:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AE767D5079
+	for <lists+linux-next@lfdr.de>; Tue, 24 Oct 2023 14:57:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231321AbjJXLBh (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 24 Oct 2023 07:01:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34098 "EHLO
+        id S234423AbjJXM5c (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 24 Oct 2023 08:57:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231552AbjJXLBe (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 24 Oct 2023 07:01:34 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C568410C9;
-        Tue, 24 Oct 2023 04:01:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1698145292; x=1729681292;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=85PAA1+GqsYhqFpnQoQXck2TLmZV/C60H5Ubi4po3Rw=;
-  b=AwRgj5dnohVDVzsjGaFMMX3QUrcpYU6brBLDHQFsPgOq6rZ3ukFQYd76
-   kWW7DqfAD2Mpcx7ty4zOHYnyvAU3apwJ+A1AbbRjcxhZiIf7fvxA2tlUX
-   xVML909SqnPt5sXMuJa+upyiBexIQxRG43YS+G1+r1N9bPZk8+K3ztlg/
-   1d7plWKcK/BYzsKIPe1YhF0C1vgywycBR+Ff7naL3RK+7iDpLdAEgeUXU
-   l33PwfycajpKoxI5v9aBsZfThk4wKLVpGo/KC1WegboTUeAAUnBvoBd6j
-   3YOjgQho21+rOXKSsWErng3SWoxuz5x1uTpi82cFDGvEB1ZNqvF9BjxX6
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10872"; a="377408813"
-X-IronPort-AV: E=Sophos;i="6.03,247,1694761200"; 
-   d="scan'208";a="377408813"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2023 04:01:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10872"; a="708244687"
-X-IronPort-AV: E=Sophos;i="6.03,247,1694761200"; 
-   d="scan'208";a="708244687"
-Received: from nkraljev-mobl.ger.corp.intel.com ([10.249.41.91])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2023 04:01:29 -0700
-Date:   Tue, 24 Oct 2023 14:01:26 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Bjorn Helgaas <bhelgaas@google.com>
-cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?ISO-8859-2?Q?Krzysztof_Wilczy=F1ski?= <kw@linux.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the pci tree
-In-Reply-To: <20231024161425.0b382725@canb.auug.org.au>
-Message-ID: <a7d53cbd-d934-f0d3-af2a-fc16f642c4b9@linux.intel.com>
-References: <20231024161425.0b382725@canb.auug.org.au>
+        with ESMTP id S234396AbjJXM5b (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 24 Oct 2023 08:57:31 -0400
+Received: from mail-oo1-xc34.google.com (mail-oo1-xc34.google.com [IPv6:2607:f8b0:4864:20::c34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D495190;
+        Tue, 24 Oct 2023 05:57:28 -0700 (PDT)
+Received: by mail-oo1-xc34.google.com with SMTP id 006d021491bc7-5841bdf1b81so2420053eaf.0;
+        Tue, 24 Oct 2023 05:57:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1698152248; x=1698757048; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TnNh0LRnjCLPjE/B6+4yEhPIsqvJNOCipSkYbYzorsc=;
+        b=hwrYGc1I2+z191YbNIqk2+OCp0QK94+jh9To1HGH+Jc1Gz/wqObrf0c+BgGjQSQZjj
+         d11GnzAUsO9l2uyP+QmeXqMHeScEjRxuTCgkRMmn139vSJSpkCw8mPeH1d8WEyNMHHc4
+         BGiRfTgbPRyswMZTg55IZCv3Nzxs0N/qCvuiZQpiiUcQ7QUqB80+Ow+lyDf2rrw7A+NQ
+         o6oPlwiG5r8MQGHSNOLagzODIRgjKqYZMTX82DaZOtaKAFVhKboNFjxhDLNTUASIv0Mu
+         9P/Qaif024ag307/ZRdbzTmI2w7N1lMEyo/ZMJDO5dhK7g6b5ehb/pDBlovjmWVwaobM
+         cMJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698152248; x=1698757048;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TnNh0LRnjCLPjE/B6+4yEhPIsqvJNOCipSkYbYzorsc=;
+        b=DG8R93PliLXeJWGi58FcD+oiwiKND1BMsz4lol2OqSZuOCNdSJtUY9ACyRgGqTpx+O
+         paI8034NeMUax8WN4u9tguwN4csCuw89ATGafsWK8eey5bPsQSg0pVz2HxN4phu2SOxj
+         RNxl05lDscpCieQreH+JNpoSVltBKjtpvSpPvVAp6nLJSldzTReJIlsB6xp+UQs0H1hC
+         9EdyKxIW8P32amwdf3eHFf0iC0HAu0M/BPwSwKZVqtLCbBTrKNWpbeLZQd7BdsUprohj
+         btl/8s8mRsgsleYDjUR6RvmoeplKaHSWDydd1U1GR6d0iaZVXiXBy24gYNmybi5f8Z8U
+         552w==
+X-Gm-Message-State: AOJu0YzhSt3Yhd28rAq02UzoQ+ssfEyn2COQlwuGbqua5uM5KZCv1RP3
+        Ocqff4VHPlyg0KSO4sMHl5ehrEczlbB4ay7nV0I=
+X-Google-Smtp-Source: AGHT+IGzsmQgOu7FVSXytUl8xoOGDU4hlcS/YQUZmgz7buw+9C5uBE1jP5997/JEOCTssiaEhiIMBVKRhijVGl2jRaE=
+X-Received: by 2002:a05:6870:e2ce:b0:1e9:d8a4:551f with SMTP id
+ w14-20020a056870e2ce00b001e9d8a4551fmr14638728oad.17.1698152248003; Tue, 24
+ Oct 2023 05:57:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20231010124357.5251e100@canb.auug.org.au> <20231019120618.71424848@canb.auug.org.au>
+ <20231024115903.2d73440c@canb.auug.org.au>
+In-Reply-To: <20231024115903.2d73440c@canb.auug.org.au>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Tue, 24 Oct 2023 08:57:16 -0400
+Message-ID: <CADnq5_Od1cQFp=5__LexMKzXwtnmcmcAidE-XsLkL3N4oz+5sg@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the amdgpu tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Dave Airlie <airlied@redhat.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Qingqing Zhuo <Qingqing.Zhuo@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Roman Li <roman.li@amd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        DRI <dri-devel@lists.freedesktop.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, 24 Oct 2023, Stephen Rothwell wrote:
-
+On Mon, Oct 23, 2023 at 8:59=E2=80=AFPM Stephen Rothwell <sfr@canb.auug.org=
+.au> wrote:
+>
 > Hi all,
-> 
-> After merging the pci tree, today's linux-next build (arm64 defconfig)
-> failed like this:
-> 
-> In file included from <command-line>:
-> drivers/pci/controller/dwc/pcie-tegra194.c: In function 'tegra_pcie_ep_irq_thread':
-> include/linux/compiler_types.h:435:45: error: call to '__compiletime_assert_497' declared with attribute error: FIELD_PREP: value too large for the field
->   435 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
->       |                                             ^
-> include/linux/compiler_types.h:416:25: note: in definition of macro '__compiletime_assert'
->   416 |                         prefix ## suffix();                             \
->       |                         ^~~~~~
-> include/linux/compiler_types.h:435:9: note: in expansion of macro '_compiletime_assert'
->   435 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
->       |         ^~~~~~~~~~~~~~~~~~~
-> include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
->    39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
->       |                                     ^~~~~~~~~~~~~~~~~~
-> include/linux/bitfield.h:68:17: note: in expansion of macro 'BUILD_BUG_ON_MSG'
->    68 |                 BUILD_BUG_ON_MSG(__builtin_constant_p(_val) ?           \
->       |                 ^~~~~~~~~~~~~~~~
-> include/linux/bitfield.h:114:17: note: in expansion of macro '__BF_FIELD_CHECK'
->   114 |                 __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
->       |                 ^~~~~~~~~~~~~~~~
-> drivers/pci/controller/dwc/pcie-tegra194.c:498:29: note: in expansion of macro 'FIELD_PREP'
->   498 |                 val = 110 | FIELD_PREP(PCI_LTR_SCALE_SHIFT, 2) | LTR_MSG_REQ;
->       |                             ^~~~~~~~~~
-> 
-> Caused by commit
-> 
->   18ca6c2c2d0e ("PCI: dwc: Use FIELD_GET/PREP()")
-> 
-> I have reverted that commit for today.
+>
+> On Thu, 19 Oct 2023 12:06:18 +1100 Stephen Rothwell <sfr@canb.auug.org.au=
+> wrote:
+> >
+> > On Tue, 10 Oct 2023 12:43:57 +1100 Stephen Rothwell <sfr@canb.auug.org.=
+au> wrote:
+> > >
+> > > After merging the amdgpu tree, today's linux-next build (x86_64
+> > > allmodconfig) failed like this:
+> > >
+> > > drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core.c: In=
+ function 'dml_core_mode_support':
+> > > drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core.c:822=
+9:1: error: the frame size of 2736 bytes is larger than 2048 bytes [-Werror=
+=3Dframe-larger-than=3D]
+> > >  8229 | } // dml_core_mode_support
+> > >       | ^
+> > > cc1: all warnings being treated as errors
+> > >
+> > > Caused by commit
+> > >
+> > >   7966f319c66d ("drm/amd/display: Introduce DML2")
+> > >
+> > > (or maybe something later that changed storage size).
+> > >
+> > > I have used the amdgpu tree from next-20231009 for today.
+> >
+> > This build failure now (presumably) exists in the drm tree.  I am still
+> > applying the 2 patches from Rodrigo to my tree as a work around.
+> >
+> > I would have expected that this was fixed in the amdgpu tree before
+> > Dave was asked to merge it ...
+>
+> Any progress here?  I am still applying the 2 patches.
 
-Thanks for providing the full error message. I already was trying to
-investigate it and reproduce the problem because LKP's report I got about 
-this failed to provide the full error message.
+The two patches are in my -next tree and in the PR I sent last week.
 
-It seems that the original code was more complex than it looked and the 
-patch is wrong and suboptimal on multiple counts. I'll provide a fixed 
-v2.
-
--- 
- i.
-
+Alex

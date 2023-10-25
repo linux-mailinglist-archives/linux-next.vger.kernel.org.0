@@ -2,83 +2,92 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59E617D5F19
-	for <lists+linux-next@lfdr.de>; Wed, 25 Oct 2023 02:34:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3009B7D5F1D
+	for <lists+linux-next@lfdr.de>; Wed, 25 Oct 2023 02:38:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230018AbjJYAes convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-next@lfdr.de>); Tue, 24 Oct 2023 20:34:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36676 "EHLO
+        id S231987AbjJYAiJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 24 Oct 2023 20:38:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbjJYAer (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 24 Oct 2023 20:34:47 -0400
-Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A35AA10DC;
-        Tue, 24 Oct 2023 17:34:45 -0700 (PDT)
-Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-564b6276941so4012769a12.3;
-        Tue, 24 Oct 2023 17:34:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698194085; x=1698798885;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IPJ3ikDFUsXo043wQDFUZjWLaI/XIii/rtjaUwo0cPo=;
-        b=p/u7wmkDNA7Ec9ZRxJS5yPdSjg836B66gl60BnIZzCIl2Km3Ckf7nP0/el83PDxUXm
-         /h3m+wedIwUp5OAx2elHEhsDLXDTlh5RCaYthfsUt8MkQpu4EDIAA5QFiyQK6s9FYNn8
-         idkQD2x2fJ28oDeq/iHfuVr2KBp7nMpT1qkr1MzA5l9YTeIN5PMpOjCfAQrv10IX0ver
-         iqAGS5xWF45drIMiIFeqxVk/KlgSKXuGI0l0CaNIrRYYlnXbXNeoEnNpjR9dbYzcg/UT
-         MnKKppWTKp1vtRxqQOZkkhQkdaHW4syohCC10bkcoOTbM3XRoYOE3LVoDsK1rCMCrB4E
-         Ppuw==
-X-Gm-Message-State: AOJu0YwNEyjkhXQxdK5u4+vFJdzOte4zSPH7nlAKTirVm4I3dyEGZ24m
-        0mawQfWewXYQb4mPOQTJoVdu6gWfh/W8tKpIS08=
-X-Google-Smtp-Source: AGHT+IHuCWQmOV9T92y6SKKVVwNZ03oYE1gpCz7tq6+YH0oXEFwazTvYlG8PSf0eqOaJsq1BsYXFVbR/UuAo0ZLHPSs=
-X-Received: by 2002:a17:90a:1602:b0:27d:4dae:3c62 with SMTP id
- n2-20020a17090a160200b0027d4dae3c62mr13428350pja.27.1698194084918; Tue, 24
- Oct 2023 17:34:44 -0700 (PDT)
-MIME-Version: 1.0
-References: <20231025102647.321c6629@canb.auug.org.au>
-In-Reply-To: <20231025102647.321c6629@canb.auug.org.au>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Tue, 24 Oct 2023 17:34:33 -0700
-Message-ID: <CAM9d7cjNAiE6bdSoQKsAqQcHBm1APz6C+-vQwu4BTB5R83dEgg@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the perf tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        with ESMTP id S232011AbjJYAiI (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 24 Oct 2023 20:38:08 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C60B10E3;
+        Tue, 24 Oct 2023 17:38:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1698194279;
+        bh=rQ2n3vaXvoxlfkwkAH5WFbjgcSuMcTxbu+XtzHZZmho=;
+        h=Date:From:To:Cc:Subject:From;
+        b=LbztQwO3SbPIUtHt8p3udHIuESMeiOkdEWZrUeKmA2PuhbqG9ejh6pL7i5nA2AETO
+         EU39yRLFnWEXWdjp8Rab+SvdGSLW8vssHA5OdY5iKkEoBp6zEHfCdIT3bIBNQGh/Tc
+         aZod+szJMZBXtNIpQ3rVOf3MPk+GTUb0DMPVxEwb7lgkivOhL/rg9hvZpy9J/UXePv
+         +uR9YJpt2mhcwhV8/PJRcZ4zDSwo2qWA6z1AzA57GIHlGcLbGEo6MF2P5x7sABuxeP
+         kyNdNq03EdP+TtCcCFXj2vNX1cmzVZcwK0pMmkWgl54CNHiFTp9wY9Rn361bV8GmKH
+         lz4Jznpy9WTlg==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4SFVQG2vh1z4wd4;
+        Wed, 25 Oct 2023 11:37:58 +1100 (AEDT)
+Date:   Wed, 25 Oct 2023 11:37:57 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
+        Wu Hao <hao.wu@intel.com>, Greg KH <greg@kroah.com>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Subject: linux-next: duplicate patches in the fpga-fixes tree
+Message-ID: <20231025113757.61688e0d@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/mnSsjN3oTgLkcDI_PksycAq";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hello,
+--Sig_/mnSsjN3oTgLkcDI_PksycAq
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Oct 24, 2023 at 4:27 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> After merging the perf tree, today's linux-next build (native perf)
-> failed like this:
->
-> perf/util/pmu-flex.c:1812:1: error: unterminated comment
->  1812 | /** Setup the input buffer state to scan a string. The next call to yylex() will
->       | ^
-> perf/util/pmu-flex.c:550:24: error: 'yy_fatal_error' used but never defined [-Werror]
->   550 | static void yynoreturn yy_fatal_error ( const char* msg , yyscan_t yyscanner );
->       |                        ^~~~~~~~~~~~~~
->
-> I don't know what caused this, but the above file looks fine and redoing
-> the build works, so it may be some timing problem when doing an
-> incremental build?
+Hi all,
 
-Yeah, I think I saw this error before.  Looks like a timing issue
-but I believe something is wrong with it.  I'll take a look.
+The following commits are also in the cha-misc.current tree as different
+commits (but the same patches):
 
-Thanks,
-Namhyung
+  03d4bf9ff34a ("fpga: Fix memory leak for fpga_region_test_class_find()")
+  9221d5ecebf0 ("fpga: m10bmc-sec: Change contact for secure update driver")
+
+These are commits
+
+  28926daf731f ("fpga: Fix memory leak for fpga_region_test_class_find()")
+  1e55c5200dc7 ("fpga: m10bmc-sec: Change contact for secure update driver")
+
+in the char-misc.current tree.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/mnSsjN3oTgLkcDI_PksycAq
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmU4Y2UACgkQAVBC80lX
+0GyLbgf+PhR+iVDVeTDNYqTUD27WSXDMJTKm1kMy+zC/tdOJx5OPw/JY+ujWJXdn
+dODaI/7sGefHRtLTCldaJAwtOy4MZMC3xPy9nNaFtZrG5dR+5ziy1Wo7UCr6Ng0k
+7WAyPO8kB+0KOBp/hvNmO8Z48a9lTU7v8wXa4edF2gGjnWtnWBtP69Kwj8X1Xnk9
+Em3MyVyY/RaQQMDooESyGkXZLJtVpBEBoahEsxnYzwQGJ346zUSo7qnv7tP9SpxH
+K8RlDKw84mU6ldFWHCqgTllU5POGO7uDVdAucGRBOJJkrno178icbkVvBs34Cy5n
+z/dHt4oBYkyQJ1vwVYrC4vbFM4SVRA==
+=OpJ3
+-----END PGP SIGNATURE-----
+
+--Sig_/mnSsjN3oTgLkcDI_PksycAq--

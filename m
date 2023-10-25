@@ -2,44 +2,54 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC64D7D5EA9
-	for <lists+linux-next@lfdr.de>; Wed, 25 Oct 2023 01:26:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F4827D5EF2
+	for <lists+linux-next@lfdr.de>; Wed, 25 Oct 2023 02:09:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344586AbjJXX0y (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 24 Oct 2023 19:26:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60978 "EHLO
+        id S1344712AbjJYAJZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 24 Oct 2023 20:09:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344484AbjJXX0y (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 24 Oct 2023 19:26:54 -0400
+        with ESMTP id S1344663AbjJYAJY (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 24 Oct 2023 20:09:24 -0400
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34A5CD7A;
-        Tue, 24 Oct 2023 16:26:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1621010D1;
+        Tue, 24 Oct 2023 17:09:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1698190008;
-        bh=cmGDdCcUCwFHEDhnWKHytkmnqawZeZ/8KeV8lsmxpRs=;
-        h=Date:From:To:Cc:Subject:From;
-        b=maMHOY3GMI+cvLqVsSlRh0vLmza25pnuDgJhanopusIjn1sZG9ohkGeAglUO4T5Gk
-         1KEQq2Fgh4+8bIcOx07oaOlS8cDU5tHOZbVrUSNLRx5IlzsU4Zm+U4nFSI8BrGxeJm
-         ztz2GKZBk95DVnFgPo8K/vq9Bbb9+N57wq5AmbzBA05U7RHpNcrslXeTmlKQlHgbd4
-         RlP+t5PXP6S1eJSJwDyNJm8pHjT1ee6vFGgvlv4dST7N1cvuQgPnOIMk3bSON5WkFU
-         v7BhL8WaIiaLmfg3/otorN16SH8lqu9/5RsmNjbnUylH7LkrCEr5GpiCsrsRGMBKtL
-         p7efVyS2fOusA==
+        s=201702; t=1698192559;
+        bh=/dPLz/UUEPyrz9+V37gfUQ/1jWhwCcantI4isgNsmf4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=TZYUP+ysGGM6yli2FDsx89ekkETbFFWa2/cYYQ/gQieZ6tAgmT+qktTRnwVUKbCsj
+         HXkVbLLqooVCR6BBRWVPPzqY5bwXcTB6IrFQFKmNy2U46D+doY+h4g0Oi27OV337cq
+         wW67iaolCaBy/J9J3AoeMUQ3O46OrCQyvWeCjzT6Es4l0LDfHyKFKpCzxosnQbS+Pb
+         ajnlAQbYnEb7L4tiXCr9l9j9ZlvKsZv4PyPxX91opYkTbRwPxg+oSuDNsgeoLh9+j5
+         EjkEJz7wCIe6O8ltmNe/vtiCWBajU6iFFcM7v/1//CMgUPVkdSsSYwcQofKZjcXsPV
+         4UH/4mvg78NsA==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4SFSr83Vdyz4wcc;
-        Wed, 25 Oct 2023 10:26:48 +1100 (AEDT)
-Date:   Wed, 25 Oct 2023 10:26:47 +1100
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4SFTnC53CTz4wd2;
+        Wed, 25 Oct 2023 11:09:19 +1100 (AEDT)
+Date:   Wed, 25 Oct 2023 11:09:18 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        Namhyung Kim <namhyung@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     David Sterba <dsterba@suse.cz>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the perf tree
-Message-ID: <20231025102647.321c6629@canb.auug.org.au>
+Subject: Re: linux-next: manual merge of the vfs-brauner tree with the btrfs
+ tree
+Message-ID: <20231025110918.5417ab87@canb.auug.org.au>
+In-Reply-To: <20231024153229.GP26353@twin.jikos.cz>
+References: <20231009104840.1bdadc80@canb.auug.org.au>
+        <20231009-bauch-gedanken-e02e35804e03@brauner>
+        <20231011083754.45a9ed53@canb.auug.org.au>
+        <20231011092004.GE2211@suse.cz>
+        <20231012154210.GI2211@suse.cz>
+        <20231023175513.GL26353@twin.jikos.cz>
+        <20231024082543.575b3edd@canb.auug.org.au>
+        <20231024153229.GP26353@twin.jikos.cz>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/BZy762ij+VMO.FPiSO4p/30";
+Content-Type: multipart/signed; boundary="Sig_/sQaoBO2EQeMWvXziY0XFN/F";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
@@ -50,47 +60,55 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/BZy762ij+VMO.FPiSO4p/30
+--Sig_/sQaoBO2EQeMWvXziY0XFN/F
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Hi David,
 
-After merging the perf tree, today's linux-next build (native perf)
-failed like this:
+On Tue, 24 Oct 2023 17:32:29 +0200 David Sterba <dsterba@suse.cz> wrote:
+>
+> On Tue, Oct 24, 2023 at 08:25:43AM +1100, Stephen Rothwell wrote:
+> >=20
+> > On Mon, 23 Oct 2023 19:55:13 +0200 David Sterba <dsterba@suse.cz> wrote=
+: =20
+> > >
+> > > I have updated my for-next branch again, sorry (top commit 1a4dc97c88=
+3a4f763cbaf50).
+> > > There are some fixes I don't want to miss from the 6.7 pull request.
+> > > There should be minimal change to the VFS tree conflict resolution so
+> > > the diff should be reusable. =20
+> >=20
+> > So, why did you not just merge in v6.6-rc7 (or better yet, the branch
+> > that contains the fix(es) that Linus merged) and then apply your new
+> > commits on top of that?  All the commits that were in the btrfs tree
+> > have been rebased unchanged. =20
+>=20
+> I don't back merge Linus' branches nor the fixes that I send, that's
+> against what I understand is the recommended practice. The development
+> queue gets rebased on top of the rc, in that way it's clean and
+> eventually drops patches sent independently merged to the master branch.
 
-perf/util/pmu-flex.c:1812:1: error: unterminated comment
- 1812 | /** Setup the input buffer state to scan a string. The next call to=
- yylex() will
-      | ^
-perf/util/pmu-flex.c:550:24: error: 'yy_fatal_error' used but never defined=
- [-Werror]
-  550 | static void yynoreturn yy_fatal_error ( const char* msg , yyscan_t =
-yyscanner );
-      |                        ^~~~~~~~~~~~~~
-
-I don't know what caused this, but the above file looks fine and redoing
-the build works, so it may be some timing problem when doing an
-incremental build?
+Please read Documentation/maintainer/rebasing-and-merging.rst
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/BZy762ij+VMO.FPiSO4p/30
+--Sig_/sQaoBO2EQeMWvXziY0XFN/F
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmU4UrcACgkQAVBC80lX
-0GxH1wf/Rw9gR2u9JuSElF66t53yQqutonKkCOkzOXufVdBmguf9B4kdO9gBNTo7
-HKDOe7v0AcyBxQ4T6U+YnHZfUY8cs41AMP9d5JmH7KGr7BMotUb/T0Er00pXJxVT
-2q5dWb0hR2B4G5UiNw6GfW0dM/snY4tcD8XGzSzyUXf736pFFrkFeav7Mu8hQRnr
-zxCm3uwWoMFe6zy1KVaUhA7SS+NeLNMtUUGmJCfRPWjYr87A6iRtWJazo2Q8ki5b
-/LEJpu1DV4NW6wZ8MTQzymqDjUBcN7t3p/MKpq7qSo6Kp3kBWq5n4mdk3u6B5ojj
-4GXlaiV9y4AEXLzFuKBFlULrC/RFuA==
-=kbyP
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmU4XK4ACgkQAVBC80lX
+0GzRMgf/YCA7AeSerC+aD8I+z7XGs+sHD4WVA5uArqsTMH33OARGkuDbLNu/4HkC
+B7PxRCIMJQo4Ae0I25cCYoK0xKt17AkEWPUgY7wExrT9XwL9VzgNqnJGAhSA155F
+y/YCaZVTVM7HNjZK04E64BYz/QGhQdbzwmv332LiP2q6SHFTcPXq+O0XApjWDEv1
+QROZR3kfoDBfiT2M8qyLNi0ao8AKII93mrkvsrfO2V9VsdTG+tNBXR2M2QacTY+S
+ko1Tx+zffDMG/tN5HWfOKEBDjB1HeeyluiHd3kTvH9oTkBmE6syZR6sYMOu8QAEW
+VM7l1TQDkgaH6ikJXKxvhmcp2pdEfA==
+=10zL
 -----END PGP SIGNATURE-----
 
---Sig_/BZy762ij+VMO.FPiSO4p/30--
+--Sig_/sQaoBO2EQeMWvXziY0XFN/F--

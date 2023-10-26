@@ -2,163 +2,169 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 994DC7D7C1B
-	for <lists+linux-next@lfdr.de>; Thu, 26 Oct 2023 07:16:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADE217D7C32
+	for <lists+linux-next@lfdr.de>; Thu, 26 Oct 2023 07:27:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229705AbjJZFQ3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 26 Oct 2023 01:16:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56790 "EHLO
+        id S230385AbjJZF1E (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 26 Oct 2023 01:27:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229554AbjJZFQ3 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 26 Oct 2023 01:16:29 -0400
-Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2894BB9;
-        Wed, 25 Oct 2023 22:16:27 -0700 (PDT)
-Received: by mail-qv1-xf33.google.com with SMTP id 6a1803df08f44-66d264e67d8so3711156d6.1;
-        Wed, 25 Oct 2023 22:16:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1698297386; x=1698902186; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xcRpgRwe25+UkQEfJDZGZHuA0KvrCaL/46MeTSbRYhg=;
-        b=iNlzEdEHzVV58O1KuXP17K7ludN6tkRrZM8aIHmIv/N8/AV8cefmDYaOxmAQ3oYBG3
-         pu5WCtwOHiBAXp2r7ByggNgY5VxaX3/CsiN2BYC4YMJyc4JU+qzLycrMHluuIxwzSTbG
-         rjM1BWxVpAK8z1wsAvKjohDGEWwL6pU2Vp+uB/yU2+pVSKYbN6HStDddiFFKptTPSZey
-         w7TXzI599gIU0hTnrLWxu/DJK7eX354SSEiw1UXK9bD9KXV9B8eX/oKq/prsJHVLBzOu
-         ctEATEZovdzsLhSJNYrZS399wxzcMw/mlyhQcsZL/f6Z8xYAGc+S/m6vgLouqhmKI1Ri
-         bFqg==
+        with ESMTP id S233277AbjJZF1D (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 26 Oct 2023 01:27:03 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0058187
+        for <linux-next@vger.kernel.org>; Wed, 25 Oct 2023 22:26:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1698297979;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=wqJae009xBE3KugPekEbv710hZP/gPekJx6jWnYEm18=;
+        b=JgAT0G3BB849gntQyo50lTSDuWijcogLeE8jAimsuRdNV32LBZ+88cGs1aib3mP43L/zpE
+        iimHtyKfGV8/z2itQxlP5qJNXWu3aKurAZnwUrMymWg+2WXoOy39DSzcsX2bgRrIsJaK5P
+        IFWZ0kpwen6DxBw57UKHIq5VuwKO7Z8=
+Received: from mail-lj1-f198.google.com (mail-lj1-f198.google.com
+ [209.85.208.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-153-CU-enoQoPc6tmIPss59ecg-1; Thu, 26 Oct 2023 01:26:16 -0400
+X-MC-Unique: CU-enoQoPc6tmIPss59ecg-1
+Received: by mail-lj1-f198.google.com with SMTP id 38308e7fff4ca-2c4fe286a5dso4272711fa.3
+        for <linux-next@vger.kernel.org>; Wed, 25 Oct 2023 22:26:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698297386; x=1698902186;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xcRpgRwe25+UkQEfJDZGZHuA0KvrCaL/46MeTSbRYhg=;
-        b=oyVqpLkoAOkBOjLjPVcL904q1awXPNOk/mYqCfBjvfmAYHqwEskQ1n/pI8ZEzOCGjE
-         It6ul57AB7Re90UkK8cELk0S/iU7rFuvRg8OBVjgElJfDBGfG2vmmNTWa1wgd5YuVIYm
-         GHR+3ZOVkUMsRV2OcF9+U/51utPfna+X1DPv6Vmwo7e4irxk/it2UfjhPbfxPw5ojY5/
-         9AUZcBTFE4nYXaXAbvhrGSj0u0sCTyrnYcmrzt0D5+1AAeID9e2wSMK5Vtj3y+RDvxit
-         mtFGCazvutP8Y4BOgV4ku3sN91KG+NvK2zL+9iQYkyfzRpQ6kyOo6giStgdei8PJvUbW
-         XkXw==
-X-Gm-Message-State: AOJu0YyHOUmaqWvLGltb5CrGfqvCgn/By7iWsEvfOdVu/oyuVhW/UG4w
-        wTIA5dOHzsp5M/EwubafH5FH8j9rg8DGdP5d16pWRw5qJmY=
-X-Google-Smtp-Source: AGHT+IGm5bZjOgdS9pjD1LIYa7YuuuCqRiJOGCr3vjsX7/7RF6uJ7LiB5Vye26ZWHi1SfuEmS2VI7QPhio+2h5rNG1I=
-X-Received: by 2002:a05:6214:c85:b0:65b:1594:264e with SMTP id
- r5-20020a0562140c8500b0065b1594264emr17698166qvr.51.1698297385896; Wed, 25
- Oct 2023 22:16:25 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1698297975; x=1698902775;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wqJae009xBE3KugPekEbv710hZP/gPekJx6jWnYEm18=;
+        b=qhCSCn/pY15P2GDpM1rMb4rLuY0HhrYYQSNTD6fTEvw3+uK1YBjdU7iap7aAlEbL9t
+         +afty+ur9gSOGz+PBKymWzYjYfsu75tuJ8Q7XvoHfNk/l+1+3TvS+MzVP3uBiD1JeHa0
+         5M3t7sWslvF4n1dldOYzbC/eaH4b3Ae5OKIYmAHD94qBxPOygwHaIdN1ZErPUbgKj+bN
+         wPjNocQpEXrbfBchZKS70v1HdnZAF/lLhr9tsrYeoRs339U+RzrXHXB66wN8tRqfn8fC
+         0nLz4ct+YJE2jkuhvzCOYTlfYgvyYFux+R1EFlLIHVOrub+u6A+IMbCT9C4dL8bKMCmz
+         pBLA==
+X-Gm-Message-State: AOJu0YzDTF2v84A6XsYpfaD89Gccw7gZWEewlmYMgBooTuCCTQjjkgld
+        wz1viFHJyFhy6PnSy9wMhH49tTHrq5jfHOSC0EBbSAM+VTsMkj5DeXeUxzdjgm+QuA90Ftw61QD
+        t8x1d0JprfpX36KoSB+ibRw==
+X-Received: by 2002:a2e:7a0b:0:b0:2c5:1075:5ec9 with SMTP id v11-20020a2e7a0b000000b002c510755ec9mr10995819ljc.13.1698297975209;
+        Wed, 25 Oct 2023 22:26:15 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGvK8TcWtAa7HeN38eCIs/EyjZjcjRrw4ST8tbuymn5lLBsYCwz56XxpCAwv10LfG1bqXWNzw==
+X-Received: by 2002:a2e:7a0b:0:b0:2c5:1075:5ec9 with SMTP id v11-20020a2e7a0b000000b002c510755ec9mr10995811ljc.13.1698297974852;
+        Wed, 25 Oct 2023 22:26:14 -0700 (PDT)
+Received: from redhat.com ([2.52.26.119])
+        by smtp.gmail.com with ESMTPSA id g11-20020adffc8b000000b0032dc24ae625sm13339764wrr.12.2023.10.25.22.26.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Oct 2023 22:26:14 -0700 (PDT)
+Date:   Thu, 26 Oct 2023 01:26:10 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Si-Wei Liu <si-wei.liu@oracle.com>
+Cc:     jasowang@redhat.com, virtualization@lists.linux-foundation.org,
+        sfr@canb.auug.org.au, leiyang@redhat.com,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
+Subject: Re: [PATCH] vhost-vdpa: fix use-after-free in _compat_vdpa_reset
+Message-ID: <20231026012326-mutt-send-email-mst@kernel.org>
+References: <1698275594-19204-1-git-send-email-si-wei.liu@oracle.com>
 MIME-Version: 1.0
-References: <20231026100157.735d7dee@canb.auug.org.au>
-In-Reply-To: <20231026100157.735d7dee@canb.auug.org.au>
-From:   Amir Goldstein <amir73il@gmail.com>
-Date:   Thu, 26 Oct 2023 08:16:14 +0300
-Message-ID: <CAOQ4uxjmRena4AB3yMQhBJ58c6DRtkDJJrnTgFe=gWsadSdbQw@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the vfs-brauner tree with the
- bcachefs tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Kent Overstreet <kent.overstreet@linux.dev>,
-        Kent Overstreet <kent.overstreet@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Jeff Layton <jlayton@kernel.org>,
-        Chuck Lever <chuck.lever@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1698275594-19204-1-git-send-email-si-wei.liu@oracle.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Oct 26, 2023 at 2:02=E2=80=AFAM Stephen Rothwell <sfr@canb.auug.org=
-.au> wrote:
->
-> Hi all,
->
-> Today's linux-next merge of the vfs-brauner tree got a conflict in:
->
->   include/linux/exportfs.h
->
-> between commit:
->
->   85e95ca7cc48 ("bcachefs: Update export_operations for snapshots")
->
-> from the bcachefs tree and commit:
->
->   2560fa66d2ac ("exportfs: define FILEID_INO64_GEN* file handle types")
->
-> from the vfs-brauner tree.
->
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
->
-> --
-> Cheers,
-> Stephen Rothwell
+On Wed, Oct 25, 2023 at 04:13:14PM -0700, Si-Wei Liu wrote:
+> When the vhost-vdpa device is being closed, vhost_vdpa_cleanup() doesn't
+> clean up the vqs pointer after free. This could lead to use-after-tree
+> when _compat_vdpa_reset() tries to access the vqs that are freed already.
+> Fix is to set vqs pointer to NULL at the end of vhost_vdpa_cleanup()
+> after getting freed, which is guarded by atomic opened state.
+> 
+>   BUG: unable to handle page fault for address: 00000001005b4af4
+>   #PF: supervisor read access in kernel mode
+>   #PF: error_code(0x0000) - not-present page
+>   PGD 16a80a067 P4D 0
+>   Oops: 0000 [#1] PREEMPT SMP NOPTI
+>   CPU: 4 PID: 40387 Comm: qemu-kvm Not tainted 6.6.0-rc7+ #3
+>   Hardware name: Dell Inc. PowerEdge R750/0PJ80M, BIOS 1.8.2 09/14/2022
+>   RIP: 0010:_compat_vdpa_reset.isra.0+0x27/0xb0 [vhost_vdpa]
+>   Code: 90 90 90 0f 1f 44 00 00 41 55 4c 8d ae 08 03 00 00 41 54 55 48
+>   89 f5 53 4c 8b a6 00 03 00 00 48 85 ff 74 49 48 8b 07 4c 89 ef <48> 8b
+>   80 88 45 00 00 48 c1 e8 08 48 83 f0 01 89 c3 e8 73 5e 9b dc
+>   RSP: 0018:ff73a85762073ba0 EFLAGS: 00010286
+>   RAX: 00000001005b056c RBX: ff32b13ca6994c68 RCX: 0000000000000002
+>   RDX: 0000000000000001 RSI: ff32b13c07559000 RDI: ff32b13c07559308
+>   RBP: ff32b13c07559000 R08: 0000000000000000 R09: ff32b12ca497c0f0
+>   R10: ff73a85762073c58 R11: 0000000c106f9de3 R12: ff32b12c95b1d050
+>   R13: ff32b13c07559308 R14: ff32b12d0ddc5100 R15: 0000000000008002
+>   FS:  00007fec5b8cbf80(0000) GS:ff32b13bbfc80000(0000)
+>   knlGS:0000000000000000
+>   CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>   CR2: 00000001005b4af4 CR3: 000000015644a003 CR4: 0000000000773ee0
+>   PKRU: 55555554
+>   Call Trace:
+>    <TASK>
+>    ? __die+0x20/0x70
+>    ? page_fault_oops+0x76/0x170
+>    ? exc_page_fault+0x65/0x150
+>    ? asm_exc_page_fault+0x22/0x30
+>    ? _compat_vdpa_reset.isra.0+0x27/0xb0 [vhost_vdpa]
+>    vhost_vdpa_open+0x57/0x280 [vhost_vdpa]
+>    ? __pfx_chrdev_open+0x10/0x10
+>    chrdev_open+0xc6/0x260
+>    ? __pfx_chrdev_open+0x10/0x10
+>    do_dentry_open+0x16e/0x530
+>    do_open+0x21c/0x400
+>    path_openat+0x111/0x290
+>    do_filp_open+0xb2/0x160
+>    ? __check_object_size.part.0+0x5e/0x140
+>    do_sys_openat2+0x96/0xd0
+>    __x64_sys_openat+0x53/0xa0
+>    do_syscall_64+0x59/0x90
+>    ? syscall_exit_to_user_mode+0x22/0x40
+>    ? do_syscall_64+0x69/0x90
+>    ? syscall_exit_to_user_mode+0x22/0x40
+>    ? do_syscall_64+0x69/0x90
+>    ? do_syscall_64+0x69/0x90
+>    ? syscall_exit_to_user_mode+0x22/0x40
+>    ? do_syscall_64+0x69/0x90
+>    ? exc_page_fault+0x65/0x150
+>    entry_SYSCALL_64_after_hwframe+0x6e/0xd8
+> 
+> Fixes: 10cbf8dfaf93 ("vhost-vdpa: clean iotlb map during reset for older userspace")
+> Fixes: ac7e98c73c05 ("vhost-vdpa: fix NULL pointer deref in _compat_vdpa_reset")
 
-[adding exportfs maintainers]
+So these two are all in next correct?
 
->
-> diff --cc include/linux/exportfs.h
-> index be9900cc8786,21bae8bfeef1..000000000000
-> --- a/include/linux/exportfs.h
-> +++ b/include/linux/exportfs.h
-> @@@ -98,12 -98,17 +98,23 @@@ enum fid_type
->          */
->         FILEID_FAT_WITH_PARENT =3D 0x72,
->
->  +      /*
->  +       * 64 bit inode number, 32 bit subvolume, 32 bit generation numbe=
-r:
->  +       */
->  +      FILEID_BCACHEFS_WITHOUT_PARENT =3D 0x80,
->  +      FILEID_BCACHEFS_WITH_PARENT =3D 0x81,
->  +
-> +       /*
-> +        * 64 bit inode number, 32 bit generation number.
-> +        */
->  -      FILEID_INO64_GEN =3D 0x81,
-> ++      FILEID_INO64_GEN =3D 0x82,
-> +
-> +       /*
-> +        * 64 bit inode number, 32 bit generation number,
-> +        * 64 bit parent inode number, 32 bit parent generation.
-> +        */
->  -      FILEID_INO64_GEN_PARENT =3D 0x82,
-> ++      FILEID_INO64_GEN_PARENT =3D 0x83,
-> +
+I really do not like it how 10cbf8dfaf936e3ef1f5d7fdc6e9dada268ba6bb
+introduced a regression and then apparently we keep fixing things up?
 
-This is wrong.
-Those are filesystem defined constants.
-Please don't change them.
+Can I squash these 3 commits?
 
-0x81/0x82 have been used by xfs and fuse for years,
-even though neither defined a constant in this enum so far.
 
-Conflicting with FILEID_BCACHEFS_WITH_PARENT is not
-a serious issue, but I encourage Kent to pick different constants
-for bcachefs or keep the bcachefs constants out of this enum.
+> Reported-by: Lei Yang <leiyang@redhat.com>
+> Closes: https://lore.kernel.org/all/CAPpAL=yHDqn1AztEcN3MpS8o4M+BL_HVy02FdpiHN7DWd91HwQ@mail.gmail.com/
+> Signed-off-by: Si-Wei Liu <si-wei.liu@oracle.com>
+> ---
+>  drivers/vhost/vdpa.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
+> index 9a2343c45df0..30df5c58db73 100644
+> --- a/drivers/vhost/vdpa.c
+> +++ b/drivers/vhost/vdpa.c
+> @@ -1355,6 +1355,7 @@ static void vhost_vdpa_cleanup(struct vhost_vdpa *v)
+>  	vhost_vdpa_free_domain(v);
+>  	vhost_dev_cleanup(&v->vdev);
+>  	kfree(v->vdev.vqs);
+> +	v->vdev.vqs = NULL;
+>  }
+>  
+>  static int vhost_vdpa_open(struct inode *inode, struct file *filep)
+> -- 
+> 2.39.3
 
-It is a slight inconvenience for users that have bcachefs exported
-to NFS clients and upgrade their server, but maybe that is acceptable.
-In overlayfs, we encoded type OVL_FILEID_V0 and switched to encoding
-type OVL_FILEID_V1, but we still accept decoding of both types, neither
-of which are listed in this enum BTW.
-
-Adding fid types to this enum is not required.
-This enum is a place to standardize and for different fs to share the same
-fid type/encoding as is the case with  FILEID_INO{32,64}_GEN*.
-IMO, the bcachefs constant do not follow the convention in this
-enum and their format is unlikely to be used by other fs, so
-they should not be added to this enum at all.
-
-Thanks,
-Amir.

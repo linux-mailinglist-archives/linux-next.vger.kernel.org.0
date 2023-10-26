@@ -2,145 +2,107 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 135FB7D7871
-	for <lists+linux-next@lfdr.de>; Thu, 26 Oct 2023 01:16:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AD647D7A0A
+	for <lists+linux-next@lfdr.de>; Thu, 26 Oct 2023 03:18:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229573AbjJYXQK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 25 Oct 2023 19:16:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42726 "EHLO
+        id S229954AbjJZBS1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 25 Oct 2023 21:18:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbjJYXQK (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 25 Oct 2023 19:16:10 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84EF3BB;
-        Wed, 25 Oct 2023 16:16:07 -0700 (PDT)
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39PLPwHS019306;
-        Wed, 25 Oct 2023 23:15:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id; s=corp-2023-03-30;
- bh=YhogheplkOov6CtuctZ/3d9HRRT8CjStcBY8dqmxkp8=;
- b=YPNtUBboX2R2y8h6H9ms+P7TnCCvpqdKDAnXm17vwlGO/aBuh8E+bUU50vb9pfcfEKmk
- iTjlVFhCMlWBAESEI6Y6yxVemvhiKT6S58CMSIUyHsbDpEm9Umo6eWTyC0ghoHsi1UHX
- Ue87p1fXPH+o+2D0cNqvd5TRlH2Xb5GWNabRWZWmNCV+WeLDOcrMoJD5t4JOlhCqCd2i
- nUwV4wpK8UjQfmhnkiRJTSxeqKvqf/RLDfgHclve2ktJ3xZw9pIT/tIoheVZk+O2LV+d
- 5TfOkMYx8M/wHIJyNRrJLY3RlB61wWuTLnNsLNja74KMgAwgo18zeew4IjZAp6kRRUVb CA== 
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3tv68thh08-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 25 Oct 2023 23:15:58 +0000
-Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 39PLKj1j001460;
-        Wed, 25 Oct 2023 23:15:57 GMT
-Received: from ban25x6uut24.us.oracle.com (ban25x6uut24.us.oracle.com [10.153.73.24])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3tv53dutnx-1;
-        Wed, 25 Oct 2023 23:15:57 +0000
-From:   Si-Wei Liu <si-wei.liu@oracle.com>
-To:     jasowang@redhat.com, mst@redhat.com,
-        virtualization@lists.linux-foundation.org, sfr@canb.auug.org.au
-Cc:     leiyang@redhat.com, linux-kernel@vger.kernel.org,
-        linux-next@vger.kernel.org
-Subject: [PATCH] vhost-vdpa: fix use-after-free in _compat_vdpa_reset
-Date:   Wed, 25 Oct 2023 16:13:14 -0700
-Message-Id: <1698275594-19204-1-git-send-email-si-wei.liu@oracle.com>
-X-Mailer: git-send-email 1.8.3.1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-10-25_13,2023-10-25_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 mlxlogscore=807
- adultscore=0 bulkscore=0 suspectscore=0 mlxscore=0 phishscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2310170001 definitions=main-2310250198
-X-Proofpoint-ORIG-GUID: YZX4G4tlMob0ASMuBYR5Jy2w6eU9RXzk
-X-Proofpoint-GUID: YZX4G4tlMob0ASMuBYR5Jy2w6eU9RXzk
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229928AbjJZBS0 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 25 Oct 2023 21:18:26 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64FF9136;
+        Wed, 25 Oct 2023 18:18:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1698283099;
+        bh=VHRzahGOiiLSmvMd3w8GzTVfBBZEUkBw/tH5XXoVyFg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=kSqJXmGhqM+mHEbdztwvaXA7fcvO1uMfTUh3Cvs/YTCHI4Fd630CpTNqWncnsY9yQ
+         aHbD29ySok1OHkcmw68R61K1DX8xKueBq/s3vKxIig6BO+kwdMLar2pwLQQbETQ7zk
+         CKzZWc6015nU++zKBLy2KQEVqRy/nXNwg1DpiuP6S04cgpEyPJrsd35dUjnaSfE/2F
+         3apClVEgS0YAQ9f+L9aIi4DfHHeXU8mYdMCrKhYU7Bzm6ScYnpIVDFaQHWUWkLDjGb
+         yz/YvmIFOyouthL+vBupaPTkuxcYPDiiBSnpT+waaBc5kHVpb19wjbpy23XgvcNhH1
+         oojuer0fi+/aw==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4SG7GL5mGZz4wxX;
+        Thu, 26 Oct 2023 12:18:17 +1100 (AEDT)
+Date:   Thu, 26 Oct 2023 12:18:16 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the ftrace tree
+Message-ID: <20231026121816.401d2723@canb.auug.org.au>
+In-Reply-To: <20231023133033.5d54f393@canb.auug.org.au>
+References: <20231023133033.5d54f393@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/Vz68pBVvSsS3WsMewe+yFev";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-When the vhost-vdpa device is being closed, vhost_vdpa_cleanup() doesn't
-clean up the vqs pointer after free. This could lead to use-after-tree
-when _compat_vdpa_reset() tries to access the vqs that are freed already.
-Fix is to set vqs pointer to NULL at the end of vhost_vdpa_cleanup()
-after getting freed, which is guarded by atomic opened state.
+--Sig_/Vz68pBVvSsS3WsMewe+yFev
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-  BUG: unable to handle page fault for address: 00000001005b4af4
-  #PF: supervisor read access in kernel mode
-  #PF: error_code(0x0000) - not-present page
-  PGD 16a80a067 P4D 0
-  Oops: 0000 [#1] PREEMPT SMP NOPTI
-  CPU: 4 PID: 40387 Comm: qemu-kvm Not tainted 6.6.0-rc7+ #3
-  Hardware name: Dell Inc. PowerEdge R750/0PJ80M, BIOS 1.8.2 09/14/2022
-  RIP: 0010:_compat_vdpa_reset.isra.0+0x27/0xb0 [vhost_vdpa]
-  Code: 90 90 90 0f 1f 44 00 00 41 55 4c 8d ae 08 03 00 00 41 54 55 48
-  89 f5 53 4c 8b a6 00 03 00 00 48 85 ff 74 49 48 8b 07 4c 89 ef <48> 8b
-  80 88 45 00 00 48 c1 e8 08 48 83 f0 01 89 c3 e8 73 5e 9b dc
-  RSP: 0018:ff73a85762073ba0 EFLAGS: 00010286
-  RAX: 00000001005b056c RBX: ff32b13ca6994c68 RCX: 0000000000000002
-  RDX: 0000000000000001 RSI: ff32b13c07559000 RDI: ff32b13c07559308
-  RBP: ff32b13c07559000 R08: 0000000000000000 R09: ff32b12ca497c0f0
-  R10: ff73a85762073c58 R11: 0000000c106f9de3 R12: ff32b12c95b1d050
-  R13: ff32b13c07559308 R14: ff32b12d0ddc5100 R15: 0000000000008002
-  FS:  00007fec5b8cbf80(0000) GS:ff32b13bbfc80000(0000)
-  knlGS:0000000000000000
-  CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-  CR2: 00000001005b4af4 CR3: 000000015644a003 CR4: 0000000000773ee0
-  PKRU: 55555554
-  Call Trace:
-   <TASK>
-   ? __die+0x20/0x70
-   ? page_fault_oops+0x76/0x170
-   ? exc_page_fault+0x65/0x150
-   ? asm_exc_page_fault+0x22/0x30
-   ? _compat_vdpa_reset.isra.0+0x27/0xb0 [vhost_vdpa]
-   vhost_vdpa_open+0x57/0x280 [vhost_vdpa]
-   ? __pfx_chrdev_open+0x10/0x10
-   chrdev_open+0xc6/0x260
-   ? __pfx_chrdev_open+0x10/0x10
-   do_dentry_open+0x16e/0x530
-   do_open+0x21c/0x400
-   path_openat+0x111/0x290
-   do_filp_open+0xb2/0x160
-   ? __check_object_size.part.0+0x5e/0x140
-   do_sys_openat2+0x96/0xd0
-   __x64_sys_openat+0x53/0xa0
-   do_syscall_64+0x59/0x90
-   ? syscall_exit_to_user_mode+0x22/0x40
-   ? do_syscall_64+0x69/0x90
-   ? syscall_exit_to_user_mode+0x22/0x40
-   ? do_syscall_64+0x69/0x90
-   ? do_syscall_64+0x69/0x90
-   ? syscall_exit_to_user_mode+0x22/0x40
-   ? do_syscall_64+0x69/0x90
-   ? exc_page_fault+0x65/0x150
-   entry_SYSCALL_64_after_hwframe+0x6e/0xd8
+Hi all,
 
-Fixes: 10cbf8dfaf93 ("vhost-vdpa: clean iotlb map during reset for older userspace")
-Fixes: ac7e98c73c05 ("vhost-vdpa: fix NULL pointer deref in _compat_vdpa_reset")
-Reported-by: Lei Yang <leiyang@redhat.com>
-Closes: https://lore.kernel.org/all/CAPpAL=yHDqn1AztEcN3MpS8o4M+BL_HVy02FdpiHN7DWd91HwQ@mail.gmail.com/
-Signed-off-by: Si-Wei Liu <si-wei.liu@oracle.com>
----
- drivers/vhost/vdpa.c | 1 +
- 1 file changed, 1 insertion(+)
+On Mon, 23 Oct 2023 13:30:33 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>=20
+> After merging the ftrace tree, today's linux-next build (powerpc
+> ppc64_defconfig) failed like this:
+>=20
+> arch/powerpc/kernel/setup-common.c:604:10: error: 'struct seq_buf' has no=
+ member named 'readpos'
+>   604 |         .readpos =3D 0,
+>       |          ^~~~~~~
+> arch/powerpc/kernel/setup-common.c:604:20: error: excess elements in stru=
+ct initializer [-Werror]
+>   604 |         .readpos =3D 0,
+>       |                    ^
+> arch/powerpc/kernel/setup-common.c:604:20: note: (near initialization for=
+ 'ppc_hw_desc')
+> cc1: all warnings being treated as errors
+>=20
+> Caused by commit
+>=20
+>   d0ed46b60396 ("tracing: Move readpos from seq_buf to trace_seq")
+>=20
+> I have used the ftrace tree from next-20231020 for today.
 
-diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
-index 9a2343c45df0..30df5c58db73 100644
---- a/drivers/vhost/vdpa.c
-+++ b/drivers/vhost/vdpa.c
-@@ -1355,6 +1355,7 @@ static void vhost_vdpa_cleanup(struct vhost_vdpa *v)
- 	vhost_vdpa_free_domain(v);
- 	vhost_dev_cleanup(&v->vdev);
- 	kfree(v->vdev.vqs);
-+	v->vdev.vqs = NULL;
- }
- 
- static int vhost_vdpa_open(struct inode *inode, struct file *filep)
--- 
-2.39.3
+This is still failing ...
 
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/Vz68pBVvSsS3WsMewe+yFev
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmU5vlgACgkQAVBC80lX
+0GwjGAf8C+yu2pqfPXi++yq9MFhiRLu3qvzmMGgNWnxFfz79XvK1a/ZnwlPaxfcB
+5arSycnfgKg03RvIDSaKk/OKcks+iP4rMIt3Dnk4jNq3vKYi4rnAMXg0tYYrejJ7
+iWXA+OFWtIJHyj43An6E9NthrCgYsXljZHMNVQ1upt93tymqjrGr6I33HKxQ7wKw
+9MA7cwjzf+z3+WhUaLTF1d2S/mvz7I9D11s8Iz/YAcyqElITYrWLx/exyuB1+3bA
+TRSDLNToobjGlNGRjbQjdJMJC21qkGKVFkFWjKkic1NBMfsJUIv8UiI1GK+ZLvsm
+E5IYR3JYpERgjzs/jpSsRe7AAcpH6A==
+=s/Z2
+-----END PGP SIGNATURE-----
+
+--Sig_/Vz68pBVvSsS3WsMewe+yFev--

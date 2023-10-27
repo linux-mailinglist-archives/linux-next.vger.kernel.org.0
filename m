@@ -2,140 +2,144 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDE667D95C7
-	for <lists+linux-next@lfdr.de>; Fri, 27 Oct 2023 12:57:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F22A7D9932
+	for <lists+linux-next@lfdr.de>; Fri, 27 Oct 2023 15:02:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231493AbjJ0K56 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 27 Oct 2023 06:57:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48642 "EHLO
+        id S229503AbjJ0NCA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 27 Oct 2023 09:02:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231487AbjJ0K55 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 27 Oct 2023 06:57:57 -0400
-Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB0711B4
-        for <linux-next@vger.kernel.org>; Fri, 27 Oct 2023 03:57:54 -0700 (PDT)
-Received: by mail-vs1-xe32.google.com with SMTP id ada2fe7eead31-457bfdc1cdaso881140137.2
-        for <linux-next@vger.kernel.org>; Fri, 27 Oct 2023 03:57:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1698404273; x=1699009073; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=3zQBT6jRuR5jxYiRAr8syfNhHciQ/BHcE4DZFyhdPwI=;
-        b=PP7jMKs5l7SL5IZXsqTzLeRLyfOLcpy+3xxK0sjSj2gr1UTLLRnankwT5A+w5SwD0J
-         gdsAWOGRAT6DiTXv0BClS3Yl9Wi00+cZACEFYyDhtub68RweVSeuAo7RrHWQj9KY1qH3
-         85dswXIKUHhDyDKLTdgZi21nZ6z56YsM6/EgkEJb22uL7r1NqfWO0xuwda9WojuJNn6r
-         /eP+ThfBybhRj/5O0jmwnMG98XfKSs9ldeITvRZoqhe/Sov2mGWdQK7BxvNXBi7WJUs6
-         4zlADIeSrk6+xVCA10IP9WrxJfSMI1FwqIpNzFsyTRUi7FKHDFjncg/gy0vhcq+A7zeM
-         sIXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698404273; x=1699009073;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3zQBT6jRuR5jxYiRAr8syfNhHciQ/BHcE4DZFyhdPwI=;
-        b=ZYylZqiHKaMVWv+IZaGbPsYPxbUfbqhv1NTJvMHEX/7Xry4+m3v/62pNHEIrEZP69K
-         IgQKEW22RhmwHoPObuOnoYihKWqlYs8qmROB1UrXA99rHc1RWtb0CWUkEEI46hTx18oW
-         iLAQkrdF1yYfWEVKiUpVbUGr2I4f5w6bZyaGHzASGyIf9oL31vCGoBIgUT4IQDPelRW/
-         Kh8e0t+rWhKYvm/2U5y+xIWnu4uwp/k75ye3fdf5ZHWBL6l9U6WzrjtU3xVfyI87iYuN
-         xCguKd5uo2apqJnaqg10gKy7JSyAeQxSjsgTn6RAXDilogagYtoMPVOWoCzIen+YvLzY
-         AAmw==
-X-Gm-Message-State: AOJu0YzMcmgaVLrKU9mhCir0MapDbi3yaO/ssbfLnyaaLuiebWyq48XY
-        81Y79xPNMAkxmZSeJV9XUuFwGWcvFAby+fZDP09kF4gNKcDAFumhD58=
-X-Google-Smtp-Source: AGHT+IHarNLCoFsdKNzL1a48n70a2eNgURLrsseEGHkrmEWYJ6n2/q05I2+4jQ74A/lQL0OqJP835LGQwXLk47ENiWU=
-X-Received: by 2002:a05:6102:1592:b0:457:dbfc:5c69 with SMTP id
- g18-20020a056102159200b00457dbfc5c69mr2829666vsv.12.1698404273032; Fri, 27
- Oct 2023 03:57:53 -0700 (PDT)
+        with ESMTP id S231685AbjJ0NB7 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 27 Oct 2023 09:01:59 -0400
+X-Greylist: delayed 346 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 27 Oct 2023 06:01:54 PDT
+Received: from smtp-8fab.mail.infomaniak.ch (smtp-8fab.mail.infomaniak.ch [IPv6:2001:1600:3:17::8fab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A9D910E
+        for <linux-next@vger.kernel.org>; Fri, 27 Oct 2023 06:01:53 -0700 (PDT)
+Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4SH2j11TNVzMqTT5;
+        Fri, 27 Oct 2023 12:56:05 +0000 (UTC)
+Received: from unknown by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4SH2hz6f9bzMpnyv;
+        Fri, 27 Oct 2023 14:56:02 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
+        s=20191114; t=1698411365;
+        bh=QLUOoYYvr+Bp0vOk4oq52t6xX//eg65+2Kt6Rrj+F80=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YzqdC0uHeFaE/RAqamsgM3tIr2OvFxlVcZuqCExgD/dc6aTQT1bNtoZOxCJnlIBZ8
+         u86WcEql0uIWVHlhJ1Cm30u13gnXd5iiuE6m+nZ0NNUfkE9CkddK6EEPWG4Kydns4l
+         77wmyvAubvUdJaUV594E5b95euoekVDz1muoDMrw=
+Date:   Fri, 27 Oct 2023 14:56:00 +0200
+From:   =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Paul Moore <paul@paul-moore.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Kees Cook <keescook@chromium.org>,
+        Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the landlock tree
+Message-ID: <20231027.Soon0Gee4xul@digikod.net>
+References: <20231027163400.5764d549@canb.auug.org.au>
 MIME-Version: 1.0
-References: <CA+G9fYsCskpn_TNpSwLq9HGUgtT=aZpDzs7SVrqpa9WmyYFaxQ@mail.gmail.com>
- <ZTqGBzOQd4Oi3e9j@FVFF77S0Q05N.cambridge.arm.com> <CAMj1kXE8VrG6aPsjByd83kavw7He6vn=DszhJfAd-TfP9y8VBA@mail.gmail.com>
-In-Reply-To: <CAMj1kXE8VrG6aPsjByd83kavw7He6vn=DszhJfAd-TfP9y8VBA@mail.gmail.com>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Fri, 27 Oct 2023 16:27:41 +0530
-Message-ID: <CA+G9fYuQxUhsrL_=uYSAdotU1_Wx7iu5PxFuG9EzWgBE2nMjcw@mail.gmail.com>
-Subject: Re: qemu-arm64: handle_futex_death - kernel/futex/core.c:661 - Unable
- to handle kernel unknown 43 at virtual address
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        lkft-triage@lists.linaro.org, Arnd Bergmann <arnd@arndb.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@kernel.org>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Dan Carpenter <dan.carpenter@linaro.org>,
-        LTP List <ltp@lists.linux.it>, Petr Vorel <pvorel@suse.cz>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20231027163400.5764d549@canb.auug.org.au>
+X-Infomaniak-Routing: alpha
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, 26 Oct 2023 at 21:09, Ard Biesheuvel <ardb@kernel.org> wrote:
->
-> On Thu, 26 Oct 2023 at 17:30, Mark Rutland <mark.rutland@arm.com> wrote:
-> >
-> > On Thu, Oct 26, 2023 at 08:11:26PM +0530, Naresh Kamboju wrote:
-> > > Following kernel crash noticed on qemu-arm64 while running LTP syscalls
-> > > set_robust_list test case running Linux next 6.6.0-rc7-next-20231026 and
-> > > 6.6.0-rc7-next-20231025.
-> > >
-> > > BAD: next-20231025
-> > > Good: next-20231024
-> > >
-> > > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> > > Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-> > >
-> > > Log:
-> > > ----
-> > > <1>[  203.119139] Unable to handle kernel unknown 43 at virtual
-> > > address 0001ffff9e2e7d78
-> > > <1>[  203.119838] Mem abort info:
-> > > <1>[  203.120064]   ESR = 0x000000009793002b
-> > > <1>[  203.121040]   EC = 0x25: DABT (current EL), IL = 32 bits
-> > > set_robust_list01    1  TPASS  :  set_robust_list: retval = -1
-> > > (expected -1), errno = 22 (expected 22)
-> > > set_robust_list01    2  TPASS  :  set_robust_list: retval = 0
-> > > (expected 0), errno = 0 (expected 0)
-> > > <1>[  203.124496]   SET = 0, FnV = 0
-> > > <1>[  203.124778]   EA = 0, S1PTW = 0
-> > > <1>[  203.125029]   FSC = 0x2b: unknown 43
-> >
-> > It looks like this is fallout from the LPA2 enablement.
-> >
-> > According to the latest ARM ARM (ARM DDI 0487J.a), page D19-6475, that "unknown
-> > 43" (0x2b / 0b101011) is the DFSC for a level -1 translation fault:
-> >
-> >         0b101011 When FEAT_LPA2 is implemented:
-> >                  Translation fault, level -1.
-> >
-> > It's triggered here by an LDTR in a get_user() on a bogus userspace address.
-> > The exception is expected, and it's supposed to be handled via the exception
-> > fixups, but the LPA2 patches didn't update the fault_info table entries for all
-> > the level -1 faults, and so those all get handled by do_bad() and don't call
-> > fixup_exception(), causing them to be fatal.
-> >
-> > It should be relatively simple to update the fault_info table for the level -1
-> > faults, but given the other issues we're seeing I think it's probably worth
-> > dropping the LPA2 patches for the moment.
-> >
->
-> Thanks for the analysis Mark.
->
-> I agree that this should not be difficult to fix, but given the other
-> CI problems and identified loose ends, I am not going to object to
-> dropping this partially or entirely at this point. I'm sure everybody
-> will be thrilled to go over those 60 patches again after I rebase them
-> onto v6.7-rc1 :-)
+Thanks Stephen, your patch is good! I tested it with the merge of my
+branch and LSM/dev-staging.
 
-I am happy to test any proposed fix patch.
+The new Landlock changes (tested in -next for a few weeks) add a new
+call to security_add_hooks() which gets a new signature with commit
+9b09f11320db ("LSM: Identify modules by more than name") from
+the LSM/dev-staging branch [1].
 
-- Naresh
+I plan to send a PR with my branch in the next merge window (for
+v6.7-rc1).
+
+We should squash Stephen's patch in commit 9b09f11320db ("LSM:
+Identify modules by more than name") but it would not be possible
+without my branch. I see two solutions:
+* keep Stephen's patch in -next only, or
+* rebase LSM/dev-staging on my branch now, and rebase it later on
+  v6.7-rc1 once my branch is merged (which is the workflow described in
+  [1]).
+
+Paul, what do you think?
+
+[1] https://lore.kernel.org/r/CAHC9VhS1wwgH6NNd+cJz4MYogPiRV8NyPDd1yj5SpaxeUB4UVg@mail.gmail.com
+
+On Fri, Oct 27, 2023 at 04:34:00PM +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the landlock tree, today's linux-next build (powerpc
+> ppc64_defconfig) failed like this:
+> 
+> In file included from security/landlock/net.c:14:
+> security/landlock/net.c: In function 'landlock_add_net_hooks':
+> security/landlock/common.h:12:23: error: passing argument 3 of 'security_add_hooks' from incompatible pointer type [-Werror=incompatible-pointer-types]
+>    12 | #define LANDLOCK_NAME "landlock"
+>       |                       ^~~~~~~~~~
+>       |                       |
+>       |                       char *
+> security/landlock/net.c:199:28: note: in expansion of macro 'LANDLOCK_NAME'
+>   199 |                            LANDLOCK_NAME);
+>       |                            ^~~~~~~~~~~~~
+> In file included from security/landlock/setup.h:12,
+>                  from security/landlock/cred.h:17,
+>                  from security/landlock/net.c:15:
+> include/linux/lsm_hooks.h:120:53: note: expected 'const struct lsm_id *' but argument is of type 'char *'
+>   120 |                                const struct lsm_id *lsmid);
+>       |                                ~~~~~~~~~~~~~~~~~~~~~^~~~~
+> 
+> Caused by commit
+> 
+>   fff69fb03dde ("landlock: Support network rules with TCP bind and connect")
+> 
+> interacting with commit
+> 
+>   9b09f11320db ("LSM: Identify modules by more than name")
+> 
+> from the security tree.
+> 
+> I have applied the following merge resolution patch.
+> 
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Fri, 27 Oct 2023 16:13:32 +1100
+> Subject: [PATCH] fixup for "landlock: Support network rules with TCP bind and
+>  connect"
+> 
+> interacting with "LSM: Identify modules by more than name"
+> 
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> ---
+>  security/landlock/net.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/security/landlock/net.c b/security/landlock/net.c
+> index aaa92c2b1f08..efa1b644a4af 100644
+> --- a/security/landlock/net.c
+> +++ b/security/landlock/net.c
+> @@ -196,5 +196,5 @@ static struct security_hook_list landlock_hooks[] __ro_after_init = {
+>  __init void landlock_add_net_hooks(void)
+>  {
+>  	security_add_hooks(landlock_hooks, ARRAY_SIZE(landlock_hooks),
+> -			   LANDLOCK_NAME);
+> +			   &landlock_lsmid);
+>  }
+> -- 
+> 2.40.1
+> 
+> -- 
+> Cheers,
+> Stephen Rothwell
+
+

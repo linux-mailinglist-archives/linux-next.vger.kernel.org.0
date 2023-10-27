@@ -2,47 +2,47 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33DE87D8DEB
-	for <lists+linux-next@lfdr.de>; Fri, 27 Oct 2023 06:55:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B43D47D8E2D
+	for <lists+linux-next@lfdr.de>; Fri, 27 Oct 2023 07:34:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233035AbjJ0Ezb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 27 Oct 2023 00:55:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33698 "EHLO
+        id S231221AbjJ0FeL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 27 Oct 2023 01:34:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232306AbjJ0Eza (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 27 Oct 2023 00:55:30 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 606081A7;
-        Thu, 26 Oct 2023 21:55:27 -0700 (PDT)
+        with ESMTP id S229501AbjJ0FeK (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 27 Oct 2023 01:34:10 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C32381A7;
+        Thu, 26 Oct 2023 22:34:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1698382525;
-        bh=pn/MK2PwSd3NO/fy5gAheuSGiNydeLRHOjVKL3rZO80=;
+        s=201702; t=1698384843;
+        bh=ZlwcCpgji3B4ca648vW3TWOMt2e5PNvnzxuKUwNW4i0=;
         h=Date:From:To:Cc:Subject:From;
-        b=NNRNq9VHCi50Uxd6ixpXE2LmG03uRZB/+Jp9sF6I02bJByTdcDGHdn1G8lvl6MQu4
-         uGA2jj/q9GdWDSJDfK5rUAw0MVlvJnXu6oJcYIR89HbruuU8Klou+wZI5qxSRnpR6w
-         IE3SBgqsa8qJ4cCJf+JbMUqRrCumKHasOg+HerI7NB83Xji5Mp6gG20GdnNWHzYxGv
-         0d9Wgtbw2xXMxfrdFW79wZYYfW5nrEnzt2PF3lLZk4O+D8bpa316fEk4UhX4MMbwPU
-         oAdz7qjfjqO2r+j1GwWphcodvpZbSnT8m24gwLmi2RlAQzybFB1MWhdx+FRCArePqa
-         66Wy2zOPoPWzg==
+        b=hUyF5o4YyWzHLuNGTX1VCmSRatkFuiUWNsanUDL7nkO1jzZfsp8cKSMaa/vRIhakK
+         UVEoelL9P1KDvn+xbyJYDaHVnuadB+IG2qb3CWm4llXsXD+lMJoU0JKbJFsVDdlWLi
+         BkmVJEFFQoA05b/8jGACzuAjUGWsazJBnKf51KrSHe4D7xudAm8FaXqosutjLJ80TN
+         V7Thp+axHf3ph3qwS4kDKoeqo66YEme5mUts6bqY55iD60t38IxeNsyLkVUfddkbri
+         wppuN9ylDKMh+G/HylhYHM9t7L71WLsCC74BnC6H3/xmyFdNBSy4gSqqvSxTUxmOXO
+         O5C0jF/3qw5HA==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4SGr2M4MzDz4wd1;
-        Fri, 27 Oct 2023 15:55:23 +1100 (AEDT)
-Date:   Fri, 27 Oct 2023 15:55:22 +1100
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4SGrty1GQNz4wcf;
+        Fri, 27 Oct 2023 16:34:01 +1100 (AEDT)
+Date:   Fri, 27 Oct 2023 16:34:00 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jason Gunthorpe <jgg@nvidia.com>, Joerg Roedel <joro@8bytes.org>
-Cc:     Jason Gunthorpe <jgg@ziepe.ca>,
-        Joao Martins <joao.m.martins@oracle.com>,
-        Joerg Roedel <jroedel@suse.de>,
+To:     =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>,
+        Paul Moore <paul@paul-moore.com>
+Cc:     Casey Schaufler <casey@schaufler-ca.com>,
+        Kees Cook <keescook@chromium.org>,
+        Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Nicolin Chen <nicolinc@nvidia.com>, Yi Liu <yi.l.liu@intel.com>
-Subject: linux-next: manual merge of the iommufd tree with the iommu tree
-Message-ID: <20231027155522.6b2863a4@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the landlock tree
+Message-ID: <20231027163400.5764d549@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/bmNe/dKWE5QI_gaZUeETryt";
+Content-Type: multipart/signed; boundary="Sig_/m5HOWf6jM/D/e4rBXcr.b7H";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,
@@ -53,107 +53,93 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/bmNe/dKWE5QI_gaZUeETryt
+--Sig_/m5HOWf6jM/D/e4rBXcr.b7H
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the iommufd tree got a conflict in:
+After merging the landlock tree, today's linux-next build (powerpc
+ppc64_defconfig) failed like this:
 
-  drivers/iommu/iommufd/selftest.c
+In file included from security/landlock/net.c:14:
+security/landlock/net.c: In function 'landlock_add_net_hooks':
+security/landlock/common.h:12:23: error: passing argument 3 of 'security_ad=
+d_hooks' from incompatible pointer type [-Werror=3Dincompatible-pointer-typ=
+es]
+   12 | #define LANDLOCK_NAME "landlock"
+      |                       ^~~~~~~~~~
+      |                       |
+      |                       char *
+security/landlock/net.c:199:28: note: in expansion of macro 'LANDLOCK_NAME'
+  199 |                            LANDLOCK_NAME);
+      |                            ^~~~~~~~~~~~~
+In file included from security/landlock/setup.h:12,
+                 from security/landlock/cred.h:17,
+                 from security/landlock/net.c:15:
+include/linux/lsm_hooks.h:120:53: note: expected 'const struct lsm_id *' bu=
+t argument is of type 'char *'
+  120 |                                const struct lsm_id *lsmid);
+      |                                ~~~~~~~~~~~~~~~~~~~~~^~~~~
 
-between commits:
+Caused by commit
 
-  1c68cbc64fe6 ("iommu: Add IOMMU_DOMAIN_PLATFORM")
-  13fbceb1b8e9 ("iommufd: Convert to alloc_domain_paging()")
+  fff69fb03dde ("landlock: Support network rules with TCP bind and connect")
 
-from the iommu tree and commits:
+interacting with commit
 
-  408663619fcf ("iommufd/selftest: Add domain_alloc_user() support in iommu=
- mock")
-  266ce58989ba ("iommufd/selftest: Test IOMMU_HWPT_ALLOC_DIRTY_TRACKING")
-  7adf267d66d1 ("iommufd/selftest: Test IOMMU_HWPT_SET_DIRTY_TRACKING")
-  a9af47e382a4 ("iommufd/selftest: Test IOMMU_HWPT_GET_DIRTY_BITMAP")
-  0795b305da89 ("iommufd/selftest: Test IOMMU_HWPT_GET_DIRTY_BITMAP_NO_CLEA=
-R flag")
-  65fe32f7a447 ("iommufd/selftest: Add nested domain allocation for mock do=
-main")
+  9b09f11320db ("LSM: Identify modules by more than name")
 
-from the iommufd tree.
+from the security tree.
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+I have applied the following merge resolution patch.
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Fri, 27 Oct 2023 16:13:32 +1100
+Subject: [PATCH] fixup for "landlock: Support network rules with TCP bind a=
+nd
+ connect"
+
+interacting with "LSM: Identify modules by more than name"
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ security/landlock/net.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/security/landlock/net.c b/security/landlock/net.c
+index aaa92c2b1f08..efa1b644a4af 100644
+--- a/security/landlock/net.c
++++ b/security/landlock/net.c
+@@ -196,5 +196,5 @@ static struct security_hook_list landlock_hooks[] __ro_=
+after_init =3D {
+ __init void landlock_add_net_hooks(void)
+ {
+ 	security_add_hooks(landlock_hooks, ARRAY_SIZE(landlock_hooks),
+-			   LANDLOCK_NAME);
++			   &landlock_lsmid);
+ }
+--=20
+2.40.1
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc drivers/iommu/iommufd/selftest.c
-index ee6079847091,6684ab4cdc7a..000000000000
---- a/drivers/iommu/iommufd/selftest.c
-+++ b/drivers/iommu/iommufd/selftest.c
-@@@ -272,9 -435,28 +430,20 @@@ static phys_addr_t mock_domain_iova_to_
- =20
-  static bool mock_domain_capable(struct device *dev, enum iommu_cap cap)
-  {
-- 	return cap =3D=3D IOMMU_CAP_CACHE_COHERENCY;
-+ 	struct mock_dev *mdev =3D container_of(dev, struct mock_dev, dev);
-+=20
-+ 	switch (cap) {
-+ 	case IOMMU_CAP_CACHE_COHERENCY:
-+ 		return true;
-+ 	case IOMMU_CAP_DIRTY_TRACKING:
-+ 		return !(mdev->flags & MOCK_FLAGS_DEVICE_NO_DIRTY);
-+ 	default:
-+ 		break;
-+ 	}
-+=20
-+ 	return false;
-  }
- =20
- -static void mock_domain_set_plaform_dma_ops(struct device *dev)
- -{
- -	/*
- -	 * mock doesn't setup default domains because we can't hook into the
- -	 * normal probe path
- -	 */
- -}
- -
-  static struct iommu_device mock_iommu_device =3D {
-  };
- =20
-@@@ -293,8 -469,10 +462,9 @@@ static const struct iommu_ops mock_ops=20
-  	.owner =3D THIS_MODULE,
-  	.pgsize_bitmap =3D MOCK_IO_PAGE_SIZE,
-  	.hw_info =3D mock_domain_hw_info,
- -	.domain_alloc =3D mock_domain_alloc,
- +	.domain_alloc_paging =3D mock_domain_alloc_paging,
-+ 	.domain_alloc_user =3D mock_domain_alloc_user,
-  	.capable =3D mock_domain_capable,
- -	.set_platform_dma_ops =3D mock_domain_set_plaform_dma_ops,
-  	.device_group =3D generic_device_group,
-  	.probe_device =3D mock_probe_device,
-  	.default_domain_ops =3D
-
---Sig_/bmNe/dKWE5QI_gaZUeETryt
+--Sig_/m5HOWf6jM/D/e4rBXcr.b7H
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmU7QroACgkQAVBC80lX
-0GxGOwf9HDp0uSETtsl+pIsSYroDiWAMzI2zLn/AINQgJL8FkdeLQLdAzKr5KoL+
-e5SRXhXHhGUrS6K3FSA9MkjOElYIsZmljZxXqfhXAReMy4Tw0r5x2NYApPK+zHrr
-h54ny8Lzkn9tTTl6Xdu8rqWxuPmIybuerq9Oi3/j9i1kIWpFHY1/IV/IR63suWhc
-SoU+jf7Hwu5ypr6OQDEqHzQ6yDhQSK2LxUtHz/CkM7xFBGbH2e1jS9OhGRJ0Wsmi
-mAtX80/BGolXw7H9MBA0KIUb7BVAp2AlzjXhFGyTFJ9kEFysJXI9YblfD7/70x2y
-T7qigIL88gApYW3jCqCcS7EI8eHKwg==
-=76VA
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmU7S8gACgkQAVBC80lX
+0GxBlwf8CZN2qGCwBQDbwTx5IZjzE3VfGoAEWcFxeQzH7FdS5eBJBJjb8h+4exNd
+YayxJxYQ8yN5WYjBWjN6A26xEEdmpFB1Y0Db3MqTeQSW44V0x+ZOwXsj+HRVHQJD
+WwVKeosXLAFJ7y7CLjcbZm+KdsoYeH311XndVrQYd5kzodfscfHPYyQBOgEEIjcO
+whDOvkFDOTgBtdJN5QIf6j5KpN1YBOxAvFnffA1WOOEpKSuE40Z7qZteDgsJiOQ8
+x6830RrEcY3TGikbQJQYlbK5SkqP5geg+V3KXO8i6yU2Sr5a9CXTmcjOxrLPc3jC
+MbXLGAWc4GWObmh6y1IdOrB021Rj0Q==
+=74Wl
 -----END PGP SIGNATURE-----
 
---Sig_/bmNe/dKWE5QI_gaZUeETryt--
+--Sig_/m5HOWf6jM/D/e4rBXcr.b7H--

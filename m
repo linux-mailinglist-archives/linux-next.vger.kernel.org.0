@@ -2,183 +2,171 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6590D7D9A89
-	for <lists+linux-next@lfdr.de>; Fri, 27 Oct 2023 15:56:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A3E97DA580
+	for <lists+linux-next@lfdr.de>; Sat, 28 Oct 2023 09:42:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345998AbjJ0N4e (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 27 Oct 2023 09:56:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58398 "EHLO
+        id S229460AbjJ1Hmo (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sat, 28 Oct 2023 03:42:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345996AbjJ0N4d (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 27 Oct 2023 09:56:33 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2A0DCA
-        for <linux-next@vger.kernel.org>; Fri, 27 Oct 2023 06:56:30 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-6b5e6301a19so2070183b3a.0
-        for <linux-next@vger.kernel.org>; Fri, 27 Oct 2023 06:56:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1698414990; x=1699019790; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=mBPCwThcXP0SooeePksEtiwr+ubOn9cKz43DvNT+158=;
-        b=YjLGEYPsaV1iM/LLvg6yEw1phaGfNzP1FqaMVXHXo37/dPFMqtcmjPiaOW6nL/nraJ
-         MvaVVTGlGAP7NzVeBhshGK4PiFVcOrF0ebSm4MC1hpxaaImEPK7/Q5/DGvBKGH3q8dQq
-         4HC38igRCaEa8S2VrIqBUxl75WmCd1x3d2bTarQ3i/YWUoQ2CKGgqRZbLi7nwyLo5hJB
-         2fvG0z8fprOBsQKBbTWdghp9VJfizlmB/Yjxh/j8tDG+xEHJQX1iUz+LL4HBYklXdTOS
-         CNHuFn7nnAvJHXEHnVvudjUOsbO3wlRiv6uzH8BUt5LYHWySKmLnuY+cEMOKkRtOMNWX
-         eprw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698414990; x=1699019790;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mBPCwThcXP0SooeePksEtiwr+ubOn9cKz43DvNT+158=;
-        b=NJbYkAxyiGEK3T0bppar18rzdu70/Ik6NrYxj/jcEAbiviisAJRtiz9OJJmNNfJT9T
-         S+sIWVIIoZ82XgPqPhWWlKJCY3kH8w8JWiAiI1RM0nd2SOfyGRIKunP72Ag0Ge5+0hE6
-         hjib+FfZuX7rbMg3yjmF//DwjLRQMAos+70rGul0TvzZ6IGDdFz0s+xz7kaFHex7l8Rs
-         24q75JusCR42zqUyOeYyGEn32Hf5LX5UxzQm7em+6K8WcLAaZ+qsZ3GwNMYgGFh1CYzq
-         S3yLcVTu6z7t4NmVAaA95FBgMR6GvZH3OoddRIk757LfBUZJYF+M5SEAnWYwWuk23Lfj
-         mieg==
-X-Gm-Message-State: AOJu0Yy2b/xeGLncWHiPuIJ1Bd+LA+enNVki6Cg4662YvIB67UML1PUO
-        rrnBE7e7Sf/ss/yZTtJ4KnrRTd11i3YitFXcRmE=
-X-Google-Smtp-Source: AGHT+IEE39rOFjtivgBZ/lnDlURbCltu52okDlvytAkTPifIWKxejDX/f1seuaHus9Up6Cg4V8XWUA==
-X-Received: by 2002:a05:6a00:2494:b0:6bd:f760:6a9d with SMTP id c20-20020a056a00249400b006bdf7606a9dmr3189155pfv.14.1698414989994;
-        Fri, 27 Oct 2023 06:56:29 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id f29-20020a056a000b1d00b006be0fb89ac3sm1406343pfu.30.2023.10.27.06.56.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Oct 2023 06:56:29 -0700 (PDT)
-Message-ID: <653bc18d.050a0220.e9327.3d20@mx.google.com>
-Date:   Fri, 27 Oct 2023 06:56:29 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S229458AbjJ1Hmo (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sat, 28 Oct 2023 03:42:44 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB9ADE1;
+        Sat, 28 Oct 2023 00:42:41 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DCA8C433CC;
+        Sat, 28 Oct 2023 07:42:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1698478961;
+        bh=htUU5NgNW5XjX1k4bhwOpjiaCPHzbKJXSRlXtBMXaaI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=SLt9RpRk04EaksB4alsV5juWqDKrrkoFjxUkbGOZ7QmCkr5DaOIcuWvzpg2KRZFs4
+         oyNj7h+Nu2x3s/nz8wlUOhoDuxjmHXZ81/fxdhC/0g5Voz0M9n1SONNKBWxBpMncFw
+         lBKCeI9FyvIc3DaiiGzH06wGVU7T0+DOcEqxXG5+SBgGefDMATnj9bRNWCQvHdXZeM
+         FyqwXfRoKQYSCd/fmacxctuND9MgMxzBI8ScDwHMoocjekC8Ee6ezXeZ/nIzGkSYtn
+         mnayYsRVJbFeSef6Ffe/Rd0T+4ssNkfDQtYf7XwHBc5QWDgU4QDZ0Wt0a762+yDV6w
+         L93MhRkYGp9Cg==
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-507a62d4788so4346139e87.0;
+        Sat, 28 Oct 2023 00:42:41 -0700 (PDT)
+X-Gm-Message-State: AOJu0Yzk/iHOJ5O2mT+ydEWzcvjd85tgVWvUTSmwTTkDwf9wg6+iPIKu
+        cby8vZP+KDCNViIlRKuWA1v7c/ka76ewDvg6yD0=
+X-Google-Smtp-Source: AGHT+IFiTcDct53OijnP1Dv//ljwa/j8p7snP2xWb1MXmhUAIVhLZvUBdZmrQEndHPbZWL2iA8aWwpyIs51gK8PaGng=
+X-Received: by 2002:ac2:4835:0:b0:507:9ff7:2ed4 with SMTP id
+ 21-20020ac24835000000b005079ff72ed4mr3299897lft.43.1698478959384; Sat, 28 Oct
+ 2023 00:42:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: next-20231027
-X-Kernelci-Report-Type: test
-X-Kernelci-Branch: master
-X-Kernelci-Tree: next
-Subject: next/master baseline: 232 runs, 2 regressions (next-20231027)
-To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
-        kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <CA+G9fYsCskpn_TNpSwLq9HGUgtT=aZpDzs7SVrqpa9WmyYFaxQ@mail.gmail.com>
+ <ZTqGBzOQd4Oi3e9j@FVFF77S0Q05N.cambridge.arm.com> <CAMj1kXE8VrG6aPsjByd83kavw7He6vn=DszhJfAd-TfP9y8VBA@mail.gmail.com>
+ <CA+G9fYuQxUhsrL_=uYSAdotU1_Wx7iu5PxFuG9EzWgBE2nMjcw@mail.gmail.com>
+In-Reply-To: <CA+G9fYuQxUhsrL_=uYSAdotU1_Wx7iu5PxFuG9EzWgBE2nMjcw@mail.gmail.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Sat, 28 Oct 2023 09:42:27 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXESknQ40SZRMFv6Vv32x-2mSuMyOxoURQwwO1apQ+m=jA@mail.gmail.com>
+Message-ID: <CAMj1kXESknQ40SZRMFv6Vv32x-2mSuMyOxoURQwwO1apQ+m=jA@mail.gmail.com>
+Subject: Re: qemu-arm64: handle_futex_death - kernel/futex/core.c:661 - Unable
+ to handle kernel unknown 43 at virtual address
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        lkft-triage@lists.linaro.org, Arnd Bergmann <arnd@arndb.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@kernel.org>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Dan Carpenter <dan.carpenter@linaro.org>,
+        LTP List <ltp@lists.linux.it>, Petr Vorel <pvorel@suse.cz>
+Content-Type: multipart/mixed; boundary="000000000000087d0c0608c1f337"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master baseline: 232 runs, 2 regressions (next-20231027)
+--000000000000087d0c0608c1f337
+Content-Type: text/plain; charset="UTF-8"
 
-Regressions Summary
--------------------
+On Fri, 27 Oct 2023 at 12:57, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
+>
+> On Thu, 26 Oct 2023 at 21:09, Ard Biesheuvel <ardb@kernel.org> wrote:
+> >
+> > On Thu, 26 Oct 2023 at 17:30, Mark Rutland <mark.rutland@arm.com> wrote:
+> > >
+> > > On Thu, Oct 26, 2023 at 08:11:26PM +0530, Naresh Kamboju wrote:
+> > > > Following kernel crash noticed on qemu-arm64 while running LTP syscalls
+> > > > set_robust_list test case running Linux next 6.6.0-rc7-next-20231026 ...
+> > > It looks like this is fallout from the LPA2 enablement.
+> > >
+> > > According to the latest ARM ARM (ARM DDI 0487J.a), page D19-6475, that "unknown
+> > > 43" (0x2b / 0b101011) is the DFSC for a level -1 translation fault:
+> > >
+> > >         0b101011 When FEAT_LPA2 is implemented:
+> > >                  Translation fault, level -1.
+> > >
+> > > It's triggered here by an LDTR in a get_user() on a bogus userspace address.
+> > > The exception is expected, and it's supposed to be handled via the exception
+> > > fixups, but the LPA2 patches didn't update the fault_info table entries for all
+> > > the level -1 faults, and so those all get handled by do_bad() and don't call
+> > > fixup_exception(), causing them to be fatal.
+> > >
+> > > It should be relatively simple to update the fault_info table for the level -1
+> > > faults, but given the other issues we're seeing I think it's probably worth
+> > > dropping the LPA2 patches for the moment.
+> > >
+> >
+> > Thanks for the analysis Mark.
+> >
+> > I agree that this should not be difficult to fix, but given the other
+> > CI problems and identified loose ends, I am not going to object to
+> > dropping this partially or entirely at this point. I'm sure everybody
+> > will be thrilled to go over those 60 patches again after I rebase them
+> > onto v6.7-rc1 :-)
+>
+> I am happy to test any proposed fix patch.
+>
 
-platform                     | arch  | lab          | compiler | defconfig =
-                   | regressions
------------------------------+-------+--------------+----------+-----------=
--------------------+------------
-meson-gxl-s905x-libretech-cc | arm64 | lab-baylibre | gcc-10   | defconfig+=
-CON...BIG_ENDIAN=3Dy | 1          =
+Thanks Naresh. Patch attached.
 
-rk3399-roc-pc                | arm64 | lab-clabbe   | gcc-10   | defconfig+=
-videodec           | 1          =
+--000000000000087d0c0608c1f337
+Content-Type: text/x-patch; charset="US-ASCII"; 
+	name="0001-Add-missing-ESR-decoding-for-level-1-translation-fau.patch"
+Content-Disposition: attachment; 
+	filename="0001-Add-missing-ESR-decoding-for-level-1-translation-fau.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_lo9qibwf0>
+X-Attachment-Id: f_lo9qibwf0
 
-
-  Details:  https://kernelci.org/test/job/next/branch/master/kernel/next-20=
-231027/plan/baseline/
-
-  Test:     baseline
-  Tree:     next
-  Branch:   master
-  Describe: next-20231027
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      66f1e1ea3548378ff6387b1ce0b40955d54e86aa =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform                     | arch  | lab          | compiler | defconfig =
-                   | regressions
------------------------------+-------+--------------+----------+-----------=
--------------------+------------
-meson-gxl-s905x-libretech-cc | arm64 | lab-baylibre | gcc-10   | defconfig+=
-CON...BIG_ENDIAN=3Dy | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/653b8536d23ebaf016efcf0d
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy
-  Compiler:    gcc-10
-  Plain log:   https://storage.kernelci.org//next/master/next-20231027/arm6=
-4/defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy/gcc-10/lab-baylibre/baseline-meson-gx=
-l-s905x-libretech-cc.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20231027/arm6=
-4/defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy/gcc-10/lab-baylibre/baseline-meson-gx=
-l-s905x-libretech-cc.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/arm64be/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/653b8536d23ebaf016efc=
-f0e
-        new failure (last pass: next-20231026) =
-
- =
-
-
-
-platform                     | arch  | lab          | compiler | defconfig =
-                   | regressions
------------------------------+-------+--------------+----------+-----------=
--------------------+------------
-rk3399-roc-pc                | arm64 | lab-clabbe   | gcc-10   | defconfig+=
-videodec           | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/653b7e5e05f81d86a0efcf3b
-
-  Results:     5 PASS, 1 FAIL, 1 SKIP
-  Full config: defconfig+videodec
-  Compiler:    gcc-10
-  Plain log:   https://storage.kernelci.org//next/master/next-20231027/arm6=
-4/defconfig+videodec/gcc-10/lab-clabbe/baseline-rk3399-roc-pc.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20231027/arm6=
-4/defconfig+videodec/gcc-10/lab-clabbe/baseline-rk3399-roc-pc.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/653b7e5e05f81d86a0efcf44
-        new failure (last pass: next-20231013)
-
-    2023-10-27T09:09:36.137913  <8>[   21.798009] <LAVA_SIGNAL_ENDRUN 0_dme=
-sg 440854_1.5.2.4.1>
-    2023-10-27T09:09:36.242586  / # #
-    2023-10-27T09:09:36.344067  export SHELL=3D/bin/sh
-    2023-10-27T09:09:36.344581  #
-    2023-10-27T09:09:36.445495  / # export SHELL=3D/bin/sh. /lava-440854/en=
-vironment
-    2023-10-27T09:09:36.445997  =
-
-    2023-10-27T09:09:36.546932  / # . /lava-440854/environment/lava-440854/=
-bin/lava-test-runner /lava-440854/1
-    2023-10-27T09:09:36.547752  =
-
-    2023-10-27T09:09:36.552405  / # /lava-440854/bin/lava-test-runner /lava=
--440854/1
-    2023-10-27T09:09:36.600145  + export 'TESTRUN_ID=3D1_bootrr' =
-
-    ... (42 line(s) more)  =
-
- =20
+RnJvbSAwZDNjOWQzOWE0NTQxZjdjNWRlYTUxNzVhZGVhMmFmNjNlYzFiOTJkIE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpGcm9tOiBBcmQgQmllc2hldXZlbCA8YXJkYkBrZXJuZWwub3JnPgpEYXRl
+OiBTYXQsIDI4IE9jdCAyMDIzIDA5OjQwOjI5ICswMjAwClN1YmplY3Q6IFtQQVRDSF0gQWRkIG1p
+c3NpbmcgRVNSIGRlY29kaW5nIGZvciBsZXZlbCAtMSB0cmFuc2xhdGlvbiBmYXVsdHMKClNpZ25l
+ZC1vZmYtYnk6IEFyZCBCaWVzaGV1dmVsIDxhcmRiQGtlcm5lbC5vcmc+Ci0tLQogYXJjaC9hcm02
+NC9tbS9mYXVsdC5jIHwgOCArKysrLS0tLQogMSBmaWxlIGNoYW5nZWQsIDQgaW5zZXJ0aW9ucygr
+KSwgNCBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9hcmNoL2FybTY0L21tL2ZhdWx0LmMgYi9h
+cmNoL2FybTY0L21tL2ZhdWx0LmMKaW5kZXggNDYwZDc5OWUxMjk2Li4yMjMxOGQ1NjA4N2QgMTAw
+NjQ0Ci0tLSBhL2FyY2gvYXJtNjQvbW0vZmF1bHQuYworKysgYi9hcmNoL2FybTY0L21tL2ZhdWx0
+LmMKQEAgLTc5MSw3ICs3OTEsNyBAQCBzdGF0aWMgY29uc3Qgc3RydWN0IGZhdWx0X2luZm8gZmF1
+bHRfaW5mb1tdID0gewogCXsgZG9fc2VhLAkJU0lHQlVTLCAgQlVTX09CSkVSUiwJInN5bmNocm9u
+b3VzIGV4dGVybmFsIGFib3J0Igl9LAogCXsgZG9fdGFnX2NoZWNrX2ZhdWx0LAlTSUdTRUdWLCBT
+RUdWX01URVNFUlIsCSJzeW5jaHJvbm91cyB0YWcgY2hlY2sgZmF1bHQiCX0sCiAJeyBkb19iYWQs
+CQlTSUdLSUxMLCBTSV9LRVJORUwsCSJ1bmtub3duIDE4IgkJCX0sCi0JeyBkb19iYWQsCQlTSUdL
+SUxMLCBTSV9LRVJORUwsCSJ1bmtub3duIDE5IgkJCX0sCisJeyBkb19zZWEsCQlTSUdLSUxMLCBT
+SV9LRVJORUwsCSJsZXZlbCAtMSAodHJhbnNsYXRpb24gdGFibGUgd2FsaykiCX0sCiAJeyBkb19z
+ZWEsCQlTSUdLSUxMLCBTSV9LRVJORUwsCSJsZXZlbCAwICh0cmFuc2xhdGlvbiB0YWJsZSB3YWxr
+KSIJfSwKIAl7IGRvX3NlYSwJCVNJR0tJTEwsIFNJX0tFUk5FTCwJImxldmVsIDEgKHRyYW5zbGF0
+aW9uIHRhYmxlIHdhbGspIgl9LAogCXsgZG9fc2VhLAkJU0lHS0lMTCwgU0lfS0VSTkVMLAkibGV2
+ZWwgMiAodHJhbnNsYXRpb24gdGFibGUgd2FsaykiCX0sCkBAIC03OTksNyArNzk5LDcgQEAgc3Rh
+dGljIGNvbnN0IHN0cnVjdCBmYXVsdF9pbmZvIGZhdWx0X2luZm9bXSA9IHsKIAl7IGRvX3NlYSwJ
+CVNJR0JVUywgIEJVU19PQkpFUlIsCSJzeW5jaHJvbm91cyBwYXJpdHkgb3IgRUNDIGVycm9yIiB9
+LAkvLyBSZXNlcnZlZCB3aGVuIFJBUyBpcyBpbXBsZW1lbnRlZAogCXsgZG9fYmFkLAkJU0lHS0lM
+TCwgU0lfS0VSTkVMLAkidW5rbm93biAyNSIJCQl9LAogCXsgZG9fYmFkLAkJU0lHS0lMTCwgU0lf
+S0VSTkVMLAkidW5rbm93biAyNiIJCQl9LAotCXsgZG9fYmFkLAkJU0lHS0lMTCwgU0lfS0VSTkVM
+LAkidW5rbm93biAyNyIJCQl9LAorCXsgZG9fc2VhLAkJU0lHS0lMTCwgU0lfS0VSTkVMLAkibGV2
+ZWwgLTEgc3luY2hyb25vdXMgcGFyaXR5IGVycm9yICh0cmFuc2xhdGlvbiB0YWJsZSB3YWxrKSIJ
+fSwJLy8gUmVzZXJ2ZWQgd2hlbiBSQVMgaXMgaW1wbGVtZW50ZWQKIAl7IGRvX3NlYSwJCVNJR0tJ
+TEwsIFNJX0tFUk5FTCwJImxldmVsIDAgc3luY2hyb25vdXMgcGFyaXR5IGVycm9yICh0cmFuc2xh
+dGlvbiB0YWJsZSB3YWxrKSIJfSwJLy8gUmVzZXJ2ZWQgd2hlbiBSQVMgaXMgaW1wbGVtZW50ZWQK
+IAl7IGRvX3NlYSwJCVNJR0tJTEwsIFNJX0tFUk5FTCwJImxldmVsIDEgc3luY2hyb25vdXMgcGFy
+aXR5IGVycm9yICh0cmFuc2xhdGlvbiB0YWJsZSB3YWxrKSIJfSwJLy8gUmVzZXJ2ZWQgd2hlbiBS
+QVMgaXMgaW1wbGVtZW50ZWQKIAl7IGRvX3NlYSwJCVNJR0tJTEwsIFNJX0tFUk5FTCwJImxldmVs
+IDIgc3luY2hyb25vdXMgcGFyaXR5IGVycm9yICh0cmFuc2xhdGlvbiB0YWJsZSB3YWxrKSIJfSwJ
+Ly8gUmVzZXJ2ZWQgd2hlbiBSQVMgaXMgaW1wbGVtZW50ZWQKQEAgLTgxMSw5ICs4MTEsOSBAQCBz
+dGF0aWMgY29uc3Qgc3RydWN0IGZhdWx0X2luZm8gZmF1bHRfaW5mb1tdID0gewogCXsgZG9fYmFk
+LAkJU0lHS0lMTCwgU0lfS0VSTkVMLAkidW5rbm93biAzNiIJCQl9LAogCXsgZG9fYmFkLAkJU0lH
+S0lMTCwgU0lfS0VSTkVMLAkidW5rbm93biAzNyIJCQl9LAogCXsgZG9fYmFkLAkJU0lHS0lMTCwg
+U0lfS0VSTkVMLAkidW5rbm93biAzOCIJCQl9LAotCXsgZG9fYmFkLAkJU0lHS0lMTCwgU0lfS0VS
+TkVMLAkidW5rbm93biAzOSIJCQl9LAorCXsgZG9fYmFkLAkJU0lHS0lMTCwgU0lfS0VSTkVMLAki
+bGV2ZWwgLTEgYWRkcmVzcyBzaXplIGZhdWx0Igl9LAogCXsgZG9fYmFkLAkJU0lHS0lMTCwgU0lf
+S0VSTkVMLAkidW5rbm93biA0MCIJCQl9LAotCXsgZG9fYmFkLAkJU0lHS0lMTCwgU0lfS0VSTkVM
+LAkidW5rbm93biA0MSIJCQl9LAorCXsgZG9fdHJhbnNsYXRpb25fZmF1bHQsCVNJR1NFR1YsIFNF
+R1ZfTUFQRVJSLAkibGV2ZWwgLTEgdHJhbnNsYXRpb24gZmF1bHQiCX0sCiAJeyBkb19iYWQsCQlT
+SUdLSUxMLCBTSV9LRVJORUwsCSJ1bmtub3duIDQyIgkJCX0sCiAJeyBkb19iYWQsCQlTSUdLSUxM
+LCBTSV9LRVJORUwsCSJ1bmtub3duIDQzIgkJCX0sCiAJeyBkb19iYWQsCQlTSUdLSUxMLCBTSV9L
+RVJORUwsCSJ1bmtub3duIDQ0IgkJCX0sCi0tIAoyLjM5LjIKCg==
+--000000000000087d0c0608c1f337--

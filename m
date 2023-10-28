@@ -2,64 +2,55 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A3E97DA580
-	for <lists+linux-next@lfdr.de>; Sat, 28 Oct 2023 09:42:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF4987DA780
+	for <lists+linux-next@lfdr.de>; Sat, 28 Oct 2023 16:10:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229460AbjJ1Hmo (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 28 Oct 2023 03:42:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59640 "EHLO
+        id S229461AbjJ1OKS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sat, 28 Oct 2023 10:10:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjJ1Hmo (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sat, 28 Oct 2023 03:42:44 -0400
+        with ESMTP id S229454AbjJ1OKQ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sat, 28 Oct 2023 10:10:16 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB9ADE1;
-        Sat, 28 Oct 2023 00:42:41 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DCA8C433CC;
-        Sat, 28 Oct 2023 07:42:41 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 949A7D6;
+        Sat, 28 Oct 2023 07:10:14 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60BB8C433C7;
+        Sat, 28 Oct 2023 14:10:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1698478961;
-        bh=htUU5NgNW5XjX1k4bhwOpjiaCPHzbKJXSRlXtBMXaaI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=SLt9RpRk04EaksB4alsV5juWqDKrrkoFjxUkbGOZ7QmCkr5DaOIcuWvzpg2KRZFs4
-         oyNj7h+Nu2x3s/nz8wlUOhoDuxjmHXZ81/fxdhC/0g5Voz0M9n1SONNKBWxBpMncFw
-         lBKCeI9FyvIc3DaiiGzH06wGVU7T0+DOcEqxXG5+SBgGefDMATnj9bRNWCQvHdXZeM
-         FyqwXfRoKQYSCd/fmacxctuND9MgMxzBI8ScDwHMoocjekC8Ee6ezXeZ/nIzGkSYtn
-         mnayYsRVJbFeSef6Ffe/Rd0T+4ssNkfDQtYf7XwHBc5QWDgU4QDZ0Wt0a762+yDV6w
-         L93MhRkYGp9Cg==
-Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-507a62d4788so4346139e87.0;
-        Sat, 28 Oct 2023 00:42:41 -0700 (PDT)
-X-Gm-Message-State: AOJu0Yzk/iHOJ5O2mT+ydEWzcvjd85tgVWvUTSmwTTkDwf9wg6+iPIKu
-        cby8vZP+KDCNViIlRKuWA1v7c/ka76ewDvg6yD0=
-X-Google-Smtp-Source: AGHT+IFiTcDct53OijnP1Dv//ljwa/j8p7snP2xWb1MXmhUAIVhLZvUBdZmrQEndHPbZWL2iA8aWwpyIs51gK8PaGng=
-X-Received: by 2002:ac2:4835:0:b0:507:9ff7:2ed4 with SMTP id
- 21-20020ac24835000000b005079ff72ed4mr3299897lft.43.1698478959384; Sat, 28 Oct
- 2023 00:42:39 -0700 (PDT)
+        s=k20201202; t=1698502214;
+        bh=uN7HCH0yzy8b1CLvlI/NASuYfAWHTNyav6PEkpckViw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IsKeQV41bTjyTzbc0Zlk6kD2iYdCZczsAqbCmV1/DyWInG3i1IAOjMr3b/F7u2Nrf
+         2ampCKN1Sp+LH8PfTQchPhTddELZqhSpmzNKthIlULMo8VBLni6Z3tXu0Y2v2M3Zfz
+         pstIhXtkGzOdEMynFSAvwk4OO+NaRubmndo/6TazYL+M5pvODf0BVS2fmm19GfEiCa
+         vAb3HdXIJ53By94hiSJKckLC9d9rwevZGWcl2hN7Uc58KYP7OE2LFZx+Fjq3y9V/he
+         qhfjB1dQOKIsE5orPSmZ+Melv8wNgpE4PisBCuIfCOjRGwPkDJj/OEIxodpebqR3Ds
+         9huc/xrGyPzhQ==
+Date:   Sat, 28 Oct 2023 16:10:09 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     David Sterba <dsterba@suse.cz>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Christoph Hellwig <hch@lst.de>, Jan Kara <jack@suse.cz>
+Subject: upcoming merge window: Where did the patches we had intended to
+ depend on go? vfs-brauner tree with the btrfs tree
+Message-ID: <20231028-heutzutage-wortfetzen-a54cdb387623@brauner>
+References: <20231009104840.1bdadc80@canb.auug.org.au>
+ <20231009-bauch-gedanken-e02e35804e03@brauner>
+ <20231011083754.45a9ed53@canb.auug.org.au>
+ <20231011092004.GE2211@suse.cz>
+ <20231012154210.GI2211@suse.cz>
+ <20231023175513.GL26353@twin.jikos.cz>
+ <20231024082543.575b3edd@canb.auug.org.au>
+ <20231024-kolossal-ungelegen-f95c436de174@brauner>
+ <20231024154620.GQ26353@twin.jikos.cz>
+ <20231025-braumeister-sprung-44d486e2d721@brauner>
 MIME-Version: 1.0
-References: <CA+G9fYsCskpn_TNpSwLq9HGUgtT=aZpDzs7SVrqpa9WmyYFaxQ@mail.gmail.com>
- <ZTqGBzOQd4Oi3e9j@FVFF77S0Q05N.cambridge.arm.com> <CAMj1kXE8VrG6aPsjByd83kavw7He6vn=DszhJfAd-TfP9y8VBA@mail.gmail.com>
- <CA+G9fYuQxUhsrL_=uYSAdotU1_Wx7iu5PxFuG9EzWgBE2nMjcw@mail.gmail.com>
-In-Reply-To: <CA+G9fYuQxUhsrL_=uYSAdotU1_Wx7iu5PxFuG9EzWgBE2nMjcw@mail.gmail.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Sat, 28 Oct 2023 09:42:27 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXESknQ40SZRMFv6Vv32x-2mSuMyOxoURQwwO1apQ+m=jA@mail.gmail.com>
-Message-ID: <CAMj1kXESknQ40SZRMFv6Vv32x-2mSuMyOxoURQwwO1apQ+m=jA@mail.gmail.com>
-Subject: Re: qemu-arm64: handle_futex_death - kernel/futex/core.c:661 - Unable
- to handle kernel unknown 43 at virtual address
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        lkft-triage@lists.linaro.org, Arnd Bergmann <arnd@arndb.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@kernel.org>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Dan Carpenter <dan.carpenter@linaro.org>,
-        LTP List <ltp@lists.linux.it>, Petr Vorel <pvorel@suse.cz>
-Content-Type: multipart/mixed; boundary="000000000000087d0c0608c1f337"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20231025-braumeister-sprung-44d486e2d721@brauner>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -69,104 +60,129 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---000000000000087d0c0608c1f337
-Content-Type: text/plain; charset="UTF-8"
+On Wed, Oct 25, 2023 at 03:19:11PM +0200, Christian Brauner wrote:
+> On Tue, Oct 24, 2023 at 05:46:20PM +0200, David Sterba wrote:
+> > On Tue, Oct 24, 2023 at 10:59:39AM +0200, Christian Brauner wrote:
+> > > On Tue, Oct 24, 2023 at 08:25:43AM +1100, Stephen Rothwell wrote:
+> > > > Hi David,
+> > > > 
+> > > > On Mon, 23 Oct 2023 19:55:13 +0200 David Sterba <dsterba@suse.cz> wrote:
+> > > > >
+> > > > > I have updated my for-next branch again, sorry (top commit 1a4dc97c883a4f763cbaf50).
+> > > > > There are some fixes I don't want to miss from the 6.7 pull request.
+> > > > > There should be minimal change to the VFS tree conflict resolution so
+> > > > > the diff should be reusable.
+> > > > 
+> > > > So, why did you not just merge in v6.6-rc7 (or better yet, the branch
+> > > > that contains the fix(es) that Linus merged) and then apply your new
+> > > > commits on top of that?  All the commits that were in the btrfs tree
+> > > > have been rebased unchanged.
+> > > 
+> > > Please reconsider that and follow Stephen's suggestion. I'm sending pull
+> > > requests this week and it'd be really annoying having to rebase
+> > > vfs.super right before sending them.
+> > > 
+> > > We let you carry the required patches in btrfs on your insistence even
+> > > though this effectively blocked two patchsets for a whole cycle
+> > 
+> > I hope I explained my reasons already under that series, core btrfs
+> > changes should not go via VFS tree.
+> > 
+> > > and then
+> > > merged in btrfs into vfs.super for that. Rebasing on such short notice
+> > > is really not very nice.
+> > 
+> > Like said in the my other reply, the amount of VFS changes asks for
+> > stopping taking new patches to btrfs and not continuing the patch
+> > workflow that I've been doing. I understand that the inter-tree
+> > dependencies are never easy so it's about finding some common way and
+> > splitting the work over more releases eventually.
+> > 
+> > A resync of our branches a week before merge window, when there are no
+> 
+> Pull requests for VFS and a bunch of other trees are going out the week
+> before the merge window opens. This has been requested multiple times.
+> It's mentioned in almost every kernel release mail that pull requests
+> should go out early.
+> 
+> So you rebasing a week before the merge window means rebasing
+> right before the pr is sent for us. You might send pull requests later
+> and are free to do so of course but you made us depend on your tree so
+> we need some stability. That's why the rebase is problematic here.
+> 
+> > significant changes on my side does not sound like too short notice, but
+> > you can feel otherwise of course.
+> > 
+> > > I'm going to wait with the rebase for a bit.
+> > 
+> > Ok, don't rebase. I'll push to linux-next the previous snapshot and will
+> > find a way how to deliver the new patches.
+> 
+> Thanks! So I know you have your workflow and that's obviously fine but
+> rebasing when other major trees depend on your tree is a problem and I
+> believe Stephen has already linked to our official "Rebasing and
+> merging" documentation:
+> 
+> "- Do not reparent a tree without a good reason to do so.  Just being on a
+>    newer base or avoiding a merge with an upstream repository is not
+>    generally a good reason."
+> 
+> [...]
+> 
+> "A frequent cause of merge-window trouble is when Linus is presented with a
+> patch series that has clearly been reparented, often to a random commit,
+> shortly before the pull request was sent.  The chances of such a series
+> having been adequately tested are relatively low - as are the chances of
+> the pull request being acted upon."
+> 
+> So I'll make sure to point out that we're depending on the btrfs tree
+> and I have a clear merge commit explaining why we're pulling it in. All
+> of that would be invalidated if you're rebasing. So not rebasing really
+> helps us a lot.
+> 
+> I specifically put Linus in Cc so hopefully everyone is aware up front
+> and there are no unnecessary suprises during the merge window.
 
-On Fri, 27 Oct 2023 at 12:57, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
->
-> On Thu, 26 Oct 2023 at 21:09, Ard Biesheuvel <ardb@kernel.org> wrote:
-> >
-> > On Thu, 26 Oct 2023 at 17:30, Mark Rutland <mark.rutland@arm.com> wrote:
-> > >
-> > > On Thu, Oct 26, 2023 at 08:11:26PM +0530, Naresh Kamboju wrote:
-> > > > Following kernel crash noticed on qemu-arm64 while running LTP syscalls
-> > > > set_robust_list test case running Linux next 6.6.0-rc7-next-20231026 ...
-> > > It looks like this is fallout from the LPA2 enablement.
-> > >
-> > > According to the latest ARM ARM (ARM DDI 0487J.a), page D19-6475, that "unknown
-> > > 43" (0x2b / 0b101011) is the DFSC for a level -1 translation fault:
-> > >
-> > >         0b101011 When FEAT_LPA2 is implemented:
-> > >                  Translation fault, level -1.
-> > >
-> > > It's triggered here by an LDTR in a get_user() on a bogus userspace address.
-> > > The exception is expected, and it's supposed to be handled via the exception
-> > > fixups, but the LPA2 patches didn't update the fault_info table entries for all
-> > > the level -1 faults, and so those all get handled by do_bad() and don't call
-> > > fixup_exception(), causing them to be fatal.
-> > >
-> > > It should be relatively simple to update the fault_info table for the level -1
-> > > faults, but given the other issues we're seeing I think it's probably worth
-> > > dropping the LPA2 patches for the moment.
-> > >
-> >
-> > Thanks for the analysis Mark.
-> >
-> > I agree that this should not be difficult to fix, but given the other
-> > CI problems and identified loose ends, I am not going to object to
-> > dropping this partially or entirely at this point. I'm sure everybody
-> > will be thrilled to go over those 60 patches again after I rebase them
-> > onto v6.7-rc1 :-)
->
-> I am happy to test any proposed fix patch.
->
+So now I'm confused.
 
-Thanks Naresh. Patch attached.
+I prepared the vfs-6.7.super pull request yesterday and was about to
+write the pull request message earlier and was about to send it out. And
+I did the usual checklist and takinga another close look at all the
+patches:
 
---000000000000087d0c0608c1f337
-Content-Type: text/x-patch; charset="US-ASCII"; 
-	name="0001-Add-missing-ESR-decoding-for-level-1-translation-fau.patch"
-Content-Disposition: attachment; 
-	filename="0001-Add-missing-ESR-decoding-for-level-1-translation-fau.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_lo9qibwf0>
-X-Attachment-Id: f_lo9qibwf0
+Where are the patches that you insisted go through the btrfs tree and
+that made us merge in the btrfs/for-next tree into vfs.super?
 
-RnJvbSAwZDNjOWQzOWE0NTQxZjdjNWRlYTUxNzVhZGVhMmFmNjNlYzFiOTJkIE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBBcmQgQmllc2hldXZlbCA8YXJkYkBrZXJuZWwub3JnPgpEYXRl
-OiBTYXQsIDI4IE9jdCAyMDIzIDA5OjQwOjI5ICswMjAwClN1YmplY3Q6IFtQQVRDSF0gQWRkIG1p
-c3NpbmcgRVNSIGRlY29kaW5nIGZvciBsZXZlbCAtMSB0cmFuc2xhdGlvbiBmYXVsdHMKClNpZ25l
-ZC1vZmYtYnk6IEFyZCBCaWVzaGV1dmVsIDxhcmRiQGtlcm5lbC5vcmc+Ci0tLQogYXJjaC9hcm02
-NC9tbS9mYXVsdC5jIHwgOCArKysrLS0tLQogMSBmaWxlIGNoYW5nZWQsIDQgaW5zZXJ0aW9ucygr
-KSwgNCBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9hcmNoL2FybTY0L21tL2ZhdWx0LmMgYi9h
-cmNoL2FybTY0L21tL2ZhdWx0LmMKaW5kZXggNDYwZDc5OWUxMjk2Li4yMjMxOGQ1NjA4N2QgMTAw
-NjQ0Ci0tLSBhL2FyY2gvYXJtNjQvbW0vZmF1bHQuYworKysgYi9hcmNoL2FybTY0L21tL2ZhdWx0
-LmMKQEAgLTc5MSw3ICs3OTEsNyBAQCBzdGF0aWMgY29uc3Qgc3RydWN0IGZhdWx0X2luZm8gZmF1
-bHRfaW5mb1tdID0gewogCXsgZG9fc2VhLAkJU0lHQlVTLCAgQlVTX09CSkVSUiwJInN5bmNocm9u
-b3VzIGV4dGVybmFsIGFib3J0Igl9LAogCXsgZG9fdGFnX2NoZWNrX2ZhdWx0LAlTSUdTRUdWLCBT
-RUdWX01URVNFUlIsCSJzeW5jaHJvbm91cyB0YWcgY2hlY2sgZmF1bHQiCX0sCiAJeyBkb19iYWQs
-CQlTSUdLSUxMLCBTSV9LRVJORUwsCSJ1bmtub3duIDE4IgkJCX0sCi0JeyBkb19iYWQsCQlTSUdL
-SUxMLCBTSV9LRVJORUwsCSJ1bmtub3duIDE5IgkJCX0sCisJeyBkb19zZWEsCQlTSUdLSUxMLCBT
-SV9LRVJORUwsCSJsZXZlbCAtMSAodHJhbnNsYXRpb24gdGFibGUgd2FsaykiCX0sCiAJeyBkb19z
-ZWEsCQlTSUdLSUxMLCBTSV9LRVJORUwsCSJsZXZlbCAwICh0cmFuc2xhdGlvbiB0YWJsZSB3YWxr
-KSIJfSwKIAl7IGRvX3NlYSwJCVNJR0tJTEwsIFNJX0tFUk5FTCwJImxldmVsIDEgKHRyYW5zbGF0
-aW9uIHRhYmxlIHdhbGspIgl9LAogCXsgZG9fc2VhLAkJU0lHS0lMTCwgU0lfS0VSTkVMLAkibGV2
-ZWwgMiAodHJhbnNsYXRpb24gdGFibGUgd2FsaykiCX0sCkBAIC03OTksNyArNzk5LDcgQEAgc3Rh
-dGljIGNvbnN0IHN0cnVjdCBmYXVsdF9pbmZvIGZhdWx0X2luZm9bXSA9IHsKIAl7IGRvX3NlYSwJ
-CVNJR0JVUywgIEJVU19PQkpFUlIsCSJzeW5jaHJvbm91cyBwYXJpdHkgb3IgRUNDIGVycm9yIiB9
-LAkvLyBSZXNlcnZlZCB3aGVuIFJBUyBpcyBpbXBsZW1lbnRlZAogCXsgZG9fYmFkLAkJU0lHS0lM
-TCwgU0lfS0VSTkVMLAkidW5rbm93biAyNSIJCQl9LAogCXsgZG9fYmFkLAkJU0lHS0lMTCwgU0lf
-S0VSTkVMLAkidW5rbm93biAyNiIJCQl9LAotCXsgZG9fYmFkLAkJU0lHS0lMTCwgU0lfS0VSTkVM
-LAkidW5rbm93biAyNyIJCQl9LAorCXsgZG9fc2VhLAkJU0lHS0lMTCwgU0lfS0VSTkVMLAkibGV2
-ZWwgLTEgc3luY2hyb25vdXMgcGFyaXR5IGVycm9yICh0cmFuc2xhdGlvbiB0YWJsZSB3YWxrKSIJ
-fSwJLy8gUmVzZXJ2ZWQgd2hlbiBSQVMgaXMgaW1wbGVtZW50ZWQKIAl7IGRvX3NlYSwJCVNJR0tJ
-TEwsIFNJX0tFUk5FTCwJImxldmVsIDAgc3luY2hyb25vdXMgcGFyaXR5IGVycm9yICh0cmFuc2xh
-dGlvbiB0YWJsZSB3YWxrKSIJfSwJLy8gUmVzZXJ2ZWQgd2hlbiBSQVMgaXMgaW1wbGVtZW50ZWQK
-IAl7IGRvX3NlYSwJCVNJR0tJTEwsIFNJX0tFUk5FTCwJImxldmVsIDEgc3luY2hyb25vdXMgcGFy
-aXR5IGVycm9yICh0cmFuc2xhdGlvbiB0YWJsZSB3YWxrKSIJfSwJLy8gUmVzZXJ2ZWQgd2hlbiBS
-QVMgaXMgaW1wbGVtZW50ZWQKIAl7IGRvX3NlYSwJCVNJR0tJTEwsIFNJX0tFUk5FTCwJImxldmVs
-IDIgc3luY2hyb25vdXMgcGFyaXR5IGVycm9yICh0cmFuc2xhdGlvbiB0YWJsZSB3YWxrKSIJfSwJ
-Ly8gUmVzZXJ2ZWQgd2hlbiBSQVMgaXMgaW1wbGVtZW50ZWQKQEAgLTgxMSw5ICs4MTEsOSBAQCBz
-dGF0aWMgY29uc3Qgc3RydWN0IGZhdWx0X2luZm8gZmF1bHRfaW5mb1tdID0gewogCXsgZG9fYmFk
-LAkJU0lHS0lMTCwgU0lfS0VSTkVMLAkidW5rbm93biAzNiIJCQl9LAogCXsgZG9fYmFkLAkJU0lH
-S0lMTCwgU0lfS0VSTkVMLAkidW5rbm93biAzNyIJCQl9LAogCXsgZG9fYmFkLAkJU0lHS0lMTCwg
-U0lfS0VSTkVMLAkidW5rbm93biAzOCIJCQl9LAotCXsgZG9fYmFkLAkJU0lHS0lMTCwgU0lfS0VS
-TkVMLAkidW5rbm93biAzOSIJCQl9LAorCXsgZG9fYmFkLAkJU0lHS0lMTCwgU0lfS0VSTkVMLAki
-bGV2ZWwgLTEgYWRkcmVzcyBzaXplIGZhdWx0Igl9LAogCXsgZG9fYmFkLAkJU0lHS0lMTCwgU0lf
-S0VSTkVMLAkidW5rbm93biA0MCIJCQl9LAotCXsgZG9fYmFkLAkJU0lHS0lMTCwgU0lfS0VSTkVM
-LAkidW5rbm93biA0MSIJCQl9LAorCXsgZG9fdHJhbnNsYXRpb25fZmF1bHQsCVNJR1NFR1YsIFNF
-R1ZfTUFQRVJSLAkibGV2ZWwgLTEgdHJhbnNsYXRpb24gZmF1bHQiCX0sCiAJeyBkb19iYWQsCQlT
-SUdLSUxMLCBTSV9LRVJORUwsCSJ1bmtub3duIDQyIgkJCX0sCiAJeyBkb19iYWQsCQlTSUdLSUxM
-LCBTSV9LRVJORUwsCSJ1bmtub3duIDQzIgkJCX0sCiAJeyBkb19iYWQsCQlTSUdLSUxMLCBTSV9L
-RVJORUwsCSJ1bmtub3duIDQ0IgkJCX0sCi0tIAoyLjM5LjIKCg==
---000000000000087d0c0608c1f337--
+commit d6b5ffd5520a ("btrfs: use the super_block as holder when mounting file systems")
+commit 6d0eb684ad4a ("btrfs: open block devices after superblock creation")
+commit 8f05745a1bf9 ("btrfs: split btrfs_fs_devices.opened")
+commit 987b157f182e ("btrfs: call btrfs_close_devices from ->kill_sb")
+commit b87aed6ff4c3 ("btrfs: always open the device read-only in btrfs_scan_one_device")
+
+They were in btrfs/for-next on October 10, then you rebased and whatever
+is in btrfs/for-next that we merged in doesn't contain any of these
+patches. The top commit I have and that's visible in your repo is:
+c6e8f898f56f ("btrfs: open code timespec64 in struct btrfs_inode")
+
+So what happened and why weren't we told any of this as we did point out
+that we want to depend on this?
+
+I'm rebasing vfs.super onto plain v6.6-rc7 and dropping the btrfs merge
+completely as this is now completely pointless and it doesn't feely very
+transparent.
+
+If the btrfs tree somehow ends up bringing in these changes then that's
+fine. We've reworked locking requirements this cycle and so we will be
+fine without these changes.
+
+But you're actively blocking Jan from making progress with restricting
+writers to a block device because they are required for that for the
+second merge window.
+
+And I hope we won't be repeating this cycle's churn again coming cycle.
+
+And btw, as mentioned multiple times and reported upstream
+https://lore.kernel.org/linux-btrfs/20230908-merklich-bebauen-11914a630db4@brauner
+btrfs is broken when freezing block devices through the block layer
+(e.g., device mapper). Something we also can't fix without these
+patches.

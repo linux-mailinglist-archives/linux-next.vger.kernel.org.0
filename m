@@ -2,107 +2,99 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B7E97DA7D4
-	for <lists+linux-next@lfdr.de>; Sat, 28 Oct 2023 17:35:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA3257DAE54
+	for <lists+linux-next@lfdr.de>; Sun, 29 Oct 2023 21:52:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229461AbjJ1PfD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 28 Oct 2023 11:35:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52438 "EHLO
+        id S230145AbjJ2Uwy (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 29 Oct 2023 16:52:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjJ1PfC (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sat, 28 Oct 2023 11:35:02 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40C39CF
-        for <linux-next@vger.kernel.org>; Sat, 28 Oct 2023 08:35:00 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id 3f1490d57ef6-d865854ef96so2340403276.2
-        for <linux-next@vger.kernel.org>; Sat, 28 Oct 2023 08:35:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1698507299; x=1699112099; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=y8nz7Y347FoMR7VcvdwalitvLrVo2XnIXuxuFyGWSWA=;
-        b=Z2UKQk0Y9z2cMwJJdzZ1TDugoMe287IWUTyC16I49d+UY6VOr/YX/tB7zpQXGRS/1G
-         /uFL3gx3KvcMT8iWfbycktH+jyvKKITi8q9aObDMuzbRCiXL2KFr7POU3eC+lB9dhKtB
-         U8tiYI7dYJTD1onDsSZLINhyhBgmUo1q7ANuXUQH6EzxAuKYdhBbB4mRWBcsCI7XN4E6
-         iIN/eHm8nadJB4DjHfdDNCL+mLb3xQ4A/WjhO9l6bvjFINQQqJP4MpdP5tWMYb6BGGMI
-         b725TlFim/R4xx8nj5/UzRxZoK9XhhYNn+rABmYaucGCvVySanitMiS6aohK70Re/iyU
-         UvoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698507299; x=1699112099;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=y8nz7Y347FoMR7VcvdwalitvLrVo2XnIXuxuFyGWSWA=;
-        b=o3sSJ9As45XqdGtm31vjUopvGpXQ1fRMyqWmu2/TneD1mPjLGIVQWXv909BZ33VWtq
-         b9Abw/v+i1UYVS4weozANcGU9E4vmJRQGqcFliDGfSTvp0zPaxdO8vvdYaA0KF/9jhEf
-         TH7exQz2DUfCq1dklUT1FhIR4Y942klsB71erZtNejCWbNNWxJBEAcl7rfoUVcsV7c9X
-         0PvBi4Au1TLyzu1JQ5F0qItBUcaEX6nlGJA/isZyzCRXpP9clrk9hmGNyiN54DjL2N+C
-         cjy0wm6rErtczgn9tlnCXa6TNs6L7Nt93g5W1zZv3vwSsbDvFSw8BzW9woJu7i74gDc7
-         Pj4A==
-X-Gm-Message-State: AOJu0YyGFPsZ5eeU3d91yytOzTZNMVsk8tyCP7M270CtQmRnnz0S79x5
-        NzsCInJ6h6Ua/Lw+NKDw42FAylDRdg6DapdV05UF
-X-Google-Smtp-Source: AGHT+IEhxraiZOz31Kh6g9w1ZKQEdOuTpbHM8zmyCV+huYIiGODPmBP0B+MGMGs4ux5B9P9q18WHQUubaNepET00LNw=
-X-Received: by 2002:a05:6902:1209:b0:da0:52e4:b5aa with SMTP id
- s9-20020a056902120900b00da052e4b5aamr7298142ybu.8.1698507299391; Sat, 28 Oct
- 2023 08:34:59 -0700 (PDT)
-MIME-Version: 1.0
-References: <20231027163400.5764d549@canb.auug.org.au> <20231027.Soon0Gee4xul@digikod.net>
-In-Reply-To: <20231027.Soon0Gee4xul@digikod.net>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Sat, 28 Oct 2023 11:34:48 -0400
-Message-ID: <CAHC9VhTHVhgdBpSkMocmgWZgQzMcxMwC8Tp=Qr13Xvxaof82Pw@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the landlock tree
-To:     =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Kees Cook <keescook@chromium.org>,
-        Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
+        with ESMTP id S229512AbjJ2Uwy (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 29 Oct 2023 16:52:54 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71741C0;
+        Sun, 29 Oct 2023 13:52:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1698612765;
+        bh=6He0/+af7Qh1VNBvQxG1D9Q7mzmKRnr1/5WGX1UYgpA=;
+        h=Date:From:To:Cc:Subject:From;
+        b=gHUeU31emEALkVkqkPXB1KjI1eyrVVbarnt/GlqDjiyLLMrt4VWJJD7FxwVIsvC/B
+         b4EDKtkVvDcP5ma5IKRJtL3H6wz44xFT5jG2QDDhfAqAfwCms+F7oLd2YnnH6t01IP
+         dcSLFWCLg2YnYh/noea6ViJP99T0GsX7wu6j9lBnSCVA7FX9Z6ZLJHPB9WwbWs8rGu
+         oe53JD2tCMe0CHDXTZB+iNXVZ3/IFcKKRcqMPPZObTyxFgyiFS646GwdbyvJbC7Otz
+         qZtQKepYWVQspGaowVyv3d4ey8St3zJwMEwjy8WUFamJb/qx5LGieycPSJ33wR842Y
+         d0ZcF5mdO/4Rw==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4SJTB43JPlz4wnt;
+        Mon, 30 Oct 2023 07:52:44 +1100 (AEDT)
+Date:   Mon, 30 Oct 2023 07:52:42 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
+        Wu Hao <hao.wu@intel.com>
+Cc:     Jinjie Ruan <ruanjinjie@huawei.com>,
+        Russ Weight <russell.h.weight@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Marco Pagani <marpagan@redhat.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Subject: linux-next: duplicate patches in the fpga-fixes tree
+Message-ID: <20231030075242.15a4af0b@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/Q_OrNXO_QPZq+=amhG9d_4M";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Oct 27, 2023 at 8:56=E2=80=AFAM Micka=C3=ABl Sala=C3=BCn <mic@digik=
-od.net> wrote:
->
-> Thanks Stephen, your patch is good! I tested it with the merge of my
-> branch and LSM/dev-staging.
->
-> The new Landlock changes (tested in -next for a few weeks) add a new
-> call to security_add_hooks() which gets a new signature with commit
-> 9b09f11320db ("LSM: Identify modules by more than name") from
-> the LSM/dev-staging branch [1].
->
-> I plan to send a PR with my branch in the next merge window (for
-> v6.7-rc1).
->
-> We should squash Stephen's patch in commit 9b09f11320db ("LSM:
-> Identify modules by more than name") but it would not be possible
-> without my branch. I see two solutions:
-> * keep Stephen's patch in -next only, or
-> * rebase LSM/dev-staging on my branch now, and rebase it later on
->   v6.7-rc1 once my branch is merged (which is the workflow described in
->   [1]).
->
-> Paul, what do you think?
+--Sig_/Q_OrNXO_QPZq+=amhG9d_4M
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks Stephen, Micka=C3=ABl.
+Hi all,
 
-Once the Landlock tree is pulled into Linus' tree during the next
-merge window I'll update the LSM syscall patches currently living in
-lsm/dev-staging and this conflict should go away.  FWIW, there are
-other conflicts with the LSM syscall patchset, most notably in the
-syscall registrations, that should also resolve themselves when I
-rebase on top of v6.7-rc1.
+The following commits are also in Linus Torvalds' tree as different
+commits (but the same patches):
+
+  03d4bf9ff34a ("fpga: Fix memory leak for fpga_region_test_class_find()")
+  9221d5ecebf0 ("fpga: m10bmc-sec: Change contact for secure update driver")
+  ee8abd6ce1da ("fpga: disable KUnit test suites when module support is ena=
+bled")
+
+These are commits
+
+  28926daf731f ("fpga: Fix memory leak for fpga_region_test_class_find()")
+  1e55c5200dc7 ("fpga: m10bmc-sec: Change contact for secure update driver")
+  a3fad2e92c76 ("fpga: disable KUnit test suites when module support is ena=
+bled")
+
+in Linus' tree.
 
 --=20
-paul-moore.com
+Cheers,
+Stephen Rothwell
+
+--Sig_/Q_OrNXO_QPZq+=amhG9d_4M
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmU+xhoACgkQAVBC80lX
+0GwyBAgAjGvDznuYEbAlqVHQ76Vv0lf9bSJdEUPKUYm+bvAbz2DmbUtM1zIicofd
+HKXKm0c2O7eCT6TyJITnRZL5BC03xI3Fbg2/oKMwMDxO0vzrLVjp9YSYPxhRNuyW
+Loihqz5OuB//asEy1HEwdi5kBJBTYSF/ZHrShrvE8est5MYTqzWbr2Az0rq6Woj7
+QkOyuJQw8CfR3k0czj+HQR8A0BonGzZX0L35jqMK790rLn45MkiJ6/p3VIbe9G/1
+rdYKU+LCiMYovhBKOnC3DbtdEOVwKd31PePOLdoQQG1kz14EKuYKNHHyR+2AriDn
+84UHoJ5/rSNKGC/kmCEJE+cyuphgkA==
+=SQQm
+-----END PGP SIGNATURE-----
+
+--Sig_/Q_OrNXO_QPZq+=amhG9d_4M--

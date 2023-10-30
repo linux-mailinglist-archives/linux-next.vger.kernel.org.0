@@ -2,173 +2,159 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56FF87DBF8F
-	for <lists+linux-next@lfdr.de>; Mon, 30 Oct 2023 19:16:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BE787DBFD5
+	for <lists+linux-next@lfdr.de>; Mon, 30 Oct 2023 19:26:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231394AbjJ3SQA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 30 Oct 2023 14:16:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43106 "EHLO
+        id S230373AbjJ3S0d (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 30 Oct 2023 14:26:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229630AbjJ3SPw (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 30 Oct 2023 14:15:52 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FAB99E
-        for <linux-next@vger.kernel.org>; Mon, 30 Oct 2023 11:15:49 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id 41be03b00d2f7-5b980391d70so1323692a12.0
-        for <linux-next@vger.kernel.org>; Mon, 30 Oct 2023 11:15:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20230601.gappssmtp.com; s=20230601; t=1698689748; x=1699294548; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XmnI5qBbSMZl1OWF9Q0rVzehwSZZifS0Ca/lJsm0aEQ=;
-        b=WkuxvrbT/NEPCGxNewpViuN5VI1z0AhZfB0kMGvPLMw9O0hoejiz7hLrJq5IZ/xCn8
-         tscLj4fSnAxU8jXvcLJwXx0WNkmoUH7mEHvaJoWAWuFtn06kCYF/GoEuRfBH1rfaxW2F
-         /mDj5eY4Fx6JzG20eCP8Q9loogAkVM9N+Oz7cCLklVllPqWvxPE0E1VM7Ha1emrOTD6t
-         5+LuxaUzc+NfpzkQTlfJHL5Na0OnEw2YSQQO76koa6ai4H/XHSIWiDP0iTRiNl2JVHX+
-         c1EGiPfld/93JGgAucnvtXEWSUTvtgaHpwVVBivOtNXPx/RB4QqJ76Yq5+IHXohmiyT9
-         Teng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698689748; x=1699294548;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XmnI5qBbSMZl1OWF9Q0rVzehwSZZifS0Ca/lJsm0aEQ=;
-        b=XmvPjIzxMO3U8j1WB75VM6v/EUL0nBgSiYKzTcioff1BPRljxtJiJ8OhVRFnYKdnsA
-         mU5p6C9gbuBWBuQzwb2hznlC3EbTU01NZRR2px4F6VzZCcZzbBApBiBcKZtUYR8VICSc
-         MNyWlK4PsBGWXmohNMFv5DexY7r8iLYLmMfCbJhdkJXrr65vbnmq3GOOrHPKnu3WmiFJ
-         RvMvcTkQnpSP2NHJ22ylOeXEt8Wo4410kFcF40AKDcO4XjtRwGCxqhyF8RCq0Tw3zTTf
-         vLHCUFNR9/rvM1kDuB3eDzd/D99JhZ4InASpBsgIop76h++8mK8UU2A6RNiy72A1RJBK
-         ChHA==
-X-Gm-Message-State: AOJu0YwN6D84o+RvL3sHicbjYOVJAWy4zmLl9cITqvEeUqNOrAeSvoN9
-        +3TpZvqiWIGkFsbyXq0gfUERxw==
-X-Google-Smtp-Source: AGHT+IGzIk0q5DFc6SUvyh4xXFBWbmnMc4JsWCwcwGkrdSnNztaLRGrwg2NHM7rmwQPW9TuA2n5hrA==
-X-Received: by 2002:a17:90b:23d7:b0:280:29cd:4802 with SMTP id md23-20020a17090b23d700b0028029cd4802mr5034310pjb.3.1698689748510;
-        Mon, 30 Oct 2023 11:15:48 -0700 (PDT)
-Received: from localhost ([12.44.203.122])
-        by smtp.gmail.com with ESMTPSA id d88-20020a17090a6f6100b0027e022bd3e5sm6257471pjk.54.2023.10.30.11.15.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Oct 2023 11:15:48 -0700 (PDT)
-Date:   Mon, 30 Oct 2023 11:15:48 -0700 (PDT)
-X-Google-Original-Date: Mon, 30 Oct 2023 11:15:44 PDT (-0700)
-Subject:     Re: linux-next: duplicate patches in the risc-v tree
-In-Reply-To: <20231030075629.0296f072@canb.auug.org.au>
-CC:     Paul Walmsley <paul@pwsan.com>, linux-kernel@vger.kernel.org,
-        linux-next@vger.kernel.org
-From:   Palmer Dabbelt <palmer@dabbelt.com>
+        with ESMTP id S230299AbjJ3S0b (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 30 Oct 2023 14:26:31 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2076.outbound.protection.outlook.com [40.107.243.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5715DF9;
+        Mon, 30 Oct 2023 11:26:25 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZVSzcw4lzycN7CezidacQRWg+BB1xo2fRl1nnkqAE7EU13YY1GnSMiqFBHH+O2duDqkS67Gcyw/yp0u2dJ53ZgKmqLbXdiZgbGlc/oTxQlpE+hqBq2ZSDlpEjlQMgB1ZtlC9ktsFtPq4Xih9KZdpbySNmI1yVIMacxmATvrAodpMb/l4OC/NdGNwaXNr2LOilazdMZgcn1oWPLGMOBBWK97MhkZRZLUQReipUAY3ynvx7jKfFjByaJSYfeuH1vhcrcy1MQAkj2/0dLeZvcmRGQZKjXrFnDBTl+tYz88F3AnQaa7FUWObl6r2TgNxKcYnIE3ZUg3nZ3UWA3EMO/Z5tA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=R5YGtEKGaq8+tCKA1pmTCvsQGjQTmXysW/A/ymENySo=;
+ b=bLwzPOpq/Ru93rwy1llug6JDhUBItBk+vC0t21i1g8sy7MABrFr/me/tG+qCyCPV+1+KQIC96PHU/iNnEX7UDt3+vIVgE2Lbykqn1lKgXW9ggoRMs4DUq5PnxMm5kF7U3pcYmsoEHZQO03MnTYwOdkQNdkIqgs63eDnG5bCmwUOBMT+NINpdvvSTK5xKUHh3k1zlhjCj2M0EmEreg58CI6xPhntY6zvENb+Z7jmvnkPaOio9K1AqnWwWX3FZpuoHIGrVcnnMp52YNdtnPYMwuWPc/IBIUgz3/jVho8t4maVkEQ1lM70pmjlASQqrbsVYXgNOU8nGxL8TancwqBMZ6A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=R5YGtEKGaq8+tCKA1pmTCvsQGjQTmXysW/A/ymENySo=;
+ b=lP3X0aQB1HiOO4NBhWHLutNtz0KwuUtQhTmJIM2Vbroo6jttqiN5ecykbplGCdznNuihOQfsQ1R6H4yvlA4E2tQCGp4eowbHQ/9b7eY/4FsRIegXgrqZKx3jxlKxznW/lJHvaKT223jFnrvhaJ6fipsnzuUk4RwmWLqqoL5JBO5ArOh3d/Sl2Kbbi0NU1U6wD2fH1tSVnp8hu4Zh2xMEgJCsEcXvw4uHuHwnnlpBMJ3mujAlBcHjQFUPQpaDeaOOB+9XFEbj9CNRQRJ3NLYqOSrfn9lr3UjD+VLzvLJQzHQNAQAbEFQkwTQDt1JRP5l4xxTcNMdzVC4hiEB70iHePg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by SJ1PR12MB6291.namprd12.prod.outlook.com (2603:10b6:a03:456::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6933.27; Mon, 30 Oct
+ 2023 18:26:23 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::b53a:1092:9be2:cfb9]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::b53a:1092:9be2:cfb9%4]) with mapi id 15.20.6933.027; Mon, 30 Oct 2023
+ 18:26:23 +0000
+Date:   Mon, 30 Oct 2023 15:26:21 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Message-ID: <mhng-b6345abb-81b3-450c-ae11-deed854821dc@palmer-ri-x1c9a>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Cc:     Joerg Roedel <joro@8bytes.org>,
+        Joao Martins <joao.m.martins@oracle.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Nicolin Chen <nicolinc@nvidia.com>, Yi Liu <yi.l.liu@intel.com>
+Subject: Re: linux-next: manual merge of the iommufd tree with the iommu tree
+Message-ID: <20231030182621.GV3952@nvidia.com>
+References: <20231027155522.6b2863a4@canb.auug.org.au>
+ <20231027171522.692a58ec@canb.auug.org.au>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231027171522.692a58ec@canb.auug.org.au>
+X-ClientProxiedBy: MN2PR15CA0048.namprd15.prod.outlook.com
+ (2603:10b6:208:237::17) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|SJ1PR12MB6291:EE_
+X-MS-Office365-Filtering-Correlation-Id: f54ef95a-4ba2-4d26-c897-08dbd975b82f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: KEaM/oFApDs3TsxPFd0p2OgFILMHLxMVGGluLqpg8OF9HK0r2SQfDagEnkBq1Ws//L+KR+0hkXGWAUhzDBadeGsDDO/K8o0EryVWEH6bzAJJfLTOZJO2UHduYS6OH4u8Y2QK1vP61FdD/ouiMuWXA3EYjuEuN7dydOc+z3WVZad2OXw3Z/L1lF50eYMq08uEwvOO/erRl4w235CVSABw3GzH++xUWI1eAt2yAWxD1tQzlqJ2bdIJMfz1n4D3dgDMAIQoCTGf9svvGP7QtOUU5TArMP9XqWf1XsSePIPmYn8KHy/jgRi0tBVHsSiqSnTZs5nyOjbwBgPVRjOgVKiCdhdKciGLYK2ZGVINCxfNglcOAv7ADhZdZsioSk96VBgMvb5SeNxWOBR28bhEbBpkZ+mrdPPv1yZw0//H3XUVM906oTLHfFOdlh2umf/X/626coBcRWwivZglrLiVq17VFPIlx/vYmURYjWFMX4/9yjqnM72VSWSBuYzQ/W0OeuHazZ3VEvbZ+Rcev6aVIVuItHMGMg8DuoK6HxP3BSBV7PSv6S0EDULTbxdvaSSL3nSq
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(136003)(396003)(366004)(39860400002)(376002)(346002)(230922051799003)(64100799003)(186009)(1800799009)(451199024)(8936002)(4326008)(8676002)(5660300002)(83380400001)(41300700001)(316002)(66556008)(54906003)(6916009)(66946007)(66476007)(478600001)(6486002)(2906002)(6506007)(26005)(2616005)(1076003)(6512007)(33656002)(36756003)(86362001)(38100700002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?KGZ+BZ1x+vJI+4DylcTbqHgX7MrB1efo6TtgIA3EXpqymGAOolKOreBrkS8z?=
+ =?us-ascii?Q?WVyIT7crXhHvEEhYiZGtt7xa1TO8pLYtCw3pjQIEyNEXAqau727MDZRN+em9?=
+ =?us-ascii?Q?vB5IKmSeEvXnG8HEyDeLZkfaodosU3BlWhuPOCGyG1CBrU5pvCOxYsmAUMSw?=
+ =?us-ascii?Q?FXEumcqlroHZJesRoK0004DjyLGaxIilQI6VkHS5avIJgV3j4BvSU0BEYjw2?=
+ =?us-ascii?Q?uvIfEgpfQbuGgQ8OVAyFDCC5bYAaBxuRvzPO5fOz5C7SXyB0HKIUxdzveuoC?=
+ =?us-ascii?Q?uaz6HORq5nelj2Hp89zAoijKzXfndjFS80szvo9YRxlohRi9/RyyjB5NuwzQ?=
+ =?us-ascii?Q?sYb1FsXnFx4H+ap+fV2fvSdUAHcgUBr4/D4DKxLrJdg9x/wtdnyj4bfFVZxW?=
+ =?us-ascii?Q?GO1ocZzYP+0V39LucTvU4sEDx8OHPHRjQBgCMqKS0NHJJyN8nJpIwvuZfsfx?=
+ =?us-ascii?Q?9q/EvIVmHkEvAJ42p6uYlhXwW97xaYY35x8bvfz6jbKmEmqwVeL89GsAeGmE?=
+ =?us-ascii?Q?39Hlu6F+ua8NxtSiUBadhfJmw5yN89LXd2qSk4StCxlrRVnumz509YC+Fc2R?=
+ =?us-ascii?Q?eRbR3H2Oq1gwVfcrFEDDdYe66v4c+fwjJXM/x1LvFynxtpx1wHwYRZM9/BfX?=
+ =?us-ascii?Q?c97ZbKMam/CbrvzfoGlkfwq64w6fmDu9Y94W8AwdTRXmg+ook5HO7cFtU7uj?=
+ =?us-ascii?Q?kdiNTdRGWCeYAcyE+AWpXhP+i59i4YEF+FdsdlAmRB3Fm6evChA7yPOBcmRc?=
+ =?us-ascii?Q?dBhq9IqBGxmJSUIxREqNrayo3icplAAHrNb8WVv5JTApX3RYjxRvxm/Pbwc9?=
+ =?us-ascii?Q?cyZVwZs5nxcfQ3kYd+Ka4JzgJRLT/BiBKfjitEhehZCozyh9IyxQ9kElLw1e?=
+ =?us-ascii?Q?gYBU4AhZ1BznpB1zNhOWAi/4MldrlnyxZudoHlkph2618gTEbe3U0fIdTAaF?=
+ =?us-ascii?Q?sUvI4/VdiDRoDtaQjV2KL4yqvAX3FGShmTfb5NbsK1PSCfMDTdqlCYoVeoEd?=
+ =?us-ascii?Q?G7+hcgxSEx8HdwolzpKs1yA173krnWXzuSMLjX+T3Nz19AVWJm3MfQkS+02h?=
+ =?us-ascii?Q?2p62UZyb8bDJmDl0F7yI+u1KBjPP5cBDQG4BuN7x66HA/+zMZjJ+aQSgiLYR?=
+ =?us-ascii?Q?KMGolOVXLhUC5AwXT4Xzzwqxn5vses+26/y8hFiC/yl1WrxvcxaJws0x3tZF?=
+ =?us-ascii?Q?r9TqY/un6UA+dJR20b2ilYJLMI021HGxwnKnHc+0ZqDhYkkHzr65iGBkJO+L?=
+ =?us-ascii?Q?2DJS3P92AsBVM5ygNAdgMPsGh4yV3d86tLAnWilUtXYVJKoLTnAmnsjP91am?=
+ =?us-ascii?Q?bHXQuUGXfZGR8t6EuVxwGykED7swzECSVzbaIw2BmF3BxhIrYSway4qVT2yp?=
+ =?us-ascii?Q?g5A31ysss3ASkuxP68csEZ9HnjMVJ/ikDIK/QYKhHnDJ2opjIcyCSNrUlY9c?=
+ =?us-ascii?Q?tj7wvSjmpI3c/u4RhSI3p1qNDAvvKiI0wbYZI1Sps2Jra3eeD9JKhgHQ0iTa?=
+ =?us-ascii?Q?u2lFOqBprbTIFK2mdIbM/ZH6rRkmIc64oygjE8nxXjkjRBgbY+az6lue6lKP?=
+ =?us-ascii?Q?KaUjNXV8GuUzfkPjzc36hCXyEsOLG+FyfjtaQLsk?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f54ef95a-4ba2-4d26-c897-08dbd975b82f
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Oct 2023 18:26:22.9404
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: vP6v9weVX32okY92Y1LrP8Kw09DMsfnR9R4zQZ6qCitS1TtDbjpR/Xqn/3/6yaUI
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR12MB6291
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Sun, 29 Oct 2023 13:56:29 PDT (-0700), Stephen Rothwell wrote:
+On Fri, Oct 27, 2023 at 05:15:22PM +1100, Stephen Rothwell wrote:
 > Hi all,
->
-> The following commits are also in Linus Torvalds' tree as different
-> commits (but the same patches):
->
->   767423658d53 ("riscv: kexec: Align the kexeced kernel entry")
->   fe2ed36d419f ("riscv: Remove duplicate objcopy flag")
+> 
+> On Fri, 27 Oct 2023 15:55:22 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> >
+> > Today's linux-next merge of the iommufd tree got a conflict in:
+> > 
+> >   drivers/iommu/iommufd/selftest.c
+> > 
+> > between commits:
+> > 
+> >   1c68cbc64fe6 ("iommu: Add IOMMU_DOMAIN_PLATFORM")
+> >   13fbceb1b8e9 ("iommufd: Convert to alloc_domain_paging()")
+> > 
+> > from the iommu tree and commits:
+> > 
+> >   408663619fcf ("iommufd/selftest: Add domain_alloc_user() support in iommu mock")
+> >   266ce58989ba ("iommufd/selftest: Test IOMMU_HWPT_ALLOC_DIRTY_TRACKING")
+> >   7adf267d66d1 ("iommufd/selftest: Test IOMMU_HWPT_SET_DIRTY_TRACKING")
+> >   a9af47e382a4 ("iommufd/selftest: Test IOMMU_HWPT_GET_DIRTY_BITMAP")
+> >   0795b305da89 ("iommufd/selftest: Test IOMMU_HWPT_GET_DIRTY_BITMAP_NO_CLEAR flag")
+> >   65fe32f7a447 ("iommufd/selftest: Add nested domain allocation for mock domain")
+> > 
+> > from the iommufd tree.
+> > 
+> > I fixed it up (see below) and can carry the fix as necessary. This
+> > is now fixed as far as linux-next is concerned, but any non trivial
+> > conflicts should be mentioned to your upstream maintainer when your tree
+> > is submitted for merging.  You may also want to consider cooperating
+> > with the maintainer of the conflicting tree to minimise any particularly
+> > complex conflicts.
+> 
+> The resolution should have been as below (I think).
 
-Sorry, but I'm lost here -- I'm not sure if I've managed to screw up git 
-again?  If it helps, I'm not seeing the same commits here:
+This was too horrible, I pushed a patch to reorganize the new iommufd side
+code to more closely match how the domain_alloc_paging stuff is
+supposed to work
 
-    $ git show fe2ed36d419f
-    commit fe2ed36d419fdae48a6850bdbe2d2e7543c3c389
-    gpg: Signature made Wed 20 Sep 2023 02:51:59 AM PDT
-    gpg:                using RSA key 2B3C3747446843B24A943A7A2E1319F35FBB1889
-    gpg:                issuer "palmer@dabbelt.com"
-    gpg: Good signature from "Palmer Dabbelt <palmer@dabbelt.com>" [ultimate]
-    gpg:                 aka "Palmer Dabbelt <palmer@rivosinc.com>" [ultimate]
-    Author: Song Shuai <songshuaishuai@tinylab.org>
-    Date:   Thu Sep 14 17:13:34 2023 +0800
-    
-        riscv: Remove duplicate objcopy flag
-    
-        There are two duplicate `-O binary` flags when objcopying from vmlinux
-        to Image/xipImage.
-    
-        RISC-V set `-O binary` flag in both OBJCOPYFLAGS in the top-level riscv
-        Makefile and OBJCOPYFLAGS_* in the boot/Makefile, and the objcopy cmd
-        in Kbuild would join them together.
-    
-        The `-O binary` flag is only needed for objcopying Image, so remove the
-        OBJCOPYFLAGS in the top-level riscv Makefile.
-    
-        Fixes: c0fbcd991860 ("RISC-V: Build flat and compressed kernel images")
-        Signed-off-by: Song Shuai <songshuaishuai@tinylab.org>
-        Link: https://lore.kernel.org/r/20230914091334.1458542-1-songshuaishuai@tinylab.org
-        Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
-    
-    diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
-    index 1329e060c548..b43a6bb7e4dc 100644
-    --- a/arch/riscv/Makefile
-    +++ b/arch/riscv/Makefile
-    @@ -6,7 +6,6 @@
-     # for more details.
-     #
-    
-    -OBJCOPYFLAGS    := -O binary
-     LDFLAGS_vmlinux := -z norelro
-     ifeq ($(CONFIG_RELOCATABLE),y)
-     	LDFLAGS_vmlinux += -shared -Bsymbolic -z notext --emit-relocs
+Thanks,
+Jason
 
-and
-
-    $ git show 767423658d53 | cat
-    commit 767423658d53d147409821e51e6d0bc12425b24f
-    gpg: Signature made Wed 20 Sep 2023 02:53:30 AM PDT
-    gpg:                using RSA key 2B3C3747446843B24A943A7A2E1319F35FBB1889
-    gpg:                issuer "palmer@dabbelt.com"
-    gpg: Good signature from "Palmer Dabbelt <palmer@dabbelt.com>" [ultimate]
-    gpg:                 aka "Palmer Dabbelt <palmer@rivosinc.com>" [ultimate]
-    Author: Song Shuai <songshuaishuai@tinylab.org>
-    Date:   Thu Sep 7 18:33:03 2023 +0800
-    
-        riscv: kexec: Align the kexeced kernel entry
-    
-        The current riscv boot protocol requires 2MB alignment for RV64
-        and 4MB alignment for RV32.
-    
-        In KEXEC_FILE path, the elf_find_pbase() function should align
-        the kexeced kernel entry according to the requirement, otherwise
-        the kexeced kernel would silently BUG at the setup_vm().
-    
-        Fixes: 8acea455fafa ("RISC-V: Support for kexec_file on panic")
-        Signed-off-by: Song Shuai <songshuaishuai@tinylab.org>
-        Link: https://lore.kernel.org/r/20230907103304.590739-3-songshuaishuai@tinylab.org
-        Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
-    
-    diff --git a/arch/riscv/kernel/elf_kexec.c b/arch/riscv/kernel/elf_kexec.c
-    index 5372b708fae2..9a81d6926ac6 100644
-    --- a/arch/riscv/kernel/elf_kexec.c
-    +++ b/arch/riscv/kernel/elf_kexec.c
-    @@ -98,7 +98,13 @@ static int elf_find_pbase(struct kimage *image, unsigned long kernel_len,
-     	kbuf.image = image;
-     	kbuf.buf_min = lowest_paddr;
-     	kbuf.buf_max = ULONG_MAX;
-    -	kbuf.buf_align = PAGE_SIZE;
-    +
-    +	/*
-    +	* Current riscv boot protocol requires 2MB alignment for
-    +	* RV64 and 4MB alignment for RV32
-    +	*
-    +	*/
-    +	kbuf.buf_align = PMD_SIZE;
-     	kbuf.mem = KEXEC_BUF_MEM_UNKNOWN;
-     	kbuf.memsz = ALIGN(kernel_len, PAGE_SIZE);
-     	kbuf.top_down = false;
-
->
-> -- 
-> Cheers,
-> Stephen Rothwell

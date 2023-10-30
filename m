@@ -2,158 +2,313 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 736C87DB8EA
-	for <lists+linux-next@lfdr.de>; Mon, 30 Oct 2023 12:28:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6CD67DB939
+	for <lists+linux-next@lfdr.de>; Mon, 30 Oct 2023 12:49:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232294AbjJ3L2K (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 30 Oct 2023 07:28:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36934 "EHLO
+        id S232555AbjJ3LtK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 30 Oct 2023 07:49:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232941AbjJ3L2J (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 30 Oct 2023 07:28:09 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A944DB3
-        for <linux-next@vger.kernel.org>; Mon, 30 Oct 2023 04:27:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1698665242;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-        bh=bsiUeVflfDVvAmeVY6x5W9Hj7ij+usCTK+hwkN4FBgE=;
-        b=E3URgsnoJyX9nIJJWWOlHTf913++sQWwxKIJT8p1m6H9NyP5w9ErCMHgG+h6YHNRVfYW7w
-        fkK5t7miIlIh1KRNw9zyNQFYN+Co1/ze5YAXIXRtk/HhOdAfdSYnKIDdC1qChSk/52ujTe
-        znn4V8pfFLtQfvDojIjqJqp7kh74unc=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-341-D5z5AoKDMSKMSEK_m6Zcxw-1; Mon, 30 Oct 2023 07:27:11 -0400
-X-MC-Unique: D5z5AoKDMSKMSEK_m6Zcxw-1
-Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-32da39f7f2bso2123031f8f.0
-        for <linux-next@vger.kernel.org>; Mon, 30 Oct 2023 04:27:11 -0700 (PDT)
+        with ESMTP id S229456AbjJ3LtJ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 30 Oct 2023 07:49:09 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9563CC4
+        for <linux-next@vger.kernel.org>; Mon, 30 Oct 2023 04:49:07 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1cc3542e328so7163325ad.1
+        for <linux-next@vger.kernel.org>; Mon, 30 Oct 2023 04:49:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1698666547; x=1699271347; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=X8GnBZuXi0ptvBBNproYdcaAQGS2W4yHN8dJIIIOKAc=;
+        b=np8r4u+1LmSefcWJEISKB8IKIhPLEFjihHHPV/3c/fQ2FToIjlsGW7S+vMz7CyoUYv
+         Ey7rPizQSgpg/7RaruSKAJW/9UHemz/hJ1jyFQDG31RBMk/cLu7BzTQiXYouFk4QnpYi
+         T4EwIwv/pQP2UHQcB4poi9X8s9IyDtmECJrs3A8k4G3aOeSrHLzVTtJ16UZwSjR/HZEB
+         Azlkd8jHVamyEMQ5+bvQ/hD0AH+z6VPKmE+PsuiaYpx282mVzug7FT+1i+tF7EzSyNwO
+         Cjuz8urOh6ww7/7CZfeT6QKKtWbNq3UGDaXymKNUV3dnupdaSp368LOPgHWQVywez3oA
+         hG/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698665230; x=1699270030;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bsiUeVflfDVvAmeVY6x5W9Hj7ij+usCTK+hwkN4FBgE=;
-        b=C79nT6QDM2Lvd7t81/TbFaJkqGVEAU8PgpQ6RZDyth+4js08Ps67Ws+mDv0coLJOoI
-         R3ckhcXOc1hEtTzwwSjeIKizt+lSQDMfXZPyP2oadMti/iCTexKYwoUA8iUVQPhckHau
-         kYOTa2CEhVNVc8oAhaVC7BTENYWqAGm5K5MSa+pgkbVT4Ss7du3aZ2ymtccvLnW6xA5V
-         PLu6QdqSAEzhn+1StQYc07bQrqpJ32jlmgCHU1QLtv9eILjo6BpFhYdrSoocRnjI97hO
-         gTkxMTsCZJp9JlPbHt20r2eQ4LhjxGZIQeH716HS0XSldjGto1wkXmyK3in3/hlHzNS1
-         4mwA==
-X-Gm-Message-State: AOJu0YzOU+6xFxVXhWQFfsftmh8vaysBgGkH7GtfHl8BbCdLxKszJzL/
-        PU+VdhJ+HzEwIw3qOcdDq8NpDCawp2ZBSc6WotWVbz7QN3BavifX+Iy8ujENVp9W4XhPHat0yUk
-        oOT2kuII7XpKeDMrqQ0WUTA==
-X-Received: by 2002:adf:e94d:0:b0:32d:857c:d51d with SMTP id m13-20020adfe94d000000b0032d857cd51dmr6801186wrn.60.1698665230252;
-        Mon, 30 Oct 2023 04:27:10 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHwPR5Ky0Zsz4Ewu1UsV9OwmoJs5riShSCPj1bsmLTCUJ4UyfvG44yDX2LNCh32jYjTMqEkig==
-X-Received: by 2002:adf:e94d:0:b0:32d:857c:d51d with SMTP id m13-20020adfe94d000000b0032d857cd51dmr6801171wrn.60.1698665229940;
-        Mon, 30 Oct 2023 04:27:09 -0700 (PDT)
-Received: from [192.168.1.174] ([151.81.68.207])
-        by smtp.googlemail.com with ESMTPSA id d12-20020adffd8c000000b003143c9beeaesm7988756wrr.44.2023.10.30.04.27.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 Oct 2023 04:27:09 -0700 (PDT)
-Message-ID: <3ed75fa4-6b49-4fd2-a907-8619ca19a8b8@redhat.com>
-Date:   Mon, 30 Oct 2023 12:27:07 +0100
+        d=1e100.net; s=20230601; t=1698666547; x=1699271347;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=X8GnBZuXi0ptvBBNproYdcaAQGS2W4yHN8dJIIIOKAc=;
+        b=uYDQ92fervmte62hcQn4C+sQ1Q/P+rzd9GxRhUPO9BNlPdwiYDD4HC9Aq3e1MwvNoj
+         LI1t0kgq5DdZwy5TAPy5KuKH6O4tXCgcG0s/km99soKE3eVtVEix3Bn/JcwDac3JS4nz
+         HTVVBCtEXO7UoktwhvGRJiIFhjJwuSWCo4gmsYy/KysCZQu13S8UuUztCwUp+E3MDjN1
+         PHYgg/pIj/CeLtNqp8dyWwmTOv6AN1kyVLpahGLCSLIMsxdjV6rZJ2fsRgW/oVzekGVb
+         dAbLOpPdztuAFvXK6sjMX9VxGZZpTz3Ak+iBPEQ36tG73yjsfEJaPUakxoiPyinWMHlR
+         qqKg==
+X-Gm-Message-State: AOJu0Yz2GuA76wZ1AM49tbcGOTT3+28EjoljVXVNVxSw0so+Z/TGhD+W
+        b5XrJHAEwCAo2YC5wqU7ZtshFzfy5FSWOdEwTv8=
+X-Google-Smtp-Source: AGHT+IGZelnA94Uz9gyDz5BKiMlz7RLE3BBYd+ijj5ayPgAgsf504Y8sSrESoENKEfHZQKFIOziwJA==
+X-Received: by 2002:a17:903:41c5:b0:1cc:4921:af1b with SMTP id u5-20020a17090341c500b001cc4921af1bmr1934933ple.7.1698666546625;
+        Mon, 30 Oct 2023 04:49:06 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id o13-20020a170902d4cd00b001c0ce518e98sm6111176plg.224.2023.10.30.04.49.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Oct 2023 04:49:06 -0700 (PDT)
+Message-ID: <653f9832.170a0220.947f1.048b@mx.google.com>
+Date:   Mon, 30 Oct 2023 04:49:06 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: build failure after merge of the kvm-x86 tree
-Content-Language: en-US
-To:     Christian Brauner <brauner@kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Sean Christopherson <seanjc@google.com>
-Cc:     Ackerley Tng <ackerleytng@google.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Isaku Yamahata <isaku.yamahata@intel.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20231030134806.24510492@canb.auug.org.au>
- <20231030-ignorant-liebschaft-6d603ab43494@brauner>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Autocrypt: addr=pbonzini@redhat.com; keydata=
- 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
-In-Reply-To: <20231030-ignorant-liebschaft-6d603ab43494@brauner>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: next-20231030
+X-Kernelci-Report-Type: test
+X-Kernelci-Branch: master
+X-Kernelci-Tree: next
+Subject: next/master baseline: 181 runs, 6 regressions (next-20231030)
+To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+        kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 10/30/23 11:05, Christian Brauner wrote:
-> 
-> @Paolo and @Sean, does that make sense and is the series for v6.7 or
-> just already in -next for v6.8?
+next/master baseline: 181 runs, 6 regressions (next-20231030)
 
-It's for 6.8.  Thanks for the fixup!
+Regressions Summary
+-------------------
 
-Paolo
+platform              | arch  | lab           | compiler | defconfig       =
+| regressions
+----------------------+-------+---------------+----------+-----------------=
++------------
+qemu_arm64-virt-gicv2 | arm64 | lab-baylibre  | gcc-10   | defconfig+debug =
+| 1          =
 
-> diff --git a/virt/kvm/guest_memfd.c b/virt/kvm/guest_memfd.c
-> index 94bc478c26f3..a4c194b0b22c 100644
-> --- a/virt/kvm/guest_memfd.c
-> +++ b/virt/kvm/guest_memfd.c
-> @@ -272,17 +272,7 @@ static int kvm_gmem_release(struct inode *inode, struct file *file)
-> 
->  static struct file *kvm_gmem_get_file(struct kvm_memory_slot *slot)
->  {
-> -       struct file *file;
-> -
-> -       rcu_read_lock();
-> -
-> -       file = rcu_dereference(slot->gmem.file);
-> -       if (file && !get_file_rcu(file))
-> -               file = NULL;
-> -
-> -       rcu_read_unlock();
-> -
-> -       return file;
-> +       return get_file_active(&slot->gmem.file);
->  }
-> 
->  static struct file_operations kvm_gmem_fops = {
-> 
+qemu_arm64-virt-gicv2 | arm64 | lab-collabora | gcc-10   | defconfig+debug =
+| 1          =
 
+qemu_arm64-virt-gicv3 | arm64 | lab-baylibre  | gcc-10   | defconfig+debug =
+| 1          =
+
+qemu_arm64-virt-gicv3 | arm64 | lab-collabora | gcc-10   | defconfig+debug =
+| 1          =
+
+qemu_mips-malta       | mips  | lab-collabora | gcc-10   | malta_defconfig =
+| 1          =
+
+rk3399-roc-pc         | arm64 | lab-clabbe    | clang-17 | defconfig       =
+| 1          =
+
+
+  Details:  https://kernelci.org/test/job/next/branch/master/kernel/next-20=
+231030/plan/baseline/
+
+  Test:     baseline
+  Tree:     next
+  Branch:   master
+  Describe: next-20231030
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+  SHA:      c503e3eec382ac708ee7adf874add37b77c5d312 =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform              | arch  | lab           | compiler | defconfig       =
+| regressions
+----------------------+-------+---------------+----------+-----------------=
++------------
+qemu_arm64-virt-gicv2 | arm64 | lab-baylibre  | gcc-10   | defconfig+debug =
+| 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/653f5b5f255be6edcbefceff
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+debug
+  Compiler:    gcc-10
+  Plain log:   https://storage.kernelci.org//next/master/next-20231030/arm6=
+4/defconfig+debug/gcc-10/lab-baylibre/baseline-qemu_arm64-virt-gicv2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20231030/arm6=
+4/defconfig+debug/gcc-10/lab-baylibre/baseline-qemu_arm64-virt-gicv2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/653f5b5f255be6edcbefc=
+f00
+        new failure (last pass: next-20231026) =
+
+ =
+
+
+
+platform              | arch  | lab           | compiler | defconfig       =
+| regressions
+----------------------+-------+---------------+----------+-----------------=
++------------
+qemu_arm64-virt-gicv2 | arm64 | lab-collabora | gcc-10   | defconfig+debug =
+| 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/653f5b498c5cbb0bd9efcef7
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+debug
+  Compiler:    gcc-10
+  Plain log:   https://storage.kernelci.org//next/master/next-20231030/arm6=
+4/defconfig+debug/gcc-10/lab-collabora/baseline-qemu_arm64-virt-gicv2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20231030/arm6=
+4/defconfig+debug/gcc-10/lab-collabora/baseline-qemu_arm64-virt-gicv2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/653f5b498c5cbb0bd9efc=
+ef8
+        new failure (last pass: next-20231026) =
+
+ =
+
+
+
+platform              | arch  | lab           | compiler | defconfig       =
+| regressions
+----------------------+-------+---------------+----------+-----------------=
++------------
+qemu_arm64-virt-gicv3 | arm64 | lab-baylibre  | gcc-10   | defconfig+debug =
+| 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/653f5b5d8c5cbb0bd9efcf00
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+debug
+  Compiler:    gcc-10
+  Plain log:   https://storage.kernelci.org//next/master/next-20231030/arm6=
+4/defconfig+debug/gcc-10/lab-baylibre/baseline-qemu_arm64-virt-gicv3.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20231030/arm6=
+4/defconfig+debug/gcc-10/lab-baylibre/baseline-qemu_arm64-virt-gicv3.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/653f5b5d8c5cbb0bd9efc=
+f01
+        new failure (last pass: next-20231026) =
+
+ =
+
+
+
+platform              | arch  | lab           | compiler | defconfig       =
+| regressions
+----------------------+-------+---------------+----------+-----------------=
++------------
+qemu_arm64-virt-gicv3 | arm64 | lab-collabora | gcc-10   | defconfig+debug =
+| 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/653f5b5db20d41f634efcefb
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+debug
+  Compiler:    gcc-10
+  Plain log:   https://storage.kernelci.org//next/master/next-20231030/arm6=
+4/defconfig+debug/gcc-10/lab-collabora/baseline-qemu_arm64-virt-gicv3.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20231030/arm6=
+4/defconfig+debug/gcc-10/lab-collabora/baseline-qemu_arm64-virt-gicv3.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/653f5b5db20d41f634efc=
+efc
+        new failure (last pass: next-20231026) =
+
+ =
+
+
+
+platform              | arch  | lab           | compiler | defconfig       =
+| regressions
+----------------------+-------+---------------+----------+-----------------=
++------------
+qemu_mips-malta       | mips  | lab-collabora | gcc-10   | malta_defconfig =
+| 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/653f56fc81f7926928efcf01
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: malta_defconfig
+  Compiler:    gcc-10
+  Plain log:   https://storage.kernelci.org//next/master/next-20231030/mips=
+/malta_defconfig/gcc-10/lab-collabora/baseline-qemu_mips-malta.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20231030/mips=
+/malta_defconfig/gcc-10/lab-collabora/baseline-qemu_mips-malta.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/mipsel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/653f56fc81f7926928efc=
+f02
+        new failure (last pass: next-20231027) =
+
+ =
+
+
+
+platform              | arch  | lab           | compiler | defconfig       =
+| regressions
+----------------------+-------+---------------+----------+-----------------=
++------------
+rk3399-roc-pc         | arm64 | lab-clabbe    | clang-17 | defconfig       =
+| 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/653f5a2337c5ebaad1efcef4
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: defconfig
+  Compiler:    clang-17
+  Plain log:   https://storage.kernelci.org//next/master/next-20231030/arm6=
+4/defconfig/clang-17/lab-clabbe/baseline-rk3399-roc-pc.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20231030/arm6=
+4/defconfig/clang-17/lab-clabbe/baseline-rk3399-roc-pc.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/653f5a2337c5ebaad1efcefd
+        new failure (last pass: next-20231023)
+
+    2023-10-30T07:23:55.709514  <8>[   21.916390] <LAVA_SIGNAL_ENDRUN 0_dme=
+sg 441279_1.5.2.4.1>
+    2023-10-30T07:23:55.815180  / # #
+    2023-10-30T07:23:55.916831  export SHELL=3D/bin/sh
+    2023-10-30T07:23:55.917462  #
+    2023-10-30T07:23:56.018457  / # export SHELL=3D/bin/sh. /lava-441279/en=
+vironment
+    2023-10-30T07:23:56.018989  =
+
+    2023-10-30T07:23:56.119990  / # . /lava-441279/environment/lava-441279/=
+bin/lava-test-runner /lava-441279/1
+    2023-10-30T07:23:56.120829  =
+
+    2023-10-30T07:23:56.126413  / # /lava-441279/bin/lava-test-runner /lava=
+-441279/1
+    2023-10-30T07:23:56.175568  + export 'TESTRUN_ID=3D1_bootrr' =
+
+    ... (42 line(s) more)  =
+
+ =20

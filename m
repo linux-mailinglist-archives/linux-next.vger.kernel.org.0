@@ -2,81 +2,67 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 278C97DBF48
-	for <lists+linux-next@lfdr.de>; Mon, 30 Oct 2023 18:45:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56FF87DBF8F
+	for <lists+linux-next@lfdr.de>; Mon, 30 Oct 2023 19:16:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232706AbjJ3RpD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 30 Oct 2023 13:45:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39578 "EHLO
+        id S231394AbjJ3SQA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 30 Oct 2023 14:16:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230217AbjJ3RpC (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 30 Oct 2023 13:45:02 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B5B9D9
-        for <linux-next@vger.kernel.org>; Mon, 30 Oct 2023 10:44:58 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-40806e4106dso28411415e9.1
-        for <linux-next@vger.kernel.org>; Mon, 30 Oct 2023 10:44:57 -0700 (PDT)
+        with ESMTP id S229630AbjJ3SPw (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 30 Oct 2023 14:15:52 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FAB99E
+        for <linux-next@vger.kernel.org>; Mon, 30 Oct 2023 11:15:49 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id 41be03b00d2f7-5b980391d70so1323692a12.0
+        for <linux-next@vger.kernel.org>; Mon, 30 Oct 2023 11:15:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=arista.com; s=google; t=1698687896; x=1699292696; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=m7al2b/2zhByEaCyFJyvoG/06fDJKEZg/ESJAS5x0TA=;
-        b=VGqYZiGZzmjyix7uT77D06o16aWVjTl1Gz5QqNMwSwQ/gZEWEGox5RbWZQRASCmB+8
-         X1NRklyAHeFaHjaRPvzvek5tSRTZtUIPVpxU3LK4rS1QwQmK93yvCuj5fBmBI/z9rBQh
-         cxebdeDTIXPNNwRBOwcFh4IOj+sMiGWPk8FhYEy7wRYecT/2lVHluyfNmHC9pYIpiI8Z
-         7FDRDWA/G+00cerbq4C17nOfNvfMgFoUomNIEOBlzDBhdedyI+qCGnE70lWBAVROiZCM
-         XB0xktEgT+joSxF3UVdr+QLJNuu+VVucVA2IgYIi0iITQ53J7IFPQeaYVIC6RHzD2Frg
-         BeYQ==
+        d=dabbelt-com.20230601.gappssmtp.com; s=20230601; t=1698689748; x=1699294548; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XmnI5qBbSMZl1OWF9Q0rVzehwSZZifS0Ca/lJsm0aEQ=;
+        b=WkuxvrbT/NEPCGxNewpViuN5VI1z0AhZfB0kMGvPLMw9O0hoejiz7hLrJq5IZ/xCn8
+         tscLj4fSnAxU8jXvcLJwXx0WNkmoUH7mEHvaJoWAWuFtn06kCYF/GoEuRfBH1rfaxW2F
+         /mDj5eY4Fx6JzG20eCP8Q9loogAkVM9N+Oz7cCLklVllPqWvxPE0E1VM7Ha1emrOTD6t
+         5+LuxaUzc+NfpzkQTlfJHL5Na0OnEw2YSQQO76koa6ai4H/XHSIWiDP0iTRiNl2JVHX+
+         c1EGiPfld/93JGgAucnvtXEWSUTvtgaHpwVVBivOtNXPx/RB4QqJ76Yq5+IHXohmiyT9
+         Teng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698687896; x=1699292696;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=m7al2b/2zhByEaCyFJyvoG/06fDJKEZg/ESJAS5x0TA=;
-        b=lpEjZ7FCGllCmP5aCtN0FMUypsN0EUze0QPtmPUDDBygOM/ZJJPwxcA6Ycaw0FRaII
-         Y5Ug+r8n4ku9Ed1bHo8BHXbv3Vn1NheLyJlaaAaFdn5vwegGavUtiqoIpANDTZTw16FK
-         JBw9V2eN/JFUH3pdsvBjWLCqPwfBKEAiklKFVU5sCcXeQ+iqZccSheuMcedZ+mO1Y68n
-         ThW+UxJOKtkEkPK4jz9JGPzL9Uo77uUMzSGmEsBYal+JLtQhRiT866tiDeYHzdpA7ixT
-         IGKu/5dROlweEQdQOxepE7Iq3/E2piHDANPuCb+0JEEXh3O4jLtD7N6N2IxrmexIWS6D
-         zu/w==
-X-Gm-Message-State: AOJu0YxdphudTCiZg8+junFT3I8Ex3CkDMVXqGVGCQfS0A+Kejd0JTh0
-        QAQLkuSucoQvDbu6eGTNj0qSAQ==
-X-Google-Smtp-Source: AGHT+IHjVsfeQaLVAw8QRYpPOrXmkuIn9PR0bd/WaTnyVSvIBK/qVIcRCXGKCUX/5vQZrKyO2idimw==
-X-Received: by 2002:a1c:7405:0:b0:405:29ba:9b5c with SMTP id p5-20020a1c7405000000b0040529ba9b5cmr381850wmc.16.1698687896491;
-        Mon, 30 Oct 2023 10:44:56 -0700 (PDT)
-Received: from ?IPV6:2a02:8084:2562:c100:228:f8ff:fe6f:83a8? ([2a02:8084:2562:c100:228:f8ff:fe6f:83a8])
-        by smtp.gmail.com with ESMTPSA id g7-20020a05600c4ec700b004064ac107cfsm9931435wmq.39.2023.10.30.10.44.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 Oct 2023 10:44:55 -0700 (PDT)
-Message-ID: <cd025d15-4e2b-4727-a10b-a6da98af4058@arista.com>
-Date:   Mon, 30 Oct 2023 17:44:55 +0000
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: build failure after merge of the crypto tree
-Content-Language: en-US
+        d=1e100.net; s=20230601; t=1698689748; x=1699294548;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XmnI5qBbSMZl1OWF9Q0rVzehwSZZifS0Ca/lJsm0aEQ=;
+        b=XmvPjIzxMO3U8j1WB75VM6v/EUL0nBgSiYKzTcioff1BPRljxtJiJ8OhVRFnYKdnsA
+         mU5p6C9gbuBWBuQzwb2hznlC3EbTU01NZRR2px4F6VzZCcZzbBApBiBcKZtUYR8VICSc
+         MNyWlK4PsBGWXmohNMFv5DexY7r8iLYLmMfCbJhdkJXrr65vbnmq3GOOrHPKnu3WmiFJ
+         RvMvcTkQnpSP2NHJ22ylOeXEt8Wo4410kFcF40AKDcO4XjtRwGCxqhyF8RCq0Tw3zTTf
+         vLHCUFNR9/rvM1kDuB3eDzd/D99JhZ4InASpBsgIop76h++8mK8UU2A6RNiy72A1RJBK
+         ChHA==
+X-Gm-Message-State: AOJu0YwN6D84o+RvL3sHicbjYOVJAWy4zmLl9cITqvEeUqNOrAeSvoN9
+        +3TpZvqiWIGkFsbyXq0gfUERxw==
+X-Google-Smtp-Source: AGHT+IGzIk0q5DFc6SUvyh4xXFBWbmnMc4JsWCwcwGkrdSnNztaLRGrwg2NHM7rmwQPW9TuA2n5hrA==
+X-Received: by 2002:a17:90b:23d7:b0:280:29cd:4802 with SMTP id md23-20020a17090b23d700b0028029cd4802mr5034310pjb.3.1698689748510;
+        Mon, 30 Oct 2023 11:15:48 -0700 (PDT)
+Received: from localhost ([12.44.203.122])
+        by smtp.gmail.com with ESMTPSA id d88-20020a17090a6f6100b0027e022bd3e5sm6257471pjk.54.2023.10.30.11.15.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Oct 2023 11:15:48 -0700 (PDT)
+Date:   Mon, 30 Oct 2023 11:15:48 -0700 (PDT)
+X-Google-Original-Date: Mon, 30 Oct 2023 11:15:44 PDT (-0700)
+Subject:     Re: linux-next: duplicate patches in the risc-v tree
+In-Reply-To: <20231030075629.0296f072@canb.auug.org.au>
+CC:     Paul Walmsley <paul@pwsan.com>, linux-kernel@vger.kernel.org,
+        linux-next@vger.kernel.org
+From:   Palmer Dabbelt <palmer@dabbelt.com>
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Networking <netdev@vger.kernel.org>,
-        Linux Crypto List <linux-crypto@vger.kernel.org>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Francesco Ruggeri <fruggeri@arista.com>,
-        Salam Noureddine <noureddine@arista.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>
-References: <20231030155809.6b47288c@canb.auug.org.au>
- <20231030160953.28f2df61@canb.auug.org.au>
- <ZT896a2j3hUI1NF+@gondor.apana.org.au>
-From:   Dmitry Safonov <dima@arista.com>
-In-Reply-To: <ZT896a2j3hUI1NF+@gondor.apana.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Message-ID: <mhng-b6345abb-81b3-450c-ae11-deed854821dc@palmer-ri-x1c9a>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,29 +70,105 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 10/30/23 05:23, Herbert Xu wrote:
-> On Mon, Oct 30, 2023 at 04:09:53PM +1100, Stephen Rothwell wrote:
->>
->> From: Stephen Rothwell <sfr@canb.auug.org.au>
->> Date: Mon, 30 Oct 2023 15:54:37 +1100
->> Subject: [PATCH] fix up for "crypto: ahash - remove crypto_ahash_alignmask"
->>
->> interacting with "net/tcp: Introduce TCP_AO setsockopt()s"
->>
->> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
->> ---
->>  net/ipv4/tcp_ao.c | 6 ------
->>  1 file changed, 6 deletions(-)
-> 
-> Acked-by: Herbert Xu <herbert@gondor.apana.org.au>
+On Sun, 29 Oct 2023 13:56:29 PDT (-0700), Stephen Rothwell wrote:
+> Hi all,
+>
+> The following commits are also in Linus Torvalds' tree as different
+> commits (but the same patches):
+>
+>   767423658d53 ("riscv: kexec: Align the kexeced kernel entry")
+>   fe2ed36d419f ("riscv: Remove duplicate objcopy flag")
 
-Reviewed-by: Dmitry Safonov <dima@arista.com>
+Sorry, but I'm lost here -- I'm not sure if I've managed to screw up git 
+again?  If it helps, I'm not seeing the same commits here:
 
-> If we simply apply this patch to the netdev tree then everything
-> should work at the next merge window.  But perhaps you could change
-> the patch description to say something like remove the obsolete
-> crypto_hash_alignmask.  It's not important though.
+    $ git show fe2ed36d419f
+    commit fe2ed36d419fdae48a6850bdbe2d2e7543c3c389
+    gpg: Signature made Wed 20 Sep 2023 02:51:59 AM PDT
+    gpg:                using RSA key 2B3C3747446843B24A943A7A2E1319F35FBB1889
+    gpg:                issuer "palmer@dabbelt.com"
+    gpg: Good signature from "Palmer Dabbelt <palmer@dabbelt.com>" [ultimate]
+    gpg:                 aka "Palmer Dabbelt <palmer@rivosinc.com>" [ultimate]
+    Author: Song Shuai <songshuaishuai@tinylab.org>
+    Date:   Thu Sep 14 17:13:34 2023 +0800
+    
+        riscv: Remove duplicate objcopy flag
+    
+        There are two duplicate `-O binary` flags when objcopying from vmlinux
+        to Image/xipImage.
+    
+        RISC-V set `-O binary` flag in both OBJCOPYFLAGS in the top-level riscv
+        Makefile and OBJCOPYFLAGS_* in the boot/Makefile, and the objcopy cmd
+        in Kbuild would join them together.
+    
+        The `-O binary` flag is only needed for objcopying Image, so remove the
+        OBJCOPYFLAGS in the top-level riscv Makefile.
+    
+        Fixes: c0fbcd991860 ("RISC-V: Build flat and compressed kernel images")
+        Signed-off-by: Song Shuai <songshuaishuai@tinylab.org>
+        Link: https://lore.kernel.org/r/20230914091334.1458542-1-songshuaishuai@tinylab.org
+        Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+    
+    diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
+    index 1329e060c548..b43a6bb7e4dc 100644
+    --- a/arch/riscv/Makefile
+    +++ b/arch/riscv/Makefile
+    @@ -6,7 +6,6 @@
+     # for more details.
+     #
+    
+    -OBJCOPYFLAGS    := -O binary
+     LDFLAGS_vmlinux := -z norelro
+     ifeq ($(CONFIG_RELOCATABLE),y)
+     	LDFLAGS_vmlinux += -shared -Bsymbolic -z notext --emit-relocs
 
-Thank you,
-           Dmitry
+and
 
+    $ git show 767423658d53 | cat
+    commit 767423658d53d147409821e51e6d0bc12425b24f
+    gpg: Signature made Wed 20 Sep 2023 02:53:30 AM PDT
+    gpg:                using RSA key 2B3C3747446843B24A943A7A2E1319F35FBB1889
+    gpg:                issuer "palmer@dabbelt.com"
+    gpg: Good signature from "Palmer Dabbelt <palmer@dabbelt.com>" [ultimate]
+    gpg:                 aka "Palmer Dabbelt <palmer@rivosinc.com>" [ultimate]
+    Author: Song Shuai <songshuaishuai@tinylab.org>
+    Date:   Thu Sep 7 18:33:03 2023 +0800
+    
+        riscv: kexec: Align the kexeced kernel entry
+    
+        The current riscv boot protocol requires 2MB alignment for RV64
+        and 4MB alignment for RV32.
+    
+        In KEXEC_FILE path, the elf_find_pbase() function should align
+        the kexeced kernel entry according to the requirement, otherwise
+        the kexeced kernel would silently BUG at the setup_vm().
+    
+        Fixes: 8acea455fafa ("RISC-V: Support for kexec_file on panic")
+        Signed-off-by: Song Shuai <songshuaishuai@tinylab.org>
+        Link: https://lore.kernel.org/r/20230907103304.590739-3-songshuaishuai@tinylab.org
+        Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+    
+    diff --git a/arch/riscv/kernel/elf_kexec.c b/arch/riscv/kernel/elf_kexec.c
+    index 5372b708fae2..9a81d6926ac6 100644
+    --- a/arch/riscv/kernel/elf_kexec.c
+    +++ b/arch/riscv/kernel/elf_kexec.c
+    @@ -98,7 +98,13 @@ static int elf_find_pbase(struct kimage *image, unsigned long kernel_len,
+     	kbuf.image = image;
+     	kbuf.buf_min = lowest_paddr;
+     	kbuf.buf_max = ULONG_MAX;
+    -	kbuf.buf_align = PAGE_SIZE;
+    +
+    +	/*
+    +	* Current riscv boot protocol requires 2MB alignment for
+    +	* RV64 and 4MB alignment for RV32
+    +	*
+    +	*/
+    +	kbuf.buf_align = PMD_SIZE;
+     	kbuf.mem = KEXEC_BUF_MEM_UNKNOWN;
+     	kbuf.memsz = ALIGN(kernel_len, PAGE_SIZE);
+     	kbuf.top_down = false;
+
+>
+> -- 
+> Cheers,
+> Stephen Rothwell

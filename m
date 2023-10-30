@@ -2,55 +2,52 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14FAC7DC152
-	for <lists+linux-next@lfdr.de>; Mon, 30 Oct 2023 21:37:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC5077DC163
+	for <lists+linux-next@lfdr.de>; Mon, 30 Oct 2023 21:46:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231725AbjJ3UhP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 30 Oct 2023 16:37:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47686 "EHLO
+        id S230043AbjJ3Uq7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 30 Oct 2023 16:46:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231693AbjJ3UhO (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 30 Oct 2023 16:37:14 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A09EFE;
-        Mon, 30 Oct 2023 13:37:11 -0700 (PDT)
+        with ESMTP id S229498AbjJ3Uq6 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 30 Oct 2023 16:46:58 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A4EBDF;
+        Mon, 30 Oct 2023 13:46:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1698698228;
-        bh=kKVReQ2HLqh4fTYOxvEBglxLXvmXaMtUjWAkpNeYU7w=;
+        s=201702; t=1698698812;
+        bh=CpTdll+8XVH6r91t8HW1QM29SCZcmEjYvGOHhG+p4n8=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=d49XSugkWCJvAWMf3QFojxNIN7rVA5qDk8fwTw16oydR9kcSW7iOP+F/Mw2OiF9RE
-         fYxoPhtBOyGgRmcJEFMOXtO7wzW6Ix7su/WvHbnlWOvNAJ3lS0tktdwxn37sbyromY
-         +STHFoqWYJxRr0ZsbFXYXGt+u0BPjCj/gezDtSbXowaEp9N/LSMNUwSlMts5eOEC6O
-         Dxi8nhQPZGqun7IUE/B5jQQDWZCdRkRzQfqfdbdUMatIYn67l2aeNfJ+g9jpc4tPXy
-         MwvvGxGI/K7dOdpR66ubm/qOVxHOKCOL9QUVksQtevdErin6LyQvdRD5Uf+YDIhB+R
-         kp0APj/eyOTIg==
+        b=Npu7eACCrxV4K8pPP/N0tTZUxX/RH74VmHBG2sFcmSU44BkNxjEFjs7b5GKSstz9K
+         lTJTIa/vatadaGcHkD7EiR+r0fpfUJ/sfusr+hOqd2ydWc6rjMGXFlrYi7DtCE/4Ez
+         DBrbSlIWYvNemJKH3WYrQbUL57HZAqLWpUg7Q6TfSxUNYcvRDKrLqHbYwMmM7r/Nrb
+         v8+Z4Tgwhw4nmgUlLvELl2E6K7yFGOQP7Gs6nsheqH7RbUyP0kIjNYXKsn14WnXcHO
+         8gileDbWPblxDvD0AWILYP/xEtDB04LbpTk9rVKKFx3U3F02g88mQ2kE3Etvu8NJpj
+         U6mzfZ8dcBHzA==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4SK4nb1TvLz4wcX;
-        Tue, 31 Oct 2023 07:37:07 +1100 (AEDT)
-Date:   Tue, 31 Oct 2023 07:37:05 +1100
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4SK50q4hySz4wc6;
+        Tue, 31 Oct 2023 07:46:51 +1100 (AEDT)
+Date:   Tue, 31 Oct 2023 07:46:49 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Ackerley Tng <ackerleytng@google.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Isaku Yamahata <isaku.yamahata@intel.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     John Johansen <john.johansen@canonical.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the kvm-x86 tree
-Message-ID: <20231031073705.512dab4b@canb.auug.org.au>
-In-Reply-To: <3ed75fa4-6b49-4fd2-a907-8619ca19a8b8@redhat.com>
-References: <20231030134806.24510492@canb.auug.org.au>
-        <20231030-ignorant-liebschaft-6d603ab43494@brauner>
-        <3ed75fa4-6b49-4fd2-a907-8619ca19a8b8@redhat.com>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        linux-security-module@vger.kernel.org
+Subject: Re: linux-next: manual merge of the apparmor tree with the security
+ tree
+Message-ID: <20231031074649.3bdbec45@canb.auug.org.au>
+In-Reply-To: <CAHC9VhQbxJ4-z4Hp7CSmtcTNOWGFeQF2eEyct9=nHCMN_89YXw@mail.gmail.com>
+References: <20231027130320.69469330@canb.auug.org.au>
+        <CAHC9VhQ+Nt7CrLxSZcOVNEtAypruOmM0ST0P0JJMrOq4XYmAkw@mail.gmail.com>
+        <4b4eb40c-b65a-46e2-9e23-5412a9cdcad0@canonical.com>
+        <CAHC9VhQbxJ4-z4Hp7CSmtcTNOWGFeQF2eEyct9=nHCMN_89YXw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_//c_IGahhLhJSEaICQttXXNj";
+Content-Type: multipart/signed; boundary="Sig_/aiy5N31_hmy5w4rYuRJ_1ME";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS
@@ -61,41 +58,45 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_//c_IGahhLhJSEaICQttXXNj
-Content-Type: text/plain; charset=US-ASCII
+--Sig_/aiy5N31_hmy5w4rYuRJ_1ME
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-Hi Paolo,
+Hi Paul,
 
-On Mon, 30 Oct 2023 12:27:07 +0100 Paolo Bonzini <pbonzini@redhat.com> wrot=
-e:
+On Mon, 30 Oct 2023 12:52:50 -0400 Paul Moore <paul@paul-moore.com> wrote:
 >
-> On 10/30/23 11:05, Christian Brauner wrote:
-> >=20
-> > @Paolo and @Sean, does that make sense and is the series for v6.7 or
-> > just already in -next for v6.8? =20
+> On Sun, Oct 29, 2023 at 5:09=E2=80=AFPM John Johansen <john.johansen@cano=
+nical.com> wrote:
+> >
+> > is part of the Three basic syscalls series, the plan is still to have t=
+hat
+> > series bake in next for a full cycle? =20
 >=20
-> It's for 6.8.
+> Yes, that's still the plan.  Once v6.7-rc1 is out I'll rebase the LSM
+> syscall patches and I expect the vast majority of these conflicts to
+> disappear, although I'm sure we'll pick up some new ones with the rest
+> of the v6.7-rcX cycle :)
 
-Then it should not be in linux-next yet. :-(
+These patches should not be in linux-next until after v6.7-rc1.
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_//c_IGahhLhJSEaICQttXXNj
+--Sig_/aiy5N31_hmy5w4rYuRJ_1ME
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmVAE/EACgkQAVBC80lX
-0GzacQf+IU7hUvfEJf/a7GlUinmCdqlDvSaCdLIPGAwBQXMdX6/BKBSPlI7W5+Og
-CUl0P/ll6XUzRNhJBbQSJJg4oik4d/HjX8OzVyOmKIqhrev+Q82qyV7kwMx2U0UE
-jNCtFqClsfov7mhgu1a/W5kP23XesUD2i9rkSqtjVQz515J5Mu9uF04/267mnVpf
-QQbrmY+SlmHc27RO3HKMqS+Z12EVsy7XTAXoO8RFO/vqGeiYIwJUH9poFlKwW3+g
-FKpqncmXwlyqfz5aDZvcrK/2HlsuLifwCmDnDlJ7gwfSS+LzHuMvQmobBIxxu7Ju
-CYT5tL6CCvvHgDjfk3Ky0B72TVtOYw==
-=G2bY
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmVAFjkACgkQAVBC80lX
+0GyboAf/XupUfVXdKLvYrSCUgrEzBwzYxm90+mL6+/RD/KibOPbvIq0hLzt2rtFf
+qukY435IlE0d9qTl0zlf2AjGjTlLcJq99h39PfJdjX7RvePVFbThlnnk1uyQl1rl
+jmr5BJrEfB33mBg7v8q2v/dqTC7jXdHSeYbuYMwD9JDTuXY1MKOoYcD4FOw8jyiy
+re6d2+6FpNj4rIm7raCAYYja62PkHRudcwpVgXHwVNRwxjSihC2y8b9vtU6MUqsh
+ovqArLTSpdHvrFULpphUmRUuKNww/9Qf73OofVLiDZgLBsB3hzFXk8QWsLIM23X/
+Km+nVuCW4kZ4tcLeLF88fLO8XWfh8A==
+=gVFO
 -----END PGP SIGNATURE-----
 
---Sig_//c_IGahhLhJSEaICQttXXNj--
+--Sig_/aiy5N31_hmy5w4rYuRJ_1ME--

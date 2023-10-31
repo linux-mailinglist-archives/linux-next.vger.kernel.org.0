@@ -2,55 +2,111 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAA257DC5C8
-	for <lists+linux-next@lfdr.de>; Tue, 31 Oct 2023 06:12:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 481E07DC601
+	for <lists+linux-next@lfdr.de>; Tue, 31 Oct 2023 06:39:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230409AbjJaFMn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 31 Oct 2023 01:12:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51268 "EHLO
+        id S230010AbjJaFjb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 31 Oct 2023 01:39:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231995AbjJaFMi (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 31 Oct 2023 01:12:38 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BFA511D;
-        Mon, 30 Oct 2023 22:12:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1698729138;
-        bh=bxStzz6nOrEXdZNDwkU7etS4G1iLolFxrkKrbs09ZDM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=psu1CyEJqPHl0uI9x4wig77w/YMF4e7kS55Q/oetq9n4VoNC6IgRlPlmujk29mTzC
-         5CLo2TB9kvc7rCGOC7A4vWfHVdPfQZyAFczaJ0+fQL+ER9ITMoI6ysnOhV2WYs10rz
-         u/IRas3KU/Y+GJBf+17qQQqFgoH1im0QQhBrmVA9xr7H3E87LjPh9ewQ18gB6a2JQQ
-         0LI2gNRMapkTiL9KHQyLuvRxrPLP7ebvw3j76HK8Ruptuc+sg84eo/Lf2kwOiFvznm
-         BtHfBnUpsf8NMSdKLJFKCcp+773MxhH+caDabIfau1H8XgBlczEvDoiAra4jJ7VC6F
-         VaU9w8dJs1S5w==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4SKJD00c9dz4x5k;
-        Tue, 31 Oct 2023 16:12:15 +1100 (AEDT)
-Date:   Tue, 31 Oct 2023 16:12:14 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Joerg Roedel <joro@8bytes.org>,
-        Joao Martins <joao.m.martins@oracle.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Nicolin Chen <nicolinc@nvidia.com>, Yi Liu <yi.l.liu@intel.com>
-Subject: Re: linux-next: manual merge of the iommufd tree with the iommu
- tree
-Message-ID: <20231031161214.25560598@canb.auug.org.au>
-In-Reply-To: <20231030182621.GV3952@nvidia.com>
-References: <20231027155522.6b2863a4@canb.auug.org.au>
-        <20231027171522.692a58ec@canb.auug.org.au>
-        <20231030182621.GV3952@nvidia.com>
+        with ESMTP id S229557AbjJaFja (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 31 Oct 2023 01:39:30 -0400
+Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on2125.outbound.protection.outlook.com [40.107.113.125])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFDBEBD;
+        Mon, 30 Oct 2023 22:39:24 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jsMBPn7SO5LkO5J9Q0h9W2+2frLEAmS99p+FiyCBGFxg6CaR8VGwz9s4pnjEU/e7Uhrbad/J5+aurWNjNiYLuBv0rXvl4+ulSiEN/2dR/63DsQZajR0An7CJuQ46Gsuep9LWp7MFtAiA4a9SS+ocXEtQMcnhAhlTVd6tH8IckgcHLD1eiD1xkGjg5rhH1Zoch95yXHgs+P33XWlcy8cli5E+KYbiLOCbSwPjrvsQ14doViIyQwiTyj2P4/oath+npcigojQ26804seNSG1sxKMXwakwUHVxudiUSBvUroRgnZ7FJ3od3XF+6ohYcbcNGoCa/L/QOST6JLtz9D+Gjow==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=bms9+JO3fKAnaN6LGCZzXbJWhjc/Ny5b/nY/FUZqd1E=;
+ b=CrvUOC6s+n8YAwhAcA0wPRcdW8M90mNP0otPXOx2AwlY7HsIMguGyhE14PFqK1BDjyY1AjtqQltRoU/1Ntps/iYytm4BtYXrj4pqqwa7OAw6M5dr3UH5y0YVrv4QTmHFZet3iSMnBtU1GFVGibIYNS/6zGl78ZuS6pfOZzDtMacdgMFA4fb35vMjNxADK1GnlvDppyDpzx+gY08URtZF2R95tdB5EvewFCj3Lu0mq5qQtlTmUSdafHUDnioL5gXLQ1Hb86/msWqyeSj/DW9HAhepiOE0c46pAwk5DUgoXeHJ889ZwbdPPxF/1iQ/JxC2Oc86bt4KXC0Wa4IeY/02oQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=zenithal.me; dmarc=pass action=none header.from=zenithal.me;
+ dkim=pass header.d=zenithal.me; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zenithal.me;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=bms9+JO3fKAnaN6LGCZzXbJWhjc/Ny5b/nY/FUZqd1E=;
+ b=NoBkz1vw7WJRoDO2szQxWOZ8jMNcc1/q0vSV74LhOoEfz8HP3f2vz8G6R6z+Yi1PhOM4lbZJU7rqnKLxryYyA4LlPt6wsQpZglKbKKZIVYLQqcpcgQy/yB71KVoeV1PCM6xoI/S+TrdKqeib4CfkCBRk7cY2JEKPtR5wgEuXjeE=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=zenithal.me;
+Received: from TYCP286MB1393.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:c0::6) by
+ TY1P286MB3280.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:2e4::12) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6933.29; Tue, 31 Oct 2023 05:39:22 +0000
+Received: from TYCP286MB1393.JPNP286.PROD.OUTLOOK.COM
+ ([fe80::ecbe:414e:2a07:b355]) by TYCP286MB1393.JPNP286.PROD.OUTLOOK.COM
+ ([fe80::ecbe:414e:2a07:b355%5]) with mapi id 15.20.6933.029; Tue, 31 Oct 2023
+ 05:39:22 +0000
+Date:   Tue, 31 Oct 2023 13:39:16 +0800
+From:   Hongren Zheng <i@zenithal.me>
+To:     syzbot <syzbot+6867a9777f4b8dc4e256@syzkaller.appspotmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] [usb?] linux-next boot error: KASAN: slab-out-of-bounds
+ Write in vhci_setup
+Message-ID: <ZUCTBMazbx41wmrO@Sun>
+References: <0000000000007634c1060793197c@google.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0000000000007634c1060793197c@google.com>
+X-Operating-System: Linux Sun 5.15.67
+X-Mailer: Mutt 2.2.7 (2022-08-07)
+X-ClientProxiedBy: BY3PR10CA0007.namprd10.prod.outlook.com
+ (2603:10b6:a03:255::12) To TYCP286MB1393.JPNP286.PROD.OUTLOOK.COM
+ (2603:1096:400:c0::6)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/suJhAFsV/.WPioJKy0M+F+_";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: TYCP286MB1393:EE_|TY1P286MB3280:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6c2ce7f2-b3e6-496f-3c2a-08dbd9d3bbfb
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: dDoOkZVaD8EvKRKly9YpJQlP+ma/nymGDS4qtLPflID+49YrE8zhFpIt/tG9PS8e66xkB1G+nW4m7juUOOSsHrwHF/qFLzr++9eWFICmhBuB0OjiMkeoeXSzoUNiJe/xyAh7Ew+x6McOD13STviKmKbM4XZzsvePRMV3uf3nzZCQxc7i+VqU85UdbJ+gUON6U05B0HgqSxong+mnFIveVRhXEM47vQrn71cxmkgKT2576bCyenWpEiv96iUbWSJILAuGx8gaIOyZajXdHMTSpblh6PYbsN7RUIQY8ATcFUHkC6FNVr5KLYznfp4XTshRg6wxmly6DoIBRjTF0r0aOZ4cdhNUMPwpbhZ3JKiXDyJr/5f2QpKnrDGDXyahYNik3SHI4r5HtgVB9kiEnfeqOs51ihmYUnYxyUKS43BUUhsB6ETKnE8ZV9IcTsoisDplcJr3Jjg4+KkaX11Fmwu6+jNCDOOxQMORaQ86eDpAvw3e6WUWifQrAF1D9U4Ml2eAhd+Ey6VQoH0DkT1elqud9YnQxh4inTAuXbX5tbHGsKachnoe3nWq+UIcVW01DcgwtYxJ9p6fGXkNs/pVzq0Yfj0MTbMsKT3vz9um7yeWM04=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYCP286MB1393.JPNP286.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230031)(7916004)(366004)(396003)(39840400004)(136003)(346002)(376002)(230922051799003)(451199024)(186009)(1800799009)(64100799003)(6512007)(6506007)(9686003)(38100700002)(41320700001)(558084003)(33716001)(86362001)(5660300002)(41300700001)(316002)(786003)(66556008)(66476007)(66946007)(6666004)(4326008)(8676002)(8936002)(2906002)(508600001)(6486002)(49092004);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?53fG6bsiNTIgBTj1TaXerF0fscdF8zSOLRM7oHYqHyJ1b3D+9GB24esqTtXt?=
+ =?us-ascii?Q?PFDQHcKMYJLgzio57uYcaya+Tf/anj7cHlpGPbKe5dFjBBskdbur0aJNckFj?=
+ =?us-ascii?Q?qU7ONvSjIHv2mcXGeOB4u66GLHrSAy4mmUxcWLj6iMQnfZhS4NhL5dTCworb?=
+ =?us-ascii?Q?civc+brED5S+wTdUabA8iPu1re4cXPmW3Jmv0qsPdUBrMjcYK3NSDn7SKTJS?=
+ =?us-ascii?Q?g7DKbxMEcqjCn5+7V7/i2YFky4i1jOy7iQ8JBxuEliNTL17gaYf0hYEo7ITU?=
+ =?us-ascii?Q?XhfMeh/BIgnROTid9dT7AVrdELSHBDdt9a1JkXN2cvXwh3qjfM6oI+fGHZsg?=
+ =?us-ascii?Q?Gg8NRgLcrSFhB7pm0H+fFowIqY+dlDPJDm/FSYwVUQyVYXn6lSfItqFrJC8W?=
+ =?us-ascii?Q?bpbNBoimp6J1P+3IetuF7turosGOJx0tZTGNbz6Afp1PUXrQ6MXSLTqclW2o?=
+ =?us-ascii?Q?5gGFOukLWDSutLGsKBbg/yi9Z570B7UgqBa+7Ox3g9XpkaaKN62z8udjbGUI?=
+ =?us-ascii?Q?y6SeZw1uGGGIpibWicaMQFINp/kH7unLqtbG0M9EUTqPHq3+LncWeaX9WPnh?=
+ =?us-ascii?Q?oLIe7frehE/tofXuLG42+JnWyoTZjVjJVHtlamUYI8QH41+DvLALSS+doXYZ?=
+ =?us-ascii?Q?JP34LTgsa0qHeIrTU+FQW/T1iy17kjQY/M6SJ833lV29SDi5i+Oyv2NJXdpr?=
+ =?us-ascii?Q?MkAeVerUWSrtjaBRK1YylhjZpUXzc3NsuhQIti3OoS7piLy+sgjh157lfjnZ?=
+ =?us-ascii?Q?gu/N97HlwMz6vYf+BlpEMuSJpj225hH7+TgPjicWWsWGenXVthYv2GAjGz4g?=
+ =?us-ascii?Q?PKPLUKIaCePdeyUeeuVb1y23v9WTP0dyLalmRXWGyCOb5t1ZqmDEN2UAYC4C?=
+ =?us-ascii?Q?8KzqmADlvpSrefI2oJ07V/GvNIRxx+VgvBfi4sH5UD5H3RUlUSA5nvs8rKCs?=
+ =?us-ascii?Q?IRw3VgK5PN6tRRUamsWIYgXHMEs2P1kbPRHGuOmfo4VS/i1Hfyj7q0OS0RX7?=
+ =?us-ascii?Q?H501uQ5doemkIslhRSVA6SC8XcvG5W21I0cZPm+KwodWEUJ4HbbhqaGUPTzL?=
+ =?us-ascii?Q?toz/6serSdbTbc3xmeHge0M0Qyz/ibSJa/WOSakDURdW3bmnT/aTt4tyvU+5?=
+ =?us-ascii?Q?JqLKIqC6BSg47K6uB0lZNRD11uF1Gm84LmBglf+kuiV0kOTzNsgFw1stcqB4?=
+ =?us-ascii?Q?lfWSt3CDMkn15G7OxTor4z9pRY7ftXsre6MEe7pCqonP6Z79RwEgP9TxlzaG?=
+ =?us-ascii?Q?qBWJVfNAItbkJu/NfeigzmXOb4nWM0RSOt1Z72Yy3464igYNdU9OFSQGclKB?=
+ =?us-ascii?Q?EM67mLo2cs7il6CRWBbOpWPuxFku2IDUREQ6EPr88QTkGNleyHIUL08jBCmm?=
+ =?us-ascii?Q?k8golmTabTiRzMtULPS9B8WWrNQ4hwOe/C3q6Z7r1/G2vg23dW5F/ZuxGB47?=
+ =?us-ascii?Q?yihtPVnlNm5oRQQSYvkkC9inx0zjPL7zAACfLQeyhFcAqGqIzgBCZLS9CcM/?=
+ =?us-ascii?Q?IZHMmi5KdGrs4XzAF/BfDKTAr5HBZAIo1Hkgz2SJ+5UgxtTNF6K9ByY+lqtV?=
+ =?us-ascii?Q?shZIvi3NlK+ZIuzt+xd7n09oAHOBmu/E1Ch16i8N?=
+X-OriginatorOrg: zenithal.me
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6c2ce7f2-b3e6-496f-3c2a-08dbd9d3bbfb
+X-MS-Exchange-CrossTenant-AuthSource: TYCP286MB1393.JPNP286.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Oct 2023 05:39:22.0539
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 436d481c-43b1-4418-8d7f-84c1e4887cf0
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: WT8pwvSz0NIRuA2+LksRv+/JC5xQMzctFOJgHUrjOP5t4sbA0hQucxuKLblPjVH+
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY1P286MB3280
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,209 +114,4 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/suJhAFsV/.WPioJKy0M+F+_
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-
-Hi all,
-
-On Mon, 30 Oct 2023 15:26:21 -0300 Jason Gunthorpe <jgg@nvidia.com> wrote:
->
-> On Fri, Oct 27, 2023 at 05:15:22PM +1100, Stephen Rothwell wrote:
-> >=20
-> > On Fri, 27 Oct 2023 15:55:22 +1100 Stephen Rothwell <sfr@canb.auug.org.=
-au> wrote: =20
-> > >
-> > > Today's linux-next merge of the iommufd tree got a conflict in:
-> > >=20
-> > >   drivers/iommu/iommufd/selftest.c
-> > >=20
-> > > between commits:
-> > >=20
-> > >   1c68cbc64fe6 ("iommu: Add IOMMU_DOMAIN_PLATFORM")
-> > >   13fbceb1b8e9 ("iommufd: Convert to alloc_domain_paging()")
-> > >=20
-> > > from the iommu tree and commits:
-> > >=20
-> > >   408663619fcf ("iommufd/selftest: Add domain_alloc_user() support in=
- iommu mock")
-> > >   266ce58989ba ("iommufd/selftest: Test IOMMU_HWPT_ALLOC_DIRTY_TRACKI=
-NG")
-> > >   7adf267d66d1 ("iommufd/selftest: Test IOMMU_HWPT_SET_DIRTY_TRACKING=
-")
-> > >   a9af47e382a4 ("iommufd/selftest: Test IOMMU_HWPT_GET_DIRTY_BITMAP")
-> > >   0795b305da89 ("iommufd/selftest: Test IOMMU_HWPT_GET_DIRTY_BITMAP_N=
-O_CLEAR flag")
-> > >   65fe32f7a447 ("iommufd/selftest: Add nested domain allocation for m=
-ock domain")
-> > >=20
-> > > from the iommufd tree.
-> > >=20
-> > > I fixed it up (see below) and can carry the fix as necessary. This
-> > > is now fixed as far as linux-next is concerned, but any non trivial
-> > > conflicts should be mentioned to your upstream maintainer when your t=
-ree
-> > > is submitted for merging.  You may also want to consider cooperating
-> > > with the maintainer of the conflicting tree to minimise any particula=
-rly
-> > > complex conflicts. =20
-> >=20
-> > The resolution should have been as below (I think). =20
->=20
-> This was too horrible, I pushed a patch to reorganize the new iommufd side
-> code to more closely match how the domain_alloc_paging stuff is
-> supposed to work
-
-I have used the conflict resolution below now.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc drivers/iommu/iommufd/selftest.c
-index ee6079847091,d43a87737c1e..5d93434003d8
---- a/drivers/iommu/iommufd/selftest.c
-+++ b/drivers/iommu/iommufd/selftest.c
-@@@ -155,6 -240,81 +235,72 @@@ static struct iommu_domain *mock_domain
-  	return &mock->domain;
-  }
- =20
-+ static struct iommu_domain *
-+ __mock_domain_alloc_nested(struct mock_iommu_domain *mock_parent,
-+ 			   const struct iommu_hwpt_selftest *user_cfg)
-+ {
-+ 	struct mock_iommu_domain_nested *mock_nested;
-+ 	int i;
-+=20
-+ 	mock_nested =3D kzalloc(sizeof(*mock_nested), GFP_KERNEL);
-+ 	if (!mock_nested)
-+ 		return ERR_PTR(-ENOMEM);
-+ 	mock_nested->parent =3D mock_parent;
-+ 	mock_nested->domain.ops =3D &domain_nested_ops;
-+ 	mock_nested->domain.type =3D IOMMU_DOMAIN_NESTED;
-+ 	for (i =3D 0; i < MOCK_NESTED_DOMAIN_IOTLB_NUM; i++)
-+ 		mock_nested->iotlb[i] =3D user_cfg->iotlb;
-+ 	return &mock_nested->domain;
-+ }
-+=20
- -static struct iommu_domain *mock_domain_alloc(unsigned int iommu_domain_t=
-ype)
- -{
- -	if (iommu_domain_type =3D=3D IOMMU_DOMAIN_BLOCKED)
- -		return &mock_blocking_domain;
- -	if (iommu_domain_type =3D=3D IOMMU_DOMAIN_UNMANAGED)
- -		return mock_domain_alloc_paging(NULL);
- -	return NULL;
- -}
- -
-+ static struct iommu_domain *
-+ mock_domain_alloc_user(struct device *dev, u32 flags,
-+ 		       struct iommu_domain *parent,
-+ 		       const struct iommu_user_data *user_data)
-+ {
-+ 	struct mock_iommu_domain *mock_parent;
-+ 	struct iommu_hwpt_selftest user_cfg;
-+ 	int rc;
-+=20
-+ 	/* must be mock_domain */
-+ 	if (!parent) {
-+ 		struct mock_dev *mdev =3D container_of(dev, struct mock_dev, dev);
-+ 		bool has_dirty_flag =3D flags & IOMMU_HWPT_ALLOC_DIRTY_TRACKING;
-+ 		bool no_dirty_ops =3D mdev->flags & MOCK_FLAGS_DEVICE_NO_DIRTY;
-+ 		struct iommu_domain *domain;
-+=20
-+ 		if (flags & (~(IOMMU_HWPT_ALLOC_NEST_PARENT |
-+ 			       IOMMU_HWPT_ALLOC_DIRTY_TRACKING)))
-+ 			return ERR_PTR(-EOPNOTSUPP);
-+ 		if (user_data || (has_dirty_flag && no_dirty_ops))
-+ 			return ERR_PTR(-EOPNOTSUPP);
-+ 		domain =3D mock_domain_alloc_paging(NULL);
-+ 		if (!domain)
-+ 			return ERR_PTR(-ENOMEM);
-+ 		if (has_dirty_flag)
-+ 			container_of(domain, struct mock_iommu_domain, domain)
-+ 				->domain.dirty_ops =3D &dirty_ops;
-+ 		return domain;
-+ 	}
-+=20
-+ 	/* must be mock_domain_nested */
-+ 	if (user_data->type !=3D IOMMU_HWPT_DATA_SELFTEST || flags)
-+ 		return ERR_PTR(-EOPNOTSUPP);
-+ 	if (!parent || parent->ops !=3D mock_ops.default_domain_ops)
-+ 		return ERR_PTR(-EINVAL);
-+=20
-+ 	mock_parent =3D container_of(parent, struct mock_iommu_domain, domain);
-+ 	if (!mock_parent)
-+ 		return ERR_PTR(-EINVAL);
-+=20
-+ 	rc =3D iommu_copy_struct_from_user(&user_cfg, user_data,
-+ 					 IOMMU_HWPT_DATA_SELFTEST, iotlb);
-+ 	if (rc)
-+ 		return ERR_PTR(rc);
-+=20
-+ 	return __mock_domain_alloc_nested(mock_parent, &user_cfg);
-+ }
-+=20
-  static void mock_domain_free(struct iommu_domain *domain)
-  {
-  	struct mock_iommu_domain *mock =3D
-@@@ -272,9 -432,28 +418,20 @@@ static phys_addr_t mock_domain_iova_to_
- =20
-  static bool mock_domain_capable(struct device *dev, enum iommu_cap cap)
-  {
-- 	return cap =3D=3D IOMMU_CAP_CACHE_COHERENCY;
-+ 	struct mock_dev *mdev =3D container_of(dev, struct mock_dev, dev);
-+=20
-+ 	switch (cap) {
-+ 	case IOMMU_CAP_CACHE_COHERENCY:
-+ 		return true;
-+ 	case IOMMU_CAP_DIRTY_TRACKING:
-+ 		return !(mdev->flags & MOCK_FLAGS_DEVICE_NO_DIRTY);
-+ 	default:
-+ 		break;
-+ 	}
-+=20
-+ 	return false;
-  }
- =20
- -static void mock_domain_set_plaform_dma_ops(struct device *dev)
- -{
- -	/*
- -	 * mock doesn't setup default domains because we can't hook into the
- -	 * normal probe path
- -	 */
- -}
- -
-  static struct iommu_device mock_iommu_device =3D {
-  };
- =20
-@@@ -293,8 -466,10 +450,9 @@@ static const struct iommu_ops mock_ops=20
-  	.owner =3D THIS_MODULE,
-  	.pgsize_bitmap =3D MOCK_IO_PAGE_SIZE,
-  	.hw_info =3D mock_domain_hw_info,
- -	.domain_alloc =3D mock_domain_alloc,
- +	.domain_alloc_paging =3D mock_domain_alloc_paging,
-+ 	.domain_alloc_user =3D mock_domain_alloc_user,
-  	.capable =3D mock_domain_capable,
- -	.set_platform_dma_ops =3D mock_domain_set_plaform_dma_ops,
-  	.device_group =3D generic_device_group,
-  	.probe_device =3D mock_probe_device,
-  	.default_domain_ops =3D
-
---Sig_/suJhAFsV/.WPioJKy0M+F+_
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmVAjK4ACgkQAVBC80lX
-0GzB7Af6Ajc3Y1Rc9nIBa+dW+jo55qcKzEHZB4P/ew9JiF4O/vA1V+tLFeqEcrzQ
-n2WSJEEq7qYw9UC0iQosC3l6lqEgCfq2BFEltAx2fC+IiaMK8Ewg6yqsq4blZtVk
-dyTIztTyDKr6qF3RJcW4KvVsD4YYoKCM//g25WbTrvEQ+6fYv92kCQ91Q09kg8M6
-DpruHLfAtNzPDRJzUAsbqwEMPl++YsoHt6MPm+fHN0iTKTq4tHe9374qbTF0yzwv
-Qez+po+kzbC+D4LQBMArw0t3Zpp6E0yap3S1YHy+6Mv2I0DT3bh5mqeYx/TCol9L
-LfEvWxI1CawibzJMttOPaqf2TZh3XA==
-=uZ6P
------END PGP SIGNATURE-----
-
---Sig_/suJhAFsV/.WPioJKy0M+F+_--
+#syz fix: usb/usbip: fix wrong data added to platform device

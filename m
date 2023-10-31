@@ -2,121 +2,114 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 318F37DD82E
-	for <lists+linux-next@lfdr.de>; Tue, 31 Oct 2023 23:21:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E1EC7DD833
+	for <lists+linux-next@lfdr.de>; Tue, 31 Oct 2023 23:23:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344925AbjJaWV5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 31 Oct 2023 18:21:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48196 "EHLO
+        id S1346570AbjJaWX5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 31 Oct 2023 18:23:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346399AbjJaWV5 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 31 Oct 2023 18:21:57 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A561AF1;
-        Tue, 31 Oct 2023 15:21:53 -0700 (PDT)
+        with ESMTP id S1346504AbjJaWX5 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 31 Oct 2023 18:23:57 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BDA710F;
+        Tue, 31 Oct 2023 15:23:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1698790912;
-        bh=0/iPY9kfJQM8rbXhWaLusL0GvM6vvu0c3dVC6j6qNj8=;
+        s=201702; t=1698791029;
+        bh=cJvaviqJcj+/e/u9e1phUK3dawuyU8/xvwf+6L2zplo=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=IEzlh71NsWa2rj/5JbwIjqIYOpY7MtPiciRQteFGYAgzu8wZqznHpLFExbwhl73Fn
-         F16kSYzGZ9OspPNKHc6jpELCUFoRDcEzfTtl1w01w5A1q2RT8UOX2LRTRYmxwKKUYP
-         MBSPQFVwg+qbFr8rtFcCddnacycseUcKrvpVPgMacYT3/LHbWT18bhZcqVnlx/M7cu
-         E/Ar5slSzhr0pWrxFSCRpxc9fUDTefba37v/Bz2em+UW66afVaR0DOO6N8i/QdM2I+
-         kp+eaao3xlNHB1P7VRmwpWBgTPZSontr9vF3hArPXyI8vE3VaVCS2NPKoV56mr0MOX
-         XABL4VQCcVSPQ==
+        b=uvBNS6NesI3Y1n6p2ENWcgbV0ouCx8sOp2cWLJo3EVjcLtBS9gw+1iD3MHud8CgTI
+         sgLKpypE/XBT5iW7VopSCBPEv3RqO0qP8LUWdeokknViE0LekF1Z3JxHD7edzK4nEr
+         voi1ZEmczqSutom1nH5Ke3WQobDTVgXZCVrjUqDRyAbDu8k0XnNlILJmWrv//3WNXq
+         NzJGbxRzzwD6dVwC0WEhn+eSHY145oZ5913yfmdmlCaAPsiwipRJmzdtZhSRfzxTQo
+         ZUrutWN0WtFvw9ckRc3oZ9a3LbUzB74lA8sNxD8wKBEE6Sf+gRwPprqbJps/FVLNt6
+         OUHMeQUXjF/6A==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4SKl3y69ffz4wd2;
-        Wed,  1 Nov 2023 09:21:50 +1100 (AEDT)
-Date:   Wed, 1 Nov 2023 09:21:46 +1100
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4SKl6D4bTNz4wd2;
+        Wed,  1 Nov 2023 09:23:48 +1100 (AEDT)
+Date:   Wed, 1 Nov 2023 09:23:47 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
 To:     Arnd Bergmann <arnd@arndb.de>
 Cc:     Jens Axboe <axboe@kernel.dk>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Sohil Mehta <sohil.mehta@intel.com>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
 Subject: Re: linux-next: manual merge of the block tree with the asm-generic
  tree
-Message-ID: <20231101092146.4a19a00b@canb.auug.org.au>
-In-Reply-To: <20231009123118.4487a0e1@canb.auug.org.au>
-References: <20231009123118.4487a0e1@canb.auug.org.au>
+Message-ID: <20231101092347.01bc2eec@canb.auug.org.au>
+In-Reply-To: <20230925120908.4b15c44d@canb.auug.org.au>
+References: <20230925120544.7b1baece@canb.auug.org.au>
+        <20230925120908.4b15c44d@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/sxYwLbzN=Mwr0xwm9iz+GEP";
+Content-Type: multipart/signed; boundary="Sig_/2/u+06xgg1lGXSfxRUqMiXh";
  protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/sxYwLbzN=Mwr0xwm9iz+GEP
+--Sig_/2/u+06xgg1lGXSfxRUqMiXh
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Mon, 9 Oct 2023 12:31:18 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
->
-> Today's linux-next merge of the block tree got conflicts in:
+On Mon, 25 Sep 2023 12:09:08 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
 >=20
->   arch/alpha/kernel/syscalls/syscall.tbl
->   arch/arm/tools/syscall.tbl
->   arch/arm64/include/asm/unistd.h
->   arch/arm64/include/asm/unistd32.h
->   arch/m68k/kernel/syscalls/syscall.tbl
->   arch/microblaze/kernel/syscalls/syscall.tbl
->   arch/mips/kernel/syscalls/syscall_n32.tbl
->   arch/mips/kernel/syscalls/syscall_n64.tbl
->   arch/mips/kernel/syscalls/syscall_o32.tbl
->   arch/parisc/kernel/syscalls/syscall.tbl
->   arch/powerpc/kernel/syscalls/syscall.tbl
->   arch/s390/kernel/syscalls/syscall.tbl
->   arch/sh/kernel/syscalls/syscall.tbl
->   arch/sparc/kernel/syscalls/syscall.tbl
->   arch/x86/entry/syscalls/syscall_32.tbl
->   arch/xtensa/kernel/syscalls/syscall.tbl
->   include/uapi/asm-generic/unistd.h
+> On Mon, 25 Sep 2023 12:05:44 +1000 Stephen Rothwell <sfr@canb.auug.org.au=
+> wrote:
+> >
+> > Today's linux-next merge of the block tree got a conflict in:
+> >=20
+> >   arch/ia64/kernel/syscalls/syscall.tbl
+> >=20
+> > between commit:
+> >=20
+> >   cf8e8658100d ("arch: Remove Itanium (IA-64) architecture")
+> >=20
+> > from the asm-generic tree and commits:
+> >=20
+> >   9f6c532f59b2 ("futex: Add sys_futex_wake()")
+> >   cb8c4312afca ("futex: Add sys_futex_wait()")
+> >   0f4b5f972216 ("futex: Add sys_futex_requeue()")
+> >=20
+> > from the block tree. =20
 >=20
-> between commits:
+> These three commits are also in the tip tree.
 >=20
->   2fd0ebad27bc ("arch: Reserve map_shadow_stack() syscall number for all =
-architectures")
->=20
-> from the asm-generic tree and commits:
->=20
->   9f6c532f59b2 ("futex: Add sys_futex_wake()")
->   cb8c4312afca ("futex: Add sys_futex_wait()")
->   0f4b5f972216 ("futex: Add sys_futex_requeue()")
->=20
-> from the block tree.
+> > I fixed it up (I just removed the file) and can carry the fix as
+> > necessary.
 
 This is now a conflict between the asm-generic tree and Linus' tree.
-
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/sxYwLbzN=Mwr0xwm9iz+GEP
+--Sig_/2/u+06xgg1lGXSfxRUqMiXh
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmVBffoACgkQAVBC80lX
-0Gx64Af9F7cnAyFeN33QuudhqVUezl/iiPmRkNuVGJS1bTjuFpG6dMaw/HT/MLP+
-FpWn5ticga8cLeUGvuy70EuVGk0weR9gWqUyeUKOChtpF+dDD3seDXe/MC6qj7Du
-Tml4TPI+b3oCKHZQRHi+MAjkZUJPIAWJH4WUplS9QKhA+mj7vnN9pLxT1rgZRgrO
-Sx6/DRKGwq8cZYqsWhIshWN0Lw3d1UaebgmrrznOe2U3f1zhWeXruoxvMLy54gR+
-/LY6brcXZgfQJONKe2OUdoIL+nJlj+jjZBfBN8ai91RfDaYpYDG1QYNAbQHqW5R6
-6Tej+g+Mm7gs/SVd68QOPMTIZfm7YA==
-=d2a7
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmVBfnMACgkQAVBC80lX
+0GwLfwgAhD85pgEiS5/zT0OKuXtids3mMWGV6mBnbq/eYPsnLZC8xmqsYyBjIkV0
+XMJcZRh5/BjJFNqHL7tg6Nj9FGq0+S40FPHUsXq2Ia8DlOlpkjj2Kiv7aHRfSck5
+CyRu0U95g/0QRDrW4x4at59jVefmleFx6Rmi2CDA5dH2BFb6PPFWtEYBq9Zc6Vyn
+7fNP7JKSteZVtPMGOcdyQEhT2XpV7MqnB9p3ZaEWa/SbYsQlCi/LSIS9Pm/H8vfS
+l1ifxQ/jREvmWGTkWoTwT+xqdx9Wy03IfFo/936Mx2sEHy1qeVNZP6+mJrhbJgfz
+6Ed0s5jFb+SAhW4eJiwCv3G9pgGW0A==
+=gKyP
 -----END PGP SIGNATURE-----
 
---Sig_/sxYwLbzN=Mwr0xwm9iz+GEP--
+--Sig_/2/u+06xgg1lGXSfxRUqMiXh--

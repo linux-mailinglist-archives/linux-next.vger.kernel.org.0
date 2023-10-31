@@ -2,52 +2,44 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E1EC7DD833
-	for <lists+linux-next@lfdr.de>; Tue, 31 Oct 2023 23:23:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FDBC7DD89A
+	for <lists+linux-next@lfdr.de>; Tue, 31 Oct 2023 23:50:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346570AbjJaWX5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 31 Oct 2023 18:23:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39568 "EHLO
+        id S1344428AbjJaWuI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 31 Oct 2023 18:50:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346504AbjJaWX5 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 31 Oct 2023 18:23:57 -0400
+        with ESMTP id S1344196AbjJaWuI (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 31 Oct 2023 18:50:08 -0400
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BDA710F;
-        Tue, 31 Oct 2023 15:23:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16B42B9;
+        Tue, 31 Oct 2023 15:50:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1698791029;
-        bh=cJvaviqJcj+/e/u9e1phUK3dawuyU8/xvwf+6L2zplo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=uvBNS6NesI3Y1n6p2ENWcgbV0ouCx8sOp2cWLJo3EVjcLtBS9gw+1iD3MHud8CgTI
-         sgLKpypE/XBT5iW7VopSCBPEv3RqO0qP8LUWdeokknViE0LekF1Z3JxHD7edzK4nEr
-         voi1ZEmczqSutom1nH5Ke3WQobDTVgXZCVrjUqDRyAbDu8k0XnNlILJmWrv//3WNXq
-         NzJGbxRzzwD6dVwC0WEhn+eSHY145oZ5913yfmdmlCaAPsiwipRJmzdtZhSRfzxTQo
-         ZUrutWN0WtFvw9ckRc3oZ9a3LbUzB74lA8sNxD8wKBEE6Sf+gRwPprqbJps/FVLNt6
-         OUHMeQUXjF/6A==
+        s=201702; t=1698792603;
+        bh=TGLDyaxbXwrRXxeoq6uzWjCu5hnLNuWS15sOBL5JZQc=;
+        h=Date:From:To:Cc:Subject:From;
+        b=QcdMIQWLryv6F7kJHQ3a3WJ8m3eoXkiVKHzBWp3KRWu2YNdQS5Oq6jvtDFxZNP5Iv
+         9K3Akj9WRTNbZdS0dGmJ07LlTXRd5NI2z+6v47CnaSF+AKWzOWF7Bh0JLsDf12KBRM
+         +9afXB39vH5tYA0Zi/YJxyh/eQHGwK7EL5YoCEUag15Yrvb/hrN/q8kml2jnq7e2Pc
+         XKVgHqY2EQzdJ8nywqyFJM67Nk1P1nJO3QTY7E2enQdc9b1eNGzxSRW3MySqyVDlyf
+         IS9vttrG0c7dO3oCSXorljBWlQqOoLuL/98iZRnSbytj6P3AFMk7ZY8N6g+Pap9faF
+         +DHY7X1IE8GQw==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4SKl6D4bTNz4wd2;
-        Wed,  1 Nov 2023 09:23:48 +1100 (AEDT)
-Date:   Wed, 1 Nov 2023 09:23:47 +1100
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4SKlhW1dykz4wcH;
+        Wed,  1 Nov 2023 09:50:03 +1100 (AEDT)
+Date:   Wed, 1 Nov 2023 09:50:02 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Jens Axboe <axboe@kernel.dk>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     Kent Overstreet <kent.overstreet@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the block tree with the asm-generic
- tree
-Message-ID: <20231101092347.01bc2eec@canb.auug.org.au>
-In-Reply-To: <20230925120908.4b15c44d@canb.auug.org.au>
-References: <20230925120544.7b1baece@canb.auug.org.au>
-        <20230925120908.4b15c44d@canb.auug.org.au>
+Subject: linux-next: manual merge of the bcachefs tree with the mm tree
+Message-ID: <20231101095002.737cedb8@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/2/u+06xgg1lGXSfxRUqMiXh";
+Content-Type: multipart/signed; boundary="Sig_/UjKdMn7cI9InZx1MbFBjZO4";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
@@ -58,58 +50,106 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/2/u+06xgg1lGXSfxRUqMiXh
+--Sig_/UjKdMn7cI9InZx1MbFBjZO4
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Mon, 25 Sep 2023 12:09:08 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->=20
-> On Mon, 25 Sep 2023 12:05:44 +1000 Stephen Rothwell <sfr@canb.auug.org.au=
-> wrote:
-> >
-> > Today's linux-next merge of the block tree got a conflict in:
-> >=20
-> >   arch/ia64/kernel/syscalls/syscall.tbl
-> >=20
-> > between commit:
-> >=20
-> >   cf8e8658100d ("arch: Remove Itanium (IA-64) architecture")
-> >=20
-> > from the asm-generic tree and commits:
-> >=20
-> >   9f6c532f59b2 ("futex: Add sys_futex_wake()")
-> >   cb8c4312afca ("futex: Add sys_futex_wait()")
-> >   0f4b5f972216 ("futex: Add sys_futex_requeue()")
-> >=20
-> > from the block tree. =20
->=20
-> These three commits are also in the tip tree.
->=20
-> > I fixed it up (I just removed the file) and can carry the fix as
-> > necessary.
+Today's linux-next merge of the bcachefs tree got conflicts in:
 
-This is now a conflict between the asm-generic tree and Linus' tree.
+  fs/bcachefs/btree_cache.c
+  fs/bcachefs/btree_key_cache.c
+
+between commit:
+
+  e1ae18bfd5bc ("Merge branch 'mm-everything' of git://git.kernel.org/pub/s=
+cm/linux/kernel/git/akpm/mm")
+(this merge commit includes fix up for the shrinker allocation changes)
+
+from the mm tree and commit:
+
+  a1d97d8417d3 ("bcachefs: Fix shrinker names")
+
+from the bcachefs tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/2/u+06xgg1lGXSfxRUqMiXh
+diff --cc fs/bcachefs/btree_cache.c
+index 5e5858191905,0b084fbc478a..000000000000
+--- a/fs/bcachefs/btree_cache.c
++++ b/fs/bcachefs/btree_cache.c
+@@@ -472,15 -473,12 +472,15 @@@ int bch2_fs_btree_cache_init(struct bch
+ =20
+  	mutex_init(&c->verify_lock);
+ =20
+- 	shrink =3D shrinker_alloc(0, "%s/btree_cache", c->name);
+ -	bc->shrink.count_objects	=3D bch2_btree_cache_count;
+ -	bc->shrink.scan_objects		=3D bch2_btree_cache_scan;
+ -	bc->shrink.seeks		=3D 4;
+ -	ret =3D register_shrinker(&bc->shrink, "%s-btree_cache", c->name);
+ -	if (ret)
+++	shrink =3D shrinker_alloc(0, "%s-btree_cache", c->name);
+ +	if (!shrink)
+  		goto err;
+ +	bc->shrink =3D shrink;
+ +	shrink->count_objects	=3D bch2_btree_cache_count;
+ +	shrink->scan_objects	=3D bch2_btree_cache_scan;
+ +	shrink->seeks		=3D 4;
+ +	shrink->private_data	=3D c;
+ +	shrinker_register(shrink);
+ =20
+  	return 0;
+  err:
+diff --cc fs/bcachefs/btree_key_cache.c
+index f9a5e38a085b,3304bff7d464..000000000000
+--- a/fs/bcachefs/btree_key_cache.c
++++ b/fs/bcachefs/btree_key_cache.c
+@@@ -1038,15 -1039,11 +1038,15 @@@ int bch2_fs_btree_key_cache_init(struc
+ =20
+  	bc->table_init_done =3D true;
+ =20
+- 	shrink =3D shrinker_alloc(0, "%s/btree_key_cache", c->name);
+ -	bc->shrink.seeks		=3D 0;
+ -	bc->shrink.count_objects	=3D bch2_btree_key_cache_count;
+ -	bc->shrink.scan_objects		=3D bch2_btree_key_cache_scan;
+ -	if (register_shrinker(&bc->shrink, "%s-btree_key_cache", c->name))
+++	shrink =3D shrinker_alloc(0, "%s-btree_key_cache", c->name);
+ +	if (!shrink)
+  		return -BCH_ERR_ENOMEM_fs_btree_cache_init;
+ +	bc->shrink =3D shrink;
+ +	shrink->seeks		=3D 0;
+ +	shrink->count_objects	=3D bch2_btree_key_cache_count;
+ +	shrink->scan_objects	=3D bch2_btree_key_cache_scan;
+ +	shrink->private_data	=3D c;
+ +	shrinker_register(shrink);
+  	return 0;
+  }
+ =20
+
+--Sig_/UjKdMn7cI9InZx1MbFBjZO4
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmVBfnMACgkQAVBC80lX
-0GwLfwgAhD85pgEiS5/zT0OKuXtids3mMWGV6mBnbq/eYPsnLZC8xmqsYyBjIkV0
-XMJcZRh5/BjJFNqHL7tg6Nj9FGq0+S40FPHUsXq2Ia8DlOlpkjj2Kiv7aHRfSck5
-CyRu0U95g/0QRDrW4x4at59jVefmleFx6Rmi2CDA5dH2BFb6PPFWtEYBq9Zc6Vyn
-7fNP7JKSteZVtPMGOcdyQEhT2XpV7MqnB9p3ZaEWa/SbYsQlCi/LSIS9Pm/H8vfS
-l1ifxQ/jREvmWGTkWoTwT+xqdx9Wy03IfFo/936Mx2sEHy1qeVNZP6+mJrhbJgfz
-6Ed0s5jFb+SAhW4eJiwCv3G9pgGW0A==
-=gKyP
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmVBhJoACgkQAVBC80lX
+0GxZzQf/c88Z/IHte83IQmkmqGnYLsMXRdNUPY2G0sWJwKdWqPtuPqfjNEhIwqp7
+RKvB35VGrt+FWiWEyXa9QGLvH3JT6/CNJrG43eBJCLFkrUCNw0a3na0r+AEYBtcY
+YGSwW1mx4nGyAU03wZfHXx1DDiAdedhKUPO0B0eUI5vTklCBCUUOGKIe8My8lY4z
+D02BnOnvcKfJ5AIhNQSYsW+5+iCDyLW8uEuY9dOhTUKQL8aqRhIbLyUmYb3xTTa9
+pxqYs4YNV2nnlUkPO6WOgN6Wn06iD3fE4Msxi+NCP+XrJYD/K+Za1wUsiNJZs1nJ
+2DtZSoh8ecuWBmk19fBQDpMnjizD9A==
+=U57/
 -----END PGP SIGNATURE-----
 
---Sig_/2/u+06xgg1lGXSfxRUqMiXh--
+--Sig_/UjKdMn7cI9InZx1MbFBjZO4--

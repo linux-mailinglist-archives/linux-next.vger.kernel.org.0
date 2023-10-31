@@ -2,169 +2,142 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2B277DCBDA
-	for <lists+linux-next@lfdr.de>; Tue, 31 Oct 2023 12:32:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0680C7DCCA9
+	for <lists+linux-next@lfdr.de>; Tue, 31 Oct 2023 13:14:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235614AbjJaLcB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 31 Oct 2023 07:32:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60446 "EHLO
+        id S1344255AbjJaMKY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 31 Oct 2023 08:10:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235613AbjJaLcA (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 31 Oct 2023 07:32:00 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1373DA6;
-        Tue, 31 Oct 2023 04:31:58 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Cz0AszdpkpMucjMcpNpYnWtyJXOqnAagDsX8Vbgc60uzMBIh3q6N2swFm+jAnJtFUM3Vsk7eW57rNMN5yg5Q8532KwIwB3e+XQ/zO0J9yBmVAlFrtMBIVH+BTVVBahbjqg0L8HoD63Gxa78yhGpWbp+RayJg5UIWIZKDBqahU5TUgOmFiHQiiZPHULU9ZGib8v0AYKVbCh7NLPCPUL0vpP8mmmRH6o/DUO6bNOt2mawupM+pe/iYJrwcpEFQ+UgdcYMWKCYSu2cNYsTig/5rwsTu91fRKETS41J/2fNalZoLw8nRzjqEBJdFt3VK4FaVwqvcvgtBtkXk08/hDa4PSQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=QvoxKC9rKfTJ+gX2v9OLDH64jTjXRvjskYK+ZaUEFIo=;
- b=k7Ul+MP1+UFfIihTDBBwX32x3IaZJ5Fv+sXSovdcoGZ3oIbP6B8r/5UyvyV7Damv27BB5uzGQiIz6Srgo0TUijwelnP1YErorke3Wx9XD4SquZoFgt6uuv5b6AaRYsIKyRqf+LY6J8/uUoYtlipYt2uqh3qeBCgTva7pXaS9jjFiOSz7og46Cd9SJAcoQx/ydHdyCUu1HfjrLeMRzKUwzM6HJJEO+aw4WnKdBsRka2vs7W3c7IGFdJahc4cnQsXyi+zB4V4/E6qbs0CI5bKevpCWvRJTFydAcIIce9tgYcXuFlzgHiYtyqPQ7355yBW+Qx1hGSlEAMOK3BGCXUi8Rg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QvoxKC9rKfTJ+gX2v9OLDH64jTjXRvjskYK+ZaUEFIo=;
- b=WNEKVdVunUOIPqkEejkgRMUFRd0qYaj75Uieum3ZdS3QlaFjT5O4auK/zW2Xw81D8dadjp8lxuDIXD6O1oNfOc4WoCD8qogdZlZZ3y5ymIEkeHrhgIloYH3UAknT/fD1Lxtjn4gvfEgt42QAcpr+nC2eVJ1YHr0jSNkiZI8uZVoKufDfUdGiFHF1JUZGXdILZQzrtB50ThXT/sHNAH1qTYnwlMm6RTPcuqPwRDxTY6AL7mgVgUTBLcSZ/kibMDLHAZQZENNb5juJbHu6GW92WOg+DLFxE6kOrt3uWS+NsT/uFw0DMV5/7gjnAvZFk4LbWFPZJBAnx4d5NZaPwjR2Ug==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by IA1PR12MB6628.namprd12.prod.outlook.com (2603:10b6:208:3a0::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6933.28; Tue, 31 Oct
- 2023 11:31:55 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::b53a:1092:9be2:cfb9]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::b53a:1092:9be2:cfb9%4]) with mapi id 15.20.6933.027; Tue, 31 Oct 2023
- 11:31:55 +0000
-Date:   Tue, 31 Oct 2023 08:31:54 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Joerg Roedel <joro@8bytes.org>,
-        Joao Martins <joao.m.martins@oracle.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Nicolin Chen <nicolinc@nvidia.com>, Yi Liu <yi.l.liu@intel.com>
-Subject: Re: linux-next: manual merge of the iommufd tree with the iommu tree
-Message-ID: <20231031113154.GX3952@nvidia.com>
-References: <20231027155522.6b2863a4@canb.auug.org.au>
- <20231027171522.692a58ec@canb.auug.org.au>
- <20231030182621.GV3952@nvidia.com>
- <20231031161214.25560598@canb.auug.org.au>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231031161214.25560598@canb.auug.org.au>
-X-ClientProxiedBy: MN2PR03CA0007.namprd03.prod.outlook.com
- (2603:10b6:208:23a::12) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|IA1PR12MB6628:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3a4592b7-48f2-466b-a3f8-08dbda04fc38
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: UbTnQ0Tpb97uflITebsRx6+t2XHEpJTx+5RzWRCtnz0UQt7/CvvKxpn/W4LXEleenVjDBvZl6TN63zbCuoFpDIIQCrArgWMHZyIopi30wBVgjIDSG0DYSwp5hg4ka3HSz+A1/AxqGdtrbYYUiwDyHzAQibw4vBbhcTWUh1MbiWkyeMBLKDLdnqP0pIRekTw1n7IEINZgyETdsrkMyUYBIbnyFz/FuYSWw3hp113N8Y4hSgB2z2ZILH5LeYBVF09pUwxrNKf9pBGwZMGZnBJS76+GXEZhPZ4chvNFMKq1V75JcblGyc8vqutNSpYbX/4x3NDXGzgdIp3ycObUFp6V85tXahvT3NYRzTWZeMT441tAuz+VZQSYrTMAvq7ad4TLzshk3Qhel3vR8W12vXpMhBYIpIe9ASJvbAxRMJSdGL7i+CcUH0i6QDwUY2ATlfjJmJvt5vDxM/NWWQLL3q9FvBhhBVBjTezi5CwdNELwisgdoSGck55G/WWE3Bfo8h+L7Z3xFt3Zda/yafhfwUrzmA4wOUuYzbovk0Gn9rWlt5tD5LfSHTs0J8gWlUtwyR4J
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366004)(39860400002)(396003)(376002)(136003)(346002)(230922051799003)(64100799003)(186009)(1800799009)(451199024)(6506007)(6512007)(6486002)(478600001)(83380400001)(26005)(1076003)(2616005)(2906002)(5660300002)(66946007)(66556008)(41300700001)(54906003)(66476007)(8936002)(8676002)(4326008)(316002)(86362001)(36756003)(33656002)(38100700002)(6916009);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?HbNbJemcS8DhGZ0cXScwkGJEp7wx9l7Olbm3P4XNUKz5RDzwD99xyvPdgOoG?=
- =?us-ascii?Q?Eo5io+WydlsX0YxKmDR3ZzS9XEyYx86EHpkpNsCyROmd3cpp/QH+4W3I0gjp?=
- =?us-ascii?Q?unqq7y6be8Ybkr2FoPbuDl7edZO1iAiw+QVVKzlXY29RkppiXWhhfWBpHwtw?=
- =?us-ascii?Q?Oakeq3n7YhY3HvHodF/10YCrwosd/k7eyxiFrtCExNLK/YGlXcLPJtJmqW/7?=
- =?us-ascii?Q?hpkCcmWrLsfvUDJVACf+60e/I4kRw+304jvF9IvX220sc3pbg/ej9kK4WS+H?=
- =?us-ascii?Q?QCpF56s49pyUoxHOyPqiSUBZXXamSbQ0c6YaU3IcdyCP3jfS17NdxJ2VEEUD?=
- =?us-ascii?Q?Qk/yjZzKuQ9JD2ofjYovzpEsB8zLH8kLDvQ242/ADdzva7mZcvVqnbHT8tD2?=
- =?us-ascii?Q?zOGN1X5S2APJSXiSivLgpI02nlz99OcnrvvUQ/cJqwA0u/hlUo2CejV85Ohv?=
- =?us-ascii?Q?X8MV7en7vU86Wj2W4hnkTC32FAnqDNbn4s+O5lr4UXFbAHmfoVM+TZKs454l?=
- =?us-ascii?Q?Jik5Czqa5pRfwMT4Av3bU7pCYgsrDAA05es7Vsje8Yllt0BJ4e9C0ByIGSxQ?=
- =?us-ascii?Q?Xez2prFSgtQ8Ro0gAl/I0HaxVmnacfw3vxcvmzNE+k5SevCotPnKsEjqVepQ?=
- =?us-ascii?Q?AF5yQ8aksZh1Ff0uvQEgQecAnxWpRqCehi/zI9eRNwjj2Prk2ZSJUsH4ySq5?=
- =?us-ascii?Q?YiRQa1hrTJLbeCxvHJ7Bx/2Fe69TRP4JmfJSSVoS4Fr5ucOAbPTyskKl/F7m?=
- =?us-ascii?Q?sDg+9+bnd/I4chZWRZSdEzleGkUpDUJXw7jHeTz5W+m3PAaLXJ58gCl6/IUr?=
- =?us-ascii?Q?Nq1X1kDjzb+VfjZLdtMudtJDhNjag8UR3rd6ks/x4ueHlDo5NXuyuUOzBj3G?=
- =?us-ascii?Q?G//b45kqQxNbEKMeoBJIiFEAV3yoVMlzxoeFB1u44LqDVGiJgOR020r0gBvA?=
- =?us-ascii?Q?JlARO/ZkThJDdA/TTvDSnsbho+n3dLbSJEffVmfP1wFPJqlhWeF/q1nEI+Ek?=
- =?us-ascii?Q?2vE6QiZ2g0hXbq4/tOvLIam8meoDIjiLxZuRQRAfe1uAZRdeznl12a+AUkkw?=
- =?us-ascii?Q?rux5iPZp7wNbkaF0yXg1Jc+L5fM6QvMsx21T13y4IPt+0ovn6t56LBvjjcbJ?=
- =?us-ascii?Q?UyYyu3M8ZErWSxNr6OTq6NUDAG3eUUoQtQGZc00URIzGnclqI7u4d9J2m2Zm?=
- =?us-ascii?Q?uAM4+UoehvEuDF70dLRBJj9F6QZHU8gWUOantIAmzqWjDZhKZYaB14M1mRe3?=
- =?us-ascii?Q?twDrnGHwj2lm3kdCdSZx+Q611zz3jPsP9JadDUqRkFyHBJqs9rCs4D58Zcd0?=
- =?us-ascii?Q?2cmMmbCs3aIJQwJILVgeVaymHyOsrXq+o0+wneAZKinR19m1wezaEOnRZGXu?=
- =?us-ascii?Q?cKiKios+W+MR/5ahd3Ds2cKk2H+V2sAYGsenGu023wWzMMDiMMwtt6QL2z/B?=
- =?us-ascii?Q?y8tS5ZrZWdkAyXhhniFzOUZEc5IP3pAl5CXOPjdmEXyp/UB5x4HV/Jhnf/FL?=
- =?us-ascii?Q?mCgZMawVgHpv7ofKgL7kWks0QB8+eltfNvZy1ZQYRcbX8w7XB5Q8v0eiBA51?=
- =?us-ascii?Q?QlH9qnNRAMaXf13Plyc=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3a4592b7-48f2-466b-a3f8-08dbda04fc38
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Oct 2023 11:31:55.0416
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: XjtadhLhSaUttrBLpNPQW8f2+Mj8Zpx9IiJahdqtAjOidz1/fo4ssnzGs6e4F8pR
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6628
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        with ESMTP id S236290AbjJaMKD (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 31 Oct 2023 08:10:03 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19A1312D;
+        Tue, 31 Oct 2023 05:09:04 -0700 (PDT)
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39VC5BWp013894;
+        Tue, 31 Oct 2023 12:08:58 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : content-type :
+ content-transfer-encoding : mime-version : subject : message-id : date :
+ cc : to; s=pp1; bh=V6NmdaSgVW3N030dFBGJpeC6MoCP5aKmyx/pwxFz4oU=;
+ b=CTjsHXGLX6w751KhemgPlBkc3w1Bvlc0RMZt2+5hCbfMqXFry9ci9h7zjo3hrGXNlXf4
+ FisY5mAhqrHU2KxX+5CuFRL79vQsCyDtWUxl+0JAz5UJ8O8CrDBVvJD4WSG3JPb+fPo+
+ sst9pZSkDo8Xjvnf3jF61hXx9mkMbFxDDqejNPt1TvTrCTRLvJXwXSdv0v74c52IIq6W
+ /TSxpvFQ6QAud9DRyL0kvBskceUDXoca0wI/+ouh2KHnB6OTl6hTsvUBwNrBc2vo483i
+ nGf/YInzKDpyJc5Z5lIn5/SvGXY+kW62Ulc+sWPl8VvYIyRzOqoxHdjlXYXY8h+JNrrO 6A== 
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3u319c88gs-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 31 Oct 2023 12:08:57 +0000
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+        by ppma11.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 39V9qwgV031377;
+        Tue, 31 Oct 2023 12:08:50 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+        by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 3u1fb1ynbf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 31 Oct 2023 12:08:50 +0000
+Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
+        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 39VC8mVa7471658
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 31 Oct 2023 12:08:48 GMT
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 316AD2004B;
+        Tue, 31 Oct 2023 12:08:48 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 047C320040;
+        Tue, 31 Oct 2023 12:08:47 +0000 (GMT)
+Received: from smtpclient.apple (unknown [9.43.119.159])
+        by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 31 Oct 2023 12:08:46 +0000 (GMT)
+From:   Sachin Sant <sachinp@linux.ibm.com>
+Content-Type: text/plain;
+        charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3774.100.2.1.4\))
+Subject: [ppc64le] WARN at crypto/testmgr.c:5804 
+Message-Id: <2721FCA5-6113-4B2E-8DA9-893105EE966C@linux.ibm.com>
+Date:   Tue, 31 Oct 2023 17:38:35 +0530
+Cc:     linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-next@vger.kernel.org
+To:     linux-crypto@vger.kernel.org, dimitri.ledkov@canonical.com
+X-Mailer: Apple Mail (2.3774.100.2.1.4)
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: A9dzOTInhVy5uIoT3uDy9CKCFJsy_JPi
+X-Proofpoint-ORIG-GUID: A9dzOTInhVy5uIoT3uDy9CKCFJsy_JPi
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-10-31_01,2023-10-31_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 phishscore=0
+ lowpriorityscore=0 impostorscore=0 mlxscore=0 malwarescore=0
+ mlxlogscore=668 priorityscore=1501 adultscore=0 spamscore=0 suspectscore=0
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2310240000 definitions=main-2310310095
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Oct 31, 2023 at 04:12:14PM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> On Mon, 30 Oct 2023 15:26:21 -0300 Jason Gunthorpe <jgg@nvidia.com> wrote:
-> >
-> > On Fri, Oct 27, 2023 at 05:15:22PM +1100, Stephen Rothwell wrote:
-> > > 
-> > > On Fri, 27 Oct 2023 15:55:22 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:  
-> > > >
-> > > > Today's linux-next merge of the iommufd tree got a conflict in:
-> > > > 
-> > > >   drivers/iommu/iommufd/selftest.c
-> > > > 
-> > > > between commits:
-> > > > 
-> > > >   1c68cbc64fe6 ("iommu: Add IOMMU_DOMAIN_PLATFORM")
-> > > >   13fbceb1b8e9 ("iommufd: Convert to alloc_domain_paging()")
-> > > > 
-> > > > from the iommu tree and commits:
-> > > > 
-> > > >   408663619fcf ("iommufd/selftest: Add domain_alloc_user() support in iommu mock")
-> > > >   266ce58989ba ("iommufd/selftest: Test IOMMU_HWPT_ALLOC_DIRTY_TRACKING")
-> > > >   7adf267d66d1 ("iommufd/selftest: Test IOMMU_HWPT_SET_DIRTY_TRACKING")
-> > > >   a9af47e382a4 ("iommufd/selftest: Test IOMMU_HWPT_GET_DIRTY_BITMAP")
-> > > >   0795b305da89 ("iommufd/selftest: Test IOMMU_HWPT_GET_DIRTY_BITMAP_NO_CLEAR flag")
-> > > >   65fe32f7a447 ("iommufd/selftest: Add nested domain allocation for mock domain")
-> > > > 
-> > > > from the iommufd tree.
-> > > > 
-> > > > I fixed it up (see below) and can carry the fix as necessary. This
-> > > > is now fixed as far as linux-next is concerned, but any non trivial
-> > > > conflicts should be mentioned to your upstream maintainer when your tree
-> > > > is submitted for merging.  You may also want to consider cooperating
-> > > > with the maintainer of the conflicting tree to minimise any particularly
-> > > > complex conflicts.  
-> > > 
-> > > The resolution should have been as below (I think).  
-> > 
-> > This was too horrible, I pushed a patch to reorganize the new iommufd side
-> > code to more closely match how the domain_alloc_paging stuff is
-> > supposed to work
-> 
-> I have used the conflict resolution below now.
+Following warning is observed during boot of latest -next
+kernel (6.6.0-rc7-next-20231030 and todays -next) on IBM Power server.
 
-Yep!
+[ 0.085775] workingset: timestamp_bits=3D38 max_order=3D20 =
+bucket_order=3D0
+[ 0.085801] zbud: loaded
+[ 0.086473] ------------[ cut here ]------------
+[ 0.086477] WARNING: CPU: 23 PID: 211 at crypto/testmgr.c:5804 =
+alg_test.part.33+0x308/0x740
+[ 0.086486] Modules linked in:
+[ 0.086489] CPU: 23 PID: 211 Comm: cryptomgr_test Not tainted =
+6.6.0-rc7-next-20231030 #1
+[ 0.086493] Hardware name: IBM,9080-HEX POWER10 (raw) 0x800200 0xf000006 =
+of:IBM,FW1030.20 (NH1030_058) hv:phyp pSeries
+[ 0.086497] NIP: c000000000765068 LR: c000000000764ff4 CTR: =
+c00000000075da00
+[ 0.086500] REGS: c00000000ed7bb50 TRAP: 0700 Not tainted =
+(6.6.0-rc7-next-20231030)
+[ 0.086503] MSR: 8000000000029033 <SF,EE,ME,IR,DR,RI,LE> CR: 80000284 =
+XER: 20040002
+[ 0.086511] CFAR: c000000000765318 IRQMASK: 1=20
+GPR00: c000000000764ff4 c00000000ed7bdf0 c000000001482000 =
+0000000000000002=20
+GPR04: c00000000ed7be60 000000000000000e 000000000000002f =
+fffffffffffe0000=20
+GPR08: 0000ff000000ffff 0000000000000001 0000000000000008 =
+0000000000000000=20
+GPR12: c00000000075da00 c000000aa7cec700 c00000000019da88 =
+c000000006df9cc0=20
+GPR16: 0000000000000000 0000000000000000 c000000001309f98 =
+0000000000000000=20
+GPR20: c000000001308d50 c000000001308d98 c000000000ffeaf0 =
+c000000001309fb0=20
+GPR24: c000000000ffb330 c000000000ffdf30 0000000000000400 =
+c000000019bfd480=20
+GPR28: 0000000000000002 c000000019bfd400 c000000002bcf633 =
+000000000000000e=20
+[ 0.086547] NIP [c000000000765068] alg_test.part.33+0x308/0x740
+[ 0.086552] LR [c000000000764ff4] alg_test.part.33+0x294/0x740
+[ 0.086556] Call Trace:
+[ 0.086557] [c00000000ed7bdf0] [c000000000764ff4] =
+alg_test.part.33+0x294/0x740 (unreliable)
+[ 0.086563] [c00000000ed7bf60] [c00000000075da34] =
+cryptomgr_test+0x34/0x70
+[ 0.086568] [c00000000ed7bf90] [c00000000019dbb8] kthread+0x138/0x140
+[ 0.086573] [c00000000ed7bfe0] [c00000000000df98] =
+start_kernel_thread+0x14/0x18
+[ 0.086578] Code: fb210138 fb810150 3af76d20 3b80ffff 3a526d38 3a946d50 =
+3ab56d98 3b380040 3ad837c0 2f9c0000 7d301026 5529f7fe <0b090000> =
+7f890034 5529d97e 419d03a4=20
+[ 0.086589] ---[ end trace 0000000000000000 ]---
+[ 0.086592] testmgr: alg_test_descs entries in wrong order: =
+'pkcs1pad(rsa,sha512)' before 'pkcs1pad(rsa,sha3-256)=E2=80=99
 
-Thanks,
-Jason
+Git bisect points to following patch:
+commit ee62afb9d02dd279a7b73245614f13f8fe777a6d
+    crypto: rsa-pkcs1pad - Add FIPS 202 SHA-3 support
 
+- Sachin=

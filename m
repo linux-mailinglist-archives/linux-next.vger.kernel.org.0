@@ -2,108 +2,88 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D79CE7DCE1E
-	for <lists+linux-next@lfdr.de>; Tue, 31 Oct 2023 14:46:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 362577DCE37
+	for <lists+linux-next@lfdr.de>; Tue, 31 Oct 2023 14:51:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344603AbjJaNn5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 31 Oct 2023 09:43:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35590 "EHLO
+        id S1344635AbjJaNuP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 31 Oct 2023 09:50:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344641AbjJaNnw (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 31 Oct 2023 09:43:52 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71FC7E6
-        for <linux-next@vger.kernel.org>; Tue, 31 Oct 2023 06:43:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1698759788;
+        with ESMTP id S1344592AbjJaNuP (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 31 Oct 2023 09:50:15 -0400
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54BCC9F;
+        Tue, 31 Oct 2023 06:50:11 -0700 (PDT)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id B04F4C000A;
+        Tue, 31 Oct 2023 13:50:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1698760209;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=YwSdYaOUr2kkGu8J8P5xSwLcOrRCIPx0rihuqWdukug=;
-        b=FbnWq3f13I6lM94iZj/11H3+VAYWXdqxTb/o5WQABnlj3+8KoGF2Ck6QsmQZgTwlmYdvtC
-        ke7JZk/ubMO0Pvg6fN/d303n3df70mlShJdG5vk9kYBkt1w8Y/OM/SUi4PSOGCjoBJGcaa
-        wbgiqgTWYfctnx1AMOXXxG83G7Qd4QM=
-Received: from mail-ua1-f71.google.com (mail-ua1-f71.google.com
- [209.85.222.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-120-eGt8ttKYPCu1C15n9bStCw-1; Tue, 31 Oct 2023 09:43:02 -0400
-X-MC-Unique: eGt8ttKYPCu1C15n9bStCw-1
-Received: by mail-ua1-f71.google.com with SMTP id a1e0cc1a2514c-7b9b70dd2beso1175820241.2
-        for <linux-next@vger.kernel.org>; Tue, 31 Oct 2023 06:43:02 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698759782; x=1699364582;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YwSdYaOUr2kkGu8J8P5xSwLcOrRCIPx0rihuqWdukug=;
-        b=u9ndnW0s5jKtMsjHhBdZQMCOtkYQgoXpH70hNSZLsXSPdl0alwKP82X4GhbhhMD2do
-         V74PRdwxKL9G2UXwo38hQhYx4VV1MIVRCWi/U1d+lmQn5jWdfvc4/UpAoP8BrOsf+biz
-         xCx9TQGg7b1Td/1Z3gAaf3mBMtJPQsQlW4e79tRosGMU7OI1vJl4glq5s5D1waA+8Jyt
-         PGIo5jH1/t83Ae/vWtoRkyXIt5SgVqrp4zl5KS49Is0wrCjrBBsaRGqedqji/HHYGA5g
-         zmD5Kv6HXZq0rSsuJ0cQ2diKiZhV64XCrwip7N0dDKTvQPF66y0v50g4XyiAoDLMnBpG
-         3FZQ==
-X-Gm-Message-State: AOJu0Yz+vaY27PjwJUP9K4iLHduI9RAmx/SngtrWDGOdgABG39MQvJpI
-        wd+c6vu96aM36Qr49EmgRYf5UY09knIP76PVDaOVe7A5CqsA6dJpbp9GoA76iTYqqNBvBxjAG2i
-        cUksQR0Dvbz6hb8w1R72L6cW3FRRr2SAVghCBsA==
-X-Received: by 2002:a67:c309:0:b0:454:5a16:890d with SMTP id r9-20020a67c309000000b004545a16890dmr9314393vsj.24.1698759781858;
-        Tue, 31 Oct 2023 06:43:01 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHRazy8qcp9t/yo0fBuQc907BQJ2j/Y0Wh4UUVqODMdn1cN5WQIVHfZbUEnhTxW0TsQjpHHlBdX/HV9WIFM0tQ=
-X-Received: by 2002:a67:c309:0:b0:454:5a16:890d with SMTP id
- r9-20020a67c309000000b004545a16890dmr9314371vsj.24.1698759781573; Tue, 31 Oct
- 2023 06:43:01 -0700 (PDT)
-MIME-Version: 1.0
-References: <20231030134806.24510492@canb.auug.org.au> <20231030-ignorant-liebschaft-6d603ab43494@brauner>
- <3ed75fa4-6b49-4fd2-a907-8619ca19a8b8@redhat.com> <20231031073705.512dab4b@canb.auug.org.au>
- <ZUAaiA0-FNRNy7wJ@google.com> <20231031081035.7f7d860b@canb.auug.org.au>
-In-Reply-To: <20231031081035.7f7d860b@canb.auug.org.au>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Date:   Tue, 31 Oct 2023 14:42:49 +0100
-Message-ID: <CABgObfa_-BYrx0s=PAed=S2C-NgoCuvdYaVS_D9Fm6FxSChQNA@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the kvm-x86 tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Ackerley Tng <ackerleytng@google.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Isaku Yamahata <isaku.yamahata@intel.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        bh=KxFIypa0LTfiiI18tkuJQWvHcLDKDhKP+leOpD6yEC8=;
+        b=WXn1XyDnEoDBgQNhZltAs4pBhEA8yn34Vtgqn6dpgPCii0McQB669Mf1olRWLpa94fc/DP
+        /RaWrM/tAaocCJDOm3bhjLOOsaBVP84kHL5TkkXYSB32RtlfgDOF0/bWoPVVSaOdYzXp63
+        8v3/xti/T417KwY2ZbceRdNBKXSwSZ7w6Ff8gb4LQeZETOsmogJiiF6thsxQFEBaRw1RMe
+        mdsxQQvzuRDTwj+5mUduspWlE1uhfV8HAA5jqVjkKLFE+kwbPpD9AJdphu4H83AlgqeMQV
+        jcHyNy5yMyE4JYtcQO+/v0Tj9WMrAQ2ginLHOhhPWUsMmxmoh6sAPHMORzXKpQ==
+Date:   Tue, 31 Oct 2023 14:50:06 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Richard Weinberger <richard@nod.at>
+Cc:     Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Richard Weinberger <richard.weinberger@gmail.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: linux-next: manual merge of the mtd tree with the vfs-brauner
+ tree
+Message-ID: <20231031145006.3df11822@xps-13>
+In-Reply-To: <440004449.28174.1698758033696.JavaMail.zimbra@nod.at>
+References: <20231030103415.401ce804@canb.auug.org.au>
+        <20231030173228.691620ca@xps-13>
+        <1541110626.24818.1698696696387.JavaMail.zimbra@nod.at>
+        <20231031085158.o4ilb5d47sxcqm3o@quack3>
+        <1419418117.26823.1698742930275.JavaMail.zimbra@nod.at>
+        <20231031-laienhaft-weshalb-bc27f8dacd9e@brauner>
+        <2131754563.27779.1698751840800.JavaMail.zimbra@nod.at>
+        <20231031134522.27e78274@xps-13>
+        <440004449.28174.1698758033696.JavaMail.zimbra@nod.at>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Oct 30, 2023 at 10:10=E2=80=AFPM Stephen Rothwell <sfr@canb.auug.or=
-g.au> wrote:
->
-> Hi Sean,
->
-> On Mon, 30 Oct 2023 14:05:12 -0700 Sean Christopherson <seanjc@google.com=
-> wrote:
-> >
-> > That's my bad, I wanted to get the guest_memfd code exposure asap and j=
-umped the
-> > gun.  I'll yank the branch out kvm-x86/next.
->
-> Thanks.
 
-In all fairness, it was only recently pushed back from 6.7 to 6.8 so
-it probably would have made sense to include it _even earlier_. But I
-agree that at this point it's better if we wait for 6.7-rc1 before it
-makes it back into linux-next. At that point I'll include the conflict
-resolution myself.
+richard@nod.at wrote on Tue, 31 Oct 2023 14:13:53 +0100 (CET):
 
-Paolo
+> ----- Urspr=C3=BCngliche Mail -----
+> > Von: "Miquel Raynal" <miquel.raynal@bootlin.com> =20
+> >> Miquel, we could also keep ff6abbe85634 in the mtd tree and explain Li=
+nus the
+> >> conflict, what do you think? That would help with back porting to stab=
+le. =20
+> >=20
+> > It's not relevant if the patch in Brauner's tree is already fixing this
+> > up. Just send the smaller patch to stable@vger.kernel.org asking them to
+> > backport this patch instead of the other one, they are used to this
+> > kind of constraint, no? =20
+>=20
+> I'm just in fear of stable rule #1.
+> "It or an equivalent fix must already exist in Linus' tree (upstream)."
 
+It should be very soon, the merge window is open ;)
+
+Cheers,
+Miqu=C3=A8l

@@ -2,47 +2,68 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FDBC7DD89A
-	for <lists+linux-next@lfdr.de>; Tue, 31 Oct 2023 23:50:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 662837DD910
+	for <lists+linux-next@lfdr.de>; Wed,  1 Nov 2023 00:03:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344428AbjJaWuI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 31 Oct 2023 18:50:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57000 "EHLO
+        id S1347258AbjJaXD1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 31 Oct 2023 19:03:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344196AbjJaWuI (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 31 Oct 2023 18:50:08 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16B42B9;
-        Tue, 31 Oct 2023 15:50:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1698792603;
-        bh=TGLDyaxbXwrRXxeoq6uzWjCu5hnLNuWS15sOBL5JZQc=;
-        h=Date:From:To:Cc:Subject:From;
-        b=QcdMIQWLryv6F7kJHQ3a3WJ8m3eoXkiVKHzBWp3KRWu2YNdQS5Oq6jvtDFxZNP5Iv
-         9K3Akj9WRTNbZdS0dGmJ07LlTXRd5NI2z+6v47CnaSF+AKWzOWF7Bh0JLsDf12KBRM
-         +9afXB39vH5tYA0Zi/YJxyh/eQHGwK7EL5YoCEUag15Yrvb/hrN/q8kml2jnq7e2Pc
-         XKVgHqY2EQzdJ8nywqyFJM67Nk1P1nJO3QTY7E2enQdc9b1eNGzxSRW3MySqyVDlyf
-         IS9vttrG0c7dO3oCSXorljBWlQqOoLuL/98iZRnSbytj6P3AFMk7ZY8N6g+Pap9faF
-         +DHY7X1IE8GQw==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4SKlhW1dykz4wcH;
-        Wed,  1 Nov 2023 09:50:03 +1100 (AEDT)
-Date:   Wed, 1 Nov 2023 09:50:02 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Kent Overstreet <kent.overstreet@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the bcachefs tree with the mm tree
-Message-ID: <20231101095002.737cedb8@canb.auug.org.au>
+        with ESMTP id S1347255AbjJaXD0 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 31 Oct 2023 19:03:26 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 029A4E4
+        for <linux-next@vger.kernel.org>; Tue, 31 Oct 2023 16:03:24 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id 41be03b00d2f7-565334377d0so4917046a12.2
+        for <linux-next@vger.kernel.org>; Tue, 31 Oct 2023 16:03:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1698793403; x=1699398203; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=U/q89Ev6m3dZ85/1jOKgaP6SgrhxpNWK+FZuOnPFi9M=;
+        b=l/2NzYH1Iylp8ePgg2xgPC/gHQwp8eHYj6+YWndpi31q6DEpV3V2msER6khgu3NUZa
+         LP+f9Tqt6enpPSs7/4fJ+EZmsrMLJl4HHeA6IXkQecyX/DXCp4yxjMP61D+g3fHJHk0s
+         gumddbNldbiEiN/oEOriJJSff7WPwXN1oFrnMld02ulr7AZY35j4T75sKPdR5JbgTw+/
+         OCmT6xbGNcbVgjS/k1uA1ilShrPDw943UyJF6IXm/2TlCZCfb5PbCwyCDFFwX+G/sp58
+         +HtqQQieyOtDMjgYccMqkiIQUyaenRKN6fUVIyAFEOTFwIs4Qi2WGGP+fcuXxwU5W9FG
+         FE8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698793403; x=1699398203;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=U/q89Ev6m3dZ85/1jOKgaP6SgrhxpNWK+FZuOnPFi9M=;
+        b=HloTU/kWiGH3TKFG04Ol9j4e0PNRygjQAuGF6E0ur4LLHjqry1mv91c1AmNvxwfLv4
+         8TjoslwE+lVIfXJaXtRqvDrCuo5rYjLCoSVF2Wpzsjnrcq8LusZUNOgSCgnvdsJ6GDo1
+         IWSl8vG6I0h53NsdZGOf6nC/1iV2lefjJtknPqr4rLYUR4D5iIMPTM7HYIP2JbHpqxUo
+         PVAfqW4dcEhrqMsbQz9X9e+ZzcLWROUQUyTIQ3O3TWBPrMsaKjHS8CA/jc7qYeXWuZ1+
+         p8JsPzlkpCLSuoNUsNNMADNMNiuhubYyrwV6gQ86TbLuFtKpaRE/kLjPQax/4zkwkMmw
+         FTRQ==
+X-Gm-Message-State: AOJu0YzbKBNmVShLURt1rWoStww2FO97z67Gep0DUhTmm6RpTsk/Ls+9
+        XCgIIxQ2fReJphMb+CNFjq6lnQSXTdI5iGT8jbAhDg==
+X-Google-Smtp-Source: AGHT+IFxI52aF+JOIRHH99OyB/uE4pPGf1K+JO5iDhHFr6anghrlKQyEF/ALWEkwDTUPqFMWPkA6Wg==
+X-Received: by 2002:a17:90a:e642:b0:280:9074:eb36 with SMTP id ep2-20020a17090ae64200b002809074eb36mr4572573pjb.14.1698793402749;
+        Tue, 31 Oct 2023 16:03:22 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id v3-20020a17090ad58300b0027dafa55306sm1541541pju.40.2023.10.31.16.03.22
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 Oct 2023 16:03:22 -0700 (PDT)
+Message-ID: <654187ba.170a0220.2085d.41ef@mx.google.com>
+Date:   Tue, 31 Oct 2023 16:03:22 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/UjKdMn7cI9InZx1MbFBjZO4";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: v6.6-6725-g1201a4a5fe1e
+X-Kernelci-Report-Type: build
+X-Kernelci-Branch: pending-fixes
+X-Kernelci-Tree: next
+Subject: next/pending-fixes build: 8 builds: 0 failed, 8 passed,
+ 4 warnings (v6.6-6725-g1201a4a5fe1e)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,106 +71,100 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/UjKdMn7cI9InZx1MbFBjZO4
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+next/pending-fixes build: 8 builds: 0 failed, 8 passed, 4 warnings (v6.6-67=
+25-g1201a4a5fe1e)
 
-Hi all,
+Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
+rnel/v6.6-6725-g1201a4a5fe1e/
 
-Today's linux-next merge of the bcachefs tree got conflicts in:
+Tree: next
+Branch: pending-fixes
+Git Describe: v6.6-6725-g1201a4a5fe1e
+Git Commit: 1201a4a5fe1e49877e185144473374dff355447f
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Built: 8 unique architectures
 
-  fs/bcachefs/btree_cache.c
-  fs/bcachefs/btree_key_cache.c
+Warnings Detected:
 
-between commit:
+arc:
 
-  e1ae18bfd5bc ("Merge branch 'mm-everything' of git://git.kernel.org/pub/s=
-cm/linux/kernel/git/akpm/mm")
-(this merge commit includes fix up for the shrinker allocation changes)
+arm64:
 
-from the mm tree and commit:
+arm:
 
-  a1d97d8417d3 ("bcachefs: Fix shrinker names")
+i386:
 
-from the bcachefs tree.
+mips:
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+riscv:
 
---=20
-Cheers,
-Stephen Rothwell
+sparc:
+    sparc64_defconfig (gcc-10): 4 warnings
 
-diff --cc fs/bcachefs/btree_cache.c
-index 5e5858191905,0b084fbc478a..000000000000
---- a/fs/bcachefs/btree_cache.c
-+++ b/fs/bcachefs/btree_cache.c
-@@@ -472,15 -473,12 +472,15 @@@ int bch2_fs_btree_cache_init(struct bch
- =20
-  	mutex_init(&c->verify_lock);
- =20
-- 	shrink =3D shrinker_alloc(0, "%s/btree_cache", c->name);
- -	bc->shrink.count_objects	=3D bch2_btree_cache_count;
- -	bc->shrink.scan_objects		=3D bch2_btree_cache_scan;
- -	bc->shrink.seeks		=3D 4;
- -	ret =3D register_shrinker(&bc->shrink, "%s-btree_cache", c->name);
- -	if (ret)
-++	shrink =3D shrinker_alloc(0, "%s-btree_cache", c->name);
- +	if (!shrink)
-  		goto err;
- +	bc->shrink =3D shrink;
- +	shrink->count_objects	=3D bch2_btree_cache_count;
- +	shrink->scan_objects	=3D bch2_btree_cache_scan;
- +	shrink->seeks		=3D 4;
- +	shrink->private_data	=3D c;
- +	shrinker_register(shrink);
- =20
-  	return 0;
-  err:
-diff --cc fs/bcachefs/btree_key_cache.c
-index f9a5e38a085b,3304bff7d464..000000000000
---- a/fs/bcachefs/btree_key_cache.c
-+++ b/fs/bcachefs/btree_key_cache.c
-@@@ -1038,15 -1039,11 +1038,15 @@@ int bch2_fs_btree_key_cache_init(struc
- =20
-  	bc->table_init_done =3D true;
- =20
-- 	shrink =3D shrinker_alloc(0, "%s/btree_key_cache", c->name);
- -	bc->shrink.seeks		=3D 0;
- -	bc->shrink.count_objects	=3D bch2_btree_key_cache_count;
- -	bc->shrink.scan_objects		=3D bch2_btree_key_cache_scan;
- -	if (register_shrinker(&bc->shrink, "%s-btree_key_cache", c->name))
-++	shrink =3D shrinker_alloc(0, "%s-btree_key_cache", c->name);
- +	if (!shrink)
-  		return -BCH_ERR_ENOMEM_fs_btree_cache_init;
- +	bc->shrink =3D shrink;
- +	shrink->seeks		=3D 0;
- +	shrink->count_objects	=3D bch2_btree_key_cache_count;
- +	shrink->scan_objects	=3D bch2_btree_key_cache_scan;
- +	shrink->private_data	=3D c;
- +	shrinker_register(shrink);
-  	return 0;
-  }
- =20
+x86_64:
 
---Sig_/UjKdMn7cI9InZx1MbFBjZO4
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
 
------BEGIN PGP SIGNATURE-----
+Warnings summary:
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmVBhJoACgkQAVBC80lX
-0GxZzQf/c88Z/IHte83IQmkmqGnYLsMXRdNUPY2G0sWJwKdWqPtuPqfjNEhIwqp7
-RKvB35VGrt+FWiWEyXa9QGLvH3JT6/CNJrG43eBJCLFkrUCNw0a3na0r+AEYBtcY
-YGSwW1mx4nGyAU03wZfHXx1DDiAdedhKUPO0B0eUI5vTklCBCUUOGKIe8My8lY4z
-D02BnOnvcKfJ5AIhNQSYsW+5+iCDyLW8uEuY9dOhTUKQL8aqRhIbLyUmYb3xTTa9
-pxqYs4YNV2nnlUkPO6WOgN6Wn06iD3fE4Msxi+NCP+XrJYD/K+Za1wUsiNJZs1nJ
-2DtZSoh8ecuWBmk19fBQDpMnjizD9A==
-=U57/
------END PGP SIGNATURE-----
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
 
---Sig_/UjKdMn7cI9InZx1MbFBjZO4--
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---
+For more info write to <info@kernelci.org>

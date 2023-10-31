@@ -2,103 +2,71 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E3BF7DCFAD
-	for <lists+linux-next@lfdr.de>; Tue, 31 Oct 2023 15:54:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A97767DCFBA
+	for <lists+linux-next@lfdr.de>; Tue, 31 Oct 2023 15:55:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233467AbjJaOqj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 31 Oct 2023 10:46:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59390 "EHLO
+        id S1344517AbjJaOuU convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-next@lfdr.de>); Tue, 31 Oct 2023 10:50:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235748AbjJaOqi (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 31 Oct 2023 10:46:38 -0400
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::226])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16A94DB;
-        Tue, 31 Oct 2023 07:46:35 -0700 (PDT)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 36A2EC0009;
-        Tue, 31 Oct 2023 14:46:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1698763594;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8KULM1KY0Lj9Mz/GZCCMoNQMoHMjvZdIx4RtFjfmlps=;
-        b=ksIyObctg3yLoNLPuB3hEsglG19un9LzETpfaYVycRwRLKeYxAl8h+zTTm5ugB5kOrdMg8
-        /NhqUGKH/y3GO2vloEU7t+BlyB1gMTT0mk5Xz4LA6EZMlSULzkO/p56uCzzonOxoYit73u
-        BZIjPh42QvvQYEVemX7GLjqKLimXtyeTKm6bkpaPBCGpF+m1fteJ9+2LRSAQ2PQnw8/Hl1
-        lmni/9C0h3lWd2ZhCrl9l4EZJmFn/fyo4glhw0WVo0WKtNYrlUriEzJCcE1V2ttN3RA59N
-        dvhGerBmF1+UPTKcAAXc/txC95tmbgRQey8tggvtTNIZ0LXH1vjAKIGoURG8Cg==
-Date:   Tue, 31 Oct 2023 15:46:31 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     Richard Weinberger <richard@nod.at>, Jan Kara <jack@suse.cz>,
+        with ESMTP id S1344509AbjJaOuU (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 31 Oct 2023 10:50:20 -0400
+Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D6B5F3;
+        Tue, 31 Oct 2023 07:50:16 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by lithops.sigma-star.at (Postfix) with ESMTP id AF6226342D5C;
+        Tue, 31 Oct 2023 15:50:14 +0100 (CET)
+Received: from lithops.sigma-star.at ([127.0.0.1])
+        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id FVsp3OUWLPeo; Tue, 31 Oct 2023 15:50:14 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by lithops.sigma-star.at (Postfix) with ESMTP id 461546343CA5;
+        Tue, 31 Oct 2023 15:50:14 +0100 (CET)
+Received: from lithops.sigma-star.at ([127.0.0.1])
+        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 3l07tppJEt09; Tue, 31 Oct 2023 15:50:14 +0100 (CET)
+Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
+        by lithops.sigma-star.at (Postfix) with ESMTP id 1207F6342D5C;
+        Tue, 31 Oct 2023 15:50:14 +0100 (CET)
+Date:   Tue, 31 Oct 2023 15:50:13 +0100 (CET)
+From:   Richard Weinberger <richard@nod.at>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+Cc:     Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
         Stephen Rothwell <sfr@canb.auug.org.au>,
         Richard Weinberger <richard.weinberger@gmail.com>,
         linux-kernel <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
+Message-ID: <111052022.28286.1698763813964.JavaMail.zimbra@nod.at>
+In-Reply-To: <20231031154631.61e5f83e@xps-13>
+References: <20231030103415.401ce804@canb.auug.org.au> <20231031-laienhaft-weshalb-bc27f8dacd9e@brauner> <2131754563.27779.1698751840800.JavaMail.zimbra@nod.at> <20231031134522.27e78274@xps-13> <440004449.28174.1698758033696.JavaMail.zimbra@nod.at> <20231031145006.3df11822@xps-13> <20231031-trauben-jobben-40074a43e5a0@brauner> <20231031154631.61e5f83e@xps-13>
 Subject: Re: linux-next: manual merge of the mtd tree with the vfs-brauner
  tree
-Message-ID: <20231031154631.61e5f83e@xps-13>
-In-Reply-To: <20231031-trauben-jobben-40074a43e5a0@brauner>
-References: <20231030103415.401ce804@canb.auug.org.au>
-        <20231030173228.691620ca@xps-13>
-        <1541110626.24818.1698696696387.JavaMail.zimbra@nod.at>
-        <20231031085158.o4ilb5d47sxcqm3o@quack3>
-        <1419418117.26823.1698742930275.JavaMail.zimbra@nod.at>
-        <20231031-laienhaft-weshalb-bc27f8dacd9e@brauner>
-        <2131754563.27779.1698751840800.JavaMail.zimbra@nod.at>
-        <20231031134522.27e78274@xps-13>
-        <440004449.28174.1698758033696.JavaMail.zimbra@nod.at>
-        <20231031145006.3df11822@xps-13>
-        <20231031-trauben-jobben-40074a43e5a0@brauner>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
+X-Originating-IP: [195.201.40.130]
+X-Mailer: Zimbra 8.8.12_GA_3807 (ZimbraWebClient - FF97 (Linux)/8.8.12_GA_3809)
+Thread-Topic: linux-next: manual merge of the mtd tree with the vfs-brauner tree
+Thread-Index: kWPa0v3hfia+qBl27L6nOQ2p8bVm3g==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,
+        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Christian,
+----- Ursprüngliche Mail -----
+> Von: "Miquel Raynal" <miquel.raynal@bootlin.com>
+>> vfs-6.7.super was merged yesterday, if that's what this is about.
+> 
+> Great, thanks for the confirmation. Then Richard you have your upstream
+> commit already!
 
-brauner@kernel.org wrote on Tue, 31 Oct 2023 15:25:19 +0100:
-
-> On Tue, Oct 31, 2023 at 02:50:06PM +0100, Miquel Raynal wrote:
-> >=20
-> > richard@nod.at wrote on Tue, 31 Oct 2023 14:13:53 +0100 (CET):
-> >  =20
-> > > ----- Urspr=C3=BCngliche Mail ----- =20
-> > > > Von: "Miquel Raynal" <miquel.raynal@bootlin.com>   =20
-> > > >> Miquel, we could also keep ff6abbe85634 in the mtd tree and explai=
-n Linus the
-> > > >> conflict, what do you think? That would help with back porting to =
-stable.   =20
-> > > >=20
-> > > > It's not relevant if the patch in Brauner's tree is already fixing =
-this
-> > > > up. Just send the smaller patch to stable@vger.kernel.org asking th=
-em to
-> > > > backport this patch instead of the other one, they are used to this
-> > > > kind of constraint, no?   =20
-> > >=20
-> > > I'm just in fear of stable rule #1.
-> > > "It or an equivalent fix must already exist in Linus' tree (upstream)=
-." =20
-> >=20
-> > It should be very soon, the merge window is open ;) =20
->=20
-> vfs-6.7.super was merged yesterday, if that's what this is about.
-
-Great, thanks for the confirmation. Then Richard you have your upstream
-commit already!
+Well, I'd like to back port ff6abbe85634, which is not upstream.
+But I'll try to argue that ff6abbe85634 is the super simple variant of 1bcded92d938.
 
 Thanks,
-Miqu=C3=A8l
+//richard

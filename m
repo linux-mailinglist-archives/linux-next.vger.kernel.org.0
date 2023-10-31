@@ -2,59 +2,48 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19F437DD6EF
-	for <lists+linux-next@lfdr.de>; Tue, 31 Oct 2023 21:14:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FC607DD774
+	for <lists+linux-next@lfdr.de>; Tue, 31 Oct 2023 22:06:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229573AbjJaUOY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 31 Oct 2023 16:14:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45156 "EHLO
+        id S231921AbjJaVG2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 31 Oct 2023 17:06:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230522AbjJaUOY (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 31 Oct 2023 16:14:24 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C53C9F4;
-        Tue, 31 Oct 2023 13:14:19 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27D12C433C7;
-        Tue, 31 Oct 2023 20:14:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1698783259;
-        bh=YduzvvmkmCkh7XYeNNev2rvRk7Q+I6SxwFxUFz9VHnY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=td53QjSZeq2Du0lMC4bD+vMC4aWlfLC6V0Q7LWNOqXlaz2rTQNiFyJBLjpmpSENEP
-         lvws2KtMyn0A53iMkYIQ2qVzbyxMzHmMHXt5+xvSNSDqjA3mNAhW3tTPCXX5laQDj7
-         5gEeamGoTjWEIzsQNKPr8douaj0yQdLVMp+kCC3hXHhWbub+UPGXyjKNCicJV7s8x0
-         Y3KHPV0Y3IvkwHqHkCaeWIJgGkTSscfIx6Y77pA9McZwK+ZT2LQrK12x7PXeRon0iI
-         Y+cRRPMo2jAIJznQndQ5b9BUTsm2nFI2IskQR9RZarDym0db04q2Vqr/kEgTX66QQe
-         Y4H7zM1YqwUug==
-Date:   Tue, 31 Oct 2023 13:14:18 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        David Miller <davem@davemloft.net>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Networking <netdev@vger.kernel.org>,
-        Linux Crypto List <linux-crypto@vger.kernel.org>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Dmitry Safonov <dima@arista.com>,
-        Francesco Ruggeri <fruggeri@arista.com>,
-        Salam Noureddine <noureddine@arista.com>,
+        with ESMTP id S231287AbjJaVG1 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 31 Oct 2023 17:06:27 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FCC8F3;
+        Tue, 31 Oct 2023 14:06:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1698786379;
+        bh=of0pl9Zp8MiZ1FNN1AWooh5vOCvzcmEBnYPYq2iyDXI=;
+        h=Date:From:To:Cc:Subject:From;
+        b=WXqyOj3NF0VtVdGGfu1pHjkgfNguCFqLhFk2tuU1aupSRAk3gP7h3rVJZ2hPfrdjM
+         0p8CKqArM+SIv2Gg3zvWwahLjLfpcGeHLaxcpvX/4IlmARFYSndR7Pwcb5JNYAnTvB
+         UolXvHJSVREjswmvlvK651DXVMHyuvAru1/D2T/9cyy0y5rLbYjw5uyaK/7P0UC9Mv
+         RgcHJ9BYAi7TFkdsPHXPrLNuS4+N3X9oBacTdbiBi7ji8aAc+mijfmw5VmFhTdSpJ5
+         kZkf4P1O7a8ja7z8ZDPgv7W8/3Nao3zBfBAorNaVsCBg9QGLzX7qaQn4BTMBZB9wR4
+         aFAqPzuE628kw==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4SKjNq3f0Pz4x1v;
+        Wed,  1 Nov 2023 08:06:19 +1100 (AEDT)
+Date:   Wed, 1 Nov 2023 08:06:18 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>
+Cc:     Syed Saba Kareem <Syed.SabaKareem@amd.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the crypto tree
-Message-ID: <20231031131418.52af79d0@kernel.org>
-In-Reply-To: <20231031045157.GA12981@sol.localdomain>
-References: <20231030155809.6b47288c@canb.auug.org.au>
-        <20231030160953.28f2df61@canb.auug.org.au>
-        <ZT896a2j3hUI1NF+@gondor.apana.org.au>
-        <20231030150243.0e66ba73@kernel.org>
-        <20231031045157.GA12981@sol.localdomain>
+Subject: linux-next: Fixes tag needs some work in the sound-asoc-fixes tree
+Message-ID: <20231101080618.17fd208a@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: multipart/signed; boundary="Sig_/YxtM1LuF4nRD/U9+MdRczwC";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,26 +51,47 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, 30 Oct 2023 21:51:57 -0700 Eric Biggers wrote:
-> On Mon, Oct 30, 2023 at 03:02:43PM -0700, Jakub Kicinski wrote:
-> > On Mon, 30 Oct 2023 13:23:53 +0800 Herbert Xu wrote:  
-> > > If we simply apply this patch to the netdev tree then everything
-> > > should work at the next merge window.  But perhaps you could change
-> > > the patch description to say something like remove the obsolete
-> > > crypto_hash_alignmask.  It's not important though.  
-> > 
-> > I'm happy to massage the commit message and apply the fix to net.
-> > But is it actually 100% correct to do that? IOW is calling
-> > crypto_ahash_alignmask() already not necessary in net-next or does
-> > it only become unnecessary after some prep work in crypto-next?
-> > 
-> > We can tell Linus to squash this fix into the merge of either
-> > crypto-next or net-next, I'm pretty sure he'd be okay with that..  
-> 
-> It's safe to fold the patch into net-next.  It actually looks like a bug to be
-> using the alignmask in the way that net/ipv4/tcp_ao.c is using it.  You don't
-> want to be erroring out just because the algorithm declared an alignmask.
+--Sig_/YxtM1LuF4nRD/U9+MdRczwC
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks Eric! Applied as commit f2fbb9081123 ("net: tcp: remove call to
-obsolete crypto_ahash_alignmask()") to net-next. I'll respin our PR
-after some sanity checking.
+Hi all,
+
+In commit
+
+  ed2232d49187 ("ASoC: amd: acp: fix for i2s mode register field update")
+
+Fixes tag
+
+  Fixes: 40f74d5f09d7 ("ASoC: amd: acp: refactor acp i2s clock
+
+has these problem(s):
+
+  - Subject has leading but no trailing parentheses
+  - Subject has leading but no trailing quotes
+
+Please do not split Fixes lines over more than one line.  Also, please
+keep all the commit message tags together at the end of the commit
+message.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/YxtM1LuF4nRD/U9+MdRczwC
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmVBbEoACgkQAVBC80lX
+0Gxl5Qf/RVzpqUYAcWdKW5aconhiD9YgaZKmofe8tagmQhRTKrZgup0VoiWjQ9tF
+yBcK8xHcM4a4EZcaQk9NNHleDNI2zogMsW28XHcYXLA6Ctz/2x5vOEAJgiI0g2TE
+84MEnmHaSKKS/TdZ11p2tZ6WxfCGVjQO9LZOkw9G4ZGH+/FeX+AZbp28AY0+8NbX
+tUmFdt6qubYydmuXHiI1lh47aRpBJ2rB3AqARHPvJNxy0EMA3pX11lqAxwit26mE
+RG19VN5EDbpg3aqVSEEDwwDzTnvrRwnEW3XgWDqmP9H/KZTqJMQFKpPyhD/8kXVW
+UNboWSjoT9Ym5sENpAhsWXCVV0yeyA==
+=b0FW
+-----END PGP SIGNATURE-----
+
+--Sig_/YxtM1LuF4nRD/U9+MdRczwC--

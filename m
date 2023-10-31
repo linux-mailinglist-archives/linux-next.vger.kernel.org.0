@@ -2,133 +2,134 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 650207DD92D
-	for <lists+linux-next@lfdr.de>; Wed,  1 Nov 2023 00:16:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A70B77DD94B
+	for <lists+linux-next@lfdr.de>; Wed,  1 Nov 2023 00:37:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235295AbjJaXPa (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 31 Oct 2023 19:15:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54934 "EHLO
+        id S234087AbjJaXgp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 31 Oct 2023 19:36:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235302AbjJaXP2 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 31 Oct 2023 19:15:28 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59F0BE4;
-        Tue, 31 Oct 2023 16:15:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1698794123;
-        bh=/76Xugrew87xiLqcZFqXvqoM0IUWyml2vPqmzgwbdsg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=r6yChABplSocrvD2adOhza3xhSf9fQD3NOD4auFXeog+qFTYbjqGVZEVyJMfQ1b4P
-         ZsMg1OKXVq+G3uR9006h9Fh11wS/2OKIbvSVTT6ncFyklS5MkZZcBSxxvxPAicU4gd
-         MO8U4nChIoN998f6EfWQh9fY4AmET5hAfcgyyzxq4J2tdfUWj+6bMb5dmSiRFVJrpO
-         yXy8MtWnFmUkDNbEDVK8doRFM6sdy5Zgz870cEF48CuKc6LSytzTDrQuNOvcbGIabF
-         fH7q/n7zBamp9PleAKJI8M/0yPQQTQfbXZ/j0b1V/DzfYsMZg3+EUvE3yQOqnbtDjc
-         XBy49MznqPnSg==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4SKmFk4rbGz4x1v;
-        Wed,  1 Nov 2023 10:15:22 +1100 (AEDT)
-Date:   Wed, 1 Nov 2023 10:15:21 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof =?UTF-8?B?V2lsY3p5xYRza2k=?= <kw@linux.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Muralidhara M K <muralidhara.mk@amd.com>,
-        Suma Hegde <suma.hegde@amd.com>, Vicki Pfau <vi@endrift.com>
-Subject: Re: linux-next: manual merge of the tip tree with the pci tree
-Message-ID: <20231101101521.1d28e795@canb.auug.org.au>
-In-Reply-To: <20231009134701.17ab655e@canb.auug.org.au>
-References: <20231009134701.17ab655e@canb.auug.org.au>
+        with ESMTP id S230375AbjJaXgo (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 31 Oct 2023 19:36:44 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FEEDB9;
+        Tue, 31 Oct 2023 16:36:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=rmDBg442GPXbpmQYDhM9m5rfvjZvnyUa7KdVKTxDqDI=; b=bkMl9bXQltns243D5IbE6Ep0QH
+        nv13VO6dxyB/cnpIxswcNSfpZq9wVh/vlEHHxO91Qkgmev9TFvUrW0S8801hVtfOdnjvnhW4lcQQ9
+        4XdAOJ+GBrSxwz147v/D4/0248m6t/SdSwkalUhUxriy4giennW0pfj16uN3Xal4LskOJB0yUexob
+        mlwfOgU86zJxGhwCQP9Lt14c5MOOS+Tqk1EybEw8NuK0+UgBs6SDvr1d73Iv8EslRHxffWZip7yxJ
+        A7eiFXkb7gOIEJSmbWDcOEuI8mTcwVmrZmpt+9OjZ++d/1UaHfH+5qLSejNH/h81cTTmPwX0ZWbWx
+        BbtmyaPg==;
+Received: from [50.53.46.231] (helo=[192.168.254.15])
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qxyHc-006KX6-1M;
+        Tue, 31 Oct 2023 23:36:28 +0000
+Message-ID: <cd18356e-51dc-4054-afbb-7f92a45833a7@infradead.org>
+Date:   Tue, 31 Oct 2023 16:36:26 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/9JZx.ip1=.jBiTY=3Q3Y8PS";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla Thunderbird
+Subject: Re: linux-next: Tree for Oct 30 [drivers/cxl/core/cxl_core.ko]
+Content-Language: en-US
+To:     Dan Williams <dan.j.williams@intel.com>,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Jonathan Cameron <jonathan.cameron@huawei.com>,
+        Davidlohr Bueso <dave@stgolabs.net>
+References: <20231030163344.5a39a625@canb.auug.org.au>
+ <dc312544-6070-4299-b9ee-903b34d7cf21@infradead.org>
+ <e3e9bcc3-e026-43d3-964c-5f5b51916782@leemhuis.info>
+ <65413d5ae720c_244c782942a@dwillia2-xfh.jf.intel.com.notmuch>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <65413d5ae720c_244c782942a@dwillia2-xfh.jf.intel.com.notmuch>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/9JZx.ip1=.jBiTY=3Q3Y8PS
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Dan.
 
-Hi all,
+On 10/31/23 10:46, Dan Williams wrote:
+> Thorsten Leemhuis wrote:
+>> [CCing the CXL maintainers]
+>>
+>> On 31.10.23 06:04, Randy Dunlap wrote:
+>>> On 10/29/23 22:33, Stephen Rothwell wrote:
+>>>>
+>>>> Please do not add any material not destined to be merged before v6.7-rc1
+>>>> into your linux-next included branches until after v6.7-rc1 has been
+>>>> released.
+>>>>
+>>>> Changes since 20231027:
+>>>
+>>> when CONFIG_ACPI is not set (on various ARCH):
+>>>
+>>> ERROR: modpost: "pci_print_aer" [drivers/cxl/core/cxl_core.ko] undefined!
+>>>
+>>> Already fixed?
+>>
+>> Doesn't seem so, I saw that yesterday and today in my ppc64le builds for
+>> Fedora (based on the Fedora rawhide config). Build log, in case anyone
+>> cares:
+>> https://copr-be.cloud.fedoraproject.org/results/@kernel-vanilla/next/fedora-38-ppc64le/06583955-next-next-all/builder-live.log.gz
+>>
+>> Seems 0day ran into this, too:
+>>
+>> https://lore.kernel.org/all/202310281921.W9lzomPk-lkp@intel.com/
+>> https://lore.kernel.org/all/202310290131.Z10R00pk-lkp@intel.com/
+>> https://lore.kernel.org/all/202310302206.Pkr5eBDi-lkp@intel.com/
+>> https://lore.kernel.org/all/202310310457.5LusQqF6-lkp@intel.com/
+> 
+> Yes, apologies for the thrash. This fixes it for me. I will append this
+> to the cxl/next branch:
+> 
 
-On Mon, 9 Oct 2023 13:47:01 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
->=20
-> Today's linux-next merge of the tip tree got a conflict in:
->=20
->   include/linux/pci_ids.h
->=20
-> between commit:
->=20
->   7e6f3b6d2c35 ("PCI: Prevent xHCI driver from claiming AMD VanGogh USB3 =
-DRD device")
->=20
-> from the pci tree and commit:
->=20
->   24775700eaa9 ("x86/amd_nb: Add AMD Family MI300 PCI IDs")
->=20
-> from the tip tree.
->=20
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
->=20
-> --=20
-> Cheers,
-> Stephen Rothwell
->=20
-> diff --cc include/linux/pci_ids.h
-> index 3a8e24e9a93f,91b457de262e..000000000000
-> --- a/include/linux/pci_ids.h
-> +++ b/include/linux/pci_ids.h
-> @@@ -579,7 -579,7 +579,8 @@@
->   #define PCI_DEVICE_ID_AMD_1AH_M00H_DF_F3 0x12c3
->   #define PCI_DEVICE_ID_AMD_1AH_M20H_DF_F3 0x16fb
->   #define PCI_DEVICE_ID_AMD_MI200_DF_F3	0x14d3
-> + #define PCI_DEVICE_ID_AMD_MI300_DF_F3	0x152b
->  +#define PCI_DEVICE_ID_AMD_VANGOGH_USB	0x163a
->   #define PCI_DEVICE_ID_AMD_CNB17H_F3	0x1703
->   #define PCI_DEVICE_ID_AMD_LANCE		0x2000
->   #define PCI_DEVICE_ID_AMD_LANCE_HOME	0x2001
+Works for me. Thanks.
 
-This is now a conflict between the pci tree and Linus' tree.
+> diff --git a/include/linux/aer.h b/include/linux/aer.h
+> index f6ea2f57d808..3db310c19ab7 100644
+> --- a/include/linux/aer.h
+> +++ b/include/linux/aer.h
+> @@ -43,16 +43,20 @@ struct aer_capability_regs {
+>  #if defined(CONFIG_PCIEAER)
+>  int pci_aer_clear_nonfatal_status(struct pci_dev *dev);
+>  int pcie_aer_is_native(struct pci_dev *dev);
+> +void pci_print_aer(struct pci_dev *dev, int aer_severity,
+> +                   struct aer_capability_regs *aer);
+>  #else
+>  static inline int pci_aer_clear_nonfatal_status(struct pci_dev *dev)
+>  {
+>         return -EINVAL;
+>  }
+>  static inline int pcie_aer_is_native(struct pci_dev *dev) { return 0; }
+> +static inline void pci_print_aer(struct pci_dev *dev, int aer_severity,
+> +                                struct aer_capability_regs *aer)
+> +{
+> +}
+>  #endif
+>  
+> -void pci_print_aer(struct pci_dev *dev, int aer_severity,
+> -                   struct aer_capability_regs *aer);
+>  int cper_severity_to_aer(int cper_severity);
+>  void aer_recover_queue(int domain, unsigned int bus, unsigned int devfn,
+>                        int severity, struct aer_capability_regs *aer_regs);
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/9JZx.ip1=.jBiTY=3Q3Y8PS
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmVBiokACgkQAVBC80lX
-0GwJUQf/ULq/xFm5IJ2GvxVUWIgtuit7oh7nVtXXrHo+LfhEdzAIobfscbvjNHtW
-ktQjq3VlzHHim9TssmTxNMX95tl9OvoCiyC+J77hqFOEo77pA9gx/Cq35c8y9bdH
-NW4wNNf8IMY7512xXhn97wGKG7AuQD/DUpYJeZstPMJq6UNuOLGeAvGoXD0XNQFB
-/59E6UqZ0g3KwVVuvc1p1m18Fla0kJhidKxK09yervnGDYDFbUcNF+wJQ3RGGFGN
-8Ei4y8fMwWsHqqPVxtiQqB2/Gg9xmsAB/Z/p4m+l6OrKjCefoSC/KvPb7z/bJAZn
-Tq9lPXqJ8u9KAI6JJHQRYB24lNzUSw==
-=AgUB
------END PGP SIGNATURE-----
-
---Sig_/9JZx.ip1=.jBiTY=3Q3Y8PS--
+-- 
+~Randy

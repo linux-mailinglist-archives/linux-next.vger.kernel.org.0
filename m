@@ -2,92 +2,99 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1A4D7DDA76
-	for <lists+linux-next@lfdr.de>; Wed,  1 Nov 2023 02:01:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AF267DDA88
+	for <lists+linux-next@lfdr.de>; Wed,  1 Nov 2023 02:14:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376972AbjKABBb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 31 Oct 2023 21:01:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60514 "EHLO
+        id S235155AbjKABOv (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 31 Oct 2023 21:14:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376924AbjKABBa (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 31 Oct 2023 21:01:30 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F065DA;
-        Tue, 31 Oct 2023 18:01:24 -0700 (PDT)
+        with ESMTP id S233002AbjKABOu (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 31 Oct 2023 21:14:50 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AC63F5;
+        Tue, 31 Oct 2023 18:14:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1698800483;
-        bh=w7cB5/DfsNaqHAPKVUm7+/nm2gVSnMiF+lwkwCzXS0M=;
-        h=Date:From:To:Cc:Subject:From;
-        b=CIUju1ue9BTFVzJw/ihRlwvFjYCJF/3WBslLnmml9yvA9JWSXwnTGWswged84PuiH
-         3LzbcgBYMy1WaEy2qqCjN1IZi+g7+6uCmcesBcaCbiljpf3d1AccC8rcCJKjMg/5nc
-         QYQyJdTyj4vFLro+TpTBF5FsNc73q+k85QMOeKuiZWwWOl9/mqlgThMiw0I3arojv9
-         Gv/TB8ZUvY7L02NTJbS8NkJJ/8r6E3jlzY+URB08DU7x9l5dVm6SN5Ob5G2n3NYJMg
-         CrMTV9I0/b9qg9A5WTFH54DSzfWrMaIkDur78bNrrlxFgyiW/0mBeQrLZ0Snd1U+cE
-         VxTC6pvWRFK2g==
+        s=201702; t=1698801280;
+        bh=tGmJG3EnV1bi5eFYNVwQL8EbCbu5u6g5uta9lEO8vqU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Z2nULhb9FtJJSHBT6JzBWQuBpoiUfMF6p9PqzHcBou+fut/Gn3Php5czmd+ARqq0f
+         e4/8uFZPfcBUJX09IMxngtIMYq+RtSjaVQKjo2k05KVSOlhp9qb8W1aBuUqbT00viT
+         j+BbklZgsJn1vZyiUboP6u+uHGKuBm2udHr1UAe080zFbrlxc3ZrUN249gTHGwslWw
+         VtRQj78EJzDDTGsrg95fUztLh0mDhEV0xqgk1/cwWBLKrvj+//GFe6Bh2r//UbtScV
+         c0qk7w9lnNgZWuQwdzVcPx6+iEaFtPzeb8SsPLIWiYNhGQCgu+4Wiq7YnT1zrgFeKU
+         tcNFefIYBL+0Q==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4SKpc22SpLz4wcg;
-        Wed,  1 Nov 2023 12:01:22 +1100 (AEDT)
-Date:   Wed, 1 Nov 2023 12:01:21 +1100
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4SKpvM5MQCz4x1v;
+        Wed,  1 Nov 2023 12:14:39 +1100 (AEDT)
+Date:   Wed, 1 Nov 2023 12:14:39 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Frederic Weisbecker <frederic@kernel.org>,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        Neeraj upadhyay <Neeraj.Upadhyay@amd.com>,
-        Yong He <alexyonghe@tencent.com>,
+To:     Kent Overstreet <kent.overstreet@linux.dev>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Kent Overstreet <kent.overstreet@gmail.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patch in the rcu tree
-Message-ID: <20231101120121.04919c8d@canb.auug.org.au>
+Subject: Re: linux-next: build failure after merge of the bcachefs tree
+Message-ID: <20231101121439.3244f4a4@canb.auug.org.au>
+In-Reply-To: <20231101005307.2udx7kqicf3rba3h@moria.home.lan>
+References: <20230912120429.7852428f@canb.auug.org.au>
+        <e639a428-0fb7-7329-ce52-e51f7951a146@bytedance.com>
+        <20230913093553.4290421e@canb.auug.org.au>
+        <ada473e9-aa2f-c6ff-b869-cf94942ddd20@bytedance.com>
+        <20230913132330.00b3ef07f696cf9efc4d0886@linux-foundation.org>
+        <20230914083145.17c2e7de@canb.auug.org.au>
+        <20231101113222.13e7edc2@canb.auug.org.au>
+        <20231101005307.2udx7kqicf3rba3h@moria.home.lan>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/kux=L9QU4S1fMEsZ+sabZV3";
+Content-Type: multipart/signed; boundary="Sig_/7lRzxnOl19usRKr.v2UWEf3";
  protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/kux=L9QU4S1fMEsZ+sabZV3
+--Sig_/7lRzxnOl19usRKr.v2UWEf3
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Hi Kent,
 
-The following commit is also in Linus Torvalds' tree as a different commit
-(but the same patch):
+On Tue, 31 Oct 2023 20:53:07 -0400 Kent Overstreet <kent.overstreet@linux.d=
+ev> wrote:
+>=20
+> Is/was there a procedure for me here?
 
-  8a77f38bcd28 ("srcu: Only accelerate on enqueue time")
-
-This is commit
-
-  1bb2b7de033a ("srcu: Only accelerate on enqueue time")
-
-in the rcu tree.
+You should have mentioned it in your pull request to Linus (in case he
+merged Andrew's tree first (I don't know if you did).  And presumably
+Andrew will mention it in his pull request to Linus.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/kux=L9QU4S1fMEsZ+sabZV3
+--Sig_/7lRzxnOl19usRKr.v2UWEf3
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmVBo2EACgkQAVBC80lX
-0GwSvwgApUQ+OPROhP/zc1Vvs8sQ+1iXls85Y/MCFdzXmMU4g+b+QMhIrWBiBwHC
-ZCRdRhDPo8Ms6bk0qYs15AkNCNDLWgkSFFYRsj/9Ucv+3HcbitfIx3xe7yBJCeZw
-82xVU+Ve/QukWaYwkP6c3a66MXmn4V8LhAXOFGcKUugAxDTQ1AjcmXrGj/sS3rWS
-JbDBEwMJq1ml6dYsC8rkZeVIrQdnvnkgf+Lc0wB2shgNQ66YjqhjZ0IOR1UBI6up
-rXatpGUzQcWr9I5L4+RCDV+Qo2HR0GJfzAncHQPLqQ70ZQzpRr6Y+X3hxx89Vujo
-MH7WJ1TT89NiATeGDZmYcIKluy334w==
-=RJiu
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmVBpn8ACgkQAVBC80lX
+0GxovQgApeCpxTizsO7qMX5oqiC73sGzLrwo8IRnhnrw/JrRyHN/vuFK6MyMZfUG
+EebtMR4V3N6srzi0iKvIv06Wcrh6Jz/kEJf1faAzPKsvlr0+B1Cdx2Ij2LaGVEuU
+ud4DoBEAKp+MyxRJchO4F/4A1X4d79ZWfxsA1YWu/PQp4KauQQlKFkLKvCeYxbg8
+iATJedf3Q1jaopqmIt3zeato8jdel7gisywUSBzjy2S2hfkZfdXH6+wx3XsNCb/1
+6yGBS63RqulDvT5wayEyVy4F8DEwaUfdNXQSqMPcQedH0hZIYOJaz3csyLgnGwUY
+oHPjyCbOeLRJ7rohQ3RwQFTPh66imA==
+=Kjn/
 -----END PGP SIGNATURE-----
 
---Sig_/kux=L9QU4S1fMEsZ+sabZV3--
+--Sig_/7lRzxnOl19usRKr.v2UWEf3--

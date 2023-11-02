@@ -2,53 +2,50 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72EF47DE793
-	for <lists+linux-next@lfdr.de>; Wed,  1 Nov 2023 22:46:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 394A67DE951
+	for <lists+linux-next@lfdr.de>; Thu,  2 Nov 2023 01:30:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345578AbjKAVh3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 1 Nov 2023 17:37:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42600 "EHLO
+        id S231511AbjKBAaE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 1 Nov 2023 20:30:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345555AbjKAVh3 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 1 Nov 2023 17:37:29 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 502C410F;
-        Wed,  1 Nov 2023 14:37:23 -0700 (PDT)
+        with ESMTP id S229727AbjKBAaE (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 1 Nov 2023 20:30:04 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EF89DB;
+        Wed,  1 Nov 2023 17:29:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1698874640;
-        bh=TWYa5K9/yZGo0dWefhyN/y52uF+cU7stI6Yiq66HcRg=;
+        s=201702; t=1698884994;
+        bh=P2Q8D09La9f7vsdPBAHh1puRIjrljwbw2c0LbxTp7jc=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=eJf4eiRUphvAJPCc+YE4nhCHyUh7xChuIvXvGdttfXu2vplj7trKKeMHqo5WoCxCr
-         FhUD1MLuHNjQm9Bga0VzvLRcyGgTZQxmOqUSkFEsrQYrJCme/8oyPEuYSATHEQ3OvY
-         Z5qS10hXFba3/Xr4BHmoujK/UTP7QE+3LSQcu8+BAl3GGSitofGRd+kU9g77QHQn1A
-         8CKb8EuraeOCfHdIF2uDOXuAi8TsGITMAiX4FlrvmJCMmmiu4qfHGJQFf9hZxBBnXj
-         wBuJnuFlN3agz58iGDXh6bcIjEBej5xg6iy5HsvEcG/xsIjIiWMeNAfNDIf2Ht9OFb
-         6SOdYM/zu5IQw==
+        b=LPQfn1RpRLe14/rTr0LbknH1uyV2oP3up/HScoRG1pTIhlA9u0yDJ4xUzm5wwf+mT
+         RqfJokTLetH++LJPNx+zR1O2QLQHnTl82IwzniqZPoBc85SLyVcTg3hOuyEVzkYbl+
+         8BxsXuJ4oLy0RjzlSQPf48tRg35u6iKe57rjFDlu7pNRkwqz5l4iUvbR0dJRSkiEgC
+         /Z0R9Gcn91dgTQAGc6DRNbITIxBowwd7y2IerarO0y//ScDl9gCFHbbZoOrhq80Lhn
+         18Msb3BwnLK12knP20tjDq/7DaWbVVdlcmFEPuY0yiLjpXNE7P5ddgVld1QcUe+bHf
+         ERQGzbShrVdpg==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4SLL275H1Qz4wcj;
-        Thu,  2 Nov 2023 08:37:19 +1100 (AEDT)
-Date:   Thu, 2 Nov 2023 08:37:18 +1100
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4SLPsD2XZDz4xVK;
+        Thu,  2 Nov 2023 11:29:51 +1100 (AEDT)
+Date:   Thu, 2 Nov 2023 11:29:50 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Dave Airlie <airlied@redhat.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
+To:     Bartosz Golaszewski <brgl@bgdev.pl>, Greg KH <greg@kroah.com>
+Cc:     Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Subject: Re: linux-next: manual merge of the drm-misc tree with the
- asm-generic tree
-Message-ID: <20231102083718.0036fea2@canb.auug.org.au>
-In-Reply-To: <20231018124636.4a973762@canb.auug.org.au>
-References: <20231013114602.4cea19d1@canb.auug.org.au>
-        <20231018124636.4a973762@canb.auug.org.au>
+        Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
+        <u.kleine-koenig@pengutronix.de>, Wentong Wu <wentong.wu@intel.com>
+Subject: Re: linux-next: manual merge of the gpio-brgl tree with the usb
+ tree
+Message-ID: <20231102112950.4706f887@canb.auug.org.au>
+In-Reply-To: <20231016134159.11d8f849@canb.auug.org.au>
+References: <20231016134159.11d8f849@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/dgdxoDFng=1cPgzrqV7RqPu";
+Content-Type: multipart/signed; boundary="Sig_/JIf8eFlvsk4.2uZ7M9Njdu9";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,
@@ -60,62 +57,50 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/dgdxoDFng=1cPgzrqV7RqPu
+--Sig_/JIf8eFlvsk4.2uZ7M9Njdu9
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Wed, 18 Oct 2023 12:46:36 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+On Mon, 16 Oct 2023 13:41:59 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
 wrote:
->
-> On Fri, 13 Oct 2023 11:46:02 +1100 Stephen Rothwell <sfr@canb.auug.org.au=
-> wrote:
-> >
-> > Today's linux-next merge of the drm-misc tree got a conflict in:
-> >=20
-> >   arch/ia64/include/asm/fb.h
-> >=20
-> > between commit:
-> >=20
-> >   cf8e8658100d ("arch: Remove Itanium (IA-64) architecture")
-> >=20
-> > from the asm-generic tree and commit:
-> >=20
-> >   052ddf7b86d2 ("fbdev: Replace fb_pgprotect() with pgprot_framebuffer(=
-)")
-> >=20
-> > from the drm-misc tree.
-> >=20
-> > I fixed it up (I just removed the file) and can carry the fix as
-> > necessary. This is now fixed as far as linux-next is concerned, but any
-> > non trivial conflicts should be mentioned to your upstream maintainer
-> > when your tree is submitted for merging.  You may also want to consider
-> > cooperating with the maintainer of the conflicting tree to minimise any
-> > particularly complex conflicts. =20
 >=20
-> This is now a conflict between the asm-generic tree and the drm tree.
+> Today's linux-next merge of the gpio-brgl tree got a conflict in:
+>=20
+>   drivers/gpio/gpio-ljca.c
+>=20
+> between commit:
+>=20
+>   1034cc423f1b ("gpio: update Intel LJCA USB GPIO driver")
+>=20
+> from the usb tree and commit:
+>=20
+>   da2ad5fe2292 ("gpio: ljca: Convert to platform remove callback returnin=
+g void")
+>=20
+> from the gpio-brgl tree.
 
-And now between the asm-generic tree and Linus' tree.
+This is now a conflict between the usb tree and Linus' tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/dgdxoDFng=1cPgzrqV7RqPu
+--Sig_/JIf8eFlvsk4.2uZ7M9Njdu9
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmVCxQ4ACgkQAVBC80lX
-0GzYZwgAhIHEwFgqish6zxEbyETPuf+e/L3yLSrzFY3vROPhCb7MElNT0Aur2DCt
-7lbhzVoC9N0Y+jgxHVzC3tZfGYHVtyyg+f6g5IEFQzDma2wigpf9u+ockyp2X5FO
-oSIjB23CeS5zEb/C9+ve+FaIkhvjBYX9iNty/r7PkTQbHtMoLNLhrlih8RF0e431
-IkEw0U14a8NKaLU+zOUyTwjPH0NcQJOulUYjdIhuM91F2jaE4zFclf/cxPGV3uyS
-tQWnTUAIO5QuLgvLwM1ZR8+EKJvg/gyKfJA38J+XzLLJdeU/yT3W6P7BeRtn8gDG
-zTyNNGevgemC77Xd/yEPPWPVEeYE/A==
-=UFiq
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmVC7X4ACgkQAVBC80lX
+0GwICgf/STdIjNFb9Z8WrRKSviBY3j3skfpl4swVJ1p8UY8g5QY2UHiyy+wPRl6Z
+rFhjMTjPXvJg73Tgbz23OfUXk2sfeAgSv8fMGXP0gyoO+BlKYSyT/DILDfpcdc6C
+2VX5DSxh2u6NXHtWPLhFHjPHqKEswM8CRId64CP/sX6bK/RRYP/6LoP3s5ZfHXCz
+LuMpn/1iIakS+LSubjrraM42ClOiWDqMru5gp5s4TfDpJdXu6yYvqDKH6wTXcP72
+LicrGLOBLdBwHWWJ9aot0xf23dKJiPyBgRMfdLnA0OIBJrJqhhW2TDT1hdxHXfd6
+Mp3DKX11TJsRznZ1UJ3rhz3FS8pXJQ==
+=he8V
 -----END PGP SIGNATURE-----
 
---Sig_/dgdxoDFng=1cPgzrqV7RqPu--
+--Sig_/JIf8eFlvsk4.2uZ7M9Njdu9--

@@ -2,160 +2,110 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAB157DFC3E
-	for <lists+linux-next@lfdr.de>; Thu,  2 Nov 2023 23:14:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1436B7DFC4F
+	for <lists+linux-next@lfdr.de>; Thu,  2 Nov 2023 23:21:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230187AbjKBWO4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 2 Nov 2023 18:14:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34220 "EHLO
+        id S229741AbjKBWVq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 2 Nov 2023 18:21:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229628AbjKBWOz (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 2 Nov 2023 18:14:55 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD46A91;
-        Thu,  2 Nov 2023 15:14:49 -0700 (PDT)
+        with ESMTP id S229628AbjKBWVp (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 2 Nov 2023 18:21:45 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E786D192;
+        Thu,  2 Nov 2023 15:21:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1698963288;
-        bh=i80a06SOeQSQ1W4w6P9Q8wfCVSh8IgOe4nN4K90pDck=;
-        h=Date:From:To:Cc:Subject:From;
-        b=sWdmCh01Iql1djxCPponKgqM3MVvtQjBtJi3XQEPrLx9KZOgn/9NvJHrp0vkBmWvO
-         81lnK0VFvTVKL/Yo3ykG4W9eOOiY2pGwoqdB8JYp6z53XLvMfH3Sr3N5De3wHVacup
-         NHsy1Ga9KUJ2yl3U/OdYH7EtlbEnnm7YRrlHw/9zyr69q29QaBxD2frn9nK/xbn0C5
-         3v/s4XdiFuiQDVxE3hnufXDkK24rEeKhIybLAHXuM52NEDXJjJn+7rpCbc2D/579Jq
-         d4fHfox9739O9v5oMDFXm1mg5mfgTfL0GGM/6QM37CFuJ3i7Pan9MAwPoARO/ScKad
-         EPFlTaAwG5Adw==
+        s=201702; t=1698963697;
+        bh=f3Mv1PfjmUThu6abXvcPwvt2F05nrGBngw82Qc8TZG0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=TcRVjMFN4RlTyBBpWwyQEExQLWja3pC/WWTGxRFEOSuWgoOdy7hZ/pR8DIvkMBQ9p
+         Ovz69uZq2p9GkK4h5xVMKeoQeHoyvddUMM2DOn5l50bKh11f1dvgbeWDJyG90FZAnQ
+         eITN0A4bqsR/6fuMUdq56EULrfNglwgt9GUpRfVZ3pdidVZPnFfeFIsvqR2JnuBxJ7
+         wC/gyA+gT79lIdKiMm+o+O795iuKrZc9FC+TU6V1s6bZHeAWGvx6Se9XxfZ+JNUrI8
+         j/PhXXprimR5CS/9//G0J2ymmI/mkyELWMt1LgLjFjGqvsHE+gLp5qpXOtDu3fIBfe
+         k+O/ouuYExTLg==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4SLypv3TjMz4xQS;
-        Fri,  3 Nov 2023 09:14:47 +1100 (AEDT)
-Date:   Fri, 3 Nov 2023 09:14:36 +1100
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4SLyym43vBz4xNH;
+        Fri,  3 Nov 2023 09:21:36 +1100 (AEDT)
+Date:   Fri, 3 Nov 2023 09:21:34 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <paul@pwsan.com>
-Cc:     Jiexun Wang <wangjiexun@tinylab.org>,
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Shuah Khan <shuah@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Sami Tolvanen <samitolvanen@google.com>
-Subject: linux-next: manual merge of the risc-v tree with Linus' tree
-Message-ID: <20231103091436.730cb6c6@canb.auug.org.au>
+        Mark Brown <broonie@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>
+Subject: Re: linux-next: manual merge of the kselftest tree with the
+ mm-hotfixes tree
+Message-ID: <20231103092134.7ddde5c3@canb.auug.org.au>
+In-Reply-To: <20231019163310.6c24d6ac@canb.auug.org.au>
+References: <20231019163310.6c24d6ac@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/_/ZYG0PhO7Kp5.fiNdLvnQ2";
+Content-Type: multipart/signed; boundary="Sig_/_A+MC2CEDlPX8.Osu64lCNT";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/_/ZYG0PhO7Kp5.fiNdLvnQ2
+--Sig_/_A+MC2CEDlPX8.Osu64lCNT
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the risc-v tree got a conflict in:
+On Thu, 19 Oct 2023 16:33:10 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> Today's linux-next merge of the kselftest tree got a conflict in:
+>=20
+>   tools/testing/selftests/clone3/clone3.c
+>=20
+> between commit:
+>=20
+>   fc7f04dc23db ("selftests/clone3: Fix broken test under !CONFIG_TIME_NS")
+>=20
+> from the mm-hotfixes tree and commit:
+>=20
+>   34dce23f7e40 ("selftests/clone3: Report descriptive test names")
+>=20
+> from the kselftest tree.
+>=20
+> I fixed it up (I used this file from the latter commit) and can carry the
+> fix as necessary. This is now fxed as far as linux-next is concerned,
+> but any non trivial conflicts should be mentioned to your upstream
+> maintainer when your tree is submitted for merging.  You may also want
+> to consider cooperating with the maintainer of the conflicting tree to
+> minimise any particularly complex conflicts.
 
-  arch/riscv/kernel/irq.c
-
-between commit:
-
-  07a27665754b ("RISC-V: Fix wrong use of CONFIG_HAVE_SOFTIRQ_ON_OWN_STACK")
-
-from Linus' tree and commit:
-
-  82982fdd5133 ("riscv: Deduplicate IRQ stack switching")
-
-from the risc-v tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+This is now a conflict between the mm-hotfixes tree and Linus' tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc arch/riscv/kernel/irq.c
-index 9cc0a7669271,7bfea97ee7e7..000000000000
---- a/arch/riscv/kernel/irq.c
-+++ b/arch/riscv/kernel/irq.c
-@@@ -60,41 -79,23 +79,23 @@@ static void init_irq_stacks(void
-  }
-  #endif /* CONFIG_VMAP_STACK */
- =20
- -#ifdef CONFIG_HAVE_SOFTIRQ_ON_OWN_STACK
- +#ifdef CONFIG_SOFTIRQ_ON_OWN_STACK
-+ static void ___do_softirq(struct pt_regs *regs)
-+ {
-+ 	__do_softirq();
-+ }
-+=20
-  void do_softirq_own_stack(void)
-  {
-- #ifdef CONFIG_IRQ_STACKS
-- 	if (on_thread_stack()) {
-- 		ulong *sp =3D per_cpu(irq_stack_ptr, smp_processor_id())
-- 					+ IRQ_STACK_SIZE/sizeof(ulong);
-- 		__asm__ __volatile(
-- 		"addi	sp, sp, -"RISCV_SZPTR  "\n"
-- 		REG_S"  ra, (sp)		\n"
-- 		"addi	sp, sp, -"RISCV_SZPTR  "\n"
-- 		REG_S"  s0, (sp)		\n"
-- 		"addi	s0, sp, 2*"RISCV_SZPTR "\n"
-- 		"move	sp, %[sp]		\n"
-- 		"call	__do_softirq		\n"
-- 		"addi	sp, s0, -2*"RISCV_SZPTR"\n"
-- 		REG_L"  s0, (sp)		\n"
-- 		"addi	sp, sp, "RISCV_SZPTR   "\n"
-- 		REG_L"  ra, (sp)		\n"
-- 		"addi	sp, sp, "RISCV_SZPTR   "\n"
-- 		:
-- 		: [sp] "r" (sp)
-- 		: "a0", "a1", "a2", "a3", "a4", "a5", "a6", "a7",
-- 		  "t0", "t1", "t2", "t3", "t4", "t5", "t6",
-- #ifndef CONFIG_FRAME_POINTER
-- 		  "s0",
-- #endif
-- 		  "memory");
-- 	} else
-- #endif
-+ 	if (on_thread_stack())
-+ 		call_on_irq_stack(NULL, ___do_softirq);
-+ 	else
-  		__do_softirq();
-  }
- -#endif /* CONFIG_HAVE_SOFTIRQ_ON_OWN_STACK */
- +#endif /* CONFIG_SOFTIRQ_ON_OWN_STACK */
- =20
-  #else
-+ static void init_irq_scs(void) {}
-  static void init_irq_stacks(void) {}
-  #endif /* CONFIG_IRQ_STACKS */
- =20
-
---Sig_/_/ZYG0PhO7Kp5.fiNdLvnQ2
+--Sig_/_A+MC2CEDlPX8.Osu64lCNT
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmVEH0wACgkQAVBC80lX
-0Gw61Af/cpxDB3nTwIhG02iZyOLJUwgYroVw2nP8RuVb/+BKta3FfY03/FqFzanG
-zeXcMftPUDz98EMWv36AdVf3ziwMRE/nSQ6Kl1y5j3qzTepL+UylK5BJqNJNcFHO
-IHOIwzoeKHkrYmabNiha+ovAGee0HYT/7GT/R5XbNFOdNAl7F5w4ojln3p9L8btJ
-xUGzK+MT0kUMhP/TKCxmz/IjD3OnwFv+S798px3JgM8+ysTlZUoi+iDybHJKY26Y
-rlhvfO6/MUpuHGCRx39LRdmni8/tutOK1rZPXODwhpy5m7Uh75OEVxwQUZFatu7N
-Ylg3AjXrafX+0sPtGShfrbEbSJUDcw==
-=9FZK
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmVEIO4ACgkQAVBC80lX
+0GxtQAf/QyTWDq17gLUDulERb35r/zP9xK5HCbelCG2ew58C5Z2WuWXUzYiJUAgQ
++eTofCe59u+9kxYGnIpZ938Nk7wLuQu00dYpg4EzK2cOZ54ALg6EzWzvP57sduZA
+tUj9kxMYeGjGLMdpPc/3u3DZ3b0tEhRpnDMGSPs6Fy3I16HE7Q05Asw0cH1p7dx1
+iVYCmiV4S6Zgqaq8UyAFfBpZbiXUxqvLWMGPn8W6eraj9nTmVgUo/zD76CHUf/B4
+lmPX0bHzAapGF4Y/bt6bjtEorUmhAzs0ojOCuWuTeGXlnHdBZSTOPhySug/Jw3SD
+rvukq2IEim6rYwXLkhmHaSOHmyIbyw==
+=qXVh
 -----END PGP SIGNATURE-----
 
---Sig_/_/ZYG0PhO7Kp5.fiNdLvnQ2--
+--Sig_/_A+MC2CEDlPX8.Osu64lCNT--

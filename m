@@ -2,80 +2,160 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C60847DFC16
-	for <lists+linux-next@lfdr.de>; Thu,  2 Nov 2023 22:48:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAB157DFC3E
+	for <lists+linux-next@lfdr.de>; Thu,  2 Nov 2023 23:14:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234323AbjKBVsO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 2 Nov 2023 17:48:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51448 "EHLO
+        id S230187AbjKBWO4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 2 Nov 2023 18:14:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjKBVsO (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 2 Nov 2023 17:48:14 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80D0518B;
-        Thu,  2 Nov 2023 14:48:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=GXxaVa4Xmy3l9nFyocU4N0dWrObmXp3nfxcdQhfLD0g=; b=a2EJuUVJcjNaS5YO68yNNMNcFB
-        EHmoie2GCtfIRg2zirhwS+4fU7NY+d1irjZ7wjtCt0KxSfDcVITp5WF2C5kPXtlT4K6in6JbML2aE
-        RIFQ/beeYUwhxugapkg68vVgUX4SYfA+F1U7M7SOostFkvJcjH66NffC4DVCjR0unqgOXk/3Y4tNZ
-        paMoQ1WGBAe8tN4hSjE4LzKqUTe/Ya3t1baq6ZzY2Bg7T0pdj7sGFarIS7bN43aVeuH+ku8SvAzkp
-        Jy6hBi/Q5qwd2KjInkgLELQXUwqIlVvfCkVkP+7OhVcOfujFJLPNvcAshQEZbnuxN6/FBEjf6L5mP
-        Mrc8Q1Ww==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1qyfXs-00AKwB-0o;
-        Thu, 02 Nov 2023 21:48:08 +0000
-Date:   Thu, 2 Nov 2023 14:48:08 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patches in the modules tree
-Message-ID: <ZUQZGLDYL1/eoyzj@bombadil.infradead.org>
-References: <20231103080642.468b331a@canb.auug.org.au>
+        with ESMTP id S229628AbjKBWOz (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 2 Nov 2023 18:14:55 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD46A91;
+        Thu,  2 Nov 2023 15:14:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1698963288;
+        bh=i80a06SOeQSQ1W4w6P9Q8wfCVSh8IgOe4nN4K90pDck=;
+        h=Date:From:To:Cc:Subject:From;
+        b=sWdmCh01Iql1djxCPponKgqM3MVvtQjBtJi3XQEPrLx9KZOgn/9NvJHrp0vkBmWvO
+         81lnK0VFvTVKL/Yo3ykG4W9eOOiY2pGwoqdB8JYp6z53XLvMfH3Sr3N5De3wHVacup
+         NHsy1Ga9KUJ2yl3U/OdYH7EtlbEnnm7YRrlHw/9zyr69q29QaBxD2frn9nK/xbn0C5
+         3v/s4XdiFuiQDVxE3hnufXDkK24rEeKhIybLAHXuM52NEDXJjJn+7rpCbc2D/579Jq
+         d4fHfox9739O9v5oMDFXm1mg5mfgTfL0GGM/6QM37CFuJ3i7Pan9MAwPoARO/ScKad
+         EPFlTaAwG5Adw==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4SLypv3TjMz4xQS;
+        Fri,  3 Nov 2023 09:14:47 +1100 (AEDT)
+Date:   Fri, 3 Nov 2023 09:14:36 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <paul@pwsan.com>
+Cc:     Jiexun Wang <wangjiexun@tinylab.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Sami Tolvanen <samitolvanen@google.com>
+Subject: linux-next: manual merge of the risc-v tree with Linus' tree
+Message-ID: <20231103091436.730cb6c6@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231103080642.468b331a@canb.auug.org.au>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/_/ZYG0PhO7Kp5.fiNdLvnQ2";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Nov 03, 2023 at 08:06:42AM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> The following commits are also in Linus Torvalds' tree as different
-> commits (but the same patches):
-> 
->   3111add7f414 ("module: Annotate struct module_notes_attrs with __counted_by")
->   331e833a7606 ("module: Fix comment typo")
->   dc95e422c283 ("module: Make is_valid_name() return bool")
->   bac202d3712f ("module: Make is_mapping_symbol() return bool")
->   b72d5a66766d ("module/decompress: use vmalloc() for gzip decompression workspace")
->   c7540b27da9e ("MAINTAINERS: add include/linux/module*.h to modules")
->   130afb8ce111 ("module: Clarify documentation of module_param_call()")
-> 
-> These are commits
-> 
->   ea0b0bcef491 ("module: Annotate struct module_notes_attrs with __counted_by")
->   fd06da776130 ("module: Fix comment typo")
->   04311b9b3063 ("module: Make is_valid_name() return bool")
->   60da3640b07c ("module: Make is_mapping_symbol() return bool")
->   3737df782c74 ("module/decompress: use vmalloc() for gzip decompression workspace")
->   62eedac26415 ("MAINTAINERS: add include/linux/module*.h to modules")
->   2c7ccb3c362b ("module: Clarify documentation of module_param_call()")
-> 
-> in Linus' tree.
+--Sig_/_/ZYG0PhO7Kp5.fiNdLvnQ2
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Fixed.
+Hi all,
 
-  Luis
+Today's linux-next merge of the risc-v tree got a conflict in:
+
+  arch/riscv/kernel/irq.c
+
+between commit:
+
+  07a27665754b ("RISC-V: Fix wrong use of CONFIG_HAVE_SOFTIRQ_ON_OWN_STACK")
+
+from Linus' tree and commit:
+
+  82982fdd5133 ("riscv: Deduplicate IRQ stack switching")
+
+from the risc-v tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc arch/riscv/kernel/irq.c
+index 9cc0a7669271,7bfea97ee7e7..000000000000
+--- a/arch/riscv/kernel/irq.c
++++ b/arch/riscv/kernel/irq.c
+@@@ -60,41 -79,23 +79,23 @@@ static void init_irq_stacks(void
+  }
+  #endif /* CONFIG_VMAP_STACK */
+ =20
+ -#ifdef CONFIG_HAVE_SOFTIRQ_ON_OWN_STACK
+ +#ifdef CONFIG_SOFTIRQ_ON_OWN_STACK
++ static void ___do_softirq(struct pt_regs *regs)
++ {
++ 	__do_softirq();
++ }
++=20
+  void do_softirq_own_stack(void)
+  {
+- #ifdef CONFIG_IRQ_STACKS
+- 	if (on_thread_stack()) {
+- 		ulong *sp =3D per_cpu(irq_stack_ptr, smp_processor_id())
+- 					+ IRQ_STACK_SIZE/sizeof(ulong);
+- 		__asm__ __volatile(
+- 		"addi	sp, sp, -"RISCV_SZPTR  "\n"
+- 		REG_S"  ra, (sp)		\n"
+- 		"addi	sp, sp, -"RISCV_SZPTR  "\n"
+- 		REG_S"  s0, (sp)		\n"
+- 		"addi	s0, sp, 2*"RISCV_SZPTR "\n"
+- 		"move	sp, %[sp]		\n"
+- 		"call	__do_softirq		\n"
+- 		"addi	sp, s0, -2*"RISCV_SZPTR"\n"
+- 		REG_L"  s0, (sp)		\n"
+- 		"addi	sp, sp, "RISCV_SZPTR   "\n"
+- 		REG_L"  ra, (sp)		\n"
+- 		"addi	sp, sp, "RISCV_SZPTR   "\n"
+- 		:
+- 		: [sp] "r" (sp)
+- 		: "a0", "a1", "a2", "a3", "a4", "a5", "a6", "a7",
+- 		  "t0", "t1", "t2", "t3", "t4", "t5", "t6",
+- #ifndef CONFIG_FRAME_POINTER
+- 		  "s0",
+- #endif
+- 		  "memory");
+- 	} else
+- #endif
++ 	if (on_thread_stack())
++ 		call_on_irq_stack(NULL, ___do_softirq);
++ 	else
+  		__do_softirq();
+  }
+ -#endif /* CONFIG_HAVE_SOFTIRQ_ON_OWN_STACK */
+ +#endif /* CONFIG_SOFTIRQ_ON_OWN_STACK */
+ =20
+  #else
++ static void init_irq_scs(void) {}
+  static void init_irq_stacks(void) {}
+  #endif /* CONFIG_IRQ_STACKS */
+ =20
+
+--Sig_/_/ZYG0PhO7Kp5.fiNdLvnQ2
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmVEH0wACgkQAVBC80lX
+0Gw61Af/cpxDB3nTwIhG02iZyOLJUwgYroVw2nP8RuVb/+BKta3FfY03/FqFzanG
+zeXcMftPUDz98EMWv36AdVf3ziwMRE/nSQ6Kl1y5j3qzTepL+UylK5BJqNJNcFHO
+IHOIwzoeKHkrYmabNiha+ovAGee0HYT/7GT/R5XbNFOdNAl7F5w4ojln3p9L8btJ
+xUGzK+MT0kUMhP/TKCxmz/IjD3OnwFv+S798px3JgM8+ysTlZUoi+iDybHJKY26Y
+rlhvfO6/MUpuHGCRx39LRdmni8/tutOK1rZPXODwhpy5m7Uh75OEVxwQUZFatu7N
+Ylg3AjXrafX+0sPtGShfrbEbSJUDcw==
+=9FZK
+-----END PGP SIGNATURE-----
+
+--Sig_/_/ZYG0PhO7Kp5.fiNdLvnQ2--

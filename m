@@ -2,110 +2,80 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 644C27DFC07
-	for <lists+linux-next@lfdr.de>; Thu,  2 Nov 2023 22:34:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C60847DFC16
+	for <lists+linux-next@lfdr.de>; Thu,  2 Nov 2023 22:48:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229449AbjKBVeR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 2 Nov 2023 17:34:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44776 "EHLO
+        id S234323AbjKBVsO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 2 Nov 2023 17:48:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234513AbjKBVeQ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 2 Nov 2023 17:34:16 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD5E319A;
-        Thu,  2 Nov 2023 14:34:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1698960844;
-        bh=kCbqYq6AZTpaUah26JxLW0tsZXqox8dE9OSgv3+Z8jE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=UBR1Mik8oL3uIgyKJDs2KlF2Xu93Q8HKojGD/CgBdGlE1pEiWjgbdGMyOS6mtmTRL
-         +CxQInRyTiyc7vuF6twYOtxE57Nja2udn1v0pEy0g2QzrC20yeV/WdIhCa+j3GFtu7
-         Um22N9jbyVX7wcUWxWWoxe2gah8CdSxPjAjWa+rw15sCAcDuA+AzWJfMb9rQt6z09n
-         jHF/VYVnXrEZLH9BXY9PG0CCWyodmFRed+E+QQXoLhv/vulSXPMMB8/8/The6Ma8AP
-         HZmOpa7F+XUMdNBWJFHVEcEHPmqgVx8aKuggLUyL8Q+ZG6llkkGHwqattyECBcW/MH
-         5iczpnFC+3nsA==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4SLxvv5z2xz4wx7;
-        Fri,  3 Nov 2023 08:34:03 +1100 (AEDT)
-Date:   Fri, 3 Nov 2023 08:34:02 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Ard Biesheuvel <ardb@kernel.org>,
-        Baoquan He <bhe@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        with ESMTP id S229448AbjKBVsO (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 2 Nov 2023 17:48:14 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80D0518B;
+        Thu,  2 Nov 2023 14:48:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=GXxaVa4Xmy3l9nFyocU4N0dWrObmXp3nfxcdQhfLD0g=; b=a2EJuUVJcjNaS5YO68yNNMNcFB
+        EHmoie2GCtfIRg2zirhwS+4fU7NY+d1irjZ7wjtCt0KxSfDcVITp5WF2C5kPXtlT4K6in6JbML2aE
+        RIFQ/beeYUwhxugapkg68vVgUX4SYfA+F1U7M7SOostFkvJcjH66NffC4DVCjR0unqgOXk/3Y4tNZ
+        paMoQ1WGBAe8tN4hSjE4LzKqUTe/Ya3t1baq6ZzY2Bg7T0pdj7sGFarIS7bN43aVeuH+ku8SvAzkp
+        Jy6hBi/Q5qwd2KjInkgLELQXUwqIlVvfCkVkP+7OhVcOfujFJLPNvcAshQEZbnuxN6/FBEjf6L5mP
+        Mrc8Q1Ww==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1qyfXs-00AKwB-0o;
+        Thu, 02 Nov 2023 21:48:08 +0000
+Date:   Thu, 2 Nov 2023 14:48:08 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the asm-generic tree with the mm
- tree
-Message-ID: <20231103083402.6d8cc7d2@canb.auug.org.au>
-In-Reply-To: <20230918101027.7506b71e@canb.auug.org.au>
-References: <20230918101027.7506b71e@canb.auug.org.au>
+Subject: Re: linux-next: duplicate patches in the modules tree
+Message-ID: <ZUQZGLDYL1/eoyzj@bombadil.infradead.org>
+References: <20231103080642.468b331a@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/cQl1LrOmM=j1cchgpHoaltm";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231103080642.468b331a@canb.auug.org.au>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/cQl1LrOmM=j1cchgpHoaltm
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Fri, Nov 03, 2023 at 08:06:42AM +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> The following commits are also in Linus Torvalds' tree as different
+> commits (but the same patches):
+> 
+>   3111add7f414 ("module: Annotate struct module_notes_attrs with __counted_by")
+>   331e833a7606 ("module: Fix comment typo")
+>   dc95e422c283 ("module: Make is_valid_name() return bool")
+>   bac202d3712f ("module: Make is_mapping_symbol() return bool")
+>   b72d5a66766d ("module/decompress: use vmalloc() for gzip decompression workspace")
+>   c7540b27da9e ("MAINTAINERS: add include/linux/module*.h to modules")
+>   130afb8ce111 ("module: Clarify documentation of module_param_call()")
+> 
+> These are commits
+> 
+>   ea0b0bcef491 ("module: Annotate struct module_notes_attrs with __counted_by")
+>   fd06da776130 ("module: Fix comment typo")
+>   04311b9b3063 ("module: Make is_valid_name() return bool")
+>   60da3640b07c ("module: Make is_mapping_symbol() return bool")
+>   3737df782c74 ("module/decompress: use vmalloc() for gzip decompression workspace")
+>   62eedac26415 ("MAINTAINERS: add include/linux/module*.h to modules")
+>   2c7ccb3c362b ("module: Clarify documentation of module_param_call()")
+> 
+> in Linus' tree.
 
-Hi all,
+Fixed.
 
-On Mon, 18 Sep 2023 10:10:27 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> Today's linux-next merge of the asm-generic tree got a conflict in:
->=20
->   arch/ia64/kernel/setup.c
->=20
-> between commit:
->=20
->   52f40d9a3c11 ("crash_core: change the prototype of function parse_crash=
-kernel()")
->=20
-> from the mm tree and commit:
->=20
->   cf8e8658100d ("arch: Remove Itanium (IA-64) architecture")
->=20
-> from the asm-generic tree.
->=20
-> I fixed it up (I removed the file) and can carry the fix as
-> necessary. This is now fixed as far as linux-next is concerned, but any
-> non trivial conflicts should be mentioned to your upstream maintainer
-> when your tree is submitted for merging.  You may also want to consider
-> cooperating with the maintainer of the conflicting tree to minimise any
-> particularly complex conflicts.
-
-This is now a conflict between the mm-nonmm-stable tree and Linus' tree.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/cQl1LrOmM=j1cchgpHoaltm
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmVEFcoACgkQAVBC80lX
-0GwW6Qf/fSluccY/3iDJ4vilm2o4OKokc0WdzboftFaHhuEqUITrz4OKBaQbRHKy
-PPO2rFcztzRammqLYbASC95CtLN/Tqj5dTwzRBThyKtE90+6z/xvabjL4OH3rTzq
-ZjgsPbew43nJEKyrjxyAug2/LM60xLmYEb90YJn26DCppM4ayuXA/FORcvBQ5ij6
-Khp+w6w9Hcq0fbd8YN/DE2r6H69AMrXap5YdIiwB/+pGyjj+TKrv71UC2nwBAXPm
-90eElpdPz5obK2A9mP0OBMiTcrL7yLyqt7chyH3sMdZv2zCmcnptiVp04oW9Gych
-Nlf4HCUaowP65/O1rjmCXE7vnq2ySg==
-=9pgm
------END PGP SIGNATURE-----
-
---Sig_/cQl1LrOmM=j1cchgpHoaltm--
+  Luis

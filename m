@@ -2,101 +2,250 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDC7F7E15AE
-	for <lists+linux-next@lfdr.de>; Sun,  5 Nov 2023 18:56:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B37E7E1754
+	for <lists+linux-next@lfdr.de>; Sun,  5 Nov 2023 23:24:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229470AbjKER4B (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 5 Nov 2023 12:56:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49000 "EHLO
+        id S229597AbjKEWYT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 5 Nov 2023 17:24:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbjKER4A (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 5 Nov 2023 12:56:00 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25F3BDB
-        for <linux-next@vger.kernel.org>; Sun,  5 Nov 2023 09:55:58 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1c9b7c234a7so33750275ad.3
-        for <linux-next@vger.kernel.org>; Sun, 05 Nov 2023 09:55:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1699206957; x=1699811757; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HIXC95EsfE1M+IH5iNxhZaF/mLKVXVH52rDOYhksDf4=;
-        b=flL9EMKchoc8Ep6t5N9Y7m3hraTTbzM/0Km871ec4Nph5kZEfb+oj5Hc2uesv39pGo
-         0X+8rIog7tWoak1xHPFAETjugGDKhXfw/f5nQP0fmPHUTJwm/XVJkcdME21nNjsyAzss
-         YErsrWm+7YF8ZimCai35yI7hNLFXVttUGQcv5eXJ+pDLzmoBFS1eQi82eusLu+CK4NVT
-         zPyZ1FVcVVnrEMGolq1FKT+C/G9QxmfFZ5Ucuz3K04Hg7DOfYzUzUlv0fJ01Qe7xoT94
-         wK4ve/S3VfM4TO4NAknvaxrArYmJcDEOY5iuakIumdNGxE3GEUla890K7HJe8Ru7LtV3
-         ywCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699206957; x=1699811757;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HIXC95EsfE1M+IH5iNxhZaF/mLKVXVH52rDOYhksDf4=;
-        b=hxxOLPEphxwDEuUOz15I/ra71bFHqAVtUz34mBjHyT5OjaAjs8H2vnnZnqtZiyzSkp
-         LPRGY8jTuyhNERCVV71UxfmoX0UNJcT+Djgn4r099wLx+MQz0vNJzKtjO6vgU+SZ+8Ku
-         TDh86DYHHrbiKa2tFg/CTyOherQLKAzCsI+ExzvNsJPtOdYiXSK+eESnEjETxBxlUURw
-         uAAsuDFk3+D5agYRTKcfPB71wyYX8igo9cQzp5bL6DcRli7N7H4up9DU2mjfH+H4wdMD
-         IewolhUKOpb8eCWSuoQGTrnPjT8gmEkjX2VVoflDq7LSGKqQ/4vmih4V+Q845siOIMah
-         /Q8Q==
-X-Gm-Message-State: AOJu0Yz4twtLao8r4iwZ6wJqvmr6+RTya++Tx6Mx7XDcibG6MZbuvjbu
-        gJdYxE7rk6ZtASWiRxadMl2XQe/Cf3g=
-X-Google-Smtp-Source: AGHT+IFBLGY54PYhYsI+r9J0zFjt+Lj9MUAmvwx6SjMhszUI82oqENWEtbcEZk5jA75+E2fw/54IEQ==
-X-Received: by 2002:a17:902:ecce:b0:1cc:59a1:79c6 with SMTP id a14-20020a170902ecce00b001cc59a179c6mr22992191plh.18.1699206957551;
-        Sun, 05 Nov 2023 09:55:57 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id m15-20020a170902db0f00b001c7443d0890sm3062865plx.102.2023.11.05.09.55.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Nov 2023 09:55:56 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 5 Nov 2023 09:55:55 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Chaitanya Dhere <chaitanya.dhere@amd.com>,
-        Roman Li <roman.li@amd.com>, linux-next@vger.kernel.org,
-        amd-gfx@lists.freedesktop.org
-Subject: Re: [PATCH 2/2] drm/amd/display: Fix stack size issue on DML2
-Message-ID: <aa6344f8-abd4-4f9e-86cf-febecd6fd747@roeck-us.net>
-References: <20231016142031.241912-1-Rodrigo.Siqueira@amd.com>
- <20231016142031.241912-3-Rodrigo.Siqueira@amd.com>
+        with ESMTP id S229447AbjKEWYT (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 5 Nov 2023 17:24:19 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF2FECF;
+        Sun,  5 Nov 2023 14:24:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1699223050;
+        bh=YAxELxRWIwi3c78SCzfri2Ak5wWEvow0ypGfivoE5p8=;
+        h=Date:From:To:Cc:Subject:From;
+        b=a5pAmDZKcdrZF5107HD+V6yB4Fhj4EXTK/W1vMZ/zwQUh8YD8KKxBzcR/7fphNNdE
+         fsIhYJzGJwqRe8UHYryftK4i5KrfGNdHbGRo6rYoSXQ+oMf2Vcqv2xIm+uQviiaPdE
+         EKw0rCmsS73R2OPEaKTotWv/RkGMRrjHDxHJJ1j0OkzcXtemh+8h5HHJUUtsl18yPF
+         UIG/0bg0t8vUJwArFNYztuFCZvhcWgW+Q/CZdjPw+P9jDyK9nFZHVSmY0s+jUqA6Aa
+         9X6G7/uYGu0EL/dZBT5QtBMlgTDQseJWwloaTbYJfVGMqdn8iDee/Vypgn+9PWmtWR
+         +UjDLKRTCnTFw==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4SNptL40vRz4x1v;
+        Mon,  6 Nov 2023 09:24:10 +1100 (AEDT)
+Date:   Mon, 6 Nov 2023 09:24:08 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Jeff Layton <jlayton@kernel.org>, Ilya Dryomov <idryomov@gmail.com>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Xiubo Li <xiubli@redhat.com>
+Subject: linux-next: manual merge of the ceph tree with Linus' tree
+Message-ID: <20231106092408.24ea682e@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231016142031.241912-3-Rodrigo.Siqueira@amd.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/1j8nlq0XA/GSLTG=Ly2X_.v";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Oct 16, 2023 at 08:19:18AM -0600, Rodrigo Siqueira wrote:
-> This commit is the last part of the fix that reduces the stack size in
-> the DML2 code.
-> 
+--Sig_/1j8nlq0XA/GSLTG=Ly2X_.v
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-That does not really help when trying to build allmodconfig or allyesconfig
-with gcc 11.4 or 12.3.
+Hi all,
 
-drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core.c: In function 'dml_prefetch_check':
-drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core.c:6707:1: error: the frame size of 2056 bytes is larger than 2048 bytes
+Today's linux-next merge of the ceph tree got a conflict in:
 
-This is with v6.6-14500-g1c41041124bd.
+  fs/ceph/inode.c
 
-I am overwriting it by forcing CONFIG_FRAME_WARN=0 in my test builds for
-x86_64, but of course that affects all code. Maybe consider increasing
-frame-larger-than in drivers/gpu/drm/amd/display/dc/dml2/Makefile ?
-Currently it is
+between commit:
 
-ifneq ($(CONFIG_FRAME_WARN),0)
-frame_warn_flag := -Wframe-larger-than=2048
-endif
+  c453bdb53534 ("ceph: convert to new timestamp accessors")
 
-Guenter
+from Linus' tree and commit:
+
+  38d46409c463 ("ceph: print cluster fsid and client global_id in all debug=
+ logs")
+
+from the ceph tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc fs/ceph/inode.c
+index 2e2a303b9e64,b1b92a948a3b..000000000000
+--- a/fs/ceph/inode.c
++++ b/fs/ceph/inode.c
+@@@ -833,33 -847,29 +847,32 @@@ void ceph_fill_file_time(struct inode *
+  		if (ci->i_version =3D=3D 0 ||
+  		    ceph_seq_cmp(time_warp_seq, ci->i_time_warp_seq) > 0) {
+  			/* the MDS did a utimes() */
+- 			dout("mtime %lld.%09ld -> %lld.%09ld "
+- 			     "tw %d -> %d\n",
+- 			     inode_get_mtime_sec(inode),
+- 			     inode_get_mtime_nsec(inode),
+- 			     mtime->tv_sec, mtime->tv_nsec,
+- 			     ci->i_time_warp_seq, (int)time_warp_seq);
++ 			doutc(cl, "mtime %lld.%09ld -> %lld.%09ld tw %d -> %d\n",
+ -			      inode->i_mtime.tv_sec, inode->i_mtime.tv_nsec,
+++			      inode_get_mtime_sec(inode),
+++			      inode_get_mtime_nsec(inode),
++ 			      mtime->tv_sec, mtime->tv_nsec,
++ 			      ci->i_time_warp_seq, (int)time_warp_seq);
+ =20
+ -			inode->i_mtime =3D *mtime;
+ -			inode->i_atime =3D *atime;
+ +			inode_set_mtime_to_ts(inode, *mtime);
+ +			inode_set_atime_to_ts(inode, *atime);
+  			ci->i_time_warp_seq =3D time_warp_seq;
+  		} else if (time_warp_seq =3D=3D ci->i_time_warp_seq) {
+ +			struct timespec64	ts;
+ +
+  			/* nobody did utimes(); take the max */
+ -			if (timespec64_compare(mtime, &inode->i_mtime) > 0) {
+ +			ts =3D inode_get_mtime(inode);
+ +			if (timespec64_compare(mtime, &ts) > 0) {
+- 				dout("mtime %lld.%09ld -> %lld.%09ld inc\n",
+- 				     ts.tv_sec, ts.tv_nsec,
+- 				     mtime->tv_sec, mtime->tv_nsec);
++ 				doutc(cl, "mtime %lld.%09ld -> %lld.%09ld inc\n",
+ -				      inode->i_mtime.tv_sec,
+ -				      inode->i_mtime.tv_nsec,
+++				      ts.tv_sec, ts.tv_nsec,
++ 				      mtime->tv_sec, mtime->tv_nsec);
+ -				inode->i_mtime =3D *mtime;
+ +				inode_set_mtime_to_ts(inode, *mtime);
+  			}
+ -			if (timespec64_compare(atime, &inode->i_atime) > 0) {
+ +			ts =3D inode_get_atime(inode);
+ +			if (timespec64_compare(atime, &ts) > 0) {
+- 				dout("atime %lld.%09ld -> %lld.%09ld inc\n",
+- 				     ts.tv_sec, ts.tv_nsec,
+- 				     atime->tv_sec, atime->tv_nsec);
++ 				doutc(cl, "atime %lld.%09ld -> %lld.%09ld inc\n",
+ -				      inode->i_atime.tv_sec,
+ -				      inode->i_atime.tv_nsec,
+++				      ts.tv_sec, ts.tv_nsec,
++ 				      atime->tv_sec, atime->tv_nsec);
+ -				inode->i_atime =3D *atime;
+ +				inode_set_atime_to_ts(inode, *atime);
+  			}
+  		} else if (issued & CEPH_CAP_FILE_EXCL) {
+  			/* we did a utimes(); ignore mds values */
+@@@ -2554,22 -2595,21 +2598,22 @@@ retry
+  	}
+ =20
+  	if (ia_valid & ATTR_ATIME) {
+ +		struct timespec64 atime =3D inode_get_atime(inode);
+ +
+- 		dout("setattr %p atime %lld.%ld -> %lld.%ld\n", inode,
+- 		     atime.tv_sec, atime.tv_nsec,
+- 		     attr->ia_atime.tv_sec, attr->ia_atime.tv_nsec);
++ 		doutc(cl, "%p %llx.%llx atime %lld.%ld -> %lld.%ld\n",
+ -		      inode, ceph_vinop(inode), inode->i_atime.tv_sec,
+ -		      inode->i_atime.tv_nsec, attr->ia_atime.tv_sec,
+ -		      attr->ia_atime.tv_nsec);
+++		      inode, ceph_vinop(inode), atime.tv_sec, atime.tv_nsec,
+++		      attr->ia_atime.tv_sec, attr->ia_atime.tv_nsec);
+  		if (issued & CEPH_CAP_FILE_EXCL) {
+  			ci->i_time_warp_seq++;
+ -			inode->i_atime =3D attr->ia_atime;
+ +			inode_set_atime_to_ts(inode, attr->ia_atime);
+  			dirtied |=3D CEPH_CAP_FILE_EXCL;
+  		} else if ((issued & CEPH_CAP_FILE_WR) &&
+ -			   timespec64_compare(&inode->i_atime,
+ -					    &attr->ia_atime) < 0) {
+ -			inode->i_atime =3D attr->ia_atime;
+ +			   timespec64_compare(&atime,
+ +					      &attr->ia_atime) < 0) {
+ +			inode_set_atime_to_ts(inode, attr->ia_atime);
+  			dirtied |=3D CEPH_CAP_FILE_WR;
+  		} else if ((issued & CEPH_CAP_FILE_SHARED) =3D=3D 0 ||
+ -			   !timespec64_equal(&inode->i_atime, &attr->ia_atime)) {
+ +			   !timespec64_equal(&atime, &attr->ia_atime)) {
+  			ceph_encode_timespec64(&req->r_args.setattr.atime,
+  					       &attr->ia_atime);
+  			mask |=3D CEPH_SETATTR_ATIME;
+@@@ -2629,21 -2670,21 +2674,21 @@@
+  		}
+  	}
+  	if (ia_valid & ATTR_MTIME) {
+ +		struct timespec64 mtime =3D inode_get_mtime(inode);
+ +
+- 		dout("setattr %p mtime %lld.%ld -> %lld.%ld\n", inode,
+- 		     mtime.tv_sec, mtime.tv_nsec,
+- 		     attr->ia_mtime.tv_sec, attr->ia_mtime.tv_nsec);
++ 		doutc(cl, "%p %llx.%llx mtime %lld.%ld -> %lld.%ld\n",
+ -		      inode, ceph_vinop(inode), inode->i_mtime.tv_sec,
+ -		      inode->i_mtime.tv_nsec, attr->ia_mtime.tv_sec,
+ -		      attr->ia_mtime.tv_nsec);
+++		      inode, ceph_vinop(inode), mtime.tv_sec, mtime.tv_nsec,
+++		      attr->ia_mtime.tv_sec, attr->ia_mtime.tv_nsec);
+  		if (issued & CEPH_CAP_FILE_EXCL) {
+  			ci->i_time_warp_seq++;
+ -			inode->i_mtime =3D attr->ia_mtime;
+ +			inode_set_mtime_to_ts(inode, attr->ia_mtime);
+  			dirtied |=3D CEPH_CAP_FILE_EXCL;
+  		} else if ((issued & CEPH_CAP_FILE_WR) &&
+ -			   timespec64_compare(&inode->i_mtime,
+ -					    &attr->ia_mtime) < 0) {
+ -			inode->i_mtime =3D attr->ia_mtime;
+ +			   timespec64_compare(&mtime, &attr->ia_mtime) < 0) {
+ +			inode_set_mtime_to_ts(inode, attr->ia_mtime);
+  			dirtied |=3D CEPH_CAP_FILE_WR;
+  		} else if ((issued & CEPH_CAP_FILE_SHARED) =3D=3D 0 ||
+ -			   !timespec64_equal(&inode->i_mtime, &attr->ia_mtime)) {
+ +			   !timespec64_equal(&mtime, &attr->ia_mtime)) {
+  			ceph_encode_timespec64(&req->r_args.setattr.mtime,
+  					       &attr->ia_mtime);
+  			mask |=3D CEPH_SETATTR_MTIME;
+@@@ -2656,11 -2697,12 +2701,12 @@@
+  	if (ia_valid & ATTR_CTIME) {
+  		bool only =3D (ia_valid & (ATTR_SIZE|ATTR_MTIME|ATTR_ATIME|
+  					 ATTR_MODE|ATTR_UID|ATTR_GID)) =3D=3D 0;
+- 		dout("setattr %p ctime %lld.%ld -> %lld.%ld (%s)\n", inode,
+- 		     inode_get_ctime_sec(inode),
+- 		     inode_get_ctime_nsec(inode),
+- 		     attr->ia_ctime.tv_sec, attr->ia_ctime.tv_nsec,
+- 		     only ? "ctime only" : "ignored");
++ 		doutc(cl, "%p %llx.%llx ctime %lld.%ld -> %lld.%ld (%s)\n",
+ -		      inode, ceph_vinop(inode), inode_get_ctime(inode).tv_sec,
+ -		      inode_get_ctime(inode).tv_nsec,
+++		      inode, ceph_vinop(inode), inode_get_ctime_sec(inode),
+++		      inode_get_ctime_nsec(inode),
++ 		      attr->ia_ctime.tv_sec, attr->ia_ctime.tv_nsec,
++ 		      only ? "ctime only" : "ignored");
++=20
+  		if (only) {
+  			/*
+  			 * if kernel wants to dirty ctime but nothing else,
+
+--Sig_/1j8nlq0XA/GSLTG=Ly2X_.v
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmVIFggACgkQAVBC80lX
+0Gxd6wf8ClPpTZaexMFzLxPb60d+d5N50oCz4lIuf+1hKR178blo2DiD0lYX5s3X
+KmzbRTJo+XmdK5pyfENBp6GG/TUYVjRcgJ1NIflVKU4cQA4gaOUITKpyEu4fbSTe
+dEzRtkDJR0Fxbede0pnROarIzgAYL4euhpvfhnyBP92Ep+fGGrtMEVmPq4znoKeZ
+otFSkaVNshBr+2TMApR7KBWk5ZsIQwUU3JUZ4J+DtOKYnZrausb40uZ4lTIacj9s
+cweULZ3xHXWIt4kDJJkSTY/RyfajMAClndWhfUXD5XzogihV8xZUNO9cdMoS+tW9
+lPbCbPM6GCeKVV0gMckReQIj5w9wpQ==
+=L02l
+-----END PGP SIGNATURE-----
+
+--Sig_/1j8nlq0XA/GSLTG=Ly2X_.v--

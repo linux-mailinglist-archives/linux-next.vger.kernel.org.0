@@ -2,54 +2,49 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED8F17E17D3
-	for <lists+linux-next@lfdr.de>; Mon,  6 Nov 2023 00:14:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 554CD7E17DF
+	for <lists+linux-next@lfdr.de>; Mon,  6 Nov 2023 00:22:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229784AbjKEXOl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 5 Nov 2023 18:14:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57014 "EHLO
+        id S229717AbjKEXWQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 5 Nov 2023 18:22:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjKEXOl (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 5 Nov 2023 18:14:41 -0500
+        with ESMTP id S229485AbjKEXWP (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 5 Nov 2023 18:22:15 -0500
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A9EBE0;
-        Sun,  5 Nov 2023 15:14:38 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06270CC;
+        Sun,  5 Nov 2023 15:22:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1699226076;
-        bh=KNZfu7OjolZplMBWHK4KYrGyxje/IEIPmuS4nt+hcXA=;
+        s=201702; t=1699226531;
+        bh=lHq2yBVx2PRPUkReEuYgqvnzXGUDwT03Ph9QcnzcWv8=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=PkTUoPjS8C+kZTg2HC6IGXC2Rrya/zlyd5oe7zF2CvviO8Q5nwGYY4bOMps0a5k42
-         qcZeo2mIy5xW1uvWTjQawq5fxh3I4dii2Kqcz4rIitGtW2lFQpPWRZEgAclG4y4tBo
-         x2dJvSmADQjV5a0tVpYrcwD/1FqsoTMDYfk2WX99ADmOzOh6exVv1l+PsEwFeHzqSA
-         OK0TMydgjmA47PQB4cvgCbjHNu5TES2WjG+Wt2EN7b9xwQJgV5XurXDr25V6e4tKhF
-         qklMJbpsoN6NZmrh7ReI/Ecce/bmiwwFiUqkPUcAQs6Hrj1QRQls1rAvdXwf9eB9W6
-         HNBxeQ5wDfcag==
+        b=EeqeRSvYpZqCRnmfBdE0l6CPQzKlidBtsWLsHia+dihBX1EupMHsGJCl/SpT2F5lN
+         LDPke2/tNchc12J8uApvhiJ2rJ6q6x/IRqGvwpYJ77DLi0o8ZRVJz915jv0kej1d3P
+         dvrqHOtcxn+rVG63QCDUiDFYim7SBp+7QEmp3K4A4e3QdWZYU/4EjfIs4GQ/2IC7KW
+         tDfr/vEOolDE0+7NLw4bEuMRQN8NYNu8llZGxWiqQl/N+Nm0xYwXmpAhrJkkKEJzNa
+         7rJVzbAAQbDvcEAqv+hfasH1u5T8I+nZ9No6RDPY+fsGtqj8uZdmaZdWFWvj963Lns
+         bSrWfKgjuU2Kg==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4SNr0X2q4sz4xPL;
-        Mon,  6 Nov 2023 10:14:36 +1100 (AEDT)
-Date:   Mon, 6 Nov 2023 10:14:34 +1100
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4SNr9H0QQwz4x5m;
+        Mon,  6 Nov 2023 10:22:10 +1100 (AEDT)
+Date:   Mon, 6 Nov 2023 10:22:09 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     John Johansen <john.johansen@canonical.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
+To:     =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>,
+        Paul Moore <paul@paul-moore.com>
+Cc:     Casey Schaufler <casey@schaufler-ca.com>,
+        Kees Cook <keescook@chromium.org>,
+        Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        linux-security-module@vger.kernel.org
-Subject: Re: linux-next: manual merge of the apparmor tree with the security
- tree
-Message-ID: <20231106101434.70c62773@canb.auug.org.au>
-In-Reply-To: <CAHC9VhR=x7qB3gmQg+GPYLnXtGU88S3KCiZGjRYtDKSJHp4P1g@mail.gmail.com>
-References: <20231027130320.69469330@canb.auug.org.au>
-        <CAHC9VhQ+Nt7CrLxSZcOVNEtAypruOmM0ST0P0JJMrOq4XYmAkw@mail.gmail.com>
-        <4b4eb40c-b65a-46e2-9e23-5412a9cdcad0@canonical.com>
-        <CAHC9VhQbxJ4-z4Hp7CSmtcTNOWGFeQF2eEyct9=nHCMN_89YXw@mail.gmail.com>
-        <20231031074649.3bdbec45@canb.auug.org.au>
-        <CAHC9VhR=x7qB3gmQg+GPYLnXtGU88S3KCiZGjRYtDKSJHp4P1g@mail.gmail.com>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the landlock tree
+Message-ID: <20231106102209.4b07d7e7@canb.auug.org.au>
+In-Reply-To: <20231027163400.5764d549@canb.auug.org.au>
+References: <20231027163400.5764d549@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/_zu0BJwfrCMGY12QZZF2a/8";
+Content-Type: multipart/signed; boundary="Sig_/L4WbjisVULi66lxp_lEZC4x";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
@@ -61,64 +56,99 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/_zu0BJwfrCMGY12QZZF2a/8
-Content-Type: text/plain; charset=UTF-8
+--Sig_/L4WbjisVULi66lxp_lEZC4x
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Paul,
+Hi all,
 
-[Sorry for the slow reply]
-
-On Mon, 30 Oct 2023 17:04:01 -0400 Paul Moore <paul@paul-moore.com> wrote:
+On Fri, 27 Oct 2023 16:34:00 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
 >
-> On Mon, Oct 30, 2023 at 4:46=E2=80=AFPM Stephen Rothwell <sfr@canb.auug.o=
-rg.au> wrote:
-> >
-> > On Mon, 30 Oct 2023 12:52:50 -0400 Paul Moore <paul@paul-moore.com> wro=
-te: =20
-> > >
-> > > On Sun, Oct 29, 2023 at 5:09=E2=80=AFPM John Johansen <john.johansen@=
-canonical.com> wrote: =20
-> > > >
-> > > > is part of the Three basic syscalls series, the plan is still to ha=
-ve that
-> > > > series bake in next for a full cycle? =20
-> > >
-> > > Yes, that's still the plan.  Once v6.7-rc1 is out I'll rebase the LSM
-> > > syscall patches and I expect the vast majority of these conflicts to
-> > > disappear, although I'm sure we'll pick up some new ones with the rest
-> > > of the v6.7-rcX cycle :) =20
-> >
-> > These patches should not be in linux-next until after v6.7-rc1. =20
+> After merging the landlock tree, today's linux-next build (powerpc
+> ppc64_defconfig) failed like this:
 >=20
-> What if we wanted additional testing beyond the typical?  Do you not
-> support that?
+> In file included from security/landlock/net.c:14:
+> security/landlock/net.c: In function 'landlock_add_net_hooks':
+> security/landlock/common.h:12:23: error: passing argument 3 of 'security_=
+add_hooks' from incompatible pointer type [-Werror=3Dincompatible-pointer-t=
+ypes]
+>    12 | #define LANDLOCK_NAME "landlock"
+>       |                       ^~~~~~~~~~
+>       |                       |
+>       |                       char *
+> security/landlock/net.c:199:28: note: in expansion of macro 'LANDLOCK_NAM=
+E'
+>   199 |                            LANDLOCK_NAME);
+>       |                            ^~~~~~~~~~~~~
+> In file included from security/landlock/setup.h:12,
+>                  from security/landlock/cred.h:17,
+>                  from security/landlock/net.c:15:
+> include/linux/lsm_hooks.h:120:53: note: expected 'const struct lsm_id *' =
+but argument is of type 'char *'
+>   120 |                                const struct lsm_id *lsmid);
+>       |                                ~~~~~~~~~~~~~~~~~~~~~^~~~~
+>=20
+> Caused by commit
+>=20
+>   fff69fb03dde ("landlock: Support network rules with TCP bind and connec=
+t")
+>=20
+> interacting with commit
+>=20
+>   9b09f11320db ("LSM: Identify modules by more than name")
+>=20
+> from the security tree.
+>=20
+> I have applied the following merge resolution patch.
+>=20
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Fri, 27 Oct 2023 16:13:32 +1100
+> Subject: [PATCH] fixup for "landlock: Support network rules with TCP bind=
+ and
+>  connect"
+>=20
+> interacting with "LSM: Identify modules by more than name"
+>=20
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> ---
+>  security/landlock/net.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/security/landlock/net.c b/security/landlock/net.c
+> index aaa92c2b1f08..efa1b644a4af 100644
+> --- a/security/landlock/net.c
+> +++ b/security/landlock/net.c
+> @@ -196,5 +196,5 @@ static struct security_hook_list landlock_hooks[] __r=
+o_after_init =3D {
+>  __init void landlock_add_net_hooks(void)
+>  {
+>  	security_add_hooks(landlock_hooks, ARRAY_SIZE(landlock_hooks),
+> -			   LANDLOCK_NAME);
+> +			   &landlock_lsmid);
+>  }
+> --=20
+> 2.40.1
 
-No, I try hard not to.  It just complicates things when I and others
-have to cope with conflicts and build problems caused by
-patches/features destined for next+1 while trying to stabilise the
-current/next release.
-
-Sometimes it happens that a feature slips after being added to -next,
-but please don't do it deliberately.
+This is now a conflict between the security tree and Linus' tree.
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/_zu0BJwfrCMGY12QZZF2a/8
+--Sig_/L4WbjisVULi66lxp_lEZC4x
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmVIIdoACgkQAVBC80lX
-0Gx1IAf9H6V82cvAQtkUP2Py/ZW41u9lLBGGfLJ/mePRq+auXqJ7G2Tl1wOqx+4t
-dzNmZq5f/VDFeXghE4jA6GHxst1C1/JPeIjew6g32BRSMQ0sHMIax8JFZg6kGrnf
-kE/jTG6YyW2lfK+DhfL2x7FU1d2vDK19oIwr8rR+oQjADKGAta91pGZWfCMpOpsK
-T9YMg4wqrb1iQ85g4H1aA1xnddA4+4NDqZpyyrxjeiRbdU3VtAb5IAnQAp/iFjVo
-fbtXRxW6hsk4dXxIPJG1rwttUNWBj9J23WtFyn/WdFfsFh4fsKpvpSF23AZkJ4a7
-pCQpF/51mND8VV4sBjJ67cOa3aq+sQ==
-=5v1Q
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmVII6EACgkQAVBC80lX
+0GxX6gf/Traap0Ho5WqkzDsT4PKC5irgj6MhkN1wWCxfABSHc8sqOlRNKIMD1Jpj
+3pk2irkl86l5AL9pUwmtSMPUZkSjhYMM7X87Bj8QCDy6mIa8xiQ1ExQ+WFzA9s9K
+O9Y3WM7OB2vGonkFV/MRAk5RIbOogSI88s8ygomu2rw6n4BEJJvr7qtsQIoS+mhD
+bmtxz3j3UhpZrjjciNJw9+76IAEVnyw0PrwgftAZjCHg5OkwtlsFY7CNschjprG3
+7erw3YZPR3X6tPsfRbs9FveAWrCBpTa6SDubFuRppkzQFEmHVcpDGX7AzKe5xL4y
+cUXj7Qt/4/GVrOvg2ZP/B8hxFiDY6Q==
+=0F30
 -----END PGP SIGNATURE-----
 
---Sig_/_zu0BJwfrCMGY12QZZF2a/8--
+--Sig_/L4WbjisVULi66lxp_lEZC4x--

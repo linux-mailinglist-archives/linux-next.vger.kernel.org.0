@@ -2,381 +2,101 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 452047E00D6
-	for <lists+linux-next@lfdr.de>; Fri,  3 Nov 2023 11:30:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDC7F7E15AE
+	for <lists+linux-next@lfdr.de>; Sun,  5 Nov 2023 18:56:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230048AbjKCKZp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 3 Nov 2023 06:25:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38406 "EHLO
+        id S229470AbjKER4B (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 5 Nov 2023 12:56:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230038AbjKCKZo (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 3 Nov 2023 06:25:44 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D777AD57
-        for <linux-next@vger.kernel.org>; Fri,  3 Nov 2023 03:25:30 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id d9443c01a7336-1cc5b6d6228so14773045ad.2
-        for <linux-next@vger.kernel.org>; Fri, 03 Nov 2023 03:25:30 -0700 (PDT)
+        with ESMTP id S229455AbjKER4A (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 5 Nov 2023 12:56:00 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25F3BDB
+        for <linux-next@vger.kernel.org>; Sun,  5 Nov 2023 09:55:58 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1c9b7c234a7so33750275ad.3
+        for <linux-next@vger.kernel.org>; Sun, 05 Nov 2023 09:55:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1699007130; x=1699611930; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=NLCFTwExURR7czM9i6j07KN41FVVbL33kTuoXXI2ZVU=;
-        b=fGpSPF29xIeerrM1nQdxdCnVIgpF26J5r8MsRgpc+mfFq1dHbksCiEWPOdEfuqFc5j
-         ZRsU1oWGtBCR5xoMD1Jp8+j2AYoWHSMCzc6BxSRsOmjrFAB4mj9WT62MCIn/Nfi5smoD
-         qJ+mRAbNtDHo4OCDGk1QBIiyQvl2MqTzRyKZMwZ2Ws+uGnLLAZnR07XQ4exkipP7bfuj
-         km3oRnp9oHUG0SwprygUgkTT559eNRvWlrNlJqueBDA+P/aEBtXLj6jPXcip3j5Zzh6x
-         bvu/UU7YuvKon2GSMDGmDH2zwWygh0Y0iX97ZVt2EyCFy3La5jy3BGcbA5EtYVKFd/Ru
-         55Sw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699007130; x=1699611930;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=gmail.com; s=20230601; t=1699206957; x=1699811757; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=NLCFTwExURR7czM9i6j07KN41FVVbL33kTuoXXI2ZVU=;
-        b=qPDPSc361YaRE5LykCVE4G5kf/cWql7FWwfyzGGKx5BNTdhFy87n278ktP5fl8eaDo
-         P+7qkDjNmP318juaOX9nML0NpMp796spRYTqzvM2iPvp4SkNP2kdrJRpvbkL1vbF/2+U
-         5/O7tOO+rId3xWLatThI6ewcLm2pCehZim7Gk8POYWB7Tvu6cRQT6/PfI1KnTZ41HSy8
-         Xg31lTCkUEGNjdXl0AWmhErsCVdBMVxKLEzGC46MXPqytTmOOJuyKyKuliQjzwA7+hLT
-         dHk5dFWI7lDTpTiocXA5pTBRaI/H85Me/FJHzB7/nbj4XONQfrJjEqb/sLNFfDwwS4XO
-         9DBg==
-X-Gm-Message-State: AOJu0YxrRKMuwADEM1AG4VC/WNHksFUkZJlEHWAB2Qw4PdEsVk/YWBZN
-        vHv3Bqncu/fVfErrnMKw/3tZAem3Zyyum5s4zJv+Qg==
-X-Google-Smtp-Source: AGHT+IGTtsWQ+fBk1BEJzuFoh30juGY4WuiOO+7lnvwylmm1XvTM1GK9ZIpBXdyLbaP136i7vj4pEQ==
-X-Received: by 2002:a17:903:1248:b0:1cc:c0f:2e9b with SMTP id u8-20020a170903124800b001cc0c0f2e9bmr21995380plh.24.1699007129550;
-        Fri, 03 Nov 2023 03:25:29 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id s18-20020a17090330d200b001c771740da4sm1111395plc.195.2023.11.03.03.25.28
+        bh=HIXC95EsfE1M+IH5iNxhZaF/mLKVXVH52rDOYhksDf4=;
+        b=flL9EMKchoc8Ep6t5N9Y7m3hraTTbzM/0Km871ec4Nph5kZEfb+oj5Hc2uesv39pGo
+         0X+8rIog7tWoak1xHPFAETjugGDKhXfw/f5nQP0fmPHUTJwm/XVJkcdME21nNjsyAzss
+         YErsrWm+7YF8ZimCai35yI7hNLFXVttUGQcv5eXJ+pDLzmoBFS1eQi82eusLu+CK4NVT
+         zPyZ1FVcVVnrEMGolq1FKT+C/G9QxmfFZ5Ucuz3K04Hg7DOfYzUzUlv0fJ01Qe7xoT94
+         wK4ve/S3VfM4TO4NAknvaxrArYmJcDEOY5iuakIumdNGxE3GEUla890K7HJe8Ru7LtV3
+         ywCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1699206957; x=1699811757;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HIXC95EsfE1M+IH5iNxhZaF/mLKVXVH52rDOYhksDf4=;
+        b=hxxOLPEphxwDEuUOz15I/ra71bFHqAVtUz34mBjHyT5OjaAjs8H2vnnZnqtZiyzSkp
+         LPRGY8jTuyhNERCVV71UxfmoX0UNJcT+Djgn4r099wLx+MQz0vNJzKtjO6vgU+SZ+8Ku
+         TDh86DYHHrbiKa2tFg/CTyOherQLKAzCsI+ExzvNsJPtOdYiXSK+eESnEjETxBxlUURw
+         uAAsuDFk3+D5agYRTKcfPB71wyYX8igo9cQzp5bL6DcRli7N7H4up9DU2mjfH+H4wdMD
+         IewolhUKOpb8eCWSuoQGTrnPjT8gmEkjX2VVoflDq7LSGKqQ/4vmih4V+Q845siOIMah
+         /Q8Q==
+X-Gm-Message-State: AOJu0Yz4twtLao8r4iwZ6wJqvmr6+RTya++Tx6Mx7XDcibG6MZbuvjbu
+        gJdYxE7rk6ZtASWiRxadMl2XQe/Cf3g=
+X-Google-Smtp-Source: AGHT+IFBLGY54PYhYsI+r9J0zFjt+Lj9MUAmvwx6SjMhszUI82oqENWEtbcEZk5jA75+E2fw/54IEQ==
+X-Received: by 2002:a17:902:ecce:b0:1cc:59a1:79c6 with SMTP id a14-20020a170902ecce00b001cc59a179c6mr22992191plh.18.1699206957551;
+        Sun, 05 Nov 2023 09:55:57 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id m15-20020a170902db0f00b001c7443d0890sm3062865plx.102.2023.11.05.09.55.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Nov 2023 03:25:29 -0700 (PDT)
-Message-ID: <6544ca99.170a0220.8f8b0.29bc@mx.google.com>
-Date:   Fri, 03 Nov 2023 03:25:29 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        Sun, 05 Nov 2023 09:55:56 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sun, 5 Nov 2023 09:55:55 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Chaitanya Dhere <chaitanya.dhere@amd.com>,
+        Roman Li <roman.li@amd.com>, linux-next@vger.kernel.org,
+        amd-gfx@lists.freedesktop.org
+Subject: Re: [PATCH 2/2] drm/amd/display: Fix stack size issue on DML2
+Message-ID: <aa6344f8-abd4-4f9e-86cf-febecd6fd747@roeck-us.net>
+References: <20231016142031.241912-1-Rodrigo.Siqueira@amd.com>
+ <20231016142031.241912-3-Rodrigo.Siqueira@amd.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: next-20231103
-X-Kernelci-Report-Type: test
-X-Kernelci-Branch: master
-X-Kernelci-Tree: next
-Subject: next/master baseline: 205 runs, 8 regressions (next-20231103)
-To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
-        kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231016142031.241912-3-Rodrigo.Siqueira@amd.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master baseline: 205 runs, 8 regressions (next-20231103)
+On Mon, Oct 16, 2023 at 08:19:18AM -0600, Rodrigo Siqueira wrote:
+> This commit is the last part of the fix that reduces the stack size in
+> the DML2 code.
+> 
 
-Regressions Summary
--------------------
+That does not really help when trying to build allmodconfig or allyesconfig
+with gcc 11.4 or 12.3.
 
-platform                     | arch  | lab             | compiler | defconf=
-ig                    | regressions
------------------------------+-------+-----------------+----------+--------=
-----------------------+------------
-imx8mm-innocomm-wb15-evk     | arm64 | lab-pengutronix | gcc-10   | defconf=
-ig+CON...OMIZE_BASE=3Dy | 1          =
+drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core.c: In function 'dml_prefetch_check':
+drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core.c:6707:1: error: the frame size of 2056 bytes is larger than 2048 bytes
 
-k3-j721e-sk                  | arm64 | lab-baylibre    | gcc-10   | defconf=
-ig+kselftest          | 1          =
+This is with v6.6-14500-g1c41041124bd.
 
-meson-gxl-s905x-libretech-cc | arm64 | lab-broonie     | gcc-10   | defconf=
-ig+kselftest          | 1          =
+I am overwriting it by forcing CONFIG_FRAME_WARN=0 in my test builds for
+x86_64, but of course that affects all code. Maybe consider increasing
+frame-larger-than in drivers/gpu/drm/amd/display/dc/dml2/Makefile ?
+Currently it is
 
-meson-gxl-s905x-libretech-cc | arm64 | lab-clabbe      | gcc-10   | defconf=
-ig+kselftest          | 1          =
+ifneq ($(CONFIG_FRAME_WARN),0)
+frame_warn_flag := -Wframe-larger-than=2048
+endif
 
-rk3399-roc-pc                | arm64 | lab-clabbe      | gcc-10   | defconf=
-ig+kselftest          | 1          =
-
-rk3399-rock-pi-4b            | arm64 | lab-collabora   | gcc-10   | defconf=
-ig+CON...OMIZE_BASE=3Dy | 1          =
-
-sun50i-h6-pine-h64           | arm64 | lab-clabbe      | gcc-10   | defconf=
-ig+kselftest          | 1          =
-
-sun50i-h6-pine-h64           | arm64 | lab-collabora   | gcc-10   | defconf=
-ig+kselftest          | 1          =
-
-
-  Details:  https://kernelci.org/test/job/next/branch/master/kernel/next-20=
-231103/plan/baseline/
-
-  Test:     baseline
-  Tree:     next
-  Branch:   master
-  Describe: next-20231103
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      e27090b1413ff236ca1aec26d6b022149115de2c =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform                     | arch  | lab             | compiler | defconf=
-ig                    | regressions
------------------------------+-------+-----------------+----------+--------=
-----------------------+------------
-imx8mm-innocomm-wb15-evk     | arm64 | lab-pengutronix | gcc-10   | defconf=
-ig+CON...OMIZE_BASE=3Dy | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/654469c2004bc7eda4efcf3d
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20231103/arm6=
-4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-pengutronix/baseline-imx8m=
-m-innocomm-wb15-evk.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20231103/arm6=
-4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-pengutronix/baseline-imx8m=
-m-innocomm-wb15-evk.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/654469c2004bc7eda4efc=
-f3e
-        new failure (last pass: next-20231102) =
-
- =
-
-
-
-platform                     | arch  | lab             | compiler | defconf=
-ig                    | regressions
------------------------------+-------+-----------------+----------+--------=
-----------------------+------------
-k3-j721e-sk                  | arm64 | lab-baylibre    | gcc-10   | defconf=
-ig+kselftest          | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/65446d1ceec2c171d6efcfd9
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+kselftest
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20231103/arm6=
-4/defconfig+kselftest/gcc-10/lab-baylibre/baseline-k3-j721e-sk.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20231103/arm6=
-4/defconfig+kselftest/gcc-10/lab-baylibre/baseline-k3-j721e-sk.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/65446d1ceec2c171d6efc=
-fda
-        new failure (last pass: next-20231025) =
-
- =
-
-
-
-platform                     | arch  | lab             | compiler | defconf=
-ig                    | regressions
------------------------------+-------+-----------------+----------+--------=
-----------------------+------------
-meson-gxl-s905x-libretech-cc | arm64 | lab-broonie     | gcc-10   | defconf=
-ig+kselftest          | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/65446d5b7f1ab402dfefcef8
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+kselftest
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20231103/arm6=
-4/defconfig+kselftest/gcc-10/lab-broonie/baseline-meson-gxl-s905x-libretech=
--cc.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20231103/arm6=
-4/defconfig+kselftest/gcc-10/lab-broonie/baseline-meson-gxl-s905x-libretech=
--cc.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/65446d5b7f1ab402dfefc=
-ef9
-        failing since 268 days (last pass: next-20230206, first fail: next-=
-20230207) =
-
- =
-
-
-
-platform                     | arch  | lab             | compiler | defconf=
-ig                    | regressions
------------------------------+-------+-----------------+----------+--------=
-----------------------+------------
-meson-gxl-s905x-libretech-cc | arm64 | lab-clabbe      | gcc-10   | defconf=
-ig+kselftest          | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/65446cf88764c9e011efcef8
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+kselftest
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20231103/arm6=
-4/defconfig+kselftest/gcc-10/lab-clabbe/baseline-meson-gxl-s905x-libretech-=
-cc.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20231103/arm6=
-4/defconfig+kselftest/gcc-10/lab-clabbe/baseline-meson-gxl-s905x-libretech-=
-cc.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/65446cf88764c9e011efc=
-ef9
-        failing since 268 days (last pass: next-20230206, first fail: next-=
-20230207) =
-
- =
-
-
-
-platform                     | arch  | lab             | compiler | defconf=
-ig                    | regressions
------------------------------+-------+-----------------+----------+--------=
-----------------------+------------
-rk3399-roc-pc                | arm64 | lab-clabbe      | gcc-10   | defconf=
-ig+kselftest          | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/65446ce59154bb8b05efcefb
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+kselftest
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20231103/arm6=
-4/defconfig+kselftest/gcc-10/lab-clabbe/baseline-rk3399-roc-pc.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20231103/arm6=
-4/defconfig+kselftest/gcc-10/lab-clabbe/baseline-rk3399-roc-pc.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/65446ce59154bb8b05efc=
-efc
-        failing since 268 days (last pass: next-20230206, first fail: next-=
-20230207) =
-
- =
-
-
-
-platform                     | arch  | lab             | compiler | defconf=
-ig                    | regressions
------------------------------+-------+-----------------+----------+--------=
-----------------------+------------
-rk3399-rock-pi-4b            | arm64 | lab-collabora   | gcc-10   | defconf=
-ig+CON...OMIZE_BASE=3Dy | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/65446abd9675dcb5aeefcf62
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20231103/arm6=
-4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-collabora/baseline-rk3399-=
-rock-pi-4b.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20231103/arm6=
-4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-collabora/baseline-rk3399-=
-rock-pi-4b.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/65446abd9675dcb5aeefc=
-f63
-        new failure (last pass: next-20231102) =
-
- =
-
-
-
-platform                     | arch  | lab             | compiler | defconf=
-ig                    | regressions
------------------------------+-------+-----------------+----------+--------=
-----------------------+------------
-sun50i-h6-pine-h64           | arm64 | lab-clabbe      | gcc-10   | defconf=
-ig+kselftest          | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/65446ce424dacd0bf4efcf0b
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+kselftest
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20231103/arm6=
-4/defconfig+kselftest/gcc-10/lab-clabbe/baseline-sun50i-h6-pine-h64.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20231103/arm6=
-4/defconfig+kselftest/gcc-10/lab-clabbe/baseline-sun50i-h6-pine-h64.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/65446ce424dacd0bf4efc=
-f0c
-        failing since 265 days (last pass: next-20230127, first fail: next-=
-20230210) =
-
- =
-
-
-
-platform                     | arch  | lab             | compiler | defconf=
-ig                    | regressions
------------------------------+-------+-----------------+----------+--------=
-----------------------+------------
-sun50i-h6-pine-h64           | arm64 | lab-collabora   | gcc-10   | defconf=
-ig+kselftest          | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/65446d12eec2c171d6efcf1f
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+kselftest
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20231103/arm6=
-4/defconfig+kselftest/gcc-10/lab-collabora/baseline-sun50i-h6-pine-h64.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20231103/arm6=
-4/defconfig+kselftest/gcc-10/lab-collabora/baseline-sun50i-h6-pine-h64.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/65446d12eec2c171d6efc=
-f20
-        failing since 265 days (last pass: next-20230127, first fail: next-=
-20230210) =
-
- =20
+Guenter

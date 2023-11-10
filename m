@@ -2,83 +2,111 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A2777E766A
-	for <lists+linux-next@lfdr.de>; Fri, 10 Nov 2023 02:08:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 484907E768C
+	for <lists+linux-next@lfdr.de>; Fri, 10 Nov 2023 02:28:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229491AbjKJBI3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 9 Nov 2023 20:08:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34290 "EHLO
+        id S229572AbjKJB2Y (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 9 Nov 2023 20:28:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233763AbjKJBI2 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 9 Nov 2023 20:08:28 -0500
-Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com [209.85.214.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BF913C07
-        for <linux-next@vger.kernel.org>; Thu,  9 Nov 2023 17:08:26 -0800 (PST)
-Received: by mail-pl1-f200.google.com with SMTP id d9443c01a7336-1cc4cab731dso16029505ad.1
-        for <linux-next@vger.kernel.org>; Thu, 09 Nov 2023 17:08:26 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699578506; x=1700183306;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JcCQUwNZTDBQbuS2JVWfRjTHUqPG7AVLEi88/PTnOeQ=;
-        b=mNC6bjcISF7DZ1ypg00SacYnF80juc6jfUNQorBc6TVjlBCz6kkK6DmqNqxTqGffFJ
-         4uo/Up2nfdHMVmDckhilfIi8/N5/sUg+L+UT8tGAn913yAbP4An8V2QNIvsXRAuo2m6K
-         sHcm/A8C2Yl3StWqjhFTbRujahVKrK+j+yZ0wAIj1UsmJrfBZ5WPfsOf/5AmRnfzfx6d
-         5x3LBZplWV4+w/r8ZCm/H3CtQK0Fbshjmpu7TubwSpSablezpUIoJK+PRVy6i/tLBUJT
-         uADVfdc9Bd/+i1O784/THBZHUXsfsPVuT2udS2lH6BBjcNBt1kxCzpxYpPd1sYa4hLcs
-         q31w==
-X-Gm-Message-State: AOJu0YzpBVKV1PeEtP5UkLV0hcIfCEpQrK3rKY7qjje6YgIMex+R1qms
-        emEUBMK+y3Pm3LqXDWwFtGeBXmWrIMKpQ3Fg4xLwN35X5Ocj
-X-Google-Smtp-Source: AGHT+IEQSzI5DmMzdc8d+77zBqRnTz/okKpUl2LFL+NMapj2FXDc1FuyhGRUA4j6w/rJ9uxfH1lFguxFb4knFCyJQRWAUtZK+j4f
+        with ESMTP id S229491AbjKJB2Y (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 9 Nov 2023 20:28:24 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAD9F44B9;
+        Thu,  9 Nov 2023 17:28:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1699579698;
+        bh=dmuzaMMRBU3HdG40Tz/vWvs2KQopBltoB/JEWdN41Eo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=mixpMI6Y4wLj4HJgs7h98AJAsRNEEKWkPZHul2IANWCuD7GNfrw43Gmitj6peCgmm
+         cHWSmOE5mfwFfvyq1VK+azSeZP4vAnLMS0vRLnDHkj8jS+1DqMaWsfCOZa3mZ819yF
+         neYU2JNss5KyLH+LuhWj9LWE+Po2ZXZWRlU0BZZBa61jfeYpBulY438nST33ZQNpTJ
+         NBZUdPtDd09nycpl7pKwzWc4EBEJ+Y28RAgL/d+JT/0RjlhhaSS2+s/VFtx6QeAItI
+         yuIodV9P0bIY8ngImek2PzfkwoGThF2veB6N2RaKiYHRZuoEzWH9Q53EzsmfMgQqbC
+         9AfjO693C4CDA==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4SRLmy11Rvz4x1v;
+        Fri, 10 Nov 2023 12:28:17 +1100 (AEDT)
+Date:   Fri, 10 Nov 2023 12:28:17 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     syzbot <syzbot+c65436ac3463dd64e422@syzkaller.appspotmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] linux-next build error (16)
+Message-ID: <20231110122817.47d72603@canb.auug.org.au>
+In-Reply-To: <0000000000002167ca0609c1f5d5@google.com>
+References: <0000000000002167ca0609c1f5d5@google.com>
 MIME-Version: 1.0
-X-Received: by 2002:a17:902:7484:b0:1cc:408e:1b19 with SMTP id
- h4-20020a170902748400b001cc408e1b19mr837717pll.1.1699578506207; Thu, 09 Nov
- 2023 17:08:26 -0800 (PST)
-Date:   Thu, 09 Nov 2023 17:08:26 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000002167ca0609c1f5d5@google.com>
-Subject: [syzbot] linux-next build error (16)
-From:   syzbot <syzbot+c65436ac3463dd64e422@syzkaller.appspotmail.com>
-To:     linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
-        sfr@canb.auug.org.au, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/ZB7n9vr3vnJsSzUJcC.0+hE";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hello,
+--Sig_/ZB7n9vr3vnJsSzUJcC.0+hE
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-syzbot found the following issue on:
+Hi syzbot,
 
-HEAD commit:    b622d91ca201 Add linux-next specific files for 20231109
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=16a51397680000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=159f4f31622eb7ff
-dashboard link: https://syzkaller.appspot.com/bug?extid=c65436ac3463dd64e422
+On Thu, 09 Nov 2023 17:08:26 -0800 syzbot <syzbot+c65436ac3463dd64e422@syzk=
+aller.appspotmail.com> wrote:
+>=20
+> syzbot found the following issue on:
+>=20
+> HEAD commit:    b622d91ca201 Add linux-next specific files for 20231109
+> git tree:       linux-next
+> console output: https://syzkaller.appspot.com/x/log.txt?x=3D16a51397680000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=3D159f4f31622eb=
+7ff
+> dashboard link: https://syzkaller.appspot.com/bug?extid=3Dc65436ac3463dd6=
+4e422
+>=20
+> IMPORTANT: if you fix the issue, please add the following tag to the comm=
+it:
+> Reported-by: syzbot+c65436ac3463dd64e422@syzkaller.appspotmail.com
+>=20
+> failed to run ["make" "-j" "64" "ARCH=3Dx86_64" "oldconfig"]: exit status=
+ 2
+>=20
+> ---
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+>=20
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+>=20
+> If the report is already addressed, let syzbot know by replying with:
+> #syz fix: exact-commit-title
+>=20
+> If you want to overwrite report's subsystems, reply with:
+> #syz set subsystems: new-subsystem
+> (See the list of subsystem names on the web dashboard)
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+c65436ac3463dd64e422@syzkaller.appspotmail.com
+#syz set subsystems: crypto
 
-failed to run ["make" "-j" "64" "ARCH=x86_64" "oldconfig"]: exit status 2
+--=20
+Cheers,
+Stephen Rothwell
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+--Sig_/ZB7n9vr3vnJsSzUJcC.0+hE
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+-----BEGIN PGP SIGNATURE-----
 
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmVNhzEACgkQAVBC80lX
+0Gxhegf+OI3RvI3R+XGuFYCvEvIf2fn2rHa3rqdx4LjV+39+RBaxJzzTTq3XwBy+
+X9wbfE7xdNwWk0Ms7js5WwlZivnzGquejqJ03Qm/KlFhsscJwF0NwVMJ9+zmwVwV
+fMXT3hmaQoVRoxq8DmUY/93kYrgLNH0+qCippn7GjHuuFHKTtSYe9qD7xLETqggc
+oJo+LybtyYnC58NDZMIoR8Qn/m7FMFfSBpy4mgm/ExFH1Yfk+48BAUWj9uDFeZ5I
+8t4EiHxs917JGFy5Xjg7ms6i5AXh3O7QkneJLuzCm2GKFzIlegXmIpLj4G1kx32+
+VVBJF1dqByZ7fy6ainmn4aFx+JHZfA==
+=Kwrz
+-----END PGP SIGNATURE-----
 
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+--Sig_/ZB7n9vr3vnJsSzUJcC.0+hE--

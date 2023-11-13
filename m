@@ -2,46 +2,45 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73C0F7EA517
-	for <lists+linux-next@lfdr.de>; Mon, 13 Nov 2023 21:55:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 631EB7EA526
+	for <lists+linux-next@lfdr.de>; Mon, 13 Nov 2023 21:58:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229940AbjKMUzI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 13 Nov 2023 15:55:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38128 "EHLO
+        id S229715AbjKMU63 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 13 Nov 2023 15:58:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229924AbjKMUzH (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 13 Nov 2023 15:55:07 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4257D57;
-        Mon, 13 Nov 2023 12:55:04 -0800 (PST)
+        with ESMTP id S229640AbjKMU63 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 13 Nov 2023 15:58:29 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 675DA189;
+        Mon, 13 Nov 2023 12:58:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1699908902;
-        bh=DUv/lJ8qA5cOJasdLl/4KI3Byg7tjhwKBtZ2bXBLmFg=;
+        s=201702; t=1699909105;
+        bh=S8GKVidekCTz5YQyshWVhExuAgu8Ma3k8Ik+ACdCWDg=;
         h=Date:From:To:Cc:Subject:From;
-        b=sGxdMDUj2J0vpRNJVDPnvsSgiTBkmBqRh4+/XlynAWcJ19+yoybrg5yDfUuqbDes8
-         eK06i4hM5r1YHiENbLd1jqNRMFZO56v3x2m4E6oSrwRXlyTMMwIBZOhwCCH3I5KGsg
-         ZjM0euA2XgM7oPbYhIfHqhm7xJX1IL13lvLRTQRhnvvsyS3W2d/J0fz2DUo9PRbyV+
-         EmlfcFi+/m6sg7pDX4X0wZ4x2F80eLlCrrwKJCGvNuP8mKtZjNC7l7dmJmV5w8tcSM
-         fvLLuy0sMjfImv5wKYNYIBECaj6iT90eyVNZzgliBtz0Pl4jZFwwiUjIJy/jCrtUo/
-         xU9SrllY3XfHQ==
+        b=hcP8aZ5kodJIKKbMDHC+HmZYM59IvPcvg2iIzwWSzrf3Mfuot0kRUvCl0/xeRcTP+
+         bSseJkWeHEu7gAFao2p1k8qDAzBQWkakKfS4AJjujADs+SNF0NfpCX2NHMeQQRQd/O
+         p2e23JR8PIiq6VKb/Wy9RTVVAXmmm6051/m0/BvRmPcftQ/TQNOH7GedNMQEDUqBNi
+         iyiRNqoOA+HnHyy1BMxIJDqsdbwFvcOq4jI4DYpNoqh8DfwXFV3ox18YZkqyntIrxw
+         uYAca+ycv8GYeylEWrPcukzx2qFFE081HiPeW/OV5Za82H6Sj+SKQ15JaIJkkCzKof
+         rPNrrL4b1dHPw==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4SThWp45pYz4wdF;
-        Tue, 14 Nov 2023 07:55:02 +1100 (AEDT)
-Date:   Tue, 14 Nov 2023 07:55:01 +1100
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4SThbj0hY5z4xFR;
+        Tue, 14 Nov 2023 07:58:25 +1100 (AEDT)
+Date:   Tue, 14 Nov 2023 07:58:24 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>
-Cc:     Luben Tuikov <ltuikov89@gmail.com>,
+To:     Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>
+Cc:     Syed Saba Kareem <Syed.SabaKareem@amd.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the drm-misc tree
-Message-ID: <20231114075501.61321c29@canb.auug.org.au>
+Subject: linux-next: Fixes tag needs some work in the sound-asoc tree
+Message-ID: <20231114075824.41584faa@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Emdt8+VYSRwA677krXtY.UV";
+Content-Type: multipart/signed; boundary="Sig_/RhMk1Ln9F3sXcRbTUKfEOly";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,
@@ -52,36 +51,45 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/Emdt8+VYSRwA677krXtY.UV
+--Sig_/RhMk1Ln9F3sXcRbTUKfEOly
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Commit
+In commit
 
-  0da611a87021 ("dma-buf: add dma_fence_timestamp helper")
+  60b4a86cc6b8 ("ASoC: amd: acp: Fix for indentation issue")
 
-is missing a Signed-off-by from its committer.
+Fixes tag
+
+  Fixes: e84db124cb21 (ASoC: amd: acp: Add pci legacy driver support
+
+has these problem(s):
+
+  - Subject has leading but no trailing parentheses
+
+Please do not split Fixes tags over more than one line and keep all the
+commit message tags together at the end of the commit message.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/Emdt8+VYSRwA677krXtY.UV
+--Sig_/RhMk1Ln9F3sXcRbTUKfEOly
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmVSjSUACgkQAVBC80lX
-0Gwz5Af/YNPogz3RRCNjYLK5dR2VMBX/IRevqIKwxef//cPJ0hDVSYqMmcjQdd7j
-sUyw3BvrUkrXC+jPMxAwtsmSC1NoeX0dDC4YrIG2io0RtiYvD6CmX56fkPNcReIf
-fSZSHz1FL1qA1gKezWe2xcKP00HILXxUsQQKT0cLaP5j7OvnmRM9oDPccWrgcqyY
-9eHNhQ+ylFk8HbNNsvP0ZsgJDO2pS5VDfi3otVnQNhmJRcDipz3apqhyehMLMgDk
-4xAsuMVvg99nPQQFtHW7lP3xuY7tHrqYWoOcGdk+Zs2T0afABQ+T05YbZG366sE5
-gPhUQ44dm0x/SEBWJjSX9/ZDY1nU4A==
-=E4tp
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmVSjfAACgkQAVBC80lX
+0GxqAAf7BXBw0fao85v6x7XMToRR/ASRn1VLYpctXteFtJ59MIXkQ8/PKEwmVbOc
+nKGZw+OkHlnMhPddfrnlY5O0grl56DqyW0xNRVjf3kOlG+bcIY8Ri+9OvpEciE4X
+L7+NvuQwGY3B8IhyLxL6rNsmuQoMaxsszCNV/Oj/Mn32tVG0omOGbqtrSFTfJWQ5
+IgkPs0PQ2M+h/P+ozyYF5DEeZi8Mi7T0xpQlU4BiE5hSe/ZsNNLs7/rvcaFJgcWL
+tuh3fLFf2XTbmtti/bHCCxj6czgY/OWP5LfZuOO8ycSxaw8xsRq9tIBf6MxclITx
+3B/x/4q4r8EH+p2hMBEvJ3VX6wCiJQ==
+=63VU
 -----END PGP SIGNATURE-----
 
---Sig_/Emdt8+VYSRwA677krXtY.UV--
+--Sig_/RhMk1Ln9F3sXcRbTUKfEOly--

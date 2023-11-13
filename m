@@ -2,43 +2,46 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32A1D7EA512
-	for <lists+linux-next@lfdr.de>; Mon, 13 Nov 2023 21:51:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73C0F7EA517
+	for <lists+linux-next@lfdr.de>; Mon, 13 Nov 2023 21:55:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229711AbjKMUvr (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 13 Nov 2023 15:51:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48824 "EHLO
+        id S229940AbjKMUzI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 13 Nov 2023 15:55:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229677AbjKMUvq (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 13 Nov 2023 15:51:46 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A2E5D57;
-        Mon, 13 Nov 2023 12:51:43 -0800 (PST)
+        with ESMTP id S229924AbjKMUzH (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 13 Nov 2023 15:55:07 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4257D57;
+        Mon, 13 Nov 2023 12:55:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1699908699;
-        bh=jkM/entJp8ZNxZcqkCfrr3msi5mZ2vfKJlFf2iJ0tq0=;
+        s=201702; t=1699908902;
+        bh=DUv/lJ8qA5cOJasdLl/4KI3Byg7tjhwKBtZ2bXBLmFg=;
         h=Date:From:To:Cc:Subject:From;
-        b=KxOr/GT/C1L5ks6XlRz5mAF1hb9pSRpJAVch1QIOiVEfiRb9tAKfbeCh1uSNiWp8w
-         PYctNiBBWDjCbofb6t2GcxuTzHzbmnkgoIsAQKr4n6XAbVakOQa8YHzWWocx30aY9/
-         w0MPR1L53+qMKy08cd+5yFtEmz4XCRDDFLw3zoNm0h68ucUGB/alO98wUDvrespLP0
-         ht57zRtYJNYAghyORRQl1jjgvFdp4sADPFBkeeIXrARnk6pDRClqyzarqe0HP7wLf+
-         9PZHG44vS6DPVOBFzjO/OjefpBYvHv4rKd6yIBXJWsJ++UC0QBK6MEoViTgQJMLFaj
-         LZtjDKUENOREw==
+        b=sGxdMDUj2J0vpRNJVDPnvsSgiTBkmBqRh4+/XlynAWcJ19+yoybrg5yDfUuqbDes8
+         eK06i4hM5r1YHiENbLd1jqNRMFZO56v3x2m4E6oSrwRXlyTMMwIBZOhwCCH3I5KGsg
+         ZjM0euA2XgM7oPbYhIfHqhm7xJX1IL13lvLRTQRhnvvsyS3W2d/J0fz2DUo9PRbyV+
+         EmlfcFi+/m6sg7pDX4X0wZ4x2F80eLlCrrwKJCGvNuP8mKtZjNC7l7dmJmV5w8tcSM
+         fvLLuy0sMjfImv5wKYNYIBECaj6iT90eyVNZzgliBtz0Pl4jZFwwiUjIJy/jCrtUo/
+         xU9SrllY3XfHQ==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4SThRv3Mmgz4wbk;
-        Tue, 14 Nov 2023 07:51:39 +1100 (AEDT)
-Date:   Tue, 14 Nov 2023 07:51:36 +1100
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4SThWp45pYz4wdF;
+        Tue, 14 Nov 2023 07:55:02 +1100 (AEDT)
+Date:   Tue, 14 Nov 2023 07:55:01 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>
+Cc:     Luben Tuikov <ltuikov89@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the renesas tree
-Message-ID: <20231114075136.3e164b4a@canb.auug.org.au>
+Subject: linux-next: Signed-off-by missing for commit in the drm-misc tree
+Message-ID: <20231114075501.61321c29@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/2TXcM+nHCSB5sUc.1bir5wZ";
+Content-Type: multipart/signed; boundary="Sig_/Emdt8+VYSRwA677krXtY.UV";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,
@@ -49,39 +52,36 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/2TXcM+nHCSB5sUc.1bir5wZ
+--Sig_/Emdt8+VYSRwA677krXtY.UV
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Commits
+Commit
 
-  e443f05dfa8f ("arm64: dts: renesas: rzg2lc-smarc-som: Enable 4-bit tx sup=
-port")
-  ce2e1b36450e ("arm64: dts: renesas: rzg2l-smarc-som: Enable 4-bit tx supp=
-ort")
+  0da611a87021 ("dma-buf: add dma_fence_timestamp helper")
 
-are missing a Signed-off-by from their committer.
+is missing a Signed-off-by from its committer.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/2TXcM+nHCSB5sUc.1bir5wZ
+--Sig_/Emdt8+VYSRwA677krXtY.UV
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmVSjFgACgkQAVBC80lX
-0Gxw5Qf/UKBurLPu34z6cpCDtYH2Mf44aeSpPk853ZxI63Dzl5PNF0RuXll0vK7J
-O4UmqWrPsRxWevEEuvPTKPKlo441haFAfF+83a4ogw9ZnhYRFfiLDvOc9tTHeybj
-+/jmc1irrXDKflBQwK8rlOlYsJUc4GacDIOkiwsanLhAHlhbeFIOvbE+cHa4PZGj
-X7APN8gTYRa2z7+P6xssm1KWjfp4WwQVxenokrxKPFvtwDRJVsV72j6EuxLRqpGU
-OGmRqp62pdwqZUWLsgM3HXvqK2Zl2NQajS50uOSGaJ94nY3GYoIIxR2mj1rgP5wt
-4jtQXcNVIe0xITIkTCtZpdGPp50zlg==
-=HeWQ
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmVSjSUACgkQAVBC80lX
+0Gwz5Af/YNPogz3RRCNjYLK5dR2VMBX/IRevqIKwxef//cPJ0hDVSYqMmcjQdd7j
+sUyw3BvrUkrXC+jPMxAwtsmSC1NoeX0dDC4YrIG2io0RtiYvD6CmX56fkPNcReIf
+fSZSHz1FL1qA1gKezWe2xcKP00HILXxUsQQKT0cLaP5j7OvnmRM9oDPccWrgcqyY
+9eHNhQ+ylFk8HbNNsvP0ZsgJDO2pS5VDfi3otVnQNhmJRcDipz3apqhyehMLMgDk
+4xAsuMVvg99nPQQFtHW7lP3xuY7tHrqYWoOcGdk+Zs2T0afABQ+T05YbZG366sE5
+gPhUQ44dm0x/SEBWJjSX9/ZDY1nU4A==
+=E4tp
 -----END PGP SIGNATURE-----
 
---Sig_/2TXcM+nHCSB5sUc.1bir5wZ--
+--Sig_/Emdt8+VYSRwA677krXtY.UV--

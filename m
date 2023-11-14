@@ -2,61 +2,96 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F10E17EAC01
-	for <lists+linux-next@lfdr.de>; Tue, 14 Nov 2023 09:49:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F388C7EAC18
+	for <lists+linux-next@lfdr.de>; Tue, 14 Nov 2023 09:53:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232619AbjKNItR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 14 Nov 2023 03:49:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57674 "EHLO
+        id S232151AbjKNIxp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 14 Nov 2023 03:53:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232622AbjKNItH (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 14 Nov 2023 03:49:07 -0500
-Received: from mail.commercesolutions.pl (unknown [162.19.155.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0373198
-        for <linux-next@vger.kernel.org>; Tue, 14 Nov 2023 00:47:50 -0800 (PST)
-Received: by mail.commercesolutions.pl (Postfix, from userid 1002)
-        id 3B1D2232C7; Tue, 14 Nov 2023 08:46:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=commercesolutions.pl;
-        s=mail; t=1699951588;
-        bh=PcMncQpBfIZCnTOfZJY5G1G+gaLn4c9QPfFvoXrE4rA=;
-        h=Date:From:To:Subject:From;
-        b=QqtPB4EN1wmYMNEey+hRf2Z/e/W8/oQmPp6q3u1qfuP+3cV2jaVZBlzjGpyCw/N9T
-         SvXaLq6NnVdA5zGKJ5pbpmtp8cmsfg58eAiKQVqiH2WGyWdrvhWXsff31sLDn2CyOi
-         Z/o7T/TVJ1ZBoelpLTKvNsjRZ2LeSAZoSQaEXPJ+qY76raUCyBLH4zVWIhFa1LN50v
-         smK+BeuHM+due0tqK7KYoWWeXzCPV/suUmxCAh8NcJAqQD00C7/mPpq3Zrlmw4aui/
-         Iu4nyHh/Vnip7XA28F7OSoqAwd569LZBJ1UsKephgXBGQrH9UEGJKmlGxUxHUZO43Q
-         1QN4zAb5qkwxQ==
-Received: by mail.commercesolutions.pl for <linux-next@vger.kernel.org>; Tue, 14 Nov 2023 08:46:03 GMT
-Message-ID: <20231114074500-0.1.9w.206vk.0.pbgzsnb4aj@commercesolutions.pl>
-Date:   Tue, 14 Nov 2023 08:46:03 GMT
-From:   "Kamil Tralewski" <kamil.tralewski@commercesolutions.pl>
-To:     <linux-next@vger.kernel.org>
-Subject: =?UTF-8?Q?S=C5=82owa_kluczowe_do_wypozycjonowania?=
-X-Mailer: mail.commercesolutions.pl
+        with ESMTP id S231975AbjKNIxo (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 14 Nov 2023 03:53:44 -0500
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B42CA4;
+        Tue, 14 Nov 2023 00:53:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1699952021; x=1731488021;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=yAw9k3gw5sgGKUi8oLnxSsuyohYC1OCk82oksGDoQpk=;
+  b=YI/9Ap2R4N41jCBfKvE5PmWQHpPkv6/8S5Hb+G1+S+LTKvNOiTSoRANO
+   SwA3tQseFUOb/3halXpXbZ7ZtqBwENaHoueieGuAhIGuylVovRphETv0F
+   QLTDkcgtqe3LChwfBbiDA5QilCBQ+9XeKpaHNNoEidu2H0zKOK5BdDVgH
+   ByD4ZzyaqEZb5FNprCEL5Meil2CwM8qfCKKwNyQccWiI+FJDD749nYwqv
+   +I0BiXEI54QfJbc4RCcXcTh19SmCOz4NP3Q+65IqGK//uL61hK5geXODj
+   MBiCQw7TKmiBrptELTN6UH+SIJNQJweSveFymSfUwov1t8tvxdk5wPThg
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10893"; a="394526088"
+X-IronPort-AV: E=Sophos;i="6.03,301,1694761200"; 
+   d="scan'208";a="394526088"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2023 00:53:40 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10893"; a="1011849315"
+X-IronPort-AV: E=Sophos;i="6.03,301,1694761200"; 
+   d="scan'208";a="1011849315"
+Received: from hatran1-mobl1.ccr.corp.intel.com (HELO localhost) ([10.252.56.145])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2023 00:53:32 -0800
+From:   Jani Nikula <jani.nikula@linux.intel.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the drm-intel tree
+In-Reply-To: <8734x8u4la.fsf@intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20231114141715.6f435118@canb.auug.org.au>
+ <8734x8u4la.fsf@intel.com>
+Date:   Tue, 14 Nov 2023 10:53:30 +0200
+Message-ID: <87y1f0sol1.fsf@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Dzie=C5=84 dobry,
+On Tue, 14 Nov 2023, Jani Nikula <jani.nikula@linux.intel.com> wrote:
+> On Tue, 14 Nov 2023, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>> Hi all,
+>>
+>> After merging the drm-intel tree, today's linux-next build (htmldocs)
+>> produced this warning:
+>>
+>> Documentation/gpu/drm-kms-helpers:296: drivers/gpu/drm/display/drm_dp_mst_topology.c:5484: ERROR: Unexpected indentation.
+>> Documentation/gpu/drm-kms-helpers:296: drivers/gpu/drm/display/drm_dp_mst_topology.c:5488: WARNING: Block quote ends without a blank line; unexpected unindent.
+>>
+>> Introduced by commit
+>>
+>>   1cd0a5ea4279 ("drm/dp_mst: Factor out a helper to check the atomic state of a topology manager")
+>
+> Imre, please fix this.
 
-zapozna=C5=82em si=C4=99 z Pa=C5=84stwa ofert=C4=85 i z przyjemno=C5=9Bci=
-=C4=85 przyznaj=C4=99, =C5=BCe przyci=C4=85ga uwag=C4=99 i zach=C4=99ca d=
-o dalszych rozm=C3=B3w.=20
+Just noticed there's a fix [1]. Need to merge that via drm-intel.
 
-Pomy=C5=9Bla=C5=82em, =C5=BCe mo=C5=BCe m=C3=B3g=C5=82bym mie=C4=87 sw=C3=
-=B3j wk=C5=82ad w Pa=C5=84stwa rozw=C3=B3j i pom=C3=B3c dotrze=C4=87 z t=C4=
-=85 ofert=C4=85 do wi=C4=99kszego grona odbiorc=C3=B3w. Pozycjonuj=C4=99 =
-strony www, dzi=C4=99ki czemu generuj=C4=85 =C5=9Bwietny ruch w sieci.
+BR,
+Jani.
 
-Mo=C5=BCemy porozmawia=C4=87 w najbli=C5=BCszym czasie?
+[1] https://patchwork.freedesktop.org/patch/msgid/20231114081033.27343-1-bagasdotme@gmail.com
 
-Pozdrawiam
-Kamil Tralewski
+>
+> Thanks,
+> Jani.
+
+-- 
+Jani Nikula, Intel

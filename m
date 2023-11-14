@@ -2,96 +2,158 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F388C7EAC18
-	for <lists+linux-next@lfdr.de>; Tue, 14 Nov 2023 09:53:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D91867EB038
+	for <lists+linux-next@lfdr.de>; Tue, 14 Nov 2023 13:50:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232151AbjKNIxp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 14 Nov 2023 03:53:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48216 "EHLO
+        id S232577AbjKNMur (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 14 Nov 2023 07:50:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231975AbjKNIxo (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 14 Nov 2023 03:53:44 -0500
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B42CA4;
-        Tue, 14 Nov 2023 00:53:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1699952021; x=1731488021;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=yAw9k3gw5sgGKUi8oLnxSsuyohYC1OCk82oksGDoQpk=;
-  b=YI/9Ap2R4N41jCBfKvE5PmWQHpPkv6/8S5Hb+G1+S+LTKvNOiTSoRANO
-   SwA3tQseFUOb/3halXpXbZ7ZtqBwENaHoueieGuAhIGuylVovRphETv0F
-   QLTDkcgtqe3LChwfBbiDA5QilCBQ+9XeKpaHNNoEidu2H0zKOK5BdDVgH
-   ByD4ZzyaqEZb5FNprCEL5Meil2CwM8qfCKKwNyQccWiI+FJDD749nYwqv
-   +I0BiXEI54QfJbc4RCcXcTh19SmCOz4NP3Q+65IqGK//uL61hK5geXODj
-   MBiCQw7TKmiBrptELTN6UH+SIJNQJweSveFymSfUwov1t8tvxdk5wPThg
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10893"; a="394526088"
-X-IronPort-AV: E=Sophos;i="6.03,301,1694761200"; 
-   d="scan'208";a="394526088"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2023 00:53:40 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10893"; a="1011849315"
-X-IronPort-AV: E=Sophos;i="6.03,301,1694761200"; 
-   d="scan'208";a="1011849315"
-Received: from hatran1-mobl1.ccr.corp.intel.com (HELO localhost) ([10.252.56.145])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2023 00:53:32 -0800
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the drm-intel tree
-In-Reply-To: <8734x8u4la.fsf@intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20231114141715.6f435118@canb.auug.org.au>
- <8734x8u4la.fsf@intel.com>
-Date:   Tue, 14 Nov 2023 10:53:30 +0200
-Message-ID: <87y1f0sol1.fsf@intel.com>
+        with ESMTP id S231656AbjKNMuq (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 14 Nov 2023 07:50:46 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEA38188
+        for <linux-next@vger.kernel.org>; Tue, 14 Nov 2023 04:50:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1699966242;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+        bh=+dtR7uxZYKr8ZF2Mvilnq0MwzlXpAsQU4Jpz/lAT/98=;
+        b=eNJIuNyTiu+GmDkszpjYAc07+uB9QzAcvrUkrbhVPsLSS9uzsczaYfXPo9EhtZ3geb127O
+        +lUi0RTR5hLnS1SvzNn6vzs9f09Dwqw0a5RkAqcVA2glGyqideM98I/poDN2plsd7pwgnK
+        Nf7rc+NZ9mnuqQXRrHRY/DArKx3SdiQ=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-49-5lADhhBWPH-lYyXKB4Gfzw-1; Tue, 14 Nov 2023 07:50:41 -0500
+X-MC-Unique: 5lADhhBWPH-lYyXKB4Gfzw-1
+Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-779e001ffa5so615614985a.3
+        for <linux-next@vger.kernel.org>; Tue, 14 Nov 2023 04:50:41 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1699966241; x=1700571041;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+dtR7uxZYKr8ZF2Mvilnq0MwzlXpAsQU4Jpz/lAT/98=;
+        b=TFi9UHXONUDCeniSMswdpo429dwgWKQKw4yWxdPyP7upd6vg1OoZuvkTiHYf1E5/Jj
+         lx0yev9rFyiNWv/lm3vA0Qtc5UwWkykaGD3PtzmgMXMnsPt7cofRNOCzsti1mDUl2tKm
+         FmjU3IeJBVith/gM90htBNiOKvHJSfnhfKBvNXQqEC8/ubL05T/QI+1P0iE72qLLIwT+
+         4sTDg58AOnYoTPbUXrB28628pU1NJBw3JRkVBrQm8OdMQsthDmYAk2FfKlvYMMSEBxyv
+         cAbbesQWjU7QfZSxPVtM6Se5br18jebjqxxualAqNqdPrvVNlBJf7CKO5vCNp+CuzrF/
+         WQUQ==
+X-Gm-Message-State: AOJu0YxJEwWR5uRVgynRmFGi3sfAY143QHSwVoHAunSpq/OmR1QyynQa
+        QgEDvdhXiD3e9yu4gaZRkor2MwGOzp35TyNubu66q9/Q8VGLjb7SwvycLNmoC1Ch96iE4U33+1l
+        f1GPGP/VeLrX3SmlvTvOdTg==
+X-Received: by 2002:ae9:f808:0:b0:779:e2f2:2be3 with SMTP id x8-20020ae9f808000000b00779e2f22be3mr1984103qkh.30.1699966241034;
+        Tue, 14 Nov 2023 04:50:41 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IE2/zjHMfgKXBv77NBDBXPIwXJPe13B0ErZi3LiGA1sLO98BkmbiIkPxtcXMwHgeV07sNodaA==
+X-Received: by 2002:ae9:f808:0:b0:779:e2f2:2be3 with SMTP id x8-20020ae9f808000000b00779e2f22be3mr1984089qkh.30.1699966240746;
+        Tue, 14 Nov 2023 04:50:40 -0800 (PST)
+Received: from [192.168.157.119] ([12.191.197.195])
+        by smtp.googlemail.com with ESMTPSA id r17-20020a05620a299100b00767177a5bebsm2607897qkp.56.2023.11.14.04.50.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Nov 2023 04:50:39 -0800 (PST)
+Message-ID: <3cfe0285-bf5a-4a0b-ae72-f5008c71d28e@redhat.com>
+Date:   Tue, 14 Nov 2023 13:50:30 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla Thunderbird
+Subject: Re: linux-next: build warning after merge of the kvm tree
+Content-Language: en-US
+To:     Stephen Rothwell <sfr@canb.auug.org.au>, KVM <kvm@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20231114141326.38a3dcd4@canb.auug.org.au>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+Autocrypt: addr=pbonzini@redhat.com; keydata=
+ xsEhBFRCcBIBDqDGsz4K0zZun3jh+U6Z9wNGLKQ0kSFyjN38gMqU1SfP+TUNQepFHb/Gc0E2
+ CxXPkIBTvYY+ZPkoTh5xF9oS1jqI8iRLzouzF8yXs3QjQIZ2SfuCxSVwlV65jotcjD2FTN04
+ hVopm9llFijNZpVIOGUTqzM4U55sdsCcZUluWM6x4HSOdw5F5Utxfp1wOjD/v92Lrax0hjiX
+ DResHSt48q+8FrZzY+AUbkUS+Jm34qjswdrgsC5uxeVcLkBgWLmov2kMaMROT0YmFY6A3m1S
+ P/kXmHDXxhe23gKb3dgwxUTpENDBGcfEzrzilWueOeUWiOcWuFOed/C3SyijBx3Av/lbCsHU
+ Vx6pMycNTdzU1BuAroB+Y3mNEuW56Yd44jlInzG2UOwt9XjjdKkJZ1g0P9dwptwLEgTEd3Fo
+ UdhAQyRXGYO8oROiuh+RZ1lXp6AQ4ZjoyH8WLfTLf5g1EKCTc4C1sy1vQSdzIRu3rBIjAvnC
+ tGZADei1IExLqB3uzXKzZ1BZ+Z8hnt2og9hb7H0y8diYfEk2w3R7wEr+Ehk5NQsT2MPI2QBd
+ wEv1/Aj1DgUHZAHzG1QN9S8wNWQ6K9DqHZTBnI1hUlkp22zCSHK/6FwUCuYp1zcAEQEAAc0j
+ UGFvbG8gQm9uemluaSA8cGJvbnppbmlAcmVkaGF0LmNvbT7CwU0EEwECACMFAlRCcBICGwMH
+ CwkIBwMCAQYVCAIJCgsEFgIDAQIeAQIXgAAKCRB+FRAMzTZpsbceDp9IIN6BIA0Ol7MoB15E
+ 11kRz/ewzryFY54tQlMnd4xxfH8MTQ/mm9I482YoSwPMdcWFAKnUX6Yo30tbLiNB8hzaHeRj
+ jx12K+ptqYbg+cevgOtbLAlL9kNgLLcsGqC2829jBCUTVeMSZDrzS97ole/YEez2qFpPnTV0
+ VrRWClWVfYh+JfzpXmgyhbkuwUxNFk421s4Ajp3d8nPPFUGgBG5HOxzkAm7xb1cjAuJ+oi/K
+ CHfkuN+fLZl/u3E/fw7vvOESApLU5o0icVXeakfSz0LsygEnekDbxPnE5af/9FEkXJD5EoYG
+ SEahaEtgNrR4qsyxyAGYgZlS70vkSSYJ+iT2rrwEiDlo31MzRo6Ba2FfHBSJ7lcYdPT7bbk9
+ AO3hlNMhNdUhoQv7M5HsnqZ6unvSHOKmReNaS9egAGdRN0/GPDWr9wroyJ65ZNQsHl9nXBqE
+ AukZNr5oJO5vxrYiAuuTSd6UI/xFkjtkzltG3mw5ao2bBpk/V/YuePrJsnPFHG7NhizrxttB
+ nTuOSCMo45pfHQ+XYd5K1+Cv/NzZFNWscm5htJ0HznY+oOsZvHTyGz3v91pn51dkRYN0otqr
+ bQ4tlFFuVjArBZcapSIe6NV8C4cEiSTOwE0EVEJx7gEIAMeHcVzuv2bp9HlWDp6+RkZe+vtl
+ KwAHplb/WH59j2wyG8V6i33+6MlSSJMOFnYUCCL77bucx9uImI5nX24PIlqT+zasVEEVGSRF
+ m8dgkcJDB7Tps0IkNrUi4yof3B3shR+vMY3i3Ip0e41zKx0CvlAhMOo6otaHmcxr35sWq1Jk
+ tLkbn3wG+fPQCVudJJECvVQ//UAthSSEklA50QtD2sBkmQ14ZryEyTHQ+E42K3j2IUmOLriF
+ dNr9NvE1QGmGyIcbw2NIVEBOK/GWxkS5+dmxM2iD4Jdaf2nSn3jlHjEXoPwpMs0KZsgdU0pP
+ JQzMUMwmB1wM8JxovFlPYrhNT9MAEQEAAcLBMwQYAQIACQUCVEJx7gIbDAAKCRB+FRAMzTZp
+ sadRDqCctLmYICZu4GSnie4lKXl+HqlLanpVMOoFNnWs9oRP47MbE2wv8OaYh5pNR9VVgyhD
+ OG0AU7oidG36OeUlrFDTfnPYYSF/mPCxHttosyt8O5kabxnIPv2URuAxDByz+iVbL+RjKaGM
+ GDph56ZTswlx75nZVtIukqzLAQ5fa8OALSGum0cFi4ptZUOhDNz1onz61klD6z3MODi0sBZN
+ Aj6guB2L/+2ZwElZEeRBERRd/uommlYuToAXfNRdUwrwl9gRMiA0WSyTb190zneRRDfpSK5d
+ usXnM/O+kr3Dm+Ui+UioPf6wgbn3T0o6I5BhVhs4h4hWmIW7iNhPjX1iybXfmb1gAFfjtHfL
+ xRUr64svXpyfJMScIQtBAm0ihWPltXkyITA92ngCmPdHa6M1hMh4RDX+Jf1fiWubzp1voAg0
+ JBrdmNZSQDz0iKmSrx8xkoXYfA3bgtFN8WJH2xgFL28XnqY4M6dLhJwV3z08tPSRqYFm4NMP
+ dRsn0/7oymhneL8RthIvjDDQ5ktUjMe8LtHr70OZE/TT88qvEdhiIVUogHdo4qBrk41+gGQh
+ b906Dudw5YhTJFU3nC6bbF2nrLlB4C/XSiH76ZvqzV0Z/cAMBo5NF/w=
+In-Reply-To: <20231114141326.38a3dcd4@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, 14 Nov 2023, Jani Nikula <jani.nikula@linux.intel.com> wrote:
-> On Tue, 14 Nov 2023, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->> Hi all,
->>
->> After merging the drm-intel tree, today's linux-next build (htmldocs)
->> produced this warning:
->>
->> Documentation/gpu/drm-kms-helpers:296: drivers/gpu/drm/display/drm_dp_mst_topology.c:5484: ERROR: Unexpected indentation.
->> Documentation/gpu/drm-kms-helpers:296: drivers/gpu/drm/display/drm_dp_mst_topology.c:5488: WARNING: Block quote ends without a blank line; unexpected unindent.
->>
->> Introduced by commit
->>
->>   1cd0a5ea4279 ("drm/dp_mst: Factor out a helper to check the atomic state of a topology manager")
->
-> Imre, please fix this.
+On 11/14/23 04:13, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the kvm tree, today's linux-next build (htmldocs) produced
+> this warning:
+> 
+> Documentation/filesystems/api-summary:74: fs/anon_inodes.c:167: ERROR: Unexpected indentation.
+> Documentation/filesystems/api-summary:74: fs/anon_inodes.c:168: WARNING: Block quote ends without a blank line; unexpected unindent.
 
-Just noticed there's a fix [1]. Need to merge that via drm-intel.
+This reproduces with the version of sphinx in
+Documentation/sphinx/requirements.txt.  The fix is
+simply this, for which I will send a patch:
 
-BR,
-Jani.
+diff --git a/fs/anon_inodes.c b/fs/anon_inodes.c
+index e02f4e2e2ece..0496cb5b6eab 100644
+--- a/fs/anon_inodes.c
++++ b/fs/anon_inodes.c
+@@ -163,8 +163,10 @@ EXPORT_SYMBOL_GPL(anon_inode_getfile);
+   *
+   * Create a new anonymous inode and file pair.  This can be done for two
+   * reasons:
++ *
+   * - for the inode to have its own security context, so that LSMs can enforce
+   *   policy on the inode's creation;
++ *
+   * - if the caller needs a unique inode, for example in order to customize
+   *   the size returned by fstat()
+   *
+@@ -250,8 +252,10 @@ EXPORT_SYMBOL_GPL(anon_inode_getfd);
+   *
+   * Create a new anonymous inode and file pair.  This can be done for two
+   * reasons:
++ *
+   * - for the inode to have its own security context, so that LSMs can enforce
+   *   policy on the inode's creation;
++ *
+   * - if the caller needs a unique inode, for example in order to customize
+   *   the size returned by fstat()
+   *
 
-[1] https://patchwork.freedesktop.org/patch/msgid/20231114081033.27343-1-bagasdotme@gmail.com
+Paolo
 
->
-> Thanks,
-> Jani.
-
--- 
-Jani Nikula, Intel

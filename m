@@ -2,102 +2,88 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 895447EAB0E
-	for <lists+linux-next@lfdr.de>; Tue, 14 Nov 2023 08:47:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB34B7EAB16
+	for <lists+linux-next@lfdr.de>; Tue, 14 Nov 2023 08:50:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230271AbjKNHrM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 14 Nov 2023 02:47:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40658 "EHLO
+        id S231382AbjKNHuN convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-next@lfdr.de>); Tue, 14 Nov 2023 02:50:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232244AbjKNHrL (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 14 Nov 2023 02:47:11 -0500
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A4E219E
-        for <linux-next@vger.kernel.org>; Mon, 13 Nov 2023 23:47:08 -0800 (PST)
-Received: by mail-yb1-xb31.google.com with SMTP id 3f1490d57ef6-d9b9adaf291so5142305276.1
-        for <linux-next@vger.kernel.org>; Mon, 13 Nov 2023 23:47:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1699948027; x=1700552827; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VR06ltxFQEdp1reUSvUvds1lIfSzzgfu3vrbiPXH7+I=;
-        b=kXt2VNIHx26hXq6Y520cYNl458hxr5jAt5obQiAoqpnyUxNKBiPP4MWn9xZummEQI5
-         zuTMaqQODtJ1LEDB/b9G0nCJh5bkMK6RXOF/I3CYwOAgytJEnc1VCnEAexteXwf62F35
-         rD4LPPELpo6ylDa4x+2XjPHLPzncxBgP27CHZpTJEGSkSY4xZMTGJlWN07uTR5BNjWC5
-         mjz1seu9WzvALgZPN3Bv+53Sns6JVKLskMbN0ZvRgfBuPyP9ZPAg7DQlR0xzev52IMT+
-         TtGL1vthWM7rZmbcF52ysV/nzTQZSLJQtc/FKzYe1Kdu/HPaW95De3MuSuetXD3lopjn
-         wDHw==
+        with ESMTP id S229566AbjKNHuM (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 14 Nov 2023 02:50:12 -0500
+Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C80C8CC;
+        Mon, 13 Nov 2023 23:50:08 -0800 (PST)
+Received: by mail-yb1-f170.google.com with SMTP id 3f1490d57ef6-daf2eda7efaso3815851276.0;
+        Mon, 13 Nov 2023 23:50:08 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699948027; x=1700552827;
+        d=1e100.net; s=20230601; t=1699948208; x=1700553008;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=VR06ltxFQEdp1reUSvUvds1lIfSzzgfu3vrbiPXH7+I=;
-        b=QalPpW+sXGAjxta86llq+SVmx2YpXiAK3uY737RXkXnFh+pqCJorFIsYNLkIASdNZK
-         Omej18Be0ReFG/pXJ65n/+cXYgGvH9i1LpLNlq8hYLnNICY7PGjAlwanomKqCDzs0UNZ
-         NG7meEdFWOrOFGjDT4rFP/eKEb9s2mM6yHgGG8pje8evpgQ5iBPOPwN2uGBrY7Lwu8ew
-         2VEdZqTxgwG04uVFXc7Xtim+F2I5xnfRGj1jDLn3SfR7x1EEwlzD15govoBBOReTze8X
-         C8vDDD9bQ2ieIRJwXv7fax1BRzP4G7B8aA0I8QVO50LrfrPGn/FFtVQR25INtrpCASk/
-         0M1Q==
-X-Gm-Message-State: AOJu0Yy1GXL3RIUAoH5leDz0O/G3s/OobVJ+hRfPpXkrft0wA/mcnUUv
-        ryfMZO/8KyZCLpsCPIby6JfJ5NJ6ST2udjm1K+e2Yg==
-X-Google-Smtp-Source: AGHT+IH7OXaXFQNfZsSr/nNbDU4L+en3c3DdVZzM+CNA5JnM/6GQGX0z/o7Nq1AvRxEpIPUPmeSdGZ9SBmSrJhVcW2s=
-X-Received: by 2002:a25:5ca:0:b0:da3:9a65:84b1 with SMTP id
- 193-20020a2505ca000000b00da39a6584b1mr6144751ybf.12.1699948027297; Mon, 13
- Nov 2023 23:47:07 -0800 (PST)
+        bh=ZNKgiMastFHu6zZA090ti6BtPSEMiA1kjXskvmbMMYo=;
+        b=q2tqCE6C1Ts03wECqY2AhXgR4YVIFRHBJ81waT+rcW92nSdemaj3dC3O1Svwxczi5G
+         v+xoCw50tiNs5L/ZutOB3KWlBhwXgl4E4el63YO/gGVRBwv1Rmz6i25UevHazjn3b3p7
+         8R4k9ZNo3/4IyYJWqo2nXe/JKELHTIy105G45dgZuiJOrjIVyEHB5PCywdyb5me+r+08
+         cRzrxXBYs538WX1vZNU9yDbaOr1dyYNpL2Q+d0RrPQV9L01+qGatjGcIxpmIM8VYL6Nb
+         cKiU3qhfNv3HbhiDu7lUEevGaHOcRrbYXAM2VYeXkInYjjouCAnrE/51dkE9PUkz/fcS
+         Z24A==
+X-Gm-Message-State: AOJu0YygjMEdD4xV9xYkVG0HkXeuXKhZesWXSOP74oHdfy+CfqY9gjxY
+        pX6fLuwJ+dpCCjYWFmRIAzib6mRP0IaF/A==
+X-Google-Smtp-Source: AGHT+IGS8j3IjpSJimjygO02lvI8vxOAd1pExxvzKvWhnUf2x/31X0MABM5GM8J5YkHScv+ICOfmsw==
+X-Received: by 2002:a25:2d1e:0:b0:d9a:4a5f:415d with SMTP id t30-20020a252d1e000000b00d9a4a5f415dmr8844739ybt.0.1699948207828;
+        Mon, 13 Nov 2023 23:50:07 -0800 (PST)
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com. [209.85.128.173])
+        by smtp.gmail.com with ESMTPSA id p13-20020a056902014d00b00d9a43500f1dsm1920128ybh.28.2023.11.13.23.50.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Nov 2023 23:50:07 -0800 (PST)
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-5a7eef0b931so61437687b3.0;
+        Mon, 13 Nov 2023 23:50:06 -0800 (PST)
+X-Received: by 2002:a0d:cc10:0:b0:5a7:c1f1:24b with SMTP id
+ o16-20020a0dcc10000000b005a7c1f1024bmr10295001ywd.22.1699948206361; Mon, 13
+ Nov 2023 23:50:06 -0800 (PST)
 MIME-Version: 1.0
-References: <20231114131335.3aba4f4d@canb.auug.org.au>
-In-Reply-To: <20231114131335.3aba4f4d@canb.auug.org.au>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 14 Nov 2023 08:46:56 +0100
-Message-ID: <CACRpkdZP6Epat3nnqfzoZwD3FtanARiOFqN_xomga8Syg-F2kw@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the pinctrl tree
+References: <20231114075136.3e164b4a@canb.auug.org.au>
+In-Reply-To: <20231114075136.3e164b4a@canb.auug.org.au>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 14 Nov 2023 08:49:54 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXSD3pXUOKQ_ShDLgDb=YCz26Ot3TzF3hrxjdrax2inJQ@mail.gmail.com>
+Message-ID: <CAMuHMdXSD3pXUOKQ_ShDLgDb=YCz26Ot3TzF3hrxjdrax2inJQ@mail.gmail.com>
+Subject: Re: linux-next: Signed-off-by missing for commit in the renesas tree
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Nov 14, 2023 at 3:13=E2=80=AFAM Stephen Rothwell <sfr@canb.auug.org=
-.au> wrote:
+Hi Stephen,
 
-> After merging the pinctrl tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
+On Mon, Nov 13, 2023 at 9:51 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> Commits
 >
-> drivers/pinctrl/qcom/pinctrl-sm8650-lpass-lpi.c:232:10: error: 'const str=
-uct lpi_pinctrl_variant_data' has no member named 'flags'
->   232 |         .flags =3D LPI_FLAG_SLEW_RATE_SAME_REG,
->       |          ^~~~~
-> drivers/pinctrl/qcom/pinctrl-sm8650-lpass-lpi.c:232:18: error: 'LPI_FLAG_=
-SLEW_RATE_SAME_REG' undeclared here (not in a function); did you mean 'LPI_=
-SLEW_RATE_CTL_REG'?
->   232 |         .flags =3D LPI_FLAG_SLEW_RATE_SAME_REG,
->       |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~
->       |                  LPI_SLEW_RATE_CTL_REG
-> drivers/pinctrl/qcom/pinctrl-sm8650-lpass-lpi.c:232:18: error: excess ele=
-ments in struct initializer [-Werror]
-> drivers/pinctrl/qcom/pinctrl-sm8650-lpass-lpi.c:232:18: note: (near initi=
-alization for 'sm8650_lpi_data')
-> cc1: all warnings being treated as errors
+>   e443f05dfa8f ("arm64: dts: renesas: rzg2lc-smarc-som: Enable 4-bit tx support")
+>   ce2e1b36450e ("arm64: dts: renesas: rzg2l-smarc-som: Enable 4-bit tx support")
 >
-> Caused by commit
->
->   c4e47673853f ("pinctrl: qcom: sm8650-lpass-lpi: add SM8650 LPASS")
+> are missing a Signed-off-by from their committer.
 
-Ah I forgot a prerequisite patch we postponed before.
+Thanks for reporting, please consider it fixed.
 
-Applied it now so things should work by tomorrow, thanks!
+Gr{oetje,eeting}s,
 
-Yours,
-Linus Walleij
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

@@ -2,100 +2,280 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6AB77EBAFB
-	for <lists+linux-next@lfdr.de>; Wed, 15 Nov 2023 02:43:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A33AE7EBBE6
+	for <lists+linux-next@lfdr.de>; Wed, 15 Nov 2023 04:32:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230162AbjKOBnb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 14 Nov 2023 20:43:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34338 "EHLO
+        id S234330AbjKODcY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 14 Nov 2023 22:32:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229600AbjKOBnb (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 14 Nov 2023 20:43:31 -0500
-X-Greylist: delayed 62 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 14 Nov 2023 17:43:28 PST
-Received: from fgw20-7.mail.saunalahti.fi (fgw20-7.mail.saunalahti.fi [62.142.5.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C8E3E3
-        for <linux-next@vger.kernel.org>; Tue, 14 Nov 2023 17:43:28 -0800 (PST)
-Received: from localhost (88-113-24-34.elisa-laajakaista.fi [88.113.24.34])
-        by fgw20.mail.saunalahti.fi (Halon) with ESMTP
-        id 38a819f9-8358-11ee-b3cf-005056bd6ce9;
-        Wed, 15 Nov 2023 03:42:24 +0200 (EET)
-From:   andy.shevchenko@gmail.com
-Date:   Wed, 15 Nov 2023 03:42:22 +0200
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, linux-mm <linux-mm@kvack.org>,
-        Arnd Bergmann <arnd@arndb.de>, Shuah Khan <shuah@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Pengfei Xu <pengfei.xu@intel.com>, yi1.lai@intel.com,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Dan Carpenter <dan.carpenter@linaro.org>
-Subject: Re: selftests: gpio: crash on arm64
-Message-ID: <ZVQh_nvgqMkd3tN6@surfacebook.localdomain>
-References: <CA+G9fYv94gx8+-JMzbmQaue3q3y6QdBmsGUCdD-26X5XavL3Ag@mail.gmail.com>
- <ZAocZRZh4FQRH3lc@smile.fi.intel.com>
- <CA+G9fYsOttth+k3Ki8LK_ZiayvXa0bAg-DmQAaFHZeEyR=6Lrw@mail.gmail.com>
- <CACRpkdbUYWcFiRh+Y=MOekv2RjSP4sB2t5tVrSsz54Eez6wmVg@mail.gmail.com>
- <ZJHWdcP+PDaNrw07@smile.fi.intel.com>
- <CA+G9fYvReHr+ofJAW4yfA5EWT6-MRpR2+fOQG24hROjSd+dY0g@mail.gmail.com>
+        with ESMTP id S234323AbjKODcY (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 14 Nov 2023 22:32:24 -0500
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 397E7C3
+        for <linux-next@vger.kernel.org>; Tue, 14 Nov 2023 19:32:20 -0800 (PST)
+Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1cc34c3420bso50030225ad.3
+        for <linux-next@vger.kernel.org>; Tue, 14 Nov 2023 19:32:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1700019139; x=1700623939; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=cBUhGSteMV44Xy3ZuBx9sgpmwczTY4oy2w74y0AMAjo=;
+        b=pu6rxSCVi+tF6bCyEw5AKDAXBltGuVREkieUkD4qBG5AjvlLTSz9VlBt1h3zSw/GfO
+         H5VCb2lf0vYj80SIENgAQdMppKbFWnPEduu0AI6RnYVtuGkhWF9ebhnQb3xNUCUxB3wU
+         aRjJ3/YlFywohHSnLl0e4Xn/oehcSxzVdEp0TDH+MrVoC78Q2L05yxmwjZERCjkz1MSQ
+         Rdm9QfH5i92bZXs/iqLe8RONs0TabSon1x0b+0WuoCqWmocOtgN86u+71J53oElVtm/b
+         zvh6G9AOpgap1gvJAXVMZzrUnWkjtCr2L24bNi3bOv6naAoRVg2yjUunAp982M1gGqUx
+         RD7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700019139; x=1700623939;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cBUhGSteMV44Xy3ZuBx9sgpmwczTY4oy2w74y0AMAjo=;
+        b=dh6W0gUvVb/+81G8d42ZTyOTrBo0CMZMJA/btsTrGxi2FT7sUW6oxLrxhlHQYc6Jiz
+         wn99OJrwy6PXH3fmg5g38CFCoDg7zk0CIqwZ6Jj1fsZCaOC842qt2XDkjPWs7SkOVNg2
+         YDHbQWkhKofKrPgKFGM7KgkXDbVbrszP3PvCQwbAuSMThzp6yLsy4AnjBXHwCq0mDNe/
+         otih5Y01/ytgehVfg3894fy1f/eczk+aFWgKztMk/b+AV0kZfqYBVA8US/fFc6PuYQTG
+         8wqVo9BPL9bBJc40BYPPYMjRulhMece1xp9gsKkqX3/izrOFLz8ZHJlz2dwMZQwv0+RY
+         NoDw==
+X-Gm-Message-State: AOJu0YxdL+JQriIvoHfma4DJeWycxJazYtIQ/5xl1QO7DNMrSz18q23B
+        v1gQ9yaJr/8Y9JKcs5HP5klLbaSYWSsFtMeOloKrDw==
+X-Google-Smtp-Source: AGHT+IFGHGOXLtWg5iG/Lc5jMVQE9lRw/ifJOn25NBQ+ddzEaSghEpMtDF5FkM8REp8bMbnsSRj0dg==
+X-Received: by 2002:a17:902:ef94:b0:1cc:32ce:bd9 with SMTP id iz20-20020a170902ef9400b001cc32ce0bd9mr3925033plb.69.1700019139096;
+        Tue, 14 Nov 2023 19:32:19 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id z11-20020a1709027e8b00b001b9e9edbf43sm6624184pla.171.2023.11.14.19.32.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Nov 2023 19:32:18 -0800 (PST)
+Message-ID: <65543bc2.170a0220.4c555.1d5a@mx.google.com>
+Date:   Tue, 14 Nov 2023 19:32:18 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CA+G9fYvReHr+ofJAW4yfA5EWT6-MRpR2+fOQG24hROjSd+dY0g@mail.gmail.com>
-X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: test
+X-Kernelci-Branch: pending-fixes
+X-Kernelci-Tree: next
+X-Kernelci-Kernel: v6.7-rc1-127-gaea4a488542f
+Subject: next/pending-fixes baseline: 108 runs,
+ 4 regressions (v6.7-rc1-127-gaea4a488542f)
+To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+        kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Tue, Nov 07, 2023 at 07:21:32PM +0530, Naresh Kamboju kirjoitti:
-> On Tue, 20 Jun 2023 at 22:11, Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> wrote:
-> > On Tue, Apr 11, 2023 at 10:57:28AM +0200, Linus Walleij wrote:
-> > > On Mon, Apr 10, 2023 at 11:16 AM Naresh Kamboju
-> > > <naresh.kamboju@linaro.org> wrote:
+next/pending-fixes baseline: 108 runs, 4 regressions (v6.7-rc1-127-gaea4a48=
+8542f)
 
-...
+Regressions Summary
+-------------------
 
-> > > Add a pr_info() devm_gpio_chip_release() in drivers/gpio/gpiolib-devres.c
-> > > and see if the callback is even called. I think this could be the
-> > > problem: if that isn't cleaned up, there will be dangling references.
-> >
-> > Side note: Since we have devres tracepoints, your patch seems an overkill :-)
-> > Just enable devres tracepoints and filter out by the function name. I believe
-> > that should work.
-> 
-> Since I have been tracking open issues on the stable-rc kernel,
-> The reported problem on stable-rc linux.6.3.y has been solved
-> on the stable-rc linux.6.6.y branch.
-> 
-> Thanks for fixing this reported issue.
-> 
-> Upstream links about this fix and discussion,
+platform              | arch  | lab          | compiler | defconfig        =
+  | regressions
+----------------------+-------+--------------+----------+------------------=
+--+------------
+kontron-pitx-imx8m    | arm64 | lab-kontron  | gcc-10   | defconfig        =
+  | 1          =
 
-I'm a bit lost. Is the [3] fixed? Is the fix the below mentioned commit?
+meson-gxl-s905d-p230  | arm64 | lab-baylibre | gcc-10   | defconfig        =
+  | 1          =
 
-> Commit daecca4b8433
-> gpiolib: Do not alter GPIO chip fwnode member
-> 
-> [1] https://lore.kernel.org/linux-gpio/20230703142308.5772-4-andriy.shevchenko@linux.intel.com/
-> [2] https://lore.kernel.org/linux-gpio/CAMRc=MfFEBSeJ78NO7XeuzAMJ0KezEPAYWsWnFXXaRyQPAf3dA@mail.gmail.com/
-> [3] https://lore.kernel.org/linux-gpio/CA+G9fYv94gx8+-JMzbmQaue3q3y6QdBmsGUCdD-26X5XavL3Ag@mail.gmail.com/
+sun7i-a20-cubieboard2 | arm   | lab-baylibre | gcc-10   | multi_v7_defconfi=
+g | 1          =
 
--- 
-With Best Regards,
-Andy Shevchenko
+sun7i-a20-cubieboard2 | arm   | lab-clabbe   | gcc-10   | multi_v7_defconfi=
+g | 1          =
 
 
+  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
+v6.7-rc1-127-gaea4a488542f/plan/baseline/
+
+  Test:     baseline
+  Tree:     next
+  Branch:   pending-fixes
+  Describe: v6.7-rc1-127-gaea4a488542f
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+  SHA:      aea4a488542fb2f54a04350919955bc91a79bd8b =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform              | arch  | lab          | compiler | defconfig        =
+  | regressions
+----------------------+-------+--------------+----------+------------------=
+--+------------
+kontron-pitx-imx8m    | arm64 | lab-kontron  | gcc-10   | defconfig        =
+  | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/65540b6b93651b75767e4a75
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.7-rc1-12=
+7-gaea4a488542f/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-pitx-im=
+x8m.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.7-rc1-12=
+7-gaea4a488542f/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-pitx-im=
+x8m.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/65540b6b93651b75767e4=
+a76
+        new failure (last pass: v6.7-rc1-105-g3e62c2378662) =
+
+ =
+
+
+
+platform              | arch  | lab          | compiler | defconfig        =
+  | regressions
+----------------------+-------+--------------+----------+------------------=
+--+------------
+meson-gxl-s905d-p230  | arm64 | lab-baylibre | gcc-10   | defconfig        =
+  | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/65540c26d0d912a7187e4abc
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.7-rc1-12=
+7-gaea4a488542f/arm64/defconfig/gcc-10/lab-baylibre/baseline-meson-gxl-s905=
+d-p230.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.7-rc1-12=
+7-gaea4a488542f/arm64/defconfig/gcc-10/lab-baylibre/baseline-meson-gxl-s905=
+d-p230.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/65540c26d0d912a7187e4=
+abd
+        new failure (last pass: v6.7-rc1-105-g3e62c2378662) =
+
+ =
+
+
+
+platform              | arch  | lab          | compiler | defconfig        =
+  | regressions
+----------------------+-------+--------------+----------+------------------=
+--+------------
+sun7i-a20-cubieboard2 | arm   | lab-baylibre | gcc-10   | multi_v7_defconfi=
+g | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/65540b39dbea55f62c7e4a88
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: multi_v7_defconfig
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.7-rc1-12=
+7-gaea4a488542f/arm/multi_v7_defconfig/gcc-10/lab-baylibre/baseline-sun7i-a=
+20-cubieboard2.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.7-rc1-12=
+7-gaea4a488542f/arm/multi_v7_defconfig/gcc-10/lab-baylibre/baseline-sun7i-a=
+20-cubieboard2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/65540b39dbea55f62c7e4a91
+        new failure (last pass: v6.4-rc7-260-g7124fb0a8216)
+
+    2023-11-15T00:04:44.497018  / # #
+    2023-11-15T00:04:44.599690  export SHELL=3D/bin/sh
+    2023-11-15T00:04:44.600084  #
+    2023-11-15T00:04:44.700983  / # export SHELL=3D/bin/sh. /lava-3833969/e=
+nvironment
+    2023-11-15T00:04:44.702071  =
+
+    2023-11-15T00:04:44.804057  / # . /lava-3833969/environment/lava-383396=
+9/bin/lava-test-runner /lava-3833969/1
+    2023-11-15T00:04:44.805615  =
+
+    2023-11-15T00:04:44.821214  / # /lava-3833969/bin/lava-test-runner /lav=
+a-3833969/1
+    2023-11-15T00:04:44.942921  + export 'TESTRUN_ID=3D1_bootrr'
+    2023-11-15T00:04:44.943938  + cd /lava-3833969/1/tests/1_bootrr =
+
+    ... (10 line(s) more)  =
+
+ =
+
+
+
+platform              | arch  | lab          | compiler | defconfig        =
+  | regressions
+----------------------+-------+--------------+----------+------------------=
+--+------------
+sun7i-a20-cubieboard2 | arm   | lab-clabbe   | gcc-10   | multi_v7_defconfi=
+g | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/65540ae989e37d7bdd7e4a9b
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: multi_v7_defconfig
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.7-rc1-12=
+7-gaea4a488542f/arm/multi_v7_defconfig/gcc-10/lab-clabbe/baseline-sun7i-a20=
+-cubieboard2.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.7-rc1-12=
+7-gaea4a488542f/arm/multi_v7_defconfig/gcc-10/lab-clabbe/baseline-sun7i-a20=
+-cubieboard2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/65540ae989e37d7bdd7e4aa4
+        new failure (last pass: v6.4-rc7-260-g7124fb0a8216)
+
+    2023-11-15T00:03:31.014000  + set +x[   19.893079] <LAVA_SIGNAL_ENDRUN =
+0_dmesg 444016_1.5.2.4.1>
+    2023-11-15T00:03:31.014304  =
+
+    2023-11-15T00:03:31.122242  / # #
+    2023-11-15T00:03:31.223859  export SHELL=3D/bin/sh
+    2023-11-15T00:03:31.224405  #
+    2023-11-15T00:03:31.325411  / # export SHELL=3D/bin/sh. /lava-444016/en=
+vironment
+    2023-11-15T00:03:31.325961  =
+
+    2023-11-15T00:03:31.427012  / # . /lava-444016/environment/lava-444016/=
+bin/lava-test-runner /lava-444016/1
+    2023-11-15T00:03:31.427892  =
+
+    2023-11-15T00:03:31.431304  / # /lava-444016/bin/lava-test-runner /lava=
+-444016/1 =
+
+    ... (12 line(s) more)  =
+
+ =20

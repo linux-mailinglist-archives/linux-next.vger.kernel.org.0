@@ -2,138 +2,97 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 701EE7EC77A
-	for <lists+linux-next@lfdr.de>; Wed, 15 Nov 2023 16:38:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1836E7ED27B
+	for <lists+linux-next@lfdr.de>; Wed, 15 Nov 2023 21:40:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231199AbjKOPhv (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 15 Nov 2023 10:37:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43418 "EHLO
+        id S235766AbjKOUkW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 15 Nov 2023 15:40:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230144AbjKOPhs (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 15 Nov 2023 10:37:48 -0500
-Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6E34195
-        for <linux-next@vger.kernel.org>; Wed, 15 Nov 2023 07:37:44 -0800 (PST)
-Received: by mail-ot1-x32a.google.com with SMTP id 46e09a7af769-6ce2988d62eso4009790a34.1
-        for <linux-next@vger.kernel.org>; Wed, 15 Nov 2023 07:37:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1700062664; x=1700667464; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nxWKE0RnE67ZCac+DE3wf0+WlhQHwaxB8ToZtgmVZwY=;
-        b=pBDRktK76id6NpKj3jlCs/xMSpWkPsLSPwkT+oitTZfn0ctMgfSu3Cj3lbVGNtzSVl
-         JnDunYOnaj8kozNVwM9OxPo9AtRtqJaOpXbPsaly16Z9gUGxtgJZ/LivykVi5zgTeVYE
-         Eg6okvKXfe4AYLB2Rw391JlzhG2NXJF+xfe+pEVblOydZOfQSlxZsPao3Nz0VK2Lo/zS
-         lfBb1NMozCh+QRcsMT0lexpxwe4Zll4na8lEHLIftatwZPm27lE5Ih9xehsv8azYIvoT
-         4bD42ibE65tdd/f8ddjIyaGGjAql5tAf81PGYn2KetJnvcDj21wpf0zQANRTSKH6hiZe
-         QXuw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700062664; x=1700667464;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nxWKE0RnE67ZCac+DE3wf0+WlhQHwaxB8ToZtgmVZwY=;
-        b=e/U4h79nrNBseXrCYuZda8kNz/YxRJ9CWv3CuFSdsz7ULlAnCA9TX64WROjlPXJ9i0
-         UZKnJcmpD7bskpcHXwPP3uZwHDXSmjj7jTJeiNzxRHBjjhBb73K64xh+hUNYZIkGhR/n
-         jKHyF+PJBhQf6+KLXTTMMc1nxpMatHCjkFHN9isNUxuhe7i6nZZgWqmheJT2M24nSa/L
-         n03aaD93yAoByhrg7wrVHDhOEd67nx+KHgNdPtJugltBo3jlkDNw7Jq0ugIseiot8f5C
-         TIznoQAJ1RQKGVlVz+H7SU5w3W3YSFHcbXBC758sbU7M3ZojnznYoB4zUK7NKIxpfGjC
-         UzEg==
-X-Gm-Message-State: AOJu0Yxxj6PKn+RtrElbgfI/rxuqQn1bToUzIzpzVAFkuKNyio0xKXpF
-        hpfvSwBklpJJsaO4UqY6Bojb3xCMuuoOQYVaaZqd9A==
-X-Google-Smtp-Source: AGHT+IGO8zAnm0zIxz1rZhEvNk250XK6A18NgKyait+fesnXkzrYw4HG90ngI8KHEvMDRK2dAwrF7to4ErqNn8RuSQ0=
-X-Received: by 2002:a05:6358:590c:b0:168:e69b:538c with SMTP id
- g12-20020a056358590c00b00168e69b538cmr6106636rwf.3.1700062663887; Wed, 15 Nov
- 2023 07:37:43 -0800 (PST)
+        with ESMTP id S235794AbjKOUkE (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 15 Nov 2023 15:40:04 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8903119AC;
+        Wed, 15 Nov 2023 12:39:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1700080792;
+        bh=S1DRmiOFH4gdx6jD7U1d7I9+SbzQKbwT9ONQwhw7An0=;
+        h=Date:From:To:Cc:Subject:From;
+        b=JNRWg1S/N9vPo3dVXpr5w54RfxnTeDhwA1PwBMgL2bIXqTXmqPY1SbhASBohc0JLl
+         6fzTuLWp/grLEH96hTP1jOn9ICvvpLpRDe8FEG43gFZDm5IxsGGu792oMvH8vJUHud
+         YWBh0i5AMsvPMeeqWD9WfkZl6BJLu/9ajUtLHHX6dHwWKMmXQAiEW6JuliE5YvkhyY
+         gR+X5Jgo/Njg3r2Y2R9HyATFVZjRopOyP8ZtoJquJv9q6i9ZH1XBmXJAZppa/tNmT9
+         7yCBq1Z/2i9QDMW2Il7si0vv8bcznErrBmrgKjG4b4QpqEe23J37I0slk8xvXvBZZJ
+         g/fdhcy2Uefag==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4SVw5N0Q67z4wd0;
+        Thu, 16 Nov 2023 07:39:52 +1100 (AEDT)
+Date:   Thu, 16 Nov 2023 07:39:50 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Steven Whitehouse <swhiteho@redhat.com>,
+        Bob Peterson <rpeterso@redhat.com>,
+        Andreas Gruenbacher <agruenba@redhat.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: contacts for the gfs2 tree
+Message-ID: <20231116073950.02c0610f@canb.auug.org.au>
 MIME-Version: 1.0
-References: <CA+G9fYv94gx8+-JMzbmQaue3q3y6QdBmsGUCdD-26X5XavL3Ag@mail.gmail.com>
- <ZAocZRZh4FQRH3lc@smile.fi.intel.com> <CA+G9fYsOttth+k3Ki8LK_ZiayvXa0bAg-DmQAaFHZeEyR=6Lrw@mail.gmail.com>
- <CACRpkdbUYWcFiRh+Y=MOekv2RjSP4sB2t5tVrSsz54Eez6wmVg@mail.gmail.com>
- <ZJHWdcP+PDaNrw07@smile.fi.intel.com> <CA+G9fYvReHr+ofJAW4yfA5EWT6-MRpR2+fOQG24hROjSd+dY0g@mail.gmail.com>
- <ZVQh_nvgqMkd3tN6@surfacebook.localdomain>
-In-Reply-To: <ZVQh_nvgqMkd3tN6@surfacebook.localdomain>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 15 Nov 2023 21:07:32 +0530
-Message-ID: <CA+G9fYujHuwn_AFDeFHbt0DMx7A63fjLR25aX7pkoMcVmmxbog@mail.gmail.com>
-Subject: Re: selftests: gpio: crash on arm64
-To:     andy.shevchenko@gmail.com
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, linux-mm <linux-mm@kvack.org>,
-        Arnd Bergmann <arnd@arndb.de>, Shuah Khan <shuah@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Pengfei Xu <pengfei.xu@intel.com>, yi1.lai@intel.com,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Dan Carpenter <dan.carpenter@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/7Ota_2r3cnc_63MSW71WcWp";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, 15 Nov 2023 at 07:12, <andy.shevchenko@gmail.com> wrote:
->
-> Tue, Nov 07, 2023 at 07:21:32PM +0530, Naresh Kamboju kirjoitti:
-> > On Tue, 20 Jun 2023 at 22:11, Andy Shevchenko
-> > <andriy.shevchenko@linux.intel.com> wrote:
-> > > On Tue, Apr 11, 2023 at 10:57:28AM +0200, Linus Walleij wrote:
-> > > > On Mon, Apr 10, 2023 at 11:16=E2=80=AFAM Naresh Kamboju
-> > > > <naresh.kamboju@linaro.org> wrote:
->
-> ...
->
-> > > > Add a pr_info() devm_gpio_chip_release() in drivers/gpio/gpiolib-de=
-vres.c
-> > > > and see if the callback is even called. I think this could be the
-> > > > problem: if that isn't cleaned up, there will be dangling reference=
-s.
-> > >
-> > > Side note: Since we have devres tracepoints, your patch seems an over=
-kill :-)
-> > > Just enable devres tracepoints and filter out by the function name. I=
- believe
-> > > that should work.
-> >
-> > Since I have been tracking open issues on the stable-rc kernel,
-> > The reported problem on stable-rc linux.6.3.y has been solved
-> > on the stable-rc linux.6.6.y branch.
-> >
-> > Thanks for fixing this reported issue.
-> >
-> > Upstream links about this fix and discussion,
->
-> I'm a bit lost. Is the [3] fixed? Is the fix the below mentioned commit?
+--Sig_/7Ota_2r3cnc_63MSW71WcWp
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-As per my understanding on this,
-The reported issue has been fixed with the below commit.
+Hi all,
 
->
-> > Commit daecca4b8433
-> > gpiolib: Do not alter GPIO chip fwnode member
-> >
-> > [1] https://lore.kernel.org/linux-gpio/20230703142308.5772-4-andriy.she=
-vchenko@linux.intel.com/
-> > [2] https://lore.kernel.org/linux-gpio/CAMRc=3DMfFEBSeJ78NO7XeuzAMJ0Kez=
-EPAYWsWnFXXaRyQPAf3dA@mail.gmail.com/
-> > [3] https://lore.kernel.org/linux-gpio/CA+G9fYv94gx8+-JMzbmQaue3q3y6QdB=
-msGUCdD-26X5XavL3Ag@mail.gmail.com/
->
-> --
-> With Best Regards,
-> Andy Shevchenko
+I noticed commit
 
-- Naresh
+  2e6ef8aaba6b ("Remove myself as maintainer of GFS2")
+
+Currently I have
+
+Steven Whitehouse <swhiteho@redhat.com>
+Bob Peterson <rpeterso@redhat.com>
+
+listed as the only contacts for the gfs2 tree.
+
+Should I change that to
+
+Andreas Gruenbacher <agruenba@redhat.com>
+
+or keep Steven (even though he is not listed in MAINTAINERS)?  And should
+I add the mailing list as well?
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/7Ota_2r3cnc_63MSW71WcWp
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmVVLJYACgkQAVBC80lX
+0Gw4twf/bMgmWLCS5rUJj0ztqu+Km33BzhOGz1LrcjSHGORFZ70hT/+cVU4PKRVA
++6VvxLYK52Qp4sNK6Y8R6XYINdHTWfvEt53nmVj1513OjBqdURd3LSxGwsIBQ66s
+PssNTNwJVptn3mf+wvrlxwGHRFMxPpSCLe7E4w/Gb8B5gtdv2c/UsS0H3YJ1zboA
+cNxc6I/cV7E8byWQcBXMZzkydHnJftg1UVHEK+Xvz1iEz52vfTdjTY4ZDMFm1sdy
+vS5wJWLgAQkg+EN5GGAE8xA8JUK6AZF338kWE/iomX8xdpzPi9PtyjbTHCwHW7Il
+k7q7Yk6cJtO9fXbRj1Qpie/wi2SQuA==
+=CRUS
+-----END PGP SIGNATURE-----
+
+--Sig_/7Ota_2r3cnc_63MSW71WcWp--

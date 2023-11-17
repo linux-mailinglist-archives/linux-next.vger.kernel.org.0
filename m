@@ -2,68 +2,47 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A12D7EE9DD
-	for <lists+linux-next@lfdr.de>; Fri, 17 Nov 2023 00:07:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DEDF7EEA5D
+	for <lists+linux-next@lfdr.de>; Fri, 17 Nov 2023 01:33:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232401AbjKPXHN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 16 Nov 2023 18:07:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52604 "EHLO
+        id S229783AbjKQAdY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 16 Nov 2023 19:33:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229813AbjKPXHM (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 16 Nov 2023 18:07:12 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7E6E130
-        for <linux-next@vger.kernel.org>; Thu, 16 Nov 2023 15:07:08 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id 98e67ed59e1d1-28003daaaa6so1125262a91.0
-        for <linux-next@vger.kernel.org>; Thu, 16 Nov 2023 15:07:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1700176028; x=1700780828; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=QS2u+12vNLw8OHDFQdBjeAc33Jss03WYF3mq2tjMg2k=;
-        b=Q3hEaOLNUXhbkbhnCpeF9LIFmJVdwnyfKUh+RlAIe5yguq+tltO5hLM7SIq22hHRqg
-         kGgP+xPtVtbtrcpz8GR3uOMHaDNtq83umCo+JG0QEaeNPH+z7K42IjcVeBecpVpwKJt1
-         Dqo9Ec7yryCdYXkoypeUUavcVBEMk55ghxXMXRVOsT5hRHmlmLKh5Ny5n6ckkoqmr4kZ
-         PNDvEI7BIc2AjQF0wuTVCmZT3olMJTOVCQMdd2iAde5llEs/iAbbMZmJ64lTPKLJgs/T
-         vNmzJYwMwgVMWImhmFzU/1BJRw8WKUiDlfCYN8lvD71oG+Vz/gRv9LnkejIB7+rmEcdn
-         5DJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700176028; x=1700780828;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QS2u+12vNLw8OHDFQdBjeAc33Jss03WYF3mq2tjMg2k=;
-        b=T8JiOFeVcmG4ZdW5qT6/n1i092DcdYtJP+yzv6hMoPnvi2zc8ZOQD0foz0jsFtFd6D
-         nonWLP8mvxPA73u8cqkQsS99LrS0dP2MRHBjNRNg9+VjSvGXCRuDdMC87W7K6HKwlIP6
-         AuYcdto1UnPOh0/tKw91nvMBMpg7WKe5jQo+UrSCKzjabmOrM6tyJARsa324PVCv7N95
-         lDQf6f6WT/o1cLPMXMmwpsJS6fDlqJL8noR/zYUJ2uyiey5i+XNAGuv4qANnnm5ymWiO
-         NKZ+oYOXTI6fQUdVyFvu5DTqqeq1xr0GAwnSoIekLFD3tGxvoDahyWTapD6kp+5yknph
-         2rOQ==
-X-Gm-Message-State: AOJu0YzAIGtDBGrH8IT6ukvio7+8zE3abTj5LR3o7IyZU0iECqlaOGHD
-        aOWS4sc2Dp0lIppqOmlN7+Wf9t6u1DRMqBpXf6g=
-X-Google-Smtp-Source: AGHT+IFkN4L3eqc36melCggqIFcNK+iYJxels/Fmx5oqeM2jA57dUccUDLOqLYKeElJbQjAYjjzTEQ==
-X-Received: by 2002:a17:90a:e7c7:b0:282:e851:a7ea with SMTP id kb7-20020a17090ae7c700b00282e851a7eamr16279016pjb.48.1700176027804;
-        Thu, 16 Nov 2023 15:07:07 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id g4-20020a17090a9b8400b00278ff752eacsm218228pjp.50.2023.11.16.15.07.06
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Nov 2023 15:07:07 -0800 (PST)
-Message-ID: <6556a09b.170a0220.77646.121f@mx.google.com>
-Date:   Thu, 16 Nov 2023 15:07:07 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S229809AbjKQAdX (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 16 Nov 2023 19:33:23 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F020182;
+        Thu, 16 Nov 2023 16:33:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1700181194;
+        bh=KTMVv7/Ueb564ZJYWnTWcSzc5IuQGbeTYWJDICffPOg=;
+        h=Date:From:To:Cc:Subject:From;
+        b=aJKdrTF+HPa3kq/Km3hW2uBurMvo03E+HDp1EIGFhrqgN7xbVht/bqYePlEBPxeyH
+         PIm3wgc29vbCRYDm4Y4U8eEd96dAWYyT2R96z3yP4nIfAYOnCKCI4TveOJAnnR/0t2
+         2A48kiRaPO5o0BmK8BlD0/BZCxDKlGv3aF3ZMxv5Ka9goxfDKByTreTTPEV2ONSg2Q
+         N8bRgiUNS5opfIDl7mXF6wrktV5a2qfSggeInPk6z8vSu2sTwgsXmt/ymLZrhU5e4O
+         qtLagHAevPe1eXCFddHb1+C++zl4KCUH1vF1vq3aG44KKXAXQwRb3ZnD9SVZg672Vl
+         J0f262h+0iI1g==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4SWdD96rKNz4wdD;
+        Fri, 17 Nov 2023 11:33:13 +1100 (AEDT)
+Date:   Fri, 17 Nov 2023 11:33:12 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+Cc:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the kspp-gustavo tree
+Message-ID: <20231117113312.31379f74@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: build
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Tree: next
-X-Kernelci-Kernel: v6.7-rc1-251-g1da100f819fbe
-Subject: next/pending-fixes build: 8 builds: 0 failed, 8 passed,
- 4 warnings (v6.7-rc1-251-g1da100f819fbe)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,
+Content-Type: multipart/signed; boundary="Sig_/JsIxQBj1mIatj2rNJwWgdKt";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,100 +51,97 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes build: 8 builds: 0 failed, 8 passed, 4 warnings (v6.7-rc=
-1-251-g1da100f819fbe)
+--Sig_/JsIxQBj1mIatj2rNJwWgdKt
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
-rnel/v6.7-rc1-251-g1da100f819fbe/
+Hi all,
 
-Tree: next
-Branch: pending-fixes
-Git Describe: v6.7-rc1-251-g1da100f819fbe
-Git Commit: 1da100f819fbef3f6f1982cd0e448694e6ef2956
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Built: 8 unique architectures
+After merging the kspp-gustavo tree, today's linux-next build (powerpc
+ppc64_defconfig) failed like this:
 
-Warnings Detected:
+In function 'do_byte_reverse',
+    inlined from 'do_vec_store' at arch/powerpc/lib/sstep.c:722:3,
+    inlined from 'emulate_loadstore' at arch/powerpc/lib/sstep.c:3510:9:
+arch/powerpc/lib/sstep.c:287:23: error: writing 8 bytes into a region of si=
+ze 0 [-Werror=3Dstringop-overflow=3D]
+  287 |                 up[3] =3D tmp;
+      |                 ~~~~~~^~~~~
+arch/powerpc/lib/sstep.c: In function 'emulate_loadstore':
+arch/powerpc/lib/sstep.c:708:11: note: at offset [24, 39] into destination =
+object 'u' of size 16
+  708 |         } u;
+      |           ^
+In function 'do_byte_reverse',
+    inlined from 'do_vec_store' at arch/powerpc/lib/sstep.c:722:3,
+    inlined from 'emulate_loadstore' at arch/powerpc/lib/sstep.c:3510:9:
+arch/powerpc/lib/sstep.c:289:23: error: writing 8 bytes into a region of si=
+ze 0 [-Werror=3Dstringop-overflow=3D]
+  289 |                 up[2] =3D byterev_8(up[1]);
+      |                 ~~~~~~^~~~~~~~~~~~~~~~~~
+arch/powerpc/lib/sstep.c: In function 'emulate_loadstore':
+arch/powerpc/lib/sstep.c:708:11: note: at offset 16 into destination object=
+ 'u' of size 16
+  708 |         } u;
+      |           ^
+In function 'do_byte_reverse',
+    inlined from 'do_vec_load' at arch/powerpc/lib/sstep.c:691:3,
+    inlined from 'emulate_loadstore' at arch/powerpc/lib/sstep.c:3439:9:
+arch/powerpc/lib/sstep.c:287:23: error: writing 8 bytes into a region of si=
+ze 0 [-Werror=3Dstringop-overflow=3D]
+  287 |                 up[3] =3D tmp;
+      |                 ~~~~~~^~~~~
+arch/powerpc/lib/sstep.c: In function 'emulate_loadstore':
+arch/powerpc/lib/sstep.c:681:11: note: at offset [24, 39] into destination =
+object 'u' of size 16
+  681 |         } u =3D {};
+      |           ^
+arch/powerpc/lib/sstep.c:681:11: note: at offset [24, 39] into destination =
+object 'u' of size 16
+arch/powerpc/lib/sstep.c:681:11: note: at offset [24, 39] into destination =
+object 'u' of size 16
+In function 'do_byte_reverse',
+    inlined from 'do_vec_load' at arch/powerpc/lib/sstep.c:691:3,
+    inlined from 'emulate_loadstore' at arch/powerpc/lib/sstep.c:3439:9:
+arch/powerpc/lib/sstep.c:289:23: error: writing 8 bytes into a region of si=
+ze 0 [-Werror=3Dstringop-overflow=3D]
+  289 |                 up[2] =3D byterev_8(up[1]);
+      |                 ~~~~~~^~~~~~~~~~~~~~~~~~
+arch/powerpc/lib/sstep.c: In function 'emulate_loadstore':
+arch/powerpc/lib/sstep.c:681:11: note: at offset 16 into destination object=
+ 'u' of size 16
+  681 |         } u =3D {};
+      |           ^
+arch/powerpc/lib/sstep.c:681:11: note: at offset 16 into destination object=
+ 'u' of size 16
+arch/powerpc/lib/sstep.c:681:11: note: at offset 16 into destination object=
+ 'u' of size 16
+cc1: all warnings being treated as errors
 
-arc:
+Caused by commit
 
-arm64:
+  c94c73da81d7 ("Makefile: Enable -Wstringop-overflow globally")
 
-arm:
+I have used te kspp-gustavo tree from next-20231116 for today.
 
-i386:
+--=20
+Cheers,
+Stephen Rothwell
 
-mips:
+--Sig_/JsIxQBj1mIatj2rNJwWgdKt
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-riscv:
+-----BEGIN PGP SIGNATURE-----
 
-sparc:
-    sparc64_defconfig (gcc-10): 4 warnings
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmVWtMgACgkQAVBC80lX
+0GwnIQf+L5Nuw/fA+7yL7I3fa51i0CLqCLl2qjdQmWlbjsVEcunt2MJjc0y3Kofs
+/XPjhEAZTp2G+6kfmAs9L/xvkksog7ol4OGnSS8qsVPWiiJlY6gcF7VARx8rpIpl
+XswyH5G+3RhDRquNSsHuKhmWTKNqFd8CUsS5lyaaz5cRDXBGzrDQnn5RpbBKfT4j
+xqtgWSJntrmpkNKLY0Du8RPhPZqUgCrgONmO7bKtxKKEs3FNmDlxNaWXDo5VSZ6s
+daggmJCXctmDPROsddDU2tzAAQtumhBFrXGWE83ecbosihdEpPjwFKS8YDYiHAt4
+6CH+isVuuIxppIhN0lgeDsdwlhbXYg==
+=nfoi
+-----END PGP SIGNATURE-----
 
-x86_64:
-
-
-Warnings summary:
-
-    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
-tion failed, symbol will not be versioned.
-    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
--Wcpp]
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----
-For more info write to <info@kernelci.org>
+--Sig_/JsIxQBj1mIatj2rNJwWgdKt--

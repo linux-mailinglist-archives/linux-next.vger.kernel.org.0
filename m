@@ -1,235 +1,124 @@
-Return-Path: <linux-next+bounces-36-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-37-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 012AF7F53B3
-	for <lists+linux-next@lfdr.de>; Wed, 22 Nov 2023 23:50:12 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A99417F552A
+	for <lists+linux-next@lfdr.de>; Thu, 23 Nov 2023 01:10:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A04452815BA
-	for <lists+linux-next@lfdr.de>; Wed, 22 Nov 2023 22:50:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CCEDA1C20AAC
+	for <lists+linux-next@lfdr.de>; Thu, 23 Nov 2023 00:10:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCC1C1B295;
-	Wed, 22 Nov 2023 22:50:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 077A6179;
+	Thu, 23 Nov 2023 00:10:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fJd2fw6D"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="PRll5c2A"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 496A092;
-	Wed, 22 Nov 2023 14:50:05 -0800 (PST)
-Received: by mail-qt1-x82b.google.com with SMTP id d75a77b69052e-41cc537ed54so1271001cf.2;
-        Wed, 22 Nov 2023 14:50:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1700693404; x=1701298204; darn=vger.kernel.org;
-        h=in-reply-to:autocrypt:from:content-language:references:cc:to
-         :subject:user-agent:mime-version:date:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=pgUF2jw5fhh4WgDjWnxiVoJOmAD0MbdmhXUbJVHtxqs=;
-        b=fJd2fw6DzeRQH/BBtKKnx5BQEq3bb2OJ6LP0JvY4tnPPtVuzDxfcfskcuo10IWa4AX
-         cD7bZkzffb//Z/9hnNS72Jfe/HKwSz+75crhT08BoFvYdZBlngWoDiwr0loRfFiqvU2R
-         mo+t7LkiHcV+7EMVSBU3/pbROyiYavbzeZg5GrnQN1i7iHBMbRv+C1thnbeZtZxuQ2N9
-         ubRsi66VAuD3aoPhMZTeYkFcHTe05aU5MyRo0WNx/DkMDMHm5ZjzE5WYZg9rPbAKwqTP
-         KhHhxGUUXquMvFIa6+jR1hJAgbXXdlzBgUhVuKs7g36QssbARba2Ul0X9vXrHW0qOdCr
-         J7bA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700693404; x=1701298204;
-        h=in-reply-to:autocrypt:from:content-language:references:cc:to
-         :subject:user-agent:mime-version:date:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=pgUF2jw5fhh4WgDjWnxiVoJOmAD0MbdmhXUbJVHtxqs=;
-        b=AdreYJwSVhpvT78WhIMuXDmAYF+tbackKy+2Zo+KJIUxaiTXQJSGe+TVqJJnzO5WSP
-         AQLC9cIP1lEhw4lK5osZi7iDicMWAkHuHdl/kSQOUE/FHnK06evsr6sTTWMKfvcjHZKS
-         xdomIf2QXqpt84nczRjyvkBEOqSW8D5KWMGxIkxxufglAgqSJqjijAT6AxnANuSZywxo
-         pZ91vkWqaDemfZR/yBa+fRu69q2+am4H0IrTrMC9mtKLEXxS85APX95ZylzGLn9mxAqe
-         YzkfXEJAchSPrutr8OLtDxmY/anLqubisPjw+/o+UuvC1/KZncfj/a2LB7vcHeD8TDMt
-         +SXQ==
-X-Gm-Message-State: AOJu0Yw8c1eq/ULpF80jOcZ12GeQb7jvwjlZuSdkAKTBOlRjKk/Duo+8
-	sStdgMzcE7MtZpayXRAAsF8=
-X-Google-Smtp-Source: AGHT+IFxFtVzEMOttPulrUYMFhaJqDwiYUxwlliQIjlXN+6KPQ9fIo7F72WMer0S3lfosciSxMWjSw==
-X-Received: by 2002:ac8:4e45:0:b0:417:b026:794a with SMTP id e5-20020ac84e45000000b00417b026794amr4777426qtw.34.1700693404221;
-        Wed, 22 Nov 2023 14:50:04 -0800 (PST)
-Received: from [192.168.2.14] ([76.65.20.140])
-        by smtp.gmail.com with ESMTPSA id jr38-20020a05622a802600b004182037f655sm180094qtb.14.2023.11.22.14.50.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Nov 2023 14:50:03 -0800 (PST)
-Message-ID: <ed5f8aa6-c46b-414a-a10e-afcdd3535487@gmail.com>
-Date: Wed, 22 Nov 2023 17:49:54 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5B72DD;
+	Wed, 22 Nov 2023 16:10:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1700698206;
+	bh=F3hUK3Y0jf6mS8cm4SBZe1aq3dM/e7j0/uTA65TSOTE=;
+	h=Date:From:To:Cc:Subject:From;
+	b=PRll5c2AoJNykMGptGa6+/VDK3EWaqvRu1+ZgltEQee7Vhckm3AJji5OjOxetaOrD
+	 pg3B6YD6FMrE76APsslOa8b8oONNzVtjF7yTKjjJrVjNbaj67l5jzaLt4BzAVaV9hT
+	 J6JXLGr5VcZzVN9IxqcSI5X+l7UVpP3WBA8JsSTgDN/LQQbARhf+ERHWWd7QoHNn+H
+	 TO5WUnw5RCYcUH9nM9xE9yBKUjQaHErdLU3BB5fyDnRzTe7pE/ydGcbBjN5iNXXDLq
+	 noQamLNEI6k0eAMxFBGZT91M5d27ynztmohUeSzsMhyjEcax09fTiLAoTDgGhApITZ
+	 njTGh6y1uoXVw==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4SbJQj6nrMz4wdB;
+	Thu, 23 Nov 2023 11:10:05 +1100 (AEDT)
+Date: Thu, 23 Nov 2023 11:10:05 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Paul Moore <paul@paul-moore.com>, Arnaldo Carvalho de Melo
+ <arnaldo.melo@gmail.com>, Namhyung Kim <namhyung@kernel.org>
+Cc: Casey Schaufler <casey@schaufler-ca.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the security tree with the perf-current
+ tree
+Message-ID: <20231123111005.432dfc56@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:115.0) Gecko/20100101
- Thunderbird/115.5.0
-Subject: Re: linux-next: Signed-off-by missing for commit in the drm-misc tree
-To: Maxime Ripard <mripard@redhat.com>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
- Intel Graphics <intel-gfx@lists.freedesktop.org>,
- DRI <dri-devel@lists.freedesktop.org>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20231114075501.61321c29@canb.auug.org.au>
- <19740d41-dd5a-47e4-b3e8-539b45bbd3e5@gmail.com>
- <3c306310-04b3-4658-a197-4b2d22a88274@gmail.com>
- <20231114134506.2ba0de1f@canb.auug.org.au>
- <530b6100-4f4e-4b3d-8fea-5b316e989633@gmail.com>
- <20231114140855.0b259b2d@canb.auug.org.au>
- <f1b21cbd-5bb6-4030-ae7d-a0ca2fbc76a9@gmail.com>
- <73cg637ax5cahqocscx5cjvtqkwlt4ves6cxgprbwqllasxq6v@gk6vzsqfc46j>
- <ZVXSjt_1uWHuYXsq@phenom.ffwll.local>
- <zuz7zpcjfqzeymfrn53tbhcsem5abqh2l4vcaqkxo5wbgoc742@bnxnkek3wv6t>
-Content-Language: en-CA, en-US
-From: Luben Tuikov <ltuikov89@gmail.com>
-Autocrypt: addr=ltuikov89@gmail.com; keydata=
- xjMEZTohOhYJKwYBBAHaRw8BAQdAWSq76k+GsENjDTMVCy9Vr4fAO9Rb57/bPT1APnbnnRHN
- Ikx1YmVuIFR1aWtvdiA8bHR1aWtvdjg5QGdtYWlsLmNvbT7CmQQTFgoAQRYhBJkj7+VmFO9b
- eaAl10wVR5QxozSvBQJlOiE6AhsDBQkJZgGABQsJCAcCAiICBhUKCQgLAgQWAgMBAh4HAheA
- AAoJEEwVR5QxozSvSm4BAOwCpX53DTQhE20FBGlTMqKCOQyJqlMcIQ9SO1qPWX1iAQCv3vfy
- JwktF7REl1yt7IU2Sye1qmQMfJxdt9JMbMNNBs44BGU6IToSCisGAQQBl1UBBQEBB0BT9wSP
- cCE8uGe7FWo8C+nTSyWPXKTx9F0gpEnlqReRBwMBCAfCfgQYFgoAJhYhBJkj7+VmFO9beaAl
- 10wVR5QxozSvBQJlOiE6AhsMBQkJZgGAAAoJEEwVR5QxozSvSsYA/2LIFjbxQ2ikbU5S0pKo
- aMDzO9eGz69uNhNWJcvIKJK6AQC9228Mqc1JeZMIyjYWr2HKYHi8S2q2/zHrSZwAWYYwDA==
-In-Reply-To: <zuz7zpcjfqzeymfrn53tbhcsem5abqh2l4vcaqkxo5wbgoc742@bnxnkek3wv6t>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------cW0jnkQpqvbooC61FfCQNjc4"
+Content-Type: multipart/signed; boundary="Sig_/ka_w7hWow747h/p/rsdKFwU";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------cW0jnkQpqvbooC61FfCQNjc4
-Content-Type: multipart/mixed; boundary="------------BOlQ1N8z9TxlZfDl0VeePWbr";
- protected-headers="v1"
-From: Luben Tuikov <ltuikov89@gmail.com>
-To: Maxime Ripard <mripard@redhat.com>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
- Intel Graphics <intel-gfx@lists.freedesktop.org>,
- DRI <dri-devel@lists.freedesktop.org>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux Next Mailing List <linux-next@vger.kernel.org>
-Message-ID: <ed5f8aa6-c46b-414a-a10e-afcdd3535487@gmail.com>
-Subject: Re: linux-next: Signed-off-by missing for commit in the drm-misc tree
-References: <20231114075501.61321c29@canb.auug.org.au>
- <19740d41-dd5a-47e4-b3e8-539b45bbd3e5@gmail.com>
- <3c306310-04b3-4658-a197-4b2d22a88274@gmail.com>
- <20231114134506.2ba0de1f@canb.auug.org.au>
- <530b6100-4f4e-4b3d-8fea-5b316e989633@gmail.com>
- <20231114140855.0b259b2d@canb.auug.org.au>
- <f1b21cbd-5bb6-4030-ae7d-a0ca2fbc76a9@gmail.com>
- <73cg637ax5cahqocscx5cjvtqkwlt4ves6cxgprbwqllasxq6v@gk6vzsqfc46j>
- <ZVXSjt_1uWHuYXsq@phenom.ffwll.local>
- <zuz7zpcjfqzeymfrn53tbhcsem5abqh2l4vcaqkxo5wbgoc742@bnxnkek3wv6t>
-In-Reply-To: <zuz7zpcjfqzeymfrn53tbhcsem5abqh2l4vcaqkxo5wbgoc742@bnxnkek3wv6t>
-
---------------BOlQ1N8z9TxlZfDl0VeePWbr
-Content-Type: multipart/mixed; boundary="------------odbxRq18VREOLDcToXr8M3b2"
-
---------------odbxRq18VREOLDcToXr8M3b2
-Content-Type: text/plain; charset=UTF-8
+--Sig_/ka_w7hWow747h/p/rsdKFwU
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-On 2023-11-22 07:00, Maxime Ripard wrote:
-> Hi Luben,
->=20
-> On Thu, Nov 16, 2023 at 09:27:58AM +0100, Daniel Vetter wrote:
->> On Thu, Nov 16, 2023 at 09:11:43AM +0100, Maxime Ripard wrote:
->>> On Tue, Nov 14, 2023 at 06:46:21PM -0500, Luben Tuikov wrote:
->>>> On 2023-11-13 22:08, Stephen Rothwell wrote:
->>>>> BTW, cherry picking commits does not avoid conflicts - in fact it c=
-an
->>>>> cause conflicts if there are further changes to the files affected =
-by
->>>>> the cherry picked commit in either the tree/branch the commit was
->>>>> cheery picked from or the destination tree/branch (I have to deal w=
-ith
->>>>> these all the time when merging the drm trees in linux-next).  Much=
+Hi all,
 
->>>>> better is to cross merge the branches so that the patch only appear=
-s
->>>>> once or have a shared branches that are merged by any other branch =
-that
->>>>> needs the changes.
->>>>>
->>>>> I understand that things are not done like this in the drm trees :-=
-(
->>>>
->>>> Hi Stephen,
->>>>
->>>> Thank you for the clarification--understood. I'll be more careful in=
- the future.
->>>> Thanks again! :-)
->>>
->>> In this case, the best thing to do would indeed have been to ask the
->>> drm-misc maintainers to merge drm-misc-fixes into drm-misc-next.
->>>
->>> We're doing that all the time, but we're not ubiquitous so you need t=
-o
->>> ask us :)
->>>
->>> Also, dim should have caught that when you pushed the branch. Did you=
+Today's linux-next merge of the security tree got a conflict in:
 
->>> use it?
->>
->> Yeah dim must be used, exactly to avoid these issues. Both for applyin=
-g
->> patches (so not git am directly, or cherry-picking from your own
->> development branch), and for pushing. The latter is even checked for b=
-y
->> the server (dim sets a special push flag which is very long and contai=
-ns a
->> very clear warning if you bypass it).
->>
->> If dim was used, this would be a bug in the dim script that we need to=
+  tools/perf/arch/s390/entry/syscalls/syscall.tbl
 
->> fix.
->=20
-> It would be very useful for you to explain what happened here so we
-> improve the tooling or doc and can try to make sure it doesn't happen
-> again
->=20
-> Maxime
+between commit:
 
-There is no problem with the tooling--I just forced the commit in.
+  d3968c974a24 ("tools/perf: Update tools's copy of s390 syscall table")
+
+from the perf-current tree and commit:
+
+  5f42375904b0 ("LSM: wireup Linux Security Module syscalls")
+
+from the security tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
 --=20
-Regards,
-Luben
+Cheers,
+Stephen Rothwell
 
---------------odbxRq18VREOLDcToXr8M3b2
-Content-Type: application/pgp-keys; name="OpenPGP_0x4C15479431A334AF.asc"
-Content-Disposition: attachment; filename="OpenPGP_0x4C15479431A334AF.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
+diff --cc tools/perf/arch/s390/entry/syscalls/syscall.tbl
+index 86fec9b080f6,5a422443cb16..000000000000
+--- a/tools/perf/arch/s390/entry/syscalls/syscall.tbl
++++ b/tools/perf/arch/s390/entry/syscalls/syscall.tbl
+@@@ -455,7 -455,6 +455,10 @@@
+  450  common	set_mempolicy_home_node	sys_set_mempolicy_home_node	sys_set_m=
+empolicy_home_node
+  451  common	cachestat		sys_cachestat			sys_cachestat
+  452  common	fchmodat2		sys_fchmodat2			sys_fchmodat2
+ -453  common	lsm_get_self_attr	sys_lsm_get_self_attr	sys_lsm_get_self_attr
+ -454  common	lsm_set_self_attr	sys_lsm_set_self_attr	sys_lsm_set_self_attr
+ -455  common	lsm_list_modules	sys_lsm_list_modules	sys_lsm_list_modules
+ +453  common	map_shadow_stack	sys_map_shadow_stack		sys_map_shadow_stack
+ +454  common	futex_wake		sys_futex_wake			sys_futex_wake
+ +455  common	futex_wait		sys_futex_wait			sys_futex_wait
+ +456  common	futex_requeue		sys_futex_requeue		sys_futex_requeue
+++459  common	lsm_get_self_attr	sys_lsm_get_self_attr	sys_lsm_get_self_attr
+++460  common	lsm_set_self_attr	sys_lsm_set_self_attr	sys_lsm_set_self_attr
+++461  common	lsm_list_modules	sys_lsm_list_modules	sys_lsm_list_modules
 
------BEGIN PGP PUBLIC KEY BLOCK-----
-
-xjMEZTohOhYJKwYBBAHaRw8BAQdAWSq76k+GsENjDTMVCy9Vr4fAO9Rb57/bPT1A
-PnbnnRHNIkx1YmVuIFR1aWtvdiA8bHR1aWtvdjg5QGdtYWlsLmNvbT7CmQQTFgoA
-QRYhBJkj7+VmFO9beaAl10wVR5QxozSvBQJlOiE6AhsDBQkJZgGABQsJCAcCAiIC
-BhUKCQgLAgQWAgMBAh4HAheAAAoJEEwVR5QxozSvSm4BAOwCpX53DTQhE20FBGlT
-MqKCOQyJqlMcIQ9SO1qPWX1iAQCv3vfyJwktF7REl1yt7IU2Sye1qmQMfJxdt9JM
-bMNNBs44BGU6IToSCisGAQQBl1UBBQEBB0BT9wSPcCE8uGe7FWo8C+nTSyWPXKTx
-9F0gpEnlqReRBwMBCAfCfgQYFgoAJhYhBJkj7+VmFO9beaAl10wVR5QxozSvBQJl
-OiE6AhsMBQkJZgGAAAoJEEwVR5QxozSvSsYA/2LIFjbxQ2ikbU5S0pKoaMDzO9eG
-z69uNhNWJcvIKJK6AQC9228Mqc1JeZMIyjYWr2HKYHi8S2q2/zHrSZwAWYYwDA=3D=3D
-=3DqCaZ
------END PGP PUBLIC KEY BLOCK-----
-
---------------odbxRq18VREOLDcToXr8M3b2--
-
---------------BOlQ1N8z9TxlZfDl0VeePWbr--
-
---------------cW0jnkQpqvbooC61FfCQNjc4
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+--Sig_/ka_w7hWow747h/p/rsdKFwU
+Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-wnsEABYIACMWIQSZI+/lZhTvW3mgJddMFUeUMaM0rwUCZV6FkgUDAAAAAAAKCRBMFUeUMaM0rxFN
-AP93JLSs3wqu/h4O8tmvb4N4qyVUopXOTtP+nR7M4vTyhwEAwdX4NkfewGDmbecj6BkSq+XYkdfa
-e1ykbMruFW40tg4=
-=0V1M
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmVemF0ACgkQAVBC80lX
+0GzPuQgAkjP506h+ukQtYp4SvCpuCsXiZlPpImj4FpnNz3B2JVUYwi+c7//OOFx2
+DasVpvnZdFfxjadZKM15HEeOpzVTi/Fe7MYjVTlzeKTMF3kto+4IwuvfkCoXEey9
+fVr2so9Mndo1PHAZOoNGwoyTPpJNzq5pjv2WBRSWj8f2jpdebtwtENyBlNzOvQnR
+H9gozjIYWD+7zSDqUWp7FiRT7WX+LMcTKcfsL2DJ0cX9hXNwhGufQgEgfcppFN6L
+VUYN2M/Xmg2lb+Ht3ZJk+p7zw6OvzM+3cr6j0NMlyyyAazlPi09IQuclhet21pQS
+5nT8EGvGJRmWwkCZ9bDI04Hzmy9ouw==
+=uq7O
 -----END PGP SIGNATURE-----
 
---------------cW0jnkQpqvbooC61FfCQNjc4--
+--Sig_/ka_w7hWow747h/p/rsdKFwU--
 

@@ -1,132 +1,92 @@
-Return-Path: <linux-next+bounces-38-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-39-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9970F7F55DB
-	for <lists+linux-next@lfdr.de>; Thu, 23 Nov 2023 02:27:03 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 615717F5682
+	for <lists+linux-next@lfdr.de>; Thu, 23 Nov 2023 03:45:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 546BA28162B
-	for <lists+linux-next@lfdr.de>; Thu, 23 Nov 2023 01:27:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8F0C61C20A06
+	for <lists+linux-next@lfdr.de>; Thu, 23 Nov 2023 02:45:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A15A15DA;
-	Thu, 23 Nov 2023 01:26:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8383117C4;
+	Thu, 23 Nov 2023 02:45:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="XQ4f6cQV"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="gORI8rUn"
 X-Original-To: linux-next@vger.kernel.org
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F040692;
-	Wed, 22 Nov 2023 17:26:51 -0800 (PST)
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E12A91A8;
+	Wed, 22 Nov 2023 18:45:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1700702805;
-	bh=IvHOIfA9qWAsQrGBj3amwIrNeIf7IUTRccGXal+xPcU=;
+	s=201702; t=1700707547;
+	bh=TEx2hkCoBOjDhspfbnS7KuTYyc0yi6VsIhBcpQ2tTB0=;
 	h=Date:From:To:Cc:Subject:From;
-	b=XQ4f6cQVUu8tSG249lzsIhe6vh0FaOqRbogdowx0gLFZv6Pym6CsV4mV/HbJqXP7I
-	 QepilpT2t0ROYEcsAGeoQ5gOfx4AbMaIadYva821Ml5i3NvFPlZUoxE2Z7SeDLzgL9
-	 l2FWnDpxwiTYLOQwq8ejPMyWDOSoyWWb/GfQ/cSkU2j68CDjJNaj1J+7DgpE8MGK30
-	 mgtojoYtrNJBNWddpY75pbujszz4W4UmcuODb8g+rT4dexZyKI9mmmEcB48MsMMbPd
-	 tH+IG0pf9AAmJsh3TarBkQWmeJDpYSEh8j9FdYzBoUHDrQ6S6a/aXzHgS773ZHltgT
-	 dbeUUAjb5CYQA==
+	b=gORI8rUnblpr9Lw1cfWvbInBtOy2a0x4y6bEn+8EfFGqaUTJwvuALeIOLYlw3MOtm
+	 Lqda1/TgvngfSvT5M96wEpjP6JeAABlJxpMd/l9O91zBIyU651M+SIKM7M9rPKBYRS
+	 aSFYFJIy6+PUjOB2cWAC4SYUWU1uS9t9rMkxl2Cz8UemqHjvl31kfCH+19wsRCsYPo
+	 1Hr90mdP25eYPg0fytn7XqxMfmHxlH7V8ttOZTTEdhOxEEYmH/ntc3zsfp1r9lkJHS
+	 TOMTCscDuqabktBPpL/dz6s3FE3zGvU8V2q5VGzlOO2Wpgm2n0UQObobloLARqWTFX
+	 zPOXCuD4pswMQ==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4SbL795Pwbz4x1R;
-	Thu, 23 Nov 2023 12:26:45 +1100 (AEDT)
-Date: Thu, 23 Nov 2023 12:26:44 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4SbMtM1MByz4x1R;
+	Thu, 23 Nov 2023 13:45:46 +1100 (AEDT)
+Date: Thu, 23 Nov 2023 13:45:45 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Tejun Heo <tj@kernel.org>
+To: David Miller <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Networking <netdev@vger.kernel.org>
 Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>, Waiman Long <longman@redhat.com>
-Subject: linux-next: manual merge of the cgroup tree with the workqueues
- tree
-Message-ID: <20231123122644.34518972@canb.auug.org.au>
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build warning after merge of the net-next tree
+Message-ID: <20231123134545.3ce67bd4@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/0OHAM0=zUMJT0.mKO+UsGF1";
+Content-Type: multipart/signed; boundary="Sig_/Ud56VJJErToe/mhvryWCuaP";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/0OHAM0=zUMJT0.mKO+UsGF1
+--Sig_/Ud56VJJErToe/mhvryWCuaP
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the cgroup tree got a conflict in:
+After merging the net-next tree, today's linux-next build (htmldocs)
+produced this warning:
 
-  kernel/workqueue.c
+include/net/page_pool/types.h:73: warning: Function parameter or member 'ST=
+RUCT_GROUP(' not described in 'page_pool_params'
 
-between commit:
+Introduced by commit
 
-  4a6c5607d450 ("workqueue: Make sure that wq_unbound_cpumask is never empt=
-y")
-
-from the workqueues tree and commit:
-
-  fe28f631fa94 ("workqueue: Add workqueue_unbound_exclude_cpumask() to excl=
-ude CPUs from wq_unbound_cpumask")
-
-from the cgroup tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+  5027ec19f104 ("net: page_pool: split the page_pool_params into fast and s=
+low")
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc kernel/workqueue.c
-index 2989b57e154a,2fc585d3d6ca..000000000000
---- a/kernel/workqueue.c
-+++ b/kernel/workqueue.c
-@@@ -6542,11 -6606,14 +6614,14 @@@ void __init workqueue_init_early(void
-  	BUILD_BUG_ON(__alignof__(struct pool_workqueue) < __alignof__(long long)=
-);
- =20
-  	BUG_ON(!alloc_cpumask_var(&wq_unbound_cpumask, GFP_KERNEL));
-+ 	BUG_ON(!alloc_cpumask_var(&wq_requested_unbound_cpumask, GFP_KERNEL));
-+ 	BUG_ON(!zalloc_cpumask_var(&wq_isolated_cpumask, GFP_KERNEL));
- -	cpumask_copy(wq_unbound_cpumask, housekeeping_cpumask(HK_TYPE_WQ));
- -	cpumask_and(wq_unbound_cpumask, wq_unbound_cpumask, housekeeping_cpumask=
-(HK_TYPE_DOMAIN));
- -
- +	cpumask_copy(wq_unbound_cpumask, cpu_possible_mask);
- +	restrict_unbound_cpumask("HK_TYPE_WQ", housekeeping_cpumask(HK_TYPE_WQ));
- +	restrict_unbound_cpumask("HK_TYPE_DOMAIN", housekeeping_cpumask(HK_TYPE_=
-DOMAIN));
-  	if (!cpumask_empty(&wq_cmdline_cpumask))
- -		cpumask_and(wq_unbound_cpumask, wq_unbound_cpumask, &wq_cmdline_cpumask=
-);
- +		restrict_unbound_cpumask("workqueue.unbound_cpus", &wq_cmdline_cpumask);
-+ 	cpumask_copy(wq_requested_unbound_cpumask, wq_unbound_cpumask);
- =20
-  	pwq_cache =3D KMEM_CACHE(pool_workqueue, SLAB_PANIC);
- =20
-
---Sig_/0OHAM0=zUMJT0.mKO+UsGF1
+--Sig_/Ud56VJJErToe/mhvryWCuaP
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmVeqlQACgkQAVBC80lX
-0GxPdQf+LJxl0KUXKbsO1HaZB1mzz1SPLQkVJe+swfCsfgaU/7epDRnZwRSqfedZ
-PZRTiwytp4qiEF5IzCfYoUSWnsniMA+76Pbl73vY0b8uul6FUtd67XMBGwaLy6Sm
-01su1B0OjqaMuHzK3asQME2h/At2oH3LrntKtubMAEsUltcg9hdJ/myTcxbdlpPd
-YiGKO0eGNNE2IhXNJWu5XxHZDdjUgUaKjSixFMaZOtz/gxPxxpB7o7Uxu4W36JUY
-ugSDgrnXnLo6Bd6HZWV9aNHTS7SqgOl3ZPK2DbaAmRbEXw3FJJGjW4kgjQSAfxDM
-/Dn8KM2Dj72xfx+BQM3Ugtxooeu0qQ==
-=C6TD
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmVevNkACgkQAVBC80lX
+0GwPywf/abEsjOtqlmt08zTsQZq4NBY743XvHVD3DcubT43lnsKyFliy2FlGs4mC
+Gu7dcVinO3zHhhD/b/B42xl8FegYMP6S1HSoR47SEzfOvzcEScmyMkmqr7CKywld
+lYhwQ9TD6ISd29YbW1lb5x2ZuuVh8nOGb40bhSDZnucKSoxKXUjWnQDEbicZB71J
+D9DieZIaa4ILuGoZ/LstLKkQUDo/9L+qjc+SE62PlKZNUOg4YrXsVkTHBifGI+tu
+ThZDYQGR/Ms6rqAmrbcDSv0832ElRqWYbi28M6bgbAf2wDTEQk+PidmZQ7RA1vIM
+GnOmvsoGJanCjCsqZwwxKNBAAUdzsg==
+=Xz/B
 -----END PGP SIGNATURE-----
 
---Sig_/0OHAM0=zUMJT0.mKO+UsGF1--
+--Sig_/Ud56VJJErToe/mhvryWCuaP--
 

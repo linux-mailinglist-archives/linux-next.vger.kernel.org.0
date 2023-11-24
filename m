@@ -1,140 +1,100 @@
-Return-Path: <linux-next+bounces-49-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-50-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 681317F69A5
-	for <lists+linux-next@lfdr.de>; Fri, 24 Nov 2023 01:00:39 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC2837F6A18
+	for <lists+linux-next@lfdr.de>; Fri, 24 Nov 2023 02:23:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 08642B20C58
-	for <lists+linux-next@lfdr.de>; Fri, 24 Nov 2023 00:00:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 93DE62813FE
+	for <lists+linux-next@lfdr.de>; Fri, 24 Nov 2023 01:23:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA32F322B;
-	Fri, 24 Nov 2023 00:00:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28C46625;
+	Fri, 24 Nov 2023 01:23:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="J9heKbYi"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=embeddedor.com header.i=@embeddedor.com header.b="LMKE00oI"
 X-Original-To: linux-next@vger.kernel.org
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C4ADD6C;
-	Thu, 23 Nov 2023 16:00:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1700784021;
-	bh=4u/I//7hjlJWABhYXJ8C7CRuJPSGckPXSpzxEFjRSXw=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=J9heKbYiobAHKL07AHBp2Z+L1n2gM94suXGkBLEkY1bbUJP+aNRreu/xdPO1osc4k
-	 8L9mSRNyRCvXN4tiQXk3OCm0fX4V40wNx4rDArGONLrzotjAwKs7hd3LUWXTgx9DuX
-	 yQYRlp4BZQA50GvoR4LM/eS+A3ZhI434aKBit9/rtwr/oD+1jKBO2Bd2pg8ShsaVoQ
-	 kKI93tr5Q6fgF7DuxszoOgXnzaHV8VA5iZrurXtE1pfKrwLdANcYqx68XBliDBjfF6
-	 wzcl/yye3ABFb3R2DbVCYIj/NtdfiGB+BLUNyqDgiobFqgB/klRLipN3Wv99XyQkET
-	 0B3U+E5zX/WUA==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Sbw8z6FYPz4x1R;
-	Fri, 24 Nov 2023 11:00:19 +1100 (AEDT)
-Date: Fri, 24 Nov 2023 11:00:18 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Alex Deucher <alexdeucher@gmail.com>, Dave Airlie <airlied@redhat.com>
-Cc: Daniel Vetter <daniel.vetter@ffwll.ch>, Jani Nikula
- <jani.nikula@linux.intel.com>, Joonas Lahtinen
- <joonas.lahtinen@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>,
- Intel Graphics <intel-gfx@lists.freedesktop.org>, DRI
- <dri-devel@lists.freedesktop.org>, Alex Deucher
- <alexander.deucher@amd.com>, Fangzhi Zuo <jerry.zuo@amd.com>, Imre Deak
- <imre.deak@intel.com>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, Ville =?UTF-8?B?U3lyasOkbMOk?=
- <ville.syrjala@linux.intel.com>
-Subject: Re: linux-next: manual merge of the drm-intel tree with the amdgpu
- tree
-Message-ID: <20231124110018.33c10a48@canb.auug.org.au>
-In-Reply-To: <20231120122818.09bb6f35@canb.auug.org.au>
-References: <20231120122818.09bb6f35@canb.auug.org.au>
+Received: from omta34.uswest2.a.cloudfilter.net (omta34.uswest2.a.cloudfilter.net [35.89.44.33])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EF5BD50
+	for <linux-next@vger.kernel.org>; Thu, 23 Nov 2023 17:23:37 -0800 (PST)
+Received: from eig-obgw-5010a.ext.cloudfilter.net ([10.0.29.199])
+	by cmsmtp with ESMTPS
+	id 6At6rhUPk8Hte6KuurlgIA; Fri, 24 Nov 2023 01:23:36 +0000
+Received: from gator4166.hostgator.com ([108.167.133.22])
+	by cmsmtp with ESMTPS
+	id 6KutrUHnchDny6KutrEg0Z; Fri, 24 Nov 2023 01:23:36 +0000
+X-Authority-Analysis: v=2.4 cv=fda+dmcF c=1 sm=1 tr=0 ts=655ffb18
+ a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=yGeM7+xMb5a5VK1DGQx1ew==:17
+ a=OWjo9vPv0XrRhIrVQ50Ab3nP57M=:19 a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19
+ a=IkcTkHD0fZMA:10 a=BNY50KLci1gA:10 a=wYkD_t78qR0A:10
+ a=hy65s6PCVsRWhxaC_Y0A:9 a=QEXdDO2ut3YA:10
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=Xce5fXDshzVqJJD4AIumwGg26b48GuDNWNLxAdAWO74=; b=LMKE00oIG3u2KsxJv+PLCD9Yv2
+	TI+u3cUJvVXVATHU2mXt26gL1aCjCT/9TGQZqHN9yxSQ9gmb1zoIW6AhHKNbfKdFbKvZE/DHn7dQO
+	UicQOTYc+oqzwCvfM62Jktp/7Hzj66ZbIralhoP5V5ezgrq4RRnn2UuTGbBpjHe9ym2w+Zwpy6pjl
+	9BzSK4uBLzyfNUi5XEqTk+x6z9rVjM1v2YNgt8GNFc79s2WPfHdo4oe+HtfP1DUOczQLFbbt7YaIH
+	x9zCy59JJfig21czpfmh0XaBYL2ikB4hZ2jU2CTjfMv5ia4NTRnbOi2lXnXDuD5iWzorhjIEJRcAE
+	fW4OLnfw==;
+Received: from 187.184.157.122.cable.dyn.cableonline.com.mx ([187.184.157.122]:58578 helo=[192.168.0.25])
+	by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.96.2)
+	(envelope-from <gustavo@embeddedor.com>)
+	id 1r6Kut-001U4W-0D;
+	Thu, 23 Nov 2023 19:23:35 -0600
+Message-ID: <17b92a96-f197-49f5-a040-35b65adae70a@embeddedor.com>
+Date: Thu, 23 Nov 2023 19:23:27 -0600
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/cnA4g+gCkd46mEk0SGkmvNe";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+User-Agent: Mozilla Thunderbird
+Subject: Re: linux-next: build warnings after merge of the kspp-gustavo tree
+To: "Aithal, Srikanth" <sraithal@amd.com>,
+ Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20231122144814.649823ac@canb.auug.org.au>
+ <813f3aa2-3449-7264-fa54-eaafd9981add@amd.com>
+Content-Language: en-US
+From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+In-Reply-To: <813f3aa2-3449-7264-fa54-eaafd9981add@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 187.184.157.122
+X-Source-L: No
+X-Exim-ID: 1r6Kut-001U4W-0D
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 187.184.157.122.cable.dyn.cableonline.com.mx ([192.168.0.25]) [187.184.157.122]:58578
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 1
+X-Org: HG=hgshared;ORG=hostgator;
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
+X-CMAE-Envelope: MS4xfPUYrWUd5eJhAymP+MLF0x8H0ixk7VhaTO2nR0iFb9H/o/P545mAlIboTbu5lvW2OekIOOnJE6RWlQGq9+pHj3uALkiRUA/cIkN16B45YIkXiVQYbsvH
+ 1ko2eQUDd1kvOJfsriDzUK5B3+sMAhtOcqpxTV1VOfwfCW93iY66lRwRwOIMcvG8aI5nsn9WpFc+dN0Dc2bqfFFFATQCmO0BC3blQPalCQh+KgVGeR78lM/q
+X-Spam-Level: *
 
---Sig_/cnA4g+gCkd46mEk0SGkmvNe
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+> which version of gcc resolves this issue?
 
-On Mon, 20 Nov 2023 12:28:18 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->=20
-> Today's linux-next merge of the drm-intel tree got a conflict in:
->=20
->   drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
->=20
-> between commits:
->=20
->   a58555359a9f ("drm/amd/display: Fix DSC not Enabled on Direct MST Sink")
->   c29085d29562 ("drm/amd/display: Enable DSC Flag in MST Mode Validation")
->=20
-> from the amdgpu tree and commit:
->=20
->   7707dd602259 ("drm/dp_mst: Fix fractional DSC bpp handling")
->=20
-> from the drm-intel tree.
->=20
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
->=20
-> --=20
-> Cheers,
-> Stephen Rothwell
->=20
-> diff --cc drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
-> index 8d7d4024f285,2afd1bc74978..000000000000
-> --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
-> +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
-> @@@ -1650,7 -1636,8 +1650,7 @@@ enum dc_status dm_dp_mst_is_port_suppor
->   	} else {
->   		/* check if mode could be supported within full_pbn */
->   		bpp =3D convert_dc_color_depth_into_bpc(stream->timing.display_color_=
-depth) * 3;
-> - 		pbn =3D drm_dp_calc_pbn_mode(stream->timing.pix_clk_100hz / 10, bpp, =
-false);
-> + 		pbn =3D drm_dp_calc_pbn_mode(stream->timing.pix_clk_100hz / 10, bpp <=
-< 4);
->  -
->   		if (pbn > aconnector->mst_output_port->full_pbn)
->   			return DC_FAIL_BANDWIDTH_VALIDATE;
->   	}
+GCC 12.1.0
 
-This is now a conflict between the amdgpu tree and the drm tree.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/cnA4g+gCkd46mEk0SGkmvNe
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmVf55IACgkQAVBC80lX
-0Gya3wf/Wu5hfPJD6u2XJMjFb6UEq7eNnLtimEME4lJwD9Byp/lIUzlV7O+8sspB
-Do/KMS8hZVtlBCzLMpbjCgMUt9nuYWVX7Kr1VSiSjmOChLd7NilCWJXcQxPvf6Td
-LX3Ebvi4uTeVh04da20nnlaK4Z367lf1ay+PexITtBnwHV/xN2twAibWEPBoeknW
-Y/UIPIVaadc9AquF9DOHBVEUqNhUiCidlY9oj/VFCYjLkjhd8bqUMaehSqWJXcfh
-vowpQI9NERRk2y5EBi2EbN5FU7bid32hN09gHnPoD7BfCVs7bgtO0V6k/A1mdLKv
-MYCh1jpETpRjp1b32sAhk3z5OVHWRg==
-=szxH
------END PGP SIGNATURE-----
-
---Sig_/cnA4g+gCkd46mEk0SGkmvNe--
+--
+Gustavo
 

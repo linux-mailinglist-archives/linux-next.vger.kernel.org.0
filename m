@@ -1,116 +1,107 @@
-Return-Path: <linux-next+bounces-87-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-88-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id EABF97F9E62
-	for <lists+linux-next@lfdr.de>; Mon, 27 Nov 2023 12:18:02 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 28A087FA17E
+	for <lists+linux-next@lfdr.de>; Mon, 27 Nov 2023 14:54:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 283B61C209D7
-	for <lists+linux-next@lfdr.de>; Mon, 27 Nov 2023 11:18:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D56A0281788
+	for <lists+linux-next@lfdr.de>; Mon, 27 Nov 2023 13:54:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E518199AD;
-	Mon, 27 Nov 2023 11:18:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF3E630344;
+	Mon, 27 Nov 2023 13:54:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b="T/mF6sIV";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="L/U7aqHX"
 X-Original-To: linux-next@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3124D135
-	for <linux-next@vger.kernel.org>; Mon, 27 Nov 2023 03:17:57 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1r7ZcT-0000NU-Id; Mon, 27 Nov 2023 12:17:41 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1r7ZcS-00BvgE-8m; Mon, 27 Nov 2023 12:17:40 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1r7ZcR-009IZy-Vj; Mon, 27 Nov 2023 12:17:39 +0100
-Date: Mon, 27 Nov 2023 12:17:39 +0100
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To: Michael Ellerman <mpe@ellerman.id.au>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>, Greg KH <greg@kroah.com>,
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82F59187;
+	Mon, 27 Nov 2023 05:54:11 -0800 (PST)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+	by mailout.west.internal (Postfix) with ESMTP id 57A2E3200AF5;
+	Mon, 27 Nov 2023 08:54:07 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Mon, 27 Nov 2023 08:54:08 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:sender
+	:subject:subject:to:to; s=fm1; t=1701093246; x=1701179646; bh=08
+	c3ZOJkvs/WUEnrIQy2p839jU1z0opu7K3BHqLsdYk=; b=T/mF6sIV/bhUadE5hh
+	TUO3r6FDtzVQASe2nAKZFwTHuIT4ofayZ64zY57/J5osQOegIiRKTN7rdn/nx71/
+	U68p5qfkOKg6A4cFjy1B4jmNdkbsbpGIVEvAXwQKJGX1fGdcJlO8l8REFlQCuAXV
+	0HDrgzSideJahLcN12HVd6b/W7PSyEy1LG3ygS7DCUcJpZdtRGbu7YPutEURFjJ3
+	q7yP1tiA9xanjHGmpDVVjhluWxgKCrY8j4gtOOvrFIfApUMJsIgo66OTYw6Zpvbn
+	x+kxee02pEVcIYv7SUha6qjnm8hVG2SuZjzGx3R3wuAnEJuqx1uONOS6GQeNUMko
+	SpDQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:sender:subject
+	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+	:x-sasl-enc; s=fm1; t=1701093246; x=1701179646; bh=08c3ZOJkvs/WU
+	EnrIQy2p839jU1z0opu7K3BHqLsdYk=; b=L/U7aqHXey847XT7NXlckHYqdb5De
+	tmV9IMGLy27r02hmh/3xM+abUv8M5AK487wkXh6XFLQ1lajmkM9P6wMH/DawOXHY
+	Ry7ZZcZD+Efrmyga1CQokPck5SgqOPbiCvgKylJdldn4CPa2tGa/4JThP26IWRLE
+	xGuWLy7c9oWOp2TPz+JCsu6PBSZ5gfZX092zFMwrjm4RVbZiW4LlL40CdQUMcP20
+	qVa7/yJKt1BGIelkaL1Cnjam3cB0hvwqMwNSZeP5v7oMcRw/OuF10I7h97UoKn0W
+	JmI7bXFFr4nqOUQpfJMaFiIzU+DMLMT0hb+4H0d00tqPhOcr8t/fJEHYg==
+X-ME-Sender: <xms:fZ9kZeKBfAOm8q9B2WVl2wDTBN3FsTxCsXa0Nt4ZWcPh7etI3cRS5g>
+    <xme:fZ9kZWJ1Aln82JqGegtdgZ-DNCYhCcrA201n7Gpom7dCYGokvDufz7FkFz_XJKrup
+    rrGkpDn-EjHgA>
+X-ME-Received: <xmr:fZ9kZeteOkX0HJ6g2POEchLEy2Sy1FkV8G0GdlZNekb_tECXSewQ6MX4H4zQ73lWNFLZySi0H99iWDuPQua6Lx7a8qM9wdTZAjLpebP6CG7kQ_3xgZJrJrI>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudeiuddgheekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
+    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepheegvd
+    evvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefhgfehkeetnecuvehluhhs
+    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
+    hhrdgtohhm
+X-ME-Proxy: <xmx:fZ9kZTb4qHoCGi5zbT5WdrZwOm8bX5y6RB_zDkKGAfg-OxtH1yjMXw>
+    <xmx:fZ9kZVb3_epGeWJafk2PzVzEO-DIeMqQazmDmy_GAd--N-cZe_Sq-A>
+    <xmx:fZ9kZfAviFL2gpT2jYirMx6lOOfqdcscMI2kQJ9_I64bqug0Z2dLnw>
+    <xmx:fp9kZSQLyYm9dRJDAHIzDTBca4_OWn2onUamwN01JCLyKdWcUzAelA>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 27 Nov 2023 08:54:05 -0500 (EST)
+Date: Mon, 27 Nov 2023 13:14:07 +0000
+From: Greg KH <greg@kroah.com>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Michael Ellerman <mpe@ellerman.id.au>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
 	PowerPC <linuxppc-dev@lists.ozlabs.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
 	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the tty tree with the powerpc tree
-Message-ID: <20231127111739.ryvlgofx3b65z2hf@pengutronix.de>
-References: <20231127114904.77f7efb6@canb.auug.org.au>
- <877cm34g0l.fsf@mail.lhotse>
+Subject: Re: linux-next: duplicate patch in the tty tree
+Message-ID: <2023112757-enamel-degrading-38e5@gregkh>
+References: <20231127115718.7ad1701c@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="4eyf7rezxjwurju5"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <877cm34g0l.fsf@mail.lhotse>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-next@vger.kernel.org
+In-Reply-To: <20231127115718.7ad1701c@canb.auug.org.au>
 
+On Mon, Nov 27, 2023 at 11:57:18AM +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> The following commit is also in the powerpc tree as a different commit
+> (but the same patch):
+> 
+>   aa46b225ebbf ("tty: hvc: hvc_opal: Convert to platform remove callback returning void")
+> 
+> This is commit
+> 
+>   f99c0e0d0859 ("tty: hvc: hvc_opal: Convert to platform remove callback returning void")
+> 
+> in the powerpc tree.
 
---4eyf7rezxjwurju5
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Should be fine, thanks for the notice.
 
-Hello,
-
-On Mon, Nov 27, 2023 at 10:00:58PM +1100, Michael Ellerman wrote:
-> Stephen Rothwell <sfr@canb.auug.org.au> writes:
-> > Hi all,
-> >
-> > Today's linux-next merge of the tty tree got a conflict in:
-> >
-> >   drivers/tty/hvc/hvc_console.h
-> >
-> > between commit:
-> >
-> >   c9e38dc90e1c ("tty: hvc: Make hvc_remove() return no value")
-> >
-> > from the powerpc tree and commit:
-> >
-> >   7f30c19caf94 ("tty: hvc: Make hvc_remove() return no value")
-> >
-> > from the tty tree.
-> >
-> > These are slightly different versions of the same patch.
->=20
-> I'll drop it from my tree.
-
-FTR: Regarding the slightly difference: The variant in the tty tree is
-the better one. So nothing to do for Greg (or me) here.
-
-Thanks
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---4eyf7rezxjwurju5
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmVketMACgkQj4D7WH0S
-/k6xOgf+NZ2fNHlxIPkzzXeqRV8tvyXxa1uBM2gugQRm+9VBIvNM9m/ywtsM3GKZ
-OVSkXb4mWIp1QXXJodmlPBnAyv4+J568aKjSlAAZw3gxzNDJ4pLBTGCJo9L+U3WO
-YThzKymrcwwsb9z/L7oL4IiH64KGtQj7uZ6rsuJZFT2zaBJRZJo+Q1VahvQHtakZ
-aNo5NRhg2swXKhoAv0LDbxFY6ZmQVxKI6PmoLwzK0f8l8+SeE9fYtxr22minkWDA
-48kV91gH/vgx9YjP8MJ1HzRxTssmvkUj6mHwBjz1Vxpd3GuCTK6sm1+Bmf8xnDof
-bM0LSRRDZyR47GrqhtUchIMD0mEsTw==
-=8Vol
------END PGP SIGNATURE-----
-
---4eyf7rezxjwurju5--
+greg k-h
 

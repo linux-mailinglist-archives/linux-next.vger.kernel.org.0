@@ -1,134 +1,177 @@
-Return-Path: <linux-next+bounces-74-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-75-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 29C607F9729
-	for <lists+linux-next@lfdr.de>; Mon, 27 Nov 2023 02:29:18 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD12F7F9769
+	for <lists+linux-next@lfdr.de>; Mon, 27 Nov 2023 03:12:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AF653B209D5
-	for <lists+linux-next@lfdr.de>; Mon, 27 Nov 2023 01:29:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E60281C20753
+	for <lists+linux-next@lfdr.de>; Mon, 27 Nov 2023 02:12:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E9E4EC0;
-	Mon, 27 Nov 2023 01:29:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F11710FD;
+	Mon, 27 Nov 2023 02:12:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="gJSY2rLP"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="T6ix7D/9"
 X-Original-To: linux-next@vger.kernel.org
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0438E3;
-	Sun, 26 Nov 2023 17:29:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1701048544;
-	bh=c8WraKH7izMTzidMiHYbs+LFOZrlhXTUuBrEz0967Ec=;
-	h=Date:From:To:Cc:Subject:From;
-	b=gJSY2rLP/nKY6yZzr6xV5MaHq6oFnYlDzsoHwxbFZzDpoo2sZGhn56OfiClTv69SQ
-	 GgsJFOOj3vhZ+tD27+T6HXCFnmqVFwpY2lXcIntW8w9NDXhQsQ2XpT/+VBatQ4Rkap
-	 pdD7t7l/Or8xl7FM6gS8v+ro7tC3QZtr0tF/YlVzMBuqudSdSQmBtMOKgQxBq0XAAJ
-	 6pERLj6f8GwMr+TXiW73Fjucn7/h/IslYYNG8362Pr3GdJT5ZQv/yoiCAARaqfGCFn
-	 XxRcXrQTewG9hLz8AAbVDT/br6kEa80lfXSHJEmf+VyVSemDT8kjJni0Ns9nwA4p8Q
-	 Fs9XzOWqunMmQ==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Sdnzz5rnHz4wc1;
-	Mon, 27 Nov 2023 12:29:03 +1100 (AEDT)
-Date: Mon, 27 Nov 2023 12:29:02 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Vlastimil Babka <vbabka@suse.cz>, Andrew Morton
- <akpm@linux-foundation.org>
-Cc: Andrey Konovalov <andreyknvl@gmail.com>, Andrey Konovalov
- <andreyknvl@google.com>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the slab tree with the mm tree
-Message-ID: <20231127122902.566de6d1@canb.auug.org.au>
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB3AB11C;
+	Sun, 26 Nov 2023 18:12:48 -0800 (PST)
+Received: by mail-qt1-x834.google.com with SMTP id d75a77b69052e-41cc44736f2so21376311cf.3;
+        Sun, 26 Nov 2023 18:12:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1701051168; x=1701655968; darn=vger.kernel.org;
+        h=in-reply-to:autocrypt:from:references:cc:to:content-language
+         :subject:user-agent:mime-version:date:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=qugBdKBw39THHjgwXW3RTBqPcyk8dRGoduuik4Rrsqg=;
+        b=T6ix7D/9iWEzI9WueRm5oUVD80QZD7Cip89Ibo5UNGn2/AqI10M2vZDcyiA1ZaX7Vu
+         4zqIYAfbL1E4bZb95ytDGjhmfUICMmznyJWVKZ9xPdPVptWCA1PFXx18Q4P8xH9K+VzZ
+         gzYNpmM3NLeaPdSNPaTBbSyLlsmxNUQcLxNo4I4GAtmgXCQDVb/522VxYB2Mj5+NYC3a
+         lPErEdqBET73NzhV1TDZ8QKFLK0PwxgIEjUf94Rfc2lWSDzJ7e+cD8tjI0gpd5AVqcxE
+         OhRRmVMAjwwmkytMtOOQcUa5aY+otGPNGhCjKxnNo4XreVu3rxdbnzK6l9sxMmMnRufG
+         DLnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701051168; x=1701655968;
+        h=in-reply-to:autocrypt:from:references:cc:to:content-language
+         :subject:user-agent:mime-version:date:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qugBdKBw39THHjgwXW3RTBqPcyk8dRGoduuik4Rrsqg=;
+        b=VkbzBn46Ua2IvfvG78JBUj0ZH/1fd7BTM2zBgALfw3qp6zbMKphJ7UcdVTr5PNUbmt
+         jt33vSSZGvBxNpgQR7t489MTocEUM6/yk2oBCRxa8fscdSz5RBqeBGl0qfGIyIngUVvj
+         mLQvuPCNCHs5WZOBqtZj2tqG/jMIgiaH0it1EBEcD6MvpgEqHdp8TMHHopH5xDdiKRhU
+         uyKpFrxcyQcEdg8vj6gYGB3W/+BKa6iQm6aZ3wbJGZgTLtj8pYCUxl+oB4O2E1A+R8W1
+         hGuN5Ygo8+q1Sr/5OjZvCkYw05IedpPgYJI2Gotf0nfpX+fjGMOywVFJ2uEX3dZEcwN3
+         KXYg==
+X-Gm-Message-State: AOJu0Yy4UuxeKDeU+MpbFTGZ9/CWsuCVyrmXCURNXH8TJJpuAPNUtw3k
+	ToGgyBvatN1aSOwVSfp4dusTBatHncUhlA==
+X-Google-Smtp-Source: AGHT+IHMpVJuXgS5KglBGiTNBGXulFF0WfBXXWwEUewotEA8G5zPSVHNOuRY9FQrqtvAoosIfFTOsA==
+X-Received: by 2002:ac8:5749:0:b0:423:8b9c:cfb8 with SMTP id 9-20020ac85749000000b004238b9ccfb8mr12564359qtx.24.1701051167787;
+        Sun, 26 Nov 2023 18:12:47 -0800 (PST)
+Received: from [192.168.2.14] ([76.65.20.140])
+        by smtp.gmail.com with ESMTPSA id h7-20020ac87447000000b0041ea59e639bsm3369008qtr.70.2023.11.26.18.12.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 26 Nov 2023 18:12:46 -0800 (PST)
+Message-ID: <ad3bcdd0-9b73-436a-91cd-6e034bd8980c@gmail.com>
+Date: Sun, 26 Nov 2023 21:12:37 -0500
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/9qvVD_TXCr7c=szVwJfkcnk";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:115.0) Gecko/20100101
+ Thunderbird/115.5.0
+Subject: Re: linux-next: build failure after merge of the drm-misc tree
+Content-Language: en-CA, en-US
+To: Stephen Rothwell <sfr@canb.auug.org.au>,
+ Daniel Vetter <daniel.vetter@ffwll.ch>,
+ Intel Graphics <intel-gfx@lists.freedesktop.org>,
+ DRI <dri-devel@lists.freedesktop.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20231127103806.35efa376@canb.auug.org.au>
+From: Luben Tuikov <ltuikov89@gmail.com>
+Autocrypt: addr=ltuikov89@gmail.com; keydata=
+ xjMEZTohOhYJKwYBBAHaRw8BAQdAWSq76k+GsENjDTMVCy9Vr4fAO9Rb57/bPT1APnbnnRHN
+ Ikx1YmVuIFR1aWtvdiA8bHR1aWtvdjg5QGdtYWlsLmNvbT7CmQQTFgoAQRYhBJkj7+VmFO9b
+ eaAl10wVR5QxozSvBQJlOiE6AhsDBQkJZgGABQsJCAcCAiICBhUKCQgLAgQWAgMBAh4HAheA
+ AAoJEEwVR5QxozSvSm4BAOwCpX53DTQhE20FBGlTMqKCOQyJqlMcIQ9SO1qPWX1iAQCv3vfy
+ JwktF7REl1yt7IU2Sye1qmQMfJxdt9JMbMNNBs44BGU6IToSCisGAQQBl1UBBQEBB0BT9wSP
+ cCE8uGe7FWo8C+nTSyWPXKTx9F0gpEnlqReRBwMBCAfCfgQYFgoAJhYhBJkj7+VmFO9beaAl
+ 10wVR5QxozSvBQJlOiE6AhsMBQkJZgGAAAoJEEwVR5QxozSvSsYA/2LIFjbxQ2ikbU5S0pKo
+ aMDzO9eGz69uNhNWJcvIKJK6AQC9228Mqc1JeZMIyjYWr2HKYHi8S2q2/zHrSZwAWYYwDA==
+In-Reply-To: <20231127103806.35efa376@canb.auug.org.au>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------wviEZ0IpOBd7JAaeKWbJOXsz"
 
---Sig_/9qvVD_TXCr7c=szVwJfkcnk
-Content-Type: text/plain; charset=US-ASCII
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------wviEZ0IpOBd7JAaeKWbJOXsz
+Content-Type: multipart/mixed; boundary="------------vmKbUiNtiy3e77Q6SGunvJYP";
+ protected-headers="v1"
+From: Luben Tuikov <ltuikov89@gmail.com>
+To: Stephen Rothwell <sfr@canb.auug.org.au>,
+ Daniel Vetter <daniel.vetter@ffwll.ch>,
+ Intel Graphics <intel-gfx@lists.freedesktop.org>,
+ DRI <dri-devel@lists.freedesktop.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Linux Next Mailing List <linux-next@vger.kernel.org>
+Message-ID: <ad3bcdd0-9b73-436a-91cd-6e034bd8980c@gmail.com>
+Subject: Re: linux-next: build failure after merge of the drm-misc tree
+References: <20231127103806.35efa376@canb.auug.org.au>
+In-Reply-To: <20231127103806.35efa376@canb.auug.org.au>
+
+--------------vmKbUiNtiy3e77Q6SGunvJYP
+Content-Type: multipart/mixed; boundary="------------DF08rh0qV4ytr5U57IfaV0Cd"
+
+--------------DF08rh0qV4ytr5U57IfaV0Cd
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+On 2023-11-26 18:38, Stephen Rothwell wrote:
+> Hi all,
+>=20
+> After merging the drm-misc tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+>=20
+> drivers/gpu/drm/nouveau/nouveau_sched.c:21:41: error: 'DRM_SCHED_PRIORI=
+TY_MIN' undeclared here (not in a function); did you mean 'DRM_SCHED_PRIO=
+RITY_LOW'?
+>    21 |         NOUVEAU_SCHED_PRIORITY_SINGLE =3D DRM_SCHED_PRIORITY_MI=
+N,
+>       |                                         ^~~~~~~~~~~~~~~~~~~~~~
+>       |                                         DRM_SCHED_PRIORITY_LOW
+>=20
+> Caused by commit
+>=20
+>   fe375c74806d ("drm/sched: Rename priority MIN to LOW")
+>=20
+> I have used the drm-misc tree from next-20231124 for today.
 
-Today's linux-next merge of the slab tree got a conflict in:
-
-  mm/kasan/quarantine.c
-
-between commit:
-
-  f644ee35cf5b ("kasan: use stack_depot_put for Generic mode")
-
-from the mm tree and commit:
-
-  40a038d5fc11 ("KASAN: remove code paths guarded by CONFIG_SLAB")
-
-from the slab tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
+I posted a fix for this yesterday:
+https://lore.kernel.org/r/20231125192246.87268-2-ltuikov89@gmail.com
 --=20
-Cheers,
-Stephen Rothwell
+Regards,
+Luben
 
-diff --cc mm/kasan/quarantine.c
-index 265ca2bbe2dd,138c57b836f2..000000000000
---- a/mm/kasan/quarantine.c
-+++ b/mm/kasan/quarantine.c
-@@@ -143,22 -143,7 +143,21 @@@ static void *qlink_to_object(struct qli
-  static void qlink_free(struct qlist_node *qlink, struct kmem_cache *cache)
-  {
-  	void *object =3D qlink_to_object(qlink, cache);
- -	struct kasan_free_meta *meta =3D kasan_get_free_meta(cache, object);
- +	struct kasan_alloc_meta *alloc_meta =3D kasan_get_alloc_meta(cache, obje=
-ct);
- +	struct kasan_free_meta *free_meta =3D kasan_get_free_meta(cache, object);
-- 	unsigned long flags;
- +
- +	if (alloc_meta) {
- +		stack_depot_put(alloc_meta->alloc_track.stack);
- +		stack_depot_put(alloc_meta->aux_stack[0]);
- +		stack_depot_put(alloc_meta->aux_stack[1]);
- +		__memset(alloc_meta, 0, sizeof(*alloc_meta));
- +	}
- +
- +	if (free_meta &&
- +	    *(u8 *)kasan_mem_to_shadow(object) =3D=3D KASAN_SLAB_FREETRACK) {
- +		stack_depot_put(free_meta->free_track.stack);
- +		free_meta->free_track.stack =3D 0;
- +	}
- =20
-  	/*
-  	 * If init_on_free is enabled and KASAN's free metadata is stored in
+--------------DF08rh0qV4ytr5U57IfaV0Cd
+Content-Type: application/pgp-keys; name="OpenPGP_0x4C15479431A334AF.asc"
+Content-Disposition: attachment; filename="OpenPGP_0x4C15479431A334AF.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
 
---Sig_/9qvVD_TXCr7c=szVwJfkcnk
-Content-Type: application/pgp-signature
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+
+xjMEZTohOhYJKwYBBAHaRw8BAQdAWSq76k+GsENjDTMVCy9Vr4fAO9Rb57/bPT1A
+PnbnnRHNIkx1YmVuIFR1aWtvdiA8bHR1aWtvdjg5QGdtYWlsLmNvbT7CmQQTFgoA
+QRYhBJkj7+VmFO9beaAl10wVR5QxozSvBQJlOiE6AhsDBQkJZgGABQsJCAcCAiIC
+BhUKCQgLAgQWAgMBAh4HAheAAAoJEEwVR5QxozSvSm4BAOwCpX53DTQhE20FBGlT
+MqKCOQyJqlMcIQ9SO1qPWX1iAQCv3vfyJwktF7REl1yt7IU2Sye1qmQMfJxdt9JM
+bMNNBs44BGU6IToSCisGAQQBl1UBBQEBB0BT9wSPcCE8uGe7FWo8C+nTSyWPXKTx
+9F0gpEnlqReRBwMBCAfCfgQYFgoAJhYhBJkj7+VmFO9beaAl10wVR5QxozSvBQJl
+OiE6AhsMBQkJZgGAAAoJEEwVR5QxozSvSsYA/2LIFjbxQ2ikbU5S0pKoaMDzO9eG
+z69uNhNWJcvIKJK6AQC9228Mqc1JeZMIyjYWr2HKYHi8S2q2/zHrSZwAWYYwDA=3D=3D
+=3DqCaZ
+-----END PGP PUBLIC KEY BLOCK-----
+
+--------------DF08rh0qV4ytr5U57IfaV0Cd--
+
+--------------vmKbUiNtiy3e77Q6SGunvJYP--
+
+--------------wviEZ0IpOBd7JAaeKWbJOXsz
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
 Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmVj8N4ACgkQAVBC80lX
-0GyebAgAoWkglSXrgn+ihSDD0b2x8HHiVEXkcAt3Wru2wnaw31Lya+Y6xuJ7t4X7
-dzOFrxIL14sIwDhwTeL5Iangh/2oPsnfI0j0qOc5FGVdZ8NgwCYkVEW6HEMb/sj7
-obo6X0mnydSd3F+1ChzbVU5BOPM7KdB0T13fy8lfq8XcljyBs8qHN+29gbTf1eaD
-Iq5nBLsAkADutX+KKvF0o7oaefOE6H0A1EFsULCLTh/ejpxsOOQ9gO/GNAYT1230
-cwqjxw+4jigsGw4H1jjH3M4eyYVIZTZoIDdzDdhWOr+2W4PA/qUj1RK9IzyBwWW9
-Ups9ksfnmvokPpOOuViolSYgBIr+1A==
-=UaKz
+wnsEABYIACMWIQSZI+/lZhTvW3mgJddMFUeUMaM0rwUCZWP7FQUDAAAAAAAKCRBMFUeUMaM0r/HA
+AP0UwqabBpVwQ4K3Cv7V8M8DEsDBst4mh3U3M+A5V78C7gD/WO/c1PqfHpIqZmVeELHy7rZod8ha
+r+IfEQRrxFpNCAQ=
+=y3V8
 -----END PGP SIGNATURE-----
 
---Sig_/9qvVD_TXCr7c=szVwJfkcnk--
+--------------wviEZ0IpOBd7JAaeKWbJOXsz--
 

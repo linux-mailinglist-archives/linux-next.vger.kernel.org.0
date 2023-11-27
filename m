@@ -1,107 +1,110 @@
-Return-Path: <linux-next+bounces-88-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-89-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 28A087FA17E
-	for <lists+linux-next@lfdr.de>; Mon, 27 Nov 2023 14:54:20 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id A82C27FA598
+	for <lists+linux-next@lfdr.de>; Mon, 27 Nov 2023 17:04:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D56A0281788
-	for <lists+linux-next@lfdr.de>; Mon, 27 Nov 2023 13:54:18 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3A126B212B7
+	for <lists+linux-next@lfdr.de>; Mon, 27 Nov 2023 16:04:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF3E630344;
-	Mon, 27 Nov 2023 13:54:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B112534CF1;
+	Mon, 27 Nov 2023 16:04:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b="T/mF6sIV";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="L/U7aqHX"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="SysesZok"
 X-Original-To: linux-next@vger.kernel.org
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82F59187;
-	Mon, 27 Nov 2023 05:54:11 -0800 (PST)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-	by mailout.west.internal (Postfix) with ESMTP id 57A2E3200AF5;
-	Mon, 27 Nov 2023 08:54:07 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Mon, 27 Nov 2023 08:54:08 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:sender
-	:subject:subject:to:to; s=fm1; t=1701093246; x=1701179646; bh=08
-	c3ZOJkvs/WUEnrIQy2p839jU1z0opu7K3BHqLsdYk=; b=T/mF6sIV/bhUadE5hh
-	TUO3r6FDtzVQASe2nAKZFwTHuIT4ofayZ64zY57/J5osQOegIiRKTN7rdn/nx71/
-	U68p5qfkOKg6A4cFjy1B4jmNdkbsbpGIVEvAXwQKJGX1fGdcJlO8l8REFlQCuAXV
-	0HDrgzSideJahLcN12HVd6b/W7PSyEy1LG3ygS7DCUcJpZdtRGbu7YPutEURFjJ3
-	q7yP1tiA9xanjHGmpDVVjhluWxgKCrY8j4gtOOvrFIfApUMJsIgo66OTYw6Zpvbn
-	x+kxee02pEVcIYv7SUha6qjnm8hVG2SuZjzGx3R3wuAnEJuqx1uONOS6GQeNUMko
-	SpDQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-	:x-sasl-enc; s=fm1; t=1701093246; x=1701179646; bh=08c3ZOJkvs/WU
-	EnrIQy2p839jU1z0opu7K3BHqLsdYk=; b=L/U7aqHXey847XT7NXlckHYqdb5De
-	tmV9IMGLy27r02hmh/3xM+abUv8M5AK487wkXh6XFLQ1lajmkM9P6wMH/DawOXHY
-	Ry7ZZcZD+Efrmyga1CQokPck5SgqOPbiCvgKylJdldn4CPa2tGa/4JThP26IWRLE
-	xGuWLy7c9oWOp2TPz+JCsu6PBSZ5gfZX092zFMwrjm4RVbZiW4LlL40CdQUMcP20
-	qVa7/yJKt1BGIelkaL1Cnjam3cB0hvwqMwNSZeP5v7oMcRw/OuF10I7h97UoKn0W
-	JmI7bXFFr4nqOUQpfJMaFiIzU+DMLMT0hb+4H0d00tqPhOcr8t/fJEHYg==
-X-ME-Sender: <xms:fZ9kZeKBfAOm8q9B2WVl2wDTBN3FsTxCsXa0Nt4ZWcPh7etI3cRS5g>
-    <xme:fZ9kZWJ1Aln82JqGegtdgZ-DNCYhCcrA201n7Gpom7dCYGokvDufz7FkFz_XJKrup
-    rrGkpDn-EjHgA>
-X-ME-Received: <xmr:fZ9kZeteOkX0HJ6g2POEchLEy2Sy1FkV8G0GdlZNekb_tECXSewQ6MX4H4zQ73lWNFLZySi0H99iWDuPQua6Lx7a8qM9wdTZAjLpebP6CG7kQ_3xgZJrJrI>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudeiuddgheekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
-    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepheegvd
-    evvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefhgfehkeetnecuvehluhhs
-    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
-    hhrdgtohhm
-X-ME-Proxy: <xmx:fZ9kZTb4qHoCGi5zbT5WdrZwOm8bX5y6RB_zDkKGAfg-OxtH1yjMXw>
-    <xmx:fZ9kZVb3_epGeWJafk2PzVzEO-DIeMqQazmDmy_GAd--N-cZe_Sq-A>
-    <xmx:fZ9kZfAviFL2gpT2jYirMx6lOOfqdcscMI2kQJ9_I64bqug0Z2dLnw>
-    <xmx:fp9kZSQLyYm9dRJDAHIzDTBca4_OWn2onUamwN01JCLyKdWcUzAelA>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 27 Nov 2023 08:54:05 -0500 (EST)
-Date: Mon, 27 Nov 2023 13:14:07 +0000
-From: Greg KH <greg@kroah.com>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Michael Ellerman <mpe@ellerman.id.au>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
-	PowerPC <linuxppc-dev@lists.ozlabs.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patch in the tty tree
-Message-ID: <2023112757-enamel-degrading-38e5@gregkh>
-References: <20231127115718.7ad1701c@canb.auug.org.au>
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8310198
+	for <linux-next@vger.kernel.org>; Mon, 27 Nov 2023 08:04:06 -0800 (PST)
+Received: by mail-yb1-xb2f.google.com with SMTP id 3f1490d57ef6-d9beb865a40so3916237276.1
+        for <linux-next@vger.kernel.org>; Mon, 27 Nov 2023 08:04:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1701101046; x=1701705846; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=C7kfcTFnc1EIcTrfufgAiSWZaBI8ZkU3ldDxmrr3WA8=;
+        b=SysesZokp5xWO/Fl8lCVgEy4lqfbu0NZ+qRRLJz0pnmy8n3ZM57d0McKSVo1ATYsKm
+         si1rvtagc74oDGvjO3pj90jlH0tvynj1d5K9qyHb+wQDYLtFhlKN0ZhjCjkluSl3Ki+B
+         RYleH2fpS7CUf0SPHcv6y2qzXTlktyeveBrxo9rNo/BM4v66fPEPgaWk1/U8RQR9Gm/r
+         aZgF205XF3qOZw3QqyjcL6XF5qZDH2yoQp4EwPj3mVxFEtgQY9OUb4HQ/GZPzKZvydIm
+         ZiYnuS8ZANwUxaw8yJApwHzHjU+PpvmlQcHCVzf8+d1tej059Spj/e/t7Z6ddgYLMbkO
+         mFlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701101046; x=1701705846;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=C7kfcTFnc1EIcTrfufgAiSWZaBI8ZkU3ldDxmrr3WA8=;
+        b=CHfA6KKtODzv2krCFCN3o5sJlWz0rYGmisvO5Vibu0X+KeTK9BX1wEjMkYenoNe4AP
+         kY0QfcQP50Ko7shB9cyqV456BUoemcwy4MjnxMEDsfhFF0MWnoci5s6VAHkXPcqb4gU1
+         Spn27SBkBmOWzvk7qOxW7Ai1Gc0U+MiPfZiHTnkVoCBSFC1vJaRMoYNGgjzNdiE8fMxX
+         45iB3Re5p0SEMq5WkX90OcujPmXuCo8TWnjm9IT1wdvs3ApWpRYSNV16L0P0S6oPJmTz
+         /B1UMu52WqQi+Ua1XIlpBQ9r3mDkqvBB7skbuqWMqI0h4glb2tuif47Y8NS8YAdgvEMC
+         FSUA==
+X-Gm-Message-State: AOJu0YxmX3fZ0Qqk3pkoh+9+VOPCtqWTY4JfOFzUwVx+hEOctyQz4FMf
+	zPKwsQPD5hHOomGQRCWOkBGK10CRySpqjtc8M7KyWg==
+X-Google-Smtp-Source: AGHT+IH34yJLIkZJKXuCRnBcCqV+kUWFq5pvwWNuBFGfgw8Ppgvz1en2RopG7eerUDrKPKL790hzAPbQaxQoDiQvtbQ=
+X-Received: by 2002:a25:ea45:0:b0:db3:9994:119b with SMTP id
+ o5-20020a25ea45000000b00db39994119bmr10785589ybe.50.1701101046011; Mon, 27
+ Nov 2023 08:04:06 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231127115718.7ad1701c@canb.auug.org.au>
+References: <20231127051414.3783108-1-victor.liu@nxp.com>
+In-Reply-To: <20231127051414.3783108-1-victor.liu@nxp.com>
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Mon, 27 Nov 2023 17:03:53 +0100
+Message-ID: <CACRpkdZAtxh5muhbPKvmUQGtQogs3UhGxNZqnSGWoWQNUL7=9g@mail.gmail.com>
+Subject: Re: [PATCH v2 0/2] drm/bridge: panel: Check device dependency before
+ managing device link
+To: Liu Ying <victor.liu@nxp.com>
+Cc: linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+	linux-next@vger.kernel.org, sfr@canb.auug.org.au, gregkh@linuxfoundation.org, 
+	rafael@kernel.org, andrzej.hajda@intel.com, neil.armstrong@linaro.org, 
+	rfoss@kernel.org, Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se, 
+	jernej.skrabec@gmail.com, maarten.lankhorst@linux.intel.com, 
+	mripard@kernel.org, tzimmermann@suse.de, airlied@gmail.com, daniel@ffwll.ch, 
+	angelogioacchino.delregno@collabora.com, ulf.hansson@linaro.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Nov 27, 2023 at 11:57:18AM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> The following commit is also in the powerpc tree as a different commit
-> (but the same patch):
-> 
->   aa46b225ebbf ("tty: hvc: hvc_opal: Convert to platform remove callback returning void")
-> 
-> This is commit
-> 
->   f99c0e0d0859 ("tty: hvc: hvc_opal: Convert to platform remove callback returning void")
-> 
-> in the powerpc tree.
+On Mon, Nov 27, 2023 at 6:10=E2=80=AFAM Liu Ying <victor.liu@nxp.com> wrote=
+:
 
-Should be fine, thanks for the notice.
+> This series aims to check panel device dependency upon DRM device before
+> managing device link between them.  It fixes eariler patches in v6.7-rc1
+> which tried to manage the link.  Without this series, the link fails to
+> be added for dependent panel devices and hence relevant panel bridges
+> fail to be attached.  A real broken panel is "novatek,nt35510" defined
+> in arch/arm/boot/dts/st/ste-ux500-samsung-skomer.dts as reported by
+> Linus Walleij.
+>
+> Patch 1 exports device_is_dependent() to modules as needed by patch 2.
+> Patch 2 checks device dependency before managing the device link.
+>
+> Note that patch 2 is already in drm-misc/drm-misc-fixes and
+> drm-misc/for-linux-next-fixes.  Patch 1 needs to be reviewed and picked u=
+p.
+>
+> v2:
+> * Introduce patch 1 to export device_is_dependent() to modules as needed =
+by
+>   patch 2.
+>
+> Liu Ying (2):
+>   driver core: Export device_is_dependent() to modules
+>   drm/bridge: panel: Check device dependency before managing device link
 
-greg k-h
+I just applied patch 1 directly to the drm-misc-fixes so we don't have to
+revert and then re-apply patches, because that is a bigger evil. (We can't
+rebase these branches...)
+
+Yours,
+Linus Walleij
 

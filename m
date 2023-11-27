@@ -1,173 +1,255 @@
-Return-Path: <linux-next+bounces-77-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-78-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D26D67F97AC
-	for <lists+linux-next@lfdr.de>; Mon, 27 Nov 2023 03:55:26 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 681307F97FC
+	for <lists+linux-next@lfdr.de>; Mon, 27 Nov 2023 04:44:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DB53BB20A3E
-	for <lists+linux-next@lfdr.de>; Mon, 27 Nov 2023 02:55:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8B51E1C20826
+	for <lists+linux-next@lfdr.de>; Mon, 27 Nov 2023 03:44:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E12311C16;
-	Mon, 27 Nov 2023 02:55:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DACC146A3;
+	Mon, 27 Nov 2023 03:44:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="XEWhFivL"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="o2iEkiFp"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D939122
-	for <linux-next@vger.kernel.org>; Sun, 26 Nov 2023 18:55:10 -0800 (PST)
-Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1cc9b626a96so25638885ad.2
-        for <linux-next@vger.kernel.org>; Sun, 26 Nov 2023 18:55:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1701053710; x=1701658510; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=qJU1V3tUq/Bk8cidUaRbJetXNU/I9W8m/X6XWnP9AFs=;
-        b=XEWhFivLQsmcl6gX+HdqP7nPugnDRt3LRGOfWF7YDhPPmOQs5prL1PrbmVackpSLH4
-         nNsS6uRCDzjPiOl7mBzlPGQ5GjsznBcMW0cS1V22rn1TsamiP/uXjjwuNeUGyUHxd5AG
-         8NnkNyhLe5lSqBHSoTLz0Kw5OuqGIkmiOUzODTb/YeQ6/rNDHPEOKAsohu1Izx9N8kAS
-         K+epkLnddvE9OdPP+bl1KbRiFNcpiSfoX+4yEz21dGNn+S0XhgIW/Y7CePX3XJZw/RJf
-         VzVOgJ95yyJRoR3RLuU5RTW9MPGrHJDfr3Sfz69lcBBTSbJGCFLUrskHAXQ7Rw1+2aFQ
-         YrUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701053710; x=1701658510;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qJU1V3tUq/Bk8cidUaRbJetXNU/I9W8m/X6XWnP9AFs=;
-        b=dLtLjnrDz63HGER9T8htCvEDto+msm6gLVVTEy/bVHY87WaQB1vPi9SURWAXefKRO9
-         uz9onNuwVD3TDLE860a3OkuWbA8U+OCCs7MiP1YlmO/JbhNpV6p8ATxIWrde4f4VkaO+
-         XM4hUwBfxI30lTWogqiomMgw6QsHd62xBk5sK9bRlwhelAvqJmvX2XGNc2DVm3AYD3aP
-         wVYspUhQ6QOTHyM0hJ9F8E6oY3Dy0dkmo0Gs9cPJUKzpqPD3Xco27+aLwDl4Ola8ScH+
-         QwWoE+R2gGtWHqZRQtq0C5M+DCNHT+useqD8zmSmr47rRFhm4a7CMNXC8fVgeDYdfcuC
-         ICvA==
-X-Gm-Message-State: AOJu0Yxf85IyDXUjYCWR6GO9sQy4Y85WAv7JGHmjPAiAmB5F7GvyAL3V
-	TzWFZ3ky7e4B3i5cdKNuvvpxop25nS3XrpSONRo=
-X-Google-Smtp-Source: AGHT+IEj9Bq71uXkxou4wQE9KA7jR577mOtU5ERkpDC/oAoDAxGcBha+HwAWNtrJUVoCAqh2NJ/8Jg==
-X-Received: by 2002:a17:90b:4b91:b0:285:a4f9:4597 with SMTP id lr17-20020a17090b4b9100b00285a4f94597mr4060749pjb.21.1701053709652;
-        Sun, 26 Nov 2023 18:55:09 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id s5-20020a17090a5d0500b00280469602bcsm6523739pji.2.2023.11.26.18.55.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Nov 2023 18:55:09 -0800 (PST)
-Message-ID: <6564050d.170a0220.aa699.ecce@mx.google.com>
-Date: Sun, 26 Nov 2023 18:55:09 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A11C2122;
+	Sun, 26 Nov 2023 19:44:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1701056661;
+	bh=W6wPi/O+8MM/qw5hdejRqnpZ8FpJQUB6x4BDudn9Emo=;
+	h=Date:From:To:Cc:Subject:From;
+	b=o2iEkiFpqZp9ED6zRKmy0/zOe4H5byuQsJhCvLvTaC7GKnbIpfaD19EVCCEBaJMU9
+	 N39wtysnIQ1irdb0v2FOtyEveIhnTsTt2iMjEz1AwXg9WB31XO5XUOB4FttReSWeCB
+	 zOaMiXb2V1mlHUvojeenVRavMmly+PtWerhRQAsV6HOYWfpTzEkRT9lsLcAj1Arwos
+	 riiKYbnxlcGdMPxkw0V0vHTufFG7VgO7CaK68WYkkJd9WDKvf2fJo+LTWWYDWBc43C
+	 8FrnnbdHHzg/9vsZd9n6MP6jwd7qbtA7B/pKjFsjV4OnFGXyf9L7zuT0eWac35Omk4
+	 BluzjANKLss6w==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Sds0448RBz4wd1;
+	Mon, 27 Nov 2023 14:44:20 +1100 (AEDT)
+Date: Mon, 27 Nov 2023 14:44:18 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the mm tree
+Message-ID: <20231127144418.54daad5d@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/MM5jk5QheGWqV9dqAb6GT+P";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+
+--Sig_/MM5jk5QheGWqV9dqAb6GT+P
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: test
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Tree: next
-X-Kernelci-Kernel: v6.7-rc2-454-gc7607b4f01b34
-Subject: next/pending-fixes baseline: 77 runs,
- 2 regressions (v6.7-rc2-454-gc7607b4f01b34)
-To: linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
- kernelci-results@groups.io
-From: "kernelci.org bot" <bot@kernelci.org>
 
-next/pending-fixes baseline: 77 runs, 2 regressions (v6.7-rc2-454-gc7607b4f=
-01b34)
+Hi all,
 
-Regressions Summary
--------------------
+After merging the mm tree, today's linux-next build (sparc64 defconfig)
+failed like this:
 
-platform            | arch | lab          | compiler | defconfig          |=
- regressions
---------------------+------+--------------+----------+--------------------+=
-------------
-beaglebone-black    | arm  | lab-broonie  | gcc-10   | multi_v7_defconfig |=
- 1          =
+arch/sparc/vdso/vclock_gettime.c:254:1: warning: no previous prototype for =
+'__vdso_clock_gettime' [-Wmissing-prototypes]
+  254 | __vdso_clock_gettime(clockid_t clock, struct __kernel_old_timespec =
+*ts)
+      | ^~~~~~~~~~~~~~~~~~~~
+arch/sparc/vdso/vclock_gettime.c:282:1: warning: no previous prototype for =
+'__vdso_clock_gettime_stick' [-Wmissing-prototypes]
+  282 | __vdso_clock_gettime_stick(clockid_t clock, struct __kernel_old_tim=
+espec *ts)
+      | ^~~~~~~~~~~~~~~~~~~~~~~~~~
+arch/sparc/vdso/vclock_gettime.c:307:1: warning: no previous prototype for =
+'__vdso_gettimeofday' [-Wmissing-prototypes]
+  307 | __vdso_gettimeofday(struct __kernel_old_timeval *tv, struct timezon=
+e *tz)
+      | ^~~~~~~~~~~~~~~~~~~
+arch/sparc/vdso/vclock_gettime.c:343:1: warning: no previous prototype for =
+'__vdso_gettimeofday_stick' [-Wmissing-prototypes]
+  343 | __vdso_gettimeofday_stick(struct __kernel_old_timeval *tv, struct t=
+imezone *tz)
+      | ^~~~~~~~~~~~~~~~~~~~~~~~~
+arch/sparc/vdso/vma.c:246:12: warning: no previous prototype for 'init_vdso=
+_image' [-Wmissing-prototypes]
+  246 | int __init init_vdso_image(const struct vdso_image *image,
+      |            ^~~~~~~~~~~~~~~
+arch/sparc/prom/p1275.c:52:6: warning: no previous prototype for 'prom_cif_=
+init' [-Wmissing-prototypes]
+   52 | void prom_cif_init(void *cif_handler, void *cif_stack)
+      |      ^~~~~~~~~~~~~
+In file included from arch/sparc/vdso/vdso32/vclock_gettime.c:22:
+arch/sparc/vdso/vdso32/../vclock_gettime.c:254:1: warning: no previous prot=
+otype for '__vdso_clock_gettime' [-Wmissing-prototypes]
+  254 | __vdso_clock_gettime(clockid_t clock, struct __kernel_old_timespec =
+*ts)
+      | ^~~~~~~~~~~~~~~~~~~~
+arch/sparc/vdso/vdso32/../vclock_gettime.c:282:1: warning: no previous prot=
+otype for '__vdso_clock_gettime_stick' [-Wmissing-prototypes]
+  282 | __vdso_clock_gettime_stick(clockid_t clock, struct __kernel_old_tim=
+espec *ts)
+      | ^~~~~~~~~~~~~~~~~~~~~~~~~~
+arch/sparc/vdso/vdso32/../vclock_gettime.c:307:1: warning: no previous prot=
+otype for '__vdso_gettimeofday' [-Wmissing-prototypes]
+  307 | __vdso_gettimeofday(struct __kernel_old_timeval *tv, struct timezon=
+e *tz)
+      | ^~~~~~~~~~~~~~~~~~~
+arch/sparc/vdso/vdso32/../vclock_gettime.c:343:1: warning: no previous prot=
+otype for '__vdso_gettimeofday_stick' [-Wmissing-prototypes]
+  343 | __vdso_gettimeofday_stick(struct __kernel_old_timeval *tv, struct t=
+imezone *tz)
+      | ^~~~~~~~~~~~~~~~~~~~~~~~~
+arch/sparc/prom/misc_64.c:165:5: warning: no previous prototype for 'prom_g=
+et_mmu_ihandle' [-Wmissing-prototypes]
+  165 | int prom_get_mmu_ihandle(void)
+      |     ^~~~~~~~~~~~~~~~~~~~
+arch/sparc/kernel/traps_64.c:253:6: error: no previous prototype for 'is_no=
+_fault_exception' [-Werror=3Dmissing-prototypes]
+  253 | bool is_no_fault_exception(struct pt_regs *regs)
+      |      ^~~~~~~~~~~~~~~~~~~~~
+arch/sparc/kernel/traps_64.c:2035:6: error: no previous prototype for 'do_m=
+cd_err' [-Werror=3Dmissing-prototypes]
+ 2035 | void do_mcd_err(struct pt_regs *regs, struct sun4v_error_entry ent)
+      |      ^~~~~~~~~~
+arch/sparc/kernel/traps_64.c:2153:6: error: no previous prototype for 'sun4=
+v_nonresum_error_user_handled' [-Werror=3Dmissing-prototypes]
+ 2153 | bool sun4v_nonresum_error_user_handled(struct pt_regs *regs,
+      |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+cc1: all warnings being treated as errors
+arch/sparc/mm/init_64.c:2644:6: error: no previous prototype for 'vmemmap_f=
+ree' [-Werror=3Dmissing-prototypes]
+ 2644 | void vmemmap_free(unsigned long start, unsigned long end,
+      |      ^~~~~~~~~~~~
+cc1: all warnings being treated as errors
 
-qemu_arm-virt-gicv2 | arm  | lab-baylibre | gcc-10   | multi_v7_defconfig |=
- 1          =
+Caused by commit
 
+  c6345dfa6e3e ("Makefile.extrawarn: turn on missing-prototypes globally")
 
-  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
-v6.7-rc2-454-gc7607b4f01b34/plan/baseline/
+I applied the following hack for today.
 
-  Test:     baseline
-  Tree:     next
-  Branch:   pending-fixes
-  Describe: v6.7-rc2-454-gc7607b4f01b34
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      c7607b4f01b34588b85ee3e48a1db6ff450caa11 =
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Mon, 27 Nov 2023 14:18:45 +1100
+Subject: [PATCH] sparc: turn off Werror for now
 
+---
+ arch/sparc/kernel/Makefile | 2 +-
+ arch/sparc/mm/Makefile     | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/arch/sparc/kernel/Makefile b/arch/sparc/kernel/Makefile
+index 0984bb6f0f17..1ce4d5028c86 100644
+--- a/arch/sparc/kernel/Makefile
++++ b/arch/sparc/kernel/Makefile
+@@ -5,7 +5,7 @@
+ #
+=20
+ asflags-y :=3D -ansi
+-ccflags-y :=3D -Werror
++#ccflags-y :=3D -Werror
+=20
+ # Undefine sparc when processing vmlinux.lds - it is used
+ # And teach CPP we are doing $(BITS) builds (for this case)
+diff --git a/arch/sparc/mm/Makefile b/arch/sparc/mm/Makefile
+index 871354aa3c00..a199484e131f 100644
+--- a/arch/sparc/mm/Makefile
++++ b/arch/sparc/mm/Makefile
+@@ -3,7 +3,7 @@
+ #
+=20
+ asflags-y :=3D -ansi
+-ccflags-y :=3D -Werror
++#ccflags-y :=3D -Werror
+=20
+ obj-$(CONFIG_SPARC64)   +=3D ultra.o tlb.o tsb.o
+ obj-y                   +=3D fault_$(BITS).o
+--=20
+2.40.1
 
-Test Regressions
----------------- =
+After which I got these as well:
 
+arch/sparc/kernel/adi_64.c:124:21: warning: no previous prototype for 'find=
+_tag_store' [-Wmissing-prototypes]
+  124 | tag_storage_desc_t *find_tag_store(struct mm_struct *mm,
+      |                     ^~~~~~~~~~~~~~
+arch/sparc/kernel/adi_64.c:156:21: warning: no previous prototype for 'allo=
+c_tag_store' [-Wmissing-prototypes]
+  156 | tag_storage_desc_t *alloc_tag_store(struct mm_struct *mm,
+      |                     ^~~~~~~~~~~~~~~
+arch/sparc/kernel/adi_64.c:299:6: warning: no previous prototype for 'del_t=
+ag_store' [-Wmissing-prototypes]
+  299 | void del_tag_store(tag_storage_desc_t *tag_desc, struct mm_struct *=
+mm)
+      |      ^~~~~~~~~~~~~
+arch/sparc/kernel/uprobes.c:237:17: warning: no previous prototype for 'upr=
+obe_trap' [-Wmissing-prototypes]
+  237 | asmlinkage void uprobe_trap(struct pt_regs *regs,
+      |                 ^~~~~~~~~~~
+arch/sparc/kernel/time_64.c:880:20: warning: no previous prototype for 'sch=
+ed_clock' [-Wmissing-prototypes]
+  880 | unsigned long long sched_clock(void)
+      |                    ^~~~~~~~~~~
+arch/sparc/kernel/pci_sun4v.c:259:15: warning: no previous prototype for 'd=
+ma_4v_iotsb_bind' [-Wmissing-prototypes]
+  259 | unsigned long dma_4v_iotsb_bind(unsigned long devhandle,
+      |               ^~~~~~~~~~~~~~~~~
+arch/sparc/kernel/setup_64.c:602:13: warning: no previous prototype for 'al=
+loc_irqstack_bootmem' [-Wmissing-prototypes]
+  602 | void __init alloc_irqstack_bootmem(void)
+      |             ^~~~~~~~~~~~~~~~~~~~~~
 
+And these from the sparc (32) defconfig build:
 
-platform            | arch | lab          | compiler | defconfig          |=
- regressions
---------------------+------+--------------+----------+--------------------+=
-------------
-beaglebone-black    | arm  | lab-broonie  | gcc-10   | multi_v7_defconfig |=
- 1          =
+arch/sparc/lib/cmpdi2.c:6:11: error: no previous prototype for '__cmpdi2' [=
+-Werror=3Dmissing-prototypes]
+    6 | word_type __cmpdi2(long long a, long long b)
+      |           ^~~~~~~~
+cc1: all warnings being treated as errors
+kernel/dma.c:70:5: warning: no previous prototype for 'request_dma' [-Wmiss=
+ing-prototypes]
+   70 | int request_dma(unsigned int dmanr, const char * device_id)
+      |     ^~~~~~~~~~~
+kernel/dma.c:88:6: warning: no previous prototype for 'free_dma' [-Wmissing=
+-prototypes]
+   88 | void free_dma(unsigned int dmanr)
+      |      ^~~~~~~~
 
+So I turned off -Werrror in the lib directory as well which added this:
 
-  Details:     https://kernelci.org/test/plan/id/6563d48c28932e5c3a7e4aa1
+arch/sparc/lib/ucmpdi2.c:5:11: warning: no previous prototype for '__ucmpdi=
+2' [-Wmissing-prototypes]
+    5 | word_type __ucmpdi2(unsigned long long a, unsigned long long b)
+      |           ^~~~~~~~~
 
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.7-rc2-45=
-4-gc7607b4f01b34/arm/multi_v7_defconfig/gcc-10/lab-broonie/baseline-beagleb=
-one-black.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.7-rc2-45=
-4-gc7607b4f01b34/arm/multi_v7_defconfig/gcc-10/lab-broonie/baseline-beagleb=
-one-black.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/armel/rootfs.cpio.gz =
+--=20
+Cheers,
+Stephen Rothwell
 
+--Sig_/MM5jk5QheGWqV9dqAb6GT+P
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
+-----BEGIN PGP SIGNATURE-----
 
-  * baseline.login: https://kernelci.org/test/case/id/6563d48c28932e5c3a7e4=
-aa2
-        new failure (last pass: v6.7-rc2-287-gd58dc32d55f5) =
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmVkEJIACgkQAVBC80lX
+0GxDFAf/ZnIJkLictTCPLZ1hei3lyPwT+hx97uVFxHV4Db03880T7jqJJf1F+zXG
+BQHi1WhOxTmMpFWCzu+qCZ/KBpGjTwQINkLKAFRg6y+5dCl+Q3nQUfLCxwdz/hHk
+orRDn0OUaTAsTd4oKgpI1BhySiEW2OAi6sffF5u3IXKlJqbFSAv7WHyGTesJQAWa
+WGRdnmFdtBPdol3WUxe+TfzH6fWy8QkEC8pU4iCUovYq2LGum+euPfSmfcN/msgB
+8iwRG/jPz7CS+UMXap1aA7LkWWlcjW3VmeBiXAr9DUNH0ILWkrlhqtl7ZFf/3vX3
+N7KAdvcKNXvtbN5C55eLyQo1sTssFg==
+=egQu
+-----END PGP SIGNATURE-----
 
- =
-
-
-
-platform            | arch | lab          | compiler | defconfig          |=
- regressions
---------------------+------+--------------+----------+--------------------+=
-------------
-qemu_arm-virt-gicv2 | arm  | lab-baylibre | gcc-10   | multi_v7_defconfig |=
- 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6563d3ff158455ea227e4a99
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.7-rc2-45=
-4-gc7607b4f01b34/arm/multi_v7_defconfig/gcc-10/lab-baylibre/baseline-qemu_a=
-rm-virt-gicv2.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.7-rc2-45=
-4-gc7607b4f01b34/arm/multi_v7_defconfig/gcc-10/lab-baylibre/baseline-qemu_a=
-rm-virt-gicv2.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6563d3ff158455ea227e4=
-a9a
-        new failure (last pass: v6.7-rc2-287-gd58dc32d55f5) =
-
- =20
+--Sig_/MM5jk5QheGWqV9dqAb6GT+P--
 

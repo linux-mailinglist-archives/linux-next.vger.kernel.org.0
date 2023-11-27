@@ -1,225 +1,154 @@
-Return-Path: <linux-next+bounces-84-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-85-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F0F47F988C
-	for <lists+linux-next@lfdr.de>; Mon, 27 Nov 2023 06:10:22 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 819A57F98B2
+	for <lists+linux-next@lfdr.de>; Mon, 27 Nov 2023 06:32:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BC748280D1C
-	for <lists+linux-next@lfdr.de>; Mon, 27 Nov 2023 05:10:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3C6F1280DE2
+	for <lists+linux-next@lfdr.de>; Mon, 27 Nov 2023 05:32:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFC93538A;
-	Mon, 27 Nov 2023 05:10:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E93153A7;
+	Mon, 27 Nov 2023 05:32:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b="PFfaT4jd"
+	dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b="RT4Z3AR5"
 X-Original-To: linux-next@vger.kernel.org
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2086.outbound.protection.outlook.com [40.107.22.86])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DF8012F;
-	Sun, 26 Nov 2023 21:10:15 -0800 (PST)
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2059.outbound.protection.outlook.com [40.107.21.59])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11685E3;
+	Sun, 26 Nov 2023 21:32:05 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZSsKEX/JI8ePpXCwTg+9tnoc+TJ6Lkqe8sbh99m37Y6HDGrTekjDHiEJNB09vsJRHry2qc3yCdb5Vg7jSoIGmKW1IGUMmvPfeJ/gv5RgnKo0aB6BBYIkmG7cvtYB5wuMiTMw/sKidO9Jl3V2CIeA4Ye1rwphcwojFFd9sk7QAHvImMLU0/qgaxYgrZF6kFMdSBSuUFHZjswsizbUlQbFVoDXRJjJIEIUpxyefiaN+X2Aivq5RextZUVYRzV092RRe/9W3QbFGbJQ+Okt/FaqpY+rr3cESil4dINfXdYCh6G3sPfaKJWdFTXF2iQKyJmIasykHJQvA2xiNfR07cDrGA==
+ b=ltqPj4WLpDJYdHT+4WInqH0aeLOAU/A9zmy130O2JM8r7rASJoAza+t/WpU66tgyAkFAHKJnAzA/Z2NBeHD/lyWsIL20qz3DdE37S+WcZIZgGfP5Qf89g3e/V99gHhyRFqbwdVHZiGGty1mC3w+46eKpRo9mE1LRS4RW9cvRqPRKttFFsFqpbNNgWoP4lNVsUodj6irVKcqioPFW0lRwclrluBBWJYMxO3zE4aUMlfm9sfh4HEiNbgg7DZZRMI6GcP3kBmT1jVmCDih8XQrBM2haPFO04FZr++pkEru8dAvkzqhroOo83ddFAADgCZ5LK0c1r3bbLdcZM7tUqXtHRw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=K5zWOZmsGTeT8xFxJ8FHYZvgDxLdC87QS8N39Aej3dE=;
- b=oJ4RdkSU+d2n6ia0weBlv36F4ED1blonNtb4mBcE4D0mSFkcDvZJJD+sRh9TYSYrDijHhoyiyHnoQ4XPiFZx5BsG/EKtqSlZcYilpyNBEeV6An24h9pfokiVCyGDEEP3dCQTiqjOMduDDeAKcHC9URpuKXCY3He2n3+0/TW87qNxEepFkX3XVCs1DSO7dzmMCTpjR3zeeuyQlBKccsEf3DcPYsOaho7BOe96PlUKJQ9KJ0kxH8s8D4ZmhUxXa5qMEGe5J/hIcLb6flup548C4f3QOe7bzjSw+nMKRECnkIAXBenFpA0Ln1NxGfnIpc9kbiCENfhC6EqD2k/OIXMvyg==
+ bh=/moDtIKrLaEZ9O+P3MvoWR50Uhy9gWuNEO3gkDsOIqY=;
+ b=WhpsvMht4JMGN8ehxNBmY+Q5X/aWln7p21um1HdNByrAWrqSpR2z9DzU7PbVxxp8/zgVY+wUiWK9dHg6Q6o5y6kWtQnXSisB+oKBgBMmo3l3tDM+ZB2L1QjVXJKu0LAM/W6BkiSyZWFdhIm4Q0gUXZPNVV6fAvW3rwLljI1EH4r++LACOai/ekv3ghm5HehFd9TP3r3u1z63NI3BB72ZwEI+ljShG70DPHGRGEiv6KFTH1v5Tu+4YFxf1UEm7jyVqruGiDciCoCollt6cjpAd/Lo1XOqB48yj9FM3sRvbq0TGJnTn6oLFjknqkGxCAW+2k8KNk95uort1zTY8WTnKg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=K5zWOZmsGTeT8xFxJ8FHYZvgDxLdC87QS8N39Aej3dE=;
- b=PFfaT4jdBODUK4bJtGg7gE5RsJFdgCBmEqT/duS0TS3fNtxiI3wegiduygloj43NZ2o/0JPnrK84k8GQ+vOYz95M240wjkGSQo4qbNapuH6Wftnl8B07eafSfWm/klzxcENtOHA1aECMnh4ScHCEH+VcH9vmdt0m/5QXDHYiVvI=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
+ bh=/moDtIKrLaEZ9O+P3MvoWR50Uhy9gWuNEO3gkDsOIqY=;
+ b=RT4Z3AR5OfO+Stn4eQClr3PA61YcdaTdL6vVZ0OEABNT5K2Ooo0il619JPR+o3vyRhrns2+nzwi3aZoS923eC57li2zQyGrQi6JZhiP0G06I/HOFo16wkujjeWeI6njMRrWxG1+exup24+pG3uvo/+FaJ40OBL9kK3NOUz4NxtE=
 Received: from AM7PR04MB7046.eurprd04.prod.outlook.com (2603:10a6:20b:113::22)
- by AM0PR04MB6961.eurprd04.prod.outlook.com (2603:10a6:208:180::11) with
+ by DBAPR04MB7302.eurprd04.prod.outlook.com (2603:10a6:10:1a5::14) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7046.21; Mon, 27 Nov
- 2023 05:10:12 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7046.19; Mon, 27 Nov
+ 2023 05:32:02 +0000
 Received: from AM7PR04MB7046.eurprd04.prod.outlook.com
  ([fe80::d99:f43f:65a3:9bf]) by AM7PR04MB7046.eurprd04.prod.outlook.com
  ([fe80::d99:f43f:65a3:9bf%7]) with mapi id 15.20.7046.015; Mon, 27 Nov 2023
- 05:10:12 +0000
-From: Liu Ying <victor.liu@nxp.com>
-To: linux-kernel@vger.kernel.org,
-	dri-devel@lists.freedesktop.org
-Cc: linux-next@vger.kernel.org,
-	sfr@canb.auug.org.au,
-	gregkh@linuxfoundation.org,
-	rafael@kernel.org,
-	andrzej.hajda@intel.com,
-	neil.armstrong@linaro.org,
-	rfoss@kernel.org,
-	Laurent.pinchart@ideasonboard.com,
-	jonas@kwiboo.se,
-	jernej.skrabec@gmail.com,
-	maarten.lankhorst@linux.intel.com,
-	mripard@kernel.org,
-	tzimmermann@suse.de,
-	airlied@gmail.com,
-	daniel@ffwll.ch,
-	angelogioacchino.delregno@collabora.com,
-	ulf.hansson@linaro.org,
-	linus.walleij@linaro.org
-Subject: [PATCH v2 2/2] drm/bridge: panel: Check device dependency before managing device link
-Date: Mon, 27 Nov 2023 13:14:14 +0800
-Message-Id: <20231127051414.3783108-3-victor.liu@nxp.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20231127051414.3783108-1-victor.liu@nxp.com>
-References: <20231127051414.3783108-1-victor.liu@nxp.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI2PR01CA0012.apcprd01.prod.exchangelabs.com
- (2603:1096:4:191::8) To AM7PR04MB7046.eurprd04.prod.outlook.com
- (2603:10a6:20b:113::22)
+ 05:32:02 +0000
+From: Ying Liu <victor.liu@nxp.com>
+To: Stephen Rothwell <sfr@canb.auug.org.au>, Daniel Vetter
+	<daniel.vetter@ffwll.ch>
+CC: Linus Walleij <linus.walleij@linaro.org>, Intel Graphics
+	<intel-gfx@lists.freedesktop.org>, DRI <dri-devel@lists.freedesktop.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing
+ List <linux-next@vger.kernel.org>
+Subject: RE: linux-next: build failure after merge of the drm-misc-fixes tree
+Thread-Topic: linux-next: build failure after merge of the drm-misc-fixes tree
+Thread-Index: AQHaILAPih4tujf4ZkeAQQ148k8/RrCNoPhg
+Date: Mon, 27 Nov 2023 05:32:02 +0000
+Message-ID:
+ <AM7PR04MB704669C9C5471A309F8F72B198BDA@AM7PR04MB7046.eurprd04.prod.outlook.com>
+References: <20231127083205.44b25fa8@canb.auug.org.au>
+In-Reply-To: <20231127083205.44b25fa8@canb.auug.org.au>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: AM7PR04MB7046:EE_|DBAPR04MB7302:EE_
+x-ms-office365-filtering-correlation-id: b29317dd-989b-44aa-4442-08dbef0a2f44
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info:
+ IFUbNvIN6yE8DzgMWJj3u5uMduP8nsQDWf//NezNkWJgLkeasZejE9uqIIYLfvKb17JW8XgYzG9aOQOdJv+vGbYWmxRFmk8jo6I+wys1rR5DCcjTHmCwdkpow60J9ItVKPCvc/Yix1dilKHFjq666RmPqCyoO8Bqc7N8bbIpzJNIx0l3NB8Vnz5GmQE+/nY0ihypBg1pNS0MWBXiCUdfD9NSYERjdZOJzdOKiZYbRrdsEAklYME69mfP66TLk1xWXzrOPhHXE+ZOYIq9W1xAgXXMwSLHQ6VktOOwI+OLGH5UqkY90QJ/06JyECHBCU3b8s0oY5xDxUaIjoYRlwIineAofZbbdZ0+343zWZnyUehzZ75wIQ8AbcfDZX5ukehczXckZEjh0YG0azBODadGgQcrLxNhl6glBWdlck5iQrzsLJLZaXRpCAM7Q5QYGGYsOWrcghyHIYiQ+52Y/+haVuT782OdZVt+91AbOTJBidwd6cpstHwiLCk83Iwyd8noEL98UvRjM3SLCkkefF0SdQVFYFv6p3w25PxjKpp/Yhz2W8R6oJ3nYjAsCSkzvF0+rqRTuXA5ij9tHwdB2DTV0NTQjD2f78JTtw9b+5UEeTc=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7046.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(396003)(376002)(366004)(136003)(346002)(39860400002)(230922051799003)(64100799003)(186009)(1800799012)(451199024)(6506007)(53546011)(966005)(478600001)(9686003)(7696005)(71200400001)(4744005)(83380400001)(2906002)(5660300002)(41300700001)(66946007)(76116006)(66556008)(66446008)(64756008)(110136005)(54906003)(66476007)(316002)(4326008)(52536014)(8936002)(8676002)(38100700002)(38070700009)(86362001)(122000001)(33656002)(55016003)(26005);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?Tv4fPJ2YyZqweooepek4ymKf3SPqGxK8kuj6C3f5ZJHTF78z4bNs8Ozcn0AJ?=
+ =?us-ascii?Q?2lSvwFldAsj5sEWZb4o8ovYXQibUR/0XD6ytJMhW/OEdf8/xPRTTYdy+FLKt?=
+ =?us-ascii?Q?YUJjtDyyuoJSG6VguaMBRmk/yKubQUTuCShefLYQUGTePgAT8RyOzu2rVGTD?=
+ =?us-ascii?Q?yZYpR3ObkYUGQ2f+XGOZLGPLCDJRDhjZAym+tfsdzMUlVHpSmv6WH7g6PAq2?=
+ =?us-ascii?Q?HGusCgGCgM8epbeg5Do3IeYvM4VivKSZh0p3JhQjc8l2ev3BpI+2W9axzsTU?=
+ =?us-ascii?Q?OrA2VdYiCV1VTks9YaI8Pgg5BjlZ22OcTnIFowc6U9WFtjPW+A3ZLJrD1ro2?=
+ =?us-ascii?Q?MBgCEIB3C3MYJAnWv9rGU4GJcbdC+ZyJDQ1L5q6yVkZUxrMVBsxU+z+GfehC?=
+ =?us-ascii?Q?Luv6aHUypjzn9JTl1d9E9RtbJyLBdYA8Vr9fjmLx9qe72Jf8RCZZzvkadjRb?=
+ =?us-ascii?Q?TDDnS0nPxlu/b5ixhAY0S5pHADFMb+fKGconHhZ4DMIoYJ58FyFBZY3wij97?=
+ =?us-ascii?Q?0H4336wRo57MV/ojgHfWGnpG9dPNfQB+e0Jd/V03jk39YoMyWVnt/HM1jF6z?=
+ =?us-ascii?Q?IhnvLxcaQv5tt+KaJwrjYsrozOvN55vRWLIdhDki7bqGcUvu5EO47eCUTfAf?=
+ =?us-ascii?Q?LZUDyXFijvXrAXhvrtDi+LauvwDbNobEs/mnXxy0eBYlMSmyCwKABBs8P2Km?=
+ =?us-ascii?Q?m4nm4F1rIrDdh4lzl2y+VC3XpIGC3dT8wbgRobFh64gR7Xwuk6ccg94ryBeR?=
+ =?us-ascii?Q?CItSEZrShGw7gauAMBQ/fIhbRBfCxHvYugGT2LebV5cH40Uv64NAg4+dulPb?=
+ =?us-ascii?Q?/Mcl2qSj6JfS3cJQnFo6MJIO0+apVCeLSoOu03JbIVJaI6wk6E3faPuIGjR3?=
+ =?us-ascii?Q?1QRCtlVjPH5xW+eF5XQjQKgRna9SKFdsWf7BNkyEN17IAy+BYY2fIHnJWNSE?=
+ =?us-ascii?Q?ht2ckujx3nveB9c7uqkMGaoeGx2uFM0O0RxJtZ++ebWVZEjNkoE1n9jT8YD7?=
+ =?us-ascii?Q?uXXcCDcqymqUkgFAgg8icyVM8rtJu2+rY1P8VKh+SNjUac9/AYmzh0Gh3iq9?=
+ =?us-ascii?Q?tdW7cDh/8rebGPcInaMHM9sZKaH2OqEO5FIhes817mzvdsHopzQGRPyOgtYv?=
+ =?us-ascii?Q?vO0QthtjITVwxmJgw7NcFG3uN8fFrhImSMC1C6YBg2oiwnEFORY8OVoxZhzd?=
+ =?us-ascii?Q?Y1s7XiHQLupNGz4Yrf4y2Fof536Xu3u1KRHgESh3dBIS4zlT16aLTd3aja/o?=
+ =?us-ascii?Q?QzRujaSjsQYsF1RCSG887L7VQIzXxMChKfaGb1JYbThXQAVeMWxMkd1HUXTd?=
+ =?us-ascii?Q?C6QDHwvtcp2kPCkhUhtr9pyI0EOBpGlnfFJ0APbUK9wFvrdTyDPVSn2aS5Au?=
+ =?us-ascii?Q?+D8V4D3uXlkh5lQc/aAREkcGbchECShvA15jPgpxWBubYeZQFxoJsSeqvjop?=
+ =?us-ascii?Q?jFnfEtAalyFWZl6nGlZOZ0bOWUupvJaSCKzZ01mIbMi9l3UW6yb5YWzIPTb9?=
+ =?us-ascii?Q?ocAm2/KpDHSIIR3zFU+pfoxshjiZCup9Il9ks4aCJz99RfNrDW3PZGlOD7Mi?=
+ =?us-ascii?Q?s9TXPWmJhgSOGhY0QHM=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM7PR04MB7046:EE_|AM0PR04MB6961:EE_
-X-MS-Office365-Filtering-Correlation-Id: 130cf83e-8372-4e41-9fad-08dbef072298
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	r92LQc+yAEo6qAPCnIvN2cJcKjShHhRaF2V45SdlgXKZR3Q+Ln0ooRNUw/BaGnlw90wtGCrhKq01ywseBcNRHj5LjN5+FGFQyB1BIKaOhu3hKgQNKiLCljs35+NRJuQAfxYKfGCFqo3/8ANb0UHXidpqmiOB8/8cd0xrG//7OAOupeIo2fV1W6aXQfnAJ/ixc3SLiGffblUgR9vekxpPwHRtlphWSKwPlDebZmVb+AqtDg21EWp4ZNDbzJdMxoGArbQJvcBr1mHQ3kGm4REElqei9I0FWwpdyruKfmhlH5LazQwgzIxiB5AAoQMSLHtk/5PYpg7leNRMt3WT+ysUUeDGP40kZB/lZgri5P6ZTFRpp++ODIt4eD5zXAfRZ/XhTAV8q5KtnTtjspkHbiwzvcRUL9jzXNByywSxO69AP5UCdCwXkJ2Q0mASd+0/02oBXQ14FBbVAwzPqtgLdyOsJg+Y4Ax/v8F01POhO/Pic8QvyCSiYivWeM1BSe9EfvNUchNxDlIEMs9a2m2zEVRfP418UYoee5gAr73ISaKinaT7MNnd/j4Aj9Ic8xne2r6Ue6mtitW4C0mNQ8FDrpQ0SMzN1e4hNPAVX0ZGXH8g1Xw=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7046.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366004)(136003)(39860400002)(376002)(346002)(396003)(230922051799003)(64100799003)(186009)(1800799012)(451199024)(6512007)(6506007)(1076003)(2616005)(6486002)(478600001)(52116002)(966005)(83380400001)(7416002)(2906002)(5660300002)(41300700001)(66946007)(66556008)(66476007)(316002)(4326008)(8936002)(8676002)(38100700002)(38350700005)(86362001)(36756003)(26005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?HNu8tw0h9bZtckpOi9b3c99rlPv5TSZ23+P2k06qJ15pj+MiS5S/V1dLUbxF?=
- =?us-ascii?Q?o/bPEHgwXxQ/F4/V1HBDS7Nrme+6dsbsJlGJ7QO2683Txd+MYH2CHymvprKD?=
- =?us-ascii?Q?/kE99eTLjN+JfKweVS7hZE5h66ZcZhnRhOAag2D6QBUdslCo+6joRgdI0y+2?=
- =?us-ascii?Q?KsgkqAY/4JNDvXSxVyrUife6a6yVXg568Et/fqHfcGWfT4mR3wt6pbwqWAe8?=
- =?us-ascii?Q?uibNsNGTwQ+sWfhXBF+gI2pYZyJ/3sUMSlQl2MJDdLGENGpNgNd5nzq6HiUf?=
- =?us-ascii?Q?2RjRge6p8x6Eb5ECfpvrRcnvNgmUX05WaQpOPdd1coyPTz/ggzaJvHQ4DUcY?=
- =?us-ascii?Q?/PWhRreFJb5H7E6JBYVErvgYIO5dFZTM20JGuybxKFV9Sxp+7lRfyxlahCqY?=
- =?us-ascii?Q?oFsqoFnsY8MMTJe+zwad4GYClQ+nc3CCNUOBnGMGMPijuCAEn1R8JEGBbGIM?=
- =?us-ascii?Q?Q7PFjPhQ1PKY/riFb5VVj89F9f1f6xBhZszza+pa1rbbGKJIUKt8MOTyrL+f?=
- =?us-ascii?Q?ztOdEZcy1Kw0DqQco5gIFopRRMu1PRZD4kLF0iEoaH5Xb2Ul0O4rOkQ0WsXE?=
- =?us-ascii?Q?ANWKAhKaOS+aH/gWz6wnWNlKoxSefNKjk4vL8vezLohnBTzsrvjHoKhG8SAr?=
- =?us-ascii?Q?ZGDCXOea9EAyNzs5qg2QeUSnpPrNpNLrHIFJ/zPUC8zLVu0s9tNFVjuy67TR?=
- =?us-ascii?Q?zjDArFmYnm4VUAK9iVpVLLQ3SPzvRD89HoNpIrB8g1YfAYwgEJRj+QM/Jvws?=
- =?us-ascii?Q?9w5My7IgpfNaC8829V1qHJNWxnabb/VHRAqcku0g2xs2U4NRbCNKpIM2Gcgp?=
- =?us-ascii?Q?y8mTWePOvEXwP0uHunthM6Q63J4zGmTzDwSFqeQ06H2SEh8+s8jPmKH58Bcm?=
- =?us-ascii?Q?y2CXkJ7bpLuSeIpet7zUy2J1VHZ3ZEUvUcL5ro31nHj8cx9yRMcsPFBRJbJ1?=
- =?us-ascii?Q?9+hvhgiHkxK+NjLex25AtXI+2pWdX2gqdv3HdyNDOydaAyg0Y4O+OV7CYpug?=
- =?us-ascii?Q?mGyqj4p4DXFEXwnbues4ssC9RGY+3VkOLG8u6u/UDFigJonP2yI41SV/j1lF?=
- =?us-ascii?Q?3MEGZroOGXV4pOODBjGqDKBcVqvnm0iJiVfwQTOZ9hAl8zNFZA5m9ZbXHNgX?=
- =?us-ascii?Q?t6pPfJf6tIb1pBrwsai/o6d4VcR+Ev7JAyLhaY3KRW81zPet8ld11k/Hi1Jj?=
- =?us-ascii?Q?Q3QWoBCNVVMPJ3uXA4P0ainseSSbNAHWTdn8yqDHGfEtnFvctBOb3MdYOvql?=
- =?us-ascii?Q?Ll9ggTbd5NnPrGc8jC+Hr8ixXDSPZBi/wpayjyZxNle5A3XSnU6tM7U/XuBn?=
- =?us-ascii?Q?DZIiK4w4hM6sagKFrMXI2JdbjG9FDn48nf5HFO5KL3v2rbbk7wKietGRC+EW?=
- =?us-ascii?Q?dwU/AA1Isx8wjg8ME/RM2bbzb5Wa5wxVoEoUT5kPVFvvkAmxnvYHpZcKQUvc?=
- =?us-ascii?Q?uNqCWOkw2kBGAzymLBlud2oTDfJhubXg97bcC8oxIBcm3ELJ0ruAjARptFYs?=
- =?us-ascii?Q?eQD8v0KEYZXtRzlCIBLVmBwPDb15BFkWzXyfLW2pG0Q8A3x7d6LSQlZYXS7L?=
- =?us-ascii?Q?VgmW0UXEkZK5wvNYsL4+h18yVTr8WJT+EpmMIemS?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 130cf83e-8372-4e41-9fad-08dbef072298
-X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7046.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Nov 2023 05:10:12.9275
+X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7046.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b29317dd-989b-44aa-4442-08dbef0a2f44
+X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Nov 2023 05:32:02.4330
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: dHo0h4fqvwmozg5qC3vr04Tpjch7TvsbPlNh7A05b+cumK4bhM+Csg4kwYjfQHA5P/xCc4D7OQ8UCE7gdGA6Ow==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB6961
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 9l78jUn8FsP4wc5nZzyOnQavRHunZz3DmH/7DYCZDRjz2i3eduDTp+AKeN/F3N6koQxC3qv7tNRmD48koSQMvw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBAPR04MB7302
 
-Some panel devices already depend on DRM device, like the panel in
-arch/arm/boot/dts/st/ste-ux500-samsung-skomer.dts, because DRM device is
-the ancestor of those panel devices.  device_link_add() would fail by
-returning a NULL pointer for those panel devices because of the existing
-dependency.  So, check the dependency by calling device_is_dependent()
-before adding or deleting device link between panel device and DRM device
-so that the link is managed only for independent panel devices.
+On Monday, November 27, 2023 5:32 AM, Stephen Rothwell <sfr@canb.auug.org.a=
+u> wrote:
+> Hi all,
+>=20
+> After merging the drm-misc-fixes tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+>=20
+> ERROR: modpost: "device_is_dependent"
+> [drivers/gpu/drm/drm_kms_helper.ko] undefined!
 
-Fixes: 887878014534 ("drm/bridge: panel: Fix device link for DRM_BRIDGE_ATTACH_NO_CONNECTOR")
-Fixes: 199cf07ebd2b ("drm/bridge: panel: Add a device link between drm device and panel device")
-Reported-by: Linus Walleij <linus.walleij@linaro.org>
-Closes: https://lore.kernel.org/lkml/CACRpkdaGzXD6HbiX7mVUNJAJtMEPG00Pp6+nJ1P0JrfJ-ArMvQ@mail.gmail.com/T/
-Tested-by: Linus Walleij <linus.walleij@linaro.org>
-Signed-off-by: Liu Ying <victor.liu@nxp.com>
----
-v2:
-* No change.
+I've sent a new patch series to address the build failure.
+It includes a new patch to export device_is_dependent and then
+adds the offending commit.
+https://lore.kernel.org/all/20231127051414.3783108-1-victor.liu@nxp.com/T/#=
+t
 
- drivers/gpu/drm/bridge/panel.c | 27 ++++++++++++++++++---------
- 1 file changed, 18 insertions(+), 9 deletions(-)
+Regards,
+Liu Ying
 
-diff --git a/drivers/gpu/drm/bridge/panel.c b/drivers/gpu/drm/bridge/panel.c
-index e48823a4f1ed..5e8980023407 100644
---- a/drivers/gpu/drm/bridge/panel.c
-+++ b/drivers/gpu/drm/bridge/panel.c
-@@ -23,6 +23,7 @@ struct panel_bridge {
- 	struct drm_panel *panel;
- 	struct device_link *link;
- 	u32 connector_type;
-+	bool is_independent;
- };
- 
- static inline struct panel_bridge *
-@@ -67,12 +68,17 @@ static int panel_bridge_attach(struct drm_bridge *bridge,
- 	struct drm_device *drm_dev = bridge->dev;
- 	int ret;
- 
--	panel_bridge->link = device_link_add(drm_dev->dev, panel->dev,
--					     DL_FLAG_STATELESS);
--	if (!panel_bridge->link) {
--		DRM_ERROR("Failed to add device link between %s and %s\n",
--			  dev_name(drm_dev->dev), dev_name(panel->dev));
--		return -EINVAL;
-+	panel_bridge->is_independent = !device_is_dependent(drm_dev->dev,
-+							    panel->dev);
-+
-+	if (panel_bridge->is_independent) {
-+		panel_bridge->link = device_link_add(drm_dev->dev, panel->dev,
-+						     DL_FLAG_STATELESS);
-+		if (!panel_bridge->link) {
-+			DRM_ERROR("Failed to add device link between %s and %s\n",
-+				  dev_name(drm_dev->dev), dev_name(panel->dev));
-+			return -EINVAL;
-+		}
- 	}
- 
- 	if (flags & DRM_BRIDGE_ATTACH_NO_CONNECTOR)
-@@ -80,7 +86,8 @@ static int panel_bridge_attach(struct drm_bridge *bridge,
- 
- 	if (!bridge->encoder) {
- 		DRM_ERROR("Missing encoder\n");
--		device_link_del(panel_bridge->link);
-+		if (panel_bridge->is_independent)
-+			device_link_del(panel_bridge->link);
- 		return -ENODEV;
- 	}
- 
-@@ -92,7 +99,8 @@ static int panel_bridge_attach(struct drm_bridge *bridge,
- 				 panel_bridge->connector_type);
- 	if (ret) {
- 		DRM_ERROR("Failed to initialize connector\n");
--		device_link_del(panel_bridge->link);
-+		if (panel_bridge->is_independent)
-+			device_link_del(panel_bridge->link);
- 		return ret;
- 	}
- 
-@@ -115,7 +123,8 @@ static void panel_bridge_detach(struct drm_bridge *bridge)
- 	struct panel_bridge *panel_bridge = drm_bridge_to_panel_bridge(bridge);
- 	struct drm_connector *connector = &panel_bridge->connector;
- 
--	device_link_del(panel_bridge->link);
-+	if (panel_bridge->is_independent)
-+		device_link_del(panel_bridge->link);
- 
- 	/*
- 	 * Cleanup the connector if we know it was initialized.
--- 
-2.37.1
-
+>=20
+> Caused by commit
+>=20
+>   39d5b6a64ace ("drm/bridge: panel: Check device dependency before
+> managing device link")
+>=20
+> I have used the drm-misc-fixes tree from next-20231124 for today.
+>=20
+> --
+> Cheers,
+> Stephen Rothwell
 

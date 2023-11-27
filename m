@@ -1,96 +1,100 @@
-Return-Path: <linux-next+bounces-94-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-95-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1EF777FAD2B
-	for <lists+linux-next@lfdr.de>; Mon, 27 Nov 2023 23:14:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id BF82E7FAD82
+	for <lists+linux-next@lfdr.de>; Mon, 27 Nov 2023 23:34:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 505D91C20BBF
-	for <lists+linux-next@lfdr.de>; Mon, 27 Nov 2023 22:14:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E6DD41C20BBF
+	for <lists+linux-next@lfdr.de>; Mon, 27 Nov 2023 22:34:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36043487BB;
-	Mon, 27 Nov 2023 22:14:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2998F48CEE;
+	Mon, 27 Nov 2023 22:34:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="kUyuZ8iP"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Tup13n66"
 X-Original-To: linux-next@vger.kernel.org
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E4241FD0;
-	Mon, 27 Nov 2023 14:13:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1701123233;
-	bh=tGnYwQcptrSZBJuctW7ZXlb98GcAKMT1kKOsCwBNdF0=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=kUyuZ8iPo4wMk4ZQONkXIKfnLpiJSdY5Sz30klGBELHgD6w//Cp9yhy5aZMhYhJwY
-	 8atQFqWCc+U/QZVnqCHtvAujP3E2a6gzXd5uvjfxbK908lXjYIsJjaR4qnuY/BObxs
-	 0kuRggBVGb8dgptRLaVFBWy/tAoqVvW5jDTTzxAthrX7g/mcQXgHb4AHuChLGb8jf3
-	 YtX0/x8T6TnloNBPfb6rSWm5d+KMlrE1ZbBoSeSXOUF2Um41hihGLyg1hRS5bZ33GI
-	 SdHPimo1bDxNXEVFXhWLzn2nUzNT0LuiRKGgejHHiuJtxohvThv9uahK6tM+4mWFAw
-	 VI2uHtEq+xNQg==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4SfKcJ4GFxz4x1p;
-	Tue, 28 Nov 2023 09:13:52 +1100 (AEDT)
-Date: Tue, 28 Nov 2023 09:13:51 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-Cc: "Aithal, Srikanth" <sraithal@amd.com>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warnings after merge of the kspp-gustavo tree
-Message-ID: <20231128091351.2bfb38dd@canb.auug.org.au>
-In-Reply-To: <813f3aa2-3449-7264-fa54-eaafd9981add@amd.com>
-References: <20231122144814.649823ac@canb.auug.org.au>
-	<813f3aa2-3449-7264-fa54-eaafd9981add@amd.com>
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18EA2194
+	for <linux-next@vger.kernel.org>; Mon, 27 Nov 2023 14:34:16 -0800 (PST)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-5cc69df1b9aso44911347b3.3
+        for <linux-next@vger.kernel.org>; Mon, 27 Nov 2023 14:34:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1701124455; x=1701729255; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3vGzcsQmOQggKxvH47Tmuwqz8+t2HhA4WbAiv2DPY8Y=;
+        b=Tup13n66O9ybNB8tN3x5gGXIu7nvBtq3nAYgj9xR8bjjQJCxmG9Q38Tr5xqhaAZHQZ
+         nVtCsPOVRd7TzceyX80w/H+riMTnXMk/PcE5Mgvvw8AXV1j6rwOvMjchP6sNvbc/OlaX
+         lRdxu+KEYgg/EAqUwezXN7lk9QyxnEobDdGVzlYpAJhcpOvM3BtxwdPcDI5Oua7EPnkf
+         j0GQWA7tXyLMfQKPukALS/6A9lUaRXfNHOPtt7fINpBBiGbX56XJvSzqCGuNler8pkzU
+         OlEZAEM6IxP3th9koqTkifCoG0bh/Jc+cjqonm+k2Mu8vCSl7wyx1DCtMqdhMeZklh6b
+         y5iw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701124455; x=1701729255;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3vGzcsQmOQggKxvH47Tmuwqz8+t2HhA4WbAiv2DPY8Y=;
+        b=aFCmdzOeq/+DVIz/+XAzZaokBRaJJJWzVHB7Y5Fj7BXzeBROca8b8/dheDvmzEo2oi
+         jvflOvpKfiBxeJkixk6r3PVVHckJCs3GKKpAW6PhBof/lan+HAsZRqxvm47G1eLyR7uI
+         ok9Sq8ZeuBqw60G3bSkdy5Z/RIiAjCrVFADeiGLjx/jpIug3gXLbAnr862nCmK2osALh
+         8LwgR9RQkk0fb+cDTiA377f9Lz2mTekF7KTb7XGNsnHLZeY/mYW2RT9/kjEhcHS0kshg
+         5mnfEuog3ydZo7Oht7Rhe3HSOE2Wh+UlZywNwpM4itdsl1laHT9kWpTYeCcfgPRoUagj
+         ngYA==
+X-Gm-Message-State: AOJu0Yx+6H0r4t3DooOaVCHX/eTeWbXUGQjLX708RMq7Y67OIHLvHXCH
+	ddXZYH2ga8cCQD+8VQNjsn+Lr3J7adzVFKVlINLyLA==
+X-Google-Smtp-Source: AGHT+IEYWPEuZyZ69QjYMb0/vc3v6nEVmOOn24SzLtwWBbFeT4Ij5VfP4VJMQXY3IVaHPqBsT/A9Cy+DjHMdZR5nfa4=
+X-Received: by 2002:a81:ac5b:0:b0:5d0:b0e7:929e with SMTP id
+ z27-20020a81ac5b000000b005d0b0e7929emr3605101ywj.42.1701124455238; Mon, 27
+ Nov 2023 14:34:15 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/TMd+Hj.aWPsUW8cxUbz38/0";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-
---Sig_/TMd+Hj.aWPsUW8cxUbz38/0
-Content-Type: text/plain; charset=US-ASCII
+References: <20231127051414.3783108-1-victor.liu@nxp.com> <20231127051414.3783108-2-victor.liu@nxp.com>
+ <v6rthnruba5xaxazsn4jsptn6catso5qwuyf5xxbf4ml25b6eo@snttjo7oqlod> <2023112739-willing-sighing-6bdd@gregkh>
+In-Reply-To: <2023112739-willing-sighing-6bdd@gregkh>
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Mon, 27 Nov 2023 23:34:00 +0100
+Message-ID: <CACRpkdbZvUMy7PzqnPSsM+SmMv5Z0mnVq_GU9_9HbBWXkg21zA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] driver core: Export device_is_dependent() to modules
+To: Greg KH <gregkh@linuxfoundation.org>, Liu Ying <victor.liu@nxp.com>
+Cc: Maxime Ripard <mripard@kernel.org>, rafael@kernel.org, linux-kernel@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, linux-next@vger.kernel.org, 
+	sfr@canb.auug.org.au, andrzej.hajda@intel.com, neil.armstrong@linaro.org, 
+	rfoss@kernel.org, Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se, 
+	jernej.skrabec@gmail.com, maarten.lankhorst@linux.intel.com, 
+	tzimmermann@suse.de, airlied@gmail.com, daniel@ffwll.ch, 
+	angelogioacchino.delregno@collabora.com, ulf.hansson@linaro.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Gustavo,
+On Mon, Nov 27, 2023 at 7:20=E2=80=AFPM Greg KH <gregkh@linuxfoundation.org=
+> wrote:
 
-On Wed, 22 Nov 2023 10:21:27 +0530 "Aithal, Srikanth" <sraithal@amd.com> wr=
-ote:
+[Maxime]
+> > So, a committer just applied this to drm-misc-fixes without your
+> > approval.
+
+That was me, mea culpa.
+I learned a lesson. Or two.
+
+> Wait, why exactly is this needed?  Nothing outside of the driver core
+> should be needing this function, it shouldn't be public at all (I missed
+> that before.)
 >
-> @Gustavo I see you have mentioned it as gcc issue. I was not hitting this=
- until yesterdays linux-next build. I am on latest gcc which RHEL 9.x provi=
-des,
-> gcc --version
-> gcc (GCC) 11.4.1 20230605 (Red Hat 11.4.1-2)
+> So please, revert it for now, let's figure out why DRM thinks this is
+> needed for it's devices, and yet no other bus/subsystem does.
 
-Given that gcc 11 is a provided compiler on RHEL 9, can you not add
--Wstringop-overflow for that compiler, please.
+I'm preparing a revert series back to the original patch causing
+the issue so we can clear the original bug out of the way, take
+a step back and fix this properly.
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/TMd+Hj.aWPsUW8cxUbz38/0
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmVlFJ8ACgkQAVBC80lX
-0GyAuwf/Z2vFUg77JRB4zuHgYjAOcnIpPcivXNVwtM9u18+pRUVpQCFyW1K5dL5Y
-xsASgAnbwyT7CqNwOd8unCHaPQIgknaYsJC2OrvW8vWEujlRg2rLymqEJPFop2F9
-Xpal2y9xj1/tQJcwuYUGdbz/hsBKRXOzIMsDDSVf9IwI7mv3UXVIn+XjOTmnB046
-+SSgAiw06DYIH8HUSXJNhZVoxiAh4PgWRHn8UHa0VFRQTfhqOiAHEEDLnZfk6/Zz
-eLfzSAuxJLr8WvJKfTQb4db0BaQ4MdbVYMpXbh0L3YhWtgOz9fczYw3KTn/3SbFt
-TadE2e8oq4zCPsIp5X2GWSrYyvVQhw==
-=OAdW
------END PGP SIGNATURE-----
-
---Sig_/TMd+Hj.aWPsUW8cxUbz38/0--
+Yours,
+Linus Walleij
 

@@ -1,165 +1,172 @@
-Return-Path: <linux-next+bounces-117-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-118-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 01CB97FD38B
-	for <lists+linux-next@lfdr.de>; Wed, 29 Nov 2023 11:05:44 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 54BDB7FD3A4
+	for <lists+linux-next@lfdr.de>; Wed, 29 Nov 2023 11:12:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EE989B216A7
-	for <lists+linux-next@lfdr.de>; Wed, 29 Nov 2023 10:05:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0EAD9282AF3
+	for <lists+linux-next@lfdr.de>; Wed, 29 Nov 2023 10:12:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFBA619BA1;
-	Wed, 29 Nov 2023 10:05:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F63018E1D;
+	Wed, 29 Nov 2023 10:12:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dPw/5Qns"
+	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="gApYvNgx"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36D861FE5;
-	Wed, 29 Nov 2023 02:05:28 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1d011cdf562so6730985ad.2;
-        Wed, 29 Nov 2023 02:05:28 -0800 (PST)
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C38BE1
+	for <linux-next@vger.kernel.org>; Wed, 29 Nov 2023 02:12:02 -0800 (PST)
+Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-6cb4d366248so5571485b3a.0
+        for <linux-next@vger.kernel.org>; Wed, 29 Nov 2023 02:12:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1701252328; x=1701857128; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=MpQndnRiODx+tos8fdE4dhL+06RTmhorpUhO5hT0DMc=;
-        b=dPw/5QnshuN0bjj9rRxZozm2OjLoTv3+NhOC3Y6n69Li/cGVn85hxrdeq9OM9qsxvE
-         EaGdtdr+4R+9l6hcYFeDwo9/VKsxlGTCKoCb3tpMGeZbiU5Ebf3PkvibHHQj/A3tQXdW
-         6ZANj429WFzckS+yyOQPIaVtN7dCaGKkXQ5R5OYkN+a6OcTOT645WowvsvDKQjrCyKXw
-         4UamErNBaBPU1k2Fq2xIIFzL/IcuJxJDsKdZQjp6FEVApD7BUlg9xLjn2ZGT109/hy9J
-         nFd1JeK/mChUPI2wlsuvzvMxfRue80texMI/XFbM9CVB67v/cQMe+auUA/ix1ahBtR02
-         j0bA==
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1701252721; x=1701857521; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=DIHbJLg+hLV80en7o4KDChDloQVe0LWX8OBKY7pewPg=;
+        b=gApYvNgxQnikVfPn0jKp7z4HLbIvKGI4BUoamNP0tjHtqgXf5vlus9EhVojzGUQU7X
+         MzHzbwigfk80cvNf4+1w3HQeIBo1W17hthunR6xGVcqcNhE03OIhDEf05y1PQqbjSNj0
+         QTBzvQIGCA5Pa3COGGgA12rOQ62OwARX3rqiQDTSAnsydHAkRjNB/sfLjAFC1yTyuN17
+         MHANOnVnnKpFcq36EHQNkuDXP+STOwTL/PzSOxMamZuDogm0RiAlittCfV1Y27raENIs
+         jeIpiuq5AYpLz0Y5O58lpGermAeUoTt3FSvjkFnJdA9LORiJac8ZM8ec9mveZ/Rwjo+V
+         fyaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701252328; x=1701857128;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MpQndnRiODx+tos8fdE4dhL+06RTmhorpUhO5hT0DMc=;
-        b=Eyw4K0ZdPEbX6dRD8Uhr+OYvMP+xEnSM7Lkq0gZWEDRe+t0/oeh7MzSoDZWS2jgEqU
-         poIkOCXOJwF3pCCnppP2G6Wy5UzffGAoDNUfIb6NVoUoW8Q/fEm3PCoUaGfhlCgBuzg2
-         Pn7YNTf0siYJFWWY5Cp1rE3ruP0IHbwB6ua52TbLTqxjzh1ybzUGy79eT6YGbhflWrd3
-         rfr8gOx8pwToJXBDTROM1G4ISOCqqc0zdNCSbCko5fziwsqPj3obefhxd4y0wxhMEExG
-         ydbzaf4TtKBvX9jcMI3O0knSsdlhHmKlszVkBCsFOnwvuaUVEgn10a1vmaf8+7/OK7AA
-         6pAA==
-X-Gm-Message-State: AOJu0Yz5Tnam9oXeT8OfVfeK7/BL1uh0EZo8HNbUm4jW5tYUAnwbP8HG
-	4mdBJyy4EtDuFf3QrsTxi4U=
-X-Google-Smtp-Source: AGHT+IFHz1EOBr29DpBEQyHQO01oqfVMNvqkP1ezQq262jWCjWECYCTqM2o+9jGXSDx+XO+Xey/PSw==
-X-Received: by 2002:a17:902:f687:b0:1d0:e37:8c14 with SMTP id l7-20020a170902f68700b001d00e378c14mr3871818plg.34.1701252328212;
-        Wed, 29 Nov 2023 02:05:28 -0800 (PST)
-Received: from archie.me ([103.131.18.64])
-        by smtp.gmail.com with ESMTPSA id t8-20020a170902bc4800b001cc131c65besm11862520plz.168.2023.11.29.02.05.26
+        d=1e100.net; s=20230601; t=1701252721; x=1701857521;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DIHbJLg+hLV80en7o4KDChDloQVe0LWX8OBKY7pewPg=;
+        b=w06U1m+3rvgpSnXbX/9spqZpPmISFx2KSCsCLIkA8HR8TBwy4X0vb9wxp0YuGfmo3/
+         0Cy78rZphiSeJAE7zGdyxlNYtau6zRQzDByv22AlIQvJcMAmOG7wDD5xD211rnLQ4SFu
+         B2RHVa2HDwget40fnlv7ynCiLjkdiSYt0SBc44RfsrnvZMCcZRY48nNpRKSfHbx66mBB
+         khSLcS4MELtiI9zKnDeyfO+oCcngltPt0J7jCVA6/DZXHURPA3NIT06iUsGM3cRCt3Nx
+         r6fyojvWbh/lU2SuprXP2eOBuqZZH10plRBh6VtgV0lnnbZuP3o+gDKVE30bIidOkVoZ
+         1TqQ==
+X-Gm-Message-State: AOJu0Yw8xPpqhH3EoOmuHl+lrT3ZkSmios/uXWaB/Af4JLP2hlABhz4v
+	2acSqA+LUgAYMw9SSFQ3leLH24b0KASNeN6n/Uw=
+X-Google-Smtp-Source: AGHT+IEfv2nBy0moaBc0X88pBM3/Wq35QntoTVxAQGXEahiKANWu4YTPlgu74pQ4hkE8BpsOk8+i0g==
+X-Received: by 2002:a05:6a21:a5a8:b0:18c:3fe8:d8cc with SMTP id gd40-20020a056a21a5a800b0018c3fe8d8ccmr17195920pzc.28.1701252721265;
+        Wed, 29 Nov 2023 02:12:01 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id y10-20020a17090aca8a00b002851c9f7a77sm973432pjt.38.2023.11.29.02.12.00
+        for <linux-next@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Nov 2023 02:05:27 -0800 (PST)
-Received: by archie.me (Postfix, from userid 1000)
-	id C6DF71140D81A; Wed, 29 Nov 2023 16:58:36 +0700 (WIB)
-Date: Wed, 29 Nov 2023 16:58:36 +0700
-From: Bagas Sanjaya <bagasdotme@gmail.com>
-To: Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	lkft-triage@lists.linaro.org,
-	Linux Regressions <regressions@lists.linux.dev>,
-	Linux btrfs <linux-btrfs@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>,
-	Josef Bacik <josef@toxicpanda.com>, David Sterba <dsterba@suse.com>,
-	Chris Mason <clm@fb.com>, Anders Roxell <anders.roxell@linaro.org>,
-	Arnd Bergmann <arnd@arndb.de>
-Subject: Re: btrfs: super.c:416:25: error: 'ret' undeclared (first use in
- this function); did you mean 'net'?
-Message-ID: <ZWcLTJB8wrLUwuVf@archie.me>
-References: <CA+G9fYvbCBUCkt-NdJ7HCETCFrzMWGnjnRBjCsw39Z_aUOaTDQ@mail.gmail.com>
- <ZWbjXV85zDXen_YH@archie.me>
- <CA+G9fYtByCCzrbM-a4du2b5rJVn_UaCz1HaMZMcBAcfyUBXPSA@mail.gmail.com>
+        Wed, 29 Nov 2023 02:12:00 -0800 (PST)
+Message-ID: <65670e70.170a0220.c0136.1fba@mx.google.com>
+Date: Wed, 29 Nov 2023 02:12:00 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="8g5cYfr1bA2m8oZD"
-Content-Disposition: inline
-In-Reply-To: <CA+G9fYtByCCzrbM-a4du2b5rJVn_UaCz1HaMZMcBAcfyUBXPSA@mail.gmail.com>
-
-
---8g5cYfr1bA2m8oZD
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: build
+X-Kernelci-Branch: pending-fixes
+X-Kernelci-Tree: next
+X-Kernelci-Kernel: v6.7-rc3-265-g1618cb8f57417
+Subject: next/pending-fixes build: 8 builds: 0 failed, 8 passed,
+ 4 warnings (v6.7-rc3-265-g1618cb8f57417)
+To: linux-next@vger.kernel.org
+From: "kernelci.org bot" <bot@kernelci.org>
 
-On Wed, Nov 29, 2023 at 02:29:42PM +0530, Naresh Kamboju wrote:
-> On Wed, 29 Nov 2023 at 12:38, Bagas Sanjaya <bagasdotme@gmail.com> wrote:
-> >
-> > On Tue, Nov 28, 2023 at 05:55:51PM +0530, Naresh Kamboju wrote:
-> > > Following x86 and i386 build regressions noticed on Linux next-202311=
-28 tag.
-> > >
-> > > Build log:
-> > > -----------
-> > > fs/btrfs/super.c: In function 'btrfs_parse_param':
-> > > fs/btrfs/super.c:416:25: error: 'ret' undeclared (first use in this
-> > > function); did you mean 'net'?
-> > >   416 |                         ret =3D -EINVAL;
-> > >       |                         ^~~
-> > >       |                         net
-> > > fs/btrfs/super.c:416:25: note: each undeclared identifier is reported
-> > > only once for each function it appears in
-> > > fs/btrfs/super.c:417:25: error: label 'out' used but not defined
-> > >   417 |                         goto out;
-> > >       |                         ^~~~
-> > > make[5]: *** [scripts/Makefile.build:243: fs/btrfs/super.o] Error 1
-> > >
-> > > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> > >
-> > > Links:
-> > >  - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20=
-231128/testrun/21349057/suite/build/test/gcc-13-lkftconfig-kselftest/log
-> > >
-> > >  - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20=
-231128/testrun/21349057/suite/build/test/gcc-13-lkftconfig-kselftest/detail=
-s/
-> > >  - https://storage.tuxsuite.com/public/linaro/lkft/builds/2Ymoxor9n54=
-ID51BFjRBS06YQ3U/
-> > > - https://storage.tuxsuite.com/public/linaro/lkft/builds/2Ymoxor9n54I=
-D51BFjRBS06YQ3U/config
-> > >
-> >
-> > Is it W=3D1 build? I can't reproduce on btrfs tree with
-> > CONFIG_BTRFS_FS_POSIX_ACL=3Dy and without W=3D1.
->=20
-> My config did not set this
-> # CONFIG_BTRFS_FS_POSIX_ACL is not set
+next/pending-fixes build: 8 builds: 0 failed, 8 passed, 4 warnings (v6.7-rc=
+3-265-g1618cb8f57417)
 
-OK.
+Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
+rnel/v6.7-rc3-265-g1618cb8f57417/
 
->=20
-> Do you think the system should auto select the above config as default wh=
-en
-> following config gets enabled ?
->=20
-> CONFIG_BTRFS_FS=3Dm
-> (or)
-> CONFIG_BTRFS_FS=3Dy
->=20
+Tree: next
+Branch: pending-fixes
+Git Describe: v6.7-rc3-265-g1618cb8f57417
+Git Commit: 1618cb8f574175a196b0e8926c62efc45760e856
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Built: 8 unique architectures
 
-Nope, leave it as is.
+Warnings Detected:
 
-Thanks.
+arc:
 
---=20
-An old man doll... just what I always wanted! - Clara
+arm64:
 
---8g5cYfr1bA2m8oZD
-Content-Type: application/pgp-signature; name="signature.asc"
+arm:
 
------BEGIN PGP SIGNATURE-----
+i386:
 
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZWcLQQAKCRD2uYlJVVFO
-oz05AQDW4tcs+qseWAL5BBtuPRoexDBDprBofv0Ia95ssWcdqgD/Y3FQpjWSjs8q
-d7X5Lsdki4Ydbwkio5K/IdQJQ6O8qAE=
-=xISu
------END PGP SIGNATURE-----
+mips:
 
---8g5cYfr1bA2m8oZD--
+riscv:
+
+sparc:
+    sparc64_defconfig (gcc-10): 4 warnings
+
+x86_64:
+
+
+Warnings summary:
+
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---
+For more info write to <info@kernelci.org>
 

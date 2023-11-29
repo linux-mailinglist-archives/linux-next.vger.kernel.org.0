@@ -1,123 +1,115 @@
-Return-Path: <linux-next+bounces-115-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-116-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 86C007FD187
-	for <lists+linux-next@lfdr.de>; Wed, 29 Nov 2023 10:00:09 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 755C87FD277
+	for <lists+linux-next@lfdr.de>; Wed, 29 Nov 2023 10:26:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A58EEB217F1
-	for <lists+linux-next@lfdr.de>; Wed, 29 Nov 2023 09:00:06 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B8791B20E33
+	for <lists+linux-next@lfdr.de>; Wed, 29 Nov 2023 09:26:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 307EE12B70;
-	Wed, 29 Nov 2023 09:00:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1F5B1401E;
+	Wed, 29 Nov 2023 09:26:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="PlpJQXgC"
+	dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b="ahXwRa31";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="FLv6B1yC"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-ua1-x936.google.com (mail-ua1-x936.google.com [IPv6:2607:f8b0:4864:20::936])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC33DD50
-	for <linux-next@vger.kernel.org>; Wed, 29 Nov 2023 00:59:54 -0800 (PST)
-Received: by mail-ua1-x936.google.com with SMTP id a1e0cc1a2514c-7c51d5e6184so297393241.2
-        for <linux-next@vger.kernel.org>; Wed, 29 Nov 2023 00:59:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1701248394; x=1701853194; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=XBUUYQft2seUnlUM4OmCBERBIGRIw1M9PaGf8BE6/Yo=;
-        b=PlpJQXgCUWQD7ptz1svyvZ3i/H3+PiIBCwvm2Zft6MQeQvcApLYcP/stVhOI05rC/f
-         3rTI/YUG22fXtmbUDH9xz+UuCeL6y/gRZrvSAL0V7yuv4hOPJFFyUv/4AOngYZ47FoyZ
-         FwBzwkOzGHz9KYO+lviSpkbYjKz7sWbgkvj3soXovmq59ieo5TesO45eHOQAyReKB1ZR
-         /quSCDCOqtElC20yNgf19wXDW7MC3Wq9xvL25/DERlWisi0jit9C5AHzl2pkEk6OJRK6
-         p0cWD05HRkGfS7hMNf0LsPQPM+poFK6hM0rhwZtHouwrxmSxwPKGVbKSTlWiSG4N2sVj
-         d8hQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701248394; x=1701853194;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XBUUYQft2seUnlUM4OmCBERBIGRIw1M9PaGf8BE6/Yo=;
-        b=sfer6s7YgaJIuAba9xLTb2JeKzK5r7jTEFF/W1n2DdGl6BO7RcXlq1QRB0slrqQZfx
-         WfrOLArJROeKxJ62Pepi4fsuRUCDUZowuR+1MGWiuMFvYLj4fiAezU4lq+4u87gpVqcY
-         XGu4lojzpkeJfJRgeqa6L4EoSapf2yKbYcGUijIY0oCR7nQFbHApFOCcWbUSYJ9WioZh
-         uBC5Rhb5NOvZzREFDHaA0AC1vAZEzYCL0WnQbWWjwCmC7nk1OVO6HmkSND02IOFXPWaf
-         NZp6vvVPuwNjE8iprKdLR3F0oKkrwDv9h1Rq8sz/RQLxr1kw7Fnf22fBpB7AOfbbehFN
-         AfVw==
-X-Gm-Message-State: AOJu0Yz/FzdA+1rgt5n7KzyUNJUSTx9dki/27SiI7zc5i9mCY9S6ycKh
-	BConLIUDLH75mvqXoEG9EXjFrCYCUmgqZKB6E1uABSvKxb1p3rZHCjM=
-X-Google-Smtp-Source: AGHT+IEAiYKsp8cH+2h3D9JtZpHKKIWvy5a5Q1QY0jUFvGMVWmqKhCUBJBpd5MooxAaQp9G4F38UYjLP10jlxrC+JuY=
-X-Received: by 2002:a05:6102:415:b0:464:3c0a:fdd4 with SMTP id
- d21-20020a056102041500b004643c0afdd4mr4191842vsq.2.1701248394003; Wed, 29 Nov
- 2023 00:59:54 -0800 (PST)
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77194B9;
+	Wed, 29 Nov 2023 01:26:43 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+	by mailout.nyi.internal (Postfix) with ESMTP id 199485C0193;
+	Wed, 29 Nov 2023 04:26:41 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute6.internal (MEProxy); Wed, 29 Nov 2023 04:26:41 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:sender:subject:subject:to:to; s=fm1; t=
+	1701250001; x=1701336401; bh=UZVLXVj/9RM66jjJ3eRMLi+UGrfZP/eo/Zt
+	B3Eh+csY=; b=ahXwRa31VVIzIv7TGZMjoPdq9ofW5j0qtOT/iNwP5gKPGwIVNzK
+	FAd8mZnDZE08x6HPEiDM/qxb3bQFAjipxxk+Qr1GJ0oHYfO/LUOBLHuzYJL/DfzM
+	JmJEX82jkbs6ZkX3IaZv1fqxrRMmlKrS7FzNkV0cC5aTTO8QW5IdNDP+oB4IcITd
+	JftSk5dzc9twc+p+1vdOWivFJ2iiXZ+RbiWfATMVhqvGjM0Wx7godtRMypz84XV8
+	KSARqd8iMfL5UYRgaEpycyqAtieR6q7cfVMriIbMGAP2p26AYgu+iKcTIKEZN+6S
+	qK1s9cNkTqw81TY+DQhUa4xEL1RBjaGoKug==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:sender:subject:subject:to:to:x-me-proxy
+	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+	1701250001; x=1701336401; bh=UZVLXVj/9RM66jjJ3eRMLi+UGrfZP/eo/Zt
+	B3Eh+csY=; b=FLv6B1yC56io4Ntf3Oo67RjJuFe1aoL7Ihw1ItOs2iLUhb+Q5gI
+	LxCwICkGVxVdfXwI9Dide0LNzxY/pTxmxesC6t72fQCzn6Kqr+l3B1S+4WK3Ah+M
+	cWs0qYRH/KlXH5kIHfaNhvCdYaJklCz0FA0AMMoJb344yLHIbr/46+LkwX2BJlrJ
+	Dmb7cgy0iMMfUwLvvhu+iFF5cLZcWiGCjO8l0n1Ywm2cXeeSUNv23/X60mUFpYoY
+	PfPVj3bkvPArhtagqn0kmrnxl1tbS/DFZXZkTJCxXRQKTURnLGPuN4EPyPzlek0u
+	4EbsxH/dfu1pQmbaNkfGgX/0GnVmkkXOuIg==
+X-ME-Sender: <xms:0ANnZXIqJ9HG_BNpMBXVYgnKb6KRkNLTv2dkYfj0e5HBYEtZeTvVfA>
+    <xme:0ANnZbKa3YLYuFAeOcE6QUDiNTALfeBj2_3pbUi8kLg-MmJzeohenvsfY-khGnRkY
+    lZm06v-MU1fqA>
+X-ME-Received: <xmr:0ANnZfshz8BxS9kKJ2xn4G5BOD6py01w4EzJfRBs-tR5IocCSggUBc7wKD4>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudeihedgtddvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggugfgjsehtkeertddttdejnecuhfhrohhmpefirhgv
+    ghcumffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpefgke
+    ffieefieevkeelteejvdetvddtledugfdvhfetjeejieduledtfefffedvieenucevlhhu
+    shhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhroh
+    grhhdrtghomh
+X-ME-Proxy: <xmx:0ANnZQZmAHOzMV6hVU7pL5s_ujbL_l-kOniHq8UE7KyiG416iN42Mg>
+    <xmx:0ANnZeaYoND-MfOeMXlCTF5VocpDj3TWuS2qb8cSqUC64_BnxTba_Q>
+    <xmx:0ANnZUBargby5kHdPPA0zi8k8XGxypFoBeyp7kNOeTaBEbcuZ-muXg>
+    <xmx:0QNnZbQwl1I7tvvUjvpbJdA9qg37rVyxeHjvLthxQYNUBCIDYlxWsg>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 29 Nov 2023 04:26:39 -0500 (EST)
+Date: Wed, 29 Nov 2023 09:26:37 +0000
+From: Greg KH <greg@kroah.com>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Arnd Bergmann <arnd@arndb.de>, Michael Ellerman <mpe@ellerman.id.au>,
+	PowerPC <linuxppc-dev@lists.ozlabs.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: duplicate patches in the char-misc tree
+Message-ID: <2023112919-multiple-trickily-9bd2@gregkh>
+References: <20231129122405.27a5e54a@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CA+G9fYvbCBUCkt-NdJ7HCETCFrzMWGnjnRBjCsw39Z_aUOaTDQ@mail.gmail.com>
- <ZWbjXV85zDXen_YH@archie.me>
-In-Reply-To: <ZWbjXV85zDXen_YH@archie.me>
-From: Naresh Kamboju <naresh.kamboju@linaro.org>
-Date: Wed, 29 Nov 2023 14:29:42 +0530
-Message-ID: <CA+G9fYtByCCzrbM-a4du2b5rJVn_UaCz1HaMZMcBAcfyUBXPSA@mail.gmail.com>
-Subject: Re: btrfs: super.c:416:25: error: 'ret' undeclared (first use in this
- function); did you mean 'net'?
-To: Bagas Sanjaya <bagasdotme@gmail.com>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, lkft-triage@lists.linaro.org, 
-	Linux Regressions <regressions@lists.linux.dev>, Linux btrfs <linux-btrfs@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>, Josef Bacik <josef@toxicpanda.com>, 
-	David Sterba <dsterba@suse.com>, Chris Mason <clm@fb.com>, Anders Roxell <anders.roxell@linaro.org>, 
-	Arnd Bergmann <arnd@arndb.de>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20231129122405.27a5e54a@canb.auug.org.au>
 
-On Wed, 29 Nov 2023 at 12:38, Bagas Sanjaya <bagasdotme@gmail.com> wrote:
->
-> On Tue, Nov 28, 2023 at 05:55:51PM +0530, Naresh Kamboju wrote:
-> > Following x86 and i386 build regressions noticed on Linux next-20231128 tag.
-> >
-> > Build log:
-> > -----------
-> > fs/btrfs/super.c: In function 'btrfs_parse_param':
-> > fs/btrfs/super.c:416:25: error: 'ret' undeclared (first use in this
-> > function); did you mean 'net'?
-> >   416 |                         ret = -EINVAL;
-> >       |                         ^~~
-> >       |                         net
-> > fs/btrfs/super.c:416:25: note: each undeclared identifier is reported
-> > only once for each function it appears in
-> > fs/btrfs/super.c:417:25: error: label 'out' used but not defined
-> >   417 |                         goto out;
-> >       |                         ^~~~
-> > make[5]: *** [scripts/Makefile.build:243: fs/btrfs/super.o] Error 1
-> >
-> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> >
-> > Links:
-> >  - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20231128/testrun/21349057/suite/build/test/gcc-13-lkftconfig-kselftest/log
-> >
-> >  - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20231128/testrun/21349057/suite/build/test/gcc-13-lkftconfig-kselftest/details/
-> >  - https://storage.tuxsuite.com/public/linaro/lkft/builds/2Ymoxor9n54ID51BFjRBS06YQ3U/
-> > - https://storage.tuxsuite.com/public/linaro/lkft/builds/2Ymoxor9n54ID51BFjRBS06YQ3U/config
-> >
->
-> Is it W=1 build? I can't reproduce on btrfs tree with
-> CONFIG_BTRFS_FS_POSIX_ACL=y and without W=1.
+On Wed, Nov 29, 2023 at 12:24:05PM +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> The following commits are also in the powerpc tree as different commits
+> (but the same patches):
+> 
+>   bc1183a63057 ("misc: ocxl: main: Remove unnecessary ‘0’ values from rc")
+>   29eb0dc7bd1e ("misc: ocxl: link: Remove unnecessary (void*) conversions")
+>   0e425d703c30 ("misc: ocxl: afu_irq: Remove unnecessary (void*) conversions")
+>   62df29a542f9 ("misc: ocxl: context: Remove unnecessary (void*) conversions")
+> 
+> These are commits
+> 
+>   29685ea5754f ("misc: ocxl: main: Remove unnecessary ‘0’ values from rc")
+>   220f3ced8e42 ("misc: ocxl: link: Remove unnecessary (void*) conversions")
+>   84ba5d3675e2 ("misc: ocxl: afu_irq: Remove unnecessary (void*) conversions")
+>   82d30723d58f ("misc: ocxl: context: Remove unnecessary (void*) conversions")
+> 
+> in the powerpc tree.
 
-My config did not set this
-# CONFIG_BTRFS_FS_POSIX_ACL is not set
+Thanks, that should be fine, I didn't realize these ended up in the
+powerpc tree already.
 
-Do you think the system should auto select the above config as default when
-following config gets enabled ?
-
-CONFIG_BTRFS_FS=m
-(or)
-CONFIG_BTRFS_FS=y
-
-- Naresh
-
-> Thanks.
->
-> --
-> An old man doll... just what I always wanted! - Clara
+greg k-h
 

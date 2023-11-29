@@ -1,201 +1,117 @@
-Return-Path: <linux-next+bounces-125-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-126-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E46B87FD863
-	for <lists+linux-next@lfdr.de>; Wed, 29 Nov 2023 14:41:16 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A43B67FD9B3
+	for <lists+linux-next@lfdr.de>; Wed, 29 Nov 2023 15:39:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 21AB01C209A9
-	for <lists+linux-next@lfdr.de>; Wed, 29 Nov 2023 13:41:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 513E928331F
+	for <lists+linux-next@lfdr.de>; Wed, 29 Nov 2023 14:39:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63E4320310;
-	Wed, 29 Nov 2023 13:41:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66B8232C96;
+	Wed, 29 Nov 2023 14:38:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="1nMOjW+3"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="tv9+mf4h"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 355A0DD
-	for <linux-next@vger.kernel.org>; Wed, 29 Nov 2023 05:41:10 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1cfd04a6e49so7208635ad.0
-        for <linux-next@vger.kernel.org>; Wed, 29 Nov 2023 05:41:10 -0800 (PST)
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3FD41735
+	for <linux-next@vger.kernel.org>; Wed, 29 Nov 2023 06:38:48 -0800 (PST)
+Received: by mail-yb1-xb31.google.com with SMTP id 3f1490d57ef6-db527023652so551390276.3
+        for <linux-next@vger.kernel.org>; Wed, 29 Nov 2023 06:38:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1701265269; x=1701870069; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=m24Zx3HSoR8X/m4MD/IEzh+XHQBu5zld2cKy9MQbcKI=;
-        b=1nMOjW+3k3yuHSAh3lDBWSTn8JsJJW0CzD+Y8/1KQypnHAQ7PEX0r726EC8oHoETOI
-         WT7wuke9vGgHRMuM/Z0DXwSE6jk6ltMU6RAyrEy094nXvS3pFlwVwgl5QakL/vOt8CVg
-         NoHBSG9kmwcAlBvedRrQDWZqqq8r6dzOCpD+qqLZ+g7JTbqbnWsO5VhyqHSMvFbhLXig
-         XW1sSTnOOdYFv2iSdu91f0g3JisKTY09TbgrHO+CCwuxmSGWbD6nvnOmhJIc89sKUvMR
-         4nQnNTuhwTbn6+QZ8faVgeNOHHrhgctunmLljwOqstobvCaevsbvNKR0XqCPQ3zyZmok
-         JrCQ==
+        d=linaro.org; s=google; t=1701268727; x=1701873527; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VitFHUDO7lpbwwEpDiSX9K6mtclW0i9+NRl7WDJQuXM=;
+        b=tv9+mf4hYoDk2xZVeAIJdYreaEHWjLUGLhDOAO/tn2VtPl6lwH9TdhaWK5+dWBHTU4
+         Plp9EcaGrWtxPw54QBz0jC2vfcArJEWLQzq7Q3WRpwE5oJqfhrveKQC3fZl/Zam3RH+p
+         eEcgM6MfrA5GQdmWd/0Yjm3fF0Y3GZmJVJLGK+v9ToKXjFM3h5XB77bIAbFSoUNgFsk/
+         h756/FEFdU26kTXFBRKjbRhSf1awhRuxTIwOQ/aiYHa1c2OIE9QExxyVqcm1eBjdhHL0
+         edgecgfP2kut6lfEGYrXfNlmPUOitk2bY2MjtDwD589wjrkIGSiz7i1mNGgMA9CMG0So
+         P+sQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701265269; x=1701870069;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=m24Zx3HSoR8X/m4MD/IEzh+XHQBu5zld2cKy9MQbcKI=;
-        b=tgysh3SfTL4ECyQMp5tnZSrpjszmVzucqB50LxWqqTaVWWlUd9rUSFVz5IhpwEP+oa
-         9FZFXqXs3+68ovJehmv8ieijW6nsYY5CX0if0MPyxRzRzl91cj8btU0nPbjymRD/ja9d
-         pZcCLYCmOu9k586U4FhUHr7DG/+fgXjeP6Cj8gdvLWRLcFQr+cXmGD8vO/Tg/8VV5qAg
-         LipBVDk8SQ/HWF5F59Qzt4zYLsPH1D2RfBfJmkX46LTEkI3xfx4TzN8/HSZMSt8TZmQu
-         X255wiYpwpUtxFJ1vv8g+zFNLRTpDl0sBMLDCNazdABRSQoXWlKsr13UrjRFUE0rLUlz
-         AC9Q==
-X-Gm-Message-State: AOJu0YzIM/7JyBfttaQrGIrUGNekuAN+LuHr9Ec6JDH/ToK2Dcrw8eX8
-	nMll9XHVHrSld+M6jFZ6W6EonQr1j6WQQE/shEc=
-X-Google-Smtp-Source: AGHT+IHZ7Hdx8Mb4rONXCaUWVE1vl/C4zI9pCNIcXxwVNxjndLCBEQoCNtQaiDbHT2DKHhYtMBsg1A==
-X-Received: by 2002:a17:902:c40d:b0:1cf:59ad:9637 with SMTP id k13-20020a170902c40d00b001cf59ad9637mr33131901plk.22.1701265269262;
-        Wed, 29 Nov 2023 05:41:09 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id w2-20020a63fb42000000b005b6c1972c99sm11271666pgj.7.2023.11.29.05.41.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Nov 2023 05:41:08 -0800 (PST)
-Message-ID: <65673f74.630a0220.d3eaf.bcf8@mx.google.com>
-Date: Wed, 29 Nov 2023 05:41:08 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        d=1e100.net; s=20230601; t=1701268727; x=1701873527;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VitFHUDO7lpbwwEpDiSX9K6mtclW0i9+NRl7WDJQuXM=;
+        b=SPOGwGtGqyVGtJ+vU+ewiNDYgQAcpHJ08iEFwGZhzu4clQ/yyGExvT+Jg0KqILCdhq
+         CwkbWmQc+amVsOHlUGlw7+GOkIqReNagko+8sP1j8C+DeAn2sJJvs4UFcmREL1xx2Uw/
+         kPMmARlvNWmHMpn14PZNeHNV/3uhsKey3pJpwYbIZPoennrRlla0JnheGGy/Kl/kYtZm
+         u5kKMLo9xhPQE5EHIUGE+Vn5zY8SCfaCHF6dLIniVVS4GXDJ6iraETwL0wtGJDW+CjFh
+         ShFW2ihs+JyrmAZuijtGw9Ir2DFIsBsmGXrJ+IICfAdw5da4O9C72OWtFvWM2GIU1+iz
+         xt0g==
+X-Gm-Message-State: AOJu0YyhGtQ9Zt6pJMlZCdefnI+w32OfthC1xey1kZ7Y06fCemirgLf4
+	Wkl/63w+tZe279mhDRZqNZA3TSHM1d7evPMmwQH75+489S3hFtKd
+X-Google-Smtp-Source: AGHT+IFn9m5/2pvXGrsuZL1JkkJ7wo07TKiyWdKmwMqkGOMa7/9+521wEHRtk/MN9ZsmYdiUXcwuztNOZ8LxPBTuDFQ=
+X-Received: by 2002:a25:fb0b:0:b0:d86:5a8d:6e34 with SMTP id
+ j11-20020a25fb0b000000b00d865a8d6e34mr17592236ybe.29.1701268726832; Wed, 29
+ Nov 2023 06:38:46 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20231127051414.3783108-1-victor.liu@nxp.com> <CACRpkdZAtxh5muhbPKvmUQGtQogs3UhGxNZqnSGWoWQNUL7=9g@mail.gmail.com>
+ <k65hxlckssjd46nsrlly6vjrr5nnkrakouzw5pmxgbf6ui3mdl@5ny7j7blkwyj>
+ <CACRpkdbKwycpjuhMfnriqMUcbmwCTb3vJzgzCF7+ARax54q7WQ@mail.gmail.com> <d33ovl3ox2u74jbik2bcraeqiqplqoc57p4quapdyydqlyzrf5@vlhszortxfio>
+In-Reply-To: <d33ovl3ox2u74jbik2bcraeqiqplqoc57p4quapdyydqlyzrf5@vlhszortxfio>
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Wed, 29 Nov 2023 15:38:35 +0100
+Message-ID: <CACRpkdb1DmH2NJ2nBRtGaB+9Tmbn1tzXafDSpZVxjCFnexz=3g@mail.gmail.com>
+Subject: Re: [PATCH v2 0/2] drm/bridge: panel: Check device dependency before
+ managing device link
+To: Maxime Ripard <mripard@kernel.org>
+Cc: daniel@ffwll.ch, Liu Ying <victor.liu@nxp.com>, linux-kernel@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, linux-next@vger.kernel.org, 
+	sfr@canb.auug.org.au, gregkh@linuxfoundation.org, rafael@kernel.org, 
+	andrzej.hajda@intel.com, neil.armstrong@linaro.org, rfoss@kernel.org, 
+	Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se, jernej.skrabec@gmail.com, 
+	maarten.lankhorst@linux.intel.com, tzimmermann@suse.de, airlied@gmail.com, 
+	angelogioacchino.delregno@collabora.com, ulf.hansson@linaro.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: test
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Tree: next
-X-Kernelci-Kernel: v6.7-rc3-265-g1618cb8f57417
-Subject: next/pending-fixes baseline: 92 runs,
- 3 regressions (v6.7-rc3-265-g1618cb8f57417)
-To: linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
- kernelci-results@groups.io
-From: "kernelci.org bot" <bot@kernelci.org>
 
-next/pending-fixes baseline: 92 runs, 3 regressions (v6.7-rc3-265-g1618cb8f=
-57417)
+On Wed, Nov 29, 2023 at 1:32=E2=80=AFPM Maxime Ripard <mripard@kernel.org> =
+wrote:
+[Me]
+> > It is a bigger evil to leave the tree broken than to enforce formal pro=
+cess,
+> > and it is pretty self-evident. If any of them get annoyed about it we c=
+an
+> > revert the patch, or both.
+>
+> Yeah, I definitely understand why you did it, but I don't think it's
+> something we would encourage in drm-misc.
 
-Regressions Summary
--------------------
+Hm OK I guess, it can be debated but no point in debating it either.
 
-platform           | arch  | lab           | compiler | defconfig | regress=
-ions
--------------------+-------+---------------+----------+-----------+--------=
-----
-kontron-pitx-imx8m | arm64 | lab-kontron   | gcc-10   | defconfig | 2      =
-    =
+> We've discussed it with Sima yesterday, and I think we would even need
+> the extra check in dim to make sure that a committer shouldn't do that
+> without dim complaining.
+(...)
+> Sima played a bit with it, and it should be doable to get something
+> fairly reliable if you use get_maintainers.pl to retrieve the git tree
+> (through scripts/get_maintainer.pl --no-email --no-l --scm) and figuring
+> out if only drm.git, drm-intel.git or drm-misc.git is involved.
+>
+> If it isn't, then we should check that there's the ack of one of the
+> maintainers.
 
-rk3399-rock-pi-4b  | arm64 | lab-collabora | gcc-10   | defconfig | 1      =
-    =
+So check for any code that is hitting namespaces outside drivers/gpu/*
+Documentation/gpu/* or include/[uapi/]drm/* that it is ACKed by the respect=
+ive
+maintainer for that area of the kernel?
 
+> Could you write a patch to do so?
 
-  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
-v6.7-rc3-265-g1618cb8f57417/plan/baseline/
+Patch dim? Well my bash skills are a bit so-so. But I guess I could
+learn it. But did you say there is already a prototype?
 
-  Test:     baseline
-  Tree:     next
-  Branch:   pending-fixes
-  Describe: v6.7-rc3-265-g1618cb8f57417
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      1618cb8f574175a196b0e8926c62efc45760e856 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform           | arch  | lab           | compiler | defconfig | regress=
-ions
--------------------+-------+---------------+----------+-----------+--------=
-----
-kontron-pitx-imx8m | arm64 | lab-kontron   | gcc-10   | defconfig | 2      =
-    =
-
-
-  Details:     https://kernelci.org/test/plan/id/65670c6d7928b5962f7e4aac
-
-  Results:     51 PASS, 2 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.7-rc3-26=
-5-g1618cb8f57417/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-pitx-i=
-mx8m.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.7-rc3-26=
-5-g1618cb8f57417/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-pitx-i=
-mx8m.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/65670c6d7928b5962f7e4ab3
-        new failure (last pass: v6.7-rc3-220-gaeca85031d1b)
-
-    2023-11-29T10:03:14.473762  / # #
-    2023-11-29T10:03:14.575979  export SHELL=3D/bin/sh
-    2023-11-29T10:03:14.576683  #
-    2023-11-29T10:03:14.678072  / # export SHELL=3D/bin/sh. /lava-399535/en=
-vironment
-    2023-11-29T10:03:14.678813  =
-
-    2023-11-29T10:03:14.780391  / # . /lava-399535/environment/lava-399535/=
-bin/lava-test-runner /lava-399535/1
-    2023-11-29T10:03:14.781546  =
-
-    2023-11-29T10:03:14.785979  / # /lava-399535/bin/lava-test-runner /lava=
--399535/1
-    2023-11-29T10:03:14.826259  + export 'TESTRUN_ID=3D1_bootrr'
-    2023-11-29T10:03:14.851538  + cd /lava-399535/1/tests/1_bootrr =
-
-    ... (10 line(s) more)  =
-
-
-  * baseline.bootrr.dwc3-usb1-probed: https://kernelci.org/test/case/id/656=
-70c6d7928b5962f7e4ac3
-        new failure (last pass: v6.7-rc3-220-gaeca85031d1b)
-
-    2023-11-29T10:03:17.239046  /lava-399535/1/../bin/lava-test-case
-    2023-11-29T10:03:17.239469  <8>[   18.438987] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Ddwc3-usb1-probed RESULT=3Dfail>
-    2023-11-29T10:03:17.239847  /lava-399535/1/../bin/lava-test-case   =
-
- =
-
-
-
-platform           | arch  | lab           | compiler | defconfig | regress=
-ions
--------------------+-------+---------------+----------+-----------+--------=
-----
-rk3399-rock-pi-4b  | arm64 | lab-collabora | gcc-10   | defconfig | 1      =
-    =
-
-
-  Details:     https://kernelci.org/test/plan/id/65670d5333ecdfd4bb7e4ae9
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.7-rc3-26=
-5-g1618cb8f57417/arm64/defconfig/gcc-10/lab-collabora/baseline-rk3399-rock-=
-pi-4b.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.7-rc3-26=
-5-g1618cb8f57417/arm64/defconfig/gcc-10/lab-collabora/baseline-rk3399-rock-=
-pi-4b.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/65670d5333ecdfd4bb7e4=
-aea
-        new failure (last pass: v6.7-rc3-220-gaeca85031d1b) =
-
- =20
+Yours,
+Linus Walleij
 

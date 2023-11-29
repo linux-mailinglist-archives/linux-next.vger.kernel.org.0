@@ -1,172 +1,94 @@
-Return-Path: <linux-next+bounces-118-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-119-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 54BDB7FD3A4
-	for <lists+linux-next@lfdr.de>; Wed, 29 Nov 2023 11:12:10 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9471F7FD3ED
+	for <lists+linux-next@lfdr.de>; Wed, 29 Nov 2023 11:18:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0EAD9282AF3
-	for <lists+linux-next@lfdr.de>; Wed, 29 Nov 2023 10:12:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C5C791C20F20
+	for <lists+linux-next@lfdr.de>; Wed, 29 Nov 2023 10:18:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F63018E1D;
-	Wed, 29 Nov 2023 10:12:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="gApYvNgx"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C2381A5A9;
+	Wed, 29 Nov 2023 10:18:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C38BE1
-	for <linux-next@vger.kernel.org>; Wed, 29 Nov 2023 02:12:02 -0800 (PST)
-Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-6cb4d366248so5571485b3a.0
-        for <linux-next@vger.kernel.org>; Wed, 29 Nov 2023 02:12:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1701252721; x=1701857521; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=DIHbJLg+hLV80en7o4KDChDloQVe0LWX8OBKY7pewPg=;
-        b=gApYvNgxQnikVfPn0jKp7z4HLbIvKGI4BUoamNP0tjHtqgXf5vlus9EhVojzGUQU7X
-         MzHzbwigfk80cvNf4+1w3HQeIBo1W17hthunR6xGVcqcNhE03OIhDEf05y1PQqbjSNj0
-         QTBzvQIGCA5Pa3COGGgA12rOQ62OwARX3rqiQDTSAnsydHAkRjNB/sfLjAFC1yTyuN17
-         MHANOnVnnKpFcq36EHQNkuDXP+STOwTL/PzSOxMamZuDogm0RiAlittCfV1Y27raENIs
-         jeIpiuq5AYpLz0Y5O58lpGermAeUoTt3FSvjkFnJdA9LORiJac8ZM8ec9mveZ/Rwjo+V
-         fyaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701252721; x=1701857521;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DIHbJLg+hLV80en7o4KDChDloQVe0LWX8OBKY7pewPg=;
-        b=w06U1m+3rvgpSnXbX/9spqZpPmISFx2KSCsCLIkA8HR8TBwy4X0vb9wxp0YuGfmo3/
-         0Cy78rZphiSeJAE7zGdyxlNYtau6zRQzDByv22AlIQvJcMAmOG7wDD5xD211rnLQ4SFu
-         B2RHVa2HDwget40fnlv7ynCiLjkdiSYt0SBc44RfsrnvZMCcZRY48nNpRKSfHbx66mBB
-         khSLcS4MELtiI9zKnDeyfO+oCcngltPt0J7jCVA6/DZXHURPA3NIT06iUsGM3cRCt3Nx
-         r6fyojvWbh/lU2SuprXP2eOBuqZZH10plRBh6VtgV0lnnbZuP3o+gDKVE30bIidOkVoZ
-         1TqQ==
-X-Gm-Message-State: AOJu0Yw8xPpqhH3EoOmuHl+lrT3ZkSmios/uXWaB/Af4JLP2hlABhz4v
-	2acSqA+LUgAYMw9SSFQ3leLH24b0KASNeN6n/Uw=
-X-Google-Smtp-Source: AGHT+IEfv2nBy0moaBc0X88pBM3/Wq35QntoTVxAQGXEahiKANWu4YTPlgu74pQ4hkE8BpsOk8+i0g==
-X-Received: by 2002:a05:6a21:a5a8:b0:18c:3fe8:d8cc with SMTP id gd40-20020a056a21a5a800b0018c3fe8d8ccmr17195920pzc.28.1701252721265;
-        Wed, 29 Nov 2023 02:12:01 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id y10-20020a17090aca8a00b002851c9f7a77sm973432pjt.38.2023.11.29.02.12.00
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Nov 2023 02:12:00 -0800 (PST)
-Message-ID: <65670e70.170a0220.c0136.1fba@mx.google.com>
-Date: Wed, 29 Nov 2023 02:12:00 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0562DBA
+	for <linux-next@vger.kernel.org>; Wed, 29 Nov 2023 02:18:53 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1r8HeZ-0001Po-Mm; Wed, 29 Nov 2023 11:18:47 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1r8HeY-00CNjm-Ht; Wed, 29 Nov 2023 11:18:46 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1r8HeY-00Ale9-8p; Wed, 29 Nov 2023 11:18:46 +0100
+From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To: Thierry Reding <thierry.reding@gmail.com>
+Cc: linux-pwm@vger.kernel.org,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>,
+	kernel@pengutronix.de,
+	Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: [PATCH] pwm: Update kernel doc for struct pwm_chip
+Date: Wed, 29 Nov 2023 11:18:32 +0100
+Message-ID: <20231129101831.908952-2-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.42.0
+In-Reply-To: <20231129125826.08d7d178@canb.auug.org.au>
+References: <20231129125826.08d7d178@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: build
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Tree: next
-X-Kernelci-Kernel: v6.7-rc3-265-g1618cb8f57417
-Subject: next/pending-fixes build: 8 builds: 0 failed, 8 passed,
- 4 warnings (v6.7-rc3-265-g1618cb8f57417)
-To: linux-next@vger.kernel.org
-From: "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1267; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=tsm5bQuNyv52mW3JCZFnEoHg3N8bF61pCfqHO/cC8NI=; b=owGbwMvMwMXY3/A7olbonx/jabUkhtR0/u+Mqf8zDFjjK5dfypiXkJPIMPW4cszLzKot06655 Zgxr7rVyWjMwsDIxSArpshi37gm06pKLrJz7b/LMINYmUCmMHBxCsBElFrY/1cnzPxU7ffF0jbg WZ6EZooIB49T/aO1AVe7rFvuTJ9W2pD4xKtxneh0o5cCP7jcVpk7fmXnXCPLflDih4+Upc4zZ6f GaUWHbH6J7XZPnrQ46dwcPZlVOQH7j9znFV4aVfRVd9PJfW/9HXJ1XgS8uqetF1f9WGrv+1NdS7 19rV/2exulf3Zd4K8VmGQ7qaSae479uVSPoInuFjdunf+mYNnNbCmT+rKmInrCC3W2kyoVgt0i9 gd6Jfcz1J7VOmpT8pqJ0ab7iTRv835raV/dMs9FLGc+97sFx/79+Eng72u7t+aXWROvmxUmsylt 28iol7io9Jjz8U+XmZJnRm6YuO2V2KNtU07su7HAXLsGAA==
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-next@vger.kernel.org
 
-next/pending-fixes build: 8 builds: 0 failed, 8 passed, 4 warnings (v6.7-rc=
-3-265-g1618cb8f57417)
+Commit c572f3b9c8b7 ("pwm: Replace PWM chip unique base by unique ID")
+changed the members of struct pwm_chip, but failed to update the
+documentation accordingly. Catch up and document the new member and drop
+description for the two removed ones.
 
-Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
-rnel/v6.7-rc3-265-g1618cb8f57417/
-
-Tree: next
-Branch: pending-fixes
-Git Describe: v6.7-rc3-265-g1618cb8f57417
-Git Commit: 1618cb8f574175a196b0e8926c62efc45760e856
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Built: 8 unique architectures
-
-Warnings Detected:
-
-arc:
-
-arm64:
-
-arm:
-
-i386:
-
-mips:
-
-riscv:
-
-sparc:
-    sparc64_defconfig (gcc-10): 4 warnings
-
-x86_64:
-
-
-Warnings summary:
-
-    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
-tion failed, symbol will not be versioned.
-    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
--Wcpp]
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
-For more info write to <info@kernelci.org>
+ include/linux/pwm.h | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/include/linux/pwm.h b/include/linux/pwm.h
+index c27a4bb76012..f87655c06c82 100644
+--- a/include/linux/pwm.h
++++ b/include/linux/pwm.h
+@@ -281,11 +281,10 @@ struct pwm_ops {
+  * @dev: device providing the PWMs
+  * @ops: callbacks for this PWM controller
+  * @owner: module providing this chip
+- * @base: number of first PWM controlled by this chip
++ * @id: unique number of this PWM chip
+  * @npwm: number of PWMs controlled by this chip
+  * @of_xlate: request a PWM device given a device tree PWM specifier
+  * @of_pwm_n_cells: number of cells expected in the device tree PWM specifier
+- * @list: list node for internal use
+  * @pwms: array of PWM devices allocated by the framework
+  */
+ struct pwm_chip {
+
+base-commit: 5d67b8f81b9d598599366214e3b2eb5f84003c9f
+-- 
+2.42.0
+
 

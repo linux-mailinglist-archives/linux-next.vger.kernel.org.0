@@ -1,123 +1,76 @@
-Return-Path: <linux-next+bounces-146-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-147-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9DBCC7FF3FC
-	for <lists+linux-next@lfdr.de>; Thu, 30 Nov 2023 16:53:06 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9DBF37FF4A5
+	for <lists+linux-next@lfdr.de>; Thu, 30 Nov 2023 17:19:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 255AAB20D40
-	for <lists+linux-next@lfdr.de>; Thu, 30 Nov 2023 15:53:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 58ADC2816BA
+	for <lists+linux-next@lfdr.de>; Thu, 30 Nov 2023 16:19:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13A04524DB;
-	Thu, 30 Nov 2023 15:53:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5B5154F80;
+	Thu, 30 Nov 2023 16:19:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=embeddedor.com header.i=@embeddedor.com header.b="WKTIFw98"
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="lbLLL9vY"
 X-Original-To: linux-next@vger.kernel.org
-Received: from omta40.uswest2.a.cloudfilter.net (omta40.uswest2.a.cloudfilter.net [35.89.44.39])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48EFAC1
-	for <linux-next@vger.kernel.org>; Thu, 30 Nov 2023 07:52:57 -0800 (PST)
-Received: from eig-obgw-5002a.ext.cloudfilter.net ([10.0.29.215])
-	by cmsmtp with ESMTPS
-	id 8bxrrNHqtL9Ag8jLSrA5sA; Thu, 30 Nov 2023 15:52:54 +0000
-Received: from gator4166.hostgator.com ([108.167.133.22])
-	by cmsmtp with ESMTPS
-	id 8jLRrTk7iRQmi8jLRr8Yyh; Thu, 30 Nov 2023 15:52:53 +0000
-X-Authority-Analysis: v=2.4 cv=CdcbWZnl c=1 sm=1 tr=0 ts=6568afd5
- a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=7m0pAUNwt3ppyxJkgzeoew==:17
- a=OWjo9vPv0XrRhIrVQ50Ab3nP57M=:19 a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19
- a=IkcTkHD0fZMA:10 a=BNY50KLci1gA:10 a=wYkD_t78qR0A:10
- a=Zq8NaG4NZQ_Hog5x324A:9 a=QEXdDO2ut3YA:10
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=NYGGXfz3k+0Na3QNYJYqk59wr8y1uvRXMMlAblXBrVg=; b=WKTIFw980PeTy/ggSFW0YQxf9n
-	2QvByb5GwZjp7wKwUDG+mLOpylY2Im0JoOQ9CW1N9vJBJzNEp4DQ3XwPpLyIEFbzH5XMrI8FU4zfs
-	lTBQyldFsmbA4tnPHjNm/wgz92TuPcrCNSoM8l65d2yFUGUrI9zhSTPztMs6kejPupeEXP+02PH8N
-	nqKcW+tMjhCUE2XqIb5ivAjnscYrNM32PQcpCHdAAwXC7oypNo52wRvgAW1uTYB/+r/0odeq5ZyzI
-	k7CAyoefcV//A6cNIAKhB+k7VtCliHkKP73862hKNRMRYtPYjdNdpwZZoPv3rcL9VyMziC3Qtml8H
-	3Krd+tNQ==;
-Received: from 187.184.156.122.cable.dyn.cableonline.com.mx ([187.184.156.122]:57202 helo=[192.168.0.28])
-	by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.96.2)
-	(envelope-from <gustavo@embeddedor.com>)
-	id 1r8jLQ-0028gj-26;
-	Thu, 30 Nov 2023 09:52:52 -0600
-Message-ID: <730544ae-1e7f-4622-b986-839f81e60384@embeddedor.com>
-Date: Thu, 30 Nov 2023 09:52:42 -0600
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26D8F5467D;
+	Thu, 30 Nov 2023 16:19:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AC8CC433C9;
+	Thu, 30 Nov 2023 16:19:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+	s=korg; t=1701361170;
+	bh=mDtzF7NAf/4/gCyKEm5oMxB9JWjUMGxC0nVhCgSfJiI=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=lbLLL9vY1iZm73oW0pLb5e2DTUMZwAVzUyefidj4FWo5C5BEKe0QdpDdbG48LcpVR
+	 RGVEOqcSIEiYSLWUJi7eFZbo6zoyYvnMhIuFWrq6+IMh/0b03TTVWdV3YsMdEFRc2Q
+	 BJBvgqW0vCh7Bamjd5FtC0tZZY4LTFNienKCGV/8=
+Date: Thu, 30 Nov 2023 08:19:29 -0800
+From: Andrew Morton <akpm@linux-foundation.org>
+To: "Arnd Bergmann" <arnd@arndb.de>
+Cc: "Stephen Rothwell" <sfr@rothwell.id.au>, linux-next
+ <linux-next@vger.kernel.org>, "Linux Kernel Mailing List"
+ <linux-kernel@vger.kernel.org>, "Thomas Bogendoerfer"
+ <tsbogend@alpha.franken.de>, "David S . Miller" <davem@davemloft.net>,
+ sparclinux@vger.kernel.org, linux-mips@vger.kernel.org
+Subject: Re: linux-next: lots of errors/warnings from the
+ -Werror=missing-prototypes addition
+Message-Id: <20231130081929.46a79c33edee8651c63112dc@linux-foundation.org>
+In-Reply-To: <4be73872-c1f5-4c31-8201-712c19290a22@app.fastmail.com>
+References: <20231130075838.05e5bc9b@oak>
+	<20231129131003.d2c1078847c3865c1ac2dfd5@linux-foundation.org>
+	<ebb5b1a2-ed27-4a77-b62b-1d3f19bddd85@app.fastmail.com>
+	<20231129151030.24b807f1d2b43be301a533b7@linux-foundation.org>
+	<4be73872-c1f5-4c31-8201-712c19290a22@app.fastmail.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH next] Fix the build failed caused by -Wstringop-overflow
-To: Wenyu Huang <huangwenyu5@huawei.com>, pmladek@suse.com,
- rostedt@goodmis.org
-Cc: andriy.shevchenko@linux.intel.com, linux@rasmusvillemoes.dk,
- senozhatsky@chromium.org, akpm@linux-foundation.org,
- linux-next@vger.kernel.org, gustavoars@kernel.org
-References: <20231130105741.2849670-1-huangwenyu5@huawei.com>
-Content-Language: en-US
-From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-In-Reply-To: <20231130105741.2849670-1-huangwenyu5@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 187.184.156.122
-X-Source-L: No
-X-Exim-ID: 1r8jLQ-0028gj-26
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 187.184.156.122.cable.dyn.cableonline.com.mx ([192.168.0.28]) [187.184.156.122]:57202
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 2
-X-Org: HG=hgshared;ORG=hostgator;
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfJL5Kd0ODjVaB+AZsIrOBCphoMKJyPmpE26e2N0OeVgAEAgtxCXXMt73Z/eD+N3a6c4slzzxy7NosykIte9PCvLT8QoPl41gTh98ImBkFfFYHFB5zk1V
- djNJg0hcQh7MMsW0ty9vxlnVBwcIAXZlwVAtF7xKxjbNE1IjWoN5yNS2kWIW/BLfqCZ6YfoWDhyhVboqkAeH0ZYD5jQ1Ukakc+PbZq+aA+o0P2PegOvar8W/
 
+On Thu, 30 Nov 2023 09:07:38 +0100 "Arnd Bergmann" <arnd@arndb.de> wrote:
 
-
-On 11/30/23 04:57, Wenyu Huang wrote:
-> gcc version: gcc (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0
+> > I guess it should precede "Makefile.extrawarn: turn on
+> > missing-prototypes globally".
 > 
-> I use this version of gcc to compile, and the compilation fails. It said
-> that "error: writing 1 byte into a region of size 0
-> [-Werror=stringop-overflow=]".
+> I already have a collection of patches to fix up known
+> -Wmissing-prototype warnings across architectures in the
+> asm-generic tree, so I'll add this patch there:
 > 
-> This patch is to fix it to build successfully.
+> commit bdef96eb0b89dfa80992312a8e3b2613bf178ae5
+> Author: Arnd Bergmann <arnd@arndb.de>
+> Date:   Thu Nov 30 00:07:07 2023 +0100
 > 
+>     arch: turn off -Werror for architectures with known warnings
 
-This doesn't really fix anything. GCC 11 is buggy and the issues you
-see are false positives that doesn't show up in other versions of
-the compiler.
-
-> Fixes: 89741e7e42f6 ("Makefile: Enable -Wstringop-overflow globally")
-
-The commit ID is from a patch that's currently in linux-next, which
-does not guarantee it's a stable commit. So, it shouldn't be used
-for any tag in any changelog text. In fact, it has changed a couple
-of times in the last couple of weeks.
-
--Wstringop-overflow will soon be disabled for GCC 11 by default. So,
-this patch is unnecessary. I'll probably commit a patch for this next
-week. :)
-
-Thanks
---
-Gustavo
-
+I think this would be better in the mm-nonmm tree, alongside
+"Makefile.extrawarn: turn on missing-prototypes globally".  Can I steal it?
 

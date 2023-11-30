@@ -1,65 +1,152 @@
-Return-Path: <linux-next+bounces-164-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-165-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 070897FFE44
-	for <lists+linux-next@lfdr.de>; Thu, 30 Nov 2023 23:03:52 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C6A7C7FFE48
+	for <lists+linux-next@lfdr.de>; Thu, 30 Nov 2023 23:04:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 40FEA1C20B76
-	for <lists+linux-next@lfdr.de>; Thu, 30 Nov 2023 22:03:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 818AE28181C
+	for <lists+linux-next@lfdr.de>; Thu, 30 Nov 2023 22:04:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 459176167B;
-	Thu, 30 Nov 2023 22:03:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 471706167C;
+	Thu, 30 Nov 2023 22:04:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="jEncOMNK"
 X-Original-To: linux-next@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTP id B4121D40;
-	Thu, 30 Nov 2023 14:03:44 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 352B41042;
-	Thu, 30 Nov 2023 14:04:31 -0800 (PST)
-Received: from bogus (unknown [10.57.42.162])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7E8413F73F;
-	Thu, 30 Nov 2023 14:03:43 -0800 (PST)
-Date: Thu, 30 Nov 2023 22:01:37 +0000
-From: Sudeep Holla <sudeep.holla@arm.com>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Sudeep Holla <sudeep.holla@arm.com>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the scmi tree
-Message-ID: <20231130220137.pglo3n5g3n5zuudy@bogus>
-References: <20231201085914.4ad45eb2@canb.auug.org.au>
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87067D40;
+	Thu, 30 Nov 2023 14:04:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1701381880;
+	bh=ZihOGHfcGL6IPblR8lpNHXKjLfhDSV+YMLeb5Lb4EXU=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=jEncOMNKVJSLImHusypGjPZzbfg5EmNUruYT8vz/AqndZ0vEsf+aL7RFsRQtP7kcV
+	 0ulLgfKITqepuGJhI1dxVuVOfSc6lkoOErzjqdz4WGOJmaPyX2+e33uhBDsTR2y7JG
+	 8/HaXZD3m4lyiYJGnTvk2pG7v+pQxIV8/OuSd7Hx23k818U/zEZ4pyZYu+YUYqpLd1
+	 XPexA34WHfA2Yv6Be0BMkXiqrE2whR5nVG7yMmCcMyRhiyHd0mlW5zp0OM1T7w+deR
+	 0eFdoJ1Wd7pauSqcI3vqxlcfAmjHoRqsHYibX89iX7VznsCRa86U2lI6Q6JkJX3ELj
+	 hwY+ALStXeijQ==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Sh9GH5tcSz4wx7;
+	Fri,  1 Dec 2023 09:04:39 +1100 (AEDT)
+Date: Fri, 1 Dec 2023 09:04:39 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>, Michael Ellerman <mpe@ellerman.id.au>,
+ PowerPC <linuxppc-dev@lists.ozlabs.org>
+Subject: Re: linux-next: build failure after merge of the mm tree
+Message-ID: <20231201090439.7ae92c13@canb.auug.org.au>
+In-Reply-To: <20231127144852.069b2e7e@canb.auug.org.au>
+References: <20231127132809.45c2b398@canb.auug.org.au>
+	<20231127144852.069b2e7e@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231201085914.4ad45eb2@canb.auug.org.au>
+Content-Type: multipart/signed; boundary="Sig_/mftAfNUiKPZGOFgp0y=in45";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Fri, Dec 01, 2023 at 08:59:14AM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the scmi tree, today's linux-next build (arm
-> multi_v7_defconfig) failed like this:
-> 
-> arm-linux-gnueabi-ld: drivers/firmware/arm_scmi/perf.o: in function `scmi_dvfs_freq_set':
-> perf.c:(.text+0xc8c): undefined reference to `__aeabi_uldivmod'
-> 
-> Caused by commit
-> 
->   eb55fbef8913 ("firmware: arm_scmi: Fix possible frequency truncation when using level indexing mode")
-> 
-> I have used the scmi tree from next-20231130 for today.
+--Sig_/mftAfNUiKPZGOFgp0y=in45
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks for the report, I will fix it ASAP.
+Hi all,
 
+On Mon, 27 Nov 2023 14:48:52 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>=20
+> Just cc'ing the PowerPC guys to see if my fix is sensible.
+>=20
+> On Mon, 27 Nov 2023 13:28:09 +1100 Stephen Rothwell <sfr@canb.auug.org.au=
+> wrote:
+> >
+> > After merging the mm tree, today's linux-next build (powerpc64
+> > allnoconfig) failed like this:
+> >=20
+> > arch/powerpc/mm/book3s64/pgtable.c:557:5: error: no previous prototype =
+for 'pmd_move_must_withdraw' [-Werror=3Dmissing-prototypes]
+> >   557 | int pmd_move_must_withdraw(struct spinlock *new_pmd_ptl,
+> >       |     ^~~~~~~~~~~~~~~~~~~~~~
+> > cc1: all warnings being treated as errors
+> >=20
+> > Caused by commit
+> >=20
+> >   c6345dfa6e3e ("Makefile.extrawarn: turn on missing-prototypes globall=
+y")
+> >=20
+> > I have added the following patch for today (which could be applied to
+> > the mm or powerpc trees):
+> >=20
+> > From 194805b44c11b4c0aa28bdcdc0bb0d82acef394c Mon Sep 17 00:00:00 2001
+> > From: Stephen Rothwell <sfr@canb.auug.org.au>
+> > Date: Mon, 27 Nov 2023 13:08:57 +1100
+> > Subject: [PATCH] powerpc: pmd_move_must_withdraw() is only needed for
+> >  CONFIG_TRANSPARENT_HUGEPAGE
+> >=20
+> > Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> > ---
+> >  arch/powerpc/mm/book3s64/pgtable.c | 2 ++
+> >  1 file changed, 2 insertions(+)
+> >=20
+> > diff --git a/arch/powerpc/mm/book3s64/pgtable.c b/arch/powerpc/mm/book3=
+s64/pgtable.c
+> > index be229290a6a7..3438ab72c346 100644
+> > --- a/arch/powerpc/mm/book3s64/pgtable.c
+> > +++ b/arch/powerpc/mm/book3s64/pgtable.c
+> > @@ -542,6 +542,7 @@ void ptep_modify_prot_commit(struct vm_area_struct =
+*vma, unsigned long addr,
+> >  	set_pte_at(vma->vm_mm, addr, ptep, pte);
+> >  }
+> > =20
+> > +#ifdef CONFIG_TRANSPARENT_HUGEPAGE
+> >  /*
+> >   * For hash translation mode, we use the deposited table to store hash=
+ slot
+> >   * information and they are stored at PTRS_PER_PMD offset from related=
+ pmd
+> > @@ -563,6 +564,7 @@ int pmd_move_must_withdraw(struct spinlock *new_pmd=
+_ptl,
+> > =20
+> >  	return true;
+> >  }
+> > +#endif
+> > =20
+> >  /*
+> >   * Does the CPU support tlbie?
+> > --=20
+> > 2.40.1 =20
 
--- 
-Regards,
-Sudeep
+I am still carrying this patch (it should probably go into the mm
+tree).  Is someone going to pick it up (assuming it is correct)?
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/mftAfNUiKPZGOFgp0y=in45
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmVpBvcACgkQAVBC80lX
+0GydrAf9GN954MjHMtmQr8oDfEmXP34v1XDb6cN03i1NEMNhX1K0QIBor+LlMZKx
+OZg9WsMzA5OqCViRJHFD3vi6ZTmy8Z4bQPsXuUqz5/l+v4XC9nGP7x8GcPvdhktG
+j3y9FFpY5EyPTTEUYoApw9WdXjaFIMYwZGyzfYXnVS0rj3BY47YmTx757ndCXhgc
+GnlOMV6eQXgV+mxwo5lg96O8GVeBYVShREmDOiVbOgOiRm1Moe8CL9JLFDn5tDW2
+tfqsFl4X/S+y5iYdTdrPqjJuVkDGnLqPSRNogDHW2K6ZacV0shaFVhHd2pTfJqTN
+KmZ1QNG1L7moZcoA8XIAJcIUC8TQIg==
+=JUuX
+-----END PGP SIGNATURE-----
+
+--Sig_/mftAfNUiKPZGOFgp0y=in45--
 

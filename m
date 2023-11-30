@@ -1,120 +1,117 @@
-Return-Path: <linux-next+bounces-157-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-158-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2BDFC7FF927
-	for <lists+linux-next@lfdr.de>; Thu, 30 Nov 2023 19:14:05 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 45FA77FFA0C
+	for <lists+linux-next@lfdr.de>; Thu, 30 Nov 2023 19:52:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C9CD51F20FF0
-	for <lists+linux-next@lfdr.de>; Thu, 30 Nov 2023 18:14:04 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DC043B20E94
+	for <lists+linux-next@lfdr.de>; Thu, 30 Nov 2023 18:52:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEB2F59162;
-	Thu, 30 Nov 2023 18:14:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53AD54A9B6;
+	Thu, 30 Nov 2023 18:52:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=embeddedor.com header.i=@embeddedor.com header.b="npYD61bH"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MnfCa0q2"
 X-Original-To: linux-next@vger.kernel.org
-Received: from omta038.useast.a.cloudfilter.net (omta038.useast.a.cloudfilter.net [44.202.169.37])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27FAC1B3
-	for <linux-next@vger.kernel.org>; Thu, 30 Nov 2023 10:13:59 -0800 (PST)
-Received: from eig-obgw-5010a.ext.cloudfilter.net ([10.0.29.199])
-	by cmsmtp with ESMTPS
-	id 8jDrrfKRRWcCI8lXwr4lqd; Thu, 30 Nov 2023 18:13:56 +0000
-Received: from gator4166.hostgator.com ([108.167.133.22])
-	by cmsmtp with ESMTPS
-	id 8lXvrMevphDny8lXwrqSjv; Thu, 30 Nov 2023 18:13:56 +0000
-X-Authority-Analysis: v=2.4 cv=fda+dmcF c=1 sm=1 tr=0 ts=6568d0e4
- a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=8XV0R0IcXUXM6S+KMni/4w==:17
- a=OWjo9vPv0XrRhIrVQ50Ab3nP57M=:19 a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19
- a=IkcTkHD0fZMA:10 a=BNY50KLci1gA:10 a=wYkD_t78qR0A:10
- a=PVSOBieIn8NgmMscb9EA:9 a=QEXdDO2ut3YA:10
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=NjabATgC5jPAzirodaq7Hzl5wjX/HOiBM6z4A8/ofHw=; b=npYD61bHIit3EaU9YU6B6D3QyP
-	dR28QobYNsmPh/4HUf1373dXGUamqZ/H0hpOjZwzfFCF4LhC2gXDumHe98GYw7abuGkYwi9a4YQtf
-	Ru8Y5wLaM+rry2Ifd3gPfM+wQYs7BlcdpMGDaD5Nnwe4ClaiRWm3xm9x1IaIMXeo+vXantszVnrXU
-	nw1FoLaIabOV/SnOcoySs0BeRIACKVoW5uDznGNYWZ6Iz11kBRroOD74G5rcVKgSAST8VRjXIOyM6
-	fKb6yKqYmP1kAxGD+uLgBe0AJS1Ujn8m8q3hmWacfurlMucqM+DUYnWghg4VX9zcdS4GHqJVZqcw3
-	3tOA6jXQ==;
-Received: from 189.215.208.186.cable.dyn.cableonline.com.mx ([189.215.208.186]:12148 helo=[192.168.0.28])
-	by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.96.2)
-	(envelope-from <gustavo@embeddedor.com>)
-	id 1r8lXv-00078V-0X;
-	Thu, 30 Nov 2023 12:13:55 -0600
-Message-ID: <6f275a31-7495-48c8-88a6-90a7bcf865b8@embeddedor.com>
-Date: Thu, 30 Nov 2023 12:13:52 -0600
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEE7110D1;
+	Thu, 30 Nov 2023 10:52:08 -0800 (PST)
+Received: by mail-io1-xd31.google.com with SMTP id ca18e2360f4ac-7b389399dfdso37498039f.2;
+        Thu, 30 Nov 2023 10:52:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1701370328; x=1701975128; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rSUQmBAKYkYrpY41v43m0knZKLfy9bpen4/P40ry7dE=;
+        b=MnfCa0q2URoT63xW+mRU/MldxGbXyUuanTkmaqBLVEbEzajx5orhFX6dd2fXkpHIor
+         ILn0I9c/goeCY2C/czawZOREjJ5c8+YbCj9Q84UAbU43p+3OgHYKcMk0VIeivUhFLw3+
+         2lPUmJiYUN8RKpDo1GAKI7SSnkylJ9WcegnUXy/Crh2UZ81Npm58aBE0qze8FKClGYdk
+         BRc/X8xJFor63ql7t8HlHDDKmTEbZgNrfPmkCniPj8uO/Z9sb1tTJwF6Zm2vV4OEPt4H
+         Q7NyeG5eZJlWcBXX9wng2aNOaOPCBhCPv1osdi5YIy9LRkPHnGZmJ6ZHP4Ie1IALbisL
+         7tkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701370328; x=1701975128;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rSUQmBAKYkYrpY41v43m0knZKLfy9bpen4/P40ry7dE=;
+        b=bNg+UC56x4nSwC4ZSnzHQYqyQWazlxmmfaiMQhMfVUE0N7UYmETRhH0242aUnwdnNf
+         CThyiWZyFsXbjhIzW1XmxijZuQo19u8qGl1Y9n5IAh1INa1vis1wRyebdhUCp2x9UHJE
+         WPOLqph37WNgJ1I20udFdLjnjdjL5wBJGdRIx6otR/4smzbS6eXuztMBFwUx1YSuWXJs
+         rvfD0zf2p+4hvO4XAMw/GeP/MqH01IMjEq/so9mENiz2+07S4QvGtihM2zpxDzbS9hTh
+         53zCZN3OU+4rws0IN+KCrYOPvA+tT05cBQ00J2rRvYB8XzVjCcHsn5dtfP6lqebCkVk1
+         rKJw==
+X-Gm-Message-State: AOJu0YxkzrCk1PfjpKsSWy5yzg6FugH84iRaVo1Rk0Id7aIOR5cmxuVw
+	p7+j7UGs50csC/wPReH9INXX4X2cwHBvEtEzlkLbSBJBiCc=
+X-Google-Smtp-Source: AGHT+IHdY7uRSa5FbKE1+o5t0MbSvVmvWeWXAbHlj9Kja92DH83XBgWsFJHnINTkBtG+zPcV9sk2y+mXAN4McTt2R1o=
+X-Received: by 2002:a05:6602:6411:b0:7a9:a31e:c05d with SMTP id
+ gn17-20020a056602641100b007a9a31ec05dmr25196017iob.18.1701370327949; Thu, 30
+ Nov 2023 10:52:07 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH next] Fix the build failed caused by -Wstringop-overflow
-Content-Language: en-US
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Wenyu Huang <huangwenyu5@huawei.com>, pmladek@suse.com,
- rostedt@goodmis.org, linux@rasmusvillemoes.dk, senozhatsky@chromium.org,
- akpm@linux-foundation.org, linux-next@vger.kernel.org, gustavoars@kernel.org
-References: <20231130105741.2849670-1-huangwenyu5@huawei.com>
- <730544ae-1e7f-4622-b986-839f81e60384@embeddedor.com>
- <ZWjK_UX6skFwECNi@smile.fi.intel.com> <ZWjLehXvSPGm_gre@smile.fi.intel.com>
- <c3167ae2-fd98-4e68-9112-cfdfbb34b87b@embeddedor.com>
- <ZWjPEFMwEsVMwqZq@smile.fi.intel.com>
-From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-In-Reply-To: <ZWjPEFMwEsVMwqZq@smile.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 189.215.208.186
-X-Source-L: No
-X-Exim-ID: 1r8lXv-00078V-0X
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 189.215.208.186.cable.dyn.cableonline.com.mx ([192.168.0.28]) [189.215.208.186]:12148
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 11
-X-Org: HG=hgshared;ORG=hostgator;
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfG0k6UuB3bL05xZUtFwCgNonx8yNVBRhWoEB3spHAUt5dqn6NLyRJVllx2m1NKaAzbkHrgPRI/YptPzZPeqRBat6TMDTPk6i7djEO+MpRLWt5Qv3T3QA
- Lx6QmCB5msRoeFF5fZC6BhBk5gO8WbEcM1T8n6M9RD/+VLsuaxVG1VbyL0rx3ZkuMCO3kFrEcBXSYGLTdksfG/D1SE29+TqogZvcUouuL2edZT8rAnoyjA6v
+References: <20231130140330.55de96cd@canb.auug.org.au> <6d11b95a-c5a5-47ca-b3da-d78f2ef9f5bc@infradead.org>
+In-Reply-To: <6d11b95a-c5a5-47ca-b3da-d78f2ef9f5bc@infradead.org>
+From: Nhat Pham <nphamcs@gmail.com>
+Date: Thu, 30 Nov 2023 10:51:56 -0800
+Message-ID: <CAKEwX=NCzMQzJxOTOsOZzGe4TeC6hzEUaw1HGHQLCc2bBTisNg@mail.gmail.com>
+Subject: Re: linux-next: Tree for Nov 30 (mm/zswap.c)
+To: Randy Dunlap <rdunlap@infradead.org>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, linux-mm <linux-mm@kvack.org>, 
+	Seth Jennings <sjenning@redhat.com>, Dan Streetman <ddstreet@ieee.org>, 
+	Vitaly Wool <vitaly.wool@konsulko.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Thu, Nov 30, 2023 at 9:16=E2=80=AFAM Randy Dunlap <rdunlap@infradead.org=
+> wrote:
+>
+>
+>
+> On 11/29/23 19:03, Stephen Rothwell wrote:
+> > Hi all,
+> >
+> > Changes since 20231129:
+> >
+>
+> on i386, loongarch, ppc64, riscv32:
+> when CONFIG_MEMCG is not set.
+>
+>
+> ../mm/zswap.c: In function 'mem_cgroup_from_entry':
+> ../mm/zswap.c:313:31: error: implicit declaration of function 'obj_cgroup=
+_memcg'; did you mean 'obj_cgroup_put'? [-Werror=3Dimplicit-function-declar=
+ation]
+>   313 |         return entry->objcg ? obj_cgroup_memcg(entry->objcg) : NU=
+LL;
+>       |                               ^~~~~~~~~~~~~~~~
+>       |                               obj_cgroup_put
+> ../mm/zswap.c:313:62: warning: pointer/integer type mismatch in condition=
+al expression
+>   313 |         return entry->objcg ? obj_cgroup_memcg(entry->objcg) : NU=
+LL;
+>       |                                                              ^
+> ../mm/zswap.c: In function 'shrink_worker':
+> ../mm/zswap.c:984:31: error: invalid use of undefined type 'struct mem_cg=
+roup'
+>   984 |                 css_get(&memcg->css);
+>       |                               ^~
+>
+>
+>
+> --
+> ~Randy
+>
 
-
-On 11/30/23 12:06, Andy Shevchenko wrote:
-> On Thu, Nov 30, 2023 at 12:04:28PM -0600, Gustavo A. R. Silva wrote:
->> On 11/30/23 11:50, Andy Shevchenko wrote:
->>> On Thu, Nov 30, 2023 at 07:48:46PM +0200, Andy Shevchenko wrote:
->>>> On Thu, Nov 30, 2023 at 09:52:42AM -0600, Gustavo A. R. Silva wrote:
->>>>> On 11/30/23 04:57, Wenyu Huang wrote:
-> 
-> ...
-> 
->>> On top of that, Fixes tag is not enough to get it to stable. See the rules
->>> on how to submit a material to stable kernels, it's in the documentation.
->>
->> We are talking about different things. I'm talking about commit IDs staying
->> unchanged (stable commit IDs). That's different to stable kernels. :)
-> 
-> I see, but look at my answer to your previous email.
-> 
-
-Yes, we are on the same page.
-
-Thanks
---
-Gustavo
+Thanks for the report, Randy! I'm fixing this for the !CONFIG_MEMCG
+case. A new version of this patch series should be sent out in a short
+while.
 

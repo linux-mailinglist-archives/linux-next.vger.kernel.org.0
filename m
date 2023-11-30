@@ -1,152 +1,101 @@
-Return-Path: <linux-next+bounces-165-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-166-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C6A7C7FFE48
-	for <lists+linux-next@lfdr.de>; Thu, 30 Nov 2023 23:04:49 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id C1D437FFE55
+	for <lists+linux-next@lfdr.de>; Thu, 30 Nov 2023 23:10:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 818AE28181C
-	for <lists+linux-next@lfdr.de>; Thu, 30 Nov 2023 22:04:48 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 554DAB20D86
+	for <lists+linux-next@lfdr.de>; Thu, 30 Nov 2023 22:10:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 471706167C;
-	Thu, 30 Nov 2023 22:04:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE1426167C;
+	Thu, 30 Nov 2023 22:10:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="jEncOMNK"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="CCLHKo+l"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87067D40;
-	Thu, 30 Nov 2023 14:04:41 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35F7810DF;
+	Thu, 30 Nov 2023 14:10:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1701381880;
-	bh=ZihOGHfcGL6IPblR8lpNHXKjLfhDSV+YMLeb5Lb4EXU=;
+	s=201702; t=1701382214;
+	bh=tGoqKjA42cE3Tk+7GVPpkEkj6chR/SK3IvRvQjTYq20=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=jEncOMNKVJSLImHusypGjPZzbfg5EmNUruYT8vz/AqndZ0vEsf+aL7RFsRQtP7kcV
-	 0ulLgfKITqepuGJhI1dxVuVOfSc6lkoOErzjqdz4WGOJmaPyX2+e33uhBDsTR2y7JG
-	 8/HaXZD3m4lyiYJGnTvk2pG7v+pQxIV8/OuSd7Hx23k818U/zEZ4pyZYu+YUYqpLd1
-	 XPexA34WHfA2Yv6Be0BMkXiqrE2whR5nVG7yMmCcMyRhiyHd0mlW5zp0OM1T7w+deR
-	 0eFdoJ1Wd7pauSqcI3vqxlcfAmjHoRqsHYibX89iX7VznsCRa86U2lI6Q6JkJX3ELj
-	 hwY+ALStXeijQ==
+	b=CCLHKo+lmMSqjSn6RNiOydApuVZmqoxwI5pBdM/GP5gDkdPEDQx6JbN9loi5f7Swj
+	 BCx1IGnRYibn5vbTrm2/c29xUJe8lO8VBrATZXa2Kjh1RyHXVeOmrasGAJ/8EbVKGw
+	 Dn8ju+H90kkvTq+/fpWWAwMdbHQvgAh57Myo3ASaDDIIdyN97yZSlAVIQdUhU6qxPV
+	 EfD2YvVmjQkTfwtmoZwcjlxOXaSIUMhr6TnWgN+0AgTtBwEvDrVOC0Ka80V/mTgenB
+	 7DremU+J5JuXHrU5e8s8XgibONFDJ5DuLHddBnZZHDN0jX+kILixB7s7o/O3jpHW0W
+	 XuycNQ57uipVg==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Sh9GH5tcSz4wx7;
-	Fri,  1 Dec 2023 09:04:39 +1100 (AEDT)
-Date: Fri, 1 Dec 2023 09:04:39 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Sh9Nj6Gyfz4xWX;
+	Fri,  1 Dec 2023 09:10:13 +1100 (AEDT)
+Date: Fri, 1 Dec 2023 09:10:13 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Linux Kernel Mailing List
+To: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+Cc: "Aithal, Srikanth" <sraithal@amd.com>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, Michael Ellerman <mpe@ellerman.id.au>,
- PowerPC <linuxppc-dev@lists.ozlabs.org>
-Subject: Re: linux-next: build failure after merge of the mm tree
-Message-ID: <20231201090439.7ae92c13@canb.auug.org.au>
-In-Reply-To: <20231127144852.069b2e7e@canb.auug.org.au>
-References: <20231127132809.45c2b398@canb.auug.org.au>
-	<20231127144852.069b2e7e@canb.auug.org.au>
+ <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warnings after merge of the kspp-gustavo tree
+Message-ID: <20231201091013.6554b27f@canb.auug.org.au>
+In-Reply-To: <402fc89f-96ff-4f64-ad6d-aaa7ecc284e7@embeddedor.com>
+References: <20231122144814.649823ac@canb.auug.org.au>
+	<813f3aa2-3449-7264-fa54-eaafd9981add@amd.com>
+	<20231128091351.2bfb38dd@canb.auug.org.au>
+	<001021e0-2262-49c8-89d0-c0d0720ca313@embeddedor.com>
+	<402fc89f-96ff-4f64-ad6d-aaa7ecc284e7@embeddedor.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/mftAfNUiKPZGOFgp0y=in45";
+Content-Type: multipart/signed; boundary="Sig_/kdNimbeNk/GRNQqhx_kqMm9";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/mftAfNUiKPZGOFgp0y=in45
+--Sig_/kdNimbeNk/GRNQqhx_kqMm9
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Hi Gustavo,
 
-On Mon, 27 Nov 2023 14:48:52 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->=20
-> Just cc'ing the PowerPC guys to see if my fix is sensible.
->=20
-> On Mon, 27 Nov 2023 13:28:09 +1100 Stephen Rothwell <sfr@canb.auug.org.au=
-> wrote:
-> >
-> > After merging the mm tree, today's linux-next build (powerpc64
-> > allnoconfig) failed like this:
-> >=20
-> > arch/powerpc/mm/book3s64/pgtable.c:557:5: error: no previous prototype =
-for 'pmd_move_must_withdraw' [-Werror=3Dmissing-prototypes]
-> >   557 | int pmd_move_must_withdraw(struct spinlock *new_pmd_ptl,
-> >       |     ^~~~~~~~~~~~~~~~~~~~~~
-> > cc1: all warnings being treated as errors
-> >=20
-> > Caused by commit
-> >=20
-> >   c6345dfa6e3e ("Makefile.extrawarn: turn on missing-prototypes globall=
-y")
-> >=20
-> > I have added the following patch for today (which could be applied to
-> > the mm or powerpc trees):
-> >=20
-> > From 194805b44c11b4c0aa28bdcdc0bb0d82acef394c Mon Sep 17 00:00:00 2001
-> > From: Stephen Rothwell <sfr@canb.auug.org.au>
-> > Date: Mon, 27 Nov 2023 13:08:57 +1100
-> > Subject: [PATCH] powerpc: pmd_move_must_withdraw() is only needed for
-> >  CONFIG_TRANSPARENT_HUGEPAGE
-> >=20
-> > Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> > ---
-> >  arch/powerpc/mm/book3s64/pgtable.c | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >=20
-> > diff --git a/arch/powerpc/mm/book3s64/pgtable.c b/arch/powerpc/mm/book3=
-s64/pgtable.c
-> > index be229290a6a7..3438ab72c346 100644
-> > --- a/arch/powerpc/mm/book3s64/pgtable.c
-> > +++ b/arch/powerpc/mm/book3s64/pgtable.c
-> > @@ -542,6 +542,7 @@ void ptep_modify_prot_commit(struct vm_area_struct =
-*vma, unsigned long addr,
-> >  	set_pte_at(vma->vm_mm, addr, ptep, pte);
-> >  }
-> > =20
-> > +#ifdef CONFIG_TRANSPARENT_HUGEPAGE
-> >  /*
-> >   * For hash translation mode, we use the deposited table to store hash=
- slot
-> >   * information and they are stored at PTRS_PER_PMD offset from related=
- pmd
-> > @@ -563,6 +564,7 @@ int pmd_move_must_withdraw(struct spinlock *new_pmd=
-_ptl,
-> > =20
-> >  	return true;
-> >  }
-> > +#endif
-> > =20
-> >  /*
-> >   * Does the CPU support tlbie?
-> > --=20
-> > 2.40.1 =20
+On Thu, 30 Nov 2023 15:54:57 -0600 "Gustavo A. R. Silva" <gustavo@embeddedo=
+r.com> wrote:
+>
 
-I am still carrying this patch (it should probably go into the mm
-tree).  Is someone going to pick it up (assuming it is correct)?
+> >> Given that gcc 11 is a provided compiler on RHEL 9, can you not add
+> >> -Wstringop-overflow for that compiler, please. =20
+>=20
+> Done:
+>=20
+> https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git/comm=
+it/?h=3Dfor-next/kspp&id=3D617ab3c357d2ebdfff0e1a090c46f2f3f29b45e2
+
+Thanks.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/mftAfNUiKPZGOFgp0y=in45
+--Sig_/kdNimbeNk/GRNQqhx_kqMm9
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmVpBvcACgkQAVBC80lX
-0GydrAf9GN954MjHMtmQr8oDfEmXP34v1XDb6cN03i1NEMNhX1K0QIBor+LlMZKx
-OZg9WsMzA5OqCViRJHFD3vi6ZTmy8Z4bQPsXuUqz5/l+v4XC9nGP7x8GcPvdhktG
-j3y9FFpY5EyPTTEUYoApw9WdXjaFIMYwZGyzfYXnVS0rj3BY47YmTx757ndCXhgc
-GnlOMV6eQXgV+mxwo5lg96O8GVeBYVShREmDOiVbOgOiRm1Moe8CL9JLFDn5tDW2
-tfqsFl4X/S+y5iYdTdrPqjJuVkDGnLqPSRNogDHW2K6ZacV0shaFVhHd2pTfJqTN
-KmZ1QNG1L7moZcoA8XIAJcIUC8TQIg==
-=JUuX
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmVpCEUACgkQAVBC80lX
+0Gx1mgf/fm6PH5keY60h4sgJAJFzE8XQYxlYDe4RL36z5HYxVJSDcOKWi+DLktgl
+KrU0fhtQds1VwFuy0a4LdurHrDnr9mD48iPnNdnpgUGC3kOXoNOOv6jwD4yjhA3L
+HlOQsTNsMW4dMjeOSqAAH+Li58yJgE6vMpa6BGJq8OGnRTjLIq1gXlMUdw5axHo2
+FGAk6L8Z/waPnyXH/7J+IhUjuD4r+ThkPUspxpbMOguPqIEvyaElPIdxkJhvM84L
+huPlumslbZ1pBbe+7GZkIc1nfK0K4OE89FswMF9oMnEu8847AYjnWUJplRY32i/b
+dEbwxRc6L/TCzzqROKUhAm/o7NKd2g==
+=4QiC
 -----END PGP SIGNATURE-----
 
---Sig_/mftAfNUiKPZGOFgp0y=in45--
+--Sig_/kdNimbeNk/GRNQqhx_kqMm9--
 

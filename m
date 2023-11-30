@@ -1,172 +1,259 @@
-Return-Path: <linux-next+bounces-139-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-140-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id F0ECE7FE947
-	for <lists+linux-next@lfdr.de>; Thu, 30 Nov 2023 07:42:32 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 49C847FEA34
+	for <lists+linux-next@lfdr.de>; Thu, 30 Nov 2023 09:08:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6BEF7B20D83
-	for <lists+linux-next@lfdr.de>; Thu, 30 Nov 2023 06:42:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6C8EA1C20BD6
+	for <lists+linux-next@lfdr.de>; Thu, 30 Nov 2023 08:08:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3E9B14F8D;
-	Thu, 30 Nov 2023 06:42:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21A0B11C8E;
+	Thu, 30 Nov 2023 08:08:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="fIwaSAsP"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="hJIf7ZAc";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="DvQ8b9zb"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39FAFA3
-	for <linux-next@vger.kernel.org>; Wed, 29 Nov 2023 22:42:22 -0800 (PST)
-Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-6cb66f23eddso546955b3a.0
-        for <linux-next@vger.kernel.org>; Wed, 29 Nov 2023 22:42:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1701326541; x=1701931341; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=ScTMfbULEj/583FIqGPA1QydwmklPYE0iBm9DYMG6dM=;
-        b=fIwaSAsPb1QkDoGQm/HfbpUXqu4r8M8QZmQruiDChXfP+XG92kKiUfOgPtjfC8UVt4
-         wzjuT1CCC4HhjDGK/06W8U3MPdIMICi3jLKphTETSDVx3jVG5gWJgAG5xxs25Gr1EIvn
-         JVxwTE/Y6whwWdjNKA/zec92mpWsHg5cn2VEX1IG8wfwsi6DZyDKEoa6pIXvJgCMI1Nl
-         LhGLxjwo0WOrvXMzjWaCiWhRK2LX5EPS9HZZc1Lu7ndpcwNlJ/4oueJu4L+JCmVdTkYZ
-         vFa9UTp2T4/ud8khmAkBstQSHAf92rGZVF0dqKYsxLVbbTKgxv6QD4EPrj1exX/N+rBt
-         ULGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701326541; x=1701931341;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ScTMfbULEj/583FIqGPA1QydwmklPYE0iBm9DYMG6dM=;
-        b=YQRuvqReVJH+UECKmhkBNWqVl7w8hNC75Ywye2fWu3O3glZbPoZZL/ff17X57mlJaX
-         Ic8CY3UV1dCowVZYUsegpldAmciGcK5Aqb8nk6cAg3Vqy/Iml3jyRU0bYiIcrx6Ge1O+
-         /Ex3TOv11J7hUdUgrgcRlybXHHGYHQf9iGAnllz3JFPCQxqmfw+t+jF450ij6ECH2AvN
-         znlUJXyuMGgwcIErNmAU08LaTXeFSPiAKKDgRL48AansQh8fPQHt5lfuOwY8DATzm67A
-         7KDvslAFZUHDbzb3CuS4s/TsVproNm/E4ihkQLQw3bFg5D12QMB4I/9CI5jzaDWiXOXu
-         vWwQ==
-X-Gm-Message-State: AOJu0YyaprQ21TgLuO8dGYXX1JD0T+EYUbua4HP8NxOdiSWTwosXvJ3u
-	wvguyli9duyjeR36RtiR12aWi6RYmSzSfNkE41qarg==
-X-Google-Smtp-Source: AGHT+IEOxfTkMB1QhGx1osPGIanuILvJQXDYCJVbIbenfFQ5RpGgg+JCj9dXSVXpIBfMOm6IgxdN5Q==
-X-Received: by 2002:a05:6a00:3697:b0:6cd:ecdf:b244 with SMTP id dw23-20020a056a00369700b006cdecdfb244mr283304pfb.5.1701326541138;
-        Wed, 29 Nov 2023 22:42:21 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id g26-20020aa79dda000000b006cb4379061esm444725pfq.205.2023.11.29.22.42.20
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Nov 2023 22:42:20 -0800 (PST)
-Message-ID: <65682ecc.a70a0220.e1da3.1366@mx.google.com>
-Date: Wed, 29 Nov 2023 22:42:20 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43312A3;
+	Thu, 30 Nov 2023 00:08:04 -0800 (PST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailout.west.internal (Postfix) with ESMTP id 70B323200A6E;
+	Thu, 30 Nov 2023 03:08:00 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute5.internal (MEProxy); Thu, 30 Nov 2023 03:08:01 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:sender:subject:subject:to:to; s=fm3; t=
+	1701331679; x=1701418079; bh=VLB9sPty6BA5Y2qKbDnRq6jtN+JfidHBYr5
+	ZaRockn8=; b=hJIf7ZAcZbsPzME+ukFyrAttvBXgz/msRrDSSa6ZSH7cxDOHCcw
+	ZqhSTPSzgqwA+NLyrR572BsH7w2suneQGutEkrAI0VrYY2qCBwL/+fUAAUWVNaOO
+	xTAkV48Am+YBz392u1WRI+xSmmVVd8c8NoHNT/n1CaKtFOpqkStVhNwgUIxCECAy
+	xVc4jaFttzdA5kPhcs8V/BMUPoroUvunBcZMjyI6b6S7Ur6S4yeQ3crtW2Uw5XXt
+	d0/L8dfBAc1O7fMTWj60PbCbnBhVuBtWnmiTpbPwhjOzhwQCIQt0+P3XqK1dTnrR
+	sX9K9CBgYxJl4jU6ZJn51Vahhk0Enod8PNQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:sender:subject:subject:to:to:x-me-proxy
+	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+	1701331679; x=1701418079; bh=VLB9sPty6BA5Y2qKbDnRq6jtN+JfidHBYr5
+	ZaRockn8=; b=DvQ8b9zbCS9bYkg6AeyJ56n/708NSO8xwvQK1KR0+t8h0w6YVrC
+	k815wVn1z4Aw+MY4lk1ngMcP/WPM9fxXjJrJ5Tdx7AU/VT7EIWIwid71aohC1sC6
+	0KOkeu9MoeL2vNZlszoKu99htogDzCcssv+0oh/fUjXiFmosaLBtXjZprI5nQo5h
+	ZwBkG9dYc+LUlBYPvDmzopTvpTJuBHG+Bxqmzc2pkpMj78j0Lv6EZ2vPBLL+CU8m
+	leGXp91jU0kKIwvdv7iAJcWwWC4OYazkCAhrmuyVD6UJFhoeWzkupuD5hbIAfyLk
+	JtCecsXKGlm5eVBpOvUKeXiR7C4nWL4HaVA==
+X-ME-Sender: <xms:30JoZa__NZR7rAS7yNEV9tVLlu07nwMm5PkiMu810gyil11WeWG9cw>
+    <xme:30JoZasz_10cKqO6iXgwgfgNACjAG34k3NXt9xSVAvGXCXJoruhcX9KEiyfzNUHNB
+    cFLRRZR8d1PWWyM8C0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudeiiedgudduhecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedf
+    tehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrf
+    grthhtvghrnhepgeefjeehvdelvdffieejieejiedvvdfhleeivdelveehjeelteegudek
+    tdfgjeevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    eprghrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:30JoZQD6GDEo2WQLYt0vqB3WgSNf3bYLjokeSfdijvvfyK8GYapM2g>
+    <xmx:30JoZSfeIRXhadZjWghMZgu0TiVnHsHKE3TqX4jP-lHnUJ-1qNcV-g>
+    <xmx:30JoZfNkOkdi6Uw80VA5zRP-aHkXHo68_XkhrgG-dCzyItW6Z3vUxw>
+    <xmx:30JoZa2mGqoSvfvjQjoBsrxInzNx_hIFe7MODJJkII69zo4lLtvNqQ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id F2B9BB60089; Thu, 30 Nov 2023 03:07:58 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-1238-g6cccb1fa34-fm-20231128.002-g6cccb1fa
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Message-Id: <4be73872-c1f5-4c31-8201-712c19290a22@app.fastmail.com>
+In-Reply-To: <20231129151030.24b807f1d2b43be301a533b7@linux-foundation.org>
+References: <20231130075838.05e5bc9b@oak>
+ <20231129131003.d2c1078847c3865c1ac2dfd5@linux-foundation.org>
+ <ebb5b1a2-ed27-4a77-b62b-1d3f19bddd85@app.fastmail.com>
+ <20231129151030.24b807f1d2b43be301a533b7@linux-foundation.org>
+Date: Thu, 30 Nov 2023 09:07:38 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Andrew Morton" <akpm@linux-foundation.org>
+Cc: "Stephen Rothwell" <sfr@rothwell.id.au>,
+ linux-next <linux-next@vger.kernel.org>,
+ "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+ "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+ "David S . Miller" <davem@davemloft.net>, sparclinux@vger.kernel.org,
+ linux-mips@vger.kernel.org
+Subject: Re: linux-next: lots of errors/warnings from the -Werror=missing-prototypes
+ addition
+Content-Type: text/plain;charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: build
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Tree: next
-X-Kernelci-Kernel: v6.7-rc3-291-g1867b4f140ac1
-Subject: next/pending-fixes build: 8 builds: 0 failed, 8 passed,
- 4 warnings (v6.7-rc3-291-g1867b4f140ac1)
-To: linux-next@vger.kernel.org
-From: "kernelci.org bot" <bot@kernelci.org>
 
-next/pending-fixes build: 8 builds: 0 failed, 8 passed, 4 warnings (v6.7-rc=
-3-291-g1867b4f140ac1)
+On Thu, Nov 30, 2023, at 00:10, Andrew Morton wrote:
+> On Wed, 29 Nov 2023 23:51:04 +0100 "Arnd Bergmann" <arnd@arndb.de> wro=
+te:
+>
+>> I did all my testing with CONFIG_WERROR force-enabled, so
+>> the bit I missed here is that at least three architectures
+>> that are missing fixes also set -Werror: mips, sparc and alpha.
+>>=20
+>> How about adding a patch to no longer force -Werror for
+>> these?
+>
+> These architectures are doing it wrong, aren't they?  They should be
+> using the CONFIG_WERROR infrastructure rather than hard-coding it?  If
+> so then sure, a standalone patch to clean that up sounds sounds
+> appropriate.=20
 
-Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
-rnel/v6.7-rc3-291-g1867b4f140ac1/
+Yes, I think we should have already removed them when CONFIG_WERROR
+was added in v5.15, the architecture specific logic dates back
+to v2.6 times.
 
-Tree: next
-Branch: pending-fixes
-Git Describe: v6.7-rc3-291-g1867b4f140ac1
-Git Commit: 1867b4f140ac1336fdc9f7989171e230ab3cea6a
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Built: 8 unique architectures
+> I guess it should precede "Makefile.extrawarn: turn on
+> missing-prototypes globally".
 
-Warnings Detected:
+I already have a collection of patches to fix up known
+-Wmissing-prototype warnings across architectures in the
+asm-generic tree, so I'll add this patch there:
 
-arc:
+commit bdef96eb0b89dfa80992312a8e3b2613bf178ae5
+Author: Arnd Bergmann <arnd@arndb.de>
+Date:   Thu Nov 30 00:07:07 2023 +0100
 
-arm64:
+    arch: turn off -Werror for architectures with known warnings
+   =20
+    A couple of architectures enable -Werror for their own files regardl=
+ess
+    of CONFIG_WERROR but also have known warnings that fail the build
+    with -Wmissing-prototypes enabled by default:
+   =20
+    arch/alpha/lib/memcpy.c:153:8: error: no previous prototype for 'mem=
+cpy' [-Werror=3Dmissing-prototypes]
+    arch/alpha/kernel/irq.c:96:1: error: no previous prototype for 'hand=
+le_irq' [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:673:17: error: no previous prototype for =E2=
+=80=98sys_rt_sigreturn=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/signal.c:636:17: error: no previous prototype for =E2=
+=80=98sys_sigreturn=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/kernel/syscall.c:51:16: error: no previous prototype for =E2=
+=80=98sysm_pipe=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/mips/mm/fault.c:323:17: error: no previous prototype for =E2=80=
+=98do_page_fault=E2=80=99 [-Werror=3Dmissing-prototypes]
+    arch/sparc/vdso/vma.c:246:12: warning: no previous prototype for =E2=
+=80=98init_vdso_image=E2=80=99 [-Wmissing-prototypes]v
+    arch/sparc/vdso/vdso32/../vclock_gettime.c:343:1: warning: no previo=
+us prototype for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-=
+prototypes]
+    arch/sparc/vdso/vclock_gettime.c:343:1: warning: no previous prototy=
+pe for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/prom/p1275.c:52:6: warning: no previous prototype for =E2=
+=80=98prom_cif_init=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/prom/misc_64.c:165:5: warning: no previous prototype for =
+=E2=80=98prom_get_mmu_ihandle=E2=80=99 [-Wmissing-prototypes]
+   =20
+    This appears to be an artifact from the times when this architecture
+    code was better maintained that most device drivers and before CONFI=
+G_WERROR
+    was added. Now it just gets in the way, so remove all of these.
+   =20
+    Powerpc and x86 both still have their own Kconfig options to enable =
+-Werror
+    for some of their files. These architectures are better maintained t=
+han most
+    and the options are easy to disable, so leave those untouched.
+   =20
+    Reported-by: Stephen Rothwell <sfr@rothwell.id.au>
+    Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-arm:
-
-i386:
-
-mips:
-
-riscv:
-
-sparc:
-    sparc64_defconfig (gcc-10): 4 warnings
-
-x86_64:
-
-
-Warnings summary:
-
-    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
-tion failed, symbol will not be versioned.
-    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
--Wcpp]
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----
-For more info write to <info@kernelci.org>
+diff --git a/arch/alpha/lib/Makefile b/arch/alpha/lib/Makefile
+index 1cc74f7b50ef..6a779b9018fd 100644
+--- a/arch/alpha/lib/Makefile
++++ b/arch/alpha/lib/Makefile
+@@ -4,7 +4,6 @@
+ #
+=20
+ asflags-y :=3D $(KBUILD_CFLAGS)
+-ccflags-y :=3D -Werror
+=20
+ # Many of these routines have implementations tuned for ev6.
+ # Choose them iff we're targeting ev6 specifically.
+diff --git a/arch/alpha/mm/Makefile b/arch/alpha/mm/Makefile
+index bd770302eb82..101dbd06b4ce 100644
+--- a/arch/alpha/mm/Makefile
++++ b/arch/alpha/mm/Makefile
+@@ -3,6 +3,4 @@
+ # Makefile for the linux alpha-specific parts of the memory manager.
+ #
+=20
+-ccflags-y :=3D -Werror
+-
+ obj-y	:=3D init.o fault.o
+diff --git a/arch/mips/Kbuild b/arch/mips/Kbuild
+index af2967bffb73..e2d623621a00 100644
+--- a/arch/mips/Kbuild
++++ b/arch/mips/Kbuild
+@@ -1,10 +1,4 @@
+ # SPDX-License-Identifier: GPL-2.0
+-# Fail on warnings - also for files referenced in subdirs
+-# -Werror can be disabled for specific files using:
+-# CFLAGS_<file.o> :=3D -Wno-error
+-ifeq ($(W),)
+-subdir-ccflags-y :=3D -Werror
+-endif
+=20
+ # platform specific definitions
+ include $(srctree)/arch/mips/Kbuild.platforms
+diff --git a/arch/sparc/kernel/Makefile b/arch/sparc/kernel/Makefile
+index 1ce4d5028c86..58ea4ef9b622 100644
+--- a/arch/sparc/kernel/Makefile
++++ b/arch/sparc/kernel/Makefile
+@@ -5,7 +5,6 @@
+ #
+=20
+ asflags-y :=3D -ansi
+-#ccflags-y :=3D -Werror
+=20
+ # Undefine sparc when processing vmlinux.lds - it is used
+ # And teach CPP we are doing $(BITS) builds (for this case)
+diff --git a/arch/sparc/lib/Makefile b/arch/sparc/lib/Makefile
+index 80b07bbe4978..59669ebddd4e 100644
+--- a/arch/sparc/lib/Makefile
++++ b/arch/sparc/lib/Makefile
+@@ -3,7 +3,6 @@
+ #
+=20
+ asflags-y :=3D -ansi -DST_DIV0=3D0x02
+-#ccflags-y :=3D -Werror
+=20
+ lib-$(CONFIG_SPARC32) +=3D ashrdi3.o
+ lib-$(CONFIG_SPARC32) +=3D memcpy.o memset.o
+diff --git a/arch/sparc/mm/Makefile b/arch/sparc/mm/Makefile
+index a199484e131f..809d993f6d88 100644
+--- a/arch/sparc/mm/Makefile
++++ b/arch/sparc/mm/Makefile
+@@ -3,7 +3,6 @@
+ #
+=20
+ asflags-y :=3D -ansi
+-#ccflags-y :=3D -Werror
+=20
+ obj-$(CONFIG_SPARC64)   +=3D ultra.o tlb.o tsb.o
+ obj-y                   +=3D fault_$(BITS).o
+diff --git a/arch/sparc/prom/Makefile b/arch/sparc/prom/Makefile
+index 397b79af77f7..a1adc75d8055 100644
+--- a/arch/sparc/prom/Makefile
++++ b/arch/sparc/prom/Makefile
+@@ -3,7 +3,6 @@
+ # Linux.
+ #
+ asflags :=3D -ansi
+-ccflags :=3D -Werror
+=20
+ lib-y                 :=3D bootstr_$(BITS).o
+ lib-y                 +=3D init_$(BITS).o
 

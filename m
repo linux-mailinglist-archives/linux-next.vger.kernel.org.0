@@ -1,121 +1,133 @@
-Return-Path: <linux-next+bounces-160-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-161-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1AE857FFDA2
-	for <lists+linux-next@lfdr.de>; Thu, 30 Nov 2023 22:37:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id AE6057FFDCE
+	for <lists+linux-next@lfdr.de>; Thu, 30 Nov 2023 22:47:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4CC931C20EBF
-	for <lists+linux-next@lfdr.de>; Thu, 30 Nov 2023 21:37:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CA70F1C20BA2
+	for <lists+linux-next@lfdr.de>; Thu, 30 Nov 2023 21:47:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FD945917E;
-	Thu, 30 Nov 2023 21:37:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1EF265FEF9;
+	Thu, 30 Nov 2023 21:47:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="VUwU1hZ5";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="xtu8hJy4"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="Q5V2nzV2"
 X-Original-To: linux-next@vger.kernel.org
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1215E194;
-	Thu, 30 Nov 2023 13:37:15 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailout.nyi.internal (Postfix) with ESMTP id 8071A5C01BC;
-	Thu, 30 Nov 2023 16:37:12 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Thu, 30 Nov 2023 16:37:12 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:sender
-	:subject:subject:to:to; s=fm3; t=1701380232; x=1701466632; bh=Zz
-	F9h379MrAFj54pXWhL+XcbpUP3DpZlKzF1Dnx5FrY=; b=VUwU1hZ5uvMFqnriFi
-	fZNJ2fUdH7Aa5LbOPjDXL+SMTdE1URP+lXR4UgpTdHT0/25JMTdeoI1foTS7o7HP
-	3v6lsx2tcZwvY0cYSv2A0NVWSyvoaR8S0CW+gtYZb77WwTaP1hdZHZwNmf2HhbF3
-	Njq+2RfP3Umj8yFhfpWDmnwISxlqqgFvEjsJwkVvtiWsJmHMeSvh+8b8fxUQ7+mj
-	HeePWxpvgok5gmZzwKA5hAO3cxAP2+96L5oY3eijzE7Ae7nMBuFG0gX5ilVhViUa
-	3r9opUS+dctQIG5z4VJD3/XgXOfzNNWsG8nJZ/JA74RfVTMW1q0553h7mqJM3WyM
-	1Y+A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-	:x-sasl-enc; s=fm1; t=1701380232; x=1701466632; bh=ZzF9h379MrAFj
-	54pXWhL+XcbpUP3DpZlKzF1Dnx5FrY=; b=xtu8hJy4NCZgJkhuo6Vdqoe7aPaYs
-	hu2d9SSnQuPMZKo/wqq9EX538D/lSwJIZmSwPr46vcjUc85mGIJRsTxXgnTWA44R
-	vbp6/KqI2bzT5406NtyMrkTL1iBqnc4kuPWfnmiBZru9lXDLfe1FPL2RTilrDMoO
-	SiSBdxV/sycERlIt3JNl4FUyT+c+QeRP2GwzmxpKAC+bqZNGjHGpXP+iutR6qC3c
-	Mo0Sv/xy3sMRtpnC1tylWeubJX9nM2HOcHJBPKmyB1XJ/3N+uotC9Ap/Hu7d/Pyc
-	R8bLTE3kqnwQ6gMOlH/vBgkXxk/UJA/9El8blbBCRZhO2rUtxxjj+ntYQ==
-X-ME-Sender: <xms:hwBpZZHQuTBe7RDle2Un4O4CJuIMyYZTAe9_ya1VLyIE1IpJEEyqFw>
-    <xme:hwBpZeUvIvzOgkdiL9MtbJ7cxxWa0SJfkt_97-yww6DW1sLDQhG26JOwtagUDwFJ6
-    VGUQWZxWMXRhndAvp8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudeijedgudehtdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
-    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:hwBpZbJ6EsZXwFWS7NTv4ZhUNrXLJ_JLpBnHAvigtsNslQylZulc0g>
-    <xmx:hwBpZfGVFa3Po9QgM2Sr11NTtHLRK4QU47H8uZhxH_Pv7r7YKYgvag>
-    <xmx:hwBpZfUhV4s4k09ASokxWzATzECncoE3Gci5bth3tu3R21KlwWRkUQ>
-    <xmx:iABpZVf0RCnCciZ9H2I4w-dz_IdNmXN2Xg26tDd9qtkl3yds-Q_KyA>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id ADD8DB60089; Thu, 30 Nov 2023 16:37:11 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-1238-g6cccb1fa34-fm-20231128.002-g6cccb1fa
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84AFF10D9;
+	Thu, 30 Nov 2023 13:47:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1701380837;
+	bh=X6P4Ic/jVR/ehQk8xDi+AsQIzeIiWoSBPu1D03k6dX4=;
+	h=Date:From:To:Cc:Subject:From;
+	b=Q5V2nzV2FGWLDZTKfh9HcZR7cjUPtxgdMT0oR8NmHy0tRxehCeUb+jqJNBuArqwch
+	 qBj0uQnKsVEhPUJBgtdVW324wt9cgTNyPq0kNZijSdL+NpM6z/bfU/Yy31wNi/hSq/
+	 kw74Wx0N1VRsXUflDbz0Ck5dF61bfIQHbT5WBb+hvMiE/ek0+LnWKAXeBGk7cyvLJ6
+	 4L3nvqALHj5MVy+lB2Mfr9pYRYXqSWyUcIo7hb3olfpuSgXr8R6sxyafSJJpfuRAXc
+	 ya6bGqDciWcRwrDl7FYMjfGSVrp/n537Fk02LyDMQkRdooR0ppupFq9W3ot1Njx6ed
+	 M4gmwBF41nLag==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Sh8tD6rL4z4xkW;
+	Fri,  1 Dec 2023 08:47:16 +1100 (AEDT)
+Date: Fri, 1 Dec 2023 08:47:15 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Conor Dooley <Conor.Dooley@microchip.com>
+Cc: Inochi Amaoto <inochiama@outlook.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the riscv-dt tree with the
+ riscv-dt-fixes tree
+Message-ID: <20231201084715.11edd814@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <8cef91eb-140c-46a6-b695-70df89bbdb81@app.fastmail.com>
-In-Reply-To: <20231130081929.46a79c33edee8651c63112dc@linux-foundation.org>
-References: <20231130075838.05e5bc9b@oak>
- <20231129131003.d2c1078847c3865c1ac2dfd5@linux-foundation.org>
- <ebb5b1a2-ed27-4a77-b62b-1d3f19bddd85@app.fastmail.com>
- <20231129151030.24b807f1d2b43be301a533b7@linux-foundation.org>
- <4be73872-c1f5-4c31-8201-712c19290a22@app.fastmail.com>
- <20231130081929.46a79c33edee8651c63112dc@linux-foundation.org>
-Date: Thu, 30 Nov 2023 22:36:50 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Andrew Morton" <akpm@linux-foundation.org>
-Cc: "Stephen Rothwell" <sfr@rothwell.id.au>,
- linux-next <linux-next@vger.kernel.org>,
- "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
- "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
- "David S . Miller" <davem@davemloft.net>, sparclinux@vger.kernel.org,
- linux-mips@vger.kernel.org
-Subject: Re: linux-next: lots of errors/warnings from the -Werror=missing-prototypes
- addition
-Content-Type: text/plain
+Content-Type: multipart/signed; boundary="Sig_/ygxXbF.zZVQRrzdGe2cOBJQ";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Thu, Nov 30, 2023, at 17:19, Andrew Morton wrote:
-> On Thu, 30 Nov 2023 09:07:38 +0100 "Arnd Bergmann" <arnd@arndb.de> wrote:
->
->> > I guess it should precede "Makefile.extrawarn: turn on
->> > missing-prototypes globally".
->> 
->> I already have a collection of patches to fix up known
->> -Wmissing-prototype warnings across architectures in the
->> asm-generic tree, so I'll add this patch there:
->> 
->> commit bdef96eb0b89dfa80992312a8e3b2613bf178ae5
->> Author: Arnd Bergmann <arnd@arndb.de>
->> Date:   Thu Nov 30 00:07:07 2023 +0100
->> 
->>     arch: turn off -Werror for architectures with known warnings
->
-> I think this would be better in the mm-nonmm tree, alongside
-> "Makefile.extrawarn: turn on missing-prototypes globally".  Can I steal it?
+--Sig_/ygxXbF.zZVQRrzdGe2cOBJQ
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Agreed, that does help with bisection. I had pushed out the
-asm-generic branch with the patch earlier today but now reverted
-back to the previous state.
+Hi all,
 
-      Arnd
+Today's linux-next merge of the riscv-dt tree got a conflict in:
+
+  arch/riscv/boot/dts/sophgo/cv1800b.dtsi
+
+between commit:
+
+  e80ed63affc9 ("riscv: dts: sophgo: remove address-cells from intc node")
+
+from the riscv-dt-fixes tree and commit:
+
+  5b5dce3951b2 ("riscv: dts: sophgo: Separate compatible specific for CV180=
+0B soc")
+
+from the riscv-dt tree.
+
+I fixed it up (I used the latter version of his file and added the
+following merge fix patch) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Fri, 1 Dec 2023 08:43:13 +1100
+Subject: [PATCH] fixup for "riscv: dts: sophgo: Separate compatible specifi=
+c for CV1800B soc"
+
+interacting with "riscv: dts: sophgo: remove address-cells from intc node"
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ arch/riscv/boot/dts/sophgo/cv18xx.dtsi | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/arch/riscv/boot/dts/sophgo/cv18xx.dtsi b/arch/riscv/boot/dts/s=
+ophgo/cv18xx.dtsi
+index d415cc758def..2d6f4a4b1e58 100644
+--- a/arch/riscv/boot/dts/sophgo/cv18xx.dtsi
++++ b/arch/riscv/boot/dts/sophgo/cv18xx.dtsi
+@@ -34,7 +34,6 @@ cpu0: cpu@0 {
+ 			cpu0_intc: interrupt-controller {
+ 				compatible =3D "riscv,cpu-intc";
+ 				interrupt-controller;
+-				#address-cells =3D <0>;
+ 				#interrupt-cells =3D <1>;
+ 			};
+ 		};
+--=20
+2.40.1
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/ygxXbF.zZVQRrzdGe2cOBJQ
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmVpAuMACgkQAVBC80lX
+0GzG4wgAoOVTnujhByAtTrxoTWrpadvbQUICioJ25Xr5gdlmotHMfGsZTC/O9adO
+ioqNP2eBLQSt0It1ez9Rajnn1tvANC8E4CaU/2o+fsrcx/59j7V5ElnMZ9RMLBDx
+E/KWmkFn0Y8bP0Y9UUeDYoa7iKri29RlBuub94AB7dpSNt132J7vOTA3WPmfkW8R
+3KYUWx4rXzcfTVdspwPLoLGKs8CzJK8/gUO7pK49HSnRl7sYa2vRb79PVTHUFrya
+wXz2QOaBgHLtlOa7Ji06LawF0/eDiZtqmSZlEcbikh5RGevasPgGNI8VP9uzz0wH
+lZv7kBj7MLxj4IcEoLqh1J2pBHaMrQ==
+=1+6H
+-----END PGP SIGNATURE-----
+
+--Sig_/ygxXbF.zZVQRrzdGe2cOBJQ--
 

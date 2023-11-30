@@ -1,133 +1,127 @@
-Return-Path: <linux-next+bounces-161-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-162-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AE6057FFDCE
-	for <lists+linux-next@lfdr.de>; Thu, 30 Nov 2023 22:47:32 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 15F0A7FFE11
+	for <lists+linux-next@lfdr.de>; Thu, 30 Nov 2023 22:55:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CA70F1C20BA2
-	for <lists+linux-next@lfdr.de>; Thu, 30 Nov 2023 21:47:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 485211C20BF8
+	for <lists+linux-next@lfdr.de>; Thu, 30 Nov 2023 21:55:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1EF265FEF9;
-	Thu, 30 Nov 2023 21:47:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 380B25A0EE;
+	Thu, 30 Nov 2023 21:55:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="Q5V2nzV2"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=embeddedor.com header.i=@embeddedor.com header.b="mMiffwqt"
 X-Original-To: linux-next@vger.kernel.org
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84AFF10D9;
-	Thu, 30 Nov 2023 13:47:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1701380837;
-	bh=X6P4Ic/jVR/ehQk8xDi+AsQIzeIiWoSBPu1D03k6dX4=;
-	h=Date:From:To:Cc:Subject:From;
-	b=Q5V2nzV2FGWLDZTKfh9HcZR7cjUPtxgdMT0oR8NmHy0tRxehCeUb+jqJNBuArqwch
-	 qBj0uQnKsVEhPUJBgtdVW324wt9cgTNyPq0kNZijSdL+NpM6z/bfU/Yy31wNi/hSq/
-	 kw74Wx0N1VRsXUflDbz0Ck5dF61bfIQHbT5WBb+hvMiE/ek0+LnWKAXeBGk7cyvLJ6
-	 4L3nvqALHj5MVy+lB2Mfr9pYRYXqSWyUcIo7hb3olfpuSgXr8R6sxyafSJJpfuRAXc
-	 ya6bGqDciWcRwrDl7FYMjfGSVrp/n537Fk02LyDMQkRdooR0ppupFq9W3ot1Njx6ed
-	 M4gmwBF41nLag==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Sh8tD6rL4z4xkW;
-	Fri,  1 Dec 2023 08:47:16 +1100 (AEDT)
-Date: Fri, 1 Dec 2023 08:47:15 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Conor Dooley <Conor.Dooley@microchip.com>
-Cc: Inochi Amaoto <inochiama@outlook.com>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the riscv-dt tree with the
- riscv-dt-fixes tree
-Message-ID: <20231201084715.11edd814@canb.auug.org.au>
+Received: from omta038.useast.a.cloudfilter.net (omta038.useast.a.cloudfilter.net [44.202.169.37])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DF8110F8
+	for <linux-next@vger.kernel.org>; Thu, 30 Nov 2023 13:55:01 -0800 (PST)
+Received: from eig-obgw-6002a.ext.cloudfilter.net ([10.0.30.222])
+	by cmsmtp with ESMTPS
+	id 8mhxrgbT9WcCI8ozsr6nYC; Thu, 30 Nov 2023 21:55:00 +0000
+Received: from gator4166.hostgator.com ([108.167.133.22])
+	by cmsmtp with ESMTPS
+	id 8ozrroQYvM0U28ozrrxrq1; Thu, 30 Nov 2023 21:55:00 +0000
+X-Authority-Analysis: v=2.4 cv=BuKOfKb5 c=1 sm=1 tr=0 ts=656904b4
+ a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=8XV0R0IcXUXM6S+KMni/4w==:17
+ a=OWjo9vPv0XrRhIrVQ50Ab3nP57M=:19 a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19
+ a=IkcTkHD0fZMA:10 a=BNY50KLci1gA:10 a=wYkD_t78qR0A:10 a=zd2uoN0lAAAA:8
+ a=VwQbUJbxAAAA:8 a=Kg8e4WwB38ma1Z1VaQoA:9 a=QEXdDO2ut3YA:10
+ a=AjGcO6oz07-iQ99wixmX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:References:Cc:To:From:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=0jen8kdfIh24UVe/0TrHAVR7LS4PbKHvWju6bbFi/X4=; b=mMiffwqt7JlYCd+/FhAKIV3nv6
+	TK8DFVgBrw2dnuxT51DmDaI21Dl0sBvA7VvARCjmkz8dArEvFguZVL3AreH4yX8dZ0nTI7n68RnBk
+	Akk40eOlXFFS9c4n0KE1rPlzaxus9Oj0VVD0nuG4VQJvym6433jAhJZ/c5MMeNplC1DQdkJAxmKb+
+	EmPc+O8Q2nUGWEvXEJ6OhzU12bEWOC9+ufJav+4e2/zeZ8xIrYS4QGuwtfcfaX0KzQtF1v+G0JeOQ
+	TubmLK6NFbgoptZhhBKgokrQXorW5NKBRacw26IoDNnbgTvzdQEn2o3WBXWEv09wTwzJ2gxFiiPKD
+	JCAZyqTQ==;
+Received: from 189.215.208.186.cable.dyn.cableonline.com.mx ([189.215.208.186]:1908 helo=[192.168.0.28])
+	by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.96.2)
+	(envelope-from <gustavo@embeddedor.com>)
+	id 1r8ozr-003hpQ-0g;
+	Thu, 30 Nov 2023 15:54:59 -0600
+Message-ID: <402fc89f-96ff-4f64-ad6d-aaa7ecc284e7@embeddedor.com>
+Date: Thu, 30 Nov 2023 15:54:57 -0600
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ygxXbF.zZVQRrzdGe2cOBJQ";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+User-Agent: Mozilla Thunderbird
+Subject: Re: linux-next: build warnings after merge of the kspp-gustavo tree
+Content-Language: en-US
+From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: "Aithal, Srikanth" <sraithal@amd.com>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20231122144814.649823ac@canb.auug.org.au>
+ <813f3aa2-3449-7264-fa54-eaafd9981add@amd.com>
+ <20231128091351.2bfb38dd@canb.auug.org.au>
+ <001021e0-2262-49c8-89d0-c0d0720ca313@embeddedor.com>
+In-Reply-To: <001021e0-2262-49c8-89d0-c0d0720ca313@embeddedor.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 189.215.208.186
+X-Source-L: No
+X-Exim-ID: 1r8ozr-003hpQ-0g
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 189.215.208.186.cable.dyn.cableonline.com.mx ([192.168.0.28]) [189.215.208.186]:1908
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 1
+X-Org: HG=hgshared;ORG=hostgator;
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
+X-CMAE-Envelope: MS4xfKlakc22IIdN8A91jivxu+6yB1x1XMvchH5184+G+RXUFbC6bW1+Mbt4QnUNeHZAjM48dBM1WtA3lw7GBJL+3touQK71wUjEKcBTHuSwBQhvb0zNIz9M
+ DtcU7pP7xyOrr7wu3QOsdSuPhEayuXT0qgy37lwIIUdechsK/ySlWAIBRDZpZ2Ham9apQIzNa+Bs6UIzQCi4Yq9qaas9t/MJrsTkwWqnErlBOZCwBKa7/yqU
 
---Sig_/ygxXbF.zZVQRrzdGe2cOBJQ
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Stephen,
 
-Hi all,
+On 11/28/23 15:11, Gustavo A. R. Silva wrote:
+> Hi Stephen,
+> 
+> On 11/27/23 16:13, Stephen Rothwell wrote:
+>> Hi Gustavo,
+>>
+>> On Wed, 22 Nov 2023 10:21:27 +0530 "Aithal, Srikanth" <sraithal@amd.com> wrote:
+>>>
+>>> @Gustavo I see you have mentioned it as gcc issue. I was not hitting this until yesterdays linux-next build. I am on latest gcc which RHEL 9.x provides,
+>>> gcc --version
+>>> gcc (GCC) 11.4.1 20230605 (Red Hat 11.4.1-2)
+>>
+>> Given that gcc 11 is a provided compiler on RHEL 9, can you not add
+>> -Wstringop-overflow for that compiler, please.
 
-Today's linux-next merge of the riscv-dt tree got a conflict in:
+Done:
 
-  arch/riscv/boot/dts/sophgo/cv1800b.dtsi
+https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git/commit/?h=for-next/kspp&id=617ab3c357d2ebdfff0e1a090c46f2f3f29b45e2
 
-between commit:
+Thanks!
+--
+Gustavo
 
-  e80ed63affc9 ("riscv: dts: sophgo: remove address-cells from intc node")
-
-from the riscv-dt-fixes tree and commit:
-
-  5b5dce3951b2 ("riscv: dts: sophgo: Separate compatible specific for CV180=
-0B soc")
-
-from the riscv-dt tree.
-
-I fixed it up (I used the latter version of his file and added the
-following merge fix patch) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Fri, 1 Dec 2023 08:43:13 +1100
-Subject: [PATCH] fixup for "riscv: dts: sophgo: Separate compatible specifi=
-c for CV1800B soc"
-
-interacting with "riscv: dts: sophgo: remove address-cells from intc node"
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- arch/riscv/boot/dts/sophgo/cv18xx.dtsi | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/arch/riscv/boot/dts/sophgo/cv18xx.dtsi b/arch/riscv/boot/dts/s=
-ophgo/cv18xx.dtsi
-index d415cc758def..2d6f4a4b1e58 100644
---- a/arch/riscv/boot/dts/sophgo/cv18xx.dtsi
-+++ b/arch/riscv/boot/dts/sophgo/cv18xx.dtsi
-@@ -34,7 +34,6 @@ cpu0: cpu@0 {
- 			cpu0_intc: interrupt-controller {
- 				compatible =3D "riscv,cpu-intc";
- 				interrupt-controller;
--				#address-cells =3D <0>;
- 				#interrupt-cells =3D <1>;
- 			};
- 		};
---=20
-2.40.1
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/ygxXbF.zZVQRrzdGe2cOBJQ
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmVpAuMACgkQAVBC80lX
-0GzG4wgAoOVTnujhByAtTrxoTWrpadvbQUICioJ25Xr5gdlmotHMfGsZTC/O9adO
-ioqNP2eBLQSt0It1ez9Rajnn1tvANC8E4CaU/2o+fsrcx/59j7V5ElnMZ9RMLBDx
-E/KWmkFn0Y8bP0Y9UUeDYoa7iKri29RlBuub94AB7dpSNt132J7vOTA3WPmfkW8R
-3KYUWx4rXzcfTVdspwPLoLGKs8CzJK8/gUO7pK49HSnRl7sYa2vRb79PVTHUFrya
-wXz2QOaBgHLtlOa7Ji06LawF0/eDiZtqmSZlEcbikh5RGevasPgGNI8VP9uzz0wH
-lZv7kBj7MLxj4IcEoLqh1J2pBHaMrQ==
-=1+6H
------END PGP SIGNATURE-----
-
---Sig_/ygxXbF.zZVQRrzdGe2cOBJQ--
+> 
+> 
+> Sure thing. Working on that. :)
+> 
+> -- 
+> Gustavo
+> 
 

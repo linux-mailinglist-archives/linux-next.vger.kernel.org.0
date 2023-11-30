@@ -1,135 +1,122 @@
-Return-Path: <linux-next+bounces-154-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-155-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B9B387FF905
-	for <lists+linux-next@lfdr.de>; Thu, 30 Nov 2023 19:04:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id E9B687FF907
+	for <lists+linux-next@lfdr.de>; Thu, 30 Nov 2023 19:05:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4C306B21118
-	for <lists+linux-next@lfdr.de>; Thu, 30 Nov 2023 18:04:39 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8A153B20DEF
+	for <lists+linux-next@lfdr.de>; Thu, 30 Nov 2023 18:05:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C1A75677D;
-	Thu, 30 Nov 2023 18:04:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2EFF58103;
+	Thu, 30 Nov 2023 18:05:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=embeddedor.com header.i=@embeddedor.com header.b="PJ6JiSRb"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Jg/CBQzp"
 X-Original-To: linux-next@vger.kernel.org
-Received: from omta34.uswest2.a.cloudfilter.net (omta34.uswest2.a.cloudfilter.net [35.89.44.33])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1D3D10D9
-	for <linux-next@vger.kernel.org>; Thu, 30 Nov 2023 10:04:32 -0800 (PST)
-Received: from eig-obgw-6008a.ext.cloudfilter.net ([10.0.30.227])
-	by cmsmtp with ESMTPS
-	id 8irHrJ0vK8Hte8lOqrmimV; Thu, 30 Nov 2023 18:04:32 +0000
-Received: from gator4166.hostgator.com ([108.167.133.22])
-	by cmsmtp with ESMTPS
-	id 8lOprBaWW0xkr8lOprbpM7; Thu, 30 Nov 2023 18:04:31 +0000
-X-Authority-Analysis: v=2.4 cv=N7U6qkxB c=1 sm=1 tr=0 ts=6568ceaf
- a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=8XV0R0IcXUXM6S+KMni/4w==:17
- a=OWjo9vPv0XrRhIrVQ50Ab3nP57M=:19 a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19
- a=IkcTkHD0fZMA:10 a=BNY50KLci1gA:10 a=wYkD_t78qR0A:10
- a=fa1ft06VDggV8PKGu0QA:9 a=QEXdDO2ut3YA:10
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=UIrw8mPmKxRewSnqZF1Z5qtHPBEGCfslbycsdPU0pvk=; b=PJ6JiSRbvQou1dDcs8kwpfAiyl
-	BA2lcL6e6oN0F06vz6QlHEzA72qaEVNgW2bR/laH7280WxW/vktQ1VcemY21E7bqp0kkNs1eW1f9g
-	1gIrm7lCt55LpHXcVeC/jSxWTSINmrKy6yp0fD+5CUovpP4EayTTCTFfnH5CidWdSyHU3tFHKRxx8
-	J6TyecUNg4rur8egWNsaePQqbq71kw32btau8vYDrFHCo/lAI8aSeYe55ncNXnIOar8Urh76nmicK
-	oZdlEO+Kg/DU2+G6g7x/NT9KLdTwC7jt/ZqV+sJKUqCPol+Kuge6XiSsJhjyUsFY5flXKuKG40MqQ
-	hqHirOCQ==;
-Received: from 189.215.208.186.cable.dyn.cableonline.com.mx ([189.215.208.186]:21783 helo=[192.168.0.28])
-	by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.96.2)
-	(envelope-from <gustavo@embeddedor.com>)
-	id 1r8lOo-004KwP-2L;
-	Thu, 30 Nov 2023 12:04:30 -0600
-Message-ID: <c3167ae2-fd98-4e68-9112-cfdfbb34b87b@embeddedor.com>
-Date: Thu, 30 Nov 2023 12:04:28 -0600
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C33C61A4
+	for <linux-next@vger.kernel.org>; Thu, 30 Nov 2023 10:05:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1701367525; x=1732903525;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=optsMxmBjwkmXGGOipLNa/DLaoRqv8jHCmq7VBXyo0U=;
+  b=Jg/CBQzpipq1jh6pTT8XaRDM+6e24Kig928yGS6/ItXMKpRqWe5zPe8r
+   bwtH56+v3Q/njHfWWE8JIUzXMG5Kv4SCYoNTeMHzOwZIrHoWEMtwOegxa
+   S/5Ktp5blC1/nMwDw4aNUVT9kFNao40BSqVB2GCx5H+3z32mqoXviDrV7
+   67piT9DnLC2pb/20j/NLjAQWPslA/Qa6cqaVFrEtBOzJ2GmMDZwSRBXEF
+   cYzYNVtCs2okpgyPS6MuEKZNOitKfQ9su1VDk0a3gKPyoAKf0tNO63EmX
+   6R7lsvOvQChVBFchtxqVdL4HxgO+mXyk5dEwE6JQFQWiiZ/QlJrP1U+aQ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10910"; a="359093"
+X-IronPort-AV: E=Sophos;i="6.04,239,1695711600"; 
+   d="scan'208";a="359093"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2023 10:05:24 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10910"; a="839887303"
+X-IronPort-AV: E=Sophos;i="6.04,239,1695711600"; 
+   d="scan'208";a="839887303"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga004.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2023 10:05:21 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.97)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1r8lPa-00000000m85-1S8s;
+	Thu, 30 Nov 2023 20:05:18 +0200
+Date: Thu, 30 Nov 2023 20:05:17 +0200
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+Cc: Wenyu Huang <huangwenyu5@huawei.com>, pmladek@suse.com,
+	rostedt@goodmis.org, linux@rasmusvillemoes.dk,
+	senozhatsky@chromium.org, akpm@linux-foundation.org,
+	linux-next@vger.kernel.org, gustavoars@kernel.org
+Subject: Re: [PATCH next] Fix the build failed caused by -Wstringop-overflow
+Message-ID: <ZWjO3dAJonO05JYI@smile.fi.intel.com>
+References: <20231130105741.2849670-1-huangwenyu5@huawei.com>
+ <730544ae-1e7f-4622-b986-839f81e60384@embeddedor.com>
+ <ZWjK_UX6skFwECNi@smile.fi.intel.com>
+ <508507b2-be1d-403a-876e-f49f5d0a2a49@embeddedor.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH next] Fix the build failed caused by -Wstringop-overflow
-Content-Language: en-US
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Wenyu Huang <huangwenyu5@huawei.com>, pmladek@suse.com,
- rostedt@goodmis.org, linux@rasmusvillemoes.dk, senozhatsky@chromium.org,
- akpm@linux-foundation.org, linux-next@vger.kernel.org, gustavoars@kernel.org
-References: <20231130105741.2849670-1-huangwenyu5@huawei.com>
- <730544ae-1e7f-4622-b986-839f81e60384@embeddedor.com>
- <ZWjK_UX6skFwECNi@smile.fi.intel.com> <ZWjLehXvSPGm_gre@smile.fi.intel.com>
-From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-In-Reply-To: <ZWjLehXvSPGm_gre@smile.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 189.215.208.186
-X-Source-L: No
-X-Exim-ID: 1r8lOo-004KwP-2L
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 189.215.208.186.cable.dyn.cableonline.com.mx ([192.168.0.28]) [189.215.208.186]:21783
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 2
-X-Org: HG=hgshared;ORG=hostgator;
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfJLjoOCgxgYldLo0zmTOJUlqspIa8gH1yEVrZ70BOGwhnM8F82+k4lMZ9LsVHjJphmHDp1ShfZwrKWjBk6e1KiTlgMQ20mzmsZ0Vwe9/bovJlEuoqovm
- OSEFBUUgLqnOvmB60dqV1+Y2t8DqcSFH8bklINs2J9K4PO5HHipiDLq9tBYyI1hQaYA4slhwlhZ1jE19m2QStcigF6I4yUVhFdBLf5+J8Uh7UoJxL4WoRVM7
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <508507b2-be1d-403a-876e-f49f5d0a2a49@embeddedor.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
+On Thu, Nov 30, 2023 at 11:56:29AM -0600, Gustavo A. R. Silva wrote:
+> On 11/30/23 11:48, Andy Shevchenko wrote:
+> > On Thu, Nov 30, 2023 at 09:52:42AM -0600, Gustavo A. R. Silva wrote:
+> > > On 11/30/23 04:57, Wenyu Huang wrote:
 
+...
 
-On 11/30/23 11:50, Andy Shevchenko wrote:
-> On Thu, Nov 30, 2023 at 07:48:46PM +0200, Andy Shevchenko wrote:
->> On Thu, Nov 30, 2023 at 09:52:42AM -0600, Gustavo A. R. Silva wrote:
->>> On 11/30/23 04:57, Wenyu Huang wrote:
+> > > > Fixes: 89741e7e42f6 ("Makefile: Enable -Wstringop-overflow globally")
+> > > 
+> > > The commit ID is from a patch that's currently in linux-next, which
+> > > does not guarantee it's a stable commit. So, it shouldn't be used
+> > > for any tag in any changelog text. In fact, it has changed a couple
+> > > of times in the last couple of weeks.
+> > 
+> > I disagree on this in general.
+> > 
+> > The case in practice I have. I does something in new cycle that broke the
+> > enumeration of some devices. The patch is in the maintainer's tree pending
+> > for the next release (v6.8-rc1). There are I see two options:
+> > - revert patch completely and redo it properly
+> > - add a fix (which is one liner)
+> > 
+> > Now, what you are suggesting is to drop the Fixes tag on the grounds that
+> > the culprit and the fix are to be in the same release (as we go let's say
+> > with the latter approach). In case that the culprit will be backported
+> > (let's say to satisfy dependencies, as per se it's not a fix), it will
+> > bring a regression and become unnoticed for some time until first reports
+> > will appear. Additional resources would be need for all this.
+> > 
+> > So, I'm fully in favour of using Fixes tag as it makes clear if we have
+> > some broken changes in the kernel for which the fix is known and exists.
 > 
-> ...
+> I'm fully in favor, as well. :)
 > 
->>>> Fixes: 89741e7e42f6 ("Makefile: Enable -Wstringop-overflow globally")
->>>
->>> The commit ID is from a patch that's currently in linux-next, which
->>> does not guarantee it's a stable commit. So, it shouldn't be used
->>> for any tag in any changelog text. In fact, it has changed a couple
->>> of times in the last couple of weeks.
->>
->> I disagree on this in general.
->>
->> The case in practice I have. I does something in new cycle that broke the
->> enumeration of some devices. The patch is in the maintainer's tree pending
->> for the next release (v6.8-rc1). There are I see two options:
->> - revert patch completely and redo it properly
->> - add a fix (which is one liner)
->>
->> Now, what you are suggesting is to drop the Fixes tag on the grounds that
->> the culprit and the fix are to be in the same release (as we go let's say
->> with the latter approach). In case that the culprit will be backported
->> (let's say to satisfy dependencies, as per se it's not a fix), it will
->> bring a regression and become unnoticed for some time until first reports
->> will appear. Additional resources would be need for all this.
->>
->> So, I'm fully in favour of using Fixes tag as it makes clear if we have
->> some broken changes in the kernel for which the fix is known and exists.
-> 
-> On top of that, Fixes tag is not enough to get it to stable. See the rules
-> on how to submit a material to stable kernels, it's in the documentation.
+> I'm talking about patches in linux-next, exclusively.
 
-We are talking about different things. I'm talking about commit IDs staying
-unchanged (stable commit IDs). That's different to stable kernels. :)
+And I am. And I think it's a good practice independently on the Linux Next
+case. The only what you should think about is that the maintainer has to
+take care about proper commit ID in case they rebase their tree (spoiler:
+they shouldn't in 99.99% of cases).
 
---
-Gustavo
+My "in general" was to make sure we are on the page not specifically related
+to _this_ patch.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
 

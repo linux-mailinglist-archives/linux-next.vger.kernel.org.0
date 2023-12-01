@@ -1,94 +1,85 @@
-Return-Path: <linux-next+bounces-184-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-185-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 94F55800ED5
-	for <lists+linux-next@lfdr.de>; Fri,  1 Dec 2023 16:51:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3C329801295
+	for <lists+linux-next@lfdr.de>; Fri,  1 Dec 2023 19:25:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4F2AF281A68
-	for <lists+linux-next@lfdr.de>; Fri,  1 Dec 2023 15:51:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E8B72281470
+	for <lists+linux-next@lfdr.de>; Fri,  1 Dec 2023 18:25:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 981214B5B7;
-	Fri,  1 Dec 2023 15:51:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 533D84F5EC;
+	Fri,  1 Dec 2023 18:25:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="V2ebkIoa"
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="C4tDQY8E"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1756610DE
-	for <linux-next@vger.kernel.org>; Fri,  1 Dec 2023 07:51:45 -0800 (PST)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-5ca26c07848so38336787b3.0
-        for <linux-next@vger.kernel.org>; Fri, 01 Dec 2023 07:51:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1701445904; x=1702050704; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=PAeovdGjroVCsGrn3XWTlzE+J+H6t28MAePFWwHrtao=;
-        b=V2ebkIoaA/4sdJFwyLW2bytuo8aTOTSk7eVqD7uHr94dXRp1UCU1yiLM/dP5jCTZMl
-         uBMpO9uyfyQ9xdyp2H0cgX3BI5Yq+60r9GqCV9yhtm/ofDfy5e63xpBibB4H5DCRtFPm
-         ZQaDmW4rfj5P3MY1vC7TfhzCPYdqfB3Uc90mm1jfr5MlhdlsRO4owFE0Rt9uZjZLrBZx
-         TBH5uro7GP2O3UhKw+bpBltr1f9wnzdhyTjYdhqfGlkYurkT8O0cwHP1DubybnCFhBLB
-         6w7XFj4YqXb36SAmRYcQUwM+EutujCXuQn1cMVBIb0vjWM5tCHwR9bg/EstaPX6BQ46u
-         B0Ew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701445904; x=1702050704;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PAeovdGjroVCsGrn3XWTlzE+J+H6t28MAePFWwHrtao=;
-        b=OzZNosRfnEBkuO1w/H/23ZfOo/oqH91QBqz0WMd7iu7lybI4UuvescCaRW7D1iR1rE
-         uCue9TKJonvqDOgMdcs+ws1pkRUTrGkPfreMOJnLmr2BICO4PAbbQfaO3bBiGpdOX9vA
-         wXCqXUKXpiJHTwtlcDXnJuRNgsui9WqLWT3I/OhE+0stG5Kt1P5VA30EH/IPIArboR0E
-         rTXIdg4MKSMwtCmVZ1ze1QqOeRwXNGsTJ4/79bwXwWDxgoQHnWqdATnYs/ZmHr+2RfXq
-         mu/bV9wkk2DWdynnBO53rYa0ecSV2FypuHFctIzGxmEbfU1lTETmlfJ9zWeFKVY2322j
-         64Ug==
-X-Gm-Message-State: AOJu0YxsOiqYEn6ViWEBuYloOdsr8YgOKOXgyhZRttthRYaIx7nFdKdV
-	NEjRcHzKkwoEeTiditH3X8LXyJ7XL/g=
-X-Google-Smtp-Source: AGHT+IF/BSqTj5Ow5+rxN/Ku1lgO8NWN9bOrodXJa+C378+RoNDDmNhF1Gt7nscSQbypYDY/mLQOj3BB6X8=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:690c:fc1:b0:5d3:7ed5:dfc5 with SMTP id
- dg1-20020a05690c0fc100b005d37ed5dfc5mr198619ywb.9.1701445904264; Fri, 01 Dec
- 2023 07:51:44 -0800 (PST)
-Date: Fri, 1 Dec 2023 07:51:42 -0800
-In-Reply-To: <20231201142539.7519d330@canb.auug.org.au>
+X-Greylist: delayed 577 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 01 Dec 2023 10:25:43 PST
+Received: from relay.smtp-ext.broadcom.com (saphodev.broadcom.com [192.19.144.205])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA11F9A
+	for <linux-next@vger.kernel.org>; Fri,  1 Dec 2023 10:25:43 -0800 (PST)
+Received: from bld-lvn-bcawlan-34.lvn.broadcom.net (bld-lvn-bcawlan-34.lvn.broadcom.net [10.75.138.137])
+	by relay.smtp-ext.broadcom.com (Postfix) with ESMTP id A6970C0000D4;
+	Fri,  1 Dec 2023 10:16:05 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 relay.smtp-ext.broadcom.com A6970C0000D4
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=broadcom.com;
+	s=dkimrelay; t=1701454565;
+	bh=oOit/4rL2wvddJb+2fxKmDWbNk0f7jYnHz9/Hr/bK+c=;
+	h=From:To:Subject:Date:From;
+	b=C4tDQY8EKcPwDOkiiufmRVq8/AV+fmjWbbxXz9rWjYHsRquZSCpJtqNOXCJpwi7gO
+	 /LztMBDdDSpGUScW6K3X0vre14j350zSWmAK2+ukeBiZrMV67+1Jtmx/PwuKpUy0LZ
+	 GX+49kybcRVrRovdTPAh0ufSlwFx07Hbr/K6F+/8=
+Received: from bcacpedev-irv-3.lvn.broadcom.net (bcacpedev-irv-3.lvn.broadcom.net [10.75.138.105])
+	by bld-lvn-bcawlan-34.lvn.broadcom.net (Postfix) with ESMTPSA id 6C42F18728D;
+	Fri,  1 Dec 2023 10:16:05 -0800 (PST)
+From: dregan <dregan@broadcom.com>
+To: dregan <dregan@broadcom.com>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	Stephen Rothwell <sfr@canb.auug.org.au>,
+	Boris Brezillon <boris.brezillon@collabora.com>,
+	Boris Brezillon <bbrezillon@kernel.org>,
+	Richard Weinberger <richard@nod.at>,
+	Vignesh Raghavendra <vigneshr@ti.com>,
+	linux-mtd@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: [PATCH 1/1] mtd: rawnand: Add deassert_wp comment
+Date: Fri,  1 Dec 2023 10:15:42 -0800
+Message-Id: <20231201181542.421077-1-dregan@broadcom.com>
+X-Mailer: git-send-email 2.37.3
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20231201142539.7519d330@canb.auug.org.au>
-Message-ID: <ZWoBDsMOOzYsIbLh@google.com>
-Subject: Re: linux-next: Fixes tag needs some work in the kvm-x86 tree
-From: Sean Christopherson <seanjc@google.com>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: David Matlack <dmatlack@google.com>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Fri, Dec 01, 2023, Stephen Rothwell wrote:
-> Hi all,
-> 
-> In commit
-> 
->   7cd1bf039eeb ("KVM: x86/mmu: Fix off-by-1 when splitting huge pages during CLEAR")
-> 
-> Fixes tag
-> 
->   Fixes: f2928aae8b9a ("UPSTREAM: KVM: x86/mmu: Split huge pages mapped by the TDP MMU during KVM_CLEAR_DIRTY_LOG")
+From: Boris Brezillon <bbrezillon@kernel.org>
 
-Ugh, my eyes glossed right over that.
+Add deassert_wp description comment
 
-> has these problem(s):
-> 
->   - Target SHA1 does not exist
-> 
-> Maybe you meant
-> 
-> Fixes: cb00a70bd4b7 ("KVM: x86/mmu: Split huge pages mapped by the TDP MMU during KVM_CLEAR_DIRTY_LOG")
+Signed-off-by: Boris Brezillon <bbrezillon@kernel.org>
+Signed-off-by: David Regan <dregan@broadcom.com>
+---
+ include/linux/mtd/rawnand.h | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Yep, that's the one.  I'll force push asap.
+diff --git a/include/linux/mtd/rawnand.h b/include/linux/mtd/rawnand.h
+index fcad94aa0515..3049b05d8a20 100644
+--- a/include/linux/mtd/rawnand.h
++++ b/include/linux/mtd/rawnand.h
+@@ -1001,6 +1001,8 @@ struct nand_op_parser {
+ /**
+  * struct nand_operation - NAND operation descriptor
+  * @cs: the CS line to select for this NAND operation
++ * @deassert_wp: set to true when the operation requires the WP pin to be
++ *		 de-asserted (ERASE, PROG, ...)
+  * @instrs: array of instructions to execute
+  * @ninstrs: length of the @instrs array
+  *
+-- 
+2.37.3
 
-Thanks Stephen!
 

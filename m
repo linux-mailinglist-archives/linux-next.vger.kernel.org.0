@@ -1,100 +1,108 @@
-Return-Path: <linux-next+bounces-178-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-179-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 10F58800212
-	for <lists+linux-next@lfdr.de>; Fri,  1 Dec 2023 04:25:49 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7AC738002B0
+	for <lists+linux-next@lfdr.de>; Fri,  1 Dec 2023 06:03:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BEBB62814B0
-	for <lists+linux-next@lfdr.de>; Fri,  1 Dec 2023 03:25:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ABC6E1C20AAE
+	for <lists+linux-next@lfdr.de>; Fri,  1 Dec 2023 05:03:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE2EE17F7;
-	Fri,  1 Dec 2023 03:25:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88DF91FAA;
+	Fri,  1 Dec 2023 05:03:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="UBnbg6h8"
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="V9tv3rVt"
 X-Original-To: linux-next@vger.kernel.org
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E842103;
-	Thu, 30 Nov 2023 19:25:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1701401140;
-	bh=DIlkwIVngCXUlbUdYKDCc4nalkRk+ZcOp+5ydaezr4Q=;
-	h=Date:From:To:Cc:Subject:From;
-	b=UBnbg6h8UVJT1iiQhKI1VIuigZr0tj3aESzjV+zmRe0JNtstcqXLmJ7IOgWv6R+e1
-	 i0tJxc89yf9WXVOITXZqQwhNzQKCAo04uhyNXmV+PSWuLcVjiYRqCwQUmhApV+xFIR
-	 dZdUO416m4So09jZU4vAB8PsmJOSrge5ecv3pDvKyd8ppGUNvL3AWINZHCvshXoLgp
-	 k7GOicil3BCJgArF0iRdDogFGI5vf9yC3RNuFd8otzM/UmoIJv1B/OJgpqXdur8xpg
-	 ROI+GqnsD1orfG4ATOr//+i2zobLR6iVkSpalMzbcTiuldif5QGUKsGE3zHQNSp6js
-	 syWyS02QAT/mw==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ShJNh1n4Vz4wdD;
-	Fri,  1 Dec 2023 14:25:40 +1100 (AEDT)
-Date: Fri, 1 Dec 2023 14:25:39 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Sean Christopherson <seanjc@google.com>
-Cc: David Matlack <dmatlack@google.com>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the kvm-x86 tree
-Message-ID: <20231201142539.7519d330@canb.auug.org.au>
+Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 832AA1724
+	for <linux-next@vger.kernel.org>; Thu, 30 Nov 2023 21:03:12 -0800 (PST)
+Received: by mail-ot1-x329.google.com with SMTP id 46e09a7af769-6d81fc0ad6eso95355a34.2
+        for <linux-next@vger.kernel.org>; Thu, 30 Nov 2023 21:03:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google; t=1701406992; x=1702011792; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bRgO3Me4RPteNIjeT7wKR86R3xO68rd3yf3Bruq3Mvk=;
+        b=V9tv3rVt+urK+K0R1VIlumsWtyePU0NjIkPASi8HDAdUQ6e1Lz6Xq1wRv5+bz1jvea
+         1Ce0JAMsA/X4HMHq2YBuBsHSfZy9+xfSBSYptPhIhx2af2LsgbCuCYSnCc51VldSu/gN
+         K80//Yc3T9bwC1uOxcx2HCZWv8VpvsCglQsFo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701406992; x=1702011792;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bRgO3Me4RPteNIjeT7wKR86R3xO68rd3yf3Bruq3Mvk=;
+        b=WD4NGHdFYgPhnl02SYFJhuyKPAFo7nWxjYsWfYZHprdkxIzj567UDKyEK39P0zPXjj
+         4H77hprWBXxzgARETHyaVXLo4GFEMIL6nRrkekX1o2Y779/CgM0nGK1f9wGgcKEfDGY6
+         xd76CEN6KlGbgZ0IffkeEdWI5mJ+/5bScKAWYtTcberL7gY8S85RkhTsjvN9I2SWqOk5
+         o8/HPdKTvX4u9NFaQpaEcIR7YtjhrtAp09/isnv6ibO/G6ttjYMouTgauAwNI/d/G5M1
+         4am1p/RgSHFsZzNxYdkEsVVAVDZrNVdwUTxX5VLimrJZH9mDsQGf9OUS2YkkUEnt/hDJ
+         g0kg==
+X-Gm-Message-State: AOJu0YwAZLB2PNeXb0Qedv/7F15d4VNeZZCgMwfrYGR7u0u1qWbOHZif
+	xetDaKFx4nbt1tNOWbDwfVrNsQcB14v4qkmUqbyyeg==
+X-Google-Smtp-Source: AGHT+IGiqJl3vJ6vZ2muJrHHwI0tG4m8ZHNbXqBH/R+01uyvnqe8RJ4l1yCXKUjiYFbkSec8qXJazLNNZztc3hDCaM4=
+X-Received: by 2002:a9d:5e8c:0:b0:6d8:2d13:3c68 with SMTP id
+ f12-20020a9d5e8c000000b006d82d133c68mr1903142otl.28.1701406991784; Thu, 30
+ Nov 2023 21:03:11 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/QN9cPAROIKfrVSW.Nqu+9.z";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-
---Sig_/QN9cPAROIKfrVSW.Nqu+9.z
-Content-Type: text/plain; charset=US-ASCII
+References: <20231201125648.71d7586d@canb.auug.org.au>
+In-Reply-To: <20231201125648.71d7586d@canb.auug.org.au>
+From: David Regan <dregan@broadcom.com>
+Date: Thu, 30 Nov 2023 21:03:00 -0800
+Message-ID: <CAA_RMS5THkAQxEPWvtpcbb=F-G1xdntZPTmzhAhvK6voWi6VOA@mail.gmail.com>
+Subject: Re: linux-next: build warning after merge of the nand tree
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Miquel Raynal <miquel.raynal@bootlin.com>, 
+	Boris Brezillon <boris.brezillon@collabora.com>, Boris Brezillon <bbrezillon@kernel.org>, 
+	David Regan <dregan@broadcom.com>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Hi Stephen,
 
-In commit
+from this post:
+https://github.com/bbrezillon/linux/commit/e612e1f2c69a33ac5f2c91d13669f0f1=
+72d58717
 
-  7cd1bf039eeb ("KVM: x86/mmu: Fix off-by-1 when splitting huge pages durin=
-g CLEAR")
+Looks like this comment needs to be added:
 
-Fixes tag
+* @deassert_wp: set to true when the operation requires the WP pin to be
+*                         de-asserted (ERASE, PROG, ...)
 
-  Fixes: f2928aae8b9a ("UPSTREAM: KVM: x86/mmu: Split huge pages mapped by =
-the TDP MMU during KVM_CLEAR_DIRTY_LOG")
 
-has these problem(s):
+What's the best way to go about doing this?
 
-  - Target SHA1 does not exist
+Thanks!
 
-Maybe you meant
+-Dave
 
-Fixes: cb00a70bd4b7 ("KVM: x86/mmu: Split huge pages mapped by the TDP MMU =
-during KVM_CLEAR_DIRTY_LOG")
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/QN9cPAROIKfrVSW.Nqu+9.z
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmVpUjMACgkQAVBC80lX
-0GyDtgf+OpTfmqyAzEdFzJGgf2YSYfiBgtKMcDXaQqKwFvXAs3pQ6FcudtKGtRvE
-qmvJS55kzr7qC8r5eEMT4sG2EZVWrs3jPZiyJTyEYvvB9wv4Ao2hOubI0Hl6YUcS
-M/AnWlnsra2UQ1lewRdvLLzlNh2led98sPbi9ZxH/z9/XQdQzFuiIufLIK3h48QS
-UAMVHVw/TikUvhGoej3dR6b1t/PHiDryWQD9XiRhwQLfilRIeLaK9YO5aDVmVEW3
-M3aVR2yjov42uBt6mOllbJVvByrsO7kVpabp44sqqNBihr7vOMsdi56TF2Xli9tC
-FximdTW9XytRPUf3gNmxK+Dra9qQeA==
-=ITZB
------END PGP SIGNATURE-----
-
---Sig_/QN9cPAROIKfrVSW.Nqu+9.z--
+On Thu, Nov 30, 2023 at 5:56=E2=80=AFPM Stephen Rothwell <sfr@canb.auug.org=
+.au> wrote:
+>
+> Hi all,
+>
+> After merging the nand tree, today's linux-next build (htmldocs) produced
+> this warning:
+>
+> include/linux/mtd/rawnand.h:1016: warning: Function parameter or member '=
+deassert_wp' not described in 'nand_operation'
+>
+> Introduced by commit
+>
+>   e82a5a014dd5 ("mtd: rawnand: Add destructive operation")
+>
+> --
+> Cheers,
+> Stephen Rothwell
 

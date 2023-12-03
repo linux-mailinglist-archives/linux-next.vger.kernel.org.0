@@ -1,75 +1,123 @@
-Return-Path: <linux-next+bounces-195-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-196-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B1C05802888
-	for <lists+linux-next@lfdr.de>; Sun,  3 Dec 2023 23:48:59 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id ACFE48028E5
+	for <lists+linux-next@lfdr.de>; Mon,  4 Dec 2023 00:04:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E1A511C20843
-	for <lists+linux-next@lfdr.de>; Sun,  3 Dec 2023 22:48:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 69440280C9C
+	for <lists+linux-next@lfdr.de>; Sun,  3 Dec 2023 23:04:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3306718636;
-	Sun,  3 Dec 2023 22:48:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7CF719465;
+	Sun,  3 Dec 2023 23:04:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=schauer.dev header.i=@schauer.dev header.b="Y8iSOipA"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="nY3bL1hH"
 X-Original-To: linux-next@vger.kernel.org
-X-Greylist: delayed 480 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 03 Dec 2023 14:48:48 PST
-Received: from mail.as62269.net (mail.as62269.net [IPv6:2a11:5b00::14])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E168EC8;
-	Sun,  3 Dec 2023 14:48:48 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 8C6B5185FC7;
-	Sun,  3 Dec 2023 23:40:44 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=schauer.dev; s=dkim;
-	t=1701643246; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:content-language:in-reply-to:references;
-	bh=m2SwH+2nTFJ8YYCU70R3/og5ethgEhS9ts+NdUG/DWU=;
-	b=Y8iSOipAM+/DS+lqchgiwKUDDsnQRZ8TPS/y9E+mn/X+y1ewFkuGOzCzdf10peEWl3aw0k
-	NPckhg4VBgN18jO2mBaj192Q4bCyfH4joWd2fkdeLIUiOtsf5WQN+uiAy0JuZZ9A+Kb357
-	m9VwiF+/Nmx6sfkzYi8LnkOUnvymdSs=
-Message-ID: <5b43d427-f24e-4625-95eb-87ef21452025@schauer.dev>
-Date: Sun, 3 Dec 2023 23:40:41 +0100
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83FE0D3;
+	Sun,  3 Dec 2023 15:04:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1701644640;
+	bh=RA2TwRrP0Ly0mWirQ4+Do/8V1dx1Wtq90aM3EiRJMFM=;
+	h=Date:From:To:Cc:Subject:From;
+	b=nY3bL1hHbmLdabHCALg6/YpLn2XGtn2D+axxgZVK7noFTovSeu/02mKxSoMn/spHj
+	 y2Pm5OOQCQAo+moFRNqX2pvn5u3lG99aa6R0LPY/Xy5/CXdClGzgc9euIna00VSuIU
+	 9S1NZqKaL/+uXSniFXawV99uFEmyg0IJQPr2uXbnsDsrxhdRYRS5rgpecnLT6vEQxU
+	 dG/f42KMhrrU8nEI0yZMoi5hMPf5sBsfqHx1oeNsBDzN0JgU4MjfbldGUluwsY2O9Y
+	 qYsakgnln16QxBj5h7Hj/3As7u1VaddNEZv5yUQ0zXe6X37H03+tEDtKtd7xGEMO1X
+	 78fRDYEGlnOMA==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Sk2RL3sXCz4wdC;
+	Mon,  4 Dec 2023 10:03:58 +1100 (AEDT)
+Date: Mon, 4 Dec 2023 10:03:55 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Andy Gross <agross@kernel.org>, Olof Johansson <olof@lixom.net>, Arnd
+ Bergmann <arnd@arndb.de>
+Cc: ARM <linux-arm-kernel@lists.infradead.org>, Bjorn Andersson
+ <andersson@kernel.org>, Dominik Kobinski <dominikkobinski314@gmail.com>,
+ Ivaylo Ivanov <ivo.ivanov.ivanov1@gmail.com>, Jack Matthews
+ <jm5112356@gmail.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>, Luca Weiss <luca@z3ntu.xyz>, Rayyan Ansari
+ <rayyan@ansari.sh>
+Subject: linux-next: manual merge of the qcom tree with the arm-soc tree
+Message-ID: <20231204100355.0fb43204@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: Signed-off-by missing for commit in the vfs-brauner
- tree
-Content-Language: en-US
-To: Stephen Rothwell <sfr@canb.auug.org.au>,
- Christian Brauner <brauner@kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20231204090139.03f0ddcc@canb.auug.org.au>
-From: Lukas Schauer <lukas@schauer.dev>
-In-Reply-To: <20231204090139.03f0ddcc@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Type: multipart/signed; boundary="Sig_/tcmXDN8Gr_q+.xQhDB9Zt9X";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-Hey there,
+--Sig_/tcmXDN8Gr_q+.xQhDB9Zt9X
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I'm not sure on how to proceed here since I've never submitted patches 
-to the kernel.
-Does this require additional input by me?
+Hi all,
 
-Anyway I'm fine with the changes made to my original patch and its 
-inclusion in the kernel source.
+Today's linux-next merge of the qcom tree got a conflict in:
 
-Regards,
-Lukas
+  arch/arm/boot/dts/qcom/Makefile
 
-On 12/3/23 23:01, Stephen Rothwell wrote:
-> Hi all,
->
-> Commit
->
->    348806de39e0 ("pipe: wakeup wr_wait after setting max_usage")
->
-> is missing a Signed-off-by from its author.
->
+between commits:
+
+  00400a98b2c3 ("ARM: dts: qcom: add device tree for Nokia Lumia 735")
+  8677233e5913 ("ARM: dts: qcom: add device tree for Nokia Lumia 830")
+
+from the arm-soc tree and commit:
+
+  be0061dcbac1 ("ARM: dts: qcom: Add support for HTC One Mini 2")
+
+from the qcom tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc arch/arm/boot/dts/qcom/Makefile
+index a3d293e40820,c13dddd3c683..000000000000
+--- a/arch/arm/boot/dts/qcom/Makefile
++++ b/arch/arm/boot/dts/qcom/Makefile
+@@@ -32,8 -29,7 +32,9 @@@ dtb-$(CONFIG_ARCH_QCOM) +=3D=20
+  	qcom-msm8916-samsung-e7.dtb \
+  	qcom-msm8916-samsung-grandmax.dtb \
+  	qcom-msm8916-samsung-serranove.dtb \
++ 	qcom-msm8926-htc-memul.dtb \
+ +	qcom-msm8926-microsoft-superman-lte.dtb \
+ +	qcom-msm8926-microsoft-tesla.dtb \
+  	qcom-msm8960-cdp.dtb \
+  	qcom-msm8960-samsung-expressatt.dtb \
+  	qcom-msm8974-lge-nexus5-hammerhead.dtb \
+
+--Sig_/tcmXDN8Gr_q+.xQhDB9Zt9X
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmVtCVsACgkQAVBC80lX
+0GziYgf/Xl9qd3VvY9UNtETBuXewIBHp+YXvPvfG8mKNgGSCkhNN4InXQd6cJd0K
+aTkCFOH+DYlXjNuvxIQ5hbcqkQhYLaRGcxC+67Mn9HxTWXUeGJbYHCYkQ0tfZ2zu
+dQNPUMOW5F3M1n9mM9Hr8lC1HiYeri3eCGC2VKM5PcEV3eXWkBHiSSh/WUU1lB6C
+BR4jOboPz7z0vCUU/CwO7mAu3Q6PT40vbya1gC/gMIy61YwRSfNqF7S7Ji1EI9yw
+xKhREGBhxki8myDA4slpGVkQvcEM2DMdi16m3O7UyKw1LXA0Y7DY2L49s8F+5Byw
+tjoDFjWj/4D5d1ZnCh4GiZqh22r/8g==
+=bkM3
+-----END PGP SIGNATURE-----
+
+--Sig_/tcmXDN8Gr_q+.xQhDB9Zt9X--
 

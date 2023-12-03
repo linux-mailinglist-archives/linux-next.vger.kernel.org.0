@@ -1,153 +1,98 @@
-Return-Path: <linux-next+bounces-192-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-193-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 02ADC801C85
-	for <lists+linux-next@lfdr.de>; Sat,  2 Dec 2023 13:10:47 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 76125802842
+	for <lists+linux-next@lfdr.de>; Sun,  3 Dec 2023 22:59:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 28E031C20927
-	for <lists+linux-next@lfdr.de>; Sat,  2 Dec 2023 12:10:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 17E82280CDB
+	for <lists+linux-next@lfdr.de>; Sun,  3 Dec 2023 21:59:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B251BE64;
-	Sat,  2 Dec 2023 12:10:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E33B3199D1;
+	Sun,  3 Dec 2023 21:59:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="lZ0Pa0Jh"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="CT+m6Zjq"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 950AE184
-	for <linux-next@vger.kernel.org>; Sat,  2 Dec 2023 04:10:39 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-40b31232bf0so28451645e9.1
-        for <linux-next@vger.kernel.org>; Sat, 02 Dec 2023 04:10:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1701519038; x=1702123838; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GziMkt38oro/EGKCm9dzHghYvSdsiMHqjyJC7MQPmdU=;
-        b=lZ0Pa0Jhs5NMOJ8/k2NGMFYqpg58eWoaxugsRrIplCfvDBnCdkAcarWayGJK6meZiB
-         D02TmpHsLiHV7nOonOH6Xe1KxVPDHXOmai4mlCcaNOAjgP5SM/Bmnl5ZNePJF512B0Ft
-         VdFBOuXDhVRJVLoHgNnpHV/K/3Yw0ITuliZKgb7EcCzsmA1xmQopqBIeFZhaIKBqGm+i
-         SLIxi4xS4MFj+V7gB40j29kOZJhT55sGTchCNH4n8GQJQdMhN52hiAaaTVEHmuHIWfSv
-         V2f2jbEDjMajUh1y3a+woCkVkHnYXTzMttU6iMM55QIWFx1kGa3KE0fr1fyUJfOaICEY
-         9MGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701519038; x=1702123838;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GziMkt38oro/EGKCm9dzHghYvSdsiMHqjyJC7MQPmdU=;
-        b=ADV3U1vM5gboQ6j1AYyT4KnjGLN/+gDNrDfiF2og/wLXsYxlPu99Dpk4ExsE2+/sg/
-         rl/HU24y68S/z1fptcnUw9aGFy5o1PadAiSeLKIFkzjSU4lzO2bvPWajBHQggKgAEOa1
-         f6FosYhAjRqb0y6GjUeevpANT1K8M9sc6Q21XK3urDl+eT/WNHcMu077wPBL9ZAWgDoK
-         /J1k65zuoULZjANExFntIhkAtTIXJdBKnd5Wpu+75LLVt1aNmwmR16lUvVQ7TBq+iAB0
-         F0PPgajOMTPe2ewjDk4RiGQEIqBFI6SbwGv5qs8l/Sj0piEr+It0iQxktv6O9eGj0/dH
-         JpsQ==
-X-Gm-Message-State: AOJu0YyJw/660MuvsuxifjXJkzM0AVlaXLFoZ/RMkR3GgNDT70/IBNGo
-	yrS62X0eQKqJ/U8C4tsCrPO/3A==
-X-Google-Smtp-Source: AGHT+IGS7rSyE3QiA6fu+aSxIHQW+cIH8fMUj5mo3Ako59ALprfHpD3qewSXaKOU7llpc4x7ZqdJYg==
-X-Received: by 2002:a05:600c:3502:b0:40b:3933:f994 with SMTP id h2-20020a05600c350200b0040b3933f994mr1400816wmq.25.1701519037986;
-        Sat, 02 Dec 2023 04:10:37 -0800 (PST)
-Received: from [192.168.1.20] ([178.197.223.109])
-        by smtp.gmail.com with ESMTPSA id d4-20020a05600c3ac400b0040b538047b4sm11954076wms.3.2023.12.02.04.10.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 02 Dec 2023 04:10:37 -0800 (PST)
-Message-ID: <cdb7c02f-a314-4e64-b95c-66c91e83d4d5@linaro.org>
-Date: Sat, 2 Dec 2023 13:10:35 +0100
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47620D5;
+	Sun,  3 Dec 2023 13:59:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1701640776;
+	bh=jOZ2ydFmcCUIltUjegzVrxzH+K2UgOk9snLESSEWhMU=;
+	h=Date:From:To:Cc:Subject:From;
+	b=CT+m6ZjqUgfxRqpBfuomKCQj2kbTuZjj3K4usTC4bzkPPAYp7BQBp3yvKAZj8wxRC
+	 tfg58uI0INgzboVflxT7oAxwHnJg70v+QpgW7YnBriK4vl1z6WWtd5IzUEWg9fOd5h
+	 nbnwcU/EaXuP9ODYYAq4X9ZEtLIbQVAoaLeVLiK/sx8jLNKn511WIKHAxq0tTsOKKI
+	 Hg8jmxtGhr3ILgKYfF9bCqfo2vC0bB952zokHiR6kpJtmoJzd8qpM9Tqzs2FBVU3x8
+	 y3Wqnw6mldaN6hRUwEWyAHWF0j+0PUyBs0/t/A2BvIRwFeGuBBCFuYlS8y+OGdaBVr
+	 kMxt+8lsWX5Lg==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Sk1143rStz4xVP;
+	Mon,  4 Dec 2023 08:59:36 +1100 (AEDT)
+Date: Mon, 4 Dec 2023 08:59:17 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Kees Cook <keescook@chromium.org>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tags need some work in the hwmon-staging tree
+Message-ID: <20231204085917.42dae9fd@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: Tree for Nov 27 (drivers/memory/tegra/tegra186.c)
-Content-Language: en-US
-To: Ashish Mhetre <amhetre@nvidia.com>, Randy Dunlap <rdunlap@infradead.org>,
- Stephen Rothwell <sfr@canb.auug.org.au>,
- Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20231127150547.461d8bac@canb.auug.org.au>
- <8b44e417-e9dc-4d6f-b0ae-f9834d0624ac@infradead.org>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <8b44e417-e9dc-4d6f-b0ae-f9834d0624ac@infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/aonhYZtP_tWotU+q+9QTgrj";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On 28/11/2023 01:31, Randy Dunlap wrote:
-> 
-> 
-> On 11/26/23 20:05, Stephen Rothwell wrote:
->> Hi all,
->>
->> Changes since 20231124:
->>
-> 
-> on ARCH=arm64:
-> when CONFIG_IOMMU_API is not set:
-> 
-> ../drivers/memory/tegra/tegra186.c: In function 'tegra186_mc_resume':
-> ../drivers/memory/tegra/tegra186.c:149:17: error: implicit declaration of function 'tegra186_mc_client_sid_override' [-Werror=implicit-function-declaration]
->   149 |                 tegra186_mc_client_sid_override(mc, client, client->sid);
+--Sig_/aonhYZtP_tWotU+q+9QTgrj
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Ashish,
+Hi all,
 
-This was reported few days ago and still no fix or comment. So we are
-repeating the same case happened weeks ago with other LKP reported issue
-- I need to ping you, otherwise you will not address reports in your
-code. We all expect that contributor addresses the reports related to
-their code.
+In commits
 
-Knowing this I will double think before I take any code from you.
+  43a2b23f31e3 ("hwmon: (nct6775-core) Explicitly initialize nct6775_device=
+_names indexes")
+  06d0522c544c ("hwmon: (nct6775-platform) Explicitly initialize nct6775_si=
+o_names indexes")
 
-I am planning to drop this code next week, unless some fix comes.
+Fixes tag
 
-Best regards,
-Krzysztof
+  Fixes: 8cd470cda3fe ("hwmon: nct6775-i2c: Use i2c_get_match_data()")
 
+has these problem(s):
+
+  - Subject does not match target commit subject
+    Just use
+        git log -1 --format=3D'Fixes: %h ("%s")'
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/aonhYZtP_tWotU+q+9QTgrj
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmVs+jUACgkQAVBC80lX
+0GwQYggAh2QrVQc/oKWnAijeSZOWYpUJPRu9mXcgBAGCl8ahS5uX/gkDg/iY2UqX
+J3KnVYzJ0+ATN2Rn4IzxUw1uYPe7C5UMtPWGzf4v5zjoX3KvnVAxbbvWXUSA2Gb0
+OoJtEFj2HURSt2T+++zNFW5cAH8/J4gqO8Vj51rwhDsfiNhhbjNmfWLuejS3tpp0
+jOJrC5dQFaAvckyPdhhDlY174Pa0RqCUb+VaHPuF2W3xhXEiHnaGWKD3Xj5zWvtr
+TtdA7m5AmeYWI23SZ1KLBZsQHn5t1yPKOlokiBGKPjYmG7v8H4W1WqDND2pTpY9p
+Sor0XyeVAHxWrZgYboUADmqysgrr5w==
+=hYXR
+-----END PGP SIGNATURE-----
+
+--Sig_/aonhYZtP_tWotU+q+9QTgrj--
 

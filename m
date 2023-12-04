@@ -1,99 +1,127 @@
-Return-Path: <linux-next+bounces-207-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-208-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 51334802A3D
-	for <lists+linux-next@lfdr.de>; Mon,  4 Dec 2023 03:23:42 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 348CC802AB1
+	for <lists+linux-next@lfdr.de>; Mon,  4 Dec 2023 05:08:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0B731280C74
-	for <lists+linux-next@lfdr.de>; Mon,  4 Dec 2023 02:23:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6F4E31C20834
+	for <lists+linux-next@lfdr.de>; Mon,  4 Dec 2023 04:08:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EAE01FD8;
-	Mon,  4 Dec 2023 02:23:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E4EF33CF;
+	Mon,  4 Dec 2023 04:08:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="cNfwkHR0"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="ewJAXGH6"
 X-Original-To: linux-next@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C1EAC1
-	for <linux-next@vger.kernel.org>; Sun,  3 Dec 2023 18:23:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1701656612;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=N3oj/lBQzpBpheCv8g6m9tnnqQ9YL5qzNhLYbMSq4hU=;
-	b=cNfwkHR0+XBDU/IUmRs+jwHE9RfSRZhKraGI5TysHmugdtusTpPbzWVKh0mjq2YdUTVKNN
-	4AnJ/cIM9AC+M4IULB+PNOs3A3JD+xGohrb0eJot0Vgc3/FPJ/G1P/Q+CZLuheMDuCKPNH
-	ZZAE8v6V/NhOparR/ax9fCqwmjjEkuc=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-623-itdX0an8McWg5ZpBNZWuxQ-1; Sun, 03 Dec 2023 21:23:27 -0500
-X-MC-Unique: itdX0an8McWg5ZpBNZWuxQ-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7714BCD;
+	Sun,  3 Dec 2023 20:08:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1701662890;
+	bh=Mt4zD1tGaHWza6GlukoEY8R3eTQNovJ0fviSb32nqVE=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=ewJAXGH6U02n2FgyDaFgjxx238vOel2u39LFbW7foifF87ed0nAWrHhBijgyuXKVz
+	 F/Wa3GaSdSvu0Wk7zE2Pg7wuScZYpwcp/YN0RFhQznQjeHAaNzPKEkNJd0T8Yxlnzi
+	 MQwkogMp10QXfQpcYVWppbC0rrOGIyopo+TIrPsM6xBSqB78uRAzSfa/tjjy9unQ6A
+	 iIFyRhnt2fuwuDkqPCs3Zjc5x+nzdmaWJ2PPhL/cH6ZfXzYFREiEYOLPEzid/lf9zU
+	 jwE/OABx/ecltWMyRov7FYwsf/6SSkoA0wb5L+bCu1KNMTA1KQDp/j7CWPNEH0SAVq
+	 sgk1u0lAl9LUQ==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6D4C180F82F;
-	Mon,  4 Dec 2023 02:23:27 +0000 (UTC)
-Received: from localhost (unknown [10.72.113.121])
-	by smtp.corp.redhat.com (Postfix) with ESMTPS id 80B4A2026D6E;
-	Mon,  4 Dec 2023 02:23:26 +0000 (UTC)
-Date: Mon, 4 Dec 2023 10:23:23 +0800
-From: Baoquan He <bhe@redhat.com>
-To: Randy Dunlap <rdunlap@infradead.org>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>, akpm@linux-foundation.org,
-	ignat@cloudflare.com, linux-next@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-	kexec@lists.infradead.org, eric_devolder@yahoo.com
-Subject: [PATCH 2/2] riscv, kexec: fix dependency of two items
-Message-ID: <ZW04G/SKnhbE5mnX@MiWiFi-R3L-srv>
-References: <ZW00/Cfk47Cc3kGo@MiWiFi-R3L-srv>
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Sk9BK5V1Tz4xMw;
+	Mon,  4 Dec 2023 15:08:09 +1100 (AEDT)
+Date: Mon, 4 Dec 2023 15:08:07 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Uros Bizjak <ubizjak@gmail.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>,
+ Ingo Molnar <mingo@kernel.org>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warnings after merge of the tip tree
+Message-ID: <20231204150807.600c2f09@canb.auug.org.au>
+In-Reply-To: <CAFULd4Yfh0=TkhoevuJP1kghP5VLFj2zP9av68_s2pez3n2iog@mail.gmail.com>
+References: <20231201112918.294b40b1@canb.auug.org.au>
+	<CAFULd4Yfh0=TkhoevuJP1kghP5VLFj2zP9av68_s2pez3n2iog@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZW00/Cfk47Cc3kGo@MiWiFi-R3L-srv>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.4
+Content-Type: multipart/signed; boundary="Sig_/Dg2jyPmbbaRHaFvwrb0cc6+";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-Drop the dependency on MMU from ARCH_SUPPORTS_KEXEC and
-ARCH_SUPPORTS_KEXEC_FILE because CONFIG_MMU could be disabled while
-people may still want to have KEXEC/KEXEC_FILE functionality.
+--Sig_/Dg2jyPmbbaRHaFvwrb0cc6+
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Baoquan He <bhe@redhat.com>
----
- arch/riscv/Kconfig | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Hi Uros,
 
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index 95a2a06acc6a..24c1799e2ec4 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -685,7 +685,7 @@ config RISCV_BOOT_SPINWAIT
- 	  If unsure what to do here, say N.
- 
- config ARCH_SUPPORTS_KEXEC
--	def_bool MMU
-+	def_bool y
- 
- config ARCH_SELECTS_KEXEC
- 	def_bool y
-@@ -693,7 +693,7 @@ config ARCH_SELECTS_KEXEC
- 	select HOTPLUG_CPU if SMP
- 
- config ARCH_SUPPORTS_KEXEC_FILE
--	def_bool 64BIT && MMU
-+	def_bool 64BIT
- 
- config ARCH_SELECTS_KEXEC_FILE
- 	def_bool y
--- 
-2.41.0
+On Fri, 1 Dec 2023 13:09:45 +0100 Uros Bizjak <ubizjak@gmail.com> wrote:
+>
+> On Fri, Dec 1, 2023 at 1:29=E2=80=AFAM Stephen Rothwell <sfr@canb.auug.or=
+g.au> wrote:
+> >
+ > After merging the tip tree, today's linux-next build (x86_64 allmodconfi=
+g)
+> > produced these warnings:
+> >
+> > WARNING: modpost: EXPORT symbol "const_pcpu_hot" [vmlinux] version gene=
+ration failed, symbol will not be versioned.
+> > Is "const_pcpu_hot" prototyped in <asm/asm-prototypes.h>?
+> > WARNING: modpost: "const_pcpu_hot" [arch/x86/kernel/msr.ko] has no CRC!
+> > WARNING: modpost: "const_pcpu_hot" [arch/x86/kvm/kvm.ko] has no CRC! =20
+>=20
+> My build doesn't produce any warnings. A defconfig + enabling kvm.ko as m=
+odule:
+>=20
+> ...
+>  AR      built-in.a
+>  AR      vmlinux.a
+>  LD      vmlinux.o
+>  OBJCOPY modules.builtin.modinfo
+>  GEN     modules.builtin
+>  MODPOST Module.symvers
+>  CC      .vmlinux.export.o
+>  CC [M]  arch/x86/kvm/kvm.mod.o
+>  CC [M]  fs/efivarfs/efivarfs.mod.o
+> ...
+>=20
+> Does the attached patch help? Or is there anything else I should do to
+> trigger the above problem?
 
+The patch does not help.  I am just doing an X86_64 allmodconfig build
+with CONFIG_WERROR=3Dn. gcc is
+
+$ x86_64-linux-gnu-gcc --version
+x86_64-linux-gnu-gcc (Debian 13.2.0-2) 13.2.0
+
+This is a cross build with a ppc64le host.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/Dg2jyPmbbaRHaFvwrb0cc6+
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmVtUKcACgkQAVBC80lX
+0GyX5Qf+IJQio0mJpBjKa1FbCKwrDuxIAft+twott7IlJiGqoa7e2KjWcL1FtE1f
+FBjcAduG4o77sbjveubm/ygUQVYurLOYr5DgGRV76oEaw2BjAFGzyJV2610ukcz6
+nW108H/suWcSe9Scc6lG80eI6Rl4f5qXqHzNNYcsK2YXBMXvrVPKWVVwXbHStGe9
+tjvPjOnSJ6nv7m8fLuK0AyXwWJ9EgZgYSTcbUyqVvs57VWeQvipPeuUMkYGhauBq
+aElTkGciwGlqtGYMxMxCl2p3YoSY+E3lDJV+ExSG7jAsV4+maQejikyqCKbHG1qe
+V8ZPsglm0Yk7E86ich+vIA/6Ra8B2Q==
+=GxVn
+-----END PGP SIGNATURE-----
+
+--Sig_/Dg2jyPmbbaRHaFvwrb0cc6+--
 

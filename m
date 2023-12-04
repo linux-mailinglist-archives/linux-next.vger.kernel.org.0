@@ -1,100 +1,137 @@
-Return-Path: <linux-next+bounces-224-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-225-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3FFE5803E2E
-	for <lists+linux-next@lfdr.de>; Mon,  4 Dec 2023 20:14:45 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6325880414B
+	for <lists+linux-next@lfdr.de>; Mon,  4 Dec 2023 23:06:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C72842810A1
-	for <lists+linux-next@lfdr.de>; Mon,  4 Dec 2023 19:14:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 04A2D280FF5
+	for <lists+linux-next@lfdr.de>; Mon,  4 Dec 2023 22:06:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C5B131595;
-	Mon,  4 Dec 2023 19:14:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C380C39FEF;
+	Mon,  4 Dec 2023 22:06:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="fr99GW5c"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="rYNVpU5g"
 X-Original-To: linux-next@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 958A1187;
-	Mon,  4 Dec 2023 11:14:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-	bh=avd9kpVhWVz2B8M8Ybf0Aja5DrFeuHw1R35QMA4ZI+c=; b=fr99GW5caHfSxsY/5+j9x6lnD0
-	l/95EYHH/31qeCFDn35JABWm/dAXSF0CNShkcWkyDCkYGAFRUmR+y84+2r1y4bw8lkUNYlL+Mzjqs
-	qYzB0IAWXTNSmaEbHmjrcwZQiwoOOObUmEfzfRNvd4DQu2LqpAHlZ7FWjfEa8Lj5O5YJz9BnMr+p2
-	IO0egqlQgdGtdgK8c6kiCRBj+jd/6duuU9aojp7Nkq5SQed9xM+z4XPSViC7w9YIOyYsyxXfjKJw0
-	oanG7uyO9tlhDS8lvMuZ/NDhrD19v0pMGU22BOyHIHjOaO5cy9bgG3o5CNcCgGQLu9iE2Ghtyjb+I
-	tR0c9H0g==;
-Received: from [50.53.46.231] (helo=[192.168.254.15])
-	by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-	id 1rAEOo-005QO4-2M;
-	Mon, 04 Dec 2023 19:14:34 +0000
-Message-ID: <17633619-fde3-4f36-b047-413e79c8116f@infradead.org>
-Date: Mon, 4 Dec 2023 11:14:34 -0800
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2933A130;
+	Mon,  4 Dec 2023 14:05:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1701727549;
+	bh=u8QKEqgw1lWdKU3HMKBvExEXQRW3gD1GYo/TOI2dnVQ=;
+	h=Date:From:To:Cc:Subject:From;
+	b=rYNVpU5gDOwPj9MLTqFCXrSxqDVlrr9QhKy+BhH5e/DSmjhlxnItTHuaSoeyW+BHb
+	 VidrYmogBlsIB6T+n7kunyclCOJEzHs49cWfQ1QDCQcbMJGg4X3Ijf1vZ6PDC/DTmq
+	 KDyDQ2DQlu/ZlT9omhmV1r8XIyWIk8equsFbajr+/jkFDQeYWJrOPmAFXEoBJjj0Sn
+	 gVXWo/th/EmdNJgN02axPWySgLa+eAVgdFNdFzp+qXNclR3BNhvX4U/g5VRqxp1c+7
+	 1WF94bCMmwIjmvmHqZqLhkfC+vWkR4b4NxsvcCN/fB5Njkjg1fPTHCBAaYtcGILNDu
+	 t0EVpllixZ08Q==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Skd5m74Vlz4x5M;
+	Tue,  5 Dec 2023 09:05:48 +1100 (AEDT)
+Date: Tue, 5 Dec 2023 09:05:46 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Arnd Bergmann <arnd@arndb.de>, Andrew Morton <akpm@linux-foundation.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the asm-generic tree with the mm tree
+Message-ID: <20231205090546.7dffe3aa@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] riscv, kexec: fix dependency of two items
-Content-Language: en-US
-To: Baoquan He <bhe@redhat.com>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>, akpm@linux-foundation.org,
- ignat@cloudflare.com, linux-next@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
- kexec@lists.infradead.org, eric_devolder@yahoo.com
-References: <ZW00/Cfk47Cc3kGo@MiWiFi-R3L-srv>
- <ZW04G/SKnhbE5mnX@MiWiFi-R3L-srv>
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <ZW04G/SKnhbE5mnX@MiWiFi-R3L-srv>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/VBYqBJXGz5xwbMxQnhHuZk9";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
+--Sig_/VBYqBJXGz5xwbMxQnhHuZk9
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
 
-On 12/3/23 18:23, Baoquan He wrote:
-> Drop the dependency on MMU from ARCH_SUPPORTS_KEXEC and
-> ARCH_SUPPORTS_KEXEC_FILE because CONFIG_MMU could be disabled while
-> people may still want to have KEXEC/KEXEC_FILE functionality.
-> 
-> Signed-off-by: Baoquan He <bhe@redhat.com>
+Today's linux-next merge of the asm-generic tree got a conflict in:
 
-Tested-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
+  arch/mips/include/asm/traps.h
 
-Thanks.
+between commit:
 
-> ---
->  arch/riscv/Kconfig | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> index 95a2a06acc6a..24c1799e2ec4 100644
-> --- a/arch/riscv/Kconfig
-> +++ b/arch/riscv/Kconfig
-> @@ -685,7 +685,7 @@ config RISCV_BOOT_SPINWAIT
->  	  If unsure what to do here, say N.
->  
->  config ARCH_SUPPORTS_KEXEC
-> -	def_bool MMU
-> +	def_bool y
->  
->  config ARCH_SELECTS_KEXEC
->  	def_bool y
-> @@ -693,7 +693,7 @@ config ARCH_SELECTS_KEXEC
->  	select HOTPLUG_CPU if SMP
->  
->  config ARCH_SUPPORTS_KEXEC_FILE
-> -	def_bool 64BIT && MMU
-> +	def_bool 64BIT
->  
->  config ARCH_SELECTS_KEXEC_FILE
->  	def_bool y
+  6b281b05cbcc ("mips: add missing declarations for trap handlers")
 
--- 
-~Randy
+from the mm tree and commit:
+
+  23f8c1823bd4 ("arch: add do_page_fault prototypes")
+
+from the asm-generic tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc arch/mips/include/asm/traps.h
+index 2c2b26f1e464,d4d9f8a8fdea..000000000000
+--- a/arch/mips/include/asm/traps.h
++++ b/arch/mips/include/asm/traps.h
+@@@ -39,28 -39,7 +39,30 @@@ extern char except_vec_nmi[]
+  	register_nmi_notifier(&fn##_nb);				\
+  })
+ =20
+ +asmlinkage void do_ade(struct pt_regs *regs);
+ +asmlinkage void do_be(struct pt_regs *regs);
+ +asmlinkage void do_ov(struct pt_regs *regs);
+ +asmlinkage void do_fpe(struct pt_regs *regs, unsigned long fcr31);
+ +asmlinkage void do_bp(struct pt_regs *regs);
+ +asmlinkage void do_tr(struct pt_regs *regs);
+ +asmlinkage void do_ri(struct pt_regs *regs);
+ +asmlinkage void do_cpu(struct pt_regs *regs);
+ +asmlinkage void do_msa_fpe(struct pt_regs *regs, unsigned int msacsr);
+ +asmlinkage void do_msa(struct pt_regs *regs);
+ +asmlinkage void do_mdmx(struct pt_regs *regs);
+ +asmlinkage void do_watch(struct pt_regs *regs);
+ +asmlinkage void do_mcheck(struct pt_regs *regs);
+ +asmlinkage void do_mt(struct pt_regs *regs);
+ +asmlinkage void do_dsp(struct pt_regs *regs);
+ +asmlinkage void do_reserved(struct pt_regs *regs);
+ +asmlinkage void do_ftlb(void);
+ +asmlinkage void do_gsexc(struct pt_regs *regs, u32 diag1);
+ +asmlinkage void do_daddi_ov(struct pt_regs *regs);
+ +
+ +asmlinkage void cache_parity_error(void);
+ +asmlinkage void ejtag_exception_handler(struct pt_regs *regs);
+ +asmlinkage void __noreturn nmi_exception_handler(struct pt_regs *regs);
++ asmlinkage void do_page_fault(struct pt_regs *regs,
++ 	unsigned long write, unsigned long address);
+ =20
+  #endif /* _ASM_TRAPS_H */
+
+--Sig_/VBYqBJXGz5xwbMxQnhHuZk9
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmVuTToACgkQAVBC80lX
+0GxyXAf/Z9tKTD17hXu4lNOF7mgeQmQ87sTn6cPQMIbZ0CfAGBbNVpWC3mirSzEB
+gOOUxEvgiSLEv36vioe0StTQ73olGDc0by2m7GhXGb0g9pTG9xAxUUFW6AHnhMLU
+MoDEORA+Ns1IkXmkB6ECsu4dm2dj1lAYU6eq7KxjFgUOdgWV8uGvMhqONxCOMHCr
+phb19Tny/PZXnDiDM1ADXx2+Csz+P6K0posY7v96dM15VbL4UyloKWxwbCA4o+2i
++VR6lDQ+Mdf2qZPU3z0kg9cekp9Y26tns58mnLwE91gIzCoRwfJYdDyIr/+5iY5z
+WRpT6zggimGtMevFmdQ5IOwrrZt0GQ==
+=W7Pp
+-----END PGP SIGNATURE-----
+
+--Sig_/VBYqBJXGz5xwbMxQnhHuZk9--
 

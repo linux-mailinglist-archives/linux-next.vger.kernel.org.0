@@ -1,118 +1,174 @@
-Return-Path: <linux-next+bounces-200-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-201-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 218DF802905
-	for <lists+linux-next@lfdr.de>; Mon,  4 Dec 2023 00:35:23 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9A0BC8029A4
+	for <lists+linux-next@lfdr.de>; Mon,  4 Dec 2023 01:52:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D0DDA1F20F60
-	for <lists+linux-next@lfdr.de>; Sun,  3 Dec 2023 23:35:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ED1CA280A93
+	for <lists+linux-next@lfdr.de>; Mon,  4 Dec 2023 00:52:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9CE11A712;
-	Sun,  3 Dec 2023 23:35:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E4FF65C;
+	Mon,  4 Dec 2023 00:51:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="IrDTteuU"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="PNAnU1fN"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E058D7;
-	Sun,  3 Dec 2023 15:35:15 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09CCCDB;
+	Sun,  3 Dec 2023 16:51:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1701646514;
-	bh=4SeuYyjE6NX5ofJ9uaA1W0ZgO2sJUY+tLHUi7w+Ap5c=;
-	h=Date:From:To:Cc:Subject:From;
-	b=IrDTteuUcrRsDwpYS7m9X6E0gy4gLyJ1QefQD54VPqI4TlhtstRBi/MagkhYWjiUA
-	 HiR90IP0SZhNuOXscpwB2CqKOkEk/f6ctdrtOY5e9W7cVKiU/Pm5z8Vt4BOlDq5VFH
-	 z/5bFeTx6Ie4SaHAbNxSTbqIHplNp7Acppxn2XxX1iYPRqmWghA36X8Eh4ol76e+4m
-	 CrqwGsee+SmG7Rylz3VuS4EOh8S2Vy+F0X7WbRIkwi0xF3a1ussrknXuhwxQLefAzn
-	 R8TRW5f4MCzt27Wrtd4Nop83aWdHi8cjqazsy26vU96h5kFTnUFAJjo2iugkJAidJJ
-	 5QMhO9v0EJ9NA==
+	s=201702; t=1701651110;
+	bh=Opj6twM4acMBCpY7T23VTzRC6W4CJ1xxdOLVZ0BFwGY=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=PNAnU1fNgJ32W0hGwE141ESRcRgmPsdmNRAmufzHkJKRI4Fiavz0IwFyvIRBtLUpf
+	 T9ClY2QGqGkGvGUTANJb9Lwqi/BzFxasMIX1jCuD4mn08IpedB0jswkpKUiLuJiHTv
+	 I7ujGXEgxPWKcU9XdSM0YKEzxvs4r9b7ztl0khRBEa0E2wypMSpBXQS8SckDP442cV
+	 D/vwINh0JzvHvgwPPqT5sgARdrR9Q7Ps7OxlZfBLH9Oa7oRnsqvn5dtyTZLVtkQGlI
+	 bV+/GUeaof+/di1naCRaKj1mQtR1YenzV7czHxy5gGqExytOSxomtVvKvKHPyTQyYB
+	 VJAvBfYlf78Kg==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Sk37M2YYyz4xKZ;
-	Mon,  4 Dec 2023 10:35:11 +1100 (AEDT)
-Date: Mon, 4 Dec 2023 10:35:10 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Sk4qn6b5hz4xhZ;
+	Mon,  4 Dec 2023 11:51:49 +1100 (AEDT)
+Date: Mon, 4 Dec 2023 11:51:48 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Christian Brauner <brauner@kernel.org>
-Cc: Christoph Hellwig <hch@lst.de>, Jan Kara <jack@suse.cz>, Jens Axboe
- <axboe@kernel.dk>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, Yu Kuai <yukuai3@huawei.com>
-Subject: linux-next: manual merge of the vfs-brauner tree with Linus' tree
-Message-ID: <20231204103510.0eb5ea5f@canb.auug.org.au>
+To: Paolo Bonzini <pbonzini@redhat.com>, KVM <kvm@vger.kernel.org>
+Cc: Christian Brauner <brauner@kernel.org>, Christoph Hellwig <hch@lst.de>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>, Sean Christopherson
+ <seanjc@google.com>, Vlastimil Babka <vbabka@suse.cz>
+Subject: Re: linux-next: manual merge of the kvm tree with the vfs-brauner
+ tree
+Message-ID: <20231204115148.0b09243b@canb.auug.org.au>
+In-Reply-To: <20231122125539.5a7df3a3@canb.auug.org.au>
+References: <20231122125539.5a7df3a3@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/pWxTEZ4vOXMwEmPh+.KR_n5";
+Content-Type: multipart/signed; boundary="Sig_/8r2oWaKZaSmteXC+67jB/fz";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/pWxTEZ4vOXMwEmPh+.KR_n5
+--Sig_/8r2oWaKZaSmteXC+67jB/fz
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the vfs-brauner tree got a conflict in:
+On Wed, 22 Nov 2023 12:55:39 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> Today's linux-next merge of the kvm tree got a conflict in:
+>=20
+>   include/linux/pagemap.h
+>=20
+> between commit:
+>=20
+>   762321dab9a7 ("filemap: add a per-mapping stable writes flag")
 
-  include/linux/blk_types.h
+This is now in Linus' tree.
 
-between commit:
+> from the vfs-brauner tree and commit:
+>=20
+>   0003e2a41468 ("mm: Add AS_UNMOVABLE to mark mapping as completely unmov=
+able")
+>=20
+> from the kvm tree.
+>=20
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
 
-  67d995e06953 ("block: warn once for each partition in bio_check_ro()")
-
-from Linus' tree and commit:
-
-  ed5cc702d311 ("block: Add config option to not allow writing to mounted d=
-evices")
-
-from the vfs-brauner tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+The current resolution is below.
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc include/linux/blk_types.h
-index b29ebd53417d,52e264d5a830..000000000000
---- a/include/linux/blk_types.h
-+++ b/include/linux/blk_types.h
-@@@ -70,7 -66,7 +67,8 @@@ struct block_device=20
-  #ifdef CONFIG_FAIL_MAKE_REQUEST
-  	bool			bd_make_it_fail;
-  #endif
- +	bool			bd_ro_warned;
-+ 	int			bd_writers;
-  	/*
-  	 * keep this out-of-line as it's both big and not needed in the fast
-  	 * path
+diff --cc include/linux/pagemap.h
+index 06142ff7f9ce,bf2965b01b35..c2d90588c0bf
+--- a/include/linux/pagemap.h
++++ b/include/linux/pagemap.h
+@@@ -203,9 -203,8 +203,10 @@@ enum mapping_flags=20
+  	/* writeback related tags are not used */
+  	AS_NO_WRITEBACK_TAGS =3D 5,
+  	AS_LARGE_FOLIO_SUPPORT =3D 6,
+ -	AS_RELEASE_ALWAYS =3D 7,	/* Call ->release_folio(), even if no private d=
+ata */
+ -	AS_UNMOVABLE	=3D 8,	/* The mapping cannot be moved, ever */
+ +	AS_RELEASE_ALWAYS,	/* Call ->release_folio(), even if no private data */
+ +	AS_STABLE_WRITES,	/* must wait for writeback before modifying
+ +				   folio contents */
+++	AS_UNMOVABLE,		/* The mapping cannot be moved, ever */
+  };
+ =20
+  /**
+@@@ -291,21 -290,22 +292,37 @@@ static inline void mapping_clear_releas
+  	clear_bit(AS_RELEASE_ALWAYS, &mapping->flags);
+  }
+ =20
++ static inline void mapping_set_unmovable(struct address_space *mapping)
++ {
++ 	/*
++ 	 * It's expected unmovable mappings are also unevictable. Compaction
++ 	 * migrate scanner (isolate_migratepages_block()) relies on this to
++ 	 * reduce page locking.
++ 	 */
++ 	set_bit(AS_UNEVICTABLE, &mapping->flags);
++ 	set_bit(AS_UNMOVABLE, &mapping->flags);
++ }
++=20
++ static inline bool mapping_unmovable(struct address_space *mapping)
++ {
++ 	return test_bit(AS_UNMOVABLE, &mapping->flags);
++ }
++=20
+ +static inline bool mapping_stable_writes(const struct address_space *mapp=
+ing)
+ +{
+ +	return test_bit(AS_STABLE_WRITES, &mapping->flags);
+ +}
+ +
+ +static inline void mapping_set_stable_writes(struct address_space *mappin=
+g)
+ +{
+ +	set_bit(AS_STABLE_WRITES, &mapping->flags);
+ +}
+ +
+ +static inline void mapping_clear_stable_writes(struct address_space *mapp=
+ing)
+ +{
+ +	clear_bit(AS_STABLE_WRITES, &mapping->flags);
+ +}
+ +
+  static inline gfp_t mapping_gfp_mask(struct address_space * mapping)
+  {
+  	return mapping->gfp_mask;
 
---Sig_/pWxTEZ4vOXMwEmPh+.KR_n5
+--Sig_/8r2oWaKZaSmteXC+67jB/fz
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmVtEK4ACgkQAVBC80lX
-0GzeLQf9GK26ZpgubASvbXlGIj73n6T4gjxAcBJiR0lbGU2LtjNKkut5lhyXtF1b
-QnI9gEF9HGPnR0bhZE7rOK1/yctqNUpPoSp+G3PWvS+ywN/tnI7Kbav6nyc+DxV/
-edjmXz2t1nemcYPrfZf+jTgnlkcTBitzaJfxHS8AjM1xHtLHgyVKOaVTSUXPIKKX
-DSjAgnmAlX6AibfAMEQZpinnSmbPzyQiUAR/8CLDXJbA7502Ce9H5Z/unJXkRBL9
-SjNFdET2zsxbztbjq+R1Ub5X2pU4iKDK9r4etmnv7gyc38y0JGWfrs5tMYHAAEoP
-6JMIExv7dZHeXF4dgqtLMbQq/X0BwA==
-=EaOI
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmVtIqQACgkQAVBC80lX
+0GzjWAf/X1tCPBNu95zV0Mq9esX+qPvDhfWOLbieaYGzjpHNlL9AXomcCbRTg8GF
+8AtLG8v42IHH6GkeeETor1NiGcSv/BYyEa9ibvoO48x00YSKt8rAqUQKg4nBgXVa
+/FNzujmiXacB+a+cgb4tyqlBYGMzadQOvR4am1UkTq249AYUw4fhphJqpQ+ggPPo
+L/XsayunYH1AcUD1FpHLNmx2GeRrHuOXBFK3drqkK9JXlWNRHT5LW/5VuoTPUM/G
+I3ueJ//hmBZGStJaSK3wE+lqmK7B1iEYjAajupkwu4XdWlDK0wUsX5KJxn2gjPp/
+nhXaagOvwtGfZ1qv8sPuPf9HjmwWqA==
+=U7sa
 -----END PGP SIGNATURE-----
 
---Sig_/pWxTEZ4vOXMwEmPh+.KR_n5--
+--Sig_/8r2oWaKZaSmteXC+67jB/fz--
 

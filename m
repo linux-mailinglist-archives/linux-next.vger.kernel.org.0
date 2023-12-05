@@ -1,137 +1,148 @@
-Return-Path: <linux-next+bounces-234-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-235-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 95784805A72
-	for <lists+linux-next@lfdr.de>; Tue,  5 Dec 2023 17:52:12 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9EBCB805ACF
+	for <lists+linux-next@lfdr.de>; Tue,  5 Dec 2023 18:09:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C633F1C21262
-	for <lists+linux-next@lfdr.de>; Tue,  5 Dec 2023 16:52:11 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 618A9B20F61
+	for <lists+linux-next@lfdr.de>; Tue,  5 Dec 2023 17:08:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C780E60BAE;
-	Tue,  5 Dec 2023 16:52:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9DF76928E;
+	Tue,  5 Dec 2023 17:08:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="AMamVXfN"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="VZUbUKqL"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6E00D4F
-	for <linux-next@vger.kernel.org>; Tue,  5 Dec 2023 08:52:04 -0800 (PST)
-Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-6ce52ff23dfso1825187b3a.0
-        for <linux-next@vger.kernel.org>; Tue, 05 Dec 2023 08:52:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1701795124; x=1702399924; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=UF8h57KGEYaaO7ZeAO7CIlragiT90CyvWupEGqaqa1M=;
-        b=AMamVXfNbuOxbZfp+hAXam0tZQzWYogtdRNW/DjwrBvFIAdr6zm6vknTXM7nNBvYCf
-         sf6OIioXqgaQ1h4c1b4dYqyND3gb6r3ehhKnHSUgo1SLvHr2irTgDWqAa8Z1/jP0cPuW
-         5aAAomrDAnUl+O/YUWf594+gD80/p0xgWlpk7tHPp7M70qS3c0IvjsBvVJXlA8a1nR4T
-         woizuNpu4T2Geg26jU67FdOodlkpt8o909CyS6yDHz14VLTbXgAnU41V3HsA3dEfwGkH
-         ob1Y9wMkPWEcL2F2KtuCC7LOLyWPgO/S7XOhfTojC5ygrAduoElU/mySE84Pzr8yFq0A
-         G/kQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701795124; x=1702399924;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UF8h57KGEYaaO7ZeAO7CIlragiT90CyvWupEGqaqa1M=;
-        b=sBefeafcHXFRSJOSr/ck9D9yhhvl+0Iiuqpo78OiIfZF9yO+/b5ALHxPwl66NC05a2
-         Q90Q5ienx9q85PQKNL8XnAt0jrEY5+fX9Z0kUNxWFaj6H/8CCBToL9zqmYD4oYrMQInV
-         LlOwyf2Fl18Y8fL6bKttrecpZglxReAsZWkaeoi/X7o1wpuIj4w+Sshu1MrX5pGMiPk4
-         BO9YsEpsNHdf4DQxrBsgKbq5I4PERXS1Va9IbBaakuV9rfjtPP1wcFGjlFvcPT+ARkWm
-         hZBHkQgqc4XntRilAJCxXIHY2RQ37+VJ+RN5LNUc6GAKVUJpWvoxAbD9DlNaVxkXQrrK
-         jESQ==
-X-Gm-Message-State: AOJu0YyI0EsaAdCWbZ4iLRib4kcOOml7hbUbnrB9zrqU80tJekAwWf3r
-	ibVwOd6yIYZk576mSSC5DF2X2LVAJQdeNmAmpG2fxQ==
-X-Google-Smtp-Source: AGHT+IE8AJXDLLfWDbJyhPuadiwEeHKLlw9Gv24SmVI+gZTno/Cg0VT2UBMjZ1cCqp6NsktgwC+V1w==
-X-Received: by 2002:a05:6a00:1888:b0:6ce:7f32:d64e with SMTP id x8-20020a056a00188800b006ce7f32d64emr110370pfh.29.1701795123777;
-        Tue, 05 Dec 2023 08:52:03 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id p23-20020aa78617000000b006ce742b6b1fsm1192021pfn.63.2023.12.05.08.52.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Dec 2023 08:52:03 -0800 (PST)
-Message-ID: <656f5533.a70a0220.90447.3264@mx.google.com>
-Date: Tue, 05 Dec 2023 08:52:03 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F189DA9;
+	Tue,  5 Dec 2023 09:08:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+	bh=1llierF4zA5793A0h8X4gsP2jzq0+KwCB4rIq5DDmzk=; b=VZUbUKqL5NX+XS5uyMthkp/nId
+	OVaS08z9q7+cJ/3uONusQZfOFscvx0ZTXbIZSnZT6EdhPkAutf+jaoCPUWR1+i1iKmTSBkWhWqC9z
+	rLAvq6LZuTWic/4zPopHcUaTSjoDKVAKgJbPild6F4eMt0OLO7Jk7siA51jy2isnDjzc5tfX5tsRY
+	USwbjhPxdzSuFN9BPjemmk9vEwRdLxgahXg+SOkZgs5yP4BoUpnDF46pypE5PeFkhwc0JwAVrdOiX
+	r2KD3WhCfOfl1FwGLCedvoOedXoLU0gokVgNE8o/V8nipxbt0kMPNBF80tW1ZOwooSuZ6rhIXM22E
+	eJ12iGJw==;
+Received: from [50.53.46.231] (helo=[192.168.254.15])
+	by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+	id 1rAYuW-007zp0-1J;
+	Tue, 05 Dec 2023 17:08:40 +0000
+Message-ID: <5f9f018a-dc4f-42f0-ba90-2f44d2f61a7c@infradead.org>
+Date: Tue, 5 Dec 2023 09:08:37 -0800
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Tree: next
-X-Kernelci-Report-Type: test
-X-Kernelci-Kernel: v6.7-rc4-219-gcc1b39317a57
-Subject: next/pending-fixes baseline: 91 runs,
- 1 regressions (v6.7-rc4-219-gcc1b39317a57)
-To: linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
- kernelci-results@groups.io
-From: "kernelci.org bot" <bot@kernelci.org>
-
-next/pending-fixes baseline: 91 runs, 1 regressions (v6.7-rc4-219-gcc1b3931=
-7a57)
-
-Regressions Summary
--------------------
-
-platform           | arch  | lab         | compiler | defconfig | regressio=
-ns
--------------------+-------+-------------+----------+-----------+----------=
---
-kontron-pitx-imx8m | arm64 | lab-kontron | gcc-10   | defconfig | 1        =
-  =
-
-
-  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
-v6.7-rc4-219-gcc1b39317a57/plan/baseline/
-
-  Test:     baseline
-  Tree:     next
-  Branch:   pending-fixes
-  Describe: v6.7-rc4-219-gcc1b39317a57
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      cc1b39317a57120651840e79b535594ee09f5768 =
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] riscv, crash: don't export some symbols when
+ CONFIG_MMU=n
+Content-Language: en-US
+To: Baoquan He <bhe@redhat.com>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>, akpm@linux-foundation.org,
+ ignat@cloudflare.com, linux-next@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+ kexec@lists.infradead.org, eric_devolder@yahoo.com
+References: <ZW00/Cfk47Cc3kGo@MiWiFi-R3L-srv>
+ <ZW03ODUKGGhP1ZGU@MiWiFi-R3L-srv>
+ <694baf13-65d0-4877-b6c7-56e3006f83be@infradead.org>
+ <ZW7OsX4zQRA3mO4+@MiWiFi-R3L-srv>
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <ZW7OsX4zQRA3mO4+@MiWiFi-R3L-srv>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
 
 
-Test Regressions
----------------- =
+On 12/4/23 23:18, Baoquan He wrote:
+> On 12/04/23 at 11:14am, Randy Dunlap wrote:
+
+[]
+
+>>
+>> Both riscv 32-bit and 64-bit complain:
+>>
+>> ../arch/riscv/kernel/crash_core.c: In function 'arch_crash_save_vmcoreinfo':
+>> ../arch/riscv/kernel/crash_core.c:11:58: warning: format '%lx' expects argument of type 'long unsigned int', but argument 2 has type 'int' [-Wformat=]
+>>    11 |         vmcoreinfo_append_str("NUMBER(VMALLOC_START)=0x%lx\n", VMALLOC_START);
+>>       |                                                        ~~^
+>>       |                                                          |
+>>       |                                                          long unsigned int
+>>       |                                                        %x
+> 
+> Thanks for all these testing.
+> 
+> This warning is irrelevant to the kexec patch, it's becasue 
+> VMALLOC_START is defined as 0 which is int when CONFIG_MMU=n.
+> 
+> Below patch can fix the warning.
+> 
+> From 46984a0287e5f1b41ae3e9adfcfa0d26b71db8f4 Mon Sep 17 00:00:00 2001
+> From: Baoquan He <bhe@redhat.com>
+> Date: Tue, 5 Dec 2023 11:02:55 +0800
+> Subject: [PATCH] riscv: fix VMALLC_START definition
+> Content-type: text/plain
+> 
+> When below config items are set, compiler complained:
+> 
+> --------------------
+> CONFIG_CRASH_CORE=y
+> CONFIG_KEXEC_CORE=y
+> CONFIG_CRASH_DUMP=y
+> ......
+> -----------------------
+> 
+> -------------------------------------------------------------------
+> arch/riscv/kernel/crash_core.c: In function 'arch_crash_save_vmcoreinfo':
+> arch/riscv/kernel/crash_core.c:11:58: warning: format '%lx' expects argument of type 'long unsigned int', but argument 2 has type 'int' [-Wformat=]
+> 11 |         vmcoreinfo_append_str("NUMBER(VMALLOC_START)=0x%lx\n", VMALLOC_START);
+>    |                                                        ~~^
+>    |                                                          |
+>    |                                                          long unsigned int
+>    |                                                        %x
+> ----------------------------------------------------------------------
+> 
+> This is because on riscv macro VMALLOC_START has different type when
+> CONFIG_MMU is set or unset.
+> 
+> arch/riscv/include/asm/pgtable.h:
+> --------------------------------------------------
+> 
+> Changing it to _AC(0, UL) in case CONFIG_MMU=n can fix the warning.
+> 
+> Signed-off-by: Baoquan He <bhe@redhat.com>
+
+Reported-by: Randy Dunlap <rdunlap@infradead.org>
+Acked-by: Randy Dunlap <rdunlap@infradead.org>
+Tested-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
 
 
+Thanks.
 
-platform           | arch  | lab         | compiler | defconfig | regressio=
-ns
--------------------+-------+-------------+----------+-----------+----------=
---
-kontron-pitx-imx8m | arm64 | lab-kontron | gcc-10   | defconfig | 1        =
-  =
+> ---
+>  arch/riscv/include/asm/pgtable.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
+> index 294044429e8e..ab00235b018f 100644
+> --- a/arch/riscv/include/asm/pgtable.h
+> +++ b/arch/riscv/include/asm/pgtable.h
+> @@ -899,7 +899,7 @@ static inline pte_t pte_swp_clear_exclusive(pte_t pte)
+>  #define PAGE_KERNEL		__pgprot(0)
+>  #define swapper_pg_dir		NULL
+>  #define TASK_SIZE		0xffffffffUL
+> -#define VMALLOC_START		0
+> +#define VMALLOC_START		_AC(0, UL)
+>  #define VMALLOC_END		TASK_SIZE
+>  
+>  #endif /* !CONFIG_MMU */
 
-
-  Details:     https://kernelci.org/test/plan/id/656f2546c40ab1fef8e134b2
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.7-rc4-21=
-9-gcc1b39317a57/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-pitx-im=
-x8m.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.7-rc4-21=
-9-gcc1b39317a57/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-pitx-im=
-x8m.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/656f2546c40ab1fef8e13=
-4b3
-        new failure (last pass: v6.7-rc4-181-ge070da1246e73) =
-
- =20
+-- 
+~Randy
 

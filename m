@@ -1,99 +1,69 @@
-Return-Path: <linux-next+bounces-248-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-250-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5323D80665F
-	for <lists+linux-next@lfdr.de>; Wed,  6 Dec 2023 05:47:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id E8E6D806697
+	for <lists+linux-next@lfdr.de>; Wed,  6 Dec 2023 06:30:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A94AC281D71
-	for <lists+linux-next@lfdr.de>; Wed,  6 Dec 2023 04:47:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9F795280D39
+	for <lists+linux-next@lfdr.de>; Wed,  6 Dec 2023 05:30:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A836C1108;
-	Wed,  6 Dec 2023 04:47:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77895F9E6;
+	Wed,  6 Dec 2023 05:30:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="KWF9cQqn"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="h6ZQ9lbd"
 X-Original-To: linux-next@vger.kernel.org
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 502C1A5;
-	Tue,  5 Dec 2023 20:47:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1701838052;
-	bh=vVeXte/GmqKo3BeYMWbX83grmqhoPxHp5v7YTOjDpsA=;
-	h=Date:From:To:Cc:Subject:From;
-	b=KWF9cQqnSfX/77k/wycjtzFfW+925aby3FKWeEgtj3OkxaFyjT1ax1afFkn2puYTa
-	 qe1mT00hYcRq8h/L0xEGine+G/P0Wh2hnztomnNKdW/eVn3yf9NccGpjQ0bnXz7gBc
-	 2TA7b39oQAoL42fMY8QmFVF/P98crAa1XdDTcx0zk2vq5FBUsyVdCeeYvUwFfIEPcH
-	 oAZH0dctryy0XG/BrasUyHRCV+3r9ynqz8Gg+tTkjMf6sVcRXyjz8sAB+EjXzgyLWk
-	 npqSvzhO6h/WJco7mXCypLFo36BlAzv6mXQYsEjNgyEftV70MC8kNP0b4Em7z9s8QI
-	 jrceWPhZ8YAAA==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4SlPyq1wJyz4wd1;
-	Wed,  6 Dec 2023 15:47:31 +1100 (AEDT)
-Date: Wed, 6 Dec 2023 15:47:30 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Shawn Guo <shawnguo@kernel.org>
-Cc: Alexander Stein <alexander.stein@ew.tq-group.com>, Linux Kernel Mailing
- List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the imx-mxs tree
-Message-ID: <20231206154730.00346f93@canb.auug.org.au>
+X-Greylist: delayed 522 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 05 Dec 2023 21:30:33 PST
+Received: from out-185.mta0.migadu.com (out-185.mta0.migadu.com [91.218.175.185])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24FC818F
+	for <linux-next@vger.kernel.org>; Tue,  5 Dec 2023 21:30:32 -0800 (PST)
+Date: Wed, 6 Dec 2023 00:21:42 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1701840105;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=r3uwpE6nH1ZY3NnV+4RJaHdhMr8NRwdTOin5q+eq/aQ=;
+	b=h6ZQ9lbdFCxH6KChv8hEWSc9Yr2NnPds8VUr2rbGI7dL7tdsRhwcF8Ayi4bvOoDy/zL+g4
+	JCFS5yFWReaju4Fou/43kidkddeNPny2s6uzt8HNZeWqL+H8YozsF72xRRkv9xOCTXp+V2
+	lln3skwBHbkKJHxNkcX8ScKS93zjIDw=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Kent Overstreet <kent.overstreet@linux.dev>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Al Viro <viro@ZenIV.linux.org.uk>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: duplicate patches in the vfs tree
+Message-ID: <20231206052142.oreb4sczrvcbm26a@moria.home.lan>
+References: <20231206133842.104276c7@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/j7l+mD.zyoT/RVwR2qkuFR2";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231206133842.104276c7@canb.auug.org.au>
+X-Migadu-Flow: FLOW_OUT
 
---Sig_/j7l+mD.zyoT/RVwR2qkuFR2
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Wed, Dec 06, 2023 at 01:38:42PM +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> The following commits are also in the bcachefs tree as different
+> commits (but the same patches):
+> 
+>   bbe6a7c899e7 ("bch2_ioctl_subvolume_destroy(): fix locking")
+>   74d016ecc1a7 ("new helper: user_path_locked_at()")
+> 
+> These are commits
+> 
+>   b3057fdbaa42 ("bch2_ioctl_subvolume_destroy(): fix locking")
+>   6d93d94d56e4 ("new helper: user_path_locked_at()")
+> 
+> in the bcachefs tree.
 
-Hi all,
-
-In commit
-
-  50f8906b310e ("arm64: dts: freescale: imx8-ss-lsio: Fix #pwm-cells")
-
-Fixes tag
-
-  Fixes: a05c329644d81 ("arm64: dts: freescale: imx8-ss-lsio: add support f=
-or lsio_pwm0-3")
-
-has these problem(s):
-
-  - Target SHA1 does not exist
-
-Maybe you meant
-
-Fixes: 23fa99b205ea ("arm64: dts: freescale: imx8-ss-lsio: add support for =
-lsio_pwm0-3")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/j7l+mD.zyoT/RVwR2qkuFR2
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmVv/OIACgkQAVBC80lX
-0GytjAf+Ib7Z+SOfFCz37uYYBm5vZqoIRqr+XT1PUGMd3uWqu13NAkhkaVmTd6iL
-+SElKoN6PvMnOOK08KT9UXZfDDu7ZltS16lYTZhwCw65FkbYpj4WODS/XLtrFnnk
-fQwzbDZR4NUmSg91gT2i4zphLIMranV4/ZRSgdcbFZ5bf427pJ0JMjzZb3mUeloJ
-ZsezDQ20GHsBXmN9fE87aDEaDYXIUg/FAanXUeoZOTetbuObN848tt+Adlj8ssOL
-/PXC++BZlSxO46Qflclh0PBCPYfApNlJ/DIxGqJffnjZ6zLeFi8NQWsgPozgXAJm
-dX0yZ9xV5bmH04dfIglv0Lemm0V3aQ==
-=Yfsc
------END PGP SIGNATURE-----
-
---Sig_/j7l+mD.zyoT/RVwR2qkuFR2--
+Dropped from mine
 

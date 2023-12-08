@@ -1,99 +1,172 @@
-Return-Path: <linux-next+bounces-278-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-279-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BCE5E8096EE
-	for <lists+linux-next@lfdr.de>; Fri,  8 Dec 2023 01:08:20 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5377B809735
+	for <lists+linux-next@lfdr.de>; Fri,  8 Dec 2023 01:28:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4FD501F211B1
-	for <lists+linux-next@lfdr.de>; Fri,  8 Dec 2023 00:08:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EA3E1282054
+	for <lists+linux-next@lfdr.de>; Fri,  8 Dec 2023 00:28:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5692A7F4;
-	Fri,  8 Dec 2023 00:08:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B7B87F4;
+	Fri,  8 Dec 2023 00:28:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="KIBaVo4B"
+	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="BP3Mxd5v"
 X-Original-To: linux-next@vger.kernel.org
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 783881713;
-	Thu,  7 Dec 2023 16:08:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1701994085;
-	bh=Y8H1SxXdEsoUXtruYdRocu8FnDiCy0NFG2kz/YYgWKQ=;
-	h=Date:From:To:Cc:Subject:From;
-	b=KIBaVo4Bsdlxs9FvaPz3pU44nvraVNUjLd+uB6vmxlanFrsRGRmIvSmh79PtqyfiV
-	 LJWJkCc0IzcxsFctt3+VGS9etUP/ByiJGHpzHh7sekUEDHEhWbcBqKARAyi7sK4ZQN
-	 9wnBli2NhD9+7dG1LEKN88NYwYmgRLTmmo3yVp8EJtG34ki9nxZ1EPZipsl5ntiJdn
-	 wl5Bf1HDeUGg73KATVSWRVXOlqdCg2x0GVltqyO9BbkVCfE6UjoXNmaHfV39VOT/9c
-	 xUXKR5ea9Lh8rIZjhGALclB52FAqxV2F5+y/lLrqp9vkqT9RDGrrQpOmfZ6+Y/D8w5
-	 y6sFKUa0BeYiQ==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4SmWgT3rdsz4wbh;
-	Fri,  8 Dec 2023 11:08:05 +1100 (AEDT)
-Date: Fri, 8 Dec 2023 11:08:03 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: David Sterba <dsterba@suse.cz>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patches in the btrfs tree
-Message-ID: <20231208110803.59c777b9@canb.auug.org.au>
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 745FC1713
+	for <linux-next@vger.kernel.org>; Thu,  7 Dec 2023 16:28:33 -0800 (PST)
+Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-6cea2a38b48so1169491b3a.3
+        for <linux-next@vger.kernel.org>; Thu, 07 Dec 2023 16:28:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1701995312; x=1702600112; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=YGnAw8yCHebSnT1B/75W5+kwC9oLITs0NAmyxRhO2ss=;
+        b=BP3Mxd5vxcsaFJsnS6cSkVkw4lTp6BBFogcW6VxcKdn8SRZPFgd2xP13g8O5Hzoixj
+         JtuoRAGWI3vp2fQhtftXzzAuOCjgYPqVuKFufysVw4DyGBfCFUlACDQ7M9OmWfYwjbDo
+         e9VRfxbKxaq2D1Zu9HBeR95cQ/YUR954xE7c+S6UjpiTmgJuntG3ezednPs8IOPhPiYZ
+         Y8h1gHZBU4mvI9Y1/2nwRLgLH7kQwcgGgx/nhnTd4qzHG0bqqtFhJfj73mCvS83vz3kX
+         Fw25l8DE18XSpkmECcgyqX/FAMcEwtXaWzZMsdX/sskYNtbwWYnTFWMhBeoKVnEqEdS6
+         3rpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701995312; x=1702600112;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YGnAw8yCHebSnT1B/75W5+kwC9oLITs0NAmyxRhO2ss=;
+        b=Itmpc2QWm4Vz3YbwKAqisIvyufrl1ehGeg/2hrw5qkIuxbh660Y8oe4gcSvlCuvvYt
+         Nti3/bohnErsE1rWkvkY/2upjVkqP/TO+e/19ouPhnLgbR2ldsKMCiRvJGo8UPlDGA3I
+         CZWL8q9YMxYjevDGxvyO+qSxl0g+3NG9K1CreCc0/6zIH8/xboXablwi5sV3+f6/rXss
+         hvtus1VYabfTfNwM2uVRO1vsvNUYt6ZayeUGpOMN3inVrrndizhHYJBKBFHSq5ZpkBXy
+         NpU0KGiHdZoni/Ibn7rytDuf6i1GSOazSxG3k9fhYoeWt/GRZGUbZjh2w3uBpKcWMXHG
+         9LXw==
+X-Gm-Message-State: AOJu0YwiZBqc7lmVImBmMn8CdQKAgzDWeFTAfiFd/e/b/G0bxmMN8IDk
+	OjIr7ot6Hki4JhWl2h8Q+h6mzl6rp9prkScL3A6HYA==
+X-Google-Smtp-Source: AGHT+IGbCQckGea+uAfB8WcqpkV1ryANMr54kJ2mDMcrs2+5Kcc3lrRWxVazBcH9sHuc0Pb6s8v25A==
+X-Received: by 2002:aa7:9e1c:0:b0:6ce:2e39:97d5 with SMTP id y28-20020aa79e1c000000b006ce2e3997d5mr3126295pfq.38.1701995312538;
+        Thu, 07 Dec 2023 16:28:32 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id fb6-20020a056a002d8600b006ce95e37a40sm359849pfb.111.2023.12.07.16.28.31
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Dec 2023 16:28:31 -0800 (PST)
+Message-ID: <6572632f.050a0220.2b396.1e5c@mx.google.com>
+Date: Thu, 07 Dec 2023 16:28:31 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/0oHs9sGDSSYN0qnY7QHCUCy";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-
---Sig_/0oHs9sGDSSYN0qnY7QHCUCy
-Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: pending-fixes
+X-Kernelci-Tree: next
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: v6.7-rc4-412-ge142e0e4b174b
+Subject: next/pending-fixes build: 8 builds: 0 failed, 8 passed,
+ 4 warnings (v6.7-rc4-412-ge142e0e4b174b)
+To: linux-next@vger.kernel.org
+From: "kernelci.org bot" <bot@kernelci.org>
 
-Hi all,
+next/pending-fixes build: 8 builds: 0 failed, 8 passed, 4 warnings (v6.7-rc=
+4-412-ge142e0e4b174b)
 
-The following commits are also in the btrfs-fixes tree as different
-commits (but the same patches):
+Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
+rnel/v6.7-rc4-412-ge142e0e4b174b/
 
-  34394e93dcb0 ("btrfs: ensure releasing squota rsv on head refs")
-  157711241cca ("btrfs: don't clear qgroup reserved bit in release_folio")
-  21b2ea73c688 ("btrfs: free qgroup pertrans rsv on trans abort")
-  eb56ec091a44 ("btrfs: fix qgroup_free_reserved_data int overflow")
-  025d23a138c6 ("btrfs: free qgroup reserve when ORDERED_IOERR is set")
+Tree: next
+Branch: pending-fixes
+Git Describe: v6.7-rc4-412-ge142e0e4b174b
+Git Commit: e142e0e4b174b269d1fd400aa676c5f0483b608c
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Built: 8 unique architectures
 
-These are commits
+Warnings Detected:
 
-  e85a0adacf17 ("btrfs: ensure releasing squota reserve on head refs")
-  a86805504b88 ("btrfs: don't clear qgroup reserved bit in release_folio")
-  b321a52cce06 ("btrfs: free qgroup pertrans reserve on transaction abort")
-  9e65bfca24cf ("btrfs: fix qgroup_free_reserved_data int overflow")
-  f63e1164b90b ("btrfs: free qgroup reserve when ORDERED_IOERR is set")
+arc:
 
-in the btrfs-fixes tree.
+arm64:
 
---=20
-Cheers,
-Stephen Rothwell
+arm:
 
---Sig_/0oHs9sGDSSYN0qnY7QHCUCy
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+i386:
 
------BEGIN PGP SIGNATURE-----
+mips:
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmVyXmMACgkQAVBC80lX
-0Gw3LAf/dEsUwCcV60LW/BjH1zC0Q7+VaZvDgGpPYUhIMocjwjXt+e+A5b6UKwF1
-n18KLATLxxQCLOuT2aJMo7ImbgtYzPStnpmZ2GdrNgYD2G1ZhkWn1otawrnGSKHs
-Kgk0KjpgRG4gRZBtJH0s0W6flNUI37tYKwVaPtxsyL8lVNv3jI3BERMfjd7OsQus
-M3AD0wHtME8Sm20kBifF4mYKO5+dG4DvKSekePPYDzODF56GPnb2iDnzEtL45ulI
-mbolZkIyXTeQToBeQOfpxPcYPU+YOl3qlkubgG9riXNjkgPc8Xk0tVIhohG1Cs8n
-kqB3HOzYGFtCloSKPREpbzZUjxbV6g==
-=yu3C
------END PGP SIGNATURE-----
+riscv:
 
---Sig_/0oHs9sGDSSYN0qnY7QHCUCy--
+sparc:
+    sparc64_defconfig (gcc-10): 4 warnings
+
+x86_64:
+
+
+Warnings summary:
+
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---
+For more info write to <info@kernelci.org>
 

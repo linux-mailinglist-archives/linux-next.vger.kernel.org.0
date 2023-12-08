@@ -1,46 +1,47 @@
-Return-Path: <linux-next+bounces-286-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-287-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB0A4809D0F
-	for <lists+linux-next@lfdr.de>; Fri,  8 Dec 2023 08:30:57 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id E518E809D15
+	for <lists+linux-next@lfdr.de>; Fri,  8 Dec 2023 08:31:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 716021F2111C
-	for <lists+linux-next@lfdr.de>; Fri,  8 Dec 2023 07:30:57 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 86267B20CCD
+	for <lists+linux-next@lfdr.de>; Fri,  8 Dec 2023 07:31:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1A78101D3;
-	Fri,  8 Dec 2023 07:30:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2B2D101C9;
+	Fri,  8 Dec 2023 07:31:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="d3iKWa6U"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="OeooZJQF"
 X-Original-To: linux-next@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83BC11720
-	for <linux-next@vger.kernel.org>; Thu,  7 Dec 2023 23:30:49 -0800 (PST)
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A77311736
+	for <linux-next@vger.kernel.org>; Thu,  7 Dec 2023 23:30:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1702020648;
+	s=mimecast20190719; t=1702020656;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=Lqd+oR1/9Yw4u2jQUrZmD5XRa3aKzcaLuNSBKTGkq30=;
-	b=d3iKWa6UOdJKOHJe4Nr/Tg+ZZnNFfgUx2gcrpeWKgrNmpQOnFX9BYOAV7OtUhdoyZGB4/2
-	D8b+A7knOcKWeY7h45TYb2uRRURDzyKzj7iI36T37RLhYGj2vn5H1/XbAUtxnBrm02Gp7M
-	zBWYusVO0JOWRDoIk1Rme34esRUS2nk=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-47-owVotutEOF-CVKYkPKJ4lw-1; Fri, 08 Dec 2023 02:30:45 -0500
-X-MC-Unique: owVotutEOF-CVKYkPKJ4lw-1
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=PMJ0khluh69+oGYQ45qNovXMn1kcyTft2Ss07SyrAMA=;
+	b=OeooZJQFxMz5qZ7k8kW4ot6lZeF3nalCVzOvzdvbkGUTAo5ZQfw6DJY8UjlH3Q0rf77BBL
+	kC/hCePL/GW5ujzzdo3l6oDnlqYAGx85Ock1fKrLw+MguDLu3+o/szU3qMeFYU9x46LRas
+	Q+QtQmyzpbhLBjox74qFDMLT4RVPUe8=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-310-fgcVBsYqNd-Y6txwm1BDyQ-1; Fri,
+ 08 Dec 2023 02:30:51 -0500
+X-MC-Unique: fgcVBsYqNd-Y6txwm1BDyQ-1
 Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 449CC85A588;
-	Fri,  8 Dec 2023 07:30:44 +0000 (UTC)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 939181C05ED0;
+	Fri,  8 Dec 2023 07:30:49 +0000 (UTC)
 Received: from fedora.redhat.com (unknown [10.72.112.9])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 917B98CD0;
-	Fri,  8 Dec 2023 07:30:39 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTP id D7C5A8CD0;
+	Fri,  8 Dec 2023 07:30:44 +0000 (UTC)
 From: Baoquan He <bhe@redhat.com>
 To: linux-kernel@vger.kernel.org
 Cc: linux-next@vger.kernel.org,
@@ -53,10 +54,13 @@ Cc: linux-next@vger.kernel.org,
 	eric_devolder@yahoo.com,
 	sfr@canb.auug.org.au,
 	ignat@cloudflare.com,
-	Baoquan He <bhe@redhat.com>
-Subject: [PATCH 0/5] kexec: fix the incorrect ifdeffery and dependency of CONFIG_KEXEC
-Date: Fri,  8 Dec 2023 15:30:31 +0800
-Message-ID: <20231208073036.7884-1-bhe@redhat.com>
+	Baoquan He <bhe@redhat.com>,
+	kernel test robot <lkp@intel.com>
+Subject: [PATCH 1/5] loongarch, kexec: change dependency of object files
+Date: Fri,  8 Dec 2023 15:30:32 +0800
+Message-ID: <20231208073036.7884-2-bhe@redhat.com>
+In-Reply-To: <20231208073036.7884-1-bhe@redhat.com>
+References: <20231208073036.7884-1-bhe@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -67,8 +71,11 @@ Content-type: text/plain
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.5
 
-The select of KEXEC for CRASH_DUMP in kernel/Kconfig.kexec will be
-dropped, then compiling errors will be triggered if below config
+Currently, in arch/loongarch/kernel/Makefile, building machine_kexec.o
+relocate_kernel.o depends on CONFIG_KEXEC.
+
+Whereas, since we will drop the select of KEXEC for CRASH_DUMP in
+kernel/Kconfig.kexec, compiling error will be triggered if below config
 items are set:
 
 ===
@@ -77,54 +84,40 @@ CONFIG_KEXEC_CORE=y
 CONFIG_CRASH_DUMP=y
 ===
 
-E.g on mips, below link error are seen:
---------------------------------------------------------------------
-mipsel-linux-ld: kernel/kexec_core.o: in function `kimage_free':
-kernel/kexec_core.c:(.text+0x2200): undefined reference to `machine_kexec_cleanup'
-mipsel-linux-ld: kernel/kexec_core.o: in function `__crash_kexec':
-kernel/kexec_core.c:(.text+0x2480): undefined reference to `machine_crash_shutdown'
-mipsel-linux-ld: kernel/kexec_core.c:(.text+0x2488): undefined reference to `machine_kexec'
-mipsel-linux-ld: kernel/kexec_core.o: in function `kernel_kexec':
-kernel/kexec_core.c:(.text+0x29b8): undefined reference to `machine_shutdown'
-mipsel-linux-ld: kernel/kexec_core.c:(.text+0x29c0): undefined reference to `machine_kexec'
---------------------------------------------------------------------
+---------------------------------------------------------------
+loongarch64-linux-ld: kernel/kexec_core.o: in function `.L209':
+>> kexec_core.c:(.text+0x1660): undefined reference to `machine_kexec_cleanup'
+   loongarch64-linux-ld: kernel/kexec_core.o: in function `.L287':
+>> kexec_core.c:(.text+0x1c5c): undefined reference to `machine_crash_shutdown'
+>> loongarch64-linux-ld: kexec_core.c:(.text+0x1c64): undefined reference to `machine_kexec'
+   loongarch64-linux-ld: kernel/kexec_core.o: in function `.L2^B5':
+>> kexec_core.c:(.text+0x2090): undefined reference to `machine_shutdown'
+   loongarch64-linux-ld: kexec_core.c:(.text+0x20a0): undefined reference to `machine_kexec'
+---------------------------------------------------------------
 
-Here, change the incorrect dependency of building kexec_core related object
-files, and the ifdeffery on architectures from CONFIG_KEXEC to
-CONFIG_KEXEC_CORE.
+Here, changing the dependency of machine_kexec.o relocate_kernel.o to
+CONFIG_KEXEC_CORE can fix above building error.
 
-Testing:
-========
-Passed on mips and loognarch with the LKP reproducer.
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202311300946.kHE9Iu71-lkp@intel.com/
+Signed-off-by: Baoquan He <bhe@redhat.com>
+---
+ arch/loongarch/kernel/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Baoquan He (5):
-  loongarch, kexec: change dependency of object files
-  m68k, kexec: fix the incorrect ifdeffery and build dependency of
-    CONFIG_KEXEC
-  mips, kexec: fix the incorrect ifdeffery and dependency of
-    CONFIG_KEXEC
-  sh, kexec: fix the incorrect ifdeffery and dependency of CONFIG_KEXEC
-  x86, kexec: fix the wrong ifdeffery CONFIG_KEXEC
-
- arch/loongarch/kernel/Makefile  |  2 +-
- arch/m68k/include/asm/kexec.h   |  4 ++--
- arch/m68k/kernel/Makefile       |  2 +-
- arch/mips/cavium-octeon/smp.c   |  4 ++--
- arch/mips/include/asm/kexec.h   |  2 +-
- arch/mips/include/asm/smp-ops.h |  2 +-
- arch/mips/include/asm/smp.h     |  2 +-
- arch/mips/kernel/Makefile       |  2 +-
- arch/mips/kernel/smp-bmips.c    |  4 ++--
- arch/mips/kernel/smp-cps.c      | 10 +++++-----
- arch/mips/loongson64/reset.c    |  4 ++--
- arch/mips/loongson64/smp.c      |  2 +-
- arch/sh/include/asm/kexec.h     |  4 ++--
- arch/sh/kernel/Makefile         |  2 +-
- arch/sh/kernel/reboot.c         |  4 ++--
- arch/sh/kernel/setup.c          |  2 +-
- arch/x86/boot/compressed/acpi.c |  2 +-
- 17 files changed, 27 insertions(+), 27 deletions(-)
-
+diff --git a/arch/loongarch/kernel/Makefile b/arch/loongarch/kernel/Makefile
+index 4fcc168f0732..3c808c680370 100644
+--- a/arch/loongarch/kernel/Makefile
++++ b/arch/loongarch/kernel/Makefile
+@@ -57,7 +57,7 @@ obj-$(CONFIG_MAGIC_SYSRQ)	+= sysrq.o
+ 
+ obj-$(CONFIG_RELOCATABLE)	+= relocate.o
+ 
+-obj-$(CONFIG_KEXEC)		+= machine_kexec.o relocate_kernel.o
++obj-$(CONFIG_KEXEC_CORE)	+= machine_kexec.o relocate_kernel.o
+ obj-$(CONFIG_CRASH_DUMP)	+= crash_dump.o
+ 
+ obj-$(CONFIG_UNWINDER_GUESS)	+= unwind_guess.o
 -- 
 2.41.0
 

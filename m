@@ -1,172 +1,218 @@
-Return-Path: <linux-next+bounces-279-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-280-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5377B809735
-	for <lists+linux-next@lfdr.de>; Fri,  8 Dec 2023 01:28:45 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2EA22809984
+	for <lists+linux-next@lfdr.de>; Fri,  8 Dec 2023 03:51:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EA3E1282054
-	for <lists+linux-next@lfdr.de>; Fri,  8 Dec 2023 00:28:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 13EF31C20BC6
+	for <lists+linux-next@lfdr.de>; Fri,  8 Dec 2023 02:51:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B7B87F4;
-	Fri,  8 Dec 2023 00:28:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CB9A17F8;
+	Fri,  8 Dec 2023 02:51:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="BP3Mxd5v"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="CxHo/BQL"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 745FC1713
-	for <linux-next@vger.kernel.org>; Thu,  7 Dec 2023 16:28:33 -0800 (PST)
-Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-6cea2a38b48so1169491b3a.3
-        for <linux-next@vger.kernel.org>; Thu, 07 Dec 2023 16:28:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1701995312; x=1702600112; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=YGnAw8yCHebSnT1B/75W5+kwC9oLITs0NAmyxRhO2ss=;
-        b=BP3Mxd5vxcsaFJsnS6cSkVkw4lTp6BBFogcW6VxcKdn8SRZPFgd2xP13g8O5Hzoixj
-         JtuoRAGWI3vp2fQhtftXzzAuOCjgYPqVuKFufysVw4DyGBfCFUlACDQ7M9OmWfYwjbDo
-         e9VRfxbKxaq2D1Zu9HBeR95cQ/YUR954xE7c+S6UjpiTmgJuntG3ezednPs8IOPhPiYZ
-         Y8h1gHZBU4mvI9Y1/2nwRLgLH7kQwcgGgx/nhnTd4qzHG0bqqtFhJfj73mCvS83vz3kX
-         Fw25l8DE18XSpkmECcgyqX/FAMcEwtXaWzZMsdX/sskYNtbwWYnTFWMhBeoKVnEqEdS6
-         3rpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701995312; x=1702600112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YGnAw8yCHebSnT1B/75W5+kwC9oLITs0NAmyxRhO2ss=;
-        b=Itmpc2QWm4Vz3YbwKAqisIvyufrl1ehGeg/2hrw5qkIuxbh660Y8oe4gcSvlCuvvYt
-         Nti3/bohnErsE1rWkvkY/2upjVkqP/TO+e/19ouPhnLgbR2ldsKMCiRvJGo8UPlDGA3I
-         CZWL8q9YMxYjevDGxvyO+qSxl0g+3NG9K1CreCc0/6zIH8/xboXablwi5sV3+f6/rXss
-         hvtus1VYabfTfNwM2uVRO1vsvNUYt6ZayeUGpOMN3inVrrndizhHYJBKBFHSq5ZpkBXy
-         NpU0KGiHdZoni/Ibn7rytDuf6i1GSOazSxG3k9fhYoeWt/GRZGUbZjh2w3uBpKcWMXHG
-         9LXw==
-X-Gm-Message-State: AOJu0YwiZBqc7lmVImBmMn8CdQKAgzDWeFTAfiFd/e/b/G0bxmMN8IDk
-	OjIr7ot6Hki4JhWl2h8Q+h6mzl6rp9prkScL3A6HYA==
-X-Google-Smtp-Source: AGHT+IGbCQckGea+uAfB8WcqpkV1ryANMr54kJ2mDMcrs2+5Kcc3lrRWxVazBcH9sHuc0Pb6s8v25A==
-X-Received: by 2002:aa7:9e1c:0:b0:6ce:2e39:97d5 with SMTP id y28-20020aa79e1c000000b006ce2e3997d5mr3126295pfq.38.1701995312538;
-        Thu, 07 Dec 2023 16:28:32 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id fb6-20020a056a002d8600b006ce95e37a40sm359849pfb.111.2023.12.07.16.28.31
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Dec 2023 16:28:31 -0800 (PST)
-Message-ID: <6572632f.050a0220.2b396.1e5c@mx.google.com>
-Date: Thu, 07 Dec 2023 16:28:31 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E05C1715;
+	Thu,  7 Dec 2023 18:51:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1702003895;
+	bh=gtfU+2QTWZOU23jlezqw2A+wGCuTv6O7PKwuxidIA3I=;
+	h=Date:From:To:Cc:Subject:From;
+	b=CxHo/BQLhQX5uV8wVXkKZBDVtU7QfsMx2wKZ1FpqLtsPjwmIRgVKxd4D1jmgetC6h
+	 del/gm8yTJNPNAZ263GiDLxJLj3Zr0yTv4zf1IhA7ID78kVzMmOENaMyFxUBTAX9Vj
+	 OELvVAqrOOa6AMELYqaMD1LIXyyRJEPrkqjvF75Re4EtLCoY5lagJY+pEC6hXc0Ag8
+	 4ixjV5k6EyaX0QcJrG/Eg28jcEbcTVeDOaBEWKQk036wlOF1jSpKxklD6IIOC9XFaZ
+	 la4bWQUBIRgETQGd9qgKMLAQ4G+YIvGXVdaWqp3ASifIYpWiQXhxFT3VqCKWBfJQ/D
+	 yFsjdAHZZRH1g==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4SmbJ65N2Dz4xG8;
+	Fri,  8 Dec 2023 13:51:34 +1100 (AEDT)
+Date: Fri, 8 Dec 2023 13:51:33 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski
+ <krzysztof.kozlowski@linaro.org>
+Cc: Kris Chaplin <kris.chaplin@amd.com>, Thomas Delev
+ <thomas.delev@amd.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the devicetree tree
+Message-ID: <20231208135133.42704925@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/alGm_CHpwalqpl0Fccs6VSE";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+
+--Sig_/alGm_CHpwalqpl0Fccs6VSE
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Tree: next
-X-Kernelci-Report-Type: build
-X-Kernelci-Kernel: v6.7-rc4-412-ge142e0e4b174b
-Subject: next/pending-fixes build: 8 builds: 0 failed, 8 passed,
- 4 warnings (v6.7-rc4-412-ge142e0e4b174b)
-To: linux-next@vger.kernel.org
-From: "kernelci.org bot" <bot@kernelci.org>
 
-next/pending-fixes build: 8 builds: 0 failed, 8 passed, 4 warnings (v6.7-rc=
-4-412-ge142e0e4b174b)
+Hi all,
 
-Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
-rnel/v6.7-rc4-412-ge142e0e4b174b/
+After merging the devicetree tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-Tree: next
-Branch: pending-fixes
-Git Describe: v6.7-rc4-412-ge142e0e4b174b
-Git Commit: e142e0e4b174b269d1fd400aa676c5f0483b608c
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Built: 8 unique architectures
+drivers/w1/masters/amd_axi_w1.c: In function 'amd_axi_w1_probe':
+drivers/w1/masters/amd_axi_w1.c:296:35: error: invalid use of undefined typ=
+e 'struct platform_device'
+  296 |         struct device *dev =3D &pdev->dev;
+      |                                   ^~
+drivers/w1/masters/amd_axi_w1.c:307:25: error: implicit declaration of func=
+tion 'devm_platform_ioremap_resource'; did you mean 'devm_ioremap_resource'=
+? [-Werror=3Dimplicit-function-declaration]
+  307 |         lp->base_addr =3D devm_platform_ioremap_resource(pdev, 0);
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                         devm_ioremap_resource
+drivers/w1/masters/amd_axi_w1.c:307:23: warning: assignment to 'void *' fro=
+m 'int' makes pointer from integer without a cast [-Wint-conversion]
+  307 |         lp->base_addr =3D devm_platform_ioremap_resource(pdev, 0);
+      |                       ^
+drivers/w1/masters/amd_axi_w1.c:311:19: error: implicit declaration of func=
+tion 'platform_get_irq'; did you mean 'platform_notify'? [-Werror=3Dimplici=
+t-function-declaration]
+  311 |         lp->irq =3D platform_get_irq(pdev, 0);
+      |                   ^~~~~~~~~~~~~~~~
+      |                   platform_notify
+drivers/w1/masters/amd_axi_w1.c:360:9: error: implicit declaration of funct=
+ion 'platform_set_drvdata' [-Werror=3Dimplicit-function-declaration]
+  360 |         platform_set_drvdata(pdev, lp);
+      |         ^~~~~~~~~~~~~~~~~~~~
+drivers/w1/masters/amd_axi_w1.c: In function 'amd_axi_w1_remove':
+drivers/w1/masters/amd_axi_w1.c:372:39: error: implicit declaration of func=
+tion 'platform_get_drvdata' [-Werror=3Dimplicit-function-declaration]
+  372 |         struct amd_axi_w1_local *lp =3D platform_get_drvdata(pdev);
+      |                                       ^~~~~~~~~~~~~~~~~~~~
+drivers/w1/masters/amd_axi_w1.c:372:39: warning: initialization of 'struct =
+amd_axi_w1_local *' from 'int' makes pointer from integer without a cast [-=
+Wint-conversion]
+drivers/w1/masters/amd_axi_w1.c: At top level:
+drivers/w1/masters/amd_axi_w1.c:383:15: error: variable 'amd_axi_w1_driver'=
+ has initializer but incomplete type
+  383 | static struct platform_driver amd_axi_w1_driver =3D {
+      |               ^~~~~~~~~~~~~~~
+drivers/w1/masters/amd_axi_w1.c:384:10: error: 'struct platform_driver' has=
+ no member named 'probe'
+  384 |         .probe =3D amd_axi_w1_probe,
+      |          ^~~~~
+drivers/w1/masters/amd_axi_w1.c:384:18: warning: excess elements in struct =
+initializer
+  384 |         .probe =3D amd_axi_w1_probe,
+      |                  ^~~~~~~~~~~~~~~~
+drivers/w1/masters/amd_axi_w1.c:384:18: note: (near initialization for 'amd=
+_axi_w1_driver')
+drivers/w1/masters/amd_axi_w1.c:385:10: error: 'struct platform_driver' has=
+ no member named 'remove_new'
+  385 |         .remove_new =3D amd_axi_w1_remove,
+      |          ^~~~~~~~~~
+drivers/w1/masters/amd_axi_w1.c:385:23: warning: excess elements in struct =
+initializer
+  385 |         .remove_new =3D amd_axi_w1_remove,
+      |                       ^~~~~~~~~~~~~~~~~
+drivers/w1/masters/amd_axi_w1.c:385:23: note: (near initialization for 'amd=
+_axi_w1_driver')
+drivers/w1/masters/amd_axi_w1.c:386:10: error: 'struct platform_driver' has=
+ no member named 'driver'
+  386 |         .driver =3D {
+      |          ^~~~~~
+drivers/w1/masters/amd_axi_w1.c:386:19: error: extra brace group at end of =
+initializer
+  386 |         .driver =3D {
+      |                   ^
+drivers/w1/masters/amd_axi_w1.c:386:19: note: (near initialization for 'amd=
+_axi_w1_driver')
+drivers/w1/masters/amd_axi_w1.c:386:19: warning: excess elements in struct =
+initializer
+drivers/w1/masters/amd_axi_w1.c:386:19: note: (near initialization for 'amd=
+_axi_w1_driver')
+drivers/w1/masters/amd_axi_w1.c:391:1: warning: data definition has no type=
+ or storage class
+  391 | module_platform_driver(amd_axi_w1_driver);
+      | ^~~~~~~~~~~~~~~~~~~~~~
+drivers/w1/masters/amd_axi_w1.c:391:1: error: type defaults to 'int' in dec=
+laration of 'module_platform_driver' [-Werror=3Dimplicit-int]
+drivers/w1/masters/amd_axi_w1.c:391:1: warning: parameter names (without ty=
+pes) in function declaration
+drivers/w1/masters/amd_axi_w1.c:383:31: error: storage size of 'amd_axi_w1_=
+driver' isn't known
+  383 | static struct platform_driver amd_axi_w1_driver =3D {
+      |                               ^~~~~~~~~~~~~~~~~
+drivers/w1/masters/amd_axi_w1.c:383:31: warning: 'amd_axi_w1_driver' define=
+d but not used [-Wunused-variable]
 
-Warnings Detected:
+Caused by commit
 
-arc:
+  0d18bcdebb2f ("of: Stop circularly including of_device.h and of_platform.=
+h")
 
-arm64:
+interacting with commit
 
-arm:
+  271c81935801 ("w1: Add AXI 1-wire host driver for AMD programmable logic =
+IP core")
 
-i386:
+from the w1 tree.
 
-mips:
+I have applied the following merge fix patch for today (that could just
+be applied to the w1 tree).
 
-riscv:
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Fri, 8 Dec 2023 13:37:03 +1100
+Subject: [PATCH] amd_axi_w1: include the correct files
 
-sparc:
-    sparc64_defconfig (gcc-10): 4 warnings
+This is to cope with "of: Stop circularly including of_device.h and
+of_platform.h"
 
-x86_64:
-
-
-Warnings summary:
-
-    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
-tion failed, symbol will not be versioned.
-    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
--Wcpp]
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
 ---
-For more info write to <info@kernelci.org>
+ drivers/w1/masters/amd_axi_w1.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/w1/masters/amd_axi_w1.c b/drivers/w1/masters/amd_axi_w=
+1.c
+index 24a05c2de5f1..f8b31cae450d 100644
+--- a/drivers/w1/masters/amd_axi_w1.c
++++ b/drivers/w1/masters/amd_axi_w1.c
+@@ -13,7 +13,8 @@
+ #include <linux/jiffies.h>
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+-#include <linux/of_platform.h>
++#include <linux/platform_device.h>
++#include <linux/mod_devicetable.h>
+ #include <linux/types.h>
+ #include <linux/wait.h>
+=20
+--=20
+2.40.1
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/alGm_CHpwalqpl0Fccs6VSE
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmVyhLUACgkQAVBC80lX
+0GyvpAgAmIAizw31WRu3TgclLRg1U93IyL2VoS9oP8tDqAPrAN1/xaBSwLLjQg1W
+NqgHpp5mu273LixmXZXO16eqFlGuWmsDbkgRtPztfH/hLR/GxqzXMtXd5MqIDln2
+Y4I5hm+yBEJQvFdi8Skc8WZpouPQVvqEkHONVoTQKI21BmJnbPsW65pM3EVulAPn
+Kkqgf1+hmbBdyfGXV7vkhCUgsfO+cEbWbFy/eyhp8E/5VplL/cnfyKBFi2t4l6jD
+MrgBiHetmCj3DH5Ly7aqRQNDDAH1ilnlAorgrOUXIi+aAv8Ray+YKT/Ld+fnadck
+U7avoL1IAox8v4ktBIQWfr6tPGERnw==
+=MOyT
+-----END PGP SIGNATURE-----
+
+--Sig_/alGm_CHpwalqpl0Fccs6VSE--
 

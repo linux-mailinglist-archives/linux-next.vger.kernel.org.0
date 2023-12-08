@@ -1,218 +1,119 @@
-Return-Path: <linux-next+bounces-280-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-281-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2EA22809984
-	for <lists+linux-next@lfdr.de>; Fri,  8 Dec 2023 03:51:50 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6EC3C809A13
+	for <lists+linux-next@lfdr.de>; Fri,  8 Dec 2023 04:12:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 13EF31C20BC6
-	for <lists+linux-next@lfdr.de>; Fri,  8 Dec 2023 02:51:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2976E2814BA
+	for <lists+linux-next@lfdr.de>; Fri,  8 Dec 2023 03:12:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CB9A17F8;
-	Fri,  8 Dec 2023 02:51:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5804B20F4;
+	Fri,  8 Dec 2023 03:12:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="CxHo/BQL"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="tMYLAiTZ"
 X-Original-To: linux-next@vger.kernel.org
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E05C1715;
-	Thu,  7 Dec 2023 18:51:39 -0800 (PST)
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23BD2D54;
+	Thu,  7 Dec 2023 19:12:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1702003895;
-	bh=gtfU+2QTWZOU23jlezqw2A+wGCuTv6O7PKwuxidIA3I=;
-	h=Date:From:To:Cc:Subject:From;
-	b=CxHo/BQLhQX5uV8wVXkKZBDVtU7QfsMx2wKZ1FpqLtsPjwmIRgVKxd4D1jmgetC6h
-	 del/gm8yTJNPNAZ263GiDLxJLj3Zr0yTv4zf1IhA7ID78kVzMmOENaMyFxUBTAX9Vj
-	 OELvVAqrOOa6AMELYqaMD1LIXyyRJEPrkqjvF75Re4EtLCoY5lagJY+pEC6hXc0Ag8
-	 4ixjV5k6EyaX0QcJrG/Eg28jcEbcTVeDOaBEWKQk036wlOF1jSpKxklD6IIOC9XFaZ
-	 la4bWQUBIRgETQGd9qgKMLAQ4G+YIvGXVdaWqp3ASifIYpWiQXhxFT3VqCKWBfJQ/D
-	 yFsjdAHZZRH1g==
+	s=201702; t=1702005119;
+	bh=72VEtvIJ6CpxIaXsemMJUrDlyhqyH3d9y/tYOeQO1GE=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=tMYLAiTZEjzDYh89VKA/femGUjU9oWiIaCXH+fWg2cPcg6Ut7X8ybpi/DXgwPQjpn
+	 4AvXp9Pd4LMIxp51Bnpkogi4on6U7UMGhRDddy4eojamlpADi46uNgAp3ERqUtTtjl
+	 CrwpN+M9DZ1KaGq4N33R2pqDCvVWvoOfqxAGzyLw8awkjWH6HkDLe7tWIgw8WekwGG
+	 rlpsJ/DZ11fydHdQeEYnGXPU0LOHxTM2m3N10mbYZnw+v9if4HefVi5HV3OWyoQGBZ
+	 RNQesJTCJd8ZAKh460tIL6SXK7kIASmnmSmbamyUToJEID0L52kSE5X5ivxGrN0HnK
+	 nn3BtT1pb/UuA==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4SmbJ65N2Dz4xG8;
-	Fri,  8 Dec 2023 13:51:34 +1100 (AEDT)
-Date: Fri, 8 Dec 2023 13:51:33 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Smblf5m4bz4x1v;
+	Fri,  8 Dec 2023 14:11:58 +1100 (AEDT)
+Date: Fri, 8 Dec 2023 14:11:56 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski
- <krzysztof.kozlowski@linaro.org>
-Cc: Kris Chaplin <kris.chaplin@amd.com>, Thomas Delev
- <thomas.delev@amd.com>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the devicetree tree
-Message-ID: <20231208135133.42704925@canb.auug.org.au>
+To: Rob Herring <robh@kernel.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the devicetree tree
+Message-ID: <20231208141156.20341c10@canb.auug.org.au>
+In-Reply-To: <CAL_JsqKyqe827YRyqZnqcVghhuAuvWoiS4U7uR8wwYoGj3=9KA@mail.gmail.com>
+References: <20231207125737.5e7553e3@canb.auug.org.au>
+	<CAL_JsqKXo+Cr=9s=dt1kCQeMadJ_cnuSpm06zmvK8yd-vd2X3g@mail.gmail.com>
+	<20231208075847.6bbd23b8@canb.auug.org.au>
+	<CAL_JsqKyqe827YRyqZnqcVghhuAuvWoiS4U7uR8wwYoGj3=9KA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/alGm_CHpwalqpl0Fccs6VSE";
+Content-Type: multipart/signed; boundary="Sig_/1u9Ex+aSgYAkr2kJerTwxtH";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/alGm_CHpwalqpl0Fccs6VSE
-Content-Type: text/plain; charset=US-ASCII
+--Sig_/1u9Ex+aSgYAkr2kJerTwxtH
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Hi Rob,
 
-After merging the devicetree tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
-
-drivers/w1/masters/amd_axi_w1.c: In function 'amd_axi_w1_probe':
-drivers/w1/masters/amd_axi_w1.c:296:35: error: invalid use of undefined typ=
-e 'struct platform_device'
-  296 |         struct device *dev =3D &pdev->dev;
-      |                                   ^~
-drivers/w1/masters/amd_axi_w1.c:307:25: error: implicit declaration of func=
-tion 'devm_platform_ioremap_resource'; did you mean 'devm_ioremap_resource'=
-? [-Werror=3Dimplicit-function-declaration]
-  307 |         lp->base_addr =3D devm_platform_ioremap_resource(pdev, 0);
-      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      |                         devm_ioremap_resource
-drivers/w1/masters/amd_axi_w1.c:307:23: warning: assignment to 'void *' fro=
-m 'int' makes pointer from integer without a cast [-Wint-conversion]
-  307 |         lp->base_addr =3D devm_platform_ioremap_resource(pdev, 0);
-      |                       ^
-drivers/w1/masters/amd_axi_w1.c:311:19: error: implicit declaration of func=
-tion 'platform_get_irq'; did you mean 'platform_notify'? [-Werror=3Dimplici=
-t-function-declaration]
-  311 |         lp->irq =3D platform_get_irq(pdev, 0);
-      |                   ^~~~~~~~~~~~~~~~
-      |                   platform_notify
-drivers/w1/masters/amd_axi_w1.c:360:9: error: implicit declaration of funct=
-ion 'platform_set_drvdata' [-Werror=3Dimplicit-function-declaration]
-  360 |         platform_set_drvdata(pdev, lp);
-      |         ^~~~~~~~~~~~~~~~~~~~
-drivers/w1/masters/amd_axi_w1.c: In function 'amd_axi_w1_remove':
-drivers/w1/masters/amd_axi_w1.c:372:39: error: implicit declaration of func=
-tion 'platform_get_drvdata' [-Werror=3Dimplicit-function-declaration]
-  372 |         struct amd_axi_w1_local *lp =3D platform_get_drvdata(pdev);
-      |                                       ^~~~~~~~~~~~~~~~~~~~
-drivers/w1/masters/amd_axi_w1.c:372:39: warning: initialization of 'struct =
-amd_axi_w1_local *' from 'int' makes pointer from integer without a cast [-=
-Wint-conversion]
-drivers/w1/masters/amd_axi_w1.c: At top level:
-drivers/w1/masters/amd_axi_w1.c:383:15: error: variable 'amd_axi_w1_driver'=
- has initializer but incomplete type
-  383 | static struct platform_driver amd_axi_w1_driver =3D {
-      |               ^~~~~~~~~~~~~~~
-drivers/w1/masters/amd_axi_w1.c:384:10: error: 'struct platform_driver' has=
- no member named 'probe'
-  384 |         .probe =3D amd_axi_w1_probe,
-      |          ^~~~~
-drivers/w1/masters/amd_axi_w1.c:384:18: warning: excess elements in struct =
-initializer
-  384 |         .probe =3D amd_axi_w1_probe,
-      |                  ^~~~~~~~~~~~~~~~
-drivers/w1/masters/amd_axi_w1.c:384:18: note: (near initialization for 'amd=
-_axi_w1_driver')
-drivers/w1/masters/amd_axi_w1.c:385:10: error: 'struct platform_driver' has=
- no member named 'remove_new'
-  385 |         .remove_new =3D amd_axi_w1_remove,
-      |          ^~~~~~~~~~
-drivers/w1/masters/amd_axi_w1.c:385:23: warning: excess elements in struct =
-initializer
-  385 |         .remove_new =3D amd_axi_w1_remove,
-      |                       ^~~~~~~~~~~~~~~~~
-drivers/w1/masters/amd_axi_w1.c:385:23: note: (near initialization for 'amd=
-_axi_w1_driver')
-drivers/w1/masters/amd_axi_w1.c:386:10: error: 'struct platform_driver' has=
- no member named 'driver'
-  386 |         .driver =3D {
-      |          ^~~~~~
-drivers/w1/masters/amd_axi_w1.c:386:19: error: extra brace group at end of =
-initializer
-  386 |         .driver =3D {
-      |                   ^
-drivers/w1/masters/amd_axi_w1.c:386:19: note: (near initialization for 'amd=
-_axi_w1_driver')
-drivers/w1/masters/amd_axi_w1.c:386:19: warning: excess elements in struct =
-initializer
-drivers/w1/masters/amd_axi_w1.c:386:19: note: (near initialization for 'amd=
-_axi_w1_driver')
-drivers/w1/masters/amd_axi_w1.c:391:1: warning: data definition has no type=
- or storage class
-  391 | module_platform_driver(amd_axi_w1_driver);
-      | ^~~~~~~~~~~~~~~~~~~~~~
-drivers/w1/masters/amd_axi_w1.c:391:1: error: type defaults to 'int' in dec=
-laration of 'module_platform_driver' [-Werror=3Dimplicit-int]
-drivers/w1/masters/amd_axi_w1.c:391:1: warning: parameter names (without ty=
-pes) in function declaration
-drivers/w1/masters/amd_axi_w1.c:383:31: error: storage size of 'amd_axi_w1_=
-driver' isn't known
-  383 | static struct platform_driver amd_axi_w1_driver =3D {
-      |                               ^~~~~~~~~~~~~~~~~
-drivers/w1/masters/amd_axi_w1.c:383:31: warning: 'amd_axi_w1_driver' define=
-d but not used [-Wunused-variable]
-
-Caused by commit
-
-  0d18bcdebb2f ("of: Stop circularly including of_device.h and of_platform.=
-h")
-
-interacting with commit
-
-  271c81935801 ("w1: Add AXI 1-wire host driver for AMD programmable logic =
-IP core")
-
-from the w1 tree.
-
-I have applied the following merge fix patch for today (that could just
-be applied to the w1 tree).
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Fri, 8 Dec 2023 13:37:03 +1100
-Subject: [PATCH] amd_axi_w1: include the correct files
-
-This is to cope with "of: Stop circularly including of_device.h and
-of_platform.h"
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- drivers/w1/masters/amd_axi_w1.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/w1/masters/amd_axi_w1.c b/drivers/w1/masters/amd_axi_w=
-1.c
-index 24a05c2de5f1..f8b31cae450d 100644
---- a/drivers/w1/masters/amd_axi_w1.c
-+++ b/drivers/w1/masters/amd_axi_w1.c
-@@ -13,7 +13,8 @@
- #include <linux/jiffies.h>
- #include <linux/kernel.h>
- #include <linux/module.h>
--#include <linux/of_platform.h>
-+#include <linux/platform_device.h>
-+#include <linux/mod_devicetable.h>
- #include <linux/types.h>
- #include <linux/wait.h>
+On Thu, 7 Dec 2023 16:05:27 -0600 Rob Herring <robh@kernel.org> wrote:
+>
+> On Thu, Dec 7, 2023 at 2:58=E2=80=AFPM Stephen Rothwell <sfr@canb.auug.or=
+g.au> wrote:
+> >
+> > On Thu, 7 Dec 2023 09:11:22 -0600 Rob Herring <robh@kernel.org> wrote: =
 =20
---=20
-2.40.1
+> > >
+> > > I'm sending out fixes for all these. I want to get the final patch
+> > > ("of: Stop circularly including of_device.h and of_platform.h") for
+> > > all this in next to get some better build coverage and catch any new
+> > > drivers added. But if it is dropped for every new driver that breaks,
+> > > I'll never get it in. Can you fix these up or just leave them broken?
+> > > I can keep the fixes in my tree until they get applied by the
+> > > corresponding subsystem. =20
+> >
+> > These dependencies between trees are impossible to handle.  Please if
+> > you really need the final patch in, then you must put all the necessary
+> > fixes in the same branch.  There is no telling what order Linus (or I)
+> > will merge the interdependent branches.
+> >
+> > The alternative is to spray the needed fixes out to the other
+> > subsystems and then put the final patch in after the merge window
+> > closes or the next release. =20
+>=20
+> Yes, that's what I've been doing since July and plan to do for the
+> final patch. The final patch can't wait a cycle because then we'll
+> just have more moles to wack. There's a couple of dependencies that
+> still haven't been picked up (seems Sparc is unmaintained), so I'm
+> going to send those along. I'll carry any further fixes until they I
+> see they are applied.
 
+OK, so I have moved your tree to be merged last and I fixed up the new
+driver, so hopefully we are good, now.
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/alGm_CHpwalqpl0Fccs6VSE
+--Sig_/1u9Ex+aSgYAkr2kJerTwxtH
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmVyhLUACgkQAVBC80lX
-0GyvpAgAmIAizw31WRu3TgclLRg1U93IyL2VoS9oP8tDqAPrAN1/xaBSwLLjQg1W
-NqgHpp5mu273LixmXZXO16eqFlGuWmsDbkgRtPztfH/hLR/GxqzXMtXd5MqIDln2
-Y4I5hm+yBEJQvFdi8Skc8WZpouPQVvqEkHONVoTQKI21BmJnbPsW65pM3EVulAPn
-Kkqgf1+hmbBdyfGXV7vkhCUgsfO+cEbWbFy/eyhp8E/5VplL/cnfyKBFi2t4l6jD
-MrgBiHetmCj3DH5Ly7aqRQNDDAH1ilnlAorgrOUXIi+aAv8Ray+YKT/Ld+fnadck
-U7avoL1IAox8v4ktBIQWfr6tPGERnw==
-=MOyT
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmVyiXwACgkQAVBC80lX
+0GxmdAf7BqaIpe3WGH5SKEELLOV19V03pACUoh5AkIb2ZbKHd0e2JIhwMx35pibl
+DfcWXgRRCAQqDt0HfWTI0jUBpzzp1eMRW/O3t0A29obWDM+JRG5JZWiyJOo6Zelq
+ElhogKs/w9Y9rU3ojIoPlTMOLxggBCnR1M+B7n5WkXGIJYBezJYNYVL0BhMO9loG
+sr0DeiCQioayE8ibr+ov19c6ejjTBTslcdiE2w505fEei3LGpTz8Hc6KeXhz0bKH
+ck1sU10lV8H0mTEC2a+5OHadAvou9ITYPT5QdnHlWSXna4mx6I5qru1u0lLYi4KE
+DD1oESM4ptz1wOX7nR7fGb/So5kCcA==
+=9eEw
 -----END PGP SIGNATURE-----
 
---Sig_/alGm_CHpwalqpl0Fccs6VSE--
+--Sig_/1u9Ex+aSgYAkr2kJerTwxtH--
 

@@ -1,119 +1,93 @@
-Return-Path: <linux-next+bounces-281-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-282-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6EC3C809A13
-	for <lists+linux-next@lfdr.de>; Fri,  8 Dec 2023 04:12:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D7909809A50
+	for <lists+linux-next@lfdr.de>; Fri,  8 Dec 2023 04:28:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2976E2814BA
-	for <lists+linux-next@lfdr.de>; Fri,  8 Dec 2023 03:12:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6A73C281E38
+	for <lists+linux-next@lfdr.de>; Fri,  8 Dec 2023 03:28:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5804B20F4;
-	Fri,  8 Dec 2023 03:12:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2825B3FD4;
+	Fri,  8 Dec 2023 03:28:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="tMYLAiTZ"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="P0zvy+yy"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23BD2D54;
-	Thu,  7 Dec 2023 19:12:01 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5499310E3;
+	Thu,  7 Dec 2023 19:27:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1702005119;
-	bh=72VEtvIJ6CpxIaXsemMJUrDlyhqyH3d9y/tYOeQO1GE=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=tMYLAiTZEjzDYh89VKA/femGUjU9oWiIaCXH+fWg2cPcg6Ut7X8ybpi/DXgwPQjpn
-	 4AvXp9Pd4LMIxp51Bnpkogi4on6U7UMGhRDddy4eojamlpADi46uNgAp3ERqUtTtjl
-	 CrwpN+M9DZ1KaGq4N33R2pqDCvVWvoOfqxAGzyLw8awkjWH6HkDLe7tWIgw8WekwGG
-	 rlpsJ/DZ11fydHdQeEYnGXPU0LOHxTM2m3N10mbYZnw+v9if4HefVi5HV3OWyoQGBZ
-	 RNQesJTCJd8ZAKh460tIL6SXK7kIASmnmSmbamyUToJEID0L52kSE5X5ivxGrN0HnK
-	 nn3BtT1pb/UuA==
+	s=201702; t=1702006076;
+	bh=3uUxl8AjSfB8bvexoex29z4Sn6xbCPQjVqOSbPXD9OI=;
+	h=Date:From:To:Cc:Subject:From;
+	b=P0zvy+yyzvPgu5HJ5lPWY2Vq9Trg1MjG5jC+Y7GtWkCL9Tuu5qC45vzFX4gU24S2t
+	 pg5773vWwEuqQbSmMLVGbJcacCw+LL3bDs/cITQ2bQYdYX7tdkzzLXIXbc90fXhd9y
+	 FsnOkL1axQbh06dcLD0K6K33QOh2c5U9BOOvBGxqbeKeuzSGG6mwPyVj8mttDybi0e
+	 o00EinfMVSn7P08r3ziVSqc5w2E2Ol9cIFJQjCQ/4Ma7ow5JAEE+fQT1W+97LrxvMa
+	 qtL/CFB/q8MsPp2bbiLRlXkI2aAfsd6df5SAP7wCiuLPvP1Ke81naAA6ZkO8fxFrHF
+	 321NP6NwUqCRg==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Smblf5m4bz4x1v;
-	Fri,  8 Dec 2023 14:11:58 +1100 (AEDT)
-Date: Fri, 8 Dec 2023 14:11:56 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Smc6401bmz4wbn;
+	Fri,  8 Dec 2023 14:27:55 +1100 (AEDT)
+Date: Fri, 8 Dec 2023 14:27:54 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Rob Herring <robh@kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the devicetree tree
-Message-ID: <20231208141156.20341c10@canb.auug.org.au>
-In-Reply-To: <CAL_JsqKyqe827YRyqZnqcVghhuAuvWoiS4U7uR8wwYoGj3=9KA@mail.gmail.com>
-References: <20231207125737.5e7553e3@canb.auug.org.au>
-	<CAL_JsqKXo+Cr=9s=dt1kCQeMadJ_cnuSpm06zmvK8yd-vd2X3g@mail.gmail.com>
-	<20231208075847.6bbd23b8@canb.auug.org.au>
-	<CAL_JsqKyqe827YRyqZnqcVghhuAuvWoiS4U7uR8wwYoGj3=9KA@mail.gmail.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>, Linux Kernel
+ Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: build warnings after merge of the spi tree
+Message-ID: <20231208142754.6720183e@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/1u9Ex+aSgYAkr2kJerTwxtH";
+Content-Type: multipart/signed; boundary="Sig_/3qSm+5zJNQx3=QRiXxHHFiG";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/1u9Ex+aSgYAkr2kJerTwxtH
-Content-Type: text/plain; charset=UTF-8
+--Sig_/3qSm+5zJNQx3=QRiXxHHFiG
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Rob,
+Hi all,
 
-On Thu, 7 Dec 2023 16:05:27 -0600 Rob Herring <robh@kernel.org> wrote:
->
-> On Thu, Dec 7, 2023 at 2:58=E2=80=AFPM Stephen Rothwell <sfr@canb.auug.or=
-g.au> wrote:
-> >
-> > On Thu, 7 Dec 2023 09:11:22 -0600 Rob Herring <robh@kernel.org> wrote: =
-=20
-> > >
-> > > I'm sending out fixes for all these. I want to get the final patch
-> > > ("of: Stop circularly including of_device.h and of_platform.h") for
-> > > all this in next to get some better build coverage and catch any new
-> > > drivers added. But if it is dropped for every new driver that breaks,
-> > > I'll never get it in. Can you fix these up or just leave them broken?
-> > > I can keep the fixes in my tree until they get applied by the
-> > > corresponding subsystem. =20
-> >
-> > These dependencies between trees are impossible to handle.  Please if
-> > you really need the final patch in, then you must put all the necessary
-> > fixes in the same branch.  There is no telling what order Linus (or I)
-> > will merge the interdependent branches.
-> >
-> > The alternative is to spray the needed fixes out to the other
-> > subsystems and then put the final patch in after the merge window
-> > closes or the next release. =20
->=20
-> Yes, that's what I've been doing since July and plan to do for the
-> final patch. The final patch can't wait a cycle because then we'll
-> just have more moles to wack. There's a couple of dependencies that
-> still haven't been picked up (seems Sparc is unmaintained), so I'm
-> going to send those along. I'll carry any further fixes until they I
-> see they are applied.
+After merging the spi tree, today's linux-next build (htmldocs) produced
+these warnings:
 
-OK, so I have moved your tree to be merged last and I fixed up the new
-driver, so hopefully we are good, now.
+include/linux/spi/spi.h:246: warning: Function parameter or member 'cs_inde=
+x_mask:SPI_CS_CNT_MAX' not described in 'spi_device'
+include/linux/spi/spi.h:778: warning: Function parameter or member 'last_cs=
+_index_mask' not described in 'spi_controller'
+
+Introduced by commit
+
+  4d8ff6b0991d ("spi: Add multi-cs memories support in SPI core")
+
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/1u9Ex+aSgYAkr2kJerTwxtH
+--Sig_/3qSm+5zJNQx3=QRiXxHHFiG
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmVyiXwACgkQAVBC80lX
-0GxmdAf7BqaIpe3WGH5SKEELLOV19V03pACUoh5AkIb2ZbKHd0e2JIhwMx35pibl
-DfcWXgRRCAQqDt0HfWTI0jUBpzzp1eMRW/O3t0A29obWDM+JRG5JZWiyJOo6Zelq
-ElhogKs/w9Y9rU3ojIoPlTMOLxggBCnR1M+B7n5WkXGIJYBezJYNYVL0BhMO9loG
-sr0DeiCQioayE8ibr+ov19c6ejjTBTslcdiE2w505fEei3LGpTz8Hc6KeXhz0bKH
-ck1sU10lV8H0mTEC2a+5OHadAvou9ITYPT5QdnHlWSXna4mx6I5qru1u0lLYi4KE
-DD1oESM4ptz1wOX7nR7fGb/So5kCcA==
-=9eEw
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmVyjToACgkQAVBC80lX
+0GyDQwgAjgAyX1oREeAHMk+mcIDF8MHCJp52cgkX9CHKVAsThqN5WbHWueCafJBa
+6tBjiZ8RKs5fn7dj0pCJatZRqWp6hq7bjN9ACnfw+LB3b69/gWKq/Xw0M4d7e0PN
+RxDvhoTlqP7TUP1MAtHqbhv0SCMKEIlCFcchfibW1Ir8B2uGRqbZeLVG2JCGWZ9b
+Y9mZTsVBXZAOtAY+XGQelZgbptIi4PCwW5EwmhtDFL9uZ572vdEsLS28SbnsrhdI
+YGyXuegnWfQDhzxmrCYEulGOvwuKZjcb/cAHUE/bWZnegNJ990/QFGwR0AjdZyT+
++IwpTa4IdCIOVOrY/HC+itpHrPx5lg==
+=E4+Z
 -----END PGP SIGNATURE-----
 
---Sig_/1u9Ex+aSgYAkr2kJerTwxtH--
+--Sig_/3qSm+5zJNQx3=QRiXxHHFiG--
 

@@ -1,117 +1,210 @@
-Return-Path: <linux-next+bounces-306-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-307-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 99E8C80BEC0
-	for <lists+linux-next@lfdr.de>; Mon, 11 Dec 2023 02:29:36 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 33D4B80BF73
+	for <lists+linux-next@lfdr.de>; Mon, 11 Dec 2023 03:51:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 42CFC1F20F09
-	for <lists+linux-next@lfdr.de>; Mon, 11 Dec 2023 01:29:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 643C21C20860
+	for <lists+linux-next@lfdr.de>; Mon, 11 Dec 2023 02:51:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBDAABE52;
-	Mon, 11 Dec 2023 01:29:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F51A156C8;
+	Mon, 11 Dec 2023 02:51:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="a0dg6gWu"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="FlJaLcfv"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1763CE4;
-	Sun, 10 Dec 2023 17:29:25 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 937A21FD2;
+	Sun, 10 Dec 2023 18:51:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1702258160;
-	bh=ORry25Z5o/8D2R+y4DclrXluDctJV4FlEMOgt6MNs7k=;
-	h=Date:From:To:Cc:Subject:From;
-	b=a0dg6gWuufHxVVlOP3prS7t4P9O/S0S8DR+Lq0s9dQX6PBKKq6zYDX5ot1F77Ev26
-	 46uEIRz+sMOgLWhvb9XX1RI67sTN82qS75Qk493pkHzwBEuZTRvx1IUehDqGaPdCzo
-	 dUDCreAq0ld4WbAwqgKbAKdiWxvN+HOReVlmjM+IbCG94CINmYITqMI+AzcTOoA4pP
-	 D+JlgxmPZE3IAauj9/OTwft5AvsHnoYwTbTKxo2DygremvRU4esW/D2GsQfjaNmhAc
-	 ponLHX+7UuVFjBQ0VU9gz23TiFz/LE1GDqheQyQndLQxa/5mB0/fML3gLeeUssP+Yv
-	 5qrP9g8dI27HA==
+	s=201702; t=1702263056;
+	bh=Sq8nbVEcRVues8cBbXzwXlj2IWgRQ6rEbTmY8CyoHEQ=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=FlJaLcfvWS0edDd1sYTx/8DzmUXQDkHkg7aaaVy2DXBd/DYjO4uRS7amjU047M51z
+	 0leWYyiuNja1b+mhQqTLXKFmZeAExiFUs4Yahv5l6+i/QqscvmIrvMNyTOay2c5qBH
+	 ViUrDHolpRMPXcQRpUmsTwkjiuQev7Rcyx1SdwDlbPwnh/mO3381+uTrqfsdEOTguO
+	 4Gsvr1lOrZBGId28c59lxYnjBFFZpHbAngOG6PRuQBGu2Q7ClTVeBrLzcdg69A+85q
+	 BBOaMws56i3778t58GsA6YA68vMMA/KRAGmHRR5UEuW+hy8uYJxpN3SZlYbFvwFdOK
+	 sJW1eehFHeiiA==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4SpPKq44Wrz4wbQ;
-	Mon, 11 Dec 2023 12:29:19 +1100 (AEDT)
-Date: Mon, 11 Dec 2023 12:29:17 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4SpR7y06KGz4xNH;
+	Mon, 11 Dec 2023 13:50:53 +1100 (AEDT)
+Date: Mon, 11 Dec 2023 13:50:52 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Paul Moore <paul@paul-moore.com>, Jonathan Corbet <corbet@lwn.net>
-Cc: Casey Schaufler <casey@schaufler-ca.com>, Kees Cook
- <keescook@chromium.org>, Linux Kernel Mailing List
+To: Paolo Bonzini <pbonzini@redhat.com>, Andrew Morton
+ <akpm@linux-foundation.org>
+Cc: KVM <kvm@vger.kernel.org>, Ackerley Tng <ackerleytng@google.com>, Chao
+ Peng <chao.p.peng@linux.intel.com>, Isaku Yamahata
+ <isaku.yamahata@intel.com>, "Kirill A. Shutemov"
+ <kirill.shutemov@linux.intel.com>, Michael Roth <michael.roth@amd.com>,
+ Sean Christopherson <seanjc@google.com>, Yu Zhang
+ <yu.c.zhang@linux.intel.com>, "Matthew Wilcox (Oracle)"
+ <willy@infradead.org>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, Sumit Garg <sumit.garg@linaro.org>
-Subject: linux-next: manual merge of the security tree with the jc_docs tree
-Message-ID: <20231211122917.138d141b@canb.auug.org.au>
+ <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the kvm tree
+Message-ID: <20231211135052.4fb016a6@canb.auug.org.au>
+In-Reply-To: <20231120152227.3bfe2450@canb.auug.org.au>
+References: <20231120152227.3bfe2450@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/VHdyE0Ee2I.oPd+91Q7uGKY";
+Content-Type: multipart/signed; boundary="Sig_/k6L+z4ZF5AITNIBFCyYc60_";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/VHdyE0Ee2I.oPd+91Q7uGKY
+--Sig_/k6L+z4ZF5AITNIBFCyYc60_
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the security tree got a conflict in:
+On Mon, 20 Nov 2023 15:22:27 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> After merging the kvm tree, today's linux-next build (x86_64 allmodconfig)
+> failed like this:
+>=20
+> arch/x86/kvm/../../../virt/kvm/guest_memfd.c:306:10: error: 'const struct=
+ address_space_operations' has no member named 'error_remove_page'; did you=
+ mean 'error_remove_folio'?
+>   306 |         .error_remove_page =3D kvm_gmem_error_page,
+>       |          ^~~~~~~~~~~~~~~~~
+>       |          error_remove_folio
+> arch/x86/kvm/../../../virt/kvm/guest_memfd.c:306:30: error: initializatio=
+n of 'int (*)(struct folio *)' from incompatible pointer type 'int (*)(stru=
+ct address_space *, struct page *)' [-Werror=3Dincompatible-pointer-types]
+>   306 |         .error_remove_page =3D kvm_gmem_error_page,
+>       |                              ^~~~~~~~~~~~~~~~~~~
+> arch/x86/kvm/../../../virt/kvm/guest_memfd.c:306:30: note: (near initiali=
+zation for 'kvm_gmem_aops.launder_folio')
+>=20
+> Caused by commit
+>=20
+>   640be5bc564f ("fs: convert error_remove_page to error_remove_folio")
+>=20
+> from the mm tree intercting with commit
+>=20
+>   a7800aa80ea4 ("KVM: Add KVM_CREATE_GUEST_MEMFD ioctl() for guest-specif=
+ic backing memory")
+>=20
+> I have applied the following supplied merge fix patch (thanks Andrew).
+>=20
+> From: Andrew Morton <akpm@linux-foundation.org>
+> Date: Fri, 17 Nov 2023 09:28:33 -0800
+> Subject: [PATCH] fs: Convert error_remove_page to error_remove_folio
+>=20
+> On Fri, 17 Nov 2023 16:14:47 +0000 "Matthew Wilcox (Oracle)" <willy@infra=
+dead.org> wrote:
+>=20
+> > There were already assertions that we were not passing a tail page
+> > to error_remove_page(), so make the compiler enforce that by converting
+> > everything to pass and use a folio.
+> >
+> > Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+> > ---
+> >  Documentation/filesystems/locking.rst |  4 ++--
+> >  Documentation/filesystems/vfs.rst     |  6 +++---
+> >  block/fops.c                          |  2 +-
+> >  fs/afs/write.c                        |  2 +-
+> >  fs/bcachefs/fs.c                      |  2 +-
+> >  fs/btrfs/inode.c                      |  2 +-
+> >  fs/ceph/addr.c                        |  4 ++--
+> >  fs/ext2/inode.c                       |  2 +-
+> >  fs/ext4/inode.c                       |  6 +++---
+> >  fs/f2fs/compress.c                    |  2 +-
+> >  fs/f2fs/inode.c                       |  2 +-
+> >  fs/gfs2/aops.c                        |  4 ++--
+> >  fs/hugetlbfs/inode.c                  |  6 +++---
+> >  fs/nfs/file.c                         |  2 +-
+> >  fs/ntfs/aops.c                        |  6 +++---
+> >  fs/ocfs2/aops.c                       |  2 +-
+> >  fs/xfs/xfs_aops.c                     |  2 +-
+> >  fs/zonefs/file.c                      |  2 +-
+> >  include/linux/fs.h                    |  2 +-
+> >  include/linux/mm.h                    |  3 ++-
+> >  mm/memory-failure.c                   | 10 +++++-----
+> >  mm/shmem.c                            |  6 +++---
+> >  mm/truncate.c                         |  9 ++++-----
+> >  virt/kvm/guest_memfd.c                |  9 +++++---- =20
+>=20
+> virt/kvm/guest_memfd.c exists only in the KVM tree (and hence
+> linux-next).  So I assume Stephen will use the change from this patch
+> when doing his resolution.
+>=20
+> This:
+> ---
+Now this:
 
-  Documentation/userspace-api/index.rst
+ virt/kvm/guest_memfd.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-between commit:
-
-  50709576d81b ("Documentation: Destage TEE subsystem documentation")
-
-from the jc_docs tree and commit:
-
-  f3b8788cde61 ("LSM: Identify modules by more than name")
-
-from the security tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+diff --git a/virt/kvm/guest_memfd.c b/virt/kvm/guest_memfd.c
+index c2e2371720a9..c23ce219e21c 100644
+--- a/virt/kvm/guest_memfd.c
++++ b/virt/kvm/guest_memfd.c
+@@ -267,7 +267,8 @@ static int kvm_gmem_migrate_folio(struct address_space =
+*mapping,
+ 	return -EINVAL;
+ }
+=20
+-static int kvm_gmem_error_page(struct address_space *mapping, struct page =
+*page)
++static int kvm_gmem_error_folio(struct address_space *mapping,
++		struct folio *folio)
+ {
+ 	struct list_head *gmem_list =3D &mapping->private_list;
+ 	struct kvm_gmem *gmem;
+@@ -275,8 +276,8 @@ static int kvm_gmem_error_page(struct address_space *ma=
+pping, struct page *page)
+=20
+ 	filemap_invalidate_lock_shared(mapping);
+=20
+-	start =3D page->index;
+-	end =3D start + thp_nr_pages(page);
++	start =3D folio->index;
++	end =3D start + folio_nr_pages(folio);
+=20
+ 	list_for_each_entry(gmem, gmem_list, entry)
+ 		kvm_gmem_invalidate_begin(gmem, start, end);
+@@ -301,7 +302,7 @@ static int kvm_gmem_error_page(struct address_space *ma=
+pping, struct page *page)
+ static const struct address_space_operations kvm_gmem_aops =3D {
+ 	.dirty_folio =3D noop_dirty_folio,
+ 	.migrate_folio	=3D kvm_gmem_migrate_folio,
+-	.error_remove_page =3D kvm_gmem_error_page,
++	.error_remove_folio =3D kvm_gmem_error_folio,
+ };
+=20
+ static int kvm_gmem_getattr(struct mnt_idmap *idmap, const struct path *pa=
+th,
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc Documentation/userspace-api/index.rst
-index 93174ffc7350,8be8b1979194..000000000000
---- a/Documentation/userspace-api/index.rst
-+++ b/Documentation/userspace-api/index.rst
-@@@ -30,7 -33,7 +30,8 @@@ place where this information is gathere
-     sysfs-platform_profile
-     vduse
-     futex2
- +   tee
-+    lsm
- =20
-  .. only::  subproject and html
- =20
-
---Sig_/VHdyE0Ee2I.oPd+91Q7uGKY
+--Sig_/k6L+z4ZF5AITNIBFCyYc60_
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmV2Ze0ACgkQAVBC80lX
-0Gx4iwf/TWC7G21TDZQHjthHM9Xjt5Kq8T4vggBhw+gFwjgG34ErZQdCO/kAqGzZ
-kfrbeammVxfVeWJ61O1/D3ZAhJD8ZKv4YvHx3suX87ymOxeLtD+u2IOmSIku4rgu
-hdj1l7rqEJAZ+IKcSsbwVSDwzl1lofvdObi4DEBRZ1xAek6iA7a0vIGdeYr+ChPM
-gm1JqZGDnTOsTR9BXlu7arO3jCCwI1tRHR8eDf0d+8gUSWl96i1gkh0GzethA0kq
-OpTWqwCnMre5d6Y/UMLP3zzT+VbN+wmHyDdrt2h+aiiN6szxzU94ZoYwh5OtTVaQ
-rF4jJp1KDSOALJlyyMf+QMHAeA6LcQ==
-=8jcW
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmV2eQwACgkQAVBC80lX
+0GxNSAf/dDZBSEWcxmOyeozZ/ArXSlpS/X2SmABjDh02ed8wURGrwmrayYtj4HF2
+YnxLKEulMDxUjOT3upvFvamu/xaZhDFwEfBboxjvJ4rqbYKUeBOoB0S8UKAEee7P
+yW0lW0+nvqDqc7nfHCGtBPIq9VsIUdi6P9YD9XHcYuuA73pEL8ZVGi8aWZEOlU8d
+UZ3q9qsMlWZS5Na1RDgIjFR+hY89xCCI3hWwGx5Cw1Dj/MYDqSgsOVENnBrSvBgx
+gWbemvzi5rAdiAZTcFrTlHKTlU6+eJAsmyZzofR3ddwbVs1DX1rIqIZKUZDyhLiG
+ydPrmhDb0eopw1fDRwxu1M0yTAnVIA==
+=EZzi
 -----END PGP SIGNATURE-----
 
---Sig_/VHdyE0Ee2I.oPd+91Q7uGKY--
+--Sig_/k6L+z4ZF5AITNIBFCyYc60_--
 

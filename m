@@ -1,109 +1,119 @@
-Return-Path: <linux-next+bounces-319-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-320-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E247880C1AC
-	for <lists+linux-next@lfdr.de>; Mon, 11 Dec 2023 08:16:18 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7BC7380C2DD
+	for <lists+linux-next@lfdr.de>; Mon, 11 Dec 2023 09:15:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8AAEC1F20E38
-	for <lists+linux-next@lfdr.de>; Mon, 11 Dec 2023 07:16:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AB1141C208A7
+	for <lists+linux-next@lfdr.de>; Mon, 11 Dec 2023 08:15:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D536F1F615;
-	Mon, 11 Dec 2023 07:16:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F01AA20B19;
+	Mon, 11 Dec 2023 08:15:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b="Kvtk2KeU";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="O/LlyZNn"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Gl7pQfnq"
 X-Original-To: linux-next@vger.kernel.org
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B68E9D1;
-	Sun, 10 Dec 2023 23:16:09 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailout.nyi.internal (Postfix) with ESMTP id 7D0F65C0066;
-	Mon, 11 Dec 2023 02:16:06 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Mon, 11 Dec 2023 02:16:06 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:sender
-	:subject:subject:to:to; s=fm1; t=1702278966; x=1702365366; bh=Fa
-	5YWtqIPyRrvJ5Lna2WJbE0LoWXH5vrU9UsWHQJ1Jk=; b=Kvtk2KeUGKAvxxLiDq
-	0u0JLM+rR/QkQ6KEp+Xoyjsa0iv9cdypP8n9rEyeyMh54qibAM7dN0VS3r/s+Ho/
-	sfQkUMlHlbMxoxDFHtHECyFmQR4nO9HPcqY5AZ2mwUpHYpYIEesQHGbfUlfQREWG
-	eZ6IVXKZ02KZ7cpiPamGHu/wXOI5S3Jb/har917lTSa2uRxJPBVfAoQtNEGrPLil
-	s4kjVxJUaimlM0mUa2nec4PD3PSJ8iPfa6raPj4StZm8OtmQExpJ69k8b3IQXBHV
-	qn6i1ai2pi3e3JXq2tM1HJR7TDCE2/JnZEMm1/Br1KVSllo3Sses5vyP+Lp7JNFy
-	AnpA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-	:x-sasl-enc; s=fm1; t=1702278966; x=1702365366; bh=Fa5YWtqIPyRrv
-	J5Lna2WJbE0LoWXH5vrU9UsWHQJ1Jk=; b=O/LlyZNn/ncucWDVbTTMlIW46r+Zy
-	O2qaxMJzEOD40qD2Xdu0HJV5wu1aU4D876A+/yMahHT66G0kzMFXeY+yq4rNo1vX
-	HVLKnU3VwLsQDf+TnrbS3CI0DWeNKvu0ROZ6VGMbChnSXIKz9nbfPfQhg0qE/MKZ
-	OExGjYjNBtuieJmNW1drewff19jT9G3B98b62nPHzmzuez7qL68PKLIEt82O4/ss
-	DRoBRLai7zc5aiwD5j/tVZuLhLxi0B89pwDcuV0oftQqsfmr1Db1ujt86GT+pQ6q
-	WdKjA/zAV1FrfKL0cZ/T+tXdhMkOvHH84nymdRFsQ4WeB9BQZ+dHX194g==
-X-ME-Sender: <xms:Nbd2Zc_JlZfM9ke6Nb_JGXR03UmgH8fi-kkcgI15bCffan0fYLhknw>
-    <xme:Nbd2ZUsD4fIEsTgWxVUtfGSMMpneoozhyLfGkCBWwQPkeF_YOntuh8Uqbi0f4Gykl
-    WHnWQoCOVZTmg>
-X-ME-Received: <xmr:Nbd2ZSAhSJ1Cxn-DHfi3Gv4kA6bkFJdiCiKWMkww8dJMbsPLdtYwKnctTe0wmjSE-1xNCz05pRVEFPiHpIOn4KW5231HeAz7SQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudeluddguddtjecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgv
-    ghcumffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeehge
-    dvvedvleejuefgtdduudfhkeeltdeihfevjeekjeeuhfdtueefhffgheekteenucevlhhu
-    shhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhroh
-    grhhdrtghomh
-X-ME-Proxy: <xmx:Nrd2ZcdG3FN2hcjBbeLqJcM-QkcFsmF2Uxavlor9-Bnf6YZ0_ClLEA>
-    <xmx:Nrd2ZROxGKo78hf4ktjwqwvnTpHXi24D-Pyj3OuYKVnJA5ZhDGe5Hw>
-    <xmx:Nrd2ZWkTBdQJyHjZ8XkG5d4Z3aCSmQxxJMMlcTpdXeDqa-eRInl2jg>
-    <xmx:Nrd2ZdBA1WVvOHy-mH1_6nTBxBiydvvlNKXaTCGmQz0amCvue6pCFQ>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 11 Dec 2023 02:16:05 -0500 (EST)
-Date: Mon, 11 Dec 2023 08:16:04 +0100
-From: Greg KH <greg@kroah.com>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patches in the driver-core tree
-Message-ID: <2023121114-gas-unstuffed-3045@gregkh>
-References: <20231211152456.7526822b@canb.auug.org.au>
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24AD6E5
+	for <linux-next@vger.kernel.org>; Mon, 11 Dec 2023 00:15:42 -0800 (PST)
+Received: by mail-yb1-xb2b.google.com with SMTP id 3f1490d57ef6-db8892a5f96so3867374276.2
+        for <linux-next@vger.kernel.org>; Mon, 11 Dec 2023 00:15:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1702282541; x=1702887341; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=TXq9YTAU0K/Wyg67l3QF0mK1qAP+uioFbjUi30daDLE=;
+        b=Gl7pQfnqeul1cqU4KjVecz+bNXrsTQXRIeny73E7zkFiC5jlDfMIjww7TeGgCkTMlY
+         ZyLsSesDpAd5F9nveBiu0fSL07Q8ZEFwKzrlGDtWI7jZUBhKJXAXBWgWEf9IFdCoVyZT
+         8xskZmgoLVUZ5iyMCcBulBxn+57jj4XowtU+wQd4lbhicECJ6dAVOZskPOCjPUasyO1m
+         ZxonGzVX5mC/POYCPXaBaY0bbzHylJwldCdh2rqfHuMynYb0IjMqy6qdKo+ezUSGJnsR
+         Xa7JlqdKlNNfRxXdo4Aza9JDgYi70Nri8oKh2kuICobsWtD6EkCY8gi0zJHNs3hpTaUs
+         JVgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702282541; x=1702887341;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TXq9YTAU0K/Wyg67l3QF0mK1qAP+uioFbjUi30daDLE=;
+        b=N/2VH95QC19+IcrSt6x6hdm2jQPwfGSfkXQyOIVswSXNiorgxgRr8hRPcU1gP3J2V1
+         LGcEy6Lm789YRyYhasprPzzayc+azAb4Eow9w/bi0rZCVNg2wVdOm+vu6XvesU0ZtVx1
+         fokLP4Kzxm1MWhccKfxY6PEop5H/kGlKQ/8//xb7FDPol3OIDPTpJZ1Aclit1Kivr9TI
+         oHaSUSSHIhyuih2OizsV+gcNqJBOHcFYN/DjrBGehpj8P9ywANkOsoqmP5bLM6we6a8+
+         Q4NdgX7z91F+0HPt50I3qh+675mQX5HghGvobGCsVb2fBC4QpXtwGm/Fdn5z0uPgjm9N
+         3m8w==
+X-Gm-Message-State: AOJu0Yzj+AVNU4vwr08p0/zopkJDHS1j50x6vK+VdTIcHef9ByT6C/b5
+	8527pxOyfCH810cYF0CvlrKg0omqqMgEOB8/9EESuw==
+X-Google-Smtp-Source: AGHT+IEqQ1QWl9N8VrJdERt7hZAN05TSsYkaTWMXlqSVGHm1KL+k3i3fwo/Z1+5pnTt/WgCjEwjtbr25GU8ej2hs3FE=
+X-Received: by 2002:a25:8f8f:0:b0:db5:4b23:534 with SMTP id
+ u15-20020a258f8f000000b00db54b230534mr2204353ybl.17.1702282541327; Mon, 11
+ Dec 2023 00:15:41 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231211152456.7526822b@canb.auug.org.au>
+References: <20231211145056.23fbfd7d@canb.auug.org.au>
+In-Reply-To: <20231211145056.23fbfd7d@canb.auug.org.au>
+From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Date: Mon, 11 Dec 2023 09:15:30 +0100
+Message-ID: <CACMJSetGz1fCnqS_HPTLyV8dOWOUtO07-bZKKXu3=3Lk2PGdyw@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the pinctrl-intel tree with the
+ gpio-brgl tree
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Bartosz Golaszewski <brgl@bgdev.pl>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Dec 11, 2023 at 03:24:56PM +1100, Stephen Rothwell wrote:
+On Mon, 11 Dec 2023 at 04:51, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
 > Hi all,
-> 
-> The following commits are also in the pm tree tree as different
-> commits (but the same patches):
-> 
->   3babbf614ae6 ("device property: fwnode_property_get_reference_args allows NULL args now")
->   1eaea4b3604e ("software node: Let args be NULL in software_node_get_reference_args")
->   bef52aa0f3de ("acpi: property: Let args be NULL in __acpi_node_get_property_reference")
-> 
-> These are commits
-> 
->   a66cf024b377 ("device property: fwnode_property_get_reference_args() allows NULL args now")
->   b912c6530332 ("software node: Let args be NULL in software_node_get_reference_args")
->   cab48cbdfd27 ("ACPI: property: Let args be NULL in __acpi_node_get_property_reference()")
-> 
-> in the pm tree.
+>
+> Today's linux-next merge of the pinctrl-intel tree got a conflict in:
+>
+>   drivers/pinctrl/intel/pinctrl-baytrail.c
+>
+> between commit:
+>
+>   c73505c8a001 ("pinctrl: baytrail: use gpiochip_dup_line_label()")
+>
+> from the gpio-brgl tree and commit:
+>
+>   6191e49de389 ("pinctrl: baytrail: Simplify code with cleanup helpers")
+>
+> from the pinctrl-intel tree.
+>
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+>
+> --
+> Cheers,
+> Stephen Rothwell
+>
+> diff --cc drivers/pinctrl/intel/pinctrl-baytrail.c
+> index 3c8c02043481,9b76819e606a..000000000000
+> --- a/drivers/pinctrl/intel/pinctrl-baytrail.c
+> +++ b/drivers/pinctrl/intel/pinctrl-baytrail.c
+> @@@ -1173,7 -1136,7 +1136,6 @@@ static void byt_gpio_dbg_show(struct se
+>                 void __iomem *conf_reg, *val_reg;
+>                 const char *pull_str = NULL;
+>                 const char *pull = NULL;
+> -               unsigned long flags;
+>  -              const char *label;
+>                 unsigned int pin;
+>
+>                 pin = vg->soc->pins[i].number;
 
-Thanks for letting us know, I think git can handle the merge here ok.
+Andy, please pull the following into your baytrail tree:
 
-greg k-h
+https://lore.kernel.org/lkml/20231208083650.25015-1-brgl@bgdev.pl/
+
+Bart
 

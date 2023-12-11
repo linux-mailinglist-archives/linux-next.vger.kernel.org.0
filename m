@@ -1,152 +1,97 @@
-Return-Path: <linux-next+bounces-323-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-324-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3E0D380C3F9
-	for <lists+linux-next@lfdr.de>; Mon, 11 Dec 2023 10:10:45 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id F1B8280C463
+	for <lists+linux-next@lfdr.de>; Mon, 11 Dec 2023 10:22:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6D9C01C2094C
-	for <lists+linux-next@lfdr.de>; Mon, 11 Dec 2023 09:10:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9C1FF1F21107
+	for <lists+linux-next@lfdr.de>; Mon, 11 Dec 2023 09:22:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 070C5210F8;
-	Mon, 11 Dec 2023 09:10:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A2F321116;
+	Mon, 11 Dec 2023 09:22:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ZfcDidRj"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nq/0y8Al"
 X-Original-To: linux-next@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6388F116
-	for <linux-next@vger.kernel.org>; Mon, 11 Dec 2023 01:10:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1702285838;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=X3H2rKzNGhPd5aG+amaV+RsXWG/q4mDryaGgazG1R5k=;
-	b=ZfcDidRjrzvFfdbjheK3+ZyrTiEETSglFMtL+PLuKBSWZ1zQYv5bnd5MoSQ7pyONfA4WdY
-	zav9m7De9D6jnkqzfJF7RA+6iSP3wz/PmDM3+eNVCf6x4TRMNKjzgCSFwNtwyHK+IG1ZhM
-	Xwd8BOpoys+Y+wmy3LlX9otCLNUKmQQ=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-661-7k3BtasXNIGeNUyNQiTfDg-1; Mon, 11 Dec 2023 04:10:34 -0500
-X-MC-Unique: 7k3BtasXNIGeNUyNQiTfDg-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9F258833944;
-	Mon, 11 Dec 2023 09:10:33 +0000 (UTC)
-Received: from localhost (unknown [10.72.112.218])
-	by smtp.corp.redhat.com (Postfix) with ESMTPS id B74A11C060AF;
-	Mon, 11 Dec 2023 09:10:32 +0000 (UTC)
-Date: Mon, 11 Dec 2023 17:10:29 +0800
-From: Baoquan He <bhe@redhat.com>
-To: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
-	loongarch@lists.linux.dev, kexec@lists.infradead.org,
-	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-	linux-sh@vger.kernel.org, x86@kernel.org, akpm@linux-foundation.org,
-	eric_devolder@yahoo.com, sfr@canb.auug.org.au, ignat@cloudflare.com
-Subject: Re: [PATCH 0/5] kexec: fix the incorrect ifdeffery and dependency of
- CONFIG_KEXEC
-Message-ID: <ZXbSBdalhEWPtUn0@MiWiFi-R3L-srv>
-References: <20231208073036.7884-1-bhe@redhat.com>
- <ZXLI748b85be459B@fedora>
- <CAMuHMdWAaM+eJtiVbXXBO0xOmpqhrOiCO5itNsNdTiOxRXVtVw@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B52C21112
+	for <linux-next@vger.kernel.org>; Mon, 11 Dec 2023 09:22:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E608C433C7;
+	Mon, 11 Dec 2023 09:22:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1702286545;
+	bh=loi0HaJE81baXDC9k3d7qgLhOZK98B8aq2E8/2avPlU=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=nq/0y8AlWIGYezWXJ76icz3Jvp/ul+Q05DOKUcmIkby/D5l8fhQ+qRELJpmOVJR+o
+	 WOXX6P3TDZAyEjyw1cb8P7O3Au9ANm1/ZnpUy+oFtLBmtpA7V2pxs7TIQmIpN1YWIE
+	 R7cVYqpTpQMStfixab4zoBaZing6LHbAgAiE2yk86Ykiww16bOclT1+lfNSdlqYJYA
+	 iSsoj+eS9zCcfAONBqhXU62hhuQds2xuIVV2AQUYXqhTzePdbifVBNOdBAHPM+l34D
+	 SXZuVcOSPjeWeqta+PXUA5l5dBmYOsoggy5Vr9tntivBzYeQnoZ4FtEoJKzYdN5cun
+	 8t56/rQ7oZB4w==
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-50bfd3a5b54so4711475e87.3;
+        Mon, 11 Dec 2023 01:22:25 -0800 (PST)
+X-Gm-Message-State: AOJu0Yy74CCcveT+iVJFtlg4TH13YER0LaXF6J/7e9V8IsPwYzFNjX9w
+	RWkIZy4iMqEl8KF5s93Ndg2IK+i5HK5fDbXW2w0=
+X-Google-Smtp-Source: AGHT+IHkUug4AGg9NguvDT6U8EQW0DoFEM6O+sS6ukhcM/xO967l6nnD3SzKtlcEynqtqCAzg48Nvq1JutvPDEFQZ0k=
+X-Received: by 2002:ac2:4989:0:b0:50c:5c0:b5e0 with SMTP id
+ f9-20020ac24989000000b0050c05c0b5e0mr1699083lfl.105.1702286543727; Mon, 11
+ Dec 2023 01:22:23 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMuHMdWAaM+eJtiVbXXBO0xOmpqhrOiCO5itNsNdTiOxRXVtVw@mail.gmail.com>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.7
+References: <20231211151303.1286eda5@canb.auug.org.au> <20231211153905.6cbf7dcb@canb.auug.org.au>
+In-Reply-To: <20231211153905.6cbf7dcb@canb.auug.org.au>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Mon, 11 Dec 2023 10:22:12 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXGG=pPAFEJ=YuWkk6oc7ZZfRE=Y3jGmp-4fWb7FK3AC0g@mail.gmail.com>
+Message-ID: <CAMj1kXGG=pPAFEJ=YuWkk6oc7ZZfRE=Y3jGmp-4fWb7FK3AC0g@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the efi tree with the efi-fixes tree
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>, Masahisa Kojima <masahisa.kojima@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On 12/11/23 at 09:25am, Geert Uytterhoeven wrote:
-> Hi Baoquan,
-> 
-> On Fri, Dec 8, 2023 at 8:43 AM Baoquan He <bhe@redhat.com> wrote:
-> > Forgot adding kexec to CC, add it now.
+On Mon, 11 Dec 2023 at 05:39, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> On Mon, 11 Dec 2023 15:13:03 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 > >
-> > On 12/08/23 at 03:30pm, Baoquan He wrote:
-> > > The select of KEXEC for CRASH_DUMP in kernel/Kconfig.kexec will be
-> > > dropped, then compiling errors will be triggered if below config
-> > > items are set:
-> > >
-> > > ===
-> > > CONFIG_CRASH_CORE=y
-> > > CONFIG_KEXEC_CORE=y
-> > > CONFIG_CRASH_DUMP=y
-> > > ===
-> > >
-> > > E.g on mips, below link error are seen:
-> > > --------------------------------------------------------------------
-> > > mipsel-linux-ld: kernel/kexec_core.o: in function `kimage_free':
-> > > kernel/kexec_core.c:(.text+0x2200): undefined reference to `machine_kexec_cleanup'
-> > > mipsel-linux-ld: kernel/kexec_core.o: in function `__crash_kexec':
-> > > kernel/kexec_core.c:(.text+0x2480): undefined reference to `machine_crash_shutdown'
-> > > mipsel-linux-ld: kernel/kexec_core.c:(.text+0x2488): undefined reference to `machine_kexec'
-> > > mipsel-linux-ld: kernel/kexec_core.o: in function `kernel_kexec':
-> > > kernel/kexec_core.c:(.text+0x29b8): undefined reference to `machine_shutdown'
-> > > mipsel-linux-ld: kernel/kexec_core.c:(.text+0x29c0): undefined reference to `machine_kexec'
-> > > --------------------------------------------------------------------
-> > >
-> > > Here, change the incorrect dependency of building kexec_core related object
-> > > files, and the ifdeffery on architectures from CONFIG_KEXEC to
-> > > CONFIG_KEXEC_CORE.
-> > >
-> > > Testing:
-> > > ========
-> > > Passed on mips and loognarch with the LKP reproducer.
-> > >
-> > > Baoquan He (5):
-> > >   loongarch, kexec: change dependency of object files
-> > >   m68k, kexec: fix the incorrect ifdeffery and build dependency of
-> > >     CONFIG_KEXEC
-> > >   mips, kexec: fix the incorrect ifdeffery and dependency of
-> > >     CONFIG_KEXEC
-> > >   sh, kexec: fix the incorrect ifdeffery and dependency of CONFIG_KEXEC
-> > >   x86, kexec: fix the wrong ifdeffery CONFIG_KEXEC
-> 
-> I understand this series is v3 of "[PATCH v2] kexec_core: change
-> dependency of object files"? As this series does not contain a
-> changelog, can you please summarize what was changed?
-> Thanks!
+> > Today's linux-next merge of the efi tree got a conflict in:
+> >
+> >   fs/efivarfs/super.c
+> >
+> > between commits:
+> >
+> >   0b6d38bdd6f8 ("efivarfs: Free s_fs_info on unmount")
+> >   ab5c4251a009 ("efivarfs: Move efivarfs list into superblock s_fs_info")
+> >
+> > from the efi-fixes tree and commit:
+> >
+> >   b501d5b36f58 ("efivarfs: automatically update super block flag")
+> >
+> > from the efi tree.
+> >
+> > I fixed it up (see below) and can carry the fix as necessary. This
+> > is now fixed as far as linux-next is concerned, but any non trivial
+> > conflicts should be mentioned to your upstream maintainer when your tree
+> > is submitted for merging.  You may also want to consider cooperating
+> > with the maintainer of the conflicting tree to minimise any particularly
+> > complex conflicts.
+>
+> Actually the below is needed. ("info" is not a great name for, even a
+> static, global variable.  And maybe what I have called "einfo" could be
+> "sfi" like in efivarfs_kill_sb() ...)
 
-Oh, sorry for the confusion.
+Apologies, I should have spotted this myself.
 
-You are right, I should have taken this as v3 and posted to avoid
-confusion.
-
-I add below change log for this series, not sure if it's clearer than
-before. E.g for m68k, the <asm/kexec.h> is included in <linux/kexec.h>.
-The old ifdeffery CONFIG_KEXEC will cause those definitions in
-asm/kexec.h unseen if CONFIG_KEXEC is unset. See
-KEXEC_SOURCE_MEMORY_LIMIT, it's needed in kernel/kexec_core.c.
-
-Changelog:
-------------
-v2->v3:
-- Change the incorrect ifdeffery CONFIG_KEXEC in arch. Since select of
-  KEXEC for CRASH_DUMP in kernel/Kconfig.kexec is dropped, people can
-  set below config items dependently of CONFIG_KEXEC. Then those
-  KEXEC_CORE or CRASH_CORE related codes compiling will report error.
-
-  ===
-  CONFIG_CRASH_CORE=y
-  CONFIG_KEXEC_CORE=y
-  CONFIG_CRASH_DUMP=y
-  ===
-- Change the incorrect ifdeffery CONFIG_KEXEC in get_cmdline_acpi_rsdp()
-  of x86 because kexec_file_load needs that too.
-
-v1->v2:
-- V1 only includes fix on loongarch. Add m68k, mips, sh fix in v2 too.
-
+I'll fix this up and sync up the branches so any conflicts are
+resolved before they reach you.
 

@@ -1,119 +1,138 @@
-Return-Path: <linux-next+bounces-320-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-321-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7BC7380C2DD
-	for <lists+linux-next@lfdr.de>; Mon, 11 Dec 2023 09:15:49 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7C4A080C317
+	for <lists+linux-next@lfdr.de>; Mon, 11 Dec 2023 09:25:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AB1141C208A7
-	for <lists+linux-next@lfdr.de>; Mon, 11 Dec 2023 08:15:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 30F221F20FD3
+	for <lists+linux-next@lfdr.de>; Mon, 11 Dec 2023 08:25:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F01AA20B19;
-	Mon, 11 Dec 2023 08:15:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Gl7pQfnq"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0B8A20DCD;
+	Mon, 11 Dec 2023 08:25:41 +0000 (UTC)
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24AD6E5
-	for <linux-next@vger.kernel.org>; Mon, 11 Dec 2023 00:15:42 -0800 (PST)
-Received: by mail-yb1-xb2b.google.com with SMTP id 3f1490d57ef6-db8892a5f96so3867374276.2
-        for <linux-next@vger.kernel.org>; Mon, 11 Dec 2023 00:15:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1702282541; x=1702887341; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=TXq9YTAU0K/Wyg67l3QF0mK1qAP+uioFbjUi30daDLE=;
-        b=Gl7pQfnqeul1cqU4KjVecz+bNXrsTQXRIeny73E7zkFiC5jlDfMIjww7TeGgCkTMlY
-         ZyLsSesDpAd5F9nveBiu0fSL07Q8ZEFwKzrlGDtWI7jZUBhKJXAXBWgWEf9IFdCoVyZT
-         8xskZmgoLVUZ5iyMCcBulBxn+57jj4XowtU+wQd4lbhicECJ6dAVOZskPOCjPUasyO1m
-         ZxonGzVX5mC/POYCPXaBaY0bbzHylJwldCdh2rqfHuMynYb0IjMqy6qdKo+ezUSGJnsR
-         Xa7JlqdKlNNfRxXdo4Aza9JDgYi70Nri8oKh2kuICobsWtD6EkCY8gi0zJHNs3hpTaUs
-         JVgw==
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3764510A;
+	Mon, 11 Dec 2023 00:25:38 -0800 (PST)
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-5d6b9143782so35674707b3.0;
+        Mon, 11 Dec 2023 00:25:38 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702282541; x=1702887341;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TXq9YTAU0K/Wyg67l3QF0mK1qAP+uioFbjUi30daDLE=;
-        b=N/2VH95QC19+IcrSt6x6hdm2jQPwfGSfkXQyOIVswSXNiorgxgRr8hRPcU1gP3J2V1
-         LGcEy6Lm789YRyYhasprPzzayc+azAb4Eow9w/bi0rZCVNg2wVdOm+vu6XvesU0ZtVx1
-         fokLP4Kzxm1MWhccKfxY6PEop5H/kGlKQ/8//xb7FDPol3OIDPTpJZ1Aclit1Kivr9TI
-         oHaSUSSHIhyuih2OizsV+gcNqJBOHcFYN/DjrBGehpj8P9ywANkOsoqmP5bLM6we6a8+
-         Q4NdgX7z91F+0HPt50I3qh+675mQX5HghGvobGCsVb2fBC4QpXtwGm/Fdn5z0uPgjm9N
-         3m8w==
-X-Gm-Message-State: AOJu0Yzj+AVNU4vwr08p0/zopkJDHS1j50x6vK+VdTIcHef9ByT6C/b5
-	8527pxOyfCH810cYF0CvlrKg0omqqMgEOB8/9EESuw==
-X-Google-Smtp-Source: AGHT+IEqQ1QWl9N8VrJdERt7hZAN05TSsYkaTWMXlqSVGHm1KL+k3i3fwo/Z1+5pnTt/WgCjEwjtbr25GU8ej2hs3FE=
-X-Received: by 2002:a25:8f8f:0:b0:db5:4b23:534 with SMTP id
- u15-20020a258f8f000000b00db54b230534mr2204353ybl.17.1702282541327; Mon, 11
- Dec 2023 00:15:41 -0800 (PST)
+        d=1e100.net; s=20230601; t=1702283137; x=1702887937;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=j2eWe2oiRzSTkXAZdruL7FMLjSewImdzh7HyKdRxUqI=;
+        b=wt3Rq5OOiqu/yBHspSUY8gYpz2jKqNuD+wQmqfsrOE2IB2pr5KQw0CVNSKsYMfJg/R
+         mIV6FEIbf0QvNyR7BocY27xzU49XdRbh0ZtoLTJx5qw0VUBOM5RQX3dLgb2PiwBogaqa
+         uSL9I8AA2kLk44qIzJNMDSrcLPrUMW3fPEWbUUHSLcr/UNYEqLB+erVtXYQYghMkywhT
+         moS+KBbbIbTAuqGnbkBgf8fFDYuZwct5gwAMR2B1nvPmRnI8TOgVp06Rtl7OkFcBSIwG
+         3KXbzitAbhUipCQ6Fgkk9xZBhxBZCy4nC4/yqObD8nOUv1hfArEeA7yYCzrTZTojuEDc
+         5sJg==
+X-Gm-Message-State: AOJu0YwWOOb6kl9Utfo6YW9W23Ulsiu1YgsEL14CeoDx3eus8iOCD76F
+	r5dEla+HZ2ApE+ZiFBL9URxiktQlunAiQg==
+X-Google-Smtp-Source: AGHT+IGznTimJA4mSAu8adt3wu2sAMV0tN8lU0584QstnoDzM3+BXIPuN8HqHTzSSYsZE0s4uvfy5A==
+X-Received: by 2002:a0d:d48c:0:b0:5d3:e835:bd67 with SMTP id w134-20020a0dd48c000000b005d3e835bd67mr3107076ywd.41.1702283136935;
+        Mon, 11 Dec 2023 00:25:36 -0800 (PST)
+Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com. [209.85.128.172])
+        by smtp.gmail.com with ESMTPSA id q68-20020a818047000000b005d580a1fd70sm2796876ywf.75.2023.12.11.00.25.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 Dec 2023 00:25:36 -0800 (PST)
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-5d6b9143782so35674547b3.0;
+        Mon, 11 Dec 2023 00:25:35 -0800 (PST)
+X-Received: by 2002:a81:7285:0:b0:5d8:74e6:e4c5 with SMTP id
+ n127-20020a817285000000b005d874e6e4c5mr2853116ywc.98.1702283135734; Mon, 11
+ Dec 2023 00:25:35 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231211145056.23fbfd7d@canb.auug.org.au>
-In-Reply-To: <20231211145056.23fbfd7d@canb.auug.org.au>
-From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Date: Mon, 11 Dec 2023 09:15:30 +0100
-Message-ID: <CACMJSetGz1fCnqS_HPTLyV8dOWOUtO07-bZKKXu3=3Lk2PGdyw@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the pinctrl-intel tree with the
- gpio-brgl tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Bartosz Golaszewski <brgl@bgdev.pl>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20231208073036.7884-1-bhe@redhat.com> <ZXLI748b85be459B@fedora>
+In-Reply-To: <ZXLI748b85be459B@fedora>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Mon, 11 Dec 2023 09:25:24 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdWAaM+eJtiVbXXBO0xOmpqhrOiCO5itNsNdTiOxRXVtVw@mail.gmail.com>
+Message-ID: <CAMuHMdWAaM+eJtiVbXXBO0xOmpqhrOiCO5itNsNdTiOxRXVtVw@mail.gmail.com>
+Subject: Re: [PATCH 0/5] kexec: fix the incorrect ifdeffery and dependency of CONFIG_KEXEC
+To: Baoquan He <bhe@redhat.com>
+Cc: linux-kernel@vger.kernel.org, linux-next@vger.kernel.org, 
+	loongarch@lists.linux.dev, kexec@lists.infradead.org, 
+	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org, 
+	linux-sh@vger.kernel.org, x86@kernel.org, akpm@linux-foundation.org, 
+	eric_devolder@yahoo.com, sfr@canb.auug.org.au, ignat@cloudflare.com
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 11 Dec 2023 at 04:51, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> Today's linux-next merge of the pinctrl-intel tree got a conflict in:
->
->   drivers/pinctrl/intel/pinctrl-baytrail.c
->
-> between commit:
->
->   c73505c8a001 ("pinctrl: baytrail: use gpiochip_dup_line_label()")
->
-> from the gpio-brgl tree and commit:
->
->   6191e49de389 ("pinctrl: baytrail: Simplify code with cleanup helpers")
->
-> from the pinctrl-intel tree.
->
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
->
-> --
-> Cheers,
-> Stephen Rothwell
->
-> diff --cc drivers/pinctrl/intel/pinctrl-baytrail.c
-> index 3c8c02043481,9b76819e606a..000000000000
-> --- a/drivers/pinctrl/intel/pinctrl-baytrail.c
-> +++ b/drivers/pinctrl/intel/pinctrl-baytrail.c
-> @@@ -1173,7 -1136,7 +1136,6 @@@ static void byt_gpio_dbg_show(struct se
->                 void __iomem *conf_reg, *val_reg;
->                 const char *pull_str = NULL;
->                 const char *pull = NULL;
-> -               unsigned long flags;
->  -              const char *label;
->                 unsigned int pin;
->
->                 pin = vg->soc->pins[i].number;
+Hi Baoquan,
 
-Andy, please pull the following into your baytrail tree:
+On Fri, Dec 8, 2023 at 8:43=E2=80=AFAM Baoquan He <bhe@redhat.com> wrote:
+> Forgot adding kexec to CC, add it now.
+>
+> On 12/08/23 at 03:30pm, Baoquan He wrote:
+> > The select of KEXEC for CRASH_DUMP in kernel/Kconfig.kexec will be
+> > dropped, then compiling errors will be triggered if below config
+> > items are set:
+> >
+> > =3D=3D=3D
+> > CONFIG_CRASH_CORE=3Dy
+> > CONFIG_KEXEC_CORE=3Dy
+> > CONFIG_CRASH_DUMP=3Dy
+> > =3D=3D=3D
+> >
+> > E.g on mips, below link error are seen:
+> > --------------------------------------------------------------------
+> > mipsel-linux-ld: kernel/kexec_core.o: in function `kimage_free':
+> > kernel/kexec_core.c:(.text+0x2200): undefined reference to `machine_kex=
+ec_cleanup'
+> > mipsel-linux-ld: kernel/kexec_core.o: in function `__crash_kexec':
+> > kernel/kexec_core.c:(.text+0x2480): undefined reference to `machine_cra=
+sh_shutdown'
+> > mipsel-linux-ld: kernel/kexec_core.c:(.text+0x2488): undefined referenc=
+e to `machine_kexec'
+> > mipsel-linux-ld: kernel/kexec_core.o: in function `kernel_kexec':
+> > kernel/kexec_core.c:(.text+0x29b8): undefined reference to `machine_shu=
+tdown'
+> > mipsel-linux-ld: kernel/kexec_core.c:(.text+0x29c0): undefined referenc=
+e to `machine_kexec'
+> > --------------------------------------------------------------------
+> >
+> > Here, change the incorrect dependency of building kexec_core related ob=
+ject
+> > files, and the ifdeffery on architectures from CONFIG_KEXEC to
+> > CONFIG_KEXEC_CORE.
+> >
+> > Testing:
+> > =3D=3D=3D=3D=3D=3D=3D=3D
+> > Passed on mips and loognarch with the LKP reproducer.
+> >
+> > Baoquan He (5):
+> >   loongarch, kexec: change dependency of object files
+> >   m68k, kexec: fix the incorrect ifdeffery and build dependency of
+> >     CONFIG_KEXEC
+> >   mips, kexec: fix the incorrect ifdeffery and dependency of
+> >     CONFIG_KEXEC
+> >   sh, kexec: fix the incorrect ifdeffery and dependency of CONFIG_KEXEC
+> >   x86, kexec: fix the wrong ifdeffery CONFIG_KEXEC
 
-https://lore.kernel.org/lkml/20231208083650.25015-1-brgl@bgdev.pl/
+I understand this series is v3 of "[PATCH v2] kexec_core: change
+dependency of object files"? As this series does not contain a
+changelog, can you please summarize what was changed?
+Thanks!
 
-Bart
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
+
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
 

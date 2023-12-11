@@ -1,138 +1,150 @@
-Return-Path: <linux-next+bounces-321-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-322-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7C4A080C317
-	for <lists+linux-next@lfdr.de>; Mon, 11 Dec 2023 09:25:54 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5B93480C347
+	for <lists+linux-next@lfdr.de>; Mon, 11 Dec 2023 09:31:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 30F221F20FD3
-	for <lists+linux-next@lfdr.de>; Mon, 11 Dec 2023 08:25:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 15A57280BD7
+	for <lists+linux-next@lfdr.de>; Mon, 11 Dec 2023 08:31:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0B8A20DCD;
-	Mon, 11 Dec 2023 08:25:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3E2120DC9;
+	Mon, 11 Dec 2023 08:31:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="b/exAFwl"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3764510A;
-	Mon, 11 Dec 2023 00:25:38 -0800 (PST)
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-5d6b9143782so35674707b3.0;
-        Mon, 11 Dec 2023 00:25:38 -0800 (PST)
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F24D1E9
+	for <linux-next@vger.kernel.org>; Mon, 11 Dec 2023 00:31:37 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id ffacd0b85a97d-32f8441dfb5so3986896f8f.0
+        for <linux-next@vger.kernel.org>; Mon, 11 Dec 2023 00:31:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1702283496; x=1702888296; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=J9TssOoYj5sq85cjGlO/OWfUu7/5yk2nPtfgDzXrsu4=;
+        b=b/exAFwl1xEjLGjHrsK8kWRYbVdGJl+RKzc/k56POwnbn40kdYE38lU2eVnAQSzZNv
+         1Pg0QzFqzdtwVLdK/6IulXVmaiqkjcKMQgaMTpNe7aDunluqVu//50joowZh1OZR8bur
+         XQsh4J30Q5atWBeORwJJn/EoQ51RCU+y1ocUQp60uoeKKV3vK7ZnV0AY8/0s6Mp7bxLr
+         8qKN5GiD+C73xyRGv5fOtjUgENuYY9zMEoYKsbtBtDhxwcdAipNaFm2HBxRHY6naHyu3
+         1vifF9nfjr0/fXS3sKHnp7CpyLwmog6xebg1bjmFkqx6mnDL/jpPKhDyv57ANU9nvi0d
+         2Dhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702283137; x=1702887937;
+        d=1e100.net; s=20230601; t=1702283496; x=1702888296;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=j2eWe2oiRzSTkXAZdruL7FMLjSewImdzh7HyKdRxUqI=;
-        b=wt3Rq5OOiqu/yBHspSUY8gYpz2jKqNuD+wQmqfsrOE2IB2pr5KQw0CVNSKsYMfJg/R
-         mIV6FEIbf0QvNyR7BocY27xzU49XdRbh0ZtoLTJx5qw0VUBOM5RQX3dLgb2PiwBogaqa
-         uSL9I8AA2kLk44qIzJNMDSrcLPrUMW3fPEWbUUHSLcr/UNYEqLB+erVtXYQYghMkywhT
-         moS+KBbbIbTAuqGnbkBgf8fFDYuZwct5gwAMR2B1nvPmRnI8TOgVp06Rtl7OkFcBSIwG
-         3KXbzitAbhUipCQ6Fgkk9xZBhxBZCy4nC4/yqObD8nOUv1hfArEeA7yYCzrTZTojuEDc
-         5sJg==
-X-Gm-Message-State: AOJu0YwWOOb6kl9Utfo6YW9W23Ulsiu1YgsEL14CeoDx3eus8iOCD76F
-	r5dEla+HZ2ApE+ZiFBL9URxiktQlunAiQg==
-X-Google-Smtp-Source: AGHT+IGznTimJA4mSAu8adt3wu2sAMV0tN8lU0584QstnoDzM3+BXIPuN8HqHTzSSYsZE0s4uvfy5A==
-X-Received: by 2002:a0d:d48c:0:b0:5d3:e835:bd67 with SMTP id w134-20020a0dd48c000000b005d3e835bd67mr3107076ywd.41.1702283136935;
-        Mon, 11 Dec 2023 00:25:36 -0800 (PST)
-Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com. [209.85.128.172])
-        by smtp.gmail.com with ESMTPSA id q68-20020a818047000000b005d580a1fd70sm2796876ywf.75.2023.12.11.00.25.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Dec 2023 00:25:36 -0800 (PST)
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-5d6b9143782so35674547b3.0;
-        Mon, 11 Dec 2023 00:25:35 -0800 (PST)
-X-Received: by 2002:a81:7285:0:b0:5d8:74e6:e4c5 with SMTP id
- n127-20020a817285000000b005d874e6e4c5mr2853116ywc.98.1702283135734; Mon, 11
- Dec 2023 00:25:35 -0800 (PST)
+        bh=J9TssOoYj5sq85cjGlO/OWfUu7/5yk2nPtfgDzXrsu4=;
+        b=r7SlXipMKjXGgXNn7NyPwVd/j7dHBmQzOCwDdd2QPp1ahKeKtfYDB8fhQPAJ2E6LEu
+         W5XDyhfvyabpm0hIoThp3E/9dGMs7hlaDICvk1/sWpWPGsCZn5+etU9CMjSO/JpfKg62
+         MX9CxD4J7ppr2DA2OkMOqfZzHWzB9dPsmRLnDihbBfdP2LFDx0pyWDtkV2y4i7rAqjzT
+         480Aqqm0EW826xW0TVD26hgLICg3lJXWIsxk/0i3f/B79hXYerFN+K6YBYfGiMYmhw5A
+         /R1mkYCAfy4fdw5evcd5P1B5NR50ZzolvpoqYvsYYuDnrU88h+NuPiXhQob7Mkvz3bVQ
+         +2KQ==
+X-Gm-Message-State: AOJu0YzbErP2U9ekKU8DDMf8g0RAXvreEt63SvqRbNSqjEi8Sy7t6CoM
+	ZjRqolXU9DI+NW5zidlwzfksPyMPAo1cawk/9X7+nA==
+X-Google-Smtp-Source: AGHT+IHw6KbgF5ZdUqFJP2PUqyg2V4aLIlCnsgX6uYnrOdbdZVebUYLmRkdZ3Ba2r7B6LHXVcwP2IURHq+gQ2dAl7eo=
+X-Received: by 2002:adf:e781:0:b0:333:2fd2:6f7a with SMTP id
+ n1-20020adfe781000000b003332fd26f7amr2089438wrm.132.1702283496334; Mon, 11
+ Dec 2023 00:31:36 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231208073036.7884-1-bhe@redhat.com> <ZXLI748b85be459B@fedora>
-In-Reply-To: <ZXLI748b85be459B@fedora>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Mon, 11 Dec 2023 09:25:24 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWAaM+eJtiVbXXBO0xOmpqhrOiCO5itNsNdTiOxRXVtVw@mail.gmail.com>
-Message-ID: <CAMuHMdWAaM+eJtiVbXXBO0xOmpqhrOiCO5itNsNdTiOxRXVtVw@mail.gmail.com>
-Subject: Re: [PATCH 0/5] kexec: fix the incorrect ifdeffery and dependency of CONFIG_KEXEC
-To: Baoquan He <bhe@redhat.com>
-Cc: linux-kernel@vger.kernel.org, linux-next@vger.kernel.org, 
-	loongarch@lists.linux.dev, kexec@lists.infradead.org, 
-	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org, 
-	linux-sh@vger.kernel.org, x86@kernel.org, akpm@linux-foundation.org, 
-	eric_devolder@yahoo.com, sfr@canb.auug.org.au, ignat@cloudflare.com
+References: <20231211171406.71fdc29b@canb.auug.org.au>
+In-Reply-To: <20231211171406.71fdc29b@canb.auug.org.au>
+From: Alexandre Ghiti <alexghiti@rivosinc.com>
+Date: Mon, 11 Dec 2023 09:31:25 +0100
+Message-ID: <CAHVXubio372X_xXiWBMYk5=C7K49Wv6uki-uqWk1eyH-YuGGnA@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the percpu tree
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>, 
+	Christoph Lameter <cl@linux-foundation.org>, Ingo Molnar <mingo@redhat.com>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Baoquan,
+Hi Stephen,
 
-On Fri, Dec 8, 2023 at 8:43=E2=80=AFAM Baoquan He <bhe@redhat.com> wrote:
-> Forgot adding kexec to CC, add it now.
+On Mon, Dec 11, 2023 at 7:14=E2=80=AFAM Stephen Rothwell <sfr@canb.auug.org=
+.au> wrote:
 >
-> On 12/08/23 at 03:30pm, Baoquan He wrote:
-> > The select of KEXEC for CRASH_DUMP in kernel/Kconfig.kexec will be
-> > dropped, then compiling errors will be triggered if below config
-> > items are set:
-> >
-> > =3D=3D=3D
-> > CONFIG_CRASH_CORE=3Dy
-> > CONFIG_KEXEC_CORE=3Dy
-> > CONFIG_CRASH_DUMP=3Dy
-> > =3D=3D=3D
-> >
-> > E.g on mips, below link error are seen:
-> > --------------------------------------------------------------------
-> > mipsel-linux-ld: kernel/kexec_core.o: in function `kimage_free':
-> > kernel/kexec_core.c:(.text+0x2200): undefined reference to `machine_kex=
-ec_cleanup'
-> > mipsel-linux-ld: kernel/kexec_core.o: in function `__crash_kexec':
-> > kernel/kexec_core.c:(.text+0x2480): undefined reference to `machine_cra=
-sh_shutdown'
-> > mipsel-linux-ld: kernel/kexec_core.c:(.text+0x2488): undefined referenc=
-e to `machine_kexec'
-> > mipsel-linux-ld: kernel/kexec_core.o: in function `kernel_kexec':
-> > kernel/kexec_core.c:(.text+0x29b8): undefined reference to `machine_shu=
-tdown'
-> > mipsel-linux-ld: kernel/kexec_core.c:(.text+0x29c0): undefined referenc=
-e to `machine_kexec'
-> > --------------------------------------------------------------------
-> >
-> > Here, change the incorrect dependency of building kexec_core related ob=
-ject
-> > files, and the ifdeffery on architectures from CONFIG_KEXEC to
-> > CONFIG_KEXEC_CORE.
-> >
-> > Testing:
-> > =3D=3D=3D=3D=3D=3D=3D=3D
-> > Passed on mips and loognarch with the LKP reproducer.
-> >
-> > Baoquan He (5):
-> >   loongarch, kexec: change dependency of object files
-> >   m68k, kexec: fix the incorrect ifdeffery and build dependency of
-> >     CONFIG_KEXEC
-> >   mips, kexec: fix the incorrect ifdeffery and dependency of
-> >     CONFIG_KEXEC
-> >   sh, kexec: fix the incorrect ifdeffery and dependency of CONFIG_KEXEC
-> >   x86, kexec: fix the wrong ifdeffery CONFIG_KEXEC
+> Hi all,
+>
+> After merging the percpu tree, today's linux-next build (sparc64
+> defconfig) failed like this:
+>
+> mm/percpu.c: In function 'pcpu_page_first_chunk':
+> mm/percpu.c:3336:17: error: implicit declaration of function 'flush_cache=
+_vmap_early'; did you mean 'flush_cache_vmap'? [-Werror=3Dimplicit-function=
+-declaration]
+>  3336 |                 flush_cache_vmap_early(unit_addr, unit_addr + ai-=
+>unit_size);
+>       |                 ^~~~~~~~~~~~~~~~~~~~~~
+>       |                 flush_cache_vmap
+> cc1: some warnings being treated as errors
+>
+> Caused by commit
+>
+>   a95c15a43f4a ("mm: Introduce flush_cache_vmap_early() and its riscv imp=
+lementation")
+>
+> I have applied the following fix patch for today.  Are there other
+> archs that don't use asm-generic/cacheflush.h?
 
-I understand this series is v3 of "[PATCH v2] kexec_core: change
-dependency of object files"? As this series does not contain a
-changelog, can you please summarize what was changed?
-Thanks!
+It seems like most archs do not include this file, I should have
+checked. As I'm a bit scared of the possible side-effects of including
+asm-generic/cacheflush.h, I'll define flush_cache_vmap_early() on all
+archs that do define flush_cache_vmap().
 
-Gr{oetje,eeting}s,
+Stephen, do you want a patch fix? Or do you want me to send a new
+version of the current patches so that you can drop them for now?
 
-                        Geert
+Sorry for the oversight,
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
+Thanks,
 
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+Alex
+
+>
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Mon, 11 Dec 2023 16:57:00 +1100
+> Subject: [PATCH] fix up for "mm: Introduce flush_cache_vmap_early() and i=
+ts riscv implementation"
+>
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> ---
+>  arch/sparc/include/asm/cacheflush.h | 7 +++++++
+>  1 file changed, 7 insertions(+)
+>
+> diff --git a/arch/sparc/include/asm/cacheflush.h b/arch/sparc/include/asm=
+/cacheflush.h
+> index 881ac76eab93..9d87b2bcb217 100644
+> --- a/arch/sparc/include/asm/cacheflush.h
+> +++ b/arch/sparc/include/asm/cacheflush.h
+> @@ -10,4 +10,11 @@
+>  #else
+>  #include <asm/cacheflush_32.h>
+>  #endif
+> +
+> +#ifndef __ASSEMBLY__
+> +static inline void flush_cache_vmap_early(unsigned long start, unsigned =
+long end)
+> +{
+> +}
+> +#endif
+> +
+>  #endif
+> --
+> 2.40.1
+>
+> --
+> Cheers,
+> Stephen Rothwell
 

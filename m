@@ -1,145 +1,127 @@
-Return-Path: <linux-next+bounces-314-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-315-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 58CB280C0A2
-	for <lists+linux-next@lfdr.de>; Mon, 11 Dec 2023 06:19:58 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C0FDB80C0FD
+	for <lists+linux-next@lfdr.de>; Mon, 11 Dec 2023 06:49:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0BD221F20D46
-	for <lists+linux-next@lfdr.de>; Mon, 11 Dec 2023 05:19:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F30931C20840
+	for <lists+linux-next@lfdr.de>; Mon, 11 Dec 2023 05:49:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77F7C1C680;
-	Mon, 11 Dec 2023 05:19:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94E6A1E536;
+	Mon, 11 Dec 2023 05:49:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="TY/MC4uI"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="g1QYRRL0"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3747C3;
-	Sun, 10 Dec 2023 21:19:49 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26804213E;
+	Sun, 10 Dec 2023 21:49:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1702271988;
-	bh=5sNtilsWwU1x5jkzfc9dPKYu30Z5wT/4p92EP0oqClo=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=TY/MC4uInXd8Ar3RZACEymrzFF/oqjw1AEYXGZo1brr8DgAfNORkdg/NBEb+eW/P0
-	 Rw7fEvOUH/V6eU8XbYHxL4lfDNq5n50PJBkMWTQdr3vln1eE01ihS5ssXTOhje4OOH
-	 HOtpdf3CntO13FpJn7evPxIE9Yi3HdsK4zRoYGxPbRIGYpW1O9KNgUl1YaI9+zwBrC
-	 pPO/9XNfQ/XIDcDVwMV9fhq87JpiKdw/XaMBHUVIvFbqLHC8t3rjB/9d0bYvVUIYk6
-	 /u8eVRAmwZxqAGP1/DRwA9lry2SAyczQY02NvBln3qszX8wd51Ud62iz5HT1AWkU5o
-	 Qy2Sn3lV3r67Q==
+	s=201702; t=1702273758;
+	bh=5ownzIkARz43eQTloQkKelbMKKK9J+c14Q+Xkg/VpWU=;
+	h=Date:From:To:Cc:Subject:From;
+	b=g1QYRRL0JgzIR/pbzVUeOs0X3Oy8te73acyAmxtMQiUrZtQLpDlFBSkvl0pC0K/uz
+	 h/a0AVTGZwQ+RTMd4lFEHpyxrOU3dPIlCgTfIQYP5tZNLNc+bwjmAvYP3QDJG6UorT
+	 h5XnUabVn0trae5u3qQpq+3E6IcBF0799Z+ZZAOnUory6qqS79ZMOtjGMTRRuN6gUl
+	 JPF8tCcCh+2DycfYsxYbqFoV4zZMMo9MtPmacJ/rUXK7eeLwDg4ZpiMnUl7f/xOF3k
+	 9vAyQGYJx0WGLKgWfJNHEIp0AZ+pS/4K+I4NA/bGu5X5GjB6ir/cbuywybHKnhBxbE
+	 fQu2W1xABUpFg==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4SpVRl32fMz4xGR;
-	Mon, 11 Dec 2023 16:19:47 +1100 (AEDT)
-Date: Mon, 11 Dec 2023 16:19:46 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4SpW5p1Rx6z4xGR;
+	Mon, 11 Dec 2023 16:49:18 +1100 (AEDT)
+Date: Mon, 11 Dec 2023 16:49:16 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Uros Bizjak <ubizjak@gmail.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>,
- Ingo Molnar <mingo@kernel.org>, Linux Kernel Mailing List
+To: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc: Miquel Raynal <miquel.raynal@bootlin.com>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
  <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warnings after merge of the tip tree
-Message-ID: <20231211161946.2f151d13@canb.auug.org.au>
-In-Reply-To: <CAFULd4Y4n4uGy-pTc0PD6+-OytzGZHeJTPZ_CPJDq7VM7ChRdA@mail.gmail.com>
-References: <20231201112918.294b40b1@canb.auug.org.au>
-	<CAFULd4Yfh0=TkhoevuJP1kghP5VLFj2zP9av68_s2pez3n2iog@mail.gmail.com>
-	<20231204150807.600c2f09@canb.auug.org.au>
-	<CAFULd4Y4n4uGy-pTc0PD6+-OytzGZHeJTPZ_CPJDq7VM7ChRdA@mail.gmail.com>
+Subject: linux-next: build failure after merge of the nvmem tree
+Message-ID: <20231211164916.6f0d2357@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/n7biqZpoMx/uBlMl96h8naj";
+Content-Type: multipart/signed; boundary="Sig_/nYikG/bmL+ZRJ2lLCNwpPJo";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/n7biqZpoMx/uBlMl96h8naj
-Content-Type: text/plain; charset=UTF-8
+--Sig_/nYikG/bmL+ZRJ2lLCNwpPJo
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Mon, 4 Dec 2023 08:02:56 +0100 Uros Bizjak <ubizjak@gmail.com> wrote:
->
-> On Mon, Dec 4, 2023 at 5:08=E2=80=AFAM Stephen Rothwell <sfr@canb.auug.or=
-g.au> wrote:
-> >
-> > On Fri, 1 Dec 2023 13:09:45 +0100 Uros Bizjak <ubizjak@gmail.com> wrote=
-: =20
-> > >
-> > > On Fri, Dec 1, 2023 at 1:29=E2=80=AFAM Stephen Rothwell <sfr@canb.auu=
-g.org.au> wrote: =20
-> > > > =20
-> >  > After merging the tip tree, today's linux-next build (x86_64 allmodc=
-onfig) =20
-> > > > produced these warnings:
-> > > >
-> > > > WARNING: modpost: EXPORT symbol "const_pcpu_hot" [vmlinux] version =
-generation failed, symbol will not be versioned.
-> > > > Is "const_pcpu_hot" prototyped in <asm/asm-prototypes.h>?
-> > > > WARNING: modpost: "const_pcpu_hot" [arch/x86/kernel/msr.ko] has no =
-CRC!
-> > > > WARNING: modpost: "const_pcpu_hot" [arch/x86/kvm/kvm.ko] has no CRC=
-! =20
-> > >
-> > > My build doesn't produce any warnings. A defconfig + enabling kvm.ko =
-as module:
-> > >
-> > > ...
-> > >  AR      built-in.a
-> > >  AR      vmlinux.a
-> > >  LD      vmlinux.o
-> > >  OBJCOPY modules.builtin.modinfo
-> > >  GEN     modules.builtin
-> > >  MODPOST Module.symvers
-> > >  CC      .vmlinux.export.o
-> > >  CC [M]  arch/x86/kvm/kvm.mod.o
-> > >  CC [M]  fs/efivarfs/efivarfs.mod.o
-> > > ...
-> > >
-> > > Does the attached patch help? Or is there anything else I should do to
-> > > trigger the above problem? =20
-> >
-> > The patch does not help.  I am just doing an X86_64 allmodconfig build
-> > with CONFIG_WERROR=3Dn. gcc is
-> >
-> > $ x86_64-linux-gnu-gcc --version
-> > x86_64-linux-gnu-gcc (Debian 13.2.0-2) 13.2.0
-> >
-> > This is a cross build with a ppc64le host. =20
->=20
-> The warning is triggered by CONFIG_MODVERSIONS=3Dy and will be fixed in
-> a different way by the patch in [1].
->=20
-> [1] https://lore.kernel.org/lkml/20231203232017.994963-1-ubizjak@gmail.co=
-m/
+After merging the nvmem tree, today's linux-next build (i386 defconfig)
+failed like this:
 
-I am still seeing the warnings ...
+/home/sfr/next/next/drivers/nvmem/core.c: In function 'nvmem_cell_put':
+/home/sfr/next/next/drivers/nvmem/core.c:1603:9: error: implicit declaratio=
+n of function 'nvmem_layout_module_put' [-Werror=3Dimplicit-function-declar=
+ation]
+ 1603 |         nvmem_layout_module_put(nvmem);
+      |         ^~~~~~~~~~~~~~~~~~~~~~~
+
+Caused by commit
+
+  ed7778e43271 ("nvmem: core: Rework layouts to become regular devices")
+
+I have applied the following patch for today.
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Mon, 11 Dec 2023 16:34:34 +1100
+Subject: [PATCH] fix up for "nvmem: core: Rework layouts to become regular =
+devices"
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ drivers/nvmem/core.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
+index 9fc452e8ada8..784b61eb4d8e 100644
+--- a/drivers/nvmem/core.c
++++ b/drivers/nvmem/core.c
+@@ -1491,6 +1491,11 @@ struct nvmem_cell *of_nvmem_cell_get(struct device_n=
+ode *np, const char *id)
+ 	return cell;
+ }
+ EXPORT_SYMBOL_GPL(of_nvmem_cell_get);
++
++#else /* IS_ENABLED(CONFIG_OF) */
++
++static inline void nvmem_layout_module_put(struct nvmem_device *nvmem) { }
++
+ #endif
+=20
+ /**
+--=20
+2.40.1
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/n7biqZpoMx/uBlMl96h8naj
+--Sig_/nYikG/bmL+ZRJ2lLCNwpPJo
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmV2m/IACgkQAVBC80lX
-0Gy7Ggf7BIUS+NkdpG1CaDhdDdn9Sf7DQqJjlQVNB2BakU8u72if/VFG4Cke1I3t
-e1iCTtOzUp9RYmB3RGUSbgFDC9RS1SV+TjERYpYG8gXOybY3XOef4WiAeMDD+ndf
-L8se+m2iLmoCbzaGxprfKUr6LwLcxj3NDnOXqPYqYJOAb5KGWEA/XD0WvJEle7pv
-TwDNenp5C+5p7SPUFxlMIreU6uNQgxfIj8WwcqW+RdNXTsvFx4JAXsW+QQtqA8GJ
-eOkr3bkFAdw+jw5QoC/ThZeK2bdZXErWOfmIzB9rBNWZpHdptda9l4p3HF4b8b+q
-6iIN0bKZVkInJW8Dy+0QSHP+HJgwxQ==
-=JHmK
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmV2otwACgkQAVBC80lX
+0GxrhQgAmGlntDh8OyosiXZ5XBpZQRAHQPVjinRKuBEa0QMBqP/ozsVEmRp3VM11
+THPuzzrsaFfFaSyXrHwwI44XDPTbdTZ1X833tsWM5GOtV33pgLq7LLJ5m60Xb8DI
+qNbKR30addnNolHnI9eipaeZSjlKxXwWC7Wg4g2xyMBljtfKERK349Qj85mCnicf
+iLyaM4woBrLBYHBo4ZsWb/h5ykE1DRI40KPuJM9JVNnOiC0vFYRyl7xBsUtfX88I
+WkZ77SQ6iOM8zcV/gWwGZj2FaCBqZD0BMmhunu1E0W1bUsn/2Z2YXJH8bZ1NfLqy
+H/Cd06ddyZK4KcaPcgCl0gZs2xeIoA==
+=4mza
 -----END PGP SIGNATURE-----
 
---Sig_/n7biqZpoMx/uBlMl96h8naj--
+--Sig_/nYikG/bmL+ZRJ2lLCNwpPJo--
 

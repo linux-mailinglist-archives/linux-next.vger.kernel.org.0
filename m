@@ -1,101 +1,204 @@
-Return-Path: <linux-next+bounces-311-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-312-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 409E780C05B
-	for <lists+linux-next@lfdr.de>; Mon, 11 Dec 2023 05:25:09 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9601080C063
+	for <lists+linux-next@lfdr.de>; Mon, 11 Dec 2023 05:39:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E14CD1F20D47
-	for <lists+linux-next@lfdr.de>; Mon, 11 Dec 2023 04:25:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CEF4F1C20844
+	for <lists+linux-next@lfdr.de>; Mon, 11 Dec 2023 04:39:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1106F171DC;
-	Mon, 11 Dec 2023 04:25:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAD2E1775F;
+	Mon, 11 Dec 2023 04:39:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="CUftbjG5"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="XUermV09"
 X-Original-To: linux-next@vger.kernel.org
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 920C9102;
-	Sun, 10 Dec 2023 20:24:59 -0800 (PST)
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91AC6F1;
+	Sun, 10 Dec 2023 20:39:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1702268698;
-	bh=NkK4CcQOtCz9gszouJKdQt7Kfuc3mtS0aQVX7Rv73y8=;
-	h=Date:From:To:Cc:Subject:From;
-	b=CUftbjG5wwLra6KP/KGhCofJDEtmjGrW0cswOWKbDVcJiyxQuVetZ6QVnrUHZDfC8
-	 5A4TDyzylKr3Q4p4r5+twCKxwV26isPZQJabcsB2nvE/V0EiyzE7ThfaOtyIPtawEP
-	 bj+tPHNo4df/02S3GNbnNGTfASzW5HSl1WjF++AYDGooCTs996hMfJEoflcfr8tuQ3
-	 qsrTFFFYC37T+gbCudqdYZhOmhWRMUqT95bsaHEuL/zBLrGisMPzNWQzKDsyz1Tgpy
-	 gheQ/QJRSA5IKab4FMqw7BYVOwBCOPiUJWFabv2RSA3Di0Qpm+RITJanfsD27+VQlO
-	 xzKm4aInDdDgA==
+	s=201702; t=1702269546;
+	bh=ARe2WiYTYarVV8zakJUOA4IyWPnjsMkkih8W6w6qPxo=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=XUermV09HIq7zbeM530Y+p8KUiSnOtcRdvKK7lOxGEEk7UpomONeLy+AtLa/bUpVV
+	 OJmJuEq1EN47PspkZx1b+mkQfihbN+OFdyw29whZJc5UX/StBqGk/6tqCRpqnK+eVK
+	 UXQJ7M2V+aP9ilXTlIXMlhiH9NszefBi1HnNxJSpdnA0s7blKEiqgt1EVpFF0l979I
+	 WizfSUjXHNw68yMP26VyGdOukdQMRnzlaRnVdfe6OLHbSJpcfiLCll6u0DkGfXOm73
+	 DMlpDLXuiS8ZWprVRkrVHUG4Y0wnteDNAJFx6rvBQ4xx/273BRlnh4UX7hRZURI4EF
+	 jssxUYamAOdtQ==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4SpTDT5xZZz4xGM;
-	Mon, 11 Dec 2023 15:24:57 +1100 (AEDT)
-Date: Mon, 11 Dec 2023 15:24:56 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4SpTXp0B06z4x2W;
+	Mon, 11 Dec 2023 15:39:05 +1100 (AEDT)
+Date: Mon, 11 Dec 2023 15:39:05 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Greg KH <greg@kroah.com>, "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To: Ard Biesheuvel <ardb@kernel.org>
 Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patches in the driver-core tree
-Message-ID: <20231211152456.7526822b@canb.auug.org.au>
+ Mailing List <linux-next@vger.kernel.org>, Masahisa Kojima
+ <masahisa.kojima@linaro.org>
+Subject: Re: linux-next: manual merge of the efi tree with the efi-fixes
+ tree
+Message-ID: <20231211153905.6cbf7dcb@canb.auug.org.au>
+In-Reply-To: <20231211151303.1286eda5@canb.auug.org.au>
+References: <20231211151303.1286eda5@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/bgHJd+WFM5_7hbJRAgrSwjw";
+Content-Type: multipart/signed; boundary="Sig_/CfHjMo=cqgXajriNPpRcQwj";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/bgHJd+WFM5_7hbJRAgrSwjw
+--Sig_/CfHjMo=cqgXajriNPpRcQwj
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-The following commits are also in the pm tree tree as different
-commits (but the same patches):
+On Mon, 11 Dec 2023 15:13:03 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>=20
+> Today's linux-next merge of the efi tree got a conflict in:
+>=20
+>   fs/efivarfs/super.c
+>=20
+> between commits:
+>=20
+>   0b6d38bdd6f8 ("efivarfs: Free s_fs_info on unmount")
+>   ab5c4251a009 ("efivarfs: Move efivarfs list into superblock s_fs_info")
+>=20
+> from the efi-fixes tree and commit:
+>=20
+>   b501d5b36f58 ("efivarfs: automatically update super block flag")
+>=20
+> from the efi tree.
+>=20
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
 
-  3babbf614ae6 ("device property: fwnode_property_get_reference_args allows=
- NULL args now")
-  1eaea4b3604e ("software node: Let args be NULL in software_node_get_refer=
-ence_args")
-  bef52aa0f3de ("acpi: property: Let args be NULL in __acpi_node_get_proper=
-ty_reference")
-
-These are commits
-
-  a66cf024b377 ("device property: fwnode_property_get_reference_args() allo=
-ws NULL args now")
-  b912c6530332 ("software node: Let args be NULL in software_node_get_refer=
-ence_args")
-  cab48cbdfd27 ("ACPI: property: Let args be NULL in __acpi_node_get_proper=
-ty_reference()")
-
-in the pm tree.
-
+Actually the below is needed. ("info" is not a great name for, even a
+static, global variable.  And maybe what I have called "einfo" could be
+"sfi" like in efivarfs_kill_sb() ...)
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/bgHJd+WFM5_7hbJRAgrSwjw
+diff --cc fs/efivarfs/super.c
+index d7d9a3e189a0,42eff5ac7ab4..d209475a8a49
+--- a/fs/efivarfs/super.c
++++ b/fs/efivarfs/super.c
+@@@ -18,6 -20,32 +20,30 @@@
+ =20
+  #include "internal.h"
+ =20
+ -LIST_HEAD(efivarfs_list);
+ -
++ struct efivarfs_info {
++ 	struct super_block *sb;
++ 	struct notifier_block nb;
++ };
++=20
++ static struct efivarfs_info info;
++=20
++ static int efivarfs_ops_notifier(struct notifier_block *nb, unsigned long=
+ event,
++ 				 void *data)
++ {
++ 	switch (event) {
++ 	case EFIVAR_OPS_RDONLY:
++ 		info.sb->s_flags |=3D SB_RDONLY;
++ 		break;
++ 	case EFIVAR_OPS_RDWR:
++ 		info.sb->s_flags &=3D ~SB_RDONLY;
++ 		break;
++ 	default:
++ 		return NOTIFY_DONE;
++ 	}
++=20
++ 	return NOTIFY_OK;
++ }
++=20
+  static void efivarfs_evict_inode(struct inode *inode)
+  {
+  	clear_inode(inode);
+@@@ -290,7 -317,6 +316,7 @@@ static int efivarfs_parse_param(struct=20
+ =20
+  static int efivarfs_fill_super(struct super_block *sb, struct fs_context =
+*fc)
+  {
+- 	struct efivarfs_fs_info *info =3D sb->s_fs_info;
+++	struct efivarfs_fs_info *einfo =3D sb->s_fs_info;
+  	struct inode *inode =3D NULL;
+  	struct dentry *root;
+  	int err;
+@@@ -316,10 -345,17 +342,16 @@@
+  	if (!root)
+  		return -ENOMEM;
+ =20
++ 	info.sb =3D sb;
++ 	info.nb.notifier_call =3D efivarfs_ops_notifier;
++ 	err =3D blocking_notifier_chain_register(&efivar_ops_nh, &info.nb);
++ 	if (err)
++ 		return err;
++=20
+ -	INIT_LIST_HEAD(&efivarfs_list);
+ -
+ -	err =3D efivar_init(efivarfs_callback, (void *)sb, true, &efivarfs_list);
+ +	err =3D efivar_init(efivarfs_callback, (void *)sb, true,
+- 			  &info->efivarfs_list);
+++			  &einfo->efivarfs_list);
+  	if (err)
+- 		efivar_entry_iter(efivarfs_destroy, &info->efivarfs_list, NULL);
+ -		efivar_entry_iter(efivarfs_destroy, &efivarfs_list, NULL);
+++		efivar_entry_iter(efivarfs_destroy, &einfo->efivarfs_list, NULL);
+ =20
+  	return err;
+  }
+@@@ -357,13 -399,15 +400,15 @@@ static int efivarfs_init_fs_context(str
+ =20
+  static void efivarfs_kill_sb(struct super_block *sb)
+  {
+ +	struct efivarfs_fs_info *sfi =3D sb->s_fs_info;
+ +
++ 	blocking_notifier_chain_unregister(&efivar_ops_nh, &info.nb);
++ 	info.sb =3D NULL;
+  	kill_litter_super(sb);
+ =20
+ -	if (!efivar_is_available())
+ -		return;
+ -
+  	/* Remove all entries and destroy */
+ -	efivar_entry_iter(efivarfs_destroy, &efivarfs_list, NULL);
+ +	efivar_entry_iter(efivarfs_destroy, &sfi->efivarfs_list, NULL);
+ +	kfree(sfi);
+  }
+ =20
+  static struct file_system_type efivarfs_type =3D {
+
+--Sig_/CfHjMo=cqgXajriNPpRcQwj
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmV2jxgACgkQAVBC80lX
-0GzXJgf/YeW7C8pLps9MERYbK/UpV0OjUpEBiw81XE1tg7Gormf/fCw57mQHqKBl
-FSr8G5T+JpFVdMwm4k4yCL1HkT1aRQ3wXJm56WRIQMG1wBrRpmsAuoUltEQvB8fr
-ZmAyBhElsuB9VW5EJPNYINWPERXTwAgy4RQm9E1YfonRYZlwFvmKZVBgkFqY6ILt
-40cONShzCDYmBC87HsR5cNEQZN3m5G0wdeblD4Q8yv8ll821GPEkY/n9dOAfBukD
-NhKtE7mxOowKe978NUgP4QhxGbqF5rTZeYwIgmkIyMd9pwn6kJuMESNp6WftKiZ5
-Rv8qD9bMdSR789Mub0uTA+IRZF11zg==
-=AhGB
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmV2kmkACgkQAVBC80lX
+0Gx/oQf+Np0FMi0jhZMQ+WbOU7bibnjtdOYhKGnoVRWXIbCM93RLvcVecuYmnbcI
+myygrEeOFjwYVUbtyndnfP60GiJeEkuV0lQNty7CWCaQD7oH2mSyh2WUue76t7KR
+zgTWKqkkRfnb4bt6CBiqOucftBUkrqwEsaL4B3jnSVRNi55hp/BsHImpgY6RQ8/g
+3JB8fo7qVu+ySBpFkkQimJuGracJDaj2JCk9Wbf/p7M6Lv/6Xxfy3H/ZuBqO9o2s
+t0I9JOY6nmr5fylYXauRANynTFWrXZHfVEYyjEYWR+e7epa3mp5gi1IrJp8c6i6U
+9s249bvaFE7x2096qXsA1UNI5M8vlw==
+=5vYV
 -----END PGP SIGNATURE-----
 
---Sig_/bgHJd+WFM5_7hbJRAgrSwjw--
+--Sig_/CfHjMo=cqgXajriNPpRcQwj--
 

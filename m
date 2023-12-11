@@ -1,172 +1,158 @@
-Return-Path: <linux-next+bounces-304-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-305-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F58980BE8F
-	for <lists+linux-next@lfdr.de>; Mon, 11 Dec 2023 01:50:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8E94180BEA1
+	for <lists+linux-next@lfdr.de>; Mon, 11 Dec 2023 02:00:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B8B5A280A98
-	for <lists+linux-next@lfdr.de>; Mon, 11 Dec 2023 00:50:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 22EE5280AAD
+	for <lists+linux-next@lfdr.de>; Mon, 11 Dec 2023 01:00:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8100415A2;
-	Mon, 11 Dec 2023 00:50:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19F376135;
+	Mon, 11 Dec 2023 01:00:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="UcZj9WIe"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="Rgtw5RzQ"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93DAFEB
-	for <linux-next@vger.kernel.org>; Sun, 10 Dec 2023 16:50:25 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id 98e67ed59e1d1-2868cf6cb82so2889347a91.3
-        for <linux-next@vger.kernel.org>; Sun, 10 Dec 2023 16:50:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1702255824; x=1702860624; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=nc5DdYp9UsnPsN27qTjFmyB40bs89VF+sRM9kEkoRbU=;
-        b=UcZj9WIeMQqg5mJ2pVd4gsCoK5TJV1rC1B/7D0gVgTKU3W1bSEKLLeZrvbsk7MN59d
-         DNVVzfp0xLdhqDuWgSfDmLWRkXyp/Czh8NmS8p0cL7JQZmqXWhUjOAEauu9oFdinJ48L
-         uMKZbbK1Cwkslk2Fj0hwuOGQNqhW6exaAfXlgwHmrtZktcFyttmRZL+weTmB124caMIr
-         OEbhrnKJXZlLfY/Us3KZxHRmc/4uXg99+27K6NQXz/KPkfGI1CiSpmHk0xWqcjCoUsoo
-         NEPr+5j4ngB3Ozc1ay92lqnmMEVRN82dqSNO0Mk5AET2TqStoAmeHpJOINXvOZEMZp1I
-         dtYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702255824; x=1702860624;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nc5DdYp9UsnPsN27qTjFmyB40bs89VF+sRM9kEkoRbU=;
-        b=ocuCfIq+VgUEf6eXfWtlGauqJ2q6L5BxwZvsGvtw2VT123i2Gpr49gWUDcNLr3aRbt
-         e4S/e4oWU3Evi1QBfkPk+q+E+a2wQLEDgRtLLPtYih/tBYEpuaXT2r3frRhIQoz00vMN
-         MlALHxX6Q9hlALnVvngJAo/2pudbKqhVNysVeXZcv5slt6MIGYB3fnQJqPf2IR7H5N7Z
-         JRfJIsYVSFi/co//a4nkrGvHGoiHK5yBCfj9BoRGYiro0XlHUVb6oKDETMCNXZ8mZ8uq
-         h90Yx2SH5QF9e1TdzTwjw9rVW5s7B8LCufRbYyfNxWwJ9vgiJKvtxdzQpbkv64v7VXSu
-         X2bg==
-X-Gm-Message-State: AOJu0Yw2feoK/+59JJM+aEgRGD6cCSQg/E1ADUcxd9j2kka8bSrrZmmp
-	vhR3udMBFS75+cHsT1Q5Ripq3OzWWE3j/a7WFoAuTg==
-X-Google-Smtp-Source: AGHT+IFPhw/uLpWWyvaMwzSCta7kQIBuQWWaEe4RoiuclSNWbRxjUCeStQTZFtGB3DQ9p9j6dfpB3Q==
-X-Received: by 2002:a17:902:db06:b0:1d0:8383:7433 with SMTP id m6-20020a170902db0600b001d083837433mr1360547plx.36.1702255824602;
-        Sun, 10 Dec 2023 16:50:24 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id p20-20020a170902ead400b001d0b5a97cabsm5310248pld.124.2023.12.10.16.50.23
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 10 Dec 2023 16:50:24 -0800 (PST)
-Message-ID: <65765cd0.170a0220.2e2a3.ec7b@mx.google.com>
-Date: Sun, 10 Dec 2023 16:50:24 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53BE4EB;
+	Sun, 10 Dec 2023 16:59:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1702256391;
+	bh=shDzPGsI1oIYMZnAXANSyf2zj/GNqcqt9dxPVu+6vRk=;
+	h=Date:From:To:Cc:Subject:From;
+	b=Rgtw5RzQ0tWCPeWHxsPUDmYp32Ud4cAKry/Vtf2OGs6nZXlAKK2c2wJP33uPXy6fX
+	 J7rHzagQrQeMqQBSJEWHCvsLWg0Z6O0DHoxNXeyWUYCM5elY9YQBkr2o8WhEvvYJYT
+	 gp0XJEtu+92xdC8LMlihJKb4nszcMu7YRzyIuZEQ5ccICv09HcTgwRIz8x8DN/unCQ
+	 qv4aavLCjwycCn9ClVEjNkO38RNzQ9rsLjH2m/H69Nh6o56n6Qbc6O6ebnbO/bNeoA
+	 voovJTFsp4gjYsC4eeH4k8ifqoARojmorsYteauI9Y4oyTWUgIoXs6BBoyfUH0SyNf
+	 XuwtXh+87o6pQ==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4SpNgp6ymYz4wdD;
+	Mon, 11 Dec 2023 11:59:50 +1100 (AEDT)
+Date: Mon, 11 Dec 2023 11:59:50 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Rob Clark <robdclark@gmail.com>, Sean Paul <seanpaul@chromium.org>, Dave
+ Airlie <airlied@redhat.com>
+Cc: Alex Deucher <alexander.deucher@amd.com>, Arunpravin Paneer Selvam
+ <Arunpravin.PaneerSelvam@amd.com>, DRI <dri-devel@lists.freedesktop.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the drm-msm tree
+Message-ID: <20231211115950.3918d572@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/D.DO5vP1SYbCYe/YR4_jk2s";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+
+--Sig_/D.DO5vP1SYbCYe/YR4_jk2s
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Tree: next
-X-Kernelci-Report-Type: build
-X-Kernelci-Kernel: v6.7-rc4-604-g5336570f87c90
-Subject: next/pending-fixes build: 8 builds: 0 failed, 8 passed,
- 4 warnings (v6.7-rc4-604-g5336570f87c90)
-To: linux-next@vger.kernel.org
-From: "kernelci.org bot" <bot@kernelci.org>
 
-next/pending-fixes build: 8 builds: 0 failed, 8 passed, 4 warnings (v6.7-rc=
-4-604-g5336570f87c90)
+Hi all,
 
-Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
-rnel/v6.7-rc4-604-g5336570f87c90/
+After merging the drm-msm tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-Tree: next
-Branch: pending-fixes
-Git Describe: v6.7-rc4-604-g5336570f87c90
-Git Commit: 5336570f87c901f966fbe40006777f1c8e94626e
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Built: 8 unique architectures
+drivers/gpu/drm/amd/amdgpu/amdgpu_seq64.c: In function 'amdgpu_seq64_map':
+drivers/gpu/drm/amd/amdgpu/amdgpu_seq64.c:64:9: error: too few arguments to=
+ function 'drm_exec_init'
+   64 |         drm_exec_init(&exec, DRM_EXEC_INTERRUPTIBLE_WAIT);
+      |         ^~~~~~~~~~~~~
+In file included from drivers/gpu/drm/amd/amdgpu/amdgpu_seq64.c:28:
+include/drm/drm_exec.h:138:6: note: declared here
+  138 | void drm_exec_init(struct drm_exec *exec, uint32_t flags, unsigned =
+nr);
+      |      ^~~~~~~~~~~~~
+drivers/gpu/drm/amd/amdgpu/amdgpu_seq64.c: In function 'amdgpu_seq64_unmap':
+drivers/gpu/drm/amd/amdgpu/amdgpu_seq64.c:125:9: error: too few arguments t=
+o function 'drm_exec_init'
+  125 |         drm_exec_init(&exec, DRM_EXEC_INTERRUPTIBLE_WAIT);
+      |         ^~~~~~~~~~~~~
+include/drm/drm_exec.h:138:6: note: declared here
+  138 | void drm_exec_init(struct drm_exec *exec, uint32_t flags, unsigned =
+nr);
+      |      ^~~~~~~~~~~~~
 
-Warnings Detected:
+Caused by commit
 
-arc:
+  05d249352f1a ("drm/exec: Pass in initial # of objects")
 
-arm64:
+interating with commit
 
-arm:
+  c8031019dc95 ("drm/amdgpu: Implement a new 64bit sequence memory driver")
 
-i386:
+from the drm tree.
 
-mips:
+I have applied this merge resolution patch for today;
 
-riscv:
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Mon, 11 Dec 2023 11:53:17 +1100
+Subject: [PATCH] fix up for "drm/exec: Pass in initial # of objects"
 
-sparc:
-    sparc64_defconfig (gcc-10): 4 warnings
+interacting with
+"drm/amdgpu: Implement a new 64bit sequence memory driver"
 
-x86_64:
-
-
-Warnings summary:
-
-    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
-tion failed, symbol will not be versioned.
-    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
--Wcpp]
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
 ---
-For more info write to <info@kernelci.org>
+ drivers/gpu/drm/amd/amdgpu/amdgpu_seq64.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_seq64.c b/drivers/gpu/drm/am=
+d/amdgpu/amdgpu_seq64.c
+index f3de02193138..7a6a67275404 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_seq64.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_seq64.c
+@@ -61,7 +61,7 @@ int amdgpu_seq64_map(struct amdgpu_device *adev, struct a=
+mdgpu_vm *vm,
+ 	if (!bo)
+ 		return -EINVAL;
+=20
+-	drm_exec_init(&exec, DRM_EXEC_INTERRUPTIBLE_WAIT);
++	drm_exec_init(&exec, DRM_EXEC_INTERRUPTIBLE_WAIT, 0);
+ 	drm_exec_until_all_locked(&exec) {
+ 		r =3D amdgpu_vm_lock_pd(vm, &exec, 0);
+ 		if (likely(!r))
+@@ -122,7 +122,7 @@ void amdgpu_seq64_unmap(struct amdgpu_device *adev, str=
+uct amdgpu_fpriv *fpriv)
+=20
+ 	vm =3D &fpriv->vm;
+=20
+-	drm_exec_init(&exec, DRM_EXEC_INTERRUPTIBLE_WAIT);
++	drm_exec_init(&exec, DRM_EXEC_INTERRUPTIBLE_WAIT, 0);
+ 	drm_exec_until_all_locked(&exec) {
+ 		r =3D amdgpu_vm_lock_pd(vm, &exec, 0);
+ 		if (likely(!r))
+--=20
+2.40.1
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/D.DO5vP1SYbCYe/YR4_jk2s
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmV2XwYACgkQAVBC80lX
+0Gz8ywgAny8DYR8SFjTyjQEElkjqApzSTwQQpBg8OVMI5PUnPpdrdG2uzf9Rk+xF
+KppdRoLeF3pMTFzzsQ43nvcZynzQ+92bu4kV2tzP/cIOqLevDAdC+bGqORa9d7T8
+No5/VVoPXKrU6MvlSwtYAlvPQpCaneAOCW+PwiEv3krVECgNzJZvEiDnykOHXCoD
+DlEkn67Q28JQyvogx7pvIlGwLKqqDgUoBXd/r1kcgD5m96vpgiNtDbHCvL+w8fhO
+/i/le0KZ8LNDfNr+glcNXKSyiZ1jYoOzSNNyo98dLU5dm4Ors6HODqsdrM0d80D9
+kiVJe0/AG5fJvNcPRCZkV/8gTkSCGg==
+=w7iH
+-----END PGP SIGNATURE-----
+
+--Sig_/D.DO5vP1SYbCYe/YR4_jk2s--
 

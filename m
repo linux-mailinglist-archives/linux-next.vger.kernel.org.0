@@ -1,94 +1,201 @@
-Return-Path: <linux-next+bounces-362-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-363-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8AF4180EF87
-	for <lists+linux-next@lfdr.de>; Tue, 12 Dec 2023 16:01:48 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A48D80EF96
+	for <lists+linux-next@lfdr.de>; Tue, 12 Dec 2023 16:05:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 353CB1F2150F
-	for <lists+linux-next@lfdr.de>; Tue, 12 Dec 2023 15:01:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B67E01C20A15
+	for <lists+linux-next@lfdr.de>; Tue, 12 Dec 2023 15:05:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B053745EB;
-	Tue, 12 Dec 2023 15:01:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97A63745E0;
+	Tue, 12 Dec 2023 15:05:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="1VxMqQ0q"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LAvliRiC"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59D74DB
-	for <linux-next@vger.kernel.org>; Tue, 12 Dec 2023 07:01:40 -0800 (PST)
-Received: by mail-io1-xd33.google.com with SMTP id ca18e2360f4ac-7b74bc536dbso23720139f.0
-        for <linux-next@vger.kernel.org>; Tue, 12 Dec 2023 07:01:40 -0800 (PST)
+Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49234AA;
+	Tue, 12 Dec 2023 07:05:26 -0800 (PST)
+Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-1feeea75fbfso3843514fac.3;
+        Tue, 12 Dec 2023 07:05:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1702393299; x=1702998099; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ang1nCl8Jm3Jnw0Trx7aK3jW0jOvkSmS0o2JfMszURQ=;
-        b=1VxMqQ0q4oKfsDaWkCDW/gHHGvaVbuLmRGyxPTy+GK8qECb39MOJL72AhfPDowL63r
-         hf3xZqRDyI63uuoA/GQUjHjfD8Y3UfHG6/MMWow52LiGpIIFtd6k6541uUzBDA0iCFzC
-         PyJNxHr61TfeRhr049EiG2e/5GARumbCkhjRiOvgylt36wy7NwRUfr56Eqlv4Qce11Wm
-         Y6ojGJgHSFKmzP33xrc3rbMklTpd2i+yBMB2jmQLwjoLyvauyGUhO8RjhaamaIaSNHxK
-         4nu9KiklWnTSCg5k/bObRmRNaAfrTaJ6IVTUaUukQRvUkAzAPNyB/0r6x1137lYDWWSq
-         kUuA==
+        d=gmail.com; s=20230601; t=1702393525; x=1702998325; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5ZlcAkwpOLN8dI+Xyv/fIf9Doln7vlIRnH/1QEelY2c=;
+        b=LAvliRiCrUaWjACDI2I6tFioP5VMh2RHqomdpsaX0HM8HZgbKmbe2cOwr3zSlpifc3
+         t14NLEMXvUfEy/oF4U+Iiw+lxbiM4yYx9jXOuuDk/r175SFzxXOXxZ1wMCbBg0hW6E41
+         q6pPziz8JCCRKbJ0Pjr/cR/XFpUzb6OhxAgGeeZOKLwYpYEd/b+m0svgDBOGVrpFwrGE
+         GWwIR3DHyk8D5E668L9OzpsnddcHj440VUHlQpOgMVxxwlPX79k6ws6xZa6DWwmxhBjL
+         XD0n9EvAHQaD9f9nZgTIKO47H7k6v76SyOp9LzA3nm305aRVo76J5M32xXyPX3lrfgpO
+         Su5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702393299; x=1702998099;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ang1nCl8Jm3Jnw0Trx7aK3jW0jOvkSmS0o2JfMszURQ=;
-        b=clktaz04WeJmxhAuruUZk8wOw6o60asGBWbfjNTPP2Iq6vv7FD65BeKIlVpZSLL/lD
-         Ydfl9PC/nIkB58ZzfMqTH//Co73y9MMIuEoc9okWVnUCocvI9WtSj6VSGDJcNPKsBMEW
-         osxY2+EgrQA9dqIBDXYYbyS6eIMSQyvpdTOZ8fi+6jZI48YF7oDH9Mlh5p7WkLZm/EdG
-         t6x+/m1k1WHgcAKQFRWCWQwx0YgFaiqcM4V95K5Ut8+ztYmFGXSkoMW8ac5WGtXy9tfw
-         ZOLnhiBNfK2+Q54kcfc+wztZwmx4p9sT3sdEMYrBTL87gx9u/PiMfhLGZlm9UYGbkWrn
-         iQlg==
-X-Gm-Message-State: AOJu0YzAnPzclwjSsZbvlh8XjC0VZkTXljuAPz7eyEOyAtA8E5oJHPSL
-	UQmskApQzl0wFQGOSQPmgS6KBg==
-X-Google-Smtp-Source: AGHT+IH7qpx1lIvuIeLGtBhMoJA4VKjS5ZY5BsCzE5SvxLi+0WSdlLyvXuj64P1RhEVFHgnEwds6FQ==
-X-Received: by 2002:a92:cd82:0:b0:35d:7a37:5236 with SMTP id r2-20020a92cd82000000b0035d7a375236mr11505131ilb.2.1702393299512;
-        Tue, 12 Dec 2023 07:01:39 -0800 (PST)
-Received: from [192.168.1.116] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id h17-20020a056e021d9100b0035d3be59977sm2942369ila.85.2023.12.12.07.01.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Dec 2023 07:01:39 -0800 (PST)
-Message-ID: <b203a609-1f5e-4d1f-861b-c252ea164c99@kernel.dk>
-Date: Tue, 12 Dec 2023 08:01:38 -0700
+        d=1e100.net; s=20230601; t=1702393525; x=1702998325;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5ZlcAkwpOLN8dI+Xyv/fIf9Doln7vlIRnH/1QEelY2c=;
+        b=Gpv8Q6Z/txPijiId8fFLPw+iBIY+F/AC2YWGPHEs2OjtFAxgtsHrdW66e3x0JMqFDR
+         TRpF0GfkZgY8m1PaMp/P8SEWxeUQz/ystUzo0Ajan/Ec0nfZuXZm3WffOmI4otYfM136
+         4U3hxkTVcq+aNZWuhO3I1cGPaP3L/9dnu5OVw0InSjyiYec6KsijiD28U+4LMYQs7nvv
+         qfC9it2iRfCw3gGiyp+GwId8afvY1vjBBPZ/Z0hpzrz/QjDKSwdJBZRsiLAhY4yNxXDa
+         SHTo3xcDFSdaUrdL69bwYDbbn3KDOktPPr/5irbN/l0Ou4V6eIkI8t5m2DFNZmokPzn9
+         nu0Q==
+X-Gm-Message-State: AOJu0YxD8pKLM7mnwqUgFn3exABkAyrEnnZDdxxBx27VpO4uq4JJ57dW
+	OndsafID4MLnyRnbZwJH/6IhSVIXLF7zwrHExpI=
+X-Google-Smtp-Source: AGHT+IEvVnV0yK8+EB7ShGHex+/thdL3le4AIysKjBzLXZiLoBhD7nDJseZJrG+ivC8oDEwoUazhqbq1SFJsrdgOO9I=
+X-Received: by 2002:a05:6870:a54d:b0:1fa:2d2c:9ca4 with SMTP id
+ p13-20020a056870a54d00b001fa2d2c9ca4mr5797061oal.49.1702393525463; Tue, 12
+ Dec 2023 07:05:25 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: duplicate patches in the block tree
-Content-Language: en-US
-To: Christian Brauner <brauner@kernel.org>,
- Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20231212130213.631140dd@canb.auug.org.au>
- <20231212-innung-zuber-2f10bcffac51@brauner>
-From: Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20231212-innung-zuber-2f10bcffac51@brauner>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20231212110415.6f849fb4@canb.auug.org.au> <20231212140134.13ffafa8@canb.auug.org.au>
+ <20231212090159.hshy6elwhgkkhuzb@mail.igalia.com>
+In-Reply-To: <20231212090159.hshy6elwhgkkhuzb@mail.igalia.com>
+From: Alex Deucher <alexdeucher@gmail.com>
+Date: Tue, 12 Dec 2023 10:05:14 -0500
+Message-ID: <CADnq5_N3LH_tb8hOeD32Wd_T3ZB0CRpwbz=CULr=UJoF65-wDg@mail.gmail.com>
+Subject: Re: linux-next: build warning after merge of the amdgpu tree
+To: Melissa Wen <mwen@igalia.com>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>, Alex Deucher <alexander.deucher@amd.com>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 12/12/23 6:38 AM, Christian Brauner wrote:
-> On Tue, Dec 12, 2023 at 01:02:13PM +1100, Stephen Rothwell wrote:
->> Hi all,
->>
->> The following commits are also in the vfs-brauner tree as different
->> commits (but the same patches):
-> 
-> Thanks, Stephen. I gave Jens a stable vfs.file branch that he can pull
-> into his so this shouldn't become an issue again.
+On Tue, Dec 12, 2023 at 4:02=E2=80=AFAM Melissa Wen <mwen@igalia.com> wrote=
+:
+>
+> On 12/12, Stephen Rothwell wrote:
+> > Hi all,
+> >
+> > On Tue, 12 Dec 2023 11:04:15 +1100 Stephen Rothwell <sfr@canb.auug.org.=
+au> wrote:
+> > >
+> > > After merging the amdgpu tree, today's linux-next build (arm
+> > > multi_v7_defconfig) produced this warning:
+> > >
+> > > drivers/gpu/drm/drm_atomic_uapi.c:366:1: warning: 'drm_atomic_replace=
+_property_blob_from_id' defined but not used [-Wunused-function]
+> > >   366 | drm_atomic_replace_property_blob_from_id(struct drm_device *d=
+ev,
+> > >       | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > >
+> > > Introduced by commit
+> > >
+> > >   1d2b049e4582 ("drm/drm_property: make replace_property_blob_from_id=
+ a DRM helper")
+> >
+> > This became a build failure in the i386 defconfig build, so I applied
+> > the following patch for today.
+>
+> Yes, I also noticed it yesterday when building amd-staging-drm-next.
+>
+> Something went wrong when they applied this patch:
+> https://lore.kernel.org/amd-gfx/20231116195812.906115-3-mwen@igalia.com/
+> and your patch below is exactly the part of this patch ^ that is
+> missing.
 
-Should be clean now, rebased with the stable branch pulled in first.
+I'll ask the display guys what happened there, but in the meantime,
+I'll fix that up.
 
--- 
-Jens Axboe
+>
+> In addition, only the first four patches of the series were applied.
 
+The rest were still going through CI when I pushed out my updates.
 
+Alex
+
+>
+> Thanks,
+>
+> Melissa
+>
+> >
+> > From: Stephen Rothwell <sfr@canb.auug.org.au>
+> > Date: Tue, 12 Dec 2023 13:53:55 +1100
+> > Subject: [PATCH] drm: remove unused function drm_atomic_replace_propert=
+y_blob_from_id()
+> >
+> > Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> > ---
+> >  drivers/gpu/drm/drm_atomic_uapi.c | 42 -------------------------------
+> >  1 file changed, 42 deletions(-)
+> >
+> > diff --git a/drivers/gpu/drm/drm_atomic_uapi.c b/drivers/gpu/drm/drm_at=
+omic_uapi.c
+> > index 70ddbb93e466..29d4940188d4 100644
+> > --- a/drivers/gpu/drm/drm_atomic_uapi.c
+> > +++ b/drivers/gpu/drm/drm_atomic_uapi.c
+> > @@ -362,48 +362,6 @@ static s32 __user *get_out_fence_for_connector(str=
+uct drm_atomic_state *state,
+> >       return fence_ptr;
+> >  }
+> >
+> > -static int
+> > -drm_atomic_replace_property_blob_from_id(struct drm_device *dev,
+> > -                                      struct drm_property_blob **blob,
+> > -                                      uint64_t blob_id,
+> > -                                      ssize_t expected_size,
+> > -                                      ssize_t expected_elem_size,
+> > -                                      bool *replaced)
+> > -{
+> > -     struct drm_property_blob *new_blob =3D NULL;
+> > -
+> > -     if (blob_id !=3D 0) {
+> > -             new_blob =3D drm_property_lookup_blob(dev, blob_id);
+> > -             if (new_blob =3D=3D NULL) {
+> > -                     drm_dbg_atomic(dev,
+> > -                                    "cannot find blob ID %llu\n", blob=
+_id);
+> > -                     return -EINVAL;
+> > -             }
+> > -
+> > -             if (expected_size > 0 &&
+> > -                 new_blob->length !=3D expected_size) {
+> > -                     drm_dbg_atomic(dev,
+> > -                                    "[BLOB:%d] length %zu different fr=
+om expected %zu\n",
+> > -                                    new_blob->base.id, new_blob->lengt=
+h, expected_size);
+> > -                     drm_property_blob_put(new_blob);
+> > -                     return -EINVAL;
+> > -             }
+> > -             if (expected_elem_size > 0 &&
+> > -                 new_blob->length % expected_elem_size !=3D 0) {
+> > -                     drm_dbg_atomic(dev,
+> > -                                    "[BLOB:%d] length %zu not divisibl=
+e by element size %zu\n",
+> > -                                    new_blob->base.id, new_blob->lengt=
+h, expected_elem_size);
+> > -                     drm_property_blob_put(new_blob);
+> > -                     return -EINVAL;
+> > -             }
+> > -     }
+> > -
+> > -     *replaced |=3D drm_property_replace_blob(blob, new_blob);
+> > -     drm_property_blob_put(new_blob);
+> > -
+> > -     return 0;
+> > -}
+> > -
+> >  static int drm_atomic_crtc_set_property(struct drm_crtc *crtc,
+> >               struct drm_crtc_state *state, struct drm_property *proper=
+ty,
+> >               uint64_t val)
+> > --
+> > 2.40.1
+> >
+> > --
+> > Cheers,
+> > Stephen Rothwell
+>
+>
 

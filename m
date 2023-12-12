@@ -1,94 +1,100 @@
-Return-Path: <linux-next+bounces-343-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-344-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C7F080DFCD
-	for <lists+linux-next@lfdr.de>; Tue, 12 Dec 2023 01:04:27 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 615B180DFF0
+	for <lists+linux-next@lfdr.de>; Tue, 12 Dec 2023 01:16:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 94F981C2147E
-	for <lists+linux-next@lfdr.de>; Tue, 12 Dec 2023 00:04:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 97BB31C20DAF
+	for <lists+linux-next@lfdr.de>; Tue, 12 Dec 2023 00:16:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FC4F15B7;
-	Tue, 12 Dec 2023 00:04:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 975AC18D;
+	Tue, 12 Dec 2023 00:16:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="GOT9eiSC"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="UIJIBMD/"
 X-Original-To: linux-next@vger.kernel.org
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE461D6;
-	Mon, 11 Dec 2023 16:04:18 -0800 (PST)
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 028EBA2;
+	Mon, 11 Dec 2023 16:16:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1702339457;
-	bh=UYeug0TkALRuKsXEvg5RGABft1sb5wpjMQeuFth69n8=;
+	s=201702; t=1702340187;
+	bh=x0JHCGH0FlovKXGOQVOd1NIjivVJStdXjukmoSLqOY4=;
 	h=Date:From:To:Cc:Subject:From;
-	b=GOT9eiSCgrH41VXo+nidTNDvBzNW6VEzDgCuEpoQdRXEWrhY42B+Pd4Hmvw9W6Gc9
-	 Ws6BQFV0g/MPU7LhWbi2g2QsKJ8vjxaOwSW538Ac42IpH2M5tAuK1vKarrzY2JXBZH
-	 MvKp4Gx72Z1j9GxwPmye8/lEQqGhuQF0qRIl25+UUQkCwVwqEKb67RiJAGnkCADOcO
-	 DMJxm8JmUERHklEi1u90oGeHnxgwmj+zzu2az90PZ7I/0vVEvZ9tTZGXnoRlF00qPH
-	 mTF7tJ1hyopy5ixG0WO3Dh3PvqF1aWV87Yypuh5qtHMTkEDePNRU9JxhTA2gmKBBmf
-	 ln/ugliQcUWDw==
+	b=UIJIBMD/tBHnpkNWeW03tNouIyNOpslwp38rY5dAQuAnYX3ed7KfHUtWcePKR7kFP
+	 Q+La0XOn6lWo9TC93DIUon0xAwBzlaEJPzOaSxBmDS4bdBfKMx7FAJB6zLqs+fZEN0
+	 BilsuNIzkSidfZayJz4cERqpL4pEE9NYNfYSbatiJUfJSkdFaKXkw0YD98YwxZtO9W
+	 JiB6Fb9t9BKPqOjMdVu5nzAbeDmAk8pjmOap1S4nURXhOFjIkTwKOWwWLV1qceQYPP
+	 ybUhbBU4RAOBCMPZmvMSFPA3CbaTs1vQok5h6dBoALUBgjWUxY772WXvv0LkphrEMf
+	 182/785KrpCQQ==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4SpzPF0W2Bz4xGl;
-	Tue, 12 Dec 2023 11:04:17 +1100 (AEDT)
-Date: Tue, 12 Dec 2023 11:04:15 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4SpzgG566Xz4xGl;
+	Tue, 12 Dec 2023 11:16:26 +1100 (AEDT)
+Date: Tue, 12 Dec 2023 11:16:25 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Alex Deucher <alexdeucher@gmail.com>
-Cc: Alex Deucher <alexander.deucher@amd.com>, Melissa Wen <mwen@igalia.com>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the amdgpu tree
-Message-ID: <20231212110415.6f849fb4@canb.auug.org.au>
+To: Mark Brown <broonie@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>
+Cc: Charles Keepax <ckeepax@opensource.cirrus.com>, Linux Kernel Mailing
+ List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>
+Subject: linux-next: build warning after merge of the sound-asoc tree
+Message-ID: <20231212111625.2b9cf396@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/d51_/xTNjGL=+PDFCQ_=FRm";
+Content-Type: multipart/signed; boundary="Sig_/SOjPoIefmudg5ydl7hA3mfz";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/d51_/xTNjGL=+PDFCQ_=FRm
+--Sig_/SOjPoIefmudg5ydl7hA3mfz
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the amdgpu tree, today's linux-next build (arm
-multi_v7_defconfig) produced this warning:
+After merging the sound-asoc tree, today's linux-next build (x86_64
+allmodconfig) produced this warning:
 
-drivers/gpu/drm/drm_atomic_uapi.c:366:1: warning: 'drm_atomic_replace_prope=
-rty_blob_from_id' defined but not used [-Wunused-function]
-  366 | drm_atomic_replace_property_blob_from_id(struct drm_device *dev,
-      | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+sound/soc/codecs/cs42l43.c:142:6: warning: no previous prototype for 'cs42l=
+43_hp_ilimit_clear_work' [-Wmissing-prototypes]
+  142 | void cs42l43_hp_ilimit_clear_work(struct work_struct *work)
+      |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+sound/soc/codecs/cs42l43.c:159:6: warning: no previous prototype for 'cs42l=
+43_hp_ilimit_work' [-Wmissing-prototypes]
+  159 | void cs42l43_hp_ilimit_work(struct work_struct *work)
+      |      ^~~~~~~~~~~~~~~~~~~~~~
 
 Introduced by commit
 
-  1d2b049e4582 ("drm/drm_property: make replace_property_blob_from_id a DRM=
- helper")
+  bbbc18d8c27c ("ASoC: cs42l43: Allow HP amp to cool off after current limi=
+t")
+
+Maybe they should just be static?
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/d51_/xTNjGL=+PDFCQ_=FRm
+--Sig_/SOjPoIefmudg5ydl7hA3mfz
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmV3o4AACgkQAVBC80lX
-0GxXfAf9ErV1nhD9ueslUkYTMwByvQzvkSLhEkIUg/H37C0BN66pF84JuqAZQ93Q
-6NsWX/tyA+mFC9u8k9xgvMnpb0YyFiEyRp2Tk2LGqYtNP/cdemU0TqnXwJJDq3Y+
-IZcwKuYl3SAqMFfzuQ127+CmErOteCLZUl0izsPCZ2j5k+XwruMbqLEjkBpiM5DA
-a2At2C18xGIGZUDJlPRI99jycRLa752P6DuXU0SnPbDAz+UhymIOG015B4YkzVg7
-NcSmoSL1h/3qPKUs535ZEbArlf9AMZmFZBvWGm24hGK9rkhNNumqxzsZIMECi8fX
-/x6iPdgmVwnN6aQ/eM7DgnKXN+fa4Q==
-=Vudi
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmV3ploACgkQAVBC80lX
+0Gy+ngf/S9P7nr9Ot4VSXbKX8b+sN5Dxb/ha88PlYzzSc3d6SIJdyOk6Ov/m7Iij
+ADHDxejdZNp08SLV/8Kv6WU686kUJlX4YCaHiW2Ls9TSAhUVtOfg1DSSXT78d8Oo
+QDcQPv8v4/78CPAgi8+q3L87G7Pk9ox/L419zSObUQqT10tqQc65rPWhUrNErdjX
+H/ssYXN+aSRrKjLDrAcD3LlMMG8+qqD8QSLuhwhJpnVqrNcNLBxUMo++urrZ11gt
+TxzapqtqjIwjrp8v/DV4uGTjcDzQSTc0PQALQDNEGDSJv3WqJu8ImqgHMHajeKSI
+SWolzvGb2qh6WeM3kALHTSwKvi6FcA==
+=gqXW
 -----END PGP SIGNATURE-----
 
---Sig_/d51_/xTNjGL=+PDFCQ_=FRm--
+--Sig_/SOjPoIefmudg5ydl7hA3mfz--
 

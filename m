@@ -1,201 +1,97 @@
-Return-Path: <linux-next+bounces-363-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-364-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8A48D80EF96
-	for <lists+linux-next@lfdr.de>; Tue, 12 Dec 2023 16:05:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C6B5C80F8CC
+	for <lists+linux-next@lfdr.de>; Tue, 12 Dec 2023 21:59:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B67E01C20A15
-	for <lists+linux-next@lfdr.de>; Tue, 12 Dec 2023 15:05:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 04D4D1C20BD5
+	for <lists+linux-next@lfdr.de>; Tue, 12 Dec 2023 20:59:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97A63745E0;
-	Tue, 12 Dec 2023 15:05:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DD3B65A76;
+	Tue, 12 Dec 2023 20:59:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LAvliRiC"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="JKJv1weX"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49234AA;
-	Tue, 12 Dec 2023 07:05:26 -0800 (PST)
-Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-1feeea75fbfso3843514fac.3;
-        Tue, 12 Dec 2023 07:05:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702393525; x=1702998325; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5ZlcAkwpOLN8dI+Xyv/fIf9Doln7vlIRnH/1QEelY2c=;
-        b=LAvliRiCrUaWjACDI2I6tFioP5VMh2RHqomdpsaX0HM8HZgbKmbe2cOwr3zSlpifc3
-         t14NLEMXvUfEy/oF4U+Iiw+lxbiM4yYx9jXOuuDk/r175SFzxXOXxZ1wMCbBg0hW6E41
-         q6pPziz8JCCRKbJ0Pjr/cR/XFpUzb6OhxAgGeeZOKLwYpYEd/b+m0svgDBOGVrpFwrGE
-         GWwIR3DHyk8D5E668L9OzpsnddcHj440VUHlQpOgMVxxwlPX79k6ws6xZa6DWwmxhBjL
-         XD0n9EvAHQaD9f9nZgTIKO47H7k6v76SyOp9LzA3nm305aRVo76J5M32xXyPX3lrfgpO
-         Su5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702393525; x=1702998325;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5ZlcAkwpOLN8dI+Xyv/fIf9Doln7vlIRnH/1QEelY2c=;
-        b=Gpv8Q6Z/txPijiId8fFLPw+iBIY+F/AC2YWGPHEs2OjtFAxgtsHrdW66e3x0JMqFDR
-         TRpF0GfkZgY8m1PaMp/P8SEWxeUQz/ystUzo0Ajan/Ec0nfZuXZm3WffOmI4otYfM136
-         4U3hxkTVcq+aNZWuhO3I1cGPaP3L/9dnu5OVw0InSjyiYec6KsijiD28U+4LMYQs7nvv
-         qfC9it2iRfCw3gGiyp+GwId8afvY1vjBBPZ/Z0hpzrz/QjDKSwdJBZRsiLAhY4yNxXDa
-         SHTo3xcDFSdaUrdL69bwYDbbn3KDOktPPr/5irbN/l0Ou4V6eIkI8t5m2DFNZmokPzn9
-         nu0Q==
-X-Gm-Message-State: AOJu0YxD8pKLM7mnwqUgFn3exABkAyrEnnZDdxxBx27VpO4uq4JJ57dW
-	OndsafID4MLnyRnbZwJH/6IhSVIXLF7zwrHExpI=
-X-Google-Smtp-Source: AGHT+IEvVnV0yK8+EB7ShGHex+/thdL3le4AIysKjBzLXZiLoBhD7nDJseZJrG+ivC8oDEwoUazhqbq1SFJsrdgOO9I=
-X-Received: by 2002:a05:6870:a54d:b0:1fa:2d2c:9ca4 with SMTP id
- p13-20020a056870a54d00b001fa2d2c9ca4mr5797061oal.49.1702393525463; Tue, 12
- Dec 2023 07:05:25 -0800 (PST)
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79B7A95;
+	Tue, 12 Dec 2023 12:59:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1702414762;
+	bh=Q+mUWsYRG0wHEwnZzLb20+KepKx6aqzjBSnA5aqwrwg=;
+	h=Date:From:To:Cc:Subject:From;
+	b=JKJv1weXACAHh85RlIJaAh1AZL3FkeZu65pY2JemdpGAoYF/qChTxXyybxowbCheM
+	 jko4oltcpRWxnrjRt25tSs886VB+KMr/2u94F39CLW/M1Ijw8kxHAhtzJebpW/I0py
+	 9VMDxk+CzvU3iIH2aI+WaI6EzJ9ivuQU50l+F8Piv4W8YXf9Ae85qWbP9bfn06fEWY
+	 UfFW4in7qFWgCtGeNvyI7LqapQngNcDzTrYQjYMH29vk6OTJr0AJtHOB7PIsx958nI
+	 I5TSotiYZx3c+L+3uhQWvbVKLvYi5mCVlXjffSWVqwvY0MzYppf5lmbdbj6cltxNBM
+	 0aUb1qLcksc2w==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4SqWFP4zl3z4wb1;
+	Wed, 13 Dec 2023 07:59:21 +1100 (AEDT)
+Date: Wed, 13 Dec 2023 07:59:19 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Ryan Roberts <ryan.roberts@arm.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the mm tree
+Message-ID: <20231213075919.311c962b@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231212110415.6f849fb4@canb.auug.org.au> <20231212140134.13ffafa8@canb.auug.org.au>
- <20231212090159.hshy6elwhgkkhuzb@mail.igalia.com>
-In-Reply-To: <20231212090159.hshy6elwhgkkhuzb@mail.igalia.com>
-From: Alex Deucher <alexdeucher@gmail.com>
-Date: Tue, 12 Dec 2023 10:05:14 -0500
-Message-ID: <CADnq5_N3LH_tb8hOeD32Wd_T3ZB0CRpwbz=CULr=UJoF65-wDg@mail.gmail.com>
-Subject: Re: linux-next: build warning after merge of the amdgpu tree
-To: Melissa Wen <mwen@igalia.com>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>, Alex Deucher <alexander.deucher@amd.com>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/r.gIuKxXWZHC9KkGXPtrK9O";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+
+--Sig_/r.gIuKxXWZHC9KkGXPtrK9O
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Dec 12, 2023 at 4:02=E2=80=AFAM Melissa Wen <mwen@igalia.com> wrote=
-:
->
-> On 12/12, Stephen Rothwell wrote:
-> > Hi all,
-> >
-> > On Tue, 12 Dec 2023 11:04:15 +1100 Stephen Rothwell <sfr@canb.auug.org.=
-au> wrote:
-> > >
-> > > After merging the amdgpu tree, today's linux-next build (arm
-> > > multi_v7_defconfig) produced this warning:
-> > >
-> > > drivers/gpu/drm/drm_atomic_uapi.c:366:1: warning: 'drm_atomic_replace=
-_property_blob_from_id' defined but not used [-Wunused-function]
-> > >   366 | drm_atomic_replace_property_blob_from_id(struct drm_device *d=
-ev,
-> > >       | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > >
-> > > Introduced by commit
-> > >
-> > >   1d2b049e4582 ("drm/drm_property: make replace_property_blob_from_id=
- a DRM helper")
-> >
-> > This became a build failure in the i386 defconfig build, so I applied
-> > the following patch for today.
->
-> Yes, I also noticed it yesterday when building amd-staging-drm-next.
->
-> Something went wrong when they applied this patch:
-> https://lore.kernel.org/amd-gfx/20231116195812.906115-3-mwen@igalia.com/
-> and your patch below is exactly the part of this patch ^ that is
-> missing.
+Hi all,
 
-I'll ask the display guys what happened there, but in the meantime,
-I'll fix that up.
+In commit
 
->
-> In addition, only the first four patches of the series were applied.
+  fa28adea6a65 ("mm: thp: Fix build warning when CONFIG_SYSFS is disabled")
 
-The rest were still going through CI when I pushed out my updates.
+Fixes tag
 
-Alex
+  Fixes: fe2c9313a8c0 ("mm: thp: Introduce multi-size THP sysfs interface")
 
->
-> Thanks,
->
-> Melissa
->
-> >
-> > From: Stephen Rothwell <sfr@canb.auug.org.au>
-> > Date: Tue, 12 Dec 2023 13:53:55 +1100
-> > Subject: [PATCH] drm: remove unused function drm_atomic_replace_propert=
-y_blob_from_id()
-> >
-> > Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> > ---
-> >  drivers/gpu/drm/drm_atomic_uapi.c | 42 -------------------------------
-> >  1 file changed, 42 deletions(-)
-> >
-> > diff --git a/drivers/gpu/drm/drm_atomic_uapi.c b/drivers/gpu/drm/drm_at=
-omic_uapi.c
-> > index 70ddbb93e466..29d4940188d4 100644
-> > --- a/drivers/gpu/drm/drm_atomic_uapi.c
-> > +++ b/drivers/gpu/drm/drm_atomic_uapi.c
-> > @@ -362,48 +362,6 @@ static s32 __user *get_out_fence_for_connector(str=
-uct drm_atomic_state *state,
-> >       return fence_ptr;
-> >  }
-> >
-> > -static int
-> > -drm_atomic_replace_property_blob_from_id(struct drm_device *dev,
-> > -                                      struct drm_property_blob **blob,
-> > -                                      uint64_t blob_id,
-> > -                                      ssize_t expected_size,
-> > -                                      ssize_t expected_elem_size,
-> > -                                      bool *replaced)
-> > -{
-> > -     struct drm_property_blob *new_blob =3D NULL;
-> > -
-> > -     if (blob_id !=3D 0) {
-> > -             new_blob =3D drm_property_lookup_blob(dev, blob_id);
-> > -             if (new_blob =3D=3D NULL) {
-> > -                     drm_dbg_atomic(dev,
-> > -                                    "cannot find blob ID %llu\n", blob=
-_id);
-> > -                     return -EINVAL;
-> > -             }
-> > -
-> > -             if (expected_size > 0 &&
-> > -                 new_blob->length !=3D expected_size) {
-> > -                     drm_dbg_atomic(dev,
-> > -                                    "[BLOB:%d] length %zu different fr=
-om expected %zu\n",
-> > -                                    new_blob->base.id, new_blob->lengt=
-h, expected_size);
-> > -                     drm_property_blob_put(new_blob);
-> > -                     return -EINVAL;
-> > -             }
-> > -             if (expected_elem_size > 0 &&
-> > -                 new_blob->length % expected_elem_size !=3D 0) {
-> > -                     drm_dbg_atomic(dev,
-> > -                                    "[BLOB:%d] length %zu not divisibl=
-e by element size %zu\n",
-> > -                                    new_blob->base.id, new_blob->lengt=
-h, expected_elem_size);
-> > -                     drm_property_blob_put(new_blob);
-> > -                     return -EINVAL;
-> > -             }
-> > -     }
-> > -
-> > -     *replaced |=3D drm_property_replace_blob(blob, new_blob);
-> > -     drm_property_blob_put(new_blob);
-> > -
-> > -     return 0;
-> > -}
-> > -
-> >  static int drm_atomic_crtc_set_property(struct drm_crtc *crtc,
-> >               struct drm_crtc_state *state, struct drm_property *proper=
-ty,
-> >               uint64_t val)
-> > --
-> > 2.40.1
-> >
-> > --
-> > Cheers,
-> > Stephen Rothwell
->
->
+has these problem(s):
+
+  - Target SHA1 does not exist
+
+Maybe you meant
+
+Fixes: 17e9a3099850 ("mm: thp: introduce multi-size THP sysfs interface")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/r.gIuKxXWZHC9KkGXPtrK9O
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmV4yacACgkQAVBC80lX
+0GyIFgf8CUSvKjzWNpUOw/0Sb41a9mwa4cGelDp6DuBVh4Qgd2mOVNYpewY+6aAe
+l62drguaTwJbdbcmFtIkNvTU0j/4toPzhl3hnH/wY0bvkN+FXsoHORmXmJp6WXzs
+391yFQQmynIF6YvuWSVVp75Sv9lCRJSeswhNJrmvC3uhMFEDr86P0/0gjeecdfEU
+Kxi0Gjz+0gSMjv7B1YcjF0Bx8AmiL37Ta27o3XIJdJ+otPP75aXKivmM0elE5SxW
+Z7xpHXqcszyVQ/LpA1vdpBCMrl6FMuMXeBQkdklhXN611rEmdtEAuoaRFHuP0FyZ
+g04ny3fUunOJ34CyZSJx4sFw7Wd/fg==
+=kgUI
+-----END PGP SIGNATURE-----
+
+--Sig_/r.gIuKxXWZHC9KkGXPtrK9O--
 

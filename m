@@ -1,174 +1,96 @@
-Return-Path: <linux-next+bounces-356-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-357-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B68680E706
-	for <lists+linux-next@lfdr.de>; Tue, 12 Dec 2023 10:04:51 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B6B080E7CF
+	for <lists+linux-next@lfdr.de>; Tue, 12 Dec 2023 10:35:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 364CF282955
-	for <lists+linux-next@lfdr.de>; Tue, 12 Dec 2023 09:04:50 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8F36CB210A2
+	for <lists+linux-next@lfdr.de>; Tue, 12 Dec 2023 09:35:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16E9058119;
-	Tue, 12 Dec 2023 09:04:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4109584FA;
+	Tue, 12 Dec 2023 09:35:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="bF8vs1f8"
+	dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b="cKGwXTZY"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCC94B7;
-	Tue, 12 Dec 2023 01:04:43 -0800 (PST)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 3BC8GADT005417;
-	Tue, 12 Dec 2023 09:04:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=ac2zjLMEHeUmJU/ZYFnnFqnuNOtRLiobPEYCuI5Lfq0=; b=bF
-	8vs1f8L67iTtBZcsmDVM7bkU7F/EUllBqjy9ybWWWD2nJrhDkAqeJyQPrD3g2Wx6
-	KIJxnEbLpvoywfjn5pkkSgSmBYew4XOc7Psktjt51Of8x/vAXnwfjtUq10Z++h83
-	/u6uONkwBG8sUCe14aov2FXSheOGy3KcrMU/nUoTCT7RPmvE+C5RHI1VhVoBcZdj
-	unLUD99BB3uKaNU7btb+nUbdnnykfa/6q6NhzjBJzu+5NJamQIn9LGKHpx38IOFb
-	E6M6NA9i61zDLlwmlLmMCIR8I7sEGND0TMUYhXov0u9hknjk613VpfHOV6943sI9
-	JVGNfgEIDdRlJHlz2Sog==
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ux6531v1k-1
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C81FDB;
+	Tue, 12 Dec 2023 01:35:15 -0800 (PST)
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+	by mx0b-001ae601.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 3BC70GcA016663;
+	Tue, 12 Dec 2023 03:35:04 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=
+	date:from:to:cc:subject:message-id:references:mime-version
+	:content-type:in-reply-to; s=PODMain02222019; bh=75G6b+827uYHMO0
+	0ZmcSTAjr7pIn63myPK48OyBOHsA=; b=cKGwXTZYQxQwXWYVEEXQjJb1ZkGgsOh
+	LJJ/sKFmjCC/yif3yLcM4RE2Tgqz1Q1LURIT6hqiSZ/u+/zxqVCzKDwbyhJcHiqU
+	I7x/QqtEu26ZQ6BsQGndf7C6EZEe+0XVbbRIiGqFJwNubm+/G363EV7u7BYeVdvq
+	l2b/3PTHvQvJaXTnOUlQYh26NTJQUy2MVI0nhNemgh+0/H/+M4dGBJwdRL0gyiGj
+	CxiJl968GLMCGrka7LKtUhsKsJklqYsBYP/mKuEFbiKI4OH9UYBbN/CFjNj1rrHq
+	wfN1n/0vZm+aIHSCVxEKUAWp0ie2xVaqrL5+LUKvgpvsd11gIoHigCQ==
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+	by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3uvnhpjxsq-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 12 Dec 2023 09:04:33 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3BC94W60030456
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 12 Dec 2023 09:04:32 GMT
-Received: from [10.131.33.37] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+	Tue, 12 Dec 2023 03:35:03 -0600 (CST)
+Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Tue, 12 Dec
- 2023 01:04:29 -0800
-Message-ID: <02305d95-0d74-2dc1-e7f0-c81e15da0896@quicinc.com>
-Date: Tue, 12 Dec 2023 14:34:26 +0530
+ 2023 09:35:02 +0000
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.40 via Frontend
+ Transport; Tue, 12 Dec 2023 09:35:02 +0000
+Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
+	by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 1B21F468;
+	Tue, 12 Dec 2023 09:35:02 +0000 (UTC)
+Date: Tue, 12 Dec 2023 09:35:02 +0000
+From: Charles Keepax <ckeepax@opensource.cirrus.com>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+CC: Mark Brown <broonie@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing
+ List <linux-next@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: Re: linux-next: build warning after merge of the sound-asoc tree
+Message-ID: <20231212093502.GW14858@ediswmail.ad.cirrus.com>
+References: <20231212111625.2b9cf396@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: linux-next: build failure after merge of the devicetree tree
-Content-Language: en-US
-To: Stephen Rothwell <sfr@canb.auug.org.au>, Rob Herring <robh@kernel.org>,
-        Andy Gross <agross@kernel.org>
-CC: Abel Vesa <abel.vesa@linaro.org>, Bjorn Andersson <andersson@kernel.org>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>,
-        Linux Kernel Mailing List
-	<linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List
-	<linux-next@vger.kernel.org>
-References: <20231211160510.0aef871b@canb.auug.org.au>
-From: Sibi Sankar <quic_sibis@quicinc.com>
-In-Reply-To: <20231211160510.0aef871b@canb.auug.org.au>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: -kd30rdgpSnzIv-MTBJb9XkQId7I4Mr3
-X-Proofpoint-GUID: -kd30rdgpSnzIv-MTBJb9XkQId7I4Mr3
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-12-09_02,2023-12-07_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 phishscore=0
- mlxscore=0 mlxlogscore=999 clxscore=1011 adultscore=0 lowpriorityscore=0
- priorityscore=1501 bulkscore=0 suspectscore=0 malwarescore=0 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2311290000
- definitions=main-2312120071
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20231212111625.2b9cf396@canb.auug.org.au>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Proofpoint-GUID: LGc9cVkf1D_G27hJKIBvQ7hblcugw1ij
+X-Proofpoint-ORIG-GUID: LGc9cVkf1D_G27hJKIBvQ7hblcugw1ij
+X-Proofpoint-Spam-Reason: safe
 
-
-
-On 12/11/23 10:35, Stephen Rothwell wrote:
+On Tue, Dec 12, 2023 at 11:16:25AM +1100, Stephen Rothwell wrote:
 > Hi all,
+> 
+> After merging the sound-asoc tree, today's linux-next build (x86_64
+> allmodconfig) produced this warning:
+> 
+> sound/soc/codecs/cs42l43.c:142:6: warning: no previous prototype for 'cs42l43_hp_ilimit_clear_work' [-Wmissing-prototypes]
+>   142 | void cs42l43_hp_ilimit_clear_work(struct work_struct *work)
+>       |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> sound/soc/codecs/cs42l43.c:159:6: warning: no previous prototype for 'cs42l43_hp_ilimit_work' [-Wmissing-prototypes]
+>   159 | void cs42l43_hp_ilimit_work(struct work_struct *work)
+>       |      ^~~~~~~~~~~~~~~~~~~~~~
+> 
+> Introduced by commit
+> 
+>   bbbc18d8c27c ("ASoC: cs42l43: Allow HP amp to cool off after current limit")
+> 
+> Maybe they should just be static?
+> 
 
-Hey Stephen,
-Thanks for the fix.
+Yeah they should be static sorry, will send a patch today.
 
-> 
-> After merging the devicetree tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
-> 
-> drivers/clk/qcom/gcc-x1e80100.c:6786:15: error: variable 'gcc_x1e80100_driver' has initializer but incomplete type
->   6786 | static struct platform_driver gcc_x1e80100_driver = {
->        |               ^~~~~~~~~~~~~~~
-> drivers/clk/qcom/gcc-x1e80100.c:6787:10: error: 'struct platform_driver' has no member named 'probe'
->   6787 |         .probe = gcc_x1e80100_probe,
->        |          ^~~~~
-> drivers/clk/qcom/gcc-x1e80100.c:6787:18: warning: excess elements in struct initializer
->   6787 |         .probe = gcc_x1e80100_probe,
->        |                  ^~~~~~~~~~~~~~~~~~
-> drivers/clk/qcom/gcc-x1e80100.c:6787:18: note: (near initialization for 'gcc_x1e80100_driver')
-> drivers/clk/qcom/gcc-x1e80100.c:6788:10: error: 'struct platform_driver' has no member named 'driver'
->   6788 |         .driver = {
->        |          ^~~~~~
-> drivers/clk/qcom/gcc-x1e80100.c:6788:19: error: extra brace group at end of initializer
->   6788 |         .driver = {
->        |                   ^
-> drivers/clk/qcom/gcc-x1e80100.c:6788:19: note: (near initialization for 'gcc_x1e80100_driver')
-> drivers/clk/qcom/gcc-x1e80100.c:6788:19: warning: excess elements in struct initializer
-> drivers/clk/qcom/gcc-x1e80100.c:6788:19: note: (near initialization for 'gcc_x1e80100_driver')
-> drivers/clk/qcom/gcc-x1e80100.c: In function 'gcc_x1e80100_init':
-> drivers/clk/qcom/gcc-x1e80100.c:6796:16: error: implicit declaration of function 'platform_driver_register' [-Werror=implicit-function-declaration]
->   6796 |         return platform_driver_register(&gcc_x1e80100_driver);
->        |                ^~~~~~~~~~~~~~~~~~~~~~~~
-> drivers/clk/qcom/gcc-x1e80100.c: In function 'gcc_x1e80100_exit':
-> drivers/clk/qcom/gcc-x1e80100.c:6802:9: error: implicit declaration of function 'platform_driver_unregister'; did you mean 'driver_unregister'? [-Werror=implicit-function-declaration]
->   6802 |         platform_driver_unregister(&gcc_x1e80100_driver);
->        |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
->        |         driver_unregister
-> drivers/clk/qcom/gcc-x1e80100.c: At top level:
-> drivers/clk/qcom/gcc-x1e80100.c:6786:31: error: storage size of 'gcc_x1e80100_driver' isn't known
->   6786 | static struct platform_driver gcc_x1e80100_driver = {
->        |                               ^~~~~~~~~~~~~~~~~~~
-> 
-> Caused by commit
-> 
->    0d18bcdebb2f ("of: Stop circularly including of_device.h and of_platform.h")
-> 
-> interacting with commit
-> 
->    161b7c401f4b ("clk: qcom: Add Global Clock controller (GCC) driver for X1E80100")
-> 
-> from the qcom tree.
-> 
-> I have applied the following merge resolution patch.  This patch could
-> be applied to the gcom tree.
-> 
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Mon, 11 Dec 2023 15:47:55 +1100
-> Subject: [PATCH] fix up for "of: Stop circularly including of_device.h and of_platform.h"
-> 
-> interacting with
-> "clk: qcom: Add Global Clock controller (GCC) driver for X1E80100"
-> 
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-
-Reviewed-by: Sibi Sankar <quic_sibis@quicinc.com>
-
-> ---
->   drivers/clk/qcom/gcc-x1e80100.c | 3 ++-
->   1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/clk/qcom/gcc-x1e80100.c b/drivers/clk/qcom/gcc-x1e80100.c
-> index 74db7fef237b..d7182d6e9783 100644
-> --- a/drivers/clk/qcom/gcc-x1e80100.c
-> +++ b/drivers/clk/qcom/gcc-x1e80100.c
-> @@ -4,8 +4,9 @@
->    */
->   
->   #include <linux/clk-provider.h>
-> +#include <linux/mod_devicetable.h>
->   #include <linux/module.h>
-> -#include <linux/of_device.h>
-> +#include <linux/platform_device.h>
->   #include <linux/regmap.h>
->   
->   #include <dt-bindings/clock/qcom,x1e80100-gcc.h>
+Thanks,
+Charles
 

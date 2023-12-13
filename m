@@ -1,87 +1,96 @@
-Return-Path: <linux-next+bounces-386-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-387-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0820581212D
-	for <lists+linux-next@lfdr.de>; Wed, 13 Dec 2023 23:06:42 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5837C812150
+	for <lists+linux-next@lfdr.de>; Wed, 13 Dec 2023 23:18:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6F5A1B20DE7
-	for <lists+linux-next@lfdr.de>; Wed, 13 Dec 2023 22:06:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E67FE2823B6
+	for <lists+linux-next@lfdr.de>; Wed, 13 Dec 2023 22:18:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADF367FBC8;
-	Wed, 13 Dec 2023 22:06:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3EF37FBDA;
+	Wed, 13 Dec 2023 22:18:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=jms.id.au header.i=@jms.id.au header.b="b2bjIocN"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="NlN8ZMbQ"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4207AC;
-	Wed, 13 Dec 2023 14:06:29 -0800 (PST)
-Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-a1ec87a7631so666318766b.0;
-        Wed, 13 Dec 2023 14:06:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google; t=1702505188; x=1703109988; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=X4UuYiM1z+VjAh8ejY7MCYBHB5OZzwXVD0RCWJmFeg4=;
-        b=b2bjIocNh+tOZs0bVFKRZu2BMDXOp+TymNfLaQCT6ZK8qF3mLLhhhwoixtyW6mJ60B
-         eJ+M/H1cH7rFBx/pZ6ov/gI8ZT8j56q1flueSapGLRbLbZcZrgV8+HIzVK7q6ZNhIlBf
-         VRt0CWsEcZzijROSmIH6dllsOYMM8y+9fcEfQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702505188; x=1703109988;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=X4UuYiM1z+VjAh8ejY7MCYBHB5OZzwXVD0RCWJmFeg4=;
-        b=sllH4yyObBNdbBS4BStAJR+WIW7HXJkjjVejSrOjA5qkzclqRIfB2zlTvx/KSfEBZk
-         RWmrfZ88WSZKhqQKjya85bK5UaJwG2LX7TclG4xEHFEYSLto8F5dWHHDxjO8i8h1uZnr
-         eGqPuZsfAWHCZLoT8OaBgJOpMOP05BD41KZzpRIrsM9zWFE2ODSirmoHkjrDFkZW54Kw
-         WqMeP5Yw45Rv6M3MeiGao5F8T6D4yrcPl6eye7ocRnJpPFohizf6WcobBQ4S0FCEm3De
-         bjX/VKWq/HcOpNUG0M4njUsMXGdN+YH0qSSeaP8UjYK4odNWQdzEtRUMsSlJaBeeHEb8
-         wxqw==
-X-Gm-Message-State: AOJu0YwwPuvHptw77lj/89ab8a4xFxUJBoxyKX1i6fEdkScObGId7Dxd
-	Y+Lz91+lvkYOOknBMBOkfbbQGDLp6f/3BFAPXULzPq7I
-X-Google-Smtp-Source: AGHT+IHoi+YYTwEgJd54Iml8QHhKqqM0q3DYu6kyOXo+79ayzZ8IZpuenJXjrO1EDXLsFXizgjuZ1pZq5QndZQTwPmA=
-X-Received: by 2002:a17:907:1a58:b0:a18:fa22:5df2 with SMTP id
- mf24-20020a1709071a5800b00a18fa225df2mr4282845ejc.31.1702505188172; Wed, 13
- Dec 2023 14:06:28 -0800 (PST)
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB2209C;
+	Wed, 13 Dec 2023 14:18:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1702505913;
+	bh=N2KcphMx/eEE0e2GMNsci+rOYe8jMaZYKg7g7lpghNk=;
+	h=Date:From:To:Cc:Subject:From;
+	b=NlN8ZMbQUulPjbBkMtVFIsQ+MCvUKG5uDapO27h8uQLv3Mi0b2ZfRzMUV96ijSefq
+	 gZM0F85idPpDZe4zj6NSS0IwQFh5A3vKFkE/OOKhhrzPSMqbpFaGaqqHtV1Ti28xls
+	 0Pvviyzge6Q35pKNfL0Qms96kmGMOPPBfKAE/u/NM+OirrlgT4goVtL/Xoawy2/+UF
+	 ENwq4HYEbQ64iriJWXeJi08m8Kmh+whn5L00msmqfqyJSKeTN/6CaEX+u7+dIjDQPs
+	 u6MMVxWS+BTLTrBo2hkKAGfM4fWO0SsV88ETfpeGRsbPXkDj4E5VB2/azU/QxPfyHu
+	 ydgjBm8Jgeppw==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Sr8yK1fCMz4xS5;
+	Thu, 14 Dec 2023 09:18:32 +1100 (AEDT)
+Date: Thu, 14 Dec 2023 09:18:31 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Sidhartha Kumar <sidhartha.kumar@oracle.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>, "Matthew Wilcox (Oracle)"
+ <willy@infradead.org>, "Liam R. Howlett" <Liam.Howlett@oracle.com>
+Subject: linux-next: build failure after merge of the mm-hotfixes tree
+Message-ID: <20231214091831.70cc51e0@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231213093044.2fc89781@canb.auug.org.au>
-In-Reply-To: <20231213093044.2fc89781@canb.auug.org.au>
-From: Joel Stanley <joel@jms.id.au>
-Date: Thu, 14 Dec 2023 08:36:15 +1030
-Message-ID: <CACPK8XevBYm8q1rHm4CyyqaNb3gAcksJUUh4QcOWMx_Um++8jA@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the aspeed tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Peter Yin <peteryin.openbmc@gmail.com>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/Jsu8AnM33T+NQPNVNyAWpsW";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Wed, 13 Dec 2023 at 09:00, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> After merging the aspeed tree, today's linux-next build (arm
-> multi_v7_defconfig) failed like this:
->
-> make[4]: *** No rule to make target 'arch/arm/boot/dts/aspeed/aspeed-bmc-facebook-harma.dtb', needed by 'arch/arm/boot/dts/aspeed/'.  Stop.
->
-> Caused by commit
->
->   70fe22dd623e ("ARM: dts: aspeed: Harma: Add Meta Harma (AST2600) BMC")
->
-> I have used the aspeed tree from next-20231212 for today.
+--Sig_/Jsu8AnM33T+NQPNVNyAWpsW
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Should be fixed today, sorry about that.
+Hi all,
 
+After merging the mm-hotfixes tree, today's linux-next build (powerpc
+ppc64_defconfig) failed like this:
+
+lib/maple_tree.c: In function 'mas_preallocate':
+lib/maple_tree.c:5506:30: error: 'struct ma_state' has no member named 'end'
+ 5506 |         if ((node_size =3D=3D mas->end) && ((!mt_in_rcu(mas->tree))
+      |                              ^~
+
+Caused by commit
+
+  84bda0b24555 ("maple_tree: do not preallocate nodes for slot stores")
+
+I have reverted that commit for today.
+
+--=20
 Cheers,
+Stephen Rothwell
 
-Joel
+--Sig_/Jsu8AnM33T+NQPNVNyAWpsW
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmV6LbcACgkQAVBC80lX
+0Gw7JAgAjwy0mqo8r9Wsdr6sxma93mdYTcdl2Cf82gXXl+u/+w9bRfB8NMXaW8pg
+BsFde4KnnP5hG/bBirf7KeXLwJAaRM7KvaG37IhynsCFcvUS9iLEsweiIez+z5UN
+RGol5OqzV9GrdPOOHgviy++i6eNSvEHnhQ5ZrszU4RNCXy9js/H8pVehO6kWDx0a
+FanE2e/EBpuWcwNbFzdyYmQFvXhrNXoXXhe3AEF18cZs23K7pZlP/MmbY5whdm/R
+jXfrofT8GGov/mU86UzZENAp3+rdueM6h9p2GZbECwF+XcmkIvTsCtZDQXJU1CDz
+fM+fe7t7VlNUWJ+icYeST0fn5dQQPg==
+=Y/F+
+-----END PGP SIGNATURE-----
+
+--Sig_/Jsu8AnM33T+NQPNVNyAWpsW--
 

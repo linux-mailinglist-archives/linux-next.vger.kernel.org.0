@@ -1,103 +1,79 @@
-Return-Path: <linux-next+bounces-371-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-372-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E1C9810718
-	for <lists+linux-next@lfdr.de>; Wed, 13 Dec 2023 01:59:05 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C905281073C
+	for <lists+linux-next@lfdr.de>; Wed, 13 Dec 2023 02:04:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 399312818C9
-	for <lists+linux-next@lfdr.de>; Wed, 13 Dec 2023 00:59:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 728941F21701
+	for <lists+linux-next@lfdr.de>; Wed, 13 Dec 2023 01:04:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84CFEA49;
-	Wed, 13 Dec 2023 00:59:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AE9DECA;
+	Wed, 13 Dec 2023 01:04:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="WKCLTH0H"
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="YzLp10Hi"
 X-Original-To: linux-next@vger.kernel.org
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F28999;
-	Tue, 12 Dec 2023 16:58:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1702429137;
-	bh=KcEqEn+eIG9TyLxj3OVh5E9T+Hs/nxFado6LxKaKrPQ=;
-	h=Date:From:To:Cc:Subject:From;
-	b=WKCLTH0HtmkVLSur7gjjjqAm5L8veTQ1vcKsOcOIBpyZynJwpqNeonzymS2vNtLm0
-	 DfjvF18d+jsdHMQQ7yUWjgk9bmWDn8MG8EDyoD1Gy4k7tF+04F6fBKIk7fb6CyyodQ
-	 2R2LN6LBpuETe87+Fl7Jz143Ed+BiToHXzEkWhxhXwsVYOHPh6CFWnsnRBpVefno8g
-	 hn+W55zY5nFP+/BQ0NFHo6X2oygcRummYKPK4WIsCFymp2bvbUiKIBePVpon3gOzu7
-	 ul5D6rBFZKdVeGkUZWfxMQxhK9HMl29lSbXoWJhj3ylsQhVT75CJoT/L7ROsQmhzNp
-	 q+PhAzzpnQzPA==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4SqcYr2wCXz4wb1;
-	Wed, 13 Dec 2023 11:58:56 +1100 (AEDT)
-Date: Wed, 13 Dec 2023 11:58:55 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Helge Deller <deller@gmx.de>, Dave Airlie <airlied@redhat.com>
-Cc: DRI <dri-devel@lists.freedesktop.org>, Linux Kernel Mailing List
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D595EB8
+	for <linux-next@vger.kernel.org>; Wed, 13 Dec 2023 01:04:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DDBCC433C7;
+	Wed, 13 Dec 2023 01:04:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+	s=korg; t=1702429451;
+	bh=jRcmunZdqVBmgZMSHxQNvJLJyp5lE+HoxqkjQbHila0=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=YzLp10HiNGQQh48rlwTPWhlzYHA6aJfjJ4OHqBKS9Faq932M0p81NqelJe7ebmO2c
+	 7gl1qZjDGQ856AONb2cJrM/yJlW4O/izBup9U8UbpTRT3+cxHnbcCQ31ncdd2vJ2qG
+	 sDAZhde3WHFYxsu9JVmfg/QZMPN7jzhNpvI5TONg=
+Date: Tue, 12 Dec 2023 17:04:10 -0800
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Ryan Roberts <ryan.roberts@arm.com>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, "Matthew Wilcox (Oracle)"
- <willy@infradead.org>, Thomas Zimmermann <tzimmermann@suse.de>
-Subject: linux-next: manual merge of the fbdev tree with the drm tree
-Message-ID: <20231213115855.561eb665@canb.auug.org.au>
+ <linux-next@vger.kernel.org>
+Subject: Re: linux-next: Fixes tag needs some work in the mm tree
+Message-Id: <20231212170410.aa6972217ef0478f1dc9ae57@linux-foundation.org>
+In-Reply-To: <20231213075919.311c962b@canb.auug.org.au>
+References: <20231213075919.311c962b@canb.auug.org.au>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/dzRJDCs.Qr4lbbREaDsnb0F";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-
---Sig_/dzRJDCs.Qr4lbbREaDsnb0F
+Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
 
-Hi all,
+On Wed, 13 Dec 2023 07:59:19 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 
-Today's linux-next merge of the fbdev tree got a conflict in:
+> Hi all,
+> 
+> In commit
+> 
+>   fa28adea6a65 ("mm: thp: Fix build warning when CONFIG_SYSFS is disabled")
+> 
+> Fixes tag
+> 
+>   Fixes: fe2c9313a8c0 ("mm: thp: Introduce multi-size THP sysfs interface")
+> 
+> has these problem(s):
+> 
+>   - Target SHA1 does not exist
+> 
+> Maybe you meant
+> 
+> Fixes: 17e9a3099850 ("mm: thp: introduce multi-size THP sysfs interface")
 
-  drivers/video/fbdev/vermilion/vermilion.c
+Yes, but the base patch is in mm-unstable so its hash changes every day.
 
-between commit:
+I'll just remove the hash:
 
-  76f92201b821 ("fbdev: Push pgprot_decrypted() into mmap implementations")
+Fixes: ("mm: thp: Introduce multi-size THP sysfs interface")
 
-from the drm tree and commit:
-
-  d8a47ee16884 ("fbdev: Remove support for Carillo Ranch driver")
-
-from the fbdev tree.
-
-I fixed it up (I just removed the file) and can carry the fix as
-necessary. This is now fixed as far as linux-next is concerned, but any
-non trivial conflicts should be mentioned to your upstream maintainer
-when your tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/dzRJDCs.Qr4lbbREaDsnb0F
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmV5Ac8ACgkQAVBC80lX
-0GyqyAf/SwpnR7NZupcNT8Vq8VYWkt96reqewgclKlkqI6dwoCp9RFu+44jrKJBz
-akVfNlJS0mIRyR85j0E9BsikCqZ8Y/a3KJaZ7zJNP8bCEc+1GiG92EAiJgBLq21r
-0lsoUUhddX6+e3A3sxfB3TXkUAmuL2GTaXEfosI7wt36D9snHXboQlo81/zTNapj
-beXF6P9aM6TuRXjD64mkzS0GkfM3DvHSuxp65DQqH16KyQzUS+7aWuWQjlRbiqo0
-VAgbTDkAGJPP37cbD31C5Iy5ke2NRxs88WmK+YNueZnNqfd6CNFDGCfHUM7Z6ZSF
-g1YnvnEjTCfOVi5pLLaWzcEbUaxtSg==
-=O0pK
------END PGP SIGNATURE-----
-
---Sig_/dzRJDCs.Qr4lbbREaDsnb0F--
+which I expect will generate another hello-from-Stephen.  
 

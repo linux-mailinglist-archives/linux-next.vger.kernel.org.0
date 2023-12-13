@@ -1,58 +1,58 @@
-Return-Path: <linux-next+bounces-370-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-371-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D50A7810711
-	for <lists+linux-next@lfdr.de>; Wed, 13 Dec 2023 01:56:29 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7E1C9810718
+	for <lists+linux-next@lfdr.de>; Wed, 13 Dec 2023 01:59:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8642D281935
-	for <lists+linux-next@lfdr.de>; Wed, 13 Dec 2023 00:56:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 399312818C9
+	for <lists+linux-next@lfdr.de>; Wed, 13 Dec 2023 00:59:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E427A49;
-	Wed, 13 Dec 2023 00:56:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84CFEA49;
+	Wed, 13 Dec 2023 00:59:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="hlrYCOgr"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="WKCLTH0H"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2021AA1;
-	Tue, 12 Dec 2023 16:56:20 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F28999;
+	Tue, 12 Dec 2023 16:58:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1702428975;
-	bh=fSqpKJ8HzYbAkrw0VUdBtWY8LU2YCqW2PJ/MneJimZ8=;
+	s=201702; t=1702429137;
+	bh=KcEqEn+eIG9TyLxj3OVh5E9T+Hs/nxFado6LxKaKrPQ=;
 	h=Date:From:To:Cc:Subject:From;
-	b=hlrYCOgriJbNl/PCfw7psBgKitg9EBSXb32sDi6+T+evyD7IUAfPW5V4FmEfrMYDS
-	 a7gJ5j8zsg25K4kKRYdIwuTvakYnaFZa7npr2J12dQHj/EyidnuDat4Osmri25Wro6
-	 8FbliHyugZbz9Hc2gJDrHM7Sf49OK17QULaHYl5l41Beuf0RAWAwH/S5nOZAsD8mco
-	 bG/k3bdHFTmYBW51zNZOZtJYLgkPScivEoyeh64og8lLg4obBgacHahIurCfhTjZtc
-	 nfhBONXJ4rokiFeSUWRqFao75J6pq1THuWeM3wtzRw7L/ekYWRU67Odx7HT7oHRQiW
-	 q+ncKVGqxQjrg==
+	b=WKCLTH0HtmkVLSur7gjjjqAm5L8veTQ1vcKsOcOIBpyZynJwpqNeonzymS2vNtLm0
+	 DfjvF18d+jsdHMQQ7yUWjgk9bmWDn8MG8EDyoD1Gy4k7tF+04F6fBKIk7fb6CyyodQ
+	 2R2LN6LBpuETe87+Fl7Jz143Ed+BiToHXzEkWhxhXwsVYOHPh6CFWnsnRBpVefno8g
+	 hn+W55zY5nFP+/BQ0NFHo6X2oygcRummYKPK4WIsCFymp2bvbUiKIBePVpon3gOzu7
+	 ul5D6rBFZKdVeGkUZWfxMQxhK9HMl29lSbXoWJhj3ylsQhVT75CJoT/L7ROsQmhzNp
+	 q+PhAzzpnQzPA==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4SqcVk2y7pz4wcj;
-	Wed, 13 Dec 2023 11:56:13 +1100 (AEDT)
-Date: Wed, 13 Dec 2023 11:56:12 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4SqcYr2wCXz4wb1;
+	Wed, 13 Dec 2023 11:58:56 +1100 (AEDT)
+Date: Wed, 13 Dec 2023 11:58:55 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
 To: Helge Deller <deller@gmx.de>, Dave Airlie <airlied@redhat.com>
-Cc: DRI <dri-devel@lists.freedesktop.org>, Linus Walleij
- <linus.walleij@linaro.org>, Linux Kernel Mailing List
+Cc: DRI <dri-devel@lists.freedesktop.org>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>
+ <linux-next@vger.kernel.org>, "Matthew Wilcox (Oracle)"
+ <willy@infradead.org>, Thomas Zimmermann <tzimmermann@suse.de>
 Subject: linux-next: manual merge of the fbdev tree with the drm tree
-Message-ID: <20231213115612.4bbe3258@canb.auug.org.au>
+Message-ID: <20231213115855.561eb665@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Qh.ZrrYP3RXclK0Ec5S7dUz";
+Content-Type: multipart/signed; boundary="Sig_/dzRJDCs.Qr4lbbREaDsnb0F";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/Qh.ZrrYP3RXclK0Ec5S7dUz
+--Sig_/dzRJDCs.Qr4lbbREaDsnb0F
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
@@ -60,7 +60,7 @@ Hi all,
 
 Today's linux-next merge of the fbdev tree got a conflict in:
 
-  drivers/video/fbdev/amba-clcd.c
+  drivers/video/fbdev/vermilion/vermilion.c
 
 between commit:
 
@@ -68,11 +68,11 @@ between commit:
 
 from the drm tree and commit:
 
-  13366c25125e ("fbdev: amba-clcd: Delete the old CLCD driver")
+  d8a47ee16884 ("fbdev: Remove support for Carillo Ranch driver")
 
 from the fbdev tree.
 
-I fixed it up (I just deleted the file) and can carry the fix as
+I fixed it up (I just removed the file) and can carry the fix as
 necessary. This is now fixed as far as linux-next is concerned, but any
 non trivial conflicts should be mentioned to your upstream maintainer
 when your tree is submitted for merging.  You may also want to consider
@@ -83,21 +83,21 @@ particularly complex conflicts.
 Cheers,
 Stephen Rothwell
 
---Sig_/Qh.ZrrYP3RXclK0Ec5S7dUz
+--Sig_/dzRJDCs.Qr4lbbREaDsnb0F
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmV5ASwACgkQAVBC80lX
-0GzITwf+MprCy8he3YkNyx3AutdZX9UZCaE1PsKoYCXUJ+6TN/DGXy+L0GLCPp0r
-ExVDHecQbKwp58pFqiXPDpaiGc1Lz2x7QgKmzsArhvWAI79wLt/7Y0OYkDAMoynu
-gUQzK0xs5R8zobLqRTmlkO0MXfTewTFF7aUruoK+U08ZkhVnHSHMbousESPwWEH3
-aO88up1U4UWwN/vDwZ5IvxP6+osu5W8+EI1/f0NZZG7TFzPyPfeBRh1nMWDtvQtv
-Fe19x+pCjBt3duB/u9/YLFsxzKdCw7OhBMR3ChqYfu9kxxWTnw41HPjARVxjMqpv
-whNp7OEFtTcxir5CZwAlpb7EnbaJbw==
-=HR3/
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmV5Ac8ACgkQAVBC80lX
+0GyqyAf/SwpnR7NZupcNT8Vq8VYWkt96reqewgclKlkqI6dwoCp9RFu+44jrKJBz
+akVfNlJS0mIRyR85j0E9BsikCqZ8Y/a3KJaZ7zJNP8bCEc+1GiG92EAiJgBLq21r
+0lsoUUhddX6+e3A3sxfB3TXkUAmuL2GTaXEfosI7wt36D9snHXboQlo81/zTNapj
+beXF6P9aM6TuRXjD64mkzS0GkfM3DvHSuxp65DQqH16KyQzUS+7aWuWQjlRbiqo0
+VAgbTDkAGJPP37cbD31C5Iy5ke2NRxs88WmK+YNueZnNqfd6CNFDGCfHUM7Z6ZSF
+g1YnvnEjTCfOVi5pLLaWzcEbUaxtSg==
+=O0pK
 -----END PGP SIGNATURE-----
 
---Sig_/Qh.ZrrYP3RXclK0Ec5S7dUz--
+--Sig_/dzRJDCs.Qr4lbbREaDsnb0F--
 

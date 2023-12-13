@@ -1,134 +1,172 @@
-Return-Path: <linux-next+bounces-373-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-374-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 753CC8107CA
-	for <lists+linux-next@lfdr.de>; Wed, 13 Dec 2023 02:43:15 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 70731810868
+	for <lists+linux-next@lfdr.de>; Wed, 13 Dec 2023 03:52:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1F9521F212FD
-	for <lists+linux-next@lfdr.de>; Wed, 13 Dec 2023 01:43:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9BCD91C20DAD
+	for <lists+linux-next@lfdr.de>; Wed, 13 Dec 2023 02:52:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93196EB8;
-	Wed, 13 Dec 2023 01:43:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83573186C;
+	Wed, 13 Dec 2023 02:52:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="DxJM33ES"
+	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="a0N1TnlM"
 X-Original-To: linux-next@vger.kernel.org
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26DD1B7;
-	Tue, 12 Dec 2023 17:43:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1702431784;
-	bh=kJaU2JTGNOSsbFtXofZUd1U0Nbf9C/FQpjhmSxjoQss=;
-	h=Date:From:To:Cc:Subject:From;
-	b=DxJM33ESLL/bxPYx7rOpgAAWenCpSfGRD1HDyTZfmRNQWNaNWkzqfoIC9oX3pi22U
-	 LMkU7ORwXNuKySICRXVCBrFek4KcKabFr2nu8haiEDXgnnt5X55+UqK4HFwmeJJ/8J
-	 qaSPP95bQ8f349gvhHYu3VMfFvscQ3bspNfLJ90uGNYHHgY3/RNcOiPR3He0PPQCqI
-	 DvgPaZQYrf7rpFVTMdiTry6OQ0Ei3p58ebV1430+QK3gB11apHcXXashANgZonKREx
-	 gvyr4aywZqi4sli36D3j7YOIJNp20QvtYM++vMGnUoXp98Xgdl93cilo6DDE38YFxq
-	 DCNy/c06yrYMA==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4SqdXl6PpPz4wdC;
-	Wed, 13 Dec 2023 12:43:03 +1100 (AEDT)
-Date: Wed, 13 Dec 2023 12:43:02 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Joerg Roedel <joro@8bytes.org>, Andrew Morton
- <akpm@linux-foundation.org>
-Cc: Heiko Carstens <hca@linux.ibm.com>, Jason Gunthorpe <jgg@nvidia.com>,
- Jason Gunthorpe <jgg@ziepe.ca>, Joerg Roedel <jroedel@suse.de>, Linux
- Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the iommu tree with the mm-nonmm-stable
- tree
-Message-ID: <20231213124302.2a6281af@canb.auug.org.au>
+Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62FF8A6
+	for <linux-next@vger.kernel.org>; Tue, 12 Dec 2023 18:51:59 -0800 (PST)
+Received: by mail-il1-x12b.google.com with SMTP id e9e14a558f8ab-35da85e543eso23579605ab.0
+        for <linux-next@vger.kernel.org>; Tue, 12 Dec 2023 18:51:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1702435918; x=1703040718; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=g7JU20IAZWFR60Z33rTtv22US4GD658iON9bFuDwce4=;
+        b=a0N1TnlMs81lccEYbm7eChrHNMoDmOAgu77VE4moFnN76v4ZxIRrHTLhNN6GDGTxh2
+         cAhtVrdVxGsr6Dsm6wZmBxodEPagrxPOmYjFlxiWCF+BEN4ZPQJxh5GUolxdWjrg2m88
+         vaPbKrsCYqRJgwv5bAJn2+gE5NcIof8hUaIcnfPv+3as4zJGBZ45iTEkhuIWYfOTIc1x
+         qvwtNtjLP3JZcjCIbw4xxQd2ok/2Ku12raQYEp8vKI5iCVifOeBjoGPaeHojjPq1alLE
+         ru2Po6n8x6ZIuSX+k+XuHCoMmssD9uls+MiF18nbrV8O2BpU4tbCvt0kpzddLuQS8Sr6
+         eR6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702435918; x=1703040718;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=g7JU20IAZWFR60Z33rTtv22US4GD658iON9bFuDwce4=;
+        b=eFrraeqydqLa0j9CCq3ZSzFC89P9nT9/yM+K56egvczkEEUbTmf7ShVQxfPHqAK9uG
+         oMC2zgc/tGA8kReLpAG3UXOF5ZpZRs9NirEh0QPzq0/TIhrZl5cu1i/0soa2wMnQiJ2e
+         g7Gmc+BMumVphcW62Of7cpTcRIx5pB/+f4Cd5orpLIOWRJoD4fVX7t47HJAaTrX//g6c
+         KXAF1HS8dqwADpOSVS1XWMiE68prOjEIt4/+URrtEhCwx+Aj66zAgIvYfHtQcxzKDq0X
+         hBojezku0VUma/R791/8UnBg8Qsh7dJGxByp7s6s1zGkFEYHsXAJydgzcTv4dgJDAQe/
+         cvsA==
+X-Gm-Message-State: AOJu0Yy9O/W69bQQYn9fJZMmHGn1zsQ7Xkz3sz7F9uzkJPWdbH8rwWRE
+	XZhZd6Ro7jdpXvGxR462ZBWy2rr8ipu6g00D6fk9DA==
+X-Google-Smtp-Source: AGHT+IFaESIBqgRfQG8oHA89oOXoYdFhpZqKhLnVzRYosA7prFLSPkerqMOcrl7k++HJ2bxQKKwZnA==
+X-Received: by 2002:a92:ca4a:0:b0:35d:5405:e63 with SMTP id q10-20020a92ca4a000000b0035d54050e63mr8369508ilo.31.1702435918137;
+        Tue, 12 Dec 2023 18:51:58 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id b31-20020a631b5f000000b005bdf59618f9sm8704607pgm.69.2023.12.12.18.51.56
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Dec 2023 18:51:57 -0800 (PST)
+Message-ID: <65791c4d.630a0220.11668.ae0b@mx.google.com>
+Date: Tue, 12 Dec 2023 18:51:57 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/fBm6b//CFPRkuNN2Ov+FvBG";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-
---Sig_/fBm6b//CFPRkuNN2Ov+FvBG
-Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: pending-fixes
+X-Kernelci-Tree: next
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: v6.7-rc5-246-g91523d2e24e55
+Subject: next/pending-fixes build: 8 builds: 0 failed, 8 passed,
+ 4 warnings (v6.7-rc5-246-g91523d2e24e55)
+To: linux-next@vger.kernel.org
+From: "kernelci.org bot" <bot@kernelci.org>
 
-Hi all,
+next/pending-fixes build: 8 builds: 0 failed, 8 passed, 4 warnings (v6.7-rc=
+5-246-g91523d2e24e55)
 
-Today's linux-next merge of the iommu tree got a conflict in:
+Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
+rnel/v6.7-rc5-246-g91523d2e24e55/
 
-  arch/Kconfig
+Tree: next
+Branch: pending-fixes
+Git Describe: v6.7-rc5-246-g91523d2e24e55
+Git Commit: 91523d2e24e55ae76d35f6920af9711f1091772f
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Built: 8 unique architectures
 
-between commits:
+Warnings Detected:
 
-  0eb5085c3874 ("arch: remove ARCH_TASK_STRUCT_ON_STACK")
-  3888750e21cc ("arch: remove ARCH_TASK_STRUCT_ALLOCATOR")
+arc:
 
-from the mm-nonmm-stable tree and commit:
+arm64:
 
-  8f23f5dba6b4 ("iommu: Change kconfig around IOMMU_SVA")
+arm:
 
-from the iommu tree.
+i386:
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+mips:
 
---=20
-Cheers,
-Stephen Rothwell
+riscv:
 
-diff --cc arch/Kconfig
-index bfcc7c2dc039,3e49f862670e..000000000000
---- a/arch/Kconfig
-+++ b/arch/Kconfig
-@@@ -301,8 -301,22 +301,13 @@@ config ARCH_HAS_DMA_CLEAR_UNCACHE
-  config ARCH_HAS_CPU_FINALIZE_INIT
-  	bool
- =20
-+ # The architecture has a per-task state that includes the mm's PASID
-+ config ARCH_HAS_CPU_PASID
-+ 	bool
-+ 	select IOMMU_MM_DATA
-+=20
- -# Select if arch init_task must go in the __init_task_data section
- -config ARCH_TASK_STRUCT_ON_STACK
- -	bool
- -
- -# Select if arch has its private alloc_task_struct() function
- -config ARCH_TASK_STRUCT_ALLOCATOR
- -	bool
- -
-  config HAVE_ARCH_THREAD_STRUCT_WHITELIST
-  	bool
- -	depends on !ARCH_TASK_STRUCT_ALLOCATOR
-  	help
-  	  An architecture should select this to provide hardened usercopy
-  	  knowledge about what region of the thread_struct should be
+sparc:
+    sparc64_defconfig (gcc-10): 4 warnings
 
---Sig_/fBm6b//CFPRkuNN2Ov+FvBG
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+x86_64:
 
------BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmV5DCYACgkQAVBC80lX
-0Gww9Af/UGMcvjfqSRAZwOdSvyH21px/hWPgXvYKq6RIPdV8fG22tLyfQnVUrKUd
-r5LV6Pj+KL+UGu++xIAmBjVxQ4ySXmEWiqBGnh2qjOLa/6xjc74B2H5Eq/QmdDwl
-SDWyyZn1KRW0hAWmJ5MpVHlrSVtsvR9v12DlDlUegPbb1mZ2Qsc2PY8Fa5ahrB/k
-IJdCGYAGcDC9/l7tbTBUBzd5HVhesjlbeN3C9zTWBDzx6vkVFQr3iNDStwUC1AL6
-4T9X92AEknMjPbQayo2Qckqs9oRiPqU9gTtDEcv2kjK8znE1WQZ5CUR/u/+u5Kg9
-RkSIvP9+aPIw1nDoVVxJ4f14y3+Eew==
-=jFGo
------END PGP SIGNATURE-----
+Warnings summary:
 
---Sig_/fBm6b//CFPRkuNN2Ov+FvBG--
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---
+For more info write to <info@kernelci.org>
 

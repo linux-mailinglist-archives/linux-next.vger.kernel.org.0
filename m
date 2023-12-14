@@ -1,148 +1,111 @@
-Return-Path: <linux-next+bounces-399-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-400-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 856AB813E66
-	for <lists+linux-next@lfdr.de>; Fri, 15 Dec 2023 00:52:36 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 85156813E6E
+	for <lists+linux-next@lfdr.de>; Fri, 15 Dec 2023 00:57:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4B569282856
-	for <lists+linux-next@lfdr.de>; Thu, 14 Dec 2023 23:52:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 367241F22AF5
+	for <lists+linux-next@lfdr.de>; Thu, 14 Dec 2023 23:57:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 545C96C6FF;
-	Thu, 14 Dec 2023 23:52:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66CED2DB66;
+	Thu, 14 Dec 2023 23:57:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="ZKcQ49B5"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="XYU7jVEx"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3DCA2DB61;
-	Thu, 14 Dec 2023 23:52:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 821712DB63;
+	Thu, 14 Dec 2023 23:56:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1702597943;
-	bh=rMQwh6ZcWzINIjfHJVIKMLZyamBUqrB0RFZAYZl7Zb8=;
+	s=201702; t=1702598212;
+	bh=kdaqb+qL+sKQKweMgh3BTaVI6c3ywDEdnrXH5XQmY9Q=;
 	h=Date:From:To:Cc:Subject:From;
-	b=ZKcQ49B5I/Jh5muyWnok/xCBnkIK+8G2HMRiJ/im9+jVFpiXFFqrtXu/jKk3N2DTX
-	 4TUt9/t/Lnf1PJbB+FpbZxXMfDr+DOzMJVdmnWbTLR695N/9unuF2c9nmIeSoaXBE8
-	 /Skj2UAjxjnvmq/brgKRxTUuMupW/jirv3w7M4Wa0WOGQ/VaMubkF8HlpfsQnrwkHf
-	 JIxWg8ZMZZOiT8p3Prvs+7HJqPnyyeo8XPNLdfbiQNFBcrz9zGT9xCn9Bq1me0NrhW
-	 ePw6bPUmVnpwcUpIRco6es3qWWws8TBLkjV36ohZuW/p6g3N1LrenzBtO+xD2eLelF
-	 7U4cgLqu0oThg==
+	b=XYU7jVExQdM6oeWGiq1bI3oV+raixNUkyDKqnsD+dkXsy2Wrv3DLPyx9dB/fu1zp5
+	 vbUqs22wcBs/ewf0Yd0g2cfrVa2P4l230BGzp69VDHNQZv8ycQi7GJ12vC4sSK9SMi
+	 RQAMmZqVpk+laso5ybeWpSjM48pCAF8chq/1hzapRXFE6uYUyzH4oKQlaNBqcxi2eg
+	 Cs0HylxUAQH63/BPVjxEddEiW3bXsQNUZNIrwIo46AJ7q14BE4Kq/7BCu98YvzJYT/
+	 b2M7sWJb0VHUBdNrbSaLQF5RydEyAKlUFAtvZhUVxH2RrdAMyMCS6noB2gzJQqFlwy
+	 OKzuybFZz73+A==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Srq0629Nwz4wb2;
-	Fri, 15 Dec 2023 10:52:21 +1100 (AEDT)
-Date: Fri, 15 Dec 2023 10:52:19 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Srq5J0W8jz4wcJ;
+	Fri, 15 Dec 2023 10:56:51 +1100 (AEDT)
+Date: Fri, 15 Dec 2023 10:56:50 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: David Miller <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>
-Cc: Networking <netdev@vger.kernel.org>, Linux Kernel Mailing List
+To: Daniel Borkmann <daniel@iogearbox.net>, Alexei Starovoitov
+ <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, David Miller
+ <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
+ <pabeni@redhat.com>
+Cc: bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>, Larysa
+ Zaremba <larysa.zaremba@intel.com>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, Petr Oros <poros@redhat.com>, Piotr Gardocki
- <piotrx.gardocki@intel.com>, Ranganatha Rao <ranganatha.rao@intel.com>,
- Tony Nguyen <anthony.l.nguyen@intel.com>
-Subject: linux-next: manual merge of the net-next tree with Linus' tree
-Message-ID: <20231215105219.118a1ea5@canb.auug.org.au>
+ <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the bpf-next tree with the net-next
+ tree
+Message-ID: <20231215105650.5eb8d2a4@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/+IvAp3H7R_mPW8u+BQNbQvZ";
+Content-Type: multipart/signed; boundary="Sig_/CLPTXkepDjGLf88u5G7zcrp";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/+IvAp3H7R_mPW8u+BQNbQvZ
+--Sig_/CLPTXkepDjGLf88u5G7zcrp
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the net-next tree got a conflict in:
+Today's linux-next merge of the bpf-next tree got a conflict in:
 
-  drivers/net/ethernet/intel/iavf/iavf_ethtool.c
+  tools/net/ynl/generated/netdev-user.c
 
 between commit:
 
-  3a0b5a2929fd ("iavf: Introduce new state machines for flow director")
+  f7c0e362a25f ("tools: ynl: remove generated user space code from git")
 
-from Linus' tree and commit:
+from the net-next tree and commit:
 
-  95260816b489 ("iavf: use iavf_schedule_aq_request() helper")
+  e6795330f88b ("xdp: Add VLAN tag hint")
 
-from the net-next tree.
+from the bpf-next tree.
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+I fixed it up (I just removed the file) and can carry the fix as
+necessary. This is now fixed as far as linux-next is concerned, but any
+non trivial conflicts should be mentioned to your upstream maintainer
+when your tree is submitted for merging.  You may also want to consider
+cooperating with the maintainer of the conflicting tree to minimise any
+particularly complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc drivers/net/ethernet/intel/iavf/iavf_ethtool.c
-index dc499fe7734e,f147743792fb..000000000000
---- a/drivers/net/ethernet/intel/iavf/iavf_ethtool.c
-+++ b/drivers/net/ethernet/intel/iavf/iavf_ethtool.c
-@@@ -1436,16 -1435,11 +1435,16 @@@ static int iavf_add_fdir_ethtool(struc
-  	spin_lock_bh(&adapter->fdir_fltr_lock);
-  	iavf_fdir_list_add_fltr(adapter, fltr);
-  	adapter->fdir_active_fltr++;
- -	fltr->state =3D IAVF_FDIR_FLTR_ADD_REQUEST;
- +	if (adapter->link_up) {
- +		fltr->state =3D IAVF_FDIR_FLTR_ADD_REQUEST;
-- 		adapter->aq_required |=3D IAVF_FLAG_AQ_ADD_FDIR_FILTER;
- +	} else {
- +		fltr->state =3D IAVF_FDIR_FLTR_INACTIVE;
- +	}
-  	spin_unlock_bh(&adapter->fdir_fltr_lock);
- =20
- -	iavf_schedule_aq_request(adapter, IAVF_FLAG_AQ_ADD_FDIR_FILTER);
- +	if (adapter->link_up)
-- 		mod_delayed_work(adapter->wq, &adapter->watchdog_task, 0);
-++		iavf_schedule_aq_request(adapter, IAVF_FLAG_AQ_ADD_FDIR_FILTER);
-+=20
-  ret:
-  	if (err && fltr)
-  		kfree(fltr);
-@@@ -1475,12 -1469,6 +1474,11 @@@ static int iavf_del_fdir_ethtool(struc
-  	if (fltr) {
-  		if (fltr->state =3D=3D IAVF_FDIR_FLTR_ACTIVE) {
-  			fltr->state =3D IAVF_FDIR_FLTR_DEL_REQUEST;
-- 			adapter->aq_required |=3D IAVF_FLAG_AQ_DEL_FDIR_FILTER;
- +		} else if (fltr->state =3D=3D IAVF_FDIR_FLTR_INACTIVE) {
- +			list_del(&fltr->list);
- +			kfree(fltr);
- +			adapter->fdir_active_fltr--;
- +			fltr =3D NULL;
-  		} else {
-  			err =3D -EBUSY;
-  		}
-
---Sig_/+IvAp3H7R_mPW8u+BQNbQvZ
+--Sig_/CLPTXkepDjGLf88u5G7zcrp
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmV7lTMACgkQAVBC80lX
-0Gy/mAgApKLj8MZ8Tj4vPsNMSJX4ZEnZKrPuG7GFI8vxQRBnWX7UTGKp7/VgExSD
-CaAi0PlBXduMSpPe48YimsvLKDEfDqVJiUMEcmh8FoA1rt5aBxuuxrGT3CcWP4JH
-bmq1IOR77r4WGzszSyYzeJyHj7Fc9JcTlNE7L5p1/P47fxplVktF3vEN8NRj3XqY
-COokn62mquj7YdCXwHBdWmLk+0yMBa13JYCcwxefLHF4inq2ZGxZh+iVOHrKFy0f
-YvdHi/c9hKWqL8PUcIWpEGDYgwk1qT6HSxZIu0s7TAY8JjnRuiFvAL3E3zLXHsGX
-IQRK6xKacRJgH8gZUzjfYuC97ujGow==
-=Przn
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmV7lkIACgkQAVBC80lX
+0Gyv/QgAmdgxoieVX+RuS74JGn0oucUyO+YZNdN1+Q/Wx0quGXyfCus34AZzy8Wc
+/ng370Ky6puQEAPtv7p4ZdocU4kK7rBWyyqYzgDz6JcQ2rWaOXng4ClQ0cS1S8KU
+aOSTUcVnDWqCtoX04qw8qOGbKnD69T97Bc2UnBjrLpDrNdimXmBTQKbUjj9P6YuU
+hYDlCTK7KCwP+ZgpBKRZNLHBq62hjpTq1kh41+WCJmTPMt2NxXcYeeJlFi5y4ZSg
+CbZdaL5caMrU5UZ1qYDcP+KhhuUjIfWW/h1vD9rtE29EeJChd3Rt8hsrhftdIzkO
+M5qzya5888mLzxyOhw3ZABGcCHxFtQ==
+=QuYy
 -----END PGP SIGNATURE-----
 
---Sig_/+IvAp3H7R_mPW8u+BQNbQvZ--
+--Sig_/CLPTXkepDjGLf88u5G7zcrp--
 

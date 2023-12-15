@@ -1,44 +1,35 @@
-Return-Path: <linux-next+bounces-409-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-410-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B1D56814B9E
-	for <lists+linux-next@lfdr.de>; Fri, 15 Dec 2023 16:19:50 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B9FAD814CE0
+	for <lists+linux-next@lfdr.de>; Fri, 15 Dec 2023 17:22:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6D236286D29
-	for <lists+linux-next@lfdr.de>; Fri, 15 Dec 2023 15:19:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6B48C1F24025
+	for <lists+linux-next@lfdr.de>; Fri, 15 Dec 2023 16:22:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3B4A3A8F0;
-	Fri, 15 Dec 2023 15:19:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 392C43BB2E;
+	Fri, 15 Dec 2023 16:21:58 +0000 (UTC)
 X-Original-To: linux-next@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E379737140
-	for <linux-next@vger.kernel.org>; Fri, 15 Dec 2023 15:19:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rE9xk-0003J2-Du; Fri, 15 Dec 2023 16:18:52 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rE9xj-00G3c1-Nm; Fri, 15 Dec 2023 16:18:51 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rE9xj-003enb-EM; Fri, 15 Dec 2023 16:18:51 +0100
-Date: Fri, 15 Dec 2023 16:18:51 +0100
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0EAE3BB25;
+	Fri, 15 Dec 2023 16:21:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5D2BFC15;
+	Fri, 15 Dec 2023 08:22:40 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.45.203])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1150B3F5A1;
+	Fri, 15 Dec 2023 08:21:52 -0800 (PST)
+Date: Fri, 15 Dec 2023 16:21:45 +0000
+From: Mark Rutland <mark.rutland@arm.com>
 To: James Clark <james.clark@arm.com>
 Cc: linux-arm-kernel@lists.infradead.org, linux-perf-users@vger.kernel.org,
 	linux-next@vger.kernel.org, will@kernel.org,
-	Mark Rutland <mark.rutland@arm.com>,
+	u.kleine-koenig@pengutronix.de,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Bill Wendling <morbo@google.com>,
@@ -48,7 +39,7 @@ Cc: linux-arm-kernel@lists.infradead.org, linux-perf-users@vger.kernel.org,
 	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
 Subject: Re: [PATCH 1/2] arm: perf: Fix ARCH=arm build with GCC in
  armv8pmu_write_evtype()
-Message-ID: <20231215151851.24wwciobjy5ritoe@pengutronix.de>
+Message-ID: <ZXx9GW1onSy4eBEB@FVFF77S0Q05N>
 References: <20231215150040.3342183-1-james.clark@arm.com>
  <20231215150040.3342183-2-james.clark@arm.com>
 Precedence: bulk
@@ -57,63 +48,64 @@ List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="vcdax2erkxxsbf2h"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <20231215150040.3342183-2-james.clark@arm.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-next@vger.kernel.org
-
-
---vcdax2erkxxsbf2h
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hello,
 
 On Fri, Dec 15, 2023 at 03:00:38PM +0000, James Clark wrote:
+> LLVM ignores everything inside the if statement and doesn't generate
+> errors, but GCC doesn't ignore it, resulting in the following error:
+> 
+>   drivers/perf/arm_pmuv3.c: In function 'armv8pmu_write_evtype':
+>   include/linux/bits.h:34:29: error: left shift count >= width of type [-Werror=shift-count-overflow]
+>   	34 |         (((~UL(0)) - (UL(1) << (l)) + 1) & \
+> 
+> Fix it by changing the if to #if.
+
+I reckon it'd be cleaner to use GENMASK_ULL for the TH and TC fields, in
+include/linux/perf/arm_pmu.h have:
+
+| /*
+|  * PMXEVTYPER: Event selection reg
+|  */
+| #define ARMV8_PMU_EVTYPE_EVENT GENMASK(15, 0)          /* Mask for EVENT bits */
+| #define ARMV8_PMU_EVTYPE_TH    GENMASK_ULL(43, 32)     /* arm64 only */
+| #define ARMV8_PMU_EVTYPE_TC    GENMASK_ULL(63, 61)     /* arm64 only */
+
+IIUC that should silence this warning, and it'd remove the need for the
+ifdeffery and other changes in patch 2.
+
+Does that work, or am I missing something?
+
+Thanks,
+Mark.
+
+> 
+> Fixes: 3115ee021bfb ("arm64: perf: Include threshold control fields in PMEVTYPER mask")
+> Reported-by: Uwe Kleine-K"onig <u.kleine-koenig@pengutronix.de>
+> Closes: https://lore.kernel.org/linux-arm-kernel/20231215120817.h2f3akgv72zhrtqo@pengutronix.de/
+> Signed-off-by: James Clark <james.clark@arm.com>
+> ---
+>  drivers/perf/arm_pmuv3.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
 > diff --git a/drivers/perf/arm_pmuv3.c b/drivers/perf/arm_pmuv3.c
 > index 23fa6c5da82c..3ed2086cefc3 100644
 > --- a/drivers/perf/arm_pmuv3.c
 > +++ b/drivers/perf/arm_pmuv3.c
-> @@ -631,8 +631,9 @@ static void armv8pmu_write_evtype(int idx, unsigned l=
-ong val)
+> @@ -631,8 +631,9 @@ static void armv8pmu_write_evtype(int idx, unsigned long val)
 >  			     ARMV8_PMU_EXCLUDE_EL0 |
 >  			     ARMV8_PMU_EXCLUDE_EL1;
-> =20
+>  
 > -	if (IS_ENABLED(CONFIG_ARM64))
-> -		mask |=3D ARMV8_PMU_EVTYPE_TC | ARMV8_PMU_EVTYPE_TH;
+> -		mask |= ARMV8_PMU_EVTYPE_TC | ARMV8_PMU_EVTYPE_TH;
 > +#if IS_ENABLED(CONFIG_ARM64)
-> +	mask |=3D ARMV8_PMU_EVTYPE_TC | ARMV8_PMU_EVTYPE_TH;
+> +	mask |= ARMV8_PMU_EVTYPE_TC | ARMV8_PMU_EVTYPE_TH;
 > +#endif
-
-maybe add a comment about why you used an #if here, to prevent the
-people sending patches that revert your change?
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---vcdax2erkxxsbf2h
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmV8bloACgkQj4D7WH0S
-/k5b/wf+MEL3zkiZL0BMTR7yyXPKpsqbEG64vTZcxWV48jxm51wX+huoGcM3aSQj
-CbCT6/uFb6IrWF299Ed7zuLDV38aTvrB3PV9L7GBxhvAedqEMMaSrpBTxDlyTNNq
-4LFwOnj0h8Cl2l3GTwgrUgBkzc5rIOh4RGr9f/tsXzcjHQ2GUNxdJQfg0UvoGcxx
-0Qhlff3eZpuNcX6mWH3f5QGRaqGpV4pxYL3b2Ik9tSLA1tDqWlpv2CXCVAJk6ZLD
-hKd96oJY4DVjs7skS4ouBOiUtEvqtcs87iuLUbLNGBzpjPAQ78cNLoV761PkjEBT
-df7m1XwzDzVnjQrOkhjLOy3K4BV7Jw==
-=ojPK
------END PGP SIGNATURE-----
-
---vcdax2erkxxsbf2h--
+>  
+>  	val &= mask;
+>  	write_pmevtypern(counter, val);
+> -- 
+> 2.34.1
+> 
 

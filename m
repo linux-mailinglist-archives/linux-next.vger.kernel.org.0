@@ -1,91 +1,113 @@
-Return-Path: <linux-next+bounces-419-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-420-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A70AF815F76
-	for <lists+linux-next@lfdr.de>; Sun, 17 Dec 2023 14:41:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id DF4F981636B
+	for <lists+linux-next@lfdr.de>; Mon, 18 Dec 2023 00:31:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4AE7E1F21BE7
-	for <lists+linux-next@lfdr.de>; Sun, 17 Dec 2023 13:41:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 95F9F1F21D8B
+	for <lists+linux-next@lfdr.de>; Sun, 17 Dec 2023 23:31:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4353444382;
-	Sun, 17 Dec 2023 13:41:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52AEC4AF76;
+	Sun, 17 Dec 2023 23:30:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SoOlbdvN"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="D6CYSRvS"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E61F44380;
-	Sun, 17 Dec 2023 13:41:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B387C433C8;
-	Sun, 17 Dec 2023 13:41:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702820476;
-	bh=czOgyizie6+0WHtT+D4zbad4G/EaHbGm28IGylTfNsg=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=SoOlbdvNX10qBzbXJxBRoqki5rDrAf96KVcZt5zXcOZDKWPOH/CLpGwUybxjn+Iu6
-	 ZxcegYUrQcrR10vcUkbmn4j93xxX32cVfosBxzQ3LRjQxQHxYeYLPpV4FlVk2JBCOV
-	 f37m9b8ao3ICMOTkahmlOAsyiA3UvcQ9vW/4dxhD/n9x6ndbAtGyHLpeaXmHiHBA6M
-	 i4sxf/spSpUZnwemDhrW4YuxhBIN32et+lHh8zpF0TiqhwDYzMqKIREKMWR+AxBLM7
-	 uoTQg1UMbLif2EhWg/EF5q55GHVtTr6P9vAlvb8hTlPcQvuySXSI7n+caHj2fcn/k3
-	 ccQ5/ITP87trA==
-From: Will Deacon <will@kernel.org>
-To: linux-arm-kernel@lists.infradead.org,
-	mark.rutland@arm.com,
-	linux-next@vger.kernel.org,
-	u.kleine-koenig@pengutronix.de,
-	linux-perf-users@vger.kernel.org,
-	James Clark <james.clark@arm.com>
-Cc: catalin.marinas@arm.com,
-	kernel-team@android.com,
-	Will Deacon <will@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Anshuman Khandual <anshuman.khandual@arm.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	llvm@lists.linux.dev,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/1] arm: perf: Fix ARCH=arm build with GCC
-Date: Sun, 17 Dec 2023 13:41:05 +0000
-Message-Id: <170281440108.359132.7914631025593499836.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20231215175648.3397170-1-james.clark@arm.com>
-References: <20231215175648.3397170-1-james.clark@arm.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4CC648CC7;
+	Sun, 17 Dec 2023 23:30:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1702855845;
+	bh=YB2dFiDcE/7I5Sv39W5ZIfPPERRMneL2j2F4B0Hk8fs=;
+	h=Date:From:To:Cc:Subject:From;
+	b=D6CYSRvSHmCuTCzrOxKRLDwhDShCVdr4y6K1hazxFFQyHEXQaFxMJZbZSjJ4xAp2Y
+	 TnEF4IuVe+KDI6oNvZ4R85EET12qk1g08brpk7MdXtnvvYlgqSmuHopcKNMtzPwVZB
+	 jTwE/ZVSvfGC3PtktmlJ7lx9iidpWMqkksnvwrs97WqoCkl2OVFJymZLTosYzOLD2z
+	 Mgc2g88W3VJ7xlloTsAFhx71unsg2mlMU2R7YQGgeR+ooG6depVbjO65UGiOiNSN5e
+	 hEkv8bVj6AiXt27gRsRqbj3iFBYRibTNL7cGqRfHLu0sK6Dvm7EFeztOFJojR8WPI7
+	 t9M6HcAA5ryAA==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4StfMm4V21z4x5q;
+	Mon, 18 Dec 2023 10:30:44 +1100 (AEDT)
+Date: Mon, 18 Dec 2023 10:29:52 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Daniel Borkmann <daniel@iogearbox.net>, Alexei Starovoitov
+ <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, David Miller
+ <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
+ <pabeni@redhat.com>
+Cc: bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
+ Aleksander Lobakin <aleksander.lobakin@intel.com>, Larysa Zaremba
+ <larysa.zaremba@intel.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>, Randy Dunlap <rdunlap@infradead.org>
+Subject: linux-next: manual merge of the bpf-next tree with the net-next
+ tree
+Message-ID: <20231218102952.2428bd06@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="Sig_/cDv_OgwexhiKmz_AYOhw3a5";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Fri, 15 Dec 2023 17:56:47 +0000, James Clark wrote:
-> Changes since V1:
-> 
->   * Instead of wrapping everything in #if, just use GENMASK_ULL instead
->     which fixes both issues in one commit.
-> 
-> A fix for the broken build with GCC currently in linux-next
-> (next-20231214)
-> 
-> [...]
+--Sig_/cDv_OgwexhiKmz_AYOhw3a5
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Applied to will (for-next/perf), thanks!
+Hi all,
 
-[1/1] arm: perf: Fix ARCH=arm build with GCC
-      https://git.kernel.org/will/c/bb339db4d363
+Today's linux-next merge of the bpf-next tree got a conflict in:
 
+  include/linux/skbuff.h
+
+between commit:
+
+  bf873a800ac3 ("net: skbuff: fix spelling errors")
+
+from the net-next tree and commit:
+
+  2ebe81c81435 ("net, xdp: Allow metadata > 32")
+
+from the bpf-next tree.
+
+I fixed it up (the latter removed a line that was updated by the former,
+so I just removed it) and can carry the fix as necessary. This is now
+fixed as far as linux-next is concerned, but any non trivial conflicts
+should be mentioned to your upstream maintainer when your tree is
+submitted for merging.  You may also want to consider cooperating with
+the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
 Cheers,
--- 
-Will
+Stephen Rothwell
 
-https://fixes.arm64.dev
-https://next.arm64.dev
-https://will.arm64.dev
+--Sig_/cDv_OgwexhiKmz_AYOhw3a5
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmV/hHAACgkQAVBC80lX
+0GzFlwf+Kpf/rnj71gHs66yQd/EoHmcA/wPjDai4NGfF2YrGTXDCcwZaL2gEoCtk
+I/QBDSVDAIddfwkGz1+UFQdl+saaBHcOHAyy8vxebve/6VLV2DveU+4nq7uz7sB4
+C++FPLqkQQgsUb/+WdZ0LZsZyNGjWBpSFiOV78pCBmJ12VPZu813MBfx0rp8JhMj
+d+Ri+BGECNJqDbyyZUcNj0SF2wlAzf8bk42KX6dGHrKvnuu7ncyslAqyepgKFLAh
+/q2Xc7gqPbPddp3cqqLuPoyiCxIVK10CJF+DZUIF0421QrPfjwizb+SPwmuzHaR8
+nLBkWO+Brrff0rLs8RlmZCu1F0tXZQ==
+=h0WP
+-----END PGP SIGNATURE-----
+
+--Sig_/cDv_OgwexhiKmz_AYOhw3a5--
 

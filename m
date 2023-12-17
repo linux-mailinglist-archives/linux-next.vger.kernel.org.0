@@ -1,119 +1,91 @@
-Return-Path: <linux-next+bounces-418-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-419-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6F75081590F
-	for <lists+linux-next@lfdr.de>; Sat, 16 Dec 2023 13:44:56 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A70AF815F76
+	for <lists+linux-next@lfdr.de>; Sun, 17 Dec 2023 14:41:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9CF591C2179E
-	for <lists+linux-next@lfdr.de>; Sat, 16 Dec 2023 12:44:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4AE7E1F21BE7
+	for <lists+linux-next@lfdr.de>; Sun, 17 Dec 2023 13:41:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C35C1865A;
-	Sat, 16 Dec 2023 12:44:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4353444382;
+	Sun, 17 Dec 2023 13:41:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SoOlbdvN"
 X-Original-To: linux-next@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80D6B154BA;
-	Sat, 16 Dec 2023 12:44:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4D20E2F4;
-	Sat, 16 Dec 2023 04:45:29 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 78DC73F762;
-	Sat, 16 Dec 2023 04:44:42 -0800 (PST)
-Date: Sat, 16 Dec 2023 12:44:33 +0000
-From: Mark Rutland <mark.rutland@arm.com>
-To: James Clark <james.clark@arm.com>, will@kernel.org,
-	catalin.marinas@arm.com
-Cc: linux-arm-kernel@lists.infradead.org, linux-perf-users@vger.kernel.org,
-	linux-next@vger.kernel.org, u.kleine-koenig@pengutronix.de,
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E61F44380;
+	Sun, 17 Dec 2023 13:41:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B387C433C8;
+	Sun, 17 Dec 2023 13:41:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1702820476;
+	bh=czOgyizie6+0WHtT+D4zbad4G/EaHbGm28IGylTfNsg=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=SoOlbdvNX10qBzbXJxBRoqki5rDrAf96KVcZt5zXcOZDKWPOH/CLpGwUybxjn+Iu6
+	 ZxcegYUrQcrR10vcUkbmn4j93xxX32cVfosBxzQ3LRjQxQHxYeYLPpV4FlVk2JBCOV
+	 f37m9b8ao3ICMOTkahmlOAsyiA3UvcQ9vW/4dxhD/n9x6ndbAtGyHLpeaXmHiHBA6M
+	 i4sxf/spSpUZnwemDhrW4YuxhBIN32et+lHh8zpF0TiqhwDYzMqKIREKMWR+AxBLM7
+	 uoTQg1UMbLif2EhWg/EF5q55GHVtTr6P9vAlvb8hTlPcQvuySXSI7n+caHj2fcn/k3
+	 ccQ5/ITP87trA==
+From: Will Deacon <will@kernel.org>
+To: linux-arm-kernel@lists.infradead.org,
+	mark.rutland@arm.com,
+	linux-next@vger.kernel.org,
+	u.kleine-koenig@pengutronix.de,
+	linux-perf-users@vger.kernel.org,
+	James Clark <james.clark@arm.com>
+Cc: catalin.marinas@arm.com,
+	kernel-team@android.com,
+	Will Deacon <will@kernel.org>,
 	Nathan Chancellor <nathan@kernel.org>,
+	Anshuman Khandual <anshuman.khandual@arm.com>,
 	Nick Desaulniers <ndesaulniers@google.com>,
+	llvm@lists.linux.dev,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
-	Anshuman Khandual <anshuman.khandual@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v2 1/1] arm: perf: Fix ARCH=arm build with GCC
-Message-ID: <ZX2bsYEdWVxTCiTi@FVFF77S0Q05N>
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/1] arm: perf: Fix ARCH=arm build with GCC
+Date: Sun, 17 Dec 2023 13:41:05 +0000
+Message-Id: <170281440108.359132.7914631025593499836.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20231215175648.3397170-1-james.clark@arm.com>
 References: <20231215175648.3397170-1-james.clark@arm.com>
- <20231215175648.3397170-2-james.clark@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231215175648.3397170-2-james.clark@arm.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-On Fri, Dec 15, 2023 at 05:56:48PM +0000, James Clark wrote:
-> LLVM ignores everything inside the if statement and doesn't generate
-> errors, but GCC doesn't ignore it, resulting in the following error:
+On Fri, 15 Dec 2023 17:56:47 +0000, James Clark wrote:
+> Changes since V1:
 > 
->   drivers/perf/arm_pmuv3.c: In function 'armv8pmu_write_evtype':
->   include/linux/bits.h:34:29: error: left shift count >= width of type [-Werror=shift-count-overflow]
->   34 |         (((~UL(0)) - (UL(1) << (l)) + 1) & \
+>   * Instead of wrapping everything in #if, just use GENMASK_ULL instead
+>     which fixes both issues in one commit.
 > 
-> Fix it by using GENMASK_ULL which doesn't overflow on arm32 (even though
-> the value is never used there).
-
-It would be nice if this could explain the overflow problem, i.e.
-
-| The GENMASK() macro creates masks of type unsigned long, and we use this to
-| geenrate the ARMV8_PMU_EVTYPE_TH and ARMV8_PMU_EVTYPE_TC constants. These
-| include bits above bit 31, and generating these requires shifting more than the
-| size of unsigned long on 32-bit ARM.
-| 
-| Consequently when building for 32-bit arm, GCC warns about their use:
-| 
-|   drivers/perf/arm_pmuv3.c: In function 'armv8pmu_write_evtype':
-|   include/linux/bits.h:34:29: error: left shift count >= width of type [-Werror=shift-count-overflow]
-|   34 |         (((~UL(0)) - (UL(1) << (l)) + 1) & \
-| 
-| ... though LLVM does not warn as the actual usage is not reachable on 32-bit
-| ARM due to `if (IS_ENABLED(...)` checks.
-| 
-| Avoid the warning by using GENMACK_ULL(), which doesn't overflow on 32-bit arm.
-
-> Fixes: 3115ee021bfb ("arm64: perf: Include threshold control fields in PMEVTYPER mask")
-> Reported-by: Uwe Kleine-K"onig <u.kleine-koenig@pengutronix.de>
-> Closes: https://lore.kernel.org/linux-arm-kernel/20231215120817.h2f3akgv72zhrtqo@pengutronix.de/
-> Signed-off-by: James Clark <james.clark@arm.com>
-
-Thanks for this!
-
-Acked-by: Mark Rutland <mark.rutland@arm.com>
-
-Will, Catalin, the broken commit is queued in the arm64 for-next/perf branch
-(and merged into for-next/core); is this something we can easily fold in?
-
-Mark.
-
-> ---
->  include/linux/perf/arm_pmuv3.h | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+> A fix for the broken build with GCC currently in linux-next
+> (next-20231214)
 > 
-> diff --git a/include/linux/perf/arm_pmuv3.h b/include/linux/perf/arm_pmuv3.h
-> index 0f4d62ef3a9a..46377e134d67 100644
-> --- a/include/linux/perf/arm_pmuv3.h
-> +++ b/include/linux/perf/arm_pmuv3.h
-> @@ -234,8 +234,8 @@
->   * PMXEVTYPER: Event selection reg
->   */
->  #define ARMV8_PMU_EVTYPE_EVENT	GENMASK(15, 0)	/* Mask for EVENT bits */
-> -#define ARMV8_PMU_EVTYPE_TH	GENMASK(43, 32)
-> -#define ARMV8_PMU_EVTYPE_TC	GENMASK(63, 61)
-> +#define ARMV8_PMU_EVTYPE_TH	GENMASK_ULL(43, 32) /* arm64 only */
-> +#define ARMV8_PMU_EVTYPE_TC	GENMASK_ULL(63, 61) /* arm64 only */
->  
->  /*
->   * Event filters for PMUv3
-> -- 
-> 2.34.1
-> 
+> [...]
+
+Applied to will (for-next/perf), thanks!
+
+[1/1] arm: perf: Fix ARCH=arm build with GCC
+      https://git.kernel.org/will/c/bb339db4d363
+
+Cheers,
+-- 
+Will
+
+https://fixes.arm64.dev
+https://next.arm64.dev
+https://will.arm64.dev
 

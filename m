@@ -1,131 +1,117 @@
-Return-Path: <linux-next+bounces-426-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-427-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B7CBB8165FD
-	for <lists+linux-next@lfdr.de>; Mon, 18 Dec 2023 06:17:18 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E8AF816616
+	for <lists+linux-next@lfdr.de>; Mon, 18 Dec 2023 06:42:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 545DFB216A7
-	for <lists+linux-next@lfdr.de>; Mon, 18 Dec 2023 05:17:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 86C27281B30
+	for <lists+linux-next@lfdr.de>; Mon, 18 Dec 2023 05:42:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D78486131;
-	Mon, 18 Dec 2023 05:17:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26EED63CD;
+	Mon, 18 Dec 2023 05:42:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="i1Gn4axe"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="DbhgfMK9"
 X-Original-To: linux-next@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67AB663A3;
-	Mon, 18 Dec 2023 05:17:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF44C63C5;
+	Mon, 18 Dec 2023 05:42:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1702876626;
-	bh=LWVOdWD/fLbAF9XWd/EZxP0KqVqq36W6xaUInLOkyI4=;
+	s=201702; t=1702878125;
+	bh=x9ABy5vCpnKgmRlRZ90DI4YDdJgQGcJKqGSjNRufGGk=;
 	h=Date:From:To:Cc:Subject:From;
-	b=i1Gn4axeu1xP1TncM7AA8O75dLhftWe69pSXlvBmz8zeAVAM1pfvYyUkSyTA23jPF
-	 jqEU4lTDMTJ1eV9z66yLosr2bTAHiCvU4c+hKd1d2liFyVuHZmFHTWxiVloOM4/4so
-	 LXkTqH+xLOxopmWP4W6eda3qo/Gsn0QiLlfx/NytEtFggGSq9kae9uHubRy/EdHISj
-	 ukS3lzB78tUsAjWa79VHs1Hv0MFUBL/SMOp9RgXWU0kHhNyFwspm8mAS+tLztQbwFh
-	 PuEowwiomaAvt8q1WAwozbTUdvkBnvelPmsl89HZF5sW/OB65M76gKSBvWd58PefOv
-	 gDmhvABmyZMug==
+	b=DbhgfMK9uGSsLqdZdbHpDmrkuzRR4RL9INGBMWPAp2g0IT8hbDRCn/xlPP4dO+ZN5
+	 LXs6iLXio2AX3siw+/E+PKCpFRiQxDTOBEV9dbxZjOMNgpJpIh4dA3Ll/5d9W4lnLm
+	 hEmktBpyMWkUOQr8/o221dGFh3Rwrgh+hQfgS6P35zj6VXt5Z3vrUGW9lKdtI+1Ilx
+	 +cNY05PSYOt0UpV5UMg+XOF50lFlXTfQcjIBXb8iocrNqreWeJs7qgsD1qz8Epso7P
+	 fN9PJF/nJOvXCbdoOwWakAB5/FDXmUfA5SiKrwZc6tBrnoLs4xRVAB0ZbWCol5S2lS
+	 SnxgXrBKbletg==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Stp3P38L7z4xR5;
-	Mon, 18 Dec 2023 16:17:05 +1100 (AEDT)
-Date: Mon, 18 Dec 2023 16:17:04 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4StpcD29n3z4xM2;
+	Mon, 18 Dec 2023 16:42:04 +1100 (AEDT)
+Date: Mon, 18 Dec 2023 16:42:03 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Kees Cook <keescook@chromium.org>, David Miller <davem@davemloft.net>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
-Cc: Networking <netdev@vger.kernel.org>, Alexey Dobriyan
- <adobriyan@gmail.com>, FUJITA Tomonori <fujita.tomonori@gmail.com>, Linux
- Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, Trevor Gross <tmgross@umich.edu>
-Subject: linux-next: manual merge of the execve tree with the net-next tree
-Message-ID: <20231218161704.05c25766@canb.auug.org.au>
+To: Rob Herring <robh@kernel.org>, Greg KH <greg@kroah.com>, Arnd Bergmann
+ <arnd@arndb.de>, Jarkko Sakkinen <jarkko@kernel.org>, Bjorn Helgaas
+ <bhelgaas@google.com>, Lorenzo Pieralisi <lpieralisi@kernel.org>, Krzysztof
+ =?UTF-8?B?V2lsY3p5xYRza2k=?= <kw@linux.com>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patches in the devicetree tree
+Message-ID: <20231218164203.530ad4f7@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Sb5s7lOXLc2X.vewol.vAXH";
+Content-Type: multipart/signed; boundary="Sig_/qsN_.e7Or5x+KDHl86iA0Qy";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/Sb5s7lOXLc2X.vewol.vAXH
+--Sig_/qsN_.e7Or5x+KDHl86iA0Qy
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the execve tree got a conflict in:
+The following commits are also in various other trees as different
+commits (but the same patches):
 
-  MAINTAINERS
+  11844f340318 ("cdx: Explicitly include correct DT includes, again")
+  319e31686b9f ("tpm: nuvoton: Use i2c_get_match_data()")
+  5adf0863e467 ("serial: esp32_acm: Add explicit platform_device.h include")
+  68398c844813 ("serial: esp32_uart: Use device_get_match_data()")
+  72cc46a84b80 ("pci: rcar-gen4: Replace of_device.h with explicit of.h inc=
+lude")
 
-between commit:
+These are commits
 
-  cbaa28f970a1 ("MAINTAINERS: add Rust PHY abstractions for ETHERNET PHY LI=
-BRARY")
+  aaee477e3e2c ("cdx: Explicitly include correct DT includes, again")
 
-from the net-next tree and commit:
+from the char-misc tree
 
-  0a8a952a75f2 ("ELF, MAINTAINERS: specifically mention ELF")
+  ebf2d4e8e582 ("tpm: nuvoton: Use i2c_get_match_data()")
 
-from the execve tree.
+from the tpmdd tree
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+  2600d9939440 ("serial: esp32_acm: Add explicit platform_device.h include")
+  3d19ff562d06 ("serial: esp32_uart: Use device_get_match_data()")
+
+from the tty tree
+
+  ec2152374804 ("PCI: rcar-gen4: Replace of_device.h with explicit of.h inc=
+lude")
+
+from the pci tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc MAINTAINERS
-index 1f53b4c593dd,08278b9ede48..000000000000
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@@ -7919,15 -7797,7 +7919,15 @@@ F:	include/uapi/linux/mdio.
-  F:	include/uapi/linux/mii.h
-  F:	net/core/of_net.c
- =20
- +ETHERNET PHY LIBRARY [RUST]
- +M:	FUJITA Tomonori <fujita.tomonori@gmail.com>
- +R:	Trevor Gross <tmgross@umich.edu>
- +L:	netdev@vger.kernel.org
- +L:	rust-for-linux@vger.kernel.org
- +S:	Maintained
- +F:	rust/kernel/net/phy.rs
- +
-- EXEC & BINFMT API
-+ EXEC & BINFMT API, ELF
-  R:	Eric Biederman <ebiederm@xmission.com>
-  R:	Kees Cook <keescook@chromium.org>
-  L:	linux-mm@kvack.org
-
---Sig_/Sb5s7lOXLc2X.vewol.vAXH
+--Sig_/qsN_.e7Or5x+KDHl86iA0Qy
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmV/1dAACgkQAVBC80lX
-0GywbAf/TOkJk8PIJfMxee5eFdEOj53IKYndCRs1kVkMhFjRf8x7pMknWGqxDXZe
-AnY2cmCl4WUCybJbTVOJtt1qTRPYrqzxlqOq3DP+vrGvOWwkk9qoGgtk2v8Vr1hZ
-0ErE2gFg4sQJw6HtASMgGILc+DBpFSHT/7pnsvanYA+jzydGRPT6N7GITiZNp5MR
-tgkhuIr5Uo39Gs/O1YVaplg6vDcKOZW03faVTMT5vLhm0LxgWm7j/Ygh431tb6Ae
-a816ZYP2Q61KBXeAEJt6yY6CPEOcR4OFEIYc8D+Q/3RkdG5UGXLUABlVERBNL7LB
-4G6ohj2mzKevAWwNiMgFEBVBH9ctBQ==
-=9Kgs
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmV/26sACgkQAVBC80lX
+0GyAWgf/WzLidDn/pnzIIYfzXPAdRsuUenXGZZQdqu9bGMTvUAPM2TaD6/z6osP5
+b2/Ue6gzVmDFZkJxv39is00Aipp5VZUCcdZU1LUzEHSSLTwctSy8W5i51LZO9Xr/
+Eh5BsHLp26LraWORjl9QhLF7AppRfGub/Wr41b2z8S1GG/DiwXrN195R2g9dM+je
+czLoZeh1SakzlJgBWx9ynofl4cJDQYvhEK6/XH9cuv13K3BIa0DUIp3g6RYF/k94
+4cp91wJo5sZFkxoNH4iRQnIdh9QGijAxBDBYc2k9BdJf+DM8Zt0nXzaak4CXeau9
+hFTQjXns+541l2EbySp/8x1qX3xstw==
+=g5tz
 -----END PGP SIGNATURE-----
 
---Sig_/Sb5s7lOXLc2X.vewol.vAXH--
+--Sig_/qsN_.e7Or5x+KDHl86iA0Qy--
 

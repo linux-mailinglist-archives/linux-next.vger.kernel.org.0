@@ -1,105 +1,87 @@
-Return-Path: <linux-next+bounces-444-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-445-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4FA92817285
-	for <lists+linux-next@lfdr.de>; Mon, 18 Dec 2023 15:09:49 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id DCD23817368
+	for <lists+linux-next@lfdr.de>; Mon, 18 Dec 2023 15:19:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 76CA91C22528
-	for <lists+linux-next@lfdr.de>; Mon, 18 Dec 2023 14:09:48 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 65A19B222DA
+	for <lists+linux-next@lfdr.de>; Mon, 18 Dec 2023 14:18:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7EBEE37899;
-	Mon, 18 Dec 2023 14:07:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04A2B12B72;
+	Mon, 18 Dec 2023 14:18:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HzC1NSts"
+	dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b="nZKL1jqy"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C0CF3788B;
-	Mon, 18 Dec 2023 14:07:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF6FEC433CD;
-	Mon, 18 Dec 2023 14:07:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702908448;
-	bh=ylwDB8EaiT63RbKsIo8qmDnkgJNsnzzWUofGhTQT/vs=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=HzC1NSts+MmJjzo3EomeX8gDR0AnhqmH/okCKAsD8/tLXzzCuw01ZIB4Nxv9D/dMY
-	 2a92RPoGr71Ovqd4kuV6zMT1d/hZlstRmCYkF9yrf0FMei3iCm0KDiHeXQyf8CICTx
-	 zjKqD8nUsCt1jp24enQT5/jprEg4SODhrHWANZGKPCPufaC89/uvnlqeKeLo0BA/wk
-	 OJ9y9oRMpApKY7dXr+FTj5oMecGkc5leJblhXBpRblIDYYQ9GyoGfdZdwVnyQT88O3
-	 kioFABef8iNvJnZkZTt1I8tvJlLEZG8Mpyvznd03/DsHcsMdEqsyWzMMbR3BR8POZ+
-	 pu0fUB7aFzN1g==
-Received: by mail-lj1-f173.google.com with SMTP id 38308e7fff4ca-2cc6121c113so18638421fa.0;
-        Mon, 18 Dec 2023 06:07:28 -0800 (PST)
-X-Gm-Message-State: AOJu0YzFckKr8va8OpPoRmpRo796sOTdDez2075oiH4dHCXz/+s4A8LC
-	trpfCqmI2KgWWgrnKdJEQh0qWhXOJOJnncyP1A==
-X-Google-Smtp-Source: AGHT+IGGmE7yX5GXoA6PiC+8TE5JiB8PD9CYSkmjUJCS1/0lm9lmnWQvmBEyLX4HpQeDPl4CSfVmmcguFpKFx+EqrOU=
-X-Received: by 2002:a05:651c:620:b0:2cc:6ab1:e6a4 with SMTP id
- k32-20020a05651c062000b002cc6ab1e6a4mr465013lje.71.1702908447045; Mon, 18 Dec
- 2023 06:07:27 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E618129EF9;
+	Mon, 18 Dec 2023 14:18:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lwn.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lwn.net
+Received: from localhost (unknown [IPv6:2601:280:5e00:7e19::646])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by ms.lwn.net (Postfix) with ESMTPSA id 0480B37C;
+	Mon, 18 Dec 2023 14:18:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 0480B37C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+	t=1702909123; bh=rzUM8jupmmDIGLuiq7yJvkLlnNlEw6pMqLL+bnsZaQc=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=nZKL1jqyb1b6omfyiOQd/n6RiJjSRAWXQDuV9BtFbwzX/6khfuUL268M2HQ7Bq9Jf
+	 YSH+NGTIkF3Ac7Fa9ZHVgMsiN9TnQEoGO+UI3nUA9mu9th4nCA82LA7Z4quTVqGy5w
+	 SfiWuHgTfX6cr4SiR96LrEJ2PsnafiAwy03v2t2W/4KpcuqjYLhLBRLPVUKkyYCRER
+	 6TLDSTLIWI/KUqs1uJvQ78yafM/sRY/rolc1hfs2mCA5HKjx/ZhV9uy81q25vZU549
+	 UQMSPWgpA/N4w+F6NVBK8Oy8T4TnQ/kx/T/Yd9xcwe4Aqlc6DPB8B/DogC185kJbVF
+	 t92pb9cNPNVpw==
+From: Jonathan Corbet <corbet@lwn.net>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Randy Dunlap <rdunlap@infradead.org>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the jc_docs tree
+In-Reply-To: <20231218182825.39a6562b@canb.auug.org.au>
+References: <20231218182825.39a6562b@canb.auug.org.au>
+Date: Mon, 18 Dec 2023 07:18:42 -0700
+Message-ID: <87r0jjmw59.fsf@meer.lwn.net>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231218164203.530ad4f7@canb.auug.org.au>
-In-Reply-To: <20231218164203.530ad4f7@canb.auug.org.au>
-From: Rob Herring <robh@kernel.org>
-Date: Mon, 18 Dec 2023 08:07:14 -0600
-X-Gmail-Original-Message-ID: <CAL_Jsq+9TTE01MO5HtcB34gX=d9XR7dGFRgqYg0nUY4_NzhOqA@mail.gmail.com>
-Message-ID: <CAL_Jsq+9TTE01MO5HtcB34gX=d9XR7dGFRgqYg0nUY4_NzhOqA@mail.gmail.com>
-Subject: Re: linux-next: duplicate patches in the devicetree tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Greg KH <greg@kroah.com>, Arnd Bergmann <arnd@arndb.de>, Jarkko Sakkinen <jarkko@kernel.org>, 
-	Bjorn Helgaas <bhelgaas@google.com>, Lorenzo Pieralisi <lpieralisi@kernel.org>, 
-	=?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 
-On Sun, Dec 17, 2023 at 11:42=E2=80=AFPM Stephen Rothwell <sfr@canb.auug.or=
-g.au> wrote:
->
+Stephen Rothwell <sfr@canb.auug.org.au> writes:
+
 > Hi all,
 >
-> The following commits are also in various other trees as different
-> commits (but the same patches):
+> After merging the jc_docs tree, today's linux-next build (htmldocs)
+> produced this warning:
 >
->   11844f340318 ("cdx: Explicitly include correct DT includes, again")
->   319e31686b9f ("tpm: nuvoton: Use i2c_get_match_data()")
->   5adf0863e467 ("serial: esp32_acm: Add explicit platform_device.h includ=
-e")
->   68398c844813 ("serial: esp32_uart: Use device_get_match_data()")
->   72cc46a84b80 ("pci: rcar-gen4: Replace of_device.h with explicit of.h i=
-nclude")
+> include/crypto/hash.h:248: warning: Excess struct member 'digestsize' description in 'shash_alg'
 >
-> These are commits
+> and 636 new similar warnings :-(
 >
->   aaee477e3e2c ("cdx: Explicitly include correct DT includes, again")
+> Exposed by commit
 >
-> from the char-misc tree
+>   b77fdd6a48e6 ("scripts/kernel-doc: restore warning for Excess struct/union")
 >
->   ebf2d4e8e582 ("tpm: nuvoton: Use i2c_get_match_data()")
->
-> from the tpmdd tree
->
->   2600d9939440 ("serial: esp32_acm: Add explicit platform_device.h includ=
-e")
->   3d19ff562d06 ("serial: esp32_uart: Use device_get_match_data()")
->
-> from the tty tree
->
->   ec2152374804 ("PCI: rcar-gen4: Replace of_device.h with explicit of.h i=
-nclude")
->
-> from the pci tree.
+> I am not sure what we should do about this ... last Friday I only
+> got about 18 lines of warnings.
 
-Yes, expected as I was carrying them until applied. Now dropped.
+The warnings were expected, of course.
 
-Rob
+The alternatives are to fix the docs or to revert b77fdd6a48e6,
+pretending that all those kerneldoc errors don't actually exist.  The
+fixes should be pretty easy to do (and there's far less of them than it
+seems from the number of warnings).  I can't get there right away but if
+nobody beats me to it I'll try to toss some patches together.
+
+Thanks,
+
+jon
 
